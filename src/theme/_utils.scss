@@ -1,6 +1,6 @@
 @mixin theme-bg-and-color($bg, $color) {
-  background-color: $bg;
-  color: $color;
+  background-color: $bg !important;
+  color: $color !important;
 }
 @mixin theme-input-text-and-border($color) {
   &.material-input-has-value, &.material-input-focused {
@@ -50,3 +50,21 @@
 .material-input-group-theme-orange { @include theme-input-text-and-border($theme-orange); }
 .material-input-group-theme-purple { @include theme-input-text-and-border($theme-purple); }
 .material-input-group-theme-red { @include theme-input-text-and-border($theme-red); }
+
+.material-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.material-shadow-bottom-z-1 {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+
+.material-shadow-animated.material-shadow {
+  transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}

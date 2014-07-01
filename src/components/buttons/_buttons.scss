@@ -56,6 +56,9 @@
 
   &.material-button-raised {
     background-color: $button-raised-background;
+
+    @extend .material-shadow-bottom-z-1;
+
     &:hover {
       background-color: $button-raised-hover-background;
     }
