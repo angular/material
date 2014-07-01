@@ -4,6 +4,9 @@ var DocsApp = angular.module('docsApp', ['ngMaterial', 'ngRoute'])
   'COMPONENTS',
   '$routeProvider',
 function(COMPONENTS, $routeProvider) {
+  $routeProvider.when('/', {
+    templateUrl: 'home.tmpl.html'
+  });
 
   angular.forEach(COMPONENTS, function(component) {
     component.url = '/component/' + component.id;
@@ -15,6 +18,8 @@ function(COMPONENTS, $routeProvider) {
       controller: 'DocPageCtrl'
     });
   });
+
+  $routeProvider.otherwise('/');
 
 }])
 
