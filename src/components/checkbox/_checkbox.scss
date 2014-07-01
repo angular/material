@@ -16,6 +16,27 @@ material-checkbox {
     width: $checkbox-width;
     height: $checkbox-height;
     cursor: pointer;
+
+    material-ripple {
+      display: block;
+      width: 76px;
+      height: 76px;
+      top: -30px;
+      left: -30px;
+    }
+
+    .material-ripple-canvas {
+      color: #0f9d58;
+    }
+
+  }
+
+  &.material-checked .material-ripple-canvas {
+    color: #5a5f5a;
+  }
+
+  .circle {
+    border-radius: 50%;
   }
 
   // unchecked
