@@ -79,7 +79,7 @@ angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 
     }
 
   }])
-  .directive('materialRipple', ['materialEffects', function (materialEffects) {
+  .directive('materialRipple', ['materialEffects', '$interpolate', function (materialEffects, $interpolate) {
     return {
       restrict: 'E',
       compile: compileWithCanvas
@@ -95,19 +95,25 @@ angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 
      * @returns {Function}
      */
     function compileWithCanvas( element, attrs ) {
-      var recenter = (attrs.start == "center");
+      var options  = calculateOptions();
+      var tag =
+        '<canvas ' +
+             'class="material-ripple-canvas {{styles}}"' +
+             'style="top:{{top}}; left:{{left}}" >' +
+        '</canvas>';
 
       element.replaceWith(
-        angular.element('<canvas class="material-ripple-canvas" ></canvas >')
+        angular.element( $interpolate(tag)(options) )
       );
 
       return function( scope, element ){
         var parent = element.parent();
-        var rippler = materialEffects.ripple( element[0] );
+        var rippler = materialEffects.ripple( element[0], options );
 
 
         // Configure so ripple wave starts a mouseUp location...
         parent.on('mousedown', onStartRipple);
+
 
         // **********************************************************
         // Mouse EventHandlers
@@ -117,7 +123,7 @@ angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 
 
           if ( inkEnabled( element.scope() )) {
 
-            rippler.onMouseDown( !recenter ? localToCanvas(e) : null );
+            rippler.onMouseDown( options.forceToCenter ? null : localToCanvas(e) );
             parent.on('mouseup', onFinishRipple )
           }
         }
@@ -156,6 +162,38 @@ angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 
         }
 
       }
+
+      function calculateOptions()
+      {
+        return angular.extend( getBounds(element), {
+          forceToCenter : (attrs.start == "center"),
+          styles : (attrs.class || ""),
+          opacityDecayVelocity : getFloatValue( attrs, "opacityDecayVelocity" ),
+          initialOpacity : getFloatValue( attrs, "initialOpacity" )
+        });
+
+        function getBounds(element) {
+          var styles  =  window.getComputedStyle( element[0] );
+          return  {
+            left : styles.left || "0px",
+            top : styles.top || "0px",
+            width : getValue( styles, "width" ),
+            height : getValue( styles, "height" )
+          };
+        }
+
+        function getFloatValue( map, key, defaultVal )
+        {
+          return angular.isDefined( map[key] ) ? +map[key] : defaultVal;
+        }
+
+        function getValue( map, key, defaultVal )
+        {
+          var val = map[key];
+          return (angular.isDefined( val ) && (val !== ""))  ? map[key] : defaultVal;
+        }
+      }
+
     }
 
 

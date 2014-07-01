@@ -16,7 +16,24 @@ angular.module('material.animations')
              now = performance.now.bind(performance);
            }
 
-           return {
+           angular.mixin = function (dst) {
+             angular.forEach(arguments, function(obj) {
+               if (obj !== dst) {
+                 angular.forEach(obj, function(value, key) {
+                   // Only mixin if destination value is undefined
+                   if ( angular.isUndefined(dst[key]) )
+                   {
+                    dst[key] = value;
+                   }
+                 });
+               }
+             });
+             return dst;
+           };
+
+
+
+    return {
 
              /**
               * API to render ripple animations
@@ -46,30 +63,44 @@ angular.module('material.animations')
              *  effect can be visualized as a concentric circle with motion.
              */
             function Rippler( canvas, options ) {
-              /**
-               * The initial opacity set on the wave.
-               *
-               * @attribute initialOpacity
-               * @type number
-               * @default 0.25
-               */
-              this.initialOpacity = 0.95;
 
-              /**
-               * How fast (opacity per second) the wave fades out.
-               *
-               * @attribute opacityDecayVelocity
-               * @type number
-               * @default 0.8
-               */
-              this.opacityDecayVelocity = 0.95;
 
-              this.backgroundFill = true;
-              this.pixelDensity = 1;
+              var defaults = {
+                /**
+                 * The initial opacity set on the wave.
+                 *
+                 * @attribute initialOpacity
+                 * @type number
+                 * @default 0.25
+                 */
+                initialOpacity : 0.25,
+
+                /**
+                 * How fast (opacity per second) the wave fades out.
+                 *
+                 * @attribute opacityDecayVelocity
+                 * @type number
+                 * @default 0.8
+                 */
+                opacityDecayVelocity : 0.8,
+
+                /**
+                 *
+                 */
+                backgroundFill : true,
+
+                /**
+                 *
+                 */
+                pixelDensity : 1
+              };
+
+
+
               this.canvas = canvas;
               this.waves  = [];
 
-              return angular.extend(this, options);
+              return angular.extend(this, angular.mixin(options, defaults));
             };
 
             /**
@@ -94,6 +125,11 @@ angular.module('material.animations')
               wave.startPosition = startAt;
               wave.containerSize = Math.max(width, height);
               wave.maxRadius = distanceFromPointToFurthestCorner(wave.startPosition, {w: width, h: height});
+
+              if (this.canvas.classList.contains("recenteringTouch")) {
+                  wave.endPosition = {x: width / 2,  y: height / 2};
+                  wave.slideDistance = dist(wave.startPosition, wave.endPosition);
+              }
 
               this.waves.push(wave);
 
@@ -227,18 +263,45 @@ angular.module('material.animations')
               return this;
             };
 
-            /**
-             * Resize the canvas to fill the parent's dimensions...
-             */
-            Rippler.prototype.setupCanvas = function (canvas) {
 
-              var bounds = canvas.parentNode.getBoundingClientRect();
+            Rippler.prototype.adjustBounds = function( canvas )
+            {
+              // Default to parent container to define bounds
+              var bounds = angular.extend({},canvas.parentNode.getBoundingClientRect());
+              var self   = this;
+
+              angular.forEach("width height".split(" "), function( style ) {
+                var value = self[style];
+
+                // Allow CSS to explicitly define bounds (instead of parent container
+                if ( angular.isDefined(value ) && (value != "auto") ) {
+
+                  bounds[style] = sanitizePosition( value );
+                  canvas.setAttribute(style, bounds[style] * self.pixelDensity + "px");
+                }
+              });
 
               // NOTE: Modified from polymer implementation
               canvas.setAttribute('width', bounds.width * this.pixelDensity + "px");
               canvas.setAttribute('height', bounds.height * this.pixelDensity + "px");
 
-              var ctx = canvas.getContext('2d');
+
+                function sanitizePosition( style )
+                {
+                  var val = style.replace('px','');
+                  return val;
+                }
+
+              return canvas;
+            }
+
+
+            /**
+             * Resize the canvas to fill the parent's dimensions...
+             */
+            Rippler.prototype.setupCanvas = function ( canvas ) {
+
+              var ctx = this.adjustBounds(canvas).getContext('2d');
               ctx.scale(this.pixelDensity, this.pixelDensity);
               
               if (!this._loop) {

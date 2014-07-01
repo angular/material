@@ -14,38 +14,105 @@
             pointer-events: none;
             position: absolute;
             color: #f0f495;
-            top: 0px;
-            left: 0px;
+            z-index: 1;
         }
 
         .rippleBox {
             position: absolute;
             width: 200px;
             height: 200px;
-            left: 100px;
-            top: 100px;
+            left: 200px;
+            top: 150px;
             background-color: lightslategrey;
         }
+
+        .rippleBox.sample2 {
+            background-color: darkolivegreen;
+            left:  500px;
+        }
+
+        .rippleBox.sample3 {
+            background-color: indianred;
+            top:  450px;
+            left: 200px;
+        }
+
+        material-checkbox {
+
+            position: absolute;
+            top: 150px;
+            left: 50px;
+            box-sizing: border-box;
+            width: 16px;
+            height: 16px;
+            border: 2px solid black;
+            margin : 0px;
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+
+        material-checkbox material-ripple {
+            display: block;
+            width: 76px;
+            height: 76px;
+            top: -32px;
+            left: -32px;
+
+        }
+
+        material-checkbox .material-ripple-canvas {
+            color: #0f9d58;
+        }
+
+        .circle {
+            border-radius: 50%;
+        }
+
+        .tabs-container {
+            position: absolute;
+            height: 300px;
+            width: 600px;
+            top: 50px;
+            left: 50px;
+        }
+
     </style>
 </head>
 <body ng-controller="myController">
 
 
-    <div class="rippleBox">
-        <material-ripple start="pointer"></material-ripple>
+    <div class="tabs-container">
+        <material-tabs>
+            <material-tab ng-click="alert(1)">
+                Item One
+            </material-tab>
+            <material-tab ng-click="alert(2)" mystart="center">
+                Item One
+            </material-tab>
+            <material-tab ng-click="alert(3)" disabled="true">
+                Item One
+            </material-tab>
+        </material-tabs>
     </div>
 
-    <!--<material-tabs>-->
-        <!--<material-tab ng-click="alert(1)">-->
-            <!--Item One-->
-        <!--</material-tab>-->
-        <!--<material-tab ng-click="alert(2)" mystart="center">-->
-            <!--Item One-->
-        <!--</material-tab>-->
-        <!--<material-tab ng-click="alert(3)" disabled="true">-->
-            <!--Item One-->
-        <!--</material-tab>-->
-    <!--</material-tabs>-->
+
+    <material-checkbox>
+        <material-ripple start="center" class="circle" opacityDecayVelocity=""></material-ripple>
+    </material-checkbox>
+
+
+    <div class="rippleBox">
+        <material-ripple initial-opacity="0.95" opacity-decay-velocity="0.89" ></material-ripple>
+    </div>
+
+
+    <div class="rippleBox sample2" >
+        <material-ripple class="recenteringTouch" initial-opacity="0.95" opacity-decay-velocity="0.89" ></material-ripple>
+    </div>
+
+    <div class="rippleBox sample3" >
+        <material-ripple start="center" initial-opacity="0.95" opacity-decay-velocity="0.89" ></material-ripple>
+    </div>
 
 </body>
 
