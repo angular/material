@@ -1,0 +1,49 @@
+material-toolbar {
+  display: block;
+
+  position: relative;
+  z-index: 2;
+
+  box-sizing: border-box;
+  height: 64px;
+  font-size: 1.3em;
+
+  &.material-tall {
+    height: $toolbar-tall-height;
+  }
+
+  &.material-medium-tall {
+    height: $toolbar-medium-tall-height;
+  }
+
+  .material-indent {
+    margin-left: $toolbar-indent-margin;
+  }
+}
+
+.material-toolbar-tools {
+  @extend .material-display-flex;
+  @extend .material-align-center;
+  @extend .material-flex-h;
+
+  height: $toolbar-tools-height;
+  padding: 0 10px;
+
+  > * {
+    margin: 0 8px;
+  }
+}
+
+.material-toolbar-tools-bottom {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.material-toolbar-tools-middle {
+  position: absolute;
+  top: calc(33.3333333333336%);
+  left: 0;
+  right: 0;
+}

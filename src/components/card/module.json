@@ -1,0 +1,10 @@
+{
+  "module": "material.components.card",
+  "name": "Card",
+  "demos": {
+    "demo1": {
+      "name": "Card Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+*.log
+*.sw*
+.DS_STORE
+.sass-cache/
+bower_components
+node_modules
+dist
+
+/.idea/
+/components
+/vendor
+
+.polymer-qp

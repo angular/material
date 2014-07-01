@@ -1,0 +1,10 @@
+{
+  "module": "material.components.toolbar",
+  "name": "Toolbar",
+  "demos": {
+    "demo1": {
+      "name": "Toolbar Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

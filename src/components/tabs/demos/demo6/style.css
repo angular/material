@@ -1,0 +1,67 @@
+.tabs-view {
+  position: absolute;
+  top: 149px;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  animation-duration: 0.35s;
+  animation-timing-function: ease-in-out;
+  -webkit-animation-duration: 0.35s;
+  -webkit-animation-timing-function: ease-in-out;
+}
+
+.tabs-view.ng-enter {
+  animation-name: slideFromRight;
+  -webkit-animation-name: slideFromRight;
+}
+.tabs-view.reverse.ng-enter {
+  animation-name: slideFromLeft;
+  -webkit-animation-name: slideFromLeft;
+}
+.tabs-view.ng-leave {
+  animation-name: slideToLeft;
+  -webkit-animation-name: slideToLeft;
+}
+.tabs-view.reverse.ng-leave {
+  animation-name: slideToRight;
+  -webkit-animation-name: slideToRight;
+}
+
+@keyframes slideFromRight {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(0); }
+}
+@keyframes slideFromLeft {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0); }
+}
+@keyframes slideToRight {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+@keyframes slideToLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+@-webkit-keyframes slideFromRight {
+  0% { -webkit-transform: translateX(100%); }
+  100% { -webkit-transform: translateX(0); }
+}
+@-webkit-keyframes slideFromLeft {
+  0% { -webkit-transform: translateX(-100%); }
+  100% { -webkit-transform: translateX(0); }
+}
+@-webkit-keyframes slideToRight {
+  0% { -webkit-transform: translateX(0); }
+  100% { -webkit-transform: translateX(100%); }
+}
+@-webkit-keyframes slideToLeft {
+  0% { -webkit-transform: translateX(0); }
+  100% { -webkit-transform: translateX(-100%); }
+}
+
+
+ng-view {
+    padding-left: 40px;
+}

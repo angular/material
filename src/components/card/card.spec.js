@@ -1,0 +1,2 @@
+describe('materialCard directive', function() {
+});

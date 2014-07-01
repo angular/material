@@ -1,0 +1,126 @@
+/**
+ * Position a FAB button.
+ */
+@mixin fab-position($spot, $top: auto, $right: auto, $bottom: auto, $left: auto) {
+  &.material-button-fab-#{$spot} {
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+  }
+}
+
+.material-button {
+
+  @include user-select(none);
+  display: inline-block;
+
+  outline: none;
+  border: 0;
+
+  border-radius: $button-border-radius;
+  background-color: transparent;
+  background-image: none;
+  text-align: center;
+
+  // Always uppercase buttons
+  text-transform: uppercase;
+  font-weight: inherit;
+  font-style: inherit;
+  font-variant: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inherit;
+
+  cursor: pointer;
+
+  &.material-button-colored {
+    color: $theme-light;
+    fill: $theme-light;
+  }
+
+  &:hover {
+    background-color: $button-hover-background;
+  }
+
+  &[disabled] {
+    background-color: $button-disabled-background !important;
+    color: $button-disabled-color !important;
+    cursor: auto;
+  }
+
+  &.material-button-icon {
+    padding: 0;
+    background: none;
+  }
+
+  &.material-button-raised {
+    background-color: $button-raised-background;
+    &:hover {
+      background-color: $button-raised-hover-background;
+    }
+
+    &.material-button-colored {
+      background-color: $button-raised-colored-background;
+      color: $button-raised-colored-color;
+
+      &:hover {
+        background-color: $button-raised-colored-hover-background;
+      }
+    }
+  }
+
+  &.material-button-fab {
+
+    @include fab-position(bottom-right, auto, $button-fab-width/2, -$button-fab-height/2, auto);
+    @include fab-position(bottom-left, auto, auto, -$button-fab-height/2, $button-fab-width/2);
+    @include fab-position(top-right, -$button-fab-height/2, $button-fab-width/2, auto, auto);
+    @include fab-position(top-left, -$button-fab-height/2, auto, auto, $button-fab-width/2);
+    position: absolute;
+
+    z-index: $button-fab-zindex;
+    padding: $button-fab-padding;
+
+    width: $button-fab-width;
+    height: $button-fab-height;
+
+    border-radius: $button-fab-border-radius;
+
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.258824);
+  }
+}
+
+a.material-button {
+  padding: $button-padding;
+  line-height: $button-line-height;
+}
+
+.material-button-group {
+  @include flexbox();
+  @include flexbox-flex(1);
+  width: 100%;
+}
+.material-button-group > .material-button {
+  @include flexbox-flex(1);
+
+  display: block;
+
+  overflow: hidden;
+
+  width: 0;
+
+  border-width: 1px 0px 1px 1px;
+  border-radius: 0;
+
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:first-child {
+    border-radius: 2px 0px 0px 2px;
+  }
+  &:last-child {
+    border-right-width: 1px;
+    border-radius: 0px 2px 2px 0px;
+  }
+}

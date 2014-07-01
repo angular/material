@@ -1,0 +1,21 @@
+
+<div ng-app="app" ng-controller="AppCtrl">
+  <div class="inset">
+    <button class="material-button" ng-click="toastIt()">
+      Simple Toast
+    </button>
+    <button class="material-button-raised material-button" 
+            ng-click="complexToastIt()">
+      Advanced Toast
+    </button>
+  </div>
+  <material-card>
+    <div>
+      <b>Toast Position: "{{getToastPosition()}}"</b>
+    </div>
+    <material-checkbox ng-repeat="(name, isSelected) in toastPosition"> 
+      <input type="checkbox" ng-model="toastPosition[name]"> 
+      {{name}}
+    </material-checkbox>
+  </material-card>
+</div>

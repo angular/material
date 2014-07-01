@@ -1,0 +1,45 @@
+material-sidenav {
+  display: block;
+  position: absolute;
+
+  // In general, width of sidenav is Screen Width - App Bar Height
+  // See spec for max-widths
+  width: 100%;
+  @include calc(width, '100% - #{$app-bar-height}');
+  height: 100%;
+
+  max-width: 304px;
+
+  box-shadow: $sidenav-shadow;
+
+  background-color: white;
+
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+
+  @extend .material-sidenav-left;
+}
+
+.material-sidenav-inner {
+  height: 100%;
+}
+
+.material-sidenav-left {
+  left: 0;
+  top: 0;
+  @include transform-translate3d(-100%, 0, 0);
+
+  &.open {
+    @include transform-translate3d(0%, 0, 0);
+  }
+}
+
+.material-sidenav-right {
+  left: 100%;
+  top: 0;
+  @include transform-translate3d(100%, 0, 0);
+
+  &.open {
+    @include transform-translate3d(-100%, 0, 0);
+  }
+}

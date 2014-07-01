@@ -1,0 +1,10 @@
+{
+  "module": "material.components.toast",
+  "name": "Toast",
+  "demos": {
+    "demo1": {
+      "name": "Toast Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

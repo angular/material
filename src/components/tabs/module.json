@@ -1,0 +1,30 @@
+{
+  "module": "material.components.tabs",
+  "name": "Tabs",
+  "demos": {
+    "demo1": {
+      "name": "1",
+      "files": ["demos/demo1/*"]
+    },
+    "demo2": {
+      "name": "2",
+      "files": ["demos/demo2/*"]
+    },
+    "demo3": {
+      "name": "3",
+      "files": ["demos/demo3/*"]
+    },
+    "demo4": {
+      "name": "4",
+      "files": ["demos/demo4/*"]
+    },
+    "demo5": {
+      "name": "5",
+      "files": ["demos/demo5/*"]
+    },
+    "demo6": {
+      "name": "6",
+      "files": ["demos/demo6/*"]
+    }
+  }
+}

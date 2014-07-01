@@ -1,0 +1,24 @@
+material-card {
+  display: block;
+  box-sizing: border-box;
+
+  //border: $card-border;
+
+  box-shadow: $card-box-shadow;
+
+  padding: $card-padding;
+  margin: $card-margin;
+
+  border-radius: $card-border-radius;
+
+  .material-card-image {
+    min-width: 100%;
+    @include calc(width, "100% + #{$card-padding}*2");
+    margin-left: -10px;
+    margin-top: -10px;
+    border-radius: $card-border-radius $card-border-radius 0 0;
+  }
+
+  h2 {
+  }
+}

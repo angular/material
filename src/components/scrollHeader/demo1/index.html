@@ -1,0 +1,82 @@
+
+<div ng-app="app" ng-controller="AppCtrl">
+  <style>
+    .circle {
+      width: 40px;
+      height: 40px;
+      background-color: #555;
+      border-radius: 40px;
+    }
+    #header-bar {
+      background-size: cover;
+      background-image: url('/src/components/scrollHeader/demo1/img/bg9.jpg');
+    }
+    material-content {
+      padding-top: 128px;
+    }
+  </style>
+  <material-toolbar id="header-bar" class="material-theme-light-blue material-medium-tall" scroll-header condensed-height="60">
+    <div class="material-toolbar-tools material-toolbar-tools-top">
+      <button class="material-button material-button-icon" ng-click="toggleLeft()">
+        <material-icon icon="/src/components/icon/icons/system_icons/navigation/res-export/ic_menu_24px.svg"></material-icon>
+      </button>
+      <span class="material-flex"></span>
+      <icon-fill></icon-fill>
+      <icon-fill></icon-fill>
+    </div>
+    <div class="material-toolbar-tools material-toolbar-tools-bottom">
+      <span class="material-flex material-indent">My Drive</span>
+    </div>
+
+    <button class="material-button material-button-fab material-button-fab-bottom-right material-theme-red">
+      <material-icon icon="/assets/icons/system_icons/image/res-export/ic_photo_24px.svg"></material-icon>
+    </button>
+  </material-toolbar>
+
+  <material-content>
+    <material-list ng-controller="ListCtrl">
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+      <drive-item></drive-item>
+    <material-list>
+  </material-content>
+
+  <script id="icon.html" type="text/ng-template">
+    <material-icon style="width: 24px; height: 24px;">
+      <svg viewBox="0 0 24 24" style="pointer-events: none;"><g><g><rect fill="none" width="24" height="24"></rect><path d="M3,18h18v-2H3V18z M3,13h18v-2H3V13z M3,6v2h18V6H3z"></path></g></g></svg>
+    </material-icon>
+  </script>
+
+  <script id="drive-item.html" type="text/ng-template">
+    <material-item>
+      <div class="material-tile-left">
+        <div class="circle"></div>
+      </div>
+      <div class="material-tile-content">
+        <h2>Caro's birthday party planning</h2>
+        <p>
+          Jan 31, 2014
+        </p>
+      </div>
+      <div class="material-tile-right">
+        <material-icon style="width: 24px; height: 24px;">
+          <svg viewBox="0 0 24 24" style="pointer-events: none; width: 24px; height: 24px; vertical-align: middle;"><g id="camera-alt"><circle cx="12" cy="12" r="3.2"></circle><path d="M9,2L7.2,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6c0-1.1-0.9-2-2-2h-3.2L15,2H9z M12,17c-2.8,0-5-2.2-5-5s2.2-5,5-5s5,2.2,5,5S14.8,17,12,17z"></path></g></svg>
+        </material-icon>
+      </div>
+    </material-item>
+  </script>
+</div>

@@ -1,0 +1,10 @@
+{
+  "module": "material.components.list",
+  "name": "Lists",
+  "demos": {
+    "demo1": {
+      "name": "List Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

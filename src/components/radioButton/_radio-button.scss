@@ -1,0 +1,60 @@
+
+material-radio-button {
+  display: block;
+  margin: 15px;
+  white-space: nowrap;
+  cursor: pointer;
+
+  input {
+    display: none;
+  }
+
+  .material-container {
+    position: relative;
+    top: 4px;
+    display: inline-block;
+    width: $radio-width;
+    height: $radio-width;
+    cursor: pointer;
+  }
+
+  .material-off {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: $radio-width;
+    height: $radio-width;
+    border: solid 2px;
+    border-color: #5a5a5a;
+    border-radius: 50%;
+  }
+
+  .material-on {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: $radio-width;
+    height: $radio-width;
+    border-radius: 50%;
+    background-color: #0f9d58;
+    transition: -webkit-transform ease 0.28s;
+    transition: transform ease 0.28s;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+
+  &.material-checked .material-on {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+
+  .material-label {
+    position: relative;
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+    white-space: normal;
+    pointer-events: none;
+  }
+
+}

@@ -1,0 +1,120 @@
+
+material-slider {
+
+  &:before {
+    display: table;
+    content: ' ';
+  }
+
+  // Track
+  .material-track {
+    position: relative;
+    margin: $slider-height;
+  }
+
+  .material-fill {
+    position: absolute;
+    top: $slider-thumb-width - $slider-track-height;
+    left: 0;
+    height: $slider-track-height;
+    background: $theme-light-blue;
+    pointer-events: none;
+  }
+
+  // Simulated Slider Thumb
+  // the native thumb is hidden in place of this one
+  .material-thumb {
+    position: absolute;
+    top: -$slider-thumb-height / 2;
+    right: -$slider-thumb-width / 2;
+    display: table;
+    width: $slider-thumb-width;
+    height: $slider-thumb-height;
+    border: 2px solid $theme-light-blue;
+    border-radius: 50%;
+    background: $theme-light-blue;
+    -webkit-transition: all .1s ease-in-out;
+    -moz-transition: all .1s ease-in-out;
+    transition: all .1s ease-in-out;
+  }
+
+  // Active Simulate Slider Thumb
+  input:active + .material-fill .material-thumb {
+    border-radius: $slider-thumb-width * 2;
+    -webkit-transform: scale(2);
+    -moz-transform: scale(2);
+    transform: scale(2);
+  }
+
+  &.material-slider-min .material-thumb {
+    background: #fff;
+  }
+
+  input {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: $slider-track-height;
+    outline: none;
+    border: none;
+    background: $slider-background-color;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  }
+
+  input::-moz-range-track {
+    border: inherit;
+    background: transparent;
+  }
+
+  input::-ms-track {
+    border: inherit;
+    background: transparent;
+    color: transparent;
+  }
+
+  input::-ms-fill-lower,
+  input::-ms-fill-upper {
+    background: transparent;
+  }
+
+  input::-ms-tooltip {
+    display: none;
+  }
+
+  // Native Range Thumb
+  // the native thumb is actually transparent
+  // but much larger to create a bigger hit area
+  input::-webkit-slider-thumb {
+    position: relative;
+    width: $slider-thumb-width * 2;
+    height: $slider-thumb-height * 4;
+    border: none;
+    background: transparent;
+    -webkit-appearance: none;
+  }
+  input::-webkit-slider-thumb:before {
+    position: absolute;
+    left: -$slider-thumb-width * 2;
+    display: table;
+    width: $slider-thumb-width * 6;
+    height: $slider-thumb-height * 4;
+    content: ' ';
+  }
+
+  input::-moz-range-thumb {
+    width: $slider-thumb-width * 2;
+    height: $slider-thumb-height * 4;
+    border: none;
+    background: transparent;
+  }
+
+  input::-ms-thumb {
+    width: $slider-thumb-width * 2;
+    height: $slider-thumb-height * 4;
+    border: 0;
+    background: transparent;
+  }
+
+}

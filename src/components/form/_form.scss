@@ -1,0 +1,82 @@
+form {
+}
+
+label {
+  display: block;
+  font-size: $input-font-size;
+}
+
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"] {
+  display: block;
+  border-width: 0 0 1px 0;
+  line-height: $input-line-height;
+  font-size: $input-font-size;
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+input, textarea {
+  @include input-placeholder($input-placeholder-color);
+  background: none;
+}
+
+.material-input-group {
+  margin: $input-group-margin;
+  box-sizing: border-box;
+
+  position: relative;
+
+  input, textarea {
+    @include transition($input-label-transition);
+
+    color: $input-color;
+  }
+
+  &.material-input-group-inverted {
+    input {
+      color: $input-color-inverted;
+    }
+  }
+
+  label {
+    -webkit-font-smoothing: antialiased;
+    z-index: 1;
+
+    @include transform-translate3d(0, $input-line-height, 0);
+    @include transform-origin(left, center);
+    @include transition($input-label-transition);
+
+    color: $input-placeholder-color;
+
+    &:hover {
+      cursor: text;
+    }
+  }
+
+  &.material-input-focused, &.material-input-has-value {
+
+    input {
+      border-bottom-width: 2px;
+    }
+
+    label {
+      @include transform-translate3d-scale(0, 0, 0, $input-focused-scale);
+    }
+  }
+}

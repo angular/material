@@ -1,0 +1,10 @@
+{
+  "module": "material.components.form",
+  "name": "Form",
+  "demos": {
+    "demo1": {
+      "name": "Form Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

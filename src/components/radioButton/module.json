@@ -1,0 +1,10 @@
+{
+  "module": "material.components.radioButton",
+  "name": "Radio Button",
+  "demos": {
+    "demo1": {
+      "name": "Radio Button Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

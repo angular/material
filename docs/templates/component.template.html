@@ -1,0 +1,15 @@
+<!-- <div class="view-source"> -->
+<!--   <button class="material-button" ng-click="demoSource(currentComponent.selectedDemo.indexFile.outputPath)">Demo Source</button> -->
+<!--   <button class="material-button" ng-click="openDemo(currentComponent.selectedDemo.indexFile.outputPath)">Open Demo</button> -->
+<!-- </div> -->
+<material-tabs selected="currentComponent.$selectedDemoIndex" class="demo-tabs">
+  <material-tab ng-repeat="demo in demos"
+           ng-click="currentComponent.$selectedDemoIndex = $index" 
+           label="{{demo.name}}"
+           class="your-face">
+    <iframe class="demo" ng-src="{{demo.indexFile.outputPath}}" name="{{demo.id}}"></iframe>
+  </material-tab>
+
+</material-tabs>
+
+</div>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html ng-app="materialDemoTabs">
+<head>
+    <title></title>
+    <link rel="stylesheet" href="/dist/material-design.css">
+    <style type="text/css">
+        html, body {
+          color:white;
+            width: 100%;
+            height: 400px;
+        }
+
+        canvas.material-ripple-canvas {
+            pointer-events: none;
+            position: absolute;
+            color: #f0f495;
+            top: 0px;
+            left: 0px;
+        }
+
+        .rippleBox {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            left: 100px;
+            top: 100px;
+            background-color: lightslategrey;
+        }
+    </style>
+</head>
+<body ng-controller="myController">
+
+
+    <div class="rippleBox">
+        <material-ripple start="pointer"></material-ripple>
+    </div>
+
+    <!--<material-tabs>-->
+        <!--<material-tab ng-click="alert(1)">-->
+            <!--Item One-->
+        <!--</material-tab>-->
+        <!--<material-tab ng-click="alert(2)" mystart="center">-->
+            <!--Item One-->
+        <!--</material-tab>-->
+        <!--<material-tab ng-click="alert(3)" disabled="true">-->
+            <!--Item One-->
+        <!--</material-tab>-->
+    <!--</material-tabs>-->
+
+</body>
+
+<script type="text/javascript" src="/bower_components/gsap/src/uncompressed/TweenMax.js"></script>
+
+<script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="/bower_components/angular-animate/angular-animate.js"></script>
+<script type="text/javascript" src="/config/lib/angular-animate-sequence/angular-animate-sequence.js"></script>
+<script type="text/javascript" src="/config/lib/angular-animate-sequence/angular-animate-stylers.js"></script>
+
+<script src="/src/components/animate/effects.js"></script>
+<script src="/src/components/animate/canvas/rippler.js"></script>
+
+<script src="/src/utils/supplant.js"></script>
+<script src="/src/utils/binding.js"></script>
+<script src="/src/utils/list.js"></script>
+<script src="/src/components/tabs/tabs.js"></script>
+
+<script type="text/javascript" src="./example.js"></script>
+</html>

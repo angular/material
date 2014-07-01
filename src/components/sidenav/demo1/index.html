@@ -1,0 +1,22 @@
+
+<div ng-app="app" ng-controller="AppCtrl">
+
+  <material-sidenav class="material-sidenav-left material-whiteframe-z2" component-id="left">
+    <div ng-controller="LeftCtrl">
+      <h2>Sidenav left</h2>
+      <button class="material-button" ng-click="close()">Close</button>
+    </div>
+  </material-sidenav>
+
+  <material-sidenav class="material-sidenav-right material-whiteframe-z2 material-theme-light" component-id="right">
+    <div ng-controller="RightCtrl">
+      <h2>Sidenav right</h2>
+      <button class="material-button" ng-click="close()">Close</button>
+    </div>
+  </material-sidenav>
+
+  <button class="material-button" ng-click="toggleLeft()">Toggle left</button>
+
+  <button class="material-button" ng-click="toggleRight()">Toggle right</button>
+
+</div>

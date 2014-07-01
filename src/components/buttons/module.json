@@ -1,0 +1,10 @@
+{
+  "module": "material.components.button",
+  "name": "Buttons",
+  "demos": {
+    "demo1": {
+      "name": "Basic Buttons",
+      "files": ["demo1/*"]
+    }
+  }
+}

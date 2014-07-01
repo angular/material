@@ -1,0 +1,14 @@
+
+<div ng-app="app" ng-controller="AppCtrl">
+
+  <material-checkbox>
+    <input type="checkbox" ng-model="data.cb1">
+    Checkbox 1: {{ data.cb1 }}
+  </material-checkbox>
+
+  <material-checkbox>
+    <input type="checkbox" ng-model="data.cb2" ng-true-value="yup" ng-false-value="nope">
+    Checkbox 2: {{ data.cb2 }}
+  </material-checkbox>
+
+</div>

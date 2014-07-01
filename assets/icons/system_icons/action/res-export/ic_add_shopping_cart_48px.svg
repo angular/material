@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="48px" height="48px"
+	 viewBox="0 0 48 48" enable-background="new 0 0 48 48" xml:space="preserve">
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  width="1400" height="3600" y="-3112" x="-3" bottomLeftOrigin="true"></sliceSourceBounds>
+	</sfw>
+</metadata>
+<g id="Header">
+	<g>
+		<rect x="-838" y="-696" fill="none" width="1400" height="3600"/>
+	</g>
+</g>
+<g id="Label">
+</g>
+<g id="Icon">
+	<g>
+		<rect fill="none" width="48" height="48"/>
+		<polygon fill="none" points="36.6,12 36.6,12 31.1,22 		"/>
+		<path d="M22,18h4v-6h6V8h-6V2h-4v6h-6v4h6V18z M14,36c-2.2,0-4,1.8-4,4s1.8,4,4,4s4-1.8,4-4S16.2,36,14,36z M34,36
+			c-2.2,0-4,1.8-4,4s1.8,4,4,4s4-1.8,4-4S36.2,36,34,36z M14.3,29.5c0-0.1,0-0.2,0.1-0.2l1.8-3.3h14.9c1.5,0,2.8-0.8,3.5-2.1l7.7-14
+			L38.8,8h0l-2.2,4l-5.5,10h-14l-0.3-0.5L12.3,12l-1.9-4L8.5,4H2v4h4l7.2,15.2l-2.7,4.9C10.2,28.6,10,29.3,10,30c0,2.2,1.8,4,4,4h24
+			v-4H14.8C14.6,30,14.3,29.8,14.3,29.5z"/>
+	</g>
+</g>
+<g id="Grid" display="none">
+	<g display="inline">
+		<line fill="none" stroke="#00E5FF" stroke-width="0.1" stroke-miterlimit="10" x1="42" y1="-696" x2="42" y2="2856"/>
+	</g>
+</g>
+</svg>

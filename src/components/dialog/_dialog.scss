@@ -1,0 +1,77 @@
+material-dialog {
+  @include backdrop();
+  z-index: $whiteframe-zindex-z5;
+
+  .dialog-container {
+    background-color: #fff;
+    border-radius: 4px;
+    box-sizing: border-box;
+    display: block;
+    box-shadow: $whiteframe-shadow-z5;
+
+    // TODO: Calculate height properly
+    min-width: 240px;
+    max-width: 80%;
+    max-height: 80%;
+
+    @include flexbox();
+    @include flexcolumn();
+
+    .dialog-content {
+      @include flex-order(1);
+      padding: 24px;
+      overflow: auto;
+    }
+    .dialog-actions {
+      @include flex-order(2);
+      padding: 4px 16px 20px;
+    }
+  }
+
+  @include transition(opacity 0.2s ease-out);
+  &.ng-enter,
+  &.ng-leave.ng-leave-active {
+    opacity: 0;
+  }
+  &.ng-leave,
+  &.ng-enter.ng-enter-active {
+    opacity: 1;
+  }
+  &.ng-enter > .dialog-container {
+    -webkit-animation: materialDialogAnimation 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: materialDialogAnimation 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  &.ng-leave  > .dialog-container {
+    -webkit-transform: scale(1) translateY(0);
+    transform: scale(1) translateY(0);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  &.ng-leave.ng-leave-active > .dialog-container {
+    -webkit-transform: scale(0.5) translateY(100%);
+    transform: scale(0.5) translateY(100%);
+  }
+}
+
+@keyframes materialDialogAnimation {
+  0% {
+    transform: scale(0.5) translateY(0);
+    -webkit-transform: scale(0.5) translateY(0);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    -webkit-transform: scale(1) translateY(0);
+  }
+}
+
+@-webkit-keyframes materialDialogAnimation {
+  0% {
+    transform: scale(0.5) translateY(20px);
+    -webkit-transform: scale(0.5) translateY(20px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    -webkit-transform: scale(1) translateY(0);
+  }
+
+}

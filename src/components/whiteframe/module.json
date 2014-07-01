@@ -1,0 +1,10 @@
+{
+  "module": "material.components.whiteframe",
+  "name": "Whiteframe",
+  "demos": {
+    "demo1": {
+      "name": "Whiteframe Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "module": "material.components.dialog",
+  "name": "Dialog",
+  "demos": {
+    "demo1": {
+      "name": "Dialog Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

@@ -1,0 +1,41 @@
+<!doctype html>
+<html ng-app="docsApp" ng-controller="DocsCtrl">
+<head>
+<meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" href="lib/material-design.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/animations.css">
+<script src="lib/jquery.js"></script>
+<script src="lib/angular.js"></script>
+<script src="lib/angular-animate.js"></script>
+<script src="lib/angular-route.js"></script>
+<script src="lib/angular-animate-sequence.js"></script>
+<script src="lib/angular-animate-stylers.js"></script>
+<script src="lib/material-design.js"></script>
+<script src="js/app.js"></script>
+<script src="js/components-data.js"></script>
+</head>
+<body>
+  <material-sidenav class="material-sidenav-left material-whiteframe-z3" component-id="left">
+    <material-content>
+      <material-list>
+        <material-item ng-repeat="component in COMPONENTS"
+         ng-click="goToComponent(component)"
+         ng-class="{active: componentIsCurrent(component)}"
+         class="menu-item">
+         <div class="material-tile-content">
+           {{component.name}}
+         </div>
+        </material-item>
+      </material-list>
+    </material-content>
+  </material-sidenav>
+  <div class="sidenav-content">
+    <div class="menu-icon" ng-click="toggleMenu()">
+      <material-icon icon="img/icons/ic_menu_24px.svg">
+      </material-icon>
+    </div>
+    <h2>{{currentComponent.name}}</h2>
+    <ng-view class="sliding-view"></ng-view>
+  </div>
+</body>

@@ -1,0 +1,23 @@
+material-ink {
+  height: 4px;
+  background: #ffff85;
+  position: absolute;
+  margin-top: -4px;
+}
+
+
+div.material-ripple-cursor {
+  position:absolute;
+  border:0px solid #f0f495;
+  border-radius:100%;
+  z-index:-1;
+}
+
+canvas.material-ripple-canvas {
+  pointer-events: none;
+  position: absolute;
+  color: #f0f495;
+  top: 0;
+  left: 0;
+}
+

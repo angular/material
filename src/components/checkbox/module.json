@@ -1,0 +1,10 @@
+{
+  "module": "material.components.checkbox",
+  "name": "Checkbox",
+  "demos": {
+    "demo1": {
+      "name": "Checkbox Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

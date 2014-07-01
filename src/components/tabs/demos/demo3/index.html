@@ -1,0 +1,32 @@
+<link rel="stylesheet" href="/css/tab_demos.css">
+<div ng-app="app" ng-controller="AppCtrl" class="sample">
+
+    <h3>Static Tabs internal content: </h3>
+    <p>Tab #1 is active and #2, #5 are disabled > No bar</p>
+
+    <material-tabs selected="which" nobar nostretch class="special">
+
+        <material-tab >
+            <material-tab-label>ITEM A1</material-tab-label>
+            <div class="blueArea">Tab Content #A1</div>
+        </material-tab>
+
+        <material-tab disabled="true" >ITEM B2</material-tab>
+
+        <material-tab >
+            <material-tab-label>
+                <span class="redArea"> ITEM C3</span>
+            </material-tab-label>
+            <div class="redArea">Tab Content #C3</div>
+        </material-tab>
+
+        <material-tab><material-tab-label>Item D4</material-tab-label><div class="greenArea">Tab Content #D4</div></material-tab>
+
+        <material-tab disabled="true" >
+            <material-tab-label>ITEM E5</material-tab-label>
+            <div class="greenArea">Tab Content #E5</div>
+        </material-tab>
+
+    </material-tabs>
+
+<div>

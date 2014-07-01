@@ -1,0 +1,139 @@
+// Prefix a given property for the given prefixes set.
+// For example:
+// @include prefix('transform', 'translate3d(0,0,0)', $transform-vendor-prefixes);
+@mixin prefix($prop, $val, $prefixes) {
+  @each $p in $prefixes {
+    -#{$p}-#{$prop}: $val;
+  }
+}
+
+@mixin flex-box-align($direction) {
+  -webkit-box-align: $direction;
+  align-items: $direction;
+}
+
+@mixin justify-content($value: stretch) {
+  @if $value == flex-start {
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+  } @else if $value == flex-end {
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+  } @else if $value == space-between {
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+  } @else {
+    -webkit-box-pack: $value;
+    -ms-flex-pack: $value;
+  }
+  -webkit-justify-content: $value;
+  -moz-justify-content: $value;
+  justify-content: $value;
+}
+
+@mixin transform-origin($x, $y) {
+  -webkit-transform-origin: $x $y;
+          transform-origin: $x $y;
+}
+@mixin transform-translate3d($x, $y, $z) {
+  -webkit-transform: translate3d($x, $y, $z);
+          transform: translate3d($x, $y, $z);
+}
+@mixin transform-translate3d-scale($x, $y, $z, $scale) {
+  -webkit-transform: translate3d($x, $y, $z) scale($scale);
+          transform: translate3d($x, $y, $z) scale($scale);
+}
+
+@mixin transform-scale($val) {
+  -webkit-transform: scale($val);
+          transform: scale($val);
+}
+
+@mixin transform-rotate($val) {
+  -webkit-transform: rotate($val);
+          transform: rotate($val);
+}
+
+@mixin transition($val) {
+  -webkit-transition: $val;
+          transition: $val;
+}
+
+@mixin user-select($val:none) {
+  -webkit-user-select: $val;
+  -moz-user-select: $val;
+  -ms-user-select: $val;
+  user-select: $val;
+}
+
+@mixin margin-selectors($before:1em, $after:1em, $start:0px, $end:0px) {
+  -webkit-margin-before: $before;
+  -webkit-margin-after: $after;
+  -webkit-margin-start: $start;
+  -webkit-margin-end: $end;
+}
+
+@mixin flexbox {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: -moz-flex !important;
+  display: -webkit-flex !important;
+  display: flex !important;
+}
+
+@mixin flexbox-flex($amt) {
+  -webkit-box-flex: $amt;
+  -webkit-flex: $amt;
+  -moz-box-flex: $amt;
+  -moz-flex: $amt;
+  -ms-flex: $amt;
+  flex: $amt;
+}
+
+
+@mixin flex-order($n) {
+  -webkit-order: $n;
+  -ms-flex-order: $n;
+  order: $n;
+}
+@mixin flexrow {
+  -webkit-box-orient: horizontal;
+  -ms-flex-direction: row;
+  -moz-flex-direction: row;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+}
+@mixin flexcolumn {
+  -webkit-box-orient: vertical;
+  -ms-flex-direction: column;
+  -moz-flex-direction: column;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+
+@mixin calc($property, $expression) { 
+  #{$property}: -webkit-calc(#{$expression}); 
+  #{$property}: calc(#{$expression}); 
+} 
+
+@mixin input-placeholder($color) {
+  &:-ms-input-placeholder {
+    color: $color;
+  }
+  &::-webkit-input-placeholder {
+    color: $color;
+  }
+}
+
+@mixin backdrop {
+  @include flexbox();
+  @include flex-box-align(center);
+  @include justify-content(center);
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background-color: rgba(0,0,0,0.2);
+}

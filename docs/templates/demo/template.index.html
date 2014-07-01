@@ -1,0 +1,40 @@
+<!doctype html>
+<head>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <link rel="stylesheet" href="../../../lib/material-design.css">
+  <script src="../../../lib/jquery.js"></script>
+  <script src="../../../lib/angular.js"></script>
+  <script src="../../../lib/angular-animate.js"></script>
+  <script src="../../../lib/angular-route.js"></script>
+  <script src="../../../lib/angular-animate-sequence.js"></script>
+  <script src="../../../lib/angular-animate-stylers.js"></script>
+  <script src="../../../lib/material-design.js"></script>
+  {% for file in doc.js %}<script src="{$ file.basePath $}"></script>
+  {% endfor %}
+  {% for file in doc.css %}<link rel="stylesheet" href="{$ file.basePath $}"> 
+  {% endfor %}
+</head>
+<body class="demo-cloaked">
+
+{$ doc.content $}
+
+<script>
+angular.module('ng')
+.run(function() {
+  setTimeout(function() {
+    angular.element(document.body).removeClass("demo-cloaked");
+  }, 25);
+});
+</script>
+<style>
+body {
+  opacity: 1;
+  -webkit-transition: opacity ease-in 0.0s;
+  transition: opacity ease-in 0.0s;
+}
+body.demo-cloaked {
+  opacity: 0;
+}
+</style>
+</body>
+</html>

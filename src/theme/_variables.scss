@@ -1,0 +1,146 @@
+// Structural
+
+// Base vendor prefixes for mixins
+$base-vendor-prefixes: "webkit", "moz", "ms";
+
+// Font families
+$font-family: 'RobotoDraft', 'Helvetica Neue', Helvetica, Arial;
+$font-color-base: #444;
+
+// Font colors
+$text-light: #f1f1f1;
+$text-dark: #111111;
+
+// Theme colors
+$theme-light: #4285f4;
+$theme-light-blue: #03a9f4;
+$theme-dark: #3f51b5;
+$theme-green: #0f9d58;
+$theme-yellow: #ffeb3b;
+$theme-orange: #ff5722;
+$theme-purple: #9c27b0;
+$theme-red: #db4437;
+
+$theme-indigo: #3e50b4;
+
+// Button variables
+$button-border-radius: 3px;
+$button-disabled-background: rgb(234, 234, 234);
+$button-disabled-color: rgb(168, 168, 168);
+$button-raised-background: rgb(223, 223, 233);
+$button-raised-colored-color: #fff;
+$button-raised-colored-background: $theme-light;
+
+$button-hover-background: rgb(228, 228, 228);
+$button-raised-hover-background: rgb(214, 214, 214);
+$button-raised-colored-hover-background: #3367d6;
+
+$button-line-height: 25px;
+$button-padding: 2px 6px 3px;
+
+// Fab buttons
+$button-fab-width: 56px;
+$button-fab-height: 56px;
+$button-fab-border-radius: 28px;
+$button-fab-padding: 16px;
+$button-fab-zindex: 2;
+
+// App bar variables
+$app-bar-height: 64px;
+
+// Toolbar variables
+$toolbar-tools-height: 64px;
+$toolbar-height: 64px;
+$toolbar-medium-tall-height: 128px;
+$toolbar-tall-height: 192px;
+$toolbar-indent-margin: 62px;
+
+// Side nav variables
+
+$sidenav-shadow: 0px 0px 5px rgba(0,0,0,0.4);
+
+// Whiteframes
+
+$whiteframe-shadow-z1: 0px 2px 5px 0 rgba(0,0,0,0.26);
+$whiteframe-zindex-z1: 1;
+$whiteframe-shadow-z2: 0px 8px 17px rgba(0,0,0,0.2);
+$whiteframe-zindex-z2: 2;
+$whiteframe-shadow-z3: 0px 17px 50px rgba(0,0,0,0.19);
+$whiteframe-zindex-z3: 3;
+$whiteframe-shadow-z4: 0px 16px 28px 0 rgba(0,0,0,0.22);
+$whiteframe-zindex-z4: 4;
+$whiteframe-shadow-z5: 0px 27px 24px 0 rgba(0,0,0,0.2);
+$whiteframe-zindex-z5: 5;
+
+// Lists and tiles
+
+$list-h2-font-size: 1.1em;
+$list-h2-margin: 0 0 3px 0;
+$list-h2-font-weight: 400;
+$list-h3-font-size: 0.9em;
+$list-h3-font-weight: 400;
+$list-h3-margin: 0 0 3px 0;
+$list-p-font-size: 0.75em;
+$list-p-margin: 0 0 3px 0;
+
+$item-padding-top: 0px;
+$item-padding-right: 16px;
+$item-padding-left: 16px;
+$item-padding-bottom: 0px;
+
+// Cards
+
+$card-border-radius: 2px;
+$card-border: 1px solid #eee;
+$card-padding: 10px;
+$card-margin: 10px;
+$card-box-shadow: $whiteframe-shadow-z1;
+
+// Tiles
+
+$tile-border-radius: 2px;
+$tile-padding: 10px;
+$tile-margin: 10px;
+
+// Forms and inputs
+
+$input-font-size: 0.85em;
+$input-line-height: 30px;
+
+$input-placeholder-color: darken($text-light, 30%);
+
+$input-color: $text-dark;
+$input-color-inverted: $text-light;
+
+$input-group-margin: 10px 0 10px 0;
+
+$input-label-focused-font-size: 0.7em;
+$input-label-focused-color: $text-dark;
+
+$input-focused-scale: 0.85;
+
+$input-label-transition: all ease-out 300ms;
+
+
+// Slider
+//--------------------------------------------
+
+$slider-background-color:  rgb(200, 200, 200);
+$slider-height:  30px;
+$slider-track-height:  2px;
+$slider-thumb-width:  15px;
+$slider-thumb-height:  $slider-thumb-width;
+
+
+// Checkbox
+//--------------------------------------------
+
+$checkbox-width: 16px;
+$checkbox-height: $checkbox-width;
+
+
+// Radio Button
+//--------------------------------------------
+
+$radio-width: 16px;
+$radio-height: $radio-width;

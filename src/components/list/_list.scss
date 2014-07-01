@@ -1,0 +1,62 @@
+material-list {
+}
+
+material-item {
+  @extend .material-display-flex;
+  @extend .material-align-center;
+  @extend .material-flex-h;
+
+  position: relative;
+
+  box-sizing: border-box;
+
+  padding: $item-padding-top $item-padding-right $item-padding-bottom $item-padding-left;
+}
+
+/**
+ * The left tile for a list item.
+ */
+.material-tile-left {
+  width: 56px;
+  text-align: left;
+  padding-right: 16px;
+}
+
+/**
+ * The center content tile for a list item.
+ */
+.material-tile-content {
+  @extend .material-flex;
+  text-overflow: ellipsis;
+
+  border-bottom: 1px solid #eee;
+
+  padding: 15px 0 15px 0;
+
+  // For border continuation
+  margin-right: -16px;
+
+  h2 {
+    font-size: $list-h2-font-size;
+    margin: $list-h2-margin;
+    font-weight: $list-h2-font-weight;
+  }
+  h3 {
+    font-size: $list-h3-font-size;
+    margin: $list-h3-margin;
+    font-weight: $list-h3-font-weight;
+  }
+  p {
+    font-size: $list-p-font-size;
+    margin: $list-p-margin;
+  }
+}
+
+/**
+ * The right tile for a list item.
+ */
+.material-tile-right {
+  position: absolute;
+  right: $item-padding-right;
+  top: 17px;
+}

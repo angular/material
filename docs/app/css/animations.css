@@ -1,0 +1,28 @@
+.sliding-view {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 60px;
+  bottom: 0;
+}
+/*
+.sliding-view.ng-enter,
+.sliding-view.ng-leave {
+  -webkit-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+}
+
+.sliding-view.ng-enter {
+  opacity: 0.99;
+}
+.sliding-view.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+
+.sliding-view.ng-leave {
+  opacity: 1;
+}
+.sliding-view.ng-leave-active {
+  opacity: 0;
+}
+*/

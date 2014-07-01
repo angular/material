@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <link rel="stylesheet" href="/dist/material-design.css">
+    <link rel="stylesheet" href="tabs.css">
+
+  </head>
+  <body ng-app="material.components">
+
+      Demos for materialTabs Directive:
+
+      <!--
+        Demonstration #1a
+      -->
+
+      <div ng-controller="Demo1Controller" class="sample">
+
+          <h3>(1a) Simple Static Tabs (logo in header)</h3>
+
+          <material-tabs selected="activeIndex">
+              <div style="padding:10px;height:10px;width: 100%;">
+                <div style="margin-top:-5px;padding-left:48%"><img ng-src="angular.png" style="width:30px;height: 30px;"></div>
+              </div>
+              <material-tab>ITEM ONE</material-tab>
+              <material-tab>ITEM TWO</material-tab>
+              <material-tab>ITEM THREE</material-tab>
+          </material-tabs>
+
+
+          <div ng-controller="Demo1Controller" style="padding-top: 20px;">
+
+              <h3>(1b) Simple Dynamic Tabs (no views)</h3>
+
+              <material-tabs selected="selectedIndex">
+                  <material-tab ng-repeat="tab in tabs">
+                      {{tab.title}}
+                  </material-tab>
+              </material-tabs>
+
+          </div>
+      </div>
+
+
+      <!--
+        Demonstration #2
+      -->
+
+
+      <div class="sample">
+
+          <div ng-controller="Demo2Controller" class="demo2" >
+              <h3>(2a) Static Tabs internal content: </h3>
+              <p>No ink effect and no sliding bar. Tab #1 is active and #2, #5 are disabled.</p>
+
+              <material-tabs selected="which" nobar nostretch class="special">
+
+                  <material-tab >
+                      <material-tab-label>ITEM A1</material-tab-label>
+                      <div class="blueArea">Tab Content #A1</div>
+                  </material-tab>
+
+                  <material-tab disabled="true" >ITEM B2</material-tab>
+
+                  <material-tab >
+                      <material-tab-label>
+                          <span class="redArea"> ITEM C3</span>
+                      </material-tab-label>
+                      <div class="redArea">Tab Content #C3</div>
+                  </material-tab>
+
+                  <material-tab><material-tab-label>Item D4</material-tab-label><div class="greenArea">Tab Content #D4</div></material-tab>
+
+                  <material-tab disabled="true" >
+                      <material-tab-label>ITEM E5</material-tab-label>
+                      <div class="greenArea">Tab Content #E5</div>
+                  </material-tab>
+
+              </material-tabs>
+
+
+          </div>
+
+          <!--
+            Demonstration #3
+          -->
+          <div ng-controller="Demo3Controller" style="padding-top: 30px;">
+              <h3>(2b) Dynamic Tabs internal content:</h3>
+
+              <div class="options" ng-keypress="submit($event)">
+                  <span style="display:block;padding-bottom:5px;">Add another tab.</span>
+                  Title: <input type="text" ng-model="tTitle" placeholder="tab label">
+                  Content:<input type="text" ng-model="tContent" placeholder="tab content" style="width:250px;">
+                  <button ng-disabled="!tTitle" ng-click="addTab(title)" class="addTabBtn" >Add another tab</button>
+              </div>
+
+              <br/><br/>
+
+
+              <material-tabs selected="selectedIndex" style="background-color: #00bcd6">
+                  <img ng-src="angular.png" style="position:absolute; width:30px;height: 30px; padding-top:5px; padding-left: 5px;">
+
+                  <material-tab ng-repeat="tab in tabs | orderBy:predicate:reversed"
+                          on-select="onTabSelected(tab)"
+                          on-deselect="announceDeselected(tab)"
+                          disabled="tab.disabled && allowDisable && tab.title=='Material'">
+                      <material-tab-label>
+                          {{tab.title}}
+                          <button ng-click="removeTab( tab )" style="margin-left: 5px;">X</button>
+                      </material-tab-label>
+                      {{tab.content}}
+                  </material-tab>
+
+              </material-tabs>
+
+              <br/>
+              <div class="infoBar">
+                  <div class="left">
+                      Tab <span class="highlight">#{{ selectedIndex }}</span>is active.
+
+                      <span class="left-spacer">Tab #2</span> is
+                      <span class="highlight"><input type="checkbox" ng-model="allowDisable"> Disabled</span>
+                      (will auto-deselect if active)
+
+                      <span style="padding-left: 30px;">
+                          Show in <span class="highlight"><input type="checkbox" ng-model="reversed" ng-value="reversed"> Reversed Order</span>
+                      </span>
+                  </div>
+
+                  <div class="right">
+                      onSelected: <span class="highlight hello">{{greeting}}</span>
+
+                      <span class="left-spacer" ng-show="farewell.length">
+                        onDeselected: <span class="highlight bye">{{farewell}}</span>
+                      </span>
+                  </div>
+              </div>
+
+          </div>
+
+      </div>
+
+
+
+
+
+
+      <!--
+        Demonstration #4
+      -->
+
+      <div ng-controller="Demo4Controller" class="sample">
+          <h3>(3) Static Tabs linked external content (ng-Switch):</h3>
+          <p>Tabs with view panes and the bar slides to the selected tab; with no paper ink effects</p>
+
+          <p>
+              Your selection:
+              <input ng-model="selectedIndex">Tab #2 is
+              <span class="highlight">
+                <input type="checkbox" ng-model="twoDisabled">Disabled
+              </span>
+              (will auto-deselect if active)
+          </p>
+          <br/>
+
+            <material-tabs selected="selectedIndex" noink>
+              <material-tab label="ITEM ONE"></material-tab>
+              <material-tab label="ITEM TWO" disabled="twoDisabled"></material-tab>
+              <material-tab label="ITEM THREE"></material-tab>
+              <material-tab label="ITEM FOUR"></material-tab>
+            </material-tabs>
+
+            <div class="animate-switch-container" ng-switch on="selectedIndex">
+              <div class="animate-switch blueArea" ng-switch-when="0">
+                  View for Item #1<br/>
+                  Selection index = 0
+              </div>
+              <div class="animate-switch redArea" ng-switch-when="1">
+                  View for Item #2<br/>
+                  Selection index = 1
+              </div>
+              <div class="animate-switch greenArea" ng-switch-when="2">
+                  View for Item #3<br/>
+                  Selection index = 2
+              </div>
+              <div class="animate-switch grayArea" ng-switch-when="3">
+                  View for Item #4<br/>
+                  Selection index = 3
+              </div>
+            </div>
+      </div>
+
+
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/angular/angular.js"></script>
+    <script src="/bower_components/angular-animate/angular-animate.js"></script>
+    <script src="/config/lib/angular-animate-sequence/angular-animate-sequence.js"></script>
+    <script src="/config/lib/angular-animate-sequence/angular-animate-stylers.js"></script>
+
+    <script src="/src/components/animate/effects.js"></script>
+    <script src="/src/components/animate/canvas/rippler.js"></script>
+
+    <script src="/src/utils/supplant.js"></script>
+    <script src="/src/utils/binding.js"></script>
+    <script src="/src/utils/list.js"></script>
+    <script src="/src/components/tabs/tabs.js"></script>
+
+    <script src="./scripts.js"></script>
+  </body>
+
+</html>

@@ -1,0 +1,20 @@
+
+<div ng-app="app" ng-controller="AppCtrl">
+
+  <material-slider>
+    <input type="range" ng-model="data.slider1">
+  </material-slider>
+
+  <material-slider>
+    <input type="range" ng-model="data.slider2" min="33" max="67">
+  </material-slider>
+
+  <material-slider>
+    <input type="range" ng-model="data.slider3" min="-10" max="10" step="2">
+  </material-slider>
+
+  <p>Slider 1: {{ data.slider1 }}</p>
+  <p>Slider 2: {{ data.slider2 }}</p>
+  <p>Slider 3: {{ data.slider3 }}</p>
+
+</div>

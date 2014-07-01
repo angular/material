@@ -1,0 +1,10 @@
+{
+  "module": "material.components.content",
+  "name": "Content",
+  "demos": {
+    "demo1": {
+      "name": "Content Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

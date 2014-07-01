@@ -1,0 +1,22 @@
+<script src="http://code.angularjs.org/1.3.0-beta.9/angular-route.min.js"></script>
+<link rel="stylesheet" href="/css/tab_demos.css">
+
+<div class="sample">
+
+    <h3>Dynamic Tabs (ng-repeat) with view routing:</h3>
+    <p>Tab selection changes the $location.path and ng-view routing triggers...</p>
+
+
+    <div ng-app="app" ng-controller="AppCtrl" >
+
+      <material-tabs selected="selectedTabIndex">
+        <material-tab ng-repeat="tab in tabs"
+                label="{{tab.label}}">
+        </material-tab>
+      </material-tabs>
+
+      <ng-view class="tabs-view" ng-class="{reverse: reverse}"></ng-view>
+
+    </div>
+
+</div>

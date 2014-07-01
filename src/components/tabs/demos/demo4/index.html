@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="/css/tab_demos.css">
+<div ng-app="app" ng-controller="AppCtrl" class="sample">
+
+    <h3>Dynamic Tabs internal content:</h3>
+
+    <div class="options" ng-keypress="submit($event)">
+        <span style="display:block;padding-bottom:5px;">Add another tab.</span>
+        Title: <input type="text" ng-model="tTitle" placeholder="tab label">
+        Content:<input type="text" ng-model="tContent" placeholder="tab content" style="width:250px;">
+        <button ng-disabled="!tTitle" ng-click="addTab(tTitle,tContent)" class="addTabBtn" >Add another tab</button>
+    </div>
+
+    <br/><br/>
+
+
+    <material-tabs selected="selectedIndex" style="background-color: #00bcd6">
+        <img ng-src="/img/angular.png" style="position:absolute; width:30px;height: 30px; padding-top:5px; padding-left: 5px;">
+
+        <material-tab ng-repeat="tab in tabs | orderBy:predicate:reversed"
+                 on-select="onTabSelected(tab)"
+                 on-deselect="announceDeselected(tab)"
+                 disabled="tab.disabled && allowDisable && tab.title=='Material'">
+            <material-tab-label>
+                {{tab.title}}
+                <button ng-click="removeTab( tab )" style="margin-left: 5px;">X</button>
+            </material-tab-label>
+            {{tab.content}}
+        </material-tab>
+
+    </material-tabs>
+
+    <br/>
+    <div class="infoBar">
+        <div class="left">
+            Tab <span class="highlight">#{{ selectedIndex }}</span>is active.
+
+            <span class="left-spacer">Tab #2</span> is
+            <span class="highlight"><input type="checkbox" ng-model="allowDisable"> Disabled</span>
+            (will auto-deselect if active)
+
+                      <span style="padding-left: 30px;">
+                          Show in <span class="highlight"><input type="checkbox" ng-model="reversed" ng-value="reversed"> Reversed Order</span>
+                      </span>
+        </div>
+
+        <div class="right">
+            onSelected: <span class="highlight hello">{{greeting}}</span>
+
+                      <span class="left-spacer" ng-show="farewell.length">
+                        onDeselected: <span class="highlight bye">{{farewell}}</span>
+                      </span>
+        </div>
+    </div>
+
+
+<div>

@@ -1,0 +1,12 @@
+{
+  "imports": [
+    "../../common_cfg/android.json"
+  ],
+
+  "input_path": "../res-export",
+  "output_path": "../res",
+
+  "rules": {
+    "/ic_star.*/": { "extra_sizes": "16dp 38dp 48dp" }
+  }
+}

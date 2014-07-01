@@ -1,0 +1,2 @@
+describe('materialIcon directive', function() {
+});

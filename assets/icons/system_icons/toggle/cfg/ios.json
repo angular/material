@@ -1,0 +1,14 @@
+{
+  "imports": [
+    "../../common_cfg/ios.json"
+  ],
+
+  "input_path": "../res-export",
+  "output_path": "../res",
+
+  "rules": {
+    /* We need 16dp too, but we either need a new source, */
+    /* or to allow the script to size down */
+    "/ic_star.*/": { "extra_sizes": "38dp 48dp" }
+  }
+}

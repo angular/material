@@ -1,0 +1,193 @@
+body {
+    padding:20px;
+    background-color: #FAFAFA;
+}
+
+body h3 {
+    font-size:0.95em;
+    color: #d4d263;
+    font-weight: normal;
+    background-color: #474747;
+    width: 420px;
+    text-indent: 20px;
+    line-height: 30px;
+    margin-left: -20px;
+}
+.highlight {
+    background-color: rgb(255, 251, 231);
+    padding: 5px;
+    padding-right: 10px;
+    vertical-align: middle;
+}
+
+.addTabBtn {
+    font-size: 12px;
+    line-height: 24px;
+    margin-left: 40px;
+}
+
+.special {
+
+}
+
+.special .tabs-content {
+    height: 365px;
+}
+
+
+.options {
+    padding-left:20px; padding-top:5px;
+}
+.options input {
+    background-color: rgb(255, 251, 231);
+}
+
+.hello {
+    background-color: #9fffa3;
+}
+
+.bye {
+    background-color: #ffa89e;
+}
+
+.left-spacer {
+    padding-left: 20px;
+}
+
+.infoBar {
+    width: 100%;
+    height: 40px;
+}
+
+.infoBar .left {
+    display: block;
+    width: 100%;
+    line-height: 30px;
+    float: left;
+    margin-bottom: 15px;
+}
+
+
+.redArea {
+    background-color: indianred;
+    width: 100%;
+    height: 100%;
+}
+
+.blueArea {
+    background-color: dodgerblue;
+    width: 100%;
+    height: 100%;
+}
+
+.greenArea {
+    background-color: darkolivegreen;
+    width: 100%;
+    height: 100%;
+}
+
+.grayArea {
+    background-color: #f3f3f3;
+    width: 100%;
+    height: 100%;
+}
+
+
+.sample {
+    background-color: #FAFAFA;
+}
+
+.sample.demo1 {
+    height: 470px;
+}
+
+input {
+    margin-left: 10px; line-height: 25px; font-size: 12px; text-indent: 5px;
+}
+
+/*
+ * Animation styles
+ */
+
+.tabs-content, .animate-switch-container {
+    position:relative;
+    background:white;
+    border:0px solid black;
+    height:300px;
+    opacity: 1.0;
+    overflow:hidden;
+
+}
+
+.animate-switch {
+    -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    position:absolute;
+}
+
+.animate-switch.ng-leave.ng-leave-active,
+.animate-switch.ng-enter {
+    top:-300px;
+}
+.animate-switch.ng-leave,
+.animate-switch.ng-enter.ng-enter-active {
+    top:0;
+}
+
+.animate-switch.ng-leave
+{
+    z-index: 100;
+}
+
+/* Animations for material-view elements that are in materialTabs containers */
+
+.tabs-content {
+    height: 50px;
+}
+.tabs-content .material-view {
+    opacity:1.0;
+    height:100%;
+}
+
+.tabs-content .material-view div {
+    padding: 20px;
+}
+
+.tabs-content .material-view span {
+    padding: 10px;
+    display: block;
+}
+
+.tabs-content .material-view.ng-hide-add,
+.tabs-content .material-view.ng-hide-remove {
+    display:block!important;
+}
+
+.tabs-content .material-view.ng-hide-add.ng-hide-add-active,
+.tabs-content .material-view.ng-hide-remove.ng-hide-remove-active {
+    -webkit-transition:all linear 0.0s;
+    transition:all linear 0.0s;
+}
+
+.tabs-content .material-view.ng-hide {
+    opacity:0;
+}
+
+.material-view {
+    color: black;
+}
+
+
+
+div.animate-switch-container div.animate-switch {
+    padding:20px;
+}
+
+
+material-tab-label > button {
+    display:none;
+}
+
+material-tab-label:hover > button {
+    display:inline;
+}

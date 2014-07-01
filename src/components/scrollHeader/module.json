@@ -1,0 +1,10 @@
+{
+  "module": "material.components.scrollHeader",
+  "name": "Scroll Header",
+  "demos": {
+    "demo1": {
+      "name": "Scroll Header Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

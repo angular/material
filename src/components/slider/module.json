@@ -1,0 +1,10 @@
+{
+  "module": "material.components.slider",
+  "name": "Slider",
+  "demos": {
+    "demo1": {
+      "name": "Slider Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

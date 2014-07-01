@@ -1,0 +1,53 @@
+
+material-checkbox {
+  display: block;
+  margin: 15px;
+  white-space: nowrap;
+  cursor: pointer;
+
+  input {
+    display: none;
+  }
+
+  .material-container {
+    position: relative;
+    top: 4px;
+    display: inline-block;
+    width: $checkbox-width;
+    height: $checkbox-height;
+    cursor: pointer;
+  }
+
+  // unchecked
+  .material-icon {
+    @include transition(280ms);
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    width: $checkbox-width;
+    height: $checkbox-height;
+    border: 2px solid rgb(208, 208, 208);
+  }
+
+  // checked
+  &.material-checked .material-icon {
+    @include transform-rotate(45deg);
+    top: -2px;
+    left: 6px;
+    width: 9px;
+    height: 18px;
+    border: 2px solid rgb(0, 188, 212);
+    border-style: none solid solid none;
+  }
+
+  .material-label {
+    position: relative;
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+    white-space: normal;
+    pointer-events: none;
+  }
+
+}

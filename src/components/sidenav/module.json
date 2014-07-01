@@ -1,0 +1,10 @@
+{
+  "module": "material.components.sidenav",
+  "name": "Side Navigation",
+  "demos": {
+    "demo1": {
+      "name": "Side Navigation Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

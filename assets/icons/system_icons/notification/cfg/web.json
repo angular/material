@@ -1,0 +1,8 @@
+{
+  "imports": [
+    "../../common_cfg/web.json"
+  ],
+
+  "input_path": "../res-export",
+  "output_path": "../res"
+}
