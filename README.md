@@ -7,6 +7,10 @@ Our goal is to deliver a lean, lightweight set of AngularJS-native UI elements t
 
 This project is still in early preview. It is a complementary effort to the [Polymer](http://www.polymer-project.org/) project's [paper elements collection](http://www.polymer-project.org/docs/elements/paper-elements.html).
 
+## Demo Site
+
+You can see these components in action at http://material.angularjs.org
+
 ## Development
 
 This project is in early development via a small core team of [Ionic Framework](http://ionicframework.com/) and [AngularJS](http://angularjs.org) developers. We don't have guidelines yet for broader community involvement, although we hope to have some soon.
