@@ -20,6 +20,7 @@ var stripDebug = require('gulp-strip-debug');
 var template = require('gulp-template');
 var uglify = require('gulp-uglify');
 var gutil = require('gulp-util');
+var replace = require('gulp-replace');
 
 var buildConfig = require('./config/build.config');
 var karmaConf = require('./config/karma.conf.js');
@@ -36,7 +37,7 @@ gulp.task('default', ['build']);
 gulp.task('build', ['scripts', 'sass']);
 gulp.task('validate', ['jshint', 'karma']);
 
-gulp.task('watch', ['build'], function() { 
+gulp.task('watch', ['build'], function() {
   gulp.watch(['src/**/*.{scss,js,html}'], ['build']);
 });
 
@@ -56,6 +57,9 @@ gulp.task('docs-assets', ['build'], function() {
 
 gulp.task('docs-app', function() {
   return gulp.src('docs/app/**/*', { base: 'docs/app' })
+    .pipe(gulpif(IS_RELEASE_BUILD, replace(/(\.min)?\.css/g, '.min.css')))
+    .pipe(gulpif(IS_RELEASE_BUILD,
+        replace(/material-design(\.min)?\.js/g, 'material-design.min.js')))
     .pipe(gulp.dest(buildConfig.docsDist));
 });
 
