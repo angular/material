@@ -52,8 +52,8 @@ function materialSliderDirective($window) {
     trackEle.append('<div class="material-fill"><div class="material-thumb"></div></div>');
     var fillEle = trackEle[0].querySelector('.material-fill');
 
-    var settings = rangeSettings(rangeEle);
-    if(settings.step > 1) {
+    if(input.attr('step')) {
+      var settings = rangeSettings(rangeEle);
       var tickCount = (settings.max - settings.min) / settings.step;
       var tickMarkersEle = angular.element('<div class="material-tick-markers material-display-flex"></div>');
       for(var i=0; i<tickCount; i++) {
@@ -67,7 +67,7 @@ function materialSliderDirective($window) {
       var adjustedValue = parseInt(ngModelCtrl.$viewValue, 10) - settings.min;
       var fillRatio = (adjustedValue / (settings.max - settings.min));
 
-      fillEle.style.width = Math.min(fillRatio * rangeEle.clientWidth, rangeEle.clientWidth) + 'px';
+      fillEle.style.width = (fillRatio * 100) + '%';
 
       if(fillRatio <= 0) {
         element.addClass(MIN_VALUE_CSS);
@@ -78,10 +78,8 @@ function materialSliderDirective($window) {
     }
 
     scope.$watch( function () { return ngModelCtrl.$viewValue; }, render );
-    $window.addEventListener('resize', render, false);
 
   }
 
 }
-
 
