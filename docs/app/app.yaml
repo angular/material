@@ -21,6 +21,9 @@ handlers:
 - url: /img
   static_dir: img
 
+- url: /img/icons
+  static_dir: img/icons
+
 - url: /index\.html
   static_files: index.html
   upload: index.html
