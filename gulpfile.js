@@ -47,6 +47,7 @@ gulp.task('docs-assets', ['build'], function() {
     'bower_components/angular/angular.js',
     'bower_components/angular-animate/angular-animate.js',
     'bower_components/angular-route/angular-route.js',
+    'bower_components/angularytics/dist/angularytics.js',
     'config/lib/angular-animate-sequence/angular-animate-sequence.js',
     'config/lib/angular-animate-sequence/angular-animate-stylers.js',
     buildConfig.dist + '/material-design.js',

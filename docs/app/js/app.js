@@ -1,4 +1,4 @@
-var DocsApp = angular.module('docsApp', ['ngMaterial', 'ngRoute'])
+var DocsApp = angular.module('docsApp', ['ngMaterial', 'ngRoute', 'angularytics'])
 
 .config([
   'COMPONENTS',
@@ -22,6 +22,12 @@ function(COMPONENTS, $routeProvider) {
   $routeProvider.otherwise('/');
 
 }])
+    .config(['AngularyticsProvider',
+ function(AngularyticsProvider) {
+     AngularyticsProvider.setEventHandlers(['Console', 'GoogleUniversal']);
+ }
+
+])
 
 .controller('DocsCtrl', [
   '$scope',
@@ -92,4 +98,8 @@ function($scope, component) {
 
 }])
 
-;
+.run(['Angularytics',
+   function(Angularytics) {
+        Angularytics.init();
+    }]);
+
