@@ -30,9 +30,9 @@ function materialRadioButtonDirective() {
     scope: true,
     transclude: true,
     template: '<div class="material-container">' +
+                '<material-ripple start="center" class="circle" material-checked="{{ checked }}"></material-ripple>' +
                 '<div class="material-off"></div>' +
                 '<div class="material-on"></div>' +
-                '<material-ripple class="" material-checked="{{ checked }}"></material-ripple>' +
               '</div>' +
               '<div ng-transclude class="material-label"></div>',
     link: link

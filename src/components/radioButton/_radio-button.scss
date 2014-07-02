@@ -16,7 +16,20 @@ material-radio-button {
     width: $radio-width;
     height: $radio-width;
     cursor: pointer;
+
+    .material-ripple-canvas {
+      color: #0f9d58;
+    }
+
+    material-ripple {
+      display: block;
+      width: 56px;
+      height: 56px;
+      top: -20px;
+      left: -20px;
+    }
   }
+
 
   .material-off {
     position: absolute;
@@ -48,6 +61,10 @@ material-radio-button {
     transform: scale(1.1);
   }
 
+  &.material-checked .material-ripple-canvas {
+    color: #5a5f5a;
+  }
+
   .material-label {
     position: relative;
     display: inline-block;
@@ -55,6 +72,10 @@ material-radio-button {
     vertical-align: middle;
     white-space: normal;
     pointer-events: none;
+  }
+
+  .circle {
+    border-radius: 50%;
   }
 
 }

@@ -10,40 +10,13 @@
             height: 400px;
         }
 
-        /*canvas.material-ripple-canvas {*/
-            /*pointer-events: none;*/
-            /*position: absolute;*/
-            /*color: #f0f495;*/
-        /*}*/
-
-
-        /*material-checkbox {*/
-            /*-webkit-transform: translateZ(0);*/
-            /*transform: translateZ(0);*/
-        /*}*/
-
-        /*material-checkbox material-ripple {*/
-            /*display: block;*/
-            /*width: 76px;*/
-            /*height: 76px;*/
-            /*top: -30px;*/
-            /*left: -30px;*/
-
-        /*}*/
-
-        /*material-checkbox .material-ripple-canvas {*/
-            /*color: #0f9d58;*/
-        /*}*/
-
-        /*.circle {*/
-            /*border-radius: 50%;*/
-        /*}*/
-
-
+        body {
+            padding:100px; background-color: #FDFFEC; color: #000000;
+        }
 
     </style>
 </head>
-<body ng-controller="myController" style="padding:100px; background-color: dimgrey; color: #000000">
+<body ng-controller="myController" >
 
 
 
@@ -51,6 +24,19 @@
         <input type="checkbox" ng-model="data.cb1">
         Checkbox 1: {{ data.cb1 }}
     </material-checkbox>
+
+
+    <material-radio-group>
+        <material-radio-button>
+            <input type="radio" name="group2" value="4" ng-model="data.group2">
+            Label 4
+        </material-radio-button>
+
+        <material-radio-button>
+            <input type="radio" name="group2" value="5" ng-model="data.group2">
+            Label 5
+        </material-radio-button>
+    </material-radio-group>
 
 </body>
 
@@ -67,8 +53,22 @@
 <script src="/src/utils/supplant.js"></script>
 <script src="/src/utils/binding.js"></script>
 <script src="/src/utils/list.js"></script>
-<script src="/src/components/tabs/tabs.js"></script>
 <script src="/src/components/checkbox/checkbox.js"></script>
+<script src="/src/components/radioButton/radioButton.js"></script>
 
-<script type="text/javascript" src="./example.js"></script>
+<script>
+    angular.module('materialDemoTabs', ['material.animations', 'material.components.checkbox', 'material.components.radioButton'])
+            .controller('myController', function($scope, $log){
+                $scope.data = {};
+                $scope.data.group1 = '2';
+                $scope.data.group2 = '6';
+
+                $scope.radioData = [
+                    { label: 'Label 1', value: '1' },
+                    { label: 'Label 2', value: '2' },
+                    { label: 'Label 3', value: '3' }
+                ];
+            });
+
+</script>
 </html>

@@ -27,7 +27,7 @@ function materialCheckboxDirective() {
     transclude: true,
     template: '<div class="material-container">' +
                 '<div class="material-icon"></div>' +
-                '<material-ripple class="circle" material-checked="{{ checked }}"></material-ripple>' +
+                '<material-ripple start="center" class="circle" material-checked="{{ checked }}"></material-ripple>' +
               '</div>' +
               '<div ng-transclude class="material-label"></div>',
     link: link
