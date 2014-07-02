@@ -14,7 +14,7 @@ material-slider {
 
   .material-fill {
     position: absolute;
-    top: $slider-thumb-width - $slider-track-height;
+    top: 13px;
     left: 0;
     height: $slider-track-height;
     background: $theme-light-blue;
@@ -25,9 +25,12 @@ material-slider {
   // the native thumb is hidden in place of this one
   .material-thumb {
     position: absolute;
-    top: -$slider-thumb-height / 2;
+    top: (-$slider-thumb-height / 2) - 1;
     right: -$slider-thumb-width / 2;
     display: table;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
     width: $slider-thumb-width;
     height: $slider-thumb-height;
     border: 2px solid $theme-light-blue;
@@ -40,7 +43,7 @@ material-slider {
 
   // Active Simulate Slider Thumb
   input:active + .material-fill .material-thumb {
-    border-radius: $slider-thumb-width * 2;
+    border: 1px solid $theme-light-blue;
     -webkit-transform: scale(2);
     -moz-transform: scale(2);
     transform: scale(2);
