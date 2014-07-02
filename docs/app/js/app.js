@@ -22,12 +22,24 @@ function(COMPONENTS, $routeProvider) {
   $routeProvider.otherwise('/');
 
 }])
-    .config(['AngularyticsProvider',
- function(AngularyticsProvider) {
-     AngularyticsProvider.setEventHandlers(['Console', 'GoogleUniversal']);
- }
 
-])
+.config(['AngularyticsProvider',
+function(AngularyticsProvider) {
+  AngularyticsProvider.setEventHandlers(['Console', 'GoogleUniversal']);
+}])
+
+.run([
+  'Angularytics',
+  '$rootScope',
+function(Angularytics, $rootScope) {
+  Angularytics.init();
+}])
+
+.controller('HomeCtrl', [
+  '$rootScope',
+function($rootScope) {
+  $rootScope.appTitle = 'Material Design';
+}])
 
 .controller('DocsCtrl', [
   '$scope',
@@ -35,7 +47,8 @@ function(COMPONENTS, $routeProvider) {
   '$materialSidenav',
   '$timeout',
   '$location',
-function($scope, COMPONENTS, $materialSidenav, $timeout, $location) {
+  '$rootScope',
+function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope) {
   $scope.COMPONENTS = COMPONENTS;
 
   document.querySelector('.sidenav-content')
@@ -77,8 +90,9 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $location) {
 .controller('DocPageCtrl', [
   '$scope',
   'component',
-function($scope, component) {
-  document.title = component.name;
+  '$rootScope',
+function($scope, component, $rootScope) {
+  $rootScope.appTitle = 'Material: ' + component.name;
 
   $scope.setCurrentComponent(component);
 
@@ -97,9 +111,4 @@ function($scope, component) {
   };
 
 }])
-
-.run(['Angularytics',
-   function(Angularytics) {
-        Angularytics.init();
-    }]);
 
