@@ -165,7 +165,7 @@ angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 
 
       function calculateOptions()
       {
-        return angular.extend( getBounds(element), {
+        return angular.mixin( getBounds(element), {
           forceToCenter : (attrs.start == "center"),
           classList : (attrs.class || ""),
           opacityDecayVelocity : getFloatValue( attrs, "opacityDecayVelocity" ),
@@ -174,11 +174,11 @@ angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 
 
         function getBounds(element) {
           var node = element[0];
-          var styles  =  node.ownerDocument.defaultView.getComputedStyle( node, null );
+          var styles  =  node.ownerDocument.defaultView.getComputedStyle( node, null ) || { };
 
           return  {
-            left : styles.left || "0px",
-            top : styles.top || "0px",
+            left : (styles.left == "auto" || !styles.left) ? "0px" : styles.left,
+            top : (styles.top == "auto" || !styles.top) ? "0px" : styles.top,
             width : getValue( styles, "width" ),
             height : getValue( styles, "height" )
           };

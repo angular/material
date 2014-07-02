@@ -267,18 +267,19 @@ angular.module('material.animations')
             Rippler.prototype.adjustBounds = function( canvas )
             {
               // Default to parent container to define bounds
-              var bounds = angular.extend({},canvas.parentNode.getBoundingClientRect());
-              var self   = this;
+              var self = this,
+                src = canvas.parentNode.getBoundingClientRect(),  // read-only
+                bounds = { width : src.width, height: src.height };
 
               angular.forEach("width height".split(" "), function( style ) {
-                var value = self[style];
+                var value = (self[style] != "auto") ? self[style] : undefined;
 
                 // Allow CSS to explicitly define bounds (instead of parent container
-                if ( angular.isDefined(value ) && (value != "auto") ) {
-
+                if ( angular.isDefined(value ) ) {
                   bounds[style] = sanitizePosition( value );
                   canvas.setAttribute(style, bounds[style] * self.pixelDensity + "px");
                 }
+
               });
 
               // NOTE: Modified from polymer implementation
