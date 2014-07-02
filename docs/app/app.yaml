@@ -29,5 +29,9 @@ handlers:
   static_files: favicon.ico
   upload: favicon.ico
 
+- url: /home\.tmpl\.html 
+  static_files: home.tmpl.html
+  upload: home.tmpl.html
+
 - url: .*
   script: main.py
