@@ -23,7 +23,7 @@
          ng-click="goToComponent(component)"
          ng-class="{active: componentIsCurrent(component)}"
          class="menu-item">
-         <div class="material-tile-content">
+         <div ng-cloak class="material-tile-content">
            {{component.name}}
          </div>
         </material-item>
@@ -35,7 +35,7 @@
       <material-icon icon="img/icons/ic_menu_24px.svg">
       </material-icon>
     </div>
-    <h2>{{currentComponent.name}}</h2>
+    <h2 ng-bind="currentComponent.name"></h2>
     <ng-view class="sliding-view"></ng-view>
   </div>
 </body>
