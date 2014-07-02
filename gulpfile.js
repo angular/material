@@ -20,6 +20,8 @@ var stripDebug = require('gulp-strip-debug');
 var template = require('gulp-template');
 var uglify = require('gulp-uglify');
 var gutil = require('gulp-util');
+var uncss = require('gulp-uncss');
+var glob = require('glob').sync;
 
 var buildConfig = require('./config/build.config');
 var karmaConf = require('./config/karma.conf.js');
@@ -119,6 +121,9 @@ gulp.task('sass', function() {
     .pipe(concat('material-design.css'))
     .pipe(gulp.dest(buildConfig.dist))
     .pipe(gulpif(IS_RELEASE_BUILD, minifyCss()))
+    .pipe(gulpif(IS_RELEASE_BUILD, uncss({
+      html: glob('dist/docs/**/*.html')
+    })))
     .pipe(rename({ extname: '.min.css' }))
     .pipe(gulp.dest(buildConfig.dist));
 });
