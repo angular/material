@@ -109,7 +109,7 @@ gulp.task('scripts', function() {
     .pipe(rename({
       extname: '.min.js'
     }))
-    .pipe(gulp.dest(buildConfig.dist));
+    .pipe(gulp.dest(buildConfig.docsDist + '/lib'));
 });
 
 gulp.task('sass', function() {
@@ -124,7 +124,7 @@ gulp.task('sass', function() {
     .pipe(gulp.dest(buildConfig.dist))
     .pipe(gulpif(IS_RELEASE_BUILD, minifyCss()))
     .pipe(rename({ extname: '.min.css' }))
-    .pipe(gulp.dest(buildConfig.dist));
+    .pipe(gulp.dest(buildConfig.docsDist + '/lib'));
 });
 
 function enquote(str) {
