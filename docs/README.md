@@ -5,14 +5,8 @@ Uses [dgeni](http://github.com/angular/dgeni), the wonderful documentation gener
 
 To view docs:
 
-1. `gulp docs`
-2. Start an HTTP server (eg `python -m SimpleHTTPServer`)
-3. Navigate to http://localhost:8000/docs/app
+1. `gulp docs`, which builds the docs to `dist/docs`
+2. `cd dist/docs` and start an http server (e.g. `python -m SimpleHTTPServer`)
+3. Navigate to the server, and enjoy (e.g. http://localhost:8000)
 
-Follow the same conventions as angularjs.  See checkbox.js directive for an example.
-
-### Coming Soon
-
-- Examples defined as separate folders in each component's file.  
-  * `src/components/checkbox/superExample/{script.js,style.css,template.html,explain.md}`
-- A properly styled docs site
+Run `gulp watch` to watch and rebuild docs on every save.
