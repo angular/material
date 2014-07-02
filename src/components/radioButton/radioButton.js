@@ -133,7 +133,6 @@ function materialRadioGroupDirective() {
           if(rbScope === checkedRadioButton) {
             checkedRadioButton = null;
           }
-          console.log(rbScope)
           return radioButtons.splice(i, 1);
         }
       }
