@@ -56,19 +56,19 @@ gulp.task('docs-assets', ['build'], function() {
     .pipe(gulp.dest(buildConfig.docsDist + '/lib'));
 });
 
-gulp.task('docs-app', function() {
-  return gulp.src(['docs/app/**/*', '!docs/app/**/*.{png,jpeg,jpg,gif,svg}'], { base: 'docs/app' })
+gulp.task('docs-html', function() {
+  return gulp.src('docs/app/**/*.html', { base: 'docs/app' })
     .pipe(gulpif(IS_RELEASE_BUILD,
         replace(/material-design\.(js|css)/g, 'material-design.min.$1')))
     .pipe(gulp.dest(buildConfig.docsDist));
 });
 
-gulp.task('docs-img', function() {
-  return gulp.src('docs/app/**/*.{png,jpeg,jpg,gif,svg}', { base: 'docs/app' })
+gulp.task('docs-app', function() {
+  return gulp.src(['docs/app/**/*', '!docs/app/**/*.html'], { base: 'docs/app' })
     .pipe(gulp.dest(buildConfig.docsDist));
 });
 
-gulp.task('docs', ['docs-assets', 'docs-app', 'docs-img'], function() {
+gulp.task('docs', ['docs-assets', 'docs-app', 'docs-html'], function() {
   return dgeni.generator(__dirname + '/docs/index.js')();
 });
 
