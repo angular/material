@@ -16,6 +16,6 @@
 }
 
 .material-flex {
-  -webkit-box-flex: 1;
-  flex: 1 1 0px;
+  @include flexbox-flex(1, 1, 0px);
+  width: 100%;
 }

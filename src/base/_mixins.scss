@@ -81,13 +81,13 @@
   display: flex !important;
 }
 
-@mixin flexbox-flex($amt) {
-  -webkit-box-flex: $amt;
-  -webkit-flex: $amt;
-  -moz-box-flex: $amt;
-  -moz-flex: $amt;
-  -ms-flex: $amt;
-  flex: $amt;
+@mixin flexbox-flex($fg: 1, $fs: null, $fb: null) {
+  -webkit-box-flex: $fg;
+  -webkit-flex: $fg $fs $fb;
+  -moz-box-flex: $fg;
+  -moz-flex: $fg $fs $fb;
+  -ms-flex: $fg $fs $fb;
+  flex: $fg $fs $fb;
 }
 
 
@@ -111,10 +111,10 @@
   flex-direction: column;
 }
 
-@mixin calc($property, $expression) { 
-  #{$property}: -webkit-calc(#{$expression}); 
-  #{$property}: calc(#{$expression}); 
-} 
+@mixin calc($property, $expression) {
+  #{$property}: -webkit-calc(#{$expression});
+  #{$property}: calc(#{$expression});
+}
 
 @mixin input-placeholder($color) {
   &:-ms-input-placeholder {
