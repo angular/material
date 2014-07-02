@@ -12,7 +12,8 @@ material-slider {
     margin: $slider-height;
   }
 
-  .material-fill {
+  .material-fill,
+  .material-tick-markers {
     position: absolute;
     top: 13px;
     left: 0;
@@ -21,12 +22,19 @@ material-slider {
     pointer-events: none;
   }
 
+  .material-tick-markers {
+    z-index: 0;
+    width: 100%;
+    background: transparent;
+  }
+
   // Simulated Slider Thumb
   // the native thumb is hidden in place of this one
   .material-thumb {
     position: absolute;
     top: (-$slider-thumb-height / 2) - 1;
     right: -$slider-thumb-width / 2;
+    z-index: 1;
     display: table;
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
@@ -43,14 +51,29 @@ material-slider {
 
   // Active Simulate Slider Thumb
   input:active + .material-fill .material-thumb {
-    border: 1px solid $theme-light-blue;
+    border: 2px solid $theme-light-blue;
     -webkit-transform: scale(2);
     -moz-transform: scale(2);
     transform: scale(2);
   }
 
-  &.material-slider-min .material-thumb {
-    background: #fff;
+  .material-tick:after,
+  .material-tick-markers:after {
+    display: block;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: black;
+    content: "";
+  }
+
+  &.material-slider-min {
+    input:active + .material-fill .material-thumb {
+      border-width: 1px;
+    }
+    .material-thumb {
+      background: #fff;
+    }
   }
 
   input {

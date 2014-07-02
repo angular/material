@@ -20,6 +20,14 @@ function materialSliderDirective($window) {
 
   var MIN_VALUE_CSS = 'material-slider-min';
 
+  function rangeSettings(rangeEle) {
+    return {
+      min: parseInt( rangeEle.min !== "" ? rangeEle.min : 0, 10 ),
+      max: parseInt( rangeEle.max !== "" ? rangeEle.max : 100, 10 ),
+      step: parseInt( rangeEle.step !== "" ? rangeEle.step : 1, 10 )
+    }
+  }
+
   return {
     restrict: 'E',
     scope: true,
@@ -44,11 +52,20 @@ function materialSliderDirective($window) {
     trackEle.append('<div class="material-fill"><div class="material-thumb"></div></div>');
     var fillEle = trackEle[0].querySelector('.material-fill');
 
+    var settings = rangeSettings(rangeEle);
+    if(settings.step > 1) {
+      var tickCount = (settings.max - settings.min) / settings.step;
+      var tickMarkersEle = angular.element('<div class="material-tick-markers material-display-flex"></div>');
+      for(var i=0; i<tickCount; i++) {
+        tickMarkersEle.append('<div class="material-tick material-flex"></div>');
+      }
+      trackEle.append(tickMarkersEle);
+    }
+
     function render() {
-      var min = parseInt( rangeEle.min !== "" ? rangeEle.min : 0, 10 );
-      var max = parseInt( rangeEle.max !== "" ? rangeEle.max : 100, 10 );
-      var adjustedValue = parseInt(ngModelCtrl.$viewValue, 10) - min;
-      var fillRatio = (adjustedValue / (max - min));
+      var settings = rangeSettings(rangeEle);
+      var adjustedValue = parseInt(ngModelCtrl.$viewValue, 10) - settings.min;
+      var fillRatio = (adjustedValue / (settings.max - settings.min));
 
       fillEle.style.width = Math.min(fillRatio * rangeEle.clientWidth, rangeEle.clientWidth) + 'px';
 
