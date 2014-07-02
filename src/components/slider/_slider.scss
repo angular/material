@@ -50,7 +50,7 @@ material-slider {
   }
 
   // Active Simulate Slider Thumb
-  input:active + .material-fill .material-thumb {
+  .material-active .material-thumb {
     border: 2px solid $theme-light-blue;
     -webkit-transform: scale(2);
     -moz-transform: scale(2);
@@ -134,6 +134,10 @@ material-slider {
     height: $slider-thumb-height * 4;
     border: none;
     background: transparent;
+  }
+
+  input::-moz-focus-outer {
+    border: 0;
   }
 
   input::-ms-thumb {

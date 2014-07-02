@@ -19,6 +19,7 @@ angular.module('material.components.slider', [])
 function materialSliderDirective($window) {
 
   var MIN_VALUE_CSS = 'material-slider-min';
+  var ACTIVE_CSS = 'material-active';
 
   function rangeSettings(rangeEle) {
     return {
@@ -61,6 +62,15 @@ function materialSliderDirective($window) {
       }
       trackEle.append(tickMarkersEle);
     }
+
+    input.on('mousedown touchstart', function(e){
+      trackEle.addClass(ACTIVE_CSS);
+    });
+
+    input.on('mouseup touchend', function(e){
+      trackEle.removeClass(ACTIVE_CSS);
+    });
+
 
     function render() {
       var settings = rangeSettings(rangeEle);
