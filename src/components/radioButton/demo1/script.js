@@ -3,14 +3,15 @@ angular.module('app', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope) {
 
-  $scope.data = {};
-  $scope.data.group1 = '2';
-  $scope.data.group2 = '6';
+  $scope.data = {
+    group2 : '6',
+    group1 : '2'
+  };
 
   $scope.radioData = [
-    { label: 'Label 1', value: '1' },
-    { label: 'Label 2', value: '2' },
-    { label: 'Label 3', value: '3' }
+    { label: 'Label 4', value: '4' },
+    { label: 'Label 5', value: '5' },
+    { label: 'Label 6', value: '6' }
   ];
 
   $scope.addItem = function() {

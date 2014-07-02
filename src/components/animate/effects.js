@@ -98,7 +98,7 @@ angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 
       var options  = calculateOptions();
       var tag =
         '<canvas ' +
-             'class="material-ripple-canvas {{styles}}"' +
+             'class="material-ripple-canvas {{classList}}"' +
              'style="top:{{top}}; left:{{left}}" >' +
         '</canvas>';
 
@@ -167,13 +167,15 @@ angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 
       {
         return angular.extend( getBounds(element), {
           forceToCenter : (attrs.start == "center"),
-          styles : (attrs.class || ""),
+          classList : (attrs.class || ""),
           opacityDecayVelocity : getFloatValue( attrs, "opacityDecayVelocity" ),
           initialOpacity : getFloatValue( attrs, "initialOpacity" )
         });
 
         function getBounds(element) {
-          var styles  =  window.getComputedStyle( element[0] );
+          var node = element[0];
+          var styles  =  node.ownerDocument.defaultView.getComputedStyle( node, null );
+
           return  {
             left : styles.left || "0px",
             top : styles.top || "0px",

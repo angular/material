@@ -8,34 +8,36 @@
 
   <material-radio-group>
 
-    <material-radio-button ng-repeat="d in radioData">
-      <input type="radio" ng-value="d.value" ng-model="data.group1">
-      {{ d.label }}
+    <material-radio-button>
+      <input type="radio" name="group2" value="1" ng-model="data.group2">
+      Label 1
+    </material-radio-button>
+
+    <material-radio-button>
+      <input type="radio" name="group2" value="2" ng-model="data.group2">
+      Label 2
+    </material-radio-button>
+
+    <material-radio-button>
+      <input type="radio" name="group2" value="3" ng-model="data.group2">
+      Label 3
     </material-radio-button>
 
   </material-radio-group>
 
-  <p style="margin-bottom:50px">Group 1 Selected: {{ data.group1 }}</p>
+  <p>Group 1 Selected: {{ data.group2 }}</p>
 
-  <material-radio-group>
+    <material-radio-group>
 
-    <material-radio-button>
-      <input type="radio" name="group2" value="4" ng-model="data.group2">
-      Label 4
-    </material-radio-button>
+        <material-radio-button ng-repeat="d in radioData">
+            <input type="radio" ng-value="d.value" ng-model="data.group1">
+            {{ d.label }}
+        </material-radio-button>
 
-    <material-radio-button>
-      <input type="radio" name="group2" value="5" ng-model="data.group2">
-      Label 5
-    </material-radio-button>
+    </material-radio-group>
 
-    <material-radio-button>
-      <input type="radio" name="group2" value="6" ng-model="data.group2">
-      Label 6
-    </material-radio-button>
+    <p style="margin-bottom:50px">Group 2 Selected: {{ data.group1 }}</p>
 
-  </material-radio-group>
 
-  <p>Group 2 Selected: {{ data.group2 }}</p>
 
 </div>

@@ -14,7 +14,6 @@
             pointer-events: none;
             position: absolute;
             color: #f0f495;
-            z-index: 1;
         }
 
         .rippleBox {
@@ -53,6 +52,7 @@
 
         material-checkbox material-ripple {
             display: block;
+            position: absolute;
             width: 76px;
             height: 76px;
             top: -32px;
@@ -97,7 +97,7 @@
 
 
     <material-checkbox>
-        <material-ripple start="center" class="circle" opacityDecayVelocity=""></material-ripple>
+        <material-ripple start="center" class="circle" ></material-ripple>
     </material-checkbox>
 
 
@@ -131,5 +131,13 @@
 <script src="/src/utils/list.js"></script>
 <script src="/src/components/tabs/tabs.js"></script>
 
-<script type="text/javascript" src="./example.js"></script>
+<script>
+
+    angular.module('materialDemoTabs', ['material.animations', 'material.components.tabs'])
+            .controller('myController', function($scope, $log){
+                $scope.alert = function( value ){
+                    //$log.debug( value );
+                }
+            });
+</script>
 </html>
