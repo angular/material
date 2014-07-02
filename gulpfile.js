@@ -57,9 +57,8 @@ gulp.task('docs-assets', ['build'], function() {
 
 gulp.task('docs-app', function() {
   return gulp.src('docs/app/**/*', { base: 'docs/app' })
-    .pipe(gulpif(IS_RELEASE_BUILD, replace(/(\.min)?\.css/g, '.min.css')))
     .pipe(gulpif(IS_RELEASE_BUILD,
-        replace(/material-design(\.min)?\.js/g, 'material-design.min.js')))
+        replace(/material-design\.(js|css)/g, 'material-design.min.$1')))
     .pipe(gulp.dest(buildConfig.docsDist));
 });
 
