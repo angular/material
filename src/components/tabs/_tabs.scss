@@ -1,56 +1,52 @@
 
 material-tabs {
-  display:block;
+  display: block;
   width: 100%;
   background-color: #4285F4;
-  font-size: 14px;
   font-weight: 500;
+  font-size: 14px;
 
   .tabs-header {
-
     width: 100%;
 
     .tabs-header-items {
-
-      background-color: #4285F4;
-      display: flex;
-      align-items: stretch;
-      white-space: nowrap;
+      @include flexbox();
       overflow: hidden;
-
+      background-color: #4285F4;
+      white-space: nowrap;
+      align-items: stretch;
     }
-
   }
 
   .tabs-content {
-    width: 100%;
     overflow: hidden;
+    width: 100%;
   }
 }
 
 material-tab {
-  flex: 1 100%;
-  padding:10px;
-  text-align:center;
+  @include flexbox-flex(1);
   position: relative;
+  z-index: 0;
   overflow: hidden;
-  z-index:0;
+  padding: 10px;
+  text-align: center;
   cursor: pointer;
 
   material-tab-label {
-    text-align: center;
     color: #9FC1FB;
-    opacity:1.0;
 
     color: rgba(255,255,255,0.6);
+    text-align: center;
+    opacity: 1;
 
     &.active {
-     color:  white;
+     color: white;
     }
 
     &.disabled {
       color: #6a6a6a;
-      opacity : 0.5;
+      opacity: 0.5;
 
       &:hover {
         cursor: default;
@@ -59,9 +55,6 @@ material-tab {
 
   }
 
-  &:hover {
-
-  }
 }
 
 shadow {
