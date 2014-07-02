@@ -4,14 +4,14 @@
   <link rel="stylesheet" href="../../../lib/material-design.css">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-animate.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-route.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-animate.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-route.min.js"></script>
   <script src="../../../lib/angular-animate-sequence.js"></script>
   <script src="../../../lib/angular-animate-stylers.js"></script>
   <script src="../../../lib/material-design.js"></script>
   {% for file in doc.js %}<script src="{$ file.basePath $}"></script>
   {% endfor %}
-  {% for file in doc.css %}<link rel="stylesheet" href="{$ file.basePath $}"> 
+  {% for file in doc.css %}<link rel="stylesheet" href="{$ file.basePath $}">
   {% endfor %}
 </head>
 <body class="demo-cloaked">
