@@ -1,7 +1,7 @@
 Material Design for AngularJS Apps
 =======
 
-[Material Design](http://www.google.com/design/spec/material-design/introduction.html#introduction-goals) is a specification for a unified system of visual, motion, and interaction design that adapts across different devices. 
+[Material Design](http://www.google.com/design/spec/material-design/) is a specification for a unified system of visual, motion, and interaction design that adapts across different devices.
 
 Our goal is to deliver a lean, lightweight set of AngularJS-native UI elements that implement the material design system for use in Angular SPAs. 
 
