@@ -54,8 +54,13 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $location) {
     });
   };
 
+  $scope.goHome = function($event) {
+    $location.path( '/' );
+    $scope.setCurrentComponent({});
+  }
+
   $scope.goToComponent = function(component) {
-    $location.path(component.url);
+    $location.path( component.url );
     $materialSidenav('left').close();
   };
   $scope.componentIsCurrent = function(component) {

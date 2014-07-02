@@ -16,11 +16,11 @@
 <script src="js/components-data.js"></script>
 </head>
 <body>
-  <material-sidenav class="material-sidenav-left material-whiteframe-z3" component-id="left">
+  <material-sidenav class="material-sidenav-left material-whiteframe-z3" component-id="left" ng-click="goHome()">
     <material-content>
       <material-list>
         <material-item ng-repeat="component in COMPONENTS"
-         ng-click="goToComponent(component)"
+         ng-click="goToComponent(component); $event.stopImmediatePropagation();"
          ng-class="{active: componentIsCurrent(component)}"
          class="menu-item">
          <div ng-cloak class="material-tile-content">
