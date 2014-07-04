@@ -1,7 +1,4 @@
 angular.module('material.components.dialog', ['material.services.popup'])
-  .directive('materialDialog', [
-    NgmDialogDirective
-  ])
   /**
    * @ngdoc service
    * @name $materialDialog
@@ -13,14 +10,6 @@ angular.module('material.components.dialog', ['material.services.popup'])
     '$rootElement',
     NgmDialogService
   ]);
-
-function NgmDialogDirective() {
-  return {
-    restrict: 'E',
-    transclude: true,
-    template: '<div class="dialog-container ng-transclude"></div>'
-  };
-}
 
 function NgmDialogService($timeout, $materialPopup, $rootElement) {
   var recentDialog;
@@ -53,13 +42,20 @@ function NgmDialogService($timeout, $materialPopup, $rootElement) {
       dialog.locals.$hideDialog = destroyDialog;
       dialog.enter(function() {
         dialog.element.on('click', onElementClick);
+        $rootElement.on('keyup', onRootElementKeyup);
       });
 
       return destroyDialog;
 
       function destroyDialog() {
         dialog.element.off('click', onElementClick);
+        $rootElement.off('keyup', onRootElementKeyup);
         dialog.destroy();
+      }
+      function onRootElementKeyup(e) {
+        if (e.keyCode == 27) {
+          $timeout(destroyDialog);
+        }
       }
       function onElementClick(e) {
         //Close the dialog if click was outside the container
