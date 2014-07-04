@@ -5,7 +5,7 @@ var DocsApp = angular.module('docsApp', ['ngMaterial', 'ngRoute', 'angularytics'
   '$routeProvider',
 function(COMPONENTS, $routeProvider) {
   $routeProvider.when('/', {
-    templateUrl: 'home.tmpl.html'
+    templateUrl: 'template/home.tmpl.html'
   });
 
   angular.forEach(COMPONENTS, function(component) {
@@ -35,12 +35,6 @@ function(Angularytics, $rootScope) {
   Angularytics.init();
 }])
 
-.controller('HomeCtrl', [
-  '$rootScope',
-function($rootScope) {
-  $rootScope.appTitle = 'Material Design';
-}])
-
 .controller('DocsCtrl', [
   '$scope',
   'COMPONENTS',
@@ -48,7 +42,8 @@ function($rootScope) {
   '$timeout',
   '$location',
   '$rootScope',
-function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope) {
+  '$materialDialog',
+function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope, $materialDialog) {
   $scope.COMPONENTS = COMPONENTS;
 
   document.querySelector('.sidenav-content')
@@ -62,7 +57,6 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope) 
     }
   });
 
-
   $scope.setCurrentComponent = function(component) {
     $scope.currentComponent = component;
   };
@@ -75,16 +69,35 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope) 
 
   $scope.goHome = function($event) {
     $location.path( '/' );
-    $scope.setCurrentComponent({});
-  }
+  };
 
   $scope.goToComponent = function(component) {
-    $location.path( component.url );
-    $materialSidenav('left').close();
+    if (component) {
+      $location.path( component.url );
+      $materialSidenav('left').close();
+    }
   };
   $scope.componentIsCurrent = function(component) {
-    return $location.path() === component.url;
+    return component && $location.path() === component.url;
   };
+
+  $scope.viewSource = function(component) {
+    $materialDialog({
+      controller: 'ViewSourceCtrl',
+      locals: {
+        demo: component.$selectedDemo
+      },
+      templateUrl: 'template/view-source.tmpl.html'
+    });
+  };
+}])
+
+.controller('HomeCtrl', [
+  '$scope',
+  '$rootScope',
+function($scope, $rootScope) {
+  $rootScope.appTitle = 'Material Design';
+  $scope.setCurrentComponent(null);
 }])
 
 .controller('DocPageCtrl', [
@@ -95,20 +108,25 @@ function($scope, component, $rootScope) {
   $rootScope.appTitle = 'Material: ' + component.name;
 
   $scope.setCurrentComponent(component);
-
-  $scope.demos = [];
-  angular.forEach(component.demos, function(demo) {
-    $scope.demos.push(demo);
-  });
-  component.$selectedDemoIndex = component.$selectedDemoIndex || 0;
-
-  $scope.openDemo = function(demoPath) {
-    window.open('http://' + window.location.host + '/' + demoPath);
-  };
-
-  $scope.demoSource = function(demoPath) {
-    window.open('view-source:' + window.location.host + '/' + demoPath);
-  };
-
+  component.$selectedDemo = component.$selectedDemo || 
+    component.demos[ Object.keys(component.demos)[0] ];
 }])
 
+.controller('ViewSourceCtrl', [
+  '$scope',
+  'demo',
+  '$hideDialog',
+function($scope, demo, $hideDialog) {
+  $scope.files = [demo.indexFile].concat(demo.files.sort(sortByJs));
+  $scope.$hideDialog = $hideDialog;
+
+  $scope.data = {
+    selectedFile: demo.indexFile
+  };
+
+  function sortByJs(file) {
+    return file.fileType == 'js' ? -1 : 1;
+  }
+}])
+
+;

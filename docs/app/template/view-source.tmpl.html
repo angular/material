@@ -1,0 +1,21 @@
+<div class="dialog-container source-dialog-container">
+  <div class="dialog-content material-flex">
+    <material-tabs nobar>
+      <material-tab ng-repeat="file in files"
+                    active="file === data.selectedFile"
+                    ng-click="data.selectedFile = file"
+                    label="{{file.basePath}}">
+      </material-tab>
+    </material-tabs>
+    <pre>
+      <code highlight="data.selectedFile.content"
+            highlight-language="data.selectedFile.fileType">
+      </code>
+    </pre>
+  </div>
+  <div class="dialog-actions">
+    <button class="material-button material-button-raised" style="float: right;" ng-click="$hideDialog()">
+      Close
+    </button>
+  </div>
+</div>

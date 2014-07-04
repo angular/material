@@ -34,7 +34,7 @@ module.exports = function(config) {
   config.set('logging.level', 'info');
 
   config.set('source.fileReaders', [
-    require('./file-readers/paper-json'),
+    require('./file-readers/json'),
     // require('dgeni-packages/jsdoc/file-readers/jsdoc'),
     // require('./file-readers/any')
   ]);

@@ -1,37 +1,11 @@
 
-body:before {
-  position: absolute;
-  display: block;
-  width: 100%;
-  height: 60px;
-  background: #3367d6;
-  content: " ";
-}
-
 body {
   overflow: hidden;
-  max-width: 100%; max-height: 100%;
-}
-
-.material-sidenav-left:before {
-  position: absolute;
-  display: block;
-  padding: 15px;
-  width: 100%;
-  height: 60px;
-  background: #4285f4;
-  color: #fff;
-  content: "Components";
-  font-size: 1.5em;
-}
-
-.material-sidenav-left material-content {
-  top: 60px;
+  max-width: 100%; 
+  max-height: 100%;
 }
 
 .material-sidenav-inner {
-  box-sizing: border-box;
-  padding-top: 60px;
   background: #fff;
 }
 
@@ -73,20 +47,12 @@ body {
   color: #fff;
   font-weight: normal;
 }
-.sidenav-content .menu-icon {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding-right: 10px;
-  padding-left: 10px;
+.menu-icon {
   height: 60px;
 }
-.sidenav-content .menu-icon material-icon {
+.menu-icon material-icon {
   top: 19px;
   pointer-events: none; /* don't let svg stop the click event */
-}
-.menu-icon material-icon {
-  fill: white;
 }
 
 .view-source {
@@ -110,4 +76,13 @@ iframe.demo {
   height: calc(100% - 39px);
   height: -webkit-calc(100% - 39px);
   border: none;
+}
+
+.material-button.view-source-button {
+  color: #eee;
+}
+
+.dialog-container.source-dialog-container {
+  width: 100%;
+  height: 100%;
 }
