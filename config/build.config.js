@@ -29,12 +29,37 @@ module.exports = {
   docsDist: 'dist/docs',
 
   paths: {
-    scss: 'src/main.scss',
+    scss: ['src/main.scss'],
+    //We have to manually list files so demo files don't get 
+    //into the build
     js: [
-      'src/{services,components,utils}/**/*.js', 
-      '!src/{services,components,utils}/**/*.spec.js'
+      'src/components/animate/effects.js',
+      'src/components/animate/canvas/rippler.js',
+      'src/components/buttons/buttons.js',
+      'src/components/card/card.js',
+      'src/components/checkbox/checkbox.js',
+      'src/components/content/content.js',
+      'src/components/dialog/dialog.js',
+      'src/components/form/form.js',
+      'src/components/icon/icon.js',
+      'src/components/list/list.js',
+      'src/components/radioButton/radioButton.js',
+      'src/components/scrollHeader/scrollHeader.js',
+      'src/components/sidenav/sidenav.js',
+      'src/components/slider/slider.js',
+      'src/components/tabs/tabs.js',
+      'src/components/toast/toast.js',
+      'src/components/toolbar/toolbar.js',
+      'src/components/whiteframe/whiteframe.js',
+      'src/services/module.js',
+      'src/services/registry.js',
+      'src/services/compiler/compiler.js',
+      'src/services/popup/popup.js',
+      'src/utils/binding.js',
+      'src/utils/list.js',
+      'src/utils/supplant.js'
     ],
-    test: 'src/**/*.spec.js'
+    test: ['src/**/*.spec.js']
   },
 
   repository: pkg.repository.url

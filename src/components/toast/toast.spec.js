@@ -33,8 +33,8 @@ describe('$materialToast service', function() {
         template: '{{1}}234',
         appendTo: parent
       });
-      var text = parent[0].querySelector('.toast-text');
-      expect(angular.element(text).text()).toBe('1234');
+      var toast = angular.element(parent[0].querySelector('material-toast'));
+      expect(toast.children().text()).toBe('1234');
     }));
 
     it('should have templateUrl', inject(function($timeout, $rootScope, $templateCache) {
@@ -44,8 +44,8 @@ describe('$materialToast service', function() {
         templateUrl: 'template.html',
         appendTo: parent
       });
-      var text = parent[0].querySelector('.toast-text');
-      expect(angular.element(text).text()).toBe('hello, 1');
+      var toast = angular.element(parent[0].querySelector('material-toast'));
+      expect(toast.children().text()).toBe('hello, 1');
     }));
   });
 

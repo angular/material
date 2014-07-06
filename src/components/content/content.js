@@ -27,8 +27,8 @@ function materialContentService($materialComponentRegistry) {
     if(!instance) {
       $materialComponentRegistry.notFoundError(handle);
     }
-    return instance
-  }
+    return instance;
+  };
 }
 
 

@@ -18,12 +18,10 @@ describe('materialCheckbox', function() {
       $rootScope.green = true;
     });
 
-    var cbElements = element.find('material-checkbox');
+    var inputs = element.find('input');
 
-    expect(cbElements.eq(0).hasClass('checkbox-checked')).toEqual(false);
-    expect(cbElements.eq(0).attr('aria-checked')).toEqual('false');
-    expect(cbElements.eq(1).hasClass('checkbox-checked')).toEqual(true);
-    expect(cbElements.eq(1).attr('aria-checked')).toEqual('true');
+    expect(inputs[0].checked).toEqual(false);
+    expect(inputs[1].checked).toEqual(true);
   }));
 
 });

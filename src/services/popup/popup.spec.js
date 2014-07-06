@@ -1,4 +1,4 @@
-ddescribe('$materialPopup service', function() {
+describe('$materialPopup service', function() {
   beforeEach(module('material.services.popup', 'ngAnimateMock'));
 
   function setup(options) {

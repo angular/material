@@ -1,14 +1,18 @@
 var buildConfig = require('./build.config.js');
 
 module.exports = {
-  basePath: __dirname + '/../',
+  basePath: __dirname + '/..',
   frameworks: ['jasmine'],
   files: [
+    'bower_components/jquery/dist/jquery.js',
     'bower_components/angular/angular.js',
     'bower_components/angular-animate/angular-animate.js',
     'bower_components/angular-mocks/angular-mocks.js',
-    'src/**/*.js'
-  ],
+    'config/lib/angular-animate-sequence/angular-animate-sequence.js',
+    'config/lib/angular-animate-sequence/angular-animate-stylers.js',
+  ]
+    .concat(buildConfig.paths.js)
+    .concat(buildConfig.paths.test),
 
   port: 9876,
   reporters: ['progress'],
