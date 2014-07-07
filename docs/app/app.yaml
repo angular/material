@@ -32,9 +32,9 @@ handlers:
   static_files: favicon.ico
   upload: favicon.ico
 
-- url: /home\.tmpl\.html 
-  static_files: home.tmpl.html
-  upload: home.tmpl.html
+- url: /template/home\.tmpl\.html 
+  static_files: template/home.tmpl.html
+  upload: template/home.tmpl.html
 
 - url: .*
   script: main.py
