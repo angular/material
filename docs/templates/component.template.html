@@ -3,8 +3,12 @@
            active="currentComponent.$selectedDemo === demo"
            ng-click="currentComponent.$selectedDemo = demo" 
            label="{{demo.name}}">
-    <iframe class="demo" ng-src="{{demo.indexFile.outputPath}}" name="{{demo.id}}">
-    </iframe>
   </material-tab>
-
 </material-tabs>
+<iframe class="demo"
+        name="{{demo.id}}"
+        ng-repeat="demo in currentComponent.demos" 
+        ng-show="currentComponent.$selectedDemo === demo"
+        ng-src="{{demo.indexFile.outputPath}}">
+</iframe>
+

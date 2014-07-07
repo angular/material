@@ -29,7 +29,7 @@ var karmaConf = require('./config/karma.conf.js');
 
 var IS_RELEASE_BUILD = !!argv.release;
 if (IS_RELEASE_BUILD) {
-  gutil.log(
+  console.log(
     gutil.colors.red('--release:'),
     'Building release version (minified, debugs stripped)...'
   );
@@ -47,17 +47,37 @@ gulp.task('watch', ['build'], function() {
 /**
  * Docs
  */
-gulp.task('docs', ['docs-assets', 'docs-html', 'docs-generate', 'docs-app'], function() {
-  return gulp.src('dist/docs/lib/material-design.{min.css,css}')
-    .pipe(gulpif(IS_RELEASE_BUILD, uncss({
-      html: glob(__dirname + '/dist/docs/**/*.html')
-    })))
-    .pipe(gulp.dest('dist/docs/lib'));
+gulp.task('docs', ['docs-scripts', 'docs-css', 'docs-html', 'docs-app'], function() {
 });
 
-gulp.task('docs-assets', ['build'], function() {
-  return gulp.src(buildConfig.docsAssets)
-    .pipe(gulp.dest(buildConfig.docsLib));
+gulp.task('docs-scripts', ['demo-scripts'], function() {
+  return gulp.src(buildConfig.docsAssets.js)
+    .pipe(concat('docs.js'))
+    .pipe(gulpif(IS_RELEASE_BUILD, uglify())
+    .pipe(gulp.dest(buildConfig.docsDist)));
+});
+
+// demo-scripts: runs after scripts and docs-generate so both the docs-generated js
+// files and the source-generated material files are done
+gulp.task('demo-scripts', ['scripts', 'docs-generate'], function() {
+  return gulp.src(buildConfig.demoAssets.js)
+    .pipe(concat('demo.js'))
+    .pipe(gulpif(IS_RELEASE_BUILD, uglify()))
+    .pipe(gulp.dest(buildConfig.docsDist));
+});
+
+gulp.task('docs-css', ['demo-css'], function() {
+  return gulp.src(buildConfig.docsAssets.css)
+    .pipe(concat('docs.css'))
+    .pipe(gulpif(IS_RELEASE_BUILD, minifyCss()))
+    .pipe(gulp.dest(buildConfig.docsDist));
+});
+
+gulp.task('demo-css', ['sass'], function() {
+  return gulp.src(buildConfig.demoAssets.css)
+    .pipe(concat('demo.css'))
+    .pipe(gulpif(IS_RELEASE_BUILD, minifyCss()))
+    .pipe(gulp.dest(buildConfig.docsDist));
 });
 
 gulp.task('docs-html', function() {
@@ -125,7 +145,7 @@ gulp.task('scripts', function() {
       preserveComments: 'some' //preverse banner
     })))
     .pipe(rename({ extname: '.min.js' }))
-    .pipe(gulp.dest(buildConfig.docsDist + '/lib'));
+    .pipe(gulp.dest(buildConfig.dist));
 });
 
 /**
@@ -143,7 +163,7 @@ gulp.task('sass', function() {
     .pipe(gulp.dest(buildConfig.dist))
     .pipe(gulpif(IS_RELEASE_BUILD, minifyCss()))
     .pipe(rename({ extname: '.min.css' }))
-    .pipe(gulp.dest(buildConfig.docsDist + '/lib'));
+    .pipe(gulp.dest(buildConfig.dist));
 });
 
 function enquote(str) {

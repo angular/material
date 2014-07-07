@@ -10,6 +10,7 @@ module.exports = {
   closureStart: '(function(){\n',
   closureEnd: '\n})();',
 
+  //TODO make better
   components: fs.readdirSync(__dirname + '/../src/components')
     .map(function(folder) {
       try {
@@ -29,16 +30,29 @@ module.exports = {
 
   docsDist: 'dist/docs',
   docsLib: 'dist/docs/lib',
-  docsAssets: [
-    'bower_components/jquery/dist/jquery.js',
-    'bower_components/angular/angular.js',
-    'bower_components/angular-animate/angular-animate.js',
-    'bower_components/angular-route/angular-route.js',
-    'bower_components/angularytics/dist/angularytics.js',
-    'config/lib/angular-animate-sequence/angular-animate-sequence.js',
-    'config/lib/angular-animate-sequence/angular-animate-stylers.js',
-    'dist/material-design.*',
-  ],
+  docsAssets: {
+    js: [
+      'bower_components/angularytics/dist/angularytics.js',
+      'config/lib/angular-animate-sequence/angular-animate-sequence.js',
+      'config/lib/angular-animate-sequence/angular-animate-stylers.js',
+      'dist/material-design.js',
+      'dist/docs/js/**/*.js'
+    ],
+    css: [
+      'dist/material-design.css',
+      'docs/app/css/**/*.css'
+    ]
+  },
+  demoAssets: {
+    js: [
+      'config/lib/angular-animate-sequence/angular-animate-sequence.js',
+      'config/lib/angular-animate-sequence/angular-animate-stylers.js',
+      'dist/material-design.js'
+    ],
+    css: [
+      'dist/material-design.css'
+    ]
+  },
 
   paths: {
     scss: ['src/main.scss'],
