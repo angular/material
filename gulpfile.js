@@ -2,6 +2,7 @@
 var _ = require('lodash');
 var changelog = require('conventional-changelog');
 var dgeni = require('dgeni');
+var glob = require('glob').sync;
 var gulp = require('gulp');
 var karma = require('karma').server;
 var pkg = require('./package.json');
@@ -21,6 +22,7 @@ var template = require('gulp-template');
 var uglify = require('gulp-uglify');
 var gutil = require('gulp-util');
 var replace = require('gulp-replace');
+var uncss = require('gulp-uncss');
 
 var buildConfig = require('./config/build.config');
 var karmaConf = require('./config/karma.conf.js');
@@ -41,19 +43,21 @@ gulp.task('watch', ['build'], function() {
   gulp.watch(['src/**/*.{scss,js,html}'], ['build']);
 });
 
+
+/**
+ * Docs
+ */
+gulp.task('docs', ['docs-assets', 'docs-html', 'docs-generate', 'docs-app'], function() {
+  return gulp.src('dist/docs/lib/material-design.{min.css,css}')
+    .pipe(gulpif(IS_RELEASE_BUILD, uncss({
+      html: glob(__dirname + '/dist/docs/**/*.html')
+    })))
+    .pipe(gulp.dest('dist/docs/lib'));
+});
+
 gulp.task('docs-assets', ['build'], function() {
-  return gulp.src([
-    'bower_components/jquery/dist/jquery.js',
-    'bower_components/angular/angular.js',
-    'bower_components/angular-animate/angular-animate.js',
-    'bower_components/angular-route/angular-route.js',
-    'bower_components/angularytics/dist/angularytics.js',
-    'config/lib/angular-animate-sequence/angular-animate-sequence.js',
-    'config/lib/angular-animate-sequence/angular-animate-stylers.js',
-    buildConfig.dist + '/material-design.js',
-    buildConfig.dist + '/material-design.css'
-  ])
-    .pipe(gulp.dest(buildConfig.docsDist + '/lib'));
+  return gulp.src(buildConfig.docsAssets)
+    .pipe(gulp.dest(buildConfig.docsLib));
 });
 
 gulp.task('docs-html', function() {
@@ -63,15 +67,18 @@ gulp.task('docs-html', function() {
     .pipe(gulp.dest(buildConfig.docsDist));
 });
 
+gulp.task('docs-generate', function() {
+  return dgeni.generator(__dirname + '/docs/index.js')();
+});
+
 gulp.task('docs-app', function() {
   return gulp.src(['docs/app/**/*', '!docs/app/**/*.html'], { base: 'docs/app' })
     .pipe(gulp.dest(buildConfig.docsDist));
 });
 
-gulp.task('docs', ['docs-assets', 'docs-app', 'docs-html'], function() {
-  return dgeni.generator(__dirname + '/docs/index.js')();
-});
-
+/**
+ * JSHint
+ */
 gulp.task('jshint', function() {
   return gulp.src(
       buildConfig.paths.js.concat(buildConfig.paths.test)
@@ -86,6 +93,9 @@ gulp.task('jshint', function() {
     .pipe(jshint.reporter('fail'));
 });
 
+/**
+ * Karma Tests
+ */
 argv.browsers && (karmaConf.browsers = argv.browsers.trim().split(','));
 gulp.task('karma', function(done) {
   karma.start(_.assign({}, karmaConf, {singleRun: true}), done);
@@ -95,6 +105,9 @@ gulp.task('karma-watch', function(done) {
   karma.start(_.assign({}, karmaConf, {singleRun: false}), done);
 });
 
+/**
+ * Build material-design.js
+ */
 //TODO build components individually
 //Factor scripts and scss out into a task that works on either
 //an individual component or the whole bundle
@@ -111,12 +124,13 @@ gulp.task('scripts', function() {
     .pipe(gulpif(IS_RELEASE_BUILD, uglify({
       preserveComments: 'some' //preverse banner
     })))
-    .pipe(rename({
-      extname: '.min.js'
-    }))
+    .pipe(rename({ extname: '.min.js' }))
     .pipe(gulp.dest(buildConfig.docsDist + '/lib'));
 });
 
+/**
+ * Build material-design.css
+ */
 gulp.task('sass', function() {
   return gulp.src(buildConfig.paths.scss)
     .pipe(header(buildConfig.banner))

@@ -24,6 +24,7 @@
     "gulp-strip-debug": "^0.3.0",
     "gulp-template": "^0.1.1",
     "gulp-uglify": "^0.3.0",
+    "gulp-uncss": "^0.4.5",
     "gulp-util": "^2.2.14",
     "jshint-summary": "^0.3.0",
     "karma": "^0.12.16",
@@ -31,8 +32,6 @@
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "~0.1.4",
     "lodash": "^2.4.1",
-    "minimist": "^0.1.0",
-    "through": "^2.3.4",
-    "winston": "~0.7.3"
+    "minimist": "^0.1.0"
   }
 }

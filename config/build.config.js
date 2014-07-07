@@ -26,7 +26,19 @@ module.exports = {
   componentsModule: "angular.module('ngMaterial', [ 'ng', 'ngAnimate', 'material.services', <%= components.join(',') %>]);\n",
 
   dist: 'dist',
+
   docsDist: 'dist/docs',
+  docsLib: 'dist/docs/lib',
+  docsAssets: [
+    'bower_components/jquery/dist/jquery.js',
+    'bower_components/angular/angular.js',
+    'bower_components/angular-animate/angular-animate.js',
+    'bower_components/angular-route/angular-route.js',
+    'bower_components/angularytics/dist/angularytics.js',
+    'config/lib/angular-animate-sequence/angular-animate-sequence.js',
+    'config/lib/angular-animate-sequence/angular-animate-stylers.js',
+    'dist/material-design.*',
+  ],
 
   paths: {
     scss: ['src/main.scss'],
