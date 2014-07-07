@@ -41,12 +41,6 @@ body {
   }
 }
 
-.sidenav-content h2 {
-  margin: 15px;
-  margin-left: 45px;
-  color: #fff;
-  font-weight: normal;
-}
 .menu-icon {
   height: 60px;
 }
@@ -65,6 +59,10 @@ body {
   padding: 10px;
   height: auto;
   background: white;
+}
+
+material-sidenav material-content {
+  padding-top: 64px;
 }
 
 iframe.demo {

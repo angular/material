@@ -14,7 +14,3 @@ material-content {
   overflow-y: auto;
   overflow-x: hidden;
 }
-
-material-toolbar ~ material-content {
-  top: 60px;
-}
