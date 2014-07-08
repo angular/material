@@ -6,6 +6,7 @@
  * Scrollable content
  */
 angular.module('material.components.scrollHeader', [
+  'material.components.content',
   'material.services.registry'
 ])
 
