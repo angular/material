@@ -72,5 +72,5 @@ function materialScrollHeader($materialContent, $timeout) {
         });
       });
     }
-  }
+  };
 }

@@ -1,6 +1,11 @@
 angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 'ngAnimate'])
 
-  .service('materialEffects', ['$animateSequence', 'canvasRenderer', function ($animateSequence, canvasRenderer) {
+.service('materialEffects', [
+  '$animateSequence', 
+  'canvasRenderer', 
+  '$position',
+  '$$rAF',
+function ($animateSequence, canvasRenderer, $position, $$rAF) {
 
     var styler = angular.isDefined( window.TweenMax || window.TweenLite ) ? 'gsap'   :
                 angular.isDefined( window.jQuery ) ? 'jQuery' : 'default';
@@ -8,8 +13,10 @@ angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 
     // Publish API for effects...
     return {
       ripple : rippleWithJS,   // rippleWithCSS,
-      ink : animateInk
-    }
+      ink : animateInk,
+      popIn: popIn,
+      popOut: popOut
+    };
 
     // **********************************************************
     // Private API Methods
@@ -55,9 +62,61 @@ angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 
       return angular.isDefined(element) ? sequence.run(element) : sequence;
     }
 
+    function popIn(element, parentElement, clickElement) {
+      var startPos;
+      var endPos = $position.positionElements(parentElement, element, 'center');
+      if (clickElement) {
+        var dialogPos = $position.position(element);
+        var clickPos = $position.position(clickElement);
+        startPos = {
+          left: clickPos.left,
+          top: clickPos.top - dialogPos.height / 2
+        };
+      } else {
+        startPos = endPos;
+      }
+
+      // TODO once ngAnimateSequence bugs are fixed, this can be switched to use that
+      element.css({
+        '-webkit-transform': translateString(startPos.left, startPos.top, 0) + ' scale(0.25)',
+        opacity: 0
+      });
+      $$rAF(function() {
+        element.addClass('dialog-changing');
+        $$rAF(function() {
+          element.css({
+            '-webkit-transform': translateString(endPos.left, endPos.top, 0) + ' scale(1.0)',
+            opacity: 1
+          });
+        });
+      });
+    }
+
+    function popOut(element, parentElement) {
+      var endPos = $position.positionElements(parentElement, element, 'bottom-center');
+
+      endPos.top -= element.prop('offsetHeight') / 2;
+
+      var runner = $animateSequence({ styler: styler })
+        .addClass('dialog-changing')
+        .then(function() {
+          element.css({
+            '-webkit-transform': translateString(endPos.left, endPos.top, 0) + ' scale(0.5)',
+            opacity: 0
+          });
+        });
+
+      return runner.run(element);
+    }
+
     // **********************************************************
     // Utility Methods
     // **********************************************************
+    
+    function translateString(x, y, z) {
+      return 'translate3d(' + x + 'px,' + y + 'px,' + z + 'px)';
+    }
+
 
     /**
      * Support values such as 0.65 secs or 650 msecs

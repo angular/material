@@ -20,7 +20,7 @@ module.exports = {
 
     _(docs)
       .groupBy('componentId')
-      .each(function(componentDocs) {
+      .each(function(componentDocs, id) {
         var component = {};
         component.id = componentDocs[0].componentId;
         component.name = componentDocs[0].componentName;
@@ -60,6 +60,10 @@ module.exports = {
               }, fromDoc);
             }
           });
+
+        if (!_.keys(demos).length) {
+          return;
+        }
 
         var outputFolder = _.template(componentOutputFolder, { component: component });
         component.demos = demos;

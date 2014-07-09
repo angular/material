@@ -81,8 +81,9 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope, 
     return component && $location.path() === component.url;
   };
 
-  $scope.viewSource = function(component) {
+  $scope.viewSource = function(component, $event) {
     $materialDialog({
+      targetEvent: $event,
       controller: 'ViewSourceCtrl',
       locals: {
         demo: component.$selectedDemo

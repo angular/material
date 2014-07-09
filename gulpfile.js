@@ -39,8 +39,8 @@ gulp.task('default', ['build']);
 gulp.task('build', ['scripts', 'sass']);
 gulp.task('validate', ['jshint', 'karma']);
 
-gulp.task('watch', ['build'], function() {
-  gulp.watch(['src/**/*.{scss,js,html}'], ['build']);
+gulp.task('watch', ['docs'], function() {
+  gulp.watch(['src/**/*.{scss,js,html}'], ['docs']);
 });
 
 

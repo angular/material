@@ -59,8 +59,10 @@ module.exports = {
     //We have to manually list files so demo files don't get 
     //into the build
     js: [
+      //Components
       'src/components/animate/effects.js',
       'src/components/animate/canvas/rippler.js',
+      'src/components/backdrop/backdrop.js',
       'src/components/buttons/buttons.js',
       'src/components/card/card.js',
       'src/components/checkbox/checkbox.js',
@@ -77,13 +79,18 @@ module.exports = {
       'src/components/toast/toast.js',
       'src/components/toolbar/toolbar.js',
       'src/components/whiteframe/whiteframe.js',
+
+      //Services
       'src/services/module.js',
       'src/services/registry.js',
       'src/services/compiler/compiler.js',
       'src/services/popup/popup.js',
+      'src/services/position/position.js',
+
+      //Utils
       'src/utils/binding.js',
       'src/utils/list.js',
-      'src/utils/supplant.js'
+      'src/utils/supplant.js',
     ],
     test: ['src/**/*.spec.js']
   },

@@ -80,7 +80,7 @@ iframe.demo {
   color: #eee;
 }
 
-.dialog-container.source-dialog-container {
+material-dialog.view-source-dialog {
   width: 100%;
   height: 100%;
 }

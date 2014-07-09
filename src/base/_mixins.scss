@@ -54,9 +54,19 @@
           transform: rotate($val);
 }
 
+@mixin transform($val) {
+  -webkit-transform: $val;
+          transform: $val;
+}
+
 @mixin transition($val) {
   -webkit-transition: $val;
           transition: $val;
+}
+
+@mixin transition-delay($val) {
+  -webkit-transition-delay: $val;
+          transition-delay: $val;
 }
 
 @mixin user-select($val:none) {
@@ -123,17 +133,4 @@
   &::-webkit-input-placeholder {
     color: $color;
   }
-}
-
-@mixin backdrop {
-  @include flexbox();
-  @include flex-box-align(center);
-  @include justify-content(center);
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  background-color: rgba(0,0,0,0.2);
 }

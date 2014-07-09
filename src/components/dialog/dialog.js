@@ -1,4 +1,7 @@
 angular.module('material.components.dialog', ['material.services.popup'])
+  .directive('materialDialog', [
+    MaterialDialogDirective
+  ])
   /**
    * @ngdoc service
    * @name $materialDialog
@@ -8,10 +11,18 @@ angular.module('material.components.dialog', ['material.services.popup'])
     '$timeout',
     '$materialPopup',
     '$rootElement',
-    NgmDialogService
+    '$materialBackdrop',
+    'materialEffects',
+    MaterialDialogService
   ]);
 
-function NgmDialogService($timeout, $materialPopup, $rootElement) {
+function MaterialDialogDirective() {
+  return {
+    restrict: 'E'
+  };
+}
+
+function MaterialDialogService($timeout, $materialPopup, $rootElement, $materialBackdrop, materialEffects) {
   var recentDialog;
 
   return showDialog;
@@ -22,44 +33,67 @@ function NgmDialogService($timeout, $materialPopup, $rootElement) {
    */
   function showDialog(options) {
     options = angular.extend({
-      // How long to keep the dialog up, milliseconds
-      duration: 3000,
       appendTo: $rootElement,
-      clickOutsideToClose: true,
-      // Supports any combination of these class names: 'bottom top left right fit'. 
+      hasBackdrop: true, // should have an opaque backdrop
+      clickOutsideToClose: true, // should have a clickable backdrop to close
+      escapeToClose: true,
+      // targetEvent: used to find the location to start the dialog from
+      targetEvent: null
       // Also supports all options from $materialPopup
-      transformTemplate: function(template) {
-        return '<material-dialog>' + template + '</material-dialog>';
-      }
     }, options || {});
 
+    var backdropInstance;
+
+    // Close the old dialog
     recentDialog && recentDialog.then(function(destroyDialog) {
       destroyDialog();
     });
 
     recentDialog = $materialPopup(options).then(function(dialog) {
+
       // Controller will be passed a `$hideDialog` function
       dialog.locals.$hideDialog = destroyDialog;
       dialog.enter(function() {
-        dialog.element.on('click', onElementClick);
-        $rootElement.on('keyup', onRootElementKeyup);
+        if (options.escapeToClose) {
+          $rootElement.on('keyup', onRootElementKeyup);
+        }
+        if (options.hasBackdrop || options.clickOutsideToClose) {
+          backdropInstance = $materialBackdrop({
+            appendTo: options.appendTo,
+            opaque: options.hasBackdrop
+          }, destroyDialog);
+          backdropInstance.then(function(drop) {
+            drop.enter();
+          });
+        }
       });
+
+      materialEffects.popIn(
+        dialog.element,
+        options.appendTo,
+        options.targetEvent && options.targetEvent.target && 
+          angular.element(options.targetEvent.target)
+      );
 
       return destroyDialog;
 
       function destroyDialog() {
-        dialog.element.off('click', onElementClick);
-        $rootElement.off('keyup', onRootElementKeyup);
-        dialog.destroy();
+        if (backdropInstance) {
+          backdropInstance.then(function(drop) {
+            drop.destroy();
+          });
+        }
+        if (options.escapeToClose) {
+          $rootElement.off('keyup', onRootElementKeyup);
+        }
+        materialEffects.popOut(dialog.element, $rootElement);
+
+        // TODO once the done method from the popOut function & ngAnimateStyler works,
+        // remove this timeout
+        $timeout(dialog.destroy, 200);
       }
       function onRootElementKeyup(e) {
         if (e.keyCode == 27) {
-          $timeout(destroyDialog);
-        }
-      }
-      function onElementClick(e) {
-        //Close the dialog if click was outside the container
-        if (e.target === dialog.element[0]) {
           $timeout(destroyDialog);
         }
       }

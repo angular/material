@@ -1,0 +1,27 @@
+material-backdrop {
+  z-index: $z-index-backdrop;
+  background-color: rgba(0,0,0,0);
+
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  &.opaque {
+    background-color: rgba(0,0,0,0.2);
+  }
+
+  @include transition(all 0.2s ease-out);
+  &.ng-enter {
+    @include transition-delay(0.1s);
+  }
+  &.ng-enter,
+  &.ng-leave.ng-leave-active {
+    opacity: 0;
+  }
+  &.ng-leave,
+  &.ng-enter.ng-enter-active {
+    opacity: 1;
+  }
+}
