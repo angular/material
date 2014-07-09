@@ -17,6 +17,23 @@ This project is in early development via a small core team of [Ionic Framework](
 
 For issues, including progress on accessibility support for these UI elements, see the [Issue Tracker](https://github.com/angular/material/issues)
 
+## Usage
+
+At its current stage, use AngularJS Material Design at your own risk.  APIs are changing rapidly.
+
+When [v0.0.1 is released], the project will be slightly more usable.  But everything will always be subject to rapid change until the project is deemed 'ready'.
+
+Nevertheless, if you wish to use AngularJS Material Design, here are the steps (what the dependencies are and how to use them will all change):
+
+1. `gulp build`
+1. Include `jquery.js`
+1. Include `angular.js`
+1. Include `angular-animate.js`
+1. Include `config/lib/angular-animate-sequence/angular-animate-sequence.js`
+1. Include `config/lib/angular-animate-sequence/angular-animate-stylers.js`
+1. Include `dist/material-design.js`
+1. Include `dist/material-design.css`
+
 ### File Structure
 
 - Components belong in `src/components/{componentName}`
@@ -28,6 +45,9 @@ For issues, including progress on accessibility support for these UI elements, s
 
 - http://github.com/ajoslin/conventional-changelog
 - git pre-commit hook available [here](https://github.com/angular/angular.js/blob/master/validate-commit-msg.js).  Place it in `.git/hooks/pre-commit`, and run `chmod +x .git/hooks/pre-commit`. It will validate your commit messages for you.
+
+### Development 
+
 - `npm install` for gulp deps
 - `bower install` for angular deps
 - `gulp build` (alias `gulp`) to build, add `--release` flag to uglify & strip console.log.
