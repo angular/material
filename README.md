@@ -19,11 +19,11 @@ For issues, including progress on accessibility support for these UI elements, s
 
 ## Usage
 
-At its current stage, use AngularJS Material Design at your own risk.  APIs are changing rapidly.
+In its current early state, use AngularJS Material Design at your own risk.  APIs are changing rapidly.
 
-When [v0.0.1 is released], the project will be slightly more usable.  But everything will always be subject to rapid change until the project is deemed 'ready'.
+When [v0.0.1 is released](https://github.com/angular/material/issues?milestone=2&state=open), the project will more usable.  But everything is subject to rapid change until beta is ready.
 
-Nevertheless, if you wish to use AngularJS Material Design, here are the steps (what the dependencies are and how to use them will all change):
+Nevertheless, if you wish to use AngularJS Material Design, here are the steps (note that the dependencies are and how to use them will change soon):
 
 1. `gulp build`
 1. Include `jquery.js`
