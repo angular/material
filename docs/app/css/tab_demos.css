@@ -184,10 +184,22 @@ div.animate-switch-container div.animate-switch {
 }
 
 
-material-tab-label > button {
+material-tab  button {
+    position: absolute;
     display:none;
+    top: 0;
+    right: 0;
+    border: 0;
+    background: transparent none;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-material-tab-label:hover > button {
+material-tab  button:hover {
+    border-radius: 50%;
+    background-color: #ffff68;
+}
+
+material-tab:hover  button {
     display:inline;
 }
