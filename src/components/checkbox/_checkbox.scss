@@ -18,12 +18,12 @@ material-checkbox {
     cursor: pointer;
 
     material-ripple {
-      display: block;
       position: absolute;
-      width: 56px;
-      height: 56px;
       top: -20px;
       left: -20px;
+      display: block;
+      width: 56px;
+      height: 56px;
     }
 
     .material-ripple-canvas {
@@ -42,25 +42,33 @@ material-checkbox {
 
   // unchecked
   .material-icon {
-    @include transition(280ms);
+    @include transition(240ms);
     position: absolute;
     top: 0;
     left: 0;
-    box-sizing: border-box;
     width: $checkbox-width;
     height: $checkbox-height;
-    border: 2px solid rgb(208, 208, 208);
+    border: 2px solid #6D6D6D;
+    border-radius: 2px;
   }
 
   // checked
   &.material-checked .material-icon {
+    border-color: #4CAF50;
+    background: #4CAF50;
+  }
+
+  &.material-checked .material-icon:after {
     @include transform-rotate(45deg);
-    top: -2px;
-    left: 6px;
-    width: 9px;
-    height: 18px;
-    border: 2px solid rgb(0, 188, 212);
-    border-style: none solid solid none;
+    position: absolute;
+    left: 4px;
+    display: table;
+    width: 6px;
+    height: 12px;
+    border: 2px solid $color-grey-200;
+    border-top: 0;
+    border-left: 0;
+    content: ' ';
   }
 
   .material-label {
