@@ -63,7 +63,9 @@ function QpToastService($timeout, $materialPopup) {
 
       toast.element.addClass(options.position);
       toast.enter(function() {
-        options.duration && $timeout(destroy, options.duration);
+        if (options.duration) {
+          toast.delay = $timeout(destroy, options.duration);
+        }
       });
 
       return destroy;
