@@ -61,7 +61,7 @@ function MaterialDialogService($timeout, $materialPopup, $rootElement, $material
           backdropInstance = $materialBackdrop({
             appendTo: options.appendTo,
             opaque: options.hasBackdrop
-          }, destroyDialog);
+          }, clickOutsideToClose ? destroyDialog : angular.noop);
           backdropInstance.then(function(drop) {
             drop.enter();
           });
