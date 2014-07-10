@@ -67,9 +67,9 @@ function ($animateSequence, canvasRenderer, $position, $$rAF) {
       var endPos = $position.positionElements(parentElement, element, 'center');
       if (clickElement) {
         var dialogPos = $position.position(element);
-        var clickPos = $position.position(clickElement);
+        var clickPos = $position.offset(clickElement);
         startPos = {
-          left: clickPos.left,
+          left: clickPos.left - dialogPos.width / 2,
           top: clickPos.top - dialogPos.height / 2
         };
       } else {
@@ -78,7 +78,7 @@ function ($animateSequence, canvasRenderer, $position, $$rAF) {
 
       // TODO once ngAnimateSequence bugs are fixed, this can be switched to use that
       element.css({
-        '-webkit-transform': translateString(startPos.left, startPos.top, 0) + ' scale(0.25)',
+        '-webkit-transform': translateString(startPos.left, startPos.top, 0) + ' scale(0.2)',
         opacity: 0
       });
       $$rAF(function() {
