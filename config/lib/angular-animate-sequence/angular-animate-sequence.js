@@ -181,14 +181,23 @@ angular.module('ngAnimateSequence', ['ngAnimate'])
           },
 
           then : function(fn) {
-            return addToChain(0, null, null, fn);
+            return addToChain(0, null, null, function(element, duration, done) {
+              fn(element, done); 
+            });
           },
 
           animate : function(preOptions, postOptions, time ) {
-            if (arguments.length < 3) {
+            if (arguments.length == 2 && !angular.isObject(postOptions)) {
+              time = postOptions;
               postOptions = preOptions;
               preOptions  = {};
+            } else if(arguments.length == 1) {
+              postOptions = preOptions;
+              preOptions = {};
+            } else {
+              postOptions = postOptions || {};
             }
+
             return addToChain(time || postOptions.duration, preOptions, postOptions, function(_, duration, done) {
               done();
             });
@@ -267,7 +276,7 @@ angular.module('ngAnimateSequence', ['ngAnimate'])
         function addSuffix(target) {
           var styles = 'top left right bottom ' +
             'x y width height ' +
-            'border-width border-radius ' +
+            'border-width border-radius borderWidth borderRadius' +
             'margin margin-top margin-bottom margin-left margin-right ' +
             'padding padding-left padding-right padding-top padding-bottom'.split(' ');
 
