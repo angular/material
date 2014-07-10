@@ -3,12 +3,16 @@ angular.module('ngThrottle', ['ng'])
   /**
    *
    *   var canvas, rippler;
-   *   var th = $throttle({
+   *   var drawWaves = $throttle({
    *   	start : function( done  ) {
-   *          rippler = canvasRenderer.ripple( canvas, options);
    *          $animate.addClass(canvasElement, ‘grow’, done);
+   *          rippler = rippler || canvasRenderer.ripple( canvas, options);
+   *
+   *          canvas.parent.$on('mousedown', function(e) {
+   *             drawWaves({ startAt: localToCanvas(e) });
+   *          });
    *   	},
-   *   	throttle : function(data, done) {
+   *   	throttle : function drawWaveAt(data, done) {
    *   	      rippler.onMouseDown( data.startAt, done );
    *    },
    *   	end : function myFinish( done ) {
@@ -18,9 +22,6 @@ angular.module('ngThrottle', ['ng'])
    *   })(done, otherwise);
    *
    *
-   *   canvas.parent.$on('mousedown', function(e) {
-   *      th({ startAt: localToCanvas(e) });
-   *   });
    *
    */
   .factory( "$throttle", ['$timeout', '$$q', '$log', function ($timeout, $$q, $log) {
@@ -82,7 +83,13 @@ angular.module('ngThrottle', ['ng'])
             pendingActions.push({ data:data, done:done });
           }
 
-
+          /**
+           * Delegate to the custom throttle function...
+           * When CTF reports complete, then proceed to the `end` state
+           *
+           * @param data  Data to be delegated to the throttle function
+           * @param done  Callback when all throttle actions have completed
+           */
           function invokeThrottleHandler(data, done) {
 
             if ( angular.isFunction(phases.throttle) ) {
@@ -112,17 +119,13 @@ angular.module('ngThrottle', ['ng'])
            * Process all pending actions (if any)
            */
           function feedPendingActions( response ) {
-            if ( angular.isDefined(response) ) {
-              $log.debug(response);
-            }
+            logResponse(response);
 
             state = STATE_THROTTLE;
 
             angular.forEach(pendingActions, function (it) {
               throttle( it.data, function(response) {
-                if ( angular.isDefined(response) ) {
-                  $log.debug(response);
-                }
+                logResponse(response);
 
                 if ( angular.isFunction(it.done) ) {
                   it.done(response);
@@ -148,9 +151,7 @@ angular.module('ngThrottle', ['ng'])
            * of the current activity cycle
            */
           function finish( response ) {
-            if ( angular.isDefined(response) ) {
-              $log.debug(response);
-            }
+            logResponse(response);
 
             if ( state == STATE_END ){
               state = STATE_READY;
@@ -229,6 +230,13 @@ angular.module('ngThrottle', ['ng'])
         dfd.resolve.apply(null, arguments.length > 1 ? [].slice.call(arguments,1) : [ ]);
 
         return dfd.promise;
+      }
+
+      function logResponse(response)
+      {
+        if ( angular.isDefined(response) ) {
+          $log.debug(response);
+        }
       }
 
 
