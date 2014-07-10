@@ -25,6 +25,7 @@ When [v0.0.1 is released](https://github.com/angular/material/issues?milestone=2
 
 Nevertheless, if you wish to use AngularJS Material Design, here are the steps (note that the dependencies are and how to use them will change soon):
 
+1. `npm install`
 1. `gulp build`
 1. Include `jquery.js`
 1. Include `angular.js`
