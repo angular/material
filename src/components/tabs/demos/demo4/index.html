@@ -32,23 +32,23 @@
     <br/>
     <div class="infoBar">
         <div class="left">
-            Tab <span class="highlight">#{{ selectedIndex }}</span>is active.
+          Tab <span class="highlight">#{{ selectedIndex }}</span>is active.
 
-            <span class="left-spacer">Tab #2</span> is
-            <span class="highlight"><input type="checkbox" ng-model="allowDisable"> Disabled</span>
-            (will auto-deselect if active)
+          <span class="left-spacer">Tab #2</span> is
+          <span class="highlight"><input type="checkbox" ng-model="allowDisable"> Disabled</span>
+          (will auto-deselect if active)
 
-                      <span style="padding-left: 30px;">
-                          Show in <span class="highlight"><input type="checkbox" ng-model="reversed" ng-value="reversed"> Reversed Order</span>
-                      </span>
+          <span style="padding-left: 30px;">
+              Show in <span class="highlight"><input type="checkbox" ng-model="reversed" ng-value="reversed"> Reversed Order</span>
+          </span>
         </div>
 
         <div class="right">
-            onSelected: <span class="highlight hello">{{greeting}}</span>
+          onSelected: <span class="highlight hello">{{greeting}}</span>
 
-                      <span class="left-spacer" ng-show="farewell.length">
-                        onDeselected: <span class="highlight bye">{{farewell}}</span>
-                      </span>
+          <span class="left-spacer" ng-show="farewell.length">
+            onDeselected: <span class="highlight bye">{{farewell}}</span>
+          </span>
         </div>
     </div>
 
