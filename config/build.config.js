@@ -92,7 +92,10 @@ module.exports = {
       'src/utils/list.js',
       'src/utils/supplant.js',
     ],
-    test: ['src/**/*.spec.js']
+    test: [
+      'src/**/*.spec.js',
+      'config/lib/angular-animate-sequence/*.spec.js' // TODO(matias): remove this once the sequencer is placed into the ngAnimate core 
+    ]
   },
 
   repository: pkg.repository.url

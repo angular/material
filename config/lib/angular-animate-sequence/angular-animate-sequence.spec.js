@@ -52,7 +52,7 @@ describe('ngAnimateSequenceSpec', function() {
       }));
 
       it('should render the `enter` animation', function() {
-        $animateSequence().enter(parent).start(element);
+        $animateSequence().enter(parent).run(element);
         $animate.triggerReflow();
         $rootScope.$digest();
 
@@ -62,7 +62,7 @@ describe('ngAnimateSequenceSpec', function() {
       it('should render the `leave` animation', function() {
         parent.append(element);
 
-        $animateSequence().leave().start(element);
+        $animateSequence().leave().run(element);
         $animate.triggerReflow();
         $rootScope.$digest();
 
@@ -74,7 +74,7 @@ describe('ngAnimateSequenceSpec', function() {
         parent.append(move);
         parent.append(element);
 
-        $animateSequence().move(move).start(element);
+        $animateSequence().move(move).run(element);
         $animate.triggerReflow();
         $rootScope.$digest();
 
@@ -84,7 +84,7 @@ describe('ngAnimateSequenceSpec', function() {
       it('should render the `addClass` animation', function() {
         parent.append(element);
 
-        $animateSequence().addClass('on').start(element);
+        $animateSequence().addClass('on').run(element);
         $animate.triggerReflow();
 
         assertAnimation(element, { event : 'addClass', className : 'on' });
@@ -94,7 +94,7 @@ describe('ngAnimateSequenceSpec', function() {
         parent.append(element);
         element.addClass('off');
 
-        $animateSequence().removeClass('off').start(element);
+        $animateSequence().removeClass('off').run(element);
         $animate.triggerReflow();
 
         assertAnimation(element, { event : 'removeClass', className : 'off' });
@@ -104,7 +104,7 @@ describe('ngAnimateSequenceSpec', function() {
         parent.append(element);
         element.addClass('off');
 
-        $animateSequence().setClass('on','off').start(element);
+        $animateSequence().setClass('on','off').run(element);
         $animate.triggerReflow();
 
         assertAnimation(element, { event : 'setClass', className : 'on off' });
@@ -118,7 +118,7 @@ describe('ngAnimateSequenceSpec', function() {
         $animateSequence().then(function(element, done) {
           capturedElement = element; 
           done();
-        }).start(element);
+        }).run(element);
 
         $animate.triggerReflow();
         expect(capturedElement).toBe(element);
@@ -129,7 +129,7 @@ describe('ngAnimateSequenceSpec', function() {
           $animateSequence()
             .enter(parent)
             .leave()
-            .start(element);
+            .run(element);
 
           $animate.triggerReflow();
           $rootScope.$digest();
@@ -150,14 +150,13 @@ describe('ngAnimateSequenceSpec', function() {
             .addClass('two')
             .removeClass('one')
             .removeClass('two')
-            .complete(function() {
-              completed = true;
-            })
             .then(function(element, done) {
               completed = false;
               done();
             })
-            .start(element);
+            .run(element, 1000, function() {
+              completed = true;  
+            });
 
           $animate.triggerReflow();
           assertAnimation(element, { event : 'addClass', className : 'one' });
@@ -198,14 +197,13 @@ describe('ngAnimateSequenceSpec', function() {
           $animateSequence()
             .addClass('one')
             .addClass('two')
-            .complete(function() {
-              completed = true;
-            })
             .then(function(element, done) {
               then = true;
               done();
             })
-            .start(element);
+            .run(element, 1000, function() {
+              completed = true; 
+            });
 
           $animate.triggerReflow();
 
@@ -238,7 +236,7 @@ describe('ngAnimateSequenceSpec', function() {
         });
 
         seq.addClass('fade-in-wash', { color : 'red' }, { color : 'pink' });
-        seq.start(element);
+        seq.run(element);
 
         expect(preStyles).toEqual({ color : 'red' });
         expect(postStyles).toBeUndefined();
@@ -261,7 +259,7 @@ describe('ngAnimateSequenceSpec', function() {
         seq.addClass('b');
         seq.addClass('c');
 
-        seq.start(element);
+        seq.run(element);
 
         $animate.triggerReflow();
         assertAnimation(element, { event : 'addClass', className : 'a' });
@@ -277,6 +275,8 @@ describe('ngAnimateSequenceSpec', function() {
     });
 
     describe('stylers', function() {
+      beforeEach(module('ngAnimateStylers'));
+
       it('should find a pre-defined styler when a string is provided', function() {
         var spy = jasmine.createSpy('custom styler');
         module(function($$animateStylerProvider) {
@@ -286,34 +286,127 @@ describe('ngAnimateSequenceSpec', function() {
         });
         inject(function($animateSequence, $animate) {
           $animate.enabled(true);
-          var element = jqLite('</div></div>');
+          var element = jqLite('<div></div>');
           var seq = $animateSequence({ styler : 'custom' });
           seq.addClass('xyz');
 
-          seq.start(element);
+          seq.run(element);
 
           expect(spy).toHaveBeenCalled();
         });
       });
 
+      describe('webAnimations', function() {
+        it('should render animations using element.animate', 
+          inject(function($animateSequence, $animate) {
+
+          var log = [];
+
+          $animate.enabled(true);
+          var element = jqLite('<div></div>');
+          var node = element[0];
+
+          // Some browsers don't support this yet, but it's OK
+          // since we're going to mock it out anyway
+          node.animate = node.animate || function() {};
+
+          var currentAnimation = {};
+          spyOn(node, 'animate').andCallFake(function(animations, values) {
+            log.push(animations); 
+            return currentAnimation;
+          });
+
+          var seq = $animateSequence({ styler : 'webAnimations' });
+
+          seq.animate({ borderWidth: 0 }, { borderWidth: 10 });
+          seq.animate({ height: 100 }, { height: 10 });
+          seq.run(element);
+
+          $animate.triggerReflow();
+          currentAnimation.onfinish();
+          $animate.triggerCallbacks();
+
+          $animate.triggerReflow();
+          currentAnimation.onfinish();
+          $animate.triggerCallbacks();
+
+          expect(log).toEqual([
+            [ { borderWidth : '0px' },
+              { borderWidth: '10px' } ],
+            [ { height : '100px' },
+              { height: '10px' } ]
+          ]);
+        }));
+
+        it('should compute CSS values when not provided in the sequence', 
+          inject(function($animateSequence, $animate, $sniffer, $rootElement, $document) {
+
+          var log = [];
+          var prefix = $sniffer.vendorPrefix.toLowerCase() == 'webkit'
+              ? '-webkit-'
+              : '';
+
+          $animate.enabled(true);
+          var element = jqLite('<div></div>');
+          var originalStyles = {};
+
+          // the element may need to be injected into the body such that
+          // getComputedStyle will actually return real computed style values
+          $rootElement.append(element);
+          jqLite($document[0].body).append($rootElement);
+
+          originalStyles[prefix + 'transform'] = 'rotate(-30deg)';
+          originalStyles.opacity = 0.5;
+          element.css(originalStyles);
+
+          var node = element[0];
+
+          // Some browsers don't support this yet, but it's OK
+          // since we're going to mock it out anyway
+          node.animate = node.animate || function() {};
+
+          var currentAnimation = {};
+          spyOn(node, 'animate').andCallFake(function(animations, values) {
+            var pre = animations[0];
+            var post = animations[1];
+
+            //special case for transforms since matching matrix values is
+            //super finicky and will lead to alot of fine tuning 
+            if (pre.transform || pre.webkitTransform) {
+              pre.transform = '...';
+            }
+            delete pre.webkitTransform;
+
+            log.push([pre,post]); 
+            return currentAnimation;
+          });
+
+          var seq = $animateSequence({ styler : 'webAnimations' });
+
+          seq.animate({ transform: 'rotate(20deg)' });
+          seq.animate({ width : 100 }, { width: 1000 });
+          seq.animate({ opacity: 0 });
+          seq.run(element);
+
+          //each of the 3 animations defined in the sequence
+          for(var i=0; i < 3; i++) {
+            $animate.triggerReflow();
+            currentAnimation.onfinish();
+            $animate.triggerCallbacks();
+          }
+
+          expect(log).toEqual([
+            [ { transform: '...' },
+              { transform: 'rotate(20deg)' } ],
+            [ { width: '100px' },
+              { width: '1000px' } ],
+            [ { opacity: '0.5' },
+              { opacity: 0 } ]
+          ]);
+        }));
+      });
     });
 
   });
-
-  /*
-  describe('$animateGroup', function() {
-
-    it('should animate a list of sequences linearly', inject(function($animate, $animateSequence) {
-
-      var element = jqLite('<div></div>');
-
-      $animate.enabled(true);
-      var seq = $animateSequence().addClass('one').removeClass('two');
-
-      var s1 = seq.start(element);
-    }));
-
-  });
-  */
 
 });
