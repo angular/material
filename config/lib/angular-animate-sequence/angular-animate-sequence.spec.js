@@ -318,7 +318,7 @@ describe('ngAnimateSequenceSpec', function() {
 
           var seq = $animateSequence({ styler : 'webAnimations' });
 
-          seq.animate({ borderWidth: 0 }, { borderWidth: 10 });
+          seq.animate({ 'border-width': 0 }, { 'border-width': 10 });
           seq.animate({ height: 100 }, { height: 10 });
           seq.run(element);
 
@@ -336,6 +336,41 @@ describe('ngAnimateSequenceSpec', function() {
             [ { height : '100px' },
               { height: '10px' } ]
           ]);
+        }));
+
+        it('should retain the animated styles once complete', 
+          inject(function($animateSequence, $animate, $window, $rootElement, $document) {
+
+          var log = [];
+
+          $animate.enabled(true);
+          var element = jqLite('<div></div>');
+          var node = element[0];
+
+          // the element may need to be injected into the body such that
+          // getComputedStyle will actually return real computed style values
+          $rootElement.append(element);
+          jqLite($document[0].body).append($rootElement);
+
+          // Some browsers don't support this yet, but it's OK
+          // since we're going to mock it out anyway
+          node.animate = angular.noop;
+
+          var currentAnimation = {};
+          spyOn(node, 'animate').andCallFake(function() {
+            return currentAnimation; 
+          });
+
+          var seq = $animateSequence({ styler : 'webAnimations' });
+
+          seq.animate({ 'font-size': '10px' }, { 'font-size': '20px' });
+          seq.run(element);
+
+          $animate.triggerReflow();
+          currentAnimation.onfinish();
+          $animate.triggerCallbacks();
+
+          expect($window.getComputedStyle(node).fontSize).toEqual('20px');
         }));
 
         it('should compute CSS values when not provided in the sequence', 

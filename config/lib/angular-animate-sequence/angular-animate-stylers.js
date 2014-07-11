@@ -30,7 +30,11 @@ angular.module('ngAnimateStylers', ['ngAnimateSequence'])
         delay = delay || 0;
         duration = duration || 1000;
         var iterations = 1; // FIXME(matias): make sure this can be changed
+        pre = camelCaseStyles(pre);
+
         return function(post, done) {
+          post = camelCaseStyles(post);
+
           var missingProperties = [];
           angular.forEach(post, function(_, key) {
             if (!isDefined(pre[key])) {
@@ -45,12 +49,16 @@ angular.module('ngAnimateStylers', ['ngAnimateSequence'])
           if (missingProperties.length) {
             pre = angular.extend(pre, computeStartingStyles(node, missingProperties));
           }
+
           var animation = node.animate([pre, post], {
             duration : duration,
             delay : delay,
             iterations : iterations
           });
-          animation.onfinish = done;
+          animation.onfinish = function() {
+            element.css(post); 
+            done();
+          };
         }
       };
 
@@ -94,4 +102,15 @@ angular.module('ngAnimateStylers', ['ngAnimateSequence'])
         }
       };
     });
+
+    function camelCaseStyles(styles) {
+      var newStyles = {};
+      angular.forEach(styles, function(value, prop) {
+        prop = prop.toLowerCase().replace(/-(.)/g, function(match, group1) {
+          return group1.toUpperCase();
+        });
+        newStyles[prop]=value;
+      });
+      return newStyles;
+    }
   }]);
