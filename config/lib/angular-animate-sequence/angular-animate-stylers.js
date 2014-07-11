@@ -33,6 +33,8 @@ angular.module('ngAnimateStylers', ['ngAnimateSequence'])
         pre = camelCaseStyles(pre);
 
         return function(post, done) {
+          var finalStyles = normalizeVendorPrefixes(post);
+
           post = camelCaseStyles(post);
 
           var missingProperties = [];
@@ -56,7 +58,7 @@ angular.module('ngAnimateStylers', ['ngAnimateSequence'])
             iterations : iterations
           });
           animation.onfinish = function() {
-            element.css(post); 
+            element.css(finalStyles); 
             done();
           };
         }
@@ -80,6 +82,16 @@ angular.module('ngAnimateStylers', ['ngAnimateSequence'])
         return styles;
       }
 
+      function normalizeVendorPrefixes(styles) {
+        var newStyles = {};
+        angular.forEach(styles, function(value, prop) {
+          if(webkit && specialStyles.indexOf(prop) >= 0) {
+            newStyles['webkit' + prop.charAt(0).toUpperCase() + prop.substr(1)] = value;
+          }
+          newStyles[prop]=value;
+        });
+        return newStyles;
+      }
     }]);
 
     // Greensock Animation Platform (GSAP)
