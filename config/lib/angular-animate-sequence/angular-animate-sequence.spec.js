@@ -407,10 +407,12 @@ describe('ngAnimateSequenceSpec', function() {
 
             //special case for transforms since matching matrix values is
             //super finicky and will lead to alot of fine tuning 
-            if (pre.transform || pre.webkitTransform) {
+            if (pre.transform || pre.webkitTransform || pre['-webkit-transform']) {
               pre.transform = '...';
             }
             delete pre.webkitTransform;
+            delete pre['-webkit-transform'];
+            delete post['-webkit-transform'];
 
             log.push([pre,post]); 
             return currentAnimation;
