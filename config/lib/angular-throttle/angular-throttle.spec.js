@@ -4,9 +4,9 @@ describe('ngThrottleSpec', function() {
 
   beforeEach(function() {
     module('ngAnimateSequence');
+    module('ngThrottle');
     module('ngMock');
     module('ngAnimateMock');
-    module('ngThrottle');
   });
 
   beforeEach(inject(function(_$throttle_, _$timeout_, _$animate_, $document, _$rootElement_){
@@ -20,20 +20,19 @@ describe('ngThrottleSpec', function() {
 
   describe('$throttle with no configurations', function() {
     var finished, started, ended;
+    var done = function() { finished = true; };
     beforeEach( function() { finished = started = ended = false; });
 
-    it("should auto-start and auto-end without configuration",function() {
-      var doneFn = function(){ finished = true; };
-      var process = $throttle()( doneFn );
+    it("should start and end without configuration",function() {
+      var process = $throttle()( done );
 
       $timeout.flush();
 
       expect(finished).toBe(true);
     });
 
-    it("should run without configuration",function() {
-      var doneFn = function(){ finished = true; };
-      var process = $throttle()( doneFn );
+    it("should run process function without throttle configuration",function() {
+      var process = $throttle()( done );
 
       process("a");
       $timeout.flush();
@@ -41,46 +40,42 @@ describe('ngThrottleSpec', function() {
       expect(finished).toBe(true);
     });
 
-    it("should start and auto-end",function() {
+    it("should start and end with `done` callbacks",function() {
       var startFn = function(done){ started = true; done(); };
-      var process = $throttle({start:startFn})( function(){
-        finished = true;
-      });
+      var process = $throttle({start:startFn})( done );
 
-      $timeout.flush();
+      $timeout.flush();     // throttle()
 
       expect(started).toBe(true);
       expect(finished).toBe(true);
     });
 
-    it("should start and auto-end without callbacks",function() {
+    it("should start and end withOUT `done` callbacks",function() {
       var startFn = function(){ started = true; };
       var endFn = function(){ ended = true; };
-      var process = $throttle({start:startFn, end:endFn})( function(){
-        finished = true;
-      });
+      var process = $throttle({start:startFn, end:endFn})( done );
 
-      $timeout.flush();
+      $timeout.flush();     // throttle()
 
       expect(started).toBe(true);
       expect(ended).toBe(true);
       expect(finished).toBe(true);
     });
 
-    it("should auto-start without throttle calls",function() {
+    it("should start without throttle or end calls specified",function() {
       var startFn = function(){ started = true; };
       var throttledFn = $throttle({start:startFn})();
 
       expect(started).toBe(true);
     });
 
-    it("should auto-start but not auto-end",function() {
+    it("should start but NOT end if throttle does not complete",function() {
       var startFn = function(){ started = true;},
-          processFn = function(done){ ; },  // do not callback for completion
-          endFn = function(){ ended = true;},
-          throttledFn = $throttle({start:startFn, throttle:processFn, end:endFn})();
+          endFn = function(){ ended = true;};
+          lockFn = function(done){ ; },  // do not callback for completion
 
-      $timeout.flush();
+
+      $throttle({start:startFn, throttle:lockFn, end:endFn})();
 
       expect(started).toBe(true);
       expect(ended).toBe(false);
@@ -90,7 +85,7 @@ describe('ngThrottleSpec', function() {
 
   describe('$throttle with synchronous processing', function() {
 
-    it("should process() correctly",function() {
+    it("should process n-times correctly",function() {
       var wanted="The Hulk";
       var sCount=0, title="",
         startFn = function(){
@@ -112,7 +107,7 @@ describe('ngThrottleSpec', function() {
       expect(title).toBe(wanted);
     });
 
-    it("should process() and report() properly",function() {
+    it("should properly process with report callbacks",function() {
       var pCount= 10, total, callCount= 0,
         processFn = function(count, done){
           pCount -= count;
@@ -138,7 +133,7 @@ describe('ngThrottleSpec', function() {
       expect(callCount).toBe(1);
     });
 
-    it("should restart() if already finished",function() {
+    it("should restart if already finished",function() {
       var total= 0, started = 0,
           startFn = function(){
             started += 1;
@@ -157,6 +152,145 @@ describe('ngThrottleSpec', function() {
       expect(started).toBe(3); // restarted 1x
     });
 
+  });
+
+  describe('$throttle with async processing', function() {
+    var finished = false;
+    var done = function() { finished = true; };
+    beforeEach( function() { finished = false; });
+
+    it("should pass with async start()",function() {
+      var sCount=0,
+          startFn = function(){
+            return $timeout(function(){
+              sCount++;
+            },100)
+          },
+          concat = $throttle({start:startFn})( done );
+
+      concat("The ");
+      concat("Hulk");
+      $timeout.flush();
+
+      expect(sCount).toBe(1);
+
+    });
+
+    it("should pass with async start(done)",function() {
+      var sCount=0,
+        startFn = function(done){
+          return $timeout(function(){
+            sCount++;
+            done();
+          },100)
+        },
+        concat = $throttle({start:startFn})( done );
+
+      concat("The ");
+      concat("Hulk");
+      $timeout.flush();
+
+      expect(sCount).toBe(1);
+
+    });
+
+    it("should pass with async start(done) and end(done)",function() {
+      var sCount=3, eCount= 0,
+        startFn = function(done){
+          return $timeout(function(){
+            sCount--;
+            done();
+          },100)
+        },
+        endFn = function(done){
+          return $timeout(function(){
+            eCount++;
+            done();
+          },100)
+        };
+
+      $throttle({start:startFn, end:endFn})( done );
+      $timeout.flush();                         // start()
+      $timeout.flush();                         // end()
+
+      expect(sCount).toBe(2);
+      expect(eCount).toBe(1);
+      expect(finished).toBe(true);
+
+
+    });
+
+    it("should pass with async start(done) and process(done)",function() {
+      var title="",
+        startFn = function(){
+          return $timeout(function(){
+            done();
+          },200);
+        },
+        processFn = function(data, done){
+          $timeout(function(){
+            title += data;
+          },400);
+        },
+        concat = $throttle({start:startFn, throttle:processFn})( done );
+
+                        $timeout.flush();     // start()
+      concat("The ");   $timeout.flush();     // throttle(1)
+      concat("Hulk");   $timeout.flush();     // throttle(2)
+
+      expect(title).toBe("The Hulk");
+
+    });
+
+    it("should pass with async process(done) and restart with cancellable end",function() {
+      var content="", numStarts= 0, numEnds = 0,
+        startFn = function(done){
+          numStarts++;
+          done("start-done");
+        },
+        throttleFn = function(data, done){
+          $timeout(function(){
+            content += data;
+            if ( data == "e" ) {
+              done("throttle-done");
+            }
+          },400);
+        },
+        endFn = function(done){
+          numEnds++;
+
+          var procID = $timeout(function(){
+            done("end-done");
+          },500,false);
+
+          return function() {
+            $timeout.cancel( procID );
+          };
+        },
+        concat = $throttle({ start:startFn, throttle:throttleFn, end:endFn })( done );
+
+
+      concat("a");          // Build string...
+      concat("b");
+      concat("c");
+      concat("d");
+      concat("e");          // forces end()
+
+      $timeout.flush();     // flush to throttle( 5x )
+      $timeout(function(){
+
+        concat("a");        // forces restart()
+        concat("e");        // forces end()
+
+      },400,false);
+      $timeout.flush();     // flush() 278
+      $timeout.flush();     // flush to throttle( 2x )
+
+      expect(content).toBe("abcdeae");
+      expect(numStarts).toBe(2);
+      expect(numEnds).toBe(2);
+
+    });
   });
 
 
