@@ -89,12 +89,15 @@ module.exports = {
 
       //Utils
       'src/utils/binding.js',
-      'src/utils/list.js',
-      'src/utils/supplant.js',
+      'src/utils/list.js'
     ],
     test: [
       'src/**/*.spec.js',
-      'config/lib/angular-animate-sequence/*.spec.js' // TODO(matias): remove this once the sequencer is placed into the ngAnimate core 
+
+      // TODO(matias): remove this once the sequencer is placed into the ngAnimate core
+
+      'config/lib/angular-animate-sequence/*.spec.js',
+      'config/lib/angular-throttle/*.spec.js'
     ]
   },
 
