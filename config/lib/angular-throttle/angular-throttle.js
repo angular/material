@@ -14,6 +14,7 @@ angular.module('ngThrottle', ['ng'])
    *   	},
    *   	throttle : function drawWaveAt(data, done) {
    *   	      rippler.onMouseDown( data.startAt, done );
+   *   	      // can return optional cancel function()
    *    },
    *   	end : function myFinish( done ) {
    *   	      rippler = null;
@@ -39,7 +40,11 @@ angular.module('ngThrottle', ['ng'])
             cancel = angular.noop,
             state = STATE_READY;
 
-        start();
+        start().then(function(){
+           if ( phases.throttle == null ) {
+             end();
+           }
+        });
 
         return throttle;
 
@@ -162,12 +167,16 @@ angular.module('ngThrottle', ['ng'])
         }
 
         /**
-         * Cancel any end promise and restart state processes
+         * Cancel any `end` process and restart state machine processes
          */
         function restart() {
           try {
 
-            (cancel || angular.noop)();
+            if ( !angular.isFunction(cancel) ) {
+              cancel = angular.noop;
+            }
+
+            cancel();
             state = STATE_READY;
 
           } finally {
@@ -186,13 +195,18 @@ angular.module('ngThrottle', ['ng'])
         {
 
           var dfd = $$q.defer(),
-              hasAction = angular.isFunction(targetFn),
-              fn =  hasAction ? targetFn : resolved;
+              hasFn = angular.isFunction(targetFn),
+              goNext = hasFn && (targetFn.length < 1),
+              fn = hasFn ? targetFn : resolved;
 
           try {
 
             state = nextState;
-            cancel = fn.apply( null, [ hasAction ? callbackToResolve(dfd) : dfd ] );
+
+            cancel = fn.apply( null, [
+              goNext ? resolved(dfd) :
+              hasFn ? callbackToResolve(dfd) : dfd
+            ]);
 
           } catch( error ) {
             dfd.reject( error );
