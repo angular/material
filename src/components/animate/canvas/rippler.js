@@ -6,7 +6,7 @@ angular.module('material.animations')
      * @element paper-ripple
      * @homepage github.io
      */
-      .service('canvasRenderer', function() {
+      .service('$canvasRenderer', function() {
 
            var pow = Math.pow;
            var now = Date.now;
@@ -31,9 +31,7 @@ angular.module('material.animations')
              return dst;
            };
 
-
-
-    return {
+           return {
 
              /**
               * API to render ripple animations

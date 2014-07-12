@@ -139,7 +139,7 @@ function NgmTabsDirective($compile, materialEffects) {
               if( !!skipAnimation ) {
                 inkElement.css(styles);
               } else {
-                materialEffects.ink(inkElement, styles);
+                materialEffects.inkBar(inkElement, styles);
               }
             }
 
