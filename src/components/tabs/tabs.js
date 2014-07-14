@@ -1,7 +1,7 @@
-angular.module('material.components.tabs', ['material.utils', 'material.animations'])
-  .controller('materialTabsController', [ '$iterator', '$scope', NgmTabsController])
-  .directive('materialTabs', [ '$compile', 'materialEffects', NgmTabsDirective ])
-  .directive('materialTab', [ '$attrBind', NgmTabDirective  ]);
+angular.module('material.components.tabs', ['material.utils', 'material.animations', 'material.services'])
+  .controller('materialTabsController', [ '$iterator', '$scope', TabsController])
+  .directive('materialTabs', [ '$compile', 'materialEffects', TabsDirective ])
+  .directive('materialTab', [ '$attrBind', '$compile', '$timeout', TabDirective  ]);
 
 /**
  * @ngdoc directive
@@ -11,12 +11,12 @@ angular.module('material.components.tabs', ['material.utils', 'material.animatio
  * @restrict E
  *
  * @description
- * materialTabs is the outer container for the tabs directive
+ * materialTabs is the outer directive and container for the tabs functionality
  *
  * @param {integer=} selected Index of the active/selected tab
- * @param {boolean}  noink Flag indicates use of Material ink effects
- * @param {boolean}  nobar Flag indicates use of Material StretchBar effects
- * @param {boolean}  nostretch Flag indicates use of animations for stretchBar width and position changes
+ * @param {boolean}  noink Flag indicates use of RippleInk effects
+ * @param {boolean}  nobar Flag indicates use of InkBar effects
+ * @param {boolean}  nostretch Flag indicates use of elastic animation for inkBar width and position changes
  *
  * @example
  <example module="material.components.tabs">
@@ -33,7 +33,7 @@ angular.module('material.components.tabs', ['material.utils', 'material.animatio
  *
  */
 
-function NgmTabsDirective($compile, materialEffects) {
+function TabsDirective($compile, materialEffects) {
 
   return {
     restrict: 'E',
@@ -45,19 +45,19 @@ function NgmTabsDirective($compile, materialEffects) {
     },
 
     compile: compileTabsFn,
-    controller: [ '$iterator', '$scope', '$timeout', NgmTabsController ],
+    controller: [ '$scope', '$iterator', '$attrs', '$materialComponentRegistry', '$timeout', TabsController ],
 
     template:
       '<div class="tabs-header">' +
       '  <div class="tabs-header-items"></div>' +
       '  <shadow></shadow>' +
-      '  <material-ink></material-ink>'  +
+      '  <material-ink-bar></material-ink-bar>'  +
       '<div class="tabs-content ng-hide"></div>'
 
   };
 
   /**
-   * Use prelink to configure inherited scope attributes: noink, nostretch, and nobar;
+   * Use prelink to configure inherited scope attributes: noink, nobar, and nostretch;
    * do this before the child elements are linked.
    *
    * @param element
@@ -71,8 +71,8 @@ function NgmTabsDirective($compile, materialEffects) {
 
         // These attributes do not have values; but their presence defaults to value == true.
         scope.noink = angular.isDefined(attrs.noink);
-        scope.nostretch = angular.isDefined(attrs.nostretch);
         scope.nobar = angular.isDefined(attrs.nobar);
+        scope.nostretch = angular.isDefined(attrs.nostretch);
 
         // Publish for access by nested `<material-tab>` elements
         tabsController.noink = scope.noink;
@@ -83,8 +83,8 @@ function NgmTabsDirective($compile, materialEffects) {
           tabsController.selectAt(index);
         }));
 
-        // Remove the `stretchBar` element if `nobar` is defined
-        var elBar = findNode(".selection-bar",element);
+        // Remove the `inkBar` element if `nobar` is defined
+        var elBar = findNode("material-ink-bar",element);
         if ( elBar && scope.nobar ) {
           elBar.remove();
         }
@@ -109,15 +109,17 @@ function NgmTabsDirective($compile, materialEffects) {
         function configureInk() {
           if ( scope.nobar ) return;
 
-          var inkElement = findNode("material-ink", element);
+          // Single inkBar is used for all tabs
+          var inkBar = findNode("material-ink-bar", element);
 
-          tabsController.onTabChange = applyStyles;
+          // On resize or tabChange
+          tabsController.onTabChange = updateBarPosition;
           angular.element(window).on('resize', function() {
-            applyStyles(tabsController.selectedElement(), true);
+            updateBarPosition(tabsController.selectedElement(), true);
           });
 
           // Immediately place the ink bar
-          applyStyles(tabsController.selectedElement(), true );
+          updateBarPosition(tabsController.selectedElement(), true );
 
           /**
            * Update the position and size of the ink bar based on the
@@ -125,8 +127,8 @@ function NgmTabsDirective($compile, materialEffects) {
            * @param tab
            * @param skipAnimation
            */
-          function applyStyles(tab, skipAnimation) {
-            if ( angular.isDefined(tab) && angular.isDefined(inkElement) ) {
+          function updateBarPosition(tab, skipAnimation) {
+            if ( angular.isDefined(tab) && angular.isDefined(inkBar) ) {
 
               var tabNode = tab[0];
               var width = ( tabsController.$$tabs().length > 1 ) ? tabNode.offsetWidth : 0;
@@ -137,9 +139,9 @@ function NgmTabsDirective($compile, materialEffects) {
               };
 
               if( !!skipAnimation ) {
-                inkElement.css(styles);
+                inkBar.css(styles);
               } else {
-                materialEffects.inkBar(inkElement, styles);
+                materialEffects.inkBar(inkBar, styles);
               }
             }
 
@@ -287,7 +289,7 @@ function NgmTabsDirective($compile, materialEffects) {
  * @example
  *
  */
-function NgmTabDirective($attrBind) {
+function TabDirective($attrBind, $compile, $timeout) {
   var noop = angular.noop;
 
   return {
@@ -339,13 +341,14 @@ function NgmTabDirective($attrBind) {
     // **********************************************************
 
     /**
-     * If materialTabs `noInk` is true, then remove the materialInk feature
-     * By default, the materialInk directive is auto injected; @see line 255
+     * If materialTabs `noInk` is true, then remove the materialInkBar feature
+     * By default, the materialInkBar tag is auto injected; @see line 255
      */
     function configureEffects() {
-      if (tabsController.noink) {
-        // Note; material-ink directive replaces `<material-ink />` element with `div.material-ripple-cursor` element
-        var elRipple = angular.element(element[0].querySelector('.material-ripple-cursor'));
+      if ( tabsController.noink ) {
+
+        // Since <material-ripple/> directive replaces itself with `<div.material-ink-ripple />` element
+        var elRipple = angular.element(element[0].querySelector('.material-ink-ripple'));
         if (elRipple) {
           elRipple.remove();
         }
@@ -372,7 +375,7 @@ function NgmTabDirective($attrBind) {
     /**
      * Transpose the optional `label` attribute value or materialTabHeader or `content` body
      * into the body of the materialTabButton... all other content is saved in scope.content
-     * and used by NgmTabsController to inject into the `tabs-content` container.
+     * and used by TabsController to inject into the `tabs-content` container.
      */
     function updateTabContent(scope) {
       var cntr = angular.element(element[0].querySelector('material-tab-label'));
@@ -432,12 +435,13 @@ function NgmTabDirective($attrBind) {
  * @private
  *
  */
-function NgmTabsController($iterator, $scope, $timeout) {
-
+function TabsController($scope, $iterator, $attrs, $materialComponentRegistry, $timeout) {
   var list = $iterator([], true),
     elements = { },
     selected = null,
     self = this;
+
+  $materialComponentRegistry.register(self, $attrs.componentId || "tabs");
 
   // Methods used by <material-tab> and children
 
@@ -450,10 +454,11 @@ function NgmTabsController($iterator, $scope, $timeout) {
 
   // Property for child access
   this.noink = !!$scope.noink;
+  this.nobar = !!$scope.nobar;
   this.scope = $scope;
 
   // Special internal accessor to access scopes and tab `content`
-  // Used by NgmTabsDirective::buildContentItems()
+  // Used by TabsDirective::buildContentItems()
 
   this.$$tabs = $onGetTabs;
   this.$$hash = "";

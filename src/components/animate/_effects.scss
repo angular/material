@@ -1,4 +1,4 @@
-material-ink {
+material-ink-bar {
   height: 4px;
   background: #ffff85;
   position: absolute;
@@ -6,14 +6,8 @@ material-ink {
 }
 
 
-div.material-ripple-cursor {
-  position:absolute;
-  border:0px solid #f0f495;
-  border-radius:100%;
-  z-index:-1;
-}
 
-canvas.material-ripple-canvas {
+canvas.material-ink-ripple {
   pointer-events: none;
   position: absolute;
   color: #f0f495;

@@ -26,13 +26,13 @@ material-checkbox {
       height: 56px;
     }
 
-    .material-ripple-canvas {
+    .material-ink-ripple {
       color: #0f9d58;
     }
 
   }
 
-  &.material-checked .material-ripple-canvas {
+  &.material-checked .material-ink-ripple {
     color: #5a5f5a;
   }
 

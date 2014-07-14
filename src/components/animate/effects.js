@@ -1,4 +1,4 @@
-angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 'ngAnimate'])
+angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 'ngAnimate', 'material.services'])
        .service('materialEffects', [ '$animateSequence','$canvasRenderer', '$rootElement', '$position', '$$rAF', MaterialEffects])
        .directive('materialRipple', ['materialEffects', '$interpolate', MaterialRippleDirective]);
 
@@ -160,8 +160,8 @@ function MaterialRippleDirective(materialEffects, $interpolate) {
     var options  = calculateOptions();
     var tag =
       '<canvas ' +
-      'class="material-ripple-canvas {{classList}}"' +
-      'style="top:{{top}}; left:{{left}}" >' +
+        'class="material-ink-ripple {{classList}}"' +
+        'style="top:{{top}}; left:{{left}}" >' +
       '</canvas>';
 
     element.replaceWith(
