@@ -90,7 +90,12 @@ angular.module('material.animations')
                 /**
                  *
                  */
-                pixelDensity : 1
+                pixelDensity : 1,
+
+                /**
+                 * Completion hander/callback
+                 */
+                onComplete : angular.noop
               };
 
 
@@ -139,7 +144,9 @@ angular.module('material.animations')
             /**
              *
              */
-            Rippler.prototype.onMouseUp = function () {
+            Rippler.prototype.onMouseUp = function (done) {
+              this.onComplete = done;
+
               for (var i = 0; i < this.waves.length; i++) {
                 // Declare the next wave that has mouse down to be mouse'ed up.
                 var wave = this.waves[i];
@@ -256,6 +263,9 @@ angular.module('material.animations')
                 // we're not going to get another requestAnimationFrame any more.
                 ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
                 this._loop = null;
+
+                // Notify listeners [via callback] of animation completion
+                this.onComplete();
               }
 
               return this;

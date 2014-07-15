@@ -1,27 +1,39 @@
 angular.module('material.services.throttle', [ 'ng' ])
   /**
    *
-   *   var canvas, rippler;
-   *   var drawWaves = $throttle({
-   *   	start : function( done  ) {
-   *          $animate.addClass(canvasElement, ‘grow’, done);
-   *          rippler = rippler || canvasRenderer.ripple( canvas, options);
+   *   var rippler, watchMouse,
+   *       parent = element.parent(),
+   *       makeRipple = $throttle({
+   *         start : function() {
+   *           rippler = rippler || materialEffects.inkRipple( element[0], options );
+   *           watchMouse = watchMouse || buildMouseWatcher(parent, makeRipple);
+   *           // Ripples start with mouseDow (or taps)
+   *           parent.on('mousedown', makeRipple);
+   *         },
+   *         throttle : function(e, done) {
+   *           if ( effectAllowed() )
+   *           {
+   *             switch(e.type)
+   *             {
+   *               case 'mousedown' :
+   *                 watchMouse(true);
+   *                 rippler.onMouseDown( options.forceToCenter ? null : localToCanvas(e) );
+   *                 break;
+   *               default:
+   *                 watchMouse(false);
+   *                 rippler.onMouseUp( localToCanvas(e) );
+   *                 break;
+   *             }
+   *           } else {
+   *             done();
+   *           }
+   *         },
+   *         end : function() {
+   *           watchMouse(false);
+   *         }
+   *       });
    *
-   *          canvas.parent.$on('mousedown', function(e) {
-   *             drawWaves({ startAt: localToCanvas(e) });
-   *          });
-   *   	},
-   *   	throttle : function drawWaveAt(data, done) {
-   *   	      rippler.onMouseDown( data.startAt, done );
-   *   	      // can return optional cancel function()
-   *    },
-   *   	end : function myFinish( done ) {
-   *   	      rippler = null;
-   *          $animate.removeClass(canvasElement, ‘grow’, done);
-   *   	}
-   *   })(done, otherwise);
-   *
-   *
+   *   makeRipple();
    *
    */
   .factory( "$throttle", ['$timeout', '$$q', '$log', function ($timeout, $$q, $log) {

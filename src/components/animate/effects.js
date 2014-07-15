@@ -191,7 +191,7 @@ function MaterialRippleDirective(materialEffects, $interpolate, $throttle) {
 
                   default:
                     watchMouse(false);
-                    rippler.onMouseUp( localToCanvas(e) );
+                    rippler.onMouseUp( done );
                     break;
                 }
               } else {
@@ -215,11 +215,11 @@ function MaterialRippleDirective(materialEffects, $interpolate, $throttle) {
        * @returns {*|boolean}
        */
       function effectAllowed() {
-        var validated = inkEnabled( element.scope() ) && angular.isDefined( element.parent()[0] );
-        if ( !validated ) {
+        var allowed = inkEnabled( element.scope() ) && angular.isDefined( element.parent()[0] );
+        if ( !allowed ) {
           parent.off('mousedown', makeRipple);
         }
-        return validated;
+        return allowed;
       }
 
       /**
