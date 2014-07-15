@@ -10,13 +10,15 @@ describe('ngThrottleSpec', function() {
     module('material.animations');
   });
 
-  beforeEach(inject(function(_$throttle_, _$timeout_, _$animate_, $document, _$rootElement_){
+  beforeEach(inject(function(_$throttle_, _$timeout_, _$animate_, _$rootElement_, $document ){
         $throttle = _$throttle_;
         $timeout = _$timeout_;
 
         $animate = _$animate_;
         body = angular.element($document[0].body);
         $rootElement = _$rootElement_;
+
+        body.append($rootElement);
   }));
 
   describe('use $throttle with no configurations', function() {
@@ -312,26 +314,29 @@ describe('ngThrottleSpec', function() {
 
 
     function setup() {
-      var el, tmpl ='<div style="position:absolute; width:50px; height:50px;"><canvas class="material-ink-ripple" ></canvas></div>';
+      var el;
+      var tmpl = '' +
+        '<div style="width:50px; height:50px;">'+
+          '<canvas class="material-ink-ripple" ></canvas>' +
+        '</div>';
 
       inject(function($compile, $rootScope) {
-        el = $compile(tmpl)($rootScope.$new());
+        el = $compile(tmpl)($rootScope);
         $rootElement.append( el );
         $rootScope.$apply();
       });
+
       return el;
     }
 
     it('should start, animate, and end.', inject(function($compile, $rootScope, materialEffects) {
 
       var cntr = setup(),
-          canvas = cntr.find('canvas');
-
-      var rippler, makeRipple, throttled = 0,
+          canvas = cntr.find('canvas'),
+          rippler, makeRipple, throttled = 0,
           config = {
             start : function() {
               rippler = rippler || materialEffects.inkRipple( canvas[0] );
-              // Ripples start with mouseDown (or taps)
               cntr.on('mousedown', makeRipple);
               started = true;
             },
@@ -351,19 +356,27 @@ describe('ngThrottleSpec', function() {
             }
           }
 
-        makeRipple = $throttle(config)(done);
+        // prepare rippler wave function...
 
+        makeRipple = $throttle(config)(done);
         $timeout.flush();
         expect(started).toBe(true);
+
+        // trigger wave animation...
 
         cntr.triggerHandler("mousedown");
 
         // Allow animation to finish...
+
         $timeout(function(){
           expect(throttled).toBe(1);
           expect(ended).toBe(true);
           expect(finished).toBe(true);
         },10);
+
+        // Remove from $rootElement
+
+        cntr.remove();
 
     }));
 
