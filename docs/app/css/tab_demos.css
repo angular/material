@@ -3,16 +3,7 @@ body {
     background-color: #FAFAFA;
 }
 
-body h3 {
-    font-size:0.95em;
-    color: #d4d263;
-    font-weight: normal;
-    background-color: #474747;
-    width: 420px;
-    text-indent: 20px;
-    line-height: 30px;
-    margin-left: -20px;
-}
+
 .highlight {
     background-color: rgb(255, 251, 231);
     padding: 5px;

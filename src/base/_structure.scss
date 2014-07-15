@@ -1,9 +1,11 @@
 *,
 *:before,
 *:after {
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
+ -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+         box-sizing: border-box;
+
+  -webkit-font-smoothing: antialiased;
 }
 
 html, body {
@@ -12,25 +14,30 @@ html, body {
 }
 
 body {
-  margin: 0;
-  padding: 0px;
-  color: $font-color-base;
   font-family: $font-family;
+  font-size: $font-size-14;
+  line-height: $line-height-20;
+  color: $text-black-87;
+  background-color: #fff;
+  
   @include user-select();
   -webkit-tap-highlight-color: rgba(0,0,0,0);
-  -webkit-touch-callout: none;
+  -webkit-touch-callout: none; 
 
-
+  //is this accounted for on mobile devices?
+  // http://css-tricks.com/almanac/properties/t/text-rendering/
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
 
-  h3 {
-    display: block;
-    @include margin-selectors();
-    font-size: 1.17em;
-    font-weight: bold;
-  }
+}
 
+// Reset fonts for relevant elements
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
 }
 
 .inset {
