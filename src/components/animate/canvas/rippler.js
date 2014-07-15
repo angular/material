@@ -103,7 +103,7 @@ angular.module('material.animations')
               this.canvas = canvas;
               this.waves  = [];
 
-              return angular.extend(this, angular.mixin(options, defaults));
+              return angular.extend(this, angular.mixin(options || { }, defaults));
             };
 
             /**

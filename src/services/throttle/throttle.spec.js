@@ -7,6 +7,7 @@ describe('ngThrottleSpec', function() {
     module('ngMock');
     module('ngAnimateMock');
     module('material.services');
+    module('material.animations');
   });
 
   beforeEach(inject(function(_$throttle_, _$timeout_, _$animate_, $document, _$rootElement_){
@@ -304,7 +305,68 @@ describe('ngThrottleSpec', function() {
     });
   });
 
-  describe('use $throttle with inkRipple', function() {
+  describe('use $throttle with inkRipple', function(){
+    var finished, started, ended;
+    var done = function() { finished = true; };
+    beforeEach( function() { finished = started = ended = false; });
+
+
+    function setup() {
+      var el, tmpl ='<div style="position:absolute; width:50px; height:50px;"><canvas class="material-ink-ripple" ></canvas></div>';
+
+      inject(function($compile, $rootScope) {
+        el = $compile(tmpl)($rootScope.$new());
+        $rootElement.append( el );
+        $rootScope.$apply();
+      });
+      return el;
+    }
+
+    it('should start, animate, and end.', inject(function($compile, $rootScope, materialEffects) {
+
+      var cntr = setup(),
+          canvas = cntr.find('canvas');
+
+      var rippler, makeRipple, throttled = 0,
+          config = {
+            start : function() {
+              rippler = rippler || materialEffects.inkRipple( canvas[0] );
+              // Ripples start with mouseDown (or taps)
+              cntr.on('mousedown', makeRipple);
+              started = true;
+            },
+            throttle : function(e, done) {
+              throttled += 1;
+
+              switch(e.type)
+              {
+                case 'mousedown' :
+                  rippler.onMouseDown( {x:25,y:25} );
+                  rippler.onMouseUp( done );
+                  break;
+
+                default:
+                  break;
+              }
+            }
+          }
+
+        makeRipple = $throttle(config)(done);
+
+        $timeout.flush();
+        expect(started).toBe(true);
+
+        cntr.triggerHandler("mousedown");
+
+        // Allow animation to finish...
+        $timeout(function(){
+          expect(throttled).toBe(1);
+          expect(ended).toBe(true);
+          expect(finished).toBe(true);
+        },10);
+
+    }));
+
 
   });
 
