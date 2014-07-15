@@ -9,8 +9,7 @@ module.exports = {
     'bower_components/angular-animate/angular-animate.js',
     'bower_components/angular-mocks/angular-mocks.js',
     'config/lib/angular-animate-sequence/angular-animate-sequence.js',
-    'config/lib/angular-animate-sequence/angular-animate-stylers.js',
-    'config/lib/angular-throttle/angular-throttle.js'
+    'config/lib/angular-animate-sequence/angular-animate-stylers.js'
   ]
     .concat(buildConfig.paths.js)
     .concat(buildConfig.paths.test),

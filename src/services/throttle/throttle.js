@@ -1,5 +1,4 @@
-angular.module('ngThrottle', ['ng'])
-
+angular.module('material.services.throttle', [ 'ng' ])
   /**
    *
    *   var canvas, rippler;

@@ -4,9 +4,9 @@ describe('ngThrottleSpec', function() {
 
   beforeEach(function() {
     module('ngAnimateSequence');
-    module('ngThrottle');
     module('ngMock');
     module('ngAnimateMock');
+    module('material.services');
   });
 
   beforeEach(inject(function(_$throttle_, _$timeout_, _$animate_, $document, _$rootElement_){
@@ -18,7 +18,7 @@ describe('ngThrottleSpec', function() {
         $rootElement = _$rootElement_;
   }));
 
-  describe('$throttle with no configurations', function() {
+  describe('use $throttle with no configurations', function() {
     var finished, started, ended;
     var done = function() { finished = true; };
     beforeEach( function() { finished = started = ended = false; });
@@ -91,7 +91,7 @@ describe('ngThrottleSpec', function() {
 
   });
 
-  describe('$throttle with synchronous processing', function() {
+  describe('use $throttle with synchronous processing', function() {
 
     it("should process n-times correctly",function() {
       var wanted="The Hulk";
@@ -162,7 +162,7 @@ describe('ngThrottleSpec', function() {
 
   });
 
-  describe('$throttle with async processing', function() {
+  describe('use $throttle with async processing', function() {
     var finished = false;
     var done = function() { finished = true; };
     beforeEach( function() { finished = false; });
@@ -304,5 +304,8 @@ describe('ngThrottleSpec', function() {
     });
   });
 
+  describe('use $throttle with inkRipple', function() {
+
+  });
 
 });

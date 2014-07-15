@@ -1,6 +1,6 @@
 angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 'ngAnimate', 'material.services'])
-       .service('materialEffects', [ '$animateSequence','$canvasRenderer', '$rootElement', '$position', '$$rAF', MaterialEffects])
-       .directive('materialRipple', ['materialEffects', '$interpolate', MaterialRippleDirective]);
+       .service('materialEffects', [ '$animateSequence', '$canvasRenderer', '$rootElement', '$position', '$$rAF', MaterialEffects])
+       .directive('materialRipple', ['materialEffects', '$interpolate', '$throttle', MaterialRippleDirective]);
 
 /**
  * This service provides animation features for various Material Design effects:
@@ -141,7 +141,7 @@ function MaterialEffects($animateSequence, $canvasRenderer, $rootElement, $posit
 /**
  *  <material-ripple /> Directive
  */
-function MaterialRippleDirective(materialEffects, $interpolate) {
+function MaterialRippleDirective(materialEffects, $interpolate, $throttle) {
   return {
     restrict: 'E',
     compile: compileWithCanvas
@@ -169,44 +169,68 @@ function MaterialRippleDirective(materialEffects, $interpolate) {
     );
 
     return function( scope, element ){
-      var parent = element.parent();
-      var rippler = materialEffects.inkRipple( element[0], options );
-      var activateListeners = configureListeners(parent, onFinishRipple);
+      var rippler, watchMouse,
+          parent = element.parent(),
+          makeRipple = $throttle({
+            start : function() {
+              rippler = rippler || materialEffects.inkRipple( element[0], options );
+              watchMouse = watchMouse || buildMouseWatcher(parent, makeRipple);
 
+              // Ripples start with mouseDow (or taps)
+              parent.on('mousedown', makeRipple);
+            },
+            throttle : function(e, done) {
+              if ( effectAllowed() )
+              {
+                switch(e.type)
+                {
+                  case 'mousedown' :
+                    watchMouse(true);
+                    rippler.onMouseDown( options.forceToCenter ? null : localToCanvas(e) );
+                    break;
 
-      // Configure so ripple wave starts a mouseUp location...
-      parent.on('mousedown', onStartRipple);
+                  default:
+                    watchMouse(false);
+                    rippler.onMouseUp( localToCanvas(e) );
+                    break;
+                }
+              } else {
+                done();
+              }
+            },
+            end : function() {
+              watchMouse(false);
+            }
+          })();
 
-
-      // **********************************************************
-      // Mouse EventHandlers
-      // **********************************************************
-
-      function onStartRipple(e) {
-
-        if ( inkEnabled( element.scope() )) {
-          activateListeners(true);
-          rippler.onMouseDown( options.forceToCenter ? null : localToCanvas(e) );
-        }
-      }
-
-      function onFinishRipple( e ) {
-        activateListeners(false);
-        rippler.onMouseUp( localToCanvas(e) );
-      }
 
       // **********************************************************
       // Utility Methods
       // **********************************************************
 
       /**
+       * If the ripple canvas been removed from the DOM, then
+       * remove the `mousedown` listener
+       *
+       * @returns {*|boolean}
+       */
+      function effectAllowed() {
+        var validated = inkEnabled( element.scope() ) && angular.isDefined( element.parent()[0] );
+        if ( !validated ) {
+          parent.off('mousedown', makeRipple);
+        }
+        return validated;
+      }
+
+      /**
        * Build mouse event listeners for the specified element
-       * @param parent
-       * @param handlerFn
+       * @param element Angular element that will listen for bubbling mouseEvents
+       * @param handlerFn Function to be invoked with the mouse event
        * @returns {Function}
        */
-      function configureListeners(element, handlerFn) {
-        return function(active) {
+      function buildMouseWatcher(element, handlerFn) {
+        // Return function to easily toggle on/off listeners
+        return function watchMouse(active) {
           angular.forEach("mouseup,mouseleave".split(","), function(eventType) {
             var fn = active ? element.on : element.off;
             fn.apply(element, [eventType, handlerFn]);

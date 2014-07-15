@@ -26,7 +26,7 @@ describe('materialTabs directive', function() {
 
     });
 
-    it('should pass down "nobar" to hide the <div class="selectionBar">', function()
+    xit('should pass down "nobar" to hide the <div class="selectionBar">', function()
     {
       var tabs         = setup(''),
           selectionBar = tabs.children(0)[2],

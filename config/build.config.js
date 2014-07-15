@@ -86,6 +86,7 @@ module.exports = {
       'src/services/compiler/compiler.js',
       'src/services/popup/popup.js',
       'src/services/position/position.js',
+      'src/services/throttle/throttle.js',
 
       //Utils
       'src/utils/binding.js',
@@ -96,8 +97,7 @@ module.exports = {
 
       // TODO(matias): remove this once the sequencer is placed into the ngAnimate core
 
-      'config/lib/angular-animate-sequence/*.spec.js',
-      'config/lib/angular-throttle/*.spec.js'
+      'config/lib/angular-animate-sequence/*.spec.js'
     ]
   },
 
