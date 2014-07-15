@@ -44,7 +44,11 @@ describe('ngThrottleSpec', function() {
       var startFn = function(done){ started = true; done(); };
       var process = $throttle({start:startFn})( done );
 
-      $timeout.flush();     // throttle()
+
+      expect(process).toBeDefined();
+      expect(started).toBe(false);
+
+      $timeout.flush();     // flush start()
 
       expect(started).toBe(true);
       expect(finished).toBe(true);
@@ -66,6 +70,8 @@ describe('ngThrottleSpec', function() {
       var startFn = function(){ started = true; };
       var throttledFn = $throttle({start:startFn})();
 
+      $timeout.flush();
+
       expect(started).toBe(true);
     });
 
@@ -76,6 +82,8 @@ describe('ngThrottleSpec', function() {
 
 
       $throttle({start:startFn, throttle:lockFn, end:endFn})();
+
+      $timeout.flush();
 
       expect(started).toBe(true);
       expect(ended).toBe(false);
@@ -188,7 +196,7 @@ describe('ngThrottleSpec', function() {
 
       concat("The ");
       concat("Hulk");
-      $timeout.flush();
+      $timeout.flush();         // flush to begin 1st deferred start()
 
       expect(sCount).toBe(1);
 
@@ -210,6 +218,7 @@ describe('ngThrottleSpec', function() {
         };
 
       $throttle({start:startFn, end:endFn})( done );
+      $timeout.flush();                         // flush to begin 1st deferred start()
       $timeout.flush();                         // start()
       $timeout.flush();                         // end()
 
@@ -269,6 +278,7 @@ describe('ngThrottleSpec', function() {
         },
         concat = $throttle({ start:startFn, throttle:throttleFn, end:endFn })( done );
 
+      $timeout.flush();     // flush to begin 1st start()
 
       concat("a");          // Build string...
       concat("b");
@@ -285,6 +295,7 @@ describe('ngThrottleSpec', function() {
       },400,false);
       $timeout.flush();     // flush() 278
       $timeout.flush();     // flush to throttle( 2x )
+
 
       expect(content).toBe("abcdeae");
       expect(numStarts).toBe(2);

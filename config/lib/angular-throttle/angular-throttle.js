@@ -40,11 +40,14 @@ angular.module('ngThrottle', ['ng'])
             cancel = angular.noop,
             state = STATE_READY;
 
-        start().then(function(){
-           if ( phases.throttle == null ) {
-             end();
-           }
-        });
+        // Defer the call to the start function ... so `throttle` reference can be returned...
+        $timeout(function(){
+          start().then(function(){
+             if ( phases.throttle == null ) {
+               end();
+             }
+          });
+        },0,false);
 
         return throttle;
 
