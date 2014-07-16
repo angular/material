@@ -1,0 +1,55 @@
+<div class="testimonials" ng-app="app" ng-controller="AppCtrl" >
+
+    <material-tabs selected="activeQuote" nobar tabs-align="bottom">
+
+        <material-tab>
+            <p ng-class="{active:activeQuote==0}">
+                Angular Material is the framework that I use for all of my projects, and I'm not sure I can give a bigger
+                compliment than that. The innate sense of style and sophistication built into Angular Material is awesome and
+                makes building professional-level mobile applications a snap.
+            </p>
+            <material-tab-label>
+                <footer style="background-image: url(/img/testimonials/testimonial-hampton@2x.png)"
+                        ng-mouseenter="enableAutoScroll(false);"
+                        ng-mouseleave="enableAutoScroll(true);" >
+                    <cite>Hampton Catlin</cite>
+                    <div>Creator of <a href="http://sass-lang.com/">Sass</a></div>
+                </footer>
+            </material-tab-label>
+        </material-tab>
+
+        <material-tab>
+            <p ng-class="{active:activeQuote==1}">
+                Angular Material will dramatically change the way mobile apps are built. Their choice of AngularJS means
+                building functionality is a now breeze and it feels near-native. Your developers and your users will
+                thank you.
+            </p>
+            <material-tab-label>
+                <footer style="background-image: url(/img/testimonials/testimonial-james@2x.png)"
+                        ng-mouseenter="enableAutoScroll(false);"
+                        ng-mouseleave="enableAutoScroll(true);" >
+                    <cite>James Tamplin</cite>
+                    <div>Co-founder &amp; CEO, <a href="https://www.firebase.com/">Firebase</a></div>
+                </footer>
+            </material-tab-label>
+        </material-tab>
+
+        <material-tab>
+            <p ng-class="{active:activeQuote==2}">
+                I was so inspired when I found Angular Material. It fills a gap that's missing when building for mobile and
+                solves many complexities that otherwise require multiple libraries, keeping your code cleaner.
+                Overall, it just makes mobile development fun and fast, so you can build more!
+            </p>
+            <material-tab-label>
+                <footer style="background-image: url(/img/testimonials/testimonial-holly@2x.png)"
+                        ng-mouseenter="enableAutoScroll(false);"
+                        ng-mouseleave="enableAutoScroll(true);" >
+                    <cite>Holly Schinsky</cite>
+                    <div>Developer Evangelist, <a href="http://devgirl.org/">Adobe</a></div>
+                </footer>
+            </material-tab-label>
+        </material-tab>
+
+    </material-tabs>
+
+</div>
