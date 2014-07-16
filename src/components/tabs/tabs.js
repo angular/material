@@ -52,6 +52,7 @@ function TabsDirective($compile, materialEffects) {
       '  <div class="tabs-header-items"></div>' +
       '  <shadow></shadow>' +
       '  <material-ink-bar></material-ink-bar>'  +
+      '</div>'+
       '<div class="tabs-content ng-hide"></div>'
 
   };
@@ -92,6 +93,7 @@ function TabsDirective($compile, materialEffects) {
       },
       post: function tabsPostLink(scope, element, attrs, tabsController, $transclude) {
 
+        positionHeader();
         transcludeHeaderItems();
         transcludeContentItems();
 
@@ -146,7 +148,19 @@ function TabsDirective($compile, materialEffects) {
             }
 
           }
+        }
 
+        /**
+         * If the tabs-align attribute is 'bottom', then the tabs-content
+         * container is transposed with the tabs-header
+         */
+        function positionHeader() {
+          var align  = attrs['tabsAlign'] || "top";
+          var content = findNode('.tabs-content', element);
+
+          if ( align == "bottom") {
+            element.prepend(content);
+          }
         }
 
         /**
