@@ -62,6 +62,7 @@ module.exports = {
       //Components
       'src/components/animate/effects.js',
       'src/components/animate/canvas/rippler.js',
+      'src/components/animate/canvas/polyfills.js',
       'src/components/backdrop/backdrop.js',
       'src/components/buttons/buttons.js',
       'src/components/card/card.js',

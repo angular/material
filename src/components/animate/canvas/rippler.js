@@ -49,6 +49,7 @@ angular.module('material.animations')
 
            };
 
+
           // **********************************************************
           // Rippler Class
           // **********************************************************
@@ -262,6 +263,8 @@ angular.module('material.animations')
                 // If there is nothing to draw, clear any drawn waves now because
                 // we're not going to get another requestAnimationFrame any more.
                 ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+                cancelAnimationFrame(this._loop);
                 this._loop = null;
 
                 // Notify listeners [via callback] of animation completion
