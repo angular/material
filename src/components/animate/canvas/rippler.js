@@ -128,7 +128,7 @@ angular.module('material.animations')
               wave.mouseDownStart = now();
               wave.startPosition = startAt;
               wave.containerSize = Math.max(width, height);
-              wave.maxRadius = distanceFromPointToFurthestCorner(wave.startPosition, {w: width, h: height});
+              wave.maxRadius = distanceFromPointToFurthestCorner(wave.startPosition, {w: width, h: height}) * 0.75;
 
               if (this.canvas.classList.contains("recenteringTouch")) {
                   wave.endPosition = {x: width / 2,  y: height / 2};
@@ -250,10 +250,6 @@ angular.module('material.animations')
                 }
               }
 
-              if (shouldRenderWaveAgain) {
-                requestAnimationFrame(this._loop);
-              }
-
               for (var i = 0; i < deleteTheseWaves.length; ++i) {
                 var wave = deleteTheseWaves[i];
                 removeWaveFromScope(this, wave);
@@ -269,6 +265,9 @@ angular.module('material.animations')
 
                 // Notify listeners [via callback] of animation completion
                 this.onComplete();
+
+              } else if (shouldRenderWaveAgain) {
+                requestAnimationFrame(this._loop);
               }
 
               return this;

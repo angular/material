@@ -17,6 +17,7 @@ angular.module('material.components.tabs', ['material.utils', 'material.animatio
  * @param {boolean}  noink Flag indicates use of RippleInk effects
  * @param {boolean}  nobar Flag indicates use of InkBar effects
  * @param {boolean}  nostretch Flag indicates use of elastic animation for inkBar width and position changes
+ * @param {string}   align-tabs Attribute to indicate position of tab buttons: bottom or top; default is `top`
  *
  * @example
  <example module="material.components.tabs">
@@ -151,6 +152,7 @@ function TabsDirective($compile, materialEffects) {
         }
 
         /**
+         * Change the positioning of the tab header and buttons.
          * If the tabs-align attribute is 'bottom', then the tabs-content
          * container is transposed with the tabs-header
          */
