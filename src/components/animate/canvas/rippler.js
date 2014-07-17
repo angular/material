@@ -316,7 +316,9 @@ angular.module('material.animations')
               ctx.scale(this.pixelDensity, this.pixelDensity);
               
               if (!this._loop) {
-                this._loop = this.animate.bind(this, ctx);
+                this._loop = angular.bind(this, function(){
+                    this.animate(ctx);
+                });
               }
               return canvas;
             };
