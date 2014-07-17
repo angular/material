@@ -114,10 +114,19 @@ angular.module('material.services.throttle', [ 'ng' ])
             if ( angular.isFunction(phases.throttle) ) {
               done = done || angular.noop;
 
-              phases.throttle.apply( null, [data, function(response) {
-                done.apply( null, [response] );
+              try {
+
+                phases.throttle.apply( null, [data, function(response) {
+                  done.apply( null, [response] );
+                  end();
+                }]);
+
+              } catch( error ) {
+                // Report error... and end()
+
+                otherwise(error);
                 end();
-              }]);
+              }
 
             } else {
               end();
@@ -132,7 +141,7 @@ angular.module('material.services.throttle', [ 'ng' ])
          */
         function start() {
           return gotoState.apply(null, [ STATE_START, phases.start ] )
-                          .then( feedPendingActions );
+                          .then( feedPendingActions, otherwise );
 
           /**
            * Process all pending actions (if any)
@@ -152,7 +161,7 @@ angular.module('material.services.throttle', [ 'ng' ])
               });
             });
 
-            pendingActions = [];
+            pendingActions = [ ];
           }
         }
 

@@ -165,6 +165,67 @@ describe('ngThrottleSpec', function() {
 
   });
 
+  describe('use $throttle with exceptions', function() {
+
+    it("should report error within start()", function() {
+      var started = false;
+      var error   = "";
+      var fn = $throttle({start:function(done){
+        started = true;
+        throw new Error("fault_with_start");
+      }})(null, function(fault){
+        error = fault;
+      });
+
+      $timeout.flush();
+
+      expect(started).toBe(true);
+      expect(error).toNotBe("");
+    });
+
+    it("should report error within end()", function() {
+      var ended = false, error = "";
+      var config = { end : function(done){
+        ended = true;
+        throw new Error("fault_with_end");
+      }};
+      var captureError = function(fault) { error = fault; };
+
+
+      $throttle(config)(null, captureError );
+      $timeout.flush();
+
+      expect(ended).toBe(true);
+      expect(error).toNotBe("");
+    });
+
+    it("should report error within throttle()", function() {
+      var count = 0, error = "";
+      var config = { throttle : function(done){
+        count += 1;
+        switch(count)
+        {
+          case 1 :    break;
+          case 2 :    throw new Error("fault_with_throttle");   break;
+          case 3 :    done(); break;
+        }
+      }};
+      var captureError = function(fault) { error = fault; };
+      var fn = $throttle(config)(null, captureError );
+
+
+      $timeout.flush();
+
+      fn( 1 );
+      fn( 2 );
+      fn( 3 );
+
+      expect(count).toBe(2);
+      expect(error).toNotBe("");
+    });
+
+  });
+
   describe('use $throttle with async processing', function() {
     var finished = false;
     var done = function() { finished = true; };
