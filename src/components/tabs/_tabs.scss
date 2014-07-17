@@ -30,14 +30,18 @@ material-tab {
   z-index: 0;
   overflow: hidden;
   padding: 10px;
+  height: 40px;
   text-align: center;
   cursor: pointer;
 
   material-tab-label {
+    position: absolute;
+    z-index: 100;
+    padding-right: 20px;
+
     color: #9FC1FB;
 
     color: rgba(255,255,255,0.6);
-    text-align: center;
     opacity: 1;
 
     &.active {

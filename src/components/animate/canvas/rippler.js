@@ -6,7 +6,7 @@ angular.module('material.animations')
      * @element paper-ripple
      * @homepage github.io
      */
-      .service('canvasRenderer', function() {
+      .service('$canvasRenderer', function() {
 
            var pow = Math.pow;
            var now = Date.now;
@@ -31,9 +31,7 @@ angular.module('material.animations')
              return dst;
            };
 
-
-
-    return {
+           return {
 
              /**
               * API to render ripple animations
@@ -50,6 +48,7 @@ angular.module('material.animations')
              }
 
            };
+
 
           // **********************************************************
           // Rippler Class
@@ -92,7 +91,12 @@ angular.module('material.animations')
                 /**
                  *
                  */
-                pixelDensity : 1
+                pixelDensity : 1,
+
+                /**
+                 * Completion hander/callback
+                 */
+                onComplete : angular.noop
               };
 
 
@@ -100,7 +104,7 @@ angular.module('material.animations')
               this.canvas = canvas;
               this.waves  = [];
 
-              return angular.extend(this, angular.mixin(options, defaults));
+              return angular.extend(this, angular.mixin(options || { }, defaults));
             };
 
             /**
@@ -124,7 +128,7 @@ angular.module('material.animations')
               wave.mouseDownStart = now();
               wave.startPosition = startAt;
               wave.containerSize = Math.max(width, height);
-              wave.maxRadius = distanceFromPointToFurthestCorner(wave.startPosition, {w: width, h: height});
+              wave.maxRadius = distanceFromPointToFurthestCorner(wave.startPosition, {w: width, h: height}) * 0.75;
 
               if (this.canvas.classList.contains("recenteringTouch")) {
                   wave.endPosition = {x: width / 2,  y: height / 2};
@@ -141,7 +145,9 @@ angular.module('material.animations')
             /**
              *
              */
-            Rippler.prototype.onMouseUp = function () {
+            Rippler.prototype.onMouseUp = function (done) {
+              this.onComplete = done;
+
               for (var i = 0; i < this.waves.length; i++) {
                 // Declare the next wave that has mouse down to be mouse'ed up.
                 var wave = this.waves[i];
@@ -244,10 +250,6 @@ angular.module('material.animations')
                 }
               }
 
-              if (shouldRenderWaveAgain) {
-                requestAnimationFrame(this._loop);
-              }
-
               for (var i = 0; i < deleteTheseWaves.length; ++i) {
                 var wave = deleteTheseWaves[i];
                 removeWaveFromScope(this, wave);
@@ -257,7 +259,15 @@ angular.module('material.animations')
                 // If there is nothing to draw, clear any drawn waves now because
                 // we're not going to get another requestAnimationFrame any more.
                 ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+                cancelAnimationFrame(this._loop);
                 this._loop = null;
+
+                // Notify listeners [via callback] of animation completion
+                this.onComplete();
+
+              } else if (shouldRenderWaveAgain) {
+                requestAnimationFrame(this._loop);
               }
 
               return this;
@@ -306,7 +316,9 @@ angular.module('material.animations')
               ctx.scale(this.pixelDensity, this.pixelDensity);
               
               if (!this._loop) {
-                this._loop = this.animate.bind(this, ctx);
+                this._loop = angular.bind(this, function(){
+                    this.animate(ctx);
+                });
               }
               return canvas;
             };

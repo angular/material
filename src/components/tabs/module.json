@@ -25,6 +25,10 @@
     "demo6": {
       "name": "6",
       "files": ["demos/demo6/*"]
+    },
+    "demo7": {
+      "name": "7",
+      "files": ["demos/demo7/*"]
     }
   }
 }

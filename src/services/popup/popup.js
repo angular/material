@@ -2,15 +2,13 @@ angular.module('material.services.popup', ['material.services.compiler'])
 
   .factory('$materialPopup', [
     '$materialCompiler',
-    '$timeout',
-    '$document',
     '$animate',
     '$rootScope',
     '$rootElement',
-    QpPopupFactory
+    PopupFactory
   ]);
 
-function QpPopupFactory($materialCompiler, $timeout, $document, $animate, $rootScope, $rootElement) {
+function PopupFactory($materialCompiler, $animate, $rootScope, $rootElement) {
 
   return createPopup;
 

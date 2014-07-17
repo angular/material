@@ -17,7 +17,7 @@ material-radio-button {
     height: $radio-width;
     cursor: pointer;
 
-    .material-ripple-canvas {
+    .material-ink-ripple {
       color: #0f9d58;
     }
 
@@ -62,7 +62,7 @@ material-radio-button {
     transform: scale(1.1);
   }
 
-  &.material-checked .material-ripple-canvas {
+  &.material-checked .material-ink-ripple {
     color: #5a5f5a;
   }
 

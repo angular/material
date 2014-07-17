@@ -62,6 +62,7 @@ module.exports = {
       //Components
       'src/components/animate/effects.js',
       'src/components/animate/canvas/rippler.js',
+      'src/components/animate/canvas/polyfills.js',
       'src/components/backdrop/backdrop.js',
       'src/components/buttons/buttons.js',
       'src/components/card/card.js',
@@ -86,13 +87,19 @@ module.exports = {
       'src/services/compiler/compiler.js',
       'src/services/popup/popup.js',
       'src/services/position/position.js',
+      'src/services/throttle/throttle.js',
 
       //Utils
       'src/utils/binding.js',
-      'src/utils/list.js',
-      'src/utils/supplant.js',
+      'src/utils/list.js'
     ],
-    test: ['src/**/*.spec.js']
+    test: [
+      'src/**/*.spec.js',
+
+      // TODO(matias): remove this once the sequencer is placed into the ngAnimate core
+
+      'config/lib/angular-animate-sequence/*.spec.js'
+    ]
   },
 
   repository: pkg.repository.url

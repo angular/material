@@ -1,5 +1,5 @@
 angular.module('app', ['ngMaterial'])
-  .controller('AppCtrl', function ($scope) {
+  .controller('AppCtrl', function ($scope, $interpolate) {
     var tabs = [
       { title: 'Polymer', active: true, disabled: false, content: "Polymer practices are great!" },
       { title: 'Material', active: false, disabled: true, content: "Material Design practices are better!" },
@@ -49,11 +49,12 @@ angular.module('app', ['ngMaterial'])
     }
 
     function announceDeselected(tab) {
-      $scope.farewell = supplant("Goodbye {title}!", tab);
+      $scope.farewell = $interpolate("Goodbye {{title}}!")(tab);
     }
 
     function announceSelected(tab) {
-      $scope.greeting = supplant("Hello {title}!", tab);
+      $scope.greeting = $interpolate("Hello {{title}}!")(tab);
     }
 
   });
+
