@@ -1,0 +1,76 @@
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+p {
+  margin-bottom: 20px;
+  margin-top: 0;
+}
+
+.text-display-4 {
+  @include text-display4();
+}
+
+.text-display-3 {
+  @include text-display3();
+}
+
+.text-display-2 {
+  @include text-display2();
+}
+
+.text-display-1 {
+  @include text-display1();
+}
+
+.text-headline {
+  @include text-headline();
+}
+
+.text-title {
+  @include text-title();
+}
+
+.text-subhead2-dev {
+  @include text-subhead2-dev();
+}
+
+.text-subhead2-des {
+  @include text-subhead2-des();
+}
+
+.text-subhead1-dev {
+  @include text-subhead1-dev();
+}
+
+.text-subhead1-des {
+  @include text-subhead1-des();
+}
+
+.text-body2-dev {
+  @include text-body2-dev();
+}
+
+.text-body2-des {
+  @include text-body2-des();
+}
+
+.text-body1-dev {
+  @include text-body2-dev();
+}
+
+.text-body1-des {
+  @include text-body2-des();
+}
+
+.text-caption {
+  @include text-caption();
+}
+
+.text-menu {
+  @include text-menu-dev();
+}
+
+.text-button {
+  @include text-button();
+}

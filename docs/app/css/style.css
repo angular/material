@@ -12,12 +12,8 @@ body {
 .material-sidenav-left .menu-item {
   cursor: pointer;
 }
-.material-sidenav-left .menu-item:hover {
-  color: #999;
-}
 .material-sidenav-left .menu-item.active {
-  color: black;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .sidenav-content {

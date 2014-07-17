@@ -24,13 +24,7 @@
   text-align: center;
 
   // Always uppercase buttons
-  text-transform: uppercase;
-  font-weight: inherit;
-  font-style: inherit;
-  font-variant: inherit;
-  font-size: inherit;
-  font-family: inherit;
-  line-height: inherit;
+  @include text-button();
 
   cursor: pointer;
 
