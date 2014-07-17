@@ -13,6 +13,8 @@ angular.module('material.components.sidenav', [
       '$scope',
       '$element',
       '$attrs',
+      '$timeout',
+      '$document',
       '$materialSidenav',
       '$materialComponentRegistry',
     materialSidenavController ])
@@ -25,8 +27,45 @@ angular.module('material.components.sidenav', [
  * @description
  * The controller for materialSidenav components.
  */
-function materialSidenavController($scope, $element, $attrs, $materialSidenav, $materialComponentRegistry) {
+function materialSidenavController($scope, $element, $attrs, $timeout, 
+    $document, $materialSidenav, $materialComponentRegistry) {
+
+  var self = this;
+
   $materialComponentRegistry.register(this, $attrs.componentId);
+
+  // Process a click event on the body to close if necessary
+  var bodyClick = function(e) {
+    var node = e.target;
+    while(node) {
+      if(node === $element[0]) {
+        // Don't allow clicks originating in the sidenav to close it
+        return false;
+      }
+      node = node.parentNode;
+    }
+
+    $scope.$apply(function() {
+      self.close();
+      onClose();
+    });
+  };
+  /**
+   * If the side nav is open, listen for clicks on the content to close it.
+   */
+  var onOpen = function() {
+    $document[0].body.classList.add('material-sidenav-open');
+
+    // Defer the event binding to avoid a false click
+    $timeout(function() {
+      angular.element($document[0].body).on('click', bodyClick);
+    });
+  };
+
+  var onClose = function() {
+    $document[0].body.classList.remove('material-sidenav-open');
+    angular.element($document[0].body).off('click', bodyClick);
+  };
 
   this.isOpen = function() {
     return !!$scope.isOpen;
@@ -37,6 +76,11 @@ function materialSidenavController($scope, $element, $attrs, $materialSidenav, $
    */
   this.toggle = function() {
     $scope.isOpen = !$scope.isOpen;
+    if($scope.isOpen) {
+      onOpen();
+    } else {
+      onClose();
+    }
   }
 
   /**
@@ -44,6 +88,7 @@ function materialSidenavController($scope, $element, $attrs, $materialSidenav, $
    */
   this.open = function() {
     $scope.isOpen = true;
+    onOpen();
   }
 
   /**
@@ -51,6 +96,7 @@ function materialSidenavController($scope, $element, $attrs, $materialSidenav, $
    */
   this.close = function() {
     $scope.isOpen = false;
+    onClose();
   }
 }
 

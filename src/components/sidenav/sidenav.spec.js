@@ -48,6 +48,32 @@ describe('materialSidenav', function() {
 
       expect(el.hasClass('open')).toBe(false);
     });
+
+    it('should add body class', inject(function($document) {
+      var el = setup('');
+      var scope = el.isolateScope();
+      var controller = el.controller('materialSidenav');
+
+      controller.open();
+      scope.$apply();
+
+      expect($document[0].body.classList.contains('material-sidenav-open')).toBe(true);
+    }));
+
+    it('should close on body click', inject(function($document, $timeout) {
+      var el = setup('');
+      var scope = el.isolateScope();
+      var controller = el.controller('materialSidenav');
+
+      controller.open();
+      scope.$apply();
+
+      $timeout.flush();
+
+      $($document[0].body).trigger('click');
+      expect(controller.isOpen()).toBe(false);
+      expect($document[0].body.classList.contains('material-sidenav-open')).toBe(false);
+    }));
   });
 
   describe('$materialSidenav Service', function() {

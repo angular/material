@@ -43,3 +43,11 @@ material-sidenav {
     @include transform-translate3d(-100%, 0, 0);
   }
 }
+
+// Disable pointer events on the body when the sidenav is open
+.material-sidenav-open {
+
+  .material-content {
+    pointer-events: none;
+  }
+}
