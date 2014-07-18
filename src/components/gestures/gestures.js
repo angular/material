@@ -5,7 +5,7 @@
  * @description
  * A Gesture Service
  */
-angular.module('material.components.gesture', [])
+angular.module('material.components.gestures', [])
 
   .factory('$materialGesture', [ materialGestureService ]);
 
