@@ -21,7 +21,7 @@ For issues, including progress on accessibility support for these UI elements, s
 
 In its current early state, use AngularJS Material Design at your own risk.  APIs are changing rapidly.
 
-When [v0.0.1 is released](https://github.com/angular/material/issues?milestone=2&state=open), the project will more usable.  But everything is subject to rapid change until beta is ready.
+When [v0.0.1 is released](https://github.com/angular/material/issues?milestone=2&state=open), the project will be more usable.  But everything is subject to rapid change until beta is ready.
 
 Nevertheless, if you wish to use AngularJS Material Design, here are the steps (note that what the dependencies are and how to use them will change soon):
 
