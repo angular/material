@@ -40,7 +40,7 @@ function materialSidenavController($scope, $element, $attrs, $timeout,
     while(node) {
       if(node === $element[0]) {
         // Don't allow clicks originating in the sidenav to close it
-        return false;
+        return true;
       }
       node = node.parentNode;
     }
