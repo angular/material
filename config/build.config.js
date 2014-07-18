@@ -15,6 +15,7 @@ module.exports = {
     .map(function(folder) {
       try {
         var json = require(__dirname + '/../src/components/' + folder + '/module.json');
+        console.log('CONSOLE', json);
         return json.module;
       } catch(e) {
         return null;
