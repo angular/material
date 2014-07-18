@@ -69,6 +69,7 @@ module.exports = {
       'src/components/card/card.js',
       'src/components/checkbox/checkbox.js',
       'src/components/content/content.js',
+      'src/components/gestures/gestures.js',
       'src/components/dialog/dialog.js',
       'src/components/form/form.js',
       'src/components/icon/icon.js',
