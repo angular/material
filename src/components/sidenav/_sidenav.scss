@@ -47,7 +47,4 @@ material-sidenav {
 // Disable pointer events on the body when the sidenav is open
 .material-sidenav-open {
 
-  .material-content {
-    pointer-events: none;
-  }
 }
