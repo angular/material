@@ -36,9 +36,6 @@ material-slider {
     right: -$slider-thumb-width / 2;
     z-index: 1;
     display: table;
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
     width: $slider-thumb-width;
     height: $slider-thumb-height;
     border: 2px solid $theme-light-blue;

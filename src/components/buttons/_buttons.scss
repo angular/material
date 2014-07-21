@@ -99,12 +99,12 @@ a.material-button {
 }
 
 .material-button-group {
-  @include flexbox();
-  @include flexbox-flex(1);
+  @include flex-display();
+  @include flex(1);
   width: 100%;
 }
 .material-button-group > .material-button {
-  @include flexbox-flex(1);
+  @include flex(1);
 
   display: block;
 

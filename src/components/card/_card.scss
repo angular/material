@@ -1,8 +1,5 @@
 material-card {
   display: block;
-  box-sizing: border-box;
-
-  //border: $card-border;
 
   box-shadow: $card-box-shadow;
 
@@ -19,6 +16,4 @@ material-card {
     border-radius: $card-border-radius $card-border-radius 0 0;
   }
 
-  h2 {
-  }
 }

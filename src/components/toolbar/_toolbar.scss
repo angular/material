@@ -4,7 +4,6 @@ material-toolbar {
   position: relative;
   z-index: 2;
 
-  box-sizing: border-box;
   height: 64px;
   font-size: 1.3em;
 
@@ -22,9 +21,9 @@ material-toolbar {
 }
 
 .material-toolbar-tools {
-  @extend .material-display-flex;
-  @extend .material-align-center;
-  @extend .material-flex-h;
+  @include flex-display();
+  @include flex-align-items(center);
+  @include flex-direction(row);
 
   height: $toolbar-tools-height;
   padding: 0 10px;

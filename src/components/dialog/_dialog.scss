@@ -14,13 +14,12 @@ material-dialog {
 
   background-color: #fff;
   border-radius: 4px;
-  box-sizing: border-box;
 
   box-shadow: $whiteframe-shadow-z5;
   z-index: $z-index-dialog;
 
-  @include flexbox();
-  @include flexcolumn();
+  @include flex-display();
+  @include flex-direction(column);
 
   .dialog-content {
     @include flex-order(1);

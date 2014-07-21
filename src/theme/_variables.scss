@@ -23,6 +23,16 @@ $theme-red: #db4437;
 
 $theme-indigo: #3e50b4;
 
+
+// Layout
+// ------------------------------
+
+$layout-breakpoint-sm:     600px !default;
+$layout-breakpoint-md:     960px !default;
+$layout-breakpoint-lg:     1200px !default;
+$layout-gutter-width:      15px !default;
+
+
 // Button variables
 $button-border-radius: 3px;
 $button-disabled-background: rgb(234, 234, 234);

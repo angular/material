@@ -10,7 +10,7 @@ material-tabs {
     width: 100%;
 
     .tabs-header-items {
-      @include flexbox();
+      @include flex-display();
       overflow: hidden;
       background-color: #4285F4;
       white-space: nowrap;
@@ -25,7 +25,7 @@ material-tabs {
 }
 
 material-tab {
-  @include flexbox-flex(1);
+  @include flex(1);
   position: relative;
   z-index: 0;
   overflow: hidden;

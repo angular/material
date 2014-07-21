@@ -2,13 +2,11 @@ material-list {
 }
 
 material-item {
-  @extend .material-display-flex;
-  @extend .material-align-center;
-  @extend .material-flex-h;
+  @include flex-display();
+  @include flex-align-items(center);
+  @include flex-direction(row);
 
   position: relative;
-
-  box-sizing: border-box;
 
   padding: $item-padding-top $item-padding-right $item-padding-bottom $item-padding-left;
 }
