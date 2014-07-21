@@ -6,8 +6,9 @@ angular.module('material.animations')
      * @element paper-ripple
      * @homepage github.io
      */
-      .service('$canvasRenderer', function() {
+      .service('$canvasRenderer', ['$$rAF', function($$rAF) {
 
+           var cAF;
            var pow = Math.pow;
            var now = Date.now;
            var Rippler = RipplerClazz();
@@ -99,8 +100,6 @@ angular.module('material.animations')
                 onComplete : angular.noop
               };
 
-
-
               this.canvas = canvas;
               this.waves  = [];
 
@@ -111,9 +110,8 @@ angular.module('material.animations')
              *
              */
             Rippler.prototype.onMouseDown = function ( startAt ) {
-
-              var canvas = this.setupCanvas( this.canvas );
-              var wave = createWave(this.canvas);
+              var canvas = this.adjustBounds( this.canvas );
+              var wave = createWave(canvas);
 
               var width = canvas.width / this.pixelDensity; // Retina canvas
               var height = canvas.height / this.pixelDensity;
@@ -136,10 +134,9 @@ angular.module('material.animations')
               }
 
               this.waves.push(wave);
-
               this.cancelled = false;
+              this.animate();
 
-              requestAnimationFrame(this._loop);
             };
 
             /**
@@ -159,7 +156,7 @@ angular.module('material.animations')
                   break;
                 }
               }
-              this._loop && requestAnimationFrame(this._loop);
+              this.animate();
             };
 
             /**
@@ -171,9 +168,36 @@ angular.module('material.animations')
             };
 
             /**
+             *  Stop or start rendering waves for the next animation frame
+             */
+            Rippler.prototype.animate = function( active ) {
+              if ( angular.isUndefined(active) ) active = true;
+
+              if ( active === false ) {
+                if ( angular.isDefined(cAF) ) {
+                  this._loop = null;
+                  cAF();
+
+                  // Notify listeners [via callback] of animation completion
+                  this.onComplete();
+                }
+              } else {
+                if (!this._loop) {
+                  this._loop = angular.bind(this, function(){
+                    var ctx = this.canvas.getContext('2d');
+                    ctx.scale(this.pixelDensity, this.pixelDensity);
+
+                    this.onAnimateFrame(ctx);
+                  });
+                }
+                cAF = $$rAF( this._loop );
+              }
+            };
+
+            /**
              *
              */
-            Rippler.prototype.animate = function (ctx) {
+            Rippler.prototype.onAnimateFrame = function (ctx) {
               // Clear the canvas
               ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -260,14 +284,11 @@ angular.module('material.animations')
                 // we're not going to get another requestAnimationFrame any more.
                 ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-                cancelAnimationFrame(this._loop);
-                this._loop = null;
-
-                // Notify listeners [via callback] of animation completion
-                this.onComplete();
+                // stop animations
+                this.animate(false);
 
               } else if (shouldRenderWaveAgain) {
-                requestAnimationFrame(this._loop);
+                this.animate();
               }
 
               return this;
@@ -306,22 +327,6 @@ angular.module('material.animations')
               return canvas;
             }
 
-
-            /**
-             * Resize the canvas to fill the parent's dimensions...
-             */
-            Rippler.prototype.setupCanvas = function ( canvas ) {
-
-              var ctx = this.adjustBounds(canvas).getContext('2d');
-              ctx.scale(this.pixelDensity, this.pixelDensity);
-              
-              if (!this._loop) {
-                this._loop = angular.bind(this, function(){
-                    this.animate(ctx);
-                });
-              }
-              return canvas;
-            };
 
 
             return Rippler;
@@ -502,7 +507,7 @@ angular.module('material.animations')
             return Math.max(tl_d, tr_d, bl_d, br_d);
           }
 
-        });
+        }]);
 
 
 
