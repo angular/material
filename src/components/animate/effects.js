@@ -157,6 +157,7 @@ function MaterialRippleDirective(materialEffects, $interpolate, $throttle) {
    * @returns {Function}
    */
   function compileWithCanvas( element, attrs ) {
+    var RIGHT_BUTTON = 2;
     var options  = calculateOptions();
     var tag =
       '<canvas ' +
@@ -169,6 +170,7 @@ function MaterialRippleDirective(materialEffects, $interpolate, $throttle) {
     );
 
     return function( scope, element ){
+
       var rippler, watchMouse,
           parent = element.parent(),
           makeRipple = $throttle({
@@ -176,7 +178,7 @@ function MaterialRippleDirective(materialEffects, $interpolate, $throttle) {
               rippler = rippler || materialEffects.inkRipple( element[0], options );
               watchMouse = watchMouse || buildMouseWatcher(parent, makeRipple);
 
-              // Ripples start with mouseDow (or taps)
+              // Ripples start with left mouseDowns (or taps)
               parent.on('mousedown', makeRipple);
             },
             throttle : function(e, done) {
@@ -185,8 +187,12 @@ function MaterialRippleDirective(materialEffects, $interpolate, $throttle) {
                 switch(e.type)
                 {
                   case 'mousedown' :
-                    watchMouse(true);
-                    rippler.onMouseDown( options.forceToCenter ? null : localToCanvas(e) );
+                    // If not right- or ctrl-click...
+                    if (!e.ctrlKey && (e.button !== RIGHT_BUTTON))
+                    {
+                      watchMouse(true);
+                      rippler.onMouseDown( options.forceToCenter ? null : localToCanvas(e) );
+                    }
                     break;
 
                   default:
