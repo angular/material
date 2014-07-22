@@ -7,7 +7,7 @@
   @include flex-display();
 }
 
-[layout="vertical"] {
+[layout=vertical] {
   @include flex-direction(column);
 }
 
@@ -36,43 +36,47 @@
 }
 
 
-// Align Items
+// Justify Content (main axis)
 // ------------------------------
 
-[center] {
-  @include flex-align-items(center);
-}
-
-[start] {
-  @include flex-align-items(flex-start);
-}
-
-[end] {
-  @include flex-align-items(flex-end);
-}
-
-
-// Justify Content
-// ------------------------------
-
-[start-justified] {
-  @include flex-justify-content(flex-start);
-}
-
-[end-justified] {
-  @include flex-justify-content(flex-end);
-}
-
-[center-justified] {
+[main-axis=center] {
   @include flex-justify-content(center);
 }
 
-[space-between-justified] {
+[main-axis=start] {
+  @include flex-justify-content(flex-start);
+}
+
+[main-axis=end] {
+  @include flex-justify-content(flex-end);
+}
+
+[main-axis="space-between"] {
   @include flex-justify-content(space-between);
 }
 
-[space-around-justified] {
+[main-axis="space-around"] {
   @include flex-justify-content(space-around);
+}
+
+
+// Align Items (cross axis)
+// ------------------------------
+
+[cross-axis=stretch] {
+  @include flex-align-items(stretch);
+}
+
+[cross-axis=center] {
+  @include flex-align-items(center);
+}
+
+[cross-axis=start] {
+  @include flex-align-items(flex-start);
+}
+
+[cross-axis=end] {
+  @include flex-align-items(flex-end);
 }
 
 

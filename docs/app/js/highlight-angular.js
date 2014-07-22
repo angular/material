@@ -17,3 +17,19 @@ DocsApp.directive('highlight', function() {
     }
   };
 });
+
+DocsApp.directive('codeView', function($compile) {
+  return {
+    restrict: 'C',
+    link: function(scope, element) {
+      var code = element.eq(0).clone();
+      code.children().removeAttr('class');
+
+      var highlightedCode = hljs.highlight('html', code[0].innerHTML);
+
+      highlightedCode.value = highlightedCode.value.replace(/=<span class="hljs-value">""<\/span>/gi, '');
+
+      element.prepend('<pre><code>' + highlightedCode.value + '</code></pre>');
+    }
+  };
+});

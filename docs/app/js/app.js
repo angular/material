@@ -7,6 +7,9 @@ function(COMPONENTS, $routeProvider) {
   $routeProvider.when('/', {
     templateUrl: 'template/home.tmpl.html'
   });
+  $routeProvider.when('/layout/cells', {
+    templateUrl: 'template/layout-cells.tmpl.html'
+  });
 
   angular.forEach(COMPONENTS, function(component) {
     component.url = '/component/' + component.id;
@@ -98,7 +101,20 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope, 
   '$rootScope',
 function($scope, $rootScope) {
   $rootScope.appTitle = 'Material Design';
-  $scope.setCurrentComponent(null);
+  $scope.setCurrentComponent({
+    name: 'Material Design'
+  });
+}])
+
+.controller('LayoutCtrl', [
+  '$scope',
+  '$rootScope',
+  '$attrs',
+function($scope, $rootScope, $attrs) {
+  $rootScope.appTitle = $attrs.demoTitle;
+  $scope.setCurrentComponent({
+    name: $attrs.demoTitle
+  });
 }])
 
 .controller('DocPageCtrl', [
@@ -107,9 +123,10 @@ function($scope, $rootScope) {
   '$rootScope',
 function($scope, component, $rootScope) {
   $rootScope.appTitle = 'Material: ' + component.name;
+  component.showViewSource = true;
 
   $scope.setCurrentComponent(component);
-  component.$selectedDemo = component.$selectedDemo || 
+  component.$selectedDemo = component.$selectedDemo ||
     component.demos[ Object.keys(component.demos)[0] ];
 }])
 

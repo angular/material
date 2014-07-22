@@ -1,0 +1,40 @@
+
+.code-view pre {
+  margin: 0 0 0 -45px;
+}
+
+.inline-demo {
+  margin: 0 0 25px 0;
+  padding: 5px;
+  height: 170px;
+  border: 1px solid #4db6ac;
+  background: #e0f2f1;
+  text-align: center;
+}
+
+.inline-demo > div {
+  padding: 5px;
+  min-width: 130px;
+  border: 1px solid #004d40;
+  background: #00897b;
+  color: #e0f2f1;
+}
+
+[layout],
+[layout-sm],
+[layout-md],
+[layout-lg] {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAKSURBVAgdY2AAAAACAAHPyDXlAAAAAElFTkSuQmCC");
+  background-position: -1px -1px;
+  background-repeat: no-repeat;
+}
+
+[layout="horizontal"] {
+  background-position: 50% 50%;
+  background-repeat: repeat-x;
+}
+
+[layout="vertical"] {
+  background-position: 50% 50%;
+  background-repeat: repeat-y;
+}

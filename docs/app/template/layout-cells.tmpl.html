@@ -1,0 +1,220 @@
+<div ng-controller="LayoutCtrl" demo-title="Layout Cell Attributes">
+  <material-content>
+
+    <p>
+      Child items, or cells, of a layout element can be easily arranged using additional
+      alignment attributes. Note that these examples do not have the <code>flex</code> attribute,
+      which allows these demos to better illustrate how cells arrange themselves within
+      a layout container. In each demo, the center black line represents the "main axis".
+    </p>
+
+
+
+    <h3>Main Axis: Center</h3>
+    <p>
+      The <code>main-axis="center"</code> attribute will center the cells across the main axis.
+      Note that each demo's center black line represents the "main axis". Additionally, by default
+      each item will "stretch" the cross axis, which is explained later.
+    </p>
+    <div class="code-view">
+      <div layout="horizontal" main-axis="center" class="inline-demo">
+        <div>center</div>
+        <div>center</div>
+      </div>
+    </div>
+    <div class="code-view">
+      <div layout="vertical" main-axis="center" class="inline-demo">
+        <div>center</div>
+        <div>center</div>
+      </div>
+    </div>
+
+
+    <h3>Main Axis: Start</h3>
+    <p>
+      The <code>main-axis="start"</code> attribute will position the cell to the left for a
+      a horizontal layout, and at the top for a vertical layout.
+    </p>
+    <div class="code-view">
+      <div layout="horizontal" main-axis="start" class="inline-demo">
+        <div>start</div>
+        <div>start</div>
+      </div>
+    </div>
+    <div class="code-view">
+      <div layout="vertical" main-axis="start" class="inline-demo">
+        <div>start</div>
+        <div>start</div>
+      </div>
+    </div>
+
+
+
+    <h3>Main Axis: End</h3>
+    <p>
+      The <code>main-axis="end"</code> attribute will position the cell to the right for a
+      a horizontal layout, and at the bottom for a vertical layout.
+    </p>
+    <div class="code-view">
+      <div layout="horizontal" main-axis="end" class="inline-demo">
+        <div>end</div>
+        <div>end</div>
+      </div>
+    </div>
+    <div class="code-view">
+      <div layout="vertical" main-axis="end" class="inline-demo">
+        <div>end</div>
+        <div>end</div>
+      </div>
+    </div>
+
+
+    <h3>Cross Axis: Stretch (default)</h3>
+    <p>
+      Be default child cells will "stretch" the same distance as the cross axis. Note that each demo's
+      center black line represents the "main axis", which makes the perpendicular area
+      the cross axis.
+    </p>
+    <p>
+      (To stretch the cells across the main axis is where the <code>flex</code> attribute comes in.)
+    </p>
+
+    <div class="code-view">
+      <div layout="horizontal" class="inline-demo">
+        <div>stretch</div>
+        <div>stretch</div>
+      </div>
+    </div>
+
+    <div class="code-view">
+      <div layout="vertical" class="inline-demo">
+        <div>stretch</div>
+        <div>stretch</div>
+      </div>
+    </div>
+
+
+
+    <h3>Cross Axis: Center</h3>
+    <p>
+      The <code>cross-axis="center"</code> attribute puts all of the cells in the center of the
+      "cross axis". Note that each demo's center black line represents the "main axis", which makes
+      the imaginary perpendicular line the cross axis.
+    </p>
+    <div class="code-view">
+      <div layout="horizontal" cross-axis="center" class="inline-demo">
+        <div>center</div>
+        <div>center</div>
+      </div>
+    </div>
+    <div class="code-view">
+      <div layout="vertical" cross-axis="center" class="inline-demo">
+        <div>center</div>
+        <div>center</div>
+      </div>
+    </div>
+
+
+
+    <h3>Cross Axis: Start</h3>
+    <p>
+      The <code>cross-axis="start"</code> attribute packs up all the cells at the start line.
+    </p>
+    <div class="code-view">
+      <div layout="horizontal" cross-axis="start" class="inline-demo">
+        <div>start</div>
+        <div>start</div>
+      </div>
+    </div>
+    <div class="code-view">
+      <div layout="vertical" cross-axis="start" class="inline-demo">
+        <div>start</div>
+        <div>start</div>
+      </div>
+    </div>
+
+
+
+    <h3>Cross Axis: End</h3>
+    <p>
+      The <code>cross-axis="end"</code> attribute packs up all the cells at the end line.
+    </p>
+    <div class="code-view">
+      <div layout="horizontal" cross-axis="end" class="inline-demo">
+        <div>end</div>
+        <div>end</div>
+      </div>
+    </div>
+    <div class="code-view">
+      <div layout="vertical" cross-axis="end" class="inline-demo">
+        <div>end</div>
+        <div>end</div>
+      </div>
+    </div>
+
+
+
+    <h3>Centered On Both Axes!</h3>
+    <p>
+      Is it possible to center a layout's child cells by both the main and cross axes?
+      Yes. Yes it is.
+    </p>
+    <div class="code-view">
+      <div layout="horizontal" main-axis="center" cross-axis="center" class="inline-demo">
+        <div>dead center</div>
+      </div>
+    </div>
+    <div class="code-view">
+      <div layout="vertical" main-axis="center" cross-axis="center" class="inline-demo">
+        <div>dead center</div>
+      </div>
+    </div>
+
+
+
+    <h3>Main Axis: Space Between</h3>
+    <p>
+      The <code>main-axis="space-between"</code> attribute will evenly distribute
+      the cells, with the first cell is aligned at the start, and the last cell
+      aligned at the end.
+    </p>
+    <div class="code-view">
+      <div layout="horizontal" main-axis="space-between" class="inline-demo">
+        <div>Uno</div>
+        <div>Dos</div>
+        <div>Tres</div>
+      </div>
+    </div>
+    <div class="code-view">
+      <div layout="vertical" main-axis="space-between" class="inline-demo">
+        <div>Uno</div>
+        <div>Dos</div>
+        <div>Tres</div>
+      </div>
+    </div>
+
+
+
+    <h3>Main Axis: Space Around</h3>
+    <p>
+      The <code>main-axis="space-around"</code> attribute will evenly distribute
+      the cells, all with equal space between them.
+    </p>
+    <div class="code-view">
+      <div layout="horizontal" main-axis="space-around" class="inline-demo">
+        <div>Uno</div>
+        <div>Dos</div>
+        <div>Tres</div>
+      </div>
+    </div>
+    <div class="code-view">
+      <div layout="vertical" main-axis="space-around" class="inline-demo">
+        <div>Uno</div>
+        <div>Dos</div>
+        <div>Tres</div>
+      </div>
+    </div>
+
+
+  </material-content>
+</div>
