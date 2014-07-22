@@ -1,4 +1,6 @@
-DocsApp.directive('highlight', function() {
+DocsApp
+
+.directive('highlight', function() {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -16,9 +18,9 @@ DocsApp.directive('highlight', function() {
       }
     }
   };
-});
+})
 
-DocsApp.directive('codeView', function($compile) {
+.directive('codeView', function() {
   return {
     restrict: 'C',
     link: function(scope, element) {
@@ -30,6 +32,23 @@ DocsApp.directive('codeView', function($compile) {
       highlightedCode.value = highlightedCode.value.replace(/=<span class="hljs-value">""<\/span>/gi, '');
 
       element.prepend('<pre><code>' + highlightedCode.value + '</code></pre>');
+    }
+  };
+})
+
+.directive('iframeCodeView', function() {
+  return {
+    restrict: 'E',
+    link: function(scope, element) {
+      var iFrame = element[0].firstElementChild;
+      if(iFrame && iFrame.src) {
+        var links = angular.element(
+          '<p><a class="material-button material-button-raised material-button-colored" href="' + iFrame.src + '" target="_blank">Full View</a> \
+           <a class="material-button material-button-raised material-button-colored" href="view-source:' + iFrame.src + '" target="_blank">View Source</a></p>'
+        );
+        element.append(links);
+        console.log(iFrame.src)
+      }
     }
   };
 });

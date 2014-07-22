@@ -10,6 +10,9 @@ function(COMPONENTS, $routeProvider) {
   $routeProvider.when('/layout/cells', {
     templateUrl: 'template/layout-cells.tmpl.html'
   });
+  $routeProvider.when('/layout/grid', {
+    templateUrl: 'template/layout-grid.tmpl.html'
+  });
 
   angular.forEach(COMPONENTS, function(component) {
     component.url = '/component/' + component.id;

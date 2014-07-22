@@ -1,0 +1,244 @@
+<div ng-controller="LayoutCtrl" demo-title="Layout Grid">
+  <material-content>
+
+    <p>
+      CSS grid layout and responsive breakpoints using flexbox. Using the layout attributes makes it easy
+      to change columns to rows, and vise versa. Follows the mobile first responsive design pattern,
+      meaning it starts at the smallest viewport first and builts up.
+    </p>
+
+    <table>
+      <tr>
+        <th>Attribute</th>
+        <th>Value</th>
+        <th>Purpose</th>
+      </tr>
+      <tr>
+        <td>layout</td>
+        <td>horizontal</td>
+        <td>
+          This is a row with child columns.
+          This element acts as a layout container and its immediate child elements will line up horizontally.
+        </td>
+      </tr>
+      <tr>
+        <td>layout</td>
+        <td>vertical</td>
+        <td>
+          This is a column with child rows.
+          This element acts as a layout container and its immediate child elements will line up vertically.
+        </td>
+      </tr>
+      <tr>
+        <td nowrap>layout-padding</td>
+        <td></td>
+        <td>
+          Applies padding (gutters) between this layout's child cells.
+        </td>
+      </tr>
+      <tr>
+        <td>flex</td>
+        <td></td>
+        <td>
+          This cell should flex and fill the available area within the layout container. This is the default
+          cell's flex behavior at every viewport size.
+        </td>
+      </tr>
+      <tr>
+        <td>flex</td>
+        <td>[integer]</td>
+        <td>
+          A percent of the available area to take take up.
+        </td>
+      </tr>
+    </table>
+
+
+    <h3>Responsive Layouts</h3>
+    <p>
+      The above attributes can also be applied only to certain viewport sizes by using
+      specific media query sizes. For example, <code>layout-md</code> would only be
+      active when the medium media query is active.
+    </p>
+    <table>
+      <tr>
+        <th>Attribute</th>
+        <th nowrap>Viewport Size</th>
+        <th>General Device</th>
+      </tr>
+      <tr>
+        <td nowrap>layout-lg</td>
+        <td nowrap>>= 1200px</td>
+        <td>
+          Large devices
+        </td>
+      </tr>
+      <tr>
+        <td nowrap>layout-md</td>
+        <td nowrap>>= 960px</td>
+        <td>
+          Desktops
+        </td>
+      </tr>
+      <tr>
+        <td nowrap>layout-sm</td>
+        <td nowrap>>= 600px</td>
+        <td>
+          Tablets
+        </td>
+      </tr>
+      <tr>
+        <td>layout</td>
+        <td>>= 0</td>
+        <td>
+          An attribute without a size suffix is the default and would be overridden
+          by larger sizes. This follows the mobile first responsive design pattern, so
+          in many cases this would be the setting for the smallest device, such
+          as phone.
+        </td>
+      </tr>
+    </table>
+
+
+
+    <h3>Horizontal and Vertical Layouts</h3>
+    <p>
+      A layout contains cells, and a layout determines if its cells should
+      line up horizontally or vertically. In the "Layout A" example they'll always
+      be horizonal. In the "Layout B" example they'll always be vertical. In
+      "Layout C" it vertical when the viewport is small, and horizontal when larger.
+    </p>
+    <iframe-code-view>
+      <iframe src="/demo/layout/horizontal-vertical-layout.html"></iframe>
+    </iframe-code-view>
+
+
+
+    <h3>Flex Cells</h3>
+    <p>
+      Child cells of <code>layout</code> elements can use the <code>flex</code> attribute to fill
+      the available space.
+    </p>
+    <iframe-code-view>
+      <iframe src="/demo/layout/flex-cell.html"></iframe>
+    </iframe-code-view>
+
+
+    <h3>Layout Padding</h3>
+    <p>
+      This layout has padding, or gutters, between each cell by adding the
+      <code>layout-padding</code> attribute. The previous examples added in their own
+      margins/padding manually, whereas the layout-padding attribute spaces it all out
+      evenly.
+    </p>
+    <iframe-code-view>
+      <iframe src="/demo/layout/layout-padding.html"></iframe>
+    </iframe-code-view>
+
+
+
+    <h3>Layout Padding with Available Space Percents</h3>
+    <p>
+      Cells can be given integers to represent the percentage of the available space
+      it should take up. Note that cells which are not given a percentage still
+      fill up the available area. Adjust the window size to see
+      the demo's responsive layout attributes at work.
+    </p>
+    <iframe-code-view>
+      <iframe src="/demo/layout/layout-padding-percents.html"></iframe>
+    </iframe-code-view>
+
+
+
+    <h3>Layout Padding with Offsets</h3>
+    <p>
+      Cells can be offset from the left, but still allow the gutters to line up correctly.
+      Adjust the window size to see the demo's responsive layout attributes at work.
+    </p>
+    <iframe-code-view>
+      <iframe src="/demo/layout/layout-padding-offsets.html"></iframe>
+    </iframe-code-view>
+
+
+
+    <h3>Header, Menu, Main, Footer, no padding</h3>
+    <p>
+      This layout lets each of the header and footer tracks height be the size of their
+      respective content, and the middle track (menu and main) flex vertically to fill the
+      space of the entire layout. This is also an example of nested layouts, where the entire
+      body is a vertical layout (header/content/footer), and the content row is its own layout
+      (menu/main), and each layout has their own settings.
+    </p>
+    <p>
+      The body element has the <code>layout="vertical"</code> attribute.
+      By default the middle track has the menu and main cells stacked vertically. However,
+      the cells line up horizontally starting at the "small" size, which is determined by the
+      media query.
+    </p>
+    <iframe-code-view>
+      <iframe src="/demo/layout/full-width-header-menu-footer.html"></iframe>
+    </iframe-code-view>
+
+
+    <h3>Utility Attributes</h3>
+    <table>
+      <tr>
+        <th>Attribute</th>
+        <th>Applies</th>
+      </tr>
+      <tr>
+        <td>block</td>
+        <td><code>display: block</code></td>
+      </tr>
+      <tr>
+        <td>block-sm</td>
+        <td><code>display: block</code> when the small media query is active.</td>
+      </tr>
+      <tr>
+        <td>block-md</td>
+        <td><code>display: block</code> when the medium media query is active.</td>
+      </tr>
+      <tr>
+        <td>block-lg</td>
+        <td><code>display: block</code> when the large media query is active.</td>
+      </tr>
+      <tr>
+        <td>inline-block</td>
+        <td><code>display: inline-block</code></td>
+      </tr>
+      <tr>
+        <td>inline-block-sm</td>
+        <td><code>display: inline-block</code> when the small media query is active.</td>
+      </tr>
+      <tr>
+        <td>inline-block-md</td>
+        <td><code>display: inline-block</code> when the medium media query is active.</td>
+      </tr>
+      <tr>
+        <td>inline-block-lg</td>
+        <td><code>display: inline-block</code> when the large media query is active.</td>
+      </tr>
+      <tr>
+        <td>hide</td>
+        <td><code>display: none</code></td>
+      </tr>
+      <tr>
+        <td>hide-sm</td>
+        <td><code>display: none</code> when the small media query is active.</td>
+      </tr>
+      <tr>
+        <td>hide-md</td>
+        <td><code>display: none</code> when the medium media query is active.</td>
+      </tr>
+      <tr>
+        <td>hide-lg</td>
+        <td><code>display: none</code> when the large media query is active.</td>
+      </tr>
+    </table>
+    <iframe-code-view>
+      <iframe src="/demo/layout/utility-attributes.html"></iframe>
+    </iframe-code-view>
+
+
+  </material-content>
+</div>

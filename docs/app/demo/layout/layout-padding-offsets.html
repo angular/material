@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Layout Padding Offsets</title>
+  <link rel="stylesheet" href="../../docs.css">
+</head>
+<body class="layout-demo demo-padding">
+
+  <div layout="vertical" layout-sm="horizontal" layout-padding>
+
+    <div flex offset-sm="25">
+      <div>Uno [flex][offset-sm="25"]</div>
+    </div>
+
+    <div flex>
+      <div>Dos [flex]</div>
+    </div>
+
+    <div flex>
+      <div>Tres [flex]</div>
+    </div>
+
+  </div>
+
+  <div layout="vertical" layout-md="horizontal" layout-padding>
+
+    <div flex>
+      <div>Uno [flex]</div>
+    </div>
+
+    <div flex flex-md="50" offset-md="25">
+      <div>Dos [flex][flex-md="50"][offset-md="25"]</div>
+    </div>
+
+  </div>
+
+  <div layout="horizontal" layout-padding>
+
+    <div flex="50" offset="25">
+      <div>Uno [flex="50"][offset="25"]</div>
+    </div>
+
+  </div>
+
+  <div layout="vertical" layout-lg="horizontal" layout-padding>
+
+    <div flex>
+      <div>Uno [flex]</div>
+    </div>
+
+    <div flex flex-lg="25">
+      <div>Dos [flex][flex-lg="25"]</div>
+    </div>
+
+  </div>
+
+  <div layout="horizontal" layout-padding>
+
+    <div flex>
+      <div>Uno [flex]</div>
+    </div>
+
+    <div flex="50">
+      <div>Dos [flex="50"]</div>
+    </div>
+
+    <div flex>
+      <div>Tres [flex]</div>
+    </div>
+
+  </div>
+
+</body>
+</html>

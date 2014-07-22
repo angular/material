@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Layout Padding Percents</title>
+  <link rel="stylesheet" href="../../docs.css">
+</head>
+<body class="layout-demo demo-padding">
+
+  <div layout="horizontal" layout-padding>
+
+    <div flex="33">
+      <div>Uno [flex="33"]</div>
+    </div>
+
+    <div flex>
+      <div>Dos [flex]</div>
+    </div>
+
+  </div>
+
+  <div layout="horizontal" layout-padding>
+
+    <div flex="66">
+      <div>Uno [flex="66"]</div>
+    </div>
+
+    <div flex>
+      <div>Dos [flex]</div>
+    </div>
+
+  </div>
+
+  <div layout="vertical" layout-sm="horizontal" layout-padding>
+
+    <div flex>
+      <div>Uno [flex]</div>
+    </div>
+
+    <div flex>
+      <div>Dos [flex]</div>
+    </div>
+
+    <div flex>
+      <div>Tres [flex]</div>
+    </div>
+
+  </div>
+
+  <div layout="horizontal" layout-padding>
+
+    <div flex flex-sm="33" flex-md="66">
+      <div>Uno [flex][flex-sm="33"][flex-md="66"]</div>
+    </div>
+
+  </div>
+
+</body>
+</html>
