@@ -96,6 +96,11 @@
 a.material-button {
   padding: $button-padding;
   line-height: $button-line-height;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 .material-button-group {
