@@ -1,0 +1,21 @@
+
+table {
+  margin-bottom: 20px;
+  max-width: 100%;
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+  background-color: transparent;
+}
+
+td,
+th {
+  padding: $baseline-grid ($baseline-grid * 2);
+  border-top: 1px solid #ddd;
+  vertical-align: top;
+}
+
+th {
+  border-bottom: 2px solid #ddd;
+  vertical-align: bottom;
+}
