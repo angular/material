@@ -40,7 +40,9 @@ module.exports = {
     ],
     css: [
       'dist/material-design.css',
-      'docs/app/css/**/*.css'
+      'docs/app/css/highlightjs-github.css',
+      'docs/app/css/layout-demo.css',
+      'docs/app/css/style.css',
     ]
   },
   demoAssets: {
@@ -91,7 +93,7 @@ module.exports = {
       //Utils
       'src/utils/binding.js',
       'src/utils/iterator.js',
-      'src/utils/digestConnector.js'
+      'src/utils/digestConnector.js',
     ],
     test: [
       'src/**/*.spec.js',

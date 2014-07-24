@@ -1,5 +1,18 @@
+/**
+ * @ngdoc module
+ * @name material.components.backdrop
+ * @description
+ * Backdrop
+ */
 angular.module('material.components.backdrop', [])
 
+/**
+ * @ngdoc service
+ * @name $materialBackdrop
+ * @module material.components.backdrop
+ * @description
+ * Backdrop service
+ */
 .service('$materialBackdrop', [
   '$materialPopup',
   '$timeout',

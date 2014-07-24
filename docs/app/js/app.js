@@ -15,14 +15,23 @@ function(COMPONENTS, $routeProvider) {
   });
 
   angular.forEach(COMPONENTS, function(component) {
-    component.url = '/component/' + component.id;
-    $routeProvider.when(component.url, {
-      templateUrl: component.outputPath,
-      resolve: {
-        component: function() { return component; }
-      },
-      controller: 'DocPageCtrl'
+
+    component.url = '/' + component.id;
+
+    angular.forEach(component.docs, function(doc) {
+      doc.url = component.url + '/' + doc.docType + '/' + doc.name;
+      $routeProvider.when(doc.url, {
+        templateUrl: doc.docType === 'readme' ?
+          'template/overview.tmpl.html' :
+          doc.outputPath,
+        resolve: {
+          component: function() { return component; },
+          doc: function() { return doc; }
+        },
+        controller: 'ComponentDocCtrl'
+      });
     });
+
   });
 
   $routeProvider.otherwise('/');
@@ -52,19 +61,9 @@ function(Angularytics, $rootScope) {
 function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope, $materialDialog) {
   $scope.COMPONENTS = COMPONENTS;
 
-  document.querySelector('.sidenav-content')
-  .addEventListener('click', function(e) {
-    if ($materialSidenav('left').isOpen()) {
-      e.preventDefault();
-      e.stopPropagation();
-      $timeout(function() {
-        $materialSidenav('left').close();
-      });
-    }
-  });
-
-  $scope.setCurrentComponent = function(component) {
+  $scope.setCurrentComponent = function(component, doc) {
     $scope.currentComponent = component;
+    $scope.currentDoc = doc;
   };
 
   $scope.toggleMenu = function() {
@@ -73,18 +72,28 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope, 
     });
   };
 
+  //Make sure a component's menu is open if the
+  //url changes to match it
+  $scope.$watch(function() {
+    return $location.path();
+  }, function(path) {
+    angular.forEach(COMPONENTS, function(component) {
+      if ($location.path().indexOf(component.id) > -1) {
+        component.$selected = true;
+      }
+    });
+  });
+
   $scope.goHome = function($event) {
     $location.path( '/' );
   };
 
-  $scope.goToComponent = function(component) {
-    if (component) {
-      $location.path( component.url );
-      $materialSidenav('left').close();
-    }
+  $scope.goToDoc = function(doc) {
+    $location.path(doc.url);
   };
-  $scope.componentIsCurrent = function(component) {
-    return component && $location.path() === component.url;
+
+  $scope.docIsCurrent = function(doc) {
+    return $location.path() === doc.url;
   };
 
   $scope.viewSource = function(component, $event) {
@@ -120,17 +129,15 @@ function($scope, $rootScope, $attrs) {
   });
 }])
 
-.controller('DocPageCtrl', [
+.controller('ComponentDocCtrl', [
   '$scope',
+  'doc',
   'component',
   '$rootScope',
-function($scope, component, $rootScope) {
-  $rootScope.appTitle = 'Material: ' + component.name;
-  component.showViewSource = true;
-
-  $scope.setCurrentComponent(component);
-  component.$selectedDemo = component.$selectedDemo ||
-    component.demos[ Object.keys(component.demos)[0] ];
+function($scope, doc, component, $rootScope) {
+  $scope.setCurrentComponent(component, doc);
+  $scope.doc = doc;
+  $rootScope.appTitle = 'Material: ' + doc.name;
 }])
 
 .controller('ViewSourceCtrl', [

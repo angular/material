@@ -9,6 +9,7 @@ material-sidenav {
   height: 100%;
 
   max-width: 304px;
+  min-width: 304px;
 
   box-shadow: $sidenav-shadow;
 
@@ -44,7 +45,14 @@ material-sidenav {
   }
 }
 
-// Disable pointer events on the body when the sidenav is open
-.material-sidenav-open {
+@media (min-width: $layout-breakpoint-md) {
+  material-sidenav {
+    position: static;
 
+    /* Override priority of previous rules with the below specificity additions */
+    &.material-sidenav-left,
+    &.material-sidenav-right {
+      @include transform-translate3d(0,0,0);
+    }
+  }
 }

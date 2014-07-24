@@ -40,7 +40,7 @@ gulp.task('build', ['scripts', 'sass']);
 gulp.task('validate', ['jshint', 'karma']);
 
 gulp.task('watch', ['docs'], function() {
-  gulp.watch(['src/**/*.{scss,js,html}'], ['docs']);
+  gulp.watch(['src/**/*.{scss,js,html}', 'docs/app/**/*'], ['docs']);
 });
 
 

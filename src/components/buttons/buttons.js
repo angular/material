@@ -1,5 +1,5 @@
 /**
- * @ngdoc overview
+ * @ngdoc module
  * @name material.components.button
  *
  * @description

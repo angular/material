@@ -7,8 +7,8 @@
   "devDependencies": {
     "canonical-path": "0.0.2",
     "conventional-changelog": "0.0.9",
-    "dgeni": "^0.3.0",
-    "dgeni-packages": "^0.9.2",
+    "dgeni": "~0.3.0",
+    "dgeni-packages": "~0.9.2",
     "event-stream": "^3.1.5",
     "glob": "~4.0.2",
     "gulp": "^3.6.2",
@@ -32,6 +32,7 @@
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "~0.1.4",
     "lodash": "^2.4.1",
-    "minimist": "^0.1.0"
+    "minimist": "^0.1.0",
+    "esprima": "^1.2.2"
   }
 }

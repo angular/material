@@ -1,3 +1,9 @@
+/**
+ * @ngdoc module
+ * @name material.components.toast
+ * @description
+ * Toast
+ */
 angular.module('material.components.toast', ['material.services.popup'])
   .directive('materialToast', [
     QpToastDirective

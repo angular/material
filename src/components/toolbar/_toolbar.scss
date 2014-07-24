@@ -4,8 +4,9 @@ material-toolbar {
   position: relative;
   z-index: 2;
 
-  height: 64px;
   font-size: 1.3em;
+  height: $baseline-grid * 8;
+  width: 100%;
 
   &.material-tall {
     height: $toolbar-tall-height;

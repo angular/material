@@ -1,4 +1,5 @@
-material-content {
+material-content, 
+.material-content {
   display: block;
 
   overflow: auto;
@@ -15,7 +16,9 @@ material-content {
   &[scroll-xy] {
   }
 
-  .material-content {
-    padding: 20px;
+  > * {
+    position: static;
+    height: 100%;
+    width: 100%;
   }
 }

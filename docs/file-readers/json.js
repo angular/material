@@ -20,33 +20,56 @@ module.exports = {
       demos: {}
     }, json);
 
-    var sources = _([].concat(json.js, json.scss, json.readme))
-      .map(getFilenamesForGlob)
-      .flatten()
-      .map(fileToDoc)
-      .each(function(doc) {
-        doc.type = 'source';
-      })
-      .value();
+    //[].concat to coerce it to an array if it's not
+    var sources = getDocsForPatterns([].concat(json.js));
+    sources.forEach(function(doc) {
+      doc.docType = 'source';
+    });
+
+    var readmes = getDocsForPatterns([].concat(json.readme));
+    readmes.forEach(function(doc) {
+      doc.docType = 'readme';
+      doc.name = 'overview';
+    });
 
     var demos = _(json.demos)
       .map(function(demo, demoId) {
-        //[].concat makes sure demoFiles is always an array
-        return _([].concat(demo.files))
-         .map(getFilenamesForGlob)
-         .flatten()
-         .map(fileToDoc)
-         .each(function(doc) {
-           doc.type = 'demo';
+        return _(getDocsForPatterns([].concat(demo.files)))
+          .flatten()
+          .forEach(function(doc) {
+           doc.docType = 'demo';
            doc.id = demoId;
            doc.name = demo.name;
-         })
-         .value();
+           return doc;
+          })
+          .value();
       })
       .flatten()
       .value();
 
-    return sources.concat(demos);
+    return sources.concat(demos).concat(readmes);
+
+    function getDocsForPatterns(patterns) {
+      var negatedFiles = _(patterns)
+        .remove(function(pattern) {
+          return pattern.charAt(0) === '!';
+        })
+        .map(function(pattern) {
+          return pattern.substring(1); //remove '!"
+        })
+        .flatten()
+        .map(getFilenamesForGlob)
+        .value();
+
+      return _(patterns)
+        .map(getFilenamesForGlob)
+        .flatten()
+        .filter(function(file) {
+          return negatedFiles.indexOf(file) === -1;
+        })
+        .map(fileToDoc)
+        .value();
+    }
 
     function getFilenamesForGlob(pattern) {
       return glob.sync(pattern, { cwd: jsonDir })
@@ -57,6 +80,7 @@ module.exports = {
           return fs.statSync(fullPath).isFile();
         });
     }
+
     function fileToDoc(fullPath) {
       return {
         fileType: path.extname(fullPath).substring(1),

@@ -1,14 +1,1 @@
-<material-tabs class="demo-tabs">
-  <material-tab ng-repeat="(_,demo) in currentComponent.demos"
-           active="currentComponent.$selectedDemo === demo"
-           ng-click="currentComponent.$selectedDemo = demo" 
-           label="{{demo.name}}">
-  </material-tab>
-</material-tabs>
-<iframe class="demo"
-        name="{{demo.id}}"
-        ng-repeat="demo in currentComponent.demos" 
-        ng-show="currentComponent.$selectedDemo === demo"
-        ng-src="{{demo.indexFile.outputPath}}">
-</iframe>
-
+{{currentComponent.name}}

@@ -1,0 +1,63 @@
+{% include "lib/macros.html" -%}
+{% extends "api/api.template.html" %}
+
+{% block additional %}
+
+  {% block usage %}
+  <h2 id="usage">Usage</h2>
+  <div class="usage">
+  {% if doc.usage %}
+    {$ doc.usage | marked $}
+  {% else %}
+    <ul>
+    {% if doc.restrict.element %}
+      <li>as element:
+      {% code %}
+      <{$ doc.name | dashCase $}
+        {%- for param in doc.params %}
+        {$ directiveParam(param.alias or param.name, param.type, '="', '"') $}
+        {%- endfor %}>
+      ...
+      </{$ doc.name | dashCase $}>
+      {% endcode %}
+      </li>
+    {% endif -%}
+
+    {%- if doc.restrict.attribute -%}
+      <li>as attribute:
+        {% code %}
+        <{$ doc.element $}
+          {%- for param in doc.params %}
+          {$ directiveParam(param.name, param.type, '="', '"') $}
+          {%- endfor %}>
+        ...
+        </{$ doc.element $}>
+        {% endcode %}
+      </li>
+    {% endif -%}
+
+    {%- if doc.restrict.cssClass -%}
+      <li>as CSS class:
+        {% code %}
+        {% set sep = joiner(' ') %}
+        <{$ doc.element $} class="
+        {%- for param in doc.params -%}
+          {$ sep() $}{$ directiveParam(param.name, param.type, ': ', ';') $}
+        {%- endfor %}"> ... </{$ doc.element $}>
+        {% endcode %}
+      </li>
+    {% endif -%}
+    
+  {%- endif %}
+  </div>
+  {% endblock -%}
+
+  {%- if doc.animations %}
+  <h2>Animations</h2>
+  {$ doc.animations | marked $}
+  {$ 'module:ngAnimate.$animate' | link('Click here', doc) $} to learn more about the steps involved in the animation.
+  {%- endif -%}
+
+  {% include "lib/params.template.html" %}
+  {% include "lib/events.template.html" %}
+{% endblock %}

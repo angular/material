@@ -12,7 +12,6 @@ material-tabs {
     .tabs-header-items {
       @include flex-display();
       @include box-sizing(border-box);
-
       overflow: hidden;
       background-color: #4285F4;
       white-space: nowrap;
@@ -30,7 +29,6 @@ material-tab {
   @include flex(1);
   @include flex-display();
   @include box-sizing(border-box);
-
   position: relative;
   z-index: 0;
   overflow: hidden;

@@ -10,44 +10,64 @@
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.14/angular-route.min.js"></script>
 <script src="docs.js"></script>
 </head>
-<body>
-  <material-sidenav class="material-sidenav-left material-whiteframe-z3" component-id="left" ng-click="goHome()">
+<body layout="horizontal">
+
+  <material-sidenav class="material-sidenav-left material-whiteframe-z3" component-id="left">
+
     <material-toolbar class="material-theme-light">
-      <div class="material-toolbar-tools" style="margin-left: 9px">Components</div>
+      <div class="material-toolbar-tools" ng-click="goHome()">
+        <span>Components</span>
+      </div>
     </material-toolbar>
-    <div layout="vertical" layout-fill>
-      <material-content flex>
-        <material-list>
-          <material-item ng-repeat="component in COMPONENTS"
-           ng-click="goToComponent(component); $event.stopImmediatePropagation();"
-           ng-class="{active: componentIsCurrent(component)}"
-           class="menu-item">
-           <div ng-cloak class="material-tile-content">
-             {{component.name}}
-           </div>
-          </material-item>
-        </material-list>
-      </material-content>
-    </div>
+
+    <material-content flex>
+      <div layout="vertical" main-axis="start" layout-fill
+        ng-cloak
+        ng-repeat="component in COMPONENTS"
+        ng-click="component.$selected = !component.$selected">
+        <div class="menu-item menu-main-item"
+          style="user-select: none;"
+          ng-class="{active: component.$selected}">
+          <span ng-bind="component.name" style="user-select: auto;"></span>
+          <material-ripple initial-opacity="0.4" opacity-decay-velocity="1.75"></material-ripple>
+        </div>
+        <div class="menu-item menu-sub-item"
+          ng-repeat="doc in component.docs"
+          ng-click="goToDoc(doc); $event.stopImmediatePropagation()"
+          ng-show="component.$selected"
+          ng-class="{active: docIsCurrent(doc)}">
+          {{doc.humanName}}
+          <material-ripple initial-opacity="0.4" opacity-decay-velocity="1.75"></material-ripple>
+        </div>
+      </div>
+    </material-content>
+
   </material-sidenav>
-  <div class="sidenav-content">
+
+  <div layout="vertical" layout-fill>
+
     <material-toolbar class="material-theme-dark">
-      <div class="material-toolbar-tools">
-        <div class="menu-icon" ng-click="toggleMenu()">
+      <div class="material-toolbar-tools" layout="horizontal">
+        <div class="menu-icon" ng-click="toggleMenu()" hide-md>
           <material-icon icon="img/icons/ic_menu_24px.svg">
           </material-icon>
         </div>
-        <span ng-bind="currentComponent.name" style="margin-left: 9px"></span>
-        <div class="material-display-flex material-flex">
-          <!-- use up the third space so the button is on the right -->
-        </div>
-        <button class="material-button view-source-button" ng-show="currentComponent.showViewSource" ng-click="viewSource(currentComponent, $event)">
+        <span ng-bind="currentComponent.id + (currentDoc ? (': &nbsp;' + currentDoc.humanName) : '')"></span>
+        <span style="font-size: 18px;" ng-bind="currentDoc.docType && currentDoc.docType !== 'readme' ? '(' + currentDoc.docType + ')' : ''"></span>
+        <div flex></div>
+        <button class="material-button view-source-button" 
+          ng-show="currentComponent.showViewSource" 
+          ng-click="viewSource(currentComponent, $event)">
           View Source
         </button>
       </div>
     </material-toolbar>
-    <ng-view class="sliding-view"></ng-view>
+
+    <ng-view class="material-content" style="padding:20px;" flex></ng-view>
+
   </div>
+
+
   <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -56,6 +76,6 @@
 
       ga('create', 'UA-8594346-14', 'auto');
       ga('send', 'pageview');
-
   </script>
+
 </body>

@@ -92,18 +92,10 @@ function MaterialEffects($animateSequence, $ripple, $rootElement, $position, $$r
   function popOut(element, parentElement) {
     var endPos = $position.positionElements(parentElement, element, 'bottom-center');
 
-    endPos.top -= element.prop('offsetHeight') / 2;
-
-    var runner = $animateSequence({ styler: styler })
-      .addClass('dialog-changing')
-      .then(function() {
-        element.css({
-          '-webkit-transform': translateString(endPos.left, endPos.top, 0) + ' scale(0.5)',
-          opacity: 0
-        });
-      });
-
-    return runner.run(element);
+    element.addClass('dialog-changing').css({
+      '-webkit-transform': translateString(endPos.left, endPos.top, 0) + ' scale(0.5)',
+      opacity: 0
+    });
   }
 
 
@@ -113,7 +105,7 @@ function MaterialEffects($animateSequence, $ripple, $rootElement, $position, $$r
 
 
   function translateString(x, y, z) {
-    return 'translate3d(' + x + 'px,' + y + 'px,' + z + 'px)';
+    return 'translate3d(' + Math.floor(x) + 'px,' + Math.floor(y) + 'px,' + Math.floor(z) + 'px)';
   }
 
 

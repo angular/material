@@ -4,90 +4,153 @@ var path = require('canonical-path');
 module.exports = {
   name: 'components-generate',
   description: 'Transform the components into a renderable data structure',
-  runAfter: ['docs-processed'],
-  runBefore: ['adding-extra-docs'],
-  exports: {
-    components: ['value', []]
-  },
-  process: function(docs, config, components) { 
+  runAfter: ['api-docs'],
+  runBefore: ['render-docs'],
+  process: function(docs, config, otherDocs) {
     var options = config.get('processing.componentsGenerate', {});
-    var demoOutputFolder = options.demoOutputFolder || 'components/${component.id}/${demo.id}';
-    var componentOutputFolder = options.outputFolder || 'components/${component.id}';
     var repositoryUrl = config.get('source.repository');
     var projectPath = config.get('source.projectPath');
 
-    var generatedDocs = [];
+    var componentOutputFolder = options.componentOutputFolder;
+    var docOutputFolder = path.join(componentOutputFolder, options.docSubFolder);
+
+    var components = [];
+    var renderedDocs = [];
+
+    docs = docs.concat(otherDocs);
+
+    var processors = {
+      demo: processDemos,
+      readme: processDocs,
+      directive: processDocs,
+      service: processDocs,
+      object: processDocs,
+    };
 
     _(docs)
       .groupBy('componentId')
-      .each(function(componentDocs, id) {
-        var component = {};
-        component.id = componentDocs[0].componentId;
-        component.name = componentDocs[0].componentName;
+      .each(function(componentDocs, componentId) {
+        var component = {
+          id: componentId,
+          name: componentDocs[0].componentName,
+          docs: []
+        };
 
-        var byType = _.groupBy(componentDocs, 'type');
-
-        var demos = {};
-        _(byType.demo)
-          .groupBy('id')
-          .each(function(demoDocs, demoId) {
-            var demo = {
-              name: demoDocs[0].name,
-              id: demoId,
-            };
-            var outputFolder = _.template(demoOutputFolder, {
-              component: component, demo: demo
-            });
-            var indexDoc = _(demoDocs).remove({ basePath: 'index.html' }).first();
-
-            demo.files = _.map(demoDocs, generateDemoFile);
-            demo.indexFile = generateDemoFile(indexDoc);
-            demo.indexFile.js = _.filter(demo.files, { fileType: 'js' });
-            demo.indexFile.css = _.filter(demo.files, { fileType: 'css' });
-
-            demos[demoId] = demo;
-
-            generatedDocs = generatedDocs
-              .concat(demo.files)
-              .concat(demo.indexFile);
-
-            function generateDemoFile(fromDoc) {
-              return _.assign({
-                template: fromDoc.basePath === 'index.html' ? 
-                  'demo/template.index.html' :
-                  'demo/template.file',
-                outputPath: path.join(outputFolder, fromDoc.basePath),
-              }, fromDoc);
+        if (!_.find(componentDocs, { docType: 'demo' })) {
+          return;
+        }
+        _(componentDocs)
+          .omit({ docType: 'module' })
+          .groupBy('docType')
+          .each(function(docs, docType) {
+            if (processors[docType]) {
+              processors[docType](component, docType, docs);
             }
           });
 
-        if (!_.keys(demos).length) {
-          return;
-        }
+        component.docs = component.docs.sort(function(doc) {
+          return doc.docType === 'readme' ? -1 : 1;
+        });
 
-        var outputFolder = _.template(componentOutputFolder, { component: component });
-        component.demos = demos;
         component.template = 'component.template.html';
-        component.outputPath = path.join(outputFolder, 'index.html');
+        component.outputPath = path.join(
+          _.template(componentOutputFolder, { component: component }),
+          'index.html'
+        );
 
-        var mainSource = _(byType.source)
-          .filter({ fileType: 'js' })
-          .omit(function(file) { return file.basePath.match(/.spec.js$/); })
-          .first();
-
-        component.repositoryUrl = repositoryUrl + '/tree/master/' + path.dirname(mainSource.file).replace(projectPath, '');
-
-        generatedDocs.push(component);
+        renderedDocs.push(component);
         components.push(component);
       });
 
-    generatedDocs.push({
+    renderedDocs.push({
       template: 'components-data.template.js',
       outputPath: 'js/components-data.js',
       components: components
     });
 
-    return generatedDocs;
+    return renderedDocs;
 
+    function processDemos(component, docType, demoDocs) {
+      component.demos = _(demoDocs)
+        .groupBy('id')
+        .map(function(demoDocs, demoId) {
+          var demo = {};
+          demo.id = demoId;
+          demo.name = demoDocs[0].name;
+          demo.docType = 'demo';
+
+          var outputFolder = _.template(docOutputFolder, {
+            component: component, doc: demo
+          });
+          
+          var indexDoc = _(demoDocs)
+            .remove({ basePath: 'index.html' })
+            .first();
+
+          demo.files = _.map(demoDocs, generateDemoFile);
+          demo.indexFile = generateDemoFile(indexDoc);
+          demo.indexFile.js = _.filter(demo.files, { fileType: 'js' });
+          demo.indexFile.css = _.filter(demo.files, { fileType: 'css' });
+
+          renderedDocs = renderedDocs
+            .concat(demo.indexFile)
+            .concat(demo.files);
+
+          return demo;
+
+          function generateDemoFile(fromDoc) {
+            return _.assign({}, fromDoc, {
+              template: fromDoc.basePath === 'index.html' ? 
+                'demo/template.index.html' :
+                'demo/template.file',
+              outputPath: path.join(outputFolder, fromDoc.basePath),
+            });
+          }
+        })
+        .value();
+    }
+
+    function processDocs(component, docType, docs) {
+      _(docs)
+        .map(function(doc) {
+          return _.pick(doc, [
+            'description',
+            'content',
+            'componentId',
+            'componentName',
+            'docType',
+            'name',
+            'params',
+            'description',
+            'restrict',
+            'element',
+            'priority',
+            'usage'
+          ]);
+        })
+        .each(function(doc) {
+          if (doc.docType === 'directive') {
+            //dash-case for directives
+            doc.humanName = doc.name.replace(/([A-Z])/g, function($1) {
+              return '-'+$1.toLowerCase();
+            }); 
+          } else if (doc.docType === 'readme') {
+            doc.humanName = 'Overview';
+          } else {
+            doc.humanName = doc.name;
+          }
+
+          doc.outputPath = path.join(
+            _.template(docOutputFolder, {
+              component: component, doc: doc
+            }),
+            'index.html'
+          );
+          renderedDocs.push(doc);
+          component.docs.push(doc);
+        })
+        .value();
+    }
   }
 };
+

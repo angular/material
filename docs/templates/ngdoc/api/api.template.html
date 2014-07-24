@@ -1,0 +1,40 @@
+{% extends "base.template.html" %}
+
+{% block content %}
+
+{% block header %}
+<header class="api-profile-header">
+    {% block related_components %}{% endblock %}
+</header>
+{% endblock %}
+
+{% block description %}
+<div class="api-profile-description">
+  {$ doc.description | marked $}
+</div>
+{% endblock %}
+
+<div>
+  {% block dependencies %}
+  {%- if doc.requires %}
+  <h2 id="dependencies">Dependencies</h2>
+  <ul>
+    {% for require in doc.requires %}<li>{$ require | link $}</li>{% endfor %}
+  </ul>
+  {% endif -%}
+  {% endblock %}
+
+  {% block additional %}
+  {% endblock %}
+
+  {% block examples %}
+  {%- if doc.examples %}
+  <h2 id="example">Example</h2>
+  {%- for example in doc.examples -%}
+    {$ example | marked $}
+  {%- endfor -%}
+  {% endif -%}  
+  {% endblock %}
+</div>
+
+{% endblock %}

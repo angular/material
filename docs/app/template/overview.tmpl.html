@@ -1,0 +1,22 @@
+<div layout="vertical" layout-lg="horizontal">
+  <ng-include src="doc.outputPath" flex-lg="50" flex>
+  </ng-include>
+  <div flex-lg="50" flex
+    class="demo-container"
+    ng-init="currentComponent.$selectedDemo = currentComponent.$selectedDemo || currentComponent.demos[0]">
+    <material-tabs class="demo-tabs">
+      <material-tab ng-repeat="(_,demo) in currentComponent.demos"
+               active="currentComponent.$selectedDemo === demo"
+               ng-click="currentComponent.$selectedDemo = demo" 
+               label="{{demo.name}}">
+      </material-tab>
+    </material-tabs>
+    <iframe class="demo material-whiteframe-z1"
+            name="{{demo.id}}"
+            ng-repeat="demo in currentComponent.demos" 
+            ng-show="currentComponent.$selectedDemo === demo"
+            ng-src="{{demo.indexFile.outputPath}}">
+    </iframe>
+  </div>
+</div>
+

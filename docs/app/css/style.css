@@ -9,36 +9,42 @@ body {
   background: #fff;
 }
 
-.material-sidenav-left .menu-item {
+.menu-item {
   cursor: pointer;
+  width: 100%;
+  line-height: 40px;
+  color: #333;
+  padding: 0px 28px;
+  margin-top: 0px;
+  z-index: 1;
+  background-color: #fff;
+  -webkit-transition: 0.25s linear;
+  -webkit-transition-property: margin, background-color;
+  -moz-transition: 0.25s linear;
+  -moz-transition-property: margin, background-color;
+  transition: 0.25s linear;
+  transition-property: margin, background-color;
+  position: relative;
 }
-.material-sidenav-left .menu-item:hover {
+.menu-item.ng-hide {
+  margin-top: -40px;
+}
+.menu-item:hover {
   color: #999;
 }
-.material-sidenav-left .menu-item.active {
-  color: black;
+
+.menu-item.menu-main-item.active {
+  background-color: #eeeeee;
   font-weight: bold;
 }
 
-.sidenav-content {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  margin: auto;
+.menu-item.menu-sub-item {
+  padding: 0px 44px;
+  z-index: 0;
 }
-@media only screen and (min-device-width : 968px) {
-  .sidenav-content {
-    left: 304px;
-  }
-  .material-sidenav-left {
-    -webkit-transform: translate3d(0, 0, 0) !important;
-    transform: translate3d(0,0,0) !important;
-  }
-  .menu-icon {
-    display: none;
-  }
+.menu-item.menu-sub-item.active {
+  font-weight: bold;
+  color: #4285f4;
 }
 
 .menu-icon {
@@ -54,25 +60,9 @@ body {
   text-align: right;
 }
 
-.component-pane {
-  box-sizing: border-box;
-  padding: 10px;
-  height: auto;
-  background: white;
-}
-
-material-sidenav material-content {
-  padding-bottom: 64px;
-}
-
 iframe.demo {
-  position: absolute;
-  top: 39px;
-  left: 0;
-  box-sizing: border-box;
   width: 100%;
-  height: calc(100% - 39px);
-  height: -webkit-calc(100% - 39px);
+  height: 600px;
   border: none;
 }
 

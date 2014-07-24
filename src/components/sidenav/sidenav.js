@@ -1,5 +1,5 @@
 /**
- * @ngdoc overview
+ * @ngdoc module
  * @name material.components.sidenav
  *
  * @description
@@ -21,8 +21,9 @@ angular.module('material.components.sidenav', [
   .directive('materialSidenav', [ materialSidenavDirective ]);
   
 /**
- * @ngdoc controller
- * @name material.components.sidenav.controller:$materialSidenavController
+ * @ngdoc object
+ * @name materialSidenavController
+ * @module material.components.sidenav
  *
  * @description
  * The controller for materialSidenav components.
@@ -102,7 +103,8 @@ function materialSidenavController($scope, $element, $attrs, $timeout,
 
 /**
  * @ngdoc service
- * @name material.components.sidenav:$materialSidenav
+ * @name $materialSidenav
+ * @module material.components.sidenav
  *
  * @description
  * $materialSidenav makes it easy to interact with multiple sidenavs
@@ -162,6 +164,7 @@ function materialSidenavService($materialComponentRegistry) {
 /**
  * @ngdoc directive
  * @name materialSidenav
+ * @module material.components.sidenav
  * @restrict E
  *
  * @description

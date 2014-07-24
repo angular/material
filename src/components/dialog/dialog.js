@@ -1,3 +1,9 @@
+/**
+ * @ngdoc module
+ * @name material.components.dialog
+ * @description
+ * Dialog
+ */
 angular.module('material.components.dialog', ['material.services.popup'])
   .directive('materialDialog', [
     MaterialDialogDirective
@@ -57,22 +63,26 @@ function MaterialDialogService($timeout, $materialPopup, $rootElement, $material
         if (options.escapeToClose) {
           $rootElement.on('keyup', onRootElementKeyup);
         }
+
         if (options.hasBackdrop || options.clickOutsideToClose) {
           backdropInstance = $materialBackdrop({
             appendTo: options.appendTo,
             opaque: options.hasBackdrop
-          }, clickOutsideToClose ? destroyDialog : angular.noop);
+          }, options.clickOutsideToClose ? destroyDialog : angular.noop);
+
           backdropInstance.then(function(drop) {
             drop.enter();
           });
         }
       });
 
+      var popInTarget = options.targetEvent && options.targetEvent.target && 
+        angular.element(options.targetEvent.target);
+
       materialEffects.popIn(
         dialog.element,
         options.appendTo,
-        options.targetEvent && options.targetEvent.target && 
-          angular.element(options.targetEvent.target)
+        popInTarget
       );
 
       return destroyDialog;

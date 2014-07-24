@@ -1,5 +1,18 @@
+/**
+ * @ngdoc module
+ * @name material.components.form
+ * @description
+ * Form
+ */
 angular.module('material.components.form', [])
 
+/**
+ * @ngdoc directive
+ * @name materialInputGroup
+ * @module material.components.form
+ * @description
+ * Material Input Group
+ */
 .directive('materialInputGroup', [materialInputGroupDirective]);
 
 function materialInputGroupDirective() {
