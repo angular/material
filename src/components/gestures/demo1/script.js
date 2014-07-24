@@ -2,13 +2,15 @@
 angular.module('app', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope, $timeout, $materialGesture) {
-  var output = [];
+  $scope.output = [];
 
-  var pushMessage = function(msg) {
-    output.push(msg);
-  };
-
-  $scope.drag = function(e) {
-    output.push('DRAG', e.x, e.y);
+  $scope.g = function(type, e) {
+    console.log(type);
+    $scope.output.push({
+      type: type,
+      x: e.center.x,
+      y: e.center.y,
+      ts: +new Date
+    });
   };
 });

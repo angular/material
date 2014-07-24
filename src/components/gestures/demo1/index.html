@@ -1,18 +1,17 @@
-
+<script src="hammer.js"></script>
 <div ng-app="app" ng-controller="AppCtrl">
   <style>
     #box {
       width: 200px;
       height: 200px;
       background-color: #eee;
-      box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
     }
   </style>
 
-  <div id="box" on-drag="drag($event)">
+  <div id="box" on-pan="g('pan', $event)" on-start-pan="g('panstart', $event)" class=="material-whiteframe-z1">
   </div>
 
   <div id="output">
-    <div ng-repeat="message in output"></div>
+    <div ng-repeat="message in output">{{message.ts}} - {{message.type}} - {{message.x}}, {{message.y}}</div>
   </div>
 </div>
