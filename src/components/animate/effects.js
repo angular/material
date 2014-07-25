@@ -1,5 +1,5 @@
 angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 'ngAnimate', 'material.services'])
-       .service('materialEffects', [ '$animateSequence', '$canvasRenderer', '$rootElement', '$position', '$$rAF', MaterialEffects])
+       .service('materialEffects', [ '$animateSequence', '$ripple', '$rootElement', '$position', '$$rAF', MaterialEffects])
        .directive('materialRipple', ['materialEffects', '$interpolate', '$throttle', MaterialRippleDirective]);
 
 /**
@@ -12,7 +12,7 @@ angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 
  *
  * @constructor
  */
-function MaterialEffects($animateSequence, $canvasRenderer, $rootElement, $position, $$rAF) {
+function MaterialEffects($animateSequence, $ripple, $rootElement, $position, $$rAF) {
 
   var styler = angular.isDefined( $rootElement[0].animate ) ? 'webAnimations' :
                angular.isDefined( window['TweenMax'] || window['TweenLite'] ) ? 'gsap'   :
@@ -36,7 +36,7 @@ function MaterialEffects($animateSequence, $canvasRenderer, $rootElement, $posit
    */
   function animateInkRipple( canvas, options )
   {
-    return $canvasRenderer.ripple( canvas, options);
+    return new $ripple(canvas, options);
   }
 
 
@@ -169,13 +169,13 @@ function MaterialRippleDirective(materialEffects, $interpolate, $throttle) {
       angular.element( $interpolate(tag)(options) )
     );
 
-    return function( scope, element ){
+    return function linkCanvas( scope, element ){
 
-      var rippler, watchMouse,
+      var ripple, watchMouse,
           parent = element.parent(),
           makeRipple = $throttle({
             start : function() {
-              rippler = rippler || materialEffects.inkRipple( element[0], options );
+              ripple = ripple || materialEffects.inkRipple( element[0], options );
               watchMouse = watchMouse || buildMouseWatcher(parent, makeRipple);
 
               // Ripples start with left mouseDowns (or taps)
@@ -191,13 +191,17 @@ function MaterialRippleDirective(materialEffects, $interpolate, $throttle) {
                     if (!e.ctrlKey && (e.button !== RIGHT_BUTTON))
                     {
                       watchMouse(true);
-                      rippler.onMouseDown( options.forceToCenter ? null : localToCanvas(e) );
+                      ripple.createAt( options.forceToCenter ? null : localToCanvas(e) );
                     }
                     break;
 
                   default:
                     watchMouse(false);
-                    rippler.onMouseUp( done );
+
+                    // Draw of each wave/ripple in the ink only occurs
+                    // on mouseup/mouseleave
+
+                    ripple.draw( done );
                     break;
                 }
               } else {
@@ -221,11 +225,22 @@ function MaterialRippleDirective(materialEffects, $interpolate, $throttle) {
        * @returns {*|boolean}
        */
       function effectAllowed() {
-        var allowed = inkEnabled( element.scope() ) && angular.isDefined( element.parent()[0] );
+        var allowed = isInkEnabled( element.scope() ) && angular.isDefined( element.parent()[0] );
         if ( !allowed ) {
           parent.off('mousedown', makeRipple);
         }
         return allowed;
+
+
+        /**
+         * Check scope chain for `inkEnabled` or `disabled` flags...
+         */
+        function isInkEnabled(scope) {
+          return angular.isUndefined(scope) ? true :
+            angular.isDefined(scope.disabled) ? !scope.disabled :
+              angular.isDefined(scope.inkEnabled) ? scope.inkEnabled : true;
+        }
+
       }
 
       /**
@@ -258,20 +273,11 @@ function MaterialRippleDirective(materialEffects, $interpolate, $throttle) {
         };
       }
 
-      /**
-       * Check scope chain for `inkEnabled` or `disabled` flags...
-       */
-      function inkEnabled(scope) {
-        return angular.isUndefined(scope) ? true :
-          angular.isDefined(scope.disabled) ? !scope.disabled :
-            angular.isDefined(scope.inkEnabled) ? scope.inkEnabled : true;
-      }
-
     }
 
     function calculateOptions()
     {
-      return angular.mixin( getBounds(element), {
+      return angular.extend( getBounds(element), {
         forceToCenter : (attrs.start == "center"),
         classList : (attrs.class || ""),
         opacityDecayVelocity : getFloatValue( attrs, "opacityDecayVelocity" ),

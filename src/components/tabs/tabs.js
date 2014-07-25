@@ -94,7 +94,7 @@ function TabsDirective($compile, materialEffects) {
       },
       post: function tabsPostLink(scope, element, attrs, tabsController, $transclude) {
 
-        positionHeader();
+        alignTabButtons();
         transcludeHeaderItems();
         transcludeContentItems();
 
@@ -116,13 +116,13 @@ function TabsDirective($compile, materialEffects) {
           var inkBar = findNode("material-ink-bar", element);
 
           // On resize or tabChange
-          tabsController.onTabChange = updateBarPosition;
+          tabsController.onTabChange = updateInkBar;
           angular.element(window).on('resize', function() {
-            updateBarPosition(tabsController.selectedElement(), true);
+            updateInkBar(tabsController.selectedElement(), true);
           });
 
           // Immediately place the ink bar
-          updateBarPosition(tabsController.selectedElement(), true );
+          updateInkBar(tabsController.selectedElement(), true );
 
           /**
            * Update the position and size of the ink bar based on the
@@ -130,7 +130,7 @@ function TabsDirective($compile, materialEffects) {
            * @param tab
            * @param skipAnimation
            */
-          function updateBarPosition(tab, skipAnimation) {
+          function updateInkBar(tab, skipAnimation) {
             if ( angular.isDefined(tab) && angular.isDefined(inkBar) ) {
 
               var tabNode = tab[0];
@@ -156,7 +156,7 @@ function TabsDirective($compile, materialEffects) {
          * If the tabs-align attribute is 'bottom', then the tabs-content
          * container is transposed with the tabs-header
          */
-        function positionHeader() {
+        function alignTabButtons() {
           var align  = attrs['tabsAlign'] || "top";
           var content = findNode('.tabs-content', element);
 

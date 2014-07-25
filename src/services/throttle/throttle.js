@@ -1,11 +1,11 @@
 angular.module('material.services.throttle', [ 'ng' ])
   /**
    *
-   *   var rippler, watchMouse,
+   *   var ripple, watchMouse,
    *       parent = element.parent(),
    *       makeRipple = $throttle({
    *         start : function() {
-   *           rippler = rippler || materialEffects.inkRipple( element[0], options );
+   *           ripple = ripple || materialEffects.inkRipple( element[0], options );
    *           watchMouse = watchMouse || buildMouseWatcher(parent, makeRipple);
    *           // Ripples start with mouseDow (or taps)
    *           parent.on('mousedown', makeRipple);
@@ -17,11 +17,11 @@ angular.module('material.services.throttle', [ 'ng' ])
    *             {
    *               case 'mousedown' :
    *                 watchMouse(true);
-   *                 rippler.onMouseDown( options.forceToCenter ? null : localToCanvas(e) );
+   *                 ripple.createAt( options.forceToCenter ? null : localToCanvas(e) );
    *                 break;
    *               default:
    *                 watchMouse(false);
-   *                 rippler.onMouseUp( localToCanvas(e) );
+   *                 ripple.draw( localToCanvas(e) );
    *                 break;
    *             }
    *           } else {

@@ -407,8 +407,8 @@ describe('ngThrottleSpec', function() {
               switch(e.type)
               {
                 case 'mousedown' :
-                  rippler.onMouseDown( {x:25,y:25} );
-                  rippler.onMouseUp( done );
+                  rippler.createAt( {x:25,y:25} );
+                  rippler.draw( done );
                   break;
 
                 default:
