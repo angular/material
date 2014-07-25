@@ -20,21 +20,27 @@
   color: #e0f2f1;
 }
 
-[layout],
-[layout-sm],
-[layout-md],
-[layout-lg] {
+.layout-demo [layout],
+.layout-demo [layout-sm],
+.layout-demo [layout-md],
+.layout-demo [layout-lg],
+.layout-guidelines [layout],
+.layout-guidelines [layout-sm],
+.layout-guidelines [layout-md],
+.layout-guidelines [layout-lg] {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAKSURBVAgdY2AAAAACAAHPyDXlAAAAAElFTkSuQmCC");
   background-position: -1px -1px;
   background-repeat: no-repeat;
 }
 
-[layout="horizontal"] {
+.layout-demo [layout="horizontal"],
+.layout-guidelines [layout="horizontal"] {
   background-position: 50% 50%;
   background-repeat: repeat-x;
 }
 
-[layout="vertical"] {
+.layout-demo [layout="vertical"],
+.layout-guidelines [layout="vertical"] {
   background-position: 50% 50%;
   background-repeat: repeat-y;
 }
@@ -152,11 +158,13 @@ body.layout-demo:before {
     background: #4a148c;
     content: 'small';
   }
-  [layout-sm="horizontal"] {
-  background-position: 50% 50%;
+  .layout-demo [layout-sm="horizontal"],
+  .layout-guidelines [layout-sm="horizontal"] {
+    background-position: 50% 50%;
     background-repeat: repeat-x;
   }
-  [layout-sm="vertical"] {
+  .layout-demo [layout-sm="vertical"],
+  .layout-guidelines [layout-sm="vertical"] {
   background-position: 50% 50%;
     background-repeat: repeat-y;
   }
@@ -167,12 +175,14 @@ body.layout-demo:before {
     background: #0d5302;
     content: 'medium';
   }
-  [layout-md="horizontal"] {
-  background-position: 50% 50%;
+  .layout-demo [layout-md="horizontal"],
+  .layout-guidelines [layout-md="horizontal"] {
+    background-position: 50% 50%;
     background-repeat: repeat-x;
   }
-  [layout-md="vertical"] {
-  background-position: 50% 50%;
+  .layout-demo [layout-md="vertical"],
+  .layout-guidelines [layout-md="vertical"] {
+    background-position: 50% 50%;
     background-repeat: repeat-y;
   }
 }
@@ -182,12 +192,14 @@ body.layout-demo:before {
     background: #01579b;
     content: 'large';
   }
-  [layout-lg="horizontal"] {
-  background-position: 50% 50%;
+  .layout-demo [layout-lg="horizontal"],
+  .layout-guidelines [layout-lg="horizontal"] {
+    background-position: 50% 50%;
     background-repeat: repeat-x;
   }
-  [layout-lg="vertical"] {
-  background-position: 50% 50%;
+  .layout-demo [layout-lg="vertical"],
+  .layout-guidelines [layout-lg="vertical"] {
+    background-position: 50% 50%;
     background-repeat: repeat-y;
   }
 }
