@@ -10,18 +10,19 @@
 // Keylines (Vertical heights)
 // ---------------------------
 
-@mixin keylines($num) {
+@mixin keylines($num, $padding:$baseline-grid * 2) {
   [keylines="#{$num}"] {
     height: $baseline-grid * $num;
+    padding: $padding;
     overflow: hidden;
   }
 }
 
-@include keylines(1);
-@include keylines(2);
-@include keylines(3);
-@include keylines(4);
-@include keylines(5);
+@include keylines(1, 0);
+@include keylines(2, $baseline-grid / 4);
+@include keylines(3, ($baseline-grid / 2) ($baseline-grid) );
+@include keylines(4, ($baseline-grid / 2) ($baseline-grid) );
+@include keylines(5, $baseline-grid);
 @include keylines(6);
 @include keylines(7);
 @include keylines(8);
@@ -29,3 +30,41 @@
 @include keylines(10);
 @include keylines(11);
 @include keylines(12);
+
+
+// Padding
+// ---------------------------
+
+@mixin padding-base($num, $name:null) {
+  @if $name == null {
+    $name: $num;
+  }
+  [padding-base="#{$name}"] {
+    padding: $baseline-grid * $num;
+  }
+
+  [padding-base-left="#{$name}"],
+  [padding-base-horizontal="#{$name}"] {
+    padding-left: $baseline-grid * $num;
+  }
+  [padding-base-right="#{$name}"],
+  [padding-base-horizontal="#{$name}"] {
+    padding-right: $baseline-grid * $num;
+  }
+
+  [padding-base-top="#{$name}"],
+  [padding-base-vertical="#{$name}"] {
+    padding-top: $baseline-grid * $num;
+  }
+  [padding-base-bottom="#{$name}"],
+  [padding-base-vertical="#{$name}"] {
+    padding-bottom: $baseline-grid * $num;
+  }
+}
+
+@include padding-base(0.5, "half");
+
+@for $i from 1 to 12 {
+  @include padding-base($i);
+}
+
