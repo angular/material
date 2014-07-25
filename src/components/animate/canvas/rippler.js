@@ -50,8 +50,8 @@ angular.module('material.animations')
 
         var defaults = {
           onComplete: angular.noop,   // Completion hander/callback
-          initialOpacity: 0.25,       // The initial default opacity set on the wave.
-          opacityDecayVelocity: 0.9, // How fast (opacity per second) the wave fades out.
+          initialOpacity: 0.6,       // The initial default opacity set on the wave.
+          opacityDecayVelocity: 1.7, // How fast (opacity per second) the wave fades out.
           backgroundFill: true,
           pixelDensity: 1
         };
