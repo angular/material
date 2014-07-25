@@ -1,0 +1,31 @@
+
+// Metrics
+// ---------------------------
+// All components align to an 8 dp square baseline grid.
+// Type aligns to a 4 dp baseline grid. Iconography in
+// toolbars align to a 4 dp square baseline grid.
+// This applies to mobile, tablet, and desktop.
+
+
+// Keylines (Vertical heights)
+// ---------------------------
+
+@mixin keylines($num) {
+  [keylines="#{$num}"] {
+    height: $baseline-grid * $num;
+    overflow: hidden;
+  }
+}
+
+@include keylines(1);
+@include keylines(2);
+@include keylines(3);
+@include keylines(4);
+@include keylines(5);
+@include keylines(6);
+@include keylines(7);
+@include keylines(8);
+@include keylines(9);
+@include keylines(10);
+@include keylines(11);
+@include keylines(12);
