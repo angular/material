@@ -30,7 +30,7 @@ function materialRadioButtonDirective() {
     scope: true,
     transclude: true,
     template: '<div class="material-container">' +
-                '<material-ripple start="center" class="circle" material-checked="{{ checked }}"></material-ripple>' +
+                '<material-ripple start="center" class="circle" initial-opacity="0.6" opacity-decay-velocity="1.7"></material-ripple>' +
                 '<div class="material-off"></div>' +
                 '<div class="material-on"></div>' +
               '</div>' +

@@ -9,6 +9,26 @@ angular.module('material.animations')
  */
   .service('$ripple', ['$$rAF', function($$rAF) {
 
+    /**
+     * Unlike angular.extend() will always overwrites destination,
+     * mixin() only overwrites the destination if it is undefined; so
+     * pre-existing destination values are **not** modified.
+     */
+    var mixin = function (dst) {
+      angular.forEach(arguments, function(obj) {
+        if (obj !== dst) {
+          angular.forEach(obj, function(value, key) {
+            // Only mixin if destination value is undefined
+            if ( angular.isUndefined(dst[key]) )
+            {
+              dst[key] = value;
+            }
+          });
+        }
+      });
+      return dst;
+    };
+
     // **********************************************************
     // Ripple Class
     // **********************************************************
@@ -31,7 +51,7 @@ angular.module('material.animations')
         var defaults = {
           onComplete: angular.noop,   // Completion hander/callback
           initialOpacity: 0.25,       // The initial default opacity set on the wave.
-          opacityDecayVelocity: 0.8,  // How fast (opacity per second) the wave fades out.
+          opacityDecayVelocity: 0.9, // How fast (opacity per second) the wave fades out.
           backgroundFill: true,
           pixelDensity: 1
         };
@@ -40,7 +60,7 @@ angular.module('material.animations')
         this.waves = [];
         this.cAF = undefined;
 
-        return angular.extend(this, angular.extend( defaults, options ));
+        return angular.extend(this, mixin(options || { }, defaults));
       }
 
       /**
@@ -55,17 +75,17 @@ angular.module('material.animations')
           var canvas = this.adjustBounds(this.canvas);
           var wave = createWave(canvas);
 
-          var width = canvas.width / this.pixelDensity; // Retina canvas
+          var width = canvas.width / this.pixelDensity;
           var height = canvas.height / this.pixelDensity;
 
           // Auto center ripple if startAt is not defined...
           startAt = startAt || { x: Math.round(width / 2), y: Math.round(height / 2) };
 
           wave.isMouseDown = true;
+          wave.mouseDownStart = now();
+          wave.mouseUpStart = 0.0;
           wave.tDown = 0.0;
           wave.tUp = 0.0;
-          wave.mouseUpStart = 0.0;
-          wave.mouseDownStart = now();
           wave.startPosition = startAt;
           wave.containerSize = Math.max(width, height);
           wave.maxRadius = distanceFromPointToFurthestCorner(wave.startPosition, {w: width, h: height}) * 0.75;
@@ -77,8 +97,8 @@ angular.module('material.animations')
 
           this.waves.push(wave);
           this.cancelled = false;
-          this.animate();
 
+          this.animate();
         },
 
         /**
@@ -92,9 +112,9 @@ angular.module('material.animations')
             var wave = this.waves[i];
             if (wave.isMouseDown) {
               wave.isMouseDown = false
-              wave.mouseUpStart = now();
               wave.mouseDownStart = 0;
               wave.tUp = 0.0;
+              wave.mouseUpStart = now();
               break;
             }
           }
@@ -155,14 +175,10 @@ angular.module('material.animations')
           for (var i = 0; i < this.waves.length; i++) {
             var wave = this.waves[i];
 
-            if ( this.cancelled ) {
-
-              deleteTheseWaves.push(wave);
-
-            } else {
+            if ( !this.cancelled ) {
 
               if (wave.mouseDownStart > 0) {
-                wave.tDown = now() - wave.mouseDownStart;
+                wave.tDown =  now() - wave.mouseDownStart;
               }
               if (wave.mouseUpStart > 0) {
                 wave.tUp = now() - wave.mouseUpStart;
@@ -174,7 +190,7 @@ angular.module('material.animations')
               var radius = waveRadiusFn(wave.tDown, wave.tUp, anim);
               var maximumWave = waveAtMaximum(wave, radius, anim);
               var waveDissipated = waveDidFinish(wave, radius, anim);
-              var shouldKeepWave = !waveDissipated || maximumWave;
+              var shouldKeepWave = !waveDissipated || !maximumWave;
 
               if (!shouldKeepWave) {
 
@@ -193,6 +209,10 @@ angular.module('material.animations')
             }
           }
 
+          if ( this.cancelled ) {
+            // Clear all waves...
+            deleteTheseWaves = deleteTheseWaves.concat( this.waves );
+          }
           for (var i = 0; i < deleteTheseWaves.length; ++i) {
             removeWave( deleteTheseWaves[i], this.waves );
           }
@@ -284,12 +304,8 @@ angular.module('material.animations')
       // Convert from ms to s.
       var touchDown = td / 1000;
       var touchUp = tu / 1000;
-      var totalElapsed = touchDown + touchUp;
 
-      if (tu <= 0) {  // before touch up
-        return anim.initialOpacity;
-      }
-      return Math.max(0, anim.initialOpacity - touchUp * anim.opacityDecayVelocity);
+      return (tu <= 0) ? anim.initialOpacity : Math.max(0, anim.initialOpacity - touchUp * anim.opacityDecayVelocity);
     }
 
     /**

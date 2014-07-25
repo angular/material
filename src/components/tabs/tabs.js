@@ -316,7 +316,7 @@ function TabDirective($attrBind, $compile, $timeout) {
     scope: true,
     link: linkTab,
     template:
-      '<material-ripple initial-opacity="0.95" opacity-decay-velocity="0.89"> </material-ripple> ' +
+      '<material-ripple initial-opacity="0.9" opacity-decay-velocity="0.89"> </material-ripple> ' +
       '<material-tab-label ' +
         'ng-class="{ disabled : disabled, active : active }"  >' +
       '</material-tab-label>'

@@ -34,6 +34,8 @@ material-tab {
   text-align: center;
   cursor: pointer;
 
+  @include not-selectable();
+
   material-tab-label {
     position: absolute;
     z-index: 100;

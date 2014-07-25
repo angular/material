@@ -216,3 +216,13 @@
      -moz-box-sizing: $boxmodel;
           box-sizing: $boxmodel;
 }
+
+
+@mixin not-selectable($value:none) {
+  -webkit-touch-callout: $value;
+  -webkit-user-select: $value;
+  -khtml-user-select: $value;
+  -moz-user-select: $value;
+  -ms-user-select: $value;
+  user-select: $value;
+}

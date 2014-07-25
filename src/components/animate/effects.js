@@ -158,7 +158,7 @@ function MaterialRippleDirective(materialEffects, $interpolate, $throttle) {
    */
   function compileWithCanvas( element, attrs ) {
     var RIGHT_BUTTON = 2;
-    var options  = calculateOptions();
+    var options  = calculateOptions(element, attrs);
     var tag =
       '<canvas ' +
         'class="material-ink-ripple {{classList}}"' +
@@ -275,13 +275,13 @@ function MaterialRippleDirective(materialEffects, $interpolate, $throttle) {
 
     }
 
-    function calculateOptions()
+    function calculateOptions(element, attrs)
     {
       return angular.extend( getBounds(element), {
-        forceToCenter : (attrs.start == "center"),
         classList : (attrs.class || ""),
-        opacityDecayVelocity : getFloatValue( attrs, "opacityDecayVelocity" ),
-        initialOpacity : getFloatValue( attrs, "initialOpacity" )
+        forceToCenter : (attrs.start == "center"),
+        initialOpacity : getFloatValue( attrs, "initialOpacity" ),
+        opacityDecayVelocity : getFloatValue( attrs, "opacityDecayVelocity" )
       });
 
       function getBounds(element) {
