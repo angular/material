@@ -2,6 +2,7 @@ material-content {
   display: block;
 
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 
   &[scroll-y] {
     overflow-y: auto;
