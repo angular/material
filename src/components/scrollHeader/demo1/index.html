@@ -1,5 +1,5 @@
 
-<div ng-app="app" ng-controller="AppCtrl">
+<div ng-app="app" ng-controller="AppCtrl" layout="vertical" layout-fill>
   <style>
     .circle {
       width: 40px;
@@ -28,7 +28,7 @@
     </button>
   </material-toolbar>
 
-  <material-content>
+  <material-content flex scroll-y>
     <material-list ng-controller="ListCtrl">
       <drive-item></drive-item>
       <drive-item></drive-item>

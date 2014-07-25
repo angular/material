@@ -15,18 +15,20 @@
     <material-toolbar class="material-theme-light">
       <div class="material-toolbar-tools" style="margin-left: 9px">Components</div>
     </material-toolbar>
-    <material-content>
-      <material-list>
-        <material-item ng-repeat="component in COMPONENTS"
-         ng-click="goToComponent(component); $event.stopImmediatePropagation();"
-         ng-class="{active: componentIsCurrent(component)}"
-         class="menu-item">
-         <div ng-cloak class="material-tile-content">
-           {{component.name}}
-         </div>
-        </material-item>
-      </material-list>
-    </material-content>
+    <div layout="vertical" layout-fill>
+      <material-content flex>
+        <material-list>
+          <material-item ng-repeat="component in COMPONENTS"
+           ng-click="goToComponent(component); $event.stopImmediatePropagation();"
+           ng-class="{active: componentIsCurrent(component)}"
+           class="menu-item">
+           <div ng-cloak class="material-tile-content">
+             {{component.name}}
+           </div>
+          </material-item>
+        </material-list>
+      </material-content>
+    </div>
   </material-sidenav>
   <div class="sidenav-content">
     <material-toolbar class="material-theme-dark">

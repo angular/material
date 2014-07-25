@@ -62,7 +62,7 @@ body {
 }
 
 material-sidenav material-content {
-  padding-top: 64px;
+  padding-bottom: 64px;
 }
 
 iframe.demo {

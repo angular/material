@@ -1,4 +1,19 @@
 material-content {
+  display: block;
+
+  overflow: auto;
+
+  &[scroll-y] {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  &[scroll-x] {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  &[scroll-xy] {
+  }
+
   .material-content {
     padding: 20px;
   }
