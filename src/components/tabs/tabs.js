@@ -100,6 +100,8 @@ function TabsDirective($compile, materialEffects) {
 
         configureInk();
 
+        selectDefaultTab();
+
         // **********************************************************
         // Private Methods
         // **********************************************************
@@ -185,6 +187,18 @@ function TabsDirective($compile, materialEffects) {
               }
             });
           });
+        }
+
+        /**
+         * If an initial tab selection has not been specified, then
+         * select the first tab by default
+         */
+        function selectDefaultTab() {
+          var tabs = tabsController.$$tabs();
+
+          if ( tabs.length && angular.isUndefined(scope.$selIndex)) {
+            tabsController.select(tabs[0]);
+          }
         }
 
         /**
@@ -476,7 +490,7 @@ function TabsController($scope, $iterator, $attrs, $materialComponentRegistry, $
   // Special internal accessor to access scopes and tab `content`
   // Used by TabsDirective::buildContentItems()
 
-  this.$$tabs = $onGetTabs;
+  this.$$tabs = findTabs;
   this.$$hash = "";
 
   // used within the link-Phase of materialTabs
@@ -503,7 +517,7 @@ function TabsController($scope, $iterator, $attrs, $materialComponentRegistry, $
    *       node may be undefined.
    * @returns {*} Array
    */
-  function $onGetTabs(filterBy) {
+  function findTabs(filterBy) {
     return list.items().filter(filterBy || angular.identity);
   }
 
