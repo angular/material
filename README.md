@@ -46,7 +46,7 @@ Nevertheless, if you wish to use AngularJS Material Design, here are the steps (
 ### Commit Conventions
 
 - http://github.com/ajoslin/conventional-changelog
-- git pre-commit hook available [here](https://github.com/angular/angular.js/blob/master/validate-commit-msg.js).  Place it in `.git/hooks/pre-commit`, and run `chmod +x .git/hooks/pre-commit`. It will validate your commit messages for you.
+- git commit-msg hook available [here](https://github.com/angular/angular.js/blob/master/validate-commit-msg.js).  Place it in `.git/hooks/commit-msg`, and run `chmod +x .git/hooks/commit-msg`. It will validate your commit messages for you.
 
 ### Development 
 
