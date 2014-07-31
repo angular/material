@@ -90,7 +90,8 @@ module.exports = {
 
       //Utils
       'src/utils/binding.js',
-      'src/utils/list.js'
+      'src/utils/iterator.js',
+      'src/utils/digestConnector.js'
     ],
     test: [
       'src/**/*.spec.js',

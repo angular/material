@@ -1,7 +1,7 @@
 angular.module('material.components.tabs', ['material.utils', 'material.animations', 'material.services'])
-  .controller('materialTabsController', [ '$iterator', '$scope', TabsController])
-  .directive('materialTabs', [ '$compile', 'materialEffects', TabsDirective ])
-  .directive('materialTab', [ '$attrBind', '$compile', '$timeout', TabDirective  ]);
+  .controller('materialTabsController', [ '$scope', TabsController])
+  .directive('materialTabs', [ '$compile', '$timeout', '$$q', 'materialEffects', TabsDirective ])
+  .directive('materialTab', [ '$attrBind', '$compile', TabDirective  ]);
 
 /**
  * @ngdoc directive
@@ -34,7 +34,7 @@ angular.module('material.components.tabs', ['material.utils', 'material.animatio
  *
  */
 
-function TabsDirective($compile, materialEffects) {
+function TabsDirective($compile, $timeout, $$q, materialEffects) {
 
   return {
     restrict: 'E',
@@ -46,13 +46,12 @@ function TabsDirective($compile, materialEffects) {
     },
 
     compile: compileTabsFn,
-    controller: [ '$scope', '$iterator', '$attrs', '$materialComponentRegistry', '$timeout', TabsController ],
+    controller: [ '$scope', '$attrs', '$materialComponentRegistry', '$timeout', TabsController ],
 
     template:
       '<div class="tabs-header">' +
       '  <div class="tabs-header-items"></div>' +
-      '  <shadow></shadow>' +
-      '  <material-ink-bar></material-ink-bar>'  +
+      '  <material-ink-bar></material-ink-bar>' +
       '</div>'+
       '<div class="tabs-content ng-hide"></div>'
 
@@ -93,13 +92,18 @@ function TabsDirective($compile, materialEffects) {
 
       },
       post: function tabsPostLink(scope, element, attrs, tabsController, $transclude) {
+        var  cache = {
+          length: 0,
+          contains: function (tab) {
+            return !angular.isUndefined(cache[tab.$id]);
+          }
+        };
 
-        alignTabButtons();
         transcludeHeaderItems();
         transcludeContentItems();
 
         configureInk();
-
+        alignTabButtons();
         selectDefaultTab();
 
         // **********************************************************
@@ -160,12 +164,25 @@ function TabsDirective($compile, materialEffects) {
          */
         function alignTabButtons() {
           var align  = attrs['tabsAlign'] || "top";
-          var content = findNode('.tabs-content', element);
+          var container = findNode('.tabs-content', element);
 
           if ( align == "bottom") {
-            element.prepend(content);
+            element.prepend(container);
           }
         }
+
+        /**
+         * If an initial tab selection has not been specified, then
+         * select the first tab by default
+         */
+        function selectDefaultTab() {
+          var tabs = tabsController.$$tabs();
+
+          if ( tabs.length && angular.isUndefined(scope.$selIndex)) {
+            tabsController.select(tabs[0]);
+          }
+        }
+
 
         /**
          * Transclude the materialTab items into the tabsHeaderItems container
@@ -189,35 +206,18 @@ function TabsDirective($compile, materialEffects) {
           });
         }
 
-        /**
-         * If an initial tab selection has not been specified, then
-         * select the first tab by default
-         */
-        function selectDefaultTab() {
-          var tabs = tabsController.$$tabs();
-
-          if ( tabs.length && angular.isUndefined(scope.$selIndex)) {
-            tabsController.select(tabs[0]);
-          }
-        }
 
         /**
          * Transclude the materialTab view/body contents into materialView containers; which
          * are stored in the tabsContent area...
          */
         function transcludeContentItems() {
-          var cache = {
-              length: 0,
-              contains: function (tab) {
-                return !angular.isUndefined(cache[tab.$id]);
-              }
-            },
-            cntr = findNode('.tabs-content', element),
-            materialViewTmpl = '<div class="material-view" ng-show="active"></div>';
+          var cntr = findNode('.tabs-content', element),
+              materialViewTmpl = '<div class="material-view" ng-show="active"></div>';
 
           scope.$watch(getTabsHash, function buildContentItems() {
             var tabs = tabsController.$$tabs(notInCache),
-              views = tabs.map(extractViews);
+              views = tabs.map(extractContent);
 
             // At least 1 tab must have valid content to build; otherwise
             // we hide/remove the tabs-content container...
@@ -228,6 +228,9 @@ function TabsDirective($compile, materialEffects) {
                 var tab = tabs[j++],
                   materialView = $compile(materialViewTmpl)(tab);
 
+                // Allow dynamic $digest() disconnect/reconnect of scope
+                enableDisconnect(tab);
+
                 if (elements) {
                   // If transcluded content is not undefined then add all nodes to the materialView
                   angular.forEach(elements, function (node) {
@@ -236,15 +239,49 @@ function TabsDirective($compile, materialEffects) {
                 }
 
                 cntr.append(materialView);
-                addToCache(cache, { scope: tab, element: materialView });
+                addToCache(cache, { tab:tab, element: materialView });
 
               });
             }
 
-            // Hide or Show the container for the materialView(s)
+            // Add class to hide or show the container for the materialView(s)
             angular.bind(cntr, cache.length ? cntr.removeClass : cntr.addClass)('ng-hide');
 
           });
+
+          /**
+           * Allow tabs to disconnect or reconnect their content from the $digest() processes
+           * when unselected or selected (respectively).
+           *
+           * @param scope Special content scope which is a direct child of a `tab` scope
+           */
+          function enableDisconnect(scope) {
+            var selectedFn = angular.bind(scope, scope.selected),
+                deselectedFn = angular.bind(scope, scope.deselected);
+
+            addDigestConnector(scope);
+
+            // 1) Tail-hook deselected()
+            scope.deselected = function() {
+              deselectedFn();
+              scope.$$postDigest(function(){
+                scope.$disconnect();
+              });
+            };
+
+             // 2) Head-hook selected()
+            scope.selected = function() {
+              scope.$reconnect();
+              selectedFn();
+            };
+
+            // Immediate disconnect all non-actives
+            if ( !scope.active ) {
+              scope.$$postDigest(function(){
+                scope.$disconnect();
+              });
+            }
+          }
 
           /**
            * Add tab scope/DOM node to the cache and configure
@@ -253,15 +290,16 @@ function TabsDirective($compile, materialEffects) {
            * @param item
            */
           function addToCache(cache, item) {
+            var scope = item.tab;
 
-            cache[ item.scope.$id ] = item;
+            cache[ scope.$id ] = item;
             cache.length = cache.length + 1;
 
             // When the tab is removed, remove its associated material-view Node...
-            item.scope.$on("$destroy", function () {
+            scope.$on("$destroy", function () {
               angular.element(item.element).remove();
 
-              delete cache[ item.scope.$id];
+              delete cache[ scope.$id];
               cache.length = cache.length - 1;
             });
           }
@@ -270,8 +308,12 @@ function TabsDirective($compile, materialEffects) {
             return tabsController.$$hash;
           }
 
-          function extractViews(tab) {
-            return hasContent(tab) ? tab.content : undefined;
+          function extractContent(tab) {
+            var content = hasContent(tab) ? tab.content : undefined;
+
+            delete tab.content; // release immediately...
+
+            return content;
           }
 
           function hasContent(tab) {
@@ -319,7 +361,7 @@ function TabsDirective($compile, materialEffects) {
  * @example
  *
  */
-function TabDirective($attrBind, $compile, $timeout) {
+function TabDirective($attrBind, $compile ) {
   var noop = angular.noop;
 
   return {
@@ -408,8 +450,6 @@ function TabDirective($attrBind, $compile, $timeout) {
      * and used by TabsController to inject into the `tabs-content` container.
      */
     function updateTabContent(scope) {
-      var cntr = angular.element(element[0].querySelector('material-tab-label'));
-
       // Check to override label attribute with the content of the <material-tab-header> node,
       // If a materialTabHeader is not specified, then the node will be considered
       // a <material-view> content element...
@@ -435,6 +475,8 @@ function TabDirective($attrBind, $compile, $timeout) {
 
       // Prepare to assign the materialTabButton content
       // Use the label attribute or fallback to TabHeader content
+
+      var cntr = angular.element(element[0].querySelector('material-tab-label'));
 
       if (angular.isDefined(scope.label)) {
         // The `label` attribute is the default source
@@ -465,8 +507,8 @@ function TabDirective($attrBind, $compile, $timeout) {
  * @private
  *
  */
-function TabsController($scope, $iterator, $attrs, $materialComponentRegistry, $timeout) {
-  var list = $iterator([], true),
+function TabsController($scope, $attrs, $materialComponentRegistry, $timeout, $$q) {
+  var list = iterator([], true),
     elements = { },
     selected = null,
     self = this;
@@ -538,6 +580,8 @@ function TabsController($scope, $iterator, $attrs, $materialComponentRegistry, $
    * @param tab
    */
   function selectTab(tab) {
+    if ( tab == selected ) return;
+
     var activate = makeActivator(true),
       deactivate = makeActivator(false);
 
@@ -666,27 +710,28 @@ function TabsController($scope, $iterator, $attrs, $materialComponentRegistry, $
    * @param active
    */
   function makeActivator(active) {
+
     return function updateState(tab) {
       if (tab && (active != tab.active)) {
         tab.active = active;
 
-//        Disable ripples when tab is active/selected
-//        tab.inkEnabled = !active;
-
-        tab.inkEnabled = true;
-
         if (active) {
           selected = tab;
+
           tab.selected();
+
         } else {
           if (selected == tab) {
             selected = null;
           }
+
           tab.deselected();
+
         }
         return tab;
       }
       return null;
+
 
     }
   }
