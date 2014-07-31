@@ -4,31 +4,31 @@
   "demos": {
     "demo1": {
       "name": "1",
-      "files": ["demos/demo1/*"]
+      "files": ["demos/demo7/*"]
     },
     "demo2": {
       "name": "2",
-      "files": ["demos/demo2/*"]
+      "files": ["demos/demo1/*"]
     },
     "demo3": {
       "name": "3",
-      "files": ["demos/demo3/*"]
+      "files": ["demos/demo2/*"]
     },
     "demo4": {
       "name": "4",
-      "files": ["demos/demo4/*"]
+      "files": ["demos/demo3/*"]
     },
     "demo5": {
       "name": "5",
-      "files": ["demos/demo5/*"]
+      "files": ["demos/demo4/*"]
     },
     "demo6": {
       "name": "6",
-      "files": ["demos/demo6/*"]
+      "files": ["demos/demo5/*"]
     },
     "demo7": {
       "name": "7",
-      "files": ["demos/demo7/*"]
+      "files": ["demos/demo6/*"]
     }
   }
 }
