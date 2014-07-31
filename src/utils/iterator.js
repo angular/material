@@ -1,24 +1,12 @@
-angular.module('material.utils')
-  .service('$iterator', IteratorFactory);
-
 /**
- * $iterator Service Class
+ * iterator is a list facade to easily support iteration and accessors
+ *
+ * @param items Array list which this iterator will enumerate
+ * @param reloop Boolean enables iterator to consider the list as an endless reloop
  */
+function iterator(items, reloop) {
 
-function IteratorFactory() {
-
-  return function (items, loop) {
-    return new List(items, loop);
-  };
-
-  /**
-   * List facade to easily support iteration and accessors
-   * @param items Array list which this iterator will enumerate
-   * @param loop Boolean enables iterator to consider the list as an endless loop
-   * @constructor
-   */
-  function List(items, loop) {
-    loop = !!loop;
+    reloop = !!reloop;
 
     var _items = items || [ ];
 
@@ -182,7 +170,7 @@ function IteratorFactory() {
       if (contains(it)) {
         var index = indexOf(it) + 1,
           found = inRange(index) ? _items[ index ] :
-            loop ? first() : null,
+            reloop ? first() : null,
           skip = found && validate && !validate(found);
 
         return skip ? next(found) : found;
@@ -201,7 +189,7 @@ function IteratorFactory() {
       if (contains(it)) {
         var index = indexOf(it) - 1,
           found = inRange(index) ? _items[ index ] :
-            loop ? last() : null,
+            reloop ? last() : null,
           skip = found && validate && !validate(found);
 
         return skip ? previous(found) : found;
@@ -225,8 +213,6 @@ function IteratorFactory() {
     function last() {
       return _items.length ? _items[_items.length - 1] : null;
     }
-
-  }
 
 }
 
