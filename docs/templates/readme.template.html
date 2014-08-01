@@ -1,3 +1,34 @@
-<div ng-non-bindable>
-  {$ doc.content | marked $}
+<div layout="vertical" layout-padding layout-fill>
+  <div flex>
+    {$ doc.content | marked $}
+  </div>
+  <div flex
+    class="demo-container"
+    ng-init="currentComponent.$selectedDemo = currentComponent.$selectedDemo || currentComponent.demos[0]"
+    layout="vertical">
+
+    <div layout="horizontal" main-axis="center" cross-axis="center">
+      <h3>Demo</h3>
+      <div flex></div>
+      <material-button
+        class="material-button-colored material-button-cornered"
+        ng-click="viewSource(currentComponent, $event)">
+        View Demo Source
+      </material-button>
+    </div>
+    <material-tabs class="demo-tabs">
+      <material-tab ng-repeat="(_,demo) in currentComponent.demos"
+               active="currentComponent.$selectedDemo === demo"
+               ng-click="currentComponent.$selectedDemo = demo" 
+               label="{{demo.name}}">
+      </material-tab>
+    </material-tabs>
+    <iframe class="demo material-whiteframe-z1"
+            name="{{demo.id}}"
+            ng-repeat="demo in currentComponent.demos" 
+            ng-show="currentComponent.$selectedDemo === demo"
+            ng-src="{{demo.indexFile.outputPath}}">
+    </iframe>
+  </div>
 </div>
+

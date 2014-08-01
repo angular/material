@@ -97,5 +97,6 @@ code.highlight {
 
 ng-view {
   margin: auto;
+  width: 100%;
   max-width: 1600px;
 }

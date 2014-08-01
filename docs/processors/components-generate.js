@@ -153,6 +153,7 @@ module.exports = {
               doc.humanName = doc.humanName;
             }
           } else if (doc.docType === 'readme') {
+            doc.content = doc.content.replace(/<code>/g, '<code ng-non-bindable>');
             doc.humanName = 'Overview';
           } else {
             doc.humanName = doc.name;

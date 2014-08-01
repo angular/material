@@ -21,9 +21,7 @@ function(COMPONENTS, $routeProvider) {
     angular.forEach(component.docs, function(doc) {
       doc.url = component.url + '/' + doc.docType + '/' + doc.name;
       $routeProvider.when(doc.url, {
-        templateUrl: doc.docType === 'readme' ?
-          'template/overview.tmpl.html' :
-          doc.outputPath,
+        templateUrl: doc.outputPath,
         resolve: {
           component: function() { return component; },
           doc: function() { return doc; }
