@@ -6,8 +6,9 @@
 angular.module('material.components.checkbox', [
   'material.animations'
 ])
-  .directive('materialCheckbox', [
-    materialCheckboxDirective
+  .directive('materialCheckbox', [ 
+    'inputDirective',
+    materialCheckboxDirective 
   ]);
 
 /**
@@ -21,14 +22,15 @@ angular.module('material.components.checkbox', [
  *
  * @param {expression=} ngModel An expression to bind this checkbox to.
  */
-function materialCheckboxDirective() {
+function materialCheckboxDirective(inputDirectives) {
+  var inputDirective = inputDirectives[0];
 
   var CHECKED_CSS = 'material-checked';
 
   return {
     restrict: 'E',
-    scope: true,
     transclude: true,
+    require: 'ngModel',
     template: '<div class="material-container">' +
                 '<material-ripple start="center" class="circle" material-checked="{{ checked }}" ></material-ripple>' +
                 '<div class="material-icon"></div>' +
@@ -41,38 +43,37 @@ function materialCheckboxDirective() {
   // Private Methods
   // **********************************************************
 
-  function link(scope, element, attr) {
-    var input = element.find('input');
-    var ngModelCtrl = angular.element(input).controller('ngModel');
-    scope.checked = false;
+  function link(scope, element, attr, ngModelCtrl) {
+    var checked = false;
 
-    if(!ngModelCtrl || input[0].type !== 'checkbox') return;
+    // Reuse the original input[type=checkbox] directive from Angular core.
+    // This is a bit hacky as we need our own event listener and own render function.
+    attr.type = 'checkbox';
+    inputDirective.link(scope, {
+      on: angular.noop,
+      0: {}
+    }, attr, [ngModelCtrl]);
 
-    // watch the ng-model $viewValue
-    scope.$watch(
-      function () { return ngModelCtrl.$viewValue; },
-      function () {
-        scope.checked = input[0].checked;
-
-        element.attr('aria-checked', scope.checked);
-        if(scope.checked) {
-          element.addClass(CHECKED_CSS);
-        } else {
-          element.removeClass(CHECKED_CSS);
-        }
-      }
-    );
-
-    // add click listener to directive element to manually
-    // check the inner input[checkbox] and set $viewValue
-    var listener = function(ev) {
-      scope.$apply(function() {
-        input[0].checked = !input[0].checked;
-        ngModelCtrl.$setViewValue(input[0].checked, ev && ev.type);
-      });
-    };
     element.on('click', listener);
+    ngModelCtrl.$render = render;
 
+    function listener(ev) {
+      scope.$apply(function() {
+        checked = !checked;
+        ngModelCtrl.$setViewValue(checked, ev && ev.type);
+        ngModelCtrl.$render();
+      });
+    }
+
+    function render() {
+      checked = ngModelCtrl.$viewValue;
+      element.attr('aria-checked', checked);
+      if(checked) {
+        element.addClass(CHECKED_CSS);
+      } else {
+        element.removeClass(CHECKED_CSS);
+      }
+    }
   }
 
 }
