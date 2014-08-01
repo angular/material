@@ -64,6 +64,8 @@ iframe.demo {
   width: 100%;
   height: 600px;
   border: none;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 
 .material-button.view-source-button {
@@ -93,3 +95,7 @@ code.highlight {
   overflow-wrap: break-word;
 }
 
+ng-view {
+  margin: auto;
+  max-width: 1600px;
+}
