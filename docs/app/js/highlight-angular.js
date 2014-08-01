@@ -1,21 +1,21 @@
 DocsApp
 
-.directive('highlight', function() {
+.directive('code', function() {
   return {
-    restrict: 'A',
-    link: function(scope, element, attrs) {
-      scope.$watch(attrs.highlight, highlight);
-      scope.$watch(attrs.highlightLanguage, highlight);
-
-      function highlight() {
-        //Always add a newline at the start - stops a weird spacing bug
-        var code = '\n' + (''+scope.$eval(attrs.highlight)).trim();
-        var language = scope.$eval(attrs.highlightLanguage);
-        if (code && language) {
-          var highlightedCode = hljs.highlight(language, code);
-          element.html(highlightedCode.value);
-        }
+    restrict: 'E',
+    link: function(scope, element, attr) {
+      if (!attr.language) return;
+      var content;
+      if (attr.content) {
+        content = scope.$eval(attr.content);
+      } else {
+        content = element.html();
       }
+      var language = attr.language;
+
+      var highlightedCode = hljs.highlight(language, content);
+      element.html(highlightedCode.value);
+      element.attr('block','');
     }
   };
 })

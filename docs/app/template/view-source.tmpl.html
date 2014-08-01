@@ -7,9 +7,8 @@
                     label="{{file.basePath}}">
       </material-tab>
     </material-tabs>
-    <pre>
-      <code highlight="data.selectedFile.content"
-            highlight-language="data.selectedFile.fileType">
+    <pre ng-repeat="file in files" ng-show="file === data.selectedFile">
+      <code content="file.content" language="{{file.fileType}}">
       </code>
     </pre>
   </div>
