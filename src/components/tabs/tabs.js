@@ -1,7 +1,7 @@
 angular.module('material.components.tabs', ['material.utils', 'material.animations', 'material.services'])
   .controller('materialTabsController', [ '$scope', TabsController])
-  .directive('materialTabs', [ '$compile', '$timeout', '$$q', 'materialEffects', TabsDirective ])
-  .directive('materialTab', [ '$attrBind', '$compile', TabDirective  ]);
+  .directive('materialTabs', [ '$compile', '$timeout', 'materialEffects', TabsDirective ])
+  .directive('materialTab', [ '$attrBind', TabDirective  ]);
 
 /**
  * @ngdoc directive
@@ -34,7 +34,7 @@ angular.module('material.components.tabs', ['material.utils', 'material.animatio
  *
  */
 
-function TabsDirective($compile, $timeout, $$q, materialEffects) {
+function TabsDirective($compile, $timeout, materialEffects) {
 
   return {
     restrict: 'E',
@@ -377,7 +377,7 @@ function TabsDirective($compile, $timeout, $$q, materialEffects) {
  * @example
  *
  */
-function TabDirective($attrBind, $compile ) {
+function TabDirective( $attrBind ) {
   var noop = angular.noop;
 
   return {
@@ -535,7 +535,7 @@ function TabDirective($attrBind, $compile ) {
  * @private
  *
  */
-function TabsController($scope, $attrs, $materialComponentRegistry, $timeout, $$q) {
+function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
   var list = iterator([], true),
     elements = { },
     selected = null,
