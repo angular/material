@@ -10,8 +10,11 @@ material-ink-bar {
 canvas.material-ink-ripple {
   pointer-events: none;
   position: absolute;
-  color: #f0f495;
   top: 0;
   left: 0;
 }
 
+
+material-tabs .material-ink-ripple {
+  color: #f0f495;
+}
