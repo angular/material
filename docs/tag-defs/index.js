@@ -1,6 +1,6 @@
 module.exports = [
   {
-    name: 'module',
+    name: 'order',
     defaultFn: function(doc) {
       return doc.name;
     }

@@ -26,6 +26,8 @@ module.exports = function(config) {
     path.resolve(packagePath, 'templates/ngdoc/lib'),
   ]);
 
+  config.append('processing.tagDefinitions', require('./tag-defs'));
+
   config.set('processing.componentsGenerate', {
     componentOutputFolder: 'generated/${component.id}',
     docSubFolder: '${doc.docType}/${doc.id || doc.name}'

@@ -7,10 +7,12 @@
                     label="{{file.basePath}}">
       </material-tab>
     </material-tabs>
-    <pre ng-repeat="file in files" ng-show="file === data.selectedFile">
-      <code content="file.content" language="{{file.fileType}}">
-      </code>
-    </pre>
+    <div ng-repeat="file in files">
+      <hljs code="file.content" 
+        lang="{{file.fileType}}"
+        ng-show="file === data.selectedFile">
+      </hljs>
+    </div>
   </div>
   <div class="dialog-actions" layout="horizontal" main-axis="end">
     <button class="material-button material-button-raised" ng-click="$hideDialog()">

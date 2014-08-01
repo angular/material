@@ -48,9 +48,16 @@ module.exports = {
             }
           });
 
-        component.docs = component.docs.sort(function(doc) {
-          return doc.docType === 'readme' ? -1 : 1;
-        });
+        component.docs = component.docs
+          .sort(function(a, b) {
+            var orderA = a.hasOwnProperty('order') ? a.order : 999;
+            var orderB = b.hasOwnProperty('order') ? b.order : 999;
+            return orderA > orderB ? -1 : 1;
+          })
+          .sort(function(doc) {
+            //Readme first
+            return doc.docType === 'readme' ? -1 : 1;
+          });
 
         component.template = 'component.template.html';
         component.outputPath = path.join(
@@ -130,7 +137,8 @@ module.exports = {
             'element',
             'priority',
             'usage',
-            'returns'
+            'returns',
+            'order',
           ]);
         })
         .each(function(doc) {

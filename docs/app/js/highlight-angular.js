@@ -1,38 +1,32 @@
 DocsApp
 
-.directive('code', function() {
+.directive('hljs', ['$compile', function($compile) {
   return {
     restrict: 'E',
-    link: function(scope, element, attr) {
-      if (!attr.language) return;
-      var content;
-      if (attr.content) {
-        content = scope.$eval(attr.content);
-      } else {
-        content = element.html();
+    compile: function(element, attr) {
+      var code;
+      //No attribute? code is the content
+      if (!attr.code) {
+        code = element.html();
+        element.empty();
       }
-      var language = attr.language;
 
-      var highlightedCode = hljs.highlight(language, content);
-      element.html(highlightedCode.value);
-      element.addClass('highlight');
+      return function(scope, element, attr) {
+        var contentParent = angular.element('<pre><code class="highlight" ng-non-bindable></pre></code>');
+        var codeElement = contentParent.find('code');
+
+        // Attribute? code is the evaluation
+        if (attr.code) {
+          code = scope.$eval(attr.code);
+        }
+        var highlightedCode = hljs.highlight(attr.language || attr.lang, code);
+        codeElement.append(highlightedCode.value).addClass('highlight');
+
+        element.append(contentParent);
+      };
     }
   };
-})
-
-.directive('code', function() {
-  return {
-    restrict: 'E',
-    link: function(scope, element, attr) {
-      if (!attr.language) return;
-
-      var language = attr.language;
-      var highlightedCode = hljs.highlight(language, element.html());
-      element.html(highlightedCode.value);
-      element.attr('block','');
-    }
-  };
-})
+}])
 
 .directive('codeView', function() {
   return {
