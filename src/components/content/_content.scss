@@ -16,6 +16,10 @@ material-content,
   &[scroll-xy] {
   }
 
+  &.material-content-padding {
+    padding: 20px;
+  }
+
   > * {
     position: static;
     height: 100%;

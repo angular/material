@@ -28,7 +28,7 @@ module.exports = function(config) {
 
   config.set('processing.componentsGenerate', {
     componentOutputFolder: 'generated/${component.id}',
-    docSubFolder: '${doc.docType}/${doc.name}'
+    docSubFolder: '${doc.docType}/${doc.id || doc.name}'
   });
 
   config.set('basePath', projectPath);
