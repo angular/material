@@ -350,7 +350,6 @@ function TabsDirective($compile, $timeout, materialEffects) {
 }
 
 /**
- /**
  * @ngdoc directive
  * @name materialTab
  * @module material.components.tabs
@@ -359,6 +358,19 @@ function TabsDirective($compile, $timeout, materialEffects) {
  *
  * @description
  * materialTab is the inner directive to specify the tab label and optional tab view content
+ *
+ * @usage
+ * <code language="js">
+ * var a = 1;
+ * </code>
+ * <code language="html">
+ * <div class="hello">abc</div>
+ * </code>
+ * <code language="css">
+ * .style {
+ *   display: block;
+ * }
+ * </code>
  *
  * @param {string=} label Optional attribute to specify a simple string as the tab label
  * @param {boolean=}  active Flag indicates if the tab is currently selected; normally the <material-tabs selected=""> attribute is used instead.

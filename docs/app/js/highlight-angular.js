@@ -20,6 +20,20 @@ DocsApp
   };
 })
 
+.directive('code', function() {
+  return {
+    restrict: 'E',
+    link: function(scope, element, attr) {
+      if (!attr.language) return;
+
+      var language = attr.language;
+      var highlightedCode = hljs.highlight(language, element.html());
+      element.html(highlightedCode.value);
+      element.attr('block','');
+    }
+  };
+})
+
 .directive('codeView', function() {
   return {
     restrict: 'C',
