@@ -38,6 +38,10 @@ function materialRadioButtonDirective() {
   };
 
   function link(scope, element, attr, rgCtrl) {
+    // Make the element focusable
+    if (element[0].tabIndex < 0) {
+      element[0].tabIndex = 0;
+    }
     var lastChecked = undefined;
 
     rgCtrl.add(render);
@@ -45,7 +49,7 @@ function materialRadioButtonDirective() {
       rgCtrl.remove(render);
     });
 
-    element.on('click', listener);
+    element.on('click keypress', listener);
     attr.$observe('value', render);
 
     function listener(ev) {
