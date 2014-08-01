@@ -1,5 +1,6 @@
 {% macro typeList(types) -%}
-{% for typeName in types %}<span class="{$ typeName | typeClass $}">{$ typeName | escape $}</span>{% endfor %}
+{%- set sep = joiner('|') %}
+{% for typeName in types %}<code class="{$ typeName | typeClass $}">{$ typeName | escape $}</code>{% endfor %}
 {%- endmacro -%}
 
 {%- macro paramTable(params) %}
