@@ -6,12 +6,15 @@
     ng-init="currentComponent.$selectedDemo = currentComponent.$selectedDemo || currentComponent.demos[0]"
     layout="vertical">
 
-    <h3>Demo</h3>
-    <material-button
-      class="material-button-colored material-button-cornered"
-      ng-click="viewSource(currentComponent, $event)">
-      View Demo Source
-    </material-button>
+    <div layout="horizontal" main-axis="center" cross-axis="center">
+      <h3>Demo</h3>
+      <div flex></div>
+      <material-button
+        class="material-button-colored material-button-cornered"
+        ng-click="viewSource(currentComponent, $event)">
+        View Demo Source
+      </material-button>
+    </div>
     <material-tabs class="demo-tabs">
       <material-tab ng-repeat="(_,demo) in currentComponent.demos"
                active="currentComponent.$selectedDemo === demo"
