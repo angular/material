@@ -80,4 +80,9 @@ material-checkbox {
     pointer-events: none;
   }
 
+  &:focus {
+    // TODO: create a nicer/consistent syle!
+    outline: dashed red;
+  }
+
 }

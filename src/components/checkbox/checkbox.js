@@ -39,6 +39,10 @@ function materialCheckboxDirective(inputDirectives) {
   // **********************************************************
 
   function link(scope, element, attr, ngModelCtrl) {
+    // Make the element focusable
+    if (element[0].tabIndex < 0) {
+      element[0].tabIndex = 0;
+    }
     var checked = false;
 
     // Reuse the original input[type=checkbox] directive from Angular core.
@@ -49,7 +53,7 @@ function materialCheckboxDirective(inputDirectives) {
       0: {}
     }, attr, [ngModelCtrl]);
 
-    element.on('click', listener);
+    element.on('click keypress', listener);
     ngModelCtrl.$render = render;
 
     function listener(ev) {
