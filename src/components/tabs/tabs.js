@@ -691,7 +691,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
   function removeTab(tab) {
     if (list.contains(tab)) {
 
-      selectTab(selected = list.next(tab, isEnabled));
+      selectTab( list.next(tab, isEnabled) );
       list.remove(tab);
 
       // another tab was removed, make sure to update ink bar
@@ -710,7 +710,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
    * @returns {*} Tab
    */
   function selectNext() {
-    return selectTab(selected = list.next(selected, isEnabled));
+    return selectTab(list.next(selected, isEnabled));
   }
 
   /**
@@ -718,7 +718,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
    * @returns {*} Tab
    */
   function selectPrevious() {
-    return selectTab(selected = list.previous(selected, isEnabled));
+    return selectTab(list.previous(selected, isEnabled));
   }
 
   /**
