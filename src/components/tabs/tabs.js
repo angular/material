@@ -223,17 +223,20 @@ function TabsDirective($compile, $timeout, $$q, materialEffects) {
             // we hide/remove the tabs-content container...
 
             if (views.some(notEmpty)) {
-              angular.forEach(views, function (elements, j) {
+              angular.forEach(views, function (content, j) {
 
                 var tab = tabs[j++],
                   materialView = $compile(materialViewTmpl)(tab);
 
-                // Allow dynamic $digest() disconnect/reconnect of scope
-                enableDisconnect(tab);
+                // Allow dynamic $digest() disconnect/reconnect of tab content's scope
 
-                if (elements) {
-                  // If transcluded content is not undefined then add all nodes to the materialView
-                  angular.forEach(elements, function (node) {
+                enableDisconnect(tab, content.scope);
+
+                // Do we have content DOM nodes ?
+                // If transcluded content is not undefined then add all nodes to the materialView
+
+                if (content.nodes) {
+                  angular.forEach(content.nodes, function (node) {
                     materialView.append(node);
                   });
                 }
@@ -253,32 +256,34 @@ function TabsDirective($compile, $timeout, $$q, materialEffects) {
            * Allow tabs to disconnect or reconnect their content from the $digest() processes
            * when unselected or selected (respectively).
            *
-           * @param scope Special content scope which is a direct child of a `tab` scope
+           * @param content Special content scope which is a direct child of a `tab` scope
            */
-          function enableDisconnect(scope) {
-            var selectedFn = angular.bind(scope, scope.selected),
-                deselectedFn = angular.bind(scope, scope.deselected);
+          function enableDisconnect(tab,  content) {
+            if ( !content ) return;
 
-            addDigestConnector(scope);
+            var selectedFn = angular.bind(tab, tab.selected),
+                deselectedFn = angular.bind(tab, tab.deselected);
+
+            addDigestConnector(content);
 
             // 1) Tail-hook deselected()
-            scope.deselected = function() {
+            tab.deselected = function() {
               deselectedFn();
-              scope.$$postDigest(function(){
-                scope.$disconnect();
+              tab.$$postDigest(function(){
+                content.$disconnect();
               });
             };
 
              // 2) Head-hook selected()
-            scope.selected = function() {
-              scope.$reconnect();
+            tab.selected = function() {
+              content.$reconnect();
               selectedFn();
             };
 
             // Immediate disconnect all non-actives
-            if ( !scope.active ) {
-              scope.$$postDigest(function(){
-                scope.$disconnect();
+            if ( !tab.active ) {
+              tab.$$postDigest(function(){
+                content.$disconnect();
               });
             }
           }
@@ -308,12 +313,23 @@ function TabsDirective($compile, $timeout, $$q, materialEffects) {
             return tabsController.$$hash;
           }
 
+          /**
+           * Special function to extract transient data regarding transcluded
+           * tab content. Data includes dynamic lookup of bound scope for the transcluded content.
+           *
+           * @see TabDirective::updateTabContent()
+           *
+           * @param tab
+           * @returns {{nodes: *, scope: *}}
+           */
           function extractContent(tab) {
             var content = hasContent(tab) ? tab.content : undefined;
+            var scope   = (content && content.length) ? angular.element(content[0]).scope() : null;
 
-            delete tab.content; // release immediately...
+            // release immediately...
+            delete tab.content;
 
-            return content;
+            return { nodes:content, scope:scope };
           }
 
           function hasContent(tab) {
@@ -450,23 +466,33 @@ function TabDirective($attrBind, $compile ) {
      * and used by TabsController to inject into the `tabs-content` container.
      */
     function updateTabContent(scope) {
+      var tab = scope;
+
       // Check to override label attribute with the content of the <material-tab-header> node,
       // If a materialTabHeader is not specified, then the node will be considered
       // a <material-view> content element...
+      $transclude(function ( contents ) {
 
-      $transclude(function (contents) {
-        scope.content = [ ];
+        // Transient references...
+        tab.content = [ ];
 
         angular.forEach(contents, function (node) {
+
           if (!isNodeEmpty(node)) {
             if (isNodeType(node, 'material-tab-label')) {
               // Simulate use of `label` attribute
-              scope.label = node.childNodes;
+              tab.label = node.childNodes;
 
             } else {
 
+              // Transient references...
+              //
               // Attach to scope for future transclusion into materialView(s)
-              scope.content.push(node);
+              // We need the bound scope for the content elements; which is NOT
+              // the scope of tab or material-view container...
+
+              tab.content.push(node);
+
             }
           }
         });
@@ -482,6 +508,8 @@ function TabDirective($attrBind, $compile ) {
         // The `label` attribute is the default source
 
         cntr.append(scope.label);
+
+        delete scope.label;
 
       } else {
 

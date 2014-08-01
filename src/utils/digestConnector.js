@@ -55,11 +55,10 @@ function addDigestConnector (scope) {
     } else {
       parent.$$childHead = parent.$$childTail = child;
     }
-
   };
 
   scope.$disconnect = angular.bind( scope, disconnect );
-  scope.$reconnect  = angular.bind( scope,  reconnect );
+  scope.$reconnect  = angular.bind( scope, reconnect );
 
   return scope;
 }
