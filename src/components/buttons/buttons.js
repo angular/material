@@ -3,6 +3,6 @@
  * @name material.components.button
  *
  * @description
- * Button components.
+ * Button is CSS component.
  */
 angular.module('material.components.button', []);

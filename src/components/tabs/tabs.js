@@ -7,26 +7,53 @@
  */
 angular.module('material.components.tabs', ['material.utils', 'material.animations', 'material.services'])
   .controller('materialTabsController', [ '$scope', '$attrs', '$materialComponentRegistry', '$timeout', TabsController ])
-  .directive('materialTabs', [ '$compile', '$timeout', 'materialEffects', TabsDirective ])
+  .directive('materialTabs', [ '$compile', '$timeout', '$materialEffects', TabsDirective ])
   .directive('materialTab', [ '$attrBind', TabDirective  ]);
 
 /**
  * @ngdoc directive
  * @name materialTabs
  * @module material.components.tabs
+ * @order 0
  *
  * @restrict E
  *
  * @description
- * materialTabs is the outer directive and container for the tabs functionality
+ * The `<material-tabs>` tag identifies the outer directive and serves as the container for the tabs functionality
  *
  * @param {integer=} selected Index of the active/selected tab
- * @param {boolean}  noink Flag indicates use of RippleInk effects
- * @param {boolean}  nobar Flag indicates use of InkBar effects
- * @param {boolean}  nostretch Flag indicates use of elastic animation for inkBar width and position changes
- * @param {string}   align-tabs Attribute to indicate position of tab buttons: bottom or top; default is `top`
+ * @param {boolean=} noink Flag indicates use of ripple ink effects
+ * @param {boolean=} nobar Flag indicates use of ink bar effects
+ * @param {boolean=} nostretch Flag indicates use of elastic animation for inkBar width and position changes
+ * @param {string=}  align-tabs Attribute to indicate position of tab buttons: bottom or top; default is `top`
+ *
+ * @usage
+ * <hljs lang="html">
+ * <material-tabs selected="selectedIndex" >
+ *   <img ng-src="/img/angular.png" class="centered">
+ *
+ *   <material-tab
+ *      ng-repeat="tab in tabs | orderBy:predicate:reversed"
+ *      on-select="onTabSelected(tab)"
+ *      on-deselect="announceDeselected(tab)"
+ *      disabled="tab.disabled" >
+ *
+ *       <material-tab-label>
+ *           {{tab.title}}
+ *           <img src="/img/removeTab.png"
+ *                ng-click="removeTab(tab)"
+ *                class="delete" >
+ *       </material-tab-label>
+ *
+ *       {{tab.content}}
+ *
+ *   </material-tab>
+ *
+ * </material-tabs>
+ * </hljs>
+ *
  */
-function TabsDirective($compile, $timeout, materialEffects) {
+function TabsDirective($compile, $timeout, $materialEffects) {
 
   return {
     restrict: 'E',
@@ -142,7 +169,7 @@ function TabsDirective($compile, $timeout, materialEffects) {
               if( !!skipAnimation ) {
                 inkBar.css(styles);
               } else {
-                materialEffects.inkBar(inkBar, styles);
+                $materialEffects.inkBar(inkBar, styles);
               }
             }
 
@@ -353,30 +380,27 @@ function TabsDirective($compile, $timeout, materialEffects) {
  * @ngdoc directive
  * @name materialTab
  * @module material.components.tabs
+ * @order 1
  *
  * @restrict E
  *
  * @description
- * materialTab is the inner directive to specify the tab label and optional tab view content
- *
- * @usage
- * <code language="js">
- * var a = 1;
- * </code>
- * <code language="html">
- * <div class="hello">abc</div>
- * </code>
- * <code language="css">
- * .style {
- *   display: block;
- * }
- * </code>
+ * `<material-tab>` is the inner directive used to specify each tab label and optional view content
  *
  * @param {string=} label Optional attribute to specify a simple string as the tab label
- * @param {boolean=}  active Flag indicates if the tab is currently selected; normally the <material-tabs selected=""> attribute is used instead.
+ * @param {boolean=}  active Flag indicates if the tab is currently selected; normally the `<material-tabs selected="">`; attribute is used instead.
  * @param {boolean=}  disabled Flag indicates if the tab is disabled: not selectable with no ink effects
- * @param {expression} deselected Expression to be evaluated after the tab has been de-selected.
- * @param {expression} selected Expression to be evaluated after the tab has been selected.
+ * @param {expression=} deselected Expression to be evaluated after the tab has been de-selected.
+ * @param {expression=} selected Expression to be evaluated after the tab has been selected.
+ *
+ *
+ * @usage
+ * <hljs lang="html">
+ *     <material-tab label="" disabled="" selected="" deselected="" >
+ *       <h3>My Tab content</h3>
+ *     </material-tab>
+ * </hljs>
+ *
  */
 function TabDirective( $attrBind ) {
   var noop = angular.noop;
@@ -532,7 +556,9 @@ function TabDirective( $attrBind ) {
  * @ngdoc object
  * @name materialTabsController
  * @module material.components.tabs
- * @description the controller
+ * @description Controller used within `<material-tabs>` to manage tab selection and iteration
+ *
+ * @private
  */
 function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
   var list = iterator([], true),

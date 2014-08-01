@@ -55,7 +55,7 @@ angular.module('material.components.dialog', ['material.services.popup'])
     '$materialPopup',
     '$rootElement',
     '$materialBackdrop',
-    'materialEffects',
+    '$materialEffects',
     MaterialDialogService
   ]);
 
@@ -65,7 +65,7 @@ function MaterialDialogDirective() {
   };
 }
 
-function MaterialDialogService($timeout, $materialPopup, $rootElement, $materialBackdrop, materialEffects) {
+function MaterialDialogService($timeout, $materialPopup, $rootElement, $materialBackdrop, $materialEffects) {
   var recentDialog;
 
   return showDialog;
@@ -119,7 +119,7 @@ function MaterialDialogService($timeout, $materialPopup, $rootElement, $material
       var popInTarget = options.targetEvent && options.targetEvent.target && 
         angular.element(options.targetEvent.target);
 
-      materialEffects.popIn(
+      $materialEffects.popIn(
         dialog.element,
         options.appendTo,
         popInTarget
@@ -136,7 +136,7 @@ function MaterialDialogService($timeout, $materialPopup, $rootElement, $material
         if (options.escapeToClose) {
           $rootElement.off('keyup', onRootElementKeyup);
         }
-        materialEffects.popOut(dialog.element, $rootElement);
+        $materialEffects.popOut(dialog.element, $rootElement);
 
         // TODO(ajoslin): use element.animate() and ngAnimateStyler instead of
         // this $timeout.

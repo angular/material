@@ -1,16 +1,34 @@
+/**
+ * @ngdoc module
+ * @name material.components.animate
+ * @description
+ *
+ * Ink and Popup Effects
+ */
 angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 'ngAnimate', 'material.services'])
-       .service('materialEffects', [ '$animateSequence', '$ripple', '$rootElement', '$position', '$$rAF', MaterialEffects])
-       .directive('materialRipple', ['materialEffects', '$interpolate', '$throttle', MaterialRippleDirective]);
+       .service('$materialEffects', [ '$animateSequence', '$ripple', '$rootElement', '$position', '$$rAF', MaterialEffects])
+       .directive('materialRipple', ['$materialEffects', '$interpolate', '$throttle', MaterialRippleDirective]);
 
 /**
- * This service provides animation features for various Material Design effects:
+ * @ngdoc service
+ * @name $materialEffects
+ * @module material.components.animate
  *
- *  1) ink stretchBars,
- *  2) ink ripples,
- *  3) popIn animations
- *  4) popOuts animations
+ * @description
+ * The `$materialEffects` service provides a simple API for various
+ * Material Design effects:
  *
- * @constructor
+ * 1) to animate ink bars and ripple effects, and
+ * 2) to perform popup open/close effects on any DOM element.
+ *
+ * @returns A `$materialEffects` object with the following properties:
+ * - `{function(canvas,options)}` `inkRipple` - Renders ripple ink
+ * waves on the specified canvas
+ * - `{function(element,styles,duration)}` `inkBar` - starts ink bar
+ * animation on specified DOM element
+ * - `{function(element,parentElement,clickElement)}` `popIn` - animated show of element overlayed on parent element
+ * - `{function(element,parentElement)}` `popOut` - animated close of popup overlay
+ *
  */
 function MaterialEffects($animateSequence, $ripple, $rootElement, $position, $$rAF) {
 
@@ -131,9 +149,29 @@ function MaterialEffects($animateSequence, $ripple, $rootElement, $position, $$r
 }
 
 /**
- *  <material-ripple /> Directive
+ * @ngdoc directive
+ * @name materialRipple
+ * @module material.components.animate
+ *
+ * @restrict E
+ *
+ * @description
+ * The `<material-ripple/>` directive implements the Material Design ripple ink effects within a specified
+ * parent container.
+ *
+ * @param {string=} start Indicates where the wave ripples should originate in the parent container area.
+ * 'center' will force the ripples to always originate in the horizontal and vertical.
+ * @param {number=} initial-opacity Value indicates the initial opacity of each ripple wave
+ * @param {number=} opacity-decay-velocity Value indicates the speed at which each wave will fade out
+ *
+ * @usage
+ * ```
+ * <hljs lang="html">
+ *   <material-ripple initial-opacity="0.9" opacity-decay-velocity="0.89"></material-ripple>
+ * </hljs>
+ * ```
  */
-function MaterialRippleDirective(materialEffects, $interpolate, $throttle) {
+function MaterialRippleDirective($materialEffects, $interpolate, $throttle) {
   return {
     restrict: 'E',
     compile: compileWithCanvas
@@ -167,7 +205,7 @@ function MaterialRippleDirective(materialEffects, $interpolate, $throttle) {
           parent = element.parent(),
           makeRipple = $throttle({
             start : function() {
-              ripple = ripple || materialEffects.inkRipple( element[0], options );
+              ripple = ripple || $materialEffects.inkRipple( element[0], options );
               watchMouse = watchMouse || buildMouseWatcher(parent, makeRipple);
 
               // Ripples start with left mouseDowns (or taps)

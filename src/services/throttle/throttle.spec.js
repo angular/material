@@ -390,14 +390,14 @@ describe('ngThrottleSpec', function() {
       return el;
     }
 
-    it('should start, animate, and end.', inject(function($compile, $rootScope, materialEffects) {
+    it('should start, animate, and end.', inject(function($compile, $rootScope, $materialEffects) {
 
       var cntr = setup(),
           canvas = cntr.find('canvas'),
           rippler, makeRipple, throttled = 0,
           config = {
             start : function() {
-              rippler = rippler || materialEffects.inkRipple( canvas[0] );
+              rippler = rippler || $materialEffects.inkRipple( canvas[0] );
               cntr.on('mousedown', makeRipple);
               started = true;
             },

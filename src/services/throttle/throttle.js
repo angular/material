@@ -5,7 +5,7 @@ angular.module('material.services.throttle', [ 'ng' ])
    *       parent = element.parent(),
    *       makeRipple = $throttle({
    *         start : function() {
-   *           ripple = ripple || materialEffects.inkRipple( element[0], options );
+   *           ripple = ripple || $materialEffects.inkRipple( element[0], options );
    *           watchMouse = watchMouse || buildMouseWatcher(parent, makeRipple);
    *           // Ripples start with mouseDow (or taps)
    *           parent.on('mousedown', makeRipple);
