@@ -1,5 +1,5 @@
 angular.module('material.components.tabs', ['material.utils', 'material.animations', 'material.services'])
-  .controller('materialTabsController', [ '$scope', TabsController])
+  .controller('materialTabsController', [ '$scope', '$attrs', '$materialComponentRegistry', '$timeout', TabsController ])
   .directive('materialTabs', [ '$compile', '$timeout', 'materialEffects', TabsDirective ])
   .directive('materialTab', [ '$attrBind', TabDirective  ]);
 
@@ -539,9 +539,10 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
   var list = iterator([], true),
     elements = { },
     selected = null,
+    componentID = "tabs" + $scope.$id,
     self = this;
 
-  $materialComponentRegistry.register(self, $attrs.componentId || "tabs");
+  $materialComponentRegistry.register( self, $attrs.componentId || componentID );
 
   // Methods used by <material-tab> and children
 
