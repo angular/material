@@ -3,7 +3,7 @@ angular.module( 'app', [ 'ngMaterial' ] )
 .controller('AppCtrl', function( $scope, $timeout ) {
   var scrollID;
 
-  $scope.activeQuote = 1;
+  $scope.activeQuote = 0;
   $scope.enableAutoScroll = suspendAutoScroll;
 
   autoScrollTabs();

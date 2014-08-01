@@ -105,6 +105,10 @@ p {
     margin: 0 0 10.5px;
 }
 
+material-tabs {
+    margin-left: 32px;
+}
+
 material-tab {
     padding: 10.5px 21px;
     margin: 0 0 21px;
