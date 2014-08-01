@@ -33,75 +33,47 @@ function materialRadioButtonDirective() {
   return {
     restrict: 'E',
     require: '^materialRadioGroup',
-    scope: true,
     transclude: true,
     template: '<div class="material-container">' +
                 '<material-ripple start="center" class="circle"></material-ripple>' +
                 '<div class="material-off"></div>' +
                 '<div class="material-on"></div>' +
               '</div>' +
-              '<div ng-transclude class="material-label"></div>',
+              '<div ng-transclude class="material-label" tab-index="0"></div>',
     link: link
   };
 
-  // **********************************************************
-  // Private Methods
-  // **********************************************************
-
   function link(scope, element, attr, rgCtrl) {
-    var input = element.find('input');
-    var ngModelCtrl = angular.element(input).controller('ngModel');
-    scope.checked = false;
+    var lastChecked;
 
-    if(!ngModelCtrl || input[0].type !== 'radio') return;
+    rgCtrl.add(render);
+    element.on('$destroy', function() {
+      rgCtrl.remove(render);
+    });
 
-    // the radio group controller decides if this
-    // radio button should be checked or not
-    scope.check = function(val) {
-      // update the directive's DOM/design
-      scope.checked = !!val;
-      element.attr('aria-checked', scope.checked);
-      if(scope.checked) {
+    element.on('click', listener);
+    attr.$observe('value', render);
+
+    function listener(ev) {
+      scope.$apply(function() {
+        rgCtrl.setViewValue(attr.value, ev && ev.type);
+      });
+    }
+
+    function render() {
+      var checked = (rgCtrl.getViewValue() === attr.value);
+      if (checked === lastChecked) {
+        return;
+      }
+      lastChecked = checked;
+      element.attr('aria-checked', checked);
+      if (checked) {
         element.addClass(CHECKED_CSS);
       } else {
         element.removeClass(CHECKED_CSS);
       }
-    };
-
-    // watch the ng-model $viewValue
-    scope.$watch(
-      function () { return ngModelCtrl.$viewValue; },
-      function (val) {
-        // tell the radio group controller that this
-        // radio button should be the checked one
-        if(input[0].checked) {
-          rgCtrl.check(scope);
-        }
-      }
-    );
-
-    // add click listener to directive element to manually
-    // check the inner input[radio] and set $viewValue
-    var listener = function(ev) {
-      scope.$apply(function() {
-        ngModelCtrl.$setViewValue(input.val(), ev && ev.type);
-        input[0].checked = true;
-      });
-    };
-    element.on('click', listener);
-
-    // register this radio button in its radio group
-    rgCtrl.add(scope);
-
-    // on destroy, remove this radio button from its radio group
-    scope.$on('$destroy', function(){
-      if(input[0].checked) {
-        ngModelCtrl.$setViewValue(null);
-      }
-      rgCtrl.remove(scope);
-    });
+    }
   }
-
 }
 
 
@@ -115,45 +87,55 @@ function materialRadioButtonDirective() {
  * radioGroup directive!
  */
 function materialRadioGroupDirective() {
+  Controller.prototype = createControllerProto();
 
   return {
     restrict: 'E',
-    controller: controller
+    controller: Controller,
+    require: ['materialRadioGroup', '?ngModel'],
+    link: link
   };
 
-  function controller($scope) {
-    var radioButtons = [];
-    var checkedRadioButton = null;
-
-    this.add = addRadioButton;
-    this.remove = removeRadioButton;
-    this.check = checkRadioButton;
-
-    function addRadioButton(rbScope) {
-      return radioButtons.push(rbScope);
-    }
-
-    function removeRadioButton(rbScope) {
-      for(var i=0; i<radioButtons.length; i++) {
-        if(radioButtons[i] === rbScope) {
-          if(rbScope === checkedRadioButton) {
-            checkedRadioButton = null;
-          }
-          return radioButtons.splice(i, 1);
-        }
-      }
-    }
-
-    function checkRadioButton(rbScope) {
-      if(checkedRadioButton === rbScope) return;
-
-      checkedRadioButton = rbScope;
-
-      angular.forEach(radioButtons, function(rb) {
-        rb.check(rb === checkedRadioButton);
-      });
-    }
-
+  function link(scope, element, attr, ctrls) {
+    var rgCtrl = ctrls[0],
+      ngModelCtrl = ctrls[1] || {
+        $setViewValue: angular.noop
+      };
+    rgCtrl.init(ngModelCtrl);
   }
 
+  function Controller() {
+    this._radioButtonRenderFns = [];
+  }
+
+  function createControllerProto() {
+    return {
+      init: function(ngModelCtrl) {
+        this._ngModelCtrl = ngModelCtrl;
+        this._ngModelCtrl.$render = angular.bind(this, this.render);
+      },
+      add: function(rbRender) {
+        this._radioButtonRenderFns.push(rbRender);
+      },
+      remove: function(rbRender) {
+        var index = this._radioButtonRenderFns.indexOf(rbRender);
+        if (index !== -1) {
+          this._radioButtonRenderFns.splice(index, 1);
+        }
+      },
+      render: function() {
+        this._radioButtonRenderFns.forEach(function(rbRender) {
+          rbRender();
+        });
+      },
+      setViewValue: function(value, eventType) {
+        this._ngModelCtrl.$setViewValue(value, eventType);
+        // update the other checkboxes as well
+        this.render();
+      },
+      getViewValue: function() {
+        return this._ngModelCtrl.$viewValue;
+      }
+    };
+  }
 }
