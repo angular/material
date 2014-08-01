@@ -15,7 +15,7 @@ DocsApp
 
       var highlightedCode = hljs.highlight(language, content);
       element.html(highlightedCode.value);
-      element.attr('block','');
+      element.addClass('highlight');
     }
   };
 })
@@ -46,6 +46,7 @@ DocsApp
       highlightedCode.value = highlightedCode.value.replace(/=<span class="hljs-value">""<\/span>/gi, '');
 
       element.prepend('<pre><code>' + highlightedCode.value + '</code></pre>');
+      element.find('code').addClass('highlight');
     }
   };
 })
@@ -61,7 +62,6 @@ DocsApp
            <a class="material-button material-button-raised material-button-colored" href="view-source:' + iFrame.src + '" target="_blank">View Source</a></p>'
         );
         element.append(links);
-        console.log(iFrame.src)
       }
     }
   };

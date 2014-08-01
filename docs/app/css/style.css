@@ -74,3 +74,9 @@ material-dialog.view-source-dialog {
   width: 80%;
   height: 80%;
 }
+
+code:not(.highlight) {
+  background: #f6f6f6;
+  color: #4285f4;
+}
+
