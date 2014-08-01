@@ -147,6 +147,11 @@ module.exports = {
             doc.humanName = doc.name.replace(/([A-Z])/g, function($1) {
               return '-'+$1.toLowerCase();
             }); 
+            if (doc.restrict.element) {
+              doc.humanName = '<' + doc.humanName + '>';
+            } else if (doc.restrict.attribute) {
+              doc.humanName = doc.humanName;
+            }
           } else if (doc.docType === 'readme') {
             doc.humanName = 'Overview';
           } else {

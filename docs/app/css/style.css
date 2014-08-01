@@ -75,6 +75,10 @@ material-dialog.view-source-dialog {
   height: 80%;
 }
 
+pre, code {
+  margin: 0;
+  padding: 0;
+}
 code {
   background: #f6f6f6;
   font-size: 16px;
@@ -86,5 +90,6 @@ code:not(.highlight) {
 }
 code.highlight {
   display: block;
+  overflow-wrap: break-word;
 }
 

@@ -12,14 +12,14 @@ DocsApp
       }
 
       return function(scope, element, attr) {
-        var contentParent = angular.element('<pre><code class="highlight" ng-non-bindable></pre></code>');
+        var contentParent = angular.element('<pre><code class="highlight" ng-non-bindable></code></pre>');
         var codeElement = contentParent.find('code');
 
         // Attribute? code is the evaluation
         if (attr.code) {
           code = scope.$eval(attr.code);
         }
-        var highlightedCode = hljs.highlight(attr.language || attr.lang, code);
+        var highlightedCode = hljs.highlight(attr.language || attr.lang, code.trim());
         codeElement.append(highlightedCode.value).addClass('highlight');
 
         element.append(contentParent);
