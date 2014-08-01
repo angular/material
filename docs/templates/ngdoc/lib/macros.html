@@ -1,5 +1,5 @@
 {% macro typeList(types) -%}
-{% for typeName in types %}<a href="" class="{$ typeName | typeClass $}">{$ typeName | escape $}</a>{% endfor %}
+{% for typeName in types %}<span class="{$ typeName | typeClass $}">{$ typeName | escape $}</span>{% endfor %}
 {%- endmacro -%}
 
 {%- macro paramTable(params) %}
@@ -39,10 +39,21 @@
   {%- if type.optional %}]{% endif -%}
 {% endmacro -%}
 
+{%- macro functionOptionSyntax(fn) %}
+  {%- set sep = joiner(', ') -%}
+  <code>{$ fn.name $}({</code>
+    {%- for param in fn.params %}
+    <br/>&nbsp;&nbsp;<code>{%- if param.type.optional %}[{% endif -%}
+    {$ param.name $}: {$ param.type.name $}
+    {%- if param.type.optional %}]{% endif -%},</code>
+    {% endfor %}
+  <br/><code>});</code>
+{% endmacro -%}
+
 {%- macro functionSyntax(fn) %}
   {%- set sep = joiner(', ') -%}
   {% marked -%}
-    `{$ fn.name $}({%- for param in fn.params %}{$ sep() $}
+  `{$ fn.name $}({ {%- for param in fn.params %}{$ sep() $}
     {%- if param.type.optional %}[{% endif -%}
     {$ param.name $}
     {%- if param.type.optional %}]{% endif -%}

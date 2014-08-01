@@ -115,6 +115,7 @@ module.exports = {
         .map(function(doc) {
           return _.pick(doc, [
             'description',
+            'kind',
             'content',
             'componentId',
             'componentName',
@@ -125,7 +126,8 @@ module.exports = {
             'restrict',
             'element',
             'priority',
-            'usage'
+            'usage',
+            'returns'
           ]);
         })
         .each(function(doc) {

@@ -22,13 +22,17 @@ material-dialog {
   @include flex-direction(column);
 
   .dialog-content {
+    // @include flex(1);
     @include flex-order(1);
     padding: 24px;
     overflow: auto;
   }
   .dialog-actions {
     @include flex-order(2);
-    padding: 4px 16px 20px;
+    @include box-sizing(border-box);
+    @include flex-display();
+    @include flex-justify-content(flex-end);
+    padding: 8px 16px 24px;
   }
 
   &.dialog-changing {

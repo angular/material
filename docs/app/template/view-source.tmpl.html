@@ -1,5 +1,5 @@
 <material-dialog class="view-source-dialog">
-  <div class="dialog-content material-flex">
+  <div class="dialog-content" flex>
     <material-tabs nobar>
       <material-tab ng-repeat="file in files"
                     active="file === data.selectedFile"
@@ -13,8 +13,8 @@
       </code>
     </pre>
   </div>
-  <div class="dialog-actions">
-    <button class="material-button material-button-raised" style="float: right;" ng-click="$hideDialog()">
+  <div class="dialog-actions" layout="horizontal" main-axis="end">
+    <button class="material-button material-button-raised" ng-click="$hideDialog()">
       Close
     </button>
   </div>

@@ -54,12 +54,6 @@
         </div>
         <span ng-bind="currentComponent.id + (currentDoc ? (': &nbsp;' + currentDoc.humanName) : '')"></span>
         <span style="font-size: 18px;" ng-bind="currentDoc.docType && currentDoc.docType !== 'readme' ? '(' + currentDoc.docType + ')' : ''"></span>
-        <div flex></div>
-        <button class="material-button view-source-button" 
-          ng-show="currentComponent.showViewSource" 
-          ng-click="viewSource(currentComponent, $event)">
-          View Source
-        </button>
       </div>
     </material-toolbar>
 

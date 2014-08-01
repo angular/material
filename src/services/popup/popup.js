@@ -14,7 +14,7 @@ function PopupFactory($materialCompiler, $animate, $rootScope, $rootElement) {
 
   function createPopup(options) {
     var appendTo = options.appendTo || $rootElement;
-    var scope = (options.scope || $rootScope).$new();
+    var scope = (options.scope || $rootScope).$new(true);
 
     return $materialCompiler.compile(options).then(function(compileData) {
       var self;

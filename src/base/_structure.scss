@@ -6,17 +6,10 @@
 
 html, body {
   height: 100%;
-}
-
-body {
-  margin: 0;
-  padding: 0px;
   color: $font-color-base;
   font-family: $font-family;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   -webkit-touch-callout: none;
-
-
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 
@@ -26,7 +19,11 @@ body {
     font-size: 1.17em;
     font-weight: bold;
   }
+}
 
+body {
+  margin: 0;
+  padding: 0px;
 }
 
 .inset {

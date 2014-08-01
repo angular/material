@@ -7,6 +7,8 @@
     <h2 id="usage">Usage</h2>
     {% if doc.usage %}
       {$ doc.usage | code $}
+    {% elif doc.kind == 'optionFunction' %}
+      {$ functionOptionSyntax(doc) $}
     {% else %}
       {$ functionSyntax(doc) $}
     {% endif %}

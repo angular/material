@@ -10,6 +10,7 @@
   }
 }
 
+material-button,
 .material-button {
 
   @include user-select(none);
@@ -37,6 +38,10 @@
   &.material-button-colored {
     color: $theme-light;
     fill: $theme-light;
+  }
+
+  &.material-button-cornered {
+    border-radius: 0;
   }
 
   &:hover {
