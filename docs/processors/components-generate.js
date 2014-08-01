@@ -112,7 +112,9 @@ module.exports = {
 
     function processDocs(component, docType, docs) {
       _(docs)
-        .omit('private')
+        .filter(function(doc) {
+          return !doc.hasOwnProperty('private');
+        })
         .map(function(doc) {
           return _.pick(doc, [
             'description',
