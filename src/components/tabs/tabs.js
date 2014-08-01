@@ -1,3 +1,10 @@
+/**
+ * @ngdoc module
+ * @name material.components.tabs
+ * @description
+ *
+ * Tabs
+ */
 angular.module('material.components.tabs', ['material.utils', 'material.animations', 'material.services'])
   .controller('materialTabsController', [ '$scope', '$attrs', '$materialComponentRegistry', '$timeout', TabsController ])
   .directive('materialTabs', [ '$compile', '$timeout', 'materialEffects', TabsDirective ])
@@ -18,22 +25,7 @@ angular.module('material.components.tabs', ['material.utils', 'material.animatio
  * @param {boolean}  nobar Flag indicates use of InkBar effects
  * @param {boolean}  nostretch Flag indicates use of elastic animation for inkBar width and position changes
  * @param {string}   align-tabs Attribute to indicate position of tab buttons: bottom or top; default is `top`
- *
- * @example
- <example module="material.components.tabs">
- <file name="index.html">
- <h3>Static Tabs: </h3>
- <p>No ink effect and no sliding bar. Tab #1 is active and #2 is disabled.</p>
- <material-tabs selected="0" noink nobar nostretch>
- <material-tab>ITEM ONE</material-tab>
- <material-tab disabled="true" title="ITEM TWO"></material-tab>
- <material-tab>ITEM THREE</material-tab>
- </material-tabs>
- </file>
- </example>
- *
  */
-
 function TabsDirective($compile, $timeout, materialEffects) {
 
   return {
@@ -365,17 +357,14 @@ function TabsDirective($compile, $timeout, materialEffects) {
  *
  * @restrict E
  *
- * @param {string=} onSelect A function expression to call when the tab is selected.
- * @param {string=} onDeselect A function expression to call when the tab is deselected.
- * @param {boolean=} active A binding, telling whether or not this tab is selected.
- * @param {boolean=} disabled A binding, telling whether or not this tab is disabled.
- * @param {string=} title The visible heading, or title, of the tab. Set HTML headings with {@link ui.bootstrap.tabs.directive:tabHeading tabHeading}.
- *
  * @description
- * Creates a tab with a heading and (optional) content. Must be placed within a {@link material.components.tabs.directive:materialTabs materialTabs}.
+ * materialTab is the inner directive to specify the tab label and optional tab view content
  *
- * @example
- *
+ * @param {string=} label Optional attribute to specify a simple string as the tab label
+ * @param {boolean=}  active Flag indicates if the tab is currently selected; normally the <material-tabs selected=""> attribute is used instead.
+ * @param {boolean=}  disabled Flag indicates if the tab is disabled: not selectable with no ink effects
+ * @param {expression} deselected Expression to be evaluated after the tab has been de-selected.
+ * @param {expression} selected Expression to be evaluated after the tab has been selected.
  */
 function TabDirective( $attrBind ) {
   var noop = angular.noop;
@@ -528,18 +517,16 @@ function TabDirective( $attrBind ) {
 }
 
 /**
- * @ngdoc controller
+ * @ngdoc object
  * @name materialTabsController
  * @module material.components.tabs
- *
- * @private
- *
+ * @description the controller
  */
 function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
   var list = iterator([], true),
+    componentID = "tabs" + $scope.$id,
     elements = { },
     selected = null,
-    componentID = "tabs" + $scope.$id,
     self = this;
 
   $materialComponentRegistry.register( self, $attrs.componentId || componentID );

@@ -142,7 +142,7 @@ input {
 /* Animations for material-view elements that are in materialTabs containers */
 
 .tabs-content {
-    height: 50px;
+    height: 100%;
 }
 .tabs-content .material-view {
     opacity:1.0;
