@@ -2,17 +2,7 @@
 <div ng-app="app" ng-controller="AppCtrl" class="sample">
 
 
-    <h3>Static Tabs linked external content (ng-Switch):</h3>
-    <p>Tabs with view panes and the bar slides to the selected tab; with no `material` ink ripple effects</p>
-
-    <p>
-        Your selection:
-        <input type="number" ng-model="selectedIndex">Tab #2 is
-              <span class="highlight">
-                <input type="checkbox" ng-model="twoDisabled">Disabled
-              </span>
-        (will auto-deselect if active)
-    </p>
+    <p>Static Tabs linked external content (ng-Switch):</p>
     <br/>
 
     <material-tabs selected="selectedIndex" noink>
@@ -40,5 +30,14 @@
             Selection index = 3
         </div>
     </div>
+
+    <p>
+        <input type="number" ng-model="selectedIndex">Tab #2 is
+              <span class="highlight">
+                <input type="checkbox" ng-model="twoDisabled">Disabled
+              </span>
+        (will auto-deselect if active)
+    </p>
+
 
 </div>

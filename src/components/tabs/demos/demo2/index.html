@@ -1,9 +1,14 @@
 <link rel="stylesheet" href="/css/tab_demos.css">
 <div ng-app="app" ng-controller="AppCtrl" class="sample">
 
-    <h3>Simple Dynamic Tabs (no views)</h3>
+    <p>Simple Dynamic Tabs with no internal tab view content:</p>
 
     <material-tabs selected="activeIndex">
+        <div class="logo">
+            <div class="centered">
+                <img ng-src="/img/angular.png" style="width:30px;height: 30px;">
+            </div>
+        </div>
         <material-tab ng-repeat="tab in tabs">
             {{tab.title}}
         </material-tab>

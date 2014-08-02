@@ -1,10 +1,22 @@
 <link rel="stylesheet" href="/css/tab_demos.css">
-
+<style>
+    ng-view.tabs-view {
+        background-color: rgb(205, 240, 255);
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        top: 110px;
+    }
+    material-ink-bar {
+        height: 7px;
+        background: rgb(205, 240, 255);
+        position: absolute;
+        margin-top: -7px;
+    }
+</style>
 <div class="sample">
 
-    <h3>Dynamic Tabs (ng-repeat) with view routing:</h3>
-    <p>Tab selection changes the $location.path and ng-view routing triggers...</p>
-
+    <p>Dynamic Tabs (ng-repeat) with $location and ng-view routing:</p>
 
     <div ng-app="app" ng-controller="AppCtrl" >
 
