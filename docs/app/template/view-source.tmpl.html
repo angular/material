@@ -1,6 +1,14 @@
+<style>
+    .dialog-content {
+        background-color: rgb(246, 246, 246)
+    }
+    .highlight {
+        margin: 20px;
+    }
+</style>
 <material-dialog class="view-source-dialog">
   <div class="dialog-content" flex>
-    <material-tabs nobar>
+    <material-tabs>
       <material-tab ng-repeat="file in files"
                     active="file === data.selectedFile"
                     ng-click="data.selectedFile = file"
@@ -8,7 +16,7 @@
       </material-tab>
     </material-tabs>
     <div ng-repeat="file in files">
-      <hljs code="file.content" 
+      <hljs code="file.content"
         lang="{{file.fileType}}"
         ng-show="file === data.selectedFile">
       </hljs>

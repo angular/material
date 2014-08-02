@@ -24,7 +24,7 @@ material-dialog {
   .dialog-content {
     // @include flex(1);
     @include flex-order(1);
-    padding: 24px;
+    margin: 24px;
     overflow: auto;
   }
   .dialog-actions {

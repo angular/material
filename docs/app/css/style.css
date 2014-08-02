@@ -95,6 +95,11 @@ code.highlight {
   overflow-wrap: break-word;
 }
 
+pre > code.highlight {
+    padding: 20px;
+    font-weight: 600;
+}
+
 ng-view {
   margin: auto;
   width: 100%;
