@@ -19,7 +19,17 @@ angular.module('material.components.tabs', ['material.utils', 'material.animatio
  * @restrict E
  *
  * @description
- * The `<material-tabs>` tag identifies the outer directive and serves as the container for the tabs functionality
+ * The `<material-tabs>` tag identifies the outer directive and serves as the container for the tabs functionality; specified
+ * using nested `<material-tab>` markup tags. The `<material-tab>` directive is used to specify a tab label for the **header button**
+ * and optional tab view content that should be associated with each tab button.
+ *
+ * Any markup (other than **`<material-tab>`** tags) will be transcluded into the tab header area BEFORE the tab buttons.
+ *
+ * Additional Features:
+ *
+ * - Content can include any markup.
+ * - If a tab is disabled while active/selected, then the next tab will be auto-selected.
+ * - If the currently active tab is the last tab, then the next tab will be the first tab in the list.
  *
  * @param {integer=} selected Index of the active/selected tab
  * @param {boolean=} noink Flag indicates use of ripple ink effects
@@ -122,6 +132,7 @@ function TabsDirective($compile, $timeout, $materialEffects) {
         transcludeContentItems();
 
         configureInk();
+
         alignTabButtons();
         selectDefaultTab();
 
@@ -156,10 +167,12 @@ function TabsDirective($compile, $timeout, $materialEffects) {
            * @param skipAnimation
            */
           function updateInkBar(tab, skipAnimation) {
+            if ( tabsController.$$tabs().length < 2 ) return;
+
             if ( angular.isDefined(tab) && angular.isDefined(inkBar) ) {
 
               var tabNode = tab[0];
-              var width = ( tabsController.$$tabs().length > 1 ) ? tabNode.offsetWidth : 0;
+              var width = tabNode.offsetWidth;
               var styles = {
                 left : tabNode.offsetLeft +'px',
                 width : width +'px' ,
@@ -385,7 +398,18 @@ function TabsDirective($compile, $timeout, $materialEffects) {
  * @restrict E
  *
  * @description
- * `<material-tab>` is the inner directive used to specify each tab label and optional view content
+ * `<material-tab>` is the nested directive used [within `<material-tabs>`] to specify each tab with a **label** and optional *view content*
+ *
+ * If the `label` attribute is not specified, then an optional `<material-tab-label>` tag can be used to specified more
+ * complex tab header markup. If neither the **label** nor the **material-tab-label** are specified, then the nested
+ * markup of the `<material-tab>` is used as the tab header markup.
+ *
+ * If a tab **label** has been identified, then any **non-**`<material-tab-label>` markup
+ * will be considered tab content and will be transcluded to the internal `<div class="tabs-content">` container.
+ *
+ * This container is used by the TabsController to show/hide the active tab's content view. This synchronization is
+ * automatically managed by the internal TabsController whenever the tab selection changes. Selection changes can
+ * be initiated via data binding changes, programmatic invocation, or user gestures.
  *
  * @param {string=} label Optional attribute to specify a simple string as the tab label
  * @param {boolean=}  active Flag indicates if the tab is currently selected; normally the `<material-tabs selected="">`; attribute is used instead.
@@ -395,10 +419,23 @@ function TabsDirective($compile, $timeout, $materialEffects) {
  *
  *
  * @usage
+ *
  * <hljs lang="html">
- *     <material-tab label="" disabled="" selected="" deselected="" >
- *       <h3>My Tab content</h3>
- *     </material-tab>
+ * <material-tab label="" disabled="" selected="" deselected="" >
+ *   <h3>My Tab content</h3>
+ * </material-tab>
+ *
+ * <material-tab >
+ *   <material-tab-label>
+ *     <h3>My Tab content</h3>
+ *   </material-tab-label>
+ *   <p>
+ *     Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+ *     totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
+ *     dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
+ *     sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+ *   </p>
+ * </material-tab>
  * </hljs>
  *
  */

@@ -8,6 +8,8 @@ material-tabs {
 
   .tabs-header {
     width: 100%;
+    overflow: hidden;
+    @include box-sizing(border-box);
 
     .tabs-header-items {
       @include flex-display();
@@ -22,6 +24,10 @@ material-tabs {
   .tabs-content {
     overflow: hidden;
     width: 100%;
+  }
+
+  material-ink-bar {
+    @include box-sizing(border-box);
   }
 }
 

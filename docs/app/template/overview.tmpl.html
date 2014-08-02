@@ -15,7 +15,7 @@
         View Demo Source
       </material-button>
     </div>
-    <material-tabs class="demo-tabs">
+    <material-tabs class="demo-tabs" nobar="true">
       <material-tab ng-repeat="(_,demo) in currentComponent.demos"
                active="currentComponent.$selectedDemo === demo"
                ng-click="currentComponent.$selectedDemo = demo" 
