@@ -38,6 +38,9 @@ $layout-gutter-width:      ($baseline-grid * 2) !default;
 $button-border-radius: 3px;
 $button-disabled-background: rgb(234, 234, 234);
 $button-disabled-color: rgb(168, 168, 168);
+
+$button-colored-color:$theme-light;
+
 $button-raised-background: rgb(223, 223, 233);
 $button-raised-colored-color: #fff;
 $button-raised-colored-background: $theme-light;

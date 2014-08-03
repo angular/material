@@ -36,8 +36,8 @@ material-button,
   cursor: pointer;
 
   &.material-button-colored {
-    color: $theme-light;
-    fill: $theme-light;
+    color: $button-colored-color;
+    fill: $button-colored-color;
   }
 
   &.material-button-cornered {
