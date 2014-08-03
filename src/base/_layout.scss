@@ -37,46 +37,73 @@
 }
 
 
-// Justify Content (main axis)
+// Arrange on the Main Axis
+// center, start, end, space-between, space-around
+// flex-start is the default for justify-content
 // ------------------------------
 
-[main-axis=center] {
+// Main Axis Center
+[arrange="center"], //stretch
+[arrange="center center"],
+[arrange="center start"],
+[arrange="center end"] {
   @include flex-justify-content(center);
 }
 
-[main-axis=start] {
-  @include flex-justify-content(flex-start);
-}
-
-[main-axis=end] {
+// Main Axis End
+[arrange="end"], //stretch
+[arrange="end center"],
+[arrange="end start"],
+[arrange="end end"] {
   @include flex-justify-content(flex-end);
 }
 
-[main-axis="space-between"] {
-  @include flex-justify-content(space-between);
-}
-
-[main-axis="space-around"] {
+// Main Axis Space Around
+[arrange="space-around"], //stretch
+[arrange="space-around center"],
+[arrange="space-around start"],
+[arrange="space-around end"] {
   @include flex-justify-content(space-around);
 }
 
-
-// Align Items (cross axis)
-// ------------------------------
-
-[cross-axis=stretch] {
-  @include flex-align-items(stretch);
+// Main Axis Space Between
+[arrange="space-between"], //stretch
+[arrange="space-between center"],
+[arrange="space-between start"],
+[arrange="space-between end"] {
+  @include flex-justify-content(space-between);
 }
 
-[cross-axis=center] {
+
+// Arrange on the Cross Axis
+// center, start, end
+// stretch is the default for align-items
+// ------------------------------
+
+// Cross Axis Center
+[arrange="center center"],
+[arrange="start center"],
+[arrange="end center"],
+[arrange="space-between center"],
+[arrange="space-around center"] {
   @include flex-align-items(center);
 }
 
-[cross-axis=start] {
+// Cross Axis Start
+[arrange="center start"],
+[arrange="start start"],
+[arrange="end start"],
+[arrange="space-between start"],
+[arrange="space-around start"] {
   @include flex-align-items(flex-start);
 }
 
-[cross-axis=end] {
+// Cross Axis End
+[arrange="center end"],
+[arrange="start end"],
+[arrange="end end"],
+[arrange="space-between end"],
+[arrange="space-around end"] {
   @include flex-align-items(flex-end);
 }
 
