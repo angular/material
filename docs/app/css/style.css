@@ -96,8 +96,8 @@ code.highlight {
 }
 
 pre > code.highlight {
-    padding: 20px;
-    font-weight: 600;
+  padding: 20px;
+  font-weight: 400;
 }
 
 ng-view {
@@ -116,13 +116,17 @@ material-dialog.view-source-dialog .dialog-actions {
 .view-source-dialog material-tabs .tabs-header-items {
   background-color: #455ede;
 }
-.menu-separator-arrow {
-  margin: 0 4px;
-}
-.menu-separator-arrow material-icon object {
-  height: 15px;
+.menu-separator-icon {
+  margin: 0;
 }
 .menu-module-name {
   opacity: 0.6;
   font-size: 18px;
+}
+
+.side-menu-title {
+  text-transform: uppercase;
+  color: #999999;
+  font-size: 16px;
+  padding: 10px;
 }

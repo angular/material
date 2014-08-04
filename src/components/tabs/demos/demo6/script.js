@@ -4,15 +4,15 @@ angular.module('app', ['ngMaterial', 'ngRoute'])
 .config(function($routeProvider) {
   $routeProvider
     .when('/material', {
-      templateUrl: 'material.html',
+      templateUrl: 'material.tmpl.html',
       controller: 'MaterialTabCtrl'
     })
     .when('/angular', {
-      templateUrl: 'angular.html',
+      templateUrl: 'angular.tmpl.html',
       controller: 'AngularTabCtrl'
     })
     .when('/polymer', {
-      templateUrl: 'polymer.html',
+      templateUrl: 'polymer.tmpl.html',
       controller: 'PolymerTabCtrl'
     })
     .otherwise({

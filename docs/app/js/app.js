@@ -62,6 +62,25 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope, 
     return $location.path();
   };
 
+  $scope.menuItems = [
+    {
+      name: 'Utilities',
+      components: [{
+        name: 'Layout',
+        docs: [{
+          humanName: 'Grid',
+          url: '/layout/grid'
+        }, {
+          humanName: 'Cell',
+          url: '/layout/cell'
+        }]
+      }],
+    }, {
+      name: 'Components',
+      components: COMPONENTS
+    }
+  ];
+
   $scope.setCurrentComponent = function(component, doc) {
     $scope.currentComponent = component;
     $scope.currentDoc = doc;
