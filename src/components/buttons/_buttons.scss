@@ -16,6 +16,7 @@ material-button,
   @include user-select(none);
   display: inline-block;
   position: relative; //for child absolute-positioned <canvas>
+  padding: 4px;
 
   outline: none;
   border: 0;

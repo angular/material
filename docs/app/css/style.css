@@ -110,7 +110,6 @@ material-dialog.view-source-dialog,
 material-dialog.view-source-dialog .dialog-actions {
   background: #f8f8f8;
 }
-.view-source-dialog .dialog-content,
 .view-source-dialog code {
   background: #fff;
 }

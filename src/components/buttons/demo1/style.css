@@ -10,6 +10,8 @@ section {
   text-align: center;
   margin: 1%;
   padding: 1em;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 .margin .material-button {
   width: 10em;
