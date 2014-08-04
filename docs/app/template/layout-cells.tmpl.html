@@ -2,8 +2,8 @@
   <material-content flex>
 
     <p>
-      Child items, or cells, of a layout element can be easily arranged using the
-      <code>arrange</code> attribute. In each demo, the center black line represents the "main axis",
+      Child items, or cells, of a layout element can be easily align using the
+      <code>layout-align</code> attribute. In each demo, the center black line represents the "main axis",
       which is the primary axis along which child cells are laid out. For a horizontal layout, child
       cells will line up horizontally along the main axis. For a vertical layout, child cells will
       line up vertically along the main axis. Alternatively, the "cross axis"
@@ -121,8 +121,8 @@
     <p>
       This demo shows how a layout's child cells react when the <code>flex</code> attributes
       are added to the cells. Here the free space is evenly divided up within the two
-      cells, giving each cell 50% of the area. Note how setting an arrange attribute wouldn't matter
-      because there is no free space between the cells for the cells to be arranged to. Since
+      cells, giving each cell 50% of the area. Note how setting an align attribute wouldn't matter
+      because there is no free space between the cells for the cells to be aligned to. Since
       each flex cell is using up all of the free space, there's no arranging that could happen.
     </p>
     <div class="code-view">
@@ -143,7 +143,7 @@
     <h3>Cross Axis</h3>
     <p>
       The "cross axis" is the imaginary line perpendicular to the "main axis", which in each
-      demo is the center black line. The value within the value of the <code>arrange</code>
+      demo is the center black line. The value within the value of the <code>layout-align</code>
       attribute is always the main axis, and by default the cross axis is always "stretch", as seen
       in the demos above. However, to also explicitly set the cross axis by providing
       both the main and cross axis values, which are separated by a space.
