@@ -16,7 +16,7 @@
 
     <material-toolbar class="material-theme-light">
       <div class="material-toolbar-tools" ng-click="goHome()">
-        <span>angular-material</span>
+        <span>Components</span>
       </div>
     </material-toolbar>
 
@@ -52,13 +52,21 @@
           <material-icon icon="img/icons/ic_menu_24px.svg">
           </material-icon>
         </div>
-        <!--<span ng-bind="currentComponent.id + (currentDoc ? (': &nbsp;' + currentDoc.humanName) : '')"></span>-->
-          <span style="opacity:0.55;margin-right:10px;">Package:</span> <span ng-bind="currentComponent.id"></span>
-        <span style="font-size: 18px;" ng-bind="currentDoc.docType && currentDoc.docType !== 'readme' ? '(' + currentDoc.docType + ')' : ''"></span>
+        <span hide block-md>
+          {{path() === '/' ? 'Angular Material' : (currentComponent.name || 'Components')}}
+        </span>
+        <span ng-show="currentDoc.humanName" class="menu-separator-arrow" hide block-md>
+          <material-icon icon="img/icons/separator.svg"></material-icon>
+        </span>
+        <span ng-show="currentDoc.humanName" ng-bind="currentDoc.humanName">
+        </span>
+        <span flex></span>
+        <span class="menu-module-name" ng-bind="currentComponent.id" hide block-md>
+        </span>
       </div>
     </material-toolbar>
 
-    <ng-view class="material-content" style="padding:20px;" flex></ng-view>
+    <ng-view class="material-content" scroll-y style="padding:20px;" flex></ng-view>
 
   </div>
 

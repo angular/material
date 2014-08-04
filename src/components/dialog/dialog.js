@@ -81,7 +81,10 @@ function MaterialDialogService($timeout, $materialPopup, $rootElement, $material
       clickOutsideToClose: true, // should have a clickable backdrop to close
       escapeToClose: true,
       // targetEvent: used to find the location to start the dialog from
-      targetEvent: null
+      targetEvent: null,
+      transformTemplate: function(template) {
+        return '<div class="material-dialog-container">' + template + '</div>';
+      },
       // Also supports all options from $materialPopup
     }, options || {});
 
@@ -104,15 +107,18 @@ function MaterialDialogService($timeout, $materialPopup, $rootElement, $material
           $rootElement.on('keyup', onRootElementKeyup);
         }
 
-        if (options.hasBackdrop || options.clickOutsideToClose) {
+        if (options.hasBackdrop) {
           backdropInstance = $materialBackdrop({
             appendTo: options.appendTo,
             opaque: options.hasBackdrop
-          }, options.clickOutsideToClose ? destroyDialog : angular.noop);
-
+          });
           backdropInstance.then(function(drop) {
             drop.enter();
           });
+        }
+
+        if (options.clickOutsideToClose) {
+          dialog.element.on('click', dialogClickOutside);
         }
       });
 
@@ -136,6 +142,9 @@ function MaterialDialogService($timeout, $materialPopup, $rootElement, $material
         if (options.escapeToClose) {
           $rootElement.off('keyup', onRootElementKeyup);
         }
+        if (options.clickOutsideToClose) {
+          dialog.element.off('click', dialogClickOutside);
+        }
         $materialEffects.popOut(dialog.element, $rootElement);
 
         // TODO(ajoslin): use element.animate() and ngAnimateStyler instead of
@@ -144,6 +153,12 @@ function MaterialDialogService($timeout, $materialPopup, $rootElement, $material
       }
       function onRootElementKeyup(e) {
         if (e.keyCode == 27) {
+          $timeout(destroyDialog);
+        }
+      }
+      function dialogClickOutside(e) {
+        // If we click the flex container outside the backdrop
+        if (e.target === dialog.element[0]) {
           $timeout(destroyDialog);
         }
       }

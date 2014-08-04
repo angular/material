@@ -9,7 +9,7 @@ material-backdrop {
   bottom: 0;
 
   &.opaque {
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(0,0,0,0.4);
   }
 
   @include transition(all 0.2s ease-out);

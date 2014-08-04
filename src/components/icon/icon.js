@@ -11,6 +11,7 @@ angular.module('material.components.icon', [])
  * @ngdoc directive
  * @name materialIcon
  * @module material.components.icon
+ * @restrict E
  * @description
  * Icon
  */

@@ -1,42 +1,49 @@
-material-dialog {
-
-  // This will be positioned and faded in with javascript
+.material-dialog-container {
+  
+  @include flex-display();
+  @include flex-justify-content(center);
+  @include flex-align-items(center);
   position: absolute;
   left: 0;
   top: 0;
-  opacity: 0;
-
-  // TODO: Calculate height properly
-  min-width: 240px;
-  max-width: 80%;
-  max-height: 80%;
-  margin:auto;
-
-  background-color: #fff;
-  border-radius: 4px;
-
-  box-shadow: $whiteframe-shadow-z5;
+  bottom: 0;
+  right: 0;
   z-index: $z-index-dialog;
 
-  @include flex-display();
-  @include flex-direction(column);
-
-  .dialog-content {
-    // @include flex(1);
-    @include flex-order(1);
-    margin: 24px;
-    overflow: auto;
-  }
-  .dialog-actions {
-    @include flex-order(2);
-    @include box-sizing(border-box);
-    @include flex-display();
-    @include flex-justify-content(flex-end);
-    padding: 8px 16px 24px;
-  }
-
-  &.dialog-changing {
+  &.active {
+    // This will be positioned and faded in with javascript
     @include transition(all 0.2s cubic-bezier(0.4, 0, 0.2, 1));
+    @include transform('translate3d(0,0,0) scale(1.0)');
+    opacity: 1;
   }
 
+  material-dialog {
+
+    // TODO: Calculate height properly
+    min-width: 240px;
+    max-width: 80%;
+    max-height: 80%;
+    margin:auto;
+
+    background-color: #fff;
+    border-radius: 4px;
+
+    box-shadow: $whiteframe-shadow-z5;
+
+    @include flex-display();
+    @include flex-direction(column);
+
+    .dialog-content {
+      @include flex-order(1);
+      padding: 24px;
+      overflow: auto;
+    }
+    .dialog-actions {
+      @include flex-order(2);
+      @include box-sizing(border-box);
+      @include flex-display();
+      @include flex-justify-content(flex-end);
+      padding: 8px 16px;
+    }
+  }
 }

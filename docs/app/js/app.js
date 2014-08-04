@@ -58,6 +58,9 @@ function(Angularytics, $rootScope) {
   '$materialDialog',
 function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope, $materialDialog) {
   $scope.COMPONENTS = COMPONENTS;
+  $scope.path = function() {
+    return $location.path();
+  };
 
   $scope.setCurrentComponent = function(component, doc) {
     $scope.currentComponent = component;

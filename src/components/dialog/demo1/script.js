@@ -4,7 +4,7 @@ angular.module('app', ['ngMaterial'])
 
   $scope.dialog = function(e) {
     $materialDialog({
-      templateUrl: 'my-dialog.html',
+      templateUrl: 'my-dialog.tmpl.html',
       targetEvent: e,
       controller: ['$scope', '$hideDialog', function($scope, $hideDialog) {
         $scope.close = function() {

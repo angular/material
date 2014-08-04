@@ -1,6 +1,13 @@
 var _ = require('lodash');
 var path = require('canonical-path');
 
+var sourceTypeByExtension = {
+  html: 'HTML',
+  css: 'CSS',
+  js: 'JavaScript',
+  'tmpl.html': 'Template'
+};
+
 module.exports = {
   name: 'components-generate',
   description: 'Transform the components into a renderable data structure',
@@ -106,16 +113,16 @@ module.exports = {
           return demo;
 
           function generateDemoFile(fromDoc) {
-            var viewType = (fromDoc.basePath.indexOf('.html') > -1) ? 'HTML' :
-                           (fromDoc.basePath.indexOf('.css')  > -1) ? 'CSS' :
-                           (fromDoc.basePath.indexOf('.js')   > -1) ? 'JavaScript' : '';
+            var extension = fromDoc.basePath.match(/.tmpl.html$/) ?
+              'tmpl.html' :
+              path.extname(fromDoc.basePath).substring(1); //remove starting '.'
 
             return _.assign({}, fromDoc, {
               template: fromDoc.basePath === 'index.html' ? 
                 'demo/template.index.html' :
                 'demo/template.file',
               outputPath: path.join(outputFolder, fromDoc.basePath),
-              viewType : viewType
+              viewType : sourceTypeByExtension[extension]
             });
           }
         })

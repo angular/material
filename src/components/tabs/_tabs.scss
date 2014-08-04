@@ -2,7 +2,6 @@
 material-tabs {
   display: block;
   width: 100%;
-  background-color: #4285F4;
   font-weight: 500;
   font-size: 14px;
 
@@ -19,6 +18,9 @@ material-tabs {
       background-color: #4285F4;
       white-space: nowrap;
       align-items: stretch;
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
     }
   }
 
@@ -40,7 +42,7 @@ material-tab {
   z-index: 0;
   overflow: hidden;
   padding: 10px;
-  height: 40px;
+  line-height: 20px;
   text-align: center;
   cursor: pointer;
 

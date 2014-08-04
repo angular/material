@@ -87,19 +87,18 @@ function MaterialEffects($animateSequence, $ripple, $rootElement, $position, $$r
       startPos = endPos;
     }
 
-    // TODO once ngAnimateSequence bugs are fixed, this can be switched to use that
     element.css({
       '-webkit-transform': translateString(startPos.left, startPos.top, 0) + ' scale(0.2)',
       opacity: 0
     });
+    
+    // TODO once ngAnimateSequence bugs are fixed, this can be switched to use that
     $$rAF(function() {
-      element.addClass('dialog-changing');
-      $$rAF(function() {
-        element.css({
-          '-webkit-transform': translateString(endPos.left, endPos.top, 0) + ' scale(1.0)',
-          opacity: 1
-        });
+      element.css({
+        '-webkit-transform': '',
+        opacity: ''
       });
+      element.addClass('active');
     });
   }
 

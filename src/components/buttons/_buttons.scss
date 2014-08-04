@@ -15,6 +15,7 @@ material-button,
 
   @include user-select(none);
   display: inline-block;
+  position: relative; //for child absolute-positioned <canvas>
 
   outline: none;
   border: 0;
@@ -44,9 +45,9 @@ material-button,
     border-radius: 0;
   }
 
-  &:hover {
-    background-color: $button-hover-background;
-  }
+  // &:hover {
+  //   background-color: $button-hover-background;
+  // }
 
   &[disabled] {
     background-color: $button-disabled-background !important;

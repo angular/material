@@ -82,8 +82,8 @@ pre, code {
   padding: 0;
 }
 code {
-  background: #f6f6f6;
   font-size: 16px;
+  background: #f6f6f6;
 }
 code:not(.highlight) {
   color: #4285f4;
@@ -106,9 +106,24 @@ ng-view {
   max-width: 1600px;
 }
 
-.view-source-dialog {
-  background: #f2f2f2;
+material-dialog.view-source-dialog,
+material-dialog.view-source-dialog .dialog-actions {
+  background: #f8f8f8;
 }
-.dialog-actions {
-  background #f2f2f2;
+.view-source-dialog .dialog-content,
+.view-source-dialog code {
+  background: #fff;
+}
+.view-source-dialog material-tabs .tabs-header-items {
+  background-color: #455ede;
+}
+.menu-separator-arrow {
+  margin: 0 4px;
+}
+.menu-separator-arrow material-icon object {
+  height: 15px;
+}
+.menu-module-name {
+  opacity: 0.6;
+  font-size: 18px;
 }

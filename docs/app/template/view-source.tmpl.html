@@ -8,21 +8,18 @@
     </material-tab>
   </material-tabs>
 
-  <div class="dialog-content" flex>
-    <div layout="vertical" >
-      <div ng-repeat="file in files" flex>
-        <material-content>
-        <hljs code="file.content"
-          lang="{{file.fileType}}"
-          ng-show="file === data.selectedFile" >
-        </hljs>
-      </div>
+  <div class="dialog-content material-content" scroll-y flex>
+    <div ng-repeat="file in files">
+      <hljs code="file.content"
+        lang="{{file.fileType}}"
+        ng-show="file === data.selectedFile" >
+      </hljs>
     </div>
   </div>
 
   <div class="dialog-actions" layout="horizontal" layout-align="end">
-    <button class="material-button material-button-raised" ng-click="$hideDialog()">
-      Close
-    </button>
+    <material-button class="material-button-light" ng-click="$hideDialog()">
+      Done
+    </material-button>
   </div>
 </material-dialog>
