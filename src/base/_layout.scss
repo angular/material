@@ -43,34 +43,34 @@
 // ------------------------------
 
 // Main Axis Center
-[arrange="center"], //stretch
-[arrange="center center"],
-[arrange="center start"],
-[arrange="center end"] {
+[layout-align="center"], //stretch
+[layout-align="center center"],
+[layout-align="center start"],
+[layout-align="center end"] {
   @include flex-justify-content(center);
 }
 
 // Main Axis End
-[arrange="end"], //stretch
-[arrange="end center"],
-[arrange="end start"],
-[arrange="end end"] {
+[layout-align="end"], //stretch
+[layout-align="end center"],
+[layout-align="end start"],
+[layout-align="end end"] {
   @include flex-justify-content(flex-end);
 }
 
 // Main Axis Space Around
-[arrange="space-around"], //stretch
-[arrange="space-around center"],
-[arrange="space-around start"],
-[arrange="space-around end"] {
+[layout-align="space-around"], //stretch
+[layout-align="space-around center"],
+[layout-align="space-around start"],
+[layout-align="space-around end"] {
   @include flex-justify-content(space-around);
 }
 
 // Main Axis Space Between
-[arrange="space-between"], //stretch
-[arrange="space-between center"],
-[arrange="space-between start"],
-[arrange="space-between end"] {
+[layout-align="space-between"], //stretch
+[layout-align="space-between center"],
+[layout-align="space-between start"],
+[layout-align="space-between end"] {
   @include flex-justify-content(space-between);
 }
 
@@ -81,29 +81,29 @@
 // ------------------------------
 
 // Cross Axis Center
-[arrange="center center"],
-[arrange="start center"],
-[arrange="end center"],
-[arrange="space-between center"],
-[arrange="space-around center"] {
+[layout-align="center center"],
+[layout-align="start center"],
+[layout-align="end center"],
+[layout-align="space-between center"],
+[layout-align="space-around center"] {
   @include flex-align-items(center);
 }
 
 // Cross Axis Start
-[arrange="center start"],
-[arrange="start start"],
-[arrange="end start"],
-[arrange="space-between start"],
-[arrange="space-around start"] {
+[layout-align="center start"],
+[layout-align="start start"],
+[layout-align="end start"],
+[layout-align="space-between start"],
+[layout-align="space-around start"] {
   @include flex-align-items(flex-start);
 }
 
 // Cross Axis End
-[arrange="center end"],
-[arrange="start end"],
-[arrange="end end"],
-[arrange="space-between end"],
-[arrange="space-around end"] {
+[layout-align="center end"],
+[layout-align="start end"],
+[layout-align="end end"],
+[layout-align="space-between end"],
+[layout-align="space-around end"] {
   @include flex-align-items(flex-end);
 }
 

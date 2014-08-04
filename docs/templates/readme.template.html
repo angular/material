@@ -7,7 +7,7 @@
     ng-init="currentComponent.$selectedDemo = currentComponent.$selectedDemo || currentComponent.demos[0]"
     layout="vertical">
 
-    <div layout="horizontal" main-axis="center" cross-axis="center">
+    <div layout="horizontal" layout-align="center center">
       <h3>Demo</h3>
       <div flex></div>
       <material-button
@@ -19,13 +19,13 @@
     <material-tabs class="demo-tabs" nobar>
       <material-tab ng-repeat="(_,demo) in currentComponent.demos"
                active="currentComponent.$selectedDemo === demo"
-               ng-click="currentComponent.$selectedDemo = demo" 
+               ng-click="currentComponent.$selectedDemo = demo"
                label="{{demo.name}}">
       </material-tab>
     </material-tabs>
     <iframe class="demo material-whiteframe-z1"
             name="{{demo.id}}"
-            ng-repeat="demo in currentComponent.demos" 
+            ng-repeat="demo in currentComponent.demos"
             ng-show="currentComponent.$selectedDemo === demo"
             ng-src="{{demo.indexFile.outputPath}}">
     </iframe>
