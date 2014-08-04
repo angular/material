@@ -105,3 +105,10 @@ ng-view {
   width: 100%;
   max-width: 1600px;
 }
+
+.view-source-dialog {
+  background: #f2f2f2;
+}
+.dialog-actions {
+  background #f2f2f2;
+}

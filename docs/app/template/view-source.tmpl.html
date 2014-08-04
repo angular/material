@@ -1,81 +1,25 @@
-<style>
-    .view-source-dialog {
-        background-image: url("/img/bgBlackRadios.gif");
-    }
-
-    .dialog-content {
-        background-color: rgb(246, 246, 246);
-    }
-
-    material-dialog .dialog-content {
-        border: solid;
-        border-color: rgb(133, 133, 133);
-        border-width: 2px;
-        overflow: hidden;
-    }
-    .highlight {
-        margin: 20px;
-    }
-
-    material-tabs .tabs-header .tabs-header-items {
-        background-color: #b2b2b2;
-    }
-
-    material-tabs .material-ink-ripple {
-        color: #4285f4;
-    }
-
-    material-ink-bar {
-        height: 4px;
-        background: #6B6B6B;
-        margin-top: -4px;
-    }
-
-    .window_label {
-        border: solid 1px #F1F1F1;
-        background: #fff;
-        display: inline-block;
-        height: 22px;
-        padding: 0 6px;
-        line-height: 22px;
-        position: relative;
-        top: -2px;
-        right: 6px;
-        text-align: center;
-        font-size: 12px;
-        color: #777;
-        border-radius: 1px;
-        z-index: 30;
-        -webkit-transition: all 0.7;
-        transition: all 0.7;
-    }
-    material-tab-label.active .window_label {
-        background: #777;
-        color: white;
-    }
-
-
-</style>
 <material-dialog class="view-source-dialog">
-  <div class="dialog-content" flex>
-    <material-tabs>
-      <material-tab ng-repeat="file in files"
-                    active="file === data.selectedFile"
-                    ng-click="data.selectedFile = file" >
-          <span class="window_label">{{file.viewType}}</span>
-      </material-tab>
-    </material-tabs>
 
+  <material-tabs>
+    <material-tab ng-repeat="file in files"
+                  active="file === data.selectedFile"
+                  ng-click="data.selectedFile = file" >
+        <span class="window_label">{{file.viewType}}</span>
+    </material-tab>
+  </material-tabs>
+
+  <div class="dialog-content" flex>
     <div layout="vertical" >
       <div ng-repeat="file in files" flex>
+        <material-content>
         <hljs code="file.content"
           lang="{{file.fileType}}"
           ng-show="file === data.selectedFile" >
         </hljs>
       </div>
     </div>
-
   </div>
+
   <div class="dialog-actions" layout="horizontal" layout-align="end">
     <button class="material-button material-button-raised" ng-click="$hideDialog()">
       Close
