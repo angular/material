@@ -58,8 +58,12 @@ function(Angularytics, $rootScope) {
   '$materialDialog',
 function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope, $materialDialog) {
   $scope.COMPONENTS = COMPONENTS;
-  $scope.path = function() {
-    return $location.path();
+  $scope.path = function(arg) {
+    if (arg) {
+      return $location.path(arg);
+    } else { 
+      return $location.path();
+    }
   };
 
   $scope.menuItems = [
@@ -67,12 +71,13 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope, 
       name: 'Utilities',
       components: [{
         name: 'Layout',
+        id: 'layout',
         docs: [{
           humanName: 'Grid',
           url: '/layout/grid'
         }, {
-          humanName: 'Cell',
-          url: '/layout/cell'
+          humanName: 'Cells',
+          url: '/layout/cells'
         }]
       }],
     }, {
@@ -97,10 +102,13 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope, 
   $scope.$watch(function() {
     return $location.path();
   }, function(path) {
-    angular.forEach(COMPONENTS, function(component) {
-      if ($location.path().indexOf(component.id) > -1) {
-        component.$selected = true;
-      }
+    angular.forEach($scope.menuItems, function(category) {
+      category.components.forEach(function(component) {
+        console.log($location.path(), component.id || component.url);
+        if ($location.path().indexOf(component.id || component.url) > -1) {
+          component.$selected = true;
+        }
+      });
     });
   });
 
@@ -142,10 +150,15 @@ function($scope, $rootScope) {
   '$scope',
   '$rootScope',
   '$attrs',
-function($scope, $rootScope, $attrs) {
+  '$location',
+function($scope, $rootScope, $attrs, $location) {
   $rootScope.appTitle = $attrs.demoTitle;
   $scope.setCurrentComponent({
-    name: $attrs.demoTitle
+    name: 'Layout'
+  }, {
+    humanName: $location.path().indexOf('grid') > -1 ?
+      'Grid' :
+      'Cells'
   });
 }])
 

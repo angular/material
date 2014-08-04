@@ -29,22 +29,24 @@
         layout="vertical" layout-align="start" layout-fill
         ng-cloak
         ng-repeat="component in category.components"
-        ng-click="component.$selected = !component.$selected">
+        ng-click="path(component.docs[0].url)">
 
         <div class="menu-item menu-main-item"
           style="user-select: none;"
-          ng-class="{active: component.$selected}">
+          ng-class="{active: path().indexOf(component.id) > -1}">
           <span ng-bind="component.name" style="user-select: auto;"></span>
           <material-ripple initial-opacity="0.4" opacity-decay-velocity="1.75"></material-ripple>
         </div>
 
-        <div class="menu-item menu-sub-item"
-          ng-repeat="doc in component.docs"
-          ng-click="goToDoc(doc); $event.stopImmediatePropagation()"
-          ng-show="component.$selected"
-          ng-class="{active: docIsCurrent(doc)}">
-          {{doc.humanName}}
-          <material-ripple initial-opacity="0.4" opacity-decay-velocity="1.75"></material-ripple>
+        <div ng-if="component.docs.length > 1">
+          <div class="menu-item menu-sub-item"
+            ng-repeat="doc in component.docs"
+            ng-click="goToDoc(doc); $event.stopImmediatePropagation()"
+            ng-show="doc.docType !== 'readme' && path().indexOf(component.id) > -1"
+            ng-class="{active: path() == doc.url}">
+            {{doc.humanName}}
+            <material-ripple initial-opacity="0.4" opacity-decay-velocity="1.75"></material-ripple>
+          </div>
         </div>
 
       </div>

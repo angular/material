@@ -154,8 +154,6 @@ module.exports = {
           ]);
         })
         .each(function(doc) {
-          doc.demoOnly = false;
-
           if (doc.docType === 'directive') {
             //dash-case for directives
             doc.humanName = doc.name.replace(/([A-Z])/g, function($1) {
@@ -168,10 +166,7 @@ module.exports = {
             }
           } else if (doc.docType === 'readme') {
             doc.content = doc.content.replace(/<code>/g, '<code ng-non-bindable>');
-            doc.demoOnly = (doc.content.length < 30);
-            doc.humanName = doc.demoOnly ? 'Demo' : 'Overview';
-
-
+            doc.humanName = 'Overview';
           } else {
             doc.humanName = doc.name;
           }
