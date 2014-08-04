@@ -97,31 +97,12 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope, 
     });
   };
 
-  //Make sure a component's menu is open if the
-  //url changes to match it
-  $scope.$watch(function() {
-    return $location.path();
-  }, function(path) {
-    angular.forEach($scope.menuItems, function(category) {
-      category.components.forEach(function(component) {
-        console.log($location.path(), component.id || component.url);
-        if ($location.path().indexOf(component.id || component.url) > -1) {
-          component.$selected = true;
-        }
-      });
-    });
-  });
-
   $scope.goHome = function($event) {
     $location.path( '/' );
   };
 
   $scope.goToDoc = function(doc) {
     $location.path(doc.url);
-  };
-
-  $scope.docIsCurrent = function(doc) {
-    return $location.path() === doc.url;
   };
 
   $scope.viewSource = function(component, $event) {

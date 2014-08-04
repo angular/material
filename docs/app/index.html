@@ -62,11 +62,12 @@
           <material-icon icon="img/icons/ic_menu_24px.svg">
           </material-icon>
         </div>
-        <span hide block-md>
+        <span hide block-sm>
           {{path() === '/' ? 'Angular Material' : (currentComponent.name || 'Components')}}
         </span>
-        <span layout="vertical" layout-align="center center" class="menu-separator-icon">
-          <img style="height: 16px;" src="img/docArrow.png">
+        <span layout="vertical" layout-align="center center"
+          class="menu-separator-icon">
+          <img style="height: 16px;" src="img/docArrow.png" hide block-sm>
         </span>
         <span ng-show="currentDoc.humanName" ng-bind="currentDoc.humanName">
         </span>
