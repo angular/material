@@ -52,7 +52,8 @@
           <material-icon icon="img/icons/ic_menu_24px.svg">
           </material-icon>
         </div>
-        <span ng-bind="currentComponent.id + (currentDoc ? (': &nbsp;' + currentDoc.humanName) : '')"></span>
+        <!--<span ng-bind="currentComponent.id + (currentDoc ? (': &nbsp;' + currentDoc.humanName) : '')"></span>-->
+          <span style="opacity:0.55;margin-right:10px;">Package:</span> <span ng-bind="currentComponent.id"></span>
         <span style="font-size: 18px;" ng-bind="currentDoc.docType && currentDoc.docType !== 'readme' ? '(' + currentDoc.docType + ')' : ''"></span>
       </div>
     </material-toolbar>

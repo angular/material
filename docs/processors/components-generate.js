@@ -24,7 +24,7 @@ module.exports = {
       readme: processDocs,
       directive: processDocs,
       service: processDocs,
-      object: processDocs,
+      object: processDocs
     };
 
     _(docs)
@@ -106,11 +106,16 @@ module.exports = {
           return demo;
 
           function generateDemoFile(fromDoc) {
+            var viewType = (fromDoc.basePath.indexOf('.html') > -1) ? 'HTML' :
+                           (fromDoc.basePath.indexOf('.css')  > -1) ? 'CSS' :
+                           (fromDoc.basePath.indexOf('.js')   > -1) ? 'JavaScript' : '';
+
             return _.assign({}, fromDoc, {
               template: fromDoc.basePath === 'index.html' ? 
                 'demo/template.index.html' :
                 'demo/template.file',
               outputPath: path.join(outputFolder, fromDoc.basePath),
+              viewType : viewType
             });
           }
         })
@@ -142,6 +147,8 @@ module.exports = {
           ]);
         })
         .each(function(doc) {
+          doc.demoOnly = false;
+
           if (doc.docType === 'directive') {
             //dash-case for directives
             doc.humanName = doc.name.replace(/([A-Z])/g, function($1) {
@@ -154,7 +161,10 @@ module.exports = {
             }
           } else if (doc.docType === 'readme') {
             doc.content = doc.content.replace(/<code>/g, '<code ng-non-bindable>');
-            doc.humanName = 'Overview';
+            doc.demoOnly = (doc.content.length < 30);
+            doc.humanName = doc.demoOnly ? 'Demo' : 'Overview';
+
+
           } else {
             doc.humanName = doc.name;
           }

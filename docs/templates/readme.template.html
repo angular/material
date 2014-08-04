@@ -1,5 +1,5 @@
 <div layout="vertical" layout-padding layout-fill>
-  <div flex>
+  <div flex ng-if="!currentComponent.docs[0].demoOnly">
     {$ doc.content | marked $}
   </div>
   <div flex
@@ -16,7 +16,7 @@
         View Demo Source
       </material-button>
     </div>
-    <material-tabs class="demo-tabs" nobar>
+    <material-tabs class="demo-tabs" nobar ng-if="currentComponent.demos.length > 1">
       <material-tab ng-repeat="(_,demo) in currentComponent.demos"
                active="currentComponent.$selectedDemo === demo"
                ng-click="currentComponent.$selectedDemo = demo"

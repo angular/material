@@ -9,6 +9,7 @@ material-tabs {
   .tabs-header {
     width: 100%;
     overflow: hidden;
+    position: relative;
     @include box-sizing(border-box);
 
     .tabs-header-items {
