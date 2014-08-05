@@ -11,7 +11,6 @@ angular.module('material.components.button', [])
 /**
  * @ngdoc directive
  * @name materialButton
- * @name material.components.buttons
  * @order 0
  *
  * @restrict E

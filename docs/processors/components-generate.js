@@ -164,7 +164,7 @@ module.exports = {
             if (doc.restrict.element) {
               doc.humanName = '<' + doc.humanName + '>';
             } else if (doc.restrict.attribute) {
-              doc.humanName = doc.humanName;
+              doc.humanName = "@" + doc.humanName;
             }
           } else if (doc.docType === 'readme') {
             doc.content = doc.content.replace(/<code>/g, '<code ng-non-bindable>');
