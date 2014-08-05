@@ -49,6 +49,16 @@ material-button,
   // &:hover {
   //   background-color: $button-hover-background;
   // }
+  .material-inner-button {
+    position: absolute;
+    opacity: 0;
+    left: 0;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
 
   &[disabled] {
     background-color: $button-disabled-background !important;

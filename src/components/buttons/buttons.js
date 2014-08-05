@@ -46,15 +46,15 @@ function MaterialButtonDirective() {
     transclude: true,
     template: '<material-ripple start="center" initial-opacity="0.25" opacity-decay-velocity="0.75"></material-ripple>',
     link: function(scope, element, attr, ctrl, transclude) {
-      var isDisabled = angular.isDefined(attr.disabled),
-          noInk = angular.isDefined(attr.noink);
+      var noInk = angular.isDefined(attr.noink);
 
+      // Put the content of the <material-button> inside after the ripple
       transclude(scope, function(clone) {
         element.append(clone);
       });
 
-      configureInk( isDisabled || noInk );
-      configureButton( isDisabled );
+      configureInk(noInk);
+      configureButton(attr.type);
 
       /**
        * If the inkRipple is disabled, then remove the ripple area....
@@ -63,36 +63,18 @@ function MaterialButtonDirective() {
        */
       function configureInk(isDisabled) {
         if ( isDisabled ) {
-          var elRipple = findNode(element, '.material-ink-ripple');
-          if (elRipple) {
-            elRipple.remove();
-          }
+          element.find('canvas').remove();
         }
       }
 
-      /**
-       * Propagate the `disabled` attribute to the button markup...
-       * @param isDisabled
-       */
-      function configureButton( isDisabled ) {
-        if (isDisabled ){
-          var button = findNode(element, 'button');
-          if ( button ) {
-            button.attr("disabled", "");
-          }
+      function configureButton(type) {
+        if (type) {
+          var innerButton = angular.element('<button>')
+            .attr('type', type)
+            .addClass('material-inner-button');
+          element.append(innerButton);
         }
       }
-
-      /**
-       * Find child angular element based on selector
-       * @param element
-       * @returns jqLite-wrapped DOM reference
-       */
-      function findNode( element, selector ) {
-        var found = angular.element(element[0].querySelector(selector));
-        return found.length ? angular.element(found[0]) : null;
-      }
-
     }
   };
 
