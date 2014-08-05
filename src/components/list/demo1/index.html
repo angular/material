@@ -4,67 +4,19 @@
 
     <material-list>
 
-      <material-item>
+      <material-item ng-repeat="item in todos">
         <div class="material-tile-left">
-          <face></face>
+            <img ng-src="{{item.face}}" class="face">
         </div>
         <div class="material-tile-content">
-          <h2>Brunch this weekend?</h2>
-          <h3>Min Li Chan</h3>
+          <h2>{{item.what}}</h2>
+          <h3>{{item.who}}</h3>
           <p>
-            I'll be in your neighborhood doing errands
+            {{item.notes}}
           </p>
         </div>
         <div class="material-tile-right">
-          3:08PM
-        </div>
-      </material-item>
-
-      <material-item>
-        <div class="material-tile-left">
-          <face></face>
-        </div>
-        <div class="material-tile-content">
-          <h2>Brunch this weekend?</h2>
-          <h3>Min Li Chan</h3>
-          <p>
-            I'll be in your neighborhood doing errands
-          </p>
-        </div>
-        <div class="material-tile-right">
-          3:08PM
-        </div>
-      </material-item>
-
-      <material-item>
-        <div class="material-tile-left">
-          <face></face>
-        </div>
-        <div class="material-tile-content">
-          <h2>Brunch this weekend?</h2>
-          <h3>Min Li Chan</h3>
-          <p>
-            I'll be in your neighborhood doing errands
-          </p>
-        </div>
-        <div class="material-tile-right">
-          3:08PM
-        </div>
-      </material-item>
-
-      <material-item>
-        <div class="material-tile-left">
-          <face></face>
-        </div>
-        <div class="material-tile-content">
-          <h2>Brunch this weekend?</h2>
-          <h3>Min Li Chan</h3>
-          <p>
-            I'll be in your neighborhood doing errands
-          </p>
-        </div>
-        <div class="material-tile-right">
-          3:08PM
+          {{item.when}}
         </div>
       </material-item>
 

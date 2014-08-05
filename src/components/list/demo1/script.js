@@ -2,16 +2,43 @@
 angular.module('app', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope) {
+    $scope.todos = [
+      {
+        face : '/img/list/60.jpeg',
+        what: 'Brunch this weekend?',
+        who: 'Min Li Chan',
+        when: '3:08PM',
+        notes: " I'll be in your neighborhood doing errands"
+      },
+      {
+        face : '/img/list/60.jpeg',
+        what: 'Brunch this weekend?',
+        who: 'Min Li Chan',
+        when: '3:08PM',
+        notes: " I'll be in your neighborhood doing errands"
+      },
+      {
+        face : '/img/list/60.jpeg',
+        what: 'Brunch this weekend?',
+        who: 'Min Li Chan',
+        when: '3:08PM',
+        notes: " I'll be in your neighborhood doing errands"
+      },
+      {
+        face : '/img/list/60.jpeg',
+        what: 'Brunch this weekend?',
+        who: 'Min Li Chan',
+        when: '3:08PM',
+        notes: " I'll be in your neighborhood doing errands"
+      },
+      {
+        face : '/img/list/60.jpeg',
+        what: 'Brunch this weekend?',
+        who: 'Min Li Chan',
+        when: '3:08PM',
+        notes: " I'll be in your neighborhood doing errands"
+      },
+    ]
 
-})
-
-.directive('face', function() {
-  return {
-    restrict: 'E',
-    template: '<img ng-src="{{face}}">',
-    scope: true,
-    link: function($scope, $element, $attr) {
-      $scope.face = 'http://placekitten.com/40/40';
-    }
-  }
 });
+

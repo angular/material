@@ -1,4 +1,17 @@
 
-face img {
+.face {
   border-radius: 32px;
+}
+
+.material-content {
+    margin-left: 20px;
+    margin-right: 30px;
+}
+
+.material-tile-right {
+    right: 40px;
+}
+
+.material-tile-left {
+    width: 76px;
 }

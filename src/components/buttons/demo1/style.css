@@ -13,6 +13,9 @@ section {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
+material-content {
+    margin-right: 7px;
+}
 .margin .material-button {
   width: 10em;
   margin: 1em;
