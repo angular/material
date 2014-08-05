@@ -14,29 +14,39 @@ function MaterialButtonDirective() {
     transclude: true,
     template: '<material-ripple start="center" initial-opacity="0.25" opacity-decay-velocity="0.75"></material-ripple>',
     link: function(scope, element, attr, ctrl, transclude) {
+      var isDisabled = angular.isDefined(attr.disabled),
+          noInk = angular.isDefined(attr.noink);
 
       transclude(scope, function(clone) {
         element.append(clone);
       });
-      configureInk( angular.isDefined(attr.disabled) );
+
+      configureInk( isDisabled || noInk );
+      configureButton( isDisabled );
 
       /**
-       * If the inkRipple is disabled, then remove
-       * the ripple area....
+       * If the inkRipple is disabled, then remove the ripple area....
+       * NOTE: <material-ripple/> directive replaces itself with `<canvas.material-ink-ripple />` element
        *
        * @param inkParent
        * @param isDisabled
        */
       function configureInk(isDisabled) {
         if ( isDisabled ) {
-          // Since <material-ripple/> directive replaces itself with `<canvas.material-ink-ripple />` element
-          var elRipple = findInkCanvasIn(element);
+          var elRipple = findNode(element, '.material-ink-ripple');
           if (elRipple) {
             elRipple.remove();
           }
+        }
+      }
 
-          // Propagate the `disabled` attribute to the button markup...
-          var button = findButton(element);
+      /**
+       * Propagate the `disabled` attribute to the button markup...
+       * @param isDisabled
+       */
+      function configureButton( isDisabled ) {
+        if (isDisabled ){
+          var button = findNode(element, 'button');
           if ( button ) {
             button.attr("disabled", "");
           }
@@ -44,16 +54,12 @@ function MaterialButtonDirective() {
       }
 
       /**
-       *
+       * Find child angular element based on selector
        * @param element
        * @returns {*}
        */
-      function findInkCanvasIn( element ){
-        return angular.element(element[0].querySelector('.material-ink-ripple'));
-      }
-
-      function findButton(element) {
-        var found = angular.element(element[0].querySelector('button'));
+      function findNode( element, selector ) {
+        var found = angular.element(element[0].querySelector(selector));
         return found.length ? angular.element(found[0]) : null;
       }
 
