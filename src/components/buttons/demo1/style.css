@@ -2,29 +2,27 @@
 /** From vulcanized demo **/
 
 section {
-  vertical-align: top;
-  display: inline-block;
   background: #f7f7f7;
   border-radius: 3px;
-  width: 25%;
   text-align: center;
-  margin: 1%;
-  padding: 1em;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
+  margin: 1em;
+  position: relative !important;
 }
 material-content {
-    margin-right: 7px;
+  margin-right: 7px;
 }
-.margin .material-button {
+section material-button,
+section .material-button {
+  display: block;
   width: 10em;
   margin: 1em;
   line-height: 25px;
 }
 .label {
-  text-align: left;
-  color: #bbb;
-  font-size: 12px;
-  margin-top: 2em;
+  position: absolute;
+  bottom: 5px;
+  left: 7px;
+  color: #ccc;
+  font-size: 14px;
 }
 
