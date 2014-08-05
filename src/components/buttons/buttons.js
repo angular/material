@@ -1,13 +1,46 @@
 /**
  * @ngdoc module
- * @name material.components.button
- *
+ * @name material.components.buttons
  * @description
- * Button is CSS component.
+ *
+ * Button
  */
 angular.module('material.components.button', [])
   .directive('materialButton', MaterialButtonDirective);
 
+/**
+ * @ngdoc directive
+ * @name materialButton
+ * @name material.components.buttons
+ * @order 0
+ *
+ * @restrict E
+ *
+ * @description
+ * `material-button` is either a standard `<button>` markup with `material-button`
+ * CSS or a `<material-button>` directive with optional ink ripples.
+ *
+ * @usage
+ * <hljs lang="html">
+ *  <material-button>
+ *    <button class="material-button">Button</button>
+ *  </material-button>
+ *  <br>
+ *  <material-button noink>
+ *    <button class="material-button material-button-colored">Button</button>
+ *  </material-button>
+ *  <br>
+ *  <material-button disabled>
+ *    <button class="material-button material-button-colored">Colored</button>
+ *  </material-button>
+ *  <br>
+ *  <button class="material-button">Button</button>
+ *  <br>
+ *  <button class="material-button material-button-colored">Button</button>
+ *  <br>
+ *  <button disabled class="material-button material-button-colored">Colored</button>
+ * </hljs>
+ */
 function MaterialButtonDirective() {
   return {
     restrict: 'E',
@@ -27,8 +60,6 @@ function MaterialButtonDirective() {
       /**
        * If the inkRipple is disabled, then remove the ripple area....
        * NOTE: <material-ripple/> directive replaces itself with `<canvas.material-ink-ripple />` element
-       *
-       * @param inkParent
        * @param isDisabled
        */
       function configureInk(isDisabled) {
@@ -56,7 +87,7 @@ function MaterialButtonDirective() {
       /**
        * Find child angular element based on selector
        * @param element
-       * @returns {*}
+       * @returns jqLite-wrapped DOM reference
        */
       function findNode( element, selector ) {
         var found = angular.element(element[0].querySelector(selector));
