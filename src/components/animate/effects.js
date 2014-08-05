@@ -248,17 +248,20 @@ function MaterialRippleDirective($materialEffects, $interpolate, $throttle) {
       // **********************************************************
 
       /**
-       * If the ripple canvas been removed from the DOM, then
-       * remove the `mousedown` listener
+       * If the ripple canvas been removed from the DOM, then remove the `mousedown` listener.
+       * If the ripple parent is disabled, then simply ignore the mousedown event.
        *
        * @returns {*|boolean}
        */
       function effectAllowed() {
         var allowed = isInkEnabled( element.scope() ) && angular.isDefined( element.parent()[0] );
+        var isDisabled = allowed ? !!element.parent().attr('disabled') : true;
+
         if ( !allowed ) {
           parent.off('mousedown', makeRipple);
         }
-        return allowed;
+
+        return !isDisabled;
 
 
         /**
