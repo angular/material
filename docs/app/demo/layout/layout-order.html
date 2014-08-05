@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Layout Order</title>
+  <link rel="stylesheet" href="../../docs.css">
+</head>
+<body class="layout-demo demo-with-padding">
+
+  <div layout="vertical" layout-md="horizontal" layout-padding>
+
+    <div flex layout-order-sm="3">
+      <div class="demo-color-a">Uno</div>
+    </div>
+
+    <div flex layout-order-md="2">
+      <div class="demo-color-b">Dos</div>
+    </div>
+
+    <div flex layout-order-lg="1">
+      <div class="demo-color-c">Tres</div>
+    </div>
+
+    <div flex>
+      <div class="demo-color-d">Cuatro</div>
+    </div>
+
+  </div>
+
+</body>
+</html>

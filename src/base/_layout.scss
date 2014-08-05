@@ -11,15 +11,6 @@
   @include flex-direction(column);
 }
 
-[layout] > [flex] {
-  @include box-sizing(border-box);
-  display: block;
-}
-
-[layout] > [layout] {
-  @include flex-display();
-}
-
 [layout-padding],
 [layout][layout-padding] > * {
   padding: $layout-gutter-width / 2;
@@ -192,15 +183,28 @@
   }
 }
 
+@mixin layout-order-preset($attr, $n) {
+  [#{$attr}="#{$n}"] {
+    @include flex-order($n);
+  }
+}
+
+@mixin layout-order-presets($attr) {
+  @for $i from 1 through 6 {
+    @include layout-order-preset($attr, $i);
+  }
+}
+
 @mixin layout-breakpoint($suffix, $min-width) {
   @media (min-width: $min-width) {
 
     @include layout-presets( flex-#{$suffix} );
     @include layout-offset-presets( offset-#{$suffix} );
+    @include layout-order-presets( layout-order-#{$suffix} );
     [layout-#{$suffix}] {
       @include flex-direction(row);
     }
-    [layout-#{$suffix}="vertical"] {
+    [layout-#{$suffix}=vertical] {
       @include flex-direction(column);
     }
 
@@ -224,6 +228,7 @@
 // ------------------------------
 @include layout-presets( flex );
 @include layout-offset-presets( offset );
+@include layout-order-presets( layout-order );
 
 
 // layout-sm = Small (Tablets)

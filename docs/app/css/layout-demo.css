@@ -66,43 +66,50 @@ body.layout-demo {
   min-width: 30px;
 }
 
-.demo-padding [layout-padding] > div > div {
+.demo-padding [layout-padding] > div > div,
+.demo-with-padding [layout-padding] > div > div {
   margin: 0;
   padding: 10px;
 }
 
 .demo-no-padding [layout]:nth-child(1) > div,
-.demo-padding [layout-padding]:nth-child(1) > div > div {
+.demo-padding [layout-padding]:nth-child(1) > div > div,
+.demo-color-a {
   border: 1px solid #0097a7;
   background: #00BCD4;
 }
 
 .demo-no-padding [layout]:nth-child(2) > div,
-.demo-padding [layout-padding]:nth-child(2) > div > div {
+.demo-padding [layout-padding]:nth-child(2) > div > div,
+.demo-color-b {
   border: 1px solid #689f38;
   background: #8BC34A;
 }
 
 .demo-no-padding [layout]:nth-child(3) > div,
-.demo-padding [layout-padding]:nth-child(3) > div > div {
+.demo-padding [layout-padding]:nth-child(3) > div > div,
+.demo-color-c {
   border: 1px solid #610C2D;
   background: #C2185B;
 }
 
 .demo-no-padding [layout]:nth-child(4) > div,
-.demo-padding [layout-padding]:nth-child(4) > div > div {
+.demo-padding [layout-padding]:nth-child(4) > div > div,
+.demo-color-d {
   border: 1px solid #ffa000;
   background: #ffc107;
 }
 
 .demo-no-padding [layout]:nth-child(5) > div,
-.demo-padding [layout-padding]:nth-child(5) > div > div {
+.demo-padding [layout-padding]:nth-child(5) > div > div,
+.demo-color-e {
   border: 1px solid #f50057;
   background: #FF4081;
 }
 
 .demo-no-padding [layout]:nth-child(6) > div,
-.demo-padding [layout-padding]:nth-child(6) > div > div {
+.demo-padding [layout-padding]:nth-child(6) > div > div,
+.demo-color-f {
   border: 1px solid #8e24aa;
   background: #AB47BC;
 }
