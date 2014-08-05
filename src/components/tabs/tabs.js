@@ -491,17 +491,12 @@ function TabDirective( $attrBind ) {
     // **********************************************************
 
     /**
-     * If materialTabs `noInk` is true, then remove the materialInkBar feature
-     * By default, the materialInkBar tag is auto injected; @see line 255
+     * If materialTabs `noInk` is true, then remove the ripple area....
+     * NOTE: <material-ripple/> directive replaces itself with `<canvas.material-ink-ripple />` element
      */
     function configureEffects() {
       if ( tabsController.noink ) {
-
-        // Since <material-ripple/> directive replaces itself with `<div.material-ink-ripple />` element
-        var elRipple = angular.element(element[0].querySelector('.material-ink-ripple'));
-        if (elRipple) {
-          elRipple.remove();
-        }
+        element.find('canvas').remove();
       }
     }
 
@@ -543,10 +538,10 @@ function TabDirective( $attrBind ) {
           if (!isNodeEmpty(node)) {
             if (isNodeType(node, 'material-tab-label')) {
               // Simulate use of `label` attribute
+
               tab.label = node.childNodes;
 
             } else {
-
               // Transient references...
               //
               // Attach to scope for future transclusion into materialView(s)
@@ -554,7 +549,6 @@ function TabDirective( $attrBind ) {
               // the scope of tab or material-view container...
 
               tab.content.push(node);
-
             }
           }
         });
