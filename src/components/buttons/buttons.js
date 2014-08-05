@@ -16,28 +16,23 @@ angular.module('material.components.button', [])
  * @restrict E
  *
  * @description
- * `material-button` is either a standard `<button>` markup with `material-button`
- * CSS or a `<material-button>` directive with optional ink ripples.
+ * `<material-button type="" disabled noink>` is a button directive with optional ink ripples (default enabled).
+ *
+ * @param {boolean=} noink Flag indicates use of ripple ink effects
+ * @param {boolean=} disabled Flag indicates if the tab is disabled: not selectable with no ink effects
+ * @param {string=} type Optional attribute to specific button types (useful for forms); such as 'submit', etc.
  *
  * @usage
  * <hljs lang="html">
- *  <material-button>
- *    <button class="material-button">Button</button>
+ *  <material-button>Button</material-button>
+ *  <br/>
+ *  <material-button noink class="material-button-colored">
+ *    Button (noInk)
  *  </material-button>
- *  <br>
- *  <material-button noink>
- *    <button class="material-button material-button-colored">Button</button>
+ *  <br/>
+ *  <material-button disabled class="material-button-colored">
+ *    Colored (disabled)
  *  </material-button>
- *  <br>
- *  <material-button disabled>
- *    <button class="material-button material-button-colored">Colored</button>
- *  </material-button>
- *  <br>
- *  <button class="material-button">Button</button>
- *  <br>
- *  <button class="material-button material-button-colored">Button</button>
- *  <br>
- *  <button disabled class="material-button material-button-colored">Colored</button>
  * </hljs>
  */
 function MaterialButtonDirective() {
@@ -67,11 +62,16 @@ function MaterialButtonDirective() {
         }
       }
 
+      /**
+       * If a type attribute is specified, dynamically insert a <button> element.
+       * This is vital to allow <material-button> to be used as form buttons
+       * @param type
+       */
       function configureButton(type) {
         if (type) {
           var innerButton = angular.element('<button>')
-            .attr('type', type)
-            .addClass('material-inner-button');
+                .attr('type', type)
+                .addClass('material-inner-button');
           element.append(innerButton);
         }
       }
