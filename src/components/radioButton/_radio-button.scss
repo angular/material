@@ -79,4 +79,9 @@ material-radio-button {
     border-radius: 50%;
   }
 
+  &:focus {
+    // TODO: create a nicer/consistent syle!
+    outline: dashed red;
+  }
+
 }
