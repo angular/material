@@ -41,14 +41,16 @@ function MaterialButtonDirective() {
     transclude: true,
     template: '<material-ripple start="center" initial-opacity="0.25" opacity-decay-velocity="0.75"></material-ripple>',
     link: function(scope, element, attr, ctrl, transclude) {
-      var noInk = angular.isDefined(attr.noink);
 
       // Put the content of the <material-button> inside after the ripple
+
       transclude(scope, function(clone) {
         element.append(clone);
       });
 
-      configureInk(noInk);
+      //
+
+      configureInk(attr.noink);
       configureButton(attr.type);
 
       /**
@@ -56,8 +58,8 @@ function MaterialButtonDirective() {
        * NOTE: <material-ripple/> directive replaces itself with `<canvas.material-ink-ripple />` element
        * @param isDisabled
        */
-      function configureInk(isDisabled) {
-        if ( isDisabled ) {
+      function configureInk(noInk) {
+        if ( noInk ) {
           element.find('canvas').remove();
         }
       }
@@ -68,7 +70,8 @@ function MaterialButtonDirective() {
        * @param type
        */
       function configureButton(type) {
-        if (type) {
+        var hasButton = !!element.find('button');
+        if (type && !hasButton) {
           var innerButton = angular.element('<button>')
                 .attr('type', type)
                 .addClass('material-inner-button');

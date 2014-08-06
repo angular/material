@@ -96,7 +96,6 @@ material-button,
     @include fab-position(bottom-left, auto, auto, -$button-fab-height/2, $button-fab-width/2);
     @include fab-position(top-right, -$button-fab-height/2, $button-fab-width/2, auto, auto);
     @include fab-position(top-left, -$button-fab-height/2, auto, auto, $button-fab-width/2);
-    position: absolute;
 
     z-index: $button-fab-zindex;
     padding: $button-fab-padding;
@@ -107,6 +106,9 @@ material-button,
     border-radius: $button-fab-border-radius;
 
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.258824);
+    border-radius: 50%;
+    overflow: hidden;
+
   }
 }
 
