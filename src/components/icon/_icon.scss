@@ -1,7 +1,12 @@
 
 material-icon {
   position: relative;
-  display: inline-block;
   vertical-align: middle;
   background-repeat: no-repeat no-repeat;
+  pointer-events:none;
+}
+
+material-class-icon {
+  display: block;
+  margin: 0 auto;
 }
