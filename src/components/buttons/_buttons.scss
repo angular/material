@@ -36,6 +36,7 @@ material-button,
   line-height: inherit;
 
   cursor: pointer;
+  overflow: hidden;   // for ink containment
 
   &.material-button-colored {
     color: $theme-light;
