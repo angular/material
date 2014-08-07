@@ -64,13 +64,12 @@ relative to the component's directory):
 
 ### Documentation
 
-Each component's documentation is parsed from several places: the README and comments in the 
-component's source files.
+A component's documentation is parsed from the README, and from comments in the component's source files.
 
-The component's general description goes in the README file. The contents of the README be displayed
-on the component's overview page with all of the demos.
+The component's general description goes in the README file. The contents of the README will then 
+be displayed on the component's overview page with all of its demos.
 
-Then, the source comments will parsed to generate detailed API documentation pages.
+Then, source comments will parsed to generate detailed API documentation pages.
 
 We use the angular source-documentation conventions. Check any component's source file for examples.
 
