@@ -298,8 +298,8 @@ function TabsDirective($compile, $timeout, $materialEffects) {
             }
 
             // Add class to hide or show the container for the materialView(s)
-            var shouldShowContent = cache.length > 0;
-            cntr.toggleClass('ng-hide', shouldShowContent);
+            var shoudlHideContent = cache.length === 0;
+            cntr.toggleClass('ng-hide', shouldHideContent);
           });
 
           /**
