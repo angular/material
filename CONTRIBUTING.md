@@ -21,13 +21,65 @@ with a fix.
 
 We're still in early development but we look forward to welcoming community contributions soon. 
 
+### Component Structure
+
+Each component is a folder of its own. Each component can have many files: javascript, tests, sass, 
+a README, and demos.  
+
+**Demos**
+
+Demos are located in subfolders of the component. Each demo must have an index.html, and can then have
+any number of additianal javascript/css/html-templates.  The index.html is an html partial:
+it should represent an angular app that will be appended to another page's body.  
+See `src/components/dialog/demo1/` for an example.
+
+**The `module.json` File**
+
+In order for the build system to know how each component is organized, a `module.json` file in the 
+root of the component is expected.  It has the following structure (all file-matching patterns are
+relative to the component's directory):
+
+```js
+{
+  // Required. The id of the angular module this component represents.
+  "id": "material.components.myAwesomeComponent",
+
+  // Required. The 'human readable' name of this component
+  "name": "My Awesome Component",
+
+  // A pattern matching all the js files for this component. Default: ["*.js", "!*.spec.js`]
+  "js": [], 
+
+  // A pattern matching all the scss files for this component. Default: ["*.scss"]
+  "scss": [], 
+
+  // A pattern matching all the readme files for this component. Default: ["README.md"]
+  "readme": [], 
+
+  // An object matching the demos for this component. Default: no demos.
+  // Structure: `demos: { "myDemo": { "name": "My Demo", files: ["myDemoFolder/*"] }
+  "demos": {},
+}
+```
+
+### Documentation
+
+Each component's documentation is parsed from several places: the README and comments in the 
+component's source files.
+
+The component's general description goes in the README file. The contents of the README be displayed
+on the component's overview page with all of the demos.
+
+Then, the source comments will parsed to generate detailed API documentation pages.
+
+We use the angular source-documentation conventions. Check any component's source file for examples.
+
 ### Javascript Conventions
 
 - 2 spaces for tabs
 - Each component declares its own module at the top and leaks no variables
 - Use the 'revealing pattern' when possible. API at top, function definitions at bottom.  See src/components/checkbox/checkbox.js
 - JSHint conventions in progress
-
 
 ### Testing Conventions
 

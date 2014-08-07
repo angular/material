@@ -17,6 +17,9 @@ This project is in early development via a small core team of [Ionic Framework](
 
 For issues, including progress on accessibility support for these UI elements, see the [Issue Tracker](https://github.com/angular/material/issues)
 
+See [CONTRIBUTING.md](https://github.com/angular/material/tree/master/CONTRIBUTING.md) for information
+on structure, documentation, and code conventions.
+
 ## Usage
 
 In its current early state, use AngularJS Material Design at your own risk.  APIs are changing rapidly.

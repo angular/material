@@ -19,7 +19,7 @@ module.exports = {
     json = _.assign({
       js: ['*.js', '!*.spec.js'],
       scss: ['*.scss'],
-      readme: ['*.md'],
+      readme: ['README.md'],
       demos: {}
     }, json);
 
