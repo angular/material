@@ -4,7 +4,10 @@
  * @description Slider module!
  */
 angular.module('material.components.slider', [])
-  .directive('materialSlider', [ '$window', materialSliderDirective ]);
+  .directive('materialSlider', [
+    '$window', 
+    materialSliderDirective 
+  ]);
 
 /**
  * @ngdoc directive
@@ -26,7 +29,7 @@ function materialSliderDirective($window) {
       min: parseInt( rangeEle.min !== "" ? rangeEle.min : 0, 10 ),
       max: parseInt( rangeEle.max !== "" ? rangeEle.max : 100, 10 ),
       step: parseInt( rangeEle.step !== "" ? rangeEle.step : 1, 10 )
-    }
+    };
   }
 
   return {

@@ -1,4 +1,4 @@
-/**
+/*
  *  This function() provides scope-relative features to disconnect and reconnect to the $digest() processes
  *  NOTE: this is essentially a reversible $destroy() for scopes.
  *

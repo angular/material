@@ -1,4 +1,5 @@
-angular.module('material.services.compiler', [])
+angular.module('material.services.compiler', [
+])
   .service('$materialCompiler', [
     '$q',
     '$http',
@@ -116,7 +117,7 @@ function materialCompilerService($q, $http, $injector, $compile, $controller, $t
       var element = angular.element('<div>').html(template).contents();
       var linkFn = $compile(element);
 
-      //Return a linking function that can be used later whne the element is ready
+      //Return a linking function that can be used later when the element is ready
       return {
         locals: locals,
         element: element,

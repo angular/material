@@ -1,5 +1,6 @@
-angular.module('material.services.popup', ['material.services.compiler'])
-
+angular.module('material.services.popup', [
+  'material.services.compiler'
+])
   .factory('$materialPopup', [
     '$materialCompiler',
     '$animate',
@@ -21,15 +22,11 @@ function PopupFactory($materialCompiler, $animate, $rootScope, $rootElement) {
 
       return self = angular.extend({
         enter: enter,
-        leave: leave,
         destroy: destroy,
         scope: scope
       }, compileData);
 
       function enter(done) {
-        if (scope.$$destroyed || self.entered) return (done || angular.noop)();
-
-        self.entered = true;
         var after = appendTo[0].lastElementChild;
         $animate.enter(self.element, appendTo, after && angular.element(after), done);
 
@@ -39,13 +36,8 @@ function PopupFactory($materialCompiler, $animate, $rootScope, $rootElement) {
           self.compiled = true;
         }
       }
-      function leave(done) {
-        self.entered = false;
-        $animate.leave(self.element, done);
-      }
       function destroy(done) {
-        if (scope.$$destroyed) return (done || angular.noop)();
-        self.leave(function() {
+        $animate.leave(self.element, function() {
           scope.$destroy();
           (done || angular.noop)();
         });

@@ -5,9 +5,26 @@
  *
  * Ink and Popup Effects
  */
-angular.module('material.animations', ['ngAnimateStylers', 'ngAnimateSequence', 'ngAnimate', 'material.services'])
-       .service('$materialEffects', [ '$animateSequence', '$ripple', '$rootElement', '$position', '$$rAF', MaterialEffects])
-       .directive('materialRipple', ['$materialEffects', '$interpolate', '$throttle', MaterialRippleDirective]);
+angular.module('material.animations', [
+  'ngAnimateStylers', 
+  'ngAnimateSequence', 
+  'material.services.position',
+  'material.services.throttle'
+])
+  .service('$materialEffects', [ 
+    '$animateSequence', 
+    '$ripple', 
+    '$rootElement', 
+    '$position', 
+    '$$rAF', 
+    MaterialEffects
+  ])
+  .directive('materialRipple', [
+    '$materialEffects', 
+    '$interpolate', 
+    '$throttle', 
+    MaterialRippleDirective
+  ]);
 
 /**
  * @ngdoc service

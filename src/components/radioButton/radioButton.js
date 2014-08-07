@@ -4,9 +4,15 @@
  * @name material.components.radioButton
  * @description radioButton module!
  */
-angular.module('material.components.radioButton', [])
-  .directive('materialRadioButton', [ materialRadioButtonDirective ])
-  .directive('materialRadioGroup', [ materialRadioGroupDirective ]);
+angular.module('material.components.radioButton', [
+  'material.animations'
+])
+  .directive('materialRadioButton', [
+    materialRadioButtonDirective 
+  ])
+  .directive('materialRadioGroup', [
+    materialRadioGroupDirective 
+  ]);
 
 
 /**

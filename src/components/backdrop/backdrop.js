@@ -5,7 +5,15 @@
  * Backdrop is a masking layer used behind modal elements
  *
  */
-angular.module('material.components.backdrop', [])
+angular.module('material.components.backdrop', [
+  'material.services.popup'
+])
+  .service('$materialBackdrop', [
+    '$materialPopup',
+    '$timeout',
+    '$rootElement',
+    MaterialBackdropService
+  ]);
 
 /**
  * @ngdoc service
@@ -17,13 +25,6 @@ angular.module('material.components.backdrop', [])
  *
  *  @param {integer=} selected Index of the active/selected tab
  */
-.service('$materialBackdrop', [
-  '$materialPopup',
-  '$timeout',
-  '$rootElement',
-  MaterialBackdropService
-]);
-
 function MaterialBackdropService($materialPopup, $timeout, $rootElement) {
 
   return function showBackdrop(options, clickFn) {

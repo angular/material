@@ -5,10 +5,28 @@
  *
  * Tabs
  */
-angular.module('material.components.tabs', ['material.utils', 'material.animations', 'material.services'])
-  .controller('materialTabsController', [ '$scope', '$attrs', '$materialComponentRegistry', '$timeout', TabsController ])
-  .directive('materialTabs', [ '$compile', '$timeout', '$materialEffects', TabsDirective ])
-  .directive('materialTab', [ '$attrBind', TabDirective  ]);
+angular.module('material.components.tabs', [
+  'material.animations',
+  'material.services.attrBind'
+])
+  .controller('materialTabsController', [
+    '$scope', 
+    '$attrs', 
+    '$materialComponentRegistry', 
+    '$timeout', 
+    TabsController 
+  ])
+  .directive('materialTabs', [
+    '$compile', 
+    '$timeout', 
+    '$materialEffects', 
+    '$animate',
+    TabsDirective
+  ])
+  .directive('materialTab', [ 
+    '$attrBind', 
+    TabDirective  
+  ]);
 
 /**
  * @ngdoc directive
@@ -195,7 +213,7 @@ function TabsDirective($compile, $timeout, $materialEffects) {
          * container is transposed with the tabs-header
          */
         function alignTabButtons() {
-          var align  = attrs['tabsAlign'] || "top";
+          var align  = attrs.tabsAlign || "top";
           var container = findNode('.tabs-content', element);
 
           if ( align == "bottom") {
@@ -280,8 +298,8 @@ function TabsDirective($compile, $timeout, $materialEffects) {
             }
 
             // Add class to hide or show the container for the materialView(s)
-            angular.bind(cntr, cache.length ? cntr.removeClass : cntr.addClass)('ng-hide');
-
+            var shouldShowContent = cache.length > 0;
+            cntr.toggleClass('ng-hide', shouldShowContent);
           });
 
           /**
@@ -480,7 +498,7 @@ function TabDirective( $attrBind ) {
       if (!scope.disabled) {
         scope.$apply(function () {
           tabsController.select(scope);
-        })
+        });
       }
     });
 
@@ -624,7 +642,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
   this.onTabChange = angular.noop;
   this.selectedElement = function() {
     return findElementFor( selected );
-  }
+  };
 
   /**
    * Find the DOM element associated with the tab/scope
@@ -816,30 +834,10 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
         return tab;
       }
       return null;
-
-
-    }
+    };
   }
 
 }
-
-var trim = (function () {
-  function isString(value) {
-    return typeof value === 'string';
-  }
-
-  // native trim is way faster: http://jsperf.com/angular-trim-test
-  // but IE doesn't have it... :-(
-  // TODO: we should move this into IE/ES5 polyfill
-  if (!String.prototype.trim) {
-    return function (value) {
-      return isString(value) ? value.replace(/^\s\s*/, '').replace(/\s\s*$/, '') : value;
-    };
-  }
-  return function (value) {
-    return isString(value) ? value.trim() : value;
-  };
-})();
 
 /**
  * Determine if the DOM element is of a certain tag type
@@ -854,12 +852,12 @@ var isNodeType = function (node, type) {
     node.hasAttribute('data-' + type) ||
     node.tagName.toLowerCase() === type ||
     node.tagName.toLowerCase() === 'data-' + type
-    );
+  );
 };
 
 var isNgRepeat = function (node) {
   var COMMENT_NODE = 8;
-  return (node.nodeType == COMMENT_NODE) && (node.nodeValue.indexOf('ngRepeat') > -1);
+  return node.nodeType == COMMENT_NODE && node.nodeValue.indexOf('ngRepeat') > -1;
 };
 
 /**
@@ -869,6 +867,6 @@ var isNgRepeat = function (node) {
  */
 var isNodeEmpty = function (node) {
   var TEXT_NODE = 3;
-  return (node.nodeType == TEXT_NODE) && (trim(node.nodeValue) == "");
+  return node.nodeType == TEXT_NODE && !(node.nodeValue || '').trim();
 };
 

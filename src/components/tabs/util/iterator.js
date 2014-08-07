@@ -1,4 +1,4 @@
-/**
+/*
  * iterator is a list facade to easily support iteration and accessors
  *
  * @param items Array list which this iterator will enumerate
@@ -34,7 +34,7 @@ function iterator(items, reloop) {
 
     };
 
-    /**
+    /*
      * Publish copy of the enumerable set
      * @returns {Array|*}
      */
@@ -42,7 +42,7 @@ function iterator(items, reloop) {
       return [].concat(_items);
     }
 
-    /**
+    /*
      * Determine length of the list
      * @returns {Array.length|*|number}
      */
@@ -50,7 +50,7 @@ function iterator(items, reloop) {
       return _items.length;
     }
 
-    /**
+    /*
      * Is the index specified valid
      * @param index
      * @returns {Array.length|*|number|boolean}
@@ -59,7 +59,7 @@ function iterator(items, reloop) {
       return _items.length && ( index > -1 ) && (index < _items.length );
     }
 
-    /**
+    /*
      * Can the iterator proceed to the next item in the list; relative to
      * the specified item.
      *
@@ -70,7 +70,7 @@ function iterator(items, reloop) {
       return tab ? inRange(indexOf(tab) + 1) : false;
     }
 
-    /**
+    /*
      * Get item at specified index/position
      * @param index
      * @returns {*}
@@ -79,7 +79,7 @@ function iterator(items, reloop) {
       return inRange(index) ? _items[index] : null;
     }
 
-    /**
+    /*
      * Find all elements matching the key/value pair
      * otherwise return null
      *
@@ -90,7 +90,7 @@ function iterator(items, reloop) {
      */
     function findBy(key, val) {
 
-      /**
+      /*
        * Implement of e6 Array::find()
        * @param list
        * @param callback
@@ -118,7 +118,7 @@ function iterator(items, reloop) {
 
     }
 
-    /**
+    /*
      * Add item to list
      * @param it
      * @param index
@@ -134,7 +134,7 @@ function iterator(items, reloop) {
       return indexOf(it);
     }
 
-    /**
+    /*
      * Remove it from list...
      * @param it
      */
@@ -142,7 +142,7 @@ function iterator(items, reloop) {
       _items.splice(indexOf(it), 1);
     }
 
-    /**
+    /*
      * Get the zero-based index of the target tab
      * @param it
      * @returns {*}
@@ -151,7 +151,7 @@ function iterator(items, reloop) {
       return _items.indexOf(it);
     }
 
-    /**
+    /*
      * Boolean existence check
      * @param it
      * @returns {boolean}
@@ -160,7 +160,7 @@ function iterator(items, reloop) {
       return it && (indexOf(it) > -1);
     }
 
-    /**
+    /*
      * Find the next item
      * @param tab
      * @returns {*}
@@ -179,7 +179,7 @@ function iterator(items, reloop) {
       return null;
     }
 
-    /**
+    /*
      * Find the previous item
      * @param tab
      * @returns {*}
@@ -198,7 +198,7 @@ function iterator(items, reloop) {
       return null;
     }
 
-    /**
+    /*
      * Return first item in the list
      * @returns {*}
      */
@@ -206,7 +206,7 @@ function iterator(items, reloop) {
       return _items.length ? _items[0] : null;
     }
 
-    /**
+    /*
      * Return last item in the list...
      * @returns {*}
      */

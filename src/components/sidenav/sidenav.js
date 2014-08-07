@@ -8,17 +8,23 @@
 angular.module('material.components.sidenav', [
   'material.services.registry'
 ])
-  .factory('$materialSidenav', [ '$materialComponentRegistry', materialSidenavService ])
+  .factory('$materialSidenav', [
+    '$materialComponentRegistry', 
+    materialSidenavService 
+  ])
+  .directive('materialSidenav', [
+    materialSidenavDirective 
+  ])
   .controller('$materialSidenavController', [
-      '$scope',
-      '$element',
-      '$attrs',
-      '$timeout',
-      '$document',
-      '$materialSidenav',
-      '$materialComponentRegistry',
-    materialSidenavController ])
-  .directive('materialSidenav', [ materialSidenavDirective ]);
+    '$scope',
+    '$element',
+    '$attrs',
+    '$timeout',
+    '$document',
+    '$materialSidenav',
+    '$materialComponentRegistry',
+    materialSidenavController 
+  ]);
   
 /**
  * @ngdoc object
@@ -82,7 +88,7 @@ function materialSidenavController($scope, $element, $attrs, $timeout,
     } else {
       onClose();
     }
-  }
+  };
 
   /**
    * Open the side menu
@@ -90,7 +96,7 @@ function materialSidenavController($scope, $element, $attrs, $timeout,
   this.open = function() {
     $scope.isOpen = true;
     onOpen();
-  }
+  };
 
   /**
    * Close the side menu
@@ -98,7 +104,7 @@ function materialSidenavController($scope, $element, $attrs, $timeout,
   this.close = function() {
     $scope.isOpen = false;
     onClose();
-  }
+  };
 }
 
 /**
@@ -157,8 +163,8 @@ function materialSidenavService($materialComponentRegistry) {
         if(!instance) { return; }
         instance.close();
       }
-    }
-  }
+    };
+  };
 }
 
 /**

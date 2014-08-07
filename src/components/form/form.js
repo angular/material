@@ -5,6 +5,9 @@
  * Form
  */
 angular.module('material.components.form', [])
+  .directive('materialInputGroup', [
+    materialInputGroupDirective
+  ]);
 
 /**
  * @ngdoc directive
@@ -13,8 +16,6 @@ angular.module('material.components.form', [])
  * @description
  * Material Input Group
  */
-.directive('materialInputGroup', [materialInputGroupDirective]);
-
 function materialInputGroupDirective() {
   return {
     restrict: 'C',

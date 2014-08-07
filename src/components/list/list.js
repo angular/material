@@ -6,8 +6,12 @@
  */
 angular.module('material.components.list', [])
 
-.directive('materialList', [materialListDirective])
-.directive('materialItem', [materialItemDirective]);
+.directive('materialList', [
+  materialListDirective
+])
+.directive('materialItem', [
+  materialItemDirective
+]);
 
 /**
  * @ngdoc directive
@@ -23,7 +27,7 @@ function materialListDirective() {
     restrict: 'E',
     link: function($scope, $element, $attr) {
     }
-  }
+  };
 }
 
 /**
@@ -39,5 +43,5 @@ function materialItemDirective() {
     restrict: 'E',
     link: function($scope, $element, $attr) {
     }
-  }
+  };
 }

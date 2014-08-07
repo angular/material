@@ -77,6 +77,11 @@ module.exports = {
       });
 
     renderedDocs.push({
+      template: 'template.json',
+      outputPath: path.join(config.get('basePath'), config.get('buildConfig.dist'), 'components.json'),
+      content: components
+    });
+    renderedDocs.push({
       template: 'components-data.template.js',
       outputPath: 'js/components-data.js',
       components: components
@@ -151,6 +156,7 @@ module.exports = {
             'usage',
             'returns',
             'order',
+            'dependencies'
           ]);
         })
         .each(function(doc) {

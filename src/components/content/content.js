@@ -8,10 +8,20 @@
 angular.module('material.components.content', [
   'material.services.registry'
 ])
-
-.controller('$materialContentController', ['$scope', '$element', '$attrs', '$materialComponentRegistry', materialContentController])
-.factory('$materialContent', ['$materialComponentRegistry', materialContentService])
-.directive('materialContent', [materialContentDirective])
+  .controller('$materialContentController', [
+    '$scope', 
+    '$element', 
+    '$attrs', 
+    '$materialComponentRegistry', 
+    materialContentController
+  ])
+  .factory('$materialContent', [
+    '$materialComponentRegistry', 
+    materialContentService
+  ])
+  .directive('materialContent', [
+    materialContentDirective
+  ]);
 
 function materialContentController($scope, $element, $attrs, $materialComponentRegistry) {
   $materialComponentRegistry.register(this, $attrs.componentId || 'content');
@@ -40,5 +50,5 @@ function materialContentDirective() {
     controller: '$materialContentController',
     link: function($scope, $element, $attr) {
     }
-  }
+  };
 }

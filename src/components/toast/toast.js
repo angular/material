@@ -8,11 +8,6 @@ angular.module('material.components.toast', ['material.services.popup'])
   .directive('materialToast', [
     QpToastDirective
   ])
-  /**
-   * @ngdoc service
-   * @name $materialToast
-   * @module material.components.toast
-   */
   .factory('$materialToast', [
     '$timeout',
     '$materialPopup',
@@ -29,6 +24,11 @@ function QpToastDirective() {
   };
 }
 
+/**
+ * @ngdoc service
+ * @name $materialToast
+ * @module material.components.toast
+ */
 function QpToastService($timeout, $materialPopup) {
   var recentToast;
 

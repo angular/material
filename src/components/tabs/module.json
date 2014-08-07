@@ -1,6 +1,7 @@
 {
   "module": "material.components.tabs",
   "name": "Tabs",
+  "js": ["tabs.js", "util/*.js"],
   "demos": {
     "demo1": {
       "name": "1",

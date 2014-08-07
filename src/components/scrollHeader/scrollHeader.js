@@ -9,6 +9,11 @@ angular.module('material.components.scrollHeader', [
   'material.components.content',
   'material.services.registry'
 ])
+  .directive('scrollHeader', [
+    '$materialContent', 
+    '$timeout', 
+    materialScrollHeader 
+  ]);
 
 /**
  * @ngdoc directive
@@ -18,8 +23,6 @@ angular.module('material.components.scrollHeader', [
  * @description
  * Scrollable header
  */
-.directive('scrollHeader', [ '$materialContent', '$timeout', materialScrollHeader ]);
-
 function materialScrollHeader($materialContent, $timeout) {
 
   return {

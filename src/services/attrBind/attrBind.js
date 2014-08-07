@@ -1,12 +1,17 @@
-angular.module('material.utils', [ ])
-  .factory('$attrBind', [ '$parse', '$interpolate', AttrsBinder ]);
+angular.module('material.services.attrBind', [
+])
+  .factory('$attrBind', [
+    '$parse', 
+    '$interpolate', 
+    MaterialAttrBind 
+  ]);
 
 /**
  *  This service allows directives to easily databind attributes to private scope properties.
  *
  * @private
  */
-function AttrsBinder($parse, $interpolate) {
+function MaterialAttrBind($parse, $interpolate) {
   var LOCAL_REGEXP = /^\s*([@=&])(\??)\s*(\w*)\s*$/;
 
   return function (scope, attrs, bindDefinition, bindDefaults) {

@@ -5,8 +5,12 @@
  * @description
  * A component registry system for accessing various component instances in an app.
  */
-angular.module('material.services.registry', [])
-  .factory('$materialComponentRegistry', [ '$log', materialComponentRegistry ]);
+angular.module('material.services.registry', [
+])
+  .factory('$materialComponentRegistry', [
+    '$log', 
+    materialComponentRegistry 
+  ]);
 
 /**
  * @ngdoc service

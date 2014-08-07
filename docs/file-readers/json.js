@@ -3,6 +3,9 @@ var _ = require('lodash');
 var glob = require('glob');
 var fs = require('fs');
 
+// Regex adapted from https://github.com/ceymard/gulp-ngcompile
+var NG_MODULE_REGEX = /\.module\(('[^']*'|"[^"]*")\s*,(?:\s*\[([^\]]+)\])?/g;
+
 module.exports = {
   pattern: /module.json$/,
   processFile: function(filePath, contents, basePath) {
@@ -24,6 +27,17 @@ module.exports = {
     var sources = getDocsForPatterns([].concat(json.js));
     sources.forEach(function(doc) {
       doc.docType = 'source';
+
+      var match = NG_MODULE_REGEX.exec(doc.content);
+      var depsMatch = match && match[2] && match[2].trim();
+      if (depsMatch) {
+        var dependencies = _.map(depsMatch.split(/\s*,\s*/), function(dep) {
+          dep = dep.slice(1, -1); //remove quotes
+          return dep;
+        });
+
+        doc.dependencies = (doc.dependencies || []).concat(dependencies);
+      }
     });
 
     var readmes = getDocsForPatterns([].concat(json.readme));

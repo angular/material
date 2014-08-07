@@ -16,6 +16,7 @@ module.exports = function(config) {
     blockEnd: '%}'
   });
 
+  config.set('buildConfig', buildConfig);
   config.set('rendering.outputFolder', path.join(projectPath, buildConfig.docsDist));
   config.set('rendering.contentsFolder', path.join(config.rendering.outputFolder, 'generated'));
 
@@ -42,12 +43,6 @@ module.exports = function(config) {
   config.set('source.projectPath', projectPath);
   config.set('source.repository', buildConfig.repository);
   config.set('source.files', ['src/components/*/module.json']);
-
-  //Used by dgeni-packages/examples package
-  config.set('processing.examples', {
-    outputFolder: 'demos',
-    templateFolder: 'templates/demos'
-  });
 
   config.append('processing.processors', [
     require('./processors/jsdoc'),

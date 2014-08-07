@@ -5,8 +5,12 @@
  *
  * Button
  */
-angular.module('material.components.button', [])
-  .directive('materialButton', MaterialButtonDirective);
+angular.module('material.components.button', [
+  'material.animations',
+])
+  .directive('materialButton', [
+    MaterialButtonDirective
+  ]);
 
 /**
  * @ngdoc directive

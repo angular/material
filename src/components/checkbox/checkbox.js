@@ -3,8 +3,12 @@
  * @name material.components.checkbox
  * @description Checkbox module!
  */
-angular.module('material.components.checkbox', [])
-  .directive('materialCheckbox', [ materialCheckboxDirective ]);
+angular.module('material.components.checkbox', [
+  'material.animations'
+])
+  .directive('materialCheckbox', [
+    materialCheckboxDirective
+  ]);
 
 /**
  * @ngdoc directive

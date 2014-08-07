@@ -2,13 +2,7 @@ describe('ngThrottleSpec', function() {
 
   var $animate, body, $rootElement, $throttle, $timeout;
 
-  beforeEach(function() {
-    module('ngAnimateSequence');
-    module('ngMock');
-    module('ngAnimateMock');
-    module('material.services');
-    module('material.animations');
-  });
+  beforeEach(module('material.services.throttle'));
 
   beforeEach(inject(function(_$throttle_, _$timeout_, _$animate_, _$rootElement_, $document ){
         $throttle = _$throttle_;

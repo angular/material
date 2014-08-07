@@ -5,7 +5,9 @@
  * Icon
  */
 angular.module('material.components.icon', [])
-  .directive('materialIcon', [ materialIconDirective ]);
+  .directive('materialIcon', [
+    materialIconDirective
+  ]);
 
 /**
  * @ngdoc directive

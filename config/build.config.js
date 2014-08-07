@@ -24,7 +24,7 @@ module.exports = {
       return !!module;
     }),
 
-  componentsModule: "angular.module('ngMaterial', [ 'ng', 'ngAnimate', 'material.services', <%= components.join(',') %>]);\n",
+  componentsModule: "angular.module('ngMaterial', [ 'ng', 'ngAnimate', 'material.services.attrBind', 'material.services.compiler', 'material.services.popup', 'material.services.position', 'material.services.registry', 'material.services.throttle', <%= components.join(',') %>]);\n",
 
   dist: 'dist',
 
@@ -78,22 +78,18 @@ module.exports = {
       'src/components/sidenav/sidenav.js',
       'src/components/slider/slider.js',
       'src/components/tabs/tabs.js',
+      'src/components/tabs/util/*.js',
       'src/components/toast/toast.js',
       'src/components/toolbar/toolbar.js',
       'src/components/whiteframe/whiteframe.js',
 
       //Services
-      'src/services/module.js',
-      'src/services/registry.js',
+      'src/services/attrBind/attrBind.js',
       'src/services/compiler/compiler.js',
       'src/services/popup/popup.js',
       'src/services/position/position.js',
+      'src/services/registry/registry.js',
       'src/services/throttle/throttle.js',
-
-      //Utils
-      'src/utils/binding.js',
-      'src/utils/iterator.js',
-      'src/utils/digestConnector.js',
     ],
     test: [
       'src/**/*.spec.js',
