@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ARG_DEFS=(
-  "--name=(.*)"
+  "--registry-name=(.*)"
 )
 
 function prepare {
