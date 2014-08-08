@@ -7,7 +7,8 @@
  */
 angular.module('material.components.tabs', [
   'material.animations',
-  'material.services.attrBind'
+  'material.services.attrBind',
+  'material.services.registry'
 ])
   .controller('materialTabsController', [
     '$scope', 
@@ -287,7 +288,9 @@ function TabsDirective($compile, $timeout, $materialEffects) {
 
                 if (content.nodes) {
                   angular.forEach(content.nodes, function (node) {
-                    materialView.append(node);
+                    if ( !isNodeEmpty(node) ) {
+                      materialView.append(node);
+                    }
                   });
                 }
 
@@ -295,11 +298,26 @@ function TabsDirective($compile, $timeout, $materialEffects) {
                 addToCache(cache, { tab:tab, element: materialView });
 
               });
+
+              // We have some new content just added...
+              hideTabContent(false);
+
+            } else {
+
+              hideTabContent(true);
+
             }
 
-            // Add class to hide or show the container for the materialView(s)
-            var shoudlHideContent = cache.length === 0;
-            cntr.toggleClass('ng-hide', shouldHideContent);
+
+            /**
+             * Add class to hide or show the container for the materialView(s)
+             * NOTE: the `<div.tabs-content>` is **hidden** by default.
+             * @param shouldHideContent
+             */
+            function hideTabContent(shouldHideContent) {
+              cntr.toggleClass('ng-hide', shouldHideContent);
+            }
+
           });
 
           /**
@@ -387,7 +405,13 @@ function TabsDirective($compile, $timeout, $materialEffects) {
           }
 
           function notEmpty(view) {
-            return angular.isDefined(view);
+            var hasContent = false;
+            if (angular.isDefined(view.nodes)) {
+              angular.forEach(view.nodes, function(node) {
+                hasContent = hasContent || !isNodeEmpty(node);
+              });
+            }
+            return hasContent;
           }
 
           function notInCache(tab) {
@@ -866,7 +890,9 @@ var isNgRepeat = function (node) {
  * @returns {boolean}
  */
 var isNodeEmpty = function (node) {
-  var TEXT_NODE = 3;
-  return node.nodeType == TEXT_NODE && !(node.nodeValue || '').trim();
+  var TEXT_NODE = 3,
+      COMMENT_NODE = 8;
+  return (node.nodeType == COMMENT_NODE) ||
+    (node.nodeType == TEXT_NODE && !(node.nodeValue || '').trim());
 };
 
