@@ -8,7 +8,7 @@ angular.module('app', ['ngMaterial'] )
       { title: 'NodeJS' , active: false, disabled: false, content:"NodeJS practices are amazing!" }
     ];
 
-    $scope.activeIndex = 1;
-    $scope.tabs = [].concat(tabs);
+    $scope.selectedIndex = 0;
+    $scope.twoDisabled = true;
 
   });

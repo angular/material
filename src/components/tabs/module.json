@@ -5,15 +5,15 @@
   "demos": {
     "demo1": {
       "name": "1",
-      "files": ["demos/demo7/*"]
+      "files": ["demos/demo1/*"]
     },
     "demo2": {
       "name": "2",
-      "files": ["demos/demo5/*"]
+      "files": ["demos/demo2/*"]
     },
     "demo3": {
       "name": "3",
-      "files": ["demos/demo2/*"]
+      "files": ["demos/demo3/*"]
     },
     "demo4": {
       "name": "4",
@@ -21,7 +21,7 @@
     },
     "demo5": {
       "name": "5",
-      "files": ["demos/demo6/*"]
+      "files": ["demos/demo5/*"]
     }
   }
 }

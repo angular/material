@@ -1,17 +1,41 @@
 <link rel="stylesheet" href="/css/tab_demos.css">
 <div ng-app="app" ng-controller="AppCtrl" class="sample">
 
-    <p>Simple Dynamic Tabs with no internal tab view content:</p>
 
-    <material-tabs selected="activeIndex" style="background-color: #4285F4;">
-        <div class="logo">
-            <div class="centered">
-                <img ng-src="/img/angular.png" style="width:30px;height: 30px;">
-            </div>
-        </div>
-        <material-tab ng-repeat="tab in tabs">
-            {{tab.title}}
-        </material-tab>
+    <p>Static Tabs linked external content (ng-Switch):</p>
+    <br/>
+
+    <material-tabs selected="selectedIndex" noink>
+        <material-tab label="ITEM ONE"></material-tab>
+        <material-tab label="ITEM TWO" disabled="twoDisabled"></material-tab>
+        <material-tab label="ITEM THREE"></material-tab>
+        <material-tab label="ITEM FOUR"></material-tab>
     </material-tabs>
+
+    <div class="animate-switch-container" ng-switch on="selectedIndex">
+        <div class="animate-switch blueArea" ng-switch-when="0">
+            View for Item #1<br/>
+            Selection index = 0
+        </div>
+        <div class="animate-switch redArea" ng-switch-when="1">
+            View for Item #2<br/>
+            Selection index = 1
+        </div>
+        <div class="animate-switch greenArea" ng-switch-when="2">
+            View for Item #3<br/>
+            Selection index = 2
+        </div>
+        <div class="animate-switch grayArea" ng-switch-when="3">
+            View for Item #4<br/>
+            Selection index = 3
+        </div>
+    </div>
+
+        <input type="number" ng-model="selectedIndex">Tab #2 is
+              <span class="highlight">
+                <input type="checkbox" ng-model="twoDisabled">Disabled
+              </span>
+        (will auto-deselect if active)
+
 
 </div>

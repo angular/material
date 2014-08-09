@@ -1,14 +1,48 @@
 
-angular.module('app', ['ngMaterial'] )
-  .controller('AppCtrl', function( $scope ) {
-    var tabs = [
-      { title: 'Polymer', active: true,  disabled: false, content:"Polymer practices are great!" },
-      { title: 'Material', active: false, disabled: true , content:"Material Design practices are better!" },
-      { title: 'Angular', active: false, disabled: true , content:"AngularJS practices are the best!" },
-      { title: 'NodeJS' , active: false, disabled: false, content:"NodeJS practices are amazing!" }
-    ];
+angular.module('app', ['ngMaterial', 'ngRoute'])
 
-    $scope.selectedIndex = 0;
-    $scope.twoDisabled = true;
+.config(function($routeProvider) {
+  $routeProvider
+    .when('/material', {
+      templateUrl: 'material.tmpl.html',
+      controller: 'MaterialTabCtrl'
+    })
+    .when('/angular', {
+      templateUrl: 'angular.tmpl.html',
+      controller: 'AngularTabCtrl'
+    })
+    .when('/polymer', {
+      templateUrl: 'polymer.tmpl.html',
+      controller: 'PolymerTabCtrl'
+    })
+    .otherwise({
+      redirectTo: '/material'
+    });
+})
 
-  });
+.controller('AppCtrl', function($scope, $location) {
+  var tabs = $scope.tabs = [
+    { path: '/material', label: 'Material Design' },
+    { path: '/angular', label: 'Use Angular' },
+    { path: '/polymer', label: 'Use Polymer' },
+  ];
+
+  $scope.selectedTabIndex = 0;
+  $scope.$watch('selectedTabIndex', watchSelectedTab);
+  
+  function watchSelectedTab(index, oldIndex) {
+    console.log('selecting from', oldIndex, 'to', index);
+    $scope.reverse = index < oldIndex;
+    $location.path(tabs[index].path);
+  }
+
+})
+
+.controller('MaterialTabCtrl', function($scope) {
+})
+
+.controller('AngularTabCtrl', function($scope) {
+})
+
+.controller('PolymerTabCtrl', function($scope) {
+});

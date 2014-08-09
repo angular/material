@@ -1,41 +1,33 @@
 <link rel="stylesheet" href="/css/tab_demos.css">
-<div ng-app="app" ng-controller="AppCtrl" class="sample">
+<style>
+    ng-view.tabs-view {
+        background-color: rgb(205, 240, 255);
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        top: 110px;
+    }
+    material-ink-bar {
+        height: 7px;
+        background: rgb(205, 240, 255);
+        position: absolute;
+        margin-top: -7px;
+    }
+</style>
+<div class="sample">
 
+    <p>Dynamic Tabs (ng-repeat) with $location and ng-view routing:</p>
 
-    <p>Static Tabs linked external content (ng-Switch):</p>
-    <br/>
+    <div ng-app="app" ng-controller="AppCtrl" >
 
-    <material-tabs selected="selectedIndex" noink>
-        <material-tab label="ITEM ONE"></material-tab>
-        <material-tab label="ITEM TWO" disabled="twoDisabled"></material-tab>
-        <material-tab label="ITEM THREE"></material-tab>
-        <material-tab label="ITEM FOUR"></material-tab>
-    </material-tabs>
+      <material-tabs selected="selectedTabIndex">
+        <material-tab ng-repeat="tab in tabs"
+                label="{{tab.label}}">
+        </material-tab>
+      </material-tabs>
 
-    <div class="animate-switch-container" ng-switch on="selectedIndex">
-        <div class="animate-switch blueArea" ng-switch-when="0">
-            View for Item #1<br/>
-            Selection index = 0
-        </div>
-        <div class="animate-switch redArea" ng-switch-when="1">
-            View for Item #2<br/>
-            Selection index = 1
-        </div>
-        <div class="animate-switch greenArea" ng-switch-when="2">
-            View for Item #3<br/>
-            Selection index = 2
-        </div>
-        <div class="animate-switch grayArea" ng-switch-when="3">
-            View for Item #4<br/>
-            Selection index = 3
-        </div>
+      <ng-view class="tabs-view" ng-class="{reverse: reverse}"></ng-view>
+
     </div>
-
-        <input type="number" ng-model="selectedIndex">Tab #2 is
-              <span class="highlight">
-                <input type="checkbox" ng-model="twoDisabled">Disabled
-              </span>
-        (will auto-deselect if active)
-
 
 </div>

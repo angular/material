@@ -1,10 +1,327 @@
-.logo {
-    padding: 10px;
-    height: 36px;
-    width: 100%;
+
+
+
+/* @license
+ * MyFonts Webfont Build ID 2656303, 2013-10-02T11:03:28-0400
+ *
+ * The fonts listed in this notice are subject to the End User License
+ * Agreement(s) entered into by the website owner. All other parties are
+ * explicitly restricted from using the Licensed Webfonts(s).
+ *
+ * You may obtain a valid license at the URLs below.
+ *
+ * Webfont: Avenir Next Pro Regular by Linotype
+ * URL: http://www.myfonts.com/fonts/linotype/avenir-next-pro/pro-regular/
+ *
+ * Webfont: Avenir Next Pro Medium by Linotype
+ * URL: http://www.myfonts.com/fonts/linotype/avenir-next-pro/pro-medium/
+ *
+ *
+ * License: http://www.myfonts.com/viewlicense?type=web&buildid=2656303
+ * Licensed pageviews: 250,000
+ * Webfonts copyright: Copyright &#x00A9; 2004 - 2007 Linotype GmbH, www.linotype.com. All rights reserved. This font software may not be reproduced, modified, disclosed or transferred without the express written approval of Linotype GmbH. Avenir is a trademark of Linotype GmbH
+ *
+ * © 2013 MyFonts Inc
+*/
+/* @import must be at top of file, otherwise CSS will not work
+@import url("//hello.myfonts.net/count/28882f");*/
+/* Avenir Next Pro */
+@font-face {
+    font-family: 'AvenirNextLTPro-Regular';
+    src: url('http://code.ionicframework.com/assets/fonts/28882F_0_0.eot');
+    src: url('http://code.ionicframework.com/assets/fonts/28882F_0_0.eot?#iefix') format('embedded-opentype'), url('http://code.ionicframework.com/assets/fonts/28882F_0_0.woff') format('woff'), url('http://code.ionicframework.com/assets/fonts/28882F_0_0.ttf') format('truetype'); }
+
+@font-face {
+    font-family: 'AvenirNextLTPro-Medium';
+    src: url('http://code.ionicframework.com/assets/fonts/28882F_1_0.eot');
+    src: url('http://code.ionicframework.com/assets/fonts/28882F_1_0.eot?#iefix') format('embedded-opentype'), url('http://code.ionicframework.com/assets/fonts/28882F_1_0.woff') format('woff'), url('http://code.ionicframework.com/assets/fonts/28882F_1_0.ttf') format('truetype'); }
+
+@font-face {
+    font-family: 'AvenirNextLTPro-UltLt';
+    src: url('http://code.ionicframework.com/assets/fonts/29CC36_0_0.eot');
+    src: url('http://code.ionicframework.com/assets/fonts/29CC36_0_0.eot?#iefix') format('embedded-opentype'), url('http://code.ionicframework.com/assets/fonts/29CC36_0_0.woff') format('woff'), url('http://code.ionicframework.com/assets/fonts/29CC36_0_0.ttf') format('truetype'); }
+
+/* Frieght Text Pro */
+@font-face {
+    font-family: 'FreightTextProBook-Regular';
+    src: url('http://code.ionicframework.com/assets/fonts/29D26A_0_0.eot');
+    src: url('http://code.ionicframework.com/assets/fonts/29D26A_0_0.eot?#iefix') format('embedded-opentype'), url('http://code.ionicframework.com/assets/fonts/29D26A_0_0.woff') format('woff'), url('http://code.ionicframework.com/assets/fonts/29D26A_0_0.ttf') format('truetype'); }
+
+@font-face {
+    font-family: 'FreightTextProMedium-Regular';
+    src: url('http://code.ionicframework.com/assets/fonts/29D26A_1_0.eot');
+    src: url('http://code.ionicframework.com/assets/fonts/29D26A_1_0.eot?#iefix') format('embedded-opentype'), url('http://code.ionicframework.com/assets/fonts/29D26A_1_0.woff') format('woff'), url('http://code.ionicframework.com/assets/fonts/29D26A_1_0.ttf') format('truetype'); }
+
+
+/*!
+ * Bootstrap v3.0.0
+ *
+ * Copyright 2013 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world by @mdo and @fat.
+ */
+/*! normalize.css v2.1.0 | MIT License | git.io/normalize */
+
+*, *:before, *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-.centered {
-    margin-top: -5px;
-    padding-left: 48%
+html {
+    font-size: 62.5%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-size: 15px;
+    line-height: 1.42857;
+    color: #333;
+    background-color: #fff;
+}
+
+a {
+    color: #4F8EF7;
+    text-decoration: none;
+}
+
+a:hover, a:focus {
+    color: #0b62ef;
+    text-decoration: underline;
+}
+
+a:focus {
+    outline: none;
+}
+
+img {
+    vertical-align: middle;
+}
+
+p {
+    margin: 0 0 10.5px;
+}
+
+material-tabs {
+    margin-left: 32px;
+}
+
+material-tab {
+    padding: 10.5px 21px;
+    margin: 0 0 21px;
+    border-left: 5px solid #eeeeee;
+}
+
+material-tab p {
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.15;
+}
+
+material-tab p:last-child {
+    margin-bottom: 0;
+}
+
+material-tab small {
+    display: block;
+    line-height: 1.42857;
+    color: #999999;
+}
+
+material-tab small:before {
+    content: '\2014 \00A0';
+}
+
+.testimonials material-tab {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.testimonials .material-view p {
+    position: absolute;
+    display: block;
+    margin: 30px 0 0 20px;
+    padding: 5px 10px 15px 30px;
+    background: url('/img/testimonials/quote.png') no-repeat;
+    background-size: 25px 25px;
+    color: #888;
+    opacity: 0.0;
+}
+
+.material-view p.active {
+    -webkit-transition: opacity 0.9s;
+    transition: opacity 0.9s;
+    opacity: 1;
+}
+
+.testimonials footer {
+    background-size: 44px 40px;
+    background-repeat: no-repeat;
+    -webkit-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+    margin-top:10px;
+}
+
+.testimonials footer div {
+    font-size:10px;
+}
+
+.testimonials material-tabs {
+    position: relative;
+    margin: 0 auto;
+    padding: 0 5px 0px 5px;
+    max-width: 1050px;
+}
+
+.testimonials .tabs-header {
+    position: absolute;
+    top: 100px;
+}
+
+
+material-tabs, material-tabs .tabs-header .tabs-header-items {
+    background-color: #ffffff;
+}
+
+material-tab {
+    text-align: inherit;
+    height: 50px;
+    color: #333;
+}
+
+material-tab-label {
+    text-align: inherit;
+    margin-left: 30px;
+}
+
+material-tab footer {
+    color: #333;
+    padding-left: 50px;
+    background-color: rgb(0,0,0,0);
+}
+
+
+canvas.material-ink-ripple {
+    color: #d9d9d9;
+    border-radius: 8px;
+}
+
+
+
+@media (min-width: 768px) {
+    .testimonials {
+        position: relative;
+        height: 365px;
+        padding-top: 40px;
+    }
+
+
+    .material-view p {
+        position: absolute;
+        display: block;
+        margin: 20px 0 0 20px;
+        padding: 10px 80px 0 60px;
+        min-height: 150px;
+        background-size: 50px 50px;
+        color: #888;
+        text-align: center;
+        font-weight: normal;
+        font-size: 18px;
+        font-family: Georgia, serif;
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+        opacity: 0.0;
+        -webkit-transition: opacity 0.4s;
+        transition: opacity 0.4s;
+    }
+
+    .material-view p.active {
+        display: block;
+        -webkit-transition: opacity 0.9s;
+        transition: opacity 0.9s;
+        opacity: 1;
+    }
+
+    .testimonials footer {
+        margin-top:5px;
+        padding-top: 5px;
+        max-width: 230px;
+        width: 230px;
+        height: 65px;
+        background-size: 44px 40px;
+        font-size: 13px;
+        opacity: 0.4;
+        cursor: pointer;
+        padding-left: 40px;
+    }
+
+    .testimonials footer div {
+        font-size:11px;
+    }
+
+    .testimonials .active footer, .testimonials footer:hover {
+        opacity: 1;
+    }
+
+    .testimonials .active footer {
+        border-bottom: 2px solid #4F8EF7;
+    }
+
+    .testimonials cite {
+        color: #4F8EF7;
+        font-weight: 400;
+        font-size: 15px;
+    }
+
+
+    .testimonial-content {
+        padding: 10px 10px 0 10px;
+    }
+
+    .testimonials material-tab {
+        height: 60px;
+    }
+
+
+    .testimonials .tabs-header {
+        position: absolute;
+        top: 150px;
+    }
+}
+
+@media (min-width: 960px) {
+    .testimonials {
+        height: 380px;
+        padding-top: 40px;
+    }
+
+    .testimonials .material-view p {
+        font-size: 22px;
+        line-height: 38px;
+    }
+
+    .testimonials footer {
+        max-width: 265px;
+        width: 265px;
+        height: 94px;
+        background-size: 88px 80px;
+        padding-left: 90px;
+        margin-top:5px;
+    }
+
+    .testimonials footer div {
+        font-size:13px;
+    }
+    .testimonials material-tab {
+        height: 100px;
+    }
+
+    .testimonials .tabs-header {
+        position: absolute;
+        top: 190px;
+    }
 }
