@@ -300,11 +300,11 @@ function TabsDirective($compile, $timeout, $materialEffects) {
               });
 
               // We have some new content just added...
-              hideTabContent(false);
+              showTabContent();
 
             } else {
 
-              hideTabContent(true);
+              showTabContent(false);
 
             }
 
@@ -312,10 +312,10 @@ function TabsDirective($compile, $timeout, $materialEffects) {
             /**
              * Add class to hide or show the container for the materialView(s)
              * NOTE: the `<div.tabs-content>` is **hidden** by default.
-             * @param shouldHideContent
+             * @param visible Boolean a value `true` will remove the `class="ng-hide"` setting
              */
-            function hideTabContent(shouldHideContent) {
-              cntr.toggleClass('ng-hide', shouldHideContent);
+            function showTabContent(visible) {
+              cntr.toggleClass('ng-hide', !!visible);
             }
 
           });
