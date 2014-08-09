@@ -42,7 +42,7 @@ function MaterialAttrBind($parse, $interpolate) {
 
           if (!bypassWithDefaults(attrName, scopeName)) {
             // Immediate evaluation
-            scope[scopeName] = scope.$eval(attrs[attrName]);
+            scope[scopeName] = (attrs[attrName] === "") ? true : scope.$eval(attrs[attrName]);
 
             // Data-bind attribute to scope (incoming) and
             // auto-release watcher when scope is destroyed
