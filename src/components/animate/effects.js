@@ -267,29 +267,37 @@ function MaterialRippleDirective($materialEffects, $interpolate, $throttle) {
       /**
        * If the ripple canvas been removed from the DOM, then remove the `mousedown` listener.
        * If the ripple parent is disabled, then simply ignore the mousedown event.
+       * NOTE: first check the `scope` for disabled flags, then check the parent element
+       * for a disabled attribute.
        *
        * @returns {*|boolean}
        */
       function effectAllowed() {
-        var allowed = isInkEnabled( element.scope() ) && angular.isDefined( element.parent()[0] );
-        var isDisabled = allowed ? !!element.parent().attr('disabled') : true;
-
-        if ( !allowed ) {
-          parent.off('mousedown', makeRipple);
-        }
-
-        return !isDisabled;
-
+        var scope = element.scope();
+        return hasInkFlag(scope) ? isInkEnabled(scope) : !hasDisabledParent(element);
 
         /**
-         * Check scope chain for `inkEnabled` or `disabled` flags...
+         * Does the element's scope chain have a `disabled` attribute ?
          */
-        function isInkEnabled(scope) {
-          return angular.isUndefined(scope) ? true :
-            angular.isDefined(scope.disabled) ? !scope.disabled :
-              angular.isDefined(scope.inkEnabled) ? scope.inkEnabled : true;
+        function hasInkFlag(scope) {
+          return scope ? (angular.isDefined(scope.disabled) || angular.isDefined(scope.inkEnabled)) : false;
         }
 
+        /**
+         * Determine the value of the scope.disabled attribute
+         */
+        function isInkEnabled(scope) {
+          return angular.isDefined(scope.disabled)   ? !scope.disabled :
+                 angular.isDefined(scope.inkEnabled) ? scope.inkEnabled : true;
+        }
+
+        /**
+         * Ignore the scope chain and check the element's parent attribute for a
+         * `disabled` attribute (value of attribute is **ignored**).
+         */
+        function hasDisabledParent(element){
+          return !!element.parent()[0].attributes.getNamedItem('disabled');
+        }
       }
 
       /**
