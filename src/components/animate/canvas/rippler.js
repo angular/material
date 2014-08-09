@@ -12,7 +12,7 @@ angular.module('material.animations')
  * @homepage github.io
  */
 
-function MaterialRippleService() {
+function MaterialRippleService($$rAF) {
   var now = Date.now;
 
   if (window.performance && performance.now) {
