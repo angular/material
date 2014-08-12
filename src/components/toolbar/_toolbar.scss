@@ -27,10 +27,17 @@ material-toolbar {
   @include flex-direction(row);
 
   height: $toolbar-tools-height;
+  font-size: inherit;
+  font-weight: normal;
   padding: 0 10px;
+  margin: 0;
 
   > * {
+    font-size: inherit;
     margin: 0 8px;
+  }
+  h2, h3 {
+    font-weight: normal;
   }
 
   .material-button {
