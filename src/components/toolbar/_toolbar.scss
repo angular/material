@@ -39,6 +39,10 @@ material-toolbar {
   h2, h3 {
     font-weight: normal;
   }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 
   .material-button {
     font-size: 16px;
