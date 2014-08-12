@@ -15,9 +15,9 @@
   <material-sidenav class="material-sidenav-left material-whiteframe-z3" component-id="left">
 
     <material-toolbar class="material-theme-light">
-      <div class="material-toolbar-tools" ng-click="goHome()">
         <span>Material Design</span>
-      </div>
+      <h1 class="material-toolbar-tools" ng-click="goHome()">
+      </h1>
     </material-toolbar>
 
     <material-content flex>
@@ -62,15 +62,15 @@
           <material-icon icon="img/icons/ic_menu_24px.svg">
           </material-icon>
         </div>
-        <span hide block-sm>
+        <h2 hide block-sm>
           {{path() === '/' ? 'Angular Material' : (currentComponent.name || 'Components')}}
-        </span>
+        </h2>
         <span layout="vertical" layout-align="center center"
           class="menu-separator-icon">
           <img style="height: 16px;" src="img/docArrow.png" hide block-sm>
         </span>
-        <span ng-show="currentDoc.humanName" ng-bind="currentDoc.humanName">
-        </span>
+        <h3 ng-show="currentDoc.humanName" ng-bind="currentDoc.humanName">
+        </h3>
         <span flex></span>
         <span class="menu-module-name" ng-bind="currentComponent.id" hide block-md>
         </span>
