@@ -81,6 +81,12 @@ function MaterialButtonDirective() {
                 .addClass('material-inner-button');
           element.append(innerButton);
         }
+        else {
+          element.attr({
+            'role': 'button',
+            'tabIndex': '0'
+          });
+        }
       }
     }
   };
