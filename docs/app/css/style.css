@@ -10,26 +10,32 @@ body {
 }
 
 .menu-item {
-  cursor: pointer;
-  width: 100%;
-  line-height: 40px;
-  color: #333;
-  padding: 0px 28px;
-  margin-top: 0px;
-  z-index: 1;
   background-color: #fff;
+  border-width: 0;
+  cursor: pointer;
+  display: block;
+  color: #333;
+  font-size: inherit;
+  line-height: 40px;
+  margin-top: 0px;
+  outline: none;
+  padding: 0px 28px;
+  position: relative;
+  text-align: left;
+  text-decoration: none;
+  width: 100%;
+  z-index: 1;
   -webkit-transition: 0.25s linear;
   -webkit-transition-property: margin, background-color;
   -moz-transition: 0.25s linear;
   -moz-transition-property: margin, background-color;
   transition: 0.25s linear;
   transition-property: margin, background-color;
-  position: relative;
 }
 .menu-item.ng-hide {
   margin-top: -40px;
 }
-.menu-item:hover {
+.menu-item:hover, .menu-item:focus {
   color: #999;
 }
 
