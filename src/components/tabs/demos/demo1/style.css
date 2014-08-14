@@ -164,6 +164,7 @@ material-tab small:before {
     -webkit-transition: opacity 0.3s;
     transition: opacity 0.3s;
     margin-top:10px;
+    text-transform: none !important;
 }
 
 .testimonials footer div {
