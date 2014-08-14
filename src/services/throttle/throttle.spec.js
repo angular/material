@@ -1,4 +1,4 @@
-ddescribe('ngThrottleSpec', function() {
+xdescribe('ngThrottleSpec', function() {
 
   var $animate, body, $rootElement, $throttle, $timeout;
 
