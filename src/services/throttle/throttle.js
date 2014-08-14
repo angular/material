@@ -1,5 +1,4 @@
-angular.module('material.services.throttle', [
-])
+angular.module('material.services.throttle', [ ])
   .factory('$throttle', [
     '$timeout',
     '$$q',
@@ -60,7 +59,7 @@ function MaterialThrottleService($timeout, $$q, $log) {
     // Defer the call to the start function ... so `throttle` reference can be returned...
     $timeout(function(){
       start().then(function(){
-         if ( phases.throttle === null ) {
+         if ( !phases.throttle ) {
            end();
          }
       });

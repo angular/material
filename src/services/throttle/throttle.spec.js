@@ -1,4 +1,4 @@
-xdescribe('ngThrottleSpec', function() {
+describe('ngThrottleSpec', function() {
 
   var $animate, body, $rootElement, $throttle, $timeout;
 
@@ -9,10 +9,11 @@ xdescribe('ngThrottleSpec', function() {
     $timeout = _$timeout_;
 
     $animate = _$animate_;
-    body = angular.element($document[0].body);
     $rootElement = _$rootElement_;
 
+    body = angular.element($document[0].body);
     body.append($rootElement);
+
   }));
 
   describe('use $throttle with no configurations', function() {

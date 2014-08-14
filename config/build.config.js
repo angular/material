@@ -89,7 +89,7 @@ module.exports = {
       'src/services/popup/popup.js',
       'src/services/position/position.js',
       'src/services/registry/registry.js',
-      'src/services/throttle/throttle.js',
+      'src/services/throttle/throttle.js'
     ],
     test: [
       'src/**/*.spec.js',
