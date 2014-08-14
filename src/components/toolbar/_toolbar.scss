@@ -1,5 +1,6 @@
 material-toolbar {
-  display: block;
+  @include flex-display();
+  @include flex-direction(column);
 
   position: relative;
   z-index: 2;
@@ -26,6 +27,7 @@ material-toolbar {
   @include flex-align-items(center);
   @include flex-direction(row);
 
+  width: 100%;
   height: $toolbar-tools-height;
   font-size: inherit;
   font-weight: normal;
@@ -44,21 +46,14 @@ material-toolbar {
     text-decoration: none;
   }
 
-  .material-button {
+  material-button {
     font-size: 16px;
   }
 }
 
-.material-toolbar-tools-bottom {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  right: 0;
-}
-
-.material-toolbar-tools-middle {
-  position: absolute;
-  top: calc(33.3333333333336%);
-  left: 0;
-  right: 0;
-}
+// .material-toolbar-tools-middle {
+//   position: absolute;
+//   top: calc(33.3333333333336%);
+//   left: 0;
+//   right: 0;
+// }

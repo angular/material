@@ -9,8 +9,6 @@ function materialToolbarDirective() {
 
   return {
     restrict: 'E',
-    transclude: true,
-    template: '<div class="material-toolbar-inner" ng-transclude></div>'
   };
 
 }
