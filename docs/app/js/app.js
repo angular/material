@@ -68,14 +68,18 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope, 
 
   $scope.menuItems = [
     {
-      name: 'Utilities',
+      name: 'Layout',
       components: [{
-        name: 'Layout',
-        id: 'layout',
+        name: 'Grid',
+        id: 'grid',
         docs: [{
-          humanName: 'Grid',
+          humanName: 'Layout Grid',
           url: '/layout/grid'
-        }, {
+        }],
+      }, {
+        name: 'Layout Cells',
+        id: 'cells',
+        docs: [{
           humanName: 'Cells',
           url: '/layout/cells'
         }]
