@@ -1,22 +1,36 @@
 
-<div ng-app="app" ng-controller="AppCtrl">
+<div ng-app="app" ng-controller="AppCtrl" layout="vertical" layout-fill>
 
-  <material-sidenav class="material-sidenav-left material-whiteframe-z2" component-id="left">
-    <div ng-controller="LeftCtrl">
-      <h2>Sidenav left</h2>
-      <button class="material-button" ng-click="close()">Close</button>
-    </div>
-  </material-sidenav>
+  <material-toolbar class="material-theme-green">
+    <h1 class="material-toolbar-tools">
+      <span>Hello</span>
+    </h1>
+  </material-toolbar>
 
-  <material-sidenav class="material-sidenav-right material-whiteframe-z2 material-theme-light" component-id="right">
-    <div ng-controller="RightCtrl">
-      <h2>Sidenav right</h2>
-      <button class="material-button" ng-click="close()">Close</button>
-    </div>
-  </material-sidenav>
+  <section layout="horizontal" layout-fill>
 
-  <button class="material-button" ng-click="toggleLeft()">Toggle left</button>
+    <material-sidenav class="material-sidenav-left material-whiteframe-z2" component-id="left">
+      <div ng-controller="LeftCtrl">
+        <h2>Sidenav left</h2>
+        <material-button ng-click="close()">Close</material-button>
+      </div>
+    </material-sidenav>
 
-  <button class="material-button" ng-click="toggleRight()">Toggle right</button>
+    <material-content flex>
+
+      <material-button ng-click="toggleLeft()">Toggle left</material-button>
+
+      <material-button ng-click="toggleRight()">Toggle right</material-button>
+
+    </material-content>
+
+    <material-sidenav class="material-sidenav-right material-whiteframe-z2 material-theme-light" component-id="right">
+      <div ng-controller="RightCtrl">
+        <h2>Sidenav right</h2>
+        <material-button ng-click="close()">Close</material-button>
+      </div>
+    </material-sidenav>
+
+  </section>
 
 </div>
