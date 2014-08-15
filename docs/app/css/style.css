@@ -180,6 +180,7 @@ ul {
 }
 ul li {
   margin-top: 3px;
+  list-style-position: inside;
 }
 ul li:first-child {
   margin-top: 0;
