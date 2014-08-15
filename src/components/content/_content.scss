@@ -1,3 +1,4 @@
+material-content,
 .material-content {
   display: block;
 
@@ -19,7 +20,7 @@
     padding: 20px;
   }
 
-  > * {
+  > .material-content {
     height: 100%;
     width: 100%;
   }

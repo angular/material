@@ -9,6 +9,14 @@ body {
   background: #fff;
 }
 
+.layout-content {
+  max-width: 696px;
+  margin: auto;
+}
+.layout-label {
+  width: 120px;
+}
+
 .menu-item {
   background-color: #fff;
   border-width: 0;
@@ -63,6 +71,7 @@ body {
 pre, code {
   margin: 0;
   padding: 0;
+  overflow-wrap: break-word;
 }
 code {
   font-size: 14px;
@@ -164,4 +173,21 @@ material-toolbar.demo-toolbar material-button.active {
 }
 .api-options-bar material-button span {
   margin-right: 24px;
+}
+
+ul {
+  margin: 0;
+}
+ul li {
+  margin-top: 3px;
+}
+ul li:first-child {
+  margin-top: 0;
+}
+
+.layout-title {
+  color: #999999;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
 }
