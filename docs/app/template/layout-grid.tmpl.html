@@ -19,7 +19,7 @@
   </hljs>
 
   <material-divider></material-divider>
-  <div class="layout-title">Responsive Layouts</div>
+  <div class="layout-title">Responsive Layout</div>
 
   <div>
     The <code>layout</code> attribute defines an arrangement on all device sizes.
@@ -32,7 +32,7 @@
       <code>layout</code> sets the default layout on all devices.
     </li>
     <li>
-      <code>layout-sm</code> sets the layout on devices >=600px wide.
+      <code>layout-sm</code> sets the layout on device >=600px wide.
     </li>
     <li>
       <code>layout-md</code> sets the layout on devices >=960px wide.
@@ -45,38 +45,39 @@
   <hljs lang="html">
 <div layout="vertical" layout-sm="horizontal">
   <span>
-    I'm above on tiny devices, and to the left on >=600px wide devices.
+    I'm above on tiny devices, and to the left on devices wider than 600px.
   </span>
   <span>
-    I'm below on tiny devices, and to the right on >=600px wide devices.
+    I'm below on tiny devices, and to the right on devices wider than 600px.
   </span>
 </div>
   </hljs>
 
   <material-divider></material-divider>
 
-  <div class="layout-title">Additional Layout Options</div>
+  <div class="layout-title">Layout Options</div>
 
-  <ul>
-    <li>
-      <code>layout-padding</code> adds padding between this layout's children.
-      <hljs lang="html">
+  <div>
+    <code>layout-padding</code> adds padding between this layout's children.
+  </div>
+  
+  <hljs lang="html">
 <div layout="horizontal" layout-padding>
   <span>I'm on the left, and there's an empty area between.</span>
   <span>I'm on the right, and there's an empty area between.</span>
 </div>
-      </hljs>
-    </li>
-    <li>
-      <code>layout-fill</code> forces this layout to fill its parent container.
-      <hljs lang="html">
-<div layout layout-fill>
-  This layout element fills up 100% of its parent's width and height.
+  </hljs>
+
+  <span></span>
+  <div>
+    <code>layout-fill</code> forces the layout element to fill its parent container.
+  </div>
+  <hljs lang="html">
+<!-- This layout fills up 100% of its parent's width and height. -->
+<div layout="vertical" layout-fill>
 </div>
-      </hljs>
-    </li>
-  </ul>
-      
+  </hljs>
+
   <b>WIP, more soon</b>
 
   <!-- <table> -->
