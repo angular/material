@@ -17,6 +17,7 @@ angular.module('material.animations', [
     '$rootElement', 
     '$position', 
     '$$rAF', 
+    '$sniffer',
     MaterialEffects
   ])
   .directive('materialRipple', [
@@ -47,14 +48,19 @@ angular.module('material.animations', [
  * - `{function(element,parentElement)}` `popOut` - animated close of popup overlay
  *
  */
-function MaterialEffects($animateSequence, $ripple, $rootElement, $position, $$rAF) {
+function MaterialEffects($animateSequence, $ripple, $rootElement, $position, $$rAF, $sniffer) {
 
   var styler = angular.isDefined( $rootElement[0].animate ) ? 'webAnimations' :
                angular.isDefined( window['TweenMax'] || window['TweenLite'] ) ? 'gsap'   :
                angular.isDefined( window['jQuery'] ) ? 'jQuery' : 'default';
 
-  // Publish API for effects...
+ 
+  var isWebkit = /webkit/i.test($sniffer.vendorPrefix);
+  var TRANSFORM_PROPERTY = isWebkit ? 'webkitTransform' : 'transform';
+  var TRANSITIONEND_EVENT = 'transitionend' + 
+    (isWebkit ? ' webkitTransitionEnd' : '');
 
+  // Publish API for effects...
   return {
     inkRipple: animateInkRipple,
     inkBar: animateInkBar,
@@ -90,46 +96,64 @@ function MaterialEffects($animateSequence, $ripple, $rootElement, $position, $$r
   /**
    *
    */
-  function popIn(element, parentElement, clickElement) {
+  function popIn(element, parentElement, clickElement, done) {
+    parentElement.append(element);
+
     var startPos;
-    var endPos = $position.positionElements(parentElement, element, 'center');
     if (clickElement) {
-      var dialogPos = $position.position(element);
       var clickPos = $position.offset(clickElement);
-      startPos = {
-        left: clickPos.left - dialogPos.width / 2,
-        top: clickPos.top - dialogPos.height / 2
-      };
+      startPos = translateString(
+        clickPos.left - element[0].offsetWidth / 2,
+        clickPos.top - element[0].offsetHeight / 2, 
+        0
+      ) + ' scale(0.2)';
     } else {
-      startPos = endPos;
+      startPos = 'translate3d(0,100%,0) scale(0.5)';
     }
 
-    element.css({
-      '-webkit-transform': translateString(startPos.left, startPos.top, 0) + ' scale(0.2)',
-      opacity: 0
-    });
+    element
+      .css(TRANSFORM_PROPERTY, startPos)
+      .css('opacity', 0);
     
-    // TODO once ngAnimateSequence bugs are fixed, this can be switched to use that
     $$rAF(function() {
-      element.css({
-        '-webkit-transform': '',
-        opacity: ''
+      $$rAF(function() {
+        element
+          .addClass('active')
+          .css(TRANSFORM_PROPERTY, '')
+          .css('opacity', '')
+          .on(TRANSITIONEND_EVENT, finished);
       });
-      element.addClass('active');
     });
+
+    function finished(ev) {
+      //Make sure this transitionend didn't bubble up from a child
+      if (ev.target === element[0]) {
+        element.off(TRANSITIONEND_EVENT, finished);
+        (done || angular.noop)();
+      }
+    }
   }
 
   /**
    *
    *
    */
-  function popOut(element, parentElement) {
+  function popOut(element, parentElement, done) {
     var endPos = $position.positionElements(parentElement, element, 'bottom-center');
 
-    element.addClass('dialog-changing').css({
+    element.css({
       '-webkit-transform': translateString(endPos.left, endPos.top, 0) + ' scale(0.5)',
       opacity: 0
     });
+    element.on(TRANSITIONEND_EVENT, finished);
+
+    function finished(ev) {
+      //Make sure this transitionend didn't bubble up from a child
+      if (ev.target === element[0]) {
+        element.off(TRANSITIONEND_EVENT, finished);
+        (done || angular.noop)();
+      }
+    }
   }
 
 

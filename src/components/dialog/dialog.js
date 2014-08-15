@@ -125,9 +125,11 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
 
       var scope = $rootScope.$new(true);
       var element = compileData.link(scope); 
+      var popInTarget = options.targetEvent && options.targetEvent.target && 
+        angular.element(options.targetEvent.target);
       var backdrop;
 
-      $animate.enter(element, options.appendTo, null, function() {
+      $materialEffects.popIn(element, options.appendTo, popInTarget, function() {
         if (options.escapeToClose) {
           $rootElement.on('keyup', onRootElementKeyup);
         }
@@ -142,16 +144,6 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
           element.on('click', dialogClickOutside);
         }
       });
-
-      var popInTarget = options.targetEvent && options.targetEvent.target && 
-        angular.element(options.targetEvent.target);
-
-      options.appendTo.append(element);
-      $materialEffects.popIn(
-        element,
-        options.appendTo,
-        popInTarget
-      );
 
       return destroyDialog;
 
@@ -168,16 +160,12 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
         if (options.clickOutsideToClose) {
           element.off('click', dialogClickOutside);
         }
-        $materialEffects.popOut(element, $rootElement);
-
-        // TODO(ajoslin): use element.animate() and ngAnimateStyler instead of
-        // this $timeout.
-        $timeout(function() {
+        $materialEffects.popOut(element, $rootElement, function() {
           element.remove();
           scope.$destroy();
           scope = null;
           element = null;
-        }, 200);
+        });
       }
       function onRootElementKeyup(e) {
         if (e.keyCode == 27) {
