@@ -27,6 +27,7 @@ angular.module('material.components.sidenav', [
   ]);
   
 /**
+ * @private
  * @ngdoc object
  * @name materialSidenavController
  * @module material.components.sidenav
@@ -67,6 +68,7 @@ function materialSidenavController($scope, $element, $attrs, $timeout, $material
 }
 
 /**
+ * @private
  * @ngdoc service
  * @name $materialSidenav
  * @module material.components.sidenav
@@ -136,9 +138,37 @@ function materialSidenavService($materialComponentRegistry) {
  *
  * A Sidenav component that can be opened and closed programatically.
  *
- * @example
- * <material-sidenav>
- * </material-sidenav>
+ * When used properly with a layout, it will seamleslly stay open on medium
+ * and larger screens, while being hidden by default on mobile devices.
+ *
+ * @usage
+ * <hljs lang="html">
+ * <div layout="horizontal" ng-controller="MyController">
+ *   <material-sidenav class="material-sidenav-left">
+ *     Left Nav!
+ *   </material-sidenav>
+ *
+ *   <material-content>
+ *     Center Content
+ *     <material-button ng-click="openLeftMenu()">
+ *       Open Left Menu
+ *     </material-button>
+ *   </material-content>
+ *
+ *   <material-sidenav class="material-sidenav-right">
+ *     Right Nav!
+ *   </material-sidenav>
+ * </div>
+ * </hljs>
+ *
+ * <hljs lang="js">
+ * var app = angular.module('myApp', ['ngMaterial']);
+ * app.controller('MainController', function($scope, $materialSidenav) {
+ *   $scope.openLeftMenu = function() {
+ *     $materialSidenav('left').toggle();
+ *   };
+ * });
+ * </hljs>
  */
 function materialSidenavDirective($timeout) {
   return {

@@ -47,7 +47,7 @@ function QpToastDirective() {
  * <hljs lang="js">
  * var app = angular.module('app', ['ngMaterial']);
  * app.controller('MyController', function($scope, $materialToast) {
- *   $scope.openDialog = function($event) {
+ *   $scope.openToast = function($event) {
  *     var hideToast = $materialToast({
  *       template: '<material-toast>Hello!</material-toast>',
  *       duration: 3000
