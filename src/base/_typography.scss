@@ -31,36 +31,20 @@ p {
   @include text-title();
 }
 
-.text-subhead2-dev {
-  @include text-subhead2-dev();
+.text-subhead2 {
+  @include text-subhead2();
 }
 
-.text-subhead2-des {
-  @include text-subhead2-des();
+.text-subhead1 {
+  @include text-subhead1();
 }
 
-.text-subhead1-dev {
-  @include text-subhead1-dev();
+.text-body2 {
+  @include text-body2();
 }
 
-.text-subhead1-des {
-  @include text-subhead1-des();
-}
-
-.text-body2-dev {
-  @include text-body2-dev();
-}
-
-.text-body2-des {
-  @include text-body2-des();
-}
-
-.text-body1-dev {
-  @include text-body2-dev();
-}
-
-.text-body1-des {
-  @include text-body2-des();
+.text-body1 {
+  @include text-body2();
 }
 
 .text-caption {
@@ -68,7 +52,7 @@ p {
 }
 
 .text-menu {
-  @include text-menu-dev();
+  @include text-menu();
 }
 
 .text-button {

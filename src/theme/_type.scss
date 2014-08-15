@@ -95,55 +95,27 @@ $text-white-12:            rgba(255,255,255,0.12);
   color: $text-black-87;
 } 
 
-//device tablets
-@mixin text-subhead2-dev {
+@mixin text-subhead2 {
   font-weight: $font-weight-medium;
   font-size: $font-size-16;
   line-height: $line-height-28;
 } 
 
-//desktop large
-@mixin text-subhead2-des {
-  font-weight: $font-weight-medium;
-  font-size: $font-size-15;
-  line-height: $line-height-28;
-}
-
-//device mobile
-@mixin text-subhead1-dev {
+@mixin text-subhead1 {
   font-weight: $font-weight-regular;
   font-size: $font-size-16;
   line-height: $line-height-24;
 } 
 
-//desktop small
-@mixin text-subhead1-des {
-  font-weight: $font-weight-regular;
-  font-size: $font-size-15;
-  line-height: $line-height-24;
-} 
-
-@mixin text-body2-dev {
+@mixin text-body2 {
   font-weight: $font-weight-medium;
   font-size: $font-size-14;
-  line-height: $line-height-24;
-} 
-
-@mixin text-body2-des {
-  font-weight: $font-weight-medium;
-  font-size: $font-size-13;
   line-height: $line-height-24;
 }  
 
-@mixin text-body1-dev {
+@mixin text-body1 {
   font-weight: $font-weight-regular;
   font-size: $font-size-14;
-  line-height: $line-height-20;
-} 
-
-@mixin text-body1-des {
-  font-weight: $font-weight-regular;
-  font-size: $font-size-13;
   line-height: $line-height-20;
 } 
 
@@ -154,15 +126,9 @@ $text-white-12:            rgba(255,255,255,0.12);
   color: $text-black-54;
 } 
 
-@mixin text-menu-dev {
+@mixin text-menu {
   font-weight: $font-weight-medium;
   font-size: $font-size-14;
-  line-height: normal;
-} 
-
-@mixin text-menu-des {
-  font-weight: $font-weight-medium;
-  font-size: $font-size-13;
   line-height: normal;
 } 
 
