@@ -1,5 +1,6 @@
 describe('$materialToast service', function() {
-  beforeEach(module('material.components.toast', 'ngAnimateMock'));
+  beforeEach(module('material.components.toast', 'ngAnimateMock', function($provide) {
+  }));
 
   function setup(options) {
     var hideToast;
@@ -16,66 +17,61 @@ describe('$materialToast service', function() {
 
   describe('options', function() {
 
-    it('should hide after duration', inject(function($timeout, $animate) {
+    it('should hide after duration', inject(function($timeout, $animate, $rootElement) {
       var parent = angular.element('<div>');
       setup({
-        duration: 1234,
-        appendTo: parent
+        template: '<material-toast>',
+        duration: 1234
       });
-      expect(parent[0].querySelector('material-toast')).toBeTruthy();
+      expect($rootElement.find('material-toast').length).toBe(1);
       $timeout.flush();
-      expect(parent[0].querySelector('material-toast')).toBeFalsy();
+      expect($rootElement.find('material-toast').length).toBe(0);
     }));
 
-    it('should have template', inject(function($timeout, $rootScope) {
+    it('should have template', inject(function($timeout, $rootScope, $rootElement) {
       var parent = angular.element('<div>');
       setup({
-        template: '{{1}}234',
+        template: '<material-toast>{{1}}234</material-toast>',
         appendTo: parent
       });
-      var toast = angular.element(parent[0].querySelector('material-toast'));
-      expect(toast.children().text()).toBe('1234');
+      var toast = $rootElement.find('material-toast');
+      $timeout.flush();
+      expect(toast.text()).toBe('1234');
     }));
 
-    it('should have templateUrl', inject(function($timeout, $rootScope, $templateCache) {
-      var parent = angular.element('<div>');
-      $templateCache.put('template.html', 'hello, {{1}}');
+    it('should have templateUrl', inject(function($timeout, $rootScope, $templateCache, $rootElement) {
+      $templateCache.put('template.html', '<material-toast>hello, {{1}}</material-toast>');
       setup({
         templateUrl: 'template.html',
-        appendTo: parent
       });
-      var toast = angular.element(parent[0].querySelector('material-toast'));
-      expect(toast.children().text()).toBe('hello, 1');
+      var toast = $rootElement.find('material-toast');
+      expect(toast.text()).toBe('hello, 1');
     }));
   });
 
   describe('lifecycle', function() {
 
-    it('should hide current toast when showing new one', function() {
-      var parent = angular.element('<div>');
+    it('should hide current toast when showing new one', inject(function($rootElement) {
       setup({
-        appendTo: parent,
-        position: 'one'
+        template: '<material-toast class="one">'
       });
-      expect(parent[0].querySelector('material-toast.one')).toBeTruthy();
-      expect(parent[0].querySelector('material-toast.two')).toBeFalsy();
-      expect(parent[0].querySelector('material-toast.three')).toBeFalsy();
+      expect($rootElement[0].querySelector('material-toast.one')).toBeTruthy();
+      expect($rootElement[0].querySelector('material-toast.two')).toBeFalsy();
+      expect($rootElement[0].querySelector('material-toast.three')).toBeFalsy();
 
       setup({
-        appendTo: parent,
-        position: 'two'
+        template: '<material-toast class="two">'
       });
-      expect(parent[0].querySelector('material-toast.one')).toBeFalsy();
-      expect(parent[0].querySelector('material-toast.two')).toBeTruthy();
-      expect(parent[0].querySelector('material-toast.three')).toBeFalsy();
+      expect($rootElement[0].querySelector('material-toast.one')).toBeFalsy();
+      expect($rootElement[0].querySelector('material-toast.two')).toBeTruthy();
+      expect($rootElement[0].querySelector('material-toast.three')).toBeFalsy();
 
       setup({
-        appendTo: parent,
-        position: 'three'
+        template: '<material-toast class="three">'
       });
-      expect(parent[0].querySelector('material-toast.one')).toBeFalsy();
-      expect(parent[0].querySelector('material-toast.two')).toBeFalsy();
-      expect(parent[0].querySelector('material-toast.three')).toBeTruthy();
-    });
+      expect($rootElement[0].querySelector('material-toast.one')).toBeFalsy();
+      expect($rootElement[0].querySelector('material-toast.two')).toBeFalsy();
+      expect($rootElement[0].querySelector('material-toast.three')).toBeTruthy();
+    }));
   });
 });
