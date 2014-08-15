@@ -40,7 +40,8 @@ module.exports = {
         var component = {
           id: componentId,
           name: componentDocs[0].componentName,
-          docs: []
+          docs: [],
+          url: '/' + componentId
         };
 
         if (!_.find(componentDocs, { docType: 'demo' })) {
@@ -65,6 +66,11 @@ module.exports = {
             //Readme first
             return doc.docType === 'readme' ? -1 : 1;
           });
+
+        var readmeDoc = _.find(component.docs, { docType: 'readme' });
+        component.docs.forEach(function(doc) {
+          doc.readmeUrl = readmeDoc.url;
+        });
 
         component.template = 'component.template.html';
         component.outputPath = path.join(
@@ -156,30 +162,38 @@ module.exports = {
             'usage',
             'returns',
             'order',
-            'dependencies'
+            'dependencies',
+            'file',
+            'startingLine'
           ]);
         })
         .each(function(doc) {
-          doc.demoOnly = false;
 
           if (doc.docType === 'directive') {
             //dash-case for directives
             doc.humanName = doc.name.replace(/([A-Z])/g, function($1) {
               return '-'+$1.toLowerCase();
             }); 
-            if (doc.restrict.element) {
-              doc.humanName = '<' + doc.humanName + '>';
-            } else if (doc.restrict.attribute) {
-              doc.humanName = "@" + doc.humanName;
-            }
           } else if (doc.docType === 'readme') {
             doc.content = doc.content.replace(/<code>/g, '<code ng-non-bindable>');
-            doc.humanName = 'Overview';
-            doc.demoOnly = (doc.content.length < 30);
+            doc.humanName = component.name;
           } else {
             doc.humanName = doc.name;
           }
 
+          var repository = config.get('buildConfig').repository;
+          doc.githubUrl = path.join(
+            repository,
+            'tree/master',
+            path.relative(config.basePath, doc.file)
+          );
+          doc.githubEditUrl = path.join(
+            repository,
+            'edit/master',
+            path.relative(config.basePath, doc.file)
+          ) + '#L' + doc.startingLine;
+
+          doc.url = path.join(component.url, doc.docType, doc.name);
           doc.outputPath = path.join(
             _.template(docOutputFolder, {
               component: component, doc: doc

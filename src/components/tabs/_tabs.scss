@@ -38,11 +38,12 @@ material-tab {
   @include flex(1);
   @include flex-display();
   @include box-sizing(border-box);
+  @include flex-align-items(center);
+  @include flex-justify-content(center);
   position: relative;
   z-index: 0;
   overflow: hidden;
-  padding: 10px;
-  line-height: 20px;
+  line-height: 40px;
   text-align: center;
   cursor: pointer;
 

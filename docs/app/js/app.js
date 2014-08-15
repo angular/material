@@ -16,10 +16,7 @@ function(COMPONENTS, $routeProvider) {
 
   angular.forEach(COMPONENTS, function(component) {
 
-    component.url = '/' + component.id;
-
     angular.forEach(component.docs, function(doc) {
-      doc.url = component.url + '/' + doc.docType + '/' + doc.name;
       $routeProvider.when(doc.url, {
         templateUrl: doc.outputPath,
         resolve: {
@@ -48,52 +45,96 @@ function(Angularytics, $rootScope) {
   Angularytics.init();
 }])
 
+.factory('menu', [
+  'COMPONENTS',
+  '$location',
+  '$rootScope',
+function(COMPONENTS, $location, $rootScope) {
+  var componentDocs = [];
+  var demoDocs = [];
+  COMPONENTS.forEach(function(component) {
+    component.docs.forEach(function(doc) {
+      if (doc.docType === 'readme') {
+        demoDocs.push(doc);
+      } else {
+        componentDocs.push(doc);
+      }
+    });
+  });
+  var sections = [{ 
+    name: 'Demos',
+    pages: demoDocs
+  }, {
+    name: 'Layout',
+    pages: [{
+      name: 'Layout Grid',
+      id: 'grid',
+      url: '/layout/grid'
+    }, {
+      name: 'Layout Cells',
+      id: 'cells',
+      url: '/layout/cells'
+    }],
+  }, {
+    name: 'Components',
+    pages: componentDocs
+  }];
+  var self;
+
+  $rootScope.$on('$locationChangeSuccess', onLocationChange);
+
+  return self = {
+    sections: sections,
+
+    selectSection: function(section) {
+      self.openedSection = section;
+    },
+    toggleSelectSection: function(section) {
+      self.openedSection = (self.openedSection === section ? null : section);
+    },
+    isSectionSelected: function(section) {
+      return self.openedSection === section;
+    },
+
+    selectPage: function(section, page) {
+      page && page.url && $location.path(page.url);
+      self.currentSection = section;
+      self.currentPage = page;
+    },
+    isPageSelected: function(section, page) {
+      return self.currentPage === page;
+    }
+  };
+
+  function onLocationChange() {
+    var path = $location.path();
+    sections.forEach(function(section) {
+      section.pages.forEach(function(page) {
+        if (path === page.url) {
+          self.selectSection(section);
+          self.selectPage(section, page);
+        }
+      });
+    });
+  }
+}])
+
 .controller('DocsCtrl', [
   '$scope',
   'COMPONENTS',
   '$materialSidenav',
   '$timeout',
-  '$location',
-  '$rootScope',
   '$materialDialog',
-function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope, $materialDialog) {
+  'menu',
+  '$location',
+function($scope, COMPONENTS, $materialSidenav, $timeout, $materialDialog, menu, $location) {
+  $scope.goToUrl = function(p) {
+    window.location = p;
+  };
+
   $scope.COMPONENTS = COMPONENTS;
-  $scope.path = function(arg) {
-    if (arg) {
-      return $location.path(arg);
-    } else { 
-      return $location.path();
-    }
-  };
 
-  $scope.menuItems = [
-    {
-      name: 'Layout',
-      components: [{
-        name: 'Grid',
-        id: 'grid',
-        docs: [{
-          humanName: 'Layout Grid',
-          url: '/layout/grid'
-        }],
-      }, {
-        name: 'Layout Cells',
-        id: 'cells',
-        docs: [{
-          humanName: 'Cells',
-          url: '/layout/cells'
-        }]
-      }],
-    }, {
-      name: 'Components',
-      components: COMPONENTS
-    }
-  ];
-
-  $scope.setCurrentComponent = function(component, doc) {
-    $scope.currentComponent = component;
-    $scope.currentDoc = doc;
-  };
+  $scope.menu = menu;
 
   $scope.toggleMenu = function() {
     $timeout(function() {
@@ -102,49 +143,46 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $location, $rootScope, 
   };
 
   $scope.goHome = function($event) {
+    menu.selectPage(null, null);
     $location.path( '/' );
   };
 
-  $scope.goToDoc = function(doc) {
-    $location.path(doc.url);
-  };
-
-  $scope.viewSource = function(component, $event) {
+  $scope.viewSource = function(demo, $event) {
     $materialDialog({
       targetEvent: $event,
       controller: 'ViewSourceCtrl',
       locals: {
-        demo: component.$selectedDemo
+        demo: demo
       },
       templateUrl: 'template/view-source.tmpl.html'
     });
   };
+
+
+  COMPONENTS.forEach(function(component) {
+    component.demos && component.demos.forEach(function(demo) {
+      demo.$files = [demo.indexFile].concat(
+        demo.files.sort(sortByJs)
+      );
+      demo.$selectedFile = demo.indexFile;
+    });
+  });
+
+  function sortByJs(file) {
+    return file.fileType == 'js' ? -1 : 1;
+  }
 }])
 
 .controller('HomeCtrl', [
   '$scope',
-  '$rootScope',
-function($scope, $rootScope) {
-  $rootScope.appTitle = 'Material Design';
-  $scope.setCurrentComponent({
-    name: 'Material Design'
-  });
+function($scope) {
 }])
 
 .controller('LayoutCtrl', [
   '$scope',
-  '$rootScope',
   '$attrs',
   '$location',
-function($scope, $rootScope, $attrs, $location) {
-  $rootScope.appTitle = $attrs.demoTitle;
-  $scope.setCurrentComponent({
-    name: 'Layout'
-  }, {
-    humanName: $location.path().indexOf('grid') > -1 ?
-      'Grid' :
-      'Cells'
-  });
+function($scope, $attrs, $location) {
 }])
 
 .controller('ComponentDocCtrl', [
@@ -153,26 +191,7 @@ function($scope, $rootScope, $attrs, $location) {
   'component',
   '$rootScope',
 function($scope, doc, component, $rootScope) {
-  $scope.setCurrentComponent(component, doc);
+  $scope.currentComponent = component;
   $scope.doc = doc;
-  $rootScope.appTitle = 'Material: ' + doc.name;
 }])
-
-.controller('ViewSourceCtrl', [
-  '$scope',
-  'demo',
-  '$hideDialog',
-function($scope, demo, $hideDialog) {
-  $scope.files = [demo.indexFile].concat(demo.files.sort(sortByJs));
-  $scope.$hideDialog = $hideDialog;
-
-  $scope.data = {
-    selectedFile: demo.indexFile
-  };
-
-  function sortByJs(file) {
-    return file.fileType == 'js' ? -1 : 1;
-  }
-}])
-
 ;

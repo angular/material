@@ -17,7 +17,8 @@ body {
   color: #333;
   font-size: inherit;
   line-height: 40px;
-  margin-top: 0px;
+  max-height: 40px;
+  margin: 0;
   outline: none;
   padding: 0px 28px;
   position: relative;
@@ -26,31 +27,29 @@ body {
   width: 100%;
   z-index: 1;
   -webkit-transition: 0.25s linear;
-  -webkit-transition-property: margin, background-color;
+  -webkit-transition-property: max-height, background-color;
   -moz-transition: 0.25s linear;
-  -moz-transition-property: margin, background-color;
+  -moz-transition-property: max-height, background-color;
   transition: 0.25s linear;
-  transition-property: margin, background-color;
+  transition-property: max-height, background-color;
 }
 .menu-item.ng-hide {
-  margin-top: -40px;
+  max-height: 0;
 }
 .menu-item:hover, .menu-item:focus {
   color: #999;
 }
-
-.menu-item.menu-main-item.active {
+.menu-item.active {
   background-color: #eeeeee;
   font-weight: bold;
-}
-
-.menu-item.menu-sub-item {
-  padding: 0px 44px;
-  z-index: 0;
-}
-.menu-item.menu-sub-item.active {
-  font-weight: bold;
   color: #4285f4;
+}
+.menu-item.menu-title {
+  color: #888;
+  font-size: 16px;
+  padding-left: 8px;
+  text-align: left;
+  text-transform: uppercase;
 }
 
 .menu-icon {
@@ -61,34 +60,12 @@ body {
   pointer-events: none; /* don't let svg stop the click event */
 }
 
-.view-source {
-  margin: 5px;
-  text-align: right;
-}
-
-iframe.demo {
-  width: 100%;
-  height: 600px;
-  border: none;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
-
-.material-button.view-source-button {
-  color: #eee;
-}
-
-material-dialog.view-source-dialog {
-  width: 80%;
-  height: 80%;
-}
-
 pre, code {
   margin: 0;
   padding: 0;
 }
 code {
-  font-size: 16px;
+  font-size: 14px;
   background: #f6f6f6;
 }
 code:not(.highlight) {
@@ -102,7 +79,7 @@ code.highlight {
 }
 
 pre > code.highlight {
-  padding: 20px;
+  padding: 10px;
   font-weight: 400;
 }
 
@@ -112,15 +89,59 @@ ng-view {
   max-width: 1600px;
 }
 
-material-dialog.view-source-dialog,
-material-dialog.view-source-dialog .dialog-actions {
-  background: #f8f8f8;
+.demo-container.no-source {
+  height: 664px;
 }
-.view-source-dialog code {
+.demo-container {
+  height: auto;
+}
+iframe.demo {
+  width: 100%;
+  height: 600px;
+  border: none;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.demo-frame-container {
   background: #fff;
+  z-index: 1;
+  -webkit-transition: 0.2s ease-out all;
+  -moz-transition: 0.2s ease-out all;
+  transition: 0.2s ease-out all;
+  -webkit-transform: translate3d(0, -440px, 0);
+  -moz-transform: translate3d(0, -440px, 0);
+  transform: translate3d(0, -440px, 0);
 }
-.view-source-dialog material-tabs .tabs-header-items {
-  background-color: #455ede;
+.demo-frame-container.below {
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+
+material-toolbar.demo-toolbar,
+.demo-container material-tabs .tabs-header-items {
+  background: #455ede;
+  color: white;
+}
+material-toolbar.demo-toolbar material-button {
+  -webkit-transition: background 0.35s linear;
+  -moz-transition: background 0.35s linear;
+  transition: background 0.35s linear;
+}
+material-toolbar.demo-toolbar material-button.active {
+  background: rgb(118,137,231);
+}
+
+.demo-container .tabs-header-items material-tab-label {
+  background: #455ede;
+}
+.demo-source-content {
+  height: 400px;
+  background: #f6f6f6;
+}
+.demo-source-content pre {
+  max-width: 100%;
+  overflow-wrap: break-word;
 }
 .menu-separator-icon {
   margin: 0;
@@ -130,9 +151,17 @@ material-dialog.view-source-dialog .dialog-actions {
   font-size: 18px;
 }
 
-.side-menu-title {
-  text-transform: uppercase;
-  color: #999999;
-  font-size: 16px;
-  padding: 10px;
+/************
+ * DOCS
+ ************/
+.api-options-bar material-button {
+  margin: 5px;
+}
+.api-options-bar material-icon {
+  position: absolute;
+  top: 1px;
+  right: 4px;
+}
+.api-options-bar material-button span {
+  margin-right: 24px;
 }

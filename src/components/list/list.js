@@ -20,7 +20,7 @@ angular.module('material.components.list', [])
  * @restrict E
  *
  * @description
- * materialList is a list container for material-items
+ * materialList is a list container for material-items.
  */
 function materialListDirective() {
   return {

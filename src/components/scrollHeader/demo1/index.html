@@ -1,31 +1,15 @@
 
 <div ng-app="app" ng-controller="AppCtrl" layout="vertical" layout-fill>
-  <style>
-    .circle {
-      width: 40px;
-      height: 40px;
-      background-color: #555;
-      border-radius: 40px;
-    }
-    #header-bar {
-      background-size: cover;
-      background-image: url('/img/bg9.jpg');
-    }
-    material-content {
-      padding-top: 138px;
-    }
-  </style>
   <material-toolbar id="header-bar" class="material-theme-light-blue material-medium-tall" scroll-header condensed-height="60">
-    <div class="material-toolbar-tools material-toolbar-tools-top">
-      <span class="material-flex"></span>
-    </div>
+    <div flex></div>
     <div class="material-toolbar-tools material-toolbar-tools-bottom">
-      <span class="material-flex material-indent">My Drive</span>
+      <span>My Drive</span>
     </div>
 
     <button class="material-button material-button-fab material-button-fab-bottom-right material-theme-red">
       <material-icon icon="/img/icons/ic_photo_24px.svg"></material-icon>
     </button>
+
   </material-toolbar>
 
   <material-content flex scroll-y>
@@ -74,4 +58,19 @@
       </div>
     </material-item>
   </script>
+  <style>
+    .circle {
+      width: 40px;
+      height: 40px;
+      background-color: #555;
+      border-radius: 40px;
+    }
+    #header-bar {
+      background-size: cover;
+      background-image: url('/img/bg9.jpg');
+    }
+    material-content {
+      padding-top: 138px;
+    }
+  </style>
 </div>

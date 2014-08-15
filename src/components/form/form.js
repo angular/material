@@ -7,48 +7,78 @@
 angular.module('material.components.form', [])
   .directive('materialInputGroup', [
     materialInputGroupDirective
+  ])
+  .directive('input', [
+    groupInputDirective
   ]);
 
 /**
  * @ngdoc directive
  * @name materialInputGroup
  * @module material.components.form
+ * @restrict E
  * @description
- * Material Input Group
+ * Put the `<material-input-group>` directive as the parent of an `<input>` element to
+ * add proper styling for the input.
+ *
+ * @usage 
+ * <hljs lang="html">
+ * <material-input-group>
+ *   <input type="text" ng-model="myText">
+ * </material-input-group
+ * </hljs>
  */
 function materialInputGroupDirective() {
   return {
-    restrict: 'C',
-    link: function($scope, $element, $attr) {
-      // Grab the input child, and just do nothing if there is no child
-      var input = $element[0].querySelector('input');
-      if(!input) { return; }
+    restrict: 'CE',
+    controller: ['$element', function($element) {
+      this.setFocused = function(isFocused) {
+        $element.toggleClass('material-input-focused', !!isFocused);
+      };
+      this.setHasValue = function(hasValue) {
+        $element.toggleClass('material-input-has-value', !!hasValue);
+      };
+    }]
+  };
+}
 
-      input = angular.element(input);
-      var ngModelCtrl = input.controller('ngModel');
+function groupInputDirective() {
+  return {
+    restrict: 'E',
+    require: ['^?materialInputGroup', '?ngModel'],
+    link: function(scope, element, attr, ctrls) {
+      var inputGroupCtrl = ctrls[0];
+      var ngModelCtrl = ctrls[1];
+      if (!inputGroupCtrl) {
+        return;
+      }
 
       // When the input value changes, check if it "has" a value, and 
       // set the appropriate class on the input group
       if (ngModelCtrl) {
-        $scope.$watch(
-          function() { return ngModelCtrl.$viewValue; },
-          onInputChange
-        );
+        //Add a $formatter so we don't use up the render function
+        ngModelCtrl.$formatters.push(function(value) {
+          inputGroupCtrl.setHasValue(!!value);
+          return value;
+        });
       }
-      input.on('input', onInputChange);
+      element.on('input', function() {
+        inputGroupCtrl.setHasValue(!!element.val());
+      });
 
       // When the input focuses, add the focused class to the group
-      input.on('focus', function(e) {
-        $element.addClass('material-input-focused');
+      element.on('focus', function(e) {
+        inputGroupCtrl.setFocused(true);
       });
       // When the input blurs, remove the focused class from the group
-      input.on('blur', function(e) {
-        $element.removeClass('material-input-focused');
+      element.on('blur', function(e) {
+        inputGroupCtrl.setFocused(false);
       });
 
-      function onInputChange() {
-        $element.toggleClass('material-input-has-value', !!input.val());
-      }
+      scope.$on('$destroy', function() {
+        inputGroupCtrl.setFocused(false);
+        inputGroupCtrl.setHasValue(false);
+      });
     }
   };
 }

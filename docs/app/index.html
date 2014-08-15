@@ -1,7 +1,7 @@
 <!doctype html>
 <html ng-app="docsApp" ng-controller="DocsCtrl">
 <head>
-<title ng-bind="appTitle">Material Design</title>
+<title ng-bind="(menu.currentSection.name || 'Material Design') + (menu.currentPage ? (' > ' + menu.currentPage.humanName) : '')">Material Design</title>
 <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
 <link rel="stylesheet" href="docs.css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -21,33 +21,21 @@
     </material-toolbar>
 
     <material-content flex>
-      <div ng-repeat-start="category in menuItems"
-        class="side-menu-title">
-        {{category.name}}
-      </div>
-      <div ng-repeat-end 
-        layout="vertical" layout-align="start" layout-fill
-        ng-cloak
-        ng-repeat="component in category.components">
+      <div ng-repeat="section in menu.sections">
 
-        <button class="menu-item menu-main-item"
-          style="user-select: none;"
-          ng-class="{active: path().indexOf(component.id) > -1}"
-          ng-click="path(component.docs[0].url)">
-          <span ng-bind="component.name" style="user-select: auto;"></span>
-          <material-ripple initial-opacity="0.4" opacity-decay-velocity="1.75"></material-ripple>
+        <button class="menu-item menu-title"
+          ng-click="menu.toggleSelectSection(section)">
+          {{section.name}}
         </button>
 
-        <div ng-if="component.docs.length > 1">
-          <button class="menu-item menu-sub-item"
-            ng-repeat="doc in component.docs"
-            ng-click="goToDoc(doc); $event.stopImmediatePropagation()"
-            ng-show="doc.docType !== 'readme' && path().indexOf(component.id) > -1"
-            ng-class="{active: path() == doc.url}">
-            {{doc.humanName}}
-            <material-ripple initial-opacity="0.4" opacity-decay-velocity="1.75"></material-ripple>
-          </button>
-        </div>
+        <button class="menu-item"
+          ng-show="menu.isSectionSelected(section)"
+          ng-repeat="page in section.pages"
+          ng-class="{active: menu.isPageSelected(section, page)}"
+          ng-click="menu.selectPage(section, page); $event.stopImmediatePropagation()">
+          <span ng-bind="page.humanName || page.name"></span>
+          <material-ripple initial-opacity="0.4" opacity-decay-velocity="1.75"></material-ripple>
+        </button>
 
       </div>
     </material-content>
@@ -63,21 +51,21 @@
           </material-icon>
         </div>
         <h2 hide block-sm>
-          {{path() === '/' ? 'Angular Material' : (currentComponent.name || 'Components')}}
+          {{menu.currentSection.name || 'Angular Material'}}
         </h2>
-        <span layout="vertical" layout-align="center center"
-          class="menu-separator-icon">
+        <span layout="vertical" layout-align="center center" class="menu-separator-icon" 
+          ng-show="menu.currentPage">
           <img style="height: 16px;" src="img/docArrow.png" hide block-sm>
         </span>
-        <h3 ng-show="currentDoc.humanName" ng-bind="currentDoc.humanName">
+        <h3 ng-show="menu.currentPage" ng-bind="menu.currentPage.humanName || menu.currentPage.name">
         </h3>
         <span flex></span>
-        <span class="menu-module-name" ng-bind="currentComponent.id" hide block-md>
+        <span class="menu-module-name" ng-bind="menu.currentPage.id" hide block-md>
         </span>
       </div>
     </material-toolbar>
 
-    <ng-view class="material-content" scroll-y style="padding:20px;" flex></ng-view>
+    <ng-view class="material-content" scroll-y flex style="padding:16px;"></ng-view>
 
   </div>
 

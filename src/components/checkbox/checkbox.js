@@ -18,9 +18,15 @@ angular.module('material.components.checkbox', [
  * @restrict E
  *
  * @description
- * Checkbox directive!
+ * The checkbox directive is used like the normal [angular checkbox](https://docs.angularjs.org/api/ng/input/input%5Bcheckbox%5D).
  *
- * @param {expression=} ngModel An expression to bind this checkbox to.
+ * @usage
+ * <hljs lang="html">
+ * <material-checkbox ng-model="isChecked">
+ *   Is it checked?
+ * </material-checkbox>
+ * isChecked = {{isChecked}}
+ * </hljs>
  */
 function materialCheckboxDirective(inputDirectives) {
   var inputDirective = inputDirectives[0];

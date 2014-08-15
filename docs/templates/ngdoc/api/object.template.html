@@ -6,9 +6,7 @@
   {% if doc.params or doc.returns or doc.this or doc.kind == 'function' -%}
     <h2 id="usage">Usage</h2>
     {% if doc.usage %}
-      {$ doc.usage | code $}
-    {% elif doc.kind == 'optionFunction' %}
-      {$ functionOptionSyntax(doc) $}
+      {$ doc.usage | marked $}
     {% else %}
       {$ functionSyntax(doc) $}
     {% endif %}

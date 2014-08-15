@@ -12,9 +12,10 @@ angular.module('app', ['ngMaterial'])
     scope: {
       fid: '@'
     },
-    template: '<div class="material-input-group">' +
-                '<label for="{{fid}}">Description</label>' +
-                '<input id="{{fid}}" type="text" ng-model="data.description">' +
-              '</div>',
-  }
+    template: 
+      '<material-input-group>' +
+        '<label for="{{fid}}">Description</label>' +
+        '<input id="{{fid}}" type="text" ng-model="data.description">' +
+      '</material-input-group>'
+  };
 });

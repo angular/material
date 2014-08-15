@@ -29,7 +29,6 @@ function MaterialDialogDirective() {
  * @ngdoc service
  * @name $materialDialog
  * @module material.components.dialog
- * @kind optionFunction
  *
  * @description
  *
@@ -42,7 +41,27 @@ function MaterialDialogDirective() {
  *
  * It takes one parameter, `options`, which is an object with the following parameters:
  *
- * @returns {function} `hideDialog` - A function which, when called, will hide the dialog.
+ * @usage
+ * <hljs lang="html">
+ * <div ng-controller="MyController">
+ *   <material-button ng-click="openDialog($event)">
+ *     Open a Dialog from this button!
+ *   </material-dialog>
+ * </div>
+ * </hljs>
+ * <hljs lang="js">
+ * var app = angular.module('app', ['ngMaterial']);
+ * app.controller('MyController', function($scope, $materialDialog) {
+ *   $scope.openDialog = function($event) {
+ *     var hideDialog = $materialDialog({
+ *       template: '<material-dialog>Hello!</material-dialog>',
+ *       targetEvent: $event
+ *     });
+ *   };
+ * });
+ * </hljs>
+ *
+ * @returns {function} `hideDialog` - A function that hides the dialog.
  *
  * @param {string=} templateUrl The url of a template that will be used as the content
  * of the dialog. Restrictions: the template must have an outer `material-dialog` element. 
@@ -59,12 +78,12 @@ function MaterialDialogDirective() {
  * @param {boolean=} escapeToClose Whether the user can press escape to close the dialog.
  *   Default true.
  * @param {string=} controller The controller to associate with the dialog. The controller
- * will be injected with the local `$hideDialog`, which is a method used to hide the dialog.
+ * will be injected with the local `$hideDialog`, which is a function used to hide the dialog.
  * @param {object=} locals An object containing key/value pairs. The keys will be used as names
  * of values to inject into the controller. For example, `locals: {three: 3}` would inject
  * `three` into the controller, with the value 3.
  * @param {object=} resolve Similar to locals, except it takes promises as values, and the
- * dialog will not open until all of the promises resolve.
+ * toast will not open until all of the promises resolve.
  * @param {string=} controllerAs An alias to assign the controller to on the scope.
  * @param {element=} appendTo The element to append the dialog to. Defaults to appending
  *   to the root element of the application.

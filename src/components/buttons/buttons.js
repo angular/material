@@ -17,10 +17,10 @@ angular.module('material.components.button', [
  * @name materialButton
  * @order 0
  *
- * @restrict E
+ * @restrict EC
  *
  * @description
- * `<material-button type="" disabled noink>` is a button directive with optional ink ripples (default enabled).
+ * `<material-button>` is a button directive with optional ink ripples (default enabled).
  *
  * @param {boolean=} noink Flag indicates use of ripple ink effects
  * @param {boolean=} disabled Flag indicates if the tab is disabled: not selectable with no ink effects
@@ -41,7 +41,7 @@ angular.module('material.components.button', [
  */
 function MaterialButtonDirective() {
   return {
-    restrict: 'E',
+    restrict: 'EC',
     transclude: true,
     template: '<material-ripple start="center" initial-opacity="0.25" opacity-decay-velocity="0.75"></material-ripple>',
     link: function(scope, element, attr, ctrl, transclude) {

@@ -6,7 +6,24 @@
 <header class="api-profile-header">
     {% block related_components %}{% endblock %}
 </header>
+
 {% endblock %}
+
+<div layout="horizontal" class="api-options-bar">
+  <span flex></span>
+  <material-button ng-click="goToUrl('#{$ doc.readmeUrl $}')">
+    View Demo
+    <material-icon icon="/img/icons/ic_play_arrow_24px.svg"></material-icon>
+  </material-button>
+  <material-button ng-click="goToUrl('{$ doc.githubUrl $}')">
+    <span>View on Github</span>
+    <material-icon icon="/img/icons/ic_launch_24px.svg"></material-icon>
+  </material-button>
+  <material-button ng-click="goToUrl('{$ doc.githubEditUrl $}')">
+    Improve This Doc
+    <material-icon icon="/img/icons/ic_launch_24px.svg"></material-icon>
+  </material-button>
+</div>
 
 {% block description %}
 <div class="api-profile-description">
