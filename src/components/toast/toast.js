@@ -41,7 +41,7 @@ function QpToastDirective() {
  * <div ng-controller="MyController">
  *   <material-button ng-click="openToast()">
  *     Open a Toast!
- *   </material-dialog>
+ *   </material-button>
  * </div>
  * </hljs>
  * <hljs lang="js">
