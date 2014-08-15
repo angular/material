@@ -76,7 +76,7 @@ function(COMPONENTS, $location, $rootScope) {
       url: '/layout/cells'
     }],
   }, {
-    name: 'Components',
+    name: 'API',
     pages: componentDocs
   }];
   var self;

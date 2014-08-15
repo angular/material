@@ -26,11 +26,11 @@ body {
   text-decoration: none;
   width: 100%;
   z-index: 1;
-  -webkit-transition: 0.25s linear;
+  -webkit-transition: 0.2s linear;
   -webkit-transition-property: max-height, background-color;
-  -moz-transition: 0.25s linear;
+  -moz-transition: 0.2s linear;
   -moz-transition-property: max-height, background-color;
-  transition: 0.25s linear;
+  transition: 0.2s linear;
   transition-property: max-height, background-color;
 }
 .menu-item.ng-hide {
