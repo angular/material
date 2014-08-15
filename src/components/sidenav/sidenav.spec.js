@@ -42,38 +42,29 @@ describe('materialSidenav', function() {
       scope.$apply();
 
       expect(el.hasClass('open')).toBe(true);
-
-      controller.toggle();
-      scope.$apply();
-
-      expect(el.hasClass('open')).toBe(false);
     });
 
-    it('should add body class', inject(function($document) {
+    it('should add backdrop', inject(function($timeout) {
       var el = setup('');
+      var parent = angular.element('<div>').append(el);
       var scope = el.isolateScope();
-      var controller = el.controller('materialSidenav');
+      var ctrl = el.controller('materialSidenav');
+      var backdrop;
 
-      controller.open();
+
+      ctrl.open();
       scope.$apply();
 
-      expect($document[0].body.classList.contains('material-sidenav-open')).toBe(true);
-    }));
+      backdrop = parent.find('material-backdrop');
+      expect(backdrop.length).toBe(1);
 
-    it('should close on body click', inject(function($document, $timeout) {
-      var el = setup('');
-      var scope = el.isolateScope();
-      var controller = el.controller('materialSidenav');
-
-      controller.open();
-      scope.$apply();
-
+      backdrop.triggerHandler('click');
       $timeout.flush();
-
-      $($document[0].body).trigger('click');
-      expect(controller.isOpen()).toBe(false);
-      expect($document[0].body.classList.contains('material-sidenav-open')).toBe(false);
+      expect(el.hasClass('open')).toBe(false);
+      backdrop = parent.find('material-backdrop');
+      expect(backdrop.length).toBe(0);
     }));
+
   });
 
   describe('$materialSidenav Service', function() {

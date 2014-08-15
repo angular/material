@@ -3,7 +3,7 @@
 
   <material-toolbar class="material-theme-green">
     <h1 class="material-toolbar-tools">
-      <span>Hello</span>
+      <span>Toolbar</span>
     </h1>
   </material-toolbar>
 
@@ -12,25 +12,39 @@
     <material-sidenav class="material-sidenav-left material-whiteframe-z2" component-id="left">
       <div ng-controller="LeftCtrl">
         <h2>Sidenav left</h2>
-        <material-button ng-click="close()">Close</material-button>
+        <material-button ng-click="close()" hide-md>Close</material-button>
       </div>
     </material-sidenav>
 
-    <material-content flex>
+    <material-content flex class="material-content-padding">
 
-      <material-button ng-click="toggleLeft()">Toggle left</material-button>
+      <p>
+        On smaller devices, material-sidenav will be hidden by default. 
+      </p>
+      <p>
+        On larger, it will be shown by default.
+      </p>
 
-      <material-button ng-click="toggleRight()">Toggle right</material-button>
+      <material-button ng-click="toggleLeft()" hide-md>
+        Toggle left
+      </material-button>
+
+      <material-button ng-click="toggleRight()" hide-md>
+        Toggle right
+      </material-button>
 
     </material-content>
 
     <material-sidenav class="material-sidenav-right material-whiteframe-z2 material-theme-light" component-id="right">
       <div ng-controller="RightCtrl">
         <h2>Sidenav right</h2>
-        <material-button ng-click="close()">Close</material-button>
+        <material-button ng-click="close()" hide-md>Close</material-button>
       </div>
     </material-sidenav>
 
   </section>
 
 </div>
+<style>
+p { text-align: center; }
+</style>

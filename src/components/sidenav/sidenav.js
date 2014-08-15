@@ -143,13 +143,10 @@ function materialSidenavService($materialComponentRegistry) {
 function materialSidenavDirective($timeout) {
   return {
     restrict: 'E',
-    transclude: true,
     scope: {},
-    template: '<div class="material-sidenav-inner" ng-transclude></div>',
     controller: '$materialSidenavController',
     link: function($scope, $element, $attr, sidenavCtrl) {
       var backdrop = angular.element('<material-backdrop class="material-sidenav-backdrop">');
-
       $scope.$watch('isOpen', openWatchAction);
 
       function openWatchAction(isOpen) {
