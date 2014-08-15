@@ -4,18 +4,18 @@
  */
 angular.module('material.components.dialog', [
   'material.animations',
-  'material.components.backdrop',
-  'material.services.popup'
+  'material.services.compiler'
 ])
   .directive('materialDialog', [
     MaterialDialogDirective
   ])
   .factory('$materialDialog', [
     '$timeout',
-    '$materialPopup',
+    '$materialCompiler',
     '$rootElement',
-    '$materialBackdrop',
+    '$rootScope',
     '$materialEffects',
+    '$animate',
     MaterialDialogService
   ]);
 
@@ -63,13 +63,13 @@ function MaterialDialogDirective() {
  * @param {object=} locals An object containing key/value pairs. The keys will be used as names
  * of values to inject into the controller. For example, `locals: {three: 3}` would inject
  * `three` into the controller, with the value 3.
- * @param {element=} appendTo The element to append the dialog to. Defaults to appending
- *   to the root element of the application.
  * @param {object=} resolve Similar to locals, except it takes promises as values, and the
  * dialog will not open until all of the promises resolve.
  * @param {string=} controllerAs An alias to assign the controller to on the scope.
+ * @param {element=} appendTo The element to append the dialog to. Defaults to appending
+ *   to the root element of the application.
  */
-function MaterialDialogService($timeout, $materialPopup, $rootElement, $materialBackdrop, $materialEffects) {
+function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootScope, $materialEffects, $animate) {
   var recentDialog;
 
   return showDialog;
@@ -95,42 +95,41 @@ function MaterialDialogService($timeout, $materialPopup, $rootElement, $material
     // Incase the user provides a raw dom element, always wrap it in jqLite
     options.appendTo = angular.element(options.appendTo); 
 
-    var backdropInstance;
-
     // Close the old dialog
     recentDialog && recentDialog.then(function(destroyDialog) {
       destroyDialog();
     });
 
-    recentDialog = $materialPopup(options).then(function(dialog) {
-
+    recentDialog = $materialCompiler.compile(options).then(function(compileData) {
       // Controller will be passed a `$hideDialog` function
-      dialog.locals.$hideDialog = destroyDialog;
-      dialog.enter(function() {
+      compileData.locals.$hideDialog = destroyDialog;
+
+      var scope = $rootScope.$new(true);
+      var element = compileData.link(scope); 
+      var backdrop;
+
+      $animate.enter(element, options.appendTo, null, function() {
         if (options.escapeToClose) {
           $rootElement.on('keyup', onRootElementKeyup);
         }
 
         if (options.hasBackdrop) {
-          backdropInstance = $materialBackdrop({
-            appendTo: options.appendTo,
-            opaque: options.hasBackdrop
-          });
-          backdropInstance.then(function(drop) {
-            drop.enter();
+          backdrop = angular.element('<material-backdrop class="opaque">');
+          $timeout(function() {
+            $animate.enter(backdrop, options.appendTo, null);
           });
         }
-
         if (options.clickOutsideToClose) {
-          dialog.element.on('click', dialogClickOutside);
+          element.on('click', dialogClickOutside);
         }
       });
 
       var popInTarget = options.targetEvent && options.targetEvent.target && 
         angular.element(options.targetEvent.target);
 
+      options.appendTo.append(element);
       $materialEffects.popIn(
-        dialog.element,
+        element,
         options.appendTo,
         popInTarget
       );
@@ -138,22 +137,28 @@ function MaterialDialogService($timeout, $materialPopup, $rootElement, $material
       return destroyDialog;
 
       function destroyDialog() {
-        if (backdropInstance) {
-          backdropInstance.then(function(drop) {
-            drop.destroy();
-          });
+        if (destroyDialog.called) return;
+        destroyDialog.called = true;
+
+        if (backdrop) {
+          $animate.leave(backdrop);
         }
         if (options.escapeToClose) {
           $rootElement.off('keyup', onRootElementKeyup);
         }
         if (options.clickOutsideToClose) {
-          dialog.element.off('click', dialogClickOutside);
+          element.off('click', dialogClickOutside);
         }
-        $materialEffects.popOut(dialog.element, $rootElement);
+        $materialEffects.popOut(element, $rootElement);
 
         // TODO(ajoslin): use element.animate() and ngAnimateStyler instead of
         // this $timeout.
-        $timeout(dialog.destroy, 200);
+        $timeout(function() {
+          element.remove();
+          scope.$destroy();
+          scope = null;
+          element = null;
+        }, 200);
       }
       function onRootElementKeyup(e) {
         if (e.keyCode == 27) {
@@ -162,7 +167,7 @@ function MaterialDialogService($timeout, $materialPopup, $rootElement, $material
       }
       function dialogClickOutside(e) {
         // If we click the flex container outside the backdrop
-        if (e.target === dialog.element[0]) {
+        if (e.target === element[0]) {
           $timeout(destroyDialog);
         }
       }

@@ -28,7 +28,7 @@ angular.module('app', ['ngMaterial'])
 
   $scope.toastIt = function() {
     $materialToast({
-      template: 'Hello, ' + Math.random(),
+      template: '<material-toast>Hello, ' + Math.random() + '</material-toast>',
       duration: 2000,
       position: $scope.getToastPosition()
     });

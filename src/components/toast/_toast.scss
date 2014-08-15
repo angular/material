@@ -1,11 +1,17 @@
 
 material-toast {
-  display: inline-block;
+  @include flex-display();
+  @include box-sizing(border-box);
+  @include flex-align-items(center);
+
   background: #323232;
   color: #f1f1f1;
   min-height: 48px;
   min-width: 288px;
-  padding: 16px 24px 12px;
+  padding-left: 24px;
+  padding-right: 24px;
+  height: 24px;
+
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
   border-radius: 2px;
   font-size: 14px;
@@ -16,6 +22,10 @@ material-toast {
   max-height: 40px;
 
   bottom: 12px;
+
+  material-button {
+    color: white;
+  }
 
   &.capsule {
     border-radius: 24px;
@@ -75,10 +85,6 @@ material-toast {
       transform: translate(0, -100%);
     }
   }
-}
-
-.toast-container {
-  overflow: hidden;
 }
 
 .toast-action {

@@ -24,7 +24,7 @@ module.exports = {
       return !!module;
     }),
 
-  componentsModule: "angular.module('ngMaterial', [ 'ng', 'ngAnimate', 'material.services.attrBind', 'material.services.compiler', 'material.services.popup', 'material.services.position', 'material.services.registry', 'material.services.throttle', <%= components.join(',') %>]);\n",
+  componentsModule: "angular.module('ngMaterial', [ 'ng', 'ngAnimate', 'material.services.attrBind', 'material.services.compiler', 'material.services.position', 'material.services.registry', 'material.services.throttle', <%= components.join(',') %>]);\n",
 
   dist: 'dist',
 
@@ -64,7 +64,6 @@ module.exports = {
       //Components
       'src/components/animate/effects.js',
       'src/components/animate/canvas/rippler.js',
-      'src/components/backdrop/backdrop.js',
       'src/components/buttons/buttons.js',
       'src/components/card/card.js',
       'src/components/checkbox/checkbox.js',
@@ -86,7 +85,6 @@ module.exports = {
       //Services
       'src/services/attrBind/attrBind.js',
       'src/services/compiler/compiler.js',
-      'src/services/popup/popup.js',
       'src/services/position/position.js',
       'src/services/registry/registry.js',
       'src/services/throttle/throttle.js'

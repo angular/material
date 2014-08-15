@@ -4,23 +4,22 @@
  * @description
  * Toast
  */
-angular.module('material.components.toast', ['material.services.popup'])
+angular.module('material.components.toast', ['material.services.compiler'])
   .directive('materialToast', [
     QpToastDirective
   ])
   .factory('$materialToast', [
     '$timeout',
-    '$materialPopup',
+    '$rootScope',
+    '$materialCompiler',
+    '$rootElement',
+    '$animate',
     QpToastService
   ]);
 
 function QpToastDirective() {
   return {
-    restrict: 'E',
-    transclude: true,
-    template: 
-      '<div class="toast-container" ng-transclude>' +
-      '</div>'
+    restrict: 'E'
   };
 }
 
@@ -29,7 +28,7 @@ function QpToastDirective() {
  * @name $materialToast
  * @module material.components.toast
  */
-function QpToastService($timeout, $materialPopup) {
+function QpToastService($timeout, $rootScope, $materialCompiler, $rootElement, $animate) {
   var recentToast;
 
   return showToast;
@@ -47,34 +46,33 @@ function QpToastService($timeout, $materialPopup) {
       // Supports any combination of these class names: 'bottom top left right fit'. 
       // Default: 'bottom left'
       position: 'bottom left',
-
-      // Also supports all options from $materialPopup
-      transformTemplate: function(template) {
-        return '<material-toast>' + template + '</material-toast>';
-      }
     }, options || {});
 
-    recentToast && recentToast.then(function(destroyToast) {
-      destroyToast();
-    });
+    recentToast && recentToast.then(function(destroy) { destroy(); });
 
-    recentToast = $materialPopup(options).then(function(toast) {
-      function destroy() {
-        $timeout.cancel(toast.delay);
-        toast.destroy();
-      }
-
+    recentToast = $materialCompiler.compile(options).then(function(compileData) {
       // Controller will be passed a `$hideToast` function
-      toast.locals.$hideToast = destroy;
+      compileData.locals.$hideToast = destroy;
+      
+      var scope = $rootScope.$new();
+      var element = compileData.link(scope);
+      element.addClass(options.position);
 
-      toast.element.addClass(options.position);
-      toast.enter(function() {
+      var delayTimeout;
+      $animate.enter(element, $rootElement, null, function() {
         if (options.duration) {
-          toast.delay = $timeout(destroy, options.duration);
+          delayTimeout = $timeout(destroy, options.duration);
         }
       });
 
       return destroy;
+
+      function destroy() {
+        $timeout.cancel(delayTimeout);
+        $animate.leave(element, function() {
+          scope.$destroy();
+        });
+      }
     });
 
     return recentToast;
