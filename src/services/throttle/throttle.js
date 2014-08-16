@@ -1,8 +1,8 @@
 angular.module('material.services.throttle', [ ])
   .factory('$throttle', [
     '$timeout',
-    '$$q',
-    '$log', 
+    '$q',
+    '$log',
     MaterialThrottleService
   ]);
   /**
@@ -41,7 +41,7 @@ angular.module('material.services.throttle', [ ])
    *   makeRipple();
    *
    */
-function MaterialThrottleService($timeout, $$q, $log) {
+function MaterialThrottleService($timeout, $q, $log) {
 
   var STATE_READY= 0, STATE_START=1, STATE_THROTTLE=2, STATE_END=3;
 
@@ -222,7 +222,7 @@ function MaterialThrottleService($timeout, $$q, $log) {
     function gotoState( nextState , targetFn  )
     {
 
-      var dfd = $$q.defer(),
+      var dfd = $q.defer(),
           hasFn = angular.isFunction(targetFn),
           goNext = hasFn && (targetFn.length < 1),
           fn = hasFn ? targetFn : resolved;
@@ -268,7 +268,7 @@ function MaterialThrottleService($timeout, $$q, $log) {
    */
   function resolved(dfd)
   {
-    dfd = dfd || $$q.defer();
+    dfd = dfd || $q.defer();
     dfd.resolve.apply(null, arguments.length > 1 ? [].slice.call(arguments,1) : [ ]);
 
     return dfd.promise;
