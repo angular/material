@@ -1,18 +1,6 @@
 <link rel="stylesheet" href="/css/tab_demos.css">
 <div ng-app="app" ng-controller="AppCtrl" class="sample">
 
-    <p>Dynamic Tabs with internal tab view content:</p>
-
-    <div class="options" ng-keypress="submit($event)">
-        <span style="display:block;padding-bottom:5px;">Add another tab.</span>
-        Title: <input type="text" ng-model="tTitle" placeholder="tab label">
-        Content:<input type="text" ng-model="tContent" placeholder="tab content" style="width:250px;">
-        <button ng-disabled="!tTitle" ng-click="addTab(tTitle,tContent)" class="addTabBtn" >Add another tab</button>
-    </div>
-
-    <br/><br/>
-
-
     <material-tabs selected="selectedIndex" style="background-color: #00bcd6">
         <img ng-src="/img/angular.png" style="position:absolute; width:30px;height: 30px; padding-top:5px; padding-left: 5px;">
 
@@ -51,6 +39,14 @@
           </span>
         </div>
     </div>
+    <br/><br/>
+    <hr/>
+    <div class="infoBar" ng-keypress="submit($event)">
+        Title: <input type="text" ng-model="tTitle" placeholder="<tab label>">
+        Content:<input type="text" ng-model="tContent" placeholder="<tab content>" style="width:250px;">
+        <button ng-disabled="!tTitle" ng-click="addTab(tTitle,tContent)" class="addTabBtn" >Add another tab</button>
+    </div>
+
 
 
 </div>

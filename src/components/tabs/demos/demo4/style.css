@@ -1,0 +1,16 @@
+.tabs-content .material-view {
+    background-color: blanchedalmond;
+}
+
+div.infoBar input {
+    display: inline-block;
+}
+
+div.infoBar {
+    margin-left : 20px;
+}
+
+
+material-tabs .tabs-content {
+    height: 200px;
+}

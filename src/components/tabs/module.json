@@ -4,23 +4,23 @@
   "js": ["tabs.js", "util/*.js"],
   "demos": {
     "demo1": {
-      "name": "1",
+      "name": "Testimonials (tabs on bottom):",
       "files": ["demos/demo1/*"]
     },
     "demo2": {
-      "name": "2",
+      "name": "Static Tabs linked external content (ng-Switch):",
       "files": ["demos/demo2/*"]
     },
-    "demo3": {
-      "name": "3",
-      "files": ["demos/demo3/*"]
-    },
     "demo4": {
-      "name": "4",
+      "name": "Dynamic Tabs (with internal views):",
       "files": ["demos/demo4/*"]
     },
+    "demo3": {
+      "name": "Dynamic Tabs (buttons only):",
+      "files": ["demos/demo3/*"]
+    },
     "demo5": {
-      "name": "5",
+      "name": "Dynamic Tabs (buttons only) with $location & routing: ",
       "files": ["demos/demo5/*"]
     }
   }

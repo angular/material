@@ -65,3 +65,18 @@
 ng-view {
     padding-left: 40px;
 }
+
+ng-view.tabs-view {
+    background-color: rgb(205, 240, 255);
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    top: 60px;
+    height:200px;
+}
+material-ink-bar {
+    height: 7px;
+    background: rgb(205, 240, 255);
+    position: absolute;
+    margin-top: -7px;
+}
