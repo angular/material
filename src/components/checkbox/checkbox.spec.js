@@ -25,6 +25,27 @@ describe('materialCheckbox', function() {
     expect(cbElements.eq(1).attr('aria-checked')).toEqual('true');
   }));
 
+  it('should be disabled with disabled attr', inject(function($compile, $rootScope) {
+    var element = $compile('<div>' +
+                             '<material-checkbox disabled ng-model="blue">' +
+                             '</material-checkbox>' +
+                           '</div>')($rootScope);
+
+    var checkbox = element.find('material-checkbox');
+
+    $rootScope.$apply('blue = false');
+
+    checkbox.triggerHandler('click');
+    expect($rootScope.blue).toBe(false);
+
+    checkbox.removeAttr('disabled');
+
+    checkbox.triggerHandler('click');
+    expect($rootScope.blue).toBe(true);
+
+
+  }));
+
   describe('ng core checkbox tests', function() {
 
     var inputElm;

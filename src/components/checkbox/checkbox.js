@@ -37,11 +37,12 @@ function materialCheckboxDirective(inputDirectives) {
     restrict: 'E',
     transclude: true,
     require: 'ngModel',
-    template: '<div class="material-container">' +
-                '<material-ripple start="center" class="circle" material-checked="{{ checked }}" ></material-ripple>' +
-                '<div class="material-icon"></div>' +
-              '</div>' +
-              '<div ng-transclude class="material-label"></div>',
+    template: 
+      '<material-ripple start="center" class="circle" material-checked="{{ checked }}" ></material-ripple>' +
+      '<div class="material-container">' +
+        '<div class="material-icon"></div>' +
+      '</div>' +
+      '<div ng-transclude class="material-label"></div>',
     link: link
   };
 
@@ -63,7 +64,13 @@ function materialCheckboxDirective(inputDirectives) {
     element.on('click', listener);
     ngModelCtrl.$render = render;
 
+    // if (angular.isDefined(attr.noink)) {
+    //   element.find('canvas').remove();
+    // }
+
     function listener(ev) {
+      if (element[0].hasAttribute('disabled')) return;
+
       scope.$apply(function() {
         checked = !checked;
         ngModelCtrl.$setViewValue(checked, ev && ev.type);
