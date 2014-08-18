@@ -47,26 +47,11 @@ function MaterialButtonDirective() {
     link: function(scope, element, attr, ctrl, transclude) {
 
       // Put the content of the <material-button> inside after the ripple
-
       transclude(scope, function(clone) {
         element.append(clone);
       });
 
-      //
-
-      configureInk(attr.noink);
       configureButton(attr.type);
-
-      /**
-       * If the inkRipple is disabled, then remove the ripple area....
-       * NOTE: <material-ripple/> directive replaces itself with `<canvas.material-ink-ripple />` element
-       * @param isDisabled
-       */
-      function configureInk(noInk) {
-        if ( noInk ) {
-          element.find('canvas').remove();
-        }
-      }
 
       /**
        * If a type attribute is specified, dynamically insert a <button> element.
