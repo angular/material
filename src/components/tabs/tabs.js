@@ -170,8 +170,20 @@ function TabsDirective($compile, $timeout, $materialEffects) {
           // Single inkBar is used for all tabs
           var inkBar = findNode("material-ink-bar", element);
 
+          // Wait until ther next event loop to run updateInkBar, to be sure
+          // that all of the tabs have been added/removed.
+          // This is cheaper than running updateInkBar every time a tab is
+          // added or removed.
+          var inkUpdateTimeout = null;
+          var inkUpdate = function(tab, skipAnimation) {
+            clearTimeout(inkUpdateTimeout);
+            inkUpdateTimeout = setTimeout(function() {
+              updateInkBar(tab, skipAnimation);
+            });
+          };
           // On resize or tabChange
-          tabsController.onTabChange = updateInkBar;
+          tabsController.onTabChange = inkUpdate;
+
           angular.element(window).on('resize', function() {
             updateInkBar(tabsController.selectedElement(), true);
           });
@@ -743,25 +755,14 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
   }
 
   /**
-   * If not specified (in parent scope; as part of ng-repeat), create
-   * `$index` property as part of current scope.
-   * NOTE: This prevents scope variable shadowing...
-   * @param tab
-   * @param index
-   */
-  function updateIndex(tab, index) {
-    if (angular.isUndefined(tab.$index)) {
-      tab.$index = index;
-    }
-  }
-
-  /**
    * Add tab to list and auto-select; default adds item to end of list
    * @param tab
    */
   function addTab(tab, element) {
 
-    updateIndex(tab, list.count());
+    if (angular.isUndefined(tab.$index)) {
+      tab.$index = list.count();
+    }
 
     // cache materialTab DOM element; these are not materialView elements
     elements[ tab.$id ] = element;
@@ -770,7 +771,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
       var pos = list.add(tab, tab.$index);
 
       // Should we auto-select it?
-      if ($scope.$selIndex == pos) {
+      if ($scope.$selIndex == pos || tab.active) {
         selectTab(tab);
       }
     }
