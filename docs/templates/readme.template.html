@@ -1,4 +1,14 @@
 <div layout="vertical" layout-fill>
+  <div layout="horizontal" class="api-options-bar">
+    <span flex></span>
+    <b style="padding-top:11px;">API:</b>
+    <material-button ng-repeat="doc in currentComponent.docs" 
+      ng-show="doc.docType !== 'readme'"
+      ng-click="goToUrl('#' + doc.url )">
+      {{doc.humanName || doc.name}}
+      <b style="font-family: monospace; font-size: 18px;"><></b>
+    </material-button>
+  </div>
   <div flex>
     {$ doc.content | marked $}
   </div>
@@ -26,7 +36,7 @@
         </material-tab>
       </material-tabs>
 
-      <material-content scroll-y>
+      <material-content scroll-y class="demo-source-container">
         <div class="demo-source-content">
           <div ng-repeat="file in demo.$files">
             <hljs code="file.content"

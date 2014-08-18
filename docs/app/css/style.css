@@ -144,6 +144,9 @@ material-toolbar.demo-toolbar material-button.active {
 .demo-container .tabs-header-items material-tab-label {
   background: #455ede;
 }
+.demo-source-container {
+  border: 1px solid #ddd;
+}
 .demo-source-content {
   height: 400px;
   background: #f6f6f6;
@@ -166,12 +169,12 @@ material-toolbar.demo-toolbar material-button.active {
 .api-options-bar material-button {
   margin: 5px;
 }
-.api-options-bar material-icon {
+.api-options-bar.with-icon material-icon {
   position: absolute;
   top: 1px;
   right: 4px;
 }
-.api-options-bar material-button span {
+.api-options-bar.with-icon material-button span {
   margin-right: 24px;
 }
 
