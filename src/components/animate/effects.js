@@ -298,7 +298,9 @@ function MaterialRippleDirective($materialEffects, $interpolate, $throttle) {
        */
       function effectAllowed() {
         var scope = element.scope();
-        return hasInkFlag(scope) ? isInkEnabled(scope) : !hasDisabledParent(element);
+        var noink = angular.isDefined(element.parent().attr('noink'));
+        return !noink && 
+          (hasInkFlag(scope) ? isInkEnabled(scope) : !hasDisabledParent(element));
 
         /**
          * Does the element's scope chain have a `disabled` attribute ?
