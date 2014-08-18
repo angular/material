@@ -1,20 +1,11 @@
 <div layout="vertical" layout-fill>
-  <div layout="horizontal" class="api-options-bar">
-    <span flex></span>
-    <!-- <b style="padding-top:11px;">API:</b> -->
-    <material-button ng-repeat="doc in currentComponent.docs" 
-      ng-show="doc.docType !== 'readme'"
-      ng-click="goToUrl('#' + doc.url )">
-      {{doc.humanName || doc.name}}
-      <b style="font-family: monospace; font-size: 18px;"><></b>
-    </material-button>
-  </div>
   <div flex>
     {$ doc.content | marked $}
   </div>
   <div flex layout="vertical">
 
-    <section ng-repeat="demo in currentComponent.demos" class="demo-container material-whiteframe-z1"
+    <section ng-repeat="demo in currentComponent.demos" 
+      class="demo-container material-whiteframe-z1"
       ng-class="{'no-source': !demo.$showSource}">
 
       <material-toolbar class="demo-toolbar"> 

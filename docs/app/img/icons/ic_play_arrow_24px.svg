@@ -5,17 +5,15 @@
 	 height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
 <g id="Header">
 	<g>
-		<rect x="-618" y="-2872" fill="none" width="1400" height="3600"/>
+		<rect x="-618" y="-2232" fill="none" width="1400" height="3600"/>
 	</g>
 </g>
 <g id="Label">
 </g>
-<g id="Icon" transform="rotate(90, 45, 45)">
+<g id="Icon">
 	<g>
-		<g>
-			<rect fill="none" width="24" height="24"/>
-		</g>
-		<path d="M12,5.8L15.2,9l1.4-1.4L12,3L7.4,7.6L8.8,9L12,5.8z M12,18.2L8.8,15l-1.4,1.4L12,21l4.6-4.6L15.2,15L12,18.2z"/>
+		<polygon points="8,5 8,19 19,12 		" style="fill:#f3f3f3;" />
+		<rect fill="none" width="24" height="24"/>
 	</g>
 </g>
 <g id="Grid" display="none">

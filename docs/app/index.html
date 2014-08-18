@@ -14,7 +14,7 @@
 
   <material-sidenav class="material-sidenav-left material-whiteframe-z3" component-id="left">
 
-    <material-toolbar class="material-theme-light">
+    <material-toolbar class="material-theme-light material-medium-tall">
       <h1 class="material-toolbar-tools">
         <a href="#" ng-click="goHome()">Material Design</a>
       </h1>
@@ -24,11 +24,13 @@
       <div ng-repeat="section in menu.sections">
 
         <button class="menu-item menu-title"
+          ng-class="{active: menu.isSectionSelected(section)}"
           ng-click="menu.toggleSelectSection(section)">
           {{section.name}}
+          <material-ripple initial-opacity="0.4" opacity-decay-velocity="1.75"></material-ripple>
         </button>
 
-        <button class="menu-item"
+        <button class="menu-item menu-sub-item"
           ng-show="menu.isSectionSelected(section)"
           ng-repeat="page in section.pages"
           ng-class="{active: menu.isPageSelected(section, page)}"
@@ -43,9 +45,9 @@
   </material-sidenav>
 
   <div layout="vertical" layout-fill>
+    <material-toolbar class="material-theme-dark material-medium-tall">
 
-    <material-toolbar class="material-theme-dark">
-      <div class="material-toolbar-tools" layout="horizontal">
+      <div class="material-toolbar-tools">
         <div class="menu-icon" ng-click="toggleMenu()" hide-md>
           <material-icon icon="img/icons/ic_menu_24px.svg">
           </material-icon>
@@ -59,10 +61,37 @@
         </span>
         <h3 ng-show="menu.currentPage" ng-bind="menu.currentPage.humanName || menu.currentPage.name">
         </h3>
-        <span flex></span>
-        <span class="menu-module-name" ng-bind="menu.currentPage.id" hide block-md>
-        </span>
       </div>
+
+      <div class="material-toolbar-tools api-options-bar" 
+        ng-if="currentDoc && currentDoc.docType === 'readme'">
+        <span flex></span>
+        <material-button layout="horizontal" layout-align="center center"
+          ng-repeat="doc in currentComponent.docs" 
+          ng-show="doc.docType !== 'readme'"
+          ng-click="goToUrl('#' + doc.url )">
+          <b style="font-size:24px; margin-right: -8px; font-weight:600; padding-top: 2px;">〈〉</b>
+          {{doc.humanName || doc.name}}
+        </material-button>
+      </div>
+
+      <div class="material-toolbar-tools api-options-bar with-icon" 
+        ng-if="currentDoc && currentDoc.docType !== 'readme'">
+        <span flex></span>
+        <material-button ng-click="goToUrl('#' + currentDoc.readmeUrl)">
+          <material-icon icon="/img/icons/ic_play_arrow_24px.svg"></material-icon>
+          View Demo
+        </material-button>
+        <material-button ng-click="goToUrl(currentDoc.githubUrl)">
+          <material-icon icon="/img/icons/ic_launch_24px.svg"></material-icon>
+          <span>View on Github</span>
+        </material-button>
+        <material-button ng-click="goToUrl(currentDoc.githubEditUrl)">
+          <material-icon icon="/img/icons/ic_launch_24px.svg"></material-icon>
+          Improve This Doc
+        </material-button>
+      </div>
+
     </material-toolbar>
 
     <ng-view class="material-content" scroll-y flex style="padding:16px;"></ng-view>

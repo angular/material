@@ -5,6 +5,10 @@ body {
   max-height: 100%;
 }
 
+material-toolbar.material-medium-tall {
+  height: 128px;
+}
+
 .material-sidenav-inner {
   background: #fff;
 }
@@ -47,7 +51,7 @@ body {
 .menu-item:hover, .menu-item:focus {
   color: #999;
 }
-.menu-item.active {
+.menu-item.menu-sub-item.active {
   background-color: #eeeeee;
   font-weight: bold;
   color: #4285f4;
@@ -59,6 +63,14 @@ body {
   text-align: left;
   text-transform: uppercase;
 }
+.menu-item.menu-title.active {
+  font-weight: bold;
+}
+.menu-item.menu-title:hover,
+.menu-item.menu-title:focus {
+  color: #AAA;
+}
+
 
 .menu-icon {
   height: 60px;
@@ -128,9 +140,10 @@ iframe.demo {
 }
 
 material-toolbar.demo-toolbar,
-.demo-container material-tabs .tabs-header-items {
-  background: #455ede;
-  color: white;
+.demo-container material-tabs .tabs-header-items,
+.demo-container material-tabs material-tab-label {
+  background: #f9f9f9;
+  color: #4a4a4a;
 }
 material-toolbar.demo-toolbar material-button {
   -webkit-transition: background 0.35s linear;
@@ -138,12 +151,9 @@ material-toolbar.demo-toolbar material-button {
   transition: background 0.35s linear;
 }
 material-toolbar.demo-toolbar material-button.active {
-  background: rgb(118,137,231);
+  background: #eee;
 }
 
-.demo-container .tabs-header-items material-tab-label {
-  background: #455ede;
-}
 .demo-source-container {
   border: 1px solid #ddd;
 }
@@ -172,10 +182,10 @@ material-toolbar.demo-toolbar material-button.active {
 .api-options-bar.with-icon material-icon {
   position: absolute;
   top: 1px;
-  right: 4px;
+  left: 4px;
 }
 .api-options-bar.with-icon material-button span {
-  margin-right: 24px;
+  margin-left: 26px;
 }
 
 ul {

@@ -5,6 +5,10 @@ material-icon {
   background-repeat: no-repeat no-repeat;
   pointer-events: none;
 }
+svg, object {
+  fill: currentColor;
+  color-fill: currentColor;
+}
 
 material-class-icon {
   // display: block;

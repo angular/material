@@ -180,14 +180,18 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $materialDialog, menu, 
 
 .controller('HomeCtrl', [
   '$scope',
-function($scope) {
+  '$rootScope',
+function($scope, $rootScope) {
+  $rootScope.currentComponent = $rootScope.currentDoc = null;
 }])
 
 .controller('LayoutCtrl', [
   '$scope',
   '$attrs',
   '$location',
-function($scope, $attrs, $location) {
+  '$rootScope',
+function($scope, $attrs, $location, $rootScope) {
+  $rootScope.currentComponent = $rootScope.currentDoc = null;
 }])
 
 .controller('ComponentDocCtrl', [
@@ -196,7 +200,7 @@ function($scope, $attrs, $location) {
   'component',
   '$rootScope',
 function($scope, doc, component, $rootScope) {
-  $scope.currentComponent = component;
-  $scope.doc = doc;
+  $rootScope.currentComponent = component;
+  $rootScope.currentDoc = doc;
 }])
 ;
