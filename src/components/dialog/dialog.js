@@ -108,7 +108,7 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
       transformTemplate: function(template) {
         return '<div class="material-dialog-container">' + template + '</div>';
       },
-      // Also supports all options from $materialPopup
+      // Also supports all options from $materialCompiler.compile
     }, options || {});
 
     // Incase the user provides a raw dom element, always wrap it in jqLite
@@ -129,17 +129,15 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
         angular.element(options.targetEvent.target);
       var backdrop;
 
+      if (options.hasBackdrop) {
+        backdrop = angular.element('<material-backdrop class="opaque ng-enter">');
+        $animate.enter(backdrop, options.appendTo, null);
+      }
       $materialEffects.popIn(element, options.appendTo, popInTarget, function() {
         if (options.escapeToClose) {
           $rootElement.on('keyup', onRootElementKeyup);
         }
 
-        if (options.hasBackdrop) {
-          backdrop = angular.element('<material-backdrop class="opaque">');
-          $timeout(function() {
-            $animate.enter(backdrop, options.appendTo, null);
-          });
-        }
         if (options.clickOutsideToClose) {
           element.on('click', dialogClickOutside);
         }
