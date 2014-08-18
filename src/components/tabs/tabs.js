@@ -48,7 +48,7 @@ angular.module('material.components.tabs', [
  *
  * - Content can include any markup.
  * - If a tab is disabled while active/selected, then the next tab will be auto-selected.
- * - If the currently active tab is the last tab, then the next tab will be the first tab in the list.
+ * - If the currently active tab is the last tab, then the first tab will be selected.
  *
  * @param {integer=} selected Index of the active/selected tab
  * @param {boolean=} noink Flag indicates use of ripple ink effects
