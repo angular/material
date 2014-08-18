@@ -1,7 +1,7 @@
 <div layout="vertical" layout-fill>
   <div layout="horizontal" class="api-options-bar">
     <span flex></span>
-    <b style="padding-top:11px;">API:</b>
+    <!-- <b style="padding-top:11px;">API:</b> -->
     <material-button ng-repeat="doc in currentComponent.docs" 
       ng-show="doc.docType !== 'readme'"
       ng-click="goToUrl('#' + doc.url )">
