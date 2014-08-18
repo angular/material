@@ -1,8 +1,0 @@
-{
-  "imports": [
-    "../../common_cfg/ios.json"
-  ],
-
-  "input_path": "../res-export",
-  "output_path": "../res"
-}
