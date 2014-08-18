@@ -13,6 +13,10 @@ material-backdrop {
   }
 
   @include transition(all 0.2s ease-out);
+
+  &.ng-enter {
+    @include transition-delay(0.1s);
+  }
   &.ng-enter,
   &.ng-leave.ng-leave-active {
     opacity: 0;

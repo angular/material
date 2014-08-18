@@ -123,6 +123,9 @@ iframe.demo {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
+.no-source iframe.demo {
+  border-top: 1px solid #ddd;
+}
 .demo-frame-container {
   background: #fff;
   z-index: 1;
@@ -145,10 +148,16 @@ material-toolbar.demo-toolbar,
   background: #f9f9f9;
   color: #4a4a4a;
 }
+.demo-container material-tabs material-ink-bar {
+  background: #4285F4;
+}
+.demo-container material-tabs material-tab-label.active {
+  color: #777;
+}
 material-toolbar.demo-toolbar material-button {
-  -webkit-transition: background 0.35s linear;
-  -moz-transition: background 0.35s linear;
-  transition: background 0.35s linear;
+  -webkit-transition: all 0.35s linear;
+  -moz-transition: all 0.35s linear;
+  transition: all 0.35s linear;
 }
 material-toolbar.demo-toolbar material-button.active {
   background: #eee;
@@ -159,7 +168,11 @@ material-toolbar.demo-toolbar material-button.active {
 }
 .demo-source-content {
   height: 400px;
-  background: #f6f6f6;
+}
+.demo-source-content,
+.demo-source-content pre,
+.demo-source-content code {
+  background: #f4f4f4;
 }
 .demo-source-content pre {
   max-width: 100%;
