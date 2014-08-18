@@ -1,6 +1,6 @@
 
-.code-view pre {
-  margin: 0 0 0 -45px;
+.code-view pre > code.highlight {
+  padding: 0;
 }
 
 .inline-demo {

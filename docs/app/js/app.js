@@ -4,15 +4,15 @@ var DocsApp = angular.module('docsApp', ['ngMaterial', 'ngRoute', 'angularytics'
   'COMPONENTS',
   '$routeProvider',
 function(COMPONENTS, $routeProvider) {
-  $routeProvider.when('/', {
-    templateUrl: 'template/home.tmpl.html'
-  });
-  $routeProvider.when('/layout/cells', {
-    templateUrl: 'template/layout-cells.tmpl.html'
-  });
-  $routeProvider.when('/layout/grid', {
-    templateUrl: 'template/layout-grid.tmpl.html'
-  });
+  $routeProvider
+    .when('/', {
+      templateUrl: 'template/home.tmpl.html'
+    })
+    .when('/layout/:tmpl', {
+      templateUrl: function(params){
+        return 'template/layout-' + params.tmpl + '.tmpl.html';
+      }
+    });
 
   angular.forEach(COMPONENTS, function(component) {
 
@@ -61,20 +61,28 @@ function(COMPONENTS, $location, $rootScope) {
       }
     });
   });
-  var sections = [{ 
+  var sections = [{
     name: 'Demos',
     pages: demoDocs
   }, {
     name: 'Layout',
     pages: [{
-      name: 'Layout Grid',
-      id: 'grid',
+      name: 'Container Elements',
+      id: 'layoutContainers',
+      url: '/layout/container'
+    },{
+      name: 'Grid System',
+      id: 'layoutGrid',
       url: '/layout/grid'
-    }, {
-      name: 'Layout Cells',
-      id: 'cells',
-      url: '/layout/cells'
-    }],
+    },{
+      name: 'Child Alignment',
+      id: 'layoutAlign',
+      url: '/layout/alignment'
+    },{
+      name: 'Options',
+      id: 'layoutOptions',
+      url: '/layout/options'
+    }]
   }, {
     name: 'API',
     pages: componentDocs
