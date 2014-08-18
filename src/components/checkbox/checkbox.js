@@ -18,15 +18,32 @@ angular.module('material.components.checkbox', [
  * @restrict E
  *
  * @description
- * The checkbox directive is used like the normal [angular checkbox](https://docs.angularjs.org/api/ng/input/input%5Bcheckbox%5D).
+ * The checkbox directive is used like the normal [angular checkbox](https://docs.angularjs.org/api/ng/input/input%5Bcheckbox%5D)
+ *
+ * @param {string} ngModel Assignable angular expression to data-bind to.
+ * @param {string=} name Property name of the form under which the control is published.
+ * @param {expression=} ngTrueValue The value to which the expression should be set when selected.
+ * @param {expression=} ngFalseValue The value to which the expression should be set when not selected.
+ * @param {string=} ngChange Angular expression to be executed when input changes due to user interaction with the input element.
+ * @param {boolean=} noink Use of attribute indicates use of ripple ink effects
+ * @param {boolean=} disabled Use of attribute indicates the tab is disabled: no ink effects and not selectable
  *
  * @usage
  * <hljs lang="html">
  * <material-checkbox ng-model="isChecked">
- *   Is it checked?
+ *   Finished ?
  * </material-checkbox>
- * isChecked = {{isChecked}}
+ *
+ * <material-checkbox noink ng-model="hasInk">
+ *   No Ink Effects
+ * </material-checkbox>
+ *
+ * <material-checkbox disabled ng-model="isDisabled">
+ *   Disabled
+ * </material-checkbox>
+ *
  * </hljs>
+ *
  */
 function materialCheckboxDirective(inputDirectives) {
   var inputDirective = inputDirectives[0];
@@ -63,10 +80,6 @@ function materialCheckboxDirective(inputDirectives) {
 
     element.on('click', listener);
     ngModelCtrl.$render = render;
-
-    // if (angular.isDefined(attr.noink)) {
-    //   element.find('canvas').remove();
-    // }
 
     function listener(ev) {
       if (element[0].hasAttribute('disabled')) return;
