@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <link rel="stylesheet" href="/dist/material-design.css">
+    <link rel="stylesheet" href="tabs.css">
+
+</head>
+<body ng-app="material.components">
+
+Demos for materialTabs Directive:
+
+<style>
+    material-tab-label {
+        margin-left: -20px;
+    }
+</style>
+
+<div class="sample">
+
+    <div ng-controller="Demo2Controller" class="demo2">
+        <h3>(2a) Static Tabs internal content: </h3>
+
+        <p>No inkBar. Tab #1 is active and #2, #5 are disabled.</p>
+
+        <material-tabs selected="which" class="special" tabs-align="top">
+
+
+            <material-tab>
+                <material-tab-label>ITEM A1</material-tab-label>
+                <div class="blueArea">Tab Content #A1</div>
+            </material-tab>
+
+            <material-tab disabled="true" >ITEM B2</material-tab>
+
+            <material-tab>
+                <material-tab-label>
+                    <span class="redArea"> ITEM C3</span>
+                </material-tab-label>
+                <div class="redArea">Tab Content #C3 + {{label}}</div>
+            </material-tab>
+
+            <material-tab>
+                <material-tab-label>Item D4</material-tab-label>
+                <div class="greenArea">Tab Content #D4</div>
+            </material-tab>
+
+            <material-tab disabled="isDisabled">
+                <material-tab-label>ITEM E5</material-tab-label>
+                <div class="greenArea">Tab Content #E5</div>
+            </material-tab>
+
+        </material-tabs>
+
+
+
+        <input type="checkbox" ng-model="isDisabled" style="margin-top: 30px;"> Disable E5</span>
+        <!--<img src="./img/btnGo.gif" ng-click="updateTab('Frightful')">-->
+
+    </div>
+
+</div>
+
+
+<script src="/bower_components/angular/angular.js"></script>
+<script src="/bower_components/angular-animate/angular-animate.js"></script>
+<script src="/config/lib/angular-animate-sequence/angular-animate-sequence.js"></script>
+<script src="/config/lib/angular-animate-sequence/angular-animate-stylers.js"></script>
+
+<script src="/src/services/compiler/compiler.js"></script>
+<script src="/src/services/registry/registry.js"></script>
+<script src="/src/services/position/position.js"></script>
+<script src="/src/services/popup/popup.js"></script>
+<script src="/src/services/throttle/throttle.js"></script>
+<script src="/src/services/attrBind/attrBind.js"></script>
+
+<script src="/src/components/animate/effects.js"></script>
+<script src="/src/components/animate/canvas/rippler.js"></script>
+
+<script src="/src/components/tabs/util/iterator.js"></script>
+<script src="/src/components/tabs/util/digestConnector.js"></script>
+<script src="/src/components/tabs/tabs.js"></script>
+
+<script src="./scripts.js"></script>
+</body>
+
+</html>

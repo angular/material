@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body >
+
+
+<script src="/bower_components/lodash/dist/lodash.js"></script>
+<script src="/bower_components/string/lib/string.js"></script>
+<script>
+
+    Object.prototype.defineMethod = function(fnName, fn) {
+        Object.defineProperty(this, fnName, {
+           enumerable : true,
+           configurable : true,
+           value : fn
+        });
+    };
+
+    function User(who) {
+        User.statuses = ['active', 'inactive'];
+        _.forEach(User.statuses, function(key) {
+            this.defineMethod( 'is'+ S(key).camelize().capitalize().s, function(){
+              return this[key] == true;
+            });
+        },this);
+
+        this.name = who;
+    }
+
+    // Usages
+
+    var dog = { breed : 'Shelty' };
+        dog.defineMethod("bark", function() {
+            return this.breed + " says: 'Woof!'";
+        });
+
+    console.log( dog.bark() );
+
+
+    var me = new User('Thomas');
+        me.active = true;
+
+    console.log( me.name + " is active:" + me.isActive() );
+
+</script>
+</body>
+
+</html>
