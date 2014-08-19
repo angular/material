@@ -70,7 +70,7 @@
           ng-repeat="doc in currentComponent.docs" 
           ng-show="doc.docType !== 'readme'"
           ng-href="#{{doc.url}}">
-          <div style="font-size:24px; font-weight:600; position: absolute; left: -12px; top: 0">
+          <div style="font-size:24px; font-weight:600; position: absolute; left: -12px; top: 0; pointer-events:none;">
             〈〉
           </div>
           {{doc.humanName || doc.name}}

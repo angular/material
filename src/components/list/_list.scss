@@ -5,6 +5,7 @@ material-item {
   @include flex-display();
   @include flex-align-items(center);
   @include flex-direction(row);
+  @include box-sizing(border-box);
 
   position: relative;
 
@@ -15,23 +16,17 @@ material-item {
  * The left tile for a list item.
  */
 .material-tile-left {
-  padding-right: 16px;
-  width: 56px;
-  text-align: left;
+  min-width: 56px;
 }
 
 /**
  * The center content tile for a list item.
  */
 .material-tile-content {
-  @extend .material-flex;
-
-  // For border continuation
-  margin-right: -35px;
+  @include flex(1);
 
   padding: 15px 0 15px 0;
 
-  width: 100%;
   border-bottom: 1px solid #eee;
   text-overflow: ellipsis;
 
@@ -55,7 +50,5 @@ material-item {
  * The right tile for a list item.
  */
 .material-tile-right {
-  position: absolute;
-  top: 17px;
-  right: $item-padding-right;
+  padding-right: $item-padding-right;
 }

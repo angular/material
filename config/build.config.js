@@ -76,7 +76,6 @@ module.exports = {
       'src/components/icon/icon.js',
       'src/components/list/list.js',
       'src/components/radioButton/radioButton.js',
-      'src/components/scrollHeader/scrollHeader.js',
       'src/components/sidenav/sidenav.js',
       'src/components/slider/slider.js',
       'src/components/tabs/tabs.js',

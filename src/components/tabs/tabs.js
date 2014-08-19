@@ -525,7 +525,6 @@ function TabDirective( $attrBind ) {
       selected: '&onSelect'
     }, defaults);
 
-    configureEffects();
     configureWatchers();
     updateTabContent(scope);
 
@@ -543,16 +542,6 @@ function TabDirective( $attrBind ) {
     // **********************************************************
     // Private Methods
     // **********************************************************
-
-    /**
-     * If materialTabs `noInk` is true, then remove the ripple area....
-     * NOTE: <material-ripple/> directive replaces itself with `<canvas.material-ink-ripple />` element
-     */
-    function configureEffects() {
-      if ( tabsController.noink ) {
-        element.find('canvas').remove();
-      }
-    }
 
     /**
      * Auto select the next tab if the current tab is active and

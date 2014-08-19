@@ -53,6 +53,7 @@ material-button,
     background-color: $button-hover-background;
   }
 
+  // reserved for inner buttons and inner hrefs
   .material-button-inner {
     position: absolute;
     opacity: 0;

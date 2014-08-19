@@ -1,12 +1,18 @@
+<div ng-app="myApp" ng-controller="AppCtrl" layout="vertical" layout-fill>
 
-<div ng-app="app" ng-controller="AppCtrl">
+  <material-toolbar scroll-shrink class="material-theme-light">
+    <div class="material-toolbar-tools">
+      <span>My App Title</span>
+    </div>
+  </material-toolbar>
+
   <material-content>
 
     <material-list>
 
       <material-item ng-repeat="item in todos">
         <div class="material-tile-left">
-            <img ng-src="{{item.face}}" class="face">
+          <img ng-src="{{item.face}}" class="face">
         </div>
         <div class="material-tile-content">
           <h2>{{item.what}}</h2>
@@ -20,4 +26,5 @@
     </material-list>
 
   </material-content>
+
 </div>

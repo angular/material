@@ -1,11 +1,9 @@
 material-sidenav {
-  display: block;
   position: absolute;
 
   // In general, width of sidenav is Screen Width - App Bar Height
   // See spec for max-widths
   width: 100%;
-  @include calc(width, '100% - #{$app-bar-height}');
   height: 100%;
 
   max-width: 304px;

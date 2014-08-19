@@ -10,6 +10,7 @@ angular.module('material.components.icon', [])
   ]);
 
 /**
+ * @private
  * @ngdoc directive
  * @name materialIcon
  * @module material.components.icon

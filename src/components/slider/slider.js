@@ -16,8 +16,19 @@ angular.module('material.components.slider', [])
  * @restrict E
  *
  * @description
- * Slider directive!
+ * The <material-slider> directive creates a slider bar that you can use.
  *
+ * Simply put a native `<input type="range">` element inside of a
+ * `<material-slider>` container.
+ *
+ * On the range input, all HTML5 range attributes are supported.
+ *
+ * @usage
+ * <hljs lang="html">
+ * <material-slider>
+ *   <input type="range" ng-model="slideValue" min="0" max="100">
+ * </material-slider>
+ * </hljs>
  */
 function materialSliderDirective($window) {
 
@@ -48,7 +59,7 @@ function materialSliderDirective($window) {
     var input = element.find('input');
     var ngModelCtrl = angular.element(input).controller('ngModel');
 
-    if(!ngModelCtrl || input[0].type !== 'range') return;
+    if(!input || !ngModelCtrl || input[0].type !== 'range') return;
 
     var rangeEle = input[0];
     var trackEle = angular.element( element[0].querySelector('.material-track') );

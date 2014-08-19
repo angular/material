@@ -6,7 +6,7 @@ material-toolbar {
   z-index: 2;
 
   font-size: 1.3em;
-  height: $baseline-grid * 8;
+  min-height: $baseline-grid * 8;
   width: 100%;
 
   &.material-tall {
