@@ -93,10 +93,6 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
 
   return showDialog;
 
-  /**
-   * TODO fully document this
-   * Supports all options from $materialPopup, in addition to `duration` and `position`
-   */
   function showDialog(options) {
     options = angular.extend({
       appendTo: $rootElement,
