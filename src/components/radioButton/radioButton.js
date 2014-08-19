@@ -55,6 +55,7 @@ function materialRadioButtonDirective() {
     attr.$observe('value', render);
 
     function listener(ev) {
+      if (element[0].hasAttribute('disabled')) return;
       scope.$apply(function() {
         rgCtrl.setViewValue(attr.value, ev && ev.type);
       });

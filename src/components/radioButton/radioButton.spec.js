@@ -76,6 +76,22 @@ describe('radioButton', function() {
       expect($rootScope.color).toBe('blue');
     }));
 
+    it('should be disabled', inject(function($compile, $rootScope) {
+      var element = $compile('<material-radio-group ng-model="color">' +
+                              '<material-radio-button value="white" disabled></material-radio-button>' +
+                              '</material-radio-group>')($rootScope);
+      var radio = element.find('material-radio-button');
+
+      $rootScope.$apply('color = null');
+      radio.triggerHandler('click');
+      expect($rootScope.color).toBe(null);
+
+      radio.removeAttr('disabled');
+      radio.triggerHandler('click');
+      expect($rootScope.color).toBe('white');
+    }));
+
+
     it('should allow {{expr}} as value', inject(function($compile, $rootScope) {
       $rootScope.some = 11;
       var element = $compile('<material-radio-group ng-model="value">' +
