@@ -53,13 +53,13 @@
           </material-icon>
         </div>
         <h2 hide block-sm>
-          {{menu.currentSection.name || 'Angular Material'}}
+          {{menu.currentSection.name}}
         </h2>
         <span layout="vertical" layout-align="center center" class="menu-separator-icon"
           ng-show="menu.currentPage">
           <img style="height: 16px;" src="img/docArrow.png" hide block-sm>
         </span>
-        <h3 ng-show="menu.currentPage" ng-bind="menu.currentPage.humanName || menu.currentPage.name">
+        <h3 ng-bind="menu.currentPage.humanName || menu.currentPage.name || 'Angular Material'">
         </h3>
       </div>
 
