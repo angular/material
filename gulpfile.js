@@ -83,7 +83,7 @@ gulp.task('demo-css', ['sass'], function() {
 gulp.task('docs-html', function() {
   return gulp.src('docs/app/**/*.html', { base: 'docs/app' })
     .pipe(gulpif(IS_RELEASE_BUILD,
-        replace(/material-design\.(js|css)/g, 'material-design.min.$1')))
+        replace(/angular-material\.(js|css)/g, 'angular-material.min.$1')))
     .pipe(gulp.dest(buildConfig.docsDist));
 });
 
@@ -126,14 +126,14 @@ gulp.task('karma-watch', function(done) {
 });
 
 /**
- * Build material-design.js
+ * Build angular-material.js
  */
 //TODO build components individually
 //Factor scripts and scss out into a task that works on either
 //an individual component or the whole bundle
 gulp.task('scripts', function() {
   return gulp.src(buildConfig.paths.js)
-    .pipe(concat('material-design.js'))
+    .pipe(concat('angular-material.js'))
     .pipe(header(_.template(buildConfig.componentsModule, {
       components: buildConfig.components.map(enquote)
     })))
@@ -149,7 +149,7 @@ gulp.task('scripts', function() {
 });
 
 /**
- * Build material-design.css
+ * Build angular-material.css
  */
 gulp.task('sass', function() {
   return gulp.src(buildConfig.paths.scss)
@@ -159,7 +159,7 @@ gulp.task('sass', function() {
       // During watch builds, we only want to log the error.
       errLogToConsole: argv._.indexOf('watch') > -1
     }))
-    .pipe(concat('material-design.css'))
+    .pipe(concat('angular-material.css'))
     .pipe(gulp.dest(buildConfig.dist))
     .pipe(gulpif(IS_RELEASE_BUILD, minifyCss()))
     .pipe(rename({ extname: '.min.css' }))
