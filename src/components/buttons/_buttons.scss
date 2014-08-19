@@ -19,7 +19,6 @@ material-button,
   position: relative; //for child absolute-positioned <canvas>
   padding: 4px;
 
-  outline: none;
   border: 0;
 
   border-radius: $button-border-radius;
@@ -48,7 +47,7 @@ material-button,
     border-radius: 0;
   }
 
-  // &:hover {
+  // &:hover, &:focus {
   //   background-color: $button-hover-background;
   // }
   .material-inner-button {
@@ -78,7 +77,7 @@ material-button,
 
     @extend .material-shadow-bottom-z-1;
 
-    &:hover {
+    &:hover, &:focus {
       background-color: $button-raised-hover-background;
     }
 
@@ -86,7 +85,7 @@ material-button,
       background-color: $button-raised-colored-background;
       color: $button-raised-colored-color;
 
-      &:hover {
+      &:hover, &:focus {
         background-color: $button-raised-colored-hover-background;
       }
     }
@@ -119,7 +118,7 @@ a.material-button {
   line-height: $button-line-height;
   text-decoration: none;
 
-  &:hover {
+  &:hover, &:focus {
     text-decoration: none;
   }
 }
