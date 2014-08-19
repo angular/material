@@ -67,10 +67,13 @@ module.exports = {
       //Utilities
       'src/base/utils.js',
 
-      //Components
+      // Ink Components
       'src/components/animate/effects.js',
-      'src/components/animate/noEffect.js',
       'src/components/animate/canvas/rippler.js',
+      'src/components/animate/noEffect.js',
+      'src/components/animate/inkRipple.js',
+
+      // Components
       'src/components/buttons/buttons.js',
       'src/components/card/card.js',
       'src/components/checkbox/checkbox.js',
