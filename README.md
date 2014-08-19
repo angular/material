@@ -24,20 +24,7 @@ on structure, documentation, and code conventions.
 
 In its current early state, use AngularJS Material Design at your own risk.  APIs are changing rapidly.
 
-When [v0.0.1 is released](https://github.com/angular/material/issues?milestone=2&state=open), the project will be more usable.  But everything is subject to rapid change until beta is ready.
-
-Nevertheless, if you wish to use AngularJS Material Design, here are the steps (note that what the dependencies are and how to use them will change soon):
-
-1. `npm install`
-1. `bower install`
-1. `gulp build`
-1. Include `jquery.js`
-1. Include `angular.js`
-1. Include `angular-animate.js`
-1. Include `config/lib/angular-animate-sequence/angular-animate-sequence.js`
-1. Include `config/lib/angular-animate-sequence/angular-animate-stylers.js`
-1. Include `dist/material-design.js`
-1. Include `dist/material-design.css`
+If you wish to use angular-material anyway, you can `bower install angular-material`, or download the files directly from the [bower-material repository](https://github.com/angular/bower-material).
 
 ### File Structure
 
