@@ -63,6 +63,11 @@ function MaterialButtonDirective(ngHrefDirectives) {
           element.append(clone);
         });
 
+        element.attr({
+          role: 'button',
+          tabIndex: '0'
+        });
+
         configureButton(attr.type);
 
         /**
