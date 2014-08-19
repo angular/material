@@ -466,8 +466,8 @@ function TabsDirective($compile, $timeout, $materialEffects) {
  * be initiated via data binding changes, programmatic invocation, or user gestures.
  *
  * @param {string=} label Optional attribute to specify a simple string as the tab label
- * @param {boolean=}  active Flag indicates if the tab is currently selected; normally the `<material-tabs selected="">`; attribute is used instead.
- * @param {boolean=}  disabled Flag indicates if the tab is disabled: not selectable with no ink effects
+ * @param {boolean=} active Flag indicates if the tab is currently selected; normally the `<material-tabs selected="">`; attribute is used instead.
+ * @param {boolean=} ngDisabled Flag indicates if the tab is disabled: not selectable with no ink effects
  * @param {expression=} deselected Expression to be evaluated after the tab has been de-selected.
  * @param {expression=} selected Expression to be evaluated after the tab has been selected.
  *
@@ -520,7 +520,7 @@ function TabDirective( $attrBind ) {
     $attrBind(scope, attrs, {
       label: '@?',
       active: '=?',
-      disabled: '=?',
+      disabled: '=?ngDisabled',
       deselected: '&onDeselect',
       selected: '&onSelect'
     }, defaults);
