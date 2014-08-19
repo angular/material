@@ -204,6 +204,12 @@ material-toolbar.demo-toolbar material-button.active {
   margin-left: 22px;
 }
 
+.api-options-bar .directive {
+    font-size: 20px;
+    font-weight: 600;
+    margin-left:0px !important;
+}
+
 ul {
   margin: 0;
 }
