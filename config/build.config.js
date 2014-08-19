@@ -35,11 +35,11 @@ module.exports = {
       'bower_components/angularytics/dist/angularytics.js',
       'config/lib/angular-animate-sequence/angular-animate-sequence.js',
       'config/lib/angular-animate-sequence/angular-animate-stylers.js',
-      'dist/material-design.js',
+      'dist/angular-material.js',
       'dist/docs/js/**/*.js'
     ],
     css: [
-      'dist/material-design.css',
+      'dist/angular-material.css',
       'docs/app/css/highlightjs-github.css',
       'docs/app/css/layout-demo.css',
       'docs/app/css/style.css',
@@ -49,10 +49,10 @@ module.exports = {
     js: [
       'config/lib/angular-animate-sequence/angular-animate-sequence.js',
       'config/lib/angular-animate-sequence/angular-animate-stylers.js',
-      'dist/material-design.js'
+      'dist/angular-material.js'
     ],
     css: [
-      'dist/material-design.css'
+      'dist/angular-material.css'
     ]
   },
 
