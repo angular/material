@@ -50,44 +50,33 @@ function MaterialButtonDirective(ngHrefDirectives) {
     template: '<material-ripple start="center" initial-opacity="0.25" opacity-decay-velocity="0.75"></material-ripple>',
     compile: function(element, attr) {
 
+      // Add an inner anchor if the element has a `href` or `ngHref` attribute,
+      // so this element can be clicked like a normal `<a>`.
       var href = attr.ngHref || attr.href;
+      var innerElement;
       if (href) {
-        var innerAnchor = angular.element('<a>')
-          .addClass('material-button-inner')
-          .attr('ng-href', href);
-        element.append(innerAnchor);
+        innerElement = angular.element('<a>')
+          .attr('ng-href', href)
+          .attr('rel', attr.rel)
+          .attr('target', attr.target);
+
+      // Otherwise, just add an inner button element (for form submission etc)
+      } else {
+        innerElement = angular.element('<button>')
+          .attr('type', attr.type)
+          .attr('disabled', attr.ngDisabled || attr.disabled)
+          .attr('form', attr.form);
       }
+      innerElement.addClass('material-button-inner');
+      element.append(innerElement);
 
       return function postLink(scope, element, attr, ctrl, transclude) {
-
         // Put the content of the <material-button> inside after the ripple
+        // and inner elements
         transclude(scope, function(clone) {
           element.append(clone);
         });
-
-        element.attr({
-          role: 'button',
-          tabIndex: '0'
-        });
-
-        configureButton(attr.type);
-
-        /**
-         * If a type attribute is specified, dynamically insert a <button> element.
-         * This is vital to allow <material-button> to be used as form buttons
-         * @param type
-         */
-        function configureButton(type) {
-          if (type) {
-            var innerButton = angular.element('<button>')
-              .attr('type', type)
-              .addClass('material-button-inner');
-            element.append(innerButton);
-          }
-        }
-
       };
-
     }
   };
 
