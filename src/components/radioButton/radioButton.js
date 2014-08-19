@@ -28,7 +28,7 @@ angular.module('material.components.radioButton', [
  * `<material-radio-button>` tags.
  *
  * @param {string} ngModel Assignable angular expression to data-bind to.
- * @param {boolean=} noink Use of attribute indicates use of ripple ink effects on radio buttons gestures
+ * @param {boolean=} noink Use of attribute indicates flag to disable ink ripple effects.
  *
  * @usage
  * <hljs lang="html">
