@@ -13,6 +13,7 @@ angular.module('material.components.form', [])
   ]);
 
 /**
+ * @private
  * @ngdoc directive
  * @name materialInputGroup
  * @module material.components.form
