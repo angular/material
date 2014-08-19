@@ -109,7 +109,7 @@ function materialToolbarDirective($$rAF, $sniffer) {
         function transform() {
           var translate = 'translate3d(0,' + (-y / HEIGHT_FACTOR) + 'px, 0)';
           element.css(TRANSFORM_PROPERTY, translate);
-          contentElement.css('padding-top', (-y / HEIGHT_FACTOR) + 'px');
+          contentElement.css('margin-top', (-y / HEIGHT_FACTOR) + 'px');
         }
       }
 
