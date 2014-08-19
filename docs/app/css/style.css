@@ -13,7 +13,7 @@ material-toolbar.material-medium-tall {
   background: #fff;
 }
 
-.layout-content {
+ng-view {
   max-width: 760px;
   margin: auto;
 }
