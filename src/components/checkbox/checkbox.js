@@ -60,14 +60,14 @@ function materialCheckboxDirective(inputDirectives) {
         '<div class="material-icon"></div>' +
       '</div>' +
       '<div ng-transclude class="material-label"></div>',
-    link: link
+    link: postLink
   };
 
   // **********************************************************
   // Private Methods
   // **********************************************************
 
-  function link(scope, element, attr, ngModelCtrl) {
+  function postLink(scope, element, attr, ngModelCtrl) {
     var checked = false;
 
     // Create a mock ngModel if the user doesn't provide one
@@ -76,7 +76,7 @@ function materialCheckboxDirective(inputDirectives) {
         this.$viewValue = value;
       },
       $parsers: [],
-      $formatters: [],
+      $formatters: []
     };
 
     // Reuse the original input[type=checkbox] directive from Angular core.
@@ -92,7 +92,7 @@ function materialCheckboxDirective(inputDirectives) {
     ngModelCtrl.$render = render;
 
     function listener(ev) {
-      if (element[0].hasAttribute('disabled')) return;
+      if ( Util.isDisabled(element) ) return;
 
       scope.$apply(function() {
         checked = !checked;
