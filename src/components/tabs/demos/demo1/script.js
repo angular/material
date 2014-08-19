@@ -12,10 +12,10 @@ angular.module( 'app', [ 'ngMaterial' ] )
    * Auto select next tab every 4 secs...
    */
   function autoScrollTabs() {
-    scrollID = $timeout(function(){
-      $scope.selected = ($scope.selected + 1)%3;
-      autoScrollTabs();
-    },4000);
+//    scrollID = $timeout(function(){
+//      $scope.selected = ($scope.selected + 1)%3;
+//      autoScrollTabs();
+//    },4000);
   }
 
   /**

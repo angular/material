@@ -213,7 +213,7 @@ canvas.material-ink-ripple {
 
 
 
-@media (min-width: 768px) {
+@media (min-width: 568px) {
     .testimonials {
         position: relative;
         height: 365px;
@@ -245,6 +245,7 @@ canvas.material-ink-ripple {
         -webkit-transition: opacity 0.9s;
         transition: opacity 0.9s;
         opacity: 1;
+        font-size: 1.1em;
     }
 
     .testimonials footer {
@@ -257,11 +258,12 @@ canvas.material-ink-ripple {
         font-size: 13px;
         opacity: 0.4;
         cursor: pointer;
-        padding-left: 40px;
+        padding-left: 45px;
     }
 
     .testimonials footer div {
         font-size:11px;
+        margin-top:-20px;
     }
 
     .testimonials .active footer, .testimonials footer:hover {
@@ -276,6 +278,8 @@ canvas.material-ink-ripple {
         color: #4F8EF7;
         font-weight: 400;
         font-size: 15px;
+        display:block;
+        margin-top:-12px;
     }
 
 
@@ -294,7 +298,7 @@ canvas.material-ink-ripple {
     }
 }
 
-@media (min-width: 960px) {
+@media (min-width: 790px) {
     .testimonials {
         height: 380px;
         padding-top: 40px;
@@ -316,7 +320,15 @@ canvas.material-ink-ripple {
 
     .testimonials footer div {
         font-size:13px;
+        margin-top:-15px;
     }
+
+    .testimonials cite {
+        font-size: 15px;
+        display:block;
+        margin-top:10px;
+    }
+
     .testimonials material-tab {
         height: 100px;
     }
