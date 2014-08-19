@@ -83,14 +83,23 @@ function materialCheckboxDirective(inputDirectives) {
     // This is a bit hacky as we need our own event listener and own render 
     // function.
     attr.type = 'checkbox';
+    attr.tabIndex = 0;
     inputDirective.link(scope, {
       on: angular.noop,
       0: {}
     }, attr, [ngModelCtrl]);
 
     element.on('click', listener);
+    element.on('keypress', keypressHandler);
     ngModelCtrl.$render = render;
 
+    function keypressHandler(ev) {
+      // targets space-bar interactions
+      if(ev.which === 32) {
+        ev.preventDefault();
+        listener(ev);
+      }
+    }
     function listener(ev) {
       if ( Util.isDisabled(element) ) return;
 
@@ -103,7 +112,11 @@ function materialCheckboxDirective(inputDirectives) {
 
     function render() {
       checked = ngModelCtrl.$viewValue;
-      element.attr('aria-checked', checked);
+      element.attr({
+        'aria-checked': checked,
+        'role': attr.type,
+        'tabIndex': attr.tabIndex
+      });
       if(checked) {
         element.addClass(CHECKED_CSS);
       } else {
