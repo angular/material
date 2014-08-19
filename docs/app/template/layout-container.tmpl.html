@@ -1,33 +1,54 @@
-<div ng-controller="LayoutCtrl" layout="vertical" layout-fill layout-padding class="layout-content">
+<div ng-controller="LayoutCtrl" layout="vertical" layout-fill class="layout-content">
 
-  <div class="layout-title">Layout Attribute</div>
-  <div>
-    Angular Material uses a responsive CSS grid layout based on the
-    <a href="http://www.w3.org/TR/css3-flexbox/">flexbox</a> standard.
-  </div>
+  <h3 class="layout-title">Overview</h3>
+  <p>
+    Angular Material uses a responsive CSS layout based on
+    <a href="http://www.w3.org/TR/css3-flexbox/">flexbox</a>, rather than
+    using on CSS floats. Traditionally, floats proved to be the best solution for CSS
+    layouts, but with flexbox now available in a <a href="http://caniuse.com/#feat=flexbox">majority of browsers</a>,
+    we're moving onto a new era with improved layout capabilities and features.
+  </p>
 
-  <div>
+  <p>
+    The layout system uses element attributes, rather than CSS classes.
+    By doing so we're able to simplify creating layouts and make it easier to quickly generate
+    the structure required at various viewport sizes. The attribute system allows
+    assigning values following standard HTML conventions, which makes it easier to read and
+    understand compared to long strung together CSS classes. Additionally, the layout attributes
+    help to separate custom app styles from the core structure, which further simplifies code.
+  </p>
+
+  <material-divider></material-divider>
+  <h3 class="layout-title">Layout Attribute</h3>
+  <p>
     Use the <code>layout</code> attribute on an element to arrange its children
     horizontally in a row (<code>layout="horizontal"</code>), or vertically in
     a column (<code>layout="vertical"</code>). The layout attribute's value
     describes what the "main axis" is for its children.
-  </div>
+  </p>
 
   <hljs lang="html" flex>
+<div layout="horizontal">
+  <div>I'm left.</div>
+  <div>I'm right.</div>
+</div>
+
 <div layout="vertical">
-  <span>I'm above.</span>
-  <span>I'm below.</span>
+  <div>I'm above.</div>
+  <div>I'm below.</div>
 </div>
   </hljs>
 
   <material-divider></material-divider>
-  <div class="layout-title">Responsive Layout</div>
+  <h3 class="layout-title">Responsive Layout</h3>
 
-  <div>
+  <p>
+    From the ground up the layout system is built around being responsive to viewport size.
+    Out of the box it comes with useful and customizable breakpoints, which can be easily reused.
     The <code>layout</code> attribute defines an arrangement on all device sizes.
     If you wish to define a layout depending upon the device size, there are
     other <code>layout</code> attributes available:
-  </div>
+  </p>
 
   <ul>
     <li>
@@ -46,12 +67,12 @@
 
   <hljs lang="html">
 <div layout="vertical" layout-sm="horizontal">
-  <span>
+  <div>
     I'm above on tiny devices, and to the left on devices wider than 600px.
-  </span>
-  <span>
+  </div>
+  <div>
     I'm below on tiny devices, and to the right on devices wider than 600px.
-  </span>
+  </div>
 </div>
   </hljs>
 

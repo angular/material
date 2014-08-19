@@ -1,30 +1,31 @@
-<div ng-controller="LayoutCtrl" layout="vertical" layout-fill layout-padding class="layout-content">
+<div ng-controller="LayoutCtrl" layout="vertical" layout-fill class="layout-content">
 
-  <div class="layout-title">Layout Options</div>
+  <h3 class="layout-title">Layout Options</h3>
 
-  <div>
-    <code>layout-padding</code> adds padding between this layout's children.
-  </div>
+  <p>
+    <code>layout-padding</code> adds padding between this layout's children with
+    the <code>flex</code> attribute.
+  </p>
 
   <hljs lang="html">
 <div layout="horizontal" layout-padding>
-  <span>I'm on the left, and there's an empty area between.</span>
-  <span>I'm on the right, and there's an empty area between.</span>
+  <div flex>I'm on the left, and there's an empty area between.</div>
+  <div flex>I'm on the right, and there's an empty area between.</div>
 </div>
   </hljs>
 
-  <span></span>
-  <div>
+
+  <p>
     <code>layout-fill</code> forces the layout element to fill its parent container.
-  </div>
+  </p>
   <hljs lang="html">
-This layout fills up 100% of its parent's width and height.
 <div layout="vertical" layout-fill>
+  This layout fills up 100% of its parent's width and height.
 </div>
   </hljs>
 
   <material-divider></material-divider>
-  <div class="layout-title">Utility Attributes</div>
+  <h3 class="layout-title">Utility Attributes</h3>
 
   <table>
     <tr>
