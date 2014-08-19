@@ -32,14 +32,14 @@ material-slider {
   // the native thumb is hidden in place of this one
   .material-thumb {
     position: absolute;
-    top: (-$slider-thumb-height / 2) - 1;
+    top: (-$slider-thumb-height / 2) + 1;
     right: -$slider-thumb-width / 2;
     z-index: 1;
     display: table;
     width: $slider-thumb-width;
     height: $slider-thumb-height;
     border: 2px solid $theme-light-blue;
-    border-radius: 50%;
+    border-radius: max($slider-thumb-height, $slider-thumb-width);
     background: $theme-light-blue;
     -webkit-transition: all .1s ease-in-out;
     -moz-transition: all .1s ease-in-out;

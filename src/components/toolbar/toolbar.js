@@ -51,7 +51,7 @@ angular.module('material.components.toolbar', [
  * the user scrolls down, and reveal itself as the user scrolls up. 
  *
  * Note: for scrollShrink to work, the toolbar must be a sibling of a 
- * `<material-content>` element, placed before it. See the scroll shrink demo.
+ * `material-content` element, placed before it. See the scroll shrink demo.
  */ 
 function materialToolbarDirective($$rAF, $sniffer) {
   var isWebkit = $sniffer.vendorPrefix.toLowerCase().indexOf('webkit') !==- 1;

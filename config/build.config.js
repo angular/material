@@ -61,8 +61,12 @@ module.exports = {
     //We have to manually list files so demo files don't get 
     //into the build
     js: [
+      //Angular Animate Sequence
+      'config/lib/angular-animate-sequence/angular-animate-sequence.js',
+
       //Utilities
       'src/base/utils.js',
+
       //Components
       'src/components/animate/effects.js',
       'src/components/animate/noEffect.js',

@@ -16,7 +16,7 @@ angular.module('material.components.slider', [])
  * @restrict E
  *
  * @description
- * The <material-slider> directive creates a slider bar that you can use.
+ * The `material-slider` directive creates a slider bar that you can use.
  *
  * Simply put a native `<input type="range">` element inside of a
  * `<material-slider>` container.
