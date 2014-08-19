@@ -164,7 +164,8 @@ module.exports = {
             'order',
             'dependencies',
             'file',
-            'startingLine'
+            'startingLine',
+            'paramType'
           ]);
         })
         .each(function(doc) {

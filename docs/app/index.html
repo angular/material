@@ -81,15 +81,16 @@
       <div class="material-toolbar-tools api-options-bar with-icon" 
         ng-if="currentDoc && currentDoc.docType !== 'readme'">
         <span flex></span>
-        <material-button ng-click="goToUrl('#' + currentDoc.readmeUrl)">
+        <material-button ng-href="#{{currentDoc.readmeUrl}}">
           <material-icon icon="/img/icons/ic_play_arrow_24px.svg"></material-icon>
           View Demo
         </material-button>
-        <material-button ng-click="goToUrl(currentDoc.githubUrl)">
+        <material-button ng-href="{{currentDoc.githubUrl}}">
           <material-icon icon="/img/icons/ic_launch_24px.svg"></material-icon>
-          <span>View on Github</span>
+          <span hide block-sm>View on Github</span>
+          <span hide-sm>Source</span>
         </material-button>
-        <material-button ng-click="goToUrl(currentDoc.githubEditUrl)">
+        <material-button ng-href="{{currentDoc.githubEditUrl}}" hide block-sm>
           <material-icon icon="/img/icons/ic_launch_24px.svg"></material-icon>
           Improve This Doc
         </material-button>

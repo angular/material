@@ -122,6 +122,9 @@
   [#{$attr}="10"] {
     @include layout-preset(10%);
   }
+  [#{$attr}="15"] {
+    @include layout-preset(10%);
+  }
   [#{$attr}="20"] {
     @include layout-preset(20%);
   }

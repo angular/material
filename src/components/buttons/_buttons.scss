@@ -11,8 +11,7 @@
   }
 }
 
-material-button,
-.material-button {
+material-button {
 
   @include user-select(none);
   display: inline-block;

@@ -106,7 +106,7 @@ pre > code.highlight {
 }
 
 .demo-container.no-source {
-  height: 664px;
+  height: 668px;
 }
 .demo-container {
   height: auto;
@@ -187,7 +187,8 @@ material-toolbar.demo-toolbar material-button.active {
 .api-options-bar material-button {
   margin: 5px;
 }
-.api-options-bar material-button:hover {
+.api-options-bar material-button:hover,
+.api-options-bar material-button:focus {
   background: rgba(0, 0, 0, 0.2);
 }
 .api-options-bar.with-icon material-icon {
@@ -200,9 +201,20 @@ material-toolbar.demo-toolbar material-button.active {
 }
 
 .api-options-bar .directive {
-    font-size: 20px;
-    font-weight: 600;
-    margin-left:0px !important;
+  font-size: 20px;
+  font-weight: 600;
+  margin-left:0px !important;
+}
+
+.api-params-item {
+  min-height: 72px;
+  border-bottom: 1px solid #ddd;
+}
+.api-params-label { 
+  margin-right: 8px;
+}
+.api-params-title {
+  color: #999999;
 }
 
 ul {

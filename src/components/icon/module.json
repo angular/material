@@ -2,9 +2,5 @@
   "module": "material.components.icon",
   "name": "Icon",
   "demos": {
-    "demo1": {
-      "name": "Basic Icon Usage",
-      "files": ["demo1/*"]
-    }
   }
 }

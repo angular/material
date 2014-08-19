@@ -36,6 +36,8 @@ function QpToastDirective() {
  * shown while a different toast is active, the old toast will be automatically
  * hidden.
  *
+ * `$materialToast` takes one argument, options, which is defined below.
+ *
  * @usage
  * <hljs lang="html">
  * <div ng-controller="MyController">
@@ -58,6 +60,7 @@ function QpToastDirective() {
  *
  * @returns {function} `hideToast` - A function that hides the toast.
  *
+ * @paramType Options
  * @param {string=} templateUrl The url of an html template file that will
  * be used as the content of the toast. Restrictions: the template must
  * have an outer `material-toast` element.
