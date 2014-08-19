@@ -53,10 +53,10 @@ function materialCheckboxDirective(inputDirectives) {
   return {
     restrict: 'E',
     transclude: true,
-    require: 'ngModel',
+    require: '?ngModel',
     template: 
-      '<material-ripple start="center" class="circle" material-checked="{{ checked }}" ></material-ripple>' +
       '<div class="material-container">' +
+        '<material-ripple start="center" class="circle" material-checked="{{ checked }}" ></material-ripple>' +
         '<div class="material-icon"></div>' +
       '</div>' +
       '<div ng-transclude class="material-label"></div>',
@@ -70,8 +70,18 @@ function materialCheckboxDirective(inputDirectives) {
   function link(scope, element, attr, ngModelCtrl) {
     var checked = false;
 
+    // Create a mock ngModel if the user doesn't provide one
+    ngModelCtrl = ngModelCtrl || {
+      $setViewValue: function(value) {
+        this.$viewValue = value;
+      },
+      $parsers: [],
+      $formatters: [],
+    };
+
     // Reuse the original input[type=checkbox] directive from Angular core.
-    // This is a bit hacky as we need our own event listener and own render function.
+    // This is a bit hacky as we need our own event listener and own render 
+    // function.
     attr.type = 'checkbox';
     inputDirective.link(scope, {
       on: angular.noop,

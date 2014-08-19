@@ -61,8 +61,11 @@ module.exports = {
     //We have to manually list files so demo files don't get 
     //into the build
     js: [
+      //Utilities
+      'src/base/utils.js',
       //Components
       'src/components/animate/effects.js',
+      'src/components/animate/noEffect.js',
       'src/components/animate/canvas/rippler.js',
       'src/components/buttons/buttons.js',
       'src/components/card/card.js',
