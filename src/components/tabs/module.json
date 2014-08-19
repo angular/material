@@ -8,7 +8,7 @@
       "files": ["demos/demo1/*"]
     },
     "demo2": {
-      "name": "Static Tabs linked external content (ng-Switch):",
+      "name": "Static Tabs, external content, noInk:",
       "files": ["demos/demo2/*"]
     },
     "demo4": {
