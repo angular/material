@@ -12,7 +12,7 @@
 }
 
 [layout-padding],
-[layout][layout-padding] > * {
+[layout][layout-padding] > [flex] {
   padding: $layout-gutter-width / 2;
 }
 
