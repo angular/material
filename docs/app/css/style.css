@@ -13,8 +13,9 @@ material-toolbar.material-medium-tall {
   background: #fff;
 }
 
-ng-view {
-  max-width: 760px;
+.layout-content,
+.doc-content {
+  max-width: 800px;
   margin: auto;
 }
 .layout-label {
@@ -102,12 +103,6 @@ code.highlight {
 pre > code.highlight {
   padding: 10px;
   font-weight: 400;
-}
-
-ng-view {
-  margin: auto;
-  width: 100%;
-  max-width: 1600px;
 }
 
 .demo-container.no-source {
