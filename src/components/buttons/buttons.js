@@ -9,6 +9,7 @@ angular.module('material.components.button', [
   'material.animations',
 ])
   .directive('materialButton', [
+    'ngHrefDirective',
     MaterialButtonDirective
   ]);
 
@@ -17,7 +18,7 @@ angular.module('material.components.button', [
  * @name materialButton
  * @order 0
  *
- * @restrict EC
+ * @restrict E
  *
  * @description
  * `<material-button>` is a button directive with optional ink ripples (default enabled).
@@ -39,34 +40,47 @@ angular.module('material.components.button', [
  *  </material-button>
  * </hljs>
  */
-function MaterialButtonDirective() {
+function MaterialButtonDirective(ngHrefDirectives) {
+  var ngHrefDirective = ngHrefDirectives[0];
   return {
     restrict: 'EC',
     transclude: true,
     template: '<material-ripple start="center" initial-opacity="0.25" opacity-decay-velocity="0.75"></material-ripple>',
-    link: function(scope, element, attr, ctrl, transclude) {
+    compile: function(element, attr) {
 
-      // Put the content of the <material-button> inside after the ripple
-      transclude(scope, function(clone) {
-        element.append(clone);
-      });
-
-      configureButton(attr.type);
-
-      /**
-       * If a type attribute is specified, dynamically insert a <button> element.
-       * This is vital to allow <material-button> to be used as form buttons
-       * @param type
-       */
-      function configureButton(type) {
-        var hasButton = !!element.find('button');
-        if (type && !hasButton) {
-          var innerButton = angular.element('<button>')
-                .attr('type', type)
-                .addClass('material-inner-button');
-          element.append(innerButton);
-        }
+      var href = attr.ngHref || attr.href;
+      if (href) {
+        var innerAnchor = angular.element('<a>')
+          .addClass('material-button-inner')
+          .attr('ng-href', href);
+        element.append(innerAnchor);
       }
+
+      return function postLink(scope, element, attr, ctrl, transclude) {
+
+        // Put the content of the <material-button> inside after the ripple
+        transclude(scope, function(clone) {
+          element.append(clone);
+        });
+
+        configureButton(attr.type);
+
+        /**
+         * If a type attribute is specified, dynamically insert a <button> element.
+         * This is vital to allow <material-button> to be used as form buttons
+         * @param type
+         */
+        function configureButton(type) {
+          if (type) {
+            var innerButton = angular.element('<button>')
+              .attr('type', type)
+              .addClass('material-button-inner');
+            element.append(innerButton);
+          }
+        }
+
+      };
+
     }
   };
 

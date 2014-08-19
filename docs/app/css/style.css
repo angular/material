@@ -192,13 +192,16 @@ material-toolbar.demo-toolbar material-button.active {
 .api-options-bar material-button {
   margin: 5px;
 }
+.api-options-bar material-button:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
 .api-options-bar.with-icon material-icon {
   position: absolute;
   top: 1px;
-  left: 4px;
+  left: 0px;
 }
 .api-options-bar.with-icon material-button span {
-  margin-left: 26px;
+  margin-left: 22px;
 }
 
 ul {

@@ -48,10 +48,12 @@ material-button,
     border-radius: 0;
   }
 
-  // &:hover {
-  //   background-color: $button-hover-background;
-  // }
-  .material-inner-button {
+  &:hover,
+  &:active {
+    background-color: $button-hover-background;
+  }
+
+  .material-button-inner {
     position: absolute;
     opacity: 0;
     left: 0;
