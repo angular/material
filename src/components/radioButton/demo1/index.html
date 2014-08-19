@@ -6,7 +6,7 @@
     <button class="material-button" ng-click="removeItem()">Remove</button>
   </p>
 
-  <material-radio-group ng-model="data.group2">
+  <material-radio-group ng-model="data.group1">
 
     <material-radio-button value="1">
       Label 1
@@ -22,9 +22,9 @@
 
   </material-radio-group>
 
-  <p>Group 1 Selected: {{ data.group2 }}</p>
+  <p>Group 1 Selected: {{ data.group1 }}</p>
 
-    <material-radio-group ng-model="data.group1">
+    <material-radio-group ng-model="data.group2">
 
         <material-radio-button ng-repeat="d in radioData" ng-value="d.value">
             {{ d.label }}
@@ -32,7 +32,7 @@
 
     </material-radio-group>
 
-    <p style="margin-bottom:50px">Group 2 Selected: {{ data.group1 }}</p>
+    <p style="margin-bottom:50px">Group 2 Selected: {{ data.group2 }}</p>
 
 
 

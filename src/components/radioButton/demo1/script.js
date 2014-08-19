@@ -4,8 +4,8 @@ angular.module('app', ['ngMaterial'])
 .controller('AppCtrl', function($scope) {
 
   $scope.data = {
-    group2 : '6',
-    group1 : '2'
+    group1 : '2',
+    group2 : '6'
   };
 
   $scope.radioData = [
