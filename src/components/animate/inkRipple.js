@@ -53,15 +53,15 @@
         var options  = calculateOptions(element, attrs);
         var tag =
           '<canvas ' +
-          'class="material-ink-ripple {{classList}}"' +
-          'style="top:{{top}}; left:{{left}}" >' +
+            'class="material-ink-ripple {{classList}}"' +
+            'style="top:{{top}}; left:{{left}}" >' +
           '</canvas>';
 
         element.replaceWith(
           angular.element( $interpolate(tag)(options) )
         );
 
-      return function linkCanvas( scope, element, attrs, noinkCtrl ) {
+      return function postLink( scope, element, attrs, noinkCtrl ) {
         if ( noinkCtrl ) return;
 
         var ripple, watchMouse,

@@ -5,7 +5,7 @@ angular.module('material.animations')
 /**
  * noink/nobar/nostretch directive: make any element that has one of
  * these attributes be given a controller, so that other directives can 
- * `require:` these and see if there is a `nosomething` parent.
+ * `require:` these and see if there is a `no<xxx>` parent attribute.
  *
  * @usage
  * <hljs lang="html">
