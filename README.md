@@ -54,6 +54,7 @@ Nevertheless, if you wish to use AngularJS Material Design, here are the steps (
 ### Development 
 
 - `npm install` for gulp deps
+- `git submodule update --init` to add icons subfolder
 - `bower install` for angular deps
 - `gulp build` (alias `gulp`) to build, add `--release` flag to uglify & strip console.log.
 - `gulp watch` to build & rebuild on changes
