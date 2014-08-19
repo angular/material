@@ -187,7 +187,8 @@ material-toolbar.demo-toolbar material-button.active {
 .api-options-bar material-button {
   margin: 5px;
 }
-.api-options-bar material-button:hover {
+.api-options-bar material-button:hover,
+.api-options-bar material-button:focus {
   background: rgba(0, 0, 0, 0.2);
 }
 .api-options-bar.with-icon material-icon {
