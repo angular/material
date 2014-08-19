@@ -39,7 +39,7 @@ function MaterialDialogDirective() {
  * The `$materialDialog` service can be used as a function, which when called will open a
  * dialog. Note: the dialog is always given an isolate scope.
  *
- * It takes one parameter, `options`, which is an object with the following parameters:
+ * It takes one argument, `options`, which is defined below.
  *
  * @usage
  * <hljs lang="html">
@@ -63,6 +63,7 @@ function MaterialDialogDirective() {
  *
  * @returns {function} `hideDialog` - A function that hides the dialog.
  *
+ * @paramType Options
  * @param {string=} templateUrl The url of a template that will be used as the content
  * of the dialog. Restrictions: the template must have an outer `material-dialog` element. 
  * Inside, use an element with class `dialog-content` for the dialog's content, and use

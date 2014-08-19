@@ -43,7 +43,7 @@ angular.module('material.components.button', [
 function MaterialButtonDirective(ngHrefDirectives) {
   var ngHrefDirective = ngHrefDirectives[0];
   return {
-    restrict: 'EC',
+    restrict: 'E',
     transclude: true,
     template: '<material-ripple start="center" initial-opacity="0.25" opacity-decay-velocity="0.75"></material-ripple>',
     compile: function(element, attr) {

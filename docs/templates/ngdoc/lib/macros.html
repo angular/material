@@ -4,34 +4,32 @@
 {%- endmacro -%}
 
 {%- macro paramTable(params) %}
-<table class="variables-matrix input-arguments">
-  <thead>
-    <tr>
-      <th>Param</th>
-      <th>Type</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for param in params %}
-    <tr>
-      <td>
-        {$ param.name $}
-        {% if param.alias %}| {$ param.alias $}{% endif %}
-        {% if param.type.optional %}<div><em>(optional)</em></div>{% endif %}
-      </td>
-      <td>
-        {$ typeList(param.typeList) $}
-      </td>
-      <td>
-        {$ param.description | marked $}
-        {% if param.default %}<p><em>(default: {$ param.default $})</em></p>{% endif %}
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% endmacro -%}
+<material-list>
+  <material-item>
+    <div class="api-params-label api-params-title" layout="horizontal" layout-align="center center" flex="33" flex-sm="25">
+      Parameter
+    </div>
+    <div class="api-params-content api-params-title" flex layout="horizontal" layout-align="center center" flex>
+      Description
+    </div>
+  </material-item>
+  {% for param in params %}
+  <material-item class="api-params-item">
+    <div class="api-params-label" flex="40" flex-sm="25">
+      {$ param.name $}
+      {% if param.alias %}| {$ param.alias $}{% endif %}
+      {$ typeList(param.typeList) $}
+      {% if param.type.optional %}<div><em>(optional)</em></div>{% endif %}
+    </div>
+    <div class="api-params-content" flex>
+      <p>{$ param.description | marked $}
+      {% if param.default %}<p><em>(default: {$ param.default $})</em></p>{% endif %}
+      </p>
+    </div>
+  </material-item>
+  {% endfor %}
+</material-list>
+{%- endmacro -%}
 
 
 {%- macro directiveParam(name, type, join, sep) %}
@@ -63,10 +61,14 @@
 {% endmacro -%}
 
 {%- macro typeInfo(fn) -%}
-<table class="variables-matrix return-arguments">
-  <tr>
-    <td>{$ typeList(fn.typeList) $}</td>
-    <td>{$ fn.description | marked $}</td>
-  </tr>
-</table>
+<material-list>
+  <material-item class="api-params-item">
+    <div class="api-params-label" flex="40" flex-sm="25">
+      {$ typeList(fn.typeList) $}
+    </div>
+    <div class="api-params-content" flex>
+      {$ fn.description | marked $}
+    </div>
+  </material-item>
+</material-list>
 {%- endmacro -%}
