@@ -1,13 +1,16 @@
 {% macro typeList(types) -%}
 {%- set sep = joiner('|') %}
-{% for typeName in types %}<code class="{$ typeName | typeClass $}">{$ typeName | escape $}</code>{% endfor %}
+{% for typeName in types %}<code class="api-type {$ typeName | typeClass $}">{$ typeName | escape $}</code>{% endfor %}
 {%- endmacro -%}
 
 {%- macro paramTable(params) %}
 <material-list>
   <material-item>
-    <div class="api-params-label api-params-title" layout="horizontal" layout-align="center center" flex="33" flex-sm="25">
+    <div class="api-params-label api-params-title" layout layout-align="center center" flex="35" flex-sm="20">
       Parameter
+    </div>
+    <div class="api-params-label api-params-title" hide block-sm flex-sm="15" layout layout-align="center center">
+      Type
     </div>
     <div class="api-params-content api-params-title" flex layout="horizontal" layout-align="center center" flex>
       Description
@@ -15,11 +18,16 @@
   </material-item>
   {% for param in params %}
   <material-item class="api-params-item">
-    <div class="api-params-label" flex="40" flex-sm="25">
+    <div class="api-params-label" flex="35" flex-sm="20">
       {$ param.name $}
       {% if param.alias %}| {$ param.alias $}{% endif %}
-      {$ typeList(param.typeList) $}
+      <span block hide-sm>
+        {$ typeList(param.typeList) $}
+      </span>
       {% if param.type.optional %}<div><em>(optional)</em></div>{% endif %}
+    </div>
+    <div class="api-params-label" hide block-sm flex-sm="15">
+      {$ typeList(param.typeList) $}
     </div>
     <div class="api-params-content" flex>
       <p>{$ param.description | marked $}
@@ -63,7 +71,7 @@
 {%- macro typeInfo(fn) -%}
 <material-list>
   <material-item class="api-params-item">
-    <div class="api-params-label" flex="40" flex-sm="25">
+    <div class="api-params-label" flex="35" flex-sm="20">
       {$ typeList(fn.typeList) $}
     </div>
     <div class="api-params-content" flex>

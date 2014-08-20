@@ -212,9 +212,13 @@ material-toolbar.demo-toolbar material-button.active {
 }
 .api-params-label { 
   margin-right: 8px;
+  text-align: center;
 }
 .api-params-title {
   color: #999999;
+}
+code.api-type {
+  font-weight: bold;
 }
 
 ul {

@@ -119,35 +119,17 @@
   [#{$attr}] {
     @include flex(1);
   }
-  [#{$attr}="10"] {
-    @include layout-preset(10%);
-  }
-  [#{$attr}="15"] {
-    @include layout-preset(10%);
-  }
-  [#{$attr}="20"] {
-    @include layout-preset(20%);
-  }
-  [#{$attr}="25"] {
-    @include layout-preset(25%);
+  // (1-19) * 5 = 5-95%
+  @for $i from 1 through 19 {
+    [#{$attr}="#{$i * 5}"] {
+      @include layout-preset("#{$i * 5}%");
+    }
   }
   [#{$attr}="33"], [#{$attr}="34"] {
     @include layout-preset(33.33%);
   }
-  [#{$attr}="50"] {
-    @include layout-preset(50%);
-  }
   [#{$attr}="66"], [#{$attr}="67"] {
     @include layout-preset(66.66%);
-  }
-  [#{$attr}="75"] {
-    @include layout-preset(75%);
-  }
-  [#{$attr}="80"] {
-    @include layout-preset(80%);
-  }
-  [#{$attr}="90"] {
-    @include layout-preset(90%);
   }
 }
 
