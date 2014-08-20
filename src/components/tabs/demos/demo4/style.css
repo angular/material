@@ -7,7 +7,9 @@ div.infoBar input {
 }
 
 div.infoBar {
-    margin-left : 20px;
+    margin-left: 20px;
+    height: 75px;
+    font-size: .8em;
 }
 
 
