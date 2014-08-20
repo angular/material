@@ -1,0 +1,3 @@
+[submodule "material-icons"]
+	path = material-icons
+	url = git@github.com:angular/material-icons
