@@ -122,7 +122,7 @@
   // (1-19) * 5 = 5-95%
   @for $i from 1 through 19 {
     [#{$attr}="#{$i * 5}"] {
-      @include layout-preset("#{$i * 5}%");
+      @include layout-preset(#{$i * 5 + '%'});
     }
   }
   [#{$attr}="33"], [#{$attr}="34"] {
@@ -139,32 +139,17 @@
 }
 
 @mixin layout-offset-presets($attr) {
-  [#{$attr}="10"] {
-    margin-left: 10%;
-  }
-  [#{$attr}="20"] {
-    margin-left: 20%;
-  }
-  [#{$attr}="25"] {
-    margin-left: 25%;
+  // (1-19) * 5 = 5-95%
+  @for $i from 1 through 19 {
+    [#{$attr}="#{$i * 5}"] {
+      margin-left: #{i * 5 + '%'};
+    }
   }
   [#{$attr}="33"], [#{$attr}="34"] {
     margin-left: 33.33%;
   }
-  [#{$attr}="50"] {
-    margin-left: 50%;
-  }
   [#{$attr}="66"], [#{$attr}="67"] {
     margin-left: 66.66%;
-  }
-  [#{$attr}="75"] {
-    margin-left: 75%;
-  }
-  [#{$attr}="80"] {
-    margin-left: 80%;
-  }
-  [#{$attr}="90"] {
-    margin-left: 90%;
   }
 }
 
