@@ -138,24 +138,25 @@ iframe.demo {
 }
 
 material-toolbar.demo-toolbar,
-.demo-container material-tabs .tabs-header-items,
+.demo-container material-tabs .tabs-header,
 .demo-container material-tabs material-tab-label {
-  background: #f9f9f9;
-  color: #4a4a4a;
+  background: #00BCD4;
+  color: white;
 }
-.demo-container material-tabs material-ink-bar {
-  background: #4285F4;
+material-toolbar.demo-toolbar material-tab-label {
+  color: #99E4EE
 }
-.demo-container material-tabs material-tab-label.active {
-  color: #777;
+material-toolbar.demo-toolbar material-tab-label.active {
+  color: white;
 }
+
 material-toolbar.demo-toolbar material-button {
   -webkit-transition: all 0.35s linear;
   -moz-transition: all 0.35s linear;
   transition: all 0.35s linear;
 }
 material-toolbar.demo-toolbar material-button.active {
-  background: #eee;
+  background: rgba(0,0,0,0.2);
 }
 
 .demo-source-container {
@@ -202,8 +203,12 @@ material-toolbar.demo-toolbar material-button.active {
 
 .api-options-bar .directive {
   font-size: 20px;
-  font-weight: 600;
-  margin-left:0px !important;
+  font-weight: 400;
+  display: inline-block;
+  /* Make &lt; and &gt; be smaller. */
+  -webkit-transform: scaleX(0.8);
+  transform: scaleX(0.8);
+  margin: -2px;
 }
 
 .api-params-item {

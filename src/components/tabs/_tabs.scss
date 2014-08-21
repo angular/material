@@ -4,40 +4,76 @@ material-tabs {
   width: 100%;
   font-weight: 500;
   font-size: 14px;
+}
 
-  .tabs-header {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-    @include box-sizing(border-box);
+.tabs-header {
+  width: 100%;
+  @include box-sizing(border-box);
+  @include flex-display();
+  position: relative;
+  background-color: #4285F4;
+}
 
-    .tabs-header-items {
-      @include flex-display();
-      @include box-sizing(border-box);
-      overflow: hidden;
-      background-color: #4285F4;
-      white-space: nowrap;
-      align-items: stretch;
-      font-size: 14px;
-      font-weight: 500;
-      text-transform: uppercase;
-    }
+.tab-paginator {
+  z-index: 1;
+  @include flex-display();
+  @include flex-justify-content(center);
+  @include flex-align-items(center);
+  width: $tabs-paginator-width;
+  min-height: 100%;
+
+  /* TODO Once we have a better way to inline svg images, change this 
+   to use svgs correctly */
+  &.active.prev {
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPiA8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPiA8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPiA8ZyBpZD0iSGVhZGVyIj4gPGc+IDxyZWN0IHg9Ii02MTgiIHk9Ii0xMjA4IiBmaWxsPSJub25lIiB3aWR0aD0iMTQwMCIgaGVpZ2h0PSIzNjAwIi8+IDwvZz4gPC9nPiA8ZyBpZD0iTGFiZWwiPiA8L2c+IDxnIGlkPSJJY29uIj4gPGc+IDxwb2x5Z29uIHBvaW50cz0iMTUuNCw3LjQgMTQsNiA4LDEyIDE0LDE4IDE1LjQsMTYuNiAxMC44LDEyIAkJIiBzdHlsZT0iZmlsbDp3aGl0ZTsiLz4gPHJlY3QgZmlsbD0ibm9uZSIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ii8+IDwvZz4gPC9nPiA8ZyBpZD0iR3JpZCIgZGlzcGxheT0ibm9uZSI+IDxnIGRpc3BsYXk9ImlubGluZSI+IDwvZz4gPC9nPiA8L3N2Zz4NCg==');
   }
-
-  .tabs-content {
-    overflow: hidden;
-    width: 100%;
+  &.active.next {
+   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPiA8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPiA8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPiA8ZyBpZD0iSGVhZGVyIj4gPGc+IDxyZWN0IHg9Ii02MTgiIHk9Ii0xMzM2IiBmaWxsPSJub25lIiB3aWR0aD0iMTQwMCIgaGVpZ2h0PSIzNjAwIi8+IDwvZz4gPC9nPiA8ZyBpZD0iTGFiZWwiPiA8L2c+IDxnIGlkPSJJY29uIj4gPGc+IDxwb2x5Z29uIHBvaW50cz0iMTAsNiA4LjYsNy40IDEzLjIsMTIgOC42LDE2LjYgMTAsMTggMTYsMTIgCQkiIHN0eWxlPSJmaWxsOndoaXRlOyIvPiA8cmVjdCBmaWxsPSJub25lIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz4gPC9nPiA8L2c+IDxnIGlkPSJHcmlkIiBkaXNwbGF5PSJub25lIj4gPGcgZGlzcGxheT0iaW5saW5lIj4gPC9nPiA8L2c+IDwvc3ZnPg0K');
   }
-
-  material-ink-bar {
-    left: 0;
-    bottom: 0;
-    @include box-sizing(border-box);
-    &.animate {
-      @include transition(all 350ms linear);
-    }
+  &.active {
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center center;
   }
 }
+
+material-tabs[center] .tabs-header:not(.tab-paginating) .tabs-header-items {
+  @include flex-justify-content(center);
+}
+.tabs-header-items-container {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin: auto;
+  
+  .tabs-header-items {
+    @include flex-display();
+    @include box-sizing(border-box);
+    -webkit-transition: -webkit-transform 0.2s linear;
+    transition: transform 0.2s linear;
+    @include transform(translate3d(0,0,0));
+    width: 100%;
+  }
+}
+
+.tabs-content {
+  overflow: hidden;
+  width: 100%;
+}
+
+material-ink-bar {
+  left: 0;
+  bottom: 0;
+  @include box-sizing(border-box);
+  &.animate {
+    @include transition(all 0.2s linear);
+  }
+}
+
 
 material-tab {
   @include flex(1);
@@ -51,6 +87,7 @@ material-tab {
   line-height: 40px;
   text-align: center;
   cursor: pointer;
+  min-width: $tabs-tab-width;
 
   @include not-selectable();
 

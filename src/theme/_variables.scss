@@ -107,6 +107,10 @@ $card-padding: 10px;
 $card-margin: 10px;
 $card-box-shadow: $whiteframe-shadow-z1;
 
+// Tabs
+$tabs-paginator-width: $baseline-grid * 4 !default;
+$tabs-tab-width: $baseline-grid * 12 !default;
+
 // Tiles
 
 $tile-border-radius: 2px;

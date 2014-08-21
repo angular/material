@@ -1,3 +1,4 @@
+/* Disable Tab Pagination */
 /**
  * @ngdoc module
  * @name material.components.tabs
@@ -22,6 +23,7 @@ angular.module('material.components.tabs', [
     '$timeout', 
     '$materialEffects', 
     '$window',
+    '$$rAF',
     TabsDirective
   ])
   .directive('materialTab', [ 
@@ -103,7 +105,7 @@ angular.module('material.components.tabs', [
  * </hljs>
  *
  */
-function TabsDirective($compile, $timeout, $materialEffects, $window) {
+function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
 
   return {
     restrict: 'E',
@@ -118,9 +120,17 @@ function TabsDirective($compile, $timeout, $materialEffects, $window) {
     controller: [ '$scope', '$attrs', '$materialComponentRegistry', '$timeout', TabsController ],
 
     template:
-      '<div class="tabs-header">' +
-      '  <div class="tabs-header-items"></div>' +
+      '<div class="tabs-header" ng-class="{\'tab-paginating\': pagination.active}">' +
+
+      '  <div class="tab-paginator prev" ng-if="pagination.active" ng-click="pagination.hasPrev && pagination.prev()" ng-class="{active: pagination.hasPrev}">' +
+      '  </div>' +
+      '  <div class="tabs-header-items-container">' +
+      '    <div class="tabs-header-items"></div>' +
+      '  </div>' +
+      '  <div class="tab-paginator next" ng-if="pagination.active" ng-click="pagination.hasNext && pagination.next()" ng-class="{active: pagination.hasNext}">' +
+      '  </div>' +
       '  <material-ink-bar></material-ink-bar>' +
+
       '</div>'+
       '<div class="tabs-content ng-hide"></div>'
 
@@ -147,11 +157,9 @@ function TabsDirective($compile, $timeout, $materialEffects, $window) {
         // Publish for access by nested `<material-tab>` elements
         tabsController.noink = scope.noink;
 
-        // Watch for external changes `selected` & auto-select the specified tab
-        // Stop watching when the <material-tabs> directive is released
-        scope.$on("$destroy", scope.$watch('$selIndex', function (index) {
+        scope.$watch('$selIndex', function (index) {
           tabsController.selectAt(index);
-        }));
+        });
 
         // Remove the `inkBar` element if `nobar` is defined
         var elBar = findNode("material-ink-bar",element);
@@ -168,10 +176,18 @@ function TabsDirective($compile, $timeout, $materialEffects, $window) {
           }
         };
 
+        var updatePagination = configurePagination() || angular.noop;
+        var updateInk = configureInk() || angular.noop;
+        var update = $$rAF.debounce(function() {
+          /* See decorators.js for raf.debounce */
+          updatePagination();
+          updateInk();
+        });
+        angular.element($window).on('resize', update);
+        scope.$on('$materialTabsChanged', update);
+
         transcludeHeaderItems();
         transcludeContentItems();
-
-        configureInk();
 
         alignTabButtons();
         selectDefaultTab();
@@ -190,23 +206,12 @@ function TabsDirective($compile, $timeout, $materialEffects, $window) {
 
           // Single inkBar is used for all tabs
           var inkBar = findNode("material-ink-bar", element);
-
-          // Wait until ther next event loop to run updateInkBar, to be sure
-          // that all of the tabs have been added/removed.
-          function updateInkNextFrame() {
-            clearTimeout(updateInkNextFrame.timeout);
-            updateInkNextFrame.timeout = setTimeout(updateInkBar, 0);
-          }
-
-          // On resize or tabChange
-          tabsController.onTabChange = updateInkNextFrame;
-
-          angular.element($window).on('resize', function() {
-            updateInkBar(true);
-          });
+          var headerContainer = findNode('.tabs-header-items-container', element);
 
           // Immediately place the ink bar
-          updateInkBar(true);
+          refreshInkBar(true);
+
+          return $$rAF.debounce(refreshInkBar);
 
           /**
            * Update the position and size of the ink bar based on the
@@ -214,24 +219,115 @@ function TabsDirective($compile, $timeout, $materialEffects, $window) {
            * @param tab
            * @param skipAnimation
            */
-          function updateInkBar(skipAnimation) {
+          function refreshInkBar(skipAnimation) {
             var tabElement = tabsController.selectedElement();
 
-            if ( angular.isDefined(tabElement) && angular.isDefined(inkBar) ) {
+            if ( tabElement && tabElement.length && angular.isDefined(inkBar) ) {
 
-              var tabNode = tabElement[0];
-              var width = tabNode.offsetWidth;
+              var width = tabElement.prop('offsetWidth');
+              var left = headerContainer.prop('offsetLeft') + tabElement.prop('offsetLeft') +
+                (scope.headerPos || 0);
+
+              if (tabElement.hasClass('pagination-hide')) {
+                width = 0;
+              }
+
               var styles = {
                 display : width > 0 ? 'block' : 'none',
                 width: width + 'px'
               };
-              styles[$materialEffects.TRANSFORM_PROPERTY] = 
-                'translate3d(' + tabNode.offsetLeft + 'px,0,0)';
+              styles[$materialEffects.TRANSFORM_PROPERTY] = 'translate3d(' + left + 'px,0,0)';
 
-              inkBar.toggleClass('animate', !skipAnimation).css(styles);
+              inkBar.toggleClass('animate', skipAnimation !== true).css(styles);
             }
 
           }
+        }
+
+        function configurePagination() {
+          // Must match tab min-width rule in _tabs.scss
+          var TAB_MIN_WIDTH = 8 * 12;
+          // Must match (2 * width of paginators) in scss
+          var PAGINATORS_WIDTH = (8 * 4) * 2;
+
+          var pagination = scope.pagination = {
+            next: function() { setPage(pagination.page + 1); },
+            prev: function() { setPage(pagination.page - 1); }
+          };
+
+          var header = findNode('.tabs-header-items', element);
+          var headerContainer = findNode('.tabs-header-items-container', element);
+
+          scope.$watch('$selIndex', paginationWatchSelectedTab);
+
+          return refreshPagination;
+
+          function setHeaderPos(x) {
+            header.css($materialEffects.TRANSFORM_PROPERTY, 'translate3d('+x+'px,0,0)');
+            scope.headerPos = x;
+          }
+
+          function refreshPagination() {
+            var tabsWidth = element.prop('offsetWidth') - PAGINATORS_WIDTH;
+            var tabs = header.children();
+            var shouldPaginate = (TAB_MIN_WIDTH * tabs.length) > tabsWidth;
+
+            // Whether we're changing from active to inactive or vice-versa
+            var isNewState = shouldPaginate !== pagination.active;
+            pagination.active = shouldPaginate;
+            
+            if (shouldPaginate) {
+              pagination.pagesCount = Math.ceil((TAB_MIN_WIDTH * tabs.length) / tabsWidth);
+              pagination.itemsPerPage = Math.max(1, Math.floor(tabs.length / pagination.pagesCount));
+              pagination.tabWidth = tabsWidth / pagination.itemsPerPage;
+              header.css('width', pagination.tabWidth * tabs.length + 'px');
+
+              if (isNewState) {
+                // If we just activated pagination, go to page 0 and watch the 
+                // selected tab index to be sure we're on the same page
+                setPage(0);
+              } else {
+                setPage(Math.min(pagination.page, pagination.pagesCount - 1));
+              }
+            } else {
+              if (isNewState) { 
+                setHeaderPos(0);
+                header.css('width', '');
+              }
+            }
+          }
+
+          function setPage(page) {
+            var tabs = header.children();
+
+            pagination.startIndex = page * pagination.itemsPerPage;
+            pagination.endIndex = pagination.startIndex + pagination.itemsPerPage - 1;
+
+            pagination.hasPrev = page > 0;
+            pagination.hasNext = (page + 1) * pagination.itemsPerPage < tabs.length;
+
+            setHeaderPos(-page * pagination.itemsPerPage * pagination.tabWidth);
+
+            if (scope.$selIndex < pagination.startIndex ||
+                scope.$selIndex > pagination.endIndex) {
+              tabsController.selectAt(
+                page > pagination.page ?  pagination.startIndex : pagination.endIndex,
+                true
+              );
+            }
+            pagination.page = page;
+            updateInk();
+          }
+
+          function paginationWatchSelectedTab(selectedIndex) {
+            if (!pagination.active) return;
+
+            if (selectedIndex < pagination.startIndex ||
+                selectedIndex > pagination.endIndex) {
+              setPage(Math.floor(selectedIndex / pagination.itemsPerPage));
+            }
+          }
+
         }
 
         /**
@@ -243,7 +339,7 @@ function TabsDirective($compile, $timeout, $materialEffects, $window) {
           var align  = attrs.tabsAlign || "top";
           var container = findNode('.tabs-content', element);
 
-          if ( align == "bottom") {
+          if (align == "bottom") {
             element.prepend(container);
           }
         }
@@ -275,8 +371,7 @@ function TabsDirective($compile, $timeout, $materialEffects, $window) {
 
               if (intoHeader) {
                 header.append(node);
-              }
-              else {
+              } else {
                 parent.prepend(node);
               }
             });
@@ -677,11 +772,19 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
   this.$$tabs = findTabs;
   this.$$hash = "";
 
-  // used within the link-Phase of materialTabs
-  this.onTabChange = angular.noop;
   this.selectedElement = function() {
     return findElementFor( selected );
   };
+
+  function onTabsChanged() {
+    if (onTabsChanged.queued) return;
+    onTabsChanged.queued = true;
+
+    $scope.$evalAsync(function() {
+      $scope.$broadcast('$materialTabsChanged');
+      onTabsChanged.queued = false;
+    });
+  }
 
   /**
    * Find the DOM element associated with the tab/scope
@@ -721,7 +824,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
    * Select specified tab; deselect all others (if any selected)
    * @param tab
    */
-  function selectTab(tab) {
+  function selectTab(tab, noUpdate) {
     if ( tab == selected ) return;
 
     var activate = makeActivator(true),
@@ -737,7 +840,9 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
     $scope.$selIndex = String(selected.$index || list.indexOf(selected));
 
     // update the tabs ink to indicate the selected tab
-    self.onTabChange();
+    if (!noUpdate) {
+      onTabsChanged();
+    }
 
     return selected;
   }
@@ -746,13 +851,13 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
    * Select tab based on its index position
    * @param index
    */
-  function selectTabAt(index) {
+  function selectTabAt(index, noUpdate) {
     if (list.inRange(index)) {
       var matches = list.findBy("$index", index),
         it = matches ? matches[0] : null;
 
       if (it != selected) {
-        selectTab(it);
+        selectTab(it, noUpdate);
       }
     }
   }
@@ -777,7 +882,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
       if ($scope.$selIndex == pos || tab.active) {
         selectTab(tab);
       } else {
-        self.onTabChange();
+        onTabsChanged();
       }
     }
 
@@ -798,7 +903,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
       selectTab( list.next(tab, isEnabled) );
       list.remove(tab);
 
-      self.onTabChange();
+      onTabsChanged();
       // another tab was removed, make sure to update ink bar
       $timeout(function(){
         delete elements[tab.$id];

@@ -24,7 +24,7 @@ module.exports = {
       return !!module;
     }),
 
-  componentsModule: "angular.module('ngMaterial', [ 'ng', 'ngAnimate', 'material.services.attrBind', 'material.services.compiler', 'material.services.position', 'material.services.registry', 'material.services.throttle', <%= components.join(',') %>]);\n",
+  componentsModule: "angular.module('ngMaterial', [ 'ng', 'ngAnimate', 'material.services.attrBind', 'material.services.compiler', 'material.services.position', 'material.services.registry', 'material.services.throttle', 'material.decorators', <%= components.join(',') %>]);\n",
 
   dist: 'dist',
 
@@ -91,6 +91,7 @@ module.exports = {
       'src/components/whiteframe/whiteframe.js',
 
       //Services
+      'src/services/decorators.js',
       'src/services/attrBind/attrBind.js',
       'src/services/compiler/compiler.js',
       'src/services/position/position.js',

@@ -1,7 +1,6 @@
 describe('materialTabs directive', function() {
 
-  beforeEach(module('material.components.tabs'));
-
+  beforeEach(module('material.components.tabs', 'material.decorators'));
 
   describe('controller', function(){
 

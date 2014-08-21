@@ -46,8 +46,8 @@
   <div layout="vertical" layout-fill>
     <material-toolbar class="material-theme-dark material-medium-tall">
 
-      <div class="material-toolbar-tools">
-        <div class="menu-icon" ng-click="toggleMenu()" hide-md>
+      <div class="material-toolbar-tools" ng-click="toggleMenu()">
+        <div class="menu-icon" hide-md>
           <material-icon icon="img/icons/ic_menu_24px.svg">
           </material-icon>
         </div>
@@ -62,18 +62,16 @@
         </h3>
       </div>
 
-      <div class="material-toolbar-tools api-options-bar with-icon" 
+      <div class="material-toolbar-tools api-options-bar" 
         ng-if="currentDoc && currentDoc.docType === 'readme'">
         <span flex></span>
         <material-button
           ng-repeat="doc in currentComponent.docs" 
           ng-show="doc.docType !== 'readme'"
           ng-href="#{{doc.url}}" style="padding:3px;">
-            <div style="margin:2px;">
-              <span class="directive">&lt;</span>
-                {{doc.humanName || doc.name}}
-              <span class="directive">&gt;</span>
-            </div>
+            <span class="directive">&lt;</span>
+              {{doc.humanName || doc.name}}
+            <span class="directive">&gt;</span>
         </material-button>
       </div>
 

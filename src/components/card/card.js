@@ -23,14 +23,13 @@ angular.module('material.components.card', [
  *
  * @usage
  * <hljs lang="html">
- *  <material-card>
- *    <img src="/img/washedout.png" class="material-card-image">
- *    <h2>Paracosm</h2>
- *    <p>
- *      The titles of Washed Out's breakthrough song and the first single from Paracosm share the
- *      two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
- *    </p>
- *  </material-card>
+ * <material-card>
+ *  <img src="/img/washedout.png" class="material-card-image">
+ *  <h2>Paracosm</h2>
+ *  <p>
+ *    The titles of Washed Out's breakthrough song and the first single from Paracosm share the * two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
+ *  </p>
+ * /material-card>
  * </hljs>
  *
  */
