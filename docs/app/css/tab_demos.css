@@ -1,13 +1,11 @@
 body {
     padding:20px;
-    background-color: #FAFAFA;
 }
 
 body h3 {
     font-size:0.95em;
     color: #d4d263;
     font-weight: normal;
-    background-color: #474747;
     width: 420px;
     text-indent: 20px;
     line-height: 30px;
@@ -92,10 +90,6 @@ body h3 {
     height: 100%;
 }
 
-
-.sample {
-    background-color: #FAFAFA;
-}
 
 .sample.demo1 {
     height: 470px;
@@ -206,3 +200,14 @@ material-tab  button:hover {
     background-color: rgba(255, 255, 104, 1.0);
 }
 
+
+material-list.tab-demo-list material-checkbox {
+  margin: 8px;
+}
+
+.title {
+  color: #999999;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}

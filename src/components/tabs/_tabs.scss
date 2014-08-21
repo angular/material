@@ -30,7 +30,12 @@ material-tabs {
   }
 
   material-ink-bar {
+    left: 0;
+    bottom: 0;
     @include box-sizing(border-box);
+    &.animate {
+      @include transition(all 350ms linear);
+    }
   }
 }
 

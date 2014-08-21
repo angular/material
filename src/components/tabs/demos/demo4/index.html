@@ -7,46 +7,50 @@
         <material-tab ng-repeat="tab in tabs | orderBy:predicate:reversed"
                  on-select="onTabSelected(tab)"
                  on-deselect="announceDeselected(tab)"
-                 ng-disabled="tab.disabled && allowDisable && tab.title=='Material'">
-            <material-tab-label>
-                {{tab.title}}
-                <button ng-click="removeTab( tab )" style="margin-left: 5px;">x</button>
-            </material-tab-label>
-            {{tab.content}}
+                 ng-disabled="tab.disabled"
+                 label="{{tab.title}}">
+          {{tab.content}}
+          <material-button class="material-theme-red"
+            ng-click="removeTab( tab )">Remove Tab
+          </material-button>
         </material-tab>
 
     </material-tabs>
 
-    <br/>
-    <div class="infoBar">
-        <div class="left">
-          Tab <span class="highlight">#{{ selectedIndex }}</span>is active.
+    <div layout="vertical" layout-padding>
 
-          <span class="left-spacer">Tab #2</span> is
-          <span class="highlight"><input type="checkbox" ng-model="allowDisable"> Disabled</span>
-          (will auto-deselect if active)
+      <material-list class="tab-demo-list" flex>
+        <material-item>
+          <span>Active Tab Index: {{selectedIndex}}</span>
+        </material-item>
+        <material-item>
+          <material-checkbox ng-model="tabs[2].disabled">
+            Disable Tab #2?
+          </material-checkbox>
+        </material-item>
+        <material-item>
+          <material-checkbox ng-model="reversed">
+            Reversed Order? 
+          </material-checkbox>
+        </material-item>
+      </material-list>
 
-          <span style="padding-left: 30px;">
-              Show in <span class="highlight"><input type="checkbox" ng-model="reversed" ng-value="reversed"> Reversed Order</span>
-          </span>
+      <material-divider flex></material-divider>
+      <div class="title" flex>Add Another Tab</div>
+
+      <form ng-submit="addTab(tTitle,tContent)" flex>
+        <div layout="horizontal">
+          <span flex="15">Title:</span>
+          <input type="text" required ng-model="tTitle" placeholder="<tab label>">
         </div>
-
-        <div class="right">
-          onSelected: <span class="highlight hello">{{greeting}}</span>
-
-          <span class="left-spacer" ng-show="farewell.length">
-            onDeselected: <span class="highlight bye">{{farewell}}</span>
-          </span>
+        <div layout="horizontal">
+          <span flex="15">Content:</span>
+          <input type="text" required ng-model="tContent" placeholder="<tab content>">
         </div>
+        <material-button type="submit" class="material-button-colored">
+           Add New Tab
+        </material-button>
+      </form>
+
     </div>
-    <br/><br/>
-    <hr/>
-    <div class="infoBar" ng-keypress="submit($event)">
-        Title: <input type="text" ng-model="tTitle" placeholder="<tab label>">
-        Content:<input type="text" ng-model="tContent" placeholder="<tab content>" style="width:250px;">
-        <button ng-disabled="!tTitle" ng-click="addTab(tTitle,tContent)" class="addTabBtn" >Add another tab</button>
-    </div>
-
-
-
 </div>

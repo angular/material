@@ -193,24 +193,20 @@ function TabsDirective($compile, $timeout, $materialEffects) {
 
           // Wait until ther next event loop to run updateInkBar, to be sure
           // that all of the tabs have been added/removed.
-          // This is cheaper than running updateInkBar every time a tab is
-          // added or removed.
-          var inkUpdateTimeout = null;
-          var inkUpdate = function(tab, skipAnimation) {
-            clearTimeout(inkUpdateTimeout);
-            inkUpdateTimeout = setTimeout(function() {
-              updateInkBar(tab, skipAnimation);
-            });
-          };
+          function updateInkNextFrame() {
+            clearTimeout(updateInkNextFrame.timeout);
+            updateInkNextFrame.timeout = setTimeout(updateInkBar, 0);
+          }
+
           // On resize or tabChange
-          tabsController.onTabChange = inkUpdate;
+          tabsController.onTabChange = updateInkNextFrame;
 
           angular.element(window).on('resize', function() {
-            updateInkBar(tabsController.selectedElement(), true);
+            updateInkBar(true);
           });
 
           // Immediately place the ink bar
-          updateInkBar(tabsController.selectedElement(), true );
+          updateInkBar(true);
 
           /**
            * Update the position and size of the ink bar based on the
@@ -218,24 +214,21 @@ function TabsDirective($compile, $timeout, $materialEffects) {
            * @param tab
            * @param skipAnimation
            */
-          function updateInkBar(tab, skipAnimation) {
-            if ( tabsController.$$tabs().length < 2 ) return;
+          function updateInkBar(skipAnimation) {
+            var tabElement = tabsController.selectedElement();
 
-            if ( angular.isDefined(tab) && angular.isDefined(inkBar) ) {
+            if ( angular.isDefined(tabElement) && angular.isDefined(inkBar) ) {
 
-              var tabNode = tab[0];
+              var tabNode = tabElement[0];
               var width = tabNode.offsetWidth;
               var styles = {
-                left : tabNode.offsetLeft +'px',
-                width : width +'px' ,
-                display : width > 0 ? 'block' : 'none'
+                display : width > 0 ? 'block' : 'none',
+                width: width + 'px'
               };
+              styles[$materialEffects.TRANSFORM_PROPERTY] = 
+                'translate3d(' + tabNode.offsetLeft + 'px,0,0)';
 
-              if( !!skipAnimation ) {
-                inkBar.css(styles);
-              } else {
-                $materialEffects.inkBar(inkBar, styles);
-              }
+              inkBar.toggleClass('animate', !skipAnimation).css(styles);
             }
 
           }
@@ -744,7 +737,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
     $scope.$selIndex = String(selected.$index || list.indexOf(selected));
 
     // update the tabs ink to indicate the selected tab
-    self.onTabChange( findElementFor(selected) );
+    self.onTabChange();
 
     return selected;
   }
@@ -783,6 +776,8 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
       // Should we auto-select it?
       if ($scope.$selIndex == pos || tab.active) {
         selectTab(tab);
+      } else {
+        self.onTabChange();
       }
     }
 
@@ -803,9 +798,9 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
       selectTab( list.next(tab, isEnabled) );
       list.remove(tab);
 
+      self.onTabChange();
       // another tab was removed, make sure to update ink bar
       $timeout(function(){
-        self.onTabChange( findElementFor(selected), true );
         delete elements[tab.$id];
       },300);
 

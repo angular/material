@@ -57,9 +57,12 @@ function MaterialEffects($animateSequence, $ripple, $rootElement, $position, $$r
   // Publish API for effects...
   return {
     inkRipple: animateInkRipple,
-    inkBar: animateInkBar,
     popIn: popIn,
-    popOut: popOut
+    popOut: popOut,
+
+    /* Constants */
+    TRANSFORM_PROPERTY: TRANSFORM_PROPERTY,
+    TRANSITIONEND_EVENT: TRANSITIONEND_EVENT
   };
 
   // **********************************************************
@@ -73,19 +76,6 @@ function MaterialEffects($animateSequence, $ripple, $rootElement, $position, $$r
   {
     return new $ripple(canvas, options);
   }
-
-
-  /**
-   * Make instance of a reusable sequence and
-   * auto-run the sequence on the element (if defined)
-   */
-  function animateInkBar(element, styles, duration ) {
-    var animate = $animateSequence({ styler: styler }).animate,
-      sequence = animate( {}, styles, safeDuration(duration || 350) );
-
-    return angular.isDefined(element) ? sequence.run(element) : sequence;
-  }
-
 
   /**
    *
