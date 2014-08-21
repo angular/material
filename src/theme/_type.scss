@@ -1,0 +1,140 @@
+// Material Design Typography
+// -----------------------------
+// http://www.google.com/design/spec/style/typography.html
+
+
+
+// font-weight
+// ----------------------------
+$font-weight-light:        300;
+$font-weight-regular:      400;
+$font-weight-medium:       500;
+
+
+// font-size, base font size 14px
+// ----------------------------
+$font-size-112:            112px;
+$font-size-56:             56px;
+$font-size-45:             45px;
+$font-size-34:             34px; 
+$font-size-24:             24px; 
+$font-size-20:             20px;
+$font-size-16:             16px; 
+$font-size-15:             15px;
+$font-size-14:             14px; 
+$font-size-13:             13px; 
+$font-size-12:             12px;
+
+
+// line-height
+// ----------------------------
+$line-height-48:           48px; 
+$line-height-40:           40px; 
+$line-height-32:           32px;   
+$line-height-28:           28px; 
+$line-height-24:           24px;
+$line-height-20:           20px; 
+
+
+// color
+// ----------------------------
+$text-black-87:            rgba(0,0,0,0.87); //Body Text
+$text-black-54:            rgba(0,0,0,0.54); //Secondary Text and Icons
+$text-black-26:            rgba(0,0,0,0.26); //Hint Text
+$text-black-12:            rgba(0,0,0,0.12); //Dividers
+
+$text-white-100:           rgba(255,255,255,1); 
+$text-white-87:            rgba(255,255,255,0.87); 
+$text-white-54:            rgba(255,255,255,0.54); 
+$text-white-26:            rgba(255,255,255,0.26); 
+$text-white-12:            rgba(255,255,255,0.12); 
+
+
+// Mixins
+// ----------------------------
+@mixin text-display4 {
+  font-weight: $font-weight-light;
+  font-size: $font-size-112;
+  line-height: normal;
+  color: $text-black-54;
+}
+
+@mixin text-display3 {
+  font-weight: $font-weight-regular;
+  font-size: $font-size-56;
+  line-height: normal;
+  color: $text-black-54;
+}
+
+@mixin text-display2 {
+  font-weight: $font-weight-regular;
+  font-size: $font-size-45;
+  line-height: $line-height-48;
+  color: $text-black-54;
+}
+
+@mixin text-display1 {
+  font-weight: $font-weight-regular;
+  font-size: $font-size-34;
+  line-height: $line-height-40;
+  color: $text-black-54;
+}
+
+@mixin text-headline {
+  font-weight: $font-weight-regular;
+  font-size: $font-size-24;
+  line-height: $line-height-32;
+  height: 72px;
+  padding-top: 20px;
+}
+
+@mixin text-title {
+  font-weight: $font-weight-medium;
+  font-size: $font-size-20;
+  line-height: normal;
+  color: $text-black-87;
+} 
+
+@mixin text-subhead2 {
+  font-weight: $font-weight-medium;
+  font-size: $font-size-16;
+  line-height: $line-height-28;
+} 
+
+@mixin text-subhead1 {
+  font-weight: $font-weight-regular;
+  font-size: $font-size-16;
+  line-height: $line-height-24;
+} 
+
+@mixin text-body2 {
+  font-weight: $font-weight-medium;
+  font-size: $font-size-14;
+  line-height: $line-height-24;
+}  
+
+@mixin text-body1 {
+  font-weight: $font-weight-regular;
+  font-size: $font-size-14;
+  line-height: $line-height-20;
+} 
+
+@mixin text-caption {
+  font-weight: $font-weight-regular;
+  font-size: $font-size-12;
+  line-height: normal;
+  color: $text-black-54;
+} 
+
+@mixin text-menu {
+  font-weight: $font-weight-medium;
+  font-size: $font-size-14;
+  line-height: normal;
+} 
+
+@mixin text-button {
+  font-weight: $font-weight-medium;
+  font-size: $font-size-14;
+  line-height: normal;
+  text-transform: uppercase;
+} 
