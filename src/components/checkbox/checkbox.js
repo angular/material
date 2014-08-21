@@ -89,6 +89,11 @@ function materialCheckboxDirective(inputDirectives) {
       0: {}
     }, attr, [ngModelCtrl]);
 
+    element.attr({
+      'aria-checked': checked,
+      'role': attr.type,
+      'tabIndex': attr.tabIndex
+    });
     element.on('click', listener);
     element.on('keypress', keypressHandler);
     ngModelCtrl.$render = render;
@@ -112,11 +117,6 @@ function materialCheckboxDirective(inputDirectives) {
 
     function render() {
       checked = ngModelCtrl.$viewValue;
-      element.attr({
-        'aria-checked': checked,
-        'role': attr.type,
-        'tabIndex': attr.tabIndex
-      });
       if(checked) {
         element.addClass(CHECKED_CSS);
       } else {
