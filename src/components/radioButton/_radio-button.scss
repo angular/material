@@ -80,3 +80,12 @@ material-radio-button {
   }
 
 }
+material-radio-group {
+  border: 1px dotted transparent;
+  display: block;
+  outline: none;
+
+  &:focus {
+    border-color: $input-focused-border-color;
+  }
+}
