@@ -22,6 +22,7 @@ material-toast {
   max-height: 40px;
 
   bottom: 12px;
+  z-index: $z-index-toast;
 
   material-button {
     color: white;
