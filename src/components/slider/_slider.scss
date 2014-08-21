@@ -23,9 +23,30 @@ material-slider {
   }
 
   .material-tick-markers {
+    left: -1px;
     z-index: 0;
     width: 100%;
     background: transparent;
+    visibility: invisible;
+
+    &.visible {
+      visibility: visible;
+    }
+
+    @include flex-display();
+
+    .material-tick,
+    &:after {
+      margin-top: 1px;
+      height: 16px;
+      border-left: 2px solid black;
+      @include flex(1);
+    }
+    &:after {
+      position: absolute;
+      right: -2px;
+      content: '';
+    }
   }
 
   // Simulated Slider Thumb
@@ -52,16 +73,6 @@ material-slider {
     -webkit-transform: scale(2);
     -moz-transform: scale(2);
     transform: scale(2);
-  }
-
-  .material-tick:after,
-  .material-tick-markers:after {
-    display: block;
-    width: 2px;
-    height: 2px;
-    border-radius: 50%;
-    background: black;
-    content: "";
   }
 
   &.material-slider-min {

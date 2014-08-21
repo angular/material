@@ -70,9 +70,12 @@ function materialSliderDirective($window) {
     if(input.attr('step')) {
       var settings = rangeSettings(rangeEle);
       var tickCount = (settings.max - settings.min) / settings.step;
-      var tickMarkersEle = angular.element('<div class="material-tick-markers material-display-flex"></div>');
+      var tickMarkersEle = angular.element('<div class="material-tick-markers"></div>');
       for(var i=0; i<tickCount; i++) {
-        tickMarkersEle.append('<div class="material-tick material-flex"></div>');
+        tickMarkersEle.append('<div class="material-tick"></div>');
+      }
+      if (tickCount > 0) {
+        tickMarkersEle.addClass('visible');
       }
       trackEle.append(tickMarkersEle);
     }
