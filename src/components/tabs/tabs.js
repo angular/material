@@ -12,23 +12,23 @@ angular.module('material.components.tabs', [
   'material.services.registry'
 ])
   .controller('materialTabsController', [
-    '$scope', 
-    '$attrs', 
-    '$materialComponentRegistry', 
-    '$timeout', 
-    TabsController 
+    '$scope',
+    '$attrs',
+    '$materialComponentRegistry',
+    '$timeout',
+    TabsController
   ])
   .directive('materialTabs', [
-    '$compile', 
-    '$timeout', 
-    '$materialEffects', 
+    '$compile',
+    '$timeout',
+    '$materialEffects',
     '$window',
     '$$rAF',
     TabsDirective
   ])
-  .directive('materialTab', [ 
-    '$attrBind', 
-    TabDirective  
+  .directive('materialTab', [
+    '$attrBind',
+    TabDirective
   ]);
 
 /**
@@ -153,6 +153,7 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
         scope.noink = angular.isDefined(attrs.noink);
         scope.nobar = angular.isDefined(attrs.nobar);
         scope.nostretch = angular.isDefined(attrs.nostretch);
+        scope.center = angular.isDefined(attrs.center);
 
         // Publish for access by nested `<material-tab>` elements
         tabsController.noink = scope.noink;
@@ -212,6 +213,10 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
           refreshInkBar(true);
 
           return $$rAF.debounce(refreshInkBar);
+
+          return function updateInkOnNextFrame() {
+            $$rAF(updateInkBar);
+          };
 
           /**
            * Update the position and size of the ink bar based on the
@@ -275,7 +280,7 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
             // Whether we're changing from active to inactive or vice-versa
             var isNewState = shouldPaginate !== pagination.active;
             pagination.active = shouldPaginate;
-            
+
             if (shouldPaginate) {
               pagination.pagesCount = Math.ceil((TAB_MIN_WIDTH * tabs.length) / tabsWidth);
               pagination.itemsPerPage = Math.max(1, Math.floor(tabs.length / pagination.pagesCount));
@@ -283,14 +288,14 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
               header.css('width', pagination.tabWidth * tabs.length + 'px');
 
               if (isNewState) {
-                // If we just activated pagination, go to page 0 and watch the 
+                // If we just activated pagination, go to page 0 and watch the
                 // selected tab index to be sure we're on the same page
                 setPage(0);
               } else {
                 setPage(Math.min(pagination.page, pagination.pagesCount - 1));
               }
             } else {
-              if (isNewState) { 
+              if (isNewState) {
                 setHeaderPos(0);
                 header.css('width', '');
               }
@@ -328,6 +333,72 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
             }
           }
 
+        }
+
+        function configurePagination() {
+          // Must match tab min-width rule in _tabs.scss
+          var TAB_MIN_WIDTH = 8 * 16;
+          var pagination = scope.pagination = {
+            next: function() { setPage(pagination.page + 1); },
+            prev: function() { setPage(pagination.page - 1); }
+          };
+
+          var header = findNode('.tabs-header-items', element);
+
+          scope.$watch('$selIndex', function(selectedIndex) {
+            if (!pagination.active) return;
+
+            if (selectedIndex < pagination.tabStartIndex ||
+                selectedIndex > pagination.tabEndIndex) {
+              setPage(Math.floor(selectedIndex / pagination.pageLength));
+            }
+          });
+
+          return paginationUpdate;
+
+          function paginationUpdate() {
+            var headerWidth = header.prop('offsetWidth');
+            var tabs = header.children();
+            var paginationIsActive = TAB_MIN_WIDTH * tabs.length > headerWidth;
+
+            if (paginationIsActive) {
+              pagination.pages = Math.ceil((TAB_MIN_WIDTH * tabs.length) / headerWidth);
+              pagination.pageLength = Math.floor(headerWidth / TAB_MIN_WIDTH);
+            }
+
+            //If we go from pagination to non- or back, change a few things...
+            if (paginationIsActive !== pagination.active) {
+              if (paginationIsActive) {
+                pagination.page = 0;
+              } else {
+                tabs.css('display', '');
+              }
+            }
+            pagination.active = paginationIsActive;
+            setPage(pagination.page);
+          }
+
+          function setPage(page) {
+            pagination.tabStartIndex = page * pagination.pageLength;
+            pagination.tabEndIndex = pagination.tabStartIndex + pagination.pageLength - 1;
+
+            pagination.hasPrev = page > 0;
+            pagination.hasNext = page < pagination.pages;
+
+            var tabs = header.children();
+            angular.forEach(tabs, function(node, i) {
+              var isHidden = i < pagination.tabStartIndex || i > pagination.tabEndIndex;
+              node.style.display = isHidden ?  'none' : '';
+            });
+
+            if (scope.$selIndex < pagination.tabStartIndex ||
+                scope.$selIndex > pagination.tabEndIndex) {
+              tabsController.selectAt(
+                page > pagination.page ?  pagination.tabStartIndex : pagination.tabEndIndex
+              );
+            }
+            pagination.page = page;
+          }
         }
 
         /**
