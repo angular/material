@@ -15,6 +15,7 @@ module.exports = {
     .map(function(folder) {
       try {
         var json = require(__dirname + '/../src/components/' + folder + '/module.json');
+        console.log('CONSOLE', json);
         return json.module;
       } catch(e) {
         return null;
@@ -78,6 +79,7 @@ module.exports = {
       'src/components/card/card.js',
       'src/components/checkbox/checkbox.js',
       'src/components/content/content.js',
+      'src/components/gestures/gestures.js',
       'src/components/dialog/dialog.js',
       'src/components/form/form.js',
       'src/components/icon/icon.js',

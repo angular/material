@@ -1,0 +1,10 @@
+{
+  "module": "material.components.gestures",
+  "name": "Gestures",
+  "demos": {
+    "demo1": {
+      "name": "Gestures Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}
