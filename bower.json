@@ -2,10 +2,12 @@
   "name": "material-design",
   "version": "0.0.0",
   "private": "true",
-  "devDependencies": {
+  "dependencies": {
     "angular": "^1.3.x",
+    "angular-animate": "^1.3.x"
+  },
+  "devDependencies": {
     "angular-mocks": "^1.3.x",
-    "angular-animate": "^1.3.x",
     "angular-route": "1.3.x",
     "angularytics": "^0.3.0",
     "normalize.scss": "https://github.com/kristerkari/normalize.scss.git"
