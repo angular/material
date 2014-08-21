@@ -1,47 +1,65 @@
 
 <div ng-app="app" ng-controller="AppCtrl" layout="vertical" layout-fill>
 
-  <material-toolbar class="material-theme-green">
-    <h1 class="material-toolbar-tools">
-      <span>Toolbar</span>
-    </h1>
-  </material-toolbar>
+  <!-- <material-toolbar class="material-theme-green"> -->
+  <!--   <h1 class="material-toolbar-tools"> -->
+  <!--     <span>Toolbar</span> -->
+  <!--   </h1> -->
+  <!-- </material-toolbar> -->
 
   <section layout="horizontal" layout-fill>
 
     <material-sidenav class="material-sidenav-left material-whiteframe-z2" component-id="left">
-      <div ng-controller="LeftCtrl">
-        <h2>Sidenav left</h2>
-        <material-button ng-click="close()" hide-md>Close</material-button>
-      </div>
+
+      <material-toolbar class="material-theme-indigo">
+        <h1 class="material-toolbar-tools">Sidenav Left</h1>
+      </material-toolbar>
+      <material-content class="material-content-padding" ng-controller="LeftCtrl">
+        <material-button ng-click="close()" class="material-button-colored" hide-md>
+          Close Sidenav Left
+        </material-button>
+      </material-content>
+
     </material-sidenav>
 
     <material-content flex class="material-content-padding">
 
-      <p>
-        On smaller devices, material-sidenav will be hidden by default. 
-      </p>
-      <p>
-        On larger, it will be shown by default.
-      </p>
+      <div layout="vertical" layout-fill layout-align="center center">
+        <p>
+          On smaller devices, material-sidenav will be hidden by default. 
+        </p>
+        <p>
+          On larger, it will be shown by default.
+        </p>
 
-      <material-button ng-click="toggleLeft()" 
-        class="material-button-raised" hide-md>
-        Toggle left
-      </material-button>
+        <div>
+          <material-button ng-click="toggleLeft()"
+            class="material-button-colored" hide-md>
+            Toggle left
+          </material-button>
+        </div>
 
-      <material-button ng-click="toggleRight()" 
-        class="material-button-raised" hide-md>
-        Toggle right
-      </material-button>
+        <div>
+          <material-button ng-click="toggleRight()"
+            class="material-button-colored" hide-md>
+            Toggle right
+          </material-button>
+        </div>
+      </div>
 
     </material-content>
 
-    <material-sidenav class="material-sidenav-right material-whiteframe-z2 material-theme-light" component-id="right">
-      <div ng-controller="RightCtrl">
-        <h2>Sidenav right</h2>
-        <material-button ng-click="close()" hide-md>Close</material-button>
-      </div>
+    <material-sidenav class="material-sidenav-right material-whiteframe-z2" component-id="right">
+
+      <material-toolbar class="material-theme-light">
+        <h1 class="material-toolbar-tools">Sidenav Right</h1>
+      </material-toolbar>
+      <material-content ng-controller="RightCtrl" class="material-content-padding">
+        <material-button ng-click="close()" class="material-button-colored" hide-md>
+          Close Sidenav Right
+        </material-button>
+      </material-content>
+
     </material-sidenav>
 
   </section>
