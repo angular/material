@@ -33,8 +33,6 @@ module.exports = {
   docsAssets: {
     js: [
       'bower_components/angularytics/dist/angularytics.js',
-      'config/lib/angular-animate-sequence/angular-animate-sequence.js',
-      'config/lib/angular-animate-sequence/angular-animate-stylers.js',
       'dist/angular-material.js',
       'dist/docs/js/**/*.js'
     ],
@@ -63,6 +61,7 @@ module.exports = {
     js: [
       //Angular Animate Sequence
       'config/lib/angular-animate-sequence/angular-animate-sequence.js',
+      'config/lib/angular-animate-sequence/angular-animate-stylers.js',
 
       //Utilities
       'src/base/utils.js',
