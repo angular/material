@@ -142,7 +142,7 @@
   // (1-19) * 5 = 5-95%
   @for $i from 1 through 19 {
     [#{$attr}="#{$i * 5}"] {
-      margin-left: #{i * 5 + '%'};
+      margin-left: #{$i * 5 + '%'};
     }
   }
   [#{$attr}="33"], [#{$attr}="34"] {
