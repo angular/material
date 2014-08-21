@@ -1,9 +1,9 @@
-Material Design for AngularJS Apps
+Material Design for AngularJS Apps [![Build Status](https://travis-ci.org/angular/material.svg)](https://travis-ci.org/angular/material)
 =======
 
 [Material Design](http://www.google.com/design/spec/material-design/) is a specification for a unified system of visual, motion, and interaction design that adapts across different devices.
 
-Our goal is to deliver a lean, lightweight set of AngularJS-native UI elements that implement the material design system for use in Angular SPAs. 
+Our goal is to deliver a lean, lightweight set of AngularJS-native UI elements that implement the material design system for use in Angular SPAs.
 
 This project is still in early preview. It is a complementary effort to the [Polymer](http://www.polymer-project.org/) project's [paper elements collection](http://www.polymer-project.org/docs/elements/paper-elements.html).
 
@@ -38,7 +38,7 @@ If you wish to use angular-material anyway, you can `bower install angular-mater
 - http://github.com/ajoslin/conventional-changelog
 - git commit-msg hook available [here](https://github.com/angular/angular.js/blob/master/validate-commit-msg.js).  Place it in `.git/hooks/commit-msg`, and run `chmod +x .git/hooks/commit-msg`. It will validate your commit messages for you.
 
-### Development 
+### Development
 
 - `npm install` for gulp deps
 - `git submodule update --init` to add icons subfolder
