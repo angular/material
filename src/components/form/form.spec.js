@@ -6,7 +6,7 @@ describe('materialInputGroup directive', function() {
     inject(function($compile, $rootScope) {
       el = $compile('<div class="material-input-group material-input-group-theme-light-blue">' +
               '<label for="ftitle">Title</label>' +
-              '<input id="ftitle" type="text" '+(inputAttrs||'')+'>' +
+              '<material-input id="ftitle" type="text" '+(inputAttrs||'')+'>' +
             '</div>')($rootScope.$new());
       $rootScope.$apply();
     });
