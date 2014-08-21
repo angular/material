@@ -21,7 +21,7 @@ angular.module('material.components.tabs', [
     '$compile', 
     '$timeout', 
     '$materialEffects', 
-    '$animate',
+    '$window',
     TabsDirective
   ])
   .directive('materialTab', [ 
@@ -103,7 +103,7 @@ angular.module('material.components.tabs', [
  * </hljs>
  *
  */
-function TabsDirective($compile, $timeout, $materialEffects) {
+function TabsDirective($compile, $timeout, $materialEffects, $window) {
 
   return {
     restrict: 'E',
@@ -201,7 +201,7 @@ function TabsDirective($compile, $timeout, $materialEffects) {
           // On resize or tabChange
           tabsController.onTabChange = updateInkNextFrame;
 
-          angular.element(window).on('resize', function() {
+          angular.element($window).on('resize', function() {
             updateInkBar(true);
           });
 
