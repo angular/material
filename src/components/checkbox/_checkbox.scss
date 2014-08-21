@@ -4,7 +4,11 @@ material-checkbox {
   margin: 15px;
   white-space: nowrap;
   cursor: pointer;
+  outline: none;
 
+  &[disabled] {
+    cursor: no-drop;
+  }
   .material-container {
     position: relative;
     top: 4px;
@@ -68,12 +72,16 @@ material-checkbox {
   }
 
   .material-label {
+    border: 1px dotted transparent;
     position: relative;
     display: inline-block;
     margin-left: 10px;
     vertical-align: middle;
     white-space: normal;
     pointer-events: none;
+  }
+  &:focus .material-label {
+    border-color: $input-focused-border-color;
   }
 
 }
