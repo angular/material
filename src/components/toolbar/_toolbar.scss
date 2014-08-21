@@ -15,6 +15,10 @@ material-toolbar {
 
   &.material-medium-tall {
     height: $toolbar-medium-tall-height;
+
+    .material-toolbar-tools {
+      height: 48px;
+    }
   }
 
   .material-indent {
