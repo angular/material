@@ -11,6 +11,29 @@ angular.module('material.components.card', [
     materialCardDirective 
   ]);
 
+/**
+ * @ngdoc directive
+ * @name materialCard
+ * @module material.components.card
+ *
+ * @restrict E
+ *
+ * @description
+ * The `<material-card>` directive is a container element used within `<material-content>` containers.
+ *
+ * @usage
+ * <hljs lang="html">
+ *  <material-card>
+ *    <img src="/img/washedout.png" class="material-card-image">
+ *    <h2>Paracosm</h2>
+ *    <p>
+ *      The titles of Washed Out's breakthrough song and the first single from Paracosm share the
+ *      two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
+ *    </p>
+ *  </material-card>
+ * </hljs>
+ *
+ */
 function materialCardDirective() {
   return {
     restrict: 'E',

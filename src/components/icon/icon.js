@@ -10,13 +10,21 @@ angular.module('material.components.icon', [])
   ]);
 
 /**
- * @private
  * @ngdoc directive
  * @name materialIcon
  * @module material.components.icon
+ *
  * @restrict E
+ *
  * @description
- * Icon
+ * The `<material-icon>` directive is an element useful for SVG icons
+ *
+ * @usage
+ * <hljs lang="html">
+ *  <material-icon icon="/img/icons/ic_access_time_24px.svg">
+ *  </material-icon>
+ * </hljs>
+ *
  */
 function materialIconDirective() {
   return {

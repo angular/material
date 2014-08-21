@@ -8,25 +8,23 @@ angular.module('material.components.form', [])
   .directive('materialInputGroup', [
     materialInputGroupDirective
   ])
-  .directive('input', [
-    groupInputDirective
+  .directive('materialInput', [
+    materialInputDirective
   ]);
 
 /**
- * @private
  * @ngdoc directive
  * @name materialInputGroup
  * @module material.components.form
  * @restrict E
  * @description
- * Put the `<material-input-group>` directive as the parent of an `<input>` element to
- * add proper styling for the input.
+ * Use the `<material-input-group>` directive as the grouping parent of an `<material-input>` elements
  *
  * @usage 
  * <hljs lang="html">
  * <material-input-group>
- *   <input type="text" ng-model="myText">
- * </material-input-group
+ *   <material-input type="text" ng-model="myText">
+ * </material-input-group>
  * </hljs>
  */
 function materialInputGroupDirective() {
@@ -43,9 +41,29 @@ function materialInputGroupDirective() {
   };
 }
 
-function groupInputDirective() {
+/**
+ * @ngdoc directive
+ * @name materialInput
+ * @module material.components.form
+ *
+ * @restrict E
+ *
+ * @description
+ * Use the `<material-input>` directive as elements within a `<material-input-group>` container
+ *
+ * @usage
+ * <hljs lang="html">
+ * <material-input-group>
+ *   <material-input type="text" ng-model="user.fullName">
+ *   <material-input type="text" ng-model="user.email">
+ * </material-input-group>
+ * </hljs>
+ */
+function materialInputDirective() {
   return {
     restrict: 'E',
+    replace: true,
+    template: '<input>',
     require: ['^?materialInputGroup', '?ngModel'],
     link: function(scope, element, attr, ctrls) {
       var inputGroupCtrl = ctrls[0];

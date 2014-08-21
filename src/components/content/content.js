@@ -12,6 +12,24 @@ angular.module('material.components.content', [
     materialContentDirective
   ]);
 
+/**
+ * @ngdoc directive
+ * @name materialContent
+ * @module material.components.content
+ *
+ * @restrict E
+ *
+ * @description
+ * The `<material-content>` directive is a container element useful for scrollable content
+ *
+ * @usage
+ * <hljs lang="html">
+ *  <material-content class="material-content-padding">
+ *      Lorem ipsum dolor sit amet, ne quod novum mei.
+ *  </material-content>
+ * </hljs>
+ *
+ */
 function materialContentDirective() {
   return {
     restrict: 'E',

@@ -18,13 +18,10 @@ angular.module('material.components.list', [])
  * @name materialList
  * @module material.components.list
  *
- * @private
  * @restrict E
  *
  * @description
  * The `<material-list>` directive is a list container for 1..n `<material-item>` tags.
- * While this directive does not provide any programmatic features, the element
- * participates in the Angular Material **layout** style features.
  *
  * @usage
  * <hljs lang="html">
@@ -57,19 +54,18 @@ function materialListDirective() {
  * @name materialItem
  * @module material.components.list
  *
- * @private
  * @restrict E
  *
  * @description
- * The `<material-item>` directive provides a stylable element that
- * participates in the Angular Material **layout** style features.
+ * The `<material-item>` directive is a container intended for row items in a `<material-list>` container.
  *
  * @usage
  * <hljs lang="html">
- *
- *  <material-item>
- *
- *  </material-item>
+ *  <material-list>
+ *    <material-item>
+ *            Item content in list
+ *    </material-item>
+ *  </material-list>
  * </hljs>
  *
  */
