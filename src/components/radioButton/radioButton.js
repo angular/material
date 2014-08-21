@@ -36,7 +36,7 @@ angular.module('material.components.radioButton', [
  *
  *   <material-radio-button
  *        ng-repeat="d in colorOptions"
- *        ng-value="d.value">
+ *        ng-value="d.value" aria-label="{{ d.label }}">
  *
  *          {{ d.label }}
  *
@@ -47,11 +47,11 @@ angular.module('material.components.radioButton', [
  *
  */
 function materialRadioGroupDirective() {
-  Controller.prototype = createControllerProto();
+  RadioGroupController.prototype = createRadioGroupControllerProto();
 
   return {
     restrict: 'E',
-    controller: Controller,
+    controller: RadioGroupController,
     require: ['materialRadioGroup', '?ngModel'],
     link: link
   };
@@ -61,14 +61,33 @@ function materialRadioGroupDirective() {
       ngModelCtrl = ctrls[1] || {
         $setViewValue: angular.noop
       };
+
+    function keydownListener(ev) {
+
+      if (ev.which === Constant.KEY_CODE.LEFT_ARROW) {
+        ev.preventDefault();
+        rgCtrl.selectPrevious(element);
+      }
+      else if (ev.which === Constant.KEY_CODE.RIGHT_ARROW) {
+        ev.preventDefault();
+        rgCtrl.selectNext(element);
+      }
+    };
+
     rgCtrl.init(ngModelCtrl);
+
+    element.attr({
+      'role': Constant.ARIA.ROLE.RADIO_GROUP,
+      'tabIndex': '0'
+    })
+    .on('keydown', keydownListener);
   }
 
-  function Controller() {
+  function RadioGroupController() {
     this._radioButtonRenderFns = [];
   }
 
-  function createControllerProto() {
+  function createRadioGroupControllerProto() {
     return {
       init: function(ngModelCtrl) {
         this._ngModelCtrl = ngModelCtrl;
@@ -90,13 +109,56 @@ function materialRadioGroupDirective() {
       },
       setViewValue: function(value, eventType) {
         this._ngModelCtrl.$setViewValue(value, eventType);
-        // update the other checkboxes as well
+        // update the other radio buttons as well
         this.render();
       },
       getViewValue: function() {
         return this._ngModelCtrl.$viewValue;
+      },
+      selectNext: function(element) {
+        return selectButton('next', element);
+      },
+      selectPrevious : function(element) {
+        return selectButton('previous', element);
       }
     };
+  }
+  /**
+   * Select the grouping parent's next or previous radio/checkbox button.
+   * NOTE: this uses the iterator.js utility function...
+   */
+  function selectButton( direction,  parent, loop ) {
+    loop = angular.isUndefined(loop) ? true : !!loop;
+
+    var buttons = iterator( findAllButtons(parent), loop );
+
+    if ( buttons.count() ) {
+      var selected = findSelectedButton(parent);
+      var target = !selected                ? buttons.first()    :
+                   (direction =='previous') ? buttons.previous( selected ) : buttons.next( selected );
+
+      if ( target ) {
+        // Activate radioButton's click listener (triggerHandler won't send an actual click event)
+        angular.element(target).triggerHandler('click');
+      }
+    }
+  }
+  /**
+   *  Find all button children for specified element
+   *   NOTE: This guarantees giving us every radio, even grandchildren, and
+   *               us getting them in the proper order.
+   */
+  function findAllButtons(element) {
+    return Array.prototype.slice.call(
+      element[0].querySelectorAll('material-radio-button')
+    );
+  }
+
+  /**
+   * Find the currently selected button element (if any)
+   */
+  function findSelectedButton(element) {
+    return element[0].querySelector('material-radio-button.material-checked');
   }
 }
 
@@ -122,15 +184,16 @@ function materialRadioGroupDirective() {
  *    be set when selected.*
  * @param {string} value The value to which the expression should be set when selected.
  * @param {string=} name Property name of the form under which the control is published.
+ * @param {string} aria-label Input label required for accessibility
  *
  * @usage
  * <hljs lang="html">
  *
- * <material-radio-button value="1">
+ * <material-radio-button value="1" aria-label="Label 1">
  *   Label 1
  * </material-radio-button>
  *
- * <material-radio-button ng-model="color" ng-value="specialValue">
+ * <material-radio-button ng-model="color" ng-value="specialValue" aria-label="Green">
  *   Green
  * </material-radio-button>
  *
@@ -150,7 +213,7 @@ function materialRadioButtonDirective() {
                 '<div class="material-off"></div>' +
                 '<div class="material-on"></div>' +
               '</div>' +
-              '<div ng-transclude class="material-label" tab-index="0"></div>',
+              '<div ng-transclude class="material-label"></div>',
     link: link
   };
 
@@ -158,6 +221,9 @@ function materialRadioButtonDirective() {
     var lastChecked;
 
     rgCtrl.add(render);
+
+    element.attr('role', Constant.ARIA.ROLE.RADIO);
+
     element.on('$destroy', function() {
       rgCtrl.remove(render);
     });
@@ -179,7 +245,7 @@ function materialRadioButtonDirective() {
         return;
       }
       lastChecked = checked;
-      element.attr('aria-checked', checked);
+      element.attr(Constant.ARIA.PROPERTY.CHECKED, checked);
       if (checked) {
         element.addClass(CHECKED_CSS);
       } else {

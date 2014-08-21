@@ -19,6 +19,18 @@ describe('radioButton', function() {
     expect(rbElements.eq(1).hasClass(CHECKED_CSS)).toEqual(true);
   }));
 
+  it('should set aria roles', inject(function($compile, $rootScope) {
+
+    var element = $compile('<material-radio-group ng-model="color">' +
+                            '<material-radio-button value="blue"></material-radio-button>' +
+                            '<material-radio-button value="green"></material-radio-button>' +
+                          '</material-radio-group>')($rootScope);
+
+    var rbGroupElement = element;
+    expect(rbGroupElement.eq(0).attr('role')).toEqual('radiogroup');
+    expect(rbGroupElement.find('material-radio-button').eq(0).attr('role')).toEqual('radio');
+  }));
+
   it('should set aria-check attributes', inject(function($compile, $rootScope) {
     var element = $compile('<material-radio-group ng-model="color">' +
                             '<material-radio-button value="blue"></material-radio-button>' +
@@ -33,6 +45,22 @@ describe('radioButton', function() {
 
     expect(rbElements.eq(0).attr('aria-checked')).toEqual('false');
     expect(rbElements.eq(1).attr('aria-checked')).toEqual('true');
+  }));
+
+  it('should be operable via arrow keys', inject(function($compile, $rootScope) {
+    var element = $compile('<material-radio-group ng-model="color">' +
+                            '<material-radio-button value="blue"></material-radio-button>' +
+                            '<material-radio-button value="green"></material-radio-button>' +
+                          '</material-radio-group>')($rootScope);
+
+    $rootScope.$apply(function(){
+      $rootScope.color = 'blue';
+    });
+
+    var rbGroupElement = element.eq(0);
+    TestUtil.triggerEvent(rbGroupElement, "keydown", {keyCode: Constant.KEY_CODE.RIGHT_ARROW});
+
+    expect($rootScope.color).toEqual('green');
   }));
 
   describe('ng core radio button tests', function() {
