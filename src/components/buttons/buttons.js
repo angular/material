@@ -55,17 +55,17 @@ function MaterialButtonDirective(ngHrefDirectives) {
       var href = attr.ngHref || attr.href;
       var innerElement;
       if (href) {
-        innerElement = angular.element('<a>')
-          .attr('ng-href', href)
-          .attr('rel', attr.rel)
-          .attr('target', attr.target);
+        innerElement = angular.element('<a>');
+        innerElement.attr('ng-href',href);
+        innerElement.attr('rel', attr.rel);
+        innerElement.attr('target', attr.target);
 
       // Otherwise, just add an inner button element (for form submission etc)
       } else {
-        innerElement = angular.element('<button>')
-          .attr('type', attr.type)
-          .attr('disabled', attr.ngDisabled || attr.disabled)
-          .attr('form', attr.form);
+        innerElement = angular.element('<button>');
+        innerElement.attr('type', attr.type);
+        innerElement.attr('disabled', attr.ngDisabled || attr.disabled);
+        innerElement.attr('form', attr.form);
       }
       innerElement.addClass('material-button-inner');
       element.append(innerElement);
