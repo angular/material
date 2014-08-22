@@ -90,18 +90,15 @@ function materialCheckboxDirective(inputDirectives) {
       0: {}
     }, attr, [ngModelCtrl]);
 
-    element.attr({
-      'aria-checked': checked,
-      'role': attr.type,
-      'tabIndex': attr.tabIndex
-    });
+    element.attr(Constants.aria.prop.checked, checked);
+    element.attr('role', attr.type);
+    element.attr('tabIndex', attr.tabIndex);
     element.on('click', listener);
     element.on('keypress', keypressHandler);
     ngModelCtrl.$render = render;
 
     function keypressHandler(ev) {
-      // targets space-bar interactions
-      if(ev.which === 32) {
+      if(ev.which === Constants.keyCode.space) {
         ev.preventDefault();
         listener(ev);
       }
@@ -118,6 +115,7 @@ function materialCheckboxDirective(inputDirectives) {
 
     function render() {
       checked = ngModelCtrl.$viewValue;
+      element.attr(Constants.aria.prop.checked, checked);
       if(checked) {
         element.addClass(CHECKED_CSS);
       } else {
