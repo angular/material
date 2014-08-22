@@ -66,6 +66,7 @@ module.exports = {
 
       //Utilities
       'src/base/utils.js',
+      'src/base/constants.js',
 
       // Ink Components
       'src/components/animate/effects.js',
