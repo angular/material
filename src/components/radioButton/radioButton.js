@@ -63,7 +63,7 @@ function materialRadioGroupDirective() {
       };
 
     element.attr({
-      'role': 'radiogroup',
+      'role': Constants.aria.role.radiogroup,
       'tabIndex': '0'
     })
     .on('keydown', listener);
@@ -106,7 +106,7 @@ function materialRadioGroupDirective() {
     };
   }
   function listener(ev) {
-    if(ev.which === 37 || ev.which === 39) {
+    if(ev.which === Constants.keyCode.left_arrow || ev.which === Constants.keyCode.right_arrow) {
       ev.preventDefault();
 
       // keypress on parent directive needs to control child radio buttons
@@ -174,7 +174,7 @@ function materialRadioButtonDirective() {
 
     rgCtrl.add(render);
 
-    element.attr('role', 'radio');
+    element.attr('role', Constants.aria.role.radio);
 
     element.on('$destroy', function() {
       rgCtrl.remove(render);
@@ -197,7 +197,7 @@ function materialRadioButtonDirective() {
         return;
       }
       lastChecked = checked;
-      element.attr('aria-checked', checked);
+      element.attr(Constants.aria.prop.checked, checked);
       if (checked) {
         element.addClass(CHECKED_CSS);
       } else {
