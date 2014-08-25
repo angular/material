@@ -3,10 +3,6 @@
   "name": "Tabs",
   "js": ["tabs.js", "util/*.js"],
   "demos": {
-    "demo1": {
-      "name": "Testimonials (tabs on bottom):",
-      "files": ["demos/demo1/*"]
-    },
     "demo2": {
       "name": "Static Tabs, external content, noInk:",
       "files": ["demos/demo2/*"]
