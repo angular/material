@@ -21,6 +21,9 @@ material-toolbar.material-medium-tall {
 .layout-label {
   width: 120px;
 }
+.layout-content code.highlight {
+  margin-bottom: 15px;
+}
 
 .menu-item {
   background-color: #fff;
@@ -105,13 +108,8 @@ pre > code.highlight {
   font-weight: 400;
 }
 
-.demo-container {
-  min-height: 1110px;
-  -webkit-transition: 0.2s all linear;
-  transition: 0.2s all linear;
-}
 .demo-container.no-source {
-  min-height: 668px;
+  height: 668px;
 }
 iframe.demo {
   width: 100%;
