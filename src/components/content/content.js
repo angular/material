@@ -33,8 +33,6 @@ angular.module('material.components.content', [
 function materialContentDirective() {
   return {
     restrict: 'E',
-    transclude: true,
-    template: '<div class="material-content" ng-transclude></div>',
     controller: angular.noop,
     link: function($scope, $element, $attr) {
       $scope.$broadcast('$materialContentLoaded', $element);

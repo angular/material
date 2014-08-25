@@ -105,11 +105,13 @@ pre > code.highlight {
   font-weight: 400;
 }
 
-.demo-container.no-source {
-  height: 668px;
-}
 .demo-container {
-  height: auto;
+  min-height: 1110px;
+  -webkit-transition: 0.2s all linear;
+  transition: 0.2s all linear;
+}
+.demo-container.no-source {
+  min-height: 668px;
 }
 iframe.demo {
   width: 100%;
