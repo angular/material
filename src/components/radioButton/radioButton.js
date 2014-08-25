@@ -36,7 +36,7 @@ angular.module('material.components.radioButton', [
  *
  *   <material-radio-button
  *        ng-repeat="d in colorOptions"
- *        ng-value="d.value">
+ *        ng-value="d.value" aria-label="{{ d.label }}">
  *
  *          {{ d.label }}
  *
@@ -61,6 +61,13 @@ function materialRadioGroupDirective() {
       ngModelCtrl = ctrls[1] || {
         $setViewValue: angular.noop
       };
+
+    element.attr({
+      'role': Constants.aria.role.radiogroup,
+      'tabIndex': '0'
+    })
+    .on('keydown', listener);
+
     rgCtrl.init(ngModelCtrl);
   }
 
@@ -98,6 +105,13 @@ function materialRadioGroupDirective() {
       }
     };
   }
+  function listener(ev) {
+    if(ev.which === Constants.keyCode.left_arrow || ev.which === Constants.keyCode.right_arrow) {
+      ev.preventDefault();
+
+      // keypress on parent directive needs to control child radio buttons
+    }
+  }
 }
 
 /**
@@ -122,15 +136,16 @@ function materialRadioGroupDirective() {
  *    be set when selected.*
  * @param {string} value The value to which the expression should be set when selected.
  * @param {string=} name Property name of the form under which the control is published.
+ * @param {string} aria-label Input label required for accessibility
  *
  * @usage
  * <hljs lang="html">
  *
- * <material-radio-button value="1">
+ * <material-radio-button value="1" aria-label="Label 1">
  *   Label 1
  * </material-radio-button>
  *
- * <material-radio-button ng-model="color" ng-value="specialValue">
+ * <material-radio-button ng-model="color" ng-value="specialValue" aria-label="Green">
  *   Green
  * </material-radio-button>
  *
@@ -150,7 +165,7 @@ function materialRadioButtonDirective() {
                 '<div class="material-off"></div>' +
                 '<div class="material-on"></div>' +
               '</div>' +
-              '<div ng-transclude class="material-label" tab-index="0"></div>',
+              '<div ng-transclude class="material-label"></div>',
     link: link
   };
 
@@ -158,6 +173,9 @@ function materialRadioButtonDirective() {
     var lastChecked;
 
     rgCtrl.add(render);
+
+    element.attr('role', Constants.aria.role.radio);
+
     element.on('$destroy', function() {
       rgCtrl.remove(render);
     });
@@ -179,7 +197,7 @@ function materialRadioButtonDirective() {
         return;
       }
       lastChecked = checked;
-      element.attr('aria-checked', checked);
+      element.attr(Constants.aria.prop.checked, checked);
       if (checked) {
         element.addClass(CHECKED_CSS);
       } else {
