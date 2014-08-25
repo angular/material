@@ -1,20 +1,21 @@
-var Constants = {
-  aria : {
-    role : {
-      button : 'button',
-      checkbox : 'checkbox',
-      radio : 'radio',
-      radiogroup : 'radiogroup'
+var Constant = {
+  ARIA : {
+    ROLE : {
+      BUTTON : 'button',
+      CHECKBOX : 'checkbox',
+      RADIO : 'radio',
+      RADIO_GROUP : 'radiogroup'
     },
-    prop : {
-      checked : 'aria-checked',
-      hidden : 'aria-hidden',
-      expanded : 'aria-expanded'
-    }
+    PROPERTY : {
+      CHECKED : 'aria-checked',
+      HIDDEN : 'aria-hidden',
+      EXPANDED : 'aria-expanded'
+    },
+    STATE: {}
   },
-  keyCode : {
-    space: 32,
-    left_arrow : 37,
-    right_arrow : 39
+  KEY_CODE : {
+    SPACE: 32,
+    LEFT_ARROW : 37,
+    RIGHT_ARROW : 39
   }
 };
