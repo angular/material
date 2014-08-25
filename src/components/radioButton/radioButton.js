@@ -63,11 +63,11 @@ function materialRadioGroupDirective() {
       };
 
     var keydownListener = function(ev) {
-      if (ev.which === Constants.keyCode.left_arrow) {
+      if (ev.which === Constant.KEY_CODE.LEFT_ARROW) {
         ev.preventDefault();
         rgCtrl.selectPrevious(element);
       }
-      else if (ev.which === Constants.keyCode.right_arrow) {
+      else if (ev.which === Constant.KEY_CODE.RIGHT_ARROW) {
         ev.preventDefault();
         rgCtrl.selectNext(element);
       }
@@ -76,7 +76,7 @@ function materialRadioGroupDirective() {
     rgCtrl.init(ngModelCtrl);
 
     element.attr({
-      'role': Constants.aria.role.radiogroup,
+      'role': Constant.ARIA.ROLE.RADIO_GROUP,
       'tabIndex': '0'
     })
     .on('keydown', keydownListener);
@@ -221,7 +221,7 @@ function materialRadioButtonDirective() {
 
     rgCtrl.add(render);
 
-    element.attr('role', Constants.aria.role.radio);
+    element.attr('role', Constant.ARIA.ROLE.RADIO);
 
     element.on('$destroy', function() {
       rgCtrl.remove(render);
@@ -244,7 +244,7 @@ function materialRadioButtonDirective() {
         return;
       }
       lastChecked = checked;
-      element.attr(Constants.aria.prop.checked, checked);
+      element.attr(Constant.ARIA.PROPERTY.CHECKED, checked);
       if (checked) {
         element.addClass(CHECKED_CSS);
       } else {
