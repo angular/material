@@ -62,17 +62,24 @@ function materialRadioGroupDirective() {
         $setViewValue: angular.noop
       };
 
+    var keydownListener = function(ev) {
+      if (ev.which === Constants.keyCode.left_arrow) {
+        ev.preventDefault();
+        rgCtrl.selectPrevious(element);
+      }
+      else if (ev.which === Constants.keyCode.right_arrow) {
+        ev.preventDefault();
+        rgCtrl.selectNext(element);
+      }
+    };
+
+    rgCtrl.init(ngModelCtrl);
+
     element.attr({
       'role': Constants.aria.role.radiogroup,
       'tabIndex': '0'
     })
-    .on('keydown', listener);
-
-    rgCtrl.init(ngModelCtrl);
-  }
-
-  function Controller() {
-    this._radioButtonRenderFns = [];
+    .on('keydown', keydownListener);
   }
 
   function createControllerProto() {
@@ -97,20 +104,56 @@ function materialRadioGroupDirective() {
       },
       setViewValue: function(value, eventType) {
         this._ngModelCtrl.$setViewValue(value, eventType);
-        // update the other checkboxes as well
+        // update the other radio buttons as well
         this.render();
       },
       getViewValue: function() {
         return this._ngModelCtrl.$viewValue;
+      },
+      selectNext: function(element) {
+        return selectButton('next', element);
+      },
+      selectPrevious : function(element) {
+        return selectButton('previous', element);
       }
     };
   }
-  function listener(ev) {
-    if(ev.which === Constants.keyCode.left_arrow || ev.which === Constants.keyCode.right_arrow) {
-      ev.preventDefault();
+  /**
+   * Select the grouping parent's next or previous radio/checkbox button.
+   * NOTE: this uses the iterator.js utility function...
+   */
+  function selectButton( direction,  parent, loop ) {
+    loop = angular.isUndefined(loop) ? true : !!loop;
 
-      // keypress on parent directive needs to control child radio buttons
+    var buttons = iterator( findAllButtons(parent), loop );
+
+    if ( buttons.count() ) {
+      var selected = findSelectedButton(parent);
+      var target = !selected                ? buttons.first()    :
+                   (direction =='previous') ? buttons.previous( selected ) : buttons.next( selected );
+
+      if ( target ) {
+        // Activate radioButton's click listener (triggerHandler won't send an actual click event)
+        angular.element(target).triggerHandler('click');
+      }
     }
+  }
+  /**
+   *  Find all button children for specified element
+   *   NOTE: This guarantees giving us every radio, even grandchildren, and
+   *               us getting them in the proper order.
+   */
+  function findAllButtons(element) {
+    return Array.prototype.slice.call(
+      element[0].querySelectorAll('material-radio-button')
+    );
+  }
+
+  /**
+   * Find the currently selected button element (if any)
+   */
+  function findSelectedButton(element) {
+    return element[0].querySelector('material-radio-button.material-checked');
   }
 }
 
