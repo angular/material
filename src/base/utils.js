@@ -32,6 +32,6 @@ var Util = {
   elementIsSibling: function elementIsSibling(element, otherElement) {
     return element.parent().length && 
       (element.parent()[0] === otherElement.parent()[0]);
-  },
+  }
 };
 

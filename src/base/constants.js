@@ -9,7 +9,8 @@ var Constant = {
     PROPERTY : {
       CHECKED : 'aria-checked',
       HIDDEN : 'aria-hidden',
-      EXPANDED : 'aria-expanded'
+      EXPANDED : 'aria-expanded',
+      LABEL: 'aria-label'
     },
     STATE: {}
   },

@@ -4,10 +4,12 @@
  * @description Checkbox module!
  */
 angular.module('material.components.checkbox', [
-  'material.animations'
+  'material.animations',
+  'material.services.expectAria'
 ])
   .directive('materialCheckbox', [ 
     'inputDirective',
+    '$expectAria',
     materialCheckboxDirective 
   ]);
 
@@ -46,7 +48,7 @@ angular.module('material.components.checkbox', [
  * </hljs>
  *
  */
-function materialCheckboxDirective(inputDirectives) {
+function materialCheckboxDirective(inputDirectives, $expectAria) {
   var inputDirective = inputDirectives[0];
 
   var CHECKED_CSS = 'material-checked';
@@ -90,12 +92,15 @@ function materialCheckboxDirective(inputDirectives) {
       0: {}
     }, attr, [ngModelCtrl]);
 
+    // We can't chain element.attr here because of a bug with jqLite
     element.attr(Constant.ARIA.PROPERTY.CHECKED, checked);
     element.attr('role', attr.type);
     element.attr('tabIndex', attr.tabIndex);
     element.on('click', listener);
     element.on('keypress', keypressHandler);
     ngModelCtrl.$render = render;
+
+    $expectAria(element, Constant.ARIA.PROPERTY.LABEL, element.text());
 
     function keypressHandler(ev) {
       if(ev.which === Constant.KEY_CODE.SPACE) {

@@ -5,12 +5,14 @@
  * @description radioButton module!
  */
 angular.module('material.components.radioButton', [
-  'material.animations'
+  'material.animations',
+  'material.services.expectAria'
 ])
   .directive('materialRadioGroup', [
     materialRadioGroupDirective
   ])
   .directive('materialRadioButton', [
+    '$expectAria',
     materialRadioButtonDirective
   ]);
 
@@ -72,7 +74,7 @@ function materialRadioGroupDirective() {
         ev.preventDefault();
         rgCtrl.selectNext(element);
       }
-    };
+    }
 
     rgCtrl.init(ngModelCtrl);
 
@@ -184,7 +186,7 @@ function materialRadioGroupDirective() {
  *    be set when selected.*
  * @param {string} value The value to which the expression should be set when selected.
  * @param {string=} name Property name of the form under which the control is published.
- * @param {string} aria-label Input label required for accessibility
+ * @param {string=} ariaLabel Publish the button label used by screen-readers for accessibility.
  *
  * @usage
  * <hljs lang="html">
@@ -200,7 +202,7 @@ function materialRadioGroupDirective() {
  * </hljs>
  *
  */
-function materialRadioButtonDirective() {
+function materialRadioButtonDirective($expectAria) {
 
   var CHECKED_CSS = 'material-checked';
 
@@ -221,15 +223,16 @@ function materialRadioButtonDirective() {
     var lastChecked;
 
     rgCtrl.add(render);
-
-    element.attr('role', Constant.ARIA.ROLE.RADIO);
-
-    element.on('$destroy', function() {
-      rgCtrl.remove(render);
-    });
-
-    element.on('click', listener);
     attr.$observe('value', render);
+
+    element
+      .on('click', listener)
+      .on('$destroy', function() {
+        rgCtrl.remove(render);
+      })
+      .attr('role', Constant.ARIA.ROLE.RADIO);
+
+    $expectAria(element, Constant.ARIA.PROPERTY.LABEL, element.text());
 
     function listener(ev) {
       if ( Util.isDisabled(element) ) return;
