@@ -39,7 +39,8 @@ $toast-height: $baseline-grid * 3;
 $toast-margin: $baseline-grid * 1;
 
 
-// Button variables
+// Button
+//--------------------------------------------
 $button-border-radius: 3px;
 $button-disabled-background: rgb(234, 234, 234);
 $button-disabled-color: rgb(168, 168, 168);
@@ -59,7 +60,7 @@ $button-fab-width: 56px;
 $button-fab-height: 56px;
 $button-fab-border-radius: 28px;
 $button-fab-padding: 16px;
-$button-fab-zindex: 2;
+$button-fab-toast-offset: $toast-height + $toast-margin;
 
 // App bar variables
 $app-bar-height: 64px;
@@ -175,3 +176,4 @@ $z-index-dialog: 10;
 $z-index-toast: 9;
 $z-index-sidenav: 8;
 $z-index-backdrop: 7;
+$z-index-fab: 2;
