@@ -47,11 +47,11 @@ angular.module('material.components.radioButton', [
  *
  */
 function materialRadioGroupDirective() {
-  Controller.prototype = createControllerProto();
+  RadioGroupController.prototype = createRadioGroupControllerProto();
 
   return {
     restrict: 'E',
-    controller: Controller,
+    controller: RadioGroupController,
     require: ['materialRadioGroup', '?ngModel'],
     link: link
   };
@@ -83,11 +83,11 @@ function materialRadioGroupDirective() {
     .on('keydown', keydownListener);
   }
 
-  function Controller() {
+  function RadioGroupController() {
     this._radioButtonRenderFns = [];
   }
 
-  function createControllerProto() {
+  function createRadioGroupControllerProto() {
     return {
       init: function(ngModelCtrl) {
         this._ngModelCtrl = ngModelCtrl;
