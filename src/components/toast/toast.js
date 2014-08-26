@@ -84,6 +84,19 @@ function QpToastDirective() {
  */
 function QpToastService($timeout, $rootScope, $materialCompiler, $rootElement, $animate) {
   var recentToast;
+  function toastOpenClass(position) {
+    return 'material-toast-open-' + 
+      (position.indexOf('bottom') > -1 ? 'bottom' : 'top');
+  }
+
+  // If the $rootElement is the document (<html> element), be sure to append it to the
+  // body instead.
+  var toastParent = $rootElement.find('body');
+  if ( !toastParent.length ) {
+    toastParent = $rootElement;
+  }
+
+  var appendTo = angular.element($rootElement[0].querySelector('body') || $rootElement);
 
   return showToast;
 
@@ -110,10 +123,13 @@ function QpToastService($timeout, $rootScope, $materialCompiler, $rootElement, $
       
       var scope = $rootScope.$new();
       var element = compileData.link(scope);
+
+      var toastParentClass = toastOpenClass(options.position);
       element.addClass(options.position);
+      toastParent.addClass(toastParentClass);
 
       var delayTimeout;
-      $animate.enter(element, $rootElement, null, function() {
+      $animate.enter(element, toastParent, null, function() {
         if (options.duration) {
           delayTimeout = $timeout(destroy, options.duration);
         }
@@ -122,6 +138,7 @@ function QpToastService($timeout, $rootScope, $materialCompiler, $rootElement, $
       return destroy;
 
       function destroy() {
+        toastParent.removeClass(toastParentClass);
         $timeout.cancel(delayTimeout);
         $animate.leave(element, function() {
           scope.$destroy();

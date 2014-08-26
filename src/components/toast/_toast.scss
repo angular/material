@@ -7,10 +7,9 @@ material-toast {
   background: #323232;
   color: #f1f1f1;
   min-height: 48px;
-  min-width: 288px;
   padding-left: 24px;
   padding-right: 24px;
-  height: 24px;
+  height: $toast-height;
 
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
   border-radius: 2px;
@@ -32,20 +31,45 @@ material-toast {
     border-radius: 24px;
   }
 
-  &.bottom {
-    bottom: 12px;
-  }
-  &.top {
-    top: 12px;
-  }
-  &.left {
-    left: 12px;
-  }
-  &.right {
-    right: 12px;
-  }
+  opacity: 1;
+  @include transform-translate3d(0,0,0);
+  @include transition(all 0.2s linear);
 
-  &.fit {
+  &.ng-enter {
+    &.bottom {
+      @include transform-translate3d(0,100%,0);
+    }
+    &.top {
+      @include transform-translate3d(0,-100%,0);
+    }
+    opacity: 0;
+    &.ng-enter-active {
+      @include transform-translate3d(0,0,0);
+      opacity: 1;
+    }
+  }
+  &.ng-leave.ng-leave-active {
+    opacity: 0;
+    &.bottom {
+      @include transform-translate3d(0, 100%, 0);
+    }
+    &.top {
+      @include transform-translate3d(0, -100%, 0);
+    }
+  }
+}
+
+.toast-action {
+  line-height: 19px;
+  color: #eeff41;
+  padding-left: 24px;
+  cursor: pointer;
+  text-transform: uppercase;
+  float: right;
+}
+
+@media (max-width: $layout-breakpoint-sm) {
+  material-toast {
     left: 0;
     right: 0;
     width: 100%;
@@ -59,40 +83,22 @@ material-toast {
       top: 0;
     }
   }
-
-  opacity: 1;
-  transform: translate(0, 0);
-  -webkit-transform: translate(0, 0);
-  transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
-  -webkit-transition: -webkit-transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
-
-  &.ng-enter {
-    // Take slightly longer to enter
-    -webkit-transition-duration: 0.35s;
-    transition-duration: 0.35s;
-    opacity: 0;
-    &.ng-enter-active {
-      opacity: 1;
+}
+@media (min-width: $layout-breakpoint-sm) {
+  material-toast {
+    min-width: 288px;
+    &.left {
+      left: $toast-margin;
     }
-  }
-  &.ng-leave.ng-leave-active {
-    opacity: 0;
+    &.right {
+      right: $toast-margin;
+    }
     &.bottom {
-      -webkit-transform: translate(0, 100%);
-      transform: translate(0, 100%);
+      bottom: $toast-margin;
     }
     &.top {
-      -webkit-transform: translate(0, -100%);
-      transform: translate(0, -100%);
+      top: $toast-margin;
     }
   }
 }
 
-.toast-action {
-  line-height: 19px;
-  color: #eeff41;
-  padding-left: 24px;
-  cursor: pointer;
-  text-transform: uppercase;
-  float: right;
-}
