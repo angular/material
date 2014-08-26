@@ -64,7 +64,8 @@ function MaterialButtonDirective(ngHrefDirectives) {
       } else {
         innerElement = angular.element('<button>');
         innerElement.attr('type', attr.type);
-        innerElement.attr('disabled', attr.ngDisabled || attr.disabled);
+        innerElement.attr('ng-disabled', attr.ngDisabled);
+        innerElement.attr('disabled', attr.disabled);
         innerElement.attr('form', attr.form);
       }
       innerElement.addClass('material-button-inner');
