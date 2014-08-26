@@ -4,10 +4,7 @@ material-checkbox {
   margin: 15px;
   white-space: nowrap;
   cursor: pointer;
-
-  input {
-    display: none;
-  }
+  outline: none;
 
   .material-container {
     position: relative;
@@ -15,7 +12,6 @@ material-checkbox {
     display: inline-block;
     width: $checkbox-width;
     height: $checkbox-height;
-    cursor: pointer;
 
     material-ripple {
       position: absolute;
@@ -48,7 +44,7 @@ material-checkbox {
     left: 0;
     width: $checkbox-width;
     height: $checkbox-height;
-    border: 2px solid #6D6D6D;
+    border: 2px solid $input-border-color;
     border-radius: 2px;
   }
 
@@ -56,6 +52,23 @@ material-checkbox {
   &.material-checked .material-icon {
     border-color: #4CAF50;
     background: #4CAF50;
+  }
+
+  // disabled
+  &[disabled] {
+    cursor: no-drop;
+
+    .material-icon {
+      border-color: $input-disabled-border-color;
+    }
+    &.material-checked .material-icon {
+      background: $input-disabled-border-color;
+    }
+  }
+
+  // focus
+  &:focus .material-label {
+    border-color: black;
   }
 
   &.material-checked .material-icon:after {
@@ -72,6 +85,7 @@ material-checkbox {
   }
 
   .material-label {
+    border: 1px dotted transparent;
     position: relative;
     display: inline-block;
     margin-left: 10px;
@@ -79,5 +93,4 @@ material-checkbox {
     white-space: normal;
     pointer-events: none;
   }
-
 }
