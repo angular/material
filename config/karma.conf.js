@@ -4,10 +4,11 @@ module.exports = {
   basePath: __dirname + '/..',
   frameworks: ['jasmine'],
   files: [
+    // Include jQuery just for its dom helpers for testing, eg el.trigger()
+    'bower_components/jquery/jquery.js',
     'bower_components/angular/angular.js',
     'bower_components/angular-animate/angular-animate.js',
     'bower_components/angular-mocks/angular-mocks.js',
-    'config/test-util.js'
   ]
     .concat(buildConfig.paths.js)
     .concat(buildConfig.paths.test),
