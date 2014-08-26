@@ -7,8 +7,7 @@ angular.module('app', ['ngMaterial'])
     bottom: true,
     top: false,
     left: true,
-    right: false,
-    fit: false
+    right: false
   };
 
   $scope.getToastPosition = function() {
