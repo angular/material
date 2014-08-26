@@ -7,7 +7,7 @@ Our goal is to deliver a lean, lightweight set of AngularJS-native UI elements t
 
 This project is still in early preview. It is a complementary effort to the [Polymer](http://www.polymer-project.org/) project's [paper elements collection](http://www.polymer-project.org/docs/elements/paper-elements.html).
 
-> Please note that using Angular Material requires the use **Angular 1.3.x** or higher.
+> Please note that using Angular Material requires the use of **Angular 1.3.x** or higher.
 
 ## Demo Site
 
