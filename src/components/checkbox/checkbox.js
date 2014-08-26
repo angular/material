@@ -29,7 +29,7 @@ angular.module('material.components.checkbox', [
  * @param {string=} ngChange Angular expression to be executed when input changes due to user interaction with the input element.
  * @param {boolean=} noink Use of attribute indicates use of ripple ink effects
  * @param {boolean=} disabled Use of attribute indicates the tab is disabled: no ink effects and not selectable
- * @param {string} aria-label Input label required for accessibility
+ * @param {string=} ariaLabel Publish the button label used by screen-readers for accessibility. Defaults to the checkbox's text.
  *
  * @usage
  * <hljs lang="html">
