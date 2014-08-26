@@ -29,7 +29,7 @@ angular.module('material.decorators', [])
         if (!alreadyQueued) {
           alreadyQueued = true;
           $$rAF(function() {
-            invokeApply ? 
+            invokeApply ?
               $rootScope.$apply(function() {
                 queueCb.apply(context, queueArgs);
               }) :
