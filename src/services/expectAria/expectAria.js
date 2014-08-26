@@ -11,7 +11,6 @@ function ExpectAriaService($log) {
 
   return function expect(element, attrName, defaultValue) {
 
-    var template = messageTemplate;
     var node = element[0];
     if (!node.hasAttribute(attrName)) {
       var hasDefault = angular.isDefined(defaultValue);
@@ -22,7 +21,7 @@ function ExpectAriaService($log) {
                   attrName, getTagString(node), attrName, defaultValue);
         element.attr(attrName, defaultValue);
       } else {
-        $log.warn(defaultValueTemplate, attrName, getTagString(node));
+        $log.warn(messageTemplate, attrName, getTagString(node));
       }
     }
   };
