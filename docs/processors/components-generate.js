@@ -183,16 +183,10 @@ module.exports = {
           }
 
           var repository = config.get('buildConfig').repository;
-          doc.githubUrl = path.join(
-            repository,
-            'tree/master',
-            path.relative(config.basePath, doc.file)
-          );
-          doc.githubEditUrl = path.join(
-            repository,
-            'edit/master',
-            path.relative(config.basePath, doc.file)
-          ) + '#L' + doc.startingLine;
+          doc.githubUrl = repository + '/tree/master/' +
+            path.relative(config.basePath, doc.file);
+          doc.githubEditUrl = repository + '/edit/master/' + 
+            path.relative(config.basePath, doc.file);
 
           doc.url = path.join(component.url, doc.docType, doc.name);
           doc.outputPath = path.join(

@@ -110,7 +110,7 @@ module.exports = {
   },
 
   repository: pkg.repository.url
-    .replace(/^git:/,'https:')
+    .replace(/^git/,'https')
     .replace(/(\.git)?\/?$/,'')
   
 };
