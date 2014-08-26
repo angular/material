@@ -54,8 +54,8 @@ function materialInputGroupDirective() {
  * @usage
  * <hljs lang="html">
  * <material-input-group>
- *   <material-input type="text" ng-model="user.fullName">
- *   <material-input type="text" ng-model="user.email">
+ *   <material-input type="text" ng-model="user.fullName"></material-input>
+ *   <material-input type="text" ng-model="user.email"></material-input>
  * </material-input-group>
  * </hljs>
  */
