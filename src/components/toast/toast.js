@@ -86,7 +86,7 @@ function QpToastService($timeout, $rootScope, $materialCompiler, $rootElement, $
   var recentToast;
   function toastOpenClass(position) {
     return 'material-toast-open-' + 
-      (position.indexOf('bottom') > -1 ? 'bottom' : 'top');
+      (position.indexOf('top') > -1 ? 'top' : 'bottom');
   }
 
   // If the $rootElement is the document (<html> element), be sure to append it to the
