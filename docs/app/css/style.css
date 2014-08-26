@@ -146,17 +146,15 @@ material-toolbar.demo-toolbar,
 material-toolbar.demo-toolbar material-tab-label {
   color: #99E4EE
 }
-material-toolbar.demo-toolbar material-tab-label.active {
-  color: white;
+material-toolbar.demo-toolbar material-button:hover, 
+material-toolbar.demo-toolbar material-button.active {
+  background: rgba(0,0,0,0.1);
 }
 
 material-toolbar.demo-toolbar material-button {
-  -webkit-transition: all 0.35s linear;
-  -moz-transition: all 0.35s linear;
-  transition: all 0.35s linear;
-}
-material-toolbar.demo-toolbar material-button.active {
-  background: rgba(0,0,0,0.2);
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  transition: all 0.3s linear;
 }
 
 .demo-source-container {

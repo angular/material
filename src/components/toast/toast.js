@@ -96,8 +96,6 @@ function QpToastService($timeout, $rootScope, $materialCompiler, $rootElement, $
     toastParent = $rootElement;
   }
 
-  var appendTo = angular.element($rootElement[0].querySelector('body') || $rootElement);
-
   return showToast;
 
   /**
