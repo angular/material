@@ -63,6 +63,8 @@ function materialRadioGroupDirective() {
       };
 
     var keydownListener = function(ev) {
+      // console.log('which:'+ev.which);
+
       if (ev.which === Constant.KEY_CODE.LEFT_ARROW) {
         ev.preventDefault();
         rgCtrl.selectPrevious(element);

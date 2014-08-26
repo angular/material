@@ -47,6 +47,18 @@ describe('radioButton', function() {
     expect(rbElements.eq(1).attr('aria-checked')).toEqual('true');
   }));
 
+  it('should be operable via arrow keys', inject(function($compile, $rootScope) {
+    var element = $compile('<material-radio-group ng-model="color">' +
+                            '<material-radio-button value="blue"></material-radio-button>' +
+                            '<material-radio-button value="green"></material-radio-button>' +
+                          '</material-radio-group>')($rootScope);
+
+    var rbGroupElement = element.eq(0);
+    // browserTrigger(rbGroupElement, 'keydown', { which: Constant.KEY_CODE.RIGHT_ARROW });
+
+    // expect($rootScope.color).toEqual('green');
+  }));
+
   describe('ng core radio button tests', function() {
 
     it('should noop with no model', inject(function($compile, $rootScope) {
