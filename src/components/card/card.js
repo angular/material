@@ -11,6 +11,8 @@ angular.module('material.components.card', [
     materialCardDirective 
   ]);
 
+
+
 /**
  * @ngdoc directive
  * @name materialCard
@@ -20,6 +22,9 @@ angular.module('material.components.card', [
  *
  * @description
  * The `<material-card>` directive is a container element used within `<material-content>` containers.
+ *
+ * Cards have constant width and variable heights; where the maximum height is limited to what can
+ * fit within a single view on a platform, but it can temporarily expand as needed
  *
  * @usage
  * <hljs lang="html">
