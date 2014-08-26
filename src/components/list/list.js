@@ -27,7 +27,9 @@ angular.module('material.components.list', [])
  * <hljs lang="html">
  * <material-list>
  *  <material-item ng-repeat="item in todos">
- *
+ *    <div class="material-tile-left">
+ *      <img ng-src="{{item.face}}" class="face" alt="{{item.who}}">
+ *    </div>
  *    <div class="material-tile-content">
  *      <h2>{{item.what}}</h2>
  *      <h3>{{item.who}}</h3>
