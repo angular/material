@@ -73,5 +73,19 @@ describe('$materialToast service', function() {
       expect($rootElement[0].querySelector('material-toast.two')).toBeFalsy();
       expect($rootElement[0].querySelector('material-toast.three')).toBeTruthy();
     }));
+
+    it('should add class to toastParent', inject(function($rootElement) {
+      setup({
+        template: '<material-toast>'
+      });
+      expect($rootElement.hasClass('material-toast-open-bottom')).toBe(true);
+
+      setup({
+        template: '<material-toast>',
+        position: 'top'
+      });
+      expect($rootElement.hasClass('material-toast-open-top')).toBe(true);
+    }));
+
   });
 });
