@@ -77,7 +77,7 @@ function materialRadioGroupDirective() {
     rgCtrl.init(ngModelCtrl);
 
     element.attr({
-      'role': Constants.aria.role.radiogroup,
+      'role': Constant.ARIA.ROLE.RADIO_GROUP,
       'tabIndex': '0'
     })
     .on('keydown', keydownListener);
@@ -222,7 +222,7 @@ function materialRadioButtonDirective() {
 
     rgCtrl.add(render);
 
-    element.attr('role', Constants.aria.role.radio);
+    element.attr('role', Constant.ARIA.ROLE.RADIO);
 
     element.on('$destroy', function() {
       rgCtrl.remove(render);
@@ -245,7 +245,7 @@ function materialRadioButtonDirective() {
         return;
       }
       lastChecked = checked;
-      element.attr(Constants.aria.prop.checked, checked);
+      element.attr(Constant.ARIA.PROPERTY.CHECKED, checked);
       if (checked) {
         element.addClass(CHECKED_CSS);
       } else {
