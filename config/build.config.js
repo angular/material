@@ -69,9 +69,8 @@ module.exports = {
 
       // Ink Components
       'src/components/animate/effects.js',
-      'src/components/animate/canvas/rippler.js',
       'src/components/animate/noEffect.js',
-      'src/components/animate/inkRipple.js',
+      'src/components/animate/inkCssRipple.js',
 
       // Components
       'src/components/buttons/buttons.js',

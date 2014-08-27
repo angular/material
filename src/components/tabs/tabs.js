@@ -236,7 +236,7 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
                 display : width > 0 ? 'block' : 'none',
                 width: width + 'px'
               };
-              styles[$materialEffects.TRANSFORM_PROPERTY] = 'translate3d(' + left + 'px,0,0)';
+              styles[$materialEffects.TRANSFORM] = 'translate3d(' + left + 'px,0,0)';
 
               inkBar.toggleClass('animate', skipAnimation !== true).css(styles);
             }
@@ -263,7 +263,7 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
           return refreshPagination;
 
           function setHeaderPos(x) {
-            header.css($materialEffects.TRANSFORM_PROPERTY, 'translate3d('+x+'px,0,0)');
+            header.css($materialEffects.TRANSFORM, 'translate3d('+x+'px,0,0)');
             scope.headerPos = x;
           }
 
@@ -613,8 +613,7 @@ function TabDirective( $attrBind ) {
     scope: true,
     link: linkTab,
     template:
-      '<material-ripple initial-opacity="0.9" opacity-decay-velocity="0.89"> </material-ripple> ' +
-      '<material-tab-label ' +
+      '<material-tab-label ink-ripple="button" ' +
         'ng-class="{ disabled : disabled, active : active }"  >' +
       '</material-tab-label>'
 
