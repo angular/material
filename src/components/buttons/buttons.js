@@ -70,7 +70,10 @@ function MaterialButtonDirective(ngHrefDirectives, $expectAria) {
         innerElement.attr('disabled', attr.ngDisabled || attr.disabled);
         innerElement.attr('form', attr.form);
       }
-      innerElement.addClass('material-button-inner');
+      innerElement
+        .addClass('material-button-inner')
+        .append(element.contents());
+
       element.append(innerElement);
 
       return function postLink(scope, element, attr, ctrl, transclude) {

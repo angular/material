@@ -54,8 +54,9 @@ material-button {
 
   // reserved for inner buttons and inner hrefs
   .material-button-inner {
+    background: transparent;
+    border: none;
     position: absolute;
-    opacity: 0;
     left: 0;
     top: 0;
     margin: 0;
@@ -135,17 +136,6 @@ material-button {
   }
 }
 
-
-a.material-button {
-  padding: $button-padding;
-  line-height: $button-line-height;
-  text-decoration: none;
-
-  &:hover,
-  &:focus {
-    text-decoration: none;
-  }
-}
 
 .material-button-group {
   @include flex-display();
