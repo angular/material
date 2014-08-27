@@ -27,7 +27,6 @@ var uncss = require('gulp-uncss');
 
 var buildConfig = require('./config/build.config');
 var karmaConf = require('./config/karma.conf.js');
-var karmaSauceConf = require('./config/karma-sauce.conf.js');
 
 var IS_RELEASE_BUILD = !!argv.release;
 if (IS_RELEASE_BUILD) {
@@ -138,7 +137,7 @@ gulp.task('karma-watch', function(done) {
 });
 
 gulp.task('karma-sauce', function(done) {
-  karma.start(karmaSauceConf, done);
+  karma.start(require('./config/karma-sauce.conf.js'), done);
 });
 
 /**
