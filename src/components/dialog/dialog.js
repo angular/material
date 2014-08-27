@@ -24,11 +24,10 @@ function MaterialDialogDirective($$rAF) {
   return {
     restrict: 'E',
     link: function(scope, element, attr) {
-      var node = element[0];
       $$rAF(function() {
-        var content = node.querySelector('.dialog-content');
+        var content = element[0].querySelector('.dialog-content');
         if (content && content.scrollHeight > content.clientHeight) {
-          node.classList.add('dialog-content-overflow');
+          element.addClass('dialog-content-overflow');
         }
       });
     }
@@ -101,12 +100,16 @@ function MaterialDialogDirective($$rAF) {
  */
 function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootScope, $materialEffects, $animate) {
   var recentDialog;
+  var dialogParent = $rootElement.find('body');
+  if ( !dialogParent.length ) {
+    dialogParent = $rootElement;
+  }
 
   return showDialog;
 
   function showDialog(options) {
     options = angular.extend({
-      appendTo: $rootElement,
+      appendTo: dialogParent,
       hasBackdrop: true, // should have an opaque backdrop
       clickOutsideToClose: true, // should have a clickable backdrop to close
       escapeToClose: true,
@@ -144,7 +147,6 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
         if (options.escapeToClose) {
           $rootElement.on('keyup', onRootElementKeyup);
         }
-
         if (options.clickOutsideToClose) {
           element.on('click', dialogClickOutside);
         }
@@ -165,7 +167,7 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
         if (options.clickOutsideToClose) {
           element.off('click', dialogClickOutside);
         }
-        $materialEffects.popOut(element, $rootElement, function() {
+        $materialEffects.popOut(element, options.appendTo, function() {
           element.remove();
           scope.$destroy();
           scope = null;
@@ -173,7 +175,7 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
         });
       }
       function onRootElementKeyup(e) {
-        if (e.keyCode == 27) {
+        if (e.keyCode == Constant.KEY_CODE.ESCAPE) {
           $timeout(destroyDialog);
         }
       }
