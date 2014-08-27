@@ -192,8 +192,8 @@ material-toolbar.demo-toolbar material-button {
 }
 .api-options-bar.with-icon material-icon {
   position: absolute;
-    top: 1px;
-    left: 0px;
+  top: 1px;
+  left: 0px;
 }
 .api-options-bar.with-icon material-button span {
   margin-left: 22px;

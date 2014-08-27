@@ -56,13 +56,8 @@ material-button {
   .material-button-inner {
     background: transparent;
     border: none;
-    position: absolute;
-    left: 0;
-    top: 0;
     margin: 0;
     padding: 0;
-    height: 100%;
-    width: 100%;
   }
 
   &[disabled] {
