@@ -2,6 +2,7 @@
 
 ARG_DEFS=(
   "--version=(.*)"
+  "[--optional=([A-Za-z])]"
 )
 
 function run {
