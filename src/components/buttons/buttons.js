@@ -7,9 +7,11 @@
  */
 angular.module('material.components.button', [
   'material.animations',
+  'material.services.expectAria'
 ])
   .directive('materialButton', [
     'ngHrefDirective',
+    '$expectAria',
     MaterialButtonDirective
   ]);
 
@@ -28,6 +30,7 @@ angular.module('material.components.button', [
  * @param {string=} type Optional attribute to specific button types (useful for forms); such as 'submit', etc.
  * @param {string=} ng-ref Optional attribute to support both ARIA and link navigation
  * @param {string=} href Optional attribute to support both ARIA and link navigation
+ * @param {string=} ariaLabel Publish the button label used by screen-readers for accessibility. Defaults to the radio button's text.
  *
  * @usage
  * <hljs lang="html">
@@ -42,7 +45,7 @@ angular.module('material.components.button', [
  *  </material-button>
  * </hljs>
  */
-function MaterialButtonDirective(ngHrefDirectives) {
+function MaterialButtonDirective(ngHrefDirectives, $expectAria) {
   var ngHrefDirective = ngHrefDirectives[0];
   return {
     restrict: 'E',
@@ -76,6 +79,8 @@ function MaterialButtonDirective(ngHrefDirectives) {
         transclude(scope, function(clone) {
           element.append(clone);
         });
+
+        $expectAria(element, 'aria-label', element.text());
       };
     }
   };
