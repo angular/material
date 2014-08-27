@@ -41,8 +41,13 @@
       @include flex-order(2);
       @include box-sizing(border-box);
       @include flex-display();
+      @include flex-align-items(center);
       @include flex-justify-content(flex-end);
       padding: 8px 16px;
+      min-height: $baseline-grid * 4;
+    }
+    &.dialog-content-overflow .dialog-actions {
+      border-top: 1px solid #eee;
     }
   }
 }

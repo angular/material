@@ -7,6 +7,7 @@ angular.module('material.components.dialog', [
   'material.services.compiler'
 ])
   .directive('materialDialog', [
+    '$$rAF',
     MaterialDialogDirective
   ])
   .factory('$materialDialog', [
@@ -19,9 +20,18 @@ angular.module('material.components.dialog', [
     MaterialDialogService
   ]);
 
-function MaterialDialogDirective() {
+function MaterialDialogDirective($$rAF) {
   return {
-    restrict: 'E'
+    restrict: 'E',
+    link: function(scope, element, attr) {
+      var node = element[0];
+      $$rAF(function() {
+        var content = node.querySelector('.dialog-content');
+        if (content && content.scrollHeight > content.clientHeight) {
+          node.classList.add('dialog-content-overflow');
+        }
+      });
+    }
   };
 }
 
