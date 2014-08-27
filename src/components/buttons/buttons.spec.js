@@ -1,4 +1,4 @@
-ddescribe('material-button', function() {
+describe('material-button', function() {
 
   beforeEach(module('material.components.button'));
 
