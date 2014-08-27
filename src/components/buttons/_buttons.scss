@@ -56,6 +56,14 @@ material-button {
   .material-button-inner {
     background: transparent;
     border: none;
+    color: inherit;
+    text-transform: inherit;
+    font-weight: inherit;
+    font-style: inherit;
+    font-variant: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
     margin: 0;
     padding: 0;
   }
