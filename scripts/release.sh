@@ -37,7 +37,20 @@ function run {
   git push -q origin master
   git push -q origin v$VERSION
 
-  echo "-- Version $VERSION pushed successfully to bower-material!"
+  echo "-- Version $VERSION pushed successfully to angular/bower-material!"
+
+  echo "-- Updating package.json & bower.json in angular-material main..."
+  cd ../..
+  replaceJsonProp "bower.json" "version" "$VERSION"
+  replaceJsonProp "package.json" "version" "$VERSION"
+
+  echo "-- Committing, tagging and pushing bower.json and package.json..."
+  git commit bower.json package.json -m "release: version $VERSION"
+  git tag -f v$VERSION
+  git push -q origin master
+  git push -q origin v$VERSION
+
+  echo "-- Version $VERSION pushed successfully to angular/material!"
 }
 
 source $(dirname $0)/utils.inc
