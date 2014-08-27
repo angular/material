@@ -12,6 +12,7 @@ angular.module('material.components.button', [
   .directive('materialButton', [
     'ngHrefDirective',
     '$expectAria',
+    '$materialInkRipple',
     MaterialButtonDirective
   ]);
 
@@ -45,21 +46,20 @@ angular.module('material.components.button', [
  *  </material-button>
  * </hljs>
  */
-function MaterialButtonDirective(ngHrefDirectives, $expectAria) {
+function MaterialButtonDirective(ngHrefDirectives, $expectAria, $materialInkRipple) {
   var ngHrefDirective = ngHrefDirectives[0];
 
   return {
     restrict: 'E',
     compile: function(element, attr) {
+      var innerElement;
+      var attributesToCopy;
 
       // Add an inner anchor if the element has a `href` or `ngHref` attribute,
       // so this element can be clicked like a normal `<a>`.
-      var innerElement;
-      var attributesToCopy;
       if (attr.ngHref || attr.href) {
         innerElement = angular.element('<a>');
         attributesToCopy = ['ng-href', 'href', 'rel', 'target'];
-
       // Otherwise, just add an inner button element (for form submission etc)
       } else {
         innerElement = angular.element('<button>');
@@ -76,13 +76,22 @@ function MaterialButtonDirective(ngHrefDirectives, $expectAria) {
       innerElement
         .addClass('material-button-inner')
         .append(element.contents());
-
-      element
-        .append(innerElement)
-        .append('<material-ripple start="center" initial-opacity="0.25" opacity-decay-velocity="0.75"></material-ripple>');
+      element.append(innerElement);
 
       return function postLink(scope, element, attr) {
         $expectAria(element, 'aria-label', element.text());
+        $materialInkRipple.attachButtonBehavior(element);
+
+        element.on('focus', function() {
+          innerElement.focus();
+        });
+        innerElement
+          .on('focus', function() {
+            element.addClass('focus');
+          })
+          .on('blur', function() {
+            element.removeClass('focus');
+          });
       };
     }
   };

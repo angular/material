@@ -114,6 +114,10 @@
   display: none;
 }
 
+[show] {
+  display: inherit;
+}
+
 
 @mixin layout-presets($attr) {
   [#{$attr}] {
@@ -184,6 +188,10 @@
 
     [inline-block-#{$suffix}] {
       display: inline-block;
+    }
+
+    [show-#{$suffix}] {
+      display: inherit;
     }
 
     [hide-#{$suffix}] {

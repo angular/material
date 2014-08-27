@@ -111,7 +111,7 @@ function materialToolbarDirective($$rAF, $materialEffects) {
           var translate = y ?
             'translate3d(0,' + (-y / HEIGHT_FACTOR) + 'px, 0)' : 
             '';
-          element.css($materialEffects.TRANSFORM_PROPERTY, translate);
+          element.css($materialEffects.TRANSFORM, translate);
           contentElement.css('margin-top', y ?
                              (-y / HEIGHT_FACTOR) + 'px' :
                             '');

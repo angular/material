@@ -25,18 +25,18 @@
 
         <button class="menu-item menu-title"
           ng-class="{active: menu.isSectionSelected(section)}"
-          ng-click="menu.toggleSelectSection(section)">
+          ng-click="menu.toggleSelectSection(section)"
+          ink-ripple>
           {{section.name}}
-          <material-ripple initial-opacity="0.4" opacity-decay-velocity="1.75"></material-ripple>
         </button>
 
         <button class="menu-item menu-sub-item"
           ng-show="menu.isSectionSelected(section)"
           ng-repeat="page in section.pages"
           ng-class="{active: menu.isPageSelected(section, page)}"
-          ng-mousedown="menu.selectPage(section, page)">
+          ng-click="menu.selectPage(section, page)"
+          ink-ripple>
           <span ng-bind="page.humanName || page.name"></span>
-          <material-ripple initial-opacity="0.4" opacity-decay-velocity="1.75"></material-ripple>
         </button>
 
       </div>
@@ -88,7 +88,7 @@
           <span hide block-sm>View on Github</span>
           <span hide-sm>Source</span>
         </material-button>
-        <material-button ng-href="{{currentDoc.githubEditUrl}}" hide block-sm>
+        <material-button ng-href="{{currentDoc.githubEditUrl}}" hide show-sm>
           <material-icon icon="/img/icons/ic_launch_24px.svg"></material-icon>
           <span>Improve This Doc</span>
         </material-button>

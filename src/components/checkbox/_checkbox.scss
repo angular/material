@@ -13,22 +13,21 @@ material-checkbox {
     width: $checkbox-width;
     height: $checkbox-height;
 
-    material-ripple {
+    .material-ripple-container {
       position: absolute;
-      top: -20px;
-      left: -20px;
       display: block;
-      width: 56px;
-      height: 56px;
+      width: 70px;
+      height: 70px;
+      left: -(35 - $checkbox-width / 2);
+      top: -(35 - $checkbox-width / 2);
     }
-
-    .material-ink-ripple {
+    .material-ripple {
       color: #0f9d58;
     }
 
   }
 
-  &.material-checked .material-ink-ripple {
+  &.material-checked .material-ripple {
     color: #5a5f5a;
   }
 

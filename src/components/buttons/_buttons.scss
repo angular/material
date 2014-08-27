@@ -14,16 +14,15 @@
 material-button {
 
   @include user-select(none);
-  display: inline-block;
   position: relative; //for child absolute-positioned <canvas>
-  padding: 4px;
+  display: inline-block;
 
   outline: none;
   border: 0;
+  padding: 0;
+  margin: 0;
 
   border-radius: $button-border-radius;
-  background-color: transparent;
-  background-image: none;
   text-align: center;
 
   // Always uppercase buttons
@@ -38,6 +37,36 @@ material-button {
   cursor: pointer;
   overflow: hidden;   // for ink containment
 
+  // reserved for inner buttons and inner hrefs
+  .material-button-inner {
+    display: block;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: inherit;
+    outline: none;
+    text-transform: inherit;
+    font-weight: inherit;
+    font-style: inherit;
+    font-variant: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    padding: 4px;
+  }
+
+  // If we have a href and an inner anchor, let the clicks pass through to the anchor
+  &[href] {
+    pointer-events: none;
+    .material-button-inner {
+      pointer-events: auto;
+    }
+  }
+
+
   &.material-button-colored {
     color: $theme-light;
     fill: $theme-light;
@@ -47,25 +76,10 @@ material-button {
     border-radius: 0;
   }
 
-  &:hover,
-  &:focus {
+  &:hover:not([disabled]),
+  // Uses a .focus class because the child button/a is getting the actual focus
+  &.focus {
     background-color: $button-hover-background;
-  }
-
-  // reserved for inner buttons and inner hrefs
-  .material-button-inner {
-    background: transparent;
-    border: none;
-    color: inherit;
-    text-transform: inherit;
-    font-weight: inherit;
-    font-style: inherit;
-    font-variant: inherit;
-    font-size: inherit;
-    font-family: inherit;
-    line-height: inherit;
-    margin: 0;
-    padding: 0;
   }
 
   &[disabled] {
@@ -82,10 +96,16 @@ material-button {
   &.material-button-raised {
     background-color: $button-raised-background;
 
+    -webkit-transition: 0.2s linear;
+    -webkit-transition-property: box-shadow, -webkit-transform, background-color;
+    transition: 0.2s linear transform;
+    transition-property: box-shadow, transform, background-color;
+    @include transform-translate3d(0, 0, 0);
+
     @extend .material-shadow-bottom-z-1;
 
-    &:hover,
-    &:focus {
+    &:hover:not([disabled]),
+    &.focus {
       background-color: $button-raised-hover-background;
     }
 
@@ -93,8 +113,8 @@ material-button {
       background-color: $button-raised-colored-background;
       color: $button-raised-colored-color;
 
-      &:hover,
-      &:focus {
+      &:hover:not([disabled]),
+      &.focus {
         background-color: $button-raised-colored-hover-background;
       }
     }
@@ -108,21 +128,36 @@ material-button {
     @include fab-position(top-left, $button-fab-height/2, auto, auto, $button-fab-width/2);
 
     z-index: $z-index-fab;
-    padding: $button-fab-padding;
 
     width: $button-fab-width;
     height: $button-fab-height;
 
     border-radius: $button-fab-border-radius;
 
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.258824);
+    @extend .material-shadow-bottom-z-1;
     border-radius: 50%;
     overflow: hidden;
 
     @include transform-translate3d(0,0,0);
-    -webkit-transition: -webkit-transform 0.2s linear;
+    -webkit-transition: 0.2s linear;
+    -webkit-transition-property: -webkit-transform, box-shadow;
     transition: transform 0.2s linear;
+    transition-property: transform, box-shadow;
+    
+    .material-button-inner {
+      @include flex-display();
+      @include flex-align-items(center);
+      @include flex-justify-content(center);
+    }
+  }
 
+  &.material-button-raised,
+  &.material-button-fab {
+    &.focus,
+    &:hover:not([disabled]) {
+      @include transform-translate3d(0, -1px, 0);
+      @extend .material-shadow-bottom-z-2;
+    }
   }
 }
 
@@ -130,12 +165,20 @@ material-button {
   material-button.material-button-fab-top-left,
   material-button.material-button-fab-top-right {
     @include transform-translate3d(0, $button-fab-toast-offset, 0);
+    &.focus,
+    &:hover:not([disabled]) {
+      @include transform-translate3d(0, $button-fab-toast-offset - 1, 0);
+    }
   }
 }
 .material-toast-open-bottom {
   material-button.material-button-fab-bottom-left,
   material-button.material-button-fab-bottom-right {
     @include transform-translate3d(0, -$button-fab-toast-offset, 0);
+    &.focus,
+    &:hover {
+      @include transform-translate3d(0, -$button-fab-toast-offset - 1, 0);
+    }
   }
 }
 
