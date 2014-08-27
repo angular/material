@@ -3,11 +3,12 @@
  * @name material.components.toolbar
  */
 angular.module('material.components.toolbar', [
-  'material.components.content'
+  'material.components.content',
+  'material.animations'
 ])
   .directive('materialToolbar', [
     '$$rAF',
-    '$sniffer',
+    '$materialEffects',
     materialToolbarDirective
   ]);
 
@@ -53,9 +54,7 @@ angular.module('material.components.toolbar', [
  * Note: for scrollShrink to work, the toolbar must be a sibling of a 
  * `material-content` element, placed before it. See the scroll shrink demo.
  */ 
-function materialToolbarDirective($$rAF, $sniffer) {
-  var isWebkit = $sniffer.vendorPrefix.toLowerCase().indexOf('webkit') !==- 1;
-  var TRANSFORM_PROPERTY = isWebkit ? 'webkitTransform' : 'transform';
+function materialToolbarDirective($$rAF, $materialEffects) {
 
   return {
     restrict: 'E',
@@ -69,25 +68,27 @@ function materialToolbarDirective($$rAF, $sniffer) {
       function setupScrollShrink() {
         //makes it take X times as long for header to dissapear
         var HEIGHT_FACTOR = 2; 
-        var height = element.prop('offsetHeight') * HEIGHT_FACTOR;
+        var height = element.prop("offsetHeight") * HEIGHT_FACTOR;
         // Current "y" position of scroll
         var y = 0;
         // Store the last scroll top position
         var prevScrollTop = 0;
 
-        // Wait for $materialContentLoaded event from materialContent directive
+        // Wait for $materialContentLoaded event from materialContent directive.
         // If the materialContent element is a sibling of our toolbar, hook it up
         // to scroll events.
         scope.$on('$materialContentLoaded', onMaterialContentLoad);
 
         var contentElement;
         function onMaterialContentLoad($event, contentEl) {
+
           if (Util.elementIsSibling(element, contentEl)) {
             // unhook old content event listener if exists
             contentElement && contentElement.off('scroll', onScroll);
             contentEl.on('scroll', onContentScroll).css('position','relative');
             contentElement = contentEl;
           }
+
         }
 
         function onContentScroll(e) {
@@ -107,9 +108,13 @@ function materialToolbarDirective($$rAF, $sniffer) {
         }
 
         function transform() {
-          var translate = 'translate3d(0,' + (-y / HEIGHT_FACTOR) + 'px, 0)';
-          element.css(TRANSFORM_PROPERTY, translate);
-          contentElement.css('margin-top', (-y / HEIGHT_FACTOR) + 'px');
+          var translate = y ?
+            'translate3d(0,' + (-y / HEIGHT_FACTOR) + 'px, 0)' : 
+            '';
+          element.css($materialEffects.TRANSFORM_PROPERTY, translate);
+          contentElement.css('margin-top', y ?
+                             (-y / HEIGHT_FACTOR) + 'px' :
+                            '');
         }
       }
 
