@@ -75,10 +75,11 @@ function MaterialButtonDirective(ngHrefDirectives, $expectAria) {
 
       innerElement
         .addClass('material-button-inner')
-        .append(element.contents())
-        .append('<material-ripple start="center" initial-opacity="0.25" opacity-decay-velocity="0.75"></material-ripple>');
+        .append(element.contents());
 
-      element.append(innerElement);
+      element
+        .append(innerElement)
+        .append('<material-ripple start="center" initial-opacity="0.25" opacity-decay-velocity="0.75"></material-ripple>');
 
       return function postLink(scope, element, attr) {
         $expectAria(element, 'aria-label', element.text());
