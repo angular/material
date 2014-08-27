@@ -1,3 +1,5 @@
+var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
+
 var Util = {
   /**
    * Checks to see if the element or its parents are disabled.
@@ -32,6 +34,18 @@ var Util = {
   elementIsSibling: function elementIsSibling(element, otherElement) {
     return element.parent().length && 
       (element.parent()[0] === otherElement.parent()[0]);
-  }
+  },
+
+  /**
+   * Converts snake_case to camelCase.
+   * Also there is special case for Moz prefix starting with upper case letter.
+   * @param name Name to normalize
+   */
+  camelCase: function camelCase(name) {
+    return name.
+      replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
+        return offset ? letter.toUpperCase() : letter;
+      });
+  },
 };
 

@@ -47,42 +47,40 @@ angular.module('material.components.button', [
  */
 function MaterialButtonDirective(ngHrefDirectives, $expectAria) {
   var ngHrefDirective = ngHrefDirectives[0];
+
   return {
     restrict: 'E',
-    transclude: true,
-    template: '<material-ripple start="center" initial-opacity="0.25" opacity-decay-velocity="0.75"></material-ripple>',
     compile: function(element, attr) {
 
       // Add an inner anchor if the element has a `href` or `ngHref` attribute,
       // so this element can be clicked like a normal `<a>`.
-      var href = attr.ngHref || attr.href;
       var innerElement;
-      if (href) {
+      var attributesToCopy;
+      if (attr.ngHref || attr.href) {
         innerElement = angular.element('<a>');
-        innerElement.attr('ng-href',href);
-        innerElement.attr('rel', attr.rel);
-        innerElement.attr('target', attr.target);
+        attributesToCopy = ['ng-href', 'href', 'rel', 'target'];
 
       // Otherwise, just add an inner button element (for form submission etc)
       } else {
         innerElement = angular.element('<button>');
-        innerElement.attr('type', attr.type);
-        innerElement.attr('disabled', attr.ngDisabled || attr.disabled);
-        innerElement.attr('form', attr.form);
+        attributesToCopy = ['type', 'disabled', 'ng-disabled', 'form'];
       }
+
+      angular.forEach(attributesToCopy, function(name) {
+        var camelCaseName = Util.camelCase(name);
+        if (attr.hasOwnProperty(camelCaseName)) {
+          innerElement.attr(name, attr[camelCaseName]);
+        }
+      });
+
       innerElement
         .addClass('material-button-inner')
-        .append(element.contents());
+        .append(element.contents())
+        .append('<material-ripple start="center" initial-opacity="0.25" opacity-decay-velocity="0.75"></material-ripple>');
 
       element.append(innerElement);
 
-      return function postLink(scope, element, attr, ctrl, transclude) {
-        // Put the content of the <material-button> inside after the ripple
-        // and inner elements
-        transclude(scope, function(clone) {
-          element.append(clone);
-        });
-
+      return function postLink(scope, element, attr) {
         $expectAria(element, 'aria-label', element.text());
       };
     }
