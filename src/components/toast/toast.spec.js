@@ -55,23 +55,23 @@ describe('$materialToast service', function() {
       setup({
         template: '<material-toast class="one">'
       });
-      expect($rootElement[0].querySelector('material-toast.one')).toBeTruthy();
-      expect($rootElement[0].querySelector('material-toast.two')).toBeFalsy();
-      expect($rootElement[0].querySelector('material-toast.three')).toBeFalsy();
+      expect($rootElement.find('material-toast.one').length).toBe(1);
+      expect($rootElement.find('material-toast.two').length).toBe(0);
+      expect($rootElement.find('material-toast.three').length).toBe(0);
 
       setup({
         template: '<material-toast class="two">'
       });
-      expect($rootElement[0].querySelector('material-toast.one')).toBeFalsy();
-      expect($rootElement[0].querySelector('material-toast.two')).toBeTruthy();
-      expect($rootElement[0].querySelector('material-toast.three')).toBeFalsy();
+      expect($rootElement.find('material-toast.one').length).toBe(0);
+      expect($rootElement.find('material-toast.two').length).toBe(1);
+      expect($rootElement.find('material-toast.three').length).toBe(0);
 
       setup({
         template: '<material-toast class="three">'
       });
-      expect($rootElement[0].querySelector('material-toast.one')).toBeFalsy();
-      expect($rootElement[0].querySelector('material-toast.two')).toBeFalsy();
-      expect($rootElement[0].querySelector('material-toast.three')).toBeTruthy();
+      expect($rootElement.find('material-toast.one').length).toBe(0);
+      expect($rootElement.find('material-toast.two').length).toBe(0);
+      expect($rootElement.find('material-toast.three').length).toBe(1);
     }));
 
     it('should add class to toastParent', inject(function($rootElement) {
