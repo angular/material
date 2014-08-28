@@ -25,6 +25,13 @@ describe('materialTabs directive', function() {
 
     });
 
+    it('should assign ARIA roles', function(){
+      // TODO: this needs more coverage for material-tab
+      var el = setup();
+
+      expect(el.eq(0).attr('role')).toBe('tablist');
+    });
+
     xit('should pass down "nobar" to hide the <div class="selectionBar">', function()
     {
       var tabs         = setup(''),

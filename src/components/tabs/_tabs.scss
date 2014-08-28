@@ -88,8 +88,13 @@ material-tab {
   text-align: center;
   cursor: pointer;
   min-width: $tabs-tab-width;
+  border: 1px dotted transparent;
 
   @include not-selectable();
+
+  &:focus {
+    border-color: $input-focused-border-color;
+  }
 
   material-tab-label {
     @include flex(1);
