@@ -20,7 +20,7 @@ angular.module('material.components.checkbox', [
  * @restrict E
  *
  * @description
- * The checkbox directive is used like the normal [angular checkbox](https://docs.angularjs.org/api/ng/input/input%5Bcheckbox%5D)
+ * The checkbox directive is used like the normal [angular checkbox](https://docs.angularjs.org/api/ng/input/input%5Bcheckbox%5D).
  *
  * @param {string} ngModel Assignable angular expression to data-bind to.
  * @param {string=} name Property name of the form under which the control is published.
@@ -28,7 +28,7 @@ angular.module('material.components.checkbox', [
  * @param {expression=} ngFalseValue The value to which the expression should be set when not selected.
  * @param {string=} ngChange Angular expression to be executed when input changes due to user interaction with the input element.
  * @param {boolean=} noink Use of attribute indicates use of ripple ink effects
- * @param {boolean=} disabled Use of attribute indicates the tab is disabled: no ink effects and not selectable
+ * @param {boolean=} disabled Use of attribute indicates the switch is disabled: no ink effects and not selectable
  * @param {string=} ariaLabel Publish the button label used by screen-readers for accessibility. Defaults to the checkbox's text.
  *
  * @usage

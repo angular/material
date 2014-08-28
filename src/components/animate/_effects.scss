@@ -6,7 +6,7 @@ material-ink-bar {
 }
 
 canvas.material-ink-ripple {
-  pointer-events: none;
+  pointer-events: none !important;
   position: absolute;
   top: 0;
   left: 0;

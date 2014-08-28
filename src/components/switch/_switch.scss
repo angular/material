@@ -1,32 +1,41 @@
 material-switch {
+  display: block;
   position: relative;
-  width: $switch-width;
-  height: $baseline-grid * 3;
+  height: $baseline-grid * 4;
 
-  @include flex-display();
-  @include flex-justify-content(center);
-  @include flex-align-items(center);
+  *{
+    outline: none !important;
+  }
 
   .material-switch-bar {
-    width: 32px;
+    position: absolute;
+    left: $baseline-grid * 2;
+    top: $baseline-grid * 1.5;
+    width: $baseline-grid * 4;
     height: 1px;
     background-color: #5a5a5a;
     pointer-events: none;
   }
 
-  /* check _radio-button.scss */
+  /* used also in _radio-button.scss */
   .material-switch-thumb {
     position: absolute;
     margin: 0;
     left: 0;
     top: 0;
+    outline: none;
 
-    -webkit-transition: -webkit-transform 0.2s linear; 
-    transition: transform 0.2s linear;
-    @include transform-translate3d(0,0,0);
-
-    &.material-checked {
+    .material-container {
+      -webkit-transition: -webkit-transform 0.2s linear; 
+      transition: transform 0.2s linear;
+      @include transform-translate3d(0,0,0);
+    }
+    &.material-checked .material-container {
       @include transform-translate3d($switch-width - 16,0,0);
+    }
+
+    .material-label {
+      margin-left: $baseline-grid * 7;
     }
   }
 }
