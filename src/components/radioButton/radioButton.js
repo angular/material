@@ -235,7 +235,7 @@ function materialRadioButtonDirective($expectAria) {
     $expectAria(element, Constant.ARIA.PROPERTY.LABEL, element.text());
 
     function listener(ev) {
-      if ( Util.isDisabled(element) ) return;
+      if (element[0].hasAttribute('disabled')) return;
 
       scope.$apply(function() {
         rgCtrl.setViewValue(attr.value, ev && ev.type);

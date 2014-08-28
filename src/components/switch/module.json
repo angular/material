@@ -1,0 +1,10 @@
+{
+  "module": "material.components.switch",
+  "name": "Switch",
+  "demos": {
+    "demo1": {
+      "name": "Switch Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

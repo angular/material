@@ -38,7 +38,6 @@ var Util = {
 
   /**
    * Converts snake_case to camelCase.
-   * Also there is special case for Moz prefix starting with upper case letter.
    * @param name Name to normalize
    */
   camelCase: function camelCase(name) {

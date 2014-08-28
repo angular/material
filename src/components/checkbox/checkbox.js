@@ -59,7 +59,7 @@ function materialCheckboxDirective(inputDirectives, $expectAria) {
     require: '?ngModel',
     template: 
       '<div class="material-container">' +
-        '<material-ripple start="center" class="circle" material-checked="{{ checked }}" ></material-ripple>' +
+        '<material-ripple start="center" class="circle"></material-ripple>' +
         '<div class="material-icon"></div>' +
       '</div>' +
       '<div ng-transclude class="material-label"></div>',
@@ -109,7 +109,7 @@ function materialCheckboxDirective(inputDirectives, $expectAria) {
       }
     }
     function listener(ev) {
-      if ( Util.isDisabled(element) ) return;
+      if (element[0].hasAttribute('disabled')) return;
 
       scope.$apply(function() {
         checked = !checked;

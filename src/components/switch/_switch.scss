@@ -1,0 +1,32 @@
+material-switch {
+  position: relative;
+  width: $switch-width;
+  height: $baseline-grid * 3;
+
+  @include flex-display();
+  @include flex-justify-content(center);
+  @include flex-align-items(center);
+
+  .material-switch-bar {
+    width: 32px;
+    height: 1px;
+    background-color: #5a5a5a;
+    pointer-events: none;
+  }
+
+  /* check _radio-button.scss */
+  .material-switch-thumb {
+    position: absolute;
+    margin: 0;
+    left: 0;
+    top: 0;
+
+    -webkit-transition: -webkit-transform 0.2s linear; 
+    transition: transform 0.2s linear;
+    @include transform-translate3d(0,0,0);
+
+    &.material-checked {
+      @include transform-translate3d($switch-width - 16,0,0);
+    }
+  }
+}
