@@ -1,11 +1,11 @@
 material-switch {
   display: block;
   position: relative;
-  height: $baseline-grid * 4;
+  height: $baseline-grid * 3;
+  margin: $baseline-grid;
 
-  *{
-    outline: none !important;
-  }
+  @include flex-display();
+  @include flex-align-items(center);
 
   .material-switch-bar {
     position: absolute;
@@ -34,6 +34,9 @@ material-switch {
       @include transform-translate3d($switch-width - 16,0,0);
     }
 
+    &:focus .material-label {
+      border: 1px dotted black;
+    }
     .material-label {
       margin-left: $baseline-grid * 7;
     }
