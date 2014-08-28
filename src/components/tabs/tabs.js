@@ -186,6 +186,8 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
         angular.element($window).on('resize', update);
         scope.$on('$materialTabsChanged', update);
 
+        element.attr('role', Constant.ARIA.ROLE.TAB_LIST);
+
         transcludeHeaderItems();
         transcludeContentItems();
 
@@ -637,12 +639,25 @@ function TabDirective( $attrBind ) {
     configureWatchers();
     updateTabContent(scope);
 
+    element.attr('role', Constant.ARIA.ROLE.TAB);
+    // scope.ariaId = tabsController.scope.$id + '_' + scope.$id;
+    element.attr('id', scope.$id);
+    // element.attr('aria-controls', tab_content_area_id);
+
     // Click support for entire <material-tab /> element
     element.on('click', function onRequestSelect() {
       if (!scope.disabled) {
         scope.$apply(function () {
           tabsController.select(scope);
         });
+      }
+    })
+    .on('keydown', function onRequestSelect(event) {
+      if(event.which === Constant.KEY_CODE.LEFT_ARROW) {
+        tabsController.previous(scope);
+      }
+      if(event.which === Constant.KEY_CODE.RIGHT_ARROW) {
+        tabsController.next(scope);
       }
     });
 
@@ -655,12 +670,21 @@ function TabDirective( $attrBind ) {
     /**
      * Auto select the next tab if the current tab is active and
      * has been disabled.
+     *
+     * Set tab index for the current tab (0), with all other tabs
+     * outside of the tab order (-1)
+     *
      */
     function configureWatchers() {
       var unwatch = scope.$watch('disabled', function (isDisabled) {
         if (scope.active && isDisabled) {
           tabsController.next(scope);
         }
+      });
+
+      scope.$watch('active', function (isActive) {
+        element.attr(Constant.ARIA.PROPERTY.SELECTED, isActive);
+        element.attr('tabIndex', isActive === true ? 0 : -1);
       });
 
       scope.$on("$destroy", function () {
