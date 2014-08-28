@@ -4,13 +4,17 @@ var Constant = {
       BUTTON : 'button',
       CHECKBOX : 'checkbox',
       RADIO : 'radio',
-      RADIO_GROUP : 'radiogroup'
+      RADIO_GROUP : 'radiogroup',
+      SLIDER : 'slider'
     },
     PROPERTY : {
       CHECKED : 'aria-checked',
       HIDDEN : 'aria-hidden',
       EXPANDED : 'aria-expanded',
-      LABEL: 'aria-label'
+      LABEL: 'aria-label',
+      VALUE_MIN : 'aria-valuemin',
+      VALUE_NOW : 'aria-valuenow',
+      VALUE_MAX : 'aria-valuemax'
     },
     STATE: {}
   },

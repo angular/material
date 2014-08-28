@@ -64,11 +64,13 @@ function materialSliderDirective($window) {
     var rangeEle = input[0];
     var trackEle = angular.element( element[0].querySelector('.material-track') );
 
-    trackEle.append('<div class="material-fill"><div class="material-thumb"></div></div>');
-    var fillEle = trackEle[0].querySelector('.material-fill');
+    trackEle.append('<div class="material-fill"><div class="material-thumb" tabIndex="0" role="slider"></div></div>');
+    var fillEle = trackEle[0].querySelector('.material-fill'),
+        thumbEle = trackEle.find('.material-thumb');
+
+    var settings = rangeSettings(rangeEle);
 
     if(input.attr('step')) {
-      var settings = rangeSettings(rangeEle);
       var tickCount = (settings.max - settings.min) / settings.step;
       var tickMarkersEle = angular.element('<div class="material-tick-markers"></div>');
       for(var i=0; i<tickCount; i++) {
@@ -79,6 +81,9 @@ function materialSliderDirective($window) {
       }
       trackEle.append(tickMarkersEle);
     }
+
+    thumbEle.attr(Constant.ARIA.PROPERTY.VALUE_MIN, settings.min);
+    thumbEle.attr(Constant.ARIA.PROPERTY.VALUE_MAX, settings.max);
 
     input.on('mousedown touchstart', function(e){
       trackEle.addClass(ACTIVE_CSS);
@@ -101,7 +106,7 @@ function materialSliderDirective($window) {
       } else {
         element.removeClass(MIN_VALUE_CSS);
       }
-
+      thumbEle.attr(Constant.ARIA.PROPERTY.VALUE_NOW, Math.round(fillRatio * 100));
     }
 
     scope.$watch( function () { return ngModelCtrl.$viewValue; }, render );
