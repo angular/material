@@ -138,6 +138,7 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
       var popInTarget = options.targetEvent && options.targetEvent.target && 
         angular.element(options.targetEvent.target);
       var backdrop;
+      var closeButton = element[0].querySelector('.dialog-close');
 
       if (options.hasBackdrop) {
         backdrop = angular.element('<material-backdrop class="opaque ng-enter">');
@@ -150,6 +151,10 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
         if (options.clickOutsideToClose) {
           element.on('click', dialogClickOutside);
         }
+        if(closeButton !== null){
+          closeButton.focus();
+        }
+
       });
 
       return destroyDialog;

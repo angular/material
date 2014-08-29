@@ -78,8 +78,13 @@ function MaterialButtonDirective(ngHrefDirectives, $expectAria) {
         .append(element.contents());
 
       element
+        .attr('tabIndex', -1)
         .append(innerElement)
         .append('<material-ripple start="center" initial-opacity="0.25" opacity-decay-velocity="0.75"></material-ripple>');
+
+      element.on('focus', function(evt) {
+        innerElement.focus();
+      });
 
       return function postLink(scope, element, attr) {
         $expectAria(element, 'aria-label', element.text());
