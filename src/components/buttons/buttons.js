@@ -7,12 +7,12 @@
  */
 angular.module('material.components.button', [
   'material.animations',
-  'material.services.expectAria'
+  'material.services.aria'
 ])
   .directive('materialButton', [
     'ngHrefDirective',
-    '$expectAria',
     '$materialInkRipple',
+    '$aria',
     MaterialButtonDirective
   ]);
 
@@ -46,7 +46,7 @@ angular.module('material.components.button', [
  *  </material-button>
  * </hljs>
  */
-function MaterialButtonDirective(ngHrefDirectives, $expectAria, $materialInkRipple) {
+function MaterialButtonDirective(ngHrefDirectives, $materialInkRipple, $aria ) {
   var ngHrefDirective = ngHrefDirectives[0];
 
   return {
@@ -79,7 +79,7 @@ function MaterialButtonDirective(ngHrefDirectives, $expectAria, $materialInkRipp
       element.append(innerElement);
 
       return function postLink(scope, element, attr) {
-        $expectAria(element, 'aria-label', element.text());
+        $aria.expect(element, 'aria-label', element.text());
         $materialInkRipple.attachButtonBehavior(element);
 
         element.on('focus', function() {

@@ -1,4 +1,4 @@
-angular.module('material.services.expectAria', [])
+angular.module('material.services.aria', [])
 
 .service('$aria', [
   '$log',
@@ -12,18 +12,29 @@ function AriaService($log) {
   return {
 
     expect : expectAttribute,
-    assign : assignAttributes
+    update : assignAttributes
   };
 
-
+  /**
+   * Assign 1..n ARIA values to the target element
+   * @param element
+   * @param options
+   */
   function assignAttributes(element, options )
   {
-    angular.forEach(options, function( attrName, attrValue) {
+    angular.forEach(options, Util.spread(function( attrValue, attrName ) {
        element.attr(attrName,  attrValue);
-    });
+    }));
 
+    return element;
   }
 
+  /**
+   * Check if expected ARIA has been specified on the target element
+   * @param element
+   * @param attrName
+   * @param defaultValue
+   */
   function expectAttribute(element, attrName, defaultValue) {
 
     var node = element[0];
@@ -40,6 +51,7 @@ function AriaService($log) {
       }
     }
   }
+
 
 
   /**

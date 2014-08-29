@@ -46,5 +46,20 @@ var Util = {
         return offset ? letter.toUpperCase() : letter;
       });
   },
+
+  /**
+   * Spread the arguments as individual parameters to the target function.
+   * @param targetFn
+   * @param scope
+   * @returns {Function}
+   */
+  spread : function ( targetFn, scope ) {
+    return function()
+    {
+      var params = Array.prototype.slice.call(arguments, 0);
+      targetFn.apply(scope, params);
+    };
+  }
+
 };
 

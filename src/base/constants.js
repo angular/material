@@ -6,6 +6,7 @@ var Constant = {
       RADIO : 'radio',
       RADIO_GROUP : 'radiogroup',
       TAB_LIST : 'tablist',
+      TABS: 'tabs',
       TAB : 'tab',
       TAB_PANEL : 'tabpanel'
     },
@@ -14,7 +15,8 @@ var Constant = {
       HIDDEN : 'aria-hidden',
       EXPANDED : 'aria-expanded',
       LABEL: 'aria-label',
-      SELECTED : 'aria-selected'
+      SELECTED : 'aria-selected',
+      LABEL_BY : 'aria-labelledby'
     },
     STATE: {}
   },

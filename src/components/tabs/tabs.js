@@ -15,8 +15,8 @@ angular.module('material.components.tabs', [
     '$scope', 
     '$attrs', 
     '$materialComponentRegistry', 
-    '$timeout', 
-    TabsController 
+    '$timeout',
+    TabsController
   ])
   .directive('materialTabs', [
     '$compile', 
@@ -24,10 +24,12 @@ angular.module('material.components.tabs', [
     '$materialEffects', 
     '$window',
     '$$rAF',
+    '$aria',
     TabsDirective
   ])
   .directive('materialTab', [ 
-    '$attrBind', 
+    '$attrBind',
+    '$aria',
     TabDirective  
   ]);
 
@@ -105,7 +107,7 @@ angular.module('material.components.tabs', [
  * </hljs>
  *
  */
-function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
+function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF, $aria) {
 
   return {
     restrict: 'E',
@@ -117,7 +119,7 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
     },
 
     compile: compileTabsFn,
-    controller: [ '$scope', '$attrs', '$materialComponentRegistry', '$timeout', TabsController ],
+    controller: [ '$scope', '$attrs', '$materialComponentRegistry', '$timeout', '$aria', TabsController ],
 
     template:
       '<div class="tabs-header" ng-class="{\'tab-paginating\': pagination.active}">' +
@@ -175,7 +177,6 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
             return !angular.isUndefined(cache[tab.$id]);
           }
         };
-
         var updatePagination = configurePagination() || angular.noop;
         var updateInk = configureInk() || angular.noop;
         var update = $$rAF.debounce(function() {
@@ -183,10 +184,9 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
           updatePagination();
           updateInk();
         });
+
         angular.element($window).on('resize', update);
         scope.$on('$materialTabsChanged', update);
-
-        element.attr('role', Constant.ARIA.ROLE.TAB_LIST);
 
         transcludeHeaderItems();
         transcludeContentItems();
@@ -194,9 +194,32 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
         alignTabButtons();
         selectDefaultTab();
 
+        configureAria();  // Update ARIA values for the Tab group (Tabs)
+
         // **********************************************************
         // Private Methods
         // **********************************************************
+
+        /**
+         * Inject ARIA-specific attributes appropriate for Tab Groups
+         */
+        function configureAria() {
+          var ROLE = Constant.ARIA.ROLE;
+
+          $aria.update( element, {
+            'id': buildAriaID(),
+            'role': ROLE.TAB_LIST
+          });
+
+          /**
+           * Build a unique Tabs ID for WAI-ARIA; preserve the existing ID if already
+           * specified.
+           * @returns {*|string}
+           */
+          function buildAriaID() {
+            return  attrs.id || (ROLE.TABS + "_" + scope.$id);
+          }
+        }
 
         /**
          * Conditionally configure ink bar animations when the
@@ -212,7 +235,6 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
 
           // Immediately place the ink bar
           refreshInkBar(true);
-
           return $$rAF.debounce(refreshInkBar);
 
           /**
@@ -364,7 +386,7 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
          *
          */
         function transcludeHeaderItems() {
-          $transclude(function (content) {
+          $transclude( function (content) {
             var header = findNode('.tabs-header-items', element);
             var parent = angular.element(element[0]);
 
@@ -402,8 +424,10 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
                 var tab = tabs[j++],
                   materialView = $compile(materialViewTmpl)(tab);
 
-                // Allow dynamic $digest() disconnect/reconnect of tab content's scope
+                // For ARIA, link the tab content container with the tab button...
+                configureAria( materialView, tab );
 
+                // Allow dynamic $digest() disconnect/reconnect of tab content's scope
                 enableDisconnect(tab, content.scope);
 
                 // Do we have content DOM nodes ?
@@ -439,6 +463,20 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
              */
             function showTabContent(visible) {
               cntr.toggleClass('ng-hide', !!visible);
+            }
+
+            /**
+             * Configure ARIA attributes to link tab content back to their respective
+             * 'owning' tab buttons.
+             */
+            function configureAria( cntr, tab ) {
+
+              $aria.update( cntr, {
+                'id' : "content_" + tab.ariaId,
+                'role' : Constant.ARIA.ROLE.TAB_PANEL,
+                'aria-labelledby' : tab.ariaId
+              });
+
             }
 
           });
@@ -604,7 +642,7 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF) {
  * </hljs>
  *
  */
-function TabDirective( $attrBind ) {
+function TabDirective( $attrBind, $aria ) {
   var noop = angular.noop;
 
   return {
@@ -618,7 +656,6 @@ function TabDirective( $attrBind ) {
       '<material-tab-label ink-ripple ' +
         'ng-class="{ disabled : disabled, active : active }"  >' +
       '</material-tab-label>'
-
   };
 
   function linkTab(scope, element, attrs, tabsController, $transclude) {
@@ -638,33 +675,58 @@ function TabDirective( $attrBind ) {
     configureWatchers();
     updateTabContent(scope);
 
-    element.attr('role', Constant.ARIA.ROLE.TAB);
-    // scope.ariaId = tabsController.scope.$id + '_' + scope.$id;
-    element.attr('id', scope.$id);
-    // element.attr('aria-controls', tab_content_area_id);
+    // Update ARIA values for each tab element
+    configureAria(element, scope);
 
-    // Click support for entire <material-tab /> element
-    element.on('click', function onRequestSelect() {
-      if (!scope.disabled) {
-        scope.$apply(function () {
-          tabsController.select(scope);
-        });
-      }
-    })
-    .on('keydown', function onRequestSelect(event) {
-      if(event.which === Constant.KEY_CODE.LEFT_ARROW) {
-        tabsController.previous(scope);
-      }
-      if(event.which === Constant.KEY_CODE.RIGHT_ARROW) {
-        tabsController.next(scope);
-      }
-    });
+    element.on('click', function onRequestSelect()
+      {
+        // Click support for entire <material-tab /> element
+        if (!scope.disabled) {
+          scope.$apply(function () {
+            tabsController.select(scope);
+          });
+        }
+      })
+      .on('keydown', function onRequestSelect(event)
+      {
+        if(event.which === Constant.KEY_CODE.LEFT_ARROW) {
+          tabsController.previous(scope);
+        }
+        if(event.which === Constant.KEY_CODE.RIGHT_ARROW) {
+          tabsController.next(scope);
+        }
+      });
 
     tabsController.add(scope, element);
 
     // **********************************************************
     // Private Methods
     // **********************************************************
+
+
+    /**
+     * Inject ARIA-specific attributes appropriate for each Tab button
+     */
+    function configureAria( element, scope ){
+      var ROLE = Constant.ARIA.ROLE;
+
+      scope.ariaId = buildAriaID();
+      $aria.update( element, {
+        'id' :  scope.ariaId,
+        'role' : ROLE.TAB,
+        'aria-selected' : false,
+        'aria-controls' : "content_" + scope.ariaId
+      });
+
+      /**
+       * Build a unique ID for each Tab that will be used for WAI-ARIA.
+       * Preserve existing ID if already specified.
+       * @returns {*|string}
+       */
+      function buildAriaID() {
+        return attrs.id || ( ROLE.TAB + "_" + tabsController.$scope.$id + "_" + scope.$id );
+      }
+    }
 
     /**
      * Auto select the next tab if the current tab is active and
@@ -682,8 +744,12 @@ function TabDirective( $attrBind ) {
       });
 
       scope.$watch('active', function (isActive) {
-        element.attr(Constant.ARIA.PROPERTY.SELECTED, isActive);
-        element.attr('tabIndex', isActive === true ? 0 : -1);
+
+        $aria.update( element, {
+          'aria-selected' : isActive,
+          'tabIndex' : isActive === true ? 0 : -1
+        });
+
       });
 
       scope.$on("$destroy", function () {
@@ -792,6 +858,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
   // Special internal accessor to access scopes and tab `content`
   // Used by TabsDirective::buildContentItems()
 
+  this.$scope = $scope;
   this.$$tabs = findTabs;
   this.$$hash = "";
 
