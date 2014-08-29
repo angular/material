@@ -1,15 +1,30 @@
 angular.module('material.services.expectAria', [])
 
-.service('$expectAria', [
+.service('$aria', [
   '$log',
-  ExpectAriaService
+  AriaService
 ]);
 
-function ExpectAriaService($log) {
+function AriaService($log) {
   var messageTemplate = 'ARIA: Attribute "%s", required for accessibility, is missing on "%s"!';
   var defaultValueTemplate = 'Default value was set: %s="%s".';
 
-  return function expect(element, attrName, defaultValue) {
+  return {
+
+    expect : expectAttribute,
+    assign : assignAttributes
+  };
+
+
+  function assignAttributes(element, options )
+  {
+    angular.forEach(options, function( attrName, attrValue) {
+       element.attr(attrName,  attrValue);
+    });
+
+  }
+
+  function expectAttribute(element, attrName, defaultValue) {
 
     var node = element[0];
     if (!node.hasAttribute(attrName)) {
@@ -24,7 +39,8 @@ function ExpectAriaService($log) {
         // $log.warn(messageTemplate, attrName, getTagString(node));
       }
     }
-  };
+  }
+
 
   /**
    * Gets the tag definition from a node's outerHTML
