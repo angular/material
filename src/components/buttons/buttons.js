@@ -75,8 +75,24 @@ function MaterialButtonDirective(ngHrefDirectives, $materialInkRipple, $aria ) {
 
       innerElement
         .addClass('material-button-inner')
-        .append(element.contents());
-      element.append(innerElement);
+        .append(element.contents())
+        // Since we're always passing focus to the inner element,
+        // add a focus class to the outer element so we can still style
+        // it with focus.
+        .on('focus', function() {
+          element.addClass('focus');
+        })
+        .on('blur', function() {
+          element.removeClass('focus');
+        });
+
+      element.
+        append(innerElement)
+        .attr('tabIndex', -1)
+        //Always pass focus to innerElement
+        .on('focus', function() {
+          innerElement.focus();
+        });
 
       return function postLink(scope, element, attr) {
         $aria.expect(element, 'aria-label', element.text());
@@ -85,13 +101,6 @@ function MaterialButtonDirective(ngHrefDirectives, $materialInkRipple, $aria ) {
         element.on('focus', function() {
           innerElement.focus();
         });
-        innerElement
-          .on('focus', function() {
-            element.addClass('focus');
-          })
-          .on('blur', function() {
-            element.removeClass('focus');
-          });
       };
     }
   };

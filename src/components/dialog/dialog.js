@@ -43,12 +43,18 @@ function MaterialDialogDirective($$rAF) {
  *
  * The $materialDialog service opens a dialog over top of the app. 
  *
- * See the overview page for an example.
- *
  * The `$materialDialog` service can be used as a function, which when called will open a
  * dialog. Note: the dialog is always given an isolate scope.
  *
  * It takes one argument, `options`, which is defined below.
+ *
+ * Note: the dialog's template must have an outer `<material-dialog>` element. 
+ * Inside, use an element with class `dialog-content` for the dialog's content, and use
+ * an element with class `dialog-actions` for the dialog's actions.  
+ *
+ * When opened, the `dialog-actions` area will attempt to focus the first button found with 
+ * class `dialog-close`. If no button with `dialog-close` class is found, it will focus the
+ * last button in the `dialog-actions` area.
  *
  * @usage
  * <hljs lang="html">
@@ -137,6 +143,7 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
       var element = compileData.link(scope); 
       var popInTarget = options.targetEvent && options.targetEvent.target && 
         angular.element(options.targetEvent.target);
+      var closeButton = findCloseButton();
       var backdrop;
 
       if (options.hasBackdrop) {
@@ -150,10 +157,21 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
         if (options.clickOutsideToClose) {
           element.on('click', dialogClickOutside);
         }
+        closeButton.focus();
       });
 
       return destroyDialog;
 
+      function findCloseButton() {
+        //If no element with class dialog-close, try to find the last 
+        //button child in dialog-actions and assume it is a close button
+        var closeButton = element[0].querySelector('.dialog-close');
+        if (!closeButton) {
+          var actionButtons = element[0].querySelectorAll('.dialog-actions button');
+          closeButton = actionButtons[ actionButtons.length - 1 ];
+        }
+        return angular.element(closeButton);
+      }
       function destroyDialog() {
         if (destroyDialog.called) return;
         destroyDialog.called = true;

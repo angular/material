@@ -3,11 +3,11 @@ describe('$materialDialog', function() {
   beforeEach(module('material.components.dialog'));
 
   beforeEach(inject(function spyOnMaterialEffects($materialEffects) {
-    spyOn($materialEffects, 'popOut').andCallFake(function(element, parent, cb) {
-      cb();
-    });
     spyOn($materialEffects, 'popIn').andCallFake(function(element, parent, targetEvent, cb) {
       parent.append(element);
+      cb();
+    });
+    spyOn($materialEffects, 'popOut').andCallFake(function(element, parent, cb) {
       cb();
     });
   }));
@@ -133,6 +133,45 @@ describe('$materialDialog', function() {
     $rootScope.$apply();
     expect(parent.find('material-dialog').length).toBe(1);
     expect(parent.find('material-backdrop').length).toBe(0);
+  }));
+
+  it('should focus `material-button.dialog-close` on open', inject(function($materialDialog, $rootScope, $document) {
+    TestUtil.mockElementFocus(this);
+
+    var parent = angular.element('<div>');
+    $materialDialog({
+      template:
+        '<material-dialog>' +
+          '<div class="dialog-actions">' +
+            '<button class="dialog-close">Close</button>' +
+          '</div>' +
+          '</material-dialog>',
+      appendTo: parent
+    });
+
+    $rootScope.$apply();
+
+    expect($document.activeElement).toBe(parent.find('.dialog-close')[0]);
+  }));
+
+  it('should focus the last `material-button` in dialog-actions open if no `.dialog-close`', inject(function($materialDialog, $rootScope, $document) {
+    TestUtil.mockElementFocus(this);
+
+    var parent = angular.element('<div>');
+    $materialDialog({
+      template:
+        '<material-dialog>' +
+          '<div class="dialog-actions">' +
+            '<button id="a">A</material-button>' +
+            '<button id="focus-target">B</material-button>' +
+          '</div>' +
+        '</material-dialog>',
+      appendTo: parent
+    });
+
+    $rootScope.$apply();
+
+    expect($document.activeElement).toBe(parent.find('#focus-target')[0]);
   }));
 
   it('should only allow one open at a time', inject(function($materialDialog, $rootScope) {
