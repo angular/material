@@ -10,6 +10,7 @@ angular.module('material.components.checkbox', [
   .directive('materialCheckbox', [ 
     'inputDirective',
     '$expectAria',
+    '$materialInkRipple',
     materialCheckboxDirective 
   ]);
 
@@ -48,7 +49,7 @@ angular.module('material.components.checkbox', [
  * </hljs>
  *
  */
-function materialCheckboxDirective(inputDirectives, $expectAria) {
+function materialCheckboxDirective(inputDirectives, $expectAria, $materialInkRipple) {
   var inputDirective = inputDirectives[0];
 
   var CHECKED_CSS = 'material-checked';
@@ -58,8 +59,7 @@ function materialCheckboxDirective(inputDirectives, $expectAria) {
     transclude: true,
     require: '?ngModel',
     template: 
-      '<div class="material-container">' +
-        '<material-ripple start="center" class="circle"></material-ripple>' +
+      '<div class="material-container" ink-ripple="checkbox">' +
         '<div class="material-icon"></div>' +
       '</div>' +
       '<div ng-transclude class="material-label"></div>',

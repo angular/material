@@ -18,17 +18,16 @@ material-radio-button,
     height: $radio-width;
     cursor: pointer;
 
-    .material-ink-ripple {
-      color: #0f9d58;
-    }
-
-    material-ripple {
-      display: block;
+    .material-ripple-container {
       position: absolute;
-      width: 56px;
-      height: 56px;
-      top: -20px;
-      left: -20px;
+      display: block;
+      width: 70px;
+      height: 70px;
+      left: -(35 - $radio-width / 2);
+      top: -(35 - $radio-width / 2);
+    }
+    .material-ripple {
+      color: #0f9d58;
     }
   }
 

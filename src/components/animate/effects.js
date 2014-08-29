@@ -13,7 +13,6 @@ angular.module('material.animations', [
 ])
   .service('$materialEffects', [ 
     '$animateSequence', 
-    '$ripple', 
     '$rootElement', 
     '$position', 
     '$$rAF', 
@@ -28,54 +27,51 @@ angular.module('material.animations', [
  *
  * @description
  * The `$materialEffects` service provides a simple API for various
- * Material Design effects:
- *
- * 1) to animate ink bars and ripple effects, and
- * 2) to perform popup open/close effects on any DOM element.
+ * Material Design effects.
  *
  * @returns A `$materialEffects` object with the following properties:
- * - `{function(canvas,options)}` `inkRipple` - Renders ripple ink
- * waves on the specified canvas
  * - `{function(element,styles,duration)}` `inkBar` - starts ink bar
  * animation on specified DOM element
  * - `{function(element,parentElement,clickElement)}` `popIn` - animated show of element overlayed on parent element
  * - `{function(element,parentElement)}` `popOut` - animated close of popup overlay
  *
  */
-function MaterialEffects($animateSequence, $ripple, $rootElement, $position, $$rAF, $sniffer) {
+function MaterialEffects($animateSequence, $rootElement, $position, $$rAF, $sniffer) {
 
   var styler = angular.isDefined( $rootElement[0].animate ) ? 'webAnimations' :
                angular.isDefined( window['TweenMax'] || window['TweenLite'] ) ? 'gsap'   :
                angular.isDefined( window['jQuery'] ) ? 'jQuery' : 'default';
 
- 
-  var isWebkit = /webkit/i.test($sniffer.vendorPrefix);
-  var TRANSFORM_PROPERTY = isWebkit ? 'webkitTransform' : 'transform';
-  var TRANSITIONEND_EVENT = 'transitionend' + 
-    (isWebkit ? ' webkitTransitionEnd' : '');
+  var webkit = /webkit/i.test($sniffer.vendorPrefix);
+  function vendorProperty(name) {
+    return webkit ? 
+      ('webkit' + name.charAt(0).toUpperCase() + name.substring(1)) :
+      name;
+  }
 
+  var self;
   // Publish API for effects...
-  return {
-    inkRipple: animateInkRipple,
+  return self = {
     popIn: popIn,
     popOut: popOut,
 
     /* Constants */
-    TRANSFORM_PROPERTY: TRANSFORM_PROPERTY,
-    TRANSITIONEND_EVENT: TRANSITIONEND_EVENT
+    TRANSITIONEND_EVENT: 'transitionend' + (webkit ? ' webkitTransitionEnd' : ''),
+    ANIMATIONEND_EVENT: 'animationend' + (webkit ? ' webkitAnimationEnd' : ''),
+
+    TRANSFORM: vendorProperty('transform'),
+    TRANSITION: vendorProperty('transition'),
+    TRANSITION_DURATION: vendorProperty('transitionDuration'),
+    ANIMATION_PLAY_STATE: vendorProperty('animationPlayState'),
+    ANIMATION_DURATION: vendorProperty('animationDuration'),
+    ANIMATION_NAME: vendorProperty('animationName'),
+    ANIMATION_TIMING: vendorProperty('animationTimingFunction'),
+    ANIMATION_DIRECTION: vendorProperty('animationDirection')
   };
 
   // **********************************************************
   // API Methods
   // **********************************************************
-
-  /**
-   * Use the canvas animator to render the ripple effect(s).
-   */
-  function animateInkRipple( canvas, options )
-  {
-    return new $ripple(canvas, options);
-  }
 
   /**
    *
@@ -96,23 +92,23 @@ function MaterialEffects($animateSequence, $ripple, $rootElement, $position, $$r
     }
 
     element
-      .css(TRANSFORM_PROPERTY, startPos)
+      .css(self.TRANSFORM, startPos)
       .css('opacity', 0);
     
     $$rAF(function() {
       $$rAF(function() {
         element
           .addClass('active')
-          .css(TRANSFORM_PROPERTY, '')
+          .css(self.TRANSFORM, '')
           .css('opacity', '')
-          .on(TRANSITIONEND_EVENT, finished);
+          .on(self.TRANSITIONEND_EVENT, finished);
       });
     });
 
     function finished(ev) {
       //Make sure this transitionend didn't bubble up from a child
       if (ev.target === element[0]) {
-        element.off(TRANSITIONEND_EVENT, finished);
+        element.off(self.TRANSITIONEND_EVENT, finished);
         (done || angular.noop)();
       }
     }
@@ -129,12 +125,12 @@ function MaterialEffects($animateSequence, $ripple, $rootElement, $position, $$r
       '-webkit-transform': translateString(endPos.left, endPos.top, 0) + ' scale(0.5)',
       opacity: 0
     });
-    element.on(TRANSITIONEND_EVENT, finished);
+    element.on(self.TRANSITIONEND_EVENT, finished);
 
     function finished(ev) {
       //Make sure this transitionend didn't bubble up from a child
       if (ev.target === element[0]) {
-        element.off(TRANSITIONEND_EVENT, finished);
+        element.off(self.TRANSITIONEND_EVENT, finished);
         (done || angular.noop)();
       }
     }

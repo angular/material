@@ -25,7 +25,7 @@ describe('<material-toolbar>', function() {
 
     $rootScope.$broadcast('$materialContentLoaded', contentEl);
 
-    expect(toolbar.css($materialEffects.TRANSFORM_PROPERTY)).toEqual('');
+    expect(toolbar.css($materialEffects.TRANSFORM)).toEqual('');
     expect(contentEl.css('margin-top')).toEqual('');
 
     // Fake scroll to the bottom
@@ -33,7 +33,7 @@ describe('<material-toolbar>', function() {
       target: { scrollTop: 500 }
     });
 
-    expect(toolbar.css($materialEffects.TRANSFORM_PROPERTY)).toContain('-100px');
+    expect(toolbar.css($materialEffects.TRANSFORM)).toContain('-100px');
     expect(contentEl.css('margin-top')).toEqual('-100px');
 
     // Fake scroll back to the top
@@ -41,7 +41,7 @@ describe('<material-toolbar>', function() {
       target: { scrollTop: 0 }
     });
 
-    expect(toolbar.css($materialEffects.TRANSFORM_PROPERTY)).toEqual('');
+    expect(toolbar.css($materialEffects.TRANSFORM)).toEqual('');
     expect(contentEl.css('margin-top')).toEqual('');
 
   }));

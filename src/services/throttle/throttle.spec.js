@@ -385,7 +385,7 @@ describe('ngThrottleSpec', function() {
       return el;
     }
 
-    it('should start, animate, and end.', inject(function($compile, $rootScope, $materialEffects) {
+    xit('should start, animate, and end.', inject(function($compile, $rootScope, $materialEffects) {
 
       var cntr = setup(),
       canvas = cntr.find('canvas'),

@@ -210,8 +210,7 @@ function materialRadioButtonDirective($expectAria) {
     restrict: 'E',
     require: '^materialRadioGroup',
     transclude: true,
-    template: '<div class="material-container">' +
-                '<material-ripple start="center" class="circle"></material-ripple>' +
+    template: '<div class="material-container" ink-ripple="checkbox">' +
                 '<div class="material-off"></div>' +
                 '<div class="material-on"></div>' +
               '</div>' +
