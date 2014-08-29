@@ -6,7 +6,6 @@ var Constant = {
       RADIO : 'radio',
       RADIO_GROUP : 'radiogroup',
       TAB_LIST : 'tablist',
-      TABS: 'tabs',
       TAB : 'tab',
       TAB_PANEL : 'tabpanel'
     },

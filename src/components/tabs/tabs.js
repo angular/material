@@ -217,7 +217,7 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF, $ar
            * @returns {*|string}
            */
           function buildAriaID() {
-            return  attrs.id || (ROLE.TABS + "_" + scope.$id);
+            return  attrs.id || ("tabs" + "_" + scope.$id);
           }
         }
 
