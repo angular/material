@@ -68,6 +68,6 @@ function materialComponentRegistry($log) {
         }
       };
     },
-  }
+  };
 }
 

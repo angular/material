@@ -13,7 +13,7 @@ describe('ngAnimateSequenceSpec', function() {
         body = angular.element($document[0].body);
         $animate = _$animate_;
         $rootElement = _$rootElement_;
-      }
+      };
     });
   });
 
@@ -184,7 +184,7 @@ describe('ngAnimateSequenceSpec', function() {
           $animateSequence()
             .addClass('1')
             .addClass('2')
-            .addClass('3')
+            .addClass('3');
 
           expect($animate.queue.length).toBe(0);
           $animate.triggerReflow();
@@ -231,7 +231,7 @@ describe('ngAnimateSequenceSpec', function() {
             return function(post, done) {
               postStyles = post;
               done();
-            }
+            };
           }
         });
 
@@ -251,7 +251,7 @@ describe('ngAnimateSequenceSpec', function() {
           styler : function(element, pre) {
             return function(post, done) {
               doneFn = done;
-            }
+            };
           }
         });
 
@@ -377,9 +377,9 @@ describe('ngAnimateSequenceSpec', function() {
           inject(function($animateSequence, $animate, $sniffer, $rootElement, $document) {
 
           var log = [];
-          var prefix = $sniffer.vendorPrefix.toLowerCase() == 'webkit'
-              ? '-webkit-'
-              : '';
+          var prefix = $sniffer.vendorPrefix.toLowerCase() == 'webkit' ?
+              '-webkit-' : 
+              '';
 
           $animate.enabled(true);
           var element = jqLite('<div></div>');

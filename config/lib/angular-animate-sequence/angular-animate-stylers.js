@@ -10,7 +10,7 @@ angular.module('ngAnimateStylers', ['ngAnimateSequence'])
         element.css(pre);
         return function(post, done) {
           element.animate(post, duration, null, done);
-        }
+        };
       };
     });
 
@@ -61,7 +61,7 @@ angular.module('ngAnimateStylers', ['ngAnimateSequence'])
             element.css(finalStyles); 
             done();
           };
-        }
+        };
       };
 
       function computeStartingStyles(node, props) {
@@ -111,7 +111,7 @@ angular.module('ngAnimateStylers', ['ngAnimateSequence'])
             pre || { },
             angular.extend( post, {onComplete:done, delay: (delay || 0)/1000} )
           );
-        }
+        };
       };
     });
 

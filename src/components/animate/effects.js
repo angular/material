@@ -39,8 +39,8 @@ angular.module('material.animations', [
 function MaterialEffects($animateSequence, $rootElement, $position, $$rAF, $sniffer) {
 
   var styler = angular.isDefined( $rootElement[0].animate ) ? 'webAnimations' :
-               angular.isDefined( window['TweenMax'] || window['TweenLite'] ) ? 'gsap'   :
-               angular.isDefined( window['jQuery'] ) ? 'jQuery' : 'default';
+               angular.isDefined( window.TweenMax || window.TweenLite ) ? 'gsap'   :
+               angular.isDefined( window.jQuery ) ? 'jQuery' : 'default';
 
   var webkit = /webkit/i.test($sniffer.vendorPrefix);
   function vendorProperty(name) {
@@ -49,9 +49,8 @@ function MaterialEffects($animateSequence, $rootElement, $position, $$rAF, $snif
       name;
   }
 
-  var self;
   // Publish API for effects...
-  return self = {
+  var self = {
     popIn: popIn,
     popOut: popOut,
 
@@ -68,6 +67,8 @@ function MaterialEffects($animateSequence, $rootElement, $position, $$rAF, $snif
     ANIMATION_TIMING: vendorProperty('animationTimingFunction'),
     ANIMATION_DIRECTION: vendorProperty('animationDirection')
   };
+
+  return self;
 
   // **********************************************************
   // API Methods
