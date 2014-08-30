@@ -67,12 +67,9 @@
         ng-if="currentDoc && currentDoc.docType === 'readme'">
         <span flex></span>
         <material-button
-          ng-repeat="doc in currentComponent.docs" 
-          ng-show="doc.docType !== 'readme'"
-          ng-href="#{{doc.url}}" style="padding:3px;">
-            <span class="directive">&lt;</span>
-              {{doc.humanName || doc.name}}
-            <span class="directive">&gt;</span>
+          ng-repeat="doc in menuDocs(currentComponent)"
+          ng-href="#{{doc.url}}">
+          <span ng-bind="'&lt;'+ (doc.humanName || doc.name) + '&gt;'"></span>
         </material-button>
       </div>
 

@@ -184,6 +184,12 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $materialDialog, menu, 
   function sortByJs(file) {
     return file.fileType == 'js' ? -1 : 1;
   }
+
+  $scope.menuDocs = function(component) {
+    return component.docs.filter(function(doc) {
+      return doc.docType !== 'readme';
+    });
+  };
 }])
 
 .controller('HomeCtrl', [

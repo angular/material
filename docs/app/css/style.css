@@ -76,9 +76,6 @@ material-toolbar.material-medium-tall {
 }
 
 
-.menu-icon {
-  height: 60px;
-}
 .menu-icon material-icon {
   top: 19px;
   pointer-events: none; /* don't let svg stop the click event */
@@ -197,16 +194,6 @@ material-toolbar.demo-toolbar material-button {
 }
 .api-options-bar.with-icon material-button span {
   margin-left: 22px;
-}
-
-.api-options-bar .directive {
-  font-size: 20px;
-  font-weight: 400;
-  display: inline-block;
-  /* Make &lt; and &gt; be smaller. */
-  -webkit-transform: scaleX(0.8);
-  transform: scaleX(0.8);
-  margin: -2px;
 }
 
 .api-params-item {
