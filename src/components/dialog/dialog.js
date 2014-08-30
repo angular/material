@@ -80,9 +80,7 @@ function MaterialDialogDirective($$rAF) {
  *
  * @paramType Options
  * @param {string=} templateUrl The url of a template that will be used as the content
- * of the dialog. Restrictions: the template must have an outer `material-dialog` element. 
- * Inside, use an element with class `dialog-content` for the dialog's content, and use
- * an element with class `dialog-actions` for the dialog's actions.
+ * of the dialog. 
  * @param {string=} template Same as templateUrl, except this is an actual template string.
  * @param {DOMClickEvent=} targetEvent A click's event object. When passed in as an option, 
  * the location of the click will be used as the starting point for the opening animation
