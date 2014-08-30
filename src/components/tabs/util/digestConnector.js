@@ -17,34 +17,30 @@
  */
 function addDigestConnector (scope) {
   var disconnect = function () {
-    if (this.$root === this) {
-      return; // we can't disconnect the root node;
-    }
+
+    // we can't destroy the root scope or a scope that has been already destroyed
+    if (this.$root === this) return;
+    if (this.$$destroyed ) return;
+
     var parent = this.$parent;
     this.$$disconnected = true;
+
     // See Scope.$destroy
-    if (parent.$$childHead === this) {
-      parent.$$childHead = this.$$nextSibling;
-    }
-    if (parent.$$childTail === this) {
-      parent.$$childTail = this.$$prevSibling;
-    }
-    if (this.$$prevSibling) {
-      this.$$prevSibling.$$nextSibling = this.$$nextSibling;
-    }
-    if (this.$$nextSibling) {
-      this.$$nextSibling.$$prevSibling = this.$$prevSibling;
-    }
+    if (parent.$$childHead === this) parent.$$childHead = this.$$nextSibling;
+    if (parent.$$childTail === this) parent.$$childTail = this.$$prevSibling;
+    if (this.$$prevSibling) this.$$prevSibling.$$nextSibling = this.$$nextSibling;
+    if (this.$$nextSibling) this.$$nextSibling.$$prevSibling = this.$$prevSibling;
+
     this.$$nextSibling = this.$$prevSibling = null;
   };
   var reconnect = function () {
-    if (this.$root === this) {
-      return; // we can't disconnect the root node;
-    }
+
+    // we can't disconnect the root node or scope already disconnected
+    if (this.$root === this) return;
+    if (!this.$$disconnected) return;
+
     var child = this;
-    if (!child.$$disconnected) {
-      return;
-    }
+
     var parent = child.$parent;
     child.$$disconnected = false;
     // See Scope.$new for this logic...

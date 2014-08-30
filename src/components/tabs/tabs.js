@@ -234,8 +234,9 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF, $ar
           var headerContainer = findNode('.tabs-header-items-container', element);
 
           // Immediately place the ink bar
-          refreshInkBar(true);
-          return $$rAF.debounce(refreshInkBar);
+          updateInkBar(true);
+
+          return $$rAF.debounce(updateInkBar);
 
           /**
            * Update the position and size of the ink bar based on the
@@ -243,7 +244,7 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF, $ar
            * @param tab
            * @param skipAnimation
            */
-          function refreshInkBar(skipAnimation) {
+          function updateInkBar(skipAnimation) {
             var tabElement = tabsController.selectedElement();
 
             if ( tabElement && tabElement.length && angular.isDefined(inkBar) ) {
@@ -335,6 +336,7 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF, $ar
             var tabsWidth = element.prop('clientWidth') - PAGINATORS_WIDTH;
             var shouldPaginate = (TAB_MIN_WIDTH * tabs.length) > tabsWidth;
             var paginationToggled = shouldPaginate !== pagination.active;
+            var pageIndex = 0;
 
             pagination.active = shouldPaginate;
             
@@ -345,10 +347,9 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF, $ar
               pagination.tabWidth = tabsWidth / pagination.itemsPerPage;
               header.css('width', pagination.tabWidth * tabs.length + 'px');
 
-                // If we just activated pagination, go to page 0 and watch the 
-                // selected tab index to be sure we're on the same page
-
-              var pageIndex = paginationToggled ? 0 : Math.min(pagination.page, pagination.pagesCount - 1);
+              // If we just activated pagination, go to page 0 and watch the
+              // selected tab index to be sure we're on the same page
+              pageIndex = paginationToggled ? 0 : Math.min(pagination.page, pagination.pagesCount - 1);
 
               selectPageAt( pageIndex );
 
@@ -358,7 +359,7 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF, $ar
                 // Slide tab buttons to show all buttons (starting at first)
 
                 header.css('width', '');
-                slideTabButtons(0);
+                slideTabButtons( pageIndex );
               }
             }
           }
