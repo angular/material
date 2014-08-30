@@ -17,6 +17,7 @@ function iterator(items, reloop) {
       items: getItems,
       count: count,
 
+      hasPrevious:hasPrevious,
       hasNext: hasNext,
       inRange: inRange,
       contains: contains,
@@ -68,6 +69,17 @@ function iterator(items, reloop) {
      */
     function hasNext(tab) {
       return tab ? inRange(indexOf(tab) + 1) : false;
+    }
+
+    /*
+     * Can the iterator proceed to the next item in the list; relative to
+     * the specified item.
+     *
+     * @param tab
+     * @returns {Array.length|*|number|boolean}
+     */
+    function hasPrevious(tab) {
+      return tab ? inRange(indexOf(tab) - 1) : false;
     }
 
     /*

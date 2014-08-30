@@ -191,10 +191,10 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF, $ar
         transcludeHeaderItems();
         transcludeContentItems();
 
+        configureAria();  // Update ARIA values for the Tab group (Tabs)
+
         alignTabButtons();
         selectDefaultTab();
-
-        configureAria();  // Update ARIA values for the Tab group (Tabs)
 
         // **********************************************************
         // Private Methods
@@ -249,13 +249,9 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF, $ar
 
             if ( tabElement && tabElement.length && angular.isDefined(inkBar) ) {
 
-              var width = tabElement.prop('offsetWidth');
-              var left = headerContainer.prop('offsetLeft') + tabElement.prop('offsetLeft') +
-                (scope.headerPos || 0);
-
-              if (tabElement.hasClass('pagination-hide')) {
-                width = 0;
-              }
+              var isHiding = tabElement.hasClass('pagination-hide');
+              var width = isHiding ? 0 : tabElement.prop('offsetWidth');
+              var left = headerContainer.prop('offsetLeft') + tabElement.prop('offsetLeft') + (scope.headerPos || 0);
 
               var styles = {
                 display : width > 0 ? 'block' : 'none',
@@ -287,11 +283,15 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF, $ar
             prev: function() { selectPageAt(pagination.page - 1); }
           };
 
-          scope.$watch('$selIndex', function onSelIndexChange(selectedIndex) {
-            if (!pagination.active) return;
+          scope.$on('$materialTabsChanged', function onSelectedTabChange() {
+            if ( !pagination.active  ) return;
+            if ( scope.$selIndex < 0 ) return;
+
+            var selectedIndex = scope.$selIndex;
+            var pageIndex = Math.floor(selectedIndex / pagination.itemsPerPage);
 
             if ( !isTabInRange(selectedIndex) ) {
-              selectPageAt( Math.floor(selectedIndex / pagination.itemsPerPage));
+              selectPageAt( pageIndex );
             }
           });
 
@@ -723,10 +723,10 @@ function TabDirective( $attrBind, $aria ) {
       .on('keydown', function onRequestSelect(event)
       {
         if(event.which === Constant.KEY_CODE.LEFT_ARROW) {
-          tabsController.previous(scope);
+          tabsController.previous(scope, true);
         }
         if(event.which === Constant.KEY_CODE.RIGHT_ARROW) {
-          tabsController.next(scope);
+          tabsController.next(scope, true);
         }
       });
 
@@ -956,15 +956,17 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
     // Turn off all tabs (if current active)
     angular.forEach(list.items(), deactivate);
 
-    // Activate the specified tab (or next available)
-    selected = activate(tab.disabled ? list.next(tab) : tab);
+    if ( tab != null ) {
+      // Activate the specified tab (or next available)
+      selected = activate(tab.disabled ? list.next(tab) : tab);
 
-    // update external models and trigger databinding watchers
-    $scope.$selIndex = String(selected.$index || list.indexOf(selected));
+      // update external models and trigger databinding watchers
+      $scope.$selIndex = String(selected.$index || list.indexOf(selected));
 
-    // update the tabs ink to indicate the selected tab
-    if (!noUpdate) {
-      onTabsChanged();
+      // update the tabs ink to indicate the selected tab
+      if (!noUpdate) {
+        onTabsChanged();
+      }
     }
 
     return selected;
@@ -1041,16 +1043,18 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
    * Select the next tab in the list
    * @returns {*} Tab
    */
-  function selectNext() {
-    return selectTab(list.next(selected, isEnabled));
+  function selectNext(noLoop) {
+    var ignore = ( !list.hasNext(selected) && !!noLoop);
+    return ignore ? selected : selectTab(list.next(selected, isEnabled));
   }
 
   /**
    * Select the previous tab
    * @returns {*} Tab
    */
-  function selectPrevious() {
-    return selectTab(list.previous(selected, isEnabled));
+  function selectPrevious(noLoop) {
+    var ignore = ( !list.hasPrevious(selected) && !!noLoop );
+    return ignore ? selected : selectTab(list.previous(selected, isEnabled));
   }
 
   /**
