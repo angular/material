@@ -97,10 +97,6 @@ function MaterialButtonDirective(ngHrefDirectives, $materialInkRipple, $aria ) {
       return function postLink(scope, element, attr) {
         $aria.expect(element, 'aria-label', element.text());
         $materialInkRipple.attachButtonBehavior(element);
-
-        element.on('focus', function() {
-          innerElement.focus();
-        });
       };
     }
   };

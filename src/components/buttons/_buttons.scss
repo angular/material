@@ -143,12 +143,6 @@ material-button {
     -webkit-transition-property: -webkit-transform, box-shadow;
     transition: transform 0.2s linear;
     transition-property: transform, box-shadow;
-    
-    .material-button-inner {
-      @include flex-display();
-      @include flex-align-items(center);
-      @include flex-justify-content(center);
-    }
   }
 
   &.material-button-raised,

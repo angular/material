@@ -292,7 +292,8 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF, $ar
           }
 
           function refreshPagination() {
-            var tabsWidth = element.prop('offsetWidth') - PAGINATORS_WIDTH;
+            // if(1)return;
+            var tabsWidth = element.prop('clientWidth') - PAGINATORS_WIDTH;
             var tabs = header.children();
             var shouldPaginate = (TAB_MIN_WIDTH * tabs.length) > tabsWidth;
 
