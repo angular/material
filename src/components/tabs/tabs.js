@@ -268,89 +268,120 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF, $ar
           }
         }
 
+        /**
+         * Configure pagination and add listeners for tab changes
+         * and Tabs width changes...
+         *
+         * @returns {updatePagination}
+         */
         function configurePagination() {
-          // Must match tab min-width rule in _tabs.scss
-          var TAB_MIN_WIDTH = 8 * 12;
-          // Must match (2 * width of paginators) in scss
-          var PAGINATORS_WIDTH = (8 * 4) * 2;
+          // TODO - use getComputedStyle() to lookup width constants
 
-          var pagination = scope.pagination = {
-            next: function() { setPage(pagination.page + 1); },
-            prev: function() { setPage(pagination.page - 1); }
-          };
+          var TAB_MIN_WIDTH = 8 * 12;           // Must match tab min-width rule in _tabs.scss
+          var PAGINATORS_WIDTH = (8 * 4) * 2;   // Must match (2 * width of paginators) in scss
 
           var header = findNode('.tabs-header-items', element);
-          var headerContainer = findNode('.tabs-header-items-container', element);
+          var pagination = scope.pagination = {
+            next: function() { selectPageAt(pagination.page + 1); },
+            prev: function() { selectPageAt(pagination.page - 1); }
+          };
 
-          scope.$watch('$selIndex', paginationWatchSelectedTab);
+          scope.$watch('$selIndex', function onSelIndexChange(selectedIndex) {
+            if (!pagination.active) return;
 
-          return refreshPagination;
+            if ( !isTabInRange(selectedIndex) ) {
+              selectPageAt( Math.floor(selectedIndex / pagination.itemsPerPage));
+            }
+          });
 
-          function setHeaderPos(x) {
-            header.css($materialEffects.TRANSFORM, 'translate3d('+x+'px,0,0)');
-            scope.headerPos = x;
+          return updatePagination;
+
+          /**
+           * Select the specified page in the page group and
+           * also change the selected the tab if the current
+           * tab selected is **not** within the new page range.
+           *
+           * @param page
+           */
+          function selectPageAt(page) {
+            if ( page == pagination.page ) return;
+
+            pagination.startIndex = page * pagination.itemsPerPage;
+            pagination.endIndex = pagination.startIndex + pagination.itemsPerPage - 1;
+
+            var tabInRange = isTabInRange(scope.$selIndex);
+            var tabToSelect = page > pagination.page ?  pagination.startIndex : pagination.endIndex;
+            var tabs = header.children();
+
+            pagination.hasPrev = page > 0;
+            pagination.hasNext = (page + 1) * pagination.itemsPerPage < tabs.length;
+            pagination.page = page;
+
+            slideTabButtons( -page * pagination.itemsPerPage * pagination.tabWidth );
+
+            if ( !tabInRange ) {
+              // Only change selected tab IF the current tab is not `in range`
+              tabsController.selectAt( tabToSelect, true );
+            }
           }
 
-          function refreshPagination() {
-            // if(1)return;
-            var tabsWidth = element.prop('clientWidth') - PAGINATORS_WIDTH;
+          /**
+           * When the window resizes [`resize`] or the tabs are added/removed
+           * [$materialTabsChanged], then calculate pagination-width and
+           * update both the current page (if needed) and the tab headers width...
+           */
+          function updatePagination() {
             var tabs = header.children();
+            var tabsWidth = element.prop('clientWidth') - PAGINATORS_WIDTH;
             var shouldPaginate = (TAB_MIN_WIDTH * tabs.length) > tabsWidth;
+            var paginationToggled = shouldPaginate !== pagination.active;
 
-            // Whether we're changing from active to inactive or vice-versa
-            var isNewState = shouldPaginate !== pagination.active;
             pagination.active = shouldPaginate;
             
             if (shouldPaginate) {
+
               pagination.pagesCount = Math.ceil((TAB_MIN_WIDTH * tabs.length) / tabsWidth);
               pagination.itemsPerPage = Math.max(1, Math.floor(tabs.length / pagination.pagesCount));
               pagination.tabWidth = tabsWidth / pagination.itemsPerPage;
               header.css('width', pagination.tabWidth * tabs.length + 'px');
 
-              if (isNewState) {
                 // If we just activated pagination, go to page 0 and watch the 
                 // selected tab index to be sure we're on the same page
-                setPage(0);
+
+              var pageIndex = paginationToggled ? 0 : Math.min(pagination.page, pagination.pagesCount - 1);
+
+              selectPageAt( pageIndex );
+
               } else {
-                setPage(Math.min(pagination.page, pagination.pagesCount - 1));
-              }
-            } else {
-              if (isNewState) { 
-                setHeaderPos(0);
+              if (paginationToggled) {
+                // Release header to be self-adjust to size of all tab buttons
+                // Slide tab buttons to show all buttons (starting at first)
+
                 header.css('width', '');
+                slideTabButtons(0);
               }
             }
           }
 
-          function setPage(page) {
-            var tabs = header.children();
-
-            pagination.startIndex = page * pagination.itemsPerPage;
-            pagination.endIndex = pagination.startIndex + pagination.itemsPerPage - 1;
-
-            pagination.hasPrev = page > 0;
-            pagination.hasNext = (page + 1) * pagination.itemsPerPage < tabs.length;
-
-            setHeaderPos(-page * pagination.itemsPerPage * pagination.tabWidth);
-
-            if (scope.$selIndex < pagination.startIndex ||
-                scope.$selIndex > pagination.endIndex) {
-              tabsController.selectAt(
-                page > pagination.page ?  pagination.startIndex : pagination.endIndex,
-                true
-              );
-            }
-            pagination.page = page;
-            updateInk();
+          /**
+           * Perform animated CSS translation of the tab buttons container
+           * @param xOffset
+           */
+          function slideTabButtons( xOffset ) {
+            header.css($materialEffects.TRANSFORM, 'translate3d(' + xOffset + 'px,0,0)');
+            scope.headerPos = xOffset;
           }
 
-          function paginationWatchSelectedTab(selectedIndex) {
-            if (!pagination.active) return;
-
-            if (selectedIndex < pagination.startIndex ||
-                selectedIndex > pagination.endIndex) {
-              setPage(Math.floor(selectedIndex / pagination.itemsPerPage));
-            }
+          /**
+           * Is the specified tabIndex with the tab range allowed
+           * for the current page/pagination?
+           *
+           * @param tabIndex
+           * @returns {boolean}
+           */
+          function isTabInRange( tabIndex ){
+            return (tabIndex >= pagination.startIndex) &&
+                   (tabIndex <= pagination.endIndex);
           }
 
         }
