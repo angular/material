@@ -29,11 +29,11 @@ material-ink-bar {
     opacity: 0.4;
   } 
   50% {
-    @include transform(scale(2.7));
+    @include transform(scale(1.0));
     opacity: 0.4;
   }
   100% {
-    @include transform(scale(2.7));
+    @include transform(scale(1.0));
     opacity: 0;
   }
 }
@@ -53,6 +53,5 @@ material-ink-bar {
 }
 
 .material-ripple {
-  z-index: 0;
   position: absolute;
 }

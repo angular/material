@@ -21,10 +21,10 @@ material-radio-button,
     .material-ripple-container {
       position: absolute;
       display: block;
-      width: 70px;
-      height: 70px;
-      left: -(35 - $radio-width / 2);
-      top: -(35 - $radio-width / 2);
+      width: $radio-width * 3; 
+      height: $radio-width * 3;
+      left: -$radio-width;
+      top: -$radio-width;
     }
     .material-ripple {
       color: #0f9d58;

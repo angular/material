@@ -125,9 +125,6 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
       return createRipple(ev.pageX, ev.pageY, true);
     }
     function createRipple(left, top, positionsAreAbsolute) {
-      var elementRect = node.getBoundingClientRect();
-      var elementStyle = $window.getComputedStyle(node);
-      var finalSize = elementRect.width;
 
       var rippleEl = angular.element('<div class="material-ripple">')
         .css(
@@ -156,15 +153,17 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
         left = rippleContainer.prop('offsetWidth') / 2;
         top = rippleContainer.prop('offsetHeight') / 2;
       } else if (positionsAreAbsolute) {
+        var elementRect = node.getBoundingClientRect();
         left -= elementRect.left;
         top -= elementRect.top;
       }
 
-      var rippleStyle = $window.getComputedStyle(rippleEl[0]);
+      var finalSize = rippleContainer.prop('offsetWidth');
 
       // TODO don't use px, make setRippleCss fix that
       var css = {
-        'background-color': rippleStyle.color || elementStyle.color,
+        'background-color': $window.getComputedStyle(rippleEl[0]).color || 
+          $window.getComputedStyle(node).color,
         'border-radius': (finalSize / 2) + 'px',
 
         left: (left - finalSize / 2) + 'px',
