@@ -132,7 +132,7 @@ function materialRadioGroupDirective() {
   function selectButton( direction,  parent, loop ) {
     loop = angular.isUndefined(loop) ? true : !!loop;
 
-    var buttons = iterator( findAllButtons(parent), loop );
+    var buttons = Util.iterator( findAllButtons(parent), loop );
 
     if ( buttons.count() ) {
       var selected = findSelectedButton(parent);

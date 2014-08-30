@@ -64,6 +64,7 @@ module.exports = {
       'config/lib/angular-animate-sequence/angular-animate-stylers.js',
 
       //Utilities
+      'src/base/iterator.js',
       'src/base/utils.js',
       'src/base/constants.js',
 

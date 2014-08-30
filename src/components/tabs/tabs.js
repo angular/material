@@ -866,7 +866,7 @@ function TabDirective( $attrBind, $aria ) {
  * @private
  */
 function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
-  var list = iterator([], true),
+  var list = Util.iterator([], true),
     componentID = "tabs" + $scope.$id,
     elements = { },
     selected = null,

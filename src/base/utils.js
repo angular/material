@@ -59,7 +59,13 @@ var Util = {
       var params = Array.prototype.slice.call(arguments, 0);
       targetFn.apply(scope, params);
     };
-  }
+  },
+
+  /**
+   * Publish the iterator facade to easily support iteration and accessors
+   * @see iterator.js
+   */
+  iterator : iterator
 
 };
 
