@@ -65,11 +65,18 @@
         </div>
     </div>
 
-        <input type="number" ng-model="selectedIndex">Tab #2 is
-              <span class="highlight">
-                <input type="checkbox" ng-model="twoDisabled">Disabled
-              </span>
+    <material-input-group>
+        <label>SelectedIndex</label>
+        <material-input type="text" ng-model="selectedIndex"></material-input>
+    </material-input-group>
+
+    <div style="margin-top: 10px;">
+        Tab #2 is
+          <span class="highlight">
+            <input type="checkbox" ng-model="twoDisabled">Disabled
+          </span>
         (will auto-deselect if active)
+    </div>
 
 
 </div>

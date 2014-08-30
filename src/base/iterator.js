@@ -72,7 +72,7 @@ function iterator(items, reloop) {
     }
 
     /*
-     * Can the iterator proceed to the next item in the list; relative to
+     * Can the iterator proceed to the previous item in the list; relative to
      * the specified item.
      *
      * @param tab
