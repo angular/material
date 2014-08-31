@@ -25,13 +25,13 @@ angular.module('ngAnimateSequence', ['ngAnimate'])
           return function(post, done) {
             element.css(post);
             done();
-          }
+          };
         };
       });
 
       return function(name) {
         return $injector.get(name + 'Styler');
-      }
+      };
     }];
   }])
 
@@ -46,11 +46,9 @@ angular.module('ngAnimateSequence', ['ngAnimate'])
         var paused = false;
         var cancelAnimation = angular.noop;
 
-        var styler = angular.isFunction(options.styler)
-          ? options.styler
-          : angular.isString(options.styler)
-          ? $$animateStyler(options.styler)
-          : $$animateStyler('default');
+        var styler = angular.isFunction(options.styler) ? options.styler :
+          angular.isString(options.styler) ? $$animateStyler(options.styler) :
+          $$animateStyler('default');
 
         var style = function(element, duration, cssStyles) {
           cssStyles = cssStyles || {};
@@ -120,7 +118,7 @@ angular.module('ngAnimateSequence', ['ngAnimate'])
         var startingClassName = node.className;
         var accumulatedStyles = {};
 
-        return self = {
+        self = {
           revertStyles : function() {
             angular.forEach(accumulatedStyles, function(_, prop) {
               node.style.removeProperty(prop);
@@ -167,7 +165,9 @@ angular.module('ngAnimateSequence', ['ngAnimate'])
           }
 
         };
-      }
+
+        return self;
+      };
     }])
 
   .factory('$animateSequence', ['$animate', '$animateRunner', '$sniffer',
@@ -175,7 +175,7 @@ angular.module('ngAnimateSequence', ['ngAnimate'])
       return function(options) {
         var self, queue = [];
 
-        return self = {
+        self = {
           run : function(element, duration, completeFn) {
             return $animateRunner(element, options, queue, duration, completeFn).next();
           },
@@ -249,11 +249,13 @@ angular.module('ngAnimateSequence', ['ngAnimate'])
 
           setClass : function(add, remove, preOptions, postOptions, time ) {
             return addToChain(time, preOptions, postOptions, function(element, duration, done) {
-              return $animate.setClass(element, add, remove, done)
+              return $animate.setClass(element, add, remove, done);
             });
           }
 
         };
+
+	return self;
 
         /**
          * Append chain step into queue
@@ -265,7 +267,7 @@ angular.module('ngAnimateSequence', ['ngAnimate'])
             return a[0] > b[0];
           });
           return self;
-        };
+        }
 
         /**
          * For any positional fields, ensure that a `px` suffix
