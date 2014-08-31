@@ -714,7 +714,7 @@ function TabDirective( $attrBind, $aria ) {
     element.on('click', function onRequestSelect()
       {
         // Click support for entire <material-tab /> element
-        if (!scope.disabled) {
+        if ( !scope.disabled ) {
           scope.$apply(function () {
             tabsController.select(scope);
           });
@@ -904,6 +904,9 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
     onTabsChanged.queued = true;
 
     $scope.$evalAsync(function() {
+      var selected = self.selectedElement();
+      if ( selected ) selected.focus();
+
       $scope.$broadcast('$materialTabsChanged');
       onTabsChanged.queued = false;
     });
