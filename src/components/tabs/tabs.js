@@ -236,6 +236,7 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF, $ar
           // Immediately place the ink bar
           updateInkBar(true);
 
+          // Delay inkBar updates 1-frame until pagination updates...
           return $$rAF.debounce(updateInkBar);
 
           /**
@@ -723,10 +724,10 @@ function TabDirective( $attrBind, $aria ) {
       .on('keydown', function onRequestSelect(event)
       {
         if(event.which === Constant.KEY_CODE.LEFT_ARROW) {
-          tabsController.previous(scope, true);
+          tabsController.previous(scope);
         }
         if(event.which === Constant.KEY_CODE.RIGHT_ARROW) {
-          tabsController.next(scope, true);
+          tabsController.next(scope);
         }
       });
 
@@ -866,7 +867,7 @@ function TabDirective( $attrBind, $aria ) {
  * @private
  */
 function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
-  var list = Util.iterator([], true),
+  var list = Util.iterator([], false),
     componentID = "tabs" + $scope.$id,
     elements = { },
     selected = null,
@@ -961,7 +962,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
 
     if ( tab != null ) {
       // Activate the specified tab (or next available)
-      selected = activate(tab.disabled ? list.next(tab) : tab);
+      selected = activate(tab.disabled ? list.next(tab, isEnabled) : tab);
 
       // update external models and trigger databinding watchers
       $scope.$selIndex = String(selected.$index || list.indexOf(selected));
@@ -985,7 +986,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
         it = matches ? matches[0] : null;
 
       if (it != selected) {
-        selectTab(it, noUpdate);
+        selectTab(it || list.first(), noUpdate);
       }
     }
   }
@@ -1028,7 +1029,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
   function removeTab(tab) {
     if (list.contains(tab)) {
 
-      selectTab( list.next(tab, isEnabled) );
+      selectTab( list.next(tab, isEnabled) || list.previous(tab, isEnabled) );
       list.remove(tab);
 
       onTabsChanged();
@@ -1046,18 +1047,24 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
    * Select the next tab in the list
    * @returns {*} Tab
    */
-  function selectNext(noLoop) {
-    var ignore = ( !list.hasNext(selected) && !!noLoop);
-    return ignore ? selected : selectTab(list.next(selected, isEnabled));
+  function selectNext(target) {
+    var next = list.next( target, isEnabled );
+
+    return next ? selectTab( next ) :
+           target.disabled ? selectPrevious(target) : target;
   }
 
   /**
    * Select the previous tab
    * @returns {*} Tab
    */
-  function selectPrevious(noLoop) {
-    var ignore = ( !list.hasPrevious(selected) && !!noLoop );
-    return ignore ? selected : selectTab(list.previous(selected, isEnabled));
+  function selectPrevious(target) {
+    var previous = list.previous(target, isEnabled );
+
+    return previous ? selectTab( previous ) :
+           target.disabled ? selectNext(target) : target;
+
+
   }
 
   /**

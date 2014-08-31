@@ -181,11 +181,10 @@ function iterator(items, reloop) {
 
       if (contains(it)) {
         var index = indexOf(it) + 1,
-          found = inRange(index) ? _items[ index ] :
-            reloop ? first() : null,
-          skip = found && validate && !validate(found);
+            found = inRange(index) ? _items[ index ] : reloop ? first() : null,
+            skip = found && validate && !validate(found);
 
-        return skip ? next(found) : found;
+        return skip ? next(found, validate) : found;
       }
 
       return null;
@@ -200,11 +199,10 @@ function iterator(items, reloop) {
 
       if (contains(it)) {
         var index = indexOf(it) - 1,
-          found = inRange(index) ? _items[ index ] :
-            reloop ? last() : null,
-          skip = found && validate && !validate(found);
+            found = inRange(index) ? _items[ index ] : reloop ? last() : null,
+            skip = found && validate && !validate(found);
 
-        return skip ? previous(found) : found;
+        return skip ? previous(found, validate) : found;
       }
 
       return null;
