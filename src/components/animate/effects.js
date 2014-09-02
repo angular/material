@@ -52,6 +52,8 @@ function MaterialEffects($animateSequence, $rootElement, $position, $$rAF, $snif
   var self;
   // Publish API for effects...
   return self = {
+    makeSequence : makeSequence,
+
     popIn: popIn,
     popOut: popOut,
 
@@ -72,6 +74,14 @@ function MaterialEffects($animateSequence, $rootElement, $position, $$rAF, $snif
   // **********************************************************
   // API Methods
   // **********************************************************
+
+  function makeSequence( from, to, duration )
+  {
+    var animate = $animateSequence({ styler: styler }).animate,
+       sequence = animate( from, to , safeDuration(duration) );
+
+    return sequence;
+  }
 
   /**
    *

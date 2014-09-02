@@ -37,6 +37,7 @@ material-tabs {
   }
 }
 
+/* If `center` justified, change to left-justify if paginating */
 material-tabs[center] .tabs-header:not(.tab-paginating) .tabs-header-items {
   @include flex-justify-content(center);
 }
@@ -72,7 +73,12 @@ material-ink-bar {
   &.animate {
     @include transition(all 0.2s linear);
   }
+  &.easeInOut {
+    @include easeInOut(500ms, cubic-bezier(0.065, 0.485, 0.625, 0.850));
+  }
 }
+
+
 
 
 material-tab {

@@ -65,7 +65,43 @@ var Util = {
    * Publish the iterator facade to easily support iteration and accessors
    * @see iterator.js
    */
-  iterator : iterator
+  iterator : iterator,
+
+  css : {
+    /**
+     * For any positional fields, ensure that a `px` suffix
+     * is provided.
+     * @param target
+     * @returns {*}
+     */
+    appendSuffix : function (target) {
+      var styles = 'top left right bottom ' +
+        'x y width height ' +
+        'border-width border-radius borderWidth borderRadius' +
+        'margin margin-top margin-bottom margin-left margin-right ' +
+        'padding padding-left padding-right padding-top padding-bottom'.split(' ');
+
+      angular.forEach(target, function(val, key) {
+        var isPositional = styles.indexOf(key) > -1;
+        var hasPx        = String(val).indexOf('px') > -1;
+
+        if (isPositional && !hasPx) {
+          target[key] = val + 'px';
+        }
+      });
+
+      return target;
+    },
+
+    left : function( element ) {
+      return element ? element.prop('offsetLeft') : undefined;
+    },
+
+    width : function(element ) {
+      return element ? element.prop('offsetWidth') : undefined;
+    }
+
+  }
 
 };
 

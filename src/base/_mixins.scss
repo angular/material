@@ -40,6 +40,20 @@
           transition: $val;
 }
 
+@mixin transition-timing($val) {
+  -webkit-transition-timing-function: $val;
+          transition-timing-function: $val;
+
+}
+
+@mixin easeInOut($duration, $curve) {
+  -webkit-transition: all $duration $curve;
+          transition: all $duration $curve;
+
+  -webkit-transition-timing-function: all $duration $curve;
+          transition-timing-function: all $duration $curve;
+}
+
 @mixin transition-delay($val) {
   -webkit-transition-delay: $val;
           transition-delay: $val;
@@ -51,6 +65,8 @@
   -ms-user-select: $val;
   user-select: $val;
 }
+
+
 @mixin keyframes($name) {
   @-webkit-keyframes #{$name} {
     @content;
