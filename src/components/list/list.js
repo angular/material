@@ -47,6 +47,9 @@ function materialListDirective() {
   return {
     restrict: 'E',
     link: function($scope, $element, $attr) {
+      $element.attr({
+        'role' : Constant.ARIA.ROLE.LIST
+      });
     }
   };
 }
@@ -75,6 +78,9 @@ function materialItemDirective() {
   return {
     restrict: 'E',
     link: function($scope, $element, $attr) {
+      $element.attr({
+        'role' : Constant.ARIA.ROLE.LIST_ITEM
+      });
     }
   };
 }

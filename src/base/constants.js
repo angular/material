@@ -3,6 +3,8 @@ var Constant = {
     ROLE : {
       BUTTON : 'button',
       CHECKBOX : 'checkbox',
+      LIST : 'list',
+      LIST_ITEM : 'listitem',
       RADIO : 'radio',
       RADIO_GROUP : 'radiogroup',
       TAB_LIST : 'tablist',
