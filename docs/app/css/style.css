@@ -228,3 +228,14 @@ ul li:first-child {
   font-weight: bold;
   text-transform: uppercase;
 }
+
+
+.version {
+    font-size:9pt;
+    color:#ffffff;
+    position: absolute;
+    top: 65px;
+    left: 104px;
+    text-decoration: underline;
+    opacity: 0.6;
+}

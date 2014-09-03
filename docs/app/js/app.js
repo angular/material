@@ -140,7 +140,12 @@ function(COMPONENTS, $location, $rootScope) {
   '$materialDialog',
   'menu',
   '$location',
-function($scope, COMPONENTS, $materialSidenav, $timeout, $materialDialog, menu, $location) {
+  '$http',
+function($scope, COMPONENTS, $materialSidenav, $timeout, $materialDialog, menu, $location, $http ) {
+
+  $scope.version = "";
+  $scope.versionURL = "";
+
   $scope.goToUrl = function(p) {
     window.location = p;
   };
@@ -170,6 +175,22 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $materialDialog, menu, 
       templateUrl: 'template/view-source.tmpl.html'
     });
   };
+
+  // Load build version information; to be
+  // used in the header bar area
+  var now = Math.round(new Date().getTime()/1000);
+  var versionFile = "version.json" + "?ts=" + now;
+
+  $http.get("version.json")
+    .then(function(response){
+      var sha = response.data.sha || "";
+      var url = response.data.url;
+
+      if ( sha != "" ) {
+        $scope.versionURL = url + sha;
+        $scope.version = sha.substr(0,6);
+      }
+    });
 
 
   COMPONENTS.forEach(function(component) {

@@ -1,0 +1,6 @@
+{
+  "sha" : "",
+  "url" : "https://github.com/angular/material/commit/",
+
+  "_comment" : "Gulp tool should use command `git git rev-parse 'HEAD'` and inject SHA value above"
+}
