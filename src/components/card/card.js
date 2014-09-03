@@ -34,7 +34,7 @@ angular.module('material.components.card', [
  *  <p>
  *    The titles of Washed Out's breakthrough song and the first single from Paracosm share the * two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
  *  </p>
- * /material-card>
+ * </material-card>
  * </hljs>
  *
  */
