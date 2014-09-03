@@ -26,7 +26,22 @@ describe('$materialDialog', function() {
 
     var container = parent.find('.material-dialog-container');
     expect(container.length).toBe(1);
-    expect(container.html().trim()).toEqual(template);
+  }));
+
+  it('should have valid ARIA attributes', inject(function($materialDialog, $rootScope) {
+    var template = '<material-dialog>Hello</material-dialog>';
+    var parent = angular.element('<div>');
+
+    $materialDialog({
+      template: template,
+      appendTo: parent
+    });
+
+    $rootScope.$apply();
+
+    var dialog = parent.find('material-dialog');
+    expect(dialog.attr('role')).toBe('dialog');
+    expect(dialog.attr('aria-label')).toEqual(dialog.text());
   }));
 
   it('should escapeToClose == true', inject(function($materialDialog, $rootScope, $rootElement, $timeout, $materialEffects) {

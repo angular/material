@@ -4,7 +4,8 @@
  */
 angular.module('material.components.dialog', [
   'material.animations',
-  'material.services.compiler'
+  'material.services.compiler',
+  'material.services.aria'
 ])
   .directive('materialDialog', [
     '$$rAF',
@@ -17,6 +18,7 @@ angular.module('material.components.dialog', [
     '$rootScope',
     '$materialEffects',
     '$animate',
+    '$aria',
     MaterialDialogService
   ]);
 
@@ -61,7 +63,7 @@ function MaterialDialogDirective($$rAF) {
  * <div ng-controller="MyController">
  *   <material-button ng-click="openDialog($event)">
  *     Open a Dialog from this button!
- *   </material-dialog>
+ *   </material-button>
  * </div>
  * </hljs>
  * <hljs lang="js">
@@ -102,7 +104,7 @@ function MaterialDialogDirective($$rAF) {
  * @param {element=} appendTo The element to append the dialog to. Defaults to appending
  *   to the root element of the application.
  */
-function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootScope, $materialEffects, $animate) {
+function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootScope, $materialEffects, $animate, $aria) {
   var recentDialog;
   var dialogParent = $rootElement.find('body');
   if ( !dialogParent.length ) {
@@ -143,6 +145,8 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
         angular.element(options.targetEvent.target);
       var closeButton = findCloseButton();
       var backdrop;
+
+      configureAria(element.find('material-dialog'));
 
       if (options.hasBackdrop) {
         backdrop = angular.element('<material-backdrop class="opaque ng-enter">');
@@ -188,6 +192,10 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
           scope.$destroy();
           scope = null;
           element = null;
+
+          if(popInTarget !== null) {
+            popInTarget.focus();
+          }
         });
       }
       function onRootElementKeyup(e) {
@@ -202,6 +210,24 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
         }
       }
     });
+
+    /**
+     * Inject ARIA-specific attributes appropriate for Dialogs
+     */
+    function configureAria(element) {
+      var ROLE = Constant.ARIA.ROLE;
+
+      $aria.update(element, {
+        'role': ROLE.DIALOG
+      });
+
+      var dialogContent = element.find('.dialog-content');
+      if(dialogContent.length === 0){
+        dialogContent = element;
+      }
+      var defaultText = Util.stringFromTextBody(dialogContent.text(), 3);
+      $aria.expect(element, 'aria-label', defaultText);
+    }
 
     return recentDialog;
   }
