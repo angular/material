@@ -46,6 +46,18 @@ var Util = {
         return offset ? letter.toUpperCase() : letter;
       });
   },
+  /**
+   * Selects 'n' words from a string
+   * for use in an HTML attribute
+   */
+  stringFromTextBody: function stringFromTextBody(textBody, numWords) {
+    var string = textBody.trim();
+
+    if(string.split(/\s+/).length > numWords){
+      string = textBody.split(/\s+/).slice(1, (numWords + 1)).join(" ") + '...';
+    }
+    return string;
+  },
 
   /**
    * Spread the arguments as individual parameters to the target function.
