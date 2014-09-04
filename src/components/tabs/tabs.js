@@ -958,7 +958,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout, $$
 
       $$rAF( function autoFocus() {
         var selected = self.selectedElement();
-        if ( selected ) selected.focus();
+        if ( selected ) selected[0].focus();
       });
 
       onTabsChanged.queued = false;
