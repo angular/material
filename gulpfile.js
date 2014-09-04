@@ -6,6 +6,8 @@ var glob = require('glob').sync;
 var gulp = require('gulp');
 var karma = require('karma').server;
 var pkg = require('./package.json');
+var exec = require('child_process').exec;
+var writeFile = require('fs').writeFile;
 
 var argv = require('minimist')(process.argv.slice(2));
 
@@ -48,7 +50,17 @@ gulp.task('watch', ['docs'], function() {
 /**
  * Docs
  */
-gulp.task('docs', ['docs-scripts', 'docs-html2js', 'docs-css', 'docs-html', 'docs-app'], function() {
+gulp.task('docs', ['docs-scripts', 'docs-html2js', 'docs-css', 'docs-html', 'docs-app', 'docs-version'], function() {
+});
+
+gulp.task('docs-version', ['docs-app'], function(done) {
+  exec('git rev-parse HEAD', { env: process.env }, function(err, stdout) {
+    if(err) throw err;
+    var sha = stdout.trim();
+    var json = require(buildConfig.docsVersionFile);
+    json.sha = sha;
+    writeFile(buildConfig.docsVersionFile, JSON.stringify(json), 'utf8', done);
+  });
 });
 
 gulp.task('docs-scripts', ['demo-scripts'], function() {

@@ -30,6 +30,7 @@ module.exports = {
 
   docsDist: 'dist/docs',
   docsLib: 'dist/docs/lib',
+  docsVersionFile: './dist/docs/version.json', // Writing to dist/ to avoid version-managed docs
   docsAssets: {
     js: [
       'bower_components/angularytics/dist/angularytics.js',
