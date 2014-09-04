@@ -376,8 +376,8 @@ function TabsDirective($compile, $timeout, $materialEffects, $window, $$rAF, $ar
           function updatePagination() {
 
             var tabs = buttonBar.children();
-            var tabsWidth = element.prop('offsetWidth') - PAGINATORS_WIDTH;
-            var needPagination = (TAB_MIN_WIDTH * tabs.length) > tabsWidth;
+            var tabsWidth = element.prop('clientWidth') - PAGINATORS_WIDTH;
+            var needPagination = (tabsWidth > 0) && ((TAB_MIN_WIDTH * tabs.length) > tabsWidth);
             var paginationToggled = (needPagination !== pagination.active);
 
             pagination.active = needPagination;

@@ -6,7 +6,7 @@
 
     <section ng-repeat="demo in currentComponent.demos" 
       class="demo-container material-whiteframe-z1"
-      ng-class="{'no-source': !demo.$showSource}">
+      ng-class="{'no-source': !demo.$showSource}" layout="vertical">
 
       <material-toolbar class="demo-toolbar"> 
         <div class="material-toolbar-tools">
@@ -19,26 +19,21 @@
         </div>
       </material-toolbar>
 
-      <material-tabs ng-show="demo.$showSource">
+      <material-tabs ng-show="demo.$showSource" style="border-top: solid 1px #00ADC3;">
         <material-tab ng-repeat="file in demo.$files"
                       active="file === demo.$selectedFile"
                       ng-click="demo.$selectedFile = file"
                       label="{{file.basePath}}">
+            <material-content scroll-y class="demo-source-container">
+                    <hljs code="file.content"
+                          lang="{{file.fileType}}" >
+                    </hljs>
+            </material-content>
         </material-tab>
       </material-tabs>
 
-      <material-content scroll-y class="demo-source-container" ng-show="demo.$showSource" >
-        <div class="demo-source-content">
-          <div ng-repeat="file in demo.$files">
-            <hljs code="file.content"
-              lang="{{file.fileType}}"
-              ng-show="file === demo.$selectedFile" >
-            </hljs>
-          </div>
-        </div>
-      </material-content>
 
-      <div flex ng-class="{'demo-frame-container': demo.$showSource, below: demo.$showSource}">
+      <div flex class="demo-frame-container">
         <iframe class="demo"
                 name="{{demo.id}}"
                 ng-src="{{demo.indexFile.outputPath}}">

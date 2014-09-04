@@ -119,19 +119,8 @@ iframe.demo {
   border-top: 1px solid #ddd;
 }
 .demo-frame-container {
-  background: #fff;
-  z-index: 1;
-  -webkit-transition: 0.2s ease-out all;
-  -moz-transition: 0.2s ease-out all;
-  transition: 0.2s ease-out all;
-  -webkit-transform: translate3d(0, -440px, 0);
-  -moz-transform: translate3d(0, -440px, 0);
-  transform: translate3d(0, -440px, 0);
-}
-.demo-frame-container.below {
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
+    background: #fff;
+    z-index: 1;
 }
 
 material-toolbar.demo-toolbar,
@@ -155,15 +144,19 @@ material-toolbar.demo-toolbar material-button {
 }
 
 .demo-source-container {
+    display:block;
   border: 1px solid #ddd;
+  background-color: #f6f6f6;
+  height:400px;
 }
+
 .demo-source-content {
   height: 400px;
 }
 .demo-source-content,
 .demo-source-content pre,
 .demo-source-content code {
-  background: #f4f4f4;
+  background: #f6f6f6;
 }
 .demo-source-content pre {
   max-width: 100%;
