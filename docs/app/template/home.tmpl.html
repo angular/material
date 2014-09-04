@@ -1,5 +1,5 @@
-<div ng-controller="HomeCtrl">
-  <material-content>
+<div ng-controller="HomeCtrl" layout="vertical">
+  <material-content flex>
     <p>
       <a href="http://www.google.com/design/spec/material-design/">Material Design</a> is a specification for a unified system of visual, motion, and interaction design that adapts across different devices.
     </p>
@@ -10,4 +10,12 @@
       For more, see our repository on <a href="https://github.com/angular/material">GitHub</a>
     </p>
   </material-content>
+
+  <material-content style="position: absolute; bottom: 10px;">
+      <p>
+          Browse the GitHub code associated with this build of the Live docs:
+          <span class="version"><a ng-href="{{versionURL}}" target="_blank">SHA-{{version}}</a></span>
+      </p>
+  </material-content>
+
 </div>

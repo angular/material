@@ -231,11 +231,7 @@ ul li:first-child {
 
 
 .version {
-    font-size:9pt;
-    color:#ffffff;
-    position: absolute;
-    top: 65px;
-    left: 104px;
+    padding-left: 10px;
     text-decoration: underline;
-    opacity: 0.6;
+    font-size: 0.95em;
 }

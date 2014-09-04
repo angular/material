@@ -140,11 +140,7 @@ function(COMPONENTS, $location, $rootScope) {
   '$materialDialog',
   'menu',
   '$location',
-  '$http',
-function($scope, COMPONENTS, $materialSidenav, $timeout, $materialDialog, menu, $location, $http ) {
-
-  $scope.version = "";
-  $scope.versionURL = "";
+function($scope, COMPONENTS, $materialSidenav, $timeout, $materialDialog, menu, $location ) {
 
   $scope.goToUrl = function(p) {
     window.location = p;
@@ -176,22 +172,6 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $materialDialog, menu, 
     });
   };
 
-  // Load build version information; to be
-  // used in the header bar area
-  var now = Math.round(new Date().getTime()/1000);
-  var versionFile = "version.json" + "?ts=" + now;
-
-  $http.get("version.json")
-    .then(function(response){
-      var sha = response.data.sha || "";
-      var url = response.data.url;
-
-      if ( sha != "" ) {
-        $scope.versionURL = url + sha;
-        $scope.version = sha.substr(0,6);
-      }
-    });
-
 
   COMPONENTS.forEach(function(component) {
     component.demos && component.demos.forEach(function(demo) {
@@ -216,8 +196,30 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $materialDialog, menu, 
 .controller('HomeCtrl', [
   '$scope',
   '$rootScope',
-function($scope, $rootScope) {
+  '$http',
+function($scope, $rootScope, $http) {
   $rootScope.currentComponent = $rootScope.currentDoc = null;
+
+  $scope.version = "";
+  $scope.versionURL = "";
+
+  // Load build version information; to be
+  // used in the header bar area
+  var now = Math.round(new Date().getTime()/1000);
+  var versionFile = "version.json" + "?ts=" + now;
+
+  $http.get("version.json")
+    .then(function(response){
+      var sha = response.data.sha || "";
+      var url = response.data.url;
+
+      if ( sha != "" ) {
+        $scope.versionURL = url + sha;
+        $scope.version = sha.substr(0,6);
+      }
+    });
+
+
 }])
 
 .controller('LayoutCtrl', [
