@@ -34,7 +34,8 @@ var Constant = {
     TABS_CHANGED : '$materialTabsChanged',
     FOCUS_CHANGED : '$materialFocusChanged',
     WINDOW_RESIZE : 'resize',
-    KEY_DOWN     : 'keydown'
+    KEY_DOWN     : 'keydown',
+    CLICK        : 'click'
   }
 };
 

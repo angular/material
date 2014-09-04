@@ -34,7 +34,7 @@
           ng-show="menu.isSectionSelected(section)"
           ng-repeat="page in section.pages"
           ng-class="{active: menu.isPageSelected(section, page)}"
-          ng-click="menu.selectPage(section, page)"
+          ng-click="openPage(section, page)"
           ink-ripple>
           <span ng-bind="page.humanName || page.name"></span>
         </button>
@@ -44,20 +44,20 @@
 
   </material-sidenav>
 
-  <div layout="vertical" layout-fill>
+  <div layout="vertical" layout-fill tabIndex="-1" role="main">
     <material-toolbar class="material-theme-dark material-medium-tall">
 
-      <div class="material-toolbar-tools" ng-click="toggleMenu()">
-        <div class="menu-icon" hide-md>
+      <div class="material-toolbar-tools">
+        <button class="menu-icon" hide-md ng-click="toggleMenu()" aria-label="Toggle Menu">
           <material-icon icon="img/icons/ic_menu_24px.svg">
           </material-icon>
-        </div>
-        <h2 hide block-sm>
+        </button>
+        <h2 hide block-sm ng-if="menu.currentSection.name">
           {{menu.currentSection.name}}
         </h2>
         <span layout="vertical" layout-align="center center" class="menu-separator-icon"
           ng-show="menu.currentPage">
-          <img style="height: 16px;" src="img/docArrow.png" hide block-sm>
+          <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide block-sm>
         </span>
         <h3 ng-bind="menu.currentPage.humanName || menu.currentPage.name || 'Angular Material'" flex>
         </h3>

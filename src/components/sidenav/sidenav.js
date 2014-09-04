@@ -179,19 +179,59 @@ function materialSidenavDirective($timeout) {
     controller: '$materialSidenavController',
     link: function($scope, $element, $attr, sidenavCtrl) {
       var backdrop = angular.element('<material-backdrop class="material-sidenav-backdrop">');
-      $scope.$watch('isOpen', openWatchAction);
 
-      function openWatchAction(isOpen) {
+      $scope.$watch('isOpen', onShowHideSide);
+
+      /**
+       * Toggle the SideNav view and attach/detach listeners
+       * @param isOpen
+       */
+      function onShowHideSide(isOpen) {
+        var parent = $element.parent();
+
         $element.toggleClass('open', !!isOpen);
+
         if (isOpen) {
-          $element.parent().append(backdrop);
-          backdrop.on('click', onBackdropClick);
+          parent.append(backdrop);
+          backdrop.on( EVENT.CLICK, onBackdropClick );
+          parent.on( EVENT.KEY_DOWN, onKeyDown );
         } else {
-          backdrop.remove().off('click', onBackdropClick);
+          backdrop.remove();
+          backdrop.off( EVENT.CLICK, onBackdropClick);
+          parent.off( EVENT.KEY_DOWN, onKeyDown );
         }
       }
+
+      /**
+       *  Auto-close the sideNav when the backdrop mask is clicked
+       */
       function onBackdropClick() {
-        $timeout(function() {
+        close();
+      }
+
+      /**
+       * Auto-close sideNav when the **escape** key is pressed.
+       * @param evt
+       */
+      function onKeyDown(evt) {
+        if(evt.which === Constant.KEY_CODE.ESCAPE){
+          close();
+
+          evt.preventDefault();
+          evt.stopPropagation();
+        }
+      }
+
+      /**
+       * Apply immediate CSS close transition...
+       * Then notify the controller to close() and perform
+       * its own actions.
+       */
+      function close() {
+
+        onShowHideSide( false );
+
+        $timeout(function(){
           sidenavCtrl.close();
         });
       }
