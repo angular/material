@@ -13,13 +13,13 @@
           <span>{{demo.name}}</span>
           <span flex></span>
           <material-button ng-click="demo.$showSource = !demo.$showSource"
-            ng-class="{active: demo.$showSource}">
+            ng-class="{active: demo.$showSource}" >
             Show Demo Source
           </material-button>
         </div>
       </material-toolbar>
 
-      <material-tabs>
+      <material-tabs ng-show="demo.$showSource">
         <material-tab ng-repeat="file in demo.$files"
                       active="file === demo.$selectedFile"
                       ng-click="demo.$selectedFile = file"
@@ -27,7 +27,7 @@
         </material-tab>
       </material-tabs>
 
-      <material-content scroll-y class="demo-source-container">
+      <material-content scroll-y class="demo-source-container" ng-show="demo.$showSource" >
         <div class="demo-source-content">
           <div ng-repeat="file in demo.$files">
             <hljs code="file.content"
@@ -38,7 +38,7 @@
         </div>
       </material-content>
 
-      <div class="demo-frame-container" flex ng-class="{below: demo.$showSource}">
+      <div flex ng-class="{'demo-frame-container': demo.$showSource, below: demo.$showSource}">
         <iframe class="demo"
                 name="{{demo.id}}"
                 ng-src="{{demo.indexFile.outputPath}}">
