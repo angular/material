@@ -28,22 +28,6 @@ describe('$materialDialog', function() {
     expect(container.length).toBe(1);
   }));
 
-  it('should have valid ARIA attributes', inject(function($materialDialog, $rootScope) {
-    var template = '<material-dialog>Hello</material-dialog>';
-    var parent = angular.element('<div>');
-
-    $materialDialog({
-      template: template,
-      appendTo: parent
-    });
-
-    $rootScope.$apply();
-
-    var dialog = parent.find('material-dialog');
-    expect(dialog.attr('role')).toBe('dialog');
-    expect(dialog.attr('aria-label')).toEqual(dialog.text());
-  }));
-
   it('should escapeToClose == true', inject(function($materialDialog, $rootScope, $rootElement, $timeout, $materialEffects) {
     var parent = angular.element('<div>');
     $materialDialog({
@@ -208,5 +192,51 @@ describe('$materialDialog', function() {
     $rootScope.$apply();
     expect(parent.find('material-dialog.one').length).toBe(0);
     expect(parent.find('material-dialog.two').length).toBe(1);
+  }));
+
+  it('should have the dialog role', inject(function($materialDialog, $rootScope) {
+    var template = '<material-dialog>Hello</material-dialog>';
+    var parent = angular.element('<div>');
+
+    $materialDialog({
+      template: template,
+      appendTo: parent
+    });
+
+    $rootScope.$apply();
+
+    var dialog = parent.find('material-dialog');
+    expect(dialog.attr('role')).toBe('dialog');
+  }));
+
+  it('should create an ARIA label if one is missing', inject(function($materialDialog, $rootScope) {
+    var template = '<material-dialog>Hello</material-dialog>';
+    var parent = angular.element('<div>');
+
+    $materialDialog({
+      template: template,
+      appendTo: parent
+    });
+
+    $rootScope.$apply();
+
+    var dialog = parent.find('material-dialog');
+    expect(dialog.attr('aria-label')).toEqual(dialog.text());
+  }));
+
+  it('should not modify an existing ARIA label', inject(function($materialDialog, $rootScope){
+    var template = '<material-dialog aria-label="Some Other Thing">Hello</material-dialog>';
+    var parent = angular.element('<div>');
+
+    $materialDialog({
+      template: template,
+      appendTo: parent
+    });
+
+    $rootScope.$apply();
+
+    var dialog = parent.find('material-dialog');
+    expect(dialog.attr('aria-label')).not.toEqual(dialog.text());
+    expect(dialog.attr('aria-label')).toEqual('Some Other Thing');
   }));
 });
