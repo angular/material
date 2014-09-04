@@ -182,10 +182,13 @@ function materialSidenavDirective($timeout) {
       function openWatchAction(isOpen) {
         $element.toggleClass('open', !!isOpen);
         if (isOpen) {
-          $element.parent().append(backdrop);
+          $element.parent()
+            .on('keydown', onKeyDown)
+            .append(backdrop);
           backdrop.on('click', onBackdropClick);
         } else {
           backdrop.remove().off('click', onBackdropClick);
+          $element.parent().off('keydown', onKeyDown);
         }
       }
       function onBackdropClick() {
@@ -193,7 +196,15 @@ function materialSidenavDirective($timeout) {
           sidenavCtrl.close();
         });
       }
-
+      function onKeyDown(evt) {
+        if(evt.which === Constant.KEY_CODE.ESCAPE){
+          evt.preventDefault();
+          evt.stopPropagation();
+          $timeout(function() {
+            sidenavCtrl.close();
+          });
+        }
+      }
     }
   };
 }

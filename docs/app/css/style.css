@@ -75,6 +75,10 @@ material-toolbar.material-medium-tall {
   color: #AAA;
 }
 
+.menu-icon {
+  background-color: transparent;
+  border: none;
+}
 
 .menu-icon material-icon {
   top: 19px;

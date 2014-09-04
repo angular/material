@@ -150,10 +150,18 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $materialDialog, menu, 
 
   $scope.menu = menu;
 
+  $scope.mainContentArea = document.querySelector("[role='main']");
+
   $scope.toggleMenu = function() {
     $timeout(function() {
       $materialSidenav('left').toggle();
     });
+  };
+
+  $scope.openPage = function(section, page) {
+    menu.selectPage(section, page);
+    $scope.toggleMenu();
+    $scope.mainContentArea.focus();
   };
 
   $scope.goHome = function($event) {
