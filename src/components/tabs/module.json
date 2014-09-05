@@ -4,16 +4,12 @@
   "js": ["tabs.js", "util/*.js"],
   "demos": {
     "demo2": {
-      "name": "Static Tabs, external content, noInk:",
+      "name": "Static paginated tabs (with external views):",
       "files": ["demos/demo2/*"]
     },
     "demo4": {
-      "name": "Dynamic Tabs (with internal views):",
+      "name": "Dynamic Tabs (with internal views, noInk):",
       "files": ["demos/demo4/*"]
-    },
-    "demo3": {
-      "name": "Dynamic Tabs (buttons only):",
-      "files": ["demos/demo3/*"]
     }
   }
 }

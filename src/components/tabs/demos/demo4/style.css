@@ -16,3 +16,13 @@ div.infoBar {
 material-tabs .tabs-content {
     height: 200px;
 }
+
+
+.float-logo {
+    position:absolute;
+    width:30px;
+    height: 30px;
+    padding-top:5px;
+    padding-left: 5px;
+    z-index:100;
+}

@@ -1,8 +1,8 @@
 <link rel="stylesheet" href="/css/tab_demos.css">
 <div ng-app="app" ng-controller="AppCtrl" class="sample">
 
-    <material-tabs selected="selectedIndex" style="background-color: #00bcd6">
-        <img ng-src="/img/angular.png" style="position:absolute; width:30px;height: 30px; padding-top:5px; padding-left: 5px;">
+    <material-tabs selected="selectedIndex" noink style="background-color: #00bcd6">
+        <img ng-src="/img/angular.png" class="float-logo">
 
         <material-tab ng-repeat="tab in tabs | orderBy:predicate:reversed"
                  on-select="onTabSelected(tab)"
