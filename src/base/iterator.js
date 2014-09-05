@@ -17,12 +17,11 @@ function iterator(items, reloop) {
       items: getItems,
       count: count,
 
-      hasPrevious:hasPrevious,
-      hasNext: hasNext,
       inRange: inRange,
       contains: contains,
       indexOf: indexOf,
       itemAt: itemAt,
+
       findBy: findBy,
 
       add: add,
@@ -31,7 +30,10 @@ function iterator(items, reloop) {
       first: first,
       last: last,
       next: next,
-      previous: previous
+      previous: previous,
+
+      hasPrevious:hasPrevious,
+      hasNext: hasNext
 
     };
 
@@ -118,7 +120,7 @@ function iterator(items, reloop) {
           }
         });
 
-        return results.length ? results : undefined;
+        return results.length ? results : null;
       }
 
       // Use iterator callback to matches element key value
@@ -137,6 +139,8 @@ function iterator(items, reloop) {
      * @returns {*}
      */
     function add(it, index) {
+      if ( !it ) return -1;
+
       if (!angular.isDefined(index)) {
         index = _items.length;
       }
@@ -151,7 +155,9 @@ function iterator(items, reloop) {
      * @param it
      */
     function remove(it) {
-      _items.splice(indexOf(it), 1);
+      if ( contains(it) ){
+        _items.splice(indexOf(it), 1);
+      }
     }
 
     /*
