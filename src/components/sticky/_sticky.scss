@@ -1,0 +1,30 @@
+
+
+
+
+
+
+.material-subheader {
+  position:relative;
+}
+.material-sticky-invisible {
+  opacity: 0;
+}
+
+.material-sticky-container {
+  position: absolute;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+
+  .material-sticky-clone {
+    top: 0;
+    left: 0;
+    right: 24px;
+    position: absolute;
+    @include transform(translate3d(0, 0, 0));
+    &:not(.material-sticky-active) {
+      @include transform(translate3d(-9999px, -9999px, 0));
+    }
+  }
+}

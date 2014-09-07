@@ -107,6 +107,23 @@ var Util = {
   },
 
   /**
+   * Wraps an element with a tag
+   *
+   * @param el element to wrap
+   * @param tag tag to wrap it with
+   * @param [className] optional class to apply to the wrapper
+   * @returns new element
+   *
+   */
+  wrap: function(el, tag, className) {
+    if(el.hasOwnProperty(0)) { el = el[0]; }
+    var wrapper = document.createElement(tag);
+    wrapper.className += className;
+    wrapper.appendChild(el.parentNode.replaceChild(wrapper, el));
+    return angular.element(wrapper);
+  },
+
+  /**
    * nextUid, from angular.js.
    * A consistent way of creating unique IDs in angular. The ID is a sequence of alpha numeric
    * characters such as '012ABC'. The reason why we are not using simply a number counter is that
