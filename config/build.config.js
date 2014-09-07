@@ -89,6 +89,7 @@ module.exports = {
       'src/components/sidenav/sidenav.js',
       'src/components/slider/slider.js',
       'src/components/switch/switch.js',
+      'src/components/subheader/subheader.js',
       'src/components/tabs/tabs.js',
       'src/components/tabs/js/*.js',
       'src/components/toast/toast.js',

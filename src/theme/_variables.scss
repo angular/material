@@ -9,6 +9,7 @@ $font-color-base: #444;
 
 // Font colors
 $text-light: #f1f1f1;
+$text-medium: #999;
 $text-dark: #111111;
 
 // Theme colors
@@ -88,6 +89,14 @@ $whiteframe-shadow-z4: 0px 16px 28px 0 rgba(0,0,0,0.22);
 $whiteframe-zindex-z4: 4;
 $whiteframe-shadow-z5: 0px 27px 24px 0 rgba(0,0,0,0.2);
 $whiteframe-zindex-z5: 5;
+
+// SubHeader
+
+$subheader-line-height: 1em;
+$subheader-font-size: 0.9em;
+$subheader-padding: ($baseline-grid * 2) 0px ($baseline-grid * 2) ($baseline-grid * 2);
+$subheader-font-weight: 400;
+$subheader-margin: 0 0 0 0;
 
 // Lists and tiles
 

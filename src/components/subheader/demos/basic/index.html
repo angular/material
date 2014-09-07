@@ -1,0 +1,39 @@
+
+<div ng-app="app" ng-controller="AppCtrl">
+  <material-content layout="vertical">
+    <section>
+      <material-subheader class="material-subheader-colored">Unread Messages</material-subheader>
+      <material-list layout="vertical">
+        <material-item ng-repeat="message in messages">
+          <div class="material-tile-left">
+              <img ng-src="{{message.face}}" class="face" alt="{{message.who}}">
+          </div>
+          <div class="material-tile-content">
+            <h2>{{message.what}}</h2>
+            <h3>{{message.who}}</h3>
+            <p>
+              {{message.notes}}
+            </p>
+          </div>
+        </material-item>
+      </material-list>
+    </section>
+    <section>
+      <material-subheader>Read Messages</material-subheader>
+      <material-list layout="vertical">
+        <material-item ng-repeat="message in messages">
+          <div class="material-tile-left">
+              <img ng-src="{{message.face}}" class="face" alt="{{message.who}}">
+          </div>
+          <div class="material-tile-content">
+            <h2>{{message.what}}</h2>
+            <h3>{{message.who}}</h3>
+            <p>
+              {{message.notes}}
+            </p>
+          </div>
+        </material-item>
+      </material-list>
+    </section>
+  </material-content>
+</div>

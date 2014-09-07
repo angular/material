@@ -4,6 +4,7 @@ var Constant = {
       BUTTON : 'button',
       CHECKBOX : 'checkbox',
       DIALOG : 'dialog',
+      HEADING : 'heading',
       LIST : 'list',
       LIST_ITEM : 'listitem',
       RADIO : 'radio',
