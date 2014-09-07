@@ -30,9 +30,11 @@ function materialSubheaderDirective() {
   return {
     restrict: 'E',
     compile: function($el, $attr) {
-      $el.attr({
-        'role' : Constant.ARIA.ROLE.HEADING
-      });
+      if(!$attr.role) {
+        $el.attr({
+          'role' : Constant.ARIA.ROLE.HEADING
+        });
+      }
     }
   };
 }
