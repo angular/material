@@ -11,6 +11,7 @@ $background-color-base: #fff !default;
 
 // Font colors
 $text-light: #f1f1f1;
+$text-medium: #999;
 $text-dark: #111111;
 
 // Theme colors
@@ -113,16 +114,29 @@ $whiteframe-zindex-z4: 4;
 $whiteframe-shadow-z5: 0px 27px 24px 0 rgba(0,0,0,0.2);
 $whiteframe-zindex-z5: 5;
 
+// SubHeader
+
+$subheader-line-height: 1em;
+$subheader-font-size: 0.9em;
+$subheader-padding: ($baseline-grid * 2) 0px ($baseline-grid * 2) ($baseline-grid * 2);
+$subheader-font-weight: 400;
+$subheader-margin: 0 0 0 0;
+
 // Lists and tiles
 
-$list-h2-font-size: 1.1em;
-$list-h2-margin: 0 0 3px 0;
-$list-h2-font-weight: 400;
-$list-h3-font-size: 0.9em;
-$list-h3-font-weight: 400;
+$list-h3-font-size: 1.1em;
 $list-h3-margin: 0 0 3px 0;
+$list-h3-font-weight: 400;
+$list-h4-font-size: 0.9em;
+$list-h4-font-weight: 400;
+$list-h4-margin: 0 0 3px 0;
 $list-p-font-size: 0.75em;
 $list-p-margin: 0 0 3px 0;
+
+$list-padding-top: $baseline-grid;
+$list-padding-right: 0px;
+$list-padding-left: 0px;
+$list-padding-bottom: $baseline-grid;
 
 $item-padding-top: 0px;
 $item-padding-right: 0px;

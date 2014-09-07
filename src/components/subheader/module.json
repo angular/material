@@ -1,0 +1,10 @@
+{
+  "module": "material.components.subheader",
+  "name": "SubHeader",
+  "demos": {
+    "basic": {
+      "name": "Basic Usage",
+      "files": ["demos/basic/*"]
+    }
+  }
+}
