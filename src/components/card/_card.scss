@@ -1,18 +1,15 @@
 material-card {
   display: block;
+  @include box-sizing(border-box);
 
   box-shadow: $card-box-shadow;
-
-  padding: $card-padding;
   margin: $card-margin;
-
+  padding: $card-padding;
   border-radius: $card-border-radius;
 
   .material-card-image {
-    min-width: 100%;
-    @include calc(width, "100% + #{$card-padding}*2");
-    margin-left: -10px;
-    margin-top: -10px;
+    display: block;
+    width: 100%;
     border-radius: $card-border-radius $card-border-radius 0 0;
   }
 
