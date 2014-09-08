@@ -14,7 +14,7 @@ function init {
 function run {
   cd ../
 
-  NEW_VERSION="$(readJsonProp "package.json" "version")-$SHA"
+  NEW_VERSION="$(readJsonProp "package.json" "version")-$(echo $SHA | head -c 7)"
 
   ./scripts/bower-release.sh --new-version=$NEW_VERSION
 }
