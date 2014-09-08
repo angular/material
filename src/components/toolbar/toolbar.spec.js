@@ -25,24 +25,27 @@ describe('<material-toolbar>', function() {
 
     $rootScope.$broadcast('$materialContentLoaded', contentEl);
 
-    expect(toolbar.css($materialEffects.TRANSFORM)).toEqual('');
-    expect(contentEl.css('margin-top')).toEqual('');
+    // IE gives us back 'none', everything else gives us back an empty string
+    expect(toolbar.css($materialEffects.TRANSFORM)).toMatch(/none|/);
+    // IE gives us back '0px', everything else gives us back an empty string
+    expect(contentEl.css('margin-top')).toMatch(/0px|/);
 
     // Fake scroll to the bottom
     TestUtil.triggerEvent(contentEl, 'scroll', {
       target: { scrollTop: 500 }
     });
 
-    expect(toolbar.css($materialEffects.TRANSFORM)).toContain('-100px');
-    expect(contentEl.css('margin-top')).toEqual('-100px');
+    // IE gives us back a matrix with -100 in it, everything else gives us -100px
+    expect(toolbar.css($materialEffects.TRANSFORM)).toContain('-100');
+    expect(contentEl.css('margin-top')).toEqual('-100');
 
     // Fake scroll back to the top
     TestUtil.triggerEvent(contentEl, 'scroll', {
       target: { scrollTop: 0 }
     });
 
-    expect(toolbar.css($materialEffects.TRANSFORM)).toEqual('');
-    expect(contentEl.css('margin-top')).toEqual('');
+    expect(toolbar.css($materialEffects.TRANSFORM)).toMatch(/none|/);
+    expect(contentEl.css('margin-top')).toMatch(/0px|/);
 
   }));
 });

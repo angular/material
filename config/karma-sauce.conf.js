@@ -9,10 +9,6 @@ if (!process.env.SAUCE_USERNAME || !process.env.SAUCE_ACCESS_KEY) {
 
 // Browsers to run on Sauce Labs
 var customLaunchers = {
-  'SL_Chrome': {
-    base: 'SauceLabs',
-    browserName: 'chrome'
-  },
   'SL_Firefox': {
     base: 'SauceLabs',
     browserName: 'firefox',
@@ -84,13 +80,14 @@ var customLaunchers = {
 
 module.exports = _.assign({}, karmaConf, {
 
-  browsers: Object.keys(customLaunchers),
-
-  captureTimeout: 120 * 1000,
-  browserDisconnectTimeout: 60 * 1000,
-  browserNoActivityTimeout: 60 * 1000,
-
+  // Maximum 10 browsers - saucelabs limit
+  // browsers: Object.keys(customLaunchers),
+  browsers: ['SL_IE_10', 'SL_IE_11'],
   customLaunchers: customLaunchers,
+
+  captureTimeout: 180 * 1000,
+  browserDisconnectTimeout: 180 * 1000,
+  browserNoActivityTimeout: 180 * 1000,
 
   reporters: ['dots', 'saucelabs'],
 
