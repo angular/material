@@ -2,7 +2,7 @@ material-backdrop {
   z-index: $z-index-backdrop;
   background-color: rgba(0,0,0,0);
 
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   right: 0;
