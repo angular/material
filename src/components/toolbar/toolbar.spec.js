@@ -37,7 +37,7 @@ describe('<material-toolbar>', function() {
 
     // IE gives us back a matrix with -100 in it, everything else gives us -100px
     expect(toolbar.css($materialEffects.TRANSFORM)).toContain('-100');
-    expect(contentEl.css('margin-top')).toEqual('-100');
+    expect(contentEl.css('margin-top')).toContain('-100');
 
     // Fake scroll back to the top
     TestUtil.triggerEvent(contentEl, 'scroll', {
