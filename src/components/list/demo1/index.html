@@ -5,16 +5,18 @@
     <material-list>
 
       <material-item ng-repeat="item in todos">
-        <div class="material-tile-left">
-            <img ng-src="{{item.face}}" class="face" alt="{{item.who}}">
-        </div>
-        <div class="material-tile-content">
-          <h2>{{item.what}}</h2>
-          <h3>{{item.who}}</h3>
-          <p>
-            {{item.notes}}
-          </p>
-        </div>
+        <material-item-content>
+          <div class="material-tile-left">
+              <img ng-src="{{item.face}}" class="face" alt="{{item.who}}">
+          </div>
+          <div class="material-tile-content">
+            <h2>{{item.what}}</h2>
+            <h3>{{item.who}}</h3>
+            <p>
+              {{item.notes}}
+            </p>
+          </div>
+        </material-item-content>
       </material-item>
 
     </material-list>

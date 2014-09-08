@@ -1,0 +1,10 @@
+{
+  "module": "material.components.divider",
+  "name": "Divider",
+  "demos": {
+    "demo1": {
+      "name": "Divider Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}
