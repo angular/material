@@ -1,158 +1,258 @@
 
+@include keyframes(sliderFocusThumb) {
+  0% {
+    opacity: 0;
+    @include transform(scale(0.0));
+  }
+  50% {
+    @include transform(scale(1.0));
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@mixin slider-thumb-position($width: $slider-thumb-width, $height: $slider-thumb-height) {
+  position: absolute;
+  left: -$width / 2;
+  top: ($slider-height / 2) - ($height / 2);
+  width: $width;
+  height: $height;
+  border-radius: max($width, $height);
+}
+
 material-slider {
 
-  &:before {
-    display: table;
-    content: ' ';
-  }
+  height: $slider-height;
+  position: relative;
+  display: block;
+  margin-left: 4px;
+  margin-right: 4px;
 
-  // Track
-  .material-track {
-    position: relative;
-    margin: $slider-height;
-  }
-
-  .material-fill,
-  .material-tick-markers {
-    position: absolute;
-    top: 13px;
-    left: 0;
-    height: $slider-track-height;
-    background: $theme-light-blue;
-    pointer-events: none;
-  }
-
-  .material-tick-markers {
-    left: -1px;
-    z-index: 0;
+  /**
+   * Track
+   */
+  .slider-track-container {
     width: 100%;
-    background: transparent;
-    visibility: invisible;
+    position: absolute;
+    top: ($slider-height / 2) - ($slider-track-height) / 2;
+    height: $slider-track-height;
+  }
+  .slider-track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: #C8C8C8;
+  }
+  .slider-track-fill {
+    background: #03A9F4;
+    @include transition(width 0.05s linear);
+  }
+  .slider-track-ticks {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 100%;
+  }
 
-    &.visible {
-      visibility: visible;
-    }
+  /**
+   * Slider thumb
+   */
+  .slider-thumb-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    @include transform(translateX(0));
+    transition: transform 0.1s linear;
+    -webkit-transition: -webkit-transform 0.1s linear;
+  }
+  .slider-thumb {
+    z-index: 1;
 
-    @include flex-display();
+    // Positioning the outer area of the thumb 6px bigger than it needs to be keeps
+    // the :after area being clipped by the background of the focus-thumb animation.
+    @include slider-thumb-position($slider-thumb-width + 6, $slider-thumb-height + 6);
 
-    .material-tick,
+    // We render thumb in an :after selector to fix an obscure problem with the
+    // thumb being clipped by the focus-ring and focus-thumb while running the focus
+    // animation.
     &:after {
-      margin-top: 1px;
-      height: 16px;
-      border-left: 2px solid black;
-      @include flex(1);
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: $slider-thumb-width;
+      height: $slider-thumb-height;
+      border-radius: max($slider-thumb-width, $slider-thumb-height);
+      border: 3px solid $theme-light-blue;
+      background-color: $theme-light-blue;
     }
+
+    @include transform(scale($slider-thumb-default-scale));
+    @include transition(all 0.1s linear);
+  }
+
+  /* The sign that's focused in discrete mode */
+  .slider-sign {
+
+    /* Center the children (slider-thumb-text) */
+    @include flex-display();
+    @include flex-align-items(center);
+    @include flex-justify-content(center);
+
+    position: absolute;
+    left: -($slider-sign-height / 2);
+    top: $slider-sign-top;
+    width: $slider-sign-width;
+    height: $slider-sign-height;
+    border-radius: max($slider-sign-height, $slider-sign-width);
+    background-color: $theme-light-blue;
+
+    @include transform(scale(0.4) translateY((-$slider-sign-top + 8) / 0.4));
+    @include transition(all 0.2s ease-in-out);
+
+    /* The arrow pointing down under the sign */
     &:after {
       position: absolute;
-      right: -2px;
       content: '';
+      left: -($slider-sign-width / 2 - $slider-arrow-width / 2);
+      border-radius: $slider-arrow-height;
+      top: 19px;
+      border-left: $slider-arrow-width / 2 solid transparent;
+      border-right: $slider-arrow-width / 2 solid transparent;
+      border-top: $slider-arrow-height solid $theme-light-blue;
+
+      opacity: 0;
+      @include transform(translateY(-8px));
+      @include transition(all 0.2s ease-in-out);
+    }
+
+    .slider-thumb-text {
+      z-index: 1;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
     }
   }
 
-  // Simulated Slider Thumb
-  // the native thumb is hidden in place of this one
-  .material-thumb {
-    position: absolute;
-    top: (-$slider-thumb-height / 2) + 1;
-    right: -$slider-thumb-width / 2;
-    z-index: 1;
-    display: table;
-    width: $slider-thumb-width;
-    height: $slider-thumb-height;
-    border: 2px solid $theme-light-blue;
-    border-radius: max($slider-thumb-height, $slider-thumb-width);
-    background: $theme-light-blue;
-    -webkit-transition: all .1s ease-in-out;
-    -moz-transition: all .1s ease-in-out;
-    transition: all .1s ease-in-out;
+  /**
+   * The border/background that comes in when focused in non-discrete mode
+   */
+  .slider-focus-thumb {
+    @include slider-thumb-position($slider-focus-thumb-width, $slider-focus-thumb-height);
+    display: none;
+    opacity: 0;
+    background-color: #C0C0C0;
+    @include animation(sliderFocusThumb 0.4s linear);
   }
-
-  // Active Simulate Slider Thumb
-  .material-active .material-thumb {
-    border: 2px solid $theme-light-blue;
-    -webkit-transform: scale(2);
-    -moz-transform: scale(2);
-    transform: scale(2);
+  .slider-focus-ring {
+    @include slider-thumb-position($slider-focus-thumb-width, $slider-focus-thumb-height);
+    border: 2px solid #D6D6D6;
+    background-color: transparent;
+    @include transform(scale(0));
+    @include transition(all 0.2s linear);
   }
-
-  &.material-slider-min {
-    input:active + .material-fill .material-thumb {
-      border-width: 1px;
-    }
-    .material-thumb {
-      background: #fff;
-    }
-  }
-
-  input {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: $slider-track-height;
-    outline: none;
-    border: none;
-    background: $slider-background-color;
-    cursor: pointer;
-    -webkit-appearance: none;
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-  }
-
-  input::-moz-range-track {
-    border: inherit;
-    background: transparent;
-  }
-
-  input::-ms-track {
-    border: inherit;
-    background: transparent;
-    color: transparent;
-  }
-
-  input::-ms-fill-lower,
-  input::-ms-fill-upper {
-    background: transparent;
-  }
-
-  input::-ms-tooltip {
+  .slider-disabled-thumb {
+    @include slider-thumb-position(
+      $slider-thumb-width + $slider-thumb-disabled-border * 2,
+      $slider-thumb-height + $slider-thumb-disabled-border * 2
+    );
+    @include transform(scale($slider-thumb-disabled-scale));
+    border: $slider-thumb-disabled-border solid white;
     display: none;
   }
 
-  // Native Range Thumb
-  // the native thumb is actually transparent
-  // but much larger to create a bigger hit area
-  input::-webkit-slider-thumb {
-    position: relative;
-    width: $slider-thumb-width * 2;
-    height: $slider-thumb-height * 4;
-    border: none;
-    background: transparent;
-    -webkit-appearance: none;
-  }
-  input::-webkit-slider-thumb:before {
-    position: absolute;
-    left: -$slider-thumb-width * 2;
-    display: table;
-    width: $slider-thumb-width * 6;
-    height: $slider-thumb-height * 4;
-    content: ' ';
+  &.slider-min {
+    .slider-thumb {
+      &:after {
+        background-color: white;
+      }
+    }
+    .slider-sign {
+      opacity: 0;
+    }
   }
 
-  input::-moz-range-thumb {
-    width: $slider-thumb-width * 2;
-    height: $slider-thumb-height * 4;
-    border: none;
-    background: transparent;
+  &:focus {
+    outline: none;
   }
 
-  input::-moz-focus-outer {
-    border: 0;
+  /* Don't animate left/right while panning */
+  &.panning {
+    .slider-thumb-container,
+    .slider-track-fill {
+      @include transition(none);
+    }
   }
 
-  input::-ms-thumb {
-    width: $slider-thumb-width * 2;
-    height: $slider-thumb-height * 4;
-    border: 0;
-    background: transparent;
+  &:not([discrete]) {
+    /* Hide the sign and ticks in non-discrete mode */
+    .slider-track-ticks,
+    .slider-sign {
+      display: none;
+    }
+
+    &:not([disabled]) {
+      &:hover {
+        .slider-thumb {
+          @include transform(scale($slider-thumb-hover-scale));
+        }
+      }
+
+      &:focus,
+      &.active {
+        .slider-focus-thumb {
+          display: block;
+        }
+        .slider-focus-ring {
+          @include transform(scale(1));
+        }
+        .slider-thumb {
+          @include transform(scale($slider-thumb-focus-scale));
+        }
+      }
+    }
+  }
+
+  &[discrete] {
+    /* Hide the focus thumb in discrete mode */
+    .slider-focus-thumb,
+    .slider-focus-ring {
+      display: none;
+    }
+
+    &:not([disabled]) {
+      &:focus,
+      &.active {
+        .slider-sign,
+        .slider-sign:after {
+          opacity: 1;
+          @include transform(translateY(0) scale(1.0));
+        }
+      }
+    }
+  }
+
+  &[disabled] {
+    .slider-track-fill {
+      display: none;
+    }
+    .slider-thumb {
+      @include transform(scale($slider-thumb-disabled-scale));
+      &:after {
+        border-color: #BEBEBE;
+      }
+    }
+    &:not(.slider-min) .slider-thumb {
+      &:after {
+        background-color: #BEBEBE;
+      }
+    }
+    .slider-disabled-thumb {
+      display: block;
+    }
   }
 
 }

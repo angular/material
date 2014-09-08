@@ -59,6 +59,11 @@
           transition-delay: $val;
 }
 
+@mixin animation($val) {
+  -webkit-animation: $val;
+          animation: $val;
+}
+
 @mixin user-select($val:none) {
   -webkit-user-select: $val;
   -moz-user-select: $val;

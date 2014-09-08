@@ -145,10 +145,28 @@ $input-focused-border-color: $text-dark;
 //--------------------------------------------
 
 $slider-background-color:  rgb(200, 200, 200);
-$slider-height:  30px;
+$slider-height:  48px;
+
 $slider-track-height:  2px;
-$slider-thumb-width:  10px;
+$slider-thumb-width:  32px;
 $slider-thumb-height:  $slider-thumb-width;
+
+$slider-thumb-default-scale: 0.5;
+$slider-thumb-hover-scale: 0.6;
+$slider-thumb-focus-scale: 0.85;
+$slider-thumb-disabled-scale: 0.35;
+$slider-thumb-disabled-border: 6px;
+
+$slider-focus-thumb-width:  48px;
+$slider-focus-thumb-height: $slider-focus-thumb-width;
+$slider-focus-ring-border-width: 3px;
+
+$slider-arrow-height: 16px;
+$slider-arrow-width: 28px;
+
+$slider-sign-height: 28px;
+$slider-sign-width: 28px;
+$slider-sign-top: ($slider-height / 2) - ($slider-thumb-default-scale * $slider-thumb-height / 2) - ($slider-sign-height) - ($slider-arrow-height) + 8px;
 
 // Switch
 //--------------------------------------------
