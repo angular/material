@@ -7,7 +7,7 @@
  */
 
 angular.module('material.components.sticky', [])
-.factory('$materialSticky', [materialSticky]);
+.factory('$materialSticky', [MaterialSticky]);
 /**
  * @ngdoc factory
  * @name $materialSticky
@@ -19,7 +19,7 @@ angular.module('material.components.sticky', [])
  * @returns A `$materialSticky` function that takes `$el` as an argument.
  */
 
-function materialSticky() {
+function MaterialSticky() {
   return function($el) {
     console.log("Applying sticky to $el");
   };
