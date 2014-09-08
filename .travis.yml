@@ -1,6 +1,9 @@
 language: node_js
 node_js:
   - '0.10'
+env:
+  global:
+    secure: TWmpBzRG68b9e5wbJ7I6ox8TrZTnU/XpOkBvggJyuMgvUz27accp92Y9U7DWUPiXYXcWnoc7pqVAvEbwd1/ykHKCqezmyEXsrzZo6POg2lNFXkI9vSuDukL8A4Ct9zANVmr+5Y+kEBtQ/viyO5Rxc5H9bZskSeMaegqR60ZT2E8=
 
 before_script:
   - npm install -g bower
@@ -8,6 +11,7 @@ before_script:
 
 script:
   - gulp karma --browsers=PhantomJS
+  - ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT
 
 notifications:
   flowdock: ca58afe1354053b15fe75a763138829d
