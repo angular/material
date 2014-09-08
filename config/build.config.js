@@ -92,6 +92,7 @@ module.exports = {
       'src/components/toast/toast.js',
       'src/components/toolbar/toolbar.js',
       'src/components/whiteframe/whiteframe.js',
+      'src/components/divider/divider.js',
 
       //Services
       'src/services/decorators.js',
