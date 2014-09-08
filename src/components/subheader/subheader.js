@@ -4,9 +4,10 @@
  * @description
  * SubHeader module
  */
-angular.module('material.components.subheader', [])
+angular.module('material.components.subheader', ['material.components.sticky'])
 
 .directive('materialSubheader', [
+  '$materialSticky',
   materialSubheaderDirective
 ]);
 
@@ -26,7 +27,7 @@ angular.module('material.components.subheader', [])
  * </hljs>
  */
 
-function materialSubheaderDirective() {
+function materialSubheaderDirective($materialSticky) {
   return {
     restrict: 'E',
     compile: function($el, $attr) {
@@ -35,6 +36,9 @@ function materialSubheaderDirective() {
           'role' : Constant.ARIA.ROLE.HEADING
         });
       }
+      return function link(scope, el, attrs) {
+        $materialSticky(el);
+      };
     }
   };
 }
