@@ -8,6 +8,8 @@ env:
 before_script:
   - npm install -g bower
   - bower install
+  - git config --global user.email "ngmaterial@googlegroups.com"
+  - git config --global user.name "ngMaterial Bot"
 
 script:
   - gulp karma --browsers=PhantomJS
