@@ -103,14 +103,6 @@ var Util = {
       });
 
       return target;
-    },
-
-    left : function( element ) {
-      return element ? element.prop('offsetLeft') : undefined;
-    },
-
-    width : function(element ) {
-      return element ? element.prop('offsetWidth') : undefined;
     }
 
   }
