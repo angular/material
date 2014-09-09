@@ -32,6 +32,7 @@ var Constant = {
   EVENTS : {
     TABS_CHANGED : '$materialTabsChanged',
     FOCUS_CHANGED : '$materialFocusChanged',
-    WINDOW_RESIZE : 'resize'
+    WINDOW_RESIZE : 'resize',
+    SCOPE_DESTROY : '$destroy'
   }
 };
