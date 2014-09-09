@@ -81,11 +81,13 @@ function materialSidenavController($scope, $element, $attrs, $timeout, $material
  *
  * ```javascript
  * // Toggle the given sidenav
- * $materialSidenav.toggle(componentId);
+ * $materialSidenav(componentId).toggle();
+ *
  * // Open the given sidenav
- * $materialSidenav.open(componentId);
+ * $materialSidenav(componentId).open();
+ *
  * // Close the given sidenav
- * $materialSidenav.close(componentId);
+ * $materialSidenav(componentId).close();
  * ```
  */
 function materialSidenavService($materialComponentRegistry) {

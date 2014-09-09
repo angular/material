@@ -1,4 +1,8 @@
 angular.module('material.components.tabs')
+  .factory('$materialTabs', [
+    '$materialComponentRegistry',
+    TabsService
+  ])
   .controller('materialTabsController', [
     '$scope', 
     '$attrs', 
@@ -6,6 +10,44 @@ angular.module('material.components.tabs')
     '$timeout',
     TabsController
   ]);
+
+
+/**
+ * @private
+ * @ngdoc service
+ * @name $materialTabs
+ * @module material.components.tabs
+ *
+ * @description
+ * $materialTabs makes it easy to programmatically interact with a specific Tabs group
+ * in an app.
+ *
+ * @usage
+ *
+ * ```javascript
+ * // Toggle the given sidenav
+ * $materialTabs(tabsID).select(0);
+ * ```
+ */
+function TabsService($materialComponentRegistry) {
+  return function(handle) {
+    var instance = $materialComponentRegistry.get(handle);
+    if(!instance) {
+      $materialComponentRegistry.notFoundError(handle);
+    }
+
+    return {
+      /**
+       * Select the tab at the specified index
+       * @param index
+       * @returns {*}
+       */
+      select: function(index) {
+        return instance && instance.selectAt(index);
+      }
+    };
+  };
+}
 
 
 /**
