@@ -13,18 +13,18 @@ module.exports = {
     var jsonDir = path.dirname(filePath);
     
     if (!json.module) {
-      throw new Error("paper.json has no `module` field!");
+      throw new Error("module.json has no `module` field!");
     }
 
     json = _.assign({
-      js: ['*.js', '!*.spec.js'],
+      js: ['*.js'],
       scss: ['*.scss'],
       readme: ['README.md'],
       demos: {}
     }, json);
 
     //[].concat to coerce it to an array if it's not
-    var sources = getDocsForPatterns([].concat(json.js));
+    var sources = getDocsForPatterns(['!*.spec.js'].concat(json.js));
     sources.forEach(function(doc) {
       doc.docType = 'source';
 
