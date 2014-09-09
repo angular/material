@@ -1,3 +1,42 @@
+
+/**
+ * Determine if the DOM element is of a certain tag type
+ * or has the specified attribute type
+ *
+ * @param node
+ * @returns {*|boolean}
+ */
+var isNodeType = function (node, type) {
+  return node.tagName && (
+    node.hasAttribute(type) ||
+    node.hasAttribute('data-' + type) ||
+    node.tagName.toLowerCase() === type ||
+    node.tagName.toLowerCase() === 'data-' + type
+  );
+};
+
+var isNgRepeat = function (node) {
+  var COMMENT_NODE = 8;
+  return node.nodeType == COMMENT_NODE && node.nodeValue.indexOf('ngRepeat') > -1;
+};
+
+/**
+ * Is the an empty text string
+ * @param node
+ * @returns {boolean}
+ */
+var isNodeEmpty = function (node) {
+  var TEXT_NODE = 3,
+      COMMENT_NODE = 8;
+  return (node.nodeType == COMMENT_NODE) ||
+    (node.nodeType == TEXT_NODE && !(node.nodeValue || '').trim());
+};
+
+function findNode(selector, element) {
+  var parentNode = element[0];
+  return angular.element(parentNode.querySelector(selector));
+}
+
 /*
  *  This function() provides scope-relative features to disconnect and reconnect to the $digest() processes
  *  NOTE: this is essentially a reversible $destroy() for scopes.

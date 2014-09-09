@@ -1,7 +1,7 @@
 {
   "module": "material.components.tabs",
   "name": "Tabs",
-  "js": ["tabs.js", "util/*.js"],
+  "js": ["*.js", "js/*.js"],
   "demos": {
     "demo2": {
       "name": "Static paginated tabs (with external views):",
