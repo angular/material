@@ -5,7 +5,7 @@
  *
  * @returns {updatePagination}
  */
-function linkTabPagination(scope, element, attrs, tabsCtrl, $materialEffects) {
+function linkTabPagination(scope, element, tabsCtrl, $q, $materialEffects ) {
 
   // TODO allow configuration of TAB_MIN_WIDTH
   var TAB_MIN_WIDTH = 8 * 12;           // Must match tab min-width rule in _tabs.scss
@@ -13,11 +13,21 @@ function linkTabPagination(scope, element, attrs, tabsCtrl, $materialEffects) {
 
   var tabsHeader = findNode('.tabs-header-items-container', element); // excludes paginators
   var buttonBar = findNode('.tabs-header-items', element);
-
   var pagination = scope.pagination = {
-    next: function() { selectPageAt(pagination.page + 1); },
-    prev: function() { selectPageAt(pagination.page - 1); }
+    page : 0,
+    next: function() {
+      // selectPageAt(pagination.page + 1);
+      tabsCtrl.selectAt( pagination.endIndex + 1  );
+    },
+    prev: function() {
+      // selectPageAt(pagination.page - 1);
+      tabsCtrl.selectAt( pagination.startIndex - 1  );
+    }
   };
+
+  scope.$on(Constant.EVENTS.FOCUS_CHANGED, function() {
+
+  });
 
   return updatePagination;
 
@@ -27,6 +37,7 @@ function linkTabPagination(scope, element, attrs, tabsCtrl, $materialEffects) {
    * update both the current page (if needed) and the tab headers width...
    */
   function updatePagination() {
+    var dfd = $q.defer();
 
     var tabs = buttonBar.children();
     var tabsWidth = element.prop('clientWidth') - PAGINATORS_WIDTH;
@@ -44,15 +55,30 @@ function linkTabPagination(scope, element, attrs, tabsCtrl, $materialEffects) {
       // If we just activated pagination, go to page 0 and watch the
       // selected tab index to be sure we're on the same page
       var pageIndex = getPageAtTabIndex(scope.$selIndex);
+      var pageChange = (pagination.page != pageIndex);
 
       // Manually set width of page...
       buttonBar.css('width', pagination.tabWidth * tabs.length + 'px');
 
       selectPageAt( pageIndex );
 
+      // If pagination.page changed, we need to wait for the transition to complete
+      // before we announce status [and potentially update focus]
+
+      if ( pageChange ) {
+        tabsHeader.one($materialEffects.TRANSITIONEND_EVENT, function() {
+            dfd.resolve(pageIndex);
+        });
+
+      } else {
+
+        dfd.resolve(pageIndex);
+      }
+
     } else {
 
       if (paginationToggled) {
+
         // Release buttonBar to be self-adjust to size of all tab buttons
         // Slide tab buttons to show all buttons (starting at first)
 
@@ -60,7 +86,11 @@ function linkTabPagination(scope, element, attrs, tabsCtrl, $materialEffects) {
 
         selectPageAt( 0 );
       }
+
+      dfd.resolve(0);
     }
+
+    return dfd.promise;
   }
 
   /**
@@ -70,7 +100,7 @@ function linkTabPagination(scope, element, attrs, tabsCtrl, $materialEffects) {
    *
    * @param page
    */
-  function selectPageAt(page) {
+  function selectPageAt(page, updateTabSelection) {
     var lastPage = pagination.pagesCount - 1;
     var lastTab = buttonBar.children().length - 1;
 
@@ -84,7 +114,7 @@ function linkTabPagination(scope, element, attrs, tabsCtrl, $materialEffects) {
 
     slideTabButtons( -page * pagination.itemsPerPage * pagination.tabWidth );
 
-    if ( !isTabInRange(scope.$selIndex) ) {
+    if ( (updateTabSelection !== false) && !isTabInRange(scope.$selIndex) ) {
       var index = (page > pagination.page) ?  pagination.startIndex : pagination.endIndex;
 
       // Only change selected tab IF the current tab is not `in range`

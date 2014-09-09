@@ -28,5 +28,10 @@ var Constant = {
     LEFT_ARROW : 37,
     RIGHT_ARROW : 39,
     ENTER: 13
+  },
+  EVENTS : {
+    TABS_CHANGED : '$materialTabsChanged',
+    FOCUS_CHANGED : '$materialFocusChanged',
+    WINDOW_RESIZE : 'resize'
   }
 };

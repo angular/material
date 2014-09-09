@@ -16,6 +16,7 @@ material-tabs {
 
 .tab-paginator {
   z-index: 1;
+  margin-right: -2px;
   @include flex-display();
   @include flex-justify-content(center);
   @include flex-align-items(center);

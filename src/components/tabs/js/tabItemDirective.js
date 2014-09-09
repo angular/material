@@ -94,20 +94,15 @@ function TabDirective( $attrBind, $aria ) {
     element.on('click', function onRequestSelect()
       {
         // Click support for entire <material-tab /> element
-        if ( !scope.disabled ) {
-          scope.$apply(function () {
-            tabsCtrl.select(scope);
-          });
-        }
+        if ( !scope.disabled ) tabsCtrl.select(scope);
+
       })
       .on('keydown', function onRequestSelect(event)
       {
-        if(event.which === Constant.KEY_CODE.LEFT_ARROW) {
-          tabsCtrl.previous(scope);
-        }
-        if(event.which === Constant.KEY_CODE.RIGHT_ARROW) {
-          tabsCtrl.next(scope);
-        }
+        if (event.which == Constant.KEY_CODE.SPACE )            tabsCtrl.select(scope);
+        else if (event.which === Constant.KEY_CODE.LEFT_ARROW)  tabsCtrl.previous(scope);
+        else if (event.which === Constant.KEY_CODE.RIGHT_ARROW) tabsCtrl.next(scope);
+
       });
 
     tabsCtrl.add(scope, element);

@@ -3,7 +3,7 @@
  * tab selection changes. If `nobar` then do not show the
  * bar nor animate.
  */
-function linkTabInk(scope, element, attrs, tabsCtrl, $materialEffects) {
+function linkTabInk(scope, element, tabsCtrl, $q, $materialEffects) {
   // TODO scope.nostretch
   if ( scope.nobar ) return;
 
@@ -59,8 +59,16 @@ function linkTabInk(scope, element, attrs, tabsCtrl, $materialEffects) {
 
       inkBar
         .toggleClass('animate', (immediate !== true) )
-        .css(styles);
-
+        .css(styles)
     }
+
+    // Listen for CSS transition completion and announce
+    var dfd = $q.defer();
+    inkBar.one( $materialEffects.TRANSITIONEND_EVENT, function() {
+      dfd.resolve({ width: width, left:left });
+    });
+
+    return dfd.promise;
+
   }
 }

@@ -4,7 +4,6 @@ angular.module('material.components.tabs')
     '$attrs', 
     '$materialComponentRegistry', 
     '$timeout',
-    '$$rAF',
     TabsController
   ]);
 
@@ -17,49 +16,109 @@ angular.module('material.components.tabs')
  *
  * @private
  */
-function TabsController($scope, $attrs, $materialComponentRegistry, $timeout, $$rAF ) {
+function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
   var list = Util.iterator([], false),
     componentID = "tabs" + $scope.$id,
     elements = { },
     selected = null,
     self = this;
 
-  $materialComponentRegistry.register( self, $attrs.componentId || componentID );
-
-  // Methods used by <material-tab> and children
-
-  this.add = addTab;
-  this.remove = removeTab;
-  this.select = selectTab;
-  this.selectAt = selectTabAt;
-  this.next = selectNext;
-  this.previous = selectPrevious;
-
   // Property for child access
-  this.noink = !!$scope.noink;
-  this.nobar = !!$scope.nobar;
-  this.scope = $scope;
+  self.noink = !!$scope.noink;
+  self.nobar = !!$scope.nobar;
+  self.scope = $scope;
 
   // Special internal accessor to access scopes and tab `content`
   // Used by TabsDirective::buildContentItems()
 
-  this.$scope = $scope;
-  this.$$tabs = findTabs;
-  this.$$hash = "";
+  self.$scope = $scope;
+  self.$$tabs = findTabs;
+  self.$$hash = "";
 
-  this.selectedElement = function() {
+  // Methods used by <material-tab> and children
+
+  self.add = addTab;
+  self.remove = removeTab;
+  self.select = selectTab;
+  self.selectAt = selectTabAt;
+  self.next = selectNext;
+  self.previous = selectPrevious;
+
+  self.focusSelected = focusSelected;
+  self.focusNext     = focusNext;
+  self.focusPrevious = focusPrevious;
+
+  self.selectedElement = selectedElement;
+
+  $materialComponentRegistry.register( self, $attrs.componentId || componentID );
+
+
+  /**
+   * Accessor to look up the associated
+   * @returns {*}
+   */
+  function selectedElement() {
     return findElementFor( selected );
   };
 
-  function onTabsChanged() {
-    if (onTabsChanged.queued) return;
-    onTabsChanged.queued = true;
+
+  /**
+   * When the selected tab changes, broadcast notification
+   */
+  function onSelectedChange() {
+    if (onSelectedChange.queued) return;
+    onSelectedChange.queued = true;
 
     $scope.$evalAsync(function() {
-      $scope.$broadcast('$materialTabsChanged');
-      onTabsChanged.queued = false;
+      $scope.$broadcast(Constant.EVENTS.TABS_CHANGED, selected);
+      onSelectedChange.queued = false;
     });
   }
+
+
+  /**
+   * Make sure the currently selected tab is
+   * focused. Do not! announce focus changes..
+   *
+   * NOTE: this is primarily used within pagination/ink updates after
+   *       tab click handlers. @see tabsDirective.js
+   * @returns {*}
+   */
+  function focusSelected() {
+    return focusOn('current');
+  }
+
+  /**
+   * Focus on the next enabled tab relative to `from`
+   * Announce focus change with new focusIndex if appropriate
+   * @param from
+   */
+  function focusNext(from) {
+    var focusIndex = focusOn('next', from);
+    if ( focusIndex != list.indexOf(selected)) {
+
+      // Announce focus change
+      $scope.$broadcast(Constant.EVENTS.FOCUS_CHANGED, focusIndex);
+    }
+    return focusIndex;
+  }
+
+  /**
+   * Focus on the previous enabled tab relative to `from`
+   * Announce focus change with new focusIndex if appropriate
+   * @param from
+   */
+  function focusPrevious(from) {
+    var focusIndex = focusOn('previous', from );
+
+    if ( focusIndex != list.indexOf(selected)) {
+      // Announce focus change
+      $scope.$broadcast(Constant.EVENTS.FOCUS_CHANGED, focusIndex);
+    }
+
+    return focusIndex;
+  }
+
 
   /**
    * Find the DOM element associated with the tab/scope
@@ -117,7 +176,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout, $$
 
       // update the tabs ink to indicate the selected tab
       if (!noUpdate) {
-        onTabsChanged();
+        onSelectedChange();
       }
     }
 
@@ -166,7 +225,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout, $$
       if ($scope.$selIndex == pos || tab.active) {
         selectTab(tab);
       } else {
-        onTabsChanged();
+        onSelectedChange();
       }
     }
 
@@ -187,7 +246,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout, $$
       selectTab( list.next(tab, isEnabled) || list.previous(tab, isEnabled) );
       list.remove(tab);
 
-      onTabsChanged();
+      onSelectedChange();
       // another tab was removed, make sure to update ink bar
       $timeout(function(){
         delete elements[tab.$id];
@@ -199,14 +258,26 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout, $$
   }
 
   /**
-   * Select the next tab in the list
+   * Focus on the specified tab (if available)
+   * @returns {*} Tab
+   */
+  function focusOn(which, from) {
+    var tab = (which === 'current' ) ? selected :
+              (which === 'next')     ? list.next(from || selected, isEnabled) :
+              (which === 'previous') ? list.previous(from || selected, isEnabled) : null;
+
+    var el = findElementFor( tab );
+    if ( el ) el[0].focus();
+
+    return list.indexOf(tab);
+  }
+
+  /**
+   * Select the next tab in the list or the
    * @returns {*} Tab
    */
   function selectNext(target) {
-    var next = list.next( target, isEnabled );
-
-    return next ? selectTab( next ) :
-           target.disabled ? selectPrevious(target) : target;
+    return selectTab( list.next(target, isEnabled) || target );
   }
 
   /**
@@ -214,12 +285,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout, $$
    * @returns {*} Tab
    */
   function selectPrevious(target) {
-    var previous = list.previous(target, isEnabled );
-
-    return previous ? selectTab( previous ) :
-           target.disabled ? selectNext(target) : target;
-
-
+    return selectTab( list.previous(target, isEnabled) || target );
   }
 
   /**
