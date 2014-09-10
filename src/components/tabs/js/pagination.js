@@ -5,7 +5,7 @@
  *
  * @returns {updatePagination}
  */
-function linkTabPagination(scope, element, tabsCtrl, $q, $materialEffects ) {
+function linkTabPagination(scope, element, tabsCtrl, $q, $log, $materialEffects ) {
 
   // TODO allow configuration of TAB_MIN_WIDTH
   var TAB_MIN_WIDTH = 8 * 12;           // Must match tab min-width rule in _tabs.scss
@@ -66,6 +66,7 @@ function linkTabPagination(scope, element, tabsCtrl, $q, $materialEffects ) {
       // before we announce status [and potentially update focus]
 
       if ( pageChange ) {
+
         tabsHeader.one($materialEffects.TRANSITIONEND_EVENT, function() {
             dfd.resolve(pageIndex);
         });
@@ -107,22 +108,14 @@ function linkTabPagination(scope, element, tabsCtrl, $q, $materialEffects ) {
     if ( page < 0 ) page = 0;
     if ( page > lastPage ) page = lastPage;
 
+    pagination.page = page;
+
     pagination.startIndex = !pagination.active ? 0       : page * pagination.itemsPerPage;
     pagination.endIndex   = !pagination.active ? lastTab : pagination.startIndex + pagination.itemsPerPage - 1;
     pagination.hasPrev    = !pagination.active ? false   : page > 0;
     pagination.hasNext    = !pagination.active ? false   : (page + 1) < pagination.pagesCount;
 
     slideTabButtons( -page * pagination.itemsPerPage * pagination.tabWidth );
-
-    if ( (updateTabSelection !== false) && !isTabInRange(scope.$selIndex) ) {
-      var index = (page > pagination.page) ?  pagination.startIndex : pagination.endIndex;
-
-      // Only change selected tab IF the current tab is not `in range`
-      tabsCtrl.selectAt( index );
-    }
-
-    pagination.page = page;
-
   }
 
   /**
