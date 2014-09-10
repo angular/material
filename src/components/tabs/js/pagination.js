@@ -5,7 +5,7 @@
  *
  * @returns {updatePagination}
  */
-function linkTabPagination(scope, element, tabsCtrl, $q, $log, $materialEffects ) {
+function linkTabPagination(scope, element, tabsCtrl, $q, $materialEffects ) {
 
   // TODO allow configuration of TAB_MIN_WIDTH
   var TAB_MIN_WIDTH = 8 * 12;           // Must match tab min-width rule in _tabs.scss
