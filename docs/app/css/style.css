@@ -110,6 +110,7 @@ pre > code.highlight {
 }
 
 .demo-container.no-source {
+  margin-top: 30px;
   height: 668px;
 }
 iframe.demo {

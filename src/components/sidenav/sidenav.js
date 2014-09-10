@@ -210,7 +210,7 @@ function materialSidenavDirective($timeout) {
       }
 
       /**
-       * Auto-close sideNav when the **escape** key is pressed.
+       * Auto-close sideNav when the `escape` key is pressed.
        * @param evt
        */
       function onKeyDown(evt) {
@@ -223,9 +223,9 @@ function materialSidenavDirective($timeout) {
       }
 
       /**
-       * Apply immediate CSS close transition...
-       * Then notify the controller to close() and perform
-       * its own actions.
+        * With backdrop `clicks` or `escape` key-press, immediately
+       * apply the CSS close transition... Then notify the controller
+       * to close() and perform its own actions.
        */
       function close() {
 
