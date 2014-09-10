@@ -30,9 +30,16 @@ var Constant = {
     ENTER: 13
   },
   EVENTS : {
+    SCOPE_DESTROY : '$destroy',
     TABS_CHANGED : '$materialTabsChanged',
     FOCUS_CHANGED : '$materialFocusChanged',
     WINDOW_RESIZE : 'resize',
-    SCOPE_DESTROY : '$destroy'
+    KEY_DOWN     : 'keydown'
   }
 };
+
+/**
+ * Alias shortcuts...
+ */
+var EVENT = Constant.EVENTS;
+var KEY  = Constant.KEY_CODE;
