@@ -29,6 +29,28 @@ var Util = {
   },
 
   /**
+   * Returns a function, that, as long as it continues to be invoked, will not
+   * be triggered. The function will be called after it stops being called for
+   * N milliseconds.
+   * @param fn Function function to call
+   * @param wait Number number of ms to wait before calling function
+   * @param immediate Boolean causes the function to be called on the leading instead of trailing
+   * @returns {Function}
+   */
+  debounce: function debounce(func, wait, immediate) {
+    var timeout;
+    return function() {
+      var context = this, args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(function() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      }, wait);
+      if (immediate) func.apply(context, args);
+    };
+  },
+
+  /**
    * Checks if two elements have the same parent
    */
   elementIsSibling: function elementIsSibling(element, otherElement) {
@@ -105,6 +127,23 @@ var Util = {
       return target;
     }
 
+  },
+
+  /**
+   * Wraps an element with a tag
+   *
+   * @param el element to wrap
+   * @param tag tag to wrap it with
+   * @param [className] optional class to apply to the wrapper
+   * @returns new element
+   *
+   */
+  wrap: function(el, tag, className) {
+    if(el.hasOwnProperty(0)) { el = el[0]; }
+    var wrapper = document.createElement(tag);
+    wrapper.className += className;
+    wrapper.appendChild(el.parentNode.replaceChild(wrapper, el));
+    return angular.element(wrapper);
   }
 
 };

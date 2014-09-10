@@ -37,7 +37,7 @@ function materialSubheaderDirective($materialSticky) {
         });
       }
       return function link(scope, el, attrs) {
-        $materialSticky(el);
+        $materialSticky(scope, el);
       };
     }
   };
