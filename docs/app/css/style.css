@@ -111,9 +111,10 @@ pre > code.highlight {
 
 .demo-container {
   margin-top: 30px;
-}
-.demo-container:not(.show-source) {
   height: 668px;
+}
+.demo-container.show-source {
+  height: 1117px;
 }
 
 iframe.demo {
