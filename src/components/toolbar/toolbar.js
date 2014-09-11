@@ -84,7 +84,7 @@ function materialToolbarDirective($$rAF, $materialEffects) {
 
           if (Util.elementIsSibling(element, contentEl)) {
             // unhook old content event listener if exists
-            contentElement && contentElement.off('scroll', onScroll);
+            contentElement && contentElement.off('scroll', onContentScroll);
             contentEl.on('scroll', onContentScroll).css('position','relative');
             contentElement = contentEl;
           }
