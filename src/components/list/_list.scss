@@ -1,7 +1,12 @@
 material-list {
+
 }
 
 material-item {
+
+}
+
+material-item-content {
   @include flex-display();
   @include flex-align-items(center);
   @include flex-direction(row);
@@ -17,6 +22,7 @@ material-item {
  */
 .material-tile-left {
   min-width: 56px;
+  margin-right: -16px;
 }
 
 /**
@@ -25,9 +31,8 @@ material-item {
 .material-tile-content {
   @include flex(1);
 
-  padding: 15px 0 15px 0;
+  padding: $baseline-grid * 2;
 
-  border-bottom: 1px solid #eee;
   text-overflow: ellipsis;
 
   h2 {
