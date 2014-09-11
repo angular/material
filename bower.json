@@ -10,7 +10,6 @@
     "angular-mocks": "1.3.0-beta.18",
     "angular-route": "1.3.0-beta.18",
     "angularytics": "^0.3.0",
-    "normalize.scss": "https://github.com/kristerkari/normalize.scss.git",
     "jquery": "~2.1.1"
   }
 }
