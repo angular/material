@@ -8,8 +8,8 @@ material-tabs {
 
 .tabs-header {
   width: 100%;
+  height: $tabs-header-height;
   @include box-sizing(border-box);
-  @include flex-display();
   position: relative;
   background-color: #4285F4;
 }
@@ -22,6 +22,14 @@ material-tabs {
   @include flex-align-items(center);
   width: $tabs-paginator-width;
   min-height: 100%;
+
+  position: absolute;
+  &.prev {
+    left: 0;
+  }
+  &.next {
+    right: 0;
+  }
 
   /* TODO Once we have a better way to inline svg images, change this 
    to use svgs correctly */
@@ -42,12 +50,18 @@ material-tabs {
 material-tabs[center] .tabs-header:not(.tab-paginating) .tabs-header-items {
   @include flex-justify-content(center);
 }
+.tab-paginating .tabs-header-items-container {
+  left: $tabs-paginator-width;
+  right: $tabs-paginator-width;
+}
 .tabs-header-items-container {
   overflow: hidden;
-  position: relative;
-  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 100%;
   white-space: nowrap;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   text-transform: uppercase;
   margin: auto;
@@ -59,6 +73,7 @@ material-tabs[center] .tabs-header:not(.tab-paginating) .tabs-header-items {
     transition: transform 0.2s linear;
     @include transform(translate3d(0,0,0));
     width: 100%;
+    height: 100%;
   }
 }
 
@@ -79,9 +94,6 @@ material-ink-bar {
   }
 }
 
-
-
-
 material-tab {
   @include flex(1);
   @include flex-display();
@@ -91,7 +103,7 @@ material-tab {
   position: relative;
   z-index: 0;
   overflow: hidden;
-  line-height: 40px;
+  height: 100%;
   text-align: center;
   cursor: pointer;
   min-width: $tabs-tab-width;
@@ -132,10 +144,3 @@ material-tab {
 shadow {
   box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.2);
 }
-
-
-
-
-
-
-
