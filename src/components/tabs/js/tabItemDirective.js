@@ -2,6 +2,7 @@ angular.module('material.components.tabs')
   .directive('materialTab', [ 
     '$attrBind',
     '$aria',
+    '$materialInkRipple',
     TabDirective  
   ]);
 
@@ -55,7 +56,7 @@ angular.module('material.components.tabs')
  * </hljs>
  *
  */
-function TabDirective( $attrBind, $aria ) {
+function TabDirective( $attrBind, $aria, $materialInkRipple) {
   var noop = angular.noop;
 
   return {
@@ -66,7 +67,7 @@ function TabDirective( $attrBind, $aria ) {
     scope: true,
     link: linkTab,
     template:
-      '<material-tab-label ink-ripple ' +
+      '<material-tab-label ' +
         'ng-class="{ disabled : disabled, active : active }"  >' +
       '</material-tab-label>'
   };
@@ -84,6 +85,8 @@ function TabDirective( $attrBind, $aria ) {
       deselected: '&onDeselect',
       selected: '&onSelect'
     }, defaults);
+
+    $materialInkRipple.attachButtonBehavior(element);
 
     configureWatchers();
     updateTabContent(scope);

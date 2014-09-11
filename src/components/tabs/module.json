@@ -4,11 +4,11 @@
   "js": ["*.js", "js/*.js"],
   "demos": {
     "demo2": {
-      "name": "Static paginated tabs (with external views):",
+      "name": "Static Paginated Tabs",
       "files": ["demos/demo2/*"]
     },
     "demo4": {
-      "name": "Dynamic Tabs (with internal views, noInk):",
+      "name": "Dynamic Tabs",
       "files": ["demos/demo4/*"]
     }
   }

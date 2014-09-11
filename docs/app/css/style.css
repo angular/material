@@ -122,10 +122,6 @@ iframe.demo {
   border: none;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  border-top: 1px solid #ddd;
-}
-.show-source iframe.demo {
-  border-top: none;
 }
 .show-source .demo-frame-container {
   -webkit-transform: translate3d(0, 0, 0);
@@ -166,6 +162,8 @@ material-toolbar.demo-toolbar material-button {
   background-color: #f6f6f6;
   height:400px;
   opacity: 0;
+  transition: opacity 0.2s linear;
+  -webkit-transition: opacity 0.2s linear;
 }
 .show-source .demo-source-container {
   opacity: 1;

@@ -3,15 +3,15 @@
 
     <material-tabs selected="selectedIndex"  center>
         <material-tab label="ITEM ONE"></material-tab>
-        <material-tab label="ITEM TWO" ng-disabled="twoDisabled"></material-tab>
-        <material-tab label="ITEM THREE" ng-disabled="true"></material-tab>
+        <material-tab label="ITEM TWO"></material-tab>
+        <material-tab label="ITEM THREE"></material-tab>
         <material-tab label="ITEM FOUR"></material-tab>
-        <material-tab label="ITEM FIVE" ng-disabled="true"></material-tab>
+        <material-tab label="ITEM FIVE"></material-tab>
         <material-tab label="ITEM SIX"></material-tab>
         <material-tab label="ITEM SEVEN"></material-tab>
-        <material-tab label="ITEM EIGHT" ng-disabled="true"></material-tab>
+        <material-tab label="ITEM EIGHT"></material-tab>
         <material-tab label="ITEM NINE"></material-tab>
-        <material-tab label="ITEM TEN" ng-disabled="true"></material-tab>
+        <material-tab label="ITEM TEN"></material-tab>
     </material-tabs>
 
     <div class="animate-switch-container" ng-switch on="selectedIndex">
@@ -64,20 +64,4 @@
             Selection index = 9
         </div>
     </div>
-
-
-    <div style="margin-top: 10px;">
-        <material-input-group>
-            <label>SelectedIndex</label>
-            <material-input type="text" ng-model="selectedIndex"></material-input>
-        </material-input-group>
-
-        <div style="margin-top: 10px;">
-            Tab #2 is
-            <material-checkbox ng-model="twoDisabled" aria-label="Disabled">Disabled</material-checkbox>
-            (will auto-deselect if active)
-        </div>
-    </div>
-
-
 </div>
