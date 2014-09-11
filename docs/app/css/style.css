@@ -112,6 +112,8 @@ pre > code.highlight {
 .demo-container {
   margin-top: 30px;
   height: 668px;
+  -webkit-transition: height 0.4s ease-in-out;
+  transition: height 0.4s ease-in-out;
 }
 .demo-container.show-source {
   height: 1117px;
