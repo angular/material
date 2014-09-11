@@ -183,9 +183,9 @@ function TabsDirective($q, $window, $timeout, $compile, $materialEffects, $$rAF,
               angular.element($window).off('resize', onWindowResize);
             };
 
-        angular.element($window).on( Constant.EVENTS.WINDOW_RESIZE, onWindowResize);
-        scope.$on( Constant.EVENTS.TABS_CHANGED, updateAll );
-        scope.$on( Constant.EVENTS.SCOPE_DESTROY,onWindowRelease );
+        angular.element($window).on( EVENT.WINDOW_RESIZE, onWindowResize);
+        scope.$on( EVENT.TABS_CHANGED, updateAll );
+        scope.$on( EVENT.SCOPE_DESTROY,onWindowRelease );
 
         transcludeHeaderItems();
         transcludeContentItems();

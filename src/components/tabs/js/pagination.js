@@ -25,7 +25,7 @@ function linkTabPagination(scope, element, tabsCtrl, $q, $materialEffects ) {
     }
   };
 
-  scope.$on(Constant.EVENTS.FOCUS_CHANGED, function() {
+  scope.$on( EVENT.FOCUS_CHANGED, function() {
 
   });
 
@@ -35,6 +35,8 @@ function linkTabPagination(scope, element, tabsCtrl, $q, $materialEffects ) {
    * When the window resizes [`resize`] or the tabs are added/removed
    * [$materialTabsChanged], then calculate pagination-width and
    * update both the current page (if needed) and the tab headers width...
+   *
+   * @returns Promise that is resolved when the pagination transition finishes
    */
   function updatePagination() {
     var dfd = $q.defer();

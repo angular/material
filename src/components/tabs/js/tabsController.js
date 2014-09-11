@@ -112,7 +112,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
     onSelectedChange.queued = true;
 
     $scope.$evalAsync(function() {
-      $scope.$broadcast(Constant.EVENTS.TABS_CHANGED, selected);
+      $scope.$broadcast(EVENT.TABS_CHANGED, selected);
       onSelectedChange.queued = false;
     });
   }
@@ -140,7 +140,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
     if ( focusIndex != list.indexOf(selected)) {
 
       // Announce focus change
-      $scope.$broadcast(Constant.EVENTS.FOCUS_CHANGED, focusIndex);
+      $scope.$broadcast(EVENT.FOCUS_CHANGED, focusIndex);
     }
     return focusIndex;
   }
@@ -155,7 +155,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
 
     if ( focusIndex != list.indexOf(selected)) {
       // Announce focus change
-      $scope.$broadcast(Constant.EVENTS.FOCUS_CHANGED, focusIndex);
+      $scope.$broadcast(EVENT.FOCUS_CHANGED, focusIndex);
     }
 
     return focusIndex;

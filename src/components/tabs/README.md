@@ -1,4 +1,15 @@
-Tabs, created with the `<material-tabs>` directive provide *tabbed* navigation with different styles.
+Tabs, created with the `<material-tabs>` directive provide *tabbed* navigation with different styles. The Tabs component consists of clickable tabs that are aligned horizontally side-by-side.
 
-The Tabs component consists of clickable tabs that are aligned horizontally side-by-side. Features include for supports static or dynamic tab creation, a programmatic Tab API, responsive designs, and dynamic transitions through different tab contents.
+Features include support for:
+
+* static or dynamic tabs,
+* responsive designs,
+* accessibility support (ARIA),
+* tab pagination,
+* external or internal tab content,
+* focus indicators and arrow-key navigations,
+* programmatic lookup and access to tab controllers, and
+* dynamic transitions through different tab contents.
+
+
 
