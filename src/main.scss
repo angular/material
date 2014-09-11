@@ -1,7 +1,9 @@
-// Theme
-@import "theme/theme",
+@import
 
 "base/normalize",
+
+// Theme
+"theme/theme",
 
 // Base
 "base/mixins",
