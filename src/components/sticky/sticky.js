@@ -25,17 +25,16 @@ function MaterialSticky($window, $document, $$rAF) {
   targetElementIndex;
 
 
-  //$document.on('scroll', Util.debounce(startScroll, 1000, true));
   $document.on('scroll',  checkElements);
 
-  startScroll();
+  $document.ready(scanElements);
 
   return registerStickyElement;
 
   /* *
    * Function to prepare our lookups so we can go quick!
    * */
-  function startScroll() {
+  function scanElements() {
     targetElementIndex = 0;
     // Sort based on position in the window, and assign an active index
     orderedElements = elements.sort(function(a, b) {
@@ -48,6 +47,8 @@ function MaterialSticky($window, $document, $$rAF) {
       for(var i = 0; i < orderedElements.length ; ++i) {
         if(bottom(orderedElements[i].children(0)) > 0) {
           targetElementIndex = i > 0 ? i - 1 : i;
+        } else {
+          targetElementIndex = i;
         }
       }
     })();
@@ -65,36 +66,38 @@ function MaterialSticky($window, $document, $$rAF) {
     }
     lastScroll = $window.scrollY;
 
+    var stickyActive = content.attr('material-sticky-active');
 
-    if(scrollingDown && content.attr('material-sticky-active') && contentRect.bottom <= 0 && targetElementIndex < orderedElements.length - 1) {
-      console.log("Upping target");
+
+    if(scrollingDown && stickyActive && contentRect.bottom <= 0 && targetElementIndex < orderedElements.length - 1) {
+      incrementElement();
       $$rAF(function() {
-        content.removeAttr('material-sticky-active');
-        targetElement().css({height: null});
-        targetElementIndex++;
-        content = targetElement().children(0);
-        contentRect = rect(content);
-        content.attr('material-sticky-active', true);
-        content.css({top: 0});
-        targetElement().css({height: contentRect.height});
+        targetElement(-1).children(0).removeAttr('material-sticky-active');
+        targetElement(-1).css({height: null});
       });
-    } else if(!scrollingDown && content.attr('material-sticky-active') && targetRect.top > 0) {
-      console.log("Lowering target");
+    } else if(!scrollingDown && stickyActive && targetRect.top > 0) {
+      incrementElement(-1);
       return $$rAF(function() {
-        content.removeAttr('material-sticky-active');
-        targetElement().css({height: null});
-        targetElementIndex--;
-        content = targetElement().children(0);
-        contentRect = rect(content);
+        targetElement(+1).children(0).removeAttr('material-sticky-active');
+        targetElement(+1).css({height: null});
         content.attr('material-sticky-active', true);
+        content.css({top: -1 * contentRect.height});
         targetElement().css({height: contentRect.height});
       });
-    } else if(scrollingDown && contentRect.top <= 0) {
+    } else if(scrollingDown && contentRect.top <= 0 && !stickyActive) {
       $$rAF(function() {
         content.attr('material-sticky-active', true);
-        content.css({top: 0});
         targetElement().css({height: contentRect.height});
         contentRect = rect(content);
+        var next = targetElement(+1),
+            offset = 0;
+        if(next) {
+          nextRect = rect(next.children(0));
+          if(rectsAreTouching(contentRect, nextRect)) {
+            offset = nextRect.top - contentRect.bottom;
+          }
+        }
+        content.css({top: Math.min(offset, 0)});
       });
     } 
 
@@ -116,7 +119,6 @@ function MaterialSticky($window, $document, $$rAF) {
         }
       }
     } else if(targetElementIndex < orderedElements.length - 1 && contentRect.top < 0) {
-      console.log("B");
       // check if we need to pull
       nextRect = rect(targetElement(+1).children(0));
       $$rAF(function() {
@@ -127,7 +129,15 @@ function MaterialSticky($window, $document, $$rAF) {
         content.css({top: Math.min(currentTop - offsetAmount, 0)});
       });
     }
+
+    function incrementElement(inc) {
+      inc = inc || 1;
+      targetElementIndex += inc;
+      content = targetElement().children(0);
+      contentRect = rect(content);
+    }
   }
+
 
 
   // Convenience getter for the target element
