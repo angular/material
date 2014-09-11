@@ -22,30 +22,77 @@ angular.module('material.components.sticky', [])
 function MaterialSticky($window, $document, $$rAF) {
   var elements = [],
   orderedElements, // Sorted elements by scroll position
-  targetElementIndex;
+  targetElementIndex, browserStickySupport;
+
+  /**
+   * Registers an element as sticky, used internally by directives to register themselves
+   */
+
+  function registerStickyElement(scope, $el) {
+    $el = Util.wrap($el, 'div', 'sticky-container');
+    elements.push($el);
+
+    // check sticky support on first register
+    if(browserStickySupport === undefined) {
+      browserStickySupport = checkStickySupport($el);
+    } else if(browserStickySupport) {
+      $el.css({position: browserStickySupport, top: '0px'});
+    }
+
+    if(!browserStickySupport) {
+      if(elements.length == 1) {
+        $document.on('scroll',  checkElements);
+      }
+      scanElements();
+    }
+  }
 
 
-  $document.on('scroll',  checkElements);
-
-  $document.ready(scanElements);
+  // Deregister a sticky element, useful for $destroy event.
+  registerStickyElement.$deregister = function($el) {
+    var innerElements = elements.map(function(el) { return el.children(0); });
+    var index = innerElements.indexOf($el);
+    if(~index) {
+      elements[index].replaceWith($el);
+      elements.splice(index, 1);
+      if(elements.length === 0) {
+        $document.off('scroll', checkElements);
+      }
+    }
+  };
 
   return registerStickyElement;
+
+  function checkStickySupport($el) {
+    var stickyProps = ['sticky', '-webkit-sticky'];
+    for(var i = 0; i < stickyProps.length; ++i) {
+      $el.css({position: stickyProps[i], top: '0px'});
+      if($window.getComputedStyle($el[0]).position == stickyProps[i]) {
+        return stickyProps[i];
+      }
+    }
+    $el.css({position: undefined, top: undefined});
+    return false;
+  }
+
 
   /* *
    * Function to prepare our lookups so we can go quick!
    * */
+
   function scanElements() {
+    if(browserStickySupport) return; // don't need to do anything if we have native sticky
     targetElementIndex = 0;
     // Sort based on position in the window, and assign an active index
     orderedElements = elements.sort(function(a, b) {
-      return top(a) - top(b);
+      return rect(a).top - rect(b).top;
     });
 
     // Iterate over our sorted elements and find the one that is active
     (function findTargetElement() {
       var windowTop = $window.scrollY;
       for(var i = 0; i < orderedElements.length ; ++i) {
-        if(bottom(orderedElements[i].children(0)) > 0) {
+        if(rect(orderedElements[i].children(0)).bottom > 0) {
           targetElementIndex = i > 0 ? i - 1 : i;
         } else {
           targetElementIndex = i;
@@ -119,7 +166,7 @@ function MaterialSticky($window, $document, $$rAF) {
         }
       }
     } else if(targetElementIndex < orderedElements.length - 1 && contentRect.top < 0) {
-      // check if we need to pull
+      // we need to pull
       nextRect = rect(targetElement(+1).children(0));
       $$rAF(function() {
         var offsetAmount = contentRect.bottom - nextRect.top;
@@ -156,18 +203,6 @@ function MaterialSticky($window, $document, $$rAF) {
   function rect($el) {
     return $el.hasOwnProperty(0) ? $el[0].getBoundingClientRect() : $el.getBoundingClientRect();
   }
-  function top($el) {
-    return rect($el).top;
-  }
 
-  function bottom($el) {
-    return rect($el).bottom;
-  }
 
-  /**
-   * Registers an element as sticky, this is what the factory returns,
-   * and what directives register themselves with */
-  function registerStickyElement(scope, $el) {
-    elements.push(Util.wrap($el, 'div', 'sticky-container'));
-  }
 }
