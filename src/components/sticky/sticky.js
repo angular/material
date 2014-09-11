@@ -21,12 +21,14 @@ angular.module('material.components.sticky', [])
 
 function MaterialSticky($window, $document, $$rAF) {
   var elements = [],
-      orderedElements, // Sorted elements by scroll position
-      targetElementIndex;
+  orderedElements, // Sorted elements by scroll position
+  targetElementIndex;
 
 
-  $document.on('scroll', Util.debounce(startScroll, 200, true));
+  //$document.on('scroll', Util.debounce(startScroll, 1000, true));
   $document.on('scroll',  checkElements);
+
+  startScroll();
 
   return registerStickyElement;
 
@@ -44,53 +46,100 @@ function MaterialSticky($window, $document, $$rAF) {
     (function findTargetElement() {
       var windowTop = $window.scrollY;
       for(var i = 0; i < orderedElements.length ; ++i) {
-        if(bottom(orderedElements[i]) > 0) {
+        if(bottom(orderedElements[i].children(0)) > 0) {
           targetElementIndex = i > 0 ? i - 1 : i;
         }
       }
     })();
   }
 
-  var reverseAt = 0;
+  var lastScroll = 0;
   function checkElements() {
-    var targetRect = rect(targetElement().children(0));
-    if(targetRect.top <= 0) {
-      reverseAt = targetRect.top;
-      targetElement().children(0).attr('material-sticky-active', true);
-      targetElement().css({height: targetRect.height});
-    }
-    if($window.scrollY < reverseAt) {
-      targetElement().children(0).attr('material-sticky-active', false);
-      targetElement().css({height: null});
-    }
+    var content = targetElement().children(0);
+    var contentRect = rect(content),
+    targetRect = rect(targetElement());
 
-    // check if we need to push
-    var next = targetElement(+1);
-    if(next) {
-      var nextRect = rect(next);
-      if(rectsAreTouching(targetRect, nextRect)) {
-        $$rAF(function() {
-          var offsetAmount = targetRect.bottom - nextRect.top;
-          var currentTop = targetElement().children(0).css('top');
-          if(currentTop == 'auto') { currentTop = 0; } 
-          var newTop = currentTop - offsetAmount;
-          console.log("ssetting top to %d", newTop);
-          targetElement().children(0).css({top: currentTop - offsetAmount});
-        });
+    var scrollingDown = false;
+    if($window.scrollY > (lastScroll || 0)) {
+      scrollingDown = true;
+    }
+    lastScroll = $window.scrollY;
+
+
+    if(scrollingDown && content.attr('material-sticky-active') && contentRect.bottom <= 0 && targetElementIndex < orderedElements.length - 1) {
+      console.log("Upping target");
+      $$rAF(function() {
+        content.removeAttr('material-sticky-active');
+        targetElement().css({height: null});
+        targetElementIndex++;
+        content = targetElement().children(0);
+        contentRect = rect(content);
+        content.attr('material-sticky-active', true);
+        content.css({top: 0});
+        targetElement().css({height: contentRect.height});
+      });
+    } else if(!scrollingDown && content.attr('material-sticky-active') && targetRect.top > 0) {
+      console.log("Lowering target");
+      return $$rAF(function() {
+        content.removeAttr('material-sticky-active');
+        targetElement().css({height: null});
+        targetElementIndex--;
+        content = targetElement().children(0);
+        contentRect = rect(content);
+        content.attr('material-sticky-active', true);
+        targetElement().css({height: contentRect.height});
+      });
+    } else if(scrollingDown && contentRect.top <= 0) {
+      $$rAF(function() {
+        content.attr('material-sticky-active', true);
+        content.css({top: 0});
+        targetElement().css({height: contentRect.height});
+        contentRect = rect(content);
+      });
+    } 
+
+    var nextRect;
+    if(scrollingDown) {
+      // check if we need to push
+      var next = targetElement(+1);
+      if(next) {
+        nextRect = rect(next.children(0));
+        if(rectsAreTouching(contentRect, nextRect)) {
+          $$rAF(function() {
+            var offsetAmount = contentRect.bottom - nextRect.top;
+            var currentTop = content.css('top');
+            if(currentTop == 'auto') { currentTop = 0; }
+            else { currentTop = parseInt(currentTop, 10); }
+            var newTop = currentTop - offsetAmount;
+            content.css({top: currentTop - offsetAmount});
+          });
+        }
       }
+    } else if(targetElementIndex < orderedElements.length - 1 && contentRect.top < 0) {
+      console.log("B");
+      // check if we need to pull
+      nextRect = rect(targetElement(+1).children(0));
+      $$rAF(function() {
+        var offsetAmount = contentRect.bottom - nextRect.top;
+        var currentTop = content.css('top');
+        if(currentTop == 'auto') { currentTop = 0; }
+        else { currentTop = parseInt(currentTop, 10); }
+        content.css({top: Math.min(currentTop - offsetAmount, 0)});
+      });
     }
   }
 
-   // Convenience getter for the target element
-   function targetElement(indexModifier) {
-     indexModifier = indexModifier || 0;
-     if(targetElementIndex === undefined) return undefined;
-     return orderedElements[targetElementIndex + indexModifier];
-   }
 
-   function rectsAreTouching(first, second) {
-      return first.bottom >= second.top;
-   }
+  // Convenience getter for the target element
+  function targetElement(indexModifier) {
+    indexModifier = indexModifier || 0;
+    if(targetElementIndex === undefined) return undefined;
+    return orderedElements[targetElementIndex + indexModifier];
+  }
+
+  function rectsAreTouching(first, second) {
+    return first.bottom >= second.top;
+  }
 
   // Helper functions to get position of element
 
