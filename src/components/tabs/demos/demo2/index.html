@@ -4,8 +4,8 @@
     <material-tabs selected="selectedIndex"  center>
         <material-tab label="ITEM ONE"></material-tab>
         <material-tab label="ITEM TWO"></material-tab>
-        <material-tab label="ITEM THREE"></material-tab>
-        <material-tab label="ITEM FOUR"></material-tab>
+        <material-tab label="ITEM THREE" ></material-tab>
+        <material-tab label="ITEM FOUR" ng-disabled="locked"></material-tab>
         <material-tab label="ITEM FIVE"></material-tab>
         <material-tab label="ITEM SIX"></material-tab>
         <material-tab label="ITEM SEVEN"></material-tab>
@@ -15,53 +15,69 @@
     </material-tabs>
 
     <div class="animate-switch-container" ng-switch on="selectedIndex">
-        <div class="animate-switch blueArea" ng-switch-when="0">
+        <div class="animate-switch tab1" ng-switch-when="0">
             View for Item #1<br/>
             Selection index = 0
         </div>
-        <div class="animate-switch redArea" ng-switch-when="1">
+        <div class="animate-switch tab2" ng-switch-when="1">
             View for Item #2<br/>
             Selection index = 1
         </div>
-        <div class="animate-switch greenArea" ng-switch-when="2">
+        <div class="animate-switch tab3" ng-switch-when="2">
             View for Item #3<br/>
             Selection index = 2
         </div>
-        <div class="animate-switch grayArea" ng-switch-when="3">
+        <div class="animate-switch tab4" ng-switch-when="3">
             View for Item #4<br/>
             Selection index = 3
         </div>
-        <div class="animate-switch grayArea" ng-switch-when="4">
+        <div class="animate-switch tab5" ng-switch-when="4">
             View for Item #5<br/>
             Selection index = 4
         </div>
-        <div class="animate-switch grayArea" ng-switch-when="5">
+        <div class="animate-switch tab6" ng-switch-when="5">
             View for Item #6<br/>
             Selection index = 5
         </div>
-        <div class="animate-switch grayArea" ng-switch-when="6">
+        <div class="animate-switch tab7" ng-switch-when="6">
             View for Item #7<br/>
             Selection index = 6
         </div>
-        <div class="animate-switch grayArea" ng-switch-when="7">
+        <div class="animate-switch tab8" ng-switch-when="7">
             View for Item #8<br/>
             Selection index = 7
         </div>
-        <div class="animate-switch grayArea" ng-switch-when="8">
+        <div class="animate-switch tab9" ng-switch-when="8">
             View for Item #9<br/>
             Selection index = 8
         </div>
-        <div class="animate-switch grayArea" ng-switch-when="9">
+        <div class="animate-switch tab10" ng-switch-when="9">
             View for Item #10<br/>
             Selection index = 9
         </div>
-        <div class="animate-switch grayArea" ng-switch-when="8">
+        <div class="animate-switch tab1" ng-switch-when="10">
             View for Item #9<br/>
             Selection index = 8
         </div>
-        <div class="animate-switch grayArea" ng-switch-when="9">
+        <div class="animate-switch tab2" ng-switch-when="11">
             View for Item #10<br/>
             Selection index = 9
         </div>
     </div>
+
+
+    <div style="margin-top: 10px;">
+        <material-input-group>
+            <label>SelectedIndex</label>
+            <material-input type="text" ng-model="selectedIndex"></material-input>
+        </material-input-group>
+
+        <div style="margin-top: 10px;">
+            Tab #4 is
+            <material-checkbox ng-model="locked" aria-label="Disabled">Disabled</material-checkbox>
+            (will auto-deselect if active)
+        </div>
+    </div>
+
+
 </div>

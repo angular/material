@@ -251,3 +251,9 @@ material-list.tab-demo-list material-checkbox {
   font-weight: bold;
   text-transform: uppercase;
 }
+
+.removal {
+    position: absolute;
+    top: 35%;
+    left: 40%;
+}

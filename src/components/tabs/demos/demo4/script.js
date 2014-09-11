@@ -1,9 +1,9 @@
 angular.module('app', ['ngMaterial'])
   .controller('AppCtrl', function ($scope, $interpolate) {
     var tabs = [
-      { title: 'Polymer', active: true, disabled: false, content: "Polymer practices are great!" },
-      { title: 'Material', active: false, disabled: false, content: "Material Design practices are better!" },
-      { title: 'Angular', active: false, disabled: true, content: "AngularJS practices are the best!" },
+      { title: 'Polymer', active: true, disabled: false, content: "Polymer practices are great!", style:"tab1"},
+      { title: 'Material', active: false, disabled: false, content: "Material Design practices are better!", style:"tab2" },
+      { title: 'Angular', active: false, disabled: true, content: "AngularJS practices are the best!", style:"tab3" },
       { title: 'NodeJS', active: false, disabled: false, content: "NodeJS practices are amazing!" }
     ];
 

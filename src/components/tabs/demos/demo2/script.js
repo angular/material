@@ -17,6 +17,6 @@ angular.module('app', ['ngMaterial'] )
     ];
 
     $scope.selectedIndex = 0;
-    $scope.twoDisabled = true;
+    $scope.locked = true;
 
   });
