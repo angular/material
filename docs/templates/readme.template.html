@@ -6,7 +6,7 @@
 
     <section ng-repeat="demo in currentComponent.demos" 
       class="demo-container material-whiteframe-z1"
-      ng-class="{'no-source': !demo.$showSource}" layout="vertical">
+      ng-class="{'show-source': demo.$showSource}" layout="vertical">
 
       <material-toolbar class="demo-toolbar"> 
         <div class="material-toolbar-tools">
@@ -19,7 +19,7 @@
         </div>
       </material-toolbar>
 
-      <material-tabs ng-show="demo.$showSource" style="border-top: solid 1px #00ADC3;">
+      <material-tabs style="border-top: solid 1px #00ADC3;">
         <material-tab ng-repeat="file in demo.$files"
                       active="file === demo.$selectedFile"
                       ng-click="demo.$selectedFile = file"
