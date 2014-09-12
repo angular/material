@@ -154,9 +154,9 @@ function QpToastService($timeout, $rootScope, $materialCompiler, $rootElement, $
 
       function destroy() {
         if (destroy.called) return;
-
         destroy.called = true;
-        mc.off(swipeEvents, onSwipe);
+
+        mc.destroy();
         toastParent.removeClass(toastParentClass);
         $timeout.cancel(delayTimeout);
         $animate.leave(element, function() {
