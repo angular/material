@@ -131,11 +131,11 @@ function MaterialEffects($animateSequence, $rootElement, $position, $$rAF, $snif
   function popOut(element, parentElement, done) {
     var endPos = $position.positionElements(parentElement, element, 'bottom-center');
 
-    element.css({
-      '-webkit-transform': translateString(endPos.left, endPos.top, 0) + ' scale(0.5)',
-      opacity: 0
-    });
-    element.on(self.TRANSITIONEND_EVENT, finished);
+    element
+      .css(self.TRANSFORM, 
+           translateString(endPos.left, endPos.top, 0) + ' scale(0.5)')
+      .css('opacity', 0)
+      .on(self.TRANSITIONEND_EVENT, finished);
 
     function finished(ev) {
       //Make sure this transitionend didn't bubble up from a child

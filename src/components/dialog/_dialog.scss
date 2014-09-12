@@ -6,48 +6,51 @@
   position: fixed;
   left: 0;
   top: 0;
-  bottom: 0;
   right: 0;
+  bottom: 0;
   z-index: $z-index-dialog;
 
   &.active {
     @include transition(all 0.2s cubic-bezier(0.4, 0, 0.2, 1));
-    @include transform('translate3d(0,0,0) scale(1.0)');
+    @include transform(translate3d(0,0,0) scale(1.0));
     opacity: 1;
   }
 
-  material-dialog {
+}
 
-    // TODO: Calculate height properly
-    min-width: 240px;
-    max-width: 80%;
-    max-height: 80%;
-    margin:auto;
+material-dialog {
 
-    background-color: #fff;
-    border-radius: 4px;
+  min-width: 240px;
+  max-width: 80%;
+  max-height: 80%;
+  margin:auto;
 
-    box-shadow: $whiteframe-shadow-z5;
+  background-color: #fff;
+  border-radius: 4px;
 
-    @include flex-display();
-    @include flex-direction(column);
+  box-shadow: $whiteframe-shadow-z5;
 
-    .dialog-content {
-      @include flex-order(1);
-      padding: 24px;
-      overflow: auto;
-    }
-    .dialog-actions {
-      @include flex-order(2);
-      @include box-sizing(border-box);
-      @include flex-display();
-      @include flex-align-items(center);
-      @include flex-justify-content(flex-end);
-      padding: 8px 16px;
-      min-height: $baseline-grid * 4;
-    }
-    &.dialog-content-overflow .dialog-actions {
-      border-top: 1px solid #eee;
-    }
+  @include flex-display();
+  @include flex-direction(column);
+
+  .dialog-content {
+    @include flex-order(1);
+    padding: 24px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
   }
+
+  .dialog-actions {
+    @include flex-order(2);
+    @include box-sizing(border-box);
+    @include flex-display();
+    @include flex-align-items(center);
+    @include flex-justify-content(flex-end);
+    padding: 8px 16px;
+    min-height: $baseline-grid * 5;
+  }
+  &.dialog-content-overflow .dialog-actions {
+    border-top: 1px solid #eee;
+  }
+
 }
