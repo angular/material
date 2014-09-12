@@ -61,6 +61,7 @@ module.exports = {
           });
 
         var readmeDoc = _.find(component.docs, { docType: 'readme' });
+        !readmeDoc && console.log(component.id);
         component.docs.forEach(function(doc) {
           doc.readmeUrl = readmeDoc.url;
         });
