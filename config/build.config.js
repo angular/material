@@ -1,11 +1,14 @@
 var fs = require('fs');
 var pkg = require('../package.json');
+var bower = require('../bower.json');
 
 module.exports = {
   banner:
     '/*!\n' +
     ' * Angular Material Design\n' +
-    ' * WIP Banner\n' +
+    ' * https://github.com/angular/material\n' +
+    ' * @license MIT\n' +
+    ' * v' + bower.version + '\n' + 
     ' */\n',
   closureStart: '(function(){\n',
   closureEnd: '\n})();',
