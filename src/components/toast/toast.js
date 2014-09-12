@@ -147,7 +147,6 @@ function QpToastService($timeout, $rootScope, $materialCompiler, $rootElement, $
       function onSwipe(ev) {
         //Add swipeleft/swiperight/swipeup/swipedown class to element
         element.addClass(ev.type);
-        mc.off(swipeEvents, onSwipe);
         $timeout(destroy);
       }
 
@@ -155,6 +154,7 @@ function QpToastService($timeout, $rootScope, $materialCompiler, $rootElement, $
 
       function destroy() {
         if (destroy.called) return;
+        mc.off(swipeEvents, onSwipe);
         destroy.called = true;
         toastParent.removeClass(toastParentClass);
         $timeout.cancel(delayTimeout);
