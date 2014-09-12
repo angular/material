@@ -88,18 +88,19 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
       function onPointerDown(ev) {
         if (!rippleIsAllowed()) return;
 
-        // Stop listening to pointer down for now, until the user lifts his finger/mouse
-        element.off(POINTERDOWN_EVENT, onPointerDown);
 
         var rippleEl = createRippleFromEvent(ev);
         var ripplePauseTimeout = $timeout(pauseRipple, options.mousedownPauseTime, false);
-
         rippleEl.on('$destroy', cancelRipplePause);
-        element.one(POINTERUP_EVENT, onPointerUp);
+
+        // Stop listening to pointer down for now, until the user lifts their finger/mouse
+        element.off(POINTERDOWN_EVENT, onPointerDown);
+        element.on(POINTERUP_EVENT, onPointerUp);
 
         function onPointerUp() {
           cancelRipplePause();
           rippleEl.css($materialEffects.ANIMATION_PLAY_STATE, 'running');
+          element.off(POINTERUP_EVENT, onPointerUp);
           element.on(POINTERDOWN_EVENT, onPointerDown);
         }
         function pauseRipple() {
@@ -118,18 +119,9 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
     function createRipple(left, top, positionsAreAbsolute) {
 
       var rippleEl = angular.element('<div class="material-ripple">')
-        .css(
-          $materialEffects.ANIMATION_DURATION,
-          options.animationDuration + 'ms'
-        )
-        .css(
-          $materialEffects.ANIMATION_NAME,
-          options.animationName
-        )
-        .css(
-          $materialEffects.ANIMATION_TIMING,
-          options.animationTimingFunction
-        )
+        .css($materialEffects.ANIMATION_DURATION, options.animationDuration + 'ms')
+        .css($materialEffects.ANIMATION_NAME, options.animationName)
+        .css($materialEffects.ANIMATION_TIMING, options.animationTimingFunction)
         .on($materialEffects.ANIMATIONEND_EVENT, function() {
           rippleEl.remove();
         });
@@ -140,8 +132,10 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
       }
       rippleContainer.append(rippleEl);
 
+      var containerWidth = rippleContainer.prop('offsetWidth');
+
       if (options.center) {
-        left = rippleContainer.prop('offsetWidth') / 2;
+        left = containerWidth / 2;
         top = rippleContainer.prop('offsetHeight') / 2;
       } else if (positionsAreAbsolute) {
         var elementRect = node.getBoundingClientRect();
@@ -149,19 +143,16 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
         top -= elementRect.top;
       }
 
-      var finalSize = rippleContainer.prop('offsetWidth');
-
-      // TODO don't use px, make setRippleCss fix that
       var css = {
         'background-color': $window.getComputedStyle(rippleEl[0]).color || 
           $window.getComputedStyle(node).color,
-        'border-radius': (finalSize / 2) + 'px',
+        'border-radius': (containerWidth / 2) + 'px',
 
-        left: (left - finalSize / 2) + 'px',
-        width: finalSize + 'px',
+        left: (left - containerWidth / 2) + 'px',
+        width: containerWidth + 'px',
 
-        top: (top - finalSize / 2) + 'px',
-        height: finalSize + 'px',
+        top: (top - containerWidth / 2) + 'px',
+        height: containerWidth + 'px',
       };
       css[$materialEffects.ANIMATION_DURATION] = options.fadeoutDuration + 'ms';
       rippleEl.css(css);
