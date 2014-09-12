@@ -67,9 +67,7 @@ function TabDirective( $attrBind, $aria, $materialInkRipple) {
     scope: true,
     link: linkTab,
     template:
-      '<material-tab-label ' +
-        'ng-class="{ disabled : disabled, active : active }"  >' +
-      '</material-tab-label>'
+      '<material-tab-label></material-tab-label>'
   };
 
   function linkTab(scope, element, attrs, tabsCtrl, $transclude) {
@@ -85,6 +83,10 @@ function TabDirective( $attrBind, $aria, $materialInkRipple) {
       deselected: '&onDeselect',
       selected: '&onSelect'
     }, defaults);
+
+    scope.$watch('active', function(isActive) {
+      element.toggleClass('active', isActive);
+    });
 
     $materialInkRipple.attachButtonBehavior(element);
 

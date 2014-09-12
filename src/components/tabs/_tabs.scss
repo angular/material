@@ -109,6 +109,16 @@ material-tab {
   min-width: $tabs-tab-width;
   border: 1px dotted transparent;
 
+  color: #9FC1FB;
+  &.active {
+   color: white;
+  }
+  &[disabled] {
+    color: #6a6a6a;
+    opacity: 0.5;
+    cursor: default;
+  }
+
   @include not-selectable();
 
   &:focus {
@@ -118,24 +128,7 @@ material-tab {
   material-tab-label {
     @include flex(1);
     z-index: 100;
-
-    color: #9FC1FB;
-
-    color: rgba(255,255,255,0.6);
     opacity: 1;
-
-    &.active {
-     color: white;
-    }
-
-    &.disabled {
-      color: #6a6a6a;
-      opacity: 0.5;
-
-      &:hover {
-        cursor: default;
-      }
-    }
 
   }
 
