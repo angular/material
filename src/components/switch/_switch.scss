@@ -26,6 +26,7 @@ material-switch {
     outline: none;
 
     .material-container {
+      position: absolute;
       -webkit-transition: -webkit-transform 0.2s linear; 
       transition: transform 0.2s linear;
       @include transform-translate3d(0,0,0);
@@ -38,7 +39,7 @@ material-switch {
       border: 1px dotted black;
     }
     .material-label {
-      margin-left: $baseline-grid * 7;
+      margin-left: $baseline-grid * 9;
     }
   }
 }
