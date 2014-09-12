@@ -35,7 +35,8 @@ module.exports = {
     js: [
       'bower_components/angularytics/dist/angularytics.js',
       'dist/angular-material.js',
-      'dist/docs/js/**/*.js'
+      'dist/docs/js/**/*.js',
+      'bower_components/hammerjs/hammer.js',
     ],
     css: [
       'dist/angular-material.css',
@@ -46,8 +47,6 @@ module.exports = {
   },
   demoAssets: {
     js: [
-      'config/lib/angular-animate-sequence/angular-animate-sequence.js',
-      'config/lib/angular-animate-sequence/angular-animate-stylers.js',
       'dist/angular-material.js'
     ],
     css: [
