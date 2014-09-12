@@ -31,8 +31,16 @@ material-toast {
   }
 
   opacity: 1;
-  @include transform-translate3d(0,0,0);
+  @include transform(translate3d(0,0,0) rotateZ(0deg));
   @include transition(all 0.2s linear);
+  
+  /* Transition faster when swiping */
+  &.swipeleft,
+  &.swiperight,
+  &.swipeup,
+  &.swipedown {
+    @include transition(all 0.15s ease-out);
+  }
 
   &.ng-enter {
     @include transform-translate3d(0,100%,0);
@@ -50,6 +58,12 @@ material-toast {
     @include transform-translate3d(0, 100%, 0);
     &.top {
       @include transform-translate3d(0, -100%, 0);
+    }
+    &.swipeleft {
+      @include transform(translate3d(-100%, 0, 0));
+    }
+    &.swiperight {
+      @include transform(translate3d(100%, 0, 0));
     }
   }
 }
@@ -90,6 +104,27 @@ material-toast {
     &.top {
       bottom: auto;
       top: $toast-margin;
+    }
+
+    /* 
+     * When the toast doesn't take up the whole screen,
+     * make it rotate when the user swipes it away
+     */
+    &.ng-leave.ng-leave-active {
+      &.swipeleft {
+        @include transform(translate3d(-100%, 25%, 0) rotateZ(-15deg));
+      }
+      &.swiperight {
+        @include transform(translate3d(100%, 25%, 0) rotateZ(15deg));
+      }
+      &.top {
+        &.swipeleft {
+          @include transform(translate3d(-100%, 0, 0) rotateZ(-15deg));
+        }
+        &.swiperight {
+          @include transform(translate3d(100%, 0, 0) rotateZ(15deg));
+        }
+      }
     }
   }
 }

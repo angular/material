@@ -20,7 +20,7 @@ angular.module('app', ['ngMaterial'])
     $materialToast({
       controller: 'ToastCtrl',
       templateUrl: 'toast-template.html',
-      duration: 5000,
+      duration: 6000,
       position: $scope.getToastPosition()
     });
   };
