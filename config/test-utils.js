@@ -4,6 +4,7 @@ var TestUtil = {
    *
    */
   triggerEvent: function (element, eventName, eventData) {
+    eventData = eventData || {};
     var e = $.extend({}, $.Event(eventName), eventData);
     if(eventData.keyCode){
       e.which = eventData.keyCode;

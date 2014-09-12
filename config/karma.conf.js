@@ -9,6 +9,7 @@ module.exports = {
     'bower_components/angular/angular.js',
     'bower_components/angular-animate/angular-animate.js',
     'bower_components/angular-mocks/angular-mocks.js',
+    'bower_components/hammerjs/hammer.js',
     'config/test-utils.js',
   ]
     .concat(buildConfig.paths.js)
