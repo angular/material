@@ -52,7 +52,7 @@
           <material-icon icon="img/icons/ic_menu_24px.svg">
           </material-icon>
         </button>
-        <h2 hide block-sm ng-if="menu.currentSection.name">
+        <h2 hide show-sm ng-if="menu.currentSection.name">
           {{menu.currentSection.name}}
         </h2>
         <span layout="vertical" layout-align="center center" class="menu-separator-icon"
@@ -93,7 +93,7 @@
 
     </material-toolbar>
 
-    <ng-view class="material-content" scroll-y flex style="padding:16px;"></ng-view>
+    <material-content ng-view scroll-y flex class="material-content-padding"></ng-view>
 
   </div>
 

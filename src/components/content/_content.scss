@@ -1,5 +1,4 @@
-material-content,
-.material-content {
+material-content {
 
   overflow: auto;
   -webkit-overflow-scrolling: touch;
@@ -16,9 +15,15 @@ material-content,
   }
 
   &.material-content-padding {
-    padding: 20px;
+    padding: 8px;
   }
 
   // min-width: 100%;
   // min-height: 100%;
+}
+
+@media (min-width: $layout-breakpoint-sm) {
+  material-content.material-content-padding {
+    padding: 16px;
+  }
 }
