@@ -1,15 +1,19 @@
 material-subheader {
-  color: $text-medium;
-  display: block;
-  width: 100%;
-  font-size: $subheader-font-size;
-  font-weight: $subheader-font-weight;
-  line-height: $subheader-line-height;
-  padding: $subheader-padding;
-  margin: $subheader-margin;
-  background-color: white;
+  h2.material-subheader {
+    color: $text-medium;
+    display: block;
+    width: 100%;
+    font-size: $subheader-font-size;
+    font-weight: $subheader-font-weight;
+    line-height: $subheader-line-height;
+    padding: $subheader-padding;
+    margin: $subheader-margin;
+    background-color: white;
+  }
 
   &.material-subheader-colored {
-    color: $theme-light-blue
+    h2.material-subheader {
+      color: $theme-light-blue
+    }
   }
 }

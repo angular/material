@@ -7,7 +7,6 @@
 angular.module('material.components.subheader', ['material.components.sticky'])
 
 .directive('materialSubheader', [
-  '$materialSticky',
   materialSubheaderDirective
 ]);
 
@@ -27,18 +26,22 @@ angular.module('material.components.subheader', ['material.components.sticky'])
  * </hljs>
  */
 
-function materialSubheaderDirective($materialSticky) {
+function materialSubheaderDirective() {
   return {
     restrict: 'E',
     compile: function($el, $attr) {
-      if(!$attr.role) {
-        $el.attr({
-          'role' : Constant.ARIA.ROLE.HEADING
-        });
-      }
-      return function link(scope, el, attrs) {
-        $materialSticky(scope, el);
-      };
+      var template = [
+        '<h2 material-sticky class="material-subheader">',
+          $el.html(),
+        '</h2>'
+      ].join('');
+
+      $el.html(template);
+
+
+      $el.attr({
+        'role' : $attr.role || Constant.ARIA.ROLE.HEADING
+      });
     }
   };
 }
