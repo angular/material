@@ -7,7 +7,9 @@
  */
 
 angular.module('material.components.sticky', [])
-.factory('$materialSticky', ['$window', '$document', '$$rAF', MaterialSticky]);
+.factory('$materialSticky', ['$window', '$document', '$$rAF', MaterialSticky])
+.directive('materialSticky', ['$materialSticky', MaterialStickyDirective]);
+
 /**
  * @ngdoc factory
  * @name $materialSticky
@@ -221,4 +223,21 @@ function MaterialSticky($window, $document, $$rAF) {
   }
 
 
+}
+
+/**
+ * @ngdoc directive
+ * @name materialSticky
+ * @module material.components.sticky
+ *
+ * @description
+ * Directive to consume the $materialSticky directive
+ *
+ * @returns A material-sticky directive
+ */
+function MaterialStickyDirective($materialSticky) {
+  return {
+    restrict: 'A',
+    link: $materialSticky
+  };
 }
