@@ -1,5 +1,5 @@
 
-angular.module('app', ['ngMaterial'])
+angular.module('radioDemo1', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope) {
 

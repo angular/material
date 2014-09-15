@@ -17,6 +17,7 @@ module.exports = function(config) {
   });
 
   config.set('buildConfig', buildConfig);
+
   config.set('rendering.outputFolder', path.join(projectPath, buildConfig.docsDist));
   config.set('rendering.contentsFolder', path.join(config.rendering.outputFolder, 'generated'));
 

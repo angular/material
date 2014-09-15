@@ -1,4 +1,4 @@
-angular.module('app', ['ngMaterial'])
+angular.module('dialogDemo1', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope, $materialDialog) {
 

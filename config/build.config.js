@@ -27,7 +27,7 @@ module.exports = {
       return !!module;
     }),
 
-  componentsModule: "angular.module('ngMaterial', [ 'ng', 'ngAnimate', 'material.services.attrBind', 'material.services.compiler', 'material.services.position', 'material.services.registry', 'material.services.throttle', 'material.decorators', 'material.services.aria', <%= components.join(',') %>]);\n",
+  componentsModule: "angular.module('ngMaterial', [ 'ng', 'ngAnimate', 'material.services.attrBind', 'material.services.compiler', 'material.services.registry', 'material.services.throttle', 'material.decorators', 'material.services.aria', <%= components.join(',') %>]);\n",
 
   dist: 'dist',
 
@@ -38,8 +38,9 @@ module.exports = {
     js: [
       'bower_components/angularytics/dist/angularytics.js',
       'dist/angular-material.js',
-      'dist/docs/js/**/*.js',
       'bower_components/hammerjs/hammer.js',
+      'dist/docs/js/**/*.js',
+      'dist/docs/generated/**/demo/**/*.js',
     ],
     css: [
       'dist/angular-material.css',
@@ -97,7 +98,6 @@ module.exports = {
       'src/services/aria/aria.js',
       'src/services/attrBind/attrBind.js',
       'src/services/compiler/compiler.js',
-      'src/services/position/position.js',
       'src/services/registry/registry.js',
       'src/services/throttle/throttle.js'
     ],

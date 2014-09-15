@@ -1,6 +1,3 @@
-.tabs-content .material-view {
-    background-color: #96ba82;
-}
 
 div.infoBar input {
     display: inline-block;
@@ -13,8 +10,12 @@ div.infoBar {
 }
 
 
-material-tabs .tabs-content {
-    height: 200px;
+material-tabs .material-view {
+  background: #EEE;
+}
+
+.tab-text {
+  margin: 32px;
 }
 
 

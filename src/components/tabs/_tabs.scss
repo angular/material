@@ -123,6 +123,7 @@ material-tab {
 
   &:focus {
     border-color: $input-focused-border-color;
+    outline: none;
   }
 
   material-tab-label {

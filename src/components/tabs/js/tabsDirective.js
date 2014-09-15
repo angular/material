@@ -165,27 +165,28 @@ function TabsDirective($q, $window, $timeout, $compile, $materialEffects, $$rAF,
         var updateInk = linkTabInk(scope, element, tabsCtrl, $q, $materialEffects);
         var updatePagination = linkTabPagination( scope, element, tabsCtrl, $q, $materialEffects );
 
-        var updateAll =  function() {
+        var updateAll = function() {
+          scope.$evalAsync(function() {
+            updatePagination().then( function(){
+              // Make sure the ink positioning is correct
+              $timeout( updateInk );
+            });
 
-              updatePagination().then( function(){
-                tabsCtrl.focusSelected();
-
-                // Make sure the ink positioning is correct
-                $timeout( updateInk );
-              });
-
-              // Make sure ink changes start just after pagination transitions have started...
-              $$rAF( updateInk );
-            };
+            // Make sure ink changes start just after pagination transitions have started...
+            $$rAF( updateInk );
+          });
+        };
 
         var onWindowResize = $$rAF.debounce( updateAll );
         var onWindowRelease = function() {
-              angular.element($window).off('resize', onWindowResize);
-            };
+          angular.element($window).off('resize', onWindowResize);
+        };
+
+        $$rAF(updateAll);
 
         angular.element($window).on( EVENT.WINDOW_RESIZE, onWindowResize);
         scope.$on( EVENT.TABS_CHANGED, updateAll );
-        scope.$on( EVENT.SCOPE_DESTROY,onWindowRelease );
+        scope.$on( EVENT.SCOPE_DESTROY, onWindowRelease );
 
         transcludeHeaderItems();
         transcludeContentItems();

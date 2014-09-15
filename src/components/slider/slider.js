@@ -138,15 +138,16 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
     hammertime.on('pan', onPan);
 
     // On resize, recalculate the slider's dimensions and re-render
-    var onWindowResize = $$rAF.debounce(function() {
+    var updateAll = $$rAF.debounce(function() {
       refreshSliderDimensions();
       ngModelRender();
       redrawTicks();
-    }, false);
-    angular.element($window).on('resize', onWindowResize);
+    });
+    updateAll();
+    angular.element($window).on('resize', updateAll);
 
     scope.$on('$destroy', function() {
-      angular.element($window).off('resize', onWindowResize);
+      angular.element($window).off('resize', updateAll);
       hammertime.destroy();
       stopDisabledWatch();
     });
@@ -175,7 +176,6 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
       redrawTicks();
     }
     function updateAriaDisabled(isDisabled) {
-      console.log('updateAriaDislabed', isDisabled);
       element.attr('aria-disabled', !!isDisabled);
     }
 

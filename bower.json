@@ -3,14 +3,17 @@
   "version": "0.0.2",
   "private": "true",
   "dependencies": {
-    "angular": "1.3.0-beta.18",
-    "angular-animate": "1.3.0-beta.18",
-    "hammerjs": "~2.0.3"
+    "angular": "1.3.0-rc.2",
+    "angular-animate": "1.3.0-rc.2",
+    "hammerjs": "~2.0.2"
   },
   "devDependencies": {
-    "angular-mocks": "1.3.0-beta.18",
-    "angular-route": "1.3.0-beta.18",
+    "angular-mocks": "1.3.0-rc.2",
+    "angular-route": "1.3.0-rc.2",
     "angularytics": "^0.3.0",
     "jquery": "~2.1.1"
+  },
+  "resolutions": {
+    "angular": "1.3.0-rc.2"
   }
 }
