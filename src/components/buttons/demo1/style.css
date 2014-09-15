@@ -12,10 +12,11 @@ section {
 material-content {
   margin-right: 7px;
 }
-section material-button,
-section .material-button {
-  display: block;
+section material-button:not(.material-button-fab) {
   width: 10em;
+}
+section material-button {
+  display: block;
   margin: 1em;
   line-height: 25px;
 }

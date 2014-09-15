@@ -6,14 +6,13 @@
  * Ink and Popup Effects
  */
 angular.module('material.animations', [
-  'material.services.position',
   'material.services.throttle'
 ])
   .service('$materialEffects', [ 
     '$rootElement', 
-    '$position', 
     '$$rAF', 
     '$sniffer',
+    '$q',
     MaterialEffects
   ]);
 
@@ -33,7 +32,7 @@ angular.module('material.animations', [
  * - `{function(element,parentElement)}` `popOut` - animated close of popup overlay
  *
  */
-function MaterialEffects($rootElement, $position, $$rAF, $sniffer) {
+function MaterialEffects($rootElement, $$rAF, $sniffer, $q) {
 
   var webkit = /webkit/i.test($sniffer.vendorPrefix);
   function vendorProperty(name) {
@@ -46,7 +45,6 @@ function MaterialEffects($rootElement, $position, $$rAF, $sniffer) {
   // Publish API for effects...
   return self = {
     popIn: popIn,
-    popOut: popOut,
 
     /* Constants */
     TRANSITIONEND_EVENT: 'transitionend' + (webkit ? ' webkitTransitionEnd' : ''),
@@ -65,19 +63,16 @@ function MaterialEffects($rootElement, $position, $$rAF, $sniffer) {
   // **********************************************************
   // API Methods
   // **********************************************************
-
-  /**
-   *
-   */
-  function popIn(element, parentElement, clickElement, done) {
+  function popIn(element, parentElement, clickElement) {
+    var deferred = $q.defer();
     parentElement.append(element);
 
     var startPos;
     if (clickElement) {
-      var clickPos = $position.offset(clickElement);
+      var clickRect = clickElement[0].getBoundingClientRect();
       startPos = translateString(
-        clickPos.left - element[0].offsetWidth / 2,
-        clickPos.top - element[0].offsetHeight / 2, 
+        clickRect.left - element[0].offsetWidth,
+        clickRect.top - element[0].offsetHeight, 
         0
       ) + ' scale(0.2)';
     } else {
@@ -102,33 +97,12 @@ function MaterialEffects($rootElement, $position, $$rAF, $sniffer) {
       //Make sure this transitionend didn't bubble up from a child
       if (ev.target === element[0]) {
         element.off(self.TRANSITIONEND_EVENT, finished);
-        (done || angular.noop)();
+        deferred.resolve();
       }
     }
+
+    return deferred.promise;
   }
-
-  /**
-   *
-   *
-   */
-  function popOut(element, parentElement, done) {
-    var endPos = $position.positionElements(parentElement, element, 'bottom-center');
-
-    element
-      .css(self.TRANSFORM, 
-           translateString(endPos.left, endPos.top, 0) + ' scale(0.5)')
-      .css('opacity', 0)
-      .on(self.TRANSITIONEND_EVENT, finished);
-
-    function finished(ev) {
-      //Make sure this transitionend didn't bubble up from a child
-      if (ev.target === element[0]) {
-        element.off(self.TRANSITIONEND_EVENT, finished);
-        (done || angular.noop)();
-      }
-    }
-  }
-
 
   // **********************************************************
   // Utility Methods
@@ -137,26 +111,6 @@ function MaterialEffects($rootElement, $position, $$rAF, $sniffer) {
 
   function translateString(x, y, z) {
     return 'translate3d(' + Math.floor(x) + 'px,' + Math.floor(y) + 'px,' + Math.floor(z) + 'px)';
-  }
-
-
-  /**
-   * Support values such as 0.65 secs or 650 msecs
-   */
-  function safeDuration(value) {
-    var duration = isNaN(value) ? 0 : Number(value);
-    return (duration < 1.0) ? (duration * 1000) : duration;
-  }
-
-  /**
-   * Convert all values to decimal;
-   * eg 150 msecs -> 0.15sec
-   */
-  function safeVelocity(value) {
-    var duration = isNaN(value) ? 0 : Number(value);
-    return (duration > 100) ? (duration / 1000) :
-      (duration > 10 ) ? (duration / 100) :
-        (duration > 1  ) ? (duration / 10) : duration;
   }
 
 }

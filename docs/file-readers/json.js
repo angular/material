@@ -2,9 +2,7 @@ var path = require('canonical-path');
 var _ = require('lodash');
 var glob = require('glob');
 var fs = require('fs');
-
-// Regex adapted from https://github.com/ceymard/gulp-ngcompile
-var NG_MODULE_REGEX = /\.module\(('[^']*'|"[^"]*")\s*,(?:\s*\[([^\]]+)\])?/g;
+var ngModuleData = require('../util/ngModuleData');
 
 module.exports = {
   pattern: /module.json$/,
@@ -26,18 +24,9 @@ module.exports = {
     //[].concat to coerce it to an array if it's not
     var sources = getDocsForPatterns(['!*.spec.js'].concat(json.js));
     sources.forEach(function(doc) {
+      var moduleData = ngModuleData(doc.content);
+      doc.dependencies = (doc.dependencies || []).concat(moduleData.dependencies);
       doc.docType = 'source';
-
-      var match = NG_MODULE_REGEX.exec(doc.content);
-      var depsMatch = match && match[2] && match[2].trim();
-      if (depsMatch) {
-        var dependencies = _.map(depsMatch.split(/\s*,\s*/), function(dep) {
-          dep = dep.slice(1, -1); //remove quotes
-          return dep;
-        });
-
-        doc.dependencies = (doc.dependencies || []).concat(dependencies);
-      }
     });
 
     var readmes = getDocsForPatterns([].concat(json.readme));
@@ -54,7 +43,15 @@ module.exports = {
            doc.docType = 'demo';
            doc.id = demoId;
            doc.name = demo.name;
-           return doc;
+           if (doc.fileType == 'js') {
+             doc.module = ngModuleData(doc.content).module;
+             if (!doc.module) {
+               //Unknown fix for an unknown bug: the first time, ngModuleData
+               //won't read correctly. Second time, it will.
+               // TODO(ajoslin): find cause and properly fix.
+               doc.module = ngModuleData(doc.content).module;
+             }
+           }
           })
           .value();
       })

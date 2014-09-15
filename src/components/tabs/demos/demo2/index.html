@@ -1,83 +1,47 @@
-<link rel="stylesheet" href="/css/tab_demos.css">
-<div ng-app="app" ng-controller="AppCtrl" class="sample">
+<div ng-controller="AppCtrl" class="sample">
 
-    <material-tabs selected="selectedIndex"  center>
-        <material-tab label="ITEM ONE"></material-tab>
-        <material-tab label="ITEM TWO"></material-tab>
-        <material-tab label="ITEM THREE" ></material-tab>
-        <material-tab label="ITEM FOUR" ng-disabled="locked"></material-tab>
-        <material-tab label="ITEM FIVE"></material-tab>
-        <material-tab label="ITEM SIX"></material-tab>
-        <material-tab label="ITEM SEVEN"></material-tab>
-        <material-tab label="ITEM EIGHT"></material-tab>
-        <material-tab label="ITEM NINE"></material-tab>
-        <material-tab label="ITEM TEN"></material-tab>
+    <material-tabs selected="selectedIndex" noink>
+        <img ng-src="/img/angular.png" class="float-logo">
+
+        <material-tab ng-repeat="tab in tabs"
+                 on-select="onTabSelected(tab)"
+                 on-deselect="announceDeselected(tab)"
+                 ng-disabled="tab.disabled"
+                 label="{{tab.title}}">
+          <div ng-class="tab.style" layout="vertical" layout-fill layout-align="center center">
+            <div flex ng-bind="tab.content" class="tab-text"></div>
+              <material-button class="material-theme-red"
+                ng-click="removeTab( tab )">Remove Tab
+              </material-button>
+          </div>
+        </material-tab>
+
     </material-tabs>
 
-    <div class="animate-switch-container" ng-switch on="selectedIndex">
-        <div class="animate-switch tab1" ng-switch-when="0">
-            View for Item #1<br/>
-            Selection index = 0
+    <div layout="vertical" layout-padding>
+
+      <material-list class="tab-demo-list" flex>
+        <material-item>
+          <span>Active Tab Index: {{selectedIndex}}</span>
+        </material-item>
+      </material-list>
+
+      <material-divider flex></material-divider>
+      <div class="title" flex>Add Another Tab</div>
+
+      <form ng-submit="addTab(tTitle,tContent)" flex>
+        <div layout="horizontal">
+          <span flex="15">Title:</span>
+          <input type="text" required ng-model="tTitle" placeholder="<tab label>">
         </div>
-        <div class="animate-switch tab2" ng-switch-when="1">
-            View for Item #2<br/>
-            Selection index = 1
+        <div layout="horizontal">
+          <span flex="15">Content:</span>
+          <input type="text" required ng-model="tContent" placeholder="<tab content>">
         </div>
-        <div class="animate-switch tab3" ng-switch-when="2">
-            View for Item #3<br/>
-            Selection index = 2
-        </div>
-        <div class="animate-switch tab4" ng-switch-when="3">
-            View for Item #4<br/>
-            Selection index = 3
-        </div>
-        <div class="animate-switch tab5" ng-switch-when="4">
-            View for Item #5<br/>
-            Selection index = 4
-        </div>
-        <div class="animate-switch tab6" ng-switch-when="5">
-            View for Item #6<br/>
-            Selection index = 5
-        </div>
-        <div class="animate-switch tab7" ng-switch-when="6">
-            View for Item #7<br/>
-            Selection index = 6
-        </div>
-        <div class="animate-switch tab8" ng-switch-when="7">
-            View for Item #8<br/>
-            Selection index = 7
-        </div>
-        <div class="animate-switch tab9" ng-switch-when="8">
-            View for Item #9<br/>
-            Selection index = 8
-        </div>
-        <div class="animate-switch tab10" ng-switch-when="9">
-            View for Item #10<br/>
-            Selection index = 9
-        </div>
-        <div class="animate-switch tab1" ng-switch-when="10">
-            View for Item #9<br/>
-            Selection index = 8
-        </div>
-        <div class="animate-switch tab2" ng-switch-when="11">
-            View for Item #10<br/>
-            Selection index = 9
-        </div>
+        <material-button type="submit" class="material-button-colored">
+           Add New Tab
+        </material-button>
+      </form>
+
     </div>
-
-
-    <div style="margin-top: 10px;">
-        <material-input-group>
-            <label>SelectedIndex</label>
-            <material-input type="text" ng-model="selectedIndex"></material-input>
-        </material-input-group>
-
-        <div style="margin-top: 10px;">
-            Tab #4 is
-            <material-checkbox ng-model="locked" aria-label="Disabled">Disabled</material-checkbox>
-            (will auto-deselect if active)
-        </div>
-    </div>
-
-
 </div>

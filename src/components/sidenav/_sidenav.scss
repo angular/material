@@ -1,15 +1,8 @@
 material-sidenav {
   position: absolute;
 
-  // In general, width of sidenav is Screen Width - App Bar Height
-  // See spec for max-widths
-  width: 100%;
-  height: 100%;
-
-  max-width: 304px;
-  min-width: 304px;
-
-  box-shadow: $sidenav-shadow;
+  width: 304px;
+  bottom: 0;
 
   background-color: white;
 
@@ -49,5 +42,15 @@ material-sidenav {
 
   .material-sidenav-backdrop {
     display: none !important;
+  }
+}
+
+/* 
+ * When sidenav is closed on small screen, show no box shadow
+ */
+@media (max-width: $layout-breakpoint-md) {
+  &:not(.open).material-sidenav-left,
+  &:not(.open).material-sidenav-right {
+    box-shadow: none;
   }
 }

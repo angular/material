@@ -1,13 +1,13 @@
 
-angular.module('app', ['ngMaterial'])
+angular.module('toastDemo1', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope, $materialToast, $animate) {
   
   $scope.toastPosition = {
-    bottom: true,
-    top: false,
-    left: true,
-    right: false
+    bottom: false,
+    top: true,
+    left: false,
+    right: true
   };
 
   $scope.getToastPosition = function() {

@@ -1,67 +1,80 @@
-<div class="testimonials" ng-app="app" ng-controller="AppCtrl" >
-    <material-tabs selected="selected" nobar tabs-align="bottom" >
+<div ng-controller="AppCtrl">
 
-        <material-tab>
-            <p ng-class="{active:selected==0}">
-                I'm thrilled by the depth of thought behind Material Design's
-                specification for responsive application development.
-                Drifty's implementation for AngularJS makes it instantly
-                usable in your existing applications.
-            </p>
-            <material-tab-label>
-                <footer style="background-image: url(/img/testimonials/logo-bradgreen@2x.png)"
-                        ng-mouseenter="enableAutoScroll(false);"
-                        ng-mouseleave="enableAutoScroll(true);" >
-                    <cite>Brad Green</cite>
-                    <div>
-                        Director, <a href="https://plus.google.com/+BradGreen/about">Google</a>
-                    </div>
-                </footer>
-            </material-tab-label>
-        </material-tab>
-
-        <material-tab>
-            <p ng-class="{active:selected==1}">
-                Using the Material Design specifications and lessons learned
-                from Angular & Polymer component development, our team has
-                created Angular Material. Implemented with advanced CSS and
-                Directives, Angular Material delivers an amazing UI SDK for
-                Angular SPA(s).
-            </p>
-            <material-tab-label>
-                <footer style="background-image: url(/img/testimonials/logo-thomasburleson@2x.png)"
-                        ng-mouseenter="enableAutoScroll(false);"
-                        ng-mouseleave="enableAutoScroll(true);" >
-                    <cite>Thomas Burleson</cite>
-                    <div>
-                        i-Architect,
-                        <a href="http://solutionOptimist.com/">Mindspace</a>
-                    </div>
-                </footer>
-            </material-tab-label>
-        </material-tab>
-
-        <material-tab>
-            <p ng-class="{active:selected==2}">
-                I am so inspired with Angular Material. It fills a gap that's
-                missing when building for mobile and solves many complexities
-                that otherwise require multiple libraries, keeping your code
-                cleaner. Overall, it just makes mobile development fun and
-                fast, so you can build more!
-            </p>
-            <material-tab-label>
-                <footer style="background-image: url(/img/testimonials/logo-maxlynch@2x.png)"
-                        ng-mouseenter="enableAutoScroll(false);"
-                        ng-mouseleave="enableAutoScroll(true);" >
-                    <cite>Max Lynch</cite>
-                    <div>
-                        Co-Founder,
-                        <a href="http://ionicframework.com/">Drifty</a>
-                    </div>
-                </footer>
-            </material-tab-label>
-        </material-tab>
-
-
+    <material-tabs selected="selectedIndex"  center>
+        <material-tab label="ITEM ONE"></material-tab>
+        <material-tab label="ITEM TWO"></material-tab>
+        <material-tab label="ITEM THREE" ></material-tab>
+        <material-tab label="ITEM FOUR" ng-disabled="locked"></material-tab>
+        <material-tab label="ITEM FIVE"></material-tab>
+        <material-tab label="ITEM SIX"></material-tab>
+        <material-tab label="ITEM SEVEN"></material-tab>
+        <material-tab label="ITEM EIGHT"></material-tab>
+        <material-tab label="ITEM NINE"></material-tab>
+        <material-tab label="ITEM TEN"></material-tab>
     </material-tabs>
+
+    <div class="animate-switch-container" ng-switch on="selectedIndex">
+        <div class="animate-switch tab1" ng-switch-when="0">
+            View for Item #1<br/>
+            Selection index = 0
+        </div>
+        <div class="animate-switch tab2" ng-switch-when="1">
+            View for Item #2<br/>
+            Selection index = 1
+        </div>
+        <div class="animate-switch tab3" ng-switch-when="2">
+            View for Item #3<br/>
+            Selection index = 2
+        </div>
+        <div class="animate-switch tab4" ng-switch-when="3">
+            View for Item #4<br/>
+            Selection index = 3
+        </div>
+        <div class="animate-switch tab5" ng-switch-when="4">
+            View for Item #5<br/>
+            Selection index = 4
+        </div>
+        <div class="animate-switch tab6" ng-switch-when="5">
+            View for Item #6<br/>
+            Selection index = 5
+        </div>
+        <div class="animate-switch tab7" ng-switch-when="6">
+            View for Item #7<br/>
+            Selection index = 6
+        </div>
+        <div class="animate-switch tab8" ng-switch-when="7">
+            View for Item #8<br/>
+            Selection index = 7
+        </div>
+        <div class="animate-switch tab9" ng-switch-when="8">
+            View for Item #9<br/>
+            Selection index = 8
+        </div>
+        <div class="animate-switch tab10" ng-switch-when="9">
+            View for Item #10<br/>
+            Selection index = 9
+        </div>
+        <div class="animate-switch tab1" ng-switch-when="10">
+            View for Item #9<br/>
+            Selection index = 8
+        </div>
+        <div class="animate-switch tab2" ng-switch-when="11">
+            View for Item #10<br/>
+            Selection index = 9
+        </div>
+    </div>
+
+
+    <div layout="vertical" layout-padding style="margin-top: 10px;">
+        <material-input-group>
+            <label>SelectedIndex</label>
+            <material-input type="text" ng-model="selectedIndex"></material-input>
+        </material-input-group>
+
+        <material-checkbox ng-model="locked" aria-label="Disabled">
+          Disable Tab #4? (will auto-deselect on disable)
+        </material-checkbox> 
+    </div>
+
+
 </div>

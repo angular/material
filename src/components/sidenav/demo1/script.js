@@ -1,5 +1,5 @@
 
-angular.module('app', ['ngMaterial'])
+angular.module('sidenavDemo1', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope, $timeout, $materialSidenav) {
   $scope.toggleLeft = function() {

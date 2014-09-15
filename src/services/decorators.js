@@ -15,12 +15,8 @@ angular.module('material.decorators', [])
      * event that happened before that frame.
      *
      * @param {function} callback function to debounce
-     * @param {boolean=} invokeApply If set to false skips dirty checking, otherwise will invoke fn within the $apply block.
      */
-    $$rAF.debounce = function(cb, invokeApply) {
-      if (arguments.length === 1) {
-        invokeApply = true;
-      }
+    $$rAF.debounce = function(cb) {
       var queueArgs, alreadyQueued, queueCb, context;
       return function debounced() {
         queueArgs = arguments;
@@ -29,11 +25,7 @@ angular.module('material.decorators', [])
         if (!alreadyQueued) {
           alreadyQueued = true;
           $$rAF(function() {
-            invokeApply ? 
-              $rootScope.$apply(function() {
-                queueCb.apply(context, queueArgs);
-              }) :
-                queueCb.apply(context, queueArgs);
+            queueCb.apply(context, queueArgs);
             alreadyQueued = false;
           });
         }

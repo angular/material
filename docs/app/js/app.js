@@ -180,20 +180,6 @@ function($scope, COMPONENTS, $materialSidenav, $timeout, $materialDialog, menu, 
     });
   };
 
-
-  COMPONENTS.forEach(function(component) {
-    component.demos && component.demos.forEach(function(demo) {
-      demo.$files = [demo.indexFile].concat(
-        demo.files.sort(sortByJs)
-      );
-      demo.$selectedFile = demo.indexFile;
-    });
-  });
-
-  function sortByJs(file) {
-    return file.fileType == 'js' ? -1 : 1;
-  }
-
   $scope.menuDocs = function(component) {
     return component.docs.filter(function(doc) {
       return doc.docType !== 'readme';
@@ -221,7 +207,7 @@ function($scope, $rootScope, $http) {
       var sha = response.data.sha || "";
       var url = response.data.url;
 
-      if ( sha != "" ) {
+      if (sha) {
         $scope.versionURL = url + sha;
         $scope.version = sha.substr(0,6);
       }
@@ -244,8 +230,41 @@ function($scope, $attrs, $location, $rootScope) {
   'doc',
   'component',
   '$rootScope',
-function($scope, doc, component, $rootScope) {
+  '$templateCache',
+  '$http',
+  '$q',
+function($scope, doc, component, $rootScope, $templateCache, $http, $q) {
   $rootScope.currentComponent = component;
   $rootScope.currentDoc = doc;
+
+  component.demos.forEach(function(demo) {
+
+    var demoFiles = [demo.indexFile]
+      .concat( (demo.files || []).sort(sortByJs) );
+
+    var promises = demoFiles.map(function(file) {
+      return $http.get(file.outputPath, {cache: $templateCache}).then(
+        function(response) {
+          file.content = response.data;
+          return file;
+        }, 
+        function(err) {
+          file.content = 'Failed to load ' + file.outputPath + '.';
+          return file;
+        }
+      );
+    });
+
+    $q.all(promises).then(function(files) {
+      demo.$files = files;
+      demo.$selectedFile = files[0];
+    });
+
+  });
+
+  function sortByJs(file) {
+    return file.fileType == 'js' ? -1 : 1;
+  }
+
 }])
 ;

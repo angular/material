@@ -152,15 +152,19 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
         backdrop = angular.element('<material-backdrop class="opaque ng-enter">');
         $animate.enter(backdrop, options.appendTo, null);
       }
-      $materialEffects.popIn(element, options.appendTo, popInTarget, function() {
-        if (options.escapeToClose) {
-          $rootElement.on('keyup', onRootElementKeyup);
-        }
-        if (options.clickOutsideToClose) {
-          element.on('click', dialogClickOutside);
-        }
-        closeButton.focus();
-      });
+
+      $materialEffects.popIn(element, options.appendTo, popInTarget)
+        .then(function() {
+
+          if (options.escapeToClose) {
+            $rootElement.on('keyup', onRootElementKeyup);
+          }
+          if (options.clickOutsideToClose) {
+            element.on('click', dialogClickOutside);
+          }
+          closeButton.focus();
+
+        });
 
       return destroyDialog;
 
@@ -187,7 +191,7 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
         if (options.clickOutsideToClose) {
           element.off('click', dialogClickOutside);
         }
-        $materialEffects.popOut(element, options.appendTo, function() {
+        $animate.leave(element).then(function() {
           element.remove();
           scope.$destroy();
           scope = null;
@@ -199,12 +203,12 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
         });
       }
       function onRootElementKeyup(e) {
-        if (e.keyCode == Constant.KEY_CODE.ESCAPE) {
+        if (e.keyCode === Constant.KEY_CODE.ESCAPE) {
           $timeout(destroyDialog);
         }
       }
       function dialogClickOutside(e) {
-        // If we click the flex container outside the backdrop
+        // Only close if we click the flex container outside the backdrop
         if (e.target === element[0]) {
           $timeout(destroyDialog);
         }
