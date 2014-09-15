@@ -140,8 +140,7 @@ iframe.demo {
 }
 
 material-toolbar.demo-toolbar,
-.demo-container material-tabs .tabs-header,
-.demo-container material-tabs material-tab-label {
+.demo-container material-tabs material-tab {
   background: #00BCD4;
   color: white;
 }
