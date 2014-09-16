@@ -40,11 +40,16 @@ function linkTabPagination(scope, element, tabsCtrl, $q, $materialEffects ) {
    */
   function updatePagination() {
     var dfd = $q.defer();
-
     var tabs = buttonBar.children();
     var tabsWidth = element.prop('clientWidth') - PAGINATORS_WIDTH;
+
     var needPagination = (tabsWidth > 0) && ((TAB_MIN_WIDTH * tabs.length) > tabsWidth);
     var paginationToggled = (needPagination !== pagination.active);
+
+    if (tabsWidth <= 0) {
+      //tabsWidth is 0 on initial load. Just instantly resolve the promise if it's 0
+      return $q.when();
+    }
 
     pagination.active = needPagination;
 
