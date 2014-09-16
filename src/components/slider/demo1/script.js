@@ -3,10 +3,14 @@ angular.module('app', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope) {
 
-  $scope.data = {
-    slider1: 0,
-    slider2: 50,
-    slider3: 8,
-  }
+  $scope.color = {
+    red: Math.floor(Math.random() * 255),
+    green: Math.floor(Math.random() * 255),
+    blue: Math.floor(Math.random() * 255)
+  };
+
+  $scope.rating = 3;
+  $scope.disabled1 = 0;
+  $scope.disabled2 = 70;
 
 });
