@@ -92,6 +92,7 @@ module.exports = {
       'src/components/toolbar/toolbar.js',
       'src/components/whiteframe/whiteframe.js',
       'src/components/divider/divider.js',
+      'src/components/linearProgress/linearProgress.js',
 
       //Services
       'src/services/decorators.js',
