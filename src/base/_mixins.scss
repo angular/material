@@ -71,6 +71,12 @@
   user-select: $val;
 }
 
+@mixin animation($animation) {
+  -webkit-animation: #{$animation};
+  -moz-animation: #{$animation};
+  -ms-animation: #{$animation};
+  animation: #{$animation};
+}
 
 @mixin keyframes($name) {
   @-webkit-keyframes #{$name} {
