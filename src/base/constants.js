@@ -8,6 +8,7 @@ var Constant = {
       LIST_ITEM : 'listitem',
       RADIO : 'radio',
       RADIO_GROUP : 'radiogroup',
+      SLIDER : 'slider',
       TAB_LIST : 'tablist',
       TAB : 'tab',
       TAB_PANEL : 'tabpanel'
