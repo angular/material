@@ -67,7 +67,7 @@ function materialComponentRegistry($log) {
           instances.splice(index, 1);
         }
       };
-    },
+    }
   }
 }
 

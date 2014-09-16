@@ -5,7 +5,7 @@
 
 angular.module('material.components.switch', [
   'material.components.checkbox',
-  'material.components.radioButton',
+  'material.components.radioButton'
 ])
 
 .directive('materialSwitch', [
@@ -59,7 +59,7 @@ function MaterialSwitch(checkboxDirectives, radioButtonDirectives) {
       '<div class="material-switch-thumb">' +
         radioButtonDirective.template +
       '</div>',
-    require: '?ngModel', 
+    require: '?ngModel',
     compile: compile
   };
 

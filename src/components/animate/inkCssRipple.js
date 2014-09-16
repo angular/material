@@ -34,7 +34,7 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
   return {
     attachButtonBehavior: attachButtonBehavior,
     attachCheckboxBehavior: attachCheckboxBehavior,
-    attach: attach,
+    attach: attach
   };
 
   function attachButtonBehavior(element) {
@@ -152,7 +152,7 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
         width: containerWidth + 'px',
 
         top: (top - containerWidth / 2) + 'px',
-        height: containerWidth + 'px',
+        height: containerWidth + 'px'
       };
       css[$materialEffects.ANIMATION_DURATION] = options.fadeoutDuration + 'ms';
       rippleEl.css(css);

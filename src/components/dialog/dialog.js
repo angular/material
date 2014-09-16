@@ -123,7 +123,7 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
       targetEvent: null,
       transformTemplate: function(template) {
         return '<div class="material-dialog-container">' + template + '</div>';
-      },
+      }
       // Also supports all options from $materialCompiler.compile
     }, options || {});
 

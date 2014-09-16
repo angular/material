@@ -36,7 +36,7 @@ angular.module('material.animations')
 .directive({
   noink: attrNoDirective(),
   nobar: attrNoDirective(),
-  nostretch: attrNoDirective(),
+  nostretch: attrNoDirective()
 });
 
 function attrNoDirective() {

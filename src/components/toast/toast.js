@@ -85,7 +85,7 @@ function QpToastDirective() {
 function QpToastService($timeout, $rootScope, $materialCompiler, $rootElement, $animate) {
   var recentToast;
   function toastOpenClass(position) {
-    return 'material-toast-open-' + 
+    return 'material-toast-open-' +
       (position.indexOf('top') > -1 ? 'top' : 'bottom');
   }
 
@@ -108,9 +108,9 @@ function QpToastService($timeout, $rootScope, $materialCompiler, $rootElement, $
       duration: 3000,
       // [unimplemented] Whether to disable swiping
       swipeDisabled: false,
-      // Supports any combination of these class names: 'bottom top left right fit'. 
+      // Supports any combination of these class names: 'bottom top left right fit'.
       // Default: 'bottom left'
-      position: 'bottom left',
+      position: 'bottom left'
     }, options || {});
 
     recentToast && recentToast.then(function(destroy) { destroy(); });
@@ -118,7 +118,7 @@ function QpToastService($timeout, $rootScope, $materialCompiler, $rootElement, $
     recentToast = $materialCompiler.compile(options).then(function(compileData) {
       // Controller will be passed a `$hideToast` function
       compileData.locals.$hideToast = destroy;
-      
+
       var scope = $rootScope.$new();
       var element = compileData.link(scope);
 
