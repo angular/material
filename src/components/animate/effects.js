@@ -6,13 +6,10 @@
  * Ink and Popup Effects
  */
 angular.module('material.animations', [
-  'ngAnimateStylers', 
-  'ngAnimateSequence', 
   'material.services.position',
   'material.services.throttle'
 ])
   .service('$materialEffects', [ 
-    '$animateSequence', 
     '$rootElement', 
     '$position', 
     '$$rAF', 
@@ -36,11 +33,7 @@ angular.module('material.animations', [
  * - `{function(element,parentElement)}` `popOut` - animated close of popup overlay
  *
  */
-function MaterialEffects($animateSequence, $rootElement, $position, $$rAF, $sniffer) {
-
-  var styler = angular.isDefined( $rootElement[0].animate ) ? 'webAnimations' :
-               angular.isDefined( window['TweenMax'] || window['TweenLite'] ) ? 'gsap'   :
-               angular.isDefined( window['jQuery'] ) ? 'jQuery' : 'default';
+function MaterialEffects($rootElement, $position, $$rAF, $sniffer) {
 
   var webkit = /webkit/i.test($sniffer.vendorPrefix);
   function vendorProperty(name) {
@@ -52,8 +45,6 @@ function MaterialEffects($animateSequence, $rootElement, $position, $$rAF, $snif
   var self;
   // Publish API for effects...
   return self = {
-    makeSequence : makeSequence,
-
     popIn: popIn,
     popOut: popOut,
 

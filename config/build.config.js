@@ -62,10 +62,6 @@ module.exports = {
     //We have to manually list files so demo files don't get 
     //into the build
     js: [
-      //Angular Animate Sequence
-      'config/lib/angular-animate-sequence/angular-animate-sequence.js',
-      'config/lib/angular-animate-sequence/angular-animate-stylers.js',
-
       //Utilities
       'src/base/iterator.js',
       'src/base/utils.js',
@@ -107,10 +103,6 @@ module.exports = {
     ],
     test: [
       'src/**/*.spec.js',
-
-      // TODO(matias): remove this once the sequencer is placed into the ngAnimate core
-
-      'config/lib/angular-animate-sequence/*.spec.js'
     ]
   },
 
