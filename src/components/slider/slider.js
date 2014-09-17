@@ -113,9 +113,15 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
     attr.max ? attr.$observe('max', updateMax) : updateMax(100);
     attr.step ? attr.$observe('step', updateStep) : updateStep(1);
 
-    attr.ngDisabled ?
-      scope.$parent.$watch(attr.ngDisabled, updateAriaDisabled) :
+    // We have to manually stop the $watch on ngDisabled because it exists
+    // on the parent scope, and won't be automatically destroyed when
+    // the component is destroyed.
+    var stopDisabledWatch = angular.noop;
+    if (attr.ngDisabled) {
+      stopDisabledWatch = scope.$parent.$watch(attr.ngDisabled, updateAriaDisabled);
+    } else {
       updateAriaDisabled(!!attr.disabled);
+    }
 
     $aria.expect(element, 'aria-label');
     element.attr('tabIndex', 0);
@@ -136,6 +142,7 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
       refreshSliderDimensions();
       ngModelRender();
       redrawTicks();
+      stopDisabledWatch();
     }, false);
     angular.element($window).on('resize', onWindowResize);
 
@@ -168,6 +175,7 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
       redrawTicks();
     }
     function updateAriaDisabled(isDisabled) {
+      console.log('updateAriaDislabed', isDisabled);
       element.attr('aria-disabled', !!isDisabled);
     }
 
