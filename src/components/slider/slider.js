@@ -114,7 +114,7 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
     attr.step ? attr.$observe('step', updateStep) : updateStep(1);
 
     attr.ngDisabled ?
-      scope.$watch(attr.ngDisabled, updateAriaDisabled) :
+      scope.$parent.$watch(attr.ngDisabled, updateAriaDisabled) :
       updateAriaDisabled(!!attr.disabled);
 
     $aria.expect(element, 'aria-label');
@@ -168,6 +168,7 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
       redrawTicks();
     }
     function updateAriaDisabled(isDisabled) {
+      console.log('updateAriaDislabed', isDisabled);
       element.attr('aria-disabled', !!isDisabled);
     }
 
