@@ -142,13 +142,13 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
       refreshSliderDimensions();
       ngModelRender();
       redrawTicks();
-      stopDisabledWatch();
     }, false);
     angular.element($window).on('resize', onWindowResize);
 
     scope.$on('$destroy', function() {
       angular.element($window).off('resize', onWindowResize);
       hammertime.destroy();
+      stopDisabledWatch();
     });
 
     ngModelCtrl.$render = ngModelRender;
