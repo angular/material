@@ -42,9 +42,7 @@ function MaterialEffects($rootElement, $position, $$rAF, $sniffer) {
       name;
   }
 
-  var self;
-  // Publish API for effects...
-  return self = {
+  var self = {
     popIn: popIn,
     popOut: popOut,
 
@@ -61,6 +59,8 @@ function MaterialEffects($rootElement, $position, $$rAF, $sniffer) {
     ANIMATION_TIMING: vendorProperty('animationTimingFunction'),
     ANIMATION_DIRECTION: vendorProperty('animationDirection')
   };
+  // Publish API for effects...
+  return self;
 
   // **********************************************************
   // API Methods
