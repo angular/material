@@ -15,6 +15,10 @@
     @include transform(translate3d(0,0,0) scale(1.0));
     opacity: 1;
   }
+  &.ng-leave.ng-leave-active {
+    @include transform(translate3d(0,100%,0) scale(0.5));
+    opacity: 0;
+  }
 
 }
 

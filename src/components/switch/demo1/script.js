@@ -1,1 +1,1 @@
-angular.module('myApp', ['ngMaterial']);
+angular.module('switchDemo1', ['ngMaterial']);

@@ -1,4 +1,4 @@
 
-body {
-  padding: 20px;
+input[type="number"] {
+  text-align: center;
 }

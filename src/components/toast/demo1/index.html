@@ -1,5 +1,5 @@
 
-<div ng-app="app" ng-controller="AppCtrl">
+<div ng-controller="AppCtrl">
   <div class="inset">
     <material-button ng-click="toastIt()">
       Simple Toast
@@ -9,6 +9,9 @@
       Advanced Toast
     </material-button>
   </div>
+  <p class="inset">
+    Toast can be dismissed with a swipe, a timer, or a button.
+  </p>
   <div>
     <b>Toast Position: "{{getToastPosition()}}"</b>
   </div>

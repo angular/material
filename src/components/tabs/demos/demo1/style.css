@@ -1,274 +1,109 @@
-
-*, *:before, *:after {
-    @include box-sizing(border-box);
-    @include flex-display();
+.tab1 {
+    background-color: #ea9a9e;
+    width: 100%;
+    height: 100%;
 }
 
-html {
-    font-size: 62.5%;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+.tab2 {
+    background-color: #65a1fc;
+    width: 100%;
+    height: 100%;
 }
 
-body {
-    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-    font-size: 15px;
-    line-height: 1.42857;
-    color: #333;
-    background-color: #fff;
+.tab3 {
+    background-color: #96ba82;
+    width: 100%;
+    height: 100%;
 }
 
-a {
-    color: #4F8EF7;
-    text-decoration: none;
+.tab4 {
+    background-color: #f4f5af;
+    width: 100%;
+    height: 100%;
 }
 
-a:hover, a:focus {
-    color: #0b62ef;
-    text-decoration: underline;
-}
-
-a:focus {
-    outline: none;
-}
-
-img {
-    vertical-align: middle;
-}
-
-p {
-    margin: 0 0 10.5px;
-}
-
-material-tabs {
-    margin-left: 32px;
-}
-
-material-tab {
-    padding: 10.5px 21px;
-    margin: 0 0 21px;
-    border-left: 5px solid #eeeeee;
-}
-
-material-tab p {
-    font-weight: 300;
-    font-size: 16px;
-    line-height: 1.15;
-}
-
-material-tab p:last-child {
-    margin-bottom: 0;
-}
-
-material-tab small {
-    display: block;
-    line-height: 1.42857;
-    color: #999999;
-}
-
-material-tab small:before {
-    content: '\2014 \00A0';
-}
-
-.testimonials material-tab {
-    margin: 0;
-    padding: 0;
-    border: none;
-}
-
-.testimonials .material-view p {
-    position: absolute;
-    display: block;
-    margin: 30px 0 0 20px;
-    padding: 5px 10px 15px 30px;
-    background: url('/img/testimonials/quote.png') no-repeat;
-    background-size: 25px 25px;
-    color: #888;
-    opacity: 0.0;
-}
-
-.material-view p.active {
-    -webkit-transition: opacity 0.9s;
-    transition: opacity 0.9s;
-    opacity: 1;
-}
-
-.testimonials footer {
-    background-size: 44px 40px;
-    background-repeat: no-repeat;
-    -webkit-transition: opacity 0.3s;
-    transition: opacity 0.3s;
-    margin-top:10px;
-    text-transform: none !important;
-}
-
-.testimonials footer div {
-    font-size:10px;
-}
-
-.testimonials material-tabs {
-    position: relative;
-    margin: 0 auto;
-    padding: 0 5px 0px 5px;
-    max-width: 1050px;
-}
-
-.testimonials .tabs-header {
-    position: absolute;
-    top: 100px;
+.tab5 {
+    background-color: #91a7ea;
+    width: 100%;
+    height: 100%;
 }
 
 
-material-tabs, material-tabs .tabs-header .tabs-header-items {
-    background-color: #ffffff;
+.tab6 {
+    background-color: #d9d9d9;
+    width: 100%;
+    height: 100%;
 }
 
-material-tab {
-    text-align: inherit;
-    height: 50px;
-    color: #333;
+.tab7 {
+    background-color: #f3f3f3;
+    width: 100%;
+    height: 100%;
 }
 
-material-tab-label {
-    text-align: inherit;
-    margin-left: 30px;
+.tab8 {
+    background-color: #119957;
+    width: 100%;
+    height: 100%;
 }
 
-material-tab footer {
-    color: #333;
-    padding-left: 50px;
-    background-color: rgb(0,0,0,0);
+.tab9 {
+    background-color: #cdf0ff;
+    width: 100%;
+    height: 100%;
 }
 
-
-canvas.material-ink-ripple {
-    color: #d9d9d9;
-    border-radius: 8px;
+.tab10 {
+    background-color: #83d473;
+    width: 100%;
+    height: 100%;
 }
 
 
 
-@media (min-width: 568px) {
-    .testimonials {
-        position: relative;
-        height: 365px;
-        padding-top: 40px;
-    }
 
 
-    .material-view p {
-        position: absolute;
-        display: block;
-        margin: 20px 0 0 20px;
-        padding: 10px 80px 0 60px;
-        min-height: 150px;
-        background-size: 50px 50px;
-        color: #888;
-        text-align: center;
-        font-weight: normal;
-        font-size: 18px;
-        font-family: Georgia, serif;
-        line-height: 1.65;
-        -webkit-font-smoothing: antialiased;
-        opacity: 0.0;
-        -webkit-transition: opacity 0.4s;
-        transition: opacity 0.4s;
-    }
+/*
+ * Animation styles
+ */
 
-    .material-view p.active {
-        display: block;
-        -webkit-transition: opacity 0.9s;
-        transition: opacity 0.9s;
-        opacity: 1;
-        font-size: 1.1em;
-    }
+.animate-switch-container {
+    position:relative;
+    background:white;
+    border:0px solid black;
+    height:300px;
+    opacity: 1.0;
+    overflow:hidden;
 
-    .testimonials footer {
-        margin-top:5px;
-        padding-top: 5px;
-        max-width: 230px;
-        width: 230px;
-        height: 65px;
-        background-size: 44px 40px;
-        font-size: 13px;
-        opacity: 0.4;
-        cursor: pointer;
-        padding-left: 45px;
-    }
-
-    .testimonials footer div {
-        font-size:11px;
-        margin-top:-20px;
-    }
-
-    .testimonials .active footer, .testimonials footer:hover {
-        opacity: 1;
-    }
-
-    .testimonials .active footer {
-        border-bottom: 2px solid #4F8EF7;
-    }
-
-    .testimonials cite {
-        color: #4F8EF7;
-        font-weight: 400;
-        font-size: 15px;
-        display:block;
-        margin-top:-12px;
-    }
-
-
-    .testimonial-content {
-        padding: 10px 10px 0 10px;
-    }
-
-    .testimonials material-tab {
-        height: 60px;
-    }
-
-
-    .testimonials .tabs-header {
-        position: absolute;
-        top: 150px;
-    }
 }
 
-@media (min-width: 790px) {
-    .testimonials {
-        height: 380px;
-        padding-top: 40px;
-    }
+.animate-switch {
+    -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    position:absolute;
+}
 
-    .testimonials .material-view p {
-        font-size: 20px;
-        line-height: 38px;
-    }
+.animate-switch.ng-leave.ng-leave-active,
+.animate-switch.ng-enter {
+    top:-300px;
+}
+.animate-switch.ng-leave,
+.animate-switch.ng-enter.ng-enter-active {
+    top:0;
+}
 
-    .testimonials footer {
-        max-width: 265px;
-        width: 265px;
-        height: 94px;
-        background-size: 88px 80px;
-        padding-left: 90px;
-        margin-top:5px;
-    }
+.animate-switch.ng-leave
+{
+    z-index: 100;
+}
 
-    .testimonials footer div {
-        font-size:13px;
-        margin-top:-15px;
-    }
+div.animate-switch-container div.animate-switch {
+    padding:20px;
+}
 
-    .testimonials cite {
-        font-size: 15px;
-        display:block;
-        margin-top:10px;
-    }
-
-    .testimonials material-tab {
-        height: 100px;
-    }
-
-    .testimonials .tabs-header {
-        position: absolute;
-        top: 190px;
-    }
+.title {
+  color: #999999;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
 }

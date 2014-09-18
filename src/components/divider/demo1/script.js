@@ -1,4 +1,4 @@
-angular.module('app', ['ngMaterial'])
+angular.module('dividerDemo1', ['ngMaterial'])
   .controller('AppCtrl', function($scope) {
     $scope.messages = [{
       face: '/img/list/60.jpeg',

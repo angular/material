@@ -110,37 +110,57 @@ pre > code.highlight {
 }
 
 .demo-container {
+  overflow: hidden;
   margin-top: 30px;
-  height: 668px;
-  -webkit-transition: height 0.4s ease-in-out;
-  transition: height 0.4s ease-in-out;
+  -webkit-transition: 0.02s padding ease-in-out;
+  transition: 0.02s padding ease-in-out;
+  position: relative;
+  padding-bottom: 0;
 }
 .demo-container.show-source {
-  height: 1117px;
+  padding-bottom: 448px;
 }
 
-iframe.demo {
-  width: 100%;
-  height: 600px;
-  border: none;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
-.show-source .demo-frame-container {
+[demo-include] {
+  z-index: 1;
+  -webkit-transition: -webkit-transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
-}
-.demo-frame-container {
+  min-height: 448px;
   background: #fff;
-  z-index: 1;
-  -webkit-transform: translate3d(0, -448px, 0);
-  transform: translate3d(0, -448px, 0);
-  -webkit-transition: -webkit-transform .3s ease-in-out;
-  transition: transform .3s ease-in-out;
+}
+
+.show-source [demo-include] {
+  -webkit-transform: translate3d(0, 448px, 0);
+  transform: translate3d(0, 448px, 0);
+}
+.demo-source-tabs {
+  position: absolute;
+  width: 100%;
+  z-index: 0;
+}
+.demo-content {
+  min-height: 448px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.demo-content > * {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -moz-box-flex: 1;
+  -moz-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
 }
 
 material-toolbar.demo-toolbar,
-.demo-container material-tabs material-tab {
+.demo-source-tabs material-tab,
+.demo-source-tabs .tabs-header {
   background: #00BCD4;
   color: white;
 }
@@ -157,20 +177,12 @@ material-toolbar.demo-toolbar material-button {
   -moz-transition: all 0.3s linear;
   transition: all 0.3s linear;
 }
-
 .demo-source-container {
   display:block;
   border: 1px solid #ddd;
   background-color: #f6f6f6;
   height:400px;
-  opacity: 0;
-  transition: opacity 0.2s linear;
-  -webkit-transition: opacity 0.2s linear;
 }
-.show-source .demo-source-container {
-  opacity: 1;
-}
-
 .demo-source-content {
   height: 400px;
 }
@@ -178,6 +190,7 @@ material-toolbar.demo-toolbar material-button {
 .demo-source-content pre,
 .demo-source-content code {
   background: #f6f6f6;
+  font-family: monospace;
 }
 .demo-source-content pre {
   max-width: 100%;

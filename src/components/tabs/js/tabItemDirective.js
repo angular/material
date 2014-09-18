@@ -1,5 +1,5 @@
 angular.module('material.components.tabs')
-  .directive('materialTab', [ 
+  .directive('materialTab', [
     '$attrBind',
     '$aria',
     '$materialInkRipple',

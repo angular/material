@@ -1,4 +1,4 @@
-var app = angular.module('myApp', ['ngMaterial']);
+var app = angular.module('toolbarDemo2', ['ngMaterial']);
 
 app.controller('AppCtrl', function($scope) {
   var item = {

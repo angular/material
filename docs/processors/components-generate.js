@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var path = require('canonical-path');
+var ngModuleData = require('../util/ngModuleData');
 
 module.exports = {
   name: 'components-generate',
@@ -61,9 +62,9 @@ module.exports = {
           });
 
         var readmeDoc = _.find(component.docs, { docType: 'readme' });
-        !readmeDoc && console.log(component.id);
         component.docs.forEach(function(doc) {
           doc.readmeUrl = readmeDoc.url;
+          doc.demos = components.demos;
         });
 
         component.template = 'component.template.html';
@@ -106,22 +107,30 @@ module.exports = {
             .remove({ basePath: 'index.html' })
             .first();
 
-          demo.files = _.map(demoDocs, generateDemoFile);
-          demo.indexFile = generateDemoFile(indexDoc);
-          demo.indexFile.js = _.filter(demo.files, { fileType: 'js' });
-          demo.indexFile.css = _.filter(demo.files, { fileType: 'css' });
+            var moduleDoc = _.find(demoDocs, function(doc) {
+              return !!doc.module;
+            });
+
+          demo.module = moduleDoc && moduleDoc.module || '';
+          var files = _.map(demoDocs, generateDemoFile);
+          var indexFile = generateDemoFile(indexDoc);
 
           renderedDocs = renderedDocs
-            .concat(demo.indexFile)
-            .concat(demo.files);
+            .concat(indexFile)
+            .concat(files);
+
+          // No need to pass content on to the final docs app, uses up a lot 
+          // of bytes
+          demo.files = _.map(files, function(file) {
+            return _.omit(file, ['content', 'renderedContent']);
+          });
+          demo.indexFile = _.omit(indexFile, ['content', 'renderedContent']);
 
           return demo;
 
           function generateDemoFile(fromDoc) {
             return _.assign({}, fromDoc, {
-              template: fromDoc.basePath === 'index.html' ? 
-                'demo/template.index.html' :
-                'demo/template.file',
+              template: 'demo/template.file',
               outputPath: path.join(outputFolder, fromDoc.basePath)
             });
           }
@@ -185,7 +194,8 @@ module.exports = {
             'index.html'
           );
           renderedDocs.push(doc);
-          component.docs.push(doc);
+          
+          component.docs.push(_.omit(doc, ['content', 'renderedContent']));
         })
         .value();
     }
