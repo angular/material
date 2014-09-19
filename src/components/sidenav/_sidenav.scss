@@ -49,8 +49,10 @@ material-sidenav {
  * When sidenav is closed on small screen, show no box shadow
  */
 @media (max-width: $layout-breakpoint-md) {
-  &:not(.open).material-sidenav-left,
-  &:not(.open).material-sidenav-right {
-    box-shadow: none;
+  material-sidenav {
+    &:not(.open).material-sidenav-left,
+    &:not(.open).material-sidenav-right {
+      box-shadow: none;
+    }
   }
 }
