@@ -2,6 +2,7 @@
 var _ = require('lodash');
 var changelog = require('conventional-changelog');
 var dgeni = require('dgeni');
+var fs = require('fs');
 var glob = require('glob').sync;
 var gulp = require('gulp');
 var karma = require('karma').server;
@@ -44,6 +45,16 @@ gulp.task('validate', ['jshint', 'karma']);
 
 gulp.task('watch', ['docs'], function() {
   gulp.watch(['src/**/*.{scss,js,html}', 'docs/app/**/*'], ['docs']);
+});
+
+gulp.task('changelog', function(done) {
+  changelog({
+    repository: 'https://github.com/angular/material',
+    version: pkg.version,
+    file: 'CHANGELOG.md'
+  }, function(err, log) {
+    fs.writeFileSync(__dirname + '/CHANGELOG.md', log);
+  });
 });
 
 
