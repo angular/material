@@ -262,3 +262,12 @@ ul li:first-child {
     text-decoration: underline;
     font-size: 0.95em;
 }
+
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+pre, code {
+  font-family: monospace, serif;
+}

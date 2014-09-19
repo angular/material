@@ -7,6 +7,8 @@ $base-vendor-prefixes: "webkit", "moz", "ms";
 $font-family: 'RobotoDraft', 'Helvetica Neue', Helvetica, Arial;
 $font-color-base: #444;
 
+$background-color-base: #fff !default;
+
 // Font colors
 $text-light: #f1f1f1;
 $text-dark: #111111;
@@ -22,6 +24,26 @@ $theme-purple: #9c27b0;
 $theme-red: #db4437;
 
 $theme-indigo: #3e50b4;
+
+$h1-font-size-base: 2em !default;
+$h1-margin-base: 0.67em 0 !default;
+
+$h2-font-size-base: 1.5em !default;
+$h2-margin-base: 0.83em 0 !default;
+
+$h3-font-size-base: 1.17em !default;
+$h3-margin-base: 1em 0 !default;
+
+$h4-font-size-base: 1em !default;
+$h4-margin-base: 1.33em 0 !default;
+
+$h5-font-size-base: 0.83em !default;
+$h5-margin-base: 1.67em 0 !default;
+
+$h6-font-size-base: 0.75em !default;
+$h6-margin-base: 2.33em 0 !default;
+
+
 
 
 // Layout
