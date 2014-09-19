@@ -34,6 +34,8 @@ a. `bower install angular-material` to the get latest stable release (or downloa
 
 b. `bower install angular-material#master` to get the version just committed to master (less stable than a release).
 
+View the [README in the bower-material repository](https://github.com/angular/bower-material/tree/master/README.md) for how to get started.
+
 ### File Structure
 
 - Components belong in `src/components/{componentName}`
