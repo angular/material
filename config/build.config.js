@@ -79,7 +79,7 @@ module.exports = {
       'src/components/checkbox/checkbox.js',
       'src/components/content/content.js',
       'src/components/dialog/dialog.js',
-      'src/components/form/form.js',
+      'src/components/textField/textField.js',
       'src/components/icon/icon.js',
       'src/components/list/list.js',
       'src/components/radioButton/radioButton.js',

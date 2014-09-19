@@ -1,0 +1,10 @@
+{
+  "module": "material.components.textField",
+  "name": "Text Field",
+  "demos": {
+    "demo1": {
+      "name": "Text Field Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

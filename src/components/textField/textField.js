@@ -1,10 +1,10 @@
 /**
  * @ngdoc module
- * @name material.components.form
+ * @name material.components.textField
  * @description
  * Form
  */
-angular.module('material.components.form', [])
+angular.module('material.components.textField', [])
   .directive('materialInputGroup', [
     materialInputGroupDirective
   ])
@@ -15,15 +15,15 @@ angular.module('material.components.form', [])
 /**
  * @ngdoc directive
  * @name materialInputGroup
- * @module material.components.form
+ * @module material.components.textField
  * @restrict E
  * @description
- * Use the `<material-input-group>` directive as the grouping parent of an `<material-input>` elements
+ * Use the `<material-input-group>` directive as the grouping parent of a `<material-input>` element.
  *
  * @usage 
  * <hljs lang="html">
  * <material-input-group>
- *   <material-input type="text" ng-model="myText">
+ *   <material-input type="text" ng-model="myText"></material-input>
  * </material-input-group>
  * </hljs>
  */
@@ -44,7 +44,7 @@ function materialInputGroupDirective() {
 /**
  * @ngdoc directive
  * @name materialInput
- * @module material.components.form
+ * @module material.components.textField
  *
  * @restrict E
  *

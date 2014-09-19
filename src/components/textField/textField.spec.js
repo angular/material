@@ -1,5 +1,5 @@
 describe('materialInputGroup directive', function() {
-  beforeEach(module('material.components.form'));
+  beforeEach(module('material.components.textField'));
 
   function setup(inputAttrs) {
     var el;
