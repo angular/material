@@ -1,7 +1,7 @@
 <a name="0.0.3"></a>
 ### v0.0.3  (2014-09-19)
 
-v0.0.3 includes performance and usability improvements to existing components. It also introduces the slider, switch, divider, and linear progress components.
+v0.0.3 includes many bug fixes, performance, and usability improvements to existing components, as well as introducing the slider, switch, divider, and linear progress components.
 
 Additionally, accessibility support are added to material-button, material-checkbox, material-radio-button, material-slider, material-dialog and material-lists, with more forthcoming. With added ARIA support including roles, states and properties, Angular Material directives now also communicate to users of assistive technologies. Additionally, tabIndex and focus management are handled dynamically where appropriate.
 
