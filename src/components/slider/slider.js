@@ -272,7 +272,7 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
       activeTrack.css('width', (percent * 100) + '%');
       thumbContainer.css(
         $materialEffects.TRANSFORM,
-        'translateX(' + getSliderDimensions().width * percent + 'px)'
+        'translate3d(' + getSliderDimensions().width * percent + 'px,0,0)'
       );
       element.toggleClass('slider-min', percent === 0);
     }

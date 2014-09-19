@@ -64,7 +64,7 @@ material-slider {
     position: absolute;
     left: 0;
     top: 0;
-    @include transform(translateX(0));
+    @include transform(translate3d(0,0,0));
     transition: transform 0.1s linear;
     -webkit-transition: -webkit-transform 0.1s linear;
   }
@@ -110,7 +110,7 @@ material-slider {
     border-radius: max($slider-sign-height, $slider-sign-width);
     background-color: $theme-light-blue;
 
-    @include transform(scale(0.4) translateY((-$slider-sign-top + 8) / 0.4));
+    @include transform(scale(0.4) translate3d(0,(-$slider-sign-top + 8) / 0.4,0));
     @include transition(all 0.2s ease-in-out);
 
     /* The arrow pointing down under the sign */
@@ -125,7 +125,7 @@ material-slider {
       border-top: $slider-arrow-height solid $theme-light-blue;
 
       opacity: 0;
-      @include transform(translateY(-8px));
+      @include transform(translate3d(0,-8px,0));
       @include transition(all 0.2s ease-in-out);
     }
 
@@ -229,7 +229,7 @@ material-slider {
         .slider-sign,
         .slider-sign:after {
           opacity: 1;
-          @include transform(translateY(0) scale(1.0));
+          @include transform(translate3d(0,0,0) scale(1.0));
         }
       }
     }
