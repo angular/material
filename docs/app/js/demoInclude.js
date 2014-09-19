@@ -31,10 +31,13 @@ function($q, $http, $compile, $templateCache) {
             $compile(demoContainer)(scope);
           }
 
-          handleDemoStyles();
-          handleDemoTemplates();
-
-          element.append(demoContainer);
+          // Once everything is loaded, put the demo into the DOM
+          $q.all([
+            handleDemoStyles(),
+            handleDemoTemplates()
+          ]).finally(function() {
+            element.append(demoContainer);
+          });
         });
     }
 
@@ -45,32 +48,30 @@ function($q, $http, $compile, $templateCache) {
      */
     function handleDemoStyles() {
 
+      var demoSelector = demo.module ? ('.' + demo.module + ' ') : '';
       var styleFiles = demo.files.filter(function(file) {
         return file.fileType === 'css';
       });
-      if (styleFiles.length) {
-        var demoSelector = demo.module ? ('.' + demo.module + ' ') : '';
 
-        $q.all(styleFiles.map(function(file) {
-          return $http.get(file.outputPath, {cache: $templateCache})
-            .then(function(response) { return response.data; });
-        }))
-        .then(function(styles) {
-          styles = styles
-            .join('\n') //join styles as one string
-            .replace(/.+?({|,)/g, function($1) {
-              // change ' .class {' to '.buttonsDemo1 .class {'
-              return demoSelector + $1;
-            });
-
-          var styleElement = angular.element('<style>' + styles + '</style>');
-          document.body.appendChild(styleElement[0]);
-
-          scope.$on('$destroy', function() {
-            styleElement.remove();
+      return $q.all(styleFiles.map(function(file) {
+        return $http.get(file.outputPath, {cache: $templateCache})
+          .then(function(response) { return response.data; });
+      }))
+      .then(function(styles) {
+        styles = styles
+          .join('\n') //join styles as one string
+          .replace(/.+?({|,)/g, function($1) {
+            // change ' .selector {' to '.buttonsDemo1 .selector {'
+            return demoSelector + $1;
           });
+
+        var styleElement = angular.element('<style>' + styles + '</style>');
+        document.body.appendChild(styleElement[0]);
+
+        scope.$on('$destroy', function() {
+          styleElement.remove();
         });
-      }
+      });
 
     }
 
@@ -88,22 +89,22 @@ function($q, $http, $compile, $templateCache) {
       var templates = demo.files.filter(function(file) {
         return file.fileType === 'html';
       });
+      // Get the $templateCache instance that goes with the demo's specific
+      // app instance.
+      var demoTemplateCache = demoContainer.injector().get('$templateCache');
 
-      if (templates.length) {
-        // Get the $templateCache instance that goes with the demo's specific
-        // app instance.
-        var demoTemplateCache = demoContainer.injector().get('$templateCache');
+      return $q.all(templates.map(function(file) {
+        return $http.get(file.outputPath).then(function(response) {
 
-        templates.forEach(function(file) {
-          $http.get(file.outputPath).then(function(response) {
-            demoTemplateCache.put(file.basePath, response.data);
+          demoTemplateCache.put(file.basePath, response.data);
+
+          scope.$on('$destroy', function() {
+            demoTemplateCache.remove(file.basePath);
           });
+
         });
 
-        scope.$on('$destroy', function() {
-          templates.forEach(demoTemplateCache.remove);
-        });
-      }
+      }));
 
     }
 
