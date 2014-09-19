@@ -1,4 +1,4 @@
 describe('materialLinearProgress', function() {
-  
+
 
 });
