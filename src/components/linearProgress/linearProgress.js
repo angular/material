@@ -78,5 +78,5 @@ function clamp(value) {
     return 0;
   }
 
-  return value;
+  return value || 0;
 }
