@@ -50,9 +50,9 @@ angular.module('material.components.toolbar', [
  *
  * @param {boolean=} scrollShrink Whether the header should shrink away as 
  * the user scrolls down, and reveal itself as the user scrolls up. 
- *
  * Note: for scrollShrink to work, the toolbar must be a sibling of a 
  * `material-content` element, placed before it. See the scroll shrink demo.
+ *
  *
  * @param {number=} shrinkSpeedFactor How much to change the speed of the toolbar's
  * shrinking by. For example, if 0.25 is given then the toolbar will shrink
