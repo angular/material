@@ -19,8 +19,9 @@ material-content {
     padding: 8px;
   }
 
-  // min-width: 100%;
-  // min-height: 100%;
+  &[scroll-shrink] {
+    position: relative;
+  }
 }
 
 @media (min-width: $layout-breakpoint-sm) {

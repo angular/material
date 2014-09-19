@@ -110,7 +110,6 @@ pre > code.highlight {
 }
 
 .demo-container {
-  overflow: hidden;
   margin-top: 30px;
   -webkit-transition: 0.02s padding ease-in-out;
   transition: 0.02s padding ease-in-out;
@@ -129,6 +128,7 @@ pre > code.highlight {
   transform: translate3d(0, 0, 0);
   min-height: 448px;
   background: #fff;
+  overflow: hidden;
 }
 
 .show-source [demo-include] {

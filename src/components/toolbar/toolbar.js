@@ -53,6 +53,10 @@ angular.module('material.components.toolbar', [
  *
  * Note: for scrollShrink to work, the toolbar must be a sibling of a 
  * `material-content` element, placed before it. See the scroll shrink demo.
+ *
+ * @param {number=} shrinkSpeedFactor How much to change the speed of the toolbar's
+ * shrinking by. For example, if 0.25 is given then the toolbar will shrink
+ * at one fourth the rate at which the user scrolls down. Default 0.5.
  */ 
 function materialToolbarDirective($$rAF, $materialEffects) {
 
@@ -66,56 +70,76 @@ function materialToolbarDirective($$rAF, $materialEffects) {
       }
 
       function setupScrollShrink() {
-        //makes it take X times as long for header to dissapear
-        var HEIGHT_FACTOR = 2; 
-        var height = element.prop("offsetHeight") * HEIGHT_FACTOR;
         // Current "y" position of scroll
         var y = 0;
         // Store the last scroll top position
         var prevScrollTop = 0;
+
+        var shrinkSpeedFactor = attr.shrinkSpeedFactor || 0.5;
+
+        var toolbarHeight;
+        var contentElement;
+
+        var debouncedContentScroll = $$rAF.debounce(onContentScroll);
+        var debouncedUpdateHeight = Util.debounce(updateToolbarHeight, 5 * 1000);
 
         // Wait for $materialContentLoaded event from materialContent directive.
         // If the materialContent element is a sibling of our toolbar, hook it up
         // to scroll events.
         scope.$on('$materialContentLoaded', onMaterialContentLoad);
 
-        var contentElement;
-        function onMaterialContentLoad($event, contentEl) {
-
-          if (Util.elementIsSibling(element, contentEl)) {
+        function onMaterialContentLoad($event, newContentEl) {
+          if (Util.elementIsSibling(element, newContentEl)) {
             // unhook old content event listener if exists
-            contentElement && contentElement.off('scroll', onContentScroll);
-            contentEl.on('scroll', onContentScroll).css('position','relative');
-            contentElement = contentEl;
-          }
+            if (contentElement) {
+              contentElement.off('scroll', debouncedContentScroll);
+            }
 
+            newContentEl.on('scroll', debouncedContentScroll);
+            newContentEl.attr('scroll-shrink', 'true');
+
+            contentElement = newContentEl;
+            $$rAF(updateToolbarHeight);
+          }
+        }
+
+        function updateToolbarHeight() {
+          toolbarHeight = element.prop('offsetHeight');
+          // Add a negative margin-top the size of the toolbar to the content el.
+          // The content will start transformed down the toolbarHeight amount,
+          // so everything looks normal.
+          //
+          // As the user scrolls down, the content will be transformed up slowly
+          // to put the content underneath where the toolbar was.
+          contentElement.css(
+            'margin-top', 
+            (-toolbarHeight * shrinkSpeedFactor) + 'px'
+          );
+          onContentScroll();
         }
 
         function onContentScroll(e) {
-          shrink(e.target.scrollTop);
-          prevScrollTop = e.target.scrollTop;
+          var scrollTop = e ? e.target.scrollTop : prevScrollTop;
+
+          debouncedUpdateHeight();
+
+          y = Math.min(
+            toolbarHeight / shrinkSpeedFactor, 
+            Math.max(0, y + scrollTop - prevScrollTop)
+          );
+
+          element.css(
+            $materialEffects.TRANSFORM, 
+            'translate3d(0,' + (-y * shrinkSpeedFactor) + 'px,0)'
+          );
+          contentElement.css(
+            $materialEffects.TRANSFORM, 
+            'translate3d(0,' + ((toolbarHeight - y) * shrinkSpeedFactor) + 'px,0)'
+          );
+
+          prevScrollTop = scrollTop;
         }
 
-        // Shrink the given target element based on the scrolling
-        // of the scroller element.
-        function shrink(scrollTop) {
-          y = Math.min(height, Math.max(0, y + scrollTop - prevScrollTop));
-          // If we are scrolling back "up", show the header condensed again
-          // if (prevScrollTop > scrollTop && scrollTop > margin) {
-          //   y = Math.max(y, margin);
-          // }
-          $$rAF(transform);
-        }
-
-        function transform() {
-          var translate = y ?
-            'translate3d(0,' + (-y / HEIGHT_FACTOR) + 'px, 0)' : 
-            '';
-          element.css($materialEffects.TRANSFORM, translate);
-          contentElement.css('margin-top', y ?
-                             (-y / HEIGHT_FACTOR) + 'px' :
-                            '');
-        }
       }
 
     }
