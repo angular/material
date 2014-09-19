@@ -116,7 +116,8 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
   function showDialog(options) {
     options = angular.extend({
       appendTo: dialogParent,
-      hasBackdrop: true, // should have an opaque backdrop
+      hasBackdrop: true, // should have an opaque backdrop,
+      disableBackdropScroll: true,
       clickOutsideToClose: true, // should have a clickable backdrop to close
       escapeToClose: true,
       // targetEvent: used to find the location to start the dialog from
@@ -151,6 +152,9 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
       if (options.hasBackdrop) {
         backdrop = angular.element('<material-backdrop class="opaque ng-enter">');
         $animate.enter(backdrop, options.appendTo, null);
+      }
+      if (options.disableBackdropScroll) {
+        dialogParent.addClass('material-dialog-overflow');
       }
       $materialEffects.popIn(element, options.appendTo, popInTarget, function() {
         if (options.escapeToClose) {
@@ -189,6 +193,7 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
         }
         $materialEffects.popOut(element, options.appendTo, function() {
           element.remove();
+          dialogParent.removeClass('material-dialog-overflow');
           scope.$destroy();
           scope = null;
           element = null;
