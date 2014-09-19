@@ -71,7 +71,6 @@
   user-select: $val;
 }
 
-
 @mixin keyframes($name) {
   @-webkit-keyframes #{$name} {
     @content;
