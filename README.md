@@ -1,6 +1,4 @@
-Material Design for AngularJS Apps 
-
-<!--[![Build Status](https://travis-ci.org/angular/material.svg)](https://travis-ci.org/angular/material)-->
+# Material Design for AngularJS Apps [![Build Status](https://travis-ci.org/angular/material.svg)](https://travis-ci.org/angular/material)
 
 =======
 
