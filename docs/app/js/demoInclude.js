@@ -91,10 +91,10 @@ function($q, $http, $compile, $templateCache) {
       });
       // Get the $templateCache instance that goes with the demo's specific
       // app instance.
-      var demoTemplateCache = demoContainer.injector().get('$templateCache');
 
       return $q.all(templates.map(function(file) {
         return $http.get(file.outputPath).then(function(response) {
+          var demoTemplateCache = demoContainer.injector().get('$templateCache');
 
           demoTemplateCache.put(file.basePath, response.data);
 
