@@ -46,9 +46,9 @@ function MaterialLinearProgressDirective($timeout) {
       '<div class="bar bar2"></div>' +
       '</div>',
     link: function(scope, element, attr) {
-      var bar1 = element.find('.bar1'),
-        bar2 = element.find('.bar2'),
-        container = element.find('.container');
+      var bar1 = angular.element(element[0].querySelector('.bar1')),
+          bar2 = angular.element(element[0].querySelector('.bar2')),
+          container = angular.element(element[0].querySelector('.container'));
 
       attr.$observe('value', function(value) {
         bar2.css('width', clamp(value).toString() + '%');

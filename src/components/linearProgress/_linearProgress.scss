@@ -1,8 +1,10 @@
 $bar-height:5px;
+
  material-linear-progress {
   display: block;
   width: 100%;
   height: $bar-height;
+
   .container {
     overflow: hidden;
     position: relative;
@@ -11,39 +13,47 @@ $bar-height:5px;
     top: $bar-height;
     @include transition(all .3s linear);
   }
+
   .container.ready {
     height: $bar-height;
     top: 0;
   }
+
   .bar {
     height: $bar-height;
     background-color: $color-blue-500;
     position: absolute;
   }
+
   .bar1, .bar2 {
     @include transition(width 0.2s linear);
   }
+
   &[mode=determinate] {
     .bar1 {
       display: none;
     }
   }
+
   &[mode=indeterminate] {
     .bar1 {
       left: 50%;
       width: 10%;
       @include animation(indeterminate1 5s infinite linear);
     }
+
     .bar2 {
       left: 0%;
       width: 0%;
       @include animation(indeterminate2 5s infinite linear);
     }
   }
+
   &[mode=buffer] {
     .container {
       background-color: transparent;
     }
+
     .dashed:before {
       content: "";
       display: block;
@@ -57,10 +67,12 @@ $bar-height:5px;
       background-position: 0px -23px;
       @include animation(buffer 3s infinite linear);
     }
+
     .bar1 {
       background-color: $color-blue-100;
     }
   }
+
   &[mode=query] {
     .bar2 {
       left: 50%;
@@ -69,6 +81,7 @@ $bar-height:5px;
     }
   }
 }
+
 @include keyframes(indeterminate1) {
   0% {
     width: 0%;
@@ -131,6 +144,7 @@ $bar-height:5px;
     left: 100%;
   }
 }
+
 @include keyframes(indeterminate2) {
   0% {
     width: 0%;
@@ -196,6 +210,7 @@ $bar-height:5px;
     left: 100%;
   }
 }
+
 @include keyframes(query) {
   0% {
     width: 30%;
@@ -207,6 +222,7 @@ $bar-height:5px;
     opacity: 0;
   }
 }
+
 @include keyframes(buffer) {
   0% {
     opacity: 1;
