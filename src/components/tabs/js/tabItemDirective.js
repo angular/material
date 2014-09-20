@@ -100,6 +100,7 @@ function TabDirective( $attrBind, $aria, $materialInkRipple) {
       {
         // Click support for entire <material-tab /> element
         if ( !scope.disabled ) tabsCtrl.select(scope);
+        else                   tabsCtrl.focusSelected();
 
       })
       .on('keydown', function onRequestSelect(event)

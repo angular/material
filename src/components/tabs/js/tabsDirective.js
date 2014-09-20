@@ -162,14 +162,25 @@ function TabsDirective($q, $window, $timeout, $compile, $materialEffects, $$rAF,
           }
         };
 
-        var updateInk = linkTabInk(scope, element, tabsCtrl, $q, $materialEffects);
+        var allowFocus = 0;   // do not auto-focus on default tab selection
+        var updateInk = linkTabInk(scope, element, tabsCtrl, $q, $materialEffects) || angular.noop;
         var updatePagination = linkTabPagination( scope, element, tabsCtrl, $q, $materialEffects );
 
-        var updateAll = function() {
+        var updateAll = function(event) {
+
           scope.$evalAsync(function() {
             updatePagination().then( function(){
+
               // Make sure the ink positioning is correct
-              $timeout( updateInk );
+              $timeout( function() {
+                updateInk();
+
+                // Key focus synced with tab selection...
+                if (  (event.name == EVENT.TABS_CHANGED) && allowFocus++) {
+                  tabsCtrl.focusSelected();
+                }
+
+              },60);
             });
 
             // Make sure ink changes start just after pagination transitions have started...

@@ -135,9 +135,9 @@ function linkTabPagination(scope, element, tabsCtrl, $q, $materialEffects ) {
     var lastTab = (pagination.itemsPerPage * pagination.pagesCount) - 1;
     var lastPage = pagination.pagesCount - 1;
 
-    return (numPages < 1)       ? -1       :
-      (tabIndex < 0)       ?  0       :
-      (tabIndex > lastTab) ? lastPage : Math.floor(tabIndex / pagination.itemsPerPage);
+    return  (numPages < 1)       ? -1       :
+            (tabIndex < 0)       ?  0       :
+            (tabIndex > lastTab) ? lastPage : Math.floor(tabIndex / pagination.itemsPerPage);
   }
 
   /**
@@ -161,7 +161,7 @@ function linkTabPagination(scope, element, tabsCtrl, $q, $materialEffects ) {
    */
   function isTabInRange( tabIndex ){
     return (tabIndex >= pagination.startIndex) &&
-      (tabIndex <= pagination.endIndex);
+           (tabIndex <= pagination.endIndex);
   }
 
 }
