@@ -60,7 +60,7 @@ function($q, $http, $compile, $templateCache) {
       .then(function(styles) {
         styles = styles
           .join('\n') //join styles as one string
-          .replace(/.+?({|,)/g, function($1) {
+          .replace(/.+?({|,)\w*$/g, function($1) {
             // change ' .selector {' to '.buttonsDemo1 .selector {'
             return demoSelector + $1;
           });
