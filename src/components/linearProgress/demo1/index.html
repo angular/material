@@ -1,13 +1,13 @@
-<div ng-controller="AppCtrl">
-  <h2>Determinate</h2>
+<div ng-controller="AppCtrl" layout="vertical" layout-padding>
+  <h3>Determinate</h3>
   <material-linear-progress mode="determinate" ng-value="determinateValue"></material-linear-progress>
 
-  <h2>Indeterminate</h2>
+  <h3>Indeterminate</h3>
   <material-linear-progress mode="indeterminate"></material-linear-progress>
 
-  <h2>Buffer</h2>
+  <h3>Buffer</h3>
   <material-linear-progress mode="buffer" value="{{determinateValue}}" secondaryValue="{{determinateValue2}}"></material-linear-progress>
 
-  <h2>Query Indeterminate and Determinate</h2>
+  <h3>Query Indeterminate and Determinate</h3>
   <material-linear-progress mode="{{mode}}" value="{{determinateValue}}"></material-linear-progress>
 </div>
