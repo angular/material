@@ -62,152 +62,143 @@ function MaterialTabDirective($materialInkRipple, $compile, $aria) {
     restrict: 'E',
     require: ['materialTab', '^materialTabs'],
     controller: '$materialTab',
-    transclude: true,
-    priority: 1, // Make this run before ngClick directive
     scope: {
       onSelect: '&',
       onDeselect: '&',
       label: '@',
     },
-    link: postLink
+    compile: compile
   };
 
-  function postLink(scope, element, attr, ctrls, transclude) {
+  function compile(element, attr) {
+    var tabLabel = element.find('material-tab-label');
 
-    var tabItemCtrl = ctrls[0]; // Controller for THIS tabItemCtrl
-    var tabsCtrl = ctrls[1]; // Controller for ALL tabs
-
-    transclude(scope.$parent.$new(), transcludeTabContent);
-
-    tabsCtrl.add(tabItemCtrl);
-    scope.$on('$destroy', function() {
-      tabsCtrl.remove(tabItemCtrl);
-    });
-
-    $materialInkRipple.attachButtonBehavior(element);
-
-    element.on('click', stopOnDisableListener);
-    if (!angular.isDefined(attr.ngClick)) {
-      element.on('click', defaultClickListener);
+    // If a tab label element is found, remove it for later re-use.
+    if (tabLabel.length) {
+      tabLabel.remove();
+    // Otherwise, try to use attr.label as the label
+    } else if (angular.isDefined(attr.label)) {
+      tabLabel = angular.element('<material-tab-label>').html(attr.label);
+    // If nothing is found, use the tab's content as the label
+    } else {
+      tabLabel = angular.element('<material-tab-label>')
+        .append(element.contents().remove());
     }
-    element.on('keydown', keydownListener);
 
-    if (angular.isNumber(scope.$parent.$index)) {
-      watchNgRepeatIndex();
-    }
-    if (angular.isDefined(attr.active)) {
-      watchActiveAttribute();
-    }
-    watchDisabled();
+    // Everything that's left is the tab's content area.
+    var tabContent = element.contents().remove();
 
-    configureAria();
+    return function postLink(scope, element, attr, ctrls) {
 
-    function transcludeTabContent(contents) {
-      var tabContent = [];
-      var tabLabel;
+      var tabItemCtrl = ctrls[0]; // Controller for THIS tabItemCtrl
+      var tabsCtrl = ctrls[1]; // Controller for ALL tabs
 
-      angular.forEach(contents, function(node) {
-        if (node.tagName && node.tagName.toLowerCase() === 'material-tab-label') {
-          tabLabel = angular.element(node);
-        } else {
-          tabContent.push(node);
-        }
+      transcludeTabContent();
+
+      tabsCtrl.add(tabItemCtrl);
+      scope.$on('$destroy', function() {
+        tabsCtrl.remove(tabItemCtrl);
       });
 
-      if (!tabLabel) {
-        // Use attr.label for the label if it's found
-        if (angular.isDefined(attr.label)) {
-          tabLabel = angular.element('<material-tab-label ng-bind="label">');
-          $compile(tabLabel)(scope);
+      $materialInkRipple.attachButtonBehavior(element);
 
-          // Otherwise, the tabItemCtrl's contents are all the label.
-        } else {
-          tabLabel = angular.element('<material-tab-label>').append(tabContent);
-          tabContent = [];
-        }
-        element.append(tabLabel);
+      if (!angular.isDefined(attr.ngClick)) {
+        element.on('click', defaultClickListener);
+      }
+      element.on('keydown', keydownListener);
+
+      if (angular.isNumber(scope.$parent.$index)) {
+        watchNgRepeatIndex();
+      }
+      if (angular.isDefined(attr.active)) {
+        watchActiveAttribute();
+      }
+      watchDisabled();
+
+      configureAria();
+
+      function transcludeTabContent() {
+        // Clone the label we found earlier, and $compile and append it
+        var label = tabLabel.clone();
+        element.append(label);
+        $compile(label)(scope.$parent);
+
+        // Clone the content we found earlier, and mark it for later placement into
+        // the proper content area.
+        tabItemCtrl.content = tabContent.clone();
       }
 
-      // Publish the content so we can put into the proper area later.
-      tabItemCtrl.content = angular.element(tabContent);
-    }
-
-    // If the tab is disabled, then stop the click from ever reaching other listeners.
-    function stopOnDisableListener(ev) {
-      // TODO restore focus back to selected item if disabled
-      if (tabItemCtrl.isDisabled()) {
-        ev.stopImmediatePropagation();
-      }
-    }
-    //defaultClickListener isn't applied if the user provides an ngClick expression.
-    function defaultClickListener() {
-      scope.$apply(function() {
-        tabsCtrl.select(tabItemCtrl);
-        tabItemCtrl.element.focus();
-      });
-    }
-    function keydownListener(ev) {
-      if (ev.which == Constant.KEY_CODE.SPACE ) {
-        // Fire the click handler to do normal selection if space is pressed
-        element.triggerHandler('click');
-        ev.preventDefault();
-
-      } else if (ev.which === Constant.KEY_CODE.LEFT_ARROW) {
-        var previous = tabsCtrl.previous(tabItemCtrl);
-        previous && previous.element.focus();
-
-      } else if (ev.which === Constant.KEY_CODE.RIGHT_ARROW) {
-        var next = tabsCtrl.next(tabItemCtrl);
-        next && next.element.focus();
-      }
-    }
-
-    // If tabItemCtrl is part of an ngRepeat, move the tabItemCtrl in our internal array
-    // when its $index changes
-    function watchNgRepeatIndex() {
-      // The tabItemCtrl has an isolate scope, so we watch the $index on the parent.
-      scope.$watch('$parent.$index', function $indexWatchAction(newIndex) {
-        tabsCtrl.move(tabItemCtrl, newIndex);
-      });
-    }
-
-    function watchActiveAttribute() {
-      scope.$watch('!!(' + attr.active + ')', function activeWatchAction(isActive) {
-        var isSelected = tabsCtrl.selected() === tabItemCtrl;
-
-        if (isActive && !isSelected) {
+      //defaultClickListener isn't applied if the user provides an ngClick expression.
+      function defaultClickListener() {
+        scope.$apply(function() {
           tabsCtrl.select(tabItemCtrl);
+          tabItemCtrl.element.focus();
+        });
+      }
+      function keydownListener(ev) {
+        if (ev.which == Constant.KEY_CODE.SPACE ) {
+          // Fire the click handler to do normal selection if space is pressed
+          element.triggerHandler('click');
+          ev.preventDefault();
 
-        } else if (!isActive && isSelected) {
-          tabsCtrl.deselect(tabItemCtrl);
+        } else if (ev.which === Constant.KEY_CODE.LEFT_ARROW) {
+          var previous = tabsCtrl.previous(tabItemCtrl);
+          previous && previous.element.focus();
+
+        } else if (ev.which === Constant.KEY_CODE.RIGHT_ARROW) {
+          var next = tabsCtrl.next(tabItemCtrl);
+          next && next.element.focus();
         }
-      });
-    }
+      }
 
-    function watchDisabled() {
-      scope.$watch(tabItemCtrl.isDisabled, function disabledWatchAction(isDisabled) {
-        element.attr('aria-disabled', isDisabled);
-      });
-    }
+      // If tabItemCtrl is part of an ngRepeat, move the tabItemCtrl in our internal array
+      // when its $index changes
+      function watchNgRepeatIndex() {
+        // The tabItemCtrl has an isolate scope, so we watch the $index on the parent.
+        scope.$watch('$parent.$index', function $indexWatchAction(newIndex) {
+          tabsCtrl.move(tabItemCtrl, newIndex);
+        });
+      }
 
-    function configureAria() {
-      // Link together the content area and tabItemCtrl with an id
-      var tabId = attr.id || Util.nextUid();
-      var tabContentId = 'content_' + tabId;
-      element.attr({
-        id: tabId,
-        role: 'tabItemCtrl',
-        tabIndex: '-1', //this is also set on select/deselect in tabItemCtrl
-        'aria-controls': tabContentId
-      });
-      tabItemCtrl.contentParent.attr({
-        id: tabContentId,
-        role: 'tabpanel',
-        'aria-labelledby': tabId
-      });
+      function watchActiveAttribute() {
+        scope.$parent.$watch('!!(' + attr.active + ')', function activeWatchAction(isActive) {
+          var isSelected = tabsCtrl.selected() === tabItemCtrl;
 
-      $aria.expect(element, 'aria-label', element.text());
-    }
+          if (isActive && !isSelected) {
+            tabsCtrl.select(tabItemCtrl);
+
+          } else if (!isActive && isSelected) {
+            tabsCtrl.deselect(tabItemCtrl);
+          }
+        });
+      }
+
+      function watchDisabled() {
+        scope.$watch(tabItemCtrl.isDisabled, function disabledWatchAction(isDisabled) {
+          element.attr('aria-disabled', isDisabled);
+        });
+      }
+
+      function configureAria() {
+        // Link together the content area and tabItemCtrl with an id
+        var tabId = attr.id || Util.nextUid();
+        var tabContentId = 'content_' + tabId;
+        element.attr({
+          id: tabId,
+          role: 'tabItemCtrl',
+          tabIndex: '-1', //this is also set on select/deselect in tabItemCtrl
+          'aria-controls': tabContentId
+        });
+        tabItemCtrl.contentParent.attr({
+          id: tabContentId,
+          role: 'tabpanel',
+          'aria-labelledby': tabId
+        });
+
+        $aria.expect(element, 'aria-label', element.text());
+      }
+
+    };
 
   }
 

@@ -106,6 +106,7 @@ material-tab {
    color: white;
   }
   &[disabled] {
+    pointer-events: none;
     color: #6a6a6a;
     opacity: 0.5;
     cursor: default;

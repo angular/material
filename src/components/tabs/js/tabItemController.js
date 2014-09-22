@@ -62,9 +62,10 @@ function TabItemController(scope, element, $compile, $animate) {
     if (self.content.length) {
 
       self.contentParent.append(self.content);
-      self.contentScope = self.content.children().scope();
+      self.contentScope = scope.$parent.$new();
       contentArea.append(self.contentParent);
 
+      $compile(self.contentParent)(self.contentScope);
       Util.disconnectScope(self.contentScope);
 
     }
