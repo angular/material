@@ -59,7 +59,7 @@ function linkTabInk(scope, element, tabsCtrl, $q, $materialEffects) {
 
       inkBar
         .toggleClass('animate', (immediate !== true) )
-        .css(styles)
+        .css(styles);
     }
 
     // Listen for CSS transition completion and announce

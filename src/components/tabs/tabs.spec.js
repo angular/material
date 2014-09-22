@@ -36,11 +36,11 @@ describe('materialTabs directive', function() {
     {
       var tabs         = setup(''),
           selectionBar = tabs.children(0)[2],
-          el           = angular.element(selectionBar )
+          el           = angular.element(selectionBar );
 
       expect( el.hasClass('ng-hide') ).toBeTruthy();
     });
 
-  })
+  });
 
 });

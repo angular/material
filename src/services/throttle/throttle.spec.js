@@ -75,8 +75,18 @@ describe('ngThrottleSpec', function() {
 
     it("should start but NOT end if throttle does not complete",function() {
       var startFn = function(){ started = true;},
+<<<<<<< HEAD
+      endFn = function(){ ended = true;},
+=======
       endFn = function(){ ended = true;};
-      lockFn = function(done){ ; },  // do not callback for completion
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> cf54261... (style): fix JS hint warnings
+=======
+>>>>>>> cf54261... (style): fix JS hint warnings
+=======
+>>>>>>> cf54261... (style): fix JS hint warnings
+      lockFn = function(done){ /* do not callback for completion */ };
 
 
       $throttle({start:startFn, throttle:lockFn, end:endFn})();
@@ -201,7 +211,7 @@ describe('ngThrottleSpec', function() {
         switch(count)
         {
           case 1 :    break;
-          case 2 :    throw new Error("fault_with_throttle");   break;
+          case 2 :    throw new Error("fault_with_throttle");
           case 3 :    done(); break;
         }
       }};
@@ -231,7 +241,7 @@ describe('ngThrottleSpec', function() {
       startFn = function(){
         return $timeout(function(){
           sCount++;
-        },100)
+        },100);
       },
       concat = $throttle({start:startFn})( done );
 
@@ -249,7 +259,7 @@ describe('ngThrottleSpec', function() {
         return $timeout(function(){
           sCount++;
           done();
-        },100)
+        },100);
       },
       concat = $throttle({start:startFn})( done );
 
@@ -267,13 +277,13 @@ describe('ngThrottleSpec', function() {
         return $timeout(function(){
           sCount--;
           done();
-        },100)
+        },100);
       },
       endFn = function(done){
         return $timeout(function(){
           eCount++;
           done();
-        },100)
+        },100);
       };
 
       $throttle({start:startFn, end:endFn})( done );

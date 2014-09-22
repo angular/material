@@ -101,7 +101,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
    */
   function selectedElement() {
     return findElementFor( selected );
-  };
+  }
 
 
   /**
@@ -209,7 +209,7 @@ function TabsController($scope, $attrs, $materialComponentRegistry, $timeout ) {
     // Turn off all tabs (if current active)
     angular.forEach(list.items(), deactivate);
 
-    if ( tab != null ) {
+    if ( tab !== null ) {
       // Activate the specified tab (or next available)
       selected = activate(tab.disabled ? list.next(tab, isEnabled) : tab);
 
