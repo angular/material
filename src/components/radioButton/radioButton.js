@@ -53,7 +53,7 @@ function materialRadioGroupDirective() {
 
   return {
     restrict: 'E',
-    controller: RadioGroupController,
+    controller: ['$element', RadioGroupController],
     require: ['materialRadioGroup', '?ngModel'],
     link: link
   };
@@ -65,12 +65,11 @@ function materialRadioGroupDirective() {
       };
 
     function keydownListener(ev) {
-
-      if (ev.which === Constant.KEY_CODE.LEFT_ARROW) {
+      if (ev.which === Constant.KEY_CODE.LEFT_ARROW || ev.which === Constant.KEY_CODE.UP_ARROW) {
         ev.preventDefault();
         rgCtrl.selectPrevious(element);
       }
-      else if (ev.which === Constant.KEY_CODE.RIGHT_ARROW) {
+      else if (ev.which === Constant.KEY_CODE.RIGHT_ARROW || ev.which === Constant.KEY_CODE.DOWN_ARROW) {
         ev.preventDefault();
         rgCtrl.selectNext(element);
       }
@@ -85,8 +84,9 @@ function materialRadioGroupDirective() {
     .on('keydown', keydownListener);
   }
 
-  function RadioGroupController() {
+  function RadioGroupController($element) {
     this._radioButtonRenderFns = [];
+    this.$element = $element;
   }
 
   function createRadioGroupControllerProto() {
@@ -122,6 +122,9 @@ function materialRadioGroupDirective() {
       },
       selectPrevious : function(element) {
         return selectButton('previous', element);
+      },
+      setActiveDescendant: function (radioId) {
+        this.$element.attr('aria-activedescendant', radioId);
       }
     };
   }
@@ -221,6 +224,8 @@ function materialRadioButtonDirective($aria) {
   function link(scope, element, attr, rgCtrl) {
     var lastChecked;
 
+    configureAria(element, scope);
+
     rgCtrl.add(render);
     attr.$observe('value', render);
 
@@ -228,10 +233,7 @@ function materialRadioButtonDirective($aria) {
       .on('click', listener)
       .on('$destroy', function() {
         rgCtrl.remove(render);
-      })
-      .attr('role', 'radio');
-
-    $aria.expect(element, 'aria-label', element.text());
+      });
 
     function listener(ev) {
       if (element[0].hasAttribute('disabled')) return;
@@ -250,8 +252,32 @@ function materialRadioButtonDirective($aria) {
       element.attr('aria-checked', checked);
       if (checked) {
         element.addClass(CHECKED_CSS);
+        rgCtrl.setActiveDescendant(element.attr('id'));
       } else {
         element.removeClass(CHECKED_CSS);
+      }
+    }
+    /**
+     * Inject ARIA-specific attributes appropriate for each radio button
+     */
+    function configureAria( element, scope ){
+      scope.ariaId = buildAriaID();
+
+      element.attr({
+        'id' :  scope.ariaId,
+        'role' : 'radio',
+        'aria-checked' : 'false'
+      });
+
+      $aria.expect(element, 'aria-label', element.text());
+
+      /**
+       * Build a unique ID for each radio button that will be used with aria-activedescendant.
+       * Preserve existing ID if already specified.
+       * @returns {*|string}
+       */
+      function buildAriaID() {
+        return attr.id || ( 'radio' + "_" + Util.nextUid() );
       }
     }
   }

@@ -19,7 +19,7 @@ describe('radioButton', function() {
     expect(rbElements.eq(1).hasClass(CHECKED_CSS)).toEqual(true);
   }));
 
-  it('should set aria roles', inject(function($compile, $rootScope) {
+  it('should set roles', inject(function($compile, $rootScope) {
 
     var element = $compile('<material-radio-group ng-model="color">' +
                             '<material-radio-button value="blue"></material-radio-button>' +
@@ -31,7 +31,7 @@ describe('radioButton', function() {
     expect(rbGroupElement.find('material-radio-button').eq(0).attr('role')).toEqual('radio');
   }));
 
-  it('should set aria-check attributes', inject(function($compile, $rootScope) {
+  it('should set aria attributes', inject(function($compile, $rootScope) {
     var element = $compile('<material-radio-group ng-model="color">' +
                             '<material-radio-button value="blue"></material-radio-button>' +
                             '<material-radio-button value="green"></material-radio-button>' +
@@ -45,6 +45,9 @@ describe('radioButton', function() {
 
     expect(rbElements.eq(0).attr('aria-checked')).toEqual('false');
     expect(rbElements.eq(1).attr('aria-checked')).toEqual('true');
+
+    expect(element.attr('aria-activedescendant')).toEqual(rbElements.eq(1).attr('id'));
+    expect(element.attr('aria-activedescendant')).not.toEqual(rbElements.eq(0).attr('id'));
   }));
 
   it('should be operable via arrow keys', inject(function($compile, $rootScope) {
