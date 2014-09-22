@@ -10,24 +10,8 @@ function AriaService($log) {
   var defaultValueTemplate = 'Default value was set: %s="%s".';
 
   return {
-
     expect : expectAttribute,
-    update : assignAttributes
   };
-
-  /**
-   * Assign 1..n ARIA values to the target element
-   * @param element
-   * @param options
-   */
-  function assignAttributes(element, options )
-  {
-    angular.forEach(options, Util.spread(function( attrValue, attrName ) {
-       element.attr(attrName,  attrValue);
-    }));
-
-    return element;
-  }
 
   /**
    * Check if expected ARIA has been specified on the target element
@@ -53,10 +37,9 @@ function AriaService($log) {
   }
 
 
-
   /**
    * Gets the tag definition from a node's outerHTML
-   * @example getTagDefinition(
+   * @example getTagString(
    *   '<material-button foo="bar">Hello</material-button>'
    * ) // => '<material-button foo="bar">'
    */

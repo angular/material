@@ -1,14 +1,13 @@
 @import
 
 // Theme
-"theme/theme",
+"core/style/theme/theme",
 
 // Base
-"base/mixins",
-"base/structure",
-"base/table",
-"base/layout",
-
+"core/style/mixins",
+"core/style/structure",
+"core/style/table",
+"core/style/layout",
 
 // Components
 "components/animate/effects",

@@ -60,6 +60,9 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
   }
 
   function attach(element, options) {
+    // Parent element with noink attr? Abort.
+    if (element.controller('noink')) return;
+
     options = angular.extend({
       mousedown: true,
       hover: true,
@@ -79,7 +82,7 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
     }
 
     function rippleIsAllowed() {
-      return !element.controller('noink') && !Util.isDisabled(element);
+      return !Util.isParentDisabled(element);
     }
 
     function enableMousedown() {
@@ -87,7 +90,6 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
 
       function onPointerDown(ev) {
         if (!rippleIsAllowed()) return;
-
 
         var rippleEl = createRippleFromEvent(ev);
         var ripplePauseTimeout = $timeout(pauseRipple, options.mousedownPauseTime, false);

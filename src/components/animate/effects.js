@@ -5,9 +5,7 @@
  *
  * Ink and Popup Effects
  */
-angular.module('material.animations', [
-  'material.services.throttle'
-])
+angular.module('material.animations', [])
   .service('$materialEffects', [ 
     '$rootElement', 
     '$$rAF', 

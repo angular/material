@@ -57,6 +57,7 @@ material-input-group,
   label {
     -webkit-font-smoothing: antialiased;
     z-index: 1;
+    pointer-events: none;
 
     @include transform-translate3d(0, $input-line-height, 0);
     @include transform-origin(left, center);

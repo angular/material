@@ -75,11 +75,12 @@ function materialInputDirective() {
       // When the input value changes, check if it "has" a value, and 
       // set the appropriate class on the input group
       if (ngModelCtrl) {
-        //Add a $formatter so we don't use up the render function
-        ngModelCtrl.$formatters.push(function(value) {
-          inputGroupCtrl.setHasValue(!!value);
-          return value;
+        ngModelCtrl.$viewChangeListeners.push(function() {
+          inputGroupCtrl.setHasValue(!!ngModelCtrl.$viewValue);
         });
+        ngModelCtrl.$render = function() {
+          inputGroupCtrl.setHasValue(!!ngModelCtrl.$viewValue);
+        };
       }
       element.on('input', function() {
         inputGroupCtrl.setHasValue(!!element.val());

@@ -193,20 +193,13 @@ function materialSidenavDirective($timeout) {
 
         if (isOpen) {
           parent.append(backdrop);
-          backdrop.on( EVENT.CLICK, onBackdropClick );
-          parent.on( EVENT.KEY_DOWN, onKeyDown );
+          backdrop.on('click', close);
+          parent.on('keydown', onKeyDown);
         } else {
           backdrop.remove();
-          backdrop.off( EVENT.CLICK, onBackdropClick);
-          parent.off( EVENT.KEY_DOWN, onKeyDown );
+          backdrop.off('click', close);
+          parent.off('keydown', onKeyDown);
         }
-      }
-
-      /**
-       *  Auto-close the sideNav when the backdrop mask is clicked
-       */
-      function onBackdropClick() {
-        close();
       }
 
       /**

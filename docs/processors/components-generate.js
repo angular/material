@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var path = require('canonical-path');
 var ngModuleData = require('../util/ngModuleData');
+var sass = require('node-sass');
 
 module.exports = {
   name: 'components-generate',
@@ -107,13 +108,25 @@ module.exports = {
             .remove({ basePath: 'index.html' })
             .first();
 
-            var moduleDoc = _.find(demoDocs, function(doc) {
-              return !!doc.module;
-            });
+          var moduleDoc = _.find(demoDocs, function(doc) {
+            return !!doc.module;
+          });
 
           demo.module = moduleDoc && moduleDoc.module || '';
           var files = _.map(demoDocs, generateDemoFile);
           var indexFile = generateDemoFile(indexDoc);
+
+          // Wrap the css docs in a '.demoModule {' rule and compile with sass.
+          if (demo.module) {
+            _.filter(files, { fileType: 'css' })
+              .forEach(function(file) {
+                var moduleSelector = '.' + demo.module + ' {';
+                var content = moduleSelector + '\n' + file.content + '\n}';
+                file.content = sass.renderSync({
+                  data: content
+                });
+              });
+          }
 
           renderedDocs = renderedDocs
             .concat(indexFile)
