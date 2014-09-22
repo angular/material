@@ -31,9 +31,10 @@ input {
   font-family: $font-family;
 }
 
-body {
+html body {
   margin: 0;
-  padding: 0px;
+  padding: 0;
+  outline: none;
 }
 
 .inset {
@@ -46,13 +47,7 @@ button {
 
 a {
   background: transparent;
-  &:focus {
-    outline: thin dotted;
-  }
-  &:hover,
-  &:active {
-    outline: none;
-  }
+  outline: none;
 }
 
 h1 {
