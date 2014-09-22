@@ -19,6 +19,7 @@ DocsApp
         if (attr.code) {
           code = scope.$eval(attr.code);
         }
+        if (!code) return;
         var highlightedCode = hljs.highlight(attr.language || attr.lang, code.trim());
         highlightedCode.value = highlightedCode.value.replace(/=<span class="hljs-value">""<\/span>/gi, '');
         codeElement.append(highlightedCode.value).addClass('highlight');

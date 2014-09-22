@@ -6,8 +6,6 @@
  * Tabs
  */
 angular.module('material.components.tabs', [
-  'material.animations',
-  'material.services.attrBind',
-  'material.services.registry'
+  'material.animations'
 ]);
 

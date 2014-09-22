@@ -125,7 +125,7 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
 
     $aria.expect(element, 'aria-label');
     element.attr('tabIndex', 0);
-    element.attr('role', Constant.ARIA.ROLE.SLIDER);
+    element.attr('role', 'slider');
     element.on('keydown', keydownListener);
 
     var hammertime = new Hammer(element[0], {

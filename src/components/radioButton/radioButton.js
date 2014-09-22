@@ -79,7 +79,7 @@ function materialRadioGroupDirective() {
     rgCtrl.init(ngModelCtrl);
 
     element.attr({
-      'role': Constant.ARIA.ROLE.RADIO_GROUP,
+      'role': 'radiogroup',
       'tabIndex': '0'
     })
     .on('keydown', keydownListener);
@@ -229,9 +229,9 @@ function materialRadioButtonDirective($aria) {
       .on('$destroy', function() {
         rgCtrl.remove(render);
       })
-      .attr('role', Constant.ARIA.ROLE.RADIO);
+      .attr('role', 'radio');
 
-    $aria.expect(element, Constant.ARIA.PROPERTY.LABEL, element.text());
+    $aria.expect(element, 'aria-label', element.text());
 
     function listener(ev) {
       if (element[0].hasAttribute('disabled')) return;
@@ -247,7 +247,7 @@ function materialRadioButtonDirective($aria) {
         return;
       }
       lastChecked = checked;
-      element.attr(Constant.ARIA.PROPERTY.CHECKED, checked);
+      element.attr('aria-checked', checked);
       if (checked) {
         element.addClass(CHECKED_CSS);
       } else {

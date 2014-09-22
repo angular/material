@@ -219,10 +219,8 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
      * Inject ARIA-specific attributes appropriate for Dialogs
      */
     function configureAria(element) {
-      var ROLE = Constant.ARIA.ROLE;
-
-      $aria.update(element, {
-        'role': ROLE.DIALOG
+      element.attr({
+        'role': 'dialog'
       });
 
       var dialogContent = element.find('.dialog-content');

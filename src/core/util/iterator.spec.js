@@ -280,10 +280,10 @@ describe('iterator', function() {
       expect(iter.findBy("name","Naomi").length).toBe(1);
 
       // Record not found
-      expect(iter.findBy("gender","Ryan")).toBeNull();
+      expect(iter.findBy("gender","Ryan").length).toBe(0);
 
       // Property not found
-      expect(iter.findBy("age",27)).toBeNull();
+      expect(iter.findBy("age",27).length).toBe(0);
 
     });
 

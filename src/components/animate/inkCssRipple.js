@@ -60,6 +60,9 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
   }
 
   function attach(element, options) {
+    // Parent element with noink attr? Abort.
+    if (element.controller('noink')) return angular.noop;
+
     options = angular.extend({
       mousedown: true,
       hover: true,
@@ -78,53 +81,34 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
       enableMousedown();
     }
 
+    // Publish self-detach method if desired...
+    return function detach() {
+      enableMousedown(false);
+
+      rippleContainer
+         .parent
+         .remove( rippleContainer );
+    }
+
+    function enableMousedown(active) {
+      if ( !!active) element.on(POINTERDOWN_EVENT, onPointerDown);
+      else           element.off(POINTERDOWN_EVENT, onPointerDown);
+    }
+
+
     function rippleIsAllowed() {
-      return !element.controller('noink') && !Util.isDisabled(element);
+      return !Util.isParentDisabled(element);
     }
 
-    function enableMousedown() {
-      element.on(POINTERDOWN_EVENT, onPointerDown);
-
-      function onPointerDown(ev) {
-        if (!rippleIsAllowed()) return;
-
-
-        var rippleEl = createRippleFromEvent(ev);
-        var ripplePauseTimeout = $timeout(pauseRipple, options.mousedownPauseTime, false);
-        rippleEl.on('$destroy', cancelRipplePause);
-
-        // Stop listening to pointer down for now, until the user lifts their finger/mouse
-        element.off(POINTERDOWN_EVENT, onPointerDown);
-        element.on(POINTERUP_EVENT, onPointerUp);
-
-        function onPointerUp() {
-          cancelRipplePause();
-          rippleEl.css($materialEffects.ANIMATION_PLAY_STATE, 'running');
-          element.off(POINTERUP_EVENT, onPointerUp);
-          element.on(POINTERDOWN_EVENT, onPointerDown);
-        }
-        function pauseRipple() {
-          rippleEl.css($materialEffects.ANIMATION_PLAY_STATE, 'paused');
-        }
-        function cancelRipplePause() {
-          $timeout.cancel(ripplePauseTimeout);
-        }
-      }
-    }
-
-    function createRippleFromEvent(ev) {
-      ev = ev.touches ? ev.touches[0] : ev;
-      return createRipple(ev.pageX, ev.pageY, true);
-    }
     function createRipple(left, top, positionsAreAbsolute) {
 
       var rippleEl = angular.element('<div class="material-ripple">')
-        .css($materialEffects.ANIMATION_DURATION, options.animationDuration + 'ms')
-        .css($materialEffects.ANIMATION_NAME, options.animationName)
-        .css($materialEffects.ANIMATION_TIMING, options.animationTimingFunction)
-        .on($materialEffects.ANIMATIONEND_EVENT, function() {
-          rippleEl.remove();
-        });
+            .css($materialEffects.ANIMATION_DURATION, options.animationDuration + 'ms')
+            .css($materialEffects.ANIMATION_NAME, options.animationName)
+            .css($materialEffects.ANIMATION_TIMING, options.animationTimingFunction)
+            .on($materialEffects.ANIMATIONEND_EVENT, function() {
+              rippleEl.remove();
+            });
 
       if (!rippleContainer) {
         rippleContainer = angular.element('<div class="material-ripple-container">');
@@ -158,6 +142,36 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
       rippleEl.css(css);
 
       return rippleEl;
+    }
+
+    function onPointerDown(ev) {
+      if (!rippleIsAllowed()) return;
+
+      var rippleEl = createRippleFromEvent(ev);
+      var ripplePauseTimeout = $timeout(pauseRipple, options.mousedownPauseTime, false);
+      rippleEl.on('$destroy', cancelRipplePause);
+
+      // Stop listening to pointer down for now, until the user lifts their finger/mouse
+      element.off(POINTERDOWN_EVENT, onPointerDown);
+      element.on(POINTERUP_EVENT, onPointerUp);
+
+      function onPointerUp() {
+        cancelRipplePause();
+        rippleEl.css($materialEffects.ANIMATION_PLAY_STATE, 'running');
+        element.off(POINTERUP_EVENT, onPointerUp);
+        element.on(POINTERDOWN_EVENT, onPointerDown);
+      }
+      function pauseRipple() {
+        rippleEl.css($materialEffects.ANIMATION_PLAY_STATE, 'paused');
+      }
+      function cancelRipplePause() {
+        $timeout.cancel(ripplePauseTimeout);
+      }
+
+      function createRippleFromEvent(ev) {
+        ev = ev.touches ? ev.touches[0] : ev;
+        return createRipple(ev.pageX, ev.pageY, true);
+      }
     }
   }
 

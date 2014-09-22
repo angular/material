@@ -58,12 +58,7 @@ function($q, $http, $compile, $templateCache) {
           .then(function(response) { return response.data; });
       }))
       .then(function(styles) {
-        styles = styles
-          .join('\n') //join styles as one string
-          .replace(/.+?({|,)\w*$/g, function($1) {
-            // change ' .selector {' to '.buttonsDemo1 .selector {'
-            return demoSelector + $1;
-          });
+        styles = styles.join('\n'); //join styles as one string
 
         var styleElement = angular.element('<style>' + styles + '</style>');
         document.body.appendChild(styleElement[0]);

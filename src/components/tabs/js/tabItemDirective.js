@@ -1,10 +1,11 @@
 angular.module('material.components.tabs')
-  .directive('materialTab', [
-    '$attrBind',
-    '$aria',
-    '$materialInkRipple',
-    TabDirective  
-  ]);
+
+.directive('materialTab', [
+  '$materialInkRipple', 
+  '$compile',
+  '$aria',
+  MaterialTabDirective
+]);
 
 /**
  * @ngdoc directive
@@ -15,7 +16,7 @@ angular.module('material.components.tabs')
  * @restrict E
  *
  * @description
- * `<material-tab>` is the nested directive used [within `<material-tabs>`] to specify each tab with a **label** and optional *view content*
+ * `<material-tab>` is the nested directive used [within `<material-tabs>`] to specify each tab with a **label** and optional *view content*.
  *
  * If the `label` attribute is not specified, then an optional `<material-tab-label>` tag can be used to specified more
  * complex tab header markup. If neither the **label** nor the **material-tab-label** are specified, then the nested
@@ -56,184 +57,155 @@ angular.module('material.components.tabs')
  * </hljs>
  *
  */
-function TabDirective( $attrBind, $aria, $materialInkRipple) {
-  var noop = angular.noop;
-
+function MaterialTabDirective($materialInkRipple, $compile, $aria) {
   return {
     restrict: 'E',
-    replace: false,
-    require: "^materialTabs",
-    transclude: 'true',
-    scope: true,
-    link: linkTab,
-    template:
-      '<material-tab-label></material-tab-label>'
+    require: ['materialTab', '^materialTabs'],
+    controller: '$materialTab',
+    scope: {
+      onSelect: '&',
+      onDeselect: '&',
+      label: '@'
+    },
+    compile: compile
   };
 
-  function linkTab(scope, element, attrs, tabsCtrl, $transclude) {
-    var defaults = { active: false, disabled: false, deselected: noop, selected: noop };
+  function compile(element, attr) {
+    var tabLabel = element.find('material-tab-label');
 
-    // Since using scope=true for inherited new scope,
-    // then manually scan element attributes for forced local mappings...
-
-    $attrBind(scope, attrs, {
-      label: '@?',
-      active: '=?',
-      disabled: '=?ngDisabled',
-      deselected: '&onDeselect',
-      selected: '&onSelect'
-    }, defaults);
-
-    scope.$watch('active', function(isActive) {
-      element.toggleClass('active', isActive);
-    });
-
-    $materialInkRipple.attachButtonBehavior(element);
-
-    configureWatchers();
-    updateTabContent(scope);
-
-    // Update ARIA values for each tab element
-    configureAria(element, scope);
-
-    element.on('click', function onRequestSelect()
-      {
-        // Click support for entire <material-tab /> element
-        if ( !scope.disabled ) tabsCtrl.select(scope);
-        else                   tabsCtrl.focusSelected();
-
-      })
-      .on('keydown', function onRequestSelect(event)
-      {
-        if (event.which == Constant.KEY_CODE.SPACE )            tabsCtrl.select(scope);
-        else if (event.which === Constant.KEY_CODE.LEFT_ARROW)  tabsCtrl.previous(scope);
-        else if (event.which === Constant.KEY_CODE.RIGHT_ARROW) tabsCtrl.next(scope);
-
-      });
-
-    tabsCtrl.add(scope, element);
-
-    // **********************************************************
-    // Private Methods
-    // **********************************************************
-
-
-    /**
-     * Inject ARIA-specific attributes appropriate for each Tab button
-     */
-    function configureAria( element, scope ){
-      var ROLE = Constant.ARIA.ROLE;
-
-      scope.ariaId = buildAriaID();
-      $aria.update( element, {
-        'id' :  scope.ariaId,
-        'role' : ROLE.TAB,
-        'aria-selected' : false,
-        'aria-controls' : "content_" + scope.ariaId
-      });
-
-      /**
-       * Build a unique ID for each Tab that will be used for WAI-ARIA.
-       * Preserve existing ID if already specified.
-       * @returns {*|string}
-       */
-      function buildAriaID() {
-        return attrs.id || ( ROLE.TAB + "_" + tabsCtrl.$scope.$id + "_" + scope.$id );
-      }
+    // If a tab label element is found, remove it for later re-use.
+    if (tabLabel.length) {
+      tabLabel.remove();
+    // Otherwise, try to use attr.label as the label
+    } else if (angular.isDefined(attr.label)) {
+      tabLabel = angular.element('<material-tab-label>').html(attr.label);
+    // If nothing is found, use the tab's content as the label
+    } else {
+      tabLabel = angular.element('<material-tab-label>')
+        .append(element.contents().remove());
     }
 
-    /**
-     * Auto select the next tab if the current tab is active and
-     * has been disabled.
-     *
-     * Set tab index for the current tab (0), with all other tabs
-     * outside of the tab order (-1)
-     *
-     */
-    function configureWatchers() {
-      var unwatch = scope.$watch('disabled', function (isDisabled) {
-        if (scope.active && isDisabled) {
-          tabsCtrl.next(scope);
+    // Everything that's left as a child is the tab's content.
+    var tabContent = element.contents().remove();
+
+    return function postLink(scope, element, attr, ctrls) {
+
+      var tabItemCtrl = ctrls[0]; // Controller for THIS tabItemCtrl
+      var tabsCtrl = ctrls[1]; // Controller for ALL tabs
+
+      transcludeTabContent();
+
+      var detachRippleFn = $materialInkRipple.attachButtonBehavior(element);
+      tabsCtrl.add(tabItemCtrl);
+      scope.$on('$destroy', function() {
+        detachRippleFn();
+        tabsCtrl.remove(tabItemCtrl);
+      });
+
+      if (!angular.isDefined(attr.ngClick)) element.on('click', defaultClickListener);
+      element.on('keydown', keydownListener);
+
+      if (angular.isNumber(scope.$parent.$index)) watchNgRepeatIndex();
+      if (angular.isDefined(attr.active)) watchActiveAttribute();
+      watchDisabled();
+
+      configureAria();
+
+      function transcludeTabContent() {
+        // Clone the label we found earlier, and $compile and append it
+        var label = tabLabel.clone();
+        element.append(label);
+        $compile(label)(scope.$parent);
+
+        // Clone the content we found earlier, and mark it for later placement into
+        // the proper content area.
+        tabItemCtrl.content = tabContent.clone();
+      }
+
+      //defaultClickListener isn't applied if the user provides an ngClick expression.
+      function defaultClickListener() {
+        scope.$apply(function() {
+          tabsCtrl.select(tabItemCtrl);
+          tabItemCtrl.element.focus();
+        });
+      }
+      function keydownListener(ev) {
+        if (ev.which == Constant.KEY_CODE.SPACE ) {
+          // Fire the click handler to do normal selection if space is pressed
+          element.triggerHandler('click');
+          ev.preventDefault();
+
+        } else if (ev.which === Constant.KEY_CODE.LEFT_ARROW) {
+          var previous = tabsCtrl.previous(tabItemCtrl);
+          previous && previous.element.focus();
+
+        } else if (ev.which === Constant.KEY_CODE.RIGHT_ARROW) {
+          var next = tabsCtrl.next(tabItemCtrl);
+          next && next.element.focus();
         }
-      });
-
-      scope.$watch('active', function (isActive) {
-
-        $aria.update( element, {
-          'aria-selected' : isActive,
-          'tabIndex' : isActive === true ? 0 : -1
-        });
-
-      });
-
-      scope.$on("$destroy", function () {
-        unwatch();
-        tabsCtrl.remove(scope);
-      });
-    }
-
-    /**
-     * Transpose the optional `label` attribute value or materialTabHeader or `content` body
-     * into the body of the materialTabButton... all other content is saved in scope.content
-     * and used by TabsController to inject into the `tabs-content` container.
-     */
-    function updateTabContent(scope) {
-      var tab = scope;
-
-      // Check to override label attribute with the content of the <material-tab-header> node,
-      // If a materialTabHeader is not specified, then the node will be considered
-      // a <material-view> content element...
-      $transclude(function ( contents ) {
-
-        // Transient references...
-        tab.content = [ ];
-
-        angular.forEach(contents, function (node) {
-
-          if (!isNodeEmpty(node)) {
-            if (isNodeType(node, 'material-tab-label')) {
-              // Simulate use of `label` attribute
-
-              tab.label = node.childNodes;
-
-            } else {
-              // Transient references...
-              //
-              // Attach to scope for future transclusion into materialView(s)
-              // We need the bound scope for the content elements; which is NOT
-              // the scope of tab or material-view container...
-
-              tab.content.push(node);
-            }
-          }
-        });
-
-      });
-
-      // Prepare to assign the materialTabButton content
-      // Use the label attribute or fallback to TabHeader content
-
-      var cntr = angular.element(element[0].querySelector('material-tab-label'));
-
-      if (angular.isDefined(scope.label)) {
-        // The `label` attribute is the default source
-
-        cntr.append(scope.label);
-
-        delete scope.label;
-
-      } else {
-
-        // NOTE: If not specified, all markup and content is assumed
-        // to be used for the tab label.
-
-        angular.forEach(scope.content, function (node) {
-          cntr.append(node);
-        });
-
-        delete scope.content;
       }
-    }
+
+      // If tabItemCtrl is part of an ngRepeat, move the tabItemCtrl in our internal array
+      // when its $index changes
+      function watchNgRepeatIndex() {
+        // The tabItemCtrl has an isolate scope, so we watch the $index on the parent.
+        scope.$watch('$parent.$index', function $indexWatchAction(newIndex) {
+          tabsCtrl.move(tabItemCtrl, newIndex);
+        });
+      }
+
+      function watchActiveAttribute() {
+        var unwatch = scope.$parent.$watch('!!(' + attr.active + ')', activeWatchAction);
+        scope.$on('$destroy', unwatch);
+        
+        function activeWatchAction(isActive) {
+          var isSelected = tabsCtrl.selected() === tabItemCtrl;
+
+          if (isActive && !isSelected) {
+            tabsCtrl.select(tabItemCtrl);
+          } else if (!isActive && isSelected) {
+            tabsCtrl.deselect(tabItemCtrl);
+          }
+        }
+      }
+
+      function watchDisabled() {
+        scope.$watch(tabItemCtrl.isDisabled, disabledWatchAction);
+        
+        function disabledWatchAction(isDisabled) {
+          element.attr('aria-disabled', isDisabled);
+
+          // Auto select `next` tab when disabled
+          var isSelected = (tabsCtrl.selected() === tabItemCtrl);
+          if (isSelected && isDisabled) {
+            tabsCtrl.select(tabsCtrl.next() || tabsCtrl.previous());
+          }
+
+        }
+      }
+
+      function configureAria() {
+        // Link together the content area and tabItemCtrl with an id
+        var tabId = attr.id || Util.nextUid();
+        var tabContentId = 'content_' + tabId;
+        element.attr({
+          id: tabId,
+          role: 'tabItemCtrl',
+          tabIndex: '-1', //this is also set on select/deselect in tabItemCtrl
+          'aria-controls': tabContentId
+        });
+        tabItemCtrl.contentContainer.attr({
+          id: tabContentId,
+          role: 'tabpanel',
+          'aria-labelledby': tabId
+        });
+
+        $aria.expect(element, 'aria-label', element.text());
+      }
+
+    };
 
   }
+
 }
+

@@ -93,14 +93,14 @@ function MaterialCheckboxDirective(inputDirectives, $materialInkRipple, $aria) {
     }, attr, [ngModelCtrl]);
 
     // We can't chain element.attr here because of a bug with jqLite
-    element.attr(Constant.ARIA.PROPERTY.CHECKED, checked);
+    element.attr('aria-checked', checked);
     element.attr('role', attr.type);
     element.attr('tabIndex', attr.tabIndex);
     element.on('click', listener);
     element.on('keypress', keypressHandler);
     ngModelCtrl.$render = render;
 
-    $aria.expect(element, Constant.ARIA.PROPERTY.LABEL, element.text());
+    $aria.expect(element, 'aria-label', element.text());
 
     function keypressHandler(ev) {
       if(ev.which === Constant.KEY_CODE.SPACE) {
@@ -120,7 +120,7 @@ function MaterialCheckboxDirective(inputDirectives, $materialInkRipple, $aria) {
 
     function render() {
       checked = ngModelCtrl.$viewValue;
-      element.attr(Constant.ARIA.PROPERTY.CHECKED, checked);
+      element.attr('aria-checked', checked);
       if(checked) {
         element.addClass(CHECKED_CSS);
       } else {

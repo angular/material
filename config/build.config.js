@@ -27,7 +27,7 @@ module.exports = {
       return !!module;
     }),
 
-  componentsModule: "angular.module('ngMaterial', [ 'ng', 'ngAnimate', 'material.services.attrBind', 'material.services.compiler', 'material.services.registry', 'material.services.throttle', 'material.decorators', 'material.services.aria', <%= components.join(',') %>]);\n",
+  componentsModule: "angular.module('ngMaterial', [ 'ng', 'ngAnimate', 'material.services.attrBind', 'material.services.compiler', 'material.services.registry', 'material.decorators', 'material.services.aria', <%= components.join(',') %>]);\n",
 
   dist: 'dist',
 
@@ -64,9 +64,8 @@ module.exports = {
     //into the build
     js: [
       //Utilities
-      'src/base/iterator.js',
-      'src/base/utils.js',
-      'src/base/constants.js',
+      'src/core/**/*.js',
+      '!src/core/**/*.spec.js',
 
       // Ink Components
       'src/components/animate/effects.js',

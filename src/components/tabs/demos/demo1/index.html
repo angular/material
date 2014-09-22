@@ -1,6 +1,6 @@
 <div ng-controller="AppCtrl">
 
-    <material-tabs selected="selectedIndex"  center>
+    <material-tabs selected="data.selectedIndex"  center>
         <material-tab label="ITEM ONE"></material-tab>
         <material-tab label="ITEM TWO"></material-tab>
         <material-tab label="ITEM THREE" ></material-tab>
@@ -13,7 +13,7 @@
         <material-tab label="ITEM TEN"></material-tab>
     </material-tabs>
 
-    <div class="animate-switch-container" ng-switch on="selectedIndex">
+    <div class="animate-switch-container" ng-switch on="data.selectedIndex">
         <div class="animate-switch tab1" ng-switch-when="0">
             View for Item #1<br/>
             Selection index = 0
@@ -54,26 +54,18 @@
             View for Item #10<br/>
             Selection index = 9
         </div>
-        <div class="animate-switch tab1" ng-switch-when="10">
-            View for Item #9<br/>
-            Selection index = 8
-        </div>
-        <div class="animate-switch tab2" ng-switch-when="11">
-            View for Item #10<br/>
-            Selection index = 9
-        </div>
     </div>
 
 
     <div layout="vertical" layout-padding style="margin-top: 10px;">
         <material-input-group>
             <label>SelectedIndex</label>
-            <material-input type="text" ng-model="selectedIndex"></material-input>
+            <input type="number" ng-model="data.selectedIndex">
         </material-input-group>
 
         <material-checkbox ng-model="locked" aria-label="Disabled">
-          Disable Tab #4? (will auto-deselect on disable)
-        </material-checkbox> 
+          Disable Tab #4?
+        </material-checkbox>
     </div>
 
 
