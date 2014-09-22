@@ -1,8 +1,6 @@
 <div ng-controller="AppCtrl" class="sample">
 
     <material-tabs selected="selectedIndex" noink>
-        <img ng-src="/img/angular.png" class="float-logo">
-
         <material-tab ng-repeat="tab in tabs"
                  on-select="onTabSelected(tab)"
                  on-deselect="announceDeselected(tab)"
@@ -44,4 +42,5 @@
       </form>
 
     </div>
+
 </div>

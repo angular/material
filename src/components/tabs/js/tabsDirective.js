@@ -1,22 +1,4 @@
-/* Disable Tab Pagination */
-/**
- * @ngdoc module
- * @name material.components.tabs
- * @description
- *
- * Tabs
- */
 angular.module('material.components.tabs')
-  .directive('materialTabs', [
-    '$q',
-    '$window',
-    '$timeout',
-    '$compile',
-    '$materialEffects',
-    '$$rAF',
-    '$aria',
-    TabsDirective
-  ]);
 
 /**
  * @ngdoc directive
@@ -63,7 +45,6 @@ angular.module('material.components.tabs')
  * @param {integer=} selected Index of the active/selected tab
  * @param {boolean=} noink Flag indicates use of ripple ink effects
  * @param {boolean=} nobar Flag indicates use of ink bar effects
- * @param {boolean=} nostretch Flag indicates use of elastic animation for inkBar width and position changes
  * @param {string=}  align-tabs Attribute to indicate position of tab buttons: bottom or top; default is `top`
  *
  * @usage
@@ -92,375 +73,77 @@ angular.module('material.components.tabs')
  * </hljs>
  *
  */
-function TabsDirective($q, $window, $timeout, $compile, $materialEffects, $$rAF, $aria) {
+.directive('materialTabs', [
+  '$parse',
+  TabsDirective
+]);
 
+function TabsDirective($parse) {
   return {
     restrict: 'E',
-    replace: false,
-    transclude: 'true',
-
+    controller: '$materialTabs',
+    require: 'materialTabs',
+    transclude: true,
     scope: {
-      $selIndex: '=?selected'
+      selectedIndex: '=?selected'
     },
+    template: 
+      '<section class="tabs-header" ' +
+        'ng-class="{\'tab-paginating\': pagination.active}">' +
 
-    compile: compileTabsFn,
-    controller: [ '$scope', '$attrs', '$materialComponentRegistry', '$timeout', '$$rAF', TabsController ],
+        '<div class="tab-paginator prev" ' +
+          'ng-if="pagination.active && pagination.hasPrev" ' +
+          'ng-click="pagination.clickPrevious()">' +
+        '</div>' +
 
-    template:
-      '<div class="tabs-header" ng-class="{\'tab-paginating\': pagination.active}">' +
+        // overflow: hidden container when paginating
+        '<div class="tabs-header-items-container" material-tabs-pagination>' +
+          // flex container for <material-tab> elements
+          '<div class="tabs-header-items" ng-transclude></div>' +
+          '<material-tabs-ink-bar></material-tabs-ink-bar>' +
+        '</div>' +
 
-      '  <div class="tab-paginator prev" ng-if="pagination.active" ng-click="pagination.hasPrev && pagination.prev()" ng-class="{active: pagination.hasPrev}">' +
-      '  </div>' +
-      '  <div class="tabs-header-items-container">' +
-      '    <div class="tabs-header-items"></div>' +
-      '  </div>' +
-      '  <div class="tab-paginator next" ng-if="pagination.active" ng-click="pagination.hasNext && pagination.next()" ng-class="{active: pagination.hasNext}">' +
-      '  </div>' +
-      '  <material-ink-bar></material-ink-bar>' +
+        '<div class="tab-paginator next" ' +
+          'ng-if="pagination.active && pagination.hasNext" ' +
+          'ng-click="pagination.clickNext()">' +
+        '</div>' +
 
-      '</div>'+
-      '<div class="tabs-content ng-hide"></div>'
-
+      '</section>' +
+      '<section class="tabs-content"></section>',
+    link: postLink
   };
 
-  /**
-   * Use prelink to configure inherited scope attributes: noink, nobar, and nostretch;
-   * do this before the child elements are linked.
-   *
-   * @param element
-   * @param attr
-   * @returns {{pre: materialTabsLink}}
-   */
-  function compileTabsFn() {
+  function postLink(scope, element, attr, tabsCtrl) {
 
-    return {
-      pre: function tabsPreLink(scope, element, attrs, tabsCtrl) {
-        // These attributes do not have values; but their presence defaults to value == true.
-        scope.noink = angular.isDefined(attrs.noink);
-        scope.nobar = angular.isDefined(attrs.nobar);
-        scope.nostretch = angular.isDefined(attrs.nostretch);
+    configureAria();
+    watchSelected();
 
-        // Publish for access by nested `<material-tab>` elements
-        tabsCtrl.noink = scope.noink;
+    function configureAria() {
+      element.attr({
+        role: 'tablist'
+      });
+    }
 
-        scope.$watch('$selIndex', function (index) {
-          tabsCtrl.selectAt(index);
-        });
+    function watchSelected() {
+      scope.$watch('selectedIndex', function watchSelectedIndex(newIndex, oldIndex) {
+        // Note: if the user provides an invalid newIndex, all tabs will be deselected
+        // and the associated view will be hidden.
+        tabsCtrl.deselect( tabsCtrl.itemAt(oldIndex) );
 
-        // Remove the `inkBar` element if `nobar` is defined
-        var elBar = findNode("material-ink-bar",element);
-        if ( elBar && scope.nobar ) {
-          elBar.remove();
+        if (tabsCtrl.inRange(newIndex)) {
+          var newTab = tabsCtrl.itemAt(newIndex);
+
+          // If the newTab is disabled, find an enabled one to go to.
+          if (newTab && newTab.isDisabled()) {
+            newTab = newIndex > oldIndex ?
+              tabsCtrl.next(newTab) :
+              tabsCtrl.previous(newTab);
+          }
+          tabsCtrl.select(newTab);
+
         }
-
-      },
-      post: function tabsPostLink(scope, element, attrs, tabsCtrl, $transclude) {
-        var cache = {
-          length: 0,
-          contains: function (tab) {
-            return !angular.isUndefined(cache[tab.$id]);
-          }
-        };
-
-        var allowFocus = 0;   // do not auto-focus on default tab selection
-        var updateInk = linkTabInk(scope, element, tabsCtrl, $q, $materialEffects) || angular.noop;
-        var updatePagination = linkTabPagination( scope, element, tabsCtrl, $q, $materialEffects );
-
-        var updateAll = function(event) {
-
-          scope.$evalAsync(function() {
-            updatePagination().then( function(){
-
-              // Make sure the ink positioning is correct
-              $timeout( function() {
-                updateInk();
-
-                // Key focus synced with tab selection...
-                if (  (event.name == EVENT.TABS_CHANGED) && allowFocus++) {
-                  tabsCtrl.focusSelected();
-                }
-
-              },60);
-            });
-
-            // Make sure ink changes start just after pagination transitions have started...
-            $$rAF( updateInk );
-          });
-        };
-
-        var onWindowResize = $$rAF.debounce( updateAll );
-        var onWindowRelease = function() {
-          angular.element($window).off('resize', onWindowResize);
-        };
-
-        $$rAF(updateAll);
-
-        angular.element($window).on( EVENT.WINDOW_RESIZE, onWindowResize);
-        scope.$on( EVENT.TABS_CHANGED, updateAll );
-        scope.$on( EVENT.SCOPE_DESTROY, onWindowRelease );
-
-        transcludeHeaderItems();
-        transcludeContentItems();
-
-        configureAria();  // Update ARIA values for the Tab group (Tabs)
-
-        alignTabButtons();
-        selectDefaultTab();
-
-        // **********************************************************
-        // Private Methods
-        // **********************************************************
-
-        /**
-         * Inject ARIA-specific attributes appropriate for Tab Groups
-         */
-        function configureAria() {
-          var ROLE = Constant.ARIA.ROLE;
-
-          $aria.update( element, {
-            'id': buildAriaID(),
-            'role': ROLE.TAB_LIST
-          });
-
-          /**
-           * Build a unique Tabs ID for WAI-ARIA; preserve the existing ID if already
-           * specified.
-           * @returns {*|string}
-           */
-          function buildAriaID() {
-            return  attrs.id || ("tabs" + "_" + scope.$id);
-          }
-        }
-
-
-        /**
-         * Change the positioning of the tab header and buttons.
-         * If the tabs-align attribute is 'bottom', then the tabs-content
-         * container is transposed with the tabs-header
-         */
-        function alignTabButtons() {
-          var align  = attrs.tabsAlign || "top";
-          var container = findNode('.tabs-content', element);
-
-          if (align == "bottom") {
-            element.prepend(container);
-          }
-        }
-
-        /**
-         * If an initial tab selection has not been specified, then
-         * select the first tab by default
-         */
-        function selectDefaultTab() {
-          var tabs = tabsCtrl.$$tabs();
-
-          if ( tabs.length && angular.isUndefined(scope.$selIndex)) {
-            tabsCtrl.select(tabs[0]);
-          }
-        }
-
-
-        /**
-         * Transclude the materialTab items into the tabsHeaderItems container
-         *
-         */
-        function transcludeHeaderItems() {
-          $transclude( function (content) {
-            var header = findNode('.tabs-header-items', element);
-            var parent = angular.element(element[0]);
-
-            angular.forEach(content, function (node) {
-              var intoHeader = isNodeType(node, 'material-tab') || isNgRepeat(node);
-
-              if (intoHeader) {
-                header.append(node);
-              } else {
-                parent.prepend(node);
-              }
-            });
-          });
-        }
-
-
-        /**
-         * Transclude the materialTab view/body contents into materialView containers; which
-         * are stored in the tabsContent area...
-         */
-        function transcludeContentItems() {
-          var cntr = findNode('.tabs-content', element),
-              materialViewTmpl = '<div class="material-view" ng-show="active"></div>';
-
-          scope.$watch(getTabsHash, function buildContentItems() {
-            var tabs = tabsCtrl.$$tabs(notInCache),
-              views = tabs.map(extractContent);
-
-            // At least 1 tab must have valid content to build; otherwise
-            // we hide/remove the tabs-content container...
-
-            if (views.some(notEmpty)) {
-              angular.forEach(views, function (content, j) {
-
-                var tab = tabs[j++],
-                  materialView = $compile(materialViewTmpl)(tab);
-
-                // For ARIA, link the tab content container with the tab button...
-                configureAria( materialView, tab );
-
-                // Allow dynamic $digest() disconnect/reconnect of tab content's scope
-                enableDisconnect(tab, content.scope);
-
-                // Do we have content DOM nodes ?
-                // If transcluded content is not undefined then add all nodes to the materialView
-
-                if (content.nodes) {
-                  angular.forEach(content.nodes, function (node) {
-                    if ( !isNodeEmpty(node) ) {
-                      materialView.append(node);
-                    }
-                  });
-                }
-
-                cntr.append(materialView);
-                addToCache(cache, { tab:tab, element: materialView });
-
-              });
-
-              // We have some new content just added...
-              showTabContent();
-
-            } else {
-
-              showTabContent(false);
-
-            }
-
-
-            /**
-             * Add class to hide or show the container for the materialView(s)
-             * NOTE: the `<div.tabs-content>` is **hidden** by default.
-             * @param visible Boolean a value `true` will remove the `class="ng-hide"` setting
-             */
-            function showTabContent(visible) {
-              cntr.toggleClass('ng-hide', !!visible);
-            }
-
-            /**
-             * Configure ARIA attributes to link tab content back to their respective
-             * 'owning' tab buttons.
-             */
-            function configureAria( cntr, tab ) {
-
-              $aria.update( cntr, {
-                'id' : "content_" + tab.ariaId,
-                'role' : Constant.ARIA.ROLE.TAB_PANEL,
-                'aria-labelledby' : tab.ariaId
-              });
-
-            }
-
-          });
-
-          /**
-           * Allow tabs to disconnect or reconnect their content from the $digest() processes
-           * when unselected or selected (respectively).
-           *
-           * @param content Special content scope which is a direct child of a `tab` scope
-           */
-          function enableDisconnect(tab,  content) {
-            if ( !content ) return;
-
-            var selectedFn = angular.bind(tab, tab.selected),
-                deselectedFn = angular.bind(tab, tab.deselected);
-
-            addDigestConnector(content);
-
-            // 1) Tail-hook deselected()
-            tab.deselected = function() {
-              deselectedFn();
-              tab.$$postDigest(function(){
-                content.$disconnect();
-              });
-            };
-
-             // 2) Head-hook selected()
-            tab.selected = function() {
-              content.$reconnect();
-              selectedFn();
-            };
-
-            // Immediate disconnect all non-actives
-            if ( !tab.active ) {
-              tab.$$postDigest(function(){
-                content.$disconnect();
-              });
-            }
-          }
-
-          /**
-           * Add tab scope/DOM node to the cache and configure
-           * to auto-remove when the scope is destroyed.
-           * @param cache
-           * @param item
-           */
-          function addToCache(cache, item) {
-            var scope = item.tab;
-
-            cache[ scope.$id ] = item;
-            cache.length = cache.length + 1;
-
-            // When the tab is removed, remove its associated material-view Node...
-            scope.$on("$destroy", function () {
-              angular.element(item.element).remove();
-
-              delete cache[ scope.$id];
-              cache.length = cache.length - 1;
-            });
-          }
-
-          function getTabsHash() {
-            return tabsCtrl.$$hash;
-          }
-
-          /**
-           * Special function to extract transient data regarding transcluded
-           * tab content. Data includes dynamic lookup of bound scope for the transcluded content.
-           *
-           * @see TabDirective::updateTabContent()
-           *
-           * @param tab
-           * @returns {{nodes: *, scope: *}}
-           */
-          function extractContent(tab) {
-            var content = hasContent(tab) ? tab.content : undefined;
-            var scope   = (content && content.length) ? angular.element(content[0]).scope() : null;
-
-            // release immediately...
-            delete tab.content;
-
-            return { nodes:content, scope:scope };
-          }
-
-          function hasContent(tab) {
-            return tab.content && tab.content.length;
-          }
-
-          function notEmpty(view) {
-            var hasContent = false;
-            if (angular.isDefined(view.nodes)) {
-              angular.forEach(view.nodes, function(node) {
-                hasContent = hasContent || !isNodeEmpty(node);
-              });
-            }
-            return hasContent;
-          }
-
-          function notInCache(tab) {
-            return !cache.contains(tab);
-          }
-        }
-
-      }
-    };
+      });
+    }
 
   }
 }

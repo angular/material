@@ -14,17 +14,6 @@ describe('materialTabs directive', function() {
       return el;
     }
 
-    it('should create a controller.', function(){
-      var el = setup();
-      var controller = el.controller('materialTabs');
-
-      expect(controller).not.toBe(undefined);
-      expect(controller.$$tabs().length).toBe(0);
-      expect(controller.noink).toBeFalsy();
-      expect(controller.nobar).toBeFalsy();
-
-    });
-
     it('should assign ARIA roles', function(){
       // TODO: this needs more coverage for material-tab
       var el = setup();
