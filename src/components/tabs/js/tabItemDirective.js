@@ -95,10 +95,12 @@ function MaterialTabDirective($materialInkRipple, $compile, $aria) {
 
       transcludeTabContent();
 
-      var autoRemoveFn = tabsCtrl.add(tabItemCtrl);
-      scope.$on('$destroy', autoRemoveFn);
-
-      $materialInkRipple.attachButtonBehavior(element);
+      var detachRippleFn = $materialInkRipple.attachButtonBehavior(element);
+      var removeTabFn = tabsCtrl.add(tabItemCtrl);
+      scope.$on('$destroy', function() {
+        detachRippleFn();
+        removeTabFn();
+      });
 
       if (!angular.isDefined(attr.ngClick)) element.on('click', defaultClickListener);
       element.on('keydown', keydownListener);
