@@ -40,9 +40,9 @@ function MaterialTabsController(scope, element) {
   // Add a new tab.
   // Returns a method to remove the tab from the list.
   function add(tab, index) {
-    var newIndex = tabs.add(tab, index);
 
-    tab.setupContent(self.contentElement);
+    var newIndex = tabs.add(tab, index);
+    tab.addContent(self.contentElement);
 
     // Select the new tab if we don't have a selectedIndex, or if the 
     // selectedIndex we've been waiting for is this tab
