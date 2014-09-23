@@ -18,7 +18,7 @@ angular.module('material.components.dialog', [
     '$rootScope',
     '$materialEffects',
     '$animate',
-    '$aria',
+    '$materialAria',
     MaterialDialogService
   ]);
 
@@ -104,7 +104,7 @@ function MaterialDialogDirective($$rAF) {
  * @param {element=} appendTo The element to append the dialog to. Defaults to appending
  *   to the root element of the application.
  */
-function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootScope, $materialEffects, $animate, $aria) {
+function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootScope, $materialEffects, $animate, $materialAria) {
   var recentDialog;
   var dialogParent = $rootElement.find('body');
   if ( !dialogParent.length ) {
@@ -221,7 +221,7 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
     function configureAria(element) {
       var ROLE = Constant.ARIA.ROLE;
 
-      $aria.update(element, {
+      $materialAria.update(element, {
         'role': ROLE.DIALOG
       });
 
@@ -230,7 +230,7 @@ function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootS
         dialogContent = element;
       }
       var defaultText = Util.stringFromTextBody(dialogContent.text(), 3);
-      $aria.expect(element, 'aria-label', defaultText);
+      $materialAria.expect(element, 'aria-label', defaultText);
     }
 
     return recentDialog;

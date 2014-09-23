@@ -12,7 +12,7 @@ angular.module('material.components.radioButton', [
     materialRadioGroupDirective
   ])
   .directive('materialRadioButton', [
-    '$aria',
+    '$materialAria',
     materialRadioButtonDirective
   ]);
 
@@ -202,7 +202,7 @@ function materialRadioGroupDirective() {
  * </hljs>
  *
  */
-function materialRadioButtonDirective($aria) {
+function materialRadioButtonDirective($materialAria) {
 
   var CHECKED_CSS = 'material-checked';
 
@@ -231,7 +231,7 @@ function materialRadioButtonDirective($aria) {
       })
       .attr('role', Constant.ARIA.ROLE.RADIO);
 
-    $aria.expect(element, Constant.ARIA.PROPERTY.LABEL, element.text());
+    $materialAria.expect(element, Constant.ARIA.PROPERTY.LABEL, element.text());
 
     function listener(ev) {
       if (element[0].hasAttribute('disabled')) return;

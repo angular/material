@@ -14,7 +14,7 @@ angular.module('material.components.tabs')
     '$compile',
     '$materialEffects',
     '$$rAF',
-    '$aria',
+    '$materialAria',
     TabsDirective
   ]);
 
@@ -92,7 +92,7 @@ angular.module('material.components.tabs')
  * </hljs>
  *
  */
-function TabsDirective($q, $window, $timeout, $compile, $materialEffects, $$rAF, $aria) {
+function TabsDirective($q, $window, $timeout, $compile, $materialEffects, $$rAF, $materialAria) {
 
   return {
     restrict: 'E',
@@ -217,7 +217,7 @@ function TabsDirective($q, $window, $timeout, $compile, $materialEffects, $$rAF,
         function configureAria() {
           var ROLE = Constant.ARIA.ROLE;
 
-          $aria.update( element, {
+          $materialAria.update( element, {
             'id': buildAriaID(),
             'role': ROLE.TAB_LIST
           });
@@ -350,7 +350,7 @@ function TabsDirective($q, $window, $timeout, $compile, $materialEffects, $$rAF,
              */
             function configureAria( cntr, tab ) {
 
-              $aria.update( cntr, {
+              $materialAria.update( cntr, {
                 'id' : "content_" + tab.ariaId,
                 'role' : Constant.ARIA.ROLE.TAB_PANEL,
                 'aria-labelledby' : tab.ariaId

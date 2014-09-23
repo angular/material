@@ -1,9 +1,9 @@
 angular.module('material.components.tabs')
   .directive('materialTab', [
     '$attrBind',
-    '$aria',
+    '$materialAria',
     '$materialInkRipple',
-    TabDirective  
+    TabDirective
   ]);
 
 /**
@@ -56,7 +56,7 @@ angular.module('material.components.tabs')
  * </hljs>
  *
  */
-function TabDirective( $attrBind, $aria, $materialInkRipple) {
+function TabDirective( $attrBind, $materialAria, $materialInkRipple) {
   var noop = angular.noop;
 
   return {
@@ -125,7 +125,7 @@ function TabDirective( $attrBind, $aria, $materialInkRipple) {
       var ROLE = Constant.ARIA.ROLE;
 
       scope.ariaId = buildAriaID();
-      $aria.update( element, {
+      $materialAria.update( element, {
         'id' :  scope.ariaId,
         'role' : ROLE.TAB,
         'aria-selected' : false,
@@ -159,7 +159,7 @@ function TabDirective( $attrBind, $aria, $materialInkRipple) {
 
       scope.$watch('active', function (isActive) {
 
-        $aria.update( element, {
+        $materialAria.update( element, {
           'aria-selected' : isActive,
           'tabIndex' : isActive === true ? 0 : -1
         });

@@ -1,6 +1,6 @@
 angular.module('material.services.aria', [])
 
-.service('$aria', [
+.service('$materialAria', [
   '$log',
   AriaService
 ]);

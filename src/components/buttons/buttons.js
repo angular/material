@@ -12,7 +12,7 @@ angular.module('material.components.button', [
   .directive('materialButton', [
     'ngHrefDirective',
     '$materialInkRipple',
-    '$aria',
+    '$materialAria',
     MaterialButtonDirective
   ]);
 
@@ -46,7 +46,7 @@ angular.module('material.components.button', [
  *  </material-button>
  * </hljs>
  */
-function MaterialButtonDirective(ngHrefDirectives, $materialInkRipple, $aria ) {
+function MaterialButtonDirective(ngHrefDirectives, $materialInkRipple, $materialAria ) {
   var ngHrefDirective = ngHrefDirectives[0];
 
   return {
@@ -95,7 +95,7 @@ function MaterialButtonDirective(ngHrefDirectives, $materialInkRipple, $aria ) {
         });
 
       return function postLink(scope, element, attr) {
-        $aria.expect(element, 'aria-label', element.text());
+        $materialAria.expect(element, 'aria-label', element.text());
         $materialInkRipple.attachButtonBehavior(element);
       };
     }
