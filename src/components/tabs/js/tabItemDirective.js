@@ -173,7 +173,7 @@ function MaterialTabDirective($materialInkRipple, $compile, $aria) {
           // Auto select `next` tab when disabled
           var isSelected = (tabsCtrl.selected() === tabItemCtrl);
           if( isSelected && isDisabled ) {
-            tabsCtrl.select( tabsCtrl.next(tabItemCtrl) );
+            tabsCtrl.select( tabsCtrl.next(tabItemCtrl) || tabsCtrl.previous(tabItemCtrl) );
           }
 
         });
