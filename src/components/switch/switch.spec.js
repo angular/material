@@ -1,6 +1,7 @@
 describe('<material-switch>', function() {
   var CHECKED_CSS = 'material-checked';
 
+  beforeEach(module('ngAria'));
   beforeEach(module('material.components.switch'));
 
   it('should set checked css class and aria-checked attributes', inject(function($compile, $rootScope) {

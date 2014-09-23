@@ -58,75 +58,77 @@ function MaterialCheckboxDirective(inputDirectives, $materialInkRipple, $materia
     restrict: 'E',
     transclude: true,
     require: '?ngModel',
-    template: 
+    template:
       '<div class="material-container" ink-ripple="checkbox">' +
         '<div class="material-icon"></div>' +
       '</div>' +
       '<div ng-transclude class="material-label"></div>',
-    link: postLink
+    compile: compile
   };
 
   // **********************************************************
   // Private Methods
   // **********************************************************
 
-  function postLink(scope, element, attr, ngModelCtrl) {
-    var checked = false;
+  function compile (tElement, tAttrs) {
 
-    // Create a mock ngModel if the user doesn't provide one
-    ngModelCtrl = ngModelCtrl || {
-      $setViewValue: function(value) {
-        this.$viewValue = value;
-      },
-      $parsers: [],
-      $formatters: []
+    tAttrs.type = 'checkbox';
+    tAttrs.tabIndex = 0;
+    tElement.attr('role', tAttrs.type);
+
+    $materialAria.expect(tElement, Constant.ARIA.PROPERTY.LABEL, tElement.text());
+
+    return function postLink(scope, element, attr, ngModelCtrl) {
+      var checked = false;
+
+      // Create a mock ngModel if the user doesn't provide one
+      ngModelCtrl = ngModelCtrl || {
+        $setViewValue: function(value) {
+          this.$viewValue = value;
+        },
+        $parsers: [],
+        $formatters: []
+      };
+
+      // Reuse the original input[type=checkbox] directive from Angular core.
+      // This is a bit hacky as we need our own event listener and own render
+      // function.
+      inputDirective.link(scope, {
+        on: angular.noop,
+        0: {}
+      }, attr, [ngModelCtrl]);
+
+
+      //element.attr('tabIndex', attr.tabIndex);
+      element.on('click', listener);
+      element.on('keypress', keypressHandler);
+      ngModelCtrl.$render = render;
+
+      function keypressHandler(ev) {
+        if(ev.which === Constant.KEY_CODE.SPACE) {
+          ev.preventDefault();
+          listener(ev);
+        }
+      }
+      function listener(ev) {
+        if (element[0].hasAttribute('disabled')) return;
+
+        scope.$apply(function() {
+          checked = !checked;
+          ngModelCtrl.$setViewValue(checked, ev && ev.type);
+          ngModelCtrl.$render();
+        });
+      }
+
+      function render() {
+        checked = ngModelCtrl.$viewValue;
+        if(checked) {
+          element.addClass(CHECKED_CSS);
+        } else {
+          element.removeClass(CHECKED_CSS);
+        }
+      }
     };
-
-    // Reuse the original input[type=checkbox] directive from Angular core.
-    // This is a bit hacky as we need our own event listener and own render 
-    // function.
-    attr.type = 'checkbox';
-    attr.tabIndex = 0;
-    inputDirective.link(scope, {
-      on: angular.noop,
-      0: {}
-    }, attr, [ngModelCtrl]);
-
-    // We can't chain element.attr here because of a bug with jqLite
-    element.attr(Constant.ARIA.PROPERTY.CHECKED, checked);
-    element.attr('role', attr.type);
-    element.attr('tabIndex', attr.tabIndex);
-    element.on('click', listener);
-    element.on('keypress', keypressHandler);
-    ngModelCtrl.$render = render;
-
-    $materialAria.expect(element, Constant.ARIA.PROPERTY.LABEL, element.text());
-
-    function keypressHandler(ev) {
-      if(ev.which === Constant.KEY_CODE.SPACE) {
-        ev.preventDefault();
-        listener(ev);
-      }
-    }
-    function listener(ev) {
-      if (element[0].hasAttribute('disabled')) return;
-
-      scope.$apply(function() {
-        checked = !checked;
-        ngModelCtrl.$setViewValue(checked, ev && ev.type);
-        ngModelCtrl.$render();
-      });
-    }
-
-    function render() {
-      checked = ngModelCtrl.$viewValue;
-      element.attr(Constant.ARIA.PROPERTY.CHECKED, checked);
-      if(checked) {
-        element.addClass(CHECKED_CSS);
-      } else {
-        element.removeClass(CHECKED_CSS);
-      }
-    }
   }
 
 }

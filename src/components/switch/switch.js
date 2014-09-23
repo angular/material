@@ -64,14 +64,17 @@ function MaterialSwitch(checkboxDirectives, radioButtonDirectives) {
   };
 
   function compile(element, attr) {
-    
+
     var thumb = angular.element(element[0].querySelector('.material-switch-thumb'));
     //Copy down disabled attributes for checkboxDirective to use
     thumb.attr('disabled', attr.disabled);
     thumb.attr('ngDisabled', attr.ngDisabled);
 
-    return function postLink(scope, element, attr, ngModelCtrl) {
-      checkboxDirective.link(scope, thumb, attr, ngModelCtrl);
+    var link = checkboxDirective.compile(thumb, attr);
+
+    return function (scope, element, attr, ngModelCtrl) {
+      var thumb = angular.element(element[0].querySelector('.material-switch-thumb'));
+      return link(scope, thumb, attr, ngModelCtrl)
     };
   }
 }
