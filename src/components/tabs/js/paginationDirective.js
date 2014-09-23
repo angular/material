@@ -6,10 +6,11 @@ angular.module('material.components.tabs')
   '$window',
   '$$rAF',
   '$$q',
+  '$timeout',
   TabPaginationDirective
 ]);
 
-function TabPaginationDirective($materialEffects, $window, $$rAF, $$q) {
+function TabPaginationDirective($materialEffects, $window, $$rAF, $$q, $timeout) {
 
   // TODO allow configuration of TAB_MIN_WIDTH
   // Must match tab min-width rule in _tabs.scss
@@ -123,10 +124,12 @@ function TabPaginationDirective($materialEffects, $window, $$rAF, $$q) {
       } else {
 
         if (paginationToggled) {
-          tabsParent.css('width', '');
-          tabs.css('width', '');
-          slideTabButtons(0);
-          state.page = -1;
+          $timeout(function() {
+            tabsParent.css('width', '');
+            tabs.css('width', '');
+            slideTabButtons(0);
+            state.page = -1;
+          });
         }
 
       }
@@ -175,8 +178,7 @@ function TabPaginationDirective($materialEffects, $window, $$rAF, $$q) {
 
       state.page = page;
 
-      scope.$evalAsync(function() {
-        // This is disconnected form the animation, it triggers a digest.
+      $timeout(function() {
         scope.$broadcast('$materialTabsPaginationChanged');
       });
 

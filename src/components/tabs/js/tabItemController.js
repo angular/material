@@ -13,19 +13,43 @@ function TabItemController(scope, element, $compile, $animate) {
   var self = this;
 
   // Properties
-  self.contentParent = angular.element('<div class="tab-content ng-hide">');
+  self.contentContainer = angular.element('<div class="tab-content ng-hide">');
   self.element = element;
 
   // Methods
   self.isDisabled = isDisabled;
+  self.onAdd = onAdd;
+  self.onRemove = onRemove;
   self.onSelect = onSelect;
   self.onDeselect = onDeselect;
 
   self.addContent = addContent;
-  self.removeContent = angular.noop;
 
   function isDisabled() {
     return element[0].hasAttribute('disabled');
+  }
+  
+  /**
+   * Add the tab's content to the DOM container area in the tabs,
+   * @param contentArea the contentArea to add the content of the tab to
+   */
+  function onAdd(contentArea) {
+    if (self.content.length) {
+
+      self.contentContainer.append(self.content);
+      self.contentScope = scope.$parent.$new();
+      contentArea.append(self.contentContainer);
+
+      $compile(self.contentContainer)(self.contentScope);
+      Util.disconnectScope(self.contentScope);
+    }
+  }
+
+  function onRemove() {
+    $animate.leave(self.contentContainer).then(function() {
+      self.contentScope && self.contentScope.$destroy();
+      self.contentScope = null;
+    });
   }
 
   function onSelect() {
@@ -35,7 +59,7 @@ function TabItemController(scope, element, $compile, $animate) {
     element.addClass('active');
     element.attr('aria-selected', true);
     element.attr('tabIndex', 0);
-    $animate.removeClass(self.contentParent, 'ng-hide');
+    $animate.removeClass(self.contentContainer, 'ng-hide');
 
     scope.onSelect();
   }
@@ -48,37 +72,13 @@ function TabItemController(scope, element, $compile, $animate) {
     element.attr('aria-selected', false);
     // Only allow tabbing to the active tab
     element.attr('tabIndex', -1);
-    $animate.addClass(self.contentParent, 'ng-hide');
+    $animate.addClass(self.contentContainer, 'ng-hide');
 
     scope.onDeselect();
   }
 
-  /**
-   * Add the tab's content to the DOM container area in the tabs,
-   * NOTE: Called from TabsController::add() when the tab is added
-   *
-   * @param contentArea Parent element into which the tab content should be transposed
-   */
   function addContent(contentArea) {
-    if (addContent.called) return; // Only do this once.
-    addContent.called = true;
-
     // If there isn't any content for this tab, don't setup anything.
-    if (self.content.length) {
-
-      self.contentParent.append(self.content);
-      self.contentScope = scope.$parent.$new();
-      contentArea.append(self.contentParent);
-
-      $compile(self.contentParent)(self.contentScope);
-      Util.disconnectScope(self.contentScope);
-
-      // Configure called from TabsController::remove()
-      self.removeContent = function() {
-        Util.disconnectScope(self.contentScope);
-        self.contentParent.remove(contentArea);
-      };
-    }
 
   }
 }
