@@ -23,8 +23,6 @@ function TabItemController(scope, element, $compile, $animate) {
   self.onSelect = onSelect;
   self.onDeselect = onDeselect;
 
-  self.addContent = addContent;
-
   function isDisabled() {
     return element[0].hasAttribute('disabled');
   }
@@ -77,9 +75,5 @@ function TabItemController(scope, element, $compile, $animate) {
     scope.onDeselect();
   }
 
-  function addContent(contentArea) {
-    // If there isn't any content for this tab, don't setup anything.
-
-  }
 }
 
