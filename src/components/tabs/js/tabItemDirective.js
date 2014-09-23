@@ -65,7 +65,7 @@ function MaterialTabDirective($materialInkRipple, $compile, $aria) {
     scope: {
       onSelect: '&',
       onDeselect: '&',
-      label: '@',
+      label: '@'
     },
     compile: compile
   };
@@ -95,24 +95,16 @@ function MaterialTabDirective($materialInkRipple, $compile, $aria) {
 
       transcludeTabContent();
 
-      tabsCtrl.add(tabItemCtrl);
-      scope.$on('$destroy', function() {
-        tabsCtrl.remove(tabItemCtrl);
-      });
+      var autoRemoveFn = tabsCtrl.add(tabItemCtrl);
+      scope.$on('$destroy', autoRemoveFn);
 
       $materialInkRipple.attachButtonBehavior(element);
 
-      if (!angular.isDefined(attr.ngClick)) {
-        element.on('click', defaultClickListener);
-      }
+      if (!angular.isDefined(attr.ngClick)) element.on('click', defaultClickListener);
       element.on('keydown', keydownListener);
 
-      if (angular.isNumber(scope.$parent.$index)) {
-        watchNgRepeatIndex();
-      }
-      if (angular.isDefined(attr.active)) {
-        watchActiveAttribute();
-      }
+      if (angular.isNumber(scope.$parent.$index)) watchNgRepeatIndex();
+      if (angular.isDefined(attr.active))         watchActiveAttribute();
       watchDisabled();
 
       configureAria();
@@ -161,8 +153,9 @@ function MaterialTabDirective($materialInkRipple, $compile, $aria) {
       }
 
       function watchActiveAttribute() {
-        scope.$parent.$watch('!!(' + attr.active + ')', function activeWatchAction(isActive) {
-          var isSelected = tabsCtrl.selected() === tabItemCtrl;
+        scope.$parent.$watch('!!(' + attr.active + ')', function activeWatchAction(isActive)
+        {
+          var isSelected = (tabsCtrl.selected() === tabItemCtrl);
 
           if (isActive && !isSelected) {
             tabsCtrl.select(tabItemCtrl);
@@ -176,6 +169,13 @@ function MaterialTabDirective($materialInkRipple, $compile, $aria) {
       function watchDisabled() {
         scope.$watch(tabItemCtrl.isDisabled, function disabledWatchAction(isDisabled) {
           element.attr('aria-disabled', isDisabled);
+
+          // Auto select `next` tab when disabled
+          var isSelected = (tabsCtrl.selected() === tabItemCtrl);
+          if( isSelected && isDisabled ) {
+            tabsCtrl.select( tabsCtrl.next(tabItemCtrl) );
+          }
+
         });
       }
 

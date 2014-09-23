@@ -2,7 +2,7 @@ angular.module('material.components.tabs')
 
 .controller('$materialTabs', [
   '$scope', 
-  '$element', 
+  '$element',
   MaterialTabsController
 ]);
 
@@ -50,6 +50,11 @@ function MaterialTabsController(scope, element) {
       self.select(tab);
     }
     scope.$broadcast('$materialTabsChanged');
+
+    // Dynamic remove function locked to tab just added...
+    return function() {
+      remove(tab);
+    };
   }
 
   function remove(tab) {
@@ -57,12 +62,16 @@ function MaterialTabsController(scope, element) {
 
     if (self.selected() === tab) {
       if (tabs.count() > 1) {
-        self.select(self.previous() || self.next());
+        var next = self.previous() || self.next();
+          self.select(next);
       } else {
         self.deselect(tab);
       }
     }
+
     tabs.remove(tab);
+    tab.removeContent(self.contentElement);
+
     scope.$broadcast('$materialTabsChanged');
   }
 
@@ -78,13 +87,12 @@ function MaterialTabsController(scope, element) {
   }
 
   function select(tab) {
-    var index = self.indexOf(tab);
     if (!tab || tab.isSelected || tab.isDisabled()) return;
-    if (index < 0) return;
+    if (self.indexOf(tab) < 0) return;
 
     self.deselect(self.selected());
 
-    scope.selectedIndex = index;
+    scope.selectedIndex = self.indexOf(tab);
     tab.isSelected = true;
     tab.onSelect();
   }

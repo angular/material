@@ -20,7 +20,9 @@ function TabItemController(scope, element, $compile, $animate) {
   self.isDisabled = isDisabled;
   self.onSelect = onSelect;
   self.onDeselect = onDeselect;
-  self.setupContent = setupContent;
+
+  self.setupContent = transposeContent;
+  self.removeContent = angular.noop;
 
   function isDisabled() {
     return element[0].hasAttribute('disabled');
@@ -51,12 +53,12 @@ function TabItemController(scope, element, $compile, $animate) {
     scope.onDeselect();
   }
 
-  // Called when the tab is added, from tabsCtrl.
   // Add the tab's content to the proper area in the tabs,
   // and do initial setup.
-  function setupContent(contentArea) {
-    if (setupContent.called) return; // Only do this once.
-    setupContent.called = true;
+  // NOTE: Called from TabsController::add() when the tab is added
+  function transposeContent(contentArea) {
+    if (transposeContent.called) return; // Only do this once.
+    transposeContent.called = true;
 
     // If there isn't any content for this tab, don't setup anything.
     if (self.content.length) {
@@ -69,6 +71,13 @@ function TabItemController(scope, element, $compile, $animate) {
       Util.disconnectScope(self.contentScope);
 
     }
+
+    // Called from TabsController::remove()
+    self.removeContent = function() {
+      Util.disconnectScope(self.contentScope);
+      self.contentParent.remove(contentArea);
+    };
+
   }
 }
 
