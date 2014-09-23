@@ -5,7 +5,8 @@
   "dependencies": {
     "angular": "1.3.0-rc.2",
     "angular-animate": "1.3.0-rc.2",
-    "hammerjs": "~2.0.2"
+    "hammerjs": "~2.0.2",
+    "angular-aria": "~1.3.0-build.3289+sha.d8c8b2e"
   },
   "devDependencies": {
     "angular-mocks": "1.3.0-rc.2",
