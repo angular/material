@@ -78,19 +78,22 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
     var node = element[0];
 
     if (options.mousedown) {
-      enableMousedown(true);
+      listenPointerDown(true);
     }
 
     // Publish self-detach method if desired...
     return function detach() {
-      enableMousedown(false);
+      listenPointerDown(false);
 
-      rippleContainer
-         .parent
+      if ( rippleContainer ) {
+        // Self-removal of injected container...
+        rippleContainer
+         .parent()
          .remove( rippleContainer );
-    }
+      }
+    };
 
-    function enableMousedown(active) {
+    function listenPointerDown(active) {
       if ( !active) element.off(POINTERDOWN_EVENT, onPointerDown);
       else          element.on(POINTERDOWN_EVENT, onPointerDown);
     }
