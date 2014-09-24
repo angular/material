@@ -192,21 +192,25 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
 
       function configureAria() {
         // Link together the content area and tabItemCtrl with an id
-        var tabId = attr.id || $mdUtil.nextUid();
+        var tabId = attr.id || ('tab_' + $mdUtil.nextUid());
         var tabContentId = 'content_' + tabId;
+
         element.attr({
           id: tabId,
-          role: 'tabItemCtrl',
-          tabIndex: '-1', //this is also set on select/deselect in tabItemCtrl
-          'aria-controls': tabContentId
+          role: 'tab',
+          tabIndex: '-1' //this is also set on select/deselect in tabItemCtrl
         });
+        if(!element.attr('aria-controls')) {
+          element.attr('aria-controls', tabContentId);
+        }
         tabItemCtrl.contentContainer.attr({
           id: tabContentId,
-          role: 'tabpanel',
-          'aria-labelledby': tabId
+          role: 'tabpanel'
         });
 
-        $mdAria.expectWithText(element, 'aria-label');
+        if (!tabItemCtrl.contentContainer.attr('aria-labelledby')) {
+          tabItemCtrl.contentContainer.attr('aria-labelledby', tabId);
+        }
       }
 
     };
