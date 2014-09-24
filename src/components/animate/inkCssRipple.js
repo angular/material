@@ -78,7 +78,7 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
     var node = element[0];
 
     if (options.mousedown) {
-      enableMousedown();
+      enableMousedown(true);
     }
 
     // Publish self-detach method if desired...
@@ -91,8 +91,8 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
     }
 
     function enableMousedown(active) {
-      if ( !!active) element.on(POINTERDOWN_EVENT, onPointerDown);
-      else           element.off(POINTERDOWN_EVENT, onPointerDown);
+      if ( !active) element.off(POINTERDOWN_EVENT, onPointerDown);
+      else          element.on(POINTERDOWN_EVENT, onPointerDown);
     }
 
 
