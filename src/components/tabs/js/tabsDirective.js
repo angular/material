@@ -91,10 +91,11 @@ function TabsDirective($parse, $mdTheming) {
       '<section class="md-header" ' +
         'ng-class="{\'md-paginating\': pagination.active}">' +
 
-        '<div class="md-paginator md-prev" ' +
+        '<button class="md-paginator md-prev" ' +
           'ng-if="pagination.active && pagination.hasPrev" ' +
-          'ng-click="pagination.clickPrevious()">' +
-        '</div>' +
+          'ng-click="pagination.clickPrevious()" ' +
+          'aria-hidden="true">' +
+        '</button>' +
 
         // overflow: hidden container when paginating
         '<div class="md-header-items-container" md-tabs-pagination>' +
@@ -103,10 +104,11 @@ function TabsDirective($parse, $mdTheming) {
           '<md-tabs-ink-bar></md-tabs-ink-bar>' +
         '</div>' +
 
-        '<div class="md-paginator md-next" ' +
+        '<button class="md-paginator md-next" ' +
           'ng-if="pagination.active && pagination.hasNext" ' +
-          'ng-click="pagination.clickNext()">' +
-        '</div>' +
+          'ng-click="pagination.clickNext()" ' +
+          'aria-hidden="true">' +
+        '</button>' +
 
       '</section>' +
       '<section class="md-tabs-content"></section>',

@@ -1,34 +1,33 @@
 <div ng-controller="AppCtrl" class="sample">
 
-    <md-tabs selected="selectedIndex">
-        <md-tab ng-repeat="tab in tabs"
-                on-select="onTabSelected(tab)"
-                on-deselect="announceDeselected(tab)"
-                ng-disabled="tab.disabled"
-                label="{{tab.title}}">
+  <md-tabs selected="selectedIndex">
+    <md-tab ng-repeat="tab in tabs"
+            on-select="announceSelected(tab)"
+            on-deselect="announceDeselected(tab)"
+            ng-disabled="tab.disabled"
+            label="{{tab.title}}">
 
-            <div ng-class="tab.style" layout="vertical" layout-fill layout-align="center center">
-                <div flex ng-bind="tab.content" class="tab-text"></div>
-                <md-button class="remove-tab md-warn"
-                           ng-click="removeTab( tab )">Remove Tab
-                </md-button>
-            </div>
-        </md-tab>
-    </md-tabs>
+    <div class="demo-tab tab{{$index%4}}" layout="vertical" layout-fill layout-align="space-around center">
+        <div ng-bind="tab.content"></div>
+        <md-button class="md-warn" ng-click="removeTab( tab )">
+          Remove Tab
+        </md-button>
+      </div>
+    </md-tab>
+  </md-tabs>
 
-    <form ng-submit="addTab(tTitle,tContent)" flex>
-        <div layout="vertical" layout-sm="horizontal" layout-padding layout-align="left center">
-            <md-text-float label="Active Index" ng-model="selectedIndex" disabled></md-text-float>
-            <md-text-float label="Active Title" ng-model="tabs[selectedIndex].title"></md-text-float>
-            <md-text-float label="Active Content" ng-model="tabs[selectedIndex].content" class="long"></md-text-float>
-        </div>
-        <div layout="vertical" layout-sm="horizontal" layout-padding layout-align="left center">
-            <span class="title">Add a new Tab:</span>
-            <md-text-float label="Label" ng-model="tTitle"></md-text-float>
-            <md-text-float label="Content" ng-model="tContent" ></md-text-float>
-            <md-button class="add-tab md-primary"  type="submit" style="max-height: 40px" >Add Tab</md-button>
-        </div>
-    </form>
+  <form ng-submit="addTab(tTitle,tContent)" flex>
+    <div layout="vertical" layout-sm="horizontal" layout-padding layout-align="left center">
+      <md-text-float label="Active Index" ng-model="selectedIndex" disabled></md-text-float>
+      <md-text-float label="Active Title" ng-model="tabs[selectedIndex].title"></md-text-float>
+    </div>
+    <div layout="vertical" layout-sm="horizontal" layout-padding layout-align="left center">
+      <span class="title">Add a new Tab:</span>
+      <md-text-float label="Label" ng-model="tTitle"></md-text-float>
+      <md-text-float label="Content" ng-model="tContent" ></md-text-float>
+      <md-button class="add-tab md-primary"  type="submit" style="max-height: 40px" >Add Tab</md-button>
+    </div>
+  </form>
 
 
 </div>

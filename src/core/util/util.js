@@ -1,8 +1,14 @@
+/* 
+ * This var has to be outside the angular factory, otherwise when
+ * there are multiple material apps on the same page, each app
+ * will create its own instance of this array and the app's IDs 
+ * will not be unique.
+ */
+var nextUniqueId = ['0','0','0'];
+
 angular.module('material.core')
 .factory('$mdUtil', ['$cacheFactory', function($cacheFactory) {
   var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
-  /* for nextUid() function below */
-  var uid = ['0','0','0'];
 
   var Util;
   return Util = {
@@ -140,25 +146,25 @@ angular.module('material.core')
      * @returns an unique alpha-numeric string
      */
     nextUid: function() {
-      var index = uid.length;
+      var index = nextUniqueId.length;
       var digit;
 
       while(index) {
         index--;
-        digit = uid[index].charCodeAt(0);
+        digit = nextUniqueId[index].charCodeAt(0);
         if (digit == 57 /*'9'*/) {
-          uid[index] = 'A';
-          return uid.join('');
+          nextUniqueId[index] = 'A';
+          return nextUniqueId.join('');
         }
         if (digit == 90  /*'Z'*/) {
-          uid[index] = '0';
+          nextUniqueId[index] = '0';
         } else {
-          uid[index] = String.fromCharCode(digit + 1);
-          return uid.join('');
+          nextUniqueId[index] = String.fromCharCode(digit + 1);
+          return nextUniqueId.join('');
         }
       }
-      uid.unshift('0');
-      return uid.join('');
+      nextUniqueId.unshift('0');
+      return nextUniqueId.join('');
     },
 
     // Stop watchers and events from firing on a scope without destroying it,

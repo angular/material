@@ -1,38 +1,27 @@
 
 .remove-tab {
-    margin-bottom: 40px;
+  margin-bottom: 40px;
 }
-
-md-tabs .md-view {
-  background: #EEE;
-}
-
-.tab-text {
-    padding-top: 32px;
-    margin-bottom: 32px;
-}
-
 
 .md-button {
-    display:block;
+  display:block;
 }
 
-
+.demo-tab {
+  height: 300px;
+  text-align: center;
+}
+.tab0 {
+  background-color: #E3F2FD;
+}
 .tab1 {
-    background-color: #abd6e4;
-    height:300px;
+  background-color: #E1F5FE;
 }
 .tab2 {
-    background-color: #94caa6;
-    height:300px;
+  background-color: #E0F7FA;
 }
 .tab3 {
-    background-color: #c4b5a2;
-    height:300px;
-}
-.tab4 {
-    background-color: #e3cde8;
-    height:300px;
+  background-color: #E0F2F1;
 }
 
 .title {
@@ -46,7 +35,7 @@ md-tabs .md-view {
 
 
 [layout-align] > * {
- margin-left: 8px;
+  margin-left: 8px;
 }
 
 form > [layout] > * {
@@ -54,14 +43,14 @@ form > [layout] > * {
 }
 
 .long > input {
-    width: 264px;
+  width: 264px;
 }
 
 .md-button {
-    max-height: 30px;
+  max-height: 30px;
 }
 
 .md-button.add-tab {
-    margin-top:20px;
-    max-height:30px !important;
+  margin-top:20px;
+  max-height:30px !important;
 }

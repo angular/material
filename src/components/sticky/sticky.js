@@ -9,7 +9,6 @@
 angular.module('material.components.sticky', [
   'material.core',
   'material.components.content',
-  'material.decorators',
   'material.animations'
 ])
 .factory('$mdSticky', [
