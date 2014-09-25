@@ -292,6 +292,8 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
         refreshSliderDimensions();
         doSlide(ev.center.x);
 
+        ev.srcEvent.stopPropagation();
+
       } else if (isSliding && ev.eventType === Hammer.INPUT_END) {
         isSliding = false;
         element.removeClass('panning active');
@@ -304,7 +306,9 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
     function onPan(ev) {
       if (!isSliding) return;
       doSlide(ev.center.x);
+
       ev.preventDefault();
+      ev.srcEvent.stopPropagation();
     }
 
     /**
