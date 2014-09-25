@@ -189,19 +189,30 @@ function materialSidenavDirective($timeout) {
       function onShowHideSide(isOpen) {
         var parent = $element.parent();
 
+        var interactiveEls = $element[0].querySelectorAll('a, button');
+
         $element.toggleClass('open', !!isOpen);
 
         if (isOpen) {
           parent.append(backdrop);
           backdrop.on('click', close);
           parent.on('keydown', onKeyDown);
+
+          changeTabIndex(interactiveEls, 0);
         } else {
           backdrop.remove();
           backdrop.off('click', close);
           parent.off('keydown', onKeyDown);
+
+          changeTabIndex(interactiveEls, -1);
         }
       }
 
+      function changeTabIndex(nodeList, tabIndex){
+        for(var i=0; i<nodeList.length; i++){
+          nodeList[i].setAttribute('tabIndex', tabIndex);
+        }
+      }
       /**
        * Auto-close sideNav when the `escape` key is pressed.
        * @param evt
