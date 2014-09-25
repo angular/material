@@ -3,8 +3,17 @@ angular.module('tabsDemo1', ['ngMaterial'] )
   .controller('AppCtrl', function( $scope ) {
 
     $scope.data = {
-      selectedIndex: 0
+      maxIndex : 9,
+      selectedIndex : 0,
+      locked : true
     };
-    $scope.locked = true;
 
+    $scope.next = function() {
+      $scope.data.selectedIndex = Math.min( $scope.data.maxIndex, $scope.data.selectedIndex + 1) ;
+    };
+
+    $scope.previous = function() {
+      $scope.data.selectedIndex = Math.max(0, ($scope.data.selectedIndex - 1));
+    };
+    
   });

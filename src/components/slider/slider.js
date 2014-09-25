@@ -296,6 +296,8 @@ function SliderController(scope, element, attr, $$rAF, $window, $materialEffects
 
         onPan(ev);
 
+        ev.srcEvent.stopPropagation();
+
       } else if (isSliding && ev.eventType === Hammer.INPUT_END) {
 
         if ( isDiscrete ) onPanEnd(ev);

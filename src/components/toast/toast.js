@@ -4,7 +4,7 @@
  * @description
  * Toast
  */
-angular.module('material.components.toast', ['material.services.compiler'])
+angular.module('material.components.toast', ['material.services.compiler', 'material.components.swipe'])
   .directive('materialToast', [
     QpToastDirective
   ])
@@ -12,6 +12,7 @@ angular.module('material.components.toast', ['material.services.compiler'])
     '$timeout',
     '$rootScope',
     '$materialCompiler',
+    '$materialSwipe',
     '$rootElement',
     '$animate',
     QpToastService
@@ -29,7 +30,7 @@ function QpToastDirective() {
  * @module material.components.toast
  *
  * @description
- * Open a toast notification on any position on the screen, with an optional 
+ * Open a toast notification on any position on the screen, with an optional
  * duration.
  *
  * Only one toast notification may ever be active at any time. If a new toast is
@@ -67,7 +68,7 @@ function QpToastDirective() {
  * @param {string=} template Same as templateUrl, except this is an actual
  * template string.
  * @param {number=} duration How many milliseconds the toast should stay
- * active before automatically closing.  Set to 0 to disable duration. 
+ * active before automatically closing.  Set to 0 to disable duration.
  * Default: 3000.
  * @param {string=} position Where to place the toast. Available: any combination
  * of 'bottom', 'left', 'top', 'right', 'fit'. Default: 'bottom left'.
@@ -75,14 +76,14 @@ function QpToastDirective() {
  * The controller will be injected the local `$hideToast`, which is a function
  * used to hide the toast.
  * @param {string=} locals An object containing key/value pairs. The keys will
- * be used as names of values to inject into the controller. For example, 
+ * be used as names of values to inject into the controller. For example,
  * `locals: {three: 3}` would inject `three` into the controller with the value
  * of 3.
  * @param {object=} resolve Similar to locals, except it takes promises as values
  * and the toast will not open until the promises resolve.
  * @param {string=} controllerAs An alias to assign the controller to on the scope.
  */
-function QpToastService($timeout, $rootScope, $materialCompiler, $rootElement, $animate) {
+function QpToastService($timeout, $rootScope, $materialCompiler, $materialSwipe, $rootElement, $animate) {
   var recentToast;
   function toastOpenClass(position) {
     return 'material-toast-open-' +
@@ -119,40 +120,39 @@ function QpToastService($timeout, $rootScope, $materialCompiler, $rootElement, $
       // Controller will be passed a `$hideToast` function
       compileData.locals.$hideToast = destroy;
 
+      var delayTimeout;
       var scope = $rootScope.$new();
       var element = compileData.link(scope);
-
       var toastParentClass = toastOpenClass(options.position);
+      var configureSwipe = $materialSwipe(scope, "swiperight swipeleft");
+
       element.addClass(options.position);
       toastParent.addClass(toastParentClass);
 
-      var delayTimeout;
-      $animate.enter(element, toastParent).then(function() {
-        if (options.duration) {
-          delayTimeout = $timeout(destroy, options.duration);
-        }
-      });
+      $animate
+        .enter(element, toastParent).then(function() {
+          if (options.duration) {
+            delayTimeout = $timeout(destroy, options.duration);
+          }
+        });
 
-      var hammertime = new Hammer(element[0], {
-        recognizers: [
-          [Hammer.Swipe, { direction: Hammer.DIRECTION_HORIZONTAL }]
-        ]
-      });
-      hammertime.on('swipeleft swiperight', onSwipe);
-      
-      function onSwipe(ev) {
-        //Add swipeleft/swiperight class to element so it can animate correctly
+      //Add swipeleft/swiperight class to element so it can animate correctly
+
+      configureSwipe(element, function onSwipe(ev) {
         element.addClass(ev.type);
         $timeout(destroy);
-      }
+      });
 
       return destroy;
+
+      // ******************************
+      // Internal methods
+      // ******************************
 
       function destroy() {
         if (destroy.called) return;
         destroy.called = true;
 
-        hammertime.destroy();
         toastParent.removeClass(toastParentClass);
         $timeout.cancel(delayTimeout);
         $animate.leave(element).then(function() {

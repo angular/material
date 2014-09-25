@@ -6,6 +6,7 @@
  * Tabs
  */
 angular.module('material.components.tabs', [
-  'material.animations'
+  'material.animations',
+  'material.components.swipe'
 ]);
 

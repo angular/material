@@ -27,7 +27,7 @@ module.exports = {
       return !!module;
     }),
 
-  componentsModule: "angular.module('ngMaterial', [ 'ng', 'ngAnimate', 'material.services.attrBind', 'material.services.compiler', 'material.services.registry', 'material.decorators', 'material.services.aria', <%= components.join(',') %>]);\n",
+  componentsModule: "angular.module('ngMaterial', [ 'ng', 'ngAnimate', 'material.core', 'material.services.attrBind', 'material.services.compiler', 'material.services.registry', 'material.decorators', 'material.services.aria', <%= components.join(',') %>]);\n",
 
   dist: 'dist',
 
@@ -63,8 +63,10 @@ module.exports = {
   paths: {
     sassSrc: ['src/**/*.scss'],
     scss: ['src/main.scss'],
+
     //We have to manually list files so demo files don't get 
     //into the build
+
     js: [
       //Utilities
       'src/core/**/*.js',
@@ -96,13 +98,20 @@ module.exports = {
       'src/components/divider/divider.js',
       'src/components/linearProgress/linearProgress.js',
 
+      // Non-visual Components
+      'src/components/swipe/swipe.js',
+
       //Services
       'src/services/decorators.js',
       'src/services/aria/aria.js',
       'src/services/attrBind/attrBind.js',
       'src/services/compiler/compiler.js',
       'src/services/registry/registry.js',
-      'src/services/throttle/throttle.js'
+      'src/services/throttle/throttle.js',
+
+      // Environment checks
+      'src/components/core/main.js'
+
     ],
     test: [
       'src/**/*.spec.js',

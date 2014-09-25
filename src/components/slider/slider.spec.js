@@ -1,16 +1,16 @@
 
 describe('material-slider', function() {
 
-    function simulateEventAt( centerX, eventType ) {
-      return {
-        eventType: eventType,
-        center: { x: centerX },
-        preventDefault: angular.noop,
-        srcEvent : {
-          stopPropagation : angular.noop
-        }
-      };
-    }
+  function simulateEventAt( centerX, eventType ) {
+    return {
+      eventType: eventType,
+      center: { x: centerX },
+      preventDefault: angular.noop,
+      srcEvent : {
+        stopPropagation : angular.noop
+      }
+    };
+  }
 
   beforeEach(module('material.components.slider','material.decorators'));
 

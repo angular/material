@@ -95,5 +95,5 @@ module.exports = _.assign({}, karmaConf, {
     testName: 'Angular material unit tests'
   },
 
-  singleRun: true,
+  singleRun: true
 });
