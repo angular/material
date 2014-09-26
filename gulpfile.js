@@ -40,7 +40,7 @@ if (IS_RELEASE_BUILD) {
 }
 
 gulp.task('default', ['build']);
-gulp.task('build', ['scripts', 'sass']);
+gulp.task('build', ['scripts', 'sass', 'sass-src']);
 gulp.task('validate', ['jshint', 'karma']);
 
 gulp.task('watch', ['docs'], function() {
@@ -202,6 +202,11 @@ gulp.task('sass', function() {
     .pipe(gulpif(IS_RELEASE_BUILD, minifyCss()))
     .pipe(rename({ extname: '.min.css' }))
     .pipe(gulp.dest(buildConfig.dist));
+});
+
+gulp.task('sass-src', function() {
+  return gulp.src(buildConfig.paths.sassSrc)
+    .pipe(gulp.dest(buildConfig.srcDist));
 });
 
 function enquote(str) {
