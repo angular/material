@@ -12,7 +12,7 @@ This project is still in early preview. It is a complementary effort to the [Pol
 
 ## Demo Site
 
-You can see these components in action at http://material.angularjs.org
+You can see these components in action at http://material.angularjs.org.
 
 Or you run build the docs and demos locally. See the [Documentation README](https://github.com/angular/material/tree/master/docs) for details.
 
@@ -20,7 +20,7 @@ Or you run build the docs and demos locally. See the [Documentation README](http
 
 This project is in early development via a small core team of [Ionic Framework](http://ionicframework.com/) and [AngularJS](http://angularjs.org) developers. We don't have guidelines yet for broader community involvement, although we hope to have some soon.
 
-For issues, including progress on accessibility support for these UI elements, see the [Issue Tracker](https://github.com/angular/material/issues)
+For issues, including progress on accessibility support for these UI elements, see the [Issue Tracker](https://github.com/angular/material/issues).
 
 See [CONTRIBUTING.md](https://github.com/angular/material/tree/master/CONTRIBUTING.md) for information
 on structure, documentation, and code conventions.
