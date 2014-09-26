@@ -31,6 +31,8 @@ module.exports = {
 
   dist: 'dist',
 
+  srcDist: 'dist/src',
+
   docsDist: 'dist/docs',
   docsLib: 'dist/docs/lib',
   docsVersionFile: './dist/docs/version.json', // Writing to dist/ to avoid version-managed docs
@@ -59,6 +61,7 @@ module.exports = {
   },
 
   paths: {
+    sassSrc: ['src/**/*.scss'],
     scss: ['src/main.scss'],
     //We have to manually list files so demo files don't get 
     //into the build
