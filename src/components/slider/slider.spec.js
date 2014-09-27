@@ -1,6 +1,17 @@
 
 describe('material-slider', function() {
 
+    function simulateEventAt( centerX, eventType ) {
+      return {
+        eventType: eventType,
+        center: { x: centerX },
+        preventDefault: angular.noop,
+        srcEvent : {
+          stopPropagation : angular.noop
+        }
+      };
+    }
+
   beforeEach(module('material.components.slider','material.decorators'));
 
   it('should set model on press', inject(function($compile, $rootScope, $timeout) {
@@ -14,25 +25,16 @@ describe('material-slider', function() {
       right: 0
     });
 
-    sliderCtrl._onInput({
-      eventType: Hammer.INPUT_START,
-      center: { x: 30 }
-    });
+    sliderCtrl._onInput( simulateEventAt( 30, Hammer.INPUT_START ));
     $timeout.flush();
     expect($rootScope.value).toBe(30);
 
     //When going past max, it should clamp to max
-    sliderCtrl._onPan({
-      center: { x: 500 },
-      preventDefault: angular.noop
-    });
+    sliderCtrl._onPan( simulateEventAt( 500 ));
     $timeout.flush();
     expect($rootScope.value).toBe(100);
 
-    sliderCtrl._onPan({
-      center: { x: 50 },
-      preventDefault: angular.noop
-    });
+    sliderCtrl._onPan( simulateEventAt( 50 ));
     $timeout.flush();
     expect($rootScope.value).toBe(50);
   }));
