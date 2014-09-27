@@ -53,7 +53,6 @@ function SliderDirective() {
       '$element',
       '$attrs',
       '$$rAF',
-      '$timeout',
       '$window',
       '$materialEffects',
       '$aria',
@@ -99,7 +98,7 @@ function SliderDirective() {
  * We use a controller for all the logic so that we can expose a few
  * things to unit tests
  */
-function SliderController(scope, element, attr, $$rAF, $timeout, $window, $materialEffects, $aria) {
+function SliderController(scope, element, attr, $$rAF, $window, $materialEffects, $aria) {
 
   this.init = function init(ngModelCtrl) {
     var thumb = angular.element(element[0].querySelector('.slider-thumb'));
@@ -136,6 +135,7 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
     hammertime.on('hammer.input', onInput);
     hammertime.on('panstart', onPanStart);
     hammertime.on('pan', onPan);
+    hammertime.on('panend', onPanEnd);
 
     // On resize, recalculate the slider's dimensions and re-render
     var updateAll = $$rAF.debounce(function() {
@@ -282,18 +282,25 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
      * Slide listeners
      */
     var isSliding = false;
+    var isDiscrete = angular.isDefined(attr.discrete);
+
     function onInput(ev) {
       if (!isSliding && ev.eventType === Hammer.INPUT_START &&
           !element[0].hasAttribute('disabled')) {
 
         isSliding = true;
+
         element.addClass('active');
         element[0].focus();
         refreshSliderDimensions();
-        doSlide(ev.center.x);
+
+        onPan(ev);
 
       } else if (isSliding && ev.eventType === Hammer.INPUT_END) {
+
+        if ( isDiscrete ) onPanEnd(ev);
         isSliding = false;
+
         element.removeClass('panning active');
       }
     }
@@ -303,8 +310,33 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
     }
     function onPan(ev) {
       if (!isSliding) return;
-      doSlide(ev.center.x);
+
+      // While panning discrete, update only the
+      // visual positioning but not the model value.
+
+      if ( isDiscrete ) adjustThumbPosition( ev.center.x );
+      else              doSlide( ev.center.x );
+
       ev.preventDefault();
+      ev.srcEvent.stopPropagation();
+    }
+
+    function onPanEnd(ev) {
+      if ( isDiscrete ) {
+        // Convert exact to closest discrete value.
+        // Slide animate the thumb... and then update the model value.
+
+        var exactVal = percentToValue( positionToPercent( ev.center.x ));
+        var closestVal = minMaxValidator( stepValidator(exactVal) );
+
+        setSliderPercent( valueToPercent(closestVal));
+        $$rAF(function(){
+          setModelValue( closestVal );
+        });
+
+        ev.preventDefault();
+        ev.srcEvent.stopPropagation();
+      }
     }
 
     /**
@@ -314,9 +346,44 @@ function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mater
     this._onPanStart = onPanStart;
     this._onPan = onPan;
 
-    function doSlide(x) {
-      var percent = (x - sliderDimensions.left) / (sliderDimensions.width);
-      scope.$evalAsync(function() { setModelValue(min + percent * (max - min)); });
+    /**
+     * Slide the UI by changing the model value
+     * @param x
+     */
+    function doSlide( x ) {
+      scope.$evalAsync( function() {
+        setModelValue( percentToValue( positionToPercent(x) ));
+      });
+    }
+
+    /**
+     * Slide the UI without changing the model (while dragging/panning)
+     * @param x
+     */
+    function adjustThumbPosition( x ) {
+      setSliderPercent( positionToPercent(x) );
+    }
+
+    /**
+     * Convert horizontal position on slider to percentage value of offset from beginning...
+     * @param x
+     * @returns {number}
+     */
+    function positionToPercent( x ) {
+      return (x - sliderDimensions.left) / (sliderDimensions.width);
+    }
+
+    /**
+     * Convert percentage offset on slide to equivalent model value
+     * @param percent
+     * @returns {*}
+     */
+    function percentToValue( percent ) {
+      return (min + percent * (max - min));
+    }
+
+    function valueToPercent( val ) {
+      return (val - min)/(max - min);
     }
 
   };
