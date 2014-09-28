@@ -57,7 +57,10 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
 
     var InterimElement = {};
 
-    var deferred, hideTimeout, currentEl, lastOptions;
+    var deferred = [];
+    var hideTimeouts = [];
+    var elementStack = [];
+    var optionsStack = [];
 
     var parent = $rootElement.find('body');
     if (!parent.length) parent = $rootElement;
@@ -88,20 +91,24 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
      */
 
     InterimElement.show = function(options) {
-      if (deferred) {
+      if (deferred.length) {
         InterimElement.hide();
       }
 
-      deferred = $q.defer();
+      var defer = $q.defer();
+      deferred.push(defer);
 
       options = options || {};
 
-      lastOptions = options = angular.extend({
+      options = angular.extend({
         scope: options.scope || $rootScope.$new(options.isolateScope)
       }, InterimElement.defaults, options);
 
+      optionsStack.push(options);
+
       $materialCompiler.compile(options).then(function(compiledData) {
-        currentEl = compiledData.link(options.scope);
+        var currentEl = compiledData.link(options.scope);
+        elementStack.push(currentEl);
 
         var ret = options.onShow(options.scope, currentEl, options);
         $q.when(ret).then(function() {
@@ -110,7 +117,7 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
           }
         });
       });
-      return deferred.promise;
+      return defer.promise;
     };
 
     /**
@@ -129,10 +136,12 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
 
     InterimElement.hide = function() {
       var args = [].slice.call(arguments);
-      var def = deferred;
-      destroy().then(function() {
-        def.resolve.apply(def, args);
-      });
+      var def = deferred.shift();
+      if(def) {
+        destroy().then(function() {
+          def.resolve.apply(def, args);
+        });
+      }
     };
 
     /**
@@ -151,28 +160,24 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
 
     InterimElement.cancel = function() {
       var args = [].slice.call(arguments);
-      var def = deferred;
-      destroy().then(function() {
-        def.reject.apply(def, args);
-      });
+      var def = deferred.shift();
+      if(def) {
+        destroy().then(function() {
+          def.reject.apply(def, args);
+        });
+      }
     };
 
     function destroy() {
       var finish = $q.defer();
-      if (!deferred) {
-        // Already cleaned up, just return
-        finish.resolve();
-        return finish.promise;
-      }
-      deferred = undefined;
-      if (hideTimeout) {
-        $timeout.cancel(hideTimeout);
-        hideTimeout = undefined;
+      if (hideTimeouts.length) {
+        $timeout.cancel(hideTimeouts.shift());
       }
 
-      var ret = lastOptions.onHide(lastOptions.scope, currentEl, lastOptions);
+      var options = optionsStack.shift();
+      var ret = options.onHide(options.scope, elementStack.shift(), options);
       return $q.when(ret).then(function() {
-        lastOptions.scope.$destroy();
+        options.scope.$destroy();
         finish.resolve();
       });
     }
