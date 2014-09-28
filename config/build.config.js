@@ -106,12 +106,12 @@ module.exports = {
       'src/services/aria/aria.js',
       'src/services/attrBind/attrBind.js',
       'src/services/compiler/compiler.js',
+      'src/services/interimElement/interimElement.js',
       'src/services/registry/registry.js',
       'src/services/throttle/throttle.js',
 
       // Environment checks
       'src/components/core/main.js'
-
     ],
     test: [
       'src/**/*.spec.js',
