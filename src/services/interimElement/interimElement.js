@@ -60,7 +60,7 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
     var deferred, hideTimeout, currentEl, lastOptions;
 
     var parent = $rootElement.find('body');
-    if(!parent.length) parent = $rootElement;
+    if (!parent.length) parent = $rootElement;
 
     InterimElement.defaults = angular.extend({
       parent: parent,
@@ -82,13 +82,13 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
      *
      * @param {Object} options Options object to compile with.
      *
-     * @returns {Promise} Promise that will resolve when the service 
+     * @returns {Promise} Promise that will resolve when the service
      * has `#close()` or `#cancel()` called.
      *
      */
 
     InterimElement.show = function(options) {
-      if(deferred) {
+      if (deferred) {
         InterimElement.hide();
       }
 
@@ -105,7 +105,7 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
 
         var ret = options.onShow(options.scope, currentEl, options);
         $q.when(ret).then(function() {
-          if(options.hideTimeout) {
+          if (options.hideTimeout) {
             hideTimeout = $timeout(InterimElement.hide, options.hideTimeout);
           }
         });
@@ -159,16 +159,16 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
 
     function destroy() {
       var finish = $q.defer();
-      if(!deferred) {
+      if (!deferred) {
         // Already cleaned up, just return
         finish.resolve();
         return finish.promise;
       }
       deferred = undefined;
-      if(hideTimeout) {
+      if (hideTimeout) {
         $timeout.cancel(hideTimeout);
         hideTimeout = undefined;
-      } 
+      }
 
       var ret = lastOptions.onHide(lastOptions.scope, currentEl, lastOptions);
       return $q.when(ret).then(function() {

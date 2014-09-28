@@ -45,10 +45,12 @@ function MaterialDialogDirective($$rAF) {
  *
  * The $materialDialog service opens a dialog over top of the app. 
  *
- * The `$materialDialog` service can be used as a function, which when called will open a
- * dialog. Note: the dialog is always given an isolate scope.
+ * Note: The dialog is always given an isolate scope.
  *
- * It takes one argument, `options`, which is defined below.
+ * `$materialDialog` is an `$interimElement` service and adheres to the same behaviors.
+ *  - `$materialDialog.show()`
+ *  - `$materialDialog.hide()`
+ *  - `$materialDialog.cancel()`
  *
  * Note: the dialog's template must have an outer `<material-dialog>` element. 
  * Inside, use an element with class `dialog-content` for the dialog's content, and use
@@ -70,7 +72,7 @@ function MaterialDialogDirective($$rAF) {
  * var app = angular.module('app', ['ngMaterial']);
  * app.controller('MyController', function($scope, $materialDialog) {
  *   $scope.openDialog = function($event) {
- *     var hideDialog = $materialDialog({
+ *     $materialDialog.show({
  *       template: '<material-dialog>Hello!</material-dialog>',
  *       targetEvent: $event
  *     });
@@ -78,7 +80,15 @@ function MaterialDialogDirective($$rAF) {
  * });
  * </hljs>
  *
- * @returns {function} `hideDialog` - A function that hides the dialog.
+ */
+
+/**
+ *
+ * @ngdoc method
+ * @name $materialDialog#show
+ *
+ * @description
+ * Show a dialog with the specified options
  *
  * @paramType Options
  * @param {string=} templateUrl The url of a template that will be used as the content
@@ -103,6 +113,31 @@ function MaterialDialogDirective($$rAF) {
  * @param {string=} controllerAs An alias to assign the controller to on the scope.
  * @param {element=} parent The element to append the dialog to. Defaults to appending
  *   to the root element of the application.
+ *
+ * @returns {Promise} Returns a promise that will be resolved or rejected when
+ *  `$materialDialog.hide()` or `$materialDialog.cancel()` is called respectively.
+ */
+
+/**
+ * @ngdoc method
+ * @name $materialDialog#hide
+ *
+ * @description
+ * Hide an existing dialog and `resolve` the promise returned from `$materialDialog.show()`.
+ *
+ * @param {*} arg An argument to resolve the promise with.
+ *
+ */
+
+/**
+ * @ngdoc method
+ * @name $materialDialog#cancel
+ *
+ * @description
+ * Hide an existing dialog and `reject` the promise returned from `$materialDialog.show()`.
+ *
+ * @param {*} arg An argument to reject the promise with.
+ *
  */
 
 function MaterialDialogService($timeout, $rootElement, $materialEffects, $animate, $aria, $$interimElementFactory) {
@@ -125,9 +160,9 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
 
   function onShow(scope, el, options) {
     // Incase the user provides a raw dom element, always wrap it in jqLite
-    options.parent = angular.element(options.parent); 
+    options.parent = angular.element(options.parent);
 
-    popInTarget = options.targetEvent && options.targetEvent.target && 
+    popInTarget = options.targetEvent && options.targetEvent.target &&
       angular.element(options.targetEvent.target);
 
     var closeButton = findCloseButton();
@@ -167,7 +202,7 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
 
 
     function findCloseButton() {
-      //If no element with class dialog-close, try to find the last 
+      //If no element with class dialog-close, try to find the last
       //button child in dialog-actions and assume it is a close button
       var closeButton = el[0].querySelector('.dialog-close');
       if (!closeButton) {
@@ -199,7 +234,7 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
     }
     return $animate.leave(el).then(function() {
       el.remove();
-      if(popInTarget) {
+      if (popInTarget) {
         popInTarget.focus();
       }
     });
@@ -214,7 +249,7 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
     });
 
     var dialogContent = element.find('.dialog-content');
-    if(dialogContent.length === 0){
+    if (dialogContent.length === 0){
       dialogContent = element;
     }
     var defaultText = Util.stringFromTextBody(dialogContent.text(), 3);

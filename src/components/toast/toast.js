@@ -36,8 +36,10 @@ function MaterialToastDirective() {
  * shown while a different toast is active, the old toast will be automatically
  * hidden.
  *
- * `$materialToast` is an $interimElement service and adheres to the same behaviors.
- *  It has a `show()`, `hide()` and `cancel()` function.
+ * `$materialToast` is an `$interimElement` service and adheres to the same behaviors.
+ *  - `$materialToast.show()`
+ *  - `$materialToast.hide()`
+ *  - `$materialToast.cancel()`
  *
  * @usage
  * <hljs lang="html">
@@ -58,6 +60,14 @@ function MaterialToastDirective() {
  *   };
  * });
  * </hljs>
+ */
+
+ /**
+ * @ngdoc method
+ * @name $materialToast#show
+ *
+ * @description
+ * Show a toast dialog with the specified options.
  *
  * @paramType Options
  * @param {string=} templateUrl The url of an html template file that will
@@ -80,6 +90,31 @@ function MaterialToastDirective() {
  * @param {object=} resolve Similar to locals, except it takes promises as values
  * and the toast will not open until the promises resolve.
  * @param {string=} controllerAs An alias to assign the controller to on the scope.
+ *
+ * @returns {Promise} Returns a promise that will be resolved or rejected when
+ *  `$materialToast.hide()` or `$materialToast.cancel()` is called respectively.
+ */
+
+/**
+ * @ngdoc method
+ * @name $materialToast#hide
+ *
+ * @description
+ * Hide an existing toast and `resolve` the promise returned from `$materialToast.show()`.
+ *
+ * @param {*} arg An argument to resolve the promise with.
+ *
+ */
+
+/**
+ * @ngdoc method
+ * @name $materialToast#cancel
+ *
+ * @description
+ * Hide an existing toast and `reject` the promise returned from `$materialToast.show()`.
+ *
+ * @param {*} arg An argument to reject the promise with.
+ *
  */
 
 function MaterialToastService($timeout, $$interimElementFactory, $animate) {

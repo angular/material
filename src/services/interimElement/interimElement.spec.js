@@ -50,19 +50,13 @@ describe('$$interimElementFactory service', function() {
 
       it('calls onShow', inject(function($rootScope) {
         var onShowCalled = false;
-        runs(function() {
-          Service.show({
-            template: '<some-element />',
-            isPassingOptions: true,
-            onShow: onShow
-          });
-          $rootScope.$digest();
+        Service.show({
+          template: '<some-element />',
+          isPassingOptions: true,
+          onShow: onShow
         });
-
-        waitsFor(function() {
-          return onShowCalled;
-        }, 'onShow should be called', 100);
-
+        $rootScope.$digest();
+        expect(onShowCalled).toBe(true);
 
         function onShow(scope, el, options) {
           onShowCalled = true;
@@ -79,21 +73,15 @@ describe('$$interimElementFactory service', function() {
     describe('#hide', function() {
       it('calls onHide', inject(function($rootScope) {
         var onHideCalled = false;
-        runs(function() {
-          Service.show({
-            template: '<some-element />',
-            passingOptions: true,
-            onHide: onHide
-          });
-          $rootScope.$digest();
-          Service.hide();
-          $rootScope.$digest();
+        Service.show({
+          template: '<some-element />',
+          passingOptions: true,
+          onHide: onHide
         });
-
-        waitsFor(function() {
-          return onHideCalled;
-        }, 'onHide should be called', 100);
-
+        $rootScope.$digest();
+        Service.hide();
+        $rootScope.$digest();
+        expect(onHideCalled).toBe(true);
 
         function onHide(scope, el, options) {
           onHideCalled = true;
@@ -105,41 +93,31 @@ describe('$$interimElementFactory service', function() {
       it('resolves the show promise', inject(function($animate, $rootScope) {
         var resolved = false;
 
-        runs(function() {
-          Service.show().then(function(arg) {
-            expect(arg).toBe('test');
-            resolved = true;
-          });
-          $rootScope.$digest();
-          $animate.triggerCallbacks();
-          Service.hide('test');
-          $rootScope.$digest();
-          $animate.triggerCallbacks();
+        Service.show().then(function(arg) {
+          expect(arg).toBe('test');
+          resolved = true;
         });
-        waitsFor(function() {
-          return resolved;
-        }, 'promise should be resolved', 100);
+        $rootScope.$digest();
+        $animate.triggerCallbacks();
+        Service.hide('test');
+        $rootScope.$digest();
+        $animate.triggerCallbacks();
+        expect(resolved).toBe(true);
       }));
     });
 
     describe('#cancel', function() {
       it('calls onHide', inject(function($rootScope) {
         var onHideCalled = false;
-        runs(function() {
-          Service.show({
-            template: '<some-element />',
-            passingOptions: true,
-            onHide: onHide
-          });
-          $rootScope.$digest();
-          Service.cancel();
-          $rootScope.$digest();
+        Service.show({
+          template: '<some-element />',
+          passingOptions: true,
+          onHide: onHide
         });
-
-        waitsFor(function() {
-          return onHideCalled;
-        }, 'onHide should be called', 100);
-
+        $rootScope.$digest();
+        Service.cancel();
+        $rootScope.$digest();
+        expect(onHideCalled).toBe(true);
 
         function onHide(scope, el, options) {
           onHideCalled = true;
@@ -151,20 +129,16 @@ describe('$$interimElementFactory service', function() {
       it('rejects the show promise', inject(function($animate, $rootScope) {
         var rejected = false;
 
-        runs(function() {
-          Service.show().then(undefined, function(arg) {
-            expect(arg).toBe('test');
-            rejected = true;
-          });
-          $rootScope.$digest();
-          $animate.triggerCallbacks();
-          Service.cancel('test');
-          $rootScope.$digest();
-          $animate.triggerCallbacks();
+        Service.show().then(undefined, function(arg) {
+          expect(arg).toBe('test');
+          rejected = true;
         });
-        waitsFor(function() {
-          return rejected;
-        }, 'promise should be rejected', 100);
+        $rootScope.$digest();
+        $animate.triggerCallbacks();
+        Service.cancel('test');
+        $rootScope.$digest();
+        $animate.triggerCallbacks();
+        expect(rejected).toBe(true);
       }));
     });
 
