@@ -1,17 +1,15 @@
 angular.module('dialogDemo1', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope, $materialDialog) {
-
   $scope.dialog = function(e) {
-    $materialDialog({
+    $materialDialog.show({
       templateUrl: 'my-dialog.tmpl.html',
       targetEvent: e,
-      controller: ['$scope', '$hideDialog', function($scope, $hideDialog) {
+      controller: ['$scope', function($scope) {
         $scope.close = function() {
-          $hideDialog();
+          $materialDialog.hide();
         };
       }]
     });
   };
-
 });

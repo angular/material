@@ -192,7 +192,7 @@
         var configureSwipe = $materialSwipe(scope, direction);
         var requestSwipe = function(locals) {
           // build function to request scope-specific swipe response
-          parentGetter(scope, locals)
+          parentGetter(scope, locals);
         };
 
         configureSwipe( element, function onHandleSwipe(ev) {

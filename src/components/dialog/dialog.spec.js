@@ -11,6 +11,11 @@ describe('$materialDialog', function() {
       element.remove();
       return $$q.when();
     });
+
+    spyOn($animate, 'enter').andCallFake(function(element, parent) {
+      parent.append(element);
+      return $$q.when();
+    });
   }));
 
   it('should append dialog with container', inject(function($materialDialog, $rootScope) {
@@ -18,9 +23,9 @@ describe('$materialDialog', function() {
     var template = '<material-dialog>Hello</material-dialog>';
     var parent = angular.element('<div>');
 
-    $materialDialog({
+    $materialDialog.show({
       template: template,
-      appendTo: parent
+      parent: parent
     });
 
     $rootScope.$apply();
@@ -31,9 +36,9 @@ describe('$materialDialog', function() {
 
   it('should escapeToClose == true', inject(function($materialDialog, $rootScope, $rootElement, $timeout, $materialEffects, $animate) {
     var parent = angular.element('<div>');
-    $materialDialog({
+    $materialDialog.show({
       template: '<material-dialog>',
-      appendTo: parent,
+      parent: parent,
       escapeToClose: true
     });
 
@@ -51,9 +56,9 @@ describe('$materialDialog', function() {
 
   it('should escapeToClose == false', inject(function($materialDialog, $rootScope, $rootElement, $timeout, $materialEffects, $animate) {
     var parent = angular.element('<div>');
-    $materialDialog({
+    $materialDialog.show({
       template: '<material-dialog>',
-      appendTo: parent,
+      parent: parent,
       escapeToClose: false
     });
 
@@ -70,9 +75,9 @@ describe('$materialDialog', function() {
   it('should clickOutsideToClose == true', inject(function($materialDialog, $rootScope, $timeout, $materialEffects, $animate) {
 
     var parent = angular.element('<div>');
-    $materialDialog({
+    $materialDialog.show({
       template: '<material-dialog>',
-      appendTo: parent,
+      parent: parent,
       clickOutsideToClose: true
     });
 
@@ -92,9 +97,9 @@ describe('$materialDialog', function() {
   it('should clickOutsideToClose == false', inject(function($materialDialog, $rootScope, $timeout, $materialEffects, $animate) {
 
     var parent = angular.element('<div>');
-    $materialDialog({
+    $materialDialog.show({
       template: '<material-dialog>',
-      appendTo: parent,
+      parent: parent,
       clickOutsideToClose: false
     });
 
@@ -113,9 +118,9 @@ describe('$materialDialog', function() {
 
   it('should hasBackdrop == true', inject(function($materialDialog, $rootScope) {
     var parent = angular.element('<div>');
-    $materialDialog({
+    $materialDialog.show({
       template: '<material-dialog>',
-      appendTo: parent,
+      parent: parent,
       hasBackdrop: true
     });
 
@@ -126,9 +131,9 @@ describe('$materialDialog', function() {
 
   it('should hasBackdrop == false', inject(function($materialDialog, $rootScope) {
     var parent = angular.element('<div>');
-    $materialDialog({
+    $materialDialog.show({
       template: '<material-dialog>',
-      appendTo: parent,
+      parent: parent,
       hasBackdrop: false
     });
 
@@ -141,14 +146,14 @@ describe('$materialDialog', function() {
     TestUtil.mockElementFocus(this);
 
     var parent = angular.element('<div>');
-    $materialDialog({
+    $materialDialog.show({
       template:
         '<material-dialog>' +
           '<div class="dialog-actions">' +
             '<button class="dialog-close">Close</button>' +
           '</div>' +
           '</material-dialog>',
-      appendTo: parent
+      parent: parent
     });
 
     $rootScope.$apply();
@@ -161,7 +166,7 @@ describe('$materialDialog', function() {
     TestUtil.mockElementFocus(this);
 
     var parent = angular.element('<div>');
-    $materialDialog({
+    $materialDialog.show({
       template:
         '<material-dialog>' +
           '<div class="dialog-actions">' +
@@ -169,7 +174,7 @@ describe('$materialDialog', function() {
             '<button id="focus-target">B</material-button>' +
           '</div>' +
         '</material-dialog>',
-      appendTo: parent
+      parent: parent
     });
 
     $rootScope.$apply();
@@ -180,18 +185,18 @@ describe('$materialDialog', function() {
 
   it('should only allow one open at a time', inject(function($materialDialog, $rootScope) {
     var parent = angular.element('<div>');
-    $materialDialog({
+    $materialDialog.show({
       template: '<material-dialog class="one">',
-      appendTo: parent
+      parent: parent
     });
 
     $rootScope.$apply();
     expect(parent.find('material-dialog.one').length).toBe(1);
     expect(parent.find('material-dialog.two').length).toBe(0);
 
-    $materialDialog({
+    $materialDialog.show({
       template: '<material-dialog class="two">',
-      appendTo: parent
+      parent: parent
     });
 
     $rootScope.$apply();
@@ -203,9 +208,9 @@ describe('$materialDialog', function() {
     var template = '<material-dialog>Hello</material-dialog>';
     var parent = angular.element('<div>');
 
-    $materialDialog({
+    $materialDialog.show({
       template: template,
-      appendTo: parent
+      parent: parent
     });
 
     $rootScope.$apply();
@@ -218,9 +223,9 @@ describe('$materialDialog', function() {
     var template = '<material-dialog>Hello</material-dialog>';
     var parent = angular.element('<div>');
 
-    $materialDialog({
+    $materialDialog.show({
       template: template,
-      appendTo: parent
+      parent: parent
     });
 
     $rootScope.$apply();
@@ -233,9 +238,9 @@ describe('$materialDialog', function() {
     var template = '<material-dialog aria-label="Some Other Thing">Hello</material-dialog>';
     var parent = angular.element('<div>');
 
-    $materialDialog({
+    $materialDialog.show({
       template: template,
-      appendTo: parent
+      parent: parent
     });
 
     $rootScope.$apply();

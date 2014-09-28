@@ -1,95 +1,195 @@
+/**
+ * @ngdoc module
+ * @name material.services.interimElement
+ * @description InterimElement
+ */
+
 angular.module('material.services.interimElement', [
   'material.services.compiler'
 ])
-.factory('$$interimElementFactory', [
+.factory('$$interimElement', [
   '$q',
   '$rootScope',
   '$timeout',
   '$rootElement',
+  '$animate',
   '$materialCompiler',
   InterimElementFactory
 ]);
 
-function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $materialCompiler) {
+/**
+ * @ngdoc service
+ * @name $$interimElement
+ *
+ * @description
+ *
+ * Factory that contructs `$$interimElement.$service` services. 
+ * Used internally in material for elements that appear on screen temporarily.
+ * The service provides a promise-like API for interacting with the temporary
+ * elements.
+ *
+ * ```js
+ * app.service('$materialToast', function($$interimElement) {
+ *   var $materialToast = $$interimElement(toastDefaultOptions);
+ *   return $materialToast;
+ * });
+ * ```
+ * @param {object=} defaultOptions Options used by default for the `show` method on the service.
+ *
+ * @returns {$$interimElement.$service}
+ *
+ */
 
-  return createInterimElement;
+function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate, $materialCompiler) {
 
-  function createInterimElement(defaults) {
-    var InterimElement = {};
+  return function createInterimElementService(defaults) {
 
-    var deferred, hideTimeout, currentEl, lastOptions;
+    /**
+     * @ngdoc service
+     * @name $$interimElement.$service
+     *
+     * @description
+     * A service used to control inserting and removing an element into the DOM.
+     *
+     */
+
+
+    var stack = [];
 
     var parent = $rootElement.find('body');
-    if(!parent.length) parent = $rootElement;
+    if (!parent.length) parent = $rootElement;
 
-    InterimElement.defaults = angular.extend({
+    defaults = angular.extend({
       parent: parent,
       onShow: function(scope, $el, options) {
         return $animate.enter($el, options.parent);
       },
-      onHide: function(scope, $el, options) {
+      onRemove: function(scope, $el, options) {
         return $animate.leave($el);
       },
     }, defaults || {});
 
-    InterimElement.show = function(options) {
-      if(deferred) {
-        InterimElement.hide();
+    var service;
+    return service = {
+      show: show,
+      hide: hide,
+      cancel: cancel
+    };
+
+    /**
+     * @ngdoc method
+     * @name $$interimElement.$service#show
+     * @kind function
+     *
+     * @description
+     * Compiles and inserts an element into the DOM.
+     *
+     * @param {Object} options Options object to compile with.
+     *
+     * @returns {Promise} Promise that will resolve when the service
+     * has `#close()` or `#cancel()` called.
+     *
+     */
+    function show(options) {
+      if (stack.length) {
+        service.hide();
       }
 
-      deferred = $q.defer();
-
-      options = options || {};
-
-      lastOptions = options = angular.extend({
-        scope: options.scope || $rootScope.$new()
-      }, InterimElement.defaults, options);
-
-      $materialCompiler.compile(options).then(function(compiledData) {
-        currentEl = compiledData.link(options.scope);
-
-        var ret = options.onShow(options.scope, currentEl, options);
-        $q.when(ret).then(function() {
-          if(options.hideTimeout) {
-            hideTimeout = $timeout(InterimElement.hide, options.hideTimeout);
-          }
-        });
-      });
-      return deferred.promise;
-    };
-
-    InterimElement.hide = function() {
-      var args = [].slice.call(arguments);
-      var def = deferred;
-      destroy().then(function() {
-        def.resolve.apply(def, args);
-      });
-    };
-
-    InterimElement.cancel = function() {
-      var args = [].slice.call(arguments);
-      var def = deferred;
-      destroy().then(function() {
-        def.reject.apply(def, args);
-      });
-    };
-
-    function destroy() {
-      var finish = $q.defer();
-      deferred = undefined;
-      if(hideTimeout) {
-        $timeout.cancel(hideTimeout);
-        hideTimeout = undefined;
-      }
-
-      var ret = lastOptions.onHide(lastOptions.scope, currentEl, lastOptions);
-      return $q.when(ret).then(function() {
-        lastOptions.scope.$destroy();
-        finish.resolve();
+      var interimElement = new InterimElement(options);
+      stack.push(interimElement);
+      return interimElement.show().then(function() {
+        return interimElement.deferred.promise;
       });
     }
 
-    return InterimElement;
-  }
+    /**
+     * @ngdoc method
+     * @name $$interimElement.$service#hide
+     * @kind function
+     *
+     * @description
+     * Removes the `$interimElement` from the DOM and resolves the promise returned from `show`
+     *
+     * @param {*} resolveParam Data to resolve the promise with
+     *
+     * @returns undefined data that resolves after the element has been removed.
+     *
+     */
+    function hide(success) {
+      var interimElement = stack.shift();
+      interimElement.remove().then(function() {
+        interimElement.deferred.resolve(success);
+      });
+    }
+
+    /**
+     * @ngdoc method
+     * @name $$interimElement.$service#cancel
+     * @kind function
+     *
+     * @description
+     * Removes the `$interimElement` from the DOM and rejects the promise returned from `show`
+     *
+     * @param {*} reason Data to reject the promise with
+     *
+     * @returns undefined
+     *
+     */
+    function cancel(reason) {
+      var interimElement = stack.shift();
+      interimElement.remove().then(function() {
+        interimElement.deferred.reject(reason);
+      });
+    }
+
+
+    /*
+     * Internal Interim Element Object
+     * Used internally to manage the DOM element and related data
+     */
+    function InterimElement(options) {
+      var self;
+      var hideTimeout, element;
+
+      options = options || {};
+
+      options = angular.extend({
+        scope: options.scope || $rootScope.$new(options.isolateScope)
+      }, defaults, options);
+
+      self = {
+        options: options,
+        deferred: $q.defer(),
+        show: function() {
+          return $materialCompiler.compile(options).then(function(compiledData) {
+            element = compiledData.link(options.scope);
+            var ret = options.onShow(options.scope, element, options);
+            return $q.when(ret)
+              .then(startHideTimeout);
+
+            function startHideTimeout() {
+              if (options.hideDelay) {
+                hideTimeout = $timeout(service.hide, options.hideDelay) ;
+              }
+            }
+          });
+        },
+        cancelTimeout: function() {
+          if (hideTimeout) {
+            $timeout.cancel(hideTimeout);
+            hideTimeout = undefined;
+          }
+        },
+        remove: function() {
+          self.cancelTimeout();
+          var ret = options.onRemove(options.scope, element, options);
+          return $q.when(ret).then(function() {
+            options.scope.$destroy();
+          });
+        }
+      };
+      return self;
+    }
+  };
 }
 
