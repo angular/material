@@ -5,7 +5,8 @@
 angular.module('material.components.dialog', [
   'material.animations',
   'material.services.compiler',
-  'material.services.aria'
+  'material.services.aria',
+  'material.services.interimElement',
 ])
   .directive('materialDialog', [
     '$$rAF',
@@ -13,12 +14,11 @@ angular.module('material.components.dialog', [
   ])
   .factory('$materialDialog', [
     '$timeout',
-    '$materialCompiler',
     '$rootElement',
-    '$rootScope',
     '$materialEffects',
     '$animate',
     '$aria',
+    '$$interimElementFactory',
     MaterialDialogService
   ]);
 
@@ -101,136 +101,123 @@ function MaterialDialogDirective($$rAF) {
  * @param {object=} resolve Similar to locals, except it takes promises as values, and the
  * toast will not open until all of the promises resolve.
  * @param {string=} controllerAs An alias to assign the controller to on the scope.
- * @param {element=} appendTo The element to append the dialog to. Defaults to appending
+ * @param {element=} parent The element to append the dialog to. Defaults to appending
  *   to the root element of the application.
  */
-function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootScope, $materialEffects, $animate, $aria) {
-  var recentDialog;
-  var dialogParent = $rootElement.find('body');
-  if ( !dialogParent.length ) {
-    dialogParent = $rootElement;
-  }
 
-  return showDialog;
+function MaterialDialogService($timeout, $rootElement, $materialEffects, $animate, $aria, $$interimElementFactory) {
+  var factoryDef = {
+    hasBackdrop: true,
+    isolateScope: true,
+    onShow: onShow,
+    onHide: onHide,
+    clickOutsideToClose: true,
+    escapeToClose: true,
+    targetEvent: null,
+    transformTemplate: function(template) {
+      return '<div class="material-dialog-container">' + template + '</div>';
+    }
+  };
 
-  function showDialog(options) {
-    options = angular.extend({
-      appendTo: dialogParent,
-      hasBackdrop: true, // should have an opaque backdrop
-      clickOutsideToClose: true, // should have a clickable backdrop to close
-      escapeToClose: true,
-      // targetEvent: used to find the location to start the dialog from
-      targetEvent: null,
-      transformTemplate: function(template) {
-        return '<div class="material-dialog-container">' + template + '</div>';
-      }
-      // Also supports all options from $materialCompiler.compile
-    }, options || {});
+  var $dialogService = $$interimElementFactory(factoryDef);
+  return $dialogService;
 
+
+  function onShow(scope, el, options) {
     // Incase the user provides a raw dom element, always wrap it in jqLite
-    options.appendTo = angular.element(options.appendTo); 
+    options.parent = angular.element(options.parent); 
 
-    // Close the old dialog
-    recentDialog && recentDialog.then(function(destroyDialog) {
-      destroyDialog();
-    });
+    popInTarget = options.targetEvent && options.targetEvent.target && 
+      angular.element(options.targetEvent.target);
 
-    recentDialog = $materialCompiler.compile(options).then(function(compileData) {
-      // Controller will be passed a `$hideDialog` function
-      compileData.locals.$hideDialog = destroyDialog;
+    var closeButton = findCloseButton();
 
-      var scope = $rootScope.$new(true);
-      var element = compileData.link(scope); 
-      var popInTarget = options.targetEvent && options.targetEvent.target && 
-        angular.element(options.targetEvent.target);
-      var closeButton = findCloseButton();
-      var backdrop;
+    configureAria(el.find('material-dialog'));
 
-      configureAria(element.find('material-dialog'));
-
-      if (options.hasBackdrop) {
-        backdrop = angular.element('<material-backdrop class="opaque ng-enter">');
-        $animate.enter(backdrop, options.appendTo, null);
-      }
-
-      $materialEffects.popIn(element, options.appendTo, popInTarget)
-        .then(function() {
-
-          if (options.escapeToClose) {
-            $rootElement.on('keyup', onRootElementKeyup);
-          }
-          if (options.clickOutsideToClose) {
-            element.on('click', dialogClickOutside);
-          }
-          closeButton.focus();
-
-        });
-
-      return destroyDialog;
-
-      function findCloseButton() {
-        //If no element with class dialog-close, try to find the last 
-        //button child in dialog-actions and assume it is a close button
-        var closeButton = element[0].querySelector('.dialog-close');
-        if (!closeButton) {
-          var actionButtons = element[0].querySelectorAll('.dialog-actions button');
-          closeButton = actionButtons[ actionButtons.length - 1 ];
-        }
-        return angular.element(closeButton);
-      }
-      function destroyDialog() {
-        if (destroyDialog.called) return;
-        destroyDialog.called = true;
-
-        if (backdrop) {
-          $animate.leave(backdrop);
-        }
-        if (options.escapeToClose) {
-          $rootElement.off('keyup', onRootElementKeyup);
-        }
-        if (options.clickOutsideToClose) {
-          element.off('click', dialogClickOutside);
-        }
-        $animate.leave(element).then(function() {
-          element.remove();
-          scope.$destroy();
-          scope = null;
-          element = null;
-
-          if(popInTarget !== null) {
-            popInTarget.focus();
-          }
-        });
-      }
-      function onRootElementKeyup(e) {
-        if (e.keyCode === Constant.KEY_CODE.ESCAPE) {
-          $timeout(destroyDialog);
-        }
-      }
-      function dialogClickOutside(e) {
-        // Only close if we click the flex container outside the backdrop
-        if (e.target === element[0]) {
-          $timeout(destroyDialog);
-        }
-      }
-    });
-
-    /**
-     * Inject ARIA-specific attributes appropriate for Dialogs
-     */
-    function configureAria(element) {
-      element.attr({
-        'role': 'dialog'
-      });
-
-      var dialogContent = element.find('.dialog-content');
-      if(dialogContent.length === 0){
-        dialogContent = element;
-      }
-      var defaultText = Util.stringFromTextBody(dialogContent.text(), 3);
-      $aria.expect(element, 'aria-label', defaultText);
+    if (options.hasBackdrop) {
+      var backdrop = angular.element('<material-backdrop class="opaque ng-enter">');
+      $animate.enter(backdrop, options.parent, null);
+      el.data('backdrop', backdrop);
     }
 
-    return recentDialog;
+    // Store listeners on data for easy cleanup later
+    el.data('onRootElementKeyup', function onRootElementKeyup(e) {
+      if (e.keyCode === Constant.KEY_CODE.ESCAPE) {
+        $timeout($dialogService.hide);
+      }
+    });
+
+    el.data('dialogClickOutside', function(e) {
+      // Only close if we click the flex container outside the backdrop
+      if (e.target === el[0]) {
+        $timeout($dialogService.hide);
+      }
+    });
+
+    return $materialEffects.popIn(el, options.parent, popInTarget)
+    .then(function() {
+      if (options.escapeToClose) {
+        $rootElement.on('keyup', el.data('onRootElementKeyup'));
+      }
+      if (options.clickOutsideToClose) {
+        el.on('click', el.data('dialogClickOutside'));
+      }
+      closeButton.focus();
+    });
+
+
+    function findCloseButton() {
+      //If no element with class dialog-close, try to find the last 
+      //button child in dialog-actions and assume it is a close button
+      var closeButton = el[0].querySelector('.dialog-close');
+      if (!closeButton) {
+        var actionButtons = el[0].querySelectorAll('.dialog-actions button');
+        closeButton = actionButtons[ actionButtons.length - 1 ];
+      }
+      return angular.element(closeButton);
+    }
+
+  }
+
+  function onHide(scope, el, options) {
+    var backdrop = el.data('backdrop');
+    var onRootElementKeyup = el.data('onRootElementKeyup');
+    var dialogClickOutside = el.data('dialogClickOutside');
+    var popInTarget = el.data('popInTarget');
+
+    if (backdrop) {
+      $animate.leave(backdrop);
+      el.data('backdrop', undefined);
+    }
+    if (options.escapeToClose) {
+      $rootElement.off('keyup', onRootElementKeyup);
+      el.data('onRootElementKeyup', undefined);
+    }
+    if (options.clickOutsideToClose) {
+      el.off('click', dialogClickOutside);
+      el.data('dialogClickOutside', undefined);
+    }
+    return $animate.leave(el).then(function() {
+      el.remove();
+      if(popInTarget) {
+        popInTarget.focus();
+      }
+    });
+  }
+
+  /**
+   * Inject ARIA-specific attributes appropriate for Dialogs
+   */
+  function configureAria(element) {
+    element.attr({
+      'role': 'dialog'
+    });
+
+    var dialogContent = element.find('.dialog-content');
+    if(dialogContent.length === 0){
+      dialogContent = element;
+    }
+    var defaultText = Util.stringFromTextBody(dialogContent.text(), 3);
+    $aria.expect(element, 'aria-label', defaultText);
   }
 }

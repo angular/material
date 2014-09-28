@@ -97,7 +97,7 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
       options = options || {};
 
       lastOptions = options = angular.extend({
-        scope: options.scope || $rootScope.$new()
+        scope: options.scope || $rootScope.$new(options.isolateScope)
       }, InterimElement.defaults, options);
 
       $materialCompiler.compile(options).then(function(compiledData) {
