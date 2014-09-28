@@ -99,7 +99,8 @@ module.exports = {
       'src/services/attrBind/attrBind.js',
       'src/services/compiler/compiler.js',
       'src/services/registry/registry.js',
-      'src/services/throttle/throttle.js'
+      'src/services/throttle/throttle.js',
+      'src/services/interimElement/interimElement.js'
     ],
     test: [
       'src/**/*.spec.js',
