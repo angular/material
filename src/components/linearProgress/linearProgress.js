@@ -47,22 +47,39 @@ function MaterialLinearProgressDirective($timeout) {
       '<div class="bar bar1"></div>' +
       '<div class="bar bar2"></div>' +
       '</div>',
-    link: function(scope, element, attr) {
-      var bar1 = angular.element(element[0].querySelector('.bar1')),
-          bar2 = angular.element(element[0].querySelector('.bar2')),
-          container = angular.element(element[0].querySelector('.container'));
+    compile: function compile(tElement, tAttrs, transclude) {
+      tElement.attr('aria-valuemin', 0);
+      tElement.attr('aria-valuemax', 100);
+      tElement.attr('role', 'progressbar');
 
-      attr.$observe('value', function(value) {
-        bar2.css('width', clamp(value).toString() + '%');
-      });
+      return function(scope, element, attr) {
+        var bar1Style = element[0].querySelector('.bar1').style,
+            bar2Style = element[0].querySelector('.bar2').style,
+            container = angular.element(element[0].querySelector('.container'));
 
-      attr.$observe('secondaryvalue', function(value) {
-        bar1.css('width', clamp(value).toString() + '%');
-      });
+        attr.$observe('value', function(value) {
+          if(attr.mode == 'query'){
+            return;
+          }
 
-      $timeout(function() {
-        container.addClass('ready');
-      });
+          var clamped = clamp(value);
+          element.attr('aria-valuenow', clamped);
+
+          var transform =  transformTable[clamped];
+          bar2Style.transform = transform;
+          bar2Style.webkitTransform = transform;
+        });
+
+        attr.$observe('secondaryvalue', function(value) {
+          var transform =  transformTable[clamp(value)];
+          bar1Style.transform = transform;
+          bar1Style.webkitTransform = transform;
+        });
+
+        $timeout(function() {
+          container.addClass('ready');
+        });
+      }
     }
   };
 }
@@ -70,6 +87,18 @@ function MaterialLinearProgressDirective($timeout) {
 // **********************************************************
 // Private Methods
 // **********************************************************
+
+var transformTable = new Array(101);
+
+for(var i = 0; i < 101; i++){
+  transformTable[i] = makeTransform(i);
+}
+
+function makeTransform(value){
+  var scale = value/100;
+  var translateX = (value-100)/2;
+  return 'translateX(' + translateX.toString() + '%) scale(' + scale.toString() + ', 1)';
+}
 
 function clamp(value) {
   if (value > 100) {
@@ -80,5 +109,5 @@ function clamp(value) {
     return 0;
   }
 
-  return value || 0;
+  return Math.ceil(value || 0);
 }
