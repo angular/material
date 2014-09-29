@@ -146,7 +146,7 @@ function materialSidenavService($materialComponentRegistry) {
  * @usage
  * <hljs lang="html">
  * <div layout="horizontal" ng-controller="MyController">
- *   <material-sidenav class="material-sidenav-left">
+ *   <material-sidenav component-id="left" class="material-sidenav-left">
  *     Left Nav!
  *   </material-sidenav>
  *
@@ -157,7 +157,7 @@ function materialSidenavService($materialComponentRegistry) {
  *     </material-button>
  *   </material-content>
  *
- *   <material-sidenav class="material-sidenav-right">
+ *   <material-sidenav component-id="right" class="material-sidenav-right">
  *     Right Nav!
  *   </material-sidenav>
  * </div>
