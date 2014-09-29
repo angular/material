@@ -7,7 +7,11 @@ angular.module('material.components.linearProgress', [
   'material.animations',
   'material.services.aria'
 ])
-  .directive('materialLinearProgress', ['$timeout', MaterialLinearProgressDirective]);
+.directive('materialLinearProgress', [
+  '$$rAF', 
+  '$materialEffects',
+  MaterialLinearProgressDirective
+]);
 
 /**
  * @ngdoc directive
@@ -39,7 +43,8 @@ angular.module('material.components.linearProgress', [
  * <material-linear-progress mode="query"></material-linear-progress>
  * </hljs>
  */
-function MaterialLinearProgressDirective($timeout) {
+function MaterialLinearProgressDirective($$rAF, $materialEffects) {
+
   return {
     restrict: 'E',
     template: '<div class="container">' +
@@ -47,38 +52,68 @@ function MaterialLinearProgressDirective($timeout) {
       '<div class="bar bar1"></div>' +
       '<div class="bar bar2"></div>' +
       '</div>',
-    link: function(scope, element, attr) {
-      var bar1 = angular.element(element[0].querySelector('.bar1')),
-          bar2 = angular.element(element[0].querySelector('.bar2')),
-          container = angular.element(element[0].querySelector('.container'));
-
-      attr.$observe('value', function(value) {
-        bar2.css('width', clamp(value).toString() + '%');
-      });
-
-      attr.$observe('secondaryvalue', function(value) {
-        bar1.css('width', clamp(value).toString() + '%');
-      });
-
-      $timeout(function() {
-        container.addClass('ready');
-      });
-    }
+    compile: compile
   };
+  
+  function compile(tElement, tAttrs, transclude) {
+    tElement.attr('aria-valuemin', 0);
+    tElement.attr('aria-valuemax', 100);
+    tElement.attr('role', 'progressbar');
+
+    return postLink;
+  }
+  function postLink(scope, element, attr) {
+    var bar1Style = element[0].querySelector('.bar1').style,
+      bar2Style = element[0].querySelector('.bar2').style,
+      container = angular.element(element[0].querySelector('.container'));
+
+    attr.$observe('value', function(value) {
+      if (attr.mode == 'query') {
+        return;
+      }
+
+      var clamped = clamp(value);
+      element.attr('aria-valuenow', clamped);
+      bar2Style[$materialEffects.TRANSFORM] = linearProgressTransforms[clamped];
+    });
+
+    attr.$observe('secondaryvalue', function(value) {
+      bar1Style[$materialEffects.TRANSFORM] = linearProgressTransforms[clamp(value)];
+    });
+
+    $$rAF(function() {
+      container.addClass('ready');
+    });
+  }
+
+  function clamp(value) {
+    if (value > 100) {
+      return 100;
+    }
+
+    if (value < 0) {
+      return 0;
+    }
+
+    return Math.ceil(value || 0);
+  }
 }
+
 
 // **********************************************************
 // Private Methods
 // **********************************************************
-
-function clamp(value) {
-  if (value > 100) {
-    return 100;
+var linearProgressTransforms = (function() {
+  var values = new Array(101);
+  for(var i = 0; i < 101; i++){
+    values[i] = makeTransform(i);
   }
 
-  if (value < 0) {
-    return 0;
-  }
+  return values;
 
-  return value || 0;
-}
+  function makeTransform(value){
+    var scale = value/100;
+    var translateX = (value-100)/2;
+    return 'translateX(' + translateX.toString() + '%) scale(' + scale.toString() + ', 1)';
+  }
+})();
