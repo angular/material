@@ -42,9 +42,7 @@ angular.module('material.services.interimElement', [
 
 function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate, $materialCompiler) {
 
-  return createInterimElement;
-
-  function createInterimElement(defaults) {
+  return function createInterimElement(defaults) {
 
     /**
      * @ngdoc type
@@ -57,20 +55,17 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
 
     var InterimElement = {};
 
-    var deferred = [];
-    var hideTimeouts = [];
-    var elementStack = [];
-    var optionsStack = [];
+    var itemStack = [];
 
     var parent = $rootElement.find('body');
     if (!parent.length) parent = $rootElement;
 
     InterimElement.defaults = angular.extend({
       parent: parent,
-      onShow: function(scope, $el, options) {
+      enter: function(scope, $el, options) {
         return $animate.enter($el, options.parent);
       },
-      onHide: function(scope, $el, options) {
+      leave: function(scope, $el, options) {
         return $animate.leave($el);
       },
     }, defaults || {});
@@ -91,33 +86,15 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
      */
 
     InterimElement.show = function(options) {
-      if (deferred.length) {
+      if (itemStack.length) {
         InterimElement.hide();
       }
 
-      var defer = $q.defer();
-      deferred.push(defer);
+      var item = new InterimItem(options);
+      itemStack.push(item);
+      item.show();
 
-      options = options || {};
-
-      options = angular.extend({
-        scope: options.scope || $rootScope.$new(options.isolateScope)
-      }, InterimElement.defaults, options);
-
-      optionsStack.push(options);
-
-      $materialCompiler.compile(options).then(function(compiledData) {
-        var currentEl = compiledData.link(options.scope);
-        elementStack.push(currentEl);
-
-        var ret = options.onShow(options.scope, currentEl, options);
-        $q.when(ret).then(function() {
-          if (options.hideTimeout) {
-            hideTimeout = $timeout(InterimElement.hide, options.hideTimeout);
-          }
-        });
-      });
-      return defer.promise;
+      return item.dfd.promise;
     };
 
     /**
@@ -135,13 +112,11 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
      */
 
     InterimElement.hide = function() {
+      var item = itemStack.shift();
       var args = [].slice.call(arguments);
-      var def = deferred.shift();
-      if(def) {
-        destroy().then(function() {
-          def.resolve.apply(def, args);
-        });
-      }
+      item.destroy().then(function() {
+        item.dfd.resolve.apply(item.dfd, args);
+      });
     };
 
     /**
@@ -159,30 +134,67 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
      */
 
     InterimElement.cancel = function() {
+      var item = itemStack.shift();
       var args = [].slice.call(arguments);
-      var def = deferred.shift();
-      if(def) {
-        destroy().then(function() {
-          def.reject.apply(def, args);
-        });
-      }
+      item.destroy().then(function() {
+        item.dfd.reject.apply(item.dfd, args);
+      });
     };
 
-    function destroy() {
-      var finish = $q.defer();
-      if (hideTimeouts.length) {
-        $timeout.cancel(hideTimeouts.shift());
-      }
-
-      var options = optionsStack.shift();
-      var ret = options.onHide(options.scope, elementStack.shift(), options);
-      return $q.when(ret).then(function() {
-        options.scope.$destroy();
-        finish.resolve();
-      });
-    }
 
     return InterimElement;
+
+    function InterimItem(options) {
+      var self;
+      var dfd = $q.defer();
+      var hideTimeout;
+
+      options = options || {};
+
+      options = angular.extend({
+        scope: options.scope || $rootScope.$new(options.isolateScope)
+      }, InterimElement.defaults, options);
+
+      self = {
+        options: options,
+        dfd: dfd,
+        compile: function() {
+          if (self.element) { return true; }
+          return $materialCompiler.compile(options).then(function(compiledData) {
+            self.element = compiledData.link(options.scope);
+          });
+        },
+        show: function() {
+          $q.when(self.compile()).then(function() {
+            var ret = options.enter(options.scope, self.element, options);
+            $q.when(ret)
+              .then(function() {
+                if (options.hideDelay) {
+                  // Only start hide timer after show animation...
+                  hideTimeout = $timeout(InterimElement.hide, options.hideDelay) ;
+                }
+            });
+          });
+        },
+        cancelTimeout: function() {
+          if (hideTimeout) {
+            $timeout.cancel(hideTimeout);
+            hideTimeout = undefined;
+          }
+        },
+        destroy: function() {
+          var finish = $q.defer();
+          self.cancelTimeout();
+          var ret = options.leave(options.scope, self.element, options);
+          return $q.when(ret).then(function() {
+            options.scope.$destroy();
+            finish.resolve();
+          });
+        }
+      };
+      return self;
+    }
   }
+
 }
 

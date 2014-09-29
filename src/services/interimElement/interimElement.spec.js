@@ -39,27 +39,27 @@ describe('$$interimElementFactory service', function() {
         expect($compilerSpy.mostRecentCall.args[0].template).toBe('testing');
       }));
 
-      it('calls hide after hideTimeout', inject(function($animate, $timeout, $rootScope) {
+      it('calls hide after hideDelay', inject(function($animate, $timeout, $rootScope) {
         var hideSpy = spyOn(Service, 'hide').andCallThrough();
-        Service.show({hideTimeout: 1000});
+        Service.show({hideDelay: 1000});
         $rootScope.$digest();
         $animate.triggerCallbacks();
         $timeout.flush();
         expect(hideSpy).toHaveBeenCalled();
       }));
 
-      it('calls onShow', inject(function($rootScope) {
-        var onShowCalled = false;
+      it('calls enter', inject(function($rootScope) {
+        var enterCalled = false;
         Service.show({
           template: '<some-element />',
           isPassingOptions: true,
-          onShow: onShow
+          enter: enter
         });
         $rootScope.$digest();
-        expect(onShowCalled).toBe(true);
+        expect(enterCalled).toBe(true);
 
-        function onShow(scope, el, options) {
-          onShowCalled = true;
+        function enter(scope, el, options) {
+          enterCalled = true;
           expect(options.isPassingOptions).toBe(true);
           expect(el[0]).toBeTruthy();
         }
@@ -71,20 +71,20 @@ describe('$$interimElementFactory service', function() {
     });
 
     describe('#hide', function() {
-      it('calls onHide', inject(function($rootScope) {
-        var onHideCalled = false;
+      it('calls leave', inject(function($rootScope) {
+        var leaveCalled = false;
         Service.show({
           template: '<some-element />',
           passingOptions: true,
-          onHide: onHide
+          leave: leave
         });
         $rootScope.$digest();
         Service.hide();
         $rootScope.$digest();
-        expect(onHideCalled).toBe(true);
+        expect(leaveCalled).toBe(true);
 
-        function onHide(scope, el, options) {
-          onHideCalled = true;
+        function leave(scope, el, options) {
+          leaveCalled = true;
           expect(options.passingOptions).toBe(true);
           expect(el[0]).toBeTruthy();
         }
@@ -107,20 +107,20 @@ describe('$$interimElementFactory service', function() {
     });
 
     describe('#cancel', function() {
-      it('calls onHide', inject(function($rootScope) {
-        var onHideCalled = false;
+      it('calls leave', inject(function($rootScope) {
+        var leaveCalled = false;
         Service.show({
           template: '<some-element />',
           passingOptions: true,
-          onHide: onHide
+          leave: leave
         });
         $rootScope.$digest();
         Service.cancel();
         $rootScope.$digest();
-        expect(onHideCalled).toBe(true);
+        expect(leaveCalled).toBe(true);
 
-        function onHide(scope, el, options) {
-          onHideCalled = true;
+        function leave(scope, el, options) {
+          leaveCalled = true;
           expect(options.passingOptions).toBe(true);
           expect(el[0]).toBeTruthy();
         }

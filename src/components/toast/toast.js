@@ -55,7 +55,7 @@ function MaterialToastDirective() {
  *   $scope.openToast = function($event) {
  *     $materialToast.show({
  *       template: '<material-toast>Hello!</material-toast>',
- *       hideTimeout: 3000
+ *       hideDelay: 3000
  *     });
  *   };
  * });
@@ -75,7 +75,7 @@ function MaterialToastDirective() {
  * have an outer `material-toast` element.
  * @param {string=} template Same as templateUrl, except this is an actual
  * template string.
- * @param {number=} hideTimeout How many milliseconds the toast should stay
+ * @param {number=} hideDelay How many milliseconds the toast should stay
  * active before automatically closing.  Set to 0 to disable duration. 
  * Default: 3000.
  * @param {string=} position Where to place the toast. Available: any combination
@@ -120,16 +120,16 @@ function MaterialToastDirective() {
 function MaterialToastService($timeout, $$interimElementFactory, $animate) {
 
   var factoryDef = {
-    onShow: onShow,
-    onHide: onHide,
+    enter: enter,
+    leave: leave,
     position: 'bottom left',
-    hideTimeout: 3000,
+    hideDelay: 3000,
   };
 
   var $materialToast = $$interimElementFactory(factoryDef);
   return $materialToast;
 
-  function onShow(scope, el, options) {
+  function enter(scope, el, options) {
     el.addClass(options.position);
     options.parent.addClass(toastOpenClass(options.position));
 
@@ -138,10 +138,9 @@ function MaterialToastService($timeout, $$interimElementFactory, $animate) {
         [Hammer.Swipe, { direction: Hammer.DIRECTION_HORIZONTAL }]
       ]
     });
-
-    el.data('hammertime', hammertime);
-
     hammertime.on('swipeleft swiperight', onSwipe);
+    options.hammertime = hammertime;
+
 
     function onSwipe(ev) {
       //Add swipeleft/swiperight class to element so it can animate correctly
@@ -152,10 +151,8 @@ function MaterialToastService($timeout, $$interimElementFactory, $animate) {
     return $animate.enter(el, options.parent);
   }
 
-  function onHide(scope, el, options) {
-    var hammertime = el.data('hammertime');
-    hammertime.destroy();
-    el.data('hammertime', undefined);
+  function leave(scope, el, options) {
+    options.hammertime.destroy();
     options.parent.removeClass(toastOpenClass(options.position));
     return $animate.leave(el);
   }

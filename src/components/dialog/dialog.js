@@ -144,8 +144,8 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
   var factoryDef = {
     hasBackdrop: true,
     isolateScope: true,
-    onShow: onShow,
-    onHide: onHide,
+    enter: enter,
+    leave: leave,
     clickOutsideToClose: true,
     escapeToClose: true,
     targetEvent: null,
@@ -158,7 +158,7 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
   return $dialogService;
 
 
-  function onShow(scope, el, options) {
+  function enter(scope, el, options) {
     // Incase the user provides a raw dom element, always wrap it in jqLite
     options.parent = angular.element(options.parent);
 
@@ -214,7 +214,7 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
 
   }
 
-  function onHide(scope, el, options) {
+  function leave(scope, el, options) {
     var backdrop = el.data('backdrop');
     var onRootElementKeyup = el.data('onRootElementKeyup');
     var dialogClickOutside = el.data('dialogClickOutside');
