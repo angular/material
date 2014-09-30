@@ -1,19 +1,15 @@
 (function() {
 
-  /**
-   * @ngdoc module
-   * @name material.components.swipe
-   * @description Swipe module!
-   */
   angular.module('material.components.swipe',['ng'])
 
     /**
-     * @ngdoc directive
+     * @ngdoc service
      * @module material.components.swipe
      * @name $materialSwipe
      *
-     *  This service allows directives to easily attach swipe and pan listeners to
-     *  the specified element.
+     * @description
+     * This service allows directives to easily attach swipe and pan listeners to
+     * the specified element.
      *
      * @private
      */
@@ -30,13 +26,12 @@
        * @returns {*}
        * @constructor
        */
-      return function SwipeService(scope, eventTypes)
-      {
+      return function SwipeService(scope, eventTypes) {
+
         if ( !eventTypes ) eventTypes = "swipeleft swiperight";
 
         // publish configureFor() method for specific element instance
-        return function configureFor(element, onSwipeCallback, attachLater )
-        {
+        return function configureFor(element, onSwipeCallback, attachLater ) {
           var hammertime = new Hammer(element[0], {
             recognizers : addRecognizers([], eventTypes )
           });
@@ -92,8 +87,13 @@
             var hasPanning = (events.indexOf("pan") > -1);
             var hasSwipe   = (events.indexOf("swipe") > -1);
 
-            if ( hasPanning ) list.push([ Hammer.Pan, { direction: Hammer.DIRECTION_HORIZONTAL } ]);
-            if ( hasSwipe )   list.push([ Hammer.Swipe, { direction: Hammer.DIRECTION_HORIZONTAL } ]);
+            if ( hasPanning ) {
+              list.push([ Hammer.Pan, { direction: Hammer.DIRECTION_HORIZONTAL } ]);
+            }
+
+            if ( hasSwipe ) {
+              list.push([ Hammer.Swipe, { direction: Hammer.DIRECTION_HORIZONTAL } ]);
+            }
 
             return list;
           }
@@ -184,8 +184,8 @@
      */
     function swipePostLink($parse, $materialSwipe, name ) {
 
-      return function(scope, element, attrs)
-      {
+      return function(scope, element, attrs) {
+
         var direction = name.toLowerCase();
         var directiveName= "material" + name;
 
