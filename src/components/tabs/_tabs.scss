@@ -77,6 +77,10 @@ material-tabs[center] .tabs-header:not(.tab-paginating) .tabs-header-items {
 .tabs-content {
   overflow: hidden;
   width: 100%;
+
+  .tab-content {
+    height : 100%;
+  }
 }
 
 material-tabs-ink-bar {
