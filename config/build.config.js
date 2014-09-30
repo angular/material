@@ -27,7 +27,7 @@ module.exports = {
       return !!module;
     }),
 
-  componentsModule: "angular.module('ngMaterial', [ 'ng', 'ngAnimate', 'material.core', 'material.services.attrBind', 'material.services.compiler', 'material.services.registry', 'material.decorators', 'material.services.aria', <%= components.join(',') %>]);\n",
+  componentsModule: "angular.module('ngMaterial', [ 'ng', 'ngAnimate', 'ngAria', 'material.core', 'material.services.attrBind', 'material.services.compiler', 'material.services.registry', 'material.decorators', 'material.services.aria', <%= components.join(',') %>]);\n",
 
   dist: 'dist',
 
