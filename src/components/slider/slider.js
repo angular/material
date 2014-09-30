@@ -209,13 +209,13 @@ function SliderController(scope, element, attr, $$rAF, $window, $materialEffects
      * Refreshing Dimensions
      */
     var sliderDimensions = {};
-    var debouncedRefreshDimensions = Util.debounce(refreshSliderDimensions, 5000);
+    var throttledRefreshDimensions = Util.throttle(refreshSliderDimensions, 5000);
     refreshSliderDimensions();
     function refreshSliderDimensions() {
       sliderDimensions = trackContainer[0].getBoundingClientRect();
     }
     function getSliderDimensions() {
-      debouncedRefreshDimensions();
+      throttledRefreshDimensions();
       return sliderDimensions;
     }
 
