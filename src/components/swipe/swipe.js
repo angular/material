@@ -198,15 +198,11 @@
 
         configureSwipe( element, function onHandleSwipe(ev)
         {
-          if (( ev.type == direction ) && !isDisabled()) {
+          if ( ev.type == direction ) {
             requestSwipe();
           }
         });
 
-        // Is element currently disabled ?
-        function isDisabled() {
-          return element[0].hasAttribute('disabled');
-        }
       }
     }
 
