@@ -3,6 +3,7 @@ describe('materialCheckbox', function() {
   var CHECKED_CSS = 'material-checked';
 
   beforeEach(module('material.components.checkbox'));
+  beforeEach(module('ngAria'));
 
   it('should set checked css class and aria-checked attributes', inject(function($compile, $rootScope) {
     var element = $compile('<div>' +

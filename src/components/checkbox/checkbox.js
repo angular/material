@@ -10,7 +10,7 @@ angular.module('material.components.checkbox', [
   .directive('materialCheckbox', [ 
     'inputDirective',
     '$materialInkRipple',
-    '$aria',
+    '$materialAria',
     MaterialCheckboxDirective
   ]);
 
@@ -49,7 +49,7 @@ angular.module('material.components.checkbox', [
  * </hljs>
  *
  */
-function MaterialCheckboxDirective(inputDirectives, $materialInkRipple, $aria) {
+function MaterialCheckboxDirective(inputDirectives, $materialInkRipple, $materialAria) {
   var inputDirective = inputDirectives[0];
 
   var CHECKED_CSS = 'material-checked';
@@ -63,72 +63,72 @@ function MaterialCheckboxDirective(inputDirectives, $materialInkRipple, $aria) {
         '<div class="material-icon"></div>' +
       '</div>' +
       '<div ng-transclude class="material-label"></div>',
-    link: postLink
+    compile: compile
   };
 
   // **********************************************************
   // Private Methods
   // **********************************************************
 
-  function postLink(scope, element, attr, ngModelCtrl) {
-    var checked = false;
+  function compile (tElement, tAttrs) {
 
-    // Create a mock ngModel if the user doesn't provide one
-    ngModelCtrl = ngModelCtrl || {
-      $setViewValue: function(value) {
-        this.$viewValue = value;
-      },
-      $parsers: [],
-      $formatters: []
-    };
+    tAttrs.type = 'checkbox';
+    tAttrs.tabIndex = 0;
+    tElement.attr('role', tAttrs.type);
 
-    // Reuse the original input[type=checkbox] directive from Angular core.
-    // This is a bit hacky as we need our own event listener and own render 
-    // function.
-    attr.type = 'checkbox';
-    attr.tabIndex = 0;
-    inputDirective.link(scope, {
-      on: angular.noop,
-      0: {}
-    }, attr, [ngModelCtrl]);
+    $materialAria.expect(tElement, 'aria-label', tElement.text());
 
-    // We can't chain element.attr here because of a bug with jqLite
-    element.attr('aria-checked', checked);
-    element.attr('role', attr.type);
-    element.attr('tabIndex', attr.tabIndex);
-    element.on('click', listener);
-    element.on('keypress', keypressHandler);
-    ngModelCtrl.$render = render;
+    return function postLink(scope, element, attr, ngModelCtrl) {
+      var checked = false;
 
-    $aria.expect(element, 'aria-label', element.text());
+      // Create a mock ngModel if the user doesn't provide one
+      ngModelCtrl = ngModelCtrl || {
+        $setViewValue: function(value) {
+          this.$viewValue = value;
+        },
+        $parsers: [],
+        $formatters: []
+      };
 
-    function keypressHandler(ev) {
-      if(ev.which === Constant.KEY_CODE.SPACE) {
-        ev.preventDefault();
-        listener(ev);
+      // Reuse the original input[type=checkbox] directive from Angular core.
+      // This is a bit hacky as we need our own event listener and own render
+      // function.
+      inputDirective.link(scope, {
+        on: angular.noop,
+        0: {}
+      }, attr, [ngModelCtrl]);
+
+      element.on('click', listener);
+      element.on('keypress', keypressHandler);
+      ngModelCtrl.$render = render;
+
+      function keypressHandler(ev) {
+        if(ev.which === Constant.KEY_CODE.SPACE) {
+          ev.preventDefault();
+          listener(ev);
+        }
       }
-    }
-    function listener(ev) {
-      if (element[0].hasAttribute('disabled')) return;
+      function listener(ev) {
+        if (element[0].hasAttribute('disabled')) return;
 
-      scope.$apply(function() {
-        checked = !checked;
-        ngModelCtrl.$setViewValue(checked, ev && ev.type);
-        ngModelCtrl.$render();
-      });
-    }
+        scope.$apply(function() {
+          checked = !checked;
+          ngModelCtrl.$setViewValue(checked, ev && ev.type);
+          ngModelCtrl.$render();
+        });
+      }
 
-    function render() {
-      checked = ngModelCtrl.$viewValue;
-      element.attr('aria-checked', checked);
-      if(checked) {
-        element.addClass(CHECKED_CSS);
-      } else {
-        element.removeClass(CHECKED_CSS);
+      function render() {
+        checked = ngModelCtrl.$viewValue;
+        // element.attr('aria-checked', checked);
+        if(checked) {
+          element.addClass(CHECKED_CSS);
+        } else {
+          element.removeClass(CHECKED_CSS);
+        }
       }
     }
   }
-
 }
 
 

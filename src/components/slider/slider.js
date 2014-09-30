@@ -55,7 +55,7 @@ function SliderDirective() {
       '$$rAF',
       '$window',
       '$materialEffects',
-      '$aria',
+      '$materialAria',
       SliderController
     ],
     template:
@@ -98,7 +98,7 @@ function SliderDirective() {
  * We use a controller for all the logic so that we can expose a few
  * things to unit tests
  */
-function SliderController(scope, element, attr, $$rAF, $window, $materialEffects, $aria) {
+function SliderController(scope, element, attr, $$rAF, $window, $materialEffects, $materialAria) {
 
   this.init = function init(ngModelCtrl) {
     var thumb = angular.element(element[0].querySelector('.slider-thumb'));
@@ -122,7 +122,7 @@ function SliderController(scope, element, attr, $$rAF, $window, $materialEffects
       updateAriaDisabled(!!attr.disabled);
     }
 
-    $aria.expect(element, 'aria-label');
+    $materialAria.expect(element, 'aria-label');
     element.attr('tabIndex', 0);
     element.attr('role', 'slider');
     element.on('keydown', keydownListener);
