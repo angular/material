@@ -1,4 +1,4 @@
-describe('$$interimElementFactory service', function() {
+describe('$$interimElement service', function() {
   var $compilerSpy, resolvingPromise;
 
   beforeEach(module('material.services.interimElement', 'ngAnimateMock', function($provide) {
@@ -21,19 +21,19 @@ describe('$$interimElementFactory service', function() {
 
   describe('instance', function() {
     var Service;
-    beforeEach(inject(function($$interimElementFactory) {
-      Service = $$interimElementFactory();
+    beforeEach(inject(function($$interimElement) {
+      Service = $$interimElement();
     }));
 
     describe('#show', function() {
-      it('inherits default options', inject(function($$interimElementFactory) {
+      it('inherits default options', inject(function($$interimElement) {
         var defaults = { templateUrl: 'testing.html' };
-        Service = $$interimElementFactory(defaults);
+        Service = $$interimElement(defaults);
         Service.show();
         expect($compilerSpy.mostRecentCall.args[0].templateUrl).toBe('testing.html');
       }));
 
-      it('forwards options to $materialCompiler', inject(function($$interimElementFactory) {
+      it('forwards options to $materialCompiler', inject(function($$interimElement) {
         var options = {template: 'testing'};
         Service.show(options);
         expect($compilerSpy.mostRecentCall.args[0].template).toBe('testing');
@@ -48,43 +48,45 @@ describe('$$interimElementFactory service', function() {
         expect(hideSpy).toHaveBeenCalled();
       }));
 
-      it('calls enter', inject(function($rootScope) {
-        var enterCalled = false;
+      it('calls onHide', inject(function($rootScope) {
+        var onHideCalled = false;
         Service.show({
           template: '<some-element />',
           isPassingOptions: true,
-          enter: enter
+          onHide: onHide
         });
         $rootScope.$digest();
-        expect(enterCalled).toBe(true);
+        Service.hide();
+        $rootScope.$digest();
+        expect(onHideCalled).toBe(true);
 
-        function enter(scope, el, options) {
-          enterCalled = true;
+        function onHide(scope, el, options) {
+          onHideCalled = true;
           expect(options.isPassingOptions).toBe(true);
           expect(el[0]).toBeTruthy();
         }
       }));
 
-      it('returns a promise', inject(function($$interimElementFactory) {
+      it('returns a promise', inject(function($$interimElement) {
         expect(typeof Service.show().then).toBe('function');
       }));
     });
 
     describe('#hide', function() {
-      it('calls leave', inject(function($rootScope) {
-        var leaveCalled = false;
+      it('calls onHide', inject(function($rootScope) {
+        var onHideCalled = false;
         Service.show({
           template: '<some-element />',
           passingOptions: true,
-          leave: leave
+          onHide: onHide
         });
         $rootScope.$digest();
         Service.hide();
         $rootScope.$digest();
-        expect(leaveCalled).toBe(true);
+        expect(onHideCalled).toBe(true);
 
-        function leave(scope, el, options) {
-          leaveCalled = true;
+        function onHide(scope, el, options) {
+          onHideCalled = true;
           expect(options.passingOptions).toBe(true);
           expect(el[0]).toBeTruthy();
         }
@@ -107,20 +109,20 @@ describe('$$interimElementFactory service', function() {
     });
 
     describe('#cancel', function() {
-      it('calls leave', inject(function($rootScope) {
-        var leaveCalled = false;
+      it('calls onHide', inject(function($rootScope) {
+        var onHideCalled = false;
         Service.show({
           template: '<some-element />',
           passingOptions: true,
-          leave: leave
+          onHide: onHide
         });
         $rootScope.$digest();
         Service.cancel();
         $rootScope.$digest();
-        expect(leaveCalled).toBe(true);
+        expect(onHideCalled).toBe(true);
 
-        function leave(scope, el, options) {
-          leaveCalled = true;
+        function onHide(scope, el, options) {
+          onHideCalled = true;
           expect(options.passingOptions).toBe(true);
           expect(el[0]).toBeTruthy();
         }

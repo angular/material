@@ -12,7 +12,7 @@ angular.module('material.components.toast', [
   ])
   .factory('$materialToast', [
     '$timeout',
-    '$$interimElementFactory',
+    '$$interimElement',
     '$animate',
     MaterialToastService
   ]);
@@ -117,19 +117,19 @@ function MaterialToastDirective() {
  *
  */
 
-function MaterialToastService($timeout, $$interimElementFactory, $animate) {
+function MaterialToastService($timeout, $$interimElement, $animate) {
 
   var factoryDef = {
-    enter: enter,
-    leave: leave,
+    onShow: onShow,
+    onHide: onHide,
     position: 'bottom left',
     hideDelay: 3000,
   };
 
-  var $materialToast = $$interimElementFactory(factoryDef);
+  var $materialToast = $$interimElement(factoryDef);
   return $materialToast;
 
-  function enter(scope, el, options) {
+  function onShow(scope, el, options) {
     el.addClass(options.position);
     options.parent.addClass(toastOpenClass(options.position));
 
@@ -151,7 +151,7 @@ function MaterialToastService($timeout, $$interimElementFactory, $animate) {
     return $animate.enter(el, options.parent);
   }
 
-  function leave(scope, el, options) {
+  function onHide(scope, el, options) {
     options.hammertime.destroy();
     options.parent.removeClass(toastOpenClass(options.position));
     return $animate.leave(el);
