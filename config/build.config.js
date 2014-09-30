@@ -97,6 +97,7 @@ module.exports = {
       'src/components/whiteframe/whiteframe.js',
       'src/components/divider/divider.js',
       'src/components/linearProgress/linearProgress.js',
+      'src/components/circularProgress/circularProgress.js',
 
       // Non-visual Components
       'src/components/swipe/swipe.js',

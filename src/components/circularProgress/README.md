@@ -1,0 +1,1 @@
+Circular progress indicators, created with the `<material-circular-progress>` directive.

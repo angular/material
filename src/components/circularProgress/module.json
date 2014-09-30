@@ -1,0 +1,10 @@
+{
+  "module": "material.components.circularProgress",
+  "name": "Circular Progress",
+  "demos": {
+    "demo1": {
+      "name": "Circular Progress Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}
