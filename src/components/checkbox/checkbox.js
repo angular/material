@@ -10,7 +10,7 @@ angular.module('material.components.checkbox', [
   .directive('materialCheckbox', [ 
     'inputDirective',
     '$materialInkRipple',
-    '$aria',
+    '$materialAria',
     MaterialCheckboxDirective
   ]);
 
@@ -49,7 +49,7 @@ angular.module('material.components.checkbox', [
  * </hljs>
  *
  */
-function MaterialCheckboxDirective(inputDirectives, $materialInkRipple, $aria) {
+function MaterialCheckboxDirective(inputDirectives, $materialInkRipple, $materialAria) {
   var inputDirective = inputDirectives[0];
 
   var CHECKED_CSS = 'material-checked';

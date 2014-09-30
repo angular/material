@@ -12,7 +12,7 @@ angular.module('material.components.radioButton', [
     materialRadioGroupDirective
   ])
   .directive('materialRadioButton', [
-    '$aria',
+    '$materialAria',
     materialRadioButtonDirective
   ]);
 
@@ -186,7 +186,7 @@ function materialRadioGroupDirective() {
  * </hljs>
  *
  */
-function materialRadioButtonDirective($aria) {
+function materialRadioButtonDirective($materialAria) {
 
   var CHECKED_CSS = 'material-checked';
 
@@ -250,7 +250,7 @@ function materialRadioButtonDirective($aria) {
         'aria-checked' : 'false'
       });
 
-      $aria.expect(element, 'aria-label', element.text());
+      $materialAria.expect(element, 'aria-label', element.text());
 
       /**
        * Build a unique ID for each radio button that will be used with aria-activedescendant.

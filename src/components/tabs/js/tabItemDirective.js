@@ -3,7 +3,7 @@ angular.module('material.components.tabs')
 .directive('materialTab', [
   '$materialInkRipple', 
   '$compile',
-  '$aria',
+  '$materialAria',
   MaterialTabDirective
 ]);
 
@@ -57,7 +57,7 @@ angular.module('material.components.tabs')
  * </hljs>
  *
  */
-function MaterialTabDirective($materialInkRipple, $compile, $aria) {
+function MaterialTabDirective($materialInkRipple, $compile, $materialAria) {
   return {
     restrict: 'E',
     require: ['materialTab', '^materialTabs'],
@@ -200,7 +200,7 @@ function MaterialTabDirective($materialInkRipple, $compile, $aria) {
           'aria-labelledby': tabId
         });
 
-        $aria.expect(element, 'aria-label', element.text());
+        $materialAria.expect(element, 'aria-label', element.text());
       }
 
     };
