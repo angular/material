@@ -84,20 +84,14 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
     // Publish self-detach method if desired...
     return function detach() {
       listenPointerDown(false);
-
-      if ( rippleContainer ) {
-        // Self-removal of injected container...
-        rippleContainer
-         .parent()
-         .remove( rippleContainer );
+      if (rippleContainer) {
+        rippleContainer.remove();
       }
     };
 
-    function listenPointerDown(active) {
-      if ( !active) element.off(POINTERDOWN_EVENT, onPointerDown);
-      else          element.on(POINTERDOWN_EVENT, onPointerDown);
+    function listenPointerDown(shouldListen) {
+      element[shouldListen ? 'on' : 'off'](POINTERDOWN_EVENT, onPointerDown);
     }
-
 
     function rippleIsAllowed() {
       return !Util.isParentDisabled(element);
@@ -155,14 +149,14 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
       rippleEl.on('$destroy', cancelRipplePause);
 
       // Stop listening to pointer down for now, until the user lifts their finger/mouse
-      element.off(POINTERDOWN_EVENT, onPointerDown);
+      listenPointerDown(false);
       element.on(POINTERUP_EVENT, onPointerUp);
 
       function onPointerUp() {
         cancelRipplePause();
         rippleEl.css($materialEffects.ANIMATION_PLAY_STATE, 'running');
         element.off(POINTERUP_EVENT, onPointerUp);
-        element.on(POINTERDOWN_EVENT, onPointerDown);
+        listenPointerDown(true);
       }
       function pauseRipple() {
         rippleEl.css($materialEffects.ANIMATION_PLAY_STATE, 'paused');
