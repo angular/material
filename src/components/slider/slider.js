@@ -314,7 +314,7 @@ function SliderController(scope, element, attr, $$rAF, $window, $materialEffects
       // While panning discrete, update only the
       // visual positioning but not the model value.
 
-      if ( isDiscrete ) doPan( ev.center.x );
+      if ( isDiscrete ) adjustThumbPosition( ev.center.x );
       else              doSlide( ev.center.x );
 
       ev.preventDefault();
@@ -360,7 +360,7 @@ function SliderController(scope, element, attr, $$rAF, $window, $materialEffects
      * Slide the UI without changing the model (while dragging/panning)
      * @param x
      */
-    function doPan( x ) {
+    function adjustThumbPosition( x ) {
       setSliderPercent( positionToPercent(x) );
     }
 
