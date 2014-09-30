@@ -18,7 +18,7 @@ angular.module('material.components.dialog', [
     '$materialEffects',
     '$animate',
     '$aria',
-    '$$interimElementFactory',
+    '$$interimElement',
     MaterialDialogService
   ]);
 
@@ -140,25 +140,24 @@ function MaterialDialogDirective($$rAF) {
  *
  */
 
-function MaterialDialogService($timeout, $rootElement, $materialEffects, $animate, $aria, $$interimElementFactory) {
-  var factoryDef = {
-    hasBackdrop: true,
-    isolateScope: true,
-    enter: enter,
-    leave: leave,
-    clickOutsideToClose: true,
-    escapeToClose: true,
-    targetEvent: null,
-    transformTemplate: function(template) {
-      return '<div class="material-dialog-container">' + template + '</div>';
-    }
-  };
+function MaterialDialogService($timeout, $rootElement, $materialEffects, $animate, $aria, $$interimElement) {
+  var $dialogService = $$interimElement({
+        hasBackdrop: true,
+        isolateScope: true,
+        onShow: onShow,
+        onHide: onHide,
+        clickOutsideToClose: true,
+        escapeToClose: true,
+        targetEvent: null,
+        transformTemplate: function(template) {
+          return '<div class="material-dialog-container">' + template + '</div>';
+        }
+      });
 
-  var $dialogService = $$interimElementFactory(factoryDef);
   return $dialogService;
 
 
-  function enter(scope, el, options) {
+  function onShow(scope, el, options) {
     // Incase the user provides a raw dom element, always wrap it in jqLite
     options.parent = angular.element(options.parent);
 
@@ -214,7 +213,7 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
 
   }
 
-  function leave(scope, el, options) {
+  function onHide(scope, el, options) {
     var backdrop = el.data('backdrop');
     var onRootElementKeyup = el.data('onRootElementKeyup');
     var dialogClickOutside = el.data('dialogClickOutside');
