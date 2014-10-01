@@ -48,20 +48,20 @@ describe('$$interimElement service', function() {
         expect(hideSpy).toHaveBeenCalled();
       }));
 
-      it('calls onHide', inject(function($rootScope) {
-        var onHideCalled = false;
+      it('calls onRemove', inject(function($rootScope) {
+        var onRemoveCalled = false;
         Service.show({
           template: '<some-element />',
           isPassingOptions: true,
-          onHide: onHide
+          onRemove: onRemove
         });
         $rootScope.$digest();
         Service.hide();
         $rootScope.$digest();
-        expect(onHideCalled).toBe(true);
+        expect(onRemoveCalled).toBe(true);
 
-        function onHide(scope, el, options) {
-          onHideCalled = true;
+        function onRemove(scope, el, options) {
+          onRemoveCalled = true;
           expect(options.isPassingOptions).toBe(true);
           expect(el[0]).toBeTruthy();
         }
@@ -73,20 +73,20 @@ describe('$$interimElement service', function() {
     });
 
     describe('#hide', function() {
-      it('calls onHide', inject(function($rootScope) {
-        var onHideCalled = false;
+      it('calls onRemove', inject(function($rootScope) {
+        var onRemoveCalled = false;
         Service.show({
           template: '<some-element />',
           passingOptions: true,
-          onHide: onHide
+          onRemove: onRemove
         });
         $rootScope.$digest();
         Service.hide();
         $rootScope.$digest();
-        expect(onHideCalled).toBe(true);
+        expect(onRemoveCalled).toBe(true);
 
-        function onHide(scope, el, options) {
-          onHideCalled = true;
+        function onRemove(scope, el, options) {
+          onRemoveCalled = true;
           expect(options.passingOptions).toBe(true);
           expect(el[0]).toBeTruthy();
         }
@@ -109,20 +109,20 @@ describe('$$interimElement service', function() {
     });
 
     describe('#cancel', function() {
-      it('calls onHide', inject(function($rootScope) {
-        var onHideCalled = false;
+      it('calls onRemove', inject(function($rootScope) {
+        var onRemoveCalled = false;
         Service.show({
           template: '<some-element />',
           passingOptions: true,
-          onHide: onHide
+          onRemove: onRemove
         });
         $rootScope.$digest();
         Service.cancel();
         $rootScope.$digest();
-        expect(onHideCalled).toBe(true);
+        expect(onRemoveCalled).toBe(true);
 
-        function onHide(scope, el, options) {
-          onHideCalled = true;
+        function onRemove(scope, el, options) {
+          onRemoveCalled = true;
           expect(options.passingOptions).toBe(true);
           expect(el[0]).toBeTruthy();
         }

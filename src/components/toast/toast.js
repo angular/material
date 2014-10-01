@@ -121,7 +121,7 @@ function MaterialToastService($timeout, $$interimElement, $animate) {
 
   var factoryDef = {
     onShow: onShow,
-    onHide: onHide,
+    onRemove: onRemove,
     position: 'bottom left',
     hideDelay: 3000,
   };
@@ -151,7 +151,7 @@ function MaterialToastService($timeout, $$interimElement, $animate) {
     return $animate.enter(el, options.parent);
   }
 
-  function onHide(scope, el, options) {
+  function onRemove(scope, el, options) {
     options.hammertime.destroy();
     options.parent.removeClass(toastOpenClass(options.position));
     return $animate.leave(el);

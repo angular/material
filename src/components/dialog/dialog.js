@@ -145,7 +145,7 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
     hasBackdrop: true,
     isolateScope: true,
     onShow: onShow,
-    onHide: onHide,
+    onRemove: onRemove,
     clickOutsideToClose: true,
     escapeToClose: true,
     targetEvent: null,
@@ -214,7 +214,7 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
 
   }
 
-  function onHide(scope, el, options) {
+  function onRemove(scope, el, options) {
     var backdrop = el.data('backdrop');
     var onRootElementKeyup = el.data('onRootElementKeyup');
     var dialogClickOutside = el.data('dialogClickOutside');
