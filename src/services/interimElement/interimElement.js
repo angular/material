@@ -36,7 +36,7 @@ angular.module('material.services.interimElement', [
  * ```
  * @param {object=} defaultOptions Options used by default for the `show` method on the service.
  *
- * @returns {InterimElement.service}
+ * @returns {$$interimElement.$service}
  *
  */
 
@@ -45,8 +45,8 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
   return function createInterimElementService(defaults) {
 
     /**
-     * @ngdoc type
-     * @name $$interimElement.$interimElement
+     * @ngdoc service
+     * @name $$interimElement.$service
      *
      * @description
      * A service used to control inserting and removing an element into the DOM.
