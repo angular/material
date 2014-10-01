@@ -165,7 +165,7 @@ function materialSidenavService($materialComponentRegistry) {
  *
  * <hljs lang="js">
  * var app = angular.module('myApp', ['ngMaterial']);
- * app.controller('MainController', function($scope, $materialSidenav) {
+ * app.controller('MyController', function($scope, $materialSidenav) {
  *   $scope.openLeftMenu = function() {
  *     $materialSidenav('left').toggle();
  *   };
