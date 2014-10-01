@@ -141,7 +141,9 @@ function MaterialDialogDirective($$rAF) {
  */
 
 function MaterialDialogService($timeout, $rootElement, $materialEffects, $animate, $aria, $$interimElement) {
-  var factoryDef = {
+
+  var $dialogService;
+  return $dialogService = $$interimElement({
     hasBackdrop: true,
     isolateScope: true,
     onShow: onShow,
@@ -152,50 +154,48 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
     transformTemplate: function(template) {
       return '<div class="material-dialog-container">' + template + '</div>';
     }
-  };
+  });
 
-  var $dialogService = $$interimElement(factoryDef);
-  return $dialogService;
-
-
-  function onShow(scope, el, options) {
+  function onShow(scope, element, options) {
     // Incase the user provides a raw dom element, always wrap it in jqLite
     options.parent = angular.element(options.parent);
 
-    popInTarget = options.targetEvent && options.targetEvent.target &&
-      angular.element(options.targetEvent.target);
-
+    options.popInTarget = angular.element((options.targetEvent || {}).target); 
     var closeButton = findCloseButton();
 
-    configureAria(el.find('material-dialog'));
+    configureAria(element.find('material-dialog'));
 
     if (options.hasBackdrop) {
       var backdrop = angular.element('<material-backdrop class="opaque ng-enter">');
       $animate.enter(backdrop, options.parent, null);
-      el.data('backdrop', backdrop);
+      options.backdrop = backdrop;
     }
 
-    // Store listeners on data for easy cleanup later
-    el.data('onRootElementKeyup', function onRootElementKeyup(e) {
-      if (e.keyCode === Constant.KEY_CODE.ESCAPE) {
-        $timeout($dialogService.hide);
-      }
-    });
-
-    el.data('dialogClickOutside', function(e) {
-      // Only close if we click the flex container outside the backdrop
-      if (e.target === el[0]) {
-        $timeout($dialogService.hide);
-      }
-    });
-
-    return $materialEffects.popIn(el, options.parent, popInTarget)
+    return $materialEffects.popIn(
+      element, 
+      options.parent, 
+      options.popInTarget.length && options.popInTarget
+    )
     .then(function() {
       if (options.escapeToClose) {
-        $rootElement.on('keyup', el.data('onRootElementKeyup'));
+        options.rootElementKeyupCallback = function(e) {
+          if (e.keyCode === Constant.KEY_CODE.ESCAPE) {
+            $timeout($dialogService.hide);
+          }
+        };
+
+        $rootElement.on('keyup', options.rootElementKeyupCallback);
       }
+
       if (options.clickOutsideToClose) {
-        el.on('click', el.data('dialogClickOutside'));
+        options.dialogClickOutsideCallback = function(e) {
+          // Only close if we click the flex container outside the backdrop
+          if (e.target === element[0]) {
+            $timeout($dialogService.hide);
+          }
+        };
+
+        element.on('click', options.dialogClickOutsideCallback);
       }
       closeButton.focus();
     });
@@ -204,9 +204,9 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
     function findCloseButton() {
       //If no element with class dialog-close, try to find the last
       //button child in dialog-actions and assume it is a close button
-      var closeButton = el[0].querySelector('.dialog-close');
+      var closeButton = element[0].querySelector('.dialog-close');
       if (!closeButton) {
-        var actionButtons = el[0].querySelectorAll('.dialog-actions button');
+        var actionButtons = element[0].querySelectorAll('.dialog-actions button');
         closeButton = actionButtons[ actionButtons.length - 1 ];
       }
       return angular.element(closeButton);
@@ -214,30 +214,23 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
 
   }
 
-  function onRemove(scope, el, options) {
-    var backdrop = el.data('backdrop');
-    var onRootElementKeyup = el.data('onRootElementKeyup');
-    var dialogClickOutside = el.data('dialogClickOutside');
-    var popInTarget = el.data('popInTarget');
+  function onRemove(scope, element, options) {
 
-    if (backdrop) {
-      $animate.leave(backdrop);
-      el.data('backdrop', undefined);
+    if (options.backdrop) {
+      $animate.leave(options.backdrop);
+      element.data('backdrop', undefined);
     }
     if (options.escapeToClose) {
-      $rootElement.off('keyup', onRootElementKeyup);
-      el.data('onRootElementKeyup', undefined);
+      $rootElement.off('keyup', options.rootElementKeyupCallback);
     }
     if (options.clickOutsideToClose) {
-      el.off('click', dialogClickOutside);
-      el.data('dialogClickOutside', undefined);
+      element.off('click', options.dialogClickOutsideCallback);
     }
-    return $animate.leave(el).then(function() {
-      el.remove();
-      if (popInTarget) {
-        popInTarget.focus();
-      }
+    return $animate.leave(element).then(function() {
+      element.remove();
+      options.popInTarget && options.popInTarget.focus();
     });
+
   }
 
   /**
