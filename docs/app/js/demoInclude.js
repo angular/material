@@ -19,32 +19,35 @@ function($q, $http, $compile, $templateCache) {
      */
     function handleDemoIndexFile() {
       $http.get(demo.indexFile.outputPath, {cache: $templateCache})
-        .then(function(response) {
+      .then(function(response) {
 
-          demoContainer = angular.element(
-            '<div class="demo-content ' + demo.module + '">'
-          ).html(response.data);
+        demoContainer = angular.element(
+          '<div class="demo-content ' + demo.module + '">'
+        ).html(response.data);
 
-          if (demo.module) {
-            angular.bootstrap(demoContainer[0], [demo.module]);
-          } else {
-            $compile(demoContainer)(scope);
-          }
-
-          // Once everything is loaded, put the demo into the DOM
-          $q.all([
-            handleDemoStyles(),
-            handleDemoTemplates()
-          ]).finally(function() {
-            element.append(demoContainer);
+        if (demo.module) {
+          angular.bootstrap(demoContainer[0], [demo.module]);
+          scope.$on('$destroy', function() {
+            demoContainer.scope() && demoContainer.scope().$destroy();
           });
+        } else {
+          $compile(demoContainer)(scope);
+        }
+
+        // Once everything is loaded, put the demo into the DOM
+        $q.all([
+          handleDemoStyles(),
+          handleDemoTemplates()
+        ]).finally(function() {
+          element.append(demoContainer);
         });
+      });
+
     }
 
 
     /**
-     * Fetch the demo styles, add a rule to restrict the styles to only
-     * apply to this specific demo, and append the styles to the DOM.
+     * Fetch the demo styles, and append them to the DOM.
      */
     function handleDemoStyles() {
 
@@ -84,11 +87,10 @@ function($q, $http, $compile, $templateCache) {
       var templates = demo.files.filter(function(file) {
         return file.fileType === 'html';
       });
-      // Get the $templateCache instance that goes with the demo's specific
-      // app instance.
 
       return $q.all(templates.map(function(file) {
         return $http.get(file.outputPath).then(function(response) {
+          // Get the $templateCache instance that goes with the demo's specific ng-app.
           var demoTemplateCache = demoContainer.injector().get('$templateCache');
 
           demoTemplateCache.put(file.basePath, response.data);
