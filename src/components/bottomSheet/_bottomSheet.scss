@@ -1,0 +1,136 @@
+material-bottom-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: $bottom-sheet-vertical-padding $bottom-sheet-horizontal-padding $bottom-sheet-vertical-padding + $bottom-sheet-hidden-bottom-padding $bottom-sheet-horizontal-padding;
+  z-index: $z-index-bottom-sheet;
+
+  background-color: $bottom-sheet-background-color;
+  border-top: 1px solid $bottom-sheet-border-top-color;
+
+  @include transform-translate3d(0, $bottom-sheet-hidden-bottom-padding, 0);
+  @include transition(0.2s linear);
+  @include transition-transform();
+
+  &.has-header {
+    padding-top: 0;
+  }
+
+  &.ng-enter {
+    opacity: 0;
+    @include transform(translate3d(0, 100%, 0));
+  }
+
+  &.ng-enter-active {
+    opacity: 1;
+    display: block;
+    @include transform(translate3d(0, $bottom-sheet-hidden-bottom-padding, 0) !important);
+  }
+
+
+  &.ng-leave-active {
+    @include transform(translate3d(0, 100%, 0) !important );
+  }
+
+  h2.material-subheader {
+    background-color: transparent;
+    font-family: $font-family;
+    color: $text-medium;
+    line-height: $bottom-sheet-header-height;
+    padding: 0;
+    white-space: nowrap;
+  }
+
+  material-inline-icon {
+    display: inline-block;
+    background-image: url('data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDI0IDI0IiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPGcgaWQ9IkhlYWRlciI+IDxnPiA8cmVjdCB4PSItNjE4IiB5PSItMTU5MiIgZmlsbD0ibm9uZSIgd2lkdGg9IjE0MDAiIGhlaWdodD0iMzYwMCIvPiA8L2c+IDwvZz4gPGcgaWQ9IkxhYmVsIj4gPC9nPiA8ZyBpZD0iSWNvbiI+IDxnPiA8cmVjdCBmaWxsPSJub25lIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz4gPHBhdGggZD0iTTEyLDQuNUM3LDQuNSwyLjcsNy42LDEsMTJjMS43LDQuNCw2LDcuNSwxMSw3LjVjNSwwLDkuMy0zLjEsMTEtNy41QzIxLjMsNy42LDE3LDQuNSwxMiw0LjV6IE0xMiwxN2MtMi44LDAtNS0yLjItNS01ICAgIHMyLjItNSw1LTVjMi44LDAsNSwyLjIsNSw1UzE0LjgsMTcsMTIsMTd6IE0xMiw5Yy0xLjcsMC0zLDEuMy0zLDNzMS4zLDMsMywzYzEuNywwLDMtMS4zLDMtM1MxMy43LDksMTIsOXoiLz4gPC9nPiA8L2c+IDxnIGlkPSJHcmlkIiBkaXNwbGF5PSJub25lIj4gPGcgZGlzcGxheT0iaW5saW5lIj4gPC9nPiA8L2c+IDwvc3ZnPg==');
+    height: 24px;
+    width: 24px;
+    fill: #444;
+  }
+
+  material-item {
+    @include flex-display();
+    outline: none;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &.list {
+    material-item {
+      @include flex-align-items(center);
+      height: $bottom-sheet-list-item-height;
+
+      div.material-icon-container {
+        display: inline-block;
+        height: 3 * $baseline-grid;
+        margin-right: $bottom-sheet-icon-after-margin;
+      }
+    }
+  }
+
+  &.grid {
+    padding-left: 3 * $baseline-grid;
+    padding-right: 3 * $baseline-grid;
+    padding-top: 0;
+
+    material-list {
+      @include flex-display();
+      @include flex-direction(row);
+      @include flex-wrap(wrap);
+    }
+
+    material-item {
+      @include flex(1, 1, 33%);
+      @include flex-direction(column);
+
+      &:nth-of-type(3n + 1) {
+        @include flex-align-items(flex-start);
+      }
+      &:nth-of-type(3n + 2) {
+        @include flex-align-items(center);
+      }
+      &:nth-of-type(3n) {
+        @include flex-align-items(flex-end);
+      }
+
+      height: 10 * $baseline-grid;
+
+      margin-top: $baseline-grid;
+      margin-bottom: $baseline-grid;
+
+      max-width: 33%;
+
+      .material-item-content {
+        @include flex-display();
+        @include flex-direction(column);
+        @include flex-align-items(center);
+        width: 6 * $baseline-grid;
+      }
+
+      .material-icon-container {
+        display: inline-block;
+        box-sizing: border-box;
+        height: 6 * $baseline-grid;
+        width: 6 * $baseline-grid;
+        margin: $baseline-grid 0;
+      }
+
+      p.grid-text {
+        font-weight: $bottom-sheet-grid-font-weight;
+        line-height: 2 * $baseline-grid;
+        font-size: 2 * $baseline-grid - 3;
+        margin: 0;
+        white-space: nowrap;
+        width: 6 * $baseline-grid;
+        text-align: center;
+      }
+    }
+  }
+}
+
+
+

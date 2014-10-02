@@ -47,7 +47,7 @@ function MaterialDialogDirective($$rAF) {
  *
  * Note: The dialog is always given an isolate scope.
  *
- * `$materialDialog` is an `$interimElement` service and adheres to the same behaviors.
+ * `$materialDialog` is an `$$interimElement.$service` and adheres to the same behaviors.
  *  - `$materialDialog.show()`
  *  - `$materialDialog.hide()`
  *  - `$materialDialog.cancel()`

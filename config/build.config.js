@@ -81,6 +81,7 @@ module.exports = {
       'src/components/sticky/sticky.js',
 
       // Components
+      'src/components/bottomSheet/bottomSheet.js',
       'src/components/buttons/buttons.js',
       'src/components/card/card.js',
       'src/components/checkbox/checkbox.js',

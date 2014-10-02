@@ -1,0 +1,10 @@
+{
+  "module": "material.components.bottomSheet",
+  "name": "BottomSheet",
+  "demos": {
+    "demo1": {
+      "name": "BottomSheet Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}
