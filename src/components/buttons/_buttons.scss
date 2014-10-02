@@ -105,9 +105,8 @@ material-button {
     transition-property: box-shadow, transform, background-color;
     @include transform-translate3d(0, 0, 0);
 
-    @extend .material-shadow-bottom-z-1;
-
     &:not([disabled]) {
+      @extend .material-shadow-bottom-z-1;
       &:hover,
       &.focus {
         background-color: $button-raised-hover-background;
@@ -151,12 +150,14 @@ material-button {
 
   }
 
-  &.material-button-raised,
-  &.material-button-fab {
-    &.focus,
-    &:hover:not([disabled]) {
-      @include transform-translate3d(0, -1px, 0);
-      @extend .material-shadow-bottom-z-2;
+  &:not([disabled]) {
+    &.material-button-raised,
+    &.material-button-fab {
+      &.focus,
+      &:hover {
+        @include transform-translate3d(0, -1px, 0);
+        @extend .material-shadow-bottom-z-2;
+      }
     }
   }
 }
