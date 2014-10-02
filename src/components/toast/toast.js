@@ -38,7 +38,7 @@ function MaterialToastDirective() {
  * shown while a different toast is active, the old toast will be automatically
  * hidden.
  *
- * `$materialToast` is an `$interimElement` service and adheres to the same behaviors.
+ * `$materialToast` is an `$$interimElement.$service` and adheres to the same behaviors.
  *  - `$materialToast.show()`
  *  - `$materialToast.hide()`
  *  - `$materialToast.cancel()`

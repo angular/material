@@ -1,0 +1,11 @@
+<material-bottom-sheet class="list has-header">
+  <material-subheader>Comment Actions</material-subheader>
+  <material-list>
+    <material-item ng-repeat="item in items" ng-click="listItemClick($index)">
+      <div class="material-icon-container">
+        <material-inline-icon />
+      </div>
+      {{ item.name }}
+    </material-item>
+  </material-list>
+</material-bottom-sheet>

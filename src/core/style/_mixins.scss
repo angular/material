@@ -46,6 +46,11 @@
 
 }
 
+@mixin transition-transform() {
+  -webkit-transition-property: -webkit-transform;
+  transition-property: transform;
+}
+
 @mixin easeInOut($duration, $curve) {
   -webkit-transition: all $duration $curve;
   transition: all $duration $curve;

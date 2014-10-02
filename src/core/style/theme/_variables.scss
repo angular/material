@@ -161,7 +161,6 @@ $tabs-tab-width: $baseline-grid * 12 !default;
 $tabs-header-height: 48px;
 
 
-
 // ***********************************
 // Styles for Floating Label Text Fields
 // - Light Theme -
@@ -211,6 +210,16 @@ $tff-line-focused-dark: #1194f6;
 $tff-line-disabled-dark: #333333;
 $tff-line-dashed-dark: #525252;
 
+// Bottom Sheets
+$bottom-sheet-background-color: #FAFAFA;
+$bottom-sheet-border-top-color: #BCBBBB;
+$bottom-sheet-horizontal-padding: 2 * $baseline-grid;
+$bottom-sheet-vertical-padding: 1 * $baseline-grid;
+$bottom-sheet-icon-after-margin: 4 * $baseline-grid;
+$bottom-sheet-list-item-height: 6 * $baseline-grid;
+$bottom-sheet-hidden-bottom-padding: 80px;
+$bottom-sheet-header-height: 7 * $baseline-grid;
+$bottom-sheet-grid-font-weight: 300;
 
 // Forms and inputs
 
@@ -290,3 +299,4 @@ $z-index-sidenav: 8;
 $z-index-backdrop: 7;
 $z-index-tooltip: 6;
 $z-index-fab: 2;
+$z-index-bottom-sheet: $z-index-backdrop + 1;
