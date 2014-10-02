@@ -45,16 +45,16 @@
   </material-sidenav>
 
   <div layout="vertical" layout-fill tabIndex="-1" role="main">
-    <material-toolbar class="material-theme-dark material-medium-tall">
+    <material-toolbar class="material-theme-dark material-medium-tall app-toolbar">
 
-      <div class="material-toolbar-tools">
-        <button class="menu-icon" hide-md ng-click="toggleMenu()" aria-label="Toggle Menu">
+      <div class="material-toolbar-tools" ng-click="toggleMenu()">
+        <button class="menu-icon" hide-md aria-label="Toggle Menu">
           <material-icon icon="img/icons/ic_menu_24px.svg">
           </material-icon>
         </button>
-        <h2 hide show-sm ng-if="menu.currentSection.name">
+        <h3 hide show-sm ng-if="menu.currentSection.name">
           {{menu.currentSection.name}}
-        </h2>
+        </h3>
         <span layout="vertical" layout-align="center center" class="menu-separator-icon"
           ng-show="menu.currentPage">
           <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide block-sm>

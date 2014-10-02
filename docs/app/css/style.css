@@ -63,7 +63,7 @@ material-toolbar.material-medium-tall {
 .menu-item.menu-title {
   color: #888;
   font-size: 16px;
-  padding-left: 8px;
+  padding-left: 16px;
   text-align: left;
   text-transform: uppercase;
 }
@@ -79,10 +79,9 @@ material-toolbar.material-medium-tall {
   background-color: transparent;
   border: none;
 }
-
-.menu-icon material-icon {
-  top: 19px;
-  pointer-events: none; /* don't let svg stop the click event */
+.app-toolbar .material-toolbar-tools h3 {
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
 }
 
 pre, code {
@@ -208,7 +207,8 @@ material-toolbar.demo-toolbar material-button {
  * DOCS
  ************/
 .api-options-bar material-button {
-  margin: 5px;
+  margin: 4px;
+  padding: 4px;
 }
 .api-options-bar material-button:hover,
 .api-options-bar material-button:focus {
@@ -216,8 +216,8 @@ material-toolbar.demo-toolbar material-button {
 }
 .api-options-bar.with-icon material-icon {
   position: absolute;
-  top: 1px;
-  left: 0px;
+  top: 2px;
+  left: 4px;
 }
 .api-options-bar.with-icon material-button span {
   margin-left: 22px;

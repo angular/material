@@ -56,7 +56,7 @@ material-button {
     font-family: inherit;
     line-height: inherit;
     white-space: nowrap;
-    padding: 4px;
+    padding: 6px;
   }
 
   // If we have a href and an inner anchor, let the clicks pass through to the anchor
@@ -77,10 +77,12 @@ material-button {
     border-radius: 0;
   }
 
-  &:hover:not([disabled]),
-  // Uses a .focus class because the child button/a is getting the actual focus
-  &.focus {
-    background-color: $button-hover-background;
+  &:not([disabled]) {
+    &:hover, 
+    // Uses a .focus class because the child button/a is getting the actual focus
+    &.focus {
+      background-color: $button-hover-background;
+    }
   }
 
   &[disabled] {
@@ -105,9 +107,11 @@ material-button {
 
     @extend .material-shadow-bottom-z-1;
 
-    &:hover:not([disabled]),
-    &.focus {
-      background-color: $button-raised-hover-background;
+    &:not([disabled]) {
+      &:hover,
+      &.focus {
+        background-color: $button-raised-hover-background;
+      }
     }
 
     &.material-button-colored {
@@ -144,6 +148,7 @@ material-button {
     -webkit-transition-property: -webkit-transform, box-shadow;
     transition: transform 0.2s linear;
     transition-property: transform, box-shadow;
+
   }
 
   &.material-button-raised,
