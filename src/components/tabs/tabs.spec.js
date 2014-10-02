@@ -1,5 +1,6 @@
 describe('mdTabs directive', function() {
 
+  beforeEach(TestUtil.mockRaf);
   beforeEach(module('material.components.tabs', 'material.decorators', 'material.services.aria'));
 
   describe('controller', function(){

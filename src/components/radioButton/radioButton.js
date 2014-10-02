@@ -253,7 +253,7 @@ function mdRadioButtonDirective($mdAria, $mdUtil) {
         'aria-checked' : 'false'
       });
 
-      $mdAria.expect(element, 'aria-label', element.text());
+      $mdAria.expect(element, 'aria-label', true);
 
       /**
        * Build a unique ID for each radio button that will be used with aria-activedescendant.

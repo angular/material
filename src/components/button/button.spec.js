@@ -1,5 +1,6 @@
 describe('md-button', function() {
 
+  beforeEach(TestUtil.mockRaf);
   beforeEach(module('material.components.button'));
 
   it('should have inner-anchor with attrs if href attr is given', inject(function($compile, $rootScope) {

@@ -12,6 +12,8 @@ describe('md-slider', function() {
     };
   }
 
+  beforeEach(TestUtil.mockRaf);
+  beforeEach(module('ngAria'));
   beforeEach(module('material.components.slider','material.decorators'));
 
   it('should set model on press', inject(function($compile, $rootScope, $timeout) {
@@ -93,4 +95,18 @@ describe('md-slider', function() {
     expect($rootScope.model).toBe(100);
   }));
 
+  it('should warn developers they need a label', inject(function($compile, $rootScope, $timeout, $log) {
+    spyOn($log, "warn");
+
+    var element = $compile(
+      '<div>' +
+       '<md-slider min="100" max="104" step="2" ng-model="model"></md-slider>' +
+       '<md-slider min="0" max="100" ng-model="model2" aria-label="some label"></md-slider>' +
+      '</div>'
+    )($rootScope);
+
+    var sliders = element.find('md-slider');
+    expect($log.warn).toHaveBeenCalledWith(sliders[0]);
+    expect($log.warn).not.toHaveBeenCalledWith(sliders[1]);
+  }));
 });

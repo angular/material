@@ -255,6 +255,6 @@ function MdDialogService($timeout, $rootElement, $mdEffects, $animate, $mdAria, 
       dialogContent = element;
     }
     var defaultText = $mdUtil.stringFromTextBody(dialogContent.text(), 3);
-    $mdAria.expect(element, 'aria-label', defaultText);
+    $mdAria.expect(element, 'aria-label', true, defaultText);
   }
 }

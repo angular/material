@@ -32,6 +32,23 @@ var TestUtil = {
     test.after(function() {
       angular.element.prototype.focus = focus;
     });
-  }
+  },
 
+  /**
+   * Create a fake version of $$rAF that does things asynchronously
+   */
+  mockRaf: function() {
+    module('ng', function($provide) {
+      $provide.value('$$rAF', mockRaf);
+
+      function mockRaf(cb) {
+        cb();
+      }
+      mockRaf.debounce = function(cb) {
+        return function() {
+          cb.apply(this, arguments);
+        };
+      };
+    });
+  }
 };

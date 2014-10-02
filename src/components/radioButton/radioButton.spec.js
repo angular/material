@@ -1,6 +1,7 @@
 describe('radioButton', function() {
   var CHECKED_CSS = 'md-checked';
 
+  beforeEach(TestUtil.mockRaf);
   beforeEach(module('material.components.radioButton'));
 
   it('should set checked css class', inject(function($compile, $rootScope) {
@@ -31,7 +32,7 @@ describe('radioButton', function() {
     expect(rbGroupElement.find('md-radio-button').eq(0).attr('role')).toEqual('radio');
   }));
 
-  it('should set aria attributes', inject(function($compile, $rootScope) {
+  it('should set aria states', inject(function($compile, $rootScope) {
     var element = $compile('<md-radio-group ng-model="color">' +
                             '<md-radio-button value="blue"></md-radio-button>' +
                             '<md-radio-button value="green"></md-radio-button>' +
@@ -50,12 +51,31 @@ describe('radioButton', function() {
     expect(element.attr('aria-activedescendant')).not.toEqual(rbElements.eq(0).attr('id'));
   }));
 
-  it('should be operable via arrow keys', inject(function($compile, $rootScope, $mdConstant) {
+  it('should warn developers they need a label', inject(function($compile, $rootScope, $log){
+    spyOn($log, "warn");
     var element = $compile('<md-radio-group ng-model="color">' +
                             '<md-radio-button value="blue"></md-radio-button>' +
                             '<md-radio-button value="green"></md-radio-button>' +
                           '</md-radio-group>')($rootScope);
 
+    expect($log.warn).toHaveBeenCalled();
+  }));
+
+  it('should create an aria label from provided text', inject(function($compile, $rootScope) {
+    var element = $compile('<md-radio-group ng-model="color">' +
+                            '<md-radio-button value="blue">Blue</md-radio-button>' +
+                            '<md-radio-button value="green">Green</md-radio-button>' +
+                          '</md-radio-group>')($rootScope);
+
+    var rbElements = element.find('md-radio-button');
+    expect(rbElements.eq(0).attr('aria-label')).toEqual('Blue');
+  }));
+
+  it('should be operable via arrow keys', inject(function($compile, $rootScope, $mdConstant) {
+    var element = $compile('<md-radio-group ng-model="color">' +
+                            '<md-radio-button value="blue"></md-radio-button>' +
+                            '<md-radio-button value="green"></md-radio-button>' +
+                          '</md-radio-group>')($rootScope);
     $rootScope.$apply(function(){
       $rootScope.color = 'blue';
     });

@@ -78,8 +78,6 @@ function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant
     tAttrs.tabIndex = 0;
     tElement.attr('role', tAttrs.type);
 
-    $mdAria.expect(tElement, 'aria-label', tElement.text());
-
     return function postLink(scope, element, attr, ngModelCtrl) {
       var checked = false;
 
@@ -91,6 +89,8 @@ function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant
         $parsers: [],
         $formatters: []
       };
+
+      $mdAria.expect(tElement, 'aria-label', true);
 
       // Reuse the original input[type=checkbox] directive from Angular core.
       // This is a bit hacky as we need our own event listener and own render
@@ -122,7 +122,6 @@ function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant
 
       function render() {
         checked = ngModelCtrl.$viewValue;
-        // element.attr('aria-checked', checked);
         if(checked) {
           element.addClass(CHECKED_CSS);
         } else {
