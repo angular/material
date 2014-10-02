@@ -6,7 +6,8 @@
  * A Sidenav QP component.
  */
 angular.module('material.components.sidenav', [
-  'material.services.registry'
+  'material.services.registry',
+  'material.animations'
 ])
   .factory('$materialSidenav', [
     '$materialComponentRegistry', 
@@ -14,6 +15,8 @@ angular.module('material.components.sidenav', [
   ])
   .directive('materialSidenav', [
     '$timeout',
+    '$materialEffects',
+    '$$rAF',
     materialSidenavDirective 
   ])
   .controller('$materialSidenavController', [
@@ -172,63 +175,83 @@ function materialSidenavService($materialComponentRegistry) {
  * });
  * </hljs>
  */
-function materialSidenavDirective($timeout) {
+function materialSidenavDirective($timeout, $materialEffects, $$rAF) {
   return {
     restrict: 'E',
     scope: {},
     controller: '$materialSidenavController',
-    link: function($scope, $element, $attr, sidenavCtrl) {
-      var backdrop = angular.element('<material-backdrop class="material-sidenav-backdrop">');
-
-      $scope.$watch('isOpen', onShowHideSide);
-
-      /**
-       * Toggle the SideNav view and attach/detach listeners
-       * @param isOpen
-       */
-      function onShowHideSide(isOpen) {
-        var parent = $element.parent();
-
-        $element.toggleClass('open', !!isOpen);
-
-        if (isOpen) {
-          parent.append(backdrop);
-          backdrop.on('click', close);
-          parent.on('keydown', onKeyDown);
-        } else {
-          backdrop.remove();
-          backdrop.off('click', close);
-          parent.off('keydown', onKeyDown);
-        }
-      }
-
-      /**
-       * Auto-close sideNav when the `escape` key is pressed.
-       * @param evt
-       */
-      function onKeyDown(evt) {
-        if(evt.which === Constant.KEY_CODE.ESCAPE){
-          close();
-
-          evt.preventDefault();
-          evt.stopPropagation();
-        }
-      }
-
-      /**
-        * With backdrop `clicks` or `escape` key-press, immediately
-       * apply the CSS close transition... Then notify the controller
-       * to close() and perform its own actions.
-       */
-      function close() {
-
-        onShowHideSide( false );
-
-        $timeout(function(){
-          sidenavCtrl.close();
-        });
-      }
-
-    }
+    compile: compile
   };
+
+  function compile(element, attr) {
+    element.addClass('closed');
+
+    return postLink;
+  }
+  function postLink(scope, element, attr, sidenavCtrl) {
+    var backdrop = angular.element('<material-backdrop class="material-sidenav-backdrop">');
+
+    scope.$watch('isOpen', onShowHideSide);
+    element.on($materialEffects.TRANSITIONEND_EVENT, onTransitionEnd);
+
+    /**
+     * Toggle the SideNav view and attach/detach listeners
+     * @param isOpen
+     */
+    function onShowHideSide(isOpen) {
+      var parent = element.parent();
+
+      if (isOpen) {
+        element.removeClass('closed');
+
+        parent.append(backdrop);
+        backdrop.on('click', close);
+        parent.on('keydown', onKeyDown);
+
+      } else {
+        backdrop.remove();
+        backdrop.off('click', close);
+        parent.off('keydown', onKeyDown);
+      }
+
+      $$rAF(function() {
+        element.toggleClass('open', !!scope.isOpen);
+      });
+    }
+
+    function onTransitionEnd(ev) {
+      if (ev.target === element[0] && !scope.isOpen) {
+        element.addClass('closed');
+      }
+    }
+
+    /**
+     * Auto-close sideNav when the `escape` key is pressed.
+     * @param evt
+     */
+    function onKeyDown(evt) {
+      if(evt.which === Constant.KEY_CODE.ESCAPE){
+        close();
+
+        evt.preventDefault();
+        evt.stopPropagation();
+      }
+    }
+
+    /**
+     * With backdrop `clicks` or `escape` key-press, immediately
+     * apply the CSS close transition... Then notify the controller
+     * to close() and perform its own actions.
+     */
+    function close() {
+
+      onShowHideSide( false );
+
+      $timeout(function(){
+        sidenavCtrl.close();
+      });
+    }
+
+  }
+
 }

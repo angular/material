@@ -10,6 +10,10 @@ material-sidenav {
   transition: transform 0.3s ease-in-out;
 
   @extend .material-sidenav-left;
+
+  &.closed {
+    display: none;
+  }
 }
 
 .material-sidenav-left {
@@ -42,18 +46,6 @@ material-sidenav {
 
   .material-sidenav-backdrop {
     display: none !important;
-  }
-}
-
-/* 
- * When sidenav is closed on small screen, show no box shadow
- */
-@media (max-width: $layout-breakpoint-md) {
-  material-sidenav {
-    &:not(.open).material-sidenav-left,
-    &:not(.open).material-sidenav-right {
-      box-shadow: none;
-    }
   }
 }
 
