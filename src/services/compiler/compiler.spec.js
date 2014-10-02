@@ -1,8 +1,5 @@
 describe('$materialCompiler service', function() {
-  beforeEach(module('material.services.compiler', function($provide) {
-    // Some constant to use in one of the tests below
-    $provide.constant('ChickenString', 'chicken');
-  }));
+  beforeEach(module('material.services.compiler'));
 
   function compile(options) {
     var compileData;
@@ -43,6 +40,10 @@ describe('$materialCompiler service', function() {
     });
 
     it('resolve and locals should work', function() {
+      module(function($provide) {
+        $provide.constant('StrawberryColor', 'red');
+      });
+
       var data = compile({
         resolve: {
           //Resolve a factory inline
@@ -50,7 +51,7 @@ describe('$materialCompiler service', function() {
             return $q.when('apple');
           },
           //Resolve a DI token's value
-          meat: 'ChickenString'
+          color: 'StrawberryColor'
         },
         locals: {
           vegetable: 'carrot'
@@ -58,7 +59,7 @@ describe('$materialCompiler service', function() {
       });
       expect(data.locals.fruit).toBe('apple');
       expect(data.locals.vegetable).toBe('carrot');
-      expect(data.locals.meat).toBe('chicken');
+      expect(data.locals.color).toBe('red');
     });
 
     describe('after link()', function() {
