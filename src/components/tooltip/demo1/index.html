@@ -1,0 +1,32 @@
+<div ng-controller="AppCtrl">
+  <material-content class="material-content-padding">
+
+    <material-button class="material-button-fab material-button-fab-top-left">
+      <material-tooltip visible="showTooltip">
+        Refresh
+      </material-tooltip>
+      <material-icon icon="/img/icons/ic_refresh_24px.svg">
+      </material-icon>
+    </material-button>
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+    <p>
+      <div>
+        The tooltip is visible when the button is hovered, focused, or touched.
+      </div>
+      <div>
+        Additionally, the tooltip's visibility is bound to the checkbox below.
+      </div>
+    </p>
+
+    <material-checkbox ng-model="showTooltip">
+      Tooltip is shown
+    </material-checkbox>
+
+  </material-content>
+</div>

@@ -94,6 +94,7 @@ module.exports = {
       'src/components/tabs/js/*.js',
       'src/components/toast/toast.js',
       'src/components/toolbar/toolbar.js',
+      'src/components/tooltip/tooltip.js',
       'src/components/whiteframe/whiteframe.js',
       'src/components/divider/divider.js',
       'src/components/linearProgress/linearProgress.js',
