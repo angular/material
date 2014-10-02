@@ -11,9 +11,9 @@ material-sidenav {
 
   @extend .material-sidenav-left;
 
-  &.closed {
-    display: none;
-  }
+  // &.closed {
+  //   display: none;
+  // }
 }
 
 .material-sidenav-left {
