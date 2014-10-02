@@ -1,5 +1,7 @@
 describe('materialSidenav', function() {
-  beforeEach(module('material.components.sidenav'));
+  beforeEach(module('material.components.sidenav', function($provide) {
+    $provide.value('$$rAF', function(cb) { cb(); });
+  }));
 
   function setup(attrs) {
     var el;
