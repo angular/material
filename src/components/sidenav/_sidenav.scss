@@ -1,7 +1,7 @@
 material-sidenav {
   position: absolute;
 
-  width: 304px;
+  width: $sidenav-default-width;
   bottom: 0;
 
   background-color: white;
@@ -54,5 +54,11 @@ material-sidenav {
     &:not(.open).material-sidenav-right {
       box-shadow: none;
     }
+  }
+}
+
+@media (max-width: $sidenav-default-width + 2 * $sidenav-min-room) {
+  material-sidenav {
+    max-width: 75%;
   }
 }
