@@ -32,14 +32,16 @@ material-toast {
 
   opacity: 1;
   @include transform(translate3d(0,0,0) rotateZ(0deg));
-  @include transition(all 0.2s linear);
+  @include transition(0.2s linear);
+  transition-property: transform, opacity;
+  -webkit-transition-property: -webkit-transform, opacity;
   
-  /* Transition faster when swiping */
+  /* Transition differently when swiping */
   &.swipeleft,
   &.swiperight,
   &.swipeup,
   &.swipedown {
-    @include transition(all 0.15s ease-out);
+    @include transition(0.15s ease-out);
   }
 
   &.ng-enter {
@@ -95,14 +97,16 @@ material-toast {
 @media (min-width: $layout-breakpoint-sm) {
   material-toast {
     min-width: 288px;
-    bottom: $toast-margin;
-    left: $toast-margin;
+    &.bottom {
+      bottom: $toast-margin;
+    }
+    &.left {
+      left: $toast-margin;
+    }
     &.right {
-      left: auto;
       right: $toast-margin;
     }
     &.top {
-      bottom: auto;
       top: $toast-margin;
     }
 
