@@ -214,6 +214,8 @@ function materialSidenavDirective($timeout, $materialEffects, $$rAF) {
         parent.off('keydown', onKeyDown);
       }
 
+      // Wait until the next frame, so that if the `closed` class was just removed the 
+      // element has a chance to 're-initialize' from being display: none.
       $$rAF(function() {
         element.toggleClass('open', !!scope.isOpen);
       });
