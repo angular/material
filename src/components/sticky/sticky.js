@@ -12,15 +12,11 @@ angular.module('material.components.sticky', [
   'material.animations'
 ])
 .factory('$materialSticky', [
-  '$window',
   '$document',
-  '$$rAF',
   '$materialEffects',
+  '$compile',
+  '$$rAF',
   MaterialSticky
-])
-.directive('materialSticky', [
-  '$materialSticky', 
-  MaterialStickyDirective
 ]);
 
 /**
@@ -31,282 +27,284 @@ angular.module('material.components.sticky', [
  * @description
  * The `$materialSticky`service provides a mixin to make elements sticky.
  *
- * @returns A `$materialSticky` function that takes `$el` as an argument.
+ * @returns A `$materialSticky` function that takes three arguments:
+ *   - `scope`
+ *   - `element`: The element that will be 'sticky'
+ *   - `{optional}` `clone`: A clone of the element, that will be shown
+ *     when the user starts scrolling past the original element.
+ *     If not provided, it will use the result of `element.clone()`.
  */
 
-function MaterialSticky($window, $document, $$rAF, $materialEffects) {
-  var browserStickySupport;
+function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
+
+  var browserStickySupport = checkStickySupport();
 
   /**
    * Registers an element as sticky, used internally by directives to register themselves
    */
+  return function registerStickyElement(scope, element, stickyClone) {
+    var contentCtrl = element.controller('materialContent');
+    if (!contentCtrl) return;
 
-
-  function registerStickyElement(scope, $el) {
-    scope.$on('$destroy', function() { $deregister($el); });
-    $el = Util.wrap($el, 'div', 'sticky-container');
-
-    var ctrl = $el.controller('materialContent');
-
-    if (!ctrl) { throw new Error('$materialSticky used outside of material-content'); }
-
-    var $container = ctrl.$element;
-
-    /*
-     * The sticky object on the container stores everything we need.
-     * `elements`: all known sticky elements within the container
-     * `orderedElements`: elements, ordered by vertical position within the layout
-     * `check`: debounced function to check elements for adjustment on scroll
-     * `targetIndex`: the index in orderedElements of the currently active sticky el
-    */
-
-    var $sticky = $container.data('$sticky') || {
-      elements: [], // all known sticky elements within $container
-      orderedElements: [], // elements, ordered by vertical position in layout
-      check: $$rAF.debounce(angular.bind(undefined, checkElements, $container)),
-      targetIndex: 0
-    };
-
-    $sticky.elements.push($el);
-
-    // check sticky support on first register
-    if (browserStickySupport === undefined) {
-      browserStickySupport = checkStickySupport($el);
-    } else if (browserStickySupport) {
-      $el.css({position: browserStickySupport, top: '0px', 'z-index': 2});
-    }
-
-    if (!browserStickySupport) {
-      if ($sticky.elements.length == 1) {
-        $container.data('$sticky', $sticky);
-        $container.on('scroll',  $sticky.check);
+    if (browserStickySupport) {
+      element.css({
+        position: browserStickySupport,
+        top: 0,
+        'z-index': 2
+      });
+    } else {
+      var $$sticky = contentCtrl.$element.data('$$sticky');
+      if (!$$sticky) {
+        $$sticky = setupSticky(contentCtrl);
+        contentCtrl.$element.data('$$sticky', $$sticky);
       }
-      queueScan();
+
+      var deregister = $$sticky.add(element, stickyClone || element.clone());
+      scope.$on('$destroy', deregister);
     }
+  };
 
-    return $deregister;
+  function setupSticky(contentCtrl) {
+    var contentEl = contentCtrl.$element;
 
+    // stickyContainer holds all of the clones of the sticky elements.
+    // The proper clone will be stickied to the top of the screen depending 
+    // on the content's scroll position.
+    var stickyContainer = angular.element('<div class="material-sticky-container">');
+    $document[0].body.appendChild(stickyContainer[0]);
 
-    // Deregister a sticky element, useful for $destroy event.
-    function $deregister($el) {
-      if ($deregister.called) return;
-      $deregister.called = true;
-      var innerElements = elements.map(function(el) { return el.children(0); });
-      var index = innerElements.indexOf($el);
-      if (index !== -1) {
-        elements[index].replaceWith($el);
-        elements.splice(index, 1);
-        if (elements.length === 0) {
-          $container.off('scroll', $sticky.check);
-          $container.removeData('$sticky');
-        }
-      }
-    }
+    // Refresh elements is very expensive, so we use the debounced
+    // version when possible.
+    var debouncedRefreshElements = $$rAF.debounce(refreshElements);
 
-    // Method that will scan the elements after the current digest cycle
-    function queueScan() {
-      if (!queueScan.queued) {
-        queueScan.queued = true;
-        scope.$$postDigest(function() {
-          scanElements($container);
-          queueScan.queued = false;
-        });
-      }
-    }
-  }
-  return registerStickyElement;
+    // setupAugmentedScrollEvents gives us `$scrollstart` and `$scroll`,
+    // more reliable than `scroll` on android.
+    setupAugmentedScrollEvents(contentEl);
+    contentEl.on('$scrollstart', debouncedRefreshElements);
+    contentEl.on('$scroll', onScroll);
 
-  // Function to check for browser sticky support
-
-  function checkStickySupport($el) {
-    var stickyProps = ['sticky', '-webkit-sticky'];
-    for (var i = 0; i < stickyProps.length; ++i) {
-      $el.css({position: stickyProps[i], top: 0, 'z-index': 2});
-      if ($el.css('position') == stickyProps[i]) {
-        return stickyProps[i];
-      }
-    }
-    $el.css({position: undefined, top: undefined});
-    return false;
-  }
-
-
-  /**
-   * Function to prepare our lookups so we can go quick!
-   */
-  function scanElements($container) {
-    if (browserStickySupport) return;
-
-    var $sticky = $container.data('$sticky');
-
-    // Sort based on position in the window, and assign an active index
-    $sticky.orderedElements = $sticky.elements.sort(function(a, b) {
-      return rect(a).top - rect(b).top;
+    contentCtrl.$scope.$on('$destroy', function cleanup() {
+      stickyContainer.remove();
     });
 
-    $sticky.targetIndex = findTargetElementIndex();
+    var self;
+    return self = {
+      prev: null,
+      current: null, //the currently stickied item
+      next: null,
+      items: [],
+      add: add,
+      refreshElements: refreshElements
+    };
+
+    /***************
+     * Public
+     ***************/
+    // Add an element and its sticky clone to this content's sticky collection
+    function add(element, stickyClone) {
+      stickyClone.addClass('material-sticky-clone');
+
+      var item = {
+        element: element,
+        clone: stickyClone
+      };
+      self.items.push(item);
+
+      stickyContainer.append(item.clone);
+
+      debouncedRefreshElements();
+
+      return function remove() {
+        self.items.forEach(function(item, index) {
+          if (item.element[0] === element[0]) {
+            self.items.splice(index, 1);
+            item.clone.remove();
+          }
+        });
+        debouncedRefreshElements();
+      };
+    }
+
+    function refreshElements() {
+      var contentRect = contentEl[0].getBoundingClientRect();
+
+      // Sort our collection of elements by their current position in the DOM.
+      // We need to do this because our elements' order of being added may not
+      // be the same as their order of display.
+      self.items = self.items.sort(function(a, b) {
+        refreshPosition(a);
+        refreshPosition(b);
+        return a.top > b.top;
+      });
+
+      // Set our stickyContainer, which is just an invisible overflow:hidden box 
+      // placed over the content area, to fit right on top of the content.
+      stickyContainer.css({
+        left: contentRect.left + 'px',
+        top: contentRect.top + 'px',
+        width: contentRect.width + 'px',
+        height: contentRect.height + 'px'
+      });
+
+      // Finally, try to sticky the item nearest to the user's scroll position.
+      findCurrentItem();
+    }
 
 
-    // Iterate over our sorted elements and find the one that is active
-    function findTargetElementIndex() {
-      var scroll = $container.prop('scrollTop');
-      for(var i = 0; i < $sticky.orderedElements.length ; ++i) {
-        if (rect($sticky.orderedElements[i]).bottom > 0) {
-          return i > 0 ? i - 1 : i;
-        } else {
-          return i;
+    /***************
+     * Private
+     ***************/
+
+    // Find the `top` of an item relative to the content element,
+    // and also the height.
+    function refreshPosition(item) {
+      // Find the top of an item by adding to the offsetHeight until we reach the 
+      // content element.
+      var current = item.element[0];
+      item.top = 0;
+      while (current && current !== contentEl[0]) {
+        item.top += current.offsetTop;
+        current = current.offsetParent;
+      }
+      item.height = item.element.prop('offsetHeight');
+    }
+
+    function cleanup() {
+      stickyContainer.remove();
+    }
+
+    // Find which item in the list should be active, based upon the content's scroll position
+    function findCurrentItem() {
+      var currentItem;
+      var currentScrollTop = contentEl.prop('scrollTop');
+      for (var i = self.items.length - 1; i >= 0; i--) {
+        if (currentScrollTop >= self.items[i].top) {
+          currentItem = self.items[i];
+          break;
+        }
+      }
+      setCurrentItem(currentItem);
+    }
+
+    // As we scroll, push in and select the correct sticky element.
+    function onScroll() {
+      var scrollTop = contentEl.prop('scrollTop');
+      var isScrollingDown = scrollTop > (onScroll.prevScrollTop || 0);
+      onScroll.prevScrollTop = scrollTop;
+
+      // Going to next item?
+      if (isScrollingDown && self.next) {
+        if (self.next.top - scrollTop <= 0) {
+          // Sticky the next item if we've scrolled past its position.
+          setCurrentItem(self.next);
+        } else if (self.current) {
+          // Push the current item up when we're almost at the next item.
+          if (self.next.top - scrollTop <= self.next.height) {
+            translate(self.current, self.next.top - self.next.height - scrollTop);
+          } else {
+            translate(self.current, null);
+          }
+        }
+      // Scrolling up with a current sticky item?
+      } else if (!isScrollingDown && self.current) {
+        if (scrollTop < self.current.top) {
+          // Sticky the previous item if we've scrolled up past
+          // the original position of the currently stickied item.
+          setCurrentItem(self.prev);
+        }
+        // Scrolling up, and just bumping into the item above (just set to current)?
+        // If we have a next item bumping into the current item, translate
+        // the current item up from the top as it scrolls into view.
+        if (self.current && self.next) {
+          if (scrollTop >= self.next.top - self.current.height) {
+            translate(self.current, self.next.top - scrollTop - self.current.height);
+          } else {
+            translate(self.current, null);
+          }
         }
       }
     }
+     
+   function setCurrentItem(item) {
+     self.current && setInactive(self.current);
+     item && setActive(item);
+
+     self.current = item;
+     var index = self.items.indexOf(item);
+     // If index === -1, index + 1 = 0. It works out.
+     self.next = self.items[index + 1];
+     self.prev = self.items[index - 1];
+   }
+
+   function setActive(item) {
+     item.clone.addClass('material-sticky-active');
+     item.element.addClass('material-sticky-invisible');
+   }
+   function setInactive(item) {
+     translate(item, null);
+     item.clone.removeClass('material-sticky-active');
+     item.element.removeClass('material-sticky-invisible');
+   }
+
+   function translate(item, amount) {
+     if (!item) return;
+     if (amount === null || amount === undefined) {
+       if (item.translateY) {
+         item.translateY = null;
+         item.clone.css($materialEffects.TRANSFORM, '');
+       }
+     } else {
+       item.translateY = amount;
+       item.clone.css($materialEffects.TRANSFORM, 'translate3d(0,' + amount + 'px,0)');
+     }
+   }
   }
 
-  // Function that executes on scroll to see if we need to do adjustments
-  function checkElements($container) {
-    var next; // pointer to next target
+  // Function to check for browser sticky support
+  function checkStickySupport($el) {
+    var stickyProp;
+    var testEl = angular.element('<div>');
+    $document[0].body.appendChild(testEl[0]);
 
-    var $sticky = $container.data('$sticky');
-
-    var targetElementIndex = $sticky.targetIndex;
-    var orderedElements = $sticky.orderedElements;
-
-    /* 
-     * Since we wrap in an element (to keep track of where in the layout the 
-     * element would normally be, we use children to get the actual sticky 
-     * element.
-     */
-
-    var content = targetElement().children(0);
-    var contentRect = rect(content);
-    var containerRect = rect($container);
-    var targetRect = rect(targetElement());
-
-    var scrollingDown = false;
-    var currentScroll = $container.prop('scrollTop');
-    var lastScroll = $sticky.lastScroll;
-    if (currentScroll > (lastScroll || 0)) {
-      scrollingDown = true;
-    }
-    $sticky.lastScroll = currentScroll;
-
-    var stickyActive = content.hasClass('material-sticky-active');
-
-
-    // If we are scrollingDown, sticky, and are being pushed off screen by a different element, increment
-    if (scrollingDown && stickyActive && contentRect.bottom <= containerRect.top && targetElementIndex < orderedElements.length - 1) {
-      targetElement().children(0).removeClass('material-sticky-active');
-      targetElement().css('height', null);
-      incrementElement();
-      return;
-
-    //If we are going up, and our normal position would be rendered not sticky, un-sticky ourselves
-    } else if (!scrollingDown && stickyActive && targetRect.top > containerRect.top) {
-      targetElement().children(0).removeClass('material-sticky-active');
-      targetElement().css('height', null);
-      if (targetElementIndex > 0) {
-        incrementElement(-1);
-        content.addClass('material-sticky-active');
-        transformY(content, -contentRect.height);
-        targetElement().css('height', contentRect.height + 'px');
-        return;
+    var stickyProps = ['sticky', '-webkit-sticky'];
+    for (var i = 0; i < stickyProps.length; ++i) {
+      testEl.css({position: stickyProps[i], top: 0, 'z-index': 2});
+      if (testEl.css('position') == stickyProps[i]) {
+        stickyProp = stickyProps[i];
+        break;
       }
-      return; // explicit return for the blind
+    }
+    testEl.remove();
+    return stickyProp;
+  }
 
-    /* 
-     * If we are going off screen and haven't been made sticky yet, go sticky
-     * Check at 0 so that if we get lucky on the scroll position, we activate
-     * sticky and avoid floating off the top for a second
-     */
-
-    } else if (scrollingDown && contentRect.top <= containerRect.top && !stickyActive) {
-      content.addClass('material-sticky-active');
-      targetElement().css('height', contentRect.height + 'px');
-      contentRect = rect(content);
-      next = targetElement(+1);
-      var offset = 0;
-      if (next) {
-        nextRect = rect(next.children(0));
-        if (rectsAreTouching(contentRect, nextRect)) {
-          offset = nextRect.top - contentRect.bottom;
-        }
-        transformY(content, Math.min(offset, 0));
+  // Android 4.4 don't accurately give scroll events.
+  // To fix this problem, we setup a fake scroll event. We say:
+  // > If a scroll or touchmove event has happened in the last DELAY milliseconds, 
+  //   then send a `$scroll` event every animationFrame.
+  // Additionally, we add $scrollstart and $scrollend events.
+  function setupAugmentedScrollEvents(element) {
+    var SCROLL_END_DELAY = 200;
+    var isScrolling;
+    var lastScrollTime;
+    element.on('scroll touchmove', function() {
+      if (!isScrolling) {
+        isScrolling = true;
+        element.triggerHandler('$scrollstart');
+        scrollEvent();
       }
-      return;
-    } 
+      lastScrollTime = +Util.now();
+    });
 
-    var nextRect, offsetAmount, currentTop, translateAmt;
-
-    // check if we need to push
-    if (scrollingDown) {
-      next = targetElement(+1);
-      if (next) {
-        nextRect = rect(next.children(0));
-        if (rectsAreTouching(contentRect, nextRect)) {
-          offsetAmount = contentRect.bottom - nextRect.top;
-          currentTop = transformY(content);
-          translateAmt = currentTop - offsetAmount;
-          transformY(content, translateAmt);
-        }
+    function scrollEvent() {
+      if (+Util.now() - lastScrollTime > SCROLL_END_DELAY) {
+        isScrolling = false;
+        element.triggerHandler('$scrollend');
+      } else {
+        element.triggerHandler('$scroll');
+        $$rAF(scrollEvent);
       }
-    // Check if we need to pull
-    } else if (targetElementIndex < orderedElements.length - 1 && contentRect.top < containerRect.top) {
-      nextRect = rect(targetElement(+1).children(0));
-      offsetAmount = contentRect.bottom - nextRect.top;
-      currentTop = transformY(content);
-      translateAmt = Math.min(currentTop - offsetAmount, 0);
-      transformY(content, translateAmt);
-    }
-
-    function incrementElement(inc) {
-      inc = inc || 1;
-      targetElementIndex += inc;
-      content = targetElement().children(0);
-      contentRect = rect(content);
-      $sticky.targetIndex = targetElementIndex;
-    }
-
-    function targetElement(indexModifier) {
-      indexModifier = indexModifier || 0;
-      if (targetElementIndex === undefined) return undefined;
-      return orderedElements[targetElementIndex + indexModifier];
     }
   }
 
-  function rectsAreTouching(first, second) {
-    return first.bottom >= second.top;
-  }
-
-  // Helper functions to get position of element
-
-  function rect($el) {
-    return $el.hasOwnProperty(0) ? $el[0].getBoundingClientRect() : $el.getBoundingClientRect();
-  }
-
-  // Getter / setter for transform
-  function transformY($el, amnt) {
-    if (amnt === undefined) {
-      return $el.data('translatedHeight') || 0;
-    } else {
-      $el.css($materialEffects.TRANSFORM, 'translate3d(0, ' + amnt + 'px, 0)');
-      $el.data('translatedHeight', amnt);
-    }
-  }
-
-
-}
-
-/**
- * @ngdoc directive
- * @name materialSticky
- * @module material.components.sticky
- *
- * @description
- * Directive to consume the $materialSticky service
- *
- * @returns A material-sticky directive
- */
-function MaterialStickyDirective($materialSticky) {
-  return {
-    restrict: 'A',
-    link: $materialSticky
-  };
 }
