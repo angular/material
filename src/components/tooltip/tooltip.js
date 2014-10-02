@@ -63,7 +63,7 @@ function MaterialTooltipDirective($timeout, $window, $$rAF, $document) {
     // We will re-attach tooltip when visible
     element.detach();
     element.attr('role', 'tooltip');
-    element.attr('id', attr.id || Util.nextUid());
+    element.attr('id', attr.id || ('tooltip_' + Util.nextUid()));
 
     parent.on('focus mouseenter touchstart', function() {
       setVisible(true);
