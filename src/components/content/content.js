@@ -33,9 +33,13 @@ angular.module('material.components.content', [
 function materialContentDirective() {
   return {
     restrict: 'E',
-    controller: angular.noop,
+    controller: ['$element', ContentController],
     link: function($scope, $element, $attr) {
       $scope.$broadcast('$materialContentLoaded', $element);
     }
   };
+
+  function ContentController($element) {
+    this.$element = $element;
+  }
 }

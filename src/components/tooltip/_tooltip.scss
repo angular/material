@@ -1,0 +1,101 @@
+@include keyframes(tooltipBackgroundShow) {
+  0% {
+    @include transform(scale(0.2));
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    @include transform(scale(1.0));
+    opacity: 1;
+  }
+}
+@include keyframes(tooltipBackgroundHide) {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+material-tooltip {
+  position: absolute;
+  font-size: 14px;
+  z-index: $z-index-tooltip;
+  overflow: hidden;
+  pointer-events: none;
+  color: white;
+  border-radius: 4px;
+
+  &[tooltip-direction="bottom"] {
+    @include transform(translate3d(0, -30%, 0));
+    margin-top: 8px;
+  }
+  &[tooltip-direction="top"] {
+    @include transform(translate3d(0, 30%, 0));
+    margin-bottom: 8px;
+  }
+
+  .tooltip-background {
+    background: rgb(115,115,115);
+    position: absolute;
+    left: 50%;
+    width: 256px;
+    height: 256px;
+    margin-left: -128px;
+    margin-top: -128px;
+    border-radius: 256px;
+
+    opacity: 0.25;
+    @include transform(scale(0.2));
+  }
+
+  .tooltip-content {
+    max-width: 240px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    padding: 8px;
+    background: transparent;
+    opacity: 0.3;
+    @include transition(inherit);
+  }
+
+  &.tooltip-show,
+  &.tooltip-hide {
+    @include transition(0.2s ease-out);
+    transition-property: transform, opacity;
+    -webkit-transition-property: -webkit-transform, opacity;
+  }
+
+  &.tooltip-show {
+    pointer-events: auto;
+    @include transform(translate3d(0,0,0));
+
+    .tooltip-background {
+      @include transform(scale(1.0));
+      opacity: 1.0;
+      @include animation(tooltipBackgroundShow linear);
+    }
+    .tooltip-content {
+      opacity: 0.99;
+    }
+  }
+  &.tooltip-hide .tooltip-background {
+    @include transform(scale(1.0));
+    opacity: 0;
+    @include animation(tooltipBackgroundHide 0.2s linear);
+  }
+
+  /**
+   * Depending on the tooltip's size as a multiple of 32 (set by JS),
+   * change the background's animation duration.
+   * The larger the tooltip, the less time the background should take to ripple outwards.
+   */
+  @for $i from 1 through 8 {
+    &[width-32="#{$i}"].tooltip-show .tooltip-background {
+      $duration: 1000 - $i * 100;
+      animation-duration: #{$duration}ms;
+      -webkit-animation-duration: #{$duration}ms;
+    }
+  }
+}

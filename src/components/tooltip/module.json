@@ -1,0 +1,10 @@
+{
+  "module": "material.components.tooltip",
+  "name": "Tooltip",
+  "demos": {
+    "demo1": {
+      "name": "Tooltip Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}
