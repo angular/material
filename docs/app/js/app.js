@@ -1,4 +1,4 @@
-var DocsApp = angular.module('docsApp', ['ngMaterial', 'ngRoute', 'angularytics', 'ngAria'])
+var DocsApp = angular.module('docsApp', ['ngMaterial', 'ngRoute', 'angularytics'])
 
 .config([
   'COMPONENTS',

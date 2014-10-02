@@ -4,6 +4,29 @@ describe('mdCheckbox', function() {
 
   beforeEach(module('material.components.checkbox'));
   beforeEach(module('ngAria'));
+  beforeEach(TestUtil.mockRaf);
+
+  it('should warn developers they need a label', inject(function($compile, $rootScope, $log){
+    spyOn($log, "warn");
+
+    var element = $compile('<div>' +
+                             '<md-checkbox ng-model="blue">' +
+                             '</md-checkbox>' +
+                           '</div>')($rootScope);
+
+    expect($log.warn).toHaveBeenCalled();
+  }));
+
+  it('should copy text content to aria-label', inject(function($compile, $rootScope){
+    var element = $compile('<div>' +
+                             '<md-checkbox ng-model="blue">' +
+                             'Some text' +
+                             '</md-checkbox>' +
+                           '</div>')($rootScope);
+
+    var cbElements = element.find('md-checkbox');
+    expect(cbElements.eq(0).attr('aria-label')).toBe('Some text');
+  }));
 
   it('should set checked css class and aria-checked attributes', inject(function($compile, $rootScope) {
     var element = $compile('<div>' +

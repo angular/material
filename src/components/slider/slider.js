@@ -109,6 +109,7 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
     var trackContainer = angular.element(element[0].querySelector('.slider-track-container'));
     var activeTrack = angular.element(element[0].querySelector('.slider-track-fill'));
     var tickContainer = angular.element(element[0].querySelector('.slider-track-ticks'));
+    var throttledRefreshDimensions = $mdUtil.throttle(refreshSliderDimensions, 5000);
 
     // Default values, overridable by attrs
     attr.min ? attr.$observe('min', updateMin) : updateMin(0);
@@ -125,7 +126,8 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
       updateAriaDisabled(!!attr.disabled);
     }
 
-    $mdAria.expect(element, 'aria-label');
+    $mdAria.expect(element, 'aria-label', false);
+
     element.attr('tabIndex', 0);
     element.attr('role', 'slider');
     element.on('keydown', keydownListener);
@@ -214,7 +216,6 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
      * Refreshing Dimensions
      */
     var sliderDimensions = {};
-    var throttledRefreshDimensions = $mdUtil.throttle(refreshSliderDimensions, 5000);
     refreshSliderDimensions();
     function refreshSliderDimensions() {
       sliderDimensions = trackContainer[0].getBoundingClientRect();

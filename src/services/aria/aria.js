@@ -1,12 +1,13 @@
 angular.module('material.services.aria', [])
 
 .service('$mdAria', [
+  '$$rAF',
   '$log',
   AriaService
 ]);
 
-function AriaService($log) {
-  var messageTemplate = 'ARIA: Attribute "%s", required for accessibility, is missing on "%s"!';
+function AriaService($$rAF, $log) {
+  var messageTemplate = 'ARIA: Attribute "%s", required for accessibility, is missing on "%s"';
   var defaultValueTemplate = 'Default value was set: %s="%s".';
 
   return {
@@ -17,23 +18,31 @@ function AriaService($log) {
    * Check if expected ARIA has been specified on the target element
    * @param element
    * @param attrName
-   * @param defaultValue
+   * @param copyElementText
+   * @param {optional} defaultValue
    */
-  function expectAttribute(element, attrName, defaultValue) {
+  function expectAttribute(element, attrName, copyElementText, defaultValue) {
 
-    var node = element[0];
-    if (!node.hasAttribute(attrName)) {
-      var hasDefault = angular.isDefined(defaultValue);
+    $$rAF(function(){
 
-      if (hasDefault) {
-        defaultValue = String(defaultValue).trim();
-        // $log.warn(messageTemplate + ' ' + defaultValueTemplate,
-        //           attrName, getTagString(node), attrName, defaultValue);
-        element.attr(attrName, defaultValue);
-      } else {
-        // $log.warn(messageTemplate, attrName, getTagString(node));
+      var node = element[0];
+      if (!node.hasAttribute(attrName)) {
+
+        var hasDefault;
+        if(copyElementText === true){
+          if(!defaultValue) defaultValue = element.text().trim();
+          hasDefault = angular.isDefined(defaultValue) && defaultValue.length;
+        }
+
+        if (hasDefault) {
+          defaultValue = String(defaultValue).trim();
+          element.attr(attrName, defaultValue);
+        } else {
+          $log.warn(messageTemplate, attrName, node);
+          $log.warn(node);
+        }
       }
-    }
+    });
   }
 
 
