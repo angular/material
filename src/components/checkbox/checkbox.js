@@ -93,7 +93,7 @@ function MaterialCheckboxDirective(inputDirectives, $materialInkRipple, $materia
       // Reuse the original input[type=checkbox] directive from Angular core.
       // This is a bit hacky as we need our own event listener and own render
       // function.
-      inputDirective.link(scope, {
+      inputDirective.link.pre(scope, {
         on: angular.noop,
         0: {}
       }, attr, [ngModelCtrl]);
