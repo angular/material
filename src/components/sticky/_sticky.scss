@@ -12,12 +12,12 @@
     display: none;
 
     &.sticky-next, 
-    &.sticky-prev,
-    &.sticky-active {
+    &.sticky-prev {
       display: block;
       @include transform(translate3d(-9999px, -9999px, 0));
     }
     &.sticky-active {
+      display: block;
       @include transform(translate3d(0, 0, 0));
     }
   }
