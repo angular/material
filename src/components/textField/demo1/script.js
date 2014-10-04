@@ -32,13 +32,20 @@ angular.module('textFieldDemo1', ['ngMaterial'])
         fid : '@?',
         value : '='
       },
-      link : function(scope, element, attrs) {
-          scope.isDisabled = angular.isDefined(attrs.disabled);
-          scope.label = angular.isUndefined(scope.label) ? attrs.label : "";
+      compile : function() {
+        return {
+          pre : function(scope, element, attrs) {
+            if ( angular.isDefined(attrs.disabled) ) {
+              element.attr('disabled', true);
+              scope.isDisabled = true;
+            }
+            scope.label = angular.isUndefined(scope.label) ? attrs.label : "";
 
-          if ( angular.isUndefined(scope.fid) ) {
-            scope.fid = scope.label;
+            if ( angular.isUndefined(scope.fid) ) {
+              scope.fid = scope.label;
+            }
           }
+        }
       },
       template:
         '<material-input-group ng-disabled="isDisabled">' +
