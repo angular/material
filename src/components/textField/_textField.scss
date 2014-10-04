@@ -3,7 +3,7 @@ form {
 
 label {
   display: block;
-  font-size: $input-font-size;
+  font-size: $tff-font-size;
 }
 
 textarea,
@@ -23,8 +23,8 @@ input[type="tel"],
 input[type="color"] {
   display: block;
   border-width: 0 0 1px 0;
-  line-height: $input-line-height;
-  font-size: $input-font-size;
+  line-height: $tff-line-height;
+  font-size: $tff-font-size;
 
   &:focus {
     outline: 0;
@@ -32,52 +32,104 @@ input[type="color"] {
 }
 
 input, textarea {
-  @include input-placeholder($input-placeholder-color);
+  @include input-placeholder($tff-placeholder-color);
   background: none;
 }
 
+// Light-Theme
 material-input-group,
 .material-input-group {
-  margin: $input-group-margin;
+  margin: $tff-margin;
 
   position: relative;
-
-  input, textarea {
-    @include transition($input-label-transition);
-
-    color: $input-color;
-  }
-
-  &.material-input-group-inverted {
-    input {
-      color: $input-color-inverted;
-    }
-  }
+  display:  block;
 
   label {
-    -webkit-font-smoothing: antialiased;
     z-index: 1;
     pointer-events: none;
-
-    @include transform-translate3d(0, $input-line-height, 0);
-    @include transform-origin(left, center);
-    @include transition($input-label-transition);
-
-    color: $input-placeholder-color;
+    -webkit-font-smoothing: antialiased;
 
     &:hover {
       cursor: text;
     }
   }
 
-  &.material-input-focused, &.material-input-has-value {
+  @include text-hint( $tff-hint-normal, large, $tff-transition );
+  @include text-field( $tff-input-normal, $tff-line-normal, $tff-transition );
 
-    input {
-      border-bottom-width: 2px;
-    }
 
-    label {
-      @include transform-translate3d-scale(0, 0, 0, $input-focused-scale);
+  &.material-input-focused {
+    @include text-hint( $tff-hint-focused, small );
+    @include text-field( $tff-input-normal,$tff-line-focused, false, $tff-line-focused-width );
+  }
+
+  &.material-input-has-value {
+    @include text-hint( $tff-hint-focused, small );
+
+    &:not(.material-input-focused) {
+      @include text-hint( $tff-hint-normal, small );
     }
   }
+
+  &[disabled] {
+
+    @include text-field( $tff-input-disabled, $tff-line-disabled, false, $tff-line-disabled-width );
+    input, textarea {
+      @include dashed-border( $tff-line-dot-width, $tff-line-dot-width, $tff-line-dot-width, $tff-line-dashed, bottom );
+      pointer-events: none;
+      tabindex : -1;
+    }
+
+    @include text-hint( $tff-hint-disabled, small );
+
+    *:not(.material-input-has-value) {
+      @include text-hint( $tff-hint-disabled, large );
+    }
+
+  }
+
 }
+
+
+// Dark Theme
+.dark material-input-group,
+.dark .material-input-group {
+
+  @include text-hint( $tff-hint-normal-dark, large, $tff-transition );
+  @include text-field( $tff-input-normal-dark, $tff-line-normal-dark, $tff-transition );
+
+
+  &.material-input-focused {
+    @include text-hint( $tff-hint-focused-dark, small );
+    @include text-field( $tff-input-focused-dark,$tff-line-focused-dark, false, $tff-line-focused-width );
+  }
+
+  &.material-input-has-value {
+    @include text-hint( $tff-hint-focused-dark, small );
+
+    &:not(.material-input-focused) {
+      @include text-hint( $tff-hint-normal-dark, small );
+    }
+  }
+
+  &[disabled] {
+
+    @include text-field( $tff-input-disabled-dark, $tff-line-disabled-dark, false, $tff-line-disabled-width );
+    input, textarea {
+      @include dashed-border( $tff-line-dot-width, $tff-line-dot-width, $tff-line-dot-width, $tff-line-dashed-dark, bottom );
+      pointer-events: none;
+      tabindex : -1;
+    }
+
+    @include text-hint( $tff-hint-disabled-dark, small );
+
+    *:not(.material-input-has-value) {
+      @include text-hint( $tff-hint-disabled-dark, large );
+    }
+
+  }
+
+}
+
+
+.theme-dark-tff { @include theme-bg-and-color(#333, #999); }

@@ -31,11 +31,12 @@
 @include material-theme('grey', #f0f0f0, #e0e0e0, #a2a2a2, #636363, #252525);
 */
 
+.material-theme-dark { @include theme-bg-and-color($theme-dark, $text-light); }
+
 
 .material-theme-light { @include theme-bg-and-color($theme-light, $text-light); }
 .material-theme-light-blue { @include theme-bg-and-color($theme-light-blue, $text-light); }
 .material-theme-indigo { @include theme-bg-and-color($theme-indigo, $text-light); }
-.material-theme-dark { @include theme-bg-and-color($theme-dark, $text-light); }
 .material-theme-green { @include theme-bg-and-color($theme-green, $text-light); }
 .material-theme-yellow { @include theme-bg-and-color($theme-yellow, $text-dark); }
 .material-theme-orange { @include theme-bg-and-color($theme-orange, $text-light); }
@@ -50,6 +51,7 @@
 .material-input-group-theme-orange { @include theme-input-text-and-border($theme-orange); }
 .material-input-group-theme-purple { @include theme-input-text-and-border($theme-purple); }
 .material-input-group-theme-red { @include theme-input-text-and-border($theme-red); }
+
 
 .material-shadow {
   position: absolute;

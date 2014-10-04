@@ -15,6 +15,10 @@ $text-medium: #999;
 $text-dark: #111111;
 
 // Theme colors
+$theme-textfield-focus-label: #1b1b1b;
+$theme-textfield-focus-border: #1394F5;
+
+$theme-gray: #444;
 $theme-light: #4285f4;
 $theme-light-blue: #03a9f4;
 $theme-dark: #3f51b5;
@@ -156,10 +160,61 @@ $tabs-paginator-width: $baseline-grid * 4 !default;
 $tabs-tab-width: $baseline-grid * 12 !default;
 $tabs-header-height: 48px;
 
+
+
+// ***********************************
+// Styles for Floating Label Text Fields
+// - Light Theme -
+// ***********************************
+//
+$tff-font-size: 0.75em;
+$tff-line-height:26px;
+$tff-margin: 10px 0 10px 0;
+$tff-placeholder-color: darken($text-light, 30%);
+$tff-transition: all ease-out 300ms;
+// - `label` element (aka hint)
+$tff-hint-offset-large : 26px;
+$tff-hint-offset-small : 4px;
+$ttf-hint-offset-scale : 0.75;
+$tff-hint-normal: #999;
+$tff-hint-focused: #EE008B;
+$tff-hint-disabled: #b0b0b0;
+// - `input` element
+$tff-input-normal: #2f2f2f;
+$tff-input-focused: #EE008B;
+$tff-input-disabled: #bcbcbc;
+// - `line` element
+$tff-line-focused-width: 2px;
+$tff-line-disabled-width: 0px;
+$tff-line-dot-width: 2px;
+$tff-line-normal: #c7c7c7;
+$tff-line-focused: #EE008B;
+$tff-line-disabled: #bcbcbc;
+$tff-line-dashed: #b8b8b8;
+
+// ***********************************
+// Styles for Floating Label Text Fields
+// - Light Theme -
+// ***********************************
+// - `label` element (aka hint)
+$tff-hint-normal-dark: #5d5d5d;
+$tff-hint-focused-dark: #1194f6;
+$tff-hint-disabled-dark: #858585;
+// - `input` element
+$tff-input-normal-dark: #d6d6d6;
+$tff-input-focused-dark: #d6d6d6;
+$tff-input-disabled-dark: #5d5d5d;
+// - `line` element
+$tff-line-normal-dark: #4c4c4c;
+$tff-line-focused-dark: #1194f6;
+$tff-line-disabled-dark: #333333;
+$tff-line-dashed-dark: #686868;
+
+
 // Forms and inputs
 
-$input-font-size: 0.85em;
-$input-line-height: 30px;
+$input-font-size: 0.75em;
+$input-line-height: 26px;
 
 $input-placeholder-color: darken($text-light, 30%);
 

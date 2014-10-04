@@ -9,59 +9,59 @@
 
 @mixin transform-origin($x, $y) {
   -webkit-transform-origin: $x $y;
-          transform-origin: $x $y;
+  transform-origin: $x $y;
 }
 @mixin transform-translate3d($x, $y, $z) {
   -webkit-transform: translate3d($x, $y, $z);
-          transform: translate3d($x, $y, $z);
+  transform: translate3d($x, $y, $z);
 }
 @mixin transform-translate3d-scale($x, $y, $z, $scale) {
   -webkit-transform: translate3d($x, $y, $z) scale($scale);
-          transform: translate3d($x, $y, $z) scale($scale);
+  transform: translate3d($x, $y, $z) scale($scale);
 }
 
 @mixin transform-scale($val) {
   -webkit-transform: scale($val);
-          transform: scale($val);
+  transform: scale($val);
 }
 
 @mixin transform-rotate($val) {
   -webkit-transform: rotate($val);
-          transform: rotate($val);
+  transform: rotate($val);
 }
 
 @mixin transform($val) {
   -webkit-transform: $val;
-          transform: $val;
+  transform: $val;
 }
 
 @mixin transition($val) {
   -webkit-transition: $val;
-          transition: $val;
+  transition: $val;
 }
 
 @mixin transition-timing($val) {
   -webkit-transition-timing-function: $val;
-          transition-timing-function: $val;
+  transition-timing-function: $val;
 
 }
 
 @mixin easeInOut($duration, $curve) {
   -webkit-transition: all $duration $curve;
-          transition: all $duration $curve;
+  transition: all $duration $curve;
 
   -webkit-transition-timing-function: all $duration $curve;
-          transition-timing-function: all $duration $curve;
+  transition-timing-function: all $duration $curve;
 }
 
 @mixin transition-delay($val) {
   -webkit-transition-delay: $val;
-          transition-delay: $val;
+  transition-delay: $val;
 }
 
 @mixin animation($val) {
   -webkit-animation: $val;
-          animation: $val;
+  animation: $val;
 }
 
 @mixin user-select($val:none) {
@@ -133,9 +133,9 @@
   -webkit-flex-wrap: $value;
   -moz-flex-wrap: $value;
   @if $value == nowrap {
-      -ms-flex-wrap: none;
+    -ms-flex-wrap: none;
   } @else {
-      -ms-flex-wrap: $value;
+    -ms-flex-wrap: $value;
   }
   flex-wrap: $value;
 }
@@ -241,8 +241,8 @@
 
 @mixin box-sizing($boxmodel) {
   -webkit-box-sizing: $boxmodel;
-     -moz-box-sizing: $boxmodel;
-          box-sizing: $boxmodel;
+  -moz-box-sizing: $boxmodel;
+  box-sizing: $boxmodel;
 }
 
 
@@ -253,4 +253,53 @@
   -moz-user-select: $value;
   -ms-user-select: $value;
   user-select: $value;
+}
+
+
+
+// ******************************
+// Mixins: Text Fields
+// ******************************
+
+@mixin text-field($color, $borderColor, $transition:false, $borderWidth:1px ) {
+  input, textarea {
+    color: $color;
+    border-color: $borderColor;
+    border-bottom-width: $borderWidth;
+
+    @if( $transition != false ) {
+      @include transition($transition);
+    }
+  }
+}
+
+@mixin text-hint($color, $size:large, $transition:false ) {
+  label {
+    color: $color;
+
+    @if $size == "small" {
+
+      @include transform-translate3d-scale(0, $tff-hint-offset-small, 0, $ttf-hint-offset-scale);
+
+    } @else {
+
+      @include transform-translate3d(0, $tff-hint-offset-large, 0);
+      @include transform-origin(left, center);
+      @include transition( $tff-transition );
+
+    }
+
+    @if( $transition != false ) {
+      @include transition($transition);
+    }
+
+  }
+}
+
+@mixin dashed-border($dashlength, $spacelength, $borderwidth, $color, $position: top) {
+  $per: percentage($dashlength / ($dashlength + $spacelength));
+  background-image: linear-gradient(to right, $color 0%, $color $per, rgba(0, 0, 0, 0) 0%);
+  background-position: 0 $position;
+  background-size: ($dashlength + $spacelength) $borderwidth;
+  background-repeat: repeat-x;
 }
