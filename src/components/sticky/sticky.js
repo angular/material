@@ -224,19 +224,27 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
    function setCurrentItem(item) {
      // Deactivate currently active item
      if (self.current) {
-       self.current.clone.removeClass('material-sticky-active');
        translate(self.current, null);
+       self.current.clone.removeClass('sticky-active');
+       self.next && self.next.clone.removeClass('sticky-next');
+       self.prev && self.prev.clone.removeClass('sticky-prev');
      }
+
      // Activate new item if given
      if (item) {
-       item.clone.addClass('material-sticky-active');
+       item.clone.removeClass('sticky-next sticky-prev');
+       item.clone.addClass('sticky-active');
      }
 
      self.current = item;
      var index = self.items.indexOf(item);
-     // If index === -1, index + 1 = 0. It works out.
-     self.next = self.items[index + 1];
-     self.prev = self.items[index - 1];
+     if (self.next = self.items[index + 1]) {
+       // If index === -1, index + 1 = 0. It works out.
+       self.next.clone.addClass('sticky-next');
+     }
+     if (self.prev = self.items[index - 1]) {
+       self.prev.clone.addClass('sticky-prev');
+     }
    }
 
    function translate(item, amount) {
@@ -296,7 +304,7 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
         element.triggerHandler('$scrollend');
       } else {
         element.triggerHandler('$scroll');
-        $$rAF(scrollEvent);
+        $$rAF(loopScrollEvent);
       }
     }
   }
