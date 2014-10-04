@@ -1,5 +1,9 @@
 material-list {
+  padding: $list-padding-top $list-padding-right $list-padding-bottom $list-padding-left;
 
+  &.with-subheader {
+    padding-top: 0px;
+  }
 }
 
 material-item {
@@ -35,15 +39,15 @@ material-item-content {
 
   text-overflow: ellipsis;
 
-  h2 {
-    margin: $list-h2-margin;
-    font-weight: $list-h2-font-weight;
-    font-size: $list-h2-font-size;
-  }
   h3 {
     margin: $list-h3-margin;
     font-weight: $list-h3-font-weight;
     font-size: $list-h3-font-size;
+  }
+  h4 {
+    margin: $list-h4-margin;
+    font-weight: $list-h4-font-weight;
+    font-size: $list-h4-font-size;
   }
   p {
     margin: $list-p-margin;

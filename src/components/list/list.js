@@ -31,8 +31,8 @@ angular.module('material.components.list', [])
  *      <img ng-src="{{item.face}}" class="face" alt="{{item.who}}">
  *    </div>
  *    <div class="material-tile-content">
- *      <h2>{{item.what}}</h2>
- *      <h3>{{item.who}}</h3>
+ *      <h3>{{item.what}}</h3>
+ *      <h4>{{item.who}}</h4>
  *      <p>
  *        {{item.notes}}
  *      </p>
