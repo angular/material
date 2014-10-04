@@ -117,7 +117,7 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
      */
     function hide(success) {
       var interimElement = stack.shift();
-      interimElement.remove().then(function() {
+      interimElement && interimElement.remove().then(function() {
         interimElement.deferred.resolve(success);
       });
     }
@@ -137,7 +137,7 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
      */
     function cancel(reason) {
       var interimElement = stack.shift();
-      interimElement.remove().then(function() {
+      interimElement && interimElement.remove().then(function() {
         interimElement.deferred.reject(reason);
       });
     }
