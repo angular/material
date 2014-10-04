@@ -29,12 +29,16 @@ angular.module('textFieldDemo1', ['ngMaterial'])
       restrict: 'E',
       replace: true,
       scope : {
-        fid : '@',
+        fid : '@?',
         value : '='
       },
       link : function(scope, element, attrs) {
           scope.isDisabled = angular.isDefined(attrs.disabled);
           scope.label = angular.isUndefined(scope.label) ? attrs.label : "";
+
+          if ( angular.isUndefined(scope.fid) ) {
+            scope.fid = scope.label;
+          }
       },
       template:
         '<material-input-group ng-disabled="isDisabled">' +
