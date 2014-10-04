@@ -1,5 +1,5 @@
 
-angular.module('app', ['ngMaterial'])
+angular.module('subheaderBasicDemo', ['ngMaterial'])
 
 .controller('SubheaderAppCtrl', function($scope) {
     $scope.messages = [
