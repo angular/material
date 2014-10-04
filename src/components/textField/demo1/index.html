@@ -1,23 +1,23 @@
 
-<div ng-controller="AppCtrl" layout="vertical">
+<div ng-controller="DemoController" layout="vertical">
 
   <material-toolbar class="theme-dark-tff material-medium-tall" style="padding-top:15px;">
     <div class="material-toolbar-tools dark">
-      <ig fid="t1" label="data.t1.label" value="data.t1.value" class="material-input-group-theme-light material-input-group-inverted"></ig>
-      <ig fid="t2" label="data.t2.label" value="data.t2.value" class="material-input-group-theme-light-blue material-input-group-inverted"></ig>
+      <tf-float fid="tfFloat" label="Title" value="user.title"     ></tf-float>
+      <tf-float fid="tfFloat" label="Message" value="user.message" ></tf-float>
     </div>
   </material-toolbar>
 
   <material-content>
     <form style="padding: 20px;">
-      <ig fid="i1" label="data.i1.label" value="data.i1.value" ></ig>
-      <ig fid="i2" label="data.i2.label" value="data.i2.value" ></ig>
-      <ig fid="i3" label="data.i3.label" value="data.i3.value" ></ig>
-      <ig fid="i4" label="data.i4.label" value="data.i4.value" ></ig>
-      <ig fid="i5" label="data.i5.label" value="data.i5.value" ></ig>
-      <ig fid="i6" label="data.i6.label" value="data.i6.value" ></ig>
-      <ig fid="i7" label="data.i7.label" value="data.i7.value" disabled ></ig>
-      <ig fid="i8" label="data.i8.label" value="data.i8.value" ></ig>
+      <tf-float fid="i1" label="FirstName"    value="user.firstName"  > </tf-float>
+      <tf-float fid="i2" label="LastName"     value="user.lastName"   > </tf-float>
+      <tf-float fid="i3" label="Company"      value="user.company"    > </tf-float>
+      <tf-float fid="i4" label="Address"      value="user.address"    > </tf-float>
+      <tf-float fid="i5" label="City"         value="user.city"       > </tf-float>
+      <tf-float fid="i6" label="State"        value="user.state"      > </tf-float>
+      <tf-float fid="i7" label="Country"      value="user.country"    disabled > </tf-float>
+      <tf-float fid="i8" label="Postal Code"  value="user.postalCode" > </tf-float>
     </form>
   </material-content>
 

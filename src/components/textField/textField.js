@@ -22,8 +22,9 @@ angular.module('material.components.textField', [])
  *
  * @usage 
  * <hljs lang="html">
- * <material-input-group>
- *   <material-input type="text" ng-model="myText"></material-input>
+ * <material-input-group ng-disabled="isDisabled">
+ *   <label for="{{fid}}">{{someLabel}}</label>
+ *   <material-input id="{{fid}}" type="text" ng-model="someText"></material-input>
  * </material-input-group>
  * </hljs>
  */
@@ -53,8 +54,9 @@ function materialInputGroupDirective() {
  *
  * @usage
  * <hljs lang="html">
- * <material-input-group>
- *   <material-input type="text" ng-model="user.fullName"></material-input>
+ * <material-input-group ng-disabled="user.isLocked">
+ *   <label for="i1">FirstName</label>
+ *   <material-input id="i1" type="text" ng-model="user.firstName"></material-input>
  * </material-input-group>
  * </hljs>
  */

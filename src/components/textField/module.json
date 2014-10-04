@@ -3,7 +3,7 @@
   "name": "Text Field",
   "demos": {
     "demo1": {
-      "name": "Text Field Usage",
+      "name": "Using Floating Label Text Fields",
       "files": ["demo1/*"]
     }
   }
