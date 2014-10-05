@@ -23,6 +23,7 @@ input[type="tel"],
 input[type="color"] {
   display: block;
   border-width: 0 0 1px 0;
+  padding-top:2px;
   line-height: $tff-line-height;
   font-size: $tff-font-size;
 
@@ -133,3 +134,4 @@ material-input-group,
 
 
 .theme-dark-tff { @include theme-bg-and-color(#333, #999); }
+

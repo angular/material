@@ -12,11 +12,11 @@ angular.module('textFieldDemo1', ['ngMaterial'])
        firstName: "Naomi",
        lastName:  "" ,
        company:   "Google" ,
-       address:   "" ,
+       address:   "1600 Amphitheatre Pkwy" ,
        city:      "Mountain View" ,
        state:     "CA" ,
        country:   "USA" ,
-       postalCode : ""
+       postalCode : "94043"
     };
   })
 

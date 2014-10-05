@@ -64,7 +64,7 @@ function materialInputDirective() {
   return {
     restrict: 'E',
     replace: true,
-    template: '<input>',
+    template: '<input type="text">',
     require: ['^?materialInputGroup', '?ngModel'],
     link: function(scope, element, attr, ctrls) {
       var inputGroupCtrl = ctrls[0];
@@ -73,7 +73,12 @@ function materialInputDirective() {
         return;
       }
 
-      // When the input value changes, check if it "has" a value, and 
+      if ( Util.isParentDisabled(element.parent()) ) {
+        // tab focus not allowed
+        element.attr('tabindex', -1);
+      }
+
+      // When the input value changes, check if it "has" a value, and
       // set the appropriate class on the input group
       if (ngModelCtrl) {
         //Add a $formatter so we don't use up the render function
@@ -81,10 +86,6 @@ function materialInputDirective() {
           inputGroupCtrl.setHasValue(!!value);
           return value;
         });
-      }
-
-      if ( Util.isParentDisabled(element.parent()) ) {
-        element.attr('tabindex', -1);
       }
 
       element.on('input', function() {
