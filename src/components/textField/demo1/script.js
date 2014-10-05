@@ -8,7 +8,7 @@ angular.module('textFieldDemo1', ['ngMaterial'])
   .controller('DemoController', function($scope) {
     $scope.user = {
        title:     "Project Manager",
-       message:   "ipsum lorem id screib",
+       email:     "ipsum@lorem.com",
        firstName: "Naomi",
        lastName:  "" ,
        company:   "Google" ,
@@ -35,17 +35,18 @@ angular.module('textFieldDemo1', ['ngMaterial'])
       compile : function() {
         return {
           pre : function(scope, element, attrs) {
+            // transpose `disabled` flag
             if ( angular.isDefined(attrs.disabled) ) {
               element.attr('disabled', true);
               scope.isDisabled = true;
             }
-            scope.label = angular.isUndefined(scope.label) ? attrs.label : "";
 
-            if ( angular.isUndefined(scope.fid) ) {
-              scope.fid = scope.label;
-            }
+            // transpose the `label` value
+            scope.label = attrs.label || "";
+            scope.fid = scope.fid || scope.label;
 
-            // transpose class settings...
+            // transpose optional `type` and `class` settings
+            element.attr('type', attrs.type || "text");
             element.attr('class', attrs.class );
           }
         }
@@ -53,7 +54,7 @@ angular.module('textFieldDemo1', ['ngMaterial'])
       template:
         '<material-input-group ng-disabled="isDisabled">' +
           '<label for="{{fid}}">{{label}}</label>' +
-          '<material-input id="{{fid}}" type="text" ng-model="value">' +
+          '<material-input id="{{fid}}" ng-model="value">' +
         '</material-input-group>'
     };
   });

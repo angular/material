@@ -56,7 +56,7 @@ function materialInputGroupDirective() {
  * <hljs lang="html">
  * <material-input-group ng-disabled="user.isLocked">
  *   <label for="i1">FirstName</label>
- *   <material-input id="i1" type="text" ng-model="user.firstName"></material-input>
+ *   <material-input id="i1" ng-model="user.firstName"></material-input>
  * </material-input-group>
  * </hljs>
  */
@@ -64,7 +64,7 @@ function materialInputDirective() {
   return {
     restrict: 'E',
     replace: true,
-    template: '<input type="text">',
+    template: '<input >',
     require: ['^?materialInputGroup', '?ngModel'],
     link: function(scope, element, attr, ctrls) {
       var inputGroupCtrl = ctrls[0];
@@ -73,10 +73,11 @@ function materialInputDirective() {
         return;
       }
 
-      if ( Util.isParentDisabled(element.parent()) ) {
-        // tab focus not allowed
-        element.attr('tabindex', -1);
-      }
+      // scan for disabled and transpose the `type` value to the <input> element
+      var isDisabled = Util.isParentDisabled(element);
+
+      element.attr('tabindex', isDisabled ? -1 : 0 );
+      element.attr('type', attr.type || element.parent().attr('type') || "text" );
 
       // When the input value changes, check if it "has" a value, and
       // set the appropriate class on the input group
