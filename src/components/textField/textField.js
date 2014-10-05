@@ -64,7 +64,7 @@ function materialInputDirective() {
   return {
     restrict: 'E',
     replace: true,
-    template: '<input type="text">',
+    template: '<input>',
     require: ['^?materialInputGroup', '?ngModel'],
     link: function(scope, element, attr, ctrls) {
       var inputGroupCtrl = ctrls[0];
