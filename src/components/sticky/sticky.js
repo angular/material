@@ -67,12 +67,6 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
   function setupSticky(contentCtrl) {
     var contentEl = contentCtrl.$element;
 
-    // stickyContainer holds all of the clones of the sticky elements.
-    // The proper clone will be stickied to the top of the screen depending 
-    // on the content's scroll position.
-    var stickyContainer = angular.element('<div class="material-sticky-container">');
-    $document[0].body.appendChild(stickyContainer[0]);
-
     // Refresh elements is very expensive, so we use the debounced
     // version when possible.
     var debouncedRefreshElements = $$rAF.debounce(refreshElements);
@@ -82,10 +76,6 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
     setupAugmentedScrollEvents(contentEl);
     contentEl.on('$scrollstart', debouncedRefreshElements);
     contentEl.on('$scroll', onScroll);
-
-    contentCtrl.$scope.$on('$destroy', function cleanup() {
-      stickyContainer.remove();
-    });
 
     var self;
     return self = {
@@ -110,7 +100,7 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
       };
       self.items.push(item);
 
-      stickyContainer.append(item.clone);
+      contentEl.parent().prepend(item.clone);
 
       debouncedRefreshElements();
 
@@ -137,17 +127,17 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
         return a.top > b.top;
       });
 
-      // Set our stickyContainer, which is just an invisible overflow:hidden box 
-      // placed over the content area, to fit right on top of the content.
-      stickyContainer.css({
-        left: contentRect.left + 'px',
-        top: contentRect.top + 'px',
-        width: contentRect.width + 'px',
-        height: contentRect.height + 'px'
-      });
-
-      // Finally, try to sticky the item nearest to the user's scroll position.
-      findCurrentItem();
+      // Find which item in the list should be active, 
+      // based upon the content's current scroll position
+      var item;
+      var currentScrollTop = contentEl.prop('scrollTop');
+      for (var i = self.items.length - 1; i >= 0; i--) {
+        if (currentScrollTop >= self.items[i].top) {
+          item = self.items[i];
+          break;
+        }
+      }
+      setCurrentItem(item);
     }
 
 
@@ -169,18 +159,6 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
       item.height = item.element.prop('offsetHeight');
     }
 
-    // Find which item in the list should be active, based upon the content's scroll position
-    function findCurrentItem() {
-      var currentItem;
-      var currentScrollTop = contentEl.prop('scrollTop');
-      for (var i = self.items.length - 1; i >= 0; i--) {
-        if (currentScrollTop >= self.items[i].top) {
-          currentItem = self.items[i];
-          break;
-        }
-      }
-      setCurrentItem(currentItem);
-    }
 
     // As we scroll, push in and select the correct sticky element.
     function onScroll() {
@@ -226,25 +204,18 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
      if (self.current) {
        translate(self.current, null);
        self.current.clone.removeClass('sticky-active');
-       self.next && self.next.clone.removeClass('sticky-next');
-       self.prev && self.prev.clone.removeClass('sticky-prev');
      }
 
      // Activate new item if given
      if (item) {
-       item.clone.removeClass('sticky-next sticky-prev');
        item.clone.addClass('sticky-active');
      }
 
      self.current = item;
      var index = self.items.indexOf(item);
-     if (self.next = self.items[index + 1]) {
-       // If index === -1, index + 1 = 0. It works out.
-       self.next.clone.addClass('sticky-next');
-     }
-     if (self.prev = self.items[index - 1]) {
-       self.prev.clone.addClass('sticky-prev');
-     }
+     // If index === -1, index + 1 = 0. It works out.
+     self.next = self.items[index + 1];
+     self.prev = self.items[index - 1];
    }
 
    function translate(item, amount) {

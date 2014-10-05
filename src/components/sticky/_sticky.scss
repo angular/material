@@ -1,24 +1,12 @@
-.material-sticky-container {
+.material-sticky-clone {
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 24px;
   position: absolute;
-  z-index: 2;
-  overflow: hidden;
-  pointer-events: none;
 
-  .material-sticky-clone {
-    top: 0;
-    left: 0;
-    right: 24px;
-    position: absolute;
-    display: none;
-
-    &.sticky-next, 
-    &.sticky-prev {
-      display: block;
-      @include transform(translate3d(-9999px, -9999px, 0));
-    }
-    &.sticky-active {
-      display: block;
-      @include transform(translate3d(0, 0, 0));
-    }
+  @include transform(translate3d(-9999px, -9999px, 0));
+  &.sticky-active {
+    @include transform(translate3d(0, 0, 0));
   }
 }
