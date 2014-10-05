@@ -296,10 +296,18 @@
   }
 }
 
+@mixin text-dashed-line( $dotGap, $dotSize, $color ) {
+  @include dashed-border(1px, 1px, $dotGap, $color, bottom );
+  background-size: $dotSize $dotGap;
+}
+
 @mixin dashed-border($dashlength, $spacelength, $borderwidth, $color, $position: top) {
   $per: percentage($dashlength / ($dashlength + $spacelength));
   background-image: linear-gradient(to right, $color 0%, $color $per, rgba(0, 0, 0, 0) 0%);
   background-position: 0 $position;
+
   background-size: ($dashlength + $spacelength) $borderwidth;
   background-repeat: repeat-x;
 }
+
+

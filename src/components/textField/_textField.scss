@@ -76,7 +76,7 @@ material-input-group,
 
     @include text-field( $tff-input-disabled, $tff-line-disabled, false, $tff-line-disabled-width );
     input, textarea {
-      @include dashed-border( $tff-line-dot-width, $tff-line-dot-width, $tff-line-dot-width, $tff-line-dashed, bottom );
+      @include text-dashed-line( $tff-line-dot-width, $tff-line-dot-size, $tff-line-dashed );
       pointer-events: none;
       tabindex : -1;
     }
@@ -117,7 +117,7 @@ material-input-group,
 
     @include text-field( $tff-input-disabled-dark, $tff-line-disabled-dark, false, $tff-line-disabled-width );
     input, textarea {
-      @include dashed-border( $tff-line-dot-width, $tff-line-dot-width, $tff-line-dot-width, $tff-line-dashed-dark, bottom );
+      @include text-dashed-line( $tff-line-dot-width, $tff-line-dot-size, $tff-line-dashed-dark );
       pointer-events: none;
       tabindex : -1;
     }
