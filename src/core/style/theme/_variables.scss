@@ -186,11 +186,11 @@ $tff-input-disabled: #bcbcbc;
 // - `line` element
 $tff-line-focused-width: 2px;
 $tff-line-disabled-width: 0px;
-$tff-line-dot-width: 2px;
+$tff-line-dot-width: 1px;
 $tff-line-normal: #c7c7c7;
 $tff-line-focused: #EE008B;
 $tff-line-disabled: #bcbcbc;
-$tff-line-dashed: #b8b8b8;
+$tff-line-dashed: #cfcfcf;
 
 // ***********************************
 // Styles for Floating Label Text Fields
@@ -208,7 +208,7 @@ $tff-input-disabled-dark: #5d5d5d;
 $tff-line-normal-dark: #4c4c4c;
 $tff-line-focused-dark: #1194f6;
 $tff-line-disabled-dark: #333333;
-$tff-line-dashed-dark: #686868;
+$tff-line-dashed-dark: #525252;
 
 
 // Forms and inputs
