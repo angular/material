@@ -1,22 +1,29 @@
 /**
  *  SaSS version
-
-.row_group {
-  @include flex-display();
-  @include flex-align-items(center);
-  @include flex-direction(row);
-
-  > * {
-    font-size: inherit;
-    margin: 0 8px;
-  }
-
-  margin-left: -8px;
-}
-
+ *
+ * form > .row {
+ *   @include flex-display();
+ *   @include flex-align-items(center);
+ *   @include flex-direction(row);
+ *
+ *   > * {
+ *     font-size: inherit;
+ *     margin: 0 8px;
+ *   }
+ *
+ *   margin-left: -8px;
+ * }
+ *
+ *
+ * material-input-group.long {
+ *   input {
+ *      width : 262px;
+ *   }
+ * }
+ *
 */
 
-.row_group {
+form > .row {
     display: -webkit-box;
     display: -webkit-flex;
     display: -moz-box;
@@ -37,9 +44,11 @@
     margin-left: -8px;
 }
 
-.row_group > * {
+.row > * {
     font-size: inherit;
     margin: 0 8px;
 }
 
-
+material-input-group.long > input {
+    width: 264px;
+}

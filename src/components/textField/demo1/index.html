@@ -11,20 +11,16 @@
   <material-content>
     <form style="padding: 20px;">
       <tf-float label="Company"       value="user.company"    disabled > </tf-float>
-
-        <div class="row_group">
+      <div class="row">
           <tf-float label="FirstName" value="user.firstName"  > </tf-float>
-          <tf-float label="LastName"  value="user.lastName"   > </tf-float>
+          <tf-float label="LastName"  value="user.lastName"   class="long"> </tf-float>
       </div>
-
       <tf-float label="Address"       value="user.address"    > </tf-float>
-
-      <div class="row_group">
+      <div class="row">
         <tf-float label="City"        value="user.city"       > </tf-float>
         <tf-float label="State"       value="user.state"      > </tf-float>
         <tf-float label="Postal Code" value="user.postalCode" > </tf-float>
       </div>
-
       <tf-float label="Country"       value="user.country"    disabled > </tf-float>
     </form>
   </material-content>

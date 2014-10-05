@@ -44,6 +44,9 @@ angular.module('textFieldDemo1', ['ngMaterial'])
             if ( angular.isUndefined(scope.fid) ) {
               scope.fid = scope.label;
             }
+
+            // transpose class settings...
+            element.attr('class', attrs.class );
           }
         }
       },
