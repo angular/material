@@ -1,0 +1,17 @@
+
+material-toolbar .material-toolbar-tools material-button,
+material-toolbar .material-toolbar-tools material-button:hover { 
+  box-shadow: none;
+  border: none;
+  transform: none;
+  -webkit-transform: none;
+}
+
+material-toolbar .material-toolbar-tools material-button:hover button { 
+  background: rgba(46,168,109, 0.8);
+}
+material-toolbar .material-toolbar-tools material-button:focus,
+material-toolbar .material-toolbar-tools material-button.focus,
+material-toolbar .material-toolbar-tools material-button button:focus { 
+  background: rgb(46,168,109);
+}
