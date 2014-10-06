@@ -180,7 +180,7 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
       if (options.escapeToClose) {
         options.rootElementKeyupCallback = function(e) {
           if (e.keyCode === Constant.KEY_CODE.ESCAPE) {
-            $timeout($dialogService.hide);
+            $timeout($dialogService.cancel);
           }
         };
 
@@ -191,7 +191,7 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
         options.dialogClickOutsideCallback = function(e) {
           // Only close if we click the flex container outside the backdrop
           if (e.target === element[0]) {
-            $timeout($dialogService.hide);
+            $timeout($dialogService.cancel);
           }
         };
 
