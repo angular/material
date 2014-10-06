@@ -1,3 +1,88 @@
+<a name="0.4"></a>
+### 0.4  (2014-10-06)
+
+Version 0.4 incorporates four new components: [circular progress](https://material.angularjs.org/#/material.components.circularProgress/readme/overview), [subheader](https://material.angularjs.org/#/material.components.subheader/readme/overview), [tooltip](https://material.angularjs.org/#/material.components.tooltip/readme/overview) and [bottom sheet](https://material.angularjs.org/#/material.components.bottomSheet/readme/overview). Additionally, a [new API](#v0.4-breaking) has been introduced for $materialDialog and $materialToast. Lastly, many small component functionality issues are resolved.
+
+v0.4 is tested on desktop Chrome, Safari and Firefox, as well as Android 4.4+ and iOS7.
+
+
+#### Bug Fixes
+
+* **button:** 
+  * no underline when button has a href ([948aef0d](https://github.com/angular/material/commit/948aef0db53e6fc7f679d913f08c4a80869d209d))
+  * disabled raised and fab buttons don't hover on focus ([6d0ca8fb](https://github.com/angular/material/commit/6d0ca8fb0c9946a8adef2161c95b1439977dd7e1), closes [#358](https://github.com/angular/material/issues/358))
+* **checkbox:** resolve TypeError for inputDirective.link ([4da56732](https://github.com/angular/material/commit/4da5673272599d5eb70bd82f54bfeefaa260c970))
+* **dialog:** cancel instead of hiding when user escapes/clicks out ([0cc21d47](https://github.com/angular/material/commit/0cc21d47e1f6c20ee5a9f15559771dbacaef1120))
+* **interimElement:** make cancel and hide not fail when no element is shown ([6162156d](https://github.com/angular/material/commit/6162156d13762b25fd4bd0110f4bc263ab9652c4))
+* **linear-progress:** Add aria, tests and better animations ([3b386276](https://github.com/angular/material/commit/3b3862765a5c70b6369bfc0fd6b0a30811382984), closes [#297](https://github.com/angular/material/issues/297))
+* **radio:** Radio button a11y ([05ed42de](https://github.com/angular/material/commit/05ed42de4fb52ec916b2fcc6e5a78d2d5ea164ad), closes [#310](https://github.com/angular/material/issues/310))
+* **toolbar:** Demo correct heading levels ([fd7697d6](https://github.com/angular/material/commit/fd7697d6697710fcfab1c1d02d8306b50897236f))
+* **ripple:**
+  * make detach method work properly ([c3d858a2](https://github.com/angular/material/commit/c3d858a24e1a931d073a17b3185c2cd79b2628de))
+  * ripple container self-removal NPE fixed. ([664ab996](https://github.com/angular/material/commit/664ab99621ca6fb52fc53ced877324a1b767347b))
+* **sidenav:**
+  * add `display: none;` while closed ([8f104012](https://github.com/angular/material/commit/8f10401265d13c6b35467a82362a0765cb9b2d2e), closes [#300](https://github.com/angular/material/issues/300))
+  * always leave >=56px of room, no matter the screensize ([13a26670](https://github.com/angular/material/commit/13a26670bbf8265ce235a37f642c05f17a2ea569), closes [#346](https://github.com/angular/material/issues/346))
+* **slider:** discrete mode supports live dragging and snap-to ([b231f1c0](https://github.com/angular/material/commit/b231f1c031918efedc96217349a45f3fba6d4726), closes [#331](https://github.com/angular/material/issues/331))
+* **textfield:**
+  * ng-model bindings now working and demo rendering fixed. ([e8f456fc](https://github.com/angular/material/commit/e8f456fcc77937d61f587eae0cbe6b93f943dc18))
+  * match float-label (light theme) specifications ([63eeb47f](https://github.com/angular/material/commit/63eeb47fe2ad38da6acb5b1854fae28e5e59abb6))
+
+#### Features
+
+* **circular-progress:** Add circular progress component ([07d56533](https://github.com/angular/material/commit/07d5653350d1ef2a9aa86689653bce62350bdb31), closes [#365](https://github.com/angular/material/issues/365))
+* **subheader:** add subheader component with sticky scroll ([7787c9cc](https://github.com/angular/material/commit/7787c9cc9cacde77fdef06b75ea231a58ed814ce), closes [#216](https://github.com/angular/material/issues/216))
+* **tooltip:** add tooltip component ([9f9b0897](https://github.com/angular/material/commit/9f9b0897b22b017b5e03754c4deac7a189b72235), closes [#354](https://github.com/angular/material/issues/354))
+* **bottomSheet** add bottomSheet component ([3be359c](https://github.com/angular/material/commit/3be359cc9aabed1613a51090c08f82abd3fa2bc3))
+
+
+<a name="v0.4-breaking"></a>
+#### Breaking Changes
+
+##### $materialDialog:
+
+Change your code from this:
+
+```js
+var hideDialog = $materialDialog(options);
+hideDialog();
+```
+
+To this:
+
+```js
+$materialDialog.show(options)
+  .then(function success(result) {}, function cancelled(result) {});
+$materialDialog.hide(mySuccessResult);
+// or...
+$materialDialog.cancel(myCancelResult);
+```
+
+$materialDialog no longer injects a `$hideDialog` function into controllers.
+
+##### $materialToast:
+
+Change your code from this:
+
+```js
+var hideToast = $materialToast(options);
+hideToast();
+```
+
+To this:
+
+```js
+$materialToast.show(options)
+  .then(function success(result) {}, function cancelled(result) {});
+$materialToast.hide(mySuccessResult);
+// or ...
+$materialToast.cancel(myCancelResult);
+```
+
+$materialToast no longer injects a `$hideToast` function into controllers.
+
+
+
 <a name="0.0.3"></a>
 ### v0.0.3  (2014-09-19)
 
