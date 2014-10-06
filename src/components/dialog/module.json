@@ -3,7 +3,7 @@
   "name": "Dialog",
   "demos": {
     "demo1": {
-      "name": "Dialog Basic Usage",
+      "name": "Dialog Usage",
       "files": ["demo1/*"]
     }
   }

@@ -27,7 +27,8 @@ material-dialog {
   min-width: 240px;
   max-width: 80%;
   max-height: 80%;
-  margin:auto;
+  margin: auto;
+  position: relative;
 
   background-color: #fff;
   border-radius: 4px;
@@ -52,6 +53,10 @@ material-dialog {
     @include flex-justify-content(flex-end);
     padding: 8px 16px;
     min-height: $baseline-grid * 5;
+
+    > * {
+      margin-left: 8px;
+    }
   }
   &.dialog-content-overflow .dialog-actions {
     border-top: 1px solid #eee;

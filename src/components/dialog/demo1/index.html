@@ -1,5 +1,11 @@
-<div ng-controller="AppCtrl" class="inset full">
-  <material-button class="material-button-colored" ng-click="dialog($event)">
-    Open a Dialog
+<div ng-controller="AppCtrl" class="full" layout="vertical" layout-padding>
+  <material-button class="material-button-colored" 
+    ng-click="dialogBasic($event)">
+    Open Basic Dialog
   </material-button>
+  <material-button class="material-button-colored" 
+    ng-click="dialogAdvanced($event)">
+    Open Advanced Dialog
+  </material-button>
+
 </div>
