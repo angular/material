@@ -43,16 +43,18 @@ function MaterialDialogDirective($$rAF) {
  *
  * @description
  *
- * The $materialDialog service opens a dialog over top of the app. 
+ * Used to open a dialog over top of the app, `$materialDialog` is a service created
+ * by `$$interimElement` and provides a simple promise-based, behavior API:
  *
- * Note: The dialog is always given an isolate scope.
- *
- * `$materialDialog` is an `$$interimElement.$service` and adheres to the same behaviors.
  *  - `$materialDialog.show()`
  *  - `$materialDialog.hide()`
  *  - `$materialDialog.cancel()`
  *
- * Note: the dialog's template must have an outer `<material-dialog>` element. 
+ * #### Notes:
+ *
+ * The dialog is always given an isolate scope.
+ *
+ * The dialog's template must have an outer `<material-dialog>` element.
  * Inside, use an element with class `dialog-content` for the dialog's content, and use
  * an element with class `dialog-actions` for the dialog's actions.  
  *

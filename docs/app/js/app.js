@@ -60,6 +60,8 @@ function(COMPONENTS, $location, $rootScope) {
         componentDocs.push(doc);
       }
     });
+    demoDocs = demoDocs.sort(sortByHumanName);
+    componentDocs = componentDocs.sort(sortByHumanName);
   });
   var sections = [{
     name: 'Demos',
@@ -113,6 +115,11 @@ function(COMPONENTS, $location, $rootScope) {
       return self.currentPage === page;
     }
   };
+
+  function sortByHumanName(a,b) {
+    return (a.humanName < b.humanName) ? -1 :
+      (a.humanName > b.humanName) ? 1 : 0;
+  }
 
   function onLocationChange() {
     var activated = false;

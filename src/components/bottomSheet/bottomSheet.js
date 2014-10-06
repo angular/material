@@ -31,18 +31,21 @@ function MaterialBottomSheetDirective() {
  * @module material.components.bottomSheet
  *
  * @description
- * Open a bottom sheet on the screen.
+
+ * Used to open a bottom sheet on the screen, `$materialBottomSheet` is a service
+ * created by `$$interimElement` and provides a simple promise-based, behavior API:
  *
- * Only one bottom sheet may ever be active at any time. If a new sheet is
- * shown while a different one is active, the previous sheet will be automatically
- * hidden.
- *
- * `$materialBottomSheet` is an `$$interimElement.$service` and adheres to the same behaviors.
  *  - `$materialBottomSheet.show()`
  *  - `$materialBottomSheet.hide()`
  *  - `$materialBottomSheet.cancel()`
  *
- * Note: the bottom sheet's template must have an outer `<material-bottom-sheet>` element. 
+ * #### Notes:
+ *
+ * Only one bottom sheet may ever be active at any time. If a new sheet is
+ * shown while a different one is active, the previous sheet will be automatically
+ * hidden.
+
+ * The bottom sheet's template must have an outer `<material-bottom-sheet>` element.
  *
  * @usage
  * <hljs lang="html">

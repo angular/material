@@ -210,6 +210,7 @@ module.exports = {
           
           component.docs.push(_.omit(doc, ['content', 'renderedContent']));
         })
+        .sortBy('humanName')
         .value();
     }
   }

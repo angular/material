@@ -31,36 +31,40 @@ function MaterialToastDirective() {
  * @module material.components.toast
  *
  * @description
- * Open a toast notification on any position on the screen, with an optional 
- * duration.
+ *
+ * Used to open a toast notification on any position on the screen [with an optional
+ * duration], `$materialToast` is a service created by `$$interimElement` and provides a
+ * simple promise-based, behavior API:
+ *
+ *  - `$materialToast.show()`
+ *  - `$materialToast.hide()`
+ *  - `$materialToast.cancel()`
+ *
+ * #### Notes:
  *
  * Only one toast notification may ever be active at any time. If a new toast is
  * shown while a different toast is active, the old toast will be automatically
  * hidden.
  *
- * `$materialToast` is an `$$interimElement.$service` and adheres to the same behaviors.
- *  - `$materialToast.show()`
- *  - `$materialToast.hide()`
- *  - `$materialToast.cancel()`
- *
  * @usage
  * <hljs lang="html">
- * <div ng-controller="MyController">
- *   <material-button ng-click="openToast()">
- *     Open a Toast!
- *   </material-button>
- * </div>
- * </hljs>
- * <hljs lang="js">
- * var app = angular.module('app', ['ngMaterial']);
- * app.controller('MyController', function($scope, $materialToast) {
- *   $scope.openToast = function($event) {
- *     $materialToast.show({
- *       template: '<material-toast>Hello!</material-toast>',
- *       hideDelay: 3000
- *     });
- *   };
- * });
+ *  <script type="text/javascript">
+ *  var app = angular.module('app', ['ngMaterial']);
+ *    app.controller('MyController', function($scope, $materialToast) {
+ *      $scope.openToast = function($event) {
+ *        $materialToast.show({
+ *          template: '<material-toast>Hello!</material-toast>',
+ *          hideDelay: 3000
+ *        });
+ *      };
+ *    });
+ *  </script>
+ *
+ *  <div ng-controller="MyController">
+ *    <material-button ng-click="openToast()">
+ *      Open a Toast!
+ *    </material-button>
+ *  </div>
  * </hljs>
  */
 
@@ -78,7 +82,7 @@ function MaterialToastDirective() {
  * @param {string=} template Same as templateUrl, except this is an actual
  * template string.
  * @param {number=} hideDelay How many milliseconds the toast should stay
- * active before automatically closing.  Set to 0 to disable duration. 
+ * active before automatically closing.  Set to 0 to disable duration.
  * Default: 3000.
  * @param {string=} position Where to place the toast. Available: any combination
  * of 'bottom', 'left', 'top', 'right', 'fit'. Default: 'bottom left'.
@@ -86,7 +90,7 @@ function MaterialToastDirective() {
  * The controller will be injected the local `$hideToast`, which is a function
  * used to hide the toast.
  * @param {string=} locals An object containing key/value pairs. The keys will
- * be used as names of values to inject into the controller. For example, 
+ * be used as names of values to inject into the controller. For example,
  * `locals: {three: 3}` would inject `three` into the controller with the value
  * of 3.
  * @param {object=} resolve Similar to locals, except it takes promises as values
