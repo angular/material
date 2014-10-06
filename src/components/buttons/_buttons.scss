@@ -58,6 +58,9 @@ material-button {
     white-space: nowrap;
     padding: 6px;
   }
+  a {
+    text-decoration: none;
+  }
 
   // If we have a href and an inner anchor, let the clicks pass through to the anchor
   &[href] {
