@@ -132,7 +132,7 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
       var item;
       var currentScrollTop = contentEl.prop('scrollTop');
       for (var i = self.items.length - 1; i >= 0; i--) {
-        if (currentScrollTop >= self.items[i].top) {
+        if (currentScrollTop > self.items[i].top) {
           item = self.items[i];
           break;
         }
@@ -170,8 +170,12 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
       var isScrollingDown = scrollTop > (onScroll.prevScrollTop || 0);
       onScroll.prevScrollTop = scrollTop;
 
+      // At the top?
+      if (scrollTop === 0) {
+        setCurrentItem(null);
+
       // Going to next item?
-      if (isScrollingDown && self.next) {
+      } else if (isScrollingDown && self.next) {
         if (self.next.top - scrollTop <= 0) {
           // Sticky the next item if we've scrolled past its position.
           setCurrentItem(self.next);
@@ -183,6 +187,7 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
             translate(self.current, null);
           }
         }
+        
       // Scrolling up with a current sticky item?
       } else if (!isScrollingDown && self.current) {
         if (scrollTop < self.current.top) {
@@ -204,15 +209,16 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
     }
      
    function setCurrentItem(item) {
+     if (self.current === item) return;
      // Deactivate currently active item
      if (self.current) {
        translate(self.current, null);
-       self.current.clone.removeClass('sticky-active');
+       setStickyState(self.current, null);
      }
 
      // Activate new item if given
      if (item) {
-       item.clone.addClass('sticky-active');
+       setStickyState(item, 'active');
      }
 
      self.current = item;
@@ -220,6 +226,19 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
      // If index === -1, index + 1 = 0. It works out.
      self.next = self.items[index + 1];
      self.prev = self.items[index - 1];
+     setStickyState(self.next, 'next');
+     setStickyState(self.prev, 'prev');
+   }
+
+   function setStickyState(item, state) {
+     if (!item || item.state === state) return;
+     if (item.state) {
+       item.clone.attr('sticky-prev-state', item.state);
+       item.element.attr('sticky-prev-state', item.state);
+     }
+     item.clone.attr('sticky-state', state);
+     item.element.attr('sticky-state', state);
+     item.state = state;
    }
 
    function translate(item, amount) {

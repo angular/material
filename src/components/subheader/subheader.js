@@ -34,22 +34,28 @@ function MaterialSubheaderDirective($materialSticky, $compile) {
     restrict: 'E',
     replace: true,
     transclude: true,
-    template: '<h2 class="material-subheader"></h2>',
+    template: 
+      '<h2 class="material-subheader">' +
+        '<span class="material-subheader-content"></span>' +
+      '</h2>',
     compile: function(element, attr, transclude) {
       var outerHTML = element[0].outerHTML;
       return function postLink(scope, element, attr) {
+        function getContent(el) {
+          return angular.element(el[0].querySelector('.material-subheader-content'));
+        }
 
         // Transclude the user-given contents of the subheader
         // the conventional way.
         transclude(scope, function(clone) {
-          element.append(clone);
+          getContent(element).append(clone);
         });
 
         // Create another clone, that uses the outer and inner contents
         // of the element, that will be 'stickied' as the user scrolls.
         transclude(scope, function(clone) {
           var stickyClone = $compile(angular.element(outerHTML))(scope);
-          stickyClone.append(clone);
+          getContent(stickyClone).append(clone);
           $materialSticky(scope, element, stickyClone);
         });
       };

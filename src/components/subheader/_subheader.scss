@@ -1,3 +1,20 @@
+@include keyframes(subheaderStickyHoverIn) {
+  0% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  100% {
+    box-shadow: $subheader-sticky-shadow;
+  }
+}
+@include keyframes(subheaderStickyHoverOut) {
+  0% {
+    box-shadow: $subheader-sticky-shadow;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
 .material-subheader {
   color: $text-medium;
   display: block;
@@ -6,9 +23,28 @@
   line-height: $subheader-line-height;
   padding: $subheader-padding;
   margin: $subheader-margin;
+  margin-right: $subheader-margin-right;
   background-color: white;
+  position: relative;
 
   &.material-subheader-colored {
     color: $theme-light-blue
+  }
+
+  &:after {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    right: -$subheader-margin-right;
+    content: '';
+  }
+
+  @include transition(0.2s ease-out margin);
+  &[sticky-state="active"] {
+    margin-top: -2px;
+  }
+  &:not(.material-sticky-clone)[sticky-prev-state="active"]:after {
+    @include animation(subheaderStickyHoverOut 0.3s ease-out both);
   }
 }
