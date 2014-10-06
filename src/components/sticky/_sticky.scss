@@ -9,8 +9,10 @@
 
   &[sticky-state="active"] {
     @include transform(translate3d(0, 0, 0));
-    &:after {
-      @include animation(subheaderStickyHoverIn 0.3s ease-out both);
+    &:not(.sticky-no-effect) {
+      &:after {
+        @include animation(subheaderStickyHoverIn 0.3s ease-out both);
+      }
     }
   }
 }
