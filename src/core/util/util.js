@@ -4,7 +4,7 @@ var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
 var uid = ['0','0','0'];
 
 var Util = {
-  now: window.performance ? angular.bind(window['performance'], performance.now) : Date.now,
+  now: window.performance ? angular.bind(window.performance, window.performance.now) : Date.now,
 
   /**
    * Checks if the specified element has an ancestor (ancestor being parent, grandparent, etc)
