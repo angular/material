@@ -3,7 +3,8 @@
   <material-list>
     <material-item ng-repeat="item in items" ng-click="listItemClick($index)">
       <div class="material-icon-container">
-        <material-inline-icon />
+        <!-- Using custom inline icon until material-icon is ready. DONT USE ME! -->
+        <material-inline-list-icon icon="{{item.icon}}" />
       </div>
       {{ item.name }}
     </material-item>

@@ -44,7 +44,6 @@ material-bottom-sheet {
 
   material-inline-icon {
     display: inline-block;
-    background-image: url('data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDI0IDI0IiB4bWw6c3BhY2U9InByZXNlcnZlIj4gPGcgaWQ9IkhlYWRlciI+IDxnPiA8cmVjdCB4PSItNjE4IiB5PSItMTU5MiIgZmlsbD0ibm9uZSIgd2lkdGg9IjE0MDAiIGhlaWdodD0iMzYwMCIvPiA8L2c+IDwvZz4gPGcgaWQ9IkxhYmVsIj4gPC9nPiA8ZyBpZD0iSWNvbiI+IDxnPiA8cmVjdCBmaWxsPSJub25lIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz4gPHBhdGggZD0iTTEyLDQuNUM3LDQuNSwyLjcsNy42LDEsMTJjMS43LDQuNCw2LDcuNSwxMSw3LjVjNSwwLDkuMy0zLjEsMTEtNy41QzIxLjMsNy42LDE3LDQuNSwxMiw0LjV6IE0xMiwxN2MtMi44LDAtNS0yLjItNS01ICAgIHMyLjItNSw1LTVjMi44LDAsNSwyLjIsNSw1UzE0LjgsMTcsMTIsMTd6IE0xMiw5Yy0xLjcsMC0zLDEuMy0zLDNzMS4zLDMsMywzYzEuNywwLDMtMS4zLDMtM1MxMy43LDksMTIsOXoiLz4gPC9nPiA8L2c+IDxnIGlkPSJHcmlkIiBkaXNwbGF5PSJub25lIj4gPGcgZGlzcGxheT0iaW5saW5lIj4gPC9nPiA8L2c+IDwvc3ZnPg==');
     height: 24px;
     width: 24px;
     fill: #444;
@@ -63,6 +62,7 @@ material-bottom-sheet {
     material-item {
       @include flex-align-items(center);
       height: $bottom-sheet-list-item-height;
+      color: $text-medium;
 
       div.material-icon-container {
         display: inline-block;
@@ -81,28 +81,52 @@ material-bottom-sheet {
       @include flex-display();
       @include flex-direction(row);
       @include flex-wrap(wrap);
+      @include transition(all 0.5s);
     }
 
     material-item {
-      @include flex(1, 1, 33%);
       @include flex-direction(column);
-
-      &:nth-of-type(3n + 1) {
-        @include flex-align-items(flex-start);
-      }
-      &:nth-of-type(3n + 2) {
-        @include flex-align-items(center);
-      }
-      &:nth-of-type(3n) {
-        @include flex-align-items(flex-end);
-      }
+      @include flex-align-items(center);
+      @include transition(all 0.5s);
 
       height: 10 * $baseline-grid;
 
       margin-top: $baseline-grid;
       margin-bottom: $baseline-grid;
 
-      max-width: 33%;
+      /* Mixin for how many grid items to show per row */
+      @mixin grid-items-per-row($num, $alignEdges: false) {
+        $width: 100% / $num;
+        @include flex(1, 1, $width);
+        max-width: $width;
+
+        @if $alignEdges {
+          &:nth-of-type(#{$num}n + 1) {
+            @include flex-align-items(flex-start);
+          }
+          &:nth-of-type(#{$num}n) {
+            @include flex-align-items(flex-end);
+          }
+        }
+      }
+      
+      @media screen and (max-width: $layout-breakpoint-sm) {
+        @include grid-items-per-row(3, true);
+      }
+
+      @media screen and (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md) {
+        @include grid-items-per-row(4);
+      }
+
+      @media screen and (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg) {
+        @include grid-items-per-row(6);
+      }
+
+      @media screen and (min-width: $layout-breakpoint-lg) {
+        @include grid-items-per-row(7);
+      }
+
+
 
       .material-item-content {
         @include flex-display();

@@ -1,1 +1,1 @@
-BottomSheet, exposed via the '$materialBottomSheet' service.
+Bottom Sheet, exposed via the '$materialBottomSheet' service.

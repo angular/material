@@ -2,7 +2,9 @@
   <material-list>
     <material-item ng-repeat="item in items" ng-click="listItemClick($index)">
       <div class="material-item-content">
-        <div class="material-icon-container"></div>
+        <div class="material-icon-container">
+            <material-inline-grid-icon icon="{{item.icon}}" />
+        </div>
         <p class="grid-text"> {{ item.name }} </p>
       </div>
     </material-item>

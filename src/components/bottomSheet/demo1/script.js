@@ -4,7 +4,7 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
   $scope.showListBottomSheet = function($event) {
     $materialBottomSheet.show({
       templateUrl: 'bottom-sheet-list-template.html',
-      controller: 'BottomSheetCtrl',
+      controller: 'ListBottomSheetCtrl',
       targetEvent: $event
     }).then(function(clickedItem) {
       alert(clickedItem.name + ' clicked!');
@@ -14,7 +14,7 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
   $scope.showGridBottomSheet = function($event) {
     $materialBottomSheet.show({
       templateUrl: 'bottom-sheet-grid-template.html',
-      controller: 'BottomSheetCtrl',
+      controller: 'GridBottomSheetCtrl',
       targetEvent: $event
     }).then(function(clickedItem) {
       alert(clickedItem.name + ' clicked!');
@@ -22,13 +22,29 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
   };
 })
 
-.controller('BottomSheetCtrl', function($scope, $materialBottomSheet) {
+.controller('ListBottomSheetCtrl', function($scope, $materialBottomSheet) {
 
   $scope.items = [
-    { name: 'Facebook' },
-    { name: 'Twitter' },
-    { name: 'Print' },
-    { name: 'Email' },
+    { name: 'Share', icon: 'share' },
+    { name: 'Upload', icon: 'upload' },
+    { name: 'Copy', icon: 'copy' },
+    { name: 'Print this page', icon: 'print' },
+  ];
+
+  $scope.listItemClick = function($index) {
+    var clickedItem = $scope.items[$index];
+    $materialBottomSheet.hide(clickedItem);
+  };
+})
+.controller('GridBottomSheetCtrl', function($scope, $materialBottomSheet) {
+
+  $scope.items = [
+    { name: 'Hangout', icon: 'hangout' },
+    { name: 'Mail', icon: 'mail' },
+    { name: 'Message', icon: 'message' },
+    { name: 'Copy', icon: 'copy' },
+    { name: 'Facebook', icon: 'facebook' },
+    { name: 'Twitter', icon: 'twitter' },
   ];
 
   $scope.listItemClick = function($index) {
