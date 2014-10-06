@@ -1,10 +1,14 @@
 <a name="0.4"></a>
 ### 0.4  (2014-10-06)
 
-Version 0.4 incorporates four new components: [circular progress](https://material.angularjs.org/#/material.components.circularProgress/readme/overview), [subheader](https://material.angularjs.org/#/material.components.subheader/readme/overview), [tooltip](https://material.angularjs.org/#/material.components.tooltip/readme/overview) and [bottom sheet](https://material.angularjs.org/#/material.components.bottomSheet/readme/overview). Additionally, a [new API](#v0.4-breaking) has been introduced for $materialDialog and $materialToast. Lastly, many small component functionality issues are resolved.
+Version 0.4 incorporates four (4) new components: [circular progress](https://material.angularjs.org/#/material.components.circularProgress/readme/overview), [subheader](https://material.angularjs.org/#/material.components.subheader/readme/overview), [tooltip](https://material.angularjs.org/#/material.components.tooltip/readme/overview) and [bottom sheet](https://material.angularjs.org/#/material.components.bottomSheet/readme/overview). A [new API](#v0.4-breaking) has also been introduced for `$materialDialog` and `$materialToast`. Additionally, many small component functionality and performance issues have been resolved.
 
 v0.4 is tested on desktop Chrome, Safari and Firefox, as well as Android 4.4+ and iOS7.
 
+<a name="v0.4-breaking"></a>
+#### Breaking Changes
+
+The services `$materialDialog` and `$materialToast` have changed API(s). See section at bottom for [Change Details](#v0.4-breaking-details).
 
 #### Bug Fixes
 
@@ -36,10 +40,13 @@ v0.4 is tested on desktop Chrome, Safari and Firefox, as well as Android 4.4+ an
 * **bottomSheet** add bottomSheet component ([3be359c](https://github.com/angular/material/commit/3be359cc9aabed1613a51090c08f82abd3fa2bc3))
 
 
-<a name="v0.4-breaking"></a>
-#### Breaking Changes
+<br/>
 
-##### $materialDialog:
+---
+<a name="v0.4-breaking-details"></a>
+#### Details on Breaking Changes
+
+**1) $materialDialog**:
 
 Change your code from this:
 
@@ -51,16 +58,29 @@ hideDialog();
 To this:
 
 ```js
-$materialDialog.show(options)
-  .then(function success(result) {}, function cancelled(result) {});
-$materialDialog.hide(mySuccessResult);
-// or...
-$materialDialog.cancel(myCancelResult);
+$materialDialog
+  .show(options)
+  .then(
+	function success(response) {},
+	function cancelled(reason) {}
+   );
+
+// Hides the dialog last shown with `show()`
+// and resolves the show() promise with `response`
+
+$materialDialog.hide(response);
+
+// Hides the dialog last shown and rejects the `show()`
+// promise with the `reason`
+
+$materialDialog.cancel(reason);
 ```
 
-$materialDialog no longer injects a `$hideDialog` function into controllers.
+Note: $materialDialog no longer injects a `$hideDialog` function into controllers.
 
-##### $materialToast:
+<br/>
+
+**2) $materialToast**:
 
 Change your code from this:
 
@@ -72,15 +92,30 @@ hideToast();
 To this:
 
 ```js
-$materialToast.show(options)
-  .then(function success(result) {}, function cancelled(result) {});
-$materialToast.hide(mySuccessResult);
-// or ...
-$materialToast.cancel(myCancelResult);
+$materialToast
+  .show(options)
+  .then(
+	function success(response) {},
+	function cancelled(reason) {}
+  );
+
+
+// Hides the dialog last shown with `show()`
+// and resolves the show() promise with `response`
+
+$materialToast.hide(response);
+
+// Hides the dialog last shown and rejects the `show()`
+// promise with the `reason`
+
+$materialToast.cancel(reason);
+
 ```
+<br/>
+Note: $materialToast` no longer injects a `$hideToast` function into controllers.
 
-$materialToast no longer injects a `$hideToast` function into controllers.
-
+<br/>
+---
 
 
 <a name="0.0.3"></a>
@@ -132,5 +167,4 @@ Additionally, accessibility support is added to material-button, material-checkb
 * **slider:** add full-featured slider component ([5ea4dbc2](https://github.com/angular/material/commit/5ea4dbc2cbb778884bb164d91fcf9b6262987e52), closes [#260](https://github.com/angular/material/issues/260), [#31](https://github.com/angular/material/issues/31))
 * **switch:** add focus styles ([8878ca7a](https://github.com/angular/material/commit/8878ca7aed861ac4c667cc96de61b8c2e09f9bac))
 * **tabs:** improvements to pagination, disabled tabs, and tab navigation. ([b4244bf3](https://github.com/angular/material/commit/b4244bf3a2d9b97c78361fd0b0189919a710e394))
-
 
