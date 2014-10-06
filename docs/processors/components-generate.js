@@ -122,9 +122,14 @@ module.exports = {
               .forEach(function(file) {
                 var moduleSelector = '.' + demo.module + ' {';
                 var content = moduleSelector + '\n' + file.content + '\n}';
-                file.content = sass.renderSync({
-                  data: content
-                });
+                try {
+                  file.content = sass.renderSync({
+                    data: content
+                  });
+                } catch(e) {
+                  console.log('Failed rendering', file.content);
+                  console.log('Error: ' + e.toString());
+                }
               });
           }
 
