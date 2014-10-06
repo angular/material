@@ -118,12 +118,12 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
     function refreshElements() {
       var contentRect = contentEl[0].getBoundingClientRect();
 
+
       // Sort our collection of elements by their current position in the DOM.
       // We need to do this because our elements' order of being added may not
       // be the same as their order of display.
+      self.items.forEach(refreshPosition);
       self.items = self.items.sort(function(a, b) {
-        refreshPosition(a);
-        refreshPosition(b);
         return a.top > b.top;
       });
 
@@ -152,11 +152,15 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
       // content element.
       var current = item.element[0];
       item.top = 0;
+      item.left = 0;
       while (current && current !== contentEl[0]) {
         item.top += current.offsetTop;
+        item.left += current.offsetLeft;
         current = current.offsetParent;
       }
       item.height = item.element.prop('offsetHeight');
+
+      item.clone.css('margin-left', item.left + 'px');
     }
 
 
@@ -227,7 +231,10 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
        }
      } else {
        item.translateY = amount;
-       item.clone.css($materialEffects.TRANSFORM, 'translate3d(0,' + amount + 'px,0)');
+       item.clone.css(
+         $materialEffects.TRANSFORM, 
+         'translate3d(' + item.left + 'px,' + amount + 'px,0)'
+       );
      }
    }
   }
