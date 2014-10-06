@@ -76,7 +76,7 @@ $materialDialog.hide(response);
 $materialDialog.cancel(reason);
 ```
 
-Note: $materialDialog no longer injects a `$hideDialog` function into controllers.
+Note: $materialDialog no longer returns a `$hideDialog` function.
 
 <br/>
 
@@ -112,7 +112,7 @@ $materialToast.cancel(reason);
 
 ```
 <br/>
-Note: $materialToast` no longer injects a `$hideToast` function into controllers.
+Note: $materialToast no longer returns a `$hideToast` function.
 
 <br/>
 ---
