@@ -1,9 +1,9 @@
 {
   "module": "material.components.textField",
-  "name": "Text Field",
+  "name": "Text field",
   "demos": {
     "demo1": {
-      "name": "Using Floating Label Text Fields",
+      "name": "Using Floating-Label Text fields",
       "files": ["demo1/*"]
     }
   }

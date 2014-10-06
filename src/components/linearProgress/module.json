@@ -1,6 +1,6 @@
 {
   "module": "material.components.linearProgress",
-  "name": "Linear Progress",
+  "name": "Progress - Linear",
   "demos": {
     "demo1": {
       "name": "Linear Progress Basic Usage",

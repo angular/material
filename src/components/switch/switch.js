@@ -1,4 +1,5 @@
 /**
+ * @private
  * @ngdoc module
  * @name material.components.switch
  */
@@ -15,6 +16,7 @@ angular.module('material.components.switch', [
 ]);
 
 /**
+ * @private
  * @ngdoc directive
  * @module material.components.switch
  * @name materialSwitch
