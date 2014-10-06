@@ -17,11 +17,16 @@
   </material-content>
 
   <div class="dialog-actions">
-    <material-button class="material-theme-light-blue" 
-      href="http://en.wikipedia.org/wiki/Mango" target="_blank">
-      Read More on Wikipedia
+    <material-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" class="material-button-colored">
+      More on Wikipedia
     </material-button>
-    <material-button class="material-theme-red">Done</material-button>
+    <span flex></span>
+    <material-button ng-click="answer('useful')" class="material-theme-green">
+      Useful
+    </material-button>
+    <material-button ng-click="answer('not useful')" class="material-theme-red">
+     Not Useful
+    </material-button>
   </div>
 
 </material-dialog>

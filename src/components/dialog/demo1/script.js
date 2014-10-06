@@ -14,6 +14,10 @@ angular.module('dialogDemo1', ['ngMaterial'])
       templateUrl: 'dialog2.tmpl.html',
       targetEvent: ev,
       controller: DialogController
+    }).then(function(answer) {
+      alert('You said the information was "' + answer + '".');
+    }, function() {
+      alert('You cancelled the dialog.');
     });
   };
 });
@@ -21,5 +25,9 @@ angular.module('dialogDemo1', ['ngMaterial'])
 function DialogController($scope, $materialDialog) {
   $scope.hide = function() {
     $materialDialog.hide();
+  };
+
+  $scope.answer = function(answer) {
+    $materialDialog.hide(answer);
   };
 }
