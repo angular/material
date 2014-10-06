@@ -132,15 +132,17 @@ function materialRadioGroupDirective() {
    * Change the radio group's selected button by a given increment.
    * If no button is selected, select the first button.
    */
-  function changeSelectedButton(parent, selectionIncrement) {
-    // Coerce all child radio buttons into an array
-    var buttons = Array.prototype.slice.call(
-      parent[0].querySelectorAll('material-radio-button')
+  function changeSelectedButton(parent, increment) {
+    // Coerce all child radio buttons into an array, then wrap then in an iterator
+    var buttons = Util.iterator(
+      Array.prototype.slice.call(parent[0].querySelectorAll('material-radio-button')),
+      true
     );
 
-    if (buttons.length) {
+    if (buttons.count()) {
       var selected = parent[0].querySelector('material-radio-button.material-checked');
-      var target = buttons[buttons.indexOf(selected) + selectionIncrement] || buttons[0];
+      var target = buttons[increment < 0 ? 'previous' : 'next'](selected) || 
+        buttons.first();
       // Activate radioButton's click listener (triggerHandler won't create a real click event)
       angular.element(target).triggerHandler('click');
     }
