@@ -26,8 +26,8 @@ angular.module('material.components.button', [
  * @description
  * `<material-button>` is a button directive with optional ink ripples (default enabled).
  *
- * @param {boolean=} noink Flag indicates use of ripple ink effects
- * @param {boolean=} disabled Flag indicates if the tab is disabled: not selectable with no ink effects
+ * @param {boolean=} noink If present, disable ripple ink effects.
+ * @param {boolean=} disabled If present, disable tab selection.
  * @param {string=} type Optional attribute to specific button types (useful for forms); such as 'submit', etc.
  * @param {string=} ng-href Optional attribute to support both ARIA and link navigation
  * @param {string=} href Optional attribute to support both ARIA and link navigation

@@ -43,8 +43,8 @@ angular.module('material.components.tabs')
  * *  Any markup (other than **`<material-tab>`** tags) will be transcluded into the tab header area BEFORE the tab buttons.
  *
  * @param {integer=} selected Index of the active/selected tab
- * @param {boolean=} noink Flag indicates use of ripple ink effects
- * @param {boolean=} nobar Flag indicates use of ink bar effects
+ * @param {boolean=} noink If present, disables ink ripple effects.
+ * @param {boolean=} nobar If present, disables the selection ink bar.
  * @param {string=}  align-tabs Attribute to indicate position of tab buttons: bottom or top; default is `top`
  *
  * @usage
