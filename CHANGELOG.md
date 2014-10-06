@@ -1,5 +1,5 @@
 <a name="0.4"></a>
-### 0.4  (2014-10-06)
+## 0.4  (2014-10-06)
 
 Version 0.4 incorporates four (4) new components: [circular progress](https://material.angularjs.org/#/material.components.circularProgress/readme/overview), [subheader](https://material.angularjs.org/#/material.components.subheader/readme/overview), [tooltip](https://material.angularjs.org/#/material.components.tooltip/readme/overview) and [bottom sheet](https://material.angularjs.org/#/material.components.bottomSheet/readme/overview). A [new API](#v0.4-breaking) has also been introduced for `$materialDialog` and `$materialToast`. Additionally, many small component functionality and performance issues have been resolved.
 
@@ -41,8 +41,6 @@ The services `$materialDialog` and `$materialToast` have changed API(s). See sec
 
 
 <br/>
-
-
 <a name="v0.4-breaking-details"></a>
 #### Details on Breaking Changes
 
@@ -76,7 +74,7 @@ $materialDialog.hide(response);
 $materialDialog.cancel(reason);
 ```
 
-Note: $materialDialog no longer returns a `$hideDialog` function.
+Note: If you previously provided a `controller` option to `$materialDialog`, that controller would be injected with a `$hideDialog` function. This feature no longer exists; use `$materialDialog.hide()`.
 
 <br/>
 
@@ -112,14 +110,12 @@ $materialToast.cancel(reason);
 
 ```
 <br/>
-Note: $materialToast no longer returns a `$hideToast` function.
+Note: If you previously provided a `controller` option to `$materialToast`, that controller would be injected with a `$hideToast` function. This feature no longer exists; use `$materialToast.hide()`.
 
-<br/>
----
 
 
 <a name="0.0.3"></a>
-### v0.0.3  (2014-09-19)
+## v0.0.3  (2014-09-19)
 
 v0.0.3 includes many bug fixes, performance, and usability improvements to existing components, as well as introducing the slider, switch, divider, and linear progress components.
 
