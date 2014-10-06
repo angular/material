@@ -42,7 +42,7 @@ The services `$materialDialog` and `$materialToast` have changed API(s). See sec
 
 <br/>
 
----
+
 <a name="v0.4-breaking-details"></a>
 #### Details on Breaking Changes
 
