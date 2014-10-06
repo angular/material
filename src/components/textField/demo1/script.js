@@ -7,7 +7,7 @@ angular.module('textFieldDemo1', ['ngMaterial'])
    */
   .controller('DemoController', function($scope) {
     $scope.user = {
-       title:     "Program Manager",
+       title:     "Technical Program Manager",
        email:     "ipsum@lorem.com",
        firstName: "Naomi",
        lastName:  "" ,
