@@ -1,5 +1,5 @@
 <a name="0.4"></a>
-## 0.4  (2014-10-06)
+## 0.4.0  (2014-10-06)
 
 Version 0.4 incorporates four (4) new components: [circular progress](https://material.angularjs.org/#/material.components.circularProgress/readme/overview), [subheader](https://material.angularjs.org/#/material.components.subheader/readme/overview), [tooltip](https://material.angularjs.org/#/material.components.tooltip/readme/overview) and [bottom sheet](https://material.angularjs.org/#/material.components.bottomSheet/readme/overview). A [new API](#v0.4-breaking) has also been introduced for `$materialDialog` and `$materialToast`. Additionally, many small component functionality and performance issues have been resolved.
 
