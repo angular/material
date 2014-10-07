@@ -1,8 +1,8 @@
 material-bottom-sheet {
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: $bottom-sheet-hidden-bottom-padding;
   padding: $bottom-sheet-vertical-padding $bottom-sheet-horizontal-padding $bottom-sheet-vertical-padding + $bottom-sheet-hidden-bottom-padding $bottom-sheet-horizontal-padding;
   z-index: $z-index-bottom-sheet;
 
