@@ -1,14 +1,12 @@
 {
   "name": "material-design",
-  "version": "0.4",
+  "version": "0.4.0",
   "repository": {
     "url": "git://github.com/angular/material.git"
   },
   "devDependencies": {
     "canonical-path": "0.0.2",
     "conventional-changelog": "0.0.9",
-    "dgeni": "~0.3.0",
-    "dgeni-packages": "~0.9.2",
     "esprima": "^1.2.2",
     "event-stream": "^3.1.5",
     "glob": "~4.0.2",
