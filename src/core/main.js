@@ -2,7 +2,7 @@
    * Angular Materials initialization function that validates environment
    * requirements.
    */
-  angular.module('material.core',['ng'])
+  angular.module('material.core', ['ngAria'] )
     .run(function validateEnvironment() {
 
       if (angular.isUndefined( window.Hammer )) {
