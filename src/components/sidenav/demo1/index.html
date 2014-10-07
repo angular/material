@@ -3,15 +3,18 @@
 
   <section layout="horizontal" flex>
 
-    <material-sidenav class="material-sidenav-left material-whiteframe-z2" component-id="left">
+    <material-sidenav responsive-breakpoint="lg" class="material-sidenav-left material-whiteframe-z2" component-id="left">
 
       <material-toolbar class="material-theme-indigo">
         <h1 class="material-toolbar-tools">Sidenav Left</h1>
       </material-toolbar>
       <material-content class="material-content-padding" ng-controller="LeftCtrl">
-        <material-button ng-click="close()" class="material-button-colored" hide-md>
+        <material-button ng-click="close()" class="material-button-colored" hide-lg>
           Close Sidenav Left
         </material-button>
+        <p>
+          With <em>responsive-breakpoint="lg"</em>. Shown by default on large screens.
+        </p>
       </material-content>
 
     </material-sidenav>
@@ -20,7 +23,7 @@
 
       <div layout="vertical" layout-fill layout-align="center center">
         <p>
-          On smaller devices, material-sidenav will be hidden by default. 
+          On smaller devices, material-sidenav will be hidden by default.
         </p>
         <p>
           On larger, it will be shown by default.
@@ -28,7 +31,7 @@
 
         <div>
           <material-button ng-click="toggleLeft()"
-            class="material-button-colored" hide-md>
+            class="material-button-colored" hide-lg>
             Toggle left
           </material-button>
         </div>
@@ -52,6 +55,9 @@
         <material-button ng-click="close()" class="material-button-colored" hide-md>
           Close Sidenav Right
         </material-button>
+        <p>
+          With no <em>responsive-breakpoint</em> attribute. Shown by default on medium screens.
+        </p>
       </material-content>
 
     </material-sidenav>
