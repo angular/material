@@ -26,7 +26,7 @@ material-toolbar.material-medium-tall {
 }
 
 .menu-item {
-  background-color: #fff;
+  background: none;
   border-width: 0;
   cursor: pointer;
   display: block;
@@ -76,7 +76,7 @@ material-toolbar.material-medium-tall {
 }
 
 .menu-icon {
-  background-color: transparent;
+  background: none;
   border: none;
 }
 .app-toolbar .material-toolbar-tools h3 {
