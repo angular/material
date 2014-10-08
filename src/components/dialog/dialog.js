@@ -105,8 +105,7 @@ function MaterialDialogDirective($$rAF) {
  *   close it. Default true.
  * @param {boolean=} escapeToClose Whether the user can press escape to close the dialog.
  *   Default true.
- * @param {string=} controller The controller to associate with the dialog. The controller
- * will be injected with the local `$hideDialog`, which is a function used to hide the dialog.
+ * @param {string=} controller The controller to associate with the dialog.
  * @param {object=} locals An object containing key/value pairs. The keys will be used as names
  * of values to inject into the controller. For example, `locals: {three: 3}` would inject
  * `three` into the controller, with the value 3.
