@@ -64,6 +64,7 @@ transition: transform 0.2s all;
 
 themes/*
 
+```
 /src
   /components
     -tabs
@@ -86,6 +87,7 @@ themes/
     - component-name.js
     - component-core.css
     - component-default-theme.css
+```
 
 ```variables.scss```
 $theme-name: 'default-theme';
