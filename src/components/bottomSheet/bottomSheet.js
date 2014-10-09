@@ -85,6 +85,8 @@ function MaterialBottomSheetDirective() {
  * be used as names of values to inject into the controller. For example, 
  * `locals: {three: 3}` would inject `three` into the controller with the value
  * of 3.
+ * @param {element=} parent The element to append the bottomSheet to. Defaults to appending
+ * to the root element of the application.
  * @param {DOMClickEvent=} targetEvent A click's event object. When passed in as an option, 
  * the location of the click will be used as the starting point for the opening animation
  * of the the dialog.
