@@ -10,14 +10,14 @@ angular.module('material.components.sidenav', [
   'material.animations'
 ])
   .factory('$materialSidenav', [
-    '$materialComponentRegistry', 
-    materialSidenavService 
+    '$materialComponentRegistry',
+    materialSidenavService
   ])
   .directive('materialSidenav', [
     '$timeout',
     '$materialEffects',
     '$$rAF',
-    materialSidenavDirective 
+    materialSidenavDirective
   ])
   .controller('$materialSidenavController', [
     '$scope',
@@ -26,7 +26,7 @@ angular.module('material.components.sidenav', [
     '$timeout',
     '$materialSidenav',
     '$materialComponentRegistry',
-    materialSidenavController 
+    materialSidenavController
   ]);
   
 /**
@@ -149,7 +149,7 @@ function materialSidenavService($materialComponentRegistry) {
  * @usage
  * <hljs lang="html">
  * <div layout="horizontal" ng-controller="MyController">
- *   <material-sidenav component-id="left" class="material-sidenav-left">
+ *   <material-sidenav responsive-breakpoint="lg" component-id="left" class="material-sidenav-left">
  *     Left Nav!
  *   </material-sidenav>
  *
@@ -174,6 +174,7 @@ function materialSidenavService($materialComponentRegistry) {
  *   };
  * });
  * </hljs>
+ * @param {string=} responsiveBreakpoint Optional attribute to specify at what screen size the sidenav should be shown by default: `sm`, `md` (default), or `lg`
  */
 function materialSidenavDirective($timeout, $materialEffects, $$rAF) {
   return {
@@ -189,7 +190,8 @@ function materialSidenavDirective($timeout, $materialEffects, $$rAF) {
     return postLink;
   }
   function postLink(scope, element, attr, sidenavCtrl) {
-    var backdrop = angular.element('<material-backdrop class="material-sidenav-backdrop">');
+    var responsiveBreakpoint = attr.responsiveBreakpoint || 'md';
+    var backdrop = angular.element('<material-backdrop class="material-sidenav-backdrop material-sidenav-responsive-breakpoint-' + responsiveBreakpoint + '">');
 
     scope.$watch('isOpen', onShowHideSide);
     element.on($materialEffects.TRANSITIONEND_EVENT, onTransitionEnd);
@@ -214,7 +216,7 @@ function materialSidenavDirective($timeout, $materialEffects, $$rAF) {
         parent.off('keydown', onKeyDown);
       }
 
-      // Wait until the next frame, so that if the `closed` class was just removed the 
+      // Wait until the next frame, so that if the `closed` class was just removed the
       // element has a chance to 're-initialize' from being display: none.
       $$rAF(function() {
         element.toggleClass('open', !!scope.isOpen);

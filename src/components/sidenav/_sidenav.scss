@@ -38,15 +38,32 @@ material-sidenav {
   }
 }
 
-@media (min-width: $layout-breakpoint-md) {
-  material-sidenav {
+@mixin sidenav-responsive-breakpoint($layout-size) {
+  material-sidenav[responsive-breakpoint='#{$layout-size}'] {
     position: static;
     @include transform(translate3d(0,0,0) !important);
   }
 
-  .material-sidenav-backdrop {
+  .material-sidenav-backdrop-responsive-breakpoint-#{$layout-size} {
     display: none !important;
   }
+}
+
+@media (min-width: $layout-breakpoint-sm) {
+  @include sidenav-responsive-breakpoint('sm');
+}
+
+@media (min-width: $layout-breakpoint-md) {
+  @include sidenav-responsive-breakpoint('md');
+  
+  material-sidenav:not([responsive-breakpoint]) {
+    position: static;
+    @include transform(translate3d(0,0,0) !important);
+  }
+}
+
+@media (min-width: $layout-breakpoint-lg) {
+  @include sidenav-responsive-breakpoint('lg');
 }
 
 @media (max-width: $sidenav-default-width + 2 * $sidenav-min-room) {
