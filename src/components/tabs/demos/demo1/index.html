@@ -4,7 +4,7 @@
         <material-tab label="ITEM ONE"></material-tab>
         <material-tab label="ITEM TWO"></material-tab>
         <material-tab label="ITEM THREE" ></material-tab>
-        <material-tab label="ITEM FOUR" ng-disabled="locked"></material-tab>
+        <material-tab label="ITEM FOUR" ng-disabled="data.locked"></material-tab>
         <material-tab label="ITEM FIVE"></material-tab>
         <material-tab label="ITEM SIX"></material-tab>
         <material-tab label="ITEM SEVEN"></material-tab>
@@ -93,7 +93,7 @@
             <input type="number" ng-model="data.selectedIndex">
         </material-input-group>
 
-        <material-checkbox ng-model="locked" aria-label="Disabled">
+        <material-checkbox ng-model="data.locked" aria-label="Disabled">
           Disable Tab #4?
         </material-checkbox>
     </div>
