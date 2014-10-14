@@ -1,1 +1,1 @@
-Provides a dialog overlay, opened using the `$materialDialog` service.
+Provides a dialog overlay, opened using the `$mdDialog` service.

@@ -1,0 +1,25 @@
+<md-dialog class="view-source-dialog">
+
+  <md-tabs>
+    <md-tab ng-repeat="file in files"
+                  active="file === data.selectedFile"
+                  ng-click="data.selectedFile = file" >
+        <span class="window_label">{{file.viewType}}</span>
+    </md-tab>
+  </md-tabs>
+
+  <div class="dialog-content md-content" scroll-y flex>
+    <div ng-repeat="file in files">
+      <hljs code="file.content"
+        lang="{{file.fileType}}"
+        ng-show="file === data.selectedFile" >
+      </hljs>
+    </div>
+  </div>
+
+  <div class="dialog-actions" layout="horizontal">
+    <md-button class="md-button-light" ng-click="$hideDialog()">
+      Done
+    </md-button>
+  </div>
+</md-dialog>

@@ -1,0 +1,35 @@
+<div ng-controller="AppCtrl" layout="vertical" layout-fill>
+
+  <md-toolbar scroll-shrink class="md-theme-light">
+    <div class="md-toolbar-tools">
+      <h3>
+        <span>My App Title</span>
+      </h3>
+    </div>
+  </md-toolbar>
+
+  <md-content style="height: 600px;">
+
+    <md-list>
+
+      <md-item ng-repeat="item in todos">
+        <md-item-content>
+          <div class="md-tile-left">
+            <img ng-src="{{item.face}}" class="face">
+          </div>
+          <div class="md-tile-content">
+            <h3>{{item.what}}</h3>
+            <h4>{{item.who}}</h4>
+            <p>
+              {{item.notes}}
+            </p>
+          </div>
+        </md-item-content>
+        <md-divider inset></md-divider>
+      </md-item>
+
+    </md-list>
+
+  </md-content>
+
+</div>

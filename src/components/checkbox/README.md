@@ -1,1 +1,1 @@
-Checkboxes, created with the `<material-checkbox>` directive.
+Checkboxes, created with the `<md-checkbox>` directive.

@@ -1,6 +1,6 @@
-material-toolbar {
-  @include flex-display();
-  @include flex-direction(column);
+md-toolbar {
+  display: flex;
+  flex-direction: column;
 
   position: relative;
   z-index: 2;
@@ -9,27 +9,27 @@ material-toolbar {
   min-height: $baseline-grid * 8;
   width: 100%;
 
-  &.material-tall {
+  &.md-tall {
     height: $toolbar-tall-height;
   }
 
-  &.material-medium-tall {
+  &.md-medium-tall {
     height: $toolbar-medium-tall-height;
 
-    .material-toolbar-tools {
+    .md-toolbar-tools {
       height: 48px;
     }
   }
 
-  .material-indent {
+  .md-indent {
     margin-left: $toolbar-indent-margin;
   }
 }
 
-.material-toolbar-tools {
-  @include flex-display();
-  @include flex-align-items(center);
-  @include flex-direction(row);
+.md-toolbar-tools {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
 
   width: 100%;
   height: $toolbar-tools-height;
@@ -50,12 +50,12 @@ material-toolbar {
     text-decoration: none;
   }
 
-  material-button {
+  md-button {
     font-size: 16px;
   }
 }
 
-// .material-toolbar-tools-middle {
+// .md-toolbar-tools-middle {
 //   position: absolute;
 //   top: calc(33.3333333333336%);
 //   left: 0;

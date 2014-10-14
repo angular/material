@@ -1,2 +1,2 @@
-describe('materialIcon directive', function() {
+describe('mdIcon directive', function() {
 });

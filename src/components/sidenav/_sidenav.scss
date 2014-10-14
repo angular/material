@@ -1,4 +1,4 @@
-material-sidenav {
+md-sidenav {
   position: absolute;
 
   width: $sidenav-default-width;
@@ -6,51 +6,50 @@ material-sidenav {
 
   background-color: white;
 
-  -webkit-transition: -webkit-transform 0.3s ease-in-out;
   transition: transform 0.3s ease-in-out;
 
-  @extend .material-sidenav-left;
+  @extend .md-sidenav-left;
 
   // &.closed {
   //   display: none;
   // }
 }
 
-.material-sidenav-left {
+.md-sidenav-left {
   left: 0;
   top: 0;
-  @include transform-translate3d(-100%, 0, 0);
+  transform: translate3d(-100%, 0, 0);
 
   &.open {
-    @include transform-translate3d(0%, 0, 0);
+    transform: translate3d(0%, 0, 0);
     z-index: $z-index-sidenav;
   }
 }
 
-.material-sidenav-right {
+.md-sidenav-right {
   left: 100%;
   top: 0;
-  @include transform-translate3d(100%, 0, 0);
+  transform: translate3d(100%, 0, 0);
 
   &.open {
-    @include transform-translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
     z-index: $z-index-sidenav;
   }
 }
 
 @media (min-width: $layout-breakpoint-md) {
-  material-sidenav {
+  md-sidenav {
     position: static;
-    @include transform(translate3d(0,0,0) !important);
+    transform: translate3d(0,0,0) !important;
   }
 
-  .material-sidenav-backdrop {
+  .md-sidenav-backdrop {
     display: none !important;
   }
 }
 
 @media (max-width: $sidenav-default-width + 2 * $sidenav-min-room) {
-  material-sidenav {
+  md-sidenav {
     max-width: 75%;
   }
 }

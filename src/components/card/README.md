@@ -1,1 +1,1 @@
-Cards, created with the `<material-card>` directive.
+Cards, created with the `<md-card>` directive.

@@ -1,10 +1,10 @@
-describe('$materialCompiler service', function() {
+describe('$mdCompiler service', function() {
   beforeEach(module('material.services.compiler'));
 
   function compile(options) {
     var compileData;
-    inject(function($materialCompiler, $rootScope) {
-      $materialCompiler.compile(options).then(function(data) {
+    inject(function($mdCompiler, $rootScope) {
+      $mdCompiler.compile(options).then(function(data) {
         compileData = data;
       });
       $rootScope.$apply();

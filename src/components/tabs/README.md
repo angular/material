@@ -1,4 +1,4 @@
-Tabs, created with the `<material-tabs>` directive provide *tabbed* navigation with different styles. The Tabs component consists of clickable tabs that are aligned horizontally side-by-side.
+Tabs, created with the `<md-tabs>` directive provide *tabbed* navigation with different styles. The Tabs component consists of clickable tabs that are aligned horizontally side-by-side.
 
 Features include support for:
 

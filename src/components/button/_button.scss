@@ -1,0 +1,215 @@
+/**
+ * Position a FAB button.
+ */
+@mixin fab-position($spot, $top: auto, $right: auto, $bottom: auto, $left: auto) {
+  &.md-button-fab-#{$spot} {
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+    position: absolute;
+  }
+}
+
+md-button {
+
+  user-select: none;
+  position: relative; //for child absolute-positioned <canvas>
+  display: inline-block;
+
+  outline: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  border-radius: $button-border-radius;
+  text-align: center;
+
+  // Always uppercase buttons
+  text-transform: uppercase;
+  font-weight: inherit;
+  font-style: inherit;
+  font-variant: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inherit;
+
+  cursor: pointer;
+  overflow: hidden;   // for ink containment
+
+  // reserved for inner buttons and inner hrefs
+  .md-button-inner {
+    display: block;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: inherit;
+    outline: none;
+    text-transform: inherit;
+    font-weight: inherit;
+    font-style: inherit;
+    font-variant: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    white-space: nowrap;
+    padding: 6px;
+  }
+  a {
+    text-decoration: none;
+  }
+
+  // If we have a href and an inner anchor, let the clicks pass through to the anchor
+  &[href] {
+    pointer-events: none;
+    .md-button-inner {
+      pointer-events: auto;
+    }
+  }
+
+
+  &.md-button-colored {
+    color: $theme-light;
+    fill: $theme-light;
+  }
+
+  &.md-button-cornered {
+    border-radius: 0;
+  }
+
+  &:not([disabled]) {
+    &:hover, 
+    // Uses a .focus class because the child button/a is getting the actual focus
+    &.focus {
+      background-color: $button-hover-background;
+    }
+  }
+
+  &[disabled] {
+    background-color: $button-disabled-background !important;
+    color: $button-disabled-color !important;
+    cursor: auto;
+  }
+
+  &.md-button-icon {
+    padding: 0;
+    background: none;
+  }
+
+  &.md-button-raised {
+    background-color: $button-raised-background;
+
+    transition: 0.2s linear;
+    transition-property: box-shadow, transform, background-color;
+    transform: translate3d(0, 0, 0);
+
+    &:not([disabled]) {
+      @extend .md-shadow-bottom-z-1;
+      &:hover,
+      &.focus {
+        background-color: $button-raised-hover-background;
+      }
+    }
+
+    &.md-button-colored {
+      background-color: $button-raised-colored-background;
+      color: $button-raised-colored-color;
+
+      &:hover:not([disabled]),
+      &.focus {
+        background-color: $button-raised-colored-hover-background;
+      }
+    }
+  }
+
+  &.md-button-fab {
+
+    @include fab-position(bottom-right, auto, $button-fab-width/2, $button-fab-height/2, auto);
+    @include fab-position(bottom-left, auto, auto, $button-fab-height/2, $button-fab-width/2);
+    @include fab-position(top-right, $button-fab-height/2, $button-fab-width/2, auto, auto);
+    @include fab-position(top-left, $button-fab-height/2, auto, auto, $button-fab-width/2);
+
+    z-index: $z-index-fab;
+
+    width: $button-fab-width;
+    height: $button-fab-height;
+
+    border-radius: $button-fab-border-radius;
+
+    @extend .md-shadow-bottom-z-1;
+    border-radius: 50%;
+    overflow: hidden;
+
+    transform: translate3d(0,0,0);
+
+    transition: 0.2s linear;
+    transition-property: transform, box-shadow;
+
+  }
+
+  &:not([disabled]) {
+    &.md-button-raised,
+    &.md-button-fab {
+      &.focus,
+      &:hover {
+        transform: translate3d(0, -1px, 0);
+        @extend .md-shadow-bottom-z-2;
+      }
+    }
+  }
+}
+
+.md-toast-open-top {
+  md-button.md-button-fab-top-left,
+  md-button.md-button-fab-top-right {
+    transform: translate3d(0, $button-fab-toast-offset, 0);
+    &.focus,
+    &:hover:not([disabled]) {
+      transform: translate3d(0, $button-fab-toast-offset - 1, 0);
+    }
+  }
+}
+.md-toast-open-bottom {
+  md-button.md-button-fab-bottom-left,
+  md-button.md-button-fab-bottom-right {
+    transform: translate3d(0, -$button-fab-toast-offset, 0);
+    &.focus,
+    &:hover {
+      transform: translate3d(0, -$button-fab-toast-offset - 1, 0);
+    }
+  }
+}
+
+
+.md-button-group {
+  display: flex;
+  flex: 1;
+  width: 100%;
+}
+.md-button-group > .md-button {
+  flex: 1;
+
+  display: block;
+
+  overflow: hidden;
+
+  width: 0;
+
+  border-width: 1px 0px 1px 1px;
+  border-radius: 0;
+
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:first-child {
+    border-radius: 2px 0px 0px 2px;
+  }
+  &:last-child {
+    border-right-width: 1px;
+    border-radius: 0px 2px 2px 0px;
+  }
+}

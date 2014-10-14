@@ -1,17 +1,17 @@
-.material-sticky-clone {
+.md-sticky-clone {
   z-index: 1;
   top: 0;
   left: 0;
   right: 0;
   position: absolute;
 
-  @include transform(translate3d(-9999px,-9999px,0));
+  transform: translate3d(-9999px,-9999px,0);
 
   &[sticky-state="active"] {
-    @include transform(translate3d(0, 0, 0));
+    transform: translate3d(0, 0, 0);
     &:not(.sticky-no-effect) {
       &:after {
-        @include animation(subheaderStickyHoverIn 0.3s ease-out both);
+        animation: subheaderStickyHoverIn 0.3s ease-out both;
       }
     }
   }

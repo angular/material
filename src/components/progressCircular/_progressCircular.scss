@@ -1,0 +1,136 @@
+$circle-size:48px;
+$circle-background:transparent;
+$circle-color:$color-blue-500;
+$inset-size:36px;
+$inset-color:white;
+$transition-length:.3s;
+$shadow:6px 6px 10px rgba(0, 0, 0, 0.2);
+
+md-progress-circular {
+  display: block;
+  width: $circle-size + 6;
+  height: $circle-size + 6;
+  background-color: $circle-background;
+  border-radius: 50%;
+  padding: 3px;
+
+  .wrapper1, .wrapper2 {
+    width: $circle-size;
+    height: $circle-size;
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .circle {
+    .mask, .fill, .shadow {
+      width: $circle-size;
+      height: $circle-size;
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .shadow { }
+
+    .mask, .fill {
+      backface-visibility: hidden;
+      transition: transform $transition-length;
+    }
+
+    .mask {
+      clip: rect(0px, $circle-size, $circle-size, $circle-size/2);
+      .fill {
+        clip: rect(0px, $circle-size/2, $circle-size, 0px);
+        background-color: $circle-color;
+      }
+    }
+  }
+
+  .inset {
+    width: $inset-size;
+    height: $inset-size;
+    position: absolute;
+    margin-left: ($circle-size - $inset-size)/2;
+    margin-top: ($circle-size - $inset-size)/2;
+    background-color: $inset-color;
+    border-radius: 50%;
+  }
+
+  &[mode=indeterminate] {
+    .wrapper1, .wrapper2 {
+      transform-origin: 50% 50%;
+    }
+
+    .wrapper1{
+      animation: indeterminate_rotate1 3s infinite linear;
+    }
+
+    .wrapper2{
+      animation: indeterminate_rotate2 1.5s infinite linear;
+    }
+
+    .fill, .mask.full{
+      animation: indeterminate_size_fill 1.5s infinite linear;
+    }
+
+    .fill.fix {
+      animation: indeterminate_size_fix 1.5s infinite linear;
+    }
+  }
+}
+
+@keyframes indeterminate_rotate1 {
+  0%{
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes indeterminate_rotate2 {
+  0%{
+    transform: rotate(0deg);
+  }
+  70%{
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes indeterminate_size_fill {
+  0%{
+    transform: rotate(5deg);
+  }
+  10%{
+    transform: rotate(5deg);
+  }
+  50%{
+    transform: rotate(135deg);
+  }
+  70%{
+    transform: rotate(135deg);
+  }
+  100%{
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes indeterminate_size_fix {
+  0%{
+    transform: rotate(10deg);
+  }
+  10%{
+    transform: rotate(10deg);
+  }
+  50%{
+    transform: rotate(270deg);
+  }
+  70%{
+    transform: rotate(270deg);
+  }
+  100%{
+    transform: rotate(10deg);
+  }
+}

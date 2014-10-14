@@ -9,17 +9,17 @@ angular.module('material.components.switch', [
   'material.components.radioButton'
 ])
 
-.directive('materialSwitch', [
-  'materialCheckboxDirective',
-  'materialRadioButtonDirective',
-  MaterialSwitch
+.directive('mdSwitch', [
+  'mdCheckboxDirective',
+  'mdRadioButtonDirective',
+  MdSwitch
 ]);
 
 /**
  * @private
  * @ngdoc directive
  * @module material.components.switch
- * @name materialSwitch
+ * @name mdSwitch
  * @restrict E
  *
  * The switch directive is used very much like the normal [angular checkbox](https://docs.angularjs.org/api/ng/input/input%5Bcheckbox%5D).
@@ -35,21 +35,21 @@ angular.module('material.components.switch', [
  *
  * @usage
  * <hljs lang="html">
- * <material-switch ng-model="isActive" aria-label="Finished?">
+ * <md-switch ng-model="isActive" aria-label="Finished?">
  *   Finished ?
- * </material-switch>
+ * </md-switch>
  *
- * <material-switch noink ng-model="hasInk" aria-label="No Ink Effects">
+ * <md-switch noink ng-model="hasInk" aria-label="No Ink Effects">
  *   No Ink Effects
- * </material-switch>
+ * </md-switch>
  *
- * <material-switch disabled ng-model="isDisabled" aria-label="Disabled">
+ * <md-switch disabled ng-model="isDisabled" aria-label="Disabled">
  *   Disabled
- * </material-switch>
+ * </md-switch>
  *
  * </hljs>
  */
-function MaterialSwitch(checkboxDirectives, radioButtonDirectives) {
+function MdSwitch(checkboxDirectives, radioButtonDirectives) {
   var checkboxDirective = checkboxDirectives[0];
   var radioButtonDirective = radioButtonDirectives[0];
 
@@ -57,8 +57,8 @@ function MaterialSwitch(checkboxDirectives, radioButtonDirectives) {
     restrict: 'E',
     transclude: true,
     template:
-      '<div class="material-switch-bar"></div>' +
-      '<div class="material-switch-thumb">' +
+      '<div class="md-switch-bar"></div>' +
+      '<div class="md-switch-thumb">' +
         radioButtonDirective.template +
       '</div>',
     require: '?ngModel',
@@ -67,7 +67,7 @@ function MaterialSwitch(checkboxDirectives, radioButtonDirectives) {
 
   function compile(element, attr) {
     
-    var thumb = angular.element(element[0].querySelector('.material-switch-thumb'));
+    var thumb = angular.element(element[0].querySelector('.md-switch-thumb'));
     //Copy down disabled attributes for checkboxDirective to use
     thumb.attr('disabled', attr.disabled);
     thumb.attr('ngDisabled', attr.ngDisabled);
@@ -75,7 +75,7 @@ function MaterialSwitch(checkboxDirectives, radioButtonDirectives) {
     var link = checkboxDirective.compile(thumb, attr);
 
     return function (scope, element, attr, ngModelCtrl) {
-      var thumb = angular.element(element[0].querySelector('.material-switch-thumb'));
+      var thumb = angular.element(element[0].querySelector('.md-switch-thumb'));
       return link(scope, thumb, attr, ngModelCtrl)
     };
   }

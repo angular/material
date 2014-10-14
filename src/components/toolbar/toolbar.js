@@ -3,62 +3,65 @@
  * @name material.components.toolbar
  */
 angular.module('material.components.toolbar', [
+  'material.core',
   'material.components.content',
   'material.animations'
 ])
-  .directive('materialToolbar', [
+  .directive('mdToolbar', [
     '$$rAF',
-    '$materialEffects',
-    materialToolbarDirective
+    '$mdEffects',
+    '$mdUtil',
+    mdToolbarDirective
   ]);
 
 /**
  * @ngdoc directive
- * @name materialToolbar
+ * @name mdToolbar
+ * @module material.components.toolbar
  * @restrict E
  * @description
- * `material-toolbar` is used to place a toolbar in your app.
+ * `md-toolbar` is used to place a toolbar in your app.
  *
  * Toolbars are usually used above a content area to display the title of the
  * current page, and show relevant action buttons for that page.
  *
  * You can change the height of the toolbar by adding either the
- * `material-medium-tall` or `material-tall` class to the toolbar.
+ * `md-medium-tall` or `md-tall` class to the toolbar.
  *
  * @usage
  * <hljs lang="html">
  * <div layout="vertical" layout-fill>
- *   <material-toolbar>
+ *   <md-toolbar>
  *
- *     <div class="material-toolbar-tools">
+ *     <div class="md-toolbar-tools">
  *       <span>My App's Title</span>
  *
  *       <!-- fill up the space between left and right area -->
  *       <span flex></span>
  *
- *       <material-button>
+ *       <md-button>
  *         Right Bar Button
- *       </material-button>
+ *       </md-button>
  *     </div>
  *
- *   </material-toolbar>
- *   <material-content>
+ *   </md-toolbar>
+ *   <md-content>
  *     Hello!
- *   </material-content>
+ *   </md-content>
  * </div>
  * </hljs>
  *
  * @param {boolean=} scrollShrink Whether the header should shrink away as 
  * the user scrolls down, and reveal itself as the user scrolls up. 
  * Note: for scrollShrink to work, the toolbar must be a sibling of a 
- * `material-content` element, placed before it. See the scroll shrink demo.
+ * `md-content` element, placed before it. See the scroll shrink demo.
  *
  *
  * @param {number=} shrinkSpeedFactor How much to change the speed of the toolbar's
  * shrinking by. For example, if 0.25 is given then the toolbar will shrink
  * at one fourth the rate at which the user scrolls down. Default 0.5.
  */ 
-function materialToolbarDirective($$rAF, $materialEffects) {
+function mdToolbarDirective($$rAF, $mdEffects, $mdUtil) {
 
   return {
     restrict: 'E',
@@ -81,15 +84,15 @@ function materialToolbarDirective($$rAF, $materialEffects) {
         var contentElement;
 
         var debouncedContentScroll = $$rAF.debounce(onContentScroll);
-        var debouncedUpdateHeight = Util.debounce(updateToolbarHeight, 5 * 1000);
+        var debouncedUpdateHeight = $mdUtil.debounce(updateToolbarHeight, 5 * 1000);
 
-        // Wait for $materialContentLoaded event from materialContent directive.
-        // If the materialContent element is a sibling of our toolbar, hook it up
+        // Wait for $mdContentLoaded event from mdContent directive.
+        // If the mdContent element is a sibling of our toolbar, hook it up
         // to scroll events.
-        scope.$on('$materialContentLoaded', onMaterialContentLoad);
+        scope.$on('$mdContentLoaded', onMdContentLoad);
 
-        function onMaterialContentLoad($event, newContentEl) {
-          if (Util.elementIsSibling(element, newContentEl)) {
+        function onMdContentLoad($event, newContentEl) {
+          if ($mdUtil.elementIsSibling(element, newContentEl)) {
             // unhook old content event listener if exists
             if (contentElement) {
               contentElement.off('scroll', debouncedContentScroll);
@@ -129,11 +132,11 @@ function materialToolbarDirective($$rAF, $materialEffects) {
           );
 
           element.css(
-            $materialEffects.TRANSFORM, 
+            $mdEffects.TRANSFORM, 
             'translate3d(0,' + (-y * shrinkSpeedFactor) + 'px,0)'
           );
           contentElement.css(
-            $materialEffects.TRANSFORM, 
+            $mdEffects.TRANSFORM, 
             'translate3d(0,' + ((toolbarHeight - y) * shrinkSpeedFactor) + 'px,0)'
           );
 

@@ -1,0 +1,101 @@
+{% macro typeList(types) -%}
+{%- set sep = joiner('|') %}
+{% for typeName in types %}<code class="api-type {$ typeName | typeClass $}">{$ typeName | escape $}</code>{% endfor %}
+{%- endmacro -%}
+
+{%- macro paramList(params) %}
+  {% for param in params %}
+  <md-item class="api-params-item">
+    <md-item-content>
+      <div class="api-params-label" flex="35" flex-sm="20">
+        {$ param.name $}
+        {% if param.alias %}| {$ param.alias $}{% endif %}
+        <span block hide-sm>
+          {$ typeList(param.typeList) $}
+        </span>
+        {% if param.type.optional %}<div><em>(optional)</em></div>{% endif %}
+      </div>
+      <div class="api-params-label" hide block-sm flex-sm="15">
+        {$ typeList(param.typeList) $}
+      </div>
+      <div class="api-params-content" flex>
+        <p>{$ param.description | marked $}
+        {% if param.default %}<p><em>(default: {$ param.default $})</em></p>{% endif %}
+        </p>
+      </div>
+    </md-item-content>
+  </md-item>
+  {% endfor %}
+{% endmacro -%}
+
+{%- macro paramTable(params) %}
+<md-list>
+  <md-item>
+    <md-item-content>
+      <div class="api-params-label api-params-title" layout layout-align="center center" flex="35" flex-sm="20">
+        Parameter
+      </div>
+      <div class="api-params-label api-params-title" hide block-sm flex-sm="15" layout layout-align="center center">
+        Type
+      </div>
+      <div class="api-params-content api-params-title" flex layout="horizontal" layout-align="center center" flex>
+        Description
+      </div>
+    </md-item-content>
+  </md-item>
+  {$ paramList(params) $}
+</md-list>
+{% endmacro -%}
+
+
+
+{%- macro directiveParam(name, type, join, sep) %}
+  {%- if type.optional %}[{% endif -%}
+  {$ name | dashCase $}{$ join $}{$ type.description $}{$ sep $}
+  {%- if type.optional %}]{% endif -%}
+{% endmacro -%}
+
+{%- macro functionOptionSyntax(fn) %}
+  {%- set sep = joiner(', ') -%}
+  <code>{$ fn.name $}({</code>
+    {%- for param in fn.params %}
+    <br/>&nbsp;&nbsp;<code>{%- if param.type.optional %}[{% endif -%}
+    {$ param.name $}: {$ param.type.name $}
+    {%- if param.type.optional %}]{% endif -%},</code>
+    {% endfor %}
+  <br/><code>});</code>
+{% endmacro -%}
+
+{%- macro functionSyntax(fn) %}
+  {%- set sep = joiner(', ') -%}
+  {$ fn.name $}({%- for param in fn.params %}{$ sep() $}
+    {%- if param.type.optional %}[{% endif -%}
+    {$ param.name $}
+    {%- if param.type.optional %}]{% endif -%}
+    {% endfor %});
+{% endmacro -%}
+
+{%- macro returnTable(fn) -%}
+<md-list>
+  <md-item>
+    <md-item-content>
+      <div class="api-params-label api-params-title" layout layout-align="center center" flex="35" flex-sm="20">
+        Returns
+      </div>
+      <div class="api-params-content api-params-title" flex layout="horizontal" layout-align="center center" flex>
+        Description
+      </div>
+    </md-item-content>
+  </md-item>
+  <md-item>
+    <md-item-content>
+      <div class="api-params-label" flex="35" flex-sm="20">
+        {$ typeList(fn.typeList) $}
+      </div>
+      <div class="api-params-content" flex>
+        {$ fn.description | marked $}
+      </div>
+    </md-item-content>
+  </md-item>
+</md-list>
+{%- endmacro -%}

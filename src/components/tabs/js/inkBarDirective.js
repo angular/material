@@ -5,19 +5,19 @@
  */
 angular.module('material.components.tabs')
 
-.directive('materialTabsInkBar', [
-  '$materialEffects',
+.directive('mdTabsInkBar', [
+  '$mdEffects',
   '$window',
   '$$rAF',
   '$timeout',
-  MaterialTabInkDirective
+  MdTabInkDirective
 ]);
 
-function MaterialTabInkDirective($materialEffects, $window, $$rAF, $timeout) {
+function MdTabInkDirective($mdEffects, $window, $$rAF, $timeout) {
 
   return {
     restrict: 'E',
-    require: ['^?nobar', '^materialTabs'],
+    require: ['^?nobar', '^mdTabs'],
     link: postLink
   };
 
@@ -30,8 +30,8 @@ function MaterialTabInkDirective($materialEffects, $window, $$rAF, $timeout) {
     var debouncedUpdateBar = $$rAF.debounce(updateBar);
 
     scope.$watch(tabsCtrl.selected, updateBar);
-    scope.$on('$materialTabsChanged', debouncedUpdateBar);
-    scope.$on('$materialTabsPaginationChanged', debouncedUpdateBar);
+    scope.$on('$mdTabsChanged', debouncedUpdateBar);
+    scope.$on('$mdTabsPaginationChanged', debouncedUpdateBar);
     angular.element($window).on('resize', onWindowResize);
 
     function onWindowResize() {
@@ -59,7 +59,7 @@ function MaterialTabInkDirective($materialEffects, $window, $$rAF, $timeout) {
           display : width > 0 ? 'block' : 'none',
           width: width + 'px'
         });
-        element.css($materialEffects.TRANSFORM, 'translate3d(' + left + 'px,0,0)');
+        element.css($mdEffects.TRANSFORM, 'translate3d(' + left + 'px,0,0)');
       }
     }
 

@@ -3,7 +3,7 @@ angular.module('material.services.attrBind', [
   .factory('$attrBind', [
     '$parse', 
     '$interpolate', 
-    MaterialAttrBind 
+    MdAttrBind 
   ]);
 
 /**
@@ -11,7 +11,7 @@ angular.module('material.services.attrBind', [
  *
  * @private
  */
-function MaterialAttrBind($parse, $interpolate) {
+function MdAttrBind($parse, $interpolate) {
   var LOCAL_REGEXP = /^\s*([@=&])(\??)\s*(\w*)\s*$/;
 
   return function (scope, attrs, bindDefinition, bindDefaults) {

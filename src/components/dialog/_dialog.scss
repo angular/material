@@ -1,8 +1,7 @@
-.material-dialog-container {
-  
-  @include flex-display();
-  @include flex-justify-content(center);
-  @include flex-align-items(center);
+.md-dialog-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed;
   left: 0;
   top: 0;
@@ -11,18 +10,18 @@
   z-index: $z-index-dialog;
 
   &.active {
-    @include transition(all 0.2s cubic-bezier(0.4, 0, 0.2, 1));
-    @include transform(translate3d(0,0,0) scale(1.0));
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translate3d(0,0,0) scale(1.0);
     opacity: 1;
   }
   &.ng-leave.ng-leave-active {
-    @include transform(translate3d(0,100%,0) scale(0.5));
+    transform: translate3d(0,100%,0) scale(0.5);
     opacity: 0;
   }
 
 }
 
-material-dialog {
+md-dialog {
 
   min-width: 240px;
   max-width: 80%;
@@ -35,22 +34,22 @@ material-dialog {
 
   box-shadow: $whiteframe-shadow-z5;
 
-  @include flex-display();
-  @include flex-direction(column);
+  display: flex;
+  flex-direction: column;
 
   .dialog-content {
-    @include flex-order(1);
+    flex-order: 1;
     padding: 24px;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
   }
 
   .dialog-actions {
-    @include flex-order(2);
-    @include box-sizing(border-box);
-    @include flex-display();
-    @include flex-align-items(center);
-    @include flex-justify-content(flex-end);
+    display: flex;
+    flex-order: 2;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: flex-end;
     padding: 8px 16px;
     min-height: $baseline-grid * 5;
 

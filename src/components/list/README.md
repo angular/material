@@ -1,1 +1,1 @@
-Lists, created using the `<material-list>` parent with `<material-item>` children.
+Lists, created using the `<md-list>` parent with `<md-item>` children.

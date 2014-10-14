@@ -2,25 +2,24 @@ angular.module('material.components.tabs')
 
 /**
  * @ngdoc directive
- * @name materialTabs
+ * @name mdTabs
  * @module material.components.tabs
- * @order 0
  *
  * @restrict E
  *
  * @description
- * The `<material-tabs>` directive serves as the container for 1..n `<material-tab>` child directives to produces a Tabs components.
- * In turn, the nested `<material-tab>` directive is used to specify a tab label for the **header button** and a [optional] tab view
+ * The `<md-tabs>` directive serves as the container for 1..n `<md-tab>` child directives to produces a Tabs components.
+ * In turn, the nested `<md-tab>` directive is used to specify a tab label for the **header button** and a [optional] tab view
  * content that will be associated with each tab button.
  *
  * Below is the markup for its simplest usage:
  *
  *  <hljs lang="html">
- *  <material-tabs>
- *    <material-tab label="Tab #1"></material-tab>
- *    <material-tab label="Tab #2"></material-tab>
- *    <material-tab label="Tab #3"></material-tab>
- *  <material-tabs>
+ *  <md-tabs>
+ *    <md-tab label="Tab #1"></md-tab>
+ *    <md-tab label="Tab #2"></md-tab>
+ *    <md-tab label="Tab #3"></md-tab>
+ *  <md-tabs>
  *  </hljs>
  *
  * Tabs supports three (3) usage scenarios:
@@ -40,7 +39,7 @@ angular.module('material.components.tabs')
  * *  Content can include any markup.
  * *  If a tab is disabled while active/selected, then the next tab will be auto-selected.
  * *  If the currently active tab is the last tab, then next() action will select the first tab.
- * *  Any markup (other than **`<material-tab>`** tags) will be transcluded into the tab header area BEFORE the tab buttons.
+ * *  Any markup (other than **`<md-tab>`** tags) will be transcluded into the tab header area BEFORE the tab buttons.
  *
  * @param {integer=} selected Index of the active/selected tab
  * @param {boolean=} noink If present, disables ink ripple effects.
@@ -49,31 +48,31 @@ angular.module('material.components.tabs')
  *
  * @usage
  * <hljs lang="html">
- * <material-tabs selected="selectedIndex" >
+ * <md-tabs selected="selectedIndex" >
  *   <img ng-src="/img/angular.png" class="centered">
  *
- *   <material-tab
+ *   <md-tab
  *      ng-repeat="tab in tabs | orderBy:predicate:reversed"
  *      on-select="onTabSelected(tab)"
  *      on-deselect="announceDeselected(tab)"
  *      disabled="tab.disabled" >
  *
- *       <material-tab-label>
+ *       <md-tab-label>
  *           {{tab.title}}
  *           <img src="/img/removeTab.png"
  *                ng-click="removeTab(tab)"
  *                class="delete" >
- *       </material-tab-label>
+ *       </md-tab-label>
  *
  *       {{tab.content}}
  *
- *   </material-tab>
+ *   </md-tab>
  *
- * </material-tabs>
+ * </md-tabs>
  * </hljs>
  *
  */
-.directive('materialTabs', [
+.directive('mdTabs', [
   '$parse',
   TabsDirective
 ]);
@@ -81,8 +80,8 @@ angular.module('material.components.tabs')
 function TabsDirective($parse) {
   return {
     restrict: 'E',
-    controller: '$materialTabs',
-    require: 'materialTabs',
+    controller: '$mdTabs',
+    require: 'mdTabs',
     transclude: true,
     scope: {
       selectedIndex: '=?selected'
@@ -97,10 +96,10 @@ function TabsDirective($parse) {
         '</div>' +
 
         // overflow: hidden container when paginating
-        '<div class="tabs-header-items-container" material-tabs-pagination>' +
-          // flex container for <material-tab> elements
+        '<div class="tabs-header-items-container" md-tabs-pagination>' +
+          // flex container for <md-tab> elements
           '<div class="tabs-header-items" ng-transclude></div>' +
-          '<material-tabs-ink-bar></material-tabs-ink-bar>' +
+          '<md-tabs-ink-bar></md-tabs-ink-bar>' +
         '</div>' +
 
         '<div class="tab-paginator next" ' +

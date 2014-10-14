@@ -1,6 +1,6 @@
 angular.module('material.services.aria', [])
 
-.service('$materialAria', [
+.service('$mdAria', [
   '$log',
   AriaService
 ]);
@@ -40,8 +40,8 @@ function AriaService($log) {
   /**
    * Gets the tag definition from a node's outerHTML
    * @example getTagString(
-   *   '<material-button foo="bar">Hello</material-button>'
-   * ) // => '<material-button foo="bar">'
+   *   '<md-button foo="bar">Hello</md-button>'
+   * ) // => '<md-button foo="bar">'
    */
   function getTagString(node) {
     var html = node.outerHTML;

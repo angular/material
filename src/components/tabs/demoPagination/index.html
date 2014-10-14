@@ -1,0 +1,102 @@
+<div ng-controller="AppCtrl">
+
+    <md-tabs selected="data.selectedIndex"  center>
+        <md-tab label="ITEM ONE"></md-tab>
+        <md-tab label="ITEM TWO"></md-tab>
+        <md-tab label="ITEM THREE" ></md-tab>
+        <md-tab label="ITEM FOUR" ng-disabled="locked"></md-tab>
+        <md-tab label="ITEM FIVE"></md-tab>
+        <md-tab label="ITEM SIX"></md-tab>
+        <md-tab label="ITEM SEVEN"></md-tab>
+        <md-tab label="ITEM EIGHT"></md-tab>
+        <md-tab label="ITEM NINE"></md-tab>
+        <md-tab label="ITEM TEN"></md-tab>
+    </md-tabs>
+
+    <div class="animate-switch-container" ng-switch on="data.selectedIndex">
+        <div class="animate-switch tab1"
+             ng-switch-when="0"
+             md-swipe-left="next()"
+             md-swipe-right="previous()" >
+            View for Item #1<br/>
+            Selection index = 0
+        </div>
+        <div class="animate-switch tab2"
+             ng-switch-when="1"
+             md-swipe-left="next()"
+             md-swipe-right="previous()" >
+            View for Item #2<br/>
+            Selection index = 1
+        </div>
+        <div class="animate-switch tab3"
+             ng-switch-when="2"
+             md-swipe-left="next()"
+             md-swipe-right="previous()" >
+            View for Item #3<br/>
+            Selection index = 2
+        </div>
+        <div class="animate-switch tab4"
+             ng-switch-when="3"
+             md-swipe-left="next()"
+             md-swipe-right="previous()" >
+            View for Item #4<br/>
+            Selection index = 3
+        </div>
+        <div class="animate-switch tab5"
+             ng-switch-when="4"
+             md-swipe-left="next()"
+             md-swipe-right="previous()" >
+            View for Item #5<br/>
+            Selection index = 4
+        </div>
+        <div class="animate-switch tab6"
+             ng-switch-when="5"
+             md-swipe-left="next()"
+             md-swipe-right="previous()" >
+            View for Item #6<br/>
+            Selection index = 5
+        </div>
+        <div class="animate-switch tab7"
+             ng-switch-when="6"
+             md-swipe-left="next()"
+             md-swipe-right="previous()" >
+            View for Item #7<br/>
+            Selection index = 6
+        </div>
+        <div class="animate-switch tab8"
+             ng-switch-when="7"
+             md-swipe-left="next()"
+             md-swipe-right="previous()" >
+            View for Item #8<br/>
+            Selection index = 7
+        </div>
+        <div class="animate-switch tab9"
+             ng-switch-when="8"
+             md-swipe-left="next()"
+             md-swipe-right="previous()" >
+            View for Item #9<br/>
+            Selection index = 8
+        </div>
+        <div class="animate-switch tab10"
+             ng-switch-when="9"
+             md-swipe-left="next()"
+             md-swipe-right="previous()" >
+            View for Item #10<br/>
+            Selection index = 9
+        </div>
+    </div>
+
+
+    <div layout="vertical" layout-padding style="margin-top: 10px;">
+        <md-input-group>
+            <label>SelectedIndex</label>
+            <input type="number" ng-model="data.selectedIndex">
+        </md-input-group>
+
+        <md-checkbox ng-model="locked" aria-label="Disabled">
+          Disable Tab #4?
+        </md-checkbox>
+    </div>
+
+
+</div>

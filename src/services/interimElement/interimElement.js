@@ -1,4 +1,4 @@
-/**
+/*
  * @ngdoc module
  * @name material.services.interimElement
  * @description InterimElement
@@ -13,25 +13,25 @@ angular.module('material.services.interimElement', [
   '$timeout',
   '$rootElement',
   '$animate',
-  '$materialCompiler',
+  '$mdCompiler',
   InterimElementFactory
 ]);
 
-/**
+/*
  * @ngdoc service
  * @name $$interimElement
  *
  * @description
  *
  * Factory that contructs `$$interimElement.$service` services. 
- * Used internally in material for elements that appear on screen temporarily.
+ * Used internally in material design for elements that appear on screen temporarily.
  * The service provides a promise-like API for interacting with the temporary
  * elements.
  *
  * ```js
- * app.service('$materialToast', function($$interimElement) {
- *   var $materialToast = $$interimElement(toastDefaultOptions);
- *   return $materialToast;
+ * app.service('$mdToast', function($$interimElement) {
+ *   var $mdToast = $$interimElement(toastDefaultOptions);
+ *   return $mdToast;
  * });
  * ```
  * @param {object=} defaultOptions Options used by default for the `show` method on the service.
@@ -40,11 +40,11 @@ angular.module('material.services.interimElement', [
  *
  */
 
-function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate, $materialCompiler) {
+function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate, $mdCompiler) {
 
   return function createInterimElementService(defaults) {
 
-    /**
+    /*
      * @ngdoc service
      * @name $$interimElement.$service
      *
@@ -72,7 +72,7 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
       cancel: cancel
     };
 
-    /**
+    /*
      * @ngdoc method
      * @name $$interimElement.$service#show
      * @kind function
@@ -98,7 +98,7 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
       });
     }
 
-    /**
+    /*
      * @ngdoc method
      * @name $$interimElement.$service#hide
      * @kind function
@@ -118,7 +118,7 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
       });
     }
 
-    /**
+    /*
      * @ngdoc method
      * @name $$interimElement.$service#cancel
      * @kind function
@@ -153,17 +153,16 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
         scope: options.scope || $rootScope.$new(options.isolateScope)
       }, defaults, options);
 
-      self = {
+      return self = {
         options: options,
         deferred: $q.defer(),
         show: function() {
-          return $materialCompiler.compile(options).then(function(compiledData) {
+          return $mdCompiler.compile(options).then(function(compiledData) {
             // Search for parent at insertion time, if not specified
             if (!options.parent) {
               options.parent = $rootElement.find('body');
               if (!options.parent.length) options.parent = $rootElement;
             }
-
             element = compiledData.link(options.scope);
             var ret = options.onShow(options.scope, element, options);
             return $q.when(ret)
@@ -190,7 +189,6 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
           });
         }
       };
-      return self;
     }
   };
 }

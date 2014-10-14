@@ -1,0 +1,13 @@
+body {
+  padding: 20px;
+}
+
+
+h4 {
+    margin: 10px 0;
+}
+
+md-progress-circular {
+    padding-top:10px;
+    margin-bottom:20px;
+}

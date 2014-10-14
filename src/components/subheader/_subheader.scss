@@ -1,4 +1,4 @@
-@include keyframes(subheaderStickyHoverIn) {
+@keyframes subheaderStickyHoverIn {
   0% {
     box-shadow: 0 0 0 0 transparent;
   }
@@ -6,7 +6,7 @@
     box-shadow: $subheader-sticky-shadow;
   }
 }
-@include keyframes(subheaderStickyHoverOut) {
+@keyframes subheaderStickyHoverOut {
   0% {
     box-shadow: $subheader-sticky-shadow;
   }
@@ -15,7 +15,7 @@
   }
 }
 
-.material-subheader {
+.md-subheader {
   color: $text-medium;
   display: block;
   font-size: $subheader-font-size;
@@ -27,7 +27,7 @@
   background-color: white;
   position: relative;
 
-  &.material-subheader-colored {
+  &.md-subheader-colored {
     color: $theme-light-blue
   }
 
@@ -41,12 +41,12 @@
       content: '';
     }
 
-    @include transition(0.2s ease-out margin);
+    transition: 0.2s ease-out margin;
     &[sticky-state="active"] {
       margin-top: -2px;
     }
-    &:not(.material-sticky-clone)[sticky-prev-state="active"]:after {
-      @include animation(subheaderStickyHoverOut 0.3s ease-out both);
+    &:not(.md-sticky-clone)[sticky-prev-state="active"]:after {
+      animation: subheaderStickyHoverOut 0.3s ease-out both;
     }
   }
 }

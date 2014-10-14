@@ -5,56 +5,59 @@
  * @description radioButton module!
  */
 angular.module('material.components.radioButton', [
+  'material.core',
   'material.animations',
   'material.services.aria'
 ])
-  .directive('materialRadioGroup', [
-    materialRadioGroupDirective
+  .directive('mdRadioGroup', [
+    '$mdUtil',
+    '$mdConstant',
+    mdRadioGroupDirective
   ])
-  .directive('materialRadioButton', [
-    '$materialAria',
-    materialRadioButtonDirective
+  .directive('mdRadioButton', [
+    '$mdAria',
+    '$mdUtil',
+    mdRadioButtonDirective
   ]);
 
 /**
  * @ngdoc directive
  * @module material.components.radioButton
- * @name materialRadioGroup
+ * @name mdRadioGroup
  *
- * @order 0
  * @restrict E
  *
  * @description
- * The `<material-radio-group>` directive identifies a grouping
- * container for the 1..n grouped material radio buttons; specified using nested
- * `<material-radio-button>` tags.
+ * The `<md-radio-group>` directive identifies a grouping
+ * container for the 1..n grouped radio buttons; specified using nested
+ * `<md-radio-button>` tags.
  *
  * @param {string} ngModel Assignable angular expression to data-bind to.
  * @param {boolean=} noink Use of attribute indicates flag to disable ink ripple effects.
  *
  * @usage
  * <hljs lang="html">
- * <material-radio-group ng-model="selected">
+ * <md-radio-group ng-model="selected">
  *
- *   <material-radio-button
+ *   <md-radio-button
  *        ng-repeat="d in colorOptions"
  *        ng-value="d.value" aria-label="{{ d.label }}">
  *
  *          {{ d.label }}
  *
- *   </material-radio-button>
+ *   </md-radio-button>
  *
- * </material-radio-group>
+ * </md-radio-group>
  * </hljs>
  *
  */
-function materialRadioGroupDirective() {
+function mdRadioGroupDirective($mdUtil, $mdConstant) {
   RadioGroupController.prototype = createRadioGroupControllerProto();
 
   return {
     restrict: 'E',
     controller: ['$element', RadioGroupController],
-    require: ['materialRadioGroup', '?ngModel'],
+    require: ['mdRadioGroup', '?ngModel'],
     link: link
   };
 
@@ -65,11 +68,11 @@ function materialRadioGroupDirective() {
       };
 
     function keydownListener(ev) {
-      if (ev.which === Constant.KEY_CODE.LEFT_ARROW || ev.which === Constant.KEY_CODE.UP_ARROW) {
+      if (ev.which === $mdConstant.KEY_CODE.LEFT_ARROW || ev.which === $mdConstant.KEY_CODE.UP_ARROW) {
         ev.preventDefault();
         rgCtrl.selectPrevious();
       }
-      else if (ev.which === Constant.KEY_CODE.RIGHT_ARROW || ev.which === Constant.KEY_CODE.DOWN_ARROW) {
+      else if (ev.which === $mdConstant.KEY_CODE.RIGHT_ARROW || ev.which === $mdConstant.KEY_CODE.DOWN_ARROW) {
         ev.preventDefault();
         rgCtrl.selectNext();
       }
@@ -134,13 +137,13 @@ function materialRadioGroupDirective() {
    */
   function changeSelectedButton(parent, increment) {
     // Coerce all child radio buttons into an array, then wrap then in an iterator
-    var buttons = Util.iterator(
-      Array.prototype.slice.call(parent[0].querySelectorAll('material-radio-button')),
+    var buttons = $mdUtil.iterator(
+      Array.prototype.slice.call(parent[0].querySelectorAll('md-radio-button')),
       true
     );
 
     if (buttons.count()) {
-      var selected = parent[0].querySelector('material-radio-button.material-checked');
+      var selected = parent[0].querySelector('md-radio-button.md-checked');
       var target = buttons[increment < 0 ? 'previous' : 'next'](selected) || 
         buttons.first();
       // Activate radioButton's click listener (triggerHandler won't create a real click event)
@@ -153,16 +156,15 @@ function materialRadioGroupDirective() {
 /**
  * @ngdoc directive
  * @module material.components.radioButton
- * @name materialRadioButton
+ * @name mdRadioButton
  *
- * @order 1
  * @restrict E
  *
  * @description
- * The `<material-radio-button>`directive is the child directive required to be used within `<material-radioo-group>` elements.
+ * The `<md-radio-button>`directive is the child directive required to be used within `<md-radioo-group>` elements.
  *
  * While similar to the `<input type="radio" ng-model="" value="">` directive,
- * the `<material-radio-button>` directive provides material ink effects, ARIA support, and
+ * the `<md-radio-button>` directive provides ink effects, ARIA support, and
  * supports use within named radio groups.
  *
  * @param {string} ngModel Assignable angular expression to data-bind to.
@@ -177,30 +179,30 @@ function materialRadioGroupDirective() {
  * @usage
  * <hljs lang="html">
  *
- * <material-radio-button value="1" aria-label="Label 1">
+ * <md-radio-button value="1" aria-label="Label 1">
  *   Label 1
- * </material-radio-button>
+ * </md-radio-button>
  *
- * <material-radio-button ng-model="color" ng-value="specialValue" aria-label="Green">
+ * <md-radio-button ng-model="color" ng-value="specialValue" aria-label="Green">
  *   Green
- * </material-radio-button>
+ * </md-radio-button>
  *
  * </hljs>
  *
  */
-function materialRadioButtonDirective($materialAria) {
+function mdRadioButtonDirective($mdAria, $mdUtil) {
 
-  var CHECKED_CSS = 'material-checked';
+  var CHECKED_CSS = 'md-checked';
 
   return {
     restrict: 'E',
-    require: '^materialRadioGroup',
+    require: '^mdRadioGroup',
     transclude: true,
-    template: '<div class="material-container" ink-ripple="checkbox">' +
-                '<div class="material-off"></div>' +
-                '<div class="material-on"></div>' +
+    template: '<div class="md-container" ink-ripple="checkbox">' +
+                '<div class="md-off"></div>' +
+                '<div class="md-on"></div>' +
               '</div>' +
-              '<div ng-transclude class="material-label"></div>',
+              '<div ng-transclude class="md-label"></div>',
     link: link
   };
 
@@ -252,7 +254,7 @@ function materialRadioButtonDirective($materialAria) {
         'aria-checked' : 'false'
       });
 
-      $materialAria.expect(element, 'aria-label', element.text());
+      $mdAria.expect(element, 'aria-label', element.text());
 
       /**
        * Build a unique ID for each radio button that will be used with aria-activedescendant.
@@ -260,7 +262,7 @@ function materialRadioButtonDirective($materialAria) {
        * @returns {*|string}
        */
       function buildAriaID() {
-        return attr.id || ( 'radio' + "_" + Util.nextUid() );
+        return attr.id || ( 'radio' + "_" + $mdUtil.nextUid() );
       }
     }
   }

@@ -1,13 +1,13 @@
-material-card {
+md-card {
   display: block;
-  @include box-sizing(border-box);
+  box-sizing: border-box;
 
   box-shadow: $card-box-shadow;
   margin: $card-margin;
   padding: $card-padding;
   border-radius: $card-border-radius;
 
-  .material-card-image {
+  .md-card-image {
     display: block;
     width: 100%;
     border-radius: $card-border-radius $card-border-radius 0 0;

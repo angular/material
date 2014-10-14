@@ -1,8 +1,8 @@
 
 angular.module('material.components.tabs')
 
-.directive('materialTabsPagination', [
-  '$materialEffects',
+.directive('mdTabsPagination', [
+  '$mdEffects',
   '$window',
   '$$rAF',
   '$$q',
@@ -10,7 +10,7 @@ angular.module('material.components.tabs')
   TabPaginationDirective
 ]);
 
-function TabPaginationDirective($materialEffects, $window, $$rAF, $$q, $timeout) {
+function TabPaginationDirective($mdEffects, $window, $$rAF, $$q, $timeout) {
 
   // TODO allow configuration of TAB_MIN_WIDTH
   // Must match tab min-width rule in _tabs.scss
@@ -20,7 +20,7 @@ function TabPaginationDirective($materialEffects, $window, $$rAF, $$q, $timeout)
 
   return {
     restrict: 'A',
-    require: '^materialTabs',
+    require: '^mdTabs',
     link: postLink
   };
 
@@ -34,12 +34,13 @@ function TabPaginationDirective($materialEffects, $window, $$rAF, $$q, $timeout)
       clickPrevious: function() { userChangePage(-1); }
     };
 
+    updatePagination();
     var debouncedUpdatePagination = $$rAF.debounce(updatePagination);
 
-    scope.$on('$materialTabsChanged', debouncedUpdatePagination);
+    scope.$on('$mdTabsChanged', debouncedUpdatePagination);
     angular.element($window).on('resize', debouncedUpdatePagination);
 
-    // Listen to focus events bubbling up from material-tab elements
+    // Listen to focus events bubbling up from md-tab elements
     tabsParent.on('focusin', onTabsFocusIn);
 
     scope.$on('$destroy', function() {
@@ -53,7 +54,7 @@ function TabPaginationDirective($materialEffects, $window, $$rAF, $$q, $timeout)
     function onTabsFocusIn(ev) {
       if (!state.active) return;
 
-      var tab = angular.element(ev.target).controller('materialTab');
+      var tab = angular.element(ev.target).controller('mdTab');
       var pageIndex = getPageForTab(tab);
       if (pageIndex !== state.page) {
         // If the focused element is on a new page, don't focus yet.
@@ -101,7 +102,7 @@ function TabPaginationDirective($materialEffects, $window, $$rAF, $$q, $timeout)
     }
 
     function updatePagination() {
-      var tabs = element.find('material-tab');
+      var tabs = element.find('md-tab');
       var tabsWidth = element.parent().prop('clientWidth') - PAGINATORS_WIDTH;
 
       var needPagination = tabsWidth && TAB_MIN_WIDTH * tabsCtrl.count() > tabsWidth;
@@ -144,15 +145,15 @@ function TabPaginationDirective($materialEffects, $window, $$rAF, $$q, $timeout)
       var deferred = $$q.defer();
 
       tabsCtrl.$$pagingOffset = x;
-      tabsParent.css($materialEffects.TRANSFORM, 'translate3d(' + x + 'px,0,0)');
-      tabsParent.on($materialEffects.TRANSITIONEND_EVENT, onTabsParentTransitionEnd);
+      tabsParent.css($mdEffects.TRANSFORM, 'translate3d(' + x + 'px,0,0)');
+      tabsParent.on($mdEffects.TRANSITIONEND_EVENT, onTabsParentTransitionEnd);
 
       return deferred.promise;
 
       function onTabsParentTransitionEnd(ev) {
         // Make sure this event didn't bubble up from an animation in a child element.
         if (ev.target === tabsParent[0]) {
-          tabsParent.off($materialEffects.TRANSITIONEND_EVENT, onTabsParentTransitionEnd);
+          tabsParent.off($mdEffects.TRANSITIONEND_EVENT, onTabsParentTransitionEnd);
           deferred.resolve();
         }
       }
@@ -179,7 +180,7 @@ function TabPaginationDirective($materialEffects, $window, $$rAF, $$q, $timeout)
       state.page = page;
 
       $timeout(function() {
-        scope.$broadcast('$materialTabsPaginationChanged');
+        scope.$broadcast('$mdTabsPaginationChanged');
       });
 
       return slideTabButtons(-page * state.itemsPerPage * state.tabWidth);

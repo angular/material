@@ -1,15 +1,15 @@
-describe('<material-switch>', function() {
-  var CHECKED_CSS = 'material-checked';
+describe('<md-switch>', function() {
+  var CHECKED_CSS = 'md-checked';
 
   beforeEach(module('ngAria'));
   beforeEach(module('material.components.switch'));
 
   it('should set checked css class and aria-checked attributes', inject(function($compile, $rootScope) {
     var element = $compile('<div>' +
-                             '<material-switch ng-model="blue">' +
-                             '</material-switch>' +
-                             '<material-switch ng-model="green">' +
-                             '</material-switch>' +
+                             '<md-switch ng-model="blue">' +
+                             '</md-switch>' +
+                             '<md-switch ng-model="green">' +
+                             '</md-switch>' +
                            '</div>')($rootScope);
 
     $rootScope.$apply(function(){
@@ -17,7 +17,7 @@ describe('<material-switch>', function() {
       $rootScope.green = true;
     });
 
-    var cbElements = element.find('.material-switch-thumb');
+    var cbElements = element.find('.md-switch-thumb');
 
     expect(cbElements.eq(0).hasClass(CHECKED_CSS)).toEqual(false);
     expect(cbElements.eq(1).hasClass(CHECKED_CSS)).toEqual(true);
@@ -28,11 +28,11 @@ describe('<material-switch>', function() {
 
   it('should be disabled with disabled attr', inject(function($compile, $rootScope) {
     var element = $compile('<div>' +
-                             '<material-switch disabled ng-model="blue">' +
-                             '</material-switch>' +
+                             '<md-switch disabled ng-model="blue">' +
+                             '</md-switch>' +
                            '</div>')($rootScope);
 
-    var switchThumb = element.find('.material-switch-thumb');
+    var switchThumb = element.find('.md-switch-thumb');
 
     $rootScope.$apply('blue = false');
 

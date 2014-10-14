@@ -1,1 +1,1 @@
-Simple range sliders, created using the `<material-slider>` directive.
+Simple range sliders, created using the `<md-slider>` directive.

@@ -1,11 +1,11 @@
 
-@include keyframes(sliderFocusThumb) {
+@keyframes sliderFocusThumb {
   0% {
     opacity: 0;
-    @include transform(scale(0.0));
+    transform: scale(0.0);
   }
   50% {
-    @include transform(scale(1.0));
+    transform: scale(1.0);
     opacity: 1;
   }
   100% {
@@ -22,7 +22,7 @@
   border-radius: max($width, $height);
 }
 
-material-slider {
+md-slider {
 
   height: $slider-height;
   position: relative;
@@ -48,7 +48,7 @@ material-slider {
   }
   .slider-track-fill {
     background: #03A9F4;
-    @include transition(width 0.05s linear);
+    transition: width 0.05s linear;
   }
   .slider-track-ticks {
     position: absolute;
@@ -64,9 +64,8 @@ material-slider {
     position: absolute;
     left: 0;
     top: 0;
-    @include transform(translate3d(0,0,0));
+    transform: translate3d(0,0,0);
     transition: transform 0.1s linear;
-    -webkit-transition: -webkit-transform 0.1s linear;
   }
   .slider-thumb {
     z-index: 1;
@@ -90,17 +89,17 @@ material-slider {
       background-color: $theme-light-blue;
     }
 
-    @include transform(scale($slider-thumb-default-scale));
-    @include transition(all 0.1s linear);
+    transform: scale($slider-thumb-default-scale);
+    transition: all 0.1s linear;
   }
 
   /* The sign that's focused in discrete mode */
   .slider-sign {
 
     /* Center the children (slider-thumb-text) */
-    @include flex-display();
-    @include flex-align-items(center);
-    @include flex-justify-content(center);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     position: absolute;
     left: -($slider-sign-height / 2);
@@ -110,8 +109,8 @@ material-slider {
     border-radius: max($slider-sign-height, $slider-sign-width);
     background-color: $theme-light-blue;
 
-    @include transform(scale(0.4) translate3d(0,(-$slider-sign-top + 8) / 0.4,0));
-    @include transition(all 0.2s ease-in-out);
+    transform: scale(0.4) translate3d(0,(-$slider-sign-top + 8) / 0.4,0);
+    transition: all 0.2s ease-in-out;
 
     /* The arrow pointing down under the sign */
     &:after {
@@ -125,8 +124,8 @@ material-slider {
       border-top: $slider-arrow-height solid $theme-light-blue;
 
       opacity: 0;
-      @include transform(translate3d(0,-8px,0));
-      @include transition(all 0.2s ease-in-out);
+      transform: translate3d(0,-8px,0);
+      transition: all 0.2s ease-in-out;
     }
 
     .slider-thumb-text {
@@ -145,21 +144,21 @@ material-slider {
     display: none;
     opacity: 0;
     background-color: #C0C0C0;
-    @include animation(sliderFocusThumb 0.4s linear);
+    animation: sliderFocusThumb 0.4s linear;
   }
   .slider-focus-ring {
     @include slider-thumb-position($slider-focus-thumb-width, $slider-focus-thumb-height);
     border: 2px solid #D6D6D6;
     background-color: transparent;
-    @include transform(scale(0));
-    @include transition(all 0.2s linear);
+    transform: scale(0);
+    transition: all 0.2s linear;
   }
   .slider-disabled-thumb {
     @include slider-thumb-position(
       $slider-thumb-width + $slider-thumb-disabled-border * 2,
       $slider-thumb-height + $slider-thumb-disabled-border * 2
     );
-    @include transform(scale($slider-thumb-disabled-scale));
+    transform: scale($slider-thumb-disabled-scale);
     border: $slider-thumb-disabled-border solid white;
     display: none;
   }
@@ -183,7 +182,7 @@ material-slider {
   &.panning {
     .slider-thumb-container,
     .slider-track-fill {
-      @include transition(none);
+      transition: none;
     }
   }
 
@@ -197,7 +196,7 @@ material-slider {
     &:not([disabled]) {
       &:hover {
         .slider-thumb {
-          @include transform(scale($slider-thumb-hover-scale));
+          transform: scale($slider-thumb-hover-scale);
         }
       }
 
@@ -207,10 +206,10 @@ material-slider {
           display: block;
         }
         .slider-focus-ring {
-          @include transform(scale(1));
+          transform: scale(1);
         }
         .slider-thumb {
-          @include transform(scale($slider-thumb-focus-scale));
+          transform: scale($slider-thumb-focus-scale);
         }
       }
     }
@@ -229,7 +228,7 @@ material-slider {
         .slider-sign,
         .slider-sign:after {
           opacity: 1;
-          @include transform(translate3d(0,0,0) scale(1.0));
+          transform: translate3d(0,0,0) scale(1.0);
         }
       }
     }
@@ -240,7 +239,7 @@ material-slider {
       display: none;
     }
     .slider-thumb {
-      @include transform(scale($slider-thumb-disabled-scale));
+      transform: scale($slider-thumb-disabled-scale);
       &:after {
         border-color: #BEBEBE;
       }
@@ -254,5 +253,4 @@ material-slider {
       display: block;
     }
   }
-
 }

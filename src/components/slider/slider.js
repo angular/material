@@ -3,20 +3,21 @@
  * @name material.components.slider
  */
 angular.module('material.components.slider', [
+  'material.core',
   'material.animations',
   'material.services.aria'
 ])
-.directive('materialSlider', [
+.directive('mdSlider', [
   SliderDirective
 ]);
 
 /**
  * @ngdoc directive
- * @name materialSlider
+ * @name mdSlider
  * @module material.components.slider
  * @restrict E
  * @description
- * The `<material-slider>` component allows the user to choose from a range of
+ * The `<md-slider>` component allows the user to choose from a range of
  * values.
  *
  * It has two modes: 'normal' mode, where the user slides between a wide range
@@ -30,13 +31,13 @@ angular.module('material.components.slider', [
  * @usage
  * <h4>Normal Mode</h4>
  * <hljs lang="html">
- * <material-slider ng-model="myValue" min="5" max="500">
- * </material-slider>
+ * <md-slider ng-model="myValue" min="5" max="500">
+ * </md-slider>
  * </hljs>
  * <h4>Discrete Mode</h4>
  * <hljs lang="html">
- * <material-slider discrete ng-model="myDiscreteValue" step="10" min="10" max="130">
- * </material-slider>
+ * <md-slider discrete ng-model="myDiscreteValue" step="10" min="10" max="130">
+ * </md-slider>
  * </hljs>
  *
  * @param {boolean=} discrete Whether to enable discrete mode.
@@ -47,15 +48,17 @@ angular.module('material.components.slider', [
 function SliderDirective() {
   return {
     scope: {},
-    require: ['?ngModel', 'materialSlider'],
+    require: ['?ngModel', 'mdSlider'],
     controller: [
       '$scope',
       '$element',
       '$attrs',
       '$$rAF',
       '$window',
-      '$materialEffects',
-      '$materialAria',
+      '$mdEffects',
+      '$mdAria',
+      '$mdUtil',
+      '$mdConstant',
       SliderController
     ],
     template:
@@ -98,7 +101,7 @@ function SliderDirective() {
  * We use a controller for all the logic so that we can expose a few
  * things to unit tests
  */
-function SliderController(scope, element, attr, $$rAF, $window, $materialEffects, $materialAria) {
+function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdAria, $mdUtil, $mdConstant) {
 
   this.init = function init(ngModelCtrl) {
     var thumb = angular.element(element[0].querySelector('.slider-thumb'));
@@ -122,7 +125,7 @@ function SliderController(scope, element, attr, $$rAF, $window, $materialEffects
       updateAriaDisabled(!!attr.disabled);
     }
 
-    $materialAria.expect(element, 'aria-label');
+    $mdAria.expect(element, 'aria-label');
     element.attr('tabIndex', 0);
     element.attr('role', 'slider');
     element.on('keydown', keydownListener);
@@ -138,16 +141,18 @@ function SliderController(scope, element, attr, $$rAF, $window, $materialEffects
     hammertime.on('panend', onPanEnd);
 
     // On resize, recalculate the slider's dimensions and re-render
-    var updateAll = $$rAF.debounce(function() {
+    function updateAll() {
       refreshSliderDimensions();
       ngModelRender();
       redrawTicks();
-    });
-    updateAll();
-    angular.element($window).on('resize', updateAll);
+    }
+    setTimeout(updateAll);
+
+    var debouncedUpdateAll = $$rAF.debounce(updateAll);
+    angular.element($window).on('resize', debouncedUpdateAll);
 
     scope.$on('$destroy', function() {
-      angular.element($window).off('resize', updateAll);
+      angular.element($window).off('resize', debouncedUpdateAll);
       hammertime.destroy();
       stopDisabledWatch();
     });
@@ -209,7 +214,7 @@ function SliderController(scope, element, attr, $$rAF, $window, $materialEffects
      * Refreshing Dimensions
      */
     var sliderDimensions = {};
-    var throttledRefreshDimensions = Util.throttle(refreshSliderDimensions, 5000);
+    var throttledRefreshDimensions = $mdUtil.throttle(refreshSliderDimensions, 5000);
     refreshSliderDimensions();
     function refreshSliderDimensions() {
       sliderDimensions = trackContainer[0].getBoundingClientRect();
@@ -224,9 +229,9 @@ function SliderController(scope, element, attr, $$rAF, $window, $materialEffects
      */
     function keydownListener(ev) {
       var changeAmount;
-      if (ev.which === Constant.KEY_CODE.LEFT_ARROW) {
+      if (ev.which === $mdConstant.KEY_CODE.LEFT_ARROW) {
         changeAmount = -step;
-      } else if (ev.which === Constant.KEY_CODE.RIGHT_ARROW) {
+      } else if (ev.which === $mdConstant.KEY_CODE.RIGHT_ARROW) {
         changeAmount = step;
       }
       if (changeAmount) {
@@ -271,7 +276,7 @@ function SliderController(scope, element, attr, $$rAF, $window, $materialEffects
     function setSliderPercent(percent) {
       activeTrack.css('width', (percent * 100) + '%');
       thumbContainer.css(
-        $materialEffects.TRANSFORM,
+        $mdEffects.TRANSFORM,
         'translate3d(' + getSliderDimensions().width * percent + 'px,0,0)'
       );
       element.toggleClass('slider-min', percent === 0);
@@ -372,7 +377,7 @@ function SliderController(scope, element, attr, $$rAF, $window, $materialEffects
      * @returns {number}
      */
     function positionToPercent( x ) {
-      return (x - sliderDimensions.left) / (sliderDimensions.width);
+      return Math.max(0, Math.min(1, (x - sliderDimensions.left) / (sliderDimensions.width)));
     }
 
     /**

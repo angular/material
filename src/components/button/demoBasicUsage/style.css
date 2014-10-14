@@ -1,0 +1,30 @@
+
+/** From vulcanized demo **/
+
+section {
+  background: #f7f7f7;
+  border-radius: 3px;
+  text-align: center;
+  margin: 1em;
+  position: relative !important;
+  padding-bottom: 10px;
+}
+md-content {
+  margin-right: 7px;
+}
+section md-button:not(.md-button-fab) {
+  width: 10em;
+}
+section md-button {
+  display: block;
+  margin: 1em;
+  line-height: 25px;
+}
+.label {
+  position: absolute;
+  bottom: 5px;
+  left: 7px;
+  color: #ccc;
+  font-size: 14px;
+}
+

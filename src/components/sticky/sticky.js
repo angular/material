@@ -1,41 +1,43 @@
-/**
+/*
  * @ngdoc module
  * @name material.components.sticky
  * @description
  *
- * Sticky effects for material
+ * Sticky effects for md
  */
 
 angular.module('material.components.sticky', [
+  'material.core',
   'material.components.content',
   'material.decorators',
   'material.animations'
 ])
-.factory('$materialSticky', [
+.factory('$mdSticky', [
   '$document',
-  '$materialEffects',
+  '$mdEffects',
   '$compile',
   '$$rAF',
-  MaterialSticky
+  '$mdUtil',
+  MdSticky
 ]);
 
-/**
- * @ngdoc factory
- * @name $materialSticky
+/*
+ * @ngdoc service
+ * @name $mdSticky
  * @module material.components.sticky
  *
  * @description
- * The `$materialSticky`service provides a mixin to make elements sticky.
+ * The `$mdSticky`service provides a mixin to make elements sticky.
  *
- * @returns A `$materialSticky` function that takes three arguments:
+ * @returns A `$mdSticky` function that takes three arguments:
  *   - `scope`
  *   - `element`: The element that will be 'sticky'
- *   - `{optional}` `clone`: A clone of the element, that will be shown
+ *   - `elementClone`: A clone of the element, that will be shown
  *     when the user starts scrolling past the original element.
  *     If not provided, it will use the result of `element.clone()`.
  */
 
-function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
+function MdSticky($document, $mdEffects, $compile, $$rAF, $mdUtil) {
 
   var browserStickySupport = checkStickySupport();
 
@@ -43,7 +45,7 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
    * Registers an element as sticky, used internally by directives to register themselves
    */
   return function registerStickyElement(scope, element, stickyClone) {
-    var contentCtrl = element.controller('materialContent');
+    var contentCtrl = element.controller('mdContent');
     if (!contentCtrl) return;
 
     if (browserStickySupport) {
@@ -92,7 +94,7 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
      ***************/
     // Add an element and its sticky clone to this content's sticky collection
     function add(element, stickyClone) {
-      stickyClone.addClass('material-sticky-clone');
+      stickyClone.addClass('md-sticky-clone');
 
       var item = {
         element: element,
@@ -246,12 +248,12 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
      if (amount === null || amount === undefined) {
        if (item.translateY) {
          item.translateY = null;
-         item.clone.css($materialEffects.TRANSFORM, '');
+         item.clone.css($mdEffects.TRANSFORM, '');
        }
      } else {
        item.translateY = amount;
        item.clone.css(
-         $materialEffects.TRANSFORM, 
+         $mdEffects.TRANSFORM, 
          'translate3d(' + item.left + 'px,' + amount + 'px,0)'
        );
      }
@@ -292,11 +294,11 @@ function MaterialSticky($document, $materialEffects, $compile, $$rAF) {
         element.triggerHandler('$scrollstart');
       }
       element.triggerHandler('$scroll');
-      lastScrollTime = +Util.now();
+      lastScrollTime = +$mdUtil.now();
     });
 
     function loopScrollEvent() {
-      if (+Util.now() - lastScrollTime > SCROLL_END_DELAY) {
+      if (+$mdUtil.now() - lastScrollTime > SCROLL_END_DELAY) {
         isScrolling = false;
         element.triggerHandler('$scrollend');
       } else {

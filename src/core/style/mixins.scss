@@ -1,0 +1,65 @@
+@mixin margin-selectors($before:1em, $after:1em, $start:0px, $end:0px) {
+  -webkit-margin-before: $before;
+  -webkit-margin-after: $after;
+  -webkit-margin-start: $start;
+  -webkit-margin-end: $end;
+}
+
+@mixin not-selectable($value:none) {
+  user-select: $value;
+}
+
+@mixin input-placeholder($color) {
+  &:-ms-input-placeholder {
+    color: $color;
+  }
+  &::-webkit-input-placeholder {
+    color: $color;
+  }
+}
+
+
+
+// ******************************
+// Mixins: Text Fields
+// ******************************
+
+@mixin text-field($color, $borderColor, $transition:false, $borderWidth:1px ) {
+  input, textarea {
+    color: $color;
+    border-color: $borderColor;
+    border-bottom-width: $borderWidth;
+
+    @if( $transition != false ) {
+      transition: $transition;
+    }
+  }
+}
+
+@mixin text-hint($color, $size:large, $transition:false ) {
+  label {
+    color: $color;
+
+    @if $size == "small" {
+      transform: translate3d(0, $tff-hint-offset-small, 0) scale($ttf-hint-offset-scale);
+    } @else {
+      transform: translate3d(0, $tff-hint-offset-large, 0);
+      transform-origin: left center;
+      transition: $tff-transition;
+    }
+
+    @if( $transition != false ) {
+      transition: $transition;
+    }
+  }
+}
+
+@mixin text-dashed-line( $dotGap, $dotSize, $color ) {
+  background-size: $dotSize $dotGap;
+
+  background-image: linear-gradient(to right, $color 0%, $color 50%, rgba(0, 0, 0, 0) 0%);
+  background-position: 0 bottom;
+
+  background-size: (1px + 1px) $dotGap;
+  background-repeat: repeat-x;
+}

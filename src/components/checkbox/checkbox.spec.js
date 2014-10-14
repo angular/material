@@ -1,16 +1,16 @@
 
-describe('materialCheckbox', function() {
-  var CHECKED_CSS = 'material-checked';
+describe('mdCheckbox', function() {
+  var CHECKED_CSS = 'md-checked';
 
   beforeEach(module('material.components.checkbox'));
   beforeEach(module('ngAria'));
 
   it('should set checked css class and aria-checked attributes', inject(function($compile, $rootScope) {
     var element = $compile('<div>' +
-                             '<material-checkbox ng-model="blue">' +
-                             '</material-checkbox>' +
-                             '<material-checkbox ng-model="green">' +
-                             '</material-checkbox>' +
+                             '<md-checkbox ng-model="blue">' +
+                             '</md-checkbox>' +
+                             '<md-checkbox ng-model="green">' +
+                             '</md-checkbox>' +
                            '</div>')($rootScope);
 
     $rootScope.$apply(function(){
@@ -18,7 +18,7 @@ describe('materialCheckbox', function() {
       $rootScope.green = true;
     });
 
-    var cbElements = element.find('material-checkbox');
+    var cbElements = element.find('md-checkbox');
 
     expect(cbElements.eq(0).hasClass(CHECKED_CSS)).toEqual(false);
     expect(cbElements.eq(1).hasClass(CHECKED_CSS)).toEqual(true);
@@ -29,11 +29,11 @@ describe('materialCheckbox', function() {
 
   it('should be disabled with disabled attr', inject(function($compile, $rootScope) {
     var element = $compile('<div>' +
-                             '<material-checkbox disabled ng-model="blue">' +
-                             '</material-checkbox>' +
+                             '<md-checkbox disabled ng-model="blue">' +
+                             '</md-checkbox>' +
                            '</div>')($rootScope);
 
-    var checkbox = element.find('material-checkbox');
+    var checkbox = element.find('md-checkbox');
 
     $rootScope.$apply('blue = false');
 
@@ -68,7 +68,7 @@ describe('materialCheckbox', function() {
     }
 
     it('should format booleans', function() {
-      compileInput('<material-checkbox ng-model="name" />');
+      compileInput('<md-checkbox ng-model="name" />');
 
       scope.$apply("name = false");
       expect(isChecked(inputElm)).toBe(false);
@@ -79,7 +79,7 @@ describe('materialCheckbox', function() {
 
 
     it('should support type="checkbox" with non-standard capitalization', function() {
-      compileInput('<material-checkbox ng-model="checkbox" />');
+      compileInput('<md-checkbox ng-model="checkbox" />');
 
       inputElm.triggerHandler('click');
       expect(scope.checkbox).toBe(true);
@@ -90,7 +90,7 @@ describe('materialCheckbox', function() {
 
 
     it('should allow custom enumeration', function() {
-      compileInput('<material-checkbox ng-model="name" ng-true-value="\'y\'" ' +
+      compileInput('<md-checkbox ng-model="name" ng-true-value="\'y\'" ' +
           'ng-false-value="\'n\'">');
 
       scope.$apply("name = 'y'");
@@ -112,27 +112,27 @@ describe('materialCheckbox', function() {
 
     it('should throw if ngTrueValue is present and not a constant expression', function() {
       expect(function() {
-        compileInput('<material-checkbox ng-model="value" ng-true-value="yes" />');
+        compileInput('<md-checkbox ng-model="value" ng-true-value="yes" />');
       }).toThrow();
     });
 
 
     it('should throw if ngFalseValue is present and not a constant expression', function() {
       expect(function() {
-        compileInput('<material-checkbox ng-model="value" ng-false-value="no" />');
+        compileInput('<md-checkbox ng-model="value" ng-false-value="no" />');
       }).toThrow();
     });
 
 
     it('should not throw if ngTrueValue or ngFalseValue are not present', function() {
       expect(function() {
-        compileInput('<material-checkbox ng-model="value" />');
+        compileInput('<md-checkbox ng-model="value" />');
       }).not.toThrow();
     });
 
 
     it('should be required if false', function() {
-      compileInput('<material-checkbox ng:model="value" required />');
+      compileInput('<md-checkbox ng:model="value" required />');
 
       inputElm.triggerHandler('click');
       expect(isChecked(inputElm)).toBe(true);

@@ -1,0 +1,255 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+:focus {
+  outline: none;
+}
+
+html, body {
+  height: 100%;
+  color: $font-color-base;
+  background: $background-color-base;
+
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  h3 {
+    display: block;
+    @include margin-selectors();
+    font-size: 1.17em;
+    font-weight: bold;
+  }
+}
+
+button,
+select,
+html,
+textarea,
+input {
+  font-family: $font-family;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+
+.inset {
+  padding: 10px;
+}
+
+button {
+  font-family: $font-family;
+}
+
+a {
+  background: transparent;
+  outline: none;
+}
+
+h1 {
+  font-size: $h1-font-size-base;
+  margin: $h1-margin-base;
+}
+h2 {
+  font-size: $h2-font-size-base;
+  margin: $h2-margin-base;
+}
+h3 {
+  font-size: $h3-font-size-base;
+  margin: $h3-margin-base;
+}
+h4 {
+  font-size: $h4-font-size-base;
+  margin: $h4-margin-base;
+}
+h5 {
+  font-size: $h5-font-size-base;
+  margin: $h5-margin-base;
+}
+h6 {
+  font-size: $h6-font-size-base;
+  margin: $h6-margin-base;
+}
+
+select,
+button,
+textarea,
+input {
+  margin: 0;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+}
+
+// Fix Android 4.0 button bugs
+input[type="reset"],
+input[type="submit"],
+html input[type="button"],
+button {
+  cursor: pointer;
+  -webkit-appearance: button;
+
+  &[disabled] {
+    cursor: default;
+  }
+}
+
+textarea {
+  vertical-align: top;
+  overflow: auto;
+}
+
+input {
+  &[type="radio"],
+  &[type="checkbox"] {
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  &[type="search"] {
+    -webkit-appearance: textfield;
+    box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+
+    &::-webkit-search-decoration,
+    &::-webkit-search-cancel-button {
+      -webkit-appearance: none;
+    }
+  }
+}
+
+@font-face {
+  font-family: 'RobotoDraft';
+  font-style: normal;
+  font-weight: 100;
+  src: local('RobotoDraft Thin'), local('RobotoDraft-Thin'), url(//fonts.gstatic.com/s/robotodraft/v1/hope9NW9iJ5hh8P5PM_EAyeJLMOzE6CCkidNEpZOseY.woff) format('woff');
+}
+@font-face {
+  font-family: 'RobotoDraft';
+  font-style: normal;
+  font-weight: 300;
+  src: local('RobotoDraft Light'), local('RobotoDraft-Light'), url(//fonts.gstatic.com/s/robotodraft/v1/u0_CMoUf3y3-4Ss4ci-VwR_xHqYgAV9Bl_ZQbYUxnQU.woff) format('woff');
+}
+@font-face {
+  font-family: 'RobotoDraft';
+  font-style: normal;
+  font-weight: 400;
+  src: local('RobotoDraft'), local('RobotoDraft-Regular'), url(//fonts.gstatic.com/s/robotodraft/v1/0xES5Sl_v6oyT7dAKuoni4bN6UDyHWBl620a-IRfuBk.woff) format('woff');
+}
+@font-face {
+  font-family: 'RobotoDraft';
+  font-style: normal;
+  font-weight: 500;
+  src: local('RobotoDraft Medium'), local('RobotoDraft-Medium'), url(//fonts.gstatic.com/s/robotodraft/v1/u0_CMoUf3y3-4Ss4ci-VwSqHEX2q--o2so14pIEl08w.woff) format('woff');
+}
+@font-face {
+  font-family: 'RobotoDraft';
+  font-style: normal;
+  font-weight: 700;
+  src: local('RobotoDraft Bold'), local('RobotoDraft-Bold'), url(//fonts.gstatic.com/s/robotodraft/v1/u0_CMoUf3y3-4Ss4ci-VwTqR_3kx9_hJXbbyU8S6IN0.woff) format('woff');
+}
+@font-face {
+  font-family: 'RobotoDraft';
+  font-style: normal;
+  font-weight: 900;
+  src: local('RobotoDraft Black'), local('RobotoDraft-Black'), url(//fonts.gstatic.com/s/robotodraft/v1/u0_CMoUf3y3-4Ss4ci-VwUExzZ44ka2Lr5i-x5aWr0E.woff) format('woff');
+}
+@font-face {
+  font-family: 'RobotoDraft';
+  font-style: italic;
+  font-weight: 400;
+  src: local('RobotoDraft Italic'), local('RobotoDraft-Italic'), url(//fonts.gstatic.com/s/robotodraft/v1/er-TIW55l9KWsTS1x9bTftkZXW4sYc4BjuAIFc1SXII.woff) format('woff');
+}
+@font-face {
+  font-family: 'RobotoDraft';
+  font-style: italic;
+  font-weight: 700;
+  src: local('RobotoDraft Bold Italic'), local('RobotoDraft-BoldItalic'), url(//fonts.gstatic.com/s/robotodraft/v1/5SAvdU0uYYlH8OURAykt5wRV2F9RPTaqyJ4QibDfkzM.woff) format('woff');
+}
+
+
+// TEMPORARY theming variables
+// TODO(ajoslin, ryanschmukler): remove things
+@mixin theme-bg-and-color($bg, $color) {
+  background-color: $bg !important;
+  color: $color !important;
+}
+@mixin theme-input-text-and-border($color) {
+  &.md-input-has-value, &.md-input-focused {
+    input {
+      border-color: $color;
+    }
+    label {
+      color: $color;
+    }
+  }
+}
+
+/*
+@mixin md-theme($name, $t100, $t300, $t500, $t700, $t900) {
+}
+
+@include md-theme('google-red', #f3c6C2, #e57b72, #da4336, #c43828, #a42613);
+@include md-theme('pink', #f7bacf, #ef6191, #e81d62, #c1175a, #870d4e);
+@include md-theme('indigo', #c4c9e8, #7885ca, #3e50b4, #2f3e9e, #19227d);
+@include md-theme('google-blue', #c5d9fb, #7aa9f6, #4184f3, #3266d5, #1b39ab);
+@include md-theme('light-blue', #b2e4fb, #4ec2f6, #02a8f3, #0187d0, #00569A);
+@include md-theme('teal', #b1deda, #4cb5ab, #009587, #00786a, #004c3f);
+@include md-theme('google-green', #b6e0cc, #56ba89, #0E9C57, #0a7f42, #045423);
+@include md-theme('yellow', #fff8c3, #fff075, #ffea3a, #fabf2c, #f47e16);
+@include md-theme('google-yellow', #fbe7b1, #f6ca4c, #f3b300, #ef9200, #e96000);
+@include md-theme('orange', #ffdfb1, #ffb64c, #ff9700, #f47b00, #e55000);
+@include md-theme('deep-orange', #ffcbbb, #ff8964, #ff5621, #e54918, #be350b);
+@include md-theme('grey', #f0f0f0, #e0e0e0, #a2a2a2, #636363, #252525);
+*/
+
+.md-theme-dark { @include theme-bg-and-color($theme-dark, $text-light); }
+
+
+.md-theme-light { @include theme-bg-and-color($theme-light, $text-light); }
+.md-theme-light-blue { @include theme-bg-and-color($theme-light-blue, $text-light); }
+.md-theme-indigo { @include theme-bg-and-color($theme-indigo, $text-light); }
+.md-theme-green { @include theme-bg-and-color($theme-green, $text-light); }
+.md-theme-yellow { @include theme-bg-and-color($theme-yellow, $text-dark); }
+.md-theme-orange { @include theme-bg-and-color($theme-orange, $text-light); }
+.md-theme-purple { @include theme-bg-and-color($theme-purple, $text-light); }
+.md-theme-red { @include theme-bg-and-color($theme-red, $text-light); }
+
+.md-input-group-theme-light { @include theme-input-text-and-border($theme-light); }
+.md-input-group-theme-light-blue { @include theme-input-text-and-border($theme-light-blue); }
+.md-input-group-theme-dark { @include theme-input-text-and-border($theme-dark); }
+.md-input-group-theme-green { @include theme-input-text-and-border($theme-green); }
+.md-input-group-theme-yellow { @include theme-input-text-and-border($theme-yellow); }
+.md-input-group-theme-orange { @include theme-input-text-and-border($theme-orange); }
+.md-input-group-theme-purple { @include theme-input-text-and-border($theme-purple); }
+.md-input-group-theme-red { @include theme-input-text-and-border($theme-red); }
+
+
+.md-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.md-shadow-bottom-z-1 {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+.md-shadow-bottom-z-2 {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+}
+
+.md-shadow-animated.md-shadow {
+  transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}

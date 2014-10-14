@@ -1,0 +1,111 @@
+<!doctype html>
+<html ng-app="docsApp" ng-controller="DocsCtrl">
+<head>
+<title ng-bind="(menu.currentSection.name || 'Material Design') + (menu.currentPage ? (' > ' + (menu.currentPage | humanizeDoc)) : '')">Material Design</title>
+<meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-animate.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-route.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-aria.min.js"></script>
+
+<script src="docs.js"></script>
+<link rel="stylesheet" href="docs.css">
+</head>
+<body layout="horizontal">
+
+  <md-sidenav layout="vertical" class="md-sidenav-left md-whiteframe-z3" component-id="left">
+
+    <md-toolbar class="md-theme-light md-medium-tall">
+      <h1 class="md-toolbar-tools" style="padding-top:25px;">
+        <a href="#" ng-click="goHome()">Angular<br/>Material Design</a>
+      </h1>
+    </md-toolbar>
+
+    <md-content flex>
+      <div ng-repeat="section in menu.sections">
+
+        <button class="menu-item menu-title"
+          ng-class="{active: menu.isSectionSelected(section)}"
+          ng-click="menu.toggleSelectSection(section)"
+          ink-ripple>
+          {{section.name}}
+        </button>
+
+        <a class="menu-item menu-sub-item"
+          ng-show="menu.isSectionSelected(section)"
+          ng-repeat="page in section.pages"
+          ng-class="{active: menu.isPageSelected(section, page)}"
+          ng-href="#{{page.url}}"
+          ink-ripple>
+          <span ng-bind="page | humanizeDoc"></span>
+        </a>
+
+      </div>
+    </md-content>
+
+  </md-sidenav>
+
+  <div layout="vertical" layout-fill tabIndex="-1" role="main">
+    <md-toolbar class="md-theme-dark md-medium-tall app-toolbar">
+
+      <div class="md-toolbar-tools" ng-click="toggleMenu()">
+        <button class="menu-icon" hide-md aria-label="Toggle Menu">
+          <md-icon icon="img/icons/ic_menu_24px.svg">
+          </md-icon>
+        </button>
+        <h3 hide show-sm ng-if="menu.currentSection.name">
+          {{menu.currentSection.name}}
+        </h3>
+        <span layout="vertical" layout-align="center center" class="menu-separator-icon"
+          ng-if="menu.currentPage">
+          <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide block-sm>
+        </span>
+        <h3 ng-bind="(menu.currentPage | humanizeDoc) || 'Angular Material'" flex>
+        </h3>
+      </div>
+
+      <div class="md-toolbar-tools api-options-bar"
+        ng-if="path().indexOf('demo') > -1">
+        <span flex></span>
+        <md-button ng-repeat="doc in currentComponent.docs"
+          ng-href="#{{doc.url}}">
+          <span ng-bind="doc | humanizeDoc | directiveBrackets"></span>
+        </md-button>
+      </div>
+
+      <div class="md-toolbar-tools api-options-bar with-icon"
+        ng-if="currentDoc">
+        <span flex></span>
+        <md-button ng-href="#/demo/{{currentComponent.name}}">
+          <md-icon icon="/img/icons/ic_play_arrow_24px.svg"></md-icon>
+          <span>View Demo</span>
+        </md-button>
+        <md-button ng-href="{{currentDoc.githubUrl}}">
+          <md-icon icon="/img/icons/ic_launch_24px.svg"></md-icon>
+          <span hide block-sm>View on Github</span>
+          <span hide-sm>Source</span>
+        </md-button>
+        <md-button ng-href="{{currentDoc.githubEditUrl}}" hide show-sm>
+          <md-icon icon="/img/icons/ic_launch_24px.svg"></md-icon>
+          <span>Improve This Doc</span>
+        </md-button>
+      </div>
+
+    </md-toolbar>
+
+    <md-content ng-view scroll-y flex class="md-content-padding"></md-content>
+
+  </div>
+
+
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-8594346-14', 'auto');
+      ga('send', 'pageview');
+  </script>
+
+</body>

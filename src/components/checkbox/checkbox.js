@@ -4,19 +4,21 @@
  * @description Checkbox module!
  */
 angular.module('material.components.checkbox', [
+  'material.core',
   'material.animations',
   'material.services.aria'
 ])
-  .directive('materialCheckbox', [ 
+  .directive('mdCheckbox', [ 
     'inputDirective',
-    '$materialInkRipple',
-    '$materialAria',
-    MaterialCheckboxDirective
+    '$mdInkRipple',
+    '$mdAria',
+    '$mdConstant',
+    MdCheckboxDirective
   ]);
 
 /**
  * @ngdoc directive
- * @name materialCheckbox
+ * @name mdCheckbox
  * @module material.components.checkbox
  * @restrict E
  *
@@ -34,35 +36,35 @@ angular.module('material.components.checkbox', [
  *
  * @usage
  * <hljs lang="html">
- * <material-checkbox ng-model="isChecked" aria-label="Finished?">
+ * <md-checkbox ng-model="isChecked" aria-label="Finished?">
  *   Finished ?
- * </material-checkbox>
+ * </md-checkbox>
  *
- * <material-checkbox noink ng-model="hasInk" aria-label="No Ink Effects">
+ * <md-checkbox noink ng-model="hasInk" aria-label="No Ink Effects">
  *   No Ink Effects
- * </material-checkbox>
+ * </md-checkbox>
  *
- * <material-checkbox disabled ng-model="isDisabled" aria-label="Disabled">
+ * <md-checkbox disabled ng-model="isDisabled" aria-label="Disabled">
  *   Disabled
- * </material-checkbox>
+ * </md-checkbox>
  *
  * </hljs>
  *
  */
-function MaterialCheckboxDirective(inputDirectives, $materialInkRipple, $materialAria) {
+function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant) {
   var inputDirective = inputDirectives[0];
 
-  var CHECKED_CSS = 'material-checked';
+  var CHECKED_CSS = 'md-checked';
 
   return {
     restrict: 'E',
     transclude: true,
     require: '?ngModel',
     template: 
-      '<div class="material-container" ink-ripple="checkbox">' +
-        '<div class="material-icon"></div>' +
+      '<div class="md-container" ink-ripple="checkbox">' +
+        '<div class="md-icon"></div>' +
       '</div>' +
-      '<div ng-transclude class="material-label"></div>',
+      '<div ng-transclude class="md-label"></div>',
     compile: compile
   };
 
@@ -76,7 +78,7 @@ function MaterialCheckboxDirective(inputDirectives, $materialInkRipple, $materia
     tAttrs.tabIndex = 0;
     tElement.attr('role', tAttrs.type);
 
-    $materialAria.expect(tElement, 'aria-label', tElement.text());
+    $mdAria.expect(tElement, 'aria-label', tElement.text());
 
     return function postLink(scope, element, attr, ngModelCtrl) {
       var checked = false;
@@ -103,7 +105,7 @@ function MaterialCheckboxDirective(inputDirectives, $materialInkRipple, $materia
       ngModelCtrl.$render = render;
 
       function keypressHandler(ev) {
-        if(ev.which === Constant.KEY_CODE.SPACE) {
+        if(ev.which === $mdConstant.KEY_CODE.SPACE) {
           ev.preventDefault();
           listener(ev);
         }
@@ -127,7 +129,7 @@ function MaterialCheckboxDirective(inputDirectives, $materialInkRipple, $materia
           element.removeClass(CHECKED_CSS);
         }
       }
-    }
+    };
   }
 }
 

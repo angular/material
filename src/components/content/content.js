@@ -8,34 +8,34 @@
 angular.module('material.components.content', [
   'material.services.registry'
 ])
-  .directive('materialContent', [
-    materialContentDirective
+  .directive('mdContent', [
+    mdContentDirective
   ]);
 
 /**
  * @ngdoc directive
- * @name materialContent
+ * @name mdContent
  * @module material.components.content
  *
  * @restrict E
  *
  * @description
- * The `<material-content>` directive is a container element useful for scrollable content
+ * The `<md-content>` directive is a container element useful for scrollable content
  *
  * @usage
  * <hljs lang="html">
- *  <material-content class="material-content-padding">
+ *  <md-content class="md-content-padding">
  *      Lorem ipsum dolor sit amet, ne quod novum mei.
- *  </material-content>
+ *  </md-content>
  * </hljs>
  *
  */
-function materialContentDirective() {
+function mdContentDirective() {
   return {
     restrict: 'E',
     controller: ['$scope', '$element', ContentController],
     link: function($scope, $element, $attr) {
-      $scope.$broadcast('$materialContentLoaded', $element);
+      $scope.$broadcast('$mdContentLoaded', $element);
     }
   };
 

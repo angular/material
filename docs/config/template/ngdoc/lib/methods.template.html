@@ -1,0 +1,25 @@
+{%- if doc.methods %}
+<h3>Methods</h3>
+<ul class="methods">
+  {%- for method in doc.methods %}
+  <li id="{$ method.name $}">
+    <h3 class="method-function-syntax"><code class="method-function-syntax">{$ doc.name $}.{$ functionSyntax(method) $}</code></h3>
+    <div>{$ method.description | marked $}</div>
+
+    {% if method.params %}
+    {$ paramTable(method.params) $}
+    {% endif %}
+
+    {% if method.this %}
+    <h4>Method's {% code %}this{% endcode %}</h4>
+    {$ method.this | marked $}
+    {% endif %}
+    
+    {% if method.returns %}
+    {$ returnTable(method.returns) $}
+    {% endif %}
+
+  </li>
+  {% endfor -%}
+</ul>
+{%- endif -%}

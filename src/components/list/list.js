@@ -6,31 +6,31 @@
  */
 angular.module('material.components.list', [])
 
-.directive('materialList', [
-  materialListDirective
+.directive('mdList', [
+  mdListDirective
 ])
-.directive('materialItem', [
-  materialItemDirective
+.directive('mdItem', [
+  mdItemDirective
 ]);
 
 /**
  * @ngdoc directive
- * @name materialList
+ * @name mdList
  * @module material.components.list
  *
  * @restrict E
  *
  * @description
- * The `<material-list>` directive is a list container for 1..n `<material-item>` tags.
+ * The `<md-list>` directive is a list container for 1..n `<md-item>` tags.
  *
  * @usage
  * <hljs lang="html">
- * <material-list>
- *  <material-item ng-repeat="item in todos">
- *    <div class="material-tile-left">
+ * <md-list>
+ *  <md-item ng-repeat="item in todos">
+ *    <div class="md-tile-left">
  *      <img ng-src="{{item.face}}" class="face" alt="{{item.who}}">
  *    </div>
- *    <div class="material-tile-content">
+ *    <div class="md-tile-content">
  *      <h3>{{item.what}}</h3>
  *      <h4>{{item.who}}</h4>
  *      <p>
@@ -38,12 +38,12 @@ angular.module('material.components.list', [])
  *      </p>
  *    </div>
  *
- *  </material-item>
- * </material-list>
+ *  </md-item>
+ * </md-list>
  * </hljs>
  *
  */
-function materialListDirective() {
+function mdListDirective() {
   return {
     restrict: 'E',
     link: function($scope, $element, $attr) {
@@ -56,25 +56,25 @@ function materialListDirective() {
 
 /**
  * @ngdoc directive
- * @name materialItem
+ * @name mdItem
  * @module material.components.list
  *
  * @restrict E
  *
  * @description
- * The `<material-item>` directive is a container intended for row items in a `<material-list>` container.
+ * The `<md-item>` directive is a container intended for row items in a `<md-list>` container.
  *
  * @usage
  * <hljs lang="html">
- *  <material-list>
- *    <material-item>
+ *  <md-list>
+ *    <md-item>
  *            Item content in list
- *    </material-item>
- *  </material-list>
+ *    </md-item>
+ *  </md-list>
  * </hljs>
  *
  */
-function materialItemDirective() {
+function mdItemDirective() {
   return {
     restrict: 'E',
     link: function($scope, $element, $attr) {

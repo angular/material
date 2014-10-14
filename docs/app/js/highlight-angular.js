@@ -54,8 +54,8 @@ DocsApp
       var iFrame = element[0].firstElementChild;
       if(iFrame && iFrame.src) {
         var links = angular.element(
-          '<p><a class="material-button material-button-raised material-button-colored" href="' + iFrame.src + '" target="_blank">Full View</a> \
-           <a class="material-button material-button-raised material-button-colored" href="view-source:' + iFrame.src + '" target="_blank">View Source</a></p>'
+          '<p><a class="md-button md-button-raised md-button-colored" href="' + iFrame.src + '" target="_blank">Full View</a> \
+           <a class="md-button md-button-raised md-button-colored" href="view-source:' + iFrame.src + '" target="_blank">View Source</a></p>'
         );
         element.append(links);
       }

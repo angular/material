@@ -1,35 +1,35 @@
-/**
+/*
  * @ngdoc module
  * @name material.components.icon
  * @description
  * Icon
  */
 angular.module('material.components.icon', [])
-  .directive('materialIcon', [
-    materialIconDirective
+  .directive('mdIcon', [
+    mdIconDirective
   ]);
 
-/**
+/*
  * @ngdoc directive
- * @name materialIcon
+ * @name mdIcon
  * @module material.components.icon
  *
  * @restrict E
  *
  * @description
- * The `<material-icon>` directive is an element useful for SVG icons
+ * The `<md-icon>` directive is an element useful for SVG icons
  *
  * @usage
  * <hljs lang="html">
- *  <material-icon icon="/img/icons/ic_access_time_24px.svg">
- *  </material-icon>
+ *  <md-icon icon="/img/icons/ic_access_time_24px.svg">
+ *  </md-icon>
  * </hljs>
  *
  */
-function materialIconDirective() {
+function mdIconDirective() {
   return {
     restrict: 'E',
-    template: '<object class="material-icon"></object>',
+    template: '<object class="md-icon"></object>',
     compile: function(element, attr) {
       var object = angular.element(element[0].children[0]);
       if(angular.isDefined(attr.icon)) {

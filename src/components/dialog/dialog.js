@@ -3,26 +3,29 @@
  * @name material.components.dialog
  */
 angular.module('material.components.dialog', [
+  'material.core',
   'material.animations',
   'material.services.compiler',
   'material.services.aria',
   'material.services.interimElement',
 ])
-  .directive('materialDialog', [
+  .directive('mdDialog', [
     '$$rAF',
-    MaterialDialogDirective
+    MdDialogDirective
   ])
-  .factory('$materialDialog', [
+  .factory('$mdDialog', [
     '$timeout',
     '$rootElement',
-    '$materialEffects',
+    '$mdEffects',
     '$animate',
-    '$materialAria',
+    '$mdAria',
     '$$interimElement',
-    MaterialDialogService
+    '$mdUtil',
+    '$mdConstant',
+    MdDialogService
   ]);
 
-function MaterialDialogDirective($$rAF) {
+function MdDialogDirective($$rAF) {
   return {
     restrict: 'E',
     link: function(scope, element, attr) {
@@ -38,46 +41,50 @@ function MaterialDialogDirective($$rAF) {
 
 /**
  * @ngdoc service
- * @name $materialDialog
+ * @name $mdDialog
  * @module material.components.dialog
  *
  * @description
+ * `$mdDialog` opens a dialog over the app and provides a simple promise API.
  *
- * Used to open a dialog over top of the app, `$materialDialog` is a service created
- * by `$$interimElement` and provides a simple promise-based, behavior API:
+ * ### Restrictions
  *
- *  - `$materialDialog.show()`
- *  - `$materialDialog.hide()`
- *  - `$materialDialog.cancel()`
- *
- * #### Notes:
- *
- * The dialog is always given an isolate scope.
- *
- * The dialog's template must have an outer `<material-dialog>` element.
- * Inside, use an element with class `dialog-content` for the dialog's content, and use
- * an element with class `dialog-actions` for the dialog's actions.  
- *
- * When opened, the `dialog-actions` area will attempt to focus the first button found with 
- * class `dialog-close`. If no button with `dialog-close` class is found, it will focus the
- * last button in the `dialog-actions` area.
+ * - The dialog is always given an isolate scope.
+ * - The dialog's template must have an outer `<md-dialog>` element.
+ *   Inside, use an element with class `dialog-content` for the dialog's content, and use
+ *   an element with class `dialog-actions` for the dialog's actions.  
  *
  * @usage
  * <hljs lang="html">
  * <div ng-controller="MyController">
- *   <material-button ng-click="openDialog($event)">
+ *   <md-button ng-click="openDialog($event)">
  *     Open a Dialog from this button!
- *   </material-button>
+ *   </md-button>
  * </div>
  * </hljs>
+ *
  * <hljs lang="js">
  * var app = angular.module('app', ['ngMaterial']);
- * app.controller('MyController', function($scope, $materialDialog) {
+ * app.controller('MyController', function($scope, $mdDialog) {
  *   $scope.openDialog = function($event) {
- *     $materialDialog.show({
- *       template: '<material-dialog>Hello!</material-dialog>',
- *       targetEvent: $event
+ *     $mdDialog.show({
+ *       targetEvent: $event,
+ *       controller: 'DialogController',
+ *       template: 
+ *         '<md-dialog>
+ *         '  <div class="dialog-content">Hello!</div>' +
+ *         '  <div class="dialog-actions">
+ *         '    <md-button ng-click="closeDialog()">' +
+ *         '      Close' +
+ *         '    </md-button>' +
+ *         '  </div>' +
+ *         '</md-dialog>'
  *     });
+ *   };
+ * });
+ * app.controller('DialogController', function($scope, $mdDialog) {
+ *   $scope.closeDialog = function() {
+ *     $mdDialog.hide();
  *   };
  * });
  * </hljs>
@@ -87,61 +94,62 @@ function MaterialDialogDirective($$rAF) {
 /**
  *
  * @ngdoc method
- * @name $materialDialog#show
+ * @name $mdDialog#show
  *
  * @description
- * Show a dialog with the specified options
+ * Show a dialog with the specified options.
  *
- * @paramType Options
- * @param {string=} templateUrl The url of a template that will be used as the content
- * of the dialog. 
- * @param {string=} template Same as templateUrl, except this is an actual template string.
- * @param {DOMClickEvent=} targetEvent A click's event object. When passed in as an option, 
- * the location of the click will be used as the starting point for the opening animation
- * of the the dialog.
- * @param {boolean=} hasBackdrop Whether there should be an opaque backdrop behind the dialog.
- *   Default true.
- * @param {boolean=} clickOutsideToClose Whether the user can click outside the dialog to
- *   close it. Default true.
- * @param {boolean=} escapeToClose Whether the user can press escape to close the dialog.
- *   Default true.
- * @param {string=} controller The controller to associate with the dialog.
- * @param {object=} locals An object containing key/value pairs. The keys will be used as names
- * of values to inject into the controller. For example, `locals: {three: 3}` would inject
- * `three` into the controller, with the value 3.
- * @param {object=} resolve Similar to locals, except it takes promises as values, and the
- * toast will not open until all of the promises resolve.
- * @param {string=} controllerAs An alias to assign the controller to on the scope.
- * @param {element=} parent The element to append the dialog to. Defaults to appending
- *   to the root element of the application.
+ * @param {object} options An options object, with the following properties:
+ *   - `templateUrl` - `{string=}`: The url of a template that will be used as the content
+ *   of the dialog. 
+ *   - `template` - `{string=}`: Same as templateUrl, except this is an actual template string.
+ *   - `targetEvent` - `{DOMClickEvent=}`: A click's event object. When passed in as an option, 
+ *     the location of the click will be used as the starting point for the opening animation
+ *     of the the dialog.
+ *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop behind the dialog.
+ *     Default true.
+ *   - `clickOutsideToClose` - `{boolean=}`: Whether the user can click outside the dialog to
+ *     close it. Default true.
+ *   - `escapeToClose` - `{boolean=}`: Whether the user can press escape to close the dialog.
+ *     Default true.
+ *   - `controller` - `{string=}`: The controller to associate with the dialog. The controller
+ *     will be injected with the local `$hideDialog`, which is a function used to hide the dialog.
+ *   - `locals` - `{object=}`: An object containing key/value pairs. The keys will be used as names
+ *     of values to inject into the controller. For example, `locals: {three: 3}` would inject
+ *     `three` into the controller, with the value 3.
+ *   - `resolve` - `{object=}`: Similar to locals, except it takes promises as values, and the
+ *     toast will not open until all of the promises resolve.
+ *   - `controllerAs` - `{string=}`: An alias to assign the controller to on the scope.
+ *   - `parent` - `{element=}`: The element to append the dialog to. Defaults to appending
+ *     to the root element of the application.
  *
- * @returns {Promise} Returns a promise that will be resolved or rejected when
- *  `$materialDialog.hide()` or `$materialDialog.cancel()` is called respectively.
+ * @returns {promise} A promise that can be resolved with `$mdDialog.hide()` or
+ * rejected with `mdDialog.cancel()`.
  */
 
 /**
  * @ngdoc method
- * @name $materialDialog#hide
+ * @name $mdDialog#hide
  *
  * @description
- * Hide an existing dialog and `resolve` the promise returned from `$materialDialog.show()`.
+ * Hide an existing dialog and resolve the promise returned from `$mdDialog.show()`.
  *
- * @param {*} arg An argument to resolve the promise with.
+ * @param {*=} response An argument for the resolved promise.
  *
  */
 
 /**
  * @ngdoc method
- * @name $materialDialog#cancel
+ * @name $mdDialog#cancel
  *
  * @description
- * Hide an existing dialog and `reject` the promise returned from `$materialDialog.show()`.
+ * Hide an existing dialog and reject the promise returned from `$mdDialog.show()`.
  *
- * @param {*} arg An argument to reject the promise with.
+ * @param {*=} response An argument for the rejected promise.
  *
  */
 
-function MaterialDialogService($timeout, $rootElement, $materialEffects, $animate, $materialAria, $$interimElement) {
+function MdDialogService($timeout, $rootElement, $mdEffects, $animate, $mdAria, $$interimElement, $mdUtil, $mdConstant) {
 
   var $dialogService;
   return $dialogService = $$interimElement({
@@ -153,7 +161,7 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
     escapeToClose: true,
     targetEvent: null,
     transformTemplate: function(template) {
-      return '<div class="material-dialog-container">' + template + '</div>';
+      return '<div class="md-dialog-container">' + template + '</div>';
     }
   });
 
@@ -164,15 +172,15 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
     options.popInTarget = angular.element((options.targetEvent || {}).target); 
     var closeButton = findCloseButton();
 
-    configureAria(element.find('material-dialog'));
+    configureAria(element.find('md-dialog'));
 
     if (options.hasBackdrop) {
-      var backdrop = angular.element('<material-backdrop class="opaque ng-enter">');
+      var backdrop = angular.element('<md-backdrop class="opaque ng-enter">');
       $animate.enter(backdrop, options.parent, null);
       options.backdrop = backdrop;
     }
 
-    return $materialEffects.popIn(
+    return $mdEffects.popIn(
       element, 
       options.parent, 
       options.popInTarget.length && options.popInTarget
@@ -180,7 +188,7 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
     .then(function() {
       if (options.escapeToClose) {
         options.rootElementKeyupCallback = function(e) {
-          if (e.keyCode === Constant.KEY_CODE.ESCAPE) {
+          if (e.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
             $timeout($dialogService.cancel);
           }
         };
@@ -246,7 +254,7 @@ function MaterialDialogService($timeout, $rootElement, $materialEffects, $animat
     if (dialogContent.length === 0){
       dialogContent = element;
     }
-    var defaultText = Util.stringFromTextBody(dialogContent.text(), 3);
-    $materialAria.expect(element, 'aria-label', defaultText);
+    var defaultText = $mdUtil.stringFromTextBody(dialogContent.text(), 3);
+    $mdAria.expect(element, 'aria-label', defaultText);
   }
 }

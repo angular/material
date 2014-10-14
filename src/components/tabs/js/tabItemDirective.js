@@ -1,28 +1,29 @@
 angular.module('material.components.tabs')
 
-.directive('materialTab', [
-  '$materialInkRipple', 
+.directive('mdTab', [
+  '$mdInkRipple', 
   '$compile',
-  '$materialAria',
-  MaterialTabDirective
+  '$mdAria',
+  '$mdUtil',
+  '$mdConstant',
+  MdTabDirective
 ]);
 
 /**
  * @ngdoc directive
- * @name materialTab
+ * @name mdTab
  * @module material.components.tabs
- * @order 1
  *
  * @restrict E
  *
  * @description
- * `<material-tab>` is the nested directive used [within `<material-tabs>`] to specify each tab with a **label** and optional *view content*.
+ * `<md-tab>` is the nested directive used [within `<md-tabs>`] to specify each tab with a **label** and optional *view content*.
  *
- * If the `label` attribute is not specified, then an optional `<material-tab-label>` tag can be used to specified more
- * complex tab header markup. If neither the **label** nor the **material-tab-label** are specified, then the nested
- * markup of the `<material-tab>` is used as the tab header markup.
+ * If the `label` attribute is not specified, then an optional `<md-tab-label>` tag can be used to specified more
+ * complex tab header markup. If neither the **label** nor the **md-tab-label** are specified, then the nested
+ * markup of the `<md-tab>` is used as the tab header markup.
  *
- * If a tab **label** has been identified, then any **non-**`<material-tab-label>` markup
+ * If a tab **label** has been identified, then any **non-**`<md-tab-label>` markup
  * will be considered tab content and will be transcluded to the internal `<div class="tabs-content">` container.
  *
  * This container is used by the TabsController to show/hide the active tab's content view. This synchronization is
@@ -39,29 +40,29 @@ angular.module('material.components.tabs')
  * @usage
  *
  * <hljs lang="html">
- * <material-tab label="" disabled="" selected="" deselected="" >
+ * <md-tab label="" disabled="" selected="" deselected="" >
  *   <h3>My Tab content</h3>
- * </material-tab>
+ * </md-tab>
  *
- * <material-tab >
- *   <material-tab-label>
+ * <md-tab >
+ *   <md-tab-label>
  *     <h3>My Tab content</h3>
- *   </material-tab-label>
+ *   </md-tab-label>
  *   <p>
  *     Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
  *     totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
  *     dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
  *     sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
  *   </p>
- * </material-tab>
+ * </md-tab>
  * </hljs>
  *
  */
-function MaterialTabDirective($materialInkRipple, $compile, $materialAria) {
+function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
   return {
     restrict: 'E',
-    require: ['materialTab', '^materialTabs'],
-    controller: '$materialTab',
+    require: ['mdTab', '^mdTabs'],
+    controller: '$mdTab',
     scope: {
       onSelect: '&',
       onDeselect: '&',
@@ -71,17 +72,17 @@ function MaterialTabDirective($materialInkRipple, $compile, $materialAria) {
   };
 
   function compile(element, attr) {
-    var tabLabel = element.find('material-tab-label');
+    var tabLabel = element.find('md-tab-label');
 
     // If a tab label element is found, remove it for later re-use.
     if (tabLabel.length) {
       tabLabel.remove();
     // Otherwise, try to use attr.label as the label
     } else if (angular.isDefined(attr.label)) {
-      tabLabel = angular.element('<material-tab-label>').html(attr.label);
+      tabLabel = angular.element('<md-tab-label>').html(attr.label);
     // If nothing is found, use the tab's content as the label
     } else {
-      tabLabel = angular.element('<material-tab-label>')
+      tabLabel = angular.element('<md-tab-label>')
         .append(element.contents().remove());
     }
 
@@ -95,7 +96,7 @@ function MaterialTabDirective($materialInkRipple, $compile, $materialAria) {
 
       transcludeTabContent();
 
-      var detachRippleFn = $materialInkRipple.attachButtonBehavior(element);
+      var detachRippleFn = $mdInkRipple.attachButtonBehavior(element);
       tabsCtrl.add(tabItemCtrl);
       scope.$on('$destroy', function() {
         detachRippleFn();
@@ -130,16 +131,16 @@ function MaterialTabDirective($materialInkRipple, $compile, $materialAria) {
         });
       }
       function keydownListener(ev) {
-        if (ev.which == Constant.KEY_CODE.SPACE ) {
+        if (ev.which == $mdConstant.KEY_CODE.SPACE ) {
           // Fire the click handler to do normal selection if space is pressed
           element.triggerHandler('click');
           ev.preventDefault();
 
-        } else if (ev.which === Constant.KEY_CODE.LEFT_ARROW) {
+        } else if (ev.which === $mdConstant.KEY_CODE.LEFT_ARROW) {
           var previous = tabsCtrl.previous(tabItemCtrl);
           previous && previous.element.focus();
 
-        } else if (ev.which === Constant.KEY_CODE.RIGHT_ARROW) {
+        } else if (ev.which === $mdConstant.KEY_CODE.RIGHT_ARROW) {
           var next = tabsCtrl.next(tabItemCtrl);
           next && next.element.focus();
         }
@@ -186,7 +187,7 @@ function MaterialTabDirective($materialInkRipple, $compile, $materialAria) {
 
       function configureAria() {
         // Link together the content area and tabItemCtrl with an id
-        var tabId = attr.id || Util.nextUid();
+        var tabId = attr.id || $mdUtil.nextUid();
         var tabContentId = 'content_' + tabId;
         element.attr({
           id: tabId,
@@ -200,7 +201,7 @@ function MaterialTabDirective($materialInkRipple, $compile, $materialAria) {
           'aria-labelledby': tabId
         });
 
-        $materialAria.expect(element, 'aria-label', element.text());
+        $mdAria.expect(element, 'aria-label', element.text());
       }
 
     };

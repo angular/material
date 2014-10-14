@@ -1,0 +1,24 @@
+
+<div ng-controller="AppCtrl">
+
+  <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+    Checkbox 1: {{ data.cb1 }}
+  </md-checkbox>
+
+  <md-checkbox ng-model="data.cb2" aria-label="Checkbox 2" ng-true-value="'yup'" ng-false-value="'nope'">
+    Checkbox 2: {{ data.cb2 }}
+  </md-checkbox>
+
+  <md-checkbox disabled aria-label="Disabled checkbox">
+    Checkbox (Disabled)
+  </md-checkbox>
+
+  <md-checkbox disabled aria-label="Disabled checked checkbox" ng-model="data.cb4" ng-init="data.cb4=true">
+    Checkbox (Disabled, Checked)
+  </md-checkbox>
+
+  <md-checkbox noink aria-label="Checkbox No Ink">
+    Checkbox (No Ink)
+  </md-checkbox>
+
+</div>

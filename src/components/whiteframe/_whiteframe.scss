@@ -1,32 +1,32 @@
-material-whiteframe {
+md-whiteframe {
 }
 
-.material-whiteframe-z1 {
-  @extend material-whiteframe;
+.md-whiteframe-z1 {
+  @extend md-whiteframe;
 
   z-index: $whiteframe-zindex-z1;
   box-shadow: $whiteframe-shadow-z1;
 }
-.material-whiteframe-z2 {
-  @extend material-whiteframe;
+.md-whiteframe-z2 {
+  @extend md-whiteframe;
 
   z-index: $whiteframe-zindex-z2;
   box-shadow: $whiteframe-shadow-z2;
 }
-.material-whiteframe-z3 {
-  @extend material-whiteframe;
+.md-whiteframe-z3 {
+  @extend md-whiteframe;
 
   z-index: $whiteframe-zindex-z3;
   box-shadow: $whiteframe-shadow-z3;
 }
-.material-whiteframe-z4 {
-  @extend material-whiteframe;
+.md-whiteframe-z4 {
+  @extend md-whiteframe;
 
   z-index: $whiteframe-zindex-z4;
   box-shadow: $whiteframe-shadow-z4;
 }
-.material-whiteframe-z5 {
-  @extend material-whiteframe;
+.md-whiteframe-z5 {
+  @extend md-whiteframe;
 
   z-index: $whiteframe-zindex-z5;
   box-shadow: $whiteframe-shadow-z5;

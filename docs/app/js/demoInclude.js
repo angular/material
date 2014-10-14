@@ -18,20 +18,27 @@ function($q, $http, $compile, $templateCache) {
      * the demo into the current demo ng-app.
      */
     function handleDemoIndexFile() {
-      $http.get(demo.indexFile.outputPath, {cache: $templateCache})
+      $http.get(demo.index.outputPath, {cache: $templateCache})
       .then(function(response) {
-
         demoContainer = angular.element(
-          '<div class="demo-content ' + demo.module + '">'
-        ).html(response.data);
+          '<div class="demo-content ' + demo.id + '">'
+        );
 
-        if (demo.module) {
-          angular.bootstrap(demoContainer[0], [demo.module]);
+        var demoIndexHtml = response.data;
+        var isStandalone = !!demo.ngModule.module;
+        var demoScope;
+        var demoCompileService;
+        if (isStandalone) {
+          angular.bootstrap(demoContainer[0], [demo.ngModule.module]);
+          demoScope = demoContainer.scope();
+          demoCompileService = demoContainer.injector().get('$compile');
           scope.$on('$destroy', function() {
-            demoContainer.scope() && demoContainer.scope().$destroy();
+            demoScope.$destroy();
           });
+
         } else {
-          $compile(demoContainer)(scope);
+          demoScope = scope.$new();
+          demoCompileService = $compile;
         }
 
         // Once everything is loaded, put the demo into the DOM
@@ -39,7 +46,11 @@ function($q, $http, $compile, $templateCache) {
           handleDemoStyles(),
           handleDemoTemplates()
         ]).finally(function() {
-          element.append(demoContainer);
+          demoScope.$evalAsync(function() {
+            element.append(demoContainer);
+            demoContainer.html(demoIndexHtml);
+            demoCompileService( demoContainer.contents() )(demoScope);
+          });
         });
       });
 
@@ -50,13 +61,7 @@ function($q, $http, $compile, $templateCache) {
      * Fetch the demo styles, and append them to the DOM.
      */
     function handleDemoStyles() {
-
-      var demoSelector = demo.module ? ('.' + demo.module + ' ') : '';
-      var styleFiles = demo.files.filter(function(file) {
-        return file.fileType === 'css';
-      });
-
-      return $q.all(styleFiles.map(function(file) {
+      return $q.all((demo.css || []).map(function(file) {
         return $http.get(file.outputPath, {cache: $templateCache})
           .then(function(response) { return response.data; });
       }))
@@ -83,20 +88,15 @@ function($q, $http, $compile, $templateCache) {
      * 'generated/material.components.dialog/demo/demo1/my-dialog.tmpl.html'.
      */
     function handleDemoTemplates() {
-
-      var templates = demo.files.filter(function(file) {
-        return file.fileType === 'html';
-      });
-
-      return $q.all(templates.map(function(file) {
+      return $q.all((demo.html || []).map(function(file) {
         return $http.get(file.outputPath).then(function(response) {
           // Get the $templateCache instance that goes with the demo's specific ng-app.
           var demoTemplateCache = demoContainer.injector().get('$templateCache');
 
-          demoTemplateCache.put(file.basePath, response.data);
+          demoTemplateCache.put(file.name, response.data);
 
           scope.$on('$destroy', function() {
-            demoTemplateCache.remove(file.basePath);
+            demoTemplateCache.remove(file.name);
           });
 
         });

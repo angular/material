@@ -2,40 +2,41 @@
  * @ngdoc module
  * @name material.components.tooltip
  */
-angular.module('material.components.tooltip', [])
+angular.module('material.components.tooltip', ['material.core'])
 
-.directive('materialTooltip', [
+.directive('mdTooltip', [
   '$timeout',
   '$window',
   '$$rAF',
   '$document',
-  MaterialTooltipDirective
+  '$mdUtil',
+  MdTooltipDirective
 ]);
 
 /**
  * @ngdoc directive
- * @name materialTooltip
+ * @name mdTooltip
  * @module material.components.tooltip
  * @description
  * Tooltips are used to describe elements that are interactive and primarily graphical (not textual).
  *
- * Place a `<material-tooltip>` as a child of the element it describes.
+ * Place a `<md-tooltip>` as a child of the element it describes.
  *
  * A tooltip will activate when the user focuses, hovers over, or touches the parent.
  *
  * @usage
  * <hljs lang="html">
- * <material-icon icon="/img/icons/ic_play_arrow_24px.svg">
- *   <material-tooltip>
+ * <md-icon icon="/img/icons/ic_play_arrow_24px.svg">
+ *   <md-tooltip>
  *     Play Music
- *   </material-tooltip>
- * </material-icon>
+ *   </md-tooltip>
+ * </md-icon>
  * </hljs>
  *
  * @param {expression=} visible Boolean bound to whether the tooltip is 
  * currently visible.
  */
-function MaterialTooltipDirective($timeout, $window, $$rAF, $document) {
+function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil) {
 
   var TOOLTIP_SHOW_DELAY = 400;
   var TOOLTIP_WINDOW_EDGE_SPACE = 8;
@@ -47,7 +48,7 @@ function MaterialTooltipDirective($timeout, $window, $$rAF, $document) {
   return {
     restrict: 'E',
     transclude: true,
-    require: '^?materialContent',
+    require: '^?mdContent',
     template: 
       '<div class="tooltip-background"></div>' +
       '<div class="tooltip-content" ng-transclude></div>',
@@ -63,7 +64,7 @@ function MaterialTooltipDirective($timeout, $window, $$rAF, $document) {
     // We will re-attach tooltip when visible
     element.detach();
     element.attr('role', 'tooltip');
-    element.attr('id', attr.id || ('tooltip_' + Util.nextUid()));
+    element.attr('id', attr.id || ('tooltip_' + $mdUtil.nextUid()));
 
     parent.on('focus mouseenter touchstart', function() {
       setVisible(true);

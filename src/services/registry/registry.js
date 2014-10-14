@@ -1,5 +1,5 @@
-/**
- * @ngdoc overview
+/*
+ * @ngdoc module
  * @name material.services.registry
  *
  * @description
@@ -7,20 +7,21 @@
  */
 angular.module('material.services.registry', [
 ])
-  .factory('$materialComponentRegistry', [
+  .factory('$mdComponentRegistry', [
     '$log', 
-    materialComponentRegistry 
+    mdComponentRegistry 
   ]);
 
-/**
+/*
  * @ngdoc service
- * @name material.services.registry.service:$materialComponentRegistry
+ * @name $mdComponentRegistry
+ * @module material.services.registry
  *
  * @description
- * $materialComponentRegistry enables the user to interact with multiple instances of
+ * $mdComponentRegistry enables the user to interact with multiple instances of
  * certain complex components in a running app.
  */
-function materialComponentRegistry($log) {
+function mdComponentRegistry($log) {
   var instances = [];
 
   return {
@@ -45,7 +46,7 @@ function materialComponentRegistry($log) {
       var i, j, instance;
       for(i = 0, j = instances.length; i < j; i++) {
         instance = instances[i];
-        if(instance.$$materialHandle === handle) {
+        if(instance.$$mdHandle === handle) {
           return instance;
         }
       }
@@ -58,7 +59,7 @@ function materialComponentRegistry($log) {
      * @param handle the handle to identify the instance under.
      */
     register: function(instance, handle) {
-      instance.$$materialHandle = handle;
+      instance.$$mdHandle = handle;
       instances.push(instance);
 
       return function deregister() {

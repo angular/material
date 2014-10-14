@@ -1,4 +1,4 @@
-describe('<material-toolbar>', function() {
+describe('<md-toolbar>', function() {
 
   beforeEach(module('material.components.toolbar', function($provide) {
     //Create fake raf to instant-trigger the callback
@@ -13,10 +13,10 @@ describe('<material-toolbar>', function() {
     $provide.value('$$rAF', raf);
   }));
 
-  it('with scrollShrink, it should shrink scrollbar when going to bottom', inject(function($compile, $rootScope, $materialEffects, materialToolbarDirective) {
+  it('with scrollShrink, it should shrink scrollbar when going to bottom', inject(function($compile, $rootScope, $mdEffects, mdToolbarDirective) {
 
     var parent = angular.element('<div>');
-    var toolbar = angular.element('<material-toolbar>');
+    var toolbar = angular.element('<md-toolbar>');
     var contentEl = angular.element('<div>');
     // Make content and toolbar siblings
     parent.append(toolbar).append(contentEl);
@@ -39,33 +39,33 @@ describe('<material-toolbar>', function() {
     });
 
     // Manually link so we can give our own elements with spies on them
-    materialToolbarDirective[0].link($rootScope, toolbar, { 
+    mdToolbarDirective[0].link($rootScope, toolbar, { 
       scrollShrink: true,
       shrinkSpeedFactor: 1
     });
 
-    $rootScope.$broadcast('$materialContentLoaded', contentEl);
+    $rootScope.$broadcast('$mdContentLoaded', contentEl);
 
     //Expect everything to be in its proper initial state.
-    expect(toolbarCss[$materialEffects.TRANSFORM]).toEqual('translate3d(0,0px,0)');
+    expect(toolbarCss[$mdEffects.TRANSFORM]).toEqual('translate3d(0,0px,0)');
     expect(contentCss['margin-top']).toEqual('-100px');
-    expect(contentCss[$materialEffects.TRANSFORM]).toEqual('translate3d(0,100px,0)');
+    expect(contentCss[$mdEffects.TRANSFORM]).toEqual('translate3d(0,100px,0)');
 
     // Fake scroll to the bottom
     TestUtil.triggerEvent(contentEl, 'scroll', {
       target: { scrollTop: 500 }
     });
 
-    expect(toolbarCss[$materialEffects.TRANSFORM]).toEqual('translate3d(0,-100px,0)');
-    expect(contentCss[$materialEffects.TRANSFORM]).toEqual('translate3d(0,0px,0)');
+    expect(toolbarCss[$mdEffects.TRANSFORM]).toEqual('translate3d(0,-100px,0)');
+    expect(contentCss[$mdEffects.TRANSFORM]).toEqual('translate3d(0,0px,0)');
 
     // Fake scroll back to the top
     TestUtil.triggerEvent(contentEl, 'scroll', {
       target: { scrollTop: 0 }
     });
 
-    expect(toolbarCss[$materialEffects.TRANSFORM]).toEqual('translate3d(0,0px,0)');
-    expect(contentCss[$materialEffects.TRANSFORM]).toEqual('translate3d(0,100px,0)');
+    expect(toolbarCss[$mdEffects.TRANSFORM]).toEqual('translate3d(0,0px,0)');
+    expect(contentCss[$mdEffects.TRANSFORM]).toEqual('translate3d(0,100px,0)');
 
   }));
 });

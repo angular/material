@@ -1,14 +1,15 @@
 angular.module('material.components.tabs')
 
-.controller('$materialTabs', [
+.controller('$mdTabs', [
   '$scope', 
   '$element',
-  MaterialTabsController
+  '$mdUtil',
+  MdTabsController
 ]);
 
-function MaterialTabsController(scope, element) {
+function MdTabsController(scope, element, $mdUtil) {
 
-  var tabsList = Util.iterator([], false);
+  var tabsList = $mdUtil.iterator([], false);
   var self = this;
 
   // Properties
@@ -54,7 +55,7 @@ function MaterialTabsController(scope, element) {
     if (scope.selectedIndex === -1 || scope.selectedIndex === self.indexOf(tab)) {
       self.select(tab);
     }
-    scope.$broadcast('$materialTabsChanged');
+    scope.$broadcast('$mdTabsChanged');
   }
 
   function remove(tab) {
@@ -71,7 +72,7 @@ function MaterialTabsController(scope, element) {
     tabsList.remove(tab);
     tab.onRemove();
 
-    scope.$broadcast('$materialTabsChanged');
+    scope.$broadcast('$mdTabsChanged');
   }
 
   // Move a tab (used when ng-repeat order changes)
@@ -82,7 +83,7 @@ function MaterialTabsController(scope, element) {
     tabsList.add(tab, toIndex);
     if (isSelected) self.select(tab);
 
-    scope.$broadcast('$materialTabsChanged');
+    scope.$broadcast('$mdTabsChanged');
   }
 
   function select(tab) {

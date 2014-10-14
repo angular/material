@@ -1,25 +1,25 @@
-describe('$materialComponentRegistry Service', function() {
+describe('$mdComponentRegistry Service', function() {
   beforeEach(module('material.services.registry'));
 
-  it('should print error on no handle', inject(function($materialComponentRegistry, $log) {
+  it('should print error on no handle', inject(function($mdComponentRegistry, $log) {
     spyOn($log, 'error');
-    $materialComponentRegistry.notFoundError('badHandle');
+    $mdComponentRegistry.notFoundError('badHandle');
     expect($log.error).toHaveBeenCalled();
   }));
 
-  it('Should register handle', inject(function($materialComponentRegistry) {
-    $materialComponentRegistry.register({needle: true}, 'test');
-    var instance = $materialComponentRegistry.get('test');
+  it('Should register handle', inject(function($mdComponentRegistry) {
+    $mdComponentRegistry.register({needle: true}, 'test');
+    var instance = $mdComponentRegistry.get('test');
     expect(instance).toBeTruthy();
     expect(instance.needle).not.toBe(undefined);
-    expect($materialComponentRegistry.getInstances().length).toBe(1);
+    expect($mdComponentRegistry.getInstances().length).toBe(1);
   }));
 
-  it('Should deregister', inject(function($materialComponentRegistry) {
-    var deregister = $materialComponentRegistry.register({needle: true}, 'test');
-    expect($materialComponentRegistry.getInstances().length).toBe(1);
+  it('Should deregister', inject(function($mdComponentRegistry) {
+    var deregister = $mdComponentRegistry.register({needle: true}, 'test');
+    expect($mdComponentRegistry.getInstances().length).toBe(1);
     deregister();
-    expect($materialComponentRegistry.getInstances().length).toBe(0);
+    expect($mdComponentRegistry.getInstances().length).toBe(0);
   }));
 
 });

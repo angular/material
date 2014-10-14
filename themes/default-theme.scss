@@ -1,0 +1,754 @@
+$base-vendor-prefixes: "webkit", "moz", "ms";
+$font-family: 'RobotoDraft', 'Helvetica Neue', Helvetica, Arial;
+$font-color-base: #444;
+$background-color-base: #fff !default;
+$text-light: #f1f1f1;
+$text-medium: #999;
+$text-dark: #111111;
+$theme-textfield-focus-label: #1b1b1b;
+$theme-textfield-focus-border: #1394F5;
+$theme-gray: #444;
+$theme-light: #4285f4;
+$theme-light-blue: #03a9f4;
+$theme-dark: #3f51b5;
+$theme-green: #0f9d58;
+$theme-yellow: #ffeb3b;
+$theme-orange: #ff5722;
+$theme-purple: #9c27b0;
+$theme-red: #db4437;
+$theme-indigo: #3e50b4;
+$h1-font-size-base: 2em !default;
+$h1-margin-base: 0.67em 0 !default;
+$h2-font-size-base: 1.5em !default;
+$h2-margin-base: 0.83em 0 !default;
+$h3-font-size-base: 1.17em !default;
+$h3-margin-base: 1em 0 !default;
+$h4-font-size-base: 1em !default;
+$h4-margin-base: 1.33em 0 !default;
+$h5-font-size-base: 0.83em !default;
+$h5-margin-base: 1.67em 0 !default;
+$h6-font-size-base: 0.75em !default;
+$h6-margin-base: 2.33em 0 !default;
+$baseline-grid:            8px !default;
+$layout-breakpoint-sm:     600px !default;
+$layout-breakpoint-md:     960px !default;
+$layout-breakpoint-lg:     1200px !default;
+$layout-gutter-width:      ($baseline-grid * 2) !default;
+$toast-height: $baseline-grid * 3;
+$toast-margin: $baseline-grid * 1;
+$button-border-radius: 3px;
+$button-disabled-background: rgb(234, 234, 234);
+$button-disabled-color: rgb(168, 168, 168);
+$button-raised-background: rgb(223, 223, 233);
+$button-raised-colored-color: #fff;
+$button-raised-colored-background: $theme-light;
+$button-hover-background: rgb(228, 228, 228);
+$button-raised-hover-background: rgb(214, 214, 214);
+$button-raised-colored-hover-background: #3367d6;
+$button-line-height: 25px;
+$button-padding: 2px 6px 3px;
+$button-fab-width: 56px;
+$button-fab-height: 56px;
+$button-fab-border-radius: 28px;
+$button-fab-padding: 16px;
+$button-fab-toast-offset: $toast-height + $toast-margin;
+$app-bar-height: 64px;
+$toolbar-tools-height: 64px;
+$toolbar-height: 64px;
+$toolbar-medium-tall-height: 88px;
+$toolbar-tall-height: 192px;
+$toolbar-indent-margin: 64px;
+$sidenav-shadow: 0px 0px 5px rgba(0,0,0,0.4);
+$sidenav-default-width: 304px;
+$sidenav-min-room: 56px;
+$whiteframe-shadow-z1: 0px 2px 5px 0 rgba(0,0,0,0.26);
+$whiteframe-zindex-z1: 1;
+$whiteframe-shadow-z2: 0px 8px 17px rgba(0,0,0,0.2);
+$whiteframe-zindex-z2: 2;
+$whiteframe-shadow-z3: 0px 17px 50px rgba(0,0,0,0.19);
+$whiteframe-zindex-z3: 3;
+$whiteframe-shadow-z4: 0px 16px 28px 0 rgba(0,0,0,0.22);
+$whiteframe-zindex-z4: 4;
+$whiteframe-shadow-z5: 0px 27px 24px 0 rgba(0,0,0,0.2);
+$whiteframe-zindex-z5: 5;
+$subheader-line-height: 1em;
+$subheader-font-size: 0.9em;
+$subheader-padding: ($baseline-grid * 2) 0px ($baseline-grid * 2) ($baseline-grid * 2);
+$subheader-font-weight: 400;
+$subheader-margin: 0 0 0 0;
+$subheader-margin-right: 16px;
+$subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16);
+$list-h3-font-size: 1.1em;
+$list-h3-margin: 0 0 3px 0;
+$list-h3-font-weight: 400;
+$list-h4-font-size: 0.9em;
+$list-h4-font-weight: 400;
+$list-h4-margin: 0 0 3px 0;
+$list-p-font-size: 0.75em;
+$list-p-margin: 0 0 3px 0;
+$list-padding-top: $baseline-grid;
+$list-padding-right: 0px;
+$list-padding-left: 0px;
+$list-padding-bottom: $baseline-grid;
+$item-padding-top: 0px;
+$item-padding-right: 0px;
+$item-padding-left: 0px;
+$item-padding-bottom: 0px;
+$card-border-radius: 2px;
+$card-border: 1px solid #eee;
+$card-padding: 8px;
+$card-margin: 8px;
+$card-box-shadow: $whiteframe-shadow-z1;
+$tabs-paginator-width: $baseline-grid * 4 !default;
+$tabs-tab-width: $baseline-grid * 12 !default;
+$tabs-header-height: 48px;
+$tff-font-size: 0.75em;
+$tff-line-height:26px;
+$tff-margin: 10px 0 10px 0;
+$tff-placeholder-color: darken($text-light, 30%);
+$tff-transition: all ease-out 150ms;
+$tff-hint-offset-large : 22px;
+$tff-hint-offset-small : 4px;
+$ttf-hint-offset-scale : 0.75;
+$tff-hint-normal: #999;
+$tff-hint-focused: #EE008B;
+$tff-hint-disabled: #b0b0b0;
+$tff-input-normal: #2f2f2f;
+$tff-input-focused: #EE008B;
+$tff-input-disabled: #bcbcbc;
+$tff-line-focused-width: 2px;
+$tff-line-disabled-width: 0px;
+$tff-line-dot-width: 1px;
+$tff-line-dot-size: 3px;
+$tff-line-normal: #c7c7c7;
+$tff-line-focused: #EE008B;
+$tff-line-disabled: #bcbcbc;
+$tff-line-dashed: #cfcfcf;
+$tff-hint-normal-dark: #5d5d5d;
+$tff-hint-focused-dark: #1194f6;
+$tff-hint-disabled-dark: #858585;
+$tff-input-normal-dark: #d6d6d6;
+$tff-input-focused-dark: #d6d6d6;
+$tff-input-disabled-dark: #5d5d5d;
+$tff-line-normal-dark: #4c4c4c;
+$tff-line-focused-dark: #1194f6;
+$tff-line-disabled-dark: #333333;
+$tff-line-dashed-dark: #525252;
+$bottom-sheet-background-color: #FAFAFA;
+$bottom-sheet-border-top-color: #BCBBBB;
+$bottom-sheet-horizontal-padding: 2 * $baseline-grid;
+$bottom-sheet-vertical-padding: 1 * $baseline-grid;
+$bottom-sheet-icon-after-margin: 4 * $baseline-grid;
+$bottom-sheet-list-item-height: 6 * $baseline-grid;
+$bottom-sheet-hidden-bottom-padding: 80px;
+$bottom-sheet-header-height: 7 * $baseline-grid;
+$bottom-sheet-grid-font-weight: 300;
+$input-font-size: 0.75em;
+$input-line-height: 26px;
+$input-placeholder-color: darken($text-light, 30%);
+$input-color: $text-dark;
+$input-color-inverted: $text-light;
+$input-group-margin: 10px 0 10px 0;
+$input-label-focused-font-size: 0.7em;
+$input-label-focused-color: $text-dark;
+$input-focused-scale: 0.85;
+$input-label-transition: all ease-out 300ms;
+$input-border-color: #6D6D6D;
+$input-disabled-border-color: #a0a0a0;
+$input-focused-border-color: $text-dark;
+$slider-background-color:  rgb(200, 200, 200);
+$slider-height:  48px;
+$slider-track-height:  2px;
+$slider-thumb-width:  32px;
+$slider-thumb-height:  $slider-thumb-width;
+$slider-thumb-default-scale: 0.5;
+$slider-thumb-hover-scale: 0.6;
+$slider-thumb-focus-scale: 0.85;
+$slider-thumb-disabled-scale: 0.35;
+$slider-thumb-disabled-border: 6px;
+$slider-focus-thumb-width:  48px;
+$slider-focus-thumb-height: $slider-focus-thumb-width;
+$slider-focus-ring-border-width: 3px;
+$slider-arrow-height: 16px;
+$slider-arrow-width: 28px;
+$slider-sign-height: 28px;
+$slider-sign-width: 28px;
+$slider-sign-top: ($slider-height / 2) - ($slider-thumb-default-scale * $slider-thumb-height / 2) - ($slider-sign-height) - ($slider-arrow-height) + 8px;
+$switch-width: $baseline-grid * 8;
+$checkbox-width: 18px;
+$checkbox-height: $checkbox-width;
+$radio-width: 16px;
+$radio-height: $radio-width;
+$z-index-dialog: 10;
+$z-index-toast: 9;
+$z-index-sidenav: 8;
+$z-index-backdrop: 7;
+$z-index-tooltip: 6;
+$z-index-fab: 2;
+$z-index-bottom-sheet: $z-index-backdrop + 1;
+$color-divider: 							 rgba(0,0,0,.12) !important;
+$color-red-50:                 #fde0dc !default;
+$color-red-100:                #f9bdbb !default;
+$color-red-200:                #f69988 !default;
+$color-red-300:                #f36c60 !default;
+$color-red-400:                #e84e40 !default;
+$color-red-500:                #e51c23 !default;
+$color-red-600:                #dd191d !default;
+$color-red-700:                #d01716 !default;
+$color-red-800:                #c41411 !default;
+$color-red-900:                #b0120a !default;
+$color-red-A100:               #ff7997 !default;
+$color-red-A200:               #ff5177 !default;
+$color-red-A400:               #ff2d6f !default;
+$color-red-A700:               #e00032 !default;
+$color-red:                    $color-red-500 !default;
+$color-pink-50:                #fce4ec !default;
+$color-pink-100:               #f8bbd0 !default;
+$color-pink-200:               #f48fb1 !default;
+$color-pink-300:               #f06292 !default;
+$color-pink-400:               #ec407a !default;
+$color-pink-500:               #e91e63 !default;
+$color-pink-600:               #d81b60 !default;
+$color-pink-700:               #c2185b !default;
+$color-pink-800:               #ad1457 !default;
+$color-pink-900:               #880e4f !default;
+$color-pink-A100:              #ff80ab !default;
+$color-pink-A200:              #ff4081 !default;
+$color-pink-A400:              #f50057 !default;
+$color-pink-A700:              #c51162 !default;
+$color-pink:                   $color-pink-500 !default;
+$color-purple-50:              #f3e5f5 !default;
+$color-purple-100:             #e1bee7 !default;
+$color-purple-200:             #ce93d8 !default;
+$color-purple-300:             #ba68c8 !default;
+$color-purple-400:             #ab47bc !default;
+$color-purple-500:             #9c27b0 !default;
+$color-purple-600:             #8e24aa !default;
+$color-purple-700:             #7b1fa2 !default;
+$color-purple-800:             #6a1b9a !default;
+$color-purple-900:             #4a148c !default;
+$color-purple-A100:            #ea80fc !default;
+$color-purple-A200:            #e040fb !default;
+$color-purple-A400:            #d500f9 !default;
+$color-purple-A700:            #aa00ff !default;
+$color-purple:                 $color-purple-500 !default;
+$color-deep-purple-50:         #ede7f6 !default;
+$color-deep-purple-100:        #d1c4e9 !default;
+$color-deep-purple-200:        #b39ddb !default;
+$color-deep-purple-300:        #9575cd !default;
+$color-deep-purple-400:        #7e57c2 !default;
+$color-deep-purple-500:        #673ab7 !default;
+$color-deep-purple-600:        #5e35b1 !default;
+$color-deep-purple-700:        #512da8 !default;
+$color-deep-purple-800:        #4527a0 !default;
+$color-deep-purple-900:        #311b92 !default;
+$color-deep-purple-A100:       #b388ff !default;
+$color-deep-purple-A200:       #7c4dff !default;
+$color-deep-purple-A400:       #651fff !default;
+$color-deep-purple-A700:       #6200ea !default;
+$color-deep-purple:            $color-deep-purple-500 !default;
+$color-indigo-50:              #e8eaf6 !default;
+$color-indigo-100:             #c5cae9 !default;
+$color-indigo-200:             #9fa8da !default;
+$color-indigo-300:             #7986cb !default;
+$color-indigo-400:             #5c6bc0 !default;
+$color-indigo-500:             #3f51b5 !default;
+$color-indigo-600:             #3949ab !default;
+$color-indigo-700:             #303f9f !default;
+$color-indigo-800:             #283593 !default;
+$color-indigo-900:             #1a237e !default;
+$color-indigo-A100:            #8c9eff !default;
+$color-indigo-A200:            #536dfe !default;
+$color-indigo-A400:            #3d5afe !default;
+$color-indigo-A700:            #304ffe !default;
+$color-indigo:                 $color-indigo-500 !default;
+$color-blue-50:                #e7e9fd !default;
+$color-blue-100:               #d0d9ff !default;
+$color-blue-200:               #afbfff !default;
+$color-blue-300:               #91a7ff !default;
+$color-blue-400:               #738ffe !default;
+$color-blue-500:               #5677fc !default;
+$color-blue-600:               #4e6cef !default;
+$color-blue-700:               #455ede !default;
+$color-blue-800:               #3b50ce !default;
+$color-blue-900:               #2a36b1 !default;
+$color-blue-A100:              #a6baff !default;
+$color-blue-A200:              #6889ff !default;
+$color-blue-A400:              #4d73ff !default;
+$color-blue-A700:              #4d69ff !default;
+$color-blue:                   $color-blue-500 !default;
+$color-light-blue-50:          #e1f5fe !default;
+$color-light-blue-100:         #b3e5fc !default;
+$color-light-blue-200:         #81d4fa !default;
+$color-light-blue-300:         #4fc3f7 !default;
+$color-light-blue-400:         #29b6f6 !default;
+$color-light-blue-500:         #03a9f4 !default;
+$color-light-blue-600:         #039be5 !default;
+$color-light-blue-700:         #0288d1 !default;
+$color-light-blue-800:         #0277bd !default;
+$color-light-blue-900:         #01579b !default;
+$color-light-blue-A100:        #80d8ff !default;
+$color-light-blue-A200:        #40c4ff !default;
+$color-light-blue-A400:        #00b0ff !default;
+$color-light-blue-A700:        #0091ea !default;
+$color-light-blue:             $color-light-blue-500 !default;
+$color-cyan-50:                #e0f7fa !default;
+$color-cyan-100:               #b2ebf2 !default;
+$color-cyan-200:               #80deea !default;
+$color-cyan-300:               #4dd0e1 !default;
+$color-cyan-400:               #26c6da !default;
+$color-cyan-500:               #00bcd4 !default;
+$color-cyan-600:               #00acc1 !default;
+$color-cyan-700:               #0097a7 !default;
+$color-cyan-800:               #00838f !default;
+$color-cyan-900:               #006064 !default;
+$color-cyan-A100:              #84ffff !default;
+$color-cyan-A200:              #18ffff !default;
+$color-cyan-A400:              #00e5ff !default;
+$color-cyan-A700:              #00b8d4 !default;
+$color-cyan:                   $color-cyan-500 !default;
+$color-teal-50:                #e0f2f1 !default;
+$color-teal-100:               #b2dfdb !default;
+$color-teal-200:               #80cbc4 !default;
+$color-teal-300:               #4db6ac !default;
+$color-teal-400:               #26a69a !default;
+$color-teal-500:               #009688 !default;
+$color-teal-600:               #00897b !default;
+$color-teal-700:               #00796b !default;
+$color-teal-800:               #00695c !default;
+$color-teal-900:               #004d40 !default;
+$color-teal-A100:              #a7ffeb !default;
+$color-teal-A200:              #64ffda !default;
+$color-teal-A400:              #1de9b6 !default;
+$color-teal-A700:              #00bfa5 !default;
+$color-teal:                   $color-teal-500 !default;
+$color-green-50:               #d0f8ce !default;
+$color-green-100:              #a3e9a4 !default;
+$color-green-200:              #72d572 !default;
+$color-green-300:              #42bd41 !default;
+$color-green-400:              #2baf2b !default;
+$color-green-500:              #259b24 !default;
+$color-green-600:              #0a8f08 !default;
+$color-green-700:              #0a7e07 !default;
+$color-green-800:              #056f00 !default;
+$color-green-900:              #0d5302 !default;
+$color-green-A100:             #a2f78d !default;
+$color-green-A200:             #5af158 !default;
+$color-green-A400:             #14e715 !default;
+$color-green-A700:             #12c700 !default;
+$color-green:                  $color-green-500 !default;
+$color-light-green-50:         #f1f8e9 !default;
+$color-light-green-100:        #dcedc8 !default;
+$color-light-green-200:        #c5e1a5 !default;
+$color-light-green-300:        #aed581 !default;
+$color-light-green-400:        #9ccc65 !default;
+$color-light-green-500:        #8bc34a !default;
+$color-light-green-600:        #7cb342 !default;
+$color-light-green-700:        #689f38 !default;
+$color-light-green-800:        #558b2f !default;
+$color-light-green-900:        #33691e !default;
+$color-light-green-A100:       #ccff90 !default;
+$color-light-green-A200:       #b2ff59 !default;
+$color-light-green-A400:       #76ff03 !default;
+$color-light-green-A700:       #64dd17 !default;
+$color-light-green:            $color-light-green-500 !default;
+$color-lime-50:                #f9fbe7 !default;
+$color-lime-100:               #f0f4c3 !default;
+$color-lime-200:               #e6ee9c !default;
+$color-lime-300:               #dce775 !default;
+$color-lime-400:               #d4e157 !default;
+$color-lime-500:               #cddc39 !default;
+$color-lime-600:               #c0ca33 !default;
+$color-lime-700:               #afb42b !default;
+$color-lime-800:               #9e9d24 !default;
+$color-lime-900:               #827717 !default;
+$color-lime-A100:              #f4ff81 !default;
+$color-lime-A200:              #eeff41 !default;
+$color-lime-A400:              #c6ff00 !default;
+$color-lime-A700:              #aeea00 !default;
+$color-lime:                   $color-lime-500 !default;
+$color-yellow-50:              #fffde7 !default;
+$color-yellow-100:             #fff9c4 !default;
+$color-yellow-200:             #fff59d !default;
+$color-yellow-300:             #fff176 !default;
+$color-yellow-400:             #ffee58 !default;
+$color-yellow-500:             #ffeb3b !default;
+$color-yellow-600:             #fdd835 !default;
+$color-yellow-700:             #fbc02d !default;
+$color-yellow-800:             #f9a825 !default;
+$color-yellow-900:             #f57f17 !default;
+$color-yellow-A100:            #ffff8d !default;
+$color-yellow-A200:            #ffff00 !default;
+$color-yellow-A400:            #ffea00 !default;
+$color-yellow-A700:            #ffd600 !default;
+$color-yellow:                 $color-yellow-500 !default;
+$color-amber-50:               #fff8e1 !default;
+$color-amber-100:              #ffecb3 !default;
+$color-amber-200:              #ffe082 !default;
+$color-amber-300:              #ffd54f !default;
+$color-amber-400:              #ffca28 !default;
+$color-amber-500:              #ffc107 !default;
+$color-amber-600:              #ffb300 !default;
+$color-amber-700:              #ffa000 !default;
+$color-amber-800:              #ff8f00 !default;
+$color-amber-900:              #ff6f00 !default;
+$color-amber-A100:             #ffe57f !default;
+$color-amber-A200:             #ffd740 !default;
+$color-amber-A400:             #ffc400 !default;
+$color-amber-A700:             #ffab00 !default;
+$color-amber:                  $color-amber-500 !default;
+$color-orange-50:              #fff3e0 !default;
+$color-orange-100:             #ffe0b2 !default;
+$color-orange-200:             #ffcc80 !default;
+$color-orange-300:             #ffb74d !default;
+$color-orange-400:             #ffa726 !default;
+$color-orange-500:             #ff9800 !default;
+$color-orange-600:             #fb8c00 !default;
+$color-orange-700:             #f57c00 !default;
+$color-orange-800:             #ef6c00 !default;
+$color-orange-900:             #e65100 !default;
+$color-orange-A100:            #ffd180 !default;
+$color-orange-A200:            #ffab40 !default;
+$color-orange-A400:            #ff9100 !default;
+$color-orange-A700:            #ff6d00 !default;
+$color-orange:                 $color-orange-500 !default;
+$color-deep-orange-50:         #fbe9e7 !default;
+$color-deep-orange-100:        #ffccbc !default;
+$color-deep-orange-200:        #ffab91 !default;
+$color-deep-orange-300:        #ff8a65 !default;
+$color-deep-orange-400:        #ff7043 !default;
+$color-deep-orange-500:        #ff5722 !default;
+$color-deep-orange-600:        #f4511e !default;
+$color-deep-orange-700:        #e64a19 !default;
+$color-deep-orange-800:        #d84315 !default;
+$color-deep-orange-900:        #bf360c !default;
+$color-deep-orange-A100:       #ff9e80 !default;
+$color-deep-orange-A200:       #ff6e40 !default;
+$color-deep-orange-A400:       #ff3d00 !default;
+$color-deep-orange-A700:       #dd2c00 !default;
+$color-deep-orange:            $color-deep-orange-500 !default;
+$color-brown-50:               #efebe9 !default;
+$color-brown-100:              #d7ccc8 !default;
+$color-brown-200:              #bcaaa4 !default;
+$color-brown-300:              #a1887f !default;
+$color-brown-400:              #8d6e63 !default;
+$color-brown-500:              #795548 !default;
+$color-brown-600:              #6d4c41 !default;
+$color-brown-700:              #5d4037 !default;
+$color-brown-800:              #4e342e !default;
+$color-brown-900:              #3e2723 !default;
+$color-brown:                  $color-brown-500 !default;
+$color-grey-0:                 #ffffff !default;
+$color-grey-50:                #fafafa !default;
+$color-grey-100:               #f5f5f5 !default;
+$color-grey-200:               #eeeeee !default;
+$color-grey-300:               #e0e0e0 !default;
+$color-grey-400:               #bdbdbd !default;
+$color-grey-500:               #9e9e9e !default;
+$color-grey-600:               #757575 !default;
+$color-grey-700:               #616161 !default;
+$color-grey-800:               #424242 !default;
+$color-grey-900:               #212121 !default;
+$color-grey-1000:              #000000 !default;
+$color-grey:                   $color-grey-500 !default;
+$color-blue-grey-50:           #eceff1 !default;
+$color-blue-grey-100:          #cfd8dc !default;
+$color-blue-grey-200:          #b0bec5 !default;
+$color-blue-grey-300:          #90a4ae !default;
+$color-blue-grey-400:          #78909c !default;
+$color-blue-grey-500:          #607d8b !default;
+$color-blue-grey-600:          #546e7a !default;
+$color-blue-grey-700:          #455a64 !default;
+$color-blue-grey-800:          #37474f !default;
+$color-blue-grey-900:          #263238 !default;
+$color-blue-grey:              $color-blue-grey-500 !default;
+$toast-height: 20px !default;
+// Structural
+
+// Base vendor prefixes for mixins
+
+// Font families
+
+
+// Font colors
+
+// Theme colors
+
+
+
+
+
+
+
+
+
+
+
+
+// Layout
+// ------------------------------
+
+
+// Toast
+//--------------------------------------------
+
+
+// Button
+//--------------------------------------------
+
+
+
+// Fab buttons
+
+// App bar variables
+
+// Toolbar variables
+
+// Side nav variables
+
+
+// Whiteframes
+
+
+// SubHeader
+
+
+// Lists and tiles
+
+
+
+
+// Cards
+
+
+// Tabs
+
+
+// ***********************************
+// Styles for Floating Label Text Fields
+// - Light Theme -
+// ***********************************
+//
+// - `label` element (aka hint)
+// - `input` element
+// - `line` element
+
+// ***********************************
+// Styles for Floating Label Text Fields
+// - Light Theme -
+// ***********************************
+// - `label` element (aka hint)
+// - `input` element
+// - `line` element
+
+// Bottom Sheets
+
+// Forms and inputs
+
+
+
+
+
+
+
+
+
+// Slider
+//--------------------------------------------
+
+
+
+
+
+
+
+// Switch
+//--------------------------------------------
+
+
+
+// Checkbox
+//--------------------------------------------
+
+
+
+// Radio Button
+//--------------------------------------------
+
+
+// Z-indexes
+//--------------------------------------------
+
+
+// Md Design Color Palette
+// -----------------------------
+// http://www.google.com/design/spec/style/color.html
+
+// Text
+// ----------------------------
+
+
+// Red
+// ----------------------------
+
+
+
+// Pink
+// ----------------------------
+
+
+
+// Purple
+// ----------------------------
+
+
+
+// Deep Purple
+// ----------------------------
+
+
+
+// Indigo
+// ----------------------------
+
+
+
+// Blue
+// ----------------------------
+
+
+
+// Light Blue
+// ----------------------------
+
+
+
+// Cyan
+// ----------------------------
+
+
+
+// Teal
+// ----------------------------
+
+
+
+// Green
+// ----------------------------
+
+
+
+// Light Green
+// ----------------------------
+
+
+
+// Lime
+// ----------------------------
+
+
+
+// Yellow
+// ----------------------------
+
+
+
+// Amber
+// ----------------------------
+
+
+
+// Orange
+// ----------------------------
+
+
+
+// Deep Orange
+// ----------------------------
+
+
+
+// Brown
+// ----------------------------
+
+
+
+// Grey
+// ----------------------------
+
+
+
+// Blue Grey
+// ----------------------------
+
+
+@mixin margin-selectors($before:1em, $after:1em, $start:0px, $end:0px) {
+  -webkit-margin-before: $before;
+  -webkit-margin-after: $after;
+  -webkit-margin-start: $start;
+  -webkit-margin-end: $end;
+}
+
+@mixin not-selectable($value:none) {
+  user-select: $value;
+}
+
+@mixin input-placeholder($color) {
+  &:-ms-input-placeholder {
+    color: $color;
+  }
+  &::-webkit-input-placeholder {
+    color: $color;
+  }
+}
+
+
+
+// ******************************
+// Mixins: Text Fields
+// ******************************
+
+@mixin text-field($color, $borderColor, $transition:false, $borderWidth:1px ) {
+  input, textarea {
+    color: $color;
+    border-color: $borderColor;
+    border-bottom-width: $borderWidth;
+
+    @if( $transition != false ) {
+      transition: $transition;
+    }
+  }
+}
+
+@mixin text-hint($color, $size:large, $transition:false ) {
+  label {
+    color: $color;
+
+    @if $size == "small" {
+      transform: translate3d(0, $tff-hint-offset-small, 0) scale($ttf-hint-offset-scale);
+    } @else {
+      transform: translate3d(0, $tff-hint-offset-large, 0);
+      transform-origin: left center;
+      transition: $tff-transition;
+    }
+
+    @if( $transition != false ) {
+      transition: $transition;
+    }
+  }
+}
+
+@mixin text-dashed-line( $dotGap, $dotSize, $color ) {
+  background-size: $dotSize $dotGap;
+
+  background-image: linear-gradient(to right, $color 0%, $color 50%, rgba(0, 0, 0, 0) 0%);
+  background-position: 0 bottom;
+
+  background-size: (1px + 1px) $dotGap;
+  background-repeat: repeat-x;
+}
+
+
+md-toast {
+  height: $toast-height;
+}

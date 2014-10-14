@@ -1,0 +1,17 @@
+<div ng-controller="AppCtrl" layout="vertical" layout-padding style="padding:25px;">
+
+  <h4 style="margin-top:0px">Determinate</h4>
+  For operations where the percentage of the operation completed can be determined, use a determinate indicator. They give users a quick sense of how long an operation will take.
+  <md-progress-linear mode="determinate" ng-value="determinateValue" ></md-progress-linear>
+
+  <h4>Indeterminate</h4>
+  For operations where the user is asked to wait a moment while something finishes up, and it’s not necessary to expose what's happening behind the scenes and how long it will take, use an indeterminate indicator.
+  <md-progress-linear mode="indeterminate"></md-progress-linear>
+
+  <h4>Buffer</h4>
+  <md-progress-linear mode="buffer" value="{{determinateValue}}" secondaryValue="{{determinateValue2}}"></md-progress-linear>
+
+  <h4>Query Indeterminate and Determinate</h4>
+  <md-progress-linear mode="{{mode}}" value="{{determinateValue}}"></md-progress-linear>
+
+</div>

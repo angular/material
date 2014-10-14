@@ -1,6 +1,6 @@
 
-material-radio-button,
-.material-switch-thumb { // Used in switch
+md-radio-button,
+.md-switch-thumb { // Used in switch
   display: block;
   margin: 15px;
   white-space: nowrap;
@@ -10,7 +10,7 @@ material-radio-button,
     display: none;
   }
 
-  .material-container {
+  .md-container {
     position: relative;
     top: 4px;
     display: inline-block;
@@ -18,7 +18,7 @@ material-radio-button,
     height: $radio-width;
     cursor: pointer;
 
-    .material-ripple-container {
+    .md-ripple-container {
       position: absolute;
       display: block;
       width: $radio-width * 3; 
@@ -26,13 +26,13 @@ material-radio-button,
       left: -$radio-width;
       top: -$radio-width;
     }
-    .material-ripple {
+    .md-ripple {
       color: #0f9d58;
     }
   }
 
 
-  .material-off {
+  .md-off {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -43,7 +43,7 @@ material-radio-button,
     border-radius: 50%;
   }
 
-  .material-on {
+  .md-on {
     position: absolute;
     top: 0;
     left: 0;
@@ -51,22 +51,19 @@ material-radio-button,
     height: $radio-width;
     border-radius: 50%;
     background-color: #0f9d58;
-    transition: -webkit-transform ease 0.28s;
     transition: transform ease 0.28s;
-    -webkit-transform: scale(0);
     transform: scale(0);
   }
 
-  &.material-checked .material-on {
-    -webkit-transform: scale(1.1);
+  &.md-checked .md-on {
     transform: scale(1.1);
   }
 
-  &.material-checked .material-ink-ripple {
+  &.md-checked .md-ink-ripple {
     color: #119957;
   }
 
-  .material-label {
+  .md-label {
     position: relative;
     display: inline-block;
     margin-left: 10px;
@@ -81,7 +78,7 @@ material-radio-button,
   }
 
 }
-material-radio-group {
+md-radio-group {
   border: 1px dotted transparent;
   display: block;
   outline: none;

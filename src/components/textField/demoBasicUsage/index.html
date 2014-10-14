@@ -1,0 +1,28 @@
+
+<div ng-controller="DemoController" layout="vertical">
+
+  <md-toolbar class="theme-dark-tff md-medium-tall" style="padding-top:15px;">
+    <div class="md-toolbar-tools dark">
+      <tf-float label="Title"  value="user.title"   ></tf-float>
+      <tf-float label="eMail"  value="user.email" type="email" ></tf-float>
+    </div>
+  </md-toolbar>
+
+  <md-content>
+    <form style="padding: 20px;">
+      <tf-float label="Company"       value="user.company"    disabled > </tf-float>
+      <div class="row">
+          <tf-float label="FirstName" value="user.firstName"  > </tf-float>
+          <tf-float label="LastName"  value="user.lastName"   class="long"> </tf-float>
+      </div>
+      <tf-float label="Address"       value="user.address"    > </tf-float>
+      <div class="row">
+        <tf-float label="City"        value="user.city"       > </tf-float>
+        <tf-float label="State"       value="user.state"      > </tf-float>
+        <tf-float label="Postal Code" value="user.postalCode" > </tf-float>
+      </div>
+      <tf-float label="Country"       value="user.country"    disabled > </tf-float>
+    </form>
+  </md-content>
+
+</div>

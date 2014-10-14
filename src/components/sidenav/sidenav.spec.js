@@ -1,4 +1,4 @@
-describe('materialSidenav', function() {
+describe('mdSidenav', function() {
   beforeEach(module('material.components.sidenav', function($provide) {
     $provide.value('$$rAF', function(cb) { cb(); });
   }));
@@ -6,7 +6,7 @@ describe('materialSidenav', function() {
   function setup(attrs) {
     var el;
     inject(function($compile, $rootScope) {
-      el = $compile('<material-sidenav '+(attrs || '')+'></material-sidenav>')($rootScope.$new());
+      el = $compile('<md-sidenav '+(attrs || '')+'></md-sidenav>')($rootScope.$new());
       $rootScope.$apply();
     });
     return el;
@@ -18,14 +18,14 @@ describe('materialSidenav', function() {
   describe('controller', function() {
     it('should create controller', function() {
       var el = setup('');
-      var controller = el.controller('materialSidenav');
+      var controller = el.controller('mdSidenav');
       expect(controller).not.toBe(undefined);
     });
 
     it('should open and close and toggle', function() {
       var el = setup('');
       var scope = el.isolateScope();
-      var controller = el.controller('materialSidenav');
+      var controller = el.controller('mdSidenav');
 
       // Should start closed
       expect(el.hasClass('open')).toBe(false);
@@ -50,31 +50,31 @@ describe('materialSidenav', function() {
       var el = setup('');
       var parent = angular.element('<div>').append(el);
       var scope = el.isolateScope();
-      var ctrl = el.controller('materialSidenav');
+      var ctrl = el.controller('mdSidenav');
       var backdrop;
 
 
       ctrl.open();
       scope.$apply();
 
-      backdrop = parent.find('material-backdrop');
+      backdrop = parent.find('md-backdrop');
       expect(backdrop.length).toBe(1);
 
       backdrop.triggerHandler('click');
       $timeout.flush();
       expect(el.hasClass('open')).toBe(false);
-      backdrop = parent.find('material-backdrop');
+      backdrop = parent.find('md-backdrop');
       expect(backdrop.length).toBe(0);
     }));
 
   });
 
-  describe('$materialSidenav Service', function() {
-    it('should grab instance', inject(function($materialSidenav) {
+  describe('$mdSidenav Service', function() {
+    it('should grab instance', inject(function($mdSidenav) {
       var el = setup('component-id="left"');
       var scope = el.isolateScope();
 
-      var instance = $materialSidenav('left');
+      var instance = $mdSidenav('left');
       expect(instance).toBeTruthy();
 
       instance.open();

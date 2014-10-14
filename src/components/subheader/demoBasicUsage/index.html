@@ -1,0 +1,62 @@
+
+<div ng-controller="SubheaderAppCtrl" layout="vertical" flex layout-fill>
+  <md-content style="height: 600px;">
+    <section>
+      <md-subheader class="md-subheader-colored">Unread Messages</md-subheader>
+      <md-list layout="vertical">
+        <md-item ng-repeat="message in messages">
+          <md-item-content>
+            <div class="md-tile-left">
+                <img ng-src="{{message.face}}" class="face" alt="{{message.who}}">
+            </div>
+            <div class="md-tile-content">
+              <h3>{{message.what}}</h3>
+              <h4>{{message.who}}</h4>
+              <p>
+                {{message.notes}}
+              </p>
+            </div>
+          </md-item-content>
+        </md-item>
+      </md-list>
+    </section>
+    <section>
+      <md-subheader>Read Messages</md-subheader>
+      <md-list layout="vertical">
+        <md-item ng-repeat="message in messages">
+          <md-item-content>
+            <div class="md-tile-left">
+                <img ng-src="{{message.face}}" class="face" alt="{{message.who}}">
+            </div>
+            <div class="md-tile-content">
+              <h3>{{message.what}}</h3>
+              <h4>{{message.who}}</h4>
+              <p>
+                {{message.notes}}
+              </p>
+            </div>
+          </md-item-content>
+        </md-item>
+      </md-list>
+    </section>
+    <section>
+      <md-subheader>Archived messages</md-subheader>
+      <md-list layout="vertical">
+        <md-item ng-repeat="message in messages">
+          <md-item-content>
+            <div class="md-tile-left">
+                <img ng-src="{{message.face}}" class="face" alt="{{message.who}}">
+            </div>
+            <div class="md-tile-content">
+              <h3>{{message.what}}</h3>
+              <h4>{{message.who}}</h4>
+              <p>
+                {{message.notes}}
+              </p>
+            </div>
+          </md-item-content>
+        </md-item>
+      </md-list>
+    </section>
+  </md-content>
+</div>

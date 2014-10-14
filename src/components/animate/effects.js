@@ -1,36 +1,36 @@
-/**
+/*
  * @ngdoc module
  * @name material.components.animate
  * @description
  *
  * Ink and Popup Effects
  */
-angular.module('material.animations', [])
-  .service('$materialEffects', [ 
+angular.module('material.animations', ['material.core'])
+  .service('$mdEffects', [ 
     '$rootElement', 
     '$$rAF', 
     '$sniffer',
     '$q',
-    MaterialEffects
+    MdEffects
   ]);
 
-/**
+/*
  * @ngdoc service
- * @name $materialEffects
+ * @name $mdEffects
  * @module material.components.animate
  *
  * @description
- * The `$materialEffects` service provides a simple API for various
+ * The `$mdEffects` service provides a simple API for various
  * Material Design effects.
  *
- * @returns A `$materialEffects` object with the following properties:
+ * @returns A `$mdEffects` object with the following properties:
  * - `{function(element,styles,duration)}` `inkBar` - starts ink bar
  * animation on specified DOM element
  * - `{function(element,parentElement,clickElement)}` `popIn` - animated show of element overlayed on parent element
  * - `{function(element,parentElement)}` `popOut` - animated close of popup overlay
  *
  */
-function MaterialEffects($rootElement, $$rAF, $sniffer, $q) {
+function MdEffects($rootElement, $$rAF, $sniffer, $q) {
 
   var webkit = /webkit/i.test($sniffer.vendorPrefix);
   function vendorProperty(name) {

@@ -1,4 +1,4 @@
-describe('<material-tooltip> directive', function() {
+describe('<md-tooltip> directive', function() {
 
   beforeEach(module('material.components.tooltip', function($provide) {
     $provide.value('$$rAF', mockRaf);
@@ -15,14 +15,14 @@ describe('<material-tooltip> directive', function() {
   }));
 
   function findTooltip() {
-    return angular.element(document.body).find('material-tooltip');
+    return angular.element(document.body).find('md-tooltip');
   }
 
   it('should show and hide when visible is set', inject(function($compile, $rootScope, $timeout) {
-    var element = $compile('<material-button>' +
+    var element = $compile('<md-button>' +
                'Hello' +
-               '<material-tooltip visible="isVisible">Tooltip</material-tooltip>' +
-             '</material-button>')($rootScope);
+               '<md-tooltip visible="isVisible">Tooltip</md-tooltip>' +
+             '</md-button>')($rootScope);
 
     $rootScope.$apply();
     expect(findTooltip().length).toBe(0);
@@ -40,10 +40,10 @@ describe('<material-tooltip> directive', function() {
   }));
 
   it('should describe parent', inject(function($compile, $rootScope, $timeout) {
-    var element = $compile('<material-button>' +
+    var element = $compile('<md-button>' +
                'Hello' +
-               '<material-tooltip visible="isVisible">Tooltip</material-tooltip>' +
-             '</material-button>')($rootScope);
+               '<md-tooltip visible="isVisible">Tooltip</md-tooltip>' +
+             '</md-button>')($rootScope);
 
     $rootScope.$apply('isVisible = true');
 
@@ -55,10 +55,10 @@ describe('<material-tooltip> directive', function() {
   }));
 
   it('should set visible on mouseenter and mouseleave', inject(function($compile, $rootScope, $timeout) {
-    var element = $compile('<material-button>' +
+    var element = $compile('<md-button>' +
                'Hello' +
-               '<material-tooltip visible="isVisible">Tooltip</material-tooltip>' +
-             '</material-button>')($rootScope);
+               '<md-tooltip visible="isVisible">Tooltip</md-tooltip>' +
+             '</md-button>')($rootScope);
 
     $rootScope.$apply();
 
@@ -72,10 +72,10 @@ describe('<material-tooltip> directive', function() {
   }));
 
   it('should set visible on focus and blur', inject(function($compile, $rootScope, $timeout) {
-    var element = $compile('<material-button>' +
+    var element = $compile('<md-button>' +
                'Hello' +
-               '<material-tooltip visible="isVisible">Tooltip</material-tooltip>' +
-             '</material-button>')($rootScope);
+               '<md-tooltip visible="isVisible">Tooltip</md-tooltip>' +
+             '</md-button>')($rootScope);
 
     $rootScope.$apply();
 
@@ -89,10 +89,10 @@ describe('<material-tooltip> directive', function() {
   }));
 
   it('should set visible on touchstart and touchend', inject(function($compile, $rootScope, $timeout) {
-    var element = $compile('<material-button>' +
+    var element = $compile('<md-button>' +
                'Hello' +
-               '<material-tooltip visible="isVisible">Tooltip</material-tooltip>' +
-             '</material-button>')($rootScope);
+               '<md-tooltip visible="isVisible">Tooltip</md-tooltip>' +
+             '</md-button>')($rootScope);
 
     $rootScope.$apply();
 

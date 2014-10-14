@@ -1,19 +1,19 @@
 
-material-checkbox {
+md-checkbox {
   display: block;
   margin: 15px;
   white-space: nowrap;
   cursor: pointer;
   outline: none;
 
-  .material-container {
+  .md-container {
     position: relative;
     top: 4px;
     display: inline-block;
     width: $checkbox-width;
     height: $checkbox-height;
 
-    .material-ripple-container {
+    .md-ripple-container {
       position: absolute;
       display: block;
       width: $checkbox-width * 3; 
@@ -21,13 +21,13 @@ material-checkbox {
       left: -$checkbox-width;
       top: -$checkbox-width;
     }
-    .material-ripple {
+    .md-ripple {
       color: #0f9d58;
     }
 
   }
 
-  &.material-checked .material-ripple {
+  &.md-checked .md-ripple {
     color: #5a5f5a;
   }
 
@@ -36,8 +36,8 @@ material-checkbox {
   }
 
   // unchecked
-  .material-icon {
-    @include transition(240ms);
+  .md-icon {
+    transition: 240ms;
     position: absolute;
     top: 0;
     left: 0;
@@ -48,7 +48,7 @@ material-checkbox {
   }
 
   // checked
-  &.material-checked .material-icon {
+  &.md-checked .md-icon {
     border-color: #4CAF50;
     background: #4CAF50;
   }
@@ -57,21 +57,21 @@ material-checkbox {
   &[disabled] {
     cursor: no-drop;
 
-    .material-icon {
+    .md-icon {
       border-color: $input-disabled-border-color;
     }
-    &.material-checked .material-icon {
+    &.md-checked .md-icon {
       background: $input-disabled-border-color;
     }
   }
 
   // focus
-  &:focus .material-label {
+  &:focus .md-label {
     border-color: black;
   }
 
-  &.material-checked .material-icon:after {
-    @include transform-rotate(45deg);
+  &.md-checked .md-icon:after {
+    transform: rotate(45deg);
     position: absolute;
     left: 4px;
     display: table;
@@ -83,7 +83,7 @@ material-checkbox {
     content: ' ';
   }
 
-  .material-label {
+  .md-label {
     border: 1px dotted transparent;
     position: relative;
     display: inline-block;

@@ -1,1 +1,1 @@
-Radio buttons, created using the `<material-radio-group>` parent with `<material-radio-button>` children.
+Radio buttons, created using the `<md-radio-group>` parent with `<md-radio-button>` children.

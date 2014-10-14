@@ -7,42 +7,42 @@
 angular.module('material.components.subheader', [
   'material.components.sticky'
 ])
-.directive('materialSubheader', [
-  '$materialSticky',
+.directive('mdSubheader', [
+  '$mdSticky',
   '$compile',
-  MaterialSubheaderDirective
+  MdSubheaderDirective
 ]);
 
 /**
  * @ngdoc directive
- * @name materialSubheader
+ * @name mdSubheader
  * @module material.components.subheader
  *
  * @restrict E
  *
  * @description
- * The `<material-subheader>` directive is a subheader for a section
+ * The `<md-subheader>` directive is a subheader for a section
  *
  * @usage
  * <hljs lang="html">
- * <material-subheader>Online Friends</material-subheader>
+ * <md-subheader>Online Friends</md-subheader>
  * </hljs>
  */
 
-function MaterialSubheaderDirective($materialSticky, $compile) {
+function MdSubheaderDirective($mdSticky, $compile) {
   return {
     restrict: 'E',
     replace: true,
     transclude: true,
     template: 
-      '<h2 class="material-subheader">' +
-        '<span class="material-subheader-content"></span>' +
+      '<h2 class="md-subheader">' +
+        '<span class="md-subheader-content"></span>' +
       '</h2>',
     compile: function(element, attr, transclude) {
       var outerHTML = element[0].outerHTML;
       return function postLink(scope, element, attr) {
         function getContent(el) {
-          return angular.element(el[0].querySelector('.material-subheader-content'));
+          return angular.element(el[0].querySelector('.md-subheader-content'));
         }
 
         // Transclude the user-given contents of the subheader
@@ -56,7 +56,7 @@ function MaterialSubheaderDirective($materialSticky, $compile) {
         transclude(scope, function(clone) {
           var stickyClone = $compile(angular.element(outerHTML))(scope);
           getContent(stickyClone).append(clone);
-          $materialSticky(scope, element, stickyClone);
+          $mdSticky(scope, element, stickyClone);
         });
       };
     }

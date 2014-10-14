@@ -1,0 +1,225 @@
+
+// Mobile first responsive design
+// ------------------------------
+
+[layout] {
+  box-sizing: border-box;
+  display: flex;
+}
+
+[layout=vertical] {
+  flex-direction: column;
+}
+
+[layout-padding],
+[layout][layout-padding] > [flex] {
+  padding: $layout-gutter-width / 2;
+}
+
+[layout-padding] + [layout-padding] {
+  margin-top: -($layout-gutter-width / 2);
+  padding-top: 0;
+}
+
+[layout-fill] {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+
+// Arrange on the Main Axis
+// center, start, end, space-between, space-around
+// flex-start is the default for justify-content
+// ------------------------------
+
+// Main Axis Center
+[layout-align="center"], //stretch
+[layout-align="center center"],
+[layout-align="center start"],
+[layout-align="center end"] {
+  justify-content: center;
+}
+
+// Main Axis End
+[layout-align="end"], //stretch
+[layout-align="end center"],
+[layout-align="end start"],
+[layout-align="end end"] {
+  justify-content: flex-end;
+}
+
+// Main Axis Space Around
+[layout-align="space-around"], //stretch
+[layout-align="space-around center"],
+[layout-align="space-around start"],
+[layout-align="space-around end"] {
+  justify-content: space-around;
+}
+
+// Main Axis Space Between
+[layout-align="space-between"], //stretch
+[layout-align="space-between center"],
+[layout-align="space-between start"],
+[layout-align="space-between end"] {
+  justify-content: space-between;
+}
+
+
+// Arrange on the Cross Axis
+// center, start, end
+// stretch is the default for align-items
+// ------------------------------
+
+// Cross Axis Center
+[layout-align="center center"],
+[layout-align="start center"],
+[layout-align="end center"],
+[layout-align="space-between center"],
+[layout-align="space-around center"] {
+  align-items: center;
+}
+
+// Cross Axis Start
+[layout-align="center start"],
+[layout-align="start start"],
+[layout-align="end start"],
+[layout-align="space-between start"],
+[layout-align="space-around start"] {
+  align-items: flex-start;
+}
+
+// Cross Axis End
+[layout-align="center end"],
+[layout-align="start end"],
+[layout-align="end end"],
+[layout-align="space-between end"],
+[layout-align="space-around end"] {
+  align-items: flex-end;
+}
+
+
+// Utility Attributes
+// ------------------------------
+
+[block] {
+  display: block;
+}
+
+[inline-block] {
+  display: inline-block;
+}
+
+[hide] {
+  display: none;
+}
+
+[show] {
+  display: inherit;
+}
+
+
+@mixin layout-presets($attr) {
+  [#{$attr}] {
+    flex: 1;
+  }
+  // (1-19) * 5 = 5-95%
+  @for $i from 1 through 19 {
+    [#{$attr}="#{$i * 5}"] {
+      @include layout-preset(#{$i * 5 + '%'});
+    }
+  }
+  [#{$attr}="33"], [#{$attr}="34"] {
+    @include layout-preset(33.33%);
+  }
+  [#{$attr}="66"], [#{$attr}="67"] {
+    @include layout-preset(66.66%);
+  }
+}
+
+@mixin layout-preset($value) {
+  flex: 0, 0, $value;
+  max-width: $value;
+}
+
+@mixin layout-offset-presets($attr) {
+  // (1-19) * 5 = 5-95%
+  @for $i from 1 through 19 {
+    [#{$attr}="#{$i * 5}"] {
+      margin-left: #{$i * 5 + '%'};
+    }
+  }
+  [#{$attr}="33"], [#{$attr}="34"] {
+    margin-left: 33.33%;
+  }
+  [#{$attr}="66"], [#{$attr}="67"] {
+    margin-left: 66.66%;
+  }
+}
+
+@mixin layout-order-preset($attr, $n) {
+  [#{$attr}="#{$n}"] {
+    flex-order: $n;
+  }
+}
+
+@mixin layout-order-presets($attr) {
+  @for $i from 1 through 6 {
+    @include layout-order-preset($attr, $i);
+  }
+}
+
+@mixin layout-breakpoint($suffix, $min-width) {
+  @media (min-width: $min-width) {
+
+    @include layout-presets( flex-#{$suffix} );
+    @include layout-offset-presets( offset-#{$suffix} );
+    @include layout-order-presets( layout-order-#{$suffix} );
+    [layout-#{$suffix}] {
+      flex-direction: row;
+    }
+    [layout-#{$suffix}=vertical] {
+      flex-direction: column;
+    }
+
+    [block-#{$suffix}] {
+      display: block;
+    }
+
+    [inline-block-#{$suffix}] {
+      display: inline-block;
+    }
+
+    [show-#{$suffix}] {
+      display: inherit;
+    }
+
+    [hide-#{$suffix}] {
+      display: none;
+    }
+
+  }
+}
+
+
+// layout = Default
+// ------------------------------
+@include layout-presets( flex );
+@include layout-offset-presets( offset );
+@include layout-order-presets( layout-order );
+
+
+// layout-sm = Small (Tablets)
+// ------------------------------
+@include layout-breakpoint(sm, $layout-breakpoint-sm);
+
+
+// layout-md = Medium (Desktops)
+// ------------------------------
+@include layout-breakpoint(md, $layout-breakpoint-md);
+
+
+// layout-lg = Large
+// ------------------------------
+@include layout-breakpoint(lg, $layout-breakpoint-lg);
+

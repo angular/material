@@ -1,0 +1,82 @@
+<div ng-controller="LayoutCtrl" layout="vertical" layout-fill class="layout-content">
+
+  <h3 class="layout-title">Layout Options</h3>
+
+  <p>
+    <code>layout-padding</code> adds padding between this layout's children with
+    the <code>flex</code> attribute.
+  </p>
+
+  <hljs lang="html">
+<div layout="horizontal" layout-padding>
+  <div flex>I'm on the left, and there's an empty area between.</div>
+  <div flex>I'm on the right, and there's an empty area between.</div>
+</div>
+  </hljs>
+
+
+  <p>
+    <code>layout-fill</code> forces the layout element to fill its parent container.
+  </p>
+  <hljs lang="html">
+<div layout="vertical" layout-fill>
+  This layout fills up 100% of its parent's width and height.
+</div>
+  </hljs>
+
+  <md-divider></md-divider>
+  <h3 class="layout-title">Utility Attributes</h3>
+
+  <table>
+    <tr>
+      <td>block</td>
+      <td><code>display: block</code></td>
+    </tr>
+    <tr>
+      <td>block-sm</td>
+      <td><code>display: block</code> when the small media query is active.</td>
+    </tr>
+    <tr>
+      <td>block-md</td>
+      <td><code>display: block</code> when the medium media query is active.</td>
+    </tr>
+    <tr>
+      <td>block-lg</td>
+      <td><code>display: block</code> when the large media query is active.</td>
+    </tr>
+    <tr>
+      <td>inline-block</td>
+      <td><code>display: inline-block</code></td>
+    </tr>
+    <tr>
+      <td>inline-block-sm</td>
+      <td><code>display: inline-block</code> when the small media query is active.</td>
+    </tr>
+    <tr>
+      <td>inline-block-md</td>
+      <td><code>display: inline-block</code> when the medium media query is active.</td>
+    </tr>
+    <tr>
+      <td>inline-block-lg</td>
+      <td><code>display: inline-block</code> when the large media query is active.</td>
+    </tr>
+    <tr>
+      <td>hide</td>
+      <td><code>display: none</code></td>
+    </tr>
+    <tr>
+      <td>hide-sm</td>
+      <td><code>display: none</code> when the small media query is active.</td>
+    </tr>
+    <tr>
+      <td>hide-md</td>
+      <td><code>display: none</code> when the medium media query is active.</td>
+    </tr>
+    <tr>
+      <td>hide-lg</td>
+      <td><code>display: none</code> when the large media query is active.</td>
+    </tr>
+  </table>
+
+
+</div>

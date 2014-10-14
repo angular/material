@@ -1,4 +1,4 @@
-material-content {
+md-content {
 
   display: block;
   position: relative;
@@ -16,13 +16,13 @@ material-content {
   &[scroll-xy] {
   }
 
-  &.material-content-padding {
+  &.md-content-padding {
     padding: 8px;
   }
 }
 
 @media (min-width: $layout-breakpoint-sm) {
-  material-content.material-content-padding {
+  md-content.md-content-padding {
     padding: 16px;
   }
 }

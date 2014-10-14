@@ -1,0 +1,39 @@
+
+<div ng-controller="AppCtrl">
+
+  <p>
+    <md-button ng-click="addItem()">Add</md-button>
+    <md-button ng-click="removeItem()">Remove</md-button>
+  </p>
+
+  <md-radio-group ng-model="data.group1">
+
+    <md-radio-button value="1" aria-label="Label 1">
+      Label 1
+    </md-radio-button>
+
+    <md-radio-button value="2" noink>
+      Label 2
+    </md-radio-button>
+
+    <md-radio-button value="3" aria-label="Label 3">
+      Label 3
+    </md-radio-button>
+
+  </md-radio-group>
+
+  <p>Group 1 Selected: {{ data.group1 }}</p>
+
+    <md-radio-group ng-model="data.group2">
+
+        <md-radio-button ng-repeat="d in radioData" ng-value="d.value" aria-label="{{ d.label }}">
+            {{ d.label }}
+        </md-radio-button>
+
+    </md-radio-group>
+
+    <p style="margin-bottom:50px">Group 2 Selected: {{ data.group2 }}</p>
+
+
+
+</div>

@@ -1,3 +1,3 @@
-describe('$materialBottomSheet service', function() {
-  beforeEach(module('material.components.materialBottomSheet', 'ngAnimateMock'));
+describe('$mdBottomSheet service', function() {
+  beforeEach(module('material.components.mdBottomSheet', 'ngAnimateMock'));
 });

@@ -4,39 +4,40 @@
  * @description
  * Form
  */
-angular.module('material.components.textField', [])
-  .directive('materialInputGroup', [
-    materialInputGroupDirective
+angular.module('material.components.textField', ['material.core'])
+  .directive('mdInputGroup', [
+    mdInputGroupDirective
   ])
-  .directive('materialInput', [
-    materialInputDirective
+  .directive('mdInput', [
+    '$mdUtil',
+    mdInputDirective
   ]);
 
 /**
  * @ngdoc directive
- * @name materialInputGroup
+ * @name mdInputGroup
  * @module material.components.textField
  * @restrict E
  * @description
- * Use the `<material-input-group>` directive as the grouping parent of a `<material-input>` element.
+ * Use the `<md-input-group>` directive as the grouping parent of a `<md-input>` element.
  *
  * @usage 
  * <hljs lang="html">
- * <material-input-group ng-disabled="isDisabled">
+ * <md-input-group ng-disabled="isDisabled">
  *   <label for="{{fid}}">{{someLabel}}</label>
- *   <material-input id="{{fid}}" type="text" ng-model="someText"></material-input>
- * </material-input-group>
+ *   <md-input id="{{fid}}" type="text" ng-model="someText"></md-input>
+ * </md-input-group>
  * </hljs>
  */
-function materialInputGroupDirective() {
+function mdInputGroupDirective() {
   return {
     restrict: 'CE',
     controller: ['$element', function($element) {
       this.setFocused = function(isFocused) {
-        $element.toggleClass('material-input-focused', !!isFocused);
+        $element.toggleClass('md-input-focused', !!isFocused);
       };
       this.setHasValue = function(hasValue) {
-        $element.toggleClass('material-input-has-value', !!hasValue);
+        $element.toggleClass('md-input-has-value', !!hasValue);
       };
     }]
   };
@@ -44,28 +45,28 @@ function materialInputGroupDirective() {
 
 /**
  * @ngdoc directive
- * @name materialInput
+ * @name mdInput
  * @module material.components.textField
  *
  * @restrict E
  *
  * @description
- * Use the `<material-input>` directive as elements within a `<material-input-group>` container
+ * Use the `<md-input>` directive as elements within a `<md-input-group>` container
  *
  * @usage
  * <hljs lang="html">
- * <material-input-group ng-disabled="user.isLocked">
+ * <md-input-group ng-disabled="user.isLocked">
  *   <label for="i1">FirstName</label>
- *   <material-input id="i1" ng-model="user.firstName"></material-input>
- * </material-input-group>
+ *   <md-input id="i1" ng-model="user.firstName"></md-input>
+ * </md-input-group>
  * </hljs>
  */
-function materialInputDirective() {
+function mdInputDirective($mdUtil) {
   return {
     restrict: 'E',
     replace: true,
     template: '<input >',
-    require: ['^?materialInputGroup', '?ngModel'],
+    require: ['^?mdInputGroup', '?ngModel'],
     link: function(scope, element, attr, ctrls) {
       var inputGroupCtrl = ctrls[0];
       var ngModelCtrl = ctrls[1];
@@ -74,7 +75,7 @@ function materialInputDirective() {
       }
 
       // scan for disabled and transpose the `type` value to the <input> element
-      var isDisabled = Util.isParentDisabled(element);
+      var isDisabled = $mdUtil.isParentDisabled(element);
 
       element.attr('tabindex', isDisabled ? -1 : 0 );
       element.attr('type', attr.type || element.parent().attr('type') || "text" );

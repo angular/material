@@ -1,5 +1,4 @@
-
-material-tabs {
+md-tabs {
   display: block;
   width: 100%;
   font-weight: 500;
@@ -8,7 +7,7 @@ material-tabs {
 .tabs-header {
   width: 100%;
   height: $tabs-header-height;
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   position: relative;
   background-color: #4285F4;
 }
@@ -16,9 +15,9 @@ material-tabs {
 .tab-paginator {
   z-index: 1;
   margin-right: -2px;
-  @include flex-display();
-  @include flex-justify-content(center);
-  @include flex-align-items(center);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: $tabs-paginator-width;
   min-height: 100%;
   cursor: pointer;
@@ -33,7 +32,7 @@ material-tabs {
     right: 0;
   }
 
-  /* TODO Once we have a better way to inline svg images, change this 
+  /* TODO Once we have a better way to inline svg images, change this
    to use svgs correctly */
   &.prev {
     background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPiA8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPiA8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPiA8ZyBpZD0iSGVhZGVyIj4gPGc+IDxyZWN0IHg9Ii02MTgiIHk9Ii0xMjA4IiBmaWxsPSJub25lIiB3aWR0aD0iMTQwMCIgaGVpZ2h0PSIzNjAwIi8+IDwvZz4gPC9nPiA8ZyBpZD0iTGFiZWwiPiA8L2c+IDxnIGlkPSJJY29uIj4gPGc+IDxwb2x5Z29uIHBvaW50cz0iMTUuNCw3LjQgMTQsNiA4LDEyIDE0LDE4IDE1LjQsMTYuNiAxMC44LDEyIAkJIiBzdHlsZT0iZmlsbDp3aGl0ZTsiLz4gPHJlY3QgZmlsbD0ibm9uZSIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ii8+IDwvZz4gPC9nPiA8ZyBpZD0iR3JpZCIgZGlzcGxheT0ibm9uZSI+IDxnIGRpc3BsYXk9ImlubGluZSI+IDwvZz4gPC9nPiA8L3N2Zz4NCg==');
@@ -44,8 +43,8 @@ material-tabs {
 }
 
 /* If `center` justified, change to left-justify if paginating */
-material-tabs[center] .tabs-header:not(.tab-paginating) .tabs-header-items {
-  @include flex-justify-content(center);
+md-tabs[center] .tabs-header:not(.tab-paginating) .tabs-header-items {
+  justify-content: center;
 }
 .tab-paginating .tabs-header-items-container {
   left: $tabs-paginator-width;
@@ -62,13 +61,12 @@ material-tabs[center] .tabs-header:not(.tab-paginating) .tabs-header-items {
   font-weight: 500;
   text-transform: uppercase;
   margin: auto;
-  
+
   .tabs-header-items {
-    @include flex-display();
-    @include box-sizing(border-box);
-    -webkit-transition: -webkit-transform 0.2s linear;
+    display: flex;
+    box-sizing: border-box;
     transition: transform 0.2s linear;
-    @include transform(translate3d(0,0,0));
+    transform: translate3d(0, 0, 0);
     width: 100%;
     height: 100%;
   }
@@ -83,19 +81,19 @@ material-tabs[center] .tabs-header:not(.tab-paginating) .tabs-header-items {
   }
 }
 
-material-tabs-ink-bar {
+md-tabs-ink-bar {
   left: 0;
   bottom: 0;
-  @include box-sizing(border-box);
-  @include transition(all 0.2s linear);
+  box-sizing: border-box;
+  transition: all 0.2s linear;
 }
 
-material-tab {
-  @include flex(1);
-  @include flex-display();
-  @include box-sizing(border-box);
-  @include flex-align-items(center);
-  @include flex-justify-content(center);
+md-tab {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
   position: relative;
   z-index: 0;
   overflow: hidden;
@@ -123,15 +121,15 @@ material-tab {
     outline: none;
   }
 
-  material-tab-label {
-    @include flex(1);
+  md-tab-label {
+    flex: 1;
     z-index: 100;
     opacity: 1;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .material-ripple-container {
+  .md-ripple-container {
     color: #ffff85;
   }
 

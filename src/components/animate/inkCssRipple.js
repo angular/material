@@ -2,29 +2,30 @@
 angular.module('material.animations')
 
 .directive('inkRipple', [
-  '$materialInkRipple',
+  '$mdInkRipple',
   InkRippleDirective
 ])
 
-.factory('$materialInkRipple', [
+.factory('$mdInkRipple', [
   '$window',
   '$$rAF',
-  '$materialEffects',
+  '$mdEffects',
   '$timeout',
+  '$mdUtil',
   InkRippleService
 ]);
 
-function InkRippleDirective($materialInkRipple) {
+function InkRippleDirective($mdInkRipple) {
   return function(scope, element, attr) {
     if (attr.inkRipple == 'checkbox') {
-      $materialInkRipple.attachCheckboxBehavior(element);
+      $mdInkRipple.attachCheckboxBehavior(element);
     } else {
-      $materialInkRipple.attachButtonBehavior(element);
+      $mdInkRipple.attachButtonBehavior(element);
     }
   };
 }
 
-function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
+function InkRippleService($window, $$rAF, $mdEffects, $timeout, $mdUtil) {
 
   // TODO fix this. doesn't support touch AND click devices (eg chrome pixel)
   var hasTouch = !!('ontouchend' in document);
@@ -94,21 +95,21 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
     }
 
     function rippleIsAllowed() {
-      return !Util.isParentDisabled(element);
+      return !$mdUtil.isParentDisabled(element);
     }
 
     function createRipple(left, top, positionsAreAbsolute) {
 
-      var rippleEl = angular.element('<div class="material-ripple">')
-            .css($materialEffects.ANIMATION_DURATION, options.animationDuration + 'ms')
-            .css($materialEffects.ANIMATION_NAME, options.animationName)
-            .css($materialEffects.ANIMATION_TIMING, options.animationTimingFunction)
-            .on($materialEffects.ANIMATIONEND_EVENT, function() {
+      var rippleEl = angular.element('<div class="md-ripple">')
+            .css($mdEffects.ANIMATION_DURATION, options.animationDuration + 'ms')
+            .css($mdEffects.ANIMATION_NAME, options.animationName)
+            .css($mdEffects.ANIMATION_TIMING, options.animationTimingFunction)
+            .on($mdEffects.ANIMATIONEND_EVENT, function() {
               rippleEl.remove();
             });
 
       if (!rippleContainer) {
-        rippleContainer = angular.element('<div class="material-ripple-container">');
+        rippleContainer = angular.element('<div class="md-ripple-container">');
         element.append(rippleContainer);
       }
       rippleContainer.append(rippleEl);
@@ -135,7 +136,7 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
         top: (top - containerWidth / 2) + 'px',
         height: containerWidth + 'px'
       };
-      css[$materialEffects.ANIMATION_DURATION] = options.fadeoutDuration + 'ms';
+      css[$mdEffects.ANIMATION_DURATION] = options.fadeoutDuration + 'ms';
       rippleEl.css(css);
 
       return rippleEl;
@@ -154,12 +155,12 @@ function InkRippleService($window, $$rAF, $materialEffects, $timeout) {
 
       function onPointerUp() {
         cancelRipplePause();
-        rippleEl.css($materialEffects.ANIMATION_PLAY_STATE, 'running');
+        rippleEl.css($mdEffects.ANIMATION_PLAY_STATE, 'running');
         element.off(POINTERUP_EVENT, onPointerUp);
         listenPointerDown(true);
       }
       function pauseRipple() {
-        rippleEl.css($materialEffects.ANIMATION_PLAY_STATE, 'paused');
+        rippleEl.css($mdEffects.ANIMATION_PLAY_STATE, 'paused');
       }
       function cancelRipplePause() {
         $timeout.cancel(ripplePauseTimeout);

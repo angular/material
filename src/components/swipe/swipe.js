@@ -7,17 +7,15 @@
    */
   angular.module('material.components.swipe',['ng'])
 
-    /**
-     * @ngdoc directive
+    /*
+     * @ngdoc service
      * @module material.components.swipe
-     * @name $materialSwipe
-     *
-     *  This service allows directives to easily attach swipe and pan listeners to
-     *  the specified element.
-     *
-     * @private
+     * @name $mdSwipe
+     * @description
+     * This service allows directives to easily attach swipe and pan listeners to
+     * the specified element.
      */
-    .factory("$materialSwipe", function() {
+    .factory("$mdSwipe", function() {
 
       // match expected API functionality
       var attachNoop = function(){ return angular.noop; };
@@ -106,13 +104,12 @@
     /**
      * @ngdoc directive
      * @module material.components.swipe
-     * @name materialSwipeLeft
+     * @name mdSwipeLeft
      *
-     * @order 0
      * @restrict A
      *
      * @description
-     * The `<div  material-swipe-left="<expression" >` directive identifies an element on which
+     * The `<div  md-swipe-left="<expression" >` directive identifies an element on which
      * HammerJS horizontal swipe left and pan left support will be active. The swipe/pan action
      * can result in custom activity trigger by evaluating `<expression>`.
      *
@@ -123,31 +120,30 @@
      *
      * <div class="animate-switch-container"
      *      ng-switch on="data.selectedIndex"
-     *      material-swipe-left="data.selectedIndex+=1;"
-     *      material-swipe-right="data.selectedIndex-=1;" >
+     *      md-swipe-left="data.selectedIndex+=1;"
+     *      md-swipe-right="data.selectedIndex-=1;" >
      *
      * </div>
      * </hljs>
      *
      */
-    .directive("materialSwipeLeft", ['$parse', '$materialSwipe',
-      function MaterialSwipeLeft($parse, $materialSwipe) {
+    .directive("mdSwipeLeft", ['$parse', '$mdSwipe',
+      function MdSwipeLeft($parse, $mdSwipe) {
         return {
           restrict: 'A',
-          link :  swipePostLink( $parse, $materialSwipe, "SwipeLeft" )
+          link :  swipePostLink( $parse, $mdSwipe, "SwipeLeft" )
         };
       }])
 
     /**
      * @ngdoc directive
      * @module material.components.swipe
-     * @name materialSwipeRight
+     * @name mdSwipeRight
      *
-     * @order 1
      * @restrict A
      *
      * @description
-     * The `<div  material-swipe-right="<expression" >` directive identifies functionality
+     * The `<div  md-swipe-right="<expression" >` directive identifies functionality
      * that attaches HammerJS horizontal swipe right and pan right support to an element. The swipe/pan action
      * can result in activity trigger by evaluating `<expression>`
      *
@@ -158,18 +154,18 @@
      *
      * <div class="animate-switch-container"
      *      ng-switch on="data.selectedIndex"
-     *      material-swipe-left="data.selectedIndex+=1;"
-     *      material-swipe-right="data.selectedIndex-=1;" >
+     *      md-swipe-left="data.selectedIndex+=1;"
+     *      md-swipe-right="data.selectedIndex-=1;" >
      *
      * </div>
      * </hljs>
      *
      */
-    .directive( "materialSwipeRight", ['$parse', '$materialSwipe',
-      function MaterialSwipeRight($parse, $materialSwipe) {
+    .directive( "mdSwipeRight", ['$parse', '$mdSwipe',
+      function MdSwipeRight($parse, $mdSwipe) {
         return {
           restrict: 'A',
-          link: swipePostLink( $parse, $materialSwipe, "SwipeRight" )
+          link: swipePostLink( $parse, $mdSwipe, "SwipeRight" )
         };
       }
     ]);
@@ -178,18 +174,18 @@
      * Factory to build PostLink function specific to Swipe or Pan direction
      *
      * @param $parse
-     * @param $materialSwipe
+     * @param $mdSwipe
      * @param name
      * @returns {Function}
      */
-    function swipePostLink($parse, $materialSwipe, name ) {
+    function swipePostLink($parse, $mdSwipe, name ) {
 
       return function(scope, element, attrs) {
         var direction = name.toLowerCase();
-        var directiveName= "material" + name;
+        var directiveName= "md" + name;
 
         var parentGetter = $parse(attrs[directiveName]) || angular.noop;
-        var configureSwipe = $materialSwipe(scope, direction);
+        var configureSwipe = $mdSwipe(scope, direction);
         var requestSwipe = function(locals) {
           // build function to request scope-specific swipe response
           parentGetter(scope, locals);

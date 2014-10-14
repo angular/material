@@ -1,0 +1,30 @@
+
+<div ng-controller="AppCtrl">
+  <div class="inset">
+    <md-button ng-click="toastIt()">
+      Simple Toast
+    </md-button>
+    <md-button class="md-button-raised" 
+            ng-click="complexToastIt()">
+      Advanced Toast
+    </md-button>
+  </div>
+  <p class="inset" style="padding-left: 24px;">
+    Toast can be dismissed with a swipe, a timer, or a button.
+  </p>
+  <div style="padding: 24px;">
+    <div>
+      <b>Toast Position: "{{getToastPosition()}}"</b>
+    </div>
+    <md-checkbox ng-repeat="(name, isSelected) in toastPosition"
+      ng-model="toastPosition[name]"> 
+      {{name}}
+    </md-checkbox>
+    <md-button class="md-button-fab md-button-fab-bottom-right md-theme-red">
+      FAB
+    </md-button>
+    <md-button class="md-button-fab md-button-fab-top-right md-theme-green">
+      FAB
+    </md-button>
+  </div>
+</div>

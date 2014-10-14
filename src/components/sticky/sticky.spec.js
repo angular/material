@@ -2,43 +2,43 @@
  * TODO: adjust to work properly with refactors of original code
  */
 /*
-describe('$materialStickySpec', function() {
-  var $document, $compile, $rootScope, $materialSticky;
+describe('$mdStickySpec', function() {
+  var $document, $compile, $rootScope, $mdSticky;
   beforeEach(module('material.components.sticky', function($provide) {
     var $$rAF = function(fn) { fn(); };
     $$rAF.debounce = function(fn) { return function() { fn(); }; };
     $provide.value('$$rAF', $$rAF);
   }));
 
-  beforeEach(inject(function(_$document_, _$compile_, _$rootScope_, _$materialSticky_) {
+  beforeEach(inject(function(_$document_, _$compile_, _$rootScope_, _$mdSticky_) {
     $document = _$document_;
     $rootScope = _$rootScope_;
     $compile = _$compile_;
-    $materialSticky = _$materialSticky_;
+    $mdSticky = _$mdSticky_;
   }));
 
   var $container, $firstSticky, $secondSticky, $sticky;
   function setup(opts) {
     opts = opts || {};
 
-    var TEST_HTML = '<material-content><h2>First sticky</h2><h2>Second sticky</h2></material-content>';
+    var TEST_HTML = '<md-content><h2>First sticky</h2><h2>Second sticky</h2></md-content>';
     var scope = $rootScope.$new();
     $container = $compile(TEST_HTML)(scope);
     $firstSticky = $container.children().eq(0);
     $secondSticky = $container.children().eq(1);
 
     // Wire up our special $container instance;
-    $firstSticky.controller('materialContent').$element = $container;
+    $firstSticky.controller('mdContent').$element = $container;
 
     $document.find('body').html('');
     $document.find('body').append($container);
 
 
     if(!opts.skipFirst) {
-      $materialSticky($rootScope.$new(), $firstSticky);
+      $mdSticky($rootScope.$new(), $firstSticky);
     }
     if(!opts.skipSecond) {
-      $materialSticky($rootScope.$new(), $secondSticky);
+      $mdSticky($rootScope.$new(), $secondSticky);
     }
 
 
@@ -79,30 +79,30 @@ describe('$materialStickySpec', function() {
     scope.$digest();
   }
 
-  it('throws an error if uses outside of material-content', inject(function($materialSticky, $compile, $rootScope) {
+  it('throws an error if uses outside of md-content', inject(function($mdSticky, $compile, $rootScope) {
     var html = '<h2>Hello world!</h2>';
-    function useWithoutMaterialContent() {
-      $materialSticky($rootScope.$new(), angular.element(html));
+    function useWithoutMdContent() {
+      $mdSticky($rootScope.$new(), angular.element(html));
     }
-    expect(useWithoutMaterialContent).toThrow('$materialSticky used outside of material-content');
+    expect(useWithoutMdContent).toThrow('$mdSticky used outside of md-content');
   }));
 
-  it('adds class material-sticky-active when an element would scroll off screen', function() {
+  it('adds class md-sticky-active when an element would scroll off screen', function() {
     var firstActual = { top: -10, bottom: 9, height: 19 };
     setup({containerScroll: 10, firstActual: firstActual, skipSecond: true});
     $sticky.check();
-    expect($firstSticky.hasClass('material-sticky-active')).toBe(true);
+    expect($firstSticky.hasClass('md-sticky-active')).toBe(true);
   });
 
-  it('removes class material-sticky-active when an element is no longer sticky', function() {
+  it('removes class md-sticky-active when an element is no longer sticky', function() {
     var firstTarget = { top: 1, bottom: 10, height: 9 };
     setup({
       containerScroll: 10,
       lastScroll: 11
     });
-    $firstSticky.addClass('material-sticky-active');
+    $firstSticky.addClass('md-sticky-active');
     $sticky.check();
-    expect($firstSticky.hasClass('material-sticky-active')).toBe(false);
+    expect($firstSticky.hasClass('md-sticky-active')).toBe(false);
   });
 
   it('pushes the active element when the next sticky element touches it', function() {
@@ -115,7 +115,7 @@ describe('$materialStickySpec', function() {
       firstTarget: firstTarget,
       secondActual: secondActual
     });
-    $firstSticky.attr('material-sticky-active', true);
+    $firstSticky.attr('md-sticky-active', true);
     $sticky.check();
     expect($firstSticky.data('translatedHeight')).toBe(-1);
   });
@@ -126,9 +126,9 @@ describe('$materialStickySpec', function() {
       containerScroll: 10,
       firstActual: firstActual
     });
-    $firstSticky.addClass('material-sticky-active');
+    $firstSticky.addClass('md-sticky-active');
     $sticky.check();
-    expect($firstSticky.hasClass('material-sticky-active')).toBe(false);
+    expect($firstSticky.hasClass('md-sticky-active')).toBe(false);
     expect($sticky.targetIndex).toBe(1);
   });
 
@@ -146,7 +146,7 @@ describe('$materialStickySpec', function() {
     });
     $sticky.targetIndex = 0;
     $firstSticky.data('translatedHeight', -10);
-    $firstSticky.addClass('material-sticky-active');
+    $firstSticky.addClass('md-sticky-active');
     $sticky.check();
     expect($firstSticky.data('translatedHeight')).toBe(-9);
   });

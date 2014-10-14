@@ -7,13 +7,13 @@ angular.module('material.components.divider', [
   'material.animations',
   'material.services.aria'
 ])
-  .directive('materialDivider', MaterialDividerDirective);
+  .directive('mdDivider', MdDividerDirective);
 
-function MaterialDividerController(){}
+function MdDividerController(){}
 
 /**
  * @ngdoc directive
- * @name materialDivider
+ * @name mdDivider
  * @module material.components.divider
  * @restrict E
  *
@@ -23,15 +23,15 @@ function MaterialDividerController(){}
  * @param {boolean=} inset Add this attribute to activate the inset divider style.
  * @usage
  * <hljs lang="html">
- * <material-divider></material-divider>
+ * <md-divider></md-divider>
  *
- * <material-divider inset></material-divider>
+ * <md-divider inset></md-divider>
  * </hljs>
  *
  */
-function MaterialDividerDirective() {
+function MdDividerDirective() {
   return {
     restrict: 'E',
-    controller: [MaterialDividerController]
+    controller: [MdDividerController]
   };
 }

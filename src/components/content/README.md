@@ -1,1 +1,1 @@
-A simple container for scrollable content, using the `<material-content>` directive.
+A simple container for scrollable content, using the `<md-content>` directive.

@@ -1,1 +1,1 @@
-Toolbars, created using the `<material-toolbar>` directive.
+Toolbars, created using the `<md-toolbar>` directive.

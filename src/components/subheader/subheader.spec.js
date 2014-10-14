@@ -1,28 +1,28 @@
-describe('materialSubheader', function() {
-  var $materialStickyMock,
-      basicHtml = '<material-subheader>Hello world!</material-header>';
+describe('mdSubheader', function() {
+  var $mdStickyMock,
+      basicHtml = '<md-subheader>Hello world!</md-header>';
 
   beforeEach(module('material.components.subheader', function($provide) {
-    $materialStickyMock = function() {
-      $materialStickyMock.args = Array.prototype.slice.call(arguments);
+    $mdStickyMock = function() {
+      $mdStickyMock.args = Array.prototype.slice.call(arguments);
     };
-    $provide.value('$materialSticky', $materialStickyMock);
+    $provide.value('$mdSticky', $mdStickyMock);
   }));
 
 
   it('should preserve content', inject(function($compile, $rootScope) {
     var $scope = $rootScope.$new();
     $scope.to = 'world';
-    var $el = $compile('<div><material-subheader>Hello {{ to }}!</material-subheader></div>')($scope);
+    var $el = $compile('<div><md-subheader>Hello {{ to }}!</md-subheader></div>')($scope);
     $scope.$digest();
     var $subHeader = $el.children();
     expect($subHeader.text()).toEqual('Hello world!');
   }));
 
-  it('should implement $materialSticky', inject(function($compile, $rootScope) {
+  it('should implement $mdSticky', inject(function($compile, $rootScope) {
     var scope = $rootScope.$new();
     var $el = $compile(basicHtml)(scope);
-    expect($materialStickyMock.args[0]).toBe(scope);
+    expect($mdStickyMock.args[0]).toBe(scope);
   }));
 
 });

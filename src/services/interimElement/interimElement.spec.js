@@ -2,10 +2,10 @@ describe('$$interimElement service', function() {
   var $compilerSpy, resolvingPromise;
 
   beforeEach(module('material.services.interimElement', 'ngAnimateMock', function($provide) {
-    var $materialCompiler = { compile: angular.noop };
-    $compilerSpy = spyOn($materialCompiler, 'compile');
+    var $mdCompiler = { compile: angular.noop };
+    $compilerSpy = spyOn($mdCompiler, 'compile');
 
-    $provide.value('$materialCompiler', $materialCompiler);
+    $provide.value('$mdCompiler', $mdCompiler);
   }));
 
   beforeEach(inject(function($q, $compile) {
@@ -33,7 +33,7 @@ describe('$$interimElement service', function() {
         expect($compilerSpy.mostRecentCall.args[0].templateUrl).toBe('testing.html');
       }));
 
-      it('forwards options to $materialCompiler', inject(function($$interimElement) {
+      it('forwards options to $mdCompiler', inject(function($$interimElement) {
         var options = {template: 'testing'};
         Service.show(options);
         expect($compilerSpy.mostRecentCall.args[0].template).toBe('testing');

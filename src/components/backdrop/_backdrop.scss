@@ -1,4 +1,4 @@
-material-backdrop {
+md-backdrop {
   z-index: $z-index-backdrop;
   background-color: rgba(0,0,0,0);
 
@@ -12,10 +12,10 @@ material-backdrop {
     background-color: rgba(0,0,0,0.4);
   }
 
-  @include transition(all 0.2s ease-out);
+  transition: all 0.2s ease-out;
 
   &.ng-enter {
-    @include transition-delay(0.1s);
+    transition-delay: 0.1s;
   }
   &.ng-enter,
   &.ng-leave.ng-leave-active {

@@ -1,4 +1,4 @@
-material-list {
+md-list {
   padding: $list-padding-top $list-padding-right $list-padding-bottom $list-padding-left;
 
   &.with-subheader {
@@ -6,15 +6,15 @@ material-list {
   }
 }
 
-material-item {
+md-item {
 
 }
 
-material-item-content {
-  @include flex-display();
-  @include flex-align-items(center);
-  @include flex-direction(row);
-  @include box-sizing(border-box);
+md-item-content {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  box-sizing: border-box;
 
   position: relative;
 
@@ -24,7 +24,7 @@ material-item-content {
 /**
  * The left tile for a list item.
  */
-.material-tile-left {
+.md-tile-left {
   min-width: 56px;
   margin-right: -16px;
 }
@@ -32,8 +32,8 @@ material-item-content {
 /**
  * The center content tile for a list item.
  */
-.material-tile-content {
-  @include flex(1);
+.md-tile-content {
+  flex: 1;
 
   padding: $baseline-grid * 2;
 
@@ -58,6 +58,6 @@ material-item-content {
 /**
  * The right tile for a list item.
  */
-.material-tile-right {
+.md-tile-right {
   padding-right: $item-padding-right;
 }

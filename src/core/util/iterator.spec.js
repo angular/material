@@ -1,19 +1,21 @@
 describe('iterator', function() {
+  beforeEach(module('material.core'));
 
   describe('use to provide accessor API ', function () {
+
     var list, iter;
 
-    beforeEach(function () {
+    beforeEach(inject(function ($mdUtil) {
       list = [ 13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99 ];
-      iter = iterator(list);
-    });
+      iter = $mdUtil.iterator(list);
+    }));
 
-    it('should construct properly', function () {
+    it('should construct properly', inject(function($mdUtil) {
       expect(iter.count()).toEqual(11);
 
-      var iter2 = iterator();
+      var iter2 = $mdUtil.iterator();
       expect(iter2.count()).toEqual(0);
-    });
+    }));
 
     it('should publish read-only access to the dataset', function () {
       var ds = iter.items();
@@ -75,10 +77,10 @@ describe('iterator', function() {
   describe('use to provide mutator API ', function () {
     var list, iter;
 
-    beforeEach(function () {
+    beforeEach(inject(function ($mdUtil) {
       list = [ 13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99 ];
-      iter = iterator(list);
-    });
+      iter = $mdUtil.iterator(list);
+    }));
 
     it('should use add() to append or insert items properly', function () {
 
@@ -130,10 +132,10 @@ describe('iterator', function() {
   describe('use to provide navigation API ', function () {
     var list, iter;
 
-    beforeEach(function () {
+    beforeEach(inject(function ($mdUtil) {
       list = [ 13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99 ];
-      iter = iterator(list);
-    });
+      iter = $mdUtil.iterator(list);
+    }));
 
     it('should use first() properly', function () {
 
@@ -142,27 +144,27 @@ describe('iterator', function() {
       iter.add("47");
       expect(iter.first()).toBe(13);
 
-      iter.add('Material', 0);
-      expect(iter.first()).toBe('Material');
+      iter.add('Md', 0);
+      expect(iter.first()).toBe('Md');
 
-      iter.remove('Material');
+      iter.remove('Md');
       expect(iter.first()).toBe(13);
 
       iter.remove(iter.first());
       expect(iter.first()).toBe(14);
     });
 
-    it('should last() items properly', function () {
+    it('should last() items properly', inject(function ($mdUtil) {
 
       expect(iter.last()).toBe(99);
 
       iter.add("47");
       expect(iter.last()).toBe("47");
 
-      iter.add('Material', list.length);
-      expect(iter.last()).toBe('Material');
+      iter.add('Md', list.length);
+      expect(iter.last()).toBe('Md');
 
-      iter.remove('Material');
+      iter.remove('Md');
       expect(iter.last()).toBe("47");
 
       iter.remove(iter.last());
@@ -173,11 +175,11 @@ describe('iterator', function() {
       expect(iter.last()).toBe('Max');
       expect(iter.first()).toBe(13);
 
-      iter = iterator([ 2, 5 ]);
+      iter = $mdUtil.iterator([ 2, 5 ]);
       iter.remove(2);
       expect(iter.last()).toBe(iter.first());
 
-    });
+    }));
 
     it('should use hasNext() properly', function () {
 
@@ -193,7 +195,7 @@ describe('iterator', function() {
 
     });
 
-    it('should use hasPrevious() properly', function () {
+    it('should use hasPrevious() properly', inject(function ($mdUtil) {
 
       expect( iter.hasPrevious( iter.first()) ).toBe(false);
       expect( iter.hasPrevious( iter.last()) ).toBe(true);
@@ -209,7 +211,7 @@ describe('iterator', function() {
       iter.remove(13);
       expect( iter.hasPrevious(iter.first()) ).toBe(false);
 
-      iter =  iterator(list = [ 2, 3 ]);
+      iter =  $mdUtil.iterator(list = [ 2, 3 ]);
       expect( iter.hasPrevious(iter.last()) ).toBe(true);
       iter.remove(2);
       expect( iter.hasPrevious(iter.last()) ).toBe(false);
@@ -221,7 +223,7 @@ describe('iterator', function() {
 
 
       expect( iter.hasPrevious(null) ).toBe(false);
-    });
+    }));
 
     it('should use next() properly', function () {
 
@@ -258,7 +260,7 @@ describe('iterator', function() {
   describe('use to provide a search API ', function () {
     var list, iter;
 
-    beforeEach(function () {
+    beforeEach(inject(function ($mdUtil) {
       list = [
         { gender:"male", name:'Thomas' },
         { gender:"male", name:'Andrew' },
@@ -267,8 +269,8 @@ describe('iterator', function() {
         { gender:"male", name:'Adam' },
         { gender:"male", name:'Max' }
       ];
-      iter = iterator(list);
-    });
+      iter = $mdUtil.iterator(list);
+    }));
 
     it('should use findBy() properly', function () {
 

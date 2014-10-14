@@ -2,21 +2,22 @@ var DocsApp = angular.module('docsApp', ['ngMaterial', 'ngRoute', 'angularytics'
 
 .config([
   'COMPONENTS',
+  'DEMOS',
   '$routeProvider',
-function(COMPONENTS, $routeProvider) {
+function(COMPONENTS, DEMOS, $routeProvider) {
   $routeProvider
     .when('/', {
-      templateUrl: 'template/home.tmpl.html'
+      templateUrl: 'partials/home.tmpl.html'
     })
     .when('/layout/:tmpl', {
       templateUrl: function(params){
-        return 'template/layout-' + params.tmpl + '.tmpl.html';
+        return 'partials/layout-' + params.tmpl + '.tmpl.html';
       }
     });
 
   angular.forEach(COMPONENTS, function(component) {
-
     angular.forEach(component.docs, function(doc) {
+      doc.url = '/' + doc.url;
       $routeProvider.when(doc.url, {
         templateUrl: doc.outputPath,
         resolve: {
@@ -26,15 +27,27 @@ function(COMPONENTS, $routeProvider) {
         controller: 'ComponentDocCtrl'
       });
     });
+  });
 
+  angular.forEach(DEMOS, function(componentDemos) {
+    angular.forEach(COMPONENTS, function(component) {
+      if (componentDemos.name === component.name) {
+        $routeProvider.when(componentDemos.url, {
+          templateUrl: 'partials/demo.tmpl.html',
+          controller: 'DemoCtrl',
+          resolve: {
+            component: function() { return component; },
+            demos: function() { return componentDemos.demos; }
+          }
+        });
+      }
+    });
   });
 
   $routeProvider.otherwise('/');
-
 }])
 
-.config(['AngularyticsProvider',
-function(AngularyticsProvider) {
+.config(['AngularyticsProvider', function(AngularyticsProvider) {
   AngularyticsProvider.setEventHandlers(['Console', 'GoogleUniversal']);
 }])
 
@@ -47,26 +60,12 @@ function(Angularytics, $rootScope) {
 
 .factory('menu', [
   'COMPONENTS',
+  'DEMOS',
   '$location',
   '$rootScope',
-function(COMPONENTS, $location, $rootScope) {
-  var componentDocs = [];
-  var demoDocs = [];
-  COMPONENTS.forEach(function(component) {
-    component.docs.forEach(function(doc) {
-      if (doc.docType === 'readme') {
-        demoDocs.push(doc);
-      } else {
-        componentDocs.push(doc);
-      }
-    });
-    demoDocs = demoDocs.sort(sortByHumanName);
-    componentDocs = componentDocs.sort(sortByHumanName);
-  });
+function(COMPONENTS, DEMOS, $location, $rootScope) {
+
   var sections = [{
-    name: 'Demos',
-    pages: demoDocs
-  }, {
     name: 'Layout',
     pages: [{
       name: 'Container Elements',
@@ -85,10 +84,39 @@ function(COMPONENTS, $location, $rootScope) {
       id: 'layoutOptions',
       url: '/layout/options'
     }]
-  }, {
-    name: 'API',
-    pages: componentDocs
   }];
+
+  var apiDocs = {};
+  COMPONENTS.forEach(function(component) {
+    component.docs.forEach(function(doc) {
+      apiDocs[doc.type] = apiDocs[doc.type] || [];
+      apiDocs[doc.type].push(doc);
+    });
+  });
+  var demoDocs = [];
+  angular.forEach(DEMOS, function(componentDemos) {
+    demoDocs.push({
+      name: componentDemos.label,
+      url: componentDemos.url
+    });
+  });
+
+  sections.unshift({
+    name: 'Demos',
+    pages: demoDocs.sort(sortByName)
+  });
+  sections.push({
+    name: 'Services',
+    pages: apiDocs.service.sort(sortByName)
+  });
+  sections.push({
+    name: 'Directives',
+    pages: apiDocs.directive.sort(sortByName)
+  });
+  function sortByName(a,b) {
+    return a.name < b.name ? -1 : 1;
+  }
+
   var self;
 
   $rootScope.$on('$locationChangeSuccess', onLocationChange);
@@ -134,7 +162,7 @@ function(COMPONENTS, $location, $rootScope) {
       });
     });
     if (!activated) {
-      self.selectSection(sections[2]);
+      self.selectSection(sections[3]);
     }
   }
 }])
@@ -142,55 +170,32 @@ function(COMPONENTS, $location, $rootScope) {
 .controller('DocsCtrl', [
   '$scope',
   'COMPONENTS',
-  '$materialSidenav',
+  '$mdSidenav',
   '$timeout',
-  '$materialDialog',
+  '$mdDialog',
   'menu',
   '$location',
-function($scope, COMPONENTS, $materialSidenav, $timeout, $materialDialog, menu, $location ) {
-
-  $scope.goToUrl = function(p) {
-    window.location = p;
-  };
+function($scope, COMPONENTS, $mdSidenav, $timeout, $mdDialog, menu, $location ) {
 
   $scope.COMPONENTS = COMPONENTS;
 
   $scope.menu = menu;
 
-  $scope.mainContentArea = document.querySelector("[role='main']");
+  var mainContentArea = document.querySelector("[role='main']");
 
   $scope.toggleMenu = function() {
     $timeout(function() {
-      $materialSidenav('left').toggle();
+      $mdSidenav('left').toggle();
     });
   };
 
-  $scope.openPage = function(section, page) {
-    menu.selectPage(section, page);
-    $scope.toggleMenu();
-    $scope.mainContentArea.focus();
+  $scope.path = function() {
+    return $location.path();
   };
 
   $scope.goHome = function($event) {
     menu.selectPage(null, null);
     $location.path( '/' );
-  };
-
-  $scope.viewSource = function(demo, $event) {
-    $materialDialog({
-      targetEvent: $event,
-      controller: 'ViewSourceCtrl',
-      locals: {
-        demo: demo
-      },
-      templateUrl: 'template/view-source.tmpl.html'
-    });
-  };
-
-  $scope.menuDocs = function(component) {
-    return component.docs.filter(function(doc) {
-      return doc.docType !== 'readme';
-    });
   };
 }])
 
@@ -243,35 +248,53 @@ function($scope, $attrs, $location, $rootScope) {
 function($scope, doc, component, $rootScope, $templateCache, $http, $q) {
   $rootScope.currentComponent = component;
   $rootScope.currentDoc = doc;
+}])
 
-  component.demos.forEach(function(demo) {
+.controller('DemoCtrl', [
+  '$rootScope',
+  '$scope',
+  'component',
+  'demos',
+function($rootScope, $scope, component, demos) {
+  $rootScope.currentComponent = component;
+  $rootScope.currentDoc = null;
 
-    var demoFiles = [demo.indexFile]
-      .concat( (demo.files || []).sort(sortByJs) );
+  $scope.demos = [];
 
-    var promises = demoFiles.map(function(file) {
-      return $http.get(file.outputPath, {cache: $templateCache}).then(
-        function(response) {
-          file.content = response.data;
-          return file;
-        }, 
-        function(err) {
-          file.content = 'Failed to load ' + file.outputPath + '.';
-          return file;
-        }
-      );
-    });
-
-    $q.all(promises).then(function(files) {
-      demo.$files = files;
-      demo.$selectedFile = files[0];
-    });
-
+  angular.forEach(demos, function(demo) {
+    // Get displayed contents (un-minified)
+    demo.$files = [demo.index]
+      .concat(demo.js || [])
+      .concat(demo.css || [])
+      .concat(demo.html || []);
+    demo.$selectedFile = demo.index;
+    $scope.demos.push(demo);
   });
 
-  function sortByJs(file) {
-    return file.fileType == 'js' ? -1 : 1;
-  }
+  $scope.demos = $scope.demos.sort(function(a,b) {
+    return a.name > b.name ? 1 : -1;
+  });
 
 }])
+
+.filter('humanizeDoc', function() {
+  return function(doc) {
+    if (!doc) return;
+    if (doc.type === 'directive') {
+      return doc.name.replace(/([A-Z])/g, function($1) {
+        return '-'+$1.toLowerCase();
+      }); 
+    }
+    return doc.label || doc.name;
+  };
+})
+
+.filter('directiveBrackets', function() {
+  return function(str) {
+    if (str.indexOf('-') > -1) {
+      return '<' + str + '>';
+    }
+    return str;
+  };
+})
 ;

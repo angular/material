@@ -1,0 +1,55 @@
+
+<div ng-controller="AppCtrl">
+  <md-content class="md-content-padding">
+
+    <h3>
+      RGB <span style="border: 1px solid #333; background: rgb({{color.red}},{{color.green}},{{color.blue}})">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    </h3>
+
+    <div layout>
+      <div flex="10" layout layout-align="center center">
+        <span>R</span>
+      </div>
+      <md-slider flex min="0" max="255" ng-model="color.red" aria-label="red" id="red-slider">
+      </md-slider>
+      <div flex="20" layout layout-align="center center">
+        <input type="number" ng-model="color.red" aria-label="red" aria-controls="red-slider">
+      </div>
+    </div>
+
+    <div layout>
+      <div flex="10" layout layout-align="center center">
+        <span>G</span>
+      </div>
+      <md-slider flex ng-model="color.green" min="0" max="255" aria-label="green" id="green-slider">
+      </md-slider>
+      <div flex="20" layout layout-align="center center">
+        <input type="number" ng-model="color.green" aria-label="green" aria-controls="green-slider">
+      </div>
+    </div>
+
+    <div layout>
+      <div flex="10" layout layout-align="center center">
+        <span>B</span>
+      </div>
+      <md-slider flex ng-model="color.blue" min="0" max="255" aria-label="blue" id="blue-slider">
+      </md-slider>
+      <div flex="20" layout layout-align="center center">
+        <input type="number" ng-model="color.blue" aria-label="blue" aria-controls="blue-slider">
+      </div>
+    </div>
+
+    <h3>Rating: {{rating}}/5</h3>
+    <md-slider discrete ng-model="rating" step="1" min="1" max="5" aria-label="rating">
+    </md-slider>
+
+    <h3>Disabled</h3>
+    <md-slider ng-model="disabled1" disabled aria-label="Disabled 1"></md-slider>
+    <md-slider ng-model="disabled2" disabled aria-label="Disabled 2"></md-slider>
+
+    <h3>Disabled, Discrete</h3>
+    <md-slider ng-model="disabled1" disabled step="3" discrete min="0" max="10" aria-label="Disabled discrete 1"></md-slider>
+    <md-slider ng-model="disabled2" disabled step="10" discrete aria-label="Disabled discrete 2"></md-slider>
+
+  </md-content>
+</div>

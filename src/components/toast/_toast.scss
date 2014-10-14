@@ -1,15 +1,14 @@
 
-material-toast {
-  @include flex-display();
-  @include box-sizing(border-box);
-  @include flex-align-items(center);
+md-toast {
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
 
   background: #323232;
   color: #f1f1f1;
   min-height: 48px;
   padding-left: 24px;
   padding-right: 24px;
-  height: $toast-height;
 
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
   border-radius: 2px;
@@ -22,7 +21,7 @@ material-toast {
 
   z-index: $z-index-toast;
 
-  material-button {
+  md-button {
     color: white;
   }
 
@@ -31,41 +30,40 @@ material-toast {
   }
 
   opacity: 1;
-  @include transform(translate3d(0,0,0) rotateZ(0deg));
-  @include transition(0.2s linear);
+  transform: translate3d(0,0,0) rotateZ(0deg);
+  transition: 0.2s linear;
   transition-property: transform, opacity;
-  -webkit-transition-property: -webkit-transform, opacity;
   
   /* Transition differently when swiping */
   &.swipeleft,
   &.swiperight,
   &.swipeup,
   &.swipedown {
-    @include transition(0.15s ease-out);
+    transition: 0.15s ease-out;
   }
 
   &.ng-enter {
-    @include transform-translate3d(0,100%,0);
+    transform: translate3d(0, 100%, 0);
     &.top {
-      @include transform-translate3d(0,-100%,0);
+      transform: translate3d(0, -100%, 0);
     }
     opacity: 0;
     &.ng-enter-active {
-      @include transform-translate3d(0,0,0);
+      transform: translate3d(0, 0, 0);
       opacity: 1;
     }
   }
   &.ng-leave.ng-leave-active {
     opacity: 0;
-    @include transform-translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
     &.top {
-      @include transform-translate3d(0, -100%, 0);
+      transform: translate3d(0, -100%, 0);
     }
     &.swipeleft {
-      @include transform(translate3d(-100%, 0, 0));
+      transform: translate3d(-100%, 0%, 0);
     }
     &.swiperight {
-      @include transform(translate3d(100%, 0, 0));
+      transform: translate3d(100%, 0%, 0);
     }
   }
 }
@@ -80,7 +78,7 @@ material-toast {
 }
 
 @media (max-width: $layout-breakpoint-sm) {
-  material-toast {
+  md-toast {
     left: 0;
     right: 0;
     width: 100%;
@@ -95,7 +93,7 @@ material-toast {
   }
 }
 @media (min-width: $layout-breakpoint-sm) {
-  material-toast {
+  md-toast {
     min-width: 288px;
     &.bottom {
       bottom: $toast-margin;
@@ -116,20 +114,19 @@ material-toast {
      */
     &.ng-leave.ng-leave-active {
       &.swipeleft {
-        @include transform(translate3d(-100%, 25%, 0) rotateZ(-15deg));
+        transform: translate3d(-100%, 25%, 0) rotateZ(-15deg);
       }
       &.swiperight {
-        @include transform(translate3d(100%, 25%, 0) rotateZ(15deg));
+        transform: translate3d(100%, 25%, 0) rotateZ(15deg);
       }
       &.top {
         &.swipeleft {
-          @include transform(translate3d(-100%, 0, 0) rotateZ(-15deg));
+          transform: translate3d(-100%, 0, 0) rotateZ(-15deg);
         }
         &.swiperight {
-          @include transform(translate3d(100%, 0, 0) rotateZ(15deg));
+          transform: translate3d(100%, 0, 0) rotateZ(15deg);
         }
       }
     }
   }
 }
-

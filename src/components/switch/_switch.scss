@@ -1,13 +1,13 @@
-material-switch {
+md-switch {
   display: block;
   position: relative;
   height: $baseline-grid * 3;
   margin: $baseline-grid;
 
-  @include flex-display();
-  @include flex-align-items(center);
+  display: flex;
+  align-items: center;
 
-  .material-switch-bar {
+  .md-switch-bar {
     position: absolute;
     left: $baseline-grid * 2;
     top: $baseline-grid * 1.5;
@@ -18,27 +18,26 @@ material-switch {
   }
 
   /* used also in _radio-button.scss */
-  .material-switch-thumb {
+  .md-switch-thumb {
     position: absolute;
     margin: 0;
     left: 0;
     top: 0;
     outline: none;
 
-    .material-container {
+    .md-container {
       position: absolute;
-      -webkit-transition: -webkit-transform 0.2s linear; 
       transition: transform 0.2s linear;
-      @include transform-translate3d(0,0,0);
+      transform: translate3d(0,0,0);
     }
-    &.material-checked .material-container {
-      @include transform-translate3d($switch-width - 16,0,0);
+    &.md-checked .md-container {
+      transform: translate3d($switch-width - 16,0,0);
     }
 
-    &:focus .material-label {
+    &:focus .md-label {
       border: 1px dotted black;
     }
-    .material-label {
+    .md-label {
       margin-left: $baseline-grid * 9;
     }
   }

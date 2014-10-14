@@ -1,1 +1,1 @@
-Dividers, created with the `<material-divider>` directive.
+Dividers, created with the `<md-divider>` directive.

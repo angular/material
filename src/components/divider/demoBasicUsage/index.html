@@ -1,0 +1,51 @@
+<div ng-controller="AppCtrl">
+
+  <md-toolbar class="md-theme-light">
+    <h1 class="md-toolbar-tools">
+      <span>Full Bleed</span>
+    </h1>
+  </md-toolbar>
+
+  <md-content>
+    <md-list>
+      <md-item ng-repeat="item in messages">
+        <md-item-content>
+          <div class="md-tile-content">
+            <h2>{{item.what}}</h2>
+            <h3>{{item.who}}</h3>
+            <p>
+              {{item.notes}}
+            </p>
+          </div>
+        </md-item-content>
+        <md-divider ng-if="!$last"></md-divider>
+      </md-item>
+    </md-list>
+  </md-content>
+
+  <md-toolbar class="md-theme-light">
+    <h1 class="md-toolbar-tools">
+      <span>Inset</span>
+    </h1>
+  </md-toolbar>
+
+  <md-content>
+    <md-list>
+      <md-item ng-repeat="item in messages">
+        <md-item-content>
+          <div class="md-tile-left">
+            <img ng-src="{{item.face}}" class="face" alt="{{item.who}}">
+          </div>
+          <div class="md-tile-content">
+            <h2>{{item.what}}</h2>
+            <h3>{{item.who}}</h3>
+            <p>
+              {{item.notes}}
+            </p>
+          </div>
+        </md-item-content>
+        <md-divider inset ng-if="!$last"></md-divider>
+      </md-item>
+    </md-list>
+  </md-content>
+</div>

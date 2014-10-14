@@ -1,22 +1,23 @@
 
 angular.module('material.components.tabs')
 
-.controller('$materialTab', [
+.controller('$mdTab', [
   '$scope',
   '$element',
   '$compile',
   '$animate',
-  '$materialSwipe',
+  '$mdSwipe',
+  '$mdUtil',
   TabItemController
 ]);
 
-function TabItemController(scope, element, $compile, $animate, $materialSwipe) {
+function TabItemController(scope, element, $compile, $animate, $mdSwipe, $mdUtil) {
   var self = this;
 
   var detachSwipe = angular.noop;
-  var attachSwipe = function() { return detachSwipe };
+  var attachSwipe = function() { return detachSwipe; };
   var eventTypes = "swipeleft swiperight" ;
-  var configureSwipe = $materialSwipe( scope, eventTypes );
+  var configureSwipe = $mdSwipe( scope, eventTypes );
 
   // special callback assigned by TabsController
   self.$$onSwipe = angular.noop;
@@ -50,9 +51,9 @@ function TabItemController(scope, element, $compile, $animate, $materialSwipe) {
 
       $compile(self.contentContainer)(self.contentScope);
 
-      Util.disconnectScope(self.contentScope);
+      $mdUtil.disconnectScope(self.contentScope);
 
-      // For internal tab views we only use the `$materialSwipe`
+      // For internal tab views we only use the `$mdSwipe`
       // so we can easily attach()/detach() when the tab view is active/inactive
 
       attachSwipe = configureSwipe( self.contentContainer, function(ev) {
@@ -76,7 +77,7 @@ function TabItemController(scope, element, $compile, $animate, $materialSwipe) {
 
   function onSelect() {
     // Resume watchers and events firing when tab is selected
-    Util.reconnectScope(self.contentScope);
+    $mdUtil.reconnectScope(self.contentScope);
     detachSwipe = attachSwipe();
 
     element.addClass('active');
@@ -89,7 +90,7 @@ function TabItemController(scope, element, $compile, $animate, $materialSwipe) {
 
   function onDeselect() {
     // Stop watchers & events from firing while tab is deselected
-    Util.disconnectScope(self.contentScope);
+    $mdUtil.disconnectScope(self.contentScope);
     detachSwipe();
 
     element.removeClass('active');

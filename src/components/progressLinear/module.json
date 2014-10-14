@@ -1,0 +1,10 @@
+{
+  "module": "material.components.progressLinear",
+  "name": "Progress - Linear",
+  "demos": {
+    "demo1": {
+      "name": "Linear Progress Basic Usage",
+      "files": ["demo1/*"]
+    }
+  }
+}

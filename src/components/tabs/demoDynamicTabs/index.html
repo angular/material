@@ -1,0 +1,46 @@
+<div ng-controller="AppCtrl" class="sample">
+
+    <md-tabs selected="selectedIndex">
+        <md-tab ng-repeat="tab in tabs"
+                 on-select="onTabSelected(tab)"
+                 on-deselect="announceDeselected(tab)"
+                 ng-disabled="tab.disabled"
+                 label="{{tab.title}}">
+          <div ng-class="tab.style" layout="vertical" layout-fill layout-align="center center">
+            <div flex ng-bind="tab.content" class="tab-text"></div>
+              <md-button class="md-theme-red"
+                ng-click="removeTab( tab )">Remove Tab
+              </md-button>
+          </div>
+        </md-tab>
+
+    </md-tabs>
+
+    <div layout="vertical" layout-padding>
+
+      <md-list class="tab-demo-list" flex>
+        <md-item>
+          <span>Active Tab Index: {{selectedIndex}}</span>
+        </md-item>
+      </md-list>
+
+      <md-divider flex></md-divider>
+      <div class="title" flex>Add Another Tab</div>
+
+      <form ng-submit="addTab(tTitle,tContent)" flex>
+        <div layout="horizontal">
+          <span flex="15">Title:</span>
+          <input type="text" required ng-model="tTitle" placeholder="<tab label>">
+        </div>
+        <div layout="horizontal">
+          <span flex="15">Content:</span>
+          <input type="text" required ng-model="tContent" placeholder="<tab content>">
+        </div>
+        <md-button type="submit" class="md-button-colored">
+           Add New Tab
+        </md-button>
+      </form>
+
+    </div>
+
+</div>

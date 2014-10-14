@@ -5,17 +5,17 @@ body {
   max-height: 100%;
 }
 
-material-toolbar.material-medium-tall {
+md-toolbar.md-medium-tall {
   height: 88px;
 }
 
-.material-sidenav-inner {
+.md-sidenav-inner {
   background: #fff;
 }
 
 .layout-content,
 .doc-content {
-  max-width: 800px;
+  max-width: 864px;
   margin: auto;
 }
 .layout-label {
@@ -34,6 +34,7 @@ material-toolbar.material-medium-tall {
   font-size: inherit;
   line-height: 40px;
   max-height: 40px;
+  opacity: 1;
   margin: 0;
   outline: none;
   padding: 0px 28px;
@@ -42,15 +43,16 @@ material-toolbar.material-medium-tall {
   text-decoration: none;
   width: 100%;
   z-index: 1;
-  -webkit-transition: 0.2s linear;
-  -webkit-transition-property: max-height, background-color;
-  -moz-transition: 0.2s linear;
-  -moz-transition-property: max-height, background-color;
-  transition: 0.2s linear;
-  transition-property: max-height, background-color;
+  -webkit-transition: 0.2s ease-in-out;
+  -webkit-transition-property: max-height, background-color, opacity;
+  -moz-transition: 0.2s ease-in-out;
+  -moz-transition-property: max-height, background-color, opacity;
+  transition: 0.2s ease-in-out;
+  transition-property: max-height, background-color, opacity;
 }
 .menu-item.ng-hide {
   max-height: 0;
+  opacity: 0;
 }
 .menu-item:hover, .menu-item:focus {
   color: #999;
@@ -79,7 +81,7 @@ material-toolbar.material-medium-tall {
   background: none;
   border: none;
 }
-.app-toolbar .material-toolbar-tools h3 {
+.app-toolbar .md-toolbar-tools h3 {
   -webkit-margin-before: 0;
   -webkit-margin-after: 0;
 }
@@ -140,6 +142,7 @@ pre > code.highlight {
   z-index: 0;
 }
 .demo-content {
+  position: relative;
   min-height: 448px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -157,21 +160,21 @@ pre > code.highlight {
   flex: 1;
 }
 
-material-toolbar.demo-toolbar,
-.demo-source-tabs material-tab,
+md-toolbar.demo-toolbar,
+.demo-source-tabs md-tab,
 .demo-source-tabs .tabs-header {
   background: #00BCD4;
   color: white;
 }
-material-toolbar.demo-toolbar material-tab-label {
+md-toolbar.demo-toolbar md-tab-label {
   color: #99E4EE
 }
-material-toolbar.demo-toolbar material-button:hover, 
-material-toolbar.demo-toolbar material-button.active {
+md-toolbar.demo-toolbar md-button:hover, 
+md-toolbar.demo-toolbar md-button.active {
   background: rgba(0,0,0,0.1);
 }
 
-material-toolbar.demo-toolbar material-button {
+md-toolbar.demo-toolbar md-button {
   -webkit-transition: all 0.3s linear;
   -moz-transition: all 0.3s linear;
   transition: all 0.3s linear;
@@ -206,20 +209,20 @@ material-toolbar.demo-toolbar material-button {
 /************
  * DOCS
  ************/
-.api-options-bar material-button {
+.api-options-bar md-button {
   margin: 4px;
   padding: 4px;
 }
-.api-options-bar material-button:hover,
-.api-options-bar material-button:focus {
+.api-options-bar md-button:hover,
+.api-options-bar md-button:focus {
   background: rgba(0, 0, 0, 0.2);
 }
-.api-options-bar.with-icon material-icon {
+.api-options-bar.with-icon md-icon {
   position: absolute;
   top: 2px;
   left: 4px;
 }
-.api-options-bar.with-icon material-button span {
+.api-options-bar.with-icon md-button span {
   margin-left: 22px;
 }
 
@@ -230,9 +233,14 @@ material-toolbar.demo-toolbar material-button {
 .api-params-label { 
   margin-right: 8px;
   text-align: center;
+  margin-top: 16px;
+  -webkit-align-self: flex-start;
+  -moz-align-self: flex-start;
+  -ms-flex-item-align: start;
+  align-self: flex-start;
 }
 .api-params-title {
-  color: #999999;
+  color: #888;
 }
 code.api-type {
   font-weight: bold;
@@ -256,6 +264,34 @@ ul li:first-child {
   text-transform: uppercase;
 }
 
+.api-params-content ul {
+  padding-left: 4px;
+}
+ul.methods > li {
+  margin-bottom: 48px;
+}
+
+ul.methods .method-function-syntax {
+  font-weight: normal;
+  font-size: 20px;
+  margin: 0;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+}
+ul.methods li h3 {
+  /* border-bottom: 1px solid #eee; */
+}
+
+@media (max-width: 600px) {
+  ul.methods > li {
+    padding-left: 0;
+    border-left: none;
+    list-style: default;
+  }
+  ul.methods .method-function-syntax {
+    font-size: 16px;
+  }
+}
 
 .version {
     padding-left: 10px;

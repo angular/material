@@ -1,22 +1,22 @@
-@include keyframes(tooltipBackgroundShow) {
+@keyframes tooltipBackgroundShow {
   0% {
-    @include transform(scale(0.2));
+    transform: scale(0.2);
     opacity: 0.25;
   }
   50% {
     opacity: 1;
   }
   100% {
-    @include transform(scale(1.0));
+    transform: scale(1.0);
     opacity: 1;
   }
 }
-@include keyframes(tooltipBackgroundHide) {
+@keyframes tooltipBackgroundHide {
   0% { opacity: 1; }
   100% { opacity: 0; }
 }
 
-material-tooltip {
+md-tooltip {
   position: absolute;
   font-size: 14px;
   z-index: $z-index-tooltip;
@@ -26,11 +26,11 @@ material-tooltip {
   border-radius: 4px;
 
   &[tooltip-direction="bottom"] {
-    @include transform(translate3d(0, -30%, 0));
+    transform: translate3d(0, -30%, 0);
     margin-top: 8px;
   }
   &[tooltip-direction="top"] {
-    @include transform(translate3d(0, 30%, 0));
+    transform: translate3d(0, 30%, 0);
     margin-bottom: 8px;
   }
 
@@ -45,7 +45,7 @@ material-tooltip {
     border-radius: 256px;
 
     opacity: 0.25;
-    @include transform(scale(0.2));
+    transform: scale(0.2);
   }
 
   .tooltip-content {
@@ -57,33 +57,32 @@ material-tooltip {
     padding: 8px;
     background: transparent;
     opacity: 0.3;
-    @include transition(inherit);
+    transition: inherit;
   }
 
   &.tooltip-show,
   &.tooltip-hide {
-    @include transition(0.2s ease-out);
+    transition: 0.2s ease-out;
     transition-property: transform, opacity;
-    -webkit-transition-property: -webkit-transform, opacity;
   }
 
   &.tooltip-show {
     pointer-events: auto;
-    @include transform(translate3d(0,0,0));
+    transform: translate3d(0,0,0);
 
     .tooltip-background {
-      @include transform(scale(1.0));
+      transform: scale(1.0);
       opacity: 1.0;
-      @include animation(tooltipBackgroundShow linear);
+      animation: tooltipBackgroundShow linear;
     }
     .tooltip-content {
       opacity: 0.99;
     }
   }
   &.tooltip-hide .tooltip-background {
-    @include transform(scale(1.0));
+    transform: scale(1.0);
     opacity: 0;
-    @include animation(tooltipBackgroundHide 0.2s linear);
+    animation: tooltipBackgroundHide 0.2s linear;
   }
 
   /**
@@ -95,7 +94,6 @@ material-tooltip {
     &[width-32="#{$i}"].tooltip-show .tooltip-background {
       $duration: 1000 - $i * 100;
       animation-duration: #{$duration}ms;
-      -webkit-animation-duration: #{$duration}ms;
     }
   }
 }

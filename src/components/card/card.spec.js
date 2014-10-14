@@ -1,2 +1,2 @@
-describe('materialCard directive', function() {
+describe('mdCard directive', function() {
 });

@@ -6,43 +6,45 @@
  * A Sidenav QP component.
  */
 angular.module('material.components.sidenav', [
+  'material.core',
   'material.services.registry',
   'material.animations'
 ])
-  .factory('$materialSidenav', [
-    '$materialComponentRegistry', 
-    materialSidenavService 
+  .factory('$mdSidenav', [
+    '$mdComponentRegistry', 
+    mdSidenavService 
   ])
-  .directive('materialSidenav', [
+  .directive('mdSidenav', [
     '$timeout',
-    '$materialEffects',
+    '$mdEffects',
     '$$rAF',
-    materialSidenavDirective 
+    '$mdConstant',
+    mdSidenavDirective 
   ])
-  .controller('$materialSidenavController', [
+  .controller('$mdSidenavController', [
     '$scope',
     '$element',
     '$attrs',
     '$timeout',
-    '$materialSidenav',
-    '$materialComponentRegistry',
-    materialSidenavController 
+    '$mdSidenav',
+    '$mdComponentRegistry',
+    mdSidenavController 
   ]);
   
-/**
+/*
  * @private
  * @ngdoc object
- * @name materialSidenavController
+ * @name mdSidenavController
  * @module material.components.sidenav
  *
  * @description
- * The controller for materialSidenav components.
+ * The controller for mdSidenav components.
  */
-function materialSidenavController($scope, $element, $attrs, $timeout, $materialSidenav, $materialComponentRegistry) {
+function mdSidenavController($scope, $element, $attrs, $timeout, $mdSidenav, $mdComponentRegistry) {
 
   var self = this;
 
-  $materialComponentRegistry.register(this, $attrs.componentId);
+  $mdComponentRegistry.register(this, $attrs.componentId);
 
   this.isOpen = function() {
     return !!$scope.isOpen;
@@ -70,34 +72,34 @@ function materialSidenavController($scope, $element, $attrs, $timeout, $material
   };
 }
 
-/**
+/*
  * @private
  * @ngdoc service
- * @name $materialSidenav
+ * @name $mdSidenav
  * @module material.components.sidenav
  *
  * @description
- * $materialSidenav makes it easy to interact with multiple sidenavs
+ * $mdSidenav makes it easy to interact with multiple sidenavs
  * in an app.
  *
  * @usage
  *
  * ```javascript
  * // Toggle the given sidenav
- * $materialSidenav(componentId).toggle();
+ * $mdSidenav(componentId).toggle();
  *
  * // Open the given sidenav
- * $materialSidenav(componentId).open();
+ * $mdSidenav(componentId).open();
  *
  * // Close the given sidenav
- * $materialSidenav(componentId).close();
+ * $mdSidenav(componentId).close();
  * ```
  */
-function materialSidenavService($materialComponentRegistry) {
+function mdSidenavService($mdComponentRegistry) {
   return function(handle) {
-    var instance = $materialComponentRegistry.get(handle);
+    var instance = $mdComponentRegistry.get(handle);
     if(!instance) {
-      $materialComponentRegistry.notFoundError(handle);
+      $mdComponentRegistry.notFoundError(handle);
     }
 
     return {
@@ -135,7 +137,7 @@ function materialSidenavService($materialComponentRegistry) {
 
 /**
  * @ngdoc directive
- * @name materialSidenav
+ * @name mdSidenav
  * @module material.components.sidenav
  * @restrict E
  *
@@ -149,37 +151,37 @@ function materialSidenavService($materialComponentRegistry) {
  * @usage
  * <hljs lang="html">
  * <div layout="horizontal" ng-controller="MyController">
- *   <material-sidenav component-id="left" class="material-sidenav-left">
+ *   <md-sidenav component-id="left" class="md-sidenav-left">
  *     Left Nav!
- *   </material-sidenav>
+ *   </md-sidenav>
  *
- *   <material-content>
+ *   <md-content>
  *     Center Content
- *     <material-button ng-click="openLeftMenu()">
+ *     <md-button ng-click="openLeftMenu()">
  *       Open Left Menu
- *     </material-button>
- *   </material-content>
+ *     </md-button>
+ *   </md-content>
  *
- *   <material-sidenav component-id="right" class="material-sidenav-right">
+ *   <md-sidenav component-id="right" class="md-sidenav-right">
  *     Right Nav!
- *   </material-sidenav>
+ *   </md-sidenav>
  * </div>
  * </hljs>
  *
  * <hljs lang="js">
  * var app = angular.module('myApp', ['ngMaterial']);
- * app.controller('MainController', function($scope, $materialSidenav) {
+ * app.controller('MainController', function($scope, $mdSidenav) {
  *   $scope.openLeftMenu = function() {
- *     $materialSidenav('left').toggle();
+ *     $mdSidenav('left').toggle();
  *   };
  * });
  * </hljs>
  */
-function materialSidenavDirective($timeout, $materialEffects, $$rAF) {
+function mdSidenavDirective($timeout, $mdEffects, $$rAF, $mdConstant) {
   return {
     restrict: 'E',
     scope: {},
-    controller: '$materialSidenavController',
+    controller: '$mdSidenavController',
     compile: compile
   };
 
@@ -189,10 +191,10 @@ function materialSidenavDirective($timeout, $materialEffects, $$rAF) {
     return postLink;
   }
   function postLink(scope, element, attr, sidenavCtrl) {
-    var backdrop = angular.element('<material-backdrop class="material-sidenav-backdrop">');
+    var backdrop = angular.element('<md-backdrop class="md-sidenav-backdrop">');
 
     scope.$watch('isOpen', onShowHideSide);
-    element.on($materialEffects.TRANSITIONEND_EVENT, onTransitionEnd);
+    element.on($mdEffects.TRANSITIONEND_EVENT, onTransitionEnd);
 
     /**
      * Toggle the SideNav view and attach/detach listeners
@@ -232,7 +234,7 @@ function materialSidenavDirective($timeout, $materialEffects, $$rAF) {
      * @param evt
      */
     function onKeyDown(evt) {
-      if(evt.which === Constant.KEY_CODE.ESCAPE){
+      if(evt.which === $mdConstant.KEY_CODE.ESCAPE){
         close();
 
         evt.preventDefault();

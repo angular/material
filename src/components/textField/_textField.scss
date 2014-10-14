@@ -37,8 +37,8 @@ input, textarea {
 }
 
 // Light-Theme
-material-input-group,
-.material-input-group {
+md-input-group,
+.md-input-group {
   margin: $tff-margin;
 
   position: relative;
@@ -58,15 +58,15 @@ material-input-group,
   @include text-field( $tff-input-normal, $tff-line-normal, $tff-transition );
 
 
-  &.material-input-focused {
+  &.md-input-focused {
     @include text-hint( $tff-hint-focused, small );
     @include text-field( $tff-input-normal,$tff-line-focused, false, $tff-line-focused-width );
   }
 
-  &.material-input-has-value {
+  &.md-input-has-value {
     @include text-hint( $tff-hint-focused, small );
 
-    &:not(.material-input-focused) {
+    &:not(.md-input-focused) {
       @include text-hint( $tff-hint-normal, small );
     }
   }
@@ -82,32 +82,31 @@ material-input-group,
 
     @include text-hint( $tff-hint-disabled, small );
 
-    *:not(.material-input-has-value) {
+    *:not(.md-input-has-value) {
       @include text-hint( $tff-hint-disabled, large );
     }
 
   }
-
 }
 
 
 // Dark Theme
-.dark material-input-group,
-.dark .material-input-group {
+.dark md-input-group,
+.dark .md-input-group {
 
   @include text-hint( $tff-hint-normal-dark, large, $tff-transition );
   @include text-field( $tff-input-normal-dark, $tff-line-normal-dark, $tff-transition );
 
 
-  &.material-input-focused {
+  &.md-input-focused {
     @include text-hint( $tff-hint-focused-dark, small );
     @include text-field( $tff-input-focused-dark,$tff-line-focused-dark, false, $tff-line-focused-width );
   }
 
-  &.material-input-has-value {
+  &.md-input-has-value {
     @include text-hint( $tff-hint-focused-dark, small );
 
-    &:not(.material-input-focused) {
+    &:not(.md-input-focused) {
       @include text-hint( $tff-hint-normal-dark, small );
     }
   }
@@ -123,12 +122,10 @@ material-input-group,
 
     @include text-hint( $tff-hint-disabled-dark, small );
 
-    *:not(.material-input-has-value) {
+    *:not(.md-input-has-value) {
       @include text-hint( $tff-hint-disabled-dark, large );
     }
 
   }
 
 }
-
-.theme-dark-tff { @include theme-bg-and-color(#333, #999); }

@@ -1,0 +1,12 @@
+<md-bottom-sheet class="list has-header">
+  <md-subheader>Comment Actions</md-subheader>
+  <md-list>
+    <md-item ng-repeat="item in items" ng-click="listItemClick($index)">
+      <div class="md-icon-container">
+        <!-- Using custom inline icon until md-icon is ready. DONT USE ME! -->
+        <md-inline-list-icon icon="{{item.icon}}" />
+      </div>
+      {{ item.name }}
+    </md-item>
+  </md-list>
+</md-bottom-sheet>

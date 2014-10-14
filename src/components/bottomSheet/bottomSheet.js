@@ -7,19 +7,19 @@
 angular.module('material.components.bottomSheet', [
   'material.services.interimElement'
 ])
-.directive('materialBottomSheet', [
-  MaterialBottomSheetDirective
+.directive('mdBottomSheet', [
+  MdBottomSheetDirective
 ])
-.factory('$materialBottomSheet', [
+.factory('$mdBottomSheet', [
   '$$interimElement',
   '$animate',
-  '$materialEffects',
+  '$mdEffects',
   '$timeout',
   '$$rAF',
-  MaterialBottomSheet
+  MdBottomSheet
 ]);
 
-function MaterialBottomSheetDirective() {
+function MdBottomSheetDirective() {
   return {
     restrict: 'E'
   };
@@ -27,40 +27,30 @@ function MaterialBottomSheetDirective() {
 
 /**
  * @ngdoc service
- * @name $materialBottomSheet
+ * @name $mdBottomSheet
  * @module material.components.bottomSheet
  *
  * @description
-
- * Used to open a bottom sheet on the screen, `$materialBottomSheet` is a service
- * created by `$$interimElement` and provides a simple promise-based, behavior API:
+ * `$mdBottomSheet` opens a bottom sheet over the app and provides a simple promise API.
  *
- *  - `$materialBottomSheet.show()`
- *  - `$materialBottomSheet.hide()`
- *  - `$materialBottomSheet.cancel()`
- *
- * #### Notes:
- *
- * Only one bottom sheet may ever be active at any time. If a new sheet is
- * shown while a different one is active, the previous sheet will be automatically
- * hidden.
-
- * The bottom sheet's template must have an outer `<material-bottom-sheet>` element.
+ * ### Restrictions
+ * 
+ * - The bottom sheet's template must have an outer `<md-bottom-sheet>` element.
  *
  * @usage
  * <hljs lang="html">
  * <div ng-controller="MyController">
- *   <material-button ng-click="openBottomSheet()">
+ *   <md-button ng-click="openBottomSheet()">
  *     Open a Bottom Sheet!
- *   </material-button>
+ *   </md-button>
  * </div>
  * </hljs>
  * <hljs lang="js">
  * var app = angular.module('app', ['ngMaterial']);
- * app.controller('MyController', function($scope, $materialBottomSheet) {
+ * app.controller('MyController', function($scope, $mdBottomSheet) {
  *   $scope.openBottomSheet = function() {
- *     $materialBottomSheet.show({
- *       template: '<material-bottom-sheet>Hello!</material-bottom-sheet>'
+ *     $mdBottomSheet.show({
+ *       template: '<md-bottom-sheet>Hello!</md-bottom-sheet>'
  *     });
  *   };
  * });
@@ -69,75 +59,73 @@ function MaterialBottomSheetDirective() {
 
  /**
  * @ngdoc method
- * @name $materialBottomSheet#show
+ * @name $mdBottomSheet#show
  *
  * @description
  * Show a bottom sheet with the specified options.
  *
- * @paramType Options
- * @param {string=} templateUrl The url of an html template file that will
- * be used as the content of the bottom sheet. Restrictions: the template must
- * have an outer `material-bottom-sheet` element.
- * @param {string=} template Same as templateUrl, except this is an actual
- * template string.
- * @param {string=} controller The controller to associate with this bottom sheet.
- * @param {string=} locals An object containing key/value pairs. The keys will
- * be used as names of values to inject into the controller. For example, 
- * `locals: {three: 3}` would inject `three` into the controller with the value
- * of 3.
- * @param {element=} parent The element to append the bottomSheet to. Defaults to appending
- * to the root element of the application.
- * @param {DOMClickEvent=} targetEvent A click's event object. When passed in as an option, 
- * the location of the click will be used as the starting point for the opening animation
- * of the the dialog.
- * @param {object=} resolve Similar to locals, except it takes promises as values
- * and the bottom sheet will not open until the promises resolve.
- * @param {string=} controllerAs An alias to assign the controller to on the scope.
+ * @param {object} options An options object, with the following properties:
  *
- * @returns {Promise} Returns a promise that will be resolved or rejected when
- *  `$materialBottomSheet.hide()` or `$materialBottomSheet.cancel()` is called respectively.
+ *   - `templateUrl` - `{string=}`: The url of an html template file that will
+ *   be used as the content of the bottom sheet. Restrictions: the template must
+ *   have an outer `md-bottom-sheet` element.
+ *   - `template` - `{string=}`: Same as templateUrl, except this is an actual
+ *   template string.
+ *   - `controller` - `{string=}`: The controller to associate with this bottom sheet.
+ *   - `locals` - `{string=}`: An object containing key/value pairs. The keys will
+ *   be used as names of values to inject into the controller. For example, 
+ *   `locals: {three: 3}` would inject `three` into the controller with the value
+ *   of 3.
+ *   - `targetEvent` - `{DOMClickEvent=}`: A click's event object. When passed in as an option, 
+ *   the location of the click will be used as the starting point for the opening animation
+ *   of the the dialog.
+ *   - `resolve` - `{object=}`: Similar to locals, except it takes promises as values
+ *   and the bottom sheet will not open until the promises resolve.
+ *   - `controllerAs` - `{string=}`: An alias to assign the controller to on the scope.
+ *
+ * @returns {promise} A promise that can be resolved with `$mdBottomSheet.hide()` or
+ * rejected with `$mdBottomSheet.cancel()`.
  */
 
 /**
  * @ngdoc method
- * @name $materialBottomSheet#hide
+ * @name $mdBottomSheet#hide
  *
  * @description
- * Hide the existing bottom sheet and `resolve` the promise returned from 
- * `$materialBottomSheet.show()`.
+ * Hide the existing bottom sheet and resolve the promise returned from 
+ * `$mdBottomSheet.show()`.
  *
- * @param {*} arg An argument to resolve the promise with.
+ * @param {*=} response An argument for the resolved promise.
  *
  */
 
 /**
  * @ngdoc method
- * @name $materialBottomSheet#cancel
+ * @name $mdBottomSheet#cancel
  *
  * @description
- * Hide the existing bottom sheet and `reject` the promise returned from 
- * `$materialBottomSheet.show()`.
+ * Hide the existing bottom sheet and reject the promise returned from 
+ * `$mdBottomSheet.show()`.
  *
- * @param {*} arg An argument to reject the promise with.
+ * @param {*=} response An argument for the rejected promise.
  *
  */
 
-function MaterialBottomSheet($$interimElement, $animate, $materialEffects, $timeout, $$rAF) {
+function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF) {
   var backdrop;
 
-  var $materialBottomSheet = $$interimElement({
+  var $mdBottomSheet;
+  return $mdBottomSheet = $$interimElement({
     targetEvent: null,
     onShow: onShow,
     onRemove: onRemove,
   });
 
-  return $materialBottomSheet;
-
   function onShow(scope, element, options) {
     // Add a backdrop that will close on click
-    backdrop = angular.element('<material-backdrop class="opaque ng-enter">');
+    backdrop = angular.element('<md-backdrop class="opaque ng-enter">');
     backdrop.on('click touchstart', function() {
-      $timeout($materialBottomSheet.cancel);
+      $timeout($mdBottomSheet.cancel);
     });
 
     $animate.enter(backdrop, options.parent, null);
@@ -172,7 +160,7 @@ function MaterialBottomSheet($$interimElement, $animate, $materialEffects, $time
     var CLOSING_VELOCITY = 10; // how fast we need to flick down to close the sheet
     var startY, lastY, velocity, transitionDelay, startTarget;
 
-    // coercion incase $materialCompiler returns multiple elements
+    // coercion incase $mdCompiler returns multiple elements
     element = element.eq(0);
 
     element.on('touchstart', onTouchStart);
@@ -194,13 +182,13 @@ function MaterialBottomSheet($$interimElement, $animate, $materialEffects, $time
       startY = getY(e);
       
       // Disable transitions on transform so that it feels fast
-      transitionDelay = element.css($materialEffects.TRANSITION_DURATION);
-      element.css($materialEffects.TRANSITION_DURATION, '0s');
+      transitionDelay = element.css($mdEffects.TRANSITION_DURATION);
+      element.css($mdEffects.TRANSITION_DURATION, '0s');
     }
 
     function onTouchEnd(e) {
       // Re-enable the transitions on transforms
-      element.css($materialEffects.TRANSITION_DURATION, transitionDelay);
+      element.css($mdEffects.TRANSITION_DURATION, transitionDelay);
 
       var currentY = getY(e);
       // If we didn't scroll much, and we didn't change targets, assume its a click
@@ -209,7 +197,7 @@ function MaterialBottomSheet($$interimElement, $animate, $materialEffects, $time
       } else {
         // If they went fast enough, trigger a close.
         if (velocity > CLOSING_VELOCITY) {
-          $timeout($materialBottomSheet.cancel);
+          $timeout($mdBottomSheet.cancel);
 
         // Otherwise, untransform so that we go back to our normal position
         } else {
@@ -243,9 +231,9 @@ function MaterialBottomSheet($$interimElement, $animate, $materialEffects, $time
      **/
     function setTransformY(amt) {
       if (amt === null || amt === undefined) {
-        element.css($materialEffects.TRANSFORM, '');
+        element.css($mdEffects.TRANSFORM, '');
       } else {
-        element.css($materialEffects.TRANSFORM, 'translate3d(0, ' + amt + 'px, 0)');
+        element.css($mdEffects.TRANSFORM, 'translate3d(0, ' + amt + 'px, 0)');
       }
     }
 

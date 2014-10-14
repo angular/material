@@ -1,4 +1,4 @@
-material-bottom-sheet {
+md-bottom-sheet {
   position: absolute;
   left: 0;
   right: 0;
@@ -9,9 +9,9 @@ material-bottom-sheet {
   background-color: $bottom-sheet-background-color;
   border-top: 1px solid $bottom-sheet-border-top-color;
 
-  @include transform-translate3d(0, $bottom-sheet-hidden-bottom-padding, 0);
-  @include transition(0.2s linear);
-  @include transition-transform();
+  transform: translate3d(0, $bottom-sheet-hidden-bottom-padding, 0);
+  transition: 0.2s linear;
+  transition-property: transform;
 
   &.has-header {
     padding-top: 0;
@@ -19,21 +19,21 @@ material-bottom-sheet {
 
   &.ng-enter {
     opacity: 0;
-    @include transform(translate3d(0, 100%, 0));
+    transform: translate3d(0, 100%, 0);
   }
 
   &.ng-enter-active {
     opacity: 1;
     display: block;
-    @include transform(translate3d(0, $bottom-sheet-hidden-bottom-padding, 0) !important);
+    transform: translate3d(0, $bottom-sheet-hidden-bottom-padding, 0) !important;
   }
 
 
   &.ng-leave-active {
-    @include transform(translate3d(0, 100%, 0) !important );
+    transform: translate3d(0, 100%, 0) !important;
   }
 
-  h2.material-subheader {
+  h2.md-subheader {
     background-color: transparent;
     font-family: $font-family;
     color: $text-medium;
@@ -42,15 +42,15 @@ material-bottom-sheet {
     white-space: nowrap;
   }
 
-  material-inline-icon {
+  md-inline-icon {
     display: inline-block;
     height: 24px;
     width: 24px;
     fill: #444;
   }
 
-  material-item {
-    @include flex-display();
+  md-item {
+    display: flex;
     outline: none;
 
     &:hover {
@@ -59,12 +59,12 @@ material-bottom-sheet {
   }
 
   &.list {
-    material-item {
-      @include flex-align-items(center);
+    md-item {
+      align-items: center;
       height: $bottom-sheet-list-item-height;
       color: $text-medium;
 
-      div.material-icon-container {
+      div.md-icon-container {
         display: inline-block;
         height: 3 * $baseline-grid;
         margin-right: $bottom-sheet-icon-after-margin;
@@ -77,17 +77,17 @@ material-bottom-sheet {
     padding-right: 3 * $baseline-grid;
     padding-top: 0;
 
-    material-list {
-      @include flex-display();
-      @include flex-direction(row);
-      @include flex-wrap(wrap);
-      @include transition(all 0.5s);
+    md-list {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      transition: all 0.5s;
     }
 
-    material-item {
-      @include flex-direction(column);
-      @include flex-align-items(center);
-      @include transition(all 0.5s);
+    md-item {
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.5s;
 
       height: 10 * $baseline-grid;
 
@@ -97,15 +97,15 @@ material-bottom-sheet {
       /* Mixin for how many grid items to show per row */
       @mixin grid-items-per-row($num, $alignEdges: false) {
         $width: 100% / $num;
-        @include flex(1, 1, $width);
+        flex: 1 1 $width;
         max-width: $width;
 
         @if $alignEdges {
           &:nth-of-type(#{$num}n + 1) {
-            @include flex-align-items(flex-start);
+            align-items: flex-start;
           }
           &:nth-of-type(#{$num}n) {
-            @include flex-align-items(flex-end);
+            align-items: flex-end;
           }
         }
       }
@@ -128,14 +128,14 @@ material-bottom-sheet {
 
 
 
-      .material-item-content {
-        @include flex-display();
-        @include flex-direction(column);
-        @include flex-align-items(center);
+      .md-item-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         width: 6 * $baseline-grid;
       }
 
-      .material-icon-container {
+      .md-icon-container {
         display: inline-block;
         box-sizing: border-box;
         height: 6 * $baseline-grid;

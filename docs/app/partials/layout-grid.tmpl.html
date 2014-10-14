@@ -1,0 +1,104 @@
+<div ng-controller="LayoutCtrl" layout="vertical" layout-fill class="layout-content">
+
+  <p>
+    The grid system is different than most because of its use of the
+    <a href="http://www.w3.org/TR/css3-flexbox/">CSS Flexible Box Layout Module</a> standard. With flexbox
+    you have the power to simply add in the columns and rows required, and they'll evenly take up the
+    available space of their parent layout container. There's no restriction to a 12 column grid, or
+    having to explicitly state how large each column should be.
+  </p>
+
+
+  <md-divider></md-divider>
+  <h3 class="layout-title">Flex Attribute</h3>
+  <p>
+    Child elements of a layout container with the <code>flex</code>
+    attribute will "flex", or stretch, to fill the available area within its parent layout container.
+    If a design requires three evenly spaced elements, simply add three elements with a
+    <code>flex</code> attribute. Elements without the flex attribute will take up their natural size,
+    whereas elements with the flex attribute will evenly fill in the available area.
+  </p>
+  <iframe-code-view>
+    <iframe src="/demo/layout/flex-cell.html"></iframe>
+  </iframe-code-view>
+
+
+  <md-divider></md-divider>
+  <h3 class="layout-title">Layout Padding</h3>
+  <p>
+    This layout has padding, or gutters, between each cell by adding the
+    <code>layout-padding</code> attribute. The previous examples added in their own
+    margins/padding manually, whereas the layout-padding attribute spaces it all out
+    evenly.
+  </p>
+  <iframe-code-view>
+    <iframe src="/demo/layout/layout-padding.html"></iframe>
+  </iframe-code-view>
+
+
+
+  <md-divider></md-divider>
+  <h3 class="layout-title">Layout Padding with Available Space Percents</h3>
+  <p>
+    Flex attributes can be given integers to represent the percentage of the available space
+    it should take up. Note that elements which are not given a percentage still
+    fill up the available area. Adjust the window size to see
+    the demo's responsive layout attributes at work.
+  </p>
+  <iframe-code-view>
+    <iframe src="/demo/layout/layout-padding-percents.html"></iframe>
+  </iframe-code-view>
+
+
+
+  <md-divider></md-divider>
+  <h3 class="layout-title">Layout Padding with Offsets</h3>
+  <p>
+    Elements can be offset from the left, but still allow the gutters to line up correctly.
+    Adjust the window size to see the demo's responsive layout attributes at work.
+  </p>
+  <iframe-code-view>
+    <iframe src="/demo/layout/layout-padding-offsets.html"></iframe>
+  </iframe-code-view>
+
+
+
+  <md-divider></md-divider>
+  <h3 class="layout-title">Layout Order</h3>
+  <p>
+    Child elements of a layout container can have their order changed through the use of the
+    <code>layout-order</code> attribute, and respective responsive
+    attributes such as: layout-order-sm, layout-order-md, and layout-order-lg. Reordering elements
+    is useful when the placement of a cell should be changed depending on the viewport size.
+  </p>
+  <p>
+    In the demo, notice how the default size (the smallest) has each of the elements in their
+    natural order determined by its markup. However, as the viewport changes size then each
+    individual cell can change their order using the layout-order attribute.
+  </p>
+  <iframe-code-view>
+    <iframe src="/demo/layout/layout-order.html"></iframe>
+  </iframe-code-view>
+
+
+
+  <md-divider></md-divider>
+  <h3 class="layout-title">Header, Menu, Main, Footer, no padding</h3>
+  <p>
+    This layout lets each of the header and footer tracks height be the size of their
+    respective content, and the middle track (menu and main) flex vertically to fill the
+    space of the entire layout. This is also an example of nested layouts, where the entire
+    body is a vertical layout (header/content/footer), and the content row is its own layout
+    (menu/main), and each layout has their own settings.
+  </p>
+  <p>
+    The body element has the <code>layout="vertical"</code> attribute.
+    By default the middle track has the menu and main elements stacked vertically. However,
+    the elements line up horizontally starting at the "small" size, which is determined by the
+    media query.
+  </p>
+  <iframe-code-view>
+    <iframe src="/demo/layout/full-width-header-menu-footer.html"></iframe>
+  </iframe-code-view>
+
+</div>

@@ -1,4 +1,4 @@
-material-tabs-ink-bar {
+md-tabs-ink-bar {
   height: 2px;
   background: #ffff85;
   position: absolute;
@@ -7,33 +7,33 @@ material-tabs-ink-bar {
 
 // Button ripple: keep same opacity, but expand to 0.75 scale.
 // Then, fade out and expand to 2.0 scale.
-@include keyframes(inkRippleButton) {
+@keyframes inkRippleButton {
   0% {
-    @include transform(scale(0));
+    transform: scale(0);
     opacity: 0.15;
   }
   50% {
-    @include transform(scale(0.75));
+    transform: scale(0.75);
     opacity: 0.15;
   }
   100% {
-    @include transform(scale(2.0));
+    transform: scale(2.0);
     opacity: 0;
   }
 }
 
 // Checkbox ripple: fully expand, then fade out.
-@include keyframes(inkRippleCheckbox) {
+@keyframes inkRippleCheckbox {
   0% {
-    @include transform(scale(0));
+    transform: scale(0);
     opacity: 0.4;
   } 
   50% {
-    @include transform(scale(1.0));
+    transform: scale(1.0);
     opacity: 0.4;
   }
   100% {
-    @include transform(scale(1.0));
+    transform: scale(1.0);
     opacity: 0;
   }
 }
@@ -42,7 +42,7 @@ material-tabs-ink-bar {
  * A container inside of a rippling element (eg a button),
  * which contains all of the individual ripples
  */
-.material-ripple-container {
+.md-ripple-container {
   pointer-events: none;
   position: absolute;
   overflow: hidden;
@@ -52,6 +52,6 @@ material-tabs-ink-bar {
   height: 100%;
 }
 
-.material-ripple {
+.md-ripple {
   position: absolute;
 }
