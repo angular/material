@@ -74,10 +74,11 @@ angular.module('material.components.tabs')
  */
 .directive('mdTabs', [
   '$parse',
+  '$mdTheming',
   TabsDirective
 ]);
 
-function TabsDirective($parse) {
+function TabsDirective($parse, $mdTheming) {
   return {
     restrict: 'E',
     controller: '$mdTabs',
@@ -86,7 +87,7 @@ function TabsDirective($parse) {
     scope: {
       selectedIndex: '=?selected'
     },
-    template: 
+    template:
       '<section class="tabs-header" ' +
         'ng-class="{\'tab-paginating\': pagination.active}">' +
 
@@ -113,7 +114,7 @@ function TabsDirective($parse) {
   };
 
   function postLink(scope, element, attr, tabsCtrl) {
-
+    $mdTheming(element);
     configureAria();
     watchSelected();
 

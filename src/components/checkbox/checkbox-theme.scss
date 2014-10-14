@@ -1,0 +1,40 @@
+$checkbox-color-palette: $color-green !default;
+$checkbox-checked-background-color: rgba(map-get($checkbox-color-palette, '400'), 0.87) !default;
+$checkbox-checked-color: map-get($foreground-color-palette, '200') !default;
+$checkbox-ripple-color: map-get($checkbox-color-palette, '600') !default;
+$checkbox-checked-ripple-color: map-get($color-grey, '600') !default;
+$checkbox-border-color: $input-border-color !default;
+$checkbox-disabled-border-color: $input-disabled-border-color !default;
+
+md-checkbox.md-#{$theme-name}-theme {
+
+  .md-ripple {
+    color: $checkbox-ripple-color;
+  }
+
+  &.md-checked .md-ripple {
+    color: $checkbox-checked-ripple-color;
+  }
+
+  .md-icon {
+    border-color: $checkbox-border-color;
+  }
+
+  &.md-checked .md-icon {
+    background-color: $checkbox-checked-background-color;
+  }
+
+  &.md-checked .md-icon:after {
+    border-color: $checkbox-checked-color;
+  }
+
+  &[disabled] {
+    .md-icon {
+      border-color: $checkbox-disabled-border-color;
+    }
+
+    &.md-checked .md-icon {
+      background-color: $checkbox-disabled-border-color;
+    }
+  }
+}

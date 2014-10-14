@@ -116,12 +116,13 @@ function MdToastDirective() {
  *
  */
 
-function MdToastService($timeout, $$interimElement, $animate, $mdSwipe) {
+function MdToastService($timeout, $$interimElement, $animate, $mdSwipe, $mdTheming) {
 
   var factoryDef = {
     onShow: onShow,
     onRemove: onRemove,
     position: 'bottom left',
+    themable: true,
     hideDelay: 3000,
   };
 

@@ -1,0 +1,14 @@
+$dialog-border-radius: 4px !default;
+$dialog-color-palette: $background-color-palette !default;
+$dialog-background-color: map-get($dialog-color-palette, 'A100') !default;
+$dialog-border-color: rgba(map-get($dialog-color-palette, '1000'), 0.12) !default;
+
+md-dialog.md-#{$theme-name}-theme {
+  border-radius: $dialog-border-radius;
+  background-color: $dialog-background-color;
+
+  &.dialog-content-overflow .dialog-actions {
+    border-top-color: $dialog-border-color;
+  }
+}
+

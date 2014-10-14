@@ -6,6 +6,7 @@
 angular.module('material.components.checkbox', [
   'material.core',
   'material.animations',
+  'material.services.theming',
   'material.services.aria'
 ])
   .directive('mdCheckbox', [ 
@@ -13,6 +14,7 @@ angular.module('material.components.checkbox', [
     '$mdInkRipple',
     '$mdAria',
     '$mdConstant',
+    '$mdTheming',
     MdCheckboxDirective
   ]);
 
@@ -51,7 +53,7 @@ angular.module('material.components.checkbox', [
  * </hljs>
  *
  */
-function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant) {
+function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant, $mdTheming) {
   var inputDirective = inputDirectives[0];
 
   var CHECKED_CSS = 'md-checked';
@@ -80,6 +82,7 @@ function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant
 
     return function postLink(scope, element, attr, ngModelCtrl) {
       var checked = false;
+      $mdTheming(element);
 
       // Create a mock ngModel if the user doesn't provide one
       ngModelCtrl = ngModelCtrl || {

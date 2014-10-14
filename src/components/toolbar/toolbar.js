@@ -5,12 +5,14 @@
 angular.module('material.components.toolbar', [
   'material.core',
   'material.components.content',
+  'material.services.theming',
   'material.animations'
 ])
   .directive('mdToolbar', [
     '$$rAF',
     '$mdEffects',
     '$mdUtil',
+    '$mdTheming',
     mdToolbarDirective
   ]);
 
@@ -61,12 +63,13 @@ angular.module('material.components.toolbar', [
  * shrinking by. For example, if 0.25 is given then the toolbar will shrink
  * at one fourth the rate at which the user scrolls down. Default 0.5.
  */ 
-function mdToolbarDirective($$rAF, $mdEffects, $mdUtil) {
+function mdToolbarDirective($$rAF, $mdEffects, $mdUtil, $mdTheming) {
 
   return {
     restrict: 'E',
     controller: angular.noop,
     link: function(scope, element, attr) {
+      $mdTheming(element);
 
       if (angular.isDefined(attr.scrollShrink)) {
         setupScrollShrink();

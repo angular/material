@@ -1,5 +1,5 @@
 
-.btnRemove {
+.remove-tab {
     margin-bottom: 40px;
 }
 
@@ -61,7 +61,7 @@ md-button {
     max-height: 30px;
 }
 
-md-button.md-theme-green {
+md-button.add-tab {
     margin-top:20px;
     max-height:30px !important;
 }

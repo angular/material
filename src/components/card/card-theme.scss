@@ -1,0 +1,9 @@
+$card-border-radius: 2px !default;
+
+md-card.md-#{$theme-name}-theme {
+  border-radius: $card-border-radius;
+
+  .md-card-image {
+    border-radius: $card-border-radius $card-border-radius 0 0;
+  }
+}

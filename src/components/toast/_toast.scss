@@ -1,11 +1,9 @@
-
+// See height set globally, depended on by buttons
 md-toast {
   display: flex;
   box-sizing: border-box;
   align-items: center;
 
-  background: #323232;
-  color: #f1f1f1;
   min-height: 48px;
   padding-left: 24px;
   padding-right: 24px;
@@ -19,11 +17,8 @@ md-toast {
   max-width: 879px;
   max-height: 40px;
 
+  height: $toast-height;
   z-index: $z-index-toast;
-
-  md-button {
-    color: white;
-  }
 
   &.capsule {
     border-radius: 24px;
@@ -66,16 +61,16 @@ md-toast {
       transform: translate3d(100%, 0%, 0);
     }
   }
+
+  .md-action {
+    line-height: 19px;
+    padding-left: 24px;
+    cursor: pointer;
+    text-transform: uppercase;
+    float: right;
+  }
 }
 
-.toast-action {
-  line-height: 19px;
-  color: #eeff41;
-  padding-left: 24px;
-  cursor: pointer;
-  text-transform: uppercase;
-  float: right;
-}
 
 @media (max-width: $layout-breakpoint-sm) {
   md-toast {

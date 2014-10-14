@@ -1,0 +1,54 @@
+$tff-focus-color: map-get($primary-color-palette, '500') !default;
+$tff-text-color: $foreground-primary-color !default;
+$tff-hint-small-color: mix($foreground-secondary-color, $foreground-tertiary-color, 40%) !default;
+$tff-hint-color: $foreground-tertiary-color !default;
+$tff-line-color: $foreground-quarternary-color !default;
+$tff-disabled-line-color: mix($foreground-tertiary-color, $foreground-quarternary-color) !default;
+$tff-disabled-color: $foreground-quarternary-color !default;
+
+md-input-group.md-#{$theme-name}-theme {
+  input, textarea {
+    text-shadow: $foreground-text-shadow;
+    @include input-placeholder($tff-hint-color);
+  }
+
+  label {
+    text-shadow: $foreground-text-shadow;
+    color: $tff-hint-color;
+  }
+
+  input, textarea {
+    color: $tff-text-color;
+    border-color: $tff-line-color;
+  }
+
+  &.md-input-focused {
+    input, textarea {
+      border-color: $tff-focus-color;
+    }
+    label {
+      color: $tff-focus-color;
+    }
+    &.md-input-has-value {
+      @if $dark-theme {
+        label {
+          color: lighten($tff-focus-color, 10%);
+        }
+      }
+    }
+  }
+
+  &.md-input-has-value:not(.md-input-focused) {
+    label {
+      color: $tff-hint-small-color;
+    }
+  }
+
+  &[disabled] {
+    input, textarea {
+      border-bottom-color: $tff-disabled-color;
+      color: $tff-hint-color;
+      background-image: linear-gradient(to right, $tff-disabled-line-color 0%, $tff-disabled-line-color 50%, rgba(0, 0, 0, 0) 0%);
+    }
+  }
+}

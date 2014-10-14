@@ -5,11 +5,13 @@
  * SubHeader module
  */
 angular.module('material.components.subheader', [
-  'material.components.sticky'
+  'material.components.sticky',
+  'material.services.theming'
 ])
 .directive('mdSubheader', [
   '$mdSticky',
   '$compile',
+  '$mdTheming',
   MdSubheaderDirective
 ]);
 
@@ -29,7 +31,7 @@ angular.module('material.components.subheader', [
  * </hljs>
  */
 
-function MdSubheaderDirective($mdSticky, $compile) {
+function MdSubheaderDirective($mdSticky, $compile, $mdTheming) {
   return {
     restrict: 'E',
     replace: true,
@@ -41,6 +43,7 @@ function MdSubheaderDirective($mdSticky, $compile) {
     compile: function(element, attr, transclude) {
       var outerHTML = element[0].outerHTML;
       return function postLink(scope, element, attr) {
+        $mdTheming(element);
         function getContent(el) {
           return angular.element(el[0].querySelector('.md-subheader-content'));
         }
@@ -55,6 +58,7 @@ function MdSubheaderDirective($mdSticky, $compile) {
         // of the element, that will be 'stickied' as the user scrolls.
         transclude(scope, function(clone) {
           var stickyClone = $compile(angular.element(outerHTML))(scope);
+          $mdTheming(stickyClone);
           getContent(stickyClone).append(clone);
           $mdSticky(scope, element, stickyClone);
         });

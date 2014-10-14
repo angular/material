@@ -1,0 +1,33 @@
+$radio-color-palette: $color-green !default;
+$radio-on-background-color: rgba(map-get($radio-color-palette, '400'), 0.87) !default;
+$radio-ripple-color: map-get($radio-color-palette, '600') !default;
+$radio-off-border-color: $foreground-secondary-color !default;
+$radio-group-focus-border-color: $foreground-primary-color !default;
+
+md-radio-button.md-#{$theme-name}-theme,
+md-switch.md-#{$theme-name}-theme .md-switch-thumb {
+  .md-container .md-ripple {
+    color: $radio-ripple-color;
+  }
+
+  .md-off {
+    border-color: $radio-off-border-color;
+  }
+
+
+  .md-on {
+    background-color: $radio-on-background-color;
+  }
+
+  &.md-checked .md-off {
+    border-color: $radio-on-background-color;
+  }
+
+  &.md-checked .md-ink-ripple {
+    color: $radio-on-background-color;
+  }
+}
+
+md-radio-group.md-#{$theme-name}-theme:focus {
+  border-color: $radio-group-focus-border-color;
+}

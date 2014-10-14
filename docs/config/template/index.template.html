@@ -19,7 +19,7 @@
     component-id="left"
     is-locked-open="$media('md')">
 
-    <md-toolbar class="md-theme-light md-medium-tall">
+    <md-toolbar class="md-medium-tall">
       <h1 class="md-toolbar-tools" style="padding-top:25px;">
         <a href="#/" ng-click="goHome()">Angular<br/>Material Design</a>
       </h1>
@@ -50,7 +50,7 @@
   </md-sidenav>
 
   <div layout="vertical" layout-fill tabIndex="-1" role="main">
-    <md-toolbar class="md-theme-dark md-medium-tall app-toolbar">
+    <md-toolbar md-theme="indigo" class="md-medium-tall app-toolbar">
 
       <div class="md-toolbar-tools" ng-click="openMenu()">
         <button class="menu-icon" hide-md aria-label="Toggle Menu">

@@ -1,3 +1,8 @@
+// Tabs
+$tabs-paginator-width: $baseline-grid * 4 !default;
+$tabs-tab-width: $baseline-grid * 12 !default;
+$tabs-header-height: 48px;
+
 md-tabs {
   display: block;
   width: 100%;
@@ -9,7 +14,6 @@ md-tabs {
   height: $tabs-header-height;
   box-sizing: border-box;
   position: relative;
-  background-color: #4285F4;
 }
 
 .tab-paginator {
@@ -82,10 +86,13 @@ md-tabs[center] .tabs-header:not(.tab-paginating) .tabs-header-items {
 }
 
 md-tabs-ink-bar {
+  position: absolute;
   left: 0;
   bottom: 0;
   box-sizing: border-box;
   transition: all 0.2s linear;
+  height: 2px;
+  margin-top: -2px;
 }
 
 md-tab {
@@ -103,21 +110,14 @@ md-tab {
   min-width: $tabs-tab-width;
   border: 1px dotted transparent;
 
-  color: #9FC1FB;
-  &.active {
-   color: white;
-  }
   &[disabled] {
     pointer-events: none;
-    color: #6a6a6a;
-    opacity: 0.5;
     cursor: default;
   }
 
   @include not-selectable();
 
   &:focus {
-    border-color: $input-focused-border-color;
     outline: none;
   }
 
@@ -127,10 +127,6 @@ md-tab {
     opacity: 1;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .md-ripple-container {
-    color: #ffff85;
   }
 
 }

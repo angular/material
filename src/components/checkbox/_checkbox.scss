@@ -1,3 +1,5 @@
+$checkbox-width: 18px;
+$checkbox-height: $checkbox-width;
 
 md-checkbox {
   display: block;
@@ -21,14 +23,6 @@ md-checkbox {
       left: -$checkbox-width;
       top: -$checkbox-width;
     }
-    .md-ripple {
-      color: #0f9d58;
-    }
-
-  }
-
-  &.md-checked .md-ripple {
-    color: #5a5f5a;
   }
 
   .circle {
@@ -43,26 +37,17 @@ md-checkbox {
     left: 0;
     width: $checkbox-width;
     height: $checkbox-height;
-    border: 2px solid $input-border-color;
+    border: 2px solid;
     border-radius: 2px;
   }
 
-  // checked
   &.md-checked .md-icon {
-    border-color: #4CAF50;
-    background: #4CAF50;
+    border: none;
   }
 
   // disabled
   &[disabled] {
     cursor: no-drop;
-
-    .md-icon {
-      border-color: $input-disabled-border-color;
-    }
-    &.md-checked .md-icon {
-      background: $input-disabled-border-color;
-    }
   }
 
   // focus
@@ -70,14 +55,16 @@ md-checkbox {
     border-color: black;
   }
 
+
   &.md-checked .md-icon:after {
     transform: rotate(45deg);
     position: absolute;
-    left: 4px;
+    left: 6px;
+    top: 2px;
     display: table;
     width: 6px;
     height: 12px;
-    border: 2px solid $color-grey-200;
+    border: 2px solid;
     border-top: 0;
     border-left: 0;
     content: ' ';

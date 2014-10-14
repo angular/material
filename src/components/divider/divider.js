@@ -5,9 +5,13 @@
  */
 angular.module('material.components.divider', [
   'material.animations',
-  'material.services.aria'
+  'material.services.aria',
+  'material.services.theming'
 ])
-  .directive('mdDivider', MdDividerDirective);
+.directive('mdDivider', [
+  '$mdTheming',
+  MdDividerDirective
+]);
 
 function MdDividerController(){}
 
@@ -29,9 +33,10 @@ function MdDividerController(){}
  * </hljs>
  *
  */
-function MdDividerDirective() {
+function MdDividerDirective($mdTheming) {
   return {
     restrict: 'E',
+    link: $mdTheming,
     controller: [MdDividerController]
   };
 }

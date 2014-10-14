@@ -1,0 +1,22 @@
+$progress-linear-color-palette: $primary-color-palette !default;
+$progress-linear-color: map-get($progress-linear-color-palette, '500') !default;
+$progress-linear-alt-color: map-get($progress-linear-color-palette, '100') !default;
+
+md-progress-linear.md-#{$theme-name}-theme {
+  .container {
+    background-color: $progress-linear-alt-color;
+  }
+
+  .bar {
+    background-color: $progress-linear-color;
+  }
+
+  &[mode=buffer] {
+    .dashed:before {
+      background: radial-gradient($progress-linear-alt-color 0%, $progress-linear-alt-color 16%, transparent 42%);
+    }
+    .bar1 {
+      background-color: $progress-linear-alt-color;
+    }
+  }
+}

@@ -7,7 +7,7 @@
 angular.module('material.components.textField', ['material.core'])
        .directive('mdInputGroup', [ mdInputGroupDirective ])
        .directive('mdInput', ['$mdUtil', mdInputDirective ])
-       .directive('mdTextFloat', [ mdTextFloatDirective ]);
+       .directive('mdTextFloat', [ '$mdTheming', mdTextFloatDirective ]);
 
 
 
@@ -36,7 +36,7 @@ angular.module('material.components.textField', ['material.core'])
  * <md-text-float label="eMail"    ng-model="user.email" type="email" ></md-text-float>
  * </hljs>
  */
-function mdTextFloatDirective() {
+function mdTextFloatDirective($mdTheming) {
   return {
     restrict: 'E',
     replace: true,
@@ -60,7 +60,8 @@ function mdTextFloatDirective() {
           // transpose optional `type` and `class` settings
           element.attr('type', attrs.type || "text");
           element.attr('class', attrs.class );
-        }
+        },
+        post: $mdTheming
       };
     },
     template:

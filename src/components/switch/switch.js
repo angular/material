@@ -6,12 +6,14 @@
 
 angular.module('material.components.switch', [
   'material.components.checkbox',
-  'material.components.radioButton'
+  'material.components.radioButton',
+  'material.services.theming'
 ])
 
 .directive('mdSwitch', [
   'mdCheckboxDirective',
   'mdRadioButtonDirective',
+  '$mdTheming',
   MdSwitch
 ]);
 
@@ -49,7 +51,7 @@ angular.module('material.components.switch', [
  *
  * </hljs>
  */
-function MdSwitch(checkboxDirectives, radioButtonDirectives) {
+function MdSwitch(checkboxDirectives, radioButtonDirectives, $mdTheming) {
   var checkboxDirective = checkboxDirectives[0];
   var radioButtonDirective = radioButtonDirectives[0];
 
@@ -75,8 +77,9 @@ function MdSwitch(checkboxDirectives, radioButtonDirectives) {
     var link = checkboxDirective.compile(thumb, attr);
 
     return function (scope, element, attr, ngModelCtrl) {
+      $mdTheming(element);
       var thumb = angular.element(element[0].querySelector('.md-switch-thumb'));
-      return link(scope, thumb, attr, ngModelCtrl)
+      return link(scope, thumb, attr, ngModelCtrl);
     };
   }
 }

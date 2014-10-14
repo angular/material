@@ -8,14 +8,17 @@ angular.module('material.components.dialog', [
   'material.services.compiler',
   'material.services.aria',
   'material.services.interimElement',
+  'material.services.theming',
 ])
   .directive('mdDialog', [
     '$$rAF',
+    '$mdTheming',
     MdDialogDirective
   ])
   .factory('$mdDialog', [
     '$timeout',
     '$rootElement',
+    '$compile',
     '$mdEffects',
     '$animate',
     '$mdAria',
@@ -25,10 +28,11 @@ angular.module('material.components.dialog', [
     MdDialogService
   ]);
 
-function MdDialogDirective($$rAF) {
+function MdDialogDirective($$rAF, $mdTheming) {
   return {
     restrict: 'E',
     link: function(scope, element, attr) {
+      $mdTheming(element);
       $$rAF(function() {
         var content = element[0].querySelector('.dialog-content');
         if (content && content.scrollHeight > content.clientHeight) {
@@ -149,7 +153,7 @@ function MdDialogDirective($$rAF) {
  *
  */
 
-function MdDialogService($timeout, $rootElement, $mdEffects, $animate, $mdAria, $$interimElement, $mdUtil, $mdConstant) {
+function MdDialogService($timeout, $rootElement, $compile, $mdEffects, $animate, $mdAria, $$interimElement, $mdUtil, $mdConstant) {
 
   var $dialogService;
   return $dialogService = $$interimElement({
@@ -175,7 +179,7 @@ function MdDialogService($timeout, $rootElement, $mdEffects, $animate, $mdAria, 
     configureAria(element.find('md-dialog'));
 
     if (options.hasBackdrop) {
-      var backdrop = angular.element('<md-backdrop class="opaque ng-enter">');
+      var backdrop = $compile('<md-backdrop class="opaque ng-enter">')(scope);
       $animate.enter(backdrop, options.parent, null);
       options.backdrop = backdrop;
     }

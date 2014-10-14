@@ -5,11 +5,13 @@
  */
 angular.module('material.components.progressCircular', [
   'material.animations',
-  'material.services.aria'
+  'material.services.aria',
+  'material.services.theming',
 ])
   .directive('mdProgressCircular', [
     '$$rAF',
     '$mdEffects',
+    '$mdTheming',
     MdProgressCircularDirective
   ]);
 
@@ -41,7 +43,7 @@ angular.module('material.components.progressCircular', [
  * <md-progress-circular mode="indeterminate"></md-progress-circular>
  * </hljs>
  */
-function MdProgressCircularDirective($$rAF, $mdEffects) {
+function MdProgressCircularDirective($$rAF, $mdEffects, $mdTheming) {
   var fillRotations = new Array(101),
     fixRotations = new Array(101);
 
@@ -79,6 +81,7 @@ function MdProgressCircularDirective($$rAF, $mdEffects) {
   }
 
   function postLink(scope, element, attr) {
+    $mdTheming(element);
     var circle = element[0],
       fill = circle.querySelectorAll('.fill, .mask.full'),
       fix = circle.querySelectorAll('.fill.fix'),
