@@ -33,6 +33,10 @@ function DialogController($scope, $mdDialog) {
     $mdDialog.hide();
   };
 
+  $scope.cancel = function() {
+    $mdDialog.cancel();
+  };
+
   $scope.answer = function(answer) {
     $mdDialog.hide(answer);
   };

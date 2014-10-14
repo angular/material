@@ -1,12 +1,13 @@
 
 <div ng-controller="DemoController" layout="vertical">
-
-  <md-toolbar class="theme-dark-tff md-medium-tall" style="padding-top:15px;">
-    <div class="md-toolbar-tools dark">
-      <md-text-float label="Title"  ng-model="user.title"   ></md-text-float>
-      <md-text-float label="eMail"  ng-model="user.email" type="email" ></md-text-float>
-    </div>
-  </md-toolbar>
+  <md-content md-theme="light-blue-dark">
+    <form style="padding: 20px;">
+      <div class="row">
+        <md-text-float label="Title"  ng-model="user.title"   ></md-text-float>
+        <md-text-float label="eMail"  ng-model="user.email" type="email" ></md-text-float>
+      </div>
+    </form>
+  </md-content>
 
   <md-content>
     <form style="padding: 20px;">

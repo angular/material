@@ -1,8 +1,17 @@
+$button-line-height: 25px;
+$button-padding: 2px 6px 3px;
+
+// Fab buttons
+$button-fab-width: 56px;
+$button-fab-height: 56px;
+$button-fab-padding: 16px;
+$button-fab-toast-offset: $toast-height + $toast-margin;
+
 /**
  * Position a FAB button.
  */
 @mixin fab-position($spot, $top: auto, $right: auto, $bottom: auto, $left: auto) {
-  &.md-button-fab-#{$spot} {
+  &.md-fab-#{$spot} {
     top: $top;
     right: $right;
     bottom: $bottom;
@@ -22,7 +31,6 @@ md-button {
   padding: 0;
   margin: 0;
 
-  border-radius: $button-border-radius;
   text-align: center;
 
   // Always uppercase buttons
@@ -71,61 +79,26 @@ md-button {
   }
 
 
-  &.md-button-colored {
-    color: $theme-light;
-    fill: $theme-light;
-  }
-
-  &.md-button-cornered {
+  &.md-cornered {
     border-radius: 0;
   }
 
-  &:not([disabled]) {
-    &:hover, 
-    // Uses a .focus class because the child button/a is getting the actual focus
-    &.focus {
-      background-color: $button-hover-background;
-    }
-  }
-
-  &[disabled] {
-    background-color: $button-disabled-background !important;
-    color: $button-disabled-color !important;
-    cursor: auto;
-  }
-
-  &.md-button-icon {
+  &.md-icon {
     padding: 0;
     background: none;
   }
 
-  &.md-button-raised {
-    background-color: $button-raised-background;
-
+  &.md-raised {
     transition: 0.2s linear;
     transition-property: box-shadow, transform, background-color;
     transform: translate3d(0, 0, 0);
 
     &:not([disabled]) {
       @extend .md-shadow-bottom-z-1;
-      &:hover,
-      &.focus {
-        background-color: $button-raised-hover-background;
-      }
-    }
-
-    &.md-button-colored {
-      background-color: $button-raised-colored-background;
-      color: $button-raised-colored-color;
-
-      &:hover:not([disabled]),
-      &.focus {
-        background-color: $button-raised-colored-hover-background;
-      }
     }
   }
 
-  &.md-button-fab {
+  &.md-fab {
 
     @include fab-position(bottom-right, auto, $button-fab-width/2, $button-fab-height/2, auto);
     @include fab-position(bottom-left, auto, auto, $button-fab-height/2, $button-fab-width/2);
@@ -137,7 +110,7 @@ md-button {
     width: $button-fab-width;
     height: $button-fab-height;
 
-    border-radius: $button-fab-border-radius;
+    border-radius: 50%;
 
     @extend .md-shadow-bottom-z-1;
     border-radius: 50%;
@@ -151,8 +124,8 @@ md-button {
   }
 
   &:not([disabled]) {
-    &.md-button-raised,
-    &.md-button-fab {
+    &.md-raised,
+    &.md-fab {
       &.focus,
       &:hover {
         transform: translate3d(0, -1px, 0);
@@ -163,8 +136,8 @@ md-button {
 }
 
 .md-toast-open-top {
-  md-button.md-button-fab-top-left,
-  md-button.md-button-fab-top-right {
+  md-button.md-fab-top-left,
+  md-button.md-fab-top-right {
     transform: translate3d(0, $button-fab-toast-offset, 0);
     &.focus,
     &:hover:not([disabled]) {
@@ -173,8 +146,8 @@ md-button {
   }
 }
 .md-toast-open-bottom {
-  md-button.md-button-fab-bottom-left,
-  md-button.md-button-fab-bottom-right {
+  md-button.md-fab-bottom-left,
+  md-button.md-fab-bottom-right {
     transform: translate3d(0, -$button-fab-toast-offset, 0);
     &.focus,
     &:hover {

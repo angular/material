@@ -5,6 +5,10 @@ body {
   max-height: 100%;
 }
 
+a {
+  color: #3f51b5;
+}
+
 md-toolbar.md-medium-tall {
   height: 88px;
 }
@@ -158,13 +162,16 @@ pre > code.highlight {
   -moz-flex: 1;
   -ms-flex: 1;
   flex: 1;
+}
+
+.demo-content > div[layout-fill] {
   min-height: 448px;
 }
 
 md-toolbar.demo-toolbar,
 .demo-source-tabs md-tab,
 .demo-source-tabs .tabs-header {
-  background: #00BCD4;
+  background: #00BCD4 !important;
   color: white;
 }
 md-toolbar.demo-toolbar md-tab-label {

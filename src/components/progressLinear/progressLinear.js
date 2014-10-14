@@ -5,11 +5,13 @@
  */
 angular.module('material.components.progressLinear', [
   'material.animations',
+  'material.services.theming',
   'material.services.aria'
 ])
 .directive('mdProgressLinear', [
   '$$rAF', 
   '$mdEffects',
+  '$mdTheming',
   MdProgressLinearDirective
 ]);
 
@@ -43,7 +45,7 @@ angular.module('material.components.progressLinear', [
  * <md-progress-linear mode="query"></md-progress-linear>
  * </hljs>
  */
-function MdProgressLinearDirective($$rAF, $mdEffects) {
+function MdProgressLinearDirective($$rAF, $mdEffects, $mdTheming) {
 
   return {
     restrict: 'E',
@@ -63,6 +65,7 @@ function MdProgressLinearDirective($$rAF, $mdEffects) {
     return postLink;
   }
   function postLink(scope, element, attr) {
+    $mdTheming(element);
     var bar1Style = element[0].querySelector('.bar1').style,
       bar2Style = element[0].querySelector('.bar2').style,
       container = angular.element(element[0].querySelector('.container'));

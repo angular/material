@@ -17,15 +17,15 @@
   </md-content>
 
   <div class="dialog-actions">
-    <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" class="md-button-colored" hide show-md>
+    <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" hide show-md>
       More on Wikipedia
     </md-button>
     <span flex></span>
-    <md-button ng-click="answer('useful')" class="md-theme-green">
-      Useful
-    </md-button>
-    <md-button ng-click="answer('not useful')" class="md-theme-red">
+    <md-button ng-click="answer('not useful')">
      Not Useful
+    </md-button>
+    <md-button ng-click="answer('useful')" class="md-primary">
+      Useful
     </md-button>
   </div>
 

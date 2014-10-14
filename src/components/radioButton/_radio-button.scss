@@ -1,3 +1,5 @@
+$radio-width: 16px;
+$radio-height: $radio-width;
 
 md-radio-button,
 .md-switch-thumb { // Used in switch
@@ -26,9 +28,6 @@ md-radio-button,
       left: -$radio-width;
       top: -$radio-width;
     }
-    .md-ripple {
-      color: #0f9d58;
-    }
   }
 
 
@@ -39,8 +38,8 @@ md-radio-button,
     width: $radio-width;
     height: $radio-width;
     border: solid 2px;
-    border-color: #5a5a5a;
     border-radius: 50%;
+    transition: border-color ease 0.28s;
   }
 
   .md-on {
@@ -50,17 +49,12 @@ md-radio-button,
     width: $radio-width;
     height: $radio-width;
     border-radius: 50%;
-    background-color: #0f9d58;
     transition: transform ease 0.28s;
     transform: scale(0);
   }
 
   &.md-checked .md-on {
-    transform: scale(1.1);
-  }
-
-  &.md-checked .md-ink-ripple {
-    color: #119957;
+    transform: scale(0.55);
   }
 
   .md-label {
@@ -82,8 +76,4 @@ md-radio-group {
   border: 1px dotted transparent;
   display: block;
   outline: none;
-
-  &:focus {
-    border-color: $input-focused-border-color;
-  }
 }

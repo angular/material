@@ -1,0 +1,13 @@
+$switch-color: $foreground-secondary-color !default;
+$switch-focus-color: map-get($foreground-color-palette, '1000');
+
+md-switch.md-#{$theme-name}-theme {
+  .md-switch-bar {
+    background-color: $switch-color;
+  }
+  .md-switch-thumb {
+    &:focus .md-label {
+      border: 1px dotted black;
+    }
+  }
+}

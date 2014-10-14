@@ -1,0 +1,34 @@
+$tabs-color-palette: $primary-color-palette !default;
+$tabs-header-background-color: map-get($tabs-color-palette, '500') !default;
+$tabs-inactive-color: map-get($tabs-color-palette, '100') !default;
+$tabs-active-color: $primary-color-palette-contrast-color !default;
+$tabs-disabled-color: $foreground-quarternary-color !default;
+$tabs-focus-color: $foreground-primary-color !default;
+$tabs-highlight-color: #ffff85;
+
+md-tabs.md-#{$theme-name}-theme {
+  .tabs-header {
+    background-color: $tabs-header-background-color;
+  }
+
+  md-tabs-ink-bar {
+    background: $tabs-highlight-color;
+  }
+
+  md-tab {
+    color: $tabs-inactive-color;
+    &.active {
+      color: $tabs-active-color;
+    }
+    &[disabled] {
+      color: $tabs-disabled-color;
+    }
+    &:focus {
+      border-color: $tabs-focus-color;
+    }
+
+    .md-ripple-container {
+      color: $tabs-highlight-color;
+    }
+  }
+}

@@ -1,5 +1,16 @@
-$toast-height: 20px !default;
+$toast-background-color: #323232 !default;
+$toast-text-color: white !default;
+$toast-action-color: map-get($primary-color-palette, 'A200') !default;
 
-md-toast {
-  height: $toast-height;
+md-toast.md-#{$theme-name}-theme {
+  background-color: $toast-background-color;
+  color: $toast-text-color;
+
+  md-button {
+    color: $toast-text-color;
+  }
+
+  .md-action {
+    color: $toast-action-color;
+  }
 }

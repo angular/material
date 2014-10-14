@@ -2,7 +2,10 @@
  * @ngdoc module
  * @name material.components.tooltip
  */
-angular.module('material.components.tooltip', ['material.core'])
+angular.module('material.components.tooltip', [
+  'material.core',
+  'material.services.theming'
+])
 
 .directive('mdTooltip', [
   '$timeout',
@@ -10,6 +13,7 @@ angular.module('material.components.tooltip', ['material.core'])
   '$$rAF',
   '$document',
   '$mdUtil',
+  '$mdTheming',
   MdTooltipDirective
 ]);
 
@@ -36,7 +40,7 @@ angular.module('material.components.tooltip', ['material.core'])
  * @param {expression=} visible Boolean bound to whether the tooltip is 
  * currently visible.
  */
-function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil) {
+function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdTheming) {
 
   var TOOLTIP_SHOW_DELAY = 400;
   var TOOLTIP_WINDOW_EDGE_SPACE = 8;
@@ -59,6 +63,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil) {
   };
 
   function postLink(scope, element, attr, contentCtrl) {
+    $mdTheming(element);
     var parent = element.parent();
 
     // We will re-attach tooltip when visible

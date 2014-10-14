@@ -7,16 +7,19 @@
 angular.module('material.components.radioButton', [
   'material.core',
   'material.animations',
-  'material.services.aria'
+  'material.services.aria',
+  'material.services.theming'
 ])
   .directive('mdRadioGroup', [
     '$mdUtil',
     '$mdConstant',
+    '$mdTheming',
     mdRadioGroupDirective
   ])
   .directive('mdRadioButton', [
     '$mdAria',
     '$mdUtil',
+    '$mdTheming',
     mdRadioButtonDirective
   ]);
 
@@ -51,7 +54,7 @@ angular.module('material.components.radioButton', [
  * </hljs>
  *
  */
-function mdRadioGroupDirective($mdUtil, $mdConstant) {
+function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming) {
   RadioGroupController.prototype = createRadioGroupControllerProto();
 
   return {
@@ -62,6 +65,7 @@ function mdRadioGroupDirective($mdUtil, $mdConstant) {
   };
 
   function link(scope, element, attr, ctrls) {
+    $mdTheming(element);
     var rgCtrl = ctrls[0],
       ngModelCtrl = ctrls[1] || {
         $setViewValue: angular.noop
@@ -189,7 +193,7 @@ function mdRadioGroupDirective($mdUtil, $mdConstant) {
  * </hljs>
  *
  */
-function mdRadioButtonDirective($mdAria, $mdUtil) {
+function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
 
   var CHECKED_CSS = 'md-checked';
 
@@ -208,6 +212,7 @@ function mdRadioButtonDirective($mdAria, $mdUtil) {
   function link(scope, element, attr, rgCtrl) {
     var lastChecked;
 
+    $mdTheming(element);
     configureAria(element, scope);
 
     rgCtrl.add(render);

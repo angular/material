@@ -1,9 +1,9 @@
 <div ng-controller="AppCtrl">
 
-  <md-toolbar class="md-theme-green">
+  <md-toolbar md-theme="green">
     <h1 class="md-toolbar-tools">
       <span flex>Awesome Md App</span>
-      <md-button class="md-button-fab md-theme-green">
+      <md-button class="md-fab md-primary">
         <md-tooltip>
           Refresh
         </md-tooltip>
@@ -18,13 +18,13 @@
       The tooltip is visible when the button is hovered, focused, or touched.
     </p>
 
-    <md-button class="md-button-fab md-button-fab-top-left left" >
+    <md-button class="md-fab md-fab-top-left left" >
       <md-icon icon="/img/icons/ic_insert_drive_file_24px.svg"></md-icon>
       <md-tooltip visible="showTooltip">
         Insert Drive
       </md-tooltip>
     </md-button>
-    <md-button class="md-button-fab md-button-fab-top-right right">
+    <md-button class="md-fab md-fab-top-right right">
       <md-icon icon="/img/icons/ic_photo_24px.svg"></md-icon>
       <md-tooltip>
         Photos

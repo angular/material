@@ -118,10 +118,10 @@ module.exports = function(gulp, IS_RELEASE_BUILD) {
   gulp.task('docs-css', ['docs-app', 'build'], function() {
     return gulp.src([
       'dist/angular-material.css',
+      'dist/themes/*.css',
       'docs/app/css/highlightjs-github.css',
       'docs/app/css/layout-demo.css',
-      'docs/app/css/style.css',
-      'dist/themes/default-theme.css'
+      'docs/app/css/style.css'
     ])
       .pipe(concat('docs.css'))
       .pipe(gulp.dest('dist/docs'));

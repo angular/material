@@ -5,9 +5,11 @@
 angular.module('material.components.slider', [
   'material.core',
   'material.animations',
-  'material.services.aria'
+  'material.services.aria',
+  'material.services.theming'
 ])
 .directive('mdSlider', [
+  '$mdTheming',
   SliderDirective
 ]);
 
@@ -45,7 +47,7 @@ angular.module('material.components.slider', [
  * @param {number=} min The minimum value the user is allowed to pick. Default 0.
  * @param {number=} max The maximum value the user is allowed to pick. Default 100.
  */
-function SliderDirective() {
+function SliderDirective($mdTheming) {
   return {
     scope: {},
     require: ['?ngModel', 'mdSlider'],
@@ -80,6 +82,7 @@ function SliderDirective() {
   };
 
   function postLink(scope, element, attr, ctrls) {
+    $mdTheming(element);
     var ngModelCtrl = ctrls[0] || {
       // Mock ngModelController if it doesn't exist to give us
       // the minimum functionality needed

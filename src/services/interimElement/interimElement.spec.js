@@ -1,11 +1,13 @@
 describe('$$interimElement service', function() {
-  var $compilerSpy, resolvingPromise;
+  var $compilerSpy, $themingSpy, resolvingPromise;
 
   beforeEach(module('material.services.interimElement', 'ngAnimateMock', function($provide) {
     var $mdCompiler = { compile: angular.noop };
     $compilerSpy = spyOn($mdCompiler, 'compile');
+    $themingSpy = jasmine.createSpy('$mdTheming');
 
     $provide.value('$mdCompiler', $mdCompiler);
+    $provide.value('$mdTheming', $themingSpy);
   }));
 
   beforeEach(inject(function($q, $compile) {
@@ -37,6 +39,12 @@ describe('$$interimElement service', function() {
         var options = {template: 'testing'};
         Service.show(options);
         expect($compilerSpy.mostRecentCall.args[0].template).toBe('testing');
+      }));
+
+      it('supports theming', inject(function($$interimElement, $rootScope) {
+        Service.show({themable: true});
+        $rootScope.$digest();
+        expect($themingSpy).toHaveBeenCalled();
       }));
 
       it('calls hide after hideDelay', inject(function($animate, $timeout, $rootScope) {
