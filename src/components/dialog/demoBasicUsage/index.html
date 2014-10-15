@@ -1,11 +1,20 @@
 <div ng-controller="AppCtrl" class="full" layout="vertical" layout-padding>
-  <md-button class="md-button-colored" 
-    ng-click="dialogBasic($event)">
-    Open Basic Dialog
-  </md-button>
-  <md-button class="md-button-colored" 
-    ng-click="dialogAdvanced($event)">
-    Open Advanced Dialog
-  </md-button>
+  <p class="inset">
+    Open a dialog over the app's content. Press escape or click outside to close the dialog.
+  </p>
 
+  <div layout="vertical" layout-sm="horizontal" layout-align="center" >
+    <md-button class="md-button-colored" ng-click="dialogBasic($event)">
+      Simple Dialog
+    </md-button>
+    <div class="gap"></div>
+    <md-button class="md-button-colored" ng-click="dialogAdvanced($event)">
+      Complex Dialog
+    </md-button>
+  </div>
+  
+  <br/>
+  <b layout="horizontal" layout-align="center center" layout-padding>
+    {{alert}}
+  </b>
 </div>

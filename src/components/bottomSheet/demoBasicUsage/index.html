@@ -1,13 +1,18 @@
 <div ng-controller="BottomSheetExample">
-  <div class="bottom-sheet-demo inset" layout="vertical">
-      <md-button class="md-button-colored" ng-click="showListBottomSheet($event)">
-        Show as List
-      </md-button>
-      <md-button class="md-button-colored" ng-click="showGridBottomSheet($event)">
-        Show as Grid
-      </md-button>
-  </div>
-  <p class="inset">
+  <p style="padding-left: 20px;">
     Bottom sheet can be dismissed with the service or a swipe down.
   </p>
+  <div class="bottom-sheet-demo inset" layout="vertical" layout-sm="horizontal" layout-align="center">
+    <md-button class="md-button-colored" ng-click="showListBottomSheet($event)">
+      Show as List
+    </md-button>
+    <md-button class="md-button-colored" ng-click="showGridBottomSheet($event)">
+      Show as Grid
+    </md-button>
+  </div>
+
+  <br/>
+  <b layout="horizontal" layout-align="center center" layout-padding>
+    {{alert}}
+  </b>
 </div>

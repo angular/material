@@ -122,7 +122,6 @@ var config = {
  */
 
 gulp.task('build', ['build-theme', 'build-scss', 'build-js'], function() {
-  gutil.log("Done baking cookies...");
 });
 
 gulp.task('watch', ['build'], function() {

@@ -305,7 +305,7 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
 
       } else if (isSliding && ev.eventType === Hammer.INPUT_END) {
 
-        if ( isDiscrete ) onPanEnd(ev);
+        if ( isSliding && isDiscrete ) onPanEnd(ev);
         isSliding = false;
 
         element.removeClass('panning active');

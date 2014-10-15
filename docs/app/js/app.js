@@ -30,16 +30,19 @@ function(COMPONENTS, DEMOS, $routeProvider) {
   });
 
   angular.forEach(DEMOS, function(componentDemos) {
+    var demoComponent;
     angular.forEach(COMPONENTS, function(component) {
       if (componentDemos.name === component.name) {
-        $routeProvider.when(componentDemos.url, {
-          templateUrl: 'partials/demo.tmpl.html',
-          controller: 'DemoCtrl',
-          resolve: {
-            component: function() { return component; },
-            demos: function() { return componentDemos.demos; }
-          }
-        });
+        demoComponent = component;
+      }
+    });
+    demoComponent = demoComponent || angular.extend({}, componentDemos);
+    $routeProvider.when(componentDemos.url, {
+      templateUrl: 'partials/demo.tmpl.html',
+      controller: 'DemoCtrl',
+      resolve: {
+        component: function() { return demoComponent; },
+        demos: function() { return componentDemos.demos; }
       }
     });
   });

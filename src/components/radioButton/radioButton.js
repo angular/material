@@ -68,11 +68,11 @@ function mdRadioGroupDirective($mdUtil, $mdConstant) {
       };
 
     function keydownListener(ev) {
-      if (ev.which === $mdConstant.KEY_CODE.LEFT_ARROW || ev.which === $mdConstant.KEY_CODE.UP_ARROW) {
+      if (ev.which === $mdConstant.KEY_CODE.LEFT_ARROW) {
         ev.preventDefault();
         rgCtrl.selectPrevious();
       }
-      else if (ev.which === $mdConstant.KEY_CODE.RIGHT_ARROW || ev.which === $mdConstant.KEY_CODE.DOWN_ARROW) {
+      else if (ev.which === $mdConstant.KEY_CODE.RIGHT_ARROW) {
         ev.preventDefault();
         rgCtrl.selectNext();
       }
@@ -144,8 +144,7 @@ function mdRadioGroupDirective($mdUtil, $mdConstant) {
 
     if (buttons.count()) {
       var selected = parent[0].querySelector('md-radio-button.md-checked');
-      var target = buttons[increment < 0 ? 'previous' : 'next'](selected) || 
-        buttons.first();
+      var target = buttons[increment < 0 ? 'previous' : 'next'](selected) || buttons.first();
       // Activate radioButton's click listener (triggerHandler won't create a real click event)
       angular.element(target).triggerHandler('click');
     }

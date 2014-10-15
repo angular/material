@@ -1,39 +1,32 @@
 
-<div ng-controller="AppCtrl">
+<div ng-controller="AppCtrl" >
+    <p>Selected Value: <span class="radioValue">{{ data.group1 }}</span> </p>
 
-  <p>
-    <md-button ng-click="addItem()">Add</md-button>
-    <md-button ng-click="removeItem()">Remove</md-button>
-  </p>
+    <md-radio-group ng-model="data.group1">
 
-  <md-radio-group ng-model="data.group1">
+      <md-radio-button value="Apple" aria-label="Label 1">Apple</md-radio-button>
+      <md-radio-button value="Banana" noink> Banana </md-radio-button>
+      <md-radio-button value="Mango" aria-label="Label 3">Mango</md-radio-button>
 
-    <md-radio-button value="1" aria-label="Label 1">
-      Label 1
-    </md-radio-button>
+    </md-radio-group>
 
-    <md-radio-button value="2" noink>
-      Label 2
-    </md-radio-button>
+    <hr />
 
-    <md-radio-button value="3" aria-label="Label 3">
-      Label 3
-    </md-radio-button>
-
-  </md-radio-group>
-
-  <p>Group 1 Selected: {{ data.group1 }}</p>
+    <p>Selected Value: <span class="radioValue">{{ data.group2 }}</span></p>
 
     <md-radio-group ng-model="data.group2">
 
-        <md-radio-button ng-repeat="d in radioData" ng-value="d.value" aria-label="{{ d.label }}">
+        <md-radio-button ng-repeat="d in radioData"
+                         ng-value="d.value"
+                         aria-label="{{ d.label }}">
             {{ d.label }}
         </md-radio-button>
 
     </md-radio-group>
 
-    <p style="margin-bottom:50px">Group 2 Selected: {{ data.group2 }}</p>
-
-
+    <p>
+      <md-button ng-click="addItem()">Add</md-button>
+      <md-button ng-click="removeItem()">Remove</md-button>
+    </p>
 
 </div>

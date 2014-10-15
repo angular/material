@@ -1,13 +1,15 @@
 angular.module('bottomSheetDemo1', ['ngMaterial'])
 
 .controller('BottomSheetExample', function($scope, $timeout, $mdBottomSheet) {
+  $scope.alert = '';
+
   $scope.showListBottomSheet = function($event) {
     $mdBottomSheet.show({
       templateUrl: 'bottom-sheet-list-template.html',
       controller: 'ListBottomSheetCtrl',
       targetEvent: $event
     }).then(function(clickedItem) {
-      alert(clickedItem.name + ' clicked!');
+      $scope.alert = clickedItem.name + ' clicked!';
     });
   };
 
@@ -17,7 +19,7 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
       controller: 'GridBottomSheetCtrl',
       targetEvent: $event
     }).then(function(clickedItem) {
-      alert(clickedItem.name + ' clicked!');
+      $scope.alert = clickedItem.name + ' clicked!';
     });
   };
 })
