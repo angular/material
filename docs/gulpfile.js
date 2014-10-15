@@ -56,7 +56,7 @@ module.exports = function(gulp, IS_RELEASE_BUILD) {
     return gulp.src('src/{components,services}/*/')
       .pipe(through2.obj(function(folder, enc, next) {
         var self = this;
-        var split = folder.path.split('/');
+        var split = folder.path.split(path.sep);
         var name = split.pop();
         var moduleName = 'material.' + split.pop() + '.' + name;
 
