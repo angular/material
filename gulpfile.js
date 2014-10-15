@@ -109,8 +109,8 @@ var config = {
     ' * v' + pkg.version + '\n' +
     ' */\n',
   jsBaseFiles: ['src/core/core.js', 'src/core/util/*.js'],
-  themeBaseFiles: 'src/core/style/{variables,mixins}.scss',
-  scssBaseFiles: 'src/core/style/{variables,mixins,structure,layout,table}.scss',
+  themeBaseFiles: ['src/core/style/variables.scss', 'src/core/style/mixins.scss'],
+  scssBaseFiles: ['src/core/style/variables.scss', 'src/core/style/mixins.scss', 'src/core/style/{structure,layout,table}.scss'],
   paths: 'src/{components,services}/**',
   outputDir: 'dist/'
 };
@@ -154,7 +154,7 @@ gulp.task('server', function() {
 });
 
 gulp.task('build-default-theme', function() {
-  return gulp.src([config.themeBaseFiles, path.join(config.paths, '*-theme.scss')])
+  return gulp.src(config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss')))
     .pipe(concat('default-theme.scss'))
     .pipe(utils.hoistScssVariables())
     .pipe(gulp.dest('themes/'));
@@ -174,7 +174,7 @@ gulp.task('build-theme', ['build-default-theme'], function() {
 gulp.task('build-scss', function() {
   var scssGlob = path.join(config.paths, '*.scss');
   gutil.log("Building css files...");
-  return gulp.src([config.scssBaseFiles, scssGlob])
+  return gulp.src(config.scssBaseFiles.concat(scssGlob))
     .pipe(filterNonCodeFiles())
     .pipe(filter(['**', '!**/*-theme.scss'])) // remove once ported
     .pipe(concat('angular-material.scss'))
