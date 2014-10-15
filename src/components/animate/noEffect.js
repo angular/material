@@ -1,5 +1,3 @@
-(function() {
-
 angular.module('material.animations')
 
 /**
@@ -46,5 +44,3 @@ function attrNoDirective() {
     };
   };
 }
-
-})();
