@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="docsApp" ng-controller="DocsCtrl">
+<html ng-app="docsApp" ng-controller="DocsCtrl" lang="en">
 <head>
 <title ng-bind="(menu.currentSection.name || 'Material Design') + (menu.currentPage ? (' > ' + (menu.currentPage.humanName || menu.currentPage.name)) : '')">Material Design</title>
 <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
@@ -48,20 +48,20 @@
   <div layout="vertical" layout-fill tabIndex="-1" role="main">
     <material-toolbar class="material-theme-dark material-medium-tall app-toolbar">
 
-      <div class="material-toolbar-tools" ng-click="toggleMenu()">
-        <button class="menu-icon" hide-md aria-label="Toggle Menu">
+      <div class="material-toolbar-tools">
+        <button class="menu-icon" hide-md aria-label="Toggle Menu" ng-click="toggleMenu()">
           <material-icon icon="img/icons/ic_menu_24px.svg">
           </material-icon>
         </button>
-        <h3 hide show-sm ng-if="menu.currentSection.name">
+        <p hide show-sm ng-if="menu.currentSection.name">
           {{menu.currentSection.name}}
-        </h3>
+        </p>
         <span layout="vertical" layout-align="center center" class="menu-separator-icon"
           ng-show="menu.currentPage">
           <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide block-sm>
         </span>
-        <h3 ng-bind="menu.currentPage.humanName || menu.currentPage.name || 'Angular Material'" flex>
-        </h3>
+        <h2 ng-bind="menu.currentPage.humanName || menu.currentPage.name || 'Angular Material'" flex>
+        </h2>
       </div>
 
       <div class="material-toolbar-tools api-options-bar" 

@@ -25,16 +25,16 @@
       </material-list>
 
       <material-divider flex></material-divider>
-      <div class="title" flex>Add Another Tab</div>
+      <h4 class="title" flex id="add-tab">Add Another Tab</h4>
 
-      <form ng-submit="addTab(tTitle,tContent)" flex>
+      <form ng-submit="addTab(tTitle,tContent)" flex aria-labelledby="add-tab">
         <div layout="horizontal">
           <span flex="15">Title:</span>
-          <input type="text" required ng-model="tTitle" placeholder="<tab label>">
+          <input type="text" required ng-model="tTitle" placeholder="<tab label>" aria-label="tab label">
         </div>
         <div layout="horizontal">
           <span flex="15">Content:</span>
-          <input type="text" required ng-model="tContent" placeholder="<tab content>">
+          <input type="text" required ng-model="tContent" placeholder="<tab content>" aria-label="tab content">
         </div>
         <material-button type="submit" class="material-button-colored">
            Add New Tab
