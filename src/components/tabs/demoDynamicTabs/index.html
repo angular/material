@@ -25,16 +25,16 @@
       </md-list>
 
       <md-divider flex></md-divider>
-      <div class="title" flex>Add Another Tab</div>
+      <h4 class="title" flex id="add-tab">Add Another Tab</h4>
 
-      <form ng-submit="addTab(tTitle,tContent)" flex>
+      <form ng-submit="addTab(tTitle,tContent)" aria-describedby="add-tab" flex>
         <div layout="horizontal">
           <span flex="15">Title:</span>
-          <input type="text" required ng-model="tTitle" placeholder="<tab label>">
+          <input type="text" required ng-model="tTitle" placeholder="<tab label>" aria-label="Title">
         </div>
         <div layout="horizontal">
           <span flex="15">Content:</span>
-          <input type="text" required ng-model="tContent" placeholder="<tab content>">
+          <input type="text" required ng-model="tContent" placeholder="<tab content>" aria-label="Content">
         </div>
         <md-button type="submit" class="md-button-colored">
            Add New Tab
