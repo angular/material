@@ -1,4 +1,4 @@
-describe('mdInputGroup directive', function() {
+xdescribe('mdInputGroup directive', function() {
   beforeEach(module('material.components.textField'));
 
   function setup(inputAttrs) {

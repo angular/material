@@ -2,9 +2,9 @@
 
     <md-tabs selected="data.selectedIndex"  center>
         <md-tab label="ITEM ONE"></md-tab>
-        <md-tab label="ITEM TWO"></md-tab>
+        <md-tab label="{{data.label2}}"></md-tab>
         <md-tab label="ITEM THREE" ></md-tab>
-        <md-tab label="ITEM FOUR" ng-disabled="data.locked"></md-tab>
+        <md-tab label="ITEM FOUR" ng-disabled="locked"></md-tab>
         <md-tab label="ITEM FIVE"></md-tab>
         <md-tab label="ITEM SIX"></md-tab>
         <md-tab label="ITEM SEVEN"></md-tab>
@@ -25,7 +25,7 @@
              ng-switch-when="1"
              md-swipe-left="next()"
              md-swipe-right="previous()" >
-            View for Item #2<br/>
+            View for {{data.label2}}<br/>
             Selection index = 1
         </div>
         <div class="animate-switch tab3"
@@ -87,15 +87,15 @@
     </div>
 
 
-    <div layout="vertical" layout-padding style="margin-top: 10px;">
-        <md-input-group>
-            <label for="selected-index">SelectedIndex</label>
-            <input type="number" id="selected-index" ng-model="data.selectedIndex">
-        </md-input-group>
+    <div class="row" layout="vertical" layout-md="horizontal" layout-padding style="margin-top: 10px;padding-left: 30px;">
 
-        <md-checkbox ng-model="data.locked" aria-label="Disabled">
-          Disable Tab #4?
+        <md-text-float type="number" label="Selected Index" ng-model="data.selectedIndex"></md-text-float>
+        <md-text-float label="Tab #2 Label" ng-model="data.label2"></md-text-float>
+
+        <md-checkbox ng-model="locked" aria-label="Disabled">
+          Tab #4 Disabled
         </md-checkbox>
+
     </div>
 
 

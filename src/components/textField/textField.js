@@ -147,13 +147,15 @@ function mdInputDirective($mdUtil) {
       if (ngModelCtrl) {
         //Add a $formatter so we don't use up the render function
         ngModelCtrl.$formatters.push(function(value) {
-          inputGroupCtrl.setHasValue(!!value);
+          inputGroupCtrl.setHasValue(angular.isDefined(value) && value!==null );
           return value;
         });
       }
 
       element.on('input', function() {
-        inputGroupCtrl.setHasValue(!!element.val());
+        var value = element.val();
+
+        inputGroupCtrl.setHasValue(angular.isDefined(value) && value!==null);
       });
 
       // When the input focuses, add the focused class to the group
