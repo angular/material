@@ -126,7 +126,7 @@ function MdSticky($document, $mdEffects, $compile, $$rAF, $mdUtil) {
       // be the same as their order of display.
       self.items.forEach(refreshPosition);
       self.items = self.items.sort(function(a, b) {
-        return a.top > b.top;
+        return a.top < b.top ? -1 : 1;
       });
 
       // Find which item in the list should be active, 
@@ -161,8 +161,6 @@ function MdSticky($document, $mdEffects, $compile, $$rAF, $mdUtil) {
         current = current.offsetParent;
       }
       item.height = item.element.prop('offsetHeight');
-
-      item.clone.css('margin-left', item.left + 'px');
     }
 
 
