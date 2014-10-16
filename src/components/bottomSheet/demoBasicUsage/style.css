@@ -1,8 +1,3 @@
-.bottom-sheet-demo md-button {
-  align-self: center;
-  -webkit-align-self: center;
-  width: 200px;
-}
 
 /* Temporary fix until md-icon is working, DO NOT USE! */
 .md-icon-container md-inline-list-icon {
