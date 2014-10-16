@@ -228,6 +228,10 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
      * left/right arrow listener
      */
     function keydownListener(ev) {
+      if(element[0].hasAttribute('disabled')) {
+        return;
+      }
+
       var changeAmount;
       if (ev.which === $mdConstant.KEY_CODE.LEFT_ARROW) {
         changeAmount = -step;
