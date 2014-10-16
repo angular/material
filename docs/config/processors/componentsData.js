@@ -1,5 +1,7 @@
 var _ = require('lodash');
 
+function isUndefined(val) { return typeof val === 'undefined'; }
+
 // We don't need to publish all of a doc's data to the app, that will
 // add many kilobytes of loading overhead.
 function publicDocData(doc, extraData) {
@@ -22,14 +24,13 @@ module.exports = function componentsGenerateProcessor(log, moduleMap) {
 
   function process(docs) {
 
-    
-    // We are only interested in pages that are not landing pages
-    var pages = _.filter(docs, function(page) {
-      return page.docType != 'componentGroup';
-    });
-
-    var components = _(pages)
-      .filter('module') // We are not interested in docs that are not in a module
+    var components = _(docs)
+      .filter(function(doc) {
+        // We are not interested in docs that are not in a module
+        // We are only interested in pages that are not landing pages
+        return doc.docType !== 'componentGroup' && doc.module;
+      })
+      .filter('module') 
       .groupBy('module')
       .map(function(moduleDocs, moduleName) {
 
@@ -40,17 +41,12 @@ module.exports = function componentsGenerateProcessor(log, moduleMap) {
         if (!moduleDoc) return;
 
         return publicDocData(moduleDoc, {
-          docs: _(moduleDocs)
-            .omit(function(doc) {
+          docs: moduleDocs
+            .filter(function(doc) {
               // Private isn't set to true, just to an empty string if @private is supplied
-              return typeof doc.private !== 'undefined';
-            })
-            .omit({ docType: 'module' })
-            .sortBy(function(doc) {
-              return typeof doc.order === 'number' ? doc.order : doc.docType;
+              return isUndefined(doc.private) && doc.docType !== 'module';
             })
             .map(publicDocData)
-            .value()
         });
 
       })
