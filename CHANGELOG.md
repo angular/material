@@ -11,7 +11,7 @@ sed -i '' 's/material/md/g' $(echo my-material-project/app/**/*.{js,html,css})
 
 Additionally, `material-linear-progress` has been renamed to `md-progress-linear` and `material-circular-progress` has been renamed to `md-progress-circular`.
 
-`angular-aria` is now a dependency. Be sure to include angular-aria.js before angular-material. See [https://github.com/angular/bower-material#usage](usage).
+`angular-aria` is now a dependency. Be sure to include angular-aria.js before angular-material. See https://github.com/angular/bower-material#usage.
 
 <a name="0.4"></a>
 ## 0.4.0  (2014-10-06)
