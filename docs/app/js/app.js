@@ -103,6 +103,8 @@ function(COMPONENTS, DEMOS, $location, $rootScope) {
       url: componentDemos.url
     });
   });
+  console.log(apiDocs);
+  console.log(demoDocs);
 
   sections.unshift({
     name: 'Demos',

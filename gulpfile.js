@@ -49,7 +49,7 @@ function readModuleArg() {
   return module;
 }
 
-require('./docs/gulpfile')(gulp, argv);
+require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
 
 gulp.task('default', ['build']);
 //gulp.task('build', ['scripts', 'sass', 'sass-src']);
@@ -179,9 +179,14 @@ gulp.task('build-scss', function() {
     .pipe(concat('angular-material.scss'))
     .pipe(sass())
     .pipe(autoprefix())
-    .pipe(gulpif(IS_RELEASE_BUILD, minifyCss()))
     .pipe(insert.prepend(config.banner))
-    .pipe(gulp.dest(config.outputDir));
+    .pipe(gulp.dest(config.outputDir))
+    .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
+      .pipe(minifyCss)
+      .pipe(rename, {extname: '.min.css'})
+      .pipe(gulp.dest, config.outputDir)
+      ()
+    ));
 });
 
 gulp.task('build-js', function() {
@@ -192,9 +197,14 @@ gulp.task('build-js', function() {
     .pipe(utils.buildNgMaterialDefinition())
     .pipe(insert.wrap('(function() {\n', '})();\n'))
     .pipe(concat('angular-material.js'))
-    .pipe(gulpif(IS_RELEASE_BUILD, uglify()))
     .pipe(insert.prepend(config.banner))
-    .pipe(gulp.dest(config.outputDir));
+    .pipe(gulp.dest(config.outputDir))
+    .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
+      .pipe(uglify)
+      .pipe(rename, {extname: '.min.js'})
+      .pipe(gulp.dest, config.outputDir)
+      ()
+    ));
 });
 
 /**

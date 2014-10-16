@@ -20,7 +20,7 @@ var config = {
   demoFolder: 'demo-partials'
 };
 
-module.exports = function(gulp, argv) {
+module.exports = function(gulp, IS_RELEASE_BUILD) {
   gulp.task('docs', ['docs-js', 'docs-css']);
 
   gulp.task('demos', function(done) {
@@ -107,7 +107,7 @@ module.exports = function(gulp, argv) {
       'dist/docs/demo-partials/**/*.js',
     ])
       .pipe(concat('docs.js'))
-      .pipe(gulpif(argv.release, uglify()))
+      .pipe(gulpif(IS_RELEASE_BUILD, uglify()))
       .pipe(gulp.dest('dist/docs'));
   });
 
