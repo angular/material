@@ -9,6 +9,8 @@ To migrate your code, replace all instances of 'material' in your project with '
 sed -i '' 's/material/md/g' $(echo my-material-project/app/**/*.{js,html,css})
 ```
 
+Additionally, `material-linear-progress` has been renamed to `md-progress-linear` and `material-circular-progress` has been renamed to `md-progress-circular`.
+
 <a name="0.4"></a>
 ## 0.4.0  (2014-10-06)
 
