@@ -15,6 +15,7 @@ var through2 = require('through2');
 var uglify = require('gulp-uglify');
 var gutil = require('gulp-util');
 var utils = require('../scripts/gulp-utils.js');
+var exec = require('child_process').exec;
 
 var config = {
   demoFolder: 'demo-partials'
@@ -84,8 +85,16 @@ module.exports = function(gulp, IS_RELEASE_BUILD) {
         }
       }));
   }
+
+  gulp.task('version', function(done) {
+    exec('git rev-parse HEAD', function(error, stdout, stderr) {
+      if (error) return done(stderr.toString());
+      fs.writeFileSync(__dirname + '/../dist/commit', stdout.toString().trim());
+      done();
+    });
+  });
   
-  gulp.task('docs-generate', ['build'], function() {
+  gulp.task('docs-generate', ['build', 'version'], function() {
     var dgeni = new Dgeni([
       require('./config')
     ]);

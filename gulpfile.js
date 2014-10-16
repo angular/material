@@ -30,6 +30,7 @@ var webserver = require('gulp-webserver');
 var buildConfig = require('./config/build.config');
 var karmaConf = require('./config/karma.conf.js');
 var utils = require('./scripts/gulp-utils.js');
+var exec = require('child_process').exec;
 
 var IS_RELEASE_BUILD = !!argv.release;
 
