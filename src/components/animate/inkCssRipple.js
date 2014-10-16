@@ -27,11 +27,6 @@ function InkRippleDirective($mdInkRipple) {
 
 function InkRippleService($window, $$rAF, $mdEffects, $timeout, $mdUtil) {
 
-  // TODO fix this. doesn't support touch AND click devices (eg chrome pixel)
-  var hasTouch = !!('ontouchend' in document);
-  var POINTERDOWN_EVENT = hasTouch ? 'touchstart' : 'mousedown';
-  var POINTERUP_EVENT = hasTouch ? 'touchend touchcancel' : 'mouseup mouseleave';
-
   return {
     attachButtonBehavior: attachButtonBehavior,
     attachCheckboxBehavior: attachCheckboxBehavior,
@@ -78,25 +73,22 @@ function InkRippleService($window, $$rAF, $mdEffects, $timeout, $mdUtil) {
 
     var rippleContainer;
     var node = element[0];
+    var hammertime = new Hammer(node);
 
     if (options.mousedown) {
-      listenPointerDown(true);
+      hammertime.on('hammer.input', onInput);
     }
 
     // Publish self-detach method if desired...
     return function detach() {
-      listenPointerDown(false);
+      hammertime.destroy();
       if (rippleContainer) {
         rippleContainer.remove();
       }
     };
 
-    function listenPointerDown(shouldListen) {
-      element[shouldListen ? 'on' : 'off'](POINTERDOWN_EVENT, onPointerDown);
-    }
-
     function rippleIsAllowed() {
-      return !$mdUtil.isParentDisabled(element);
+      return !element[0].hasAttribute('disabled');
     }
 
     function createRipple(left, top, positionsAreAbsolute) {
@@ -147,35 +139,26 @@ function InkRippleService($window, $$rAF, $mdEffects, $timeout, $mdUtil) {
       return rippleEl;
     }
 
-    function onPointerDown(ev) {
-      if (!rippleIsAllowed()) return;
+    var pauseTimeout;
+    var rippleEl;
+    function onInput(ev) {
+      if (ev.eventType === Hammer.INPUT_START && ev.isFirst && rippleIsAllowed()) {
 
-      var rippleEl = createRippleFromEvent(ev);
-      var ripplePauseTimeout = $timeout(pauseRipple, options.mousedownPauseTime, false);
-      rippleEl.on('$destroy', cancelRipplePause);
+        rippleEl = createRipple(ev.center.x, ev.center.y, true);
+        pauseTimeout = $timeout(function() {
+          rippleEl && rippleEl.css($mdEffects.ANIMATION_PLAY_STATE, 'paused');
+        }, options.mousedownPauseTime, false);
 
-      // Stop listening to pointer down for now, until the user lifts their finger/mouse
-      listenPointerDown(false);
-      element.on(POINTERUP_EVENT, onPointerUp);
+        rippleEl.on('$destroy', function() {
+          rippleEl = null;
+        });
 
-      function onPointerUp() {
-        cancelRipplePause();
-        rippleEl.css($mdEffects.ANIMATION_PLAY_STATE, 'running');
-        element.off(POINTERUP_EVENT, onPointerUp);
-        listenPointerDown(true);
-      }
-      function pauseRipple() {
-        rippleEl.css($mdEffects.ANIMATION_PLAY_STATE, 'paused');
-      }
-      function cancelRipplePause() {
-        $timeout.cancel(ripplePauseTimeout);
-      }
-
-      function createRippleFromEvent(ev) {
-        ev = ev.touches ? ev.touches[0] : ev;
-        return createRipple(ev.pageX, ev.pageY, true);
+      } else if (ev.eventType === Hammer.INPUT_END && ev.isFinal) {
+        $timeout.cancel(pauseTimeout);
+        rippleEl && rippleEl.css($mdEffects.ANIMATION_PLAY_STATE, '');
       }
     }
+
   }
 
 }

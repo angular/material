@@ -3,21 +3,18 @@
   "version": "0.4.1",
   "private": "true",
   "dependencies": {
-    "angular": "1.3.0-rc.4",
-    "angular-animate": "1.3.0-rc.4",
-    "angular-aria": "1.3.0-rc.4",
+    "angular": "1.3.0",
+    "angular-animate": "1.3.0",
+    "angular-aria": "1.3.0",
     "hammerjs": "~2.0.2"
   },
   "devDependencies": {
-    "angular": "1.3.0-rc.4",
-    "angular-animate": "1.3.0-rc.4",
-    "angular-aria": "1.3.0-rc.4",
-    "angular-route": "1.3.0-rc.4",
-    "angular-mocks": "1.3.0-rc.4",
+    "angular": "1.3.0",
+    "angular-animate": "1.3.0",
+    "angular-aria": "1.3.0",
+    "angular-route": "1.3.0",
+    "angular-mocks": "1.3.0",
     "angularytics": "^0.3.0",
     "jquery": "~2.1.1"
-  },
-  "resolutions": {
-    "angular": "1.3.0-rc.4"
   }
 }
