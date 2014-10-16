@@ -103,8 +103,6 @@ function(COMPONENTS, DEMOS, $location, $rootScope) {
       url: componentDemos.url
     });
   });
-  console.log(apiDocs);
-  console.log(demoDocs);
 
   sections.unshift({
     name: 'Demos',
@@ -180,7 +178,8 @@ function(COMPONENTS, DEMOS, $location, $rootScope) {
   '$mdDialog',
   'menu',
   '$location',
-function($scope, COMPONENTS, $mdSidenav, $timeout, $mdDialog, menu, $location ) {
+  '$rootScope',
+function($scope, COMPONENTS, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope ) {
 
   $scope.COMPONENTS = COMPONENTS;
 
@@ -188,10 +187,13 @@ function($scope, COMPONENTS, $mdSidenav, $timeout, $mdDialog, menu, $location ) 
 
   var mainContentArea = document.querySelector("[role='main']");
 
-  $scope.toggleMenu = function() {
-    $timeout(function() {
-      $mdSidenav('left').toggle();
-    });
+  $rootScope.$on('$locationChangeSuccess', openPage);
+
+  $scope.closeMenu = function() {
+    $timeout(function() { $mdSidenav('left').close(); });
+  };
+  $scope.openMenu = function() {
+    $timeout(function() { $mdSidenav('left').open(); });
   };
 
   $scope.path = function() {
@@ -202,6 +204,11 @@ function($scope, COMPONENTS, $mdSidenav, $timeout, $mdDialog, menu, $location ) 
     menu.selectPage(null, null);
     $location.path( '/' );
   };
+
+  function openPage() {
+    $scope.closeMenu();
+    mainContentArea.focus();
+  }
 }])
 
 .controller('HomeCtrl', [
