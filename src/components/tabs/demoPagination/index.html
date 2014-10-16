@@ -4,7 +4,7 @@
         <md-tab label="ITEM ONE"></md-tab>
         <md-tab label="ITEM TWO"></md-tab>
         <md-tab label="ITEM THREE" ></md-tab>
-        <md-tab label="ITEM FOUR" ng-disabled="locked"></md-tab>
+        <md-tab label="ITEM FOUR" ng-disabled="data.locked"></md-tab>
         <md-tab label="ITEM FIVE"></md-tab>
         <md-tab label="ITEM SIX"></md-tab>
         <md-tab label="ITEM SEVEN"></md-tab>
@@ -93,7 +93,7 @@
             <input type="number" ng-model="data.selectedIndex">
         </md-input-group>
 
-        <md-checkbox ng-model="locked" aria-label="Disabled">
+        <md-checkbox ng-model="data.locked" aria-label="Disabled">
           Disable Tab #4?
         </md-checkbox>
     </div>
