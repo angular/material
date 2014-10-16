@@ -35,6 +35,13 @@ function MdTabsController(scope, element, $mdUtil) {
 
   self.swipe = swipe;
 
+  scope.$on('$destroy', function() {
+    self.deselect(self.selected());
+    for (var i = tabsList.count() - 1; i >= 0; i--) {
+      self.remove(tabsList[i], true);
+    }
+  });
+
   // Get the selected tab
   function selected() {
     return self.itemAt(scope.selectedIndex);
@@ -58,10 +65,12 @@ function MdTabsController(scope, element, $mdUtil) {
     scope.$broadcast('$mdTabsChanged');
   }
 
-  function remove(tab) {
+  function remove(tab, noReselect) {
     if (!tabsList.contains(tab)) return;
 
-    if (self.selected() === tab) {
+    if (noReselect) {
+
+    } else if (self.selected() === tab) {
       if (tabsList.count() > 1) {
         self.select(self.previous() || self.next());
       } else {

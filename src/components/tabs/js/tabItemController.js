@@ -68,8 +68,7 @@ function TabItemController(scope, element, $compile, $animate, $mdSwipe, $mdUtil
    * as in an ng-repeat
    */
   function onRemove() {
-    $animate.leave(self.contentContainer).then(function()
-    {
+    $animate.leave(self.contentContainer).then(function() {
       self.contentScope && self.contentScope.$destroy();
       self.contentScope = null;
     });
