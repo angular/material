@@ -102,7 +102,7 @@ exports.buildNgMaterialDefinition = function() {
     buffer.push(file);
     next();
   }, function(done) {
-    var EXPLICIT_DEPS = ['ng', 'ngAnimate'];
+    var EXPLICIT_DEPS = ['ng', 'ngAnimate', 'ngAria'];
     var angularFileContents = "angular.module('ngMaterial', " + JSON.stringify(EXPLICIT_DEPS.concat(modulesSeen)) + ');';
     var angularFile = new gutil.File({
       base: process.cwd(),
