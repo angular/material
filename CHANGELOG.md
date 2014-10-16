@@ -1,3 +1,14 @@
+<a name="0.4.1"></a>
+## 0.4.1  (2014-10-15)
+
+Version 0.4.1 changes the prefix for all services and directives from 'material' to 'md'.
+
+To migrate your code, replace all instances of 'material' in your project with 'md':
+
+```sh
+sed -i '' 's/material/md/g' $(echo my-material-project/app/**/*.{js,html,css})
+```
+
 <a name="0.4"></a>
 ## 0.4.0  (2014-10-06)
 
