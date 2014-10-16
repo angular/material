@@ -1,7 +1,5 @@
 var _ = require('lodash');
 
-function isUndefined(val) { return typeof val === 'undefined'; }
-
 // We don't need to publish all of a doc's data to the app, that will
 // add many kilobytes of loading overhead.
 function publicDocData(doc, extraData) {
@@ -44,7 +42,7 @@ module.exports = function componentsGenerateProcessor(log, moduleMap) {
           docs: moduleDocs
             .filter(function(doc) {
               // Private isn't set to true, just to an empty string if @private is supplied
-              return isUndefined(doc.private) && doc.docType !== 'module';
+              return doc.docType !== 'module';
             })
             .map(publicDocData)
         });

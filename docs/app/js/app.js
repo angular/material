@@ -92,6 +92,7 @@ function(COMPONENTS, DEMOS, $location, $rootScope) {
   var apiDocs = {};
   COMPONENTS.forEach(function(component) {
     component.docs.forEach(function(doc) {
+      if (angular.isDefined(doc.private)) return;
       apiDocs[doc.type] = apiDocs[doc.type] || [];
       apiDocs[doc.type].push(doc);
     });
