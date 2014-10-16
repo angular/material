@@ -21,7 +21,7 @@ var config = {
 };
 
 module.exports = function(gulp, IS_RELEASE_BUILD) {
-  gulp.task('docs', ['docs-js', 'docs-css']);
+  gulp.task('docs', ['docs-js', 'docs-css', 'docs-demo-scripts']);
 
   gulp.task('demos', function(done) {
     var demos = [];
@@ -97,14 +97,18 @@ module.exports = function(gulp, IS_RELEASE_BUILD) {
       .pipe(gulp.dest('dist/docs'));
   });
 
+  gulp.task('docs-demo-scripts', ['demos'], function() {
+    return gulp.src('dist/docs/demo-partials/**/*.js')
+      .pipe(concat('docs-demo-scripts.js'))
+      .pipe(gulp.dest('dist/docs'));
+  });
+
   gulp.task('docs-js', ['docs-app', 'docs-html2js', 'demos', 'build'], function() {
     return gulp.src([
       'bower_components/angularytics/dist/angularytics.js',
       'bower_components/hammerjs/hammer.js',
       'dist/angular-material.js',
       'dist/docs/js/**/*.js',
-      'dist/docs/generated/**/demo/*.js',
-      'dist/docs/demo-partials/**/*.js',
     ])
       .pipe(concat('docs.js'))
       .pipe(gulpif(IS_RELEASE_BUILD, uglify()))
