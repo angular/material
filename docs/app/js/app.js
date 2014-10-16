@@ -174,15 +174,16 @@ function(COMPONENTS, DEMOS, $location, $rootScope) {
 .controller('DocsCtrl', [
   '$scope',
   'COMPONENTS',
+  'BUILDCONFIG',
   '$mdSidenav',
   '$timeout',
   '$mdDialog',
   'menu',
   '$location',
   '$rootScope',
-function($scope, COMPONENTS, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope ) {
-
+function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope) {
   $scope.COMPONENTS = COMPONENTS;
+  $scope.BUILDCONFIG = BUILDCONFIG;
 
   $scope.menu = menu;
 

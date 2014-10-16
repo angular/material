@@ -14,6 +14,7 @@ module.exports = new Package('angular-md', [
 
 .processor(require('./processors/componentsData'))
 .processor(require('./processors/indexPage'))
+.processor(require('./processors/buildConfig'))
 
 .config(function(log, templateEngine, templateFinder) {
 
