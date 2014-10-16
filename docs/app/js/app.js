@@ -180,13 +180,16 @@ function(COMPONENTS, DEMOS, $location, $rootScope) {
   '$mdDialog',
   'menu',
   '$location',
-function($scope, COMPONENTS, $mdSidenav, $timeout, $mdDialog, menu, $location ) {
+  '$rootScope',
+function($scope, COMPONENTS, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope ) {
 
   $scope.COMPONENTS = COMPONENTS;
 
   $scope.menu = menu;
 
   var mainContentArea = document.querySelector("[role='main']");
+
+  $rootScope.$on('$locationChangeSuccess', openPage);
 
   $scope.toggleMenu = function() {
     $timeout(function() {
@@ -201,6 +204,11 @@ function($scope, COMPONENTS, $mdSidenav, $timeout, $mdDialog, menu, $location ) 
   $scope.goHome = function($event) {
     menu.selectPage(null, null);
     $location.path( '/' );
+  };
+
+  function openPage() {
+    $scope.toggleMenu();
+    mainContentArea.focus();
   };
 }])
 
