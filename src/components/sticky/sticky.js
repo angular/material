@@ -161,6 +161,7 @@ function MdSticky($document, $mdEffects, $compile, $$rAF, $mdUtil) {
         current = current.offsetParent;
       }
       item.height = item.element.prop('offsetHeight');
+      item.clone.css('margin-left', item.left + 'px');
     }
 
 
