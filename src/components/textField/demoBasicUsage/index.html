@@ -3,25 +3,25 @@
 
   <md-toolbar class="theme-dark-tff md-medium-tall" style="padding-top:15px;">
     <div class="md-toolbar-tools dark">
-      <tf-float label="Title"  value="user.title"   ></tf-float>
-      <tf-float label="eMail"  value="user.email" type="email" ></tf-float>
+      <md-text-float label="Title"  ng-model="user.title"   ></md-text-float>
+      <md-text-float label="eMail"  ng-model="user.email" type="email" ></md-text-float>
     </div>
   </md-toolbar>
 
   <md-content>
     <form style="padding: 20px;">
-      <tf-float label="Company"       value="user.company"    disabled > </tf-float>
+      <md-text-float label="Company"       ng-model="user.company"    disabled > </md-text-float>
       <div class="row">
-          <tf-float label="FirstName" value="user.firstName"  > </tf-float>
-          <tf-float label="LastName"  value="user.lastName"   class="long"> </tf-float>
+          <md-text-float label="FirstName" ng-model="user.firstName"  > </md-text-float>
+          <md-text-float label="LastName"  ng-model="user.lastName"   class="long"> </md-text-float>
       </div>
-      <tf-float label="Address"       value="user.address"    > </tf-float>
+      <md-text-float label="Address"       ng-model="user.address"    > </md-text-float>
       <div class="row">
-        <tf-float label="City"        value="user.city"       > </tf-float>
-        <tf-float label="State"       value="user.state"      > </tf-float>
-        <tf-float label="Postal Code" value="user.postalCode" > </tf-float>
+        <md-text-float label="City"        ng-model="user.city"       > </md-text-float>
+        <md-text-float label="State"       ng-model="user.state"      > </md-text-float>
+        <md-text-float label="Postal Code" ng-model="user.postalCode" > </md-text-float>
       </div>
-      <tf-float label="Country"       value="user.country"    disabled > </tf-float>
+      <md-text-float label="Country"       ng-model="user.country"    disabled > </md-text-float>
     </form>
   </md-content>
 

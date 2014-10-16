@@ -4,7 +4,7 @@ angular.module('tabsDemo2', ['ngMaterial'])
       { title: 'Polymer', active: true, content: "Polymer practices are great!", style:"tab1"},
       { title: 'Material Design', active: false, content: "Material Design practices are better!", style:"tab2" },
       { title: 'Angular', active: false, content: "AngularJS practices are the best!", style:"tab3" },
-      { title: 'NodeJS', active: false, disabled: false, content: "NodeJS practices are amazing!" }
+      { title: 'NodeJS', active: false, disabled: false, content: "NodeJS practices are amazing!" ,style:"tab4" }
     ];
 
     $scope.tabs = tabs;
@@ -18,8 +18,9 @@ angular.module('tabsDemo2', ['ngMaterial'])
     $scope.announceDeselected = announceDeselected;
 
     $scope.addTab = function (title, view) {
+      var style = tabs[(tabs.length % 4)].style;
       view = view || title + " Content View";
-      tabs.push({ title: title, content: view, active: false, disabled: false});
+      tabs.push({ title: title, content: view, active: false, disabled: false, style:style});
     };
 
     $scope.removeTab = function (tab) {

@@ -5,7 +5,9 @@ angular.module('tabsDemo1', ['ngMaterial'] )
     $scope.data = {
       maxIndex : 9,
       selectedIndex : 0,
-      locked : true
+      locked : true,
+
+      label2 : "Item 2"
     };
 
     $scope.next = function() {

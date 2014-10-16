@@ -1,7 +1,7 @@
 angular.module('material.components.tabs')
 
 .directive('mdTab', [
-  '$mdInkRipple', 
+  '$mdInkRipple',
   '$compile',
   '$mdAria',
   '$mdUtil',
@@ -74,16 +74,21 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
   function compile(element, attr) {
     var tabLabel = element.find('md-tab-label');
 
-    // If a tab label element is found, remove it for later re-use.
     if (tabLabel.length) {
+
+      // If a tab label element is found, remove it for later re-use.
       tabLabel.remove();
-    // Otherwise, try to use attr.label as the label
+
     } else if (angular.isDefined(attr.label)) {
+
+      // Otherwise, try to use attr.label as the label
       tabLabel = angular.element('<md-tab-label>').html(attr.label);
-    // If nothing is found, use the tab's content as the label
+
     } else {
+
+      // If nothing is found, use the tab's content as the label
       tabLabel = angular.element('<md-tab-label>')
-        .append(element.contents().remove());
+                        .append(element.contents().remove());
     }
 
     // Everything that's left as a child is the tab's content.
