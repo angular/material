@@ -61,7 +61,7 @@ function mdTextFloatDirective() {
           element.attr('type', attrs.type || "text");
           element.attr('class', attrs.class );
         }
-      }
+      };
     },
     template:
     '<md-input-group ng-disabled="isDisabled">' +

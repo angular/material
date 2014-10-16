@@ -1,14 +1,4 @@
 
-div.infoBar input {
-    display: inline-block;
-}
-
-div.infoBar {
-    margin-left: 20px;
-    height: 75px;
-    font-size: .8em;
-}
-
 .btnRemove {
     margin-bottom: 40px;
 }
@@ -20,16 +10,6 @@ md-tabs .md-view {
 .tab-text {
     padding-top: 32px;
     margin-bottom: 32px;
-}
-
-
-.float-logo {
-    position:absolute;
-    width:30px;
-    height: 30px;
-    padding-top:5px;
-    padding-left: 5px;
-    z-index:100;
 }
 
 
@@ -55,33 +35,19 @@ md-button {
     height:300px;
 }
 
-
-.row {
-    padding-left:30px;
-    min-height:60px;
-    margin-left: -8px;
-}
-
-.row > * {
-    font-size: inherit;
-    margin: 0 8px;
-}
-
-.row md-button {
-    padding-left: 6px;
-    padding-right: 6px;
-}
-
 .title {
-    padding-top:20px;
-    padding-right: 10px;
+  padding-top: 8px;
+  padding-right: 8px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #888;
 }
+
 
 [layout-align] > * {
  margin-left: 8px;
 }
 
-
-md-input-group.long > input {
-    width: 264px;
+form > [layout] > * {
+  margin-left: 8px;
 }

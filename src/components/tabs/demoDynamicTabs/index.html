@@ -16,21 +16,19 @@
         </md-tab>
     </md-tabs>
 
-    <div >
-        <form ng-submit="addTab(tTitle,tContent)" flex>
-            <div layout="vertical" layout-md="horizontal" layout-padding layout-align="start center">
-                <md-text-float label="Active Index" ng-model="selectedIndex" disabled></md-text-float>
-                <md-text-float label="Active Title" ng-model="tabs[selectedIndex].title"></md-text-float>
-                <md-text-float label="Active Content" ng-model="tabs[selectedIndex].content" class="long"></md-text-float>
-            </div>
-            <div layout="vertical" layout-md="horizontal" layout-padding layout-align="start center">
-                <span class="title">Create a new Tab:</span>
-                <md-text-float label="Label" ng-model="tTitle"></md-text-float>
-                <md-text-float label="Content" ng-model="tContent" ></md-text-float>
-                <md-button class="md-theme-green"  type="submit" style="max-height: 40px" >Add Tab</md-button>
-            </div>
-        </form>
+    <form ng-submit="addTab(tTitle,tContent)" flex>
+        <div layout="vertical" layout-sm="horizontal" layout-padding layout-align="center center">
+            <md-text-float label="Active Index" ng-model="selectedIndex" disabled></md-text-float>
+            <md-text-float label="Active Title" ng-model="tabs[selectedIndex].title"></md-text-float>
+            <md-text-float label="Active Content" ng-model="tabs[selectedIndex].content" class="long"></md-text-float>
+        </div>
+        <div layout="vertical" layout-sm="horizontal" layout-padding layout-align="center center">
+            <span class="title">New Tab:</span>
+            <md-text-float label="Label" ng-model="tTitle"></md-text-float>
+            <md-text-float label="Content" ng-model="tContent" ></md-text-float>
+            <md-button class="md-theme-green"  type="submit" style="max-height: 40px" >Add Tab</md-button>
+        </div>
+    </form>
 
-    </div>
 
 </div>
