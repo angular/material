@@ -170,7 +170,7 @@ function mdSidenavService($mdComponentRegistry) {
  *
  * <hljs lang="js">
  * var app = angular.module('myApp', ['ngMaterial']);
- * app.controller('MainController', function($scope, $mdSidenav) {
+ * app.controller('MyController', function($scope, $mdSidenav) {
  *   $scope.openLeftMenu = function() {
  *     $mdSidenav('left').toggle();
  *   };
