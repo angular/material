@@ -41,9 +41,11 @@ module.exports = function componentsGenerateProcessor(log, moduleMap) {
 
         return publicDocData(moduleDoc, {
           docs: _(moduleDocs)
-            .filter(function(doc) {
-              return doc.docType !== 'module';
+            .omit(function(doc) {
+              // Private isn't set to true, just to an empty string if @private is supplied
+              return typeof doc.private !== 'undefined';
             })
+            .omit({ docType: 'module' })
             .sortBy(function(doc) {
               return typeof doc.order === 'number' ? doc.order : doc.docType;
             })
