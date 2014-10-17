@@ -136,7 +136,9 @@ function mdSidenavService($mdComponentRegistry) {
  *     </md-button>
  *   </md-content>
  *
- *   <md-sidenav component-id="right" class="md-sidenav-right">
+ *   <md-sidenav component-id="right" 
+ *     lock-open="$media('min-width: 333px')"
+ *     class="md-sidenav-right">
  *     Right Nav!
  *   </md-sidenav>
  * </div>
@@ -155,7 +157,7 @@ function mdSidenavService($mdComponentRegistry) {
  * service.
  * @param {expression=} lock-open When this expression evalutes to true,
  * the sidenav 'locks open': it falls into the content's flow instead
- * of appearing above it.
+ * of appearing over it.
  *
  * A $media() function is exposed to the expression, which
  * can be given a media query or one of the `sm`, `md` or `lg` presets.
