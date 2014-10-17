@@ -153,8 +153,6 @@ function mdSidenavService($mdComponentRegistry) {
  * </hljs>
  *
  * @param {expression=} is-open A model bound to whether the sidenav is opened.
- * @param {boolean=} transparent-mask When the sidenav is opened, a semi-opaque mask will appear
- * over the content to block user interaction. If set to true, this will make the mask transparent.
  * @param {string=} component-id componentId to use with $mdSidenav service.
  * @param {expression=} is-locked-open When this expression evalutes to true,
  * the sidenav 'locks open': it falls into the content's flow instead
@@ -185,11 +183,7 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant) {
     var isLockedOpenParsed = $parse(attr.isLockedOpen);
     var backdrop = angular.element(
       '<md-backdrop class="md-sidenav-backdrop opaque">'
-   );
-
-   if (angular.isDefined(attr.transparentMask)) {
-     backdrop.removeClass('opaque');
-   }
+    );
 
     scope.$watch('isOpen', setOpen);
     scope.$watch(function() {
