@@ -3,53 +3,55 @@ md-sidenav {
 
   width: $sidenav-default-width;
   bottom: 0;
-
+  z-index: $z-index-sidenav;
   background-color: white;
+  overflow: auto;
 
-  transition: transform 0.3s ease-in-out;
+  display: none;
+  &.open,
+  &.open-add,
+  &.open-remove {
+    display: block;
+  }
+  &.open-add,
+  &.open-remove {
+    /* this is required as of 1.3x to properly
+       apply all styling in a show/hide animation */
+    transition: 0s all;
+  }
+  &.open-add.open-add-active,
+  &.open-remove.open-remove-active {
+    transition: transform 0.3s ease-in-out;
+  }
 
-  @extend .md-sidenav-left;
+  &.lock-open,
+  &.lock-open.material-sidenav-left,
+  &.lock-open.material-sidenav-right {
+    position: static;
+    display: block;
+    transform: translate3d(0, 0, 0);
+  }
 
-  // &.closed {
-  //   display: none;
-  // }
+  @extend .material-sidenav-left;
+}
+.md-sidenav-backdrop.lock-open {
+  display: none;
 }
 
 .md-sidenav-left {
   left: 0;
   top: 0;
   transform: translate3d(-100%, 0, 0);
-
   &.open {
     transform: translate3d(0%, 0, 0);
-    z-index: $z-index-sidenav;
   }
 }
 
 .md-sidenav-right {
   left: 100%;
   top: 0;
-  transform: translate3d(100%, 0, 0);
-
+  transform: translate3d(0%, 0, 0);
   &.open {
     transform: translate3d(-100%, 0, 0);
-    z-index: $z-index-sidenav;
-  }
-}
-
-@media (min-width: $layout-breakpoint-md) {
-  md-sidenav {
-    position: static;
-    transform: translate3d(0,0,0) !important;
-  }
-
-  .md-sidenav-backdrop {
-    display: none !important;
-  }
-}
-
-@media (max-width: $sidenav-default-width + 2 * $sidenav-min-room) {
-  md-sidenav {
-    max-width: 75%;
   }
 }

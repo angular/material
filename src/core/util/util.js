@@ -1,5 +1,5 @@
 angular.module('material.core')
-.factory('$mdUtil', function() {
+.factory('$mdUtil', ['$cacheFactory', function($cacheFactory) {
   var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
   /* for nextUid() function below */
   var uid = ['0','0','0'];
@@ -73,6 +73,11 @@ angular.module('material.core')
      * @see iterator below
      */
     iterator: iterator,
+
+    /**
+     * @see cacheFactory below
+     */
+    cacheFactory: cacheFactory,
 
     // Returns a function, that, as long as it continues to be invoked, will not
     // be triggered. The function will be called after it stops being called for
@@ -415,7 +420,33 @@ angular.module('material.core')
       return _items.length ? _items[_items.length - 1] : null;
     }
   }
-});
+
+  /*
+   * Angular's $cacheFactory doesn't have a keys() method,
+   * so we add one ourself.
+   */
+  function cacheFactory(id, options) {
+    var cache = $cacheFactory(id, options);
+
+    var keys = {};
+    cache._put = cache.put;
+    cache.put = function(k,v) {
+      keys[k] = true;
+      return cache._put(k, v);
+    };
+    cache._remove = cache.remove;
+    cache.remove = function(k) {
+      delete keys[k];
+      return cache._remove(k);
+    };
+
+    cache.keys = function() {
+      return Object.keys(keys);
+    };
+
+    return cache;
+  }
+}]);
 
 /* 
  * Since removing jQuery from the demos, some code that uses `element.focus()` is broken.
