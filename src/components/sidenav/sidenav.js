@@ -119,8 +119,7 @@ function mdSidenavService($mdComponentRegistry) {
  *
  * A Sidenav component that can be opened and closed programatically.
  *
- * When opened, it will appear above the app's main content area,
- * unless a `lock-open` attribute is provided (see below).
+ * By default, upon opening it will slide out on top of the main content area.
  *
  * @usage
  * <hljs lang="html">
