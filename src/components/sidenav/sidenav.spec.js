@@ -22,12 +22,12 @@ describe('mdSidenav', function() {
       $rootScope.$apply('show = true');
 
       $animate.triggerCallbacks();
-      expect(el.hasClass('open')).toBe(true);
+      expect(el.hasClass('closed')).toBe(false);
       expect(el.parent().find('md-backdrop').length).toBe(1);
 
       $rootScope.$apply('show = false');
       $animate.triggerCallbacks();
-      expect(el.hasClass('open')).toBe(false);
+      expect(el.hasClass('closed')).toBe(true);
       expect(el.parent().find('md-backdrop').length).toBe(0);
     }));
 
@@ -70,7 +70,7 @@ describe('mdSidenav', function() {
       expect(el.parent().find('md-backdrop').hasClass('locked-open')).toBe(true);
     }));
 
-    it('should have $mdMedia service as $media local in is-locked-open attribute', function() {
+    it('should expose $mdMedia service as $media local in is-locked-open attribute', function() {
       var mdMediaSpy = jasmine.createSpy('$mdMedia');
       module(function($provide) {
         $provide.value('$mdMedia', mdMediaSpy);
@@ -96,44 +96,23 @@ describe('mdSidenav', function() {
       var controller = el.controller('mdSidenav');
 
       // Should start closed
-      expect(el.hasClass('open')).toBe(false);
+      expect(el.hasClass('closed')).toBe(true);
 
       controller.open();
       scope.$apply();
 
-      expect(el.hasClass('open')).toBe(true);
+      expect(el.hasClass('closed')).toBe(false);
 
       controller.close();
       scope.$apply();
 
-      expect(el.hasClass('open')).toBe(false);
+      expect(el.hasClass('closed')).toBe(true);
 
       controller.toggle();
       scope.$apply();
 
-      expect(el.hasClass('open')).toBe(true);
+      expect(el.hasClass('closed')).toBe(false);
     });
-
-    it('should add backdrop', inject(function($timeout) {
-      var el = setup('');
-      var parent = angular.element('<div>').append(el);
-      var scope = el.isolateScope();
-      var ctrl = el.controller('mdSidenav');
-      var backdrop;
-
-
-      ctrl.open();
-      scope.$apply();
-
-      backdrop = parent.find('md-backdrop');
-      expect(backdrop.length).toBe(1);
-
-      backdrop.triggerHandler('click');
-      $timeout.flush();
-      expect(el.hasClass('open')).toBe(false);
-      backdrop = parent.find('md-backdrop');
-      expect(backdrop.length).toBe(0);
-    }));
 
   });
 
@@ -148,22 +127,22 @@ describe('mdSidenav', function() {
       instance.open();
       scope.$apply();
 
-      expect(el.hasClass('open')).toBe(true);
+      expect(el.hasClass('closed')).toBe(false);
 
       instance.close();
       scope.$apply();
 
-      expect(el.hasClass('open')).toBe(false);
+      expect(el.hasClass('closed')).toBe(true);
 
       instance.toggle();
       scope.$apply();
 
-      expect(el.hasClass('open')).toBe(true);
+      expect(el.hasClass('closed')).toBe(false);
 
       instance.toggle();
       scope.$apply();
 
-      expect(el.hasClass('open')).toBe(false);
+      expect(el.hasClass('closed')).toBe(true);
     }));
   });
 

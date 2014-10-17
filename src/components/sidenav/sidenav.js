@@ -175,7 +175,10 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant) {
       isOpen: '=?'
     },
     controller: '$mdSidenavController',
-    link: postLink
+    compile: function(element) {
+      element.addClass('closed');
+      return postLink;
+    }
   };
 
   function postLink(scope, element, attr, sidenavCtrl) {
@@ -209,7 +212,7 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant) {
       $animate[isOpen ? 'enter' : 'leave'](backdrop, parent);
       backdrop[isOpen ? 'on' : 'off']('click', close);
 
-      $animate[isOpen ? 'addClass' : 'removeClass'](element, 'open').then(function() {
+      $animate[isOpen ? 'removeClass' : 'addClass'](element, 'closed').then(function() {
         // If we opened, and haven't closed again before the animation finished
         if (scope.isOpen) {
           element.focus();

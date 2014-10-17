@@ -7,26 +7,25 @@ md-sidenav {
   background-color: white;
   overflow: auto;
 
-  display: none;
-  &.open,
-  &.open-add,
-  &.open-remove {
-    display: block;
+  &.closed {
+    display: none;
   }
-  &.open-add,
-  &.open-remove {
+  &.closed-add,
+  &.closed-remove {
+    display: block;
     /* this is required as of 1.3x to properly
        apply all styling in a show/hide animation */
     transition: 0s all;
   }
-  &.open-add.open-add-active,
-  &.open-remove.open-remove-active {
+  &.closed-add.closed-add-active,
+  &.closed-remove.closed-remove-active {
     transition: transform 0.3s ease-in-out;
   }
 
   &.locked-open,
-  &.locked-open.material-sidenav-left,
-  &.locked-open.material-sidenav-right {
+  &.locked-open.closed,
+  &.locked-open.closed.material-sidenav-left,
+  &.locked-open.closed.material-sidenav-right {
     position: static;
     display: block;
     transform: translate3d(0, 0, 0);
@@ -41,17 +40,17 @@ md-sidenav {
 .md-sidenav-left {
   left: 0;
   top: 0;
-  transform: translate3d(-100%, 0, 0);
-  &.open {
-    transform: translate3d(0%, 0, 0);
+  transform: translate3d(0%, 0, 0);
+  &.closed {
+    transform: translate3d(-100%, 0, 0);
   }
 }
 
 .md-sidenav-right {
   left: 100%;
   top: 0;
-  transform: translate3d(0%, 0, 0);
-  &.open {
-    transform: translate3d(-100%, 0, 0);
+  transform: translate3d(-100%, 0, 0);
+  &.closed {
+    transform: translate3d(0%, 0, 0);
   }
 }
