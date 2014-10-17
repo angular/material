@@ -158,6 +158,7 @@ pre > code.highlight {
   -moz-flex: 1;
   -ms-flex: 1;
   flex: 1;
+  min-height: 448px;
 }
 
 md-toolbar.demo-toolbar,
