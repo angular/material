@@ -136,7 +136,7 @@ function mdSidenavService($mdComponentRegistry) {
  *   </md-content>
  *
  *   <md-sidenav component-id="right" 
- *     lock-open="$media('min-width: 333px')"
+ *     is-locked-open="$media('min-width: 333px')"
  *     class="md-sidenav-right">
  *     Right Nav!
  *   </md-sidenav>
@@ -152,42 +152,50 @@ function mdSidenavService($mdComponentRegistry) {
  * });
  * </hljs>
  *
- * @param {string=} component-id componentId to use with $mdSidenav 
- * service.
- * @param {expression=} lock-open When this expression evalutes to true,
+ * @param {expression=} is-open A model bound to whether the sidenav is opened.
+ * @param {boolean=} transparent-mask When the sidenav is opened, a semi-opaque mask will appear
+ * over the content to block user interaction. If set to true, this will make the mask transparent.
+ * @param {string=} component-id componentId to use with $mdSidenav service.
+ * @param {expression=} is-locked-open When this expression evalutes to true,
  * the sidenav 'locks open': it falls into the content's flow instead
- * of appearing over it.
+ * of appearing over it. This overrides the `is-open` attribute.
  *
- * A $media() function is exposed to the expression, which
+ * A $media() function is exposed to the is-locked-open attribute, which
  * can be given a media query or one of the `sm`, `md` or `lg` presets.
  * Examples:
  *
- *   - `<md-sidenav lock-open="shouldLockOpen"></md-sidenav>`
- *   - `<md-sidenav lock-open="$media('min-width: 1000px')"></md-sidenav>`
- *   - `<md-sidenav lock-open="$media('sm')"></md-sidenav>` <!-- locks open on small screens !-->
+ *   - `<md-sidenav is-locked-open="shouldLockOpen"></md-sidenav>`
+ *   - `<md-sidenav is-locked-open="$media('min-width: 1000px')"></md-sidenav>`
+ *   - `<md-sidenav is-locked-open="$media('sm')"></md-sidenav>` <!-- locks open on small screens !-->
  */
 function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant) {
   return {
     restrict: 'E',
-    scope: {},
+    scope: {
+      isOpen: '=?'
+    },
     controller: '$mdSidenavController',
     link: postLink
   };
 
   function postLink(scope, element, attr, sidenavCtrl) {
-    var lockOpenParsed = $parse(attr.lockOpen);
+    var isLockedOpenParsed = $parse(attr.isLockedOpen);
     var backdrop = angular.element(
-      '<md-backdrop class="md-sidenav-backdrop">'
+      '<md-backdrop class="md-sidenav-backdrop opaque">'
    );
+
+   if (angular.isDefined(attr.transparentMask)) {
+     backdrop.removeClass('opaque');
+   }
 
     scope.$watch('isOpen', setOpen);
     scope.$watch(function() {
-      return lockOpenParsed(scope.$parent, {
+      return isLockedOpenParsed(scope.$parent, {
         $media: $mdMedia
       });
     }, function(isLocked) {
-      element.toggleClass('lock-open', !!isLocked);
-      backdrop.toggleClass('lock-open', !!isLocked);
+      element.toggleClass('locked-open', !!isLocked);
+      backdrop.toggleClass('locked-open', !!isLocked);
     });
 
     /**
@@ -198,10 +206,15 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant) {
       var parent = element.parent();
 
       parent[isOpen ? 'on' : 'off']('keydown', onKeyDown);
-      $animate[isOpen ? 'addClass' : 'removeClass'](element, 'open');
-
       $animate[isOpen ? 'enter' : 'leave'](backdrop, parent);
       backdrop[isOpen ? 'on' : 'off']('click', close);
+
+      $animate[isOpen ? 'addClass' : 'removeClass'](element, 'open').then(function() {
+        // If we opened, and haven't closed again before the animation finished
+        if (scope.isOpen) {
+          element.focus();
+        }
+      });
     }
 
     /**
