@@ -8,6 +8,7 @@
 angular.module('material.components.sidenav', [
   'material.core',
   'material.services.registry',
+  'material.services.media',
   'material.animations'
 ])
   .factory('$mdSidenav', [
@@ -16,8 +17,9 @@ angular.module('material.components.sidenav', [
   ])
   .directive('mdSidenav', [
     '$timeout',
-    '$mdEffects',
-    '$$rAF',
+    '$animate',
+    '$parse',
+    '$mdMedia',
     '$mdConstant',
     mdSidenavDirective 
   ])
@@ -49,24 +51,12 @@ function mdSidenavController($scope, $element, $attrs, $timeout, $mdSidenav, $md
   this.isOpen = function() {
     return !!$scope.isOpen;
   };
-
-  /**
-   * Toggle the side menu to open or close depending on its current state.
-   */
   this.toggle = function() {
     $scope.isOpen = !$scope.isOpen;
   };
-
-  /**
-   * Open the side menu
-   */
   this.open = function() {
     $scope.isOpen = true;
   };
-
-  /**
-   * Close the side menu
-   */
   this.close = function() {
     $scope.isOpen = false;
   };
@@ -104,32 +94,16 @@ function mdSidenavService($mdComponentRegistry) {
 
     return {
       isOpen: function() {
-        if (!instance) { return; }
-        return instance.isOpen();
+        return instance && instance.isOpen();
       },
-      /**
-       * Toggle the given sidenav
-       * @param handle the specific sidenav to toggle
-       */
       toggle: function() {
-        if(!instance) { return; }
-        instance.toggle();
+        instance && instance.toggle();
       },
-      /**
-       * Open the given sidenav
-       * @param handle the specific sidenav to open
-       */
-      open: function(handle) {
-        if(!instance) { return; }
-        instance.open();
+      open: function() {
+        instance && instance.open();
       },
-      /**
-       * Close the given sidenav
-       * @param handle the specific sidenav to close
-       */
-      close: function(handle) {
-        if(!instance) { return; }
-        instance.close();
+      close: function() {
+        instance && instance.close();
       }
     };
   };
@@ -145,8 +119,8 @@ function mdSidenavService($mdComponentRegistry) {
  *
  * A Sidenav component that can be opened and closed programatically.
  *
- * When used properly with a layout, it will seamleslly stay open on medium
- * and larger screens, while being hidden by default on mobile devices.
+ * When opened, it will appear above the app's main content area,
+ * unless a `lock-open` attribute is provided (see below).
  *
  * @usage
  * <hljs lang="html">
@@ -176,69 +150,68 @@ function mdSidenavService($mdComponentRegistry) {
  *   };
  * });
  * </hljs>
+ *
+ * @param {string=} component-id componentId to use with $mdSidenav 
+ * service.
+ * @param {expression=} lock-open When this expression evalutes to true,
+ * the sidenav 'locks open': it falls into the content's flow instead
+ * of appearing above it.
+ *
+ * A $media() function is exposed to the expression, which
+ * can be given a media query or one of the `sm`, `md` or `lg` presets.
+ * Examples:
+ *
+ *   - `<md-sidenav lock-open="shouldLockOpen"></md-sidenav>`
+ *   - `<md-sidenav lock-open="$media('min-width: 1000px')"></md-sidenav>`
+ *   - `<md-sidenav lock-open="$media('sm')"></md-sidenav>` <!-- locks open on small screens !-->
  */
-function mdSidenavDirective($timeout, $mdEffects, $$rAF, $mdConstant) {
+function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant) {
   return {
     restrict: 'E',
     scope: {},
     controller: '$mdSidenavController',
-    compile: compile
+    link: postLink
   };
 
-  function compile(element, attr) {
-    element.addClass('closed');
-
-    return postLink;
-  }
   function postLink(scope, element, attr, sidenavCtrl) {
-    var backdrop = angular.element('<md-backdrop class="md-sidenav-backdrop">');
+    var lockOpenParsed = $parse(attr.lockOpen);
+    var backdrop = angular.element(
+      '<md-backdrop class="md-sidenav-backdrop">'
+   );
 
-    scope.$watch('isOpen', onShowHideSide);
-    element.on($mdEffects.TRANSITIONEND_EVENT, onTransitionEnd);
+    scope.$watch('isOpen', setOpen);
+    scope.$watch(function() {
+      return lockOpenParsed(scope.$parent, {
+        $media: $mdMedia
+      });
+    }, function(isLocked) {
+      element.toggleClass('lock-open', !!isLocked);
+      backdrop.toggleClass('lock-open', !!isLocked);
+    });
 
     /**
      * Toggle the SideNav view and attach/detach listeners
      * @param isOpen
      */
-    function onShowHideSide(isOpen) {
+    function setOpen(isOpen) {
       var parent = element.parent();
 
-      if (isOpen) {
-        element.removeClass('closed');
+      parent[isOpen ? 'on' : 'off']('keydown', onKeyDown);
+      $animate[isOpen ? 'addClass' : 'removeClass'](element, 'open');
 
-        parent.append(backdrop);
-        backdrop.on('click', close);
-        parent.on('keydown', onKeyDown);
-
-      } else {
-        backdrop.remove();
-        backdrop.off('click', close);
-        parent.off('keydown', onKeyDown);
-      }
-
-      // Wait until the next frame, so that if the `closed` class was just removed the 
-      // element has a chance to 're-initialize' from being display: none.
-      $$rAF(function() {
-        element.toggleClass('open', !!scope.isOpen);
-      });
-    }
-
-    function onTransitionEnd(ev) {
-      if (ev.target === element[0] && !scope.isOpen) {
-        element.addClass('closed');
-      }
+      $animate[isOpen ? 'enter' : 'leave'](backdrop, parent);
+      backdrop[isOpen ? 'on' : 'off']('click', close);
     }
 
     /**
      * Auto-close sideNav when the `escape` key is pressed.
      * @param evt
      */
-    function onKeyDown(evt) {
-      if(evt.which === $mdConstant.KEY_CODE.ESCAPE){
+    function onKeyDown(ev) {
+      if (ev.which === $mdConstant.KEY_CODE.ESCAPE) {
         close();
-
-        evt.preventDefault();
-        evt.stopPropagation();
+        ev.preventDefault();
+        ev.stopPropagation();
       }
     }
 
@@ -248,9 +221,6 @@ function mdSidenavDirective($timeout, $mdEffects, $$rAF, $mdConstant) {
      * to close() and perform its own actions.
      */
     function close() {
-
-      onShowHideSide( false );
-
       $timeout(function(){
         sidenavCtrl.close();
       });
