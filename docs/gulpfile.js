@@ -4,16 +4,12 @@ var concat = require('gulp-concat');
 var fs = require('fs');
 var gulpif = require('gulp-if');
 var lazypipe = require('lazypipe');
-var minifyCss = require('gulp-minify-css');
-var minifyHtml = require('gulp-minify-html');
 var mkdirp = require('mkdirp');
 var ngHtml2js = require('gulp-ng-html2js');
 var path = require('path');
-var rename = require('gulp-rename');
 var sass = require('gulp-sass');
 var through2 = require('through2');
 var uglify = require('gulp-uglify');
-var gutil = require('gulp-util');
 var utils = require('../scripts/gulp-utils.js');
 
 var config = {
