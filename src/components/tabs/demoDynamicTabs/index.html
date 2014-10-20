@@ -17,13 +17,13 @@
     </md-tabs>
 
     <form ng-submit="addTab(tTitle,tContent)" flex>
-        <div layout="vertical" layout-sm="horizontal" layout-padding layout-align="center center">
+        <div layout="vertical" layout-sm="horizontal" layout-padding layout-align="left center">
             <md-text-float label="Active Index" ng-model="selectedIndex" disabled></md-text-float>
             <md-text-float label="Active Title" ng-model="tabs[selectedIndex].title"></md-text-float>
             <md-text-float label="Active Content" ng-model="tabs[selectedIndex].content" class="long"></md-text-float>
         </div>
-        <div layout="vertical" layout-sm="horizontal" layout-padding layout-align="center center">
-            <span class="title">New Tab:</span>
+        <div layout="vertical" layout-sm="horizontal" layout-padding layout-align="left center">
+            <span class="title">Add a new Tab:</span>
             <md-text-float label="Label" ng-model="tTitle"></md-text-float>
             <md-text-float label="Content" ng-model="tContent" ></md-text-float>
             <md-button class="md-theme-green"  type="submit" style="max-height: 40px" >Add Tab</md-button>

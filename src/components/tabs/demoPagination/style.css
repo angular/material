@@ -116,3 +116,19 @@ div.row {
     font-size: inherit;
     margin: 0 8px;
 }
+
+.t4 {
+    padding: 25px;
+}
+.t4 > span {
+    margin-top:25px;
+    padding-right: 15px;
+    vertical-align: middle;
+    line-height: 30px;
+    height: 35px;
+}
+
+.t4 > md-checkbox {
+    margin-top:26px;
+    margin-left:0px;
+}

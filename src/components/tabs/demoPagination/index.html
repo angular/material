@@ -87,11 +87,13 @@
     </div>
 
 
-    <div layout-padding>
+    <div class="t4" layout="vertical" layout-sm="horizontal" layout-padding layout-align="left center">
 
         <md-text-float type="number" label="Selected Index" ng-model="data.selectedIndex"></md-text-float>
-        <md-checkbox ng-model="locked" aria-label="Disabled">
-          Tab #4 Disabled
+        <div flex></div>
+        <span>Tab #4: </span>
+        <md-checkbox class=""  ng-model="locked" aria-label="Disabled">
+          Disabled
         </md-checkbox>
 
     </div>

@@ -38,9 +38,10 @@ md-button {
 .title {
   padding-top: 8px;
   padding-right: 8px;
-  text-align: center;
+  text-align: left;
   text-transform: uppercase;
   color: #888;
+  margin-top: 24px;
 }
 
 
@@ -50,4 +51,17 @@ md-button {
 
 form > [layout] > * {
   margin-left: 8px;
+}
+
+.long > input {
+    width: 264px;
+}
+
+md-button {
+    max-height: 30px;
+}
+
+md-button.md-theme-green {
+    margin-top:20px;
+    max-height:30px !important;
 }
