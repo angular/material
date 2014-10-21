@@ -97,10 +97,11 @@ function mdInputGroupDirective() {
         $element.toggleClass('md-input-focused', !!isFocused);
       };
       this.setHasValue = function(hasValue) {
-        $element.toggleClass('md-input-has-value', !!hasValue);
+        $element.toggleClass('md-input-has-value', hasValue );
       };
     }]
   };
+
 }
 
 /*
@@ -147,15 +148,13 @@ function mdInputDirective($mdUtil) {
       if (ngModelCtrl) {
         //Add a $formatter so we don't use up the render function
         ngModelCtrl.$formatters.push(function(value) {
-          inputGroupCtrl.setHasValue(angular.isDefined(value) && value!==null );
+          inputGroupCtrl.setHasValue( isNotEmpty(value) );
           return value;
         });
       }
 
       element.on('input', function() {
-        var value = element.val();
-
-        inputGroupCtrl.setHasValue(angular.isDefined(value) && value!==null);
+        inputGroupCtrl.setHasValue( isNotEmpty() );
       });
 
       // When the input focuses, add the focused class to the group
@@ -165,12 +164,20 @@ function mdInputDirective($mdUtil) {
       // When the input blurs, remove the focused class from the group
       element.on('blur', function(e) {
         inputGroupCtrl.setFocused(false);
+        inputGroupCtrl.setHasValue( isNotEmpty() );
       });
 
       scope.$on('$destroy', function() {
         inputGroupCtrl.setFocused(false);
         inputGroupCtrl.setHasValue(false);
       });
+
+
+      function isNotEmpty(value) {
+        value = angular.isUndefined(value) ? element.val() : value;
+        return (angular.isDefined(value) && (value!==null) &&
+               (value.toString().trim() != ""));
+      }
     }
   };
 }
