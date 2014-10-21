@@ -6,7 +6,7 @@ Note that `<md-input-group>` and `<md-input>` are deprecated in favor on `<md-te
 
 #### Features
 
-* **text-float:** Add floating label text field ([25cf6f1](https://github.com/angular/material/commit/25cf6f116b9d3044894aaf6d3244c5395cd4a6c2)
+* **text-float:** Add floating label text field ([25cf6f1](https://github.com/angular/material/commit/25cf6f116b9d3044894aaf6d3244c5395cd4a6c2))
  
 
 #### Bug Fixes
