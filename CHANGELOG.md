@@ -1,6 +1,8 @@
 <a name="0.4.2"></a>
 ### 0.4.2  (2014-10-16)
 
+This release adds support for the Angular 1.3 release and includes doc generation improvements and demo cleanups.
+
 Note that `<md-input-group>` and `<md-input>` are deprecated in favor on `<md-text-float>`. While both directives are still available for more granular control, developers are encouraged to use the `<md-text-float>` directive whenever possible.
 
 
