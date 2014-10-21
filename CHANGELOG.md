@@ -1,6 +1,14 @@
 <a name="0.4.2"></a>
 ### 0.4.2  (2014-10-16)
 
+Note that `<md-input-group>` and `<md-input>` are deprecated in favor on `<md-text-float>`. While both directives are still available for more granular control, developers are encouraged to use the `<md-text-float>` directive whenever possible.
+
+
+#### Features
+
+* **text-float:** Add floating label text field ([25cf6f1](https://github.com/angular/material/commit/25cf6f116b9d3044894aaf6d3244c5395cd4a6c2)
+ 
+
 #### Bug Fixes
 
 * Focus management for docs views ([9afe28a8](https://github.com/angular/material/commit/9afe28a87fdd2840428f904345442dcfc898708f))
