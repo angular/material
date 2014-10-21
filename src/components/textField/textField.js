@@ -66,7 +66,7 @@ function mdTextFloatDirective() {
     template:
     '<md-input-group ng-disabled="isDisabled">' +
     ' <label for="{{fid}}">{{label}}</label>' +
-    ' <md-input id="{{fid}}" ng-model="value">' +
+    ' <md-input id="{{fid}}" ng-model="value"></md-input>' +
     '</md-input-group>'
   };
 }
