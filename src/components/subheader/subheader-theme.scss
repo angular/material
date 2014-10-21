@@ -1,0 +1,12 @@
+$subheader-color-palette: $primary-color-palette !default;
+$subheader-text-color: $foreground-secondary-color !default;
+$subheader-primary-text-color: map-get($subheader-color-palette, '500') !default;
+
+.md-subheader.md-#{$theme-name}-theme {
+  color: $subheader-text-color;
+  background-color: $background-color-base;
+
+  &.md-primary {
+    color: $subheader-primary-text-color;
+  }
+}

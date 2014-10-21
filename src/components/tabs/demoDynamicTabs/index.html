@@ -9,7 +9,7 @@
 
             <div ng-class="tab.style" layout="vertical" layout-fill layout-align="center center">
                 <div flex ng-bind="tab.content" class="tab-text"></div>
-                <md-button class="md-theme-red btnRemove"
+                <md-button class="remove-tab md-warn"
                            ng-click="removeTab( tab )">Remove Tab
                 </md-button>
             </div>
@@ -26,7 +26,7 @@
             <span class="title">Add a new Tab:</span>
             <md-text-float label="Label" ng-model="tTitle"></md-text-float>
             <md-text-float label="Content" ng-model="tContent" ></md-text-float>
-            <md-button class="md-theme-green"  type="submit" style="max-height: 40px" >Add Tab</md-button>
+            <md-button class="add-tab md-primary"  type="submit" style="max-height: 40px" >Add Tab</md-button>
         </div>
     </form>
 

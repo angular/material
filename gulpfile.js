@@ -9,6 +9,7 @@ var gulp = require('gulp');
 var karma = require('karma').server;
 var pkg = require('./package.json');
 var exec = require('child_process').exec;
+var mergeStream = require('merge-stream');
 
 var argv = require('minimist')(process.argv.slice(2));
 
@@ -109,8 +110,8 @@ var config = {
     ' * v' + pkg.version + '\n' +
     ' */\n',
   jsBaseFiles: ['src/core/core.js', 'src/core/util/*.js'],
-  themeBaseFiles: ['src/core/style/variables.scss', 'src/core/style/mixins.scss'],
-  scssBaseFiles: ['src/core/style/variables.scss', 'src/core/style/mixins.scss', 'src/core/style/{structure,layout,table}.scss'],
+  themeBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss'],
+  scssBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss', 'src/core/style/{structure,layout,table}.scss'],
   paths: 'src/{components,services}/**',
   outputDir: 'dist/'
 };
@@ -121,7 +122,7 @@ var config = {
  * Project wide build related tasks
  */
 
-gulp.task('build', ['build-theme', 'build-scss', 'build-js'], function() {
+gulp.task('build', ['build-themes', 'build-scss', 'build-js'], function() {
 });
 
 gulp.task('watch', ['build'], function() {
@@ -162,13 +163,27 @@ gulp.task('build-default-theme', function() {
 gulp.task('build-theme', ['build-default-theme'], function() {
   var theme = argv.theme || argv.t || 'default';
   theme = theme.replace(/-theme$/, '');
+  return buildTheme(theme);
+});
+
+gulp.task('build-themes', ['build-default-theme'], function() {
+  var stream = mergeStream();
+  var themes = glob('themes/*.scss', { cwd: __dirname });
+  themes.forEach(function(themeFile) {
+    var name = themeFile.match(/((\w|-)+)-theme\.scss/)[1];
+    stream.add(buildTheme(name));
+  });
+  return stream;
+});
+
+function buildTheme(theme) {
   gutil.log("Building theme " + theme + "...");
-  return gulp.src(['themes/default-theme.scss', 'themes/' + theme + '-theme.scss'])
+  return gulp.src(['src/core/style/color-palette.scss', 'themes/' + theme + '-theme.scss', 'themes/default-theme.scss'])
     .pipe(concat(theme + '-theme.scss'))
     .pipe(utils.hoistScssVariables())
     .pipe(sass())
     .pipe(gulp.dest(config.outputDir + 'themes/'));
-});
+}
 
 gulp.task('build-scss', function() {
   var scssGlob = path.join(config.paths, '*.scss');
@@ -249,7 +264,11 @@ gulp.task('build-demo', function() {
 });
 
 function buildModuleStyles(name) {
-  var baseStyles = glob(config.themeBaseFiles, { cwd: __dirname }).map(function(fileName) {
+  var files = [];
+  config.themeBaseFiles.forEach(function(fileGlob) {
+    files = files.concat(glob(fileGlob, { cwd: __dirname }));
+  });
+  var baseStyles = files.map(function(fileName) {
     return fs.readFileSync(fileName, 'utf8').toString();
   }).join('\n');
   return lazypipe()

@@ -1,0 +1,14 @@
+$progress-circle-background: transparent !default;
+$progress-circle-color: map-get($primary-color-palette, '500') !default;
+$progress-circle-inset-color: $background-color-base !default;
+
+md-progress-circular.md-#{$theme-name}-theme {
+  background-color: $progress-circle-background;
+  .circle .mask .fill {
+    background-color: $progress-circle-color;
+  }
+
+  .inset {
+    background-color: $progress-circle-inset-color;
+  }
+}

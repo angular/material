@@ -1,30 +1,25 @@
-$circle-size:48px;
-$circle-background:transparent;
-$circle-color:$color-blue-500;
-$inset-size:36px;
-$inset-color:white;
-$transition-length:.3s;
-$shadow:6px 6px 10px rgba(0, 0, 0, 0.2);
+$progress-circle-size:48px;
+$progress-circle-inset-size:36px;
+$progress-circle-transition-length:.3s;
 
 md-progress-circular {
   display: block;
-  width: $circle-size + 6;
-  height: $circle-size + 6;
-  background-color: $circle-background;
+  width: $progress-circle-size + 6;
+  height: $progress-circle-size + 6;
   border-radius: 50%;
   padding: 3px;
 
   .wrapper1, .wrapper2 {
-    width: $circle-size;
-    height: $circle-size;
+    width: $progress-circle-size;
+    height: $progress-circle-size;
     position: absolute;
     border-radius: 50%;
   }
 
   .circle {
     .mask, .fill, .shadow {
-      width: $circle-size;
-      height: $circle-size;
+      width: $progress-circle-size;
+      height: $progress-circle-size;
       position: absolute;
       border-radius: 50%;
     }
@@ -33,25 +28,23 @@ md-progress-circular {
 
     .mask, .fill {
       backface-visibility: hidden;
-      transition: transform $transition-length;
+      transition: transform $progress-circle-transition-length;
     }
 
     .mask {
-      clip: rect(0px, $circle-size, $circle-size, $circle-size/2);
+      clip: rect(0px, $progress-circle-size, $progress-circle-size, $progress-circle-size/2);
       .fill {
-        clip: rect(0px, $circle-size/2, $circle-size, 0px);
-        background-color: $circle-color;
+        clip: rect(0px, $progress-circle-size/2, $progress-circle-size, 0px);
       }
     }
   }
 
   .inset {
-    width: $inset-size;
-    height: $inset-size;
+    width: $progress-circle-inset-size;
+    height: $progress-circle-inset-size;
     position: absolute;
-    margin-left: ($circle-size - $inset-size)/2;
-    margin-top: ($circle-size - $inset-size)/2;
-    background-color: $inset-color;
+    margin-left: ($progress-circle-size - $progress-circle-inset-size)/2;
+    margin-top: ($progress-circle-size - $progress-circle-inset-size)/2;
     border-radius: 50%;
   }
 

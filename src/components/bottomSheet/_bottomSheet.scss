@@ -1,3 +1,11 @@
+$bottom-sheet-horizontal-padding: 2 * $baseline-grid;
+$bottom-sheet-vertical-padding: 1 * $baseline-grid;
+$bottom-sheet-icon-after-margin: 4 * $baseline-grid;
+$bottom-sheet-list-item-height: 6 * $baseline-grid;
+$bottom-sheet-hidden-bottom-padding: 80px;
+$bottom-sheet-header-height: 7 * $baseline-grid;
+$bottom-sheet-grid-font-weight: 300;
+
 md-bottom-sheet {
   position: fixed;
   left: 0;
@@ -6,8 +14,7 @@ md-bottom-sheet {
   padding: $bottom-sheet-vertical-padding $bottom-sheet-horizontal-padding $bottom-sheet-vertical-padding + $bottom-sheet-hidden-bottom-padding $bottom-sheet-horizontal-padding;
   z-index: $z-index-bottom-sheet;
 
-  background-color: $bottom-sheet-background-color;
-  border-top: 1px solid $bottom-sheet-border-top-color;
+  border-top: 1px solid;
 
   transform: translate3d(0, $bottom-sheet-hidden-bottom-padding, 0);
   transition: 0.2s linear;
@@ -36,7 +43,6 @@ md-bottom-sheet {
   h2.md-subheader {
     background-color: transparent;
     font-family: $font-family;
-    color: $text-medium;
     line-height: $bottom-sheet-header-height;
     padding: 0;
     white-space: nowrap;
@@ -62,7 +68,6 @@ md-bottom-sheet {
     md-item {
       align-items: center;
       height: $bottom-sheet-list-item-height;
-      color: $text-medium;
 
       div.md-icon-container {
         display: inline-block;
@@ -155,6 +160,3 @@ md-bottom-sheet {
     }
   }
 }
-
-
-

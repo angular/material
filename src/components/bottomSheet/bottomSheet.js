@@ -16,6 +16,7 @@ angular.module('material.components.bottomSheet', [
   '$mdEffects',
   '$timeout',
   '$$rAF',
+  '$compile',
   MdBottomSheet
 ]);
 
@@ -111,11 +112,12 @@ function MdBottomSheetDirective() {
  *
  */
 
-function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF) {
+function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF, $compile) {
   var backdrop;
 
   var $mdBottomSheet;
   return $mdBottomSheet = $$interimElement({
+    themable: true,
     targetEvent: null,
     onShow: onShow,
     onRemove: onRemove,
@@ -123,7 +125,7 @@ function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF) 
 
   function onShow(scope, element, options) {
     // Add a backdrop that will close on click
-    backdrop = angular.element('<md-backdrop class="opaque ng-enter">');
+    backdrop = $compile('<md-backdrop class="opaque ng-enter">')(scope);
     backdrop.on('click touchstart', function() {
       $timeout($mdBottomSheet.cancel);
     });

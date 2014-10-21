@@ -22,7 +22,6 @@ md-tooltip {
   z-index: $z-index-tooltip;
   overflow: hidden;
   pointer-events: none;
-  color: white;
   border-radius: 4px;
 
   &[tooltip-direction="bottom"] {
@@ -35,7 +34,6 @@ md-tooltip {
   }
 
   .tooltip-background {
-    background: rgb(115,115,115);
     position: absolute;
     left: 50%;
     width: 256px;

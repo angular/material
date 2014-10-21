@@ -154,13 +154,20 @@ exports.hoistScssVariables = function() {
     var contents = file.contents.toString().split('\n');
     var lastVariableLine = -1;
 
+    var openCount = 0;
+    var closeCount = 0;
+    var openBlock = false;
+
     for( var currentLine = 0; currentLine < contents.length; ++currentLine) {
       var line = contents[currentLine];
-      if (/^\s*\$/.test(line)) {
-        if (currentLine != lastVariableLine + 1) {
-          var variable = contents.splice(currentLine, 1)[0];
-          contents.splice(++lastVariableLine, 0, variable);
-        }
+
+      if (openBlock || /^\s*\$/.test(line)) {
+        if (openBlock) debugger;
+        openCount += (line.match(/\(/g) || []).length;
+        closeCount += (line.match(/\)/g) || []).length;
+        openBlock = openCount != closeCount;
+        var variable = contents.splice(currentLine, 1)[0];
+        contents.splice(++lastVariableLine, 0, variable);
       }
     }
     file.contents = new Buffer(contents.join('\n'));

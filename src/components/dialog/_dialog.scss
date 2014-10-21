@@ -29,8 +29,6 @@ md-dialog {
   margin: auto;
   position: relative;
 
-  background-color: #fff;
-  border-radius: 4px;
 
   box-shadow: $whiteframe-shadow-z5;
 
@@ -42,6 +40,10 @@ md-dialog {
     padding: 24px;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
+
+    *:first-child {
+      margin-top: 0px;
+    }
   }
 
   .dialog-actions {
@@ -58,7 +60,7 @@ md-dialog {
     }
   }
   &.dialog-content-overflow .dialog-actions {
-    border-top: 1px solid #eee;
+    border-top: 1px solid;
   }
 
 }

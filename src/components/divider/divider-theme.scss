@@ -1,0 +1,5 @@
+$divider-color: $foreground-quarternary-color !default;
+
+md-divider.md-#{$theme-name}-theme {
+  border-top-color: $divider-color;
+}

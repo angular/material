@@ -6,9 +6,11 @@
  * Scrollable content
  */
 angular.module('material.components.content', [
+  'material.services.theming',
   'material.services.registry'
 ])
   .directive('mdContent', [
+    '$mdTheming',
     mdContentDirective
   ]);
 
@@ -30,11 +32,12 @@ angular.module('material.components.content', [
  * </hljs>
  *
  */
-function mdContentDirective() {
+function mdContentDirective($mdTheming) {
   return {
     restrict: 'E',
     controller: ['$scope', '$element', ContentController],
     link: function($scope, $element, $attr) {
+      $mdTheming($element);
       $scope.$broadcast('$mdContentLoaded', $element);
     }
   };

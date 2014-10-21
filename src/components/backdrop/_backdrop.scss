@@ -8,10 +8,6 @@ md-backdrop {
   right: 0;
   bottom: 0;
 
-  &.opaque {
-    background-color: rgba(0,0,0,0.3);
-  }
-
   transition: all 0.2s ease-out;
 
   &.ng-enter {

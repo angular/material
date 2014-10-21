@@ -1,3 +1,21 @@
+$h1-font-size-base: 2em !default;
+$h1-margin-base: 0.67em 0 !default;
+
+$h2-font-size-base: 1.5em !default;
+$h2-margin-base: 0.83em 0 !default;
+
+$h3-font-size-base: 1.17em !default;
+$h3-margin-base: 1em 0 !default;
+
+$h4-font-size-base: 1em !default;
+$h4-margin-base: 1.33em 0 !default;
+
+$h5-font-size-base: 0.83em !default;
+$h5-margin-base: 1.67em 0 !default;
+
+$h6-font-size-base: 0.75em !default;
+$h6-margin-base: 2.33em 0 !default;
+
 *,
 *:before,
 *:after {
@@ -10,7 +28,7 @@
 
 html, body {
   height: 100%;
-  color: $font-color-base;
+  color: $foreground-primary-color;
   background: $background-color-base;
 
   -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -18,6 +36,10 @@ html, body {
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+
+  p {
+    line-height: 1.846;
+  }
 
   h3 {
     display: block;
@@ -174,64 +196,6 @@ input {
   font-weight: 700;
   src: local('RobotoDraft Bold Italic'), local('RobotoDraft-BoldItalic'), url(//fonts.gstatic.com/s/robotodraft/v1/5SAvdU0uYYlH8OURAykt5wRV2F9RPTaqyJ4QibDfkzM.woff) format('woff');
 }
-
-
-// TEMPORARY theming variables
-// TODO(ajoslin, ryanschmukler): remove things
-@mixin theme-bg-and-color($bg, $color) {
-  background-color: $bg !important;
-  color: $color !important;
-}
-@mixin theme-input-text-and-border($color) {
-  &.md-input-has-value, &.md-input-focused {
-    input {
-      border-color: $color;
-    }
-    label {
-      color: $color;
-    }
-  }
-}
-
-/*
-@mixin md-theme($name, $t100, $t300, $t500, $t700, $t900) {
-}
-
-@include md-theme('google-red', #f3c6C2, #e57b72, #da4336, #c43828, #a42613);
-@include md-theme('pink', #f7bacf, #ef6191, #e81d62, #c1175a, #870d4e);
-@include md-theme('indigo', #c4c9e8, #7885ca, #3e50b4, #2f3e9e, #19227d);
-@include md-theme('google-blue', #c5d9fb, #7aa9f6, #4184f3, #3266d5, #1b39ab);
-@include md-theme('light-blue', #b2e4fb, #4ec2f6, #02a8f3, #0187d0, #00569A);
-@include md-theme('teal', #b1deda, #4cb5ab, #009587, #00786a, #004c3f);
-@include md-theme('google-green', #b6e0cc, #56ba89, #0E9C57, #0a7f42, #045423);
-@include md-theme('yellow', #fff8c3, #fff075, #ffea3a, #fabf2c, #f47e16);
-@include md-theme('google-yellow', #fbe7b1, #f6ca4c, #f3b300, #ef9200, #e96000);
-@include md-theme('orange', #ffdfb1, #ffb64c, #ff9700, #f47b00, #e55000);
-@include md-theme('deep-orange', #ffcbbb, #ff8964, #ff5621, #e54918, #be350b);
-@include md-theme('grey', #f0f0f0, #e0e0e0, #a2a2a2, #636363, #252525);
-*/
-
-.md-theme-dark { @include theme-bg-and-color($theme-dark, $text-light); }
-
-
-.md-theme-light { @include theme-bg-and-color($theme-light, $text-light); }
-.md-theme-light-blue { @include theme-bg-and-color($theme-light-blue, $text-light); }
-.md-theme-indigo { @include theme-bg-and-color($theme-indigo, $text-light); }
-.md-theme-green { @include theme-bg-and-color($theme-green, $text-light); }
-.md-theme-yellow { @include theme-bg-and-color($theme-yellow, $text-dark); }
-.md-theme-orange { @include theme-bg-and-color($theme-orange, $text-light); }
-.md-theme-purple { @include theme-bg-and-color($theme-purple, $text-light); }
-.md-theme-red { @include theme-bg-and-color($theme-red, $text-light); }
-
-.md-input-group-theme-light { @include theme-input-text-and-border($theme-light); }
-.md-input-group-theme-light-blue { @include theme-input-text-and-border($theme-light-blue); }
-.md-input-group-theme-dark { @include theme-input-text-and-border($theme-dark); }
-.md-input-group-theme-green { @include theme-input-text-and-border($theme-green); }
-.md-input-group-theme-yellow { @include theme-input-text-and-border($theme-yellow); }
-.md-input-group-theme-orange { @include theme-input-text-and-border($theme-orange); }
-.md-input-group-theme-purple { @include theme-input-text-and-border($theme-purple); }
-.md-input-group-theme-red { @include theme-input-text-and-border($theme-red); }
-
 
 .md-shadow {
   position: absolute;

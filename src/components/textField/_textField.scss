@@ -1,3 +1,58 @@
+$tff-font-size: 0.75em;
+$tff-line-height:26px;
+$tff-transition: all ease-out 150ms;
+// - `label` element (aka hint)
+$tff-hint-offset-large : 22px;
+$tff-hint-offset-small : 4px;
+$ttf-hint-offset-scale : 0.75;
+// - `line` element
+$tff-line-focused-width: 2px;
+$tff-line-disabled-width: 0px;
+$tff-line-dot-width: 1px;
+$tff-line-dot-size: 3px;
+$tff-line-dashed: #cfcfcf;
+
+$tff-margin: 10px 0 (10px - $tff-line-focused-width) 0;
+
+// ******************************
+// Mixins: Text Fields
+// ******************************
+
+@mixin text-field($transition:false, $borderWidth:1px ) {
+  input, textarea {
+    border-bottom-width: $borderWidth;
+
+    @if( $transition != false ) {
+      transition: $transition;
+    }
+  }
+}
+
+@mixin text-hint($size:large, $transition:false ) {
+  label {
+    @if $size == "small" {
+      transform: translate3d(0, $tff-hint-offset-small, 0) scale($ttf-hint-offset-scale);
+    } @else {
+      transform: translate3d(0, $tff-hint-offset-large, 0);
+      transform-origin: left center;
+      transition: $tff-transition;
+    }
+
+    @if( $transition != false ) {
+      transition: $transition;
+    }
+  }
+}
+
+@mixin text-dashed-line( $dotGap, $dotSize) {
+  background-size: $dotSize $dotGap;
+
+  background-position: 0 bottom;
+
+  background-size: (1px + 1px) $dotGap;
+  background-repeat: repeat-x;
+}
+
 form {
 }
 
@@ -25,6 +80,7 @@ input[type="color"] {
   border-width: 0 0 1px 0;
   padding-top:2px;
   line-height: $tff-line-height;
+  padding-bottom: 1px;
 
   &:focus {
     outline: 0;
@@ -32,19 +88,20 @@ input[type="color"] {
 }
 
 input, textarea {
-  @include input-placeholder($tff-placeholder-color);
   background: none;
 }
 
 // Light-Theme
 md-input-group,
 .md-input-group {
+  padding-bottom: $tff-line-focused-width;
   margin: $tff-margin;
 
   position: relative;
   display:  block;
 
   label {
+    font-size: 1em;
     z-index: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
@@ -54,80 +111,40 @@ md-input-group,
     }
   }
 
-  @include text-hint( $tff-hint-normal, large, $tff-transition );
-  @include text-field( $tff-input-normal, $tff-line-normal, $tff-transition );
+  @include text-hint( large, $tff-transition );
+  @include text-field( $tff-transition );
 
 
   &.md-input-focused {
-    @include text-hint( $tff-hint-focused, small );
-    @include text-field( $tff-input-normal,$tff-line-focused, false, $tff-line-focused-width );
+    @include text-hint( small );
+    @include text-field( false, $tff-line-focused-width );
+    input {
+      padding-bottom: 0px;
+    }
   }
 
   &.md-input-has-value {
-    @include text-hint( $tff-hint-focused, small );
+    @include text-hint( small );
 
     &:not(.md-input-focused) {
-      @include text-hint( $tff-hint-normal, small );
+      @include text-hint( small );
     }
   }
 
   &[disabled] {
 
-    @include text-field( $tff-input-disabled, $tff-line-disabled, false, $tff-line-disabled-width );
+    @include text-field( false, $tff-line-disabled-width );
     input, textarea {
-      @include text-dashed-line( $tff-line-dot-width, $tff-line-dot-size, $tff-line-dashed );
+      @include text-dashed-line( $tff-line-dot-width, $tff-line-dot-size);
       pointer-events: none;
       tabindex : -1;
     }
 
-    @include text-hint( $tff-hint-disabled, small );
+    @include text-hint( small );
 
     *:not(.md-input-has-value) {
-      @include text-hint( $tff-hint-disabled, large );
+      @include text-hint( large );
     }
 
   }
 }
-
-
-// Dark Theme
-.dark md-input-group,
-.dark .md-input-group {
-
-  @include text-hint( $tff-hint-normal-dark, large, $tff-transition );
-  @include text-field( $tff-input-normal-dark, $tff-line-normal-dark, $tff-transition );
-
-
-  &.md-input-focused {
-    @include text-hint( $tff-hint-focused-dark, small );
-    @include text-field( $tff-input-focused-dark,$tff-line-focused-dark, false, $tff-line-focused-width );
-  }
-
-  &.md-input-has-value {
-    @include text-hint( $tff-hint-focused-dark, small );
-
-    &:not(.md-input-focused) {
-      @include text-hint( $tff-hint-normal-dark, small );
-    }
-  }
-
-  &[disabled] {
-
-    @include text-field( $tff-input-disabled-dark, $tff-line-disabled-dark, false, $tff-line-disabled-width );
-    input, textarea {
-      @include text-dashed-line( $tff-line-dot-width, $tff-line-dot-size, $tff-line-dashed-dark );
-      pointer-events: none;
-      tabindex : -1;
-    }
-
-    @include text-hint( $tff-hint-disabled-dark, small );
-
-    *:not(.md-input-has-value) {
-      @include text-hint( $tff-hint-disabled-dark, large );
-    }
-
-  }
-
-}
-
-.theme-dark-tff { @include theme-bg-and-color(#333, #999); }

@@ -1,3 +1,5 @@
+$switch-width: $baseline-grid * 8;
+
 md-switch {
   display: block;
   position: relative;
@@ -13,7 +15,6 @@ md-switch {
     top: $baseline-grid * 1.5;
     width: $baseline-grid * 4;
     height: 1px;
-    background-color: #5a5a5a;
     pointer-events: none;
   }
 
@@ -34,9 +35,6 @@ md-switch {
       transform: translate3d($switch-width - 16,0,0);
     }
 
-    &:focus .md-label {
-      border: 1px dotted black;
-    }
     .md-label {
       margin-left: $baseline-grid * 9;
     }

@@ -5,7 +5,8 @@
  */
 
 angular.module('material.services.interimElement', [
-  'material.services.compiler'
+  'material.services.compiler',
+  'material.services.theming'
 ])
 .factory('$$interimElement', [
   '$q',
@@ -14,6 +15,7 @@ angular.module('material.services.interimElement', [
   '$rootElement',
   '$animate',
   '$mdCompiler',
+  '$mdTheming',
   InterimElementFactory
 ]);
 
@@ -40,7 +42,7 @@ angular.module('material.services.interimElement', [
  *
  */
 
-function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate, $mdCompiler) {
+function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate, $mdCompiler, $mdTheming) {
 
   return function createInterimElementService(defaults) {
 
@@ -164,6 +166,7 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
               if (!options.parent.length) options.parent = $rootElement;
             }
             element = compiledData.link(options.scope);
+            if (options.themable) $mdTheming(element);
             var ret = options.onShow(options.scope, element, options);
             return $q.when(ret)
               .then(startHideTimeout);
