@@ -29,6 +29,9 @@ input[type="color"] {
   &:focus {
     outline: 0;
   }
+  &[disabled] {
+    border-bottom: 1px dashed #757575;
+  }
 }
 
 input, textarea {

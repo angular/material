@@ -41,4 +41,16 @@ describe('materialInputGroup directive', function() {
     input.scope().$apply('something = ""');
     expect(el.hasClass('material-input-has-value')).toBe(false);
   });
+
+  it('should set the disable the input when material-input-group is disabled', function() {
+    var el = setup();
+    var input = el.find('input');
+    expect(input.attr('disabled')).toBe(undefined);
+    el.attr('disabled', '');
+    input.scope().$digest();
+    expect(input.attr('disabled')).not.toBe(undefined);
+    el.removeAttr('disabled');
+    input.scope().$digest();
+    expect(input.attr('disabled')).toBe(undefined);
+  });
 });

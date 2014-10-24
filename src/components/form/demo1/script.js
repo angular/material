@@ -10,11 +10,12 @@ angular.module('app', ['ngMaterial'])
     restrict: 'E',
     replace: true,
     scope: {
-      fid: '@'
+      fid: '@',
+      disabled: '='
     },
     template: 
-      '<material-input-group>' +
-        '<label for="{{fid}}">Description</label>' +
+      '<material-input-group ng-disabled="{{disabled}}">' +
+        '<label for="{{fid}}"><span ng-show="disabled">Disabled </span>Description</label>' +
         '<material-input id="{{fid}}" type="text" ng-model="data.description">' +
       '</material-input-group>'
   };

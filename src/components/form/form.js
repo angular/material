@@ -20,11 +20,18 @@ angular.module('material.components.form', [])
  * @description
  * Use the `<material-input-group>` directive as the grouping parent of an `<material-input>` elements
  *
+ * @param {boolean=} disabled Use of attribute indicates the input is disabled: no ink effects and not selectable
+ *
  * @usage 
  * <hljs lang="html">
  * <material-input-group>
  *   <material-input type="text" ng-model="myText">
  * </material-input-group>
+ *
+ * <material-input-group disabled aria-disabled="true">
+ *   <material-input type="text" ng-model="myText">
+ * </material-input-group>
+ * 
  * </hljs>
  */
 function materialInputGroupDirective() {
@@ -36,6 +43,9 @@ function materialInputGroupDirective() {
       };
       this.setHasValue = function(hasValue) {
         $element.toggleClass('material-input-has-value', !!hasValue);
+      };
+      this.isDisabled = function() {
+        return $element.attr('disabled') !== undefined;
       };
     }]
   };
@@ -71,6 +81,17 @@ function materialInputDirective() {
       if (!inputGroupCtrl) {
         return;
       }
+
+      scope.$watch(function() {
+        return inputGroupCtrl.isDisabled();
+      }, function(isDisabled) {
+        element.attr('aria-disabled', isDisabled);
+        if (isDisabled) {
+          element[0].setAttribute('disabled', '');
+        } else {
+          element.removeAttr('disabled');
+        }
+      });
 
       // When the input value changes, check if it "has" a value, and 
       // set the appropriate class on the input group
