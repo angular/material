@@ -1,39 +1,40 @@
-form {
-}
-
-label {
-  display: block;
-  font-size: $tff-font-size;
-}
-
-textarea,
-input[type="text"],
-input[type="password"],
-input[type="datetime"],
-input[type="datetime-local"],
-input[type="date"],
-input[type="month"],
-input[type="time"],
-input[type="week"],
-input[type="number"],
-input[type="email"],
-input[type="url"],
-input[type="search"],
-input[type="tel"],
-input[type="color"] {
-  display: block;
-  border-width: 0 0 1px 0;
-  padding-top:2px;
-  line-height: $tff-line-height;
-
-  &:focus {
-    outline: 0;
+// Base style
+md-input-group,
+.md-input-group {
+  label {
+    display: block;
+    font-size: $tff-font-size;
   }
-}
 
-input, textarea {
-  @include input-placeholder($tff-placeholder-color);
-  background: none;
+  textarea,
+  input[type="text"],
+  input[type="password"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="date"],
+  input[type="month"],
+  input[type="time"],
+  input[type="week"],
+  input[type="number"],
+  input[type="email"],
+  input[type="url"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="color"] {
+    display: block;
+    border-width: 0 0 1px 0;
+    padding-top:2px;
+    line-height: $tff-line-height;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  input, textarea {
+    @include input-placeholder($tff-placeholder-color);
+    background: none;
+  }
 }
 
 // Light-Theme
