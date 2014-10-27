@@ -12,7 +12,7 @@ describe('Text Field directives', function() {
           email: 'ThomasBurleson@gmail.com',
           password: 'your password is incorrect'
         }
-      }
+      };
     });
 
     it('should set input class for focus & blur', function() {
@@ -200,6 +200,7 @@ describe('Text Field directives', function() {
       expect( label.attr('for') ).toBe( "093" );
       expect( input.attr('id') ).toBe( label.attr('for') );
     });
+
     it('should auto-pair input and label for accessibility.', function() {
       var markup ='<md-text-float ' +
                   '  label="{{labels.firstName}}" ' +
@@ -207,12 +208,22 @@ describe('Text Field directives', function() {
                   '</md-text-float>';
       var el = buildElement( markup, model);
       var input = el.find('input');
-      var label = el.find('label')
+      var label = el.find('label');
 
       expect( label.attr('for') == "" ).toBe( false );
       expect( input.attr('id') ).toBe( label.attr('for') );
     });
 
+    it('should add an ARIA attribute for disabled inputs', function() {
+      var markup ='<md-text-float disabled ' +
+                  '  label="{{labels.firstName}}" ' +
+                  '  ng-model="user.firstName" >' +
+                  '</md-text-float>';
+      var el = buildElement( markup, model);
+      var input = el.find('input');
+
+      expect( input.attr('aria-disabled') ).toBe( 'true' );
+    });
   });
 
   // ****************************************************************
