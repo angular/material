@@ -137,7 +137,6 @@ md-input-group,
     input, textarea {
       @include text-dashed-line( $tff-line-dot-width, $tff-line-dot-size);
       pointer-events: none;
-      tabindex : -1;
     }
 
     @include text-hint( small );

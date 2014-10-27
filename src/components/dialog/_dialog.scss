@@ -36,7 +36,7 @@ md-dialog {
   flex-direction: column;
 
   .dialog-content {
-    flex-order: 1;
+    order: 1;
     padding: 24px;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
@@ -48,7 +48,7 @@ md-dialog {
 
   .dialog-actions {
     display: flex;
-    flex-order: 2;
+    order: 2;
     box-sizing: border-box;
     align-items: center;
     justify-content: flex-end;

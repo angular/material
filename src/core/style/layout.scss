@@ -159,7 +159,7 @@
 
 @mixin layout-order-preset($attr, $n) {
   [#{$attr}="#{$n}"] {
-    flex-order: $n;
+    order: $n;
   }
 }
 
