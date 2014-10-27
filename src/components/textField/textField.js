@@ -148,6 +148,7 @@ function mdInputDirective($mdUtil) {
       var isDisabled = $mdUtil.isParentDisabled(element);
 
       element.attr('tabindex', isDisabled ? -1 : 0 );
+      element.attr('aria-disabled', isDisabled ? 'true' : 'false');
       element.attr('type', attr.type || element.parent().attr('type') || "text" );
 
       // When the input value changes, check if it "has" a value, and
