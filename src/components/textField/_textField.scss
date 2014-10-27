@@ -46,49 +46,48 @@ $tff-margin: 10px 0 (10px - $tff-line-focused-width) 0;
 
 @mixin text-dashed-line( $dotGap, $dotSize) {
   background-size: $dotSize $dotGap;
-
   background-position: 0 bottom;
-
   background-size: (1px + 1px) $dotGap;
   background-repeat: repeat-x;
 }
 
-form {
-}
+md-input-group,
+.md-input-group {
 
-label {
-  display: block;
-  font-size: $tff-font-size;
-}
-
-textarea,
-input[type="text"],
-input[type="password"],
-input[type="datetime"],
-input[type="datetime-local"],
-input[type="date"],
-input[type="month"],
-input[type="time"],
-input[type="week"],
-input[type="number"],
-input[type="email"],
-input[type="url"],
-input[type="search"],
-input[type="tel"],
-input[type="color"] {
-  display: block;
-  border-width: 0 0 1px 0;
-  padding-top:2px;
-  line-height: $tff-line-height;
-  padding-bottom: 1px;
-
-  &:focus {
-    outline: 0;
+  label {
+    display: block;
+    font-size: $tff-font-size;
   }
-}
 
-input, textarea {
-  background: none;
+  textarea,
+  input[type="text"],
+  input[type="password"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="date"],
+  input[type="month"],
+  input[type="time"],
+  input[type="week"],
+  input[type="number"],
+  input[type="email"],
+  input[type="url"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="color"] {
+    display: block;
+    border-width: 0 0 1px 0;
+    padding-top: 2px;
+    line-height: $tff-line-height;
+    padding-bottom: 1px;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  input, textarea {
+    background: none;
+  }
 }
 
 // Light-Theme
