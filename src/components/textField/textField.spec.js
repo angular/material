@@ -173,7 +173,6 @@ describe('Text Field directives', function() {
       input.triggerHandler('input');
       expect(el.hasClass('md-input-has-value')).toBe(true);
     });
-
     it('should set input class for ngModel changes', function() {
       var expressions = {label:"Password", model:"user.password", type:"password"},
           el = setupTextFloat( expressions, model),
@@ -186,6 +185,32 @@ describe('Text Field directives', function() {
 
       input.scope().$apply(function() { model.user.password = "hiddenValley"; });
       expect(el.hasClass('md-input-has-value')).toBe(true);
+    });
+
+    it('should pair input and label for accessibility.', function() {
+      var markup ='<md-text-float ' +
+                  '  fid="093" ' +
+                  '  label="{{labels.firstName}}" ' +
+                  '  ng-model="user.firstName" >' +
+                  '</md-text-float>';
+      var el = buildElement( markup, model);
+      var input = el.find('input');
+      var label = el.find('label')
+
+      expect( label.attr('for') ).toBe( "093" );
+      expect( input.attr('id') ).toBe( label.attr('for') );
+    });
+    it('should auto-pair input and label for accessibility.', function() {
+      var markup ='<md-text-float ' +
+                  '  label="{{labels.firstName}}" ' +
+                  '  ng-model="user.firstName" >' +
+                  '</md-text-float>';
+      var el = buildElement( markup, model);
+      var input = el.find('input');
+      var label = el.find('label')
+
+      expect( label.attr('for') == "" ).toBe( false );
+      expect( input.attr('id') ).toBe( label.attr('for') );
     });
 
   });
