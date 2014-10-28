@@ -7,6 +7,7 @@
 angular.module('material.services.theming', [
 ])
 .directive('mdTheme', [
+  '$interpolate',
   ThemingDirective
 ])
 .directive('mdThemable', [
@@ -53,35 +54,36 @@ function Theming($rootScope) {
       scope = $rootScope;
     }
 
-    if (el.attr('md-theme')) { window.debugging = true; }
     var ctrl = el.controller('mdTheme');
 
-    if (el.attr('md-theme-watch')) { 
-      $scope.$watch(function() { return ctrl && ctrl.$mdTheme || 'default'; }, changeTheme);
+    if (angular.isDefined(el.attr('md-theme-watch'))) { 
+      scope.$watch(function() { 
+        return ctrl && ctrl.$mdTheme || 'default'; 
+      }, changeTheme);
     } else {
       var theme = ctrl && ctrl.$mdTheme || 'default';
       changeTheme(theme);
     }
 
     function changeTheme(theme, oldTheme) {
-      if (oldTheme) el.removeClass('md-' + theme +'-theme');
+      if (oldTheme) el.removeClass('md-' + oldTheme +'-theme');
       el.addClass('md-' + theme + '-theme');
     }
   };
 }
 
-function ThemingDirective() {
+function ThemingDirective($interpolate) {
   return {
     priority: 100,
     link: {
       pre: function(scope, el, attrs) {
         var ctrl = {
           $setTheme: function(theme) {
-            this.$mdTheme = theme;
+            ctrl.$mdTheme = theme;
           }
         };
         el.data('$mdThemeController', ctrl);
-        ctrl.$setTheme(attrs.mdTheme);
+        ctrl.$setTheme($interpolate(attrs.mdTheme)(scope));
         attrs.$observe('mdTheme', ctrl.$setTheme);
       }
     }
