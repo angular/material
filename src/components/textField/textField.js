@@ -4,7 +4,7 @@
  * @description
  * Form
  */
-angular.module('material.components.textField', ['material.core'])
+angular.module('material.components.textField', ['material.core', 'material.services.theming'])
        .directive('mdInputGroup', [ mdInputGroupDirective ])
        .directive('mdInput', ['$mdUtil', mdInputDirective ])
        .directive('mdTextFloat', [ '$mdTheming', mdTextFloatDirective ]);
@@ -42,6 +42,7 @@ function mdTextFloatDirective($mdTheming) {
     replace: true,
     scope : {
       fid : '@?',
+      label : '@?',
       value : '=ngModel'
     },
     compile : function() {
@@ -53,21 +54,23 @@ function mdTextFloatDirective($mdTheming) {
             scope.isDisabled = true;
           }
 
-          // transpose the `label` value
-          scope.label = attrs.label || "";
+          // transpose the `label`, type, and fid properties
           scope.fid = scope.fid || scope.label;
 
+          scope.inputType = attrs.type || "text";
+          element.removeAttr('type');
+
           // transpose optional `type` and `class` settings
-          element.attr('type', attrs.type || "text");
           element.attr('class', attrs.class );
+
         },
         post: $mdTheming
       };
     },
     template:
     '<md-input-group ng-disabled="isDisabled" tabindex="-1">' +
-    ' <label for="{{fid}}" tabindex="-1">{{label}}</label>' +
-    ' <md-input id="{{fid}}" ng-model="value"></md-input>' +
+    ' <label for="{{fid}}" >{{label}}</label>' +
+    ' <md-input id="{{fid}}" ng-model="value" type="{{inputType}}"></md-input>' +
     '</md-input-group>'
   };
 }
