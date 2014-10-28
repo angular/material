@@ -1,7 +1,8 @@
 
 Colors
 
-- The `md-theme-*` classes have all been removed, in favor of themes set with the `<element md-theme="*">` attribute.  See [THEMING.md]().
+- The `md-theme-*` classes have all been removed, in favor of themes set with the `<element md-theme="*">` 
+  attribute.  See [THEMING.md]().
 - Instead, use `md-primary` and `md-warn` classes on an element when a theme is set.
 
 Buttons
