@@ -64,4 +64,4 @@ View the [README in the bower-material repository](https://github.com/angular/bo
 
 ### Documentation
 
-- See `docs/README.md`.
+- See `docs/README.md`. 
