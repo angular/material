@@ -22,6 +22,12 @@ Subheader
 
 - `md-subheader-colored` is now `md-primary`.
 
+Text Float 
+
+- use of `<md-input-group>` is deprecated to recommend use of `<md-text-float >` markup
+- improved namespace of input and label so text field styles are only applied within **md-input-group** usages
+
+
 Toast
 
 - `toast-action` has been renamed to `md-action`
