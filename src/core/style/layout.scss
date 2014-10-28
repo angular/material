@@ -138,7 +138,7 @@
 }
 
 @mixin layout-preset($value) {
-  flex: 0, 0, $value;
+  flex: 0 0 $value;
   max-width: $value;
 }
 
