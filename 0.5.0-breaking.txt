@@ -1,0 +1,30 @@
+
+Colors
+
+- The `md-theme-*` classes have all been removed, in favor of themes set with the `<element md-theme="*">` attribute.  See [THEMING.md]().
+- Instead, use `md-primary` and `md-warn` classes on an element when a theme is set.
+
+Buttons
+
+- `md-button-colored` class has been changed to `md-primary` and `md-warn` color classes.
+- All classes that start with `md-button-fab` now start with `md-fab`.
+  - `md-button-fab-top-left` to `md-fab-top-left`
+  - `md-button-fab-top-right` to `md-fab-top-right`
+  - `md-button-fab-bottom-left` to `md-fab-bottom-left`
+  - `md-button-fab-bottom-right` to `md-fab-bottom-right`
+- `md-button-cornered` class has been changed to `md-cornered`
+- `md-button-icon` class has been changed to `md-icon`
+- `md-button-raised` class has been changed to `md-raised`
+
+Toast
+
+- `toast-action` has been renamed to `md-action`
+
+Toolbar
+
+- `md-toolbar-tall` class has been renamed to `md-tall`
+- `md-toolbar-medium-tall` class has been renamed to `md-medium-tall`
+
+Whiteframe
+
+- md-whiteframe-z* classes no longer set z-index, only shadow
