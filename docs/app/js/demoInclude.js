@@ -89,7 +89,7 @@ function($q, $http, $compile, $templateCache) {
      */
     function handleDemoTemplates() {
       return $q.all((demo.html || []).map(function(file) {
-        return $http.get(file.outputPath).then(function(response) {
+        return $http.get(file.outputPath, {cache: $templateCache}).then(function(response) {
           // Get the $templateCache instance that goes with the demo's specific ng-app.
           var demoTemplateCache = demoContainer.injector().get('$templateCache');
 

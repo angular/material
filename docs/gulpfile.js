@@ -23,10 +23,16 @@ var config = {
 module.exports = function(gulp, IS_RELEASE_BUILD) {
   gulp.task('docs', ['docs-js', 'docs-css', 'docs-demo-scripts']);
 
-  gulp.task('demos', function(done) {
+  gulp.task('demos', function() {
     var demos = [];
     return generateDemos()
       .pipe(through2.obj(function(demo, enc, next) {
+        // Don't include file contents into the docs app,
+        // it saves space
+        demo.css.concat(demo.js).concat(demo.html).concat(demo.index)
+          .forEach(function(file) {
+            delete file.contents;
+          });
         demos.push(demo);
         next();
       }, function(done) {

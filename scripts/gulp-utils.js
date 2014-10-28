@@ -37,8 +37,6 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
         .pipe(fileTasks(demoId))
         .pipe(through2.obj(function(file, enc, cb) {
           if (/index.html$/.test(file.path)) {
-            var match = file.path.match(/\/demo.*\//);
-
             demo.moduleName = moduleName,
             demo.name = path.basename(demoFolder.path);
             demo.label = exports.humanizeCamelCase(path.basename(demoFolder.path).replace(/^demo/, ''));

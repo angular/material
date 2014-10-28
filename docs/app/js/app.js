@@ -269,7 +269,10 @@ function($scope, doc, component, $rootScope, $templateCache, $http, $q) {
   '$scope',
   'component',
   'demos',
-function($rootScope, $scope, component, demos) {
+  '$http',
+  '$templateCache',
+  '$q',
+function($rootScope, $scope, component, demos, $http, $templateCache, $q) {
   $rootScope.currentComponent = component;
   $rootScope.currentDoc = null;
 
@@ -277,12 +280,20 @@ function($rootScope, $scope, component, demos) {
 
   angular.forEach(demos, function(demo) {
     // Get displayed contents (un-minified)
-    demo.$files = [demo.index]
+    var files = [demo.index]
       .concat(demo.js || [])
       .concat(demo.css || [])
       .concat(demo.html || []);
-    demo.$selectedFile = demo.index;
-    $scope.demos.push(demo);
+    $q.all(files.map(function(file) {
+      return $http.get(file.outputPath, {cache: $templateCache})
+        .then(function(response) {
+          file.contents = response.data;
+        });
+    })).then(function() {
+      demo.$files = files;
+      demo.$selectedFile = demo.index;
+      $scope.demos.push(demo);
+    });
   });
 
   $scope.demos = $scope.demos.sort(function(a,b) {

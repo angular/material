@@ -104,6 +104,10 @@ code:not(.highlight) {
   margin-left: 1px;
   margin-right: 1px;
 }
+.demo-source-container pre,
+.demo-source-container code {
+  height: 100%;
+}
 code.highlight {
   display: block;
   overflow-wrap: break-word;
