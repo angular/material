@@ -13,8 +13,9 @@ module.exports = {
     'bower_components/hammerjs/hammer.js',
     'config/test-utils.js',
     'src/core/**/*.js',
-    'src/{components,services}/*.js',
-    'src/{components,services}/*/*.js', // Don't put demos in the tests
+    'src/components/*/*.js',
+    'src/services/*.js',
+    'src/services/*/*.js' // Don't put demos in the tests
   ],
 
   port: 9876,
