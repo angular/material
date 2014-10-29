@@ -718,19 +718,19 @@ md-progress-circular.md-#{$theme-name}-theme {
 
 
 md-progress-linear.md-#{$theme-name}-theme {
-  .container {
+  .md-container {
     background-color: $progress-linear-alt-color;
   }
 
-  .bar {
+  .md-bar {
     background-color: $progress-linear-color;
   }
 
   &[mode=buffer] {
-    .dashed:before {
+    .md-dashed:before {
       background: radial-gradient($progress-linear-alt-color 0%, $progress-linear-alt-color 16%, transparent 42%);
     }
-    .bar1 {
+    .md-bar1 {
       background-color: $progress-linear-alt-color;
     }
   }

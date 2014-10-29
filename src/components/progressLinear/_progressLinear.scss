@@ -1,11 +1,11 @@
 $progress-linear-bar-height:5px;
 
- md-progress-linear {
+md-progress-linear {
   display: block;
   width: 100%;
   height: $progress-linear-bar-height;
 
-  .container {
+  .md-container {
     overflow: hidden;
     position: relative;
     height: $progress-linear-bar-height;
@@ -14,42 +14,42 @@ $progress-linear-bar-height:5px;
     transition: all .3s linear;
   }
 
-  .container.ready {
+  .md-container.md-ready {
     transform: translate(0, 0) scale(1, 1);
   }
 
-  .bar {
+  .md-bar {
     height: $progress-linear-bar-height;
     position: absolute;
     width: 100%;
   }
 
-  .bar1, .bar2 {
+  .md-bar1, .md-bar2 {
     transition: all 0.2s linear;
   }
 
   &[mode=determinate] {
-    .bar1 {
+    .md-bar1 {
       display: none;
     }
   }
 
   &[mode=indeterminate] {
-    .bar1 {
+    .md-bar1 {
       animation: indeterminate1 4s infinite linear;
     }
 
-    .bar2 {
+    .md-bar2 {
       animation: indeterminate2 4s infinite linear;
     }
   }
 
   &[mode=buffer] {
-    .container {
+    .md-container {
       background-color: transparent !important;
     }
 
-    .dashed:before {
+    .md-dashed:before {
       content: "";
       display: block;
       height: $progress-linear-bar-height;
@@ -64,7 +64,7 @@ $progress-linear-bar-height:5px;
   }
 
   &[mode=query] {
-    .bar2 {
+    .md-bar2 {
       animation: query .8s infinite cubic-bezier(0.390, 0.575, 0.565, 1.000);
     }
   }

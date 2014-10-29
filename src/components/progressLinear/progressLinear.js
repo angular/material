@@ -49,10 +49,10 @@ function MdProgressLinearDirective($$rAF, $mdEffects, $mdTheming) {
 
   return {
     restrict: 'E',
-    template: '<div class="container">' +
-      '<div class="dashed"></div>' +
-      '<div class="bar bar1"></div>' +
-      '<div class="bar bar2"></div>' +
+    template: '<div class="md-container">' +
+      '<div class="md-dashed"></div>' +
+      '<div class="md-bar md-bar1"></div>' +
+      '<div class="md-bar md-bar2"></div>' +
       '</div>',
     compile: compile
   };
@@ -66,9 +66,9 @@ function MdProgressLinearDirective($$rAF, $mdEffects, $mdTheming) {
   }
   function postLink(scope, element, attr) {
     $mdTheming(element);
-    var bar1Style = element[0].querySelector('.bar1').style,
-      bar2Style = element[0].querySelector('.bar2').style,
-      container = angular.element(element[0].querySelector('.container'));
+    var bar1Style = element[0].querySelector('.md-bar1').style,
+      bar2Style = element[0].querySelector('.md-bar2').style,
+      container = angular.element(element[0].querySelector('.md-container'));
 
     attr.$observe('value', function(value) {
       if (attr.mode == 'query') {
@@ -85,7 +85,7 @@ function MdProgressLinearDirective($$rAF, $mdEffects, $mdTheming) {
     });
 
     $$rAF(function() {
-      container.addClass('ready');
+      container.addClass('md-ready');
     });
   }
 
