@@ -57,9 +57,12 @@ function Theming($rootScope) {
     var ctrl = el.controller('mdTheme');
 
     if (angular.isDefined(el.attr('md-theme-watch'))) { 
-      scope.$watch(function() { 
+      var deregisterWatch = scope.$watch(function() { 
         return ctrl && ctrl.$mdTheme || 'default'; 
       }, changeTheme);
+      // If scope is $rootScope, we need to be sure to deregister when the
+      // element is destroyed
+      el.on('$destroy', deregisterWatch);
     } else {
       var theme = ctrl && ctrl.$mdTheme || 'default';
       changeTheme(theme);
