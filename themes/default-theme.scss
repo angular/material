@@ -550,7 +550,7 @@ $tooltip-background-color: rgba(black, 0.52);
 }
 
 
-md-backdrop.opaque.md-#{$theme-name}-theme {
+md-backdrop.md-opaque.md-#{$theme-name}-theme {
   background-color: $backdrop-color;
 }
 
@@ -559,7 +559,7 @@ md-bottom-sheet.md-#{$theme-name}-theme {
   background-color: $bottom-sheet-background-color;
   border-top-color: $bottom-sheet-border-top-color;
 
-  &.list {
+  &.md-list {
     md-item {
       color: $bottom-sheet-list-color;
     }
@@ -693,7 +693,7 @@ md-dialog.md-#{$theme-name}-theme {
   border-radius: $dialog-border-radius;
   background-color: $dialog-background-color;
 
-  &.dialog-content-overflow .dialog-actions {
+  &.md-content-overflow .md-actions {
     border-top-color: $dialog-border-color;
   }
 }
