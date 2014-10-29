@@ -22,12 +22,12 @@ describe('mdSidenav', function() {
       $rootScope.$apply('show = true');
 
       $animate.triggerCallbacks();
-      expect(el.hasClass('closed')).toBe(false);
+      expect(el.hasClass('md-closed')).toBe(false);
       expect(el.parent().find('md-backdrop').length).toBe(1);
 
       $rootScope.$apply('show = false');
       $animate.triggerCallbacks();
-      expect(el.hasClass('closed')).toBe(true);
+      expect(el.hasClass('md-closed')).toBe(true);
       expect(el.parent().find('md-backdrop').length).toBe(0);
     }));
 
@@ -62,12 +62,12 @@ describe('mdSidenav', function() {
 
     it('should lock open when is-locked-open is true', inject(function($rootScope, $animate, $document) {
       var el = setup('is-open="show" is-locked-open="lock"');
-      expect(el.hasClass('locked-open')).toBe(false);
+      expect(el.hasClass('md-locked-open')).toBe(false);
       $rootScope.$apply('lock = true');
-      expect(el.hasClass('locked-open')).toBe(true);
+      expect(el.hasClass('md-locked-open')).toBe(true);
       $rootScope.$apply('show = true');
       $animate.triggerCallbacks();
-      expect(el.parent().find('md-backdrop').hasClass('locked-open')).toBe(true);
+      expect(el.parent().find('md-backdrop').hasClass('md-locked-open')).toBe(true);
     }));
 
     it('should expose $mdMedia service as $media local in is-locked-open attribute', function() {
@@ -96,22 +96,22 @@ describe('mdSidenav', function() {
       var controller = el.controller('mdSidenav');
 
       // Should start closed
-      expect(el.hasClass('closed')).toBe(true);
+      expect(el.hasClass('md-closed')).toBe(true);
 
       controller.open();
       scope.$apply();
 
-      expect(el.hasClass('closed')).toBe(false);
+      expect(el.hasClass('md-closed')).toBe(false);
 
       controller.close();
       scope.$apply();
 
-      expect(el.hasClass('closed')).toBe(true);
+      expect(el.hasClass('md-closed')).toBe(true);
 
       controller.toggle();
       scope.$apply();
 
-      expect(el.hasClass('closed')).toBe(false);
+      expect(el.hasClass('md-closed')).toBe(false);
     });
 
   });
@@ -127,22 +127,22 @@ describe('mdSidenav', function() {
       instance.open();
       scope.$apply();
 
-      expect(el.hasClass('closed')).toBe(false);
+      expect(el.hasClass('md-closed')).toBe(false);
 
       instance.close();
       scope.$apply();
 
-      expect(el.hasClass('closed')).toBe(true);
+      expect(el.hasClass('md-closed')).toBe(true);
 
       instance.toggle();
       scope.$apply();
 
-      expect(el.hasClass('closed')).toBe(false);
+      expect(el.hasClass('md-closed')).toBe(false);
 
       instance.toggle();
       scope.$apply();
 
-      expect(el.hasClass('closed')).toBe(true);
+      expect(el.hasClass('md-closed')).toBe(true);
     }));
   });
 
