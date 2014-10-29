@@ -33,7 +33,7 @@ $subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16);
   margin-right: $subheader-margin-right;
   position: relative;
 
-  &:not(.sticky-no-effect) {
+  &:not(.md-sticky-no-effect) {
     &:after {
       position: absolute;
       left: 0;
