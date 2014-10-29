@@ -106,7 +106,7 @@ code:not(.highlight) {
 }
 .demo-source-container pre,
 .demo-source-container code {
-  height: 100%;
+  min-height: 100%;
 }
 code.highlight {
   display: block;
