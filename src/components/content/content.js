@@ -26,7 +26,7 @@ angular.module('material.components.content', [
  *
  * @usage
  * <hljs lang="html">
- *  <md-content class="md-content-padding">
+ *  <md-content class="md-padding">
  *      Lorem ipsum dolor sit amet, ne quod novum mei.
  *  </md-content>
  * </hljs>
