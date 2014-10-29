@@ -8,7 +8,7 @@ md-bottom-sheet.md-#{$theme-name}-theme {
   background-color: $bottom-sheet-background-color;
   border-top-color: $bottom-sheet-border-top-color;
 
-  &.list {
+  &.md-list {
     md-item {
       color: $bottom-sheet-list-color;
     }
