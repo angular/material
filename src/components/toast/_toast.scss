@@ -20,7 +20,7 @@ md-toast {
   height: $toast-height;
   z-index: $z-index-toast;
 
-  &.capsule {
+  &.md-capsule {
     border-radius: 24px;
   }
 
@@ -30,16 +30,16 @@ md-toast {
   transition-property: transform, opacity;
   
   /* Transition differently when swiping */
-  &.swipeleft,
-  &.swiperight,
-  &.swipeup,
-  &.swipedown {
+  &.md-swipeleft,
+  &.md-swiperight,
+  &.md-swipeup,
+  &.md-swipedown {
     transition: 0.15s ease-out;
   }
 
   &.ng-enter {
     transform: translate3d(0, 100%, 0);
-    &.top {
+    &.md-top {
       transform: translate3d(0, -100%, 0);
     }
     opacity: 0;
@@ -51,13 +51,13 @@ md-toast {
   &.ng-leave.ng-leave-active {
     opacity: 0;
     transform: translate3d(0, 100%, 0);
-    &.top {
+    &.md-top {
       transform: translate3d(0, -100%, 0);
     }
-    &.swipeleft {
+    &.md-swipeleft {
       transform: translate3d(-100%, 0%, 0);
     }
-    &.swiperight {
+    &.md-swiperight {
       transform: translate3d(100%, 0%, 0);
     }
   }
@@ -81,7 +81,7 @@ md-toast {
     min-width: 0;
     border-radius: 0;
     bottom: 0;
-    &.top {
+    &.md-top {
       bottom: auto;
       top: 0;
     }
@@ -90,16 +90,16 @@ md-toast {
 @media (min-width: $layout-breakpoint-sm) {
   md-toast {
     min-width: 288px;
-    &.bottom {
+    &.md-bottom {
       bottom: $toast-margin;
     }
-    &.left {
+    &.md-left {
       left: $toast-margin;
     }
-    &.right {
+    &.md-right {
       right: $toast-margin;
     }
-    &.top {
+    &.md-top {
       top: $toast-margin;
     }
 
@@ -108,17 +108,17 @@ md-toast {
      * make it rotate when the user swipes it away
      */
     &.ng-leave.ng-leave-active {
-      &.swipeleft {
+      &.md-swipeleft {
         transform: translate3d(-100%, 25%, 0) rotateZ(-15deg);
       }
-      &.swiperight {
+      &.md-swiperight {
         transform: translate3d(100%, 25%, 0) rotateZ(15deg);
       }
-      &.top {
-        &.swipeleft {
+      &.md-top {
+        &.md-swipeleft {
           transform: translate3d(-100%, 0, 0) rotateZ(-15deg);
         }
-        &.swiperight {
+        &.md-swiperight {
           transform: translate3d(100%, 0, 0) rotateZ(15deg);
         }
       }
