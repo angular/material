@@ -24,7 +24,7 @@ angular.module('material.components.tabs')
  * markup of the `<md-tab>` is used as the tab header markup.
  *
  * If a tab **label** has been identified, then any **non-**`<md-tab-label>` markup
- * will be considered tab content and will be transcluded to the internal `<div class="tabs-content">` container.
+ * will be considered tab content and will be transcluded to the internal `<div class="md-tabs-content">` container.
  *
  * This container is used by the TabsController to show/hide the active tab's content view. This synchronization is
  * automatically managed by the internal TabsController whenever the tab selection changes. Selection changes can

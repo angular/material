@@ -88,28 +88,28 @@ function TabsDirective($parse, $mdTheming) {
       selectedIndex: '=?selected'
     },
     template:
-      '<section class="tabs-header" ' +
-        'ng-class="{\'tab-paginating\': pagination.active}">' +
+      '<section class="md-header" ' +
+        'ng-class="{\'md-paginating\': pagination.active}">' +
 
-        '<div class="tab-paginator prev" ' +
+        '<div class="md-paginator md-prev" ' +
           'ng-if="pagination.active && pagination.hasPrev" ' +
           'ng-click="pagination.clickPrevious()">' +
         '</div>' +
 
         // overflow: hidden container when paginating
-        '<div class="tabs-header-items-container" md-tabs-pagination>' +
+        '<div class="md-header-items-container" md-tabs-pagination>' +
           // flex container for <md-tab> elements
-          '<div class="tabs-header-items" ng-transclude></div>' +
+          '<div class="md-header-items" ng-transclude></div>' +
           '<md-tabs-ink-bar></md-tabs-ink-bar>' +
         '</div>' +
 
-        '<div class="tab-paginator next" ' +
+        '<div class="md-paginator md-next" ' +
           'ng-if="pagination.active && pagination.hasNext" ' +
           'ng-click="pagination.clickNext()">' +
         '</div>' +
 
       '</section>' +
-      '<section class="tabs-content"></section>',
+      '<section class="md-tabs-content"></section>',
     link: postLink
   };
 
