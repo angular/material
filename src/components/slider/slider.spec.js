@@ -21,7 +21,7 @@ describe('md-slider', function() {
     $rootScope.$apply('value = 50');
     var sliderCtrl = slider.controller('mdSlider');
 
-    spyOn(slider.find('.slider-track-container')[0], 'getBoundingClientRect').andReturn({
+    spyOn(slider.find('.md-track-container')[0], 'getBoundingClientRect').andReturn({
       width: 100,
       left: 0,
       right: 0
