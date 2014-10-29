@@ -37,6 +37,8 @@ function MdBottomSheetDirective() {
  * ### Restrictions
  * 
  * - The bottom sheet's template must have an outer `<md-bottom-sheet>` element.
+ * - Add the `md-grid` class to the bottom sheet for a grid layout.
+ * - Add the `md-list` class to the bottom sheet for a list layout.
  *
  * @usage
  * <hljs lang="html">

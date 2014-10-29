@@ -767,20 +767,20 @@ md-radio-group.md-#{$theme-name}-theme:focus {
 
 
 md-slider.md-#{$theme-name}-theme {
-  .slider-track {
+  .md-track {
     background-color: $slider-background-color;
   }
 
-  .slider-track-fill {
+  .md-track-fill {
     background-color: $slider-track-color;
   }
 
-  .slider-thumb:after {
+  .md-thumb:after {
     border-color: $slider-thumb-color;
     background-color: $slider-thumb-color;
   }
 
-  .slider-sign {
+  .md-sign {
     background-color: $slider-sign-color;
 
     &:after {
@@ -788,31 +788,31 @@ md-slider.md-#{$theme-name}-theme {
     }
   }
 
-  .slider-thumb-text {
+  .md-thumb-text {
     color: $slider-sign-text-color;
   }
 
-  .slider-focus-thumb {
+  .md-focus-thumb {
     background-color: $slider-focus-thumb-color;
   }
 
-  .slider-focus-ring {
+  .md-focus-ring {
     border-color: $slider-focus-ring-color;
   }
 
-  .slider-disabled-thumb {
+  .md-disabled-thumb {
     border-color: $background-color-base;
   }
 
-  &.slider-min .slider-thumb:after {
+  &.md-min .md-thumb:after {
     background-color: $background-color-base;
   }
 
   &[disabled] {
-    .slider-thumb:after {
+    .md-thumb:after {
       border-color: $slider-disabled-color;
     }
-    &:not(.slider-min) .slider-thumb:after {
+    &:not(.md-min) .md-thumb:after {
       background-color: $slider-disabled-color;
     }
   }
@@ -842,7 +842,7 @@ md-switch.md-#{$theme-name}-theme {
 
 
 md-tabs.md-#{$theme-name}-theme {
-  .tabs-header {
+  .md-header {
     background-color: $tabs-header-background-color;
   }
 
@@ -939,7 +939,7 @@ md-toolbar.md-#{$theme-name}-theme {
 
 md-tooltip.md-#{$theme-name}-theme {
   color: $tooltip-color;
-  .tooltip-background {
+  .md-background {
     background-color: $tooltip-background-color;
   }
 }
