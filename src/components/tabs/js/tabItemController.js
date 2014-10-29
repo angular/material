@@ -23,7 +23,7 @@ function TabItemController(scope, element, $compile, $animate, $mdSwipe, $mdUtil
   self.$$onSwipe = angular.noop;
 
   // Properties
-  self.contentContainer = angular.element('<div class="tab-content ng-hide">');
+  self.contentContainer = angular.element('<div class="md-tab-content ng-hide">');
   self.element = element;
 
   // Methods

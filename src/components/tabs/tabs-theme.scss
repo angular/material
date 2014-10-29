@@ -7,7 +7,7 @@ $tabs-focus-color: $foreground-primary-color !default;
 $tabs-highlight-color: #ffff85;
 
 md-tabs.md-#{$theme-name}-theme {
-  .tabs-header {
+  .md-header {
     background-color: $tabs-header-background-color;
   }
 

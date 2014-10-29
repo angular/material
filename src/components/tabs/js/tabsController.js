@@ -15,7 +15,7 @@ function MdTabsController(scope, element, $mdUtil) {
   // Properties
   self.element = element;
   // The section containing the tab content elements
-  self.contentArea = angular.element(element[0].querySelector('.tabs-content'));
+  self.contentArea = angular.element(element[0].querySelector('.md-tabs-content'));
 
   // Methods from iterator
   self.inRange = tabsList.inRange;
