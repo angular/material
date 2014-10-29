@@ -179,7 +179,7 @@ function MdDialogService($timeout, $rootElement, $compile, $mdEffects, $animate,
     configureAria(element.find('md-dialog'));
 
     if (options.hasBackdrop) {
-      var backdrop = $compile('<md-backdrop class="opaque ng-enter">')(scope);
+      var backdrop = $compile('<md-backdrop class="md-opaque ng-enter">')(scope);
       $animate.enter(backdrop, options.parent, null);
       options.backdrop = backdrop;
     }
