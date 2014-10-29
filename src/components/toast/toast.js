@@ -34,8 +34,11 @@ function MdToastDirective() {
  * `$mdToast` opens a toast nofication on any position on the screen with an optional
  * duration, and provides a simple promise API.
  *
+ *
  * ### Restrictions
  * - The toast's template must have an outer `<md-toast>` element.
+ * - For a toast action, use element with class `md-action`.
+ * - Add the class `md-capsule` for curved corners.
  *
  * @usage
  * <hljs lang="html">
@@ -130,13 +133,16 @@ function MdToastService($timeout, $$interimElement, $animate, $mdSwipe, $mdThemi
   return $mdToast;
 
   function onShow(scope, element, options) {
-    element.addClass(options.position);
+    // 'top left' -> 'md-top md-left'
+    element.addClass(options.position.split(' ').map(function(pos) {
+      return 'md-' + pos;
+    }).join(' '));
     options.parent.addClass(toastOpenClass(options.position));
 
     var configureSwipe = $mdSwipe(scope, 'swipeleft swiperight');
     options.detachSwipe = configureSwipe(element, function(ev) {
       //Add swipeleft/swiperight class to element so it can animate correctly
-      element.addClass(ev.type);
+      element.addClass('md-' + ev.type);
       $timeout($mdToast.hide);
     });
 

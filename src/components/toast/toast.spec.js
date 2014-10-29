@@ -43,6 +43,17 @@ describe('$mdToast service', function() {
       var toast = $rootElement.find('md-toast');
       expect(toast.text()).toBe('hello, 1');
     }));
+
+    it('should add position class to tast', inject(function($rootElement, $timeout) {
+      setup({
+        template: '<md-toast>',
+        position: 'top left'
+      });
+      var toast = $rootElement.find('md-toast');
+      $timeout.flush();
+      expect(toast.hasClass('md-top')).toBe(true);
+      expect(toast.hasClass('md-left')).toBe(true);
+    }));
   });
 
   describe('lifecycle', function() {
