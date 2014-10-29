@@ -9,37 +9,37 @@ md-progress-circular {
   border-radius: 50%;
   padding: 3px;
 
-  .wrapper1, .wrapper2 {
+  .md-wrapper1, .md-wrapper2 {
     width: $progress-circle-size;
     height: $progress-circle-size;
     position: absolute;
     border-radius: 50%;
   }
 
-  .circle {
-    .mask, .fill, .shadow {
+  .md-circle {
+    .md-mask, .md-fill, .md-shadow {
       width: $progress-circle-size;
       height: $progress-circle-size;
       position: absolute;
       border-radius: 50%;
     }
 
-    .shadow { }
+    .md-shadow { }
 
-    .mask, .fill {
+    .md-mask, .md-fill {
       backface-visibility: hidden;
       transition: transform $progress-circle-transition-length;
     }
 
-    .mask {
+    .md-mask {
       clip: rect(0px, $progress-circle-size, $progress-circle-size, $progress-circle-size/2);
-      .fill {
+      .md-fill {
         clip: rect(0px, $progress-circle-size/2, $progress-circle-size, 0px);
       }
     }
   }
 
-  .inset {
+  .md-inset {
     width: $progress-circle-inset-size;
     height: $progress-circle-inset-size;
     position: absolute;
@@ -49,23 +49,23 @@ md-progress-circular {
   }
 
   &[mode=indeterminate] {
-    .wrapper1, .wrapper2 {
+    .md-wrapper1, .md-wrapper2 {
       transform-origin: 50% 50%;
     }
 
-    .wrapper1{
+    .md-wrapper1{
       animation: indeterminate_rotate1 3s infinite linear;
     }
 
-    .wrapper2{
+    .md-wrapper2{
       animation: indeterminate_rotate2 1.5s infinite linear;
     }
 
-    .fill, .mask.full{
+    .md-fill, .md-mask.md-full{
       animation: indeterminate_size_fill 1.5s infinite linear;
     }
 
-    .fill.fix {
+    .md-fill.md-fix {
       animation: indeterminate_size_fix 1.5s infinite linear;
     }
   }
