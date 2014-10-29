@@ -64,19 +64,19 @@ function SliderDirective($mdTheming) {
       SliderController
     ],
     template:
-      '<div class="slider-track-container">' +
-        '<div class="slider-track"></div>' +
-        '<div class="slider-track slider-track-fill"></div>' +
-        '<div class="slider-track-ticks"></div>' +
+      '<div class="md-track-container">' +
+        '<div class="md-track"></div>' +
+        '<div class="md-track md-track-fill"></div>' +
+        '<div class="md-track-ticks"></div>' +
       '</div>' +
-      '<div class="slider-thumb-container">' +
-        '<div class="slider-thumb"></div>' +
-        '<div class="slider-focus-thumb"></div>' +
-        '<div class="slider-focus-ring"></div>' +
-        '<div class="slider-sign">' +
-          '<span class="slider-thumb-text" ng-bind="modelValue"></span>' +
+      '<div class="md-thumb-container">' +
+        '<div class="md-thumb"></div>' +
+        '<div class="md-focus-thumb"></div>' +
+        '<div class="md-focus-ring"></div>' +
+        '<div class="md-sign">' +
+          '<span class="md-thumb-text" ng-bind="modelValue"></span>' +
         '</div>' +
-        '<div class="slider-disabled-thumb"></div>' +
+        '<div class="md-disabled-thumb"></div>' +
       '</div>',
     link: postLink
   };
@@ -107,11 +107,11 @@ function SliderDirective($mdTheming) {
 function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdAria, $mdUtil, $mdConstant) {
 
   this.init = function init(ngModelCtrl) {
-    var thumb = angular.element(element[0].querySelector('.slider-thumb'));
+    var thumb = angular.element(element[0].querySelector('.md-thumb'));
     var thumbContainer = thumb.parent();
-    var trackContainer = angular.element(element[0].querySelector('.slider-track-container'));
-    var activeTrack = angular.element(element[0].querySelector('.slider-track-fill'));
-    var tickContainer = angular.element(element[0].querySelector('.slider-track-ticks'));
+    var trackContainer = angular.element(element[0].querySelector('.md-track-container'));
+    var activeTrack = angular.element(element[0].querySelector('.md-track-fill'));
+    var tickContainer = angular.element(element[0].querySelector('.md-track-ticks'));
     var throttledRefreshDimensions = $mdUtil.throttle(refreshSliderDimensions, 5000);
 
     // Default values, overridable by attrs
@@ -287,7 +287,7 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
         $mdEffects.TRANSFORM,
         'translate3d(' + getSliderDimensions().width * percent + 'px,0,0)'
       );
-      element.toggleClass('slider-min', percent === 0);
+      element.toggleClass('md-min', percent === 0);
     }
 
 

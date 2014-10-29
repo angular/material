@@ -174,7 +174,7 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant) {
     },
     controller: '$mdSidenavController',
     compile: function(element) {
-      element.addClass('closed');
+      element.addClass('md-closed');
       element.attr('tabIndex', '-1');
       return postLink;
     }

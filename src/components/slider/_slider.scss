@@ -56,22 +56,22 @@ md-slider {
   /**
    * Track
    */
-  .slider-track-container {
+  .md-track-container {
     width: 100%;
     position: absolute;
     top: ($slider-height / 2) - ($slider-track-height) / 2;
     height: $slider-track-height;
   }
-  .slider-track {
+  .md-track {
     position: absolute;
     left: 0;
     right: 0;
     height: 100%;
   }
-  .slider-track-fill {
+  .md-track-fill {
     transition: width 0.05s linear;
   }
-  .slider-track-ticks {
+  .md-track-ticks {
     position: absolute;
     left: 0;
     right: 0;
@@ -81,14 +81,14 @@ md-slider {
   /**
    * Slider thumb
    */
-  .slider-thumb-container {
+  .md-thumb-container {
     position: absolute;
     left: 0;
     top: 0;
     transform: translate3d(0,0,0);
     transition: transform 0.1s linear;
   }
-  .slider-thumb {
+  .md-thumb {
     z-index: 1;
 
     // Positioning the outer area of the thumb 6px bigger than it needs to be keeps
@@ -114,7 +114,7 @@ md-slider {
   }
 
   /* The sign that's focused in discrete mode */
-  .slider-sign {
+  .md-sign {
 
     /* Center the children (slider-thumb-text) */
     display: flex;
@@ -147,7 +147,7 @@ md-slider {
       transition: all 0.2s ease-in-out;
     }
 
-    .slider-thumb-text {
+    .md-thumb-text {
       z-index: 1;
       font-size: 12px;
       font-weight: bold;
@@ -157,21 +157,21 @@ md-slider {
   /**
    * The border/background that comes in when focused in non-discrete mode
    */
-  .slider-focus-thumb {
+  .md-focus-thumb {
     @include slider-thumb-position($slider-focus-thumb-width, $slider-focus-thumb-height);
     display: none;
     opacity: 0;
     background-color: #C0C0C0;
     animation: sliderFocusThumb 0.4s linear;
   }
-  .slider-focus-ring {
+  .md-focus-ring {
     @include slider-thumb-position($slider-focus-thumb-width, $slider-focus-thumb-height);
     border: 2px solid #D6D6D6;
     background-color: transparent;
     transform: scale(0);
     transition: all 0.2s linear;
   }
-  .slider-disabled-thumb {
+  .md-disabled-thumb {
     @include slider-thumb-position(
       $slider-thumb-width + $slider-thumb-disabled-border * 2,
       $slider-thumb-height + $slider-thumb-disabled-border * 2
@@ -181,13 +181,13 @@ md-slider {
     display: none;
   }
 
-  &.slider-min {
-    .slider-thumb {
+  &.md-min {
+    .md-thumb {
       &:after {
         background-color: white;
       }
     }
-    .slider-sign {
+    .md-sign {
       opacity: 0;
     }
   }
@@ -198,35 +198,35 @@ md-slider {
 
   /* Don't animate left/right while panning */
   &.panning {
-    .slider-thumb-container,
-    .slider-track-fill {
+    .md-thumb-container,
+    .md-track-fill {
       transition: none;
     }
   }
 
   &:not([discrete]) {
     /* Hide the sign and ticks in non-discrete mode */
-    .slider-track-ticks,
-    .slider-sign {
+    .md-track-ticks,
+    .md-sign {
       display: none;
     }
 
     &:not([disabled]) {
       &:hover {
-        .slider-thumb {
+        .md-thumb {
           transform: scale($slider-thumb-hover-scale);
         }
       }
 
       &:focus,
       &.active {
-        .slider-focus-thumb {
+        .md-focus-thumb {
           display: block;
         }
-        .slider-focus-ring {
+        .md-focus-ring {
           transform: scale(1);
         }
-        .slider-thumb {
+        .md-thumb {
           transform: scale($slider-thumb-focus-scale);
         }
       }
@@ -235,16 +235,16 @@ md-slider {
 
   &[discrete] {
     /* Hide the focus thumb in discrete mode */
-    .slider-focus-thumb,
-    .slider-focus-ring {
+    .md-focus-thumb,
+    .md-focus-ring {
       display: none;
     }
 
     &:not([disabled]) {
       &:focus,
       &.active {
-        .slider-sign,
-        .slider-sign:after {
+        .md-sign,
+        .md-sign:after {
           opacity: 1;
           transform: translate3d(0,0,0) scale(1.0);
         }
@@ -253,16 +253,16 @@ md-slider {
   }
 
   &[disabled] {
-    .slider-track-fill {
+    .md-track-fill {
       display: none;
     }
-    .slider-sign {
+    .md-sign {
       display: none;
     }
-    .slider-thumb {
+    .md-thumb {
       transform: scale($slider-thumb-disabled-scale);
     }
-    .slider-disabled-thumb {
+    .md-disabled-thumb {
       display: block;
     }
   }
