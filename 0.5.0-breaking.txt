@@ -5,6 +5,13 @@ Colors
   attribute.  See [THEMING.md]().
 - Instead, use `md-primary` and `md-warn` classes on an element when a theme is set.
 
+Bottom Sheet
+
+- `list` class has been renamed to `md-list`
+- `grid` class has been renamed to `md-grid`
+- `has-header` class has been renamed to `md-has-header`
+- `grid-text` class has been renamed to `md-grid-text`.
+
 Buttons
 
 - `md-button-colored` class has been changed to `md-primary` and `md-warn` color classes.
@@ -17,6 +24,15 @@ Buttons
 - `md-button-cornered` class has been changed to `md-cornered`
 - `md-button-icon` class has been changed to `md-icon`
 - `md-button-raised` class has been changed to `md-raised`
+
+Content
+
+- `md-content-padding` class has been renamed to `md-padding`.
+
+Dialog
+
+- `dialog-content` class has been removed. Use an `md-content` element instead.
+- `dialog-actions` has been renamed to `md-actions`
 
 Subheader
 
