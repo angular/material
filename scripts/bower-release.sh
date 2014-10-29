@@ -17,6 +17,7 @@ function run {
 
   echo "-- Copying in build files..."
   cp dist/angular-material* dist/bower-material
+  cp -R dist/themes dist/bower-material
 
   cd dist/bower-material
 
