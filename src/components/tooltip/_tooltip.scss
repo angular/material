@@ -24,16 +24,16 @@ md-tooltip {
   pointer-events: none;
   border-radius: 4px;
 
-  &[tooltip-direction="bottom"] {
+  &[md-direction="bottom"] {
     transform: translate3d(0, -30%, 0);
     margin-top: 8px;
   }
-  &[tooltip-direction="top"] {
+  &[md-direction="top"] {
     transform: translate3d(0, 30%, 0);
     margin-bottom: 8px;
   }
 
-  .tooltip-background {
+  .md-background {
     position: absolute;
     left: 50%;
     width: 256px;
@@ -46,7 +46,7 @@ md-tooltip {
     transform: scale(0.2);
   }
 
-  .tooltip-content {
+  .md-content {
     max-width: 240px;
     white-space: nowrap;
     overflow: hidden;
@@ -58,26 +58,26 @@ md-tooltip {
     transition: inherit;
   }
 
-  &.tooltip-show,
-  &.tooltip-hide {
+  &.md-show,
+  &.md-hide {
     transition: 0.2s ease-out;
     transition-property: transform, opacity;
   }
 
-  &.tooltip-show {
+  &.md-show {
     pointer-events: auto;
     transform: translate3d(0,0,0);
 
-    .tooltip-background {
+    .md-background {
       transform: scale(1.0);
       opacity: 1.0;
       animation: tooltipBackgroundShow linear;
     }
-    .tooltip-content {
+    .md-content {
       opacity: 0.99;
     }
   }
-  &.tooltip-hide .tooltip-background {
+  &.md-hide .md-background {
     transform: scale(1.0);
     opacity: 0;
     animation: tooltipBackgroundHide 0.2s linear;
@@ -89,7 +89,7 @@ md-tooltip {
    * The larger the tooltip, the less time the background should take to ripple outwards.
    */
   @for $i from 1 through 8 {
-    &[width-32="#{$i}"].tooltip-show .tooltip-background {
+    &[width-32="#{$i}"].md-show .md-background {
       $duration: 1000 - $i * 100;
       animation-duration: #{$duration}ms;
     }

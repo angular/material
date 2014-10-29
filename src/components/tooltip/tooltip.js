@@ -45,8 +45,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
   var TOOLTIP_SHOW_DELAY = 400;
   var TOOLTIP_WINDOW_EDGE_SPACE = 8;
   // We have to append tooltips to the body, because we use
-  // getBoundingClientRect().
-  // to find where to append the tooltip.
+  // getBoundingClientRect() to find where to append the tooltip.
   var tooltipParent = angular.element(document.body);
 
   return {
@@ -54,8 +53,8 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     transclude: true,
     require: '^?mdContent',
     template: 
-      '<div class="tooltip-background"></div>' +
-      '<div class="tooltip-content" ng-transclude></div>',
+      '<div class="md-background"></div>' +
+      '<div class="md-content" ng-transclude></div>',
     scope: {
       visible: '=?'
     },
@@ -76,7 +75,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     });
     parent.on('blur mouseleave touchend touchcancel', function() {
       // Don't hide the tooltip if the parent is still focused.
-      if (document.activeElement === parent[0]) return;
+      if ($document.activeElement === parent[0]) return;
       setVisible(false);
     });
 
@@ -125,7 +124,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     function showTooltip() {
       // Insert the element before positioning it, so we can get position
       // (tooltip is hidden by default)
-      element.removeClass('tooltip-hide');
+      element.removeClass('md-hide');
       parent.attr('aria-describedby', element.attr('id'));
       tooltipParent.append(element);
 
@@ -138,14 +137,14 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
         $$rAF(function() {
           positionTooltip();
           if (!scope.visible) return;
-          element.addClass('tooltip-show');
+          element.addClass('md-show');
         });
 
       });
     }
 
     function hideTooltip() {
-      element.removeClass('tooltip-show').addClass('tooltip-hide');
+      element.removeClass('md-show').addClass('md-hide');
       parent.removeAttr('aria-describedby');
       $timeout(function() {
         if (scope.visible) return;
@@ -185,7 +184,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       element.css({top: newPosition.top + 'px', left: newPosition.left + 'px'});
       // Tell the CSS the size of this tooltip, as a multiple of 32.
       element.attr('width-32', Math.ceil(tipRect.width / 32));
-      element.attr('tooltip-direction', tipDirection);
+      element.attr('md-direction', tipDirection);
     }
 
   }
