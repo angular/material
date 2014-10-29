@@ -58,17 +58,17 @@ function MdProgressCircularDirective($$rAF, $mdEffects, $mdTheming) {
   return {
     restrict: 'E',
     template: 
-      '<div class="wrapper1"><div class="wrapper2"><div class="circle">' +
-        '<div class="mask full">' +
-          '<div class="fill"></div>' +
+      '<div class="md-wrapper1"><div class="md-wrapper2"><div class="md-circle">' +
+        '<div class="md-mask md-full">' +
+          '<div class="md-fill"></div>' +
         '</div>' +
-        '<div class="mask half">' +
-          '<div class="fill"></div>' +
-          '<div class="fill fix"></div>' +
+        '<div class="md-mask md-half">' +
+          '<div class="md-fill"></div>' +
+          '<div class="md-fill md-fix"></div>' +
         '</div>' +
-        '<div class="shadow"></div>' +
+        '<div class="md-shadow"></div>' +
       '</div>' +
-      '<div class="inset"></div></div></div>',
+      '<div class="md-inset"></div></div></div>',
     compile: compile
   };
 
@@ -83,8 +83,8 @@ function MdProgressCircularDirective($$rAF, $mdEffects, $mdTheming) {
   function postLink(scope, element, attr) {
     $mdTheming(element);
     var circle = element[0],
-      fill = circle.querySelectorAll('.fill, .mask.full'),
-      fix = circle.querySelectorAll('.fill.fix'),
+      fill = circle.querySelectorAll('.md-fill, .md-mask.md-full'),
+      fix = circle.querySelectorAll('.md-fill.md-fix'),
       i, clamped, fillRotation, fixRotation;
 
     var diameter = attr.diameter || 48;

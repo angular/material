@@ -707,11 +707,11 @@ md-divider.md-#{$theme-name}-theme {
 
 md-progress-circular.md-#{$theme-name}-theme {
   background-color: $progress-circle-background;
-  .circle .mask .fill {
+  .md-circle .md-mask .md-fill {
     background-color: $progress-circle-color;
   }
 
-  .inset {
+  .md-inset {
     background-color: $progress-circle-inset-color;
   }
 }
