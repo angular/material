@@ -192,8 +192,8 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant) {
         $media: $mdMedia
       });
     }, function(isLocked) {
-      element.toggleClass('locked-open', !!isLocked);
-      backdrop.toggleClass('locked-open', !!isLocked);
+      element.toggleClass('md-locked-open', !!isLocked);
+      backdrop.toggleClass('md-locked-open', !!isLocked);
     });
 
     /**
@@ -207,7 +207,7 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant) {
       $animate[isOpen ? 'enter' : 'leave'](backdrop, parent);
       backdrop[isOpen ? 'on' : 'off']('click', close);
 
-      $animate[isOpen ? 'removeClass' : 'addClass'](element, 'closed').then(function() {
+      $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed').then(function() {
         // If we opened, and haven't closed again before the animation finished
         if (scope.isOpen) {
           element.focus();
