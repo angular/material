@@ -13,7 +13,7 @@ describe('mdProgressLinear', function() {
     });
 
     var progress = element.find('md-progress-linear'),
-      bar2 = progress.find('.bar2')[0];
+      bar2 = progress.find('.md-bar2')[0];
 
     expect(bar2.style[$mdEffects.TRANSFORM]).toEqual('translateX(-25%) scale(0.5, 1)');
   }));
@@ -45,7 +45,7 @@ describe('mdProgressLinear', function() {
     });
 
     var progress = element.find('md-progress-linear'),
-      bar1 = progress.find('.bar1')[0];
+      bar1 = progress.find('.md-bar1')[0];
 
     expect(bar1.style[$mdEffects.TRANSFORM]).toEqual('translateX(-12.5%) scale(0.75, 1)');
   }));
@@ -61,7 +61,7 @@ describe('mdProgressLinear', function() {
     });
 
     var progress = element.find('md-progress-linear'),
-      bar2 = progress.find('.bar2')[0];
+      bar2 = progress.find('.md-bar2')[0];
 
     expect(bar2.style[$mdEffects.TRANSFORM]).toBeFalsy();
   }));
