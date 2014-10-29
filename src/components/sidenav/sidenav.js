@@ -21,6 +21,7 @@ angular.module('material.components.sidenav', [
     '$parse',
     '$mdMedia',
     '$mdConstant',
+    '$compile',
     mdSidenavDirective 
   ])
   .controller('$mdSidenavController', [
@@ -166,7 +167,7 @@ function mdSidenavService($mdComponentRegistry) {
  *   - `<md-sidenav is-locked-open="$media('min-width: 1000px')"></md-sidenav>`
  *   - `<md-sidenav is-locked-open="$media('sm')"></md-sidenav>` <!-- locks open on small screens !-->
  */
-function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant) {
+function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $compile) {
   return {
     restrict: 'E',
     scope: {
@@ -182,9 +183,9 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant) {
 
   function postLink(scope, element, attr, sidenavCtrl) {
     var isLockedOpenParsed = $parse(attr.isLockedOpen);
-    var backdrop = angular.element(
+    var backdrop = $compile(
       '<md-backdrop class="md-sidenav-backdrop md-opaque">'
-    );
+    )(scope);
 
     scope.$watch('isOpen', setOpen);
     scope.$watch(function() {
