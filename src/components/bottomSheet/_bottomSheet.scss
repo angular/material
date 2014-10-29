@@ -20,7 +20,7 @@ md-bottom-sheet {
   transition: 0.2s linear;
   transition-property: transform;
 
-  &.has-header {
+  &.md-has-header {
     padding-top: 0;
   }
 
@@ -40,7 +40,7 @@ md-bottom-sheet {
     transform: translate3d(0, 100%, 0) !important;
   }
 
-  h2.md-subheader {
+  .md-subheader {
     background-color: transparent;
     font-family: $font-family;
     line-height: $bottom-sheet-header-height;
@@ -77,7 +77,7 @@ md-bottom-sheet {
     }
   }
 
-  &.grid {
+  &.md-grid {
     padding-left: 3 * $baseline-grid;
     padding-right: 3 * $baseline-grid;
     padding-top: 0;
@@ -148,7 +148,7 @@ md-bottom-sheet {
         margin: $baseline-grid 0;
       }
 
-      p.grid-text {
+      p.md-grid-text {
         font-weight: $bottom-sheet-grid-font-weight;
         line-height: 2 * $baseline-grid;
         font-size: 2 * $baseline-grid - 3;
