@@ -3,7 +3,7 @@ $tooltip-background-color: rgba(black, 0.52);
 
 md-tooltip.md-#{$theme-name}-theme {
   color: $tooltip-color;
-  .tooltip-background {
+  .md-background {
     background-color: $tooltip-background-color;
   }
 }
