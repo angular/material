@@ -19,10 +19,6 @@ $item-padding-bottom: 0px;
 
 md-list {
   padding: $list-padding-top $list-padding-right $list-padding-bottom $list-padding-left;
-
-  &.with-subheader {
-    padding-top: 0px;
-  }
 }
 
 md-item {
