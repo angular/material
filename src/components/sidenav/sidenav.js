@@ -183,7 +183,7 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant) {
   function postLink(scope, element, attr, sidenavCtrl) {
     var isLockedOpenParsed = $parse(attr.isLockedOpen);
     var backdrop = angular.element(
-      '<md-backdrop class="md-sidenav-backdrop opaque">'
+      '<md-backdrop class="md-sidenav-backdrop md-opaque">'
     );
 
     scope.$watch('isOpen', setOpen);
