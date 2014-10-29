@@ -84,7 +84,7 @@ function MdEffects($rootElement, $$rAF, $sniffer, $q) {
     $$rAF(function() {
       $$rAF(function() {
         element
-          .addClass('active')
+          .addClass('md-active')
           .css(self.TRANSFORM, '')
           .css('opacity', '')
           .on(self.TRANSITIONEND_EVENT, finished);

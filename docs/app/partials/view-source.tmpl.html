@@ -8,7 +8,7 @@
     </md-tab>
   </md-tabs>
 
-  <div class="dialog-content md-content" scroll-y flex>
+  <div class="md-content" scroll-y flex>
     <div ng-repeat="file in files">
       <hljs code="file.content"
         lang="{{file.fileType}}"
@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <div class="dialog-actions" layout="horizontal">
+  <div class="md-actions" layout="horizontal">
     <md-button class="md-button-light" ng-click="$hideDialog()">
       Done
     </md-button>

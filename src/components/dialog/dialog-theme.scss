@@ -7,7 +7,7 @@ md-dialog.md-#{$theme-name}-theme {
   border-radius: $dialog-border-radius;
   background-color: $dialog-background-color;
 
-  &.dialog-content-overflow .dialog-actions {
+  &.md-content-overflow .md-actions {
     border-top-color: $dialog-border-color;
   }
 }

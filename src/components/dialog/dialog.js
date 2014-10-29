@@ -34,9 +34,9 @@ function MdDialogDirective($$rAF, $mdTheming) {
     link: function(scope, element, attr) {
       $mdTheming(element);
       $$rAF(function() {
-        var content = element[0].querySelector('.dialog-content');
+        var content = element[0].querySelector('md-content');
         if (content && content.scrollHeight > content.clientHeight) {
-          element.addClass('dialog-content-overflow');
+          element.addClass('md-content-overflow');
         }
       });
     }
@@ -55,8 +55,8 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *
  * - The dialog is always given an isolate scope.
  * - The dialog's template must have an outer `<md-dialog>` element.
- *   Inside, use an element with class `dialog-content` for the dialog's content, and use
- *   an element with class `dialog-actions` for the dialog's actions.  
+ *   Inside, use an `<md-content>` element for the dialog's content, and use
+ *   an element with class `md-actions` for the dialog's actions.  
  *
  * @usage
  * <hljs lang="html">
@@ -76,8 +76,8 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *       controller: 'DialogController',
  *       template: 
  *         '<md-dialog>
- *         '  <div class="dialog-content">Hello!</div>' +
- *         '  <div class="dialog-actions">
+ *         '  <md-content>Hello!</md-content>' +
+ *         '  <div class="md-actions">
  *         '    <md-button ng-click="closeDialog()">' +
  *         '      Close' +
  *         '    </md-button>' +
@@ -216,10 +216,10 @@ function MdDialogService($timeout, $rootElement, $compile, $mdEffects, $animate,
 
     function findCloseButton() {
       //If no element with class dialog-close, try to find the last
-      //button child in dialog-actions and assume it is a close button
+      //button child in md-actions and assume it is a close button
       var closeButton = element[0].querySelector('.dialog-close');
       if (!closeButton) {
-        var actionButtons = element[0].querySelectorAll('.dialog-actions button');
+        var actionButtons = element[0].querySelectorAll('.md-actions button');
         closeButton = actionButtons[ actionButtons.length - 1 ];
       }
       return angular.element(closeButton);
@@ -254,7 +254,7 @@ function MdDialogService($timeout, $rootElement, $compile, $mdEffects, $animate,
       'role': 'dialog'
     });
 
-    var dialogContent = element.find('.dialog-content');
+    var dialogContent = element.find('md-content');
     if (dialogContent.length === 0){
       dialogContent = element;
     }

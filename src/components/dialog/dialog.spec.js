@@ -150,7 +150,7 @@ describe('$mdDialog', function() {
     $mdDialog.show({
       template:
         '<md-dialog>' +
-          '<div class="dialog-actions">' +
+          '<div class="md-actions">' +
             '<button class="dialog-close">Close</button>' +
           '</div>' +
           '</md-dialog>',
@@ -163,14 +163,14 @@ describe('$mdDialog', function() {
     expect($document.activeElement).toBe(parent.find('.dialog-close')[0]);
   }));
 
-  it('should focus the last `md-button` in dialog-actions open if no `.dialog-close`', inject(function($mdDialog, $rootScope, $document, $timeout) {
+  it('should focus the last `md-button` in md-actions open if no `.dialog-close`', inject(function($mdDialog, $rootScope, $document, $timeout) {
     TestUtil.mockElementFocus(this);
 
     var parent = angular.element('<div>');
     $mdDialog.show({
       template:
         '<md-dialog>' +
-          '<div class="dialog-actions">' +
+          '<div class="md-actions">' +
             '<button id="a">A</md-button>' +
             '<button id="focus-target">B</md-button>' +
           '</div>' +
