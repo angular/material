@@ -15,6 +15,7 @@ module.exports = new Package('angular-md', [
 .processor(require('./processors/componentsData'))
 .processor(require('./processors/indexPage'))
 .processor(require('./processors/buildConfig'))
+.processor(require('./processors/content'))
 
 .config(function(log, templateEngine, templateFinder) {
 
@@ -25,14 +26,43 @@ module.exports = new Package('angular-md', [
   ];
 })
 
-.config(function(readFilesProcessor, writeFilesProcessor, generateComponentGroupsProcessor) {
-  readFilesProcessor.basePath = path.join(projectPath, 'dist');
-  readFilesProcessor.sourceFiles = ['angular-material.js'];
+.config(function(readFilesProcessor, writeFilesProcessor) {
+  readFilesProcessor.basePath = projectPath;
+  readFilesProcessor.sourceFiles = [
+    { include: 'dist/angular-material.js', basePath: 'dist' },
+    { include: 'docs/content/**/*.md', basePath: 'docs/content', fileReader: 'ngdocFileReader' }
+  ];
 
-  writeFilesProcessor.outputFolder = path.join(projectPath, 'dist/docs');
-
-  // Don't use generateComponentGroupsProcessor
-  generateComponentGroupsProcessor.$enabled = false;
+  writeFilesProcessor.outputFolder = 'dist/docs';
 })
 
-;
+
+.config(function(computeIdsProcessor, computePathsProcessor) {
+
+  computeIdsProcessor.idTemplates.push({
+    docTypes: ['content'],
+    idTemplate: 'content-${fileInfo.relativePath.replace("/","-")}',
+    getAliases: function(doc) { return [doc.id]; }
+  });
+
+  computePathsProcessor.pathTemplates.push({
+    docTypes: ['content'],
+    getPath: function(doc) {
+      var docPath = path.dirname(doc.fileInfo.relativePath);
+      if ( doc.fileInfo.baseName !== 'index' ) {
+        docPath = path.join(docPath, doc.fileInfo.baseName);
+      }
+      return docPath;
+    },
+    getOutputPath: function(doc) {
+      return path.join(
+        'partials',
+        path.dirname(doc.fileInfo.relativePath),
+        doc.fileInfo.baseName) + '.html';
+    }
+  });
+})
+
+.config(function(generateComponentGroupsProcessor) {
+  generateComponentGroupsProcessor.$enabled = false;
+});

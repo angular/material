@@ -3,8 +3,9 @@ var DocsApp = angular.module('docsApp', ['ngMaterial', 'ngRoute', 'angularytics'
 .config([
   'COMPONENTS',
   'DEMOS',
+  'PAGES',
   '$routeProvider',
-function(COMPONENTS, DEMOS, $routeProvider) {
+function(COMPONENTS, DEMOS, PAGES, $routeProvider) {
   $routeProvider
     .when('/', {
       templateUrl: 'partials/home.tmpl.html'
@@ -14,6 +15,15 @@ function(COMPONENTS, DEMOS, $routeProvider) {
         return 'partials/layout-' + params.tmpl + '.tmpl.html';
       }
     });
+
+  angular.forEach(PAGES, function(pages, area) {
+    angular.forEach(pages, function(page) {
+      $routeProvider
+        .when(page.url, {
+          templateUrl: page.outputPath
+        });
+    });
+  });
 
   angular.forEach(COMPONENTS, function(component) {
     angular.forEach(component.docs, function(doc) {
@@ -64,9 +74,10 @@ function(Angularytics, $rootScope) {
 .factory('menu', [
   'COMPONENTS',
   'DEMOS',
+  'PAGES',
   '$location',
   '$rootScope',
-function(COMPONENTS, DEMOS, $location, $rootScope) {
+function(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
 
   var sections = [{
     name: 'Layout',
@@ -109,6 +120,14 @@ function(COMPONENTS, DEMOS, $location, $rootScope) {
     name: 'Demos',
     pages: demoDocs.sort(sortByName)
   });
+
+  angular.forEach(PAGES, function(pages, area) {
+    sections.push({
+      name: area,
+      pages: pages
+    });
+  });
+
   sections.push({
     name: 'Services',
     pages: apiDocs.service.sort(sortByName)
@@ -308,7 +327,7 @@ function($rootScope, $scope, component, demos, $http, $templateCache, $q) {
     if (doc.type === 'directive') {
       return doc.name.replace(/([A-Z])/g, function($1) {
         return '-'+$1.toLowerCase();
-      }); 
+      });
     }
     return doc.label || doc.name;
   };
