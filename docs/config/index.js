@@ -18,13 +18,6 @@ module.exports = new Package('angular-md', [
 
 .config(function(log, templateEngine, templateFinder) {
 
-  templateEngine.config.tags = {
-    variableStart: '{$',
-    variableEnd: '$}',
-    blockStart: '{%',
-    blockEnd: '%}'
-  };
-
   templateFinder.templateFolders = [
     path.resolve(packagePath, 'template'),
     path.resolve(packagePath, 'template/ngdoc'),
