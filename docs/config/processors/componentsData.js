@@ -28,7 +28,7 @@ module.exports = function componentsGenerateProcessor(log, moduleMap) {
         // We are only interested in pages that are not landing pages
         return doc.docType !== 'componentGroup' && doc.module;
       })
-      .filter('module') 
+      .filter('module')
       .groupBy('module')
       .map(function(moduleDocs, moduleName) {
 
@@ -52,9 +52,10 @@ module.exports = function componentsGenerateProcessor(log, moduleMap) {
       .value();
 
     docs.push({
-      template: 'components-data.template.js',
+      name: 'COMPONENTS',
+      template: 'constant-data.template.js',
       outputPath: 'js/components-data.js',
-      components: components
+      items: components
     });
 
   }
