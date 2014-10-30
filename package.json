@@ -27,7 +27,7 @@
     "gulp-ng-html2js": "^0.1.8",
     "gulp-rename": "^1.2.0",
     "gulp-replace": "^0.3.0",
-    "gulp-sass": "1.2.0",
+    "gulp-sass": "ajoslin/gulp-sass#master",
     "gulp-strip-debug": "^0.3.0",
     "gulp-uglify": "^0.3.0",
     "gulp-uncss": "^0.4.5",
