@@ -9,6 +9,8 @@ angular.module('material.components.sidenav', [
   'material.core',
   'material.services.registry',
   'material.services.media',
+  'material.components.backdrop',
+  'material.services.theming',
   'material.animations'
 ])
   .factory('$mdSidenav', [
@@ -22,6 +24,7 @@ angular.module('material.components.sidenav', [
     '$mdMedia',
     '$mdConstant',
     '$compile',
+    '$mdTheming',
     mdSidenavDirective 
   ])
   .controller('$mdSidenavController', [
@@ -167,7 +170,7 @@ function mdSidenavService($mdComponentRegistry) {
  *   - `<md-sidenav is-locked-open="$media('min-width: 1000px')"></md-sidenav>`
  *   - `<md-sidenav is-locked-open="$media('sm')"></md-sidenav>` <!-- locks open on small screens !-->
  */
-function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $compile) {
+function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $compile, $mdTheming) {
   return {
     restrict: 'E',
     scope: {
@@ -186,6 +189,8 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
     var backdrop = $compile(
       '<md-backdrop class="md-sidenav-backdrop md-opaque">'
     )(scope);
+
+    $mdTheming.inherit(backdrop, element);
 
     scope.$watch('isOpen', setOpen);
     scope.$watch(function() {

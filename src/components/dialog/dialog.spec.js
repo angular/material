@@ -117,7 +117,7 @@ describe('$mdDialog', function() {
     expect(parent.find('md-dialog').length).toBe(1);
   }));
 
-  it('should hasBackdrop == true', inject(function($mdDialog, $rootScope) {
+  it('should hasBackdrop == true', inject(function($mdDialog, $animate, $rootScope) {
     var parent = angular.element('<div>');
     $mdDialog.show({
       template: '<md-dialog>',
@@ -125,6 +125,8 @@ describe('$mdDialog', function() {
       hasBackdrop: true
     });
 
+    $rootScope.$apply();
+    $animate.triggerCallbacks();
     $rootScope.$apply();
     expect(parent.find('md-dialog').length).toBe(1);
     expect(parent.find('md-backdrop').length).toBe(1);

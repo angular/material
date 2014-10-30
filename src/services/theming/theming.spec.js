@@ -1,5 +1,8 @@
 describe('$mdTheming service', function() {
-  beforeEach(module('material.services.theming'));
+  var $mdThemingProvider;
+  beforeEach(module('material.services.theming', function(_$mdThemingProvider_) {
+    $mdThemingProvider = _$mdThemingProvider_;
+  }));
 
   var el, testHtml, compileAndLink;
 
@@ -14,10 +17,21 @@ describe('$mdTheming service', function() {
     el = compileAndLink(testHtml);
   });
 
+
   it('applies a default theme if no theme can be found', inject(function($mdTheming) {
     $mdTheming(el);
     expect(el.hasClass('md-default-theme')).toBe(true);
   }));
+
+  it('supports setting a different default theme', function() {
+    $mdThemingProvider.setDefaultTheme('other');
+    inject(function($rootScope, $compile, $mdTheming) {
+      el = $compile('<h1>Test</h1>')($rootScope);
+      $mdTheming(el);
+      expect(el.hasClass('md-other-theme')).toBe(true);
+      expect(el.hasClass('md-default-theme')).toBe(false);
+    });
+  });
 
   it('inherits the theme from parent elements', inject(function($mdTheming) {
     el = compileAndLink([
@@ -35,6 +49,17 @@ describe('$mdTheming service', function() {
     el = compileAndLink('<h1 md-themable></h1>');
     expect(el.hasClass('md-default-theme')).toBe(true);
   });
+
+  it('can inherit from explicit parents', inject(function($rootScope, $mdTheming) {
+    var child = compileAndLink('<h1 md-theme="dark"></h1>');
+    var container = compileAndLink('<div md-theme="space"><h1></h1></div>');
+    var inherited = container.children();
+    $mdTheming(child);
+    expect(child.hasClass('md-dark-theme')).toBe(true);
+    $mdTheming.inherit(child, inherited);
+    expect(child.hasClass('md-dark-theme')).toBe(false);
+    expect(child.hasClass('md-space-theme')).toBe(true);
+  }));
 });
 
 describe('md-theme directive', function() {

@@ -14,18 +14,17 @@ angular.module('material.services.theming', [
   '$mdTheming',
   ThemableDirective
 ])
-.factory('$mdTheming', [
-  '$rootScope',
+.provider('$mdTheming', [
   Theming
 ]);
 
 /*
- * @ngdoc service
+ * @ngdoc provider
  * @name $mdTheming
  *
  * @description
  *
- * Service that makes an element apply theming related classes to itself.
+ * Provider that makes an element apply theming related classes to itself.
  *
  * ```js
  * app.directive('myFancyDirective', function($mdTheming) {
@@ -43,36 +42,51 @@ angular.module('material.services.theming', [
  *
  */
 
-function Theming($rootScope) {
-  return function applyTheme(scope, el) {
-    // Allow us to be invoked via a linking function signature.
-    if (el === undefined) { 
-      el = scope;
-      scope = undefined;
-    }
-    if (scope === undefined) {
-      scope = $rootScope;
-    }
-
-    var ctrl = el.controller('mdTheme');
-
-    if (angular.isDefined(el.attr('md-theme-watch'))) { 
-      var deregisterWatch = scope.$watch(function() { 
-        return ctrl && ctrl.$mdTheme || 'default'; 
-      }, changeTheme);
-      // If scope is $rootScope, we need to be sure to deregister when the
-      // element is destroyed
-      el.on('$destroy', deregisterWatch);
-    } else {
-      var theme = ctrl && ctrl.$mdTheme || 'default';
-      changeTheme(theme);
-    }
-
-    function changeTheme(theme, oldTheme) {
-      if (oldTheme) el.removeClass('md-' + oldTheme +'-theme');
-      el.addClass('md-' + theme + '-theme');
-    }
+function Theming($injector) {
+  var defaultTheme = 'default';
+  return {
+    setDefaultTheme: function(theme) {
+      defaultTheme = theme;
+    },
+    $get: ['$rootElement', '$rootScope', ThemingService]
   };
+
+  function ThemingService($rootElement, $rootScope) {
+    applyTheme.inherit = function(el, parent) {
+      var ctrl = parent.controller('mdTheme');
+
+      if (angular.isDefined(el.attr('md-theme-watch'))) { 
+        var deregisterWatch = $rootScope.$watch(function() { 
+          return ctrl && ctrl.$mdTheme || defaultTheme; 
+        }, changeTheme);
+        el.on('$destroy', deregisterWatch);
+      } else {
+        var theme = ctrl && ctrl.$mdTheme || defaultTheme;
+        changeTheme(theme);
+      }
+
+      function changeTheme(theme) {
+        var oldTheme = el.data('$mdThemeName');
+        if (oldTheme) el.removeClass('md-' + oldTheme +'-theme');
+        el.addClass('md-' + theme + '-theme');
+        el.data('$mdThemeName', theme);
+      }
+    };
+
+    return applyTheme;
+
+    function applyTheme(scope, el) {
+      // Allow us to be invoked via a linking function signature.
+      if (el === undefined) { 
+        el = scope;
+        scope = undefined;
+      }
+      if (scope === undefined) {
+        scope = $rootScope;
+      }
+      applyTheme.inherit(el, el);
+    }
+  }
 }
 
 function ThemingDirective($interpolate) {
