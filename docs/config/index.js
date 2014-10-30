@@ -25,14 +25,14 @@ module.exports = new Package('angular-md', [
   ];
 })
 
-.config(function(readFilesProcessor, writeFilesProcessor, checkAnchorLinksProcessor) {
+.config(function(readFilesProcessor, writeFilesProcessor, generateComponentGroupsProcessor) {
   readFilesProcessor.basePath = path.join(projectPath, 'dist');
   readFilesProcessor.sourceFiles = ['angular-material.js'];
 
   writeFilesProcessor.outputFolder = path.join(projectPath, 'dist/docs');
 
-  // Don't use checkAnchorLinksProcessor
-  checkAnchorLinksProcessor.checkDoc = function() { return false; };
+  // Don't use generateComponentGroupsProcessor
+  generateComponentGroupsProcessor.$enabled = false;
 })
 
 ;
