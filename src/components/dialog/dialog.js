@@ -5,6 +5,7 @@
 angular.module('material.components.dialog', [
   'material.core',
   'material.animations',
+  'material.components.backdrop',
   'material.services.compiler',
   'material.services.aria',
   'material.services.interimElement',
@@ -25,6 +26,7 @@ angular.module('material.components.dialog', [
     '$$interimElement',
     '$mdUtil',
     '$mdConstant',
+    '$mdTheming',
     MdDialogService
   ]);
 
@@ -153,7 +155,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *
  */
 
-function MdDialogService($timeout, $rootElement, $compile, $mdEffects, $animate, $mdAria, $$interimElement, $mdUtil, $mdConstant) {
+function MdDialogService($timeout, $rootElement, $compile, $mdEffects, $animate, $mdAria, $$interimElement, $mdUtil, $mdConstant, $mdTheming) {
 
   var $dialogService;
   return $dialogService = $$interimElement({
@@ -179,9 +181,9 @@ function MdDialogService($timeout, $rootElement, $compile, $mdEffects, $animate,
     configureAria(element.find('md-dialog'));
 
     if (options.hasBackdrop) {
-      var backdrop = $compile('<md-backdrop class="md-opaque ng-enter">')(scope);
-      $animate.enter(backdrop, options.parent, null);
-      options.backdrop = backdrop;
+      options.backdrop = $compile('<md-backdrop class="md-opaque ng-enter">')(scope);
+      $mdTheming.inherit(options.backdrop, options.parent);
+      $animate.enter(options.backdrop, options.parent, null);
     }
 
     return $mdEffects.popIn(

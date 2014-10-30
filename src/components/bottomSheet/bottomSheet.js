@@ -5,7 +5,9 @@
  * BottomSheet
  */
 angular.module('material.components.bottomSheet', [
-  'material.services.interimElement'
+  'material.components.backdrop',
+  'material.services.interimElement',
+  'material.services.theming'
 ])
 .directive('mdBottomSheet', [
   MdBottomSheetDirective
@@ -17,6 +19,7 @@ angular.module('material.components.bottomSheet', [
   '$timeout',
   '$$rAF',
   '$compile',
+  '$mdTheming',
   MdBottomSheet
 ]);
 
@@ -114,7 +117,7 @@ function MdBottomSheetDirective() {
  *
  */
 
-function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF, $compile) {
+function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF, $compile, $mdTheming) {
   var backdrop;
 
   var $mdBottomSheet;
@@ -131,6 +134,7 @@ function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF, 
     backdrop.on('click touchstart', function() {
       $timeout($mdBottomSheet.cancel);
     });
+    $mdTheming.inherit(backdrop, options.parent);
 
     $animate.enter(backdrop, options.parent, null);
 
@@ -139,6 +143,7 @@ function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF, 
 
     // Give up focus on calling item
     options.targetEvent && angular.element(options.targetEvent.target).blur();
+    $mdTheming.inherit(bottomSheet.element, options.parent);
 
     return $animate.enter(bottomSheet.element, options.parent);
 
