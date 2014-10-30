@@ -18,13 +18,6 @@ module.exports = new Package('angular-md', [
 
 .config(function(log, templateEngine, templateFinder) {
 
-  templateEngine.config.tags = {
-    variableStart: '{$',
-    variableEnd: '$}',
-    blockStart: '{%',
-    blockEnd: '%}'
-  };
-
   templateFinder.templateFolders = [
     path.resolve(packagePath, 'template'),
     path.resolve(packagePath, 'template/ngdoc'),
@@ -32,14 +25,14 @@ module.exports = new Package('angular-md', [
   ];
 })
 
-.config(function(readFilesProcessor, writeFilesProcessor, checkAnchorLinksProcessor) {
+.config(function(readFilesProcessor, writeFilesProcessor, generateComponentGroupsProcessor) {
   readFilesProcessor.basePath = path.join(projectPath, 'dist');
   readFilesProcessor.sourceFiles = ['angular-material.js'];
 
   writeFilesProcessor.outputFolder = path.join(projectPath, 'dist/docs');
 
-  // Don't use checkAnchorLinksProcessor
-  checkAnchorLinksProcessor.checkDoc = function() { return false; };
+  // Don't use generateComponentGroupsProcessor
+  generateComponentGroupsProcessor.$enabled = false;
 })
 
 ;
