@@ -109,4 +109,23 @@ describe('md-slider', function() {
     expect($log.warn).toHaveBeenCalledWith(sliders[0]);
     expect($log.warn).not.toHaveBeenCalledWith(sliders[1]);
   }));
+
+  it('should add aria attributes', inject(function($compile, $rootScope, $timeout, $mdConstant){
+    var slider = $compile(
+      '<md-slider min="100" max="104" step="2" ng-model="model">'
+    )($rootScope);
+
+    $rootScope.$apply('model = 102');
+
+    expect(slider.attr('role')).toEqual('slider');
+    expect(slider.attr('aria-valuemin')).toEqual('100');
+    expect(slider.attr('aria-valuemax')).toEqual('104');
+    expect(slider.attr('aria-valuenow')).toEqual('102');
+
+    TestUtil.triggerEvent(slider, 'keydown', {
+      keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
+    });
+    $timeout.flush();
+    expect(slider.attr('aria-valuenow')).toEqual('100');
+  }));
 });
