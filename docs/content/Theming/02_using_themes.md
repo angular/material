@@ -32,7 +32,7 @@ To use other themes and override parts [or all] of the default theme, you must i
 
 ### 2) Set the md-theme attribute
 
-To set a custom theme within an area of your application, set the `md-theme` attribute on an element. Then that element and all of its children will inherit that theme (see [how it works in detail](http://localhost:8080/#/Theming/04_how_it_works). 
+To set a custom theme within an area of your application, set the `md-theme` attribute on an element. Then that element and all of its children will inherit that theme (see [how it works in detail](http://localhost:8080/#/Theming/04_how_it_works)). 
 
 An element will use the default theme if no `md-theme` is defined on that element or any of its ancestors.
 
