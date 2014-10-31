@@ -155,7 +155,7 @@ gulp.task('server', function() {
 
 gulp.task('build-default-theme', function() {
   return gulp.src(config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss')))
-    .pipe(concat('default-theme.scss'))
+    .pipe(concat('_default-theme.scss'))
     .pipe(utils.hoistScssVariables())
     .pipe(gulp.dest('themes/'));
 });
@@ -168,7 +168,7 @@ gulp.task('build-theme', ['build-default-theme'], function() {
 
 gulp.task('build-themes', ['build-default-theme'], function() {
   var stream = mergeStream();
-  var themes = glob('themes/*.scss', { cwd: __dirname });
+  var themes = glob('themes/**.scss', { cwd: __dirname }).filter(function(themeName) { return themeName.split('/')[1].charAt(0) != '_'; });
   themes.forEach(function(themeFile) {
     var name = themeFile.match(/((\w|-)+)-theme\.scss/)[1];
     stream.add(buildTheme(name));
@@ -178,20 +178,24 @@ gulp.task('build-themes', ['build-default-theme'], function() {
 
 function buildTheme(theme) {
   gutil.log("Building theme " + theme + "...");
-  return gulp.src(['src/core/style/color-palette.scss', 'themes/' + theme + '-theme.scss', 'themes/default-theme.scss'])
+  return gulp.src(['src/core/style/color-palette.scss', 'themes/' + theme + '-theme.scss', 'themes/_default-theme.scss'])
     .pipe(concat(theme + '-theme.scss'))
     .pipe(utils.hoistScssVariables())
     .pipe(sass())
     .pipe(gulp.dest(config.outputDir + 'themes/'));
 }
 
-gulp.task('build-scss', function() {
+gulp.task('build-scss', ['build-default-theme'], function() {
+  var defaultThemeContents = fs.readFileSync('themes/_default-theme.scss');
+
+
   var scssGlob = path.join(config.paths, '*.scss');
   gutil.log("Building css files...");
   return gulp.src(config.scssBaseFiles.concat(scssGlob))
     .pipe(filterNonCodeFiles())
     .pipe(filter(['**', '!**/*-theme.scss'])) // remove once ported
     .pipe(concat('angular-material.scss'))
+    .pipe(insert.append(defaultThemeContents))
     .pipe(sass())
     .pipe(autoprefix())
     .pipe(insert.prepend(config.banner))
