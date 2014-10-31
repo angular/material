@@ -25,12 +25,14 @@ function run {
 
   echo "-- Copying in build files..."
   cp dist/angular-material* dist/bower-material
+  cp -R dist/themes dist/bower-material
+
   cd dist/bower-material
 
   echo "-- Committing and tagging..."
   replaceJsonProp "bower.json" "version" "$VERSION"
-  git add -A
 
+  git add -A
   git commit -am "release: version $VERSION"
   git tag -f v$VERSION
 
