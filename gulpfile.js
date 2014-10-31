@@ -111,7 +111,7 @@ var config = {
     ' */\n',
   jsBaseFiles: ['src/core/core.js', 'src/core/util/*.js'],
   themeBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss'],
-  scssBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss', 'src/core/style/{structure,layout,table}.scss'],
+  scssBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss', 'src/core/style/{structure,layout}.scss'],
   paths: 'src/{components,services}/**',
   outputDir: 'dist/'
 };
