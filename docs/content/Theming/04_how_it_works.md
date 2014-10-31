@@ -39,7 +39,6 @@ Each component within Angular Material has custom styles specified in its `*-the
 - etc.
 
 These component-specific styles are concatenated with **variables.scss** and **color-palettes.scss** to generate `/themes/default-theme.scss`.
-
 Additionally, each custom theme file in `/themes/*.scss` overrides the variables from default-theme and compiles as css to `/dist/themes/`.
 
 #### JavaScript Features
@@ -51,34 +50,39 @@ Angular Material uses both an `md-theme` directive and an `$mdTheming` service t
 
 `$mdTheming` will look up the DOM for the nearest parent with an `md-theme` attribute, and add that parent's theme class to its own element.
 
+
+- - -
+
+Here is an **simple** directive that uses **$mdTheming** to add theming support within its feature set:
+
 <hljs lang="js">
 app.directive('simpleDirective', function($mdTheming) {
   return {
     template: '<h1>Hello world</h1>',
     link: function(scope, element, attr) {
       $mdTheming(element);
+	  // Other features go here...
     }
   }
 });
 </hljs>
 
-Examples of simple-directive in the wild:
+Here is an example of using the **simple-directive** and themes in the HTML:
 
 <hljs lang="html">
-<div md-theme="green">
+<div id="myForm" md-theme="green">
   <simple-directive></simple-directive>
 </div>
 </hljs>
 
-simple-directive will have class `md-green-theme`.
+At runtime, both the elements **div#myForm** and **simple-directive** will now have a `class="md-green-theme"` attribute. And if we want to override a child element as shown below:
 
-Or
 
 <hljs lang="html">
-<div md-theme="green">
+<div id="myForm" md-theme="green">
   <simple-directive md-theme="yellow"></simple-directive>
 </div>
 </hljs>
 
-simple-directive will have class `md-yellow-theme`.
+At runtime, the elements **div#myForm** will have a `class="md-green-theme"` attribute and the element **simple-directive** will now have a `class="md-yellow-theme"` attribute.
 
