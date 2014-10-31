@@ -1,5 +1,33 @@
 <div ng-controller="LayoutCtrl" layout="vertical" layout-fill class="layout-content">
 
+
+  <h3 class="layout-title">Responsive Layout</h3>
+
+  <p>
+    From the ground up the layout system is built around being responsive to viewport size.
+    Out of the box it comes with useful and customizable breakpoints, which can be easily reused.
+    The <code>layout</code> attribute used with "horizontal" or "vertical" values define arrangement on all device sizes.
+    If you wish to define a layout depending upon the device size, there are
+    other <code>layout</code> attributes available:
+  </p>
+
+  <ul>
+    <li>
+      <code>layout</code> sets the default layout on all devices.
+    </li>
+    <li>
+      <code>layout-sm</code> sets the layout on device >=600px wide.
+    </li>
+    <li>
+      <code>layout-md</code> sets the layout on devices >=960px wide.
+    </li>
+    <li>
+      <code>layout-lg</code> sets the layout on devices >=1200px wide.
+    </li>
+  </ul>
+
+  <br/><br/>
+
   <h3 class="layout-title">Layout Options</h3>
 
   <p>
@@ -24,7 +52,10 @@
 </div>
   </hljs>
 
+  <br/><br/>
+
   <md-divider></md-divider>
+
   <h3 class="layout-title">Utility Attributes</h3>
 
   <table>
