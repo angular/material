@@ -1,4 +1,4 @@
-<div ng-controller="LayoutCtrl" layout="vertical" layout-fill class="layout-content">
+<div ng-controller="LayoutCtrl" layout="column" layout-fill class="layout-content">
 
   <h3 class="layout-title">Overview</h3>
   <p>
@@ -28,12 +28,12 @@
   </p>
 
   <hljs lang="html">
-<div layout="horizontal">
+<div layout="row">
   <div>I'm left.</div>
   <div>I'm right.</div>
 </div>
 
-<div layout="vertical">
+<div layout="column">
   <div>I'm above.</div>
   <div>I'm below.</div>
 </div>
@@ -66,7 +66,7 @@
   </ul>
 
   <hljs lang="html">
-<div layout="vertical" layout-sm="horizontal">
+<div layout="row" layout-phone="column">
   <div>
     I'm above on tiny devices, and to the left on devices wider than 600px.
   </div>

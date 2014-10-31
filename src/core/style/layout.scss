@@ -1,14 +1,25 @@
-
-// Mobile first responsive design
+// Responsive attributes
 // ------------------------------
 
+// hide means hide everywhere
+/* Sizes:
+  0    <= size <= 600  Phone
+  600  <= size <= 960  Tablet
+  960  <= size <= 1200 Tablet-Landscape
+  1200 <= size         PC
+*/
+         
 [layout] {
   box-sizing: border-box;
   display: flex;
 }
 
-[layout=vertical] {
+[layout=column] {
   flex-direction: column;
+}
+
+[layout=row] {
+  flex-direction: row;
 }
 
 [layout-padding],
@@ -32,6 +43,104 @@
 }
 
 
+@mixin layout-for-size($name) {
+  [hide]:not([show-#{$name}]),
+  [hide-#{$name}]:not([show-#{$name}]) {
+    display: none;
+  }
+
+  [layout-#{$name}] {
+    box-sizing: border-box;
+    display: flex;
+  }
+  [layout-#{$name}=column] {
+    flex-direction: column;
+  }
+  [layout-#{$name}=row] {
+    flex-direction: row;
+  }
+}
+
+@mixin flex-properties-for-size($name: null) {
+  $flexName: 'flex';
+  $offsetName: 'offset';
+  @if $name != null {
+    $flexName: 'flex-#{$name}';
+    $offsetName: 'offset-#{$name}';
+  }
+
+  // (1-19) * 5 = 5-95%
+  @for $i from 0 through 19 {
+    [#{$flexName}="#{$i * 5}"] {
+      flex: 0 0 #{$i * 5 + '%'};
+      max-width: #{$i * 5 + '%'};
+    }
+
+    [#{$offsetName}="#{$i * 5}"] {
+      margin-left: #{$i * 5 + '%'};
+    }
+  }
+
+  [#{$flexName}="33"], [#{$flexName}="34"] {
+    flex: 0 0 33.33%;
+    max-width: 33.33%;
+  }
+  [#{$flexName}="66"], [#{$flexName}="67"] {
+    flex: 0 0 66.66%;
+    max-width: 66.66%;
+  }
+
+  [#{$offsetName}="33"], [#{$offsetName}="34"] {
+    margin-left: 33.33%;
+  }
+  [#{$offsetName}="66"], [#{$offsetName}="67"] {
+    margin-left: 66.66%;
+  }
+
+}
+
+// Flex attributes for layout children
+// ------------------------------
+
+[flex] {
+  flex: 1;
+}
+
+@include flex-properties-for-size();
+@media (max-width: $layout-breakpoint-sm) {
+  @include layout-for-size(phone);
+  @include flex-properties-for-size(phone);
+}
+@media (min-width: $layout-breakpoint-sm + 1) and (max-width: $layout-breakpoint-lg) {
+  @include layout-for-size(tablet);
+  @include flex-properties-for-size(tablet);
+}
+@media (min-width: $layout-breakpoint-md + 1) and (max-width: $layout-breakpoint-lg) {
+  @include layout-for-size(tablet-landscape);
+  @include flex-properties-for-size(tablet-landscape);
+}
+@media (min-width: $layout-breakpoint-lg + 1) {
+  @include layout-for-size(pc);
+  @include flex-properties-for-size(pc);
+}
+
+
+
+// Order attributes for layout children
+// ------------------------------
+[layout-order="0"] { order: 0; }
+[layout-order="1"] { order: 1; }
+[layout-order="2"] { order: 2; }
+[layout-order="3"] { order: 3; }
+[layout-order="4"] { order: 4; }
+[layout-order="5"] { order: 5; }
+[layout-order="6"] { order: 6; }
+[layout-order="7"] { order: 7; }
+[layout-order="8"] { order: 8; }
+[layout-order="9"] { order: 9; }
+
+
+// Alignment attributes for layout containers' children
 // Arrange on the Main Axis
 // center, start, end, space-between, space-around
 // flex-start is the default for justify-content
@@ -101,129 +210,4 @@
 [layout-align="space-around end"] {
   align-items: flex-end;
 }
-
-
-// Utility Attributes
-// ------------------------------
-
-[block] {
-  display: block;
-}
-
-[inline-block] {
-  display: inline-block;
-}
-
-[hide] {
-  display: none;
-}
-
-[show] {
-  display: inherit;
-}
-
-
-@mixin layout-presets($attr) {
-  [#{$attr}] {
-    flex: 1;
-  }
-  // (1-19) * 5 = 5-95%
-  @for $i from 1 through 19 {
-    [#{$attr}="#{$i * 5}"] {
-      @include layout-preset(#{$i * 5 + '%'});
-    }
-  }
-  [#{$attr}="33"], [#{$attr}="34"] {
-    @include layout-preset(33.33%);
-  }
-  [#{$attr}="66"], [#{$attr}="67"] {
-    @include layout-preset(66.66%);
-  }
-}
-
-@mixin layout-preset($value) {
-  flex: 0 0 $value;
-  max-width: $value;
-}
-
-@mixin layout-offset-presets($attr) {
-  // (1-19) * 5 = 5-95%
-  @for $i from 1 through 19 {
-    [#{$attr}="#{$i * 5}"] {
-      margin-left: #{$i * 5 + '%'};
-    }
-  }
-  [#{$attr}="33"], [#{$attr}="34"] {
-    margin-left: 33.33%;
-  }
-  [#{$attr}="66"], [#{$attr}="67"] {
-    margin-left: 66.66%;
-  }
-}
-
-@mixin layout-order-preset($attr, $n) {
-  [#{$attr}="#{$n}"] {
-    order: $n;
-  }
-}
-
-@mixin layout-order-presets($attr) {
-  @for $i from 1 through 6 {
-    @include layout-order-preset($attr, $i);
-  }
-}
-
-@mixin layout-breakpoint($suffix, $min-width) {
-  @media (min-width: $min-width) {
-
-    @include layout-presets( flex-#{$suffix} );
-    @include layout-offset-presets( offset-#{$suffix} );
-    @include layout-order-presets( layout-order-#{$suffix} );
-    [layout-#{$suffix}] {
-      flex-direction: row;
-    }
-    [layout-#{$suffix}=vertical] {
-      flex-direction: column;
-    }
-
-    [block-#{$suffix}] {
-      display: block;
-    }
-
-    [inline-block-#{$suffix}] {
-      display: inline-block;
-    }
-
-    [show-#{$suffix}] {
-      display: inherit;
-    }
-
-    [hide-#{$suffix}] {
-      display: none;
-    }
-
-  }
-}
-
-
-// layout = Default
-// ------------------------------
-@include layout-presets( flex );
-@include layout-offset-presets( offset );
-@include layout-order-presets( layout-order );
-
-
-// layout-sm = Small (Tablets)
-// ------------------------------
-@include layout-breakpoint(sm, $layout-breakpoint-sm);
-
-
-// layout-md = Medium (Desktops)
-// ------------------------------
-@include layout-breakpoint(md, $layout-breakpoint-md);
-
-
-// layout-lg = Large
-// ------------------------------
-@include layout-breakpoint(lg, $layout-breakpoint-lg);
 

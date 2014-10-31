@@ -12,9 +12,9 @@
 <script src="docs-demo-scripts.js"></script>
 <link rel="stylesheet" href="docs.css">
 </head>
-<body layout="horizontal">
+<body layout="row">
 
-  <md-sidenav layout="vertical"
+  <md-sidenav layout="column"
     class="md-sidenav-left md-whiteframe-z2"
     md-component-id="left"
     md-is-locked-open="$media('md')">
@@ -49,20 +49,20 @@
 
   </md-sidenav>
 
-  <div layout="vertical" layout-fill tabIndex="-1" role="main">
+  <div layout="column" layout-fill tabIndex="-1" role="main">
     <md-toolbar md-theme="indigo" class="md-medium-tall app-toolbar">
 
       <div class="md-toolbar-tools" ng-click="openMenu()">
-        <button class="menu-icon" hide-md aria-label="Toggle Menu">
+        <button class="menu-icon" hide show-phone show-tablet aria-label="Toggle Menu">
           <md-icon icon="img/icons/ic_menu_24px.svg">
           </md-icon>
         </button>
-        <p hide show-sm ng-if="menu.currentSection.name">
+        <p hide-phone ng-if="menu.currentSection.name">
           {{menu.currentSection.name}}
         </p>
-        <span layout="vertical" layout-align="center center" class="menu-separator-icon"
+        <span layout="column" layout-align="center center" class="menu-separator-icon"
           ng-if="menu.currentPage">
-          <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide block-sm>
+          <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide-phone>
         </span>
         <h2 ng-bind="(menu.currentPage | humanizeDoc) || 'Angular Material'" flex>
         </h2>
@@ -86,10 +86,10 @@
         </md-button>
         <md-button ng-href="{{currentDoc.githubUrl}}">
           <md-icon icon="/img/icons/ic_launch_24px.svg"></md-icon>
-          <span hide block-sm>View on Github</span>
-          <span hide-sm>Source</span>
+          <span hide-phone>View on Github</span>
+          <span hide show-phone>Source</span>
         </md-button>
-        <md-button ng-href="{{currentDoc.githubEditUrl}}" hide show-sm>
+        <md-button ng-href="{{currentDoc.githubEditUrl}}" hide-phone>
           <md-icon icon="/img/icons/ic_launch_24px.svg"></md-icon>
           <span>Improve This Doc</span>
         </md-button>

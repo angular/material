@@ -1,4 +1,4 @@
-<div ng-controller="LayoutCtrl" layout="vertical" layout-fill class="layout-content">
+<div ng-controller="LayoutCtrl" layout="column" layout-fill class="layout-content">
 
 
   <h3 class="layout-title">Responsive Layout</h3>
@@ -36,7 +36,7 @@
   </p>
 
   <hljs lang="html">
-<div layout="horizontal" layout-padding>
+<div layout="row" layout-padding>
   <div flex>I'm on the left, and there's an empty area between.</div>
   <div flex>I'm on the right, and there's an empty area between.</div>
 </div>
@@ -47,7 +47,7 @@
     <code>layout-fill</code> forces the layout element to fill its parent container.
   </p>
   <hljs lang="html">
-<div layout="vertical" layout-fill>
+<div layout="column" layout-fill>
   This layout fills up 100% of its parent's width and height.
 </div>
   </hljs>

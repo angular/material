@@ -21,26 +21,28 @@
 }
 
 .layout-demo [layout],
-.layout-demo [layout-sm],
-.layout-demo [layout-md],
-.layout-demo [layout-lg],
+.layout-demo [layout-phone],
+.layout-demo [layout-tablet],
+.layout-demo [layout-tablet-landscape],
+.layout-demo [layout-pc],
 .layout-guidelines [layout],
-.layout-guidelines [layout-sm],
-.layout-guidelines [layout-md],
-.layout-guidelines [layout-lg] {
+.layout-guidelines [layout-phone],
+.layout-guidelines [layout-tablet],
+.layout-guidelines [layout-tablet-landscape],
+.layout-guidelines [layout-pc] {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAKSURBVAgdY2AAAAACAAHPyDXlAAAAAElFTkSuQmCC");
   background-position: -1px -1px;
   background-repeat: no-repeat;
 }
 
-.layout-demo [layout="horizontal"],
-.layout-guidelines [layout="horizontal"] {
+.layout-demo [layout="row"],
+.layout-guidelines [layout="row"] {
   background-position: 50% 50%;
   background-repeat: repeat-x;
 }
 
-.layout-demo [layout="vertical"],
-.layout-guidelines [layout="vertical"] {
+.layout-demo [layout="column"],
+.layout-guidelines [layout="column"] {
   background-position: 50% 50%;
   background-repeat: repeat-y;
 }

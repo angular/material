@@ -1,8 +1,8 @@
-<div layout="vertical" layout-fill class="doc-content">
+<div layout="column" layout-fill class="doc-content">
   <div>
     {$ doc.content | marked $}
   </div>
-  <div flex layout="vertical">
+  <div flex layout="column">
 
     <section ng-repeat="demo in currentComponent.demos" 
       class="demo-container md-whiteframe-z1 {{currentComponent.componentId}}-{{demo.id}}"

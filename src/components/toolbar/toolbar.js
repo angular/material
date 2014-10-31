@@ -27,7 +27,7 @@ angular.module('material.components.toolbar', [
  *
  * @usage
  * <hljs lang="html">
- * <div layout="vertical" layout-fill>
+ * <div layout="column" layout-fill>
  *   <md-toolbar>
  *
  *     <div class="md-toolbar-tools">

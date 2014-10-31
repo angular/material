@@ -108,7 +108,7 @@ function mdSidenavService($mdComponentRegistry) {
  *
  * @usage
  * <hljs lang="html">
- * <div layout="horizontal" ng-controller="MyController">
+ * <div layout="row" ng-controller="MyController">
  *   <md-sidenav md-component-id="left" class="md-sidenav-left">
  *     Left Nav!
  *   </md-sidenav>

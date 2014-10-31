@@ -1,9 +1,9 @@
-<div ng-controller="AppCtrl" class="full" layout="vertical" layout-padding>
+<div ng-controller="AppCtrl" class="full" layout="column" layout-padding>
   <p class="inset">
     Open a dialog over the app's content. Press escape or click outside to close the dialog.
   </p>
 
-  <div layout="vertical" layout-sm="horizontal" layout-align="center" >
+  <div layout="column" layout-align="center" >
     <md-button class="md-primary" ng-click="showAlert($event)">
       Alert Dialog
     </md-button>
@@ -18,7 +18,7 @@
   </div>
   
   <br/>
-  <b layout="horizontal" layout-align="center center" layout-padding>
+  <b layout="row" layout-align="center center" layout-padding>
     {{alert}}
   </b>
 </div>

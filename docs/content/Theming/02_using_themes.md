@@ -37,7 +37,7 @@ To set a custom theme within an area of your application, set the `md-theme` att
 An element will use the default theme if no `md-theme` is defined on that element or any of its ancestors.
 
 <hljs lang="html">
-<div ng-app="myApp" ng-controller="myAppController" layout="vertical">
+<div ng-app="myApp" ng-controller="myAppController" layout="column">
         
   <!-- The md-toolbar and all of its children will use the indigo theme -->
   <md-toolbar md-theme="indigo">
