@@ -368,11 +368,11 @@ $checkbox-ripple-color: map-get($checkbox-color-palette, '600') !default;
 $checkbox-checked-ripple-color: map-get($color-grey, '600') !default;
 $checkbox-border-color: $input-border-color !default;
 $checkbox-disabled-border-color: $input-disabled-border-color !default;
-$content-background-color: $background-color-base !default;
 $dialog-border-radius: 4px !default;
 $dialog-color-palette: $background-color-palette !default;
 $dialog-background-color: map-get($dialog-color-palette, 'A100') !default;
 $dialog-border-color: rgba(map-get($dialog-color-palette, '1000'), 0.12) !default;
+$content-background-color: $background-color-base !default;
 $divider-color: $foreground-quarternary-color !default;
 $progress-circle-background: transparent !default;
 $progress-circle-color: map-get($primary-color-palette, '500') !default;
@@ -684,11 +684,6 @@ md-checkbox.md-#{$theme-name}-theme {
 }
 
 
-md-content.md-#{$theme-name}-theme {
-  background-color: $content-background-color;
-}
-
-
 md-dialog.md-#{$theme-name}-theme {
   border-radius: $dialog-border-radius;
   background-color: $dialog-background-color;
@@ -698,6 +693,11 @@ md-dialog.md-#{$theme-name}-theme {
   }
 }
 
+
+
+md-content.md-#{$theme-name}-theme {
+  background-color: $content-background-color;
+}
 
 
 md-divider.md-#{$theme-name}-theme {
