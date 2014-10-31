@@ -77,9 +77,9 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *       targetEvent: $event,
  *       controller: 'DialogController',
  *       template: 
- *         '<md-dialog>
+ *         '<md-dialog>' +
  *         '  <md-content>Hello!</md-content>' +
- *         '  <div class="md-actions">
+ *         '  <div class="md-actions">' +
  *         '    <md-button ng-click="closeDialog()">' +
  *         '      Close' +
  *         '    </md-button>' +
