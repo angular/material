@@ -109,9 +109,9 @@
      * @restrict A
      *
      * @description
-     * The `<div  md-swipe-left="<expression" >` directive identifies an element on which
+     * The `<div  md-swipe-left="expression">` directive identifies an element on which
      * HammerJS horizontal swipe left and pan left support will be active. The swipe/pan action
-     * can result in custom activity trigger by evaluating `<expression>`.
+     * can result in custom activity trigger by evaluating `expression`.
      *
      * @param {boolean=} noPan Use of attribute indicates flag to disable detection of `panleft` activity
      *
@@ -143,9 +143,9 @@
      * @restrict A
      *
      * @description
-     * The `<div  md-swipe-right="<expression" >` directive identifies functionality
+     * The `<div  md-swipe-right="expression">` directive identifies functionality
      * that attaches HammerJS horizontal swipe right and pan right support to an element. The swipe/pan action
-     * can result in activity trigger by evaluating `<expression>`
+     * can result in activity trigger by evaluating `expression`
      *
      * @param {boolean=} noPan Use of attribute indicates flag to disable detection of `panright` activity
      *
