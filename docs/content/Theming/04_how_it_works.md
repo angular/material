@@ -46,7 +46,8 @@ Additionally, each custom theme file in `/themes/*.scss` overrides the variables
 
 Angular Material uses both an `md-theme` directive and an `$mdTheming` service to provide JavaScript support for theming.
 
-`$mdTheming` is an internal service that registers an element as 'themable': it can inherit the theme from parent elements.
+- `md-theme` is a directive that will set and watch the element's theme so all children elements can easily inherit the styles.
+- `$mdTheming` is an internal service that registers an element as 'themable': it can inherit the theme from parent elements.
 
 `$mdTheming` will look up the DOM for the nearest parent with an `md-theme` attribute, and add that parent's theme class to its own element.
 
