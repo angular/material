@@ -1,5 +1,67 @@
+<a name="0.5.0"></a>
+## 0.5.0  (2014-10-31)
+
+Version 0.5.0 introduces [theming support](https://material.angularjs.org/#/Theming/01_introduction), improves stability, and enhances API documentation.
+
+#### Features
+
+* **theming:** introduce theming support, documented at [Theming Introduction](https://material.angularjs.org/#/Theming/01_introduction) ([80768270](https://github.com/angular/material/commit/807682707045de90d30a0718b3df963fef0dafc8))
+* **sidenav:**
+   add is-open attr, rename lock-open to is-locked-open ([f66795e8](https://github.com/angular/material/commit/f66795e8378299ccd84aea69a72f5cc0704589bc))
+  * add `lock-open` attribute ([105b0e0a](https://github.com/angular/material/commit/105b0e0ae6b2d30385d2aa8bee6190dd7ce1775c), closes [#446](https://github.com/angular/material/issues/446))
+
+#### Bug Fixes
+
+* **mdAria**: add better warnings ([3368c931](https://github.com/angular/material/commit/3368c931cee4638dac6dc26f7a4d8b37dc6e4858), closes [#366](https://github.com/angular/material/issues/366))
+* **md-input-group:** disable with ARIA ([72bad32a](https://github.com/angular/material/commit/72bad32ae4d48049e52602a4feda8eef9fbe6f0c))
+* **slider:** slider default value in ng-repeat corrected ([b652d863](https://github.com/angular/material/commit/b652d8634d2177ef8ec44cd163b4cf6d348c4795), closes [#479](https://github.com/angular/material/issues/479))
+* **css:**
+  * add autoprefixer support for firefox and ie ([a1bea485](https://github.com/angular/material/commit/a1bea485c7b97974f82a3a81b440964d70514eca))
+  * fix invalid flex properties ([c1d9b5a2](https://github.com/angular/material/commit/c1d9b5a2f58e33cdcffc85484ddce421121d2636))
+  * remove deprecated css properties ([c7e3a83c](https://github.com/angular/material/commit/c7e3a83c28cd145e77cc7d61db918cc881d1ea7c))
+* **textFloat:**
+  * improved logic to determine if md-input has a value ([5c407b5f](https://github.com/angular/material/commit/5c407b5fdfcf1c69cf69c06427ab0b166fecbed7))
+  * improve ARIA pairing links between label and input ([457b3750](https://github.com/angular/material/commit/457b37506c9f076b42e76cd8c1f591087d729a50), closes [#483](https://github.com/angular/material/issues/483))
+  * added support for label/hint expressions ([3674a514](https://github.com/angular/material/commit/3674a51437871a2366a65636127f8c6a6010f560), closes [#462](https://github.com/angular/material/issues/462))
+  * fix keyboard tabbing support ([27f43751](https://github.com/angular/material/commit/27f43751be83a7b3e3a1a92d052fe1e016525ff1), closes [#458](https://github.com/angular/material/issues/458))
+
+#### Breaking Changes
+
+* **colors:**
+  * The `md-theme-*` classes have all been removed, in favor of themes.
+  * Instead, use `md-primary` and `md-warn` classes on an element when a theme is set.
+* **bottomSheet:**
+  * `list` class has been renamed to `md-list`
+  * `grid` class has been renamed to `md-grid`
+  * `has-header` class has been renamed to `md-has-header`
+  * `grid-text` class has been renamed to `md-grid-text`.
+* **button:**
+  * `md-button-colored` class has been changed to `md-primary` and `md-warn` color classes.
+  * All classes that start with `md-button-fab` now start with `md-fab`.
+    * `md-button-fab` to `md-fab`.
+    * `md-button-fab-top-left` to `md-fab-top-left`
+    * `md-button-fab-top-right` to `md-fab-top-right`
+    * `md-button-fab-bottom-left` to `md-fab-bottom-left`
+    * `md-button-fab-bottom-right` to `md-fab-bottom-right`
+  * `md-button-cornered` class has been changed to `md-cornered`
+  * `md-button-icon` class has been changed to `md-icon`
+  * `md-button-raised` class has been changed to `md-raised`
+* **content:** `md-content-padding` class has been renamed to `md-padding`.
+* **dialog:**
+  * `dialog-content` class has been removed. Use an `md-content` element instead.
+  * `dialog-actions` has been renamed to `md-actions`
+* **subheader:** `md-subheader-colored` is now `md-primary`.
+* **textFloat:**
+  * use of `<md-input-group>` is deprecated to recommend use of `<md-text-float >` markup
+  * improved namespace of input and label so text field styles are only applied within **md-input-group** usages
+* **toast:** `toast-action` has been renamed to `md-action`
+* **toolbar:**
+  * `md-toolbar-tall` class has been renamed to `md-tall`
+  * `md-toolbar-medium-tall` class has been renamed to `md-medium-tall`
+* **whiteframe:** md-whiteframe-z\* classes no longer set z-index, only shadow
+
 <a name="0.4.2"></a>
-### 0.4.2  (2014-10-16)
+## 0.4.2  (2014-10-16)
 
 This release adds support for the [official Angular 1.3 release](https://github.com/angular/angular.js/blob/master/CHANGELOG.md) and includes improvements to both the document generator and component demos.
 
