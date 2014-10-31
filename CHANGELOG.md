@@ -52,8 +52,7 @@ Version 0.5.0 introduces [theming support](https://material.angularjs.org/#/Them
   * `dialog-actions` has been renamed to `md-actions`
 * **subheader:** `md-subheader-colored` is now `md-primary`.
 * **textFloat:**
-  * use of `<md-input-group>` is deprecated to recommend use of `<md-text-float >` markup
-  * improved namespace of input and label so text field styles are only applied within **md-input-group** usages
+  * use of `<md-input-group>` is deprecated, `<md-text-float>` markup can be used for most cases
 * **toast:** `toast-action` has been renamed to `md-action`
 * **toolbar:**
   * `md-toolbar-tall` class has been renamed to `md-tall`
