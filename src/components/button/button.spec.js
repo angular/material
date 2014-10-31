@@ -22,7 +22,7 @@ describe('md-button', function() {
 
   it('should have inner-anchor with attrs if ng-href attr is given', inject(function($compile, $rootScope) {
 
-    var button = $compile('<md-button ng-href="/link" rel="foo" target="bar" something="baz">' +
+    var button = $compile('<md-button ng-href="/link" rel="foo" target="bar" something="baz" title="awesome">' +
                             '<div>content</div>' +
                           '</md-button>')($rootScope);
 
@@ -33,6 +33,7 @@ describe('md-button', function() {
 
     expect(anchor.attr('ng-href')).toBe('/link');
     expect(anchor.attr('rel')).toBe('foo');
+    expect(anchor.attr('title')).toBe('awesome');
     expect(anchor.attr('target')).toBe('bar');
     expect(anchor.attr('something')).toBeFalsy();
   }));
@@ -53,4 +54,14 @@ describe('md-button', function() {
     expect(innerButton.attr('form')).toBe('bar');
   }));
 
+  it('should have a label on inner-button', inject(function($compile, $rootScope){
+    var button = $compile('<md-button class="md-fab" aria-label="Time">' +
+                            '<md-icon icon=""></md-icon>' +
+                          '</md-button>')($rootScope);
+
+    $rootScope.$apply();
+    var innerButton = button.find('button');
+
+    expect(innerButton.attr('aria-label')).toBe('Time');
+  }));
 });

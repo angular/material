@@ -72,7 +72,7 @@
         ng-if="path().indexOf('demo') > -1">
         <span flex></span>
         <md-button ng-repeat="doc in currentComponent.docs"
-          ng-href="#{{doc.url}}">
+          ng-href="#{{doc.url}}" aria-label="{{ doc | humanizeDoc }}">
           <span ng-bind="doc | humanizeDoc | directiveBrackets"></span>
         </md-button>
       </div>

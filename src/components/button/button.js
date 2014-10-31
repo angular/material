@@ -64,11 +64,11 @@ function MdButtonDirective(ngHrefDirectives, $mdInkRipple, $mdAria, $mdUtil, $md
       // so this element can be clicked like a normal `<a>`.
       if (attr.ngHref || attr.href) {
         innerElement = angular.element('<a>');
-        attributesToCopy = ['ng-href', 'href', 'rel', 'target'];
+        attributesToCopy = ['ng-href', 'href', 'rel', 'target', 'title', 'aria-label'];
       // Otherwise, just add an inner button element (for form submission etc)
       } else {
         innerElement = angular.element('<button>');
-        attributesToCopy = ['type', 'disabled', 'ng-disabled', 'form'];
+        attributesToCopy = ['type', 'disabled', 'ng-disabled', 'form', 'aria-label'];
       }
 
       angular.forEach(attributesToCopy, function(name) {
@@ -101,7 +101,7 @@ function MdButtonDirective(ngHrefDirectives, $mdInkRipple, $mdAria, $mdUtil, $md
 
       return function postLink(scope, element, attr) {
         $mdTheming(element);
-        $mdAria.expect(element, 'aria-label', element.text());
+        $mdAria.expect(element, 'aria-label', true);
         $mdInkRipple.attachButtonBehavior(element);
       };
     }
