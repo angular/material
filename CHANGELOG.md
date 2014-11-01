@@ -1,5 +1,5 @@
 <a name="0.5.0"></a>
-## 0.5.0  (2014-10-31)
+## 0.5.1  (2014-10-31)
 
 Version 0.5.0 introduces [theming support](https://material.angularjs.org/#/Theming/01_introduction), improves stability, adds responsive features, and enhances API documentation.
 
