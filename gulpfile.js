@@ -1,7 +1,6 @@
 
 var _ = require('lodash');
 var changelog = require('conventional-changelog');
-var dgeni = require('dgeni');
 var fs = require('fs');
 var path = require('path');
 var glob = require('glob').sync;
@@ -29,7 +28,9 @@ var uglify = require('gulp-uglify');
 var webserver = require('gulp-webserver');
 
 var buildConfig = require('./config/build.config');
-var karmaConf = require('./config/karma.conf.js');
+var karma       = require('karma').server;
+
+
 var utils = require('./scripts/gulp-utils.js');
 
 var IS_RELEASE_BUILD = !!argv.release;
@@ -86,14 +87,21 @@ gulp.task('jshint', function() {
 /**
  * Karma Tests
  */
-argv.browsers && (karmaConf.browsers = argv.browsers.trim().split(','));
 gulp.task('karma', function(done) {
-  karmaConf.singleRun = true;
-  karma.start(karmaConf, done);
+  karma.start({
+    singleRun:true,
+    autoWatch:false,
+    browsers : argv.browsers ? argv.browsers.trim().split(',') : ['Chrome'],
+    configFile: __dirname + '/config/karma.conf.js'
+  },done);
 });
 
 gulp.task('karma-watch', function(done) {
-  karma.start(karmaConf, done);
+  karma.start({
+    singleRun:false,
+    autoWatch:true,
+    configFile: __dirname + '/config/karma.conf.js'
+  },done);
 });
 
 gulp.task('karma-sauce', function(done) {
