@@ -19,6 +19,32 @@ describe('$mdDialog', function() {
     });
   }));
 
+  it('should support onComplete callbacks within `show()`', inject(function($mdDialog, $rootScope, $timeout) {
+
+    var template = '<md-dialog>Hello</md-dialog>';
+    var parent = angular.element('<div>');
+    var ready = false;
+
+    $mdDialog.show({
+      template: template,
+      parent: parent,
+      onComplete: function() {
+        ready = true;
+      }
+    });
+
+    $rootScope.$apply();
+
+      expect( ready ).toBe( false );
+
+    $timeout.flush();
+
+    var container = parent.find('.md-dialog-container');
+    expect(container.length).toBe(1);
+    expect( ready ).toBe( true );
+
+  }));
+
   it('should append dialog with container', inject(function($mdDialog, $rootScope) {
 
     var template = '<md-dialog>Hello</md-dialog>';
