@@ -128,6 +128,8 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *   - `controllerAs` - `{string=}`: An alias to assign the controller to on the scope.
  *   - `parent` - `{element=}`: The element to append the dialog to. Defaults to appending
  *     to the root element of the application.
+ *   - `onComplete` `{function=}`: Callback function used to announce when the show() action is
+ *     finished.
  *
  * @returns {promise} A promise that can be resolved with `$mdDialog.hide()` or
  * rejected with `mdDialog.cancel()`.

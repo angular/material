@@ -169,6 +169,11 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate,
             if (options.themable) $mdTheming(element);
             var ret = options.onShow(options.scope, element, options);
             return $q.when(ret)
+              .then(function(){
+                  // Issue onComplete callback when the `show()` finishes
+                  var notify = options.onComplete || angular.noop;
+                  notify.apply(null, [options.scope, element, options]);
+              })
               .then(startHideTimeout);
 
             function startHideTimeout() {
