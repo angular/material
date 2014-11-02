@@ -6,3 +6,29 @@
 .gap {
   width:50px;
 }
+
+
+.md-subheader {
+    background-color: #dcedc8;
+    margin: 0px;
+}
+
+h2.md-subheader {
+    margin: 0px;
+    margin-left: -24px;
+    margin-right: -24px;
+    margin-top: -24px;
+}
+
+h2.md-subheader.md-sticky-clone {
+    margin-right:0px;
+    margin-top:0px;
+
+    box-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16);
+}
+
+h2 .md-subheader-content {
+    padding-left: 10px;
+}
+
+
