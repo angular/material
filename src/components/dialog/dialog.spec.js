@@ -28,7 +28,8 @@ describe('$mdDialog', function() {
     $mdDialog.show({
       template: template,
       parent: parent,
-      onComplete: function() {
+      onComplete: function(scope, element, options) {
+        expect( arguments.length ).toEqual( 3 );
         ready = true;
       }
     });
