@@ -114,6 +114,14 @@ describe('mdSidenav', function() {
       expect(el.hasClass('md-closed')).toBe(false);
     });
 
+    it('should deregister component when element is destroyed', inject(function($mdComponentRegistry) {
+      var el = setup('component-id="left"');
+      el.trigger('$destroy');
+
+      var instance = $mdComponentRegistry.get('left');
+      expect(instance).toBe(null);
+    }));
+
   });
 
   describe('$mdSidenav Service', function() {
