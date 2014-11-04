@@ -210,7 +210,6 @@ gulp.task('build-scss', ['build-default-theme'], function() {
     .pipe(gulp.dest(config.outputDir))
     .pipe(sass())
     .pipe(autoprefix())
-    // .pipe(insert.prepend(config.banner))
     .pipe(gulp.dest(config.outputDir))
     .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
       .pipe(minifyCss)
