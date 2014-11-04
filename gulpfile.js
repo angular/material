@@ -196,6 +196,8 @@ function buildTheme(theme) {
 gulp.task('build-scss', ['build-default-theme'], function() {
   var defaultThemeContents = fs.readFileSync('themes/_default-theme.scss');
 
+  gulp.src('themes/*.scss')
+    .pipe(gulp.dest(config.outputDir+'themes/'));
 
   var scssGlob = path.join(config.paths, '*.scss');
   gutil.log("Building css files...");
@@ -204,9 +206,11 @@ gulp.task('build-scss', ['build-default-theme'], function() {
     .pipe(filter(['**', '!**/*-theme.scss'])) // remove once ported
     .pipe(concat('angular-material.scss'))
     .pipe(insert.append(defaultThemeContents))
+    .pipe(insert.prepend(config.banner))
+    .pipe(gulp.dest(config.outputDir))
     .pipe(sass())
     .pipe(autoprefix())
-    .pipe(insert.prepend(config.banner))
+    // .pipe(insert.prepend(config.banner))
     .pipe(gulp.dest(config.outputDir))
     .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
       .pipe(minifyCss)
