@@ -16,7 +16,8 @@ angular.module('textFieldDemo1', ['ngMaterial'])
        city:      "Mountain View" ,
        state:     "CA" ,
        country:   "USA" ,
-       postalCode : "94043"
+       postalCode : "94043",
+       intro: ""
     };
   });
 
