@@ -77,7 +77,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *       targetEvent: $event,
  *       template:
  *         '<md-dialog>' +
- *         '  <md-content>Hello!</md-content>' +
+ *         '  <md-content>Hello {{ userName }}!</md-content>' +
  *         '  <div class="md-actions">' +
  *         '    <md-button ng-click="closeDialog()">' +
  *         '      Close' +
@@ -85,7 +85,8 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *         '  </div>' +
  *         '</md-dialog>',
  *       controller: 'DialogController',
- *       onComplete: afterShowAnimation
+ *       onComplete: afterShowAnimation,
+ *       locals: { name: 'Bobby' }
  *     });
  *
  *     // When the 'enter' animation finishes...
@@ -94,7 +95,8 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *        // post-show code here: DOM element focus, etc.
  *     };
  * });
- * app.controller('DialogController', function($scope, $mdDialog) {
+ * app.controller('DialogController', function($scope, $mdDialog, name) {
+ *   $scope.userName = name;
  *   $scope.closeDialog = function() {
  *     $mdDialog.hide();
  *   };
