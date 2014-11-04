@@ -11,3 +11,6 @@ dist
 /vendor
 
 .polymer-qp
+
+atlassian-ide-plugin.xml
+*.iml
