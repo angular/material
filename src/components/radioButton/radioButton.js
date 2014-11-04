@@ -72,11 +72,11 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming) {
       };
 
     function keydownListener(ev) {
-      if (ev.which === $mdConstant.KEY_CODE.LEFT_ARROW) {
+      if (ev.which === $mdConstant.KEY_CODE.LEFT_ARROW || ev.which === $mdConstant.KEY_CODE.UP_ARROW) {
         ev.preventDefault();
         rgCtrl.selectPrevious();
       }
-      else if (ev.which === $mdConstant.KEY_CODE.RIGHT_ARROW) {
+      else if (ev.which === $mdConstant.KEY_CODE.RIGHT_ARROW || ev.which === $mdConstant.KEY_CODE.DOWN_ARROW) {
         ev.preventDefault();
         rgCtrl.selectNext();
       }
