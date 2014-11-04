@@ -50,7 +50,7 @@ function mdSidenavController($scope, $element, $attrs, $timeout, $mdSidenav, $md
 
   var self = this;
 
-  $mdComponentRegistry.register(this, $attrs.componentId);
+  this.destroy = $mdComponentRegistry.register(this, $attrs.componentId);
 
   this.isOpen = function() {
     return !!$scope.isOpen;
@@ -191,6 +191,8 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
     )(scope);
 
     $mdTheming.inherit(backdrop, element);
+
+    element.on('$destroy', sidenavCtrl.destroy);
 
     scope.$watch('isOpen', setOpen);
     scope.$watch(function() {
