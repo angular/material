@@ -3,9 +3,9 @@
 
     <section ng-repeat="demo in demos" 
       class="demo-container md-whiteframe-z1 {{currentComponent.componentId}}-{{demo.id}}"
-      ng-class="{'show-source': demo.$showSource}">
+      ng-class="{'show-source':demo.$showSource}" >
 
-      <md-toolbar class="demo-toolbar"> 
+      <md-toolbar class="demo-toolbar" >
         <div class="md-toolbar-tools">
           <span>{{demo.label}}</span>
           <span flex></span>
@@ -17,8 +17,9 @@
         </div>
       </md-toolbar>
 
+      <!-- Source views -->
       <md-tabs style="border-top: solid 1px #00ADC3;"
-        class="demo-source-tabs">
+        class="demo-source-tabs" ng-show="demo.$showSource">
         <md-tab ng-repeat="file in demo.$files"
                       active="file === demo.$selectedFile"
                       ng-click="demo.$selectedFile = file"
@@ -31,7 +32,7 @@
         </md-tab>
       </md-tabs>
 
-
+      <!-- Live Demos -->
       <div demo-include="demo">
       </div>
     </section>

@@ -129,9 +129,19 @@ code:not(.highlight) {
 .demo-source-container code {
   min-height: 100%;
 }
+
+.md-tab-content {
+  position:relative;
+}
+
 code.highlight {
   display: block;
   overflow-wrap: break-word;
+
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
 }
 
 pre > code.highlight {
@@ -146,27 +156,30 @@ pre > code.highlight {
   position: relative;
   padding-bottom: 0;
 }
-.demo-container.show-source {
-  padding-bottom: 448px;
-}
 
-[demo-include] {
+.demo-source-tabs {
   z-index: 1;
-  -webkit-transition: -webkit-transform 0.2s ease-in-out;
-  transition: transform 0.2s ease-in-out;
-  -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  max-height: 448px;
   min-height: 448px;
   background: #fff;
   overflow: hidden;
 }
 
-.show-source [demo-include] {
-  -webkit-transform: translate3d(0, 448px, 0);
-  transform: translate3d(0, 448px, 0);
+md-tabs.demo-source-tabs md-tab {
+  background-color: #444444 !important;
+}
+md-tabs.demo-source-tabs md-tab-label {
+  color: #f3f3f3 !important;
+}
+
+.demo-source-tabs.ng-hide {
+  max-height: 0px;
+  min-height: 0px;
 }
 .demo-source-tabs {
-  position: absolute;
+  position: relative;
   width: 100%;
   z-index: 0;
 }
@@ -191,6 +204,10 @@ pre > code.highlight {
 
 .demo-content > div[layout-fill] {
   min-height: 448px;
+}
+
+.show-source md-toolbar.demo-toolbar {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.36);
 }
 
 md-toolbar.demo-toolbar,
@@ -231,6 +248,12 @@ md-toolbar.demo-toolbar md-button {
   max-width: 100%;
   overflow-wrap: break-word;
 }
+
+.show-source div[demo-include] {
+  border-top: #ddd solid 2px;
+}
+
+
 .menu-separator-icon {
   margin: 0;
 }
