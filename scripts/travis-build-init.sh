@@ -12,7 +12,8 @@ function init {
 }
 
 function run {
-  if [[ "$TRAVIS_PULL_REQUEST" == "true" ]]; then
+  if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then
+    echo "-- This is a pull request; not pushing out build."
     exit 0
   fi
 
