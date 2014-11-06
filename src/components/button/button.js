@@ -8,11 +8,13 @@
 angular.module('material.components.button', [
   'material.core',
   'material.animations',
-  'material.services.theming'
+  'material.services.aria',
+  'material.services.theming',
 ])
   .directive('mdButton', [
     '$mdInkRipple',
     '$mdTheming',
+    '$mdAria',
     MdButtonDirective
   ]);
 
@@ -46,7 +48,7 @@ angular.module('material.components.button', [
  *  </md-button>
  * </hljs>
  */
-function MdButtonDirective($mdInkRipple, $mdTheming) {
+function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria) {
 
   return {
     restrict: 'E',
@@ -72,6 +74,12 @@ function MdButtonDirective($mdInkRipple, $mdTheming) {
   function postLink(scope, element, attr) {
     $mdTheming(element);
     $mdInkRipple.attachButtonBehavior(element);
+
+    //We only need to expect aria-label on FAB buttons, or 
+    //buttons that could be used with icons and no text
+    if (element.hasClass('md-fab')) {
+      $mdAria.expect(element, 'aria-label');
+    }
 
     // For anchor elements, we have to set tabindex manually when the 
     // element is disabled
