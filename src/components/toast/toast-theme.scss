@@ -6,7 +6,7 @@ md-toast.md-#{$theme-name}-theme {
   background-color: $toast-background-color;
   color: $toast-text-color;
 
-  md-button {
+  .md-button {
     color: $toast-text-color;
   }
 

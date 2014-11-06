@@ -20,7 +20,7 @@ $button-fab-toast-offset: $toast-height + $toast-margin;
   }
 }
 
-md-button {
+.md-button {
 
   user-select: none;
   position: relative; //for child absolute-positioned <canvas>
@@ -28,8 +28,10 @@ md-button {
 
   outline: none;
   border: 0;
-  padding: 0;
+  padding: 6px;
   margin: 0;
+  background: transparent;
+  white-space: nowrap;
 
   text-align: center;
 
@@ -41,43 +43,10 @@ md-button {
   font-size: inherit;
   font-family: inherit;
   line-height: inherit;
+  text-decoration: none;
 
   cursor: pointer;
   overflow: hidden;   // for ink containment
-
-  // reserved for inner buttons and inner hrefs
-  .md-button-inner {
-    display: block;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    border: none;
-    color: inherit;
-    outline: none;
-    text-transform: inherit;
-    font-weight: inherit;
-    font-style: inherit;
-    font-variant: inherit;
-    font-size: inherit;
-    font-family: inherit;
-    line-height: inherit;
-    white-space: nowrap;
-    padding: 6px;
-  }
-  a {
-    text-decoration: none;
-  }
-
-  // If we have a href and an inner anchor, let the clicks pass through to the anchor
-  &[href] {
-    pointer-events: none;
-    .md-button-inner {
-      pointer-events: auto;
-    }
-  }
-
 
   &.md-cornered {
     border-radius: 0;
@@ -126,7 +95,7 @@ md-button {
   &:not([disabled]) {
     &.md-raised,
     &.md-fab {
-      &.focus,
+      &:focus,
       &:hover {
         transform: translate3d(0, -1px, 0);
         @extend .md-shadow-bottom-z-2;
@@ -136,22 +105,26 @@ md-button {
 }
 
 .md-toast-open-top {
-  md-button.md-fab-top-left,
-  md-button.md-fab-top-right {
+  .md-button.md-fab-top-left,
+  .md-button.md-fab-top-right {
     transform: translate3d(0, $button-fab-toast-offset, 0);
-    &.focus,
-    &:hover:not([disabled]) {
-      transform: translate3d(0, $button-fab-toast-offset - 1, 0);
+    &:not([disabled]) {
+      &:focus,
+      &:hover {
+        transform: translate3d(0, $button-fab-toast-offset - 1, 0);
+      }
     }
   }
 }
 .md-toast-open-bottom {
-  md-button.md-fab-bottom-left,
-  md-button.md-fab-bottom-right {
+  .md-button.md-fab-bottom-left,
+  .md-button.md-fab-bottom-right {
     transform: translate3d(0, -$button-fab-toast-offset, 0);
-    &.focus,
-    &:hover {
-      transform: translate3d(0, -$button-fab-toast-offset - 1, 0);
+    &:not([disabled]) {
+      &:focus,
+      &:hover {
+        transform: translate3d(0, -$button-fab-toast-offset - 1, 0);
+      }
     }
   }
 }

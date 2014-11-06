@@ -12,10 +12,8 @@ angular.module('material.components.button', [
   'material.services.theming'
 ])
   .directive('mdButton', [
-    'ngHrefDirective',
     '$mdInkRipple',
     '$mdAria',
-    '$mdUtil',
     '$mdTheming',
     MdButtonDirective
   ]);
@@ -50,61 +48,27 @@ angular.module('material.components.button', [
  *  </md-button>
  * </hljs>
  */
-function MdButtonDirective(ngHrefDirectives, $mdInkRipple, $mdAria, $mdUtil, $mdTheming ) {
-  var ngHrefDirective = ngHrefDirectives[0];
+function MdButtonDirective($mdInkRipple, $mdAria, $mdTheming) {
 
   return {
     restrict: 'E',
-    compile: function(element, attr) {
-      var innerElement;
-      var attributesToCopy;
-
-
-      // Add an inner anchor if the element has a `href` or `ngHref` attribute,
-      // so this element can be clicked like a normal `<a>`.
-      if (attr.ngHref || attr.href) {
-        innerElement = angular.element('<a>');
-        attributesToCopy = ['ng-href', 'href', 'rel', 'target', 'title', 'aria-label'];
-      // Otherwise, just add an inner button element (for form submission etc)
-      } else {
-        innerElement = angular.element('<button>');
-        attributesToCopy = ['type', 'disabled', 'ng-disabled', 'form', 'aria-label'];
-      }
-
-      angular.forEach(attributesToCopy, function(name) {
-        var camelCaseName = $mdUtil.camelCase(name);
-        if (attr.hasOwnProperty(camelCaseName)) {
-          innerElement.attr(name, attr[camelCaseName]);
-        }
-      });
-
-      innerElement
-        .addClass('md-button-inner')
-        .append(element.contents())
-        // Since we're always passing focus to the inner element,
-        // add a focus class to the outer element so we can still style
-        // it with focus.
-        .on('focus', function() {
-          element.addClass('focus');
-        })
-        .on('blur', function() {
-          element.removeClass('focus');
-        });
-
-      element.
-        append(innerElement)
-        .attr('tabIndex', -1)
-        //Always pass focus to innerElement
-        .on('focus', function() {
-          innerElement.focus();
-        });
-
-      return function postLink(scope, element, attr) {
-        $mdTheming(element);
-        $mdAria.expect(element, 'aria-label', true);
-        $mdInkRipple.attachButtonBehavior(element);
-      };
-    }
+    replace: true,
+    transclude: true,
+    template: getTemplate,
+    link: postLink
   };
+  
+  function getTemplate(element, attr) {
+    if (angular.isDefined(attr.href) || angular.isDefined(attr.ngHref)) {
+      return '<a class="md-button" ng-transclude></a>';
+    } else {
+      return '<button class="md-button" ng-transclude></button>';
+    }
+  }
+  function postLink(scope, element, attr) {
+    $mdTheming(element);
+    $mdAria.expect(element, 'aria-label', true);
+    $mdInkRipple.attachButtonBehavior(element);
+  }
 
 }
