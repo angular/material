@@ -12,6 +12,10 @@ function init {
 }
 
 function run {
+  if [[ "$TRAVIS_PULL_REQUEST" == "true" ]]; then
+    exit 0
+  fi
+
   cd ../
 
   NEW_VERSION="$(readJsonProp "package.json" "version")-master-$(echo $SHA | head -c 7)"
