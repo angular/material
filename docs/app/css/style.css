@@ -291,8 +291,8 @@ md-toolbar.demo-toolbar .md-button {
 }
 .api-options-bar.with-icon md-icon {
   position: absolute;
-  top: 2px;
-  left: 4px;
+  top: -3px;
+  left: 2px;
 }
 .api-options-bar.with-icon .md-button span {
   margin-left: 22px;
