@@ -72,19 +72,18 @@ function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria) {
   }
 
   function postLink(scope, element, attr) {
+    var node = element[0];
     $mdTheming(element);
     $mdInkRipple.attachButtonBehavior(element);
 
-    //We only need to expect aria-label on FAB buttons, or 
-    //buttons that could be used with icons and no text
-    if (element.hasClass('md-fab')) {
+    var elementHasText = node.textContent.trim();
+    if (!elementHasText) {
       $mdAria.expect(element, 'aria-label');
     }
 
     // For anchor elements, we have to set tabindex manually when the 
     // element is disabled
     if (isAnchor(attr)) {
-      var node = element[0];
       scope.$watch(function() {
         return node.hasAttribute('disabled');
       }, function(isDisabled) {

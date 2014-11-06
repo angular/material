@@ -9,7 +9,7 @@ angular.module('material.services.aria', [])
 function AriaService($$rAF, $log) {
 
   return {
-    expect: expectAttribute,
+    expect: expect,
     expectAsync: expectAsync,
     expectWithText: expectWithText
   };
@@ -20,12 +20,12 @@ function AriaService($$rAF, $log) {
    * @param attrName
    * @param {optional} defaultValue What to set the attr to if no value is found
    */
-  function expectAttribute(element, attrName, defaultValue) {
+  function expect(element, attrName, defaultValue) {
     var node = element[0];
     if (!node.hasAttribute(attrName)) {
 
-      if (angular.isDefined(defaultValue) && defaultValue.length) {
-        defaultValue = String(defaultValue).trim();
+      defaultValue = angular.isString(defaultValue) && defaultValue.trim() || '';
+      if (defaultValue.length) {
         element.attr(attrName, defaultValue);
       } else {
         $log.warn('ARIA: Attribute "', attrName, '", required for accessibility, is missing on node:', node);
@@ -39,7 +39,7 @@ function AriaService($$rAF, $log) {
     // the text may not be defined yet in the case of a binding.
     // There is a higher chance that a binding will be defined if we wait one frame.
     $$rAF(function() {
-      expectAttribute(element, attrName, defaultValueGetter());
+      expect(element, attrName, defaultValueGetter());
     });
   }
 
