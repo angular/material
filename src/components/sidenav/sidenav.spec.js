@@ -36,7 +36,10 @@ describe('mdSidenav', function() {
       $rootScope.$apply('show = true');
 
       $animate.triggerCallbacks();
-      TestUtil.triggerEvent(el, 'keydown', { keyCode: $mdConstant.KEY_CODE.ESCAPE });
+      el.parent().triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.ESCAPE 
+      });
       $timeout.flush();
       expect($rootScope.show).toBe(false);
     }));
@@ -116,7 +119,7 @@ describe('mdSidenav', function() {
 
     it('should deregister component when element is destroyed', inject(function($mdComponentRegistry) {
       var el = setup('component-id="left"');
-      el.trigger('$destroy');
+      el.triggerHandler('$destroy');
 
       var instance = $mdComponentRegistry.get('left');
       expect(instance).toBe(null);

@@ -228,7 +228,7 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
      * @param evt
      */
     function onKeyDown(ev) {
-      if (ev.which === $mdConstant.KEY_CODE.ESCAPE) {
+      if (ev.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
         close();
         ev.preventDefault();
         ev.stopPropagation();

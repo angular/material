@@ -52,7 +52,8 @@ describe('<md-toolbar>', function() {
     expect(contentCss[$mdEffects.TRANSFORM]).toEqual('translate3d(0,100px,0)');
 
     // Fake scroll to the bottom
-    TestUtil.triggerEvent(contentEl, 'scroll', {
+    contentEl.triggerHandler({
+      type: 'scroll',
       target: { scrollTop: 500 }
     });
 
@@ -60,7 +61,8 @@ describe('<md-toolbar>', function() {
     expect(contentCss[$mdEffects.TRANSFORM]).toEqual('translate3d(0,0px,0)');
 
     // Fake scroll back to the top
-    TestUtil.triggerEvent(contentEl, 'scroll', {
+    contentEl.triggerHandler({
+      type: 'scroll',
       target: { scrollTop: 0 }
     });
 

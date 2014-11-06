@@ -62,23 +62,23 @@ describe('$mdToast service', function() {
       setup({
         template: '<md-toast class="one">'
       });
-      expect($rootElement.find('md-toast.one').length).toBe(1);
-      expect($rootElement.find('md-toast.two').length).toBe(0);
-      expect($rootElement.find('md-toast.three').length).toBe(0);
+      expect($rootElement[0].querySelector('md-toast.one')).toBeTruthy();
+      expect($rootElement[0].querySelector('md-toast.two')).toBeFalsy();
+      expect($rootElement[0].querySelector('md-toast.three')).toBeFalsy();
 
       setup({
         template: '<md-toast class="two">'
       });
-      expect($rootElement.find('md-toast.one').length).toBe(0);
-      expect($rootElement.find('md-toast.two').length).toBe(1);
-      expect($rootElement.find('md-toast.three').length).toBe(0);
+      expect($rootElement[0].querySelector('md-toast.one')).toBeFalsy();
+      expect($rootElement[0].querySelector('md-toast.two')).toBeTruthy();
+      expect($rootElement[0].querySelector('md-toast.three')).toBeFalsy();
 
       setup({
         template: '<md-toast class="three">'
       });
-      expect($rootElement.find('md-toast.one').length).toBe(0);
-      expect($rootElement.find('md-toast.two').length).toBe(0);
-      expect($rootElement.find('md-toast.three').length).toBe(1);
+      expect($rootElement[0].querySelector('md-toast.one')).toBeFalsy();
+      expect($rootElement[0].querySelector('md-toast.two')).toBeFalsy();
+      expect($rootElement[0].querySelector('md-toast.three')).toBeTruthy();
     }));
 
     it('should add class to toastParent', inject(function($rootElement) {

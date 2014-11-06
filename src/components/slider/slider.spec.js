@@ -21,7 +21,7 @@ describe('md-slider', function() {
     $rootScope.$apply('value = 50');
     var sliderCtrl = slider.controller('mdSlider');
 
-    spyOn(slider.find('.md-track-container')[0], 'getBoundingClientRect').andReturn({
+    spyOn(slider[0].querySelector('.md-track-container'), 'getBoundingClientRect').andReturn({
       width: 100,
       left: 0,
       right: 0
@@ -48,20 +48,23 @@ describe('md-slider', function() {
 
     $rootScope.$apply('model = 100');
 
-    TestUtil.triggerEvent(slider, 'keydown', {
+    slider.triggerHandler({
+      type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
     });
     $timeout.flush();
     expect($rootScope.model).toBe(102);
 
-    TestUtil.triggerEvent(slider, 'keydown', {
+    slider.triggerHandler({
+      type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
     });
     $timeout.flush();
     expect($rootScope.model).toBe(104);
 
     // Stays at max
-    TestUtil.triggerEvent(slider, 'keydown', {
+    slider.triggerHandler({
+      type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
     });
     $timeout.flush();
@@ -75,20 +78,23 @@ describe('md-slider', function() {
 
     $rootScope.$apply('model = 104');
 
-    TestUtil.triggerEvent(slider, 'keydown', {
+    slider.triggerHandler({
+      type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
     });
     $timeout.flush();
     expect($rootScope.model).toBe(102);
 
-    TestUtil.triggerEvent(slider, 'keydown', {
+    slider.triggerHandler({
+      type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
     });
     $timeout.flush();
     expect($rootScope.model).toBe(100);
 
     // Stays at min
-    TestUtil.triggerEvent(slider, 'keydown', {
+    slider.triggerHandler({
+      type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
     });
     $timeout.flush();
@@ -123,7 +129,8 @@ describe('md-slider', function() {
     expect(slider.attr('aria-valuemax')).toEqual('104');
     expect(slider.attr('aria-valuenow')).toEqual('102');
 
-    TestUtil.triggerEvent(slider, 'keydown', {
+    slider.triggerHandler({
+      type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
     });
     $timeout.flush();
