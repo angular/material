@@ -58,9 +58,10 @@ $whiteframe-zindex-z5: 5;
 //--------------------------------------------
 
 $z-index-dialog: 10;
-$z-index-toast: 9;
-$z-index-sidenav: 8;
-$z-index-backdrop: 7;
-$z-index-tooltip: 6;
+$z-index-tooltip: 9;
+$z-index-toast: 8;
+$z-index-bottom-sheet: 8;
+
+$z-index-sidenav: 6;
+$z-index-backdrop: 5;
 $z-index-fab: 2;
-$z-index-bottom-sheet: $z-index-backdrop + 1;
