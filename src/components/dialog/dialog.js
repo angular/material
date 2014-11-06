@@ -90,10 +90,9 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *     });
  *
  *     // When the 'enter' animation finishes...
- *     function afterShowAnimation(scope, element, options)
- *     {
+ *     function afterShowAnimation(scope, element, options) {
  *        // post-show code here: DOM element focus, etc.
- *     };
+ *     }
  * });
  * app.controller('DialogController', function($scope, $mdDialog, name) {
  *   $scope.userName = name;
