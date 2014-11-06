@@ -1,23 +1,15 @@
-md-whiteframe {
-}
-
 .md-whiteframe-z1 {
-  @extend md-whiteframe;
   box-shadow: $whiteframe-shadow-z1;
 }
 .md-whiteframe-z2 {
-  @extend md-whiteframe;
   box-shadow: $whiteframe-shadow-z2;
 }
 .md-whiteframe-z3 {
-  @extend md-whiteframe;
   box-shadow: $whiteframe-shadow-z3;
 }
 .md-whiteframe-z4 {
-  @extend md-whiteframe;
   box-shadow: $whiteframe-shadow-z4;
 }
 .md-whiteframe-z5 {
-  @extend md-whiteframe;
   box-shadow: $whiteframe-shadow-z5;
 }
