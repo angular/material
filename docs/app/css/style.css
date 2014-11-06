@@ -221,6 +221,9 @@ md-tabs.demo-source-tabs md-tab-label {
 .show-source md-toolbar.demo-toolbar {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.36);
 }
+.demo-toolbar .md-button {
+  color: white;
+}
 
 md-toolbar.demo-toolbar,
 .demo-source-tabs md-tab,
