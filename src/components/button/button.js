@@ -28,23 +28,23 @@ angular.module('material.components.button', [
  * @description
  * `<md-button>` is a button directive with optional ink ripples (default enabled).
  *
+ * If you supply a `href` or `ng-href` attribute, it will become an `<a>` element. Otherwise, it will
+ * become a `<button>` element.
+ *
  * @param {boolean=} noink If present, disable ripple ink effects.
- * @param {boolean=} disabled If present, disable tab selection.
- * @param {string=} type Optional attribute to specific button types (useful for forms); such as 'submit', etc.
- * @param {string=} ng-href Optional attribute to support both ARIA and link navigation
- * @param {string=} href Optional attribute to support both ARIA and link navigation
- * @param {string=} ariaLabel Publish the button label used by screen-readers for accessibility. Defaults to the button's text.
+ * @param {boolean=} disabled If present, disable selection.
+ * @param {string=} aria-label Publish the button label used by screen-readers for accessibility. Defaults to the button's text.
  *
  * @usage
  * <hljs lang="html">
- *  <md-button>Button</md-button>
- *  <br/>
- *  <md-button noink class="md-button-colored">
- *    Button (noInk)
+ *  <md-button>
+ *    Button
  *  </md-button>
- *  <br/>
- *  <md-button disabled class="md-button-colored">
- *    Colored (disabled)
+ *  <md-button href="http://google.com" class="md-button-colored">
+ *    I'm a link
+ *  </md-button>
+ *  <md-button disabled class="md-colored">
+ *    I'm a disabled button
  *  </md-button>
  * </hljs>
  */
@@ -57,18 +57,35 @@ function MdButtonDirective($mdInkRipple, $mdAria, $mdTheming) {
     template: getTemplate,
     link: postLink
   };
+
+  function isAnchor(attr) {
+    return angular.isDefined(attr.href) || angular.isDefined(attr.ngHref);
+  }
   
   function getTemplate(element, attr) {
-    if (angular.isDefined(attr.href) || angular.isDefined(attr.ngHref)) {
-      return '<a class="md-button" ng-transclude></a>';
-    } else {
-      return '<button class="md-button" ng-transclude></button>';
-    }
+    var tag = isAnchor(attr) ? 'a' : 'button';
+    //We need to manually pass disabled to the replaced element because
+    //of a bug where it isn't always passed.
+    var disabled = element[0].hasAttribute('disabled') ? ' disabled ' : ' ';
+
+    return '<' + tag + disabled + 'class="md-button" ng-transclude></' + tag + '>';
   }
+
   function postLink(scope, element, attr) {
     $mdTheming(element);
     $mdAria.expectWithText(element, 'aria-label');
     $mdInkRipple.attachButtonBehavior(element);
+
+    // For anchor elements, we have to set tabindex manually when the 
+    // element is disabled
+    if (isAnchor(attr)) {
+      var node = element[0];
+      scope.$watch(function() {
+        return node.hasAttribute('disabled');
+      }, function(isDisabled) {
+        element.attr('tabindex', isDisabled ? -1 : 0);
+      });
+    }
   }
 
 }

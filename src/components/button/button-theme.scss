@@ -14,8 +14,8 @@ $button-warn-raised-background-color: map-get($button-warn-color-palette, '500')
 $button-warn-raised-hover-background-color: map-get($button-warn-color-palette, '700') !default;
 
 $button-flat-color-palette: $background-color-palette !default;
-$button-disabled-color: map-get($button-flat-color-palette, '500') !default;
-$button-disabled-background-color: rgba(map-get($button-flat-color-palette, '500'), 0.145) !default;
+$button-disabled-color: $foreground-tertiary-color !default;
+$button-disabled-background-color: transparent !default;
 $button-hover-background-color: rgba(map-get($button-flat-color-palette, '500'), 0.20) !default;
 
 $button-raised-color-palette: $button-flat-color-palette !default;
@@ -29,7 +29,6 @@ $button-raised-hover-background-color: rgba(map-get($button-raised-color-palette
     &:hover, 
     &:focus {
       background-color: $button-hover-background-color;
-      cursor: auto;
     }
   }
 
@@ -67,11 +66,6 @@ $button-raised-hover-background-color: rgba(map-get($button-raised-color-palette
           background-color: $button-primary-raised-hover-background-color;
         }
       }
-      &[disabled] {
-        color: $foreground-tertiary-color;
-        background: none;
-        cursor: none;
-      }
     }
 
     &.md-warn {
@@ -89,9 +83,9 @@ $button-raised-hover-background-color: rgba(map-get($button-raised-color-palette
   &[disabled],
   &.md-raised[disabled],
   &.md-fab[disabled] {
-    background-color: $button-disabled-background-color;
     color: $button-disabled-color;
     fill: $button-disabled-color;
-    cursor: auto;
+    background-color: $button-disabled-background-color;
+    cursor: not-allowed;
   }
 }
