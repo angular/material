@@ -95,12 +95,20 @@ describe('md-slider', function() {
     expect($rootScope.model).toBe(100);
   }));
 
-  it('should warn developers they need a label', inject(function($compile, $rootScope, $timeout, $log) {
+  it('should call $log.warn if aria-label isnt provided', inject(function($compile, $rootScope, $timeout, $log) {
     spyOn($log, "warn");
     var element = $compile(
      '<md-slider min="100" max="104" step="2" ng-model="model"></md-slider>' 
     )($rootScope);
     expect($log.warn).toHaveBeenCalled();
+  }));
+
+  it('should not call $log.warn if aria-label is provided', inject(function($compile, $rootScope, $timeout, $log) {
+    spyOn($log, "warn");
+    var element = $compile(
+     '<md-slider aria-label="banana" min="100" max="104" step="2" ng-model="model"></md-slider>' 
+    )($rootScope);
+    expect($log.warn).not.toHaveBeenCalled();
   }));
 
   it('should add aria attributes', inject(function($compile, $rootScope, $timeout, $mdConstant){
