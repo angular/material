@@ -235,9 +235,14 @@ gulp.task('build-js', function() {
 });
 
 /**
- * Module specific build tasks
+ * Module specific build tasks:
+ * e.g.
+ * ```sh
+ *    gulp build-module -m material.components.button
+ *    gulp watch-module -m material.components.button
+ *    gulp server
+ * ```
  */
-
 gulp.task('build-module', function() {
   var mod = readModuleArg();
   var name = mod.split('.').pop();

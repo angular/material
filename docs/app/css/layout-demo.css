@@ -1,6 +1,7 @@
 
 .code-view pre > code.highlight {
   padding: 0;
+  position: relative;
 }
 
 .inline-demo {

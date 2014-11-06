@@ -43,11 +43,18 @@ th {
   max-width: 864px;
   margin: auto;
 }
+
+.doc-content code.highlight, .theming code.highlight {
+  position: relative;
+}
+
+
 .layout-label {
   width: 120px;
 }
 .layout-content code.highlight {
   margin-bottom: 15px;
+  position:relative;
 }
 
 .menu-item {
@@ -129,6 +136,11 @@ code:not(.highlight) {
 .demo-source-container code {
   min-height: 100%;
 }
+
+.demo-source-container code.highlight {
+  position:absolute;
+}
+
 
 .md-tab-content {
   position:relative;

@@ -1,5 +1,5 @@
-{% extends "base.template.html" %}
-
-{% block content %}
-{$ doc.description | marked $}
-{% endblock %}
+<div class="doc-content theming">
+    {% block content %}
+    {$ doc.description | marked $}
+    {% endblock %}
+</div>
