@@ -40,7 +40,7 @@ describe('$mdDialog', function() {
 
     $timeout.flush();
 
-    var container = parent.find('.md-dialog-container');
+    var container = angular.element(parent[0].querySelector('.md-dialog-container'));
     expect(container.length).toBe(1);
     expect( ready ).toBe( true );
 
@@ -58,7 +58,7 @@ describe('$mdDialog', function() {
 
     $rootScope.$apply();
 
-    var container = parent.find('.md-dialog-container');
+    var container = angular.element(parent[0].querySelector('.md-dialog-container'));
     expect(container.length).toBe(1);
   }));
 
@@ -74,7 +74,8 @@ describe('$mdDialog', function() {
     $timeout.flush();
     expect(parent.find('md-dialog').length).toBe(1);
 
-    TestUtil.triggerEvent($rootElement, 'keyup', {
+    $rootElement.triggerHandler({
+      type: 'keyup',
       keyCode: $mdConstant.KEY_CODE.ESCAPE 
     });
 
@@ -93,7 +94,10 @@ describe('$mdDialog', function() {
     $rootScope.$apply();
     expect(parent.find('md-dialog').length).toBe(1);
 
-    TestUtil.triggerEvent($rootElement, 'keyup', { keyCode: $mdConstant.KEY_CODE.ESCAPE });
+    $rootElement.triggerHandler({
+      type: 'keyup',
+      keyCode: $mdConstant.KEY_CODE.ESCAPE 
+    });
 
     $timeout.flush();
     $animate.triggerCallbacks();
@@ -113,8 +117,9 @@ describe('$mdDialog', function() {
     expect(parent.find('md-dialog').length).toBe(1);
     $timeout.flush();
 
-    var container = parent.find('.md-dialog-container');
-    TestUtil.triggerEvent(container, 'click', {
+    var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+    container.triggerHandler({
+      type: 'click',
       target: container[0]
     });
     $timeout.flush();
@@ -134,8 +139,9 @@ describe('$mdDialog', function() {
     $rootScope.$apply();
     expect(parent.find('md-dialog').length).toBe(1);
 
-    var container = parent.find('.md-dialog-container');
-    TestUtil.triggerEvent(container, 'click', {
+    var container = angular.element(parent[0].querySelectorAll('.md-dialog-container'));
+    container.triggerHandler({
+      type: 'click',
       target: container[0]
     });
     $timeout.flush();
@@ -189,7 +195,7 @@ describe('$mdDialog', function() {
     $rootScope.$apply();
     $timeout.flush();
 
-    expect($document.activeElement).toBe(parent.find('.dialog-close')[0]);
+    expect($document.activeElement).toBe(parent[0].querySelector('.dialog-close'));
   }));
 
   it('should focus the last `md-button` in md-actions open if no `.dialog-close`', inject(function($mdDialog, $rootScope, $document, $timeout) {
@@ -210,7 +216,7 @@ describe('$mdDialog', function() {
     $rootScope.$apply();
     $timeout.flush();
 
-    expect($document.activeElement).toBe(parent.find('#focus-target')[0]);
+    expect($document.activeElement).toBe(parent[0].querySelector('#focus-target'));
   }));
 
   it('should only allow one open at a time', inject(function($mdDialog, $rootScope) {
@@ -221,8 +227,8 @@ describe('$mdDialog', function() {
     });
 
     $rootScope.$apply();
-    expect(parent.find('md-dialog.one').length).toBe(1);
-    expect(parent.find('md-dialog.two').length).toBe(0);
+    expect(angular.element(parent[0].querySelectorAll('md-dialog.one')).length).toBe(1);
+    expect(angular.element(parent[0].querySelectorAll('md-dialog.two')).length).toBe(0);
 
     $mdDialog.show({
       template: '<md-dialog class="two">',
@@ -230,8 +236,8 @@ describe('$mdDialog', function() {
     });
 
     $rootScope.$apply();
-    expect(parent.find('md-dialog.one').length).toBe(0);
-    expect(parent.find('md-dialog.two').length).toBe(1);
+    expect(angular.element(parent[0].querySelectorAll('md-dialog.one')).length).toBe(0);
+    expect(angular.element(parent[0].querySelectorAll('md-dialog.two')).length).toBe(1);
   }));
 
   it('should have the dialog role', inject(function($mdDialog, $rootScope) {

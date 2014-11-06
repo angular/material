@@ -72,11 +72,11 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming) {
       };
 
     function keydownListener(ev) {
-      if (ev.which === $mdConstant.KEY_CODE.LEFT_ARROW || ev.which === $mdConstant.KEY_CODE.UP_ARROW) {
+      if (ev.keyCode === $mdConstant.KEY_CODE.LEFT_ARROW || ev.keyCode === $mdConstant.KEY_CODE.UP_ARROW) {
         ev.preventDefault();
         rgCtrl.selectPrevious();
       }
-      else if (ev.which === $mdConstant.KEY_CODE.RIGHT_ARROW || ev.which === $mdConstant.KEY_CODE.DOWN_ARROW) {
+      else if (ev.keyCode === $mdConstant.KEY_CODE.RIGHT_ARROW || ev.keyCode === $mdConstant.KEY_CODE.DOWN_ARROW) {
         ev.preventDefault();
         rgCtrl.selectNext();
       }
@@ -258,7 +258,7 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
         'aria-checked' : 'false'
       });
 
-      $mdAria.expect(element, 'aria-label', true);
+      $mdAria.expectWithText(element, 'aria-label');
 
       /**
        * Build a unique ID for each radio button that will be used with aria-activedescendant.

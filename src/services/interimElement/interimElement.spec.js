@@ -36,9 +36,9 @@ describe('$$interimElement service', function() {
       }));
 
       it('forwards options to $mdCompiler', inject(function($$interimElement) {
-        var options = {template: 'testing'};
+        var options = {template: '<testing>'};
         Service.show(options);
-        expect($compilerSpy.mostRecentCall.args[0].template).toBe('testing');
+        expect($compilerSpy.mostRecentCall.args[0].template).toBe('<testing>');
       }));
 
       it('supports theming', inject(function($$interimElement, $rootScope) {
@@ -59,7 +59,7 @@ describe('$$interimElement service', function() {
       it('calls onRemove', inject(function($rootScope) {
         var onRemoveCalled = false;
         Service.show({
-          template: '<some-element />',
+          template: '<some-element>',
           isPassingOptions: true,
           onRemove: onRemove
         });
@@ -84,7 +84,7 @@ describe('$$interimElement service', function() {
       it('calls onRemove', inject(function($rootScope) {
         var onRemoveCalled = false;
         Service.show({
-          template: '<some-element />',
+          template: '<some-element>',
           passingOptions: true,
           onRemove: onRemove
         });
@@ -120,7 +120,7 @@ describe('$$interimElement service', function() {
       it('calls onRemove', inject(function($rootScope) {
         var onRemoveCalled = false;
         Service.show({
-          template: '<some-element />',
+          template: '<some-element>',
           passingOptions: true,
           onRemove: onRemove
         });

@@ -46,7 +46,7 @@ function mdMediaFactory($window, $mdUtil, $timeout) {
       for (var i = 0, ii = keys.length; i < ii; i++) {
         cache.put(keys[i], !!$window.matchMedia(keys[i]).matches);
       }
-      // trigger an $digest()
+      // trigger a $digest()
       $timeout(angular.noop);
     }
   }

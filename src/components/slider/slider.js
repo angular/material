@@ -129,7 +129,7 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
       updateAriaDisabled(!!attr.disabled);
     }
 
-    $mdAria.expect(element, 'aria-label', false);
+    $mdAria.expect(element, 'aria-label');
 
     element.attr('tabIndex', 0);
     element.attr('role', 'slider');
@@ -237,9 +237,9 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
       }
 
       var changeAmount;
-      if (ev.which === $mdConstant.KEY_CODE.LEFT_ARROW) {
+      if (ev.keyCode === $mdConstant.KEY_CODE.LEFT_ARROW) {
         changeAmount = -step;
-      } else if (ev.which === $mdConstant.KEY_CODE.RIGHT_ARROW) {
+      } else if (ev.keyCode === $mdConstant.KEY_CODE.RIGHT_ARROW) {
         changeAmount = step;
       }
       if (changeAmount) {

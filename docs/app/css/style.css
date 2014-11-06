@@ -221,6 +221,9 @@ md-tabs.demo-source-tabs md-tab-label {
 .show-source md-toolbar.demo-toolbar {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.36);
 }
+.demo-toolbar .md-button {
+  color: white;
+}
 
 md-toolbar.demo-toolbar,
 .demo-source-tabs md-tab,
@@ -231,12 +234,13 @@ md-toolbar.demo-toolbar,
 md-toolbar.demo-toolbar md-tab-label {
   color: #99E4EE
 }
-md-toolbar.demo-toolbar md-button:hover, 
-md-toolbar.demo-toolbar md-button.active {
+md-toolbar.demo-toolbar .md-button:hover, 
+md-toolbar.demo-toolbar .md-button:focus,
+md-toolbar.demo-toolbar .md-button.active {
   background: rgba(0,0,0,0.1);
 }
 
-md-toolbar.demo-toolbar md-button {
+md-toolbar.demo-toolbar .md-button {
   -webkit-transition: all 0.3s linear;
   -moz-transition: all 0.3s linear;
   transition: all 0.3s linear;
@@ -277,12 +281,12 @@ md-toolbar.demo-toolbar md-button {
 /************
  * DOCS
  ************/
-.api-options-bar md-button {
+.api-options-bar .md-button {
   margin: 4px;
   padding: 4px;
 }
-.api-options-bar md-button:hover,
-.api-options-bar md-button:focus {
+.api-options-bar .md-button:hover,
+.api-options-bar .md-button:focus {
   background: rgba(0, 0, 0, 0.2);
 }
 .api-options-bar.with-icon md-icon {
@@ -290,7 +294,7 @@ md-toolbar.demo-toolbar md-button {
   top: 2px;
   left: 4px;
 }
-.api-options-bar.with-icon md-button span {
+.api-options-bar.with-icon .md-button span {
   margin-left: 22px;
 }
 

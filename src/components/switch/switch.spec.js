@@ -18,7 +18,7 @@ describe('<md-switch>', function() {
       $rootScope.green = true;
     });
 
-    var cbElements = element.find('.md-switch-thumb');
+    var cbElements = angular.element(element[0].querySelectorAll('.md-switch-thumb'));
 
     expect(cbElements.eq(0).hasClass(CHECKED_CSS)).toEqual(false);
     expect(cbElements.eq(1).hasClass(CHECKED_CSS)).toEqual(true);
@@ -29,13 +29,14 @@ describe('<md-switch>', function() {
 
   it('should be disabled with disabled attr', inject(function($compile, $rootScope) {
     var element = $compile('<div>' +
-                             '<md-switch disabled ng-model="blue">' +
+                             '<md-switch ng-model="blue">' +
                              '</md-switch>' +
                            '</div>')($rootScope);
 
-    var switchThumb = element.find('.md-switch-thumb');
+    var switchThumb = angular.element(element[0].querySelectorAll('.md-switch-thumb'));
 
     $rootScope.$apply('blue = false');
+    switchThumb.attr('disabled', 'true');
 
     switchThumb.triggerHandler('click');
     expect($rootScope.blue).toBe(false);

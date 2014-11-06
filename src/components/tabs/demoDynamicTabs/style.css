@@ -13,7 +13,7 @@ md-tabs .md-view {
 }
 
 
-md-button {
+.md-button {
     display:block;
 }
 
@@ -57,11 +57,11 @@ form > [layout] > * {
     width: 264px;
 }
 
-md-button {
+.md-button {
     max-height: 30px;
 }
 
-md-button.add-tab {
+.md-button.add-tab {
     margin-top:20px;
     max-height:30px !important;
 }

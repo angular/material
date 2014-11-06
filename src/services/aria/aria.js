@@ -7,54 +7,46 @@ angular.module('material.services.aria', [])
 ]);
 
 function AriaService($$rAF, $log) {
-  var messageTemplate = 'ARIA: Attribute "%s", required for accessibility, is missing on "%s"';
-  var defaultValueTemplate = 'Default value was set: %s="%s".';
 
   return {
-    expect : expectAttribute,
+    expect: expect,
+    expectAsync: expectAsync,
+    expectWithText: expectWithText
   };
 
   /**
-   * Check if expected ARIA has been specified on the target element
+   * Check if expected attribute has been specified on the target element
    * @param element
    * @param attrName
-   * @param copyElementText
-   * @param {optional} defaultValue
+   * @param {optional} defaultValue What to set the attr to if no value is found
    */
-  function expectAttribute(element, attrName, copyElementText, defaultValue) {
+  function expect(element, attrName, defaultValue) {
+    var node = element[0];
+    if (!node.hasAttribute(attrName)) {
 
-    $$rAF(function(){
-
-      var node = element[0];
-      if (!node.hasAttribute(attrName)) {
-
-        var hasDefault;
-        if(copyElementText === true){
-          if(!defaultValue) defaultValue = element.text().trim();
-          hasDefault = angular.isDefined(defaultValue) && defaultValue.length;
-        }
-
-        if (hasDefault) {
-          defaultValue = String(defaultValue).trim();
-          element.attr(attrName, defaultValue);
-        } else {
-          $log.warn(messageTemplate, attrName, node);
-          $log.warn(node);
-        }
+      defaultValue = angular.isString(defaultValue) && defaultValue.trim() || '';
+      if (defaultValue.length) {
+        element.attr(attrName, defaultValue);
+      } else {
+        $log.warn('ARIA: Attribute "', attrName, '", required for accessibility, is missing on node:', node);
       }
+
+    }
+  }
+
+  function expectAsync(element, attrName, defaultValueGetter) {
+    // Problem: when retrieving the element's contents synchronously to find the label,
+    // the text may not be defined yet in the case of a binding.
+    // There is a higher chance that a binding will be defined if we wait one frame.
+    $$rAF(function() {
+      expect(element, attrName, defaultValueGetter());
     });
   }
 
-
-  /**
-   * Gets the tag definition from a node's outerHTML
-   * @example getTagString(
-   *   '<md-button foo="bar">Hello</md-button>'
-   * ) // => '<md-button foo="bar">'
-   */
-  function getTagString(node) {
-    var html = node.outerHTML;
-    var closingIndex = html.indexOf('>');
-    return html.substring(0, closingIndex + 1);
+  function expectWithText(element, attrName) {
+    expectAsync(element, attrName, function() {
+      return element.text().trim();
+    });
   }
+
 }

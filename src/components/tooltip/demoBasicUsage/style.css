@@ -1,18 +1,17 @@
 
-md-toolbar .md-toolbar-tools md-button,
-md-toolbar .md-toolbar-tools md-button:hover { 
+md-toolbar .md-toolbar-tools .md-button,
+md-toolbar .md-toolbar-tools .md-button:hover { 
   box-shadow: none;
   border: none;
   transform: none;
   -webkit-transform: none;
 }
 
-md-toolbar .md-toolbar-tools md-button:hover button { 
+md-toolbar .md-toolbar-tools .md-button:hover button { 
   background: rgba(46,168,109, 0.8);
 }
-md-toolbar .md-toolbar-tools md-button:focus,
-md-toolbar .md-toolbar-tools md-button.focus,
-md-toolbar .md-toolbar-tools md-button button:focus { 
+md-toolbar .md-toolbar-tools .md-button:focus,
+md-toolbar .md-toolbar-tools .md-button button:focus { 
   background: rgb(46,168,109);
 }
 

@@ -14,7 +14,6 @@
     "angular-aria": "1.3.0",
     "angular-route": "1.3.0",
     "angular-mocks": "1.3.0",
-    "angularytics": "^0.3.0",
-    "jquery": "~2.1.1"
+    "angularytics": "^0.3.0"
   }
 }

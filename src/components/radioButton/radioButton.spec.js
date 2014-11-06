@@ -81,7 +81,10 @@ describe('radioButton', function() {
     });
 
     var rbGroupElement = element.eq(0);
-    TestUtil.triggerEvent(rbGroupElement, "keydown", {keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW});
+    rbGroupElement.triggerHandler({
+      type: 'keydown',
+      keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
+    });
 
     expect($rootScope.color).toEqual('green');
   }));

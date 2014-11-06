@@ -93,7 +93,7 @@ function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant
         $formatters: []
       };
 
-      $mdAria.expect(tElement, 'aria-label', true);
+      $mdAria.expectWithText(tElement, 'aria-label');
 
       // Reuse the original input[type=checkbox] directive from Angular core.
       // This is a bit hacky as we need our own event listener and own render

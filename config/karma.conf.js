@@ -5,8 +5,6 @@ module.exports = function(config) {
     basePath: __dirname + '/..',
     frameworks: ['jasmine'],
     files: [
-      // Include jQuery just for its dom helpers for testing, eg el.trigger()
-      'bower_components/jquery/dist/jquery.js',
       'bower_components/angular/angular.js',
       'bower_components/angular-animate/angular-animate.js',
       'bower_components/angular-aria/angular-aria.js',
