@@ -1,7 +1,7 @@
 /*
  * @ngdoc module
  * @name material.services.theming
- * @description InterimElement
+ * @description Used to provide theming to angular-material directives
  */
 
 angular.module('material.services.theming', [
@@ -18,13 +18,33 @@ angular.module('material.services.theming', [
   Theming
 ]);
 
-/*
+/**
  * @ngdoc provider
+ * @name $mdThemingProvider
+ *
+ * @description Provider to configure the `$mdTheming` service.
+ */
+
+/**
+ * @ngdoc method
+ * @name $mdThemingProvider#setDefaultTheme
+ * @param {string} themeName Default theme name to be applied to elements. Default value is `default`.
+ */
+
+/**
+ * @ngdoc method
+ * @name $mdThemingProvider#alwaysWatchTheme
+ * @param {boolean} watch Whether or not to always watch themes for changes and re-apply
+ * classes when they change. Default is `false`. Enabling can reduce performance.
+ */
+
+/**
+ * @ngdoc service
  * @name $mdTheming
  *
  * @description
  *
- * Provider that makes an element apply theming related classes to itself.
+ * Service that makes an element apply theming related classes to itself.
  *
  * ```js
  * app.directive('myFancyDirective', function($mdTheming) {
@@ -37,16 +57,17 @@ angular.module('material.services.theming', [
  * });
  * ```
  * @param {el=} element to apply theming to
- *
- * @returns {$$interimElement.$service}
- *
  */
 
 function Theming($injector) {
   var defaultTheme = 'default';
+  var alwaysWatchTheme = false;
   return {
     setDefaultTheme: function(theme) {
       defaultTheme = theme;
+    },
+    alwaysWatchTheme: function(alwaysWatch) {
+      alwaysWatchTheme = alwaysWatch;
     },
     $get: ['$rootElement', '$rootScope', ThemingService]
   };
@@ -55,7 +76,8 @@ function Theming($injector) {
     applyTheme.inherit = function(el, parent) {
       var ctrl = parent.controller('mdTheme');
 
-      if (angular.isDefined(el.attr('md-theme-watch'))) { 
+      var attrThemeValue = el.attr('md-theme-watch');
+      if ( (alwaysWatchTheme || angular.isDefined(attrThemeValue)) && attrThemeValue != 'false') { 
         var deregisterWatch = $rootScope.$watch(function() { 
           return ctrl && ctrl.$mdTheme || defaultTheme; 
         }, changeTheme);

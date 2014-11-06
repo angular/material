@@ -79,6 +79,11 @@ describe('md-theme directive', function() {
 describe('md-themable directive', function() {
   beforeEach(module('material.services.theming'));
 
+  var $mdThemingProvider;
+  beforeEach(module('material.services.theming', function(_$mdThemingProvider_) {
+    $mdThemingProvider = _$mdThemingProvider_;
+  }));
+
   it('should inherit parent theme', inject(function($compile, $rootScope) {
     var el = $compile('<div md-theme="a"><span md-themable></span></div>')($rootScope);
     $rootScope.$apply();
@@ -106,4 +111,17 @@ describe('md-themable directive', function() {
     expect(el.children().hasClass('md-blue-theme')).toBe(false);
     expect(el.children().hasClass('md-red-theme')).toBe(true);
   }));
+
+  it('should support watching parent theme by default', function() {
+    $mdThemingProvider.alwaysWatchTheme(true);
+    inject(function($rootScope, $compile, $mdTheming) {
+      $rootScope.themey = 'red';
+      var el = $compile('<div md-theme="{{themey}}"><span md-themable></span></div>')($rootScope);
+      $rootScope.$apply();
+      expect(el.children().hasClass('md-red-theme')).toBe(true);
+      $rootScope.$apply('themey = "blue"');
+      expect(el.children().hasClass('md-blue-theme')).toBe(false);
+      expect(el.children().hasClass('md-red-theme')).toBe(true);
+    });
+  });
 });

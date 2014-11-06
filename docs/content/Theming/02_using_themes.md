@@ -68,9 +68,20 @@ Individual components can also override the inherited theme:
 
 <img src="https://cloud.githubusercontent.com/assets/210413/4825301/a45d735a-5f63-11e4-8597-60386f35fc68.png" alt="progress bars themed" style="max-width: 100%;">
 
+### Watching Themes
 To optimize performance, themable components do not watch a theme after it is
 set. This means, that if your theme is assigned dynamically, the component will
 not update to reflect it. If you have a dynamic attribute (ie.
 interpolated) for a theme, you will want to use the attribute `md-theme-watch="true"` on the
 relevant components so that it will watch the theme for changes. For an example
 of this see [this plunkr](http://plnkr.co/edit/0Ga0BSJgjGIiEMVXgWJd?p=preview).
+
+If you would like themable directives to *always* watch for theme changes by
+default, and are willing to take a performance hit for it, you may configure
+this default behavior by enabling it on `$mdThemingProvider`.
+
+<hljs lang="js">
+app.config(function($mdThemingProvider) {
+  $mdThemingProvider.alwaysWatchTheme(true);
+});
+</hljs>
