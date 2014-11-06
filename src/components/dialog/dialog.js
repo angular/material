@@ -208,7 +208,6 @@ function MdDialogService($timeout, $rootElement, $compile, $mdEffects, $animate,
             $timeout($dialogService.cancel);
           }
         };
-
         $rootElement.on('keyup', options.rootElementKeyupCallback);
       }
 
@@ -219,7 +218,6 @@ function MdDialogService($timeout, $rootElement, $compile, $mdEffects, $animate,
             $timeout($dialogService.cancel);
           }
         };
-
         element.on('click', options.dialogClickOutsideCallback);
       }
       closeButton.focus();
