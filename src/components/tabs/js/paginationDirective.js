@@ -109,7 +109,10 @@ function TabPaginationDirective($mdEffects, $window, $$rAF, $$q, $timeout) {
       var paginationToggled = needPagination !== state.active;
 
       // If the md-tabs element is not displayed, then do nothing.
-      if ( tabsWidth <= 0 ) return;
+      if ( tabsWidth <= 0 ) {
+        needPagination = false;
+        paginationToggled = true;
+      }
 
       state.active = needPagination;
 
