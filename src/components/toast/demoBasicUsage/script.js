@@ -20,7 +20,7 @@ angular.module('toastDemo1', ['ngMaterial'])
     $mdToast.show({
       controller: 'ToastCtrl',
       templateUrl: 'toast-template.html',
-      hideDelay: 0,
+      hideDelay: 6000,
       position: $scope.getToastPosition()
     });
   };

@@ -11,7 +11,6 @@ md-toolbar .md-toolbar-tools .md-button:hover button {
   background: rgba(46,168,109, 0.8);
 }
 md-toolbar .md-toolbar-tools .md-button:focus,
-md-toolbar .md-toolbar-tools .md-button.focus,
 md-toolbar .md-toolbar-tools .md-button button:focus { 
   background: rgb(46,168,109);
 }

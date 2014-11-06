@@ -8,12 +8,10 @@
 angular.module('material.components.button', [
   'material.core',
   'material.animations',
-  'material.services.aria',
   'material.services.theming'
 ])
   .directive('mdButton', [
     '$mdInkRipple',
-    '$mdAria',
     '$mdTheming',
     MdButtonDirective
   ]);
@@ -48,7 +46,7 @@ angular.module('material.components.button', [
  *  </md-button>
  * </hljs>
  */
-function MdButtonDirective($mdInkRipple, $mdAria, $mdTheming) {
+function MdButtonDirective($mdInkRipple, $mdTheming) {
 
   return {
     restrict: 'E',
@@ -73,7 +71,6 @@ function MdButtonDirective($mdInkRipple, $mdAria, $mdTheming) {
 
   function postLink(scope, element, attr) {
     $mdTheming(element);
-    $mdAria.expectWithText(element, 'aria-label');
     $mdInkRipple.attachButtonBehavior(element);
 
     // For anchor elements, we have to set tabindex manually when the 

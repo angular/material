@@ -27,16 +27,4 @@ describe('md-button', function() {
     expect(button.is('button')).toBe(true);
   }));
 
-  it('should not overwrite explicit aria-labels', inject(function($compile, $rootScope) {
-    var button = $compile('<md-button aria-label="my custom button">My Button</md-button>')($rootScope);
-    $rootScope.$apply();
-    expect( button.attr('aria-label')).toBe( "my custom button" );
-  }));
-
-  it('should inject simple button content as aria-label value', inject(function($compile, $rootScope) {
-    var button = $compile('<md-button>My Button</md-button>')($rootScope);
-    $rootScope.$apply();
-    expect(button.attr('aria-label')).toBe("My Button");
-  }));
-
 });
