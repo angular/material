@@ -206,7 +206,7 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
           'aria-labelledby': tabId
         });
 
-        $mdAria.expect(element, 'aria-label', true);
+        $mdAria.expectWithText(element, 'aria-label');
       }
 
     };

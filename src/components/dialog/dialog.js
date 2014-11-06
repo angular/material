@@ -270,7 +270,8 @@ function MdDialogService($timeout, $rootElement, $compile, $mdEffects, $animate,
     if (dialogContent.length === 0){
       dialogContent = element;
     }
-    var defaultText = $mdUtil.stringFromTextBody(dialogContent.text(), 3);
-    $mdAria.expect(element, 'aria-label', true, defaultText);
+    $mdAria.expectAsync(element, 'aria-label', function() {
+      return $mdUtil.stringFromTextBody(dialogContent.text(), 3);
+    });
   }
 }

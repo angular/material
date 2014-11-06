@@ -129,7 +129,7 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
       updateAriaDisabled(!!attr.disabled);
     }
 
-    $mdAria.expect(element, 'aria-label', false);
+    $mdAria.expect(element, 'aria-label');
 
     element.attr('tabIndex', 0);
     element.attr('role', 'slider');

@@ -67,7 +67,7 @@ function MdButtonDirective($mdInkRipple, $mdAria, $mdTheming) {
   }
   function postLink(scope, element, attr) {
     $mdTheming(element);
-    $mdAria.expect(element, 'aria-label', true);
+    $mdAria.expectWithText(element, 'aria-label');
     $mdInkRipple.attachButtonBehavior(element);
   }
 
