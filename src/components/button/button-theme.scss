@@ -14,26 +14,20 @@ $button-warn-raised-background-color: map-get($button-warn-color-palette, '500')
 $button-warn-raised-hover-background-color: map-get($button-warn-color-palette, '700') !default;
 
 $button-flat-color-palette: $background-color-palette !default;
-$button-disabled-color: map-get($button-flat-color-palette, '500') !default;
-$button-disabled-background-color: rgba(map-get($button-flat-color-palette, '500'), 0.145) !default;
+$button-disabled-color: $foreground-tertiary-color !default;
+$button-disabled-background-color: transparent !default;
 $button-hover-background-color: rgba(map-get($button-flat-color-palette, '500'), 0.20) !default;
 
 $button-raised-color-palette: $button-flat-color-palette !default;
 $button-raised-background-color: rgba(map-get($button-raised-color-palette, '500'), 0.185) !default;
 $button-raised-hover-background-color: rgba(map-get($button-raised-color-palette, '500'), 0.30) !default;
 
-md-button.md-#{$theme-name}-theme {
+.md-button.md-#{$theme-name}-theme {
   border-radius: $button-border-radius;
 
-  &[disabled] {
-    background-color: $button-disabled-background-color !important;
-    color: $button-disabled-color !important;
-    fill: $button-disabled-color !important;
-    cursor: auto;
-  }
-
   &:not([disabled]) {
-    &:hover, &.focus {
+    &:hover, 
+    &:focus {
       background-color: $button-hover-background-color;
     }
   }
@@ -52,11 +46,13 @@ md-button.md-#{$theme-name}-theme {
     fill: $button-warn-color;
   }
 
-  &.md-raised, &.md-fab {
+  &.md-raised, 
+  &.md-fab {
     background-color: $button-raised-background-color;
 
     &:not([disabled]) {
-      &:hover, &.focus {
+      &:hover, 
+      &:focus {
         background-color: $button-raised-hover-background-color;
       }
     }
@@ -65,7 +61,8 @@ md-button.md-#{$theme-name}-theme {
       color: $button-primary-raised-color;
       background-color: $button-primary-raised-background-color;
       &:not([disabled]) {
-        &:hover, &.focus {
+        &:hover,
+        &:focus {
           background-color: $button-primary-raised-hover-background-color;
         }
       }
@@ -75,10 +72,20 @@ md-button.md-#{$theme-name}-theme {
       color: $button-warn-raised-color;
       background-color: $button-warn-raised-background-color;
       &:not([disabled]) {
-        &:hover, &.focus {
+        &:hover, 
+        &:focus {
           background-color: $button-warn-raised-hover-background-color;
         }
       }
     }
+  }
+
+  &[disabled],
+  &.md-raised[disabled],
+  &.md-fab[disabled] {
+    color: $button-disabled-color;
+    fill: $button-disabled-color;
+    background-color: $button-disabled-background-color;
+    cursor: not-allowed;
   }
 }

@@ -3,10 +3,10 @@
   <md-content >
 
     <section layout="vertical" layout-sm="horizontal" layout-align="center center">
-      <md-button>Button</md-button>
+      <md-button>{{title1}}</md-button>
       <md-button noink class="md-primary">Primary (noink)</md-button>
-      <md-button disabled class="md-primary">Disabled</md-button>
-      <md-button class="md-warn">Warn</md-button>
+      <md-button ng-disabled="isDisabled" class="md-primary">Disabled</md-button>
+      <md-button class="md-warn" ng-click="isDisabled = !isDisabled">{{title4}}</md-button>
       <div class="label">flat</div>
     </section>
 
@@ -38,8 +38,8 @@
     </section>
 
     <section layout="vertical" layout-sm="horizontal" layout-align="center center">
-        <md-button class="">Reset</md-button>
-        <md-button class="">RSVP</md-button>
+        <md-button ng-href="{{googleUrl}}" target="_blank">Go to Google</md-button>
+        <md-button>RSVP</md-button>
       <div class="label">Button Group</div>
     </section>
 

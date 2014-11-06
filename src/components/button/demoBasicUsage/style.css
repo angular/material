@@ -12,10 +12,10 @@ section {
 md-content {
   margin-right: 7px;
 }
-section md-button:not(.md-fab) {
+section .md-button:not(.md-fab) {
   width: 10em;
 }
-section md-button {
+section .md-button {
   display: block;
   margin: 1em;
   line-height: 25px;

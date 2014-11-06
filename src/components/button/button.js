@@ -9,14 +9,12 @@ angular.module('material.components.button', [
   'material.core',
   'material.animations',
   'material.services.aria',
-  'material.services.theming'
+  'material.services.theming',
 ])
   .directive('mdButton', [
-    'ngHrefDirective',
     '$mdInkRipple',
-    '$mdAria',
-    '$mdUtil',
     '$mdTheming',
+    '$mdAria',
     MdButtonDirective
   ]);
 
@@ -30,81 +28,68 @@ angular.module('material.components.button', [
  * @description
  * `<md-button>` is a button directive with optional ink ripples (default enabled).
  *
+ * If you supply a `href` or `ng-href` attribute, it will become an `<a>` element. Otherwise, it will
+ * become a `<button>` element.
+ *
  * @param {boolean=} noink If present, disable ripple ink effects.
- * @param {boolean=} disabled If present, disable tab selection.
- * @param {string=} type Optional attribute to specific button types (useful for forms); such as 'submit', etc.
- * @param {string=} ng-href Optional attribute to support both ARIA and link navigation
- * @param {string=} href Optional attribute to support both ARIA and link navigation
- * @param {string=} ariaLabel Publish the button label used by screen-readers for accessibility. Defaults to the button's text.
+ * @param {boolean=} disabled If present, disable selection.
+ * @param {string=} aria-label Publish the button label used by screen-readers for accessibility. Defaults to the button's text.
  *
  * @usage
  * <hljs lang="html">
- *  <md-button>Button</md-button>
- *  <br/>
- *  <md-button noink class="md-button-colored">
- *    Button (noInk)
+ *  <md-button>
+ *    Button
  *  </md-button>
- *  <br/>
- *  <md-button disabled class="md-button-colored">
- *    Colored (disabled)
+ *  <md-button href="http://google.com" class="md-button-colored">
+ *    I'm a link
+ *  </md-button>
+ *  <md-button disabled class="md-colored">
+ *    I'm a disabled button
  *  </md-button>
  * </hljs>
  */
-function MdButtonDirective(ngHrefDirectives, $mdInkRipple, $mdAria, $mdUtil, $mdTheming ) {
-  var ngHrefDirective = ngHrefDirectives[0];
+function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria) {
 
   return {
     restrict: 'E',
-    compile: function(element, attr) {
-      var innerElement;
-      var attributesToCopy;
-
-
-      // Add an inner anchor if the element has a `href` or `ngHref` attribute,
-      // so this element can be clicked like a normal `<a>`.
-      if (attr.ngHref || attr.href) {
-        innerElement = angular.element('<a>');
-        attributesToCopy = ['ng-href', 'href', 'rel', 'target', 'title', 'aria-label'];
-      // Otherwise, just add an inner button element (for form submission etc)
-      } else {
-        innerElement = angular.element('<button>');
-        attributesToCopy = ['type', 'disabled', 'ng-disabled', 'form', 'aria-label'];
-      }
-
-      angular.forEach(attributesToCopy, function(name) {
-        var camelCaseName = $mdUtil.camelCase(name);
-        if (attr.hasOwnProperty(camelCaseName)) {
-          innerElement.attr(name, attr[camelCaseName]);
-        }
-      });
-
-      innerElement
-        .addClass('md-button-inner')
-        .append(element.contents())
-        // Since we're always passing focus to the inner element,
-        // add a focus class to the outer element so we can still style
-        // it with focus.
-        .on('focus', function() {
-          element.addClass('focus');
-        })
-        .on('blur', function() {
-          element.removeClass('focus');
-        });
-
-      element.
-        append(innerElement)
-        .attr('tabIndex', -1)
-        //Always pass focus to innerElement
-        .on('focus', function() {
-          innerElement.focus();
-        });
-
-      return function postLink(scope, element, attr) {
-        $mdTheming(element);
-        $mdAria.expect(element, 'aria-label', true);
-        $mdInkRipple.attachButtonBehavior(element);
-      };
-    }
+    replace: true,
+    transclude: true,
+    template: getTemplate,
+    link: postLink
   };
+
+  function isAnchor(attr) {
+    return angular.isDefined(attr.href) || angular.isDefined(attr.ngHref);
+  }
+  
+  function getTemplate(element, attr) {
+    var tag = isAnchor(attr) ? 'a' : 'button';
+    //We need to manually pass disabled to the replaced element because
+    //of a bug where it isn't always passed.
+    var disabled = element[0].hasAttribute('disabled') ? ' disabled ' : ' ';
+
+    return '<' + tag + disabled + 'class="md-button" ng-transclude></' + tag + '>';
+  }
+
+  function postLink(scope, element, attr) {
+    var node = element[0];
+    $mdTheming(element);
+    $mdInkRipple.attachButtonBehavior(element);
+
+    var elementHasText = node.textContent.trim();
+    if (!elementHasText) {
+      $mdAria.expect(element, 'aria-label');
+    }
+
+    // For anchor elements, we have to set tabindex manually when the 
+    // element is disabled
+    if (isAnchor(attr)) {
+      scope.$watch(function() {
+        return node.hasAttribute('disabled');
+      }, function(isDisabled) {
+        element.attr('tabindex', isDisabled ? -1 : 0);
+      });
+    }
+  }
 
 }

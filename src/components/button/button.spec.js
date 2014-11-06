@@ -3,65 +3,40 @@ describe('md-button', function() {
   beforeEach(TestUtil.mockRaf);
   beforeEach(module('material.components.button'));
 
-  it('should have inner-anchor with attrs if href attr is given', inject(function($compile, $rootScope) {
-
-    var button = $compile('<md-button href="/link" rel="foo" target="bar" something="baz">' +
-                            '<div>content</div>' +
-                          '</md-button>')($rootScope);
-
+  it('should be anchor if href attr', inject(function($compile, $rootScope) {
+    var button = $compile('<md-button href="/link">')($rootScope.$new());
     $rootScope.$apply();
-    var anchor = button.find('a');
-    expect(anchor.length).toBe(1);
-    expect(anchor.html()).toContain('<div>content</div>');
-
-    expect(anchor.attr('href')).toBe('/link');
-    expect(anchor.attr('rel')).toBe('foo');
-    expect(anchor.attr('target')).toBe('bar');
-    expect(anchor.attr('something')).toBeFalsy();
+    expect(button[0].tagName.toLowerCase()).toEqual('a');
   }));
 
-  it('should have inner-anchor with attrs if ng-href attr is given', inject(function($compile, $rootScope) {
-
-    var button = $compile('<md-button ng-href="/link" rel="foo" target="bar" something="baz" title="awesome">' +
-                            '<div>content</div>' +
-                          '</md-button>')($rootScope);
-
+  it('should be anchor if ng-href attr', inject(function($compile, $rootScope) {
+    var button = $compile('<md-button ng-href="/link">')($rootScope.$new());
     $rootScope.$apply();
-    var anchor = button.find('a');
-    expect(anchor.length).toBe(1);
-    expect(anchor.html()).toContain('<div>content</div>');
-
-    expect(anchor.attr('ng-href')).toBe('/link');
-    expect(anchor.attr('rel')).toBe('foo');
-    expect(anchor.attr('title')).toBe('awesome');
-    expect(anchor.attr('target')).toBe('bar');
-    expect(anchor.attr('something')).toBeFalsy();
+    expect(button[0].tagName.toLowerCase()).toEqual('a');
   }));
 
-  it('should have inner-button with attrs by default', inject(function($compile, $rootScope) {
-
-    var button = $compile('<md-button type="foo" ng-disabled="true" form="bar">' +
-                            '<div>content</div>' +
-                          '</md-button>')($rootScope);
-
+  it('should be button otherwise', inject(function($compile, $rootScope) {
+    var button = $compile('<md-button>')($rootScope.$new());
     $rootScope.$apply();
-    var innerButton = button.find('button');
-    expect(innerButton.length).toBe(1);
-    expect(innerButton.html()).toContain('<div>content</div>');
-
-    expect(innerButton.attr('type')).toBe('foo');
-    expect(innerButton.attr('ng-disabled')).toBe('true');
-    expect(innerButton.attr('form')).toBe('bar');
+    expect(button[0].tagName.toLowerCase()).toEqual('button');
   }));
 
-  it('should have a label on inner-button', inject(function($compile, $rootScope){
-    var button = $compile('<md-button class="md-fab" aria-label="Time">' +
-                            '<md-icon icon=""></md-icon>' +
-                          '</md-button>')($rootScope);
-
+  it('should pass in disabled attribute (testing our DOM bug-fix)', inject(function($compile, $rootScope) {
+    var button = $compile('<md-button disabled>')($rootScope.$new());
     $rootScope.$apply();
-    var innerButton = button.find('button');
-
-    expect(innerButton.attr('aria-label')).toBe('Time');
+    expect(button[0].hasAttribute('disabled')).toBe(true);
   }));
+
+  it('should expect an aria-label if element has no text', inject(function($compile, $rootScope, $log) {
+    spyOn($log, 'warn');
+    var button = $compile('<md-button><md-icon></md-icon></md-button>')($rootScope);
+    $rootScope.$apply();
+    expect($log.warn).toHaveBeenCalled();
+
+    $log.warn.reset();
+    button = $compile('<md-button aria-label="something"><md-icon></md-icon></md-button>')($rootScope);
+    $rootScope.$apply();
+    expect($log.warn).not.toHaveBeenCalled();
+  }));
+
 });
