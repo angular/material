@@ -138,18 +138,19 @@ function mdInputDirective($mdUtil) {
     template: '<input >',
     require: ['^?mdInputGroup', '?ngModel'],
     link: function(scope, element, attr, ctrls) {
+      if ( !ctrls[0] ) return;
+
       var inputGroupCtrl = ctrls[0];
       var ngModelCtrl = ctrls[1];
-      if (!inputGroupCtrl) {
-        return;
-      }
 
       // scan for disabled and transpose the `type` value to the <input> element
       var isDisabled = $mdUtil.isParentDisabled(element);
 
-      element.attr('tabindex', isDisabled ? -1 : 0 );
-      element.attr('aria-disabled', isDisabled ? 'true' : 'false');
-      element.attr('type', attr.type || element.parent().attr('type') || "text" );
+      element.attr({
+        'tabindex': isDisabled ? -1 : 0,
+        'aria-disabled': isDisabled ? 'true' : 'false',
+        'type': attr.type || element.parent().attr('type') || "text"
+      });
 
       // When the input value changes, check if it "has" a value, and
       // set the appropriate class on the input group
@@ -161,19 +162,19 @@ function mdInputDirective($mdUtil) {
         });
       }
 
-      element.on('input', function() {
-        inputGroupCtrl.setHasValue( isNotEmpty() );
-      });
-
-      // When the input focuses, add the focused class to the group
-      element.on('focus', function(e) {
-        inputGroupCtrl.setFocused(true);
-      });
-      // When the input blurs, remove the focused class from the group
-      element.on('blur', function(e) {
-        inputGroupCtrl.setFocused(false);
-        inputGroupCtrl.setHasValue( isNotEmpty() );
-      });
+      element
+        .on('input', function() {
+          inputGroupCtrl.setHasValue( isNotEmpty() );
+        })
+        .on('focus', function(e) {
+          // When the input focuses, add the focused class to the group
+          inputGroupCtrl.setFocused(true);
+        })
+        .on('blur', function(e) {
+          // When the input blurs, remove the focused class from the group
+          inputGroupCtrl.setFocused(false);
+          inputGroupCtrl.setHasValue( isNotEmpty() );
+        });
 
       scope.$on('$destroy', function() {
         inputGroupCtrl.setFocused(false);
