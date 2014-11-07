@@ -75,17 +75,14 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
     var tabLabel = element.find('md-tab-label');
 
     if (tabLabel.length) {
-
       // If a tab label element is found, remove it for later re-use.
       tabLabel.remove();
 
     } else if (angular.isDefined(attr.label)) {
-
       // Otherwise, try to use attr.label as the label
       tabLabel = angular.element('<md-tab-label>').html(attr.label);
 
     } else {
-
       // If nothing is found, use the tab's content as the label
       tabLabel = angular.element('<md-tab-label>')
                         .append(element.contents().remove());
@@ -100,6 +97,7 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
       var tabsCtrl = ctrls[1]; // Controller for ALL tabs
 
       transcludeTabContent();
+      configureAria();
 
       var detachRippleFn = $mdInkRipple.attachButtonBehavior(element);
       tabsCtrl.add(tabItemCtrl);
@@ -108,14 +106,19 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
         tabsCtrl.remove(tabItemCtrl);
       });
 
-      if (!angular.isDefined(attr.ngClick)) element.on('click', defaultClickListener);
+      if (!angular.isDefined(attr.ngClick)) {
+        element.on('click', defaultClickListener);
+      }
       element.on('keydown', keydownListener);
+      scope.onSwipe = onSwipe;
 
-      if (angular.isNumber(scope.$parent.$index)) watchNgRepeatIndex();
-      if (angular.isDefined(attr.active)) watchActiveAttribute();
+      if (angular.isNumber(scope.$parent.$index)) {
+        watchNgRepeatIndex();
+      }
+      if (angular.isDefined(attr.active)) {
+        watchActiveAttribute();
+      }
       watchDisabled();
-
-      configureAria();
 
       function transcludeTabContent() {
         // Clone the label we found earlier, and $compile and append it
@@ -141,14 +144,24 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
           element.triggerHandler('click');
           ev.preventDefault();
 
-        } else if (ev.which === $mdConstant.KEY_CODE.LEFT_ARROW) {
+        } else if (ev.keyCode === $mdConstant.KEY_CODE.LEFT_ARROW) {
           var previous = tabsCtrl.previous(tabItemCtrl);
           previous && previous.element.focus();
 
-        } else if (ev.which === $mdConstant.KEY_CODE.RIGHT_ARROW) {
+        } else if (ev.keyCode === $mdConstant.KEY_CODE.RIGHT_ARROW) {
           var next = tabsCtrl.next(tabItemCtrl);
           next && next.element.focus();
         }
+      }
+
+      function onSwipe(ev) {
+        scope.$apply(function() {
+          if (ev.type === 'swipeleft') {
+            tabsCtrl.select(tabsCtrl.next());
+          } else {
+            tabsCtrl.select(tabsCtrl.previous());
+          }
+        });
       }
 
       // If tabItemCtrl is part of an ngRepeat, move the tabItemCtrl in our internal array
@@ -193,23 +206,24 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
       function configureAria() {
         // Link together the content area and tabItemCtrl with an id
         var tabId = attr.id || ('tab_' + $mdUtil.nextUid());
-        var tabContentId = 'content_' + tabId;
 
         element.attr({
           id: tabId,
           role: 'tab',
-          tabIndex: '-1' //this is also set on select/deselect in tabItemCtrl
-        });
-        if(!element.attr('aria-controls')) {
-          element.attr('aria-controls', tabContentId);
-        }
-        tabItemCtrl.contentContainer.attr({
-          id: tabContentId,
-          role: 'tabpanel'
+          tabIndex: -1 //this is also set on select/deselect in tabItemCtrl
         });
 
-        if (!tabItemCtrl.contentContainer.attr('aria-labelledby')) {
-          tabItemCtrl.contentContainer.attr('aria-labelledby', tabId);
+        // Only setup the contentContainer's aria attributes if tab content is provided
+        if (tabContent.length) {
+          var tabContentId = 'content_' + tabId;
+          if (!element.attr('aria-controls')) {
+            element.attr('aria-controls', tabContentId);
+          }
+          tabItemCtrl.contentContainer.attr({
+            id: tabContentId,
+            role: 'tabpanel',
+            'aria-labelledby': tabId
+          });
         }
       }
 

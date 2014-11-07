@@ -33,8 +33,6 @@ function MdTabsController(scope, element, $mdUtil) {
   self.next = next;
   self.previous = previous;
 
-  self.swipe = swipe;
-
   scope.$on('$destroy', function() {
     self.deselect(self.selected());
     for (var i = tabsList.count() - 1; i >= 0; i--) {
@@ -54,12 +52,10 @@ function MdTabsController(scope, element, $mdUtil) {
     tabsList.add(tab, index);
     tab.onAdd(self.contentArea);
 
-    // Register swipe feature
-    tab.$$onSwipe = swipe;
-
     // Select the new tab if we don't have a selectedIndex, or if the
     // selectedIndex we've been waiting for is this tab
-    if (scope.selectedIndex === -1 || scope.selectedIndex === self.indexOf(tab)) {
+    if (scope.selectedIndex === -1 || !angular.isNumber(scope.selectedIndex) || 
+        scope.selectedIndex === self.indexOf(tab)) {
       self.select(tab);
     }
     scope.$broadcast('$mdTabsChanged');
@@ -69,7 +65,7 @@ function MdTabsController(scope, element, $mdUtil) {
     if (!tabsList.contains(tab)) return;
 
     if (noReselect) {
-
+      // do nothing
     } else if (self.selected() === tab) {
       if (tabsList.count() > 1) {
         self.select(self.previous() || self.next());
@@ -105,6 +101,7 @@ function MdTabsController(scope, element, $mdUtil) {
     tab.isSelected = true;
     tab.onSelect();
   }
+
   function deselect(tab) {
     if (!tab || !tab.isSelected) return;
     if (!tabsList.contains(tab)) return;
@@ -123,35 +120,6 @@ function MdTabsController(scope, element, $mdUtil) {
 
   function isTabEnabled(tab) {
     return tab && !tab.isDisabled();
-  }
-
-  /*
-   * attach a swipe listen
-   * if it's not selected, abort
-   * check the direction
-   *   if it is right
-   *   it pan right
-   *     Now select
-   */
-
-  function swipe(direction) {
-    if ( !self.selected() ) return;
-
-    // check the direction
-    switch(direction) {
-
-      case "swiperight":  // if it is right
-      case "panright"  :  // it pan right
-        // Now do this...
-        self.select( self.previous() );
-        break;
-
-      case "swipeleft":
-      case "panleft"  :
-        self.select( self.next() );
-        break;
-    }
-
   }
 
 }
