@@ -39,3 +39,24 @@ var TestUtil = {
     });
   }
 };
+
+beforeEach(function() {
+
+  this.addMatchers({
+    // toHaveClass matcher from angularjs test helpers
+    toHaveClass: function(clazz) {
+      this.message = function() {
+        return "Expected '" + angular.mock.dump(this.actual) + 
+          (this.isNot ? ' not' : '') + " to have class '" + clazz + "'.";
+      };
+      var classes = clazz.trim().split(/\s+/);
+      for (var i=0; i<classes.length; ++i) {
+        if (!angular.element(this.actual).hasClass(classes[i])) {
+          return false;
+        }
+      }
+      return true;
+    }
+  });
+
+});

@@ -12,9 +12,14 @@ module.exports = function(config) {
       'bower_components/hammerjs/hammer.js',
       'config/test-utils.js',
       'src/core/**/*.js',
+
+      // We are explicit like this because we don't want to put
+      // demos in the tests, and Karma doesn't support advanced
+      // globbing.
       'src/components/*/*.js',
+      'src/components/tabs/js/*.js',
       'src/services/*.js',
-      'src/services/*/*.js' // Don't put demos in the tests
+      'src/services/*/*.js', 
     ],
 
     port: 9876,
