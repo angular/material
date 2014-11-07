@@ -135,7 +135,14 @@ function mdInputDirective($mdUtil) {
   return {
     restrict: 'E',
     replace: true,
-    template: '<input >',
+    template: function(element, attr){
+      isTextarea = element.parent().attr('type') == "multiline";
+
+      if (isTextarea)
+        return '<textarea rows="1"></textarea>'
+      else
+        return '<input>'
+    },
     require: ['^?mdInputGroup', '?ngModel'],
     link: function(scope, element, attr, ctrls) {
       var inputGroupCtrl = ctrls[0];
@@ -180,6 +187,24 @@ function mdInputDirective($mdUtil) {
         inputGroupCtrl.setHasValue(false);
       });
 
+      element.on('scroll', function(e){
+        var textarea = e.target;
+        textarea.scrollTop = 0;
+
+        // for smooth new line adding
+        var line = textarea.scrollHeight - textarea.offsetHeight;
+        height = textarea.offsetHeight + line;
+        textarea.style.height = height;
+      });
+
+      element.on('keyup', function(e){
+        var textarea = e.target;
+        textarea.style.height = "auto";
+        var line = textarea.scrollHeight - textarea.offsetHeight;
+        textarea.scrollTop = 0;
+        height = textarea.offsetHeight + (line > 0 ? line : 0);
+        textarea.style.height = height;
+      });
 
       function isNotEmpty(value) {
         value = angular.isUndefined(value) ? element.val() : value;

@@ -88,6 +88,11 @@ md-input-group,
   input, textarea {
     background: none;
   }
+
+  textarea {
+    resize: none;
+    overflow: hidden;
+  }
 }
 
 // Light-Theme
