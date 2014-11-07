@@ -14,7 +14,7 @@ describe('md-slider', function() {
 
   beforeEach(TestUtil.mockRaf);
   beforeEach(module('ngAria'));
-  beforeEach(module('material.components.slider','material.decorators'));
+  beforeEach(module('material.components.slider'));
 
   it('should set model on press', inject(function($compile, $rootScope, $timeout) {
     var slider = $compile('<md-slider ng-model="value" min="0" max="100">')($rootScope);
