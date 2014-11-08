@@ -52,7 +52,7 @@ describe('<md-tabs>', function() {
       expect(tabs.find('md-tab').eq(0)).toBeActiveTab();
     });
 
-    it('should select & focus tab on click if enabled', inject(function($document) {
+    it('should select & focus tab on click', inject(function($document) {
       var tabs = setup('<md-tabs>' +
             '<md-tab></md-tab>' +
             '<md-tab></md-tab>' +
@@ -62,19 +62,22 @@ describe('<md-tabs>', function() {
 
       tabs.find('md-tab').eq(1).triggerHandler('click');
       expect(tabItems.eq(1)).toBeActiveTab();
-      expect(tabItems[1]);
+      expect($document.activeElement).toBe(tabItems[1]);
       
       tabs.find('md-tab').eq(0).triggerHandler('click');
       expect(tabItems.eq(0)).toBeActiveTab();
+      expect($document.activeElement).toBe(tabItems[0]);
     }));
 
-    it('should focus tab on arrow if enabled', inject(function($document, $mdConstant) {
+    it('should focus tab on arrow if tab is enabled', inject(function($document, $mdConstant) {
       var tabs = setup('<md-tabs>' +
                        '<md-tab></md-tab>' +
                        '<md-tab ng-disabled="true"></md-tab>' +
                        '<md-tab></md-tab>' +
                        '</md-tabs>');
       var tabItems = tabs.find('md-tab');
+      expect(tabItems.eq(0)).toBeActiveTab();
+
       // Boundary case, do nothing
       triggerKeydown(tabItems.eq(0), $mdConstant.KEY_CODE.LEFT_ARROW);
       expect(tabItems.eq(0)).toBeActiveTab();
@@ -266,17 +269,21 @@ describe('<md-tabs>', function() {
       var tabs = setup('<md-tabs>' +
                        '<md-tab label="label!">content!</md-tab>' +
                        '</md-tabs>');
-      var tab = tabs.find('md-tab');
+      var tabItem = tabs.find('md-tab');
       var tabContent = angular.element(tabs[0].querySelector('.md-tab-content'));
 
-      expect(tab.attr('id')).toBeTruthy();
-      expect(tab.attr('role')).toBe('tab');
+      expect(tabs.attr('role')).toBe('tablist');
 
-      expect(tabContent.attr('aria-labelledby')).toBe(tab.attr('id'));
-      expect(tabContent.attr('role')).toBe('tabpanel');
+      expect(tabItem.attr('id')).toBeTruthy();
+      expect(tabItem.attr('role')).toBe('tab');
+      expect(tabItem.attr('aria-controls')).toBe(tabContent.attr('id'));
+
       expect(tabContent.attr('id')).toBeTruthy();
+      expect(tabContent.attr('role')).toBe('tabpanel');
+      expect(tabContent.attr('aria-labelledby')).toBe(tabItem.attr('id'));
 
-      expect(tabContent.attr('id')).not.toEqual(tab.attr('id'));
+      //Unique ids check
+      expect(tabContent.attr('id')).not.toEqual(tabItem.attr('id'));
     });
   });
 
