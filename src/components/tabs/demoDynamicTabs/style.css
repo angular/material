@@ -9,17 +9,18 @@
 
 .demo-tab {
   height: 300px;
+  text-align: center;
 }
-.tab1 {
+.tab0 {
   background-color: #E3F2FD;
 }
-.tab2 {
+.tab1 {
   background-color: #E1F5FE;
 }
-.tab3 {
+.tab2 {
   background-color: #E0F7FA;
 }
-.tab4 {
+.tab3 {
   background-color: #E0F2F1;
 }
 

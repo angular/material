@@ -1,10 +1,14 @@
 angular.module('tabsDemo2', ['ngMaterial'])
   .controller('AppCtrl', function ($scope) {
     var tabs = [
-      { title: 'Polymer', active: true, content: "Polymer practices are great!", style:"tab1"},
-      { title: 'Material Design', active: false, content: "Material Design practices are better!", style:"tab2" },
-      { title: 'Angular', active: false, content: "AngularJS practices are the best!", style:"tab3" },
-      { title: 'NodeJS', active: false, disabled: false, content: "NodeJS practices are amazing!" ,style:"tab4" }
+      { title: 'First Tab', content: "Tabs will become paginated if there isn't enough room for them."},
+      { title: 'Second Tab', content: "You can swipe left and right on a mobile device to change tabs."},
+      { title: 'Third Tab', content: "You can bind the selected tab via the selected attribute on the md-tabs element."},
+      { title: 'Fourth Tab', content: "If you set the selected tab binding to -1, it will leave no tab selected."},
+      { title: 'Fifth Tab', content: "If you remove a tab, it will try to select a new one."},
+      { title: 'Sixth Tab', content: "There's an ink bar that follows the selected tab, you can turn it off if you want."},
+      { title: 'Seventh Tab', content: "If you set ng-disabled on a tab, it becomes unselectable. If the currently selected tab becomes disabled, it will try to select the next tab."},
+      { title: 'Eighth Tab', content: "If you're still reading this, you should just go check out the API docs for tabs!"}
     ];
 
     $scope.tabs = tabs;
@@ -14,9 +18,8 @@ angular.module('tabsDemo2', ['ngMaterial'])
     $scope.announceDeselected = announceDeselected;
 
     $scope.addTab = function (title, view) {
-      var style = tabs[(tabs.length % 4)].style;
       view = view || title + " Content View";
-      tabs.push({ title: title, content: view, active: false, disabled: false, style:style});
+      tabs.push({ title: title, content: view, disabled: false, style:style});
     };
 
     $scope.removeTab = function (tab) {
