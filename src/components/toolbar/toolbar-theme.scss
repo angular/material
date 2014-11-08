@@ -4,4 +4,8 @@ $toolbar-text-color: $primary-color-palette-contrast-color;
 md-toolbar.md-#{$theme-name}-theme {
   background-color: $toolbar-background-color;
   color: $primary-color-palette-contrast-color;
+
+  .md-button {
+    color: $primary-color-palette-contrast-color;
+  }
 }
