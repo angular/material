@@ -62,6 +62,11 @@ md-bottom-sheet {
     &:hover {
       cursor: pointer;
     }
+
+    .md-button {
+      color: inherit;
+      text-transform: none;
+    }
   }
 
   &.md-list {
@@ -114,7 +119,7 @@ md-bottom-sheet {
           }
         }
       }
-      
+
       @media screen and (max-width: $layout-breakpoint-sm) {
         @include grid-items-per-row(3, true);
       }
@@ -146,6 +151,7 @@ md-bottom-sheet {
         height: 6 * $baseline-grid;
         width: 6 * $baseline-grid;
         margin: $baseline-grid 0;
+        vertical-align: middle;
       }
 
       p.md-grid-text {
