@@ -2,11 +2,11 @@
   <md-subheader>Comment Actions</md-subheader>
   <md-list>
     <md-item ng-repeat="item in items" ng-click="listItemClick($index)">
-      <div class="md-icon-container">
+      <md-button>
         <!-- Using custom inline icon until md-icon is ready. DONT USE ME! -->
-        <md-inline-list-icon icon="{{item.icon}}" />
-      </div>
-      {{ item.name }}
+        <md-inline-list-icon icon="{{item.icon}}"></md-inline-list-icon>
+        <span class="md-inline-list-icon-label">{{ item.name }}</span>
+      </md-button>
     </md-item>
   </md-list>
 </md-bottom-sheet>

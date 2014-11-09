@@ -77,6 +77,8 @@ md-bottom-sheet {
     }
   }
 
+
+
   &.md-grid {
     padding-left: 3 * $baseline-grid;
     padding-right: 3 * $baseline-grid;
@@ -87,6 +89,7 @@ md-bottom-sheet {
       flex-direction: row;
       flex-wrap: wrap;
       transition: all 0.5s;
+      align-items: center;
     }
 
     md-item {
@@ -94,7 +97,7 @@ md-bottom-sheet {
       align-items: center;
       transition: all 0.5s;
 
-      height: 10 * $baseline-grid;
+      height: 12 * $baseline-grid;
 
       margin-top: $baseline-grid;
       margin-bottom: $baseline-grid;
@@ -138,6 +141,14 @@ md-bottom-sheet {
         flex-direction: column;
         align-items: center;
         width: 6 * $baseline-grid;
+        padding-bottom: 2 * $baseline-grid;
+      }
+
+      .md-grid-item-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 10 * $baseline-grid;
       }
 
       .md-icon-container {
@@ -145,7 +156,7 @@ md-bottom-sheet {
         box-sizing: border-box;
         height: 6 * $baseline-grid;
         width: 6 * $baseline-grid;
-        margin: $baseline-grid 0;
+        margin: 0 0;
       }
 
       p.md-grid-text {
@@ -154,8 +165,9 @@ md-bottom-sheet {
         font-size: 2 * $baseline-grid - 3;
         margin: 0;
         white-space: nowrap;
-        width: 6 * $baseline-grid;
+        width: 8 * $baseline-grid;
         text-align: center;
+        padding-top: 1 * $baseline-grid;
       }
     }
   }
