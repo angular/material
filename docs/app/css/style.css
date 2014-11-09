@@ -196,6 +196,7 @@ md-tabs.demo-source-tabs md-tab-label {
 }
 .demo-content {
   position: relative;
+  overflow:hidden;
   min-height: 448px;
   display: -webkit-box;
   display: -webkit-flex;
