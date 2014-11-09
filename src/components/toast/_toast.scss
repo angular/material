@@ -1,6 +1,7 @@
 // See height set globally, depended on by buttons
 md-toast {
-  display: flex;
+  display: block;
+  position:absolute;
   box-sizing: border-box;
   align-items: center;
 
@@ -13,7 +14,6 @@ md-toast {
   font-size: 14px;
   cursor: default;
 
-  position: fixed;
   max-width: 879px;
   max-height: 40px;
 

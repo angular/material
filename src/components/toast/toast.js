@@ -126,7 +126,7 @@ function MdToastService($timeout, $$interimElement, $animate, $mdSwipe, $mdThemi
     onRemove: onRemove,
     position: 'bottom left',
     themable: true,
-    hideDelay: 3000,
+    hideDelay: 3000
   };
 
   var $mdToast = $$interimElement(factoryDef);

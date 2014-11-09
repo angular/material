@@ -7,7 +7,7 @@ $bottom-sheet-header-height: 7 * $baseline-grid;
 $bottom-sheet-grid-font-weight: 300;
 
 md-bottom-sheet {
-  position: fixed;
+  position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
