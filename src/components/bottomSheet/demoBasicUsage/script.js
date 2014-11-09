@@ -4,6 +4,7 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
   $scope.alert = '';
 
   $scope.showListBottomSheet = function($event) {
+    $scope.alert = '';
     $mdBottomSheet.show({
       templateUrl: 'bottom-sheet-list-template.html',
       controller: 'ListBottomSheetCtrl',
@@ -14,6 +15,7 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
   };
 
   $scope.showGridBottomSheet = function($event) {
+    $scope.alert = '';
     $mdBottomSheet.show({
       templateUrl: 'bottom-sheet-grid-template.html',
       controller: 'GridBottomSheetCtrl',
