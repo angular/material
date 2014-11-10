@@ -1,4 +1,4 @@
-  /**
+/**
  * Initialization function that validates environment
  * requirements.
  */

@@ -132,6 +132,7 @@ function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF, 
     // Add a backdrop that will close on click
     backdrop = $compile('<md-backdrop class="md-opaque ng-enter">')(scope);
     backdrop.on('click touchstart', function() {
+      // Are there some cases where we can avoid this $apply?
       $timeout($mdBottomSheet.cancel);
     });
     $mdTheming.inherit(backdrop, options.parent);
@@ -146,7 +147,6 @@ function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF, 
     $mdTheming.inherit(bottomSheet.element, options.parent);
 
     return $animate.enter(bottomSheet.element, options.parent);
-
   }
 
   function onRemove(scope, element, options) {
