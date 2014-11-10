@@ -26,15 +26,18 @@ md-toast {
 
   opacity: 1;
   transform: translate3d(0,0,0) rotateZ(0deg);
-  transition: 0.2s linear;
-  transition-property: transform, opacity;
-  
+  transition: $swift-ease-out;
+
+  &.ng-leave-active {
+    transition: $swift-ease-in;
+  }
+
   /* Transition differently when swiping */
   &.md-swipeleft,
   &.md-swiperight,
   &.md-swipeup,
   &.md-swipedown {
-    transition: 0.15s ease-out;
+    transition: $swift-ease-out;
   }
 
   &.ng-enter {

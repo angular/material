@@ -58,13 +58,12 @@ md-tooltip {
     transition: inherit;
   }
 
-  &.md-show,
   &.md-hide {
-    transition: 0.2s ease-out;
-    transition-property: transform, opacity;
+    transition: $swift-ease-in;
   }
 
   &.md-show {
+    transition: $swift-ease-out;
     pointer-events: auto;
     transform: translate3d(0,0,0);
 

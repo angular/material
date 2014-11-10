@@ -1,6 +1,6 @@
 $tff-font-size: 0.75em;
 $tff-line-height:26px;
-$tff-transition: all ease-out 150ms;
+$tff-transition: all 0.15s $swift-ease-in-out-timing-function;
 // - `label` element (aka hint)
 $tff-hint-offset-large : 22px;
 $tff-hint-offset-small : 4px;

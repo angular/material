@@ -10,11 +10,12 @@
   z-index: $z-index-dialog;
 
   &.md-active {
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: $swift-ease-out;
     transform: translate3d(0,0,0) scale(1.0);
     opacity: 1;
   }
   &.ng-leave.ng-leave-active {
+    transition: $swift-ease-in;
     transform: translate3d(0,100%,0) scale(0.5);
     opacity: 0;
   }
