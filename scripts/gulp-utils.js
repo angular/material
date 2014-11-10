@@ -117,6 +117,28 @@ exports.buildNgMaterialDefinition = function() {
   });
 };
 
+function moduleNameToClosureName(name) {
+  return 'ng.' + name;
+}
+exports.addClosurePrefixes = function() {
+  return through2.obj(function(file, enc, next) {
+    var moduleInfo = getModuleInfo(file.contents);
+    if (moduleInfo.module) {
+
+      var provide = 'goog.provide(\'' + moduleNameToClosureName(moduleInfo.module) + '\');';
+      var requires = (moduleInfo.dependencies || []).sort().map(function(dep) {
+        return 'goog.require(\'' + moduleNameToClosureName(dep) + '\');';
+      }).join('\n');
+
+      file.contents = new Buffer(
+        provide + '\n' + requires + '\n' + file.contents.toString()
+      );
+    }
+    this.push(file);
+    next();
+  });
+};
+
 exports.buildModuleBower = function(name, version) {
   return through2.obj(function(file, enc, next) {
     this.push(file);
@@ -126,7 +148,7 @@ exports.buildModuleBower = function(name, version) {
     if (moduleInfo.module) {
       var bowerDeps = {};
 
-      moduleInfo.dependencies && moduleInfo.dependencies.forEach(function(dep) {
+      (moduleInfo.dependencies || []).forEach(function(dep) {
         var convertedName = 'angular-material-' + dep.split('.').pop();
         bowerDeps[convertedName] = version;
       });
@@ -135,7 +157,7 @@ exports.buildModuleBower = function(name, version) {
         name: 'angular-material-' + name,
         version: version,
         dependencies: bowerDeps
-      });
+      }, null, 2);
       var bowerFile = new gutil.File({
         base: file.base,
         path: file.base + '/bower.json',
@@ -160,7 +182,6 @@ exports.hoistScssVariables = function() {
       var line = contents[currentLine];
 
       if (openBlock || /^\s*\$/.test(line)) {
-        if (openBlock) debugger;
         openCount += (line.match(/\(/g) || []).length;
         closeCount += (line.match(/\)/g) || []).length;
         openBlock = openCount != closeCount;

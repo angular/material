@@ -27,13 +27,38 @@ var through2 = require('through2');
 var uglify = require('gulp-uglify');
 var webserver = require('gulp-webserver');
 
+var karma = require('karma').server;
+
 var buildConfig = require('./config/build.config');
-var karma       = require('karma').server;
-
-
 var utils = require('./scripts/gulp-utils.js');
 
+var config = {
+  banner:
+    '/*!\n' +
+    ' * Angular Material Design\n' +
+    ' * https://github.com/angular/material\n' +
+    ' * @license MIT\n' +
+    ' * v' + pkg.version + '\n' +
+    ' */\n',
+  jsBaseFiles: ['src/core/core.js', 'src/core/util/*.js'],
+  themeBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss'],
+  scssBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss', 'src/core/style/{structure,layout}.scss'],
+  paths: 'src/{components,services}/**',
+  outputDir: 'dist/'
+};
+var buildModes = {
+  'closure': {
+    transform: utils.addClosurePrefixes,
+    outputDir: path.join(config.outputDir, 'closure') + path.sep
+  },
+  'default': {
+    transform: gutil.noop,
+    outputDir: path.join(config.outputDir, 'js') + path.sep
+  }
+};
+
 var IS_RELEASE_BUILD = !!argv.release;
+var BUILD_MODE = buildModes[argv.mode] || buildModes['default'];
 
 if (IS_RELEASE_BUILD) {
   console.log(
@@ -107,22 +132,6 @@ gulp.task('karma-watch', function(done) {
 gulp.task('karma-sauce', function(done) {
   karma.start(require('./config/karma-sauce.conf.js'), done);
 });
-
-
-var config = {
-  banner:
-    '/*!\n' +
-    ' * Angular Material Design\n' +
-    ' * https://github.com/angular/material\n' +
-    ' * @license MIT\n' +
-    ' * v' + pkg.version + '\n' +
-    ' */\n',
-  jsBaseFiles: ['src/core/core.js', 'src/core/util/*.js'],
-  themeBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss'],
-  scssBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss', 'src/core/style/{structure,layout}.scss'],
-  paths: 'src/{components,services}/**',
-  outputDir: 'dist/'
-};
 
 
 
@@ -252,9 +261,10 @@ gulp.task('build-module', function() {
     .pipe(filterNonCodeFiles())
     .pipe(gulpif('*.scss', buildModuleStyles(name)))
     .pipe(gulpif('*.js', buildModuleJs(name)))
+    .pipe(BUILD_MODE.transform())
     .pipe(insert.prepend(config.banner))
     .pipe(gulpif(IS_RELEASE_BUILD, utils.buildModuleBower(name, pkg.version)))
-    .pipe(gulp.dest(config.outputDir + name));
+    .pipe(gulp.dest(BUILD_MODE.outputDir + name));
 });
 
 gulp.task('build-demo', function() {
@@ -268,12 +278,12 @@ gulp.task('build-demo', function() {
   return utils.readModuleDemos(mod, function() { 
     return lazypipe()
       .pipe(gulpif, /.css$/, sass())
-      .pipe(gulp.dest, config.outputDir + name)
+      .pipe(gulp.dest, BUILD_MODE.outputDir + name)
       ();
   })
     .pipe(through2.obj(function(demo, enc, next) {
       fs.writeFileSync(
-        path.resolve(config.outputDir, name, demo.name, 'index.html'),
+        path.resolve(BUILD_MODE.outputDir, name, demo.name, 'index.html'),
         _.template(demoIndexTemplate, demo)
       );
       next();
