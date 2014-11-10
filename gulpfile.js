@@ -301,7 +301,7 @@ function buildModuleStyles(name) {
   return lazypipe()
   .pipe(insert.prepend, baseStyles)
   .pipe(gulpif, /theme.scss/,
-      rename(name + '-default-theme.scss'), concat(name + '-core.scss')
+      rename(name + '-default-theme.scss'), concat(name + '.scss')
   )
   .pipe(sass)
   .pipe(autoprefix)
