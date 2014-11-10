@@ -21,7 +21,7 @@ md-sidenav {
   }
   &.md-closed-add.md-closed-add-active,
   &.md-closed-remove.md-closed-remove-active {
-    transition: transform 0.3s ease-in-out;
+    transition: $swift-ease-out;
   }
 
   &.md-locked-open,

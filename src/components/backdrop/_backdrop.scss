@@ -8,10 +8,13 @@ md-backdrop {
   right: 0;
   bottom: 0;
 
-  transition: all 0.2s ease-out;
 
   &.ng-enter {
     transition-delay: 0.1s;
+    transition: $swift-ease-out;
+  }
+  &.ng-leave {
+    transition: $swift-ease-in;
   }
   &.ng-enter,
   &.ng-leave.ng-leave-active {
