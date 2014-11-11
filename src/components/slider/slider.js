@@ -23,7 +23,7 @@ angular.module('material.components.slider', [
  * of values, and 'discrete' mode, where the user slides between only a few
  * select values.
  *
- * To enable discrete mode, add the `md-discrete` attribute to a slider,
+ * To enable discrete mode, add the `discrete` attribute to a slider,
  * and use the `step` attribute to change the distance between
  * values the user is allowed to pick.
  *
@@ -35,11 +35,11 @@ angular.module('material.components.slider', [
  * </hljs>
  * <h4>Discrete Mode</h4>
  * <hljs lang="html">
- * <md-slider md-discrete ng-model="myDiscreteValue" step="10" min="10" max="130">
+ * <md-slider discrete ng-model="myDiscreteValue" step="10" min="10" max="130">
  * </md-slider>
  * </hljs>
  *
- * @param {boolean=} mdDiscrete Whether to enable discrete mode.
+ * @param {boolean=} discrete Whether to enable discrete mode.
  * @param {number=} step The distance between values the user is allowed to pick. Default 1.
  * @param {number=} min The minimum value the user is allowed to pick. Default 0.
  * @param {number=} max The maximum value the user is allowed to pick. Default 100.
@@ -60,7 +60,7 @@ function SliderDirective($mdTheming) {
         '<div class="md-focus-thumb"></div>' +
         '<div class="md-focus-ring"></div>' +
         '<div class="md-sign">' +
-          '<span class="md-thumb-text"></span>' +
+          '<span class="md-thumb-text" ng-bind="modelValue"></span>' +
         '</div>' +
         '<div class="md-disabled-thumb"></div>' +
       '</div>',
@@ -94,7 +94,6 @@ function SliderController($scope, $element, $attrs, $$rAF, $window, $mdAria, $md
 
   this.init = function init(ngModelCtrl) {
     var thumb = angular.element($element[0].querySelector('.md-thumb'));
-    var thumbText = angular.element($element[0].querySelector('.md-thumb-text'));
     var thumbContainer = thumb.parent();
     var trackContainer = angular.element($element[0].querySelector('.md-track-container'));
     var activeTrack = angular.element($element[0].querySelector('.md-track-fill'));
@@ -181,7 +180,7 @@ function SliderController($scope, $element, $attrs, $$rAF, $window, $mdAria, $md
     // which could quickly become a performance bottleneck.
     var tickCanvas, tickCtx;
     function redrawTicks() {
-      if (!angular.isDefined($attrs.mdDiscrete)) return;
+      if (!angular.isDefined($attrs.discrete)) return;
 
       var numSteps = Math.floor( (max - min) / step );
       if (!tickCanvas) {
@@ -287,7 +286,7 @@ function SliderController($scope, $element, $attrs, $$rAF, $window, $mdAria, $md
      * Slide listeners
      */
     var isSliding = false;
-    var isDiscrete = angular.isDefined($attrs.mdDiscrete);
+    var isDiscrete = angular.isDefined($attrs.discrete);
 
     function onInput(ev) {
       if (!isSliding && ev.eventType === Hammer.INPUT_START &&
@@ -368,10 +367,7 @@ function SliderController($scope, $element, $attrs, $$rAF, $window, $mdAria, $md
      * @param x
      */
     function adjustThumbPosition( x ) {
-      var exactVal = percentToValue( positionToPercent( x ));
-      var closestVal = minMaxValidator( stepValidator(exactVal) );
       setSliderPercent( positionToPercent(x) );
-      thumbText.text( closestVal );
     }
 
     /**
