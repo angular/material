@@ -127,20 +127,20 @@ function InkRippleService($window, $timeout, $mdUtil) {
           rippleContainer.addClass('full visible');
           rippleContainer.css({ backgroundColor: css.backgroundColor.replace(')', ', 0.1').replace('(', 'a(') });
         }
-        rippleEl.addClass('placed visible centered full');
+        rippleEl.addClass('md-ripple-placed md-ripple-visible md-ripple-scaled md-ripple-full');
         rippleEl.css({ left: '50%', top: '50%' });
         $timeout(function () {
           if (rippleEl) {
-            rippleEl.removeClass('full');
-            if (!rippleEl.hasClass('visible')) {
+            rippleEl.removeClass('md-ripple-full');
+            if (!rippleEl.hasClass('md-ripple-visible')) {
               removeElement(rippleEl, 650);
               rippleEl = null;
             }
           }
-          rippleEl && rippleEl.removeClass('full');
+          rippleEl && rippleEl.removeClass('md-ripple-full');
           if (rippleContainer && options.dimBackground) {
-            rippleContainer.removeClass('full');
-            if (!rippleContainer.hasClass('visible')) rippleContainer.css({ backgroundColor: '' });
+            rippleContainer.removeClass('md-ripple-full');
+            if (!rippleContainer.hasClass('md-ripple-visible')) rippleContainer.css({ backgroundColor: '' });
           }
         }, 225, false);
       }, 0, false);
@@ -152,13 +152,13 @@ function InkRippleService($window, $timeout, $mdUtil) {
         rippleEl = createRipple(ev.center.x, ev.center.y, true);
       } else if (ev.eventType === Hammer.INPUT_END && ev.isFinal) {
         if (rippleEl) {
-          rippleEl.removeClass('visible');
+          rippleEl.removeClass('md-ripple-visible');
           removeElement(rippleEl, 650);
           rippleEl = null;
         }
         if (rippleContainer && options.dimBackground) {
-          rippleContainer.removeClass('visible');
-          if (!rippleContainer.hasClass('full')) rippleContainer.css({ backgroundColor: '' });
+          rippleContainer.removeClass('md-ripple-visible');
+          if (!rippleContainer.hasClass('md-ripple-full')) rippleContainer.css({ backgroundColor: '' });
         }
       }
     }
