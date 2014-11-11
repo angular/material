@@ -71,15 +71,17 @@ function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria) {
     return '<' + tag + disabled + 'class="md-button" ng-transclude></' + tag + '>';
   }
 
+  function compile(tElement, tAttr) {
+    var elementHasText = node.textContent.trim();
+    if (!elementHasText) {
+      $mdAria.expect(tElement, 'aria-label');
+    }
+  }
+
   function postLink(scope, element, attr) {
     var node = element[0];
     $mdTheming(element);
     $mdInkRipple.attachButtonBehavior(element);
-
-    var elementHasText = node.textContent.trim();
-    if (!elementHasText) {
-      $mdAria.expect(element, 'aria-label');
-    }
 
     // For anchor elements, we have to set tabindex manually when the 
     // element is disabled
