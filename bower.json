@@ -9,7 +9,7 @@
     "hammerjs": "~2.0.2"
   },
   "devDependencies": {
-    "angular": "1.3.0",
+    "angular": "1.3.x",
     "angular-animate": "1.3.x",
     "angular-aria": "1.3.x",
     "angular-route": "1.3.x",
