@@ -19,16 +19,16 @@
   transform-origin: 50% 50%;
   opacity: 0;
   border-radius: 50%;
-  &.placed {
+  &.md-ripple-placed {
     transition: all 0.65s $swift-ease-out-timing-function;
   }
-  &.centered {
+  &.md-ripple-scaled {
     transform: scale(1);
   }
-  &.full, &.visible {
+  &.md-ripple-full, &.md-ripple-visible {
     opacity: 0.15;
   }
-  &.held {
+  &.md-ripple-held {
     opacity: 0.15;
     transform: scale(0.35);
     transition: none;
