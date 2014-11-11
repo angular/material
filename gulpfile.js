@@ -7,6 +7,7 @@ var glob = require('glob').sync;
 var gulp = require('gulp');
 var karma = require('karma').server;
 var pkg = require('./package.json');
+var exec = require('child_process').exec;
 var mergeStream = require('merge-stream');
 
 var argv = require('minimist')(process.argv.slice(2));
@@ -24,7 +25,7 @@ var ngAnnotate = require('gulp-ng-annotate');
 var rename = require('gulp-rename');
 var sass = require('gulp-sass');
 var through2 = require('through2');
-var closureCompiler = require('gulp-closure-compiler');
+var uglify = require('gulp-uglify');
 var webserver = require('gulp-webserver');
 
 var karma = require('karma').server;
@@ -32,72 +33,40 @@ var karma = require('karma').server;
 var buildConfig = require('./config/build.config');
 var utils = require('./scripts/gulp-utils.js');
 
-var IS_RELEASE_BUILD = !!argv.release;
-var IS_MODULE_BUILD = (!!argv.module || !!argv.m);
-var BUILD_MODE = argv.mode;
-var VERSION = argv.version || pkg.version;
-
-/** Grab-bag of build configuration. */
 var config = {
   banner:
     '/*!\n' +
     ' * Angular Material Design\n' +
     ' * https://github.com/angular/material\n' +
     ' * @license MIT\n' +
-    ' * v' + VERSION + '\n' +
+    ' * v' + pkg.version + '\n' +
     ' */\n',
-  jsBaseFiles: [
-    'src/core/**/*.js',
-    '!src/core/**/*.spec.js'
-  ],
-  themeBaseFiles: [
-    'src/core/style/color-palette.scss',
-    'src/core/style/variables.scss',
-    'src/core/style/mixins.scss'
-  ],
-  scssBaseFiles: [
-    'src/core/style/color-palette.scss',
-    'src/core/style/variables.scss',
-    'src/core/style/mixins.scss',
-    'src/core/style/structure.scss',
-    'src/core/style/layout.scss'
-  ],
+  jsBaseFiles: ['src/core/**/*.js', '!src/core/**/*.spec.js'],
+  themeBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss'],
+  scssBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss', 'src/core/style/{structure,layout}.scss'],
   paths: 'src/{components,services}/**',
   outputDir: 'dist/'
 };
-
 var buildModes = {
   'closure': {
     transform: utils.addClosurePrefixes,
-    outputDir: path.join(config.outputDir, 'closure') + path.sep,
-    useBower: false
-  },
-  'module': {
-    transform: gutil.noop,
-    outputDir: path.join(config.outputDir, 'module') + path.sep,
-    useBower: false
+    outputDir: path.join(config.outputDir, 'closure') + path.sep
   },
   'default': {
     transform: gutil.noop,
-    outputDir: path.join(config.outputDir, 'js') + path.sep,
-    useBower: true
+    outputDir: path.join(config.outputDir, 'js') + path.sep
   }
 };
 
-IS_MODULE_BUILD && (BUILD_MODE="module");
-BUILD_MODE = buildModes[BUILD_MODE] || buildModes['default'];
-
+var IS_RELEASE_BUILD = !!argv.release;
+var BUILD_MODE = buildModes[argv.mode] || buildModes['default'];
 
 if (IS_RELEASE_BUILD) {
   console.log(
     gutil.colors.red('--release:'),
-    'Building release version (minified)...'
+    'Building release version (minified, debugs stripped)...'
   );
 }
-
-require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
-
-
 function readModuleArg() {
   var module = argv.module || argv.m;
   if (!module) {
@@ -108,29 +77,31 @@ function readModuleArg() {
   return module;
 }
 
+require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
 
 
 
 gulp.task('default', ['build']);
+//gulp.task('build', ['scripts', 'sass', 'sass-src']);
 gulp.task('validate', ['jshint', 'karma']);
-
 
 gulp.task('changelog', function(done) {
   changelog({
     repository: 'https://github.com/angular/material',
-    version: VERSION,
+    version: pkg.version,
     file: 'CHANGELOG.md'
   }, function(err, log) {
     fs.writeFileSync(__dirname + '/CHANGELOG.md', log);
   });
 });
 
-
-/** JSHint */
+/**
+ * JSHint
+ */
 gulp.task('jshint', function() {
   return gulp.src(
-    buildConfig.paths.js.concat(buildConfig.paths.test)
-  )
+      buildConfig.paths.js.concat(buildConfig.paths.test)
+    )
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter(require('jshint-summary')({
       fileColCol: ',bold',
@@ -141,27 +112,17 @@ gulp.task('jshint', function() {
     .pipe(jshint.reporter('fail'));
 });
 
-
-/** Karma Tests */
+/**
+ * Karma Tests
+ */
 gulp.task('karma', function(done) {
-  var karmaConfig = {
-    singleRun: true,
-    autoWatch: false,
+  karma.start({
+    singleRun:true,
+    autoWatch:false,
     browsers : argv.browsers ? argv.browsers.trim().split(',') : ['Chrome'],
     configFile: __dirname + '/config/karma.conf.js'
-  };
-
-  gutil.log('Running unit tests on unminified source.');
-  karma.start(karmaConfig, testMinified);
-
-  function testMinified() {
-    gutil.log('Running unit tests on minified source.');
-    buildJs(true);
-    karmaConfig.releaseMode = true;
-    karma.start(karmaConfig, done);
-  }
+  },done);
 });
-
 
 gulp.task('karma-watch', function(done) {
   karma.start({
@@ -171,43 +132,25 @@ gulp.task('karma-watch', function(done) {
   },done);
 });
 
-
 gulp.task('karma-sauce', function(done) {
   karma.start(require('./config/karma-sauce.conf.js'), done);
 });
 
 
-/******* Project-wide build tasks *******/
 
-gulp.task('build', ['build-themes', 'build-scss', 'build-js']);
+/**
+ * Project wide build related tasks
+ */
 
-
-gulp.task('build-all-modules', function() {
-  return gulp.src(['src/components/*', 'src/core/',])
-    .pipe(through2.obj(function(folder, enc, next) {
-      var moduleId = folder.path.indexOf('components') > -1 ?
-        'material.components.' + path.basename(folder.path) :
-        'material.' + path.basename(folder.path);
-
-      var stream;
-      if (IS_RELEASE_BUILD) {
-        stream = mergeStream(buildModule(moduleId, true), buildModule(moduleId, false));
-      } else {
-        stream = buildModule(moduleId, false);
-      }
-
-      stream.on('end', function() {
-        next();
-      });
-    }));
+gulp.task('build', ['build-themes', 'build-scss', 'build-js'], function() {
 });
 
 gulp.task('watch', ['build'], function() {
   gulp.watch('src/**/*', ['build']);
 });
 
-
-gulp.task('watch-module', ['build', 'build-module'], function() {
+var LR_PORT = argv.port || argv.p || 8080;
+gulp.task('watch-module', ['build', 'build-demo'], function() {
   var module = readModuleArg();
   var name = module.split('.').pop();
   var dir  = "/dist/demos/"+name.trim();
@@ -216,14 +159,12 @@ gulp.task('watch-module', ['build', 'build-module'], function() {
     '--', gutil.colors.green('Hint:'), 'Run',
     gutil.colors.cyan('`gulp server`'),
     'to start a livereload server in root, then navigate to\n',
-    '--', gutil.colors.green('"dist/module/' + name + '/"'), 'in your browser to develop.'
+    '--', gutil.colors.green('"dist/' + name + '/"'), 'in your browser to develop.'
    );
 
   return gulp.watch('src/**/*', ['build-demo']);
 });
 
-
-var LR_PORT = argv.port || argv.p || 8080;
 gulp.task('server', function() {
   return gulp.src('.')
     .pipe(webserver({
@@ -233,7 +174,6 @@ gulp.task('server', function() {
     }));
 });
 
-
 gulp.task('build-default-theme', function() {
   return gulp.src(config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss')))
     .pipe(concat('_default-theme.scss'))
@@ -241,20 +181,15 @@ gulp.task('build-default-theme', function() {
     .pipe(gulp.dest('themes/'));
 });
 
-
 gulp.task('build-theme', ['build-default-theme'], function() {
   var theme = argv.theme || argv.t || 'default';
   theme = theme.replace(/-theme$/, '');
   return buildTheme(theme);
 });
 
-
 gulp.task('build-themes', ['build-default-theme'], function() {
   var stream = mergeStream();
-  var themes = glob('themes/**.scss', { cwd: __dirname })
-    .filter(function(themeName) {
-      return themeName.split('/')[1].charAt(0) != '_';
-    });
+  var themes = glob('themes/**.scss', { cwd: __dirname }).filter(function(themeName) { return themeName.split('/')[1].charAt(0) != '_'; });
   themes.forEach(function(themeFile) {
     var name = themeFile.match(/((\w|-)+)-theme\.scss/)[1];
     stream.add(buildTheme(name));
@@ -262,6 +197,14 @@ gulp.task('build-themes', ['build-default-theme'], function() {
   return stream;
 });
 
+function buildTheme(theme) {
+  gutil.log("Building theme " + theme + "...");
+  return gulp.src(['src/core/style/color-palette.scss', 'themes/' + theme + '-theme.scss', 'themes/_default-theme.scss'])
+    .pipe(concat(theme + '-theme.scss'))
+    .pipe(utils.hoistScssVariables())
+    .pipe(sass())
+    .pipe(gulp.dest(config.outputDir + 'themes/'));
+}
 
 gulp.task('build-scss', ['build-default-theme'], function() {
   var defaultThemeContents = fs.readFileSync('themes/_default-theme.scss');
@@ -285,121 +228,47 @@ gulp.task('build-scss', ['build-default-theme'], function() {
     ));
 });
 
-
 gulp.task('build-js', function() {
-  return buildJs(IS_RELEASE_BUILD);
-});
-
-
-gulp.task('build-js-release', function() {
-  buildJs(true);
-});
-
-
-/**
- * Gets a function to stream javascript minification.
- * @param {string} fileName The name of the minified file.
- * @return {function(): Stream}
- */
-function minifyJs(fileName) {
-  // Figure out filename if not provided
-  if (!fileName) {
-    return through2.obj(function(file, enc, next) {
-      closure(path.basename(file.path)).on('data', this.push.bind(this));
-      next();
-    });
-  } else {
-    return closure(fileName);
-  }
-  function closure(fileName) {
-    return closureCompiler({
-      compilerPath: 'bower_components/closure-compiler/lib/vendor/compiler.jar',
-      fileName: fileName,
-      compilerFlags: {
-        language_in: 'ECMASCRIPT5',
-        warning_level: 'QUIET'
-      }
-    });
-  }
-}
-
-
-/**
- * Builds the entire component library javascript.
- * @param {boolean} isRelease Whether to build in release mode.
- */
-function buildJs(isRelease) {
   var jsGlob = path.join(config.paths, '*.js');
   gutil.log("Building js files...");
   return gulp.src(config.jsBaseFiles.concat([jsGlob]))
     .pipe(filterNonCodeFiles())
     .pipe(utils.buildNgMaterialDefinition())
+    .pipe(insert.wrap('(function() {\n', '})();\n'))
     .pipe(concat('angular-material.js'))
     .pipe(insert.prepend(config.banner))
     .pipe(ngAnnotate())
     .pipe(gulp.dest(config.outputDir))
-    .pipe(gulpif(isRelease, lazypipe()
-      .pipe(minifyJs, 'angular-material.min.js')
+    .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
+      .pipe(uglify)
+      .pipe(rename, {extname: '.min.js'})
       .pipe(gulp.dest, config.outputDir)
       ()
     ));
-}
+});
 
-
-function buildTheme(theme) {
-  gutil.log("Building theme " + theme + "...");
-  return gulp.src([
-    'src/core/style/color-palette.scss',
-    'themes/' + theme + '-theme.scss',
-    'themes/_default-theme.scss'
-  ])
-    .pipe(concat(theme + '-theme.scss'))
-    .pipe(utils.hoistScssVariables())
-    .pipe(sass())
-    .pipe(gulp.dest(config.outputDir + 'themes/'));
-}
-
-
-/******* Module-specific build tasks *******/
 /**
- * Examples:
+ * Module specific build tasks:
+ * e.g.
  * ```sh
  *    gulp watch-demo -c button
  *    gulp server
  * ```
  */
+gulp.task('build-module', function() {
+  var mod = readModuleArg();
+  var name = mod.split('.').pop();
 
-
-gulp.task('build-module', ['build-demo'], function() {
-  return buildModule(readModuleArg(), IS_RELEASE_BUILD);
-});
-
-function buildModule(module, isRelease) {
-  var name = module.split('.').pop();
-  gutil.log('Building module', module, isRelease && 'minified' || '', '...');
-  return utils.filesForModule(module)
+  gutil.log('Building module', mod, '...');
+  return utils.filesForModule(mod)
     .pipe(filterNonCodeFiles())
     .pipe(gulpif('*.scss', buildModuleStyles(name)))
     .pipe(gulpif('*.js', buildModuleJs(name)))
     .pipe(BUILD_MODE.transform())
     .pipe(insert.prepend(config.banner))
-    .pipe(gulpif(isRelease && BUILD_MODE.useBower, buildMin()))
+    .pipe(gulpif(IS_RELEASE_BUILD, utils.buildModuleBower(name, pkg.version)))
     .pipe(gulp.dest(BUILD_MODE.outputDir + name));
-
-  function buildMin() {
-    return lazypipe()
-      .pipe(gulpif, /.css$/, minifyCss(), minifyJs())
-      .pipe(rename, function(path) {
-        path.extname = path.extname
-        .replace(/.js$/, '.min.js')
-        .replace(/.css$/, '.min.css');
-      })
-      .pipe(utils.buildModuleBower, name, VERSION)
-      .pipe(gulp.dest, BUILD_MODE.outputDir + name)
-      ();
-  }
-}
-
+});
 
 gulp.task('build-demo', function() {
   var mod = readModuleArg();
@@ -407,9 +276,9 @@ gulp.task('build-demo', function() {
   var demoIndexTemplate = fs.readFileSync(
     __dirname + '/docs/demos/demo-index.template.html', 'utf8'
   ).toString();
-
+  
   gutil.log('Building demos for', mod, '...');
-  return utils.readModuleDemos(mod, function() {
+  return utils.readModuleDemos(mod, function() { 
     return lazypipe()
         .pipe(gulpif, /.css$/, sass())
         .pipe(gulpif, /.css$/, autoprefix())
@@ -426,7 +295,6 @@ gulp.task('build-demo', function() {
 
 });
 
-
 function buildModuleStyles(name) {
   var files = [];
   config.themeBaseFiles.forEach(function(fileGlob) {
@@ -442,16 +310,16 @@ function buildModuleStyles(name) {
     )
     .pipe(sass)
     .pipe(autoprefix)
+    .pipe(gulpif, IS_RELEASE_BUILD, minifyCss())
     (); // invoke the returning fn to create our pipe
 }
 
-
 function buildModuleJs(name) {
   return lazypipe()
-  .pipe(ngAnnotate)
-  .pipe(concat, name + '.js')
-  .pipe(gulpif(IS_RELEASE_BUILD, minifyJs.bind(null, name + '.min.js'), gutil.noop))
-  ();
+    .pipe(ngAnnotate())
+    .pipe(concat, name + '.js')
+    .pipe(gulpif, IS_RELEASE_BUILD, uglify({preserveComments: 'some'}))
+    ();
 }
 
 /** *****************************************
@@ -460,14 +328,14 @@ function buildModuleJs(name) {
  *
  ** ***************************************** */
 
-/******* Preconfigured gulp plugin invocations *******/
-
+/**
+ * Preconfigured gulp plugin invocations
+ */
 function filterNonCodeFiles() {
   return filter(function(file) {
     return !/demo|module\.json|\.spec.js|README/.test(file.path);
   });
 }
-
 
 function autoprefix() {
   return autoprefixer({browsers: [
