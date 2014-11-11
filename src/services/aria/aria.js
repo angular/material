@@ -11,7 +11,8 @@ function AriaService($$rAF, $log) {
   return {
     expect: expect,
     expectAsync: expectAsync,
-    expectWithText: expectWithText
+    expectWithText: expectWithText,
+    expectWithTextSynchronous: expectWithTextSynchronous
   };
 
   /**
