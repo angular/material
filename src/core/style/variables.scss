@@ -65,3 +65,18 @@ $z-index-bottom-sheet: 8;
 $z-index-sidenav: 6;
 $z-index-backdrop: 5;
 $z-index-fab: 2;
+
+// Easing Curves
+//--------------------------------------------
+
+$swift-ease-out-duration: 0.5s;
+$swift-ease-out-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+$swift-ease-out: all $swift-ease-out-duration $swift-ease-out-timing-function;
+
+$swift-ease-in-duration: 0.4s;
+$swift-ease-in-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2);
+$swift-ease-in: all $swift-ease-in-duration $swift-ease-in-timing-function;
+
+$swift-ease-in-out-duration: 0.5s;
+$swift-ease-in-out-timing-function: cubic-bezier(0.35, 0, 0.25, 1);
+$swift-ease-in-out: all $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
