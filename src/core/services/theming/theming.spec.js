@@ -1,6 +1,6 @@
 describe('$mdTheming service', function() {
   var $mdThemingProvider;
-  beforeEach(module('material.services.theming', function(_$mdThemingProvider_) {
+  beforeEach(module('material.core', function(_$mdThemingProvider_) {
     $mdThemingProvider = _$mdThemingProvider_;
   }));
 
@@ -63,7 +63,7 @@ describe('$mdTheming service', function() {
 });
 
 describe('md-theme directive', function() {
-  beforeEach(module('material.services.theming'));
+  beforeEach(module('material.core'));
 
   it('should observe and set mdTheme controller', inject(function($compile, $rootScope) {
     $rootScope.themey = 'red';
@@ -77,10 +77,8 @@ describe('md-theme directive', function() {
 });
 
 describe('md-themable directive', function() {
-  beforeEach(module('material.services.theming'));
-
   var $mdThemingProvider;
-  beforeEach(module('material.services.theming', function(_$mdThemingProvider_) {
+  beforeEach(module('material.core', function(_$mdThemingProvider_) {
     $mdThemingProvider = _$mdThemingProvider_;
   }));
 

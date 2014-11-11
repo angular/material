@@ -1,19 +1,23 @@
-  /**
+(function() {
+'use strict';
+
+/**
  * Initialization function that validates environment
  * requirements.
  */
-angular.module('material.core', [] )
+angular.module('material.core', [])
+  .run(MdCoreInitialize)
+  .config(MdCoreConfigure);
 
-.run(function validateEnvironment() {
-
+function MdCoreInitialize() {
   if (typeof Hammer === 'undefined') {
     throw new Error(
       'ngMaterial requires HammerJS to be preloaded.'
     );
   }
+}
 
-})
-.config(['$provide', function($provide) {
+function MdCoreConfigure($provide) {
   $provide.decorator('$$rAF', ['$delegate', '$rootScope', rAFDecorator]);
 
   function rAFDecorator($$rAF, $rootScope) {
@@ -44,12 +48,10 @@ angular.module('material.core', [] )
         }
       };
     };
-
     return $$rAF;
+
   }
 
-}]);
+}
 
-
-
-
+})();

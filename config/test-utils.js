@@ -1,5 +1,5 @@
 var TestUtil = {
-  /** 
+  /**
    * Mocks angular.element#focus for the duration of the test
    * @example
    * it('some focus test', inject(function($document) {
@@ -46,7 +46,7 @@ beforeEach(function() {
     // toHaveClass matcher from angularjs test helpers
     toHaveClass: function(clazz) {
       this.message = function() {
-        return "Expected '" + angular.mock.dump(this.actual) + 
+        return "Expected '" + angular.mock.dump(this.actual) +
           (this.isNot ? ' not' : '') + " to have class '" + clazz + "'.";
       };
       var classes = clazz.trim().split(/\s+/);
@@ -56,6 +56,17 @@ beforeEach(function() {
         }
       }
       return true;
+    },
+    /**
+     * A helper to match the type of a given value
+     * @example expect(1).toBeOfType('number')
+     */
+    toBeOfType: function(type) {
+      this.message = function() {
+        return "Expected " + angular.mock.dump(this.actual) + " of type " +
+          (typeof this.actual) + (this.isNot ? ' not ' : '') + " to have type '" + type + "'.";
+      };
+      return typeof this.actual == type;
     }
   });
 

@@ -1,19 +1,16 @@
+(function() {
+'use strict';
+
+
 /**
  * @ngdoc module
  * @name material.components.progressLinear
  * @description Linear Progress module!
  */
 angular.module('material.components.progressLinear', [
-  'material.animations',
-  'material.services.theming',
-  'material.services.aria'
+  'material.core'
 ])
-.directive('mdProgressLinear', [
-  '$$rAF', 
-  '$mdEffects',
-  '$mdTheming',
-  MdProgressLinearDirective
-]);
+  .directive('mdProgressLinear', MdProgressLinearDirective);
 
 /**
  * @ngdoc directive
@@ -45,7 +42,7 @@ angular.module('material.components.progressLinear', [
  * <md-progress-linear mode="query"></md-progress-linear>
  * </hljs>
  */
-function MdProgressLinearDirective($$rAF, $mdEffects, $mdTheming) {
+function MdProgressLinearDirective($$rAF, $mdConstant, $mdTheming) {
 
   return {
     restrict: 'E',
@@ -77,11 +74,11 @@ function MdProgressLinearDirective($$rAF, $mdEffects, $mdTheming) {
 
       var clamped = clamp(value);
       element.attr('aria-valuenow', clamped);
-      bar2Style[$mdEffects.TRANSFORM] = progressLinearTransforms[clamped];
+      bar2Style[$mdConstant.CSS.TRANSFORM] = transforms[clamped];
     });
 
     attr.$observe('secondaryvalue', function(value) {
-      bar1Style[$mdEffects.TRANSFORM] = progressLinearTransforms[clamp(value)];
+      bar1Style[$mdConstant.CSS.TRANSFORM] = transforms[clamp(value)];
     });
 
     $$rAF(function() {
@@ -106,7 +103,7 @@ function MdProgressLinearDirective($$rAF, $mdEffects, $mdTheming) {
 // **********************************************************
 // Private Methods
 // **********************************************************
-var progressLinearTransforms = (function() {
+var transforms = (function() {
   var values = new Array(101);
   for(var i = 0; i < 101; i++){
     values[i] = makeTransform(i);
@@ -119,4 +116,6 @@ var progressLinearTransforms = (function() {
     var translateX = (value-100)/2;
     return 'translateX(' + translateX.toString() + '%) scale(' + scale.toString() + ', 1)';
   }
+})();
+
 })();

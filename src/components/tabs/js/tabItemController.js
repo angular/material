@@ -1,22 +1,17 @@
+(function() {
+'use strict';
+
 
 angular.module('material.components.tabs')
+  .controller('$mdTab', TabItemController);
 
-.controller('$mdTab', [
-  '$scope',
-  '$element',
-  '$compile',
-  '$animate',
-  '$mdUtil',
-  TabItemController
-]);
-
-function TabItemController(scope, element, $compile, $animate, $mdUtil) {
+function TabItemController($scope, $element, $compile, $animate, $mdUtil) {
   var self = this;
 
   // Properties
   self.contentContainer = angular.element('<div class="md-tab-content ng-hide">');
-  self.hammertime = Hammer(self.contentContainer[0]);
-  self.element = element;
+  self.hammertime = new Hammer(self.contentContainer[0]);
+  self.element = $element;
 
   // Methods
   self.isDisabled = isDisabled;
@@ -26,7 +21,7 @@ function TabItemController(scope, element, $compile, $animate, $mdUtil) {
   self.onDeselect = onDeselect;
 
   function isDisabled() {
-    return element[0].hasAttribute('disabled');
+    return $element[0].hasAttribute('disabled');
   }
   
   /**
@@ -36,7 +31,7 @@ function TabItemController(scope, element, $compile, $animate, $mdUtil) {
   function onAdd(contentArea) {
     if (self.content.length) {
       self.contentContainer.append(self.content);
-      self.contentScope = scope.$parent.$new();
+      self.contentScope = $scope.$parent.$new();
       contentArea.append(self.contentContainer);
 
       $compile(self.contentContainer)(self.contentScope);
@@ -55,29 +50,30 @@ function TabItemController(scope, element, $compile, $animate, $mdUtil) {
   function onSelect() {
     // Resume watchers and events firing when tab is selected
     $mdUtil.reconnectScope(self.contentScope);
-    self.hammertime.on('swipeleft swiperight', scope.onSwipe);
+    self.hammertime.on('swipeleft swiperight', $scope.onSwipe);
 
-    element.addClass('active');
-    element.attr('aria-selected', true);
-    element.attr('tabIndex', 0);
+    $element.addClass('active');
+    $element.attr('aria-selected', true);
+    $element.attr('tabIndex', 0);
     $animate.removeClass(self.contentContainer, 'ng-hide');
 
-    scope.onSelect();
+    $scope.onSelect();
   }
 
   function onDeselect() {
     // Stop watchers & events from firing while tab is deselected
     $mdUtil.disconnectScope(self.contentScope);
-    self.hammertime.off('swipeleft swiperight', scope.onSwipe);
+    self.hammertime.off('swipeleft swiperight', $scope.onSwipe);
 
-    element.removeClass('active');
-    element.attr('aria-selected', false);
+    $element.removeClass('active');
+    $element.attr('aria-selected', false);
     // Only allow tabbing to the active tab
-    element.attr('tabIndex', -1);
+    $element.attr('tabIndex', -1);
     $animate.addClass(self.contentContainer, 'ng-hide');
 
-    scope.onDeselect();
+    $scope.onDeselect();
   }
 
 }
 
+})();

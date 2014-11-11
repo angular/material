@@ -13,7 +13,7 @@ describe('<md-toolbar>', function() {
     $provide.value('$$rAF', raf);
   }));
 
-  it('with scrollShrink, it should shrink scrollbar when going to bottom', inject(function($compile, $rootScope, $mdEffects, mdToolbarDirective) {
+  it('with scrollShrink, it should shrink scrollbar when going to bottom', inject(function($compile, $rootScope, $mdConstant, mdToolbarDirective) {
 
     var parent = angular.element('<div>');
     var toolbar = angular.element('<md-toolbar>');
@@ -47,9 +47,9 @@ describe('<md-toolbar>', function() {
     $rootScope.$broadcast('$mdContentLoaded', contentEl);
 
     //Expect everything to be in its proper initial state.
-    expect(toolbarCss[$mdEffects.TRANSFORM]).toEqual('translate3d(0,0px,0)');
+    expect(toolbarCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,0px,0)');
     expect(contentCss['margin-top']).toEqual('-100px');
-    expect(contentCss[$mdEffects.TRANSFORM]).toEqual('translate3d(0,100px,0)');
+    expect(contentCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,100px,0)');
 
     // Fake scroll to the bottom
     contentEl.triggerHandler({
@@ -57,8 +57,8 @@ describe('<md-toolbar>', function() {
       target: { scrollTop: 500 }
     });
 
-    expect(toolbarCss[$mdEffects.TRANSFORM]).toEqual('translate3d(0,-100px,0)');
-    expect(contentCss[$mdEffects.TRANSFORM]).toEqual('translate3d(0,0px,0)');
+    expect(toolbarCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,-100px,0)');
+    expect(contentCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,0px,0)');
 
     // Fake scroll back to the top
     contentEl.triggerHandler({
@@ -66,8 +66,8 @@ describe('<md-toolbar>', function() {
       target: { scrollTop: 0 }
     });
 
-    expect(toolbarCss[$mdEffects.TRANSFORM]).toEqual('translate3d(0,0px,0)');
-    expect(contentCss[$mdEffects.TRANSFORM]).toEqual('translate3d(0,100px,0)');
+    expect(toolbarCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,0px,0)');
+    expect(contentCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,100px,0)');
 
   }));
 });

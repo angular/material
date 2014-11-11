@@ -1,3 +1,6 @@
+(function() {
+'use strict';
+
 /**
  * @ngdoc module
  * @name material.components.content
@@ -6,13 +9,9 @@
  * Scrollable content
  */
 angular.module('material.components.content', [
-  'material.services.theming',
-  'material.services.registry'
+  'material.core'
 ])
-  .directive('mdContent', [
-    '$mdTheming',
-    mdContentDirective
-  ]);
+  .directive('mdContent', mdContentDirective);
 
 /**
  * @ngdoc directive
@@ -51,3 +50,4 @@ function mdContentDirective($mdTheming) {
     this.$element = $element;
   }
 }
+})();

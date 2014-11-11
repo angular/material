@@ -2,13 +2,17 @@
   <div style="padding: 24px;">
     <p>Toast can be dismissed with a swipe, a timer, or a button.</p>
     <div class="inset" layout="vertical" layout-sm="horizontal" layout-align="center">
-      <md-button ng-click="toastIt()">
+      <md-button ng-click="showCustomToast()">
+        Show Custom
+      </md-button>
+      <div style="width:50px"></div>
+      <md-button ng-click="showSimpleToast()">
         Show Simple
       </md-button>
       <div style="width:50px"></div>
       <md-button class="md-raised"
-                 ng-click="complexToastIt()">
-        Show Advanced
+                 ng-click="showActionToast()">
+        Show With Action
       </md-button>
     </div>
 

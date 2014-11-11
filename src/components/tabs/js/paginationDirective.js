@@ -1,16 +1,11 @@
+(function() {
+'use strict';
+
 
 angular.module('material.components.tabs')
+  .directive('mdTabsPagination', TabPaginationDirective);
 
-.directive('mdTabsPagination', [
-  '$mdEffects',
-  '$window',
-  '$$rAF',
-  '$$q',
-  '$timeout',
-  TabPaginationDirective
-]);
-
-function TabPaginationDirective($mdEffects, $window, $$rAF, $$q, $timeout) {
+function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
 
   // TODO allow configuration of TAB_MIN_WIDTH
   // Must match tab min-width rule in _tabs.scss
@@ -151,15 +146,15 @@ function TabPaginationDirective($mdEffects, $window, $$rAF, $$q, $timeout) {
       var deferred = $$q.defer();
 
       tabsCtrl.$$pagingOffset = x;
-      tabsParent.css($mdEffects.TRANSFORM, 'translate3d(' + x + 'px,0,0)');
-      tabsParent.on($mdEffects.TRANSITIONEND_EVENT, onTabsParentTransitionEnd);
+      tabsParent.css($mdConstant.CSS.TRANSFORM, 'translate3d(' + x + 'px,0,0)');
+      tabsParent.on($mdConstant.CSS.TRANSITIONEND, onTabsParentTransitionEnd);
 
       return deferred.promise;
 
       function onTabsParentTransitionEnd(ev) {
         // Make sure this event didn't bubble up from an animation in a child element.
         if (ev.target === tabsParent[0]) {
-          tabsParent.off($mdEffects.TRANSITIONEND_EVENT, onTabsParentTransitionEnd);
+          tabsParent.off($mdConstant.CSS.TRANSITIONEND, onTabsParentTransitionEnd);
           deferred.resolve();
         }
       }
@@ -194,3 +189,4 @@ function TabPaginationDirective($mdEffects, $window, $$rAF, $$q, $timeout) {
   }
 
 }
+})();

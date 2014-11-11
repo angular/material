@@ -1,4 +1,8 @@
+(function() {
+'use strict';
+
 angular.module('material.components.tabs')
+  .directive('mdTabs', TabsDirective);
 
 /**
  * @ngdoc directive
@@ -72,12 +76,6 @@ angular.module('material.components.tabs')
  * </hljs>
  *
  */
-.directive('mdTabs', [
-  '$parse',
-  '$mdTheming',
-  TabsDirective
-]);
-
 function TabsDirective($parse, $mdTheming) {
   return {
     restrict: 'E',
@@ -149,3 +147,4 @@ function TabsDirective($parse, $mdTheming) {
 
   }
 }
+})();

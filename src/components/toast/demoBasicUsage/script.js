@@ -2,7 +2,7 @@
 angular.module('toastDemo1', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope, $mdToast, $animate) {
-  
+
   $scope.toastPosition = {
     bottom: false,
     top: true,
@@ -16,7 +16,7 @@ angular.module('toastDemo1', ['ngMaterial'])
       .join(' ');
   };
 
-  $scope.complexToastIt = function() {
+  $scope.showCustomToast = function() {
     $mdToast.show({
       controller: 'ToastCtrl',
       templateUrl: 'toast-template.html',
@@ -25,11 +25,24 @@ angular.module('toastDemo1', ['ngMaterial'])
     });
   };
 
-  $scope.toastIt = function() {
-    $mdToast.show({
-      template: '<md-toast>Hello, ' + Math.random() + '</md-toast>',
-      hideDelay: 2000,
-      position: $scope.getToastPosition()
+  $scope.showSimpleToast = function() {
+    $mdToast.show(
+      $mdToast.simple()
+        .content('Simple Toast!')
+        .position($scope.getToastPosition())
+        .hideDelay(0)
+    );
+  };
+
+  $scope.showActionToast = function() {
+    var toast = $mdToast.simple()
+          .content('Action Toast!')
+          .action('OK')
+          .highlightAction(false)
+          .position($scope.getToastPosition());
+
+    $mdToast.show(toast).then(function() {
+      alert('You clicked \'OK\'.');
     });
   };
 

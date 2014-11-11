@@ -1,17 +1,17 @@
+(function() {
+'use strict';
+
 /**
  * @ngdoc module
  * @name material.components.list
  * @description
  * List module
  */
-angular.module('material.components.list', [])
-
-.directive('mdList', [
-  mdListDirective
+angular.module('material.components.list', [
+  'material.core'
 ])
-.directive('mdItem', [
-  mdItemDirective
-]);
+  .directive('mdList', mdListDirective)
+  .directive('mdItem', mdItemDirective);
 
 /**
  * @ngdoc directive
@@ -84,3 +84,4 @@ function mdItemDirective() {
     }
   };
 }
+})();

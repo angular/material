@@ -1,17 +1,13 @@
+(function() {
+'use strict';
 
-angular.module('material.animations')
 
-.directive('inkRipple', [
-  '$mdInkRipple',
-  InkRippleDirective
-])
-
-.factory('$mdInkRipple', [
-  '$window',
-  '$timeout',
-  '$mdUtil',
-  InkRippleService
-]);
+angular.module('material.core')
+  .factory('$mdInkRipple', InkRippleService)
+  .directive('inkRipple', InkRippleDirective)
+  .directive('noink', attrNoDirective())
+  .directive('nobar', attrNoDirective())
+  .directive('nostretch', attrNoDirective());
 
 function InkRippleDirective($mdInkRipple) {
   return function(scope, element, attr) {
@@ -72,7 +68,8 @@ function InkRippleService($window, $timeout, $mdUtil) {
     };
 
     function rippleIsAllowed() {
-      return !$mdUtil.isParentDisabled(element, 2);
+      return !element[0].hasAttribute('disabled') &&
+        !(element[0].parentNode && element[0].parentNode.hasAttribute('disabled'));
     }
 
     function removeElement(element, wait) {
@@ -163,3 +160,43 @@ function InkRippleService($window, $timeout, $mdUtil) {
     }
   }
 }
+
+/**
+ * noink/nobar/nostretch directive: make any element that has one of
+ * these attributes be given a controller, so that other directives can
+ * `require:` these and see if there is a `no<xxx>` parent attribute.
+ *
+ * @usage
+ * <hljs lang="html">
+ * <parent noink>
+ *   <child detect-no>
+ *   </child>
+ * </parent>
+ * </hljs>
+ *
+ * <hljs lang="js">
+ * myApp.directive('detectNo', function() {
+ *   return {
+ *     require: ['^?noink', ^?nobar'],
+ *     link: function(scope, element, attr, ctrls) {
+ *       var noinkCtrl = ctrls[0];
+ *       var nobarCtrl = ctrls[1];
+ *       if (noInkCtrl) {
+ *         alert("the noink flag has been specified on an ancestor!");
+ *       }
+ *       if (nobarCtrl) {
+ *         alert("the nobar flag has been specified on an ancestor!");
+ *       }
+ *     }
+ *   };
+ * });
+ * </hljs>
+ */
+function attrNoDirective() {
+  return function() {
+    return {
+      controller: angular.noop
+    };
+  };
+}
+})();

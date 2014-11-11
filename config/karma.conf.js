@@ -18,8 +18,6 @@ module.exports = function(config) {
       // globbing.
       'src/components/*/*.js',
       'src/components/tabs/js/*.js',
-      'src/services/*.js',
-      'src/services/*/*.js', 
     ],
 
     port: 9876,
