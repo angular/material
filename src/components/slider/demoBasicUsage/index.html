@@ -44,12 +44,12 @@
     </md-slider>
 
     <h3>Disabled</h3>
-    <md-slider ng-model="disabled1" disabled aria-label="Disabled 1"></md-slider>
-    <md-slider ng-model="disabled2" disabled aria-label="Disabled 2"></md-slider>
+    <md-slider ng-model="disabled1" ng-disabled="true" aria-label="Disabled 1"></md-slider>
+    <md-slider ng-model="disabled2" ng-disabled="true" aria-label="Disabled 2"></md-slider>
 
     <h3>Disabled, Discrete</h3>
-    <md-slider ng-model="disabled1" disabled step="3" md-discrete min="0" max="10" aria-label="Disabled discrete 1"></md-slider>
-    <md-slider ng-model="disabled2" disabled step="10" md-discrete aria-label="Disabled discrete 2"></md-slider>
+    <md-slider ng-model="disabled1" ng-disabled="true" step="3" md-discrete min="0" max="10" aria-label="Disabled discrete 1"></md-slider>
+    <md-slider ng-model="disabled2" ng-disabled="true" step="10" md-discrete aria-label="Disabled discrete 2"></md-slider>
 
   </md-content>
 </div>

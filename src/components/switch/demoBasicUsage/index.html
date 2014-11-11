@@ -7,11 +7,11 @@
     Switch 2: {{ data.cb2 }}
   </md-switch>
 
-  <md-switch disabled aria-label="Disabled switch">
+  <md-switch ng-disabled="true" aria-label="Disabled switch">
     Switch (Disabled)
   </md-switch>
 
-  <md-switch disabled aria-label="Disabled active switch" ng-model="data.cb4" ng-init="data.cb4=true">
+  <md-switch ng-disabled="true" aria-label="Disabled active switch" ng-model="data.cb4" ng-init="data.cb4=true">
     Switch (Disabled, Active)
   </md-switch>
 

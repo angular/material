@@ -29,7 +29,6 @@ angular.module('material.components.switch', [
  * @param {expression=} ngFalseValue The value to which the expression should be set when not selected.
  * @param {string=} ngChange Angular expression to be executed when input changes due to user interaction with the input element.
  * @param {boolean=} mdNoInk Use of attribute indicates use of ripple ink effects.
- * @param {boolean=} disabled Use of attribute indicates the switch is disabled: no ink effects and not selectable
  * @param {string=} ariaLabel Publish the button label used by screen-readers for accessibility. Defaults to the switch's text.
  *
  * @usage
@@ -42,7 +41,7 @@ angular.module('material.components.switch', [
  *   No Ink Effects
  * </md-switch>
  *
- * <md-switch disabled ng-model="isDisabled" aria-label="Disabled">
+ * <md-switch ng-disabled="true" ng-model="isDisabled" aria-label="Disabled">
  *   Disabled
  * </md-switch>
  *
@@ -65,17 +64,11 @@ function MdSwitch(mdCheckboxDirective, mdRadioButtonDirective, $mdTheming) {
   };
 
   function compile(element, attr) {
-    
     var thumb = angular.element(element[0].querySelector('.md-switch-thumb'));
-    //Copy down disabled attributes for checkboxDirective to use
-    thumb.attr('disabled', attr.disabled);
-    thumb.attr('ngDisabled', attr.ngDisabled);
-
     var checkboxLink = checkboxDirective.compile(thumb, attr);
 
     return function (scope, element, attr, ngModelCtrl) {
       $mdTheming(element);
-      var thumb = angular.element(element[0].querySelector('.md-switch-thumb'));
       return checkboxLink(scope, thumb, attr, ngModelCtrl);
     };
   }

@@ -112,9 +112,6 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
     }
 
     function refreshElements() {
-      var contentRect = contentEl[0].getBoundingClientRect();
-
-
       // Sort our collection of elements by their current position in the DOM.
       // We need to do this because our elements' order of being added may not
       // be the same as their order of display.

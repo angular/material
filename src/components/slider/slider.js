@@ -112,8 +112,6 @@ function SliderController($scope, $element, $attrs, $$rAF, $window, $mdAria, $md
     var stopDisabledWatch = angular.noop;
     if ($attrs.ngDisabled) {
       stopDisabledWatch = $scope.$parent.$watch($attrs.ngDisabled, updateAriaDisabled);
-    } else {
-      updateAriaDisabled(!!$attrs.disabled);
     }
 
     $mdAria.expect($element, 'aria-label');

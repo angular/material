@@ -21,12 +21,6 @@ describe('md-button', function() {
     expect(button[0].tagName.toLowerCase()).toEqual('button');
   }));
 
-  it('should pass in disabled attribute (testing our DOM bug-fix)', inject(function($compile, $rootScope) {
-    var button = $compile('<md-button disabled>')($rootScope.$new());
-    $rootScope.$apply();
-    expect(button[0].hasAttribute('disabled')).toBe(true);
-  }));
-
   it('should expect an aria-label if element has no text', inject(function($compile, $rootScope, $log) {
     spyOn($log, 'warn');
     var button = $compile('<md-button><md-icon></md-icon></md-button>')($rootScope);

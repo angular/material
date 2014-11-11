@@ -67,8 +67,9 @@ function InkRippleService($window, $timeout) {
     };
 
     function rippleIsAllowed() {
+      var parent;
       return !element[0].hasAttribute('disabled') &&
-          !(element[0].parentNode && element[0].parentNode.hasAttribute('disabled'));
+          !((parent = element[0].parentNode) && parent.hasAttribute('disabled'));
     }
 
     function removeElement(element, wait) {

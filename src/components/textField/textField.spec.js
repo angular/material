@@ -215,7 +215,7 @@ describe('Text Field directives', function() {
     });
 
     it('should add an ARIA attribute for disabled inputs', function() {
-      var markup ='<md-text-float disabled ' +
+      var markup ='<md-text-float ng-disabled="true" ' +
                   '  label="{{labels.firstName}}" ' +
                   '  ng-model="user.firstName" >' +
                   '</md-text-float>';

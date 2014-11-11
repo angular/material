@@ -5,7 +5,7 @@
 angular.module('material.components.tabs')
   .controller('$mdTab', TabItemController);
 
-function TabItemController($scope, $element, $compile, $animate, $mdUtil) {
+function TabItemController($scope, $element, $attrs, $compile, $animate, $mdUtil, $parse) {
   var self = this;
 
   // Properties
@@ -20,8 +20,9 @@ function TabItemController($scope, $element, $compile, $animate, $mdUtil) {
   self.onSelect = onSelect;
   self.onDeselect = onDeselect;
 
+  var disabledParsed = $parse($attrs.ngDisabled);
   function isDisabled() {
-    return $element[0].hasAttribute('disabled');
+    return disabledParsed($scope.$parent);
   }
   
   /**

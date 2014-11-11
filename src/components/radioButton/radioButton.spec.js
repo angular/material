@@ -132,15 +132,16 @@ describe('radioButton', function() {
 
     it('should be disabled', inject(function($compile, $rootScope) {
       var element = $compile('<md-radio-group ng-model="color">' +
-                              '<md-radio-button value="white" disabled></md-radio-button>' +
+                              '<md-radio-button value="white" ng-disabled="isDisabled"></md-radio-button>' +
                               '</md-radio-group>')($rootScope);
       var radio = element.find('md-radio-button');
 
+      $rootScope.$apply('isDisabled = true');
       $rootScope.$apply('color = null');
       radio.triggerHandler('click');
       expect($rootScope.color).toBe(null);
 
-      radio.removeAttr('disabled');
+      $rootScope.$apply('isDisabled = false');
       radio.triggerHandler('click');
       expect($rootScope.color).toBe('white');
     }));

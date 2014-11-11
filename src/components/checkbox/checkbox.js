@@ -26,7 +26,6 @@ angular.module('material.components.checkbox', [
  * @param {expression=} ngFalseValue The value to which the expression should be set when not selected.
  * @param {string=} ngChange Angular expression to be executed when input changes due to user interaction with the input element.
  * @param {boolean=} mdNoInk Use of attribute indicates use of ripple ink effects
- * @param {boolean=} disabled Use of attribute indicates the switch is disabled: no ink effects and not selectable
  * @param {string=} ariaLabel Publish the button label used by screen-readers for accessibility. Defaults to the checkbox's text.
  *
  * @usage
@@ -39,7 +38,7 @@ angular.module('material.components.checkbox', [
  *   No Ink Effects
  * </md-checkbox>
  *
- * <md-checkbox disabled ng-model="isDisabled" aria-label="Disabled">
+ * <md-checkbox ng-disabled="true" ng-model="isDisabled" aria-label="Disabled">
  *   Disabled
  * </md-checkbox>
  *

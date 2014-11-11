@@ -175,11 +175,11 @@ describe('<md-tabs>', function() {
       tabs.scope().$apply('disabled0 = true');
       expect(tabItems.eq(1)).toBeActiveTab();
       expect(tabItems.eq(0).attr('aria-disabled')).toBe('true');
-      expect(tabItems.eq(1).attr('aria-disabled')).toBe('false');
+      expect(tabItems.eq(1).attr('aria-disabled')).not.toBe('true');
 
       tabs.scope().$apply('disabled0 = false; disabled1 = true');
       expect(tabItems.eq(0)).toBeActiveTab();
-      expect(tabItems.eq(0).attr('aria-disabled')).toBe('false');
+      expect(tabItems.eq(0).attr('aria-disabled')).not.toBe('true');
       expect(tabItems.eq(1).attr('aria-disabled')).toBe('true');
     });
 
