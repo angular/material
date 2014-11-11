@@ -1,19 +1,15 @@
+(function() {
+'use strict';
+
 /**
  * @ngdoc module
  * @name material.components.progressCircular
  * @description Circular Progress module!
  */
 angular.module('material.components.progressCircular', [
-  'material.animations',
-  'material.services.aria',
-  'material.services.theming',
+  'material.core'
 ])
-  .directive('mdProgressCircular', [
-    '$$rAF',
-    '$mdEffects',
-    '$mdTheming',
-    MdProgressCircularDirective
-  ]);
+  .directive('mdProgressCircular', MdProgressCircularDirective);
 
 /**
  * @ngdoc directive
@@ -43,7 +39,7 @@ angular.module('material.components.progressCircular', [
  * <md-progress-circular mode="indeterminate"></md-progress-circular>
  * </hljs>
  */
-function MdProgressCircularDirective($$rAF, $mdEffects, $mdTheming) {
+function MdProgressCircularDirective($$rAF, $mdConstant, $mdTheming) {
   var fillRotations = new Array(101),
     fixRotations = new Array(101);
 
@@ -90,7 +86,7 @@ function MdProgressCircularDirective($$rAF, $mdEffects, $mdTheming) {
     var diameter = attr.diameter || 48;
     var scale = diameter/48;
 
-    circle.style[$mdEffects.TRANSFORM] = 'scale(' + scale.toString() + ')';
+    circle.style[$mdConstant.CSS.TRANSFORM] = 'scale(' + scale.toString() + ')';
 
     attr.$observe('value', function(value) {
       clamped = clamp(value);
@@ -100,11 +96,11 @@ function MdProgressCircularDirective($$rAF, $mdEffects, $mdTheming) {
       element.attr('aria-valuenow', clamped);
 
       for (i = 0; i < fill.length; i++) {
-        fill[i].style[$mdEffects.TRANSFORM] = fillRotation;
+        fill[i].style[$mdConstant.CSS.TRANSFORM] = fillRotation;
       }
 
       for (i = 0; i < fix.length; i++) {
-        fix[i].style[$mdEffects.TRANSFORM] = fixRotation;
+        fix[i].style[$mdConstant.CSS.TRANSFORM] = fixRotation;
       }
     });
   }
@@ -121,3 +117,4 @@ function MdProgressCircularDirective($$rAF, $mdEffects, $mdTheming) {
     return Math.ceil(value || 0);
   }
 }
+})();

@@ -1,3 +1,6 @@
+(function() {
+'use strict';
+
 /*
  * @ngdoc module
  * @name material.components.sticky
@@ -8,17 +11,9 @@
 
 angular.module('material.components.sticky', [
   'material.core',
-  'material.components.content',
-  'material.animations'
+  'material.components.content'
 ])
-.factory('$mdSticky', [
-  '$document',
-  '$mdEffects',
-  '$compile',
-  '$$rAF',
-  '$mdUtil',
-  MdSticky
-]);
+  .factory('$mdSticky', MdSticky);
 
 /*
  * @ngdoc service
@@ -36,7 +31,7 @@ angular.module('material.components.sticky', [
  *     If not provided, it will use the result of `element.clone()`.
  */
 
-function MdSticky($document, $mdEffects, $compile, $$rAF, $mdUtil) {
+function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
 
   var browserStickySupport = checkStickySupport();
 
@@ -246,12 +241,12 @@ function MdSticky($document, $mdEffects, $compile, $$rAF, $mdUtil) {
      if (amount === null || amount === undefined) {
        if (item.translateY) {
          item.translateY = null;
-         item.clone.css($mdEffects.TRANSFORM, '');
+         item.clone.css($mdConstant.CSS.TRANSFORM, '');
        }
      } else {
        item.translateY = amount;
        item.clone.css(
-         $mdEffects.TRANSFORM, 
+         $mdConstant.CSS.TRANSFORM, 
          'translate3d(' + item.left + 'px,' + amount + 'px,0)'
        );
      }
@@ -307,3 +302,4 @@ function MdSticky($document, $mdEffects, $compile, $$rAF, $mdUtil) {
   }
 
 }
+})();

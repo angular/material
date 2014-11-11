@@ -1,19 +1,15 @@
+(function() {
+'use strict';
+
 /**
  * Conditionally configure ink bar animations when the
  * tab selection changes. If `nobar` then do not show the
  * bar nor animate.
  */
 angular.module('material.components.tabs')
+  .directive('mdTabsInkBar', MdTabInkDirective);
 
-.directive('mdTabsInkBar', [
-  '$mdEffects',
-  '$window',
-  '$$rAF',
-  '$timeout',
-  MdTabInkDirective
-]);
-
-function MdTabInkDirective($mdEffects, $window, $$rAF, $timeout) {
+function MdTabInkDirective($mdConstant, $window, $$rAF, $timeout) {
 
   return {
     restrict: 'E',
@@ -59,10 +55,11 @@ function MdTabInkDirective($mdEffects, $window, $$rAF, $timeout) {
           display : width > 0 ? 'block' : 'none',
           width: width + 'px'
         });
-        element.css($mdEffects.TRANSFORM, 'translate3d(' + left + 'px,0,0)');
+        element.css($mdConstant.CSS.TRANSFORM, 'translate3d(' + left + 'px,0,0)');
       }
     }
 
   }
 
 }
+})();

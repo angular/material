@@ -1,3 +1,6 @@
+(function() {
+'use strict';
+
 /**
  * @private
  * @ngdoc module
@@ -5,17 +8,11 @@
  */
 
 angular.module('material.components.switch', [
+  'material.core',
   'material.components.checkbox',
-  'material.components.radioButton',
-  'material.services.theming'
+  'material.components.radioButton'
 ])
-
-.directive('mdSwitch', [
-  'mdCheckboxDirective',
-  'mdRadioButtonDirective',
-  '$mdTheming',
-  MdSwitch
-]);
+  .directive('mdSwitch', MdSwitch);
 
 /**
  * @private
@@ -51,9 +48,9 @@ angular.module('material.components.switch', [
  *
  * </hljs>
  */
-function MdSwitch(checkboxDirectives, radioButtonDirectives, $mdTheming) {
-  var checkboxDirective = checkboxDirectives[0];
-  var radioButtonDirective = radioButtonDirectives[0];
+function MdSwitch(mdCheckboxDirective, mdRadioButtonDirective, $mdTheming) {
+  var checkboxDirective = mdCheckboxDirective[0];
+  var radioButtonDirective = mdRadioButtonDirective[0];
 
   return {
     restrict: 'E',
@@ -83,3 +80,4 @@ function MdSwitch(checkboxDirectives, radioButtonDirectives, $mdTheming) {
     };
   }
 }
+})();

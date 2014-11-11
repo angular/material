@@ -1,3 +1,6 @@
+(function() {
+'use strict';
+
 /**
  * @ngdoc module
  * @name material.components.subheader
@@ -5,15 +8,10 @@
  * SubHeader module
  */
 angular.module('material.components.subheader', [
-  'material.components.sticky',
-  'material.services.theming'
+  'material.core',
+  'material.components.sticky'
 ])
-.directive('mdSubheader', [
-  '$mdSticky',
-  '$compile',
-  '$mdTheming',
-  MdSubheaderDirective
-]);
+  .directive('mdSubheader', MdSubheaderDirective);
 
 /**
  * @ngdoc directive
@@ -66,3 +64,4 @@ function MdSubheaderDirective($mdSticky, $compile, $mdTheming) {
     }
   };
 }
+})();

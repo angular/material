@@ -1,6 +1,6 @@
 describe('$mdMedia', function() {
 
-  beforeEach(module('material.services.media'));
+  beforeEach(module('material.components.sidenav'));
 
   var matchMediaResult = false;
   beforeEach(inject(function($window) {
