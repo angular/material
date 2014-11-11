@@ -1,3 +1,6 @@
+(function() {
+'use strict';
+
 /**
  * @ngdoc module
  * @name material.components.tabs
@@ -5,9 +8,10 @@
  *
  * Tabs
  */
+/*
+ * @see js folder for tabs implementation
+ */
 angular.module('material.components.tabs', [
-  'material.core',
-  'material.animations',
-  'material.services.theming',
-  'material.services.aria'
+  'material.core'
 ]);
+})();

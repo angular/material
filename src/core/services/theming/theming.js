@@ -1,26 +1,16 @@
-/*
- * @ngdoc module
- * @name material.services.theming
- * @description Used to provide theming to angular-material directives
- */
+(function() {
+'use strict';
 
-angular.module('material.services.theming', [
-])
-.directive('mdTheme', [
-  '$interpolate',
-  ThemingDirective
-])
-.directive('mdThemable', [
-  '$mdTheming',
-  ThemableDirective
-])
-.provider('$mdTheming', [
-  Theming
-]);
+
+angular.module('material.core')
+  .directive('mdTheme', ThemingDirective)
+  .directive('mdThemable', ThemableDirective)
+  .provider('$mdTheming', Theming);
 
 /**
  * @ngdoc provider
  * @name $mdThemingProvider
+ * @module material.core
  *
  * @description Provider to configure the `$mdTheming` service.
  */
@@ -132,3 +122,4 @@ function ThemingDirective($interpolate) {
 function ThemableDirective($mdTheming) {
   return $mdTheming;
 }
+})();

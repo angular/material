@@ -1,20 +1,15 @@
+(function() {
+'use strict';
+
 /**
  * @ngdoc module
  * @name material.components.toolbar
  */
 angular.module('material.components.toolbar', [
   'material.core',
-  'material.components.content',
-  'material.services.theming',
-  'material.animations'
+  'material.components.content'
 ])
-  .directive('mdToolbar', [
-    '$$rAF',
-    '$mdEffects',
-    '$mdUtil',
-    '$mdTheming',
-    mdToolbarDirective
-  ]);
+  .directive('mdToolbar', mdToolbarDirective);
 
 /**
  * @ngdoc directive
@@ -63,7 +58,7 @@ angular.module('material.components.toolbar', [
  * shrinking by. For example, if 0.25 is given then the toolbar will shrink
  * at one fourth the rate at which the user scrolls down. Default 0.5.
  */ 
-function mdToolbarDirective($$rAF, $mdEffects, $mdUtil, $mdTheming) {
+function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming) {
 
   return {
     restrict: 'E',
@@ -95,7 +90,8 @@ function mdToolbarDirective($$rAF, $mdEffects, $mdUtil, $mdTheming) {
         scope.$on('$mdContentLoaded', onMdContentLoad);
 
         function onMdContentLoad($event, newContentEl) {
-          if ($mdUtil.elementIsSibling(element, newContentEl)) {
+          // Toolbar and content must be siblings
+          if (element.parent()[0] === newContentEl.parent()[0]) {
             // unhook old content event listener if exists
             if (contentElement) {
               contentElement.off('scroll', debouncedContentScroll);
@@ -135,11 +131,11 @@ function mdToolbarDirective($$rAF, $mdEffects, $mdUtil, $mdTheming) {
           );
 
           element.css(
-            $mdEffects.TRANSFORM, 
+            $mdConstant.CSS.TRANSFORM, 
             'translate3d(0,' + (-y * shrinkSpeedFactor) + 'px,0)'
           );
           contentElement.css(
-            $mdEffects.TRANSFORM, 
+            $mdConstant.CSS.TRANSFORM, 
             'translate3d(0,' + ((toolbarHeight - y) * shrinkSpeedFactor) + 'px,0)'
           );
 
@@ -152,3 +148,4 @@ function mdToolbarDirective($$rAF, $mdEffects, $mdUtil, $mdTheming) {
   };
 
 }
+})();

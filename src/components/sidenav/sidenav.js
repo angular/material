@@ -1,3 +1,6 @@
+(function() {
+'use strict';
+
 /**
  * @ngdoc module
  * @name material.components.sidenav
@@ -7,36 +10,14 @@
  */
 angular.module('material.components.sidenav', [
   'material.core',
-  'material.services.registry',
-  'material.services.media',
-  'material.components.backdrop',
-  'material.services.theming',
-  'material.animations'
+  'material.components.backdrop'
 ])
-  .factory('$mdSidenav', [
-    '$mdComponentRegistry', 
-    mdSidenavService 
-  ])
-  .directive('mdSidenav', [
-    '$timeout',
-    '$animate',
-    '$parse',
-    '$mdMedia',
-    '$mdConstant',
-    '$compile',
-    '$mdTheming',
-    mdSidenavDirective 
-  ])
-  .controller('$mdSidenavController', [
-    '$scope',
-    '$element',
-    '$attrs',
-    '$timeout',
-    '$mdSidenav',
-    '$mdComponentRegistry',
-    mdSidenavController 
-  ]);
-  
+  .factory('$mdSidenav', mdSidenavService )
+  .directive('mdSidenav', mdSidenavDirective)
+  .controller('$mdSidenavController', mdSidenavController)
+  .factory('$mdMedia', mdMediaFactory)
+  .factory('$mdComponentRegistry', mdComponentRegistry);
+
 /*
  * @private
  * @ngdoc object
@@ -249,3 +230,108 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
   }
 
 }
+
+/**
+ * Exposes a function on the '$mdMedia' service which will return true or false,
+ * whether the given media query matches. Re-evaluates on resize. Allows presets
+ * for 'sm', 'md', 'lg'.
+ *
+ * @example $mdMedia('sm') == true if device-width <= sm
+ * @example $mdMedia('(min-width: 1200px)') == true if device-width >= 1200px
+ * @example $mdMedia('max-width: 300px') == true if device-width <= 300px (sanitizes input, adding parens)
+ */
+function mdMediaFactory($window, $mdUtil, $timeout) {
+  var cache = $mdUtil.cacheFactory('$mdMedia', { capacity: 15 });
+  var presets = {
+    sm: '(min-width: 600px)',
+    md: '(min-width: 960px)',
+    lg: '(min-width: 1200px)'
+  };
+
+  angular.element($window).on('resize', updateAll);
+
+  return $mdMedia;
+
+  function $mdMedia(query) {
+    query = validate(query);
+    var result;
+    if ( !angular.isDefined(result = cache.get(query)) ) {
+      return add(query);
+    }
+    return result;
+  }
+
+  function validate(query) {
+    return presets[query] || (
+      query.charAt(0) != '(' ?  ('(' + query + ')') : query
+    );
+  }
+
+  function add(query) {
+    return cache.put(query, !!$window.matchMedia(query).matches);
+  }
+  
+  function updateAll() {
+    var keys = cache.keys();
+    if (keys.length) {
+      for (var i = 0, ii = keys.length; i < ii; i++) {
+        cache.put(keys[i], !!$window.matchMedia(keys[i]).matches);
+      }
+      // trigger a $digest()
+      $timeout(angular.noop);
+    }
+  }
+
+}
+  
+function mdComponentRegistry($log) {
+  var instances = [];
+
+  return {
+    /**
+     * Used to print an error when an instance for a handle isn't found.
+     */
+    notFoundError: function(handle) {
+      $log.error('No instance found for handle', handle);
+    },
+    /**
+     * Return all registered instances as an array.
+     */
+    getInstances: function() {
+      return instances;
+    },
+
+    /**
+     * Get a registered instance.
+     * @param handle the String handle to look up for a registered instance.
+     */
+    get: function(handle) {
+      var i, j, instance;
+      for(i = 0, j = instances.length; i < j; i++) {
+        instance = instances[i];
+        if(instance.$$mdHandle === handle) {
+          return instance;
+        }
+      }
+      return null;
+    },
+
+    /**
+     * Register an instance.
+     * @param instance the instance to register
+     * @param handle the handle to identify the instance under.
+     */
+    register: function(instance, handle) {
+      instance.$$mdHandle = handle;
+      instances.push(instance);
+
+      return function deregister() {
+        var index = instances.indexOf(instance);
+        if (index !== -1) {
+          instances.splice(index, 1);
+        }
+      };
+    }
+  };
+}
+})();

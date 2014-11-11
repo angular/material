@@ -1,13 +1,8 @@
-angular.module('material.components.tabs')
+(function() {
+'use strict';
 
-.directive('mdTab', [
-  '$mdInkRipple',
-  '$compile',
-  '$mdAria',
-  '$mdUtil',
-  '$mdConstant',
-  MdTabDirective
-]);
+angular.module('material.components.tabs')
+  .directive('mdTab', MdTabDirective);
 
 /**
  * @ngdoc directive
@@ -233,3 +228,4 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
 
 }
 
+})();

@@ -1,13 +1,18 @@
+(function() {
+'use strict';
+
 /**
  * @ngdoc module
  * @name material.components.textField
  * @description
  * Form
  */
-angular.module('material.components.textField', ['material.core', 'material.services.theming'])
-       .directive('mdInputGroup', [ mdInputGroupDirective ])
-       .directive('mdInput', ['$mdUtil', mdInputDirective ])
-       .directive('mdTextFloat', [ '$mdTheming', '$mdUtil', mdTextFloatDirective ]);
+angular.module('material.components.textField', [
+  'material.core'
+])
+  .directive('mdInputGroup', mdInputGroupDirective)
+  .directive('mdInput', mdInputDirective)
+  .directive('mdTextFloat', mdTextFloatDirective);
 
 
 
@@ -144,7 +149,8 @@ function mdInputDirective($mdUtil) {
       var ngModelCtrl = ctrls[1];
 
       // scan for disabled and transpose the `type` value to the <input> element
-      var isDisabled = $mdUtil.isParentDisabled(element);
+      var parent = element[0].parentNode;
+      var isDisabled = parent && parent.hasAttribute('disabled');
 
       element.attr({
         'tabindex': isDisabled ? -1 : 0,
@@ -191,6 +197,4 @@ function mdInputDirective($mdUtil) {
   };
 }
 
-
-
-
+})();

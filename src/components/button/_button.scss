@@ -24,7 +24,6 @@ $button-fab-toast-offset: $toast-height + $toast-margin;
 
   user-select: none;
   position: relative; //for child absolute-positioned <canvas>
-  display: inline-block;
 
   outline: none;
   border: 0;

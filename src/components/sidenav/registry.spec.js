@@ -1,5 +1,5 @@
 describe('$mdComponentRegistry Service', function() {
-  beforeEach(module('material.services.registry'));
+  beforeEach(module('material.components.sidenav'));
 
   it('should print error on no handle', inject(function($mdComponentRegistry, $log) {
     spyOn($log, 'error');

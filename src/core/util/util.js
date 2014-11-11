@@ -1,3 +1,6 @@
+(function() {
+'use strict';
+
 /* 
  * This var has to be outside the angular factory, otherwise when
  * there are multiple material apps on the same page, each app
@@ -8,71 +11,9 @@ var nextUniqueId = ['0','0','0'];
 
 angular.module('material.core')
 .factory('$mdUtil', ['$cacheFactory', function($cacheFactory) {
-  var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
-
   var Util;
   return Util = {
     now: window.performance ? angular.bind(window.performance, window.performance.now) : Date.now,
-
-    /**
-     * Checks if the specified element has an ancestor (ancestor being parent, grandparent, etc)
-     * with the given attribute defined. 
-     *
-     * Also pass in an optional `limit` (levels of ancestry to scan), default 4.
-     */
-    ancestorHasAttribute: function ancestorHasAttribute(element, attrName, limit) {
-      limit = limit || 4;
-      var current = element;
-      while (limit-- && current.length) {
-        if (current[0].hasAttribute && current[0].hasAttribute(attrName)) {
-          return true;
-        }
-        current = current.parent();
-      }
-      return false;
-    },
-
-    /**
-     * Checks to see if the element or its parents are disabled.
-     * @param element DOM element to start scanning for `disabled` attribute
-     * @param limit Number of parent levels that should be scanned; defaults to 4
-     * @returns {*} Boolean
-     */
-    isParentDisabled: function isParentDisabled(element, limit) {
-      return Util.ancestorHasAttribute(element, 'disabled', limit);
-    },
-
-    /**
-     * Checks if two elements have the same parent
-     */
-    elementIsSibling: function elementIsSibling(element, otherElement) {
-      return element.parent().length && 
-        (element.parent()[0] === otherElement.parent()[0]);
-    },
-
-    /**
-     * Converts snake_case to camelCase.
-     * @param name Name to normalize
-     */
-    camelCase: function camelCase(name) {
-      return name
-        .replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
-          return offset ? letter.toUpperCase() : letter;
-        });
-    },
-
-    /**
-     * Selects 'n' words from a string
-     * for use in an HTML attribute
-     */
-    stringFromTextBody: function stringFromTextBody(textBody, numWords) {
-      var string = textBody.trim();
-
-      if(string.split(/\s+/).length > numWords){
-        string = textBody.split(/\s+/).slice(1, (numWords + 1)).join(" ") + '...';
-      }
-      return string;
-    },
 
     /**
      * Publish the iterator facade to easily support iteration and accessors
@@ -117,23 +58,6 @@ angular.module('material.core')
           recent = now;
         }
       };
-    },
-
-    /**
-     * Wraps an element with a tag
-     *
-     * @param el element to wrap
-     * @param tag tag to wrap it with
-     * @param [className] optional class to apply to the wrapper
-     * @returns new element
-     *
-     */
-    wrap: function(el, tag, className) {
-      if(el.hasOwnProperty(0)) { el = el[0]; }
-      var wrapper = document.createElement(tag);
-      wrapper.className += className;
-      wrapper.appendChild(el.parentNode.replaceChild(wrapper, el));
-      return angular.element(wrapper);
     },
 
     /**
@@ -474,3 +398,5 @@ angular.element.prototype.blur = angular.element.prototype.blur || function() {
   }
   return this;
 };
+
+})();

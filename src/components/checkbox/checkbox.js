@@ -1,22 +1,15 @@
+(function() {
+'use strict';
+
 /**
  * @ngdoc module
  * @name material.components.checkbox
  * @description Checkbox module!
  */
 angular.module('material.components.checkbox', [
-  'material.core',
-  'material.animations',
-  'material.services.theming',
-  'material.services.aria'
+  'material.core'
 ])
-  .directive('mdCheckbox', [ 
-    'inputDirective',
-    '$mdInkRipple',
-    '$mdAria',
-    '$mdConstant',
-    '$mdTheming',
-    MdCheckboxDirective
-  ]);
+  .directive('mdCheckbox', MdCheckboxDirective);
 
 /**
  * @ngdoc directive
@@ -53,8 +46,8 @@ angular.module('material.components.checkbox', [
  * </hljs>
  *
  */
-function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant, $mdTheming) {
-  var inputDirective = inputDirectives[0];
+function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant, $mdTheming) {
+  inputDirective = inputDirective[0];
 
   var CHECKED_CSS = 'md-checked';
 
@@ -135,4 +128,4 @@ function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant
   }
 }
 
-
+})();

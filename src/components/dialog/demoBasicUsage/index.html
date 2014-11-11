@@ -4,12 +4,16 @@
   </p>
 
   <div layout="vertical" layout-sm="horizontal" layout-align="center" >
-    <md-button class="md-primary" ng-click="dialogBasic($event)">
-      Simple Dialog
+    <md-button class="md-primary" ng-click="showAlert($event)">
+      Alert Dialog
     </md-button>
     <div class="gap"></div>
-    <md-button class="md-primary" ng-click="dialogAdvanced($event)">
-      Complex Dialog
+    <md-button class="md-primary" ng-click="showConfirm($event)">
+      Confirm Dialog
+    </md-button>
+    <div class="gap"></div>
+    <md-button class="md-primary" ng-click="showAdvanced($event)">
+      Custom Dialog
     </md-button>
   </div>
   
