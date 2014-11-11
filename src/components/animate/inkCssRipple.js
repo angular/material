@@ -88,7 +88,7 @@ function InkRippleService($window, $$rAF, $mdEffects, $timeout, $mdUtil) {
     };
 
     function rippleIsAllowed() {
-      return !element[0].hasAttribute('disabled');
+      return !$mdUtil.isParentDisabled(element, 2);
     }
 
     function createRipple(left, top, positionsAreAbsolute) {
