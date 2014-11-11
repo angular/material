@@ -112,19 +112,18 @@ function TabsDirective($parse, $mdTheming) {
 
       '</section>' +
       '<section class="md-tabs-content"></section>',
-    link: postLink
+    compile: compile
   };
+
+  function compile(tElement, tAttr) {
+    tElement.attr('role', 'tablist');
+
+    return postLink;
+  }
 
   function postLink(scope, element, attr, tabsCtrl) {
     $mdTheming(element);
-    configureAria();
     watchSelected();
-
-    function configureAria() {
-      element.attr({
-        role: 'tablist'
-      });
-    }
 
     function watchSelected() {
       scope.$watch('selectedIndex', function watchSelectedIndex(newIndex, oldIndex) {

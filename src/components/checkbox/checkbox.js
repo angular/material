@@ -124,12 +124,7 @@ function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant
       }
 
       function render() {
-        checked = ngModelCtrl.$viewValue;
-        if(checked) {
-          element.addClass(CHECKED_CSS);
-        } else {
-          element.removeClass(CHECKED_CSS);
-        }
+        element.toggleClass(CHECKED_CSS, ngModelCtrl.$viewValue);
       }
     };
   }

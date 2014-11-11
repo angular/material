@@ -78,8 +78,15 @@ function SliderDirective($mdTheming) {
         '</div>' +
         '<div class="md-disabled-thumb"></div>' +
       '</div>',
-    link: postLink
+    compile: compile
   };
+
+  function compile(tElement, tAttr) {
+    tElement.attr('tabIndex', 0)
+      .attr('role', 'slider');
+
+    return postLink;
+  }
 
   function postLink(scope, element, attr, ctrls) {
     $mdTheming(element);
@@ -104,7 +111,7 @@ function SliderDirective($mdTheming) {
  * We use a controller for all the logic so that we can expose a few
  * things to unit tests
  */
-function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdAria, $mdUtil, $mdConstant) {
+function SliderController(scope, element, attr, $$rAF, $timeout, $window, $mdEffects, $mdAria, $mdUtil, $mdConstant) {
 
   this.init = function init(ngModelCtrl) {
     var thumb = angular.element(element[0].querySelector('.md-thumb'));
@@ -131,8 +138,6 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
 
     $mdAria.expect(element, 'aria-label');
 
-    element.attr('tabIndex', 0);
-    element.attr('role', 'slider');
     element.on('keydown', keydownListener);
 
     var hammertime = new Hammer(element[0], {
@@ -151,7 +156,7 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
       ngModelRender();
       redrawTicks();
     }
-    setTimeout(updateAll);
+    $timeout(updateAll, 0, false);
 
     var debouncedUpdateAll = $$rAF.debounce(updateAll);
     angular.element($window).on('resize', debouncedUpdateAll);

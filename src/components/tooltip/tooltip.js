@@ -61,13 +61,16 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     link: postLink
   };
 
+  function compile(tElement, tAttr) {
+    tElement.attr('role', 'tooltip');
+  }
+
   function postLink(scope, element, attr, contentCtrl) {
     $mdTheming(element);
     var parent = element.parent();
 
     // We will re-attach tooltip when visible
     element.detach();
-    element.attr('role', 'tooltip');
     element.attr('id', attr.id || ('tooltip_' + $mdUtil.nextUid()));
 
     parent.on('focus mouseenter touchstart', function() {

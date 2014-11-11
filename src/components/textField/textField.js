@@ -52,6 +52,9 @@ function mdTextFloatDirective($mdTheming, $mdUtil) {
         attr.fid = $mdUtil.nextUid();
       }
 
+      var inputType = attr.type || 'text';
+      element.removeAttr('type');
+
       return {
         pre : function(scope, element, attrs) {
           // transpose `disabled` flag
@@ -60,8 +63,7 @@ function mdTextFloatDirective($mdTheming, $mdUtil) {
             scope.isDisabled = true;
           }
 
-          scope.inputType = attrs.type || "text";
-          element.removeAttr('type');
+          scope.inputType = inputType;
 
           // transpose optional `class` settings
           element.attr('class', attrs.class );

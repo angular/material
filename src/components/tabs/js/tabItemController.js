@@ -57,9 +57,9 @@ function TabItemController(scope, element, $compile, $animate, $mdUtil) {
     $mdUtil.reconnectScope(self.contentScope);
     self.hammertime.on('swipeleft swiperight', scope.onSwipe);
 
-    element.addClass('active');
-    element.attr('aria-selected', true);
-    element.attr('tabIndex', 0);
+    element.addClass('active')
+      .attr('aria-selected', true)
+      .attr('tabIndex', 0);
     $animate.removeClass(self.contentContainer, 'ng-hide');
 
     scope.onSelect();
@@ -70,10 +70,10 @@ function TabItemController(scope, element, $compile, $animate, $mdUtil) {
     $mdUtil.disconnectScope(self.contentScope);
     self.hammertime.off('swipeleft swiperight', scope.onSwipe);
 
-    element.removeClass('active');
-    element.attr('aria-selected', false);
-    // Only allow tabbing to the active tab
-    element.attr('tabIndex', -1);
+    element.removeClass('active')
+      .attr('aria-selected', false)
+      // Only allow tabbing to the active tab
+      .attr('tabIndex', -1);
     $animate.addClass(self.contentContainer, 'ng-hide');
 
     scope.onDeselect();
