@@ -9,7 +9,7 @@ angular.module('material.components.checkbox', [
   'material.services.theming',
   'material.services.aria'
 ])
-  .directive('mdCheckbox', [ 
+  .directive('mdCheckbox', [
     'inputDirective',
     '$mdInkRipple',
     '$mdAria',
@@ -134,5 +134,3 @@ function MdCheckboxDirective(inputDirectives, $mdInkRipple, $mdAria, $mdConstant
     };
   }
 }
-
-

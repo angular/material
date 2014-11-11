@@ -68,17 +68,11 @@ function MdSwitch(checkboxDirectives, radioButtonDirectives, $mdTheming) {
   };
 
   function compile(element, attr) {
-    
     var thumb = angular.element(element[0].querySelector('.md-switch-thumb'));
-    //Copy down disabled attributes for checkboxDirective to use
-    thumb.attr('disabled', attr.disabled);
-    thumb.attr('ngDisabled', attr.ngDisabled);
-
     var checkboxLink = checkboxDirective.compile(thumb, attr);
 
     return function (scope, element, attr, ngModelCtrl) {
       $mdTheming(element);
-      var thumb = angular.element(element[0].querySelector('.md-switch-thumb'));
       return checkboxLink(scope, thumb, attr, ngModelCtrl);
     };
   }
