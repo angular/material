@@ -270,7 +270,7 @@ function mdMediaFactory($window, $mdUtil, $timeout) {
   function add(query) {
     return cache.put(query, !!$window.matchMedia(query).matches);
   }
-
+  
   function updateAll() {
     var keys = cache.keys();
     if (keys.length) {
@@ -283,7 +283,7 @@ function mdMediaFactory($window, $mdUtil, $timeout) {
   }
 
 }
-
+  
 function mdComponentRegistry($log) {
   var instances = [];
 

@@ -46,22 +46,9 @@ var config = {
     ' * @license MIT\n' +
     ' * v' + VERSION + '\n' +
     ' */\n',
-  jsBaseFiles: [
-    'src/core/**/*.js',
-    '!src/core/**/*.spec.js'
-  ],
-  themeBaseFiles: [
-    'src/core/style/color-palette.scss',
-    'src/core/style/variables.scss',
-    'src/core/style/mixins.scss'
-  ],
-  scssBaseFiles: [
-    'src/core/style/color-palette.scss',
-    'src/core/style/variables.scss',
-    'src/core/style/mixins.scss',
-    'src/core/style/structure.scss',
-    'src/core/style/layout.scss'
-  ],
+  jsBaseFiles: ['src/core/**/*.js', '!src/core/**/*.spec.js'],
+  themeBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss'],
+  scssBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss', 'src/core/style/{structure,layout}.scss'],
   paths: 'src/{components,services}/**',
   outputDir: 'dist/'
 };
@@ -304,34 +291,27 @@ gulp.task('build-js-release', function() {
   buildJs(true);
 });
 
+gulp.task('build-scss', ['build-default-theme'], function() {
+  var defaultThemeContents = fs.readFileSync('themes/_default-theme.scss');
+  var scssGlob = path.join(config.paths, '*.scss');
 
-/**
- * Gets a function to stream javascript minification.
- * @param {string} fileName The name of the minified file.
- * @return {function(): Stream}
- */
-function minifyJs(fileName) {
-  // Figure out filename if not provided
-  if (!fileName) {
-    return through2.obj(function(file, enc, next) {
-      closure(path.basename(file.path)).on('data', this.push.bind(this));
-      next();
-    });
-  } else {
-    return closure(fileName);
-  }
-  function closure(fileName) {
-    return closureCompiler({
-      compilerPath: 'bower_components/closure-compiler/lib/vendor/compiler.jar',
-      fileName: fileName,
-      compilerFlags: {
-        language_in: 'ECMASCRIPT5',
-        warning_level: 'QUIET'
-      }
-    });
-  }
-}
-
+  gutil.log("Building css files...");
+  return gulp.src(config.scssBaseFiles.concat(scssGlob))
+    .pipe(filterNonCodeFiles())
+    .pipe(filter(['**', '!**/*-theme.scss'])) // remove once ported
+    .pipe(concat('angular-material.scss'))
+    .pipe(insert.append(defaultThemeContents))
+    .pipe(sass())
+    .pipe(autoprefix())
+    .pipe(insert.prepend(config.banner))
+    .pipe(gulp.dest(config.outputDir))
+    .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
+      .pipe(minifyCss)
+      .pipe(rename, {extname: '.min.css'})
+      .pipe(gulp.dest, config.outputDir)
+      ()
+    ));
+});
 
 /**
  * Builds the entire component library javascript.
@@ -438,43 +418,26 @@ gulp.task('build-themes', ['build-default-theme'], function() {
     var name = themeFile.match(/((\w|-)+)-theme\.scss/)[1];
     stream.add(buildTheme(name));
   });
-  return stream;
-});
+  var baseStyles = files.map(function(fileName) {
+    return fs.readFileSync(fileName, 'utf8').toString();
+  }).join('\n');
+  return lazypipe()
+    .pipe(insert.prepend, baseStyles)
+    .pipe(gulpif, /theme.scss/,
+        rename(name + '-default-theme.scss'), concat(name + '.scss')
+    )
+    .pipe(sass)
+    .pipe(autoprefix)
+    .pipe(gulpif, IS_RELEASE_BUILD, minifyCss())
+    (); // invoke the returning fn to create our pipe
+}
 
-gulp.task('build-scss', ['build-default-theme'], function() {
-  var defaultThemeContents = fs.readFileSync('themes/_default-theme.scss');
-  var scssGlob = path.join(config.paths, '*.scss');
-
-  gutil.log("Building css files...");
-  return gulp.src(config.scssBaseFiles.concat(scssGlob))
-      .pipe(filterNonCodeFiles())
-      .pipe(filter(['**', '!**/*-theme.scss'])) // remove once ported
-      .pipe(concat('angular-material.scss'))
-      .pipe(insert.append(defaultThemeContents))
-      .pipe(sass())
-      .pipe(autoprefix())
-      .pipe(insert.prepend(config.banner))
-      .pipe(gulp.dest(config.outputDir))
-      .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
-          .pipe(minifyCss)
-          .pipe(rename, {extname: '.min.css'})
-          .pipe(gulp.dest, config.outputDir)
-        ()
-      ));
-});
-
-
-function buildTheme(theme) {
-  gutil.log("Building theme " + theme + "...");
-  return gulp.src([
-      'src/core/style/color-palette.scss',
-      'themes/' + theme + '-theme.scss',
-      'themes/_default-theme.scss'
-    ])
-    .pipe(concat(theme + '-theme.scss'))
-    .pipe(utils.hoistScssVariables())
-    .pipe(sass())
-    .pipe(gulp.dest(config.outputDir + 'themes/'));
+function buildModuleJs(name) {
+  return lazypipe()
+    .pipe(ngAnnotate())
+    .pipe(concat, name + '.js')
+    .pipe(gulpif, IS_RELEASE_BUILD, uglify({preserveComments: 'some'}))
+    ();
 }
 
 /** *****************************************
@@ -483,19 +446,9 @@ function buildTheme(theme) {
  *
  ** ***************************************** */
 
-
-function readModuleArg() {
-  var module = argv.c ? 'material.components.' + argv.c : (argv.module || argv.m);
-  if (!module) {
-    gutil.log('\nProvide a compnent argument via `-c`:',
-      '\nExample: -c toast');
-    gutil.log('\nOr provide a module argument via `--module` or `-m`.',
-      '\nExample: --module=material.components.toast or -m material.components.dialog');
-    process.exit(1);
-  }
-  return module;
-}
-
+/**
+ * Preconfigured gulp plugin invocations
+ */
 function filterNonCodeFiles() {
   return filter(function(file) {
     return !/demo|module\.json|\.spec.js|README/.test(file.path);

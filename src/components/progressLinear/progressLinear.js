@@ -77,7 +77,7 @@ function MdProgressLinearDirective($$rAF, $mdConstant, $mdTheming) {
       bar2Style[$mdConstant.CSS.TRANSFORM] = transforms[clamped];
     });
 
-    attr.$observe('mdBufferValue', function(value) {
+    attr.$observe('secondaryvalue', function(value) {
       bar1Style[$mdConstant.CSS.TRANSFORM] = transforms[clamp(value)];
     });
 

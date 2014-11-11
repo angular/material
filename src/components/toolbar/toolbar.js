@@ -57,7 +57,7 @@ angular.module('material.components.toolbar', [
  * @param {number=} mdShrinkSpeedFactor How much to change the speed of the toolbar's
  * shrinking by. For example, if 0.25 is given then the toolbar will shrink
  * at one fourth the rate at which the user scrolls down. Default 0.5.
- */
+ */ 
 function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming) {
 
   return {
@@ -131,11 +131,11 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming) {
           );
 
           element.css(
-            $mdConstant.CSS.TRANSFORM,
+            $mdConstant.CSS.TRANSFORM, 
             'translate3d(0,' + (-y * shrinkSpeedFactor) + 'px,0)'
           );
           contentElement.css(
-            $mdConstant.CSS.TRANSFORM,
+            $mdConstant.CSS.TRANSFORM, 
             'translate3d(0,' + ((toolbarHeight - y) * shrinkSpeedFactor) + 'px,0)'
           );
 

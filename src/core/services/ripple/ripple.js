@@ -2,17 +2,12 @@
 'use strict';
 
 
-.directive('inkRipple', [
-  '$mdInkRipple',
-  InkRippleDirective
-])
-
-.factory('$mdInkRipple', [
-  '$window',
-  '$timeout',
-  '$mdUtil',
-  InkRippleService
-]);
+angular.module('material.core')
+  .factory('$mdInkRipple', InkRippleService)
+  .directive('inkRipple', InkRippleDirective)
+  .directive('noink', attrNoDirective())
+  .directive('nobar', attrNoDirective())
+  .directive('nostretch', attrNoDirective());
 
 function InkRippleDirective($mdInkRipple) {
   return function(scope, element, attr) {
@@ -73,7 +68,7 @@ function InkRippleService($window, $timeout, $mdUtil) {
     };
 
     function rippleIsAllowed() {
-      return !element[0].hasAttribute('disabled') && 
+      return !element[0].hasAttribute('disabled') &&
         !(element[0].parentNode && element[0].parentNode.hasAttribute('disabled'));
     }
 
@@ -169,12 +164,12 @@ function InkRippleService($window, $timeout, $mdUtil) {
 
 /**
  * noink/nobar/nostretch directive: make any element that has one of
- * these attributes be given a controller, so that other directives can 
+ * these attributes be given a controller, so that other directives can
  * `require:` these and see if there is a `no<xxx>` parent attribute.
  *
  * @usage
  * <hljs lang="html">
- * <parent md-no-ink>
+ * <parent noink>
  *   <child detect-no>
  *   </child>
  * </parent>
@@ -183,15 +178,15 @@ function InkRippleService($window, $timeout, $mdUtil) {
  * <hljs lang="js">
  * myApp.directive('detectNo', function() {
  *   return {
- *     require: ['^?mdNoInk', ^?mdNoBar'],
+ *     require: ['^?noink', ^?nobar'],
  *     link: function(scope, element, attr, ctrls) {
  *       var noinkCtrl = ctrls[0];
  *       var nobarCtrl = ctrls[1];
  *       if (noInkCtrl) {
- *         alert("the md-no-ink flag has been specified on an ancestor!");
+ *         alert("the noink flag has been specified on an ancestor!");
  *       }
  *       if (nobarCtrl) {
- *         alert("the md-no-bar flag has been specified on an ancestor!");
+ *         alert("the nobar flag has been specified on an ancestor!");
  *       }
  *     }
  *   };
