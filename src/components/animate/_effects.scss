@@ -1,0 +1,36 @@
+/*
+ * A container inside of a rippling element (eg a button),
+ * which contains all of the individual ripples
+ */
+.md-ripple-container {
+  pointer-events: none;
+  position: absolute;
+  overflow: hidden;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transition: all 0.65s $swift-ease-out-timing-function;
+}
+
+.md-ripple {
+  position: absolute;
+  transform: scale(0);
+  transform-origin: 50% 50%;
+  opacity: 0;
+  border-radius: 50%;
+  &.placed {
+    transition: all 0.65s $swift-ease-out-timing-function;
+  }
+  &.centered {
+    transform: scale(1);
+  }
+  &.full, &.visible {
+    opacity: 0.15;
+  }
+  &.held {
+    opacity: 0.15;
+    transform: scale(0.35);
+    transition: none;
+  }
+}
