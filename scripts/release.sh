@@ -14,7 +14,7 @@ function run {
     exit 1
   fi
 
-  ./scripts/bower-release.sh --version=$NEW_VERSION
+  ./scripts/bower-release.sh --version=$VERSION
 
   replaceJsonProp "bower.json" "version" "$VERSION"
   replaceJsonProp "package.json" "version" "$VERSION"
