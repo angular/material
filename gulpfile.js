@@ -162,22 +162,6 @@ gulp.task('karma-sauce', function(done) {
 });
 
 
-var config = {
-  banner:
-    '/*!\n' +
-    ' * Angular Material Design\n' +
-    ' * https://github.com/angular/material\n' +
-    ' * @license MIT\n' +
-    ' * v' + pkg.version + '\n' +
-    ' */\n',
-  jsBaseFiles: ['src/core/core.js', 'src/core/util/*.js'],
-  themeBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss'],
-  scssBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss', 'src/core/style/{structure,layout}.scss'],
-  paths: 'src/{components,services}/**',
-  outputDir: 'dist/'
-};
-
-
 /******* Project-wide build tasks *******/
 
 gulp.task('build', ['build-themes', 'build-scss', 'build-js']);
