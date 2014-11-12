@@ -52,9 +52,10 @@ describe('md-slider', function() {
       right: 0
     });
 
-    sliderCtrl._onPan( simulateEventAt( 80, Hammer.INPUT_MOVE ));
+    sliderCtrl._onInput( simulateEventAt( 30, Hammer.INPUT_START ));
     $timeout.flush();
-    expect($rootScope.value).toBe(80);
+
+    sliderCtrl._onPan( simulateEventAt( 80 ));
     expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('80');
   }));
 
