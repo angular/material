@@ -7,7 +7,7 @@
 angular.module('material.components.textField', ['material.core', 'material.services.theming'])
        .directive('mdInputGroup', [ mdInputGroupDirective ])
        .directive('mdInput', ['$mdUtil', mdInputDirective ])
-       .directive('mdTextFloat', [ '$mdTheming', '$mdUtil', mdTextFloatDirective ]);
+       .directive('mdTextFloat', [ '$mdTheming', '$mdUtil', '$parse', mdTextFloatDirective ]);
 
 
 
@@ -37,7 +37,7 @@ angular.module('material.components.textField', ['material.core', 'material.serv
  * <md-text-float label="eMail"    ng-model="user.email" type="email" ></md-text-float>
  * </hljs>
  */
-function mdTextFloatDirective($mdTheming, $mdUtil) {
+function mdTextFloatDirective($mdTheming, $mdUtil, $parse) {
   return {
     restrict: 'E',
     replace: true,
@@ -54,26 +54,22 @@ function mdTextFloatDirective($mdTheming, $mdUtil) {
 
       return {
         pre : function(scope, element, attrs) {
-          // transpose `disabled` flag
-          if ( angular.isDefined(attrs.disabled) ) {
-            element.attr('disabled', true);
-            scope.isDisabled = true;
-          }
+          var disabledParsed = $parse(
+            angular.isDefined(attrs.disabled) ?  'true' : attrs.ngDisabled
+          );
+          scope.isDisabled = function() {
+            return disabledParsed(scope.$parent);
+          };
 
           scope.inputType = attrs.type || "text";
-          element.removeAttr('type');
-
-          // transpose optional `class` settings
-          element.attr('class', attrs.class );
-
         },
         post: $mdTheming
       };
     },
     template:
-    '<md-input-group ng-disabled="isDisabled" tabindex="-1">' +
+    '<md-input-group tabindex="-1">' +
     ' <label for="{{fid}}" >{{label}}</label>' +
-    ' <md-input id="{{fid}}" ng-model="value" type="{{inputType}}"></md-input>' +
+    ' <md-input id="{{fid}}" ng-disabled="isDisabled()" ng-model="value" type="{{inputType}}"></md-input>' +
     '</md-input-group>'
   };
 }
@@ -143,14 +139,11 @@ function mdInputDirective($mdUtil) {
       var inputGroupCtrl = ctrls[0];
       var ngModelCtrl = ctrls[1];
 
-      // scan for disabled and transpose the `type` value to the <input> element
-      var isDisabled = $mdUtil.isParentDisabled(element);
-
-      element.attr({
-        'tabindex': isDisabled ? -1 : 0,
-        'aria-disabled': isDisabled ? 'true' : 'false',
-        'type': attr.type || element.parent().attr('type') || "text"
+      scope.$watch(scope.isDisabled, function(isDisabled) {
+        element.attr('aria-disabled', !!isDisabled);
+        element.attr('tabindex', !!isDisabled);
       });
+      element.attr('type', attr.type || element.parent().attr('type') || "text");
 
       // When the input value changes, check if it "has" a value, and
       // set the appropriate class on the input group

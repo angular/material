@@ -13,7 +13,7 @@
     <section layout="vertical" layout-sm="horizontal" layout-align="center center">
       <md-button class="md-raised">Button</md-button>
       <md-button class="md-raised md-primary">Primary</md-button>
-      <md-button disabled class="md-raised md-primary">Disabled</md-button>
+      <md-button ng-disabled="true" class="md-raised md-primary">Disabled</md-button>
       <md-button class="md-raised md-warn">Warn</md-button>
       <div class="label">raised</div>
     </section>
@@ -27,7 +27,7 @@
         <md-icon icon="/img/icons/ic_insert_drive_file_24px.svg" style="width: 24px; height: 24px;"></md-icon>
       </md-button>
 
-        <md-button class="md-fab" disabled aria-label="Comment">
+        <md-button class="md-fab" ng-disabled="true" aria-label="Comment">
             <md-icon icon="/img/icons/ic_comment_24px.svg" style="width: 24px; height: 24px;"></md-icon>
         </md-button>
 

@@ -52,18 +52,19 @@ describe('mdCheckbox', function() {
 
   it('should be disabled with disabled attr', inject(function($compile, $rootScope) {
     var element = $compile('<div>' +
-                             '<md-checkbox disabled ng-model="blue">' +
+                             '<md-checkbox ng-disabled="isDisabled" ng-model="blue">' +
                              '</md-checkbox>' +
                            '</div>')($rootScope);
 
     var checkbox = element.find('md-checkbox');
+    $rootScope.$apply('isDisabled = true');
 
     $rootScope.$apply('blue = false');
 
     checkbox.triggerHandler('click');
     expect($rootScope.blue).toBe(false);
 
-    checkbox.removeAttr('disabled');
+    $rootScope.$apply('isDisabled = false');
 
     checkbox.triggerHandler('click');
     expect($rootScope.blue).toBe(true);

@@ -63,12 +63,11 @@ function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria) {
   }
   
   function getTemplate(element, attr) {
-    var tag = isAnchor(attr) ? 'a' : 'button';
-    //We need to manually pass disabled to the replaced element because
-    //of a bug where it isn't always passed.
-    var disabled = element[0].hasAttribute('disabled') ? ' disabled ' : ' ';
-
-    return '<' + tag + disabled + 'class="md-button" ng-transclude></' + tag + '>';
+    if (isAnchor(attr)) {
+      return '<a class="md-button" ng-transclude></a>';
+    } else {
+      return '<button class="md-button" ng-transclude></button>';
+    }
   }
 
   function postLink(scope, element, attr) {
@@ -84,9 +83,7 @@ function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria) {
     // For anchor elements, we have to set tabindex manually when the 
     // element is disabled
     if (isAnchor(attr)) {
-      scope.$watch(function() {
-        return node.hasAttribute('disabled');
-      }, function(isDisabled) {
+      scope.$watch(attr.ngDisabled, function(isDisabled) {
         element.attr('tabindex', isDisabled ? -1 : 0);
       });
     }
