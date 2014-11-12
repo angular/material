@@ -6,8 +6,10 @@
  * Card components.
  */
 angular.module('material.components.card', [
+  'material.services.theming'
 ])
   .directive('mdCard', [
+    '$mdTheming',
     mdCardDirective 
   ]);
 
@@ -38,10 +40,11 @@ angular.module('material.components.card', [
  * </hljs>
  *
  */
-function mdCardDirective() {
+function mdCardDirective($mdTheming) {
   return {
     restrict: 'E',
     link: function($scope, $element, $attr) {
+      $mdTheming($element);
     }
   };
 }
