@@ -7,7 +7,6 @@ var glob = require('glob').sync;
 var gulp = require('gulp');
 var karma = require('karma').server;
 var pkg = require('./package.json');
-var exec = require('child_process').exec;
 var mergeStream = require('merge-stream');
 
 var argv = require('minimist')(process.argv.slice(2));
@@ -25,7 +24,7 @@ var ngAnnotate = require('gulp-ng-annotate');
 var rename = require('gulp-rename');
 var sass = require('gulp-sass');
 var through2 = require('through2');
-var uglify = require('gulp-uglify');
+var closureCompiler = require('gulp-closure-compiler');
 var webserver = require('gulp-webserver');
 
 var karma = require('karma').server;
@@ -37,6 +36,7 @@ var IS_RELEASE_BUILD = !!argv.release;
 var BUILD_MODE = argv.mode;
 var VERSION = argv.version || pkg.version;
 
+/** Grab-bag of build configuration. */
 var config = {
   banner:
     '/*!\n' +
@@ -45,9 +45,22 @@ var config = {
     ' * @license MIT\n' +
     ' * v' + VERSION + '\n' +
     ' */\n',
-  jsBaseFiles: ['src/core/**/*.js', '!src/core/**/*.spec.js'],
-  themeBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss'],
-  scssBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss', 'src/core/style/{structure,layout}.scss'],
+  jsBaseFiles: [
+    'src/core/**/*.js',
+    '!src/core/**/*.spec.js'
+  ],
+  themeBaseFiles: [
+    'src/core/style/color-palette.scss',
+    'src/core/style/variables.scss',
+    'src/core/style/mixins.scss'
+  ],
+  scssBaseFiles: [
+    'src/core/style/color-palette.scss',
+    'src/core/style/variables.scss',
+    'src/core/style/mixins.scss',
+    'src/core/style/structure.scss',
+    'src/core/style/layout.scss'
+  ],
   paths: 'src/{components,services}/**',
   outputDir: 'dist/'
 };
@@ -70,9 +83,13 @@ BUILD_MODE = buildModes[BUILD_MODE] || buildModes['default'];
 if (IS_RELEASE_BUILD) {
   console.log(
     gutil.colors.red('--release:'),
-    'Building release version (minified, debugs stripped)...'
+    'Building release version (minified)...'
   );
 }
+
+require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
+
+
 function readModuleArg() {
   var module = argv.module || argv.m;
   if (!module) {
@@ -83,10 +100,10 @@ function readModuleArg() {
   return module;
 }
 
-require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
 
 gulp.task('default', ['build']);
 gulp.task('validate', ['jshint', 'karma']);
+
 
 gulp.task('changelog', function(done) {
   changelog({
@@ -98,9 +115,8 @@ gulp.task('changelog', function(done) {
   });
 });
 
-/**
- * JSHint
- */
+
+/** JSHint */
 gulp.task('jshint', function() {
   return gulp.src(
     buildConfig.paths.js.concat(buildConfig.paths.test)
@@ -115,17 +131,27 @@ gulp.task('jshint', function() {
     .pipe(jshint.reporter('fail'));
 });
 
-/**
- * Karma Tests
- */
+
+/** Karma Tests */
 gulp.task('karma', function(done) {
-  karma.start({
-    singleRun:true,
-    autoWatch:false,
+  var karmaConfig = {
+    singleRun: true,
+    autoWatch: false,
     browsers : argv.browsers ? argv.browsers.trim().split(',') : ['Chrome'],
     configFile: __dirname + '/config/karma.conf.js'
-  },done);
+  };
+
+  gutil.log('Running unit tests on unminified source.');
+  karma.start(karmaConfig, testMinified);
+
+  function testMinified() {
+    gutil.log('Running unit tests on minified source.');
+    buildJs(true);
+    karmaConfig.releaseMode = true;
+    karma.start(karmaConfig, done);
+  }
 });
+
 
 gulp.task('karma-watch', function(done) {
   karma.start({
@@ -135,18 +161,16 @@ gulp.task('karma-watch', function(done) {
   },done);
 });
 
+
 gulp.task('karma-sauce', function(done) {
   karma.start(require('./config/karma-sauce.conf.js'), done);
 });
 
 
+/******* Project-wide build tasks *******/
 
-/**
- * Project wide build related tasks
- */
+gulp.task('build', ['build-themes', 'build-scss', 'build-js']);
 
-gulp.task('build', ['build-themes', 'build-scss', 'build-js'], function() {
-});
 
 gulp.task('build-all-modules', function() {
   var addedCore = false;
@@ -165,7 +189,7 @@ gulp.task('watch', ['build'], function() {
   gulp.watch('src/**/*', ['build']);
 });
 
-var LR_PORT = argv.port || argv.p || 8080;
+
 gulp.task('watch-module', ['build', 'build-demo'], function() {
   var module = readModuleArg();
   var name = module.split('.').pop();
@@ -180,6 +204,8 @@ gulp.task('watch-module', ['build', 'build-demo'], function() {
   return gulp.watch('src/**/*', ['build', 'build-demo']);
 });
 
+
+var LR_PORT = argv.port || argv.p || 8080;
 gulp.task('server', function() {
   return gulp.src('.')
     .pipe(webserver({
@@ -189,6 +215,7 @@ gulp.task('server', function() {
     }));
 });
 
+
 gulp.task('build-default-theme', function() {
   return gulp.src(config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss')))
     .pipe(concat('_default-theme.scss'))
@@ -196,15 +223,20 @@ gulp.task('build-default-theme', function() {
     .pipe(gulp.dest('themes/'));
 });
 
+
 gulp.task('build-theme', ['build-default-theme'], function() {
   var theme = argv.theme || argv.t || 'default';
   theme = theme.replace(/-theme$/, '');
   return buildTheme(theme);
 });
 
+
 gulp.task('build-themes', ['build-default-theme'], function() {
   var stream = mergeStream();
-  var themes = glob('themes/**.scss', { cwd: __dirname }).filter(function(themeName) { return themeName.split('/')[1].charAt(0) != '_'; });
+  var themes = glob('themes/**.scss', { cwd: __dirname })
+    .filter(function(themeName) {
+      return themeName.split('/')[1].charAt(0) != '_';
+    });
   themes.forEach(function(themeFile) {
     var name = themeFile.match(/((\w|-)+)-theme\.scss/)[1];
     stream.add(buildTheme(name));
@@ -212,14 +244,6 @@ gulp.task('build-themes', ['build-default-theme'], function() {
   return stream;
 });
 
-function buildTheme(theme) {
-  gutil.log("Building theme " + theme + "...");
-  return gulp.src(['src/core/style/color-palette.scss', 'themes/' + theme + '-theme.scss', 'themes/_default-theme.scss'])
-    .pipe(concat(theme + '-theme.scss'))
-    .pipe(utils.hoistScssVariables())
-    .pipe(sass())
-    .pipe(gulp.dest(config.outputDir + 'themes/'));
-}
 
 gulp.task('build-scss', ['build-default-theme'], function() {
   var defaultThemeContents = fs.readFileSync('themes/_default-theme.scss');
@@ -243,7 +267,41 @@ gulp.task('build-scss', ['build-default-theme'], function() {
     ));
 });
 
+
 gulp.task('build-js', function() {
+  return buildJs(IS_RELEASE_BUILD);
+});
+
+
+gulp.task('build-js-release', function() {
+  buildJs(true);
+});
+
+
+/**
+ * Gets a function to stream javascript minification.
+ * @param {string} fileName The name of the minified file.
+ * @return {function(): Stream}
+ */
+function minifyJs(fileName) {
+  // Return a function instead of the stream itself in order to work with
+  // lazypipe.
+  return closureCompiler({
+    compilerPath: 'bower_components/closure-compiler/lib/vendor/compiler.jar',
+    fileName: fileName,
+    compilerFlags: {
+      language_in: 'ECMASCRIPT5',
+      warning_level: 'QUIET'
+    }
+  });
+}
+
+
+/**
+ * Builds the entire component library javascript.
+ * @param {boolean} isRelease Whether to build in release mode.
+ */
+function buildJs(isRelease) {
   var jsGlob = path.join(config.paths, '*.js');
   gutil.log("Building js files...");
   return gulp.src(config.jsBaseFiles.concat([jsGlob]))
@@ -253,23 +311,39 @@ gulp.task('build-js', function() {
     .pipe(insert.prepend(config.banner))
     .pipe(ngAnnotate())
     .pipe(gulp.dest(config.outputDir))
-    .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
-      .pipe(uglify)
-      .pipe(rename, {extname: '.min.js'})
+    .pipe(gulpif(isRelease, lazypipe()
+      .pipe(minifyJs, 'angular-material.min.js')
       .pipe(gulp.dest, config.outputDir)
       ()
     ));
-});
+}
 
+
+function buildTheme(theme) {
+  gutil.log("Building theme " + theme + "...");
+  return gulp.src([
+    'src/core/style/color-palette.scss',
+    'themes/' + theme + '-theme.scss',
+    'themes/_default-theme.scss'
+  ])
+    .pipe(concat(theme + '-theme.scss'))
+    .pipe(utils.hoistScssVariables())
+    .pipe(sass())
+    .pipe(gulp.dest(config.outputDir + 'themes/'));
+}
+
+
+/******* Module-specific build tasks *******/
 /**
- * Module specific build tasks:
- * e.g.
+ * Examples:
  * ```sh
  *    gulp build-module -m material.components.button
  *    gulp watch-module -m material.components.button
  *    gulp server
  * ```
  */
+
+
 gulp.task('build-module', function() {
   return buildModule(readModuleArg());
 });
@@ -286,7 +360,11 @@ function buildModule(module) {
     .pipe(gulp.dest(BUILD_MODE.outputDir + name))
     .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
       .pipe(gulpif, BUILD_MODE.useBower, lazypipe()
-        .pipe(gulpif, /.css$/, minifyCss(), uglify({preserveComments: 'some'}))
+        .pipe(gulpif, /.css$/, minifyCss(), through2.obj(function(file, enc, next) {
+          var name = path.basename(file.path);
+          minifyJs(name).on('data', this.push.bind(this));
+          next();
+        }))
         .pipe(rename, function(path) {
           path.extname = path.extname
             .replace(/.js$/, '.min.js')
@@ -299,6 +377,7 @@ function buildModule(module) {
       ()
     ));
 }
+
 
 gulp.task('build-demo', function() {
   var mod = readModuleArg();
@@ -323,6 +402,7 @@ gulp.task('build-demo', function() {
     }));
 });
 
+
 function buildModuleStyles(name) {
   var files = [];
   config.themeBaseFiles.forEach(function(fileGlob) {
@@ -341,22 +421,24 @@ function buildModuleStyles(name) {
     (); // invoke the returning fn to create our pipe
 }
 
+
 function buildModuleJs(name) {
   return lazypipe()
-    .pipe(ngAnnotate)
-    .pipe(concat, name + '.js')
-    ();
+  .pipe(ngAnnotate)
+  .pipe(concat, name + '.js')
+  .pipe(gulpif(IS_RELEASE_BUILD, minifyJs.bind(null, name + '.min.js'), gutil.noop))
+  ();
 }
 
 
-/**
- * Preconfigured gulp plugin invocations
- */
+/******* Preconfigured gulp plugin invocations *******/
+
 function filterNonCodeFiles() {
   return filter(function(file) {
     return !/demo|module\.json|\.spec.js|README/.test(file.path);
   });
 }
+
 
 function autoprefix() {
   return autoprefixer({browsers: [
