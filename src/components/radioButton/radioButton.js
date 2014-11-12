@@ -209,6 +209,17 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
     link: link
   };
 
+  function compile(tElement, tAttr) {
+    element.attr({
+      'role' : 'radio',
+      'aria-checked' : 'false'
+    });
+
+    $mdAria.expectWithTextSynchronous(element, 'aria-label');
+
+    return link;
+  }
+
   function link(scope, element, attr, rgCtrl) {
     var lastChecked;
 
@@ -252,13 +263,7 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
     function configureAria( element, scope ){
       scope.ariaId = buildAriaID();
 
-      element.attr({
-        'id' :  scope.ariaId,
-        'role' : 'radio',
-        'aria-checked' : 'false'
-      });
-
-      $mdAria.expectWithText(element, 'aria-label');
+      element.attr('id', scope.ariaId);
 
       /**
        * Build a unique ID for each radio button that will be used with aria-activedescendant.

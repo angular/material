@@ -81,6 +81,17 @@ function SliderDirective($mdTheming) {
     link: postLink
   };
 
+  function compile(tElement, tAttr) {
+    tElement.attr({
+      tabIndex: 0,
+      role: 'slider'
+    });
+
+    $mdAria.expect(element, 'aria-label');
+
+    return postLink;
+  }
+
   function postLink(scope, element, attr, ctrls) {
     $mdTheming(element);
     var ngModelCtrl = ctrls[0] || {
@@ -129,10 +140,6 @@ function SliderController(scope, element, attr, $$rAF, $window, $mdEffects, $mdA
       updateAriaDisabled(!!attr.disabled);
     }
 
-    $mdAria.expect(element, 'aria-label');
-
-    element.attr('tabIndex', 0);
-    element.attr('role', 'slider');
     element.on('keydown', keydownListener);
 
     var hammertime = new Hammer(element[0], {

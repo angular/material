@@ -11,7 +11,8 @@ function AriaService($$rAF, $log) {
   return {
     expect: expect,
     expectAsync: expectAsync,
-    expectWithText: expectWithText
+    expectWithText: expectWithText,
+    expectWithTextSynchronous: expectWithTextSynchronous
   };
 
   /**
@@ -24,7 +25,7 @@ function AriaService($$rAF, $log) {
     var node = element[0];
     if (!node.hasAttribute(attrName)) {
 
-      defaultValue = angular.isString(defaultValue) && defaultValue.trim() || '';
+      defaultValue = angular.isString(defaultValue) ? defaultValue.trim() : '';
       if (defaultValue.length) {
         element.attr(attrName, defaultValue);
       } else {
@@ -44,9 +45,15 @@ function AriaService($$rAF, $log) {
   }
 
   function expectWithText(element, attrName) {
-    expectAsync(element, attrName, function() {
-      return element.text().trim();
-    });
+    expectAsync(element, attrName, angular.bind(getText, null, element));
+  }
+
+  function expectWithTextSynchronous(element, attrName) {
+    expect(element, attrName, angular.bind(getText, null, element));
+  }
+
+  function getText(element) {
+    return element.text().trim();
   }
 
 }
