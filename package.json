@@ -29,7 +29,7 @@
     "gulp-replace": "^0.3.0",
     "gulp-sass": "ajoslin/gulp-sass#master",
     "gulp-strip-debug": "^0.3.0",
-    "gulp-uglify": "^0.3.0",
+    "gulp-closure-compiler": "^0.2.7",
     "gulp-uncss": "^0.4.5",
     "gulp-util": "^3.0.1",
     "gulp-webserver": "^0.8.3",
