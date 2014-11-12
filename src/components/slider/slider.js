@@ -94,6 +94,7 @@ function SliderController($scope, $element, $attrs, $$rAF, $window, $mdAria, $md
 
   this.init = function init(ngModelCtrl) {
     var thumb = angular.element($element[0].querySelector('.md-thumb'));
+    var thumbText = angular.element($element[0].querySelector('.md-thumb-text'));
     var thumbContainer = thumb.parent();
     var trackContainer = angular.element($element[0].querySelector('.md-track-container'));
     var activeTrack = angular.element($element[0].querySelector('.md-track-fill'));
