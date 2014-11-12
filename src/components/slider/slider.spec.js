@@ -41,6 +41,24 @@ describe('md-slider', function() {
     expect($rootScope.value).toBe(50);
   }));
 
+  it('should set model on drag', inject(function($compile, $rootScope, $timeout) {
+    var slider = $compile('<md-slider ng-model="value" min="0" max="100" md-discrete>')($rootScope);
+    $rootScope.$apply('value = 50');
+    var sliderCtrl = slider.controller('mdSlider');
+
+    spyOn(slider[0].querySelector('.md-track-container'), 'getBoundingClientRect').andReturn({
+      width: 100,
+      left: 0,
+      right: 0
+    });
+
+    sliderCtrl._onInput( simulateEventAt( 30, Hammer.INPUT_START ));
+    $timeout.flush();
+
+    sliderCtrl._onPan( simulateEventAt( 80 ));
+    expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('80');
+  }));
+
   it('should increment model on right arrow', inject(function($compile, $rootScope, $timeout, $mdConstant) {
     var slider = $compile(
       '<md-slider min="100" max="104" step="2" ng-model="model">'
