@@ -1,26 +1,47 @@
 
 module.exports = function(config) {
-  config.set({
-
-    basePath: __dirname + '/..',
-    frameworks: ['jasmine'],
-    files: [
-      'bower_components/angular/angular.js',
-      'bower_components/angular-animate/angular-animate.js',
-      'bower_components/angular-aria/angular-aria.js',
-      'bower_components/angular-mocks/angular-mocks.js',
-      'bower_components/hammerjs/hammer.js',
+  
+  var UNCOMPILED_SRC = [
       'config/test-utils.js',
       'src/core/**/*.js',
 
+      // Test utilities, source, and specifications.
       // We are explicit like this because we don't want to put
       // demos in the tests, and Karma doesn't support advanced
       // globbing.
       'src/components/*/*.js',
       'src/components/tabs/js/*.js',
       'src/services/*.js',
-      'src/services/*/*.js', 
-    ],
+      'src/services/*/*.js'
+  ];
+
+  var COMPILED_SRC = [
+    // Minified source
+    'dist/angular-material.min.js',
+
+    // Test utilties and specifications
+    'config/test-utils.js',
+    'src/core/**/*.spec.js',
+    'src/components/*/*.spec.js',
+    'src/services/*.spec.js',
+    'src/services/*/*.spec.js'
+  ];
+  
+  // releaseMode is a custom configuration option.
+  var testSrc = config.releaseMode ? COMPILED_SRC : UNCOMPILED_SRC;
+
+  config.set({
+
+    basePath: __dirname + '/..',
+    frameworks: ['jasmine'],
+    files: [
+      // Dependencies
+      'bower_components/angular/angular.js',
+      'bower_components/angular-animate/angular-animate.js',
+      'bower_components/angular-aria/angular-aria.js',
+      'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/hammerjs/hammer.js',
+    ].concat(testSrc),
 
     port: 9876,
     reporters: ['progress'],
