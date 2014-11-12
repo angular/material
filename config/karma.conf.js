@@ -9,16 +9,8 @@ module.exports = function(config) {
       'bower_components/angular-animate/angular-animate.js',
       'bower_components/angular-aria/angular-aria.js',
       'bower_components/angular-mocks/angular-mocks.js',
-      'bower_components/hammerjs/hammer.js',
-      'config/test-utils.js',
-      'src/core/**/*.js',
-
-      // We are explicit like this because we don't want to put
-      // demos in the tests, and Karma doesn't support advanced
-      // globbing.
-      'src/components/*/*.js',
-      'src/components/tabs/js/*.js',
-    ],
+      'bower_components/hammerjs/hammer.js'
+    ].concat(testSrc),
 
     port: 9876,
     reporters: ['progress'],

@@ -36,6 +36,7 @@ var IS_RELEASE_BUILD = !!argv.release;
 var BUILD_MODE = argv.mode;
 var VERSION = argv.version || pkg.version;
 
+/** Grab-bag of build configuration. */
 var config = {
   banner:
     '/*!\n' +
@@ -44,9 +45,22 @@ var config = {
     ' * @license MIT\n' +
     ' * v' + VERSION + '\n' +
     ' */\n',
-  jsBaseFiles: ['src/core/**/*.js', '!src/core/**/*.spec.js'],
-  themeBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss'],
-  scssBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss', 'src/core/style/{structure,layout}.scss'],
+  jsBaseFiles: [
+    'src/core/**/*.js',
+    '!src/core/**/*.spec.js'
+  ],
+  themeBaseFiles: [
+    'src/core/style/color-palette.scss',
+    'src/core/style/variables.scss',
+    'src/core/style/mixins.scss'
+  ],
+  scssBaseFiles: [
+    'src/core/style/color-palette.scss',
+    'src/core/style/variables.scss',
+    'src/core/style/mixins.scss',
+    'src/core/style/structure.scss',
+    'src/core/style/layout.scss'
+  ],
   paths: 'src/{components,services}/**',
   outputDir: 'dist/'
 };
@@ -76,9 +90,23 @@ if (IS_RELEASE_BUILD) {
 require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
 
 
+function readModuleArg() {
+  var module = argv.module || argv.m;
+  if (!module) {
+    gutil.log('\nProvide a module argument via `--module` or `-m`.',
+      '\nExample: --module=material.components.toast or -m material.components.dialog');
+    process.exit(1);
+  }
+  return module;
+}
+
+
+
 
 gulp.task('default', ['build']);
 gulp.task('validate', ['jshint', 'karma']);
+
+
 gulp.task('changelog', function(done) {
   changelog({
     repository: 'https://github.com/angular/material',
@@ -88,6 +116,9 @@ gulp.task('changelog', function(done) {
     fs.writeFileSync(__dirname + '/CHANGELOG.md', log);
   });
 });
+
+
+/** JSHint */
 gulp.task('jshint', function() {
   return gulp.src(
     buildConfig.paths.js.concat(buildConfig.paths.test)
@@ -103,12 +134,7 @@ gulp.task('jshint', function() {
 });
 
 
-/** *****************************************
- *
- * Tasks for Karma Test
- *
- ** ***************************************** */
-
+/** Karma Tests */
 gulp.task('karma', function(done) {
   var karmaConfig = {
     singleRun: true,
@@ -128,6 +154,7 @@ gulp.task('karma', function(done) {
   }
 });
 
+
 gulp.task('karma-watch', function(done) {
   karma.start({
     singleRun:false,
@@ -136,40 +163,16 @@ gulp.task('karma-watch', function(done) {
   },done);
 });
 
+
 gulp.task('karma-sauce', function(done) {
   karma.start(require('./config/karma-sauce.conf.js'), done);
 });
 
 
-/** *****************************************
- *
- * Project-wide Build Tasks
- *
- ** ***************************************** */
+/******* Project-wide build tasks *******/
 
 gulp.task('build', ['build-themes', 'build-scss', 'build-js']);
 
-gulp.task('build-all-modules', function() {
-  gutil.log("Generating '/dist/components/js/**/*.*' ");
-
-  return gulp.src(['src/components/*', 'src/core/'])
-    .pipe(through2.obj(function(folder, enc, next) {
-      var moduleId = folder.path.indexOf('components') > -1 ?
-        'material.components.' + path.basename(folder.path) :
-        'material.' + path.basename(folder.path);
-
-      var stream;
-      if (IS_RELEASE_BUILD) {
-        stream = mergeStream(buildModule(moduleId, true), buildModule(moduleId, false));
-      } else {
-        stream = buildModule(moduleId, false);
-      }
-
-      stream.on('end', function() {
-        next();
-      });
-    }));
-});
 
 gulp.task('build-all-modules', function() {
   var addedCore = false;
@@ -188,7 +191,8 @@ gulp.task('watch', ['build'], function() {
   gulp.watch('src/**/*', ['build']);
 });
 
-gulp.task('watch-demo', ['build-demo'], function() {
+
+gulp.task('watch-module', ['build', 'build-demo'], function() {
   var module = readModuleArg();
   var name = module.split('.').pop();
   var dir  = "/dist/demos/"+name.trim();
@@ -203,6 +207,8 @@ gulp.task('watch-demo', ['build-demo'], function() {
   return gulp.watch('src/**/*', ['build-demo']);
 });
 
+
+var LR_PORT = argv.port || argv.p || 8080;
 gulp.task('server', function() {
   return gulp.src('.')
     .pipe(webserver({
@@ -213,19 +219,34 @@ gulp.task('server', function() {
 });
 
 
-/** *****************************************
- *
- * Tasks and functions for module Javascript
- *
- ** ***************************************** */
-
-gulp.task('build-js', function() {
-  return buildJs(IS_RELEASE_BUILD);
+gulp.task('build-default-theme', function() {
+  return gulp.src(config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss')))
+    .pipe(concat('_default-theme.scss'))
+    .pipe(utils.hoistScssVariables())
+    .pipe(gulp.dest('themes/'));
 });
 
-gulp.task('build-js-release', function() {
-  buildJs(true);
+
+gulp.task('build-theme', ['build-default-theme'], function() {
+  var theme = argv.theme || argv.t || 'default';
+  theme = theme.replace(/-theme$/, '');
+  return buildTheme(theme);
 });
+
+
+gulp.task('build-themes', ['build-default-theme'], function() {
+  var stream = mergeStream();
+  var themes = glob('themes/**.scss', { cwd: __dirname })
+    .filter(function(themeName) {
+      return themeName.split('/')[1].charAt(0) != '_';
+    });
+  themes.forEach(function(themeFile) {
+    var name = themeFile.match(/((\w|-)+)-theme\.scss/)[1];
+    stream.add(buildTheme(name));
+  });
+  return stream;
+});
+
 
 gulp.task('build-scss', ['build-default-theme'], function() {
   var defaultThemeContents = fs.readFileSync('themes/_default-theme.scss');
@@ -249,6 +270,36 @@ gulp.task('build-scss', ['build-default-theme'], function() {
     ));
 });
 
+
+gulp.task('build-js', function() {
+  return buildJs(IS_RELEASE_BUILD);
+});
+
+
+gulp.task('build-js-release', function() {
+  buildJs(true);
+});
+
+
+/**
+ * Gets a function to stream javascript minification.
+ * @param {string} fileName The name of the minified file.
+ * @return {function(): Stream}
+ */
+function minifyJs(fileName) {
+  // Return a function instead of the stream itself in order to work with
+  // lazypipe.
+  return closureCompiler({
+    compilerPath: 'bower_components/closure-compiler/lib/vendor/compiler.jar',
+    fileName: fileName,
+    compilerFlags: {
+      language_in: 'ECMASCRIPT5',
+      warning_level: 'QUIET'
+    }
+  });
+}
+
+
 /**
  * Builds the entire component library javascript.
  * @param {boolean} isRelease Whether to build in release mode.
@@ -271,21 +322,30 @@ function buildJs(isRelease) {
 }
 
 
-/** *****************************************
- *
- * Component Demos Tasks and commands
- *
- * Build and deploy demos for a module. This is
- * useful for debugging a specific module independent of
- * the docs build; which has all modules and all demos loaded.
- *
- * To build, watch for changes, and launch web server :
- *
+function buildTheme(theme) {
+  gutil.log("Building theme " + theme + "...");
+  return gulp.src([
+    'src/core/style/color-palette.scss',
+    'themes/' + theme + '-theme.scss',
+    'themes/_default-theme.scss'
+  ])
+    .pipe(concat(theme + '-theme.scss'))
+    .pipe(utils.hoistScssVariables())
+    .pipe(sass())
+    .pipe(gulp.dest(config.outputDir + 'themes/'));
+}
+
+
+/******* Module-specific build tasks *******/
+/**
+ * Examples:
  * ```sh
  *    gulp watch-demo -c button
  *    gulp server
  * ```
  */
+
+
 gulp.task('build-module', function() {
   return buildModule(readModuleArg());
 });
@@ -302,7 +362,11 @@ function buildModule(module) {
     .pipe(gulp.dest(BUILD_MODE.outputDir + name))
     .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
       .pipe(gulpif, BUILD_MODE.useBower, lazypipe()
-        .pipe(gulpif, /.css$/, minifyCss(), uglify({preserveComments: 'some'}))
+        .pipe(gulpif, /.css$/, minifyCss(), through2.obj(function(file, enc, next) {
+          var name = path.basename(file.path);
+          minifyJs(name).on('data', this.push.bind(this));
+          next();
+        }))
         .pipe(rename, function(path) {
           path.extname = path.extname
             .replace(/.js$/, '.min.js')
@@ -316,7 +380,8 @@ function buildModule(module) {
     ));
 }
 
-gulp.task('build-module-demo', function() {
+
+gulp.task('build-demo', function() {
   var mod = readModuleArg();
   var name = mod.split('.').pop();
   var demoIndexTemplate = fs.readFileSync(
@@ -342,34 +407,10 @@ gulp.task('build-module-demo', function() {
 });
 
 
-/** *****************************************
- *
- * Tasks and functions for Themes and CSS
- *
- ** ***************************************** */
-
-gulp.task('build-default-theme', function() {
-  return gulp.src(config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss')))
-    .pipe(concat('_default-theme.scss'))
-    .pipe(utils.hoistScssVariables())
-    .pipe(gulp.dest('themes/'));
-});
-
-gulp.task('build-theme', ['build-default-theme'], function() {
-  var theme = argv.theme || argv.t || 'default';
-  theme = theme.replace(/-theme$/, '');
-  return buildTheme(theme);
-});
-
-gulp.task('build-themes', ['build-default-theme'], function() {
-  var stream = mergeStream();
-  var themes = glob('themes/**.scss', { cwd: __dirname })
-    .filter(function(themeName) {
-      return themeName.split('/')[1].charAt(0) != '_';
-    });
-  themes.forEach(function(themeFile) {
-    var name = themeFile.match(/((\w|-)+)-theme\.scss/)[1];
-    stream.add(buildTheme(name));
+function buildModuleStyles(name) {
+  var files = [];
+  config.themeBaseFiles.forEach(function(fileGlob) {
+    files = files.concat(glob(fileGlob, { cwd: __dirname }));
   });
   var baseStyles = files.map(function(fileName) {
     return fs.readFileSync(fileName, 'utf8').toString();
@@ -384,11 +425,13 @@ gulp.task('build-themes', ['build-default-theme'], function() {
     (); // invoke the returning fn to create our pipe
 }
 
+
 function buildModuleJs(name) {
   return lazypipe()
-    .pipe(ngAnnotate)
-    .pipe(concat, name + '.js')
-    ();
+  .pipe(ngAnnotate)
+  .pipe(concat, name + '.js')
+  .pipe(gulpif(IS_RELEASE_BUILD, minifyJs.bind(null, name + '.min.js'), gutil.noop))
+  ();
 }
 
 /** *****************************************
@@ -397,14 +440,14 @@ function buildModuleJs(name) {
  *
  ** ***************************************** */
 
-/**
- * Preconfigured gulp plugin invocations
- */
+/******* Preconfigured gulp plugin invocations *******/
+
 function filterNonCodeFiles() {
   return filter(function(file) {
     return !/demo|module\.json|\.spec.js|README/.test(file.path);
   });
 }
+
 
 function autoprefix() {
   return autoprefixer({browsers: [
