@@ -89,6 +89,11 @@ $button-fab-toast-offset: $toast-height + $toast-margin;
     transition: 0.2s linear;
     transition-property: transform, box-shadow;
 
+    md-icon {
+      line-height: $button-fab-height;
+      margin-top: 0;
+    }
+
   }
 
   &:not([disabled]) {
