@@ -1,9 +1,9 @@
 <div ng-controller="AppCtrl" class="sample">
 
-  <md-tabs selected="selectedIndex">
+  <md-tabs md-selected="selectedIndex">
     <md-tab ng-repeat="tab in tabs"
-            on-select="announceSelected(tab)"
-            on-deselect="announceDeselected(tab)"
+            md-on-select="announceSelected(tab)"
+            md-on-deselect="announceDeselected(tab)"
             ng-disabled="tab.disabled"
             label="{{tab.title}}">
 

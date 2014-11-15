@@ -11,7 +11,7 @@ md-progress-linear.md-#{$theme-name}-theme {
     background-color: $progress-linear-color;
   }
 
-  &[mode=buffer] {
+  &[md-mode=buffer] {
     .md-dashed:before {
       background: radial-gradient($progress-linear-alt-color 0%, $progress-linear-alt-color 16%, transparent 42%);
     }

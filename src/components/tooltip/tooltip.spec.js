@@ -21,7 +21,7 @@ describe('<md-tooltip> directive', function() {
   it('should show and hide when visible is set', inject(function($compile, $rootScope, $timeout) {
     var element = $compile('<md-button>' +
                'Hello' +
-               '<md-tooltip visible="isVisible">Tooltip</md-tooltip>' +
+               '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
              '</md-button>')($rootScope);
 
     $rootScope.$apply();
@@ -42,7 +42,7 @@ describe('<md-tooltip> directive', function() {
   it('should describe parent', inject(function($compile, $rootScope, $timeout) {
     var element = $compile('<md-button>' +
                'Hello' +
-               '<md-tooltip visible="isVisible">Tooltip</md-tooltip>' +
+               '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
              '</md-button>')($rootScope);
 
     $rootScope.$apply('isVisible = true');
@@ -57,7 +57,7 @@ describe('<md-tooltip> directive', function() {
   it('should set visible on mouseenter and mouseleave', inject(function($compile, $rootScope, $timeout) {
     var element = $compile('<md-button>' +
                'Hello' +
-               '<md-tooltip visible="isVisible">Tooltip</md-tooltip>' +
+               '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
              '</md-button>')($rootScope);
 
     $rootScope.$apply();
@@ -74,7 +74,7 @@ describe('<md-tooltip> directive', function() {
   it('should set visible on focus and blur', inject(function($compile, $rootScope, $timeout) {
     var element = $compile('<md-button>' +
                'Hello' +
-               '<md-tooltip visible="isVisible">Tooltip</md-tooltip>' +
+               '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
              '</md-button>')($rootScope);
 
     $rootScope.$apply();
@@ -91,7 +91,7 @@ describe('<md-tooltip> directive', function() {
   it('should set visible on touchstart and touchend', inject(function($compile, $rootScope, $timeout) {
     var element = $compile('<md-button>' +
                'Hello' +
-               '<md-tooltip visible="isVisible">Tooltip</md-tooltip>' +
+               '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
              '</md-button>')($rootScope);
 
     $rootScope.$apply();

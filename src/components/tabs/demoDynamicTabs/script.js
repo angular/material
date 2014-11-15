@@ -21,7 +21,7 @@ angular.module('tabsDemo2', ['ngMaterial'])
 
     $scope.addTab = function (title, view) {
       view = view || title + " Content View";
-      tabs.push({ title: title, content: view, disabled: false, style:style});
+      tabs.push({ title: title, content: view, disabled: false});
     };
 
     $scope.removeTab = function (tab) {

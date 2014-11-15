@@ -3,7 +3,7 @@
 
 /**
  * Conditionally configure ink bar animations when the
- * tab selection changes. If `nobar` then do not show the
+ * tab selection changes. If `mdNoBar` then do not show the
  * bar nor animate.
  */
 angular.module('material.components.tabs')
@@ -13,7 +13,7 @@ function MdTabInkDirective($mdConstant, $window, $$rAF, $timeout) {
 
   return {
     restrict: 'E',
-    require: ['^?nobar', '^mdTabs'],
+    require: ['^?mdNoBar', '^mdTabs'],
     link: postLink
   };
 

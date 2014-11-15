@@ -204,7 +204,7 @@ md-slider {
     }
   }
 
-  &:not([discrete]) {
+  &:not([md-discrete]) {
     /* Hide the sign and ticks in non-discrete mode */
     .md-track-ticks,
     .md-sign {
@@ -233,7 +233,7 @@ md-slider {
     }
   }
 
-  &[discrete] {
+  &[md-discrete] {
     /* Hide the focus thumb in discrete mode */
     .md-focus-thumb,
     .md-focus-ring {

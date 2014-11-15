@@ -18,7 +18,7 @@ describe('mdSidenav', function() {
   describe('directive', function() {
 
     it('should bind isOpen attribute', inject(function($rootScope, $animate) {
-      var el = setup('is-open="show"');
+      var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
 
       $animate.triggerCallbacks();
@@ -32,7 +32,7 @@ describe('mdSidenav', function() {
     }));
 
     it('should close on escape', inject(function($rootScope, $animate, $mdConstant, $timeout) {
-      var el = setup('is-open="show"');
+      var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
 
       $animate.triggerCallbacks();
@@ -45,7 +45,7 @@ describe('mdSidenav', function() {
     }));
 
     it('should close on backdrop click', inject(function($rootScope, $animate, $timeout) {
-      var el = setup('is-open="show"');
+      var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
 
       $animate.triggerCallbacks();
@@ -56,7 +56,7 @@ describe('mdSidenav', function() {
 
     it('should focus sidenav on open', inject(function($rootScope, $animate, $document) {
       TestUtil.mockElementFocus(this);
-      var el = setup('is-open="show"');
+      var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
 
       $animate.triggerCallbacks();
@@ -64,7 +64,7 @@ describe('mdSidenav', function() {
     }));
 
     it('should lock open when is-locked-open is true', inject(function($rootScope, $animate, $document) {
-      var el = setup('is-open="show" is-locked-open="lock"');
+      var el = setup('md-is-open="show" md-is-locked-open="lock"');
       expect(el.hasClass('md-locked-open')).toBe(false);
       $rootScope.$apply('lock = true');
       expect(el.hasClass('md-locked-open')).toBe(true);
@@ -79,7 +79,7 @@ describe('mdSidenav', function() {
         $provide.value('$mdMedia', mdMediaSpy);
       });
       inject(function($rootScope, $animate, $document, $mdMedia) {
-        var el = setup('is-locked-open="$media(123)"');
+        var el = setup('md-is-locked-open="$media(123)"');
         expect($mdMedia).toHaveBeenCalledWith(123);
       });
     });
@@ -118,7 +118,7 @@ describe('mdSidenav', function() {
     });
 
     it('should deregister component when element is destroyed', inject(function($mdComponentRegistry) {
-      var el = setup('component-id="left"');
+      var el = setup('md-component-id="left"');
       el.triggerHandler('$destroy');
 
       var instance = $mdComponentRegistry.get('left');
@@ -129,7 +129,7 @@ describe('mdSidenav', function() {
 
   describe('$mdSidenav Service', function() {
     it('should grab instance', inject(function($mdSidenav) {
-      var el = setup('component-id="left"');
+      var el = setup('md-component-id="left"');
       var scope = el.isolateScope();
 
       var instance = $mdSidenav('left');
