@@ -136,9 +136,13 @@ function TabPaginationDirective($mdEffects, $window, $$rAF, $$q, $timeout) {
             tabs.css('width', '');
             slideTabButtons(0);
             state.page = -1;
-          });
+          }, 0, false);
         }
 
+      }
+
+      if (!scope.$root.$$phase) {
+        scope.$apply();
       }
     }
 

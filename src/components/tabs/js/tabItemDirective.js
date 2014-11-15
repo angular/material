@@ -59,6 +59,8 @@ angular.module('material.components.tabs')
  *
  */
 function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
+  var tabLabelTemplate = angular.element('<md-tab-label>');
+
   return {
     restrict: 'E',
     require: ['mdTab', '^mdTabs'],
@@ -80,16 +82,17 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
 
     } else if (angular.isDefined(attr.label)) {
       // Otherwise, try to use attr.label as the label
-      tabLabel = angular.element('<md-tab-label>').html(attr.label);
+      tabLabel = tabLabelTemplate.clone().html(attr.label);
 
     } else {
       // If nothing is found, use the tab's content as the label
-      tabLabel = angular.element('<md-tab-label>')
-                        .append(element.contents().remove());
+      tabLabel = tabLabelTemplate.clone().append(element.contents());
     }
 
     // Everything that's left as a child is the tab's content.
     var tabContent = element.contents().remove();
+
+    element.attr('role', 'tab');
 
     return function postLink(scope, element, attr, ctrls) {
 
@@ -209,7 +212,6 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
 
         element.attr({
           id: tabId,
-          role: 'tab',
           tabIndex: -1 //this is also set on select/deselect in tabItemCtrl
         });
 

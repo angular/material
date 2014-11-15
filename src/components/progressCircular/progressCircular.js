@@ -99,11 +99,11 @@ function MdProgressCircularDirective($$rAF, $mdEffects, $mdTheming) {
 
       element.attr('aria-valuenow', clamped);
 
-      for (i = 0; i < fill.length; i++) {
+      for (i = 0, ii = fill.length; i < ii; i++) {
         fill[i].style[$mdEffects.TRANSFORM] = fillRotation;
       }
 
-      for (i = 0; i < fix.length; i++) {
+      for (i = 0, ii = fix.length; i < ii; i++) {
         fix[i].style[$mdEffects.TRANSFORM] = fixRotation;
       }
     });

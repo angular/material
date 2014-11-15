@@ -47,9 +47,7 @@ function mdListDirective() {
   return {
     restrict: 'E',
     link: function($scope, $element, $attr) {
-      $element.attr({
-        'role' : 'list'
-      });
+      $element.attr('role', 'list');
     }
   };
 }
@@ -78,9 +76,7 @@ function mdItemDirective() {
   return {
     restrict: 'E',
     link: function($scope, $element, $attr) {
-      $element.attr({
-        'role' : 'listitem'
-      });
+      $element.attr('role', 'listitem');
     }
   };
 }
