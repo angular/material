@@ -2,7 +2,7 @@
  * Initialization function that validates environment
  * requirements.
  */
-angular.module('material.core', [] )
+angular.module('material.core', [])
 
 .run(function validateEnvironment() {
 
@@ -13,6 +13,7 @@ angular.module('material.core', [] )
   }
 
 })
+
 .config(['$provide', function($provide) {
   $provide.decorator('$$rAF', ['$delegate', '$rootScope', rAFDecorator]);
 

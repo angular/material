@@ -1,288 +1,402 @@
 describe('$mdDialog', function() {
-  
+
   beforeEach(TestUtil.mockRaf);
   beforeEach(module('material.components.dialog', 'ngAnimateMock'));
 
-  beforeEach(inject(function spyOnMdEffects($mdEffects, $$q, $animate) {
-    spyOn($mdEffects, 'popIn').andCallFake(function(element, parent, targetEvent) {
-      parent.append(element);
-      return $$q.when();
-    });
+  beforeEach(inject(function spyOnMdEffects($$q, $animate) {
     spyOn($animate, 'leave').andCallFake(function(element) {
       element.remove();
       return $$q.when();
     });
-
     spyOn($animate, 'enter').andCallFake(function(element, parent) {
       parent.append(element);
       return $$q.when();
     });
   }));
 
-  it('should support onComplete callbacks within `show()`', inject(function($mdDialog, $rootScope, $timeout) {
+  describe('#alert()', function() {
+    hasConfigurationMethods([
+      'title', 'content', 'ariaLabel',
+      'ok', 'targetEvent'
+    ]);
 
-    var template = '<md-dialog>Hello</md-dialog>';
-    var parent = angular.element('<div>');
-    var ready = false;
+    it('shows a basic alert dialog', inject(function($animate, $rootScope, $mdDialog, $mdConstant) {
+      var parent = angular.element('<div>');
+      var resolved = false;
+      $mdDialog.show(
+        $mdDialog.alert({
+          parent: parent
+        })
+          .title('Title')
+          .content('Hello world')
+          .ok('Next')
+      ).then(function() {
+        resolved = true;
+      });
+       
+      $rootScope.$apply();
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      container.triggerHandler('transitionend');
+      $rootScope.$apply();
 
-    $mdDialog.show({
-      template: template,
-      parent: parent,
-      onComplete: function(scope, element, options) {
-        expect( arguments.length ).toEqual( 3 );
-        ready = true;
-      }
-    });
+      var title = angular.element(parent[0].querySelector('h2'));
+      expect(title.text()).toBe('Title');
+      var content = parent.find('p');
+      expect(content.text()).toBe('Hello world');
+      var buttons = parent.find('md-button');
+      expect(buttons.length).toBe(1);
+      expect(buttons.eq(0).text()).toBe('Next');
+      buttons.eq(0).triggerHandler('click');
+      $rootScope.$apply();
+      $animate.triggerCallbacks();
+      expect(parent.find('h2').length).toBe(0);
+      expect(resolved).toBe(true);
+    }));
 
-    $rootScope.$apply();
+    function hasConfigurationMethods(methods) {
+      angular.forEach(methods, function(method) {
+        return it('supports config method #' + method, inject(function($mdDialog) {
+          var alert = $mdDialog.alert();
+          expect(typeof alert[method]).toBe('function');
+          expect(alert[method]()).toEqual(alert);
+        }));
+      });
+    }
+  });
 
-      expect( ready ).toBe( false );
+  describe('#confirm()', function() {
+    hasConfigurationMethods([
+      'title', 'content', 'ariaLabel',
+      'ok', 'cancel', 'targetEvent'
+    ]);
 
-    $timeout.flush();
+    it('shows a basic confirm dialog', inject(function($rootScope, $mdDialog, $animate, $mdConstant) {
+      var parent = angular.element('<div>');
+      var rejected = false;
+      $mdDialog.show(
+        $mdDialog.confirm({
+          parent: parent
+        })
+          .title('Title')
+          .content('Hello world')
+          .ok('Next')
+          .cancel('Forget it')
+      ).catch(function() {
+        rejected = true;
+      });
 
-    var container = angular.element(parent[0].querySelector('.md-dialog-container'));
-    expect(container.length).toBe(1);
-    expect( ready ).toBe( true );
+      $rootScope.$apply();
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      container.triggerHandler('transitionend');
+      $rootScope.$apply();
 
-  }));
+      var title = parent.find('h2');
+      expect(title.text()).toBe('Title');
+      var content = parent.find('p');
+      expect(content.text()).toBe('Hello world');
+      var buttons = parent.find('md-button');
+      expect(buttons.length).toBe(2);
+      expect(buttons.eq(0).text()).toBe('Next');
+      expect(buttons.eq(1).text()).toBe('Forget it');
+      buttons.eq(1).triggerHandler('click');
+      $rootScope.$digest();
+      $animate.triggerCallbacks();
+      expect(parent.find('h2').length).toBe(0);
+      expect(rejected).toBe(true);
+    }));
 
-  it('should append dialog with container', inject(function($mdDialog, $rootScope) {
+    function hasConfigurationMethods(methods) {
+      angular.forEach(methods, function(method) {
+        return it('supports config method #' + method, inject(function($mdDialog) {
+          var alert = $mdDialog.confirm();
+          expect(typeof alert[method]).toBe('function');
+          expect(alert[method]()).toEqual(alert);
+        }));
+      });
+    }
+  });
 
-    var template = '<md-dialog>Hello</md-dialog>';
-    var parent = angular.element('<div>');
+  describe('#build()', function() {
+    it('should support onComplete callbacks within `show()`', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
 
-    $mdDialog.show({
-      template: template,
-      parent: parent
-    });
+      var template = '<md-dialog>Hello</md-dialog>';
+      var parent = angular.element('<div>');
+      var ready = false;
 
-    $rootScope.$apply();
+      $mdDialog.show({
+        template: template,
+        parent: parent,
+        onComplete: function(scope, element, options) {
+          expect( arguments.length ).toEqual( 3 );
+          ready = true;
+        }
+      });
+      $rootScope.$apply();
 
-    var container = angular.element(parent[0].querySelector('.md-dialog-container'));
-    expect(container.length).toBe(1);
-  }));
+      expect(ready).toBe( false );
 
-  it('should escapeToClose == true', inject(function($mdDialog, $rootScope, $rootElement, $timeout, $mdEffects, $animate, $mdConstant) {
-    var parent = angular.element('<div>');
-    $mdDialog.show({
-      template: '<md-dialog>',
-      parent: parent,
-      escapeToClose: true
-    });
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      container.triggerHandler('transitionend');
+      $rootScope.$apply();
 
-    $rootScope.$apply();
-    $timeout.flush();
-    expect(parent.find('md-dialog').length).toBe(1);
+      container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      expect(container.length).toBe(1);
+      expect(ready).toBe( true );
+    }));
 
-    $rootElement.triggerHandler({
-      type: 'keyup',
-      keyCode: $mdConstant.KEY_CODE.ESCAPE 
-    });
+    it('should append dialog with container', inject(function($mdDialog, $rootScope) {
 
-    $timeout.flush();
-    expect(parent.find('md-dialog').length).toBe(0);
-  }));
+      var template = '<md-dialog>Hello</md-dialog>';
+      var parent = angular.element('<div>');
 
-  it('should escapeToClose == false', inject(function($mdDialog, $rootScope, $rootElement, $timeout, $mdEffects, $animate, $mdConstant) {
-    var parent = angular.element('<div>');
-    $mdDialog.show({
-      template: '<md-dialog>',
-      parent: parent,
-      escapeToClose: false
-    });
+      $mdDialog.show({
+        template: template,
+        parent: parent
+      });
 
-    $rootScope.$apply();
-    expect(parent.find('md-dialog').length).toBe(1);
+      $rootScope.$apply();
 
-    $rootElement.triggerHandler({
-      type: 'keyup',
-      keyCode: $mdConstant.KEY_CODE.ESCAPE 
-    });
+      var container = parent[0].querySelectorAll('.md-dialog-container');
+      expect(container.length).toBe(1);
+    }));
 
-    $timeout.flush();
-    $animate.triggerCallbacks();
-    expect(parent.find('md-dialog').length).toBe(1);
-  }));
+    it('should escapeToClose == true', inject(function($mdDialog, $rootScope, $rootElement, $timeout, $animate, $mdConstant) {
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template: '<md-dialog>',
+        parent: parent,
+        escapeToClose: true
+      });
+      $rootScope.$apply();
 
-  it('should clickOutsideToClose == true', inject(function($mdDialog, $rootScope, $timeout, $mdEffects, $animate) {
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      container.triggerHandler('transitionend');
+      $rootScope.$apply();
 
-    var parent = angular.element('<div>');
-    $mdDialog.show({
-      template: '<md-dialog>',
-      parent: parent,
-      clickOutsideToClose: true
-    });
+      expect(parent.find('md-dialog').length).toBe(1);
 
-    $rootScope.$apply();
-    expect(parent.find('md-dialog').length).toBe(1);
-    $timeout.flush();
+      $rootElement.triggerHandler({type: 'keyup',
+        keyCode: $mdConstant.KEY_CODE.ESCAPE
+      });
 
-    var container = angular.element(parent[0].querySelector('.md-dialog-container'));
-    container.triggerHandler({
-      type: 'click',
-      target: container[0]
-    });
-    $timeout.flush();
+      $timeout.flush();
+      expect(parent.find('md-dialog').length).toBe(0);
+    }));
 
-    expect(parent.find('md-dialog').length).toBe(0);
-  }));
+    it('should escapeToClose == false', inject(function($mdDialog, $rootScope, $rootElement, $timeout, $animate, $mdConstant) {
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template: '<md-dialog>',
+        parent: parent,
+        escapeToClose: false
+      });
+      $rootScope.$apply();
 
-  it('should clickOutsideToClose == false', inject(function($mdDialog, $rootScope, $timeout, $mdEffects, $animate) {
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      container.triggerHandler('transitionend');
+      $rootScope.$apply();
 
-    var parent = angular.element('<div>');
-    $mdDialog.show({
-      template: '<md-dialog>',
-      parent: parent,
-      clickOutsideToClose: false
-    });
+      expect(parent.find('md-dialog').length).toBe(1);
 
-    $rootScope.$apply();
-    expect(parent.find('md-dialog').length).toBe(1);
+      $rootElement.triggerHandler({ type: 'keyup', keyCode: $mdConstant.KEY_CODE.ESCAPE });
 
-    var container = angular.element(parent[0].querySelectorAll('.md-dialog-container'));
-    container.triggerHandler({
-      type: 'click',
-      target: container[0]
-    });
-    $timeout.flush();
-    $animate.triggerCallbacks();
+      $timeout.flush();
+      $animate.triggerCallbacks();
+      expect(parent.find('md-dialog').length).toBe(1);
+    }));
 
-    expect(parent.find('md-dialog').length).toBe(1);
-  }));
+    it('should clickOutsideToClose == true', inject(function($mdDialog, $rootScope, $timeout, $animate, $mdConstant) {
 
-  it('should hasBackdrop == true', inject(function($mdDialog, $animate, $rootScope) {
-    var parent = angular.element('<div>');
-    $mdDialog.show({
-      template: '<md-dialog>',
-      parent: parent,
-      hasBackdrop: true
-    });
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template: '<md-dialog>',
+        parent: parent,
+        clickOutsideToClose: true
+      });
+      $rootScope.$apply();
 
-    $rootScope.$apply();
-    $animate.triggerCallbacks();
-    $rootScope.$apply();
-    expect(parent.find('md-dialog').length).toBe(1);
-    expect(parent.find('md-backdrop').length).toBe(1);
-  }));
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      container.triggerHandler('transitionend');
+      $rootScope.$apply();
 
-  it('should hasBackdrop == false', inject(function($mdDialog, $rootScope) {
-    var parent = angular.element('<div>');
-    $mdDialog.show({
-      template: '<md-dialog>',
-      parent: parent,
-      hasBackdrop: false
-    });
+      expect(parent.find('md-dialog').length).toBe(1);
 
-    $rootScope.$apply();
-    expect(parent.find('md-dialog').length).toBe(1);
-    expect(parent.find('md-backdrop').length).toBe(0);
-  }));
+      container.triggerHandler({
+        type: 'click',
+        target: container[0]
+      });
+      $timeout.flush();
+      container.triggerHandler('transitionend');
+      $rootScope.$apply();
 
-  it('should focus `md-button.dialog-close` on open', inject(function($mdDialog, $rootScope, $document, $timeout) {
-    TestUtil.mockElementFocus(this);
+      expect(parent.find('md-dialog').length).toBe(0);
+    }));
 
-    var parent = angular.element('<div>');
-    $mdDialog.show({
-      template:
-        '<md-dialog>' +
-          '<div class="md-actions">' +
-            '<button class="dialog-close">Close</button>' +
-          '</div>' +
+    it('should clickOutsideToClose == false', inject(function($mdDialog, $rootScope, $timeout, $animate) {
+
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template: '<md-dialog>',
+        parent: parent,
+        clickOutsideToClose: false
+      });
+
+      $rootScope.$apply();
+      expect(parent.find('md-dialog').length).toBe(1);
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+
+      container.triggerHandler('click');
+      $timeout.flush();
+      $animate.triggerCallbacks();
+
+      expect(parent[0].querySelectorAll('md-dialog').length).toBe(1);
+    }));
+
+    it('should hasBackdrop == true', inject(function($mdDialog, $animate, $rootScope) {
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template: '<md-dialog>',
+        parent: parent,
+        hasBackdrop: true
+      });
+
+      $rootScope.$apply();
+      $animate.triggerCallbacks();
+      $rootScope.$apply();
+      expect(parent.find('md-dialog').length).toBe(1);
+      expect(parent.find('md-backdrop').length).toBe(1);
+    }));
+
+    it('should hasBackdrop == false', inject(function($mdDialog, $rootScope) {
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template: '<md-dialog>',
+        parent: parent,
+        hasBackdrop: false
+      });
+
+      $rootScope.$apply();
+      expect(parent[0].querySelectorAll('md-dialog').length).toBe(1);
+      expect(parent[0].querySelectorAll('md-backdrop').length).toBe(0);
+    }));
+
+    it('should focus `md-button.dialog-close` on open', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
+      TestUtil.mockElementFocus(this);
+
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template:
+          '<md-dialog>' +
+            '<div class="md-actions">' +
+              '<button class="dialog-close">Close</button>' +
+            '</div>' +
+            '</md-dialog>',
+        parent: parent
+      });
+
+      $rootScope.$apply();
+      $timeout.flush();
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      container.triggerHandler('transitionend');
+      $rootScope.$apply();
+
+
+      expect($document.activeElement).toBe(parent[0].querySelector('.dialog-close'));
+    }));
+
+    it('should focus the last `md-button` in md-actions open if no `.dialog-close`', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
+      TestUtil.mockElementFocus(this);
+
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template:
+          '<md-dialog>' +
+            '<div class="md-actions">' +
+              '<button id="a">A</md-button>' +
+              '<button id="focus-target">B</md-button>' +
+            '</div>' +
           '</md-dialog>',
-      parent: parent
-    });
+        parent: parent
+      });
 
-    $rootScope.$apply();
-    $timeout.flush();
+      $rootScope.$apply();
+      $timeout.flush();
 
-    expect($document.activeElement).toBe(parent[0].querySelector('.dialog-close'));
-  }));
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      container.triggerHandler('transitionend');
+      $rootScope.$apply();
 
-  it('should focus the last `md-button` in md-actions open if no `.dialog-close`', inject(function($mdDialog, $rootScope, $document, $timeout) {
-    TestUtil.mockElementFocus(this);
+      expect($document.activeElement).toBe(parent[0].querySelector('#focus-target'));
+    }));
 
-    var parent = angular.element('<div>');
-    $mdDialog.show({
-      template:
-        '<md-dialog>' +
-          '<div class="md-actions">' +
-            '<button id="a">A</md-button>' +
-            '<button id="focus-target">B</md-button>' +
-          '</div>' +
-        '</md-dialog>',
-      parent: parent
-    });
+    it('should only allow one open at a time', inject(function($mdDialog, $rootScope) {
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template: '<md-dialog class="one">',
+        parent: parent
+      });
 
-    $rootScope.$apply();
-    $timeout.flush();
+      $rootScope.$apply();
+      expect(parent[0].querySelectorAll('md-dialog.one').length).toBe(1);
+      expect(parent[0].querySelectorAll('md-dialog.two').length).toBe(0);
 
-    expect($document.activeElement).toBe(parent[0].querySelector('#focus-target'));
-  }));
+      $mdDialog.show({
+        template: '<md-dialog class="two">',
+        parent: parent
+      });
 
-  it('should only allow one open at a time', inject(function($mdDialog, $rootScope) {
-    var parent = angular.element('<div>');
-    $mdDialog.show({
-      template: '<md-dialog class="one">',
-      parent: parent
-    });
+      $rootScope.$apply();
+      expect(parent[0].querySelectorAll('md-dialog.one').length).toBe(0);
+      expect(parent[0].querySelectorAll('md-dialog.two').length).toBe(1);
+    }));
 
-    $rootScope.$apply();
-    expect(angular.element(parent[0].querySelectorAll('md-dialog.one')).length).toBe(1);
-    expect(angular.element(parent[0].querySelectorAll('md-dialog.two')).length).toBe(0);
+    it('should have the dialog role', inject(function($mdDialog, $rootScope) {
+      var template = '<md-dialog>Hello</md-dialog>';
+      var parent = angular.element('<div>');
 
-    $mdDialog.show({
-      template: '<md-dialog class="two">',
-      parent: parent
-    });
+      $mdDialog.show({
+        template: template,
+        parent: parent
+      });
 
-    $rootScope.$apply();
-    expect(angular.element(parent[0].querySelectorAll('md-dialog.one')).length).toBe(0);
-    expect(angular.element(parent[0].querySelectorAll('md-dialog.two')).length).toBe(1);
-  }));
+      $rootScope.$apply();
 
-  it('should have the dialog role', inject(function($mdDialog, $rootScope) {
-    var template = '<md-dialog>Hello</md-dialog>';
-    var parent = angular.element('<div>');
+      var dialog = angular.element(parent[0].querySelectorAll('md-dialog'));
+      expect(dialog.attr('role')).toBe('dialog');
+    }));
 
-    $mdDialog.show({
-      template: template,
-      parent: parent
-    });
+    it('should create an ARIA label if one is missing', inject(function($mdDialog, $rootScope) {
+      var template = '<md-dialog>Hello</md-dialog>';
+      var parent = angular.element('<div>');
 
-    $rootScope.$apply();
+      $mdDialog.show({
+        template: template,
+        parent: parent
+      });
 
-    var dialog = parent.find('md-dialog');
-    expect(dialog.attr('role')).toBe('dialog');
-  }));
+      $rootScope.$apply();
+      angular.element(parent[0].querySelector('.md-dialog-container')).triggerHandler('transitionend');
+      $rootScope.$apply();
 
-  it('should create an ARIA label if one is missing', inject(function($mdDialog, $rootScope) {
-    var template = '<md-dialog>Hello</md-dialog>';
-    var parent = angular.element('<div>');
+      var dialog = angular.element(parent[0].querySelector('md-dialog'));
+      expect(dialog.attr('aria-label')).toEqual(dialog.text());
+    }));
 
-    $mdDialog.show({
-      template: template,
-      parent: parent
-    });
+    it('should not modify an existing ARIA label', inject(function($mdDialog, $rootScope){
+      var template = '<md-dialog aria-label="Some Other Thing">Hello</md-dialog>';
+      var parent = angular.element('<div>');
 
-    $rootScope.$apply();
+      $mdDialog.show({
+        template: template,
+        parent: parent
+      });
 
-    var dialog = parent.find('md-dialog');
-    expect(dialog.attr('aria-label')).toEqual(dialog.text());
-  }));
+      $rootScope.$apply();
 
-  it('should not modify an existing ARIA label', inject(function($mdDialog, $rootScope){
-    var template = '<md-dialog aria-label="Some Other Thing">Hello</md-dialog>';
-    var parent = angular.element('<div>');
-
-    $mdDialog.show({
-      template: template,
-      parent: parent
-    });
-
-    $rootScope.$apply();
-
-    var dialog = parent.find('md-dialog');
-    expect(dialog.attr('aria-label')).not.toEqual(dialog.text());
-    expect(dialog.attr('aria-label')).toEqual('Some Other Thing');
-  }));
+      var dialog = angular.element(parent[0].querySelector('md-dialog'));
+      expect(dialog.attr('aria-label')).not.toEqual(dialog.text());
+      expect(dialog.attr('aria-label')).toEqual('Some Other Thing');
+    }));
+  });
 });

@@ -21,6 +21,7 @@ var insert = require('gulp-insert');
 var jshint = require('gulp-jshint');
 var lazypipe = require('lazypipe');
 var minifyCss = require('gulp-minify-css');
+var ngAnnotate = require('gulp-ng-annotate');
 var rename = require('gulp-rename');
 var sass = require('gulp-sass');
 var through2 = require('through2');
@@ -40,7 +41,7 @@ var config = {
     ' * @license MIT\n' +
     ' * v' + pkg.version + '\n' +
     ' */\n',
-  jsBaseFiles: ['src/core/core.js', 'src/core/util/*.js'],
+  jsBaseFiles: ['src/core/**/*.js', '!src/core/**/*.spec.js'],
   themeBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss'],
   scssBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss', 'src/core/style/{structure,layout}.scss'],
   paths: 'src/{components,services}/**',
@@ -204,9 +205,8 @@ function buildTheme(theme) {
 
 gulp.task('build-scss', ['build-default-theme'], function() {
   var defaultThemeContents = fs.readFileSync('themes/_default-theme.scss');
-
-
   var scssGlob = path.join(config.paths, '*.scss');
+
   gutil.log("Building css files...");
   return gulp.src(config.scssBaseFiles.concat(scssGlob))
     .pipe(filterNonCodeFiles())
@@ -234,6 +234,7 @@ gulp.task('build-js', function() {
     .pipe(insert.wrap('(function() {\n', '})();\n'))
     .pipe(concat('angular-material.js'))
     .pipe(insert.prepend(config.banner))
+    .pipe(ngAnnotate())
     .pipe(gulp.dest(config.outputDir))
     .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
       .pipe(uglify)
@@ -299,36 +300,31 @@ function buildModuleStyles(name) {
     return fs.readFileSync(fileName, 'utf8').toString();
   }).join('\n');
   return lazypipe()
-  .pipe(insert.prepend, baseStyles)
-  .pipe(gulpif, /theme.scss/,
-      rename(name + '-default-theme.scss'), concat(name + '.scss')
-  )
-  .pipe(sass)
-  .pipe(autoprefix)
-  .pipe(gulpif, IS_RELEASE_BUILD, minifyCss())
-  (); // invoke the returning fn to create our pipe
+    .pipe(insert.prepend, baseStyles)
+    .pipe(gulpif, /theme.scss/,
+        rename(name + '-default-theme.scss'), concat(name + '.scss')
+    )
+    .pipe(sass)
+    .pipe(autoprefix)
+    .pipe(gulpif, IS_RELEASE_BUILD, minifyCss())
+    (); // invoke the returning fn to create our pipe
 }
 
 function buildModuleJs(name) {
   return lazypipe()
-  .pipe(insert.wrap, '(function() {\n', '})();\n')
-  .pipe(concat, name + '.js')
-  .pipe(gulpif, IS_RELEASE_BUILD, uglify({preserveComments: 'some'}))
-  ();
+    .pipe(ngAnnotate())
+    .pipe(concat, name + '.js')
+    .pipe(gulpif, IS_RELEASE_BUILD, uglify({preserveComments: 'some'}))
+    ();
 }
 
 
 /**
  * Preconfigured gulp plugin invocations
  */
-
 function filterNonCodeFiles() {
   return filter(function(file) {
-    if (/demo/.test(file.path)) return false;
-    if (/README/.test(file.path)) return false;
-    if (/module\.json/.test(file.path)) return false;
-    if (/\.spec\.js/.test(file.path)) return false;
-    return true;
+    return !/demo|module\.json|\.spec.js|README/.test(file.path);
   });
 }
 

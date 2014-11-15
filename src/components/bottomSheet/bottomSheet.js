@@ -1,3 +1,6 @@
+(function() {
+'use strict';
+
 /**
  * @ngdoc module
  * @name material.components.bottomSheet
@@ -5,23 +8,11 @@
  * BottomSheet
  */
 angular.module('material.components.bottomSheet', [
-  'material.components.backdrop',
-  'material.services.interimElement',
-  'material.services.theming'
+  'material.core',
+  'material.components.backdrop'
 ])
-.directive('mdBottomSheet', [
-  MdBottomSheetDirective
-])
-.factory('$mdBottomSheet', [
-  '$$interimElement',
-  '$animate',
-  '$mdEffects',
-  '$timeout',
-  '$$rAF',
-  '$compile',
-  '$mdTheming',
-  MdBottomSheet
-]);
+  .directive('mdBottomSheet', MdBottomSheetDirective)
+  .provider('$mdBottomSheet', MdBottomSheetProvider);
 
 function MdBottomSheetDirective() {
   return {
@@ -38,7 +29,7 @@ function MdBottomSheetDirective() {
  * `$mdBottomSheet` opens a bottom sheet over the app and provides a simple promise API.
  *
  * ### Restrictions
- * 
+ *
  * - The bottom sheet's template must have an outer `<md-bottom-sheet>` element.
  * - Add the `md-grid` class to the bottom sheet for a grid layout.
  * - Add the `md-list` class to the bottom sheet for a list layout.
@@ -79,10 +70,10 @@ function MdBottomSheetDirective() {
  *   template string.
  *   - `controller` - `{string=}`: The controller to associate with this bottom sheet.
  *   - `locals` - `{string=}`: An object containing key/value pairs. The keys will
- *   be used as names of values to inject into the controller. For example, 
+ *   be used as names of values to inject into the controller. For example,
  *   `locals: {three: 3}` would inject `three` into the controller with the value
  *   of 3.
- *   - `targetEvent` - `{DOMClickEvent=}`: A click's event object. When passed in as an option, 
+ *   - `targetEvent` - `{DOMClickEvent=}`: A click's event object. When passed in as an option,
  *   the location of the click will be used as the starting point for the opening animation
  *   of the the dialog.
  *   - `resolve` - `{object=}`: Similar to locals, except it takes promises as values
@@ -98,7 +89,7 @@ function MdBottomSheetDirective() {
  * @name $mdBottomSheet#hide
  *
  * @description
- * Hide the existing bottom sheet and resolve the promise returned from 
+ * Hide the existing bottom sheet and resolve the promise returned from
  * `$mdBottomSheet.show()`.
  *
  * @param {*=} response An argument for the resolved promise.
@@ -110,153 +101,165 @@ function MdBottomSheetDirective() {
  * @name $mdBottomSheet#cancel
  *
  * @description
- * Hide the existing bottom sheet and reject the promise returned from 
+ * Hide the existing bottom sheet and reject the promise returned from
  * `$mdBottomSheet.show()`.
  *
  * @param {*=} response An argument for the rejected promise.
  *
  */
 
-function MdBottomSheet($$interimElement, $animate, $mdEffects, $timeout, $$rAF, $compile, $mdTheming) {
-  var backdrop;
+function MdBottomSheetProvider($$interimElementProvider) {
 
-  var $mdBottomSheet;
-  return $mdBottomSheet = $$interimElement({
-    themable: true,
-    targetEvent: null,
-    onShow: onShow,
-    onRemove: onRemove,
-  });
-
-  function onShow(scope, element, options) {
-    // Add a backdrop that will close on click
-    backdrop = $compile('<md-backdrop class="md-opaque ng-enter">')(scope);
-    backdrop.on('click touchstart', function() {
-      $timeout($mdBottomSheet.cancel);
+  return $$interimElementProvider('$mdBottomSheet')
+    .setDefaults({
+      options: bottomSheetDefaults
     });
-    $mdTheming.inherit(backdrop, options.parent);
 
-    $animate.enter(backdrop, options.parent, null);
-
-    var bottomSheet = new BottomSheet(element);
-    options.bottomSheet = bottomSheet;
-
-    // Give up focus on calling item
-    options.targetEvent && angular.element(options.targetEvent.target).blur();
-    $mdTheming.inherit(bottomSheet.element, options.parent);
-
-    return $animate.enter(bottomSheet.element, options.parent);
-
-  }
-
-  function onRemove(scope, element, options) {
-    var bottomSheet = options.bottomSheet;
-    $animate.leave(backdrop);
-    return $animate.leave(bottomSheet.element).then(function() {
-      bottomSheet.cleanup();
-
-      // Restore focus
-      options.targetEvent && angular.element(options.targetEvent.target).focus();
-    });
-  }
-
-  /**
-   * BottomSheet class to apply bottom-sheet behavior to an element
-   */
-  function BottomSheet(element) {
-    var MAX_OFFSET = 80; // amount past the bottom of the element that we can drag down, this is same as in _bottomSheet.scss
-    var WIGGLE_AMOUNT = 20; // point where it starts to get "harder" to drag
-    var CLOSING_VELOCITY = 10; // how fast we need to flick down to close the sheet
-    var startY, lastY, velocity, transitionDelay, startTarget;
-
-    // coercion incase $mdCompiler returns multiple elements
-    element = element.eq(0);
-
-    element.on('touchstart', onTouchStart);
-    element.on('touchmove', onTouchMove);
-    element.on('touchend', onTouchEnd);
+  /* @ngInject */
+  function bottomSheetDefaults($animate, $mdConstant, $timeout, $$rAF, $compile, $mdTheming,
+                               $mdBottomSheet) {
+    var backdrop;
 
     return {
-      element: element,
-      cleanup: function cleanup() {
-        element.off('touchstart', onTouchStart);
-        element.off('touchmove', onTouchMove);
-        element.off('touchend', onTouchEnd);
-      }
+      themable: true,
+      targetEvent: null,
+      onShow: onShow,
+      onRemove: onRemove,
     };
 
-    function onTouchStart(e) {
-      e.preventDefault();
-      startTarget = e.target;
-      startY = getY(e);
-      
-      // Disable transitions on transform so that it feels fast
-      transitionDelay = element.css($mdEffects.TRANSITION_DURATION);
-      element.css($mdEffects.TRANSITION_DURATION, '0s');
+    function onShow(scope, element, options) {
+      // Add a backdrop that will close on click
+      backdrop = $compile('<md-backdrop class="md-opaque ng-enter">')(scope);
+      backdrop.on('click touchstart', function() {
+        $timeout($mdBottomSheet.cancel);
+      });
+      $mdTheming.inherit(backdrop, options.parent);
+
+      $animate.enter(backdrop, options.parent, null);
+
+      var bottomSheet = new BottomSheet(element);
+      options.bottomSheet = bottomSheet;
+
+      // Give up focus on calling item
+      options.targetEvent && angular.element(options.targetEvent.target).blur();
+      $mdTheming.inherit(bottomSheet.element, options.parent);
+
+      return $animate.enter(bottomSheet.element, options.parent);
+
     }
 
-    function onTouchEnd(e) {
-      // Re-enable the transitions on transforms
-      element.css($mdEffects.TRANSITION_DURATION, transitionDelay);
+    function onRemove(scope, element, options) {
+      var bottomSheet = options.bottomSheet;
+      $animate.leave(backdrop);
+      return $animate.leave(bottomSheet.element).then(function() {
+        bottomSheet.cleanup();
 
-      var currentY = getY(e);
-      // If we didn't scroll much, and we didn't change targets, assume its a click
-      if ( Math.abs(currentY - startY) < 5  && e.target == startTarget) {
-        angular.element(e.target).triggerHandler('click');
-      } else {
-        // If they went fast enough, trigger a close.
-        if (velocity > CLOSING_VELOCITY) {
-          $timeout($mdBottomSheet.cancel);
+        // Restore focus
+        options.targetEvent && angular.element(options.targetEvent.target).focus();
+      });
+    }
 
-        // Otherwise, untransform so that we go back to our normal position
+    /**
+     * BottomSheet class to apply bottom-sheet behavior to an element
+     */
+    function BottomSheet(element) {
+      var MAX_OFFSET = 80; // amount past the bottom of the element that we can drag down, this is same as in _bottomSheet.scss
+      var WIGGLE_AMOUNT = 20; // point where it starts to get "harder" to drag
+      var CLOSING_VELOCITY = 10; // how fast we need to flick down to close the sheet
+      var startY, lastY, velocity, transitionDelay, startTarget;
+
+      // coercion incase $mdCompiler returns multiple elements
+      element = element.eq(0);
+
+      element.on('touchstart', onTouchStart)
+             .on('touchmove', onTouchMove)
+             .on('touchend', onTouchEnd);
+
+      return {
+        element: element,
+        cleanup: function cleanup() {
+          element.off('touchstart', onTouchStart)
+                 .off('touchmove', onTouchMove)
+                 .off('touchend', onTouchEnd);
+        }
+      };
+
+      function onTouchStart(e) {
+        e.preventDefault();
+        startTarget = e.target;
+        startY = getY(e);
+
+        // Disable transitions on transform so that it feels fast
+        transitionDelay = element.css($mdConstant.CSS.TRANSITION_DURATION);
+        element.css($mdConstant.CSS.TRANSITION_DURATION, '0s');
+      }
+
+      function onTouchEnd(e) {
+        // Re-enable the transitions on transforms
+        element.css($mdConstant.CSS.TRANSITION_DURATION, transitionDelay);
+
+        var currentY = getY(e);
+        // If we didn't scroll much, and we didn't change targets, assume its a click
+        if ( Math.abs(currentY - startY) < 5  && e.target == startTarget) {
+          angular.element(e.target).triggerHandler('click');
         } else {
-          setTransformY(undefined);
+          // If they went fast enough, trigger a close.
+          if (velocity > CLOSING_VELOCITY) {
+            $timeout($mdBottomSheet.cancel);
+
+          // Otherwise, untransform so that we go back to our normal position
+          } else {
+            setTransformY(undefined);
+          }
         }
       }
-    }
 
-    function onTouchMove(e) {
-      var currentY = getY(e);
-      var delta = currentY - startY;
+      function onTouchMove(e) {
+        var currentY = getY(e);
+        var delta = currentY - startY;
 
-      velocity = currentY - lastY;
-      lastY = currentY;
-      
-      // Do some conversion on delta to get a friction-like effect
-      delta = adjustedDelta(delta);
-      setTransformY(delta + MAX_OFFSET);
-    }
+        velocity = currentY - lastY;
+        lastY = currentY;
 
-    /**
-     * Helper function to find the Y aspect of various touch events.
-     **/
-    function getY(e) {
-      var touch = e.touches && e.touches.length ? e.touches[0] : e.changedTouches[0];
-      return touch.clientY;
-    }
+        // Do some conversion on delta to get a friction-like effect
+        delta = adjustedDelta(delta);
+        setTransformY(delta + MAX_OFFSET);
+      }
 
-    /**
-     * Transform the element along the y-axis
-     **/
-    function setTransformY(amt) {
-      if (amt === null || amt === undefined) {
-        element.css($mdEffects.TRANSFORM, '');
-      } else {
-        element.css($mdEffects.TRANSFORM, 'translate3d(0, ' + amt + 'px, 0)');
+      /**
+       * Helper function to find the Y aspect of various touch events.
+       **/
+      function getY(e) {
+        var touch = e.touches && e.touches.length ? e.touches[0] : e.changedTouches[0];
+        return touch.clientY;
+      }
+
+      /**
+       * Transform the element along the y-axis
+       **/
+      function setTransformY(amt) {
+        if (amt === null || amt === undefined) {
+          element.css($mdConstant.CSS.TRANSFORM, '');
+        } else {
+          element.css($mdConstant.CSS.TRANSFORM, 'translate3d(0, ' + amt + 'px, 0)');
+        }
+      }
+
+      // Returns a new value for delta that will never exceed MAX_OFFSET_AMOUNT
+      // Will get harder to exceed it as you get closer to it
+      function adjustedDelta(delta) {
+        if ( delta < 0  && delta < -MAX_OFFSET + WIGGLE_AMOUNT) {
+          delta = -delta;
+          var base = MAX_OFFSET - WIGGLE_AMOUNT;
+          delta = Math.max(-MAX_OFFSET, -Math.min(MAX_OFFSET - 5, base + ( WIGGLE_AMOUNT * (delta - base)) / MAX_OFFSET) - delta / 50);
+        }
+
+        return delta;
       }
     }
 
-    // Returns a new value for delta that will never exceed MAX_OFFSET_AMOUNT
-    // Will get harder to exceed it as you get closer to it
-    function adjustedDelta(delta) {
-      if ( delta < 0  && delta < -MAX_OFFSET + WIGGLE_AMOUNT) {
-        delta = -delta;
-        var base = MAX_OFFSET - WIGGLE_AMOUNT;
-        delta = Math.max(-MAX_OFFSET, -Math.min(MAX_OFFSET - 5, base + ( WIGGLE_AMOUNT * (delta - base)) / MAX_OFFSET) - delta / 50);
-      }
-
-      return delta;
-    }
   }
 
 }
+
+})();

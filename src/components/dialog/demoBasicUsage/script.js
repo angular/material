@@ -1,36 +1,47 @@
 angular.module('dialogDemo1', ['ngMaterial'])
 
-  .controller('AppCtrl', function($scope, $mdDialog, $log) {
-    $scope.alert = '';
+.controller('AppCtrl', function($scope, $mdDialog) {
+  $scope.alert = '';
 
-    $scope.dialogBasic = function(ev) {
-      $mdDialog.show({
-        templateUrl: 'dialog1.tmpl.html',
-        targetEvent: ev,
-        controller: DialogController
-      }).then(function() {
-        $scope.alert = 'You said "Okay".';
-      }, function() {
-        $scope.alert = 'You cancelled the dialog.';
-      });
-    };
+  $scope.showAlert = function(ev) {
+    $mdDialog.show(
+      $mdDialog.alert()
+        .content('You can specify some description text in here.')
+        .ariaLabel('Password notification')
+        .ok('Got it!')
+        .targetEvent(ev)
+    );
+  };
 
-    $scope.dialogAdvanced = function(ev) {
-      $log.debug("dialogAdvanced() preparing to show...");
-      $mdDialog.show({
-        templateUrl: 'dialog2.tmpl.html',
-        targetEvent: ev,
-        controller: DialogController,
-        onComplete:function(){
-          $log.debug("dialogAdvanced() now shown!");
-        }
-      }).then(function(answer) {
-        $scope.alert = 'You said the information was "' + answer + '".';
-      }, function() {
-        $scope.alert = 'You cancelled the dialog.';
-      });
-    };
-  });
+  $scope.showConfirm = function(ev) {
+    var confirm = $mdDialog.confirm()
+      .title('Would you like to delete your debt?')
+      .content('All of the banks have agreed to forgive you your debts.')
+      .ariaLabel('Lucky day')
+      .ok('Please do it!')
+      .cancel('Sounds like a scam')
+      .targetEvent(ev);
+
+    $mdDialog.show(confirm).then(function() {
+      $scope.alert = 'You decided to get rid of your debt.';
+    }, function() {
+      $scope.alert = 'You decided to keep your debt.';
+    });
+  };
+
+  $scope.showAdvanced = function(ev) {
+    $mdDialog.show({
+      controller: DialogController,
+      templateUrl: 'dialog1.tmpl.html',
+      targetEvent: ev,
+    })
+    .then(function(answer) {
+      $scope.alert = 'You said the information was "' + answer + '".';
+    }, function() {
+      $scope.alert = 'You cancelled the dialog.';
+    });
+  };
+});
 
 function DialogController($scope, $mdDialog) {
   $scope.hide = function() {

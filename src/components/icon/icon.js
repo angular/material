@@ -1,13 +1,16 @@
+(function() {
+'use strict';
+
 /*
  * @ngdoc module
  * @name material.components.icon
  * @description
  * Icon
  */
-angular.module('material.components.icon', [])
-  .directive('mdIcon', [
-    mdIconDirective
-  ]);
+angular.module('material.components.icon', [
+  'material.core'
+])
+  .directive('mdIcon', mdIconDirective);
 
 /*
  * @ngdoc directive
@@ -38,3 +41,4 @@ function mdIconDirective() {
     }
   };
 }
+})();

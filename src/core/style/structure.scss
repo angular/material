@@ -217,3 +217,54 @@ input {
 .md-shadow-animated.md-shadow {
   transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+// Button ripple: keep same opacity, but expand to 0.75 scale.
+// Then, fade out and expand to 2.0 scale.
+@keyframes inkRippleButton {
+  0% {
+    transform: scale(0);
+    opacity: 0.15;
+  }
+  50% {
+    transform: scale(0.75);
+    opacity: 0.15;
+  }
+  100% {
+    transform: scale(2.0);
+    opacity: 0;
+  }
+}
+
+// Checkbox ripple: fully expand, then fade out.
+@keyframes inkRippleCheckbox {
+  0% {
+    transform: scale(0);
+    opacity: 0.4;
+  } 
+  50% {
+    transform: scale(1.0);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.0);
+    opacity: 0;
+  }
+}
+
+/*
+ * A container inside of a rippling element (eg a button),
+ * which contains all of the individual ripples
+ */
+.md-ripple-container {
+  pointer-events: none;
+  position: absolute;
+  overflow: hidden;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.md-ripple {
+  position: absolute;
+}

@@ -1,21 +1,18 @@
+(function() {
+'use strict';
+
 angular.module('material.components.tabs')
+  .controller('$mdTabs', MdTabsController);
 
-.controller('$mdTabs', [
-  '$scope', 
-  '$element',
-  '$mdUtil',
-  MdTabsController
-]);
-
-function MdTabsController(scope, element, $mdUtil) {
+function MdTabsController($scope, $element, $mdUtil) {
 
   var tabsList = $mdUtil.iterator([], false);
   var self = this;
 
   // Properties
-  self.element = element;
-  // The section containing the tab content elements
-  self.contentArea = angular.element(element[0].querySelector('.md-tabs-content'));
+  self.$element = $element;
+  // The section containing the tab content $elements
+  self.contentArea = angular.element($element[0].querySelector('.md-tabs-content'));
 
   // Methods from iterator
   self.inRange = tabsList.inRange;
@@ -33,7 +30,7 @@ function MdTabsController(scope, element, $mdUtil) {
   self.next = next;
   self.previous = previous;
 
-  scope.$on('$destroy', function() {
+  $scope.$on('$destroy', function() {
     self.deselect(self.selected());
     for (var i = tabsList.count() - 1; i >= 0; i--) {
       self.remove(tabsList[i], true);
@@ -42,7 +39,7 @@ function MdTabsController(scope, element, $mdUtil) {
 
   // Get the selected tab
   function selected() {
-    return self.itemAt(scope.selectedIndex);
+    return self.itemAt($scope.selectedIndex);
   }
 
   // Add a new tab.
@@ -54,11 +51,11 @@ function MdTabsController(scope, element, $mdUtil) {
 
     // Select the new tab if we don't have a selectedIndex, or if the
     // selectedIndex we've been waiting for is this tab
-    if (scope.selectedIndex === -1 || !angular.isNumber(scope.selectedIndex) || 
-        scope.selectedIndex === self.indexOf(tab)) {
+    if ($scope.selectedIndex === -1 || !angular.isNumber($scope.selectedIndex) || 
+        $scope.selectedIndex === self.indexOf(tab)) {
       self.select(tab);
     }
-    scope.$broadcast('$mdTabsChanged');
+    $scope.$broadcast('$mdTabsChanged');
   }
 
   function remove(tab, noReselect) {
@@ -77,7 +74,7 @@ function MdTabsController(scope, element, $mdUtil) {
     tabsList.remove(tab);
     tab.onRemove();
 
-    scope.$broadcast('$mdTabsChanged');
+    $scope.$broadcast('$mdTabsChanged');
   }
 
   // Move a tab (used when ng-repeat order changes)
@@ -88,7 +85,7 @@ function MdTabsController(scope, element, $mdUtil) {
     tabsList.add(tab, toIndex);
     if (isSelected) self.select(tab);
 
-    scope.$broadcast('$mdTabsChanged');
+    $scope.$broadcast('$mdTabsChanged');
   }
 
   function select(tab) {
@@ -97,7 +94,7 @@ function MdTabsController(scope, element, $mdUtil) {
 
     self.deselect(self.selected());
 
-    scope.selectedIndex = self.indexOf(tab);
+    $scope.selectedIndex = self.indexOf(tab);
     tab.isSelected = true;
     tab.onSelect();
   }
@@ -106,7 +103,7 @@ function MdTabsController(scope, element, $mdUtil) {
     if (!tab || !tab.isSelected) return;
     if (!tabsList.contains(tab)) return;
 
-    scope.selectedIndex = -1;
+    $scope.selectedIndex = -1;
     tab.isSelected = false;
     tab.onDeselect();
   }
@@ -123,3 +120,4 @@ function MdTabsController(scope, element, $mdUtil) {
   }
 
 }
+})();

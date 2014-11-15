@@ -1,21 +1,14 @@
+(function() {
+'use strict';
+
 /**
  * @ngdoc module
  * @name material.components.tooltip
  */
 angular.module('material.components.tooltip', [
-  'material.core',
-  'material.services.theming'
+  'material.core'
 ])
-
-.directive('mdTooltip', [
-  '$timeout',
-  '$window',
-  '$$rAF',
-  '$document',
-  '$mdUtil',
-  '$mdTheming',
-  MdTooltipDirective
-]);
+  .directive('mdTooltip', MdTooltipDirective);
 
 /**
  * @ngdoc directive
@@ -190,3 +183,4 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
   }
 
 }
+})();

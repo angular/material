@@ -1,3 +1,6 @@
+(function() {
+'use strict';
+
 /**
  * @ngdoc module
  * @name material.components.card
@@ -6,10 +9,9 @@
  * Card components.
  */
 angular.module('material.components.card', [
+  'material.core'
 ])
-  .directive('mdCard', [
-    mdCardDirective 
-  ]);
+  .directive('mdCard', mdCardDirective);
 
 
 
@@ -45,3 +47,4 @@ function mdCardDirective() {
     }
   };
 }
+})();

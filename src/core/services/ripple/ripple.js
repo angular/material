@@ -1,19 +1,13 @@
+(function() {
+'use strict';
 
-angular.module('material.animations')
 
-.directive('inkRipple', [
-  '$mdInkRipple',
-  InkRippleDirective
-])
-
-.factory('$mdInkRipple', [
-  '$window',
-  '$$rAF',
-  '$mdEffects',
-  '$timeout',
-  '$mdUtil',
-  InkRippleService
-]);
+angular.module('material.core')
+  .factory('$mdInkRipple', InkRippleService)
+  .directive('inkRipple', InkRippleDirective)
+  .directive('noink', attrNoDirective())
+  .directive('nobar', attrNoDirective())
+  .directive('nostretch', attrNoDirective());
 
 function InkRippleDirective($mdInkRipple) {
   return function(scope, element, attr) {
@@ -25,7 +19,7 @@ function InkRippleDirective($mdInkRipple) {
   };
 }
 
-function InkRippleService($window, $$rAF, $mdEffects, $timeout, $mdUtil) {
+function InkRippleService($window, $$rAF, $mdUtil, $timeout, $mdConstant) {
 
   return {
     attachButtonBehavior: attachButtonBehavior,
@@ -88,16 +82,17 @@ function InkRippleService($window, $$rAF, $mdEffects, $timeout, $mdUtil) {
     };
 
     function rippleIsAllowed() {
-      return !$mdUtil.isParentDisabled(element, 2);
+      return !element[0].hasAttribute('disabled') && 
+        !(element[0].parentNode && element[0].parentNode.hasAttribute('disabled'));
     }
 
     function createRipple(left, top, positionsAreAbsolute) {
 
       var rippleEl = angular.element('<div class="md-ripple">')
-            .css($mdEffects.ANIMATION_DURATION, options.animationDuration + 'ms')
-            .css($mdEffects.ANIMATION_NAME, options.animationName)
-            .css($mdEffects.ANIMATION_TIMING, options.animationTimingFunction)
-            .on($mdEffects.ANIMATIONEND_EVENT, function() {
+            .css($mdConstant.CSS.ANIMATION_DURATION, options.animationDuration + 'ms')
+            .css($mdConstant.CSS.ANIMATION_NAME, options.animationName)
+            .css($mdConstant.CSS.ANIMATION_TIMING, options.animationTimingFunction)
+            .on($mdConstant.CSS.ANIMATIONEND, function() {
               rippleEl.remove();
             });
 
@@ -133,7 +128,7 @@ function InkRippleService($window, $$rAF, $mdEffects, $timeout, $mdUtil) {
         top: (top - containerWidth / 2) + 'px',
         height: containerWidth + 'px'
       };
-      css[$mdEffects.ANIMATION_DURATION] = options.fadeoutDuration + 'ms';
+      css[$mdConstant.CSS.ANIMATION_DURATION] = options.fadeoutDuration + 'ms';
       rippleEl.css(css);
 
       return rippleEl;
@@ -146,7 +141,7 @@ function InkRippleService($window, $$rAF, $mdEffects, $timeout, $mdUtil) {
 
         rippleEl = createRipple(ev.center.x, ev.center.y, true);
         pauseTimeout = $timeout(function() {
-          rippleEl && rippleEl.css($mdEffects.ANIMATION_PLAY_STATE, 'paused');
+          rippleEl && rippleEl.css($mdConstant.CSS.ANIMATION_PLAY_STATE, 'paused');
         }, options.mousedownPauseTime, false);
 
         rippleEl.on('$destroy', function() {
@@ -155,10 +150,50 @@ function InkRippleService($window, $$rAF, $mdEffects, $timeout, $mdUtil) {
 
       } else if (ev.eventType === Hammer.INPUT_END && ev.isFinal) {
         $timeout.cancel(pauseTimeout);
-        rippleEl && rippleEl.css($mdEffects.ANIMATION_PLAY_STATE, '');
+        rippleEl && rippleEl.css($mdConstant.CSS.ANIMATION_PLAY_STATE, '');
       }
     }
 
   }
 
 }
+
+/**
+ * noink/nobar/nostretch directive: make any element that has one of
+ * these attributes be given a controller, so that other directives can 
+ * `require:` these and see if there is a `no<xxx>` parent attribute.
+ *
+ * @usage
+ * <hljs lang="html">
+ * <parent noink>
+ *   <child detect-no>
+ *   </child>
+ * </parent>
+ * </hljs>
+ *
+ * <hljs lang="js">
+ * myApp.directive('detectNo', function() {
+ *   return {
+ *     require: ['^?noink', ^?nobar'],
+ *     link: function(scope, element, attr, ctrls) {
+ *       var noinkCtrl = ctrls[0];
+ *       var nobarCtrl = ctrls[1];
+ *       if (noInkCtrl) {
+ *         alert("the noink flag has been specified on an ancestor!");
+ *       }
+ *       if (nobarCtrl) {
+ *         alert("the nobar flag has been specified on an ancestor!");
+ *       }
+ *     }
+ *   };
+ * });
+ * </hljs>
+ */
+function attrNoDirective() {
+  return function() {
+    return {
+      controller: angular.noop
+    };
+  };
+}
+})();
