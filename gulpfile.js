@@ -33,11 +33,9 @@ var buildConfig = require('./config/build.config');
 var utils = require('./scripts/gulp-utils.js');
 
 var IS_RELEASE_BUILD = !!argv.release;
-var IS_DEMO_BUILD = (!!argv.module || !!argv.m || !!argv.c);
 var BUILD_MODE = argv.mode;
 var VERSION = argv.version || pkg.version;
 
-/** Grab-bag of build configuration. */
 var config = {
   banner:
     '/*!\n' +
@@ -53,29 +51,20 @@ var config = {
   outputDir: 'dist/'
 };
 
-var LR_PORT = argv.port || argv.p || 8080;
-
 var buildModes = {
   'closure': {
     transform: utils.addClosurePrefixes,
-    outputDir: path.join(config.outputDir, 'components/closure') + path.sep,
-    useBower: false
-  },
-  'demos': {
-    transform: gutil.noop,
-    outputDir: path.join(config.outputDir, 'demos') + path.sep,
+    outputDir: path.join(config.outputDir, 'closure') + path.sep,
     useBower: false
   },
   'default': {
     transform: gutil.noop,
-    outputDir: path.join(config.outputDir, 'components/js') + path.sep,
+    outputDir: path.join(config.outputDir, 'js') + path.sep,
     useBower: true
   }
 };
 
-IS_DEMO_BUILD && (BUILD_MODE="demos");
 BUILD_MODE = buildModes[BUILD_MODE] || buildModes['default'];
-
 
 if (IS_RELEASE_BUILD) {
   console.log(
@@ -182,71 +171,18 @@ gulp.task('build-all-modules', function() {
     }));
 });
 
-function buildModule(module, isRelease) {
-  var name = module.split('.').pop();
-  gutil.log('Building module', module, isRelease && 'minified' || '', '...');
-
-  return utils.filesForModule(module)
-              .pipe(filterNonCodeFiles())
-              .pipe(gulpif('*.scss', buildModuleStyles(name)))
-              .pipe(gulpif('*.js', buildModuleJs(name)))
-              .pipe(BUILD_MODE.transform())
-              .pipe(insert.prepend(config.banner))
-              .pipe(gulpif(isRelease && BUILD_MODE.useBower, buildMin()))
-              .pipe(gulp.dest(BUILD_MODE.outputDir + name));
-
-
-  function buildMin() {
-    return lazypipe()
-              .pipe(gulpif, /.css$/, minifyCss(), minifyJs())
-              .pipe(rename, function(path) {
-                path.extname = path.extname
-                  .replace(/.js$/, '.min.js')
-                  .replace(/.css$/, '.min.css');
-              })
-              .pipe(utils.buildModuleBower, name, VERSION)
-              .pipe(gulp.dest, BUILD_MODE.outputDir + name)
-              ();
-  }
-
-  function buildModuleJs(name) {
-    return lazypipe()
-              .pipe(ngAnnotate)
-              .pipe(concat, name + '.js')
-              .pipe(gulpif(IS_RELEASE_BUILD, minifyJs.bind(null, name + '.min.js'), gutil.noop))
-              ();
-  }
-
-  function buildModuleStyles(name) {
-    var files = [];
-    config.themeBaseFiles.forEach(function(fileGlob) {
-      files = files.concat(glob(fileGlob, { cwd: __dirname }));
-    });
-    var baseStyles = files.map(function(fileName) {
-      return fs.readFileSync(fileName, 'utf8').toString();
-    }).join('\n');
-
-    return lazypipe()
-              .pipe(insert.prepend, baseStyles)
-              .pipe(gulpif, /theme.scss/,
-                rename(name + '-default-theme.scss'), concat(name + '.scss')
-              )
-              .pipe(sass)
-              .pipe(autoprefix)
-              (); // invoke the returning fn to create our pipe
-  }
-
-}
-
-/** *****************************************
- *
- * Tasks for Watch features
- *
- * `gulp watch` - Watch, build and deploy all modules and css
- * `gulp watch-demo -c textfield` - Watch, build and deploy the 'textfield' demos
- * `gulp watch-demo -m material.components.textfield` - Watch, build and deploy the 'textfield' module's demos
- *
- ** ***************************************** */
+gulp.task('build-all-modules', function() {
+  var addedCore = false;
+  return gulp.src(['src/components/*', 'src/core/',])
+    .pipe(through2.obj(function(folder, enc, next) {
+      var moduleId = folder.path.indexOf('components') > -1 ?
+        'material.components.' + path.basename(folder.path) :
+        'material.' + path.basename(folder.path);
+      buildModule(moduleId).on('end', function() {
+        next();
+      });
+    }));
+});
 
 gulp.task('watch', ['build'], function() {
   gulp.watch('src/**/*', ['build']);
@@ -349,18 +285,36 @@ function buildJs(isRelease) {
  *    gulp watch-demo -c button
  *    gulp server
  * ```
- *
- * To build demo files:
- *
- * ```sh
- *    gulp build-demo -c button
- * ```
- *
- ** ***************************************** */
-
-gulp.task('build-demo', ['build', 'build-module-demo'], function() {
-  return buildModule(readModuleArg(), false);
+ */
+gulp.task('build-module', function() {
+  return buildModule(readModuleArg());
 });
+
+function buildModule(module) {
+  var name = module.split('.').pop();
+  gutil.log('Building module', module, '...');
+  return utils.filesForModule(module)
+    .pipe(filterNonCodeFiles())
+    .pipe(gulpif('*.scss', buildModuleStyles(name)))
+    .pipe(gulpif('*.js', buildModuleJs(name)))
+    .pipe(BUILD_MODE.transform())
+    .pipe(insert.prepend(config.banner))
+    .pipe(gulp.dest(BUILD_MODE.outputDir + name))
+    .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
+      .pipe(gulpif, BUILD_MODE.useBower, lazypipe()
+        .pipe(gulpif, /.css$/, minifyCss(), uglify({preserveComments: 'some'}))
+        .pipe(rename, function(path) {
+          path.extname = path.extname
+            .replace(/.js$/, '.min.js')
+            .replace(/.css$/, '.min.css');
+        })
+        .pipe(utils.buildModuleBower, name, VERSION)
+        ()
+      )
+      .pipe(gulp.dest, BUILD_MODE.outputDir + name)
+      ()
+    ));
+}
 
 gulp.task('build-module-demo', function() {
   var mod = readModuleArg();
@@ -370,7 +324,6 @@ gulp.task('build-module-demo', function() {
   ).toString();
 
   gutil.log('Building demos for', mod, '...');
-
   return utils.readModuleDemos(mod, function() {
     return lazypipe()
         .pipe(gulpif, /.css$/, sass())
@@ -428,15 +381,13 @@ gulp.task('build-themes', ['build-default-theme'], function() {
     )
     .pipe(sass)
     .pipe(autoprefix)
-    .pipe(gulpif, IS_RELEASE_BUILD, minifyCss())
     (); // invoke the returning fn to create our pipe
 }
 
 function buildModuleJs(name) {
   return lazypipe()
-    .pipe(ngAnnotate())
+    .pipe(ngAnnotate)
     .pipe(concat, name + '.js')
-    .pipe(gulpif, IS_RELEASE_BUILD, uglify({preserveComments: 'some'}))
     ();
 }
 
