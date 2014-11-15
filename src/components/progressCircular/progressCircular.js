@@ -24,19 +24,19 @@ angular.module('material.components.progressCircular', [
  *
  * For operations where the user is asked to wait a moment while something finishes up, and it’s not necessary to expose what's happening behind the scenes and how long it will take, use an indeterminate indicator.
  *
- * @param {string} mode Select from one of two modes: determinate and indeterminate.
+ * @param {string} mdMode Select from one of two modes: determinate and indeterminate.
  * @param {number=} value In determinate mode, this number represents the percentage of the circular progress. Default: 0
- * @param {number=} diameter This specifies the diamter of the circular progress. Default: 48
+ * @param {number=} mdDiameter This specifies the diamter of the circular progress. Default: 48
  *
  * @usage
  * <hljs lang="html">
- * <md-progress-circular mode="determinate" value="..."></md-progress-circular>
+ * <md-progress-circular md-mode="determinate" value="..."></md-progress-circular>
  *
- * <md-progress-circular mode="determinate" ng-value="..."></md-progress-circular>
+ * <md-progress-circular md-mode="determinate" ng-value="..."></md-progress-circular>
  *
- * <md-progress-circular mode="determinate" value="..." diameter="100"></md-progress-circular>
+ * <md-progress-circular md-mode="determinate" value="..." diameter="100"></md-progress-circular>
  *
- * <md-progress-circular mode="indeterminate"></md-progress-circular>
+ * <md-progress-circular md-mode="indeterminate"></md-progress-circular>
  * </hljs>
  */
 function MdProgressCircularDirective($$rAF, $mdConstant, $mdTheming) {
@@ -83,7 +83,7 @@ function MdProgressCircularDirective($$rAF, $mdConstant, $mdTheming) {
       fix = circle.querySelectorAll('.md-fill.md-fix'),
       i, clamped, fillRotation, fixRotation;
 
-    var diameter = attr.diameter || 48;
+    var diameter = attr.mdDiameter || 48;
     var scale = diameter/48;
 
     circle.style[$mdConstant.CSS.TRANSFORM] = 'scale(' + scale.toString() + ')';

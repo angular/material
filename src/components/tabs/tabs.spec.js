@@ -130,7 +130,7 @@ describe('<md-tabs>', function() {
     });
 
     it('should bind to selected', function() {
-      var tabs = setup('<md-tabs selected="current">' +
+      var tabs = setup('<md-tabs md-selected="current">' +
                        '<md-tab></md-tab>' +
                        '<md-tab></md-tab>' +
                        '<md-tab></md-tab>' +
@@ -149,9 +149,9 @@ describe('<md-tabs>', function() {
 
     it('should use active binding', function() {
       var tabs = setup('<md-tabs>' +
-                       '<md-tab active="active0"></md-tab>' +
-                       '<md-tab active="active1"></md-tab>' +
-                       '<md-tab active="active2"></md-tab>' +
+                       '<md-tab md-active="active0"></md-tab>' +
+                       '<md-tab md-active="active1"></md-tab>' +
+                       '<md-tab md-active="active2"></md-tab>' +
                        '</md-tabs>');
       var tabItems = tabs.find('md-tab');
 

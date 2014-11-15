@@ -28,13 +28,13 @@ md-progress-linear {
     transition: all 0.2s linear;
   }
 
-  &[mode=determinate] {
+  &[md-mode=determinate] {
     .md-bar1 {
       display: none;
     }
   }
 
-  &[mode=indeterminate] {
+  &[md-mode=indeterminate] {
     .md-bar1 {
       animation: indeterminate1 4s infinite linear;
     }
@@ -44,7 +44,7 @@ md-progress-linear {
     }
   }
 
-  &[mode=buffer] {
+  &[md-mode=buffer] {
     .md-container {
       background-color: transparent !important;
     }
@@ -63,7 +63,7 @@ md-progress-linear {
     }
   }
 
-  &[mode=query] {
+  &[md-mode=query] {
     .md-bar2 {
       animation: query .8s infinite cubic-bezier(0.390, 0.575, 0.565, 1.000);
     }

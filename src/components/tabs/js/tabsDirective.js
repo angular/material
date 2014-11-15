@@ -45,20 +45,20 @@ angular.module('material.components.tabs')
  * *  If the currently active tab is the last tab, then next() action will select the first tab.
  * *  Any markup (other than **`<md-tab>`** tags) will be transcluded into the tab header area BEFORE the tab buttons.
  *
- * @param {integer=} selected Index of the active/selected tab
- * @param {boolean=} noink If present, disables ink ripple effects.
- * @param {boolean=} nobar If present, disables the selection ink bar.
- * @param {string=}  align-tabs Attribute to indicate position of tab buttons: bottom or top; default is `top`
+ * @param {integer=} mdSelected Index of the active/selected tab
+ * @param {boolean=} mdNoInk If present, disables ink ripple effects.
+ * @param {boolean=} mdNoBar If present, disables the selection ink bar.
+ * @param {string=}  mdAlignTabs Attribute to indicate position of tab buttons: bottom or top; default is `top`
  *
  * @usage
  * <hljs lang="html">
- * <md-tabs selected="selectedIndex" >
+ * <md-tabs md-selected="selectedIndex" >
  *   <img ng-src="/img/angular.png" class="centered">
  *
  *   <md-tab
  *      ng-repeat="tab in tabs | orderBy:predicate:reversed"
- *      on-select="onTabSelected(tab)"
- *      on-deselect="announceDeselected(tab)"
+ *      md-on-select="onTabSelected(tab)"
+ *      md-on-deselect="announceDeselected(tab)"
  *      disabled="tab.disabled" >
  *
  *       <md-tab-label>
@@ -83,7 +83,7 @@ function TabsDirective($parse, $mdTheming) {
     require: 'mdTabs',
     transclude: true,
     scope: {
-      selectedIndex: '=?selected'
+      selectedIndex: '=?mdSelected'
     },
     template:
       '<section class="md-header" ' +

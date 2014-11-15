@@ -26,16 +26,16 @@ angular.module('material.components.tabs')
  * be initiated via data binding changes, programmatic invocation, or user gestures.
  *
  * @param {string=} label Optional attribute to specify a simple string as the tab label
- * @param {boolean=} active When evaluteing to true, selects the tab.
+ * @param {boolean=} mdActive When evaluteing to true, selects the tab.
  * @param {boolean=} disabled If present, disabled tab selection.
- * @param {expression=} deselected Expression to be evaluated after the tab has been de-selected.
- * @param {expression=} selected Expression to be evaluated after the tab has been selected.
+ * @param {expression=} mdOnDeselect Expression to be evaluated after the tab has been de-selected.
+ * @param {expression=} mdOnSelect Expression to be evaluated after the tab has been selected.
  *
  *
  * @usage
  *
  * <hljs lang="html">
- * <md-tab label="" disabled="" selected="" deselected="" >
+ * <md-tab label="" disabled="" md-on-select="" md-on-deselect="" >
  *   <h3>My Tab content</h3>
  * </md-tab>
  *
@@ -59,8 +59,8 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
     require: ['mdTab', '^mdTabs'],
     controller: '$mdTab',
     scope: {
-      onSelect: '&',
-      onDeselect: '&',
+      onSelect: '&mdOnSelect',
+      onDeselect: '&mdOnDeselect',
       label: '@'
     },
     compile: compile
@@ -110,7 +110,7 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
       if (angular.isNumber(scope.$parent.$index)) {
         watchNgRepeatIndex();
       }
-      if (angular.isDefined(attr.active)) {
+      if (angular.isDefined(attr.mdActive)) {
         watchActiveAttribute();
       }
       watchDisabled();
@@ -169,7 +169,7 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
       }
 
       function watchActiveAttribute() {
-        var unwatch = scope.$parent.$watch('!!(' + attr.active + ')', activeWatchAction);
+        var unwatch = scope.$parent.$watch('!!(' + attr.mdActive + ')', activeWatchAction);
         scope.$on('$destroy', unwatch);
         
         function activeWatchAction(isActive) {

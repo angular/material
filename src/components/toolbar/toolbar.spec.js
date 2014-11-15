@@ -40,8 +40,8 @@ describe('<md-toolbar>', function() {
 
     // Manually link so we can give our own elements with spies on them
     mdToolbarDirective[0].link($rootScope, toolbar, { 
-      scrollShrink: true,
-      shrinkSpeedFactor: 1
+      mdScrollShrink: true,
+      mdShrinkSpeedFactor: 1
     });
 
     $rootScope.$broadcast('$mdContentLoaded', contentEl);

@@ -189,13 +189,13 @@ describe('Text Field directives', function() {
 
     it('should pair input and label for accessibility.', function() {
       var markup ='<md-text-float ' +
-                  '  fid="093" ' +
+                  '  md-fid="093" ' +
                   '  label="{{labels.firstName}}" ' +
                   '  ng-model="user.firstName" >' +
                   '</md-text-float>';
       var el = buildElement( markup, model);
       var input = el.find('input');
-      var label = el.find('label')
+      var label = el.find('label');
 
       expect( label.attr('for') ).toBe( "093" );
       expect( input.attr('id') ).toBe( label.attr('for') );

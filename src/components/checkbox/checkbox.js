@@ -25,7 +25,7 @@ angular.module('material.components.checkbox', [
  * @param {expression=} ngTrueValue The value to which the expression should be set when selected.
  * @param {expression=} ngFalseValue The value to which the expression should be set when not selected.
  * @param {string=} ngChange Angular expression to be executed when input changes due to user interaction with the input element.
- * @param {boolean=} noink Use of attribute indicates use of ripple ink effects
+ * @param {boolean=} mdNoInk Use of attribute indicates use of ripple ink effects
  * @param {boolean=} disabled Use of attribute indicates the switch is disabled: no ink effects and not selectable
  * @param {string=} ariaLabel Publish the button label used by screen-readers for accessibility. Defaults to the checkbox's text.
  *
@@ -35,7 +35,7 @@ angular.module('material.components.checkbox', [
  *   Finished ?
  * </md-checkbox>
  *
- * <md-checkbox noink ng-model="hasInk" aria-label="No Ink Effects">
+ * <md-checkbox md-no-ink ng-model="hasInk" aria-label="No Ink Effects">
  *   No Ink Effects
  * </md-checkbox>
  *
@@ -56,7 +56,7 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
     transclude: true,
     require: '?ngModel',
     template: 
-      '<div class="md-container" ink-ripple="checkbox">' +
+      '<div class="md-container" md-ink-ripple="checkbox">' +
         '<div class="md-icon"></div>' +
       '</div>' +
       '<div ng-transclude class="md-label"></div>',
