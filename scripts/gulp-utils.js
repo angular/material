@@ -70,21 +70,28 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
 var pathsForModules = {};
 exports.filesForModule = function(name) {
   if (pathsForModules[name]) {
-    return gulp.src(pathsForModules[name]);
+    return srcFiles(pathsForModules[name]);
   } else {
-    return gulp.src('src/{services,components}/**')
+    return gulp.src('src/{services,components,core}/**/*')
       .pipe(through2.obj(function(file, enc, next) {
         var modName = getModuleInfo(file.contents).module;
         if (modName == name) {
           var modulePath = file.path.split(path.sep).slice(0, -1).join(path.sep);
           pathsForModules[name] = modulePath + '/**';
           var self = this;
-          gulp.src(pathsForModules[name])
-            .on('data', function(data) {
-              self.push(data);
-            });
+          srcFiles(pathsForModules[name]).on('data', function(data) {
+            self.push(data);
+          });
         }
         next();
+      }));
+  }
+
+  function srcFiles(path) {
+    return gulp.src(path)
+      .pipe(through2.obj(function(file, enc, next) {
+        if (file.stat.isFile()) next(null, file);
+        else next();
       }));
   }
 };
