@@ -101,7 +101,7 @@ function Theming($injector) {
       // Allow us to be invoked via a linking function signature.
       if (el === undefined) { 
         el = scope;
-        scope = undefined;
+        scope = $rootScope;
       }
       if (scope === undefined) {
         scope = $rootScope;

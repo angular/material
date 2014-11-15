@@ -32,7 +32,7 @@ function mdMediaFactory($window, $mdUtil, $timeout) {
 
   function validate(query) {
     return presets[query] || (
-      query.charAt(0) != '(' ?  ('(' + query + ')') : query
+      query.charAt(0) !== '(' ?  ('(' + query + ')') : query;
     );
   }
 

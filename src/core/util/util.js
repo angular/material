@@ -7,7 +7,7 @@
 var nextUniqueId = ['0','0','0'];
 
 angular.module('material.core')
-.factory('$mdUtil', ['$cacheFactory', function($cacheFactory) {
+.factory('$mdUtil', ['$cacheFactory', '$timeout', function($cacheFactory, $timeout) {
   var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
 
   var Util;
@@ -46,8 +46,9 @@ angular.module('material.core')
      * Checks if two elements have the same parent
      */
     elementIsSibling: function elementIsSibling(element, otherElement) {
-      return element.parent().length && 
-        (element.parent()[0] === otherElement.parent()[0]);
+      var elementParent = element.parent();
+      return elementParent.length && 
+        (elementParent[0] === otherElement.parent()[0]);
     },
 
     /**
@@ -68,8 +69,9 @@ angular.module('material.core')
     stringFromTextBody: function stringFromTextBody(textBody, numWords) {
       var string = textBody.trim();
 
-      if(string.split(/\s+/).length > numWords){
-        string = textBody.split(/\s+/).slice(1, (numWords + 1)).join(" ") + '...';
+      var splitString = string.split(/\s+/);
+      if (splitString.length > numWords) {
+        string = splitString.slice(1, (numWords + 1)).join(' ') + '...';
       }
       return string;
     },
@@ -92,13 +94,13 @@ angular.module('material.core')
     debounce: function debounce(func, wait, immediate) {
       var timeout;
       return function debounced() {
-        var context = this, args = arguments;
-        clearTimeout(timeout);
-        timeout = setTimeout(function() {
+        var context = this, args = arguments, timeoutExists = timeout;
+        $timeout.cancel(timeout);
+        timeout = $timeout(function() {
           timeout = null;
           if (!immediate) func.apply(context, args);
-        }, wait);
-        if (immediate && !timeout) func.apply(context, args);
+        }, wait, false);
+        if (immediate && !timeoutExists) func.apply(context, args);
       };
     },
 
@@ -186,7 +188,6 @@ angular.module('material.core')
       if (scope.$$nextSibling) scope.$$nextSibling.$$prevSibling = scope.$$prevSibling;
 
       scope.$$nextSibling = scope.$$prevSibling = null;
-
     },
 
     // Undo the effects of disconnectScope above.
@@ -271,7 +272,7 @@ angular.module('material.core')
      * @returns {Array.length|*|number|boolean}
      */
     function inRange(index) {
-      return _items.length && ( index > -1 ) && (index < _items.length );
+      return _items.length && (index > -1) && (index < _items.length);
     }
 
     /*
