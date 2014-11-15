@@ -21,7 +21,7 @@
       <md-tabs style="border-top: solid 1px #00ADC3;"
         class="demo-source-tabs" ng-show="demo.$showSource">
         <md-tab ng-repeat="file in demo.$files"
-                      active="file === demo.$selectedFile"
+                      md-active="file === demo.$selectedFile"
                       ng-click="demo.$selectedFile = file"
                       label="{{file.name}}">
             <md-content scroll-y class="demo-source-container">
