@@ -48,7 +48,7 @@ md-progress-circular {
     border-radius: 50%;
   }
 
-  &[mode=indeterminate] {
+  &[md-mode=indeterminate] {
     .md-wrapper1, .md-wrapper2 {
       transform-origin: 50% 50%;
     }

@@ -3,7 +3,7 @@ md-divider {
   border-top: 1px solid;
   margin: 0;
 
-  &[inset] {
+  &[md-inset] {
     margin-left: $baseline-grid * 10;
   }
 }

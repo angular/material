@@ -33,9 +33,9 @@ describe('mdProgressLinear', function() {
     expect(progress.eq(0).attr('aria-valuenow')).toEqual('50');
   }));
 
-  it('should set transform based on secondaryvalue', inject(function($compile, $rootScope, $mdConstant) {
+  it('should set transform based on buffer value', inject(function($compile, $rootScope, $mdConstant) {
     var element = $compile('<div>' +
-      '<md-progress-linear value="{{progress}}" secondaryvalue="{{progress2}}">' +
+      '<md-progress-linear value="{{progress}}" md-buffer-value="{{progress2}}">' +
       '</md-progress-linear>' +
       '</div>')($rootScope);
 
@@ -52,7 +52,7 @@ describe('mdProgressLinear', function() {
 
   it('should not set transform in query mode', inject(function($compile, $rootScope, $mdConstant) {
     var element = $compile('<div>' +
-      '<md-progress-linear mode="query" value="{{progress}}">' +
+      '<md-progress-linear md-mode="query" value="{{progress}}">' +
       '</md-progress-linear>' +
       '</div>')($rootScope);
 

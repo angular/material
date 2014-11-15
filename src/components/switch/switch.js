@@ -28,7 +28,7 @@ angular.module('material.components.switch', [
  * @param {expression=} ngTrueValue The value to which the expression should be set when selected.
  * @param {expression=} ngFalseValue The value to which the expression should be set when not selected.
  * @param {string=} ngChange Angular expression to be executed when input changes due to user interaction with the input element.
- * @param {boolean=} noink Use of attribute indicates use of ripple ink effects.
+ * @param {boolean=} mdNoInk Use of attribute indicates use of ripple ink effects.
  * @param {boolean=} disabled Use of attribute indicates the switch is disabled: no ink effects and not selectable
  * @param {string=} ariaLabel Publish the button label used by screen-readers for accessibility. Defaults to the switch's text.
  *
@@ -38,7 +38,7 @@ angular.module('material.components.switch', [
  *   Finished ?
  * </md-switch>
  *
- * <md-switch noink ng-model="hasInk" aria-label="No Ink Effects">
+ * <md-switch md-no-ink ng-model="hasInk" aria-label="No Ink Effects">
  *   No Ink Effects
  * </md-switch>
  *
