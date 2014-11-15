@@ -25,21 +25,21 @@ angular.module('material.components.progressLinear', [
  *
  * For operations where the user is asked to wait a moment while something finishes up, and it’s not necessary to expose what's happening behind the scenes and how long it will take, use an indeterminate indicator.
  *
- * @param {string} mode Select from one of four modes: determinate, indeterminate, buffer or query.
+ * @param {string} mdMode Select from one of four modes: determinate, indeterminate, buffer or query.
  * @param {number=} value In determinate and buffer modes, this number represents the percentage of the primary progress bar. Default: 0
- * @param {number=} secondaryValue In the buffer mode, this number represents the precentage of the secondary progress bar. Default: 0
+ * @param {number=} mdBufferValue In the buffer mode, this number represents the precentage of the secondary progress bar. Default: 0
  *
  * @usage
  * <hljs lang="html">
- * <md-progress-linear mode="determinate" value="..."></md-progress-linear>
+ * <md-progress-linear md-mode="determinate" value="..."></md-progress-linear>
  *
- * <md-progress-linear mode="determinate" ng-value="..."></md-progress-linear>
+ * <md-progress-linear md-mode="determinate" ng-value="..."></md-progress-linear>
  *
- * <md-progress-linear mode="indeterminate"></md-progress-linear>
+ * <md-progress-linear md-mode="indeterminate"></md-progress-linear>
  *
- * <md-progress-linear mode="buffer" value="..." secondaryValue="..."></md-progress-linear>
+ * <md-progress-linear md-mode="buffer" value="..." md-buffer-value="..."></md-progress-linear>
  *
- * <md-progress-linear mode="query"></md-progress-linear>
+ * <md-progress-linear md-mode="query"></md-progress-linear>
  * </hljs>
  */
 function MdProgressLinearDirective($$rAF, $mdConstant, $mdTheming) {
@@ -68,7 +68,7 @@ function MdProgressLinearDirective($$rAF, $mdConstant, $mdTheming) {
       container = angular.element(element[0].querySelector('.md-container'));
 
     attr.$observe('value', function(value) {
-      if (attr.mode == 'query') {
+      if (attr.mdMode == 'query') {
         return;
       }
 
@@ -77,7 +77,7 @@ function MdProgressLinearDirective($$rAF, $mdConstant, $mdTheming) {
       bar2Style[$mdConstant.CSS.TRANSFORM] = transforms[clamped];
     });
 
-    attr.$observe('secondaryvalue', function(value) {
+    attr.$observe('mdBufferValue', function(value) {
       bar1Style[$mdConstant.CSS.TRANSFORM] = transforms[clamp(value)];
     });
 

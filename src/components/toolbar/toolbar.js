@@ -48,16 +48,16 @@ angular.module('material.components.toolbar', [
  * </div>
  * </hljs>
  *
- * @param {boolean=} scrollShrink Whether the header should shrink away as 
- * the user scrolls down, and reveal itself as the user scrolls up. 
- * Note: for scrollShrink to work, the toolbar must be a sibling of a 
+ * @param {boolean=} mdScrollShrink Whether the header should shrink away as
+ * the user scrolls down, and reveal itself as the user scrolls up.
+ * Note: for scrollShrink to work, the toolbar must be a sibling of a
  * `md-content` element, placed before it. See the scroll shrink demo.
  *
  *
- * @param {number=} shrinkSpeedFactor How much to change the speed of the toolbar's
+ * @param {number=} mdShrinkSpeedFactor How much to change the speed of the toolbar's
  * shrinking by. For example, if 0.25 is given then the toolbar will shrink
  * at one fourth the rate at which the user scrolls down. Default 0.5.
- */ 
+ */
 function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming) {
 
   return {
@@ -66,7 +66,7 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming) {
     link: function(scope, element, attr) {
       $mdTheming(element);
 
-      if (angular.isDefined(attr.scrollShrink)) {
+      if (angular.isDefined(attr.mdScrollShrink)) {
         setupScrollShrink();
       }
 
@@ -76,7 +76,7 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming) {
         // Store the last scroll top position
         var prevScrollTop = 0;
 
-        var shrinkSpeedFactor = attr.shrinkSpeedFactor || 0.5;
+        var shrinkSpeedFactor = attr.mdShrinkSpeedFactor || 0.5;
 
         var toolbarHeight;
         var contentElement;
@@ -114,7 +114,7 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming) {
           // As the user scrolls down, the content will be transformed up slowly
           // to put the content underneath where the toolbar was.
           contentElement.css(
-            'margin-top', 
+            'margin-top',
             (-toolbarHeight * shrinkSpeedFactor) + 'px'
           );
           onContentScroll();
@@ -126,16 +126,16 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming) {
           debouncedUpdateHeight();
 
           y = Math.min(
-            toolbarHeight / shrinkSpeedFactor, 
+            toolbarHeight / shrinkSpeedFactor,
             Math.max(0, y + scrollTop - prevScrollTop)
           );
 
           element.css(
-            $mdConstant.CSS.TRANSFORM, 
+            $mdConstant.CSS.TRANSFORM,
             'translate3d(0,' + (-y * shrinkSpeedFactor) + 'px,0)'
           );
           contentElement.css(
-            $mdConstant.CSS.TRANSFORM, 
+            $mdConstant.CSS.TRANSFORM,
             'translate3d(0,' + ((toolbarHeight - y) * shrinkSpeedFactor) + 'px,0)'
           );
 
