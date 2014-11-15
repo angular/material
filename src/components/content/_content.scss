@@ -5,15 +5,15 @@ md-content {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 
-  &[scroll-y] {
+  &[md-scroll-y] {
     overflow-y: auto;
     overflow-x: hidden;
   }
-  &[scroll-x] {
+  &[md-scroll-x] {
     overflow-x: auto;
     overflow-y: hidden;
   }
-  &[scroll-xy] {
+  &[md-scroll-xy] {
   }
 
   &.md-padding {
