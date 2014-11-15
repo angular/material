@@ -24,7 +24,7 @@
                       md-active="file === demo.$selectedFile"
                       ng-click="demo.$selectedFile = file"
                       label="{{file.name}}">
-            <md-content scroll-y class="demo-source-container">
+            <md-content md-scroll-y class="demo-source-container">
                     <hljs code="file.contents"
                           lang="{{file.fileType}}" >
                     </hljs>
