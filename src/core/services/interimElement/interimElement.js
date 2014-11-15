@@ -292,11 +292,10 @@ function InterimElementProvider() {
               var ret = options.onShow(options.scope, element, options);
               return $q.when(ret)
                 .then(function(){
-                    // Issue onComplete callback when the `show()` finishes
-                    var notify = options.onComplete || angular.noop;
-                    notify.apply(null, [options.scope, element, options]);
-                })
-                .then(startHideTimeout);
+                  // Issue onComplete callback when the `show()` finishes
+                  (options.onComplete || angular.noop)(options.scope, element, options);
+                  startHideTimeout();
+                });
 
               function startHideTimeout() {
                 if (options.hideDelay) {
