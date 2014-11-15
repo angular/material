@@ -180,7 +180,7 @@ function SliderController($scope, $element, $attrs, $$rAF, $window, $mdAria, $md
     // which could quickly become a performance bottleneck.
     var tickCanvas, tickCtx;
     function redrawTicks() {
-      if (!angular.isDefined($attrs.discrete)) return;
+      if (!angular.isDefined($attrs.mdDiscrete)) return;
 
       var numSteps = Math.floor( (max - min) / step );
       if (!tickCanvas) {
@@ -286,7 +286,7 @@ function SliderController($scope, $element, $attrs, $$rAF, $window, $mdAria, $md
      * Slide listeners
      */
     var isSliding = false;
-    var isDiscrete = angular.isDefined($attrs.discrete);
+    var isDiscrete = angular.isDefined($attrs.mdDiscrete);
 
     function onInput(ev) {
       if (!isSliding && ev.eventType === Hammer.INPUT_START &&

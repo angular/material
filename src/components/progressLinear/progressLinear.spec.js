@@ -33,7 +33,7 @@ describe('mdProgressLinear', function() {
     expect(progress.eq(0).attr('aria-valuenow')).toEqual('50');
   }));
 
-  it('should set transform based on secondaryvalue', inject(function($compile, $rootScope, $mdConstant) {
+  it('should set transform based on buffer value', inject(function($compile, $rootScope, $mdConstant) {
     var element = $compile('<div>' +
       '<md-progress-linear value="{{progress}}" md-buffer-value="{{progress2}}">' +
       '</md-progress-linear>' +

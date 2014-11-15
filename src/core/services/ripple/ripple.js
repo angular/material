@@ -4,10 +4,10 @@
 
 angular.module('material.core')
   .factory('$mdInkRipple', InkRippleService)
-  .directive('inkRipple', InkRippleDirective)
-  .directive('noink', attrNoDirective())
-  .directive('nobar', attrNoDirective())
-  .directive('nostretch', attrNoDirective());
+  .directive('mdInkRipple', InkRippleDirective)
+  .directive('mdNoInk', attrNoDirective())
+  .directive('mdNoBar', attrNoDirective())
+  .directive('mdNoStretch', attrNoDirective());
 
 function InkRippleDirective($mdInkRipple) {
   return function(scope, element, attr) {
@@ -42,8 +42,8 @@ function InkRippleService($window, $timeout, $mdUtil) {
   }
 
   function attach(element, options) {
-
-    if (element.controller('noink')) return angular.noop;
+    // Parent element with mdNoInk attr? Abort.
+    if (element.controller('mdNoInk')) return angular.noop;
 
     var rippleContainer, rippleEl,
         node = element[0],
@@ -169,7 +169,7 @@ function InkRippleService($window, $timeout, $mdUtil) {
  *
  * @usage
  * <hljs lang="html">
- * <parent noink>
+ * <parent md-no-ink>
  *   <child detect-no>
  *   </child>
  * </parent>
@@ -178,15 +178,15 @@ function InkRippleService($window, $timeout, $mdUtil) {
  * <hljs lang="js">
  * myApp.directive('detectNo', function() {
  *   return {
- *     require: ['^?noink', ^?nobar'],
+ *     require: ['^?mdNoInk', ^?mdNoBar'],
  *     link: function(scope, element, attr, ctrls) {
  *       var noinkCtrl = ctrls[0];
  *       var nobarCtrl = ctrls[1];
  *       if (noInkCtrl) {
- *         alert("the noink flag has been specified on an ancestor!");
+ *         alert("the md-no-ink flag has been specified on an ancestor!");
  *       }
  *       if (nobarCtrl) {
- *         alert("the nobar flag has been specified on an ancestor!");
+ *         alert("the md-no-bar flag has been specified on an ancestor!");
  *       }
  *     }
  *   };

@@ -118,7 +118,7 @@ function MdSwipeFactory() {
  * HammerJS horizontal swipe left and pan left support will be active. The swipe/pan action
  * can result in custom activity trigger by evaluating `expression`.
  *
- * @param {boolean=} noPan Use of attribute indicates flag to disable detection of `panleft` activity
+ * @param {boolean=} mdNoPan Use of attribute indicates flag to disable detection of `panleft` activity
  *
  * @usage
  * <hljs lang="html">
@@ -151,7 +151,7 @@ function MdSwipeLeftDirective($parse, $mdSwipe) {
  * that attaches HammerJS horizontal swipe right and pan right support to an element. The swipe/pan action
  * can result in activity trigger by evaluating `expression`
  *
- * @param {boolean=} noPan Use of attribute indicates flag to disable detection of `panright` activity
+ * @param {boolean=} mdNoPan Use of attribute indicates flag to disable detection of `panright` activity
  *
  * @usage
  * <hljs lang="html">
