@@ -33,13 +33,17 @@ var karma = require('karma').server;
 var buildConfig = require('./config/build.config');
 var utils = require('./scripts/gulp-utils.js');
 
+var IS_RELEASE_BUILD = !!argv.release;
+var BUILD_MODE = argv.mode;
+var VERSION = argv.version || pkg.version;
+
 var config = {
   banner:
     '/*!\n' +
     ' * Angular Material Design\n' +
     ' * https://github.com/angular/material\n' +
     ' * @license MIT\n' +
-    ' * v' + pkg.version + '\n' +
+    ' * v' + VERSION + '\n' +
     ' */\n',
   jsBaseFiles: ['src/core/**/*.js', '!src/core/**/*.spec.js'],
   themeBaseFiles: ['src/core/style/color-palette.scss', 'src/core/style/variables.scss', 'src/core/style/mixins.scss'],
@@ -47,19 +51,21 @@ var config = {
   paths: 'src/{components,services}/**',
   outputDir: 'dist/'
 };
+
 var buildModes = {
   'closure': {
     transform: utils.addClosurePrefixes,
-    outputDir: path.join(config.outputDir, 'closure') + path.sep
+    outputDir: path.join(config.outputDir, 'closure') + path.sep,
+    useBower: false
   },
   'default': {
     transform: gutil.noop,
-    outputDir: path.join(config.outputDir, 'js') + path.sep
+    outputDir: path.join(config.outputDir, 'js') + path.sep,
+    useBower: true
   }
 };
 
-var IS_RELEASE_BUILD = !!argv.release;
-var BUILD_MODE = buildModes[argv.mode] || buildModes['default'];
+BUILD_MODE = buildModes[BUILD_MODE] || buildModes['default'];
 
 if (IS_RELEASE_BUILD) {
   console.log(
@@ -80,13 +86,12 @@ function readModuleArg() {
 require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
 
 gulp.task('default', ['build']);
-//gulp.task('build', ['scripts', 'sass', 'sass-src']);
 gulp.task('validate', ['jshint', 'karma']);
 
 gulp.task('changelog', function(done) {
   changelog({
     repository: 'https://github.com/angular/material',
-    version: pkg.version,
+    version: VERSION,
     file: 'CHANGELOG.md'
   }, function(err, log) {
     fs.writeFileSync(__dirname + '/CHANGELOG.md', log);
@@ -98,8 +103,8 @@ gulp.task('changelog', function(done) {
  */
 gulp.task('jshint', function() {
   return gulp.src(
-      buildConfig.paths.js.concat(buildConfig.paths.test)
-    )
+    buildConfig.paths.js.concat(buildConfig.paths.test)
+  )
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter(require('jshint-summary')({
       fileColCol: ',bold',
@@ -141,6 +146,19 @@ gulp.task('karma-sauce', function(done) {
  */
 
 gulp.task('build', ['build-themes', 'build-scss', 'build-js'], function() {
+});
+
+gulp.task('build-all-modules', function() {
+  var addedCore = false;
+  return gulp.src(['src/components/*', 'src/core/',])
+    .pipe(through2.obj(function(folder, enc, next) {
+      var moduleId = folder.path.indexOf('components') > -1 ?
+        'material.components.' + path.basename(folder.path) :
+        'material.' + path.basename(folder.path);
+      buildModule(moduleId).on('end', function() {
+        next();
+      });
+    }));
 });
 
 gulp.task('watch', ['build'], function() {
@@ -231,7 +249,6 @@ gulp.task('build-js', function() {
   return gulp.src(config.jsBaseFiles.concat([jsGlob]))
     .pipe(filterNonCodeFiles())
     .pipe(utils.buildNgMaterialDefinition())
-    .pipe(insert.wrap('(function() {\n', '})();\n'))
     .pipe(concat('angular-material.js'))
     .pipe(insert.prepend(config.banner))
     .pipe(ngAnnotate())
@@ -254,19 +271,34 @@ gulp.task('build-js', function() {
  * ```
  */
 gulp.task('build-module', function() {
-  var mod = readModuleArg();
-  var name = mod.split('.').pop();
+  return buildModule(readModuleArg());
+});
 
-  gutil.log('Building module', mod, '...');
-  return utils.filesForModule(mod)
+function buildModule(module) {
+  var name = module.split('.').pop();
+  gutil.log('Building module', module, '...');
+  return utils.filesForModule(module)
     .pipe(filterNonCodeFiles())
     .pipe(gulpif('*.scss', buildModuleStyles(name)))
     .pipe(gulpif('*.js', buildModuleJs(name)))
     .pipe(BUILD_MODE.transform())
     .pipe(insert.prepend(config.banner))
-    .pipe(gulpif(IS_RELEASE_BUILD, utils.buildModuleBower(name, pkg.version)))
-    .pipe(gulp.dest(BUILD_MODE.outputDir + name));
-});
+    .pipe(gulp.dest(BUILD_MODE.outputDir + name))
+    .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
+      .pipe(gulpif, BUILD_MODE.useBower, lazypipe()
+        .pipe(gulpif, /.css$/, minifyCss(), uglify({preserveComments: 'some'}))
+        .pipe(rename, function(path) {
+          path.extname = path.extname
+            .replace(/.js$/, '.min.js')
+            .replace(/.css$/, '.min.css');
+        })
+        .pipe(utils.buildModuleBower, name, VERSION)
+        ()
+      )
+      .pipe(gulp.dest, BUILD_MODE.outputDir + name)
+      ()
+    ));
+}
 
 gulp.task('build-demo', function() {
   var mod = readModuleArg();
@@ -274,9 +306,9 @@ gulp.task('build-demo', function() {
   var demoIndexTemplate = fs.readFileSync(
     __dirname + '/docs/demos/demo-index.template.html', 'utf8'
   ).toString();
-  
+
   gutil.log('Building demos for', mod, '...');
-  return utils.readModuleDemos(mod, function() { 
+  return utils.readModuleDemos(mod, function() {
     return lazypipe()
       .pipe(gulpif, /.css$/, sass())
       .pipe(gulp.dest, BUILD_MODE.outputDir + name)
@@ -306,15 +338,13 @@ function buildModuleStyles(name) {
     )
     .pipe(sass)
     .pipe(autoprefix)
-    .pipe(gulpif, IS_RELEASE_BUILD, minifyCss())
     (); // invoke the returning fn to create our pipe
 }
 
 function buildModuleJs(name) {
   return lazypipe()
-    .pipe(ngAnnotate())
+    .pipe(ngAnnotate)
     .pipe(concat, name + '.js')
-    .pipe(gulpif, IS_RELEASE_BUILD, uglify({preserveComments: 'some'}))
     ();
 }
 
