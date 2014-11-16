@@ -33,6 +33,7 @@ var buildConfig = require('./config/build.config');
 var utils = require('./scripts/gulp-utils.js');
 
 var IS_RELEASE_BUILD = !!argv.release;
+var IS_MODULE_BUILD = (!!argv.module || !!argv.m);
 var BUILD_MODE = argv.mode;
 var VERSION = argv.version || pkg.version;
 
@@ -71,6 +72,11 @@ var buildModes = {
     outputDir: path.join(config.outputDir, 'closure') + path.sep,
     useBower: false
   },
+  'module': {
+    transform: gutil.noop,
+    outputDir: path.join(config.outputDir, 'module') + path.sep,
+    useBower: false
+  },
   'default': {
     transform: gutil.noop,
     outputDir: path.join(config.outputDir, 'js') + path.sep,
@@ -78,7 +84,9 @@ var buildModes = {
   }
 };
 
+IS_MODULE_BUILD && (BUILD_MODE="module");
 BUILD_MODE = buildModes[BUILD_MODE] || buildModes['default'];
+
 
 if (IS_RELEASE_BUILD) {
   console.log(
@@ -190,7 +198,7 @@ gulp.task('watch', ['build'], function() {
 });
 
 
-gulp.task('watch-module', ['build', 'build-demo'], function() {
+gulp.task('watch-module', ['build', 'build-module'], function() {
   var module = readModuleArg();
   var name = module.split('.').pop();
   gutil.log('\n',
@@ -198,7 +206,7 @@ gulp.task('watch-module', ['build', 'build-demo'], function() {
     '--', gutil.colors.green('Hint:'), 'Run',
     gutil.colors.cyan('`gulp server`'),
     'to start a livereload server in root, then navigate to\n',
-    '--', gutil.colors.green('"dist/' + name + '/"'), 'in your browser to develop.'
+    '--', gutil.colors.green('"dist/module/' + name + '/"'), 'in your browser to develop.'
    );
 
   return gulp.watch('src/**/*', ['build', 'build-demo']);
@@ -344,7 +352,7 @@ function buildTheme(theme) {
  */
 
 
-gulp.task('build-module', function() {
+gulp.task('build-module', ['build-demo'], function() {
   return buildModule(readModuleArg());
 });
 
@@ -385,7 +393,7 @@ gulp.task('build-demo', function() {
   var demoIndexTemplate = fs.readFileSync(
     __dirname + '/docs/demos/demo-index.template.html', 'utf8'
   ).toString();
-
+	
   gutil.log('Building demos for', mod, '...');
   return utils.readModuleDemos(mod, function() {
     return lazypipe()
