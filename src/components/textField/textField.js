@@ -64,6 +64,11 @@ function mdTextFloatDirective($mdTheming, $mdUtil) {
             element.attr('disabled', true);
             scope.isDisabled = true;
           }
+            
+          if ( angular.isDefined(attrs.tabindex) ) {
+            scope.tabIndex = attrs.tabindex;
+          }
+          element.attr('tabindex', '-1');  
 
           scope.inputType = attrs.type || "text";
           element.removeAttr('type');
@@ -78,7 +83,7 @@ function mdTextFloatDirective($mdTheming, $mdUtil) {
     template:
     '<md-input-group ng-disabled="isDisabled" tabindex="-1">' +
     ' <label for="{{fid}}" >{{label}}</label>' +
-    ' <md-input id="{{fid}}" ng-model="value" type="{{inputType}}"></md-input>' +
+    ' <md-input id="{{fid}}" ng-model="value" type="{{inputType}}" tabindex="{{tabIndex}}"></md-input>' +
     '</md-input-group>'
   };
 }
