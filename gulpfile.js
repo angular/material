@@ -181,13 +181,20 @@ gulp.task('build', ['build-themes', 'build-scss', 'build-js']);
 
 
 gulp.task('build-all-modules', function() {
-  var addedCore = false;
   return gulp.src(['src/components/*', 'src/core/',])
     .pipe(through2.obj(function(folder, enc, next) {
       var moduleId = folder.path.indexOf('components') > -1 ?
         'material.components.' + path.basename(folder.path) :
         'material.' + path.basename(folder.path);
-      buildModule(moduleId).on('end', function() {
+
+      var stream;
+      if (IS_RELEASE_BUILD) {
+        stream = mergeStream(buildModule(moduleId, true), buildModule(moduleId, false));
+      } else {
+        stream = buildModule(moduleId, false);
+      }
+
+      stream.on('end', function() {
         next();
       });
     }));
@@ -292,16 +299,25 @@ gulp.task('build-js-release', function() {
  * @return {function(): Stream}
  */
 function minifyJs(fileName) {
-  // Return a function instead of the stream itself in order to work with
-  // lazypipe.
-  return closureCompiler({
-    compilerPath: 'bower_components/closure-compiler/lib/vendor/compiler.jar',
-    fileName: fileName,
-    compilerFlags: {
-      language_in: 'ECMASCRIPT5',
-      warning_level: 'QUIET'
-    }
-  });
+  // Figure out filename if not provided
+  if (!fileName) {
+    return through2.obj(function(file, enc, next) {
+      closure(path.basename(file.path)).on('data', this.push.bind(this));
+      next();
+    });
+  } else {
+    return closure(fileName);
+  }
+  function closure(fileName) {
+    return closureCompiler({
+      compilerPath: 'bower_components/closure-compiler/lib/vendor/compiler.jar',
+      fileName: fileName,
+      compilerFlags: {
+        language_in: 'ECMASCRIPT5',
+        warning_level: 'QUIET'
+      }
+    });
+  }
 }
 
 
@@ -353,37 +369,33 @@ function buildTheme(theme) {
 
 
 gulp.task('build-module', ['build-demo'], function() {
-  return buildModule(readModuleArg());
+  return buildModule(readModuleArg(), IS_RELEASE_BUILD);
 });
 
-function buildModule(module) {
+function buildModule(module, isRelease) {
   var name = module.split('.').pop();
-  gutil.log('Building module', module, '...');
+  gutil.log('Building module', module, isRelease && 'minified' || '', '...');
   return utils.filesForModule(module)
     .pipe(filterNonCodeFiles())
     .pipe(gulpif('*.scss', buildModuleStyles(name)))
     .pipe(gulpif('*.js', buildModuleJs(name)))
     .pipe(BUILD_MODE.transform())
     .pipe(insert.prepend(config.banner))
-    .pipe(gulp.dest(BUILD_MODE.outputDir + name))
-    .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
-      .pipe(gulpif, BUILD_MODE.useBower, lazypipe()
-        .pipe(gulpif, /.css$/, minifyCss(), through2.obj(function(file, enc, next) {
-          var name = path.basename(file.path);
-          minifyJs(name).on('data', this.push.bind(this));
-          next();
-        }))
-        .pipe(rename, function(path) {
-          path.extname = path.extname
-            .replace(/.js$/, '.min.js')
-            .replace(/.css$/, '.min.css');
-        })
-        .pipe(utils.buildModuleBower, name, VERSION)
-        ()
-      )
+    .pipe(gulpif(isRelease && BUILD_MODE.useBower, buildMin()))
+    .pipe(gulp.dest(BUILD_MODE.outputDir + name));
+
+  function buildMin() {
+    return lazypipe()
+      .pipe(gulpif, /.css$/, minifyCss(), minifyJs())
+      .pipe(rename, function(path) {
+        path.extname = path.extname
+        .replace(/.js$/, '.min.js')
+        .replace(/.css$/, '.min.css');
+      })
+      .pipe(utils.buildModuleBower, name, VERSION)
       .pipe(gulp.dest, BUILD_MODE.outputDir + name)
-      ()
-    ));
+      ();
+  }
 }
 
 
@@ -393,7 +405,7 @@ gulp.task('build-demo', function() {
   var demoIndexTemplate = fs.readFileSync(
     __dirname + '/docs/demos/demo-index.template.html', 'utf8'
   ).toString();
-	
+
   gutil.log('Building demos for', mod, '...');
   return utils.readModuleDemos(mod, function() {
     return lazypipe()
