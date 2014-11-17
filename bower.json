@@ -14,7 +14,6 @@
     "angular-aria": "1.3.x",
     "angular-route": "1.3.x",
     "angular-mocks": "1.3.x",
-    "angularytics": "^0.3.0",
-    "closure-compiler" :"^0.2.6"
+    "angularytics": "^0.3.0"
   }
 }

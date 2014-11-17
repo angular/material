@@ -14,7 +14,6 @@
     "glob": "~4.0.2",
     "gulp": "^3.6.2",
     "gulp-autoprefixer": "^1.0.1",
-    "gulp-closure-compiler": "^0.2.7",
     "gulp-concat": "^2.2.0",
     "gulp-filter": "^1.0.2",
     "gulp-if": "^1.2.0",

@@ -1,16 +1,19 @@
 
+/** Regular npm dependendencies */
 var _ = require('lodash');
+var argv = require('minimist')(process.argv.slice(2));
 var changelog = require('conventional-changelog');
 var fs = require('fs');
-var path = require('path');
 var glob = require('glob').sync;
 var gulp = require('gulp');
 var karma = require('karma').server;
-var pkg = require('./package.json');
+var lazypipe = require('lazypipe');
 var mergeStream = require('merge-stream');
+var path = require('path');
+var pkg = require('./package.json');
+var through2 = require('through2');
 
-var argv = require('minimist')(process.argv.slice(2));
-
+/** Gulp dependencies */
 var autoprefixer = require('gulp-autoprefixer');
 var concat = require('gulp-concat');
 var filter = require('gulp-filter');
@@ -18,20 +21,18 @@ var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
 var insert = require('gulp-insert');
 var jshint = require('gulp-jshint');
-var lazypipe = require('lazypipe');
 var minifyCss = require('gulp-minify-css');
 var ngAnnotate = require('gulp-ng-annotate');
 var rename = require('gulp-rename');
 var sass = require('gulp-sass');
-var through2 = require('through2');
-var closureCompiler = require('gulp-closure-compiler');
+var uglify = require('gulp-uglify');
 var webserver = require('gulp-webserver');
 
-var karma = require('karma').server;
-
+/** Local dependencies */
 var buildConfig = require('./config/build.config');
 var utils = require('./scripts/gulp-utils.js');
 
+/** Arguments */
 var IS_RELEASE_BUILD = !!argv.release;
 var IS_DEMO_BUILD = (!!argv.module || !!argv.m || !!argv.c);
 var BUILD_MODE = argv.mode;
@@ -211,7 +212,7 @@ function buildModule(module, isRelease) {
 
   function buildMin() {
     return lazypipe()
-              .pipe(gulpif, /.css$/, minifyCss(), minifyJs())
+              .pipe(gulpif, /.css$/, minifyCss(), uglify({ preserveComments: 'some' }))
               .pipe(rename, function(path) {
                 path.extname = path.extname
                   .replace(/.js$/, '.min.js')
@@ -226,7 +227,7 @@ function buildModule(module, isRelease) {
     return lazypipe()
               .pipe(ngAnnotate)
               .pipe(concat, name + '.js')
-              .pipe(gulpif(IS_RELEASE_BUILD, minifyJs.bind(null, name + '.min.js'), gutil.noop))
+              .pipe(gulpif, IS_RELEASE_BUILD, uglify({ preverseComments: 'some' }))
               ();
   }
 
@@ -306,34 +307,6 @@ gulp.task('build-js-release', function() {
 
 
 /**
- * Gets a function to stream javascript minification.
- * @param {string} fileName The name of the minified file.
- * @return {function(): Stream}
- */
-function minifyJs(fileName) {
-  // Figure out filename if not provided
-  if (!fileName) {
-    return through2.obj(function(file, enc, next) {
-      closure(path.basename(file.path)).on('data', this.push.bind(this));
-      next();
-    });
-  } else {
-    return closure(fileName);
-  }
-  function closure(fileName) {
-    return closureCompiler({
-      compilerPath: 'bower_components/closure-compiler/lib/vendor/compiler.jar',
-      fileName: fileName,
-      compilerFlags: {
-        language_in: 'ECMASCRIPT5',
-        warning_level: 'QUIET'
-      }
-    });
-  }
-}
-
-
-/**
  * Builds the entire component library javascript.
  * @param {boolean} isRelease Whether to build in release mode.
  */
@@ -348,7 +321,7 @@ function buildJs(isRelease) {
     .pipe(ngAnnotate())
     .pipe(gulp.dest(config.outputDir))
     .pipe(gulpif(isRelease, lazypipe()
-      .pipe(minifyJs, 'angular-material.min.js')
+      .pipe(uglify, { preserveComments: 'some' })
       .pipe(gulp.dest, config.outputDir)
       ()
     ));
