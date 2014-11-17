@@ -28,7 +28,7 @@ function InkRippleService($window, $timeout) {
 
   function attachButtonBehavior(element) {
     return attach(element, {
-      center: false,
+      center: element.hasClass('md-fab'),
       dimBackground: true
     });
   }
