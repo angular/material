@@ -249,6 +249,50 @@ describe('$$interimElement service', function() {
       it('returns a promise', inject(function($$interimElement) {
         expect(typeof Service.show().then).toBe('function');
       }));
+
+      it('defaults parent to $rootElement', inject(function($rootElement, $rootScope) {
+        var shown = false;
+        Service.show({
+          onShow: function(scope, element, options) {
+            expect(options.parent[0]).toBe($rootElement[0]);
+            shown = true;
+          }
+        });
+        $rootScope.$digest();
+        expect(shown).toBe(true);
+      }));
+
+      it('allows parent reference', inject(function($rootScope) {
+        var parent = angular.element('<div>');
+
+        var shown = false;
+        Service.show({
+          parent: parent,
+          onShow: function(scope, element, options) {
+            expect(options.parent[0]).toBe(parent[0]);
+            shown = true;
+          }
+        });
+        $rootScope.$digest();
+        expect(shown).toBe(true);
+      }));
+
+      it('allows string parent selector', inject(function($rootScope, $document) {
+        var parent = angular.element('<div id="super-parent">');
+        spyOn($document[0], 'querySelector').andReturn(parent[0]);
+
+        var shown = false;
+        Service.show({
+          parent: '#super-parent',
+          onShow: function(scope, element, options) {
+            expect($document[0].querySelector).toHaveBeenCalledWith('#super-parent');
+            expect(options.parent[0]).toBe(parent[0]);
+            shown = true;
+          }
+        });
+        $rootScope.$digest();
+        expect(shown).toBe(true);
+      }));
     });
 
 
