@@ -1,7 +1,6 @@
 (function() {
 'use strict';
 
-
 angular.module('material.core')
   .factory('$mdInkRipple', InkRippleService)
   .directive('mdInkRipple', InkRippleDirective)
@@ -19,7 +18,7 @@ function InkRippleDirective($mdInkRipple) {
   };
 }
 
-function InkRippleService($window, $$rAF, $mdUtil, $timeout, $mdConstant) {
+function InkRippleService($window, $timeout) {
 
   return {
     attachButtonBehavior: attachButtonBehavior,
@@ -29,72 +28,58 @@ function InkRippleService($window, $$rAF, $mdUtil, $timeout, $mdConstant) {
 
   function attachButtonBehavior(element) {
     return attach(element, {
-      mousedown: true,
       center: false,
-      animationDuration: 350,
-      mousedownPauseTime: 175,
-      animationName: 'inkRippleButton',
-      animationTimingFunction: 'linear'
+      dimBackground: true
     });
   }
 
   function attachCheckboxBehavior(element) {
     return attach(element, {
-      mousedown: true,
       center: true,
-      animationDuration: 300,
-      mousedownPauseTime: 180,
-      animationName: 'inkRippleCheckbox',
-      animationTimingFunction: 'linear'
+      dimBackground: false
     });
   }
 
   function attach(element, options) {
-    // Parent element with mdNoInk attr? Abort.
+
     if (element.controller('mdNoInk')) return angular.noop;
-    var contentParent = element.controller('mdContent');
+
+    var rippleContainer, rippleEl,
+        node = element[0],
+        hammertime = new Hammer(node),
+        contentParent = element.controller('mdContent');
 
     options = angular.extend({
       mousedown: true,
       hover: true,
       focus: true,
       center: false,
-      animationDuration: 300,
       mousedownPauseTime: 150,
-      animationName: '',
-      animationTimingFunction: 'linear'
+      dimBackground: false
     }, options || {});
 
-    var rippleContainer;
-    var node = element[0];
-    var hammertime = new Hammer(node);
-
-    if (options.mousedown) {
-      hammertime.on('hammer.input', onInput);
-    }
+    options.mousedown && hammertime.on('hammer.input', onInput);
 
     // Publish self-detach method if desired...
     return function detach() {
       hammertime.destroy();
-      if (rippleContainer) {
-        rippleContainer.remove();
-      }
+      rippleContainer && rippleContainer.remove();
     };
 
     function rippleIsAllowed() {
-      return !element[0].hasAttribute('disabled') && 
-        !(element[0].parentNode && element[0].parentNode.hasAttribute('disabled'));
+      return !element[0].hasAttribute('disabled') &&
+          !(element[0].parentNode && element[0].parentNode.hasAttribute('disabled'));
+    }
+
+    function removeElement(element, wait) {
+      $timeout(function () {
+        element.remove();
+      }, wait, false);
     }
 
     function createRipple(left, top, positionsAreAbsolute) {
 
-      var rippleEl = angular.element('<div class="md-ripple">')
-            .css($mdConstant.CSS.ANIMATION_DURATION, options.animationDuration + 'ms')
-            .css($mdConstant.CSS.ANIMATION_NAME, options.animationName)
-            .css($mdConstant.CSS.ANIMATION_TIMING, options.animationTimingFunction)
-            .on($mdConstant.CSS.ANIMATIONEND, function() {
-              rippleEl.remove();
-            });
+      var rippleEl = angular.element('<div class="md-ripple">');
 
       if (!rippleContainer) {
         rippleContainer = angular.element('<div class="md-ripple-container">');
@@ -102,60 +87,78 @@ function InkRippleService($window, $$rAF, $mdUtil, $timeout, $mdConstant) {
       }
       rippleContainer.append(rippleEl);
 
-      var containerWidth = rippleContainer.prop('offsetWidth');
-
-      if (options.center) {
-        left = containerWidth / 2;
-        top = rippleContainer.prop('offsetHeight') / 2;
-      } else if (positionsAreAbsolute) {
-        var elementRect = node.getBoundingClientRect();
-        left -= elementRect.left;
-        top -= elementRect.top;
-      }
+      var containerWidth = rippleContainer.prop('offsetWidth'),
+          containerHeight = rippleContainer.prop('offsetHeight'),
+          multiplier = element.hasClass('md-fab') ? 1.1 : 0.8,
+          diagonalWidth = Math.max(containerWidth, containerHeight) * multiplier;
 
       if (contentParent) {
         top += contentParent.$element.prop('scrollTop');
       }
 
       var css = {
-        'background-color': $window.getComputedStyle(rippleEl[0]).color || 
-          $window.getComputedStyle(node).color,
-        'border-radius': (containerWidth / 2) + 'px',
-
-        left: (left - containerWidth / 2) + 'px',
-        width: containerWidth + 'px',
-
-        top: (top - containerWidth / 2) + 'px',
-        height: containerWidth + 'px'
+        backgroundColor: $window.getComputedStyle(rippleEl[0]).color ||  $window.getComputedStyle(node).color,
+        width: diagonalWidth + 'px',
+        height: diagonalWidth + 'px',
+        marginLeft: (diagonalWidth * -0.5) + 'px',
+        marginTop: (diagonalWidth * -0.5) + 'px'
       };
-      css[$mdConstant.CSS.ANIMATION_DURATION] = options.fadeoutDuration + 'ms';
+
+      if (options.center) {
+        css.left = '50%';
+        css.top = '50%';
+      } else if (positionsAreAbsolute) {
+        var elementRect = node.getBoundingClientRect();
+        left -= elementRect.left;
+        top -= elementRect.top;
+        css.left = Math.round(left / containerWidth * 100) + '%';
+        css.top = Math.round(top / containerHeight * 100) + '%';
+      }
+
       rippleEl.css(css);
 
+      //-- Use minimum timeout to trigger CSS animation
+      $timeout(function () {
+        if (options.dimBackground) {
+          rippleContainer.addClass('full visible');
+          rippleContainer.css({ backgroundColor: css.backgroundColor.replace(')', ', 0.1').replace('(', 'a(') });
+        }
+        rippleEl.addClass('md-ripple-placed md-ripple-visible md-ripple-scaled md-ripple-full');
+        rippleEl.css({ left: '50%', top: '50%' });
+        $timeout(function () {
+          if (rippleEl) {
+            rippleEl.removeClass('md-ripple-full');
+            if (!rippleEl.hasClass('md-ripple-visible')) {
+              removeElement(rippleEl, 650);
+              rippleEl = null;
+            }
+          }
+          rippleEl && rippleEl.removeClass('md-ripple-full');
+          if (rippleContainer && options.dimBackground) {
+            rippleContainer.removeClass('md-ripple-full');
+            if (!rippleContainer.hasClass('md-ripple-visible')) rippleContainer.css({ backgroundColor: '' });
+          }
+        }, 225, false);
+      }, 0, false);
       return rippleEl;
     }
 
-    var pauseTimeout;
-    var rippleEl;
     function onInput(ev) {
       if (ev.eventType === Hammer.INPUT_START && ev.isFirst && rippleIsAllowed()) {
-
         rippleEl = createRipple(ev.center.x, ev.center.y, true);
-        pauseTimeout = $timeout(function() {
-          rippleEl && rippleEl.css($mdConstant.CSS.ANIMATION_PLAY_STATE, 'paused');
-        }, options.mousedownPauseTime, false);
-
-        rippleEl.on('$destroy', function() {
-          rippleEl = null;
-        });
-
       } else if (ev.eventType === Hammer.INPUT_END && ev.isFinal) {
-        $timeout.cancel(pauseTimeout);
-        rippleEl && rippleEl.css($mdConstant.CSS.ANIMATION_PLAY_STATE, '');
+        if (rippleEl) {
+          rippleEl.removeClass('md-ripple-visible');
+          removeElement(rippleEl, 650);
+          rippleEl = null;
+        }
+        if (rippleContainer && options.dimBackground) {
+          rippleContainer.removeClass('md-ripple-visible');
+          if (!rippleContainer.hasClass('md-ripple-full')) rippleContainer.css({ backgroundColor: '' });
+        }
       }
     }
-
   }
-
 }
 
 /**
