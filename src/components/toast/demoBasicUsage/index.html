@@ -21,6 +21,7 @@
       <b>Toast Position: "{{getToastPosition()}}"</b>
     </div>
     <md-checkbox ng-repeat="(name, isSelected) in toastPosition"
+      aria-label="{{name}}"
       ng-model="toastPosition[name]"> 
       {{name}}
     </md-checkbox>
