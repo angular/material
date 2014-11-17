@@ -1,23 +1,60 @@
 <div ng-controller="HomeCtrl" layout="vertical">
-  <md-content flex>
-    <p>
-      <a href="http://www.google.com/design/spec/material-design/">Material Design</a> is a specification for a unified system of visual, motion, and interaction design that adapts across different devices.
-    </p>
-    <p>
-      The material design project for Angular is a complementary effort to the <a href="http://www.polymer-project.org/">Polymer</a> project's <a href="http://www.polymer-project.org/docs/elements/paper-elements.html">paper elements</a> collection. Our goal is to provide a set of AngularJS-native UI elements that implement the material design system.
-    </p>
-    <p>
-      For more, see our <a href="https://github.com/angular/material">repository on GitHub.</a>
-    </p>
-  </md-content>
+    <md-content flex>
+        <p>
+            <a href="http://www.google.com/design/spec/material-design/">Material Design</a> is a specification for a
+            unified system of visual, motion, and interaction design that adapts across different devices and different
+            screen sizes.
 
-  <md-content layout="horizontal" layout-align="center center" style="padding-top: 50px">
-    <iframe width="560" height="315" title="Material Design" src="//www.youtube.com/embed/Q8TXgCzxEnw" frameborder="0" allowfullscreen></iframe>
-  </md-content>
+            Below is a brief video that presents the Material Design system:
+        </p>
 
-   <p>
-     These docs were generated from the code in commit 
-     <a ng-href="{{BUILDCONFIG.repository}}/commit/{{BUILDCONFIG.commit}}" target="_blank">{{BUILDCONFIG.commit.substring(0,7)}}</a>.
-   </p>
+        <md-content layout="horizontal" layout-align="center center" style="padding-bottom: 25px;" >
+            <iframe width="560" height="315" title="Material Design" src="//www.youtube.com/embed/Q8TXgCzxEnw"
+                    frameborder="0" allowfullscreen></iframe>
+        </md-content>
+
+        <p>
+            The Angular Material Design project is a reference implementation effort similar to that provided in the
+            <a href="http://www.polymer-project.org/">Polymer</a> project's
+            <a href="http://www.polymer-project.org/docs/elements/paper-elements.html">Paper elements</a>
+            collection. Created to provide a set of AngularJS-native UI elements that implement the material design system,
+            Angular Material is comprised of 3 distinct sets of features:
+            </p>
+            <md-content layout="horizontal" layout-align="center center" style="padding-top:25px;padding-bottom:25px;">
+                <img src="https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png"
+                     alt="Features of Angular Material"/>
+            </md-content>
+        <p>
+            Developers are encouraged to explore this online documentation with its component samples, demos, API listings,
+            and more...
+        </p>
+
+
+        <h3>Useful Links:</h3>
+
+        <ul>
+            <li>To contribute, fork our GitHub <a href="https://github.com/angular/material">repository</a>.</li>
+            <li>For problems,
+                <a href="https://github.com/angular/material/issues?q=is%3Aissue+is%3Aopen" target="_blank">
+                    search the issues
+                </a> and/or create a new issue.
+            </li>
+            <li>For questions,
+                <a href="https://groups.google.com/forum/#!forum/ngmaterial" target="_blank">
+                    search the forum
+                </a> and/or post a new message.
+            </li>
+            <li>These docs were generated from the code in commit
+                <a ng-href="{{BUILDCONFIG.repository}}/commit/{{BUILDCONFIG.commit}}" target="_blank">
+                    {{BUILDCONFIG.commit.substring(0,7)}}
+                </a>.
+            </li>
+        </ul>
+
+        <br/>
+        <br/>
+
+    </md-content>
+
 
 </div>
