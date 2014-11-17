@@ -51,10 +51,10 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming) {
     restrict: 'E',
     controller: ['$element', RadioGroupController],
     require: ['mdRadioGroup', '?ngModel'],
-    link: link
+    link: linkRadioGroup
   };
 
-  function link(scope, element, attr, ctrls) {
+  function linkRadioGroup(scope, element, attr, ctrls) {
     $mdTheming(element);
     var rgCtrl = ctrls[0],
       ngModelCtrl = ctrls[1] || {
@@ -191,7 +191,7 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
     restrict: 'E',
     require: '^mdRadioGroup',
     transclude: true,
-    template: '<div class="md-container" ink-ripple="checkbox">' +
+    template: '<div class="md-container" md-ink-ripple="checkbox">' +
                 '<div class="md-off"></div>' +
                 '<div class="md-on"></div>' +
               '</div>' +

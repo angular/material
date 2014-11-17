@@ -120,7 +120,7 @@ function InkRippleService($window, $timeout) {
       //-- Use minimum timeout to trigger CSS animation
       $timeout(function () {
         if (options.dimBackground) {
-          rippleContainer.addClass('full visible');
+          rippleContainer.addClass('md-ripple-full md-ripple-visible');
           rippleContainer.css({ backgroundColor: css.backgroundColor.replace(')', ', 0.1').replace('(', 'a(') });
         }
         rippleEl.addClass('md-ripple-placed md-ripple-visible md-ripple-scaled md-ripple-full');

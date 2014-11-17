@@ -230,7 +230,7 @@ input {
   top: 0;
   width: 100%;
   height: 100%;
-  transition: all 0.65s $swift-ease-out-timing-function;
+  transition: all 0.55s $swift-ease-out-timing-function;
 }
 
 .md-ripple {
@@ -246,7 +246,7 @@ input {
     transform: scale(1);
   }
   &.md-ripple-full, &.md-ripple-visible {
-    opacity: 0.15;
+    opacity: 0.20;
   }
   &.md-ripple-held {
     opacity: 0.15;
