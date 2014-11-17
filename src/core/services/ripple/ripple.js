@@ -91,7 +91,7 @@ function InkRippleService($window, $timeout) {
       var containerWidth = rippleContainer.prop('offsetWidth'),
           containerHeight = rippleContainer.prop('offsetHeight'),
           multiplier = element.hasClass('md-fab') ? 1.1 : 0.8,
-          diagonalWidth = Math.max(containerWidth, containerHeight) * multiplier;
+          rippleWidth = Math.max(containerWidth, containerHeight) * multiplier;
 
       if (contentParent) {
         top += contentParent.$element.prop('scrollTop');
@@ -99,10 +99,10 @@ function InkRippleService($window, $timeout) {
 
       var css = {
         backgroundColor: $window.getComputedStyle(rippleEl[0]).color ||  $window.getComputedStyle(node).color,
-        width: diagonalWidth + 'px',
-        height: diagonalWidth + 'px',
-        marginLeft: (diagonalWidth * -0.5) + 'px',
-        marginTop: (diagonalWidth * -0.5) + 'px'
+        width: rippleWidth + 'px',
+        height: rippleWidth + 'px',
+        marginLeft: (rippleWidth * -0.5) + 'px',
+        marginTop: (rippleWidth * -0.5) + 'px'
       };
 
       if (options.center) {
