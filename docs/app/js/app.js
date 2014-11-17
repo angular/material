@@ -306,7 +306,8 @@ function($rootScope, $scope, component, demos, $http, $templateCache, $q) {
     $q.all(files.map(function(file) {
       return $http.get(file.outputPath, {cache: $templateCache})
         .then(function(response) {
-          file.contents = response.data;
+          file.contents = response.data
+            .replace('<head/>', '');
         });
     })).then(function() {
       demo.$files = files;
