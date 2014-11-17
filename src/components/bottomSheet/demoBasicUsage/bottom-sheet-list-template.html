@@ -2,7 +2,7 @@
   <md-subheader>Comment Actions</md-subheader>
   <md-list>
     <md-item ng-repeat="item in items" ng-click="listItemClick($index)">
-      <md-button>
+    <md-button aria-label="{{item.name}}">
         <!-- Using custom inline icon until md-icon is ready. DONT USE ME! -->
         <md-inline-list-icon icon="{{item.icon}}"></md-inline-list-icon>
         <span class="md-inline-list-icon-label">{{ item.name }}</span>
