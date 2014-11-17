@@ -1,4 +1,4 @@
-var DocsApp = angular.module('docsApp', ['ngMaterial', 'ngRoute', /*'angularytics'*/])
+var DocsApp = angular.module('docsApp', ['ngMaterial', 'ngRoute', 'angularytics'])
 
 .config([
   'COMPONENTS',
@@ -60,16 +60,19 @@ function(COMPONENTS, DEMOS, PAGES, $routeProvider) {
   $routeProvider.otherwise('/');
 }])
 
-// .config(['AngularyticsProvider', function(AngularyticsProvider) {
-//   // AngularyticsProvider.setEventHandlers(['Console', 'GoogleUniversal']);
-// }])
+.config(['AngularyticsProvider', function(AngularyticsProvider) {
+   AngularyticsProvider.setEventHandlers(['Console', 'GoogleUniversal']);
+}])
 
-// .run([
-//   'Angularytics',
-//   '$rootScope',
-// function(Angularytics, $rootScope) {
-//   // Angularytics.init();
-// }])
+.run([
+   'Angularytics',
+   '$rootScope',
+    '$timeout',
+function(Angularytics, $rootScope,$timeout) {
+   //$timeout(function(){
+     Angularytics.init()
+   //});
+}])
 
 .factory('menu', [
   'COMPONENTS',

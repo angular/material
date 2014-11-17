@@ -5,7 +5,7 @@
 angular.module('material.core')
   .directive('mdTheme', ThemingDirective)
   .directive('mdThemable', ThemableDirective)
-  .provider('$mdTheming', Theming);
+  .provider('$mdTheming', ThemingProvider);
 
 /**
  * @ngdoc provider
@@ -28,28 +28,7 @@ angular.module('material.core')
  * classes when they change. Default is `false`. Enabling can reduce performance.
  */
 
-/**
- * @ngdoc service
- * @name $mdTheming
- *
- * @description
- *
- * Service that makes an element apply theming related classes to itself.
- *
- * ```js
- * app.directive('myFancyDirective', function($mdTheming) {
- *   return {
- *     restrict: 'e',
- *     link: function(scope, el, attrs) {
- *       $mdTheming(el);
- *     }
- *   };
- * });
- * ```
- * @param {el=} element to apply theming to
- */
-
-function Theming($injector) {
+function ThemingProvider() {
   var defaultTheme = 'default';
   var alwaysWatchTheme = false;
   return {
@@ -59,17 +38,37 @@ function Theming($injector) {
     alwaysWatchTheme: function(alwaysWatch) {
       alwaysWatchTheme = alwaysWatch;
     },
-    $get: ['$rootElement', '$rootScope', ThemingService]
+    $get: ['$rootScope', ThemingService]
   };
 
-  function ThemingService($rootElement, $rootScope) {
+  /**
+   * @ngdoc service
+   * @name $mdTheming
+   *
+   * @description
+   *
+   * Service that makes an element apply theming related classes to itself.
+   *
+   * ```js
+   * app.directive('myFancyDirective', function($mdTheming) {
+   *   return {
+   *     restrict: 'e',
+   *     link: function(scope, el, attrs) {
+   *       $mdTheming(el);
+   *     }
+   *   };
+   * });
+   * ```
+   * @param {el=} element to apply theming to
+   */
+  function ThemingService($rootScope) {
     applyTheme.inherit = function(el, parent) {
       var ctrl = parent.controller('mdTheme');
 
       var attrThemeValue = el.attr('md-theme-watch');
-      if ( (alwaysWatchTheme || angular.isDefined(attrThemeValue)) && attrThemeValue != 'false') { 
-        var deregisterWatch = $rootScope.$watch(function() { 
-          return ctrl && ctrl.$mdTheme || defaultTheme; 
+      if ( (alwaysWatchTheme || angular.isDefined(attrThemeValue)) && attrThemeValue != 'false') {
+        var deregisterWatch = $rootScope.$watch(function() {
+          return ctrl && ctrl.$mdTheme || defaultTheme;
         }, changeTheme);
         el.on('$destroy', deregisterWatch);
       } else {
@@ -89,7 +88,7 @@ function Theming($injector) {
 
     function applyTheme(scope, el) {
       // Allow us to be invoked via a linking function signature.
-      if (el === undefined) { 
+      if (el === undefined) {
         el = scope;
         scope = undefined;
       }
@@ -100,6 +99,8 @@ function Theming($injector) {
     }
   }
 }
+
+
 
 function ThemingDirective($interpolate) {
   return {
