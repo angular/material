@@ -201,54 +201,54 @@ function buildModule(module, isRelease) {
   gutil.log('Building ' + module + (isRelease && ' minified' || '') + ' ...');
 
   return utils.filesForModule(module)
-              .pipe(filterNonCodeFiles())
-              .pipe(gulpif('*.scss', buildModuleStyles(name)))
-              .pipe(gulpif('*.js', buildModuleJs(name)))
-              .pipe(BUILD_MODE.transform())
-              .pipe(insert.prepend(config.banner))
-              .pipe(gulpif(isRelease && BUILD_MODE.useBower, buildMin()))
-              .pipe(gulp.dest(BUILD_MODE.outputDir + name));
+    .pipe(filterNonCodeFiles())
+    .pipe(gulpif('*.scss', buildModuleStyles(name)))
+    .pipe(gulpif('*.js', buildModuleJs(name)))
+    .pipe(BUILD_MODE.transform())
+    .pipe(insert.prepend(config.banner))
+    .pipe(gulpif(isRelease && BUILD_MODE.useBower, buildMin()))
+    .pipe(gulp.dest(BUILD_MODE.outputDir + name));
 
 
   function buildMin() {
     return lazypipe()
-              .pipe(gulpif, /.css$/, minifyCss(), uglify({ preserveComments: 'some' }))
-              .pipe(rename, function(path) {
-                path.extname = path.extname
-                  .replace(/.js$/, '.min.js')
-                  .replace(/.css$/, '.min.css');
-              })
-              .pipe(utils.buildModuleBower, name, VERSION)
-              .pipe(gulp.dest, BUILD_MODE.outputDir + name)
-              ();
+      .pipe(gulpif, /.css$/, minifyCss(), uglify({ preserveComments: 'some' }))
+      .pipe(rename, function(path) {
+        path.extname = path.extname
+          .replace(/.js$/, '.min.js')
+          .replace(/.css$/, '.min.css');
+      })
+      .pipe(utils.buildModuleBower, name, VERSION)
+      .pipe(gulp.dest, BUILD_MODE.outputDir + name)
+      ();
   }
 
-  function buildModuleJs(name) {
-    return lazypipe()
-              .pipe(ngAnnotate)
-              .pipe(concat, name + '.js')
-              .pipe(gulpif, IS_RELEASE_BUILD, uglify({ preverseComments: 'some' }))
-              ();
-  }
+function buildModuleJs(name) {
+  return lazypipe()
+    .pipe(ngAnnotate)
+    .pipe(concat, name + '.js')
+    .pipe(gulpif, IS_RELEASE_BUILD, uglify({ preverseComments: 'some' }))
+    ();
+}
 
-  function buildModuleStyles(name) {
-    var files = [];
-    config.themeBaseFiles.forEach(function(fileGlob) {
-      files = files.concat(glob(fileGlob, { cwd: __dirname }));
-    });
-    var baseStyles = files.map(function(fileName) {
-      return fs.readFileSync(fileName, 'utf8').toString();
-    }).join('\n');
+function buildModuleStyles(name) {
+  var files = [];
+  config.themeBaseFiles.forEach(function(fileGlob) {
+    files = files.concat(glob(fileGlob, { cwd: __dirname }));
+  });
+  var baseStyles = files.map(function(fileName) {
+    return fs.readFileSync(fileName, 'utf8').toString();
+  }).join('\n');
 
-    return lazypipe()
-              .pipe(insert.prepend, baseStyles)
-              .pipe(gulpif, /theme.scss/,
-                rename(name + '-default-theme.scss'), concat(name + '.scss')
-              )
-              .pipe(sass)
-              .pipe(autoprefix)
-              (); // invoke the returning fn to create our pipe
-  }
+  return lazypipe()
+    .pipe(insert.prepend, baseStyles)
+    .pipe(gulpif, /theme.scss/,
+      rename(name + '-default-theme.scss'), concat(name + '.scss')
+    )
+    .pipe(sass)
+    .pipe(autoprefix)
+    (); // invoke the returning fn to create our pipe
+}
 
 }
 
@@ -322,6 +322,7 @@ function buildJs(isRelease) {
     .pipe(gulp.dest(config.outputDir))
     .pipe(gulpif(isRelease, lazypipe()
       .pipe(uglify, { preserveComments: 'some' })
+      .pipe(rename, { extname: '.min.js' })
       .pipe(gulp.dest, config.outputDir)
       ()
     ));
