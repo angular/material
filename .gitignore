@@ -12,3 +12,6 @@ themes/_default-theme.scss
 /vendor
 
 .polymer-qp
+*.iml
+atlassian-ide-plugin.xml
+_default-theme.scss
