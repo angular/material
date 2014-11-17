@@ -21,7 +21,9 @@ DocsApp
         }
         if (!code) return;
         var highlightedCode = hljs.highlight(attr.language || attr.lang, code.trim());
-        highlightedCode.value = highlightedCode.value.replace(/=<span class="hljs-value">""<\/span>/gi, '');
+        highlightedCode.value = highlightedCode.value
+          .replace(/=<span class="hljs-value">""<\/span>/gi, '')
+          .replace('<head/>', '');
         codeElement.append(highlightedCode.value).addClass('highlight');
 
         element.append(contentParent);
