@@ -35,7 +35,7 @@ md-sidenav {
 
   @extend .md-sidenav-left;
 }
-.md-sidenav-backdrop.locked-open {
+.md-sidenav-backdrop.md-locked-open {
   display: none;
 }
 
