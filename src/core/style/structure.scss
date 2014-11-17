@@ -240,7 +240,10 @@ input {
   opacity: 0;
   border-radius: 50%;
   &.md-ripple-placed {
-    transition: all 0.65s $swift-ease-out-timing-function;
+    transition: left 0.9s $swift-ease-out-timing-function,
+                right 0.9s $swift-ease-out-timing-function,
+                opacity 0.65s $swift-ease-out-timing-function,
+                transform 0.65s $swift-ease-out-timing-function;
   }
   &.md-ripple-scaled {
     transform: scale(1);
