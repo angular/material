@@ -198,7 +198,7 @@ gulp.task('build-all-modules', function() {
 
 function buildModule(module, isRelease) {
   var name = module.split('.').pop();
-  gutil.log('Building module', module, isRelease && 'minified' || '', '...');
+  gutil.log('Building ' + module + (isRelease && ' minified' || '') + ' ...');
 
   return utils.filesForModule(module)
               .pipe(filterNonCodeFiles())
