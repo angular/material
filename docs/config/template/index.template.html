@@ -40,7 +40,7 @@
           ng-repeat="page in section.pages"
           ng-class="{active: menu.isPageSelected(section, page)}"
           ng-href="#{{page.url}}"
-          ink-ripple>
+          md-ink-ripple>
           <span ng-bind="page | humanizeDoc"></span>
         </a>
 
