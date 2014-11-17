@@ -1,8 +1,8 @@
 <md-bottom-sheet class="md-list md-has-header">
   <md-subheader>Comment Actions</md-subheader>
   <md-list>
-    <md-item ng-repeat="item in items" ng-click="listItemClick($index)">
-    <md-button aria-label="{{item.name}}">
+    <md-item ng-repeat="item in items">
+      <md-button aria-label="{{item.name}}" ng-click="listItemClick($index)">
         <!-- Using custom inline icon until md-icon is ready. DONT USE ME! -->
         <md-inline-list-icon icon="{{item.icon}}"></md-inline-list-icon>
         <span class="md-inline-list-icon-label">{{ item.name }}</span>

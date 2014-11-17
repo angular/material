@@ -133,6 +133,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
       backdrop.on('click touchstart', function() {
         $timeout($mdBottomSheet.cancel);
       });
+
       $mdTheming.inherit(backdrop, options.parent);
 
       $animate.enter(backdrop, options.parent, null);
@@ -144,7 +145,15 @@ function MdBottomSheetProvider($$interimElementProvider) {
       options.targetEvent && angular.element(options.targetEvent.target).blur();
       $mdTheming.inherit(bottomSheet.element, options.parent);
 
-      return $animate.enter(bottomSheet.element, options.parent);
+      return $animate.enter(bottomSheet.element, options.parent)
+        .then(function() {
+          var focusableItems = angular.element(
+            element[0].querySelector('button') ||
+            element[0].querySelector('a') ||
+            element[0].querySelector('[ng-click]')
+          );
+          focusableItems.eq(0).focus();
+        });
 
     }
 

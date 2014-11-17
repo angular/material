@@ -1,8 +1,8 @@
 <md-bottom-sheet class="md-grid">
   <md-list>
-    <md-item ng-repeat="item in items" ng-click="listItemClick($index)">
+    <md-item ng-repeat="item in items">
 
-      <md-button class="md-grid-item-content" aria-label="{{item.name}}">
+      <md-button class="md-grid-item-content" aria-label="{{item.name}}" ng-click="listItemClick($index)">
         <div class="md-icon-container">
           <md-inline-grid-icon icon="{{item.icon}}"></md-inline-grid-icon>
         </div>
