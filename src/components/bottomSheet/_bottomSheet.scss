@@ -17,7 +17,7 @@ md-bottom-sheet {
   border-top: 1px solid;
 
   transform: translate3d(0, $bottom-sheet-hidden-bottom-padding, 0);
-  transition: 0.2s linear;
+  transition: $swift-ease-out;
   transition-property: transform;
 
   &.md-has-header {
@@ -38,6 +38,7 @@ md-bottom-sheet {
 
   &.ng-leave-active {
     transform: translate3d(0, 100%, 0) !important;
+    transition: $swift-ease-in;
   }
 
   .md-subheader {
