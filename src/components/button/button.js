@@ -27,7 +27,7 @@ angular.module('material.components.button', [
  * become a `<button>` element.
  *
  * @param {boolean=} mdNoInk If present, disable ripple ink effects.
- * @param {boolean=} disabled If present, disable selection.
+ * @param {expression=} ngDisabled En/Disable based on the expre
  * @param {string=} ariaLabel Publish the button label used by screen-readers for accessibility. Defaults to the button's text.
  *
  * @usage
