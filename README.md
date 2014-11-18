@@ -31,10 +31,10 @@ In its current early state, use AngularJS Material Design at your own risk.  API
 If you wish to use angular-material anyway, you can:
 
 - `bower install angular-material` to the get latest stable release 
-  > (or download the files directly from the [bower-material repository](https://github.com/angular/bower-material)).
+  > or download the files directly from the [bower-material repository](https://github.com/angular/bower-material).
 
 - `bower install angular-material#master` to get the version just committed to master 
-  > (less stable than a release).
+  > Note that `master` is less stable than a release.
 
 View the [README in the bower-material repository](https://github.com/angular/bower-material/tree/master/README.md) for how to get started.
 
