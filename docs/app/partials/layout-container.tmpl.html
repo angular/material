@@ -22,9 +22,10 @@
   <h3 class="layout-title">Layout Attribute</h3>
   <p>
     Use the <code>layout</code> attribute on an element to arrange its children
-    horizontally in a row (<code>layout="horizontal"</code>), or vertically in
+    horizontally in a row (<code>layout="row"</code>), or vertically in
     a column (<code>layout="vertical"</code>). The layout attribute's value
-    describes what the "main axis" is for its children.
+    describes what the "main axis" is for its children. It uses words that adhere
+    to the flexbox specification.
   </p>
 
   <hljs lang="html">
@@ -44,8 +45,8 @@
 
   <p>
     From the ground up the layout system is built around being responsive to viewport size.
-    Out of the box it comes with useful and customizable breakpoints, which can be easily reused.
-    The <code>layout</code> attribute used with "horizontal" or "vertical" values define arrangement on all device sizes.
+    Out of the box it comes with useful, which can be easily reused.
+    The <code>layout</code> attribute used with "row" or "column" values define arrangement on all device sizes.
     If you wish to define a layout depending upon the device size, there are
     other <code>layout</code> attributes available:
   </p>
@@ -55,13 +56,16 @@
       <code>layout</code> sets the default layout on all devices.
     </li>
     <li>
-      <code>layout-sm</code> sets the layout on device >=600px wide.
+      <code>layout-phone</code> sets the layout on device <=600px wide.
     </li>
     <li>
-      <code>layout-md</code> sets the layout on devices >=960px wide.
+      <code>layout-tablet</code> sets the layout on devices >600px and <=960px wide.
     </li>
     <li>
-      <code>layout-lg</code> sets the layout on devices >=1200px wide.
+      <code>layout-tablet-landscape</code> sets the layout on devices >960 and <=1200px wide.
+    </li>
+    <li>
+      <code>layout-pc</code> sets the layout on devices >=1200px wide.
     </li>
   </ul>
 

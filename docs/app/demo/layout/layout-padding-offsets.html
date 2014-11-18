@@ -7,10 +7,10 @@
 </head>
 <body class="layout-demo demo-padding">
 
-  <div layout="vertical" layout-sm="horizontal" layout-padding>
+  <div layout="row" layout-phone="column" layout-padding>
 
-    <div flex offset-sm="25">
-      <div>Uno [flex][offset-sm="25"]</div>
+    <div flex offset-phone="0" offset="25">
+      <div>Uno [flex][offset-phone="0"][offset="25"]</div>
     </div>
 
     <div flex>
@@ -23,19 +23,19 @@
 
   </div>
 
-  <div layout="vertical" layout-md="horizontal" layout-padding>
+  <div layout="row" layout-phone="column" layout-padding>
 
     <div flex>
       <div>Uno [flex]</div>
     </div>
 
-    <div flex flex-md="50" offset-md="25">
-      <div>Dos [flex][flex-md="50"][offset-md="25"]</div>
+    <div flex flex-pc="50" offset-pc="25">
+      <div>Dos [flex][flex-pc="50"][offset-pc="25"]</div>
     </div>
 
   </div>
 
-  <div layout="horizontal" layout-padding>
+  <div layout="row" layout-padding>
 
     <div flex="50" offset="25">
       <div>Uno [flex="50"][offset="25"]</div>
@@ -43,19 +43,19 @@
 
   </div>
 
-  <div layout="vertical" layout-lg="horizontal" layout-padding>
+  <div layout="column" layout-pc="row" layout-tablet-landscape="row" layout-padding>
 
     <div flex>
       <div>Uno [flex]</div>
     </div>
 
-    <div flex flex-lg="25">
-      <div>Dos [flex][flex-lg="25"]</div>
+    <div flex flex-tablet-landscape="25" flex-pc="25">
+      <div>Dos [flex][flex-tablet-landscape="25"][flex-pc="25"]</div>
     </div>
 
   </div>
 
-  <div layout="horizontal" layout-padding>
+  <div layout="column" layout-padding>
 
     <div flex>
       <div>Uno [flex]</div>

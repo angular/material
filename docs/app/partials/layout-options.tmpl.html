@@ -6,7 +6,7 @@
   <p>
     From the ground up the layout system is built around being responsive to viewport size.
     Out of the box it comes with useful and customizable breakpoints, which can be easily reused.
-    The <code>layout</code> attribute used with "horizontal" or "vertical" values define arrangement on all device sizes.
+    The <code>layout</code> attribute used with "row" or "column" values define arrangement on all device sizes.
     If you wish to define a layout depending upon the device size, there are
     other <code>layout</code> attributes available:
   </p>
@@ -16,13 +16,16 @@
       <code>layout</code> sets the default layout on all devices.
     </li>
     <li>
-      <code>layout-sm</code> sets the layout on device >=600px wide.
+      <code>layout-phone</code> sets the layout on device <600px wide.
     </li>
     <li>
-      <code>layout-md</code> sets the layout on devices >=960px wide.
+      <code>layout-tablet</code> sets the layout on devices >=600px and <960px wide.
     </li>
     <li>
-      <code>layout-lg</code> sets the layout on devices >=1200px wide.
+      <code>layout-tablet-landscape</code> sets the layout on devices >=960px and <1200px wide.
+    </li>
+    <li>
+      <code>layout-pc</code> sets the layout on devices >=1200px wide.
     </li>
   </ul>
 
@@ -60,52 +63,44 @@
 
   <table>
     <tr>
-      <td>block</td>
-      <td><code>display: block</code></td>
-    </tr>
-    <tr>
-      <td>block-sm</td>
-      <td><code>display: block</code> when the small media query is active.</td>
-    </tr>
-    <tr>
-      <td>block-md</td>
-      <td><code>display: block</code> when the medium media query is active.</td>
-    </tr>
-    <tr>
-      <td>block-lg</td>
-      <td><code>display: block</code> when the large media query is active.</td>
-    </tr>
-    <tr>
-      <td>inline-block</td>
-      <td><code>display: inline-block</code></td>
-    </tr>
-    <tr>
-      <td>inline-block-sm</td>
-      <td><code>display: inline-block</code> when the small media query is active.</td>
-    </tr>
-    <tr>
-      <td>inline-block-md</td>
-      <td><code>display: inline-block</code> when the medium media query is active.</td>
-    </tr>
-    <tr>
-      <td>inline-block-lg</td>
-      <td><code>display: inline-block</code> when the large media query is active.</td>
-    </tr>
-    <tr>
       <td>hide</td>
       <td><code>display: none</code></td>
     </tr>
     <tr>
-      <td>hide-sm</td>
-      <td><code>display: none</code> when the small media query is active.</td>
+      <td>hide-phone</td>
+      <td><code>display: none</code> when the phone media query is active.</td>
     </tr>
     <tr>
-      <td>hide-md</td>
-      <td><code>display: none</code> when the medium media query is active.</td>
+      <td>hide-tablet</td>
+      <td><code>display: none</code> when the tablet media query is active.</td>
     </tr>
     <tr>
-      <td>hide-lg</td>
-      <td><code>display: none</code> when the large media query is active.</td>
+      <td>hide-tablet-landscape</td>
+      <td><code>display: none</code> when the tablet-landscape media query is active.</td>
+    </tr>
+    <tr>
+      <td>hide-pc</td>
+      <td><code>display: none</code> when the pc media query is active.</td>
+    </tr>
+    <tr>
+      <td>show</td>
+      <td>negates hide operator</td>
+    </tr>
+    <tr>
+      <td>show-phone</td>
+      <td>negates hide operator when the phone media query is active.</td>
+    </tr>
+    <tr>
+      <td>show-tablet</td>
+      <td>negates hide operator when the tablet media query is active.</td>
+    </tr>
+    <tr>
+      <td>show-tablet-landscape</td>
+      <td>negates hide operator when the tablet-landscape media query is active.</td>
+    </tr>
+    <tr>
+      <td>show-pc</td>
+      <td>negates hide operator when the pc media query is active.</td>
     </tr>
   </table>
 

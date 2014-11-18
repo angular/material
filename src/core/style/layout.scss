@@ -69,7 +69,7 @@
     $offsetName: 'offset-#{$name}';
   }
 
-  // (1-19) * 5 = 5-95%
+  // (0-19) * 5 = 0-95%
   @for $i from 0 through 19 {
     [#{$flexName}="#{$i * 5}"] {
       flex: 0 0 #{$i * 5 + '%'};
@@ -111,7 +111,7 @@
   @include layout-for-size(phone);
   @include flex-properties-for-size(phone);
 }
-@media (min-width: $layout-breakpoint-sm + 1) and (max-width: $layout-breakpoint-lg) {
+@media (min-width: $layout-breakpoint-sm + 1) and (max-width: $layout-breakpoint-md) {
   @include layout-for-size(tablet);
   @include flex-properties-for-size(tablet);
 }

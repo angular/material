@@ -3,8 +3,8 @@
   <p>
     Child elements of a layout element can be aligned using the <code>layout-align</code>
     attribute. In each demo, the center black line represents the "main axis",
-    which is the primary axis along which child element are laid out. For a horizontal layout,
-    child elements will line up horizontally along the main axis. For a vertical layout,
+    which is the primary axis along which child element are laid out. For a row layout,
+    child elements will line up horizontally along the main axis. For a column layout,
     child elements will line up vertically along the main axis. Alternatively, the "cross axis"
     is the imaginary line perpendicular to the black main axis line.
   </p>
@@ -34,7 +34,7 @@
   <h3 class="layout-title">Main Axis: Start</h3>
   <p>
     The <code>layout-align="start"</code> attribute will position the cell to the left for a
-    a horizontal layout, and at the top for a vertical layout. (Stretches the cross axis by default)
+    a row layout, and at the top for a column layout. (Stretches the cross axis by default)
   </p>
   <div class="code-view">
     <div layout="row" layout-align="start" class="inline-demo">
@@ -54,7 +54,7 @@
   <h3 class="layout-title">Main Axis: End</h3>
   <p>
     The <code>layout-align="end"</code> attribute will position the cell to the right for a
-    a horizontal layout, and at the bottom for a vertical layout. (Stretches the cross axis by default)
+    a row layout, and at the bottom for a column layout. (Stretches the cross axis by default)
   </p>
   <div class="code-view">
     <div layout="row" layout-align="end" class="inline-demo">
