@@ -6,6 +6,9 @@
 
 Our goal is to deliver a lean, lightweight set of AngularJS-native UI elements that implement the material design system for use in Angular SPAs.
 
+![venn](https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png)
+
+
 This project is still in early preview. It is a complementary effort to the [Polymer](http://www.polymer-project.org/) project's [paper elements collection](http://www.polymer-project.org/docs/elements/paper-elements.html).
 
 > Please note that using Angular Material requires the use of **Angular 1.3.x** or higher. These components are intended to work in the latest version of "evergreen" browsers (Chrome, Firefox, Internet Explorer, Safari). 
