@@ -25,6 +25,11 @@ angular.module('material.components.radioButton', [
  * container for the 1..n grouped radio buttons; specified using nested
  * `<md-radio-button>` tags.
  *
+ * Note: `<md-radio-group>` and `<md-radio-button>` handle tabindex differently
+ * than the native `<input type='radio'>` controls. Whereas the native controls
+ * force the user to tab through all the radio buttons, `<md-radio-group>`
+ * is focusable, and by default the `<md-radio-button>`s are not.
+ *
  * @param {string} ngModel Assignable angular expression to data-bind to.
  * @param {boolean=} mdNoInk Use of attribute indicates flag to disable ink ripple effects.
  *
@@ -75,10 +80,11 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming) {
     rgCtrl.init(ngModelCtrl);
 
     element.attr({
-      'role': 'radiogroup',
-      'tabIndex': '0'
-    })
-    .on('keydown', keydownListener);
+              'role': 'radiogroup',
+              'tabIndex': element.attr('tabindex') || '0'
+            })
+            .on('keydown', keydownListener);
+
   }
 
   function RadioGroupController($element) {
