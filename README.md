@@ -54,9 +54,13 @@ View the [README in the bower-material repository](https://github.com/angular/bo
 
 ### Development
 
-- `npm install` for gulp deps
-- `git submodule update --init` to add icons subfolder
-- `bower install` for angular deps
+For each milestone release, always run:
+
+- `npm update` for gulp deps
+- `bower update` for angular deps
+ 
+The following command line tasks are available:
+
 - `gulp build` (alias `gulp`) to build, add `--release` flag to uglify & strip console.log.
 - `gulp watch` to build & rebuild on changes
 - `gulp validate` to test and jshint
