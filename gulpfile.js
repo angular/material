@@ -72,7 +72,7 @@ var LR_PORT = argv.port || argv.p || 8080;
 var buildModes = {
   'closure': {
     transform: utils.addClosurePrefixes,
-    outputDir: path.join(config.outputDir, 'components/closure') + path.sep,
+    outputDir: path.join(config.outputDir, 'modules/closure') + path.sep,
     useBower: false
   },
   'demos': {
@@ -82,7 +82,7 @@ var buildModes = {
   },
   'default': {
     transform: gutil.noop,
-    outputDir: path.join(config.outputDir, 'components/js') + path.sep,
+    outputDir: path.join(config.outputDir, 'modules/js') + path.sep,
     useBower: true
   }
 };
@@ -175,8 +175,6 @@ gulp.task('karma-sauce', function(done) {
 gulp.task('build', ['build-themes', 'build-scss', 'build-js']);
 
 gulp.task('build-all-modules', function() {
-  gutil.log("Generating '/dist/components/js/**/*.*' ");
-
   return gulp.src(['src/components/*', 'src/core/'])
     .pipe(through2.obj(function(folder, enc, next) {
       var moduleId = folder.path.indexOf('components') > -1 ?
@@ -184,7 +182,7 @@ gulp.task('build-all-modules', function() {
         'material.' + path.basename(folder.path);
 
       var stream;
-      if (IS_RELEASE_BUILD) {
+      if (IS_RELEASE_BUILD && BUILD_MODE.useBower) {
         stream = mergeStream(buildModule(moduleId, true), buildModule(moduleId, false));
       } else {
         stream = buildModule(moduleId, false);
@@ -206,7 +204,7 @@ function buildModule(module, isRelease) {
     .pipe(gulpif('*.js', buildModuleJs(name)))
     .pipe(BUILD_MODE.transform())
     .pipe(insert.prepend(config.banner))
-    .pipe(gulpif(isRelease && BUILD_MODE.useBower, buildMin()))
+    .pipe(gulpif(isRelease, buildMin()))
     .pipe(gulp.dest(BUILD_MODE.outputDir + name));
 
 
@@ -219,7 +217,6 @@ function buildModule(module, isRelease) {
           .replace(/.css$/, '.min.css');
       })
       .pipe(utils.buildModuleBower, name, VERSION)
-      .pipe(gulp.dest, BUILD_MODE.outputDir + name)
       ();
   }
 
@@ -227,7 +224,6 @@ function buildModuleJs(name) {
   return lazypipe()
     .pipe(ngAnnotate)
     .pipe(concat, name + '.js')
-    .pipe(gulpif, IS_RELEASE_BUILD, uglify({ preverseComments: 'some' }))
     ();
 }
 
@@ -447,6 +443,7 @@ function buildTheme(theme) {
     ])
     .pipe(concat(theme + '-theme.scss'))
     .pipe(utils.hoistScssVariables())
+    .pipe(insert.prepend(config.banner))
     .pipe(sass())
     .pipe(gulp.dest(config.outputDir + 'themes/'));
 }

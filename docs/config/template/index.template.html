@@ -12,9 +12,9 @@
 <script src="docs-demo-scripts.js"></script>
 <link rel="stylesheet" href="docs.css">
 </head>
-<body layout="row">
+<body layout="horizontal">
 
-  <md-sidenav layout="column"
+  <md-sidenav layout="vertical"
     class="md-sidenav-left md-whiteframe-z2"
     md-component-id="left"
     md-is-locked-open="$media('md')">
@@ -49,20 +49,20 @@
 
   </md-sidenav>
 
-  <div layout="column" layout-fill tabIndex="-1" role="main">
+  <div layout="vertical" layout-fill tabIndex="-1" role="main">
     <md-toolbar md-theme="indigo" class="md-medium-tall app-toolbar">
 
       <div class="md-toolbar-tools" ng-click="openMenu()">
-        <button class="menu-icon" hide show-phone show-tablet aria-label="Toggle Menu">
+        <button class="menu-icon" hide-md aria-label="Toggle Menu">
           <md-icon icon="img/icons/ic_menu_24px.svg">
           </md-icon>
         </button>
-        <p hide-phone ng-if="menu.currentSection.name">
+        <p hide show-sm ng-if="menu.currentSection.name">
           {{menu.currentSection.name}}
         </p>
-        <span layout="column" layout-align="center center" class="menu-separator-icon"
+        <span layout="vertical" layout-align="center center" class="menu-separator-icon"
           ng-if="menu.currentPage">
-          <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide-phone>
+          <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide block-sm>
         </span>
         <h2 ng-bind="(menu.currentPage | humanizeDoc) || 'Angular Material'" flex>
         </h2>
@@ -86,10 +86,10 @@
         </md-button>
         <md-button ng-href="{{currentDoc.githubUrl}}">
           <md-icon icon="/img/icons/ic_launch_24px.svg"></md-icon>
-          <span hide-phone>View on Github</span>
-          <span hide show-phone>Source</span>
+          <span hide block-sm>View on Github</span>
+          <span hide-sm>Source</span>
         </md-button>
-        <md-button ng-href="{{currentDoc.githubEditUrl}}" hide-phone>
+        <md-button ng-href="{{currentDoc.githubEditUrl}}" hide show-sm>
           <md-icon icon="/img/icons/ic_launch_24px.svg"></md-icon>
           <span>Improve This Doc</span>
         </md-button>
@@ -100,16 +100,15 @@
     <md-content ng-view md-scroll-y flex class="md-padding"></md-content>
 
   </div>
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-   <script>
-       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-       ga('create', 'UA-8594346-14', 'auto');
-       ga('send', 'pageview');
-   </script>
+      ga('create', 'UA-8594346-14', 'auto');
+      ga('send', 'pageview');
+  </script>
 
 </body>
 </html>
