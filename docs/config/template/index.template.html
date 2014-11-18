@@ -12,9 +12,9 @@
 <script src="docs-demo-scripts.js"></script>
 <link rel="stylesheet" href="docs.css">
 </head>
-<body layout="horizontal">
+<body layout="row">
 
-  <md-sidenav layout="vertical"
+  <md-sidenav layout="column"
     class="md-sidenav-left md-whiteframe-z2"
     md-component-id="left"
     md-is-locked-open="$media('md')">
@@ -49,7 +49,7 @@
 
   </md-sidenav>
 
-  <div layout="vertical" layout-fill tabIndex="-1" role="main">
+  <div layout="column" layout-fill tabIndex="-1" role="main">
     <md-toolbar md-theme="indigo" class="md-medium-tall app-toolbar">
 
       <div class="md-toolbar-tools" ng-click="openMenu()">
@@ -60,7 +60,7 @@
         <p hide show-sm ng-if="menu.currentSection.name">
           {{menu.currentSection.name}}
         </p>
-        <span layout="vertical" layout-align="center center" class="menu-separator-icon"
+        <span layout="column" layout-align="center center" class="menu-separator-icon"
           ng-if="menu.currentPage">
           <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide block-sm>
         </span>
