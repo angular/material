@@ -98,8 +98,9 @@ function TabsDirective($parse, $mdTheming) {
         // overflow: hidden container when paginating
         '<div class="md-header-items-container" md-tabs-pagination>' +
           // flex container for <md-tab> elements
-          '<div class="md-header-items" ng-transclude></div>' +
-          '<md-tabs-ink-bar></md-tabs-ink-bar>' +
+          '<div class="md-header-items">' +
+            '<md-tabs-ink-bar></md-tabs-ink-bar>' +
+          '</div>' +
         '</div>' +
 
         '<button class="md-paginator md-next" ' +
@@ -113,10 +114,14 @@ function TabsDirective($parse, $mdTheming) {
     link: postLink
   };
 
-  function postLink(scope, element, attr, tabsCtrl) {
+  function postLink(scope, element, attr, tabsCtrl, transclude) {
     $mdTheming(element);
     configureAria();
     watchSelected();
+
+    transclude(scope.$parent, function(clone) {
+      angular.element(element[0].querySelector('.md-header-items')).append(clone);
+    });
 
     function configureAria() {
       element.attr({

@@ -7,7 +7,7 @@
             ng-disabled="tab.disabled"
             label="{{tab.title}}">
 
-    <div class="demo-tab tab{{$index%4}}" layout="row" layout-fill layout-align="space-around center">
+    <div class="demo-tab tab{{$index%4}}" layout="column" layout-fill layout-align="space-around center">
         <div ng-bind="tab.content"></div>
         <md-button class="md-warn" ng-click="removeTab( tab )">
           Remove Tab
