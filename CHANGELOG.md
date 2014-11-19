@@ -44,13 +44,15 @@ v0.6.0-rc1 releases the following changes:
 #### Breaking Changes
 
 * To provide improved clarity and easier usages, the Layout system has been revised ([d51a44c5](https://github.com/angular/material/commit/d51a44c5629763cb52c61df39881ef665448734e)). <br/>See the updated [Layout sections](https://material.angularjs.org/#/layout/container) for details. We associate labels with specific breakpoints:
-> | Label | Size (dp) | Attribute
+
+| Label | Size (dp) | Attribute |
 |--------|--------|--------|
 | Phone | 0  &lt;= size &lt;= 600 | layout-phone |
 | Tablet | 600  &gt; size &lt;= 960 | layout-tablet |
-| Tablet-Landscape | 960  &gt;= size &lt;= 12000 | layout-tablet-landscape |
+| Tablet-Landscape | 960  &gt;= size &lt;= 1200 | layout-tablet-landscape |
 | PC | &gt; 1200 | layout-pc |
-> **<u>Example 1</u>**: To use a *horizontal* layout and responsively change to *vertical* for screen sizes < 600 dpi:
+
+> **<u>Example 1</u>**: To use a *horizontal* layout and responsively change to *vertical* for screen sizes < 600 dp:
 >```html
 <!-- original  '<div layout="vertical" layout-sm="horizontal">'  becomes -->
 <div layout="row" layout-phone="column">
