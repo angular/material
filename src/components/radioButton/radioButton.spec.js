@@ -71,6 +71,16 @@ describe('radioButton', function() {
     expect(rbElements.eq(0).attr('aria-label')).toEqual('Blue');
   }));
 
+  it('should preserve tabindex', inject(function($compile, $rootScope, $mdConstant) {
+    var element = $compile('<md-radio-group ng-model="color" tabindex="3">' +
+                            '<md-radio-button value="blue"></md-radio-button>' +
+                            '<md-radio-button value="green"></md-radio-button>' +
+                          '</md-radio-group>')($rootScope);
+
+    var rbGroupElement = element.eq(0);
+    expect(rbGroupElement.attr('tabindex')).toEqual('3');
+  }));
+
   it('should be operable via arrow keys', inject(function($compile, $rootScope, $mdConstant) {
     var element = $compile('<md-radio-group ng-model="color">' +
                             '<md-radio-button value="blue"></md-radio-button>' +
