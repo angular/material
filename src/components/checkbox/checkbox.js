@@ -55,7 +55,7 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
     transclude: true,
     require: '?ngModel',
     template: 
-      '<div class="md-container" md-ink-ripple="checkbox">' +
+      '<div class="md-container" md-ink-ripple md-ink-ripple-checkbox>' +
         '<div class="md-icon"></div>' +
       '</div>' +
       '<div ng-transclude class="md-label"></div>',
