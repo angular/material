@@ -88,24 +88,24 @@ it is disabled, change it to an ng-disabled expression.
 
 * All material component attributes and are now namespaced with the `md-` prefix; these changes do not affect ng- prefixes or standard html5 prefixes ([eb2f2f8a](https://github.com/angular/material/commit/eb2f2f8a8c668142742e4b4c1e18cf6d91a533db)). Affected attributes:
 
- * &lt;md-button **md-no-ink**="" &gt;
- * &lt;md-content&gt;		([92b76435](https://github.com/angular/material/commit/92b76435df5cb88c7bba3289c04daf17c911eee0))
-   - md-scroll-x
-   - md-scroll-y
-   - md-scroll-xy
- * &lt;md-divider **md-inset**="" &gt;
- * &lt;md-linear-progress **md-buffer-value**="someValue" **md-mode**="query" &gt;
- * &lt;md-circular-rogress **md-mode**="query" **md-diameter**="60" &gt;
- * &lt;md-sidenav&gt;
-   - **md-is-open**="isOpen"
-   - **md-is-locked-open**="isLockedOpen"
-   - **md-component-id**="my-sidenav"
- * &lt;md-tabs&gt;
-   - **md-selected**="selectedIndex"
-   - **md-on-select**="doSomething()"
-   - **md-on-deselect**="doSomething()"
-   - **md-active**="tabIsActive"
- * &lt;md-text-float **md-fid**="someId"&gt;
+  * &lt;md-button **md-no-ink**="" &gt;
+  * &lt;md-content&gt;		([92b76435](https://github.com/angular/material/commit/92b76435df5cb88c7bba3289c04daf17c911eee0))
+    - **md-scroll-x**
+    - **md-scroll-y**
+    - **md-scroll-xy**
+  * &lt;md-divider **md-inset**="" &gt;
+  * &lt;md-linear-progress **md-buffer-value**="someValue" **md-mode**="query" &gt;
+  * &lt;md-circular-rogress **md-mode**="query" **md-diameter**="60" &gt;
+  * &lt;md-sidenav&gt;
+    - **md-is-open**="isOpen"
+    - **md-is-locked-open**="isLockedOpen"
+    - **md-component-id**="my-sidenav"
+  * &lt;md-tabs&gt;
+    - **md-selected**="selectedIndex"
+    - **md-on-select**="doSomething()"
+    - **md-on-deselect**="doSomething()"
+    - **md-active**="tabIsActive"
+  * &lt;md-text-float **md-fid**="someId"&gt;
 
 * When using the `<md-button>` directive, the compiled element will now be a normal `<a>` or `<button>` element with the *class="md-button"* attribute. ([d835f9ee](https://github.com/angular/material/commit/d835f9ee7e35ea72dc6a7bd154163386ea0f3ce3))
 > Any css referencing the `md-button` element selector
