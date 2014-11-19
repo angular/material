@@ -53,18 +53,18 @@ function MdProgressCircularDirective($$rAF, $mdConstant, $mdTheming) {
 
   return {
     restrict: 'E',
-    template: 
-      '<div class="md-wrapper1"><div class="md-wrapper2"><div class="md-circle">' +
-        '<div class="md-mask md-full">' +
-          '<div class="md-fill"></div>' +
-        '</div>' +
-        '<div class="md-mask md-half">' +
-          '<div class="md-fill"></div>' +
-          '<div class="md-fill md-fix"></div>' +
-        '</div>' +
-        '<div class="md-shadow"></div>' +
-      '</div>' +
-      '<div class="md-inset"></div></div></div>',
+    template:
+        '<div class="md-spinner-wrapper">' +
+          '<div class="md-inner">' +
+            '<div class="md-gap"></div>' +
+            '<div class="md-left">' +
+              '<div class="md-half-circle"></div>' +
+            '</div>' +
+            '<div class="md-right">' +
+              '<div class="md-half-circle"></div>' +
+            '</div>' +
+          '</div>' +
+        '</div>',
     compile: compile
   };
 
