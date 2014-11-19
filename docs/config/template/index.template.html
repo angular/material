@@ -28,19 +28,19 @@
     <md-content flex>
       <div ng-repeat="section in menu.sections">
 
-        <button class="menu-item menu-title"
-          ng-class="{active: menu.isSectionSelected(section)}"
+        <button class="menu-item menu-title md-menu-item"
           ng-click="menu.toggleSelectSection(section)"
-          md-ink-ripple>
+          md-active="menu.isSectionSelected(section)"
+          md-ink-ripple="#bbb">
           {{section.name}}
         </button>
 
-        <a class="menu-item menu-sub-item"
+        <a class="menu-item menu-sub-item md-menu-item"
           ng-show="menu.isSectionSelected(section)"
           ng-repeat="page in section.pages"
-          ng-class="{active: menu.isPageSelected(section, page)}"
           ng-href="#{{page.url}}"
-          md-ink-ripple>
+          md-active="menu.isPageSelected(section, page)"
+          md-ink-ripple="#bbb">
           <span ng-bind="page | humanizeDoc"></span>
         </a>
 

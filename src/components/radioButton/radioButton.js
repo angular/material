@@ -197,7 +197,7 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
     restrict: 'E',
     require: '^mdRadioGroup',
     transclude: true,
-    template: '<div class="md-container" md-ink-ripple="checkbox">' +
+    template: '<div class="md-container" md-ink-ripple md-ink-ripple-checkbox>' +
                 '<div class="md-off"></div>' +
                 '<div class="md-on"></div>' +
               '</div>' +
