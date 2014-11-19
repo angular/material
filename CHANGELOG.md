@@ -1,3 +1,120 @@
+<a name="0.6.0-rc1"></a>
+## 0.6.0-rc1  (2014-11-18)
+
+v0.6.0-rc1 releases the following changes:
+
+- improvements to the ink Ripple effects
+- namespace prefixing Material attributes
+- revised the Layout system to be more intuitive and responsive
+- added enhancements for modular builds and distrbution for each component
+- improved minification and SHA tags for each deployed .js and .css file
+- numerous bug fixes to improve stability, adds responsive features, and enhances API documentation.
+
+#### Bug Fixes
+
+* **button:** fix css for md-fab icon position when href is present ([a7763fde](https://github.com/angular/material/commit/a7763fde0e62a36f31ee318349a847bee2fed4f0), closes [#591](https://github.com/angular/material/issues/591))
+* **card:** make md-card themeable ([55cdb5b7](https://github.com/angular/material/commit/55cdb5b7e78c3d70a7b205cf15f2ba05fb5d54b2), closes [#619](https://github.com/angular/material/issues/619))
+* **demos:** dialog, bottomsheet, and toast now display within properly within the bounding d ([5909f0a5](https://github.com/angular/material/commit/5909f0a56ea6e0ca04eb08df4b8b680eef771a50))
+* **docs:**
+  * fix error in flex docs ([a02469b2](https://github.com/angular/material/commit/a02469b23632e04bdd107949bec2561213ddf59a))
+  * improve responsive docs ([4a846b4c](https://github.com/angular/material/commit/4a846b4c2f87d29ee746b855a030d01af7ea1f4e))
+* **layout:** updates layout attributes in index template ([669d0048](https://github.com/angular/material/commit/669d0048e6397e9056a4e3cf4b936d1197979d87))
+* **md-button:** improve a11y: make title, aria-label work ([ff576289](https://github.com/angular/material/commit/ff576289bfed2eeec08ee7d743ddcaf0c441e3c7), closes [#512](https://github.com/angular/material/issues/512))
+* **ripple:** fix ripple sometimes appearing when the element is disabled ([58eaef49](https://github.com/angular/material/commit/58eaef49e931e4e7137a59485db627f461e594b7))
+* **sidenav:**
+  * make backdrop invisible when sidenav is locked-open ([4a75d599](https://github.com/angular/material/commit/4a75d5990176e1902db8626156f8518346ce0e60))
+  * clean registry when element is destroyed ([e7a3bd8d](https://github.com/angular/material/commit/e7a3bd8d03306593dbee292db85ed8147ae934eb), closes [#473](https://github.com/angular/material/issues/473))
+* **slider:** update discrete slider thumb text while dragging ([2877585e](https://github.com/angular/material/commit/2877585e6dbbf44199428c59601e954a3b31f1e1), closes [#622](https://github.com/angular/material/issues/622))
+* **themes:** bring blue, red, and green colors up to latest spec ([de3ff4b8](https://github.com/angular/material/commit/de3ff4b800955d204a8cce504332bd8d52f5b2cf))
+
+
+#### Features
+
+* **bottomSheet:** focus the first available button on open ([768cc098](https://github.com/angular/material/commit/768cc098fdc4b09e1c5f3faab526a7ed9e324702), closes [#571](https://github.com/angular/material/issues/571))
+* **interimElement:** allow options.parent to be a selector ([342051e0](https://github.com/angular/material/commit/342051e0af2ca5cd42555b30a47249006d6228b7), closes [#640](https://github.com/angular/material/issues/640))
+* **layout:**
+  * add new layout system ([d51a44c5](https://github.com/angular/material/commit/d51a44c5629763cb52c61df39881ef665448734e))
+  * add `layout-wrap` attribute to set flex-wrap to wrap ([4f755eab](https://github.com/angular/material/commit/4f755eab67046864e61eba8f4345688bed461863), closes [#634](https://github.com/angular/material/issues/634))
+* **mdThemingProvider:** add alwaysWatchTheme options, fix docs ([0a404088](https://github.com/angular/material/commit/0a4040886f288ed22fd0fef182eace13150cd732))
+* **radioGroup:** add up/down arrow navigation ([367e47db](https://github.com/angular/material/commit/367e47dbabf638154cd8155d9132f01aa05cd81b), closes [#538](https://github.com/angular/material/issues/538))
+* **styles:** add 'swift' css transitions to all components according to spec ([15bb142c](https://github.com/angular/material/commit/15bb142c0aa53e5fcfa421526a5fb0ab1c3e9b1e), closes [#611](https://github.com/angular/material/issues/611))
+* **tabs:** add accessibility links between tabs and content ([5d3bab56](https://github.com/angular/material/commit/5d3bab566ec71ff9f4a65faad7ef2674cd04c1b9))
+
+
+#### Breaking Changes
+
+* To provide improved clarity and easier usages, the Layout system has been revised ([d51a44c5](https://github.com/angular/material/commit/d51a44c5629763cb52c61df39881ef665448734e)). <br/>See the updated [Layout sections](https://material.angularjs.org/#/layout/container) for details. We associate labels with specific breakpoints:
+> | Label | Size (dp) | Attribute
+|--------|--------|--------|
+| Phone | 0  &lt;= size &lt;= 600 | layout-phone |
+| Tablet | 600  &gt; size &lt;= 960 | layout-tablet |
+| Tablet-Landscape | 960  &gt;= size &lt;= 12000 | layout-tablet-landscape |
+| PC | &gt; 1200 | layout-pc |
+> <br/>
+>Here are some examples of usage changes: <br/><br/>
+>
+> *  To use a *horizontal* layout and responsively change to *vertical* for screen sizes < 600 dpi:
+> > `<div layout="vertical" layout-sm="horizontal">` <br/> becomes <br/>`<layout="row" layout-phone="column">`.
+>
+>* To use a *horizontal* layout and change to *vertical* for *phone* and *tablet* screen sizes: 
+> > `<div layout="vertical" layout-md="horizontal">` <br/> becomes <br/> `<layout="row" layout-phone="column" layout-tablet="column">`
+>* To show an element except when on a *phone* (or smaller) screen size:
+> > `<div hide show-sm>` <br/> becomes <br/> `<div hide-phone>`
+>* To always hide an element, but show it only on phone (or smaller) devices:
+> > `<div hide-sm>` <br/> becomes <br/> `<div hide show-phone>`
+
+* For performance, the *disabled* attribute is no longer supported; instead the *ng-disabled* attribute is now read to check if a component is disabled. ([2ece8cd7](https://github.com/angular/material/commit/2ece8cd794c4c28df4fb6a7683492da71aa2c382))
+> If you use the `disabled` attribute on a component to set whether
+it is disabled, change it to an ng-disabled expression.
+> Change your code from this:
+> ```html
+> <md-checkbox disabled></md-checkbox>
+> ```
+> To this:
+> ```html
+> <md-checkboxn ng-disabled="true"></md-checkbox>
+> ```
+
+* All material component attributes and are now namespaced with the `md-` prefix; these changes do not affect ng- prefixes or standard html5 prefixes ([eb2f2f8a](https://github.com/angular/material/commit/eb2f2f8a8c668142742e4b4c1e18cf6d91a533db)). Affected attributes:
+
+ * &lt;md-button **md-no-ink**="" &gt;
+ * &lt;md-content&gt;		([92b76435](https://github.com/angular/material/commit/92b76435df5cb88c7bba3289c04daf17c911eee0))
+   - md-scroll-x
+   - md-scroll-y
+   - md-scroll-xy
+ * &lt;md-divider **md-inset**="" &gt;
+ * &lt;md-linear-progress **md-buffer-value**="someValue" **md-mode**="query" &gt;
+ * &lt;md-circular-rogress **md-mode**="query" **md-diameter**="60" &gt;
+ * &lt;md-sidenav&gt;
+   - **md-is-open**="isOpen"
+   - **md-is-locked-open**="isLockedOpen"
+   - **md-component-id**="my-sidenav"
+ * &lt;md-tabs&gt;
+   - **md-selected**="selectedIndex"
+   - **md-on-select**="doSomething()"
+   - **md-on-deselect**="doSomething()"
+   - **md-active**="tabIsActive"
+ * &lt;md-text-float **md-fid**="someId"&gt;
+
+* When using the `<md-button>` directive, the compiled element will now be a normal `<a>` or `<button>` element with the *class="md-button"* attribute. ([d835f9ee](https://github.com/angular/material/commit/d835f9ee7e35ea72dc6a7bd154163386ea0f3ce3))
+> Any css referencing the `md-button` element selector
+should now reference the `.md-button` class selector. Change your CSS overrides from this:
+>
+>```css
+>md-button {
+>  color: red;
+>}
+>```
+>
+>To this:
+>
+>```css
+>.md-button {
+>  color: red;
+>}
+>```
+
+
 <a name="0.5.0"></a>
 ## 0.5.1  (2014-10-31)
 
