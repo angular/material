@@ -50,18 +50,27 @@ v0.6.0-rc1 releases the following changes:
 | Tablet | 600  &gt; size &lt;= 960 | layout-tablet |
 | Tablet-Landscape | 960  &gt;= size &lt;= 12000 | layout-tablet-landscape |
 | PC | &gt; 1200 | layout-pc |
-> <br/>
->Here are some examples of usage changes: <br/><br/>
+> **<u>Example 1</u>**: To use a *horizontal* layout and responsively change to *vertical* for screen sizes < 600 dpi:
+>```html
+<!-- original  '<div layout="vertical" layout-sm="horizontal">'  becomes -->
+<div layout="row" layout-phone="column">
+> ```
 >
-> *  To use a *horizontal* layout and responsively change to *vertical* for screen sizes < 600 dpi:
-> > `<div layout="vertical" layout-sm="horizontal">` <br/> becomes <br/>`<layout="row" layout-phone="column">`.
->
->* To use a *horizontal* layout and change to *vertical* for *phone* and *tablet* screen sizes: 
-> > `<div layout="vertical" layout-md="horizontal">` <br/> becomes <br/> `<layout="row" layout-phone="column" layout-tablet="column">`
->* To show an element except when on a *phone* (or smaller) screen size:
-> > `<div hide show-sm>` <br/> becomes <br/> `<div hide-phone>`
->* To always hide an element, but show it only on phone (or smaller) devices:
-> > `<div hide-sm>` <br/> becomes <br/> `<div hide show-phone>`
+> **<u>Example 2</u>**: To use a *horizontal* layout and change to *vertical* for *phone* and *tablet* screen sizes: 
+>```html
+<!-- original  '<div layout="vertical" layout-md="horizontal">'  becomes -->
+<div layout="row" layout-phone="column" layout-tablet="column">
+```
+> **<u>Example 3</u>**: To show an element except when on a *phone* (or smaller) screen size:
+>```html
+<!-- original  '<div hide show-sm>'  becomes -->
+<div hide-phone>
+```
+> **<u>Example 4</u>**: To always hide an element, but show it only on phone (or smaller) devices:
+>```html
+<!-- original  '<div hide-sm>'  becomes -->
+<div hide show-phone>
+```
 
 * For performance, the *disabled* attribute is no longer supported; instead the *ng-disabled* attribute is now read to check if a component is disabled. ([2ece8cd7](https://github.com/angular/material/commit/2ece8cd794c4c28df4fb6a7683492da71aa2c382))
 > If you use the `disabled` attribute on a component to set whether
@@ -72,7 +81,7 @@ it is disabled, change it to an ng-disabled expression.
 > ```
 > To this:
 > ```html
-> <md-checkboxn ng-disabled="true"></md-checkbox>
+> <md-checkbox ng-disabled="true"></md-checkbox>
 > ```
 
 * All material component attributes and are now namespaced with the `md-` prefix; these changes do not affect ng- prefixes or standard html5 prefixes ([eb2f2f8a](https://github.com/angular/material/commit/eb2f2f8a8c668142742e4b4c1e18cf6d91a533db)). Affected attributes:
