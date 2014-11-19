@@ -248,12 +248,7 @@ input {
   &.md-ripple-scaled {
     transform: scale(1);
   }
-  &.md-ripple-full, &.md-ripple-visible {
+  &.md-ripple-active, &.md-ripple-full, &.md-ripple-visible {
     opacity: 0.20;
-  }
-  &.md-ripple-held {
-    opacity: 0.15;
-    transform: scale(0.35);
-    transition: none;
   }
 }

@@ -68,7 +68,7 @@ function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria) {
   function postLink(scope, element, attr) {
     var node = element[0];
     $mdTheming(element);
-    $mdInkRipple.attachButtonBehavior(element);
+    $mdInkRipple.attachButtonBehavior(scope, element);
 
     var elementHasText = node.textContent.trim();
     if (!elementHasText) {
