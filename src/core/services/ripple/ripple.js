@@ -79,10 +79,10 @@ function InkRippleService($window, $timeout) {
           },
           function (newValue) {
             isActive = newValue;
-            if (isActive) {
-              if (ripples.length === 0) {
+            if (isActive && !ripples.length) {
+              $timeout(function () {
                 createRipple(0, 0);
-              }
+              }, 0, false);
             }
             angular.forEach(ripples, updateElement);
           }

@@ -3,14 +3,11 @@ body {
   overflow: hidden;
   max-width: 100%; 
   max-height: 100%;
+  font-size: 14px;
 }
 
 a {
   color: #3f51b5;
-}
-
-md-toolbar.md-medium-tall {
-  height: 88px;
 }
 
 table {
@@ -79,8 +76,6 @@ code:not(.highlight) {
   margin-right: 1px;
 }
 
-
-
 .md-sidenav-inner {
   background: #fff;
 }
@@ -115,38 +110,34 @@ code:not(.highlight) {
   text-decoration: none;
   width: 100%;
   z-index: 1;
-  -webkit-transition: 0.2s ease-in-out;
+  -webkit-transition: 0.45s cubic-bezier(0.35, 0, 0.25, 1);
   -webkit-transition-property: max-height, background-color, opacity;
-  -moz-transition: 0.2s ease-in-out;
+  -moz-transition: 0.45s cubic-bezier(0.35, 0, 0.25, 1);
   -moz-transition-property: max-height, background-color, opacity;
-  transition: 0.2s ease-in-out;
+  transition: 0.45s cubic-bezier(0.35, 0, 0.25, 1);
   transition-property: max-height, background-color, opacity;
 }
 .menu-item.ng-hide {
   max-height: 0;
   opacity: 0;
 }
-.menu-item:hover, .menu-item:focus {
+.menu-item:hover {
   color: #999;
 }
-.menu-item.menu-sub-item.active {
-  background-color: #eeeeee;
+.menu-item:focus {
   font-weight: bold;
-  color: #4285f4;
 }
 .menu-item.menu-title {
   color: #888;
-  font-size: 16px;
+  font-size: 14px;
   padding-left: 16px;
   text-align: left;
   text-transform: uppercase;
-}
-.menu-item.menu-title.active {
-  font-weight: bold;
+  transition: color 0.35s cubic-bezier(0.35, 0, 0.25, 1);
 }
 .menu-item.menu-title:hover,
-.menu-item.menu-title:focus {
-  color: #AAA;
+.menu-item.menu-title.active {
+  color: #1976d2;
 }
 
 .menu-icon {
@@ -159,17 +150,18 @@ code:not(.highlight) {
 }
 
 .demo-container {
+<<<<<<< HEAD
   border-radius: 4px;
   margin-top: 16px;
-  -webkit-transition: 0.02s padding ease-in-out;
-  transition: 0.02s padding ease-in-out;
+  -webkit-transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
+  transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
   position: relative;
   padding-bottom: 0;
 }
 .demo-source-tabs {
   z-index: 1;
-  -webkit-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
+  transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
   max-height: 448px;
   min-height: 448px;
   background: #fff;
@@ -183,7 +175,11 @@ md-tabs.demo-source-tabs .md-header {
 
 
 md-tabs.demo-source-tabs md-tab-label {
-  color: #f3f3f3 !important;
+  color: #ccc !important;
+}
+
+md-tabs.demo-source-tabs .active md-tab-label {
+  color: #fff !important;
 }
 
 .demo-source-tabs.ng-hide {
@@ -238,20 +234,19 @@ md-tabs.demo-source-tabs md-tab-label {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.36);
 }
 .demo-toolbar .md-button {
-  color: white;
+  color: #616161;
 }
 
 md-toolbar.demo-toolbar,
 .demo-source-tabs md-tab,
 .demo-source-tabs .tabs-header {
-  background: #00BCD4 !important;
-  color: white;
+  background: #E0E0E0 !important;
+  color: #616161;
 }
 md-toolbar.demo-toolbar md-tab-label {
   color: #99E4EE
 }
-md-toolbar.demo-toolbar .md-button:hover, 
-md-toolbar.demo-toolbar .md-button:focus,
+md-toolbar.demo-toolbar .md-button:hover,
 md-toolbar.demo-toolbar .md-button.active {
   background: rgba(0,0,0,0.1);
 }
@@ -322,7 +317,7 @@ md-toolbar.demo-toolbar .md-button {
 .api-params-label { 
   margin-right: 8px;
   text-align: center;
-  margin-top: 16px;
+  margin-top: 14px;
   -webkit-align-self: flex-start;
   -moz-align-self: flex-start;
   -ms-flex-item-align: start;
@@ -378,7 +373,7 @@ ul.methods li h3 {
     list-style: default;
   }
   ul.methods .method-function-syntax {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 

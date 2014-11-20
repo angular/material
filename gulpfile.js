@@ -439,7 +439,8 @@ function buildTheme(theme) {
   return gulp.src([
       'src/core/style/color-palette.scss',
       'themes/' + theme + '-theme.scss',
-      'themes/_default-theme.scss'
+      'themes/_default-theme.scss',
+      'src/core/style/theme-levels.scss'
     ])
     .pipe(concat(theme + '-theme.scss'))
     .pipe(utils.hoistScssVariables())
