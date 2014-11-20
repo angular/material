@@ -57,31 +57,31 @@ $mdDialog.show(
 
 | Label | Size (dp) | Attribute |
 |--------|--------|--------|
-| Phone | 0  &lt;= size &lt;= 600 | layout-phone |
-| Tablet | 600  &gt; size &lt;= 960 | layout-tablet |
-| Tablet-Landscape | 960  &gt;= size &lt;= 1200 | layout-tablet-landscape |
-| PC | &gt; 1200 | layout-pc |
+| Phone | 0  &lt;= size &lt;= 600 | layout-sm |
+| Tablet | 600  &gt; size &lt;= 960 | layout-md |
+| Tablet-Landscape | 960  &gt;= size &lt;= 1200 | layout-lg |
+| PC | &gt; 1200 | layout-gt-lg |
 
 > **<u>Example 1</u>**: To use a *horizontal* layout and responsively change to *vertical* for screen sizes < 600 dp:
 >```html
 <!-- original  '<div layout="vertical" layout-sm="horizontal">'  becomes -->
-<div layout="row" layout-phone="column">
+<div layout="row" layout-sm="column">
 > ```
 >
 > **<u>Example 2</u>**: To use a *horizontal* layout and change to *vertical* for *phone* and *tablet* screen sizes: 
 >```html
 <!-- original  '<div layout="vertical" layout-md="horizontal">'  becomes -->
-<div layout="row" layout-phone="column" layout-tablet="column">
+<div layout="row" layout-sm="column" layout-md="column">
 ```
 > **<u>Example 3</u>**: To show an element except when on a *phone* (or smaller) screen size:
 >```html
 <!-- original  '<div hide show-sm>'  becomes -->
-<div hide-phone>
+<div hide-sm>
 ```
 > **<u>Example 4</u>**: To always hide an element, but show it only on phone (or smaller) devices:
 >```html
 <!-- original  '<div hide-sm>'  becomes -->
-<div hide show-phone>
+<div hide show-sm>
 ```
 
 * For performance, the *disabled* attribute is no longer supported; instead the *ng-disabled* attribute is now read to check if a component is disabled. ([2ece8cd7](https://github.com/angular/material/commit/2ece8cd794c4c28df4fb6a7683492da71aa2c382))

@@ -1,41 +1,6 @@
-<div layout="column" layout-fill class="doc-content">
-  <div flex layout="column">
-
-    <section ng-repeat="demo in demos" 
-      class="demo-container md-whiteframe-z1 {{currentComponent.componentId}}-{{demo.id}}"
-      ng-class="{'show-source':demo.$showSource}" >
-
-      <md-toolbar class="demo-toolbar" >
-        <div class="md-toolbar-tools">
-          <span>{{demo.label}}</span>
-          <span flex></span>
-          <md-button
-            style="min-width: 72px;"
-            ng-click="demo.$showSource = !demo.$showSource">
-            Source
-          </md-button>
-        </div>
-      </md-toolbar>
-
-      <!-- Source views -->
-      <md-tabs style="border-top: solid 1px #00ADC3;"
-        class="demo-source-tabs" ng-show="demo.$showSource">
-        <md-tab ng-repeat="file in demo.$files"
-                      md-active="file === demo.$selectedFile"
-                      ng-click="demo.$selectedFile = file"
-                      label="{{file.name}}">
-            <md-content md-scroll-y class="demo-source-container">
-                    <hljs code="file.contents"
-                          lang="{{file.fileType}}" >
-                    </hljs>
-            </md-content>
-        </md-tab>
-      </md-tabs>
-
-      <!-- Live Demos -->
-      <div demo-include="demo">
-      </div>
-    </section>
-
-  </div>
-</div>
+<docs-demo ng-repeat="demo in demos" 
+  demo-id="{{demo.id}}" demo-title="{{demo.label}}" demo-module="{{demo.ngModule.module}}">
+  <demo-file ng-repeat="file in demo.$files"
+             name="{{file.name}}" contents="file.httpPromise">
+  </demo-file>
+</docs-demo>
