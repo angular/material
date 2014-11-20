@@ -387,3 +387,9 @@ md-content.demo-source-container > hljs > pre > code.highlight {
   left: 0px;
   right: 0px;
 }
+
+
+.extraPad {
+  padding-left:32px !important;
+  padding-right:32px !important;
+}
