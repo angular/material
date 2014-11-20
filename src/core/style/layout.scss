@@ -81,6 +81,11 @@
     $flexName: 'flex-#{$name}';
   }
 
+  [#{$flexName}] {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
   // (0-19) * 5 = 0-95%
   @for $i from 0 through 19 {
     [#{$flexName}="#{$i * 5}"] {
