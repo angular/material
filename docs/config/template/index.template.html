@@ -10,22 +10,34 @@
 
 <script src="docs.js"></script>
 <script src="docs-demo-scripts.js"></script>
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
 <link rel="stylesheet" href="docs.css">
 </head>
-<body layout="row">
+<body layout="row" md-theme="blue">
 
   <md-sidenav layout="column"
-    class="md-sidenav-left md-whiteframe-z2"
-    md-component-id="left"
-    md-is-locked-open="$media('md')">
+              style="overflow: hidden; display: flex;"
+              class="md-sidenav-left md-whiteframe-z2"
+              md-component-id="left"
+              md-is-locked-open="$media('md')">
 
-    <md-toolbar class="md-medium-tall">
-      <h1 class="md-toolbar-tools" style="padding-top:25px;">
-        <a href="" ng-click="goHome()">Angular<br/>Material Design</a>
+    <md-toolbar md-theme-levels="{ backgroundColor: 900 }" style="min-height: 64px; max-height:64px;" layout="column">
+      <h1 class="md-toolbar-tools" flex layout="column">
+        <a href="" ng-click="goHome()" layout="row" flex>
+          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve" style="
+              width: 40px; height: 40px;">
+            <path d="M 50 0 L 100 14 L 92 80 L 50 100 L 8 80 L 0 14 Z" fill="#b2b2b2"></path>
+            <path d="M 50 5 L 6 18 L 13.5 77 L 50 94 Z" fill="#E42939" md-theme-levels="{ fill: 700 }"></path>
+            <path d="M 50 5 L 94 18 L 86.5 77 L 50 94 Z" fill="#B72833" md-theme-levels="{ fill: 900 }"></path>
+            <path d="M 50 7 L 83 75 L 72 75 L 65 59 L 50 59 L 50 50 L 61 50 L 50 26 Z" fill="#b2b2b2"></path>
+            <path d="M 50 7 L 17 75 L 28 75 L 35 59 L 50 59 L 50 50 L 39 50 L 50 26 Z" fill="#fff"></path>
+          </svg>
+          <div flex style="line-height:40px; text-indent: 15px;">Material Design</div>
+        </a>
       </h1>
     </md-toolbar>
 
-    <md-content flex>
+    <md-content flex style="overflow: auto;">
       <div ng-repeat="section in menu.sections">
 
         <button class="menu-item menu-title md-menu-item"
@@ -50,49 +62,47 @@
   </md-sidenav>
 
   <div layout="column" layout-fill tabIndex="-1" role="main">
-    <md-toolbar md-theme="indigo" class="md-medium-tall app-toolbar">
-
-      <div class="md-toolbar-tools" ng-click="openMenu()">
-        <button class="menu-icon" hide show-sm show-md aria-label="Toggle Menu">
-          <md-icon icon="img/icons/ic_menu_24px.svg">
-          </md-icon>
-        </button>
-        <p hide-sm ng-if="menu.currentSection.name">
-          {{menu.currentSection.name}}
-        </p>
-        <span layout="column" layout-align="center center" class="menu-separator-icon"
-          ng-if="menu.currentPage">
-          <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide-sm>
-        </span>
-        <h2 ng-bind="(menu.currentPage | humanizeDoc) || 'Angular Material'" flex>
-        </h2>
-      </div>
-
-      <div class="md-toolbar-tools api-options-bar"
-        ng-if="path().indexOf('demo') > -1">
-        <span flex></span>
-        <md-button ng-repeat="doc in currentComponent.docs"
-          ng-href="#{{doc.url}}" aria-label="{{ doc | humanizeDoc }}">
-          <span ng-bind="doc | humanizeDoc | directiveBrackets"></span>
-        </md-button>
-      </div>
-
-      <div class="md-toolbar-tools api-options-bar with-icon"
-        ng-if="currentDoc">
-        <span flex></span>
-        <md-button ng-href="#/demo/{{currentComponent.name}}">
-          <md-icon icon="/img/icons/ic_play_arrow_24px.svg"></md-icon>
-          <span>View Demo</span>
-        </md-button>
-        <md-button ng-href="{{currentDoc.githubUrl}}">
-          <md-icon icon="/img/icons/ic_launch_24px.svg"></md-icon>
-          <span hide-sm>View on Github</span>
-          <span hide show-sm>Source</span>
-        </md-button>
-        <md-button ng-href="{{currentDoc.githubEditUrl}}" hide-sm>
-          <md-icon icon="/img/icons/ic_launch_24px.svg"></md-icon>
-          <span>Improve This Doc</span>
-        </md-button>
+    <md-toolbar md-theme-levels="{ backgroundColor: 900 }" layout="column">
+      <div class="md-toolbar-tools" ng-click="openMenu()" flex layout="column">
+        <div layout="row" flex>
+          <button class="menu-icon" hide show-phone show-tablet aria-label="Toggle Menu" style="position: relative; top: -5px;">
+            <md-icon icon="img/icons/ic_menu_24px.svg"></md-icon>
+          </button>
+          <div style="line-height: 28px;" hide-phone ng-if="menu.currentSection.name">{{menu.currentSection.name}}</div>
+          <span layout="column" layout-align="center center" class="menu-separator-icon" ng-if="menu.currentPage" style="padding: 0 10px;">
+            <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide-phone>
+          </span>
+          <div style="line-height: 28px;" ng-bind="(menu.currentPage | humanizeDoc) || 'Angular Material'"></div>
+          <div flex></div>
+          <md-button ng-if="!currentDoc && path().indexOf('demo')" ng-repeat="doc in currentComponent.docs" ng-href="#{{doc.url}}" aria-label="{{ doc | humanizeDoc }}" layout="column">
+            {{doc | humanizeDoc | directiveBrackets}}
+          </md-button>
+          <md-button ng-if="currentDoc" ng-href="#/demo/{{currentComponent.name}}" style="position: relative; padding-left: 30px; margin-right: 15px;">
+            <md-icon icon="/img/icons/ic_play_arrow_24px.svg" style="
+                height: 28px;
+                position: absolute;
+                left: 0px;
+                top: -3px;"></md-icon>
+            <span>View Demo</span>
+          </md-button>
+          <md-button ng-if="currentDoc" ng-href="{{currentDoc.githubUrl}}" style="position: relative; padding-left: 30px; margin-right: 15px;">
+            <md-icon icon="/img/icons/ic_launch_24px.svg" style="
+                height: 28;
+                position: absolute;
+                left: 0px;
+                top: -3px;"></md-icon>
+            <span hide-phone>View on Github</span>
+            <span hide show-phone>Source</span>
+          </md-button>
+          <md-button ng-if="currentDoc" ng-href="{{currentDoc.githubEditUrl}}" hide-phone style="position: relative; padding-left: 30px;">
+            <md-icon icon="/img/icons/ic_launch_24px.svg" style="
+                height: 28;
+                position: absolute;
+                left: 0px;
+                top: -3px;"></md-icon>
+            <span>Improve This Doc</span>
+          </md-button>
+        </div>
       </div>
 
     </md-toolbar>
