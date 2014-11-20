@@ -12,22 +12,7 @@ DocsApp
       }
 
       return function(scope, element, attr) {
-
-        //var contentParent = angular.element('<pre><code class="highlight" ng-non-bindable></code></pre>');
-        //var codeElement = contentParent.find('code');
-        //
-        //// Attribute? code is the evaluation
-        //if (attr.code) {
-        //  code = scope.$eval(attr.code);
-        //}
-        //if (!code) return;
-        //var highlightedCode = hljs.highlight(attr.language || attr.lang, code.trim());
-        //highlightedCode.value = highlightedCode.value.replace(/=<span class="hljs-value">""<\/span>/gi, '');
-        //codeElement.append(highlightedCode.value).addClass('highlight');
-        //
-        //element.append(contentParent);
-
-
+        var contentParent;
 
         if (attr.code) {
           // Attribute? code is the evaluation
@@ -35,57 +20,42 @@ DocsApp
         }
 
         if ( code ) {
-          var contentParent = angular.element('<pre><code class="highlight" ng-non-bindable></code></pre>');
-
+          contentParent = angular.element('<pre><code class="highlight" ng-non-bindable></code></pre>');
           element.append(contentParent);
-
           // Defer highlighting 1-frame to prevent GA interference...
-          $timeout(function() {
-            var codeElement = contentParent.find('code');
-            var highlightedCode = hljs.highlight(attr.language || attr.lang, code.trim(), true);
+          $timeout(render, 0, false);
+        }
 
-                highlightedCode.value = highlightedCode.value
-                  .replace(/=<span class="hljs-value">""<\/span>/gi, '')
-                  .replace('<head>', '')
-                  .replace('<head/>', '');
+        function render() {
 
-            codeElement.append(highlightedCode.value).addClass('highlight');
-          },0, false);
+          var codeElement = contentParent.find('code');
+          var lines = code.split('\n');
+
+          // Remove empty lines
+          lines = lines.filter(function(line) {
+            return line.trim().length;
+          });
+
+          // Make it so each line starts at 0 whitespace
+          var firstLineWhitespace = lines[0].match(/^\s*/)[0] || '';
+          lines = lines.map(function(line) {
+            return line
+              .replace(new RegExp('^' + firstLineWhitespace), '')
+              .replace(/\s+$/, '');
+          });
+
+          var highlightedCode = hljs.highlight(attr.language || attr.lang, lines.join('\n'), true);
+
+              highlightedCode.value = highlightedCode.value
+                .replace(/=<span class="hljs-value">""<\/span>/gi, '')
+                .replace('<head>', '')
+                .replace('<head/>', '');
+
+          codeElement.append(highlightedCode.value).addClass('highlight');
+
         }
       };
     }
   };
 }])
-
-.directive('codeView', function() {
-  return {
-    restrict: 'C',
-    link: function(scope, element) {
-      var code = element.eq(0).clone();
-      code.children().removeAttr('class');
-
-      var highlightedCode = hljs.highlight('html', code[0].innerHTML);
-
-      highlightedCode.value = highlightedCode.value.replace(/=<span class="hljs-value">""<\/span>/gi, '');
-
-      element.prepend('<pre><code>' + highlightedCode.value + '</code></pre>');
-      element.find('code').addClass('highlight');
-    }
-  };
-})
-
-.directive('iframeCodeView', function() {
-  return {
-    restrict: 'E',
-    link: function(scope, element) {
-      var iFrame = element[0].firstElementChild;
-      if(iFrame && iFrame.src) {
-        var links = angular.element(
-          '<p><a class="md-button md-button-raised md-button-colored" href="' + iFrame.src + '" target="_blank">Full View</a> \
-           <a class="md-button md-button-raised md-button-colored" href="view-source:' + iFrame.src + '" target="_blank">View Source</a></p>'
-        );
-        element.append(links);
-      }
-    }
-  };
-});
+;

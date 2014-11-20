@@ -1,29 +1,40 @@
 <div ng-controller="LayoutCtrl" layout="column" layout-fill class="layout-content layout-guidelines">
 
   <p>
-    Child elements of a layout element can be aligned using the <code>layout-align</code>
-    attribute. In each demo, the center black line represents the "main axis",
-    which is the primary axis along which child element are laid out. For a row layout,
-    child elements will line up horizontally along the main axis. For a column layout,
-    child elements will line up vertically along the main axis. Alternatively, the "cross axis"
-    is the imaginary line perpendicular to the black main axis line.
+    When the <code>layout-align</code> attribute is given on a a layout element, its value
+    answers two questions:
+    <ol>
+      <li>
+        How will children be aligned in the layout's main direction (horizontally in a row layout, vertically in a column layout)?
+      </li>
+      <li>
+        How will children be aligned perpindicular to the layout's direction (vertically in a row layout, horizontally in a column layout)?
+      </li>
+    </ol>
   </p>
 
-
-
-  <h3 class="layout-title">Main Axis: Center</h3>
+  <docs-demo demo-title='layout="row" layout-align="center"' class="small-demo">
+    <demo-file name="index.html">
+      <div layout="row" layout-align="center">
+        <div>center</div>
+        <div>center</div>
+      </div>
+    </demo-file>
+  </docs-demo>
+  <docs-demo demo-title='layout="column" layout-align="center"' class="small-demo">
+    <demo-file name="index.html">
+      <div layout="column" layout-align="center">
+        <div>center</div>
+        <div>center</div>
+      </div>
+    </demo-file>
+  </docs-demo>
   <p>
-    The <code>layout-align="center"</code> attribute will center the cells across the main axis.
-    Note that each demo's center black line represents the "main axis". Additionally, by default
-    each item will "stretch" the cross axis, which is explained later.
+    <code>layout-align="center"</code> will center children across the layout direction.
   </p>
-  <div class="code-view">
-    <div layout="row" layout-align="center" class="inline-demo">
-      <div>center</div>
-      <div>center</div>
-    </div>
+
   </div>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="column" layout-align="center" class="inline-demo">
       <div>center</div>
       <div>center</div>
@@ -36,13 +47,13 @@
     The <code>layout-align="start"</code> attribute will position the cell to the left for a
     a row layout, and at the top for a column layout. (Stretches the cross axis by default)
   </p>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="row" layout-align="start" class="inline-demo">
       <div>start</div>
       <div>start</div>
     </div>
   </div>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="column" layout-align="start" class="inline-demo">
       <div>start</div>
       <div>start</div>
@@ -56,13 +67,13 @@
     The <code>layout-align="end"</code> attribute will position the cell to the right for a
     a row layout, and at the bottom for a column layout. (Stretches the cross axis by default)
   </p>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="row" layout-align="end" class="inline-demo">
       <div>end</div>
       <div>end</div>
     </div>
   </div>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="column" layout-align="end" class="inline-demo">
       <div>end</div>
       <div>end</div>
@@ -76,14 +87,14 @@
     The <code>layout-align="space-around"</code> attribute will evenly distribute
     the cells and the space around them. (Stretches the cross axis by default)
   </p>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="row" layout-align="space-around" class="inline-demo">
       <div>Uno</div>
       <div>Dos</div>
       <div>Tres</div>
     </div>
   </div>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="column" layout-align="space-around" class="inline-demo">
       <div>Uno</div>
       <div>Dos</div>
@@ -92,21 +103,20 @@
   </div>
 
 
-
   <h3 class="layout-title">Main Axis: Space Between</h3>
   <p>
     The <code>layout-align="space-between"</code> attribute will evenly distribute
     the cells and the free space between them, with the first cell is aligned
     at the start, and the last cell aligned at the end. (Stretches the cross axis by default)
   </p>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="row" layout-align="space-between" class="inline-demo">
       <div>Uno</div>
       <div>Dos</div>
       <div>Tres</div>
     </div>
   </div>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="column" layout-align="space-between" class="inline-demo">
       <div>Uno</div>
       <div>Dos</div>
@@ -124,13 +134,13 @@
     because there is no free space between the cells for the cells to be aligned to. Since
     each flex cell is using up all of the free space, there's no arranging that could happen.
   </p>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="row" class="inline-demo">
       <div flex>Uno</div>
       <div flex>Dos</div>
     </div>
   </div>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="column" class="inline-demo">
       <div flex>Uno</div>
       <div flex>Dos</div>
@@ -155,13 +165,13 @@
     Is it possible to center a layout's child cells by both the main and cross axes?
     Yes. Yes it is.
   </p>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="row" layout-align="center center" class="inline-demo">
       <div>center center</div>
       <div>center center</div>
     </div>
   </div>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="column" layout-align="center center" class="inline-demo">
       <div>center center</div>
       <div>center center</div>
@@ -176,13 +186,13 @@
     and in the "center" of the cross axis. Note that each demo's center black line represents the
     "main axis", which makes the imaginary perpendicular line the "cross axis".
   </p>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="row" layout-align="start center" class="inline-demo">
       <div>start center</div>
       <div>start center</div>
     </div>
   </div>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="column" layout-align="start center" class="inline-demo">
       <div>start center</div>
       <div>start center</div>
@@ -196,13 +206,13 @@
     The <code>layout-align="end center"</code> attribute packs up all of the cells at the
     "end" of the main axis, and in the "center" of the cross axis.
   </p>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="row" layout-align="end center" class="inline-demo">
       <div>end center</div>
       <div>end center</div>
     </div>
   </div>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="column" layout-align="end center" class="inline-demo">
       <div>end center</div>
       <div>end center</div>
@@ -216,13 +226,13 @@
     The <code>layout-align="center start"</code> attribute packs up all of the cells at the
     "center" of the main axis, and at the "start" of the cross axis.
   </p>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="row" layout-align="center start" class="inline-demo">
       <div>center start</div>
       <div>center start</div>
     </div>
   </div>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="column" layout-align="center start" class="inline-demo">
       <div>center start</div>
       <div>center start</div>
@@ -236,13 +246,13 @@
     The <code>layout-align="start start"</code> attribute packs up all of the cells at the
     "start" of the main axis, and at the "start" of the cross axis.
   </p>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="row" layout-align="start start" class="inline-demo">
       <div>start start</div>
       <div>start start</div>
     </div>
   </div>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="column" layout-align="start start" class="inline-demo">
       <div>start start</div>
       <div>start start</div>
@@ -256,13 +266,13 @@
     The <code>layout-align="end start"</code> attribute packs up all of the cells at the
     "end" of the main axis, and at the "start" of the cross axis.
   </p>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="row" layout-align="end start" class="inline-demo">
       <div>end start</div>
       <div>end start</div>
     </div>
   </div>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="column" layout-align="end start" class="inline-demo">
       <div>end start</div>
       <div>end start</div>
@@ -276,13 +286,13 @@
     The <code>layout-align="center end"</code> attribute packs up all of the cells at the
     "center" of the main axis, and at the "end" of the cross axis.
   </p>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="row" layout-align="center end" class="inline-demo">
       <div>center end</div>
       <div>center end</div>
     </div>
   </div>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="column" layout-align="center end" class="inline-demo">
       <div>center end</div>
       <div>center end</div>
@@ -296,13 +306,13 @@
     The <code>layout-align="start end"</code> attribute packs up all of the cells at the
     "start" of the main axis, and at the "end" of the cross axis.
   </p>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="row" layout-align="start end" class="inline-demo">
       <div>start end</div>
       <div>start end</div>
     </div>
   </div>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="column" layout-align="start end" class="inline-demo">
       <div>start end</div>
       <div>start end</div>
@@ -316,13 +326,13 @@
     The <code>layout-align="end end"</code> attribute packs up all of the cells at the
     "end" of the main axis, and at the "end" of the cross axis.
   </p>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="row" layout-align="end end" class="inline-demo">
       <div>end end</div>
       <div>end end</div>
     </div>
   </div>
-  <div class="code-view">
+  <div class="alignment-demo">
     <div layout="column" layout-align="end end" class="inline-demo">
       <div>end end</div>
       <div>end end</div>
