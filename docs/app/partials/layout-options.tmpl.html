@@ -1,13 +1,23 @@
 <div ng-controller="LayoutCtrl" layout="column" layout-fill class="layout-content">
 
-
-  <h3 class="layout-title">Responsive Layout</h3>
+  <docs-demo demo-title="Responsive Layout" class="small-demo">
+    <demo-file name="index.html">
+      <div layout="column" layout-gt-sm="row" layout-fill>
+        <div class="demo-box" flex>
+          I'm above on mobile, and to the left on larger devices.
+        </div>
+        <div class="demo-box" flex>
+          I'm below on mobile, and to the right on larger devices.
+        </div>
+      </div>
+    </demo-file>
+  </docs-demo>
 
   <p>
-    From the ground up the layout system is built around being responsive to viewport size.
-    Out of the box it comes with useful and customizable breakpoints, which can be easily reused.
-    The <code>layout</code> attribute used with "row" or "column" values define arrangement on all device sizes.
-    If you wish to define a layout depending upon the device size, there are
+    See the <a href="#/layout/container">Layout Container</a> page for a basic explanation
+    of layout attributes.
+    <br/>
+    To make your layout change depending upon the device size, there are
     other <code>layout</code> attributes available:
   </p>
 
@@ -16,93 +26,196 @@
       <code>layout</code> sets the default layout on all devices.
     </li>
     <li>
-      <code>layout-phone</code> sets the layout on device <600px wide.
+      <code>layout-sm</code> sets the layout on devices less than 600px wide (phones).
     </li>
     <li>
-      <code>layout-tablet</code> sets the layout on devices >=600px and <960px wide.
+      <code>layout-gt-sm</code> sets the layout on devices greater than 600px wide (bigger than phones).
     </li>
     <li>
-      <code>layout-tablet-landscape</code> sets the layout on devices >=960px and <1200px wide.
+      <code>layout-md</code> sets the layout on devices between 600px and 960px wide (tablets in portrait).
     </li>
     <li>
-      <code>layout-pc</code> sets the layout on devices >=1200px wide.
+      <code>layout-gt-md</code> sets the layout on devices greater than 960px wide (bigger than tablets in portrait).
+    </li>
+    <li>
+      <code>layout-lg</code> sets the layout on devices between 960 and 1200px wide (tablets in landscape).
+    </li>
+    <li>
+      <code>layout-gt-lg</code> sets the layout on devices greater than 1200px wide (computers and large screens).
     </li>
   </ul>
-
-  <br/><br/>
-
-  <h3 class="layout-title">Layout Options</h3>
-
-  <p>
-    <code>layout-padding</code> adds padding between this layout's children with
-    the <code>flex</code> attribute.
-  </p>
-
-  <hljs lang="html">
-<div layout="row" layout-padding>
-  <div flex>I'm on the left, and there's an empty area between.</div>
-  <div flex>I'm on the right, and there's an empty area between.</div>
-</div>
-  </hljs>
-
-
-  <p>
-    <code>layout-fill</code> forces the layout element to fill its parent container.
-  </p>
-  <hljs lang="html">
-<div layout="column" layout-fill>
-  This layout fills up 100% of its parent's width and height.
-</div>
-  </hljs>
-
-  <br/><br/>
+  <br/>
 
   <md-divider></md-divider>
 
-  <h3 class="layout-title">Utility Attributes</h3>
+  <docs-demo demo-title="Layout Margin and Fill" class="small-demo">
+    <demo-file name="index.html">
+      <div layout="row" layout-margin layout-fill>
+        <div class="demo-box" flex>I'm on the left, and there's an empty area around me.</div>
+        <div class="demo-box" flex>I'm on the right, and there's an empty area around me.</div>
+      </div>
+    </demo-file>
+  </docs-demo>
 
+  <p>
+    <code>layout-margin</code> adds a margin around each <code>flex</code> child. It also adds a margin to the layout container itself.
+    <br/>
+    <code>layout-fill</code> forces the layout element to fill its parent container.
+  </p>
+
+  <br/>
+
+  <md-divider></md-divider>
+
+  <docs-demo demo-title="Responsive Flex & Offset Attributes" class="small-demo">
+    <demo-file name="index.html">
+      <div layout="row">
+        <div class="demo-box" flex="33" flex-gt-sm="66">
+          I flex to one-third of the space on mobile, and two-thirds on other devices.
+        </div>
+        <div class="demo-box" flex="66" flex-gt-sm="33">
+          I flex to two-thirds of the space on mobile, and one-third on other devices.
+        </div>
+      </div>
+    </demo-file>
+  </docs-demo>
+
+  <p>
+    See the <a href="#/layout/grid">Layout Grid</a> page for a basic explanation
+    of flex and offset attributes.
+  </p>
+
+  <table>
+    <tr>
+      <td>flex</td>
+      <td>Sets flex.</td>
+    </tr>
+    <tr>
+      <td>flex-sm</td>
+      <td>Sets flex on devices less than 600px wide.</td>
+    </tr>
+    <tr>
+      <td>flex-gt-sm</td>
+      <td>Sets flex on devices greater than 600px wide.</td>
+    </tr>
+    <tr>
+      <td>flex-md</td>
+      <td>Sets flex on devices between 600px and 960px wide..</td>
+    </tr>
+    <tr>
+      <td>flex-gt-md</td>
+      <td>Sets flex on devices greater than 960px wide.
+    </tr>
+    <tr>
+      <td>flex-lg</td>
+      <td>Sets flex on devices between 960px and 1200px.</td>
+    </tr>
+    <tr>
+      <td>flex-gt-lg</td>
+      <td>Sets flex on devices greater than 1200px wide.</td>
+    </tr>
+    <tr>
+      <td>offset</td>
+      <td>Sets offset.</td>
+    </tr>
+    <tr>
+      <td>offset-sm</td>
+      <td>Sets offset on devices less than 600px wide.</td>
+    </tr>
+    <tr>
+      <td>offset-gt-sm</td>
+      <td>Sets offset on devices greater than 600px wide.</td>
+    </tr>
+    <tr>
+      <td>offset-md</td>
+      <td>Sets offset on devices between 600px and 960px wide..</td>
+    </tr>
+    <tr>
+      <td>offset-gt-md</td>
+      <td>Sets offset on devices greater than 960px wide.
+    </tr>
+    <tr>
+      <td>offset-lg</td>
+      <td>Sets offset on devices between 960px and 1200px.</td>
+    </tr>
+    <tr>
+      <td>offset-gt-lg</td>
+      <td>Sets offset on devices greater than 1200px wide.</td>
+    </tr>
+  </table>
+
+  <md-divider></md-divider>
+
+  <docs-demo demo-title="Hide and Show Attributes" class="small-demo">
+    <demo-file name="index.html">
+      <div layout layout-align="center center">
+        <md-subheader hide-sm>
+          I'm hidden on mobile and shown on larger devices.
+        </md-subheader>
+        <md-subheader hide show-sm>
+          I'm shown on mobile and hidden on larger devices.
+        </md-subheader>
+      </div>
+    </demo-file>
+  </docs-demo>
+  <br/>
   <table>
     <tr>
       <td>hide</td>
       <td><code>display: none</code></td>
     </tr>
     <tr>
-      <td>hide-phone</td>
-      <td><code>display: none</code> when the phone media query is active.</td>
+      <td>hide-sm</td>
+      <td><code>display: none</code> on devices less than 600px wide.</td>
     </tr>
     <tr>
-      <td>hide-tablet</td>
-      <td><code>display: none</code> when the tablet media query is active.</td>
+      <td>hide-gt-sm</td>
+      <td><code>display: none</code> on devices greater than 600px wide.</td>
     </tr>
     <tr>
-      <td>hide-tablet-landscape</td>
-      <td><code>display: none</code> when the tablet-landscape media query is active.</td>
+      <td>hide-md</td>
+      <td><code>display: none</code> on devices between 600px and 960px wide..</td>
     </tr>
     <tr>
-      <td>hide-pc</td>
-      <td><code>display: none</code> when the pc media query is active.</td>
+      <td>hide-gt-md</td>
+      <td><code>display: none</code> on devices greater than 960px wide.
+    </tr>
+    <tr>
+      <td>hide-lg</td>
+      <td><code>display: none</code> on devices between 960px and 1200px.</td>
+    </tr>
+    <tr>
+      <td>hide-gt-lg</td>
+      <td><code>display: none</code> on devices greater than 1200px wide.</td>
     </tr>
     <tr>
       <td>show</td>
-      <td>negates hide operator</td>
+      <td>Negates hide.</td>
     </tr>
     <tr>
-      <td>show-phone</td>
-      <td>negates hide operator when the phone media query is active.</td>
+      <td>show-sm</td>
+      <td>Negates hide on devices less than 600px wide.</td>
     </tr>
     <tr>
-      <td>show-tablet</td>
-      <td>negates hide operator when the tablet media query is active.</td>
+      <td>show-gt-sm</td>
+      <td>Negates hide on devices greater than 600px wide.</td>
     </tr>
     <tr>
-      <td>show-tablet-landscape</td>
-      <td>negates hide operator when the tablet-landscape media query is active.</td>
+      <td>show-md</td>
+      <td>Negates hide on devices between 600px and 960px wide..</td>
     </tr>
     <tr>
-      <td>show-pc</td>
-      <td>negates hide operator when the pc media query is active.</td>
+      <td>show-gt-md</td>
+      <td>Negates hide on devices greater than 960px wide.
+    </tr>
+    <tr>
+      <td>show-lg</td>
+      <td>Negates hide on devices between 960px and 1200px.</td>
+    </tr>
+    <tr>
+      <td>show-gt-lg</td>
+      <td>Negates hide on devices greater than 1200px wide.</td>
     </tr>
   </table>
-
 
 </div>

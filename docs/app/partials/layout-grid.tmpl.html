@@ -1,111 +1,120 @@
 <div ng-controller="LayoutCtrl" layout="column" layout-fill class="layout-content">
 
   <p>
-    The grid system is different than most because of its use of the
-    <a href="http://www.w3.org/TR/css3-flexbox/">CSS Flexible Box Layout Module</a> standard. With flexbox
-    you have the power to simply add in the columns and rows required, and they'll evenly take up the
-    available space of their parent layout container. There's no restriction to a 12 column grid, or
-    having to explicitly state how large each column should be.
+    To customize the size and position of elements in a layout, use the
+    <code>flex</code>, <code>offset</code>, and <code>flex-order</code> attributes.
+  </p>
+
+  <md-divider></md-divider>
+
+  <docs-demo demo-title="Flex Attribute" class="small-demo">
+    <demo-file name="index.html">
+    <div layout="row">
+      <md-button flex
+        class="md-primary md-raised" md-theme="light-blue-dark">
+        One<br/>[flex]
+      </md-button>
+      <md-button flex
+        class="md-primary md-raised" md-theme="indigo">
+        Two<br/>[flex]
+      </md-button>
+      <md-button flex hide-sm
+        class="md-primary md-raised" md-theme="purple">
+        Three<br/>[flex]
+      </md-button>
+    </div>
+    </demo-file>
+  </docs-demo>
+  <p>
+    Add the <code>flex</code> attribute to a layout's child element, and it
+    will flex (stretch) to fill the available area.
   </p>
 
 
   <md-divider></md-divider>
-  <h3 class="layout-title">Flex Attribute</h3>
+
+  <docs-demo demo-title="Flex Attribute Values" class="small-demo">
+    <demo-file name="index.html">
+      <div layout="row" layout-margin>
+        <md-button flex="33"
+          class="md-primary md-raised" md-theme="light-blue-dark">
+          flex="33"
+        </md-button>
+        <md-button flex="40"
+          class="md-primary md-raised" md-theme="indigo">
+          flex="40"
+        </md-button>
+        <md-button flex hide-sm
+          class="md-primary md-raised" md-theme="purple">
+          flex
+        </md-button>
+      </div>
+    </demo-file>
+  </docs-demo>
   <p>
-    Child elements of a layout container with the <code>flex</code>
-    attribute will "flex", or stretch, to fill the available area within its parent layout container.
-    If a design requires three evenly spaced elements, simply add three elements with a
-    <code>flex</code> attribute. Elements without the flex attribute will take up their natural size,
-    whereas elements with the flex attribute will evenly fill in the available area.
+    A layout child's <code>flex</code> attribute can be given an integer value from 0-100.
+    The element will stretch to the percentage of available space matching the value.
+    <br/><br/>
+    The <code>flex</code> attribute value is restricted to 33, 66, and multiples
+    of five.
+    <br/>
+    For example: <code>flex="5", flex="20", "flex="33", flex="50", flex="66", flex="75", ...</code>.
   </p>
-  <iframe-code-view>
-    <iframe src="/demo/layout/flex-cell.html"></iframe>
-  </iframe-code-view>
+  <p>
+  See the <a href="#/layout/options">layout options page</a> for more information on responsive flex attributes.
+  </p>
 
 
   <md-divider></md-divider>
-  <h3 class="layout-title">Layout Padding</h3>
+  <docs-demo demo-title="Offset Attribute" class="small-demo">
+    <demo-file name="index.html">
+      <div layout="row" layout-margin>
+        <md-button flex offset="10"
+          class="md-primary md-raised" md-theme="light-blue-dark">
+          flex<br/>offset="10"
+        </md-button>
+        <md-button flex offset="33"
+          class="md-primary md-raised" md-theme="indigo">
+          flex<br/>offset="33"
+        </md-button>
+        <md-button flex hide-sm
+          class="md-primary md-raised" md-theme="purple">
+          flex
+        </md-button>
+      </div>
+    </demo-file>
+  </docs-demo>
   <p>
-    This layout has padding, or gutters, between each cell by adding the
-    <code>layout-padding</code> attribute. The previous examples added in their own
-    margins/padding manually, whereas the layout-padding attribute spaces it all out
-    evenly.
+    Add the <code>offset</code> attribute with a value from 0-100 to
+    make a layout child be offset by the given percent. The <code>offset</code>
+    attribute has the same restrictions as the <code>flex</code> attribute: It is defined only at 33, 66, and multiples of five.
   </p>
-  <iframe-code-view>
-    <iframe src="/demo/layout/layout-padding.html"></iframe>
-  </iframe-code-view>
-
-
+  <p>
+    See the <a href="#/layout/options">layout options page</a> for more information on responsive offset attributes.
+  </p>
 
   <md-divider></md-divider>
-  <h3 class="layout-title">Layout Padding with Available Space Percents</h3>
+  <docs-demo demo-title="Flex Order Attribute" class="small-demo">
+    <demo-file name="index.html">
+      <div layout="row" layout-margin>
+        <md-button flex flex-order="3"
+          class="md-primary md-raised" md-theme="light-blue-dark">
+          One
+        </md-button>
+        <md-button flex flex-order="2"
+          class="md-primary md-raised" md-theme="indigo">
+          Two
+        </md-button>
+        <md-button flex flex-order="1"
+          class="md-primary md-raised" md-theme="purple">
+          Three
+        </md-button>
+      </div>
+    </demo-file>
+  </docs-demo>
   <p>
-    Flex attributes can be given integers to represent the percentage of the available space
-    it should take up. Note that elements which are not given a percentage still
-    fill up the available area. Adjust the window size to see
-    the demo's responsive layout attributes at work.
+    Add the <code>flex-order</code> attribute to a layout child to set its
+    position within the layout.
   </p>
-  <p>
-    Note that flex attributes are only defined in increments of 5, with the exception of 
-    33 and 66. (ie. <code>flex=5, flex=10, flex=15, ... flex=33, flex=35, ... flex=66, etc</code>) 
-    This avoids needlessly including extra css in the framework. If you need more
-    specificity than what is provided by our breakpoints, use stylesheets to set the
-    <code>flex-basis: x%; max-width: x%;</code> properties.
-  </p>
-  <iframe-code-view>
-    <iframe src="/demo/layout/layout-padding-percents.html"></iframe>
-  </iframe-code-view>
-
-
-
-  <md-divider></md-divider>
-  <h3 class="layout-title">Layout Padding with Offsets</h3>
-  <p>
-    Elements can be offset from the left, but still allow the gutters to line up correctly.
-    Adjust the window size to see the demo's responsive layout attributes at work.
-  </p>
-  <iframe-code-view>
-    <iframe src="/demo/layout/layout-padding-offsets.html"></iframe>
-  </iframe-code-view>
-
-
-
-  <md-divider></md-divider>
-  <h3 class="layout-title">Layout Order</h3>
-  <p>
-    Child elements of a layout container can have their order changed through the use of the
-    <code>layout-order</code> attribute, and respective responsive
-    attributes such as: layout-order-sm, layout-order-md, and layout-order-lg. Reordering elements
-    is useful when the placement of a cell should be changed depending on the viewport size.
-  </p>
-  <p>
-    In the demo, notice how the default size (the smallest) has each of the elements in their
-    natural order determined by its markup. However, as the viewport changes size then each
-    individual cell can change their order using the layout-order attribute.
-  </p>
-  <iframe-code-view>
-    <iframe src="/demo/layout/layout-order.html"></iframe>
-  </iframe-code-view>
-
-
-
-  <md-divider></md-divider>
-  <h3 class="layout-title">Header, Menu, Main, Footer, no padding</h3>
-  <p>
-    This layout lets each of the header and footer tracks height be the size of their
-    respective content, and the middle track (menu and main) flex vertically to fill the
-    space of the entire layout. This is also an example of nested layouts, where the entire
-    body is a vertical layout (header/content/footer), and the content row is its own layout
-    (menu/main), and each layout has their own settings.
-  </p>
-  <p>
-    The body element has the <code>layout="column"</code> attribute.
-    By default the middle track has the menu and main elements stacked vertically. However,
-    the elements line up horizontally starting at the "small" size, which is determined by the
-    media query.
-  </p>
-  <iframe-code-view>
-    <iframe src="/demo/layout/full-width-header-menu-footer.html"></iframe>
-  </iframe-code-view>
-
 </div>
+
