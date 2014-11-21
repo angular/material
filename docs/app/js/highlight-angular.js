@@ -1,6 +1,6 @@
 DocsApp
 
-.directive('hljs', ['$compile', function($compile) {
+.directive('hljs', ['$timeout', function($timeout) {
   return {
     restrict: 'E',
     compile: function(element, attr) {
@@ -19,14 +19,19 @@ DocsApp
         if (attr.code) {
           code = scope.$eval(attr.code);
         }
-        if (!code) return;
-        var highlightedCode = hljs.highlight(attr.language || attr.lang, code.trim());
-        highlightedCode.value = highlightedCode.value
-          .replace(/=<span class="hljs-value">""<\/span>/gi, '')
-          .replace('<head/>', '');
-        codeElement.append(highlightedCode.value).addClass('highlight');
+        if ( code ) {
+          element.append(contentParent);
 
-        element.append(contentParent);
+          // Defer highlighting 1-frame to prevent GA interference...
+          $timeout(function() {
+            var highlightedCode = hljs.highlight(attr.language || attr.lang, code.trim());
+                highlightedCode.value = highlightedCode.value
+                  .replace(/=<span class="hljs-value">""<\/span>/gi, '')
+                  .replace('<head/>', '');
+
+            codeElement.append(highlightedCode.value).addClass('highlight');
+          })
+        }
       };
     }
   };
