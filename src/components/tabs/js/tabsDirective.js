@@ -53,7 +53,7 @@ angular.module('material.components.tabs')
  * @usage
  * <hljs lang="html">
  * <md-tabs md-selected="selectedIndex" >
- *   <img ng-src="/img/angular.png" class="centered">
+ *   <img ng-src="img/angular.png" class="centered">
  *
  *   <md-tab
  *      ng-repeat="tab in tabs | orderBy:predicate:reversed"
@@ -63,7 +63,7 @@ angular.module('material.components.tabs')
  *
  *       <md-tab-label>
  *           {{tab.title}}
- *           <img src="/img/removeTab.png"
+ *           <img src="img/removeTab.png"
  *                ng-click="removeTab(tab)"
  *                class="delete" >
  *       </md-tab-label>

@@ -12,25 +12,45 @@ DocsApp
       }
 
       return function(scope, element, attr) {
-        var contentParent = angular.element('<pre><code class="highlight" ng-non-bindable></code></pre>');
-        var codeElement = contentParent.find('code');
 
-        // Attribute? code is the evaluation
+        //var contentParent = angular.element('<pre><code class="highlight" ng-non-bindable></code></pre>');
+        //var codeElement = contentParent.find('code');
+        //
+        //// Attribute? code is the evaluation
+        //if (attr.code) {
+        //  code = scope.$eval(attr.code);
+        //}
+        //if (!code) return;
+        //var highlightedCode = hljs.highlight(attr.language || attr.lang, code.trim());
+        //highlightedCode.value = highlightedCode.value.replace(/=<span class="hljs-value">""<\/span>/gi, '');
+        //codeElement.append(highlightedCode.value).addClass('highlight');
+        //
+        //element.append(contentParent);
+
+
+
         if (attr.code) {
+          // Attribute? code is the evaluation
           code = scope.$eval(attr.code);
         }
+
         if ( code ) {
+          var contentParent = angular.element('<pre><code class="highlight" ng-non-bindable></code></pre>');
+
           element.append(contentParent);
 
           // Defer highlighting 1-frame to prevent GA interference...
           $timeout(function() {
-            var highlightedCode = hljs.highlight(attr.language || attr.lang, code.trim());
+            var codeElement = contentParent.find('code');
+            var highlightedCode = hljs.highlight(attr.language || attr.lang, code.trim(), true);
+
                 highlightedCode.value = highlightedCode.value
                   .replace(/=<span class="hljs-value">""<\/span>/gi, '')
+                  .replace('<head>', '')
                   .replace('<head/>', '');
 
             codeElement.append(highlightedCode.value).addClass('highlight');
-          })
+          },0, false);
         }
       };
     }
