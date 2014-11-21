@@ -51,7 +51,7 @@ function InkRippleService($window, $timeout) {
         counter = 0,
         ripples = [],
         states = [],
-        isActiveExpr = element.attr('md-active'),
+        isActiveExpr = element.attr('md-highlight'),
         isActive = false,
         isHeld = false,
         node = element[0],

@@ -30,7 +30,7 @@
 
         <button class="menu-item menu-title md-menu-item"
           ng-click="menu.toggleSelectSection(section)"
-          md-active="menu.isSectionSelected(section)"
+          md-highlight="menu.isSectionSelected(section)"
           md-ink-ripple="#bbb">
           {{section.name}}
         </button>
@@ -39,7 +39,7 @@
           ng-show="menu.isSectionSelected(section)"
           ng-repeat="page in section.pages"
           ng-href="#{{page.url}}"
-          md-active="menu.isPageSelected(section, page)"
+          md-highlight="menu.isPageSelected(section, page)"
           md-ink-ripple="#bbb">
           <span ng-bind="page | humanizeDoc"></span>
         </a>
