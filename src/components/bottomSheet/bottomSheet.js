@@ -117,7 +117,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
 
   /* @ngInject */
   function bottomSheetDefaults($animate, $mdConstant, $timeout, $$rAF, $compile, $mdTheming,
-                               $mdBottomSheet) {
+                               $mdBottomSheet, $rootElement) {
     var backdrop;
 
     return {
@@ -125,6 +125,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
       targetEvent: null,
       onShow: onShow,
       onRemove: onRemove,
+      escapeToClose: true
     };
 
     function onShow(scope, element, options) {
@@ -153,6 +154,15 @@ function MdBottomSheetProvider($$interimElementProvider) {
             element[0].querySelector('[ng-click]')
           );
           focusableItems.eq(0).focus();
+
+          if (options.escapeToClose) {
+            options.rootElementKeyupCallback = function(e) {
+              if (e.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
+                $timeout($mdBottomSheet.cancel);
+              }
+            };
+            $rootElement.on('keyup', options.rootElementKeyupCallback);
+          }
         });
 
     }
