@@ -105,4 +105,22 @@ describe('<md-tooltip> directive', function() {
     expect($rootScope.isVisible).toBe(false);
   }));
 
+  it('should show after tooltipDelay ms', inject(function($compile, $rootScope, $timeout) {
+    var element = $compile('<md-button>' +
+               'Hello' +
+               '<md-tooltip md-visible="isVisible" md-delay="99">' +
+                 'Tooltip' +
+               '</md-tooltip>' +
+             '</md-button>')($rootScope);
+    element.triggerHandler('focus');
+
+    expect($rootScope.isVisible).toBeFalsy();
+    // Wait 1 below delay, nothing should happen
+    $timeout.flush(98);
+    expect($rootScope.isVisible).toBeFalsy();
+    // Total 99 == tooltipDelay
+    $timeout.flush(1);
+    expect($rootScope.isVisible).toBe(true);
+  }));
+
 });
