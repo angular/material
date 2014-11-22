@@ -14,6 +14,11 @@ To view docs:
 httpster -p 8000 -d ./dist/docs
 ```
 
+> Yet another solution is to use PHP's built-in HTTP server:
+```sh
+php -S localhost:8000 -t ./dist/docs
+```
+
 Then run `gulp watch` to watch and rebuild docs on every save.
 
 #### Easy Debugging
