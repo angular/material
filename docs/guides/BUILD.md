@@ -112,9 +112,9 @@ All component modules are compiled and distributed to:
 ```text
  -- dist
     -- modules
-	   -- js
-	      -- core
-	      -- <component folder>
+       -- js
+          -- core
+          -- <component folder>
 ```
 
 Let's consider the the Slider component with its module definition:
@@ -138,14 +138,14 @@ To use - for example - the Slider component within your own application, simply 
 ```text
  -- dist
     -- modules
-	   -- js
-	      -- core
-		     -- core.js
-		     -- core.css
-	      -- slider
-		     -- slider.js
-			 -- slider.css
-			 -- slider-default-theme.css
+       -- js
+          -- core
+             -- core.js
+             -- core.css
+          -- slider
+             -- slider.js
+             -- slider.css
+             -- slider-default-theme.css
 ```
 
 ###<a name="comp_debug"></a> Component Debugging
