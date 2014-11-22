@@ -2,11 +2,11 @@
 
   <docs-demo demo-title="Responsive Layout" class="small-demo">
     <demo-file name="index.html">
-      <div layout="column" layout-gt-sm="row" layout-fill>
-        <div class="demo-box" flex>
+      <div layout="column" layout-gt-sm="row">
+        <div flex>
           I'm above on mobile, and to the left on larger devices.
         </div>
-        <div class="demo-box" flex>
+        <div flex>
           I'm below on mobile, and to the right on larger devices.
         </div>
       </div>
@@ -51,8 +51,8 @@
   <docs-demo demo-title="Layout Margin and Fill" class="small-demo">
     <demo-file name="index.html">
       <div layout="row" layout-margin layout-fill>
-        <div class="demo-box" flex>I'm on the left, and there's an empty area around me.</div>
-        <div class="demo-box" flex>I'm on the right, and there's an empty area around me.</div>
+        <div flex>I'm on the left, and there's an empty area around me.</div>
+        <div flex>I'm on the right, and there's an empty area around me.</div>
       </div>
     </demo-file>
   </docs-demo>
@@ -70,10 +70,10 @@
   <docs-demo demo-title="Responsive Flex & Offset Attributes" class="small-demo">
     <demo-file name="index.html">
       <div layout="row">
-        <div class="demo-box" flex="33" flex-gt-sm="66">
+        <div flex="33" flex-gt-sm="66">
           I flex to one-third of the space on mobile, and two-thirds on other devices.
         </div>
-        <div class="demo-box" flex="66" flex-gt-sm="33">
+        <div flex="66" flex-gt-sm="33">
           I flex to two-thirds of the space on mobile, and one-third on other devices.
         </div>
       </div>
@@ -113,34 +113,6 @@
     <tr>
       <td>flex-gt-lg</td>
       <td>Sets flex on devices greater than 1200px wide.</td>
-    </tr>
-    <tr>
-      <td>offset</td>
-      <td>Sets offset.</td>
-    </tr>
-    <tr>
-      <td>offset-sm</td>
-      <td>Sets offset on devices less than 600px wide.</td>
-    </tr>
-    <tr>
-      <td>offset-gt-sm</td>
-      <td>Sets offset on devices greater than 600px wide.</td>
-    </tr>
-    <tr>
-      <td>offset-md</td>
-      <td>Sets offset on devices between 600px and 960px wide..</td>
-    </tr>
-    <tr>
-      <td>offset-gt-md</td>
-      <td>Sets offset on devices greater than 960px wide.
-    </tr>
-    <tr>
-      <td>offset-lg</td>
-      <td>Sets offset on devices between 960px and 1200px.</td>
-    </tr>
-    <tr>
-      <td>offset-gt-lg</td>
-      <td>Sets offset on devices greater than 1200px wide.</td>
     </tr>
   </table>
 

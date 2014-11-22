@@ -271,6 +271,15 @@ function($scope, $rootScope, $http) {
   '$rootScope',
 function($scope, $attrs, $location, $rootScope) {
   $rootScope.currentComponent = $rootScope.currentDoc = null;
+
+  $scope.layoutDemo = {
+    mainAxis: 'center',
+    crossAxis: 'center',
+    direction: 'row'
+  };
+  $scope.layoutAlign = function() {
+    return $scope.layoutDemo.mainAxis + ' ' + $scope.layoutDemo.crossAxis;
+  };
 }])
 
 .controller('ComponentDocCtrl', [

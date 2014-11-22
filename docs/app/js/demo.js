@@ -1,10 +1,12 @@
-DocsApp.directive('docsDemo', [
+DocsApp
+.directive('layoutAlign', function() { return angular.noop; })
+.directive('layout', function() { return angular.noop; })
+.directive('docsDemo', [
   '$mdUtil',
 function($mdUtil) {
   return {
     restrict: 'E',
-    scope: {
-    },
+    scope: true,
     templateUrl: 'partials/docs-demo.tmpl.html',
     transclude: true,
     controller: ['$scope', '$element', '$attrs', '$interpolate', DocsDemoCtrl],
@@ -15,6 +17,7 @@ function($mdUtil) {
   function DocsDemoCtrl($scope, $element, $attrs, $interpolate) {
     var self = this;
 
+    self.interpolateCode = angular.isDefined($attrs.interpolateCode);
     self.demoId = $interpolate($attrs.demoId || '')($scope.$parent);
     self.demoTitle = $interpolate($attrs.demoTitle || '')($scope.$parent);
     self.demoModule = $interpolate($attrs.demoModule || '')($scope.$parent);

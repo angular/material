@@ -7,15 +7,15 @@
   {% for param in params %}
   <md-item class="api-params-item">
     <md-item-content>
-      <div class="api-params-label" flex="35" flex-sm="20">
+      <div class="api-params-label" flex="35" flex-gt-sm="20">
         {$ param.name $}
         {% if param.alias %}| {$ param.alias $}{% endif %}
-        <span block hide-sm>
+        <span hide show-sm>
           {$ typeList(param.typeList) $}
         </span>
         {% if param.type.optional %}<div><em>(optional)</em></div>{% endif %}
       </div>
-      <div class="api-params-label" hide block-sm flex-sm="15">
+      <div class="api-params-label" hide-sm flex="15">
         {$ typeList(param.typeList) $}
       </div>
       <div class="api-params-content" flex>

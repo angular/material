@@ -1,6 +1,6 @@
 DocsApp
 
-.directive('hljs', ['$timeout', function($timeout) {
+.directive('hljs', ['$timeout', '$q', '$interpolate', function($timeout, $q, $interpolate) {
   return {
     restrict: 'E',
     compile: function(element, attr) {
@@ -12,24 +12,33 @@ DocsApp
       }
 
       return function(scope, element, attr) {
-        var contentParent;
 
         if (attr.code) {
           // Attribute? code is the evaluation
           code = scope.$eval(attr.code);
         }
+        var shouldInterpolate = scope.$eval(attr.shouldInterpolate);
 
-        if ( code ) {
-          contentParent = angular.element('<pre><code class="highlight" ng-non-bindable></code></pre>');
-          element.append(contentParent);
-          // Defer highlighting 1-frame to prevent GA interference...
-          $timeout(render, 0, false);
-        }
+        $q.when(code).then(function(code) {
+          if (code) {
+            if (shouldInterpolate) {
+              code = $interpolate(code)(scope);
+            }
+            var contentParent = angular.element(
+              '<pre><code class="highlight" ng-non-bindable></code></pre>'
+            );
+            element.append(contentParent);
+            // Defer highlighting 1-frame to prevent GA interference...
+            $timeout(function() {
+              render(code, contentParent);
+            }, 0, false);
+          }
+        });
 
-        function render() {
+        function render(contents, parent) {
 
-          var codeElement = contentParent.find('code');
-          var lines = code.split('\n');
+          var codeElement = parent.find('code');
+          var lines = contents.split('\n');
 
           // Remove empty lines
           lines = lines.filter(function(line) {
@@ -45,14 +54,11 @@ DocsApp
           });
 
           var highlightedCode = hljs.highlight(attr.language || attr.lang, lines.join('\n'), true);
-
-              highlightedCode.value = highlightedCode.value
-                .replace(/=<span class="hljs-value">""<\/span>/gi, '')
-                .replace('<head>', '')
-                .replace('<head/>', '');
-
+          highlightedCode.value = highlightedCode.value
+            .replace(/=<span class="hljs-value">""<\/span>/gi, '')
+            .replace('<head>', '')
+            .replace('<head/>', '');
           codeElement.append(highlightedCode.value).addClass('highlight');
-
         }
       };
     }

@@ -1,9 +1,9 @@
 <div layout="column" layout-fill class="doc-content">
-  <div flex layout="column">
+  <div flex layout="column" style="z-index:1">
 
     <div ng-transclude></div>
 
-    <section class="demo-container md-whiteframe-z1 {{demoCtrl.demoId}}"
+    <section class="demo-container md-whiteframe-z1"
       ng-class="{'show-source': demoCtrl.$showSource}" >
 
       <md-toolbar class="demo-toolbar" >
@@ -12,7 +12,11 @@
           <span flex></span>
           <md-button
             style="min-width: 72px;"
+            layout="row" layout-align="center center"
             ng-click="demoCtrl.$showSource = !demoCtrl.$showSource">
+            <md-icon icon="/img/icons/ic_visibility_24px.svg"
+               style="margin: 0 4px 0 0;">
+            </md-icon>
             Source
           </md-button>
         </div>
@@ -23,14 +27,14 @@
         class="demo-source-tabs" ng-show="demoCtrl.$showSource">
         <md-tab ng-repeat="file in demoCtrl.orderedFiles" label="{{file.name}}">
           <md-content md-scroll-y class="demo-source-container">
-            <hljs code="file.contents" lang="{{file.fileType}}">
+            <hljs code="file.contentsPromise" lang="{{file.fileType}}" should-interpolate="demoCtrl.interpolateCode">
             </hljs>
           </md-c>
         </md-tab>
       </md-tabs>
 
       <!-- Live Demos -->
-      <demo-include files="demoCtrl.files" module="demoCtrl.demoModule">
+      <demo-include files="demoCtrl.files" module="demoCtrl.demoModule" class="{{demoCtrl.demoId}}">
       </demo-include>
     </section>
 
