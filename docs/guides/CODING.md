@@ -1,8 +1,3 @@
-Build Process
--------------
-
-### Abstract
-
 - Implicitly decide how a component is structured using well-documented rules
 - Only use explicit definitions for things that cannot be implicitly discovered (for example, human-readable names & descriptions for components are explicitly defined)
 - Move everything into jsdoc. Human readable name is as simple as `@label` for a module, description is `@description` on a module.
@@ -45,91 +40,31 @@ Build Process
 - Javascript = **/*.js,!**/*.spec.js
 - Scss = *.scss
 - Tests = **/*.spec.js
+- 
+### File Structure
 
-### Distribution
+- Components belong in `src/components/{componentName}`
+- Component modules must be named `material.components.{componentName}`
+- Templates for directives are declared inline
+- Gulp builds files to `dist` folder, which is not version controlled (read below)
+- 
 
-### Directory Structure
+## <a name="rules"></a> Coding Rules
+To ensure consistency throughout the source code, keep these rules in mind as you are working:
 
-
-```
-gulp build
-```
-
-transition: transform 0.2s all;
--webkit-transition: -webkit-transform 0.2s all;
-
--> gulp concat-base-theme
-
--> gulp build-themes
-
-themes/*
-
-```
-/src
-  /components
-    -tabs
-      - tabs.js
-      - tabs-core.scss
-      - tabs-theme.scss
-themes/
-  light-theme.scss
-    > $tabs-color: black;
-    @import ...
-  dark-theme.scss
-
-/dist
-  angular-material.js
-  angular-material.css
-  themes/
-    light-theme.css
-    dark-theme.css
-  component-name/
-    - component-name.js
-    - component-core.css
-    - component-default-theme.css
-```
-
-```variables.scss```
-$theme-name: 'default-theme';
-
-```tabs-theme.scss``
-$tabs-background-color: white !default;
-
-material-tabs.md-#{$theme-name} {
-  color: $tabs-color;
-  background: $tabs-background-color;
-}
-
-```/themes/default-light-theme.scss
-$theme-name: 'pink-theme' !default;
-$tabs-color: 'pink' !default;
-```
-
-```user-pink-theme.scss``
-$tabs-color: 'lightpink';
-```
-
-```user-blue-theme.scss```
-$tabs-color: 'blue';
-```
-
-```
-angular-material build-theme my-theme.scss
-
-$tabs-color: 'lightpink';
-tabs-theme('lightpink-theme');
-$tabs-color: 'blue';
-tabs-theme('blue-theme');
-```
-
-
-
-```js
-var gulp = require('gulp');
-var materialTheme = require('angular-material-build-theme');
-
-gulp.task('build theme', function() {
-  return gulp.src('/my-themes/*')
-    .pipe(buildTheme);
-});
-```
+* All features or bug fixes **must be tested** by one or more [specs][unit-testing].
+* All public API methods **must be documented** with ngdoc, an extended version of jsdoc (we added
+  support for markdown and templating via @ngdoc tag). To see how we document our APIs, please check
+  out the existing ngdocs and see [this wiki page][ngDocs].
+* With the exceptions listed below, we follow the rules contained in
+  [Google's JavaScript Style Guide][js-style-guide]:
+    * **Do not use namespaces**: Instead,  wrap the entire angular code base in an anonymous closure and
+      export our API explicitly rather than implicitly.
+    * Wrap all code at **100 characters**.
+    * Instead of complex inheritance hierarchies, we **prefer simple objects**. We use prototypal
+      inheritance only when absolutely necessary.
+    * We **love functions and closures** and, whenever possible, prefer them over objects.
+    * To write concise code that can be better minified, we **use aliases internally** that map to the
+      external API. See our existing code to see what we mean.
+    * We **don't go crazy with type annotations** for private internal APIs unless it's an internal API
+      that is used throughout AngularJS. The best guidance is to do what makes the most sense.
