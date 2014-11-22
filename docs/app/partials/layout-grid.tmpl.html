@@ -9,20 +9,17 @@
 
   <docs-demo demo-title="Flex Attribute" class="small-demo">
     <demo-file name="index.html">
-    <div layout="row">
-      <md-button flex
-        class="md-primary md-raised" md-theme="light-blue-dark">
-        One<br/>[flex]
-      </md-button>
-      <md-button flex
-        class="md-primary md-raised" md-theme="indigo">
-        Two<br/>[flex]
-      </md-button>
-      <md-button flex hide-sm
-        class="md-primary md-raised" md-theme="purple">
-        Three<br/>[flex]
-      </md-button>
-    </div>
+      <div layout="row">
+        <div flex>
+          [flex]
+        </div>
+        <div flex>
+          [flex]
+        </div>
+        <div flex hide-sm>
+          [flex]
+        </div>
+      </div>
     </demo-file>
   </docs-demo>
   <p>
@@ -33,21 +30,18 @@
 
   <md-divider></md-divider>
 
-  <docs-demo demo-title="Flex Attribute Values" class="small-demo">
+  <docs-demo demo-title="Flex Percent Values" class="small-demo">
     <demo-file name="index.html">
-      <div layout="row" layout-margin>
-        <md-button flex="33"
-          class="md-primary md-raised" md-theme="light-blue-dark">
-          flex="33"
-        </md-button>
-        <md-button flex="40"
-          class="md-primary md-raised" md-theme="indigo">
-          flex="40"
-        </md-button>
-        <md-button flex hide-sm
-          class="md-primary md-raised" md-theme="purple">
-          flex
-        </md-button>
+      <div layout="row">
+        <div flex="33">
+          [flex="33"]
+        </div>
+        <div flex="55">
+          [flex="55"]
+        </div>
+        <div flex>
+          [flex]
+        </div>
       </div>
     </demo-file>
   </docs-demo>
@@ -64,51 +58,19 @@
   See the <a href="#/layout/options">layout options page</a> for more information on responsive flex attributes.
   </p>
 
-
-  <md-divider></md-divider>
-  <docs-demo demo-title="Offset Attribute" class="small-demo">
-    <demo-file name="index.html">
-      <div layout="row" layout-margin>
-        <md-button flex offset="10"
-          class="md-primary md-raised" md-theme="light-blue-dark">
-          flex<br/>offset="10"
-        </md-button>
-        <md-button flex offset="33"
-          class="md-primary md-raised" md-theme="indigo">
-          flex<br/>offset="33"
-        </md-button>
-        <md-button flex hide-sm
-          class="md-primary md-raised" md-theme="purple">
-          flex
-        </md-button>
-      </div>
-    </demo-file>
-  </docs-demo>
-  <p>
-    Add the <code>offset</code> attribute with a value from 0-100 to
-    make a layout child be offset by the given percent. The <code>offset</code>
-    attribute has the same restrictions as the <code>flex</code> attribute: It is defined only at 33, 66, and multiples of five.
-  </p>
-  <p>
-    See the <a href="#/layout/options">layout options page</a> for more information on responsive offset attributes.
-  </p>
-
   <md-divider></md-divider>
   <docs-demo demo-title="Flex Order Attribute" class="small-demo">
     <demo-file name="index.html">
       <div layout="row" layout-margin>
-        <md-button flex flex-order="3"
-          class="md-primary md-raised" md-theme="light-blue-dark">
-          One
-        </md-button>
-        <md-button flex flex-order="2"
-          class="md-primary md-raised" md-theme="indigo">
-          Two
-        </md-button>
-        <md-button flex flex-order="1"
-          class="md-primary md-raised" md-theme="purple">
-          Three
-        </md-button>
+        <div flex flex-order="3">
+          [flex-order="3"]
+        </div>
+        <div flex flex-order="2">
+          [flex-order="2"]
+        </div>
+        <div flex flex-order="1">
+          [flex-order="1"]
+        </div>
       </div>
     </demo-file>
   </docs-demo>

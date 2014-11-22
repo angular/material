@@ -8,11 +8,30 @@
   text-align: center;
 }
 
-.layout-guidelines demo-include [layout] > * {
+.layout-content demo-include [layout] > div {
   padding: 8px;
-  min-width: 136px;
   box-shadow: 0px 2px 5px 0 rgba(0,0,0,0.26);
-  margin: 8px;
+  /* white-space: nowrap; */
+  /* overflow: hidden; */
+  /* text-overflow: ellipsis; */
+}
+.layout-content demo-include [layout] > div:nth-child(1) {
+  background-color: #009688;
+  opacity: 0.9;
+  color: white;
+}
+.layout-content demo-include [layout] > div:nth-child(2) {
+  background-color: #3949ab;
+  opacity: 0.9;
+  color: white;
+}
+.layout-content demo-include [layout] > div:nth-child(3) {
+  background-color: #9c27b0;
+  opacity: 0.9;
+  color: white;
+}
+.layout-content md-divider {
+  margin-top: 16px;
 }
 
 .layout-demo :not([layout]) {

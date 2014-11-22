@@ -65,10 +65,8 @@
 
 @mixin flex-properties-for-name($name: null) {
   $flexName: 'flex';
-  $offsetName: 'offset';
   @if $name != null {
     $flexName: 'flex-#{$name}';
-    $offsetName: 'offset-#{$name}';
   }
 
   // (0-19) * 5 = 0-95%
@@ -76,10 +74,6 @@
     [#{$flexName}="#{$i * 5}"] {
       flex: 0 0 #{$i * 5 + '%'};
       max-width: #{$i * 5 + '%'};
-    }
-
-    [#{$offsetName}="#{$i * 5}"] {
-      margin-left: #{$i * 5 + '%'};
     }
   }
 
@@ -90,13 +84,6 @@
   [#{$flexName}="66"], [#{$flexName}="67"] {
     flex: 0 0 66.66%;
     max-width: 66.66%;
-  }
-
-  [#{$offsetName}="33"], [#{$offsetName}="34"] {
-    margin-left: 33.33%;
-  }
-  [#{$offsetName}="66"], [#{$offsetName}="67"] {
-    margin-left: 66.66%;
   }
 
 }

@@ -5,12 +5,17 @@
     answers two questions:
     <ol>
       <li>
-        How will children be aligned in the layout's main direction (horizontally in a row layout, vertically in a column layout)?
+        How children will be aligned in the layout's main direction: horizontally in a row layout, vertically in a column layout.
       </li>
       <li>
-        How will children be aligned perpindicular to the layout's direction (vertically in a row layout, horizontally in a column layout)?
+        How children will be aligned perpindicular to the layout's direction: vertically in a row layout, horizontally in a column layout.
       </li>
     </ol>
+    The <code>layout-align</code> attribute takes two words, separated by space.
+    The first word answers 1), the second word answers 2).
+    <br/>
+    For example, <code>layout="row" layout-align="center end"</code> means
+    align children along the center horizontally and along the end (bottom) vertically.
   </p>
 
   <docs-demo demo-title='layout="row" layout-align="center"' class="small-demo">
@@ -33,36 +38,53 @@
     <code>layout-align="center"</code> will center children across the layout direction.
   </p>
 
-  </div>
-  <div class="alignment-demo">
-    <div layout="column" layout-align="center" class="inline-demo">
-      <div>center</div>
-      <div>center</div>
-    </div>
-  </div>
+  <md-divider></md-divider>
 
-
-  <h3 class="layout-title">Main Axis: Start</h3>
+  <docs-demo demo-title='layout="row" layout-align="start"' class="small-demo">
+    <demo-file name="index.html">
+      <div layout="row" layout-align="start">
+        <div>center</div>
+        <div>center</div>
+      </div>
+    </demo-file>
+  </docs-demo>
+  <docs-demo demo-title='layout="column" layout-align="start"' class="small-demo">
+    <demo-file name="index.html">
+      <div layout="column" layout-align="start">
+        <div>start</div>
+        <div>start</div>
+      </div>
+    </demo-file>
+  </docs-demo>
   <p>
-    The <code>layout-align="start"</code> attribute will position the cell to the left for a
-    a row layout, and at the top for a column layout. (Stretches the cross axis by default)
+    <code>layout-align="start"</code> will position children to the left in a row layout,
+    and to the top in a column layout.
   </p>
-  <div class="alignment-demo">
-    <div layout="row" layout-align="start" class="inline-demo">
-      <div>start</div>
-      <div>start</div>
-    </div>
-  </div>
-  <div class="alignment-demo">
-    <div layout="column" layout-align="start" class="inline-demo">
-      <div>start</div>
-      <div>start</div>
-    </div>
-  </div>
+
+  <md-divider></md-divider>
 
 
+  <docs-demo demo-title='layout="row" layout-align="end"' class="small-demo">
+    <demo-file name="index.html">
+      <div layout="row" layout-align="end">
+        <div>start</div>
+        <div>start</div>
+      </div>
+    </demo-file>
+  </docs-demo>
+  <docs-demo demo-title='layout="column" layout-align="end"' class="small-demo">
+    <demo-file name="index.html">
+      <div layout="column" layout-align="end">
+        <div>start</div>
+        <div>start</div>
+      </div>
+    </demo-file>
+  </docs-demo>
+  <p>
+    <code>layout-align="end"</code> will position children to the right in a row layout,
+    and to the bottom in a column layout.
+  </p>
 
-  <h3 class="layout-title">Main Axis: End</h3>
   <p>
     The <code>layout-align="end"</code> attribute will position the cell to the right for a
     a row layout, and at the bottom for a column layout. (Stretches the cross axis by default)
