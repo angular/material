@@ -8,13 +8,14 @@ md-sidenav {
   z-index: $z-index-sidenav;
   background-color: white;
   overflow: auto;
+  flex-direction: column;
 
   &.md-closed {
     display: none;
   }
   &.md-closed-add,
   &.md-closed-remove {
-    display: block;
+    display: flex;
     /* this is required as of 1.3x to properly
        apply all styling in a show/hide animation */
     transition: 0s all;
@@ -29,7 +30,7 @@ md-sidenav {
   &.md-locked-open.md-closed.md-sidenav-left,
   &.md-locked-open.md-closed.md-sidenav-right {
     position: static;
-    display: block;
+    display: flex;
     transform: translate3d(0, 0, 0);
   }
 
