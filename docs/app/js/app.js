@@ -306,17 +306,16 @@ function($rootScope, $scope, component, demos, $http, $templateCache, $q) {
       .concat(demo.js || [])
       .concat(demo.css || [])
       .concat(demo.html || []);
-    $q.all(files.map(function(file) {
-      return $http.get(file.outputPath, {cache: $templateCache})
+    files.forEach(function(file) {
+      file.httpPromise =$http.get(file.outputPath, {cache: $templateCache})
         .then(function(response) {
           file.contents = response.data
             .replace('<head/>', '');
+          return file.contents;
         });
-    })).then(function() {
-      demo.$files = files;
-      demo.$selectedFile = demo.index;
-      $scope.demos.push(demo);
     });
+    demo.$files = files;
+    $scope.demos.push(demo);
   });
 
   $scope.demos = $scope.demos.sort(function(a,b) {

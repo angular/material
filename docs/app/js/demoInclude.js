@@ -3,33 +3,38 @@ DocsApp.directive('demoInclude', [
   '$http', 
   '$compile', 
   '$templateCache',
-function($q, $http, $compile, $templateCache) {
-  return function postLink(scope, element, attr) {
+  '$timeout',
+function($q, $http, $compile, $templateCache, $timeout) {
+  return {
+    restrict: 'E',
+    link: postLink
+  };
+  
+  function postLink(scope, element, attr) {
     var demoContainer;
 
     // Interpret the expression given as `demo-include="something"`
-    var demo = scope.$eval(attr.demoInclude);
+    var files = scope.$eval(attr.files) || {};
+    var ngModule = scope.$eval(attr.module) || '';
 
-    handleDemoIndexFile();
+    $timeout(handleDemoIndexFile);
 
     /**
-     * Fetch the demo's incdex file, and if it contains its own ng-app module
-     * then bootstrap a new angular app  with that module. Otherwise, compile
+     * Fetch the demo's incdex file, and if it contains its own ng-app ngModule
+     * then bootstrap a new angular app  with that ngModule. Otherwise, compile
      * the demo into the current demo ng-app.
      */
     function handleDemoIndexFile() {
-      $http.get(demo.index.outputPath, {cache: $templateCache})
-      .then(function(response) {
+      files.index.contentsPromise.then(function(contents) {
         demoContainer = angular.element(
-          '<div class="demo-content ' + demo.id + '">'
+          '<div class="demo-content ' + ngModule + '">'
         );
 
-        var demoIndexHtml = response.data;
-        var isStandalone = !!demo.ngModule.module;
+        var isStandalone = !!ngModule;
         var demoScope;
         var demoCompileService;
         if (isStandalone) {
-          angular.bootstrap(demoContainer[0], [demo.ngModule.module]);
+          angular.bootstrap(demoContainer[0], [ngModule]);
           demoScope = demoContainer.scope();
           demoCompileService = demoContainer.injector().get('$compile');
           scope.$on('$destroy', function() {
@@ -48,8 +53,8 @@ function($q, $http, $compile, $templateCache) {
         ]).finally(function() {
           demoScope.$evalAsync(function() {
             element.append(demoContainer);
-            demoContainer.html(demoIndexHtml);
-            demoCompileService( demoContainer.contents() )(demoScope);
+            demoContainer.html(contents);
+            demoCompileService(demoContainer.contents())(demoScope);
           });
         });
       });
@@ -61,9 +66,8 @@ function($q, $http, $compile, $templateCache) {
      * Fetch the demo styles, and append them to the DOM.
      */
     function handleDemoStyles() {
-      return $q.all((demo.css || []).map(function(file) {
-        return $http.get(file.outputPath, {cache: $templateCache})
-          .then(function(response) { return response.data; });
+      return $q.all(files.css.map(function(file) {
+        return file.contentsPromise;
       }))
       .then(function(styles) {
         styles = styles.join('\n'); //join styles as one string
@@ -88,12 +92,12 @@ function($q, $http, $compile, $templateCache) {
      * 'generated/material.components.dialog/demo/demo1/my-dialog.tmpl.html'.
      */
     function handleDemoTemplates() {
-      return $q.all((demo.html || []).map(function(file) {
-        return $http.get(file.outputPath, {cache: $templateCache}).then(function(response) {
+      return $q.all(files.html.map(function(file) {
+
+        return file.contentsPromise.then(function(contents) {
           // Get the $templateCache instance that goes with the demo's specific ng-app.
           var demoTemplateCache = demoContainer.injector().get('$templateCache');
-
-          demoTemplateCache.put(file.name, response.data);
+          demoTemplateCache.put(file.name, contents);
 
           scope.$on('$destroy', function() {
             demoTemplateCache.remove(file.name);
@@ -105,6 +109,6 @@ function($q, $http, $compile, $templateCache) {
 
     }
 
-  };
+  }
 
 }]);

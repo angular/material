@@ -205,6 +205,13 @@ md-tabs.demo-source-tabs md-tab-label {
   display: -ms-flexbox;
   display: flex;
 }
+.small-demo .demo-source-tabs:not(.ng-hide) {
+  min-height: 336px;
+  max-height: 336px;
+}
+.small-demo .demo-content {
+  min-height: 224px;
+}
 .demo-content > * {
   -webkit-box-flex: 1;
   -webkit-flex: 1;
@@ -216,6 +223,9 @@ md-tabs.demo-source-tabs md-tab-label {
 
 .demo-content > div[layout-fill] {
   min-height: 448px;
+}
+.small-demo .demo-content > div[layout-fill] {
+  min-height: 224px;
 }
 
 .show-source md-toolbar.demo-toolbar {
@@ -372,14 +382,10 @@ ul.methods li h3 {
     font-size: 0.95em;
 }
 
-
-
 .demo-source-container pre,
 .demo-source-container code {
   min-height: 100%;
 }
-
-
 
 md-content.demo-source-container > hljs > pre > code.highlight {
   position : absolute;

@@ -1,0 +1,38 @@
+<div layout="column" layout-fill class="doc-content">
+  <div flex layout="column">
+
+    <div ng-transclude></div>
+
+    <section class="demo-container md-whiteframe-z1 {{demoCtrl.demoId}}"
+      ng-class="{'show-source': demoCtrl.$showSource}" >
+
+      <md-toolbar class="demo-toolbar" >
+        <div class="md-toolbar-tools">
+          <span>{{demoCtrl.demoTitle}}</span>
+          <span flex></span>
+          <md-button
+            style="min-width: 72px;"
+            ng-click="demoCtrl.$showSource = !demoCtrl.$showSource">
+            Source
+          </md-button>
+        </div>
+      </md-toolbar>
+
+      <!-- Source views -->
+      <md-tabs style="border-top: solid 1px #00ADC3;"
+        class="demo-source-tabs" ng-show="demoCtrl.$showSource">
+        <md-tab ng-repeat="file in demoCtrl.orderedFiles" label="{{file.name}}">
+          <md-content md-scroll-y class="demo-source-container">
+            <hljs code="file.contents" lang="{{file.fileType}}">
+            </hljs>
+          </md-c>
+        </md-tab>
+      </md-tabs>
+
+      <!-- Live Demos -->
+      <demo-include files="demoCtrl.files" module="demoCtrl.demoModule">
+      </demo-include>
+    </section>
+
+  </div>
+</div>
