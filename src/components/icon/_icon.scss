@@ -6,6 +6,11 @@ md-icon {
   margin-top: 5px;
   background-repeat: no-repeat no-repeat;
   pointer-events: none;
+  
+  .md-icon {
+    height: inherit;
+    width: inherit;
+  }
 }
 svg, object {
   fill: currentColor;
