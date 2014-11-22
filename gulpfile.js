@@ -356,7 +356,7 @@ gulp.task('build-module-demo', function() {
   var mod = readModuleArg();
   var name = mod.split('.').pop();
   var demoIndexTemplate = fs.readFileSync(
-    __dirname + '/docs/demos/demo-index.template.html', 'utf8'
+    __dirname + '/docs/config/template/demo-index.template.html', 'utf8'
   ).toString();
 
   gutil.log('Building demos for', mod, '...');
