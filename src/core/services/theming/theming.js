@@ -5,6 +5,7 @@
 angular.module('material.core')
   .directive('mdTheme', ThemingDirective)
   .directive('mdThemable', ThemableDirective)
+  .directive('mdThemeLevels', ThemeLevelsDirective)
   .provider('$mdTheming', ThemingProvider);
 
 /**
@@ -100,7 +101,39 @@ function ThemingProvider() {
   }
 }
 
+function ThemeLevelsDirective($window, $mdTheming) {
+  var lookup = {},
+      dummyElement = angular.element('<div>'),
+      body = angular.element(document.body);
 
+  return function (scope, element, attr) {
+    var styles = scope.$eval(attr.mdThemeLevels),
+        themeName;
+    angular.forEach(styles, function (value, key) {
+      styles[key] = getColor(value);
+    });
+    element.css(styles);
+    $mdTheming(element);
+    themeName = element.controller('mdTheme').$mdTheme;
+    function getColor(level) {
+      //-- get or create theme
+      var theme = lookup[themeName],
+          color;
+      if (!theme) theme = lookup[themeName] = {};
+      //-- attempt to get color
+      color = theme[level];
+      //-- if color has been found already, return it
+      if (color) return color;
+      //-- otherwise, use the dummy DOM element to find it
+      element.append(dummyElement);
+      $mdTheming(dummyElement);
+      dummyElement.attr('md-color-level', level);
+      theme[level] = color = $window.getComputedStyle(dummyElement[0]).color;
+      dummyElement.remove();
+      return color;
+    }
+  };
+}
 
 function ThemingDirective($interpolate) {
   return {
