@@ -27,11 +27,11 @@ Please note that using Angular Material requires the use of **Angular 1.3.x** or
 
 Developers interested in contributing should read the following guidelines
 
-- [Contributing Guidelines](https://github.com/angular/material/blob/master/docs/guides/CONTRIBUTING.md)
-- [Coding Guidelines](https://github.com/angular/material/blob/master/docs/guides/CODING.md)
-- [CHANGELOG](https://github.com/angular/material/blob/master/CHANGELOG.md) 
+- [Contributing Guidelines](docs/guides/CONTRIBUTING.md)
+- [Coding Guidelines](docs/guides/CODING.md)
+- [CHANGELOG](CHANGELOG.md) 
 
-It is important to note that for each release, the [ChangeLog](https://github.com/angular/material/blob/master/CHANGELOG.md) is a resource that will itemize all
+It is important to note that for each release, the [ChangeLog](CHANGELOG.md) is a resource that will itemize all
 
 - Bug Fixes,
 - New Features,
@@ -41,7 +41,7 @@ It is important to note that for each release, the [ChangeLog](https://github.co
 
 Developers can easily build Angular Material using NPM and gulp.
 
-*  [Builds - Under the Hood](https://github.com/angular/bower-material/blob/master/docs/guidelines/BUILD.md)
+*  [Builds - Under the Hood](docs/guide/BUILD.md)
 
 First install or update your local project's **npm** tools:
 
@@ -63,7 +63,7 @@ gulp build
 gulp docs
 ```
 
-For more details on how the build process works and additional commands (available for testing and debugging) developers should read [Build Instructions](./docs/guides/BUILD.md).
+For more details on how the build process works and additional commands (available for testing and debugging) developers should read [Build Instructions](docs/guides/BUILD.md).
 
 ## <a name="installing"></a>  Installing
 
