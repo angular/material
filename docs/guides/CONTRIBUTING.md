@@ -1,19 +1,15 @@
 # Contributing to Angular Material
 
  - [Code of Conduct](#coc)
-
-
+ - [Signing the CLA](#cla)<br/><br/>
  - [Question or Problem?](#question)
- - [Issues and Bugs](#issue)
+ - [Issues and Bugs](#bug)
  - [Feature Requests](#feature)
  - [Submission Guidelines](#submit)
  - [Commit Message Guidelines](#commit)
- - [Signing the CLA](#cla)
-
-
- - [Pull Request Guidelines](PULL_REQUESTS.md)
+ - [Pull Request Guidelines](PULL_REQUESTS.md)<br/><br/>
  - [Coding Conventions](CODING.md)
-
+ 
 ## <a name="coc"></a> Code of Conduct
 Help us keep Angular open and inclusive.
 
