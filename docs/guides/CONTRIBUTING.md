@@ -11,8 +11,8 @@
  - [Signing the CLA](#cla)
 
 
- - [Pull Request Guidelines](https://github.com/angular/material/blob/master/docs/guides/PULL_REQUESTS.md)
- - [Coding Conventions](https://github.com/angular/material/blob/master/docs/guides/CODING.md)
+ - [Pull Request Guidelines](PULL_REQUESTS.md)
+ - [Coding Conventions](CODING.md)
 
 ## <a name="coc"></a> Code of Conduct
 Help us keep Angular open and inclusive.
@@ -57,7 +57,7 @@ Before starting, check out the issue queue for [Documentation](https://github.co
 
 > For large fixes, please build and test the documentation before submitting the PR. This will insure that you haven't
 accidentally introduced any layout or formatting issues.
-* See [Submitting Pull Requests](https://github.com/angular/material/blob/master/docs/guides/PULL_REQUESTS.md) for guidelines of how to best submit your remote changes.
+* See [Submitting Pull Requests](PULL_REQUESTS.md) for guidelines of how to best submit your remote changes.
 * You should also make sure that your commit message is labeled "docs:" and follows the **Git Commit Guidelines** outlined below.
 
 <br/>
@@ -95,18 +95,18 @@ Here is are two examples of a well-defined issue:
 #### Submitting Pull Requests
 
 For non-trivial changes, you should submit your proposed changes or additions as GitHub pull requests.<br/><br/>
-See the following document for details: [Pull Request Guidelines](https://github.com/angular/material/blob/master/docs/guides/PULL_REQUESTS.md)
+See the following document for details: [Pull Request Guidelines](PULL_REQUESTS.md)
 
 #### Coding Conventions
 
 To ensure a consistent code base, all contributors should keep the Angular Material coding conventions in mind.<br/><br/>
-See the following document for details: [Coding Guidelines](https://github.com/angular/material/blob/master/docs/guides/CODING.md)
+See the following document for details: [Coding Guidelines](CODING.md)
 
 <br/>
 ## <a name="commit"></a> Git Commit Guidelines
 
 We have very precise rules over how our git commit messages can be formatted.  This leads to **more
-readable messages** that are easy to follow when looking through the **project history**.  It is important to note that we use the git commit messages to **generate** the Angular Material [Changelog](https://github.com/angular/material/blob/master/CHANGELOG.md) document.
+readable messages** that are easy to follow when looking through the **project history**.  It is important to note that we use the git commit messages to **generate** the Angular Material [Changelog](../../CHANGELOG.md) document.
 
 > A detailed explanation of guidelines and conventions can be found in this [document](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#)
 
