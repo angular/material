@@ -6,7 +6,7 @@
  - [Issues and Bugs](#bug)
  - [Feature Requests](#feature)
  - [Submission Guidelines](#submit)
- 
+
 ## <a name="coc"></a> Code of Conduct
 Help us keep Angular open and inclusive.
 
