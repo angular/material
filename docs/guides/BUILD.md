@@ -25,8 +25,8 @@ Angular Material has a sophisticated collection of build process and commands av
 
 These commands are defined within two (2) **gulp** files:
 
-* [Project Gulp](https://github.com/angular/material/blob/master/gulpfile.js)
-* [Documentation Gulp](https://github.com/angular/material/blob/master/docs/gulpfile.js)
+* [Project Gulp](../../gulpfile.js)
+* [Documentation Gulp](../gulpfile.js)
 
 
 ### <a name="commands"></a> Build Commands
@@ -52,7 +52,7 @@ The Angular Material **Live Docs** are generated from the source code and demos 
 
 > Our build process uses **[dgeni](http://github.com/angular/dgeni)**, the wonderful documentation generator built by [Pete Bacon Darwin](https://github.com/petebacondarwin).
 
-See the [Building the Live Documentation](https://github.com/angular/material/tree/master/docs/README.md#docs) document for details.
+See the [Building the Live Documentation](../README.md#docs) document for details.
 
 ###<a name="builds"></a>  Building the Library
 
