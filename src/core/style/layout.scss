@@ -44,13 +44,25 @@
   width: 100%;
 }
 
-
-@mixin layout-for-name($name) {
-  [hide]:not([show-#{$name}]),
-  [hide-#{$name}]:not([show-#{$name}]) {
+@mixin hide-rules-for-name($name: null) {
+  $suffix: '';
+  @if $name != null {
+    $suffix: '-#{$name}';
+  }
+  [hide#{$suffix}]:not([show]),
+  [hide#{$suffix}]:not([show-sm]),
+  [hide#{$suffix}]:not([show-md]),
+  [hide#{$suffix}]:not([show-lg]),
+  [hide#{$suffix}]:not([show-gt-sm]),
+  [hide#{$suffix}]:not([show-gt-md]),
+  [hide#{$suffix}]:not([show-gt-lg]) {
     display: none;
   }
+}
 
+
+
+@mixin layout-for-name($name) {
   [layout-#{$name}] {
     box-sizing: border-box;
     display: flex;
@@ -96,30 +108,37 @@
 }
 
 @include flex-properties-for-name();
+@include hide-rules-for-name();
 
 @media (max-width: $layout-breakpoint-sm) {
+  @include hide-rules-for-name(sm);
   @include layout-for-name(sm);
   @include flex-properties-for-name(sm);
 }
 @media (min-width: $layout-breakpoint-sm) {
+  @include hide-rules-for-name(gt-sm);
   @include layout-for-name(gt-sm);
   @include flex-properties-for-name(gt-sm);
 }
 
 @media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md) {
+  @include hide-rules-for-name(md);
   @include layout-for-name(md);
   @include flex-properties-for-name(md);
 }
 @media (min-width: $layout-breakpoint-md) {
+  @include hide-rules-for-name(gt-md);
   @include layout-for-name(gt-md);
   @include flex-properties-for-name(gt-md);
 }
 
 @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg) {
+  @include hide-rules-for-name(lg);
   @include layout-for-name(lg);
   @include flex-properties-for-name(lg);
 }
 @media (min-width: $layout-breakpoint-lg) {
+  @include hide-rules-for-name(gt-lg);
   @include layout-for-name(gt-lg);  
   @include flex-properties-for-name(gt-lg);
 }
