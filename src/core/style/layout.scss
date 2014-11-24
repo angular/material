@@ -82,8 +82,7 @@
   }
 
   [#{$flexName}] {
-    flex: 0 0 100%;
-    max-width: 100%;
+    flex: 1;
   }
 
   // (0-19) * 5 = 0-95%
@@ -107,10 +106,6 @@
 
 // Flex attributes for layout children
 // ------------------------------
-
-[flex] {
-  flex: 1;
-}
 
 @include flex-properties-for-name();
 @include hide-rules-for-name();
