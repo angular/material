@@ -41,7 +41,7 @@ It is important to note that for each release, the [ChangeLog](CHANGELOG.md) is 
 
 Developers can easily build Angular Material using NPM and gulp.
 
-*  [Builds - Under the Hood](docs/guide/BUILD.md)
+*  [Builds - Under the Hood](docs/guides/BUILD.md)
 
 First install or update your local project's **npm** tools:
 
