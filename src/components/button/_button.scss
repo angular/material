@@ -47,6 +47,15 @@ $button-fab-toast-offset: $toast-height + $toast-margin;
   cursor: pointer;
   overflow: hidden;   // for ink containment
 
+  transition: box-shadow $swift-ease-in-out-duration $swift-ease-in-out-timing-function,
+              background-color $swift-ease-in-out-duration $swift-ease-in-out-timing-function,
+              transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+
+  &.ng-hide {
+    transition: none !important;
+  }
+;
+
   &.md-cornered {
     border-radius: 0;
   }
@@ -57,8 +66,6 @@ $button-fab-toast-offset: $toast-height + $toast-margin;
   }
 
   &.md-raised {
-    transition: 0.2s linear;
-    transition-property: box-shadow, transform, background-color;
     transform: translate3d(0, 0, 0);
 
     &:not([disabled]) {
