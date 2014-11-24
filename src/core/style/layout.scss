@@ -8,7 +8,7 @@
   960  <= size <= 1200 Tablet-Landscape
   1200 <= size         PC
 */
-         
+
 [layout] {
   box-sizing: border-box;
   display: flex;
@@ -139,7 +139,7 @@
 }
 @media (min-width: $layout-breakpoint-lg) {
   @include hide-rules-for-name(gt-lg);
-  @include layout-for-name(gt-lg);  
+  @include layout-for-name(gt-lg);
   @include flex-properties-for-name(gt-lg);
 }
 

@@ -65,12 +65,12 @@
     <md-toolbar md-theme-levels="{ backgroundColor: 900 }" layout="column">
       <div class="md-toolbar-tools" ng-click="openMenu()" flex layout="column">
         <div layout="row" flex>
-          <button class="menu-icon" hide show-phone show-tablet aria-label="Toggle Menu" style="position: relative; top: -5px;">
+          <button class="menu-icon" show hide-gt-md aria-label="Toggle Menu" style="position: relative; top: -5px;">
             <md-icon icon="img/icons/ic_menu_24px.svg"></md-icon>
           </button>
-          <div style="line-height: 28px;" hide-phone ng-if="menu.currentSection.name">{{menu.currentSection.name}}</div>
+          <div style="line-height: 28px;" hide-sm ng-if="menu.currentSection.name">{{menu.currentSection.name}}</div>
           <span layout="column" layout-align="center center" class="menu-separator-icon" ng-if="menu.currentPage" style="padding: 0 10px;">
-            <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide-phone>
+            <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide-sm>
           </span>
           <div style="line-height: 28px;" ng-bind="(menu.currentPage | humanizeDoc) || 'Angular Material'"></div>
           <div flex></div>
@@ -91,10 +91,10 @@
                 position: absolute;
                 left: 0px;
                 top: -3px;"></md-icon>
-            <span hide-phone>View on Github</span>
-            <span hide show-phone>Source</span>
+            <span hide-sm>View on Github</span>
+            <span hide show-sm>Source</span>
           </md-button>
-          <md-button ng-if="currentDoc" ng-href="{{currentDoc.githubEditUrl}}" hide-phone style="position: relative; padding-left: 30px;">
+          <md-button ng-if="currentDoc" ng-href="{{currentDoc.githubEditUrl}}" hide-sm style="position: relative; padding-left: 30px;">
             <md-icon icon="/img/icons/ic_launch_24px.svg" style="
                 height: 28;
                 position: absolute;
