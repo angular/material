@@ -115,13 +115,12 @@ Below is a sample code that demonstrates some of our rules and conventions:
   })();
 ```
 
+*  With the exceptions listed in this document, follow the rules contained in [Google's JavaScript Style Guide][js-style-guide]
 *  All components must unique, understandable module names; prefixed with 'material.components.'
 *  All components must depend upon the 'material.core' module.
-*  Do not use $inject to annotate arguments<br/>The build process uses ngAnnotate to create the annotations during the build process.
-*  All directives must use the `md-` prefix for both directive and any directive attributes<br/>  Directive **templates** should be defined inline.
+*  Do not use $inject to annotate arguments<br/>The build process uses ngAnnotate to create the annotations during the build proces.
 *  All public API methods **must** be documented with ngdoc, an extended version of jsdoc (we added support for markdown and templating via @ngdoc tag). To see how we document our APIs, please check out the existing ngdocs and see [this wiki page][ngDocs].
-* With the exceptions listed below, we follow the rules contained in
-  [Google's JavaScript Style Guide][js-style-guide]
+*  All directives must use the `md-` prefix for both directive and any directive attributes<br/>  Directive **templates** should be defined inline.
 
 
 #### Testing
