@@ -92,14 +92,20 @@ md-tabs-ink-bar {
   position: absolute;
   left: 0;
   bottom: 0;
-  margin-left: -50%;
   width: 100%;
   box-sizing: border-box;
   height: 2px;
   margin-top: -2px;
-
-  transition: $swift-ease-in-out;
-  transition-property: transform;
+  transform: scaleX(1);
+  transition: left 0.5s $swift-ease-in-out-timing-function,
+              width 0.5s $swift-ease-in-out-timing-function,
+              transform 0.25s $swift-ease-out-timing-function;
+  &.md-ink-bar-grow {
+    transition: left 0.5s $swift-ease-in-out-timing-function,
+                width 0.5s $swift-ease-in-out-timing-function,
+                transform 0.25s $swift-ease-in-timing-function;
+    transform: scaleX(1.35);
+  }
 }
 
 md-tab {
