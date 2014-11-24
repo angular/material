@@ -18,10 +18,12 @@ md-checkbox {
     .md-ripple-container {
       position: absolute;
       display: block;
-      width: $checkbox-width * 3; 
-      height: $checkbox-width * 3;
-      left: -$checkbox-width;
-      top: -$checkbox-width;
+      width: auto;
+      height: auto;
+      left: -15px;
+      top: -15px;
+      right: -15px;
+      bottom: -15px;
     }
   }
 
