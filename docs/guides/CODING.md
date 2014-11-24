@@ -1,70 +1,157 @@
-- Implicitly decide how a component is structured using well-documented rules
-- Only use explicit definitions for things that cannot be implicitly discovered (for example, human-readable names & descriptions for components are explicitly defined)
-- Move everything into jsdoc. Human readable name is as simple as `@label` for a module, description is `@description` on a module.
+# Coding Conventions and Guidelines
 
-- Use gulp with simple globbing to find each component's files
-- Gulp will then pass this information to the doc parser when initialising
+ - [Project Structure](#structure)
+ - [Coding Rules](#rules)
+ 
+ 
+## <a name="structure"></a> Project Structure
 
-### Component Structure
+All component modules are defined in:
 
-- Remove module.json, make README.md optional.
-- Move human-readable name into a `@label` tag in the js file.
-- Move description from README.md to a module's `@description` tag.
+```text
+ -- /src
+    -- /components
+       -- /<component folder>
+          
+          -- <component>.js
+          -- <component>_spec.js
+          -- <component>.scss
+          -- <component>-theme.scss
 
-- Have a `_tabs.js` file which declares the component's angular module (the _ makes it first alphabetically for globbing, in case the component is split into multiple files).
-- Have the component's core structure (not modifiable by themes) declared in `_tabs.scss`.
-- Put the component's modifiable (themable) scss into its own file: `_default-theme.scss`.  This will have all sass variables at the top, with `!default`, and below will be defined:
+          --/demo<name>
 
-  ```
-  <body ng-app="myApp" material-theme="theme-default">
-    <material-tabs>
-      <material-slider material-theme="other-theme">
-      </material-slider>
-    </material-tabs>
-  </body>
-  ```
+            -- index.html
+            -- styles.css
+            -- script.js
+```
 
-  ```
-  material-tabs.md-theme-default {
-    color: $tabs-color;
-    material-tab {
-      background-color: $tabs-tab-background-color;
-    }
-  }
-  ```
+All component modules are compiled and distributed individually to:
 
-**Implicit Module Rules**
+```text
+ -- /dist
+    -- /modules
+       -- /js
+          -- /core
+          -- /<component folder>
+```
 
-- A demo is in a folder prefixed with `demoDemoName`
-- `humanize(demoFolder.substring(5))` is used as the demo's display name.
-- Javascript = **/*.js,!**/*.spec.js
-- Scss = *.scss
-- Tests = **/*.spec.js
-- 
-### File Structure
+Additionally, all component modules are compiled and deployed as library collective to:
 
-- Components belong in `src/components/{componentName}`
-- Component modules must be named `material.components.{componentName}`
-- Templates for directives are declared inline
-- Gulp builds files to `dist` folder, which is not version controlled (read below)
-- 
+```text
+ -- /dist
+    -- angular.material.js
+    -- angular.material.css
+```
 
+> NOTE: the `dist` directory is **not** version controlled.
+
+<br/>
 ## <a name="rules"></a> Coding Rules
-To ensure consistency throughout the source code, keep these rules in mind as you are working:
 
-* All features or bug fixes **must be tested** by one or more [specs][unit-testing].
+#### Coding conventions:
+
+The best guidance is a coding approach that implements code and comments in a clear, understandable, concise, and DRY fashion.
+
+
+```js
+  (function() {
+    'use strict';
+
+    /**
+     * @ngdoc module
+     * @name material.components.slider
+     */
+    angular.module('material.components.slider', [
+             'material.core'
+           ])
+           .directive('mdSlider', SliderDirective);
+
+   /**
+    * @ngdoc directive
+    * @name mdSlider
+    * @module material.components.slider
+    * @restrict E
+    * @description
+    * The `<md-slider>` component allows the user to choose from a range of
+    * values.
+    *
+    * It has two modes: 'normal' mode, where the user slides between a wide range
+    * of values, and 'discrete' mode, where the user slides between only a few
+    * select values.
+    *
+    * To enable discrete mode, add the `md-discrete` attribute to a slider,
+    * and use the `step` attribute to change the distance between
+    * values the user is allowed to pick.
+    *
+    * @usage
+    * <h4>Normal Mode</h4>
+    * <hljs lang="html">
+    *   <md-slider ng-model="myValue" 
+                   min="5" 
+                   max="500">
+    *   </md-slider>
+    * </hljs>
+    *
+    * <h4>Discrete Mode</h4>
+    * <hljs lang="html">
+    *   <md-slider md-discrete 
+                   ng-model="myDiscreteValue" 
+                   step="10" 
+                   min="10" 
+                   max="130">
+    *   </md-slider>
+    * </hljs>
+    *
+    * @param {boolean=} mdDiscrete Whether to enable discrete mode.
+    * @param {number=} step The distance between values the user is allowed to pick. Default 1.
+    * @param {number=} min The minimum value the user is allowed to pick. Default 0.
+    * @param {number=} max The maximum value the user is allowed to pick. Default 100.
+    */
+    function SliderDirective($mdTheming) {
+      //...
+    }
+
+  })();
+```
+
+* All components must unique, understandable module names; <br/>prefixed with 'material.components.'
+* All components must depend upon the 'material.core' module.
+* All directives must use the `md-` prefix for both directive and any directive attributes
 * All public API methods **must be documented** with ngdoc, an extended version of jsdoc (we added
   support for markdown and templating via @ngdoc tag). To see how we document our APIs, please check
-  out the existing ngdocs and see [this wiki page][ngDocs].
+  out the existing ngdocs and see [this wiki page][ngDocs].<br/><br/>
 * With the exceptions listed below, we follow the rules contained in
-  [Google's JavaScript Style Guide][js-style-guide]:
-    * **Do not use namespaces**: Instead,  wrap the entire angular code base in an anonymous closure and
-      export our API explicitly rather than implicitly.
-    * Wrap all code at **100 characters**.
-    * Instead of complex inheritance hierarchies, we **prefer simple objects**. We use prototypal
-      inheritance only when absolutely necessary.
-    * We **love functions and closures** and, whenever possible, prefer them over objects.
-    * To write concise code that can be better minified, we **use aliases internally** that map to the
-      external API. See our existing code to see what we mean.
-    * We **don't go crazy with type annotations** for private internal APIs unless it's an internal API
-      that is used throughout AngularJS. The best guidance is to do what makes the most sense.
+  [Google's JavaScript Style Guide][js-style-guide]
+
+* Directive **templates** should be defined inline.<br/><br/>
+
+#### Testing
+
+* All components must have valid, **passing** unit tests.
+* All features or bug fixes **must be tested** by one or more [specs][unit-testing].<br/><br/>
+
+#### Editors
+
+* Wrap all code at **100 characters**.
+* Do not use tabs. Use two (2) spaces to represent a tab or indent.
+* Constructors are Pascal-case, closures and variables are lower-camelCase.
+
+#### Patterns
+
+* All components should be wrapped in an anonymous closure using the Module Pattern
+* Use the **Revealing Pattern** as a coding style
+* Do **not** use the global variable namespace, export our API explicitly via Angular DI
+* Instead of complex inheritance hierarchies, use **simple** objects.
+* Avoid prototypal inheritance unless warranted by performance or other considerations.
+* We **love** functions and closures and, whenever possible, prefer them over objects.
+  > Do not use anonymous functions. All closures should be named.
+
+#### Documentation
+
+* All non-trivial functions should have a jsDoc Description
+* To write concise code that can be better minified, we **use aliases internally** that map to the
+  external API. See our existing code to see what we mean.
+* Use of argument **type annotations** for private internal APIs is not encouraged, unless it's an internal API
+  that is used throughout AngularJS. 
+
+
