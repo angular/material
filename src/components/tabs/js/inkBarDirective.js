@@ -14,6 +14,7 @@ function MdTabInkDirective($mdConstant, $window, $$rAF, $timeout) {
   return {
     restrict: 'E',
     require: ['^?mdNoBar', '^mdTabs'],
+    template: '<md-tabs-ink-bar-inner></md-tabs-ink-bar-inner>',
     link: postLink
   };
 
@@ -38,15 +39,14 @@ function MdTabInkDirective($mdConstant, $window, $$rAF, $timeout) {
         var count = tabsCtrl.count();
         var scale = 1 / count;
         var left = tabsCtrl.indexOf(selected);
+        element.css($mdConstant.CSS.TRANSFORM, 'scaleX(' + scale + ') ' +
+                    'translate3d(' + left * 100 + '%,0,0)');
         element.addClass('md-ink-bar-grow');
-        element.css({
-          width: Math.round(scale * 100) + '%',
-          left:  (left / scale) + '%'
-        });
         if (timeout) $timeout.cancel(timeout);
         timeout = $timeout(function () {
           element.removeClass('md-ink-bar-grow');
         }, 250, false);
+
       }
     }
 
