@@ -1,19 +1,13 @@
 ## Build Instructions
 
-* [Introduction](#intro)
-
-
+* [Introduction](#intro)<br/><br/>
 * [Build Commands](#commands)
 * [Building the Documentation](#livedocs)
 * [Building the Library](#builds)
-* [Using the Library with Bower](#bower)
-
-
+* [Using the Library with Bower](#bower)<br/><br/>
 * [Introducing Components](#comp)
 * [Buildng Individual Components](#comp_builds)
-* [Component Debugging](#comp_debug)
-
-
+* [Component Debugging](#comp_debug)<br/><br/>
 * [Introducing Theme](#themes)
 * [Building Themes](#themes_builds)
 * [Custom Themes](#themes_custom)
