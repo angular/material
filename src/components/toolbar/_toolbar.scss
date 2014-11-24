@@ -17,13 +17,19 @@ md-toolbar {
 
   &.md-tall {
     height: $toolbar-tall-height;
+    min-height: $toolbar-tall-height;
+    max-height: $toolbar-tall-height;
   }
 
   &.md-medium-tall {
     height: $toolbar-medium-tall-height;
+    min-height: $toolbar-medium-tall-height;
+    max-height: $toolbar-medium-tall-height;
 
     .md-toolbar-tools {
       height: 48px;
+      min-height: 48px;
+      max-height: 48px;
     }
   }
 
@@ -39,6 +45,8 @@ md-toolbar {
 
   width: 100%;
   height: $toolbar-tools-height;
+  min-height: $toolbar-tools-height;
+  max-height: $toolbar-tools-height;
   font-size: inherit;
   font-weight: normal;
   padding: 0 10px;
@@ -57,7 +65,7 @@ md-toolbar {
   }
 
   .md-button {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 

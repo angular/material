@@ -18,8 +18,9 @@ function MdTabInkDirective($mdConstant, $window, $$rAF, $timeout) {
   };
 
   function postLink(scope, element, attr, ctrls) {
-    var nobar = ctrls[0];
-    var tabsCtrl = ctrls[1];
+    var nobar = ctrls[0],
+        tabsCtrl = ctrls[1],
+        timeout;
 
     if (nobar) return;
 
@@ -36,9 +37,16 @@ function MdTabInkDirective($mdConstant, $window, $$rAF, $timeout) {
       if (!hideInkBar) { 
         var count = tabsCtrl.count();
         var scale = 1 / count;
-        var left = (tabsCtrl.indexOf(selected) / count) + (1 / count / 2);
-        element.css($mdConstant.CSS.TRANSFORM, 'scaleX(' + scale + ') ' +
-                    'translate3d(' + left / scale * 100 + '%,0,0)');
+        var left = tabsCtrl.indexOf(selected);
+        element.addClass('md-ink-bar-grow');
+        element.css({
+          width: Math.round(scale * 100) + '%',
+          left:  (left / scale) + '%'
+        });
+        if (timeout) $timeout.cancel(timeout);
+        timeout = $timeout(function () {
+          element.removeClass('md-ink-bar-grow');
+        }, 250, false);
       }
     }
 

@@ -13,7 +13,7 @@ md-content {
   margin-right: 7px;
 }
 section .md-button:not(.md-fab) {
-  width: 10em;
+  min-width: 10em;
 }
 section .md-button {
   display: block;
