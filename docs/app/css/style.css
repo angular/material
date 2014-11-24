@@ -247,6 +247,7 @@ md-toolbar.demo-toolbar md-tab-label {
   color: #99E4EE
 }
 md-toolbar.demo-toolbar .md-button:hover,
+md-toolbar.demo-toolbar .md-button:focus,
 md-toolbar.demo-toolbar .md-button.active {
   background: rgba(0,0,0,0.1);
 }
