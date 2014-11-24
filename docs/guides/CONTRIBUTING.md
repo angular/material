@@ -17,7 +17,7 @@
 ## <a name="coc"></a> Code of Conduct
 Help us keep Angular open and inclusive.
 
-Please read and follow our [Code of Conduct][coc].
+Please read and follow our [Code of Conduct](https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md).
 
 <br/>
 ## <a name="question"></a> Have a Question, Problem, or Idea?
@@ -27,27 +27,27 @@ discussion list.
 
 Otherwise, do you:
 
-- [Found a Bug ?]((#issue)
+- [Found a Bug ?]((#bug)
 - [Want a Feature ?](#feature)
 - [Suggest a Doc fix ?](#docs)
 
-#### <a name="issue"></a> 1. Found an Bug or Issue?
+#### <a name="bug"></a> 1. Found an Bug or Issue?
 If you find a bug in the source code or a mistake in the documentation, we recommend that you first review the [Online Documentation](http://material.angularjs.org/). 
 
-Otherwise you can help us improve by submitting an issue to our [GitHub Repository](https://github.com/angular/material/issues/new). Even better you can submit a **Pull Request** with a fix. Your custom changes can be crafted in a repository fork and submitted to [GitHub Repository][github] as a Pull Request.
+Otherwise you can help us improve by submitting an issue to our [GitHub Repository](https://github.com/angular/material/issues/new). Even better you can submit a **Pull Request** with a fix. Your custom changes can be crafted in a repository fork and submitted to [GitHub Repository](https://github.com/angular/material/compare) as a Pull Request.
 
 
 > **Important: please review the Submission Guidelines below**.
 
 #### <a name="feature"></a> 2. Want a Feature?
-You can request a new feature by submitting an issue to our [GitHub Repository][github].  If you
+You can request a new feature by submitting an issue to our [GitHub Issues](https://github.com/angular/material/issues/new).  If you
 would like to implement a new feature then consider what kind of change it is:
 
 * **Major Changes** that you wish to contribute to the project should be discussed first on our
 [Angular Material Forum](https://groups.google.com/forum/#!forum/ngmaterial) so that we can better coordinate our efforts, prevent
 duplication of work, and help you to craft the change so that it is successfully accepted into the
 project.
-* **Small Changes** can be crafted and submitted to the [GitHub Repository][github] as a Pull Request.
+* **Small Changes** can be crafted and submitted to the [GitHub Repository](https://github.com/angular/material/compare) as a Pull Request.
 
 #### <a name="docs"></a> 3. Suggest a Doc fix?
 If you want to help improve the docs, it's a good idea to let others know what you're working on to
@@ -73,7 +73,8 @@ Providing the following information will increase the chances of your issue bein
 
 * **Overview of the Issue** - if an error is being thrown a non-minified stack trace helps
 * **Angular Version(s)** - check the header of your `angular-material.js` file to determine your specific version #.
->```js
+
+```js
 /*!
  * Angular Material Design
  * https://github.com/angular/material
@@ -86,20 +87,19 @@ Providing the following information will increase the chances of your issue bein
   [JSFiddle][jsfiddle]). 
 * **Related Issues** - has a similar issue been reported before?
 * **Suggest a Fix** - if you can't fix the bug yourself, perhaps you can point to what might be
-  causing the problem (line of code or commit)
-
-Here is are two examples of a well-defined issue: 
-- https://github.com/angular/material/issues/629
-- https://github.com/angular/material/issues/277
+  causing the problem (line of code or commit)<br/><br/>
+Here is are two examples of a well-defined issue:
+  - https://github.com/angular/material/issues/629
+  - https://github.com/angular/material/issues/277
 
 #### Submitting Pull Requests
 
-For non-trivial changes, you should submit your proposed changes or additions as GitHub **Pull Requests**.<br/>
+For non-trivial changes, you should submit your proposed changes or additions as GitHub pull requests.<br/><br/>
 See the following document for details: [Pull Request Guidelines](https://github.com/angular/material/blob/master/docs/guides/PULL_REQUESTS.md)
 
 #### Coding Conventions
 
-To ensure a consistent code base, a contributors should keep the Angular Material **Coding Rules** in mind.<br/>
+To ensure a consistent code base, all contributors should keep the Angular Material coding conventions in mind.<br/><br/>
 See the following document for details: [Coding Guidelines](https://github.com/angular/material/blob/master/docs/guides/CODING.md)
 
 <br/>
@@ -108,7 +108,7 @@ See the following document for details: [Coding Guidelines](https://github.com/a
 We have very precise rules over how our git commit messages can be formatted.  This leads to **more
 readable messages** that are easy to follow when looking through the **project history**.  It is important to note that we use the git commit messages to **generate** the Angular Material [Changelog](https://github.com/angular/material/blob/master/CHANGELOG.md) document.
 
-> A detailed explanation of guidelines and conventions can be found in this [document][commit-message-format]
+> A detailed explanation of guidelines and conventions can be found in this [document](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#)
 
 ### Commit Message Format
 Each commit message consists of a **header**, a **body** and a **footer**.  The header has a special
@@ -185,8 +185,8 @@ refactor(content): prefix mdContent scroll- attributes
 Please sign our Contributor License Agreement (CLA) before sending pull requests. For any code
 changes to be accepted, the CLA must be signed. It's a quick process, we promise!
 
-* For individuals we have a [simple click-through form][individual-cla].
+* For individuals we have a [simple click-through form](https://cla.developers.google.com/about/google-individual?csw=1).
 * For corporations we'll need you to
-  [print, sign and one of scan+email, fax or mail the form][corporate-cla].
+  [print, sign and one of scan+email, fax or mail the form](https://developers.google.com/open-source/cla/corporate?csw=1).
 
 

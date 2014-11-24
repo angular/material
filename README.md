@@ -8,6 +8,7 @@ This project is in early pre-release. Angular Material is both a reference imple
 
 Quick Links:
 
+*  [API & Demos](#demos)
 *  [Contributing](#contributing)
 *  [Building](#building)
 *  [Installing](#installing)
@@ -62,7 +63,7 @@ gulp build
 gulp docs
 ```
 
-For more details on how the build process works and additional commands (available for testing and debugging) developers should read [Build Instructions](https://github.com/angular/bower-material/blob/master/docs/guidelines/BUILD.md).
+For more details on how the build process works and additional commands (available for testing and debugging) developers should read [Build Instructions](./docs/guides/BUILD.md).
 
 ## <a name="installing"></a>  Installing
 
