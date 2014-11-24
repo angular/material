@@ -24,9 +24,8 @@ Otherwise, do you:
 
 - [Found a Bug ?](#bug)
 - [Want a Feature ?](#feature)
-- [Suggest a Doc fix ?](#docs)
 
-#### <a name="bug"></a> 1. Found an Bug or Issue?
+#### <a name="bug"></a> 1. Found a Bug or Issue?
 If you find a bug in the source code or a mistake in the documentation, we recommend that you first review the [Online Documentation](http://material.angularjs.org/). 
 
 Otherwise you can help us improve by submitting an issue to our [GitHub Repository](https://github.com/angular/material/issues/new). Even better you can submit a **Pull Request** with a fix. Your custom changes can be crafted in a repository fork and submitted to [GitHub Repository](https://github.com/angular/material/compare) as a Pull Request.
@@ -35,33 +34,18 @@ Otherwise you can help us improve by submitting an issue to our [GitHub Reposito
 > **Important: please review the [Submission Guidelines](#submit) below before contributing to the project**.
 
 #### <a name="feature"></a> 2. Want a Feature?
-You can request a new feature by submitting an issue to our [GitHub Issues](https://github.com/angular/material/issues/new).  If you
-would like to implement a new feature then consider what kind of change it is:
+You can request a new feature by submitting an issue to our [GitHub Issues](https://github.com/angular/material/issues/new).  If you would like to implement a new feature then consider what kind of change it is:
 
 * **Major Changes** that you wish to contribute to the project should be discussed first on our
-[Angular Material Forum](https://groups.google.com/forum/#!forum/ngmaterial) so that we can better coordinate our efforts, prevent
-duplication of work, and help you to craft the change so that it is successfully accepted into the
+[Angular Material Forum](https://groups.google.com/forum/#!forum/ngmaterial) so that we can better coordinate our efforts, prevent duplication of work, and help you to craft the change so that it is successfully accepted into the
 project.
 * **Small Changes** can be crafted and submitted to the [GitHub Repository](https://github.com/angular/material/compare) as a Pull Request.
-
-#### <a name="docs"></a> 3. Suggest a Doc fix?
-If you want to help improve the docs, it's a good idea to let others know what you're working on to
-minimize duplication of effort. 
-
-Before starting, check out the issue queue for [Documentation](https://github.com/angular/material/issues?q=is%3Aopen+is%3Aissue+label%3Adoc) or [Demos](https://github.com/angular/material/issues?q=is%3Aopen+is%3Aissue+label%3Ademo). Comment on an existing issue to let others know what you're working on, or create a new issue if your work doesn't fit within the scope of any of the existing project issues.
-
-> For large fixes, please build and test the documentation before submitting the PR. This will insure that you haven't
-accidentally introduced any layout or formatting issues.
-* See [Submitting Pull Requests](PULL_REQUESTS.md) for guidelines of how to best submit your remote changes.
-* You should also make sure that your commit message is labeled "docs:" and follows the **Git Commit Guidelines** outlined below.
-
-<br/>
 
 ## <a name="submit"></a> Submission Guidelines
 
 Please note, this project is still in an early beta. 
 
-We're not actively reviewing unsolicited PRs from the community, although we welcome your feature requests and issue reports. If you're thinking of contributing code to the project, please review [Submitting Pull Requests](#submitpr) before beginning any work.  
+We're not actively reviewing unsolicited PRs from the community, although we welcome your feature requests, doc corrections, and issue reports. If you're thinking of contributing code or docs to the project, please review [Submitting Pull Requests](#submitpr) before beginning any work.  
 
 #### Submitting an Issue
 Before you submit your issue **[search](https://github.com/angular/material/issues?q=is%3Aissue+is%3Aopen)** the issues archive; maybe your question was already answered. If your issue appears to be a bug, and hasn't been reported, open a new issue.
@@ -93,11 +77,11 @@ Here is are two examples of a well-defined issue:
 
 #### <a name="submitpr"></a>Submitting Pull Requests
 
-**Important**: We are not actively reviewing unsolicited PRs to Angular Material. 
+**Important**: With the exception of minor bugs and doc fixes, we are not actively reviewing unsolicited PRs to Angular Material. 
 
 Please check with us via [the discussion forum] (https://groups.google.com/forum/#!forum/ngmaterial) before investing significant effort in any pre-1.0 PR contribution; it's likely that we are already working on a related PR.
 
-* All contributions must be consistent with the Angular Material coding conventions: See [Coding Guidelines](CODING.md)
+* All contributions must be consistent with the Angular Material coding conventions. See [Coding Guidelines](CODING.md)
 * Submit proposed changes or additions as GitHub pull requests. See [Pull Request Guidelines](PULL_REQUESTS.md)
 
 <br/>
