@@ -94,7 +94,7 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
       transcludeTabContent();
       configureAria();
 
-      var detachRippleFn = $mdInkRipple.attachButtonBehavior(scope, element);
+      var detachRippleFn = $mdInkRipple.attachTabBehavior(scope, element);
       tabsCtrl.add(tabItemCtrl);
       scope.$on('$destroy', function() {
         detachRippleFn();
