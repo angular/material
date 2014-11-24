@@ -115,15 +115,13 @@ Below is a sample code that demonstrates some of our rules and conventions:
   })();
 ```
 
-* All components must unique, understandable module names; prefixed with 'material.components.'
-* All components must depend upon the 'material.core' module.
-* Do not use $inject to annotate arguments
-> The build process uses ngAnnotate to create the annotations during the build process.
-* All directives must use the `md-` prefix for both directive and any directive attributes
-> Directive **templates** should be defined inline.<br/><br/>
-* All public API methods **must** be documented with ngdoc, an extended version of jsdoc (we added
-  support for markdown and templating via @ngdoc tag). To see how we document our APIs, please check
-  out the existing ngdocs and see [this wiki page][ngDocs].<br/><br/>
+*  All components must unique, understandable module names; prefixed with 'material.components.'
+*  All components must depend upon the 'material.core' module.
+*  Do not use $inject to annotate arguments
+>  The build process uses ngAnnotate to create the annotations during the build process.
+*  All directives must use the `md-` prefix for both directive and any directive attributes
+>  Directive **templates** should be defined inline.<br/><br/>
+*  All public API methods **must** be documented with ngdoc, an extended version of jsdoc (we added support for markdown and templating via @ngdoc tag). To see how we document our APIs, please check out the existing ngdocs and see [this wiki page][ngDocs].
 * With the exceptions listed below, we follow the rules contained in
   [Google's JavaScript Style Guide][js-style-guide]
 
@@ -131,7 +129,7 @@ Below is a sample code that demonstrates some of our rules and conventions:
 #### Testing
 
 * All components must have valid, **passing** unit tests.
-* All features or bug fixes **must be tested** by one or more [specs][unit-testing].<br/><br/>
+* All features or bug fixes **must be tested** by one or more [specs][unit-testing].
 
 #### Editors
 
