@@ -1,27 +1,34 @@
 Documentation
 -------------
 
-Uses [dgeni](http://github.com/angular/dgeni), the wonderful documentation generator built by [@petebacondarwin](https://github.com/petebacondarwin).
+The Angular Material **Live Docs** are generated from the source code and demos; and, in fact, the Live Docs actually uses the Angular Material components and themes.
 
-To view docs:
+> Our build process uses **[dgeni](http://github.com/angular/dgeni)**, the wonderful documentation generator built by [Pete Bacon Darwin](https://github.com/petebacondarwin).
 
-1. `gulp docs`, which builds the docs to `dist/docs`
-2. `cd dist/docs` and start an http server (e.g. `python -m SimpleHTTPServer`)
-3. Navigate to the server, and enjoy (e.g. http://localhost:8000)
+To view the Live Docs (locally):
 
-> Another solution is to use `npm install -g httpster` and then launch the HTTP server with with the command
-```sh
+1. Build the docs using `gulp docs`
+2. Start an HTTP Server; the example below uses port 8000.
+3. Run `gulp watch` to auto-rebuild docs (Optional)
+4. Open browser at `http://localhost:8000`
+
+```bash
+# Build & deploy docs to `dist/docs`
+# Watch source dirs for changes and rebuild
+
+gulp docs
+gulp watch
+
+# Use the built-in gulp server with live reload
+# or install httpster globally; if not already isntalled
+# `npm install -g httpster`
+
+gulp server
+
+# And then launch webserver
+# NOTE: unlike `gulp server` this will not auto-reload the HTML
+
 httpster -p 8000 -d ./dist/docs
 ```
 
-Then run `gulp watch` to watch and rebuild docs on every save.
 
-#### Easy Debugging
-
-Debugging directly in the Docs is complicated due to iFrames and multiple demos loading and initializing.
-
-To open a demo outside of the Doc iframe(s), just navigate to component demo directly. For example, to debug the Toolbar demo and code, browser navigate to:
-
-```sh
-http://localhost:8000/generated/material.components.toolbar/demo/demo1/index.html
-```

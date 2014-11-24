@@ -1,72 +1,90 @@
 # Material Design for AngularJS Apps [![Build Status](https://travis-ci.org/angular/material.svg)](https://travis-ci.org/angular/material)
 
-[Material Design](http://www.google.com/design/spec/material-design/) is a specification for a unified system of visual, motion, and interaction design that adapts across different devices. Our goal is to deliver a lean, lightweight set of AngularJS-native UI elements that implement the material design system for use in Angular SPAs.
+[Material Design](http://www.google.com/design/spec/material-design/) is a specification for a unified system of visual, motion, and interaction design that adapts across different devices. Our goal is to deliver a lean, lightweight set of AngularJS-native UI elements that implement the material design system for use in Angular single-page applications (SPAs).
 
 ![venn](https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png)
 
+This project is in early pre-release. Angular Material is both a reference implementation of Material Design and a complementary effort to the [Polymer](http://www.polymer-project.org/) project's [Paper Elements](http://www.polymer-project.org/docs/elements/paper-elements.html) collection.
 
-This project is still in early preview. It is a complementary effort to the [Polymer](http://www.polymer-project.org/) project's [paper elements collection](http://www.polymer-project.org/docs/elements/paper-elements.html).
+Quick Links:
 
-> Please note that using Angular Material requires the use of **Angular 1.3.x** or higher. These components are intended to work in the latest version of "evergreen" browsers (Chrome, Firefox, Internet Explorer, Safari). 
+*  [API & Demos](#demos)
+*  [Contributing](#contributing)
+*  [Building](#building)
+*  [Installing](#installing)
 
-## Demo Site
 
-You can see these components in action at http://material.angularjs.org.
+Please note that using Angular Material requires the use of **Angular 1.3.x** or higher. Angular Material is targeted for all browsers with versions n-1; where n is the current browser version.
 
-Or you run build the docs and demos locally. See the [Documentation README](https://github.com/angular/material/tree/master/docs) for details.
+## <a name="demos"></a> Online Documentation (and Demos)
 
-## Development
+![angularmaterial](https://cloud.githubusercontent.com/assets/210413/5148790/fb9ecf52-7187-11e4-9adc-fc5ef263b4ce.png)
 
-This project is in early development via a small core team of [Ionic Framework](http://ionicframework.com/) and [AngularJS](http://angularjs.org) developers. We don't have guidelines yet for broader community involvement, although we hope to have some soon.
+- Visit [Material.AngularJS.org]() online to review the API, see the components in action with live Demos, and study the Layout system.
+- Or you can build the documentation and demos locally; see the [Build Docs & Demos](https://github.com/angular/material/tree/master/docs) for details.
 
-For issues, including progress on accessibility support for these UI elements, see the [Issue Tracker](https://github.com/angular/material/issues).
+## <a name="contributing"></a> Contributing
 
-See [CONTRIBUTING.md](https://github.com/angular/material/tree/master/CONTRIBUTING.md) for information
-on structure, documentation, and code conventions.
+Developers interested in contributing should read the following guidelines
 
-## Usage
+- [Contributing Guidelines](docs/guides/CONTRIBUTING.md)
+- [Coding Guidelines](docs/guides/CODING.md)
+- [CHANGELOG](CHANGELOG.md) 
 
-In its current early state, use AngularJS Material Design at your own risk.  APIs are changing rapidly.
+It is important to note that for each release, the [ChangeLog](CHANGELOG.md) is a resource that will itemize all
 
-If you wish to use angular-material anyway, you can:
+- Bug Fixes,
+- New Features,
+- Breaking Changes
 
-- `bower install angular-material` to the get latest stable release 
-  > or download the files directly from the [bower-material repository](https://github.com/angular/bower-material).
+## <a name="building"></a> Building
 
-- `bower install angular-material#master` to get the version just committed to master 
-  > Note that `master` is less stable than a release.
+Developers can easily build Angular Material using NPM and gulp.
 
-View the [README in the bower-material repository](https://github.com/angular/bower-material/tree/master/README.md) for how to get started.
+*  [Builds - Under the Hood](docs/guides/BUILD.md)
 
-### File Structure
+First install or update your local project's **npm** tools:
 
-- Components belong in `src/components/{componentName}`
-- Component modules must be named `material.components.{componentName}`
-- Templates for directives are declared inline
-- Gulp builds files to `dist` folder, which is not version controlled (read below)
+```bash
+# First install all the NPM tools:
+npm install
 
-### Commit Conventions
+# Or update
+npm update
+```
 
-- http://github.com/ajoslin/conventional-changelog
-- git commit-msg hook available [here](https://github.com/angular/angular.js/blob/master/validate-commit-msg.js).  Place it in `.git/hooks/commit-msg`, and run `chmod +x .git/hooks/commit-msg`. It will validate your commit messages for you.
+The run the **gulp** tasks:
 
-### Development
+```bash
+# To build `angular-material.js/.css` and `Theme` files in the `/dist` directory
+gulp build
 
-For each milestone release, always run:
+# To build the Angular Material Docs and Demos in `/dist/docs` directory
+gulp docs
+```
 
-- `npm update` for gulp deps
-- `bower update` for angular deps
- 
-The following command line tasks are available:
+For more details on how the build process works and additional commands (available for testing and debugging) developers should read [Build Instructions](docs/guides/BUILD.md).
 
-- `gulp build` (alias `gulp`) to build, add `--release` flag to uglify & strip console.log.
-- `gulp watch` to build & rebuild on changes
-- `gulp validate` to test and jshint
-- `gulp jshint` to run jshint
-- `gulp karma` to test once
-- `gulp karma-watch` to test & watch for changes
-- `gulp docs` to build docs into dist/docs
+## <a name="installing"></a>  Installing
 
-### Documentation
+For developers not interested in building the Angular Material library... use **bower** to install and use the Angular Material distribution files. 
 
-- See `docs/README.md`. 
+Change to your project's root directory.
+
+```bash
+# To get the latest stable version, use Bower from the command line.
+bower install angular-material
+
+# To get the most recent, latest committed-to-master version use:
+bower install angular-material#master
+```
+
+Visit [Bower-Material](https://github.com/angular/bower-material/blob/master/README.md) for more details on how to install and use the Angular Material distribution files within your own local project.
+
+CDN versions of Angular Material will be available in the near future.
+
+>With a CDN, you will not need to download local copies of the distribution files. Instead reference the CDN urls to easily use those remote library files... this is especially useful when using online tools such as CodePen, Plunkr, or jsFiddle.
+
+
+<br/>
+
