@@ -4,7 +4,7 @@
 
 ![venn](https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png)
 
-This project is in early pre-release. Angular Material is both a reference implementation of Material Design and a complementary for the [Polymer](http://www.polymer-project.org/) project's [Paper Elements](http://www.polymer-project.org/docs/elements/paper-elements.html) collection.
+This project is in early pre-release. Angular Material is both a reference implementation of Material Design and a complementary effort to the [Polymer](http://www.polymer-project.org/) project's [Paper Elements](http://www.polymer-project.org/docs/elements/paper-elements.html) collection.
 
 Quick Links:
 
