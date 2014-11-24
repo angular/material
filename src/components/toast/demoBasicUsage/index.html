@@ -1,35 +1,34 @@
-<div ng-controller="AppCtrl" style="position:absolute;display: block; width: 100%">
-  <div style="padding: 24px;">
+<div ng-controller="AppCtrl" layout-fill layout="column" class="inset">
     <p>Toast can be dismissed with a swipe, a timer, or a button.</p>
-    <div class="inset" layout="row" layout-sm="column" layout-align="center">
+
+    <div layout="row" layout-sm="column" layout-align="space-around">
+      <div style="width:50px"></div>
       <md-button ng-click="showCustomToast()">
         Show Custom
       </md-button>
-      <div style="width:50px"></div>
       <md-button ng-click="showSimpleToast()">
         Show Simple
       </md-button>
-      <div style="width:50px"></div>
-      <md-button class="md-raised"
-                 ng-click="showActionToast()">
+      <md-button class="md-raised" ng-click="showActionToast()">
         Show With Action
       </md-button>
+      <div style="width:50px"></div>
     </div>
 
     <div>
       <br/>
       <b>Toast Position: "{{getToastPosition()}}"</b>
+      <br/>
+      <md-checkbox ng-repeat="(name, isSelected) in toastPosition"
+        aria-label="{{name}}"
+        ng-model="toastPosition[name]"> 
+        {{name}}
+      </md-checkbox>
+      <md-button class="md-primary md-fab md-fab-bottom-right">
+        FAB
+      </md-button>
+      <md-button class="md-primary md-fab md-fab-top-right" md-theme="green">
+        FAB
+      </md-button>
     </div>
-    <md-checkbox ng-repeat="(name, isSelected) in toastPosition"
-      aria-label="{{name}}"
-      ng-model="toastPosition[name]"> 
-      {{name}}
-    </md-checkbox>
-    <md-button class="md-primary md-fab md-fab-bottom-right">
-      FAB
-    </md-button>
-    <md-button class="md-primary md-fab md-fab-top-right" md-theme="green">
-      FAB
-    </md-button>
-  </div>
 </div>
