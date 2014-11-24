@@ -45,6 +45,10 @@ Please note, this project is still in an early beta.
 
 We're not actively reviewing unsolicited PRs from the community, although we welcome your feature requests, doc corrections, and issue reports. If you're thinking of contributing code or docs to the project, please review [Submitting Pull Requests](#submitpr) before beginning any work.  
 
+Please note, this project is still in an early beta. 
+
+We're not actively reviewing unsolicited PRs from the community, although we welcome your feature requests and issue reports. If you're thinking of contributing code to the project, please review [Submitting Pull Requests](#submitpr) before beginning any work.  
+
 #### Submitting an Issue
 Before you submit your issue **[search](https://github.com/angular/material/issues?q=is%3Aissue+is%3Aopen)** the issues archive; maybe your question was already answered. If your issue appears to be a bug, and hasn't been reported, open a new issue.
 
