@@ -67,7 +67,7 @@ Providing the following information will increase the chances of your issue bein
  ```
 * **Browsers and Operating System** - is this a problem with all browsers or only IE8?
 * **Reproduce the Error** - provide a live example (using [CodePen](http://codepen.io/), [Plunker](http://plnkr.co/),
-  [JSFiddle](http://jsfiddle.net/). 
+  [JSFiddle](http://jsfiddle.net/)). 
 * **Related Issues** - has a similar issue been reported before?
 * **Suggest a Fix** - if you can't fix the bug yourself, perhaps you can point to what might be
   causing the problem (line of code or commit)<br/><br/>
