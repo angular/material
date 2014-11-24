@@ -50,8 +50,9 @@ Additionally, all component modules are compiled and deployed as library collect
 
 #### Coding conventions:
 
-The best guidance is a coding approach that implements code and comments in a clear, understandable, concise, and DRY fashion.
+The best guidance is a coding approach that implements both code and comments in a clear, understandable, concise, and DRY fashion.
 
+Below is a sample code that demonstrates some of our rules and conventions:
 
 ```js
   (function() {
@@ -116,14 +117,16 @@ The best guidance is a coding approach that implements code and comments in a cl
 
 * All components must unique, understandable module names; <br/>prefixed with 'material.components.'
 * All components must depend upon the 'material.core' module.
+* Do not use $inject to annotate arguments
+  > The build process uses ngAnnotate to create the annotations during the build process.
 * All directives must use the `md-` prefix for both directive and any directive attributes
-* All public API methods **must be documented** with ngdoc, an extended version of jsdoc (we added
+  > Directive **templates** should be defined inline.<br/><br/>
+* All public API methods **must** be documented with ngdoc, an extended version of jsdoc (we added
   support for markdown and templating via @ngdoc tag). To see how we document our APIs, please check
   out the existing ngdocs and see [this wiki page][ngDocs].<br/><br/>
 * With the exceptions listed below, we follow the rules contained in
   [Google's JavaScript Style Guide][js-style-guide]
 
-* Directive **templates** should be defined inline.<br/><br/>
 
 #### Testing
 
