@@ -6,9 +6,7 @@
  - [Issues and Bugs](#bug)
  - [Feature Requests](#feature)
  - [Submission Guidelines](#submit)
- - [Pull Request Guidelines](PULL_REQUESTS.md)<br/><br/>
- - [Coding Conventions](CODING.md)
- 
+
 ## <a name="coc"></a> Code of Conduct
 Help us keep Angular open and inclusive.
 
