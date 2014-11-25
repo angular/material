@@ -14,7 +14,6 @@ function MdTabInkDirective($mdConstant, $window, $$rAF, $timeout) {
   return {
     restrict: 'E',
     require: ['^?mdNoBar', '^mdTabs'],
-    template: '<md-tabs-ink-bar-inner></md-tabs-ink-bar-inner>',
     link: postLink
   };
 
