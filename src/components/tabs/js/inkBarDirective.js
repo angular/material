@@ -45,7 +45,7 @@ function MdTabInkDirective($mdConstant, $window, $$rAF, $timeout) {
         if (timeout) $timeout.cancel(timeout);
         timeout = $timeout(function () {
           element.removeClass('md-ink-bar-grow');
-        }, 250, false);
+        }, 500, false);
 
       }
     }
