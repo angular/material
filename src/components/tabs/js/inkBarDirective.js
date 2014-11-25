@@ -25,17 +25,19 @@ function MdTabInkDirective($mdConstant, $window, $$rAF, $timeout) {
 
     if (nobar) return;
 
+    tabsCtrl.inkBarElement = element;
+
     scope.$watch(tabsCtrl.selected, updateBar);
     scope.$on('$mdTabsChanged', updateBar);
 
     function updateBar() {
       var selected = tabsCtrl.selected();
 
-      var hideInkBar = !selected || tabsCtrl.count() < 2 || 
+      var hideInkBar = !selected || tabsCtrl.count() < 2 ||
         (scope.pagination && scope.pagination.itemsPerPage === 1);
       element.css('display', hideInkBar ? 'none' : 'block');
 
-      if (!hideInkBar) { 
+      if (!hideInkBar) {
         var count = tabsCtrl.count();
         var scale = 1 / count;
         var left = tabsCtrl.indexOf(selected);

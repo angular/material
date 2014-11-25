@@ -12,6 +12,7 @@ md-tabs.md-#{$theme-name}-theme {
   }
 
   md-tabs-ink-bar {
+    color: $tabs-highlight-color;
     md-tabs-ink-bar-inner {
       background: $tabs-highlight-color;
     }

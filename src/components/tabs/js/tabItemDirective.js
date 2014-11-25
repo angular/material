@@ -94,7 +94,9 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
       transcludeTabContent();
       configureAria();
 
-      var detachRippleFn = $mdInkRipple.attachTabBehavior(scope, element);
+      var detachRippleFn = $mdInkRipple.attachTabBehavior(scope, element, {
+        colorElement: tabsCtrl.inkBarElement
+      });
       tabsCtrl.add(tabItemCtrl);
       scope.$on('$destroy', function() {
         detachRippleFn();
@@ -171,7 +173,7 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
       function watchActiveAttribute() {
         var unwatch = scope.$parent.$watch('!!(' + attr.mdActive + ')', activeWatchAction);
         scope.$on('$destroy', unwatch);
-        
+
         function activeWatchAction(isActive) {
           var isSelected = tabsCtrl.selected() === tabItemCtrl;
 
@@ -185,7 +187,7 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
 
       function watchDisabled() {
         scope.$watch(tabItemCtrl.isDisabled, disabledWatchAction);
-        
+
         function disabledWatchAction(isDisabled) {
           element.attr('aria-disabled', isDisabled);
 
