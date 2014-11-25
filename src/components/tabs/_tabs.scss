@@ -88,6 +88,7 @@ md-tabs[center] .md-header:not(.md-paginating) .md-header-items {
 }
 
 md-tabs-ink-bar {
+  z-index: 1;
   display: none;
   position: absolute;
   left: 0;

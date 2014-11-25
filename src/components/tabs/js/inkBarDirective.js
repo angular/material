@@ -33,7 +33,7 @@ function MdTabInkDirective($mdConstant, $window, $$rAF, $timeout) {
       var selected = tabsCtrl.selected();
 
       var hideInkBar = !selected || tabsCtrl.count() < 2 ||
-        (scope.pagination && scope.pagination.itemsPerPage === 1);
+        (scope.pagination || {}).itemsPerPage === 1;
       element.css('display', hideInkBar ? 'none' : 'block');
 
       if (!hideInkBar) {
