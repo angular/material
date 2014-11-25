@@ -13,16 +13,16 @@ function($q, $http, $compile, $templateCache, $timeout) {
   function postLink(scope, element, attr) {
     var demoContainer;
 
-    // Interpret the expression given as `demo-include="something"`
+    // Interpret the expression given as `demo-include files="something"`
     var files = scope.$eval(attr.files) || {};
     var ngModule = scope.$eval(attr.module) || '';
 
     $timeout(handleDemoIndexFile);
 
     /**
-     * Fetch the demo's incdex file, and if it contains its own ng-app ngModule
-     * then bootstrap a new angular app  with that ngModule. Otherwise, compile
-     * the demo into the current demo ng-app.
+     * Fetch the index file, and if it contains its own ngModule
+     * then bootstrap a new angular app with that ngModule. Otherwise, compile
+     * the demo into the current ng-app.
      */
     function handleDemoIndexFile() {
       files.index.contentsPromise.then(function(contents) {

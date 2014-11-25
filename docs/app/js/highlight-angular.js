@@ -46,10 +46,12 @@ DocsApp
           });
 
           // Make it so each line starts at 0 whitespace
-          var firstLineWhitespace = lines[0].match(/^\s*/)[0] || '';
+          var match = lines[0].match(/^\s*/);
+          var firstLineWhitespace =  match && match[0] || ''; 
+          var startingWhitespaceRegex = new RegExp('^' + firstLineWhitespace);
           lines = lines.map(function(line) {
             return line
-              .replace(new RegExp('^' + firstLineWhitespace), '')
+              .replace(startingWhitespaceRegex, '')
               .replace(/\s+$/, '');
           });
 
