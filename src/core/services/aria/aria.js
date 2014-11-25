@@ -4,7 +4,7 @@
 angular.module('material.core')
   .service('$mdAria', AriaService);
 
-function AriaService($$rAF, $log) {
+function AriaService($$rAF, $log, $window) {
 
   return {
     expect: expect,
@@ -50,11 +50,10 @@ function AriaService($$rAF, $log) {
 
   function childHasAttribute(node, attrName) {
     var hasChildren = node.hasChildNodes(),
-        childHasAttribute = false;
+        hasAttr = false;
 
     function isHidden(el) {
-      var style = el.currentStyle ? el.currentStyle :
-                            getComputedStyle(el);
+      var style = el.currentStyle ? el.currentStyle : $window.getComputedStyle(el);
       return (style.display === 'none');
     }
 
@@ -64,12 +63,12 @@ function AriaService($$rAF, $log) {
         var child = children[i];
         if(child.nodeType === 1 && child.hasAttribute(attrName)) {
           if(!isHidden(child)){
-            childHasAttribute = true;
+            hasAttr = true;
           }
         }
       }
     }
-    return childHasAttribute;
+    return hasAttr;
   }
 }
 })();
