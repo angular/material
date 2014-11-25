@@ -1,3 +1,52 @@
+<a name="0.6.0-rc2"></a>
+### 0.6.0-rc2  (2014-11-24)
+
+This version introduces more breaking layout changes, ripple improvements,
+aria improvements, bug fixes, and documentation enhancements.
+
+
+#### Bug Fixes
+
+* **button:** add override for transitions on ng-hide ([8fa652cf](https://github.com/angular/material/commit/8fa652cfb85aca2fe454c97b81ab306a4f9eb5e9), closes [#678](https://github.com/angular/material/issues/678))
+* **layout:** add [flex-{sm,md,etc}] attr for 100% flex on screen size ([7acca432](https://github.com/angular/material/commit/7acca432aa0e18cebf1420d00ccc24e011fd9f53), closes [#706](https://github.com/angular/material/issues/706))
+* **ripple:**
+  * fix ripple bug with checkboxes in lists ([7d99f701](https://github.com/angular/material/commit/7d99f701f8eaafc8a3d1210182e82f63ec99fffb), closes [#679](https://github.com/angular/material/issues/679))
+  * fix bug with vertical ripple alignment ([5cdcf29a](https://github.com/angular/material/commit/5cdcf29a524d5f371d5f9170129e5166a8ac5b27), closes [#725](https://github.com/angular/material/issues/725))
+* **sidenav:** use flex display when opened ([ae1c1528](https://github.com/angular/material/commit/ae1c15281f5b07426c97cee16ae1efb836168679), closes [#737](https://github.com/angular/material/issues/737))
+
+#### Features
+
+* **mdAria:** checks child nodes for aria-label ([d515a6c2](https://github.com/angular/material/commit/d515a6c27e7fcdddc3ab7c7e88c93ef9b285dc7e), closes [#567](https://github.com/angular/material/issues/567))
+* **mdBottomSheet:** add escape to close functionality ([d4b4480e](https://github.com/angular/material/commit/d4b4480ee5ae025c9d0dbab86a37a2294a09234e))
+* **tabs:** ink ripple color syncs with ink bar ([9c56383b](https://github.com/angular/material/commit/9c56383b63f33aa9c4478ff0d1de6f1422938d4e))
+
+
+#### Breaking Changes
+
+* The -phone, -tablet, -pc, and -tablet-landscape
+attribute suffixes have been removed and replaced with -sm, -md, and -lg
+attributes.
+
+* hide-sm means hide only on small devices (phones).
+* hide-md means hide only on medium devices (tablets)
+* hide-lg means hide only on large devices (rotated tablets).
+
+Additionally, three new attribute suffixes have been provided for more flexibility:
+
+* hide-gt-sm means hide on devices with size greater than small
+ (bigger than phones).
+* hide-gt-md means hide on devices with size greater than medium
+ (bigger than tablets)
+* hide-gt-lg means hide on devices with size greater than large
+ (bigger than rotated tablets).
+
+See the [layout options
+section](http://material.angularjs.org/#/layout/options)
+of the website for up-to-date information.
+
+ ([a659c543](https://github.com/angular/material/commit/a659c5432f95fa62ee79977d2a2d45221600c077))
+
+
 <a name="0.6.0-rc1"></a>
 ## 0.6.0-rc1  (2014-11-18)
 
