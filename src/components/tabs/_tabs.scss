@@ -100,7 +100,7 @@ md-tabs-ink-bar {
   transition: transform 0.5s $swift-ease-in-out-timing-function;
   transform-origin: 0 0;
   md-tabs-ink-bar-inner {
-    transition: transform 0.5s $swift-ease-out-timing-function;
+    transition: transform 0.25s $swift-ease-out-timing-function;
     transform: scaleX(1);
     transform-origin: 50% 50%;
     position: absolute;
@@ -111,7 +111,7 @@ md-tabs-ink-bar {
   }
   &.md-ink-bar-grow {
     md-tabs-ink-bar-inner {
-      transition: transform 0.5s $swift-ease-in-timing-function;
+      transition: transform 0.25s $swift-ease-in-timing-function;
       transform: scaleX(1.35);
     }
   }
