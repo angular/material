@@ -22,14 +22,14 @@
   flex-direction: row;
 }
 
-[layout-margin], /* DEPRECATED */
-[layout-margin] > [flex], /* DEPRECATED */
+[layout-padding], /* DEPRECATED */
+[layout-padding] > [flex], /* DEPRECATED */
 [layout-margin],
 [layout-margin] > [flex] {
   margin: $layout-gutter-width / 2;
 }
 
-[layout-margin] + [layout-margin], /* DEPRECATED */
+[layout-padding] + [layout-padding], /* DEPRECATED */
 [layout-margin] + [layout-margin] {
   margin-top: -($layout-gutter-width / 2);
 }
