@@ -64,6 +64,7 @@
   <div layout="column" layout-fill tabIndex="-1" role="main">
     <md-toolbar layout="column">
       <div class="md-toolbar-tools" ng-click="openMenu()" flex layout="column">
+
         <div layout="row" flex>
           <button class="menu-icon" show hide-gt-md aria-label="Toggle Menu" style="position: relative; top: -5px;">
             <md-icon icon="img/icons/ic_menu_24px.svg"></md-icon>
@@ -74,10 +75,18 @@
           </span>
           <div style="line-height: 28px;" ng-bind="(menu.currentPage | humanizeDoc) || 'Angular Material'"></div>
           <div flex></div>
-          <md-button ng-if="!currentDoc && path().indexOf('demo')" ng-repeat="doc in currentComponent.docs" ng-href="#{{doc.url}}" aria-label="{{ doc | humanizeDoc }}" layout="column">
-            {{doc | humanizeDoc | directiveBrackets}}
-          </md-button>
-          <md-button ng-if="currentDoc" ng-href="#/demo/{{currentComponent.name}}" style="position: relative; padding-left: 30px; margin-right: 15px;">
+
+          <div ng-repeat="doc in currentComponent.docs">
+            <md-button ng-href="#{{doc.url}}" 
+              ng-class="{hide: path().indexOf('demo') == -1}"
+              aria-label="{{ doc | humanizeDoc }}">
+              {{doc | humanizeDoc | directiveBrackets}}
+            </md-button>
+          </div>
+
+          <md-button ng-class="{hide: !currentDoc}"
+            ng-href="#/demo/{{currentComponent.name}}" 
+            style="position: relative; padding-left: 30px; margin-right: 15px;">
             <md-icon icon="/img/icons/ic_play_arrow_24px.svg" style="
                 height: 28px;
                 position: absolute;
@@ -85,7 +94,10 @@
                 top: -3px;"></md-icon>
             <span>View Demo</span>
           </md-button>
-          <md-button ng-if="currentDoc" ng-href="{{currentDoc.githubUrl}}" style="position: relative; padding-left: 30px; margin-right: 15px;">
+
+          <md-button ng-class="{hide: !currentDoc}"
+            ng-href="{{currentDoc.githubUrl}}" 
+            style="position: relative; padding-left: 30px; margin-right: 15px;">
             <md-icon icon="/img/icons/ic_launch_24px.svg" style="
                 height: 28;
                 position: absolute;
@@ -94,7 +106,11 @@
             <span hide-sm>View on Github</span>
             <span hide show-sm>Source</span>
           </md-button>
-          <md-button ng-if="currentDoc" ng-href="{{currentDoc.githubEditUrl}}" hide-sm style="position: relative; padding-left: 30px;">
+
+          <md-button ng-class="{hide: !currentDoc}"
+            ng-href="{{currentDoc.githubEditUrl}}" 
+            hide-sm 
+            style="position: relative; padding-left: 30px;">
             <md-icon icon="/img/icons/ic_launch_24px.svg" style="
                 height: 28;
                 position: absolute;

@@ -20,7 +20,8 @@ function(COMPONENTS, DEMOS, PAGES, $routeProvider) {
     angular.forEach(pages, function(page) {
       $routeProvider
         .when(page.url, {
-          templateUrl: page.outputPath
+          templateUrl: page.outputPath,
+          controller: 'GuideCtrl'
         });
     });
   });
@@ -69,9 +70,7 @@ function(COMPONENTS, DEMOS, PAGES, $routeProvider) {
    '$rootScope',
     '$timeout',
 function(Angularytics, $rootScope,$timeout) {
-   //$timeout(function(){
-     Angularytics.init()
-   //});
+  Angularytics.init();
 }])
 
 .factory('menu', [
@@ -262,6 +261,13 @@ function($scope, $rootScope, $http) {
     });
 
 
+}])
+
+
+.controller('GuideCtrl', [
+  '$rootScope',
+function($rootScope) {
+  $rootScope.currentComponent = $rootScope.currentDoc = null;
 }])
 
 .controller('LayoutCtrl', [
