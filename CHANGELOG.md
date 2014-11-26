@@ -1,3 +1,14 @@
+<a name="0.6.0-rc3"></a>
+### 0.6.0-rc3  (2014-11-26)
+
+
+#### Bug Fixes
+
+* **dialog:** correct the opening position when opening from a button ([22865394](https://github.com/angular/material/commit/228653942b32e4bf9d7a07af5a8203e4c2052132), closes [#757](https://github.com/angular/material/issues/757))
+* **hide:** make hide-gt-* attrs work properly with larger show attrs ([7fc6b423](https://github.com/angular/material/commit/7fc6b42314fbeb9024ba482a8407737100837604))
+* **ripple:** prevent null error while using ripple ([6d81ded1](https://github.com/angular/material/commit/6d81ded16b871ee5772ce8e0d06690c5c210c0ca))
+
+
 <a name="0.6.0-rc2"></a>
 ### 0.6.0-rc2  (2014-11-24)
 
