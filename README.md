@@ -20,7 +20,7 @@ Please note that using Angular Material requires the use of **Angular 1.3.x** or
 
 ![angularmaterial](https://cloud.githubusercontent.com/assets/210413/5148790/fb9ecf52-7187-11e4-9adc-fc5ef263b4ce.png)
 
-- Visit [Material.AngularJS.org]() online to review the API, see the components in action with live Demos, and study the Layout system.
+- Visit [Material.AngularJS.org](https://material.angularjs.org/) online to review the API, see the components in action with live Demos, and study the Layout system.
 - Or you can build the documentation and demos locally; see the [Build Docs & Demos](https://github.com/angular/material/tree/master/docs) for details.
 
 ## <a name="contributing"></a> Contributing
