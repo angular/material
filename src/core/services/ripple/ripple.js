@@ -159,7 +159,7 @@ function InkRippleService($window, $timeout) {
           elemIsHeld   = ripples.length > 1 ? false : isHeld;
       if (elemIsActive || state.animating || elemIsHeld) {
         elem.addClass('md-ripple-visible');
-      } else {
+      } else if (elem) {
         elem.removeClass('md-ripple-visible');
         if (options.outline) {
           elem.css({
