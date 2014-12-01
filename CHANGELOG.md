@@ -1,3 +1,8 @@
+<a name="0.6.0"></a>
+## 0.6.0 (2014-12-01)
+
+An official release of what was in 0.6.0-rc1-3 below.
+
 <a name="0.6.0-rc3"></a>
 ### 0.6.0-rc3  (2014-11-26)
 
