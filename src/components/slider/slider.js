@@ -161,10 +161,12 @@ function SliderController($scope, $element, $attrs, $$rAF, $window, $mdAria, $md
     function updateMin(value) {
       min = parseFloat(value);
       $element.attr('aria-valuemin', value);
+      updateAll();
     }
     function updateMax(value) {
       max = parseFloat(value);
       $element.attr('aria-valuemax', value);
+      updateAll();
     }
     function updateStep(value) {
       step = parseFloat(value);
