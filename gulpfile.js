@@ -475,6 +475,6 @@ function filterNonCodeFiles() {
 
 function autoprefix() {
   return autoprefixer({browsers: [
-    'last 2 versions', 'last 3 Android versions'
+    'last 2 versions', 'last 4 Android versions'
   ]});
 }
