@@ -1,7 +1,7 @@
 $sidenav-default-width: 304px;
 
 md-sidenav {
-  position: absolute;
+  position: fixed;
 
   width: $sidenav-default-width;
   bottom: 0;
