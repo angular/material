@@ -30,19 +30,18 @@ angular.module('material.components.sidenav', [
 function mdSidenavController($scope, $element, $attrs, $timeout, $mdSidenav, $mdComponentRegistry) {
 
   var self = this;
+  self.destroy = $mdComponentRegistry.register(self, $attrs.mdComponentId);
 
-  this.destroy = $mdComponentRegistry.register(this, $attrs.mdComponentId);
-
-  this.isOpen = function() {
+  self.isOpen = function() {
     return !!$scope.isOpen;
   };
-  this.toggle = function() {
+  self.toggle = function() {
     $scope.isOpen = !$scope.isOpen;
   };
-  this.open = function() {
+  self.open = function() {
     $scope.isOpen = true;
   };
-  this.close = function() {
+  self.close = function() {
     $scope.isOpen = false;
   };
 }
@@ -144,12 +143,12 @@ function mdSidenavService($mdComponentRegistry) {
  * of appearing over it. This overrides the `is-open` attribute.
  *
  * A $media() function is exposed to the is-locked-open attribute, which
- * can be given a media query or one of the `sm`, `md` or `lg` presets.
+ * can be given a media query or one of the `sm`, `gt-sm`, `md`, `gt-md`, `lg` or `gt-lg` presets.
  * Examples:
  *
  *   - `<md-sidenav md-is-locked-open="shouldLockOpen"></md-sidenav>`
  *   - `<md-sidenav md-is-locked-open="$media('min-width: 1000px')"></md-sidenav>`
- *   - `<md-sidenav md-is-locked-open="$media('sm')"></md-sidenav>` <!-- locks open on small screens !-->
+ *   - `<md-sidenav md-is-locked-open="$media('sm')"></md-sidenav>` (locks open on small screens)
  */
 function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $compile, $mdTheming) {
   return {
@@ -240,13 +239,8 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
  * @example $mdMedia('(min-width: 1200px)') == true if device-width >= 1200px
  * @example $mdMedia('max-width: 300px') == true if device-width <= 300px (sanitizes input, adding parens)
  */
-function mdMediaFactory($window, $mdUtil, $timeout) {
+function mdMediaFactory($window, $mdUtil, $timeout, $mdConstant) {
   var cache = $mdUtil.cacheFactory('$mdMedia', { capacity: 15 });
-  var presets = {
-    sm: '(min-width: 600px)',
-    md: '(min-width: 960px)',
-    lg: '(min-width: 1200px)'
-  };
 
   angular.element($window).on('resize', updateAll);
 
@@ -262,7 +256,7 @@ function mdMediaFactory($window, $mdUtil, $timeout) {
   }
 
   function validate(query) {
-    return presets[query] || (
+    return $mdConstant.MEDIA[query] || (
       query.charAt(0) != '(' ?  ('(' + query + ')') : query
     );
   }

@@ -13,18 +13,6 @@ describe('$mdMedia', function() {
     $mdMedia('something');
     expect($window.matchMedia).toHaveBeenCalledWith('(something)');
   }));
-  it('should validate input', inject(function($window, $mdMedia) {
-    $mdMedia('sm');
-    expect($window.matchMedia).toHaveBeenCalledWith('(min-width: 600px)');
-
-    $window.matchMedia.reset();
-    $mdMedia('md');
-    expect($window.matchMedia).toHaveBeenCalledWith('(min-width: 960px)');
-
-    $window.matchMedia.reset();
-    $mdMedia('lg');
-    expect($window.matchMedia).toHaveBeenCalledWith('(min-width: 1200px)');
-  }));
 
   it('should return result of matchMedia and recalculate on resize', inject(function($window, $mdMedia) {
     matchMediaResult = true;
