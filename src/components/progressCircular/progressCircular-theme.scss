@@ -4,11 +4,25 @@ $progress-circle-inset-color: $background-color-base !default;
 
 md-progress-circular.md-#{$theme-name}-theme {
   background-color: $progress-circle-background;
-  .md-circle .md-mask .md-fill {
-    background-color: $progress-circle-color;
-  }
-
-  .md-inset {
-    background-color: $progress-circle-inset-color;
+  .md-inner {
+    .md-gap {
+      border-top-color: $progress-circle-color;
+      border-bottom-color: $progress-circle-color;
+    }
+    .md-left, .md-right {
+      .md-half-circle {
+        border-top-color: $progress-circle-color;
+      }
+    }
+    .md-right {
+      .md-half-circle {
+        border-right-color: $progress-circle-color;
+      }
+    }
+    .md-left {
+      .md-half-circle {
+        border-left-color: $progress-circle-color;
+      }
+    }
   }
 }
