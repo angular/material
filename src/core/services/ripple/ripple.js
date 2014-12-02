@@ -183,6 +183,8 @@ function InkRippleService($window, $timeout) {
      */
     function createRipple(left, top) {
 
+      color = parseColor(element.attr('md-ink-ripple')) || parseColor($window.getComputedStyle(options.colorElement[0]).color || 'rgb(0, 0, 0)');
+
       var container = getRippleContainer(),
           size = getRippleSize(left, top),
           css = getRippleCss(size, left, top),
