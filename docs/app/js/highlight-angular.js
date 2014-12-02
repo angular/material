@@ -31,7 +31,7 @@ DocsApp
             // Defer highlighting 1-frame to prevent GA interference...
             $timeout(function() {
               render(code, contentParent);
-            }, 0, false);
+            }, 34, false);
           }
         });
 
