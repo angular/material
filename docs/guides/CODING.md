@@ -2,8 +2,8 @@
 
  - [Project Structure](#structure)
  - [Coding Rules](#rules)
- 
- 
+
+
 ## <a name="structure"></a> Project Structure
 
 All component modules are defined in:
@@ -12,7 +12,7 @@ All component modules are defined in:
  -- /src
     -- /components
        -- /<component folder>
-          
+
           -- <component>.js
           -- <component>.spec.js
           -- <component>.scss
@@ -87,18 +87,18 @@ angular.module('material.components.slider', [
  * @usage
  * <h4>Normal Mode</h4>
  * <hljs lang="html">
- *   <md-slider ng-model="myValue" 
- *              min="5" 
+ *   <md-slider ng-model="myValue"
+ *              min="5"
  *              max="500">
  *   </md-slider>
  * </hljs>
  *
  * <h4>Discrete Mode</h4>
  * <hljs lang="html">
- *   <md-slider md-discrete 
- *              ng-model="myDiscreteValue" 
- *              step="10" 
- *              min="10" 
+ *   <md-slider md-discrete
+ *              ng-model="myDiscreteValue"
+ *              step="10"
+ *              min="10"
  *              max="130">
  *   </md-slider>
  * </hljs>
@@ -116,7 +116,7 @@ function SliderDirective($mdTheming) {
 ```
 
 *  With the exceptions listed in this document, follow the rules contained in [Google's JavaScript Style Guide][js-style-guide]
-*  All components must unique, understandable module names; prefixed with 'material.components.'
+*  All components must have unique, understandable module names; prefixed with 'material.components.'
 *  All components must depend upon the 'material.core' module.
 *  Do not use $inject to annotate arguments<br/>The build process uses ngAnnotate to create the annotations during the build proces.
 *  All public API methods **must** be documented with ngdoc, an extended version of jsdoc (we added support for markdown and templating via @ngdoc tag). To see how we document our APIs, please check out the existing ngdocs and see [this wiki page][ngDocs].
@@ -150,6 +150,6 @@ function SliderDirective($mdTheming) {
 * To write concise code that can be better minified, we **use aliases internally** that map to the
   external API.
 * Use of argument **type annotations** for private internal APIs is not encouraged, unless it's an internal API
-  that is used throughout AngularJS. 
+  that is used throughout Angular Material.
 
 

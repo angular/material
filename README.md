@@ -1,6 +1,6 @@
 # Material Design for AngularJS Apps [![Build Status](https://travis-ci.org/angular/material.svg)](https://travis-ci.org/angular/material)
 
-[Material Design](http://www.google.com/design/spec/material-design/) is a specification for a unified system of visual, motion, and interaction design that adapts across different devices. Our goal is to deliver a lean, lightweight set of AngularJS-native UI elements that implement the material design system for use in Angular single-page applications (SPAs).
+[Material Design](http://www.google.com/design/spec/material-design/) is a specification for a unified system of visual, motion, and interaction design that adapts across different devices. Our goal is to deliver a lean, lightweight set of AngularJS-native UI elements that implement the material design specification for use in Angular single-page applications (SPAs).
 
 ![venn](https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png)
 
@@ -29,7 +29,7 @@ Developers interested in contributing should read the following guidelines
 
 - [Contributing Guidelines](docs/guides/CONTRIBUTING.md)
 - [Coding Guidelines](docs/guides/CODING.md)
-- [CHANGELOG](CHANGELOG.md) 
+- [CHANGELOG](CHANGELOG.md)
 
 It is important to note that for each release, the [ChangeLog](CHANGELOG.md) is a resource that will itemize all
 
@@ -67,7 +67,7 @@ For more details on how the build process works and additional commands (availab
 
 ## <a name="installing"></a>  Installing
 
-For developers not interested in building the Angular Material library... use **bower** to install and use the Angular Material distribution files. 
+For developers not interested in building the Angular Material library... use **bower** to install and use the Angular Material distribution files.
 
 Change to your project's root directory.
 

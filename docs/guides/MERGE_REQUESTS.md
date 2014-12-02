@@ -46,7 +46,7 @@ to squash all of your commits into the top one, then rename the top one.
 Once this is done, run `git log` and you will see only one commit after master, representing
 everything from the pull request.
 
-Finally, we'll pull from master with rebase to put all of our local commits on top of 
+Finally, we'll pull from master with rebase to put all of our local commits on top of
 the latest remote.
 
 ```sh
@@ -93,7 +93,7 @@ git am --continue
 
 ###<a name="merging"></a> Merging With Master
 
-Finally, after you've squashed the whole pull request into one commit and made sure 
+Finally, after you've squashed the whole pull request into one commit and made sure
 it has no conflicts with the latest master and tests are run, you're ready to merge it in.
 
 Simply go back to the master branch:
@@ -114,10 +114,10 @@ And finally, rebase your pull request in from your WIP pull request branch:
 git rebase wip-pr-143
 ```
 
-This will rebase the commits from wip-pr-143 into master. 
+This will rebase the commits from wip-pr-143 into master.
 
 Finally, verify that tests pass and the docs look fine, and make sure
-the commit message for the pull request closes the proper issues and lists 
+the commit message for the pull request closes the proper issues and lists
 breaking changes.
 
 You can amend the commit to change the message:
@@ -126,14 +126,14 @@ You can amend the commit to change the message:
 git commit --amend
 ```
 
-This will open the latest commit in your text editor and allow you to add 
+This will open the latest commit in your text editor and allow you to add
 text. Do **not** forget to add `Close #xxx` to also close the PR; in this case you will aadd `Close #143`.
 
 For example:
 
 > fix(constant): rename $mdConstant.SOMETHING_ELSE to $mdConstant.SOMETHING
 
-> Close #143. Close #156. 
+> Close #143. Close #156.
 
 > BREAKING CHANGE: $mdConstant.SOMETHING_ELSE has been renamed to $mdConstant.SOMETHING.
 
@@ -149,7 +149,7 @@ For example:
   $mdConstant.SOMETHING
 > ```
 
-For more examples of how to format commit messages, see 
+For more examples of how to format commit messages, see
 [the guidelines in CONTRIBUTING.md](https://github.com/angular/material/blob/master/CONTRIBUTING.md#-git-commit-guidelines).
 
 ```sh

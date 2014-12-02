@@ -14,7 +14,7 @@ Before you submit your pull request consider the following guidelines:
 * Follow our [Coding Rules](#rules).
 * **Include appropriate test cases**
 * Create your patch
-* Run the full Angular test suite, as described in the [developer documentation][dev-doc], and ensure that all tests pass.
+* Run the full Angular Material test suite, as described in the [developer documentation][dev-doc], and ensure that all tests pass.
 * Commit your changes using a descriptive commit message that follows our
   [commit message conventions](#commit-message-format) and passes our commit message presubmit hook
   `validate-commit-msg.js`. <br/>Adherence to the [commit message conventions](#commit-message-format)
@@ -40,14 +40,14 @@ Before you submit your pull request consider the following guidelines:
 * In GitHub, send a pull request to `angular:master`.
 * If we suggest changes then
   * Make the required updates.
-  * Re-run the Angular test suite to ensure tests are still passing.
+  * Re-run the Angular Material test suite to ensure tests are still passing.
   * Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
 
     ```shell
     git rebase master -i
     git push -f
     ```
-	
+
 <br/>
 <hr/>
 
@@ -82,5 +82,4 @@ from the main (upstream) repository:
 
     ```shell
     git pull --ff upstream master
-	```language
-```
+    ```
