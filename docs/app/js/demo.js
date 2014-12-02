@@ -27,7 +27,7 @@ function($mdUtil) {
 
     self.addFile = function(name, contentsPromise) {
       var file = {
-        name: name,
+        name: convertName(name),
         contentsPromise: contentsPromise,
         fileType: name.split('.').pop()
       };
@@ -48,6 +48,16 @@ function($mdUtil) {
         .concat(self.files.css || [])
         .concat(self.files.html || []);
     };
+
+    function convertName(name) {
+      switch(name) {
+        case "index.html" : return "HTML";
+        case "script.js" : return "JS";
+        case "style.css" : return "CSS";
+        default : return name;
+      }
+    }
+
   }
 }])
 .directive('demoFile', ['$q', '$interpolate', function($q, $interpolate) {
