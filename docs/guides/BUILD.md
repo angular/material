@@ -63,7 +63,7 @@ To build from the source, simply use:
 # - `dist/angular-material.css`
 # - `dist/themes`
 
-guild build
+gulp build
 
 # Build MINIFIED assets
 #
@@ -71,12 +71,12 @@ guild build
 # - `dist/angular-material.min.css`
 # - `dist/themes`
 
-guild build --release
+gulp build --release
 ```
 
-###<a name="bower"></a>  Using the Library with Bower 
+###<a name="bower"></a>  Using the Library with Bower
 
-For developers not interested in building the Angular Material library, use **bower** to install and use the Angular Material distribution files. 
+For developers not interested in building the Angular Material library, use **bower** to install and use the Angular Material distribution files.
 
 Change to your project's root directory.
 
@@ -112,9 +112,9 @@ All component modules are compiled and distributed to:
 ```text
  -- dist
     -- modules
-	   -- js
-	      -- core
-	      -- <component folder>
+       -- js
+          -- core
+          -- <component folder>
 ```
 
 Let's consider the the Slider component with its module definition:
@@ -138,23 +138,19 @@ To use - for example - the Slider component within your own application, simply 
 ```text
  -- dist
     -- modules
-	   -- js
-	      -- core
-		     -- core.js
-		     -- core.css
-	      -- slider
-		     -- slider.js
-			 -- slider.css
-			 -- slider-default-theme.css
+       -- js
+          -- core
+             -- core.js
+             -- core.css
+          -- slider
+             -- slider.js
+             -- slider.css
+             -- slider-default-theme.css
 ```
 
 ###<a name="comp_debug"></a> Component Debugging
 
 Debugging a demo in the Live Docs is complicated due the multiple demos loading and initializing. A more practical approach is to open and debug a specific, standalone Component demo.
-
-#### Component Debugging
-
-Debugging directly in the Live Docs is complicated due the multiple demos loading and initializing. 
 
 To open a Component demo outside of the Docs application, just build, deploy and debug that compnents demo(s).
 

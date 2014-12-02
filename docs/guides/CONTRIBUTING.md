@@ -24,7 +24,7 @@ Otherwise, do you:
 - [Want a Feature ?](#feature)
 
 #### <a name="bug"></a> 1. Found a Bug or Issue?
-If you find a bug in the source code or a mistake in the documentation, we recommend that you first review the [Online Documentation](http://material.angularjs.org/). 
+If you find a bug in the source code or a mistake in the documentation, we recommend that you first review the [Online Documentation](http://material.angularjs.org/).
 
 Otherwise you can help us improve by submitting an issue to our [GitHub Repository](https://github.com/angular/material/issues/new). Even better you can submit a **Pull Request** with a fix. Your custom changes can be crafted in a repository fork and submitted to [GitHub Repository](https://github.com/angular/material/compare) as a Pull Request.
 
@@ -41,9 +41,9 @@ project.
 
 ## <a name="submit"></a> Submission Guidelines
 
-Please note, this project is still in an early beta. 
+Please note, this project is still in an early beta.
 
-We're not actively reviewing unsolicited PRs from the community, although we welcome your feature requests, doc corrections, and issue reports. If you're thinking of contributing code or docs to the project, please review [Submitting Pull Requests](#submitpr) before beginning any work.  
+We're not actively reviewing unsolicited PRs from the community, although we welcome your feature requests, doc corrections, and issue reports. If you're thinking of contributing code or docs to the project, please review [Submitting Pull Requests](#submitpr) before beginning any work.
 
 #### Submitting an Issue
 Before you submit your issue **[search](https://github.com/angular/material/issues?q=is%3Aissue+is%3Aopen)** the issues archive; maybe your question was already answered. If your issue appears to be a bug, and hasn't been reported, open a new issue.
@@ -53,7 +53,7 @@ Before you submit your issue **[search](https://github.com/angular/material/issu
 Providing the following information will increase the chances of your issue being dealt with quickly:
 
 * **Overview of the Issue** - if an error is being thrown a non-minified stack trace helps
-* **Angular Version(s)** - check the header of your `angular-material.js` file to determine your specific version #.
+* **Angular Material Version(s)** - check the header of your `angular-material.js` file to determine your specific version #.
 
 ```js
 /*!
@@ -65,7 +65,7 @@ Providing the following information will increase the chances of your issue bein
  ```
 * **Browsers and Operating System** - is this a problem with all browsers or only IE8?
 * **Reproduce the Error** - provide a live example (using [CodePen](http://codepen.io/), [Plunker](http://plnkr.co/),
-  [JSFiddle](http://jsfiddle.net/)). 
+  [JSFiddle](http://jsfiddle.net/)).
 * **Related Issues** - has a similar issue been reported before?
 * **Suggest a Fix** - if you can't fix the bug yourself, perhaps you can point to what might be
   causing the problem (line of code or commit)<br/><br/>
@@ -75,7 +75,7 @@ Here is are two examples of a well-defined issue:
 
 #### <a name="submitpr"></a>Submitting Pull Requests
 
-**Important**: With the exception of minor bugs and doc fixes, we are not actively reviewing unsolicited PRs to Angular Material. 
+**Important**: With the exception of minor bugs and doc fixes, we are not actively reviewing unsolicited PRs to Angular Material.
 
 Please check with us via [the discussion forum] (https://groups.google.com/forum/#!forum/ngmaterial) before investing significant effort in any pre-1.0 PR contribution; it's likely that we are already working on a related PR.
 
@@ -120,7 +120,7 @@ Must be one of the following:
   generation
 
 ##### Scope
-The scope could be anything specifying place of the commit change. 
+The scope could be anything specifying place of the commit change.
 
 ##### Subject
 The subject contains succinct description of the change:
@@ -143,24 +143,24 @@ reference GitHub issues that this commit **Closes**.
 
 ```text
 refactor(content): prefix mdContent scroll- attributes
-    
+
     BREAKING CHANGE: md-content's `scroll-` attributes are now prefixed with `md-`.
-    
+
     Change your code from this:
-    
+
     '''html
     <md-content scroll-x scroll-y scroll-xy>
     '''
-	
-    To this:    
-	
+
+    To this:
+
     '''html
     <md-content md-scroll-x md-scroll-y md-scroll-xy>
     ''''
 ```
 
 <br/>
-## <a name="cla"></a> Signing the CLA 
+## <a name="cla"></a> Signing the CLA
 
 Please sign our Contributor License Agreement (CLA) before sending pull requests. For any code
 changes to be accepted, the CLA must be signed. It's a quick process, we promise!
