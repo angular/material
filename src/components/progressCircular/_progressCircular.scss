@@ -1,9 +1,9 @@
-$ease-in-out : cubic-bezier(0.35, 0, 0.25, 1);
-$duration : 5.25s;
-$circle-duration : $duration * 0.25;
-$outer-duration : $duration * (5 / 9);
-$sporadic-duration : $duration;
-$size : 50px;
+$progress-circular-ease-in-out : cubic-bezier(0.35, 0, 0.25, 1);
+$progress-circular-duration : 5.25s;
+$progress-circular-circle-duration : $progress-circular-duration * 0.25;
+$progress-circular-outer-duration : $progress-circular-duration * (5 / 9);
+$progress-circular-sporadic-duration : $progress-circular-duration;
+$progress-circular-size : 50px;
 
 @keyframes outer-rotate {
   100% { transform: rotate(360deg); }
@@ -28,21 +28,21 @@ $size : 50px;
 }
 
 md-progress-circular {
-  width: $size;
-  height: $size;
+  width: $progress-circular-size;
+  height: $progress-circular-size;
   display: block;
   position: relative;
   padding-top: 0 !important;
   margin-bottom: 0 !important;
   overflow: hidden;
   .md-inner {
-    width: $size;
-    height: $size;
+    width: $progress-circular-size;
+    height: $progress-circular-size;
     position: relative;
     .md-gap {
       position: absolute;
-      left: $size * 0.5 - 1;
-      right: $size * 0.5 - 1;
+      left: $progress-circular-size * 0.5 - 1;
+      right: $progress-circular-size * 0.5 - 1;
       top: 0;
       bottom: 0;
       border-top: 5px solid black;
@@ -51,14 +51,14 @@ md-progress-circular {
     .md-left, .md-right {
       position: absolute;
       top: 0;
-      height: $size;
-      width: $size * 0.5;
+      height: $progress-circular-size;
+      width: $progress-circular-size * 0.5;
       overflow: hidden;
       .md-half-circle {
         position: absolute;
         top: 0;
-        width: $size;
-        height: $size;
+        width: $progress-circular-size;
+        height: $progress-circular-size;
         box-sizing: border-box;
         border-width: 5px;
         border-style: solid;
@@ -133,14 +133,14 @@ md-progress-circular {
 
   &[md-mode=indeterminate] {
     .md-spinner-wrapper {
-      animation: outer-rotate $outer-duration linear infinite;
+      animation: outer-rotate $progress-circular-outer-duration linear infinite;
       .md-inner {
-        animation: sporadic-rotate $sporadic-duration $ease-in-out infinite;
+        animation: sporadic-rotate $progress-circular-sporadic-duration $progress-circular-ease-in-out infinite;
         .md-left, .md-right {
           .md-half-circle {
             animation-iteration-count: infinite;
-            animation-duration: ($duration * 0.25);
-            animation-timing-function: $ease-in-out;
+            animation-duration: ($progress-circular-duration * 0.25);
+            animation-timing-function: $progress-circular-ease-in-out;
           }
         }
         .md-left {
