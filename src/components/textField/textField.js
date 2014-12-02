@@ -26,10 +26,10 @@ angular.module('material.components.textField', [
  * @description
  * Use the `<md-text-float>` directive to quickly construct `Floating Label` text fields
  *
- * @param {string} mdFid Attribute used for accessibility link pairing between the Label and Input elements
+ * @param {string} ng-model Optional value to assign as existing input text string
+ * @param {string} label Attribute to specify the input text field label/hint.
  * @param {string=} type Optional value to define the type of input field. Defaults to string.
- * @param {string} label Attribute to specify the input text field hint.
- * @param {string=} ng-model Optional value to assign as existing input text string
+ * @param {string=} md-fid Optional attribute used for accessibility link pairing between the Label and Input elements
  *
  * @usage
  * <hljs lang="html">
