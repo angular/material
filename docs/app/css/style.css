@@ -257,6 +257,7 @@ md-toolbar.demo-toolbar .md-button {
   -webkit-transition: all 0.3s linear;
   -moz-transition: all 0.3s linear;
   transition: all 0.3s linear;
+  color: #616161;
 }
 .demo-source-container {
   display: block;
