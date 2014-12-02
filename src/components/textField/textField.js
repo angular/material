@@ -33,13 +33,13 @@ angular.module('material.components.textField', [
  *
  * @usage
  * <hljs lang="html">
- * <md-text-float label="LastName" ng-model="user.lastName" > </md-text-float>
+ * <md-text-float label="LastName" name="lastname" ng-model="user.lastName" > </md-text-float>
  *
  * <!-- Specify a read-only input field by using the `disabled` attribute -->
- * <md-text-float label="Company"  ng-model="user.company" ng-disabled="true" > </md-text-float>
+ * <md-text-float label="Company" name="company"  ng-model="user.company" ng-disabled="true" > </md-text-float>
  *
  * <!-- Specify an input type if desired. -->
- * <md-text-float label="eMail"    ng-model="user.email" type="email" ></md-text-float>
+ * <md-text-float label="Email" name="email" ng-model="user.email" type="email" ></md-text-float>
  * </hljs>
  */
 function mdTextFloatDirective($mdTheming, $mdUtil, $parse) {
@@ -49,6 +49,7 @@ function mdTextFloatDirective($mdTheming, $mdUtil, $parse) {
     scope : {
       fid : '@?mdFid',
       label : '@?',
+      name : '@?',
       value : '=ngModel'
     },
     compile : function(element, attr) {
@@ -72,7 +73,7 @@ function mdTextFloatDirective($mdTheming, $mdUtil, $parse) {
     template:
     '<md-input-group tabindex="-1">' +
     ' <label for="{{fid}}" >{{label}}</label>' +
-    ' <md-input id="{{fid}}" ng-disabled="isDisabled()" ng-model="value" type="{{inputType}}"></md-input>' +
+    ' <md-input id="{{fid}}" name="{{name}}" ng-disabled="isDisabled()" ng-model="value" type="{{inputType}}"></md-input>' +
     '</md-input-group>'
   };
 }
