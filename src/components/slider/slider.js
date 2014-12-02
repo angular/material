@@ -257,6 +257,7 @@ function SliderController($scope, $element, $attrs, $$rAF, $window, $mdAria, $md
       $scope.modelValue = ngModelCtrl.$viewValue;
       $element.attr('aria-valuenow', ngModelCtrl.$viewValue);
       setSliderPercent(percent);
+      thumbText.text( ngModelCtrl.$viewValue );
     }
 
     function minMaxValidator(value) {

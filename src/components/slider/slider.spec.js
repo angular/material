@@ -119,6 +119,54 @@ describe('md-slider', function() {
     expect($rootScope.model).toBe(100);
   }));
 
+  it('should update the thumb text', inject(function($compile, $rootScope, $timeout, $mdConstant) {
+    var slider = $compile('<md-slider ng-model="value" min="0" max="100">')($rootScope);
+    var sliderCtrl = slider.controller('mdSlider');
+
+    spyOn(slider[0].querySelector('.md-track-container'), 'getBoundingClientRect').andReturn({
+      width: 100,
+      left: 0,
+      right: 0
+    });
+
+    sliderCtrl._onInput( simulateEventAt( 30, Hammer.INPUT_START ));
+    $timeout.flush();
+    expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('30');
+
+    slider.triggerHandler({
+      type: 'keydown',
+      keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
+    });
+    $timeout.flush();
+    expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('29');
+
+    sliderCtrl._onPan( simulateEventAt( 30 ));
+    $timeout.flush();
+    expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('30');
+  }));
+
+  it('should update the thumb text with the model value when using ng-change', inject(function($compile, $rootScope, $timeout) {
+    $scope = $rootScope.$new();
+
+    $scope.stayAt50 = function () {
+      $scope.value = 50;
+    };
+
+    var slider = $compile('<md-slider ng-model="value" min="0" max="100" ng-change="stayAt50()">')($scope);
+    var sliderCtrl = slider.controller('mdSlider');
+
+    spyOn(slider[0].querySelector('.md-track-container'), 'getBoundingClientRect').andReturn({
+      width: 100,
+      left: 0,
+      right: 0
+    });
+
+    sliderCtrl._onInput( simulateEventAt( 30, Hammer.INPUT_START ));
+    $timeout.flush();
+    expect($scope.value).toBe(50);
+    expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('50');
+  }));
+
   it('should call $log.warn if aria-label isnt provided', inject(function($compile, $rootScope, $timeout, $log) {
     spyOn($log, "warn");
     var element = $compile(
