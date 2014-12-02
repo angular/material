@@ -43,6 +43,13 @@
   min-height: 100%;
   width: 100%;
 }
+@-moz-document url-prefix() { 
+  [layout-fill] {
+    margin: 0;
+    width: 100%;
+    min-height: auto;
+  }
+}
 
 @mixin layout-for-name($name) {
   [layout-#{$name}] {
