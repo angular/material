@@ -28,7 +28,7 @@ Before you submit your pull request consider the following guidelines:
 * Build your changes locally to ensure all the tests pass
 
     ```shell
-    gulp karma
+    gulp validate
     ```
 
 * Push your branch to GitHub:

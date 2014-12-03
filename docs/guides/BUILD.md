@@ -35,7 +35,7 @@ The following command line tasks are available:
 - `gulp watch` to build & rebuild on changes
 
 
-- `gulp karma` to test once
+- `gulp karma` to test once / `gulp validate` to also run jshint before karma
 - `gulp karma-watch` to test & watch for changes
 
 ###<a name="livedocs"></a>  Building the Documentation
