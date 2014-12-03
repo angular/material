@@ -57,14 +57,13 @@ $whiteframe-zindex-z5: 5;
 // Z-indexes
 //--------------------------------------------
 
-$z-index-dialog: 10;
-$z-index-tooltip: 9;
-$z-index-toast: 8;
-$z-index-bottom-sheet: 8;
-
-$z-index-sidenav: 6;
-$z-index-backdrop: 5;
-$z-index-fab: 2;
+$z-index-dialog: 100;
+$z-index-tooltip: 90;
+$z-index-toast: 80;
+$z-index-bottom-sheet: 70;
+$z-index-sidenav: 60;
+$z-index-backdrop: 50;
+$z-index-fab: 20;
 
 // Easing Curves
 //--------------------------------------------
