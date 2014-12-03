@@ -30,6 +30,7 @@ angular.module('material.components.textField', [
  * @param {string} label String value or expression that specifies the input text field label/hint.
  * @param {string=} type Optional value to define the type of input field. Defaults to string.
  * @param {string=} md-fid Optional attribute used for accessibility link pairing between the Label and Input elements
+ * @param {string=} tabindex Optional attribute to specify tab order.
  *
  * @usage
  * <hljs lang="html">
@@ -65,14 +66,18 @@ function mdTextFloatDirective($mdTheming, $mdUtil, $parse) {
           };
 
           scope.inputType = attrs.type || "text";
+
+          scope.tabIndex = attrs.tabindex || '0';
+
+          element.attr('tabindex', '-1');
         },
         post: $mdTheming
       };
     },
     template:
-    '<md-input-group tabindex="-1">' +
-    ' <label for="{{fid}}" >{{label}}</label>' +
-    ' <md-input id="{{fid}}" ng-disabled="isDisabled()" ng-model="value" type="{{inputType}}"></md-input>' +
+    '<md-input-group>' +
+    ' <label for="{{fid}}">{{label}}</label>' +
+    ' <md-input tabIndex="{{tabIndex}}" id="{{fid}}" ng-disabled="isDisabled()" ng-model="value" type="{{inputType}}"></md-input>' +
     '</md-input-group>'
   };
 }
@@ -142,9 +147,11 @@ function mdInputDirective($mdUtil) {
       var inputGroupCtrl = ctrls[0];
       var ngModelCtrl = ctrls[1];
 
+      var initialTabIndex = angular.isUndefined(attr.tabindex) ? 0 : attr.tabindex;
+
       scope.$watch(scope.isDisabled, function(isDisabled) {
         element.attr('aria-disabled', !!isDisabled);
-        element.attr('tabindex', !!isDisabled);
+        element.attr('tabindex', (isDisabled ? -1 : initialTabIndex));
       });
       element.attr('type', attr.type || element.parent().attr('type') || "text");
 
