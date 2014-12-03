@@ -47,7 +47,7 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
 
     // Make sure we don't focus an element on the next page
     // before it's in view
-    function onTabFocus(tab) {
+    function onTabFocus(tab, oldTab) {
       if (!tab) return;
 
       var pageIndex = getPageForTab(tab);
@@ -55,6 +55,7 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
         tab.element.focus();
       } else {
         // Go to the new page, wait for the page transition to end, then focus.
+        oldTab && oldTab.element.blur();
         setPage(pageIndex).then(function() {
           tab.element.focus();
         });
