@@ -35,8 +35,8 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
     scope.$on('$mdTabsChanged', debouncedUpdatePagination);
     angular.element($window).on('resize', debouncedUpdatePagination);
 
-    // Listen to focus events bubbling up from md-tab elements
-    tabsParent.on('focusin', onTabsFocusIn);
+    // Listen to focus events from md-tab elements
+    tabsCtrl.scope.$on('$materialTab.focus', onTabFocus);
 
     scope.$on('$destroy', function() {
       angular.element($window).off('resize', debouncedUpdatePagination);
@@ -46,14 +46,18 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
     scope.$watch(tabsCtrl.selected, onSelectedTabChange);
 
     // Allows pagination through focus change.
-    function onTabsFocusIn(ev) {
+    function onTabFocus(ev, tab) {
       if (!state.active) return;
 
-      var tab = angular.element(ev.target).controller('mdTab');
       var pageIndex = getPageForTab(tab);
       if (pageIndex !== state.page) {
         // If the focused element is on a new page, don't focus yet.
         tab.element.blur();
+        // Firefox doesn't support synchronously stopping focus, so we have
+        // to do it asynchronously there...
+        setTimeout(function() {
+          tab.element.blur();
+        });
         // Go to the new page, wait for the page transition to end, then focus.
         setPage(pageIndex).then(function() {
           tab.element.focus();
