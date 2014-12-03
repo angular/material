@@ -143,7 +143,6 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
         } else if (ev.keyCode === $mdConstant.KEY_CODE.LEFT_ARROW) {
           scope.$evalAsync(function() {
             tabsCtrl.focus(tabsCtrl.previous(tabItemCtrl));
-            console.log('pressing back');
           });
         } else if (ev.keyCode === $mdConstant.KEY_CODE.RIGHT_ARROW) {
           scope.$evalAsync(function() {

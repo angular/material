@@ -69,7 +69,7 @@ describe('<md-tabs>', function() {
       expect($document.activeElement).toBe(tabItems[0]);
     }));
 
-    it('should focus tab on arrow if tab is enabled', inject(function($document, $mdConstant) {
+    it('should focus tab on arrow if tab is enabled', inject(function($document, $mdConstant, $timeout) {
       var tabs = setup('<md-tabs>' +
                        '<md-tab></md-tab>' +
                        '<md-tab ng-disabled="true"></md-tab>' +
@@ -85,16 +85,19 @@ describe('<md-tabs>', function() {
       // Tab 0 should still be active, but tab 2 focused (skip tab 1 it's disabled)
       triggerKeydown(tabItems.eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
       expect(tabItems.eq(0)).toBeActiveTab();
+      $timeout.flush();
       expect($document.activeElement).toBe(tabItems[2]);
 
       // Boundary case, do nothing
       triggerKeydown(tabItems.eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
       expect(tabItems.eq(0)).toBeActiveTab();
+      $timeout.flush();
       expect($document.activeElement).toBe(tabItems[2]);
 
       // Skip tab 1 again, it's disabled
       triggerKeydown(tabItems.eq(2), $mdConstant.KEY_CODE.LEFT_ARROW);
       expect(tabItems.eq(0)).toBeActiveTab();
+      $timeout.flush();
       expect($document.activeElement).toBe(tabItems[0]);
 
     }));
