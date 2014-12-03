@@ -92,21 +92,25 @@
 // ------------------------------
 
 @include flex-properties-for-name();
-[hide]:not([show]):not([show-sm]):not([show-md]):not([show-lg]):not([show-gt-sm]):not([show-gt-md]):not([show-gt-lg]) {
+[hide]:not([show]) {
   display: none;
 }
 
 @media (max-width: $layout-breakpoint-sm) {
-  [hide-sm]:not([show-sm]) {
-    display: none;
+  [hide-sm], [hide] {
+    &:not([show-sm]) {
+      display: none;
+    }
   }
 
   @include layout-for-name(sm);
   @include flex-properties-for-name(sm);
 }
 @media (min-width: $layout-breakpoint-sm) {
-  [hide-gt-sm]:not([show-gt-sm]):not([show-md]):not([show-gt-md]):not([show-lg]):not([show-gt-lg]) {
-    display: none;
+  [hide-gt-sm], [hide] {
+    &:not([show-gt-sm]):not([show-md]):not([show-gt-md]):not([show-lg]):not([show-gt-lg]) {
+      display: none;
+    }
   }
 
   @include layout-for-name(gt-sm);
@@ -114,16 +118,20 @@
 }
 
 @media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md) {
-  [hide-md]:not([show-md]) {
-    display: none;
+  [hide-md], [hide] {
+    &:not([show-md]) {
+      display: none;
+    }
   }
 
   @include layout-for-name(md);
   @include flex-properties-for-name(md);
 }
 @media (min-width: $layout-breakpoint-md) {
-  [hide-gt-md]:not([show-gt-md]):not([show-lg]):not([show-gt-lg]) {
-    display: none;
+  [hide-gt-md], [hide] {
+    &:not([show-gt-md]):not([show-lg]):not([show-gt-lg]) {
+      display: none;
+    }
   }
 
   @include layout-for-name(gt-md);
@@ -131,16 +139,20 @@
 }
 
 @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg) {
-  [hide-lg]:not([show-lg]) {
-    display: none;
+  [hide-lg], [hide] {
+    &:not([show-lg]) {
+      display: none;
+    }
   }
 
   @include layout-for-name(lg);
   @include flex-properties-for-name(lg);
 }
 @media (min-width: $layout-breakpoint-lg) {
-  [hide-gt-lg]:not([show-gt-lg]) {
-    display: none;
+  [hide-gt-lg], [hide] {
+    &:not([show-gt-lg]) {
+      display: none;
+    }
   }
 
   @include layout-for-name(gt-lg);
