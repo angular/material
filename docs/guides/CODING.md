@@ -128,11 +128,17 @@ function SliderDirective($mdTheming) {
 * All components must have valid, **passing** unit tests.
 * All features or bug fixes **must be tested** by one or more [specs][unit-testing].
 
-#### Editors
+#### Coding
 
 * Wrap all code at **100 characters**.
 * Do not use tabs. Use two (2) spaces to represent a tab or indent.
 * Constructors are PascalCase, closures and variables are lowerCamelCase.
+* When enhancing or fixing existing code
+  * Do not reformat the author's code
+  * Conform to standards and practices used within that code; unless overridden by best practices or patterns.
+  * Provide jsDocs for functions and single-line comments for code blocks
+  * Be careful of regression errors introduce by your changes
+  * **Always** test your changes with unit tests and manual user testing.
 
 #### Patterns
 
