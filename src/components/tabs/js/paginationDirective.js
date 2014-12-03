@@ -9,7 +9,7 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
 
   // TODO allow configuration of TAB_MIN_WIDTH
   // Must match tab min-width rule in _tabs.scss
-  var TAB_MIN_WIDTH = 8 * 12; 
+  var TAB_MIN_WIDTH = 8 * 12;
   // Must match (2 * width of paginators) in scss
   var PAGINATORS_WIDTH = (8 * 4) * 2;
 
@@ -35,25 +35,25 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
     scope.$on('$mdTabsChanged', debouncedUpdatePagination);
     angular.element($window).on('resize', debouncedUpdatePagination);
 
-    // Listen to focus events bubbling up from md-tab elements
-    tabsParent.on('focusin', onTabsFocusIn);
-
     scope.$on('$destroy', function() {
       angular.element($window).off('resize', debouncedUpdatePagination);
       tabsParent.off('focusin', onTabsFocusIn);
     });
 
     scope.$watch(tabsCtrl.selected, onSelectedTabChange);
+    scope.$watch(function() {
+      return tabsCtrl.tabToFocus;
+    }, onTabFocus);
 
-    // Allows pagination through focus change.
-    function onTabsFocusIn(ev) {
-      if (!state.active) return;
+    // Make sure we don't focus an element on the next page
+    // before it's in view
+    function onTabFocus(tab) {
+      if (!tab) return;
 
-      var tab = angular.element(ev.target).controller('mdTab');
       var pageIndex = getPageForTab(tab);
-      if (pageIndex !== state.page) {
-        // If the focused element is on a new page, don't focus yet.
-        tab.element.blur();
+      if (!state.active || pageIndex === state.page) {
+        tab.element.focus();
+      } else {
         // Go to the new page, wait for the page transition to end, then focus.
         setPage(pageIndex).then(function() {
           tab.element.focus();
@@ -116,7 +116,7 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
         state.pagesCount = Math.ceil((TAB_MIN_WIDTH * tabsCtrl.count()) / tabsWidth);
         state.itemsPerPage = Math.max(1, Math.floor(tabsCtrl.count() / state.pagesCount));
         state.tabWidth = tabsWidth / state.itemsPerPage;
-        
+
         tabsParent.css('width', state.tabWidth * tabsCtrl.count() + 'px');
         tabs.css('width', state.tabWidth + 'px');
 

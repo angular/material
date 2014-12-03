@@ -132,7 +132,7 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
       function defaultClickListener() {
         scope.$apply(function() {
           tabsCtrl.select(tabItemCtrl);
-          tabItemCtrl.element.focus();
+          tabsCtrl.focus(tabItemCtrl);
         });
       }
       function keydownListener(ev) {
@@ -140,14 +140,15 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
           // Fire the click handler to do normal selection if space is pressed
           element.triggerHandler('click');
           ev.preventDefault();
-
         } else if (ev.keyCode === $mdConstant.KEY_CODE.LEFT_ARROW) {
-          var previous = tabsCtrl.previous(tabItemCtrl);
-          previous && previous.element.focus();
-
+          scope.$evalAsync(function() {
+            tabsCtrl.focus(tabsCtrl.previous(tabItemCtrl));
+            console.log('pressing back');
+          });
         } else if (ev.keyCode === $mdConstant.KEY_CODE.RIGHT_ARROW) {
-          var next = tabsCtrl.next(tabItemCtrl);
-          next && next.element.focus();
+          scope.$evalAsync(function() {
+            tabsCtrl.focus(tabsCtrl.next(tabItemCtrl));
+          });
         }
       }
 

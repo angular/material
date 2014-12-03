@@ -11,6 +11,7 @@ function MdTabsController($scope, $element, $mdUtil) {
 
   // Properties
   self.$element = $element;
+  self.scope = $scope;
   // The section containing the tab content $elements
   self.contentArea = angular.element($element[0].querySelector('.md-tabs-content'));
 
@@ -25,6 +26,7 @@ function MdTabsController($scope, $element, $mdUtil) {
   self.remove = remove;
   self.move = move;
   self.select = select;
+  self.focus = focus;
   self.deselect = deselect;
 
   self.next = next;
@@ -97,6 +99,11 @@ function MdTabsController($scope, $element, $mdUtil) {
     $scope.selectedIndex = self.indexOf(tab);
     tab.isSelected = true;
     tab.onSelect();
+  }
+
+  function focus(tab) {
+    // this variable is $watch'd by pagination
+    self.tabToFocus = tab;
   }
 
   function deselect(tab) {
