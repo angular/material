@@ -139,6 +139,24 @@ describe('$$interimElement service', function() {
       });
     });
 
+    it('should allow argOption in a custom builder', function() {
+      createInterimProvider('interimTest')
+        .addPreset('banana', {
+          argOption: 'color',
+          methods: ['color']
+        });
+      inject(function(interimTest, $rootScope) {
+        var shown = false;
+        var builder = interimTest.banana('yellow').onShow(function(scope, element, options) {
+          expect(options.color).toBe('yellow');
+          shown = true;
+        });
+        interimTest.show(builder);
+        $rootScope.$apply();
+        expect(shown).toBe(true);
+      });
+    });
+
     it('should show with proper options', function() {
       createInterimProvider('interimTest')
         .setDefaults({

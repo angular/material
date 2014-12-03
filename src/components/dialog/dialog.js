@@ -258,11 +258,11 @@ function MdDialogProvider($$interimElementProvider) {
       options: dialogDefaultOptions
     })
     .addPreset('alert', {
-      methods: alertDialogMethods,
+      methods: ['title', 'content', 'ariaLabel', 'ok'],
       options: advancedDialogOptions
     })
     .addPreset('confirm', {
-      methods: alertDialogMethods.concat('cancel'),
+      methods: ['title', 'content', 'ariaLabel', 'ok', 'cancel'],
       options: advancedDialogOptions
     });
 

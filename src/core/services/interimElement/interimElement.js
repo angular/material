@@ -38,6 +38,7 @@ function InterimElementProvider() {
    * as well as configuration of 'preset' methods (eg dialog.basic(): basic is a preset method)
    */
   function createInterimElementProvider(interimFactoryName) {
+    var EXPOSED_METHODS = ['onHide', 'onShow'];
     var providerConfig = {
       presets: {}
     };
@@ -51,7 +52,7 @@ function InterimElementProvider() {
      * all interim elements will come with the 'build' preset
      */
     provider.addPreset('build', {
-      methods: ['controller', 'controllerAs', 'onRemove', 'onShow', 'resolve',
+      methods: ['controller', 'controllerAs', 'resolve',
         'template', 'templateUrl', 'themable', 'transformTemplate', 'parent']
     });
 
@@ -65,6 +66,7 @@ function InterimElementProvider() {
       providerConfig.methods = definition.methods;
       return provider;
     }
+
     /**
      * Save the configured preset to be used when the factory is instantiated
      */
@@ -80,8 +82,9 @@ function InterimElementProvider() {
         throw new Error("Method '_options' in " + interimFactoryName + " is reserved!");
       }
       providerConfig.presets[name] = {
-        methods: definition.methods,
-        optionsFactory: definition.options
+        methods: definition.methods.concat(EXPOSED_METHODS),
+        optionsFactory: definition.options,
+        argOption: definition.argOption
       };
       return provider;
     }
@@ -145,8 +148,19 @@ function InterimElementProvider() {
         });
 
         // eg $mdDialog.alert() will return a new alert preset
-        publicService[name] = function(options) {
-          return new Preset(options);
+        publicService[name] = function(arg) {
+          // If argOption is supplied, eg `argOption: 'content'`, then we assume
+          // if the argument is not an options object then it is the `argOption` option.
+          //
+          // @example `$mdToast.simple('hello')` // sets options.content to hello
+          //                                     // because argOption === 'content'
+          if (arguments.length && definition.argOption && !angular.isObject(arg) &&
+              !angular.isArray(arg)) {
+            return (new Preset())[definition.argOption](arg);
+          } else {
+            return new Preset(arg);
+          }
+
         };
       });
 

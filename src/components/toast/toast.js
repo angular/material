@@ -145,6 +145,7 @@ function MdToastProvider($$interimElementProvider) {
       options: toastDefaultOptions
     })
     .addPreset('simple', {
+      argOption: 'content',
       methods: ['content', 'action', 'highlightAction'],
       options: /* @ngInject */ function($mdToast) {
         return {
