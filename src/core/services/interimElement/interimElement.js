@@ -38,7 +38,7 @@ function InterimElementProvider() {
    * as well as configuration of 'preset' methods (eg dialog.basic(): basic is a preset method)
    */
   function createInterimElementProvider(interimFactoryName) {
-    var EXPOSED_METHODS = ['onHide', 'onShow'];
+    var EXPOSED_METHODS = ['onHide', 'onShow', 'onRemove'];
     var providerConfig = {
       presets: {}
     };
@@ -63,7 +63,7 @@ function InterimElementProvider() {
      */
     function setDefaults(definition) {
       providerConfig.optionsFactory = definition.options;
-      providerConfig.methods = definition.methods;
+      providerConfig.methods = (definition.methods || []).concat(EXPOSED_METHODS);
       return provider;
     }
 
