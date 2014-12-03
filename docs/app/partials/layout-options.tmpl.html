@@ -48,9 +48,9 @@
 
   <md-divider></md-divider>
 
-  <docs-demo demo-title="Layout Margin and Fill" class="small-demo">
+  <docs-demo demo-title="Layout Margin, Padding and Fill" class="small-demo">
     <demo-file name="index.html">
-      <div layout="row" layout-margin layout-fill>
+      <div layout="row" layout-margin layout-fill layout-padding>
         <div flex>I'm on the left, and there's an empty area around me.</div>
         <div flex>I'm on the right, and there's an empty area around me.</div>
       </div>
@@ -58,7 +58,9 @@
   </docs-demo>
 
   <p>
-    <code>layout-margin</code> adds a margin around each <code>flex</code> child. It also adds a margin to the layout container itself.
+    <code>layout-margin</code> adds margin around each <code>flex</code> child. It also adds a margin to the layout container itself.
+    <br/>
+    <code>layout-padding</code> adds padding inside each <code>flex</code> child. It also adds padding to the layout container itself.
     <br/>
     <code>layout-fill</code> forces the layout element to fill its parent container.
   </p>

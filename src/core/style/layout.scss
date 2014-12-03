@@ -22,8 +22,10 @@
   flex-direction: row;
 }
 
-[layout-padding], /* DEPRECATED */
-[layout-padding] > [flex], /* DEPRECATED */
+[layout-padding]
+[layout-padding] > [flex] {
+  padding: $layout-gutter-width / 2;
+}
 [layout-margin],
 [layout-margin] > [flex] {
   margin: $layout-gutter-width / 2;
