@@ -22,9 +22,10 @@ in on top of your branch's local history:
 curl https://github.com/angular/material/pull/143.patch | git am -3
 ```
 
-If there are any conflicts, go to the resolving conflicts section below.
+If there are any conflicts, go to the [Dealing with conflicts](#conflicts) section below.
 
-If the merge succeeds, use `git diff origin/master` to see all the new changes that will happen post-merge.
+If the merge succeeds, use `git diff origin/master` to see all the new changes that will happen
+post-merge.
 
 ###<a name="squash"></a> Squashing everything into one commit
 
@@ -55,7 +56,7 @@ git pull --rebase origin master
 
 This may cause conflicts, see below for how to deal with these.
 
-###<a name="conflicts"></a> Dealing with Conflicts
+###<a name="conflicts"></a> Dealing with conflicts
 
 Run the following to see which files are conflicted:
 
@@ -91,7 +92,7 @@ git add -A
 git am --continue
 ```
 
-###<a name="merging"></a> Merging With Master
+###<a name="merging"></a> Merging with master
 
 Finally, after you've squashed the whole pull request into one commit and made sure
 it has no conflicts with the latest master and tests are run, you're ready to merge it in.
@@ -127,7 +128,8 @@ git commit --amend
 ```
 
 This will open the latest commit in your text editor and allow you to add
-text. Do **not** forget to add `Close #xxx` to also close the PR; in this case you will aadd `Close #143`.
+text. Do **not** forget to add `Close #xxx` to also close the PR; in this case you will add
+`Close #143`.
 
 For example:
 
@@ -150,7 +152,7 @@ For example:
 > ```
 
 For more examples of how to format commit messages, see
-[the guidelines in CONTRIBUTING.md](https://github.com/angular/material/blob/master/CONTRIBUTING.md#-git-commit-guidelines).
+[the guidelines in CONTRIBUTING.md](CONTRIBUTING.md#-git-commit-guidelines).
 
 ```sh
 git push origin master
