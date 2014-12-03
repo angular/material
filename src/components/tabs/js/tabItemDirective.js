@@ -103,12 +103,6 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
         tabsCtrl.remove(tabItemCtrl);
       });
 
-      // We have to listen to each individual tab's focus event for pagination's sake,
-      // because `focusin` (the bubbled pre-focus event) is not supported in Firefox.
-      element.on('focus', function() {
-        tabsCtrl.scope.$broadcast('$materialTab.focus', tabItemCtrl);
-      });
-
       if (!angular.isDefined(attr.ngClick)) {
         element.on('click', defaultClickListener);
       }
