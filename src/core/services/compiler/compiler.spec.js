@@ -31,6 +31,14 @@ describe('$mdCompiler service', function() {
       expect(data.element.html()).toBe(tpl);
     });
 
+    it('element should use template with whitespace', function() {
+      var tpl = '  \nhello\n\t  ';
+      var data = compile({
+        template: tpl
+      });
+      expect(data.element.html()).toBe('hello');
+    });
+
     it('transformTemplate should work with template', function() {
       var data = compile({
         template: 'world',
