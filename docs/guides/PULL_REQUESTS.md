@@ -1,31 +1,39 @@
 ### Submitting a Pull Request
 Before you submit your pull request consider the following guidelines:
 
-* Search [GitHub](https://github.com/angular/angular.js/pulls) for an open or closed Pull Request
+* Search [GitHub](https://github.com/angular/material/pulls) for an open or closed Pull Request
   that relates to your submission. You don't want to duplicate effort.
-* Please sign our [Contributor License Agreement (CLA)](#cla) before sending pull
+
+* Please sign our [Contributor License Agreement (CLA)](CONTRIBUTING.md#cla) before sending pull
   requests. We cannot accept code without this.
-* Make your changes in a new git branch
+
+* Make your changes in a new git branch:
 
      ```shell
      git checkout -b my-fix-branch master
      ```
 
-* Follow our [Coding Rules](#rules).
-* **Include appropriate test cases**
-* Create your patch
-* Run the full Angular Material test suite, as described in the [developer documentation][dev-doc], and ensure that all tests pass.
+* Follow our [Coding Rules](CODING.md#rules).
+
+* **Include appropriate test cases.**
+
+* Create your patch.
+
+* Run the full Angular Material test suite, as described in the [developer documentation](BUILD.md),
+  and ensure that all tests pass.
+
 * Commit your changes using a descriptive commit message that follows our
-  [commit message conventions](#commit-message-format) and passes our commit message presubmit hook
-  `validate-commit-msg.js`. <br/>Adherence to the [commit message conventions](#commit-message-format)
-  is required because release notes are automatically generated from these messages.
+  [commit message conventions](CONTRIBUTING.md#commit-message-format) and passes our commit message
+  presubmit hook `validate-commit-msg.js`.<br/>
+  Adherence to the [commit message conventions](CONTRIBUTING.md#commit-message-format) is required
+  because release notes are automatically generated from these messages.
 
      ```shell
      git commit -a
      ```
   Note: the optional commit `-a` command line option will automatically "add" and "rm" edited files.
 
-* Build your changes locally to ensure all the tests pass
+* Build your changes locally to ensure all the tests pass:
 
     ```shell
     gulp karma
@@ -38,9 +46,12 @@ Before you submit your pull request consider the following guidelines:
     ```
 
 * In GitHub, send a pull request to `angular:master`.
-* If we suggest changes then
+
+* If we suggest changes then:
   * Make the required updates.
+
   * Re-run the Angular Material test suite to ensure tests are still passing.
+
   * Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
 
     ```shell

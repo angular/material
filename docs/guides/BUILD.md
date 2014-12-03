@@ -13,7 +13,8 @@
 
 ## <a name="intro"></a> Introduction
 
-Angular Material has a sophisticated collection of build process and commands available... to deploy distribution files, test components, and more.
+Angular Material has a sophisticated collection of build process and commands available... to deploy
+distribution files, test components, and more.
 
 These commands are defined within two (2) **gulp** files:
 
@@ -30,29 +31,33 @@ For each milestone release, always run:
 
 The following command line tasks are available:
 
-- `gulp build` (alias `gulp`) to build, add `--release` flag to uglify & strip console.log.
+- `gulp build` (alias `gulp`) to build, add `--release` flag to uglify & strip `console.log`
 - `gulp docs` to build the Live Docs into dist/docs
 - `gulp watch` to build & rebuild on changes
 
+<a separator></a>
 
 - `gulp karma` to test once
 - `gulp karma-watch` to test & watch for changes
 
-###<a name="livedocs"></a>  Building the Documentation
+###<a name="livedocs"></a> Building the Documentation
 
-The Angular Material **Live Docs** are generated from the source code and demos and actually uses the Angular Material components and themes.
+The Angular Material **Live Docs** are generated from the source code and demos and actually use the
+Angular Material components and themes.
 
-> Our build process uses **[dgeni](http://github.com/angular/dgeni)**, the wonderful documentation generator built by [Pete Bacon Darwin](https://github.com/petebacondarwin).
+> Our build process uses **[dgeni](https://github.com/angular/dgeni)**, the wonderful documentation
+  generator built by [Pete Bacon Darwin](https://github.com/petebacondarwin).
 
 See the [Building the Live Documentation](../README.md#docs) document for details.
 
-###<a name="builds"></a>  Building the Library
+###<a name="builds"></a> Building the Library
 
-Developers can be build the entire Angular Material library or individual component modules. The library comprises:
+Developers can build the entire Angular Material library or individual component modules. The
+library comprises:
 
-* angular-material.js - component
-* angular-material.css - styles and default theme stylesheet
-* /themes/**.css  - default theme override styesheets
+* `angular-material.js` - components
+* `angular-material.css` - styles and default theme stylesheet
+* `/themes/**.css` - default theme override styesheets
 
 To build from the source, simply use:
 
@@ -65,7 +70,7 @@ To build from the source, simply use:
 
 gulp build
 
-# Build MINIFIED assets
+# Build minified assets
 #
 # - `dist/angular-material.min.js`
 # - `dist/angular-material.min.css`
@@ -74,9 +79,10 @@ gulp build
 gulp build --release
 ```
 
-###<a name="bower"></a>  Using the Library with Bower
+###<a name="bower"></a> Using the Library with Bower
 
-For developers not interested in building the Angular Material library, use **bower** to install and use the Angular Material distribution files.
+For developers not interested in building the Angular Material library, use **bower** to install and
+use the Angular Material distribution files.
 
 Change to your project's root directory.
 
@@ -88,12 +94,16 @@ bower install angular-material
 bower install angular-material#master
 ```
 
-Visit [Bower-Material](https://github.com/angular/bower-material/blob/master/README.md) for more details on how to install and use the Angular Material distribution files within your own local project.
+Visit [Bower-Material](https://github.com/angular/bower-material/blob/master/README.md) for more
+details on how to install and use the Angular Material distribution files within your own local
+project.
 
 <br/>
 ##<a name="comp"></a> Introducing Components
 
-Angular Material supports the construction and deployment of individual component builds. Within Angular Material, each component is contained within its own module and specifies its own dependencies.
+Angular Material supports the construction and deployment of individual component builds. Within
+Angular Material, each component is contained within its own module and specifies its own
+dependencies.
 
 > At a minimum, all components have a dependecy upon the `core` module.
 
@@ -117,7 +127,7 @@ All component modules are compiled and distributed to:
           -- <component folder>
 ```
 
-Let's consider the the Slider component with its module definition:
+Let's consider the Slider component with its module definition:
 
 
 ```js
@@ -132,7 +142,8 @@ angular.module('material.components.slider', [
 
 First build all the component modules.
 
-To use - for example - the Slider component within your own application, simply load the stylesheets and JS from both the **slider** and the **core** modules:
+To use - for example - the Slider component within your own application, simply load the stylesheets
+and JS from both the **slider** and the **core** modules:
 
 
 ```text
@@ -150,9 +161,11 @@ To use - for example - the Slider component within your own application, simply 
 
 ###<a name="comp_debug"></a> Component Debugging
 
-Debugging a demo in the Live Docs is complicated due the multiple demos loading and initializing. A more practical approach is to open and debug a specific, standalone Component demo.
+Debugging a demo in the Live Docs is complicated due the multiple demos loading and initializing. A
+more practical approach is to open and debug a specific, standalone Component demo.
 
-To open a Component demo outside of the Docs application, just build, deploy and debug that compnents demo(s).
+To open a Component demo outside of the Docs application, just build, deploy and debug that
+compnent's demo(s).
 
 For example, to debug the **textfield** component:
 
@@ -164,7 +177,7 @@ For example, to debug the **textfield** component:
 #
 gulp watch-demo -c textfield
 
-# launch the liveReload server on port 8000
+# launch the liveReload server on port 8080
 #
 # Note: livereload will reload demos after updates are
 #       deployed (by watch-demo) to the dist/demos/
@@ -172,7 +185,8 @@ gulp watch-demo -c textfield
 gulp server
 ```
 
-The demo build process will deploy a *self-contained* Angular application that runs the specified component's demo(s). E.g.
+The demo build process will deploy a *self-contained* Angular application that runs the specified
+component's demo(s). E.g.:
 
 * `dist/demos/textfield/**/*.*`
 * `dist/demos/tabs/**/*.*`
@@ -180,12 +194,11 @@ The demo build process will deploy a *self-contained* Angular application that r
 
 After running `gulp server` to start a *LiveReload* server in your project root:
 
-* Open browser to url `http://localhost:8000/`
+* Open browser to url `http://localhost:8080/`
 * Navigate to `dist/demos/<component>/<demo>/index.html`
 * Open Dev Tools and debug...
 
 
 ##<a name="themes"></a> Theming
 
-http://material.angularjs.org/#/Theming/01_introduction
-
+https://material.angularjs.org/#/Theming/01_introduction
