@@ -56,8 +56,8 @@ Providing the following information will increase the chances of your issue bein
 * **Issue Title** - provide a concise issue title prefixed with a lower camelCase name of the associated target or component (if any): `<component>: <issue title>`.
  
 > e.g.
-> *  (#35) >  mdSideNav: Adding swipe functionality 
-> *  (#847) > mdTextFloat: does not set required/ng-required
+> *  mdSideNav: Adding swipe functionality  [#35](https://github.com/angular/material/issues/35)
+> *  mdTextFloat: does not set required/ng-required [#847](https://github.com/angular/material/issues/847)
 
 * **Overview of the Issue** - if an error is being thrown a non-minified stack trace helps
 * **Angular Material Version(s)** - check the header of your `angular-material.js` file to determine your specific version #.
