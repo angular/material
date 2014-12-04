@@ -39,7 +39,7 @@ You can request a new feature by submitting an issue to our [GitHub Issues](http
 project.
 * **Small Changes** can be crafted and submitted to the [GitHub Repository](https://github.com/angular/material/compare) as a Pull Request.
 
-## <a name="submit"></a> Submission Guidelines
+## <a name="submit"></a> Issue Guidelines
 
 Please note, this project is still in an early beta.
 
@@ -50,7 +50,14 @@ Before you submit your issue **[search](https://github.com/angular/material/issu
 
 > Do not report duplicate issues; help us to maximize the effort we can spend fixing issues and adding new features.
 
+
 Providing the following information will increase the chances of your issue being dealt with quickly:
+
+* **Issue Title** - provide a concise issue title prefixed with a lower camelCase name of the associated target or component (if any): `<component>: <issue title>`.
+ 
+> e.g.
+> *  (#35) >  mdSideNav: Adding swipe functionality 
+> *  (#847) > mdTextFloat: does not set required/ng-required
 
 * **Overview of the Issue** - if an error is being thrown a non-minified stack trace helps
 * **Angular Material Version(s)** - check the header of your `angular-material.js` file to determine your specific version #.
