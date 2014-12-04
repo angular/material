@@ -81,9 +81,38 @@ md-tabs[center] .md-header:not(.md-paginating) .md-header-items {
 .md-tabs-content {
   overflow: hidden;
   width: 100%;
-
+  position: relative;
   .md-tab-content {
-    height : 100%;
+    height: 100%;
+    &.ng-hide {
+      &.ng-animate {
+        display: block !important;
+      }
+    }
+    &.ng-animate {
+      transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+      transform: translateX(0);
+      &.ng-hide-add {
+        transform: translateX(-100%);
+        &.md-transition-rtl {
+          transform: translateX(100%);
+        }
+      }
+      &.ng-hide-remove {
+        position: absolute;
+        transform: translateX(100%);
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        &.md-transition-rtl {
+          transform: translateX(-100%);
+        }
+        &.ng-hide-remove-active {
+          transform: translateX(0);
+        }
+      }
+    }
   }
 }
 
@@ -143,5 +172,4 @@ md-tab {
     opacity: 1;
     overflow: hidden;
   }
-
 }
