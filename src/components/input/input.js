@@ -3,31 +3,30 @@ angular.module('material.components.input', [])
 .directive('mdInputTwo', InputDirective);
 
 function InputDirective($compile, $injector) {
-  var PRIORITY = 99;
+  var PRIORITY = 49;
   var copyableAttributes = {};
 
   return {
     priority: PRIORITY,
-    terminal: true,
-    link: {
-      pre: preLink,
-      post: postLink
-    }
+    compile: compile,
+    terminal: true
   };
 
-  function preLink(scope, element, attr) {
+  function compile(element, attr) {
+    var label = angular.element('<label>').append(element.contents());
     var input = angular.element(angular.isDefined(attr.mdMultiline) ? '<textarea>' : '<input>');
-    var node = element[0];
 
     // Copy relevant attributes down to the input element: attrs that either aren't a directive,
     // or are a directive that has already run (a directive with higher priority)
     // For example, ng-if would NOT be copied down to the input because it has a higher priority
-    angular.forEach(node.attributes, function(data) {
+    angular.forEach(element[0].attributes, function(data) {
       var attrName = data.name;
       var attrValue = data.value;
       
+      // Cache the test of whether this attribute should be copied, so it only has to
+      // be run once.
       if (!copyableAttributes.hasOwnProperty(attrName)) {
-        copyableAttributes[attrName] = attrIsHigherPriority(attrName);
+        copyableAttributes[attrName] = !attrIsHigherPriority(attrName);
       }
 
       if (copyableAttributes[attrName]) {
@@ -39,23 +38,23 @@ function InputDirective($compile, $injector) {
       var injectName = attr.$normalize(attrName) + 'Directive';
       var directives = $injector.has(injectName) ? $injector.get(injectName) : [];
 
-      for (var i = 0, ii = directives.length; i < ii; i++) {
-        if (directives[i].priority > PRIORITY) {
-          return false;
-        }
-      }
-      return true;
+      return directives.every(function(dir) {
+        return dir.priority > PRIORITY;
+      });
     }
- 
-    var label = angular.element('<label>').append(element.contents());
-    element.append(label);
 
-    element.append(input);
-    $compile(input)(scope);
+    element.append(label).append(input);
+
+    return postLink;
   }
 
   function postLink(scope, element, attr) {
-    var input = element.find(angular.isDefined(attr.mdMultiline) ? 'textarea' : 'input');
+    $compile(element.contents())(scope);
+
+    // Make sure we aren't selecting an input the user might have put inside the label
+    var input = angular.element(element[0].querySelector(
+      (angular.isDefined(attr.mdMultiline) ? 'textarea' : 'input') + ':last-of-type'
+    ));
     var ngModelCtrl = input.data('$ngModelController');
 
     ngModelCtrl && setupFloatingLabel();
