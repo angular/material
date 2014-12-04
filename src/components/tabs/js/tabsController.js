@@ -4,7 +4,7 @@
 angular.module('material.components.tabs')
   .controller('$mdTabs', MdTabsController);
 
-function MdTabsController($scope, $element, $mdUtil) {
+function MdTabsController($scope, $element, $mdUtil, $$rAF) {
 
   var tabsList = $mdUtil.iterator([], false);
   var self = this;
@@ -21,7 +21,8 @@ function MdTabsController($scope, $element, $mdUtil) {
   self.itemAt = tabsList.itemAt;
   self.count = tabsList.count;
   
-  self.selected = selected;
+  self.getSelectedItem = getSelectedItem;
+  self.getSelectedIndex = getSelectedIndex;
   self.add = add;
   self.remove = remove;
   self.move = move;
@@ -33,21 +34,24 @@ function MdTabsController($scope, $element, $mdUtil) {
   self.previous = previous;
 
   $scope.$on('$destroy', function() {
-    self.deselect(self.selected());
+    self.deselect(self.getSelectedItem());
     for (var i = tabsList.count() - 1; i >= 0; i--) {
       self.remove(tabsList[i], true);
     }
   });
 
   // Get the selected tab
-  function selected() {
+  function getSelectedItem() {
     return self.itemAt($scope.selectedIndex);
+  }
+
+  function getSelectedIndex() {
+    return $scope.selectedIndex;
   }
 
   // Add a new tab.
   // Returns a method to remove the tab from the list.
   function add(tab, index) {
-
     tabsList.add(tab, index);
     tab.onAdd(self.contentArea);
 
@@ -57,6 +61,7 @@ function MdTabsController($scope, $element, $mdUtil) {
         $scope.selectedIndex === self.indexOf(tab)) {
       self.select(tab);
     }
+
     $scope.$broadcast('$mdTabsChanged');
   }
 
@@ -65,7 +70,7 @@ function MdTabsController($scope, $element, $mdUtil) {
 
     if (noReselect) {
       // do nothing
-    } else if (self.selected() === tab) {
+    } else if (self.getSelectedItem() === tab) {
       if (tabsList.count() > 1) {
         self.select(self.previous() || self.next());
       } else {
@@ -81,7 +86,7 @@ function MdTabsController($scope, $element, $mdUtil) {
 
   // Move a tab (used when ng-repeat order changes)
   function move(tab, toIndex) {
-    var isSelected = self.selected() === tab;
+    var isSelected = self.getSelectedItem() === tab;
 
     tabsList.remove(tab);
     tabsList.add(tab, toIndex);
@@ -94,15 +99,20 @@ function MdTabsController($scope, $element, $mdUtil) {
     if (!tab || tab.isSelected || tab.isDisabled()) return;
     if (!tabsList.contains(tab)) return;
 
-    self.deselect(self.selected());
+    if (!angular.isDefined(self.tabToFocus)) {
+      tab.element.focus();
+    }
+    self.deselect(self.getSelectedItem());
 
     $scope.selectedIndex = self.indexOf(tab);
     tab.isSelected = true;
     tab.onSelect();
+
+    $scope.$broadcast('$mdTabsChanged');
   }
 
   function focus(tab) {
-    // this variable is $watch'd by pagination
+    // this variable is watched by pagination
     self.tabToFocus = tab;
   }
 
@@ -116,10 +126,10 @@ function MdTabsController($scope, $element, $mdUtil) {
   }
 
   function next(tab, filterFn) {
-    return tabsList.next(tab || self.selected(), filterFn || isTabEnabled);
+    return tabsList.next(tab || self.getSelectedItem(), filterFn || isTabEnabled);
   }
   function previous(tab, filterFn) {
-    return tabsList.previous(tab || self.selected(), filterFn || isTabEnabled);
+    return tabsList.previous(tab || self.getSelectedItem(), filterFn || isTabEnabled);
   }
 
   function isTabEnabled(tab) {

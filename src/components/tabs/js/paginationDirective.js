@@ -1,15 +1,11 @@
 (function() {
 'use strict';
 
-
 angular.module('material.components.tabs')
-  .directive('mdTabsPagination', TabPaginationDirective);
+    .directive('mdTabsPagination', TabPaginationDirective);
 
-function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
+function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout, $mdMedia) {
 
-  // TODO allow configuration of TAB_MIN_WIDTH
-  // Must match tab min-width rule in _tabs.scss
-  var TAB_MIN_WIDTH = 8 * 12;
   // Must match (2 * width of paginators) in scss
   var PAGINATORS_WIDTH = (8 * 4) * 2;
 
@@ -21,6 +17,8 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
 
   function postLink(scope, element, attr, tabsCtrl) {
 
+    var tabs = element[0].getElementsByTagName('md-tab');
+    var debouncedUpdatePagination = $$rAF.debounce(updatePagination);
     var tabsParent = element.children();
     var state = scope.pagination = {
       page: -1,
@@ -29,9 +27,6 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
       clickPrevious: function() { userChangePage(-1); }
     };
 
-    updatePagination();
-    var debouncedUpdatePagination = $$rAF.debounce(updatePagination);
-
     scope.$on('$mdTabsChanged', debouncedUpdatePagination);
     angular.element($window).on('resize', debouncedUpdatePagination);
 
@@ -39,10 +34,8 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
       angular.element($window).off('resize', debouncedUpdatePagination);
     });
 
-    scope.$watch(tabsCtrl.selected, onSelectedTabChange);
-    scope.$watch(function() {
-      return tabsCtrl.tabToFocus;
-    }, onTabFocus);
+    scope.$watch(tabsCtrl.getSelectedItem, onSelectedTabChange);
+    scope.$watch(function() { return tabsCtrl.tabToFocus; }, onTabFocus);
 
     // Make sure we don't focus an element on the next page
     // before it's in view
@@ -55,9 +48,7 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
       } else {
         // Go to the new page, wait for the page transition to end, then focus.
         oldTab && oldTab.element.blur();
-        setPage(pageIndex).then(function() {
-          tab.element.focus();
-        });
+        setPage(pageIndex).then(function() { tab.element.focus(); });
       }
     }
 
@@ -67,73 +58,69 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
       if (state.active) {
         var selectedTabPage = getPageForTab(selectedTab);
         setPage(selectedTabPage);
-      } else {
-        debouncedUpdatePagination();
       }
     }
 
     // Called when page is changed by a user action (click)
     function userChangePage(increment) {
-      var newPage = state.page + increment;
-      var newTab;
-      if (!tabsCtrl.selected() || getPageForTab(tabsCtrl.selected()) !== newPage) {
-        var startIndex;
-        if (increment < 0) {
-          // If going backward, select the previous available tab, starting from
-          // the first item on the page after newPage.
-          startIndex = (newPage + 1) * state.itemsPerPage;
-          newTab = tabsCtrl.previous( tabsCtrl.itemAt(startIndex) );
-        } else {
-          // If going forward, select the next available tab, starting with the
-          // last item before newPage.
-          startIndex = (newPage * state.itemsPerPage) - 1;
-          newTab = tabsCtrl.next( tabsCtrl.itemAt(startIndex) );
-        }
-      }
-      setPage(newPage).then(function() {
-        newTab && newTab.element.focus();
-      });
-      newTab && tabsCtrl.select(newTab);
+      var sizeData = state.tabData;
+      var newPage = Math.max(0, Math.min(sizeData.pages.length - 1, state.page + increment));
+      var newTabIndex = sizeData.pages[newPage][ increment > 0 ? 'firstTabIndex' : 'lastTabIndex' ];
+      var newTab = tabsCtrl.itemAt(newTabIndex);
+
+      setPage(newPage).then(function() { newTab.element.focus(); });
+      tabsCtrl.select(newTab);
     }
 
     function updatePagination() {
-      var tabs = element.find('md-tab');
-      var tabsWidth = element.parent().prop('clientWidth') - PAGINATORS_WIDTH;
-
-      var needPagination = tabsWidth && TAB_MIN_WIDTH * tabsCtrl.count() > tabsWidth;
-      var paginationToggled = needPagination !== state.active;
-
-      // If the md-tabs element is not displayed, then do nothing.
-      if ( tabsWidth <= 0 ) {
-        needPagination = false;
-        paginationToggled = true;
+      if (!element.prop('offsetParent')) {
+        var watcher = waitForVisible();
+        return;
       }
 
-      state.active = needPagination;
+      var tabs = element.find('md-tab');
 
-      if (needPagination) {
+      disablePagination();
 
-        state.pagesCount = Math.ceil((TAB_MIN_WIDTH * tabsCtrl.count()) / tabsWidth);
-        state.itemsPerPage = Math.max(1, Math.floor(tabsCtrl.count() / state.pagesCount));
-        state.tabWidth = tabsWidth / state.itemsPerPage;
+      var sizeData = state.tabData = calculateTabData();
+      var needPagination = state.active = sizeData.pages.length > 1;
 
-        tabsParent.css('width', state.tabWidth * tabsCtrl.count() + 'px');
-        tabs.css('width', state.tabWidth + 'px');
+      if (needPagination) { enablePagination(); }
 
-        var selectedTabPage = getPageForTab(tabsCtrl.selected());
-        setPage(selectedTabPage);
+      scope.$evalAsync(function () { scope.$broadcast('$mdTabsPaginationChanged'); });
 
-      } else {
+      function enablePagination() {
+        tabsParent.css('width', '9999px');
 
-        if (paginationToggled) {
-          $timeout(function() {
-            tabsParent.css('width', '');
-            tabs.css('width', '');
-            slideTabButtons(0);
-            state.page = -1;
-          });
-        }
+        //-- apply filler margins
+        angular.forEach(sizeData.tabs, function (tab) {
+          angular.element(tab.element).css('margin-left', tab.filler + 'px');
+        });
 
+        setPage(getPageForTab(tabsCtrl.getSelectedItem()));
+      }
+
+      function disablePagination() {
+        slideTabButtons(0);
+        tabsParent.css('width', '');
+        tabs.css('width', '');
+        tabs.css('margin-left', '');
+        state.page = null;
+        state.active = false;
+      }
+
+      function waitForVisible() {
+        return watcher || scope.$watch(
+            function () {
+              $timeout(function () {
+                if (element[0].offsetParent) {
+                  watcher();
+                  debouncedUpdatePagination();
+                  watcher = null;
+                }
+              }, 0, false);
+            }
+        );
       }
     }
 
@@ -160,31 +147,111 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
       }
     }
 
+    function shouldStretchTabs() {
+      switch (scope.stretchTabs) {
+        case 'no':  return false;
+        case 'yes': return true;
+        default:    return $mdMedia('sm');
+      }
+    }
+
+    function calculateTabData() {
+      var clientWidth = element.parent().prop('offsetWidth');
+      var tabsWidth = clientWidth - PAGINATORS_WIDTH - 1;
+      var $tabs = angular.element(tabs);
+      var totalWidth = 0;
+      var max = 0;
+      var tabData = [];
+      var pages = [];
+      var currentPage;
+
+      $tabs.css('max-width', '');
+      angular.forEach(tabs, function (tab, index) {
+        var tabWidth = Math.min(tabsWidth, tab.offsetWidth);
+        var data = {
+          element: tab,
+          left: totalWidth,
+          width: tabWidth,
+          right: totalWidth + tabWidth,
+          filler: 0
+        };
+
+        //-- This calculates the page for each tab.  The first page will use the clientWidth, which
+        //   does not factor in the pagination items.  After the first page, tabsWidth is used
+        //   because at this point, we know that the pagination buttons will be shown.
+        data.page = Math.ceil(data.right / ( pages.length === 1 && index === tabs.length - 1 ? clientWidth : tabsWidth )) - 1;
+
+        if (data.page >= pages.length) {
+          data.filler = (tabsWidth * data.page) - data.left;
+          data.right += data.filler;
+          data.left += data.filler;
+          currentPage = {
+            left: data.left,
+            firstTabIndex: index,
+            lastTabIndex: index,
+            tabs: [ tab ]
+          };
+          pages.push(currentPage);
+        } else {
+          currentPage.lastTabIndex = index;
+          currentPage.tabs.push(tab);
+        }
+        totalWidth = data.right;
+        max = Math.max(max, tabWidth);
+        tabData.push(data);
+      });
+      $tabs.css('max-width', tabsWidth + 'px');
+
+      if (pages.length === 1 && shouldStretchTabs()) { adjustForStretchedTabs(); }
+
+      return {
+        width: totalWidth,
+        max: max,
+        tabs: tabData,
+        pages: pages,
+        tabElements: tabs
+      };
+
+      function adjustForStretchedTabs() {
+        var tabWidth = Math.ceil(clientWidth / tabData.length);
+        if (tabWidth >= max) {
+          $tabs.css('width', tabWidth + 'px');
+          angular.forEach(tabData, function (tab, index) {
+            tab.width = tabWidth;
+            tab.left = tabWidth * index;
+            tab.right = tab.left + tab.width;
+            tab.filler = 0;
+          });
+          totalWidth = tabsWidth;
+        }
+      }
+    }
+
     function getPageForTab(tab) {
       var tabIndex = tabsCtrl.indexOf(tab);
       if (tabIndex === -1) return 0;
 
-      return Math.floor(tabIndex / state.itemsPerPage);
+      var sizeData = state.tabData;
+
+      return sizeData ? sizeData.tabs[tabIndex].page : 0;
     }
 
     function setPage(page) {
       if (page === state.page) return;
 
-      var lastPage = state.pagesCount;
+      var lastPage = state.tabData.pages.length - 1;
 
       if (page < 0) page = 0;
       if (page > lastPage) page = lastPage;
 
       state.hasPrev = page > 0;
-      state.hasNext = ((page + 1) * state.itemsPerPage) < tabsCtrl.count();
+      state.hasNext = page < lastPage;
 
       state.page = page;
 
-      $timeout(function() {
-        scope.$broadcast('$mdTabsPaginationChanged');
-      });
+      scope.$broadcast('$mdTabsPaginationChanged');
 
-      return slideTabButtons(-page * state.itemsPerPage * state.tabWidth);
+      return slideTabButtons(-state.tabData.pages[page].left);
     }
   }
 

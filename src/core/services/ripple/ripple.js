@@ -90,9 +90,7 @@ function InkRippleService($window, $timeout) {
       scope.$watch(isActiveExpr, function watchActive(newValue) {
         isActive = newValue;
         if (isActive && !ripples.length) {
-          $timeout(function () {
-            createRipple(0, 0);
-          }, 0, false);
+          $timeout(function () { createRipple(0, 0); }, 0, false);
         }
         angular.forEach(ripples, updateElement);
       });
@@ -335,9 +333,7 @@ function InkRippleService($window, $timeout) {
         isHeld = false;
         index = ripples.length - 1;
         ripple = ripples[index];
-        $timeout(function () {
-          updateElement(ripple);
-        }, 0, false);
+        $timeout(function () { updateElement(ripple); }, 0, false);
       }
 
       /**

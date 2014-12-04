@@ -11,17 +11,28 @@
   height: 300px;
   text-align: center;
 }
-.tab0 {
-  background-color: #E3F2FD;
+.tab0, .tab1, .tab2, .tab3 {
+  background-color: #bbdefb;
 }
-.tab1 {
-  background-color: #E1F5FE;
+
+.md-header {
+  background-color: #1976D2 !important;
 }
-.tab2 {
-  background-color: #E0F7FA;
+md-tab {
+  color: #90caf9 !important;
 }
-.tab3 {
-  background-color: #E0F2F1;
+md-tab.active,
+md-tab:focus {
+  color: white !important;
+}
+md-tab[disabled] {
+  opacity: 0.5;
+}
+.md-header .md-ripple {
+  border-color: #FFFF8D !important;
+}
+md-tabs-ink-bar {
+  background-color: #FFFF8D !important;
 }
 
 .title {
