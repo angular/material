@@ -48,7 +48,8 @@ angular.module('material.components.tabs')
  * @param {integer=} md-selected Index of the active/selected tab
  * @param {boolean=} md-no-ink If present, disables ink ripple effects.
  * @param {boolean=} md-no-bar If present, disables the selection ink bar.
- * @param {string=}  md-align-tabs Attribute to indicate position of tab buttons: bottom or top; default is `top`
+ * @param {string=}  md-align-tabs Attribute to indicate position of tab buttons: `bottom` or `top`; default is `top`
+ * @param {boolean=} md-stretch-tabs Attribute to indicate whether or not to stretch tabs: `auto`, `yes`, or `no`; default is `auto`
  *
  * @usage
  * <hljs lang="html">
@@ -76,7 +77,7 @@ angular.module('material.components.tabs')
  * </hljs>
  *
  */
-function TabsDirective($parse, $mdTheming) {
+function TabsDirective($mdTheming) {
   return {
     restrict: 'E',
     controller: '$mdTabs',
@@ -100,7 +101,6 @@ function TabsDirective($parse, $mdTheming) {
           // flex container for <md-tab> elements
           '<div class="md-header-items">' +
             '<md-tabs-ink-bar></md-tabs-ink-bar>' +
-            '<md-tabs-ink-bar class="md-ink-bar-delayed"></md-tabs-ink-bar>' +
           '</div>' +
         '</div>' +
 
@@ -116,6 +116,9 @@ function TabsDirective($parse, $mdTheming) {
   };
 
   function postLink(scope, element, attr, tabsCtrl, transclude) {
+
+    scope.stretchTabs = attr.hasOwnProperty('mdStretchTabs') ? attr.mdStretchTabs : 'auto';
+
     $mdTheming(element);
     configureAria();
     watchSelected();
@@ -125,32 +128,24 @@ function TabsDirective($parse, $mdTheming) {
     });
 
     function configureAria() {
-      element.attr({
-        role: 'tablist'
-      });
+      element.attr('role', 'tablist');
     }
 
     function watchSelected() {
       scope.$watch('selectedIndex', function watchSelectedIndex(newIndex, oldIndex) {
-        // Note: if the user provides an invalid newIndex, all tabs will be deselected
-        // and the associated view will be hidden.
-        tabsCtrl.deselect( tabsCtrl.itemAt(oldIndex) );
+        tabsCtrl.deselect(tabsCtrl.itemAt(oldIndex));
 
         if (tabsCtrl.inRange(newIndex)) {
           var newTab = tabsCtrl.itemAt(newIndex);
-
-          // If the newTab is disabled, find an enabled one to go to.
-          if (newTab && newTab.isDisabled()) {
-            newTab = newIndex > oldIndex ?
-              tabsCtrl.next(newTab) :
-              tabsCtrl.previous(newTab);
+          while (newTab && newTab.isDisabled()) {
+            newTab = newIndex > oldIndex
+                ? tabsCtrl.next(newTab)
+                : tabsCtrl.previous(newTab);
           }
           tabsCtrl.select(newTab);
-
         }
       });
     }
-
   }
 }
 })();

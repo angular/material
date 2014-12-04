@@ -217,10 +217,8 @@ md-tab {
       border-style: solid;
       opacity: 0.20;
       transform: none !important;
-      &.md-ripple-placed {
-      }
-      &.md-ripple-scaled {
-      }
+      &.md-ripple-placed {}
+      &.md-ripple-scaled {}
       &.md-ripple-active, &.md-ripple-full, &.md-ripple-visible {
         opacity: 0.20;
       }
