@@ -26,10 +26,10 @@ angular.module('material.components.tabs')
  * be initiated via data binding changes, programmatic invocation, or user gestures.
  *
  * @param {string=} label Optional attribute to specify a simple string as the tab label
- * @param {boolean=} mdActive When evaluteing to true, selects the tab.
+ * @param {boolean=} md-active When evaluteing to true, selects the tab.
  * @param {boolean=} disabled If present, disabled tab selection.
- * @param {expression=} mdOnDeselect Expression to be evaluated after the tab has been de-selected.
- * @param {expression=} mdOnSelect Expression to be evaluated after the tab has been selected.
+ * @param {expression=} md-on-deselect Expression to be evaluated after the tab has been de-selected.
+ * @param {expression=} md-on-select Expression to be evaluated after the tab has been selected.
  *
  *
  * @usage

@@ -26,9 +26,9 @@ angular.module('material.components.button', [
  * If you supply a `href` or `ng-href` attribute, it will become an `<a>` element. Otherwise, it will
  * become a `<button>` element.
  *
- * @param {boolean=} mdNoInk If present, disable ripple ink effects.
- * @param {expression=} ngDisabled En/Disable based on the expression
- * @param {string=} ariaLabel Adds alternative text to button for accessibility, useful for icon buttons.
+ * @param {boolean=} md-no-ink If present, disable ripple ink effects.
+ * @param {expression=} ng-disabled En/Disable based on the expression
+ * @param {string=} aria-label Adds alternative text to button for accessibility, useful for icon buttons.
  * If no default text is found, a warning will be logged.
  *
  * @usage

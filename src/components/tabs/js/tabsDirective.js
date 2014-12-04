@@ -45,10 +45,10 @@ angular.module('material.components.tabs')
  * *  If the currently active tab is the last tab, then next() action will select the first tab.
  * *  Any markup (other than **`<md-tab>`** tags) will be transcluded into the tab header area BEFORE the tab buttons.
  *
- * @param {integer=} mdSelected Index of the active/selected tab
- * @param {boolean=} mdNoInk If present, disables ink ripple effects.
- * @param {boolean=} mdNoBar If present, disables the selection ink bar.
- * @param {string=}  mdAlignTabs Attribute to indicate position of tab buttons: bottom or top; default is `top`
+ * @param {integer=} md-selected Index of the active/selected tab
+ * @param {boolean=} md-no-ink If present, disables ink ripple effects.
+ * @param {boolean=} md-no-bar If present, disables the selection ink bar.
+ * @param {string=}  md-align-tabs Attribute to indicate position of tab buttons: bottom or top; default is `top`
  *
  * @usage
  * <hljs lang="html">
