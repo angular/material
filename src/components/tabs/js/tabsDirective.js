@@ -149,7 +149,9 @@ function TabsDirective($mdTheming) {
 
     function watchSelected() {
       scope.$watch('selectedIndex', function watchSelectedIndex(newIndex, oldIndex) {
-        tabsCtrl.deselect(tabsCtrl.itemAt(oldIndex));
+        if (oldIndex == newIndex) return;
+        var rightToLeft = oldIndex > newIndex;
+        tabsCtrl.deselect(tabsCtrl.itemAt(oldIndex), rightToLeft);
 
         if (tabsCtrl.inRange(newIndex)) {
           var newTab = tabsCtrl.itemAt(newIndex);
@@ -158,7 +160,7 @@ function TabsDirective($mdTheming) {
                 ? tabsCtrl.next(newTab)
                 : tabsCtrl.previous(newTab);
           }
-          tabsCtrl.select(newTab);
+          tabsCtrl.select(newTab, rightToLeft);
         }
       });
     }
