@@ -195,6 +195,8 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
       $animate[isOpen ? 'enter' : 'leave'](backdrop, parent);
       backdrop[isOpen ? 'on' : 'off']('click', close);
 
+      scope.triggeringElement = document.activeElement;
+
       $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed').then(function() {
         // If we opened, and haven't closed again before the animation finished
         if (scope.isOpen) {
@@ -223,6 +225,7 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
     function close() {
       $timeout(function(){
         sidenavCtrl.close();
+        scope.triggeringElement && scope.triggeringElement.focus();
       });
     }
 
