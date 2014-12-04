@@ -27,6 +27,7 @@ Please note that using Angular Material requires the use of **Angular 1.3.x** or
 
 Developers interested in contributing should read the following guidelines
 
+- [Issue Guidelines](https://github.com/angular/material/blob/master/docs/guides/CONTRIBUTING.md#submit)
 - [Contributing Guidelines](docs/guides/CONTRIBUTING.md)
 - [Coding Guidelines](docs/guides/CODING.md)
 - [CHANGELOG](CHANGELOG.md)
