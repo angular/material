@@ -129,7 +129,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
 
     function onShow(scope, element, options) {
       // Add a backdrop that will close on click
-      backdrop = $compile('<md-backdrop class="md-opaque ng-enter">')(scope);
+      backdrop = $compile('<md-backdrop class="md-opaque md-bottom-sheet-backrop">')(scope);
       backdrop.on('click touchstart', function() {
         $timeout($mdBottomSheet.cancel);
       });

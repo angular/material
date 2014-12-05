@@ -169,8 +169,9 @@ function InterimElementProvider() {
       function showInterimElement(opts) {
         // opts is either a preset which stores its options on an _options field,
         // or just an object made up of options
+        if (opts && opts._options) opts = opts._options;
         return interimElementService.show(
-          angular.extend({}, defaultOptions, (opts || {})._options || opts)
+          angular.extend({}, defaultOptions, opts)
         );
       }
 

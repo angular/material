@@ -167,7 +167,7 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
   function postLink(scope, element, attr, sidenavCtrl) {
     var isLockedOpenParsed = $parse(attr.mdIsLockedOpen);
     var backdrop = $compile(
-      '<md-backdrop class="md-sidenav-backdrop md-opaque">'
+      '<md-backdrop class="md-sidenav-backdrop md-opaque ng-enter">'
     )(scope);
 
     $mdTheming.inherit(backdrop, element);

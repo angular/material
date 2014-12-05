@@ -48,7 +48,8 @@ describe('$mdDialog', function() {
       expect(buttons.eq(0).text()).toBe('Next');
       buttons.eq(0).triggerHandler('click');
       $rootScope.$apply();
-      $animate.triggerCallbacks();
+      parent.find('md-dialog').triggerHandler('transitionend');
+      $rootScope.$apply();
       expect(parent.find('h2').length).toBe(0);
       expect(resolved).toBe(true);
     }));
@@ -100,7 +101,8 @@ describe('$mdDialog', function() {
       expect(buttons.eq(1).text()).toBe('Forget it');
       buttons.eq(1).triggerHandler('click');
       $rootScope.$digest();
-      $animate.triggerCallbacks();
+      parent.find('md-dialog').triggerHandler('transitionend');
+      $rootScope.$apply();
       expect(parent.find('h2').length).toBe(0);
       expect(rejected).toBe(true);
     }));
@@ -136,7 +138,7 @@ describe('$mdDialog', function() {
       expect(ready).toBe( false );
 
       var container = angular.element(parent[0].querySelector('.md-dialog-container'));
-      container.triggerHandler('transitionend');
+      parent.find('md-dialog').triggerHandler('transitionend');
       $rootScope.$apply();
 
       container = angular.element(parent[0].querySelector('.md-dialog-container'));
@@ -170,7 +172,7 @@ describe('$mdDialog', function() {
       $rootScope.$apply();
 
       var container = angular.element(parent[0].querySelector('.md-dialog-container'));
-      container.triggerHandler('transitionend');
+      parent.find('md-dialog').triggerHandler('transitionend');
       $rootScope.$apply();
 
       expect(parent.find('md-dialog').length).toBe(1);
@@ -180,6 +182,8 @@ describe('$mdDialog', function() {
       });
 
       $timeout.flush();
+      parent.find('md-dialog').triggerHandler('transitionend');
+      $rootScope.$apply();
       expect(parent.find('md-dialog').length).toBe(0);
     }));
 
@@ -216,7 +220,7 @@ describe('$mdDialog', function() {
       $rootScope.$apply();
 
       var container = angular.element(parent[0].querySelector('.md-dialog-container'));
-      container.triggerHandler('transitionend');
+      parent.find('md-dialog').triggerHandler('transitionend');
       $rootScope.$apply();
 
       expect(parent.find('md-dialog').length).toBe(1);
@@ -226,7 +230,7 @@ describe('$mdDialog', function() {
         target: container[0]
       });
       $timeout.flush();
-      container.triggerHandler('transitionend');
+      parent.find('md-dialog').triggerHandler('transitionend');
       $rootScope.$apply();
 
       expect(parent.find('md-dialog').length).toBe(0);
@@ -300,6 +304,8 @@ describe('$mdDialog', function() {
       var container = angular.element(parent[0].querySelector('.md-dialog-container'));
       container.triggerHandler('transitionend');
       $rootScope.$apply();
+      parent.find('md-dialog').triggerHandler('transitionend');
+      $rootScope.$apply();
 
 
       expect($document.activeElement).toBe(parent[0].querySelector('.dialog-close'));
@@ -326,6 +332,8 @@ describe('$mdDialog', function() {
       var container = angular.element(parent[0].querySelector('.md-dialog-container'));
       container.triggerHandler('transitionend');
       $rootScope.$apply();
+      parent.find('md-dialog').triggerHandler('transitionend');
+      $rootScope.$apply();
 
       expect($document.activeElement).toBe(parent[0].querySelector('#focus-target'));
     }));
@@ -346,6 +354,8 @@ describe('$mdDialog', function() {
         parent: parent
       });
 
+      $rootScope.$apply();
+      parent.find('md-dialog').triggerHandler('transitionend');
       $rootScope.$apply();
       expect(parent[0].querySelectorAll('md-dialog.one').length).toBe(0);
       expect(parent[0].querySelectorAll('md-dialog.two').length).toBe(1);

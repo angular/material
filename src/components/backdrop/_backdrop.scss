@@ -1,5 +1,15 @@
 md-backdrop {
   z-index: $z-index-backdrop;
+  &.md-dialog-backdrop {
+    z-index: $z-index-dialog - 1;
+  }
+  &.md-bottom-sheet-backdrop {
+    z-index: $z-index-bottom-sheet - 1;
+  }
+  &.md-bottom-sidenav-backdrop {
+    z-index: $z-index-sidenav - 1;
+  }
+
   background-color: rgba(0,0,0,0);
 
   position: fixed;
@@ -8,20 +18,19 @@ md-backdrop {
   right: 0;
   bottom: 0;
 
-
   &.ng-enter {
-    transition-delay: 0.1s;
-    transition: $swift-ease-out;
+    animation: $swift-ease-out-timing-function mdBackdropFadeIn 0.5s both;
   }
   &.ng-leave {
-    transition: $swift-ease-in;
+    animation: $swift-ease-in-timing-function mdBackdropFadeOut 0.2s both;
   }
-  &.ng-enter,
-  &.ng-leave.ng-leave-active {
-    opacity: 0;
-  }
-  &.ng-leave,
-  &.ng-enter.ng-enter-active {
-    opacity: 1;
-  }
+}
+
+@keyframes mdBackdropFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes mdBackdropFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }

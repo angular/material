@@ -8,28 +8,25 @@
   right: 0;
   bottom: 0;
   z-index: $z-index-dialog;
-
-  &.md-active {
-    transition: $swift-ease-out;
-    transform: translate3d(0,0,0) scale(1.0);
-    opacity: 1;
-  }
-  &.ng-leave.ng-leave-active {
-    transition: $swift-ease-in;
-    transform: translate3d(0,100%,0) scale(0.5);
-    opacity: 0;
-  }
-
 }
 
 md-dialog {
+  &.transition-in {
+    opacity: 1;
+    transition: $swift-ease-out;
+    transform: translate3d(0,0,0) scale(1.0);
+  }
+  &.transition-out {
+    transition: $swift-ease-out;
+    transform: translate3d(0,100%,0) scale(0.2);
+  }
 
+  opacity: 0.05;
   min-width: 240px;
   max-width: 80%;
   max-height: 80%;
   margin: auto;
   position: relative;
-
 
   box-shadow: $whiteframe-shadow-z5;
 
