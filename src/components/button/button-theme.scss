@@ -1,34 +1,27 @@
 $button-border-radius: 3px !default;
 $button-fab-border-radius: 50% !default;
 
-$button-primary-color-palette: $primary-color-palette !default;
-$button-primary-color: map-get($button-primary-color-palette, '400') !default;
-$button-primary-raised-color: $primary-color-palette-contrast-color !default;
-$button-primary-raised-background-color: map-get($button-primary-color-palette, '500') !default;
-$button-primary-raised-hover-background-color: map-get($button-primary-color-palette, '600') !default;
-
-$button-warn-color-palette: $warn-color-palette !default;
-$button-warn-color: map-get($button-warn-color-palette, '400') !default;
-$button-warn-raised-color: $primary-color-palette-contrast-color !default;
-$button-warn-raised-background-color: map-get($button-warn-color-palette, '500') !default;
-$button-warn-raised-hover-background-color: map-get($button-warn-color-palette, '700') !default;
-
-$button-flat-color-palette: $background-color-palette !default;
-$button-disabled-color: $foreground-tertiary-color !default;
-$button-disabled-background-color: transparent !default;
-$button-hover-background-color: rgba(map-get($button-flat-color-palette, '500'), 0.20) !default;
-
-$button-raised-color-palette: $button-flat-color-palette !default;
-$button-raised-background-color: rgba(map-get($button-raised-color-palette, '500'), 0.185) !default;
-$button-raised-hover-background-color: rgba(map-get($button-raised-color-palette, '500'), 0.30) !default;
-
-.md-button.md-#{$theme-name}-theme {
+.md-button.md-THEME_NAME-theme {
   border-radius: $button-border-radius;
 
-  &:not([disabled]) {
-    &:hover, 
-    &:focus {
-      background-color: $button-hover-background-color;
+  &.md-primary {
+    color: '{{primary-color}}';
+    &:not([disabled]) {
+      &:hover, 
+      &:focus {
+        background-color: '{{background-500-0.2}}';
+      }
+    }
+    &.md-raised,
+    &.md-fab {
+      color: '{{primary-contrast}}';
+      background-color: '{{primary-color}}';
+      &:not([disabled]) {
+        &:hover, 
+        &:focus {
+          background-color: '{{primary-600}}';
+        }
+      }
     }
   }
 
@@ -36,45 +29,45 @@ $button-raised-hover-background-color: rgba(map-get($button-raised-color-palette
     border-radius: $button-fab-border-radius;
   }
 
-  &.md-primary {
-    color: $button-primary-color;
-    fill: $button-primary-color;
-  }
-
-  &.md-warn {
-    color: $button-warn-color;
-    fill: $button-warn-color;
-  }
-
-  &.md-raised, 
+  &.md-raised,
   &.md-fab {
-    background-color: $button-raised-background-color;
-
+    color: '{{background-contrast}}';
+    background-color: '{{background-500-0.185}}';
     &:not([disabled]) {
       &:hover, 
       &:focus {
-        background-color: $button-raised-hover-background-color;
+        background-color: '{{background-500-0.3}}';
       }
     }
+  }
 
-    &.md-primary {
-      color: $button-primary-raised-color;
-      background-color: $button-primary-raised-background-color;
-      &:not([disabled]) {
-        &:hover,
-        &:focus {
-          background-color: $button-primary-raised-hover-background-color;
-        }
-      }
-    }
+  &.md-warn {
+    color: '{{warn-color}}';
 
-    &.md-warn {
-      color: $button-warn-raised-color;
-      background-color: $button-warn-raised-background-color;
+    &.md-raised,
+    &.md-fab {
+      color: '{{warn-contrast}}';
+      background-color: '{{warn-color}}';
       &:not([disabled]) {
         &:hover, 
         &:focus {
-          background-color: $button-warn-raised-hover-background-color;
+          background-color: '{{warn-700}}';
+        }
+      }
+    }
+  }
+
+  &.md-accent {
+    color: '{{accent-color}}';
+
+    &.md-raised,
+    &.md-fab {
+      color: '{{accent-contrast}}';
+      background-color: '{{accent-color}}';
+      &:not([disabled]) {
+        &:hover, 
+        &:focus {
+          background-color: '{{accent-700}}';
         }
       }
     }
@@ -83,9 +76,8 @@ $button-raised-hover-background-color: rgba(map-get($button-raised-color-palette
   &[disabled],
   &.md-raised[disabled],
   &.md-fab[disabled] {
-    color: $button-disabled-color;
-    fill: $button-disabled-color;
-    background-color: $button-disabled-background-color;
+    color: '{{foreground-3}}';
+    background-color: transparent;
     cursor: not-allowed;
   }
 }

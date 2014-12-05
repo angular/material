@@ -1,40 +1,73 @@
-$checkbox-color-palette: $color-green !default;
-$checkbox-checked-background-color: rgba(map-get($checkbox-color-palette, '400'), 0.87) !default;
-$checkbox-checked-color: map-get($foreground-color-palette, '200') !default;
-$checkbox-ripple-color: map-get($checkbox-color-palette, '600') !default;
-$checkbox-checked-ripple-color: map-get($color-grey, '600') !default;
-$checkbox-border-color: $input-border-color !default;
-$checkbox-disabled-border-color: $input-disabled-border-color !default;
-
-md-checkbox.md-#{$theme-name}-theme {
+md-checkbox.md-THEME_NAME-theme {
 
   .md-ripple {
-    color: $checkbox-ripple-color;
+    color: '{{accent-600}}';
   }
-
   &.md-checked .md-ripple {
-    color: $checkbox-checked-ripple-color;
+    color: '{{background-600}}';
   }
 
   .md-icon {
-    border-color: $checkbox-border-color;
+    border-color: '{{foreground-2}}';
   }
-
   &.md-checked .md-icon {
-    background-color: $checkbox-checked-background-color;
+    background-color: '{{accent-color-0.87}}';
   }
 
   &.md-checked .md-icon:after {
-    border-color: $checkbox-checked-color;
+    border-color: '{{background-200}}';
+  }
+
+  &:not([disabled]) {
+    &.md-primary {
+      .md-ripple {
+        color: '{{primary-600}}';
+      }
+      &.md-checked .md-ripple {
+        color: '{{background-600}}';
+      }
+
+      .md-icon {
+        border-color: '{{foreground-2}}';
+      }
+      &.md-checked .md-icon {
+        background-color: '{{primary-color-0.87}}';
+      }
+
+      &.md-checked .md-icon:after {
+        border-color: '{{background-200}}';
+      }
+    }
+
+    &.md-warn {
+      .md-ripple {
+        color: '{{warn-600}}';
+      }
+      &.md-checked .md-ripple {
+        color: '{{background-600}}';
+      }
+
+      .md-icon {
+        border-color: '{{foreground-2}}';
+      }
+      &.md-checked .md-icon {
+        background-color: '{{warn-color-0.87}}';
+      }
+
+      &.md-checked .md-icon:after {
+        border-color: '{{background-200}}';
+      }
+    }
   }
 
   &[disabled] {
     .md-icon {
-      border-color: $checkbox-disabled-border-color;
+      border-color: '{{foreground-3}}';
     }
 
     &.md-checked .md-icon {
-      background-color: $checkbox-disabled-border-color;
+      background-color: '{{foreground-3}}';
     }
   }
+
 }

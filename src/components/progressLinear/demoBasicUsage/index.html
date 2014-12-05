@@ -1,25 +1,12 @@
 <div ng-controller="AppCtrl" layout="column" layout-margin style="padding:25px;">
 
-  <h4 style="margin-top:0px">Determinate</h4>
-  <p>For operations where the percentage of the operation completed can be determined, use a determinate indicator. They give users a quick sense of how long an operation will take.</p>
-  <md-progress-linear md-mode="determinate" ng-value="determinateValue" ></md-progress-linear>
-
-  <h4>Indeterminate</h4>
-  <p>For operations where the user is asked to wait a moment while something finishes up, and it’s not necessary to expose what's happening behind the scenes and how long it will take, use an indeterminate indicator.</p>
   <md-progress-linear md-mode="indeterminate"></md-progress-linear>
 
-  <h4>Buffer</h4>
-  <md-progress-linear md-mode="buffer" value="{{determinateValue}}" md-buffer-value="{{determinateValue2}}"></md-progress-linear>
+  <md-progress-linear class="md-warn" md-mode="buffer" value="{{determinateValue}}" md-buffer-value="{{determinateValue2}}">
+  </md-progress-linear>
 
-  <h4>Query Indeterminate and Determinate</h4>
-  <md-progress-linear md-mode="{{mode}}" value="{{determinateValue}}"></md-progress-linear>
+  <md-progress-linear class="md-accent" md-mode="{{mode}}" value="{{determinateValue}}"></md-progress-linear>
 
-  <h4>Themes</h4>
-  <md-progress-linear md-theme="red" md-mode="determinate" ng-value="determinateValue" ></md-progress-linear>
-  <md-progress-linear md-theme="deep-orange" md-mode="buffer" value="{{determinateValue}}" md-buffer-value="{{determinateValue2}}"></md-progress-linear>
-  <md-progress-linear md-theme="yellow" md-mode="{{mode}}" value="{{determinateValue}}"></md-progress-linear>
-  <md-progress-linear md-theme="green" md-mode="determinate" ng-value="determinateValue" ></md-progress-linear>
-  <md-progress-linear md-theme="blue" md-mode="buffer" value="{{determinateValue}}" md-buffer-value="{{determinateValue2}}"></md-progress-linear>
-  <md-progress-linear md-theme="indigo" md-mode="{{mode}}" value="{{determinateValue}}"></md-progress-linear>
+  <md-progress-linear md-theme="custom" md-mode="determinate" ng-value="determinateValue" ></md-progress-linear>
 
 </div>
