@@ -1,3 +1,283 @@
+describe('$mdThemingProvider', function() {
+
+  var themingProvider;
+  var defaultTheme;
+  var testTheme;
+  var testPalette;
+  var startAngular = inject;
+  function setup() {
+    module('material.core.theming', function($mdThemingProvider, $provide) {
+      themingProvider = $mdThemingProvider;
+
+      testPalette = themingProvider._PALETTES.testPalette = {
+        '50': 'ffebee',
+        '100': 'ffcdd2',
+        '200': 'ef9a9a',
+        '300': 'e57373',
+        '400': 'ef5350',
+        '500': 'f44336',
+        '600': 'e53935',
+        '700': 'd32f2f',
+        '800': 'c62828',
+        '900': 'b71c1c',
+        'A100': 'ff8a80',
+        'A200': 'ff5252',
+        'A400': 'ff1744',
+        'A700': 'd50000',
+        'contrastDefaultColor': 'light',
+        'contrastDarkColors': ['50', '100', '200', '300', '400', 'A100']
+      };
+      defaultTheme = themingProvider.theme('default')
+        .primaryColor('testPalette')
+        .warnColor('testPalette')
+        .accentColor('testPalette')
+        .backgroundColor('testPalette');
+
+      testTheme = themingProvider.theme('test');
+    });
+    startAngular();
+  }
+
+  describe('creating themes', function() {
+    beforeEach(setup);
+
+    it('allows registering of a theme', function() {
+      expect(testTheme.name).toBe('test');
+      expect(testTheme.dark).toBeOfType('function');
+      expect(testTheme.colors).toBeOfType('object');
+    });
+    it('defaults to light theme', function() {
+      expect(testTheme.foregroundPalette.name).toBe('dark');
+      expect(testTheme.foregroundShadow).toBeFalsy();
+    });
+
+    describe('registering a dark theme', function() {
+      it('changes the foreground color & shadow', function() {
+        testTheme.dark();
+        expect(testTheme.foregroundPalette.name).toBe('light');
+        expect(testTheme.foregroundShadow).toBeTruthy();
+      });
+      it('changes the existing hues to match the dark or light defaults, if the hues are still default', function() {
+        var darkBackground = themingProvider._DARK_DEFAULT_HUES.background;
+        var lightBackground = themingProvider._LIGHT_DEFAULT_HUES.background;
+        testTheme.dark();
+        expect(testTheme.colors.background.hues['hue-3']).toBe(darkBackground['hue-3']);
+        testTheme.dark(false);
+        expect(testTheme.colors.background.hues['hue-3']).toBe(lightBackground['hue-3']);
+        testTheme.dark();
+        expect(testTheme.colors.background.hues['hue-3']).toBe(darkBackground['hue-3']);
+
+        testTheme.backgroundColor('testPalette', {
+          'hue-3': '50'
+        });
+        testTheme.dark(false);
+        expect(testTheme.colors.background.hues['hue-3']).toBe('50');
+      });
+    });
+
+    describe('theme extension', function() {
+      var parentTheme;
+      beforeEach(function() {
+        themingProvider.definePalette('parentPalette', angular.extend({}, testPalette));
+        parentTheme = themingProvider.theme('parent').primaryColor('parentPalette');
+      });
+      it('allows extension by string', function() {
+        var childTheme = themingProvider.theme('child', 'parent');
+        expect(childTheme.colors.primary.name).toBe('parentPalette');
+      });
+      it('allows extension by reference', function() {
+        var childTheme = themingProvider.theme('child', parentTheme);
+        expect(childTheme.colors.primary.name).toBe('parentPalette');
+      });
+      it('extends the default theme automatically', function() {
+        var childTheme = themingProvider.theme('child');
+        expect(childTheme.colors.primary.name).toEqual(defaultTheme.colors.primary.name);
+      });
+    });
+
+    describe('providing hue map for a color', function() {
+      it('extends default hue map automatically', function() {
+        expect(testTheme.colors.primary.hues).toEqual(defaultTheme.colors.primary.hues);
+      });
+      it('allows specifying a custom hue map', function() {
+        expect(testTheme.colors.primary.hues['hue-1']).not.toBe('50');
+        testTheme.primaryColor('testPalette', {
+          'hue-1': '50'
+        });
+        expect(testTheme.colors.primary.hues['hue-1']).toBe('50');
+      });
+      it('errors on invalid key in hue map', function() {
+        expect(function() {
+          testTheme.primaryColor('testPalette', {
+            'invalid-key': '100'
+          });
+        }).toThrow();
+      });
+      it('errors on invalid value in hue map', function() {
+        expect(function() {
+          testTheme.primaryColor('testPalette', {
+            'hue-1': 'invalid-value'
+          });
+        }).toThrow();
+      });
+    });
+
+  });
+
+  describe('registering palettes', function() {
+    beforeEach(setup);
+    it('requires all hues specified', function() {
+      var colors = {
+        '50': ' ', '100': ' ', '200': ' ', '300': ' ', '400': ' ',
+        '500': ' ', '600': ' ', '700': ' ', '800': ' ', '900': ' ',
+        'A100': ' ', 'A200': ' ', 'A400': ' ', 'A700': ' '
+      };
+      themingProvider.definePalette('newPalette', colors);
+      delete colors['50'];
+      expect(function() {
+        themingProvider.definePalette('newPaletteTwo', colors);
+      }).toThrow();
+    });
+    it('allows to extend an existing palette', function() {
+      themingProvider.definePalette('extended', themingProvider.extendPalette('testPalette', {
+        '50': 'newValue'
+      }));
+      expect(themingProvider._PALETTES.extended['100']).toEqual(testPalette['100']);
+      expect(themingProvider._PALETTES.extended['50']).toEqual('newValue');
+    });
+  }); 
+
+  describe('css template parsing', function() {
+    beforeEach(setup);
+
+    function parse(str) {
+      return themingProvider._parseRules(testTheme, 'primary', str)
+        .split(/\}(?!(\}|'|"|;))/)
+        .filter(function(val) { return !!val; })
+        .map(function(rule) {
+          rule += '}';
+          return {
+            content: (rule.match(/\{\s*(.*?)\s*\}/) || [])[1] || null,
+            hue: (rule.match(/md-(hue-\d)/) || [])[1] || null,
+            type: (rule.match(/(primary)/) || [])[1] || null
+          };
+        });
+    }
+
+    it('errors if given a theme with invalid palettes', function() {
+      testTheme.primaryColor('invalidPalette');
+      expect(function() {
+        themingProvider._parseRules(testTheme, 'primary', '');
+      }).toThrow();
+    });
+    it('replaces THEME_NAME', function() {
+      expect(themingProvider._parseRules(
+        testTheme, 'primary', '.md-THEME_NAME-theme {}'
+      )).toContain('.md-test-theme {}');
+    });
+    describe('parses foreground text and shadow', function() {
+      it('for a light theme', function() {
+        testTheme.dark(false);
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-1}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.54);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.26);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-4}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.12);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
+          .toEqual('color: ;');
+      });
+      it('for a dark theme', function() {
+        testTheme.dark();
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-1}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,1.0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.3);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-4}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.12);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
+          .toEqual('color: 1px 1px 0px rgba(black, 0.4), -1px -1px 0px rgba(black, 0.4);');
+      });
+    });
+    it('parses contrast colors', function() {
+      testTheme.primaryColor('testPalette', {
+        'default': '50'
+      });
+      expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast}}"; } ')[0].content)
+        .toEqual('color: rgb(0,0,0);');
+
+      testTheme.primaryColor('testPalette', {
+        'default': '800'
+      });
+      expect(parse('{ color: "{{primary-contrast}}"; }')[0].content)
+        .toEqual('color: rgb(255,255,255);');
+    });
+    it('generates base, non-colorType-specific, rules', function() {
+      var accent100 = themingProvider._rgba(themingProvider._PALETTES.testPalette['100'].value);
+      var result = parse('.md-THEME_NAME-theme { color: "{{accent-100}}"; }');
+      expect(result[0].content).toEqual('color: ' + accent100 + ';');
+      expect(result[0].hue).toBeFalsy();
+      expect(result[1].content).toEqual('color: ' + accent100 + ';');
+      expect(result[1].hue).toBe('hue-1');
+      expect(result[2].content).toEqual('color: ' + accent100 + ';');
+      expect(result[2].hue).toBe('hue-2');
+      expect(result[3].content).toEqual('color: ' + accent100 + ';');
+      expect(result[3].hue).toBe('hue-3');
+      expect(result.length).toBe(4);
+    });
+    it('generates colorType-specific rules for each hue', function() {
+      var primary = themingProvider._rgba(themingProvider._PALETTES.testPalette['500'].value);
+      var hue1 = themingProvider._rgba(themingProvider._PALETTES.testPalette['300'].value);
+      var hue2 = themingProvider._rgba(themingProvider._PALETTES.testPalette['800'].value);
+      var hue3 = themingProvider._rgba(themingProvider._PALETTES.testPalette.A100.value);
+      var result = parse('.md-THEME_NAME-theme.md-primary { color: "{{primary-color}}"; }');
+      expect(result[0]).toEqual({content: 'color: ' + primary + ';', hue: null, type: 'primary'});
+      expect(result[1]).toEqual({content: 'color: ' + hue1 + ';', hue: 'hue-1', type: 'primary'});
+      expect(result[2]).toEqual({content: 'color: ' + hue2 + ';', hue: 'hue-2', type: 'primary'});
+      expect(result[3]).toEqual({content: 'color: ' + hue3 + ';', hue: 'hue-3', type: 'primary'});
+      expect(result.length).toEqual(4);
+    });
+
+    it('generates colorType-specific rules for each hue with opacity', function() {
+      var primary = themingProvider._rgba(themingProvider._PALETTES.testPalette['500'].value, '0.3');
+      var hue1 = themingProvider._rgba(themingProvider._PALETTES.testPalette['300'].value, '0.3');
+      var hue2 = themingProvider._rgba(themingProvider._PALETTES.testPalette['800'].value, '0.3');
+      var hue3 = themingProvider._rgba(themingProvider._PALETTES.testPalette.A100.value, '0.3');
+      result = parse('.md-THEME_NAME-theme.md-primary { color: "{{primary-color-0.3}}"; }');
+      expect(result[0]).toEqual({content: 'color: ' + primary + ';', hue: null, type: 'primary'});
+      expect(result[1]).toEqual({content: 'color: ' + hue1 + ';', hue: 'hue-1', type: 'primary'});
+      expect(result[2]).toEqual({content: 'color: ' + hue2 + ';', hue: 'hue-2', type: 'primary'});
+      expect(result[3]).toEqual({content: 'color: ' + hue3 + ';', hue: 'hue-3', type: 'primary'});
+      expect(result.length).toEqual(4);
+    });
+    describe('allows selecting a colorType', function() {
+      it('hue value', function() {
+        var A400 = themingProvider._rgba(themingProvider._PALETTES.testPalette.A400.value);
+        var result = parse('.md-THEME_NAME-theme.md-primary { color: {{primary-A400}}; }');
+        expect(result[0]).toEqual({content: 'color: ' + A400 + ';', hue: null, type: 'primary'});
+        expect(result[1]).toEqual({content: 'color: ' + A400 + ';', hue: 'hue-1', type: 'primary'});
+        expect(result[2]).toEqual({content: 'color: ' + A400 + ';', hue: 'hue-2', type: 'primary'});
+        expect(result[3]).toEqual({content: 'color: ' + A400 + ';', hue: 'hue-3', type: 'primary'});
+        expect(result.length).toEqual(4);
+      });
+      it('hue value with opacity', function() {
+        var A400 = themingProvider._rgba(themingProvider._PALETTES.testPalette.A400.value, '0.25');
+        var result = parse('.md-THEME_NAME-theme.md-primary { color: {{primary-A400-0.25}}; }');
+        expect(result[0]).toEqual({content: 'color: ' + A400 + ';', hue: null, type: 'primary'});
+        expect(result[1]).toEqual({content: 'color: ' + A400 + ';', hue: 'hue-1', type: 'primary'});
+        expect(result[2]).toEqual({content: 'color: ' + A400 + ';', hue: 'hue-2', type: 'primary'});
+        expect(result[3]).toEqual({content: 'color: ' + A400 + ';', hue: 'hue-3', type: 'primary'});
+        expect(result.length).toEqual(4);
+      });
+    });
+  });
+
+});
+
 describe('$mdTheming service', function() {
   var $mdThemingProvider;
   beforeEach(module('material.core', function(_$mdThemingProvider_) {

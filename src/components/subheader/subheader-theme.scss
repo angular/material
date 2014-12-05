@@ -1,12 +1,14 @@
-$subheader-color-palette: $primary-color-palette !default;
-$subheader-text-color: $foreground-secondary-color !default;
-$subheader-primary-text-color: map-get($subheader-color-palette, '500') !default;
-
-.md-subheader.md-#{$theme-name}-theme {
-  color: $subheader-text-color;
-  background-color: $background-color-base;
+.md-subheader.md-THEME_NAME-theme {
+  color: '{{ foreground-2-0.23 }}';
+  background-color: '{{background-hue-3}}';
 
   &.md-primary {
-    color: $subheader-primary-text-color;
+    color: '{{primary-color}}'
+  }
+  &.md-accent {
+    color: '{{accent-color}}'
+  }
+  &.md-warn {
+    color: '{{warn-color}}'
   }
 }

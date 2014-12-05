@@ -5,7 +5,8 @@ var DocsApp = angular.module('docsApp', ['ngMaterial', 'ngRoute', 'angularytics'
   'DEMOS',
   'PAGES',
   '$routeProvider',
-function(COMPONENTS, DEMOS, PAGES, $routeProvider) {
+  '$mdThemingProvider',
+function(COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider) {
   $routeProvider
     .when('/', {
       templateUrl: 'partials/home.tmpl.html'
@@ -15,6 +16,10 @@ function(COMPONENTS, DEMOS, PAGES, $routeProvider) {
         return 'partials/layout-' + params.tmpl + '.tmpl.html';
       }
     });
+
+
+  $mdThemingProvider.theme('docs-dark', 'default')
+    .dark();
 
   angular.forEach(PAGES, function(pages, area) {
     angular.forEach(pages, function(page) {

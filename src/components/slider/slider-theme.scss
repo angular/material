@@ -1,61 +1,84 @@
-$slider-color-palette: $primary-color-palette !default;
-$slider-background-color: $foreground-tertiary-color !default;
-$slider-track-color: map-get($slider-color-palette, '500') !default;
-$slider-thumb-color: map-get($slider-color-palette, '500') !default;
-$slider-sign-color: map-get($slider-color-palette, '500') !default;
-$slider-sign-text-color: $primary-color-palette-contrast-color !default;
-$slider-focus-thumb-color: $foreground-secondary-color !default;
-$slider-focus-ring-color: $foreground-quarternary-color !default;
-$slider-disabled-color: map-get($foreground-color-palette, '400') !default;
+md-slider.md-THEME_NAME-theme {
 
-md-slider.md-#{$theme-name}-theme {
   .md-track {
-    background-color: $slider-background-color;
+    background-color: '{{foreground-3}}';
+  }
+  .md-focus-thumb {
+    background-color: '{{foreground-2}}';
+  }
+  .md-focus-ring {
+    border-color: '{{foreground-4}}';
+  }
+  .md-disabled-thumb {
+    border-color: '{{background-hue-3}}';
+  }
+  &.md-min .md-thumb:after {
+    background-color: '{{background-hue-3}}';
   }
 
-  .md-track-fill {
-    background-color: $slider-track-color;
+  .md-track.md-track-fill {
+    background-color: '{{primary-color}}';
   }
-
   .md-thumb:after {
-    border-color: $slider-thumb-color;
-    background-color: $slider-thumb-color;
+    border-color: '{{primary-color}}';
+    background-color: '{{primary-color}}';
+  }
+  .md-sign {
+    background-color: '{{primary-color}}';
+    &:after {
+      border-top-color: '{{primary-color}}';
+    }
+  }
+  .md-thumb-text {
+    color: '{{primary-contrast}}';
   }
 
-  .md-sign {
-    background-color: $slider-sign-color;
+  &.md-warn {
+    .md-track-fill {
+      background-color: '{{warn-color}}';
+    }
+    .md-thumb:after {
+      border-color: '{{warn-color}}';
+      background-color: '{{warn-color}}';
+    }
+    .md-sign {
+      background-color: '{{warn-color}}';
 
-    &:after {
-      border-top-color: $slider-sign-color;
+      &:after {
+        border-top-color: '{{warn-color}}';
+      }
+    }
+    .md-thumb-text {
+      color: '{{warn-contrast}}';
     }
   }
 
-  .md-thumb-text {
-    color: $slider-sign-text-color;
-  }
+  &.md-accent {
+    .md-track-fill {
+      background-color: '{{accent-color}}';
+    }
+    .md-thumb:after {
+      border-color: '{{accent-color}}';
+      background-color: '{{accent-color}}';
+    }
+    .md-sign {
+      background-color: '{{accent-color}}';
 
-  .md-focus-thumb {
-    background-color: $slider-focus-thumb-color;
-  }
-
-  .md-focus-ring {
-    border-color: $slider-focus-ring-color;
-  }
-
-  .md-disabled-thumb {
-    border-color: $background-color-base;
-  }
-
-  &.md-min .md-thumb:after {
-    background-color: $background-color-base;
+      &:after {
+        border-top-color: '{{accent-color}}';
+      }
+    }
+    .md-thumb-text {
+      color: '{{accent-contrast}}';
+    }
   }
 
   &[disabled] {
     .md-thumb:after {
-      border-color: $slider-disabled-color;
+      border-color: '{{foreground-3}}';
     }
     &:not(.md-min) .md-thumb:after {
-      background-color: $slider-disabled-color;
+      background-color: '{{foreground-3}}';
     }
   }
 }

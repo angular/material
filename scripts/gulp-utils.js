@@ -188,7 +188,7 @@ exports.hoistScssVariables = function() {
     for( var currentLine = 0; currentLine < contents.length; ++currentLine) {
       var line = contents[currentLine];
 
-      if (openBlock || /^\s*\$/.test(line)) {
+      if (openBlock || /^\s*\$/.test(line) && !/^\s+/.test(line)) {
         openCount += (line.match(/\(/g) || []).length;
         closeCount += (line.match(/\)/g) || []).length;
         openBlock = openCount != closeCount;
@@ -198,6 +198,28 @@ exports.hoistScssVariables = function() {
     }
     file.contents = new Buffer(contents.join('\n'));
     this.push(file);
+    next();
+  });
+};
+
+exports.cssToNgConstant = function(ngModule, factoryName) {
+  return through2.obj(function(file, enc, next) {
+
+    var template = 'angular.module("%1").constant("%2", "%3")';
+    var output = file.contents.toString().replace(/\n/g, '')
+      .replace(/\"/,'\\"');
+
+    var jsFile = new gutil.File({
+      base: file.base,
+      path: file.path.replace('css', 'js'),
+      contents: new Buffer(
+        template.replace('%1', ngModule)
+          .replace('%2', factoryName)
+          .replace('%3', output)
+      )
+    });
+
+    this.push(jsFile);
     next();
   });
 };

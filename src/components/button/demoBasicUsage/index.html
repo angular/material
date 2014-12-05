@@ -5,8 +5,8 @@
     <section layout="row" layout-sm="column" layout-align="center center">
       <md-button>{{title1}}</md-button>
       <md-button md-no-ink class="md-primary">Primary (md-noink)</md-button>
-      <md-button ng-disabled="isDisabled" class="md-primary">Disabled</md-button>
-      <md-button class="md-warn" ng-click="isDisabled = !isDisabled">{{title4}}</md-button>
+      <md-button ng-disabled="true" class="md-primary">Disabled</md-button>
+      <md-button class="md-warn">{{title4}}</md-button>
     </section>
 
     <section layout="row" layout-sm="column" layout-align="center center">
@@ -42,10 +42,10 @@
     </section>
 
     <section layout="row" layout-sm="column" layout-align="center center">
-      <md-button class="md-primary" md-theme="green">Button</md-button>
-      <md-button class="md-primary md-raised" md-theme="indigo">Button</md-button>
-      <md-button class="md-primary md-raised" md-theme="orange">Button</md-button>
-      <md-button class="md-primary" md-theme="cyan">Button</md-button>
+      <md-button class="md-primary md-hue-1">Primary Hue 1</md-button>
+      <md-button class="md-warn md-raised md-hue-2">Warn Hue 2</md-button>
+      <md-button class="md-accent">Accent</md-button>
+      <md-button class="md-accent md-raised md-hue-3">Accent Hue 3</md-button>
       <div class="label">Themed</div>
     </section>
 

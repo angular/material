@@ -3,8 +3,8 @@
     Switch 1: {{ data.cb1 }}
   </md-switch>
 
-  <md-switch ng-model="data.cb2" aria-label="Switch 2" ng-true-value="'yup'" ng-false-value="'nope'">
-    Switch 2: {{ data.cb2 }}
+  <md-switch ng-model="data.cb2" aria-label="Switch 2" ng-true-value="'yup'" ng-false-value="'nope'" class="md-warn">
+    Switch 2 (md-warn): {{ data.cb2 }}
   </md-switch>
 
   <md-switch ng-disabled="true" aria-label="Disabled switch">
@@ -15,8 +15,8 @@
     Switch (Disabled, Active)
   </md-switch>
 
-  <md-switch md-no-ink aria-label="Switch No Ink">
-    Switch (No Ink)
+  <md-switch class="md-primary" md-no-ink aria-label="Switch No Ink">
+    Switch (md-primary): No Ink
   </md-switch>
 
 </div>

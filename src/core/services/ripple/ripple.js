@@ -106,7 +106,7 @@ function InkRippleService($window, $timeout) {
 
     function parseColor(color) {
       if (!color) return;
-      if (color.indexOf('rgba') === 0) return color;
+      if (color.indexOf('rgba') === 0) return color.replace(/\d?\.?\d*\s*\)\s*$/, '0.1)');
       if (color.indexOf('rgb')  === 0) return rgbToRGBA(color);
       if (color.indexOf('#')    === 0) return hexToRGBA(color);
 

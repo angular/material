@@ -227,3 +227,35 @@ md-tab {
     }
   }
 }
+
+@function map-to-string($map) {
+  $map-str: '{';
+  $keys: map-keys($map);
+  $len: length($keys);
+  @for $i from 1 through $len {
+    $key: nth($keys, $i);
+    $value: map-get($map, $key);
+    $map-str: $map-str + '"' + $key + '": "' + map-get($map, $key) + '"';
+    @if $i != $len {
+      $map-str: $map-str + ',';
+    }
+  }
+  @return $map-str + '}';
+}
+.md-color-palette-definition {
+  $content-rule: '{';
+  $map-str: '';
+  $keys: map-keys($colors);
+  $len: length($keys);
+  @for $i from 1 through $len {
+    $key: nth($keys, $i);
+    $value: map-get($colors, $key);
+    $content-rule: $content-rule + '"' + $key + '": ' + map-to-string($value);
+    @if $i != $len {
+      $content-rule: $content-rule + ',';
+    }
+  }
+  $content-rule: $content-rule + '}';
+  content: $content-rule;
+  display: none;
+}

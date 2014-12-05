@@ -6,10 +6,37 @@ $tabs-disabled-color: $foreground-quarternary-color !default;
 $tabs-focus-color: $foreground-primary-color !default;
 $tabs-highlight-color: #ffff85;
 
-md-tabs.md-#{$theme-name}-theme {
+md-tabs.md-THEME_NAME-theme {
   .md-header {
-    background-color: $tabs-header-background-color;
+    background-color: '{{primary-color}}';
   }
+
+  &.md-accent {
+    .md-header {
+      background-color: '{{accent-color}}';
+    }
+
+    md-tab:not([disabled]) {
+      color: '{{accent-100}}';
+      &.active {
+        color: '{{accent-contrast}}';
+      }
+    }
+  }
+
+  &.md-warn {
+    .md-header {
+      background-color: '{{warn-color}}';
+    }
+
+    md-tab:not([disabled]) {
+      color: '{{warn-100}}';
+      &.active {
+        color: '{{warn-contrast}}';
+      }
+    }
+  }
+
 
   md-tabs-ink-bar {
     color: $tabs-highlight-color;
@@ -17,17 +44,16 @@ md-tabs.md-#{$theme-name}-theme {
   }
 
   md-tab {
-    color: $tabs-inactive-color;
+    color: '{{primary-100}}';
     &.active {
-      color: $tabs-active-color;
+      color: '{{primary-contrast}}';
     }
     &[disabled] {
-      color: $tabs-disabled-color;
+      color: '{{foreground-4}}';
     }
     &:focus {
-      border-color: $tabs-focus-color;
+      border-color: '{{foreground-1}}';
     }
-
     .md-ripple-container {
       color: $tabs-highlight-color;
     }

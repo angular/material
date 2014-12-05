@@ -1,44 +1,50 @@
-$switch-color-palette: $primary-color-palette !default;
-$switch-off-color-palette: $foreground-color-palette !default;
-
-$switch-on-color: map-get($switch-color-palette, '500') !default;
-$switch-on-bar-color: rgba($switch-on-color, 0.5) !default;
-
-$switch-off-color: map-get($switch-off-color-palette, '50') !default;
-$switch-off-bar-color: map-get($switch-off-color-palette, '500') !default;
-
-$switch-disabled-color: map-get($switch-off-color-palette, '400') !default;
-$switch-disabled-bar-color: rgba(#000, 0.12);
-
-md-switch.md-#{$theme-name}-theme {
+md-switch.md-THEME_NAME-theme {
   .md-thumb {
-    background-color: $switch-off-color;
+    background-color: '{{background-50}}';
   }
   .md-bar {
-    background-color: $switch-off-bar-color;
+    background-color: '{{background-500}}';
   }
 
   &.md-checked {
     .md-thumb {
-      background-color: $switch-on-color;
+      background-color: '{{accent-color}}';
     }
     .md-bar {
-      background-color: $switch-on-bar-color;
+      background-color: '{{accent-color-0.5}}';
+    }
+
+    &.md-primary {
+      .md-thumb {
+        background-color: '{{primary-color}}';
+      }
+      .md-bar {
+        background-color: '{{primary-color-0.5}}';
+      }
+    }
+
+    &.md-warn {
+      .md-thumb {
+        background-color: '{{warn-color}}';
+      }
+      .md-bar {
+        background-color: '{{warn-color-0.5}}';
+      }
     }
   }
 
   &[disabled] {
     .md-thumb {
-      background-color: $switch-disabled-color;
+      background-color: '{{background-400}}';
     }
     .md-bar {
-      background-color: $switch-disabled-bar-color;
+      background-color: '{{foreground-4}}';
     }
   }
 
   &:focus {
     .md-label:not(:empty) {
-      border-color: black;
+      border-color: '{{foreground-1}}';
       border-style: dotted;
     }
   }

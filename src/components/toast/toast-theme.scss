@@ -1,16 +1,18 @@
-$toast-background-color: #323232 !default;
-$toast-text-color: white !default;
-$toast-action-color: map-get($primary-color-palette, 'A200') !default;
-
-md-toast.md-#{$theme-name}-theme {
-  background-color: $toast-background-color;
-  color: $toast-text-color;
+md-toast.md-THEME_NAME-theme {
+  background-color: '{{foreground-1}}';
+  color: '{{background-50}}';
 
   .md-button {
-    color: $toast-text-color;
+    color: '{{background-50}}';
   }
 
   .md-action {
-    color: $toast-action-color;
+    color: '{{primary-A200}}';
+    &.md-accent {
+      color: '{{accent-A200}}';
+    }
+    &.md-warn {
+      color: '{{warn-A200}}';
+    }
   }
 }
