@@ -6,7 +6,7 @@ md-backdrop {
   &.md-bottom-sheet-backdrop {
     z-index: $z-index-bottom-sheet - 1;
   }
-  &.md-bottom-sidenav-backdrop {
+  &.md-sidenav-backdrop {
     z-index: $z-index-sidenav - 1;
   }
 
