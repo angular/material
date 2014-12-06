@@ -69,7 +69,7 @@ function MdSwitch(mdCheckboxDirective, mdRadioButtonDirective, $mdTheming) {
 
     return function (scope, element, attr, ngModelCtrl) {
       $mdTheming(element);
-      return checkboxLink(scope, thumb, attr, ngModelCtrl);
+      return checkboxLink(scope, angular.element(element[0].querySelector('.md-switch-thumb')), attr, ngModelCtrl);
     };
   }
 }
