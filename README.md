@@ -88,15 +88,15 @@ Visit [Bower-Material](https://github.com/angular/bower-material/blob/master/REA
 
 #### CDN
 
-CDN versions of Angular Material are now available [Google Hosted Libraries](https://developers.google.com/speed/libraries/devguide#angularmaterial). 
+CDN versions of Angular Material are now available at [Google Hosted Libraries](https://developers.google.com/speed/libraries/devguide#angularmaterial). 
 
-With the Google CDN, you will not need to download local copies of the distribution files. Instead simply reference the CDN urls to easily use those remote library files... this is especially useful when using online tools such as CodePen, Plunkr, or jsFiddle.
+With the Google CDN, you will not need to download local copies of the distribution files. Instead simply reference the CDN urls to easily use those remote library files. This is especially useful when using online tools such as CodePen, Plunkr, or jsFiddle.
 
 ```html
   <head>
     
     <!-- Angulars Material CSS now available via Google CDN; version 0.6 used here -->
-    <link rel="stylesheet prefetch" href="http://ajax.googleapis.com/ajax/libs/angular_material/0.6/angular-material.css">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/0.6/angular-material.css">
     
   </head>
   <body>
@@ -117,7 +117,7 @@ Developers seeking the latest, most-current build versions can use [RawGit.com](
   <head>
   
     <!-- CSS using RawGit to load directly from `bower-material/master`  -->
-    <link rel="stylesheet prefetch" href="https://rawgit.com/angular/bower-material/master/angular-material.css">
+    <link rel="stylesheet" href="https://rawgit.com/angular/bower-material/master/angular-material.css">
     
   </head>
   <body>
