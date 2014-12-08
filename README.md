@@ -68,7 +68,9 @@ gulp docs
 
 For more details on how the build process works and additional commands (available for testing and debugging) developers should read [Build Instructions](docs/guides/BUILD.md).
 
-## <a name="installing"></a>  Installing
+## <a name="installing"></a>  Installing Build (Distribution Files)
+
+#### Bower 
 
 For developers not interested in building the Angular Material library... use **bower** to install and use the Angular Material distribution files.
 
@@ -84,9 +86,45 @@ bower install angular-material#master
 
 Visit [Bower-Material](https://github.com/angular/bower-material/blob/master/README.md) for more details on how to install and use the Angular Material distribution files within your own local project.
 
-CDN versions of Angular Material will be available in the near future.
+#### CDN
 
->With a CDN, you will not need to download local copies of the distribution files. Instead reference the CDN urls to easily use those remote library files... this is especially useful when using online tools such as CodePen, Plunkr, or jsFiddle.
+CDN versions of Angular Material are now available [Google Hosted Libraries](https://developers.google.com/speed/libraries/devguide#angularmaterial). 
+
+With the Google CDN, you will not need to download local copies of the distribution files. Instead simply reference the CDN urls to easily use those remote library files... this is especially useful when using online tools such as CodePen, Plunkr, or jsFiddle.
+
+```html
+  <head>
+    <!-- Now available via Google CDN; version 0.6 used here -->
+    <link rel="stylesheet prefetch" href="http://ajax.googleapis.com/ajax/libs/angular_material/0.6/angular-material.css">
+  </head>
+  <body>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/hammer.js/1.1.3/hammer.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-animate.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-aria.js"></script>
+    <!-- Now available via Google CDN; version 0.6 used here -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/0.6/angular-material.min.js"></script>
+  </body>
+```
+
+Developers seeking the latest, most-current build versions can use [RawGit.com](rawgit.com) to pull directly from the our distribution GitHub [Bower-Material](https://github.com/angular/bower-material) repository:
+
+```html
+  <head>
+    <!-- Using RawGit to load directly from `bower-material/master`  -->
+    <link rel="stylesheet prefetch" href="https://rawgit.com/angular/bower-material/master/angular-material.css">
+  </head>
+  <body>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/hammer.js/1.1.3/hammer.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-animate.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-aria.js"></script>
+    <!-- Using RawGit to load directly from `bower-material/master`  -->
+    <script src="https://rawgit.com/angular/bower-material/master/angular-material.min.js"></script>
+  </body>
+```
+
+> Please note that the above RawGit usage is only for development purposes and is intended **ONLY** or sharing low-traffic, temporary examples or demos with small numbers of people.
 
 
 <br/>
