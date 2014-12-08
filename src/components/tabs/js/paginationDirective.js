@@ -37,7 +37,6 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
 
     scope.$on('$destroy', function() {
       angular.element($window).off('resize', debouncedUpdatePagination);
-      tabsParent.off('focusin', onTabsFocusIn);
     });
 
     scope.$watch(tabsCtrl.selected, onSelectedTabChange);
