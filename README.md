@@ -96,17 +96,17 @@ With the Google CDN, you will not need to download local copies of the distribut
   <head>
     
     <!-- Angulars Material CSS now available via Google CDN; version 0.6 used here -->
-    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/0.6/angular-material.css">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.6/angular-material.css">
     
   </head>
   <body>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/hammer.js/1.1.3/hammer.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-animate.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-aria.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/hammer.js/1.1.3/hammer.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-animate.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-aria.js"></script>
     
     <!-- Angular Material Javascript now available via Google CDN; version 0.6 used here -->
-    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/0.6/angular-material.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angular_material/0.6/angular-material.min.js"></script>
     
   </body>
 ```
@@ -117,17 +117,17 @@ Developers seeking the latest, most-current build versions can use [RawGit.com](
   <head>
   
     <!-- CSS using RawGit to load directly from `bower-material/master`  -->
-    <link rel="stylesheet" href="https://rawgit.com/angular/bower-material/master/angular-material.css">
+    <link rel="stylesheet" href="//rawgit.com/angular/bower-material/master/angular-material.css">
     
   </head>
   <body>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/hammer.js/1.1.3/hammer.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-animate.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-aria.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/hammer.js/1.1.3/hammer.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-animate.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.4/angular-aria.js"></script>
     
     <!-- Javascript using RawGit to load directly from `bower-material/master`  -->
-    <script src="https://rawgit.com/angular/bower-material/master/angular-material.min.js"></script>
+    <script src="//rawgit.com/angular/bower-material/master/angular-material.min.js"></script>
     
   </body>
 ```
