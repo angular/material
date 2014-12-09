@@ -1,13 +1,46 @@
-$switch-color: $foreground-secondary-color !default;
-$switch-focus-color: map-get($foreground-color-palette, '1000');
+$switch-color-palette: $primary-color-palette !default;
+$switch-off-color-palette: $foreground-color-palette !default;
+
+$switch-on-color: map-get($switch-color-palette, '500') !default;
+$switch-on-bar-color: rgba($switch-on-color, 0.5) !default;
+
+$switch-off-color: map-get($switch-off-color-palette, '50') !default;
+$switch-off-bar-color: map-get($switch-off-color-palette, '500') !default;
+
+$switch-disabled-color: map-get($switch-off-color-palette, '400') !default;
+$switch-disabled-bar-color: rgba(#000, 0.12);
 
 md-switch.md-#{$theme-name}-theme {
-  .md-switch-bar {
-    background-color: $switch-color;
+  .md-thumb {
+    background-color: $switch-off-color;
   }
-  .md-switch-thumb {
-    &:focus .md-label {
-      border: 1px dotted black;
+  .md-bar {
+    background-color: $switch-off-bar-color;
+  }
+
+  &.md-checked {
+    .md-thumb {
+      background-color: $switch-on-color;
+    }
+    .md-bar {
+      background-color: $switch-on-bar-color;
     }
   }
+
+  &[disabled] {
+    .md-thumb {
+      background-color: $switch-disabled-color;
+    }
+    .md-bar {
+      background-color: $switch-disabled-bar-color;
+    }
+  }
+
+  &:focus {
+    .md-text {
+      border-color: black;
+      border-style: dotted;
+    }
+  }
+
 }

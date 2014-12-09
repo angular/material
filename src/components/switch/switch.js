@@ -9,8 +9,7 @@
 
 angular.module('material.components.switch', [
   'material.core',
-  'material.components.checkbox',
-  'material.components.radioButton'
+  'material.components.checkbox'
 ])
   .directive('mdSwitch', MdSwitch);
 
@@ -47,30 +46,90 @@ angular.module('material.components.switch', [
  *
  * </hljs>
  */
-function MdSwitch(mdCheckboxDirective, mdRadioButtonDirective, $mdTheming) {
+function MdSwitch(mdCheckboxDirective, $mdTheming, $mdUtil, $document, $mdConstant, $parse, $$rAF) {
   var checkboxDirective = mdCheckboxDirective[0];
-  var radioButtonDirective = mdRadioButtonDirective[0];
 
   return {
     restrict: 'E',
     transclude: true,
     template:
-      '<div class="md-switch-bar"></div>' +
-      '<div class="md-switch-thumb">' +
-        radioButtonDirective.template +
+      '<div class="md-container">' +
+        '<div class="md-bar"></div>' +
+        '<div class="md-thumb-container">' +
+          '<div class="md-thumb" md-ink-ripple md-ink-ripple-checkbox></div>' +
+        '</div>'+
+      '</div>' +
+      '<div ng-transclude class="md-text">' +
       '</div>',
     require: '?ngModel',
     compile: compile
   };
 
   function compile(element, attr) {
-    var thumb = angular.element(element[0].querySelector('.md-switch-thumb'));
-    var checkboxLink = checkboxDirective.compile(thumb, attr);
+    var checkboxLink = checkboxDirective.compile(element, attr);
 
-    return function (scope, element, attr, ngModelCtrl) {
-      $mdTheming(element);
-      return checkboxLink(scope, thumb, attr, ngModelCtrl);
+    return function (scope, element, attr, ngModel) {
+      ngModel = ngModel || $mdUtil.fakeNgModel();
+      var disabledGetter = $parse(attr.ngDisabled);
+      var thumbContainer = angular.element(element[0].querySelector('.md-thumb-container'));
+      var switchContainer = angular.element(element[0].querySelector('.md-container'));
+
+      // no transition on initial load
+      $$rAF(function() {
+        element.addClass('transition');
+      });
+
+      // Tell the checkbox we don't want a click listener.
+      // Our drag listener tells us everything, using more granular events.
+      attr.mdNoClick = true;
+      checkboxLink(scope, element, attr, ngModel);
+
+      $mdUtil.attachDragBehavior(scope, switchContainer);
+
+      // These events are triggered by setup drag
+      switchContainer.on('$md.dragstart', onDragStart)
+        .on('$md.drag', onDrag)
+        .on('$md.dragend', onDragEnd);
+
+      function onDragStart(ev, drag) {
+        // Don't go if ng-disabled===true
+        if (disabledGetter(scope)) return ev.preventDefault();
+
+        drag.width = thumbContainer.prop('offsetWidth');
+        element.removeClass('transition');
+      }
+      function onDrag(ev, drag) {
+        var percent = drag.distance / drag.width;
+
+        //if checked, start from right. else, start from left
+        var translate = ngModel.$viewValue ?  1 - percent : -percent;
+        // Make sure the switch stays inside its bounds, 0-1%
+        translate = Math.max(0, Math.min(1, translate));
+
+        thumbContainer.css($mdConstant.CSS.TRANSFORM, 'translate3d(' + (100*translate) + '%,0,0)');
+        drag.translate = translate;
+      }
+      function onDragEnd(ev, drag) {
+        if (disabledGetter(scope)) return false;
+
+        element.addClass('transition');
+        thumbContainer.css($mdConstant.CSS.TRANSFORM, '');
+
+        // We changed if there is no distance (this is a click a click),
+        // or if the drag distance is >50% of the total.
+        var isChanged = Math.abs(drag.distance || 0) < 5 ||
+          (ngModel.$viewValue ? drag.translate < 0.5 : drag.translate > 0.5);
+        if (isChanged) {
+          scope.$apply(function() {
+            ngModel.$setViewValue(!ngModel.$viewValue);
+            ngModel.$render();
+          });
+        }
+      }
     };
   }
+
+
 }
+
 })();
