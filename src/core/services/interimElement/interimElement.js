@@ -193,7 +193,12 @@ function InterimElementProvider() {
   }
 
   /* @ngInject */
-  function InterimElementFactory($document, $q, $rootScope, $timeout, $rootElement, $animate, $mdCompiler, $mdTheming) {
+  function InterimElementFactory($document, $q, $rootScope, $timeout, $rootElement, $animate,
+                                 $interpolate, $mdCompiler, $mdTheming ) {
+    var startSymbol = $interpolate.startSymbol(),
+        endSymbol = $interpolate.endSymbol(),
+        usesStandardSymbols = ((startSymbol === '{{') && (endSymbol === '}}')),
+        processTemplate  = usesStandardSymbols ? angular.identity : replaceInterpolationSymbols;
 
     return function createInterimElementService() {
       /*
@@ -302,6 +307,10 @@ function InterimElementProvider() {
           }
         }, options);
 
+        if (options.template) {
+          options.template = processTemplate(options.template);
+        }
+
         return self = {
           options: options,
           deferred: $q.defer(),
@@ -350,6 +359,19 @@ function InterimElementProvider() {
         };
       }
     };
+
+    /*
+     * Replace `{{` and `}}` in a string (usually a template) with the actual start-/endSymbols used
+     * for interpolation. This allows pre-defined templates (for components such as dialog, toast etc)
+     * to continue to work in apps that use custom interpolation start-/endSymbols.
+     *
+     * @param {string} text The test in which to replace `{{` / `}}`
+     * @returns {string} The modified string using the actual interpolation start-/endSymbols
+     */
+    function replaceInterpolationSymbols(text) {
+      if (!text || !angular.isString(text)) return text;
+      return text.replace(/\{\{/g, startSymbol).replace(/}}/g, endSymbol);
+    }
   }
 
 }

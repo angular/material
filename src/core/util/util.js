@@ -491,7 +491,6 @@ angular.module('material.core')
 
     return cache;
   }
-
 });
 
 /*
