@@ -46,9 +46,8 @@ angular.module('material.components.checkbox', [
  * </hljs>
  *
  */
-function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant, $mdTheming) {
+function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant, $mdTheming, $mdUtil) {
   inputDirective = inputDirective[0];
-
   var CHECKED_CSS = 'md-checked';
 
   return {
@@ -74,17 +73,9 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
     tElement.attr('role', tAttrs.type);
 
     return function postLink(scope, element, attr, ngModelCtrl) {
+      ngModelCtrl = ngModelCtrl || $mdUtil.fakeNgModel();
       var checked = false;
       $mdTheming(element);
-
-      // Create a mock ngModel if the user doesn't provide one
-      ngModelCtrl = ngModelCtrl || {
-        $setViewValue: function(value) {
-          this.$viewValue = value;
-        },
-        $parsers: [],
-        $formatters: []
-      };
 
       $mdAria.expectWithText(tElement, 'aria-label');
 

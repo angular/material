@@ -23,6 +23,18 @@ angular.module('material.core')
      */
     iterator: iterator,
 
+    fakeNgModel: function() {
+      return {
+        $setViewValue: function(value) {
+          this.$viewValue = value;
+          this.$render(value);
+        },
+        $parsers: [],
+        $formatters: [],
+        $render: angular.noop
+      };
+    },
+
     /**
      * @see cacheFactory below
      */

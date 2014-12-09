@@ -61,10 +61,8 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming) {
 
   function linkRadioGroup(scope, element, attr, ctrls) {
     $mdTheming(element);
-    var rgCtrl = ctrls[0],
-      ngModelCtrl = ctrls[1] || {
-        $setViewValue: angular.noop
-      };
+    var rgCtrl = ctrls[0];
+    var ngModelCtrl = ctrls[1] || $mdUtil.fakeNgModel();
 
     function keydownListener(ev) {
       if (ev.keyCode === $mdConstant.KEY_CODE.LEFT_ARROW || ev.keyCode === $mdConstant.KEY_CODE.UP_ARROW) {
