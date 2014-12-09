@@ -438,6 +438,8 @@ function buildTheme(theme) {
   gutil.log("Building theme " + theme + "...");
   return gulp.src([
       'src/core/style/color-palette.scss',
+      'src/core/style/mixins.scss',
+      'src/core/style/structure.scss',
       'themes/' + theme + '-theme.scss',
       'themes/_default-theme.scss'
     ])
