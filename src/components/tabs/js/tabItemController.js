@@ -5,7 +5,7 @@
 angular.module('material.components.tabs')
   .controller('$mdTab', TabItemController);
 
-function TabItemController($scope, $element, $attrs, $compile, $animate, $mdUtil, $parse) {
+function TabItemController($scope, $element, $attrs, $compile, $animate, $mdUtil, $parse, $q) {
   var self = this;
 
   // Properties
@@ -24,7 +24,7 @@ function TabItemController($scope, $element, $attrs, $compile, $animate, $mdUtil
   function isDisabled() {
     return disabledParsed($scope.$parent);
   }
-  
+
   /**
    * Add the tab's content to the DOM container area in the tabs,
    * @param contentArea the contentArea to add the content of the tab to
@@ -42,7 +42,7 @@ function TabItemController($scope, $element, $attrs, $compile, $animate, $mdUtil
 
   function onRemove() {
     self.hammertime.destroy();
-    $animate.leave(self.contentContainer).then(function() {
+    $q.when($animate.leave(self.contentContainer)).then(function() {
       self.contentScope && self.contentScope.$destroy();
       self.contentScope = null;
     });
