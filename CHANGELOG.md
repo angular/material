@@ -1,10 +1,35 @@
-<a name="0.6.0"></a>
-## 0.6.0 (2014-12-01)
+<a name="0.6.1"></a>
+## 0.6.1  (2014-12-08)
 
-An official release of what was in 0.6.0-rc3 below.
+#### Bug Fixes
+
+* **checkbox:**
+  * fixes issue where double-clicking checkboxes causes text selection ([5d2e7d47](https://github.com/angular/material/commit/5d2e7d47ff88e2a0c52382baf56a7101c2e1c16b), closes [#588](https://github.com/angular/material/issues/588))
+  * expands the checkbox click radius ([9cd24e2e](https://github.com/angular/material/commit/9cd24e2e21ee3e1c0abd57a30f501165f942f541), closes [#379](https://github.com/angular/material/issues/379))
+* **compiler:** trim whitespace from templates (effects toast, bottomSheet, etc) ([3be3a527](https://github.com/angular/material/commit/3be3a527da3a5a6f47370cde0f4ba734ff2f9f85))
+* **dialog:** transition in and out properly to/from click element ([1f5029d0](https://github.com/angular/material/commit/1f5029d0a7643fa1aa3fb970c281e261ac4de24d), closes [#568](https://github.com/angular/material/issues/568))
+* **layout:** make [hide] attr work properly with all device sizes ([c0bbad20](https://github.com/angular/material/commit/c0bbad209c2008bbe881fe896d4bc0cec018305b))
+* **mdMedia:** support all prefixes: sm,gt-sm,md,gt-md,lg,gt-lg ([c1cb9951](https://github.com/angular/material/commit/c1cb99512c1dc226f59fa3c6fe397af887263cb3))
+* **ripple:** fixes an error caused when clicking on disabled checkboxes ([8a1718d7](https://github.com/angular/material/commit/8a1718d7aac6660060ad2265ce6cd7e2c4d87e2c))
+* **slider:**
+  * update the thumb text when the model is updated ([2ca21f8b](https://github.com/angular/material/commit/2ca21f8bfcf28938dde98b44b6596f43caa95a2d), closes [#791](https://github.com/angular/material/issues/791))
+  * reposition when min or max is updated ([bd6478b9](https://github.com/angular/material/commit/bd6478b958ed464bed8608335d6304b8ec644fa7), closes [#799](https://github.com/angular/material/issues/799))
+* **tabs:**
+  * do not focus until pagination transition is done ([bb9bc82c](https://github.com/angular/material/commit/bb9bc82c4a89ba5796292111f9317cbd203bbf9f), closes [#781](https://github.com/angular/material/issues/781))
+  * dont use focusin event on firefox ([5559ac63](https://github.com/angular/material/commit/5559ac63ed460bb7ee8d3e4b409b9deebac9394a), closes [#781](https://github.com/angular/material/issues/781))
+* **toolbar:** use accent color for buttons inside ([12d458e3](https://github.com/angular/material/commit/12d458e3985cba5940107c302887f856837fd226))
+* **tooltip:** make it appear above dialogs ([a3ce7d84](https://github.com/angular/material/commit/a3ce7d84ec39771ecbfbf6ad8106a05c9a0bd319), closes [#735](https://github.com/angular/material/issues/735))
+
+
+#### Features
+
+* **layout:** add both layout-margin and layout-padding attributes ([5caa22b2](https://github.com/angular/material/commit/5caa22b2c444485b3d340cda662d8808b1fc381d), closes [#830](https://github.com/angular/material/issues/830))
+* **toast:** simple with content string: '$mdToast.simple('my-content')` ([554beff3](https://github.com/angular/material/commit/554beff3089e680c4c63b17bf271910f668a7140), closes [#833](https://github.com/angular/material/issues/833))
+
+
 
 <a name="0.6.0-rc3"></a>
-### 0.6.0-rc3  (2014-11-26)
+## 0.6.0-rc3  (2014-11-26)
 
 
 #### Bug Fixes
@@ -15,7 +40,7 @@ An official release of what was in 0.6.0-rc3 below.
 
 
 <a name="0.6.0-rc2"></a>
-### 0.6.0-rc2  (2014-11-24)
+## 0.6.0-rc2  (2014-11-24)
 
 This version introduces more breaking layout changes, ripple improvements,
 aria improvements, bug fixes, and documentation enhancements.
