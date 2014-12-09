@@ -347,7 +347,12 @@ function InkRippleService($window, $timeout) {
        */
       function isRippleAllowed() {
         var parent = node.parentNode;
-        return !node.hasAttribute('disabled') && !(parent && parent.hasAttribute('disabled'));
+        var grandparent = parent && parent.parentNode;
+        var ancestor = grandparent && grandparent.parentNode;
+        return !node.hasAttribute('disabled') &&
+          !(parent && parent.hasAttribute('disabled')) &&
+          !(grandparent && grandparent.hasAttribute('disabled')) &&
+          !(ancestor && ancestor.hasAttribute('disabled'));
       }
     }
   }
@@ -355,7 +360,7 @@ function InkRippleService($window, $timeout) {
 
 /**
  * noink/nobar/nostretch directive: make any element that has one of
- * these attributes be given a controller, so that other directives can 
+ * these attributes be given a controller, so that other directives can
  * `require:` these and see if there is a `no<xxx>` parent attribute.
  *
  * @usage
