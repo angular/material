@@ -21,6 +21,10 @@ function MdConstantFactory($$rAF, $sniffer) {
       RIGHT_ARROW : 39,
       DOWN_ARROW : 40
     },
+    INTERPOLATION_SYMBOLS: {
+      START: '{{',
+      END: '}}'
+    },
     CSS: {
       /* Constants */
       TRANSITIONEND: 'transitionend' + (webkit ? ' webkitTransitionEnd' : ''),

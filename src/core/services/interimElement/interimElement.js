@@ -193,7 +193,8 @@ function InterimElementProvider() {
   }
 
   /* @ngInject */
-  function InterimElementFactory($document, $q, $rootScope, $timeout, $rootElement, $animate, $mdCompiler, $mdTheming) {
+  function InterimElementFactory($document, $q, $rootScope, $timeout, $rootElement, $animate,
+                                 $mdCompiler, $mdTheming, $mdUtil) {
 
     return function createInterimElementService() {
       /*
@@ -301,6 +302,10 @@ function InterimElementProvider() {
             return element && $animate.leave(element) || $q.when();
           }
         }, options);
+
+        if (options.template) {
+          options.template = $mdUtil.replaceInterpolationSymbols(options.template);
+        }
 
         return self = {
           options: options,

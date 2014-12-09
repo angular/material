@@ -270,7 +270,7 @@ function MdDialogProvider($$interimElementProvider) {
   function advancedDialogOptions($mdDialog) {
     return {
       template: [
-        '<md-dialog aria-label="{{dialog.label}}">',
+        '<md-dialog aria-label="{{ dialog.ariaLabel }}">',
           '<md-content>',
             '<h2>{{ dialog.title }}</h2>',
             '<p>{{ dialog.content }}</p>',
@@ -427,7 +427,7 @@ function MdDialogProvider($$interimElementProvider) {
 
       return dialogTransitionEnd(dialogEl);
     }
-    
+
     function dialogPopOut(container, parentElement, clickElement) {
       var dialogEl = container.find('md-dialog');
 
