@@ -267,10 +267,10 @@ function MdDialogProvider($$interimElementProvider) {
     });
 
   /* @ngInject */
-  function advancedDialogOptions($mdDialog) {
+  function advancedDialogOptions($mdDialog, $mdUtil) {
     return {
-      template: [
-        '<md-dialog aria-label="{{dialog.label}}">',
+      template: $mdUtil.replaceInterpolationSymbols([
+        '<md-dialog aria-label="{{ dialog.ariaLabel }}">',
           '<md-content>',
             '<h2>{{ dialog.title }}</h2>',
             '<p>{{ dialog.content }}</p>',
@@ -284,7 +284,7 @@ function MdDialogProvider($$interimElementProvider) {
             '</md-button>',
           '</div>',
         '</md-dialog>'
-      ].join(''),
+      ].join('')),
       controller: function mdDialogCtrl() {
         this.hide = function() {
           $mdDialog.hide(true);
@@ -427,7 +427,7 @@ function MdDialogProvider($$interimElementProvider) {
 
       return dialogTransitionEnd(dialogEl);
     }
-    
+
     function dialogPopOut(container, parentElement, clickElement) {
       var dialogEl = container.find('md-dialog');
 

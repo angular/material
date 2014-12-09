@@ -35,7 +35,7 @@ describe('$mdToast service', function() {
       expect(rejected).toBe(true);
     }));
 
-    it('supports an action toast', inject(function($mdToast, $rootScope, $timeout, $animate) {
+    it('supports an action toast', inject(function($mdToast, $rootScope, $animate) {
       var resolved = false;
       var parent = angular.element('<div>');
       $mdToast.show(
@@ -57,6 +57,29 @@ describe('$mdToast service', function() {
       $animate.triggerCallbacks();
       expect(resolved).toBe(true);
     }));
+
+    describe('when using custom interpolation symbols', function() {
+      beforeEach(module(function($interpolateProvider) {
+        $interpolateProvider.startSymbol('[[').endSymbol(']]');
+      }));
+
+      it('displays correctly', inject(function($mdToast, $rootScope) {
+        var parent = angular.element('<div>');
+        var toast = $mdToast.simple({
+          content: 'Do something',
+          parent: parent
+        }).action('Click me');
+
+        $mdToast.show(toast);
+        $rootScope.$digest();
+
+        var content = parent.find('span').eq(0);
+        var button = parent.find('button');
+
+        expect(content.text()).toBe('Do something');
+        expect(button.text()).toBe('Click me');
+      }));
+    });
 
     function hasConfigMethods(methods) {
       angular.forEach(methods, function(method) {

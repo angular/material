@@ -15,7 +15,7 @@ describe('$mdDialog', function() {
   }));
 
   describe('#alert()', function() {
-    hasConfigurationMethods([
+    hasConfigurationMethods('alert', [
       'title', 'content', 'ariaLabel',
       'ok', 'targetEvent'
     ]);
@@ -33,7 +33,7 @@ describe('$mdDialog', function() {
       ).then(function() {
         resolved = true;
       });
-       
+
       $rootScope.$apply();
       var container = angular.element(parent[0].querySelector('.md-dialog-container'));
       container.triggerHandler('transitionend');
@@ -53,20 +53,10 @@ describe('$mdDialog', function() {
       expect(parent.find('h2').length).toBe(0);
       expect(resolved).toBe(true);
     }));
-
-    function hasConfigurationMethods(methods) {
-      angular.forEach(methods, function(method) {
-        return it('supports config method #' + method, inject(function($mdDialog) {
-          var alert = $mdDialog.alert();
-          expect(typeof alert[method]).toBe('function');
-          expect(alert[method]()).toEqual(alert);
-        }));
-      });
-    }
   });
 
   describe('#confirm()', function() {
-    hasConfigurationMethods([
+    hasConfigurationMethods('confirm', [
       'title', 'content', 'ariaLabel',
       'ok', 'cancel', 'targetEvent'
     ]);
@@ -106,16 +96,6 @@ describe('$mdDialog', function() {
       expect(parent.find('h2').length).toBe(0);
       expect(rejected).toBe(true);
     }));
-
-    function hasConfigurationMethods(methods) {
-      angular.forEach(methods, function(method) {
-        return it('supports config method #' + method, inject(function($mdDialog) {
-          var alert = $mdDialog.confirm();
-          expect(typeof alert[method]).toBe('function');
-          expect(alert[method]()).toEqual(alert);
-        }));
-      });
-    }
   });
 
   describe('#build()', function() {
@@ -409,4 +389,78 @@ describe('$mdDialog', function() {
       expect(dialog.attr('aria-label')).toEqual('Some Other Thing');
     }));
   });
+
+  function hasConfigurationMethods(preset, methods) {
+    angular.forEach(methods, function(method) {
+      return it('supports config method #' + method, inject(function($mdDialog) {
+        var dialog = $mdDialog[preset]();
+        expect(typeof dialog[method]).toBe('function');
+        expect(dialog[method]()).toEqual(dialog);
+      }));
+    });
+  }
 });
+
+describe('$mdDialog with custom interpolation symbols', function() {
+  beforeEach(TestUtil.mockRaf);
+  beforeEach(module('material.components.dialog', 'ngAnimateMock'));
+
+  beforeEach(module(function($interpolateProvider) {
+    $interpolateProvider.startSymbol('[[').endSymbol(']]');
+  }));
+
+  it('displays #alert() correctly', inject(function($mdDialog, $rootScope) {
+    var parent = angular.element('<div>');
+    var dialog = $mdDialog.
+        alert({parent: parent}).
+        ariaLabel('test alert').
+        title('Title').
+        content('Hello, world !').
+        ok('OK');
+
+    $mdDialog.show(dialog);
+    $rootScope.$digest();
+
+    var mdContainer = angular.element(parent[0].querySelector('.md-dialog-container'));
+    var mdDialog = mdContainer.find('md-dialog');
+    var mdContent = mdDialog.find('md-content');
+    var title = mdContent.find('h2');
+    var content = mdContent.find('p');
+    var mdActions = angular.element(mdDialog[0].querySelector('.md-actions'));
+    var buttons = mdActions.find('md-button');
+
+    expect(mdDialog.attr('aria-label')).toBe('test alert');
+    expect(title.text()).toBe('Title');
+    expect(content.text()).toBe('Hello, world !');
+    expect(buttons.eq(0).text()).toBe('OK');
+  }));
+
+  it('displays #confirm() correctly', inject(function($mdDialog, $rootScope) {
+    var parent = angular.element('<div>');
+    var dialog = $mdDialog.
+        confirm({parent: parent}).
+        ariaLabel('test alert').
+        title('Title').
+        content('Hello, world !').
+        cancel('CANCEL').
+        ok('OK');
+
+    $mdDialog.show(dialog);
+    $rootScope.$digest();
+
+    var mdContainer = angular.element(parent[0].querySelector('.md-dialog-container'));
+    var mdDialog = mdContainer.find('md-dialog');
+    var mdContent = mdDialog.find('md-content');
+    var title = mdContent.find('h2');
+    var content = mdContent.find('p');
+    var mdActions = angular.element(mdDialog[0].querySelector('.md-actions'));
+    var buttons = mdActions.find('md-button');
+
+    expect(mdDialog.attr('aria-label')).toBe('test alert');
+    expect(title.text()).toBe('Title');
+    expect(content.text()).toBe('Hello, world !');
+    expect(buttons.eq(0).text()).toBe('CANCEL');
+    expect(buttons.eq(1).text()).toBe('OK');
+  }));
+});
+

@@ -1,16 +1,21 @@
 (function() {
 'use strict';
 
-/* 
+/*
  * This var has to be outside the angular factory, otherwise when
  * there are multiple material apps on the same page, each app
- * will create its own instance of this array and the app's IDs 
+ * will create its own instance of this array and the app's IDs
  * will not be unique.
  */
 var nextUniqueId = ['0','0','0'];
 
 angular.module('material.core')
-.factory('$mdUtil', ['$cacheFactory', function($cacheFactory) {
+.factory('$mdUtil', function($cacheFactory, $interpolate, $mdConstant) {
+  var interpolationSymbols = {
+    start: $interpolate.startSymbol(),
+    end: $interpolate.endSymbol()
+  };
+
   var Util;
   return Util = {
     now: window.performance ? angular.bind(window.performance, window.performance.now) : Date.now,
@@ -90,6 +95,12 @@ angular.module('material.core')
       nextUniqueId.unshift('0');
       return nextUniqueId.join('');
     },
+
+    /**
+     * Replace `{{` and `}}` in a string with the actual start-/endSymbols used for interpolation.
+     * @see replaceInterpolationSymbols below
+     */
+    replaceInterpolationSymbols: replaceInterpolationSymbols,
 
     // Stop watchers and events from firing on a scope without destroying it,
     // by disconnecting it from its parent and its siblings' linked lists.
@@ -291,7 +302,7 @@ angular.module('material.core')
     }
 
     /*
-     * Find the next item. If reloop is true and at the end of the list, it will 
+     * Find the next item. If reloop is true and at the end of the list, it will
      * go back to the first item. If given ,the `validate` callback will be used
      * determine whether the next item is valid. If not valid, it will try to find the
      * next item again.
@@ -313,7 +324,7 @@ angular.module('material.core')
     }
 
     /*
-     * Find the previous item. If reloop is true and at the beginning of the list, it will 
+     * Find the previous item. If reloop is true and at the beginning of the list, it will
      * go back to the last item. If given ,the `validate` callback will be used
      * determine whether the previous item is valid. If not valid, it will try to find the
      * previous item again.
@@ -376,9 +387,33 @@ angular.module('material.core')
 
     return cache;
   }
-}]);
 
-/* 
+  /*
+   * Replace `{{` and `}}` in a string (usually a template) with the actual start-/endSymbols used
+   * for interpolation. This allows pre-defined templates (for components such as dialog, toast etc)
+   * to continue to work in apps that use custom interpolation start-/endSymbols.
+   *
+   * @param {string} text The test in which to replace `{{`/`}}`
+   * @returns {string} The modified string using the actual interpolation start-/endSymbols
+   */
+  function replaceInterpolationSymbols(text) {
+    var actualStart = interpolationSymbols.start;
+    var defaultStart = $mdConstant.INTERPOLATION_SYMBOLS.START;
+    if (actualStart !== defaultStart) {
+      text = text.split(defaultStart).join(actualStart);
+    }
+
+    var actualEnd = interpolationSymbols.end;
+    var defaultEnd = $mdConstant.INTERPOLATION_SYMBOLS.END;
+    if (actualEnd !== defaultEnd) {
+      text = text.split(defaultEnd).join(actualEnd);
+    }
+
+    return text;
+  }
+});
+
+/*
  * Since removing jQuery from the demos, some code that uses `element.focus()` is broken.
  *
  * We need to add `element.focus()`, because it's testable unlike `element[0].focus`.
