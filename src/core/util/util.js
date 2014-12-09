@@ -15,7 +15,7 @@ angular.module('material.core')
   return Util = {
     now: window.performance ? angular.bind(window.performance, window.performance.now) : Date.now,
 
-    pannable: pannable,
+    attachDragBehavior: attachDragBehavior,
 
     /**
      * Publish the iterator facade to easily support iteration and accessors
@@ -365,9 +365,9 @@ angular.module('material.core')
     }
   }
 
-  function pannable(scope, element, options) {
-    // The state of the current pan
-    var pan;
+  function attachDragBehavior(scope, element, options) {
+    // The state of the current drag
+    var drag;
     // Whether the pointer is currently down on this element.
     var pointerIsDown;
     var START_EVENTS = 'mousedown touchstart pointerdown';
@@ -376,9 +376,9 @@ angular.module('material.core')
 
     // Listen to move and end events on document. End events especially could have bubbled up
     // from the child.
-    element.on(START_EVENTS, startPan);
-    $document.on(MOVE_EVENTS, doPan)
-      .on(END_EVENTS, endPan);
+    element.on(START_EVENTS, startDrag);
+    $document.on(MOVE_EVENTS, doDrag)
+      .on(END_EVENTS, endDrag);
 
     scope.$on('$destroy', cleanup);
 
@@ -388,58 +388,58 @@ angular.module('material.core')
       if (cleanup.called) return;
       cleanup.called = true;
 
-      element.off(START_EVENTS, startPan);
-      $document.off(MOVE_EVENTS, doPan)
-        .off(END_EVENTS, endPan);
-      pan = pointerIsDown = false;
+      element.off(START_EVENTS, startDrag);
+      $document.off(MOVE_EVENTS, doDrag)
+        .off(END_EVENTS, endDrag);
+      drag = pointerIsDown = false;
     }
 
-    function startPan(ev) {
+    function startDrag(ev) {
       if (pointerIsDown) return;
       pointerIsDown = true;
 
-      pan = {
-        // Restrict this pan to whatever started it: if a mousedown started the pan,
+      drag = {
+        // Restrict this drag to whatever started it: if a mousedown started the drag,
         // don't let anything but mouse events continue it.
         pointerType: ev.type.charAt(0),
         startX: getPosition(ev),
         startTime: Util.now()
       };
 
-      element.one('$mdPanStart', function(ev) {
+      element.one('$md.dragstart', function(ev) {
         // Allow user to cancel by preventing default
-        if (ev.defaultPrevented) pan = null;
+        if (ev.defaultPrevented) drag = null;
       });
-      element.triggerHandler('$md.panstart', pan);
+      element.triggerHandler('$md.dragstart', drag);
     }
-    function doPan(ev) {
-      if (!pan || !isProperEventType(ev)) return;
+    function doDrag(ev) {
+      if (!drag || !isProperEventType(ev)) return;
 
-      updatePanState(ev);
-      element.triggerHandler('$md.pan', pan);
+      updateDragState(ev);
+      element.triggerHandler('$md.drag', drag);
     }
-    function endPan(ev) {
+    function endDrag(ev) {
       pointerIsDown = false;
-      if (!pan || !isProperEventType(ev)) return;
+      if (!drag || !isProperEventType(ev)) return;
 
-      updatePanState(ev);
-      element.triggerHandler('$md.panend', pan);
-      pan = null;
+      updateDragState(ev);
+      element.triggerHandler('$md.dragend', drag);
+      drag = null;
     }
 
-    function updatePanState(ev) {
+    function updateDragState(ev) {
       var x = getPosition(ev);
-      pan.distance = pan.startX - x;
-      pan.direction = pan.distance > 0 ? 'left' : (pan.distance < 0 ? 'right' : '');
-      pan.time = pan.startTime - Util.now();
-      pan.velocity = Math.abs(pan.distance) / pan.time;
+      drag.distance = drag.startX - x;
+      drag.direction = drag.distance > 0 ? 'left' : (drag.distance < 0 ? 'right' : '');
+      drag.time = drag.startTime - Util.now();
+      drag.velocity = Math.abs(drag.distance) / drag.time;
     }
     function getPosition(ev) {
       ev = ev.originalEvent || ev; //support jQuery events
       return (ev.touches ? ev.touches[0] : ev).pageX;
     }
     function isProperEventType(ev) {
-      return pan && ev && (ev.type || '').charAt(0) === pan.pointerType;
+      return drag && ev && (ev.type || '').charAt(0) === drag.pointerType;
     }
   }
 

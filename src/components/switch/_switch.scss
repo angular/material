@@ -1,42 +1,80 @@
-$switch-width: $baseline-grid * 8;
+$switch-width: 36px !default;
+$switch-height: $baseline-grid * 3 !default;
+$switch-bar-height: 14px !default;
+$switch-thumb-size: 20px !default;
 
 md-switch {
-  display: block;
-  position: relative;
-  height: $baseline-grid * 3;
-  margin: $baseline-grid;
 
   display: flex;
   align-items: center;
 
-  .md-switch-bar {
-    position: absolute;
-    left: $baseline-grid * 2;
-    top: $baseline-grid * 1.5;
-    width: $baseline-grid * 4;
-    height: 1px;
-    pointer-events: none;
+  .md-container {
+    width: $switch-width;
+    height: $switch-height;
+    position: relative;
+    user-select: none;
+    margin-right: 8px;
   }
 
-  /* used also in _radio-button.scss */
-  .md-switch-thumb {
+  .md-text {
+    border: 1px solid transparent;
+  }
+
+  .md-bar {
+    left: 1px;
+    width: $switch-width - 2px;
+    top: $switch-height / 2 - $switch-bar-height / 2;
+    height: $switch-bar-height;
+    border-radius: 8px;
+    position: absolute;
+  }
+
+  .md-thumb-container {
+    top: $switch-height / 2 - $switch-thumb-size / 2;
+    left: 0;
+    width: $switch-width - $switch-thumb-size;
+    position: absolute;
+    transform: translate3d(0,0,0);
+    z-index: 1;
+  }
+  &.md-checked .md-thumb-container {
+    transform: translate3d(100%,0,0);
+  }
+
+  .md-thumb {
     position: absolute;
     margin: 0;
     left: 0;
     top: 0;
     outline: none;
+    height: $switch-thumb-size;
+    width: $switch-thumb-size;
+    border-radius: 50%;
+    box-shadow: $whiteframe-shadow-z1;
 
-    .md-container {
+    .md-ripple-container {
       position: absolute;
-      transition: transform 0.2s linear;
-      transform: translate3d(0,0,0);
-    }
-    &.md-checked .md-container {
-      transform: translate3d($switch-width - 16,0,0);
-    }
-
-    .md-label {
-      margin-left: $baseline-grid * 9;
+      display: block;
+      width: auto;
+      height: auto;
+      left: -$switch-thumb-size;
+      top: -$switch-thumb-size;
+      right: -$switch-thumb-size;
+      bottom: -$switch-thumb-size;
     }
   }
+
+  &.transition {
+    .md-bar,
+    .md-thumb-container,
+    .md-thumb {
+      transition: $swift-ease-in-out;
+      transition-property: transform, background-color;
+    }
+    .md-bar,
+    .md-thumb {
+      transition-delay: 0.05s;
+    }
+  }
+
 }
