@@ -267,9 +267,9 @@ function MdDialogProvider($$interimElementProvider) {
     });
 
   /* @ngInject */
-  function advancedDialogOptions($mdDialog, $mdUtil) {
+  function advancedDialogOptions($mdDialog) {
     return {
-      template: $mdUtil.replaceInterpolationSymbols([
+      template: [
         '<md-dialog aria-label="{{ dialog.ariaLabel }}">',
           '<md-content>',
             '<h2>{{ dialog.title }}</h2>',
@@ -284,7 +284,7 @@ function MdDialogProvider($$interimElementProvider) {
             '</md-button>',
           '</div>',
         '</md-dialog>'
-      ].join('')),
+      ].join(''),
       controller: function mdDialogCtrl() {
         this.hide = function() {
           $mdDialog.hide(true);

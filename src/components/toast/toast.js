@@ -147,16 +147,16 @@ function MdToastProvider($$interimElementProvider) {
     .addPreset('simple', {
       argOption: 'content',
       methods: ['content', 'action', 'highlightAction'],
-      options: /* @ngInject */ function($mdToast, $mdUtil) {
+      options: /* @ngInject */ function($mdToast) {
         return {
-          template: $mdUtil.replaceInterpolationSymbols([
+          template: [
             '<md-toast ng-class="{\'md-capsule\': toast.capsule}">',
               '<span flex>{{ toast.content }}</span>',
               '<md-button ng-if="toast.action" ng-click="toast.resolve()" ng-class="{\'md-action\': toast.highlightAction}">',
                 '{{ toast.action }}',
               '</md-button>',
             '</md-toast>'
-          ].join('')),
+          ].join(''),
           controller: function mdToastCtrl() {
             this.resolve = function() {
               $mdToast.hide();

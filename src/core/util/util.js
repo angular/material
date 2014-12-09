@@ -397,6 +397,8 @@ angular.module('material.core')
    * @returns {string} The modified string using the actual interpolation start-/endSymbols
    */
   function replaceInterpolationSymbols(text) {
+    if (!text || !angular.isString(text)) return text;
+
     var actualStart = interpolationSymbols.start;
     var defaultStart = $mdConstant.INTERPOLATION_SYMBOLS.START;
     if (actualStart !== defaultStart) {
