@@ -10,12 +10,7 @@
 var nextUniqueId = ['0','0','0'];
 
 angular.module('material.core')
-.factory('$mdUtil', function($cacheFactory, $interpolate, $mdConstant) {
-  var interpolationSymbols = {
-    start: $interpolate.startSymbol(),
-    end: $interpolate.endSymbol()
-  };
-
+.factory('$mdUtil', function($cacheFactory) {
   var Util;
   return Util = {
     now: window.performance ? angular.bind(window.performance, window.performance.now) : Date.now,
@@ -95,12 +90,6 @@ angular.module('material.core')
       nextUniqueId.unshift('0');
       return nextUniqueId.join('');
     },
-
-    /**
-     * Replace `{{` and `}}` in a string with the actual start-/endSymbols used for interpolation.
-     * @see replaceInterpolationSymbols below
-     */
-    replaceInterpolationSymbols: replaceInterpolationSymbols,
 
     // Stop watchers and events from firing on a scope without destroying it,
     // by disconnecting it from its parent and its siblings' linked lists.
@@ -386,32 +375,6 @@ angular.module('material.core')
     };
 
     return cache;
-  }
-
-  /*
-   * Replace `{{` and `}}` in a string (usually a template) with the actual start-/endSymbols used
-   * for interpolation. This allows pre-defined templates (for components such as dialog, toast etc)
-   * to continue to work in apps that use custom interpolation start-/endSymbols.
-   *
-   * @param {string} text The test in which to replace `{{`/`}}`
-   * @returns {string} The modified string using the actual interpolation start-/endSymbols
-   */
-  function replaceInterpolationSymbols(text) {
-    if (!text || !angular.isString(text)) return text;
-
-    var actualStart = interpolationSymbols.start;
-    var defaultStart = $mdConstant.INTERPOLATION_SYMBOLS.START;
-    if (actualStart !== defaultStart) {
-      text = text.split(defaultStart).join(actualStart);
-    }
-
-    var actualEnd = interpolationSymbols.end;
-    var defaultEnd = $mdConstant.INTERPOLATION_SYMBOLS.END;
-    if (actualEnd !== defaultEnd) {
-      text = text.split(defaultEnd).join(actualEnd);
-    }
-
-    return text;
   }
 });
 

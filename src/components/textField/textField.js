@@ -87,7 +87,7 @@ function mdTextFloatDirective($mdTheming, $mdUtil, $parse) {
  * @description
  * Use the `<md-input-group>` directive as the grouping parent of a `<md-input>` element.
  *
- * @usage
+ * @usage 
  * <hljs lang="html">
  * <md-input-group ng-disabled="isDisabled">
  *   <label for="{{fid}}">{{someLabel}}</label>
