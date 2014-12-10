@@ -37,7 +37,7 @@ describe('<md-switch>', function() {
     expect(switches.eq(1).attr('role')).toEqual('checkbox');
   }));
 
-  it('should change on panstart/panend if distance < 5', inject(function($compile, $rootScope) {
+  it('should change on panstart/panend if no movement happened', inject(function($compile, $rootScope) {
     var element = $compile('<md-switch ng-model="banana"></md-switch>')($rootScope);
     var switchContainer = angular.element(element[0].querySelector('.md-container'));
 
@@ -47,19 +47,19 @@ describe('<md-switch>', function() {
     expect(element.hasClass(CHECKED_CSS)).toBe(false);
 
     switchContainer.triggerHandler('$md.dragstart', {});
-    switchContainer.triggerHandler('$md.dragend', {distance: 3});
+    switchContainer.triggerHandler('$md.dragend', {distance: 1});
 
     expect($rootScope.banana).toBe(true);
     expect(element.hasClass(CHECKED_CSS)).toBe(true);
 
     switchContainer.triggerHandler('$md.dragstart', {});
-    switchContainer.triggerHandler('$md.dragend', {distance: 15});
+    switchContainer.triggerHandler('$md.dragend', {distance: 5});
 
     expect($rootScope.banana).toBe(true);
     expect(element.hasClass(CHECKED_CSS)).toBe(true);
 
     switchContainer.triggerHandler('$md.dragstart', {});
-    switchContainer.triggerHandler('$md.dragend', {distance: -4});
+    switchContainer.triggerHandler('$md.dragend', {distance: -1});
 
     expect($rootScope.banana).toBe(false);
     expect(element.hasClass(CHECKED_CSS)).toBe(false);

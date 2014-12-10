@@ -117,7 +117,7 @@ function MdSwitch(mdCheckboxDirective, $mdTheming, $mdUtil, $document, $mdConsta
 
         // We changed if there is no distance (this is a click a click),
         // or if the drag distance is >50% of the total.
-        var isChanged = Math.abs(drag.distance || 0) < 5 ||
+        var isChanged = Math.abs(drag.distance || 0) < 2 ||
           (ngModel.$viewValue ? drag.translate < 0.5 : drag.translate > 0.5);
         if (isChanged) {
           scope.$apply(function() {
