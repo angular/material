@@ -28,9 +28,11 @@ angular.module('material.core')
         $setViewValue: function(value) {
           this.$viewValue = value;
           this.$render(value);
+          this.$viewChangeListeners.forEach(function(cb) { cb(); });
         },
         $parsers: [],
         $formatters: [],
+        $viewChangeListeners: [],
         $render: angular.noop
       };
     },
@@ -366,8 +368,9 @@ angular.module('material.core')
   }
 
   function attachDragBehavior(scope, element, options) {
-    // The state of the current drag
+    // The state of the current drag & previous drag
     var drag;
+    var previousDrag;
     // Whether the pointer is currently down on this element.
     var pointerIsDown;
     var START_EVENTS = 'mousedown touchstart pointerdown';
@@ -395,15 +398,24 @@ angular.module('material.core')
     }
 
     function startDrag(ev) {
+      var eventType = ev.type.charAt(0);
+      var now = Util.now();
+      // iOS & old android bug: after a touch event, iOS sends a click event 350 ms later.
+      // Don't allow a drag of a different pointerType than the previous drag if it has been
+      // less than 400ms.
+      if (previousDrag && previousDrag.pointerType !== eventType &&
+          (now - previousDrag.endTime < 400)) {
+        return;
+      }
       if (pointerIsDown) return;
       pointerIsDown = true;
 
       drag = {
         // Restrict this drag to whatever started it: if a mousedown started the drag,
         // don't let anything but mouse events continue it.
-        pointerType: ev.type.charAt(0),
+        pointerType: eventType,
         startX: getPosition(ev),
-        startTime: Util.now()
+        startTime: now
       };
 
       element.one('$md.dragstart', function(ev) {
@@ -413,17 +425,25 @@ angular.module('material.core')
       element.triggerHandler('$md.dragstart', drag);
     }
     function doDrag(ev) {
-      if (!drag || !isProperEventType(ev)) return;
+      if (!drag || !isProperEventType(ev, drag)) return;
 
+      if (drag.pointerType === 't' || drag.pointerType === 'p') {
+        // No scrolling for touch/pointer events
+        ev.preventDefault();
+      }
       updateDragState(ev);
       element.triggerHandler('$md.drag', drag);
     }
     function endDrag(ev) {
       pointerIsDown = false;
-      if (!drag || !isProperEventType(ev)) return;
+      if (!drag || !isProperEventType(ev, drag)) return;
 
+      drag.endTime = Util.now();
       updateDragState(ev);
+
       element.triggerHandler('$md.dragend', drag);
+
+      previousDrag = drag;
       drag = null;
     }
 
@@ -431,14 +451,17 @@ angular.module('material.core')
       var x = getPosition(ev);
       drag.distance = drag.startX - x;
       drag.direction = drag.distance > 0 ? 'left' : (drag.distance < 0 ? 'right' : '');
-      drag.time = drag.startTime - Util.now();
-      drag.velocity = Math.abs(drag.distance) / drag.time;
+      drag.duration = drag.startTime - Util.now();
+      drag.velocity = Math.abs(drag.duration) / drag.time;
     }
     function getPosition(ev) {
       ev = ev.originalEvent || ev; //support jQuery events
-      return (ev.touches ? ev.touches[0] : ev).pageX;
+      var point = (ev.touches && ev.touches[0]) ||
+        (ev.changedTouches && ev.changedTouches[0]) ||
+        ev;
+      return point.pageX;
     }
-    function isProperEventType(ev) {
+    function isProperEventType(ev, drag) {
       return drag && ev && (ev.type || '').charAt(0) === drag.pointerType;
     }
   }
