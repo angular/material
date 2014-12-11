@@ -116,7 +116,7 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://p
   <head>
 
     <!-- Angulars Material CSS now available via Google CDN; version 0.6 used here -->
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.6/angular-material.min.css">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.6.1/angular-material.min.css">
 
   </head>
   <body>
@@ -128,10 +128,12 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://p
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.min.js"></script>
     
     <!-- Angular Material Javascript now available via Google CDN; version 0.6 used here -->
-    <script src="//ajax.googleapis.com/ajax/libs/angular_material/0.6/angular-material.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angular_material/0.6.1/angular-material.min.js"></script>
     
   </body>
 ```
+
+> Note that the above sample references the 0.6.1 CDN release. Your version will change based on the latest stable release version.
 
 Developers seeking the latest, most-current build versions can use [RawGit.com](//rawgit.com) to
 pull directly from the distribution GitHub
