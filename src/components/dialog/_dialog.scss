@@ -38,6 +38,7 @@ md-dialog {
     padding: 24px;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
+    z-index: 1;
 
     *:first-child {
       margin-top: 0px;
