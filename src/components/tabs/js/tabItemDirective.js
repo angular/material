@@ -118,7 +118,6 @@ function MdTabDirective($mdInkRipple, $compile, $mdUtil, $mdConstant, $timeout) 
         element.on('click', defaultClickListener);
       }
       element.on('keydown', keydownListener);
-      scope.onSwipe = onSwipe;
 
       if (angular.isNumber(scope.$parent.$index)) {
         watchNgRepeatIndex();
@@ -160,16 +159,6 @@ function MdTabDirective($mdInkRipple, $compile, $mdUtil, $mdConstant, $timeout) 
             tabsCtrl.focus(tabsCtrl.next(tabItemCtrl));
           });
         }
-      }
-
-      function onSwipe(ev) {
-        scope.$apply(function() {
-          if (ev.type === 'swipeleft') {
-            tabsCtrl.select(tabsCtrl.next());
-          } else {
-            tabsCtrl.select(tabsCtrl.previous());
-          }
-        });
       }
 
       // If tabItemCtrl is part of an ngRepeat, move the tabItemCtrl in our internal array

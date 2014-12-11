@@ -355,9 +355,9 @@ function MdDialogProvider($$interimElementProvider) {
         }
 
         if (options.clickOutsideToClose) {
-          options.dialogClickOutsideCallback = function(e) {
+          options.dialogClickOutsideCallback = function(ev) {
             // Only close if we click the flex container outside the backdrop
-            if (e.target === element[0]) {
+            if (ev.target === element[0]) {
               $timeout($mdDialog.cancel);
             }
           };

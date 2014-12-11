@@ -122,7 +122,6 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://p
   <body>
   
     <!-- Angular Material Dependencies -->
-    <script src="//cdn.jsdelivr.net/hammerjs/2.0.4/hammer.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.min.js"></script>
@@ -149,7 +148,6 @@ pull directly from the distribution GitHub
   <body>
 
     <!-- Angular Material Dependencies -->
-    <script src="//cdn.jsdelivr.net/hammerjs/2.0.4/hammer.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.js"></script>

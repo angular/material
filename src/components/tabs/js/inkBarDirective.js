@@ -23,7 +23,7 @@ function MdTabInkDirective($$rAF) {
     if (ctrls[0]) return;
 
     var tabsCtrl = ctrls[1],
-        debouncedUpdateBar = $$rAF.debounce(updateBar);
+        debouncedUpdateBar = $$rAF.throttle(updateBar);
 
     tabsCtrl.inkBarElement = element;
 

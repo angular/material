@@ -91,12 +91,8 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
         0: {}
       }, attr, [ngModelCtrl]);
 
-      // Used by switch. in Switch, we don't want click listeners; we have more granular
-      // touchup/touchdown listening.
-      if (!attr.mdNoClick) {
-        element.on('click', listener);
-      }
-      element.on('keypress', keypressHandler);
+      element.on('click', listener)
+        .on('keypress', keypressHandler);
       ngModelCtrl.$render = render;
 
       function keypressHandler(ev) {

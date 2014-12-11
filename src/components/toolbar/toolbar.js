@@ -81,7 +81,7 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming) {
         var toolbarHeight;
         var contentElement;
 
-        var debouncedContentScroll = $$rAF.debounce(onContentScroll);
+        var debouncedContentScroll = $$rAF.throttle(onContentScroll);
         var debouncedUpdateHeight = $mdUtil.debounce(updateToolbarHeight, 5 * 1000);
 
         // Wait for $mdContentLoaded event from mdContent directive.

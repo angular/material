@@ -21,26 +21,25 @@ var TestUtil = {
     });
   },
 
-  /**
-   * Create a fake version of $$rAF that does things asynchronously
-   */
-  mockRaf: function() {
-    module('ng', function($provide) {
-      $provide.value('$$rAF', mockRaf);
-
-      function mockRaf(cb) {
-        cb();
-      }
-      mockRaf.debounce = function(cb) {
-        return function() {
-          cb.apply(this, arguments);
-        };
-      };
-    });
-  }
 };
 
 beforeEach(function() {
+
+  /**
+   * Create a fake version of $$rAF that does things synchronously
+   */
+  module('ng', function($provide) {
+    $provide.value('$$rAF', mockRaf);
+
+    function mockRaf(cb) {
+      cb();
+    }
+    mockRaf.throttle = function(cb) {
+      return function() {
+        cb.apply(this, arguments);
+      };
+    };
+  });
 
   module('material.core.theming', function($mdThemingProvider) {
     // Create a test version of every default palette, using a copy of the below palette.
@@ -85,6 +84,20 @@ beforeEach(function() {
           (typeof this.actual) + (this.isNot ? ' not ' : '') + " to have type '" + type + "'.";
       };
       return typeof this.actual == type;
+    },
+
+    toHaveFields: function(fields) {
+      this.message = function() {
+        return "Expected " + angular.mock.dump(this.actual) + (this.isNot ? ' not ' : ' ') +
+          "to have fields matching " + angular.mock.dump(fields);
+      };
+      for (var key in fields) {
+        if (!(this.actual || {}).hasOwnProperty(key) ||
+            !angular.equals(this.actual[key], fields[key])) {
+          return false;
+        }
+      }
+      return true;
     }
   });
 

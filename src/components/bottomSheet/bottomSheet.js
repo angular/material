@@ -111,6 +111,9 @@ function MdBottomSheetDirective() {
  */
 
 function MdBottomSheetProvider($$interimElementProvider) {
+  // how fast we need to flick down to close the sheet, pixels/ms
+  var CLOSING_VELOCITY = 0.5;
+  var PADDING = 80; // same as css
 
   return $$interimElementProvider('$mdBottomSheet')
     .setDefaults({
@@ -118,7 +121,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
     });
 
   /* @ngInject */
-  function bottomSheetDefaults($animate, $mdConstant, $timeout, $$rAF, $compile, $mdTheming, $mdBottomSheet, $rootElement) {
+  function bottomSheetDefaults($animate, $mdConstant, $timeout, $$rAF, $compile, $mdTheming, $mdBottomSheet, $rootElement, $rootScope, $mdGesture) {
     var backdrop;
 
     return {
@@ -132,7 +135,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
     function onShow(scope, element, options) {
       // Add a backdrop that will close on click
       backdrop = $compile('<md-backdrop class="md-opaque md-bottom-sheet-backdrop">')(scope);
-      backdrop.on('click touchstart', function() {
+      backdrop.on('click', function() {
         $timeout($mdBottomSheet.cancel);
       });
 
@@ -140,7 +143,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
 
       $animate.enter(backdrop, options.parent, null);
 
-      var bottomSheet = new BottomSheet(element);
+      var bottomSheet = new BottomSheet(element, options.parent);
       options.bottomSheet = bottomSheet;
 
       // Give up focus on calling item
@@ -182,99 +185,47 @@ function MdBottomSheetProvider($$interimElementProvider) {
     /**
      * BottomSheet class to apply bottom-sheet behavior to an element
      */
-    function BottomSheet(element) {
-      var MAX_OFFSET = 80; // amount past the bottom of the element that we can drag down, this is same as in _bottomSheet.scss
-      var WIGGLE_AMOUNT = 20; // point where it starts to get "harder" to drag
-      var CLOSING_VELOCITY = 10; // how fast we need to flick down to close the sheet
-      var startY, lastY, velocity, transitionDelay, startTarget;
-
-      // coercion incase $mdCompiler returns multiple elements
-      element = element.eq(0);
-
-      element.on('touchstart', onTouchStart)
-             .on('touchmove', onTouchMove)
-             .on('touchend', onTouchEnd);
+    function BottomSheet(element, parent) {
+      var deregister = $mdGesture.register(parent, 'drag', { horizontal: false });
+      parent.on('$md.dragstart', onDragStart)
+        .on('$md.drag', onDrag)
+        .on('$md.dragend', onDragEnd);
 
       return {
         element: element,
         cleanup: function cleanup() {
-          element.off('touchstart', onTouchStart)
-                 .off('touchmove', onTouchMove)
-                 .off('touchend', onTouchEnd);
+          deregister();
+          parent.off('$md.dragstart', onDragStart)
+            .off('$md.drag', onDrag)
+            .off('$md.dragend', onDragEnd);
         }
       };
 
-      function onTouchStart(e) {
-        e.preventDefault();
-        startTarget = e.target;
-        startY = getY(e);
-
+      function onDragStart(ev) {
         // Disable transitions on transform so that it feels fast
-        transitionDelay = element.css($mdConstant.CSS.TRANSITION_DURATION);
-        element.css($mdConstant.CSS.TRANSITION_DURATION, '0s');
+        element.css($mdConstant.CSS.TRANSITION_DURATION, '0ms');
       }
 
-      function onTouchEnd(e) {
-        // Re-enable the transitions on transforms
-        element.css($mdConstant.CSS.TRANSITION_DURATION, transitionDelay);
-
-        var currentY = getY(e);
-        // If we didn't scroll much, and we didn't change targets, assume its a click
-        if ( Math.abs(currentY - startY) < 5  && e.target == startTarget) {
-          angular.element(e.target).triggerHandler('click');
-        } else {
-          // If they went fast enough, trigger a close.
-          if (velocity > CLOSING_VELOCITY) {
-            $timeout($mdBottomSheet.cancel);
-
-          // Otherwise, untransform so that we go back to our normal position
-          } else {
-            setTransformY(undefined);
-          }
+      function onDrag(ev) {
+        var transform = ev.pointer.distanceY;
+        if (transform < 5) {
+          // Slow down drag when trying to drag up, and stop after PADDING
+          transform = Math.max(-PADDING, transform / 2);
         }
+        element.css($mdConstant.CSS.TRANSFORM, 'translate3d(0,' + (PADDING + transform) + 'px,0)');
       }
 
-      function onTouchMove(e) {
-        var currentY = getY(e);
-        var delta = currentY - startY;
-
-        velocity = currentY - lastY;
-        lastY = currentY;
-
-        // Do some conversion on delta to get a friction-like effect
-        delta = adjustedDelta(delta);
-        setTransformY(delta + MAX_OFFSET);
-      }
-
-      /**
-       * Helper function to find the Y aspect of various touch events.
-       **/
-      function getY(e) {
-        var touch = e.touches && e.touches.length ? e.touches[0] : e.changedTouches[0];
-        return touch.clientY;
-      }
-
-      /**
-       * Transform the element along the y-axis
-       **/
-      function setTransformY(amt) {
-        if (amt === null || amt === undefined) {
+      function onDragEnd(ev) {
+        if (ev.pointer.distanceY > 0 &&
+            (ev.pointer.distanceY > 20 || Math.abs(ev.pointer.velocityY) > CLOSING_VELOCITY)) {
+          var distanceRemaining = element.prop('offsetHeight') - ev.pointer.distanceY;
+          var transitionDuration = Math.min(distanceRemaining / ev.pointer.velocityY * 0.75, 500);
+          element.css($mdConstant.CSS.TRANSITION_DURATION, transitionDuration + 'ms');
+          $timeout($mdBottomSheet.cancel);
+        } else {
+          element.css($mdConstant.CSS.TRANSITION_DURATION, '');
           element.css($mdConstant.CSS.TRANSFORM, '');
-        } else {
-          element.css($mdConstant.CSS.TRANSFORM, 'translate3d(0, ' + amt + 'px, 0)');
         }
-      }
-
-      // Returns a new value for delta that will never exceed MAX_OFFSET_AMOUNT
-      // Will get harder to exceed it as you get closer to it
-      function adjustedDelta(delta) {
-        if ( delta < 0  && delta < -MAX_OFFSET + WIGGLE_AMOUNT) {
-          delta = -delta;
-          var base = MAX_OFFSET - WIGGLE_AMOUNT;
-          delta = Math.max(-MAX_OFFSET, -Math.min(MAX_OFFSET - 5, base + ( WIGGLE_AMOUNT * (delta - base)) / MAX_OFFSET) - delta / 50);
-        }
-
-        return delta;
       }
     }
 

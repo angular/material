@@ -1,6 +1,5 @@
 describe('$mdDialog', function() {
 
-  beforeEach(TestUtil.mockRaf);
   beforeEach(module('material.components.dialog', 'ngAnimateMock'));
 
   beforeEach(inject(function spyOnMdEffects($$q, $animate) {
@@ -415,7 +414,6 @@ describe('$mdDialog', function() {
 });
 
 describe('$mdDialog with custom interpolation symbols', function() {
-  beforeEach(TestUtil.mockRaf);
   beforeEach(module('material.components.dialog', 'ngAnimateMock'));
 
   beforeEach(module(function($interpolateProvider) {
