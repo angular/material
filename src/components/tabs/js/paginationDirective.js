@@ -18,7 +18,7 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout, $mdM
   function postLink(scope, element, attr, tabsCtrl) {
 
     var tabs = element[0].getElementsByTagName('md-tab');
-    var debouncedUpdatePagination = $$rAF.debounce(updatePagination);
+    var debouncedUpdatePagination = $$rAF.throttle(updatePagination);
     var tabsParent = element.children();
     var locked = false;
     var state = scope.pagination = {

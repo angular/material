@@ -108,9 +108,8 @@ module.exports = function(gulp, IS_RELEASE_BUILD) {
   gulp.task('docs-js', ['docs-app', 'docs-html2js', 'demos', 'build'], function() {
     return gulp.src([
       'bower_components/angularytics/dist/angularytics.js',
-      'bower_components/hammerjs/hammer.js',
       'dist/angular-material.js',
-      'dist/docs/js/**/*.js',
+      'dist/docs/js/**/*.js'
     ])
       .pipe(concat('docs.js'))
       .pipe(gulpif(IS_RELEASE_BUILD, uglify()))

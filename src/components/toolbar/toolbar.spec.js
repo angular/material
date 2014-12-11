@@ -1,17 +1,6 @@
 describe('<md-toolbar>', function() {
 
-  beforeEach(module('material.components.toolbar', function($provide) {
-    //Create fake raf to instant-trigger the callback
-    function raf(cb) { cb(); }
-    raf.debounce = function(cb) { 
-      var args = arguments;
-      return function() {
-        return cb.apply(null, arguments);
-      };
-    };
-
-    $provide.value('$$rAF', raf);
-  }));
+  beforeEach(module('material.components.toolbar'));
 
   it('with scrollShrink, it should shrink scrollbar when going to bottom', inject(function($compile, $rootScope, $mdConstant, mdToolbarDirective) {
 

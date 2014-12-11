@@ -65,7 +65,7 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
 
     // Refresh elements is very expensive, so we use the debounced
     // version when possible.
-    var debouncedRefreshElements = $$rAF.debounce(refreshElements);
+    var debouncedRefreshElements = $$rAF.throttle(refreshElements);
 
     // setupAugmentedScrollEvents gives us `$scrollstart` and `$scroll`,
     // more reliable than `scroll` on android.

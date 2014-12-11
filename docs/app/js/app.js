@@ -17,7 +17,6 @@ function(COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider) {
       }
     });
 
-
   $mdThemingProvider.theme('docs-dark', 'default')
     .dark();
 

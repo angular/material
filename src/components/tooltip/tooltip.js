@@ -87,7 +87,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       else hideTooltip();
     });
 
-    var debouncedOnResize = $$rAF.debounce(function windowResize() {
+    var debouncedOnResize = $$rAF.throttle(function windowResize() {
       // Reposition on resize
       if (scope.visible) positionTooltip();
     });

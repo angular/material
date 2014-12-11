@@ -7,10 +7,10 @@ angular.module('material.components.tabs')
 
 function TabItemController($scope, $element, $attrs, $compile, $animate, $mdUtil, $parse, $timeout) {
   var self = this;
+  var tabsCtrl = $element.controller('mdTabs');
 
   // Properties
   self.contentContainer = angular.element('<div class="md-tab-content ng-hide">');
-  self.hammertime = new Hammer(self.contentContainer[0]);
   self.element = $element;
 
   // Methods
@@ -45,7 +45,6 @@ function TabItemController($scope, $element, $attrs, $compile, $animate, $mdUtil
   }
 
   function onRemove() {
-    self.hammertime.destroy();
     $animate.leave(self.contentContainer).then(function() {
       self.contentScope && self.contentScope.$destroy();
       self.contentScope = null;
@@ -59,11 +58,15 @@ function TabItemController($scope, $element, $attrs, $compile, $animate, $mdUtil
   function onSelect(rightToLeft) {
     // Resume watchers and events firing when tab is selected
     $mdUtil.reconnectScope(self.contentScope);
-    self.hammertime.on('swipeleft swiperight', $scope.onSwipe);
 
-    $element.addClass('active');
-    $element.attr('aria-selected', true);
-    $element.attr('tabIndex', 0);
+    $element
+      .addClass('active')
+      .attr({
+        'aria-selected': true,
+        'tabIndex': 0
+      })
+      .on('$md.swipeleft $md.swiperight', onSwipe);
+
     toggleAnimationClass(rightToLeft);
     $animate.removeClass(self.contentContainer, 'ng-hide');
 
@@ -73,17 +76,33 @@ function TabItemController($scope, $element, $attrs, $compile, $animate, $mdUtil
   function onDeselect(rightToLeft) {
     // Stop watchers & events from firing while tab is deselected
     $mdUtil.disconnectScope(self.contentScope);
-    self.hammertime.off('swipeleft swiperight', $scope.onSwipe);
 
-    $element.removeClass('active');
-    $element.attr('aria-selected', false);
-    // Only allow tabbing to the active tab
-    $element.attr('tabIndex', -1);
+    $element
+      .removeClass('active')
+      .attr({
+        'aria-selected': false,
+        'tabIndex': -1
+      })
+      .off('$md.swipeleft $md.swiperight', onSwipe);
+
     toggleAnimationClass(rightToLeft);
     $animate.addClass(self.contentContainer, 'ng-hide');
 
     $scope.onDeselect();
   }
+
+  ///// Private functions
+
+  function onSwipe(ev) {
+    $scope.$apply(function() {
+      if (/left/.test(ev.type)) {
+        tabsCtrl.select(tabsCtrl.next());
+      } else {
+        tabsCtrl.select(tabsCtrl.previous());
+      }
+    });
+  }
+ 
 
 }
 

@@ -197,7 +197,7 @@ md-slider {
   }
 
   /* Don't animate left/right while panning */
-  &.panning {
+  &.dragging {
     .md-thumb-container,
     .md-track-fill {
       transition: none;

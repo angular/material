@@ -194,29 +194,19 @@ describe('<md-tabs>', function() {
                        '</md-tabs>');
       var tabItems = tabs.find('md-tab');
 
-      tabItems.eq(0).isolateScope().onSwipe({
-        type: 'swipeleft'
-      });
+      tabItems.eq(0).triggerHandler('$md.swipeleft');
       expect(tabItems.eq(1)).toBeActiveTab();
 
-      tabItems.eq(1).isolateScope().onSwipe({
-        type: 'swipeleft'
-      });
+      tabItems.eq(1).triggerHandler('$md.swipeleft');
       expect(tabItems.eq(1)).toBeActiveTab();
 
-      tabItems.eq(1).isolateScope().onSwipe({
-        type: 'swipeleft'
-      });
+      tabItems.eq(1).triggerHandler('$md.swipeleft');
       expect(tabItems.eq(1)).toBeActiveTab();
 
-      tabItems.eq(1).isolateScope().onSwipe({
-        type: 'swiperight'
-      });
+      tabItems.eq(1).triggerHandler('$md.swiperight');
       expect(tabItems.eq(0)).toBeActiveTab();
 
-      tabItems.eq(0).isolateScope().onSwipe({
-        type: 'swiperight'
-      });
+      tabItems.eq(0).triggerHandler('$md.swiperight');
       expect(tabItems.eq(0)).toBeActiveTab();
     });
 

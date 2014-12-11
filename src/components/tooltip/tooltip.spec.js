@@ -1,18 +1,6 @@
 describe('<md-tooltip> directive', function() {
 
-  beforeEach(module('material.components.tooltip', function($provide) {
-    $provide.value('$$rAF', mockRaf);
-
-    // fake synchronous version of rAF
-    function mockRaf(cb) { cb(); }
-    mockRaf.debounce = function(cb) {
-      var context = this, args = arguments;
-      return function() {
-        cb.apply(context, args);
-      };
-    };
-    findTooltip().remove();
-  }));
+  beforeEach(module('material.components.tooltip'));
 
   function findTooltip() {
     return angular.element(document.body).find('md-tooltip');

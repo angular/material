@@ -4,7 +4,6 @@ describe('mdCheckbox', function() {
 
   beforeEach(module('material.components.checkbox'));
   beforeEach(module('ngAria'));
-  beforeEach(TestUtil.mockRaf);
 
   it('should warn developers they need a label', inject(function($compile, $rootScope, $log){
     spyOn($log, "warn");

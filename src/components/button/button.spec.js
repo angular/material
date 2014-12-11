@@ -1,6 +1,5 @@
 describe('md-button', function() {
 
-  beforeEach(TestUtil.mockRaf);
   beforeEach(module('material.components.button'));
 
   it('should convert attributes on an md-button to attributes on the generated button', inject(function($compile, $rootScope) {
@@ -12,8 +11,8 @@ describe('md-button', function() {
 
   it('should only have one ripple container when a custom ripple color is set', inject(function ($compile, $rootScope, $timeout) {
     var button = $compile('<md-button md-ink-ripple="#f00">button</md-button>')($rootScope);
-    var scope = button.eq(0).scope();
-    scope._onInput({ isFirst: true, eventType: Hammer.INPUT_START, center: { x: 0, y: 0 } });
+
+    button.triggerHandler({ type: '$md.pressdown', pointer: { x: 0, y: 0 } });
     expect(button[0].getElementsByClassName('md-ripple-container').length).toBe(1);
   }));
 
