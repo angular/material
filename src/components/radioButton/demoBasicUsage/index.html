@@ -18,6 +18,7 @@
 
         <md-radio-button ng-repeat="d in radioData"
                          ng-value="d.value"
+                         ng-disabled=" d.isDisabled "
                          aria-label="{{ d.label }}">
             {{ d.label }}
         </md-radio-button>
