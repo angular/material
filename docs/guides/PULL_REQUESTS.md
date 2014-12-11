@@ -23,9 +23,7 @@ Before you submit your pull request consider the following guidelines:
   and ensure that all tests pass.
 
 * Commit your changes using a descriptive commit message that follows our
-  [commit message conventions](CONTRIBUTING.md#commit-message-format) and passes our commit message
-  presubmit hook `validate-commit-msg.js`.<br/>
-  Adherence to the [commit message conventions](CONTRIBUTING.md#commit-message-format) is required
+  [commit message conventions](CONTRIBUTING.md#commit-message-format). Adherence to the [commit message conventions](CONTRIBUTING.md#commit-message-format) is required
   because release notes are automatically generated from these messages.
 
      ```shell

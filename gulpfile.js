@@ -402,7 +402,8 @@ gulp.task('build-themes', ['build-default-theme'], function() {
   var stream = mergeStream();
   var themes = glob('themes/**.scss', { cwd: __dirname })
     .filter(function(themeName) {
-      return themeName.split('/')[1].charAt(0) != '_';
+      // Only <component>.scss is different from <component>-theme.scss
+      return (themeName.indexOf('-theme') > -1);
     });
   themes.forEach(function(themeFile) {
     var name = themeFile.match(/((\w|-)+)-theme\.scss/)[1];
