@@ -5,7 +5,7 @@
 bower_components
 node_modules
 dist
-themes/_default-theme.scss
+/src/themes/_default-theme.scss
 
 /.idea/
 /components

@@ -389,7 +389,7 @@ gulp.task('build-default-theme', function() {
   return gulp.src(config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss')))
     .pipe(concat('_default-theme.scss'))
     .pipe(utils.hoistScssVariables())
-    .pipe(gulp.dest('themes/'));
+    .pipe(gulp.dest('src/themes/'));
 });
 
 gulp.task('build-theme', ['build-default-theme'], function() {
@@ -400,7 +400,7 @@ gulp.task('build-theme', ['build-default-theme'], function() {
 
 gulp.task('build-themes', ['build-default-theme'], function() {
   var stream = mergeStream();
-  var themes = glob('themes/**.scss', { cwd: __dirname })
+  var themes = glob('src/themes/**.scss', { cwd: __dirname })
     .filter(function(themeName) {
       // Only <component>.scss is different from <component>-theme.scss
       return (themeName.indexOf('-theme') > -1);
@@ -413,7 +413,7 @@ gulp.task('build-themes', ['build-default-theme'], function() {
 });
 
 gulp.task('build-scss', ['build-default-theme'], function() {
-  var defaultThemeContents = fs.readFileSync('themes/_default-theme.scss');
+  var defaultThemeContents = fs.readFileSync('src/themes/_default-theme.scss');
   var scssGlob = path.join(config.paths, '*.scss');
 
   gutil.log("Building css files...");
@@ -439,8 +439,8 @@ function buildTheme(theme) {
   gutil.log("Building theme " + theme + "...");
   return gulp.src([
       'src/core/style/color-palette.scss',
-      'themes/' + theme + '-theme.scss',
-      'themes/_default-theme.scss'
+      'src/themes/' + theme + '-theme.scss',
+      'src/themes/_default-theme.scss'
     ])
     .pipe(concat(theme + '-theme.scss'))
     .pipe(utils.hoistScssVariables())
