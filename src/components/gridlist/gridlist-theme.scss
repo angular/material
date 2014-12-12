@@ -1,0 +1,8 @@
+$gridlist-color-palette: $primary-color-palette !default;
+$gridlist-background-color: $foreground-tertiary-color !default;
+$gridlist-disabled-color: map-get($foreground-color-palette, '400') !default;
+
+md-gridlist.md-#{$theme-name}-theme {
+
+
+}
