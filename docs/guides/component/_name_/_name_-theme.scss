@@ -1,0 +1,8 @@
+$g_name_-color-palette: $primary-color-palette !default;
+$g_name_-background-color: $foreground-tertiary-color !default;
+$g_name_-disabled-color: map-get($foreground-color-palette, '400') !default;
+
+md-_name_.md-#{$theme-name}-theme {
+
+
+}
