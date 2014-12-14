@@ -11,18 +11,48 @@ module.exports = function buildConfigProcessor(log) {
 
   function process(docs) {
 
-    var deferred = q.defer();
+    docs.push({
+      template: 'build-config.js',
+      outputPath: 'js/build-config.js',
+      buildConfig: buildConfig
+    });
+
+    return q.all([
+        getSHA(q.defer()),
+        getCommitDate(q.defer())
+    ]).then(function(){
+        return docs;
+    });
+
+  }
+
+  /**
+   * Git the SHA associated with the most recent commit on origin/master
+   * @param deferred
+   * @returns {*}
+   */
+  function getSHA(deferred) {
     exec('git rev-parse HEAD', function(error, stdout, stderr) {
       buildConfig.commit = stdout && stdout.toString().trim();
-
-      docs.push({
-        template: 'build-config.js',
-        outputPath: 'js/build-config.js',
-        buildConfig: buildConfig
-      });
-      deferred.resolve(docs);
+      deferred.resolve(buildConfig.commit);
     });
 
     return deferred.promise;
   }
+
+  /**
+   * Get the commit date for the most recent commit on origin/master
+   * @param deferred
+   * @returns {*}
+   */
+  function getCommitDate(deferred) {
+    exec('git show -s --format=%ci HEAD', function(error, stdout, stderr) {
+      buildConfig.date = stdout && stdout.toString().trim();
+      deferred.resolve(buildConfig.date);
+    });
+
+    return deferred.promise;
+  }
+
+
 };

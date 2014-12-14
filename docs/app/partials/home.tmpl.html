@@ -36,10 +36,18 @@
                     search the forum
                 </a> and/or post a new message.
             </li>
-            <li>These docs were generated from the code in commit
-                <a ng-href="{{BUILDCONFIG.repository}}/commit/{{BUILDCONFIG.commit}}" target="_blank">
-                    {{BUILDCONFIG.commit.substring(0,7)}}
-                </a>.
+            <li>These docs were generated from source in the `master` branch:
+                <ul style="padding-top:5px;">
+                    <li>
+                        at commit <a ng-href="{{BUILDCONFIG.repository}}/commit/{{BUILDCONFIG.commit}}" target="_blank">
+                        v{{BUILDCONFIG.version}}  -  SHA {{BUILDCONFIG.commit.substring(0,7)}}
+                    </a>.
+                    </li>
+                    <li>
+                        on {{BUILDCONFIG.date}} GMT.
+                    </li>
+                </ul>
+
             </li>
         </ul>
         <br/>
