@@ -17,13 +17,10 @@ module.exports = function buildConfigProcessor(log) {
       buildConfig: buildConfig
     });
 
-    return q.all([
-        getSHA(q.defer()),
-        getCommitDate(q.defer())
-    ]).then(function(){
-        return docs;
-    });
-
+    return q.all([ getSHA(), getCommitDate() ])
+            .then( function(){
+              return docs;
+          });
   }
 
   /**
@@ -31,7 +28,9 @@ module.exports = function buildConfigProcessor(log) {
    * @param deferred
    * @returns {*}
    */
-  function getSHA(deferred) {
+  function getSHA() {
+    var deferred = q.defer();
+
     exec('git rev-parse HEAD', function(error, stdout, stderr) {
       buildConfig.commit = stdout && stdout.toString().trim();
       deferred.resolve(buildConfig.commit);
@@ -45,7 +44,9 @@ module.exports = function buildConfigProcessor(log) {
    * @param deferred
    * @returns {*}
    */
-  function getCommitDate(deferred) {
+  function getCommitDate() {
+    var deferred = q.defer();
+
     exec('git show -s --format=%ci HEAD', function(error, stdout, stderr) {
       buildConfig.date = stdout && stdout.toString().trim();
       deferred.resolve(buildConfig.date);
