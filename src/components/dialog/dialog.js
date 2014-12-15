@@ -195,7 +195,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
  * @description
  * Show a dialog with the specified options.
  *
- * @param {object} optionsOrPreset Either provide an `$mdToastPreset` returned from `alert()`,
+ * @param {object} optionsOrPreset Either provide an `$mdDialogPreset` returned from `alert()`,
  * `confirm()`, and `build()`, or an options object with the following properties:
  *   - `templateUrl` - `{string=}`: The url of a template that will be used as the content
  *   of the dialog.
@@ -217,7 +217,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *     coppied to the controller instead.
  *   - `bindToController` - `bool`: bind the locals to the controller, instead of passing them in
  *   - `resolve` - `{object=}`: Similar to locals, except it takes promises as values, and the
- *     toast will not open until all of the promises resolve.
+ *     dialog will not open until all of the promises resolve.
  *   - `controllerAs` - `{string=}`: An alias to assign the controller to on the scope.
  *   - `parent` - `{element=}`: The element to append the dialog to. Defaults to appending
  *     to the root element of the application.
