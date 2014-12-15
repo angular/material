@@ -1,7 +1,7 @@
 
 <div ng-controller="DemoController" layout="column">
-  <md-content md-theme="light-blue-dark">
-    <form style="padding: 20px;">
+  <md-content md-theme="light-blue-dark" class="md-padding">
+    <form>
       <div class="row">
         <md-text-float label="Title"  ng-model="user.title"   ></md-text-float>
         <md-text-float label="eMail"  ng-model="user.email" type="email" ></md-text-float>
@@ -9,8 +9,8 @@
     </form>
   </md-content>
 
-  <md-content>
-    <form style="padding: 20px;">
+  <md-content class="md-padding">
+    <form>
       <md-text-float label="Company"       ng-model="user.company"    disabled > </md-text-float>
       <div class="row">
           <md-text-float label="FirstName" ng-model="user.firstName"  > </md-text-float>
