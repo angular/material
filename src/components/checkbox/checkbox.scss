@@ -59,7 +59,7 @@ md-checkbox {
   }
 
   // focus
-  &:focus .md-label {
+  &:focus .md-label:not(:empty) {
     border-color: black;
   }
 

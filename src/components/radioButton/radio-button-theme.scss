@@ -40,6 +40,6 @@ md-switch.md-#{$theme-name}-theme .md-switch-thumb {
 }
 
 
-md-radio-group.md-#{$theme-name}-theme:focus {
+md-radio-group.md-#{$theme-name}-theme:focus:not(:empty) {
   border-color: $radio-group-focus-border-color;
 }
