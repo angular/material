@@ -224,6 +224,11 @@ md-tabs.demo-source-tabs .active md-tab-label {
 .small-demo .demo-content > div[layout-fill] {
   min-height: 224px;
 }
+.layout-options .small-demo .demo-content > div[layout] {
+  min-height: auto !important;
+  max-height: auto !imporatnt;
+  height: 128px !important;
+}
 .small-demo .demo-toolbar,
 .small-demo .md-toolbar-tools { 
   min-height: 48px;

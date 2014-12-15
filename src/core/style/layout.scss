@@ -31,11 +31,6 @@
   margin: $layout-gutter-width / 2;
 }
 
-[layout-padding] + [layout-padding], /* DEPRECATED */
-[layout-margin] + [layout-margin] {
-  margin-top: -($layout-gutter-width / 2);
-}
-
 [layout-wrap] {
   flex-wrap: wrap;
 }
@@ -69,23 +64,36 @@
     flex: 1;
   }
 
-  // (0-19) * 5 = 0-95%
-  @for $i from 0 through 19 {
+
+  // (0-20) * 5 = 0-100%
+  @for $i from 0 through 20 {
     [#{$flexName}="#{$i * 5}"] {
       flex: 0 0 #{$i * 5 + '%'};
+    }
+    [layout="row"] > [#{$flexName}="#{$i * 5}"] {
       max-width: #{$i * 5 + '%'};
+    }
+    [layout="column"] > [#{$flexName}="#{$i * 5}"] {
+      max-height: #{$i * 5 + '%'};
     }
   }
 
-  [#{$flexName}="33"], [#{$flexName}="34"] {
-    flex: 0 0 33.33%;
-    max-width: 33.33%;
+  [layout="row"] {
+    > [#{$flexName}="33"], > [#{$flexName}="34"] {
+      max-width: 33.33%;
+    }
+    > [#{$flexName}="66"], > [#{$flexName}="67"] {
+      max-width: 66.66%;
+    }
   }
-  [#{$flexName}="66"], [#{$flexName}="67"] {
-    flex: 0 0 66.66%;
-    max-width: 66.66%;
+  [layout="column"] {
+    > [#{$flexName}="33"], > [#{$flexName}="34"] {
+      max-height: 33.33%;
+    }
+    > [#{$flexName}="66"], > [#{$flexName}="67"] {
+      max-height: 66.66%;
+    }
   }
-
 }
 
 // Flex attributes for layout children
