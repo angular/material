@@ -22,7 +22,7 @@
   flex-direction: row;
 }
 
-[layout-padding]
+[layout-padding],
 [layout-padding] > [flex] {
   padding: $layout-gutter-width / 2;
 }
@@ -31,7 +31,7 @@
   margin: $layout-gutter-width / 2;
 }
 
-[layout-padding] + [layout-padding], /* DEPRECATED */
+[layout-padding] + [layout-padding],
 [layout-margin] + [layout-margin] {
   margin-top: -($layout-gutter-width / 2);
 }
