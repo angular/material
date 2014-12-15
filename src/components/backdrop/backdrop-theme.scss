@@ -1,6 +1,4 @@
-$backdrop-color: rgba(0,0,0,0.3);
-
-md-backdrop.md-opaque.md-#{$theme-name}-theme {
-  background-color: $backdrop-color;
-  position:absolute
+md-backdrop.md-opaque.md-THEME_NAME-theme {
+  background-color: '{{foreground-4-0.5}}';
+  position: absolute
 }

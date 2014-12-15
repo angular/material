@@ -12,7 +12,9 @@ $color-red: (
   'A100': #ff8a80,
   'A200': #ff5252,
   'A400': #ff1744,
-  'A700': #d50000
+  'A700': #d50000,
+  'contrastDefaultColor': light,
+  'contrastDarkColors': 50 100 200 300 400 A100
 );
 
 // Pink
@@ -33,6 +35,8 @@ $color-pink: (
   'A200': #ff4081,
   'A400': #f50057,
   'A700': #c51162,
+  'contrastDefaultColor': light,
+  'contrastDarkColors': 50 100 200 300 400 A100
 );
 
 // Purple
@@ -52,7 +56,9 @@ $color-purple: (
   'A100': #ea80fc,
   'A200': #e040fb,
   'A400': #d500f9,
-  'A700': #aa00ff
+  'A700': #aa00ff,
+  'contrastDefaultColor': light,
+  'contrastDarkColors': 50 100 200 A100
 );
 
 
@@ -73,7 +79,9 @@ $color-deep-purple: (
   'A100': #b388ff,
   'A200': #7c4dff,
   'A400': #651fff,
-  'A700': #6200ea
+  'A700': #6200ea,
+  'contrastDefaultColor': light,
+  'contrastDarkColors': 50 100 200 A100
 );
 
 // Indigo
@@ -93,7 +101,9 @@ $color-indigo: (
   'A100': #8c9eff,
   'A200': #536dfe,
   'A400': #3d5afe,
-  'A700': #304ffe
+  'A700': #304ffe,
+  'contrastDefaultColor': light,
+  'contrastDarkColors': 50 100 200 A100
 );
 
 
@@ -114,7 +124,9 @@ $color-blue: (
   'A100': #82b1ff,
   'A200': #448aff,
   'A400': #2979ff,
-  'A700': #2962ff
+  'A700': #2962ff,
+  'contrastDefaultColor': light,
+  'contrastDarkColors': 100 200 300 400 A100
 );
 
 
@@ -135,7 +147,9 @@ $color-light-blue: (
   'A100': #80d8ff,
   'A200': #40c4ff,
   'A400': #00b0ff,
-  'A700': #0091ea
+  'A700': #0091ea,
+  'contrastDefaultColor': dark,
+  'contrastLightColors': 500 600 700 800 900 A700
 );
 
 
@@ -156,7 +170,9 @@ $color-cyan: (
   'A100': #84ffff,
   'A200': #18ffff,
   'A400': #00e5ff,
-  'A700': #00b8d4
+  'A700': #00b8d4,
+  'contrastDefaultColor': dark,
+  'contrastLightColors': 500 600 700 800 900
 );
 
 
@@ -177,7 +193,9 @@ $color-teal: (
   'A100': #a7ffeb,
   'A200': #64ffda,
   'A400': #1de9b6,
-  'A700': #00bfa5
+  'A700': #00bfa5,
+  'contrastDefaultColor': dark,
+  'contrastLightColors': 500 600 700 800 900
 );
 
 
@@ -198,7 +216,9 @@ $color-green: (
   'A100': #b9f6ca,
   'A200': #69f0ae,
   'A400': #00e676,
-  'A700': #00c853
+  'A700': #00c853,
+  'contrastDefaultColor': dark,
+  'contrastLightColors': 500 600 700 800 900
 );
 
 
@@ -219,7 +239,9 @@ $color-light-green: (
   'A100': #ccff90,
   'A200': #b2ff59,
   'A400': #76ff03,
-  'A700': #64dd17
+  'A700': #64dd17,
+  'contrastDefaultColor': dark,
+  'contrastLightColors': 800 900
 );
 
 
@@ -240,7 +262,9 @@ $color-lime: (
   'A100': #f4ff81,
   'A200': #eeff41,
   'A400': #c6ff00,
-  'A700': #aeea00
+  'A700': #aeea00,
+  'contrastDefaultColor': dark,
+  'contrastLightColors': 900
 );
 
 
@@ -260,7 +284,8 @@ $color-yellow: (
   'A100': #ffff8d,
   'A200': #ffff00,
   'A400': #ffea00,
-  'A700': #ffd600
+  'A700': #ffd600,
+  'contrastDefaultColor': dark
 );
 
 
@@ -281,7 +306,8 @@ $color-amber: (
   'A100': #ffe57f,
   'A200': #ffd740,
   'A400': #ffc400,
-  'A700': #ffab00
+  'A700': #ffab00,
+  'contrastDefaultColor': dark
 );
 
 
@@ -302,7 +328,9 @@ $color-orange: (
   'A100': #ffd180,
   'A200': #ffab40,
   'A400': #ff9100,
-  'A700': #ff6d00
+  'A700': #ff6d00,
+  'contrastDefaultColor': dark,
+  'contrastLightColors': 800 900
 );
 
 
@@ -323,7 +351,9 @@ $color-deep-orange: (
   'A100': #ff9e80,
   'A200': #ff6e40,
   'A400': #ff3d00,
-  'A700': #dd2c00
+  'A700': #dd2c00,
+  'contrastDefaultColor': light,
+  'contrastDarkColors': 50 100 200 300 400 A100 A200
 );
 
 
@@ -340,9 +370,10 @@ $color-brown: (
   '600': #6d4c41,
   '700': #5d4037,
   '800': #4e342e,
-  '900': #3e2723
+  '900': #3e2723,
+  'contrastDefaultColor': light,
+  'contrastDarkColors': 50 100 200
 );
-
 
 // Grey
 // ----------------------------
@@ -359,7 +390,9 @@ $color-grey: (
   '800': #424242,
   '900': #212121,
   '1000': #000000,
-  'A100': #ffffff
+  'A100': #ffffff,
+  'contrastDefaultColor': dark,
+  'contrastLightColors': 600 700 800 900
 );
 
 // Blue Grey
@@ -374,5 +407,30 @@ $color-blue-grey: (
   '600': #546e7a,
   '700': #455a64,
   '800': #37474f,
-  '900': #263238
+  '900': #263238,
+  'contrastDefaultColor': light,
+  'contrastDarkColors': 50 100 200 300
 );
+
+$colors: (
+  'red': $color-red,
+  'pink': $color-pink,
+  'purple': $color-purple,
+  'deep-purple': $color-deep-purple,
+  'indigo': $color-indigo,
+  'blue': $color-blue,
+  'light-blue': $color-light-blue,
+  'cyan': $color-cyan,
+  'teal': $color-teal,
+  'green': $color-green,
+  'light-green': $color-light-green,
+  'lime': $color-lime,
+  'yellow': $color-yellow,
+  'amber': $color-amber,
+  'orange': $color-orange,
+  'deep-orange': $color-deep-orange,
+  'brown': $color-brown,
+  'grey': $color-grey,
+  'blue-grey': $color-blue-grey
+);
+

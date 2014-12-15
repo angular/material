@@ -1,5 +1,3 @@
-$divider-color: $foreground-quarternary-color !default;
-
-md-divider.md-#{$theme-name}-theme {
-  border-top-color: $divider-color;
+md-divider.md-THEME_NAME-theme {
+  border-top-color: '{{foreground-4}}';
 }

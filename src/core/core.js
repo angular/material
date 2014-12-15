@@ -17,8 +17,15 @@ function MdCoreInitialize() {
   }
 }
 
-function MdCoreConfigure($provide) {
+function MdCoreConfigure($provide, $mdThemingProvider) {
   $provide.decorator('$$rAF', ['$delegate', '$rootScope', rAFDecorator]);
+
+  // Define a default theme with our newly loaded colors
+  $mdThemingProvider.theme('default')
+    .primaryColor('blue')
+    .accentColor('green')
+    .warnColor('red')
+    .backgroundColor('grey');
 
   function rAFDecorator($$rAF, $rootScope) {
     /**
