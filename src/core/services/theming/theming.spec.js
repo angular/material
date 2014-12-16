@@ -1,3 +1,35 @@
+describe('$mdThemingProvider', function() {
+
+  describe('creating themes', function() {
+    it('allows registering of a theme');
+    it('errors on invalid palette names');
+    describe('registering a dark theme', function() {
+      it('changes the foreground color');
+      it('changes the default hues on the background palette');
+    });
+    describe('theme extension', function() {
+      it('allows extension by string');
+      it('allows extension by reference');
+      it('extends the default theme automatically');
+    });
+    describe('providing hue map for a color', function() {
+      it('allows specifying a custom hue map');
+      it('extends default hue map automatically');
+      it('errors on invalid key in hue map');
+      it('errors on invalid value in hue map');
+    });
+  });
+
+  describe('registering palettes', function() {
+    it('extends the default hues automatically');
+    it('requires all hues specified');
+  }); 
+
+  describe('stylesheet parsing', function() {
+    it('automatically assigns contrast colors');
+  });
+});
+
 describe('$mdTheming service', function() {
   var $mdThemingProvider;
   beforeEach(module('material.core', function(_$mdThemingProvider_) {
