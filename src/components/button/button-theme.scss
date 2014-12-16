@@ -4,14 +4,15 @@ $button-fab-border-radius: 50% !default;
 .md-button.md-THEME_NAME-theme {
   border-radius: $button-border-radius;
 
+  &:not([disabled]) {
+    &:hover, 
+    &:focus {
+      background-color: '{{background-500-0.2}}';
+    }
+  }
+
   &.md-primary {
     color: '{{primary-color}}';
-    &:not([disabled]) {
-      &:hover, 
-      &:focus {
-        background-color: '{{background-500-0.2}}';
-      }
-    }
     &.md-raised,
     &.md-fab {
       color: '{{primary-contrast}}';
