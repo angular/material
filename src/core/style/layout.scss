@@ -22,7 +22,7 @@
   flex-direction: row;
 }
 
-[layout-padding]
+[layout-padding],
 [layout-padding] > [flex] {
   padding: $layout-gutter-width / 2;
 }
