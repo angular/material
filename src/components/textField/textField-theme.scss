@@ -41,7 +41,6 @@ md-input-group.md-THEME_NAME-theme {
     input, textarea {
       border-bottom-color: '{{foreground-4}}';
       color: '{{foreground-3}}';
-      background-image: 'linear-gradient(to right, {{foreground-3}} 0%, {{foreground-3}} 50%, rgba(0, 0, 0, 0) 0%)';
     }
   }
 }

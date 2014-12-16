@@ -1,9 +1,9 @@
 <div ng-controller="AppCtrl">
 
-  <md-toolbar md-theme="green">
+  <md-toolbar class="md-accent">
     <h1 class="md-toolbar-tools">
       <span flex>Awesome Md App</span>
-      <md-button class="md-fab md-primary" aria-label="refresh">
+      <md-button class="md-fab md-accent" aria-label="refresh">
         <md-tooltip>
           Refresh
         </md-tooltip>
@@ -20,7 +20,7 @@
 
     <md-button class="md-fab md-fab-top-left left" aria-label="Insert Drive">
       <md-icon icon="/img/icons/ic_insert_drive_file_24px.svg"></md-icon>
-      <md-tooltip md-visible="showTooltip">
+      <md-tooltip md-visible="demo.showTooltip">
         Insert Drive
       </md-tooltip>
     </md-button>
@@ -40,7 +40,7 @@
       </div>
     </p>
 
-    <md-checkbox ng-model="showTooltip">
+    <md-checkbox ng-model="demo.showTooltip">
       Insert Drive
     </md-checkbox>
 

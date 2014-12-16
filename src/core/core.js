@@ -27,6 +27,16 @@ function MdCoreConfigure($provide, $mdThemingProvider) {
     .warnColor('red')
     .backgroundColor('grey');
 
+  // Define a default theme with our newly loaded colors
+  $mdThemingProvider.theme('default-dark')
+    .backgroundColor('grey', {
+      'default': '500',
+      'hue-1': '300',
+      'hue-2': '600',
+      'hue-3': '800',
+    })
+    .dark();
+
   function rAFDecorator($$rAF, $rootScope) {
     /**
      * Use this to debounce events that come in often.
