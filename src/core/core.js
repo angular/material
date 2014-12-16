@@ -20,7 +20,6 @@ function MdCoreInitialize() {
 function MdCoreConfigure($provide, $mdThemingProvider) {
   $provide.decorator('$$rAF', ['$delegate', '$rootScope', rAFDecorator]);
 
-  // Define a default theme with our newly loaded colors
   $mdThemingProvider.theme('default')
     .primaryColor('blue')
     .accentColor('green')

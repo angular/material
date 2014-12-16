@@ -7,6 +7,7 @@ describe('$mdThemingProvider', function() {
   var startAngular = inject;
   function setup() {
     module('material.core.theming', function($mdThemingProvider, $provide) {
+      $provide.value('$MD_THEME_CSS', '{}');
       themingProvider = $mdThemingProvider;
 
       testPalette = themingProvider._PALETTES.testPalette = {
