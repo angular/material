@@ -5,7 +5,7 @@
  * Initialization function that validates environment
  * requirements.
  */
-angular.module('material.core', [])
+angular.module('material.core', ['material.core.theming'])
   .run(MdCoreInitialize)
   .config(MdCoreConfigure);
 
@@ -26,16 +26,6 @@ function MdCoreConfigure($provide, $mdThemingProvider) {
     .accentColor('green')
     .warnColor('red')
     .backgroundColor('grey');
-
-  // Define a default theme with our newly loaded colors
-  $mdThemingProvider.theme('default-dark')
-    .backgroundColor('grey', {
-      'default': '500',
-      'hue-1': '300',
-      'hue-2': '600',
-      'hue-3': '800',
-    })
-    .dark();
 
   function rAFDecorator($$rAF, $rootScope) {
     /**
