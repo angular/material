@@ -45,6 +45,8 @@ var LIGHT_FOREGROUND = {
   '4': 'rgba(255,255,255,0.12)'
 };
 
+var DARK_SHADOW = '1px 1px 0px rgba(black, 0.4), -1px -1px 0px rgba(black, 0.4)';
+var LIGHT_SHADOW = 'none';
 
 var THEME_COLOR_TYPES = ['primary', 'accent', 'warn', 'background'];
 var DEFAULT_COLOR_TYPE = 'primary';
@@ -339,7 +341,7 @@ function generateThemes($MD_THEME_CSS) {
       var themeNameRegex = new RegExp('.md-' + theme.name + '-theme', 'g');
       // Matches '{{ primary-color }}', etc
       var hueRegex = new RegExp('(\'|\")?{{\\s*\(' + colorType + '\)-\(color|contrast\)\-\?\(\\d\\.\?\\d\*\)\?\\s*}}(\"|\')?','g');
-      var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue\-[0-3])-?(\d\.?\d*)?\s*\}\}'?"?/g;
+      var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue\-[0-3]|shadow)-?(\d\.?\d*)?\s*\}\}'?"?/g;
       var palette = PALETTES[color.name];
 
       // find and replace simple variables where we use a specific hue, not angentire palette
@@ -347,8 +349,12 @@ function generateThemes($MD_THEME_CSS) {
       //\(' + THEME_COLOR_TYPES.join('\|') + '\)'
       rules = rules.replace(simpleVariableRegex, function(match, colorType, hue, opacity) {
         if (colorType === 'foreground') {
-          var color = foregroundPalette[hue] || foregroundPalette['1'];
-          return color;
+          if (hue == 'shadow') {
+            return theme.isDark ? DARK_SHADOW : LIGHT_SHADOW;
+          } else {
+            var color = foregroundPalette[hue] || foregroundPalette['1'];
+            return color;
+          }
         }
         if (hue.indexOf('hue') === 0) {
           hue = theme.colors[colorType].hues[hue];

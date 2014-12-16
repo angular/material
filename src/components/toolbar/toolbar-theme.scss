@@ -1,6 +1,3 @@
-$toolbar-background-color: map-get($primary-color-palette, '500') !default;
-$toolbar-text-color: $primary-color-palette-contrast-color;
-
 md-toolbar.md-THEME_NAME-theme {
   background-color: '{{primary-color}}';
   color: '{{primary-contrast}}';
@@ -14,5 +11,3 @@ md-toolbar.md-THEME_NAME-theme {
     color: '{{accent-contrast}}';
   }
 }
-
-// md-default-theme without accent|warn in it === primary
