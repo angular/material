@@ -140,7 +140,7 @@ function ThemingProvider() {
       .replace(/_/g, '"'); // we output underscores as placeholders for quotes
 
     // Remove backslashes that firefox gives
-    var parsed = JSON.parse(backgroundImage);
+    var parsed = JSON.parse(decodeURI(backgroundImage));
     angular.extend(PALETTES, parsed);
     document.body.removeChild(element);
   }
