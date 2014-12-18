@@ -77,7 +77,7 @@ angular.module('material.core')
         var args = arguments;
         var now = Util.now();
 
-        if (!recent || recent - now > delay) {
+        if (!recent || (now - recent > delay)) {
           func.apply(context, args);
           recent = now;
         }
