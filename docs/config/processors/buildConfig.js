@@ -5,7 +5,7 @@ var exec = require('child_process').exec;
 module.exports = function buildConfigProcessor(log) {
   return {
     $runBefore: ['rendering-docs'],
-    $unAfter: ['indexPageProcessor'],
+    $runAfter: ['indexPageProcessor'],
     $process: process
   };
 
