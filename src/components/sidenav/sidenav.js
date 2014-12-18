@@ -9,43 +9,16 @@
  * A Sidenav QP component.
  */
 angular.module('material.components.sidenav', [
-  'material.core',
-  'material.components.backdrop'
-])
-  .factory('$mdSidenav', mdSidenavService )
-  .directive('mdSidenav', mdSidenavDirective)
-  .controller('$mdSidenavController', mdSidenavController)
-  .factory('$mdComponentRegistry', mdComponentRegistry);
+    'material.core',
+    'material.components.backdrop'
+  ])
+  .factory('$mdSidenav', SidenavService )
+  .directive('mdSidenav', SidenavDirective)
+  .controller('$mdSidenavController', SidenavController)
+  .factory('$mdComponentRegistry', ComponentRegistry);
 
-/*
- * @private
- * @ngdoc object
- * @name mdSidenavController
- * @module material.components.sidenav
- *
- * @description
- * The controller for mdSidenav components.
- */
-function mdSidenavController($scope, $element, $attrs, $timeout, $mdSidenav, $mdComponentRegistry) {
 
-  var self = this;
-  self.destroy = $mdComponentRegistry.register(self, $attrs.mdComponentId);
-
-  self.isOpen = function() {
-    return !!$scope.isOpen;
-  };
-  self.toggle = function() {
-    $scope.isOpen = !$scope.isOpen;
-  };
-  self.open = function() {
-    $scope.isOpen = true;
-  };
-  self.close = function() {
-    $scope.isOpen = false;
-  };
-}
-
-/*
+/**
  * @private
  * @ngdoc service
  * @name $mdSidenav
@@ -68,8 +41,11 @@ function mdSidenavController($scope, $element, $attrs, $timeout, $mdSidenav, $md
  * $mdSidenav(componentId).close();
  * ```
  */
-function mdSidenavService($mdComponentRegistry) {
+function SidenavService($mdComponentRegistry, $q) {
   return function(handle) {
+    var errorMsg = "SideNav '" + handle + "' is not availabe!";
+
+    // Lookup the controller instance for the specified sidNav instance
     var instance = $mdComponentRegistry.get(handle);
     if(!instance) {
       $mdComponentRegistry.notFoundError(handle);
@@ -80,13 +56,13 @@ function mdSidenavService($mdComponentRegistry) {
         return instance && instance.isOpen();
       },
       toggle: function() {
-        instance && instance.toggle();
+        return instance ? instance.toggle() : $q.reject(errorMsg);
       },
       open: function() {
-        instance && instance.open();
+        return instance ? instance.open() : $q.reject(errorMsg);
       },
       close: function() {
-        instance && instance.close();
+        return instance ? instance.close() : $q.reject(errorMsg);
       }
     };
   };
@@ -149,7 +125,7 @@ function mdSidenavService($mdComponentRegistry) {
  *   - `<md-sidenav md-is-locked-open="$media('min-width: 1000px')"></md-sidenav>`
  *   - `<md-sidenav md-is-locked-open="$media('sm')"></md-sidenav>` (locks open on small screens)
  */
-function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $compile, $mdTheming) {
+function SidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $compile, $mdTheming, $q, $document) {
   return {
     restrict: 'E',
     scope: {
@@ -163,43 +139,104 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
     }
   };
 
+  /**
+   * Directive Post Link function...
+   */
   function postLink(scope, element, attr, sidenavCtrl) {
+    var triggeringElement = null;
+    var promise = $q.when(true);
+
     var isLockedOpenParsed = $parse(attr.mdIsLockedOpen);
+    var isLocked = function() {
+      return isLockedOpenParsed(scope.$parent, {
+        $media: $mdMedia
+      });
+    };
     var backdrop = $compile(
       '<md-backdrop class="md-sidenav-backdrop md-opaque ng-enter">'
     )(scope);
 
+    element.on('$destroy', sidenavCtrl.destroy);
     $mdTheming.inherit(backdrop, element);
 
-    element.on('$destroy', sidenavCtrl.destroy);
+    scope.$watch(isLocked, updateIsLocked);
+    scope.$watch('isOpen', updateIsOpen);
 
-    scope.$watch('isOpen', setOpen);
-    scope.$watch(function() {
-      return isLockedOpenParsed(scope.$parent, {
-        $media: $mdMedia
-      });
-    }, function(isLocked) {
+
+    // Publish special accessor for the Controller instance
+    sidenavCtrl.$toggleOpen = toggleOpen;
+
+    /**
+     * Toggle the DOM classes to indicate `locked`
+     * @param isLocked
+     */
+    function updateIsLocked(isLocked) {
       element.toggleClass('md-locked-open', !!isLocked);
       backdrop.toggleClass('md-locked-open', !!isLocked);
-    });
+    }
 
     /**
      * Toggle the SideNav view and attach/detach listeners
      * @param isOpen
      */
-    function setOpen(isOpen) {
+    function updateIsOpen(isOpen) {
       var parent = element.parent();
 
       parent[isOpen ? 'on' : 'off']('keydown', onKeyDown);
-      $animate[isOpen ? 'enter' : 'leave'](backdrop, parent);
       backdrop[isOpen ? 'on' : 'off']('click', close);
 
-      $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed').then(function() {
-        // If we opened, and haven't closed again before the animation finished
-        if (scope.isOpen) {
-          element.focus();
-        }
-      });
+      if ( isOpen ) {
+        // Capture upon opening..
+        triggeringElement = $document[0].activeElement;
+      }
+
+      return promise = $q.all([
+        $animate[isOpen ? 'enter' : 'leave'](backdrop, parent),
+        $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed').then(function() {
+          // If we opened, and haven't closed again before the animation finished
+          if (scope.isOpen) {
+            element.focus();
+          }
+        })
+      ]);
+    }
+
+    /**
+     * Toggle the sideNav view and publish a promise to be resolved when
+     * the view animation finishes.
+     *
+     * @param isOpen
+     * @returns {*}
+     */
+    function toggleOpen( isOpen ) {
+      if (scope.isOpen == isOpen ) {
+
+        return $q.when(true);
+
+      } else {
+        var deferred = $q.defer();
+
+        // Toggle value to force an async `updateIsOpen()` to run
+        scope.isOpen = isOpen;
+
+        $timeout(function() {
+
+          // When the current `updateIsOpen()` animation finishes
+          promise.then(function(result){
+
+            if ( !scope.isOpen ) {
+              // reset focus to originating element (if available) upon close
+              triggeringElement && triggeringElement.focus();
+              triggeringElement = null;
+            }
+
+            deferred.resolve(result);
+          });
+
+        },0,false);
+
+        return deferred.promise;
+      }
     }
 
     /**
@@ -207,11 +244,8 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
      * @param evt
      */
     function onKeyDown(ev) {
-      if (ev.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
-        close();
-        ev.preventDefault();
-        ev.stopPropagation();
-      }
+      var isEscape = (ev.keyCode === $mdConstant.KEY_CODE.ESCAPE);
+      return isEscape ? close(ev) : $q.when(true);
     }
 
     /**
@@ -219,17 +253,47 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
      * apply the CSS close transition... Then notify the controller
      * to close() and perform its own actions.
      */
-    function close() {
-      $timeout(function(){
-        sidenavCtrl.close();
-      });
+    function close(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      return sidenavCtrl.close();
     }
 
   }
-
 }
 
-function mdComponentRegistry($log) {
+/*
+ * @private
+ * @ngdoc controller
+ * @name SidenavController
+ * @module material.components.sidenav
+ *
+ */
+function SidenavController($scope, $element, $attrs, $mdComponentRegistry, $q) {
+
+  var self = this;
+
+  // Use Default internal method until overridden by directive postLink
+
+  self.$toggleOpen = function() { return $q.when($scope.isOpen) };
+  self.isOpen = function() { return !!$scope.isOpen; };
+  self.open   = function() { return self.$toggleOpen( true );  };
+  self.close  = function() { return self.$toggleOpen( false ); };
+  self.toggle = function() { return self.$toggleOpen( !$scope.isOpen );  };
+
+  self.destroy = $mdComponentRegistry.register(self, $attrs.mdComponentId);
+}
+
+/*
+ * @private
+ * @ngdoc factory
+ * @name ComponentRegistry
+ * @module material.components.sidenav
+ *
+ */
+function ComponentRegistry($log) {
+
   var instances = [];
 
   return {
@@ -279,4 +343,6 @@ function mdComponentRegistry($log) {
     }
   };
 }
+
+
 })();

@@ -93,7 +93,7 @@ describe('mdSidenav', function() {
       expect(controller).not.toBe(undefined);
     });
 
-    it('should open and close and toggle', function() {
+    it('should open and close and toggle', inject(function($timeout) {
       var el = setup('');
       var scope = el.isolateScope();
       var controller = el.controller('mdSidenav');
@@ -115,7 +115,7 @@ describe('mdSidenav', function() {
       scope.$apply();
 
       expect(el.hasClass('md-closed')).toBe(false);
-    });
+    }));
 
     it('should deregister component when element is destroyed', inject(function($mdComponentRegistry) {
       var el = setup('md-component-id="left"');
@@ -124,6 +124,87 @@ describe('mdSidenav', function() {
       var instance = $mdComponentRegistry.get('left');
       expect(instance).toBe(null);
     }));
+
+  });
+
+  describe("controller Promise API", function() {
+    var $animate, $rootScope;
+
+      function flush() {
+        if ( !$rootScope.$$phase) {
+          $rootScope.$apply();
+        }
+        $animate.triggerCallbacks();
+      }
+
+    beforeEach( inject(function(_$animate_,_$rootScope_,_$timeout_) {
+        $animate = _$animate_;
+        $rootScope = _$rootScope_;
+        $timeout = _$timeout_;
+    }));
+
+
+    it('should open(), close(), and toggle() with promises', function () {
+      var el = setup('');
+      var scope = el.isolateScope();
+      var controller = el.controller('mdSidenav');
+
+      var openDone = 0, closeDone = 0, toggleDone = 0;
+      var onDone = function() { openDone++; };
+      var onClose = function() { closeDone++; };
+      var onToggle = function() { toggleDone++; };
+
+      controller.open()
+                .then( onDone )
+                .then( controller.close )
+                .then( onClose );
+
+      flush();
+      expect(openDone).toBe(1);
+
+
+      controller.close()
+                .then( onClose );
+      flush();
+      expect(scope.isOpen).toBe(false);
+
+
+      controller.toggle()
+                .then( onToggle );
+      flush();
+      expect(scope.isOpen).toBe(true);
+
+    });
+
+
+    it('should open() to work multiple times before close()', function () {
+      var el = setup('');
+      var controller = el.controller('mdSidenav');
+
+      var openDone = 0, closeDone = 0;
+      var onDone = function() { openDone++; };
+      var onClose = function() { closeDone++; };
+
+      controller
+        .open()
+        .then(onDone)
+        .then(controller.open)
+        .then(onDone);
+
+      flush();
+      expect(openDone).toBe(2);
+      expect(closeDone).toBe(0);
+      expect(el.hasClass('md-closed')).toBe(false);
+
+      controller
+        .close()
+        .then(onClose);
+
+      flush();
+      expect(openDone).toBe(2);
+      expect(closeDone).toBe(1);
+      expect(el.hasClass('md-closed')).toBe(true);
+    });
 
   });
 
