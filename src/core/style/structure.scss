@@ -233,7 +233,7 @@ md-tab {
   @for $i from 1 through $len {
     $key: nth($keys, $i);
     $value: map-get($map, $key);
-    $map-str: $map-str + '"' + $key + '": "' + map-get($map, $key) + '"';
+    $map-str: $map-str + '_' + $key + '_: _' + map-get($map, $key) + '_';
     @if $i != $len {
       $map-str: $map-str + ',';
     }
@@ -248,12 +248,12 @@ md-tab {
   @for $i from 1 through $len {
     $key: nth($keys, $i);
     $value: map-get($colors, $key);
-    $content-rule: $content-rule + '"' + $key + '": ' + map-to-string($value);
+    $content-rule: $content-rule + '_' + $key + '_: ' + map-to-string($value);
     @if $i != $len {
       $content-rule: $content-rule + ',';
     }
   }
   $content-rule: $content-rule + '}';
-  content: $content-rule;
+  background-image: url("data:image/svg+xml;utf8,#{$content-rule}");
   display: none;
 }
