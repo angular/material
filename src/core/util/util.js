@@ -17,6 +17,28 @@ angular.module('material.core')
 
     attachDragBehavior: attachDragBehavior,
 
+    // Firefox doesn't let us set values on the object returned from getBoundingClientRect(),
+    // but we need that. So we just return a new object which uses the values returned
+    // from getBoundingClientRect()
+    elementRect: function(element, offsetParent) {
+      var node = element[0];
+      offsetParent = offsetParent || node.offsetParent || document.body;
+      offsetParent = offsetParent[0] || offsetParent;
+      var rect = {
+        left: 0,
+        top: 0,
+        width: node.offsetWidth, 
+        height: node.offsetHeight,
+      };
+      var current = node;
+      while (current && current !== offsetParent) {
+        rect.left += current.offsetLeft;
+        rect.top += current.offsetTop;
+        current = current.parentNode;
+      }
+      return rect;
+    },
+
     /**
      * Publish the iterator facade to easily support iteration and accessors
      * @see iterator below
