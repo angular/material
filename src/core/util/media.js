@@ -10,7 +10,7 @@ angular.module('material.core')
  * @example $mdMedia('(min-width: 1200px)') == true if device-width >= 1200px
  * @example $mdMedia('max-width: 300px') == true if device-width <= 300px (sanitizes input, adding parens)
  */
-function mdMediaFactory($window, $mdUtil, $timeout, $mdConstant) {
+function mdMediaFactory($mdConstant, $mdUtil, $rootScope, $window) {
   var queriesCache = $mdUtil.cacheFactory('$mdMedia:queries', {capacity: 15});
   var resultsCache = $mdUtil.cacheFactory('$mdMedia:results', {capacity: 15});
 
@@ -42,13 +42,16 @@ function mdMediaFactory($window, $mdUtil, $timeout, $mdConstant) {
   }
 
   function updateAll() {
-    var keys = cache.keys();
-    if (keys.length) {
-      for (var i = 0, ii = keys.length; i < ii; i++) {
-        cache.put(keys[i], !!$window.matchMedia(keys[i]).matches);
+    var keys = resultsCache.keys();
+    var len = keys.length;
+
+    if (len) {
+      for (var i = 0; i < len; i++) {
+        add(keys[i]);
       }
-      // trigger a $digest()
-      $timeout(angular.noop);
+
+      // Trigger a $digest() if not already in progress
+      $rootScope.$evalAsync();
     }
   }
 }
