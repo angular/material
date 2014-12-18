@@ -261,8 +261,9 @@ angular.module('material.core')
   }
 
   /*
-   * Angular's $cacheFactory doesn't have a keys() method,
-   * so we add one ourself.
+   * Inject a 'keys()' method into Angular's $cacheFactory. Then
+   * head-hook all other methods
+   *
    */
   function cacheFactory(id, options) {
     var cache = $cacheFactory(id, options);
@@ -288,7 +289,7 @@ angular.module('material.core')
 
     cache._destroy = cache.destroy;
     cache.destroy = function() {
-      keys = null;
+      keys = {};
       return cache._destroy();
     };
 
