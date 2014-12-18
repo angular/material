@@ -232,9 +232,7 @@ function SidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $co
      */
     function onKeyDown(ev) {
       if (ev.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
-        close();
-        ev.preventDefault();
-        ev.stopPropagation();
+        close(ev);
       }
     }
 
@@ -243,10 +241,11 @@ function SidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $co
      * apply the CSS close transition... Then notify the controller
      * to close() and perform its own actions.
      */
-    function close() {
-      $timeout(function(){
-        sidenavCtrl.close();
-      });
+    function close(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      return sidenavCtrl.close();
     }
 
   }
