@@ -33,18 +33,14 @@ angular.module('material.components.tooltip', [
  * @param {expression=} md-visible Boolean bound to whether the tooltip is
  * currently visible.
  */
-function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdTheming) {
+function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdTheming, $rootElement) {
 
   var TOOLTIP_SHOW_DELAY = 400;
   var TOOLTIP_WINDOW_EDGE_SPACE = 8;
-  // We have to append tooltips to the body, because we use
-  // getBoundingClientRect() to find where to append the tooltip.
-  var tooltipParent = angular.element(document.body);
 
   return {
     restrict: 'E',
     transclude: true,
-    require: '^?mdContent',
     template:
       '<div class="md-background"></div>' +
       '<div class="md-content" ng-transclude></div>',
@@ -57,6 +53,14 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
   function postLink(scope, element, attr, contentCtrl) {
     $mdTheming(element);
     var parent = element.parent();
+
+    // Look for the nearest parent md-content, stopping at the rootElement.
+    var current = element.parent()[0];
+    while (current && current !== $rootElement[0] && current !== document.body) {
+      if (current.tagName && current.tagName.toLowerCase() == 'md-content') break;
+      current = current.parentNode;
+    }
+    var tooltipParent = angular.element(current || document.body);
 
     // We will re-attach tooltip when visible
     element.detach();
@@ -123,7 +127,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       // Wait until the element has been in the dom for two frames before
       // fading it in.
       // Additionally, we position the tooltip twice to avoid positioning bugs
-      //positionTooltip();
+      positionTooltip();
       $$rAF(function() {
 
         $$rAF(function() {
@@ -145,13 +149,8 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     }
 
     function positionTooltip() {
-      var tipRect = element[0].getBoundingClientRect();
-      var parentRect = parent[0].getBoundingClientRect();
-
-      if (contentCtrl) {
-        parentRect.top += contentCtrl.$element.prop('scrollTop');
-        parentRect.left += contentCtrl.$element.prop('scrollLeft');
-      }
+      var tipRect = $mdUtil.elementRect(element, tooltipParent);
+      var parentRect = $mdUtil.elementRect(parent, tooltipParent);
 
       // Default to bottom position if possible
       var tipDirection = 'bottom';
@@ -163,12 +162,12 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       // If element bleeds over left/right of the window, place it on the edge of the window.
       newPosition.left = Math.min(
         newPosition.left,
-        $window.innerWidth - tipRect.width - TOOLTIP_WINDOW_EDGE_SPACE
+        tooltipParent.prop('scrollWidth') - tipRect.width - TOOLTIP_WINDOW_EDGE_SPACE
       );
       newPosition.left = Math.max(newPosition.left, TOOLTIP_WINDOW_EDGE_SPACE);
 
       // If element bleeds over the bottom of the window, place it above the parent.
-      if (newPosition.top + tipRect.height > $window.innerHeight) {
+      if (newPosition.top + tipRect.height > tooltipParent.prop('scrollHeight')) {
         newPosition.top = parentRect.top - tipRect.height;
         tipDirection = 'top';
       }
