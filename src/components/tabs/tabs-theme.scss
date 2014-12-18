@@ -4,7 +4,7 @@ $tabs-inactive-color: map-get($tabs-color-palette, '100') !default;
 $tabs-active-color: $primary-color-palette-contrast-color !default;
 $tabs-disabled-color: $foreground-quarternary-color !default;
 $tabs-focus-color: $foreground-primary-color !default;
-$tabs-highlight-color: #ffff85;
+$tabs-highlight-color: #ffff85 !default;
 
 md-tabs.md-THEME_NAME-theme {
   .md-header {
