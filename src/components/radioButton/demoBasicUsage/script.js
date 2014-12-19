@@ -15,6 +15,10 @@ angular.module('radioDemo1', ['ngMaterial'])
     { label: '4', value: '4' }
   ];
 
+  $scope.submit = function() {
+    alert('submit');
+  };
+
   $scope.addItem = function() {
     var r = Math.ceil(Math.random() * 1000);
     $scope.radioData.push({ label: r, value: r });

@@ -1,5 +1,5 @@
 
-<div ng-controller="AppCtrl" >
+<form ng-submit="submit()" ng-controller="AppCtrl" >
     <p>Selected Value: <span class="radioValue">{{ data.group1 }}</span> </p>
 
     <md-radio-group ng-model="data.group1">
@@ -30,4 +30,4 @@
       <md-button ng-click="removeItem()">Remove</md-button>
     </p>
 
-</div>
+</form>

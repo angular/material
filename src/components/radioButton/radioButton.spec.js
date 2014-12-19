@@ -140,6 +140,29 @@ describe('radioButton', function() {
       expect($rootScope.color).toBe('blue');
     }));
 
+    it('should trigger a submit', inject(function($compile, $rootScope, $mdConstant) {
+
+      $rootScope.testValue = false;
+      $rootScope.submitFn = function(){
+        $rootScope.testValue = true;
+      };
+      var element = $compile('<div><form ng-submit="submitFn()">' +
+                              '<md-radio-group ng-model="color">' +
+                              '<md-radio-button value="white"></md-radio-button>' +
+                              '</md-radio-group>' +
+                            '</form></div>')($rootScope);
+
+      var formElement = element.find('form'),
+          rbGroupElement = element.find('md-radio-group');
+
+      rbGroupElement.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.ENTER
+      });
+
+      expect($rootScope.testValue).toBe(true);
+    }));
+
     it('should be disabled', inject(function($compile, $rootScope) {
       var element = $compile('<md-radio-group ng-model="color">' +
                               '<md-radio-button value="white" ng-disabled="isDisabled"></md-radio-button>' +
