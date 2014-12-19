@@ -1,3 +1,66 @@
+<a name="0.7.0-rc1"></a>
+### 0.7.0-rc1  (2014-12-19)
+
+
+#### Bug Fixes
+
+* **$$interimElement:** make templates work with custom interpolation symbols ([d5aa68d1](https://github.com/angular/material/commit/d5aa68d1d7b146a30c45580d10c2e70bc736db95))
+* **build:** correct  in buildConfig.js ([6caccf75](https://github.com/angular/material/commit/6caccf7577aeb877ce294111adb4e21a74cad171), closes [#981](https://github.com/angular/material/issues/981))
+* **button:** fix hover on flat buttons ([de587772](https://github.com/angular/material/commit/de58777211bad5b5c31d5a7afe16adc498569be7))
+* **checkbox:**
+  * only add focus border if label is not empty ([74973487](https://github.com/angular/material/commit/749734876d9c39021b1d210f89ff51e1ca3c77e9), closes [#944](https://github.com/angular/material/issues/944))
+  * added css support for disabled states ([d1920839](https://github.com/angular/material/commit/d19208397c946222c28ce1d6644930bb1c255e83))
+* **demo:** Update slider demo to work in IE11 ([39559808](https://github.com/angular/material/commit/395598089bef548b76282679da71a05aeab1bf25), closes [#653](https://github.com/angular/material/issues/653))
+* **filenames:** updated component .scss names to match conventions ([629b753f](https://github.com/angular/material/commit/629b753ff348b805e4ff73a2f66d354f2d42841d))
+* **layout:** `flex="n"` attrs set height for column layout, width for row ([d3577798](https://github.com/angular/material/commit/d3577798c7384a003f0fa548e948c6201e86491d), closes [#937](https://github.com/angular/material/issues/937))
+* **mdToast:** Puts index above dialog ([4ae4e072](https://github.com/angular/material/commit/4ae4e072020fe1e59da69e23500c134463936ee7), closes [#903](https://github.com/angular/material/issues/903))
+* **switch:** only add focus border if label is not empty ([9c24cc93](https://github.com/angular/material/commit/9c24cc93497aa228a9513e40c15303edd73d865c), closes [#944](https://github.com/angular/material/issues/944))
+* **tooltip:** fix bugs in Safari & Firefox, as well as scrolling bugs ([0d265292](https://github.com/angular/material/commit/0d2652928b11e899f7a88a6f497720226d65f228), closes [#593](https://github.com/angular/material/issues/593))
+
+
+#### Features
+
+* **theming:** use $mdThemingProvider ([47f0d09e](https://github.com/angular/material/commit/47f0d09e9ebd87891703fa2b7e81355ce3952a86))
+
+
+#### Breaking Changes
+
+* Themes are no longer defined by linked CSS files.
+
+Themes are now defined through Javascript only. A 'theme template' is
+bundled into angular-material.js, and then Javascript is used to
+generate theme css for every theme the user defines.
+
+The `default` theme is still shipped with angular-material.
+
+If you used another theme (for example, the `purple` theme), change your code from this:
+
+```html
+<link rel="stylesheet" href="/themes/purple-theme.css">
+<div md-theme="purple">
+  <md-button class="md-primary">Purple</md-button>
+</div>
+```
+
+To this:
+
+```js
+var app = angular.module('myApp', ['ngMaterial']);
+app.config(function($mdThemingProvider) {
+  //will use the colors from default theme for any color not defined.
+  $mdThemingProvider.theme('purple')
+    .primaryColor('purple');
+});
+```
+```html
+<div md-theme="purple">
+  <md-button class="md-primary">Purple</md-button>
+</div>
+```
+
+For more information, read the updated [Theme](https://material.angularjs.org/#/Theming/01_introduction) documentation -  ([47f0d09e](https://github.com/angular/material/commit/47f0d09e9ebd87891703fa2b7e81355ce3952a86))
+
+
 <a name="0.6.1"></a>
 ## 0.6.1  (2014-12-08)
 
