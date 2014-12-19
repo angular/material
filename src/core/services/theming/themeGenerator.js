@@ -95,7 +95,7 @@ angular.module('material.core.themeGenerator', [])
     // `map` overwritten
     // Example: var neonRedMap = $mdThemingProvider.extendPalette('red', { 50: '#f5fafafa' });
     function extendPalette(name, map) {
-      return checkPaletteValid(name,  angular.extend({}, PALETTES[name] || {}, map) );
+      return checkPaletteValid(name,  _extend({}, PALETTES[name] || {}, map) );
     }
   
     // Make sure that palette has all required hues
@@ -123,7 +123,7 @@ angular.module('material.core.themeGenerator', [])
       var parentTheme = typeof inheritFrom === 'string' ? THEMES[inheritFrom] : inheritFrom;
       var theme = new Theme(name);
   
-      parentTheme && angular.extend(theme.colors, parentTheme.colors);
+      parentTheme && _extend(theme.colors, parentTheme.colors);
       THEMES[name] = theme;
   
       return theme;
@@ -150,18 +150,20 @@ angular.module('material.core.themeGenerator', [])
         
         var newDefaultHues = self.isDark ? DARK_DEFAULT_HUES : LIGHT_DEFAULT_HUES;
         var oldDefaultHues = self.isDark ? LIGHT_DEFAULT_HUES : DARK_DEFAULT_HUES;
-  
-        angular.forEach(newDefaultHues, function(newDefaults, colorType) {
-          var color = self.colors[colorType];
-          var oldDefaults = oldDefaultHues[colorType];
+        
+        var newDefaults, colorType, color, oldDefaults, hueName;
+        for (colorType in newDefaultHues) {
+          newDefaults = newDefaultHues[colorType];
+          oldDefaults = oldDefaultHues[colorType];
+          color = self.colors[colorType];
           if (color) {
-            for (var hueName in color.hues) {
+            for (hueName in color.hues) {
               if (color.hues[hueName] === oldDefaults[hueName]) {
                 color.hues[hueName] = newDefaults[hueName];
               }
             }
           }
-        });
+        }
   
         return self;
       }
@@ -171,7 +173,7 @@ angular.module('material.core.themeGenerator', [])
         self[colorType + 'Color'] = function setColorType(paletteName, hues) {
           var color = self.colors[colorType] = {
             name: paletteName,
-            hues: angular.extend({}, defaultHues, hues)
+            hues: _extend({}, defaultHues, hues)
           };
   
           Object.keys(color.hues).forEach(function(name) {
@@ -235,8 +237,10 @@ angular.module('material.core.themeGenerator', [])
       });
     
       // For each type, generate rules for each hue (ie. default, md-hue-1, md-hue-2, md-hue-3)
-      angular.forEach(color.hues, function(hueValue, hueName) {
-        var newRule = rules
+      var hueValue, hueName, newRule;
+      for (hueName in color.hues) {
+        hueValue = color.hues[hueName];
+        newRule = rules
           .replace(hueRegex, function(match, _, colorType, hueType, opacity) {
             return rgba(palette[hueValue][hueType === 'color' ? 'value' : 'contrast'], opacity);
           });
@@ -244,7 +248,7 @@ angular.module('material.core.themeGenerator', [])
           newRule = newRule.replace(themeNameRegex, '.md-' + theme.name + '-theme.md-' + hueName);
         }
         generatedRules.push(newRule);
-      });
+      }
     
       return generatedRules.join('');
     }
@@ -255,7 +259,9 @@ angular.module('material.core.themeGenerator', [])
       // components as templates
     
       // Expose contrast colors for palettes to ensure that text is always readable
-      angular.forEach(PALETTES, sanitizePalette);
+      for (var paletteName in PALETTES) {
+        sanitizePalette(PALETTES[paletteName], paletteName);
+      }
     
       // Break the CSS into individual rules
       var rules = template.split(/\}(?!(\}|'|"|;))/)
@@ -294,11 +300,13 @@ angular.module('material.core.themeGenerator', [])
     
       // For each theme, use the color palettes specified for `primary`, `warn` and `accent`
       // to generate CSS rules.
-      angular.forEach(THEMES, function(theme) {
+      var theme, themeName;
+      for (themeName in THEMES) {
+        theme = THEMES[themeName];
         THEME_COLOR_TYPES.forEach(function(colorType) {
           styleString += parseRules(theme, colorType, rulesByType[colorType] + '');
         });
-      });
+      }
     
       // Insert our newly minted styles into the DOM
       return styleString;
@@ -320,9 +328,12 @@ angular.module('material.core.themeGenerator', [])
         delete palette.contrastDarkColors;
     
         // Change { 'A100': '#fffeee' } to { 'A100': { value: '#fffeee', contrast:DARK_CONTRAST_COLOR }
-        angular.forEach(palette, function(hueValue, hueName) {
+        var hueValue, hueName, rgbValue;
+        for (hueName in palette) {
+          hueValue = palette[hueName];
+          
           // Map everything to rgb colors
-          var rgbValue = colorToRgbaArray(hueValue);
+          rgbValue = colorToRgbaArray(hueValue);
           if (!rgbValue) {
             throw new Error("Color %1, in palette %2's hue %3, is invalid. Hex or rgb(a) color expected."
                             .replace('%1', hueValue)
@@ -334,14 +345,15 @@ angular.module('material.core.themeGenerator', [])
             value: rgbValue,
             contrast: getContrastColor()
           };
-          function getContrastColor() {
-            if (defaultContrast === 'light') {
-              return darkColors.indexOf(hueName) > -1 ? DARK_CONTRAST_COLOR : LIGHT_CONTRAST_COLOR;
-            } else {
-              return lightColors.indexOf(hueName) > -1 ? LIGHT_CONTRAST_COLOR : DARK_CONTRAST_COLOR;
-            }
+        }
+        
+        function getContrastColor() {
+          if (defaultContrast === 'light') {
+            return darkColors.indexOf(hueName) > -1 ? DARK_CONTRAST_COLOR : LIGHT_CONTRAST_COLOR;
+          } else {
+            return lightColors.indexOf(hueName) > -1 ? LIGHT_CONTRAST_COLOR : DARK_CONTRAST_COLOR;
           }
-        });
+        }
       }
     
     }
@@ -359,7 +371,7 @@ angular.module('material.core.themeGenerator', [])
     }
     
     function colorToRgbaArray(clr) {
-      if (angular.isArray(clr) && clr.length == 3) return clr;
+      if (Array.isArray(clr) && clr.length == 3) return clr;
       if (/^rgb/.test(clr)) {
         return clr.replace(/(^\s*rgba?\(|\)\s*$)/g, '').split(',').map(function(value) {
           return parseInt(value, 10);
@@ -385,6 +397,22 @@ angular.module('material.core.themeGenerator', [])
       return opacity && opacity.length ?
         'rgba(' + rgbArray.join(',') + ',' + opacity + ')' :
         'rgb(' + rgbArray.join(',') + ')';
+    }
+    
+    
+    function _extend(dst) {
+      for (var i = 1, ii = arguments.length; i < ii; i++) {
+        var obj = arguments[i];
+        if (obj) {
+          var keys = Object.keys(obj);
+          for (var j = 0, jj = keys.length; j < jj; j++) {
+            var key = keys[j];
+            dst[key] = obj[key];
+          }
+        }
+      }
+    
+      return dst;
     }
     
   })());
