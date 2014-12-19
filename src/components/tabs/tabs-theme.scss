@@ -3,7 +3,7 @@ $tabs-header-background-color: map-get($tabs-color-palette, '500') !default;
 $tabs-inactive-color: map-get($tabs-color-palette, '100') !default;
 $tabs-active-color: $primary-color-palette-contrast-color !default;
 $tabs-disabled-color: $foreground-quarternary-color !default;
-$tabs-highlight-color: #ffff85;
+$tabs-highlight-color: $primary-color-palette-contrast-color !default;
 
 md-tabs.md-THEME_NAME-theme {
   .md-header {
@@ -52,6 +52,7 @@ md-tabs.md-THEME_NAME-theme {
     }
     &:focus {
       color: '{{primary-contrast}}';
+      background-color: rgba($tabs-highlight-color, 0.1);
     }
     .md-ripple-container {
       color: $tabs-highlight-color;

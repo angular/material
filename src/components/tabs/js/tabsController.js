@@ -99,9 +99,6 @@ function MdTabsController($scope, $element, $mdUtil, $$rAF) {
     if (!tab || tab.isSelected || tab.isDisabled()) return;
     if (!tabsList.contains(tab)) return;
 
-    if (!angular.isDefined(self.tabToFocus)) {
-      tab.element.focus();
-    }
     self.deselect(self.getSelectedItem());
 
     $scope.selectedIndex = self.indexOf(tab);

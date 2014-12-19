@@ -124,6 +124,8 @@ md-tab {
   border: 1px dotted transparent;
   padding: 20px 24px;
   box-sizing: border-box;
+  transition: background 0.35s $swift-ease-in-out-timing-function,
+              color 0.35s $swift-ease-in-out-timing-function;
 
   &[disabled] {
     pointer-events: none;
