@@ -1,5 +1,5 @@
 angular.module('tabsDemo2', ['ngMaterial'])
-  .controller('AppCtrl', function ($scope) {
+  .controller('AppCtrl', function ($scope, $log) {
     var tabs = [
       { title: 'One', content: "Tabs will become paginated if there isn't enough room for them."},
       { title: 'Two', content: "You can swipe left and right on a mobile device to change tabs."},
@@ -16,8 +16,10 @@ angular.module('tabsDemo2', ['ngMaterial'])
     $scope.tabs = tabs;
     $scope.selectedIndex = 2;
 
-    $scope.announceSelected = announceSelected;
-    $scope.announceDeselected = announceDeselected;
+    $scope.$watch('selectedIndex', function(current, old){
+      if ( old && (old != current)) $log.debug('Goodbye ' + tabs[old].title + '!');
+      if ( current )                $log.debug('Hello ' + tabs[current].title + '!');
+    });
 
     $scope.addTab = function (title, view) {
       view = view || title + " Content View";
@@ -32,14 +34,6 @@ angular.module('tabsDemo2', ['ngMaterial'])
         }
       }
     };
-
-    function announceDeselected(tab) {
-      $scope.farewell = 'Goodbye ' + tab.title + '!';
-    }
-
-    function announceSelected(tab) {
-      $scope.greeting = 'Hello ' + tab.title + '!';
-    }
 
   });
 

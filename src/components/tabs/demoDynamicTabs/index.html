@@ -2,8 +2,6 @@
 
   <md-tabs md-selected="selectedIndex">
     <md-tab ng-repeat="tab in tabs"
-            md-on-select="announceSelected(tab)"
-            md-on-deselect="announceDeselected(tab)"
             ng-disabled="tab.disabled"
             label="{{tab.title}}">
 
