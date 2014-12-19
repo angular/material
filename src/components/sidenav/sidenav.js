@@ -125,7 +125,7 @@ function SidenavService($mdComponentRegistry, $q) {
  *   - `<md-sidenav md-is-locked-open="$media('min-width: 1000px')"></md-sidenav>`
  *   - `<md-sidenav md-is-locked-open="$media('sm')"></md-sidenav>` (locks open on small screens)
  */
-function SidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $compile, $mdTheming, $q) {
+function SidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $compile, $mdTheming, $q, $document) {
   return {
     restrict: 'E',
     scope: {
@@ -183,6 +183,8 @@ function SidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $co
 
       parent[isOpen ? 'on' : 'off']('keydown', onKeyDown);
       backdrop[isOpen ? 'on' : 'off']('click', close);
+
+      scope.triggeringElement = $document[0].activeElement;
 
       return promise = $q.all([
         $animate[isOpen ? 'enter' : 'leave'](backdrop, parent),
@@ -244,7 +246,10 @@ function SidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $co
       ev.preventDefault();
       ev.stopPropagation();
 
-      return sidenavCtrl.close();
+      return sidenavCtrl.close()
+                        .then(function() {
+                          scope.triggeringElement && scope.triggeringElement.focus();
+                        });
     }
 
   }
