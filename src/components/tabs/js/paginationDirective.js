@@ -34,7 +34,6 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout, $mdM
       angular.element($window).off('resize', debouncedUpdatePagination);
     });
 
-    scope.$watch(tabsCtrl.getSelectedItem, onSelectedTabChange);
     scope.$watch(function() { return tabsCtrl.tabToFocus; }, onTabFocus);
 
     // Make sure we don't focus an element on the next page
@@ -52,24 +51,13 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout, $mdM
       }
     }
 
-    function onSelectedTabChange(selectedTab) {
-      if (!selectedTab) return;
-
-      if (state.active) {
-        var selectedTabPage = getPageForTab(selectedTab);
-        setPage(selectedTabPage);
-      }
-    }
-
     // Called when page is changed by a user action (click)
     function userChangePage(increment) {
       var sizeData = state.tabData;
       var newPage = Math.max(0, Math.min(sizeData.pages.length - 1, state.page + increment));
       var newTabIndex = sizeData.pages[newPage][ increment > 0 ? 'firstTabIndex' : 'lastTabIndex' ];
       var newTab = tabsCtrl.itemAt(newTabIndex);
-
-      setPage(newPage).then(function() { newTab.element.focus(); });
-      tabsCtrl.select(newTab);
+      onTabFocus(newTab);
     }
 
     function updatePagination() {
@@ -149,13 +137,13 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout, $mdM
 
     function shouldStretchTabs() {
       switch (scope.stretchTabs) {
-        case 'no':  return false;
-        case 'yes': return true;
-        default:    return $mdMedia('sm');
+        case 'never':  return false;
+        case 'always': return true;
+        default:       return $mdMedia('sm');
       }
     }
 
-    function calculateTabData() {
+    function calculateTabData(noAdjust) {
       var clientWidth = element.parent().prop('offsetWidth');
       var tabsWidth = clientWidth - PAGINATORS_WIDTH - 1;
       var $tabs = angular.element(tabs);
@@ -189,12 +177,12 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout, $mdM
             left: data.left,
             firstTabIndex: index,
             lastTabIndex: index,
-            tabs: [ tab ]
+            tabs: [ data ]
           };
           pages.push(currentPage);
         } else {
           currentPage.lastTabIndex = index;
-          currentPage.tabs.push(tab);
+          currentPage.tabs.push(data);
         }
         totalWidth = data.right;
         max = Math.max(max, tabWidth);
@@ -202,28 +190,25 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout, $mdM
       });
       $tabs.css('max-width', tabsWidth + 'px');
 
-      if (pages.length === 1 && shouldStretchTabs()) { adjustForStretchedTabs(); }
+      if (!noAdjust && shouldStretchTabs()) {
+        return adjustForStretchedTabs();
+      } else {
+        return {
+          width: totalWidth,
+          max: max,
+          tabs: tabData,
+          pages: pages,
+          tabElements: tabs
+        };
+      }
 
-      return {
-        width: totalWidth,
-        max: max,
-        tabs: tabData,
-        pages: pages,
-        tabElements: tabs
-      };
 
       function adjustForStretchedTabs() {
-        var tabWidth = Math.ceil(clientWidth / tabData.length);
-        if (tabWidth >= max) {
-          $tabs.css('width', tabWidth + 'px');
-          angular.forEach(tabData, function (tab, index) {
-            tab.width = tabWidth;
-            tab.left = tabWidth * index;
-            tab.right = tab.left + tab.width;
-            tab.filler = 0;
-          });
-          totalWidth = tabsWidth;
-        }
+        var canvasWidth = pages.length === 1 ? clientWidth : tabsWidth;
+        var tabsPerPage = Math.min(Math.floor(canvasWidth / max), tabs.length);
+        var tabWidth    = Math.floor(canvasWidth / tabsPerPage);
+        $tabs.css('width', tabWidth + 'px');
+        return calculateTabData(true);
       }
     }
 

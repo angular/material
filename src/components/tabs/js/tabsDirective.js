@@ -45,11 +45,27 @@ angular.module('material.components.tabs')
  * *  If the currently active tab is the last tab, then next() action will select the first tab.
  * *  Any markup (other than **`<md-tab>`** tags) will be transcluded into the tab header area BEFORE the tab buttons.
  *
+ * ### Explanation of tab stretching
+ *
+ * Initially, tabs will have an inherent size.  This size will either be defined by how much space is needed to accommodate their text or set by the user through CSS.  Calculations will be based on this size.
+ *
+ * On mobile devices, tabs will be expanded to fill the available horizontal space.  When this happens, all tabs will become the same size.
+ *
+ * On desktops, by default, stretching will never occur.
+ *
+ * This default behavior can be overridden through the `md-stretch-tabs` attribute.  Here is a table showing when stretching will occur:
+ *
+ * `md-stretch-tabs` | mobile    | desktop
+ * ------------------|-----------|--------
+ * `auto`            | stretched | ---
+ * `always`          | stretched | stretched
+ * `never`           | ---       | ---
+ *
  * @param {integer=} md-selected Index of the active/selected tab
  * @param {boolean=} md-no-ink If present, disables ink ripple effects.
  * @param {boolean=} md-no-bar If present, disables the selection ink bar.
  * @param {string=}  md-align-tabs Attribute to indicate position of tab buttons: `bottom` or `top`; default is `top`
- * @param {boolean=} md-stretch-tabs Attribute to indicate whether or not to stretch tabs: `auto`, `yes`, or `no`; default is `auto`
+ * @param {boolean=} md-stretch-tabs Attribute to indicate whether or not to stretch tabs: `auto`, `always`, or `never`; default is `auto`
  *
  * @usage
  * <hljs lang="html">
@@ -117,7 +133,7 @@ function TabsDirective($mdTheming) {
 
   function postLink(scope, element, attr, tabsCtrl, transclude) {
 
-    scope.stretchTabs = attr.hasOwnProperty('mdStretchTabs') ? attr.mdStretchTabs : 'auto';
+    scope.stretchTabs = attr.hasOwnProperty('mdStretchTabs') ? attr.mdStretchTabs || 'always' : 'auto';
 
     $mdTheming(element);
     configureAria();

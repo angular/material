@@ -53,7 +53,7 @@ angular.module('material.components.tabs')
  * </hljs>
  *
  */
-function MdTabDirective($mdInkRipple, $compile, $mdUtil, $mdConstant) {
+function MdTabDirective($mdInkRipple, $compile, $mdUtil, $mdConstant, $timeout) {
   return {
     restrict: 'E',
     require: ['mdTab', '^mdTabs'],
@@ -92,8 +92,8 @@ function MdTabDirective($mdInkRipple, $compile, $mdUtil, $mdConstant) {
       var tabsCtrl = ctrls[1]; // Controller for ALL tabs
 
       scope.$watch(
-          function () { return element.text(); },
-          function () { tabsCtrl.scope.$broadcast('$mdTabsChanged'); }
+          function () { return attr.label; },
+          function () { $timeout(function () { tabsCtrl.scope.$broadcast('$mdTabsChanged'); }, 0, false); }
       );
 
       transcludeTabContent();
