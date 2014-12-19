@@ -52,7 +52,7 @@ md-tabs.md-THEME_NAME-theme {
     }
     &:focus {
       color: '{{primary-contrast}}';
-      background-color: rgba($tabs-highlight-color, 0.1);
+      background-color: '{{primary-contrast-0.1}}';
     }
     .md-ripple-container {
       color: $tabs-highlight-color;
