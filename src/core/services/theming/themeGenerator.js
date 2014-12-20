@@ -81,7 +81,7 @@
     rgba: rgba
   };
   
-  if (angular) {
+  if (typeof angular !== 'undefined') {
     angular.module('material.core.themeGenerator', []).constant("$mdThemeGenerator", out);
   } else {
     return out;
