@@ -321,6 +321,10 @@ function buildJs(isRelease) {
     .pipe(plumber())
     .pipe(ngAnnotate());
 
+  gulp.src(['src/core/services/theming/themeGenerator.js'])
+    .pipe(insert.prepend('module.exports='))
+    .pipe(gulp.dest('dist'));
+    
   var themeBuildStream = gulp.src(
     config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss'))
   )

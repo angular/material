@@ -1,8 +1,4 @@
 (function() {
-'use strict';
-
-angular.module('material.core.themeGenerator', [])
-  .constant('$mdThemeGenerator', (function() {
     'use strict';
     
     
@@ -67,7 +63,7 @@ angular.module('material.core.themeGenerator', [])
       '700', '800', '900', 'A100', 'A200', 'A400', 'A700'
     ];
     
-    return {
+    var out = {
       definePalette: definePalette,
       extendPalette: extendPalette,
       registerTheme: registerTheme,
@@ -83,6 +79,12 @@ angular.module('material.core.themeGenerator', [])
       THEMES: THEMES,
       parseRules: parseRules,
       rgba: rgba
+    };
+    
+    if (angular) {
+      angular.module('material.core.themeGenerator', []).constant("$mdThemeGenerator", out);
+    } else {
+      return out;
     }
     
     // Example: $mdThemingProvider.definePalette('neonRed', { 50: '#f5fafa', ... });
@@ -414,7 +416,5 @@ angular.module('material.core.themeGenerator', [])
     
       return dst;
     }
-    
-  })());
     
 })();
