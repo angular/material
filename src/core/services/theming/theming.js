@@ -528,7 +528,7 @@ function colorToRgbaArray(clr) {
     });
   }
   if (clr.charAt(0) == '#') clr = clr.substring(1);
-  if (!/^([a-f0-9]{3}){1,2}$/g.test(clr)) return;
+  if (!/^([a-fA-F0-9]{3}){1,2}$/g.test(clr)) return;
 
   var dig = clr.length / 3;
   var red = clr.substr(0, dig);
