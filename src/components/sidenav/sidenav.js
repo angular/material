@@ -292,11 +292,13 @@ function SidenavController($scope, $element, $attrs, $mdComponentRegistry, $q) {
  * @module material.components.sidenav
  *
  */
-function ComponentRegistry($log) {
+function ComponentRegistry($log, $q) {
 
-  var instances = [];
+  var self;
+  var instances = [ ];
+  var pendings = { };
 
-  return {
+  return self = {
     /**
      * Used to print an error when an instance for a handle isn't found.
      */
@@ -334,14 +336,51 @@ function ComponentRegistry($log) {
       instance.$$mdHandle = handle;
       instances.push(instance);
 
-      return function deregister() {
+      resolveWhen();
+
+      return deregister;
+
+      /**
+       * Remove registration for an instance
+       */
+      function deregister() {
         var index = instances.indexOf(instance);
         if (index !== -1) {
           instances.splice(index, 1);
         }
-      };
+      }
+
+      /**
+       * Resolve any pending promises for this instance
+       */
+      function resolveWhen() {
+        var dfd = pendings[handle];
+        if ( dfd ) {
+          dfd.resolve( instance );
+          delete pendings[handle];
+        }
+      }
+    },
+
+    /**
+     * Async accessor to registered component instance
+     * If not available then a promise is created to notify
+     * all listeners when the instance is registered.
+     */
+    when : function(handle) {
+      var deferred = $q.defer();
+      var instance = self.get(handle);
+
+      if ( instance )  {
+        deferred.resolve( instance );
+      } else {
+        pendings[handle] = deferred;
+      }
+
+      return deferred.promise;
     }
   };
+
 }
 
 

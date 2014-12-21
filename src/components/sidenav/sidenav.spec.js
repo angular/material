@@ -117,14 +117,6 @@ describe('mdSidenav', function() {
       expect(el.hasClass('md-closed')).toBe(false);
     }));
 
-    it('should deregister component when element is destroyed', inject(function($mdComponentRegistry) {
-      var el = setup('md-component-id="left"');
-      el.triggerHandler('$destroy');
-
-      var instance = $mdComponentRegistry.get('left');
-      expect(instance).toBe(null);
-    }));
-
   });
 
   describe("controller Promise API", function() {
@@ -238,4 +230,50 @@ describe('mdSidenav', function() {
     }));
   });
 
+  ddescribe('$mdComponentRegistry', function() {
+
+    it('should register component when element is created', inject(function($mdComponentRegistry) {
+      var el = setup('md-component-id="left"');
+      var instance = $mdComponentRegistry.get('left');
+
+      expect(instance).toNotBe(null);
+    }));
+
+    it('should deregister component when element is destroyed', inject(function($mdComponentRegistry) {
+      var el = setup('md-component-id="left"');
+      el.triggerHandler('$destroy');
+
+      var instance = $mdComponentRegistry.get('left');
+      expect(instance).toBe(null);
+    }));
+
+    it('should wait for component registration', inject(function($mdComponentRegistry, $timeout) {
+      var promise = $mdComponentRegistry.when('left');
+      var el = setup('md-component-id="left"');
+      var instance = $mdComponentRegistry.get('left');
+      var resolved = false;
+
+      promise.then(function(inst){   resolved = inst;  });
+      $timeout.flush();
+
+      expect(instance).toBe(resolved);
+    }));
+
+    it('should wait for next component registration', inject(function($mdComponentRegistry, $timeout) {
+      var promise = $mdComponentRegistry.when('left');
+      var el = setup('md-component-id="left"');
+      var instance = $mdComponentRegistry.get('left');
+      var resolved = undefined;
+
+      el.triggerHandler('$destroy');
+
+      promise = $mdComponentRegistry.when('left');
+      promise.then(function(inst){   resolved = inst;  });
+
+      $timeout.flush();
+
+      expect(resolved).toBeUndefined();
+    }));
+
+  });
 });
