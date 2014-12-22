@@ -333,6 +333,8 @@ function ComponentRegistry($log, $q) {
      * @param handle the handle to identify the instance under.
      */
     register: function(instance, handle) {
+      if ( !handle ) return angular.noop;
+
       instance.$$mdHandle = handle;
       instances.push(instance);
 
