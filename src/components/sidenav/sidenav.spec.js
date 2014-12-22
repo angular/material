@@ -230,7 +230,7 @@ describe('mdSidenav', function() {
     }));
   });
 
-  ddescribe('$mdComponentRegistry', function() {
+  describe('$mdComponentRegistry', function() {
 
     it('should register component when element is created', inject(function($mdComponentRegistry) {
       var el = setup('md-component-id="left"');
