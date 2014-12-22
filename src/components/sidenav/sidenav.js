@@ -14,8 +14,7 @@ angular.module('material.components.sidenav', [
   ])
   .factory('$mdSidenav', SidenavService )
   .directive('mdSidenav', SidenavDirective)
-  .controller('$mdSidenavController', SidenavController)
-  .factory('$mdComponentRegistry', ComponentRegistry);
+  .controller('$mdSidenavController', SidenavController);
 
 
 /**
@@ -285,105 +284,6 @@ function SidenavController($scope, $element, $attrs, $mdComponentRegistry, $q) {
   self.destroy = $mdComponentRegistry.register(self, $attrs.mdComponentId);
 }
 
-/*
- * @private
- * @ngdoc factory
- * @name ComponentRegistry
- * @module material.components.sidenav
- *
- */
-function ComponentRegistry($log, $q) {
-
-  var self;
-  var instances = [ ];
-  var pendings = { };
-
-  return self = {
-    /**
-     * Used to print an error when an instance for a handle isn't found.
-     */
-    notFoundError: function(handle) {
-      $log.error('No instance found for handle', handle);
-    },
-    /**
-     * Return all registered instances as an array.
-     */
-    getInstances: function() {
-      return instances;
-    },
-
-    /**
-     * Get a registered instance.
-     * @param handle the String handle to look up for a registered instance.
-     */
-    get: function(handle) {
-      var i, j, instance;
-      for(i = 0, j = instances.length; i < j; i++) {
-        instance = instances[i];
-        if(instance.$$mdHandle === handle) {
-          return instance;
-        }
-      }
-      return null;
-    },
-
-    /**
-     * Register an instance.
-     * @param instance the instance to register
-     * @param handle the handle to identify the instance under.
-     */
-    register: function(instance, handle) {
-      if ( !handle ) return angular.noop;
-
-      instance.$$mdHandle = handle;
-      instances.push(instance);
-
-      resolveWhen();
-
-      return deregister;
-
-      /**
-       * Remove registration for an instance
-       */
-      function deregister() {
-        var index = instances.indexOf(instance);
-        if (index !== -1) {
-          instances.splice(index, 1);
-        }
-      }
-
-      /**
-       * Resolve any pending promises for this instance
-       */
-      function resolveWhen() {
-        var dfd = pendings[handle];
-        if ( dfd ) {
-          dfd.resolve( instance );
-          delete pendings[handle];
-        }
-      }
-    },
-
-    /**
-     * Async accessor to registered component instance
-     * If not available then a promise is created to notify
-     * all listeners when the instance is registered.
-     */
-    when : function(handle) {
-      var deferred = $q.defer();
-      var instance = self.get(handle);
-
-      if ( instance )  {
-        deferred.resolve( instance );
-      } else {
-        pendings[handle] = deferred;
-      }
-
-      return deferred.promise;
-    }
-  };
-
-}
 
 
 })();
