@@ -42,7 +42,7 @@ angular.module('material.components.sidenav', [
  */
 function SidenavService($mdComponentRegistry, $q) {
   return function(handle) {
-    var errorMsg = "SideNav '" + handle + "' is not availabe!";
+    var errorMsg = "SideNav '" + handle + "' is not available!";
 
     // Lookup the controller instance for the specified sidNav instance
     var instance = $mdComponentRegistry.get(handle);
@@ -275,7 +275,7 @@ function SidenavController($scope, $element, $attrs, $mdComponentRegistry, $q) {
 
   // Use Default internal method until overridden by directive postLink
 
-  self.$toggleOpen = function() { return $q.when($scope.isOpen) };
+  self.$toggleOpen = function() { return $q.when($scope.isOpen); };
   self.isOpen = function() { return !!$scope.isOpen; };
   self.open   = function() { return self.$toggleOpen( true );  };
   self.close  = function() { return self.$toggleOpen( false ); };

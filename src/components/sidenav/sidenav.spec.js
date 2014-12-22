@@ -38,7 +38,7 @@ describe('mdSidenav', function() {
       $animate.triggerCallbacks();
       el.parent().triggerHandler({
         type: 'keydown',
-        keyCode: $mdConstant.KEY_CODE.ESCAPE 
+        keyCode: $mdConstant.KEY_CODE.ESCAPE
       });
       $timeout.flush();
       expect($rootScope.show).toBe(false);
@@ -142,30 +142,36 @@ describe('mdSidenav', function() {
       var controller = el.controller('mdSidenav');
 
       var openDone = 0, closeDone = 0, toggleDone = 0;
-      var onDone = function() { openDone++; };
+      var onOpen = function() { openDone++; };
       var onClose = function() { closeDone++; };
       var onToggle = function() { toggleDone++; };
 
-      controller.open()
-                .then( onDone )
-                .then( controller.close )
-                .then( onClose );
+      controller
+        .open()
+        .then(onOpen)
+        .then(controller.close)
+        .then(onClose);
 
       flush();
       expect(openDone).toBe(1);
-
-
-      controller.close()
-                .then( onClose );
       flush();
+      expect(closeDone).toBe(1);
+
+      controller
+        .close()
+        .then(onClose);
+
+      flush();
+      expect(closeDone).toBe(2);
       expect(scope.isOpen).toBe(false);
 
+      controller
+        .toggle()
+        .then(onToggle);
 
-      controller.toggle()
-                .then( onToggle );
       flush();
+      expect(toggleDone).toBe(1);
       expect(scope.isOpen).toBe(true);
-
     });
 
 
@@ -174,14 +180,14 @@ describe('mdSidenav', function() {
       var controller = el.controller('mdSidenav');
 
       var openDone = 0, closeDone = 0;
-      var onDone = function() { openDone++; };
+      var onOpen = function() { openDone++; };
       var onClose = function() { closeDone++; };
 
       controller
         .open()
-        .then(onDone)
+        .then(onOpen)
         .then(controller.open)
-        .then(onDone);
+        .then(onOpen);
 
       flush();
       expect(openDone).toBe(2);
