@@ -1,0 +1,18 @@
+
+md-icon {
+  margin: auto;
+  padding: 0;
+  display: inline-block;
+  margin-top: 5px;
+  background-repeat: no-repeat no-repeat;
+  pointer-events: none;
+}
+svg, object {
+  fill: currentColor;
+  color: currentColor;
+}
+
+md-class-icon {
+  // display: block;
+  // margin: 0 auto;
+}
