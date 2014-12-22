@@ -75,10 +75,10 @@ $button-fab-toast-offset: $toast-height + $toast-margin;
 
   &.md-fab {
 
-    @include fab-position(bottom-right, auto, $button-fab-width/2, $button-fab-height/2, auto);
-    @include fab-position(bottom-left, auto, auto, $button-fab-height/2, $button-fab-width/2);
-    @include fab-position(top-right, $button-fab-height/2, $button-fab-width/2, auto, auto);
-    @include fab-position(top-left, $button-fab-height/2, auto, auto, $button-fab-width/2);
+    @include fab-position(bottom-right, auto, ($button-fab-width - $button-fab-padding)/2, ($button-fab-height - $button-fab-padding)/2, auto);
+    @include fab-position(bottom-left, auto, auto, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2);
+    @include fab-position(top-right, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2, auto, auto);
+    @include fab-position(top-left, ($button-fab-height - $button-fab-padding)/2, auto, auto, ($button-fab-width - $button-fab-padding)/2);
 
     z-index: $z-index-fab;
 
