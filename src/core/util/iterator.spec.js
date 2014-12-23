@@ -254,6 +254,32 @@ describe('iterator', function() {
 
     });
 
+  });
+
+  describe('use to provide navigation with validation ', function () {
+    var list, iter;
+    var validate = function(item) { return (item !== 14) && (item !== 'Andrew'); };
+
+    beforeEach(inject(function ($mdUtil) {
+      list = [ 13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99 ];
+      iter = $mdUtil.iterator(list);
+    }));
+
+    it('should use next() properly', function () {
+
+      expect( iter.next(13,      validate) ).toBe('Marcy');
+      expect( iter.next('Marcy', validate) ).toBe(15);
+      expect( iter.next(15,      validate) ).toBe(16);
+
+    });
+
+    it('should use previous() properly', function () {
+
+      expect( iter.previous(16,      validate) ).toBe(15);
+      expect( iter.previous(15,      validate) ).toBe('Marcy');
+      expect( iter.previous('Marcy', validate) ).toBe(13);
+
+    });
 
   });
 

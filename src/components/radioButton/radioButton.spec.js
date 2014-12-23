@@ -156,6 +156,40 @@ describe('radioButton', function() {
       expect($rootScope.color).toBe('white');
     }));
 
+    it('should skip disabled on arrow key', inject(function($compile, $rootScope, $mdConstant) {
+      var element = $compile(
+        '<md-radio-group ng-model="color">' +
+        '  <md-radio-button value="red"   ></md-radio-button>' +
+        '  <md-radio-button value="white" ng-disabled="isDisabled"></md-radio-button>' +
+        '  <md-radio-button value="blue" ></md-radio-button>' +
+        '</md-radio-group>'
+      )($rootScope);
+      var rbGroupElement = element.eq(0);
+
+      $rootScope.$apply('isDisabled = true');
+      $rootScope.$apply('color = "red"');
+      expect($rootScope.color).toBe("red");
+
+
+      rightArrow();   expect($rootScope.color).toEqual('blue');
+      rightArrow();   expect($rootScope.color).toEqual('red');
+      rightArrow();   expect($rootScope.color).toEqual('blue');
+
+
+      $rootScope.$apply('isDisabled = false');
+
+      rightArrow();
+      rightArrow();   expect($rootScope.color).toEqual('white');
+      rightArrow();   expect($rootScope.color).toEqual('blue');
+
+      function rightArrow() {
+          rbGroupElement.triggerHandler({
+            type: 'keydown',
+            keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
+          });
+        }
+    }));
+
 
     it('should allow {{expr}} as value', inject(function($compile, $rootScope) {
       $rootScope.some = 11;
