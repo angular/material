@@ -54,14 +54,18 @@ md-sidenav {
     min-width: 0;
   }
 
-  &.md-locked-open-add {
+  &.md-closed.md-locked-open-add {
+    width: 0;
     min-width: 0;
+    transform: translate3d(0%, 0, 0);
   }
 
-  &.md-locked-open-add-active {
-    transition: width $swift-ease-in-duration $swift-ease-in-timing-function;
+  &.md-closed.md-locked-open-add-active {
+    transition: width $swift-ease-in-duration $swift-ease-in-timing-function,
+                min-width $swift-ease-in-duration $swift-ease-in-timing-function;
     width: $sidenav-default-width;
     min-width: $sidenav-default-width;
+    transform: translate3d(0%, 0, 0);
   }
 
   @extend .md-sidenav-left;
