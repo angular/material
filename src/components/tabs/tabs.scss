@@ -1,186 +1,206 @@
-// Tabs
 $tabs-paginator-width: $baseline-grid * 4 !default;
 $tabs-tab-width: $baseline-grid * 12 !default;
 $tabs-header-height: 48px !default;
 
-md-tabs {
-  box-sizing: border-box;
-  display: block;
-  width: 100%;
-  font-weight: 500;
-  overflow: auto;
-
-  *,
-  *:before,
-  *:after {
-    box-sizing: border-box;
-  }
-}
-
-.md-header {
-  width: 100%;
-  height: $tabs-header-height;
-  box-sizing: border-box;
+md-tab-data {
   position: relative;
-}
-
-.md-paginator {
-  z-index: 1;
-  margin-right: -2px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: $tabs-paginator-width;
-  min-height: 100%;
-  cursor: pointer;
-  border: none;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-position: center center;
-
-  position: absolute;
-
-  &:focus {
-    outline: none;
-  }
-  &.md-prev {
-    left: 0;
-  }
-  &.md-next {
-    right: 0;
-
-    md-icon {
-      transform: rotate(180deg);
-    }
-
-  }
-}
-
-/* If `center` justified, change to left-justify if paginating */
-md-tabs[center] .md-header:not(.md-paginating) .md-header-items {
-  justify-content: center;
-}
-.md-paginating .md-header-items-container {
-  left: $tabs-paginator-width;
-  right: $tabs-paginator-width;
-}
-.md-header-items-container {
-  overflow: hidden;
-  position: absolute;
+  top: 0;
   left: 0;
   right: 0;
-  height: 100%;
-  white-space: nowrap;
-  font-size: 14px;
-  font-weight: 500;
-  text-transform: uppercase;
-  margin: auto;
-
-  .md-header-items {
-    display: flex;
-    box-sizing: border-box;
-    transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
-    transform: translate3d(0, 0, 0);
-    height: 100%;
-    width: 99999px;
-  }
-}
-
-.md-tabs-content {
-  overflow: hidden;
-  width: 100%;
-  position: relative;
-  .md-tab-content {
-    height: 100%;
-    &.ng-hide {
-      &.ng-animate {
-        display: block !important;
-      }
-    }
-    &.ng-animate {
-      transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
-      transform: translateX(0);
-      &.ng-hide-add {
-        transform: translateX(-100%);
-        &.md-transition-rtl {
-          transform: translateX(100%);
-        }
-      }
-      &.ng-hide-remove {
-        position: absolute;
-        transform: translateX(100%);
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        &.md-transition-rtl {
-          transform: translateX(-100%);
-        }
-        &.ng-hide-remove-active {
-          transform: translateX(0);
-        }
-      }
-    }
-  }
-}
-
-md-tabs-ink-bar {
-  $time: 0.25s;
-  $delay: $time * 0.3;
-  $shortTime: $time;
-  z-index: 1;
-  display: none;
-  position: absolute;
-  left: 0;
   bottom: 0;
-  box-sizing: border-box;
-  height: 2px;
-  margin-top: -2px;
-  transform: scaleX(1);
-  transform-origin: 0 0;
-  &.md-transition-right {
-    transition: right $time $swift-ease-in-out-timing-function,
-                left  $shortTime $swift-ease-in-out-timing-function $delay;
+  z-index: -1;
+  opacity: 0;
+}
+md-tabs {
+  display: block;
+  margin: 0;
+  border-radius: 2px;
+  overflow: hidden;
+  &[md-align-tabs="bottom"] {
+    padding-bottom: $tabs-header-height;
+    position: relative;
+    md-tabs-wrapper {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: $tabs-header-height;
+    }
   }
-  &.md-transition-left {
-    transition: right $shortTime $swift-ease-in-out-timing-function $delay,
-                left  $time $swift-ease-in-out-timing-function;
+  &[md-border-bottom] {
+    md-tabs-wrapper {
+      border-width: 0 0 1px;
+      border-style: solid;
+    }
+  }
+  md-tabs-wrapper {
+    display: block;
+    position: relative;
+    md-ink-bar {
+      position: absolute;
+      left: auto;
+      right: auto;
+      bottom: 0;
+      height: 2px;
+      &.md-left {
+        transition: left ($swift-ease-in-out-duration * 0.45) $swift-ease-in-out-timing-function,
+                    right $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+      }
+      &.md-right {
+        transition: left $swift-ease-in-out-duration $swift-ease-in-out-timing-function,
+                    right ($swift-ease-in-out-duration * 0.45) $swift-ease-in-out-timing-function;
+      }
+    }
+    md-tab {
+      padding: 12px 24px 14px;
+      position: absolute;
+      z-index: -1;
+      white-space: nowrap;
+      box-shadow: none;
+      border: none;
+      left: -9999px;
+      text-transform: uppercase;
+      font-size: 14px;
+      &:after {
+        content: attr(label);
+      }
+    }
+    .md-tab {
+      font-size: 14px;
+      text-align: center;
+      line-height: $tabs-header-height - 24;
+      padding: 12px 24px;
+      transition: background-color 0.35s $swift-ease-in-out-timing-function;
+      cursor: pointer;
+      white-space: nowrap;
+      position: relative;
+      text-transform: uppercase;
+      float: left;
+      font-weight: 500;
+      &.md-focus {
+        box-shadow: none;
+        outline: none;
+      }
+      &.md-active {
+        cursor: default;
+      }
+      &.md-disabled {
+        pointer-events: none;
+        touch-action: pan-y;
+        user-select: none;
+        -webkit-user-drag: none;
+        opacity: 0.5;
+        cursor: default;
+      }
+      &.ng-leave {
+        transition: none;
+      }
+    }
+    md-prev-button,
+    md-next-button {
+      height: 100%;
+      width: $tabs-paginator-width;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      line-height: 1em;
+      z-index: 2;
+      cursor: pointer;
+      font-size: 16px;
+      background: transparent no-repeat center center;
+      transition: $swift-ease-in-out;
+      md-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0);
+      }
+      &.md-disabled {
+        opacity: 0.25;
+        cursor: default;
+      }
+      &.ng-leave {
+        transition: none;
+      }
+    }
+    md-prev-button {
+      left: 0;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPiA8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPiA8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPiA8ZyBpZD0iSGVhZGVyIj4gPGc+IDxyZWN0IHg9Ii02MTgiIHk9Ii0xMjA4IiBmaWxsPSJub25lIiB3aWR0aD0iMTQwMCIgaGVpZ2h0PSIzNjAwIi8+IDwvZz4gPC9nPiA8ZyBpZD0iTGFiZWwiPiA8L2c+IDxnIGlkPSJJY29uIj4gPGc+IDxwb2x5Z29uIHBvaW50cz0iMTUuNCw3LjQgMTQsNiA4LDEyIDE0LDE4IDE1LjQsMTYuNiAxMC44LDEyIAkJIiBzdHlsZT0iZmlsbDp3aGl0ZTsiLz4gPHJlY3QgZmlsbD0ibm9uZSIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ii8+IDwvZz4gPC9nPiA8ZyBpZD0iR3JpZCIgZGlzcGxheT0ibm9uZSI+IDxnIGRpc3BsYXk9ImlubGluZSI+IDwvZz4gPC9nPiA8L3N2Zz4NCg==');
+    }
+    md-next-button {
+      right: 0;
+      background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPiA8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPiA8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPiA8ZyBpZD0iSGVhZGVyIj4gPGc+IDxyZWN0IHg9Ii02MTgiIHk9Ii0xMzM2IiBmaWxsPSJub25lIiB3aWR0aD0iMTQwMCIgaGVpZ2h0PSIzNjAwIi8+IDwvZz4gPC9nPiA8ZyBpZD0iTGFiZWwiPiA8L2c+IDxnIGlkPSJJY29uIj4gPGc+IDxwb2x5Z29uIHBvaW50cz0iMTAsNiA4LjYsNy40IDEzLjIsMTIgOC42LDE2LjYgMTAsMTggMTYsMTIgCQkiIHN0eWxlPSJmaWxsOndoaXRlOyIvPiA8cmVjdCBmaWxsPSJub25lIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz4gPC9nPiA8L2c+IDxnIGlkPSJHcmlkIiBkaXNwbGF5PSJub25lIj4gPGcgZGlzcGxheT0iaW5saW5lIj4gPC9nPiA8L2c+IDwvc3ZnPg0K');
+      md-icon {
+        transform: translate3d(-50%, -50%, 0) rotate(180deg);
+      }
+    }
+    md-tabs-canvas {
+      @include pie-clearfix;
+      position: relative;
+      overflow: hidden;
+      display: block;
+      &.md-paginated {
+        margin: 0 $tabs-paginator-width;
+      }
+    }
+    md-pagination-wrapper {
+      @include pie-clearfix;
+      display: block;
+      transition: left $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+      position: relative;
+      width: 999999px;
+    }
+    &.md-stretch-tabs {
+      md-pagination-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        md-tab-item {
+          flex: 1;
+        }
+      }
+    }
+  }
+  md-tabs-content-wrapper {
+    display: block;
+    min-height: 200px;
+    position: relative;
+    overflow: hidden;
+    md-tab-content {
+      display: block;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      transform: translateX(0);
+      transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+      &.ng-leave, &.md-no-transition {
+        transition: none;
+      }
+      &.md-left {
+        transform: translateX(-100%);
+        animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
+        opacity: 0;
+        * {
+          transition: visibility 0s linear;
+          transition-delay: $swift-ease-in-out-duration;
+          visibility: hidden;
+        }
+      }
+      &.md-right {
+        transform: translateX(100%);
+        animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
+        opacity: 0;
+        * {
+          transition: visibility 0s linear;
+          transition-delay: $swift-ease-in-out-duration;
+          visibility: hidden;
+        }
+      }
+    }
   }
 }
 
-md-tab {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 0;
-  overflow: hidden;
-  height: 100%;
-  text-align: center;
-  cursor: pointer;
-  padding: 20px 24px;
-  box-sizing: border-box;
-  transition: none;
-  &.md-tab-themed {
-    transition: background 0.35s $swift-ease-in-out-timing-function,
-                color 0.35s $swift-ease-in-out-timing-function;
-  }
-
-  &[disabled] {
-    pointer-events: none;
-    cursor: default;
-  }
-
-  @include not-selectable();
-
-  &:focus {
-    outline: none;
-  }
-
-  md-tab-label {
-    flex: 1 1 auto;
-    z-index: 100;
-    opacity: 1;
-    overflow: hidden;
-  }
+@keyframes md-tab-content-hide {
+  0% { opacity: 1; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
 }
