@@ -17,7 +17,7 @@
 
   <md-sidenav layout="column"
               style="overflow: hidden; display: flex;"
-              class="md-sidenav-left md-whiteframe-z2"
+              class="site-sidenav md-sidenav-left md-whiteframe-z2"
               md-component-id="left"
               md-is-locked-open="$media('gt-sm')">
 
@@ -66,14 +66,14 @@
       <div class="md-toolbar-tools" ng-click="openMenu()" flex layout="column">
 
         <div layout="row" flex>
-          <button class="menu-icon" hide-gt-sm aria-label="Toggle Menu" style="position: relative; top: -5px;">
+          <button class="menu-icon" hide-gt-sm aria-label="Toggle Menu" style="position: relative; top: -2px;">
             <md-icon icon="img/icons/ic_menu_24px.svg"></md-icon>
           </button>
-          <div style="line-height: 28px;" hide-sm ng-if="menu.currentSection.name">{{menu.currentSection.name}}</div>
+          <div style="line-height: 36px;" hide-sm ng-if="menu.currentSection.name">{{menu.currentSection.name}}</div>
           <span layout="column" layout-align="center center" class="menu-separator-icon" ng-if="menu.currentPage" style="padding: 0 10px;">
             <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide-sm>
           </span>
-          <div style="line-height: 28px;" ng-bind="(menu.currentPage | humanizeDoc) || 'Angular Material'"></div>
+          <div style="line-height: 36px;" ng-bind="(menu.currentPage | humanizeDoc) || 'Angular Material'"></div>
           <div flex></div>
 
           <div ng-repeat="doc in currentComponent.docs">
@@ -88,7 +88,7 @@
             ng-href="#/demo/{{currentComponent.name}}"
             style="position: relative; padding-left: 30px; margin-right: 15px;">
             <md-icon icon="/img/icons/ic_play_arrow_24px.svg" style="
-                height: 28px;
+                height: 36px;
                 position: absolute;
                 left: 0px;
                 top: -3px;"></md-icon>
@@ -99,7 +99,7 @@
             ng-href="{{currentDoc.githubUrl}}"
             style="position: relative; padding-left: 30px; margin-right: 15px;">
             <md-icon icon="/img/icons/ic_launch_24px.svg" style="
-                height: 28;
+                height: 36px;
                 position: absolute;
                 left: 0px;
                 top: -3px;"></md-icon>
@@ -112,7 +112,7 @@
             hide-sm
             style="position: relative; padding-left: 30px;">
             <md-icon icon="/img/icons/ic_launch_24px.svg" style="
-                height: 28;
+                height: 36px;
                 position: absolute;
                 left: 0px;
                 top: -3px;"></md-icon>

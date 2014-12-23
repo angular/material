@@ -4,6 +4,7 @@ md-sidenav {
   position: absolute;
 
   width: $sidenav-default-width;
+  min-width: $sidenav-default-width;
   bottom: 0;
   z-index: $z-index-sidenav;
   background-color: white;
@@ -20,18 +21,47 @@ md-sidenav {
        apply all styling in a show/hide animation */
     transition: 0s all;
   }
+
   &.md-closed-add.md-closed-add-active,
   &.md-closed-remove.md-closed-remove-active {
     transition: $swift-ease-out;
   }
 
-  &.md-locked-open,
-  &.md-locked-open.md-closed,
-  &.md-locked-open.md-closed.md-sidenav-left,
-  &.md-locked-open.md-closed.md-sidenav-right {
+  &.md-locked-open-add,
+  &.md-locked-open-remove {
     position: static;
     display: flex;
     transform: translate3d(0, 0, 0);
+  }
+  &.md-locked-open {
+    width: $sidenav-default-width;
+    min-width: $sidenav-default-width;
+  }
+
+  &.md-locked-open,
+  &.md-locked-open.md-closed,
+  &.md-locked-open.md-closed.md-sidenav-left,
+  &.md-locked-open.md-closed.md-sidenav-right,
+  &.md-locked-open-remove.md-closed {
+    position: static;
+    display: flex;
+    transform: translate3d(0, 0, 0);
+  }
+  &.md-locked-open-remove-active {
+    transition: width $swift-ease-in-duration $swift-ease-in-timing-function,
+                min-width $swift-ease-in-duration $swift-ease-in-timing-function;
+    width: 0;
+    min-width: 0;
+  }
+
+  &.md-locked-open-add {
+    min-width: 0;
+  }
+
+  &.md-locked-open-add-active {
+    transition: width $swift-ease-in-duration $swift-ease-in-timing-function;
+    width: $sidenav-default-width;
+    min-width: $sidenav-default-width;
   }
 
   @extend .md-sidenav-left;

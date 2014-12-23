@@ -169,8 +169,12 @@ function SidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $co
      * Toggle the DOM classes to indicate `locked`
      * @param isLocked
      */
-    function updateIsLocked(isLocked) {
-      element.toggleClass('md-locked-open', !!isLocked);
+    function updateIsLocked(isLocked, oldValue) {
+      if (isLocked === oldValue) {
+        element.toggleClass('md-locked-open', !!isLocked);
+      } else {
+        $animate[isLocked ? 'addClass' : 'removeClass'](element, 'md-locked-open');
+      }
       backdrop.toggleClass('md-locked-open', !!isLocked);
     }
 

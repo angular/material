@@ -409,3 +409,12 @@ md-content.demo-source-container > hljs > pre > code.highlight {
   padding-left:32px !important;
   padding-right:32px !important;
 }
+
+.site-sidenav,
+.site-sidenav.md-locked-open-add-active,
+.site-sidenav.md-locked-open {
+  min-width: 218px;
+}
+.site-sidenav > * {
+  min-width: 218px;
+}
