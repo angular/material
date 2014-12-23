@@ -197,6 +197,10 @@ gulp.task('build-all-modules', function() {
 });
 
 function buildModule(module, isRelease) {
+  if ( module.indexOf(".") < 0) {
+    module = "material.components." + module;
+  }
+
   var name = module.split('.').pop();
   gutil.log('Building ' + module + (isRelease && ' minified' || '') + ' ...');
 
