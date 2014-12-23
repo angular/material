@@ -1,47 +1,28 @@
 <div ng-controller="AppCtrl" class="tabsdemoStaticTabs sample">
 
     <md-tabs class="md-accent" md-selected="data.selectedIndex">
-      <md-tab id="tab1" aria-controls="tab1-content">
-        Item One
+      <md-tab id="tab1">
+        <md-tab-label>Item One</md-tab-label>
+        <md-tab-template>
+          View for Item #1 <br/>
+          data.selectedIndex = 0;
+        </md-tab-template>
       </md-tab>
-      <md-tab id="tab2" aria-controls="tab2-content"
-              ng-disabled="data.secondLocked">
-        {{data.secondLabel}}
+      <md-tab id="tab2" ng-disabled="data.secondLocked">
+        <md-tab-label>{{data.secondLabel}}</md-tab-label>
+        <md-tab-template>
+          View for Item #2 <br/>
+          data.selectedIndex = 1;
+        </md-tab-template>
       </md-tab>
-      <md-tab id="tab3" aria-controls="tab3-content">
-        Item Three
+      <md-tab id="tab3">
+        <md-tab-label>Item Three</md-tab-label>
+        <md-tab-template>
+          View for Item #3 <br/>
+          data.selectedIndex = 2;
+        </md-tab-template>
       </md-tab>
     </md-tabs>
-
-    <ng-switch on="data.selectedIndex" class="tabpanel-container">
-        <div role="tabpanel"
-             id="tab1-content"
-             aria-labelledby="tab1"
-             ng-switch-when="0"
-             md-swipe-left="next()"
-             md-swipe-right="previous()" >
-            View for Item #1<br/>
-            data.selectedIndex = 0
-        </div>
-        <div role="tabpanel"
-             id="tab2-content"
-             aria-labelledby="tab2"
-             ng-switch-when="1"
-             md-swipe-left="next()"
-             md-swipe-right="previous()" >
-            View for {{data.secondLabel}}<br/>
-            data.selectedIndex = 1
-        </div>
-        <div role="tabpanel"
-             id="tab3-content"
-             aria-labelledby="tab3"
-             ng-switch-when="2"
-             md-swipe-left="next()"
-             md-swipe-right="previous()" >
-            View for Item #3<br/>
-            data.selectedIndex = 2
-        </div>
-    </ng-switch>
 
     <div class="after-tabs-area" layout="row" layout-sm="column" layout-margin layout-align="left center">
         <md-input-container>

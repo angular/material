@@ -11,15 +11,15 @@ describe('<md-tabs>', function() {
           return 'Expected ' + angular.mock.dump(actual) + (this.isNot ? ' not ' : ' ') + 
             'to be the active tab. Failures: ' + fails.join(', ');
         };
-
-        if (!actual.hasClass('active')) {
+        if (!actual.length) {
+          fails.push('element not found');
+          return;
+        }
+        if (!actual.hasClass('md-active')) {
           fails.push('does not have active class');
         }
         if (actual.attr('aria-selected') != 'true') {
           fails.push('aria-selected is not true');
-        } 
-        if (actual.attr('tabindex') != '0') {
-          fails.push('tabindex is not 0');
         }
         return fails.length === 0;
       }
@@ -38,35 +38,35 @@ describe('<md-tabs>', function() {
   function triggerKeydown(el, keyCode) {
     return el.triggerHandler({
       type: 'keydown',
-      keyCode: keyCode
+      keyCode: keyCode,
+      preventDefault: angular.noop
     });
   }
 
   describe('activating tabs', function() {
 
     it('should select first tab by default', function() {
-      var tabs = setup('<md-tabs>' +
-            '<md-tab></md-tab>' +
-            '<md-tab></md-tab>' +
-            '</md-tabs>');
-      expect(tabs.find('md-tab').eq(0)).toBeActiveTab();
+      var tabs = setup('<md-tabs>\
+            <md-tab label="a">a</md-tab>\
+            <md-tab label="b">b</md-tab>\
+          </md-tabs>');
+      expect(tabs.find('md-tab-item').eq(0)).toBeActiveTab();
     });
 
-    it('should select & focus tab on click', inject(function($document) {
+    it('should select & focus tab on click', inject(function($document, $rootScope) {
       var tabs = setup('<md-tabs>' +
             '<md-tab></md-tab>' +
             '<md-tab></md-tab>' +
             '<md-tab ng-disabled="true"></md-tab>' +
             '</md-tabs>');
-      var tabItems = tabs.find('md-tab');
+      var tabItems = tabs.find('md-tab-item');
 
-      tabs.find('md-tab').eq(1).triggerHandler('click');
+      tabs.find('md-tab-item').eq(1).triggerHandler('click');
+      $rootScope.$apply();
       expect(tabItems.eq(1)).toBeActiveTab();
-      expect($document.activeElement).toBe(tabItems[1]);
-      
-      tabs.find('md-tab').eq(0).triggerHandler('click');
+
+      tabs.find('md-tab-item').eq(0).triggerHandler('click');
       expect(tabItems.eq(0)).toBeActiveTab();
-      expect($document.activeElement).toBe(tabItems[0]);
     }));
 
     it('should focus tab on arrow if tab is enabled', inject(function($document, $mdConstant, $timeout) {
@@ -75,30 +75,32 @@ describe('<md-tabs>', function() {
                        '<md-tab ng-disabled="true"></md-tab>' +
                        '<md-tab></md-tab>' +
                        '</md-tabs>');
-      var tabItems = tabs.find('md-tab');
+      var tabItems = tabs.find('md-tab-item');
+
       expect(tabItems.eq(0)).toBeActiveTab();
 
       // Boundary case, do nothing
-      triggerKeydown(tabItems.eq(0), $mdConstant.KEY_CODE.LEFT_ARROW);
+      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.LEFT_ARROW);
       expect(tabItems.eq(0)).toBeActiveTab();
 
       // Tab 0 should still be active, but tab 2 focused (skip tab 1 it's disabled)
-      triggerKeydown(tabItems.eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
+      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
       expect(tabItems.eq(0)).toBeActiveTab();
-      $timeout.flush();
-      expect($document.activeElement).toBe(tabItems[2]);
+
+      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
+      expect(tabItems.eq(2)).toBeActiveTab();
 
       // Boundary case, do nothing
-      triggerKeydown(tabItems.eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
-      expect(tabItems.eq(0)).toBeActiveTab();
-      $timeout.flush();
-      expect($document.activeElement).toBe(tabItems[2]);
+      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
+      expect(tabItems.eq(2)).toBeActiveTab();
+
+      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
+      expect(tabItems.eq(2)).toBeActiveTab();
 
       // Skip tab 1 again, it's disabled
-      triggerKeydown(tabItems.eq(2), $mdConstant.KEY_CODE.LEFT_ARROW);
+      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.LEFT_ARROW);
+      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
       expect(tabItems.eq(0)).toBeActiveTab();
-      $timeout.flush();
-      expect($document.activeElement).toBe(tabItems[0]);
 
     }));
 
@@ -107,30 +109,16 @@ describe('<md-tabs>', function() {
                        '<md-tab></md-tab>' +
                        '<md-tab></md-tab>' +
                        '</md-tabs>');
-      var tabItems = tabs.find('md-tab');
+      var tabItems = tabs.find('md-tab-item');
+      tabs.find('md-tab-item').eq(0).triggerHandler('click');
 
-      triggerKeydown(tabItems.eq(1), $mdConstant.KEY_CODE.ENTER);
+      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
+      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
       expect(tabItems.eq(1)).toBeActiveTab();
 
-      triggerKeydown(tabItems.eq(0), $mdConstant.KEY_CODE.SPACE);
+      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.LEFT_ARROW);
+      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.SPACE);
       expect(tabItems.eq(0)).toBeActiveTab();
-    }));
-
-    it('the active tab\'s content should always be connected', inject(function($timeout) {
-      var tabs = setup('<md-tabs>' +
-                       '<md-tab label="label1!">content1!</md-tab>' +
-                       '<md-tab label="label2!">content2!</md-tab>' +
-                       '</md-tabs>');
-      var tabItems = tabs.find('md-tab');
-      var contents = angular.element(tabs[0].querySelectorAll('.md-tab-content'));
-
-      $timeout.flush();
-      expect(contents.eq(0).scope().$$disconnected).toBeFalsy();
-      expect(contents.eq(1).scope().$$disconnected).toBeTruthy();
-
-      tabItems.eq(1).triggerHandler('click');
-      expect(contents.eq(0).scope().$$disconnected).toBeTruthy();
-      expect(contents.eq(1).scope().$$disconnected).toBeFalsy();
     }));
 
     it('should bind to selected', function() {
@@ -139,7 +127,7 @@ describe('<md-tabs>', function() {
                        '<md-tab></md-tab>' +
                        '<md-tab></md-tab>' +
                        '</md-tabs>');
-      var tabItems = tabs.find('md-tab');
+      var tabItems = tabs.find('md-tab-item');
 
       expect(tabItems.eq(0)).toBeActiveTab();
       expect(tabs.scope().current).toBe(0);
@@ -151,28 +139,12 @@ describe('<md-tabs>', function() {
       expect(tabs.scope().current).toBe(2);
     });
 
-    it('should use active binding', function() {
-      var tabs = setup('<md-tabs>' +
-                       '<md-tab md-active="active0"></md-tab>' +
-                       '<md-tab md-active="active1"></md-tab>' +
-                       '<md-tab md-active="active2"></md-tab>' +
-                       '</md-tabs>');
-      var tabItems = tabs.find('md-tab');
-
-      tabs.scope().$apply('active2 = true');
-      expect(tabItems.eq(2)).toBeActiveTab();
-      tabs.scope().$apply('active1 = true');
-      expect(tabItems.eq(1)).toBeActiveTab();
-      tabs.scope().$apply('active1 = false');
-      expect(tabItems.eq(1)).not.toBeActiveTab();
-    });
-
     it('disabling active tab', function() {
       var tabs = setup('<md-tabs>' +
                        '<md-tab ng-disabled="disabled0"></md-tab>' +
                        '<md-tab ng-disabled="disabled1"></md-tab>' +
                        '</md-tabs>');
-      var tabItems = tabs.find('md-tab');
+      var tabItems = tabs.find('md-tab-item');
 
       expect(tabItems.eq(0)).toBeActiveTab();
 
@@ -194,19 +166,31 @@ describe('<md-tabs>', function() {
                        '</md-tabs>');
       var tabItems = tabs.find('md-tab');
 
-      tabItems.eq(0).triggerHandler('$md.swipeleft');
+      return; //-- TODO: Wire up swipe logic
+
+      tabItems.eq(0).isolateScope().onSwipe({
+        type: 'swipeleft'
+      });
       expect(tabItems.eq(1)).toBeActiveTab();
 
-      tabItems.eq(1).triggerHandler('$md.swipeleft');
+      tabItems.eq(1).isolateScope().onSwipe({
+        type: 'swipeleft'
+      });
       expect(tabItems.eq(1)).toBeActiveTab();
 
-      tabItems.eq(1).triggerHandler('$md.swipeleft');
+      tabItems.eq(1).isolateScope().onSwipe({
+        type: 'swipeleft'
+      });
       expect(tabItems.eq(1)).toBeActiveTab();
 
-      tabItems.eq(1).triggerHandler('$md.swiperight');
+      tabItems.eq(1).isolateScope().onSwipe({
+        type: 'swiperight'
+      });
       expect(tabItems.eq(0)).toBeActiveTab();
 
-      tabItems.eq(0).triggerHandler('$md.swiperight');
+      tabItems.eq(0).isolateScope().onSwipe({
+        type: 'swiperight'
+      });
       expect(tabItems.eq(0)).toBeActiveTab();
     });
 
@@ -214,45 +198,35 @@ describe('<md-tabs>', function() {
 
   describe('tab label & content DOM', function() {
 
-    it('should support all 3 label types', function() {
+    it('should support both label types', function() {
       var tabs1 = setup('<md-tabs>' +
-                       '<md-tab label="<b>super</b> label"></md-tab>' +
+                       '<md-tab label="super label"></md-tab>' +
                        '</md-tabs>');
-      expect(tabs1.find('md-tab-label').html()).toBe('<b>super</b> label');
+      expect(tabs1.find('md-tab-item').text()).toBe('super label');
       
       var tabs2 = setup('<md-tabs>' +
-                   '<md-tab><b>super</b> label</md-tab>' +
-                   '</md-tabs>');
-      expect(tabs2.find('md-tab-label').html()).toBe('<b>super</b> label');
-
-      var tabs3 = setup('<md-tabs>' +
                    '<md-tab><md-tab-label><b>super</b> label</md-tab-label></md-tab>' +
                    '</md-tabs>');
-      expect(tabs3.find('md-tab-label').html()).toBe('<b>super</b> label');
+      expect(tabs2.find('md-tab-item').text()).toBe('super label');
+
     });
 
     it('should support content inside with each kind of label', function() {
       var tabs1 = setup('<md-tabs>' + 
                         '<md-tab label="label that!"><b>content</b> that!</md-tab>' +
                         '</md-tabs>');
-      expect(tabs1.find('md-tab-label').html()).toBe('label that!');
-      expect(tabs1[0].querySelector('.md-tabs-content .md-tab-content').innerHTML)
-        .toBe('<b>content</b> that!');
+      expect(tabs1.find('md-tab-item').text()).toBe('label that!');
+      expect(tabs1[0].querySelector('md-tab-content').textContent).toBe('content that!');
 
-      var tabs2 = setup('<md-tabs>' + 
-                        '<md-tab><md-tab-label>label that!</md-tab-label><b>content</b> that!</md-tab>' +
-                        '</md-tabs>');
-      expect(tabs1.find('md-tab-label').html()).toBe('label that!');
-      expect(tabs1[0].querySelector('.md-tabs-content .md-tab-content').innerHTML)
-        .toBe('<b>content</b> that!');
-    });
-
-    it('should connect content with child of the outside scope', function() {
-      var tabs = setup('<md-tabs>' +
-                       '<md-tab label="label!">content!</md-tab>' +
-                       '</md-tabs>');
-      var content = angular.element(tabs[0].querySelector('.md-tab-content'));
-      expect(content.scope().$parent.$id).toBe(tabs.find('md-tab').scope().$id);
+      var tabs2 = setup('<md-tabs>\
+        <md-tab>\
+          <md-tab-label>label that!</md-tab-label>\
+          <md-tab-template><b>content</b> that!</md-tab-template>\
+        </md-tab>\
+      </md-tabs>');
+      expect(tabs1.find('md-tab-item').text()).toBe('label that!');
+      expect(tabs1[0].querySelector('md-tab-content').textContent)
+        .toBe('content that!');
     });
 
   });
@@ -263,10 +237,10 @@ describe('<md-tabs>', function() {
       var tabs = setup('<md-tabs>' +
                        '<md-tab label="label!">content!</md-tab>' +
                        '</md-tabs>');
-      var tabItem = tabs.find('md-tab');
-      var tabContent = angular.element(tabs[0].querySelector('.md-tab-content'));
+      var tabItem = tabs.find('md-dummy-tab');
+      var tabContent = angular.element(tabs[0].querySelector('md-tab-content'));
 
-      expect(tabs.attr('role')).toBe('tablist');
+      expect(tabs.find('md-tab-canvas').attr('role')).toBe('tablist');
 
       expect(tabItem.attr('id')).toBeTruthy();
       expect(tabItem.attr('role')).toBe('tab');

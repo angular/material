@@ -1,84 +1,82 @@
 md-tabs.md-THEME_NAME-theme {
-  .md-header {
+  md-tabs-wrapper {
     background-color: transparent;
+    border-color: '{{foreground-4}}';
   }
   .md-paginator md-icon {
     color: '{{primary-color}}';
   }
 
+  md-ink-bar {
+    color: '{{accent-color}}';
+    background: '{{accent-color}}';
+  }
+
+  .md-tab {
+    color: '{{foreground-2}}';
+    &[disabled] {
+      color: '{{foreground-3}}';
+    }
+    &.md-active, &.md-focus {
+      color: '{{primary-color}}';
+    }
+    &.md-focus {
+      background: '{{primary-color-0.1}}';
+    }
+    .md-ripple-container {
+      color: '{{accent-100}}';
+    }
+  }
+
   &.md-accent {
-    .md-header {
+    md-tabs-wrapper {
       background-color: '{{accent-color}}';
     }
 
     md-tab:not([disabled]) {
       color: '{{accent-100}}';
-      &.active {
+      &.md-active, &.md-focus {
         color: '{{accent-contrast}}';
       }
+      &.md-focus {
+        background: '{{accent-contrast-0.1}}';
+      }
+    }
+
+    md-ink-bar {
+      color: '{{primary-600-1}}';
+      background: '{{primary-600-1}}';
     }
   }
 
   &.md-primary {
-    .md-header {
+    md-tabs-wrapper {
       background-color: '{{primary-color}}';
     }
     md-tab:not([disabled]) {
       color: '{{primary-100}}';
-      &.active {
+      &.md-active, &.md-focus {
         color: '{{primary-contrast}}';
       }
-    }
-    md-tab {
-      color: '{{primary-100}}';
-      &[disabled] {
-        color: '{{foreground-3}}';
-      }
-      &:focus {
-        color: '{{primary-contrast}}';
-        background-color: '{{primary-contrast-0.1}}';
-      }
-      &.active {
-        color: '{{primary-contrast}}';
-      }
-      .md-ripple-container {
-        color: '{{primary-contrast}}';
+      &.md-focus {
+        background: '{{primary-contrast-0.1}}';
       }
     }
   }
 
   &.md-warn {
-    .md-header {
+    md-tabs-wrapper {
       background-color: '{{warn-color}}';
     }
 
     md-tab:not([disabled]) {
       color: '{{warn-100}}';
-      &.active {
+      &.md-active, &.md-focus {
         color: '{{warn-contrast}}';
       }
-    }
-  }
-
-
-  md-tabs-ink-bar {
-    color: '{{accent-color}}';
-    background: '{{accent-color}}';
-  }
-
-  md-tab {
-    color: '{{foreground-2}}';
-    &[disabled] {
-      color: '{{foreground-3}}';
-    }
-    &:focus {
-      color: '{{foreground-1}}';
-    }
-    &.active {
-      color: '{{primary-color}}';
-    }
-    .md-ripple-container {
-      color: '{{accent-100}}';
+      &.md-focus {
+        background: '{{warn-contrast-0.1}}';
+      }
     }
   }
 }

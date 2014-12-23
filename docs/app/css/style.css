@@ -518,3 +518,6 @@ md-content.demo-source-container > hljs > pre > code.highlight {
     border: 1px solid #fff;
   }
 }
+demo-source-tabs md-tabs-content-wrapper {
+  height: 400px;
+}
