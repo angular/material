@@ -3,14 +3,14 @@
   angular
     .module('material.core')
     .config( function($provide){
-       $provide.decorator('$mdUtil', ['$delegate', function ($mdUtil){
+       $provide.decorator('$mdUtil', ['$delegate', function ($delegate){
            /**
             * Inject the iterator facade to easily support iteration and accessors
             * @see iterator below
             */
-           $mdUtil.iterator = Iterator;
+           $delegate.iterator = Iterator;
 
-           return $mdUtil;
+           return $delegate;
          }
        ])
      });
