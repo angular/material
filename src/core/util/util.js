@@ -266,17 +266,30 @@ angular.module('material.core')
    */
   function cacheFactory(id, options) {
     var cache = $cacheFactory(id, options);
-
     var keys = {};
+
     cache._put = cache.put;
     cache.put = function(k,v) {
       keys[k] = true;
       return cache._put(k, v);
     };
+
     cache._remove = cache.remove;
     cache.remove = function(k) {
       delete keys[k];
       return cache._remove(k);
+    };
+
+    cache._removeAll = cache.removeAll;
+    cache.removeAll = function() {
+      keys = {};
+      return cache._removeAll();
+    };
+
+    cache._destroy = cache.destroy;
+    cache.destroy = function() {
+      keys = null;
+      return cache._destroy();
     };
 
     cache.keys = function() {
