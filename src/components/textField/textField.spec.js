@@ -77,6 +77,13 @@ describe('Text Field directives', function() {
       }
     });
 
+    it('should have a valid tabindex', function() {
+      var el = setupTextFloat( { tabIndex:"1" }, model);
+
+      expect(el.attr('tabindex')).toBe('-1');
+      expect(el.find('input').attr('tabIndex')).toBe('1');
+    });
+
     it('should set input type `password` properly', function() {
       var el = setupTextFloat( { type:"password" }, model);
       expect( el.find('input').attr('type')).toBe("password");
@@ -236,13 +243,14 @@ describe('Text Field directives', function() {
     md_text_float : '<md-text-float ' +
                 '   type="{{type}}" ' +
                 '   label="{{label}}" ' +
+                '   tabIndex="{{tabIndex}}"' +
                 '   ng-model="{{model}}" >' +
                 '</md-text-float>',
 
-    md_input_group: '<div class="md-input-group" tabindex="-1">' +
+    md_input_group: '<md-input-group tabIndex="-1">' +
                 ' <label>{{label}}</label>' +
-                ' <md-input id="{{id}}" type="{{type}}" ng-model="{{model}}"></md-input>' +
-                '</div>'
+                ' <md-input tabIndex="{{tabIndex}}" id="{{id}}" type="{{type}}" ng-model="{{model}}"></md-input>' +
+                '</md-input-group>'
   };
 
   /**
