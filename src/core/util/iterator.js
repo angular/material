@@ -12,7 +12,7 @@
 
            return $delegate;
          }
-       ])
+       ]);
      });
 
   /**
@@ -170,13 +170,13 @@
     }
 
     /**
-     * Find the next item. If reloop is true and at the end of the list, it will
-     * go back to the first item. If given ,the `validate` callback will be used
+     * Find the next item. If `reloop` is true and at the end of the list, it will
+     * go back to the first item. If given, the `validate` callback will be used to
      * determine whether the next item is valid. If not valid, it will try to find the
      * next item again.
      * @param item
-     * @param {optional} validate function
-     * @param {optional} recursion limit
+     * @param {optional} validate Validation function
+     * @param {optional} limit Recursion limit
      * @returns {*}
      */
     function next(item, validate, limit) {
@@ -191,13 +191,13 @@
     }
 
     /**
-     * Find the previous item. If reloop is true and at the beginning of the list, it will
-     * go back to the last item. If given ,the `validate` callback will be used
+     * Find the previous item. If `reloop` is true and at the beginning of the list, it will
+     * go back to the last item. If given, the `validate` callback will be used to
      * determine whether the previous item is valid. If not valid, it will try to find the
      * previous item again.
      * @param item
-     * @param {optional} validation function
-     * @param {optional} recursion limit
+     * @param {optional} validate Validation function
+     * @param {optional} limit Recursion limit
      * @returns {*}
      */
     function previous(item, validate, limit) {
@@ -229,7 +229,7 @@
 
     /**
      * Has the iteration checked all items in the list
-     * @param item current found item in th list
+     * @param item current found item in the list
      * @param {optional} stopAt index
      * @returns {*|boolean}
      */
