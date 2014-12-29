@@ -416,7 +416,7 @@ describe('iterator', function() {
     });
   });
 
-  ddescribe('use to provide navigation API with relooping and validation', function () {
+  describe('use to provide navigation API with relooping and validation', function () {
     var list, iter;
     var validate1 = function (item) { return (item !== 14) && (item !== 'Andrew'); };
     var validate2 = function () { return false; };
