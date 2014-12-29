@@ -44,8 +44,8 @@
 
       first: first,
       last: last,
-      next: next,
-      previous: previous,
+      next: angular.bind(null, findSubsequentItem, false),
+      previous: angular.bind(null, findSubsequentItem, true),
 
       hasPrevious: hasPrevious,
       hasNext: hasNext
@@ -170,48 +170,6 @@
     }
 
     /**
-     * Find the next item. If reloop is true and at the end of the list, it will
-     * go back to the first item. If given ,the `validate` callback will be used
-     * determine whether the next item is valid. If not valid, it will try to find the
-     * next item again.
-     * @param item
-     * @param {optional} validate function
-     * @param {optional} recursion limit
-     * @returns {*}
-     */
-    function next(item, validate, limit) {
-      validate = validate || trueFn;
-
-      var index = indexOf(item) + 1;
-      var found = inRange(index) ? _items[ index ] : (reloop ? first() : null);
-
-          found = hasCheckedAll(found, limit) ? null : found;
-
-      return !found || validate(found) ? found : next(found, validate, limit || index);
-    }
-
-    /**
-     * Find the previous item. If reloop is true and at the beginning of the list, it will
-     * go back to the last item. If given ,the `validate` callback will be used
-     * determine whether the previous item is valid. If not valid, it will try to find the
-     * previous item again.
-     * @param item
-     * @param {optional} validation function
-     * @param {optional} recursion limit
-     * @returns {*}
-     */
-    function previous(item, validate, limit) {
-      validate = validate || trueFn;
-
-        var index = indexOf(item) - 1;
-        var found = inRange(index) ? _items[ index ] : (reloop ? last() : null);
-
-            found = hasCheckedAll(found, limit) ? null : found;
-
-        return !found || validate(found) ? found : previous(found, validate, limit || index);
-    }
-
-    /**
      * Return first item in the list
      * @returns {*}
      */
@@ -228,15 +186,42 @@
     }
 
     /**
-     * Has the iteration checked all items in the list
-     * @param item current found item in th list
-     * @param {optional} stopAt index
-     * @returns {*|boolean}
+     * Find the next item. If reloop is true and at the end of the list, it will
+     * go back to the first item. If given ,the `validate` callback will be used
+     * determine whether the next item is valid. If not valid, it will try to find the
+     * next item again.
+     * @param item
+     * @param {optional} validate function
+     * @param {optional} recursion limit
+     * @returns {*}
      */
-    function hasCheckedAll(item, stopAt) {
-      return stopAt && item && (indexOf(item) == stopAt);
-    }
+    function findSubsequentItem(backwards, item, validate, limit) {
+      validate = validate || trueFn;
 
+      var curIndex = indexOf(item);
+      if (!inRange(curIndex)) {
+        return null;
+      }
+
+      var nextIndex = curIndex + (backwards ? -1 : 1);
+      var foundItem = null;
+      if (inRange(nextIndex)) {
+        foundItem = _items[nextIndex];
+      } else if (reloop) {
+        foundItem = backwards ? last() : first();
+        nextIndex = indexOf(foundItem);
+      }
+
+      if ((foundItem === null) || (nextIndex === limit)) {
+        return null;
+      }
+
+      if (angular.isUndefined(limit)) {
+        limit = nextIndex;
+      }
+
+      return validate(foundItem) ? foundItem : findSubsequentItem(backwards, foundItem, validate, limit);
+    }
   }
 
 })();
