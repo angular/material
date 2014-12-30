@@ -102,7 +102,9 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout, $mdM
             function () {
               $timeout(function () {
                 if (element[0].offsetParent) {
-                  watcher();
+                  if (angular.isFunction(watcher)) {
+                    watcher();
+                  }
                   debouncedUpdatePagination();
                   watcher = null;
                 }
