@@ -79,7 +79,7 @@ function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria) {
     // For anchor elements, we have to set tabindex manually when the 
     // element is disabled
     if (isAnchor(attr)) {
-      scope.$watch(attr.ngDisabled, function(isDisabled) {
+      scope.$watch(function() {return attr.ngDisabled;}, function(isDisabled) {
         element.attr('tabindex', isDisabled ? -1 : 0);
       });
     }
