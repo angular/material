@@ -145,6 +145,7 @@ code:not(.highlight) {
 .menu-icon {
   background: none;
   border: none;
+  margin-right: 16px;
 }
 .app-toolbar .md-toolbar-tools h3 {
   -webkit-margin-before: 0;
