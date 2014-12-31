@@ -376,7 +376,7 @@ function InterimElementProvider() {
      * for interpolation. This allows pre-defined templates (for components such as dialog, toast etc)
      * to continue to work in apps that use custom interpolation start-/endSymbols.
      *
-     * @param {string} text The test in which to replace `{{` / `}}`
+     * @param {string} text The text in which to replace `{{` / `}}`
      * @returns {string} The modified string using the actual interpolation start-/endSymbols
      */
     function replaceInterpolationSymbols(text) {
