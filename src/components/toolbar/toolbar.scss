@@ -1,8 +1,9 @@
 $toolbar-tools-height: 64px !default;
 $toolbar-height: 64px !default;
 $toolbar-medium-tall-height: 88px !default;
-$toolbar-tall-height: 192px !default;
+$toolbar-tall-height: 128px !default;
 $toolbar-indent-margin: 64px !default;
+$toolbar-padding: 16px !default;
 
 md-toolbar {
   display: flex;
@@ -45,16 +46,15 @@ md-toolbar {
 
   width: 100%;
   height: $toolbar-tools-height;
-  min-height: $toolbar-tools-height;
+  min-height: 100%;
   max-height: $toolbar-tools-height;
   font-size: inherit;
   font-weight: normal;
-  padding: 0 10px;
+  padding: 0 $toolbar-padding;
   margin: 0;
 
   > * {
     font-size: inherit;
-    margin: 0 8px;
   }
   h2, h3 {
     font-weight: normal;
@@ -63,15 +63,14 @@ md-toolbar {
     color: inherit;
     text-decoration: none;
   }
-
+  .fill-height {
+    display: flex;
+    align-items: center;
+  }
+  .md-tools {
+    margin-left: auto;
+  }
   .md-button {
     font-size: 14px;
   }
 }
-
-// .md-toolbar-tools-middle {
-//   position: absolute;
-//   top: calc(33.3333333333336%);
-//   left: 0;
-//   right: 0;
-// }
