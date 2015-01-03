@@ -9,6 +9,10 @@ body {
 
 a {
   color: #3f51b5;
+  text-decoration: none;
+}
+a:hover, a:focus {
+  text-decoration: underline;
 }
 
 table {
@@ -79,6 +83,17 @@ code:not(.highlight) {
   -webkit-font-smoothing: auto;
 }
 
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  text-transform: none;
+  width: 1px;
+}
 .md-sidenav-inner {
   background: #fff;
 }
@@ -95,58 +110,99 @@ code:not(.highlight) {
   margin-bottom: 15px;
 }
 
-.menu-item {
-  background: none;
-  border-width: 0;
-  cursor: pointer;
-  display: block;
-  color: #333;
-  font-size: inherit;
-  line-height: 40px;
-  max-height: 40px;
-  opacity: 1;
+/* Begin Docs Menu */
+.docs-menu,
+.docs-menu ul {
+  list-style: none;
+  padding: 0;
+}
+.docs-menu li {
   margin: 0;
-  outline: none;
-  padding: 0px 28px;
-  position: relative;
+}
+.docs-menu > li {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+.docs-menu .md-button {
+  border-radius: 0;
+  color: inherit;
+  cursor: pointer;
+  font-weight: 400;
+  line-height: 40px;
+  margin: 0;
+  max-height: 40px;
+  overflow: hidden;
+  padding: 0px 16px;
   text-align: left;
   text-decoration: none;
+  white-space: normal;
   width: 100%;
-  z-index: 1;
-  -webkit-transition: 0.45s cubic-bezier(0.35, 0, 0.25, 1);
-  -webkit-transition-property: max-height, background-color, opacity;
-  -moz-transition: 0.45s cubic-bezier(0.35, 0, 0.25, 1);
-  -moz-transition-property: max-height, background-color, opacity;
-  transition: 0.45s cubic-bezier(0.35, 0, 0.25, 1);
-  transition-property: max-height, background-color, opacity;
 }
-.menu-item.ng-hide {
-  max-height: 0;
-  opacity: 0;
+.docs-menu a.md-button {
+  display: block;
 }
-.menu-item:hover {
-  color: #999;
+.docs-menu button.md-button::-moz-focus-inner {
+  padding: 0;
 }
-.menu-item:focus {
-  font-weight: bold;
+.docs-menu .md-button.active {
+  color: #03a9f4;
 }
-.menu-item.menu-title {
+.menu-heading {
   color: #888;
-  font-size: 14px;
-  padding-left: 16px;
+  display: block;
+  font-size: inherit;
+  font-weight: 500;
+  line-height: 40px;
+  margin: 0;
+  padding: 0px 16px;
   text-align: left;
-  text-transform: uppercase;
-  transition: color 0.35s cubic-bezier(0.35, 0, 0.25, 1);
+  width: 100%;
 }
-.menu-item.menu-title:hover,
-.menu-item.menu-title.active {
-  color: #1976d2;
+.docs-menu li.parentActive,
+.docs-menu li.parentActive .menu-toggle-list {
+  background-color: #f6f6f6;
 }
+.menu-toggle-list {
+  background: #fff;
+  max-height: 999px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  -webkit-transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
+  -webkit-transition-property: max-height;
+  -moz-transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
+  -moz-transition-property: max-height;
+  transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
+  transition-property: max-height;
+}
+.menu-toggle-list.ng-hide {
+  max-height: 0;
+}
+.docs-menu .menu-toggle-list a.md-button {
+  display: block;
+  padding: 0 16px 0 32px;
+  text-transform: none;
+}
+.md-button-toggle .md-toggle-icon {
+  background: transparent url(img/icons/list_control_down.png) no-repeat center center;
+  background-size: 100% auto;
+  display: inline-block;
+  height: 24px;
+  margin: auto 0 auto auto;
+  speak: none;
+  width: 24px;
+  transition: transform 0.2s ease-in-out;
+  -webkit-transition: -webkit-transform 0.2s ease-in-out;
+}
+.md-button-toggle .md-toggle-icon.toggled {
+  transform: rotate(180deg);
+}
+/* End Docs Menu */
 
 .menu-icon {
   background: none;
   border: none;
   margin-right: 16px;
+  padding: 0;
 }
 .app-toolbar .md-toolbar-tools h3 {
   -webkit-margin-before: 0;
@@ -310,8 +366,38 @@ md-toolbar.demo-toolbar .md-button {
   font-size: 18px;
 }
 
+/***************
+ * Landing Page
+ ***************/
+ul.buckets {
+  margin: 24px 0;
+  padding: 0;
+}
+ul.buckets li {
+  list-style: none;
+  margin: 0;
+  text-align: center;
+}
+ul.buckets li md-card md-card-content {
+  padding: 0;
+}
+ul.buckets li a {
+  background-color: transparent;
+  display: block;
+  font-weight: 500;
+  padding: 16px 0;
+  text-decoration: none;
+  -webkit-transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
+  transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
+}
+ul.buckets li a:hover,
+ul.buckets li a:focus {
+  background-color: #03a9f4;
+  color: white;
+}
+
 /************
- * DOCS
+ * API DOCS
  ************/
 .api-options-bar .md-button {
   margin: 4px;
