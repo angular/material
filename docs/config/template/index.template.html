@@ -39,24 +39,39 @@
     </md-toolbar>
 
     <md-content flex style="overflow: auto;">
-      <div ng-repeat="section in menu.sections">
+      <div ng-repeat="section in menu.sections" class="menu-{{section.type}}">
+        <div ng-if="section.type === 'heading'">
+          <md-divider></md-divider>
+          <h2 class="menu-item menu-title menu-item-heading">
+            {{section.name}}
+          </h2>
+        </div>
 
-        <button class="menu-item menu-title md-menu-item"
-          ng-click="menu.toggleSelectSection(section)"
-          md-highlight="menu.isSectionSelected(section)"
-          md-ink-ripple="#bbb">
+        <div ng-if="section.type === 'link'">
+          <a class="menu-item menu-item-action md-menu-item"
+            ng-class="{'active' : menu.isSectionSelected(section)}"
+            ng-href="#{{section.url}}"
+            md-ink-ripple="#bbb">
+            <span ng-bind="section | humanizeDoc"></span>
+          </a>
+        </div>
+
+        <button class="menu-item menu-item-toggle md-menu-item"
+          ng-if="section.type == 'toggle'"
+          ng-click="menu.toggleSelectSection(section)",
+          ng-class="{'toggled' : menu.isSectionSelected(section)}">
           {{section.name}}
+          <span class="visuallyhidden">Toggle</span>
         </button>
 
-        <a class="menu-item menu-sub-item md-menu-item"
+        <a class="menu-item menu-sub-item menu-item-action md-menu-item"
           ng-show="menu.isSectionSelected(section)"
+          ng-class="{'active' : menu.isPageSelected(section, page)}"
           ng-repeat="page in section.pages"
           ng-href="#{{page.url}}"
-          md-highlight="menu.isPageSelected(section, page)"
           md-ink-ripple="#bbb">
           <span ng-bind="page | humanizeDoc"></span>
         </a>
-
       </div>
     </md-content>
 

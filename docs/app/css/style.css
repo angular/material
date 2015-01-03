@@ -78,6 +78,16 @@ code:not(.highlight) {
   margin-right: 1px;
 }
 
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0; position:
+  absolute;
+  width: 1px;
+}
 .md-sidenav-inner {
   background: #fff;
 }
@@ -97,16 +107,15 @@ code:not(.highlight) {
 .menu-item {
   background: none;
   border-width: 0;
-  cursor: pointer;
   display: block;
-  color: #333;
   font-size: inherit;
+  font-weight: normal;
   line-height: 40px;
   max-height: 40px;
   opacity: 1;
   margin: 0;
   outline: none;
-  padding: 0px 28px;
+  padding: 0px 16px;
   position: relative;
   text-align: left;
   text-decoration: none;
@@ -119,27 +128,39 @@ code:not(.highlight) {
   transition: 0.45s cubic-bezier(0.35, 0, 0.25, 1);
   transition-property: max-height, background-color, opacity;
 }
+.menu-item-action,
+.menu-item-toggle {
+  color: inherit;
+  cursor: pointer;
+}
 .menu-item.ng-hide {
   max-height: 0;
   opacity: 0;
 }
-.menu-item:hover {
-  color: #999;
+.menu-item.active {
+  color: #03a9f4;
 }
-.menu-item:focus {
-  font-weight: bold;
+.menu-link + .menu-toggle .menu-item-toggle {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+.menu-item-toggle:after {
+  content: '\25be';
+  float: right;
+}
+.menu-item-toggle.toggled:after {
+  color: rgba(0, 0, 0, 0.729412);
+  content: '\25b4';
+}
+.menu-item:hover:not(.active),
+.menu-item:focus:not(.active) {
+  color: #999;
 }
 .menu-item.menu-title {
   color: #888;
   font-size: 14px;
   padding-left: 16px;
   text-align: left;
-  text-transform: uppercase;
   transition: color 0.35s cubic-bezier(0.35, 0, 0.25, 1);
-}
-.menu-item.menu-title:hover,
-.menu-item.menu-title.active {
-  color: #1976d2;
 }
 
 .menu-icon {

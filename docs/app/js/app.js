@@ -15,6 +15,9 @@ function(COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider) {
       templateUrl: function(params){
         return 'partials/layout-' + params.tmpl + '.tmpl.html';
       }
+    })
+    .when('/getting-started', {
+      templateUrl: 'partials/getting-started.tmpl.html'
     });
 
 
@@ -87,7 +90,32 @@ function(Angularytics, $rootScope,$timeout) {
 function(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
 
   var sections = [{
+    name: 'Getting Started',
+    id: 'gettingStarted',
+    url: '/getting-started',
+    type: 'link'
+  }];
+
+  var demoDocs = [];
+  angular.forEach(DEMOS, function(componentDemos) {
+    demoDocs.push({
+      name: componentDemos.label,
+      url: componentDemos.url
+    });
+    (docsByModule[componentDemos.name] || []).forEach(function(doc) {
+      doc.hasDemo = true;
+    });
+  });
+
+  sections.push({
+    name: 'Demos',
+    pages: demoDocs.sort(sortByName),
+    type: 'toggle'
+  });
+
+  sections.push({
     name: 'Layout',
+    type: 'toggle',
     pages: [{
       name: 'Container Elements',
       id: 'layoutContainers',
@@ -105,7 +133,7 @@ function(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
       id: 'layoutOptions',
       url: '/layout/options'
     }]
-  }];
+  });
 
   var docsByModule = {};
   var apiDocs = {};
@@ -119,37 +147,28 @@ function(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
       docsByModule[doc.module].push(doc);
     });
   });
-  var demoDocs = [];
-  angular.forEach(DEMOS, function(componentDemos) {
-    demoDocs.push({
-      name: componentDemos.label,
-      url: componentDemos.url
-    });
-    (docsByModule[componentDemos.name] || []).forEach(function(doc) {
-      doc.hasDemo = true;
-    });
-  });
-
-  sections.unshift({
-    name: 'Demos',
-    pages: demoDocs.sort(sortByName)
-  });
 
   angular.forEach(PAGES, function(pages, area) {
     sections.push({
       name: area,
-      pages: pages
+      pages: pages,
+      type: 'toggle'
     });
   });
 
   sections.push({
+    name: 'API Reference',
+    type: 'heading'
+  },{
     name: 'Services',
-    pages: apiDocs.service.sort(sortByName)
-  });
-  sections.push({
+    pages: apiDocs.service.sort(sortByName),
+    type: 'toggle'
+  },{
     name: 'Directives',
-    pages: apiDocs.directive.sort(sortByName)
+    pages: apiDocs.directive.sort(sortByName),
+    type: 'toggle'
   });
+
   function sortByName(a,b) {
     return a.name < b.name ? -1 : 1;
   }
@@ -190,16 +209,23 @@ function(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
     var activated = false;
     var path = $location.path();
     sections.forEach(function(section) {
-      section.pages.forEach(function(page) {
-        if (path === page.url) {
-          self.selectSection(section);
-          self.selectPage(section, page);
-          activated = true;
-        }
-      });
+      if(section.pages){
+        section.pages.forEach(function(page) {
+          if (path === page.url) {
+            self.selectSection(section);
+            self.selectPage(section, page);
+            activated = true;
+          }
+        });
+      }
+      else if (section.type === 'link') {
+        self.selectSection(sections[0]);
+        self.selectPage(sections[0], null);
+        activated = true;
+      }
     });
     if (!activated) {
-      self.selectSection(sections[3]);
+      self.selectSection(sections[4]);
     }
   }
 }])
