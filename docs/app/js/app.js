@@ -377,6 +377,11 @@ function($rootScope, $scope, component, demos, $http, $templateCache, $q) {
 
 }])
 
+.filter('nospace', function () {
+  return function (value) {
+    return (!value) ? '' : value.replace(/ /g, '');
+  };
+})
 .filter('humanizeDoc', function() {
   return function(doc) {
     if (!doc) return;
