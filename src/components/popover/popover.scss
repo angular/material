@@ -1,0 +1,96 @@
+@keyframes popoverBackgroundShow {
+  0% {
+    transform: scale(0.2);
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.0);
+    opacity: 1;
+  }
+}
+@keyframes popoverBackgroundHide {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+md-popover {
+  position: absolute;
+  font-size: 14px;
+  z-index: $z-index-popover;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: 4px;
+
+  &[md-direction="bottom"] {
+    transform: translate3d(0, -30%, 0);
+    margin-top: 8px;
+  }
+  &[md-direction="top"] {
+    transform: translate3d(0, 30%, 0);
+    margin-bottom: 8px;
+  }
+
+  .md-background {
+    position: absolute;
+    left: 50%;
+    width: 256px;
+    height: 256px;
+    margin-left: -128px;
+    margin-top: -128px;
+    border-radius: 256px;
+
+    opacity: 0.25;
+    transform: scale(0.2);
+  }
+
+  .md-content {
+    max-width: 240px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    padding: 8px;
+    background: transparent;
+    opacity: 0.3;
+    transition: inherit;
+  }
+
+  &.md-hide {
+    transition: $swift-ease-in;
+  }
+
+  &.md-show {
+    transition: $swift-ease-out;
+    pointer-events: auto;
+    transform: translate3d(0,0,0);
+
+    .md-background {
+      transform: scale(1.0);
+      opacity: 1.0;
+      animation: popoverBackgroundShow linear;
+    }
+    .md-content {
+      opacity: 0.99;
+    }
+  }
+  &.md-hide .md-background {
+    transform: scale(1.0);
+    opacity: 0;
+    animation: popoverBackgroundHide 0.2s linear;
+  }
+
+  /**
+   * Depending on the popover's size as a multiple of 32 (set by JS),
+   * change the background's animation duration.
+   * The larger the popover, the less time the background should take to ripple outwards.
+   */
+  @for $i from 1 through 8 {
+    &[width-32="#{$i}"].md-show .md-background {
+      $duration: 1000 - $i * 100;
+      animation-duration: #{$duration}ms;
+    }
+  }
+}

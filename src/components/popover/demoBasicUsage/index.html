@@ -1,0 +1,48 @@
+<div ng-controller="AppCtrl">
+
+  <md-toolbar class="md-accent">
+    <h1 class="md-toolbar-tools">
+      <span flex>Awesome Md App</span>
+      <md-button class="md-fab md-accent" aria-label="refresh">
+        <md-popover>
+          Refresh
+        </md-popover>
+        <md-icon icon="/img/icons/ic_refresh_24px.svg">
+        </md-icon>
+      </md-button>
+    </h1>
+  </md-toolbar>
+  <md-content class="md-padding">
+
+    <p>
+      The popover is visible when the button is clicked and closed when the button is clicked for a second time.
+    </p>
+
+    <md-button class="md-fab md-fab-top-left left" aria-label="Insert Drive">
+      <md-icon icon="/img/icons/ic_insert_drive_file_24px.svg"></md-icon>
+      <md-popover md-visible="demo.showPopover">
+        Insert Drive
+      </md-popover>
+    </md-button>
+    <md-button class="md-fab md-fab-top-right right" aria-label="Photos">
+      <md-icon icon="/img/icons/ic_photo_24px.svg"></md-icon>
+      <md-popover>
+        Photos
+      </md-popover>
+    </md-button>
+
+    <br/><br/><br/><br/><br/><br/>
+
+    <p>
+      <div>
+        Additionally, the Popover's `md-visible` attribute can use data-binding to programmatically
+        show/hide itself. Toggle the checkbox below...
+      </div>
+    </p>
+
+    <md-checkbox ng-model="demo.showPopover">
+      Insert Drive
+    </md-checkbox>
+
+  </md-content>
+</div>

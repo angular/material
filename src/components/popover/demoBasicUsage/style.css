@@ -1,0 +1,19 @@
+
+md-toolbar .md-toolbar-tools .md-button,
+md-toolbar .md-toolbar-tools .md-button:hover { 
+  box-shadow: none;
+  border: none;
+  transform: none;
+  -webkit-transform: none;
+}
+
+
+.left {
+  top:70px !important;
+  left:56px !important;
+}
+
+.right {
+  top:70px !important;
+  right:56px !important;
+}
