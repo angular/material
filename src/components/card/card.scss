@@ -1,17 +1,20 @@
-$card-padding: 8px;
 $card-margin: 8px;
 $card-box-shadow: $whiteframe-shadow-z1;
 
 md-card {
-  display: block;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 
   box-shadow: $card-box-shadow;
-  margin: $card-margin;
-  padding: $card-padding;
 
-  .md-card-image {
-    display: block;
+  > img {
+    order: 0;
     width: 100%;
+  }
+
+  md-card-content {
+    order: 1;
+    margin: $card-margin;
   }
 }
