@@ -185,9 +185,10 @@ function SliderController($scope, $element, $attrs, $$rAF, $window, $mdAria, $md
 
       var numSteps = Math.floor( (max - min) / step );
       if (!tickCanvas) {
+        var trackTicksStyle = $window.getComputedStyle(tickContainer[0]);
         tickCanvas = angular.element('<canvas style="position:absolute;">');
         tickCtx = tickCanvas[0].getContext('2d');
-        tickCtx.fillStyle = 'black';
+        tickCtx.fillStyle = trackTicksStyle.backgroundColor || 'black';
         tickContainer.append(tickCanvas);
       }
       var dimensions = getSliderDimensions();

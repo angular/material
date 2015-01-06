@@ -3,6 +3,9 @@ md-slider.md-THEME_NAME-theme {
   .md-track {
     background-color: '{{foreground-3}}';
   }
+  .md-track-ticks {
+    background-color: '{{foreground-4}}';
+  }
   .md-focus-thumb {
     background-color: '{{foreground-2}}';
   }
