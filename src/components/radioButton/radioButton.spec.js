@@ -20,6 +20,20 @@ describe('radioButton', function() {
     expect(rbElements.eq(1).hasClass(CHECKED_CSS)).toEqual(true);
   }));
 
+  it('should support mixed values', inject(function($compile, $rootScope) {
+    var element = $compile('<md-radio-group ng-model="value">' +
+                            '<md-radio-button value="1"></md-radio-button>' +
+                            '<md-radio-button value="2"></md-radio-button>' +
+                          '</md-radio-group>')($rootScope);
+
+    $rootScope.$apply(function(){
+      $rootScope.value = 1;
+    });
+
+    var rbElements = element.find('md-radio-button');
+    expect(rbElements.eq(0).hasClass(CHECKED_CSS)).toEqual(true);
+  }));
+
   it('should set roles', inject(function($compile, $rootScope) {
 
     var element = $compile('<md-radio-group ng-model="color">' +
