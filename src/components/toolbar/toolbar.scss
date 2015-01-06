@@ -1,8 +1,8 @@
-$toolbar-tools-height: 64px;
-$toolbar-height: 64px;
-$toolbar-medium-tall-height: 88px;
-$toolbar-tall-height: 192px;
-$toolbar-indent-margin: 64px;
+$toolbar-tools-height: 64px !default;
+$toolbar-height: 64px !default;
+$toolbar-medium-tall-height: 88px !default;
+$toolbar-tall-height: 192px !default;
+$toolbar-indent-margin: 64px !default;
 
 md-toolbar {
   display: flex;

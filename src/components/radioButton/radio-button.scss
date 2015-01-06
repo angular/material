@@ -1,5 +1,5 @@
-$radio-width: 16px;
-$radio-height: $radio-width;
+$radio-width: 16px !default;
+$radio-height: $radio-width !default;
 
 md-radio-button,
 .md-switch-thumb { // Used in switch

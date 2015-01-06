@@ -1,10 +1,10 @@
-$subheader-line-height: 1em;
-$subheader-font-size: 0.9em;
-$subheader-padding: ($baseline-grid * 2) 0px ($baseline-grid * 2) ($baseline-grid * 2);
-$subheader-font-weight: 400;
-$subheader-margin: 0 0 0 0;
-$subheader-margin-right: 16px;
-$subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16);
+$subheader-line-height: 1em !default;
+$subheader-font-size: 0.9em !default;
+$subheader-padding: ($baseline-grid * 2) 0px ($baseline-grid * 2) ($baseline-grid * 2) !default;
+$subheader-font-weight: 400 !default;
+$subheader-margin: 0 0 0 0 !default;
+$subheader-margin-right: 16px !default;
+$subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16) !default;
 
 @keyframes subheaderStickyHoverIn {
   0% {

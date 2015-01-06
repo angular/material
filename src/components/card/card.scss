@@ -1,5 +1,5 @@
-$card-margin: 8px;
-$card-box-shadow: $whiteframe-shadow-z1;
+$card-margin: 8px !default;
+$card-box-shadow: $whiteframe-shadow-z1 !default;
 
 md-card {
   box-sizing: border-box;

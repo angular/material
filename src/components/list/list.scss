@@ -1,21 +1,21 @@
-$list-h3-font-size: 1.1em;
-$list-h3-margin: 0 0 3px 0;
-$list-h3-font-weight: 400;
-$list-h4-font-size: 0.9em;
-$list-h4-font-weight: 400;
-$list-h4-margin: 0 0 3px 0;
-$list-p-font-size: 0.75em;
-$list-p-margin: 0 0 3px 0;
+$list-h3-font-size: 1.1em !default;
+$list-h3-margin: 0 0 3px 0 !default;
+$list-h3-font-weight: 400 !default;
+$list-h4-font-size: 0.9em !default;
+$list-h4-font-weight: 400 !default;
+$list-h4-margin: 0 0 3px 0 !default;
+$list-p-font-size: 0.75em !default;
+$list-p-margin: 0 0 3px 0 !default;
 
-$list-padding-top: $baseline-grid;
-$list-padding-right: 0px;
-$list-padding-left: 0px;
-$list-padding-bottom: $baseline-grid;
+$list-padding-top: $baseline-grid !default;
+$list-padding-right: 0px !default;
+$list-padding-left: 0px !default;
+$list-padding-bottom: $baseline-grid !default;
 
-$item-padding-top: 0px;
-$item-padding-right: 0px;
-$item-padding-left: 0px;
-$item-padding-bottom: 0px;
+$item-padding-top: 0px !default;
+$item-padding-right: 0px !default;
+$item-padding-left: 0px !default;
+$item-padding-bottom: 0px !default;
 
 md-list {
   padding: $list-padding-top $list-padding-right $list-padding-bottom $list-padding-left;

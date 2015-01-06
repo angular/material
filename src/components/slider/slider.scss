@@ -1,26 +1,26 @@
-$slider-background-color:  rgb(200, 200, 200);
-$slider-height:  48px;
+$slider-background-color:  rgb(200, 200, 200) !default;
+$slider-height:  48px !default;
 
-$slider-track-height:  2px;
-$slider-thumb-width:  32px;
-$slider-thumb-height:  $slider-thumb-width;
+$slider-track-height:  2px !default;
+$slider-thumb-width:  32px !default;
+$slider-thumb-height:  $slider-thumb-width !default;
 
-$slider-thumb-default-scale: 0.5;
-$slider-thumb-hover-scale: 0.6;
-$slider-thumb-focus-scale: 0.85;
-$slider-thumb-disabled-scale: 0.35;
-$slider-thumb-disabled-border: 6px;
+$slider-thumb-default-scale: 0.5 !default;
+$slider-thumb-hover-scale: 0.6 !default;
+$slider-thumb-focus-scale: 0.85 !default;
+$slider-thumb-disabled-scale: 0.35 !default;
+$slider-thumb-disabled-border: 6px !default;
 
-$slider-focus-thumb-width:  48px;
-$slider-focus-thumb-height: $slider-focus-thumb-width;
-$slider-focus-ring-border-width: 3px;
+$slider-focus-thumb-width:  48px !default;
+$slider-focus-thumb-height: $slider-focus-thumb-width !default;
+$slider-focus-ring-border-width: 3px !default;
 
-$slider-arrow-height: 16px;
-$slider-arrow-width: 28px;
+$slider-arrow-height: 16px !default;
+$slider-arrow-width: 28px !default;
 
-$slider-sign-height: 28px;
-$slider-sign-width: 28px;
-$slider-sign-top: ($slider-height / 2) - ($slider-thumb-default-scale * $slider-thumb-height / 2) - ($slider-sign-height) - ($slider-arrow-height) + 8px;
+$slider-sign-height: 28px !default;
+$slider-sign-width: 28px !default;
+$slider-sign-top: ($slider-height / 2) - ($slider-thumb-default-scale * $slider-thumb-height / 2) - ($slider-sign-height) - ($slider-arrow-height) + 8px !default;
 
 @keyframes sliderFocusThumb {
   0% {

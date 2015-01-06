@@ -1,5 +1,5 @@
-$checkbox-width: 18px;
-$checkbox-height: $checkbox-width;
+$checkbox-width: 18px !default;
+$checkbox-height: $checkbox-width !default;
 
 md-checkbox {
   display: block;

@@ -1,11 +1,11 @@
-$button-line-height: 25px;
-$button-padding: 2px 6px 3px;
+$button-line-height: 25px !default;
+$button-padding: 2px 6px 3px !default;
 
 // Fab buttons
-$button-fab-width: 56px;
-$button-fab-height: 56px;
-$button-fab-padding: 16px;
-$button-fab-toast-offset: $toast-height + $toast-margin;
+$button-fab-width: 56px !default;
+$button-fab-height: 56px !default;
+$button-fab-padding: 16px !default;
+$button-fab-toast-offset: $toast-height + $toast-margin !default;
 
 /**
  * Position a FAB button.

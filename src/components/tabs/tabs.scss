@@ -1,7 +1,7 @@
 // Tabs
 $tabs-paginator-width: $baseline-grid * 4 !default;
 $tabs-tab-width: $baseline-grid * 12 !default;
-$tabs-header-height: 48px;
+$tabs-header-height: 48px !default;
 
 md-tabs {
   display: block;
