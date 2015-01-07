@@ -228,6 +228,46 @@ describe('Text Field directives', function() {
     });
   });
 
+  describe(' - mdTextFloat type=textarea', function mdTextareaFloatSuit() {
+    var model;
+    beforeEach(function () {
+      model = {
+        labels: {
+          intro: 'intro'
+        },
+        user: {
+          filledIntro: 'This is my intro',
+          emptyIntro: null
+        }
+      }
+    });
+
+    it('should configure the amount of collumn and rows', function configureColsAndRows() {
+      var markup = '<md-text-float rows="4" cols="50"' +
+        '  type="textarea"' +
+        '  label="{{labels.intro}}" ' +
+        '  ng-model="user.filledIntro" >' +
+        '</md-text-float>';
+      var el = buildElement(markup, model);
+      var textarea = el.find('textarea');
+
+      expect(textarea.attr('rows')).toBe('4');
+      expect(textarea.attr('cols')).toBe('50');
+    });
+
+    it('should configure the label', function configureLabel() {
+      var markup = '<md-text-float rows="4" cols="50"' +
+        '  type="textarea"' +
+        '  label="{{labels.intro}}" ' +
+        '  ng-model="user.filledIntro" >' +
+        '</md-text-float>';
+      var el = buildElement(markup, model);
+      var label = el.find('label');
+
+      expect(label.text()).toBe(model.labels.intro);
+    });
+  });
+
   // ****************************************************************
   // Utility `setup` methods
   // ****************************************************************

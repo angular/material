@@ -40,6 +40,9 @@ angular.module('material.components.textField', [
  *
  * <!-- Specify an input type if desired. -->
  * <md-text-float label="eMail"    ng-model="user.email" type="email" ></md-text-float>
+ *
+ * <!-- Specify textarea as an input type if desired. -->
+ * <md-text-float label="intro"    ng-model="user.intro" type="textarea" ></md-text-float>
  * </hljs>
  */
 function mdTextFloatDirective($mdTheming, $mdUtil, $parse) {
@@ -134,7 +137,14 @@ function mdInputDirective($mdUtil) {
   return {
     restrict: 'E',
     replace: true,
-    template: '<input >',
+    template: function createTemplate(element) {
+      var isTextarea = element.parent().attr('type') === 'textarea';
+      if (isTextarea) {
+        return '<textarea >';
+      } else {
+        return '<input >';
+      }
+    },
     require: ['^?mdInputGroup', '?ngModel'],
     link: function(scope, element, attr, ctrls) {
       if ( !ctrls[0] ) return;
@@ -146,7 +156,12 @@ function mdInputDirective($mdUtil) {
         element.attr('aria-disabled', !!isDisabled);
         element.attr('tabindex', !!isDisabled);
       });
-      element.attr('type', attr.type || element.parent().attr('type') || "text");
+      
+      element.attr({
+        'type': attr.type || element.parent().attr('type') || "text",
+        'rows': attr.rows || element.parent().attr('rows'),
+        'cols': attr.cols || element.parent().attr('cols')
+      });
 
       // When the input value changes, check if it "has" a value, and
       // set the appropriate class on the input group
