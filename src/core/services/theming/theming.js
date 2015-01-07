@@ -61,10 +61,10 @@ var DEFAULT_COLOR_TYPE = 'primary';
 // A color in a theme will use these hues by default, if not specified by user.
 var LIGHT_DEFAULT_HUES = {
   'accent': {
-    'default': '400',
-    'hue-1': '300',
-    'hue-2': '800',
-    'hue-3': 'A100',
+    'default': 'A700',
+    'hue-1': 'A200',
+    'hue-2': 'A400',
+    'hue-3': 'A100'
   }
 };
 var DARK_DEFAULT_HUES = {
@@ -131,7 +131,7 @@ function ThemingProvider() {
 
     var backgroundImage = getComputedStyle(element).backgroundImage;
     if (backgroundImage === 'none' || !backgroundImage) {
-      backgroundImage = '{}'
+      backgroundImage = '{}';
     }
 
     backgroundImage = backgroundImage
