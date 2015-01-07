@@ -15,11 +15,11 @@ angular.module('material.components.popover', [
  * @name mdPopover
  * @module material.components.popover
  * @description
- * Popovers are used to describe elements that are interactive and primarily graphical (not textual).
+ * Popovers are used to describe elements that are interactive and either graphical or textual.
  *
- * Place a `<md-popover>` as a child of the element it describes.
+ * Place a `<md-popover>` as a child of the element it relates to.
  *
- * A popover will activate when the user focuses, hovers over, or touches the parent.
+ * A popover will activate when the user clicks the parent.
  *
  * @usage
  * <hljs lang="html">
