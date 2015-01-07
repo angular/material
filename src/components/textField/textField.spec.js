@@ -65,7 +65,7 @@ describe('Text Field directives', function() {
         labels : {
           firstName: 'FirstName',
           lastName: 'LastName',
-          email: 'eMail',
+          email: 'Email',
           password: 'Password'
         },
         user : {
@@ -75,6 +75,11 @@ describe('Text Field directives', function() {
           password: 'public'
         }
       }
+    });
+
+    it('should have a name attribute', function() {
+      var el = setupTextFloat( { name:"password" }, model);
+      expect(el.find('input').attr('name')).toBe('password');
     });
 
     it('should set input type `password` properly', function() {
@@ -236,12 +241,13 @@ describe('Text Field directives', function() {
     md_text_float : '<md-text-float ' +
                 '   type="{{type}}" ' +
                 '   label="{{label}}" ' +
+                '   name="{{name}}" ' +
                 '   ng-model="{{model}}" >' +
                 '</md-text-float>',
 
     md_input_group: '<div class="md-input-group" tabindex="-1">' +
                 ' <label>{{label}}</label>' +
-                ' <md-input id="{{id}}" type="{{type}}" ng-model="{{model}}"></md-input>' +
+                ' <md-input id="{{id}}" name="{{name}}" type="{{type}}" ng-model="{{model}}"></md-input>' +
                 '</div>'
   };
 

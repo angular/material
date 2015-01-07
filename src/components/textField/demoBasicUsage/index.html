@@ -3,26 +3,26 @@
   <md-content md-theme="docs-dark">
     <form style="padding: 20px;">
       <div class="row">
-        <md-text-float label="Title"  ng-model="user.title"   ></md-text-float>
-        <md-text-float label="eMail"  ng-model="user.email" type="email" ></md-text-float>
+        <md-text-float label="Title" name="title" ng-model="user.title"></md-text-float>
+        <md-text-float label="Email" name="email" ng-model="user.email" type="email"></md-text-float>
       </div>
     </form>
   </md-content>
 
   <md-content>
     <form style="padding: 20px;">
-      <md-text-float label="Company"       ng-model="user.company"    disabled > </md-text-float>
+      <md-text-float label="Company" name="company" ng-model="user.company" disabled></md-text-float>
       <div class="row">
-          <md-text-float label="FirstName" ng-model="user.firstName"  > </md-text-float>
-          <md-text-float label="LastName"  ng-model="user.lastName"   class="long"> </md-text-float>
+          <md-text-float label="FirstName" name="firstname" ng-model="user.firstName"></md-text-float>
+          <md-text-float label="LastName" name="lastname" ng-model="user.lastName" class="long"></md-text-float>
       </div>
-      <md-text-float label="Address"       ng-model="user.address"    > </md-text-float>
+      <md-text-float label="Address" name="address" ng-model="user.address"></md-text-float>
       <div class="row">
-        <md-text-float label="City"        ng-model="user.city"       > </md-text-float>
-        <md-text-float label="State"       ng-model="user.state"      > </md-text-float>
-        <md-text-float label="Postal Code" ng-model="user.postalCode" > </md-text-float>
+        <md-text-float label="City" name="city" ng-model="user.city"></md-text-float>
+        <md-text-float label="State" name="state" ng-model="user.state"></md-text-float>
+        <md-text-float label="Postal Code" name="postalcode" ng-model="user.postalCode"></md-text-float>
       </div>
-      <md-text-float label="Country"       ng-model="user.country"    disabled > </md-text-float>
+      <md-text-float label="Country" name="country" ng-model="user.country" disabled></md-text-float>
     </form>
   </md-content>
 
