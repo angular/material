@@ -116,7 +116,7 @@ describe('<md-tabs>', function() {
       expect(tabItems.eq(0)).toBeActiveTab();
     }));
 
-    it('the active tab\'s content should always be connected', function() {
+    it('the active tab\'s content should always be connected', inject(function($timeout) {
       var tabs = setup('<md-tabs>' +
                        '<md-tab label="label1!">content1!</md-tab>' +
                        '<md-tab label="label2!">content2!</md-tab>' +
@@ -124,13 +124,14 @@ describe('<md-tabs>', function() {
       var tabItems = tabs.find('md-tab');
       var contents = angular.element(tabs[0].querySelectorAll('.md-tab-content'));
 
+      $timeout.flush();
       expect(contents.eq(0).scope().$$disconnected).toBeFalsy();
       expect(contents.eq(1).scope().$$disconnected).toBeTruthy();
 
       tabItems.eq(1).triggerHandler('click');
       expect(contents.eq(0).scope().$$disconnected).toBeTruthy();
       expect(contents.eq(1).scope().$$disconnected).toBeFalsy();
-    });
+    }));
 
     it('should bind to selected', function() {
       var tabs = setup('<md-tabs md-selected="current">' +

@@ -53,13 +53,15 @@ function MdTabsController($scope, $element, $mdUtil, $$rAF) {
   // Returns a method to remove the tab from the list.
   function add(tab, index) {
     tabsList.add(tab, index);
-    tab.onAdd(self.contentArea);
 
     // Select the new tab if we don't have a selectedIndex, or if the
     // selectedIndex we've been waiting for is this tab
     if ($scope.selectedIndex === -1 || !angular.isNumber($scope.selectedIndex) || 
         $scope.selectedIndex === self.indexOf(tab)) {
+      tab.onAdd(self.contentArea, false);
       self.select(tab);
+    } else {
+      tab.onAdd(self.contentArea, true);
     }
 
     $scope.$broadcast('$mdTabsChanged');
