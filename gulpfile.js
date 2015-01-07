@@ -53,6 +53,9 @@ var config = {
     'src/core/**/*.js',
     '!src/core/**/*.spec.js'
   ],
+  jsFiles: [
+    'src/core/**/*.js'
+  ],
   themeBaseFiles: [
     'src/core/style/color-palette.scss',
     'src/core/style/variables.scss',
@@ -117,7 +120,7 @@ gulp.task('changelog', function(done) {
 });
 gulp.task('jshint', function() {
   return gulp.src(
-    buildConfig.paths.js.concat(buildConfig.paths.test)
+    config.jsFiles
   )
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter(require('jshint-summary')({
