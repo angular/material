@@ -157,6 +157,28 @@ describe('$$interimElement service', function() {
       });
     });
 
+    it('should create a shortcut show method with arg options', function() {
+      var shown = false;
+      createInterimProvider('interimTest')
+        .addPreset('banana', {
+          argOption: 'color',
+          methods: ['color'],
+          options: function() {
+            return {
+              onShow: function(scope, el, opts) {
+                shown = true;
+                expect(opts.color).toBe('yellow');
+              }
+            };
+          }
+        });
+      inject(function(interimTest, $rootScope) {
+        interimTest.showBanana('yellow');
+        $rootScope.$apply();
+        expect(shown).toBe(true);
+      });
+    });
+
     it('should show with proper options', function() {
       createInterimProvider('interimTest')
         .setDefaults({

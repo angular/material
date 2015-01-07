@@ -50,9 +50,22 @@ function MdToastDirective() {
  * app.controller('MyController', function($scope, $mdToast) {
  *   $scope.openToast = function($event) {
  *     $mdToast.show($mdToast.simple().content('Hello!'));
+ *     // Could also do $mdtoast.showSimple('Hello');
  *   };
  * });
  * </hljs>
+ */
+
+/**
+ * @ngdoc method
+ * @name $mdToast#showSimple
+ * 
+ * @description
+ * Convenience method which builds and shows a simple toast.
+ *
+ * @returns {promise} A promise that can be resolved with `$mdToast.hide()` or
+ * rejected with `$mdToast.cancel()`.
+ *
  */
 
  /**
