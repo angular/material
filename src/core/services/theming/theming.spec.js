@@ -200,7 +200,7 @@ describe('$mdThemingProvider', function() {
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-4}}"; }')[0].content)
           .toEqual('color: rgba(255,255,255,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
-          .toEqual('color: 1px 1px 0px rgba(black, 0.4), -1px -1px 0px rgba(black, 0.4);');
+          .toEqual('color: 1px 1px 0px rgba(0,0,0,0.4), -1px -1px 0px rgba(0,0,0,0.4);');
       });
     });
     it('parses contrast colors', function() {

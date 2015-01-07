@@ -1,0 +1,88 @@
+$input-container-padding: 2px !default;
+
+$input-label-default-offset: 24px !default;
+$input-label-default-scale: 1.0 !default;
+$input-label-float-offset: 4px !default;
+$input-label-float-scale: 0.75 !default;
+
+$input-border-width-default: 1px !default;
+$input-border-width-focused: 2px !default;
+$input-line-height: 26px !default;
+$input-padding-top: 2px !default;
+
+md-input-container {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  padding: $input-container-padding;
+
+  textarea,
+  input[type="text"],
+  input[type="password"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="date"],
+  input[type="month"],
+  input[type="time"],
+  input[type="week"],
+  input[type="number"],
+  input[type="email"],
+  input[type="url"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="color"] {
+    /* remove default appearance from all input/textarea */
+    -moz-appearance: none;
+    -webkit-appearance: none;
+  }
+
+  label {
+    order: 1;
+    pointer-events: none;
+    -webkit-font-smoothing: antialiased;
+    z-index: 1;
+    transform: translate3d(0, $input-label-default-offset, 0) scale($input-label-default-scale);
+    transform-origin: left top;
+    transition: all $swift-ease-out-timing-function 0.2s;
+  }
+
+  /* 
+   * The .md-input class is added to the input/textarea 
+   */
+  .md-input {
+    flex: 1;
+    order: 2;
+    display: block;
+
+    background: none;
+    padding-top: $input-padding-top;
+    padding-bottom: $input-border-width-focused - $input-border-width-default;
+    border-width: 0 0 $input-border-width-default 0;
+    line-height: $input-line-height;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &.md-input-focused,
+  &.md-input-has-value {
+    label {
+      transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);
+    }
+  }
+  &.md-input-focused {
+    .md-input {
+      padding-bottom: 0px; // Increase border width by 1px, decrease padding by 1
+      border-width: 0 0 $input-border-width-focused 0;
+    }
+  }
+
+  .md-input[disabled] {
+    background-position: 0 bottom;
+    // This background-size is coordinated with a linear-gradient set in input-theme.scss 
+    // to create a dotted line under the input. 
+    background-size: 3px 1px;
+    background-repeat: repeat-x;
+  }
+}

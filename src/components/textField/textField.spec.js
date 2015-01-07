@@ -74,7 +74,7 @@ describe('Text Field directives', function() {
           email: 'AndrewJoslin@drifty.com',
           password: 'public'
         }
-      }
+      };
     });
 
     it('should set input type `password` properly', function() {
