@@ -14,6 +14,9 @@
 .layout-content demo-include [layout] > div:nth-child(3) {
   background-color: #9c27b0;
 }
+.layout-content demo-include [layout] > div:nth-child(4) {
+  background-color: #8bc34a;
+}
 .layout-content md-divider {
   margin-top: 16px;
 }
