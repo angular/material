@@ -148,7 +148,7 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming) {
   function changeSelectedButton(parent, increment) {
     // Coerce all child radio buttons into an array, then wrap then in an iterator
     var buttons = $mdUtil.iterator(
-      Array.prototype.slice.call(parent[0].querySelectorAll('md-radio-button')),
+      Array.prototype.slice.call(parent[0].querySelectorAll('md-radio-button:not([disabled])')),
       true
     );
 
