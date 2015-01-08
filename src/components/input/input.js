@@ -10,8 +10,8 @@ angular.module('material.components.input', [
 ])
   .directive('mdInputContainer', mdInputContainerDirective)
   .directive('label', labelDirective)
-  .directive('input', inputDirective)
-  .directive('textarea', inputDirective);
+  .directive('input', inputTextareaDirective)
+  .directive('textarea', inputTextareaDirective);
 
 /**
  * @ngdoc directive
@@ -86,7 +86,7 @@ function labelDirective() {
   };
 }
 
-function inputDirective($mdUtil) {
+function inputTextareaDirective($mdUtil, $window) {
   return {
     restrict: 'E',
     require: ['^?mdInputContainer', '?ngModel'],
@@ -103,6 +103,10 @@ function inputDirective($mdUtil) {
     var ngModelCtrl = ctrls[1];
 
     if ( !containerCtrl ) return;
+
+    if (element[0].tagName.toLowerCase() === 'textarea') {
+      setupTextarea();
+    }
 
     if (containerCtrl.input) {
       throw new Error("<md-input-container> can only have *one* <input> or <textarea> child element!");
@@ -143,10 +147,41 @@ function inputDirective($mdUtil) {
       containerCtrl.input = null;
     });
 
-    function isNotEmpty(value) {
-      value = angular.isUndefined(value) ? element.val() : value;
-      return (angular.isDefined(value) && (value!==null) &&
-             (value.toString().trim() !== ""));
+    function setupTextarea() {
+      var node = element[0];
+
+      if (ngModelCtrl) {
+        ngModelCtrl.$formatters.push(growTextarea);
+        ngModelCtrl.$parsers.push(growTextarea);
+      } else {
+        element.on('input', growTextarea);
+        growTextarea();
+      }
+      element.on('keydown', growTextarea);
+      element.on('scroll', onScroll);
+      angular.element($window).on('resize', growTextarea);
+
+      scope.$on('$destroy', function() {
+        angular.element($window).off('resize', growTextarea);
+      });
+
+      function growTextarea(value) {
+        node.style.height = "auto";
+        var line = node.scrollHeight - node.offsetHeight;
+        node.scrollTop = 0;
+        height = node.offsetHeight + (line > 0 ? line : 0);
+        node.style.height = height + 'px';
+
+        return value; // for $formatter/$parser
+      }
+      
+      function onScroll(e) {
+        node.scrollTop = 0;
+        // for smooth new line adding
+        var line = node.scrollHeight - node.offsetHeight;
+        height = node.offsetHeight + line;
+        node.style.height = height + 'px';
+      }
     }
   }
 }

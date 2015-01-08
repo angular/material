@@ -18,7 +18,7 @@
       <input ng-model="user.company" disabled>
     </md-input-container>
   
-    <div layout layout-padding layout-sm="column">
+    <div layout layout-sm="column">
       <md-input-container flex>
         <label>First Name</label>
         <input ng-model="user.firstName">
@@ -34,7 +34,7 @@
       <input ng-model="user.address">
     </md-input-container>
 
-    <div layout layout-padding layout-sm="column">
+    <div layout layout-sm="column">
       <md-input-container flex>
         <label>City</label>
         <input ng-model="user.city">
@@ -50,8 +50,8 @@
     </div>
 
     <md-input-container flex>
-      <label>Country</label>
-      <input ng-model="user.country">
+      <label>Biography</label>
+      <textarea ng-model="user.biography" columns="1"></textarea>
     </md-input-container>
 
   </md-content>
