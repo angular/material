@@ -59,6 +59,7 @@ md-input-container {
     padding-bottom: $input-border-width-focused - $input-border-width-default;
     border-width: 0 0 $input-border-width-default 0;
     line-height: $input-line-height;
+    -ms-flex-preferred-size: $input-line-height; //IE fix
 
     &:focus {
       outline: none;
