@@ -9,11 +9,20 @@ md-switch {
   align-items: center;
 
   .md-container {
+    cursor: grab;
     width: $switch-width;
     height: $switch-height;
     position: relative;
     user-select: none;
     margin-right: 8px;
+  }
+
+  // If the user moves his mouse off the switch, stil display grabbing cursor
+  &:not([disabled]) {
+    .md-dragging,
+    &.md-dragging .md-container {
+      cursor: grabbing;
+    }
   }
 
   .md-label {
@@ -65,7 +74,7 @@ md-switch {
     }
   }
 
-  &.transition {
+  &:not(.md-dragging) {
     .md-bar,
     .md-thumb-container,
     .md-thumb {

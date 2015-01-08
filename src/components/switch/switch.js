@@ -67,6 +67,8 @@ function MdSwitch(mdCheckboxDirective, $mdTheming, $mdUtil, $document, $mdConsta
 
   function compile(element, attr) {
     var checkboxLink = checkboxDirective.compile(element, attr);
+    // no transition on initial load
+    element.addClass('md-dragging');
 
     return function (scope, element, attr, ngModel) {
       ngModel = ngModel || $mdUtil.fakeNgModel();
@@ -76,7 +78,7 @@ function MdSwitch(mdCheckboxDirective, $mdTheming, $mdUtil, $document, $mdConsta
 
       // no transition on initial load
       $$rAF(function() {
-        element.addClass('transition');
+        element.removeClass('md-dragging');
       });
 
       // Tell the checkbox we don't want a click listener.
@@ -96,7 +98,7 @@ function MdSwitch(mdCheckboxDirective, $mdTheming, $mdUtil, $document, $mdConsta
         if (disabledGetter(scope)) return ev.preventDefault();
 
         drag.width = thumbContainer.prop('offsetWidth');
-        element.removeClass('transition');
+        element.addClass('md-dragging');
       }
       function onDrag(ev, drag) {
         var percent = drag.distance / drag.width;
@@ -112,7 +114,7 @@ function MdSwitch(mdCheckboxDirective, $mdTheming, $mdUtil, $document, $mdConsta
       function onDragEnd(ev, drag) {
         if (disabledGetter(scope)) return false;
 
-        element.addClass('transition');
+        element.removeClass('md-dragging');
         thumbContainer.css($mdConstant.CSS.TRANSFORM, '');
 
         // We changed if there is no distance (this is a click a click),
