@@ -54,7 +54,7 @@ var config = {
     '!src/core/**/*.spec.js'
   ],
   jsFiles: [
-    'src/core/**/*.js'
+    'src/**/*.js'
   ],
   themeBaseFiles: [
     'src/core/style/color-palette.scss',
