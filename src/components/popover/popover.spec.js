@@ -75,7 +75,6 @@ describe('<md-popover> directive', function() {
     expect($rootScope.isVisible).toBe(false);
   }));
 
-  /*
   it('should set placement to left when md-placement is set', inject(function ($compile, $rootScope, $timeout) {
       var element = $compile('<md-button>' +
                  'Hello' +
@@ -83,7 +82,7 @@ describe('<md-popover> directive', function() {
                '</md-button>')($rootScope);
 
     $rootScope.$apply('isVisible = true');
-    $rootScope.$apply('placement = left');
+    $rootScope.$apply('placement = "left"');
     expect(findPopover().length).toBe(1);
     expect(findPopover().attr('md-placement')).toEqual('left');
   }));
@@ -91,11 +90,11 @@ describe('<md-popover> directive', function() {
   it('should set placement to right when md-placement is set', inject(function ($compile, $rootScope, $timeout) {
       var element = $compile('<md-button>' +
                  'Hello' +
-                 '<md-popover md-visible="isVisible" md-placement="right">Popover</md-popover>' +
+                 '<md-popover md-visible="isVisible" md-placement="placement">Popover</md-popover>' +
                '</md-button>')($rootScope);
                
     $rootScope.$apply('isVisible = true'); 
-    $rootScope.$apply('placement = right');
+    $rootScope.$apply('placement = "right"');
     expect(findPopover().length).toBe(1);
     expect(findPopover().attr('md-placement')).toEqual('right');
   }));
@@ -103,24 +102,23 @@ describe('<md-popover> directive', function() {
   it('should set placement to top when md-placement is set', inject(function ($compile, $rootScope, $timeout) {
       var element = $compile('<md-button>' +
                  'Hello' +
-                 '<md-popover md-visible="isVisible" md-placement="top">Popover</md-popover>' +
+                 '<md-popover md-visible="isVisible" md-placement="placement">Popover</md-popover>' +
                '</md-button>')($rootScope);
                
     $rootScope.$apply('isVisible = true'); 
-    $rootScope.$apply('placement = top');
+    $rootScope.$apply('placement = "top"');
     expect(findPopover().length).toBe(1);
     expect(findPopover().attr('md-placement')).toEqual('top');
   }));
-  */
 
   it('should set placement to bottom when md-placement is set', inject(function ($compile, $rootScope, $timeout) {
       var element = $compile('<md-button>' +
                  'Hello' +
-                 '<md-popover md-visible="isVisible" md-placement="bottom">Popover</md-popover>' +
+                 '<md-popover md-visible="isVisible" md-placement="placement">Popover</md-popover>' +
                '</md-button>')($rootScope);
                
     $rootScope.$apply('isVisible = true'); 
-    $rootScope.$apply('placement = bottom');
+    $rootScope.$apply('placement = "bottom"');
     expect(findPopover().length).toBe(1);
     expect(findPopover().attr('md-placement')).toEqual('bottom');
   }));
