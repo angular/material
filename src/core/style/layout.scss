@@ -108,10 +108,91 @@
   }
 }
 
+// Alignment attributes for layout containers' children
+// Arrange on the Main Axis
+// center, start, end, space-between, space-around
+// flex-start is the default for justify-content
+// ------------------------------
+
+@mixin layout-align-for-name($suffix: null) {
+  $name: 'layout-align';
+  @if $suffix != null {
+    $name: 'layout-align-#{$suffix}';
+  }
+
+  // Main Axis Center
+  [#{$name}="center"], //stretch
+  [#{$name}="center center"],
+  [#{$name}="center start"],
+  [#{$name}="center end"] {
+    justify-content: center;
+  }
+
+  // Main Axis End
+  [#{$name}="end"], //stretch
+  [#{$name}="end center"],
+  [#{$name}="end start"],
+  [#{$name}="end end"] {
+    justify-content: flex-end;
+  }
+
+  // Main Axis Space Around
+  [#{$name}="space-around"], //stretch
+  [#{$name}="space-around center"],
+  [#{$name}="space-around start"],
+  [#{$name}="space-around end"] {
+    justify-content: space-around;
+  }
+
+  // Main Axis Space Between
+  [#{$name}="space-between"], //stretch
+  [#{$name}="space-between center"],
+  [#{$name}="space-between start"],
+  [#{$name}="space-between end"] {
+    justify-content: space-between;
+  }
+
+
+  // Arrange on the Cross Axis
+  // center, start, end
+  // stretch is the default for align-items
+  // ------------------------------
+
+  // Cross Axis Center
+  [#{$name}="center center"],
+  [#{$name}="start center"],
+  [#{$name}="end center"],
+  [#{$name}="space-between center"],
+  [#{$name}="space-around center"] {
+    align-items: center;
+  }
+
+  // Cross Axis Start
+  [#{$name}="center start"],
+  [#{$name}="start start"],
+  [#{$name}="end start"],
+  [#{$name}="space-between start"],
+  [#{$name}="space-around start"] {
+    align-items: flex-start;
+  }
+
+  // Cross Axis End
+  [#{$name}="center end"],
+  [#{$name}="start end"],
+  [#{$name}="end end"],
+  [#{$name}="space-between end"],
+  [#{$name}="space-around end"] {
+    align-items: flex-end;
+  }
+
+}
+
 // Flex attributes for layout children
 // ------------------------------
 
 @include flex-properties-for-name();
+@include layout-align-for-name();
+
 [hide]:not([show]) {
   display: none;
 }
@@ -123,6 +204,7 @@
     }
   }
 
+  @include layout-align-for-name(sm);
   @include layout-for-name(sm);
   @include flex-properties-for-name(sm);
 }
@@ -133,6 +215,7 @@
     }
   }
 
+  @include layout-align-for-name(gt-sm);
   @include layout-for-name(gt-sm);
   @include flex-properties-for-name(gt-sm);
 }
@@ -144,6 +227,7 @@
     }
   }
 
+  @include layout-align-for-name(md);
   @include layout-for-name(md);
   @include flex-properties-for-name(md);
 }
@@ -154,6 +238,7 @@
     }
   }
 
+  @include layout-align-for-name(gt-md);
   @include layout-for-name(gt-md);
   @include flex-properties-for-name(gt-md);
 }
@@ -165,6 +250,7 @@
     }
   }
 
+  @include layout-align-for-name(lg);
   @include layout-for-name(lg);
   @include flex-properties-for-name(lg);
 }
@@ -175,6 +261,7 @@
     }
   }
 
+  @include layout-align-for-name(gt-lg);
   @include layout-for-name(gt-lg);
   @include flex-properties-for-name(gt-lg);
 }
@@ -193,76 +280,3 @@
 [flex-order="7"] { order: 7; }
 [flex-order="8"] { order: 8; }
 [flex-order="9"] { order: 9; }
-
-
-// Alignment attributes for layout containers' children
-// Arrange on the Main Axis
-// center, start, end, space-between, space-around
-// flex-start is the default for justify-content
-// ------------------------------
-
-// Main Axis Center
-[layout-align="center"], //stretch
-[layout-align="center center"],
-[layout-align="center start"],
-[layout-align="center end"] {
-  justify-content: center;
-}
-
-// Main Axis End
-[layout-align="end"], //stretch
-[layout-align="end center"],
-[layout-align="end start"],
-[layout-align="end end"] {
-  justify-content: flex-end;
-}
-
-// Main Axis Space Around
-[layout-align="space-around"], //stretch
-[layout-align="space-around center"],
-[layout-align="space-around start"],
-[layout-align="space-around end"] {
-  justify-content: space-around;
-}
-
-// Main Axis Space Between
-[layout-align="space-between"], //stretch
-[layout-align="space-between center"],
-[layout-align="space-between start"],
-[layout-align="space-between end"] {
-  justify-content: space-between;
-}
-
-
-// Arrange on the Cross Axis
-// center, start, end
-// stretch is the default for align-items
-// ------------------------------
-
-// Cross Axis Center
-[layout-align="center center"],
-[layout-align="start center"],
-[layout-align="end center"],
-[layout-align="space-between center"],
-[layout-align="space-around center"] {
-  align-items: center;
-}
-
-// Cross Axis Start
-[layout-align="center start"],
-[layout-align="start start"],
-[layout-align="end start"],
-[layout-align="space-between start"],
-[layout-align="space-around start"] {
-  align-items: flex-start;
-}
-
-// Cross Axis End
-[layout-align="center end"],
-[layout-align="start end"],
-[layout-align="end end"],
-[layout-align="space-between end"],
-[layout-align="space-around end"] {
-  align-items: flex-end;
-}
-
