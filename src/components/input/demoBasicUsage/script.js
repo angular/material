@@ -10,7 +10,7 @@ angular.module('inputBasicDemo', ['ngMaterial'])
     address: '1600 Amphitheatre Pkwy' ,
     city: 'Mountain View' ,
     state: 'CA' ,
-    biography: 'Loves kittens, snowboarding, and can type at 130 WPM. And rumour has it she\'s bouldered up Castle Craig!',
+    biography: 'Loves kittens, snowboarding, and can type at 130 WPM. And rumor has it she\'s bouldered up Castle Craig!',
     postalCode : '94043'
   };
 });
