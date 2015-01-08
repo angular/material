@@ -196,7 +196,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
  * Show a dialog with the specified options.
  *
  * @param {object} optionsOrPreset Either provide an `$mdDialogPreset` returned from `alert()`,
- * `confirm()`, and `build()`, or an options object with the following properties:
+ * `confirm()` or an options object with the following properties:
  *   - `templateUrl` - `{string=}`: The url of a template that will be used as the content
  *   of the dialog.
  *   - `template` - `{string=}`: Same as templateUrl, except this is an actual template string.
