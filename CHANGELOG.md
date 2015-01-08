@@ -1,3 +1,114 @@
+<a name="0.7.0-rc2"></a>
+### 0.7.0-rc2  (2015-01-08)
+
+
+#### Bug Fixes
+
+* **$mdUtil:** fix bugs in iterator's `next()`/`previous()` methods Refactor for DRY-ness `next ([124466e7](https://github.com/angular/material/commit/124466e71945a4515a7b5742310594e8753c4314))
+* **$mdComponentRegistry:** gracefully recover if no md-component-id is specified ([bf2266f1](https://github.com/angular/material/commit/bf2266f15a6d2c8cc299f083544955b1d1f0dc69))
+* **demos:** tab dynamic demo removes use of on-select expressions ([4db16c17](https://github.com/angular/material/commit/4db16c17fa617c53fd8436de00386826e08b602b))
+* **mdDialog:**
+  * fix dialog border radius visual overflow glitch ([9b162202](https://github.com/angular/material/commit/9b162202721a2a60884e8edf4e02f754e9bef447), closes [#1015](https://github.com/angular/material/issues/1015))
+  * prevent null-pointer error with popInTarget ([b36282a5](https://github.com/angular/material/commit/b36282a586d700831006c750d1df743bb16c6194), closes [#1061](https://github.com/angular/material/issues/1061))
+* **input:** fix height on IE11 ([dc31ee53](https://github.com/angular/material/commit/dc31ee53bb88dcc782b7aaa9c9ade31085ab3e69))
+* **layout:**
+  * fix 'layout-padding' rule not having comma ([b35be936](https://github.com/angular/material/commit/b35be936cab8118c7de483c5065b6db56018e855), closes [#952](https://github.com/angular/material/issues/952))
+  * layout-fill in firefox ([31d3c123](https://github.com/angular/material/commit/31d3c123185c6fe3e0db95674cccefb2b8884bca))
+  * layout-wrap fixed and documented ([8f937bd2](https://github.com/angular/material/commit/8f937bd2df7e43d0343f5e89e154f6b0a3c89ecc))
+* **mdButton:**
+  * fix fab vertical positioning ([641e2272](https://github.com/angular/material/commit/641e2272ce1cad731a59f015bede4a97fa2fca53), closes [#1031](https://github.com/angular/material/issues/1031))
+  * fix error when md-button is disabled anchor ([48e5a8bc](https://github.com/angular/material/commit/48e5a8bc365e89f1d0446758a7211f5773956443), closes [#1074](https://github.com/angular/material/issues/1074))
+* **mdCard:** add an md-card-content container inside md-card for content ([28a4f8ff](https://github.com/angular/material/commit/28a4f8ff4d3b1d7b123152a01ef71e767fc315ff), closes [#265](https://github.com/angular/material/issues/265))
+* **mdMedia:** avoid unnecessary digest and make changes apply quicker ([98247bcf](https://github.com/angular/material/commit/98247bcf22df9ef96e4dd0197d61e6b9b69e1b6d), closes [#978](https://github.com/angular/material/issues/978))
+* **mdRadioButton:** Loosen equality check ([ca3e4c30](https://github.com/angular/material/commit/ca3e4c306af3e4a49670a379d759f0448b42ca95), closes [#1112](https://github.com/angular/material/issues/1112))
+* **mdToolbar:** Toolbar flow on medium screens ([bfc947f6](https://github.com/angular/material/commit/bfc947f66b2a2568dc76ca3278eb9b5f83424a2f))
+* **mdUtil:**
+  * fix `throttle()` delay check ([fdb923e4](https://github.com/angular/material/commit/fdb923e40f98422ff75cbcaf137ead2233c64c68), closes [#977](https://github.com/angular/material/issues/977))
+  * remove/delete cacheFactory keys when clearing/destroying cache ([8736c7cc](https://github.com/angular/material/commit/8736c7ccf019df417e6b7834b55a1cc157a6ac64))
+* **mdRadioButton:** arrowkey navigation with disabled buttons ([f520d507](https://github.com/angular/material/commit/f520d50710e6e93686736c4f5a97e54bb9bb7518), closes [#1040](https://github.com/angular/material/issues/1040))
+* **mdSidenav:** Fix tests and typo ([c0e2b0fb](https://github.com/angular/material/commit/c0e2b0fbba0006ab2ea8930544c380d207dfea1a))
+* **mdTabs:**
+  * make md-tab-label visible on IE11 ([b85ad629](https://github.com/angular/material/commit/b85ad6296f49be7fa5ce95cbbbec49d650912e46), closes [#1057](https://github.com/angular/material/issues/1057))
+  * pagination only call watcher() when it's a function ([e952ab41](https://github.com/angular/material/commit/e952ab4100826a5ff2e36efe71d5d6b8d49df2b2), closes [#1073](https://github.com/angular/material/issues/1073))
+  * delays disconnect until after the digest is finished ([78ba497e](https://github.com/angular/material/commit/78ba497e443ca31e8a8c97f11db281f743f6aca0), closes [#1048](https://github.com/angular/material/issues/1048))
+* **theming:** 
+  * switch accent palette to use accent hues ([002d8bfd](https://github.com/angular/material/commit/002d8bfde5aa0c240ebd054297227e499f9c3bf4))
+  * allow hex values with uppercase letters ([9b45af50](https://github.com/angular/material/commit/9b45af50fd894d9e9451b833bb9c2edb1ff2e750), closes [#1014](https://github.com/angular/material/issues/1014))
+
+
+#### Features
+
+* **mdDialog:** disable scrolling on parent while showing dialog ([993fa2bc](https://github.com/angular/material/commit/993fa2bc00598dd18227b12bb197f2d9c667ea75))
+* **input:**
+  * add <md-input-container> parent for inputs/textareas, deprecate md-text-float ([60fcd6f4](https://github.com/angular/material/commit/60fcd6f4d8b895162b37a940c3f33164d8044382), closes [#993](https://github.com/angular/material/issues/993), [#553](https://github.com/angular/material/issues/553), [#654](https://github.com/angular/material/issues/654), [#993](https://github.com/angular/material/issues/993))
+  * support md-warn for theming ([6acacc53](https://github.com/angular/material/commit/6acacc5382940a7ce1b393d0f4cdda6a0ffa615c), closes [#1137](https://github.com/angular/material/issues/1137))
+* **textarea:** make textarea autogrow with size of content ([1c653696](https://github.com/angular/material/commit/1c65369629080ddb6b2c4a981ae00533f5c303b1), closes [#565](https://github.com/angular/material/issues/565))
+* **layout:** add layout-align-{sm,gt-sm,md,gt-md,lg,gt-lg} attrs ([8550bd6c](https://github.com/angular/material/commit/8550bd6c9353914083bf75328c0160027202d237), closes [#631](https://github.com/angular/material/issues/631))
+* **mdRadioGroup:** Radio submits on keydown/enter ([03c75927](https://github.com/angular/material/commit/03c7592798f904ac7a59b4a1c580672ca7c4789f), closes [#577](https://github.com/angular/material/issues/577))
+* **mdSlider:** make discrete track ticks themable ([91bc598f](https://github.com/angular/material/commit/91bc598fab00150e26b11a2c7a0e7c9b3b364bec), closes [#621](https://github.com/angular/material/issues/621))
+* **mdSwitch:** add grab/grabbing cursor during drag ([c60640bf](https://github.com/angular/material/commit/c60640bf4305cbd42d899db5b2adfe8601096d1b), closes [#983](https://github.com/angular/material/issues/983))
+* **mdTabs:** adds default transitions for tab content ([3ee83a64](https://github.com/angular/material/commit/3ee83a645b9e4da8f4c0f2e6cbf772f504d8e9a9), closes [#1044](https://github.com/angular/material/issues/1044), [#717](https://github.com/angular/material/issues/717), [#811](https://github.com/angular/material/issues/811))
+* **$mdToast:** add mdToast#showSimple shortcut method ([dd960c6f](https://github.com/angular/material/commit/dd960c6fce3dfc041ab2ee6c27f6574cfae75185))
+
+
+#### Breaking Changes
+
+* md-textfloat has been deprecated due to flaws (explanation in [#547](https://github.com/angular/material/issue/547).
+
+To create an input, you now must use the native `<input>` and `<textarea>`
+elements, with a `<md-input-container>` parent around each
+`<input>` or `<textarea>`.
+
+Change your code from this:
+
+```html
+<md-textfloat label="First Name" ng-model="firstName"></md-textfloat>
+```
+
+To this:
+
+```html
+<md-input-container>
+  <label>First Name</label>
+  <input ng-model="firstName">
+</md-input-container>
+```
+
+* md-card now requires a separate `md-card-content` element
+containing the card's content.  This was done to fix padding problems
+with the content.
+
+Change your code from this:
+
+```html
+<md-card>
+  <img src="img/washedout.png" alt="Washed Out">
+  <h2>Paracosm</h2>
+  <p>
+    The titles of Washed Out's breakthrough song and the first single from Paracosm share the
+    two most important words in Ernest Greene's musical language: feel it.
+  </p>
+</md-card>
+```
+
+To this:
+
+```html
+<md-card>
+  <img src="img/washedout.png" alt="Washed Out">
+  <md-card-content>
+    <h2>Paracosm</h2>
+    <p>
+      The titles of Washed Out's breakthrough song and the first single from Paracosm share the
+      two most important words in Ernest Greene's musical language: feel it.
+    </p>
+  </md-card-content>
+</md-card>
+```
+
+ ([28a4f8ff](https://github.com/angular/material/commit/28a4f8ff4d3b1d7b123152a01ef71e767fc315ff))
+
+
 <a name="0.7.0-rc1"></a>
 ### 0.7.0-rc1  (2014-12-19)
 
