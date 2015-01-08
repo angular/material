@@ -27,6 +27,7 @@ md-dialog {
   max-height: 80%;
   margin: auto;
   position: relative;
+  overflow: hidden; // stop content from leaking out of dialog parent
 
   box-shadow: $whiteframe-shadow-z5;
 
