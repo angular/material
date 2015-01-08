@@ -15,23 +15,23 @@ angular.module('material.components.popover', [
  * @name mdPopover
  * @module material.components.popover
  * @description
- * Popovers are used to describe elements that are interactive and either graphical or textual.
+ * Popovers add a small overlay of content to any element for housing secondary information.
  *
  * Place a `<md-popover>` as a child of the element it relates to.
  *
- * A popover will activate when the user clicks the parent.
+ * A popover will be displayed when the user clicks the parent and close when the parent is clicked a second time.
  *
  * @usage
  * <hljs lang="html">
- * <md-icon icon="/img/icons/ic_play_arrow_24px.svg">
+ * <md-button>
  *   <md-popover>
- *     Play Music
+ *     Additional information
  *   </md-popover>
- * </md-icon>
+ * </md-button>
  * </hljs>
  *
- * @param {expression=} md-visible Boolean bound to whether the popover is currently visible.
- * @param {expression=} md-placement string bound to location of popover.
+ * @param {expression=?} md-visible Boolean bound to whether the popover is currently visible.
+ * @param {expression=?} md-placement String bound to location of popover e.g. left, right, top or bottom (default).
  */
 function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdTheming, $rootElement) {
 
