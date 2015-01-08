@@ -79,12 +79,14 @@
           </div>
 
           <div class="md-toolbar-item md-tools">
-            <div ng-repeat="doc in currentComponent.docs">
-              <md-button ng-href="#{{doc.url}}"
-                ng-class="{hide: path().indexOf('demo') == -1}"
-                aria-label="{{ doc | humanizeDoc }}">
-                {{doc | humanizeDoc | directiveBrackets}}
-              </md-button>
+            <div layout="row">
+              <div ng-repeat="doc in currentComponent.docs">
+                <md-button ng-href="#{{doc.url}}"
+                  ng-class="{hide: path().indexOf('demo') == -1}"
+                  aria-label="{{ doc | humanizeDoc }}">
+                  {{doc | humanizeDoc | directiveBrackets}}
+                </md-button>
+              </div>
             </div>
 
             <md-button ng-class="{hide: !currentDoc}"
