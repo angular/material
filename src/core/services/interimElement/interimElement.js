@@ -86,8 +86,6 @@ function InterimElementProvider() {
         optionsFactory: definition.options,
         argOption: definition.argOption
       };
-      if (definition.argOption) {
-      }
       return provider;
     }
 
