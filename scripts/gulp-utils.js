@@ -205,7 +205,7 @@ exports.hoistScssVariables = function() {
 exports.cssToNgConstant = function(ngModule, factoryName) {
   return through2.obj(function(file, enc, next) {
 
-    var template = 'angular.module("%1").constant("%2", "%3")';
+    var template = 'angular.module("%1").constant("%2", "%3");';
     var output = file.contents.toString().replace(/\n/g, '')
       .replace(/\"/,'\\"');
 
