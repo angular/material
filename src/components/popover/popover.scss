@@ -24,14 +24,6 @@ md-popover {
   pointer-events: none;
   border-radius: 4px;
 
-  &[md-direction="bottom"] {
-    transform: translate3d(0, -30%, 0);
-    margin-top: 8px;
-  }
-  &[md-direction="top"] {
-    transform: translate3d(0, 30%, 0);
-    margin-bottom: 8px;
-  }
   .md-background {
     position: absolute;
     left: 50%;
