@@ -157,7 +157,7 @@ function inputTextareaDirective($mdUtil, $window) {
         element.on('input', growTextarea);
         growTextarea();
       }
-      element.on('keydown', growTextarea);
+      element.on('keyup', growTextarea);
       element.on('scroll', onScroll);
       angular.element($window).on('resize', growTextarea);
 
