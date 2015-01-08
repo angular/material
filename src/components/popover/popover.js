@@ -46,7 +46,7 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       '<div class="md-content" ng-transclude></div>',
     scope: {
       visible: '=?mdVisible',
-      placement: '=mdPlacement'
+      placement: '=?mdPlacement'
     },
     link: postLink
   };
@@ -69,8 +69,7 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     element.attr('id', attr.id || ('popover_' + $mdUtil.nextUid()));
 
     parent.on('click', function() {
-        if (scope.visible) setVisible(false);
-        else setVisible(true);
+        setVisible(!scope.visible);
     });
 
     scope.$watch('visible', function(isVisible) {
