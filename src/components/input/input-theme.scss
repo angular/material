@@ -26,6 +26,14 @@ md-input-container.md-THEME_NAME-theme {
         color: '{{accent-500}}';
       }
     }
+    &.md-warn {
+      .md-input {
+        border-color: '{{warn-500}}';
+      }
+      label {
+        color: '{{warn-500}}';
+      }
+    }
   }
 
   &.md-input-has-value:not(.md-input-focused) {
