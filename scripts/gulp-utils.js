@@ -134,7 +134,7 @@ exports.addClosurePrefixes = function() {
 
       var provide = 'goog.provide(\'' + moduleNameToClosureName(moduleInfo.module) + '\');';
       var requires = (moduleInfo.dependencies || []).sort().map(function(dep) {
-        return 'goog.require(\'' + moduleNameToClosureName(dep) + '\');';
+        return dep.indexOf(moduleInfo.module) === 0 ? '' : 'goog.require(\'' + moduleNameToClosureName(dep) + '\');';
       }).join('\n');
 
       file.contents = new Buffer(

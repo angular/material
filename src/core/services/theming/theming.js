@@ -129,7 +129,7 @@ function ThemingProvider() {
     element.classList.add('md-color-palette-definition');
     document.body.appendChild(element);
 
-    var backgroundImage = getComputedStyle(element).backgroundImage;
+    var backgroundImage = window.getComputedStyle(element).backgroundImage;
     if (backgroundImage === 'none' || !backgroundImage) {
       backgroundImage = '{}';
     }
