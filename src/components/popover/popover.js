@@ -65,7 +65,7 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
     // We will re-attach popover when visible
     element.detach();
-    element.attr('role', 'popover');
+    element.attr('role', 'tooltip');
     element.attr('id', attr.id || ('popover_' + $mdUtil.nextUid()));
 
     parent.on('click', function() {
