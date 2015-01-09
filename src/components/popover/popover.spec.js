@@ -43,19 +43,16 @@ describe('<md-popover> directive', function() {
     expect(findPopover().length).toBe(0);
   }));
 
-  it('should describe parent', inject(function($compile, $rootScope, $timeout) {
+  it('should describe parent', inject(function($compile, $rootScope) {
     var element = $compile('<md-button>' +
                'Hello' +
                '<md-popover md-visible="isVisible">Popover</md-popover>' +
              '</md-button>')($rootScope);
 
     $rootScope.$apply('isVisible = true');
-
     expect(element.attr('aria-describedby')).toEqual(findPopover().attr('id'));
-
     $rootScope.$apply('isVisible = false');
     expect(element.attr('aria-describedby')).toBeFalsy();
-
   }));
 
   it('should set visible on click and invisible on second click', inject(function($compile, $rootScope, $timeout) {
@@ -75,7 +72,7 @@ describe('<md-popover> directive', function() {
     expect($rootScope.isVisible).toBe(false);
   }));
 
-  it('should set placement to left when md-placement is set', inject(function ($compile, $rootScope, $timeout) {
+  it('should set placement to left when md-placement is set', inject(function ($compile, $rootScope) {
       var element = $compile('<md-button>' +
                  'Hello' +
                  '<md-popover md-visible="isVisible" md-placement="placement">Popover</md-popover>' +
@@ -87,7 +84,7 @@ describe('<md-popover> directive', function() {
     expect(findPopover().attr('md-placement')).toEqual('left');
   }));
 
-  it('should set placement to right when md-placement is set', inject(function ($compile, $rootScope, $timeout) {
+  it('should set placement to right when md-placement is set', inject(function ($compile, $rootScope) {
       var element = $compile('<md-button>' +
                  'Hello' +
                  '<md-popover md-visible="isVisible" md-placement="placement">Popover</md-popover>' +
@@ -99,7 +96,7 @@ describe('<md-popover> directive', function() {
     expect(findPopover().attr('md-placement')).toEqual('right');
   }));
 
-  it('should set placement to top when md-placement is set', inject(function ($compile, $rootScope, $timeout) {
+  it('should set placement to top when md-placement is set', inject(function ($compile, $rootScope) {
       var element = $compile('<md-button>' +
                  'Hello' +
                  '<md-popover md-visible="isVisible" md-placement="placement">Popover</md-popover>' +
@@ -111,7 +108,7 @@ describe('<md-popover> directive', function() {
     expect(findPopover().attr('md-placement')).toEqual('top');
   }));
 
-  it('should set placement to bottom when md-placement is set', inject(function ($compile, $rootScope, $timeout) {
+  it('should set placement to bottom when md-placement is set', inject(function ($compile, $rootScope) {
       var element = $compile('<md-button>' +
                  'Hello' +
                  '<md-popover md-visible="isVisible" md-placement="placement">Popover</md-popover>' +
@@ -123,7 +120,7 @@ describe('<md-popover> directive', function() {
     expect(findPopover().attr('md-placement')).toEqual('bottom');
   }));
 
-  it('should set placement to bottom when md-placement is not set', inject(function ($compile, $rootScope, $timeout) {
+  it('should set placement to bottom when md-placement is not set', inject(function ($compile, $rootScope) {
       var element = $compile('<md-button>' +
                  'Hello' +
                  '<md-popover md-visible="isVisible">Popover</md-popover>' +
@@ -132,5 +129,24 @@ describe('<md-popover> directive', function() {
       $rootScope.$apply('isVisible = true');
       expect(findPopover().length).toBe(1);
       expect(findPopover().attr('md-placement')).toEqual('bottom');
+  }));
+
+  it('should expect an aria-label if element has no text', inject(function ($compile, $rootScope, $log) {
+      spyOn($log, 'warn');
+      var element = $compile('<md-button>' +
+                 'Hello' +
+                 '<md-popover md-visible="isVisible"></md-popover>' +
+               '</md-button>')($rootScope);
+
+      $rootScope.$apply('isVisible = true');
+      expect($log.warn).toHaveBeenCalled();
+
+      $log.warn.reset();
+      element = $compile('<md-button>' +
+           'Hello' +
+           '<md-popover md-visible="isVisible">Popover</md-popover>' +
+         '</md-button>')($rootScope);
+      $rootScope.$apply('isVisible = true');
+      expect($log.warn).not.toHaveBeenCalled();
   }));
 });

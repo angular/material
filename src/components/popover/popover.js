@@ -33,7 +33,7 @@ angular.module('material.components.popover', [
  * @param {expression=?} md-visible Boolean bound to whether the popover is currently visible.
  * @param {expression=?} md-placement String bound to location of popover e.g. left, right, top or bottom (default).
  */
-function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdTheming, $rootElement) {
+function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdTheming, $rootElement, $mdAria) {
 
   var POPOVER_SHOW_DELAY = 400;
   var POPOVER_WINDOW_EDGE_SPACE = 8;
@@ -54,6 +54,12 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
   function postLink(scope, element, attr, contentCtrl) {
     $mdTheming(element);
     var parent = element.parent();
+
+    // check for aria label
+    var elementHasText = element[0].textContent.trim();
+    if (!elementHasText) {
+        $mdAria.expect(element, 'aria-label');
+    }
 
     // Look for the nearest parent md-content, stopping at the rootElement.
     var current = element.parent()[0];
