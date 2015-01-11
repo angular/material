@@ -45,7 +45,10 @@
 
     <div class="after-tabs-area" layout="row" layout-sm="column" layout-margin layout-align="left center">
 
-        <md-text-float type="number" label="Selected Index" ng-model="data.selectedIndex"></md-text-float>
+        <md-input-container>
+            <label>Selected Index</label>
+            <input type="number" ng-model="data.selectedIndex">
+        </md-input-container>
         <div flex></div>
         <span>Item Two: </span>
         <md-checkbox ng-model="data.secondLocked" aria-label="Disabled">
