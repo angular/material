@@ -166,11 +166,11 @@ function inputTextareaDirective($mdUtil, $window) {
       });
 
       function growTextarea(value) {
-        node.style.minHeight = "auto";
+        node.style.height = "auto";
         var line = node.scrollHeight - node.offsetHeight;
         node.scrollTop = 0;
         var height = node.offsetHeight + (line > 0 ? line : 0);
-        node.style.minHeight = height + 'px';
+        node.style.height = height + 'px';
 
         return value; // for $formatter/$parser
       }
