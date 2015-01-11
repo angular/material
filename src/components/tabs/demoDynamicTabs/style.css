@@ -36,7 +36,7 @@ md-tabs-ink-bar {
 }
 
 .title {
-  padding-top: 8px;
+  padding-top: 10px;
   padding-right: 8px;
   text-align: left;
   text-transform: uppercase;
@@ -62,6 +62,6 @@ form > [layout] > * {
 }
 
 .md-button.add-tab {
-  margin-top:20px;
+  margin-top:22px;
   max-height:30px !important;
 }
