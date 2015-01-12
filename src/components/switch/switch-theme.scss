@@ -8,18 +8,18 @@ md-switch.md-THEME_NAME-theme {
 
   &.md-checked {
     .md-thumb {
-      background-color: '{{accent-color}}';
+      background-color: '{{primary-color}}';
     }
     .md-bar {
-      background-color: '{{accent-color-0.5}}';
+      background-color: '{{primary-color-0.5}}';
     }
 
-    &.md-primary {
+    &.md-accent {
       .md-thumb {
-        background-color: '{{primary-color}}';
+        background-color: '{{accent-color}}';
       }
       .md-bar {
-        background-color: '{{primary-color-0.5}}';
+        background-color: '{{accent-color-0.5}}';
       }
     }
 
