@@ -42,6 +42,7 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     restrict: 'E',
     transclude: true,
     template:
+      '<div class="md-arrow"></div>' +
       '<div class="md-background"></div>' +
       '<div class="md-content" ng-transclude></div>',
     scope: {
@@ -67,7 +68,7 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       if (current.tagName && current.tagName.toLowerCase() == 'md-content') break;
       current = current.parentNode;
     }
-    var popoverParent = angular.element(current || document.body);
+    var popoverParent = angular.element(document.body);
 
     // We will re-attach popover when visible
     element.detach();
