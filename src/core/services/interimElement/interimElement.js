@@ -156,7 +156,7 @@ function InterimElementProvider() {
           };
         }
 
-        // eg $mdDialog.alert() will return a new alert preset
+        // For example, $mdDialog.alert() will return a new alert preset.
         publicService[name] = function(arg) {
           // If argOption is supplied, eg `argOption: 'content'`, then we assume
           // if the argument is not an options object then it is the `argOption` option.
@@ -339,11 +339,11 @@ function InterimElementProvider() {
               if (options.themable) $mdTheming(element);
               var ret = options.onShow(options.scope, element, options);
               return $q.when(ret)
-                .then(function(){
-                  // Issue onComplete callback when the `show()` finishes
-                  (options.onComplete || angular.noop)(options.scope, element, options);
-                  startHideTimeout();
-                });
+                  .then(function(){
+                    // Issue onComplete callback when the `show()` finishes
+                    (options.onComplete || angular.noop)(options.scope, element, options);
+                    startHideTimeout();
+                  });
 
               function startHideTimeout() {
                 if (options.hideDelay) {

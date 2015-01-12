@@ -27,7 +27,8 @@ function AriaService($$rAF, $log, $window) {
       if (defaultValue.length) {
         element.attr(attrName, defaultValue);
       } else {
-        $log.warn('ARIA: Attribute "', attrName, '", required for accessibility, is missing on node:', node);
+        $log.warn('ARIA: Attribute "',
+            attrName, '", required for accessibility, is missing on node:', node);
       }
 
     }
@@ -57,12 +58,12 @@ function AriaService($$rAF, $log, $window) {
       return (style.display === 'none');
     }
 
-    if(hasChildren) {
+    if (hasChildren) {
       var children = node.childNodes;
-      for(var i=0; i<children.length; i++){
+      for (var i = 0; i < children.length; i++){
         var child = children[i];
-        if(child.nodeType === 1 && child.hasAttribute(attrName)) {
-          if(!isHidden(child)){
+        if (child.nodeType === 1 && child.hasAttribute(attrName)) {
+          if (!isHidden(child)){
             hasAttr = true;
           }
         }

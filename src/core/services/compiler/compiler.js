@@ -42,9 +42,9 @@ function mdCompilerService($q, $http, $injector, $compile, $controller, $templat
     *      published to scope under the `controllerAs` name.
     *    - `template` - `{string=}` An html template as a string.
     *    - `templateUrl` - `{string=}` A path to an html template.
-    *    - `transformTemplate` - `{function(template)=}` A function which transforms the template after
-    *      it is loaded. It will be given the template string as a parameter, and should
-    *      return a a new string representing the transformed template.
+    *    - `transformTemplate` - `{function(template)=}` A function which transforms the template
+    *        after it is loaded. It will be given the template string as a parameter, and should
+    *        return a a new string representing the transformed template.
     *    - `resolve` - `{Object.<string, function>=}` - An optional map of dependencies which should
     *      be injected into the controller. If any of these dependencies are promises, the compiler
     *      will wait for them all to be resolved, or if one is rejected before the controller is
@@ -85,15 +85,16 @@ function mdCompilerService($q, $http, $injector, $compile, $controller, $templat
         resolve[key] = $injector.invoke(value);
       }
     });
-    //Add the locals, which are just straight values to inject
-    //eg locals: { three: 3 }, will inject three into the controller
+
+    // Add the locals, which is a collection of values injected into the controller constructor.
+    // For example, locals = {three: 3} will inject 'three' which the value of 3.
     angular.extend(resolve, locals);
 
     if (templateUrl) {
       resolve.$template = $http.get(templateUrl, {cache: $templateCache})
-        .then(function(response) {
-          return response.data;
-        });
+          .then(function(response) {
+            return response.data;
+          });
     } else {
       resolve.$template = $q.when(template);
     }
@@ -105,20 +106,20 @@ function mdCompilerService($q, $http, $injector, $compile, $controller, $templat
       var element = angular.element('<div>').html(template.trim()).contents();
       var linkFn = $compile(element);
 
-      //Return a linking function that can be used later when the element is ready
+      // Return a linking function that can be used later when the element is ready.
       return {
         locals: locals,
         element: element,
         link: function link(scope) {
           locals.$scope = scope;
 
-          //Instantiate controller if it exists, because we have scope
+          // Instantiate controller if it exists, because we have scope.
           if (controller) {
             var ctrl = $controller(controller, locals);
             if (bindToController) {
               angular.extend(ctrl, locals);
             }
-            //See angular-route source for this logic
+            // See angular-route source for this logic.
             element.data('$ngControllerController', ctrl);
             element.children().data('$ngControllerController', ctrl);
 

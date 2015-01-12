@@ -22,29 +22,29 @@
   function ComponentRegistry($log, $q) {
 
     var self;
-    var instances = [ ];
-    var pendings = { };
+    var instances = [];
+    var pendings = {};
 
     return self = {
-      /**
-       * Used to print an error when an instance for a handle isn't found.
-       */
+      /** Print the error given when an instance for a handle isn't found. */
       notFoundError: function(handle) {
         $log.error('No instance found for handle', handle);
       },
       /**
-       * Return all registered instances as an array.
+       * Gets all registered instances.
+       * @returns {!Array<*>}
        */
       getInstances: function() {
         return instances;
       },
 
       /**
-       * Get a registered instance.
-       * @param handle the String handle to look up for a registered instance.
+       * Get a registered instance by its handle.
+       * @param {string} handle the Handle to look up for a registered instance.
+       * @returns {*}
        */
       get: function(handle) {
-        if ( !isValidID(handle) ) return null;
+        if (!isValidID(handle)) return null;
 
         var i, j, instance;
         for(i = 0, j = instances.length; i < j; i++) {
@@ -58,11 +58,11 @@
 
       /**
        * Register an instance.
-       * @param instance the instance to register
-       * @param handle the handle to identify the instance under.
+       * @param {*} instance the instance to register
+       * @param {string} handle Handle to identify the instance.
        */
       register: function(instance, handle) {
-        if ( !handle ) return angular.noop;
+        if (!handle) return angular.noop;
 
         instance.$$mdHandle = handle;
         instances.push(instance);
@@ -93,16 +93,16 @@
       },
 
       /**
-       * Async accessor to registered component instance
-       * If not available then a promise is created to notify
-       * all listeners when the instance is registered.
+       * Async accessor to registered component instance.
+       * If not available, then a promise is created to notify all listeners when the
+       * instance is registered.
        */
-      when : function(handle) {
-        if ( isValidID(handle) ) {
+      when: function(handle) {
+        if (isValidID(handle)) {
           var deferred = $q.defer();
           var instance = self.get(handle);
 
-          if ( instance )  {
+          if (instance)  {
             deferred.resolve( instance );
           } else {
             pendings[handle] = deferred;
@@ -116,7 +116,7 @@
     };
 
     function isValidID(handle){
-      return handle && (handle != "");
+      return handle;
     }
 
   }
