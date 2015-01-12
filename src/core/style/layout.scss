@@ -49,6 +49,23 @@
   }
 }
 
+@mixin flex-order-for-name($suffix: null) {
+  $selector: 'flex-order';
+  @if $suffix != null {
+    $selector: 'flex-order-#{$suffix}';
+  }
+  [#{$selector}="0"] { order: 0; }
+  [#{$selector}="1"] { order: 1; }
+  [#{$selector}="2"] { order: 2; }
+  [#{$selector}="3"] { order: 3; }
+  [#{$selector}="4"] { order: 4; }
+  [#{$selector}="5"] { order: 5; }
+  [#{$selector}="6"] { order: 6; }
+  [#{$selector}="7"] { order: 7; }
+  [#{$selector}="8"] { order: 8; }
+  [#{$selector}="9"] { order: 9; }
+}
+
 @mixin layout-for-name($name) {
   [layout-#{$name}] {
     box-sizing: border-box;
@@ -192,6 +209,7 @@
 
 @include flex-properties-for-name();
 @include layout-align-for-name();
+@include flex-order-for-name();
 
 [hide]:not([show]) {
   display: none;
@@ -204,6 +222,7 @@
     }
   }
 
+  @include flex-order-for-name(sm);
   @include layout-align-for-name(sm);
   @include layout-for-name(sm);
   @include flex-properties-for-name(sm);
@@ -215,6 +234,7 @@
     }
   }
 
+  @include flex-order-for-name(gt-sm);
   @include layout-align-for-name(gt-sm);
   @include layout-for-name(gt-sm);
   @include flex-properties-for-name(gt-sm);
@@ -227,6 +247,7 @@
     }
   }
 
+  @include flex-order-for-name(md);
   @include layout-align-for-name(md);
   @include layout-for-name(md);
   @include flex-properties-for-name(md);
@@ -238,6 +259,7 @@
     }
   }
 
+  @include flex-order-for-name(gt-md);
   @include layout-align-for-name(gt-md);
   @include layout-for-name(gt-md);
   @include flex-properties-for-name(gt-md);
@@ -250,6 +272,7 @@
     }
   }
 
+  @include flex-order-for-name(lg);
   @include layout-align-for-name(lg);
   @include layout-for-name(lg);
   @include flex-properties-for-name(lg);
@@ -261,22 +284,8 @@
     }
   }
 
+  @include flex-order-for-name(gt-lg);
   @include layout-align-for-name(gt-lg);
   @include layout-for-name(gt-lg);
   @include flex-properties-for-name(gt-lg);
 }
-
-
-
-// Order attributes for layout children
-// ------------------------------
-[flex-order="0"] { order: 0; }
-[flex-order="1"] { order: 1; }
-[flex-order="2"] { order: 2; }
-[flex-order="3"] { order: 3; }
-[flex-order="4"] { order: 4; }
-[flex-order="5"] { order: 5; }
-[flex-order="6"] { order: 6; }
-[flex-order="7"] { order: 7; }
-[flex-order="8"] { order: 8; }
-[flex-order="9"] { order: 9; }
