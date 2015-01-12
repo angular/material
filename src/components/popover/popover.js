@@ -64,11 +64,11 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
     // Look for the nearest parent md-content, stopping at the rootElement.
     var current = element.parent()[0];
-    while (current && current !== $rootElement[0] && current !== $document.body) {
+    while (current && current !== $rootElement[0] && current !== document.body) {
       if (current.tagName && current.tagName.toLowerCase() == 'md-content') break;
       current = current.parentNode;
     }
-    var popoverParent = angular.element($document.body);
+    var popoverParent = angular.element(document.body);
 
     // We will re-attach popover when visible
     element.detach();
