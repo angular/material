@@ -348,10 +348,10 @@ function InkRippleService($window, $timeout) {
         var parent = node.parentNode;
         var grandparent = parent && parent.parentNode;
         var ancestor = grandparent && grandparent.parentNode;
-        return !node.hasAttribute('disabled') &&
-          !(parent && parent.hasAttribute && parent.hasAttribute('disabled')) &&
-          !(grandparent && grandparent.hasAttribute('disabled')) &&
-          !(ancestor && ancestor.hasAttribute('disabled'));
+        return !isDisabled(node) && !isDisabled(parent) && !isDisabled(grandparent) && !isDisabled(ancestor);
+        function isDisabled (elem) {
+          return elem && elem.hasAttribute && elem.hasAttribute('disabled');
+        }
       }
     }
   }
