@@ -1,10 +1,12 @@
 $card-margin: 8px !default;
+$card-padding: 16px !default;
 $card-box-shadow: $whiteframe-shadow-z1 !default;
 
 md-card {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  margin: $card-margin;
 
   box-shadow: $card-box-shadow;
 
@@ -15,6 +17,6 @@ md-card {
 
   md-card-content {
     order: 1;
-    margin: $card-margin;
+    padding: $card-padding;
   }
 }

@@ -1,4 +1,4 @@
-angular.module('inputBasicDemo', ['ngMaterial'])
+angular.module('inputBasicDemo', ['ngMaterial', 'ngMessages'])
 
 .controller('DemoCtrl', function($scope) {
   $scope.user = {

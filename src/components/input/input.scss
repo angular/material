@@ -10,11 +10,15 @@ $input-border-width-focused: 2px !default;
 $input-line-height: 26px !default;
 $input-padding-top: 2px !default;
 
+$input-error-font-size: 12px !default;
+$input-error-height: 24px !default;
+
 md-input-container {
   display: flex;
   position: relative;
   flex-direction: column;
   padding: $input-container-padding;
+  padding-bottom: $input-container-padding + $input-error-height;
 
   textarea,
   input[type="text"],
@@ -44,10 +48,11 @@ md-input-container {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
+    padding-left: $input-container-padding;
     z-index: 1;
     transform: translate3d(0, $input-label-default-offset, 0) scale($input-label-default-scale);
     transform-origin: left top;
-    transition: all $swift-ease-out-timing-function 0.2s;
+    transition: all $swift-ease-out-timing-function 0.25s;
   }
 
   /* 
@@ -70,17 +75,52 @@ md-input-container {
     }
   }
 
+  ng-messages, [ng-messages] {
+    order: 3;
+    position: relative;
+  }
+  ng-message, [ng-message], 
+  .md-char-counter {
+    -webkit-font-smoothing: antialiased;
+    position: absolute;
+    font-size: $input-error-font-size;
+    line-height: $input-error-height;
+
+    &.ng-enter {
+      transition: $swift-ease-out;
+      transition-delay: 0.2s;
+    }
+    &.ng-leave {
+      transition: $swift-ease-in;
+    }
+    &.ng-enter,
+    &.ng-leave.ng-leave-active {
+      opacity: 0;
+      transform: translate3d(0, -20%, 0);
+    }
+    &.ng-leave,
+    &.ng-enter.ng-enter-active {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  .md-char-counter {
+    bottom: $input-container-padding;
+    right: $input-container-padding;
+  }
+
   &.md-input-focused,
   &.md-input-has-value {
     label {
       transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);
     }
   }
-  &.md-input-focused {
-    .md-input {
-      padding-bottom: 0px; // Increase border width by 1px, decrease padding by 1
-      border-width: 0 0 $input-border-width-focused 0;
-    }
+
+  // Use wide border in error state or in focused state
+  &.md-input-focused .md-input,
+  .md-input.ng-invalid.ng-dirty {
+    padding-bottom: 0px; // Increase border width by 1px, decrease padding by 1
+    border-width: 0 0 $input-border-width-focused 0;
   }
 
   .md-input[disabled] {
