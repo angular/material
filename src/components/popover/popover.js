@@ -55,6 +55,7 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
   function postLink(scope, element, attr, contentCtrl) {
     $mdTheming(element);
     var parent = element.parent();
+    var documentBody = $document.find('body').eq(0);
 
     // check for aria label
     var elementHasText = element[0].textContent.trim();
@@ -64,11 +65,11 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
     // Look for the nearest parent md-content, stopping at the rootElement.
     var current = element.parent()[0];
-    while (current && current !== $rootElement[0] && current !== document.body) {
+    while (current && current !== $rootElement[0] && current !== documentBody) {
       if (current.tagName && current.tagName.toLowerCase() == 'md-content') break;
       current = current.parentNode;
     }
-    var popoverParent = angular.element(document.body);
+    var popoverParent = angular.element(documentBody);
 
     // We will re-attach popover when visible
     element.detach();
