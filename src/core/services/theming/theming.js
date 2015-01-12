@@ -18,7 +18,8 @@ angular.module('material.core.theming', [])
 /**
  * @ngdoc method
  * @name $mdThemingProvider#setDefaultTheme
- * @param {string} themeName Default theme name to be applied to elements. Default value is `default`.
+ * @param {string} themeName Default theme name to be applied to elements.
+ *     Default value is `default`.
  */
 
 /**
@@ -135,9 +136,9 @@ function ThemingProvider() {
     }
 
     backgroundImage = backgroundImage
-      .replace(/^.*?\{/, '{') // get rid of everything before opening brace
-      .replace(/\}.\).*?$/, '}') // get rid of everything after closing brace and paren
-      .replace(/_/g, '"'); // we output underscores as placeholders for quotes
+        .replace(/^.*?\{/, '{') // get rid of everything before opening brace
+        .replace(/\}.\).*?$/, '}') // get rid of everything after closing brace and paren
+        .replace(/_/g, '"'); // we output underscores as placeholders for quotes
 
     // Remove backslashes that firefox gives
     var parsed = JSON.parse(decodeURI(backgroundImage));
@@ -166,8 +167,8 @@ function ThemingProvider() {
     });
     if (missingColors.length) {
       throw new Error("Missing colors %1 in palette %2!"
-                      .replace('%1', missingColors.join(', '))
-                      .replace('%2', name));
+          .replace('%1', missingColors.join(', '))
+          .replace('%2', name));
     }
 
     return map;
@@ -249,11 +250,12 @@ function ThemingProvider() {
 
         Object.keys(color.hues).forEach(function(name) {
           if (!defaultHues[name]) {
-            throw new Error("Invalid hue name '%1' in theme %2's %3 color %4. Available hue names: %4"
-              .replace('%1', name)
-              .replace('%2', self.name)
-              .replace('%3', paletteName)
-              .replace('%4', Object.keys(defaultHues).join(', '))
+            throw new Error(
+                "Invalid hue name '%1' in theme %2's %3 color %4. Available hue names: %4"
+                .replace('%1', name)
+                .replace('%2', self.name)
+                .replace('%3', paletteName)
+                .replace('%4', Object.keys(defaultHues).join(', '))
             );
           }
         });
@@ -261,12 +263,13 @@ function ThemingProvider() {
           return color.hues[key];
         }).forEach(function(hueValue) {
           if (VALID_HUE_VALUES.indexOf(hueValue) == -1) {
-            throw new Error("Invalid hue value '%1' in theme %2's %3 color %4. Available hue values: %5"
-              .replace('%1', hueValue)
-              .replace('%2', self.name)
-              .replace('%3', colorType)
-              .replace('%4', paletteName)
-              .replace('%5', VALID_HUE_VALUES.join(', '))
+            throw new Error(
+                "Invalid hue value '%1' in theme %2's %3 color %4. Available hue values: %5"
+                .replace('%1', hueValue)
+                .replace('%2', self.name)
+                .replace('%3', colorType)
+                .replace('%4', paletteName)
+                .replace('%5', VALID_HUE_VALUES.join(', '))
             );
           }
         });
@@ -367,8 +370,12 @@ function parseRules(theme, colorType, rules) {
 
   var themeNameRegex = new RegExp('.md-' + theme.name + '-theme', 'g');
   // Matches '{{ primary-color }}', etc
-  var hueRegex = new RegExp('(\'|\")?{{\\s*\(' + colorType + '\)-\(color|contrast\)\-\?\(\\d\\.\?\\d\*\)\?\\s*}}(\"|\')?','g');
-  var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue\-[0-3]|shadow)-?(\d\.?\d*)?\s*\}\}'?"?/g;
+  var hueRegex = new RegExp('(\'|\")?{{\\s*\(' +
+      colorType +
+      '\)-\(color|contrast\)\-\?\(\\d\\.\?\\d\*\)\?\\s*}}(\"|\')?','g');
+
+  var simpleVariableRegex =
+      /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue\-[0-3]|shadow)-?(\d\.?\d*)?\s*\}\}'?"?/g;
   var palette = PALETTES[color.name];
 
   // find and replace simple variables where we use a specific hue, not angentire palette
@@ -391,9 +398,9 @@ function parseRules(theme, colorType, rules) {
   // For each type, generate rules for each hue (ie. default, md-hue-1, md-hue-2, md-hue-3)
   angular.forEach(color.hues, function(hueValue, hueName) {
     var newRule = rules
-      .replace(hueRegex, function(match, _, colorType, hueType, opacity) {
-        return rgba(palette[hueValue][hueType === 'color' ? 'value' : 'contrast'], opacity);
-      });
+        .replace(hueRegex, function(match, _, colorType, hueType, opacity) {
+          return rgba(palette[hueValue][hueType === 'color' ? 'value' : 'contrast'], opacity);
+        });
     if (hueName !== 'default') {
       newRule = newRule.replace(themeNameRegex, '.md-' + theme.name + '-theme.md-' + hueName);
     }
@@ -415,8 +422,8 @@ function generateThemes($injector) {
 
   // Break the CSS into individual rules
   var rules = themeCss.split(/\}(?!(\}|'|"|;))/)
-    .filter(function(rule) { return rule && rule.length; })
-    .map(function(rule) { return rule.trim() + '}'; });
+      .filter(function(rule) { return rule && rule.length; })
+      .map(function(rule) { return rule.trim() + '}'; });
 
   var rulesByType = {};
   THEME_COLOR_TYPES.forEach(function(type) {
@@ -486,10 +493,11 @@ function generateThemes($injector) {
       // Map everything to rgb colors
       var rgbValue = colorToRgbaArray(hueValue);
       if (!rgbValue) {
-        throw new Error("Color %1, in palette %2's hue %3, is invalid. Hex or rgb(a) color expected."
-                        .replace('%1', hueValue)
-                        .replace('%2', palette.name)
-                        .replace('%3', hueName));
+        throw new Error(
+            "Color %1, in palette %2's hue %3, is invalid. Hex or rgb(a) color expected."
+            .replace('%1', hueValue)
+            .replace('%2', palette.name)
+            .replace('%3', hueName));
       }
 
       palette[hueName] = {
@@ -545,8 +553,8 @@ function colorToRgbaArray(clr) {
 function rgba(rgbArray, opacity) {
   if (rgbArray.length == 4) opacity = rgbArray.pop();
   return opacity && opacity.length ?
-    'rgba(' + rgbArray.join(',') + ',' + opacity + ')' :
-    'rgb(' + rgbArray.join(',') + ')';
+      'rgba(' + rgbArray.join(',') + ',' + opacity + ')' :
+      'rgb(' + rgbArray.join(',') + ')';
 }
 
 })();

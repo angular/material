@@ -80,7 +80,8 @@ function InkRippleService($window, $timeout) {
         isHeld = false,
         node = element[0],
         hammertime = new Hammer(node),
-        color = parseColor(element.attr('md-ink-ripple')) || parseColor($window.getComputedStyle(options.colorElement[0]).color || 'rgb(0, 0, 0)');
+        color = parseColor(element.attr('md-ink-ripple')) ||
+            parseColor($window.getComputedStyle(options.colorElement[0]).color || 'rgb(0, 0, 0)');
 
     // expose onInput for ripple testing
     scope._onInput = onInput;
@@ -129,7 +130,10 @@ function InkRippleService($window, $timeout) {
           grn += grn;
           blu += blu;
         }
-        return 'rgba(' + parseInt(red, 16) + ',' + parseInt(grn, 16) + ',' + parseInt(blu, 16) + ',0.1)';
+        return 'rgba(' + parseInt(red, 16) +
+            ',' + parseInt(grn, 16) +
+            ',' + parseInt(blu, 16) +
+            ',0.1)';
       }
 
       /**
@@ -184,7 +188,8 @@ function InkRippleService($window, $timeout) {
      */
     function createRipple(left, top) {
 
-      color = parseColor(element.attr('md-ink-ripple')) || parseColor($window.getComputedStyle(options.colorElement[0]).color || 'rgb(0, 0, 0)');
+      color = parseColor(element.attr('md-ink-ripple')) ||
+          parseColor($window.getComputedStyle(options.colorElement[0]).color || 'rgb(0, 0, 0)');
 
       var container = getRippleContainer(),
           size = getRippleSize(left, top),
@@ -223,12 +228,11 @@ function InkRippleService($window, $timeout) {
       /**
        * Creates the ripple element with the provided css
        *
-       * @param {object} css properties to be applied
-       *
-       * @returns {angular.element} the generated ripple element
+       * @param {Object} css Properties to be applied.
+       * @returns {angular.element} The generated ripple element.
        */
       function getRippleElement(css) {
-        var elem = angular.element('<div class="md-ripple" data-counter="' + counter++ + '">');
+        var elem = angular.element('<div class="md-ripple" data-counter="' + (counter++) + '">');
         ripples.unshift(elem);
         states.unshift({ animating: true });
         container.append(elem);
@@ -237,7 +241,7 @@ function InkRippleService($window, $timeout) {
       }
 
       /**
-       * Calculate the ripple size
+       * Gets the calculated ripple size.
        *
        * @returns {number} calculated ripple diameter
        */
@@ -264,11 +268,11 @@ function InkRippleService($window, $timeout) {
       /**
        * Generates the ripple css
        *
-       * @param {number} the diameter of the ripple
-       * @param {number} the left cursor offset
-       * @param {number} the top cursor offset
-       *
-       * @returns {{backgroundColor: *, width: string, height: string, marginLeft: string, marginTop: string}}
+       * @param {number} size The diameter of the ripple.
+       * @param {number} left The left cursor offset.
+       * @param {number} top The top cursor offset.
+       * @returns {{backgroundColor: *, width: string, height: string, marginLeft: string,
+       *     marginTop: string}}
        */
       function getRippleCss(size, left, top) {
         var rect,
@@ -299,8 +303,7 @@ function InkRippleService($window, $timeout) {
         /**
          * Converts rgba string to rgb, removing the alpha value
          *
-         * @param {string} rgba color
-         *
+         * @param {string} color The rgba color.
          * @returns {string} rgb color
          */
         function rgbaToRGB(color) {
@@ -309,14 +312,15 @@ function InkRippleService($window, $timeout) {
       }
 
       /**
-       * Gets the current ripple container
-       * If there is no ripple container, it creates one and returns it
+       * Gets the current ripple container. If there is no ripple container,
+       * it creates one and returns it
        *
        * @returns {angular.element} ripple container element
        */
       function getRippleContainer() {
         if (rippleContainer) return rippleContainer;
-        var container = rippleContainer = angular.element('<div class="md-ripple-container"></div>');
+        var container = rippleContainer =
+            angular.element('<div class="md-ripple-container"></div>');
         element.append(container);
         return container;
       }
@@ -325,7 +329,7 @@ function InkRippleService($window, $timeout) {
     /**
      * Handles user input start and stop events
      *
-     * @param {event} event fired by hammer.js
+     * @param {Event} ev The event fired by hammer.js.
      */
     function onInput(ev) {
       var ripple, index;
@@ -340,9 +344,9 @@ function InkRippleService($window, $timeout) {
       }
 
       /**
-       * Determines if the ripple is allowed
+       * Gets whether the ripple is allowed.
        *
-       * @returns {boolean} true if the ripple is allowed, false if not
+       * @returns {boolean}
        */
       function isRippleAllowed() {
         var parent = node.parentNode;
