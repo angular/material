@@ -107,6 +107,12 @@ function MdTabDirective($mdInkRipple, $compile, $mdUtil, $mdConstant, $timeout) 
         detachRippleFn();
         tabsCtrl.remove(tabItemCtrl);
       });
+      element.on('$destroy', function () {
+        //-- wait for item to be removed from the dom
+        $timeout(function () {
+          tabsCtrl.scope.$broadcast('$mdTabsChanged');
+        }, 0, false);
+      });
 
       if (!angular.isDefined(attr.ngClick)) {
         element.on('click', defaultClickListener);

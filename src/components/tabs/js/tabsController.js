@@ -4,7 +4,7 @@
 angular.module('material.components.tabs')
   .controller('$mdTabs', MdTabsController);
 
-function MdTabsController($scope, $element, $mdUtil, $$rAF) {
+function MdTabsController($scope, $element, $mdUtil, $timeout) {
 
   var tabsList = $mdUtil.iterator([], false);
   var self = this;
@@ -69,21 +69,17 @@ function MdTabsController($scope, $element, $mdUtil, $$rAF) {
 
   function remove(tab, noReselect) {
     if (!tabsList.contains(tab)) return;
+    if (noReselect) return;
+    var isSelectedItem = getSelectedItem() === tab,
+        newTab = previous() || next();
 
-    if (noReselect) {
-      // do nothing
-    } else if (getSelectedItem() === tab) {
-      if (tabsList.count() > 1) {
-        select(previous() || next());
-      } else {
-        deselect(tab);
-      }
-    }
-
+    deselect(tab);
     tabsList.remove(tab);
     tab.onRemove();
 
     $scope.$broadcast('$mdTabsChanged');
+
+    if (isSelectedItem) { select(newTab); }
   }
 
   // Move a tab (used when ng-repeat order changes)
