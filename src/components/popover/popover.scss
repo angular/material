@@ -1,3 +1,6 @@
+$popover-arrow-width: 10px;
+$popover-arrow-height: 10px;
+
 @keyframes popoverBackgroundShow {
   0% {
     transform: scale(0.2);
@@ -23,6 +26,12 @@ md-popover {
   overflow: hidden;
   pointer-events: none;
   border-radius: 4px;
+  
+  // Offset the popover to account for the popover arrow
+  &[md-placement="top"]     { margin-top: -$popover-arrow-height; }
+  &[md-placement="right"]   { margin-left: $popover-arrow-width; }
+  &[md-placement="bottom"]  { margin-top: $popover-arrow-height; }
+  &[md-placement="left"]    { margin-left: -$popover-arrow-width; }
 
   .md-background {
     position: absolute;
