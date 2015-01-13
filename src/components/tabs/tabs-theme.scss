@@ -1,9 +1,4 @@
-$tabs-color-palette: $primary-color-palette !default;
-$tabs-header-background-color: map-get($tabs-color-palette, '500') !default;
-$tabs-inactive-color: map-get($tabs-color-palette, '100') !default;
-$tabs-active-color: $primary-color-palette-contrast-color !default;
-$tabs-disabled-color: $foreground-quarternary-color !default;
-$tabs-highlight-color: $primary-color-palette-contrast-color !default;
+$tabs-highlight-color: white !default;
 
 md-tabs.md-THEME_NAME-theme {
   .md-header {
@@ -38,8 +33,8 @@ md-tabs.md-THEME_NAME-theme {
 
 
   md-tabs-ink-bar {
-    color: $tabs-highlight-color;
-    background: $tabs-highlight-color;
+    color: '{{primary-contrast}}';
+    background: '{{primary-contrast}}';
   }
 
   md-tab {
@@ -55,7 +50,7 @@ md-tabs.md-THEME_NAME-theme {
       background-color: '{{primary-contrast-0.1}}';
     }
     .md-ripple-container {
-      color: $tabs-highlight-color;
+      color: '{{primary-contrast}}';
     }
   }
 }

@@ -28,8 +28,8 @@ $h6-margin-base: 2.33em 0 !default;
 
 html, body {
   height: 100%;
-  color: $foreground-primary-color;
-  background: $background-color-base;
+  color: rgba(0,0,0,0.87);
+  background: white;
 
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   -webkit-touch-callout: none;
@@ -239,21 +239,4 @@ md-tab {
     }
   }
   @return $map-str + '}';
-}
-.md-color-palette-definition {
-  $content-rule: '{';
-  $map-str: '';
-  $keys: map-keys($colors);
-  $len: length($keys);
-  @for $i from 1 through $len {
-    $key: nth($keys, $i);
-    $value: map-get($colors, $key);
-    $content-rule: $content-rule + '_' + $key + '_: ' + map-to-string($value);
-    @if $i != $len {
-      $content-rule: $content-rule + ',';
-    }
-  }
-  $content-rule: $content-rule + '}';
-  background-image: url("data:image/svg+xml;utf8,#{$content-rule}");
-  display: none;
 }

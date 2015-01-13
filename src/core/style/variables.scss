@@ -1,26 +1,6 @@
 // Font Variables
 $font-family: RobotoDraft, Roboto, 'Helvetica Neue', sans-serif !default;
 
-$dark-theme: false !default;
-$foreground-color-palette: $color-grey !default;
-$foreground-base-color: map-get($foreground-color-palette, '1000') !default;
-$foreground-primary-color: rgba($foreground-base-color, 0.73) !default;
-$foreground-secondary-color: rgba($foreground-base-color, 0.54) !default;
-$foreground-tertiary-color: rgba($foreground-base-color, 0.26) !default;
-$foreground-quarternary-color: rgba($foreground-base-color, 0.12) !default;
-$foreground-text-shadow: none !default;
-
-
-$input-border-color: $foreground-secondary-color !default;
-$input-disabled-border-color: $foreground-tertiary-color !default;
-
-$background-color-palette: $color-grey !default;
-$background-color-base: map-get($background-color-palette, 'A100') !default;
-
-$primary-color-palette: $color-light-blue !default;
-$warn-color-palette: $color-red !default;
-$primary-color-palette-contrast-color: white !default;
-
 // Layout
 // ------------------------------
 
