@@ -84,8 +84,9 @@ code:not(.highlight) {
   height: 1px;
   margin: -1px;
   overflow: hidden;
-  padding: 0; position:
-  absolute;
+  padding: 0;
+  position: absolute;
+  text-transform: none;
   width: 1px;
 }
 .md-sidenav-inner {
@@ -104,6 +105,7 @@ code:not(.highlight) {
   margin-bottom: 15px;
 }
 
+/* Begin Docs Menu */
 .docs-menu,
 .docs-menu ul {
   list-style: none;
@@ -112,10 +114,14 @@ code:not(.highlight) {
 .docs-menu li {
   margin: 0;
 }
+.docs-menu > li {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
 .docs-menu .md-button {
   border-radius: 0;
   color: inherit;
   cursor: pointer;
+  font-weight: 400;
   line-height: 40px;
   margin: 0;
   max-height: 40px;
@@ -126,6 +132,12 @@ code:not(.highlight) {
   white-space: normal;
   width: 100%;
 }
+.docs-menu a.md-button {
+  display: block;
+}
+.docs-menu button.md-button::-moz-focus-inner {
+  padding: 0;
+}
 .docs-menu .md-button.active {
   color: #03a9f4;
 }
@@ -133,14 +145,24 @@ code:not(.highlight) {
   color: #888;
   display: block;
   font-size: inherit;
-  font-weight: normal;
+  font-weight: 500;
   line-height: 40px;
   margin: 0;
   padding: 0px 16px;
   text-align: left;
   width: 100%;
 }
-.list-item-toggle ul {
+.docs-menu li.childActive {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+.docs-menu li.childActive:not(:last-of-type){
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+.docs-menu li.parentActive,
+.docs-menu li.parentActive .menu-toggle-list {
+  background-color: #f6f6f6;
+}
+.menu-toggle-list {
   background: #fff;
   max-height: 999px;
   overflow: hidden;
@@ -153,17 +175,13 @@ code:not(.highlight) {
   transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
   transition-property: max-height;
 }
-.list-item-toggle ul.ng-hide {
+.menu-toggle-list.ng-hide {
   max-height: 0;
 }
-.list-item-toggle ul a {
+.menu-toggle-list a {
   display: block;
   text-transform: none;
 }
-.list-item-link + .list-item-toggle .md-button-toggle {
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-}
-
 .md-button-toggle .md-toggle-icon {
   background: transparent url(img/icons/list_control_down.png) no-repeat center center;
   background-size: 100% auto;
@@ -176,11 +194,13 @@ code:not(.highlight) {
 .md-button-toggle .md-toggle-icon.toggled {
   transform: rotate(180deg);
 }
+/* End Docs Menu */
 
 .menu-icon {
   background: none;
   border: none;
   margin-right: 16px;
+  padding: 0;
 }
 .app-toolbar .md-toolbar-tools h3 {
   -webkit-margin-before: 0;
