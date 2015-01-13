@@ -54,34 +54,76 @@ function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria) {
     link: postLink
   };
 
-  function isAnchor(attr) {
-    return angular.isDefined(attr.href) || angular.isDefined(attr.ngHref);
+  function postLink(scope, element, attr) {
+    var node = element[0];
+    var elementHasText = node.textContent.trim();
+
+    $mdTheming(element);
+    $mdInkRipple.attachButtonBehavior(scope, element);
+
+    if (!elementHasText) {
+      $mdAria.expect(element, 'aria-label');
+    }
+
+    updateTabIndex(scope, element, attr);
+
   }
-  
+
+  // ************************************************
+  // Internal Methods
+  // ************************************************
+
+  /**
+   * Publish either an <a/> or <button/> template
+   * @returns {string}
+   */
   function getTemplate(element, attr) {
     return isAnchor(attr) ?
            '<a class="md-button" ng-transclude></a>' :
            '<button class="md-button" ng-transclude></button>';
   }
 
-  function postLink(scope, element, attr) {
-    var node = element[0];
-    $mdTheming(element);
-    $mdInkRipple.attachButtonBehavior(scope, element);
+  /**
+   * Should we use an <a/> template
+   * @returns {boolean|*}
+   */
+  function isAnchor(attr) {
+    return angular.isDefined(attr.href) || angular.isDefined(attr.ngHref);
+  }
 
-    var elementHasText = node.textContent.trim();
-    if (!elementHasText) {
-      $mdAria.expect(element, 'aria-label');
-    }
+  /**
+   * Is this a simulate button ?
+   * @returns {boolean}
+   */
+  function isButton(attr) {
+    return !isAnchor(attr) && (attr.role == "button");
+  }
 
-    // For anchor elements, we have to set tabindex manually when the 
-    // element is disabled
-    if (isAnchor(attr) && angular.isDefined(attr.ngDisabled) ) {
-      scope.$watch(attr.ngDisabled, function(isDisabled) {
-        element.attr('tabindex', isDisabled ? -1 : 0);
-      });
+  /**
+   * Update the accessibility `tabindex` property
+   */
+  function updateTabIndex(scope, element, attr) {
+    if ( isAnchor(attr) ) {
+
+      // For anchor elements, we have to set tabindex manually
+      // when the element is disabled
+
+      if ( angular.isDefined(attr.ngDisabled) ) {
+
+        scope.$watch(attr.ngDisabled, function(isDisabled) {
+          element.attr('tabindex', isDisabled ? -1 : 0);
+        });
+
+      }
+
+    } else if ( isButton(attr) ) {
+
+      $mdAria.expect(element, 'tabindex', "0" );
+
     }
   }
 
+
 }
+
 })();
