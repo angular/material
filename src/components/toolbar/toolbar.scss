@@ -20,6 +20,10 @@ md-toolbar {
     height: $toolbar-tall-height;
     min-height: $toolbar-tall-height;
     max-height: $toolbar-tall-height;
+
+    ~.md-sticky-clone {
+      top: $toolbar-tall-height;
+    }
   }
 
   &.md-medium-tall {
@@ -32,10 +36,18 @@ md-toolbar {
       min-height: 48px;
       max-height: 48px;
     }
+
+    ~.md-sticky-clone {
+      top: $toolbar-medium-tall-height;
+    }
   }
 
   .md-indent {
     margin-left: $toolbar-indent-margin;
+  }
+
+  ~.md-sticky-clone {
+    top: $toolbar-height;
   }
 }
 
