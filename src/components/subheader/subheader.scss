@@ -44,6 +44,9 @@ $subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16) !default;
     }
 
     transition: 0.2s ease-out margin;
+    &.md-sticky-clone {
+      z-index: 2;
+    }
     &[sticky-state="active"] {
       margin-top: -2px;
     }

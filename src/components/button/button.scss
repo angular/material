@@ -5,6 +5,8 @@ $button-padding: 2px 6px 3px !default;
 $button-fab-width: 56px !default;
 $button-fab-height: 56px !default;
 $button-fab-padding: 16px !default;
+$button-fab-mini-width: 40px !default;
+$button-fab-mini-height: 40px !default;
 
 $button-fab-toast-offset: $button-fab-height * 0.75;
 
@@ -100,6 +102,14 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
     md-icon {
       line-height: $button-fab-height;
       margin-top: 0;
+    }
+
+    &.md-mini {
+      width: $button-fab-mini-width;
+      height: $button-fab-mini-height;
+      md-icon {
+        line-height: $button-fab-mini-height;
+      }
     }
 
   }
