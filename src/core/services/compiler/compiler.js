@@ -5,6 +5,7 @@ angular.module('material.core')
   .service('$mdCompiler', mdCompilerService);
 
 function mdCompilerService($q, $http, $injector, $compile, $controller, $templateCache) {
+  /* jshint validthis: true */
 
   /*
    * @ngdoc service

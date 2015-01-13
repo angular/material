@@ -110,13 +110,13 @@
 
           return deferred.promise;
         }
-        return $q.reject("Invalid `md-component-id` value.")
+        return $q.reject("Invalid `md-component-id` value.");
       }
 
     };
 
     function isValidID(handle){
-      return handle && (handle != "");
+      return handle && (handle !== "");
     }
 
   }

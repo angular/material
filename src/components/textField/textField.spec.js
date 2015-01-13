@@ -212,7 +212,7 @@ describe('Text Field directives', function() {
       var input = el.find('input');
       var label = el.find('label');
 
-      expect( label.attr('for') == "" ).toBe( false );
+      expect( label.attr('for') === "" ).toBe( false );
       expect( input.attr('id') ).toBe( label.attr('for') );
     });
 

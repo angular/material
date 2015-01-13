@@ -73,7 +73,8 @@ describe('$mdComponentRegistry Service', function() {
     });
 
     it('should wait for next component registration', function() {
-      var resolved = undefined, count = 0;
+      var resolved;
+      var count = 0;
       var promise = $mdComponentRegistry.when('left');
       var el = setup('md-component-id="left"');
 
@@ -109,7 +110,8 @@ describe('$mdComponentRegistry Service', function() {
     it('should not find a component without an id', function() {
       var el = setup();
 
-      var resolved = undefined, count = 0;
+      var resolved;
+      var count = 0;
       var promise = $mdComponentRegistry.when('left');
       var instance = $mdComponentRegistry.get('left');
 
@@ -134,7 +136,7 @@ describe('$mdComponentRegistry Service', function() {
 
       expect(fail).toBe(true);
 
-      fail = false
+      fail = false;
       $mdComponentRegistry.when(componentID = "").catch( onFail );
       $timeout.flush();
 

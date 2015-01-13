@@ -156,7 +156,7 @@ function TabsDirective($mdTheming) {
         if (tabsCtrl.inRange(newIndex)) {
           var newTab = tabsCtrl.itemAt(newIndex);
           while (newTab && newTab.isDisabled()) {
-            newTab = newIndex > oldIndex
+            newTab = newIndex > oldIndex 
                 ? tabsCtrl.next(newTab)
                 : tabsCtrl.previous(newTab);
           }

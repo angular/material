@@ -140,7 +140,7 @@ function InkRippleService($window, $timeout) {
        * @returns {string} rgba color with 0.1 alpha
        */
       function rgbToRGBA(color) {
-        return color.replace(')', ', 0.1)').replace('(', 'a(')
+        return color.replace(')', ', 0.1)').replace('(', 'a(');
       }
 
     }
@@ -316,7 +316,8 @@ function InkRippleService($window, $timeout) {
        */
       function getRippleContainer() {
         if (rippleContainer) return rippleContainer;
-        var container = rippleContainer = angular.element('<div class="md-ripple-container"></div>');
+        var container = angular.element('<div class="md-ripple-container"></div>');
+        rippleContainer = container;
         element.append(container);
         return container;
       }

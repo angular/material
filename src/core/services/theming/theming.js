@@ -345,7 +345,7 @@ function parseRules(theme, colorType, rules) {
 
   var themeNameRegex = new RegExp('.md-' + theme.name + '-theme', 'g');
   // Matches '{{ primary-color }}', etc
-  var hueRegex = new RegExp('(\'|\")?{{\\s*\(' + colorType + '\)-\(color|contrast\)\-\?\(\\d\\.\?\\d\*\)\?\\s*}}(\"|\')?','g');
+  var hueRegex = new RegExp('(\'|")?{{\\s*(' + colorType + ')-(color|contrast)-?(\\d\\.?\\d*)?\\s*}}(\"|\')?','g');
   var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue\-[0-3]|shadow)-?(\d\.?\d*)?\s*\}\}'?"?/g;
   var palette = PALETTES[color.name];
 
@@ -400,7 +400,7 @@ function generateThemes($injector) {
   THEME_COLOR_TYPES.forEach(function(type) {
     rulesByType[type] = '';
   });
-  var ruleMatchRegex = new RegExp('md-\(' + THEME_COLOR_TYPES.join('\|') + '\)', 'g');
+  var ruleMatchRegex = new RegExp('md-(' + THEME_COLOR_TYPES.join('|') + ')', 'g');
 
   // Sort the rules based on type, allowing us to do color substitution on a per-type basis
   rules.forEach(function(rule) {

@@ -86,6 +86,6 @@ describe('md-button', function() {
       expect(button.attr('tabindex')).toBe("-1");
     }));
 
-  })
+  });
 
 });
