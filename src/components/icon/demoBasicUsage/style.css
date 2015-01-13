@@ -1,7 +1,14 @@
 
-.face {
-  border-radius: 30px;
-  border: 1px solid #ddd;
-  width: 48px;
-  margin: 16px;
+.icon {
+  width: 54px;
+  display: inline-block;
+  text-align: center;
+  white-space: wrap;
+  vertical-align: top;
+  margin: 0 10px;
+  font-size: 10px;
+}
+
+.icon md-icon {
+  font-size: 50px;
 }

@@ -1,8 +1,8 @@
 
-<div ng-controller="IconCtrl">
+<div ng-controller="IconCtrl" ng-cloak>
   <md-content class="md-padding">
-    <div ng-repeat="icon in icons">
-      <md-icon icon="{{icon}}"></md-icon>
+    <div ng-repeat="icon in icons" class="icon">
+      <md-icon icon="{{ icon }}"></md-icon>
       {{ icon }}
     </div>
   </md-content>
