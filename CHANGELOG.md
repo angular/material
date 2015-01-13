@@ -53,7 +53,7 @@
 
 #### Breaking Changes
 
-* md-text-float has been deprecated due to flaws (explanation in [#547](https://github.com/angular/material/issue/547)).
+* md-text-float has been deprecated due to flaws (explanation in [#547](https://github.com/angular/material/issues/547)).
 
 To create an input, you now must use the native `<input>` and `<textarea>`
 elements, with a `<md-input-container>` parent around each
