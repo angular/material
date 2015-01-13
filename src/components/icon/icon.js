@@ -11,6 +11,7 @@ angular.module('material.components.icon', [
   'material.core'
 ])
   .directive('mdIcon', mdIconDirective);
+  // .provider('$mdIcon', MdIconProvider);
 
 /*
  * @ngdoc directive
@@ -20,25 +21,31 @@ angular.module('material.components.icon', [
  * @restrict E
  *
  * @description
- * The `<md-icon>` directive is an element useful for SVG icons
+ * The `<md-icon>` directive is an element useful for showing an icon
  *
  * @usage
  * <hljs lang="html">
- *  <md-icon icon="/img/icons/ic_access_time_24px.svg">
- *  </md-icon>
+ *  <md-icon icon="icon-error"></md-icon>
  * </hljs>
  *
  */
 function mdIconDirective() {
   return {
+    scope: {
+      icon: '@'
+    },
     restrict: 'E',
-    template: '<object class="md-icon"></object>',
+    template: '<div ng-class="icon"></div>',
     compile: function(element, attr) {
-      var object = angular.element(element[0].children[0]);
-      if(angular.isDefined(attr.icon)) {
-        object.attr('data', attr.icon);
-      }
+      // var object = angular.element(element[0].children[0]);
+      // if(angular.isDefined(attr.icon)) {
+      //   object.attr('data', attr.icon);
+      // }
     }
   };
+}
+
+function MdIconProvider($$interimElementProvider) {
+
 }
 })();
