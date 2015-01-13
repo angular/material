@@ -32,6 +32,8 @@ angular.module('material.components.tooltip', [
  *
  * @param {expression=} md-visible Boolean bound to whether the tooltip is
  * currently visible.
+ * @param {number=} [mdTooltipDelay=400] Number of milliseconds to delay showing
+ * tooltip.
  */
 function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdTheming, $rootElement) {
 
@@ -45,7 +47,8 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       '<div class="md-background"></div>' +
       '<div class="md-content" ng-transclude></div>',
     scope: {
-      visible: '=?mdVisible'
+      visible: '=?mdVisible',
+      delay: '=?mdTooltipDelay'
     },
     link: postLink
   };
@@ -53,6 +56,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
   function postLink(scope, element, attr, contentCtrl) {
     $mdTheming(element);
     var parent = element.parent();
+    scope.delay = scope.delay || TOOLTIP_SHOW_DELAY;
 
     // Look for the nearest parent md-content, stopping at the rootElement.
     var current = element.parent()[0];
@@ -98,7 +102,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     // Methods
     // *******
 
-    // If setting visible to true, debounce to TOOLTIP_SHOW_DELAY ms
+    // If setting visible to true, debounce to scope.delay ms
     // If setting visible to false and no timeout is active, instantly hide the tooltip.
     function setVisible(value) {
       setVisible.value = !!value;
@@ -109,7 +113,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
           $timeout(function() {
             scope.visible = setVisible.value;
             setVisible.queued = false;
-          }, TOOLTIP_SHOW_DELAY);
+          }, scope.delay);
 
         } else {
           $timeout(function() { scope.visible = false; });
