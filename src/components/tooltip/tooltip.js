@@ -32,6 +32,8 @@ angular.module('material.components.tooltip', [
  *
  * @param {expression=} mdVisible Boolean bound to whether the tooltip is
  * currently visible.
+ * @param {number=} [mdTooltipDelay=400] Number of milliseconds to delay showing
+ * tooltip.
  */
 function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdTheming) {
 
