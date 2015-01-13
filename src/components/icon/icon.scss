@@ -6,6 +6,10 @@ md-icon {
   margin-top: 5px;
   background-repeat: no-repeat no-repeat;
   pointer-events: none;
+  display: flex;
+  object.md-icon {
+    display: inline-block;
+  }
 }
 svg, object {
   fill: currentColor;
