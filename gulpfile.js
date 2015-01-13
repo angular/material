@@ -57,7 +57,6 @@ var config = {
     'src/**/*.js'
   ],
   themeBaseFiles: [
-    'src/core/style/color-palette.scss',
     'src/core/style/variables.scss',
     'src/core/style/mixins.scss'
   ],
@@ -66,6 +65,9 @@ var config = {
     'src/core/style/variables.scss',
     'src/core/style/mixins.scss',
     'src/core/style/structure.scss',
+    'src/core/style/layout.scss'
+  ],
+  scssStandaloneFiles: [
     'src/core/style/layout.scss'
   ],
   paths: 'src/{components,services}/**',
@@ -410,11 +412,12 @@ gulp.task('build-module-demo', function() {
  ** ***************************************** */
 
 gulp.task('build-scss', function() {
-  // var defaultThemeContents = fs.readFileSync('themes/_default-theme.scss');
   var scssGlob = path.join(config.paths, '*.scss');
 
   gutil.log("Building css files...");
-  return gulp.src(config.scssBaseFiles.concat(scssGlob))
+  var streams = [];
+  streams.push(
+    gulp.src(config.scssBaseFiles.concat(scssGlob))
       .pipe(filterNonCodeFiles())
       .pipe(filter(['**', '!**/*-theme.scss'])) // remove once ported
       .pipe(concat('angular-material.scss'))
@@ -428,7 +431,21 @@ gulp.task('build-scss', function() {
           .pipe(rename, {extname: '.min.css'})
           .pipe(gulp.dest, config.outputDir)
         ()
-      ));
+      ))
+  );
+  if (IS_RELEASE_BUILD) {
+    var baseVars = fs.readFileSync('src/core/style/variables.scss', 'utf8').toString();
+    streams.push(
+      gulp.src(config.scssStandaloneFiles)
+        .pipe(insert.prepend(baseVars))
+        .pipe(sass())
+        .pipe(autoprefix())
+        .pipe(insert.prepend(config.banner))
+        .pipe(rename({prefix: 'angular-material-'}))
+        .pipe(gulp.dest(path.join(config.outputDir, 'modules', 'css')))
+    );
+  }
+  return series(streams);
 });
 
 /** *****************************************
