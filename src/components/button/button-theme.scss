@@ -81,4 +81,8 @@ $button-fab-border-radius: 50% !default;
     background-color: transparent;
     cursor: not-allowed;
   }
+
+  &.md-mini-fab {
+    @extend .md-fab
+  }
 }

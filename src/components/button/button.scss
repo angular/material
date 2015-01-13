@@ -5,6 +5,8 @@ $button-padding: 2px 6px 3px !default;
 $button-fab-width: 56px !default;
 $button-fab-height: 56px !default;
 $button-fab-padding: 16px !default;
+$button-mini-fab-width: 40px !default;
+$button-mini-fab-height: 40px !default;
 
 $button-fab-toast-offset: $button-fab-height * 0.75;
 
@@ -103,6 +105,18 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
     }
 
   }
+
+  &.md-mini-fab {
+    
+    @extend .md-fab;
+    
+    width: $button-mini-fab-width;
+    height: $button-mini-fab-height;
+
+    md-icon {
+      line-height: $button-mini-fab-height;
+    }
+  }  
 
   &:not([disabled]) {
     &.md-raised,
