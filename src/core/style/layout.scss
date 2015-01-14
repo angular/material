@@ -211,13 +211,16 @@
 @include layout-align-for-name();
 @include flex-order-for-name();
 
-[hide]:not([show]) {
-  display: none;
-}
+/**
+ * `hide-gt-sm show-gt-lg` should hide from 0px to 1200px
+ * `show-md hide-gt-sm` should show from 0px to 600px and >960px
+ * `hide-gt-md show-gt-sm` should show everywhere (show overrides hide)`
+ */
 
+// SMALL SCREEN
 @media (max-width: $layout-breakpoint-sm) {
   [hide-sm], [hide] {
-    &:not([show-sm]) {
+    &:not([show-sm]):not([show]) {
       display: none;
     }
   }
@@ -227,24 +230,24 @@
   @include layout-for-name(sm);
   @include flex-properties-for-name(sm);
 }
-@media (min-width: $layout-breakpoint-sm) {
-  [hide-gt-sm], [hide] {
-    &:not([show-gt-sm]):not([show-md]):not([show-gt-md]):not([show-lg]):not([show-gt-lg]) {
-      display: none;
-    }
-  }
 
+// BIGGER THAN SMALL SCREEN
+@media (min-width: $layout-breakpoint-sm) {
   @include flex-order-for-name(gt-sm);
   @include layout-align-for-name(gt-sm);
   @include layout-for-name(gt-sm);
   @include flex-properties-for-name(gt-sm);
 }
 
+// MEDIUM SCREEN
 @media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md) {
-  [hide-md], [hide] {
-    &:not([show-md]) {
+  [hide], [hide-gt-sm] {
+    &:not([show-gt-sm]):not([show-md]):not([show]) {
       display: none;
     }
+  }
+  [hide-md]:not([show-md]):not([show]) {
+    display: none;
   }
 
   @include flex-order-for-name(md);
@@ -252,24 +255,24 @@
   @include layout-for-name(md);
   @include flex-properties-for-name(md);
 }
-@media (min-width: $layout-breakpoint-md) {
-  [hide-gt-md], [hide] {
-    &:not([show-gt-md]):not([show-lg]):not([show-gt-lg]) {
-      display: none;
-    }
-  }
 
+// BIGGER THAN MEDIUM SCREEN
+@media (min-width: $layout-breakpoint-md) {
   @include flex-order-for-name(gt-md);
   @include layout-align-for-name(gt-md);
   @include layout-for-name(gt-md);
   @include flex-properties-for-name(gt-md);
 }
 
+// LARGE SCREEN
 @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg) {
-  [hide-lg], [hide] {
-    &:not([show-lg]) {
+  [hide], [hide-gt-sm], [hide-gt-md] {
+    &:not([show-gt-sm]):not([show-gt-md]):not([show-lg]):not([show]) {
       display: none;
     }
+  }
+  [hide-lg]:not([show-lg]):not([show]) {
+    display: none;
   }
 
   @include flex-order-for-name(lg);
@@ -277,9 +280,11 @@
   @include layout-for-name(lg);
   @include flex-properties-for-name(lg);
 }
+
+// BIGGER THAN LARGE SCREEN
 @media (min-width: $layout-breakpoint-lg) {
-  [hide-gt-lg], [hide] {
-    &:not([show-gt-lg]) {
+  [hide-gt-sm], [hide-gt-md], [hide-gt-lg], [hide] {
+    &:not([show-gt-sm]):not([show-gt-md]):not([show-gt-lg]):not([show]) {
       display: none;
     }
   }
