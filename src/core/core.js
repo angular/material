@@ -15,6 +15,9 @@ function MdCoreInitialize() {
       'ngMaterial requires HammerJS to be preloaded.'
     );
   }
+  // By default, Hammer disables user selection on desktop if swipe is enabled.
+  // We don't want this, so we make sure Hammer doesn't set a user-select: none.
+  Hammer.defaults.cssProps.userSelect = '';
 }
 
 function MdCoreConfigure($provide, $mdThemingProvider) {
