@@ -1,0 +1,58 @@
+// Styles for mdCalendar.
+$date-cell-size: 44px !default;
+$date-cell-emphasis-size: 40px !default;
+$calendar-number-of-weeks: 7 !default;
+
+// Style applied to date cells, including day-of-the-week header cells.
+@mixin calendar-date-cell() {
+  height: $date-cell-size;
+  width: $date-cell-size;
+  text-align: center;
+}
+
+md-calendar {
+  font-size: 12px;
+}
+
+.md-calendar-container {
+  position: relative;
+  max-height: $calendar-number-of-weeks * $date-cell-size;
+  overflow: hidden;
+}
+
+.md-calendar-date {
+  @include calendar-date-cell();
+}
+
+.md-calendar-date-selection-indicator {
+  transition-property: background-color, color;
+  transition-duration: $swift-ease-out-duration;
+  transition-timing-function: $swift-ease-out-timing-function;
+
+  border-radius: 50%;
+  display: inline-block;
+
+  cursor: pointer;
+
+  width: $date-cell-emphasis-size;
+  height: $date-cell-emphasis-size;
+  line-height: $date-cell-emphasis-size;
+}
+
+.md-calendar-month-label {
+  height: $date-cell-size;
+}
+
+.md-calendar-day-header th {
+  @include calendar-date-cell();
+  font-weight: normal;
+}
+
+.md-calendar {
+  // DEBUGGING: add border to container
+  border: 1px dotted lightgray;
+}
+
+.md-calendar.ng-animate {
+  transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+}
