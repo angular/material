@@ -107,12 +107,16 @@ function(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
     }]
   }];
 
+  var docsByModule = {};
   var apiDocs = {};
   COMPONENTS.forEach(function(component) {
     component.docs.forEach(function(doc) {
       if (angular.isDefined(doc.private)) return;
       apiDocs[doc.type] = apiDocs[doc.type] || [];
       apiDocs[doc.type].push(doc);
+
+      docsByModule[doc.module] = docsByModule[doc.module] || [];
+      docsByModule[doc.module].push(doc);
     });
   });
   var demoDocs = [];
@@ -120,6 +124,9 @@ function(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
     demoDocs.push({
       name: componentDemos.label,
       url: componentDemos.url
+    });
+    (docsByModule[componentDemos.name] || []).forEach(function(doc) {
+      doc.hasDemo = true;
     });
   });
 

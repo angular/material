@@ -9,7 +9,8 @@ function publicDocData(doc, extraData) {
     type: doc.docType,
     outputPath: doc.outputPath,
     url: doc.path,
-    label: doc.label || doc.name
+    label: doc.label || doc.name,
+    module: doc.module,
   }, extraData || {});
 }
 

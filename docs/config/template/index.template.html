@@ -81,7 +81,7 @@
 
           <span flex></span> <!-- use up the empty space -->
 
-          <div class="md-toolbar-item md-tools">
+          <div class="md-toolbar-item md-tools" layout="row">
             <div ng-repeat="doc in currentComponent.docs">
               <md-button ng-href="#{{doc.url}}"
                 ng-class="{hide: path().indexOf('demo') == -1}"
@@ -90,7 +90,7 @@
               </md-button>
             </div>
 
-            <md-button ng-class="{hide: !currentDoc}"
+            <md-button ng-class="{hide: !currentDoc || !currentDoc.hasDemo}"
               ng-href="#/demo/{{currentComponent.name}}"
               style="position: relative; padding-left: 30px; margin-right: 15px;">
               <md-icon icon="/img/icons/ic_play_arrow_24px.svg" style="
@@ -103,13 +103,14 @@
 
             <md-button ng-class="{hide: !currentDoc}"
               ng-href="{{currentDoc.githubUrl}}"
+              hide-sm hide-md
               style="position: relative; padding-left: 30px; margin-right: 15px;">
               <md-icon icon="/img/icons/ic_launch_24px.svg" style="
                   height: 36px;
                   position: absolute;
                   left: 0px;
                   top: -3px;"></md-icon>
-              <span hide-sm hide-md>View on Github</span>
+              <span>View on Github</span>
             </md-button>
 
             <md-button ng-class="{hide: !currentDoc}"
