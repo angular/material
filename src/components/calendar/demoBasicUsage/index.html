@@ -1,0 +1,28 @@
+<div ng-controller="AppCtrl" style='padding: 40px;'>
+  <md-content>
+    <h1>{{title}}</h1>
+
+    <hr>
+    <p>
+      <h2>Development tools</h2>
+      <button type="button" ng-click="adjustMonth(+1)">Next month</button>
+      <button type="button" ng-click="adjustMonth(-1)">Prev month</button>
+      <input type="date" ng-model="myDate">
+    </p>
+    <hr>
+
+    <md-calendar ng-model="myDate"></md-calendar>
+
+    <br><br>
+    <br><br>
+    <br><br>
+    <p>Here is a bunch of stuff after the calendar</p>
+    <p>Here is a bunch of stuff after the calendar</p>
+    <p>Here is a bunch of stuff after the calendar</p>
+    <p>Here is a bunch of stuff after the calendar</p>
+    <p>Here is a bunch of stuff after the calendar</p>
+    <p>Here is a bunch of stuff after the calendar</p>
+    <input>
+
+  </md-content>
+</div>
