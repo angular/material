@@ -79,6 +79,8 @@
             <span style="display: inline-block;" ng-bind="(menu.currentPage | humanizeDoc) || 'Angular Material'"></span>
           </div>
 
+          <span flex></span> <!-- use up the empty space -->
+
           <div class="md-toolbar-item md-tools">
             <div ng-repeat="doc in currentComponent.docs">
               <md-button ng-href="#{{doc.url}}"
