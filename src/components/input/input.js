@@ -190,6 +190,10 @@ function inputTextareaDirective($mdUtil, $window, $compile, $animate) {
       setupTextarea();
     }
 
+    var isEmpty = ngModelCtrl ? 
+      ngModelCtrl.$isEmpty : 
+      function() { return ('' + element.val()).length === 0; };
+
     // When the input value changes, check if it "has" a value, and
     // set the appropriate class on the input group
     if (ngModelCtrl) {
@@ -205,10 +209,9 @@ function inputTextareaDirective($mdUtil, $window, $compile, $animate) {
     element.on('input', checkHasValue);
 
     function checkHasValue(value) {
-      if (attr.name === 'rate' && window.debug)debugger; 
       containerCtrl.setHasValue(
-        !ngModelCtrl.$isEmpty(value) ||
-        (element[0].validity || {}).badInput
+        !isEmpty(value) ||
+        (element[0].validity || {}).badInput // allow badInput to count as having a value.
       );
       return value;
     }
