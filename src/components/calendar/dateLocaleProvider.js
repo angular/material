@@ -44,7 +44,7 @@
      * @param $locale
      * @returns {DateLocale}
      */
-    DateLocaleProvider.prototype.$get = function($locale) {
+    DateLocaleProvider.prototype.$get = function($locale, $filter) {
       /**
        * Default date-to-string formatting function.
        * @param {Date} date
@@ -63,29 +63,21 @@
         return new Date(dateString);
       }
 
-      // The default "short" day strings are the first character of each day,
-      // e.g., "Monday" => "M".
+      // The default "short" day strings are the first character of each day.
       var defaultShortDays = $locale.DATETIME_FORMATS.DAY.map(function(day) {
         return day[0];
       });
 
-      // The default dates are simply the numbers 1 through 31.
-      var defaultDates = Array(32);
-      for (var i = 1; i <= 31; i++) {
-        defaultDates[i] = i;
-      }
-
       window.$locale = $locale;
+      window.$filter = $filter;
 
-      // TODO(jelbourn): Freeze this object.
-      return {
+      var dateLocale = {
         months: this.months || $locale.DATETIME_FORMATS.MONTH,
         shortMonths: this.shortMonths || $locale.DATETIME_FORMATS.SHORTMONTH,
         days: this.days || $locale.DATETIME_FORMATS.DAY,
         shortDays: this.shortDays || defaultShortDays,
-        dates: this.dates || defaultDates,
-        formatDate: this.formatDate || defaultFormatDate,
-        parseDate: this.parseDate || defaultParseDate
+        formatDate: defaultFormatDate,
+        parseDate: defaultParseDate
       };
     };
 
