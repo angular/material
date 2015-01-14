@@ -216,8 +216,8 @@ function inputTextareaDirective($mdUtil, $window, $compile, $animate) {
         containerCtrl.setFocused(true);
       })
       .on('blur', function(e) {
-        if (e.target && e.target.validity) {
-          containerCtrl.setHasValue(e.target.validity.badInput);
+        if (e.target && e.target.validity && e.target.validity.badInput) {
+          containerCtrl.setHasValue(false);
         }
         containerCtrl.setFocused(false);
       });
