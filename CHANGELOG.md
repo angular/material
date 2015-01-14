@@ -1,3 +1,35 @@
+<a name="0.7.0-rc3"></a>
+### 0.7.0-rc3  (2015-01-14)
+
+
+#### Bug Fixes
+
+* allow user selection when swipe listener is enabled ([520faa72](https://github.com/angular/material/commit/520faa72e8a1ebf9112d615097e939349997fc51), closes [#838](https://github.com/angular/material/issues/838))
+* **button:**
+  * fixes vertical alignment issue with `md-fab` button ([f71eb32a](https://github.com/angular/material/commit/f71eb32a0070bdbf6ea5613d7dce32a8fa22a02c), closes [#914](https://github.com/angular/material/issues/914))
+  * adds a safe disabled-check for ripples ([9091741f](https://github.com/angular/material/commit/9091741f80002352ef16901d7abdd860631dce68), closes [#1029](https://github.com/angular/material/issues/1029))
+  * fix usages with ngDisabled ([416079b7](https://github.com/angular/material/commit/416079b787becfe584d0633ae8e7946e4309f438), closes [#1074](https://github.com/angular/material/issues/1074))
+* **dialog:**
+  * fix dialog alignment in IE11 ([240c03aa](https://github.com/angular/material/commit/240c03aa188520a20e0416095c20ace8a685fca3), closes [#790](https://github.com/angular/material/issues/790))
+  * fix margin-top when layout is row ([191df15a](https://github.com/angular/material/commit/191df15abf13cae397f7e9c3c73db956842dfee3))
+* **input:** fix label inputs with specified types ([747c6acb](https://github.com/angular/material/commit/747c6acb1835ce388215d8ecc0794ec4da67a43b))
+* **layout:** make sure hide-gt-* and show-gt-* work together properly ([d149f36b](https://github.com/angular/material/commit/d149f36b6ab2a24d22e0246d4db8c030dcb84f96), closes [#772](https://github.com/angular/material/issues/772))
+* **radioGroup:** fix render call happing before radioGroup init ([68e350d1](https://github.com/angular/material/commit/68e350d11dcd15ae07c495e6859ba32f47d79836))
+* **subheader:** make content clickable ([7178b6d6](https://github.com/angular/material/commit/7178b6d674336a8d9ee718b58fb2f1aece85c80b), closes [#554](https://github.com/angular/material/issues/554))
+* **tabs:**
+  * fix overflow leaking out tab-content ([dec2ac42](https://github.com/angular/material/commit/dec2ac42ebec04070e81fe1a664e7be906f0b4a4))
+  * factors `me-active` attribute into selection logic to prevent unnecessary `md-on ([6a087a01](https://github.com/angular/material/commit/6a087a01656b3e8f6ba2e87b40b0611519b75c2b), closes [#868](https://github.com/angular/material/issues/868))
+  * adds a delayed call to update the ink bar after a tab is removed ([1a1095b0](https://github.com/angular/material/commit/1a1095b0fae19e4b6df80027f57870e7aff7b97f), closes [#573](https://github.com/angular/material/issues/573))
+* **theming:** make switch, checkbox, radio button default to primary color for consistency ([8cbfeadf](https://github.com/angular/material/commit/8cbfeadfb32e19e855b6280983784fe0a8a516cb))
+
+
+#### Features
+
+* **input:** add error states, md-maxlength ([a2bc3c68](https://github.com/angular/material/commit/a2bc3c68551b4915c40a4eca9ec48fa9ec61f6b7))
+* **layout:** add flex-order-{sm,gt-sm,md,gt-md,lg,gt-lg} attributes ([3e453078](https://github.com/angular/material/commit/3e4530785c29650ff46cf7688f0b154adb9a7042))
+* **tooltip:** add configurable md-delay attr, default 400ms. ([e4ed530d](https://github.com/angular/material/commit/e4ed530d8000b6e31c9e4e7d52e402b9b76debd2), closes [#713](https://github.com/angular/material/issues/713))
+
+
 <a name="0.7.0-rc2"></a>
 ### 0.7.0-rc2  (2015-01-08)
 
