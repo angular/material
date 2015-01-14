@@ -52,7 +52,7 @@ md-input-container {
     z-index: 1;
     transform: translate3d(0, $input-label-default-offset, 0) scale($input-label-default-scale);
     transform-origin: left top;
-    transition: all $swift-ease-out-timing-function 0.25s;
+    transition: transform $swift-ease-out-timing-function 0.25s;
   }
 
   /* 
