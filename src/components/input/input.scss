@@ -75,11 +75,13 @@ md-input-container {
     }
   }
 
-  ng-messages, [ng-messages] {
+  ng-messages, data-ng-messages, x-ng-messages,
+  [ng-messages], [data-ng-messages], [x-ng-messages] {
     order: 3;
     position: relative;
   }
-  ng-message, [ng-message], 
+  ng-message, data-ng-message, x-ng-message,
+  [ng-message], [data-ng-message], [x-ng-message],
   .md-char-counter {
     -webkit-font-smoothing: antialiased;
     position: absolute;

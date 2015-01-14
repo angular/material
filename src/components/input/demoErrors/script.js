@@ -4,6 +4,6 @@ angular.module('inputErrorsApp', ['ngMaterial', 'ngMessages'])
   $scope.project = {
     description: 'Nuclear Missile Defense System',
     clientName: 'Bill Clinton',
-    rate: 100,
+    rate: 500,
   };
 });
