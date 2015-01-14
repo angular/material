@@ -212,8 +212,8 @@
 @include flex-order-for-name();
 
 /**
- * `hide-gt-sm show-gt-lg` should hide from 0px to 1200px
- * `show-md hide-gt-sm` should show from 0px to 600px and >960px
+ * `hide-gt-sm show-gt-lg` should hide from 600px to 1200px
+ * `show-md hide-gt-sm` should show from 0px to 960px and hide at >960px
  * `hide-gt-md show-gt-sm` should show everywhere (show overrides hide)`
  */
 
