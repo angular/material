@@ -9,9 +9,13 @@
   angular.module('material.components.calendar', ['material.core'])
       .directive('mdCalendar', calendarDirective);
 
-  // TODO(jelbourn): internationalize a11y announcements.
+  // TODO(jelbourn): i18n [month names, day names, days of month, date formatting]
+  // TODO(jelbourn): Date cell IDs need to be unique per-calendar.
+
+  // TODO(jelbourn): a11y (announcements and labels)
 
   // TODO(jelbourn): Update the selected date on [click, tap, enter]
+
   // TODO(jelbourn): Shown month transition on [swipe, scroll, keyboard, ngModel change]
   // TODO(jelbourn): Introduce free scrolling that works w/ mobile momemtum scrolling (+snapping)
 
@@ -22,24 +26,29 @@
   // TODO(jelbourn): Minimum and maximum date
   // TODO(jelbourn): Make sure the *time* on the written date makes sense (probably midnight).
   // TODO(jelbourn): Refactor "sections" into separate files.
+  // TODO(jelbourn): Highlight today.
   // TODO(jelbourn): Horizontal line between months (pending spec finalization)
   // TODO(jelbourn): Alt+down in date input to open calendar
   // TODO(jelbourn): Animations should use `.finally()` instead of `.then()`
-  // TODO(jelbourn): improve default date parser in locale provider.
-  // TODO(jelbourn): read-only state.
-  // TODO(jelbourn): make aria-live element visibly hidden (but still present on the page).
+
+  var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  var fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+      'September', 'October', 'November', 'December'];
+  var fullDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   function calendarDirective() {
     return {
       template:
         '<div>' +
-          '<table class="md-calendar-day-header"><thead></thead></table>' +
+          '<table class="md-calendar-day-header"><thead><tr>' +
+            '<th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th>' +
+          '</tr></thead></table>' +
           '<div class="md-calendar-container">' +
             '<table class="md-calendar"></table>' +
           '</div>' +
           '<div aria-live="polite"></div>' +
         '</div>',
-      scope: {},
       restrict: 'E',
       require: ['ngModel', 'mdCalendar'],
       controller: CalendarCtrl,
@@ -65,22 +74,41 @@
     DISTANT_PAST: 4
   };
 
+  // TODO(jelbourn): Refactor this to core and share with other components.
+  /** @enum {number} */
+  var Keys = {
+    ENTER: 13,
+    PAGE_UP: 33,
+    PAGE_DOWN: 34,
+    END: 35,
+    HOME: 36,
+    LEFT: 37,
+    UP: 38,
+    RIGHT: 39,
+    DOWN: 40
+  };
+
   /** Class applied to the selected date cell/. */
   var SELECTED_DATE_CLASS = 'md-calendar-selected-date';
 
   /** Class applied to the cell for today. */
   var TODAY_CLASS = 'md-calendar-date-today';
 
-  /** Next idientifier for calendar instance. */
-  var nextUniqueId = 0;
+
+  /**
+   * Gets a unique identifier for a date for internal purposes. Not to be displayed.
+   * @param {Date} date
+   * @returns {string}
+   */
+  function getDateId(date) {
+    return 'md-' + date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+  }
 
   /**
    * Controller for the mdCalendar component.
    * @ngInject @constructor
    */
-  function CalendarCtrl($element, $scope, $animate, $q, $mdConstant,
-      $$mdDateUtil, $$mdDateLocale, $mdInkRipple, $mdUtil) {
-
+  function CalendarCtrl($element, $scope, $animate, $q, $$mdDateUtil, $$mdDateLocale, $mdInkRipple, $mdUtil) {
     /** @final {!angular.$animate} */
     this.$animate = $animate;
 
@@ -94,13 +122,7 @@
     this.$mdUtil = $mdUtil;
 
     /** @final */
-    this.keyCode = $mdConstant.KEY_CODE;
-
-    /** @final */
     this.dateUtil = $$mdDateUtil;
-
-    /** @final */
-    this.dateLocale = $$mdDateLocale;
 
     /** @final {!angular.JQLite} */
     this.$element = $element;
@@ -116,9 +138,6 @@
 
     /** @final {Date} */
     this.today = new Date();
-
-    /** @final {number} Unique ID for this calendar instance. */
-    this.id = nextUniqueId++;
 
     /** @type {!angular.NgModelController} */
     this.ngModelCtrl = null;
@@ -157,8 +176,9 @@
     this.cellClickHandler = function() {
       if (this.dataset.timestamp) {
         $scope.$apply(function() {
-          self.setNgModelValue(new Date(Number(this.dataset.timestamp)));
-        }.bind(this)); // The `this` here is the cell element.
+          self.ngModelCtrl.$setViewValue(new Date(Number(this.dataset.timestamp)));
+          self.ngModelCtrl.$render();
+        }.bind(this));
       }
     };
 
@@ -189,9 +209,7 @@
    * Initialization should occur after the ngModel value is known.
    */
   CalendarCtrl.prototype.buildInitialCalendarDisplay = function() {
-    this.buildWeekHeader();
-
-    this.displayDate = this.selectedDate || new Date(Date.now());
+    this.displayDate = this.selectedDate || new Date();
     var nextMonth = this.dateUtil.getDateInNextMonth(this.displayDate);
     this.calendarElement.appendChild(this.buildCalendarForMonth(this.displayDate));
     this.calendarElement.appendChild(this.buildCalendarForMonth(nextMonth));
@@ -230,17 +248,11 @@
   CalendarCtrl.prototype.handleKeyEvent = function(event) {
     var self = this;
     this.$scope.$apply(function() {
-      // Capture escape and emit back up so that a wrapping component (such as a date-picker)
-      // can decide to close.
-      if (event.which == self.keyCode.ESCAPE) {
-        self.$scope.$emit('md-calendar-escape');
-        return;
-      }
-
-      // Remaining key events fall into two categories: selection and navigation.
+      // Handled key events fall into two categories: selection and navigation.
       // Start by checking if this is a selection event.
-      if (event.which === self.keyCode.ENTER) {
-        self.setNgModelValue(self.displayDate);
+      if (event.which === Keys.ENTER) {
+        self.ngModelCtrl.$setViewValue(self.displayDate);
+        self.ngModelCtrl.$render();
         event.preventDefault();
         return;
       }
@@ -258,7 +270,7 @@
       self.changeDisplayDate(date).then(function() {
         self.focusDateElement(date);
       });
-    });
+    })
   };
 
   /**
@@ -268,29 +280,18 @@
    */
   CalendarCtrl.prototype.getFocusDateFromKeyEvent = function(event) {
     var dateUtil = this.dateUtil;
-    var keyCode = this.keyCode;
 
     switch (event.which) {
-      case keyCode.RIGHT_ARROW: return dateUtil.incrementDays(this.displayDate, 1);
-      case keyCode.LEFT_ARROW: return dateUtil.incrementDays(this.displayDate, -1);
-      case keyCode.DOWN_ARROW: return dateUtil.incrementDays(this.displayDate, 7);
-      case keyCode.UP_ARROW: return dateUtil.incrementDays(this.displayDate, -7);
-      case keyCode.PAGE_DOWN: return dateUtil.incrementMonths(this.displayDate, 1);
-      case keyCode.PAGE_UP: return dateUtil.incrementMonths(this.displayDate, -1);
-      case keyCode.HOME: return dateUtil.getFirstDateOfMonth(this.displayDate);
-      case keyCode.END: return dateUtil.getLastDateOfMonth(this.displayDate);
+      case Keys.RIGHT: return dateUtil.incrementDays(this.displayDate, 1);
+      case Keys.LEFT: return dateUtil.incrementDays(this.displayDate, -1);
+      case Keys.DOWN: return dateUtil.incrementDays(this.displayDate, 7);
+      case Keys.UP: return dateUtil.incrementDays(this.displayDate, -7);
+      case Keys.PAGE_DOWN: return dateUtil.incrementMonths(this.displayDate, 1);
+      case Keys.PAGE_UP: return dateUtil.incrementMonths(this.displayDate, -1);
+      case Keys.HOME: return dateUtil.getFirstDateOfMonth(this.displayDate);
+      case Keys.END: return dateUtil.getLastDateOfMonth(this.displayDate);
       default: return this.displayDate;
     }
-  };
-
-  /**
-   *
-   * @param {Date} date
-   */
-  CalendarCtrl.prototype.setNgModelValue = function(date) {
-    this.$scope.$emit('md-calendar-change', date);
-    this.ngModelCtrl.$setViewValue(date);
-    this.ngModelCtrl.$render();
   };
 
   /**
@@ -298,14 +299,9 @@
    * @param {Date} date
    */
   CalendarCtrl.prototype.focusDateElement = function(date) {
-    var cellId = this.getDateId_(date);
+    var cellId = getDateId(date);
     var cell = this.calendarElement.querySelector('#' + cellId);
     cell.focus();
-  };
-
-  /** Focus the calendar. */
-  CalendarCtrl.prototype.focus = function() {
-    this.focusDateElement(this.selectedDate);
   };
   
 
@@ -485,15 +481,11 @@
    */
   CalendarCtrl.prototype.changeSelectedDate = function(date) {
     var self = this;
-    var previousSelectedDate = this.selectedDate;
-    this.selectedDate = date;
-
     this.changeDisplayDate(date).then(function() {
 
       // Remove the selected class from the previously selected date, if any.
-      if (previousSelectedDate) {
-        var prevDateCell =
-            self.calendarElement.querySelector('#' + self.getDateId_(previousSelectedDate));
+      if (self.selectedDate) {
+        var prevDateCell = self.calendarElement.querySelector('#' + getDateId(self.selectedDate));
         if (prevDateCell) {
           prevDateCell.classList.remove(SELECTED_DATE_CLASS);
         }
@@ -501,11 +493,13 @@
 
       // Apply the select class to the new selected date if it is set.
       if (date) {
-        var dateCell = self.calendarElement.querySelector('#' + self.getDateId_(date));
+        var dateCell = self.calendarElement.querySelector('#' + getDateId(date));
         if (dateCell) {
           dateCell.classList.add(SELECTED_DATE_CLASS);
         }
       }
+
+      self.selectedDate = date;
     });
   };
 
@@ -523,8 +517,8 @@
       return this.$q.when();
     }
 
-    // If trying to show an invalid date, do nothing.
-    if (!this.dateUtil.isValidDate(date)) {
+    // If trying to show a null or undefined date, do nothing.
+    if (!date) {
       return this.$q.when();
     }
 
@@ -554,7 +548,7 @@
    * Highlight the cell corresponding to today if it is on the screen.
    */
   CalendarCtrl.prototype.highlightToday = function() {
-    var todayCell = this.calendarElement.querySelector('#' + this.getDateId_(this.today));
+    var todayCell = this.calendarElement.querySelector('#' + getDateId(this.today));
     if (todayCell) {
       todayCell.classList.add(TODAY_CLASS);
     }
@@ -578,13 +572,11 @@
     var annoucement = '';
 
     if (!previousDate || !this.dateUtil.isSameMonthAndYear(previousDate, currentDate)) {
-      annoucement += currentDate.getFullYear() +
-          '. ' +
-          this.dateLocale.months[currentDate.getMonth()] + '. ';
+      annoucement += currentDate.getFullYear() + '. ' + fullMonths[currentDate.getMonth()] + '. ';
     }
 
     if (previousDate.getDate() !== currentDate.getDate()) {
-      annoucement += this.dateLocale.days[currentDate.getDay()] + '. ' + currentDate.getDate() ;
+      annoucement += fullDays[currentDate.getDay()] + '. ' + currentDate.getDate() ;
     }
 
     this.ariaLiveElement.textContent = annoucement;
@@ -592,21 +584,6 @@
 
 
   /*** Constructing the calendar table ***/
-
-  /**
-   * Builds and appends a day-of-the-week header to the calendar.
-   * This should only need to be called once during initialization.
-   */
-  CalendarCtrl.prototype.buildWeekHeader = function() {
-    var row = document.createElement('tr');
-    for (var i = 0; i < 7; i++) {
-      var th = document.createElement('th');
-      th.textContent = this.dateLocale.shortDays[i];
-      row.appendChild(th);
-    }
-
-    this.$element.find('thead').append(row);
-  };
 
   /**
    * Creates a single cell to contain a date in the calendar with all appropriate
@@ -624,11 +601,11 @@
       var selectionIndicator = document.createElement('span');
       cell.appendChild(selectionIndicator);
       selectionIndicator.classList.add('md-calendar-date-selection-indicator');
-      selectionIndicator.textContent = this.dateLocale.dates[opt_date.getDate()];
+      selectionIndicator.textContent = opt_date.getDate();
       //selectionIndicator.setAttribute('aria-label', '');
 
       cell.setAttribute('tabindex', '-1');
-      cell.id = this.getDateId_(opt_date);
+      cell.id = getDateId(opt_date);
       cell.dataset.timestamp = opt_date.getTime();
       cell.addEventListener('click', this.cellClickHandler);
     }
@@ -652,7 +629,7 @@
     // Store rows for the month in a document fragment so that we can append them all at once.
     var monthBody = document.createElement('tbody');
     monthBody.classList.add('md-calendar-month');
-    monthBody.setAttribute('aria-hidden', 'true');
+    monthBody.setAttribute('aria-hidden', 'true')
 
     var row = document.createElement('tr');
     monthBody.appendChild(row);
@@ -665,7 +642,7 @@
     monthLabelCell.classList.add('md-calendar-month-label');
     if (firstDayOfTheWeek <= 1) {
       monthLabelCell.setAttribute('colspan', '7');
-      monthLabelCell.textContent = this.dateLocale.shortMonths[date.getMonth()];
+      monthLabelCell.textContent = months[date.getMonth()];
 
       var monthLabelRow = document.createElement('tr');
       monthLabelRow.appendChild(monthLabelCell);
@@ -673,7 +650,7 @@
     } else {
       blankCellOffset = 2;
       monthLabelCell.setAttribute('colspan', '2');
-      monthLabelCell.textContent = this.dateLocale.shortMonths[date.getMonth()];
+      monthLabelCell.textContent = months[date.getMonth()];
 
       row.appendChild(monthLabelCell);
     }
@@ -705,23 +682,5 @@
     }
 
     return monthBody;
-  };
-
-
-  /**
-   * Gets an identifier for a date unique to the calendar instance for internal
-   * purposes. Not to be displayed.
-   * @param {Date} date
-   * @returns {string}
-   * @private
-   */
-  CalendarCtrl.prototype.getDateId_ = function(date) {
-    return [
-      'md',
-      this.id,
-      date.getFullYear(), 
-      date.getMonth(), 
-      date.getDate()
-    ].join('-');
   };
 })();
