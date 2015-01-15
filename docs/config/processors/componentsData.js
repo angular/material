@@ -1,16 +1,21 @@
 var _ = require('lodash');
+var buildConfig = require('../../../config/build.config.js');
 
 // We don't need to publish all of a doc's data to the app, that will
 // add many kilobytes of loading overhead.
 function publicDocData(doc, extraData) {
+  var githubBaseUrl = buildConfig.repository + '/blob/master/src/components/';
   doc = doc || {};
+  var jsName = doc.module.split('material.components.').pop();
   return _.assign({
     name: doc.name,
     type: doc.docType,
     outputPath: doc.outputPath,
     url: doc.path,
     label: doc.label || doc.name,
+    hasDemo: (doc.docType === 'directive'),
     module: doc.module,
+    githubUrl: githubBaseUrl + jsName + '/' + jsName + '.js'
   }, extraData || {});
 }
 

@@ -87,7 +87,6 @@
                 {{doc | humanizeDoc | directiveBrackets}}
               </md-button>
             </div>
-
             <md-button ng-class="{hide: !currentDoc || !currentDoc.hasDemo}"
               ng-href="#/demo/{{currentComponent.name}}"
               style="position: relative; padding-left: 30px; margin-right: 15px;">
@@ -95,7 +94,8 @@
                   height: 36px;
                   position: absolute;
                   left: 0px;
-                  top: -3px;"></md-icon>
+                  top: -3px;
+                  margin-top: 0;"></md-icon>
               <span>View Demo</span>
             </md-button>
 
@@ -107,20 +107,9 @@
                   height: 36px;
                   position: absolute;
                   left: 0px;
-                  top: -3px;"></md-icon>
+                  top: -3px;
+                  margin-top: 0;"></md-icon>
               <span>View on Github</span>
-            </md-button>
-
-            <md-button ng-class="{hide: !currentDoc}"
-              ng-href="{{currentDoc.githubEditUrl}}"
-              hide-sm hide-md
-              style="position: relative; padding-left: 30px;">
-              <md-icon icon="/img/icons/ic_launch_24px.svg" style="
-                  height: 36px;
-                  position: absolute;
-                  left: 0px;
-                  top: -3px;"></md-icon>
-              <span>Improve This Doc</span>
             </md-button>
           </div>
         </div>

@@ -16,13 +16,27 @@
 
   <form ng-submit="addTab(tTitle,tContent)" flex>
     <div layout="row" layout-sm="column" layout-margin layout-align="left center">
-      <md-text-float label="Active Index" ng-model="selectedIndex" disabled></md-text-float>
-      <md-text-float label="Active Title" ng-model="tabs[selectedIndex].title"></md-text-float>
+      <md-input-container>
+        <label for="activeIndex">Active Index</label>
+        <input type="text" id="activeIndex" ng-model="selectedIndex" disabled>
+      </md-input-container>
+
+      <md-input-container>
+        <label for="activeTitle">Active Title</label>
+        <input type="text" id="activeTitle" ng-model="tabs[selectedIndex].title">
+      </md-input-container>
     </div>
+
     <div layout="row" layout-sm="column" layout-margin layout-align="left center">
       <span class="title">Add a new Tab:</span>
-      <md-text-float label="Label" ng-model="tTitle"></md-text-float>
-      <md-text-float label="Content" ng-model="tContent" ></md-text-float>
+      <md-input-container>
+        <label for="label">Label</label>
+        <input type="text" id="label" ng-model="tTitle">
+      </md-input-container>
+      <md-input-container>
+        <label for="content">Content</label>
+        <input type="text" id="content" ng-model="tContent">
+      </md-input-container>
       <md-button class="add-tab md-primary"  type="submit" style="max-height: 40px" >Add Tab</md-button>
     </div>
   </form>

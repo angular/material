@@ -1,12 +1,14 @@
 <div layout="column" layout-fill class="doc-content">
   <div flex layout="column" style="z-index:1">
 
+    <div class="doc-description" ng-bind-html="demoCtrl.demoDescription.contents | toHtml"></div>
+
     <div ng-transclude></div>
 
     <section class="demo-container md-whiteframe-z1"
       ng-class="{'show-source': demoCtrl.$showSource}" >
 
-      <md-toolbar class="demo-toolbar" >
+      <md-toolbar class="demo-toolbar">
         <div class="md-toolbar-tools">
           <span>{{demoCtrl.demoTitle}}</span>
           <span flex></span>

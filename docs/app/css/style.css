@@ -208,10 +208,16 @@ code:not(.highlight) {
   -webkit-margin-before: 0;
   -webkit-margin-after: 0;
 }
-
+docs-demo {
+  display: block;
+  margin-top: 16px;
+}
+.doc-description p {
+  margin-top: 0;
+}
 .demo-container {
   border-radius: 4px;
-  margin-top: 16px;
+  margin-bottom: 16px;
   -webkit-transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
   transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
   position: relative;
@@ -310,7 +316,9 @@ md-tabs.demo-source-tabs .active md-tab-label {
 .demo-toolbar .md-button {
   color: #616161;
 }
-
+md-toolbar.demo-toolbar {
+  border-radius: 4px 4px 0 0;
+}
 md-toolbar.demo-toolbar,
 .demo-source-tabs md-tab,
 .demo-source-tabs .tabs-header {
