@@ -33,10 +33,14 @@ angular.module('material.core')
 
     fakeNgModel: function() {
       return {
+        $fake: true,
         $setViewValue: function(value) {
           this.$viewValue = value;
           this.$render(value);
           this.$viewChangeListeners.forEach(function(cb) { cb(); });
+        },
+        $isEmpty: function(value) {
+          return (''+value).length === 0;
         },
         $parsers: [],
         $formatters: [],

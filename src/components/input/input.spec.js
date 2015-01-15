@@ -1,10 +1,12 @@
 describe('md-input-container directive', function() {
   beforeEach(module('material.components.input'));
 
-  function setup(attrs) {
+  function setup(attrs, isForm) {
     var container;
     inject(function($rootScope, $compile) {
-      container = $compile('<md-input-container><input ' +(attrs||'')+ '><label></label></md-input-container>')($rootScope);
+      container = $compile((isForm ? '<form>' : '') + 
+          '<md-input-container><input ' +(attrs||'')+ '><label></label></md-input-container>' +
+          (isForm ? '<form>' : ''))($rootScope);
       $rootScope.$apply();
     });
     return container;
@@ -56,7 +58,7 @@ describe('md-input-container directive', function() {
     expect(el.find('label').attr('for')).toBe(el.find('input').attr('id'));
   }));
 
-  ddescribe('md-maxlength', function() {
+  describe('md-maxlength', function() {
     function getCharCounter(el) {
       return angular.element(el[0].querySelector('.md-char-counter'));
     }
