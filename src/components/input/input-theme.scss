@@ -62,5 +62,6 @@ md-input-container.md-THEME_NAME-theme {
     border-bottom-color: transparent;
     color: '{{foreground-3}}';
     background-image: linear-gradient(to right, '{{foreground-4}}' 0%, '{{foreground-4}}' 33%, transparent 0%);
+    background-image: -ms-linear-gradient(left, transparent 0%, '{{foreground-4}}' 100%);
   }
 }
