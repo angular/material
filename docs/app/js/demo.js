@@ -37,6 +37,8 @@ function($mdUtil) {
 
       if (name === 'index.html') {
         self.files.index = file;
+      } else if (name === 'readme.html') {
+       self.demoDescription = file;
       } else {
         self.files[file.fileType] = self.files[file.fileType] || [];
         self.files[file.fileType].push(file);
@@ -81,4 +83,10 @@ function($mdUtil) {
       element.remove();
     };
   }
+}])
+
+.filter('toHtml', ['$sce', function($sce) {
+  return function(str) {
+    return $sce.trustAsHtml(str);
+  };
 }]);

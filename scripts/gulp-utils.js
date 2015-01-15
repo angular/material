@@ -30,7 +30,7 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
 
       var demo = { 
         id: demoId,
-        css:[], html:[], js:[] 
+        css:[], html:[], js:[]
       };
 
       gulp.src(demoFolder.path + '**/*', { base: path.dirname(demoFolder.path) })
