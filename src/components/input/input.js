@@ -164,13 +164,9 @@ function inputTextareaDirective($mdUtil, $window, $compile, $animate) {
   return {
     restrict: 'E',
     require: ['^?mdInputContainer', '?ngModel'],
-    compile: compile,
+    link: postLink
   };
   
-  function compile(element) {
-    element.addClass('md-input');
-    return postLink;
-  }
   function postLink(scope, element, attr, ctrls) {
 
     var containerCtrl = ctrls[0];
@@ -182,6 +178,7 @@ function inputTextareaDirective($mdUtil, $window, $compile, $animate) {
     }
     containerCtrl.input = element;
 
+    element.addClass('md-input');
     if (!element.attr('id')) {
       element.attr('id', 'input_' + $mdUtil.nextUid());
     }
@@ -272,7 +269,7 @@ function inputTextareaDirective($mdUtil, $window, $compile, $animate) {
   }
 }
 
-function mdMaxlengthDirective() {
+function mdMaxlengthDirective($animate) {
   return {
     restrict: 'A',
     require: ['ngModel', '^mdInputContainer'],
@@ -292,7 +289,9 @@ function mdMaxlengthDirective() {
 
     ngModelCtrl.$formatters.push(renderCharCount);
     ngModelCtrl.$viewChangeListeners.push(renderCharCount);
-    element.on('input keydown', renderCharCount);
+    element.on('input keydown', function() { 
+      renderCharCount(); //make sure it's called with no args
+    });
 
     scope.$watch(attr.mdMaxlength, function(value) {
       maxlength = value;
@@ -311,11 +310,11 @@ function mdMaxlengthDirective() {
       if (!angular.isNumber(maxlength) || maxlength < 0) {
         return true;
       }
-      return ( element.val() || modelValue || viewValue || '' ).length <= maxlength;
+      return ( modelValue || element.val() || viewValue || '' ).length <= maxlength;
     };
 
     function renderCharCount(value) {
-      charCountEl.text( element.val().length + '/' + maxlength );
+      charCountEl.text( ( element.val() || value || '' ).length + '/' + maxlength );
       return value;
     }
   }

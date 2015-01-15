@@ -55,4 +55,58 @@ describe('md-input-container directive', function() {
     expect(el.find('input').attr('id')).toBeTruthy();
     expect(el.find('label').attr('for')).toBe(el.find('input').attr('id'));
   }));
+
+  ddescribe('md-maxlength', function() {
+    function getCharCounter(el) {
+      return angular.element(el[0].querySelector('.md-char-counter'));
+    }
+
+    it('should work with a constant', inject(function($rootScope, $compile) {
+      var el = $compile('<form name="form">' +
+                          '<md-input-container>' +
+                            '<input md-maxlength="5" ng-model="foo" name="foo">' +
+                          '</md-input-container>' +
+                        '</form>')($rootScope);
+      $rootScope.$apply();
+      expect($rootScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).text()).toBe('0/5');
+
+      $rootScope.$apply('foo = "abcde"');
+      expect($rootScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).text()).toBe('5/5');
+
+      $rootScope.$apply('foo = "abcdef"');
+      el.find('input').triggerHandler('input');
+      expect($rootScope.form.foo.$error['md-maxlength']).toBe(true);
+      expect(getCharCounter(el).text()).toBe('6/5');
+
+      $rootScope.$apply('foo = "abc"');
+      el.find('input').triggerHandler('input');
+      expect($rootScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).text()).toBe('3/5');
+    }));
+
+    it('should add and remove maxlength element & error with expression', inject(function($rootScope, $compile) {
+      var el = $compile('<form name="form">' +
+                          '<md-input-container>' +
+                            '<input md-maxlength="max" ng-model="foo" name="foo">' +
+                          '</md-input-container>' +
+                        '</form>')($rootScope);
+
+      $rootScope.$apply();
+      expect($rootScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).length).toBe(0);
+
+      $rootScope.$apply('max = 5');
+      $rootScope.$apply('foo = "abcdef"');
+      expect($rootScope.form.foo.$error['md-maxlength']).toBeTruthy();
+      expect(getCharCounter(el).length).toBe(1);
+      expect(getCharCounter(el).text()).toBe('6/5');
+
+      $rootScope.$apply('max = -1');
+      $rootScope.$apply('foo = "abcdefg"');
+      expect($rootScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).length).toBe(0);
+    }));
+  });
 });
