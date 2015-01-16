@@ -25,23 +25,21 @@ angular.module('material.components.icon', [
  *
  * @usage
  * <hljs lang="html">
- *  <md-icon icon="icon-error"></md-icon>
+ *  <md-icon md-icon-key="icon-android" md-icon-size=""></md-icon>
  * </hljs>
  *
  */
 function mdIconDirective() {
   return {
     scope: {
-      icon: '@'
+      mdIconKey: '@',
+      mdIconSize: '@'
     },
     restrict: 'E',
-    template: '<div ng-class="icon"></div>',
-    compile: function(element, attr) {
-      // var object = angular.element(element[0].children[0]);
-      // if(angular.isDefined(attr.icon)) {
-      //   object.attr('data', attr.icon);
-      // }
-    }
+    replace: true,
+    template: '<span class="step size-{{ mdIconSize }}">' +
+                '<i class="{{ mdIconKey }}"></i>' +
+              '</span>'
   };
 }
 

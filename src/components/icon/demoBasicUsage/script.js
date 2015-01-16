@@ -1,6 +1,7 @@
 
 angular.module('iconDemo', ['ngMaterial'])
 .controller('IconCtrl', function($scope) {
+  $scope.sizes = [12, 14, 16, 18, 21, 24, 36, 48, 60, 72];
   $scope.icons = [
       'icon-3d-rotation','icon-access-alarms',
       'icon-access-time','icon-accessibility','icon-account-balance',

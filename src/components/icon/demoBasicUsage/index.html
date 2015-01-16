@@ -1,9 +1,21 @@
 
-<div ng-controller="IconCtrl" ng-cloak>
-  <md-content class="md-padding">
-    <div ng-repeat="icon in icons" class="icon">
-      <md-icon icon="{{ icon }}"></md-icon>
-      {{ icon }}
+<div class="container" ng-controller="IconCtrl" ng-cloak>
+  <header>
+    <h1>material</h1>
+  </header>
+    <div class="glyph" ng-repeat="icon in icons">
+      <div class="preview-glyphs">
+        <md-icon ng-repeat="size in sizes" md-icon-key="{{ icon }}" md-icon-size="{{ size }}">
+        </md-icon>
+      </div>
+      <div class="preview-scale">
+        <span class="step" ng-repeat="size in sizes">{{ size }}</span>
+      </div>
+      <div class="usage">
+        <input class="class" type="text" readonly="readonly" onclick="this.select();"
+               value="{{ icon }}">
+        <input class="point" type="text" readonly="readonly" onclick="this.select();"
+               value="">
+      </div>
     </div>
-  </md-content>
 </div>
