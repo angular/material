@@ -228,7 +228,7 @@ md-tabs.demo-source-tabs .active md-tab-label {
 }
 .layout-options .small-demo .demo-content > div[layout] {
   min-height: auto !important;
-  max-height: auto !imporatnt;
+  max-height: auto !important;
   height: 128px !important;
 }
 .small-demo .demo-toolbar,
