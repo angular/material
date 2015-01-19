@@ -1,6 +1,10 @@
 $button-border-radius: 3px !default;
 $button-fab-border-radius: 50% !default;
 
+md-toolbar .md-button.md-THEME_NAME-theme.md-fab {
+  background-color: white;
+}
+
 .md-button.md-THEME_NAME-theme {
   border-radius: $button-border-radius;
 
