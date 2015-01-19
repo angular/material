@@ -211,21 +211,30 @@ md-tabs.demo-source-tabs .active md-tab-label {
 .small-demo .demo-content {
   min-height: 128px;
 }
-.demo-content > * {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -moz-box-flex: 1;
-  -moz-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-}
 
+.doc-content > * {
+  -webkit-box-flex: 1 1 auto;
+  -webkit-flex: 1 1 auto;
+  -moz-box-flex: 1 1 auto;
+  -moz-flex: 1 1 auto;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+}
+.demo-content > * {
+  -webkit-box-flex: 1 1 0%;
+  -webkit-flex: 1 1 0%;
+  -moz-box-flex: 1 1 0%;
+  -moz-flex: 1 1 0%;
+  -ms-flex: 1 1 0%;
+  flex: 1 1 0%;
+}
 .demo-content > div[layout-fill] {
   min-height: 448px;
 }
 .small-demo .demo-content > div[layout-fill] {
   min-height: 224px;
 }
+.layout-content .small-demo .demo-content > div[layout],
 .layout-options .small-demo .demo-content > div[layout] {
   min-height: auto !important;
   max-height: auto !important;
