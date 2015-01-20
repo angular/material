@@ -1,7 +1,7 @@
 $popover-arrow-width: 10px;
 $popover-arrow-height: 10px;
 $popover-arrow-outer-width: 0;
-$popover-color: rgba(0,0,0,0.54);
+$popover-color: rgba(0,0,0,0.92);
 $popover-arrow-outer-color: transparent;
 
 @keyframes popoverBackgroundShow {
@@ -53,7 +53,7 @@ md-popover {
     overflow: hidden;
     text-overflow: ellipsis;
     border-radius: 4px;
-    padding: 8px;
+    padding: 15px;
     background: $popover-color;
     opacity: 0.3;
     transition: inherit;
