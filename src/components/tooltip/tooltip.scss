@@ -32,6 +32,13 @@ md-tooltip {
     transform: translate3d(0, 30%, 0);
     margin-bottom: 8px;
   }
+  &[md-direction="left"] {
+    transform: translate3d(30%, 0, 0);
+  }
+  &[md-direction="right"] {
+    transform: translate3d(-30%, 0, 0);
+    margin-bottom: 8px;
+  }
 
   .md-background {
     position: absolute;
@@ -64,7 +71,7 @@ md-tooltip {
 
   &.md-show {
     transition: $swift-ease-out;
-    pointer-events: auto;
+    //pointer-events: auto;		// this leads to repeating, flashing tooltips
     transform: translate3d(0,0,0);
 
     .md-background {
