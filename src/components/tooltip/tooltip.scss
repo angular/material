@@ -1,4 +1,4 @@
-﻿@keyframes tooltipBackgroundShow {
+@keyframes tooltipBackgroundShow {
   0% {
     transform: scale(0.2);
     opacity: 0.25;
@@ -32,14 +32,6 @@ md-tooltip {
     transform: translate3d(0, 30%, 0);
     margin-bottom: 8px;
   }
-  &[md-direction="left"] {
-    transform: translate3d(30%, 0, 0);
-    margin-right: 8px;
-  }
-  &[md-direction="right"] {
-    transform: translate3d(-30%, 0, 0);
-    margin-left: 8px;
-  }
 
   .md-background {
     position: absolute;
@@ -72,7 +64,7 @@ md-tooltip {
 
   &.md-show {
     transition: $swift-ease-out;
-    //pointer-events: auto; // This seems to cause tool tip to show over and over
+    pointer-events: auto;
     transform: translate3d(0,0,0);
 
     .md-background {
