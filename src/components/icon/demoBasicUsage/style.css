@@ -1,0 +1,89 @@
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #fff;
+  color: #444;
+  font: 16px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+header {
+  border-bottom: 2px solid #ddd;
+  margin-bottom: 20px;
+  overflow: hidden;
+  padding: 20px 0;
+}
+
+header h1 {
+  color: #888;
+  float: left;
+  font-size: 36px;
+  font-weight: 300;
+}
+
+footer {
+  margin-top:40px;
+  font-size:14px;
+  color:#999;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1200px;
+  min-width: 960px;
+  padding: 40px 40px;
+  width: 90%;
+}
+
+.glyph {
+  border-bottom: 1px dotted #ccc;
+  padding: 10px 0 20px;
+  margin-bottom: 20px;
+}
+
+.preview-scale,
+.preview-glyphs {
+  display: flex;
+  flex-direction: row;
+}
+
+.preview-scale {
+  color: #888;
+  font-size: 12px;
+  margin-top: 24px;
+}
+
+.preview-glyphs {
+  vertical-align: bottom;
+}
+
+.step {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 0px;
+  line-height: 1;
+  align-self: flex-end;
+}
+
+.usage { margin-top: 10px; }
+.usage input {
+  font-family: monospace;
+  margin-right: 3px;
+  padding: 2px 5px;
+  text-align: center;
+}
+.usage .point { width: 150px; }
+.usage .class { width: 250px; }
+
+md-icon i {
+  color: red;
+}
+
+.nav {
+  text-align: center;
+}

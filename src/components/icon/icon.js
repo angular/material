@@ -10,7 +10,8 @@
 angular.module('material.components.icon', [
   'material.core'
 ])
-  .directive('mdIcon', mdIconDirective);
+  .directive('mdIcon', mdIconDirective)
+  .provider('$mdIcon', MdIconProvider);
 
 /*
  * @ngdoc directive
@@ -20,25 +21,55 @@ angular.module('material.components.icon', [
  * @restrict E
  *
  * @description
- * The `<md-icon>` directive is an element useful for SVG icons
+ * The `<md-icon>` directive is an element useful for showing an icon
  *
  * @usage
  * <hljs lang="html">
- *  <md-icon icon="/img/icons/ic_access_time_24px.svg">
- *  </md-icon>
+ *  <md-icon md-icon-key="icon-android" md-icon-size=""></md-icon>
  * </hljs>
  *
  */
-function mdIconDirective() {
+function mdIconDirective($mdIcon) {
   return {
+    scope: {
+      mdIconKey: '@',
+      mdIconSize: '@',
+      mdIconColor: '@'
+    },
     restrict: 'E',
-    template: '<object class="md-icon"></object>',
-    compile: function(element, attr) {
-      var object = angular.element(element[0].children[0]);
-      if(angular.isDefined(attr.icon)) {
-        object.attr('data', attr.icon);
+    replace: true,
+    template: '<span class="icon"></span>',
+    link: function(scope, element, attr) {
+      if ($mdIcon[scope.mdIConKey]) {
+        // TODO: use from config.
+      } else {
+        element.append(angular.element('<i>').addClass(scope.mdIconKey));
       }
+      if(angular.isDefined(attr.mdIconKey)) {
+        element.css('font-size', scope.mdIconSize);
+      }
+      attr.$observe('mdIconColor', function(color) {
+        if(color) {
+          element.css('color', scope.mdIconColor);
+        }
+      }, true);
     }
   };
+}
+
+function MdIconProvider() {
+  this.config;
+
+  this.$get = function() {
+    return this.config || {};
+  };
+
+  this.registerIcon = function(name, expr) {
+    this.config[name] = expr;
+  }
+
+  this.registerIconSet = function(name, expr) {
+    
+  }
 }
 })();
