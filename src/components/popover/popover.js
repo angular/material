@@ -86,7 +86,10 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     });
 
     scope.$watch('placement', function (placement) {
+        var visible = scope.visible;
+        if (visible) hidePopover();
         positionPopover();
+        if (visible) showPopover();
     });
 
     var debouncedOnResize = $$rAF.debounce(function windowResize() {

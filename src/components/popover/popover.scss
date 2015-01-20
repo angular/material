@@ -1,5 +1,8 @@
 $popover-arrow-width: 10px;
 $popover-arrow-height: 10px;
+$popover-arrow-outer-width: 0;
+$popover-color: rgba(0,0,0,0.54);
+$popover-arrow-outer-color: transparent;
 
 @keyframes popoverBackgroundShow {
   0% {
@@ -25,15 +28,14 @@ md-popover {
   z-index: $z-index-popover;
   overflow: hidden;
   pointer-events: none;
-  border-radius: 4px;
   
   // Offset the popover to account for the popover arrow
-  &[md-placement="top"]     { margin-top: -$popover-arrow-height; }
-  &[md-placement="right"]   { margin-left: $popover-arrow-width; }
-  &[md-placement="bottom"]  { margin-top: $popover-arrow-height; }
-  &[md-placement="left"]    { margin-left: -$popover-arrow-width; }
+  &[md-placement="top"]     { padding-bottom: $popover-arrow-height; }
+  &[md-placement="bottom"]  { padding-top: $popover-arrow-height; }
+  &[md-placement="left"]    { padding-right: $popover-arrow-width; }
+  &[md-placement="right"]   { padding-left: $popover-arrow-width; }
 
-  .md-background {
+  /*.md-background {
     position: absolute;
     left: 50%;
     width: 256px;
@@ -44,16 +46,15 @@ md-popover {
 
     opacity: 0.25;
     transform: scale(0.2);
-  }
+  }*/
 
   .md-content {
-    max-width: 240px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
+    border-radius: 4px;
     padding: 8px;
-    background: transparent;
+    background: $popover-color;
     opacity: 0.3;
     transition: inherit;
   }
@@ -71,6 +72,10 @@ md-popover {
       transform: scale(1.0);
       opacity: 1.0;
       animation: popoverBackgroundShow linear;
+    }
+    
+    .md-arrow {
+      opacity: 0.99;
     }
     .md-content {
       opacity: 0.99;
@@ -91,6 +96,86 @@ md-popover {
     &[width-32="#{$i}"].md-show .md-background {
       $duration: 1000 - $i * 100;
       animation-duration: #{$duration}ms;
+    }
+  }
+}
+
+
+
+// Arrows
+//
+// .arrow is outer, .arrow:after is inner
+
+md-popover > .md-arrow {
+  &,
+  &:after {
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+  }
+}
+md-popover > .md-arrow {
+  border-width: $popover-arrow-outer-width;
+}
+md-popover > .md-arrow:after {
+  border-width: $popover-arrow-width;
+  content: "";
+}
+
+md-popover {
+  &[md-placement="top"] > .md-arrow {
+    left: 50%;
+    border-bottom-width: 0;
+    border-top-color: $popover-arrow-outer-color;
+    bottom: $popover-arrow-outer-width;
+    &:after {
+      content: " ";
+      bottom: 0;
+      margin-left: -$popover-arrow-width;
+      border-bottom-width: 0;
+      border-top-color: $popover-color;
+    }
+  }
+  &[md-placement="bottom"] > .md-arrow {
+    left: 50%;
+    border-top-width: 0;
+    border-bottom-color: $popover-arrow-outer-color;
+    top: -$popover-arrow-outer-width;
+    &:after {
+      content: " ";
+      top: 0;
+      margin-left: -$popover-arrow-width;
+      border-top-width: 0;
+      border-bottom-color: $popover-color;
+    }
+  }
+  &[md-placement="left"] > .md-arrow {
+    top: 50%;
+    right: -$popover-arrow-outer-width;
+    border-right-width: 0;
+    border-left-color: $popover-arrow-outer-color;
+    &:after {
+      content: " ";
+      right: 0;
+      border-right-width: 0;
+      border-left-color: $popover-color;
+      bottom: -$popover-arrow-width;
+    }
+  }
+  &[md-placement="right"] > .md-arrow {
+    top: 50%;
+    left: -$popover-arrow-outer-width;
+    border-left-width: 0;
+    border-right-color: $popover-arrow-outer-color;
+    &:after {
+      content: " ";
+      left: 0;
+      bottom: -$popover-arrow-width;
+      border-left-width: 0;
+      border-right-color: $popover-color;
     }
   }
 }
