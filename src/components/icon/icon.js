@@ -10,8 +10,8 @@
 angular.module('material.components.icon', [
   'material.core'
 ])
-  .directive('mdIcon', mdIconDirective);
-  // .provider('$mdIcon', MdIconProvider);
+  .directive('mdIcon', mdIconDirective)
+  .provider('$mdIcon', MdIconProvider);
 
 /*
  * @ngdoc directive
@@ -29,21 +29,47 @@ angular.module('material.components.icon', [
  * </hljs>
  *
  */
-function mdIconDirective() {
+function mdIconDirective($mdIcon) {
   return {
     scope: {
       mdIconKey: '@',
-      mdIconSize: '@'
+      mdIconSize: '@',
+      mdIconColor: '@'
     },
     restrict: 'E',
     replace: true,
-    template: '<span class="step size-{{ mdIconSize }}">' +
-                '<i class="{{ mdIconKey }}"></i>' +
-              '</span>'
+    template: '<span class="icon"></span>',
+    link: function(scope, element, attr) {
+      if ($mdIcon[scope.mdIConKey]) {
+        // TODO: use from config.
+      } else {
+        element.append(angular.element('<i>').addClass(scope.mdIconKey));
+      }
+      if(angular.isDefined(attr.mdIconKey)) {
+        element.css('font-size', scope.mdIconSize);
+      }
+      attr.$observe('mdIconColor', function(color) {
+        if(color) {
+          element.css('color', scope.mdIconColor);
+        }
+      }, true);
+    }
   };
 }
 
-function MdIconProvider($$interimElementProvider) {
+function MdIconProvider() {
+  this.config;
 
+  this.$get = function() {
+    return this.config || {};
+  };
+
+  this.registerIcon = function(name, expr) {
+    this.config[name] = expr;
+  }
+
+  this.registerIconSet = function(name, expr) {
+    
+  }
 }
 })();

@@ -1,35 +1,43 @@
-@import '/material-fonts/fonts.css';
+
+@font-face {
+  font-family:"material";
+  src:url("/material-fonts/material.eot");
+  font-weight:normal;
+  font-style:normal;
+}
+
+@font-face {
+  font-family:"material";
+  src:url("/material-fonts/material.eot");
+  src:url("/material-fonts/material.eot?#iefix") format("embedded-opentype"),
+    url("/material-fonts/material.woff") format("woff"),
+    url("/material-fonts/material.ttf") format("truetype"),
+    url("/material-fonts/material.svg?#material") format("svg");
+  font-weight:normal;
+  font-style:normal;
+}
+
+/* Bootstrap Overrides */
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  font-family:"material";
+  display:inline-block;
+  vertical-align:middle;
+  line-height:1;
+  font-weight:normal;
+  font-style:normal;
+  speak:none;
+  text-decoration:inherit;
+  text-transform:none;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
 
 md-icon {
   margin: auto;
   background-repeat: no-repeat no-repeat;
-  pointer-events: none;
-  display: flex;
-  z-index: 0;
-
-  object.md-icon {
-    display: inline-block;
-  }
 }
-
-.step {
-  flex-grow: 1;
-  flex-shrink: 0;
-  flex-basis: 0px;
-  line-height: 1;
-  align-self: flex-end;
-}
-
-.size-12 { font-size: 12px; }
-.size-14 { font-size: 14px; }
-.size-16 { font-size: 16px; }
-.size-18 { font-size: 18px; }
-.size-21 { font-size: 21px; }
-.size-24 { font-size: 24px; }
-.size-36 { font-size: 36px; }
-.size-48 { font-size: 48px; }
-.size-60 { font-size: 60px; }
-.size-72 { font-size: 72px; }
 
 .icon-3d-rotation:before {
   content:"\f101";

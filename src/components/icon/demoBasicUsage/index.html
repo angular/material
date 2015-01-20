@@ -1,11 +1,18 @@
 
 <div class="container" ng-controller="IconCtrl" ng-cloak>
   <header>
-    <h1>material</h1>
+    <h1>Material: md-icon</h1>
   </header>
-    <div class="glyph" ng-repeat="icon in icons">
+    <div>
+      <md-input-container flex>
+        <label>Color</label>
+        <input ng-model="color">
+      </md-input-container>
+    </div>
+    <div class="glyph" ng-repeat="icon in icons | limitTo:limit">
       <div class="preview-glyphs">
-        <md-icon ng-repeat="size in sizes" md-icon-key="{{ icon }}" md-icon-size="{{ size }}">
+        <md-icon class="step" ng-repeat="size in sizes" md-icon-key="{{ icon.name }}"
+                 md-icon-size="{{ size }}px" md-icon-color="{{ color }}">
         </md-icon>
       </div>
       <div class="preview-scale">
@@ -13,9 +20,15 @@
       </div>
       <div class="usage">
         <input class="class" type="text" readonly="readonly" onclick="this.select();"
-               value="{{ icon }}">
+               value="{{ icon.name }}">
         <input class="point" type="text" readonly="readonly" onclick="this.select();"
-               value="">
+               value="{{ icon.utf }}">
       </div>
+    </div>
+    <div class="nav" ng-hide="icons.length <= limit">
+      <md-button ng-click="loadMore()">
+        More <md-icon md-icon-key="icon-more-horiz" md-icon-size="16px"></md-icon>
+      </md-button>
+      <md-button ng-click="loadMore(icons.length)">All</md-button>
     </div>
 </div>

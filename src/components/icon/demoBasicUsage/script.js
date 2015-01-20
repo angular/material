@@ -1,72 +1,20 @@
 
 angular.module('iconDemo', ['ngMaterial'])
-.controller('IconCtrl', function($scope) {
+.controller('IconCtrl', function($scope, $http, $timeout) {
   $scope.sizes = [12, 14, 16, 18, 21, 24, 36, 48, 60, 72];
-  $scope.icons = [
-      'icon-3d-rotation','icon-access-alarms',
-      'icon-access-time','icon-accessibility','icon-account-balance',
-      'icon-account-balance-wallet','icon-account-box','icon-account-child',
-      'icon-account-circle','icon-adb','icon-add','icon-add-alarm',
-      'icon-add-box','icon-add-circle','icon-add-circle-outline',
-      'icon-add-shopping-cart','icon-add-to-photos','icon-adjust',
-      'icon-airplanemode-off','icon-airplanemode-on','icon-alarm',
-      'icon-alarm-add','icon-alarm-off','icon-alarm-on','icon-album',
-      'icon-android','icon-announcement','icon-apps','icon-archive',
-      'icon-arrow-back','icon-arrow-drop-down','icon-arrow-drop-down-circle',
-      'icon-arrow-drop-up','icon-arrow-forward','icon-aspect-ratio',
-      'icon-assessment','icon-assignment','icon-assignment-ind',
-      'icon-assignment-late','icon-assignment-return',
-      'icon-assignment-returned','icon-assignment-turned-in',
-      'icon-assistant-photo','icon-attach-file','icon-attach-money',
-      'icon-attachment','icon-audiotrack','icon-autorenew','icon-av-timer',
-      'icon-backspace','icon-backup','icon-battery-20','icon-battery-30',
-      'icon-battery-50','icon-battery-60','icon-battery-80','icon-battery-90',
-      'icon-battery-alert','icon-battery-charging-20',
-      'icon-battery-charging-30','icon-battery-charging-50',
-      'icon-battery-charging-60','icon-battery-charging-80',
-      'icon-battery-charging-90','icon-battery-charging-full',
-      'icon-battery-full','icon-battery-std','icon-battery-unknown',
-      'icon-beenhere','icon-block','icon-bluetooth','icon-bluetooth-audio',
-      'icon-bluetooth-connected','icon-bluetooth-disabled',
-      'icon-bluetooth-searching','icon-blur-circular','icon-blur-linear',
-      'icon-blur-off','icon-blur-on','icon-book','icon-bookmark',
-      'icon-bookmark-outline','icon-border-all','icon-border-bottom',
-      'icon-border-clear','icon-border-color','icon-border-horizontal',
-      'icon-border-inner','icon-border-left','icon-border-outer',
-      'icon-border-right','icon-border-style','icon-border-top',
-      'icon-border-vertical','icon-brightness-1','icon-brightness-2',
-      'icon-brightness-3','icon-brightness-4','icon-brightness-5',
-      'icon-brightness-6','icon-brightness-7','icon-brightness-auto',
-      'icon-brightness-high','icon-brightness-low','icon-brightness-medium',
-      'icon-brush','icon-bug-report','icon-business','icon-cached','icon-cake',
-      'icon-call','icon-call-end','icon-call-made','icon-call-merge',
-      'icon-call-missed','icon-call-received','icon-call-split','icon-camera',
-      'icon-camera-alt','icon-camera-front','icon-camera-rear',
-      'icon-camera-roll','icon-cancel','icon-cast','icon-cast-connected',
-      'icon-center-focus-strong','icon-center-focus-weak','icon-chat',
-      'icon-check','icon-check-box','icon-check-box-outline-blank',
-      'icon-check-circle','icon-chevron-left','icon-chevron-right',
-      'icon-class','icon-clear','icon-clear-all','icon-close',
-      'icon-closed-caption','icon-cloud','icon-cloud-circle','icon-cloud-done',
-      'icon-cloud-download','icon-cloud-off','icon-cloud-queue',
-      'icon-cloud-upload','icon-collections','icon-color-lens','icon-colorize',
-      'icon-comment','icon-compare','icon-computer','icon-contacts',
-      'icon-content-copy','icon-content-cut','icon-content-paste',
-      'icon-control-point','icon-control-point-duplicate','icon-create',
-      'icon-credit-card','icon-crop','icon-crop-16-9','icon-crop-3-2',
-      'icon-crop-5-4','icon-crop-7-5','icon-crop-din','icon-crop-free',
-      'icon-crop-landscape','icon-crop-original','icon-crop-portrait',
-      'icon-crop-square','icon-dashboard','icon-data-usage','icon-dehaze',
-      'icon-delete','icon-description','icon-desktop-mac',
-      'icon-desktop-windows','icon-details','icon-developer-mode',
-      'icon-devices','icon-dialer-sip','icon-dialpad','icon-directions',
-      'icon-directions-bike','icon-directions-bus','icon-directions-car',
-      'icon-directions-ferry','icon-directions-subway','icon-directions-train',
-      'icon-directions-transit','icon-directions-walk','icon-disc-full',
-      'icon-dnd-forwardslash','icon-dnd-on','icon-dns','icon-do-not-disturb',
-      'icon-dock','icon-domain','icon-done','icon-done-all','icon-drafts',
-      'icon-drive-eta','icon-dvr','icon-edit','icon-email','icon-equalizer'];
-      // 'icon-error','icon-event','icon-event-available','icon-event-busy','icon-event-note','icon-exit-to-app','icon-expand-less','icon-expand-more','icon-explicit','icon-explore','icon-exposure','icon-exposure-minus-1','icon-exposure-minus-2','icon-exposure-plus-1','icon-exposure-plus-2','icon-exposure-zero','icon-extension','icon-face','icon-fast-forward','icon-fast-rewind','icon-favorite','icon-favorite-outline','icon-file-download','icon-file-upload','icon-filter','icon-filter-1','icon-filter-2','icon-filter-3','icon-filter-4','icon-filter-5','icon-filter-6','icon-filter-7','icon-filter-8','icon-filter-9','icon-filter-9-plus','icon-filter-b-and-w','icon-filter-center-focus','icon-filter-drama','icon-filter-frames','icon-filter-hdr','icon-filter-list','icon-filter-none','icon-filter-tilt-shift','icon-filter-vintage','icon-find-in-page','icon-find-replace','icon-flag','icon-flare','icon-flash-auto','icon-flash-off','icon-flash-on','icon-flight','icon-flip','icon-flip-to-back','icon-flip-to-front','icon-folder','icon-folder-open','icon-folder-shared','icon-folder-special','icon-format-align-center','icon-format-align-justify','icon-format-align-left','icon-format-align-right','icon-format-bold','icon-format-clear','icon-format-color-fill','icon-format-color-reset','icon-format-color-text','icon-format-indent-decrease','icon-format-indent-increase','icon-format-italic','icon-format-line-spacing','icon-format-list-bulleted','icon-format-list-numbered','icon-format-paint','icon-format-quote','icon-format-size','icon-format-strikethrough','icon-format-textdirection-l-to-r','icon-format-textdirection-r-to-l','icon-format-underline','icon-forum','icon-forward','icon-fullscreen','icon-fullscreen-exit','icon-functions','icon-gamepad','icon-games','icon-gesture','icon-get-app','icon-gps-fixed','icon-gps-not-fixed','icon-gps-off','icon-grade','icon-gradient','icon-grain','icon-grid-off','icon-grid-on','icon-group','icon-group-add','icon-group-work','icon-hdr-off','icon-hdr-on','icon-hdr-strong','icon-hdr-weak','icon-headset','icon-headset-mic','icon-healing','icon-hearing','icon-help','icon-high-quality','icon-highlight-remove','icon-history','icon-home','icon-hotel','icon-https','icon-image','icon-image-aspect-ratio','icon-import-export','icon-inbox','icon-info','icon-info-outline','icon-input','icon-insert-chart','icon-insert-comment','icon-insert-drive-file','icon-insert-emoticon','icon-insert-invitation','icon-insert-link','icon-insert-photo','icon-invert-colors','icon-invert-colors-off','icon-invert-colors-on','icon-iso','icon-keyboard','icon-keyboard-alt','icon-keyboard-arrow-down','icon-keyboard-arrow-left','icon-keyboard-arrow-right','icon-keyboard-arrow-up','icon-keyboard-backspace','icon-keyboard-capslock','icon-keyboard-control','icon-keyboard-hide','icon-keyboard-return','icon-keyboard-tab','icon-keyboard-voice','icon-label','icon-label-outline','icon-landscape','icon-language','icon-laptop','icon-laptop-chromebook','icon-laptop-mac','icon-laptop-windows','icon-launch','icon-layers','icon-layers-clear','icon-leak-add','icon-leak-remove','icon-lens','icon-link','icon-list','icon-live-help','icon-local-airport','icon-local-atm','icon-local-attraction','icon-local-bar','icon-local-cafe','icon-local-car-wash','icon-local-convenience-store','icon-local-drink','icon-local-florist','icon-local-gas-station','icon-local-grocery-store','icon-local-hospital','icon-local-hotel','icon-local-laundry-service','icon-local-library','icon-local-mall','icon-local-movies','icon-local-offer','icon-local-parking','icon-local-pharmacy','icon-local-phone','icon-local-pizza','icon-local-play','icon-local-post-office','icon-local-print-shop','icon-local-restaurant','icon-local-see','icon-local-shipping','icon-local-taxi','icon-location-city','icon-location-disabled','icon-location-history','icon-location-off','icon-location-on','icon-location-searching','icon-lock','icon-lock-open','icon-lock-outline','icon-looks','icon-looks-3','icon-looks-4','icon-looks-5','icon-looks-6','icon-looks-one','icon-looks-two','icon-loop','icon-loupe','icon-loyalty','icon-mail','icon-map','icon-markunread','icon-markunread-mailbox','icon-memory','icon-menu','icon-merge-type','icon-message','icon-messenger','icon-mic','icon-mic-none','icon-mic-off','icon-mms','icon-mode-comment','icon-mode-edit','icon-mood','icon-more','icon-more-horiz','icon-more-vert','icon-mouse','icon-movie','icon-movie-creation','icon-multitrack-audio','icon-my-library-add','icon-my-library-books','icon-my-library-music','icon-my-location','icon-nature','icon-nature-people','icon-navigate-before','icon-navigate-next','icon-navigation','icon-network-cell','icon-network-locked','icon-network-wifi','icon-new-releases','icon-nfc','icon-no-sim','icon-not-interested','icon-note-add','icon-notifications','icon-notifications-none','icon-notifications-off','icon-notifications-on','icon-notifications-paused','icon-now-wallpaper','icon-now-widgets','icon-open-in-browser','icon-open-in-new','icon-open-with','icon-pages','icon-pageview','icon-palette','icon-panorama','icon-panorama-fisheye','icon-panorama-horizontal','icon-panorama-vertical','icon-panorama-wide-angle','icon-party-mode','icon-pause','icon-pause-circle-fill','icon-pause-circle-outline','icon-payment','icon-people','icon-people-outline','icon-perm-camera-mic','icon-perm-contact-cal','icon-perm-data-setting','icon-perm-device-info','icon-perm-identity','icon-perm-media','icon-perm-phone-msg','icon-perm-scan-wifi','icon-person','icon-person-add','icon-person-outline','icon-phone','icon-phone-android','icon-phone-bluetooth-speaker','icon-phone-forwarded','icon-phone-in-talk','icon-phone-iphone','icon-phone-locked','icon-phone-missed','icon-phone-paused','icon-phonelink','icon-phonelink-off','icon-photo','icon-photo-album','icon-photo-camera','icon-photo-library','icon-picture-in-picture','icon-pin-drop','icon-place','icon-play-arrow','icon-play-circle-fill','icon-play-circle-outline','icon-play-download','icon-play-install','icon-play-shopping-bag','icon-playlist-add','icon-plus-one','icon-poll','icon-polymer','icon-portable-wifi-off','icon-portrait','icon-print','icon-public','icon-publish','icon-query-builder','icon-question-answer','icon-queue','icon-queue-music','icon-quick-contacts-dialer','icon-quick-contacts-mail','icon-radio','icon-radio-button-off','icon-radio-button-on','icon-rate-review','icon-receipt','icon-recent-actors','icon-redeem','icon-redo','icon-refresh','icon-remove','icon-remove-circle','icon-remove-circle-outline','icon-remove-red-eye','icon-reorder','icon-repeat','icon-repeat-one','icon-replay','icon-reply','icon-reply-all','icon-report','icon-report-problem','icon-restaurant-menu','icon-restore','icon-ring-volume','icon-room','icon-rotate-left','icon-rotate-right','icon-satellite','icon-save','icon-schedule','icon-school','icon-screen-lock-landscape','icon-screen-lock-portrait','icon-screen-lock-rotation','icon-screen-rotation','icon-sd-card','icon-sd-storage','icon-search','icon-security','icon-select-all','icon-send','icon-settings','icon-settings-applications','icon-settings-backup-restore','icon-settings-bluetooth','icon-settings-cell','icon-settings-display','icon-settings-ethernet','icon-settings-input-antenna','icon-settings-input-component','icon-settings-input-composite','icon-settings-input-hdmi','icon-settings-input-svideo','icon-settings-overscan','icon-settings-phone','icon-settings-power','icon-settings-remote','icon-settings-system-daydream','icon-settings-voice','icon-share','icon-shop','icon-shop-two','icon-shopping-basket','icon-shopping-cart','icon-shuffle','icon-signal-cellular-0-bar','icon-signal-cellular-1-bar','icon-signal-cellular-2-bar','icon-signal-cellular-3-bar','icon-signal-cellular-4-bar','icon-signal-cellular-connected-no-internet-0-bar','icon-signal-cellular-connected-no-internet-1-bar','icon-signal-cellular-connected-no-internet-2-bar','icon-signal-cellular-connected-no-internet-3-bar','icon-signal-cellular-connected-no-internet-4-bar','icon-signal-cellular-no-sim','icon-signal-cellular-null','icon-signal-cellular-off','icon-signal-wifi-0-bar','icon-signal-wifi-1-bar','icon-signal-wifi-2-bar','icon-signal-wifi-3-bar','icon-signal-wifi-4-bar','icon-signal-wifi-off','icon-sim-card','icon-sim-card-alert','icon-skip-next','icon-skip-previous','icon-slideshow','icon-smartphone','icon-sms','icon-sms-failed','icon-snooze','icon-sort','icon-speaker','icon-speaker-notes','icon-spellcheck','icon-star','icon-star-half','icon-star-outline','icon-star-rate','icon-stars','icon-stay-current-landscape','icon-stay-current-portrait','icon-stay-primary-landscape','icon-stay-primary-portrait','icon-stop','icon-storage','icon-store','icon-store-mall-directory','icon-straighten','icon-style','icon-subject','icon-subtitles','icon-supervisor-account','icon-surround-sound','icon-swap-calls','icon-swap-horiz','icon-swap-vert','icon-swap-vert-circle','icon-switch-camera','icon-switch-video','icon-sync','icon-sync-disabled','icon-sync-problem','icon-system-update','icon-system-update-tv','icon-tab','icon-tab-unselected','icon-tablet','icon-tablet-android','icon-tablet-mac','icon-tag-faces','icon-tap-and-play','icon-terrain','icon-text-format','icon-textsms','icon-texture','icon-theaters','icon-thumb-down','icon-thumb-up','icon-thumbs-up-down','icon-time-to-leave','icon-timelapse','icon-timer','icon-timer-10','icon-timer-3','icon-timer-auto','icon-timer-off','icon-toc','icon-today','icon-tonality','icon-track-changes','icon-traffic','icon-transform','icon-translate','icon-trending-down','icon-trending-neutral','icon-trending-up','icon-tune','icon-turned-in','icon-turned-in-not','icon-tv','icon-undo','icon-unfold-less','icon-unfold-more','icon-usb','icon-verified-user','icon-vertical-align-bottom','icon-vertical-align-center','icon-vertical-align-top','icon-vibration','icon-video-collection','icon-videocam','icon-videocam-off','icon-view-agenda','icon-view-array','icon-view-carousel','icon-view-column','icon-view-day','icon-view-headline','icon-view-list','icon-view-module','icon-view-quilt','icon-view-stream','icon-view-week','icon-visibility','icon-visibility-off','icon-voice-chat','icon-voicemail','icon-volume-down','icon-volume-mute','icon-volume-off','icon-volume-up','icon-vpn-key','icon-vpn-lock','icon-wallet-giftcard','icon-wallet-membership','icon-wallet-travel','icon-warning','icon-watch','icon-wb-auto','icon-wb-cloudy','icon-wb-incandescent','icon-wb-irradescent','icon-wb-sunny','icon-web','icon-whatshot','icon-wifi-lock','icon-wifi-tethering','icon-work','icon-wrap-text'
-  // ];
-});
+  $scope.limit = 10;
+  $scope.color = "#0000ff"
+
+  $http.get('icons.json').then(function(response) {
+    $scope.icons = response.data;
+  })
+
+  $scope.loadMore = function(size) {
+    size = size || 100;
+    $scope.limit += size;
+  }
+})
+// .config(function($mdIcon) {
+//   $mdIcon.registerIcon('menu-svg', 'test.svg');
+// });
 

@@ -36,7 +36,7 @@ footer {
   margin: 0 auto;
   max-width: 1200px;
   min-width: 960px;
-  padding: 0 40px;
+  padding: 40px 40px;
   width: 90%;
 }
 
@@ -62,6 +62,14 @@ footer {
   vertical-align: bottom;
 }
 
+.step {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 0px;
+  line-height: 1;
+  align-self: flex-end;
+}
+
 .usage { margin-top: 10px; }
 .usage input {
   font-family: monospace;
@@ -71,3 +79,11 @@ footer {
 }
 .usage .point { width: 150px; }
 .usage .class { width: 250px; }
+
+md-icon i {
+  color: red;
+}
+
+.nav {
+  text-align: center;
+}
