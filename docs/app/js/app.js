@@ -16,6 +16,21 @@ function(COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider) {
         return 'partials/layout-' + params.tmpl + '.tmpl.html';
       }
     })
+    .when('/layout/', {
+      redirectTo: function() {
+        return "/layout/container";
+      }
+    })
+    .when('/demo/', {
+      redirectTo: function() {
+        return DEMOS[0].url;
+      }
+    })
+    .when('/api/', {
+      redirectTo: function() {
+        return COMPONENTS[0].docs[0].url;
+      }
+    })
     .when('/getting-started', {
       templateUrl: 'partials/getting-started.tmpl.html'
     });

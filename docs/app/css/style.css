@@ -9,6 +9,10 @@ body {
 
 a {
   color: #3f51b5;
+  text-decoration: none;
+}
+a:hover, a:focus {
+  text-decoration: underline;
 }
 
 table {
@@ -152,12 +156,6 @@ code:not(.highlight) {
   text-align: left;
   width: 100%;
 }
-.docs-menu li.childActive {
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-}
-.docs-menu li.childActive:not(:last-of-type){
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-}
 .docs-menu li.parentActive,
 .docs-menu li.parentActive .menu-toggle-list {
   background-color: #f6f6f6;
@@ -178,8 +176,9 @@ code:not(.highlight) {
 .menu-toggle-list.ng-hide {
   max-height: 0;
 }
-.menu-toggle-list a {
+.docs-menu .menu-toggle-list a.md-button {
   display: block;
+  padding: 0 16px 0 32px;
   text-transform: none;
 }
 .md-button-toggle .md-toggle-icon {
@@ -364,8 +363,38 @@ md-toolbar.demo-toolbar .md-button {
   font-size: 18px;
 }
 
+/***************
+ * Landing Page
+ ***************/
+ul.buckets {
+  margin: 24px 0;
+  padding: 0;
+}
+ul.buckets li {
+  list-style: none;
+  margin: 0;
+  text-align: center;
+}
+ul.buckets li md-card md-card-content {
+  padding: 0;
+}
+ul.buckets li a {
+  background-color: transparent;
+  display: block;
+  font-weight: 500;
+  padding: 16px 0;
+  text-decoration: none;
+  -webkit-transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
+  transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
+}
+ul.buckets li a:hover,
+ul.buckets li a:focus {
+  background-color: #03a9f4;
+  color: white;
+}
+
 /************
- * DOCS
+ * API DOCS
  ************/
 .api-options-bar .md-button {
   margin: 4px;
