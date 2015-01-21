@@ -133,7 +133,7 @@ md-popover {
     bottom: $popover-arrow-outer-width;
     &:after {
       content: " ";
-      bottom: 0;
+      bottom: 1px;
       margin-left: -$popover-arrow-width;
       border-bottom-width: 0;
       border-top-color: $popover-color;
@@ -146,7 +146,7 @@ md-popover {
     top: -$popover-arrow-outer-width;
     &:after {
       content: " ";
-      top: 0;
+      top: 1px;
       margin-left: -$popover-arrow-width;
       border-top-width: 0;
       border-bottom-color: $popover-color;
@@ -159,7 +159,7 @@ md-popover {
     border-left-color: $popover-arrow-outer-color;
     &:after {
       content: " ";
-      right: 0;
+      right: 1px;
       border-right-width: 0;
       border-left-color: $popover-color;
       bottom: -$popover-arrow-width;
@@ -172,7 +172,7 @@ md-popover {
     border-right-color: $popover-arrow-outer-color;
     &:after {
       content: " ";
-      left: 0;
+      left: 1px;
       bottom: -$popover-arrow-width;
       border-left-width: 0;
       border-right-color: $popover-color;

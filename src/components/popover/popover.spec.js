@@ -149,4 +149,58 @@ describe('<md-popover> directive', function() {
       $rootScope.$apply('isVisible = true');
       expect($log.warn).not.toHaveBeenCalled();
   }));
+
+  it('should close on escape key press and set focus to parent', inject(function (
+      $compile, $rootScope, $rootElement, $timeout, $mdConstant, $document) {
+
+      TestUtil.mockElementFocus(this);
+
+      var element = $compile('<md-button id="focus-target">' +
+                              '<md-popover md-visible="isVisible" id="popover">Popover</md-popover>' +
+                              '</md-button>')($rootScope);
+
+      $rootScope.$apply();
+
+      element.triggerHandler('click');
+      $timeout.flush();
+      expect($rootScope.isVisible).toBe(true);
+      expect($document.activeElement.id).toBe("popover");
+
+      $rootElement.triggerHandler({
+          type: 'keyup',
+          keyCode: $mdConstant.KEY_CODE.ESCAPE
+      });
+
+      $rootScope.$apply();
+      $timeout.flush();
+      expect($rootScope.isVisible).toBe(false);
+      expect($document.activeElement.id).toBe("focus-target");
+  }));
+
+  it('should not close on A keyup', inject(function (
+      $compile, $rootScope, $rootElement, $timeout, $mdConstant, $document) {
+
+      TestUtil.mockElementFocus(this);
+
+      var element = $compile('<md-button>' +
+                 'Hello' +
+                 '<md-popover md-visible="isVisible" id="focus-target">Popover</md-popover>' +
+               '</md-button>')($rootScope);
+
+      $rootScope.$apply();
+
+      element.triggerHandler('click');
+      $timeout.flush();
+      expect($rootScope.isVisible).toBe(true);
+      expect($document.activeElement.id).toBe("focus-target");
+
+      $rootElement.triggerHandler({
+          type: 'keyup',
+          keyCode: $mdConstant.KEY_CODE.A
+      });
+
+      $rootScope.$apply();
+      expect($rootScope.isVisible).toBe(true);
+      expect($document.activeElement.id).toBe("focus-target");
+  }));
 });

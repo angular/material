@@ -33,7 +33,8 @@ angular.module('material.components.popover', [
  * @param {expression=?} md-visible Boolean bound to whether the popover is currently visible.
  * @param {expression=?} md-placement String bound to location of popover e.g. left, right, top or bottom (default).
  */
-function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdTheming, $rootElement, $mdAria) {
+function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil,
+                            $mdTheming, $rootElement, $mdAria, $mdConstant) {
 
   var POPOVER_SHOW_DELAY = 400;
   var POPOVER_WINDOW_EDGE_SPACE = 8;
@@ -69,7 +70,7 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       if (current.tagName && current.tagName.toLowerCase() == 'md-content') break;
       current = current.parentNode;
     }
-    var popoverParent = angular.element(documentBody);
+    var documentBody = angular.element(documentBody);
 
     // We will re-attach popover when visible
     element.detach();
@@ -86,10 +87,9 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     });
 
     scope.$watch('placement', function (placement) {
-        var visible = scope.visible;
-        if (visible) hidePopover();
+        if (scope.visible) hidePopover();
         positionPopover();
-        if (visible) showPopover();
+        if (scope.visible) showPopover();
     });
 
     var debouncedOnResize = $$rAF.debounce(function windowResize() {
@@ -98,11 +98,19 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     });
     angular.element($window).on('resize', debouncedOnResize);
 
+    var rootElementKeyupCallback = function (e) {
+        if (e.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
+            if (scope.visible) setVisible(false);
+        }
+    };
+    $rootElement.on('keyup', rootElementKeyupCallback);
+
     // Be sure to completely cleanup the element on destroy
-    scope.$on('$destroy', function() {
+    scope.$on('$destroy', function () {
       scope.visible = false;
       element.remove();
       angular.element($window).off('resize', debouncedOnResize);
+      $rootElement.off('keyup', options.rootElementKeyupCallback);
     });
 
     // *******
@@ -123,7 +131,10 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
           }, POPOVER_SHOW_DELAY);
 
         } else {
-          $timeout(function() { scope.visible = false; });
+            $timeout(function () {
+                scope.visible = false;
+                parent.focus();
+            });
         }
       }
     }
@@ -133,7 +144,7 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       // (popover is hidden by default)
       element.removeClass('md-hide');
       parent.attr('aria-describedby', element.attr('id'));
-      popoverParent.append(element);
+      documentBody.append(element);
 
       // Wait until the element has been in the dom for two frames before
       // fading it in.
@@ -145,6 +156,7 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
           positionPopover();
           if (!scope.visible) return;
           element.addClass('md-show');
+          $timeout(function () { element.focus(); });
         });
 
       });
@@ -160,8 +172,8 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     }
 
     function positionPopover() {
-      var popoverRect = $mdUtil.elementRect(element, popoverParent);
-      var parentRect = $mdUtil.elementRect(parent, popoverParent);
+      var popoverRect = $mdUtil.elementRect(element, documentBody);
+      var parentRect = $mdUtil.elementRect(parent, documentBody);
 
       // Default placement to bottom if not set
       var popoverPlacement = scope.placement || 'bottom';
@@ -200,12 +212,12 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       // If element bleeds over left/right of the window, place it on the edge of the window.
       newPosition.left = Math.min(
         newPosition.left,
-        popoverParent.prop('scrollWidth') - popoverRect.width - POPOVER_WINDOW_EDGE_SPACE
+        documentBody.prop('scrollWidth') - popoverRect.width - POPOVER_WINDOW_EDGE_SPACE
       );
       newPosition.left = Math.max(newPosition.left, POPOVER_WINDOW_EDGE_SPACE);
 
       // If element bleeds over the bottom of the window, place it above the parent.
-      if (newPosition.top + popoverRect.height > popoverParent.prop('scrollHeight')) {
+      if (newPosition.top + popoverRect.height > documentBody.prop('scrollHeight')) {
         newPosition.top = parentRect.top - popoverRect.height;
         popoverPlacement = 'top';
       }
