@@ -9,6 +9,10 @@ body {
 
 a {
   color: #3f51b5;
+  text-decoration: none;
+}
+a:hover, a:focus {
+  text-decoration: underline;
 }
 
 table {
@@ -364,8 +368,37 @@ md-toolbar.demo-toolbar .md-button {
   font-size: 18px;
 }
 
+/***************
+ * Landing Page
+ ***************/
+ul.buckets {
+  margin: 24px 0;
+  padding: 0;
+}
+ul.buckets li {
+  list-style: none;
+  margin: 0;
+  text-align: center;
+}
+ul.buckets li md-card md-card-content {
+  padding: 0;
+}
+ul.buckets li a {
+  background-color: transparent;
+  display: block;
+  font-weight: 500;
+  padding: 16px 0;
+  text-decoration: none;
+  -webkit-transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
+  transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
+}
+ul.buckets li a:focus {
+  background-color: #03a9f4;
+  color: white;
+}
+
 /************
- * DOCS
+ * API DOCS
  ************/
 .api-options-bar .md-button {
   margin: 4px;
