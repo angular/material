@@ -19,6 +19,10 @@ angular.module('material.components.slider', [
  * The `<md-slider>` component allows the user to choose from a range of
  * values.
  *
+ * As per the [material design spec](http://www.google.com/design/spec/style/color.html#color-ui-color-application)
+ * the slider is in the accent color by default. The primary color palette may be used with
+ * the `md-primary` class.
+ *
  * It has two modes: 'normal' mode, where the user slides between a wide range
  * of values, and 'discrete' mode, where the user slides between only a few
  * select values.

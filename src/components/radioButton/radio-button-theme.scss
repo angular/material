@@ -5,32 +5,32 @@ md-radio-button.md-THEME_NAME-theme {
   }
 
   .md-on {
-    background-color: '{{primary-color-0.87}}';
+    background-color: '{{accent-color-0.87}}';
   }
   &.md-checked .md-off {
-    border-color: '{{primary-color-0.87}}';
+    border-color: '{{accent-color-0.87}}';
   }
   &.md-checked .md-ink-ripple {
-    color: '{{primary-color-0.87}}';
+    color: '{{accent-color-0.87}}';
   }
   .md-container .md-ripple {
-    color: '{{primary-600}}';
+    color: '{{accent-600}}';
   }
 
   &:not([disabled]) {
 
-    &.md-accent {
+    &.md-primary {
       .md-on {
-        background-color: '{{accent-color-0.87}}';
+        background-color: '{{primary-color-0.87}}';
       }
       &.md-checked .md-off {
-        border-color: '{{accent-color-0.87}}';
+        border-color: '{{primary-color-0.87}}';
       }
       &.md-checked .md-ink-ripple {
-        color: '{{accent-color-0.87}}';
+        color: '{{primary-color-0.87}}';
       }
       .md-container .md-ripple {
-        color: '{{accent-600}}';
+        color: '{{primary-600}}';
       }
     }
 

@@ -56,23 +56,23 @@ md-slider.md-THEME_NAME-theme {
     }
   }
 
-  &.md-accent {
+  &.md-primary {
     .md-track-fill {
-      background-color: '{{accent-color}}';
+      background-color: '{{primary-color}}';
     }
     .md-thumb:after {
-      border-color: '{{accent-color}}';
-      background-color: '{{accent-color}}';
+      border-color: '{{primary-color}}';
+      background-color: '{{primary-color}}';
     }
     .md-sign {
-      background-color: '{{accent-color}}';
+      background-color: '{{primary-color}}';
 
       &:after {
-        border-top-color: '{{accent-color}}';
+        border-top-color: '{{primary-color}}';
       }
     }
     .md-thumb-text {
-      color: '{{accent-contrast}}';
+      color: '{{primary-contrast}}';
     }
   }
 

@@ -32,10 +32,17 @@ md-toolbar .md-button.md-THEME_NAME-theme.md-fab {
 
   &.md-fab {
     border-radius: $button-fab-border-radius;
+    background-color: '{{accent-color}}';
+    color: '{{accent-contrast}}';
+    &:not([disabled]) {
+      &:hover, 
+      &:focus {
+        background-color: '{{accent-A700}}';
+      }
+    }
   }
 
-  &.md-raised,
-  &.md-fab {
+  &.md-raised {
     color: '{{background-contrast}}';
     background-color: '{{background-500-0.185}}';
     &:not([disabled]) {
