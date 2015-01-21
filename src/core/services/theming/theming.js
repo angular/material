@@ -61,10 +61,10 @@ var DEFAULT_COLOR_TYPE = 'primary';
 // A color in a theme will use these hues by default, if not specified by user.
 var LIGHT_DEFAULT_HUES = {
   'accent': {
-    'default': 'A700',
-    'hue-1': 'A200',
+    'default': 'A200',
+    'hue-1': 'A100',
     'hue-2': 'A400',
-    'hue-3': 'A100'
+    'hue-3': 'A700'
   }
 };
 var DARK_DEFAULT_HUES = {
@@ -154,7 +154,7 @@ function ThemingProvider($mdColorPalette) {
   // Register a theme (which is a collection of color palettes to use with various states
   // ie. warn, accent, primary )
   // Optionally inherit from an existing theme
-  // $mdThemingProvider.theme('custom-theme').primaryColor('red');
+  // $mdThemingProvider.theme('custom-theme').primaryPalette('red');
   function registerTheme(name, inheritFrom) {
     inheritFrom = inheritFrom || 'default';
     if (THEMES[name]) return THEMES[name];
@@ -219,7 +219,7 @@ function ThemingProvider($mdColorPalette) {
 
     THEME_COLOR_TYPES.forEach(function(colorType) {
       var defaultHues = (self.isDark ? DARK_DEFAULT_HUES : LIGHT_DEFAULT_HUES)[colorType];
-      self[colorType + 'Color'] = function setColorType(paletteName, hues) {
+      self[colorType + 'Palette'] = function setPaletteType(paletteName, hues) {
         var color = self.colors[colorType] = {
           name: paletteName,
           hues: angular.extend({}, defaultHues, hues)
@@ -248,8 +248,14 @@ function ThemingProvider($mdColorPalette) {
             );
           }
         });
-
         return self;
+      };
+
+      self[colorType + 'Color'] = function() {
+        var args = Array.prototype.slice.call(arguments);
+        console.warn('$mdThemingProviderTheme.' + colorType + 'Color() has been depricated. ' +
+                     'Use $mdThemingProviderTheme.' + colorType + 'Palette() instead.');
+        return self[colorType + 'Palette'].apply(self, args);
       };
     });
   }
@@ -450,7 +456,7 @@ function generateThemes($injector) {
     var lightColors = palette.contrastLightColors || [];
     var darkColors = palette.contrastDarkColors || [];
 
-    // Sass provides these colors as space-separated lists
+    // These colors are provided as space-separated lists
     if (typeof lightColors === 'string') lightColors = lightColors.split(' ');
     if (typeof darkColors === 'string') darkColors = darkColors.split(' ');
 

@@ -28,10 +28,10 @@ describe('$mdThemingProvider', function() {
         'contrastDarkColors': ['50', '100', '200', '300', '400', 'A100']
       };
       defaultTheme = themingProvider.theme('default')
-        .primaryColor('testPalette')
-        .warnColor('testPalette')
-        .accentColor('testPalette')
-        .backgroundColor('testPalette');
+        .primaryPalette('testPalette')
+        .warnPalette('testPalette')
+        .accentPalette('testPalette')
+        .backgroundPalette('testPalette');
 
       testTheme = themingProvider.theme('test');
     });
@@ -67,7 +67,7 @@ describe('$mdThemingProvider', function() {
         testTheme.dark();
         expect(testTheme.colors.background.hues['hue-3']).toBe(darkBackground['hue-3']);
 
-        testTheme.backgroundColor('testPalette', {
+        testTheme.backgroundPalette('testPalette', {
           'hue-3': '50'
         });
         testTheme.dark(false);
@@ -79,7 +79,7 @@ describe('$mdThemingProvider', function() {
       var parentTheme;
       beforeEach(function() {
         themingProvider.definePalette('parentPalette', angular.extend({}, testPalette));
-        parentTheme = themingProvider.theme('parent').primaryColor('parentPalette');
+        parentTheme = themingProvider.theme('parent').primaryPalette('parentPalette');
       });
       it('allows extension by string', function() {
         var childTheme = themingProvider.theme('child', 'parent');
@@ -101,21 +101,21 @@ describe('$mdThemingProvider', function() {
       });
       it('allows specifying a custom hue map', function() {
         expect(testTheme.colors.primary.hues['hue-1']).not.toBe('50');
-        testTheme.primaryColor('testPalette', {
+        testTheme.primaryPalette('testPalette', {
           'hue-1': '50'
         });
         expect(testTheme.colors.primary.hues['hue-1']).toBe('50');
       });
       it('errors on invalid key in hue map', function() {
         expect(function() {
-          testTheme.primaryColor('testPalette', {
+          testTheme.primaryPalette('testPalette', {
             'invalid-key': '100'
           });
         }).toThrow();
       });
       it('errors on invalid value in hue map', function() {
         expect(function() {
-          testTheme.primaryColor('testPalette', {
+          testTheme.primaryPalette('testPalette', {
             'hue-1': 'invalid-value'
           });
         }).toThrow();
@@ -165,7 +165,7 @@ describe('$mdThemingProvider', function() {
     }
 
     it('errors if given a theme with invalid palettes', function() {
-      testTheme.primaryColor('invalidPalette');
+      testTheme.primaryPalette('invalidPalette');
       expect(function() {
         themingProvider._parseRules(testTheme, 'primary', '');
       }).toThrow();
@@ -204,13 +204,13 @@ describe('$mdThemingProvider', function() {
       });
     });
     it('parses contrast colors', function() {
-      testTheme.primaryColor('testPalette', {
+      testTheme.primaryPalette('testPalette', {
         'default': '50'
       });
       expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast}}"; } ')[0].content)
         .toEqual('color: rgb(0,0,0);');
 
-      testTheme.primaryColor('testPalette', {
+      testTheme.primaryPalette('testPalette', {
         'default': '800'
       });
       expect(parse('{ color: "{{primary-contrast}}"; }')[0].content)

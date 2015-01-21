@@ -24,10 +24,10 @@ function MdCoreConfigure($provide, $mdThemingProvider) {
   $provide.decorator('$$rAF', ['$delegate', '$rootScope', rAFDecorator]);
 
   $mdThemingProvider.theme('default')
-    .primaryColor('blue')
-    .accentColor('green')
-    .warnColor('red')
-    .backgroundColor('grey');
+    .primaryPalette('indigo')
+    .accentPalette('pink')
+    .warnPalette('red')
+    .backgroundPalette('grey');
 
   function rAFDecorator($$rAF, $rootScope) {
     /**
