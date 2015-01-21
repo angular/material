@@ -21,7 +21,7 @@ angular.module('material.components.sticky', [
  * @module material.components.sticky
  *
  * @description
- * The `$mdSticky`service provides a mixin to make elements sticky.
+ * The `$mdSticky`service provides a mixin to make elements placed inside `md-content` sticky.
  *
  * @returns A `$mdSticky` function that takes three arguments:
  *   - `scope`
@@ -98,7 +98,7 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
       };
       self.items.push(item);
 
-      contentEl.parent().prepend(item.clone);
+      contentEl.parent()[0].insertBefore(item.clone[0], contentCtrl.$element[0]);
 
       debouncedRefreshElements();
 
