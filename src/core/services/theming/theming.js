@@ -53,7 +53,8 @@ var DARK_SHADOW = '1px 1px 0px rgba(0,0,0,0.4), -1px -1px 0px rgba(0,0,0,0.4)';
 var LIGHT_SHADOW = '';
 
 var DARK_CONTRAST_COLOR = colorToRgbaArray('rgba(0,0,0,0.87)');
-var LIGHT_CONTRAST_COLOR = colorToRgbaArray('rgb(255,255,255)');
+var LIGHT_CONTRAST_COLOR = colorToRgbaArray('rgba(255,255,255,0.87');
+var STRONG_LIGHT_CONTRAST_COLOR = colorToRgbaArray('rgb(255,255,255)');
 
 var THEME_COLOR_TYPES = ['primary', 'accent', 'warn', 'background'];
 var DEFAULT_COLOR_TYPE = 'primary';
@@ -454,15 +455,18 @@ function generateThemes($injector) {
   function sanitizePalette(palette) {
     var defaultContrast = palette.contrastDefaultColor;
     var lightColors = palette.contrastLightColors || [];
+    var strongLightColors = palette.contrastStrongLightColors || [];
     var darkColors = palette.contrastDarkColors || [];
 
     // These colors are provided as space-separated lists
     if (typeof lightColors === 'string') lightColors = lightColors.split(' ');
+    if (typeof strongLongColors === 'string') strongLightColors = strongLightColors.split(' ');
     if (typeof darkColors === 'string') darkColors = darkColors.split(' ');
 
     // Cleanup after ourselves
     delete palette.contrastDefaultColor;
     delete palette.contrastLightColors;
+    delete palette.contrastStrongLightColors;
     delete palette.contrastDarkColors;
 
     // Change { 'A100': '#fffeee' } to { 'A100': { value: '#fffeee', contrast:DARK_CONTRAST_COLOR }
@@ -483,9 +487,19 @@ function generateThemes($injector) {
       };
       function getContrastColor() {
         if (defaultContrast === 'light') {
-          return darkColors.indexOf(hueName) > -1 ? DARK_CONTRAST_COLOR : LIGHT_CONTRAST_COLOR;
+          if (darkColors.indexOf(hueName) > -1) {
+            return DARK_CONTRAST_COLOR;
+          } else {
+            return strongLightColors.indexOf(hueName) > -1 ? STRONG_LIGHT_CONTRAST_COLOR 
+              : LIGHT_CONTRAST_COLOR;
+          }
         } else {
-          return lightColors.indexOf(hueName) > -1 ? LIGHT_CONTRAST_COLOR : DARK_CONTRAST_COLOR;
+          if (lightColors.indexOf(hueName) > -1) {
+            return strongLightColors.indexOf(hueName) > -1 ? STRONG_LIGHT_CONTRAST_COLOR 
+              : LIGHT_CONTRAST_COLOR;
+          } else {
+            return DARK_CONTRAST_COLOR;
+          }
         }
       }
     });
@@ -508,8 +522,8 @@ function checkValidPalette(theme, colorType) {
 function colorToRgbaArray(clr) {
   if (angular.isArray(clr) && clr.length == 3) return clr;
   if (/^rgb/.test(clr)) {
-    return clr.replace(/(^\s*rgba?\(|\)\s*$)/g, '').split(',').map(function(value) {
-      return parseInt(value, 10);
+    return clr.replace(/(^\s*rgba?\(|\)\s*$)/g, '').split(',').map(function(value, i) {
+      return i == 3 ? parseFloat(value, 10) : parseInt(value, 10);
     });
   }
   if (clr.charAt(0) == '#') clr = clr.substring(1);
@@ -528,8 +542,11 @@ function colorToRgbaArray(clr) {
 }
 
 function rgba(rgbArray, opacity) {
-  if (rgbArray.length == 4) opacity = rgbArray.pop();
-  return opacity && opacity.length ?
+  if (rgbArray.length == 4) {
+    rgbArray = angular.copy(rgbArray);
+    opacity = rgbArray.pop();
+  }
+  return opacity && (typeof opacity == 'number' || (typeof opacity == 'string' && opacity.length)) ?
     'rgba(' + rgbArray.join(',') + ',' + opacity + ')' :
     'rgb(' + rgbArray.join(',') + ')';
 }

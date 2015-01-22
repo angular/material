@@ -25,7 +25,8 @@ describe('$mdThemingProvider', function() {
         'A400': 'ff1744',
         'A700': 'd50000',
         'contrastDefaultColor': 'light',
-        'contrastDarkColors': ['50', '100', '200', '300', '400', 'A100']
+        'contrastDarkColors': ['50', '100', '200', '300', '400', 'A100'],
+        'contrastStrongLightColors': ['900']
       };
       defaultTheme = themingProvider.theme('default')
         .primaryPalette('testPalette')
@@ -208,10 +209,16 @@ describe('$mdThemingProvider', function() {
         'default': '50'
       });
       expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast}}"; } ')[0].content)
-        .toEqual('color: rgb(0,0,0);');
+        .toEqual('color: rgba(0,0,0,0.87);');
 
       testTheme.primaryPalette('testPalette', {
         'default': '800'
+      });
+      expect(parse('{ color: "{{primary-contrast}}"; }')[0].content)
+        .toEqual('color: rgba(255,255,255,0.87);');
+
+      testTheme.primaryPalette('testPalette', {
+        'default': '900'
       });
       expect(parse('{ color: "{{primary-contrast}}"; }')[0].content)
         .toEqual('color: rgb(255,255,255);');
