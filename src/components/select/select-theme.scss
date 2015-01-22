@@ -1,0 +1,31 @@
+md-select.md-THEME_NAME-theme {
+  &:focus {
+    .md-select-label {
+      border-bottom-color: '{{primary-color}}';
+      color: '{{ foreground-1 }}';
+      &.md-placeholder {
+        color: '{{ foreground-1 }}';
+      }
+    }
+  }
+  .md-select-label {
+    &.md-placeholder {
+      color: '{{foreground-3}}';
+    }
+    border-bottom-color: '{{foreground-4}}';
+  }
+}
+
+md-select-menu.md-THEME_NAME-theme {
+
+  md-optgroup {
+    color: '{{foreground-2}}';
+    md-option {
+      color: '{{foreground-1}}';
+    }
+  }
+  md-option[selected] {
+    background: #f0f0f0;
+  }
+
+}

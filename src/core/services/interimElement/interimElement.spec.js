@@ -356,6 +356,23 @@ describe('$$interimElement service', function() {
         expect(shown).toBe(true);
       }));
 
+      it('allows parent getter', inject(function($rootScope) {
+        var parent = angular.element('<div>');
+        var parentGetter = jasmine.createSpy('parentGetter').andReturn(parent);
+
+        var shown = false;
+        Service.show({
+          parent: parentGetter,
+          onShow: function(scope, element, options) {
+            expect(parentGetter).toHaveBeenCalledWith(scope, element, options);
+            expect(options.parent[0]).toBe(parent[0]);
+            shown = true;
+          }
+        });
+        $rootScope.$digest();
+        expect(shown).toBe(true);
+      }));
+
       it('allows string parent selector', inject(function($rootScope, $document) {
         var parent = angular.element('<div id="super-parent">');
         spyOn($document[0], 'querySelector').andReturn(parent[0]);

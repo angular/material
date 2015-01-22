@@ -144,16 +144,27 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     }
 
     function positionTooltip() {
-      var tipRect = $mdUtil.elementRect(element, tooltipParent);
-      var parentRect = $mdUtil.elementRect(parent, tooltipParent);
-      var newPosition = getPosition(direction);
+      var tipRect = $mdUtil.offsetRect(element, tooltipParent);
+      var parentRect = $mdUtil.offsetRect(parent, tooltipParent);
 
-      // If the user provided a direction, just nudge the tooltip onto the screen
-      // Otherwise, recalculate based on 'top' since default is 'bottom'
-      if (direction) {
-        newPosition = fitOnScreen(newPosition);
-      } else if (newPosition.top > tooltipParent.prop('scrollHeight') - tipRect.height - TOOLTIP_WINDOW_EDGE_SPACE) {
-        newPosition = fitOnScreen(getPosition('top'));
+      // Default to bottom position if possible
+      var tipDirection = 'bottom';
+      var newPosition = {
+        left: parentRect.left + parentRect.width / 2 - tipRect.width / 2,
+        top: parentRect.top + parentRect.height
+      };
+
+      // If element bleeds over left/right of the window, place it on the edge of the window.
+      newPosition.left = Math.min(
+        newPosition.left,
+        tooltipParent.prop('scrollWidth') - tipRect.width - TOOLTIP_WINDOW_EDGE_SPACE
+      );
+      newPosition.left = Math.max(newPosition.left, TOOLTIP_WINDOW_EDGE_SPACE);
+
+      // If element bleeds over the bottom of the window, place it above the parent.
+      if (newPosition.top + tipRect.height > tooltipParent.prop('scrollHeight')) {
+        newPosition.top = parentRect.top - tipRect.height;
+        tipDirection = 'top';
       }
 
       element.css({top: newPosition.top + 'px', left: newPosition.left + 'px'});

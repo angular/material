@@ -137,7 +137,7 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming) {
       selectNext: function() {
         return changeSelectedButton(this.$element, 1);
       },
-      selectPrevious : function() {
+      selectPrevious: function() {
         return changeSelectedButton(this.$element, -1);
       },
       setActiveDescendant: function (radioId) {
@@ -151,10 +151,7 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming) {
    */
   function changeSelectedButton(parent, increment) {
     // Coerce all child radio buttons into an array, then wrap then in an iterator
-    var buttons = $mdUtil.iterator(
-      Array.prototype.slice.call(parent[0].querySelectorAll('md-radio-button')),
-      true
-    );
+    var buttons = $mdUtil.iterator(parent[0].querySelectorAll('md-radio-button'), true);
 
     if (buttons.count()) {
       var validate = function (button) {

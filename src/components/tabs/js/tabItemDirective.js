@@ -101,12 +101,11 @@ function MdTabDirective($mdInkRipple, $compile, $mdUtil, $mdConstant, $timeout) 
       transcludeTabContent();
       configureAria();
 
-      var detachRippleFn = $mdInkRipple.attachTabBehavior(scope, element, {
+      $mdInkRipple.attachTabBehavior(scope, element, {
         colorElement: tabsCtrl.inkBarElement
       });
       tabsCtrl.add(tabItemCtrl);
       scope.$on('$destroy', function() {
-        detachRippleFn();
         tabsCtrl.remove(tabItemCtrl);
       });
       element.on('$destroy', function () {
