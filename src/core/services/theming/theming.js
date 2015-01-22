@@ -439,6 +439,10 @@ function generateThemes($injector) {
     THEME_COLOR_TYPES.forEach(function(colorType) {
       styleString += parseRules(theme, colorType, rulesByType[colorType] + '');
     });
+    if (theme.colors.primary.name == theme.colors.accent.name) {
+      console.warn("$mdThemingProvider: Using the same palette for primary and" +
+                   "accent. This violates the material design spec.");
+    }
   });
 
   // Insert our newly minted styles into the DOM
