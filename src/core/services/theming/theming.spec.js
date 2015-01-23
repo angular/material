@@ -9,7 +9,7 @@ describe('$mdThemingProvider', function() {
     module('material.core.theming', function($mdThemingProvider, $provide) {
       themingProvider = $mdThemingProvider;
 
-      testPalette = themingProvider._PALETTES.testPalette = {
+      testPalette = themingProvider._PALETTES.testPalette = themingProvider._PALETTES.otherTestPalette = {
         '50': 'ffebee',
         '100': 'ffcdd2',
         '200': 'ef9a9a',
@@ -31,7 +31,7 @@ describe('$mdThemingProvider', function() {
       defaultTheme = themingProvider.theme('default')
         .primaryPalette('testPalette')
         .warnPalette('testPalette')
-        .accentPalette('testPalette')
+        .accentPalette('otherTestPalette')
         .backgroundPalette('testPalette');
 
       testTheme = themingProvider.theme('test');
