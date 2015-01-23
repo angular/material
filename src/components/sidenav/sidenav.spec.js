@@ -248,6 +248,12 @@ describe('mdSidenav', function() {
       scope.$digest();
       expect(instance.isOpen()).toBe(true);
       expect(instance.isLockedOpen()).toBe(true);
+
+      scope.shouldOpen = false;
+      scope.shouldLockOpen = true;
+      scope.$digest();
+      expect(instance.isOpen()).toBe(false);
+      expect(instance.isLockedOpen()).toBe(true);
     }));
   });
 
