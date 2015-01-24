@@ -1,6 +1,6 @@
 
 module.exports = function(config) {
-  
+
   var UNCOMPILED_SRC = [
       'config/test-utils.js',
       'src/core/**/*.js',
@@ -35,8 +35,13 @@ module.exports = function(config) {
       'bower_components/angular-animate/angular-animate.js',
       'bower_components/angular-aria/angular-aria.js',
       'bower_components/angular-mocks/angular-mocks.js',
-      'bower_components/hammerjs/hammer.js'
+      'bower_components/hammerjs/hammer.js',
+       {pattern: 'config/fixtures/**/*.*', watched: false, included: false, served: true}
     ].concat(testSrc),
+
+    proxies: {
+      '/fixtures/': '/base/config/fixtures/'
+    },
 
     port: 9876,
     reporters: ['progress'],
