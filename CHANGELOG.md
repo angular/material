@@ -4,8 +4,8 @@
 
 #### Bug Fixes
 
-* **input**
-  * fix bug regarding md-maxlength value changes ([b432277d](https://github.com/angular/material/commit/b432277d59614d2d23e4f651a1b3c46d76ec50ae))
+* **input:**
+  * fix bug regarding `md-maxlength` value changes ([b432277d](https://github.com/angular/material/commit/b432277d59614d2d23e4f651a1b3c46d76ec50ae))
 
 <a name="0.7.0-rc3"></a>
 ### 0.7.0-rc3  (2015-01-14)
