@@ -12,7 +12,8 @@ angular.module('material.components.input', [
   .directive('label', labelDirective)
   .directive('input', inputTextareaDirective)
   .directive('textarea', inputTextareaDirective)
-  .directive('mdMaxlength', mdMaxlengthDirective);
+  .directive('mdMaxlength', mdMaxlengthDirective)
+  .directive('placeholder', placeholderDirective);
 
 /**
  * @ngdoc directive
@@ -42,7 +43,7 @@ angular.module('material.components.input', [
  *
  * </hljs>
  */
-function mdInputContainerDirective($mdTheming) {
+function mdInputContainerDirective($mdTheming, $animate, $mdUtil) {
   return {
     restrict: 'E',
     link: postLink,
@@ -52,18 +53,18 @@ function mdInputContainerDirective($mdTheming) {
   function postLink(scope, element, attr) {
     $mdTheming(element);
   }
-  function ContainerCtrl($scope, $element, $mdUtil) {
+  function ContainerCtrl($scope, $element) {
     var self = this;
 
     self.element = $element;
     self.setFocused = function(isFocused) {
-      $element.toggleClass('md-input-focused', !!isFocused);
+      $animate[isFocused ? 'addClass' : 'removeClass']($element, 'md-input-focused');
     };
     self.setHasValue = function(hasValue) {
-      $element.toggleClass('md-input-has-value', !!hasValue);
+      $animate[hasValue ? 'addClass' : 'removeClass']($element, 'md-input-has-value');
     };
     self.setInvalid = function(isInvalid) {
-      $element.toggleClass('md-input-invalid', !!isInvalid);
+      $animate[isInvalid ? 'addClass' : 'removeClass']($element, 'md-input-invalid');
     };
 
     $scope.$watch(function() {
@@ -207,11 +208,15 @@ function inputTextareaDirective($mdUtil, $window, $compile, $animate) {
     element
       .on('input', inputCheckValue)
       .on('focus', function(ev) {
-        containerCtrl.setFocused(true);
+        scope.$evalAsync(function() {
+          containerCtrl.setFocused(true);
+        });
       })
       .on('blur', function(ev) {
-        containerCtrl.setFocused(false);
-        inputCheckValue();
+        scope.$evalAsync(function() {
+          containerCtrl.setFocused(false);
+          inputCheckValue();
+        });
       });
 
     scope.$on('$destroy', function() {
@@ -310,6 +315,21 @@ function mdMaxlengthDirective($animate) {
       charCountEl.text( ( element.val() || value || '' ).length + '/' + maxlength );
       return value;
     }
+  }
+}
+
+function placeholderDirective() {
+  return {
+    restrict: 'A',
+    require: '^mdInputContainer',
+    link: postLink
+  };
+
+  function postLink(scope, element, attr, inputContainer) {
+    var placeholderText = attr.placeholder;
+    element.removeAttr('placeholder');
+
+    inputContainer.element.append('<div class="md-placeholder">' + placeholderText + '</div>');
   }
 }
 

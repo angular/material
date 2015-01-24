@@ -5,6 +5,8 @@ $input-label-default-scale: 1.0 !default;
 $input-label-float-offset: 4px !default;
 $input-label-float-scale: 0.75 !default;
 
+$input-placeholder-offset: $input-label-default-offset !default;
+
 $input-border-width-default: 1px !default;
 $input-border-width-focused: 2px !default;
 $input-line-height: 26px !default;
@@ -44,7 +46,8 @@ md-input-container {
     overflow: hidden;
   }
 
-  label {
+  label, 
+  .md-placeholder {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
@@ -53,6 +56,24 @@ md-input-container {
     transform: translate3d(0, $input-label-default-offset, 0) scale($input-label-default-scale);
     transform-origin: left top;
     transition: transform $swift-ease-out-timing-function 0.25s;
+  }
+  .md-placeholder {
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    transition-property: opacity, transform;
+    transform: translate3d(0, $input-placeholder-offset + $baseline-grid, 0);
+  }
+  &.md-input-focused:not(.md-input-has-value) {
+    .md-placeholder {
+      opacity: 1;
+      transform: translate3d(0, $input-placeholder-offset, 0);
+    }
+  }
+  &.md-input-has-value-remove-active,
+  &.md-input-focused {
+    transition: none;
+    transition-delay: none;
   }
 
   /* 
@@ -116,6 +137,9 @@ md-input-container {
     label {
       transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);
     }
+  }
+  &.md-input-has-value .md-placeholder {
+    transition: none;
   }
 
   // Use wide border in error state or in focused state
