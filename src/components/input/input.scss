@@ -62,7 +62,7 @@ md-input-container {
     top: 0;
     opacity: 0;
     transition-property: opacity, transform;
-    transform: translate3d(0, $input-placeholder-offset + $baseline-grid / 2, 0);
+    transform: translate3d(0, $input-placeholder-offset + $baseline-grid * 0.75, 0);
   }
   &.md-input-focused:not(.md-input-has-value) {
     .md-placeholder {
