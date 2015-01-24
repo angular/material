@@ -62,7 +62,7 @@ md-input-container {
     top: 0;
     opacity: 0;
     transition-property: opacity, transform;
-    transform: translate3d(0, $input-placeholder-offset + $baseline-grid, 0);
+    transform: translate3d(0, $input-placeholder-offset + $baseline-grid / 2, 0);
   }
   &.md-input-focused:not(.md-input-has-value) {
     .md-placeholder {
@@ -70,10 +70,9 @@ md-input-container {
       transform: translate3d(0, $input-placeholder-offset, 0);
     }
   }
-  &.md-input-has-value-remove-active,
-  &.md-input-focused {
+  // Placeholder should immediately disappear when the user starts typing
+  &.md-input-has-value .md-placeholder {
     transition: none;
-    transition-delay: none;
   }
 
   /* 
@@ -137,9 +136,6 @@ md-input-container {
     label {
       transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);
     }
-  }
-  &.md-input-has-value .md-placeholder {
-    transition: none;
   }
 
   // Use wide border in error state or in focused state

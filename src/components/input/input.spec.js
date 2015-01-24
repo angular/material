@@ -111,4 +111,12 @@ describe('md-input-container directive', function() {
       expect(getCharCounter(el).length).toBe(0);
     }));
   });
+
+  it('should put placeholder into separate element', function() {
+    var el = setup('placeholder="some placeholder"');
+    var placeholder = el[0].querySelector('.md-placeholder');
+    expect(el.find('input')[0].hasAttribute('placeholder')).toBe(false);
+    expect(placeholder).toBeTruthy();
+    expect(placeholder.textContent).toEqual('some placeholder');
+  });
 });
