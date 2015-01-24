@@ -43,10 +43,8 @@ md-toolbar {
   display: flex;
   align-items: center;
   flex-direction: row;
-
   width: 100%;
   height: $toolbar-tools-height;
-  min-height: 100%;
   max-height: $toolbar-tools-height;
   font-size: inherit;
   font-weight: normal;
