@@ -1,3 +1,12 @@
+<a name="0.7.0"></a>
+### 0.7.0  (2015-01-24)
+
+
+#### Bug Fixes
+
+* **input**
+  * fix bug regarding md-maxlength value changes
+
 <a name="0.7.0-rc3"></a>
 ### 0.7.0-rc3  (2015-01-14)
 
