@@ -8,17 +8,12 @@ md-icon {
   pointer-events: none;
   display: flex;
   z-index: 0;
-
-  object.md-icon {
-    display: inline-block;
+  svg {
+    fill: inherit;
+    color: inherit;
   }
-}
-svg, object {
-  fill: currentColor;
-  color: currentColor;
-}
-
-md-class-icon {
-  // display: block;
-  // margin: 0 auto;
+  svg.md-icon, img.md-icon {
+    display: inline-block;
+    width:inherit;
+  }
 }
