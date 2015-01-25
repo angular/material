@@ -1,0 +1,17 @@
+
+section {
+  margin: 1em;
+  padding-bottom: 10px;
+}
+
+md-button.md-fab md-icon {
+  width: 24px;
+  height: 24px;
+}
+md-icon svg {
+ width:256px;
+ fill:rgba(0,0,0,0.8);
+}
+md-icon img {
+ width:256px;
+}
