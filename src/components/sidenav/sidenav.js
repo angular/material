@@ -24,28 +24,31 @@ angular.module('material.components.sidenav', [
  * @module material.components.sidenav
  *
  * @description
- * $mdSidenav makes it easy to interact with multiple sidenavs
+ * `$mdSidenav` makes it easy to interact with multiple sidenavs
  * in an app.
  *
  * @usage
- *
- * ```javascript
+ * <hljs lang="js">
  * // Toggle the given sidenav
  * $mdSidenav(componentId).toggle();
- *
+ * </hljs>
+ * <hljs lang="js">
  * // Open the given sidenav
  * $mdSidenav(componentId).open();
- *
+ * </hljs>
+ * <hljs lang="js">
  * // Close the given sidenav
  * $mdSidenav(componentId).close();
- *
+ * </hljs>
+ * <hljs lang="js">
  * // Exposes whether given sidenav is set to be open
  * $mdSidenav(componentId).isOpen();
- *
+ * </hljs>
+ * <hljs lang="js">
  * // Exposes whether given sidenav is locked open
  * // If this is true, the sidenav will be open regardless of isOpen()
  * $mdSidenav(componentId).isLockedOpen();
- * ```
+ * </hljs>
  */
 function SidenavService($mdComponentRegistry, $q) {
   return function(handle) {

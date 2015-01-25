@@ -49,17 +49,17 @@ pre > code.highlight {
 }
 
 pre, code {
-
   margin: 0;
   padding: 0;
+  font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
   overflow-wrap: break-word;
-  font-family: monospace, serif;
 }
 
 
 pre > code.highlight {
-  padding: 10px;
+  background-color: transparent;
   font-weight: 400;
+  padding: 10px;
 }
 
 code {
@@ -76,6 +76,7 @@ code:not(.highlight) {
   color: #4285f4;
   margin-left: 1px;
   margin-right: 1px;
+  -webkit-font-smoothing: auto;
 }
 
 .md-sidenav-inner {
@@ -407,6 +408,10 @@ ul.methods li h3 {
   min-height: 100%;
 }
 
+md-content.demo-source-container {
+  background-color: transparent;
+  border: none;
+}
 md-content.demo-source-container > hljs > pre > code.highlight {
   position : absolute;
   top : 0px;
