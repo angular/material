@@ -346,13 +346,27 @@ function InkRippleService($window, $timeout) {
        * @returns {boolean} true if the ripple is allowed, false if not
        */
       function isRippleAllowed() {
-        var parent = node.parentNode;
-        var grandparent = parent && parent.parentNode;
-        var ancestor = grandparent && grandparent.parentNode;
-        return !isDisabled(node) && !isDisabled(parent) && !isDisabled(grandparent) && !isDisabled(ancestor);
         function isDisabled (elem) {
           return elem && elem.hasAttribute && elem.hasAttribute('disabled');
         }
+
+        function hasTooManyRipples (elem) {
+          var allowedRipplesCount = elem && elem.hasAttribute && elem.hasAttribute('max-ripple')
+              && +elem.attributes['max-ripple'].value;
+
+          if((!allowedRipplesCount && allowedRipplesCount !== 0) || allowedRipplesCount < 0) {
+            return false;
+          }
+
+          return ripples.length >= allowedRipplesCount;
+        }
+
+        var parent = node.parentNode;
+        var grandparent = parent && parent.parentNode;
+        var ancestor = grandparent && grandparent.parentNode;
+
+        return !isDisabled(node) && !isDisabled(parent) && !isDisabled(grandparent) && !isDisabled(ancestor)
+            && !hasTooManyRipples(node);
       }
     }
   }
