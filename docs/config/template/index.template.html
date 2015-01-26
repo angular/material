@@ -38,28 +38,25 @@
       </h1>
     </md-toolbar>
 
-    <md-content flex style="overflow: auto;">
-      <div ng-repeat="section in menu.sections">
+    <md-content style="overflow: auto;">
+      <ul class="docs-menu">
+        <li ng-repeat="section in menu.sections" class="parent-list-item" ng-class="{'parentActive' : isSectionSelected(section)}">
+          <h2 class="menu-heading" ng-if="section.type === 'heading'" id="heading_{{ section.name | nospace }}">
+            {{section.name}}
+          </h2>
 
-        <button class="menu-item menu-title md-menu-item"
-          ng-click="menu.toggleSelectSection(section)"
-          md-highlight="menu.isSectionSelected(section)"
-          md-ink-ripple="#bbb">
-          {{section.name}}
-        </button>
+          <menu-link section="section" ng-if="section.type === 'link'"></menu-link>
 
-        <a class="menu-item menu-sub-item md-menu-item"
-          ng-show="menu.isSectionSelected(section)"
-          ng-repeat="page in section.pages"
-          ng-href="#{{page.url}}"
-          md-highlight="menu.isPageSelected(section, page)"
-          md-ink-ripple="#bbb">
-          <span ng-bind="page | humanizeDoc"></span>
-        </a>
+          <menu-toggle section="section" ng-if="section.type === 'toggle'"></menu-toggle>
 
-      </div>
+          <ul ng-if="section.children" class="menu-nested-list">
+            <li ng-repeat="child in section.children" ng-class="{'childActive' : isSectionSelected(child)}">
+              <menu-toggle section="child"></menu-toggle>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </md-content>
-
   </md-sidenav>
 
   <div layout="column" layout-fill tabIndex="-1" role="main">
@@ -72,11 +69,13 @@
 
         <div layout="row" flex class="fill-height">
           <div class="md-toolbar-item md-breadcrumb">
-            <span hide-sm hide-md ng-if="menu.currentSection.name">{{menu.currentSection.name}}</span>
-            <span class="menu-separator-icon" ng-if="menu.currentPage" style="padding: 0 10px;" hide-sm hide-md>
-              <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true">
+            <span ng-if="menu.currentPage.name !== menu.currentSection.name">
+              <span hide-sm hide-md>{{menu.currentSection.name}}</span>
+              <span class="menu-separator-icon" style="padding: 0 10px;" hide-sm hide-md>
+                <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true">
+              </span>
             </span>
-            <span style="display: inline-block;" ng-bind="(menu.currentPage | humanizeDoc) || 'Angular Material'"></span>
+            <span style="display: inline-block;">{{(menu.currentPage | humanizeDoc) || 'Angular Material' }}</span>
           </div>
 
           <span flex></span> <!-- use up the empty space -->

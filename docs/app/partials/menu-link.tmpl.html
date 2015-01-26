@@ -1,0 +1,8 @@
+<md-button ng-class="{'active' : isSelected()}"
+  ng-href="#{{section.url}}">
+  {{section | humanizeDoc}}
+  <span class="visuallyhidden"
+    ng-if="isSelected()">
+    current page
+  </span>
+</md-button>
