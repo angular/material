@@ -51,11 +51,10 @@ $tff-margin: 10px 0 (10px - $tff-line-focused-width) 0 !default;
   background-repeat: repeat-x;
 }
 
-md-input-group,
-.md-input-group {
+md-input-container,
+.md-input-container {
 
   label {
-    display: block;
     font-size: $tff-font-size;
   }
 
@@ -74,7 +73,6 @@ md-input-group,
   input[type="search"],
   input[type="tel"],
   input[type="color"] {
-    display: block;
     border-width: 0 0 1px 0;
     padding-top: 2px;
     line-height: $tff-line-height;
@@ -82,6 +80,14 @@ md-input-group,
 
     &:focus {
       outline: 0;
+    }
+
+    // Remove IE 'x' clear button
+    &::-ms-clear,
+    &::-ms-reveal {
+      width: 0;
+      height: 0;
+      display: none;
     }
   }
 
@@ -91,13 +97,12 @@ md-input-group,
 }
 
 // Light-Theme
-md-input-group,
-.md-input-group {
+md-input-container,
+.md-input-container {
   padding-bottom: $tff-line-focused-width;
   margin: $tff-margin;
 
   position: relative;
-  display:  block;
 
   label {
     font-size: 1em;
