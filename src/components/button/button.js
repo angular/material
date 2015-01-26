@@ -62,7 +62,7 @@ function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria) {
     if (isAnchor(attr)) {
       return '<a class="md-button" ng-transclude></a>';
     } else {
-      return '<button class="md-button" ng-transclude></button>';
+      return '<button class="md-button" type="button" ng-transclude></button>';
     }
   }
 
