@@ -329,13 +329,15 @@ function MdDialogProvider($$interimElementProvider) {
       configureAria(element.find('md-dialog'));
 
       if (options.hasBackdrop) {
+        var parentOffset = options.parent.prop('scrollTop');
         options.backdrop = angular.element('<md-backdrop class="md-dialog-backdrop md-opaque">');
         $mdTheming.inherit(options.backdrop, options.parent);
         $animate.enter(options.backdrop, options.parent);
+        element.css('top', parentOffset +'px');
       }
 
       if (options.disableParentScroll) {
-        options.oldOverflowStyle = options.parent.css('overflow');
+        options.lastOverflow = options.parent.css('overflow');
         options.parent.css('overflow', 'hidden');
       }
 
@@ -387,8 +389,8 @@ function MdDialogProvider($$interimElementProvider) {
         $animate.leave(options.backdrop);
       }
       if (options.disableParentScroll) {
-        options.parent.css('overflow', options.oldOverflowStyle);
-        $document[0].removeEventListener('scroll', options.captureScroll, true);
+        options.parent.css('overflow', options.lastOverflow);
+        delete options.lastOverflow;
       }
       if (options.escapeToClose) {
         $rootElement.off('keyup', options.rootElementKeyupCallback);
