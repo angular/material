@@ -1,0 +1,16 @@
+md-icon.custom svg {
+  width:256px;
+  height:256px;
+  fill:inherit;
+}
+md-icon.custom path {
+  fill:rgba(0, 0, 0, 0.9);
+}
+md-icon.custom rect[y="20"] {
+  fill:inherit;
+}
+md-icon.filter svg {
+  width:256px;
+  filter: blur(2px) hue-rotate(180deg);
+  -webkit-filter: blur(2px) hue-rotate(180deg);
+}

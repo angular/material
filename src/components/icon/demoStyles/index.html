@@ -1,0 +1,32 @@
+<md-content ng-controller="AppCtrl" class="md-padding">
+
+  <h3>Apply CSS filters</h3>
+  <section layout="row" layout-sm="column" layout-align="center center">
+    <md-icon class="filter" icon="/img/logo.svg" type="svg" style="width:256px;height:256px;"></md-icon>
+  </section>
+  <h3>Control SVG child element fill</h3>
+  <div layout layout-align="center center" ng-attr-style="fill: rgb({{color.red}},{{color.green}},{{color.blue}});">
+    <md-icon class="custom" icon="/img/icons/ic_border_color_24px.svg" type="svg"></md-icon>
+  </div>
+  <div layout>
+      <div flex="5" layout layout-align="center center">
+          <span>R</span>
+      </div>
+      <md-slider flex min="0" max="255" ng-model="color.red" aria-label="red" id="red-slider" class="md-warn">
+      </md-slider>
+  </div>
+  <div layout>
+      <div flex="5" layout layout-align="center center">
+          <span>G</span>
+      </div>
+      <md-slider flex ng-model="color.green" min="0" max="255" aria-label="green" id="green-slider" class="md-accent">
+      </md-slider>
+  </div>
+  <div layout>
+      <div flex="5" layout layout-align="center center">
+          <span>B</span>
+      </div>
+      <md-slider flex ng-model="color.blue" min="0" max="255" aria-label="blue" id="blue-slider">
+      </md-slider>
+  </div>
+</md-content>
