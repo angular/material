@@ -36,4 +36,15 @@ describe('<md-switch>', function() {
     expect(switches.eq(1).attr('role')).toEqual('checkbox');
   }));
 
+  it('should have tabindex -1 while disabled', inject(function($rootScope, $compile) {
+    $rootScope.value = false;
+    var el = $compile('<md-switch ng-disabled="$root.value">')($rootScope);
+
+    $rootScope.$apply();
+    expect(el.attr('tabindex')).not.toEqual('-1');
+
+    $rootScope.$apply('value = true');
+    expect(el.attr('tabindex')).toEqual('-1');
+  }));
+
 });

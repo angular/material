@@ -87,6 +87,12 @@ function MdSwitch(mdCheckboxDirective, $mdTheming, $mdUtil, $document, $mdConsta
 
       checkboxLink(scope, element, attr, ngModel);
 
+      if (angular.isDefined(attr.ngDisabled)) {
+        scope.$watch(disabledGetter, function(isDisabled) {
+          element.attr('tabindex', isDisabled ? -1 : 0);
+        });
+      }
+
       // These events are triggered by setup drag
       $mdGesture.register(switchContainer, 'drag');
       switchContainer
