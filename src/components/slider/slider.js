@@ -268,7 +268,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       activeTrack.css('width', (percent * 100) + '%');
       thumbContainer.css(
         $mdConstant.CSS.TRANSFORM,
-        'translate3d(' + getSliderDimensions().width * percent + 'px,0,0)'
+        'translate3d(' + (percent * 100) + '%,0,0)'
       );
       element.toggleClass('md-min', percent === 0);
     }

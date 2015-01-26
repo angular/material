@@ -85,6 +85,7 @@ md-slider {
     position: absolute;
     left: 0;
     top: 0;
+    right: 0;
     transform: translate3d(0,0,0);
     transition: transform 0.1s linear;
   }
