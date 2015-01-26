@@ -245,12 +245,12 @@ describe('$mdGesture', function() {
 
   });
 
-  xdescribe('hold', function() {
+  describe('hold', function() {
 
     it('should call hold after options number of ms', inject(function($mdGesture, $document, $timeout) {
       var holdSpy = jasmine.createSpy('hold');
       var el = angular.element('<div>');
-      $mdGesture.attach(el, 'hold', {
+      $mdGesture.register(el, 'hold', {
         delay: 333
       });
 
@@ -273,7 +273,7 @@ describe('$mdGesture', function() {
     it('should reset timeout if moving > options.maxDistance', inject(function($mdGesture, $document, $timeout) {
       var holdSpy = jasmine.createSpy('hold');
       var el = angular.element('<div>');
-      $mdGesture.attach(el, 'hold', {
+      $mdGesture.register(el, 'hold', {
         delay: 333,
         maxDistance: 10
       });
@@ -286,8 +286,8 @@ describe('$mdGesture', function() {
         target: el[0],
         touches: [{pageX: 100, pageY: 100}]
       });
-      expect($timeout.cancel).not.toHaveBeenCalled();
       expect(holdSpy).not.toHaveBeenCalled();
+      $timeout.cancel.reset();
 
       $document.triggerHandler({
         type: 'touchmove',
@@ -297,29 +297,18 @@ describe('$mdGesture', function() {
       expect($timeout.cancel).toHaveBeenCalled();
       expect(holdSpy).not.toHaveBeenCalled();
 
-      $timeout.flush(333);
-      expect(holdSpy).toHaveBeenCalled();
-      $timeout.verifyNoPendingTasks();
-
-      // Shouldn't call it twice
-      $document.triggerHandler({
-        type: 'touchmove',
-        target: el[0],
-        touches: [{pageX: 50, pageY: 50}]
-      });
       $timeout.verifyNoPendingTasks();
     }));
 
     it('should not reset timeout if moving < options.maxDistance', inject(function($mdGesture, $document, $timeout) {
       var holdSpy = jasmine.createSpy('hold');
       var el = angular.element('<div>');
-      $mdGesture.attach(el, 'hold', {
+      $mdGesture.register(el, 'hold', {
         delay: 333,
         maxDistance: 10
       });
 
       el.on('$md.hold', holdSpy);
-      spyOn($timeout, 'cancel');
 
       $document.triggerHandler({
         type: 'touchstart',
@@ -327,8 +316,8 @@ describe('$mdGesture', function() {
         touches: [{pageX: 100, pageY: 100}]
       });
 
+      spyOn($timeout, 'cancel');
       expect(holdSpy).not.toHaveBeenCalled();
-      expect($timeout.cancel).not.toHaveBeenCalled();
 
       $document.triggerHandler({
         type: 'touchmove',
