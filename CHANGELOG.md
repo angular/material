@@ -1,3 +1,56 @@
+
+n.n.n / 2015-01-27
+==================
+
+  * update(input): fix demo markup
+  * update(toolbar): remove min-height style
+  * style(): raise opacity of foreground-3 by 5%
+  * fix(card): allow a wrapper (eg anchor) around the image
+  * fix(card): allow img to have a wrapper
+  * fix(slider): make modelValue be set on pressdown
+  * perf($mdMedia): use matchMedia#addListener instead of window resize listener
+  * fix(input): dont add focus/blur class if readonly
+  * ammend(theming): remove extra debugger
+  * feat(theming): add warnings when using unregistered themes
+  * docs(): temporarily make theming docs show last version syntax
+  * fix(button): change default style of fab to white instead of transparent
+  * style(input): polish placeholder animation
+  * fix(input): fix input padding & border on iOS
+  * fix(input): remove default Firefox invalid input styling
+  * fix(tabs): remove bad opacity on focus state
+  * fix(slider): fixes thumb positioning so that it works when not visible
+  * fix(switch): set tabindex to -1 while disabled
+  * amend(gesture): fix hold unit tests
+  * feat(gestures): add built in gesture system, remove HammerJS
+  * fix(dialog): fix overlay not covering, dialog position in overlay
+  * chore(): Update to version 0.7 in README
+  * style(input): polish placeholder animation
+  * amend(input): placeholder: remove unneeded code, add tests
+  * feat(input): make input placeholder attr work
+  * Fixes formatting in changelog 0.7.0 update.
+  * Adds SHA for changelog
+  * Updates CHANGELOG for 0.7.0.
+  * release: version 0.7.0
+  * fix(tabs): prevents multiple pagination clicks during animation
+  * test(theming): fix color palette warnings
+  * test(mdSidenav): test for state of isOpen and isLockedOpen
+  * fix(): Rolls back layout change from #1227
+  * feat(theming): warn for same palette as primary and accent
+  * feat(theming): fix strong light colors vs normal light colors, as per spec
+  * feat(theming): rename palette methods, change default palettes
+  * feat(sidenav): expose isLockedOpen for sidenav instances
+  * feat(theming): change default color of components that should be accent
+  * refactor(tabs): remove unused tabs-highlight-color variable
+  * fix(button): default background-color on fab buttons on toolbar
+  * docs(tooltip): fix fab css
+  * fix(toast): fix highlighting of action buttons
+  * fix(toast): fix excess padding on md-action
+  * fix(sticky,subheader): fix sticky elements in offset parents
+  * fix(sticky,subheader): fix sticky element z-index
+  * fix missing tabsdemoStaticTabs class in index.html
+  * fix(layout): fix IE11 layout
+  * docs(): fixed a CSS typo
+  * fix(input): add check for input value on blur
 <a name="0.7.0"></a>
 ### 0.7.0  (2015-01-24)
 
