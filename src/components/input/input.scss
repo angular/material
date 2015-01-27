@@ -40,10 +40,6 @@ md-input-container {
     /* remove default appearance from all input/textarea */
     -moz-appearance: none;
     -webkit-appearance: none;
-    &:invalid {
-      outline: none;
-      box-shadow: none;
-    }
   }
   textarea {
     resize: none;
@@ -90,12 +86,19 @@ md-input-container {
     background: none;
     padding-top: $input-padding-top;
     padding-bottom: $input-border-width-focused - $input-border-width-default;
+    padding-left: 2px;
+    padding-right: 2px;
     border-width: 0 0 $input-border-width-default 0;
     line-height: $input-line-height;
     -ms-flex-preferred-size: $input-line-height; //IE fix
+    border-radius: 0;
 
     &:focus {
       outline: none;
+    }
+    &:invalid {
+      outline: none;
+      box-shadow: none;
     }
   }
 
