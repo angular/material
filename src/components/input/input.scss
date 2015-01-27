@@ -64,15 +64,14 @@ md-input-container {
     transition-property: opacity, transform;
     transform: translate3d(0, $input-placeholder-offset + $baseline-grid * 0.75, 0);
   }
-  &.md-input-focused:not(.md-input-has-value) {
-    .md-placeholder {
-      opacity: 1;
-      transform: translate3d(0, $input-placeholder-offset, 0);
-    }
+  &.md-input-focused .md-placeholder {
+    opacity: 1;
+    transform: translate3d(0, $input-placeholder-offset, 0);
   }
   // Placeholder should immediately disappear when the user starts typing
   &.md-input-has-value .md-placeholder {
     transition: none;
+    opacity: 0;
   }
 
   /* 
