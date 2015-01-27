@@ -548,7 +548,7 @@ function colorToRgbaArray(clr) {
 function rgba(rgbArray, opacity) {
   if (rgbArray.length == 4) {
     rgbArray = angular.copy(rgbArray);
-    opacity = rgbArray.pop();
+    opacity ? rgbArray.pop() : opacity = rgbArray.pop();
   }
   return opacity && (typeof opacity == 'number' || (typeof opacity == 'string' && opacity.length)) ?
     'rgba(' + rgbArray.join(',') + ',' + opacity + ')' :
