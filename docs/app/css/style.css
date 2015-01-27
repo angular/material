@@ -316,7 +316,9 @@ md-tabs.demo-source-tabs .active md-tab-label {
 .demo-toolbar .md-button {
   color: #616161;
 }
-
+md-toolbar.demo-toolbar {
+  border-radius: 4px 4px 0 0;
+}
 md-toolbar.demo-toolbar,
 .demo-source-tabs md-tab,
 .demo-source-tabs .tabs-header {
