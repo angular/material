@@ -43,7 +43,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *   an element with class `md-actions` for the dialog's actions.
  *
  * @usage
- * ##### HTML
+ * #### HTML
  *
  * <hljs lang="html">
  * <div  ng-app="demoApp" ng-controller="EmployeeController">
@@ -59,7 +59,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
  * </div>
  * </hljs>
  *
- * ##### JavaScript
+ * #### JavaScript
  *
  * <hljs lang="js">
  * (function(angular, undefined){
