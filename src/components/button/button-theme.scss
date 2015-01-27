@@ -92,4 +92,8 @@ md-toolbar .md-button.md-THEME_NAME-theme.md-fab {
     background-color: transparent;
     cursor: not-allowed;
   }
+
+  &.md-mini-fab {
+    @extend .md-fab
+  }
 }
