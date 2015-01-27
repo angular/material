@@ -5,7 +5,7 @@
   <div flex layout="column">
 
     <section ng-repeat="demo in currentComponent.demos" 
-      class="demo-container md-whiteframe-z1 {{currentComponent.componentId}}-{{demo.id}}"
+      class="demo-container {{currentComponent.componentId}}-{{demo.id}}"
       ng-class="{'show-source': demo.$showSource}">
 
       <md-toolbar class="demo-toolbar"> 
@@ -35,7 +35,7 @@
       </md-tabs>
 
 
-      <div demo-include="demo">
+      <div demo-include="demo" class="md-whiteframe-z1">
       </div>
     </section>
 

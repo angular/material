@@ -1,3 +1,6 @@
+demo-include {
+  display: block;
+}
 
 .layout-content demo-include [layout] > div {
   padding: 8px;
