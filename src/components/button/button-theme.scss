@@ -44,11 +44,11 @@ md-toolbar .md-button.md-THEME_NAME-theme.md-fab {
 
   &.md-raised {
     color: '{{background-contrast}}';
-    background-color: '{{background-500-0.185}}';
+    background-color: '{{background-50}}';
     &:not([disabled]) {
       &:hover, 
       &:focus {
-        background-color: '{{background-500-0.3}}';
+        background-color: '{{background-200}}';
       }
     }
   }
