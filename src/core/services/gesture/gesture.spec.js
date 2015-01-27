@@ -1,4 +1,5 @@
 describe('$mdGesture', function() {
+
   beforeEach(module('material.core', function() {
     angular.element(document).triggerHandler('$$mdGestureReset');
   }));
