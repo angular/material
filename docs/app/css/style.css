@@ -190,11 +190,12 @@ code:not(.highlight) {
   margin: auto 0 auto auto;
   speak: none;
   width: 24px;
-  transition: transform 0.2s ease-in-out;
-  -webkit-transition: -webkit-transform 0.2s ease-in-out;
+  transition: transform 0.3s ease-in-out;
+  -webkit-transition: -webkit-transform 0.3s ease-in-out;
 }
 .md-button-toggle .md-toggle-icon.toggled {
   transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
 }
 /* End Docs Menu */
 
