@@ -372,7 +372,7 @@ describe('md-theme directive', function() {
     });
   });
 
-  it('does not warn when a registered theme is use', function() {
+  it('does not warn when a registered theme is used', function() {
     inject(function($log, $compile, $rootScope) {
       spyOn($log, 'warn');
       var el = $compile('<div md-theme="default"></div>')($rootScope);
