@@ -12,6 +12,35 @@ describe('md-input-container directive', function() {
     return container;
   }
 
+  it('should by default show error on $touched and $invalid', inject(function($rootScope) {
+    var el = setup('ng-model="foo"');
+    
+    expect(el).not.toHaveClass('md-input-invalid');
+
+    var model = el.find('input').controller('ngModel');
+    model.$touched = model.$invalid = true;
+    $rootScope.$apply();
+
+    expect(el).toHaveClass('md-input-invalid');
+
+    model.$touched = model.$invalid = false;
+    $rootScope.$apply();
+    expect(el).not.toHaveClass('md-input-invalid');
+  }));
+
+  it('should show error with given md-is-error expression', inject(function($rootScope, $compile) {
+    var el = $compile('<md-input-container md-is-error="$root.isError"><input ng-model="foo"></md-input-container>')($rootScope);
+
+    $rootScope.$apply();
+    expect(el).not.toHaveClass('md-input-invalid');
+
+    $rootScope.$apply('isError = true');
+    expect(el).toHaveClass('md-input-invalid');
+
+    $rootScope.$apply('isError = false');
+    expect(el).not.toHaveClass('md-input-invalid');
+  }));
+
   it('should set focus class on container', function() {
     var el = setup();
     expect(el).not.toHaveClass('md-input-focused');
