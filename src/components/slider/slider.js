@@ -295,6 +295,8 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       });
     }
     function onPressUp(ev) {
+      if (isDisabledGetter(scope)) return;
+
       element.removeClass('dragging active');
 
       var exactVal = percentToValue( positionToPercent( ev.pointer.x ));
