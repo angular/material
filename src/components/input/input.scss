@@ -40,6 +40,10 @@ md-input-container {
     /* remove default appearance from all input/textarea */
     -moz-appearance: none;
     -webkit-appearance: none;
+    &:invalid {
+      outline: none;
+      box-shadow: none;
+    }
   }
   textarea {
     resize: none;
