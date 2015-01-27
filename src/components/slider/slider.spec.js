@@ -175,8 +175,6 @@ describe('md-slider', function() {
       pointer: {}
     });
     expect(slider).toHaveClass('active');
-
-    slider.triggerHandler('$md.pressdown');
   }));
 
   it('should add active class on pressdown and remove on pressup', inject(function($rootScope) {
