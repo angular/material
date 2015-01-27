@@ -321,11 +321,13 @@ function mdMaxlengthDirective($animate) {
 function placeholderDirective() {
   return {
     restrict: 'A',
-    require: '^mdInputContainer',
+    require: '^^?mdInputContainer',
     link: postLink
   };
 
   function postLink(scope, element, attr, inputContainer) {
+    if (!inputContainer) return;
+
     var placeholderText = attr.placeholder;
     element.removeAttr('placeholder');
 
