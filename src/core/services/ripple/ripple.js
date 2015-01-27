@@ -79,7 +79,17 @@ function InkRippleService($window, $timeout) {
         isActive = false,
         isHeld = false,
         node = element[0],
+        rippleSizeSetting = element.attr('md-ripple-size'),
         color = parseColor(element.attr('md-ink-ripple')) || parseColor($window.getComputedStyle(options.colorElement[0]).color || 'rgb(0, 0, 0)');
+
+    switch (rippleSizeSetting) {
+      case 'full':
+        options.isFAB = true;
+        break;
+      case 'partial':
+        options.isFAB = false;
+        break;
+    }
 
     // expose onInput for ripple testing
     if (options.mousedown) {
@@ -272,7 +282,7 @@ function InkRippleService($window, $timeout) {
           size = 2 * Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2));
         } else {
           multiplier = options.isFAB ? 1.1 : 0.8;
-          size = Math.max(width, height) * multiplier;
+          size = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)) * multiplier;
         }
         return size;
       }
