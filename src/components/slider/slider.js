@@ -287,10 +287,21 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       element[0].focus();
       refreshSliderDimensions();
 
-      setSliderFromEvent(ev);
+      var exactVal = percentToValue( positionToPercent( ev.pointer.x ));
+      var closestVal = minMaxValidator( stepValidator(exactVal) );
+      scope.$apply(function() {
+        setModelValue( closestVal );
+        setSliderPercent( valueToPercent(closestVal));
+      });
     }
     function onPressUp(ev) {
       element.removeClass('dragging active');
+
+      var exactVal = percentToValue( positionToPercent( ev.pointer.x ));
+      var closestVal = minMaxValidator( stepValidator(exactVal) );
+      scope.$apply(function() {
+        setModelValue(closestVal);
+      });
     }
     function onDragStart(ev) {
       if (isDisabledGetter(scope)) return;
@@ -309,14 +320,6 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       if (!isDragging) return;
       ev.stopPropagation();
       isDragging = false;
-
-      var exactVal = percentToValue( positionToPercent( ev.pointer.x ));
-      var closestVal = minMaxValidator( stepValidator(exactVal) );
-
-      setSliderPercent( valueToPercent(closestVal));
-      $$rAF(function(){
-        setModelValue( closestVal );
-      });
     }
 
     function setSliderFromEvent(ev) {
