@@ -299,7 +299,6 @@ function ThemingProvider($mdColorPalette) {
 
       function changeTheme(theme) {
         if (!registered(name)) {
-          debugger;
           $log.warn('attempted to use unregistered theme \'' + theme + '\'');
         }
         var oldTheme = el.data('$mdThemeName');
