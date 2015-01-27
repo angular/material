@@ -8,6 +8,12 @@ md-switch {
   display: flex;
   align-items: center;
 
+  margin: 15px;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+
   .md-container {
     cursor: grab;
     width: $switch-width;
@@ -27,7 +33,7 @@ md-switch {
 
   .md-label {
     border-color: transparent;
-    border-width: 1px;
+    border-width: 0px;
   }
 
   .md-bar {
