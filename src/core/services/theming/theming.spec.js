@@ -198,7 +198,7 @@ describe('$mdThemingProvider', function() {
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
           .toEqual('color: rgba(255,255,255,0.7);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
-          .toEqual('color: rgba(255,255,255,0.3);');
+          .toEqual('color: rgba(255,255,255,0.35);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-4}}"; }')[0].content)
           .toEqual('color: rgba(255,255,255,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
