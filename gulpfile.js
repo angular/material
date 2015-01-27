@@ -201,7 +201,7 @@ gulp.task('build-all-modules', function() {
     })),
   themeBuildStream().pipe(
       gulp.dest(path.join(BUILD_MODE.outputDir, 'core'))
-  ).pipe(require('gulp-debug')()));
+  ));
 });
 
 function buildModule(module, isRelease) {
