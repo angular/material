@@ -35,6 +35,7 @@ describe('$mdThemingProvider', function() {
         .backgroundPalette('testPalette');
 
       testTheme = themingProvider.theme('test');
+
     });
     startAngular();
   }
@@ -361,6 +362,15 @@ describe('md-theme directive', function() {
     $rootScope.$apply('themey = "blue"');
     expect(ctrl.$mdTheme).toBe('blue');
   }));
+
+  it('warns when an unregistered theme is used', function() {
+    inject(function($log, $compile, $rootScope) {
+      spyOn($log, 'warn');
+      var el = $compile('<div md-theme="unregistered"></div>')($rootScope);
+      $rootScope.$apply();
+      expect($log.warn).toHaveBeenCalled();
+    });
+  });
 });
 
 describe('md-themable directive', function() {
