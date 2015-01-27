@@ -16,6 +16,8 @@ md-toolbar {
   min-height: $baseline-grid * 8;
   width: 100%;
 
+  box-shadow: $whiteframe-shadow-z1;
+
   &.md-tall {
     height: $toolbar-tall-height;
     min-height: $toolbar-tall-height;
