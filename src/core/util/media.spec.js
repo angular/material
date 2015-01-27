@@ -1,27 +1,31 @@
 describe('$mdMedia', function() {
   var matchMediaResult;
-  var queriesCache;
-  var resultsCache;
+  var listeners;
 
+  function runListeners() {
+    listeners.forEach(function(cb) {
+      cb.context.matches = matchMediaResult;
+      cb.call(cb.context, cb);
+    });
+  }
 
   beforeEach(module('material.core'));
 
   beforeEach(inject(function($cacheFactory, $mdMedia, $window) {
     matchMediaResult = false;
+    listeners = [];
 
-    queriesCache = $cacheFactory.get('$mdMedia:queries');
-    resultsCache = $cacheFactory.get('$mdMedia:results');
-
-    spyOn($window, 'matchMedia').andCallFake(function() {
-      return {matches: matchMediaResult};
+    spyOn($window, 'matchMedia').andCallFake(function(media) {
+      return {
+        media: media,
+        matches: matchMediaResult, 
+        addListener: function(listener) {
+          listener.context = this;
+          listeners.push(listener);
+        }
+      };
     });
   }));
-
-  afterEach(function() {
-    queriesCache.removeAll();
-    resultsCache.removeAll();
-  });
-
 
   it('should look up queries in `$mdConstant.MEDIA`', inject(
     function($mdConstant, $mdMedia, $window) {
@@ -30,38 +34,26 @@ describe('$mdMedia', function() {
       $mdMedia('somePreset');
       expect($window.matchMedia).toHaveBeenCalledWith('someQuery');
 
-      delete($mdConstant.MEDIA.somePreset);
+      delete $mdConstant.MEDIA.somePreset;
     }
   ));
-
-  it('should look up validated queries in `queriesCache`', inject(function($mdMedia, $window) {
-    queriesCache.put('originalQuery', 'validatedQuery');
-
-    $mdMedia('originalQuery');
-    expect($window.matchMedia).toHaveBeenCalledWith('validatedQuery');
-  }));
 
   it('should validate queries', inject(function($mdMedia, $window) {
     $mdMedia('something');
     expect($window.matchMedia).toHaveBeenCalledWith('(something)');
   }));
 
-  it('should cache validated queries in `queriesCache`', inject(function($mdMedia) {
-    $mdMedia('query');
-    expect(queriesCache.get('query')).toBe('(query)');
+  it('should return cached results if available', inject(function($mdMedia, $window) {
+    expect($window.matchMedia.callCount).toBe(0);
+
+    expect($mdMedia('query')).toBe(false);
+    expect($window.matchMedia.callCount).toBe(1);
+
+    expect($mdMedia('query')).toBe(false);
+    expect($window.matchMedia.callCount).toBe(1);
   }));
 
-  it('should return cached results if available', inject(function($mdMedia) {
-    resultsCache.put('(query)', 'result');
-    expect($mdMedia('(query)')).toBe('result');
-  }));
-
-  it('should cache results in `resultsCache`', inject(function($mdMedia) {
-    $mdMedia('(query)');
-    expect(resultsCache.get('(query)')).toBe(false);
-  }));
-
-  it('should recalculate on resize', inject(function($mdMedia, $window) {
+  it('should change result when listener is called', inject(function($mdMedia, $window, $timeout) {
     matchMediaResult = true;
     expect($mdMedia('query')).toBe(true);
     expect($window.matchMedia.callCount).toBe(1);
@@ -73,9 +65,9 @@ describe('$mdMedia', function() {
     expect($mdMedia('query')).toBe(true);
     expect($window.matchMedia.callCount).toBe(1);
 
-    angular.element($window).triggerHandler('resize');
+    runListeners();
+    $timeout.flush();
 
     expect($mdMedia('query')).toBe(false);
-    expect($window.matchMedia.callCount).toBe(2);
   }));
 });

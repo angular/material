@@ -10,7 +10,7 @@
 var nextUniqueId = ['0','0','0'];
 
 angular.module('material.core')
-.factory('$mdUtil', function($cacheFactory, $document, $timeout) {
+.factory('$mdUtil', function($document, $timeout) {
   var Util;
 
   return Util = {
@@ -47,11 +47,6 @@ angular.module('material.core')
         $render: angular.noop
       };
     },
-
-    /**
-     * @see cacheFactory below
-     */
-    cacheFactory: cacheFactory,
 
     // Returns a function, that, as long as it continues to be invoked, will not
     // be triggered. The function will be called after it stops being called for
@@ -183,46 +178,6 @@ angular.module('material.core')
     }
   };
 
-
-  /*
-   * Inject a 'keys()' method into Angular's $cacheFactory. Then
-   * head-hook all other methods
-   *
-   */
-  function cacheFactory(id, options) {
-    var cache = $cacheFactory(id, options);
-    var keys = {};
-
-    cache._put = cache.put;
-    cache.put = function(k,v) {
-      keys[k] = true;
-      return cache._put(k, v);
-    };
-
-    cache._remove = cache.remove;
-    cache.remove = function(k) {
-      delete keys[k];
-      return cache._remove(k);
-    };
-
-    cache._removeAll = cache.removeAll;
-    cache.removeAll = function() {
-      keys = {};
-      return cache._removeAll();
-    };
-
-    cache._destroy = cache.destroy;
-    cache.destroy = function() {
-      keys = {};
-      return cache._destroy();
-    };
-
-    cache.keys = function() {
-      return Object.keys(keys);
-    };
-
-    return cache;
-  }
 });
 
 /*

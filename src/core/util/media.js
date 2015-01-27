@@ -10,21 +10,19 @@ angular.module('material.core')
  * @example $mdMedia('(min-width: 1200px)') == true if device-width >= 1200px
  * @example $mdMedia('max-width: 300px') == true if device-width <= 300px (sanitizes input, adding parens)
  */
-function mdMediaFactory($mdConstant, $mdUtil, $rootScope, $window) {
-  var queriesCache = $mdUtil.cacheFactory('$mdMedia:queries', {capacity: 15});
-  var resultsCache = $mdUtil.cacheFactory('$mdMedia:results', {capacity: 15});
-
-  angular.element($window).on('resize', updateAll);
+function mdMediaFactory($mdConstant, $rootScope, $window, $cacheFactory) {
+  var queries = {};
+  var results = {};
 
   return $mdMedia;
 
   function $mdMedia(query) {
-    var validated = queriesCache.get(query);
+    var validated = queries[query];
     if (angular.isUndefined(validated)) {
-      validated = queriesCache.put(query, validate(query));
+      validated = queries[query] = validate(query);
     }
 
-    var result = resultsCache.get(validated);
+    var result = results[validated];
     if (angular.isUndefined(result)) {
       result = add(validated);
     }
@@ -38,20 +36,16 @@ function mdMediaFactory($mdConstant, $mdUtil, $rootScope, $window) {
   }
 
   function add(query) {
-    return resultsCache.put(query, !!$window.matchMedia(query).matches);
+    var result = $window.matchMedia(query);
+    result.addListener(onQueryChange);
+    return (results[result.media] = !!result.matches);
   }
 
-  function updateAll() {
-    var keys = resultsCache.keys();
-    var len = keys.length;
-
-    if (len) {
-      for (var i = 0; i < len; i++) {
-        add(keys[i]);
-      }
-
-      // Trigger a $digest() if not already in progress
-      $rootScope.$evalAsync();
-    }
+  function onQueryChange() {
+    var query = this;
+    $rootScope.$evalAsync(function() {
+      results[query.media] = !!query.matches;
+    });
   }
+
 }
