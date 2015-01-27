@@ -23,6 +23,17 @@ describe('md-input-container directive', function() {
     expect(el).not.toHaveClass('md-input-focused');
   });
 
+  it('not should set focus class on container if readonly', function() {
+    var el = setup('readonly');
+    expect(el).not.toHaveClass('md-input-focused');
+
+    el.find('input').triggerHandler('focus');
+    expect(el).not.toHaveClass('md-input-focused');
+
+    el.find('input').triggerHandler('blur');
+    expect(el).not.toHaveClass('md-input-focused');
+  });
+
   it('should set has-value class on container for non-ng-model input', function() {
     var el = setup();
     expect(el).not.toHaveClass('md-input-has-value');
