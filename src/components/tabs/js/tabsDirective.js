@@ -127,7 +127,7 @@ function TabsDirective($mdTheming) {
         '</button>' +
 
       '</section>' +
-      '<section class="md-tabs-content"></section>',
+      '<section class="md-tabs-content" flex></section>',
     link: postLink
   };
 
