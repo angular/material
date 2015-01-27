@@ -182,7 +182,7 @@ gulp.task('karma-sauce', function(done) {
 gulp.task('build', ['build-scss', 'build-js']);
 
 gulp.task('build-all-modules', function() {
-  return gulp.src(['src/components/*', 'src/core/'])
+  return series(gulp.src(['src/components/*', 'src/core/'])
     .pipe(through2.obj(function(folder, enc, next) {
       var moduleId = folder.path.indexOf('components') > -1 ?
         'material.components.' + path.basename(folder.path) :
@@ -198,7 +198,10 @@ gulp.task('build-all-modules', function() {
       stream.on('end', function() {
         next();
       });
-    }));
+    })),
+  themeBuildStream().pipe(
+      gulp.dest(path.join(BUILD_MODE.outputDir, 'core'))
+  ).pipe(require('gulp-debug')()));
 });
 
 function buildModule(module, isRelease) {
@@ -330,16 +333,7 @@ function buildJs(isRelease) {
     .pipe(plumber())
     .pipe(ngAnnotate());
 
-  var themeBuildStream = gulp.src(
-    config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss'))
-  )
-    .pipe(concat('default-theme.scss'))
-    .pipe(utils.hoistScssVariables())
-    .pipe(sass())
-    .pipe(gulp.dest('dist'))
-    .pipe(utils.cssToNgConstant('material.core', '$MD_THEME_CSS'));
-
-  return series(jsBuildStream, themeBuildStream)
+  return series(jsBuildStream, themeBuildStream())
     .pipe(concat('angular-material.js'))
     .pipe(gulp.dest(config.outputDir))
     .pipe(gulpif(isRelease, lazypipe()
@@ -348,6 +342,18 @@ function buildJs(isRelease) {
       .pipe(gulp.dest, config.outputDir)
       ()
     ));
+}
+
+// builds the theming related css and provides it as a JS const for angular
+function themeBuildStream() {
+  return gulp.src(
+    config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss'))
+  )
+    .pipe(concat('default-theme.scss'))
+    .pipe(utils.hoistScssVariables())
+    .pipe(sass())
+    .pipe(gulp.dest('dist'))
+    .pipe(utils.cssToNgConstant('material.core', '$MD_THEME_CSS'));
 }
 
 
