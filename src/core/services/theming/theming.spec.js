@@ -371,6 +371,15 @@ describe('md-theme directive', function() {
       expect($log.warn).toHaveBeenCalled();
     });
   });
+
+  it('does not warn when a registered theme is use', function() {
+    inject(function($log, $compile, $rootScope) {
+      spyOn($log, 'warn');
+      var el = $compile('<div md-theme="default"></div>')($rootScope);
+      $rootScope.$apply();
+      expect($log.warn.calls.length).toBe(0);
+    });
+  });
 });
 
 describe('md-themable directive', function() {
