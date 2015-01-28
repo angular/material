@@ -1,56 +1,69 @@
+<a name="0.7.0-rc1"></a>
+## 0.7.0-rc1  (2015-01-28)
 
-n.n.n / 2015-01-27
-==================
+#### Bug Fixes
 
-  * update(input): fix demo markup
-  * update(toolbar): remove min-height style
-  * style(): raise opacity of foreground-3 by 5%
-  * fix(card): allow a wrapper (eg anchor) around the image
-  * fix(card): allow img to have a wrapper
-  * fix(slider): make modelValue be set on pressdown
-  * perf($mdMedia): use matchMedia#addListener instead of window resize listener
-  * fix(input): dont add focus/blur class if readonly
-  * ammend(theming): remove extra debugger
-  * feat(theming): add warnings when using unregistered themes
-  * docs(): temporarily make theming docs show last version syntax
-  * fix(button): change default style of fab to white instead of transparent
-  * style(input): polish placeholder animation
-  * fix(input): fix input padding & border on iOS
-  * fix(input): remove default Firefox invalid input styling
-  * fix(tabs): remove bad opacity on focus state
-  * fix(slider): fixes thumb positioning so that it works when not visible
-  * fix(switch): set tabindex to -1 while disabled
-  * amend(gesture): fix hold unit tests
-  * feat(gestures): add built in gesture system, remove HammerJS
-  * fix(dialog): fix overlay not covering, dialog position in overlay
-  * chore(): Update to version 0.7 in README
-  * style(input): polish placeholder animation
-  * amend(input): placeholder: remove unneeded code, add tests
-  * feat(input): make input placeholder attr work
-  * Fixes formatting in changelog 0.7.0 update.
-  * Adds SHA for changelog
-  * Updates CHANGELOG for 0.7.0.
-  * release: version 0.7.0
-  * fix(tabs): prevents multiple pagination clicks during animation
-  * test(theming): fix color palette warnings
-  * test(mdSidenav): test for state of isOpen and isLockedOpen
-  * fix(): Rolls back layout change from #1227
-  * feat(theming): warn for same palette as primary and accent
-  * feat(theming): fix strong light colors vs normal light colors, as per spec
-  * feat(theming): rename palette methods, change default palettes
-  * feat(sidenav): expose isLockedOpen for sidenav instances
-  * feat(theming): change default color of components that should be accent
-  * refactor(tabs): remove unused tabs-highlight-color variable
-  * fix(button): default background-color on fab buttons on toolbar
-  * docs(tooltip): fix fab css
-  * fix(toast): fix highlighting of action buttons
-  * fix(toast): fix excess padding on md-action
-  * fix(sticky,subheader): fix sticky elements in offset parents
-  * fix(sticky,subheader): fix sticky element z-index
-  * fix missing tabsdemoStaticTabs class in index.html
-  * fix(layout): fix IE11 layout
-  * docs(): fixed a CSS typo
-  * fix(input): add check for input value on blur
+* **button:**
+  * change default style of fab to white instead of transparent ([04feeb83](https://github.com/angular/material/commit/04feeb836ae5508d4c0349f125d13b75dd63b7b3))
+  * default background-color on fab buttons on toolbar ([08ebff44](https://github.com/angular/material/commit/08ebff4405f75d305c24eca3549668bbc84d7ce8))
+* **card:**
+  * allow img to have a wrapper ([349b521e](https://github.com/angular/material/commit/349b521e550c48a55713659d8d6fc2f4e1719a74))
+* **dialog:** fix overlay not covering, dialog position in overlay ([1d5ef95d](https://github.com/angular/material/commit/1d5ef95d2a1daa91bcad98d460eec49923ea5233))
+* **input:**
+  * dont add focus/blur class if readonly ([6333b72c](https://github.com/angular/material/commit/6333b72c2cd50d848924e694237772371fefa759), closes [#1203](https://github.com/angular/material/issues/1203))
+  * fix input padding & border on iOS ([7dab2060](https://github.com/angular/material/commit/7dab2060dd6f1c07dcb7186a1de360c20d3014fd), closes [#1164](https://github.com/angular/material/issues/1164))
+  * remove default Firefox invalid input styling ([ba65437b](https://github.com/angular/material/commit/ba65437b452835c96bba9a7681710aec253264de), closes [#1165](https://github.com/angular/material/issues/1165))
+  * add check for input value on blur ([ec53d1a1](https://github.com/angular/material/commit/ec53d1a1d02a92e3c8d71c25d354784709124fee), closes [#1201](https://github.com/angular/material/issues/1201))
+* **layout:** fix IE11 layout ([74fe3eb1](https://github.com/angular/material/commit/74fe3eb19b097611ed17f2f1459a5682b043387a), closes [#1227](https://github.com/angular/material/issues/1227))
+* **mdSwitch:** add missing styles to switch ([54338d7d](https://github.com/angular/material/commit/54338d7d4220fd0bb88af3e3b584c70fe5ac37ab), closes [#912](https://github.com/angular/material/issues/912))
+* **ripple:** fixes size issue with ripple on switches ([c435409b](https://github.com/angular/material/commit/c435409bfdcda51c5ba164c9013a3da1e5a03ce6))
+* **slider:**
+  * don't run touchend listener if disabled ([5bbd23d6](https://github.com/angular/material/commit/5bbd23d6ad6d944806943786a748329428620e79), closes [#1308](https://github.com/angular/material/issues/1308))
+  * make modelValue be set on pressdown ([7028a750](https://github.com/angular/material/commit/7028a75058338533696d75d532e7f13f6d6f1fff), closes [#1296](https://github.com/angular/material/issues/1296))
+  * fix thumb positioning so that it works when not visible ([41c2d65d](https://github.com/angular/material/commit/41c2d65d2d4344687959c0d13c2cf48b0c90a880), closes [#1210](https://github.com/angular/material/issues/1210))
+* **styles:** fix subheader z-index, button md-mini class, md-no-bar. ([dde9ab79](https://github.com/angular/material/commit/dde9ab7987c8df787ff72c3ce46b9247ffdf7aad), closes [#1182](https://github.com/angular/material/issues/1182), [#1034](https://github.com/angular/material/issues/1034), [#1173](https://github.com/angular/material/issues/1173), [#1194](https://github.com/angular/material/issues/1194))
+* **switch:** set tabindex to -1 while disabled ([19f47b5d](https://github.com/angular/material/commit/19f47b5dcbf3006fbc14a08d909bc0265058dfe0))
+* **tabs:**
+  * adds fix for css transition on theme change ([312dcc6c](https://github.com/angular/material/commit/312dcc6c51f81de8284f43959c30d51e286bca29), closes [#1033](https://github.com/angular/material/issues/1033))
+  * remove bad opacity on focus state ([72ced4b5](https://github.com/angular/material/commit/72ced4b5b93fd82dc3e7382850f964baffbda32c))
+  * prevents multiple pagination clicks during animation ([299e1556](https://github.com/angular/material/commit/299e15569783d4f666863ac3e9f6ceed237b6cf0), closes [#1207](https://github.com/angular/material/issues/1207))
+* **toast:**
+  * fix highlighting of action buttons ([53cffe29](https://github.com/angular/material/commit/53cffe2945006ea9f5e2171fa2fbaf73b7ac6d27))
+  * fix excess padding on md-action ([0f40a843](https://github.com/angular/material/commit/0f40a8431f5b807d43c2054c64d40008213d4cf5))
+
+
+#### Features
+
+* **bottomSheet:** disable scroll on parent when bottom sheet is shown ([8273126c](https://github.com/angular/material/commit/8273126c99304b315632c377ff22717acb45f03b))
+* **button:** adds attribute override for ripple size ([b7c43a10](https://github.com/angular/material/commit/b7c43a10071455e9024fe403d6b696b664c36df4), closes [#1088](https://github.com/angular/material/issues/1088))
+* **gestures:** add built in gesture system, remove HammerJS ([8364fb57](https://github.com/angular/material/commit/8364fb57a9ac1b211c09ff564fea6ad0dea94e61))
+* **input:** make input placeholder attr work ([f1d7f830](https://github.com/angular/material/commit/f1d7f830bf2f12dab288c46a5fc2919d5d608110), closes [#1279](https://github.com/angular/material/issues/1279))
+* **mdInputContainer:** add mdIsError expr, defaults to $touched && $invalid ([c3cad666](https://github.com/angular/material/commit/c3cad666368cc238644b6c9b1aaf1260cd763187), closes [#1267](https://github.com/angular/material/issues/1267))
+* **sidenav:**
+  * make it thinner on <360px wide screens ([6ee3346e](https://github.com/angular/material/commit/6ee3346e301e979e89bf6f43449b6c4a51d78670))
+  * expose isLockedOpen for sidenav instances ([ba71a598](https://github.com/angular/material/commit/ba71a5987d4600128d6a1c14a479cac37a308d28))
+* **theming:**
+  * add warnings when using unregistered themes ([f6f56c98](https://github.com/angular/material/commit/f6f56c989bab062462a4dbf4ece59fd744c6ec3b))
+  * warn for same palette as primary and accent ([1c973330](https://github.com/angular/material/commit/1c973330c68e0c653a19f4408a373741107eb0e3))
+  * fix strong light colors vs normal light colors, as per spec ([dd5b9549](https://github.com/angular/material/commit/dd5b9549f4241eadacb4fe92db574b1bcd9771d5))
+  * rename palette methods, change default palettes ([0e0846fe](https://github.com/angular/material/commit/0e0846feb562d32079eff427abbc045f2681c24e), closes [#1252](https://github.com/angular/material/issues/1252))
+  * change default color of components that should be accent ([f2996b73](https://github.com/angular/material/commit/f2996b734fd7574ad484f258f1fd674de62d64b5))
+* **toolbar:** add shadow to toolbar ([4e47a174](https://github.com/angular/material/commit/4e47a174659e768e0b506d7ea937aadb67818d56))
+
+
+#### Breaking Changes
+
+* As per the
+[spec](http://www.google.com/design/spec/style/color.html#color-ui-color-application)
+this commit changes the default color palette of FABs, checkboxes, radio
+buttons, sliders and switches to the accent palette.
+
+closes #1255
+
+ ([f2996b73](https://github.com/angular/material/commit/f2996b734fd7574ad484f258f1fd674de62d64b5))
+
+
+
 <a name="0.7.0"></a>
 ### 0.7.0  (2015-01-24)
 
