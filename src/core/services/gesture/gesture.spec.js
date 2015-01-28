@@ -154,7 +154,7 @@ describe('$mdGesture', function() {
       });
       expect(startSpy1).not.toHaveBeenCalled();
 
-      now = 500;
+      now = 1500;
       $document.triggerHandler({
         type: 'mousedown',
         target: childEl[0]
