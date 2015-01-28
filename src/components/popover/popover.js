@@ -70,7 +70,7 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil,
       if (current.tagName && current.tagName.toLowerCase() == 'md-content') break;
       current = current.parentNode;
     }
-    var documentBody = angular.element(documentBody);
+    var popoverParent = angular.element(current || documentBody);
 
     // We will re-attach popover when visible
     element.detach();
@@ -144,7 +144,7 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil,
       // (popover is hidden by default)
       element.removeClass('md-hide');
       parent.attr('aria-describedby', element.attr('id'));
-      documentBody.append(element);
+      popoverParent.append(element);
 
       // Wait until the element has been in the dom for two frames before
       // fading it in.
@@ -172,8 +172,8 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil,
     }
 
     function positionPopover() {
-      var popoverRect = $mdUtil.elementRect(element, documentBody);
-      var parentRect = $mdUtil.elementRect(parent, documentBody);
+      var popoverRect = $mdUtil.elementRect(element, popoverParent);
+      var parentRect = $mdUtil.elementRect(parent, popoverParent);
 
       // Default placement to bottom if not set
       var popoverPlacement = scope.placement || 'bottom';
@@ -212,12 +212,12 @@ function MdPopoverDirective($timeout, $window, $$rAF, $document, $mdUtil,
       // If element bleeds over left/right of the window, place it on the edge of the window.
       newPosition.left = Math.min(
         newPosition.left,
-        documentBody.prop('scrollWidth') - popoverRect.width - POPOVER_WINDOW_EDGE_SPACE
+        popoverParent.prop('scrollWidth') - popoverRect.width - POPOVER_WINDOW_EDGE_SPACE
       );
       newPosition.left = Math.max(newPosition.left, POPOVER_WINDOW_EDGE_SPACE);
 
       // If element bleeds over the bottom of the window, place it above the parent.
-      if (newPosition.top + popoverRect.height > documentBody.prop('scrollHeight')) {
+      if (newPosition.top + popoverRect.height > popoverParent.prop('scrollHeight')) {
         newPosition.top = parentRect.top - popoverRect.height;
         popoverPlacement = 'top';
       }
