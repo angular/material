@@ -31,6 +31,33 @@
   margin: $layout-gutter-width / 2;
 }
 
+[layout-padding],
+[layout-padding] > [flex-md] {
+  padding: $layout-gutter-width / 2;
+}
+[layout-margin],
+[layout-margin] > [flex-md] {
+  margin: $layout-gutter-width / 2;
+}
+
+[layout-padding],
+[layout-padding] > [flex-sm] {
+  padding: $layout-gutter-width / 3;
+}
+[layout-margin],
+[layout-margin] > [flex-sm] {
+  margin: $layout-gutter-width / 3;
+}
+
+[layout-padding],
+[layout-padding] > [flex-lg] {
+  padding: $layout-gutter-width;
+}
+[layout-margin],
+[layout-margin] > [flex-lg] {
+  margin: $layout-gutter-width;
+}
+
 [layout-wrap] {
   flex-wrap: wrap;
 }
