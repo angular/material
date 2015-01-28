@@ -1,0 +1,18 @@
+<div ng-app="inputBasicDemo" ng-controller="DemoCtrl as ctrl" layout="column">
+
+  <md-content class="md-padding" layout="column">
+
+    <md-autocomplete
+        md-selected-item="ctrl.selectedItem"
+        md-search-text="ctrl.searchText"
+        md-items="item in ctrl.getItems(ctrl.searchText)"
+        md-item-text="display"
+        placeholder="select a state...">
+      <span md-highlight-text="ctrl.searchText">{{item.display}}</span>
+    </md-autocomplete>
+
+    <p>Current search term: "{{ctrl.searchText}}"</p>
+
+  </md-content>
+
+</div>
