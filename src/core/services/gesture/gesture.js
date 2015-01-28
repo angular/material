@@ -10,6 +10,10 @@ var MOVE_EVENTS = 'mousemove touchmove pointermove';
 var END_EVENTS = 'mouseup mouseleave touchend touchcancel pointerup pointercancel';
 var HANDLERS;
 
+document.contains || (document.contains = function(node) {
+  return document.body.contains(node);
+});
+
 document.addEventListener('click', function(ev) {
   // Space/enter on a button, and submit events, can send clicks
   var isKeyClick = ev.clientX === 0 && ev.clientY === 0 && 
@@ -352,21 +356,18 @@ angular.module('material.core')
    * NOTE: dispatchEvent is very performance sensitive. 
    */
   function dispatchEvent(srcEvent, eventType, eventPointer) {
-    console.log('dispatching', eventType);
     eventPointer = eventPointer || pointer;
     var eventObj;
+
     if (eventType === 'click') {
-      eventObj = new MouseEvent('click', {
-        clientX: eventPointer.x,
-        clientY: eventPointer.y,
-        screenX: eventPointer.x,
-        screenY: eventPointer.y,
-        bubbles: true,
-        cancelable: true,
-        view: window
-      });
+      eventObj = document.createEvent('MouseEvents');
+      eventObj.initMouseEvent('click', true, true, window, {},
+                              eventPointer.x, eventPointer.y,
+                              eventPointer.x, eventPointer.y,
+                              false, false, false, false, 0, null);
     } else {
-      eventObj = new CustomEvent(eventType, customEventOptions);
+      eventObj = document.createEvent('CustomEvent');
+      eventObj.initCustomEvent(eventType, true, true, {});
     }
     eventObj.$material = true;
     eventObj.pointer = eventPointer;
