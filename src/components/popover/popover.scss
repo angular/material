@@ -1,0 +1,181 @@
+$popover-arrow-width: 10px;
+$popover-arrow-height: 10px;
+$popover-arrow-outer-width: 0;
+$popover-color: rgba(0,0,0,0.92);
+$popover-arrow-outer-color: transparent;
+
+@keyframes popoverBackgroundShow {
+  0% {
+    transform: scale(0.2);
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.0);
+    opacity: 1;
+  }
+}
+@keyframes popoverBackgroundHide {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+md-popover {
+  position: absolute;
+  font-size: 14px;
+  z-index: $z-index-popover;
+  overflow: hidden;
+  pointer-events: none;
+  
+  // Offset the popover to account for the popover arrow
+  &[md-placement="top"]     { padding-bottom: $popover-arrow-height; }
+  &[md-placement="bottom"]  { padding-top: $popover-arrow-height; }
+  &[md-placement="left"]    { padding-right: $popover-arrow-width; }
+  &[md-placement="right"]   { padding-left: $popover-arrow-width; }
+
+  /*.md-background {
+    position: absolute;
+    left: 50%;
+    width: 256px;
+    height: 256px;
+    margin-left: -128px;
+    margin-top: -128px;
+    border-radius: 256px;
+
+    opacity: 0.25;
+    transform: scale(0.2);
+  }*/
+
+  .md-content {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: 4px;
+    padding: 5px;
+    background: $popover-color;
+    opacity: 0.3;
+    transition: inherit;
+  }
+
+  &.md-hide {
+    transition: $swift-ease-in;
+  }
+
+  &.md-show {
+    transition: $swift-ease-out;
+    pointer-events: auto;
+    transform: translate3d(0,0,0);
+
+    .md-background {
+      transform: scale(1.0);
+      opacity: 1.0;
+      animation: popoverBackgroundShow linear;
+    }
+    
+    .md-arrow {
+      opacity: 0.99;
+    }
+    .md-content {
+      opacity: 0.99;
+    }
+  }
+  &.md-hide .md-background {
+    transform: scale(1.0);
+    opacity: 0;
+    animation: popoverBackgroundHide 0.2s linear;
+  }
+
+  /**
+   * Depending on the popover's size as a multiple of 32 (set by JS),
+   * change the background's animation duration.
+   * The larger the popover, the less time the background should take to ripple outwards.
+   */
+  @for $i from 1 through 8 {
+    &[width-32="#{$i}"].md-show .md-background {
+      $duration: 1000 - $i * 100;
+      animation-duration: #{$duration}ms;
+    }
+  }
+}
+
+
+
+// Arrows
+//
+// .arrow is outer, .arrow:after is inner
+
+md-popover > .md-arrow {
+  &,
+  &:after {
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+  }
+}
+md-popover > .md-arrow {
+  border-width: $popover-arrow-outer-width;
+}
+md-popover > .md-arrow:after {
+  border-width: $popover-arrow-width;
+  content: "";
+}
+
+md-popover {
+  &[md-placement="top"] > .md-arrow {
+    left: 50%;
+    border-bottom-width: 0;
+    border-top-color: $popover-arrow-outer-color;
+    bottom: $popover-arrow-outer-width;
+    &:after {
+      content: " ";
+      bottom: 1px;
+      margin-left: -$popover-arrow-width;
+      border-bottom-width: 0;
+      border-top-color: $popover-color;
+    }
+  }
+  &[md-placement="bottom"] > .md-arrow {
+    left: 50%;
+    border-top-width: 0;
+    border-bottom-color: $popover-arrow-outer-color;
+    top: -$popover-arrow-outer-width;
+    &:after {
+      content: " ";
+      top: 1px;
+      margin-left: -$popover-arrow-width;
+      border-top-width: 0;
+      border-bottom-color: $popover-color;
+    }
+  }
+  &[md-placement="left"] > .md-arrow {
+    top: 50%;
+    right: 1px;
+    border-right-width: 0;
+    border-left-color: $popover-arrow-outer-color;
+    &:after {
+      content: " ";
+      right: 1px;
+      border-right-width: 0;
+      border-left-color: $popover-color;
+      bottom: -$popover-arrow-width;
+    }
+  }
+  &[md-placement="right"] > .md-arrow {
+    top: 50%;
+    left: 1px;
+    border-left-width: 0;
+    border-right-color: $popover-arrow-outer-color;
+    &:after {
+      content: " ";
+      left: 1px;
+      bottom: -$popover-arrow-width;
+      border-left-width: 0;
+      border-right-color: $popover-color;
+    }
+  }
+}
