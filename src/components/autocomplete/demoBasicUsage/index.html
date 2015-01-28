@@ -1,0 +1,21 @@
+<div ng-app="inputBasicDemo" ng-controller="DemoCtrl as ctrl" layout="column">
+
+  <md-content class="md-padding" layout="column">
+      <p>
+          Use the `md-auto-complete` to search for matches from local or remote data sources.
+      </p>
+
+    <md-autocomplete
+        md-selected-item="ctrl.selectedItem"
+        md-search-text="ctrl.searchText"
+        md-items="item in ctrl.querySearch(ctrl.searchText)"
+        md-item-text="display"
+        placeholder="select a state...">
+      <span md-highlight-text="ctrl.searchText">{{item.display}}</span>
+    </md-autocomplete>
+
+    <p>Current search term: "{{ctrl.searchText}}"</p>
+
+  </md-content>
+
+</div>
