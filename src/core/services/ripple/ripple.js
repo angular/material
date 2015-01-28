@@ -42,7 +42,8 @@ function InkRippleService($window, $timeout) {
   function attachCheckboxBehavior(scope, element, options) {
     return attach(scope, element, angular.extend({
       center: true,
-      dimBackground: false
+      dimBackground: false,
+      fitRipple: true
     }, options));
   }
 
@@ -67,7 +68,8 @@ function InkRippleService($window, $timeout) {
       dimBackground: false,
       outline: false,
       isFAB: false,
-      isMenuItem: false
+      isMenuItem: false,
+      fitRipple: false
     }, options);
 
     var rippleSize,
@@ -283,6 +285,9 @@ function InkRippleService($window, $timeout) {
         } else {
           multiplier = options.isFAB ? 1.1 : 0.8;
           size = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)) * multiplier;
+          if (options.fitRipple) {
+            size = Math.min(height, width, size);
+          }
         }
         return size;
       }
