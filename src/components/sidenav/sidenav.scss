@@ -1,4 +1,5 @@
 $sidenav-default-width: 304px !default;
+$sidenav-min-space: 56px !default;
 
 md-sidenav {
   position: absolute;
@@ -89,5 +90,11 @@ md-sidenav {
   transform: translate3d(-100%, 0, 0);
   &.md-closed {
     transform: translate3d(0%, 0, 0);
+  }
+}
+
+@media (max-width: $sidenav-default-width + $sidenav-min-space) {
+  md-sidenav {
+    width: 85%;
   }
 }
