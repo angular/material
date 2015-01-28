@@ -367,12 +367,6 @@ angular.module('material.core')
         ev.ctrlKey, ev.altKey, ev.shiftKey, ev.metaKey,
         ev.button, ev.relatedTarget || null
       );
-      angular.extend(eventObj, {
-        which: ev.which,
-        x: ev.x, y: ev.y,
-        offsetX: ev.offsetX, offsetY: ev.offsetY,
-        layerX: ev.layerX, layerY: ev.layerY
-      });
 
     } else {
       eventObj = document.createEvent('CustomEvent');
