@@ -54,6 +54,10 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
               background-color $swift-ease-out-duration $swift-ease-out-timing-function,
               transform $swift-ease-out-duration $swift-ease-out-timing-function;
 
+  &:focus {
+    outline: none;
+  }
+
   &.ng-hide {
     transition: none;
   }
