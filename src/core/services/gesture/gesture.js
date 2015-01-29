@@ -16,8 +16,7 @@ document.contains || (document.contains = function(node) {
 
 document.addEventListener('click', function(ev) {
   // Space/enter on a button, and submit events, can send clicks
-  var isKeyClick = ev.clientX === 0 && ev.clientY === 0 && 
-    ev.x === 0 && ev.y === 0;
+  var isKeyClick = ev.clientX === 0 && ev.clientY === 0;
   if (isKeyClick || ev.$material) return;
 
   // Prevent clicks unless they're sent by material
