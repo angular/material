@@ -183,13 +183,14 @@ function MdBottomSheetProvider($$interimElementProvider) {
     function onRemove(scope, element, options) {
       var bottomSheet = options.bottomSheet;
 
-      if (options.disableParentScroll) {
-        options.parent.css('overflow', options.lastOverflow);
-        delete options.lastOverflow;
-      }
 
       $animate.leave(backdrop);
       return $animate.leave(bottomSheet.element).then(function() {
+        if (options.disableParentScroll) {
+          options.parent.css('overflow', options.lastOverflow);
+          delete options.lastOverflow;
+        }
+
         bottomSheet.cleanup();
 
         // Restore focus
