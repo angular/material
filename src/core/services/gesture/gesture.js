@@ -14,15 +14,23 @@ document.contains || (document.contains = function(node) {
   return document.body.contains(node);
 });
 
-document.addEventListener('click', function(ev) {
-  // Space/enter on a button, and submit events, can send clicks
-  var isKeyClick = ev.clientX === 0 && ev.clientY === 0;
-  if (isKeyClick || ev.$material) return;
+// TODO add windows phone to this
+var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+var isIos = userAgent.match(/iPad/i) || userAgent.match(/iPhone/i) || userAgent.match(/iPod/i);
+var isAndroid = userAgent.match(/Android/i);
+var shouldHijackClicks = isIos || isAndroid;
 
-  // Prevent clicks unless they're sent by material
-  ev.preventDefault();
-  ev.stopPropagation();
-}, true);
+if (shouldHijackClicks) {
+  document.addEventListener('click', function(ev) {
+    // Space/enter on a button, and submit events, can send clicks
+    var isKeyClick = ev.clientX === 0 && ev.clientY === 0;
+    if (isKeyClick || ev.$material) return;
+
+    // Prevent clicks unless they're sent by material
+    ev.preventDefault();
+    ev.stopPropagation();
+  }, true);
+}
 
 angular.element(document)
   .on(START_EVENTS, gestureStart)
@@ -134,16 +142,18 @@ angular.module('material.core')
 .factory('$mdGesture', function($$MdGestureHandler, $$rAF, $timeout) {
   HANDLERS = {};
 
-  addHandler('click', {
-    options: {
-      maxDistance: 6
-    },
-    onEnd: function(ev, pointer) {
-      if (pointer.distance < this.state.options.maxDistance) {
-        this.dispatchEvent(ev, 'click', null, ev);
+  if (shouldHijackClicks) {
+    addHandler('click', {
+      options: {
+        maxDistance: 6
+      },
+      onEnd: function(ev, pointer) {
+        if (pointer.distance < this.state.options.maxDistance) {
+          this.dispatchEvent(ev, 'click', null, ev);
+        }
       }
-    }
-  });
+    });
+  }
 
   addHandler('press', {
     onStart: function(ev, pointer) {

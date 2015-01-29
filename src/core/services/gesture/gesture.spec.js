@@ -164,7 +164,7 @@ describe('$mdGesture', function() {
 
   });
 
-  describe('click', function() {
+  xdescribe('click', function() {
 
     it('should click if distance < options.maxDistance', inject(function($document) {
       var spy = jasmine.createSpy('click');
