@@ -11,7 +11,7 @@ describe('$mdMedia', function() {
 
   beforeEach(module('material.core'));
 
-  beforeEach(inject(function($cacheFactory, $mdMedia, $window) {
+  beforeEach(inject(function($mdMedia, $window) {
     matchMediaResult = false;
     listeners = [];
 

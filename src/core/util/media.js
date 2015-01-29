@@ -10,7 +10,7 @@ angular.module('material.core')
  * @example $mdMedia('(min-width: 1200px)') == true if device-width >= 1200px
  * @example $mdMedia('max-width: 300px') == true if device-width <= 300px (sanitizes input, adding parens)
  */
-function mdMediaFactory($mdConstant, $rootScope, $window, $cacheFactory) {
+function mdMediaFactory($mdConstant, $rootScope, $window) {
   var queries = {};
   var results = {};
 

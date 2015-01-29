@@ -5,15 +5,13 @@
  * Initialization function that validates environment
  * requirements.
  */
-angular.module('material.core', ['material.core.theming'])
-  .run(MdCoreInitialize)
+angular
+  .module('material.core', ['material.core.theming'])
   .config(MdCoreConfigure);
 
-function MdCoreInitialize() {
-}
 
 function MdCoreConfigure($provide, $mdThemingProvider) {
-  $provide.decorator('$$rAF', rAFDecorator);
+  $provide.decorator('$$rAF', ["$delegate", rAFDecorator]);
 
   $mdThemingProvider.theme('default')
     .primaryPalette('indigo')
@@ -22,7 +20,7 @@ function MdCoreConfigure($provide, $mdThemingProvider) {
     .backgroundPalette('grey');
 }
 
-function rAFDecorator($delegate, $rootScope) {
+function rAFDecorator( $delegate ) {
   /**
    * Use this to throttle events that come in often.
    * The throttled function will always use the *last* invocation before the
