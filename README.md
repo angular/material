@@ -5,7 +5,7 @@ unified system of visual, motion, and interaction design that adapts across diff
 goal is to deliver a lean, lightweight set of AngularJS-native UI elements that implement the
 material design specification for use in Angular single-page applications (SPAs).
 
-![venn](https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png)
+![venn diagram](https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png)
 
 This project is in early pre-release. Angular Material is both a reference implementation of
 Material Design and a complementary effort to the [Polymer](https://www.polymer-project.org/)
