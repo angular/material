@@ -49,7 +49,7 @@ function MdToastDirective() {
  * app.controller('MyController', function($scope, $mdToast) {
  *   $scope.openToast = function($event) {
  *     $mdToast.show($mdToast.simple().content('Hello!'));
- *     // Could also do $mdtoast.showSimple('Hello');
+ *     // Could also do $mdToast.showSimple('Hello');
  *   };
  * });
  * </hljs>
