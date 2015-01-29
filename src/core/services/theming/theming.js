@@ -298,8 +298,9 @@ function ThemingProvider($mdColorPalette) {
       }
 
       function changeTheme(theme) {
-        if (!registered(name)) {
-          $log.warn('attempted to use unregistered theme \'' + theme + '\'');
+        if (!registered(theme)) {
+          $log.warn('Attempted to use unregistered theme \'' + theme + '\'. ' +
+                    'Register it with $mdThemingProvider.theme().');
         }
         var oldTheme = el.data('$mdThemeName');
         if (oldTheme) el.removeClass('md-' + oldTheme +'-theme');
