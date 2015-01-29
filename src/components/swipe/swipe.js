@@ -47,7 +47,7 @@ var module = angular.module('material.components.swipe',[]);
   var directiveName = 'md' + name;
   var eventName = '$md.' + name.toLowerCase();
 
-  module.directive(directiveName, function($parse) {
+  module.directive(directiveName, /*@ngInject*/ function($parse) {
     return {
       restrict: 'A',
       link: postLink
