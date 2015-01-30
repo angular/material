@@ -1,5 +1,22 @@
-<a name="0.7.0-rc1"></a>
-## 0.7.0-rc1  (2015-01-28)
+<a name=”0.7.1-rc2”></a>
+## 0.7.1-rc2  (2015-01-29)
+
+#### Bug Fixes
+
+* **gesture:**
+  * make sure clicks properly support keys ([c6d24eb2](https://github.com/angular/material/commit/c6d24eb2dfb7c3c23f08e09ae7f22812fe395516))
+  * fix firefox keyboard events ([79196c3d](https://github.com/angular/material/commit/79196c3df13906c0221a9f0b4e2bab9c0c25825e))
+  * only hijack click events on mobile devices ([ade65b60](https://github.com/angular/material/commit/ade65b6023021350a9a6d50d5d3245104766fe82))
+* **theming:**
+  * fix warning for `changeTheme` being wrong ([f44bf604](https://github.com/angular/material/commit/f44bf6040dea4c1816922f595ec7e38213f914c6))
+* **checkbox:**
+  * make `mdAria` check linked element ([3346532c](https://github.com/angular/material/commit/3346532ca1deba489fb79bccc0047f4f9f10e8da))
+* **build:**
+  * add annotations to `rAfDecorator`, remove unused args ([c4927f9e](https://github.com/angular/material/commit/c4927f9e4ca1ffd21550e5eefb08b34c8840d02b))
+  * add annotation to `swipe.js` ([22040c77](https://github.com/angular/material/commit/22040c77b4f82dd9845ad6bcfab9ab62a534170c))
+
+<a name="0.7.1-rc1"></a>
+## 0.7.1-rc1  (2015-01-28)
 
 #### Bug Fixes
 
