@@ -383,7 +383,7 @@ function MdDialogProvider($$interimElementProvider) {
       isolateScope: true,
       onShow: onShow,
       onRemove: onRemove,
-      clickOutsideToClose: true,
+      clickOutsideToClose: false,
       escapeToClose: true,
       targetEvent: null,
       disableParentScroll: true,
