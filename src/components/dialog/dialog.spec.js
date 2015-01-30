@@ -41,21 +41,58 @@ describe('$mdDialog', function() {
 
       var title = angular.element(parent[0].querySelector('h2'));
       expect(title.text()).toBe('Title');
+
       var content = parent.find('p');
       expect(content.text()).toBe('Hello world');
+
       var buttons = parent.find('md-button');
       expect(buttons.length).toBe(1);
       expect(buttons.eq(0).text()).toBe('Next');
+
       var theme = parent.find('md-dialog').attr('md-theme');
       expect(theme).toBe('some-theme');
 
-
       buttons.eq(0).triggerHandler('click');
       $rootScope.$apply();
-      parent.find('md-dialog').triggerHandler('transitionend');
+
+      var dialog = parent.find('md-dialog');
+      dialog.triggerHandler('transitionend');
+      expect(dialog.attr('role')).toBe('alertdialog');
+
       $rootScope.$apply();
       expect(parent.find('h2').length).toBe(0);
       expect(resolved).toBe(true);
+    }));
+
+
+    it('should focus `md-content` on open', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
+      TestUtil.mockElementFocus(this);
+
+      var parent = angular.element('<div>');
+
+      $mdDialog.show(
+        $mdDialog.alert({
+          template:
+            '<md-dialog>' +
+              '<md-content tabIndex="0">' +
+                '<p>Muppets are the best</p>' +
+              '</md-content>' +
+              '</md-dialog>',
+          parent: parent
+        })
+      );
+
+      $rootScope.$apply();
+      $timeout.flush();
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      container.triggerHandler('transitionend');
+      $rootScope.$apply();
+
+      parent.find('md-dialog').triggerHandler('transitionend');
+      $rootScope.$apply();
+
+      expect($document.activeElement).toBe(parent[0].querySelector('md-content'));
     }));
   });
 
@@ -89,8 +126,10 @@ describe('$mdDialog', function() {
 
       var title = parent.find('h2');
       expect(title.text()).toBe('Title');
+
       var content = parent.find('p');
       expect(content.text()).toBe('Hello world');
+
       var buttons = parent.find('md-button');
       expect(buttons.length).toBe(2);
       expect(buttons.eq(0).text()).toBe('Next');
@@ -98,12 +137,43 @@ describe('$mdDialog', function() {
 
       buttons.eq(1).triggerHandler('click');
       $rootScope.$digest();
+
       $animate.triggerCallbacks();
-      parent.find('md-dialog').triggerHandler('transitionend');
+      var dialog = parent.find('md-dialog');
+      dialog.triggerHandler('transitionend');
+      expect(dialog.attr('role')).toBe('dialog');
       $rootScope.$digest();
       $animate.triggerCallbacks();
+
       expect(parent.find('h2').length).toBe(0);
       expect(rejected).toBe(true);
+    }));
+
+    it('should focus `md-button.dialog-close` on open', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
+      TestUtil.mockElementFocus(this);
+
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template:
+          '<md-dialog>' +
+            '<div class="md-actions">' +
+              '<button class="dialog-close">Close</button>' +
+            '</div>' +
+            '</md-dialog>',
+        parent: parent
+      });
+
+      $rootScope.$apply();
+      $timeout.flush();
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      container.triggerHandler('transitionend');
+      $rootScope.$apply();
+
+      parent.find('md-dialog').triggerHandler('transitionend');
+      $rootScope.$apply();
+
+      expect($document.activeElement).toBe(parent[0].querySelector('.dialog-close'));
     }));
   });
 
@@ -285,32 +355,6 @@ describe('$mdDialog', function() {
       $rootScope.$apply();
       expect(parent[0].querySelectorAll('md-dialog').length).toBe(1);
       expect(parent[0].querySelectorAll('md-backdrop').length).toBe(0);
-    }));
-
-    it('should focus `md-button.dialog-close` on open', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
-      TestUtil.mockElementFocus(this);
-
-      var parent = angular.element('<div>');
-      $mdDialog.show({
-        template:
-          '<md-dialog>' +
-            '<div class="md-actions">' +
-              '<button class="dialog-close">Close</button>' +
-            '</div>' +
-            '</md-dialog>',
-        parent: parent
-      });
-
-      $rootScope.$apply();
-      $timeout.flush();
-      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
-      container.triggerHandler('transitionend');
-      $rootScope.$apply();
-      parent.find('md-dialog').triggerHandler('transitionend');
-      $rootScope.$apply();
-
-
-      expect($document.activeElement).toBe(parent[0].querySelector('.dialog-close'));
     }));
 
     it('should focus the last `md-button` in md-actions open if no `.dialog-close`', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
