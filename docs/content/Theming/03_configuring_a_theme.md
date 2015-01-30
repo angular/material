@@ -18,7 +18,7 @@ during application configuration.
 ### Configuring Color Intentions
 
 You can specify a color palette for a given color intention by calling the
-appropriate configuration method (`theme.primaryPalette`, `theme.primaryPalette`,
+appropriate configuration method (`theme.primaryPalette`, `theme.accentPalette`,
 `theme.warnColor`, `theme.backgroundColor`).
 
 <hljs lang="js">
