@@ -11,7 +11,7 @@ md-card {
   box-shadow: $card-box-shadow;
 
   > img,
-  :not(md-card-content) img {
+  > :not(md-card-content) img {
     order: 0;
     width: 100%;
   }
