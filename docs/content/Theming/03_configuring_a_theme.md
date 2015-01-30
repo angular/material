@@ -19,7 +19,7 @@ during application configuration.
 
 You can specify a color palette for a given color intention by calling the
 appropriate configuration method (`theme.primaryPalette`, `theme.accentPalette`,
-`theme.warnColor`, `theme.backgroundColor`).
+`theme.warnPalette`, `theme.backgroundPalette`).
 
 <hljs lang="js">
 angular.module('myApp', ['ngMaterial'])
