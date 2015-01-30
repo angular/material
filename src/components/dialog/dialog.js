@@ -392,6 +392,14 @@ function MdDialogProvider($$interimElementProvider) {
       }
     };
 
+    function trapFocus(ev) {
+      var dialog = document.querySelector('md-dialog');
+
+      if (dialog && !dialog.contains(ev.target)) {
+        ev.stopImmediatePropagation();
+        dialog.focus();
+      }
+    }
 
     // On show method for dialogs
     function onShow(scope, element, options) {
@@ -424,6 +432,8 @@ function MdDialogProvider($$interimElementProvider) {
 
       configureAria(element.find('md-dialog'), role);
 
+      document.addEventListener('focus', trapFocus, true);
+
       if (options.disableParentScroll) {
         options.lastOverflow = options.parent.css('overflow');
         options.parent.css('overflow', 'hidden');
@@ -435,6 +445,9 @@ function MdDialogProvider($$interimElementProvider) {
         options.popInTarget && options.popInTarget.length && options.popInTarget
       )
       .then(function() {
+
+        applyAriaToSiblings(element, true);
+
         if (options.escapeToClose) {
           options.rootElementKeyupCallback = function(e) {
             if (e.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
@@ -486,6 +499,11 @@ function MdDialogProvider($$interimElementProvider) {
       if (options.clickOutsideToClose) {
         element.off('click', options.dialogClickOutsideCallback);
       }
+
+      applyAriaToSiblings(element, false);
+
+      document.removeEventListener('focus', trapFocus, true);
+
       return dialogPopOut(
         element,
         options.parent,
@@ -504,7 +522,8 @@ function MdDialogProvider($$interimElementProvider) {
     function configureAria(element, role) {
 
       element.attr({
-        'role': role
+        'role': role,
+        'tabIndex': '-1'
       });
 
       var dialogContent = element.find('md-content');
@@ -521,6 +540,45 @@ function MdDialogProvider($$interimElementProvider) {
         if (words.length > 3) words = words.slice(0,3).concat('...');
         return words.join(' ');
       });
+    /**
+     * Utility function to filter out raw DOM nodes
+     */
+    function isNodeOneOf(elem, nodeTypeArray) {
+      if (nodeTypeArray.indexOf(elem.nodeName) !== -1) {
+        return true;
+      }
+    }
+    /**
+     * Walk DOM to apply or remove aria-hidden on sibling nodes
+     * and parent sibling nodes
+     *
+     * Prevents screen reader interaction behind modal window
+     * on swipe interfaces
+     */
+    function applyAriaToSiblings(element, value) {
+      var attribute = 'aria-hidden';
+
+      // get raw DOM node
+      element = element[0];
+
+      function walkDOM(element) {
+        while (element.parentNode) {
+          if (element === document.body) {
+            return;
+          }
+          var children = element.parentNode.children;
+          for (var i = 0; i < children.length; i++) {
+            // skip over child if it is an ascendant of the dialog
+            // or a script or style tag
+            if (element !== children[i] && !isNodeOneOf(children[i], ['SCRIPT', 'STYLE'])) {
+              children[i].setAttribute(attribute, value);
+            }
+          }
+
+          walkDOM(element = element.parentNode);
+        }
+      }
+      walkDOM(element);
     }
 
     function dialogPopIn(container, parentElement, clickElement) {

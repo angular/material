@@ -462,6 +462,31 @@ describe('$mdDialog', function() {
       expect(dialog.attr('aria-label')).not.toEqual(dialog.text());
       expect(dialog.attr('aria-label')).toEqual('Some Other Thing');
     }));
+
+    it('should apply aria-hidden to siblings', inject(function($mdDialog, $rootScope, $timeout) {
+
+      var template = '<md-dialog aria-label="Some Other Thing">Hello</md-dialog>';
+      var parent = angular.element('<div>');
+      parent.append('<div class="sibling"></div>');
+
+      $mdDialog.show({
+        template: template,
+        parent: parent
+      });
+
+      $rootScope.$apply();
+      $timeout.flush();
+
+      parent.find('md-dialog').triggerHandler('transitionend');
+      $rootScope.$apply();
+
+      var dialog = angular.element(parent.find('md-dialog'));
+      expect(dialog.attr('aria-hidden')).toBe(undefined);
+      expect(dialog.parent().attr('aria-hidden')).toBe(undefined);
+
+      var sibling = angular.element(parent[0].querySelector('.sibling'));
+      expect(sibling.attr('aria-hidden')).toBe('true');
+    }));
   });
 
   function hasConfigurationMethods(preset, methods) {
