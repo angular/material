@@ -62,8 +62,10 @@ module.exports = function(gulp, IS_RELEASE_BUILD) {
         var name = split.pop();
         var moduleName = 'material.' + split.pop() + '.' + name;
 
+        utils.copyDemoAssets(name, 'src/components/', 'dist/docs/demo-partials/');
+
         utils.readModuleDemos(moduleName, function(demoId) {
-          return lazypipe() 
+          return lazypipe()
             .pipe(gulpif, /.css$/, transformCss(demoId))
             .pipe(gulp.dest, 'dist/docs/demo-partials/' + name)
             ();
