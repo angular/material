@@ -1,4 +1,3 @@
-
 module.exports = function(config) {
   
   var UNCOMPILED_SRC = [
@@ -23,20 +22,26 @@ module.exports = function(config) {
   ];
   
   // releaseMode is a custom configuration option.
-  var testSrc = config.releaseMode ? COMPILED_SRC : UNCOMPILED_SRC;
+  var testSrc = process.env['MATERIAL_RELEASE_MODE'] ? COMPILED_SRC : UNCOMPILED_SRC;
+
+  var dependencies = [];
+  if (process.env['MATERIAL_JQUERY']) {
+    dependencies.push('bower_components/jquery/dist/jquery.js');
+  }
+
+  var dependencies = dependencies.concat([
+    'bower_components/angular/angular.js',
+    'bower_components/angular-animate/angular-animate.js',
+    'bower_components/angular-aria/angular-aria.js',
+    'bower_components/angular-mocks/angular-mocks.js',
+    'config/test-utils.js'
+  ]);
 
   config.set({
 
     basePath: __dirname + '/..',
     frameworks: ['jasmine'],
-    files: [
-      // Dependencies
-      'bower_components/angular/angular.js',
-      'bower_components/angular-animate/angular-animate.js',
-      'bower_components/angular-aria/angular-aria.js',
-      'bower_components/angular-mocks/angular-mocks.js',
-      'config/test-utils.js'
-    ].concat(testSrc),
+    files: dependencies.concat(testSrc),
 
     port: 9876,
     reporters: ['progress'],
