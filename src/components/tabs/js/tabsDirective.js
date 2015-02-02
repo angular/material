@@ -23,7 +23,7 @@ angular.module('material.components.tabs')
  *    <md-tab label="Tab #1"></md-tab>
  *    <md-tab label="Tab #2"></md-tab>
  *    <md-tab label="Tab #3"></md-tab>
- *  <md-tabs>
+ *  </md-tabs>
  *  </hljs>
  *
  * Tabs supports three (3) usage scenarios:
