@@ -302,7 +302,7 @@ angular.module('material.core')
     onCancel: angular.noop,
     options: {},
 
-    dispatchEvent: dispatchEvent,
+    dispatchEvent: typeof jQuery !== 'undefined' && angular.element === jQuery ? jQueryDispatchEvent : nativeDispatchEvent,
 
     start: function(ev, pointer) {
       if (this.state.isRunning) return;
@@ -361,10 +361,11 @@ angular.module('material.core')
     bubbles: true,
     cancelable: true
   };
+
   /*
-   * NOTE: dispatchEvent is very performance sensitive. 
+   * NOTE: native and jquery event dispatchers are very performance sensitive.
    */
-  function dispatchEvent(srcEvent, eventType, eventPointer, /*original DOMEvent */ev) {
+  function nativeDispatchEvent(srcEvent, eventType, eventPointer, /*original DOMEvent */ev) {
     eventPointer = eventPointer || pointer;
     var eventObj;
 
@@ -385,6 +386,17 @@ angular.module('material.core')
     eventObj.pointer = eventPointer;
     eventObj.srcEvent = srcEvent;
     eventPointer.target.dispatchEvent(eventObj);
+  }
+
+  // JQuery doesn't use native events for events registration, so using JQuery #trigger() instead of #dispatchEvent().
+  function jQueryDispatchEvent(srcEvent, eventType, eventPointer, /*original DOMEvent */ev) {
+    eventPointer = eventPointer || pointer;
+    var eventObj = new angular.element.Event(eventType)
+
+    eventObj.$material = true;
+    eventObj.pointer = eventPointer;
+    eventObj.srcEvent = srcEvent;
+    angular.element(eventPointer.target).trigger(eventObj);
   }
 
   return GestureHandler;
