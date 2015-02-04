@@ -38,6 +38,7 @@ md-sidenav {
   &.md-locked-open {
     width: $sidenav-default-width;
     min-width: $sidenav-default-width;
+    max-width: $sidenav-default-width;
   }
 
   &.md-locked-open,
