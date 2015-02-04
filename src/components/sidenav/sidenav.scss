@@ -6,6 +6,7 @@ md-sidenav {
 
   width: $sidenav-default-width;
   min-width: $sidenav-default-width;
+  max-width: $sidenav-default-width;
   bottom: 0;
   z-index: $z-index-sidenav;
   background-color: white;

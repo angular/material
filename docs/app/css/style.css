@@ -2,7 +2,7 @@
 
 body {
   overflow: hidden;
-  max-width: 100%; 
+  max-width: 100%;
   max-height: 100%;
   font-size: 14px;
 }
@@ -305,7 +305,7 @@ md-tabs.demo-source-tabs .active md-tab-label {
   height: 128px !important;
 }
 .small-demo .demo-toolbar,
-.small-demo .md-toolbar-tools { 
+.small-demo .md-toolbar-tools {
   min-height: 48px;
   max-height: 48px;
   font-size: 20px;
@@ -429,7 +429,7 @@ ul.buckets li a:focus {
   min-height: 72px;
   border-bottom: 1px solid #ddd;
 }
-.api-params-label { 
+.api-params-label {
   margin-right: 8px;
   text-align: center;
   margin-top: 14px;
@@ -523,7 +523,9 @@ md-content.demo-source-container > hljs > pre > code.highlight {
 .site-sidenav,
 .site-sidenav.md-locked-open-add-active,
 .site-sidenav.md-locked-open {
-  min-width: 218px;
+  width: 254px;
+  min-width: 254px;
+  max-width: 254px;
 }
 .site-sidenav > * {
   min-width: 218px;
