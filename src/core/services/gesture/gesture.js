@@ -149,7 +149,7 @@ angular.module('material.core')
       },
       onEnd: function(ev, pointer) {
         if (pointer.distance < this.state.options.maxDistance) {
-          this.dispatchEvent(ev, 'click', null, ev);
+          this.dispatchEvent(ev, 'click');
         }
       }
     });
@@ -302,7 +302,9 @@ angular.module('material.core')
     onCancel: angular.noop,
     options: {},
 
-    dispatchEvent: dispatchEvent,
+    dispatchEvent: typeof jQuery !== 'undefined' && angular.element === jQuery ? 
+      jQueryDispatchEvent : 
+      nativeDispatchEvent,
 
     start: function(ev, pointer) {
       if (this.state.isRunning) return;
@@ -357,24 +359,43 @@ angular.module('material.core')
     },
   };
 
-  var customEventOptions = {
-    bubbles: true,
-    cancelable: true
-  };
+  function jQueryDispatchEvent(srcEvent, eventType, eventPointer) {
+    eventPointer = eventPointer || pointer;
+    var eventObj = new angular.element.Event(eventType)
+
+    eventObj.$material = true;
+    eventObj.pointer = eventPointer;
+    eventObj.srcEvent = srcEvent;
+
+    angular.extend(eventObj, {
+      clientX: eventPointer.x,
+      clientY: eventPointer.y,
+      screenX: eventPointer.x,
+      screenY: eventPointer.y,
+      pageX: eventPointer.x,
+      pageY: eventPointer.y,
+      ctrlKey: srcEvent.ctrlKey,
+      altKey: srcEvent.altKey,
+      shiftKey: srcEvent.shiftKey,
+      metaKey: srcEvent.metaKey
+    });
+    angular.element(eventPointer.target).trigger(eventObj);
+  }
+
   /*
-   * NOTE: dispatchEvent is very performance sensitive. 
+   * NOTE: nativeDispatchEvent is very performance sensitive. 
    */
-  function dispatchEvent(srcEvent, eventType, eventPointer, /*original DOMEvent */ev) {
+  function nativeDispatchEvent(srcEvent, eventType, eventPointer) {
     eventPointer = eventPointer || pointer;
     var eventObj;
 
     if (eventType === 'click') {
       eventObj = document.createEvent('MouseEvents');
       eventObj.initMouseEvent(
-        'click', true, true, window, ev.detail,
-        ev.screenX, ev.screenY, ev.clientX, ev.clientY, 
-        ev.ctrlKey, ev.altKey, ev.shiftKey, ev.metaKey,
-        ev.button, ev.relatedTarget || null
+        'click', true, true, window, srcEvent.detail,
+        eventPointer.x, eventPointer.y, eventPointer.x, eventPointer.y,
+        srcEvent.ctrlKey, srcEvent.altKey, srcEvent.shiftKey, srcEvent.metaKey,
+        srcEvent.button, srcEvent.relatedTarget || null
       );
 
     } else {
