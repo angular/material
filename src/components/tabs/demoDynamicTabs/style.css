@@ -3,36 +3,21 @@
   margin-bottom: 40px;
 }
 
-.md-button {
-  display:block;
-}
-
 .demo-tab {
   height: 300px;
   text-align: center;
 }
 .tab0, .tab1, .tab2, .tab3 {
-  background-color: #bbdefb;
 }
 
-.md-header {
-  background-color: #1976D2 !important;
-}
-md-tab {
-  color: #90caf9 !important;
-}
-md-tab.active,
-md-tab:focus {
-  color: white !important;
+md-tabs, md-tabs .md-header {
+  border-bottom: 1px solid #D8D8D8;
 }
 md-tab[disabled] {
   opacity: 0.5;
 }
-.md-header .md-ripple {
-  border-color: #FFFF8D !important;
-}
-md-tabs-ink-bar {
-  background-color: #FFFF8D !important;
+.md-tab-content {
+  background: white;
 }
 
 .title {
@@ -55,10 +40,6 @@ form > [layout] > * {
 
 .long > input {
   width: 264px;
-}
-
-.md-button {
-  max-height: 30px;
 }
 
 .md-button.add-tab {

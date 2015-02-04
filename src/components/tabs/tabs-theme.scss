@@ -1,6 +1,6 @@
 md-tabs.md-THEME_NAME-theme {
   .md-header {
-    background-color: '{{primary-color}}';
+    background-color: transparent;
   }
 
   &.md-accent {
@@ -12,6 +12,34 @@ md-tabs.md-THEME_NAME-theme {
       color: '{{accent-100}}';
       &.active {
         color: '{{accent-contrast}}';
+      }
+    }
+  }
+
+  &.md-primary {
+    .md-header {
+      background-color: '{{primary-color}}';
+    }
+    md-tab:not([disabled]) {
+      color: '{{primary-100}}';
+      &.active {
+        color: '{{primary-contrast}}';
+      }
+    }
+    md-tab {
+      color: '{{primary-100}}';
+      &[disabled] {
+        color: '{{foreground-3}}';
+      }
+      &:focus {
+        color: '{{primary-contrast}}';
+        background-color: '{{primary-contrast-0.1}}';
+      }
+      &.active {
+        color: '{{primary-contrast}}';
+      }
+      .md-ripple-container {
+        color: '{{primary-contrast}}';
       }
     }
   }
@@ -31,24 +59,23 @@ md-tabs.md-THEME_NAME-theme {
 
 
   md-tabs-ink-bar {
-    color: '{{primary-contrast}}';
-    background: '{{primary-contrast}}';
+    color: '{{accent-color}}';
+    background: '{{accent-color}}';
   }
 
   md-tab {
-    color: '{{primary-100}}';
-    &.active {
-      color: '{{primary-contrast}}';
-    }
+    color: '{{foreground-2}}';
     &[disabled] {
-      color: '{{foreground-4}}';
+      color: '{{foreground-3}}';
     }
     &:focus {
-      color: '{{primary-contrast}}';
-      background-color: '{{primary-contrast-0.1}}';
+      color: '{{foreground-1}}';
+    }
+    &.active {
+      color: '{{primary-color}}';
     }
     .md-ripple-container {
-      color: '{{primary-contrast}}';
+      color: '{{accent-100}}';
     }
   }
 }
