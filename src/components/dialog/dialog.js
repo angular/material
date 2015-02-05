@@ -33,9 +33,11 @@ function MdDialogDirective($$rAF, $mdTheming) {
  * @module material.components.dialog
  *
  * @description
- * `$mdDialog` opens a dialog over the app and provides a simple promise API.
+ * `$mdDialog` opens a dialog over the app to inform users about critical information or require
+ *  them to make decisions. There are two approaches for setup: a simple promise API
+ *  and regular object syntax.
  *
- * ### Restrictions
+ * ## Restrictions
  *
  * - The dialog is always given an isolate scope.
  * - The dialog's template must have an outer `<md-dialog>` element.
@@ -43,12 +45,15 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *   an element with class `md-actions` for the dialog's actions.
  *
  * @usage
- * #### HTML
+ * ### HTML
  *
  * <hljs lang="html">
  * <div  ng-app="demoApp" ng-controller="EmployeeController">
  *   <md-button ng-click="showAlert()" class="md-raised md-warn">
  *     Employee Alert!
+ *   </md-button>
+ *   <md-button ng-click="showDialog($event)" class="md-raised">
+ *     Custom Dialog
  *   </md-button>
  *   <md-button ng-click="closeAlert()" ng-disabled="!hasAlert()" class="md-raised">
  *     Close Alert
@@ -59,8 +64,72 @@ function MdDialogDirective($$rAF, $mdTheming) {
  * </div>
  * </hljs>
  *
- * #### JavaScript
+ * ### JavaScript: object syntax
+ * <hljs lang="js">
+ * (function(angular, undefined){
+ *   "use strict";
  *
+ *   angular
+ *    .module('demoApp', ['ngMaterial'])
+ *    .controller('AppCtrl', AppController);
+ *
+ *   function AppController($scope, $mdDialog) {
+ *     var alert;
+ *     $scope.showAlert = showAlert;
+ *     $scope.items = [1, 2, 3];
+ *
+ *     // Internal method
+ *     function showAlert() {
+ *       var alert = $mdDialog.alert({
+ *         title: 'Attention',
+ *         content: 'This is an example of how easy dialogs can be!',
+ *         ok: 'Close'
+ *       });
+ *
+ *       $mdDialog
+ *         .show( alert )
+ *         .finally(function() {
+ *           alert = undefined;
+ *         });
+ *     }
+ *
+ *     function showDialog($event) {
+ *        var parentEl = angular.element(document.body);
+ *        $mdDialog.show({
+ *          parent: parentEl,
+ *          targetEvent: $event,
+ *          template:
+ *            '<md-dialog aria-label="List dialog">' +
+ *            '  <md-content>'+
+ *            '    <md-list>'+
+ *            '      <md-item ng-repeat="item in items">'+
+ *            '       <p>Number {{item}}</p>' +
+ *            '      </md-item>'+
+ *            '    </md-list>'+
+ *            '  </md-content>' +
+ *            '  <div class="md-actions">' +
+ *            '    <md-button ng-click="closeDialog()">' +
+ *            '      Close Dialog' +
+ *            '    </md-button>' +
+ *            '  </div>' +
+ *            '</md-dialog>',
+ *          locals: {
+ *            items: $scope.items
+ *          },
+ *          controller: DialogController
+ *       });
+ *       function DialogController(scope, $mdDialog, items) {
+ *         $scope.items = items;
+ *         $scope.closeDialog = function() {
+ *           $mdDialog.hide();
+ *         }
+ *       }
+ *     }
+ *
+ * })(angular);
+ * </hljs>
+ *
+ * ### JavaScript: promise API syntax, custom dialog template
  * <hljs lang="js">
  * (function(angular, undefined){
  *   "use strict";
