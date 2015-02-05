@@ -28,7 +28,7 @@ function MdBottomSheetDirective() {
  * @description
  * `$mdBottomSheet` opens a bottom sheet over the app and provides a simple promise API.
  *
- * ### Restrictions
+ * ## Restrictions
  *
  * - The bottom sheet's template must have an outer `<md-bottom-sheet>` element.
  * - Add the `md-grid` class to the bottom sheet for a grid layout.

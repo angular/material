@@ -30,7 +30,7 @@ function MdToastDirective() {
  * on the screen with an optional duration, and provides a simple promise API.
  *
  *
- * ### Restrictions on custom toasts
+ * ## Restrictions on custom toasts
  * - The toast's template must have an outer `<md-toast>` element.
  * - For a toast action, use element with class `md-action`.
  * - Add the class `md-capsule` for curved corners.
