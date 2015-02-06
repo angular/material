@@ -116,19 +116,19 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://p
   <head>
 
     <!-- Angulars Material CSS now available via Google CDN; version 0.7 used here -->
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.7.0/angular-material.min.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.7.0/angular-material.min.css">
 
   </head>
   <body>
   
     <!-- Angular Material Dependencies -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.min.js"></script>
     
     
     <!-- Angular Material Javascript now available via Google CDN; version 0.7 used here -->
-    <script src="//ajax.googleapis.com/ajax/libs/angular_material/0.7.0/angular-material.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.7.0/angular-material.min.js"></script>
   </body>
 ```
 
@@ -142,18 +142,18 @@ pull directly from the distribution GitHub
   <head>
 
     <!-- Angulars Material CSS using RawGit to load directly from `bower-material/master` -->
-    <link rel="stylesheet" href="//rawgit.com/angular/bower-material/master/angular-material.css">
+    <link rel="stylesheet" href="https://rawgit.com/angular/bower-material/master/angular-material.css">
 
   </head>
   <body>
 
     <!-- Angular Material Dependencies -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.js"></script>
 
     <!-- Angular Material Javascript using RawGit to load directly from `bower-material/master` -->
-    <script src="//rawgit.com/angular/bower-material/master/angular-material.js"></script>
+    <script src="https://rawgit.com/angular/bower-material/master/angular-material.js"></script>
 
   </body>
 ```
