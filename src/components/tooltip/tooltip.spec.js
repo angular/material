@@ -18,10 +18,8 @@ describe('<md-tooltip> directive', function() {
     $rootScope.$apply('isVisible = true');
     expect(findTooltip().length).toBe(1);
     expect(findTooltip().hasClass('md-show')).toBe(true);
-    expect(findTooltip().hasClass('md-hide')).toBe(false);
 
     $rootScope.$apply('isVisible = false');
-    expect(findTooltip().hasClass('md-hide')).toBe(true);
     expect(findTooltip().hasClass('md-show')).toBe(false);
     $timeout.flush();
     expect(findTooltip().length).toBe(0);
