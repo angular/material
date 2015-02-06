@@ -20,23 +20,21 @@ exports.humanizeCamelCase = function(str) {
  * Copy all the demo assets to the dist directory
  * NOTE: this excludes the modules demo .js,.css, .html files
  */
-exports.copyDemoAssets = function(name, srcDir, distDir) {
-  gulp.src(srcDir + name + '/demo*/')
-      .pipe(through2.obj());
+exports.copyDemoAssets = function(component, srcDir, distDir) {
+  gulp.src(srcDir + component + '/demo*/')
+      .pipe(through2.obj( copyAssetsFor ));
 
+  function copyAssetsFor( demo, enc, next){
+    var demoID = component + "/" + path.basename(demo.path);
+    var demoDir = demo.path + "/**/*";
 
-  function pipe(demoFolder,enc,next){
-          var demoID = name + "/" + path.basename(demoFolder.path);
-          var demoDir = demoFolder.path + "/**/*";
+    var notJS  = '!' + demoDir + '.js';
+    var notCSS = '!' + demoDir + '.css';
+    var notHTML= '!' + demoDir + '.html';
 
-          var notJS  = '!' + demoDir + '.js';
-          var notCSS = '!' + demoDir + '.css';
-          var notHTML= '!' + demoDir + '.html';
-
-          gulp.src([demoDir, notJS, notCSS, notHTML])
-              .pipe(gulp.dest(distDir + demoID));
-        }
-
+    gulp.src([demoDir, notJS, notCSS, notHTML])
+        .pipe(gulp.dest(distDir + demoID));
+  }
 };
 
 // Gives back a pipe with an array of the parsed data from all of the module's demos
