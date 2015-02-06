@@ -4,9 +4,9 @@
 
     <md-radio-group ng-model="data.group1">
 
-      <md-radio-button value="Apple" aria-label="Label 1">Apple</md-radio-button>
+      <md-radio-button value="Apple">Apple</md-radio-button>
       <md-radio-button value="Banana"> Banana </md-radio-button>
-      <md-radio-button value="Mango" aria-label="Label 3">Mango</md-radio-button>
+      <md-radio-button value="Mango">Mango</md-radio-button>
 
     </md-radio-group>
 
@@ -18,8 +18,7 @@
 
         <md-radio-button ng-repeat="d in radioData"
                          ng-value="d.value"
-                         ng-disabled=" d.isDisabled "
-                         aria-label="{{ d.label }}">
+                         ng-disabled=" d.isDisabled ">
             {{ d.label }}
         </md-radio-button>
 
