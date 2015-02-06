@@ -67,8 +67,23 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       '</div>' +
       '<div class="md-disabled-thumb"></div>' +
       '</div>',
-    link: postLink
+    compile: compile
   };
+
+  // **********************************************************
+  // Private Methods
+  // **********************************************************
+
+  function compile (tElement, tAttrs) {
+    tElement.attr({
+      tabIndex: 0,
+      role: 'slider'
+    });
+
+    $mdAria.expect(tElement, 'aria-label');
+
+    return postLink;
+  }
 
   function postLink(scope, element, attr, ngModelCtrl) {
     $mdTheming(element);
@@ -109,14 +124,9 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       stopDisabledWatch = scope.$parent.$watch(attr.ngDisabled, updateAriaDisabled);
     }
 
-    $mdAria.expect(element, 'aria-label');
-
     $mdGesture.register(element, 'drag');
+
     element
-      .attr({
-        tabIndex: 0,
-        role: 'slider'
-      })
       .on('keydown', keydownListener)
       .on('$md.pressdown', onPressDown)
       .on('$md.pressup', onPressUp)
