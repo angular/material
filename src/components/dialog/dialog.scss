@@ -39,7 +39,7 @@ md-dialog {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 
-    &:not([layout=row]) > *:first-child {
+    &:not([layout=row]) > *:first-child:not(.md-subheader) {
       margin-top: 0px;
     }
   }
