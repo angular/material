@@ -146,6 +146,8 @@ function MdToastDirective() {
  *
  * @param {*=} response An argument for the resolved promise.
  *
+ * @returns {promise} a promise that is called when the existing element is removed from the DOM
+ *
  */
 
 /**
@@ -157,6 +159,8 @@ function MdToastDirective() {
  * `$mdToast.show()`.
  *
  * @param {*=} response An argument for the rejected promise.
+ *
+ * @returns {promise} a promise that is called when the existing element is removed from the DOM
  *
  */
 

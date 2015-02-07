@@ -30,7 +30,7 @@ angular.module('toastDemo1', ['ngMaterial'])
       $mdToast.simple()
         .content('Simple Toast!')
         .position($scope.getToastPosition())
-        .hideDelay(0)
+        .hideDelay(3000)
     );
   };
 

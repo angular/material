@@ -19,7 +19,7 @@ describe('$$interimElement service', function() {
           link: el,
           locals: {}
         });
-        $rootScope.$apply();
+        !$rootScope.$$phase && $rootScope.$apply();
         return deferred.promise;
       });
     });
@@ -203,18 +203,20 @@ describe('$$interimElement service', function() {
           },
           methods: ['key2']
         });
-      inject(function(interimTest, $rootScope) {
+      inject(function(interimTest, $rootScope, $animate) {
         interimTest.show();
         expect($compilerSpy.mostRecentCall.args[0].key).toBe('defaultValue');
-        
         $compilerSpy.reset();
+
         interimTest.show({
           key: 'newValue'
         });
+        $animate.triggerCallbacks();
         expect($compilerSpy.mostRecentCall.args[0].key).toBe('newValue');
-
         $compilerSpy.reset();
+
         interimTest.show(interimTest.preset());
+        $animate.triggerCallbacks();
         expect($compilerSpy.mostRecentCall.args[0].key).toBe('defaultValue');
         expect($compilerSpy.mostRecentCall.args[0].key2).toBe('defaultValue2');
 
@@ -225,15 +227,18 @@ describe('$$interimElement service', function() {
             key2: 'newValue2'
           })
         );
+        $animate.triggerCallbacks();
         expect($compilerSpy.mostRecentCall.args[0].key).toBe('newValue');
         expect($compilerSpy.mostRecentCall.args[0].key2).toBe('newValue2');
         
         $compilerSpy.reset();
+        $animate.triggerCallbacks();
         interimTest.show(
           interimTest.preset({
             key2: 'newValue2'
           }).key2('superNewValue2')
         );
+        $animate.triggerCallbacks();
         expect($compilerSpy.mostRecentCall.args[0].key).toBe('defaultValue');
         expect($compilerSpy.mostRecentCall.args[0].key2).toBe('superNewValue2');
       });
