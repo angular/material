@@ -41,8 +41,7 @@ function mdMediaFactory($mdConstant, $rootScope, $window) {
     return (results[result.media] = !!result.matches);
   }
 
-  function onQueryChange() {
-    var query = this;
+  function onQueryChange(query) {
     $rootScope.$evalAsync(function() {
       results[query.media] = !!query.matches;
     });
