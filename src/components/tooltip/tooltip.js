@@ -56,6 +56,11 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     $mdTheming(element);
     var parent = element.parent();
 
+    // Keep looking for a higher parent if our current one has no pointer events
+    while (parent[0].style.pointerEvents == 'none') {
+      parent = parent.parent();
+    }
+
     // Look for the nearest parent md-content, stopping at the rootElement.
     var current = element.parent()[0];
     while (current && current !== $rootElement[0] && current !== document.body) {

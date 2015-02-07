@@ -59,6 +59,14 @@ describe('<md-tooltip> directive', function() {
     expect($rootScope.isVisible).toBe(false);
   }));
 
+  it('should not set parent to items with no pointer events', inject(function($compile, $rootScope, $timeout) {
+    var element = $compile('<outer><inner style="pointer-events: none;"><md-tooltip md-visible="isVisible">Hello world' +
+                           '</md-tooltip></inner></outer>')($rootScope);
+    element.triggerHandler('mouseenter');
+    $timeout.flush();
+    expect($rootScope.isVisible).toBe(true);
+  }));
+
   it('should set visible on focus and blur', inject(function($compile, $rootScope, $timeout) {
     var element = $compile('<md-button>' +
                'Hello' +
