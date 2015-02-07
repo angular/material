@@ -57,7 +57,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     var parent = element.parent();
 
     // Keep looking for a higher parent if our current one has no pointer events
-    while (parent[0].style.pointerEvents == 'none') {
+    while ($window.getComputedStyle(parent[0])['pointer-events'] == 'none') {
       parent = parent.parent();
     }
 

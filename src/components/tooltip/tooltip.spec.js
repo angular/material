@@ -59,9 +59,18 @@ describe('<md-tooltip> directive', function() {
     expect($rootScope.isVisible).toBe(false);
   }));
 
-  it('should not set parent to items with no pointer events', inject(function($compile, $rootScope, $timeout) {
-    var element = $compile('<outer><inner style="pointer-events: none;"><md-tooltip md-visible="isVisible">Hello world' +
+  iit('should not set parent to items with no pointer events', inject(function($window, $compile, $rootScope, $timeout) {
+    spyOn($window, 'getComputedStyle').andCallFake(function(el) {
+      if (el.nodeName == 'INNER') {
+        return { 'pointer-events': 'none' };
+      } else {
+        return { 'pointer-events': '' };
+      }
+    });
+
+    var element = $compile('<outer><inner><md-tooltip md-visible="isVisible">Hello world' +
                            '</md-tooltip></inner></outer>')($rootScope);
+
     element.triggerHandler('mouseenter');
     $timeout.flush();
     expect($rootScope.isVisible).toBe(true);
