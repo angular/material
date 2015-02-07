@@ -5,7 +5,7 @@ describe('$mdMedia', function() {
   function runListeners() {
     listeners.forEach(function(cb) {
       cb.context.matches = matchMediaResult;
-      cb.call(cb.context, cb);
+      cb.call(cb.context, cb.context);
     });
   }
 
