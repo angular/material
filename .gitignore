@@ -6,6 +6,7 @@ bower_components
 node_modules
 dist
 /src/themes/_default-theme.scss
+/material-font
 
 /.idea/
 /components
