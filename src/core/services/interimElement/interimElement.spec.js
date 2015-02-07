@@ -101,6 +101,17 @@ describe('$$interimElement service', function() {
       });
     });
 
+    it('should allow custom methods', function() {
+      var called = false;
+      createInterimProvider('testCustomMethods')
+        .addMethod('helloWorld', function() { called = true; });
+
+      inject(function(testCustomMethods) {
+        testCustomMethods.helloWorld();
+      });
+      expect(called).toBe(true);
+    });
+
     it('should add specified builder with defaults', function() {
       createInterimProvider('interimTest')
         .setDefaults({

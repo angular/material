@@ -35,6 +35,15 @@ describe('$mdToast service', function() {
       expect(rejected).toBe(true);
     }));
 
+    it('supports dynamicly updating the content', inject(function($mdToast, $rootScope, $rootElement) {
+      var parent = angular.element('<div>');
+      $mdToast.showSimple('Hello world');
+      $rootScope.$digest();
+      $mdToast.updateContent('Goodbye world');
+      $rootScope.$digest();
+      expect($rootElement.find('span').text()).toBe('Goodbye world');
+    }));
+
     it('supports an action toast', inject(function($mdToast, $rootScope, $animate) {
       var resolved = false;
       var parent = angular.element('<div>');
