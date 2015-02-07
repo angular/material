@@ -20,24 +20,24 @@ md-slider.md-THEME_NAME-theme {
   }
 
   .md-track.md-track-fill {
-    background-color: '{{primary-color}}';
+    background-color: '{{accent-color}}';
   }
   .md-thumb:after {
-    border-color: '{{primary-color}}';
-    background-color: '{{primary-color}}';
+    border-color: '{{accent-color}}';
+    background-color: '{{accent-color}}';
   }
   .md-sign {
-    background-color: '{{primary-color}}';
+    background-color: '{{accent-color}}';
     &:after {
-      border-top-color: '{{primary-color}}';
+      border-top-color: '{{accent-color}}';
     }
   }
   .md-thumb-text {
-    color: '{{primary-contrast}}';
+    color: '{{accent-contrast}}';
   }
 
   &.md-warn {
-    .md-track-fill {
+    .md-track.md-track-fill {
       background-color: '{{warn-color}}';
     }
     .md-thumb:after {
@@ -57,7 +57,7 @@ md-slider.md-THEME_NAME-theme {
   }
 
   &.md-primary {
-    .md-track-fill {
+    .md-track.md-track-fill {
       background-color: '{{primary-color}}';
     }
     .md-thumb:after {

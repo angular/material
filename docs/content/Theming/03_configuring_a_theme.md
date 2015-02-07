@@ -7,8 +7,8 @@
 By default your Angular Material application will use the default theme, a theme
 that is pre-configured with the following palettes for intention groups:
 
-- *primary* - blue
-- *accent* - green
+- *primary* - indigo
+- *accent* - pink
 - *warn* - red
 - *background* - grey (note that white is in this palette)
 
