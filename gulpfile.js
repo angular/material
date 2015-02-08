@@ -150,14 +150,14 @@ gulp.task('karma', function(done) {
   };
 
   gutil.log('Running unit tests on unminified source.');
-  karma.start(karmaConfig, testMinified);
+  karma.start(karmaConfig, done);
 
-  function testMinified() {
-    gutil.log('Running unit tests on minified source.');
-    buildJs(true);
-    karmaConfig.releaseMode = true;
-    karma.start(karmaConfig, done);
-  }
+  //function testMinified() {
+  //  gutil.log('Running unit tests on minified source.');
+  //  buildJs(true);
+  //  karmaConfig.releaseMode = true;
+  //  karma.start(karmaConfig, done);
+  //}
 });
 
 gulp.task('karma-watch', function(done) {
@@ -179,7 +179,12 @@ gulp.task('karma-sauce', function(done) {
  *
  ** ***************************************** */
 
-gulp.task('build', ['build-scss', 'build-js']);
+gulp.task('build', ['build-resources', 'build-scss', 'build-js']);
+
+gulp.task('build-resources', function() {
+  return gulp.src(['material-font/*'])
+    .pipe(gulp.dest(path.join(config.outputDir, 'material-font')));
+});
 
 gulp.task('build-all-modules', function() {
   return series(gulp.src(['src/components/*', 'src/core/'])
@@ -211,6 +216,8 @@ function buildModule(module, isRelease) {
 
   var name = module.split('.').pop();
   gutil.log('Building ' + module + (isRelease && ' minified' || '') + ' ...');
+
+  utils.copyDemoAssets(name, 'src/components/', 'dist/demos/');
 
   return utils.filesForModule(module)
     .pipe(filterNonCodeFiles())

@@ -34,6 +34,8 @@ exports.copyDemoAssets = function(component, srcDir, distDir) {
 
     gulp.src([demoDir, notJS, notCSS, notHTML])
         .pipe(gulp.dest(distDir + demoID));
+
+    next();
   }
 };
 
@@ -89,6 +91,24 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
 };
 
 var pathsForModules = {};
+
+exports.pathsForModule = function(name) {
+  return pathsForModules[name] || lookupPath();
+
+  function lookupPath() {
+    gulp.src('src/{services,components,core}/**/*')
+          .pipe(through2.obj(function(file, enc, next) {
+            var modName = getModuleInfo(file.contents).module;
+            if (modName == name) {
+              var modulePath = file.path.split(path.sep).slice(0, -1).join(path.sep);
+              pathsForModules[name] = modulePath + '/**';
+            }
+            next();
+          }));
+    return pathsForModules[name];
+  }
+}
+
 exports.filesForModule = function(name) {
   if (pathsForModules[name]) {
     return srcFiles(pathsForModules[name]);
