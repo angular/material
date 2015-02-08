@@ -75,6 +75,29 @@ describe('$$interimElement service', function() {
       });
     });
 
+    iit('should not call onShow or onRemove on failing to load templates', function() {
+      createInterimProvider('interimTest');
+      inject(function($q, $rootScope, $rootElement, interimTest, $httpBackend, $animate) {
+        $compilerSpy.andCallFake(function() {
+          var deferred = $q.defer();
+          deferred.reject();
+          return deferred.promise;
+        });
+        $httpBackend.when('GET', '/fail-url.html').respond(500, '');
+        var onShowCalled = false, onHideCalled = false;
+        interimTest.show({
+          templateUrl: '/fail-url.html',
+          onShow: function(scope, el) { onShowCalled = true; },
+          onRemove: function() { onHideCalled = true; }
+        });
+        $animate.triggerCallbacks();
+        interimTest.hide();
+        $animate.triggerCallbacks();
+        expect(onShowCalled).toBe(false);
+        expect(onHideCalled).toBe(false);
+      });
+    });
+
     it('should add specified defaults', function() {
       createInterimProvider('interimTest').setDefaults({
         options: function($rootScope) {
