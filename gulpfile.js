@@ -155,8 +155,22 @@ gulp.task('karma', function(done) {
   function testMinified() {
     gutil.log('Running unit tests on minified source.');
     buildJs(true);
-    karmaConfig.releaseMode = true;
-    karma.start(karmaConfig, done);
+    process.env['MATERIAL_RELEASE_MODE'] = 'true';
+    karma.start(karmaConfig, testMinifiedJQuery);
+  }
+
+  function testMinifiedJQuery() {
+    gutil.log('Running unit tests on minified source using JQuery.');
+    buildJs(true);
+    process.env['MATERIAL_RELEASE_MODE'] = 'true';
+    process.env['MATERIAL_JQUERY'] = 'true';
+    karma.start(karmaConfig, clearEnv);
+  }
+
+  function clearEnv() {
+    process.env['MATERIAL_RELEASE_MODE'] = undefined;
+    process.env['MATERIAL_JQUERY'] = undefined;
+    done();
   }
 });
 
