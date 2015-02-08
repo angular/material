@@ -75,7 +75,7 @@ describe('$$interimElement service', function() {
       });
     });
 
-    iit('should not call onShow or onRemove on failing to load templates', function() {
+    it('should not call onShow or onRemove on failing to load templates', function() {
       createInterimProvider('interimTest');
       inject(function($q, $rootScope, $rootElement, interimTest, $httpBackend, $animate) {
         $compilerSpy.andCallFake(function() {
