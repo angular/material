@@ -16,7 +16,7 @@ describe('$mdDialog', function() {
   describe('#alert()', function() {
     hasConfigurationMethods('alert', [
       'title', 'content', 'ariaLabel',
-      'ok', 'targetEvent'
+      'ok', 'targetEvent', 'theme'
     ]);
 
     it('shows a basic alert dialog', inject(function($animate, $rootScope, $mdDialog, $mdConstant) {
@@ -28,6 +28,7 @@ describe('$mdDialog', function() {
         })
           .title('Title')
           .content('Hello world')
+          .theme('some-theme')
           .ok('Next')
       ).then(function() {
         resolved = true;
@@ -45,6 +46,10 @@ describe('$mdDialog', function() {
       var buttons = parent.find('md-button');
       expect(buttons.length).toBe(1);
       expect(buttons.eq(0).text()).toBe('Next');
+      var theme = parent.find('md-dialog').attr('md-theme');
+      expect(theme).toBe('some-theme');
+
+
       buttons.eq(0).triggerHandler('click');
       $rootScope.$apply();
       parent.find('md-dialog').triggerHandler('transitionend');
@@ -57,7 +62,7 @@ describe('$mdDialog', function() {
   describe('#confirm()', function() {
     hasConfigurationMethods('confirm', [
       'title', 'content', 'ariaLabel',
-      'ok', 'cancel', 'targetEvent'
+      'ok', 'cancel', 'targetEvent', 'theme'
     ]);
 
     it('shows a basic confirm dialog', inject(function($rootScope, $mdDialog, $animate, $mdConstant) {

@@ -348,6 +348,10 @@ describe('$mdTheming service', function() {
     expect(child.hasClass('md-dark-theme')).toBe(false);
     expect(child.hasClass('md-space-theme')).toBe(true);
   }));
+
+  it('exposes a getter for the default theme', inject(function($mdTheming) {
+    expect($mdTheming.defaultTheme()).toBe('default');
+  }));
 });
 
 describe('md-theme directive', function() {
