@@ -59,7 +59,7 @@ describe('<md-tooltip> directive', function() {
     expect($rootScope.isVisible).toBe(false);
   }));
 
-  iit('should not set parent to items with no pointer events', inject(function($window, $compile, $rootScope, $timeout) {
+  it('should not set parent to items with no pointer events', inject(function($window, $compile, $rootScope, $timeout) {
     spyOn($window, 'getComputedStyle').andCallFake(function(el) {
       if (el.nodeName == 'INNER') {
         return { 'pointer-events': 'none' };
