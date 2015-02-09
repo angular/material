@@ -1,0 +1,37 @@
+
+
+
+
+md-progress-circular {
+    margin-bottom:20px;
+}
+
+md-icon {
+    margin: 20px;
+    margin-top:0px;
+    width: 24px;
+    height: 24px;
+}
+
+
+
+.demo-content {
+    min-height: 210px;
+}
+
+
+.appDemoSvgIcons {
+    padding:25px;
+}
+
+.s24 {
+    width: 24px;height: 24px;
+}
+
+.s36 {
+    width: 36px;height: 36px;
+}
+
+.s48 {
+    width: 48px;height: 48px;
+}
