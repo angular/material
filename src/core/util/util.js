@@ -33,6 +33,7 @@ angular.module('material.core')
     fakeNgModel: function() {
       return {
         $fake: true,
+        $setTouched : angular.noop,
         $setViewValue: function(value) {
           this.$viewValue = value;
           this.$render(value);
