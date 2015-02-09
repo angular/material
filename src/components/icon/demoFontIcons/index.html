@@ -3,7 +3,7 @@
 
     <div class="glyph" ng-repeat="font in fonts">
       <div class="preview-glyphs">
-        <md-icon ng-repeat="size in sizes" font-icon="{{ font.name }}" class="step "
+        <md-icon ng-repeat="size in sizes" md-font-icon="{{ font.name }}" class="step "
                  ng-style="{color: font.color, 'font-size': size + 'px', height: size + 'px'}"
                  alt="{{ font.name + size }}">
         </md-icon>

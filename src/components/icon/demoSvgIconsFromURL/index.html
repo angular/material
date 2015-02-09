@@ -1,16 +1,16 @@
 <div ng-app="appDemoSvgIcons" ng-controller="DemoCtrl" ng-cloak layout="column" layout-margin >
     <p>The simplest way to display a single SVG icon is by referencing it by URL:</p>
     <p>
-        <md-icon svg-src="img/icons/ic_insert_drive_file_24px.svg"
+        <md-icon md-svg-src="{{ insertDriveIconURL }}"
                  alt="Insert Drive Icon">
         </md-icon>
     </p>
 
     <p>Style the icon size and color with CSS:</p>
     <p>
-      <md-icon svg-src="img/icons/cake.svg"            class="s24" style="color: #f00;" ></md-icon>
-      <md-icon svg-src="img/icons/android.svg"         class="s36" style="color: #0f0;" ></md-icon>
-      <md-icon svg-src="img/icons/addShoppingCart.svg" class="s48" style="color: #00f;" ></md-icon>
+      <md-icon md-svg-src="img/icons/cake.svg"            class="s24" style="color: #f00;" ></md-icon>
+      <md-icon md-svg-src="{{ getAndroid() }} "           class="s36" style="color: #0f0;" ></md-icon>
+      <md-icon md-svg-src="img/icons/addShoppingCart.svg" class="s48" style="color: #00f;" ></md-icon>
     </p>
 </div>
 

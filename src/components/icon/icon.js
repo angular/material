@@ -25,26 +25,26 @@ angular.module('material.components.icon', [
  * or a SVG. Both external SVGs (via URLs) or cached SVG from icon sets (using $mdIcon service) can be
  * easily used.
  *
- * @param {string} svg-src String URL for an external SVG to be loaded, cached and displayed.
- * @param {string} svg-icon String name used for lookup of the icon from the internal cache
+ * @param {string} md-svg-src String URL [or expression ] used to load, cache, and display an external SVG.
+ * @param {string} md-svg-icon String name [or expression ] used for lookup of the icon from the internal cache; can be an expression.
  * inside the cached icon sets. Specific set names can be used with the syntax `<set name>:<icon name>`.
  * Requires the iconset to be pre-registered using `$mdIconProvider`
- * @param {string} font-icon String name of CSS icon associated with the font-face will be used
+ * @param {string} md-font-icon String name of CSS icon associated with the font-face will be used
  * to render the icon. Requires the fonts and the named CSS styles to be preloaded.
  *
  * @usage
  * <hljs lang="html">
- *  <md-icon font-icon="android" alt="android icon"></md-icon>
- *  <md-icon svg-icon="action:android" alt="android icon"></md-icon>
- *  <md-icon svg-src="/android.svg" alt="android icon"></md-icon>
+ *  <md-icon md-font-icon="android" alt="android icon"></md-icon>
+ *  <md-icon md-svg-icon="action:android" alt="android icon"></md-icon>
+ *  <md-icon md-svg-src="/android.svg" alt="android icon"></md-icon>
  * </hljs>
  */
 function mdIconDirective($mdIcon, $mdAria, $log) {
   return {
     scope: {
-      fontIcon: '@',
-      svgIcon: '@',
-      svgSrc: '@'
+      fontIcon: '@mdFontIcon',
+      svgIcon: '@mdSvgIcon',
+      svgSrc: '@mdSvgSrc'
     },
     restrict: 'E',
     template: getTemplate,
@@ -52,7 +52,7 @@ function mdIconDirective($mdIcon, $mdAria, $log) {
   };
 
   function getTemplate(element, attr) {
-    return attr.fontIcon ? '<span class="md-font" ng-class="fontIcon"></span>' : '';
+    return attr.mdFontIcon ? '<span class="md-font" ng-class="fontIcon"></span>' : '';
   }
 
   /**
@@ -61,7 +61,7 @@ function mdIconDirective($mdIcon, $mdAria, $log) {
    */
   function postLink(scope, element, attr) {
     var ariaLabel = attr.alt || scope.fontIcon || scope.svgIcon;
-    var attrName = attr.$normalize(attr.$attr.svgIcon || attr.$attr.svgSrc || '');
+    var attrName = attr.$normalize(attr.$attr.mdSvgIcon || attr.$attr.mdSvgSrc || '');
     if (attr.alt == '') {
       // Hide from the accessibility layer.
       $mdAria.expect(element, 'aria-hidden', 'true');
