@@ -53,7 +53,7 @@ describe('mdIcon directive', function() {
 
     it('should append SVG from URL to md-icon', function() {
       el = make('<md-icon svg-src="android.svg"></md-icon>');
-      expect(el.html()).toEqual('<svg><g id="android"></g></svg>');
+      expect(el.html()).toEqual( updateDefaults('<svg><g id="android"></g></svg>') );
     });
 
   });
