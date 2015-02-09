@@ -36,6 +36,7 @@ function(COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider) {
     });
 
   $mdThemingProvider.theme('docs-dark', 'default')
+    .primaryPalette('yellow')
     .dark();
 
   angular.forEach(PAGES, function(pages, area) {
