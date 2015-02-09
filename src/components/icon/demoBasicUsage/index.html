@@ -1,0 +1,59 @@
+
+<div class="container" ng-controller="IconCtrl" ng-cloak>
+  <div class="loading" ng-show="loading">
+    <md-progress-circular class="md-accent" md-mode="indeterminate"></md-progress-circular>
+  </div>
+  <header>
+    <h1>Material: md-icon</h1>
+  </header>
+    <md-radio-group ng-model="iconType">
+      <label style="font-weight: bold;">Icon Type: </label>
+      <md-radio-button value="SVG" aria-label="SVG">SVG</md-radio-button>
+      <md-radio-button value="Font" aria-label="Font">Font</md-radio-button>
+    </md-radio-group>
+    <md-input-container flex>
+      <label>Color</label>
+      <input ng-model="color">
+    </md-input-container>
+
+    <div class="glyph" ng-repeat="icon in icons | limitTo:limit" ng-if="iconType == 'SVG'">
+      <div class="preview-glyphs">
+        <md-icon ng-repeat="size in sizes" svg-icon="{{ icon.name }}"
+                 ng-style="{fill: color, width: size + 'px', height: size + 'px'}"
+                 alt="{{ icon.name + size }}">
+        </md-icon>
+      </div>
+      <div class="preview-scale">
+        <span class="step" ng-repeat="size in sizes">{{ size }}</span>
+      </div>
+      <div class="usage">
+        <input class="class" type="text" readonly="readonly" onclick="this.select();"
+               value="{{ icon.name }}" aria-label="Icon Name">
+      </div>
+    </div>
+
+    <div class="glyph" ng-repeat="font in fonts | limitTo:limit" ng-if="iconType == 'Font'">
+      <div class="preview-glyphs">
+        <md-icon ng-repeat="size in sizes" font-icon="{{ font.name }}" class="step"
+                 ng-style="{color: color, 'font-size': size + 'px', height: size + 'px'}"
+                 alt="{{ font.name + size }}">
+        </md-icon>
+      </div>
+      <div class="preview-scale">
+        <span class="step" ng-repeat="size in sizes">{{ size }}</span>
+      </div>
+      <div class="usage">
+        <input class="class" type="text" readonly="readonly" onclick="this.select();"
+               value="{{ font.name }}" aria-label="Font Icon Name">
+        <input class="point" type="text" readonly="readonly" onclick="this.select();"
+               value="{{ font.utf }}" aria-label="Font UTF">
+      </div>
+    </div>
+
+    <div style="text-align: center;" ng-hide="icons.length <= limit">
+      <md-button ng-click="loadMore()">
+        More <md-icon font-icon="icon-more-horiz"></md-icon>
+      </md-button>
+      <md-button ng-click="loadMore(icons.length)">All</md-button>
+    </div>
+</div>
