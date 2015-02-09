@@ -1,0 +1,82 @@
+
+<style>
+
+    @font-face {
+      font-family:"icomoon";
+      src:url("icomoon.eot");
+      font-weight:normal;
+      font-style:normal;
+    }
+
+    @font-face {
+        font-family: 'icomoon';
+        src:url('fonts/icomoon.eot?-cmq1um');
+        src:url('fonts/icomoon.eot?#iefix-cmq1um') format('embedded-opentype'),
+            url('fonts/icomoon.woff?-cmq1um') format('woff'),
+            url('fonts/icomoon.ttf?-cmq1um') format('truetype'),
+            url('fonts/icomoon.svg?-cmq1um#icomoon') format('svg');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    /* Bootstrap Overrides */
+    [class^="icon-"]:before,
+    [class*=" icon-"]:before {
+      font-family:"icomoon";
+      display:inline-block;
+      vertical-align:middle;
+      line-height:1;
+      font-weight:normal;
+      font-style:normal;
+      speak:none;
+      text-decoration:inherit;
+      text-transform:none;
+      text-rendering:optimizeLegibility;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+
+    .icon-home:before {
+        content: "\e900";
+    }
+
+    .icon-clock:before {
+        content: "\e94e";
+    }
+
+    .icon-user-plus:before {
+        content: "\e973";
+    }
+
+    .icon-google-plus2:before {
+        content: "\ea89";
+    }
+
+    .icon-youtube4:before {
+        content: "\ea9a";
+    }
+
+    .icon-settings:before {
+        content: "\e600";
+    }
+</style>
+
+<div ng-app="appDemoFontIcons" ng-controller="DemoCtrl" ng-cloak layout="column" layout-margin style="padding:25px;width: 400px;">
+    <!-- Display font icons from Icomoon.io: -->
+
+    <div class="glyph" ng-repeat="font in fonts">
+      <div class="preview-glyphs">
+        <md-icon ng-repeat="size in sizes" font-icon="{{ font.name }}" class="step"
+                 ng-style="{color: font.color, 'font-size': size + 'px', height: size + 'px'}"
+                 alt="{{ font.name + size }}">
+        </md-icon>
+      </div>
+      <div class="preview-scale">
+        <span class="step" ng-repeat="size in sizes">{{ size }}px</span>
+      </div>
+    </div>
+
+</div>
+
+
