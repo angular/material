@@ -27,3 +27,11 @@ p:last-child {
   padding:5px;
 
 }
+
+md-icon {
+    margin: 20px;
+    margin-top:0px;
+    width: 128px;
+    height: 128px;
+}
+
