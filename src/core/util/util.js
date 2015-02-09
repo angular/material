@@ -88,6 +88,16 @@ angular.module('material.core')
     },
 
     /**
+     * Measures the number of milliseconds taken to run the provided callback
+     * function. Uses a high-precision timer if available.
+     */
+    time: function time(cb) {
+      var start = Util.now();
+      cb();
+      return Util.now() - start;
+    },
+
+    /**
      * nextUid, from angular.js.
      * A consistent way of creating unique IDs in angular. The ID is a sequence of alpha numeric
      * characters such as '012ABC'. The reason why we are not using simply a number counter is that
