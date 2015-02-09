@@ -387,7 +387,13 @@ function MdIconService(config, $http, $q, $log, $templateCache) {
     return $http
       .get(url, { cache: $templateCache })
       .then(function(response) {
-        return angular.element(response.data)[0];
+        var els = angular.element(response.data);
+        // Iterate to find first svg node, allowing for comments in loaded SVG (common with auto-generated SVGs)
+        for (var i = 0; i < els.length; ++i) {
+          if (els[i].nodeName == 'svg') {
+            return els[i];
+          }
+        }
       });
   }
 
