@@ -176,7 +176,7 @@ function MdToastProvider($$interimElementProvider) {
       argOption: 'content',
       methods: ['content', 'action', 'highlightAction', 'theme'],
       options: /* @ngInject */ function($mdToast, $mdTheming) {
-        return {
+        var opts = {
           template: [
             '<md-toast md-theme="{{ toast.theme }}" ng-class="{\'md-capsule\': toast.capsule}">',
               '<span flex>{{ toast.content }}</span>',
@@ -198,6 +198,7 @@ function MdToastProvider($$interimElementProvider) {
           controllerAs: 'toast',
           bindToController: true
         };
+        return opts;
       }
     })
     .addMethod('updateContent', function(newContent) {
