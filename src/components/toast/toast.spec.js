@@ -12,7 +12,7 @@ describe('$mdToast service', function() {
   }
 
   describe('simple()', function() {
-    hasConfigMethods(['content', 'action', 'capsule', 'highlightAction']);
+    hasConfigMethods(['content', 'action', 'capsule', 'highlightAction', 'theme']);
 
     it('supports a basic toast', inject(function($mdToast, $rootScope, $timeout, $animate) {
       var rejected = false;
@@ -21,6 +21,7 @@ describe('$mdToast service', function() {
         $mdToast.simple({
           parent: parent,
           content: 'Do something',
+          theme: 'some-theme',
           capsule: true
         })
       ).catch(function() {
@@ -29,10 +30,20 @@ describe('$mdToast service', function() {
       $rootScope.$digest();
       expect(parent.find('span').text()).toBe('Do something');
       expect(parent.find('md-toast')).toHaveClass('md-capsule');
+      expect(parent.find('md-toast').attr('md-theme')).toBe('some-theme');
       $animate.triggerCallbacks();
       $timeout.flush();
       $animate.triggerCallbacks();
       expect(rejected).toBe(true);
+    }));
+
+    it('supports dynamicly updating the content', inject(function($mdToast, $rootScope, $rootElement) {
+      var parent = angular.element('<div>');
+      $mdToast.showSimple('Hello world');
+      $rootScope.$digest();
+      $mdToast.updateContent('Goodbye world');
+      $rootScope.$digest();
+      expect($rootElement.find('span').text()).toBe('Goodbye world');
     }));
 
     it('supports an action toast', inject(function($mdToast, $rootScope, $animate) {

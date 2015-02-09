@@ -21,26 +21,43 @@ var TestUtil = {
     });
   },
 
-  /**
-   * Create a fake version of $$rAF that does things asynchronously
-   */
-  mockRaf: function() {
-    module('ng', function($provide) {
-      $provide.value('$$rAF', mockRaf);
-
-      function mockRaf(cb) {
-        cb();
-      }
-      mockRaf.debounce = function(cb) {
-        return function() {
-          cb.apply(this, arguments);
-        };
-      };
-    });
-  }
 };
 
 beforeEach(function() {
+
+  /**
+   * Create a fake version of $$rAF that does things synchronously
+   */
+  module('ng', function($provide) {
+    $provide.value('$$rAF', mockRaf);
+
+    function mockRaf(cb) {
+      cb();
+    }
+    mockRaf.throttle = function(cb) {
+      return function() {
+        cb.apply(this, arguments);
+      };
+    };
+  });
+
+  module('material.core.theming', function($mdThemingProvider) {
+    // Create a test version of every default palette, using a copy of the below palette.
+    var defaultPalette = {
+      '50': 'ffebee', '100': 'ffcdd2', '200': 'ef9a9a', '300': 'e57373',
+      '400': 'ef5350', '500': 'f44336', '600': 'e53935', '700': 'd32f2f',
+      '800': 'c62828', '900': 'b71c1c', 'A100': 'ff8a80', 'A200': 'ff5252', 
+      'A400': 'ff1744', 'A700': 'd50000',
+      'contrastDefaultColor': 'light',
+      'contrastDarkColors': ['50', '100', '200', '300', '400', 'A100']
+    };
+    (
+      'red pink purple deep-purple indigo blue light-blue cyan teal green light-green lime ' +
+      'yellow amber orange deep-orange brown grey blue-grey'
+    ).split(' ').forEach(function(themeName) {
+      $mdThemingProvider.definePalette(themeName, angular.extend({}, defaultPalette));
+    });
+  });
 
   this.addMatchers({
     // toHaveClass matcher from angularjs test helpers
@@ -67,6 +84,20 @@ beforeEach(function() {
           (typeof this.actual) + (this.isNot ? ' not ' : '') + " to have type '" + type + "'.";
       };
       return typeof this.actual == type;
+    },
+
+    toHaveFields: function(fields) {
+      this.message = function() {
+        return "Expected " + angular.mock.dump(this.actual) + (this.isNot ? ' not ' : ' ') +
+          "to have fields matching " + angular.mock.dump(fields);
+      };
+      for (var key in fields) {
+        if (!(this.actual || {}).hasOwnProperty(key) ||
+            !angular.equals(this.actual[key], fields[key])) {
+          return false;
+        }
+      }
+      return true;
     }
   });
 

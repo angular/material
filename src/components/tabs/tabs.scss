@@ -1,12 +1,13 @@
 // Tabs
 $tabs-paginator-width: $baseline-grid * 4 !default;
 $tabs-tab-width: $baseline-grid * 12 !default;
-$tabs-header-height: 48px;
+$tabs-header-height: 48px !default;
 
 md-tabs {
   display: block;
   width: 100%;
   font-weight: 500;
+  overflow: auto;
 }
 
 .md-header {
@@ -71,54 +72,92 @@ md-tabs[center] .md-header:not(.md-paginating) .md-header-items {
   .md-header-items {
     display: flex;
     box-sizing: border-box;
-    transition: $swift-ease-in-out;
+    transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
     transform: translate3d(0, 0, 0);
-    width: 100%;
     height: 100%;
+    width: 99999px;
   }
 }
 
 .md-tabs-content {
   overflow: hidden;
   width: 100%;
-
+  position: relative;
   .md-tab-content {
-    height : 100%;
+    height: 100%;
+    &.ng-hide {
+      &.ng-animate {
+        display: block !important;
+      }
+    }
+    &.ng-animate {
+      transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+      transform: translateX(0);
+      &.ng-hide-add {
+        transform: translateX(-100%);
+        &.md-transition-rtl {
+          transform: translateX(100%);
+        }
+      }
+      &.ng-hide-remove {
+        position: absolute;
+        transform: translateX(100%);
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        &.md-transition-rtl {
+          transform: translateX(-100%);
+        }
+        &.ng-hide-remove-active {
+          transform: translateX(0);
+        }
+      }
+    }
   }
 }
 
 md-tabs-ink-bar {
+  $time: 0.25s;
+  $delay: $time * 0.3;
+  $shortTime: $time;
   z-index: 1;
   display: none;
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 100%;
   box-sizing: border-box;
   height: 2px;
   margin-top: -2px;
   transform: scaleX(1);
-  transition: transform 0.5s $swift-ease-in-out-timing-function;
   transform-origin: 0 0;
-  &.md-ink-bar-delayed {
-    transition: transform 0.5s cubic-bezier(0.45, 0, 0.15, 1);
+  &.md-transition-right {
+    transition: right $time $swift-ease-in-out-timing-function,
+                left  $shortTime $swift-ease-in-out-timing-function $delay;
+  }
+  &.md-transition-left {
+    transition: right $shortTime $swift-ease-in-out-timing-function $delay,
+                left  $time $swift-ease-in-out-timing-function;
   }
 }
 
 md-tab {
   display: flex;
-  flex: 1;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
   position: relative;
   z-index: 0;
   overflow: hidden;
   height: 100%;
   text-align: center;
   cursor: pointer;
-  min-width: $tabs-tab-width;
-  border: 1px dotted transparent;
+  padding: 20px 24px;
+  box-sizing: border-box;
+  transition: none;
+  &.md-tab-themed {
+    transition: background 0.35s $swift-ease-in-out-timing-function,
+                color 0.35s $swift-ease-in-out-timing-function;
+  }
 
   &[disabled] {
     pointer-events: none;
@@ -132,11 +171,9 @@ md-tab {
   }
 
   md-tab-label {
-    flex: 1;
+    flex: 1 1 auto;
     z-index: 100;
     opacity: 1;
     overflow: hidden;
-    text-overflow: ellipsis;
   }
-
 }

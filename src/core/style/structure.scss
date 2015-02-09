@@ -28,8 +28,8 @@ $h6-margin-base: 2.33em 0 !default;
 
 html, body {
   height: 100%;
-  color: $foreground-primary-color;
-  background: $background-color-base;
+  color: rgba(0,0,0,0.87);
+  background: white;
 
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   -webkit-touch-callout: none;
@@ -217,13 +217,26 @@ md-tab {
       border-style: solid;
       opacity: 0.20;
       transform: none !important;
-      &.md-ripple-placed {
-      }
-      &.md-ripple-scaled {
-      }
+      &.md-ripple-placed {}
+      &.md-ripple-scaled {}
       &.md-ripple-active, &.md-ripple-full, &.md-ripple-visible {
         opacity: 0.20;
       }
     }
   }
+}
+
+@function map-to-string($map) {
+  $map-str: '{';
+  $keys: map-keys($map);
+  $len: length($keys);
+  @for $i from 1 through $len {
+    $key: nth($keys, $i);
+    $value: map-get($map, $key);
+    $map-str: $map-str + '_' + $key + '_: _' + map-get($map, $key) + '_';
+    @if $i != $len {
+      $map-str: $map-str + ',';
+    }
+  }
+  @return $map-str + '}';
 }

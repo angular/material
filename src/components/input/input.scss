@@ -1,0 +1,161 @@
+$input-container-padding: 2px !default;
+
+$input-label-default-offset: 24px !default;
+$input-label-default-scale: 1.0 !default;
+$input-label-float-offset: 4px !default;
+$input-label-float-scale: 0.75 !default;
+
+$input-placeholder-offset: $input-label-default-offset !default;
+
+$input-border-width-default: 1px !default;
+$input-border-width-focused: 2px !default;
+$input-line-height: 26px !default;
+$input-padding-top: 2px !default;
+
+$input-error-font-size: 12px !default;
+$input-error-height: 24px !default;
+
+md-input-container {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  padding: $input-container-padding;
+  padding-bottom: $input-container-padding + $input-error-height;
+
+  textarea,
+  input[type="text"],
+  input[type="password"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="date"],
+  input[type="month"],
+  input[type="time"],
+  input[type="week"],
+  input[type="number"],
+  input[type="email"],
+  input[type="url"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="color"] {
+    /* remove default appearance from all input/textarea */
+    -moz-appearance: none;
+    -webkit-appearance: none;
+  }
+  textarea {
+    resize: none;
+    overflow: hidden;
+  }
+
+  label, 
+  .md-placeholder {
+    order: 1;
+    pointer-events: none;
+    -webkit-font-smoothing: antialiased;
+    padding-left: $input-container-padding;
+    z-index: 1;
+    transform: translate3d(0, $input-label-default-offset, 0) scale($input-label-default-scale);
+    transform-origin: left top;
+    transition: transform $swift-ease-out-timing-function 0.25s;
+  }
+  .md-placeholder {
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    transition-property: opacity, transform;
+    transform: translate3d(0, $input-placeholder-offset + $baseline-grid * 0.75, 0);
+  }
+  &.md-input-focused .md-placeholder {
+    opacity: 1;
+    transform: translate3d(0, $input-placeholder-offset, 0);
+  }
+  // Placeholder should immediately disappear when the user starts typing
+  &.md-input-has-value .md-placeholder {
+    transition: none;
+    opacity: 0;
+  }
+
+  /* 
+   * The .md-input class is added to the input/textarea 
+   */
+  .md-input {
+    flex: 1;
+    order: 2;
+    display: block;
+
+    background: none;
+    padding-top: $input-padding-top;
+    padding-bottom: $input-border-width-focused - $input-border-width-default;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-width: 0 0 $input-border-width-default 0;
+    line-height: $input-line-height;
+    -ms-flex-preferred-size: $input-line-height; //IE fix
+    border-radius: 0;
+
+    &:focus {
+      outline: none;
+    }
+    &:invalid {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+
+  ng-messages, data-ng-messages, x-ng-messages,
+  [ng-messages], [data-ng-messages], [x-ng-messages] {
+    order: 3;
+    position: relative;
+  }
+  ng-message, data-ng-message, x-ng-message,
+  [ng-message], [data-ng-message], [x-ng-message],
+  .md-char-counter {
+    -webkit-font-smoothing: antialiased;
+    position: absolute;
+    font-size: $input-error-font-size;
+    line-height: $input-error-height;
+
+    &.ng-enter {
+      transition: $swift-ease-out;
+      transition-delay: 0.2s;
+    }
+    &.ng-leave {
+      transition: $swift-ease-in;
+    }
+    &.ng-enter,
+    &.ng-leave.ng-leave-active {
+      opacity: 0;
+      transform: translate3d(0, -20%, 0);
+    }
+    &.ng-leave,
+    &.ng-enter.ng-enter-active {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  .md-char-counter {
+    bottom: $input-container-padding;
+    right: $input-container-padding;
+  }
+
+  &.md-input-focused,
+  &.md-input-has-value {
+    label {
+      transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);
+    }
+  }
+
+  // Use wide border in error state or in focused state
+  &.md-input-focused .md-input,
+  .md-input.ng-invalid.ng-dirty {
+    padding-bottom: 0px; // Increase border width by 1px, decrease padding by 1
+    border-width: 0 0 $input-border-width-focused 0;
+  }
+
+  .md-input[disabled] {
+    background-position: 0 bottom;
+    // This background-size is coordinated with a linear-gradient set in input-theme.scss 
+    // to create a dotted line under the input. 
+    background-size: 3px 1px;
+    background-repeat: repeat-x;
+  }
+}

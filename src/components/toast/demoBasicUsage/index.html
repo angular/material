@@ -20,14 +20,13 @@
       <b>Toast Position: "{{getToastPosition()}}"</b>
       <br/>
       <md-checkbox ng-repeat="(name, isSelected) in toastPosition"
-        aria-label="{{name}}"
         ng-model="toastPosition[name]"> 
         {{name}}
       </md-checkbox>
       <md-button class="md-primary md-fab md-fab-bottom-right">
         FAB
       </md-button>
-      <md-button class="md-primary md-fab md-fab-top-right" md-theme="green">
+      <md-button class="md-accent md-fab md-fab-top-right">
         FAB
       </md-button>
     </div>

@@ -3,27 +3,28 @@
 <head>
 <title ng-bind="(menu.currentSection.name || 'Material Design') + (menu.currentPage ? (' > ' + (menu.currentPage | humanizeDoc)) : '')">Material Design</title>
 <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-animate.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-route.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-route.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-messages.min.js"></script>
 
 <script src="docs.js"></script>
 <script src="docs-demo-scripts.js"></script>
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic">
 <link rel="stylesheet" href="docs.css">
 </head>
-<body layout="row" md-theme="blue">
+<body layout="row">
 
   <md-sidenav layout="column"
               style="overflow: hidden; display: flex;"
-              class="md-sidenav-left md-whiteframe-z2"
+              class="site-sidenav md-sidenav-left md-whiteframe-z2"
               md-component-id="left"
               md-is-locked-open="$media('gt-sm')">
 
-    <md-toolbar style="min-height: 64px; max-height:64px;" layout="column">
-      <h1 class="md-toolbar-tools" flex layout="column">
-        <a href="" ng-click="goHome()" layout="row" flex>
+    <md-toolbar>
+      <h1 class="md-toolbar-tools">
+        <a ng-href="/" layout="row" flex>
           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve" style="
               width: 40px; height: 40px;">
             <path d="M 50 0 L 100 14 L 92 80 L 50 100 L 8 80 L 0 14 Z" fill="#b2b2b2"></path>
@@ -32,92 +33,85 @@
             <path d="M 50 7 L 83 75 L 72 75 L 65 59 L 50 59 L 50 50 L 61 50 L 50 26 Z" fill="#b2b2b2"></path>
             <path d="M 50 7 L 17 75 L 28 75 L 35 59 L 50 59 L 50 50 L 39 50 L 50 26 Z" fill="#fff"></path>
           </svg>
-          <div flex style="line-height:40px; text-indent: 15px;">Material Design</div>
+          <div style="line-height:40px; text-indent: 15px;">Material Design</div>
         </a>
       </h1>
     </md-toolbar>
 
-    <md-content flex style="overflow: auto;">
-      <div ng-repeat="section in menu.sections">
+    <md-content style="overflow: auto;">
+      <ul class="docs-menu">
+        <li ng-repeat="section in menu.sections" class="parent-list-item" ng-class="{'parentActive' : isSectionSelected(section)}">
+          <h2 class="menu-heading" ng-if="section.type === 'heading'" id="heading_{{ section.name | nospace }}">
+            {{section.name}}
+          </h2>
+          <menu-link section="section" ng-if="section.type === 'link'"></menu-link>
 
-        <button class="menu-item menu-title md-menu-item"
-          ng-click="menu.toggleSelectSection(section)"
-          md-highlight="menu.isSectionSelected(section)"
-          md-ink-ripple="#bbb">
-          {{section.name}}
-        </button>
+          <menu-toggle section="section" ng-if="section.type === 'toggle'"></menu-toggle>
 
-        <a class="menu-item menu-sub-item md-menu-item"
-          ng-show="menu.isSectionSelected(section)"
-          ng-repeat="page in section.pages"
-          ng-href="#{{page.url}}"
-          md-highlight="menu.isPageSelected(section, page)"
-          md-ink-ripple="#bbb">
-          <span ng-bind="page | humanizeDoc"></span>
-        </a>
-
-      </div>
+          <ul ng-if="section.children" class="menu-nested-list">
+            <li ng-repeat="child in section.children" ng-class="{'childActive' : isSectionSelected(child)}">
+              <menu-toggle section="child"></menu-toggle>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </md-content>
-
   </md-sidenav>
 
   <div layout="column" layout-fill tabIndex="-1" role="main">
-    <md-toolbar layout="column">
-      <div class="md-toolbar-tools" ng-click="openMenu()" flex layout="column">
+    <md-toolbar>
 
-        <div layout="row" flex>
-          <button class="menu-icon" hide-gt-sm aria-label="Toggle Menu" style="position: relative; top: -5px;">
-            <md-icon icon="img/icons/ic_menu_24px.svg"></md-icon>
-          </button>
-          <div style="line-height: 28px;" hide-sm ng-if="menu.currentSection.name">{{menu.currentSection.name}}</div>
-          <span layout="column" layout-align="center center" class="menu-separator-icon" ng-if="menu.currentPage" style="padding: 0 10px;">
-            <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide-sm>
-          </span>
-          <div style="line-height: 28px;" ng-bind="(menu.currentPage | humanizeDoc) || 'Angular Material'"></div>
-          <div flex></div>
+      <div class="md-toolbar-tools" ng-click="openMenu()">
+        <button class="menu-icon" hide-gt-sm aria-label="Toggle Menu">
+          <md-icon icon="img/icons/ic_menu_24px.svg"></md-icon>
+        </button>
 
-          <div ng-repeat="doc in currentComponent.docs">
-            <md-button ng-href="#{{doc.url}}"
-              ng-class="{hide: path().indexOf('demo') == -1}"
-              aria-label="{{ doc | humanizeDoc }}">
-              {{doc | humanizeDoc | directiveBrackets}}
-            </md-button>
+        <div layout="row" flex class="fill-height">
+          <div class="md-toolbar-item md-breadcrumb">
+            <span ng-if="menu.currentPage.name !== menu.currentSection.name">
+              <span hide-sm hide-md>{{menu.currentSection.name}}</span>
+              <span class="menu-separator-icon" style="padding: 0 10px;" hide-sm hide-md>
+                <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true">
+              </span>
+            </span>
+            <span style="display: inline-block;">{{(menu.currentPage | humanizeDoc) || 'Angular Material' }}</span>
           </div>
 
-          <md-button ng-class="{hide: !currentDoc}"
-            ng-href="#/demo/{{currentComponent.name}}"
-            style="position: relative; padding-left: 30px; margin-right: 15px;">
-            <md-icon icon="/img/icons/ic_play_arrow_24px.svg" style="
-                height: 28px;
-                position: absolute;
-                left: 0px;
-                top: -3px;"></md-icon>
-            <span>View Demo</span>
-          </md-button>
+          <span flex></span> <!-- use up the empty space -->
 
-          <md-button ng-class="{hide: !currentDoc}"
-            ng-href="{{currentDoc.githubUrl}}"
-            style="position: relative; padding-left: 30px; margin-right: 15px;">
-            <md-icon icon="/img/icons/ic_launch_24px.svg" style="
-                height: 28;
-                position: absolute;
-                left: 0px;
-                top: -3px;"></md-icon>
-            <span hide-sm>View on Github</span>
-            <span hide-gt-sm>Source</span>
-          </md-button>
+          <div class="md-toolbar-item md-tools" layout="row">
+            <div ng-repeat="doc in currentComponent.docs">
+              <md-button ng-href="#{{doc.url}}"
+                ng-class="{hide: path().indexOf('demo') == -1}"
+                aria-label="{{ doc | humanizeDoc }}">
+                {{doc | humanizeDoc | directiveBrackets}}
+              </md-button>
+            </div>
+            <md-button ng-class="{hide: !currentDoc || !currentDoc.hasDemo}"
+              ng-href="#/demo/{{currentComponent.name}}"
+              style="position: relative; padding-left: 30px; margin-right: 15px;">
+              <md-icon icon="/img/icons/ic_play_arrow_24px.svg" style="
+                  height: 36px;
+                  position: absolute;
+                  left: 0px;
+                  top: -3px;
+                  margin-top: 0;"></md-icon>
+              <span>View Demo</span>
+            </md-button>
 
-          <md-button ng-class="{hide: !currentDoc}"
-            ng-href="{{currentDoc.githubEditUrl}}"
-            hide-sm
-            style="position: relative; padding-left: 30px;">
-            <md-icon icon="/img/icons/ic_launch_24px.svg" style="
-                height: 28;
-                position: absolute;
-                left: 0px;
-                top: -3px;"></md-icon>
-            <span>Improve This Doc</span>
-          </md-button>
+            <md-button ng-class="{hide: !currentDoc}"
+              ng-href="{{currentDoc.githubUrl}}"
+              hide-sm hide-md
+              style="position: relative; padding-left: 30px; margin-right: 15px;">
+              <md-icon icon="/img/icons/ic_launch_24px.svg" style="
+                  height: 36px;
+                  position: absolute;
+                  left: 0px;
+                  top: -3px;
+                  margin-top: 0;"></md-icon>
+              <span>View on Github</span>
+            </md-button>
+          </div>
         </div>
       </div>
 

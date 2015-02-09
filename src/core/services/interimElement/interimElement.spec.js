@@ -19,7 +19,7 @@ describe('$$interimElement service', function() {
           link: el,
           locals: {}
         });
-        $rootScope.$apply();
+        !$rootScope.$$phase && $rootScope.$apply();
         return deferred.promise;
       });
     });
@@ -75,6 +75,29 @@ describe('$$interimElement service', function() {
       });
     });
 
+    it('should not call onShow or onRemove on failing to load templates', function() {
+      createInterimProvider('interimTest');
+      inject(function($q, $rootScope, $rootElement, interimTest, $httpBackend, $animate) {
+        $compilerSpy.andCallFake(function() {
+          var deferred = $q.defer();
+          deferred.reject();
+          return deferred.promise;
+        });
+        $httpBackend.when('GET', '/fail-url.html').respond(500, '');
+        var onShowCalled = false, onHideCalled = false;
+        interimTest.show({
+          templateUrl: '/fail-url.html',
+          onShow: function(scope, el) { onShowCalled = true; },
+          onRemove: function() { onHideCalled = true; }
+        });
+        $animate.triggerCallbacks();
+        interimTest.hide();
+        $animate.triggerCallbacks();
+        expect(onShowCalled).toBe(false);
+        expect(onHideCalled).toBe(false);
+      });
+    });
+
     it('should add specified defaults', function() {
       createInterimProvider('interimTest').setDefaults({
         options: function($rootScope) {
@@ -99,6 +122,17 @@ describe('$$interimElement service', function() {
         $rootScope.$apply();
         shown = true;
       });
+    });
+
+    it('should allow custom methods', function() {
+      var called = false;
+      createInterimProvider('testCustomMethods')
+        .addMethod('helloWorld', function() { called = true; });
+
+      inject(function(testCustomMethods) {
+        testCustomMethods.helloWorld();
+      });
+      expect(called).toBe(true);
     });
 
     it('should add specified builder with defaults', function() {
@@ -157,6 +191,28 @@ describe('$$interimElement service', function() {
       });
     });
 
+    it('should create a shortcut show method with arg options', function() {
+      var shown = false;
+      createInterimProvider('interimTest')
+        .addPreset('banana', {
+          argOption: 'color',
+          methods: ['color'],
+          options: function() {
+            return {
+              onShow: function(scope, el, opts) {
+                shown = true;
+                expect(opts.color).toBe('yellow');
+              }
+            };
+          }
+        });
+      inject(function(interimTest, $rootScope) {
+        interimTest.showBanana('yellow');
+        $rootScope.$apply();
+        expect(shown).toBe(true);
+      });
+    });
+
     it('should show with proper options', function() {
       createInterimProvider('interimTest')
         .setDefaults({
@@ -170,18 +226,20 @@ describe('$$interimElement service', function() {
           },
           methods: ['key2']
         });
-      inject(function(interimTest, $rootScope) {
+      inject(function(interimTest, $rootScope, $animate) {
         interimTest.show();
         expect($compilerSpy.mostRecentCall.args[0].key).toBe('defaultValue');
-        
         $compilerSpy.reset();
+
         interimTest.show({
           key: 'newValue'
         });
+        $animate.triggerCallbacks();
         expect($compilerSpy.mostRecentCall.args[0].key).toBe('newValue');
-
         $compilerSpy.reset();
+
         interimTest.show(interimTest.preset());
+        $animate.triggerCallbacks();
         expect($compilerSpy.mostRecentCall.args[0].key).toBe('defaultValue');
         expect($compilerSpy.mostRecentCall.args[0].key2).toBe('defaultValue2');
 
@@ -192,15 +250,18 @@ describe('$$interimElement service', function() {
             key2: 'newValue2'
           })
         );
+        $animate.triggerCallbacks();
         expect($compilerSpy.mostRecentCall.args[0].key).toBe('newValue');
         expect($compilerSpy.mostRecentCall.args[0].key2).toBe('newValue2');
         
         $compilerSpy.reset();
+        $animate.triggerCallbacks();
         interimTest.show(
           interimTest.preset({
             key2: 'newValue2'
           }).key2('superNewValue2')
         );
+        $animate.triggerCallbacks();
         expect($compilerSpy.mostRecentCall.args[0].key).toBe('defaultValue');
         expect($compilerSpy.mostRecentCall.args[0].key2).toBe('superNewValue2');
       });

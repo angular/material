@@ -1,10 +1,10 @@
-$bottom-sheet-horizontal-padding: 2 * $baseline-grid;
-$bottom-sheet-vertical-padding: 1 * $baseline-grid;
-$bottom-sheet-icon-after-margin: 4 * $baseline-grid;
-$bottom-sheet-list-item-height: 6 * $baseline-grid;
-$bottom-sheet-hidden-bottom-padding: 80px;
-$bottom-sheet-header-height: 7 * $baseline-grid;
-$bottom-sheet-grid-font-weight: 300;
+$bottom-sheet-horizontal-padding: 2 * $baseline-grid !default;
+$bottom-sheet-vertical-padding: 1 * $baseline-grid !default;
+$bottom-sheet-icon-after-margin: 4 * $baseline-grid !default;
+$bottom-sheet-list-item-height: 6 * $baseline-grid !default;
+$bottom-sheet-hidden-bottom-padding: 80px !default;
+$bottom-sheet-header-height: 7 * $baseline-grid !default;
+$bottom-sheet-grid-font-weight: 300 !default;
 
 md-bottom-sheet {
   position: absolute;

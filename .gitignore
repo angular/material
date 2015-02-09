@@ -10,5 +10,6 @@ dist
 /.idea/
 /components
 /vendor
+/material-font
 
 .polymer-qp

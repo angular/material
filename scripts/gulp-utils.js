@@ -16,6 +16,29 @@ exports.humanizeCamelCase = function(str) {
     });
 };
 
+/**
+ * Copy all the demo assets to the dist directory
+ * NOTE: this excludes the modules demo .js,.css, .html files
+ */
+exports.copyDemoAssets = function(component, srcDir, distDir) {
+  gulp.src(srcDir + component + '/demo*/')
+      .pipe(through2.obj( copyAssetsFor ));
+
+  function copyAssetsFor( demo, enc, next){
+    var demoID = component + "/" + path.basename(demo.path);
+    var demoDir = demo.path + "/**/*";
+
+    var notJS  = '!' + demoDir + '.js';
+    var notCSS = '!' + demoDir + '.css';
+    var notHTML= '!' + demoDir + '.html';
+
+    gulp.src([demoDir, notJS, notCSS, notHTML])
+        .pipe(gulp.dest(distDir + demoID));
+
+    next();
+  }
+};
+
 // Gives back a pipe with an array of the parsed data from all of the module's demos
 // @param moduleName modulename to parse
 // @param fileTasks: tasks to run on the files found in the demo's folder
@@ -30,7 +53,7 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
 
       var demo = { 
         id: demoId,
-        css:[], html:[], js:[] 
+        css:[], html:[], js:[]
       };
 
       gulp.src(demoFolder.path + '**/*', { base: path.dirname(demoFolder.path) })
@@ -68,6 +91,24 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
 };
 
 var pathsForModules = {};
+
+exports.pathsForModule = function(name) {
+  return pathsForModules[name] || lookupPath();
+
+  function lookupPath() {
+    gulp.src('src/{services,components,core}/**/*')
+          .pipe(through2.obj(function(file, enc, next) {
+            var modName = getModuleInfo(file.contents).module;
+            if (modName == name) {
+              var modulePath = file.path.split(path.sep).slice(0, -1).join(path.sep);
+              pathsForModules[name] = modulePath + '/**';
+            }
+            next();
+          }));
+    return pathsForModules[name];
+  }
+}
+
 exports.filesForModule = function(name) {
   if (pathsForModules[name]) {
     return srcFiles(pathsForModules[name]);
@@ -134,7 +175,7 @@ exports.addClosurePrefixes = function() {
 
       var provide = 'goog.provide(\'' + moduleNameToClosureName(moduleInfo.module) + '\');';
       var requires = (moduleInfo.dependencies || []).sort().map(function(dep) {
-        return 'goog.require(\'' + moduleNameToClosureName(dep) + '\');';
+        return dep.indexOf(moduleInfo.module) === 0 ? '' : 'goog.require(\'' + moduleNameToClosureName(dep) + '\');';
       }).join('\n');
 
       file.contents = new Buffer(
@@ -188,7 +229,7 @@ exports.hoistScssVariables = function() {
     for( var currentLine = 0; currentLine < contents.length; ++currentLine) {
       var line = contents[currentLine];
 
-      if (openBlock || /^\s*\$/.test(line)) {
+      if (openBlock || /^\s*\$/.test(line) && !/^\s+/.test(line)) {
         openCount += (line.match(/\(/g) || []).length;
         closeCount += (line.match(/\)/g) || []).length;
         openBlock = openCount != closeCount;
@@ -198,6 +239,28 @@ exports.hoistScssVariables = function() {
     }
     file.contents = new Buffer(contents.join('\n'));
     this.push(file);
+    next();
+  });
+};
+
+exports.cssToNgConstant = function(ngModule, factoryName) {
+  return through2.obj(function(file, enc, next) {
+
+    var template = 'angular.module("%1").constant("%2", "%3");';
+    var output = file.contents.toString().replace(/\n/g, '')
+      .replace(/\"/,'\\"');
+
+    var jsFile = new gutil.File({
+      base: file.base,
+      path: file.path.replace('css', 'js'),
+      contents: new Buffer(
+        template.replace('%1', ngModule)
+          .replace('%2', factoryName)
+          .replace('%3', output)
+      )
+    });
+
+    this.push(jsFile);
     next();
   });
 };

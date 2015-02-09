@@ -22,18 +22,13 @@
   flex-direction: row;
 }
 
-[layout-padding]
+[layout-padding],
 [layout-padding] > [flex] {
   padding: $layout-gutter-width / 2;
 }
 [layout-margin],
 [layout-margin] > [flex] {
   margin: $layout-gutter-width / 2;
-}
-
-[layout-padding] + [layout-padding], /* DEPRECATED */
-[layout-margin] + [layout-margin] {
-  margin-top: -($layout-gutter-width / 2);
 }
 
 [layout-wrap] {
@@ -44,6 +39,31 @@
   margin: 0;
   min-height: 100%;
   width: 100%;
+}
+@-moz-document url-prefix() { 
+  [layout-fill] {
+    margin: 0;
+    width: 100%;
+    min-height: auto;
+    height: inherit;
+  }
+}
+
+@mixin flex-order-for-name($suffix: null) {
+  $selector: 'flex-order';
+  @if $suffix != null {
+    $selector: 'flex-order-#{$suffix}';
+  }
+  [#{$selector}="0"] { order: 0; }
+  [#{$selector}="1"] { order: 1; }
+  [#{$selector}="2"] { order: 2; }
+  [#{$selector}="3"] { order: 3; }
+  [#{$selector}="4"] { order: 4; }
+  [#{$selector}="5"] { order: 5; }
+  [#{$selector}="6"] { order: 6; }
+  [#{$selector}="7"] { order: 7; }
+  [#{$selector}="8"] { order: 8; }
+  [#{$selector}="9"] { order: 9; }
 }
 
 @mixin layout-for-name($name) {
@@ -69,21 +89,117 @@
     flex: 1;
   }
 
-  // (0-19) * 5 = 0-95%
-  @for $i from 0 through 19 {
+
+  // (0-20) * 5 = 0-100%
+  @for $i from 0 through 20 {
     [#{$flexName}="#{$i * 5}"] {
       flex: 0 0 #{$i * 5 + '%'};
+    }
+    [layout="row"] > [#{$flexName}="#{$i * 5}"] {
       max-width: #{$i * 5 + '%'};
+    }
+    [layout="column"] > [#{$flexName}="#{$i * 5}"] {
+      max-height: #{$i * 5 + '%'};
     }
   }
 
-  [#{$flexName}="33"], [#{$flexName}="34"] {
-    flex: 0 0 33.33%;
-    max-width: 33.33%;
+  [layout="row"] {
+    > [#{$flexName}="33"], > [#{$flexName}="34"] {
+      flex: 0 0 33.33%;
+      max-width: 33.33%;
+    }
+    > [#{$flexName}="66"], > [#{$flexName}="67"] {
+      flex: 0 0 66.66%;
+      max-width: 66.66%;
+    }
   }
-  [#{$flexName}="66"], [#{$flexName}="67"] {
-    flex: 0 0 66.66%;
-    max-width: 66.66%;
+  [layout="column"] {
+    > [#{$flexName}="33"], > [#{$flexName}="34"] {
+      flex: 0 0 33.33%;
+      max-height: 33.33%;
+    }
+    > [#{$flexName}="66"], > [#{$flexName}="67"] {
+      flex: 0 0 66.66%;
+      max-height: 66.66%;
+    }
+  }
+}
+
+// Alignment attributes for layout containers' children
+// Arrange on the Main Axis
+// center, start, end, space-between, space-around
+// flex-start is the default for justify-content
+// ------------------------------
+
+@mixin layout-align-for-name($suffix: null) {
+  $name: 'layout-align';
+  @if $suffix != null {
+    $name: 'layout-align-#{$suffix}';
+  }
+
+  // Main Axis Center
+  [#{$name}="center"], //stretch
+  [#{$name}="center center"],
+  [#{$name}="center start"],
+  [#{$name}="center end"] {
+    justify-content: center;
+  }
+
+  // Main Axis End
+  [#{$name}="end"], //stretch
+  [#{$name}="end center"],
+  [#{$name}="end start"],
+  [#{$name}="end end"] {
+    justify-content: flex-end;
+  }
+
+  // Main Axis Space Around
+  [#{$name}="space-around"], //stretch
+  [#{$name}="space-around center"],
+  [#{$name}="space-around start"],
+  [#{$name}="space-around end"] {
+    justify-content: space-around;
+  }
+
+  // Main Axis Space Between
+  [#{$name}="space-between"], //stretch
+  [#{$name}="space-between center"],
+  [#{$name}="space-between start"],
+  [#{$name}="space-between end"] {
+    justify-content: space-between;
+  }
+
+
+  // Arrange on the Cross Axis
+  // center, start, end
+  // stretch is the default for align-items
+  // ------------------------------
+
+  // Cross Axis Center
+  [#{$name}="center center"],
+  [#{$name}="start center"],
+  [#{$name}="end center"],
+  [#{$name}="space-between center"],
+  [#{$name}="space-around center"] {
+    align-items: center;
+  }
+
+  // Cross Axis Start
+  [#{$name}="center start"],
+  [#{$name}="start start"],
+  [#{$name}="end start"],
+  [#{$name}="space-between start"],
+  [#{$name}="space-around start"] {
+    align-items: flex-start;
+  }
+
+  // Cross Axis End
+  [#{$name}="center end"],
+  [#{$name}="start end"],
+  [#{$name}="end end"],
+  [#{$name}="space-between end"],
+  [#{$name}="space-around end"] {
+    align-items: flex-end;
   }
 
 }
@@ -92,157 +208,89 @@
 // ------------------------------
 
 @include flex-properties-for-name();
-[hide]:not([show]) {
-  display: none;
-}
+@include layout-align-for-name();
+@include flex-order-for-name();
 
+/**
+ * `hide-gt-sm show-gt-lg` should hide from 600px to 1200px
+ * `show-md hide-gt-sm` should show from 0px to 960px and hide at >960px
+ * `hide-gt-md show-gt-sm` should show everywhere (show overrides hide)`
+ */
+
+// SMALL SCREEN
 @media (max-width: $layout-breakpoint-sm) {
   [hide-sm], [hide] {
-    &:not([show-sm]) {
+    &:not([show-sm]):not([show]) {
       display: none;
     }
   }
 
+  @include flex-order-for-name(sm);
+  @include layout-align-for-name(sm);
   @include layout-for-name(sm);
   @include flex-properties-for-name(sm);
 }
-@media (min-width: $layout-breakpoint-sm) {
-  [hide-gt-sm], [hide] {
-    &:not([show-gt-sm]):not([show-md]):not([show-gt-md]):not([show-lg]):not([show-gt-lg]) {
-      display: none;
-    }
-  }
 
+// BIGGER THAN SMALL SCREEN
+@media (min-width: $layout-breakpoint-sm) {
+  @include flex-order-for-name(gt-sm);
+  @include layout-align-for-name(gt-sm);
   @include layout-for-name(gt-sm);
   @include flex-properties-for-name(gt-sm);
 }
 
+// MEDIUM SCREEN
 @media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md) {
-  [hide-md], [hide] {
-    &:not([show-md]) {
+  [hide], [hide-gt-sm] {
+    &:not([show-gt-sm]):not([show-md]):not([show]) {
       display: none;
     }
   }
+  [hide-md]:not([show-md]):not([show]) {
+    display: none;
+  }
 
+  @include flex-order-for-name(md);
+  @include layout-align-for-name(md);
   @include layout-for-name(md);
   @include flex-properties-for-name(md);
 }
-@media (min-width: $layout-breakpoint-md) {
-  [hide-gt-md], [hide] {
-    &:not([show-gt-md]):not([show-lg]):not([show-gt-lg]) {
-      display: none;
-    }
-  }
 
+// BIGGER THAN MEDIUM SCREEN
+@media (min-width: $layout-breakpoint-md) {
+  @include flex-order-for-name(gt-md);
+  @include layout-align-for-name(gt-md);
   @include layout-for-name(gt-md);
   @include flex-properties-for-name(gt-md);
 }
 
+// LARGE SCREEN
 @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg) {
-  [hide-lg], [hide] {
-    &:not([show-lg]) {
+  [hide], [hide-gt-sm], [hide-gt-md] {
+    &:not([show-gt-sm]):not([show-gt-md]):not([show-lg]):not([show]) {
       display: none;
     }
   }
+  [hide-lg]:not([show-lg]):not([show]) {
+    display: none;
+  }
 
+  @include flex-order-for-name(lg);
+  @include layout-align-for-name(lg);
   @include layout-for-name(lg);
   @include flex-properties-for-name(lg);
 }
+
+// BIGGER THAN LARGE SCREEN
 @media (min-width: $layout-breakpoint-lg) {
-  [hide-gt-lg], [hide] {
-    &:not([show-gt-lg]) {
+  [hide-gt-sm], [hide-gt-md], [hide-gt-lg], [hide] {
+    &:not([show-gt-sm]):not([show-gt-md]):not([show-gt-lg]):not([show]) {
       display: none;
     }
   }
 
+  @include flex-order-for-name(gt-lg);
+  @include layout-align-for-name(gt-lg);
   @include layout-for-name(gt-lg);
   @include flex-properties-for-name(gt-lg);
 }
-
-
-
-// Order attributes for layout children
-// ------------------------------
-[flex-order="0"] { order: 0; }
-[flex-order="1"] { order: 1; }
-[flex-order="2"] { order: 2; }
-[flex-order="3"] { order: 3; }
-[flex-order="4"] { order: 4; }
-[flex-order="5"] { order: 5; }
-[flex-order="6"] { order: 6; }
-[flex-order="7"] { order: 7; }
-[flex-order="8"] { order: 8; }
-[flex-order="9"] { order: 9; }
-
-
-// Alignment attributes for layout containers' children
-// Arrange on the Main Axis
-// center, start, end, space-between, space-around
-// flex-start is the default for justify-content
-// ------------------------------
-
-// Main Axis Center
-[layout-align="center"], //stretch
-[layout-align="center center"],
-[layout-align="center start"],
-[layout-align="center end"] {
-  justify-content: center;
-}
-
-// Main Axis End
-[layout-align="end"], //stretch
-[layout-align="end center"],
-[layout-align="end start"],
-[layout-align="end end"] {
-  justify-content: flex-end;
-}
-
-// Main Axis Space Around
-[layout-align="space-around"], //stretch
-[layout-align="space-around center"],
-[layout-align="space-around start"],
-[layout-align="space-around end"] {
-  justify-content: space-around;
-}
-
-// Main Axis Space Between
-[layout-align="space-between"], //stretch
-[layout-align="space-between center"],
-[layout-align="space-between start"],
-[layout-align="space-between end"] {
-  justify-content: space-between;
-}
-
-
-// Arrange on the Cross Axis
-// center, start, end
-// stretch is the default for align-items
-// ------------------------------
-
-// Cross Axis Center
-[layout-align="center center"],
-[layout-align="start center"],
-[layout-align="end center"],
-[layout-align="space-between center"],
-[layout-align="space-around center"] {
-  align-items: center;
-}
-
-// Cross Axis Start
-[layout-align="center start"],
-[layout-align="start start"],
-[layout-align="end start"],
-[layout-align="space-between start"],
-[layout-align="space-around start"] {
-  align-items: flex-start;
-}
-
-// Cross Axis End
-[layout-align="center end"],
-[layout-align="start end"],
-[layout-align="end end"],
-[layout-align="space-between end"],
-[layout-align="space-around end"] {
-  align-items: flex-end;
-}
-

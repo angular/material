@@ -1,18 +1,18 @@
-$tff-font-size: 0.75em;
-$tff-line-height:26px;
-$tff-transition: all 0.15s $swift-ease-in-out-timing-function;
+$tff-font-size: 0.75em !default;
+$tff-line-height:26px !default;
+$tff-transition: all 0.15s $swift-ease-in-out-timing-function !default;
 // - `label` element (aka hint)
-$tff-hint-offset-large : 22px;
-$tff-hint-offset-small : 4px;
-$ttf-hint-offset-scale : 0.75;
+$tff-hint-offset-large : 22px !default;
+$tff-hint-offset-small : 4px !default;
+$ttf-hint-offset-scale : 0.75 !default;
 // - `line` element
-$tff-line-focused-width: 2px;
-$tff-line-disabled-width: 0px;
-$tff-line-dot-width: 1px;
-$tff-line-dot-size: 3px;
-$tff-line-dashed: #cfcfcf;
+$tff-line-focused-width: 2px !default;
+$tff-line-disabled-width: 0px !default;
+$tff-line-dot-width: 1px !default;
+$tff-line-dot-size: 3px !default;
+$tff-line-dashed: #cfcfcf !default;
 
-$tff-margin: 10px 0 (10px - $tff-line-focused-width) 0;
+$tff-margin: 10px 0 (10px - $tff-line-focused-width) 0 !default;
 
 // ******************************
 // Mixins: Text Fields

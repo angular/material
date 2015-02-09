@@ -1,24 +1,19 @@
-$bottom-sheet-color-palette: $background-color-palette !default;
-$bottom-sheet-background-color: map-get($bottom-sheet-color-palette, '50') !default;
-$bottom-sheet-border-top-color: map-get($bottom-sheet-color-palette, '400') !default;
-$bottom-sheet-header-color: $foreground-secondary-color !default;
-$bottom-sheet-list-color: $foreground-secondary-color !default;
 
-md-bottom-sheet.md-#{$theme-name}-theme {
-  background-color: $bottom-sheet-background-color;
-  border-top-color: $bottom-sheet-border-top-color;
+md-bottom-sheet.md-THEME_NAME-theme {
+  background-color: '{{background-50}}';
+  border-top-color: '{{background-300}}';
 
   &.md-list {
     md-item {
-      color: $bottom-sheet-list-color;
+      color: '{{foreground-1}}';
     }
   }
 
   .md-subheader {
-    background-color: $bottom-sheet-background-color;
+    background-color: '{{background-50}}';
   }
 
   .md-subheader {
-    color: $bottom-sheet-header-color;
+    color: '{{foreground-1}}';
   }
 }

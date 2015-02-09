@@ -1,11 +1,14 @@
-$button-line-height: 25px;
-$button-padding: 2px 6px 3px;
+$button-line-height: 25px !default;
+$button-padding: 2px 6px 3px !default;
 
 // Fab buttons
-$button-fab-width: 56px;
-$button-fab-height: 56px;
-$button-fab-padding: 16px;
-$button-fab-toast-offset: $toast-height + $toast-margin;
+$button-fab-width: 56px !default;
+$button-fab-height: 56px !default;
+$button-fab-padding: 16px !default;
+$button-fab-mini-width: 40px !default;
+$button-fab-mini-height: 40px !default;
+
+$button-fab-toast-offset: $button-fab-height * 0.75;
 
 /**
  * Position a FAB button.
@@ -36,7 +39,7 @@ $button-fab-toast-offset: $toast-height + $toast-margin;
 
   // Always uppercase buttons
   text-transform: uppercase;
-  font-weight: inherit;
+  font-weight: 500;
   font-style: inherit;
   font-variant: inherit;
   font-size: inherit;
@@ -47,9 +50,13 @@ $button-fab-toast-offset: $toast-height + $toast-margin;
   cursor: pointer;
   overflow: hidden;   // for ink containment
 
-  transition: box-shadow $swift-ease-in-out-duration $swift-ease-in-out-timing-function,
-              background-color $swift-ease-in-out-duration $swift-ease-in-out-timing-function,
-              transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+  transition: box-shadow $swift-ease-out-duration $swift-ease-out-timing-function,
+              background-color $swift-ease-out-duration $swift-ease-out-timing-function,
+              transform $swift-ease-out-duration $swift-ease-out-timing-function;
+
+  &:focus {
+    outline: none;
+  }
 
   &.ng-hide {
     transition: none;
@@ -75,10 +82,10 @@ $button-fab-toast-offset: $toast-height + $toast-margin;
 
   &.md-fab {
 
-    @include fab-position(bottom-right, auto, $button-fab-width/2, $button-fab-height/2, auto);
-    @include fab-position(bottom-left, auto, auto, $button-fab-height/2, $button-fab-width/2);
-    @include fab-position(top-right, $button-fab-height/2, $button-fab-width/2, auto, auto);
-    @include fab-position(top-left, $button-fab-height/2, auto, auto, $button-fab-width/2);
+    @include fab-position(bottom-right, auto, ($button-fab-width - $button-fab-padding)/2, ($button-fab-height - $button-fab-padding)/2, auto);
+    @include fab-position(bottom-left, auto, auto, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2);
+    @include fab-position(top-right, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2, auto, auto);
+    @include fab-position(top-left, ($button-fab-height - $button-fab-padding)/2, auto, auto, ($button-fab-width - $button-fab-padding)/2);
 
     z-index: $z-index-fab;
 
@@ -99,6 +106,14 @@ $button-fab-toast-offset: $toast-height + $toast-margin;
     md-icon {
       line-height: $button-fab-height;
       margin-top: 0;
+    }
+
+    &.md-mini {
+      width: $button-fab-mini-width;
+      height: $button-fab-mini-height;
+      md-icon {
+        line-height: $button-fab-mini-height;
+      }
     }
 
   }

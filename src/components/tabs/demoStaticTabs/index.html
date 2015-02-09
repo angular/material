@@ -1,6 +1,6 @@
-<div ng-controller="AppCtrl">
+<div ng-controller="AppCtrl" class="tabsdemoStaticTabs">
 
-    <md-tabs md-selected="data.selectedIndex">
+    <md-tabs class="md-accent" md-selected="data.selectedIndex">
       <md-tab id="tab1" aria-controls="tab1-content">
         Item One
       </md-tab>
@@ -44,8 +44,10 @@
     </ng-switch>
 
     <div class="after-tabs-area" layout="row" layout-sm="column" layout-margin layout-align="left center">
-
-        <md-text-float type="number" label="Selected Index" ng-model="data.selectedIndex"></md-text-float>
+        <md-input-container>
+          <label for="selectedIndex">Selected Index</label>
+          <input type="number" id="selectedIndex" ng-model="data.selectedIndex">
+        </md-input-container>
         <div flex></div>
         <span>Item Two: </span>
         <md-checkbox ng-model="data.secondLocked" aria-label="Disabled">

@@ -1,11 +1,17 @@
-$toolbar-background-color: map-get($primary-color-palette, '500') !default;
-$toolbar-text-color: $primary-color-palette-contrast-color;
-
-md-toolbar.md-#{$theme-name}-theme {
-  background-color: $toolbar-background-color;
-  color: $primary-color-palette-contrast-color;
+md-toolbar.md-THEME_NAME-theme {
+  background-color: '{{primary-color}}';
+  color: '{{primary-contrast}}';
 
   .md-button {
-    color: $primary-color-palette-contrast-color;
+    color: '{{primary-contrast}}';
+  }
+
+  &.md-accent {
+    background-color: '{{accent-color}}';
+    color: '{{accent-contrast}}';
+  }
+  &.md-warn {
+    background-color: '{{warn-color}}';
+    color: '{{warn-contrast}}';
   }
 }

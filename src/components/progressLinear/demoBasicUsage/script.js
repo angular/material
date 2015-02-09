@@ -1,4 +1,6 @@
 angular.module('progressLinearDemo1', ['ngMaterial'])
+  .config(function($mdThemingProvider) {
+  })
   .controller('AppCtrl', ['$scope', '$interval', function($scope, $interval) {
     $scope.mode = 'query';
     $scope.determinateValue = 30;

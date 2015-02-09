@@ -9,68 +9,52 @@
  * A Sidenav QP component.
  */
 angular.module('material.components.sidenav', [
-  'material.core',
-  'material.components.backdrop'
-])
-  .factory('$mdSidenav', mdSidenavService )
-  .directive('mdSidenav', mdSidenavDirective)
-  .controller('$mdSidenavController', mdSidenavController)
-  .factory('$mdMedia', mdMediaFactory)
-  .factory('$mdComponentRegistry', mdComponentRegistry);
+    'material.core',
+    'material.components.backdrop'
+  ])
+  .factory('$mdSidenav', SidenavService )
+  .directive('mdSidenav', SidenavDirective)
+  .controller('$mdSidenavController', SidenavController);
 
-/*
- * @private
- * @ngdoc object
- * @name mdSidenavController
- * @module material.components.sidenav
- *
- * @description
- * The controller for mdSidenav components.
- */
-function mdSidenavController($scope, $element, $attrs, $timeout, $mdSidenav, $mdComponentRegistry) {
 
-  var self = this;
-  self.destroy = $mdComponentRegistry.register(self, $attrs.mdComponentId);
-
-  self.isOpen = function() {
-    return !!$scope.isOpen;
-  };
-  self.toggle = function() {
-    $scope.isOpen = !$scope.isOpen;
-  };
-  self.open = function() {
-    $scope.isOpen = true;
-  };
-  self.close = function() {
-    $scope.isOpen = false;
-  };
-}
-
-/*
+/**
  * @private
  * @ngdoc service
  * @name $mdSidenav
  * @module material.components.sidenav
  *
  * @description
- * $mdSidenav makes it easy to interact with multiple sidenavs
+ * `$mdSidenav` makes it easy to interact with multiple sidenavs
  * in an app.
  *
  * @usage
- *
- * ```javascript
+ * <hljs lang="js">
  * // Toggle the given sidenav
  * $mdSidenav(componentId).toggle();
- *
+ * </hljs>
+ * <hljs lang="js">
  * // Open the given sidenav
  * $mdSidenav(componentId).open();
- *
+ * </hljs>
+ * <hljs lang="js">
  * // Close the given sidenav
  * $mdSidenav(componentId).close();
- * ```
+ * </hljs>
+ * <hljs lang="js">
+ * // Exposes whether given sidenav is set to be open
+ * $mdSidenav(componentId).isOpen();
+ * </hljs>
+ * <hljs lang="js">
+ * // Exposes whether given sidenav is locked open
+ * // If this is true, the sidenav will be open regardless of isOpen()
+ * $mdSidenav(componentId).isLockedOpen();
+ * </hljs>
  */
-function mdSidenavService($mdComponentRegistry) {
+function SidenavService($mdComponentRegistry, $q) {
   return function(handle) {
+    var errorMsg = "SideNav '" + handle + "' is not available!";
+
+    // Lookup the controller instance for the specified sidNav instance
     var instance = $mdComponentRegistry.get(handle);
     if(!instance) {
       $mdComponentRegistry.notFoundError(handle);
@@ -80,14 +64,17 @@ function mdSidenavService($mdComponentRegistry) {
       isOpen: function() {
         return instance && instance.isOpen();
       },
+      isLockedOpen: function() {
+        return instance && instance.isLockedOpen();
+      },
       toggle: function() {
-        instance && instance.toggle();
+        return instance ? instance.toggle() : $q.reject(errorMsg);
       },
       open: function() {
-        instance && instance.open();
+        return instance ? instance.open() : $q.reject(errorMsg);
       },
       close: function() {
-        instance && instance.close();
+        return instance ? instance.close() : $q.reject(errorMsg);
       }
     };
   };
@@ -150,7 +137,7 @@ function mdSidenavService($mdComponentRegistry) {
  *   - `<md-sidenav md-is-locked-open="$media('min-width: 1000px')"></md-sidenav>`
  *   - `<md-sidenav md-is-locked-open="$media('sm')"></md-sidenav>` (locks open on small screens)
  */
-function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $compile, $mdTheming) {
+function SidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $compile, $mdTheming, $q, $document) {
   return {
     restrict: 'E',
     scope: {
@@ -164,43 +151,109 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
     }
   };
 
+  /**
+   * Directive Post Link function...
+   */
   function postLink(scope, element, attr, sidenavCtrl) {
+    var triggeringElement = null;
+    var promise = $q.when(true);
+
     var isLockedOpenParsed = $parse(attr.mdIsLockedOpen);
+    var isLocked = function() {
+      return isLockedOpenParsed(scope.$parent, {
+        $media: $mdMedia
+      });
+    };
     var backdrop = $compile(
       '<md-backdrop class="md-sidenav-backdrop md-opaque ng-enter">'
     )(scope);
 
+    element.on('$destroy', sidenavCtrl.destroy);
     $mdTheming.inherit(backdrop, element);
 
-    element.on('$destroy', sidenavCtrl.destroy);
+    scope.$watch(isLocked, updateIsLocked);
+    scope.$watch('isOpen', updateIsOpen);
 
-    scope.$watch('isOpen', setOpen);
-    scope.$watch(function() {
-      return isLockedOpenParsed(scope.$parent, {
-        $media: $mdMedia
-      });
-    }, function(isLocked) {
-      element.toggleClass('md-locked-open', !!isLocked);
+
+    // Publish special accessor for the Controller instance
+    sidenavCtrl.$toggleOpen = toggleOpen;
+
+    /**
+     * Toggle the DOM classes to indicate `locked`
+     * @param isLocked
+     */
+    function updateIsLocked(isLocked, oldValue) {
+      scope.isLockedOpen = isLocked;
+      if (isLocked === oldValue) {
+        element.toggleClass('md-locked-open', !!isLocked);
+      } else {
+        $animate[isLocked ? 'addClass' : 'removeClass'](element, 'md-locked-open');
+      }
       backdrop.toggleClass('md-locked-open', !!isLocked);
-    });
+    }
 
     /**
      * Toggle the SideNav view and attach/detach listeners
      * @param isOpen
      */
-    function setOpen(isOpen) {
+    function updateIsOpen(isOpen) {
       var parent = element.parent();
 
       parent[isOpen ? 'on' : 'off']('keydown', onKeyDown);
-      $animate[isOpen ? 'enter' : 'leave'](backdrop, parent);
       backdrop[isOpen ? 'on' : 'off']('click', close);
 
-      $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed').then(function() {
-        // If we opened, and haven't closed again before the animation finished
-        if (scope.isOpen) {
-          element.focus();
-        }
-      });
+      if ( isOpen ) {
+        // Capture upon opening..
+        triggeringElement = $document[0].activeElement;
+      }
+
+      return promise = $q.all([
+        $animate[isOpen ? 'enter' : 'leave'](backdrop, parent),
+        $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed').then(function() {
+          // If we opened, and haven't closed again before the animation finished
+          if (scope.isOpen) {
+            element.focus();
+          }
+        })
+      ]);
+    }
+
+    /**
+     * Toggle the sideNav view and publish a promise to be resolved when
+     * the view animation finishes.
+     *
+     * @param isOpen
+     * @returns {*}
+     */
+    function toggleOpen( isOpen ) {
+      if (scope.isOpen == isOpen ) {
+
+        return $q.when(true);
+
+      } else {
+        var deferred = $q.defer();
+
+        // Toggle value to force an async `updateIsOpen()` to run
+        scope.isOpen = isOpen;
+
+        $timeout(function() {
+
+          // When the current `updateIsOpen()` animation finishes
+          promise.then(function(result){
+
+            if ( !scope.isOpen ) {
+              // reset focus to originating element (if available) upon close
+              triggeringElement && triggeringElement.focus();
+              triggeringElement = null;
+            }
+
+            deferred.resolve(result);
+          });
+
+        },0,false);
+
+        return deferred.promise;
+      }
     }
 
     /**
@@ -208,11 +261,8 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
      * @param evt
      */
     function onKeyDown(ev) {
-      if (ev.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
-        close();
-        ev.preventDefault();
-        ev.stopPropagation();
-      }
+      var isEscape = (ev.keyCode === $mdConstant.KEY_CODE.ESCAPE);
+      return isEscape ? close(ev) : $q.when(true);
     }
 
     /**
@@ -220,112 +270,39 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
      * apply the CSS close transition... Then notify the controller
      * to close() and perform its own actions.
      */
-    function close() {
-      $timeout(function(){
-        sidenavCtrl.close();
-      });
+    function close(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      return sidenavCtrl.close();
     }
 
   }
-
 }
 
-/**
- * Exposes a function on the '$mdMedia' service which will return true or false,
- * whether the given media query matches. Re-evaluates on resize. Allows presets
- * for 'sm', 'md', 'lg'.
+/*
+ * @private
+ * @ngdoc controller
+ * @name SidenavController
+ * @module material.components.sidenav
  *
- * @example $mdMedia('sm') == true if device-width <= sm
- * @example $mdMedia('(min-width: 1200px)') == true if device-width >= 1200px
- * @example $mdMedia('max-width: 300px') == true if device-width <= 300px (sanitizes input, adding parens)
  */
-function mdMediaFactory($window, $mdUtil, $timeout, $mdConstant) {
-  var cache = $mdUtil.cacheFactory('$mdMedia', { capacity: 15 });
+function SidenavController($scope, $element, $attrs, $mdComponentRegistry, $q) {
 
-  angular.element($window).on('resize', updateAll);
+  var self = this;
 
-  return $mdMedia;
+  // Use Default internal method until overridden by directive postLink
 
-  function $mdMedia(query) {
-    query = validate(query);
-    var result;
-    if ( !angular.isDefined(result = cache.get(query)) ) {
-      return add(query);
-    }
-    return result;
-  }
+  self.$toggleOpen = function() { return $q.when($scope.isOpen); };
+  self.isOpen = function() { return !!$scope.isOpen; };
+  self.isLockedOpen = function() { return !!$scope.isLockedOpen; };
+  self.open   = function() { return self.$toggleOpen( true );  };
+  self.close  = function() { return self.$toggleOpen( false ); };
+  self.toggle = function() { return self.$toggleOpen( !$scope.isOpen );  };
 
-  function validate(query) {
-    return $mdConstant.MEDIA[query] || (
-      query.charAt(0) != '(' ?  ('(' + query + ')') : query
-    );
-  }
-
-  function add(query) {
-    return cache.put(query, !!$window.matchMedia(query).matches);
-  }
-
-  function updateAll() {
-    var keys = cache.keys();
-    if (keys.length) {
-      for (var i = 0, ii = keys.length; i < ii; i++) {
-        cache.put(keys[i], !!$window.matchMedia(keys[i]).matches);
-      }
-      // trigger a $digest()
-      $timeout(angular.noop);
-    }
-  }
-
+  self.destroy = $mdComponentRegistry.register(self, $attrs.mdComponentId);
 }
 
-function mdComponentRegistry($log) {
-  var instances = [];
 
-  return {
-    /**
-     * Used to print an error when an instance for a handle isn't found.
-     */
-    notFoundError: function(handle) {
-      $log.error('No instance found for handle', handle);
-    },
-    /**
-     * Return all registered instances as an array.
-     */
-    getInstances: function() {
-      return instances;
-    },
 
-    /**
-     * Get a registered instance.
-     * @param handle the String handle to look up for a registered instance.
-     */
-    get: function(handle) {
-      var i, j, instance;
-      for(i = 0, j = instances.length; i < j; i++) {
-        instance = instances[i];
-        if(instance.$$mdHandle === handle) {
-          return instance;
-        }
-      }
-      return null;
-    },
-
-    /**
-     * Register an instance.
-     * @param instance the instance to register
-     * @param handle the handle to identify the instance under.
-     */
-    register: function(instance, handle) {
-      instance.$$mdHandle = handle;
-      instances.push(instance);
-
-      return function deregister() {
-        var index = instances.indexOf(instance);
-        if (index !== -1) {
-          instances.splice(index, 1);
-        }
-      };
-    }
-  };
-}
 })();

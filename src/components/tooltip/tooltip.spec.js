@@ -1,18 +1,6 @@
 describe('<md-tooltip> directive', function() {
 
-  beforeEach(module('material.components.tooltip', function($provide) {
-    $provide.value('$$rAF', mockRaf);
-
-    // fake synchronous version of rAF
-    function mockRaf(cb) { cb(); }
-    mockRaf.debounce = function(cb) {
-      var context = this, args = arguments;
-      return function() {
-        cb.apply(context, args);
-      };
-    };
-    findTooltip().remove();
-  }));
+  beforeEach(module('material.components.tooltip'));
 
   function findTooltip() {
     return angular.element(document.body).find('md-tooltip');
@@ -71,6 +59,23 @@ describe('<md-tooltip> directive', function() {
     expect($rootScope.isVisible).toBe(false);
   }));
 
+  it('should not set parent to items with no pointer events', inject(function($window, $compile, $rootScope, $timeout) {
+    spyOn($window, 'getComputedStyle').andCallFake(function(el) {
+      if (el.nodeName == 'INNER') {
+        return { 'pointer-events': 'none' };
+      } else {
+        return { 'pointer-events': '' };
+      }
+    });
+
+    var element = $compile('<outer><inner><md-tooltip md-visible="isVisible">Hello world' +
+                           '</md-tooltip></inner></outer>')($rootScope);
+
+    element.triggerHandler('mouseenter');
+    $timeout.flush();
+    expect($rootScope.isVisible).toBe(true);
+  }));
+
   it('should set visible on focus and blur', inject(function($compile, $rootScope, $timeout) {
     var element = $compile('<md-button>' +
                'Hello' +
@@ -103,6 +108,24 @@ describe('<md-tooltip> directive', function() {
     element.triggerHandler('touchend');
     $timeout.flush();
     expect($rootScope.isVisible).toBe(false);
+  }));
+
+  it('should show after tooltipDelay ms', inject(function($compile, $rootScope, $timeout) {
+    var element = $compile('<md-button>' +
+               'Hello' +
+               '<md-tooltip md-visible="isVisible" md-delay="99">' +
+                 'Tooltip' +
+               '</md-tooltip>' +
+             '</md-button>')($rootScope);
+    element.triggerHandler('focus');
+
+    expect($rootScope.isVisible).toBeFalsy();
+    // Wait 1 below delay, nothing should happen
+    $timeout.flush(98);
+    expect($rootScope.isVisible).toBeFalsy();
+    // Total 99 == tooltipDelay
+    $timeout.flush(1);
+    expect($rootScope.isVisible).toBe(true);
   }));
 
 });

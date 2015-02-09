@@ -1,7 +1,5 @@
 describe('mdSidenav', function() {
-  beforeEach(module('material.components.sidenav', 'ngAnimateMock', function($provide) {
-    $provide.value('$$rAF', function(cb) { cb(); });
-  }));
+  beforeEach(module('material.components.sidenav', 'ngAnimateMock'));
 
   function setup(attrs) {
     var el;
@@ -38,7 +36,7 @@ describe('mdSidenav', function() {
       $animate.triggerCallbacks();
       el.parent().triggerHandler({
         type: 'keydown',
-        keyCode: $mdConstant.KEY_CODE.ESCAPE 
+        keyCode: $mdConstant.KEY_CODE.ESCAPE
       });
       $timeout.flush();
       expect($rootScope.show).toBe(false);
@@ -93,7 +91,7 @@ describe('mdSidenav', function() {
       expect(controller).not.toBe(undefined);
     });
 
-    it('should open and close and toggle', function() {
+    it('should open and close and toggle', inject(function($timeout) {
       var el = setup('');
       var scope = el.isolateScope();
       var controller = el.controller('mdSidenav');
@@ -115,15 +113,94 @@ describe('mdSidenav', function() {
       scope.$apply();
 
       expect(el.hasClass('md-closed')).toBe(false);
+    }));
+
+  });
+
+  describe("controller Promise API", function() {
+    var $animate, $rootScope;
+
+      function flush() {
+        if ( !$rootScope.$$phase) {
+          $rootScope.$apply();
+        }
+        $animate.triggerCallbacks();
+      }
+
+    beforeEach( inject(function(_$animate_,_$rootScope_,_$timeout_) {
+        $animate = _$animate_;
+        $rootScope = _$rootScope_;
+        $timeout = _$timeout_;
+    }));
+
+
+    it('should open(), close(), and toggle() with promises', function () {
+      var el = setup('');
+      var scope = el.isolateScope();
+      var controller = el.controller('mdSidenav');
+
+      var openDone = 0, closeDone = 0, toggleDone = 0;
+      var onOpen = function() { openDone++; };
+      var onClose = function() { closeDone++; };
+      var onToggle = function() { toggleDone++; };
+
+      controller
+        .open()
+        .then(onOpen)
+        .then(controller.close)
+        .then(onClose);
+
+      flush();
+      expect(openDone).toBe(1);
+      flush();
+      expect(closeDone).toBe(1);
+
+      controller
+        .close()
+        .then(onClose);
+
+      flush();
+      expect(closeDone).toBe(2);
+      expect(scope.isOpen).toBe(false);
+
+      controller
+        .toggle()
+        .then(onToggle);
+
+      flush();
+      expect(toggleDone).toBe(1);
+      expect(scope.isOpen).toBe(true);
     });
 
-    it('should deregister component when element is destroyed', inject(function($mdComponentRegistry) {
-      var el = setup('md-component-id="left"');
-      el.triggerHandler('$destroy');
 
-      var instance = $mdComponentRegistry.get('left');
-      expect(instance).toBe(null);
-    }));
+    it('should open() to work multiple times before close()', function () {
+      var el = setup('');
+      var controller = el.controller('mdSidenav');
+
+      var openDone = 0, closeDone = 0;
+      var onOpen = function() { openDone++; };
+      var onClose = function() { closeDone++; };
+
+      controller
+        .open()
+        .then(onOpen)
+        .then(controller.open)
+        .then(onOpen);
+
+      flush();
+      expect(openDone).toBe(2);
+      expect(closeDone).toBe(0);
+      expect(el.hasClass('md-closed')).toBe(false);
+
+      controller
+        .close()
+        .then(onClose);
+
+      flush();
+      expect(openDone).toBe(2);
+      expect(closeDone).toBe(1);
+      expect(el.hasClass('md-closed')).toBe(true);
+    });
 
   });
 
@@ -154,6 +231,27 @@ describe('mdSidenav', function() {
       scope.$apply();
 
       expect(el.hasClass('md-closed')).toBe(true);
+    }));
+
+    it('exposes state', inject(function($mdSidenav) {
+      var el = setup('md-component-id="stateTest" md-is-open="shouldOpen" md-is-locked-open="shouldLockOpen"');
+      var scope = el.scope();
+
+      var instance = $mdSidenav('stateTest');
+      expect(instance.isOpen()).toBe(false);
+      expect(instance.isLockedOpen()).toBe(false);
+
+      scope.shouldOpen = true;
+      scope.shouldLockOpen = true;
+      scope.$digest();
+      expect(instance.isOpen()).toBe(true);
+      expect(instance.isLockedOpen()).toBe(true);
+
+      scope.shouldOpen = false;
+      scope.shouldLockOpen = true;
+      scope.$digest();
+      expect(instance.isOpen()).toBe(false);
+      expect(instance.isLockedOpen()).toBe(true);
     }));
   });
 

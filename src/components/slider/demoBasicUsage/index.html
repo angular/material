@@ -3,14 +3,14 @@
   <md-content class="md-padding">
 
     <h3>
-      RGB <span style="border: 1px solid #333; background: rgb({{color.red}},{{color.green}},{{color.blue}})">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      RGB <span ng-attr-style="border: 1px solid #333; background: rgb({{color.red}},{{color.green}},{{color.blue}})">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
     </h3>
 
     <div layout>
       <div flex="10" layout layout-align="center center">
         <span>R</span>
       </div>
-      <md-slider md-theme="red" flex min="0" max="255" ng-model="color.red" aria-label="red" id="red-slider">
+      <md-slider flex min="0" max="255" ng-model="color.red" aria-label="red" id="red-slider" class="">
       </md-slider>
       <div flex="20" layout layout-align="center center">
         <input type="number" ng-model="color.red" aria-label="red" aria-controls="red-slider">
@@ -21,7 +21,7 @@
       <div flex="10" layout layout-align="center center">
         <span>G</span>
       </div>
-      <md-slider md-theme="green" flex ng-model="color.green" min="0" max="255" aria-label="green" id="green-slider">
+      <md-slider flex ng-model="color.green" min="0" max="255" aria-label="green" id="green-slider" class="md-accent">
       </md-slider>
       <div flex="20" layout layout-align="center center">
         <input type="number" ng-model="color.green" aria-label="green" aria-controls="green-slider">
@@ -32,16 +32,35 @@
       <div flex="10" layout layout-align="center center">
         <span>B</span>
       </div>
-      <md-slider md-theme="blue" flex ng-model="color.blue" min="0" max="255" aria-label="blue" id="blue-slider">
+      <md-slider flex ng-model="color.blue" min="0" max="255" aria-label="blue" id="blue-slider">
       </md-slider>
       <div flex="20" layout layout-align="center center">
         <input type="number" ng-model="color.blue" aria-label="blue" aria-controls="blue-slider">
       </div>
     </div>
 
-    <h3>Rating: {{rating}}/5</h3>
-    <md-slider md-discrete ng-model="rating" step="1" min="1" max="5" aria-label="rating">
-    </md-slider>
+    <h3>Rating: {{rating}}/5 - demo of theming classes</h3>
+    <div layout>
+      <div flex="10" layout layout-align="center center">
+        <span>default</span>
+      </div>
+      <md-slider flex md-discrete ng-model="rating" step="1" min="1" max="5" aria-label="rating">
+      </md-slider>
+    </div>
+    <div layout>
+      <div flex="10" layout layout-align="center center">
+        <span>md-warn</span>
+      </div>
+      <md-slider flex class="md-warn" md-discrete ng-model="rating" step="1" min="1" max="5" aria-label="rating">
+      </md-slider>
+    </div>
+    <div layout>
+      <div flex="10" layout layout-align="center center">
+        <span>md-primary</span>
+      </div>
+      <md-slider flex class="md-primary" md-discrete ng-model="rating" step="1" min="1" max="5" aria-label="rating">
+      </md-slider>
+    </div>
 
     <h3>Disabled</h3>
     <md-slider ng-model="disabled1" ng-disabled="true" aria-label="Disabled 1"></md-slider>

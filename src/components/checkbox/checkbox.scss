@@ -1,5 +1,5 @@
-$checkbox-width: 18px;
-$checkbox-height: $checkbox-width;
+$checkbox-width: 18px !default;
+$checkbox-height: $checkbox-width !default;
 
 md-checkbox {
   display: block;
@@ -59,7 +59,7 @@ md-checkbox {
   }
 
   // focus
-  &:focus .md-label {
+  &:focus .md-label:not(:empty) {
     border-color: black;
   }
 

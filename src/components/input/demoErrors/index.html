@@ -1,0 +1,40 @@
+<ng-app="inputErrorsApp" ng-controller="AppCtrl" layout="column">
+
+  <md-toolbar class="md-primary">
+    <h1 class="md-toolbar-tools">
+      Top Secret Project
+    </h1>
+  </md-toolbar>
+
+  <md-content class="md-padding">
+    <form name="projectForm">
+      <md-input-container>
+        <label>Description</label>
+        <input md-maxlength="30" required name="description" ng-model="project.description">
+        <div ng-messages="projectForm.description.$error">
+          <div ng-message="required">This is required.</div>
+          <div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>
+        </div>
+      </md-input-container>
+
+      <md-input-container>
+        <label>Client Name</label>
+        <input required name="clientName" ng-model="project.clientName">
+        <div ng-messages="projectForm.clientName.$error">
+          <div ng-message="required">This is required.</div>
+        </div>
+      </md-input-container>
+
+      <md-input-container>
+        <label>Hourly Rate (USD)</label>
+        <input required type="number" step="any" name="rate" ng-model="project.rate" min="800" max="4999" required>
+        <div ng-messages="projectForm.rate.$error">
+          <div ng-message="required">You've got to charge something! You can't just <b>give away</b> a Missile Defense System.</div>
+          <div ng-message="min">You should charge at least $800 an hour. This job is a big deal... if you mess up, everyone dies!</div>
+          <div ng-message="max">$5,000 an hour? That's a little ridiculous. I doubt event Bill Clinton could afford that.</div>
+        </div>
+      </md-input-container>
+    </form>
+  </md-content>
+
+</div>

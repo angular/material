@@ -1,9 +1,6 @@
-$tooltip-color: map-get($foreground-color-palette, 'A100') !default;
-$tooltip-background-color: rgba(black, 0.52);
-
-md-tooltip.md-#{$theme-name}-theme {
-  color: $tooltip-color;
+md-tooltip.md-THEME_NAME-theme {
+  color: '{{background-A100}}';
   .md-background {
-    background-color: $tooltip-background-color;
+    background-color: '{{foreground-2}}';
   }
 }

@@ -2,13 +2,17 @@
 
 body {
   overflow: hidden;
-  max-width: 100%; 
+  max-width: 100%;
   max-height: 100%;
   font-size: 14px;
 }
 
 a {
   color: #3f51b5;
+  text-decoration: none;
+}
+a:hover, a:focus {
+  text-decoration: underline;
 }
 
 table {
@@ -20,16 +24,17 @@ table {
   background-color: transparent;
 }
 
-td,
-th {
-  padding: $baseline-grid ($baseline-grid * 2);
-  border-top: 1px solid #ddd;
-  vertical-align: top;
+td, th {
+  padding: 12px 6px;
+  text-align: left;
+}
+tr:nth-child(even) td {
+  background-color: #f5f5f5;
 }
 
 th {
-  border-bottom: 2px solid #ddd;
-  vertical-align: bottom;
+  border-bottom: 1px solid #ccc;
+  background-color: #f5f5f5;
 }
 
 pre {
@@ -48,17 +53,17 @@ pre > code.highlight {
 }
 
 pre, code {
-
   margin: 0;
   padding: 0;
+  font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
   overflow-wrap: break-word;
-  font-family: monospace, serif;
 }
 
 
 pre > code.highlight {
-  padding: 10px;
+  background-color: transparent;
   font-weight: 400;
+  padding: 10px;
 }
 
 code {
@@ -75,8 +80,20 @@ code:not(.highlight) {
   color: #4285f4;
   margin-left: 1px;
   margin-right: 1px;
+  -webkit-font-smoothing: auto;
 }
 
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  text-transform: none;
+  width: 1px;
+}
 .md-sidenav-inner {
   background: #fff;
 }
@@ -93,66 +110,115 @@ code:not(.highlight) {
   margin-bottom: 15px;
 }
 
-.menu-item {
-  background: none;
-  border-width: 0;
-  cursor: pointer;
-  display: block;
-  color: #333;
-  font-size: inherit;
-  line-height: 40px;
-  max-height: 40px;
-  opacity: 1;
+/* Begin Docs Menu */
+.docs-menu,
+.docs-menu ul {
+  list-style: none;
+  padding: 0;
+}
+.docs-menu li {
   margin: 0;
-  outline: none;
-  padding: 0px 28px;
-  position: relative;
+}
+.docs-menu > li {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+.docs-menu .md-button {
+  border-radius: 0;
+  color: inherit;
+  cursor: pointer;
+  font-weight: 400;
+  line-height: 40px;
+  margin: 0;
+  max-height: 40px;
+  overflow: hidden;
+  padding: 0px 16px;
   text-align: left;
   text-decoration: none;
+  white-space: normal;
   width: 100%;
-  z-index: 1;
-  -webkit-transition: 0.45s cubic-bezier(0.35, 0, 0.25, 1);
-  -webkit-transition-property: max-height, background-color, opacity;
-  -moz-transition: 0.45s cubic-bezier(0.35, 0, 0.25, 1);
-  -moz-transition-property: max-height, background-color, opacity;
-  transition: 0.45s cubic-bezier(0.35, 0, 0.25, 1);
-  transition-property: max-height, background-color, opacity;
 }
-.menu-item.ng-hide {
-  max-height: 0;
-  opacity: 0;
+.docs-menu a.md-button {
+  display: block;
 }
-.menu-item:hover {
-  color: #999;
+.docs-menu button.md-button::-moz-focus-inner {
+  padding: 0;
 }
-.menu-item:focus {
-  font-weight: bold;
+.docs-menu .md-button.active {
+  color: #03a9f4;
 }
-.menu-item.menu-title {
+.menu-heading {
   color: #888;
-  font-size: 14px;
-  padding-left: 16px;
+  display: block;
+  font-size: inherit;
+  font-weight: 500;
+  line-height: 40px;
+  margin: 0;
+  padding: 0px 16px;
   text-align: left;
-  text-transform: uppercase;
-  transition: color 0.35s cubic-bezier(0.35, 0, 0.25, 1);
+  width: 100%;
 }
-.menu-item.menu-title:hover,
-.menu-item.menu-title.active {
-  color: #1976d2;
+.docs-menu li.parentActive,
+.docs-menu li.parentActive .menu-toggle-list {
+  background-color: #f6f6f6;
 }
+.menu-toggle-list {
+  background: #fff;
+  max-height: 999px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  -webkit-transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
+  -webkit-transition-property: max-height;
+  -moz-transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
+  -moz-transition-property: max-height;
+  transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
+  transition-property: max-height;
+}
+.menu-toggle-list.ng-hide {
+  max-height: 0;
+}
+.docs-menu .menu-toggle-list a.md-button {
+  display: block;
+  padding: 0 16px 0 32px;
+  text-transform: none;
+}
+.md-button-toggle .md-toggle-icon {
+  background: transparent url(img/icons/list_control_down.png) no-repeat center center;
+  background-size: 100% auto;
+  display: inline-block;
+  height: 24px;
+  margin: auto 0 auto auto;
+  speak: none;
+  width: 24px;
+  transition: transform 0.3s ease-in-out;
+  -webkit-transition: -webkit-transform 0.3s ease-in-out;
+}
+.md-button-toggle .md-toggle-icon.toggled {
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+}
+/* End Docs Menu */
 
 .menu-icon {
   background: none;
   border: none;
+  margin-right: 16px;
+  padding: 0;
 }
 .app-toolbar .md-toolbar-tools h3 {
   -webkit-margin-before: 0;
   -webkit-margin-after: 0;
 }
-
+docs-demo {
+  display: block;
+  margin-top: 16px;
+}
+.doc-description p {
+  margin-top: 0;
+}
 .demo-container {
   border-radius: 4px;
-  margin-top: 16px;
+  margin-bottom: 16px;
   -webkit-transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
   transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
   position: relative;
@@ -209,23 +275,37 @@ md-tabs.demo-source-tabs .active md-tab-label {
 .small-demo .demo-content {
   min-height: 128px;
 }
-.demo-content > * {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -moz-box-flex: 1;
-  -moz-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-}
 
+.doc-content > * {
+  -webkit-box-flex: 1 1 auto;
+  -webkit-flex: 1 1 auto;
+  -moz-box-flex: 1 1 auto;
+  -moz-flex: 1 1 auto;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+}
+.demo-content > * {
+  -webkit-box-flex: 1 1 0%;
+  -webkit-flex: 1 1 0%;
+  -moz-box-flex: 1 1 0%;
+  -moz-flex: 1 1 0%;
+  -ms-flex: 1 1 0%;
+  flex: 1 1 0%;
+}
 .demo-content > div[layout-fill] {
   min-height: 448px;
 }
 .small-demo .demo-content > div[layout-fill] {
   min-height: 224px;
 }
+.layout-content .small-demo .demo-content > div[layout],
+.layout-options .small-demo .demo-content > div[layout] {
+  min-height: auto !important;
+  max-height: auto !important;
+  height: 128px !important;
+}
 .small-demo .demo-toolbar,
-.small-demo .md-toolbar-tools { 
+.small-demo .md-toolbar-tools {
   min-height: 48px;
   max-height: 48px;
   font-size: 20px;
@@ -237,7 +317,9 @@ md-tabs.demo-source-tabs .active md-tab-label {
 .demo-toolbar .md-button {
   color: #616161;
 }
-
+md-toolbar.demo-toolbar {
+  border-radius: 4px 4px 0 0;
+}
 md-toolbar.demo-toolbar,
 .demo-source-tabs md-tab,
 .demo-source-tabs .tabs-header {
@@ -293,8 +375,38 @@ md-toolbar.demo-toolbar .md-button {
   font-size: 18px;
 }
 
+/***************
+ * Landing Page
+ ***************/
+ul.buckets {
+  margin: 24px 0;
+  padding: 0;
+}
+ul.buckets li {
+  list-style: none;
+  margin: 0;
+  text-align: center;
+}
+ul.buckets li md-card md-card-content {
+  padding: 0;
+}
+ul.buckets li a {
+  background-color: transparent;
+  display: block;
+  font-weight: 500;
+  padding: 16px 0;
+  text-decoration: none;
+  -webkit-transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
+  transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
+}
+ul.buckets li a:hover,
+ul.buckets li a:focus {
+  background-color: #03a9f4;
+  color: white;
+}
+
 /************
- * DOCS
+ * API DOCS
  ************/
 .api-options-bar .md-button {
   margin: 4px;
@@ -317,7 +429,7 @@ md-toolbar.demo-toolbar .md-button {
   min-height: 72px;
   border-bottom: 1px solid #ddd;
 }
-.api-params-label { 
+.api-params-label {
   margin-right: 8px;
   text-align: center;
   margin-top: 14px;
@@ -391,6 +503,10 @@ ul.methods li h3 {
   min-height: 100%;
 }
 
+md-content.demo-source-container {
+  background-color: transparent;
+  border: none;
+}
 md-content.demo-source-container > hljs > pre > code.highlight {
   position : absolute;
   top : 0px;
@@ -402,4 +518,15 @@ md-content.demo-source-container > hljs > pre > code.highlight {
 .extraPad {
   padding-left:32px !important;
   padding-right:32px !important;
+}
+
+.site-sidenav,
+.site-sidenav.md-locked-open-add-active,
+.site-sidenav.md-locked-open {
+  width: 254px;
+  min-width: 254px;
+  max-width: 254px;
+}
+.site-sidenav > * {
+  min-width: 218px;
 }

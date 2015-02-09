@@ -1,7 +1,6 @@
 describe('radioButton', function() {
   var CHECKED_CSS = 'md-checked';
 
-  beforeEach(TestUtil.mockRaf);
   beforeEach(module('material.components.radioButton'));
 
   it('should set checked css class', inject(function($compile, $rootScope) {
@@ -18,6 +17,20 @@ describe('radioButton', function() {
 
     expect(rbElements.eq(0).hasClass(CHECKED_CSS)).toEqual(false);
     expect(rbElements.eq(1).hasClass(CHECKED_CSS)).toEqual(true);
+  }));
+
+  it('should support mixed values', inject(function($compile, $rootScope) {
+    var element = $compile('<md-radio-group ng-model="value">' +
+                            '<md-radio-button value="1"></md-radio-button>' +
+                            '<md-radio-button value="2"></md-radio-button>' +
+                          '</md-radio-group>')($rootScope);
+
+    $rootScope.$apply(function(){
+      $rootScope.value = 1;
+    });
+
+    var rbElements = element.find('md-radio-button');
+    expect(rbElements.eq(0).hasClass(CHECKED_CSS)).toEqual(true);
   }));
 
   it('should set roles', inject(function($compile, $rootScope) {
@@ -140,6 +153,29 @@ describe('radioButton', function() {
       expect($rootScope.color).toBe('blue');
     }));
 
+    it('should trigger a submit', inject(function($compile, $rootScope, $mdConstant) {
+
+      $rootScope.testValue = false;
+      $rootScope.submitFn = function(){
+        $rootScope.testValue = true;
+      };
+      var element = $compile('<div><form ng-submit="submitFn()">' +
+                              '<md-radio-group ng-model="color">' +
+                              '<md-radio-button value="white"></md-radio-button>' +
+                              '</md-radio-group>' +
+                            '</form></div>')($rootScope);
+
+      var formElement = element.find('form'),
+          rbGroupElement = element.find('md-radio-group');
+
+      rbGroupElement.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.ENTER
+      });
+
+      expect($rootScope.testValue).toBe(true);
+    }));
+
     it('should be disabled', inject(function($compile, $rootScope) {
       var element = $compile('<md-radio-group ng-model="color">' +
                               '<md-radio-button value="white" ng-disabled="isDisabled"></md-radio-button>' +
@@ -154,6 +190,40 @@ describe('radioButton', function() {
       $rootScope.$apply('isDisabled = false');
       radio.triggerHandler('click');
       expect($rootScope.color).toBe('white');
+    }));
+
+    it('should skip disabled on arrow key', inject(function($compile, $rootScope, $mdConstant) {
+      var element = $compile(
+        '<md-radio-group ng-model="color">' +
+        '  <md-radio-button value="red"   ></md-radio-button>' +
+        '  <md-radio-button value="white" ng-disabled="isDisabled"></md-radio-button>' +
+        '  <md-radio-button value="blue" ></md-radio-button>' +
+        '</md-radio-group>'
+      )($rootScope);
+      var rbGroupElement = element.eq(0);
+
+      $rootScope.$apply('isDisabled = true');
+      $rootScope.$apply('color = "red"');
+      expect($rootScope.color).toBe("red");
+
+
+      rightArrow();   expect($rootScope.color).toEqual('blue');
+      rightArrow();   expect($rootScope.color).toEqual('red');
+      rightArrow();   expect($rootScope.color).toEqual('blue');
+
+
+      $rootScope.$apply('isDisabled = false');
+
+      rightArrow();
+      rightArrow();   expect($rootScope.color).toEqual('white');
+      rightArrow();   expect($rootScope.color).toEqual('blue');
+
+      function rightArrow() {
+          rbGroupElement.triggerHandler({
+            type: 'keydown',
+            keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
+          });
+        }
     }));
 
 

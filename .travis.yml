@@ -10,13 +10,15 @@ branches:
     - master
 
 before_script:
+  - export DISPLAY=:99.0 # firefox virtual screen
+  - sh -e /etc/init.d/xvfb start # firefox virtual screen
   - npm install -g bower
   - bower install
   - git config --global user.email "ngmaterial@googlegroups.com"
   - git config --global user.name "ngMaterial Bot"
 
 script:
-  - gulp karma --browsers=PhantomJS
+  - gulp karma --browsers=Firefox
   - ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT
 
 notifications:
