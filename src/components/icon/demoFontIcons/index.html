@@ -1,0 +1,39 @@
+<div ng-app="appDemoFontIcons" ng-controller="DemoCtrl" ng-cloak layout="column" layout-margin >
+    <!-- Display font icons from Icomoon.io: -->
+
+    <div class="glyph" ng-repeat="font in fonts">
+      <div class="preview-glyphs">
+        <md-icon ng-repeat="size in sizes" font-icon="{{ font.name }}" class="step "
+                 ng-style="{color: font.color, 'font-size': size + 'px', height: size + 'px'}"
+                 alt="{{ font.name + size }}">
+        </md-icon>
+      </div>
+      <div class="preview-scale">
+        <span class="step" ng-repeat="size in sizes">{{ size }}px</span>
+      </div>
+    </div>
+
+</div>
+
+<!--
+  For this demo, include the font-faces needed by mdIcon above
+-->
+<style>
+@font-face {
+  font-family:"icomoon";
+  src:url("icomoon.eot");
+  font-weight:normal;
+  font-style:normal;
+}
+
+@font-face {
+    font-family: 'icomoon';
+    src:url('fonts/icomoon.eot?-cmq1um');
+    src:url('fonts/icomoon.eot?#iefix-cmq1um') format('embedded-opentype'),
+        url('fonts/icomoon.woff?-cmq1um') format('woff'),
+        url('fonts/icomoon.ttf?-cmq1um') format('truetype'),
+        url('fonts/icomoon.svg?-cmq1um#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+</style>
