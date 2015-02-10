@@ -151,11 +151,14 @@ md-input-container {
     border-width: 0 0 $input-border-width-focused 0;
   }
 
-  .md-input[disabled] {
-    background-position: 0 bottom;
-    // This background-size is coordinated with a linear-gradient set in input-theme.scss 
-    // to create a dotted line under the input. 
-    background-size: 3px 1px;
-    background-repeat: repeat-x;
+  .md-input {
+    &[disabled],
+    [disabled] & {
+      background-position: 0 bottom;
+      // This background-size is coordinated with a linear-gradient set in input-theme.scss
+      // to create a dotted line under the input.
+      background-size: 3px 1px;
+      background-repeat: repeat-x;
+    }
   }
 }
