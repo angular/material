@@ -19,7 +19,7 @@ angular.module(
 angular.module('myApp', ['ngMaterial'])
 .config(function($mdThemingProvider) {
   $mdThemingProvider.theme('altTheme')
-    .primaryPalette('purple') // specify primary color, all
+    .primaryColor('purple') // specify primary color, all
                             // other color intentions will be inherited
                             // from default
 });
