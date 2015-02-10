@@ -1,0 +1,190 @@
+.avatar {
+        position: relative;
+        width: 128px;
+        height: 128px;
+        border-radius: 50%;
+        display: inline-block;
+        overflow: hidden;
+        zoom:0.70;
+        transform: translateZ(0);
+        -webkit-transform: scale(0.70);
+        -moz-transform:scale(0.70);
+    }
+
+
+.svg-1 {
+	background-position: 33.333333333333336% 0;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-1-dims {
+	width: 128px;
+	height: 128px;
+}
+
+.svg-10 {
+	background-position: 66.66666666666667% 66.66666666666667%;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-10-dims {
+	width: 128px;
+	height: 128px;
+}
+
+.svg-11 {
+	background-position: 0 33.333333333333336%;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-11-dims {
+	width: 128px;
+	height: 128px;
+}
+
+.svg-12 {
+	background-position: 33.333333333333336% 33.333333333333336%;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-12-dims {
+	width: 128px;
+	height: 128px;
+}
+
+.svg-13 {
+	background-position: 66.66666666666667% 0;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-13-dims {
+	width: 128px;
+	height: 128px;
+}
+
+.svg-14 {
+	background-position: 66.66666666666667% 33.333333333333336%;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-14-dims {
+	width: 128px;
+	height: 128px;
+}
+
+.svg-15 {
+	background-position: 0 66.66666666666667%;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-15-dims {
+	width: 128px;
+	height: 128px;
+}
+
+.svg-16 {
+	background-position: 33.333333333333336% 66.66666666666667%;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-16-dims {
+	width: 128px;
+	height: 128px;
+}
+
+.svg-2 {
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-2-dims {
+	width: 128px;
+	height: 128px;
+}
+
+.svg-3 {
+	background-position: 100% 0;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-3-dims {
+	width: 128px;
+	height: 128px;
+}
+
+.svg-4 {
+	background-position: 100% 33.333333333333336%;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-4-dims {
+	width: 128px;
+	height: 128px;
+}
+
+.svg-5 {
+	background-position: 100% 66.66666666666667%;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-5-dims {
+	width: 128px;
+	height: 128px;
+}
+
+.svg-6 {
+	background-position: 0 100%;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-6-dims {
+	width: 128px;
+	height: 128px;
+}
+
+.svg-7 {
+	background-position: 33.333333333333336% 100%;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-7-dims {
+	width: 128px;
+	height: 128px;
+}
+
+.svg-8 {
+	background-position: 66.66666666666667% 100%;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-8-dims {
+	width: 128px;
+	height: 128px;
+}
+
+.svg-9 {
+	background-position: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url(spritesheets/avatars.svg);
+}
+
+.svg-9-dims {
+	width: 128px;
+	height: 128px;
+}
+

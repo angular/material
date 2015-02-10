@@ -4,9 +4,9 @@
 
     <md-radio-group ng-model="data.group1">
 
-      <md-radio-button value="Apple" aria-label="Label 1">Apple</md-radio-button>
+      <md-radio-button value="Apple">Apple</md-radio-button>
       <md-radio-button value="Banana"> Banana </md-radio-button>
-      <md-radio-button value="Mango" aria-label="Label 3">Mango</md-radio-button>
+      <md-radio-button value="Mango">Mango</md-radio-button>
 
     </md-radio-group>
 
@@ -18,16 +18,27 @@
 
         <md-radio-button ng-repeat="d in radioData"
                          ng-value="d.value"
-                         ng-disabled=" d.isDisabled "
-                         aria-label="{{ d.label }}">
+                         ng-disabled=" d.isDisabled ">
             {{ d.label }}
         </md-radio-button>
 
     </md-radio-group>
 
     <p>
-      <md-button ng-click="addItem()">Add</md-button>
-      <md-button ng-click="removeItem()">Remove</md-button>
+      <md-button ng-click="addItem()" type="button">Add</md-button>
+      <md-button ng-click="removeItem()" type="button">Remove</md-button>
     </p>
 
+    <hr />
+
+    <p style="margin-bottom: 0;">Graphic radio buttons need to be labeled with the <code>aria-label</code> attribute.</p>
+    <p style="margin-top: 0;">Selected Avatar: <span class="radioValue">{{ data.group3 }}</span></p>
+
+    <md-radio-group ng-model="data.group3">
+      <md-radio-button ng-repeat="d in avatarData"
+                       ng-value="d.value"
+                       aria-label="{{d.title}}">
+          <span class="{{d.cssClass}} avatar"></span>
+      </md-radio-button>
+    </md-radio-group>
 </form>

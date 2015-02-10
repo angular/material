@@ -5,8 +5,23 @@ angular.module('radioDemo1', ['ngMaterial'])
 
   $scope.data = {
     group1 : 'Banana',
-    group2 : '2'
+    group2 : '2',
+    group3 : 'avatar-1'
   };
+
+  $scope.avatarData = [{
+      title: 'avatar 1',
+      cssClass: 'svg-1',
+      value: 'avatar-1'
+    },{
+      title: 'avatar 2',
+      cssClass: 'svg-2',
+      value: 'avatar-2'
+    },{
+      title: 'avatar 3',
+      cssClass: 'svg-3',
+      value: 'avatar-3'
+  }];
 
   $scope.radioData = [
     { label: '1', value: 1 },
@@ -14,6 +29,7 @@ angular.module('radioDemo1', ['ngMaterial'])
     { label: '3', value: '3', isDisabled: true },
     { label: '4', value: '4' }
   ];
+
 
   $scope.submit = function() {
     alert('submit');
