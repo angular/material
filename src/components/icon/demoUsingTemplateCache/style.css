@@ -17,3 +17,11 @@ md-icon {
 .appUsingTemplateCache {
     padding:25px;
 }
+
+.note {
+    font-size: .8em;
+    display: block;
+    margin-top: -2px;
+    padding-left: 25px;
+    color: rgb(127, 126, 126);
+}

@@ -1,16 +1,22 @@
 <div ng-app="appDemoFontIcons" ng-controller="DemoCtrl" ng-cloak layout="column" layout-margin >
-    <!-- Display font icons from Icomoon.io: -->
 
+    <!-- Display font icons from Icomoon.io: -->
     <div class="glyph" ng-repeat="font in fonts">
       <div class="preview-glyphs">
-        <md-icon ng-repeat="size in sizes" md-font-icon="{{ font.name }}" class="step "
+
+        <md-icon ng-repeat="size in sizes"
+                 md-font-icon="{{ font.name }}"
                  ng-style="{color: font.color, 'font-size': size + 'px', height: size + 'px'}"
-                 alt="{{ font.name + size }}">
+                 alt="{{ font.name + size }}"
+                 class="step">
         </md-icon>
+
       </div>
+
       <div class="preview-scale">
         <span class="step" ng-repeat="size in sizes">{{ size }}px</span>
       </div>
+
     </div>
 
 </div>

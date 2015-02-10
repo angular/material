@@ -92,8 +92,12 @@ function mdIconDirective($mdIcon, $mdAria, $log) {
    * @module material.components.icon
    *
    * @description
-   * `$mdIconProvider` allows icons and icon sets to be pre-registered and associated with source URLs.
-   * The requested svg is loaded [by URL] on-demand and cached for future queries.
+   * `$mdIconProvider` is used only to register icon IDs with URLs. These configuration features allow
+   * icons and icon sets to be pre-registered and associated with source URLs **before** the `<md-icon />`
+   * directives are compiled.
+   *
+   * When an SVG is requested by name/ID, the `$mdIcon` service searches its registry for the associated source
+   * URL; that URL is used to on-demand load and parse the SVG dynamically.
    *
    * <hljs lang="js">
    * angular
@@ -103,12 +107,43 @@ function mdIconDirective($mdIcon, $mdAria, $log) {
    *     // Configure URLs for icons specified by [set:]id.
    *
    *     $mdIconProvider
-   *          .defaultIconSet('my/app/icons.svg')       // Register a default set of icons
-   *          .iconSet('social', 'my/app/social.svg')   // Register a named icon set
+   *          .defaultIconSet('my/app/icons.svg')       // Register a default set of SVG icons
+   *          .iconSet('social', 'my/app/social.svg')   // Register a named icon set of SVGs
    *          .icon('android', 'my/app/android.svg')    // Register a specific icon (by name)
    *          .icon('work:chair', 'my/app/chair.svg');  // Register icon in a specific set
    *   });
    * </hljs>
+   *
+   * SVG icons and icon sets can be easily pre-loaded and cached using either (a) a build process or (b) a runtime
+   * **startup** process (shown below):
+   *
+   * <hljs lang="js">
+   *
+   * angular
+   *   .module('app', ['ngMaterial'])
+   *   .config(function($mdIconProvider) {
+   *
+   *     // Register a default set of SVG icon definitions
+   *     $mdIconProvider.defaultIconSet('my/app/icons.svg')
+   *
+   *   })
+   *   .run(function($http, $templateCache){
+   *
+   *     // Pre-fetch icons sources by URL and cache in the $templateCache...
+   *     // subsequent $http calls will look there first.
+   *
+   *     var urls = [ 'imy/app/icons.svg', 'img/icons/android.svg'];
+   *
+   *     angular.forEach(urls, function(url) {
+   *       $http.get(url, {cache: $templateCache});
+   *     });
+   *
+   *   });
+   *
+   * </hljs>
+   *
+   * NOTE: the loaded SVG data is subsequently cached internally for future requests.
+   *
    */
 
   /**
@@ -187,7 +222,7 @@ function mdIconDirective($mdIcon, $mdAria, $log) {
    * @name $mdIconProvider#defaultIconSize
    *
    * @description
-   * While mdIcon markup can also be style with sizing CSS, this method configures
+   * While `<md-icon />` markup can also be style with sizing CSS, this method configures
    * the default icon size used for all icons; unless overridden by specific CSS.
    * NOTE: the default sizing is (24px, 24px).
    *
@@ -260,15 +295,13 @@ MdIconProvider.prototype = {
  * @module material.components.icon
  *
  * @description
- * `$mdIcon` is a service used to lookup SVG icons configured via $mdIconProvider using
+ * `$mdIcon` is a service used to lookup SVG icons configured via `$mdIconProvider` using
  *  and ID or uses a URL used to load and cache a currently external SVG (that is not currently cached).
  *
  * @param {string} ID or URL value
- *
- * @returns {obj} DOM element clone
+ * @returns {obj} Clone of the SVG DOM element
  *
  * @usage
- *
  * <hljs lang="js">
  * function SomeDirective($mdIcon) {
  *
@@ -276,21 +309,19 @@ MdIconProvider.prototype = {
  *   // then lookup the icon from the registry cache, load and cache
  *   // it for future requests.
  *
- *   $mdIcon('android').then(function(android) {
- *     element.append(android);
- *   });
- *
- *   $mdIcon('work:chair').then(function(chair) {
- *     element.append(chair);
- *   });
+ *   $mdIcon('android').then(function(icon) { element.append(icon); });
+ *   $mdIcon('work:chair').then(function(icon) { element.append(icon); });
  *
  *   // Load and cache the external SVG using a URL
  *
- *   $mdIcon('img/icons/android.svg').then(function(chair) {
- *     element.append(chair);
+ *   $mdIcon('img/icons/android.svg').then(function(icon) {
+ *     element.append(icon);
  *   });
  * };
  * </hljs>
+ *
+ * NOTE: The `md-icon` directive internally uses the `$mdIcon` service to query, loaded, and instantiate
+ * SVG DOM elements.
  */
 function MdIconService(config, $http, $q, $log, $templateCache) {
   var iconCache = {};
