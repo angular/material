@@ -60,6 +60,16 @@ describe('mdIcon directive', function() {
 
   describe('with ARIA support', function() {
 
+    it('should apply aria-hidden="true" when parent has valid label', function() {
+      el = make('<button aria-label="Android"><md-icon md-svg-icon="android"></md-icon></button>');
+      expect(el.find('md-icon').attr('aria-hidden')).toEqual('true');
+    });
+
+    it('should apply aria-hidden="true" when parent has text content', function() {
+      el = make('<button>Android <md-icon md-svg-icon="android"></md-icon></button>');
+      expect(el.find('md-icon').attr('aria-hidden')).toEqual('true');
+    });
+
     it('should apply aria-hidden="true" when alt is empty string', function() {
       el = make('<md-icon md-svg-icon="android" alt=""></md-icon>');
       expect(el.attr('aria-hidden')).toEqual('true');
