@@ -31,6 +31,9 @@ angular.module('material.components.icon', [
  * To use icon sets, developers are required to pre-register the sets using the `$mdIconProvider` service.
  * @param {string} md-font-icon String name of CSS icon associated with the font-face will be used
  * to render the icon. Requires the fonts and the named CSS styles to be preloaded.
+ * @param {string=} alt Labels icon for accessibility. If an empty string is provided, icon
+ * will be hidden from accessibility layer with `aria-hidden="true"`. If there's no alt on the icon
+ * nor a label on the parent element, a warning will be logged to the console.
  *
  * @usage
  * <hljs lang="html">
@@ -63,12 +66,15 @@ function mdIconDirective($mdIcon, $mdAria, $log) {
   function postLink(scope, element, attr) {
     var ariaLabel = attr.alt || scope.fontIcon || scope.svgIcon;
     var attrName = attr.$normalize(attr.$attr.mdSvgIcon || attr.$attr.mdSvgSrc || '');
-    if (attr.alt == '') {
-      // Hide from the accessibility layer.
-      $mdAria.expect(element, 'aria-hidden', 'true');
-    } else {
+    var parentEl = element.parent();
+    var parentLabel = parentEl.attr('aria-label') || parentEl.text();
+
+    if (!parentLabel && attr.alt !== '') {
       $mdAria.expect(element, 'aria-label', ariaLabel);
       $mdAria.expect(element, 'role', 'img');
+    } else {
+      // Hide from the accessibility layer.
+      $mdAria.expect(element, 'aria-hidden', 'true');
     }
 
     if (attrName) {
