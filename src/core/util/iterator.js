@@ -24,6 +24,10 @@
   function Iterator(items, reloop) {
     var trueFn = function() { return true; };
 
+    if (items && !angular.isArray(items)) {
+      items = Array.prototype.slice.call(items);
+    }
+
     reloop = !!reloop;
     var _items = items || [ ];
 
