@@ -16,9 +16,7 @@
 </head>
 <body layout="row">
 
-  <md-sidenav layout="column"
-              style="overflow: hidden; display: flex;"
-              class="site-sidenav md-sidenav-left md-whiteframe-z2"
+  <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2"
               md-component-id="left"
               md-is-locked-open="$media('gt-sm')">
 
@@ -38,7 +36,7 @@
       </h1>
     </md-toolbar>
 
-    <md-content style="overflow: auto;">
+    <md-content flex>
       <ul class="docs-menu">
         <li ng-repeat="section in menu.sections" class="parent-list-item" ng-class="{'parentActive' : isSectionSelected(section)}">
           <h2 class="menu-heading" ng-if="section.type === 'heading'" id="heading_{{ section.name | nospace }}">
@@ -58,7 +56,7 @@
     </md-content>
   </md-sidenav>
 
-  <div layout="column" layout-fill tabIndex="-1" role="main">
+  <div layout="column" tabIndex="-1" role="main" flex>
     <md-toolbar>
 
       <div class="md-toolbar-tools" ng-click="openMenu()">
