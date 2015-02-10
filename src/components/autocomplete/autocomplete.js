@@ -1,0 +1,11 @@
+(function () {
+  'use strict';
+  /**
+   * @ngdoc module
+   * @name material.components.autocomplete
+   */
+  /*
+   * @see js folder for autocomplete implementation
+   */
+  angular.module('material.components.autocomplete', [ 'material.core' ]);
+})();
