@@ -50,7 +50,7 @@ angular.module('material.components.checkbox', [
  * </hljs>
  *
  */
-function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant, $mdTheming, $mdUtil) {
+function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant, $mdTheming, $mdUtil, $parse) {
   inputDirective = inputDirective[0];
   var CHECKED_CSS = 'md-checked';
 
@@ -72,11 +72,22 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
 
   function compile (tElement, tAttrs) {
 
+    var disabledParsed = $parse(tAttrs.ngDisabled) || angular.noop;
+
     tAttrs.type = 'checkbox';
     tAttrs.tabIndex = 0;
     tElement.attr('role', tAttrs.type);
 
     return function postLink(scope, element, attr, ngModelCtrl) {
+      scope.$watch(function () {
+        return typeof disabledParsed === 'function' && disabledParsed(scope);
+      }, function (value) {
+        element.attr({
+          disabled: value,
+          ariaDisabled: value,
+          tabindex: value ? -1 : 0
+        });
+      });
       ngModelCtrl = ngModelCtrl || $mdUtil.fakeNgModel();
       var checked = false;
       $mdTheming(element);
