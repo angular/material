@@ -21,22 +21,23 @@ angular.module('material.components.icon', [
  * @restrict E
  *
  * @description
- * The `<md-icon>` directive is an element useful for showing an icon based on a font-face
- * or a SVG. Both external SVGs (via URLs) or cached SVG from icon sets (using $mdIcon service) can be
- * easily used.
+ * The `md-icon` directive is an markup element useful for showing an icon based on a font-face
+ * or a SVG. Both external SVGs (via URLs) or cached SVG from icon sets can be
+ * easily loaded and used.
  *
  * @param {string} md-svg-src String URL [or expression ] used to load, cache, and display an external SVG.
- * @param {string} md-svg-icon String name [or expression ] used for lookup of the icon from the internal cache; can be an expression.
- * inside the cached icon sets. Specific set names can be used with the syntax `<set name>:<icon name>`.
- * Requires the iconset to be pre-registered using `$mdIconProvider`
+ * @param {string} md-svg-icon String name used for lookup of the icon from the internal cache; interpolated strings or
+ * expressions may also be used. Specific set names can be used with the syntax `<set name>:<icon name>`.<br/><br/>
+ * To use icon sets, developers are required to pre-register the sets using the `$mdIconProvider` service.
  * @param {string} md-font-icon String name of CSS icon associated with the font-face will be used
  * to render the icon. Requires the fonts and the named CSS styles to be preloaded.
  *
  * @usage
  * <hljs lang="html">
- *  <md-icon md-font-icon="android" alt="android icon"></md-icon>
- *  <md-icon md-svg-icon="action:android" alt="android icon"></md-icon>
- *  <md-icon md-svg-src="/android.svg" alt="android icon"></md-icon>
+ *  <md-icon md-font-icon="android"          alt="android " ></md-icon>
+ *  <md-icon md-svg-icon="action:android"    alt="android " ></md-icon>
+ *  <md-icon md-svg-src="/android.svg"       alt="android " ></md-icon>
+ *  <md-icon md-svg-src="{{ getAndroid() }}" alt="android " ></md-icon>
  * </hljs>
  */
 function mdIconDirective($mdIcon, $mdAria, $log) {

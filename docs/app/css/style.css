@@ -530,3 +530,12 @@ md-content.demo-source-container > hljs > pre > code.highlight {
 .site-sidenav > * {
   min-width: 218px;
 }
+
+.dashed_bottom {
+    border-bottom: dashed 1px rgb(224, 224, 224);;
+        padding-bottom: 10px;
+}
+
+.api-section h3 {
+    padding-top:20px;
+}
