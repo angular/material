@@ -120,8 +120,8 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *          controller: DialogController
  *       });
  *       function DialogController(scope, $mdDialog, items) {
- *         $scope.items = items;
- *         $scope.closeDialog = function() {
+ *         scope.items = items;
+ *         scope.closeDialog = function() {
  *           $mdDialog.hide();
  *         }
  *       }
