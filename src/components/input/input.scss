@@ -17,6 +17,7 @@ $input-error-height: 24px !default;
 
 md-input-container {
   display: flex;
+  overflow-x: hidden;
   position: relative;
   flex-direction: column;
   padding: $input-container-padding;
