@@ -16,6 +16,11 @@ md-tabs, md-tabs .md-header {
 md-tab[disabled] {
   opacity: 0.5;
 }
+
+md-tabs .md-next md-icon {
+  transform: rotate(180deg);
+}
+
 .md-tab-content {
   background: white;
 }
