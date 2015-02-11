@@ -113,8 +113,9 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia, $
     // Provide the controller with a way to trigger layouts.
     ctrl.layoutDelegate = layoutDelegate
 
-    var invalidateLayout = angular.bind(ctrl, ctrl.invalidateLayout);
-    scope.$on('$destroy', watchMedia());
+    var invalidateLayout = angular.bind(ctrl, ctrl.invalidateLayout),
+        unwatchAttrs = watchMedia();
+    scope.$on('$destroy', unwatchMedia());
 
     /**
      * Watches for changes in media, invalidating layout as necessary.
