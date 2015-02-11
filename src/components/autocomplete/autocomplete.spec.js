@@ -58,6 +58,7 @@ describe('<md-autocomplete>', function() {
       ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.ENTER, preventDefault: angular.noop });
       scope.$apply();
       expect(scope.searchText).toBe('foo');
+      expect(scope.selectedItem).toBe(scope.match(scope.searchText)[0]);
     }));
   });
 

@@ -126,7 +126,8 @@
     }
 
     function select (index) {
-      $scope.searchText = getDisplayValue(self.matches[index]) || $scope.searchText;
+      $scope.selectedItem = self.matches[index];
+      $scope.searchText = getDisplayValue($scope.selectedItem) || $scope.searchText;
       self.hidden  = true;
       self.index   = -1;
       self.matches = [];
