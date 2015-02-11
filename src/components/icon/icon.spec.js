@@ -1,9 +1,9 @@
 describe('mdIcon directive', function() {
-  var provider, el;
+  var el;
 
+  beforeEach(module('material.core'));
   beforeEach(module('material.components.icon',function($mdIconProvider){
-    provider = $mdIconProvider;
-    provider
+    $mdIconProvider
       .icon('android'  , 'android.svg')
       .iconSet('social', 'social.svg' )
       .defaultIconSet('core.svg');
