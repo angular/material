@@ -1,0 +1,49 @@
+md-select.md-THEME_NAME-theme {
+  &:focus {
+    .md-select-label {
+      border-bottom-color: '{{primary-color}}';
+      color: '{{ foreground-1 }}';
+      &.md-placeholder {
+        color: '{{ foreground-1 }}';
+      }
+    }
+    &.md-accent .md-select-label {
+      border-bottom-color: '{{accent-color}}';
+    }
+    &.md-warn .md-select-label {
+      border-bottom-color: '{{warn-color}}';
+    }
+  }
+  .md-select-label {
+    &.md-placeholder {
+      color: '{{foreground-3}}';
+    }
+    border-bottom-color: '{{foreground-4}}';
+  }
+}
+
+md-select-menu.md-THEME_NAME-theme {
+
+  md-optgroup {
+    color: '{{foreground-2}}';
+    md-option {
+      color: '{{foreground-1}}';
+    }
+  }
+  md-option[selected] {
+    background-color: '{{primary-50}}';
+    &:focus {
+      background-color: '{{primary-100}}';
+    }
+    &.md-accent {
+      background-color: '{{accent-50}}';
+      &:focus {
+        background-color: '{{accent-100}}';
+      }
+    }
+  }
+  md-option:focus:not([selected]) {
+    background: '{{background-200}}';
+  }
+
+}

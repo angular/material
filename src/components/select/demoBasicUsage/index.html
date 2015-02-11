@@ -1,0 +1,14 @@
+<div ng-app="selectDemoBasic" ng-controller="AppCtrl" layout="column" layout-align="center center" style="min-height: 300px;">
+  <p>A select can be used to select a single element from a list:</p>
+  <md-select ng-model="neighborhood" placeholder="Neighborhood">
+    <md-option ng-value="opt" ng-repeat="opt in neighborhoods">{{ opt }}</md-option>
+  </md-select>
+  <p class="result">{{ neighborhood ? 'You selected ' + neighborhood : 'You haven\'t selected a neighborhood yet' }}</p>
+
+  <p>A select can also specify its own label and be used to pick multiple entries:</p>
+  <md-select multiple ng-model="multiNeighborhood" placeholder="Neighborhood">
+    <md-select-label>{{ multiNeighborhood.length ? multiNeighborhood.join(', ') : 'Choose some' }}</md-select-label>
+    <md-option ng-value="opt" ng-repeat="opt in neighborhoods2">{{ opt }}</md-option>
+  </md-select>
+  <p class="result">{{ multiNeighborhood ? 'You selected ' + multiNeighborhood : 'You haven\'t selected anything yet' }}</p>
+</div>
