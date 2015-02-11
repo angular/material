@@ -302,8 +302,8 @@ angular.module('material.core')
     onCancel: angular.noop,
     options: {},
 
-    dispatchEvent: typeof jQuery !== 'undefined' && angular.element === jQuery ? 
-      jQueryDispatchEvent : 
+    dispatchEvent: typeof window.jQuery !== 'undefined' && angular.element === window.jQuery ?
+      jQueryDispatchEvent :
       nativeDispatchEvent,
 
     start: function(ev, pointer) {
@@ -351,7 +351,7 @@ angular.module('material.core')
       element.on('$destroy', onDestroy);
 
       return onDestroy;
-      
+
       function onDestroy() {
         delete element[0].$mdGesture[self.name];
         element.off('$destroy', onDestroy);
@@ -383,7 +383,7 @@ angular.module('material.core')
   }
 
   /*
-   * NOTE: nativeDispatchEvent is very performance sensitive. 
+   * NOTE: nativeDispatchEvent is very performance sensitive.
    */
   function nativeDispatchEvent(srcEvent, eventType, eventPointer) {
     eventPointer = eventPointer || pointer;
