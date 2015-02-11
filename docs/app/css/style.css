@@ -525,6 +525,12 @@ md-content.demo-source-container > hljs > pre > code.highlight {
         padding-bottom: 10px;
 }
 
+.dashed_top {
+    border-top: dashed 1px rgb(224, 224, 224);
+    margin-top: 10px;
+}
+
+
 .api-section h3 {
     padding-top:20px;
 }

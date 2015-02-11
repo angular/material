@@ -2,13 +2,13 @@
   'use strict';
 
   angular
-    .module('material.core' )
+    .module('material.components.icon' )
     .provider('$mdIcon', MdIconProvider);
 
   /**
     * @ngdoc service
     * @name $mdIconProvider
-    * @module material.core
+    * @module material.components.icon
     *
     * @description
     * `$mdIconProvider` is used only to register icon IDs with URLs. These configuration features allow
@@ -198,6 +198,7 @@
  /**
   * @ngdoc service
   * @name $mdIcon
+  * @module material.components.icon
   *
   * @description
   * `$mdIcon` is a service used to lookup SVG icons configured via `$mdIconProvider` using

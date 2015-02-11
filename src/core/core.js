@@ -8,7 +8,7 @@
 var iconProvider;
 
 angular
-  .module('material.core', [ 'material.core.theming' ])
+  .module('material.core', [ 'material.core.theming', 'material.components.icon' ])
   .config( MdCoreConfigure )
   .run( function( $templateCache ){
 
