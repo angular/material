@@ -66,10 +66,8 @@ function mdIconDirective($mdIcon, $mdAria, $log) {
   function postLink(scope, element, attr) {
     var ariaLabel = attr.alt || scope.fontIcon || scope.svgIcon;
     var attrName = attr.$normalize(attr.$attr.mdSvgIcon || attr.$attr.mdSvgSrc || '');
-    var parentEl = element.parent();
-    var parentLabel = parentEl.attr('aria-label') || parentEl.text();
 
-    if (!parentLabel && attr.alt !== '') {
+    if (attr.alt != '' && !parentsHaveText()) {
       $mdAria.expect(element, 'aria-label', ariaLabel);
       $mdAria.expect(element, 'role', 'img');
     } else {
@@ -89,6 +87,16 @@ function mdIconDirective($mdIcon, $mdAria, $log) {
         }
 
       });
+    }
+    function parentsHaveText() {
+      var parent = element.parent();
+      if (parent.attr('aria-label') || parent.text()) {
+        return true;
+      }
+      else if(parent.parent().attr('aria-label') || parent.parent().text()) {
+        return true;
+      }
+      return false;
     }
   }
 }

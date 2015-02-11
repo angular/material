@@ -63,6 +63,14 @@ describe('mdIcon directive', function() {
     it('should apply aria-hidden="true" when parent has valid label', function() {
       el = make('<button aria-label="Android"><md-icon md-svg-icon="android"></md-icon></button>');
       expect(el.find('md-icon').attr('aria-hidden')).toEqual('true');
+
+      el = make('<md-radio-button aria-label="avatar 2" role="radio"> '+
+                  '<div class="md-container"></div> '+
+                    '<div class="md-label"> '+
+                    '<md-icon md-svg-icon="android"></md-icon> '+
+                  '</div></md-radio-button>');
+
+      expect(el.find('md-icon').attr('aria-hidden')).toEqual('true');
     });
 
     it('should apply aria-hidden="true" when parent has text content', function() {
