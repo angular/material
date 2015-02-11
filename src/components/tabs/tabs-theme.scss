@@ -2,6 +2,9 @@ md-tabs.md-THEME_NAME-theme {
   .md-header {
     background-color: transparent;
   }
+  .md-paginator md-icon {
+    color: '{{primary-color}}';
+  }
 
   &.md-accent {
     .md-header {

@@ -5,12 +5,40 @@
  * Initialization function that validates environment
  * requirements.
  */
+var iconProvider;
+
 angular
-  .module('material.core', ['material.core.theming'])
-  .config(MdCoreConfigure);
+  .module('material.core', [ 'material.core.theming' ])
+  .config( MdCoreConfigure )
+  .run( function( $templateCache ){
+
+    // These process is needed to pre-configure icons used internally
+    // with specific components. Note: these are SVGs and not font-icons.
+    //
+    // NOTE: any SVGs used below that are **also** available in `material-fonts` should
+    // be removed from this startup process.
 
 
-function MdCoreConfigure($provide, $mdThemingProvider) {
+    var svgRegistry = [{
+                    id : "tabs-arrow",
+                    url: "tabs-arrow.svg",
+                    svg: '<svg version="1.1" x="0px" y="0px" viewBox="0 0 24 24"><g id="tabs-arrow"><polygon points="15.4,7.4 14,6 8,12 14,18 15.4,16.6 10.8,12 "/></g></svg>'
+                  }];
+
+    svgRegistry.forEach(function(asset){
+      iconProvider.icon(asset.id,  asset.url);
+      $templateCache.put(asset.url, asset.svg);
+    });
+
+    // Remove reference
+    iconProvider = null;
+
+  });
+
+
+function MdCoreConfigure($provide, $mdThemingProvider, $mdIconProvider ) {
+
+  iconProvider =  $mdIconProvider;
   $provide.decorator('$$rAF', ["$delegate", rAFDecorator]);
 
   $mdThemingProvider.theme('default')

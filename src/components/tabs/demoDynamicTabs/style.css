@@ -16,6 +16,8 @@ md-tabs, md-tabs .md-header {
 md-tab[disabled] {
   opacity: 0.5;
 }
+
+
 .md-tab-content {
   background: white;
 }
