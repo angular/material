@@ -2,6 +2,11 @@ md-autocomplete {
   background: '{{background-50}}';
   button {
     background: '{{background-200}}';
+    md-icon {
+      path {
+        fill: '{{foreground-2}}';
+      }
+    }
   }
   ul {
     background: '{{background-50}}';

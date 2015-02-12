@@ -19,11 +19,17 @@ angular
     // be removed from this startup process.
 
 
-    var svgRegistry = [{
-                    id : "tabs-arrow",
-                    url: "tabs-arrow.svg",
-                    svg: '<svg version="1.1" x="0px" y="0px" viewBox="0 0 24 24"><g id="tabs-arrow"><polygon points="15.4,7.4 14,6 8,12 14,18 15.4,16.6 10.8,12 "/></g></svg>'
-                  }];
+    var svgRegistry = [
+      {
+        id : "tabs-arrow",
+        url: "tabs-arrow.svg",
+        svg: '<svg version="1.1" x="0px" y="0px" viewBox="0 0 24 24"><g id="tabs-arrow"><polygon points="15.4,7.4 14,6 8,12 14,18 15.4,16.6 10.8,12 "/></g></svg>'
+      },
+      {
+        id : "close",
+        url: "close.svg",
+        svg: '<svg version="1.1" x="0px" y="0px" viewBox="0 0 24 24"><g id="close"><path d="M19 6.41l-1.41-1.41-5.59 5.59-5.59-5.59-1.41 1.41 5.59 5.59-5.59 5.59 1.41 1.41 5.59-5.59 5.59 5.59 1.41-1.41-5.59-5.59z"/></g></svg>'
+      }];
 
     svgRegistry.forEach(function(asset){
       iconProvider.icon(asset.id,  asset.url);

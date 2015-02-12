@@ -106,7 +106,7 @@
           break;
         default:
           self.index = -1;
-          self.hidden = false;
+          self.hidden = isHidden();
           //-- after value updates, check if list should be hidden
           $timeout(function () { self.hidden = isHidden(); });
       }
