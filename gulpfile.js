@@ -39,6 +39,7 @@ var IS_RELEASE_BUILD = !!argv.release;
 var IS_DEMO_BUILD = (!!argv.module || !!argv.m || !!argv.c);
 var BUILD_MODE = argv.mode;
 var VERSION = argv.version || pkg.version;
+var SHA = argv.sha;
 
 /** Grab-bag of build configuration. */
 var config = {
@@ -112,11 +113,15 @@ require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
 gulp.task('default', ['build']);
 gulp.task('validate', ['jshint', 'karma']);
 gulp.task('changelog', function(done) {
-  changelog({
+  var options = {
     repository: 'https://github.com/angular/material',
     version: VERSION,
     file: 'CHANGELOG.md'
-  }, function(err, log) {
+  };
+  if (SHA) {
+    options.from = SHA;
+  }
+  changelog(options, function(err, log) {
     fs.writeFileSync(__dirname + '/CHANGELOG.md', log);
   });
 });
