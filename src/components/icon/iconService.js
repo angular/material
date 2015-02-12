@@ -15,8 +15,10 @@
     * icons and icon sets to be pre-registered and associated with source URLs **before** the `<md-icon />`
     * directives are compiled.
     *
-    * When an SVG is requested by name/ID, the `$mdIcon` service searches its registry for the associated source
-    * URL; that URL is used to on-demand load and parse the SVG dynamically.
+    * Loading of the actual svg files are deferred to on-demand requests and are loaded
+    * internally by the `$mdIcon` service using the `$http` service. When an SVG is requested by name/ID,
+    * the `$mdIcon` service searches its registry for the associated source URL;
+    * that URL is used to on-demand load and parse the SVG dynamically.
     *
     * <hljs lang="js">
     *   app.config(function($mdIconProvider) {
@@ -65,9 +67,18 @@
     * @name $mdIconProvider#icon
     *
     * @description
-    * Register a source URL for a specific icon name; name may include optional 'icon set' name prefix.
-    * These icons can be retrieved from the cache using `$mdIcon( <icon name> )`
+    * Register a source URL for a specific icon name; the name may include optional 'icon set' name prefix.
+    * These icons  will later be retrieved from the cache using `$mdIcon( <icon name> )`
     *
+    * @param {string} id Icon name/id used to register the icon
+    * @param {string} url specifies the external location for the data file. Used internally by `$http` to load the
+    * data or as part of the lookup in `$templateCache` if pre-loading was configured.
+    * @param {string=} iconSize Number indicating the width and height of the icons in the set. All icons
+    * in the icon set must be the same size. Default size is 24.
+    *
+    * @returns {obj} an `$mdIconProvider` reference; used to support method call chains for the API
+    *
+    * @usage
     * <hljs lang="js">
     *   app.config(function($mdIconProvider) {
     *
@@ -79,17 +90,26 @@
     *   });
     * </hljs>
     *
-    * @returns {obj} an `$mdIconProvider` reference with the chainable configuration API:
-    *
     */
    /**
     * @ngdoc method
     * @name $mdIconProvider#iconSet
     *
     * @description
-    * Register a source URL for a 'named' set of icons. Individual icons
-    * can be retrieved from this cached set using `$mdIcon( <icon set name>:<icon name> )`
+    * Register a source URL for a 'named' set of icons; group of SVG definitions where each definition
+    * has an icon id. Individual icons can be subsequently retrieved from this cached set using
+    * `$mdIcon( <icon set name>:<icon name> )`
     *
+    * @param {string} id Icon name/id used to register the iconset
+    * @param {string} url specifies the external location for the data file. Used internally by `$http` to load the
+    * data or as part of the lookup in `$templateCache` if pre-loading was configured.
+    * @param {string=} iconSize Number indicating the width and height of the icons in the set. All icons
+    * in the icon set must be the same size. Default size is 24.
+    *
+    * @returns {obj} an `$mdIconProvider` reference; used to support method call chains for the API
+    *
+    *
+    * @usage
     * <hljs lang="js">
     *   app.config(function($mdIconProvider) {
     *
@@ -100,29 +120,33 @@
     *   });
     * </hljs>
     *
-    * @returns {obj} an `$mdIconProvider` reference with the chainable configuration API:
-    *
     */
    /**
     * @ngdoc method
     * @name $mdIconProvider#defaultIconSet
     *
     * @description
-    * Register a source URL for the default 'named' set of icons. Unless explicitly registered
-    * subsequent lookups of icons will fall back to search this 'default' icon set.
+    * Register a source URL for the default 'named' set of icons. Unless explicitly registered,
+    * subsequent lookups of icons will failover to search this 'default' icon set.
     * Icon can be retrieved from this cached, default set using `$mdIcon( <icon name> )`
     *
+    * @param {string} url specifies the external location for the data file. Used internally by `$http` to load the
+    * data or as part of the lookup in `$templateCache` if pre-loading was configured.
+    * @param {string=} iconSize Number indicating the width and height of the icons in the set. All icons
+    * in the icon set must be the same size. Default size is 24.
+    *
+    * @returns {obj} an `$mdIconProvider` reference; used to support method call chains for the API
+    *
+    * @usage
     * <hljs lang="js">
     *   app.config(function($mdIconProvider) {
     *
     *     // Configure URLs for icons specified by [set:]id.
     *
     *     $mdIconProvider
-    *          .defaultIconSet('social', 'my/app/social.svg')   // Register a default icon set
+    *          .defaultIconSet( 'my/app/social.svg' )   // Register a default icon set
     *   });
     * </hljs>
-    *
-    * @returns {obj} an `$mdIconProvider` reference with the chainable configuration API:
     *
     */
    /**
@@ -131,9 +155,15 @@
     *
     * @description
     * While `<md-icon />` markup can also be style with sizing CSS, this method configures
-    * the default icon size used for all icons; unless overridden by specific CSS.
-    * NOTE: the default sizing is (24px, 24px).
+    * the default width **and** height used for all icons; unless overridden by specific CSS.
+    * The default sizing is (24px, 24px).
     *
+    * @param {string} iconSize Number indicating the width and height of the icons in the set. All icons
+    * in the icon set must be the same size. Default size is 24.
+    *
+    * @returns {obj} an `$mdIconProvider` reference; used to support method call chains for the API
+    *
+    * @usage
     * <hljs lang="js">
     *   app.config(function($mdIconProvider) {
     *
@@ -143,8 +173,6 @@
     *          .defaultIconSize(36)   // Register a default icon size (width == height)
     *   });
     * </hljs>
-    *
-    * @returns {obj} an `$mdIconProvider` reference with the chainable configuration API:
     *
     */
 
@@ -201,11 +229,16 @@
   * @module material.components.icon
   *
   * @description
-  * `$mdIcon` is a service used to lookup SVG icons configured via `$mdIconProvider` using
-  *  and ID or uses a URL used to load and cache a currently external SVG (that is not currently cached).
+  * The `$mdIcon` service is a function used to lookup SVG icons.
   *
-  * @param {string} ID or URL value
-  * @returns {obj} Clone of the SVG DOM element
+  * @param {string} id Query value for a unique Id or URL. If the argument is a URL, then the service will retrieve the icon element
+  * from its internal cache or load the icon and cache it first. If the value is not a URL-type string, then an ID lookup is
+  * performed. The Id may be a unique icon ID or may include an iconSet ID prefix.
+  *
+  * For the **id** query to work properly, this means that all id-to-URL mappings must have been previously configured
+  * using the `$mdIconProvider`.
+  *
+  * @returns {obj} Clone of the initial SVG DOM element; which was created from the SVG markup in the SVG data file.
   *
   * @usage
   * <hljs lang="js">
@@ -214,14 +247,15 @@
   *   // See if the icon has already been loaded, if not
   *   // then lookup the icon from the registry cache, load and cache
   *   // it for future requests.
+  *   // NOTE: ID queries require configuration with $mdIconProvider
   *
-  *   $mdIcon('android').then(function(icon) { element.append(icon); });
-  *   $mdIcon('work:chair').then(function(icon) { element.append(icon); });
+  *   $mdIcon('android').then(function(iconEl)    { element.append(iconEl); });
+  *   $mdIcon('work:chair').then(function(iconEl) { element.append(iconEl); });
   *
   *   // Load and cache the external SVG using a URL
   *
-  *   $mdIcon('img/icons/android.svg').then(function(icon) {
-  *     element.append(icon);
+  *   $mdIcon('img/icons/android.svg').then(function(iconEl) {
+  *     element.append(iconEl);
   *   });
   * };
   * </hljs>
