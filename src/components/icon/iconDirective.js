@@ -42,7 +42,7 @@ angular.module('material.components.icon', [
  *  <md-icon md-svg-src="{{ getAndroid() }}" alt="android " ></md-icon>
  * </hljs>
  */
-function mdIconDirective($mdIcon, $mdAria ) {
+function mdIconDirective($mdIcon, $mdTheming, $mdAria ) {
   return {
     scope: {
       fontIcon: '@mdFontIcon',
@@ -63,6 +63,8 @@ function mdIconDirective($mdIcon, $mdAria ) {
    * Supports embedded SVGs, font-icons, & external SVGs
    */
   function postLink(scope, element, attr) {
+    $mdTheming(element);
+
     var ariaLabel = attr.alt || scope.fontIcon || scope.svgIcon;
     var attrName = attr.$normalize(attr.$attr.mdSvgIcon || attr.$attr.mdSvgSrc || '');
 

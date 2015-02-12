@@ -7,11 +7,13 @@
       <div class="preview-glyphs">
 
         <md-icon ng-repeat="size in sizes"
-                 md-font-icon="{{ font.name }}"
-                 ng-style="{color: font.color, 'font-size': size + 'px', height: size + 'px'}"
-                 alt="{{ font.name + size }}"
-                 class="step">
+                         md-font-icon="{{ font.name }}"
+                         ng-style="{color: !font.theme && font.color, 'font-size': size + 'px', height: size + 'px'}"
+                         ng-class="font.theme"
+                         alt="{{ font.name + size }}"
+                         class="step">
         </md-icon>
+
 
       </div>
 
