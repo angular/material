@@ -173,7 +173,7 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia, $
                       tiles: tilePositions.map(function(ps, i) {
                         return {
                           element: angular.element(tiles[i]),
-                          styles: getTileStyle(ps.position, ps.spans,
+                          style: getTileStyle(ps.position, ps.spans,
                               colCount, rowCount,
                               gutter, rowMode, rowHeight)
                         }
@@ -405,17 +405,16 @@ function GridLayoutFactory($mdUtil) {
       },
 
       /**
-       * Default animator simply sets the element.css( <styles> ).
-       * Use the $mdGridLayoutProvider to decorate the animator callback if
-       * alternate animation scenarios are desired.
+       * Default animator simply sets the element.css( <styles> ). An alternate
+       * animator can be provided as an argument. The function has the following
+       * signature:
+       *
+       *    function({grid: {element: JQLite, style: Object}, tiles: Array<{element: JQLite, style: Object}>)
        */
       reflow: function(customAnimatorFn) {
         reflowTime = $mdUtil.time(function() {
           var animator = customAnimatorFn || defaultAnimator;
-          animator(gridStyles.grid.element, gridStyles.grid.style);
-          gridStyles.tiles.forEach(function(it) {
-            animator(it.element, it.styles);
-          });
+          animator(gridStyles.grid, gridStyles.tiles);
         });
         return self;
       },
@@ -435,8 +434,11 @@ function GridLayoutFactory($mdUtil) {
     };
   };
 
-  function defaultAnimator(element, styles) {
-    element.css(styles);
+  function defaultAnimator(grid, tiles) {
+    grid.element.css(grid.style);
+    tiles.forEach(function(t) {
+      t.element.css(t.style);
+    })
   };
 
   /**
