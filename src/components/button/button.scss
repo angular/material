@@ -108,7 +108,6 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
     transition-property: transform, box-shadow;
 
     md-icon {
-      line-height: $button-fab-height;
       margin-top: 0;
     }
 
@@ -116,7 +115,6 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
       width: $button-fab-mini-width;
       height: $button-fab-mini-height;
       md-icon {
-        line-height: $button-fab-mini-height;
       }
     }
 

@@ -57,6 +57,10 @@ md-grid-tile {
     transition: all 500ms ease-out 100ms;
 }
 
+md-grid-tile md-icon {
+  padding-bottom: 32px;
+}
+
 md-grid-tile md-grid-tile-footer {
   background:  rgba(0,0,0,.68);
   height: 36px;
