@@ -6,8 +6,9 @@ angular.module('appUsingTemplateCache', ['ngMaterial'])
     // Register icon IDs with sources. Future $mdIcon( <id> ) lookups
     // will load by url and retrieve the data via the $http and $templateCache
 
-    $mdIconProvider.iconSet('core', 'img/icons/sets/core-icons.svg')
-                   .icon('social:cake', 'img/icons/cake.svg');
+    $mdIconProvider
+      .iconSet('core', 'img/icons/sets/core-icons.svg',24)
+      .icon('social:cake', 'img/icons/cake.svg',24);
 
   })
   .run(function($http, $templateCache) {

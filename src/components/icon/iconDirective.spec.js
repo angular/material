@@ -1,59 +1,84 @@
 describe('mdIcon directive', function() {
   var el;
+  var $scope;
+  var $compile;
+  var $q;
 
   beforeEach(module('material.core'));
-  beforeEach(module('material.components.icon',function($mdIconProvider){
-    $mdIconProvider
-      .icon('android'  , 'android.svg')
-      .iconSet('social', 'social.svg' )
-      .defaultIconSet('core.svg');
-  }));
+  beforeEach(module('material.components.icon'));
 
-  beforeEach(inject(function($templateCache){
+  var mockIconSvc = function(id) {
+    var deferred = $q.defer();
+    switch(id) {
+      case 'android':
+        deferred.resolve('<svg><g id="android"></g></svg>');
+        break;
+      case 'cake':
+        deferred.resolve('<svg><g id="cake"></g></svg>');
+        break;
+      case 'android.svg':
+        deferred.resolve('<svg><g id="android"></g></svg>');
+        break;
+      case 'cake.svg':
+        deferred.resolve('<svg><g id="cake"></g></svg>');
+        break;
+    }
+    return deferred.promise;
+  }
 
-    $templateCache.put('android.svg', '<svg><g id="android"></g></svg>');
-    $templateCache.put('social.svg' , '<svg><g id="s1"></g><g id="s2"></g></svg>');
-    $templateCache.put('core.svg'   , '<svg><g id="c1"></g><g id="c2"></g></svg>');
+  function make(html) {
+    var el;
+    el = $compile(html)($scope);
+    $scope.$digest();
+    return el;
+  }
 
-  }));
+  beforeEach(function() {
+    module(function($provide) {
+      $provide.value('$mdIcon', mockIconSvc);
+    });
+
+    inject(function($rootScope, _$compile_, _$q_){
+      $scope = $rootScope;
+      $compile = _$compile_;
+      $q = _$q_;
+    });
+  });
 
 
   describe('using md-font-icon=""', function() {
+
     it('should render correct HTML with md-font-icon value as class', function() {
       el = make( '<md-icon md-font-icon="android"></md-icon>');
       expect(el.html()).toEqual('<span class="md-font android" ng-class="fontIcon"></span>');
     });
-  });
 
+  });
 
   describe('using md-svg-icon=""', function() {
 
-    it('should append configured SVG single icon', function() {
-      el = make('<md-icon md-svg-icon="android"></md-icon>');
-      var expected = updateDefaults('<svg><g id="android"></g></svg>');
-      expect(el.html()).toEqual(expected);
-    });
-
-    it('should append configured SVG icon from named group', function() {
-      el = make('<md-icon md-svg-icon="social:s1"></md-icon>');
-      var expected = updateDefaults('<svg xmlns="http://www.w3.org/2000/svg"><g id="s1"></g></g></svg>');
-      expect(el.html()).toEqual(expected);
-    });
-
-    it('should append configured SVG icon from default group', function() {
-      el = make('<md-icon md-svg-icon="c1"></md-icon>');
-      var expected = updateDefaults('<svg xmlns="http://www.w3.org/2000/svg"><g id="c1"></g></g></svg>');
-      expect(el.html()).toEqual(expected);
+    it('should update mdSvgIcon when attribute value changes', function() {
+      $scope.iconName = 'android';
+      el = make('<md-icon md-svg-icon="{{ iconName }}"></md-icon>');
+      var iScope = el.isolateScope();
+      expect(iScope.svgIcon).toEqual('android');
+      $scope.iconName = 'cake';
+      $scope.$digest();
+      expect(iScope.svgIcon).toEqual('cake');
     });
 
   });
 
-
   describe('using md-svg-src=""', function() {
 
-    it('should append SVG from URL to md-icon', function() {
-      el = make('<md-icon md-svg-src="android.svg"></md-icon>');
-      expect(el.html()).toEqual( updateDefaults('<svg><g id="android"></g></svg>') );
+    it('should update mdSvgSrc when attribute value changes', function() {
+      $scope.url = 'android.svg';
+      el = make('<md-icon md-svg-src="{{ url }}"></md-icon>');
+      var iScope = el.isolateScope();
+      expect(iScope.svgSrc).toEqual('android.svg');
+      $scope.url = 'cake.svg';
+      $scope.$digest();
+      expect(iScope.svgSrc).toEqual('cake.svg');
     });
 
   });
@@ -99,34 +124,5 @@ describe('mdIcon directive', function() {
     });
 
   });
-
-
-  function make(html) {
-    var el;
-    inject(function($compile, $rootScope) {
-      el = $compile(html)($rootScope);
-      $rootScope.$digest();
-    });
-
-    return el;
-  }
-
-  function updateDefaults(svg) {
-    svg = angular.element(svg);
-
-    svg.attr({
-      'fit'   : '',
-      'height': '100%',
-      'width' : '100%',
-      'preserveAspectRatio': 'xMidYMid meet',
-      'viewBox' : svg.attr('viewBox') || '0 0 24 24'
-    })
-    .css( {
-      'pointer-events' : 'none',
-      'display' : 'block'
-    });
-
-    return svg[0].outerHTML;
-  }
 
 });
