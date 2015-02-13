@@ -37,6 +37,20 @@ th {
   background-color: #f5f5f5;
 }
 
+ul {
+  margin: 0;
+  padding: 0;
+}
+ul li {
+  margin-left: 16px;
+  padding: 0;
+  margin-top: 3px;
+  list-style-position: inside;
+}
+ul li:first-child {
+  margin-top: 0;
+}
+
 pre {
   white-space: pre;
   white-space: pre-wrap;
@@ -83,20 +97,29 @@ code:not(.highlight) {
   -webkit-font-smoothing: auto;
 }
 
-.md-sidenav-inner {
-  background: #fff;
-}
-
 .layout-content,
 .doc-content {
   max-width: 864px;
   margin: auto;
 }
-.layout-label {
-  width: 120px;
-}
 .layout-content code.highlight {
   margin-bottom: 15px;
+}
+
+.extraPad {
+  padding-left:32px !important;
+  padding-right:32px !important;
+}
+
+.site-sidenav,
+.site-sidenav.md-locked-open-add-active,
+.site-sidenav.md-locked-open {
+  width: 254px;
+  min-width: 254px;
+  max-width: 254px;
+}
+.site-sidenav > * {
+  min-width: 218px;
 }
 
 /* Begin Docs Menu */
@@ -336,21 +359,7 @@ md-toolbar.demo-toolbar .md-button {
   background-color: #f6f6f6;
   height: 400px;
 }
-
-.demo-source-content {
-  height: 400px;
 }
-.demo-source-content,
-.demo-source-content pre,
-.demo-source-content code {
-  background: #f6f6f6;
-  font-family: monospace;
-}
-.demo-source-content pre {
-  max-width: 100%;
-  overflow-wrap: break-word;
-}
-
 .show-source div[demo-include] {
   border-top: #ddd solid 2px;
 }
@@ -358,10 +367,6 @@ md-toolbar.demo-toolbar .md-button {
 
 .menu-separator-icon {
   margin: 0;
-}
-.menu-module-name {
-  opacity: 0.6;
-  font-size: 18px;
 }
 
 /***************
@@ -434,17 +439,6 @@ code.api-type {
   font-weight: bold;
 }
 
-ul {
-  margin: 0;
-}
-ul li {
-  margin-top: 3px;
-  list-style-position: inside;
-}
-ul li:first-child {
-  margin-top: 0;
-}
-
 .layout-title {
   color: #999999;
   font-size: 14px;
@@ -466,9 +460,6 @@ ul.methods .method-function-syntax {
   -webkit-margin-before: 0;
   -webkit-margin-after: 0;
 }
-ul.methods li h3 {
-  /* border-bottom: 1px solid #eee; */
-}
 
 @media (max-width: 600px) {
   ul.methods > li {
@@ -479,12 +470,6 @@ ul.methods li h3 {
   ul.methods .method-function-syntax {
     font-size: 14px;
   }
-}
-
-.version {
-    padding-left: 10px;
-    text-decoration: underline;
-    font-size: 0.95em;
 }
 
 .demo-source-container pre,
@@ -503,33 +488,15 @@ md-content.demo-source-container > hljs > pre > code.highlight {
   right: 0px;
 }
 
-
-.extraPad {
-  padding-left:32px !important;
-  padding-right:32px !important;
+.dashed-bottom {
+  border-bottom: dashed 1px rgb(224, 224, 224);;
+  padding-bottom: 10px;
 }
 
-.site-sidenav,
-.site-sidenav.md-locked-open-add-active,
-.site-sidenav.md-locked-open {
-  width: 254px;
-  min-width: 254px;
-  max-width: 254px;
+.dashed-top {
+  border-top: dashed 1px rgb(224, 224, 224);
+  margin-top: 10px;
 }
-.site-sidenav > * {
-  min-width: 218px;
-}
-
-.dashed_bottom {
-    border-bottom: dashed 1px rgb(224, 224, 224);;
-        padding-bottom: 10px;
-}
-
-.dashed_top {
-    border-top: dashed 1px rgb(224, 224, 224);
-    margin-top: 10px;
-}
-
 
 .api-section h3 {
     padding-top:20px;
