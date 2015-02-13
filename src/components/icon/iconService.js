@@ -279,8 +279,9 @@
 
      return loadByID(id)
          .catch(loadFromIconSet)
-         .catch(announceNotFound)
-         .then( cacheIcon(id) );
+        .catch(announceIdNotFound)
+        .catch(announceNotFound)
+        .then( cacheIcon(id) );
    };
 
    /**
@@ -369,14 +370,28 @@
    }
 
    /**
-    * User did not specify a URL and the ID has not been registered with the $mdIcon
-    * registry
-    */
-   function announceNotFound(id) {
-     var msg = 'icon ' + id + ' not found';
-     $log.warn(msg);
-     throw new Error(msg);
-   }
+   * User did not specify a URL and the ID has not been registered with the $mdIcon
+   * registry
+   */
+  function announceIdNotFound(id) {
+    if (angular.isString(id)) {
+      var msg = 'icon ' + id + ' not found';
+      $log.warn(msg);
+      throw new Error(msg);
+    } else {
+      return $q.reject(id);
+    }
+  }
+
+
+  /**
+   * Catch HTTP or generic errors not related to incorrect icon IDs.
+   */
+  function announceNotFound(err) {
+    var msg = err.message || err.data || err.statusText;
+    $log.warn(msg);
+    throw (err instanceof Error) ? err : new Error(msg)
+  }
 
 
    /**
