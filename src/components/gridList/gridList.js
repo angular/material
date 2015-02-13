@@ -374,6 +374,8 @@ GridListController.prototype = {
   }
 }
 
+
+/* @ngInject */
 function GridLayoutFactory($mdUtil) {
 
   return function(colCount, tileSpans) {
