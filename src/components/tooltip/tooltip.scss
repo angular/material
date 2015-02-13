@@ -30,6 +30,7 @@ md-tooltip {
   }
 
   .md-content {
+    position: relative;
     max-width: 240px;
     white-space: nowrap;
     overflow: hidden;
@@ -37,8 +38,20 @@ md-tooltip {
 
     padding: 8px;
     background: transparent;
-    opacity: 0.3;
-    transition: inherit;
+    opacity: 0;
+    &.md-show-add {
+      transition: $swift-ease-out;
+      opacity: 0;
+    }
+    &.md-show, &.md-show-add-active {
+      opacity: 1;
+    }
+    &.md-show-remove {
+      transition: $swift-ease-in;
+      &.md-show-remove-active {
+        opacity: 0;
+      }
+    }
   }
 
   &.md-hide {
@@ -49,9 +62,5 @@ md-tooltip {
     transition: $swift-ease-out;
     pointer-events: auto;
     transform: translate3d(0,0,0);
-
-    .md-content {
-      opacity: 0.99;
-    }
   }
 }
