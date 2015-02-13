@@ -286,8 +286,8 @@ function buildModuleStyles(name) {
  *
  ** ***************************************** */
 
-gulp.task('watch', ['build'], function() {
-  gulp.watch('src/**/*', ['build']);
+gulp.task('watch', ['build', 'docs'], function() {
+  gulp.watch('src/**/*', ['build', 'docs']);
 });
 
 gulp.task('watch-demo', ['build-demo'], function() {
@@ -303,6 +303,15 @@ gulp.task('watch-demo', ['build-demo'], function() {
    );
 
   return gulp.watch('src/**/*', ['build-demo']);
+});
+
+gulp.task('site', function () {
+  return gulp.src('dist/docs')
+      .pipe(webserver({
+        livereload: true,
+        port: LR_PORT,
+        directoryListing: false
+      }));
 });
 
 gulp.task('server', function() {
