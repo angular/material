@@ -293,7 +293,11 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia, $
     }
 
     function getColumnCount() {
-      return parseInt($mdMedia.getResponsiveAttribute(attrs, 'md-cols'), 10);
+      var colCount = parseInt($mdMedia.getResponsiveAttribute(attrs, 'md-cols'), 10);
+      if (isNaN(colCount)) {
+        throw 'md-grid-list: md-cols attribute was not found, or contained a non-numeric value';
+      }
+      return colCount;
     }
 
     function getGutter() {
@@ -356,7 +360,7 @@ GridListController.prototype = {
     this.invalidateLayout();
   },
 
-  invalidateLayout: function(tile) {
+  invalidateLayout: function() {
     if (this.invalidated) {
       return;
     }
