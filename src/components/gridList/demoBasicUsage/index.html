@@ -1,63 +1,18 @@
-<div ng-controller="AppCtrl as appCtrl">
-  <md-grid-list
-      md-cols="6" md-row-height="1:1" md-gutter="8px">
-    <md-grid-tile class="gray"
-        md-rowspan="2" md-colspan="2">
-      <md-grid-tile-footer>
-        <h3>Gray</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-    <md-grid-tile class="green">
-      <md-grid-tile-footer>
-        <h3>Green</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-    <md-grid-tile class="yellow">
-      <md-grid-tile-footer>
-        <h3>Yellow</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-    <md-grid-tile class="blue"
-        md-colspan="2">
-      <md-grid-tile-footer>
-        <h3>Blue</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-    <md-grid-tile class="red"
-        md-rowspan="2" md-colspan="2">
-      <md-grid-tile-footer>
-        <h3>Red</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-    <md-grid-tile class="green">
-      <md-grid-tile-footer>
-        <h3>Green</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-    <md-grid-tile class="purple">
-      <md-grid-tile-footer>
-        <h3>Purple</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-    <md-grid-tile class="red">
-      <md-grid-tile-footer>
-        <h3>Red</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-    <md-grid-tile class="purple">
-      <md-grid-tile-footer>
-        <h3>Purple</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-    <md-grid-tile class="blue">
-      <md-grid-tile-footer>
-        <h3>Blue</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-    <md-grid-tile class="gray">
-      <md-grid-tile-footer>
-        <h3>Gray</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-  </md-grid-list>
+<div ng-app="gridListDemo" ng-controller="gridListDemoCtrl as vm">
+
+    <md-grid-list
+          md-cols-sm="1" md-cols-md="2" md-cols-gt-md="6"
+          md-row-height-gt-md="1:1" md-row-height="4:3"
+          md-gutter="8px" md-gutter-gt-sm="4px" >
+
+        <md-grid-tile ng-repeat="tile in vm.tiles"
+                      md-rowspan="{{tile.span.row}}"
+                      md-colspan="{{tile.span.col}}"
+                      ng-class="tile.background" >
+            <md-icon md-svg-icon="{{tile.icon}}"></md-icon>
+            <md-grid-tile-footer><h3>{{tile.title}}</h3></md-grid-tile-footer>
+        </md-grid-tile>
+
+      </md-grid-list>
+
 </div>
