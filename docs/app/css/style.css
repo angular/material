@@ -122,7 +122,9 @@ code:not(.highlight) {
   min-width: 218px;
 }
 
-/* Begin Docs Menu */
+/************
+ * DOCS MENU
+ ************/
 .docs-menu,
 .docs-menu ul {
   list-style: none;
@@ -211,16 +213,33 @@ code:not(.highlight) {
 }
 /* End Docs Menu */
 
-.menu-icon {
+.docs-logotype {
+  line-height:40px;
+  text-indent: 15px;
+}
+.docs-menu-icon {
   background: none;
   border: none;
   margin-right: 16px;
   padding: 0;
 }
-.app-toolbar .md-toolbar-tools h3 {
-  -webkit-margin-before: 0;
-  -webkit-margin-after: 0;
+.docs-menu-separator-icon {
+  margin: 0;
+  padding: 0 10px;
 }
+.docs-menu-separator-icon img {
+  height: 16px;
+}
+.md-breadcrumb-page {
+  display: inline-block;
+  word-wrap: break-word;
+}
+@media (max-width: 400px) {
+  .docs-tools {
+    display: none;
+  }
+}
+
 docs-demo {
   display: block;
   margin-top: 16px;
@@ -364,10 +383,6 @@ md-toolbar.demo-toolbar .md-button {
   border-top: #ddd solid 2px;
 }
 
-
-.menu-separator-icon {
-  margin: 0;
-}
 
 /***************
  * Landing Page

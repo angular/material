@@ -31,7 +31,7 @@
             <path d="M 50 7 L 83 75 L 72 75 L 65 59 L 50 59 L 50 50 L 61 50 L 50 26 Z" fill="#b2b2b2"></path>
             <path d="M 50 7 L 17 75 L 28 75 L 35 59 L 50 59 L 50 50 L 39 50 L 50 26 Z" fill="#fff"></path>
           </svg>
-          <div style="line-height:40px; text-indent: 15px;">Material Design</div>
+          <div class="docs-logotype">Material Design</div>
         </a>
       </h1>
     </md-toolbar>
@@ -60,7 +60,7 @@
     <md-toolbar>
 
       <div class="md-toolbar-tools" ng-click="openMenu()">
-        <button class="menu-icon" hide-gt-sm aria-label="Toggle Menu">
+        <button class="docs-menu-icon" hide-gt-sm aria-label="Toggle Menu">
           <md-icon md-svg-src="img/icons/ic_menu_24px.svg"></md-icon>
         </button>
 
@@ -68,16 +68,16 @@
           <div class="md-toolbar-item md-breadcrumb">
             <span ng-if="menu.currentPage.name !== menu.currentSection.name">
               <span hide-sm hide-md>{{menu.currentSection.name}}</span>
-              <span class="menu-separator-icon" style="padding: 0 10px;" hide-sm hide-md>
-                <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true">
+              <span class="docs-menu-separator-icon" style="" hide-sm hide-md>
+                <img src="img/docArrow.png" alt="" aria-hidden="true">
               </span>
             </span>
-            <span style="display: inline-block;">{{(menu.currentPage | humanizeDoc) || 'Angular Material' }}</span>
+            <span class="md-breadcrumb-page">{{(menu.currentPage | humanizeDoc) || 'Angular Material' }}</span>
           </div>
 
           <span flex></span> <!-- use up the empty space -->
 
-          <div class="md-toolbar-item md-tools" layout="row">
+          <div class="md-toolbar-item md-tools docs-tools" layout="column" layout-gt-md="row">
             <div ng-repeat="doc in currentComponent.docs">
               <md-button ng-href="#{{doc.url}}"
                 ng-class="{hide: path().indexOf('demo') == -1}"
