@@ -1,4 +1,4 @@
-<ng-app="inputErrorsApp" ng-controller="AppCtrl" layout="column">
+<div ng-app="inputErrorsApp" ng-controller="AppCtrl" layout="column">
 
   <md-toolbar class="md-primary">
     <h1 class="md-toolbar-tools">
@@ -27,7 +27,7 @@
 
       <md-input-container>
         <label>Hourly Rate (USD)</label>
-        <input required type="number" step="any" name="rate" ng-model="project.rate" min="800" max="4999" required>
+        <input required type="number" step="any" name="rate" ng-model="project.rate" min="800" max="4999">
         <div ng-messages="projectForm.rate.$error">
           <div ng-message="required">You've got to charge something! You can't just <b>give away</b> a Missile Defense System.</div>
           <div ng-message="min">You should charge at least $800 an hour. This job is a big deal... if you mess up, everyone dies!</div>
