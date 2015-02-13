@@ -57,6 +57,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     $mdTheming(element);
     var parent = element.parent();
     var background = angular.element(element[0].getElementsByClassName('md-background')[0]);
+    var content = angular.element(element[0].getElementsByClassName('md-content')[0]);
     var direction = attr.mdDirection;
 
     // Keep looking for a higher parent if our current one has no pointer events
@@ -131,11 +132,13 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       positionTooltip();
       $animate.addClass(element, 'md-show');
       $animate.addClass(background, 'md-show');
+      $animate.addClass(content, 'md-show');
     }
 
     function hideTooltip() {
       parent.removeAttr('aria-describedby');
       $q.all([
+        $animate.removeClass(content, 'md-show'),
         $animate.removeClass(background, 'md-show'),
         $animate.removeClass(element, 'md-show')
       ]).then(function () {
