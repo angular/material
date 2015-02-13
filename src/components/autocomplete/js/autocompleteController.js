@@ -29,6 +29,7 @@
     self.keydown  = keydown;
     self.clear    = clearValue;
     self.select   = select;
+    self.getCurrentDisplayValue = getCurrentDisplayValue;
     self.fetch    = $mdUtil.debounce(fetchResults);
 
     //-- return init
@@ -115,10 +116,15 @@
     function clearValue () {
       $scope.searchText = '';
       select(-1);
+      elements.input.focus();
     }
 
     function isHidden () {
       return self.matches.length === 1 && $scope.searchText === getDisplayValue(self.matches[0]);
+    }
+
+    function getCurrentDisplayValue () {
+      return getDisplayValue(self.matches[self.index]);
     }
 
     function getDisplayValue (item) {

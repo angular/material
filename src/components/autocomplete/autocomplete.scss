@@ -84,6 +84,9 @@ md-autocomplete {
     outline: none;
     z-index: 2;
     background: transparent;
+    &::-ms-clear {
+      display: none;
+    }
   }
   button {
     position: absolute;
