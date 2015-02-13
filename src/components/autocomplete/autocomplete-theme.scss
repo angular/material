@@ -1,11 +1,13 @@
 md-autocomplete {
   background: '{{background-50}}';
   button {
-    background: '{{background-200}}';
     md-icon {
       path {
-        fill: '{{foreground-2}}';
+        fill: '{{background-600}}';
       }
+    }
+    &:after {
+      background: '{{background-600-0.3}}';
     }
   }
   ul {

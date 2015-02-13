@@ -99,11 +99,31 @@ md-autocomplete {
     border-radius: 50%;
     padding: 0;
     font-size: 12px;
+    background: transparent;
+    &:after {
+      content: '';
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      bottom: -6px;
+      left: -6px;
+      border-radius: 50%;
+      transform: scale(0);
+      opacity: 0;
+      transition: $swift-ease-out;
+      z-index: -1;
+    }
+    &:focus {
+      &:after {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
     md-icon {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate3d(-50%, -50%, 0) scale(0.6);
+      transform: translate3d(-50%, -50%, 0) scale(0.9);
       path {
         stroke-width: 0;
       }
