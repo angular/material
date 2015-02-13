@@ -189,14 +189,11 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia, $
           performance: performance
         }
       });
-    };
+    }
 
-    var UNIT = $interpolate(
-        "{{ share }}% - ({{ gutter }} * {{ gutterShare }})");
-    var POSITION = $interpolate(
-        "calc(({{ unit }}) * {{ offset }} + {{ offset }} * {{ gutter }})");
-    var DIMENSION = $interpolate(
-        "calc(({{ unit }}) * {{ span }} + ({{ span }} - 1) * {{ gutter }})");
+    var UNIT      = $interpolate( "{{ share }}% - ({{ gutter }} * {{ gutterShare }})" );
+    var POSITION  = $interpolate( "calc(({{ unit }}) * {{ offset }} + {{ offset }} * {{ gutter }})" );
+    var DIMENSION = $interpolate( "calc(({{ unit }}) * {{ span }} + ({{ span }} - 1) * {{ gutter }})" );
 
     // TODO(shyndman): Replace args with a ctx object.
     function getTileStyle(position, spans, colCount, rowCount, gutter, rowMode, rowHeight) {
@@ -375,16 +372,27 @@ GridListController.prototype = {
       this.invalidated = false;
     }
   }
-};
+}
 
 function GridLayoutFactory($mdUtil) {
+
   return function(colCount, tileSpans) {
+    var defaultAnimator = GridTileAnimator;
     var self, layoutInfo, gridStyles, layoutTime, mapTime, reflowTime, layoutInfo;
+
     layoutTime = $mdUtil.time(function() {
       layoutInfo = calculateGridFor(colCount, tileSpans);
     });
 
     return self = {
+
+      /**
+       * Set the reflow animator callback
+       */
+      animateWith : function(customAnimator) {
+        defaultAnimator = !angular.isFunction(customAnimator) ? GridTileAnimator : customAnimator;
+      },
+
       /**
        * An array of objects describing each tile's position in the grid.
        */
@@ -411,9 +419,9 @@ function GridLayoutFactory($mdUtil) {
        *
        *    function({grid: {element: JQLite, style: Object}, tiles: Array<{element: JQLite, style: Object}>)
        */
-      reflow: function(customAnimatorFn) {
+      reflow: function(animatorFn) {
         reflowTime = $mdUtil.time(function() {
-          var animator = customAnimatorFn || defaultAnimator;
+          var animator = animatorFn || defaultAnimator;
           animator(gridStyles.grid, gridStyles.tiles);
         });
         return self;
@@ -434,12 +442,22 @@ function GridLayoutFactory($mdUtil) {
     };
   };
 
-  function defaultAnimator(grid, tiles) {
+  /**
+   * Default Gridlist animator simple sets the css for each element;
+   * NOTE: any transitions effects must be manually set in the CSS.
+   * e.g.
+   *
+   *  md-grid-tile {
+   *    transition: all 700ms ease-out 50ms;
+   *  }
+   *
+   */
+  function GridTileAnimator(grid, tiles) {
     grid.element.css(grid.style);
     tiles.forEach(function(t) {
       t.element.css(t.style);
     })
-  };
+  }
 
   /**
    * Calculates the positions of tiles.
@@ -470,7 +488,7 @@ function GridLayoutFactory($mdUtil) {
         };
       }),
       rowCount: curRow + Math.max.apply(Math, spaceTracker)
-    };
+    }
 
     function reserveSpace(spans, i) {
       if (spans.col > colCount) {
