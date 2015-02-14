@@ -27,6 +27,7 @@
     self.hidden   = true;
     self.index    = 0;
     self.keydown  = keydown;
+    self.blur     = blur;
     self.clear    = clearValue;
     self.select   = select;
     self.getCurrentDisplayValue = getCurrentDisplayValue;
@@ -83,7 +84,12 @@
         promise = null;
         self.loading = false;
         self.matches = matches;
-      }    }
+      }
+    }
+
+    function blur (event) {
+      self.hidden = true;
+    }
 
     function keydown (event) {
       switch (event.keyCode) {
@@ -108,6 +114,8 @@
           self.matches = [];
           self.hidden = true;
           self.index = -1;
+          break;
+        case $mdConstant.KEY_CODE.TAB:
           break;
         default:
           self.index = -1;
