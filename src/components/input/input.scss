@@ -77,6 +77,11 @@ md-input-container {
     opacity: 0;
   }
 
+  &:not( .md-input-has-value ) input:not( :focus ) {
+    color: transparent;
+  }
+
+
   /*
    * The .md-input class is added to the input/textarea
    */

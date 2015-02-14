@@ -315,7 +315,8 @@
    }
 
    /**
-    *
+    *    Loads the file as XML and uses querySelector( <id> ) to find
+    *    the desired node...
     */
    function loadFromIconSet(id) {
      var setName = id.substring(0, id.lastIndexOf(':')) || '$default';
