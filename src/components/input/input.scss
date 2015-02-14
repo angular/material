@@ -19,8 +19,11 @@ md-input-container {
   display: flex;
   position: relative;
   flex-direction: column;
+
+  overflow-x: hidden;
   padding: $input-container-padding;
   padding-bottom: $input-container-padding + $input-error-height;
+
 
   textarea,
   input[type="text"],
