@@ -331,6 +331,7 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia, $
   }
 }
 
+  /* @ngInject */
 function GridListController($timeout) {
   this.invalidated = false;
   this.$timeout_ = $timeout;
@@ -377,72 +378,77 @@ GridListController.prototype = {
 
 /* @ngInject */
 function GridLayoutFactory($mdUtil) {
+  var defaultAnimator = GridTileAnimator;
 
-  return function(colCount, tileSpans) {
-    var defaultAnimator = GridTileAnimator;
-    var self, layoutInfo, gridStyles, layoutTime, mapTime, reflowTime, layoutInfo;
-
-    layoutTime = $mdUtil.time(function() {
-      layoutInfo = calculateGridFor(colCount, tileSpans);
-    });
-
-    return self = {
-
-      /**
-       * Set the reflow animator callback
-       */
-      animateWith : function(customAnimator) {
-        defaultAnimator = !angular.isFunction(customAnimator) ? GridTileAnimator : customAnimator;
-      },
-
-      /**
-       * An array of objects describing each tile's position in the grid.
-       */
-      layoutInfo: function() {
-        return layoutInfo;
-      },
-
-      /**
-       * Maps grid positioning to an element and a set of styles using the
-       * provided updateFn.
-       */
-      map: function(updateFn) {
-        mapTime = $mdUtil.time(function() {
-          var info = self.layoutInfo();
-          gridStyles = updateFn(info.positioning, info.rowCount);
-        });
-        return self;
-      },
-
-      /**
-       * Default animator simply sets the element.css( <styles> ). An alternate
-       * animator can be provided as an argument. The function has the following
-       * signature:
-       *
-       *    function({grid: {element: JQLite, style: Object}, tiles: Array<{element: JQLite, style: Object}>)
-       */
-      reflow: function(animatorFn) {
-        reflowTime = $mdUtil.time(function() {
-          var animator = animatorFn || defaultAnimator;
-          animator(gridStyles.grid, gridStyles.tiles);
-        });
-        return self;
-      },
-
-      /**
-       * Timing for the most recent layout run.
-       */
-      performance: function() {
-        return {
-          tileCount: tileSpans.length,
-          layoutTime: layoutTime,
-          mapTime: mapTime,
-          reflowTime: reflowTime,
-          totalTime: layoutTime + mapTime + reflowTime
-        };
-      }
-    };
+  /**
+   * Set the reflow animator callback
+   */
+  GridLayout.animateWith =function(customAnimator) {
+    defaultAnimator = !angular.isFunction(customAnimator) ? GridTileAnimator : customAnimator;
   };
+
+  return GridLayout;
+
+  /**
+   * Publish layout function
+   */
+  function GridLayout(colCount, tileSpans) {
+      var self, layoutInfo, gridStyles, layoutTime, mapTime, reflowTime, layoutInfo;
+
+      layoutTime = $mdUtil.time(function() {
+        layoutInfo = calculateGridFor(colCount, tileSpans);
+      });
+
+      return self = {
+
+        /**
+         * An array of objects describing each tile's position in the grid.
+         */
+        layoutInfo: function() {
+          return layoutInfo;
+        },
+
+        /**
+         * Maps grid positioning to an element and a set of styles using the
+         * provided updateFn.
+         */
+        map: function(updateFn) {
+          mapTime = $mdUtil.time(function() {
+            var info = self.layoutInfo();
+            gridStyles = updateFn(info.positioning, info.rowCount);
+          });
+          return self;
+        },
+
+        /**
+         * Default animator simply sets the element.css( <styles> ). An alternate
+         * animator can be provided as an argument. The function has the following
+         * signature:
+         *
+         *    function({grid: {element: JQLite, style: Object}, tiles: Array<{element: JQLite, style: Object}>)
+         */
+        reflow: function(animatorFn) {
+          reflowTime = $mdUtil.time(function() {
+            var animator = animatorFn || defaultAnimator;
+            animator(gridStyles.grid, gridStyles.tiles);
+          });
+          return self;
+        },
+
+        /**
+         * Timing for the most recent layout run.
+         */
+        performance: function() {
+          return {
+            tileCount: tileSpans.length,
+            layoutTime: layoutTime,
+            mapTime: mapTime,
+            reflowTime: reflowTime,
+            totalTime: layoutTime + mapTime + reflowTime
+          };
+        }
+      };
+    }
 
   /**
    * Default Gridlist animator simple sets the css for each element;
