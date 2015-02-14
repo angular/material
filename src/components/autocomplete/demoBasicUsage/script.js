@@ -6,10 +6,11 @@ function DemoCtrl ($timeout, $q) {
   var self = this;
 
   // list of `state` value/display objects
-  self.states       = loadAll();
-  self.selectedItem = null;
-  self.searchText   = null;
-  self.querySearch  = querySearch;
+  self.states        = loadAll();
+  self.selectedItem  = null;
+  self.searchText    = null;
+  self.querySearch   = querySearch;
+  self.simulateQuery = false;
 
   // ******************************
   // Internal methods
@@ -20,16 +21,15 @@ function DemoCtrl ($timeout, $q) {
    * remote dataservice call.
    */
   function querySearch (query) {
-    var deferred = $q.defer();
-
-    $timeout(function () {
-
-      var results = query ? self.states.filter( createFilterFor(query) ) : [ ];
-      deferred.resolve( results );
-
-    }, Math.random() * 1000, false);
-
-    return deferred.promise;
+    var results = query ? self.states.filter( createFilterFor(query) ) : [],
+        deferred;
+    if (self.simulateQuery) {
+      deferred = $q.defer();
+      $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+      return deferred.promise;
+    } else {
+      return results;
+    }
   }
 
   /**

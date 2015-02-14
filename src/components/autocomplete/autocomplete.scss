@@ -156,6 +156,7 @@ md-autocomplete {
     padding: 0;
     overflow: auto;
     max-height: 41px * 5.5;
+    z-index: $z-index-backdrop - 1;
     li {
       border-top: 1px solid #ddd;
       padding: 0 15px;
