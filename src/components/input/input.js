@@ -102,9 +102,10 @@ function labelDirective() {
  * @module material.components.input
  *
  * @description
- * Use the `<input>` as a child of an `<md-input-container>`.
+ * Use the `<input>` or the  `<textarea>` as a child of an `<md-input-container>`.
  *
- * Behaves like the [AngularJS input directive](https://docs.angularjs.org/api/ng/directive/input).
+ * @param {number=} md-maxlength The maximum number of characters allowed in this input. If this is specified, a character counter will be shown underneath the input.<br/><br/>
+ * The purpose of **`md-maxength`** is exactly to show the max length counter text. If you don't want the counter text and only need "plain" validation, you can use the "simple" `ng-maxlength` or maxlength attributes.
  *
  * @usage
  * <hljs lang="html">
@@ -125,32 +126,6 @@ function labelDirective() {
  *       <div ng-message="minlength">That's too short!</div>
  *     </div>
  *   </md-input-container>
- * </form>
- * </hljs>
- *
- * @param {number=} md-maxlength The maximum number of characters allowed in this input. If this is specified, a character counter will be shown underneath the input.
- */
-/**
- * @ngdoc directive
- * @name mdTextarea
- * @restrict E
- * @module material.components.input
- *
- * @description
- * Use the `<textarea>` as a child of an `<md-input-container>`
- *
- * Behaves like the [AngularJS input directive](https://docs.angularjs.org/api/ng/directive/textarea).
- *
- * @usage
- * <hljs lang="html">
- * <md-input-container>
- *   <label>Description</label>
- *   <textarea ng-model="description" required minlength="15" md-maxlength="20"></textarea>
- * </md-input-container>
- * </hljs>
- * <h3>With Errors (uses [ngMessages](https://docs.angularjs.org/api/ngMessages))</h3>
- * <hljs lang="html">
- * <form name="userForm">
  *   <md-input-container>
  *     <label>Biography</label>
  *     <textarea name="bio" ng-model="biography" required md-maxlength="150"></textarea>
@@ -162,9 +137,11 @@ function labelDirective() {
  * </form>
  * </hljs>
  *
- * @param {number=} md-maxlength The maximum number of characters allowed in this input. If this is specified, a character counter will be shown underneath the input.
+ * Behaves like the [AngularJS input directive](https://docs.angularjs.org/api/ng/directive/input).
+ *
  */
-function inputTextareaDirective($mdUtil, $window, $compile, $animate) {
+
+function inputTextareaDirective($mdUtil, $window) {
   return {
     restrict: 'E',
     require: ['^?mdInputContainer', '?ngModel'],

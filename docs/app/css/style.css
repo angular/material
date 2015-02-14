@@ -152,7 +152,7 @@ code:not(.highlight) {
 }
 .menu-toggle-list {
   background: #fff;
-  max-height: 999px;
+  max-height: 1300px;
   overflow: hidden;
   position: relative;
   z-index: 1;
