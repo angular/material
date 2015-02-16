@@ -58,8 +58,8 @@
           <li ng-repeat="(index, item) in $mdAutocompleteCtrl.matches"\
               ng-class="{ selected: index === $mdAutocompleteCtrl.index }"\
               ng-if="searchText && !$mdAutocompleteCtrl.hidden"\
-              ng-click="$mdAutocompleteCtrl.select(index)"\
               ng-transclude\
+              md-autocomplete-list-item-index="{{index}}"\
               md-autocomplete-list-item="$mdAutocompleteCtrl.itemName">\
           </li>\
         </ul>\
