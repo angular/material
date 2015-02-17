@@ -16,7 +16,7 @@
    * @param {string=} md-search-text A model to bind the search query text to
    * @param {object=} md-selected-item A model to bind the selected item to
    * @param {expression} md-items An expression in the format of `item in items` to iterate over matches for your search.
-   * @param {string=} md-item-text A property on your object used to convert your object to a string
+   * @param {string=} md-item-text An expression that will convert your object to a single string.
    * @param {placeholder=} Placeholder text that will be forwarded to the input.
    *
    * @usage
@@ -25,20 +25,20 @@
    *       md-selected-item="selectedItem"
    *       md-search-text="searchText"
    *       md-items="item in getMatches(searchText)"
-   *       md-item-text="display">
+   *       md-item-text="item.display">
    *     <span md-highlight-text="searchText">{{item.display}}</span>
    *   </md-autocomplete>
-   * </hlhs>
+   * </hljs>
    */
 
   function MdAutocomplete () {
     return {
-      template: '\
+      template:     '\
         <md-autocomplete-wrap role="listbox">\
           <input type="text"\
               ng-model="searchText"\
               ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
-              ng-blur="$mdAutocompleteCtrl.blur($event)"\
+              ng-blur="$mdAutocompleteCtrl.blur()"\
               placeholder="{{placeholder}}"\
               aria-label="{{placeholder}}"\
               aria-autocomplete="list"\
@@ -71,15 +71,15 @@
           <p ng-if="$mdAutocompleteCtrl.index === -1 && $mdAutocompleteCtrl.matches.length > 1">There are {{$mdAutocompleteCtrl.matches.length}} matches available.</p>\
           <p ng-if="$mdAutocompleteCtrl.index >= 0">{{ $mdAutocompleteCtrl.getCurrentDisplayValue() }}</p>\
         </aria-status>',
-      transclude: true,
-      controller: 'MdAutocompleteCtrl',
+      transclude:   true,
+      controller:   'MdAutocompleteCtrl',
       controllerAs: '$mdAutocompleteCtrl',
-      scope: {
-        searchText: '=mdSearchText',
+      scope:        {
+        searchText:   '=mdSearchText',
         selectedItem: '=mdSelectedItem',
-        itemsExpr: '@mdItems',
-        itemText: '@mdItemText',
-        placeholder: '@placeholder'
+        itemsExpr:    '@mdItems',
+        itemText:     '&mdItemText',
+        placeholder:  '@placeholder'
       }
     };
   }

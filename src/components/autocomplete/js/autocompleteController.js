@@ -8,30 +8,30 @@
 
     //-- private variables
     var self = this,
-        itemParts = $scope.itemsExpr.split(/\ in\ /i),
+        itemParts = $scope.itemsExpr.split(/ in /i),
         itemExpr = itemParts[1],
         elements = {
           main:  $element[0],
           ul:    $element[0].getElementsByTagName('ul')[0],
           input: $element[0].getElementsByTagName('input')[0]
         },
-        promise  = null,
-        cache    = {};
+        promise = null,
+        cache = {};
 
     //-- public variables
-    self.scope    = $scope;
-    self.parent   = $scope.$parent;
+    self.scope = $scope;
+    self.parent = $scope.$parent;
     self.itemName = itemParts[0];
-    self.matches  = [];
-    self.loading  = false;
-    self.hidden   = true;
-    self.index    = 0;
-    self.keydown  = keydown;
-    self.blur     = blur;
-    self.clear    = clearValue;
-    self.select   = select;
+    self.matches = [];
+    self.loading = false;
+    self.hidden = true;
+    self.index = 0;
+    self.keydown = keydown;
+    self.blur = blur;
+    self.clear = clearValue;
+    self.select = select;
     self.getCurrentDisplayValue = getCurrentDisplayValue;
-    self.fetch    = $mdUtil.debounce(fetchResults);
+    self.fetch = $mdUtil.debounce(fetchResults);
 
     //-- return init
     return init();
@@ -87,7 +87,7 @@
       }
     }
 
-    function blur (event) {
+    function blur () {
       self.hidden = true;
     }
 
@@ -121,7 +121,9 @@
           self.index = -1;
           self.hidden = isHidden();
           //-- after value updates, check if list should be hidden
-          $timeout(function () { self.hidden = isHidden(); });
+          $timeout(function () {
+            self.hidden = isHidden();
+          });
       }
     }
 
@@ -140,14 +142,16 @@
     }
 
     function getDisplayValue (item) {
-      return (item && $scope.itemText) ? item[$scope.itemText] : item;
+      var locals = {};
+      locals[self.itemName] = item;
+      return (item && $scope.itemText) ? $scope.itemText(locals) : item;
     }
 
     function select (index) {
       $scope.selectedItem = self.matches[index];
       $scope.searchText = getDisplayValue($scope.selectedItem) || $scope.searchText;
-      self.hidden  = true;
-      self.index   = -1;
+      self.hidden = true;
+      self.index = -1;
       self.matches = [];
     }
 
