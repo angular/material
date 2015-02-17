@@ -168,12 +168,12 @@ md-autocomplete {
       cursor: pointer;
       margin: 0;
       &.ng-enter,
-      &.ng-hide-remove-active {
+      &.ng-hide-remove {
         transition: none;
         animation: md-autocomplete-list-in 0.2s;
       }
       &.ng-leave,
-      &.ng-hide-add-active {
+      &.ng-hide-add {
         transition: none;
         animation: md-autocomplete-list-out 0.2s;
       }
