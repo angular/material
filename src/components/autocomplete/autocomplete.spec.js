@@ -35,7 +35,7 @@ describe('<md-autocomplete>', function() {
               md-selected-item="selectedItem"\
               md-search-text="searchText"\
               md-items="item in match(searchText)"\
-              md-item-text="display"\
+              md-item-text="item.display"\
               placeholder="placeholder">\
             <span md-highlight-text="searchText">{{item.display}}</span>\
           </md-autocomplete>';
