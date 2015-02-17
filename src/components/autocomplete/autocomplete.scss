@@ -167,10 +167,14 @@ md-autocomplete {
       transition: background 0.15s linear;
       cursor: pointer;
       margin: 0;
-      &.ng-enter {
+      &.ng-enter,
+      &.ng-hide-remove-active {
+        transition: none;
         animation: md-autocomplete-list-in 0.2s;
       }
-      &.ng-leave {
+      &.ng-leave,
+      &.ng-hide-add-active {
+        transition: none;
         animation: md-autocomplete-list-out 0.2s;
       }
     }
