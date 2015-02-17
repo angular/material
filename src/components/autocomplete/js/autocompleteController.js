@@ -61,7 +61,7 @@
           promise.cancel();
           promise = null;
         }
-        if (cache[term]) {
+        if (!$scope.noCache && cache[term]) {
           self.matches = cache[term];
         } else if (!self.hidden) {
           self.fetch(searchText);

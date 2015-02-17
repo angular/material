@@ -17,7 +17,8 @@
    * @param {object=} md-selected-item A model to bind the selected item to
    * @param {expression} md-items An expression in the format of `item in items` to iterate over matches for your search.
    * @param {string=} md-item-text An expression that will convert your object to a single string.
-   * @param {placeholder=} Placeholder text that will be forwarded to the input.
+   * @param {string=} placeholder Placeholder text that will be forwarded to the input.
+   * @param {boolean=} md-no-cache Disables the internal caching that happens in autocomplete
    *
    * @usage
    * <hljs lang="html">
@@ -79,7 +80,8 @@
         selectedItem: '=mdSelectedItem',
         itemsExpr:    '@mdItems',
         itemText:     '&mdItemText',
-        placeholder:  '@placeholder'
+        placeholder:  '@placeholder',
+        noCache:      '=mdNoCache'
       }
     };
   }
