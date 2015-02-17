@@ -94,36 +94,36 @@
     function keydown (event) {
       switch (event.keyCode) {
         case $mdConstant.KEY_CODE.DOWN_ARROW:
-          if (self.loading) return;
-          event.preventDefault();
-          self.index = Math.min(self.index + 1, self.matches.length - 1);
-          updateScroll();
-          break;
+            if (self.loading) return;
+            event.preventDefault();
+            self.index = Math.min(self.index + 1, self.matches.length - 1);
+            updateScroll();
+            break;
         case $mdConstant.KEY_CODE.UP_ARROW:
-          if (self.loading) return;
-          event.preventDefault();
-          self.index = Math.max(0, self.index - 1);
-          updateScroll();
-          break;
+            if (self.loading) return;
+            event.preventDefault();
+            self.index = Math.max(0, self.index - 1);
+            updateScroll();
+            break;
         case $mdConstant.KEY_CODE.ENTER:
-          if (self.loading) return;
-          event.preventDefault();
-          select(self.index);
-          break;
+            if (self.loading || self.index < 0) return;
+            event.preventDefault();
+            select(self.index);
+            break;
         case $mdConstant.KEY_CODE.ESCAPE:
-          self.matches = [];
-          self.hidden = true;
-          self.index = -1;
-          break;
+            self.matches = [];
+            self.hidden = true;
+            self.index = -1;
+            break;
         case $mdConstant.KEY_CODE.TAB:
-          break;
+            break;
         default:
-          self.index = -1;
-          self.hidden = isHidden();
-          //-- after value updates, check if list should be hidden
-          $timeout(function () {
+            self.index = -1;
             self.hidden = isHidden();
-          });
+            //-- after value updates, check if list should be hidden
+            $timeout(function () {
+              self.hidden = isHidden();
+            });
       }
     }
 
