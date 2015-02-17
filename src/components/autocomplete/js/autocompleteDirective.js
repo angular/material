@@ -19,6 +19,8 @@
    * @param {string=} md-item-text An expression that will convert your object to a single string.
    * @param {string=} placeholder Placeholder text that will be forwarded to the input.
    * @param {boolean=} md-no-cache Disables the internal caching that happens in autocomplete
+   * @param {expression} md-selected-item-change An expression to be run each time a new item is selected
+   * @param {expression} md-search-text-change An expression to be run each time the search text updates
    *
    * @usage
    * <hljs lang="html">
@@ -81,7 +83,9 @@
         itemsExpr:    '@mdItems',
         itemText:     '&mdItemText',
         placeholder:  '@placeholder',
-        noCache:      '=mdNoCache'
+        noCache:      '=mdNoCache',
+        itemChange:   '&mdSelectedItemChange',
+        textChange:   '&mdSearchTextChange'
       }
     };
   }
