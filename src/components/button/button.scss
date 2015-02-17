@@ -24,6 +24,7 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
 }
 
 .md-button {
+  color: currentColor;
 
   user-select: none;
   position: relative; //for child absolute-positioned <canvas>
