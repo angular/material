@@ -1,26 +1,75 @@
 describe('<md-select-menu>', function() {
 
-  beforeEach(module('material.components.select'));
+  beforeEach(module('material.components.select', 'ngAnimateMock'));
+
+  function setupSelect(attrs, options) {
+    var innerTpl = setup(attrs, options, true);
+    var el;
+    inject(function($compile, $rootScope) {
+      var template = angular.element('<md-select ' + (attrs || '') + '>' + optTemplate(options) + '</md-select>');
+      el = $compile(template)($rootScope);
+    });
+    return el;
+  }
 
   function setup(attrs, options) {
     var el;
     inject(function($compile, $rootScope) {
-      var optionsTpl = '';
+      var optionsTpl = optTemplate(options);
+      var fullTpl = '<md-select-menu '+(attrs || '')+'>' + optionsTpl +
+               '</md-select-menu>';
+      el = $compile(fullTpl)($rootScope);
+      $rootScope.$apply();
+    });
+    return el;
+  }
+
+  function optTemplate(options) {
+    var optionsTpl = '';
+    inject(function($rootScope) {
       if (angular.isArray(options)) {
         $rootScope.$$values = options;
         optionsTpl = '<md-option ng-repeat="value in $$values" ng-value="value">{{value}}"></md-option>';
       } else if (angular.isString(options)) {
         optionsTpl = options;
       }
-      el = $compile('<md-select-menu '+(attrs || '')+'>' + optionsTpl +
-               '</md-select-menu>')($rootScope);
-      $rootScope.$apply();
     });
-    return el;
+    return optionsTpl;
   }
 
   function selectedOptions(el) {
     return angular.element(el[0].querySelectorAll('md-option[selected]'));
+  }
+
+  function openSelect(el) {
+    el.triggerHandler('click');
+    waitForSelectOpen();
+    inject(function($timeout) {
+      $timeout.flush();
+    });
+  }
+
+  function waitForSelectOpen() {
+    inject(function($rootScope, $animate) {
+      $rootScope.$digest();
+      $animate.triggerCallbacks();
+    });
+  }
+
+  function pressKey(el, code) {
+    inject(function($rootScope, $animate, $timeout) {
+      el.triggerHandler({
+        type: 'keydown',
+        keyCode: code
+      });
+    });
+  }
+
+  function waitForSelectClose(el, fn) {
+    inject(function($rootScope, $animate) {
+      $rootScope.$digest();
+      $animate.triggerCallbacks();
+    });
   }
 
   it('errors for duplicate md-options, non-dynamic value', inject(function($rootScope) {
@@ -183,7 +232,6 @@ describe('<md-select-menu>', function() {
       }));
 
     });
-
   });
 
   describe('multiple', function() {
@@ -409,6 +457,67 @@ describe('<md-select-menu>', function() {
       }));
 
     });
+  });
 
+  ddescribe('keyboard controls', function() {
+
+    beforeEach(inject(function($mdUtil, $q) {
+      $mdUtil.transitionEndPromise = function() {
+        var deferred = $q.defer();
+        deferred.resolve();
+        return deferred.promise;
+      };
+    }));
+
+    afterEach(inject(function($document) {
+      var selectMenus = $document.find('md-select-menu');
+      selectMenus.remove();
+    }));
+
+    describe('md-select', function() {
+      it('can be opened with a space key', inject(function($document) {
+        var el = setupSelect('ng-model="someModel"', [1, 2, 3]);
+        pressKey(el, 32);
+        waitForSelectOpen();
+        var selectMenu = angular.element($document.find('md-select-menu'));
+        expect(selectMenu.length).toBe(1);
+      }));
+
+      it('can be opened with an enter key', inject(function($document) {
+        var el = setupSelect('ng-model="someModel"', [1, 2, 3]);
+        pressKey(el, 13);
+        waitForSelectOpen();
+        var selectMenu = angular.element($document.find('md-select-menu'));
+        expect(selectMenu.length).toBe(1);
+      }));
+
+      it('can be opened with the up key', inject(function($document) {
+        var el = setupSelect('ng-model="someModel"', [1, 2, 3]);
+        pressKey(el, 38);
+        waitForSelectOpen();
+        var selectMenu = angular.element($document.find('md-select-menu'));
+        expect(selectMenu.length).toBe(1);
+      }));
+
+      it('can be opened with the down key', inject(function($document) {
+        var el = setupSelect('ng-model="someModel"', [1, 2, 3]);
+        pressKey(el, 40);
+        waitForSelectOpen();
+        var selectMenu = angular.element($document.find('md-select-menu'));
+        expect(selectMenu.length).toBe(1);
+      }));
+    });
+
+    describe('md-select-menu', function() {
+      it('can be closed with escape', inject(function($document, $rootScope, $animate) {
+        var el = setupSelect('ng-model="someVal"', [1, 2, 3]);
+        openSelect(el);
+        var selectMenu = angular.element($document.find('md-select-menu'));
+        expect(selectMenu.length).toBe(1);
+        pressKey(selectMenu, 27);
+        waitForSelectClose();
+        expect($document.find('md-select-menu').length).toBe(0);
+      }));
+    });
   });
 });

@@ -7,6 +7,12 @@ md-select.md-THEME_NAME-theme {
         color: '{{ foreground-1 }}';
       }
     }
+    &.md-accent .md-select-label {
+      border-bottom-color: '{{accent-color}}';
+    }
+    &.md-warn .md-select-label {
+      border-bottom-color: '{{warn-color}}';
+    }
   }
   .md-select-label {
     &.md-placeholder {
@@ -25,7 +31,19 @@ md-select-menu.md-THEME_NAME-theme {
     }
   }
   md-option[selected] {
-    background: #f0f0f0;
+    background-color: '{{primary-50}}';
+    &:focus {
+      background-color: '{{primary-100}}';
+    }
+    &.md-accent {
+      background-color: '{{accent-50}}';
+      &:focus {
+        background-color: '{{accent-100}}';
+      }
+    }
+  }
+  md-option:focus:not([selected]) {
+    background: '{{background-200}}';
   }
 
 }

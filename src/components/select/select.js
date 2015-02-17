@@ -112,16 +112,15 @@ function SelectDirective($mdSelect, $mdUtil, $q, $mdTheming) {
     $mdTheming(element);
 
     return function postLink(scope, element, attr) {
-      // If the label has an input, use that for open/close events...
-      var inputEl = element.find('input');
-      if (inputEl.length) {
-        inputEl
-          .on('focus', openSelect)
-          .on('blur', function() {
-            scope.$evalAsync($mdSelect.cancel);
-          });
-      } else {
-        element.on('click', openSelect);
+      element.on('click', openSelect);
+
+      element.on('keydown', openOnKeypress);
+
+      function openOnKeypress(e) {
+        var allowedCodes = [32, 13, 38, 40];
+        if (allowedCodes.indexOf(e.keyCode) != -1 ) {
+          openSelect(e);
+        }
       }
 
       function openSelect(ev) {
@@ -130,8 +129,7 @@ function SelectDirective($mdSelect, $mdUtil, $q, $mdTheming) {
             scope: scope.$new(),
             template: selectTemplate,
             target: element[0],
-            inputTriggerEl: inputEl,
-            hasBackdrop: inputEl.length === 0,
+            hasBackdrop: true,
             loadingAsync: attr.mdOnOpen ? scope.$eval(attr.mdOnOpen) : false
           });
         });
@@ -161,7 +159,14 @@ function SelectMenuDirective($parse, $mdSelect, $mdUtil, $mdTheming) {
 
     $mdTheming(element);
     element.on('click', clickListener);
+    element.on('keypress', keyListener);
     selectCtrl.init(ngModel);
+
+    function keyListener(e) {
+      if (e.keyCode == 13 || e.keyCode == 32) {
+        clickListener(e);
+      }
+    }
 
     function clickListener(ev) {
       var option = $mdUtil.getClosest(ev.target, 'md-option');
@@ -328,6 +333,7 @@ function OptionDirective($mdInkRipple) {
   function compile(element, attr) {
     // Manual transclusion to avoid the extra inner <span> that ng-transclude generates
     element.append( angular.element('<div class="md-text">').append(element.contents()) );
+    if (attr.tabindex === undefined) element.attr('tabindex', 0);
     return postLink;
   }
 
@@ -467,13 +473,62 @@ function SelectProvider($$interimElementProvider) {
         element.addClass('md-clickable');
 
         opts.backdrop && opts.backdrop.on('click', function() {
+          opts.restoreFocus = false;
           scope.$apply($mdSelect.cancel);
         });
+
+        // Escape to close
+        opts.selectEl.on('keydown', function(e) {
+          if (e.keyCode == 27) {
+            opts.restoreFocus = true;
+            scope.$apply($mdSelect.cancel);
+          }
+        });
+
+        // Cycling of options, and closing on enter
+        opts.selectEl.on('keydown', function(e) {
+          if (e.keyCode == 38) return focusPrevOption();
+          if (e.keyCode == 40) return focusNextOption();
+        });
+
+        function focusNextOption() {
+          var optNodes = Array.prototype.slice.call(opts.selectEl[0].querySelectorAll('md-option'));
+          var index;
+          if ((index = optNodes.indexOf(opts.focusedNode)) == -1) {
+            // We lost the previously focused element, reset to middle
+            index = Math.floor( (optNodes.length - 1) / 2 );
+          } else {
+            if (index < optNodes.length - 1) ++index;
+          }
+          opts.focusedNode = optNodes[index];
+          optNodes[index].focus();
+        }
+        function focusPrevOption() {
+          var optNodes = Array.prototype.slice.call(opts.selectEl[0].querySelectorAll('md-option'));
+          var index;
+          if ((index = optNodes.indexOf(opts.focusedNode)) == -1) {
+            // We lost the previously focused element, reset to middle
+            index = Math.floor( (optNodes.length - 1) / 2 );
+          } else {
+            if (index > 0) --index;
+          }
+          opts.focusedNode = optNodes[index];
+          optNodes[index].focus();
+        }
+
+
         if (!selectCtrl.isMultiple) {
-          opts.selectEl.on('click', function() {
-            scope.$evalAsync(function() {
-              $mdSelect.hide(selectCtrl.ngModel.$viewValue);
-            });
+          opts.selectEl.on('click', closeMenu);
+          opts.selectEl.on('keydown', function(e) {
+            if (e.keyCode == 32 || e.keyCode == 13) {
+              closeMenu();
+            }
+          });
+        }
+        function closeMenu() {
+          opts.restoreFocus = true;
+          scope.$evalAsync(function() {
+            $mdSelect.hide(selectCtrl.ngModel.$viewValue);
           });
         }
       }
@@ -487,6 +542,7 @@ function SelectProvider($$interimElementProvider) {
       return $mdUtil.transitionEndPromise(element).then(function() {
         element.remove();
         opts.backdrop && opts.backdrop.remove();
+        if (opts.restoreFocus) opts.target.focus();
       });
     }
 
@@ -496,10 +552,9 @@ function SelectProvider($$interimElementProvider) {
           parentNode = opts.parent[0],
           selectNode = opts.selectEl[0],
           contentNode = opts.contentEl[0],
-          inputTriggerNode = opts.inputTriggerEl && opts.inputTriggerEl[0],
           parentRect = parentNode.getBoundingClientRect(),
           targetRect = $mdUtil.clientRect(targetNode, parentNode),
-          shouldOpenAroundTarget = !!inputTriggerNode,
+          shouldOpenAroundTarget = false,
           bounds = {
             left: parentNode.scrollLeft + SELECT_EDGE_MARGIN,
             top: parentNode.scrollTop + SELECT_EDGE_MARGIN,
@@ -547,9 +602,17 @@ function SelectProvider($$interimElementProvider) {
       var selectMenuRect = selectNode.getBoundingClientRect();
       var centeredRect = getOffsetRect(centeredNode);
 
-      var centeredStyle = window.getComputedStyle(centeredNode);
-      centeredRect.paddingLeft = parseInt(centeredStyle['padding-left'], 10);
-      centeredRect.paddingRight = parseInt(centeredStyle['padding-right'], 10);
+      if (centeredNode) {
+        var centeredStyle = window.getComputedStyle(centeredNode);
+        centeredRect.paddingLeft = parseInt(centeredStyle['padding-left'], 10);
+        centeredRect.paddingRight = parseInt(centeredStyle['padding-right'], 10);
+      }
+
+      var focusedNode = centeredNode || optionNodes[0];
+      if (focusedNode) {
+        opts.focusedNode = focusedNode;
+        focusedNode.focus();
+      }
 
       if (isScrollable) {
         var scrollBuffer = contentNode.offsetHeight / 2;
