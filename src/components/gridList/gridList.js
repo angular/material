@@ -270,21 +270,16 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia, $
     }
 
     function getTileElements() {
-      // element[0].querySelectorAll(':scope > md-grid-tile') would be
-      // preferred, but is not yet widely supported.
-      return Array.prototype.slice.call(element[0].childNodes)
-          .filter(function(child) {
-            return child.tagName == 'MD-GRID-TILE';
-          });
+      return ctrl.tiles.map(function(tile) { return tile.element });
     }
 
     function getTileSpans() {
-      return ctrl.tiles.map(function(tileAttrs) {
+      return ctrl.tiles.map(function(tile) {
         return {
           row: parseInt(
-              $mdMedia.getResponsiveAttribute(tileAttrs, 'md-rowspan'), 10) || 1,
+              $mdMedia.getResponsiveAttribute(tile.attrs, 'md-rowspan'), 10) || 1,
           col: parseInt(
-              $mdMedia.getResponsiveAttribute(tileAttrs, 'md-colspan'), 10) || 1
+              $mdMedia.getResponsiveAttribute(tile.attrs, 'md-colspan'), 10) || 1
         };
       });
     }
@@ -340,17 +335,18 @@ function GridListController($timeout) {
 }
 
 GridListController.prototype = {
-  addTile: function(tileAttrs, idx) {
+  addTile: function(tileElement, tileAttrs, idx) {
+    var tile = { element: tileElement, attrs: tileAttrs };
     if (angular.isUndefined(idx)) {
-      this.tiles.push(tileAttrs);
+      this.tiles.push(tile);
     } else {
-      this.tiles.splice(idx, 0, tileAttrs);
+      this.tiles.splice(idx, 0, tile);
     }
     this.invalidateLayout();
   },
 
-  removeTile: function(tileAttrs) {
-    var idx = this.tiles.indexOf(tileAttrs);
+  removeTile: function(tileElement, tileAttrs) {
+    var idx = this._findTileIndex(tileAttrs);
     if (idx === -1) {
       return;
     }
@@ -372,6 +368,15 @@ GridListController.prototype = {
     } finally {
       this.invalidated = false;
     }
+  },
+
+  _findTileIndex: function(tileAttrs) {
+    for (var i = 0; i < this.tiles.length; i++) {
+      if (this.tiles[i].attrs == tileAttrs) {
+        return i;
+      }
+    }
+    return -1;
   }
 }
 
@@ -636,6 +641,7 @@ function GridTileDirective($mdMedia) {
     require: '^mdGridList',
     template: '<figure ng-transclude></figure>',
     transclude: true,
+    scope: {},
     link: postLink
   };
 
@@ -650,10 +656,10 @@ function GridTileDirective($mdMedia) {
     // Tile registration/deregistration
     // TODO(shyndman): Kind of gross to access parent scope like this.
     //    Consider other options.
-    gridCtrl.addTile(attrs, scope.$parent.$index);
+    gridCtrl.addTile(element, attrs, scope.$parent.$index);
     scope.$on('$destroy', function() {
       unwatchAttrs();
-      gridCtrl.removeTile(attrs);
+      gridCtrl.removeTile(element, attrs);
     });
   }
 }
