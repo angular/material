@@ -127,7 +127,6 @@ function mdCompilerService($q, $http, $injector, $compile, $controller, $templat
               scope[controllerAs] = ctrl;
             }
           }
-
           return linkFn(scope);
         }
       };

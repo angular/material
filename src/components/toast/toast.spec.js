@@ -4,6 +4,7 @@ describe('$mdToast service', function() {
 
   function setup(options) {
     inject(function($mdToast, $rootScope, $animate) {
+      $animate.triggerCallbacks();
       options = options || {};
       $mdToast.show(options);
       $rootScope.$apply();
