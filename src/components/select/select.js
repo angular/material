@@ -11,8 +11,8 @@
 - [x] Style select button to match spec
 - [x] Implement CSS for an md-progress-circular in the select while the options are loading. 
 - [x] Implement CSS for md-optgroup
-- [ ] Implement keyboard interaction
-- [ ] Implement ARIA & accessibility
+- [X] Implement keyboard interaction
+- [X] Implement ARIA & accessibility
 - [x] Finish theming - theme color
 - [x] Add element option to interimElement to avoid recompiling every time (?)
 
@@ -116,9 +116,13 @@ function SelectDirective($mdSelect, $mdUtil, $q, $mdTheming) {
 
       element.on('keydown', openOnKeypress);
 
+      configureAria();
+
       function openOnKeypress(e) {
         var allowedCodes = [32, 13, 38, 40];
         if (allowedCodes.indexOf(e.keyCode) != -1 ) {
+          // prevent page scrolling on interaction
+          e.preventDefault();
           openSelect(e);
         }
       }
@@ -135,6 +139,19 @@ function SelectDirective($mdSelect, $mdUtil, $q, $mdTheming) {
         });
       }
 
+      function configureAria() {
+
+        // needs dynamic variables
+        var selectMenuId = '',
+            isMenuOpen = false;
+
+        element.attr({
+          'id': 'select_' + $mdUtil.nextUid(),
+          'aria-haspopup': 'true',
+          'aria-controls': selectMenuId,
+          'aria-expanded': isMenuOpen
+        });
+      }
     };
 
   }
@@ -161,6 +178,7 @@ function SelectMenuDirective($parse, $mdSelect, $mdUtil, $mdTheming) {
     element.on('click', clickListener);
     element.on('keypress', keyListener);
     selectCtrl.init(ngModel);
+    configureAria();
 
     function keyListener(e) {
       if (e.keyCode == 13 || e.keyCode == 32) {
@@ -190,6 +208,18 @@ function SelectMenuDirective($parse, $mdSelect, $mdUtil, $mdTheming) {
           }
         }
         selectCtrl.refreshViewValue();
+      });
+    }
+
+    function configureAria() {
+
+      // needs reference to selectId
+      var selectId = '';
+
+      element.attr({
+        'id': 'select_menu_' + $mdUtil.nextUid(),
+        'role': 'menu',
+        'aria-labelledby': selectId
       });
     }
   }
@@ -350,6 +380,7 @@ function OptionDirective($mdInkRipple) {
     }
 
     $mdInkRipple.attachButtonBehavior(scope, element);
+    configureAria();
 
     function setOptionValue(newValue, oldValue) {
       var oldHashKey = selectCtrl.hashGetter(oldValue, scope);
@@ -365,6 +396,12 @@ function OptionDirective($mdInkRipple) {
     scope.$on('$destroy', function() {
       selectCtrl.removeOption(optionCtrl.hashKey, optionCtrl);
     });
+
+    function configureAria() {
+      element.attr({
+        'role': 'menuitem'
+      });
+    }
   }
 
   function OptionController($scope, $element) {
