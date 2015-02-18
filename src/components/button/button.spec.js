@@ -53,6 +53,23 @@ describe('md-button', function() {
   });
 
 
+  describe('with type', function() {
+
+    it('should set given type', inject(function($compile, $rootScope) {
+      var button = $compile('<md-button type="submit" ng-href="/link">')($rootScope.$new());
+      $rootScope.$apply();
+      expect(button.attr('type')).toEqual('submit');
+    }));
+
+    it('should be button otherwise', inject(function($compile, $rootScope) {
+      var button = $compile('<md-button>')($rootScope.$new());
+      $rootScope.$apply();
+      expect(button.attr('type')).toEqual('button');
+    }));
+
+  });
+
+
   describe('with ng-disabled', function() {
 
     it('should not set `tabindex` when used without anchor attributes', inject(function ($compile, $rootScope, $timeout) {
