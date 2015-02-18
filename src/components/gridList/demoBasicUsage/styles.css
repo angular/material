@@ -9,5 +9,5 @@ md-grid-list { margin: 8px; }
 
 
 md-grid-tile {
-  transition: all 700ms ease-out 50ms;
+  transition: all 400ms ease-out 50ms;
 }

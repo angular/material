@@ -1,3 +1,6 @@
+.sample {
+  height:500px;
+}
 
 .remove-tab {
   margin-bottom: 40px;
@@ -7,6 +10,11 @@
   height: 300px;
   text-align: center;
 }
+
+.demo-tab button {
+  margin-bottom: 40px;
+}
+
 .tab0, .tab1, .tab2, .tab3 {
 }
 
@@ -38,6 +46,9 @@ md-tab[disabled] {
 
 form > [layout] > * {
   margin-left: 8px;
+}
+form > [layout] > span {
+  padding-top:2px
 }
 
 .long > input {

@@ -50,12 +50,11 @@ md-grid-list {
 .pink {
   background: #ff80ab; }
 
+
 md-grid-tile {
-  -webkit-transition: all 500ms ease-out 100ms;
-    -moz-transition: all 500ms ease-out 100ms;
-    -o-transition: all 500ms ease-out 100ms;
-    transition: all 500ms ease-out 100ms;
+  transition: all 300ms ease-out 50ms;
 }
+
 
 md-grid-tile md-icon {
   padding-bottom: 32px;

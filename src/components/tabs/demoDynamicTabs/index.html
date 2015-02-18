@@ -1,21 +1,21 @@
-<div ng-controller="AppCtrl" class="sample">
+<div ng-controller="AppCtrl" class="sample" layout="column">
 
-  <md-tabs md-selected="selectedIndex">
+  <md-tabs md-selected="selectedIndex" flex>
     <md-tab ng-repeat="tab in tabs"
             ng-disabled="tab.disabled"
             label="{{tab.title}}">
 
-    <div class="demo-tab tab{{$index%4}}" layout="column" layout-fill layout-align="space-around center">
+    <div class="demo-tab tab{{$index%4}}" layout="column" layout-align="space-around center">
         <div ng-bind="tab.content"></div>
-        <md-button class="md-primary md-raised" ng-click="removeTab( tab )">
-          Remove Tab
-        </md-button>
+          <md-button class="md-primary md-raised" ng-click="removeTab( tab )">
+            Remove Tab
+          </md-button>
       </div>
     </md-tab>
   </md-tabs>
 
-  <form ng-submit="addTab(tTitle,tContent)" flex>
-    <div layout="row" layout-sm="column" layout-margin layout-align="left center">
+  <form ng-submit="addTab(tTitle,tContent)" layout="column" style="padding-top:20px;padding-left:20px;">
+    <div layout="row" layout-sm="column" layout-margin >
       <md-input-container>
         <label for="activeIndex">Active Index</label>
         <input type="text" id="activeIndex" ng-model="selectedIndex" disabled>
@@ -27,7 +27,7 @@
       </md-input-container>
     </div>
 
-    <div layout="row" layout-sm="column" layout-margin layout-align="left center">
+    <div layout="row" layout-sm="column" layout-margin >
       <span class="title">Add a new Tab:</span>
       <md-input-container>
         <label for="label">Label</label>
