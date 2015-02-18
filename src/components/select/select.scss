@@ -74,7 +74,7 @@ md-select {
   box-sizing: border-box;
   min-width: 8 * $baseline-grid;
 
-  &:after {
+  .md-select-icon:after {
     content: '\25BC';
     display: flex;
     align-items: center;
@@ -82,6 +82,7 @@ md-select {
     height: 100%;
     top: 0px;
     right: 2px;
+    speak: none;
     transform: scaleY(0.6) scaleX(1);
   }
 }

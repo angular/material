@@ -77,9 +77,10 @@ function SelectDirective($mdSelect, $mdUtil, $q, $mdTheming) {
         labelEl.remove();
       } else {
         // Otherwise, create a label for the user
-        labelEl = angular.element('<md-select-label">').html('{{' + attr.ngModel + ' ? ' + attr.ngModel + ': \'' + attr.placeholder + '\'}}');
+        labelEl = angular.element('<md-select-label>').html('<span>{{' + attr.ngModel + ' ? ' + attr.ngModel + ': \'' + attr.placeholder + '\'}}</span>');
       }
     }
+    labelEl.append('<span class="md-select-icon" aria-hidden="true"></span>');
     labelEl.addClass('md-select-label');
     labelEl.addClass('{{ ' + attr.ngModel + ' ? \'\' : \'md-placeholder\'}}');
 
@@ -116,7 +117,12 @@ function SelectDirective($mdSelect, $mdUtil, $q, $mdTheming) {
 
       element.on('keydown', openOnKeypress);
 
-      configureAria();
+      element.attr({
+        'role': 'combobox',
+        'id': 'select_' + $mdUtil.nextUid(),
+        'aria-haspopup': true,
+        'aria-expanded': 'false'
+      });
 
       function openOnKeypress(e) {
         var allowedCodes = [32, 13, 38, 40];
@@ -135,21 +141,9 @@ function SelectDirective($mdSelect, $mdUtil, $q, $mdTheming) {
             target: element[0],
             hasBackdrop: true,
             loadingAsync: attr.mdOnOpen ? scope.$eval(attr.mdOnOpen) : false
+          }).then(function() {
+            element.attr('aria-expanded', false);
           });
-        });
-      }
-
-      function configureAria() {
-
-        // needs dynamic variables
-        var selectMenuId = '',
-            isMenuOpen = false;
-
-        element.attr({
-          'id': 'select_' + $mdUtil.nextUid(),
-          'aria-haspopup': 'true',
-          'aria-controls': selectMenuId,
-          'aria-expanded': isMenuOpen
         });
       }
     };
@@ -180,6 +174,14 @@ function SelectMenuDirective($parse, $mdSelect, $mdUtil, $mdTheming) {
     selectCtrl.init(ngModel);
     configureAria();
 
+    function configureAria() {
+      element.attr({
+        'id': 'select_menu_' + $mdUtil.nextUid(),
+        'role': 'listbox',
+        'aria-multiselectable': (selectCtrl.isMultiple ? 'true' : 'false')
+      });
+    }
+
     function keyListener(e) {
       if (e.keyCode == 13 || e.keyCode == 32) {
         clickListener(e);
@@ -208,18 +210,6 @@ function SelectMenuDirective($parse, $mdSelect, $mdUtil, $mdTheming) {
           }
         }
         selectCtrl.refreshViewValue();
-      });
-    }
-
-    function configureAria() {
-
-      // needs reference to selectId
-      var selectId = '';
-
-      element.attr({
-        'id': 'select_menu_' + $mdUtil.nextUid(),
-        'role': 'menu',
-        'aria-labelledby': selectId
       });
     }
   }
@@ -351,7 +341,7 @@ function SelectMenuDirective($parse, $mdSelect, $mdUtil, $mdTheming) {
 
 }
 
-function OptionDirective($mdInkRipple) {
+function OptionDirective($mdInkRipple, $mdUtil) {
 
   return {
     restrict: 'E',
@@ -399,7 +389,9 @@ function OptionDirective($mdInkRipple) {
 
     function configureAria() {
       element.attr({
-        'role': 'menuitem'
+        'role': 'option',
+        'aria-selected': 'false',
+        'id': 'select_option_'+ $mdUtil.nextUid()
       });
     }
   }
@@ -408,9 +400,13 @@ function OptionDirective($mdInkRipple) {
     this.selected = false;
     this.setSelected = function(isSelected) {
       if (isSelected && !this.selected) {
-        $element.attr('selected', 'selected');
+        $element.attr({
+          'selected': 'selected',
+          'aria-selected': 'true'
+        });
       } else if (!isSelected && this.selected) {
         $element.removeAttr('selected');
+        $element.attr('aria-selected', 'false');
       }
       this.selected = isSelected;
     };
@@ -465,6 +461,8 @@ function SelectProvider($$interimElementProvider) {
         backdrop: opts.hasBackdrop && angular.element('<md-backdrop>')
       });
 
+      configureAria();
+
       if (opts.loadingAsync && opts.loadingAsync.then) {
         opts.loadingAsync.then(function() {
           scope.$$loadingAsyncDone = true;
@@ -504,6 +502,12 @@ function SelectProvider($$interimElementProvider) {
       });
 
       return $mdUtil.transitionEndPromise(opts.selectEl);
+
+      function configureAria() {
+        opts.selectEl.attr('aria-labelledby', opts.target.attr('id'));
+        opts.target.attr('aria-owns', opts.selectEl.attr('id'));
+        opts.target.attr('aria-expanded', 'true');
+      }
 
       function activateInteraction() {
         if (opts.isRemoved) return;
@@ -576,6 +580,7 @@ function SelectProvider($$interimElementProvider) {
     function onRemove(scope, element, opts) {
       opts.isRemoved = true;
       element.addClass('md-leave').removeClass('md-clickable');
+      opts.target.attr('aria-expanded', 'false');
 
       if (opts.disableParentScroll) {
         opts.disableTarget.css('overflow', opts.lastOverflow);

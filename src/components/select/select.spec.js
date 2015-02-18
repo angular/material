@@ -24,6 +24,11 @@ describe('<md-select-menu>', function() {
     return el;
   }
 
+  function setupMultiple(attrs, options) {
+    attrs = (attrs || '') + ' multiple';
+    return setup(attrs, options);
+  }
+
   function optTemplate(options) {
     var optionsTpl = '';
     inject(function($rootScope) {
@@ -235,11 +240,6 @@ describe('<md-select-menu>', function() {
   });
 
   describe('multiple', function() {
-
-    function setupMultiple(attrs, options) {
-      attrs = (attrs || '') + ' multiple';
-      return setup(attrs, options);
-    }
 
     describe('model->view', function() {
 
@@ -457,6 +457,64 @@ describe('<md-select-menu>', function() {
       }));
 
     });
+  });
+
+  describe('aria', function() {
+    var el;
+    beforeEach(inject(function($mdUtil, $q) {
+      el = setupSelect('ng-model="someModel"', [1, 2, 3]);
+      $mdUtil.transitionEndPromise = function() {
+        var deferred = $q.defer();
+        deferred.resolve();
+        return deferred.promise;
+      };
+    }));
+
+    afterEach(inject(function($document) {
+      var selectMenus = $document.find('md-select-menu');
+      selectMenus.remove();
+    }));
+
+    it('sets up the aria-owns attribute', inject(function($document) {
+      openSelect(el);
+      var selectMenu = $document.find('md-select-menu');
+      var selectMenuId = selectMenu.attr('id');
+      expect(selectMenuId.length).toBeTruthy();
+      expect(el.attr('aria-owns')).toBe(selectMenuId);
+    }));
+    it('sets up the aria-labeledby attribute', inject(function($document) {
+      openSelect(el);
+      var selectId = el.attr('id');
+      var selectMenu = $document.find('md-select-menu');
+      expect(selectId.length).toBeTruthy();
+      expect(selectMenu.attr('aria-labelledby')).toBe(selectId);
+    }));
+    it('sets up the aria-expanded attribute', inject(function($document) {
+      expect(el.attr('aria-expanded')).toBe('false');
+      openSelect(el);
+      expect(el.attr('aria-expanded')).toBe('true');
+
+      var selectMenu = $document.find('md-select-menu');
+      pressKey(selectMenu, 27);
+      waitForSelectClose();
+      expect(el.attr('aria-expanded')).toBe('false');
+    }));
+    it('sets up the aria-multiselectable attribute', inject(function($document, $rootScope) {
+      $rootScope.model = [1,3];
+      var el = setupMultiple('ng-model="$root.model"', [1,2,3]);
+
+      expect(el.attr('aria-multiselectable')).toBe('true');
+    }));
+    it('sets up the aria-selected attribute', inject(function($rootScope) {
+      var el = setup('ng-model="$root.model"', [1,2,3]);
+      var options = el.find('md-option');
+      expect(options.eq(2).attr('aria-selected')).toBe('false');
+      el.triggerHandler({
+        type: 'click',
+        target: el.find('md-option')[2]
+      });
+      expect(options.eq(2).attr('aria-selected')).toBe('true');
+    }));
   });
 
   describe('keyboard controls', function() {
