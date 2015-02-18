@@ -459,7 +459,7 @@ describe('<md-select-menu>', function() {
     });
   });
 
-  ddescribe('keyboard controls', function() {
+  describe('keyboard controls', function() {
 
     beforeEach(inject(function($mdUtil, $q) {
       $mdUtil.transitionEndPromise = function() {

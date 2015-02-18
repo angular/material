@@ -447,15 +447,9 @@ function SelectProvider($$interimElementProvider) {
       onShow: onShow,
       onRemove: onRemove,
       hasBackdrop: true,
+      disableParentScroll: true,
       themable: true
     };
-
-    function getParent(scope, element, options) {
-      if (!options.target) return;
-      var contentParent = angular.element(options.target).controller('mdContent');
-      // If no return value, interimElement will use the default parent ($rootElement)
-      return contentParent && contentParent.$element;
-    }
 
     function onShow(scope, element, opts) {
       if (!opts.target) {
@@ -481,6 +475,13 @@ function SelectProvider($$interimElementProvider) {
             });
           });
         });
+      }
+
+      if (opts.disableParentScroll) {
+        opts.disableTarget = opts.parent.find('md-content');
+        if (!opts.disableTarget.length) opts.disableTarget = opts.parent;
+        opts.lastOverflow = opts.disableTarget.css('overflow');
+        opts.disableTarget.css('overflow', 'hidden');
       }
 
       // Only activate click listeners after a short time to stop accidental double taps/clicks
@@ -575,6 +576,12 @@ function SelectProvider($$interimElementProvider) {
     function onRemove(scope, element, opts) {
       opts.isRemoved = true;
       element.addClass('md-leave').removeClass('md-clickable');
+
+      if (opts.disableParentScroll) {
+        opts.disableTarget.css('overflow', opts.lastOverflow);
+        delete opts.lastOverflow;
+        delete opts.disableTarget;
+      }
 
       return $mdUtil.transitionEndPromise(element).then(function() {
         element.remove();
