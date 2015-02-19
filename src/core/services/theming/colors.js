@@ -11,7 +11,7 @@
  * @module material.core.color
  *
  * @description
- * $mdColors makes it possible to use the colors of any palette to be available
+ *  $mdColors makes it possible to use the colors of any palette to be available
  *  as CSS rules in the form of md-bg-[colorname] and md-fg-[colorname] (as foreground and background)
  *  If you want to activate another palette you can use the `$mdColor.loadPalette(palletteName)` method.
  *
@@ -28,7 +28,7 @@
         .config(configColors)
         .run(loadDefaults);
 
-     /* @ngInject */
+    /* @ngInject */
     function configColors($mdThemingProvider) {
         // fetch the colors out of the theming provider
         Object.keys($mdThemingProvider._PALETTES).forEach(parsePalette);
@@ -47,7 +47,7 @@
 
             function copyColors(colorName) {
                 // use an regex to look for hex colors, ignore the rest
-                if (/#[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}\b/.test(palette[colorName])) {
+                if (/#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})\b/.test(palette[colorName])) {
                     colors.push({color:colorName,value:palette[colorName]});
                 }
             }
@@ -61,7 +61,7 @@
         $mdColors.loadPalette(defaultPalette);
     }
 
-    /* @ngInject */;
+    /* @ngInject */
     function mdColors ($interpolate, $document) {
         // wrap all of the above up in a reusable service.
         var service        = this;
@@ -102,7 +102,7 @@
                 customSheet.insertRule(bg(color));
             });
         }
-        
+
         function getStyleSheet() {
             // function to ad an dynamic style-sheet to the document
             var style = $document.querySelector('style[title="Dynamic-Generated-by-$mdColors"]');
