@@ -1,36 +1,23 @@
 (function() {
 'use strict';
+/**
+ * @ngdoc module
+ * @name material.components.select
+ */
 
 /***************************************************
 
 ### TODO ###
-
-**IMPLEMENTATION**
-
-- [x] Async loading of md-options (eg no options for one second, then they all show up).
-- [x] Style select button to match spec
-- [x] Implement CSS for an md-progress-circular in the select while the options are loading. 
-- [x] Implement CSS for md-optgroup
-- [X] Implement keyboard interaction
-- [X] Implement ARIA & accessibility
-- [x] Finish theming - theme color
-- [x] Add element option to interimElement to avoid recompiling every time (?)
-
-### TODO - POST RC1 ###
-- [ ] Abstract placement logic in $mdSelect service to $mdMenu service
-
 **DOCUMENTATION AND DEMOS**
 
 - [ ] ng-model with child mdOptions (basic)
 - [ ] ng-model="foo" ng-model-options="{ trackBy: '$value.id' }" for objects
-- [ ] mdOption with ng-value
 - [ ] mdOption with value
-- [ ] Multiple repeaters full of mdOptions
-- [ ] md-optgroups
-- [ ] Async fetching of options with a loader
 - [ ] Usage with input inside
-- [ ] Usage with custom <md-select-label> element inside
 - [ ] Usage with md-multiple
+
+### TODO - POST RC1 ###
+- [ ] Abstract placement logic in $mdSelect service to $mdMenu service
 
 ***************************************************/
 
@@ -57,6 +44,26 @@ angular.module('material.components.select', [
  *
  * @param {expression} ng-model The model!
  * @param {boolean=} multiple Whether it's multiple.
+ * @param {string=} placeholder Placeholder hint text.
+ *
+ * @usage
+ * With a placeholder (label is added dynamically)
+ * <hljs lang="html">
+ *   <md-select
+ *     ng-model="someModel"
+ *     placeholder="Select a state">
+ *     <md-option ng-value="opt" ng-repeat="opt in neighborhoods2">{{ opt }}</md-option>
+ *   </md-select>
+ * </hljs>
+ *
+ * With an explicit label
+ * <hljs lang="html">
+ *   <md-select
+ *     ng-model="someModel">
+ *     <md-select-label>Select a state</md-select-label>
+ *     <md-option ng-value="opt" ng-repeat="opt in neighborhoods2">{{ opt }}</md-option>
+ *   </md-select>
+ * </hljs>
  */
 function SelectDirective($mdSelect, $mdUtil, $mdTheming) {
   return {
@@ -82,6 +89,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming) {
     labelEl.append('<span class="md-select-icon" aria-hidden="true"></span>');
     labelEl.addClass('md-select-label');
     labelEl.addClass('{{ ' + attr.ngModel + ' ? \'\' : \'md-placeholder\'}}');
+    labelEl.attr('id', 'select_label_' + $mdUtil.nextUid());
 
     // There's got to be an md-content inside. If there's not one, let's add it.
     if (!element.find('md-content').length) {
@@ -90,7 +98,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming) {
 
     // Add progress spinner for md-options-loading
     if (attr.mdOnOpen) {
-      element.find('md-content').prepend( 
+      element.find('md-content').prepend(
         angular.element('<md-progress-circular>')
                .attr('md-mode', 'indeterminate')
                .attr('ng-hide', '$$loadingAsyncDone')
@@ -120,7 +128,8 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming) {
         'role': 'combobox',
         'id': 'select_' + $mdUtil.nextUid(),
         'aria-haspopup': true,
-        'aria-expanded': 'false'
+        'aria-expanded': 'false',
+        'aria-labelledby': labelEl.attr('id')
       });
 
       function openOnKeypress(e) {
