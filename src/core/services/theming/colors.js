@@ -18,6 +18,7 @@
  *  the $mdColors.palettes array lists all available palettes
  *  the $mdColors.palette property lists the current selected palette
  *  the $mdColors.colors array lists all the available colors with hex encoded color values for the current selected palette.
+ *   If you want to use any color for anything, you can query this array. The colors are available in hex notation.
  *
  **/
 
@@ -39,16 +40,28 @@
 
         // clone the palette colors to the colorStore var
         function parsePalette(paletteName) {
-            var palette = $mdThemingProvider._PALETTES[paletteName];
-            var colors  = [];
+            var palette   = $mdThemingProvider._PALETTES[paletteName];
+            var hueColors = $mdThemingProvider._THEMES['default'].colors['primary'].hues;
+            var colors    = [];
             colorStore[paletteName] = colors;
             Object.keys(palette).forEach(copyColors);
+            Object.keys(hueColors).forEach(addHue);
             return ;
+
+            function addHue(hueName) {
+                colors.push({
+                    color: hueName,
+                    value: palette[hueColors[hueName]]
+                });
+            }
 
             function copyColors(colorName) {
                 // use an regex to look for hex colors, ignore the rest
                 if (/#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})\b/.test(palette[colorName])) {
-                    colors.push({color:colorName,value:palette[colorName]});
+                    colors.push({
+                        color: colorName,
+                        value: palette[colorName]
+                    });
                 }
             }
         }
@@ -73,7 +86,7 @@
         return service;
 
         function loadPalette(newPalette) {
-            if(service.palettes.indexOf(newPalette) === -1) {
+            if (service.palettes.indexOf(newPalette) === -1) {
                 throw new Error('$mdColors.loadPalette: Unknown palette name ' + newPalette);
             }
             service.palette = newPalette;
@@ -82,9 +95,10 @@
         }
 
         function createStyleSheet () {
-            var colors = service.colors;
+            var colors      = service.colors;
             var fg, bg;
             var customSheet = getStyleSheet();
+            var index       = 0;
 
             // clear out old rules from stylesheet
             while (customSheet.cssRules.length > 0 ) {
@@ -97,21 +111,23 @@
 
             colors.forEach(function (color) {
                 // insert foreground color rule
-                customSheet.insertRule(fg(color));
+                customSheet.insertRule(fg(color), index);
+                index += 1;
                 // insert background color rule
-                customSheet.insertRule(bg(color));
+                customSheet.insertRule(bg(color), index);
+                index += 1;
             });
         }
 
         function getStyleSheet() {
             // function to ad an dynamic style-sheet to the document
-            var style = $document.querySelector('style[title="Dynamic-Generated-by-$mdColors"]');
+            var style = $document[0].head.querySelector('style[title="Dynamic-Generated-by-$mdColors"]');
             if (style === null) {
-                style   = $document.createElement('style');
+                style   = $document[0].createElement('style');
                 style.title = 'Dynamic-Generated-by-$mdColors';
                 // WebKit hack... (not sure if still needed)
-                style.appendChild($document.createTextNode(''));
-                $document.head.appendChild(style);
+                style.appendChild($document[0].createTextNode(''));
+                $document[0].head.appendChild(style);
             }
             return style.sheet;
         }
