@@ -451,7 +451,7 @@ function SelectProvider($$interimElementProvider) {
       onShow: onShow,
       onRemove: onRemove,
       hasBackdrop: true,
-      disableParentScroll: true,
+      disableParentScroll: $mdUtil.floatingScrollbars(),
       themable: true
     };
 
@@ -483,7 +483,7 @@ function SelectProvider($$interimElementProvider) {
         });
       }
 
-      if (opts.disableParentScroll && $mdUtil.floatingScrollbars()) {
+      if (opts.disableParentScroll) {
         opts.disableTarget = opts.parent.find('md-content');
         if (!opts.disableTarget.length) opts.disableTarget = opts.parent;
         opts.lastOverflow = opts.disableTarget.css('overflow');
