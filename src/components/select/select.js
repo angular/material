@@ -477,9 +477,11 @@ function SelectProvider($$interimElementProvider) {
       if (opts.loadingAsync && opts.loadingAsync.then) {
         opts.loadingAsync.then(function() {
           scope.$$loadingAsyncDone = true;
-        // Give ourselves two frames for the progress loader to clear out.
-        $$rAF(function() {
+          // Give ourselves two frames for the progress loader to clear out.
           $$rAF(function() {
+            $$rAF(function() {
+              // Don't go forward if the select has been removed in this time...
+              if (opts.isRemoved) return;
               animateSelect(scope, element, opts);
             });
           });
