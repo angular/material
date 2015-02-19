@@ -10,7 +10,7 @@
 var nextUniqueId = ['0','0','0'];
 
 angular.module('material.core')
-.factory('$mdUtil', function($cacheFactory, $document, $timeout, $q, $mdConstant) {
+.factory('$mdUtil', function($cacheFactory, $document, $timeout, $q, $window, $mdConstant) {
   var Util;
 
   function getNode(el) {
@@ -42,7 +42,17 @@ angular.module('material.core')
     offsetRect: function(element, offsetParent) {
       return Util.clientRect(element, offsetParent, true);
     },
-    
+
+    floatingScrollbars: function() {
+      if (this.floatingScrollbars.cached === undefined) {
+        var tempNode = angular.element('<div style="z-index: -1; position: absolute; height: 1px; overflow-y: scroll"><div style="height: 2px;"></div></div>');
+        $document[0].body.appendChild(tempNode[0]);
+        this.floatingScrollbars.cached = (tempNode[0].offsetWidth == tempNode[0].childNodes[0].offsetWidth);
+        tempNode.remove();
+      }
+      return this.floatingScrollbars.cached;
+    },
+
     // Mobile safari only allows you to set focus in click event listeners...
     forceFocus: function(element) {
       var node = element[0] || element;

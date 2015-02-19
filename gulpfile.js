@@ -308,6 +308,7 @@ gulp.task('watch-demo', ['build-demo'], function() {
 gulp.task('site', function () {
   return gulp.src('dist/docs')
       .pipe(webserver({
+        host: '0.0.0.0',
         livereload: true,
         port: LR_PORT,
         directoryListing: false
@@ -317,6 +318,7 @@ gulp.task('site', function () {
 gulp.task('server', function() {
   return gulp.src('.')
     .pipe(webserver({
+      host: '0.0.0.0',
       livereload: true,
       port: LR_PORT,
       directoryListing: true
