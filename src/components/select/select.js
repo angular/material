@@ -468,6 +468,9 @@ function SelectProvider($$interimElementProvider) {
         contentEl: element.find('md-content'),
         backdrop: opts.hasBackdrop && angular.element('<md-backdrop>')
       });
+    
+      var optionNodes = opts.selectEl[0].getElementsByTagName('md-option');
+      var arrayIndexOf = [].indexOf;
 
       configureAria();
 
@@ -547,28 +550,26 @@ function SelectProvider($$interimElementProvider) {
         });
 
         function focusNextOption() {
-          var optNodes = Array.prototype.slice.call(opts.selectEl[0].querySelectorAll('md-option'));
           var index;
-          if ((index = optNodes.indexOf(opts.focusedNode)) == -1) {
+          if ((index = arrayIndexOf.call(optionNodes, opts.focusedNode)) == -1) {
             // We lost the previously focused element, reset to middle
-            index = Math.floor( (optNodes.length - 1) / 2 );
+            index = Math.floor( (optionNodes.length - 1) / 2 );
           } else {
-            if (index < optNodes.length - 1) ++index;
+            if (index < optionNodes.length - 1) ++index;
           }
-          opts.focusedNode = optNodes[index];
-          optNodes[index].focus();
+          opts.focusedNode = optionNodes[index];
+          optionNodes[index].focus();
         }
         function focusPrevOption() {
-          var optNodes = Array.prototype.slice.call(opts.selectEl[0].querySelectorAll('md-option'));
           var index;
-          if ((index = optNodes.indexOf(opts.focusedNode)) == -1) {
+          if ((index = arrayIndexOf.call(optionNodes, opts.focusedNode)) == -1) {
             // We lost the previously focused element, reset to middle
-            index = Math.floor( (optNodes.length - 1) / 2 );
+            index = Math.floor( (optionNodes.length - 1) / 2 );
           } else {
             if (index > 0) --index;
           }
-          opts.focusedNode = optNodes[index];
-          optNodes[index].focus();
+          opts.focusedNode = optionNodes[index];
+          optionNodes[index].focus();
         }
 
 
