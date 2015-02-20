@@ -6,7 +6,7 @@
  * requirements.
  */
 angular
-  .module('material.core', [ 'material.core.theming', 'material.components.icon' ])
+  .module('material.core', [ 'material.core.theming' ])
   .config( MdCoreConfigure );
 
 
