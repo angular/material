@@ -275,6 +275,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *   - `targetEvent` - `{DOMClickEvent=}`: A click's event object. When passed in as an option,
  *     the location of the click will be used as the starting point for the opening animation
  *     of the the dialog.
+ *   - `scope` - `{object=}`: the scope to link the template / controller to. If none is specified, it will create a new isolate scope.
  *   - `disableParentScroll` - `{boolean=}`: Whether to disable scrolling while the dialog is open.
  *     Default true.
  *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop behind the dialog.
