@@ -5,7 +5,7 @@ $button-fab-border-radius: 50% !default;
   border-radius: $button-border-radius;
 
   &:not([disabled]) {
-    &:focus {
+    &.focus {
       background-color: '{{background-500-0.2}}';
     }
   }
@@ -34,9 +34,20 @@ $button-fab-border-radius: 50% !default;
         color: '{{primary-contrast}}';
       }
       &:not([disabled]) {
-        &:focus {
+        &.focus {
           background-color: '{{primary-600}}';
         }
+      }
+    }
+  }
+  &.md-fab {
+    border-radius: $button-fab-border-radius;
+    background-color: '{{accent-color}}';
+    color: '{{accent-contrast}}';
+    &:not([disabled]) {
+      &:hover,
+      &.focus {
+        background-color: '{{accent-A700}}';
       }
     }
   }
@@ -45,7 +56,7 @@ $button-fab-border-radius: 50% !default;
     color: '{{background-contrast}}';
     background-color: '{{background-50}}';
     &:not([disabled]) {
-      &:focus {
+      &.focus {
         background-color: '{{background-200}}';
       }
     }
@@ -62,7 +73,7 @@ $button-fab-border-radius: 50% !default;
         color: '{{warn-contrast}}';
       }
       &:not([disabled]) {
-        &:focus {
+        &.focus {
           background-color: '{{warn-700}}';
         }
       }
@@ -79,7 +90,7 @@ $button-fab-border-radius: 50% !default;
         color: '{{accent-contrast}}';
       }
       &:not([disabled]) {
-        &:focus {
+        &.focus {
           background-color: '{{accent-700}}';
         }
       }

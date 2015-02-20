@@ -165,7 +165,7 @@ $icon-button-margin: 0.600rem !default;
   .md-button.md-fab-top-right {
     transform: translate3d(0, $button-fab-toast-offset, 0);
     &:not([disabled]) {
-      &:focus,
+      &.focus,
       &:hover {
         transform: translate3d(0, $button-fab-toast-offset - 1, 0);
       }
@@ -177,7 +177,7 @@ $icon-button-margin: 0.600rem !default;
   .md-button.md-fab-bottom-right {
     transform: translate3d(0, -$button-fab-toast-offset, 0);
     &:not([disabled]) {
-      &:focus,
+      &.focus,
       &:hover {
         transform: translate3d(0, -$button-fab-toast-offset - 1, 0);
       }
