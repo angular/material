@@ -25,6 +25,7 @@
  * @see js folder for tabs implementation
  */
 angular.module('material.components.tabs', [
-  'material.core'
+  'material.core',
+  'material.components.icon'
 ]);
 })();
