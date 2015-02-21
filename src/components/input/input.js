@@ -173,7 +173,11 @@ function inputTextareaDirective($mdUtil, $window) {
     }
 
     var isErrorGetter = containerCtrl.isErrorGetter || function() {
-      return ngModelCtrl.$invalid && ngModelCtrl.$touched;
+      if (!ngModelCtrl.$touched) {
+        return true;
+      } else {
+        return ngModelCtrl.$invalid;
+      }
     };
     scope.$watch(isErrorGetter, containerCtrl.setInvalid);
 
