@@ -44,7 +44,7 @@ md-input-container.md-THEME_NAME-theme {
       }
     }
   }
-  &.md-input-invalid {
+  &.md-input-invalid.md-input-touched {
     .md-input {
       border-color: '{{warn-500}}';
     }
