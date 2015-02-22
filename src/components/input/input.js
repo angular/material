@@ -64,6 +64,9 @@ function mdInputContainerDirective($mdTheming, $parse) {
     self.setFocused = function(isFocused) {
       $element.toggleClass('md-input-focused', !!isFocused);
     };
+    self.setTouched = function(isTouched) {
+      $element.toggleClass('md-input-touched', !!isTouched);
+    };
     self.setHasValue = function(hasValue) {
       $element.toggleClass('md-input-has-value', !!hasValue);
     };
@@ -170,7 +173,11 @@ function inputTextareaDirective($mdUtil, $window) {
     }
 
     var isErrorGetter = containerCtrl.isErrorGetter || function() {
-      return ngModelCtrl.$invalid && ngModelCtrl.$touched;
+      if (!ngModelCtrl.$touched) {
+        return true;
+      } else {
+        return ngModelCtrl.$invalid;
+      }
     };
     scope.$watch(isErrorGetter, containerCtrl.setInvalid);
 
@@ -186,6 +193,7 @@ function inputTextareaDirective($mdUtil, $window) {
 
           // Error text should not appear before user interaction with the field.
           // So we need to check on focus also
+          containerCtrl.setTouched(true);
           ngModelCtrl.$setTouched();
           if ( isErrorGetter() ) containerCtrl.setInvalid(true);
 
