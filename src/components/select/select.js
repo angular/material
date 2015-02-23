@@ -232,7 +232,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
     self.options = {};
 
 
-    self.init = function(ngModel) {
+    self.init = function(ngModel, rerender) {
       self.ngModel = ngModel;
 
       // Allow users to provide `ng-model="foo" ng-model-options="{trackBy: 'foo.id'}"` so
@@ -267,6 +267,8 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
       } else {
         ngModel.$render = renderSingular;
       }
+
+      if (rerender) ngModel.$render();
 
       function validateArray(modelValue, viewValue) {
         // If a value is truthy but not an array, reject it.
@@ -475,7 +477,7 @@ function SelectProvider($$interimElementProvider) {
       configureAria();
 
       if (opts.ngModel) {
-        opts.selectEl.controller('mdSelectMenu').init(opts.ngModel);
+        opts.selectEl.controller('mdSelectMenu').init(opts.ngModel, true);
       }
 
       if (opts.loadingAsync && opts.loadingAsync.then) {
