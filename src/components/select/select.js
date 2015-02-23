@@ -121,9 +121,22 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming) {
     $mdTheming(element);
 
     return function postLink(scope, element, attr, ngModel) {
-      element.on('click', openSelect);
+      attr.$observe('disabled', function(disabled) {
+        if (disabled !== undefined) {
+          element.attr('tabindex', -1);
+          element.off('click', openSelect);
+          element.off('keydown', openOnKeypress);
+        } else {
+          element.attr('tabindex', 0);
+          element.on('click', openSelect);
+          element.on('keydown', openOnKeypress);
+        }
+      });
 
-      element.on('keydown', openOnKeypress);
+      if (attr.disabled === undefined) {
+        element.on('click', openSelect);
+        element.on('keydown', openOnKeypress);
+      }
 
       element.attr({
         'role': 'combobox',

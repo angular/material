@@ -47,18 +47,22 @@ describe('<md-select-menu>', function() {
   }
 
   function openSelect(el) {
-    el.triggerHandler('click');
-    waitForSelectOpen();
-    inject(function($timeout) {
-      $timeout.flush();
-    });
+    try {
+      el.triggerHandler('click');
+      waitForSelectOpen();
+      inject(function($timeout) {
+        $timeout.flush();
+      });
+    } catch(e) { }
   }
 
   function waitForSelectOpen() {
-    inject(function($rootScope, $animate) {
-      $rootScope.$digest();
-      $animate.triggerCallbacks();
-    });
+    try {
+      inject(function($rootScope, $animate) {
+          $rootScope.$digest();
+          $animate.triggerCallbacks();
+      });
+    } catch(e) { }
   }
 
   function pressKey(el, code) {
@@ -76,6 +80,13 @@ describe('<md-select-menu>', function() {
       $animate.triggerCallbacks();
     });
   }
+
+  it('supports disabled state', inject(function($document) {
+    var select = setupSelect('disabled="disabled", ng-model="val"');
+    openSelect(select);
+    waitForSelectOpen();
+    expect($document.find('md-select-menu').length).toBe(0);
+  }));
 
   it('errors for duplicate md-options, non-dynamic value', inject(function($rootScope) {
     expect(function() {

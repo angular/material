@@ -49,13 +49,18 @@ $select-max-visible-options: 5;
 md-select {
   display: inline-block;
   margin-top: 2.5 * $baseline-grid;
-  &:hover {
-    cursor: pointer
+  &[disabled]:hover {
+    cursor: default;
   }
-  &:focus {
-    .md-select-label {
-      border-bottom: 2px solid;
-      padding-bottom: $baseline-grid - 1;
+  &:not([disabled]) {
+    &:hover {
+      cursor: pointer
+    }
+    &:focus {
+      .md-select-label {
+        border-bottom: 2px solid;
+        padding-bottom: $baseline-grid - 1;
+      }
     }
   }
 }
