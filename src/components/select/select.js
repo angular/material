@@ -68,6 +68,7 @@ angular.module('material.components.select', [
 function SelectDirective($mdSelect, $mdUtil, $mdTheming) {
   return {
     restrict: 'E',
+    require: '?ngModel',
     compile: compile
   };
 
@@ -119,7 +120,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming) {
 
     $mdTheming(element);
 
-    return function postLink(scope, element, attr) {
+    return function postLink(scope, element, attr, ngModel) {
       element.on('click', openSelect);
 
       element.on('keydown', openOnKeypress);
@@ -147,10 +148,9 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming) {
             scope: scope.$new(),
             template: selectTemplate,
             target: element[0],
+            ngModel: ngModel,
             hasBackdrop: true,
             loadingAsync: attr.mdOnOpen ? scope.$eval(attr.mdOnOpen) : false
-          }).then(function() {
-            element.attr('aria-expanded', false);
           });
         });
       }
@@ -473,6 +473,10 @@ function SelectProvider($$interimElementProvider) {
       var arrayIndexOf = [].indexOf;
 
       configureAria();
+
+      if (opts.ngModel) {
+        opts.selectEl.controller('mdSelectMenu').init(opts.ngModel);
+      }
 
       if (opts.loadingAsync && opts.loadingAsync.then) {
         opts.loadingAsync.then(function() {

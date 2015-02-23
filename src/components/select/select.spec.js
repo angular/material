@@ -190,6 +190,23 @@ describe('<md-select-menu>', function() {
         expect($rootScope.model).toBe(3);
       }));
 
+      it('should support the ng-change event', inject(function($rootScope, $document) {
+          var changeCalled = false;
+          $rootScope.changed = function() {
+            changeCalled = true;
+          };
+
+          var selectEl = setupSelect('ng-model="myModel", ng-change="changed()"', [1, 2, 3]);
+          openSelect(selectEl);
+          waitForSelectOpen();
+          var menuEl = $document.find('md-select-menu');
+          menuEl.triggerHandler({
+            type: 'click',
+            target: menuEl.find('md-option')[1]
+          });
+          expect(changeCalled).toBe(true);
+      }));
+
       it('should deselect old and select new on click', inject(function($rootScope) {
         $rootScope.model = 3;
         var el = setup('ng-model="$root.model"', [1,2,3]);
@@ -461,16 +478,13 @@ describe('<md-select-menu>', function() {
 
   describe('aria', function() {
     var el;
-    beforeEach(inject(function($mdUtil, $q) {
+    beforeEach(inject(function($mdUtil, $q, $document) {
       el = setupSelect('ng-model="someModel"', [1, 2, 3]);
       $mdUtil.transitionEndPromise = function() {
         var deferred = $q.defer();
         deferred.resolve();
         return deferred.promise;
       };
-    }));
-
-    afterEach(inject(function($document) {
       var selectMenus = $document.find('md-select-menu');
       selectMenus.remove();
     }));
