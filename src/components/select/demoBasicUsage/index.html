@@ -6,7 +6,7 @@
   <p class="result">{{ neighborhood ? 'You selected ' + neighborhood : 'You haven\'t selected a neighborhood yet' }}</p>
 
   <p>A select can be disabled</p>
-  <md-select disable ng-model="disabledNeighborhood" placeholder="Neighborhood">
+  <md-select disabled ng-model="disabledNeighborhood" placeholder="Neighborhood">
     <md-option ng-value="opt" ng-repeat="opt in neighborhoods">{{ opt }}</md-option>
   </md-select>
 
