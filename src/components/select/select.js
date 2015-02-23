@@ -111,7 +111,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming) {
     // Use everything that's left inside element.contents() as the contents of the menu
     var selectTemplate = '' +
       '<div class="md-select-menu-container">' +
-        '<md-select-menu ng-model="$parent.' + attr.ngModel + '" ' +
+        '<md-select-menu ' +
         (angular.isDefined(attr.multiple) ? 'multiple' : '') + '>' +
           element.html() +
         '</md-select-menu></div>';
@@ -163,7 +163,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
 
   return {
     restrict: 'E',
-    require: ['mdSelectMenu', 'ngModel'],
+    require: ['mdSelectMenu', '?ngModel'],
     controller: SelectMenuController,
     link: {
       pre: preLink
@@ -179,7 +179,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
     $mdTheming(element);
     element.on('click', clickListener);
     element.on('keypress', keyListener);
-    selectCtrl.init(ngModel);
+    if (ngModel) selectCtrl.init(ngModel);
     configureAria();
 
     function configureAria() {
