@@ -54,7 +54,8 @@
           <button\
               type="button"\
               ng-if="searchText"\
-              ng-click="$mdAutocompleteCtrl.clear()">\
+              ng-click="$mdAutocompleteCtrl.clear()"\
+			  tabindex="1000">\
               <md-icon md-svg-icon="cancel"></md-icon>\
               <span class="visually-hidden">Clear</span>\
               </button>\
