@@ -2,6 +2,14 @@ describe('<md-select-menu>', function() {
 
   beforeEach(module('material.components.select', 'ngAnimateMock'));
 
+  beforeEach(inject(function($mdUtil, $q) {
+    $mdUtil.transitionEndPromise = function() {
+      var deferred = $q.defer();
+      deferred.resolve();
+      return deferred.promise;
+    };
+  }));
+
   function setupSelect(attrs, options) {
     var innerTpl = setup(attrs, options, true);
     var el;
@@ -56,14 +64,6 @@ describe('<md-select-menu>', function() {
     } catch(e) { }
   }
 
-  function waitForSelectOpen() {
-    try {
-      inject(function($rootScope, $animate) {
-          $rootScope.$digest();
-          $animate.triggerCallbacks();
-      });
-    } catch(e) { }
-  }
 
   function pressKey(el, code) {
     inject(function($rootScope, $animate, $timeout) {
@@ -74,7 +74,16 @@ describe('<md-select-menu>', function() {
     });
   }
 
-  function waitForSelectClose(el, fn) {
+  function waitForSelectOpen() {
+    try {
+      inject(function($rootScope, $animate) {
+          $rootScope.$digest();
+          $animate.triggerCallbacks();
+      });
+    } catch(e) { }
+  }
+
+  function waitForSelectClose() {
     inject(function($rootScope, $animate) {
       $rootScope.$digest();
       $animate.triggerCallbacks();
@@ -85,6 +94,16 @@ describe('<md-select-menu>', function() {
     var select = setupSelect('disabled="disabled", ng-model="val"');
     openSelect(select);
     waitForSelectOpen();
+    expect($document.find('md-select-menu').length).toBe(0);
+  }));
+
+  it('closes the menu if the element is destroyed', inject(function($document) {
+    var select = setupSelect('ng-model="val"');
+    openSelect(select);
+    waitForSelectOpen();
+    expect($document.find('md-select-menu').length).toBe(1);
+    select.scope().$destroy();
+    waitForSelectClose();
     expect($document.find('md-select-menu').length).toBe(0);
   }));
 
@@ -489,13 +508,8 @@ describe('<md-select-menu>', function() {
 
   describe('aria', function() {
     var el;
-    beforeEach(inject(function($mdUtil, $q, $document) {
+    beforeEach(inject(function($q, $document) {
       el = setupSelect('ng-model="someModel"', [1, 2, 3]);
-      $mdUtil.transitionEndPromise = function() {
-        var deferred = $q.defer();
-        deferred.resolve();
-        return deferred.promise;
-      };
       var selectMenus = $document.find('md-select-menu');
       selectMenus.remove();
     }));
@@ -544,13 +558,6 @@ describe('<md-select-menu>', function() {
 
   describe('keyboard controls', function() {
 
-    beforeEach(inject(function($mdUtil, $q) {
-      $mdUtil.transitionEndPromise = function() {
-        var deferred = $q.defer();
-        deferred.resolve();
-        return deferred.promise;
-      };
-    }));
 
     afterEach(inject(function($document) {
       var selectMenus = $document.find('md-select-menu');
