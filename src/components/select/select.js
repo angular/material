@@ -673,7 +673,7 @@ function SelectProvider($$interimElementProvider) {
         centeredNode = optionNodes[Math.floor(optionNodes.length / 2 )];
       // In case there are no options, center on whatevers in there... (such as a progress indicator)
       } else {
-        centeredNode = contentNode.firstElementChild;
+        centeredNode = contentNode.firstElementChild || contentNode;
       }
 
       if (contentNode.offsetWidth > maxWidth) {
