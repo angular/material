@@ -1,5 +1,8 @@
 md-backdrop {
   z-index: $z-index-backdrop;
+  &.md-select-backdrop {
+    z-index: $z-index-dialog + 1;
+  }
   &.md-dialog-backdrop {
     z-index: $z-index-dialog - 1;
   }

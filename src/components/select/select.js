@@ -487,7 +487,7 @@ function SelectProvider($$interimElementProvider) {
         parent: angular.element(opts.parent),
         selectEl: element.find('md-select-menu'),
         contentEl: element.find('md-content'),
-        backdrop: opts.hasBackdrop && angular.element('<md-backdrop>')
+        backdrop: opts.hasBackdrop && angular.element('<md-backdrop class="md-select-backdrop">')
       });
     
       var optionNodes = opts.selectEl[0].getElementsByTagName('md-option');
@@ -552,7 +552,9 @@ function SelectProvider($$interimElementProvider) {
         var selectCtrl = opts.selectEl.controller('mdSelectMenu') || {};
         element.addClass('md-clickable');
 
-        opts.backdrop && opts.backdrop.on('click', function() {
+        opts.backdrop && opts.backdrop.on('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
           opts.restoreFocus = false;
           scope.$apply($mdSelect.cancel);
         });
