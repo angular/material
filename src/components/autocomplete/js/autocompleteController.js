@@ -59,7 +59,7 @@
     function configureWatchers () {
       $scope.$watch('searchText', function (searchText) {
         self.index = -1;
-        if (!searchText) {
+        if (searchText.length < Math.max(parseInt($scope.minLength, 10), 1)) {
           self.loading = false;
           self.matches = [];
           self.hidden = shouldHide();

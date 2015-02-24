@@ -21,6 +21,8 @@
    * @param {boolean=} md-no-cache Disables the internal caching that happens in autocomplete
    * @param {expression} md-selected-item-change An expression to be run each time a new item is selected
    * @param {expression} md-search-text-change An expression to be run each time the search text updates
+   * @param {boolean=} ng-disabled Determines whether or not to disable the input field
+   * @param {number=} md-min-length Specifies the minimum length of text before autocomplete will make suggestions
    *
    * @usage
    * <hljs lang="html">
@@ -87,7 +89,8 @@
         noCache:      '=mdNoCache',
         itemChange:   '&mdSelectedItemChange',
         textChange:   '&mdSearchTextChange',
-        isDisabled:   '=ngDisabled'
+        isDisabled:   '=ngDisabled',
+        minLength:    '=mdMinLength'
       }
     };
   }
