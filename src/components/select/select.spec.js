@@ -16,6 +16,8 @@ describe('<md-select-menu>', function() {
     inject(function($compile, $rootScope) {
       var template = angular.element('<md-select ' + (attrs || '') + '>' + optTemplate(options) + '</md-select>');
       el = $compile(template)($rootScope);
+      $rootScope.$digest();
+      $rootScope.$digest();
     });
     return el;
   }
@@ -106,6 +108,43 @@ describe('<md-select-menu>', function() {
     waitForSelectClose();
     expect($document.find('md-select-menu').length).toBe(0);
   }));
+
+  describe('label behavior', function() {
+    it('defaults to the placeholder text', function() {
+      var select = setupSelect('ng-model="someVal", placeholder="Hello world"');
+      var label = select.find('md-select-label');
+      expect(label.text()).toBe('Hello world');
+      expect(label.hasClass('md-placeholder')).toBe(true);
+    });
+
+    it('sets itself to the selected option\'s label', inject(function($rootScope, $compile) {
+      $rootScope.val = 2;
+      var select = $compile('<md-select ng-model="val" placeholder="Hello World">' +
+                              '<md-option value="1">One</md-option>' +
+                              '<md-option value="2">Two</md-option>' +
+                              '<md-option value="3">Three</md-option>' +
+                            '</md-select>')($rootScope);
+      var label = select.find('md-select-label');
+      $rootScope.$digest();
+
+      expect(label.text()).toBe('Two');
+      expect(label.hasClass('md-placeholder')).toBe(false);
+    }));
+
+    it('supports rendering multiple', inject(function($rootScope, $compile) {
+      $rootScope.val = [1, 3];
+      var select = $compile('<md-select multiple ng-model="val" placeholder="Hello World">' +
+                              '<md-option value="1">One</md-option>' +
+                              '<md-option value="2">Two</md-option>' +
+                              '<md-option value="3">Three</md-option>' +
+                            '</md-select>')($rootScope);
+      var label = select.find('md-select-label');
+      $rootScope.$digest();
+
+      expect(label.text()).toBe('One, Three');
+      expect(label.hasClass('md-placeholder')).toBe(false);
+    }));
+  });
 
   it('errors for duplicate md-options, non-dynamic value', inject(function($rootScope) {
     expect(function() {
