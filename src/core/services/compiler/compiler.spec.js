@@ -31,6 +31,13 @@ describe('$mdCompiler service', function() {
       expect(data.element.html()).toBe(tpl);
     });
 
+    it('should support a custom element', function() {
+      var data = compile({
+        element: angular.element('<h1>Hello world</h1>')
+      });
+      expect(data.element.html()).toBe('Hello world');
+    });
+
     it('element should use template with whitespace', function() {
       var tpl = '  \nhello\n\t  ';
       var data = compile({

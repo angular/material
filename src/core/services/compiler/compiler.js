@@ -103,7 +103,7 @@ function mdCompilerService($q, $http, $injector, $compile, $controller, $templat
     return $q.all(resolve).then(function(locals) {
 
       var template = transformTemplate(locals.$template);
-      var element = angular.element('<div>').html(template.trim()).contents();
+      var element = options.element || angular.element('<div>').html(template.trim()).contents();
       var linkFn = $compile(element);
 
       //Return a linking function that can be used later when the element is ready
