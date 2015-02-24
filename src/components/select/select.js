@@ -34,6 +34,7 @@ angular.module('material.components.select', [
 .directive('mdOptgroup', OptgroupDirective)
 .provider('$mdSelect', SelectProvider);
 
+
 /**
  * @ngdoc directive
  * @name mdSelect
@@ -326,7 +327,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
     };
 
     self.selectedLabels = function() {
-      var selectedOptionEls = Array.prototype.slice.call($element[0].querySelectorAll('md-option[selected]'));
+      var selectedOptionEls = nodesToArray($element[0].querySelectorAll('md-option[selected]'));
       if (selectedOptionEls.length) {
         return selectedOptionEls.map(function(el) { return el.textContent; }).join(', ');
       } else {
@@ -528,8 +529,7 @@ function SelectProvider($$interimElementProvider) {
         backdrop: opts.hasBackdrop && angular.element('<md-backdrop class="md-select-backdrop">')
       });
     
-      var optionNodes = opts.selectEl[0].getElementsByTagName('md-option');
-      var arrayIndexOf = [].indexOf;
+      var optionNodes = [];
 
       configureAria();
 
@@ -542,6 +542,7 @@ function SelectProvider($$interimElementProvider) {
               // Don't go forward if the select has been removed in this time...
               if (opts.isRemoved) return;
               animateSelect(scope, element, opts);
+              optionNodes = nodesToArray(opts.selectEl[0].getElementsByTagName('md-option'));
             });
           });
         });
@@ -570,6 +571,7 @@ function SelectProvider($$interimElementProvider) {
         $$rAF(function() {
           if (opts.isRemoved) return;
           animateSelect(scope, element, opts);
+          optionNodes = nodesToArray(element[0].querySelectorAll('md-option'));
         });
       });
 
@@ -614,7 +616,7 @@ function SelectProvider($$interimElementProvider) {
 
         function focusNextOption() {
           var index;
-          if ((index = arrayIndexOf.call(optionNodes, opts.focusedNode)) == -1) {
+          if ((index = optionNodes.indexOf(opts.focusedNode)) == -1) {
             // We lost the previously focused element, reset to middle
             index = Math.floor( (optionNodes.length - 1) / 2 );
           } else {
@@ -625,7 +627,7 @@ function SelectProvider($$interimElementProvider) {
         }
         function focusPrevOption() {
           var index;
-          if ((index = arrayIndexOf.call(optionNodes, opts.focusedNode)) == -1) {
+          if ((index = optionNodes.indexOf(opts.focusedNode)) == -1) {
             // We lost the previously focused element, reset to middle
             index = Math.floor( (optionNodes.length - 1) / 2 );
           } else {
@@ -697,7 +699,7 @@ function SelectProvider($$interimElementProvider) {
           maxWidth = parentRect.width - SELECT_EDGE_MARGIN * 2,
           isScrollable = contentNode.scrollHeight > contentNode.offsetHeight,
           selectedNode = selectNode.querySelector('md-option[selected]'),
-          optionNodes = selectNode.getElementsByTagName('md-option'),
+          optionNodes = nodesToArray(selectNode.getElementsByTagName('md-option')),
           optgroupNodes = selectNode.getElementsByTagName('md-optgroup');
 
       var centeredNode;
@@ -810,4 +812,13 @@ function SelectProvider($$interimElementProvider) {
   }
 }
 
+// Annoying method to copy nodes to an array, thanks to IE
+function nodesToArray(nodes) {
+  var results = [];
+  for (var i = 0; i < nodes.length; ++i) {
+    results.push(nodes.item(i));
+  }
+  return results;
+}
 })();
+
