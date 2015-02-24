@@ -653,7 +653,9 @@ function SelectProvider($$interimElementProvider) {
           },
           spaceAvailable = {
             top: targetRect.top - bounds.top,
-            left: targetRect.left - bounds.bottom
+            left: targetRect.left - bounds.left,
+            right: bounds.right - (targetRect.left + targetRect.width),
+            bottom: bounds.bottom - (targetRect.top + targetRect.height)
           },
           maxWidth = parentRect.width - SELECT_EDGE_MARGIN * 2,
           isScrollable = contentNode.scrollHeight > contentNode.offsetHeight,
