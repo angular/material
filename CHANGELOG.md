@@ -1,3 +1,32 @@
+<a name="0.8.1"></a>
+### 0.8.1  (2015-02-24)
+
+
+#### Features
+
+* **select:**
+  * set label value based on md-option text ([ee4c7c18](https://github.com/angular/material/commit/ee4c7c1809558a51a58928e9fbe06ab16686742a))
+  * add disabled support ([0c0f25ce](https://github.com/angular/material/commit/0c0f25ce5bb4e1a4467617541cffdb24d36f8ec7))
+  * add ng-change support ([f4ce10ee](https://github.com/angular/material/commit/f4ce10eea6590ac431b7b15c44242b76219e1f7f))
+
+
+#### Bug Fixes
+
+* **select:**
+  * keyboard controls in IE ([69053a30](https://github.com/angular/material/commit/69053a30c869c6ccdf8bcfcaaba451900f38e2ba))
+  * fix overflow scroll on IE ([c5c5f860](https://github.com/angular/material/commit/c5c5f8603e631665d93c018bc6f94df2c4125eab))
+  * prevent select from closing a dialog on click away ([c573c8cd](https://github.com/angular/material/commit/c573c8cd28c66b3c74f6f6ad482ff0c0b3844ff6))
+  * stop position from going past bottom of screen ([805ed1b4](https://github.com/angular/material/commit/805ed1b49369269c0f9606d9f9c812cc8658d954))
+  * fix select with 0 options positioning ([5a82426e](https://github.com/angular/material/commit/5a82426ed23724a1860bb7b5efa3e28326512716))
+  * support custom interpolate symbols ([20b66111](https://github.com/angular/material/commit/20b6611107332b7cd36b93fc1398263c3ad328ae))
+  * remove placeholder for falsey, but defined values ([9497f063](https://github.com/angular/material/commit/9497f063a2f5b118077aaba0cdc3df851754629c))
+  * close md-select-menu if md-select is removed ([5e02ad94](https://github.com/angular/material/commit/5e02ad948fc4e68d81b18234102e47e643917b97))
+
+
+<a name="0.8.1"></a>
+### 0.8.1  (2015-02-24)
+
+
 <a name="0.8.0"></a>
 ## 0.8.0  (2015-02-23)
 
