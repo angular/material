@@ -6,6 +6,7 @@
       </p>
 
     <md-autocomplete
+        ng-disabled="ctrl.isDisabled"
         md-no-cache="ctrl.noCache"
         md-selected-item="ctrl.selectedItem"
         md-search-text="ctrl.searchText"
@@ -18,6 +19,7 @@
     <br/>
     <md-checkbox ng-model="ctrl.simulateQuery">Simulate query for results?</md-checkbox>
     <md-checkbox ng-model="ctrl.noCache">Disable caching of queries?</md-checkbox>
+    <md-checkbox ng-model="ctrl.isDisabled">Disable the input?</md-checkbox>
 
     <p style="padding-left: 15px;">By default, <code>&lt;md-autocomplete&gt;</code> will cache results when performing a query.  After the initial call is performed, it will use the cached results to eliminate unnecessary server requests or lookup logic. This can be disabled above.</p>
 

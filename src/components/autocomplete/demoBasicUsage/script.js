@@ -11,6 +11,7 @@ function DemoCtrl ($timeout, $q) {
   self.searchText    = null;
   self.querySearch   = querySearch;
   self.simulateQuery = false;
+  self.isDisabled    = false;
 
   // ******************************
   // Internal methods
