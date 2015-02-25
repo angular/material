@@ -130,7 +130,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
         mdSelectCtrl.setIsPlaceholder(!text);
         var newText = text || attr.placeholder;
         var target = customLabel ? labelEl : labelEl.children().eq(0);
-        target.html(newText);
+        target.text(newText);
       };
 
       mdSelectCtrl.setIsPlaceholder = function(val) {
@@ -181,7 +181,6 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
           fakeSelectEl = $compile(fakeSelectEl)(fakeSelectScope);
           var fakeSelectCtrl = fakeSelectEl.controller('mdSelectMenu');
           fakeSelectScope.$$postDigest(function() {
-            ngModel.$render();
             fakeSelectEl.scope().$destroy();
           });
         } else {
@@ -330,6 +329,13 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
         ngModel.$render = renderSingular;
       }
 
+      if (self.mdSelect) {
+        $scope.$$postDigest(function() {
+          ngModel.$render();
+          self.mdSelect.setLabelText(self.selectedLabels());
+        });
+      }
+
       function validateArray(modelValue, viewValue) {
         // If a value is truthy but not an array, reject it.
         // If value is undefined/falsy, accept that it's an empty array.
@@ -410,13 +416,11 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
       newSelectedHashes.forEach(function(hashKey, i) {
         self.select(hashKey, newSelectedValues[i]);
       });
-      self.mdSelect && self.mdSelect.setLabelText(self.selectedLabels());
     }
     function renderSingular() {
       var value = self.ngModel.$viewValue || self.ngModel.$modelValue;
       Object.keys(self.selected).forEach(self.deselect);
       self.select( self.hashGetter(value), value );
-      self.mdSelect && self.mdSelect.setLabelText(self.selectedLabels());
     }
   }
 
@@ -677,6 +681,11 @@ function SelectProvider($$interimElementProvider) {
         opts.disableTarget.css('overflow', opts.lastOverflow);
         delete opts.lastOverflow;
         delete opts.disableTarget;
+      }
+
+      var mdSelect = opts.selectEl.controller('mdSelect');
+      if (mdSelect) {
+        mdSelect.setLabelText(opts.selectEl.controller('mdSelectMenu').selectedLabels());
       }
 
       return $mdUtil.transitionEndPromise(element).then(function() {
