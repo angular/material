@@ -29,6 +29,11 @@ describe('md-button', function() {
     expect($log.warn).not.toHaveBeenCalled();
   }));
 
+  it('should allow attribute directive syntax', inject(function($compile, $rootScope) {
+    var button = $compile('<a md-button href="https://google.com">google</a>')($rootScope.$new());
+    expect(button.hasClass('md-button')).toBe(true);
+  }));
+
 
   describe('with href or ng-href', function() {
 
