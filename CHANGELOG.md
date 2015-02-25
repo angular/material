@@ -23,12 +23,9 @@
   * close md-select-menu if md-select is removed ([5e02ad94](https://github.com/angular/material/commit/5e02ad948fc4e68d81b18234102e47e643917b97))
 
 
-<a name="0.8.1"></a>
-### 0.8.1  (2015-02-24)
-
 
 <a name="0.8.0"></a>
-## 0.8.0  (2015-02-23)
+### 0.8.0  (2015-02-23)
 
 
 #### Features
