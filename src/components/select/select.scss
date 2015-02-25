@@ -110,10 +110,12 @@ md-select-menu {
   transform-origin: 0 0;
   transform: scale(1.0);
   max-height: ($select-option-height * $select-max-visible-options) + 2 * $baseline-grid;
-  overflow-y: scroll;
+  overflow-y: hidden;
 
   md-content {
     min-width: 136px;
+    max-height: ($select-option-height * $select-max-visible-options) + 2 * $baseline-grid;
+    overflow-y: auto;
   }
   > * {
     opacity: 0;
