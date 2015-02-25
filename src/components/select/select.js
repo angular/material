@@ -158,7 +158,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
       // Create a fake select to find out the label value
       function setInitialLabelValue() {
         if ($parse(attr.ngModel)(scope)) {
-          var fakeSelectEl = angular.element(selectTemplate).find('md-select-menu');
+          var fakeSelectEl = angular.element(selectTemplate.clone()).find('md-select-menu');
           fakeSelectEl.data('$ngModelController', ngModel);
           var fakeSelectScope = scope.$new();
           fakeSelectEl = $compile(fakeSelectEl)(fakeSelectScope);
