@@ -23,6 +23,7 @@
    * @param {expression} md-search-text-change An expression to be run each time the search text updates
    * @param {boolean=} ng-disabled Determines whether or not to disable the input field
    * @param {number=} md-min-length Specifies the minimum length of text before autocomplete will make suggestions
+   * @param {number=} md-delay Specifies the amount of time (in milliseconds) to wait before looking for results
    *
    * @usage
    * <hljs lang="html">
@@ -90,7 +91,8 @@
         itemChange:   '&mdSelectedItemChange',
         textChange:   '&mdSearchTextChange',
         isDisabled:   '=ngDisabled',
-        minLength:    '=mdMinLength'
+        minLength:    '=mdMinLength',
+        delay:        '=mdDelay'
       }
     };
   }
