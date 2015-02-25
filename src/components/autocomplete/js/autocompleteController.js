@@ -110,6 +110,7 @@
     }
 
     function updateMessages () {
+      if (self.hidden) return;
       switch (self.matches.length) {
         case 0:  return self.messages.splice(0);
         case 1:  return self.messages.push({ display: 'There is 1 match available.' });
