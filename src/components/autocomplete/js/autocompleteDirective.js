@@ -56,10 +56,12 @@
               type="button"\
               ng-if="searchText"\
               ng-click="$mdAutocompleteCtrl.clear()">\
-              <md-icon md-svg-icon="cancel"></md-icon>\
-              <span class="visually-hidden">Clear</span>\
-              </button>\
-          <md-progress-linear ng-if="$mdAutocompleteCtrl.loading" md-mode="indeterminate"></md-progress-linear>\
+            <md-icon md-svg-icon="cancel"></md-icon>\
+            <span class="visually-hidden">Clear</span>\
+          </button>\
+          <md-progress-linear\
+              ng-if="$mdAutocompleteCtrl.loading"\
+              md-mode="indeterminate"></md-progress-linear>\
         </md-autocomplete-wrap>\
         <ul role="presentation">\
           <li ng-repeat="(index, item) in $mdAutocompleteCtrl.matches"\
@@ -74,9 +76,7 @@
             class="visually-hidden"\
             role="status"\
             aria-live="assertive">\
-          <p ng-if="$mdAutocompleteCtrl.index === -1 && $mdAutocompleteCtrl.matches.length === 1">There is 1 match available.</p>\
-          <p ng-if="$mdAutocompleteCtrl.index === -1 && $mdAutocompleteCtrl.matches.length > 1">There are {{$mdAutocompleteCtrl.matches.length}} matches available.</p>\
-          <p ng-if="$mdAutocompleteCtrl.index >= 0">{{ $mdAutocompleteCtrl.getCurrentDisplayValue() }}</p>\
+          <p ng-repeat="message in $mdAutocompleteCtrl.messages">{{message.display}}</p>\
         </aria-status>',
       transclude:   true,
       controller:   'MdAutocompleteCtrl',

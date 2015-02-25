@@ -4,7 +4,7 @@
       .module('material.components.autocomplete')
       .controller('MdAutocompleteCtrl', MdAutocompleteCtrl);
 
-  function MdAutocompleteCtrl ($scope, $element, $timeout, $q, $mdUtil, $mdConstant) {
+  function MdAutocompleteCtrl ($scope, $element, $q, $mdUtil, $mdConstant) {
 
     //-- private variables
     var self = this,
@@ -32,6 +32,7 @@
     self.select = select;
     self.getCurrentDisplayValue = getCurrentDisplayValue;
     self.fetch = $mdUtil.debounce(fetchResults);
+    self.messages = [];
 
     return init();
 
@@ -52,7 +53,7 @@
     function getItemScope (item) {
       if (!item) return;
       var locals = {};
-      if (self.itemName) locals[self.itemName] = $scope.selectedItem;
+      if (self.itemName) locals[self.itemName] = item;
       return locals;
     }
 
@@ -63,12 +64,14 @@
         if ($scope.itemChange && selectedItem !== previousSelectedItem) $scope.itemChange(getItemScope(selectedItem));
       });
     }
+
     function handleSearchText (searchText, previousSearchText) {
       self.index = -1;
       if (!searchText || searchText.length < Math.max(parseInt($scope.minLength, 10), 1)) {
         self.loading = false;
         self.matches = [];
         self.hidden = shouldHide();
+        updateMessages();
         return;
       }
       var term = searchText.toLowerCase();
@@ -78,6 +81,7 @@
       }
       if (!$scope.noCache && cache[term]) {
         self.matches = cache[term];
+        updateMessages();
       } else {
         self.fetch(searchText);
       }
@@ -101,7 +105,20 @@
         self.loading = false;
         self.matches = matches;
         self.hidden = shouldHide();
+        updateMessages();
       }
+    }
+
+    function updateMessages () {
+      switch (self.matches.length) {
+        case 0:  return self.messages.splice(0);
+        case 1:  return self.messages.push({ display: 'There is 1 match available.' });
+        default: return self.messages.push({ display: 'There are ' + self.matches.length + ' matches available.' });
+      }
+    }
+
+    function updateSelectionMessage () {
+      self.messages.push({ display: getCurrentDisplayValue() });
     }
 
     function blur () {
@@ -115,12 +132,14 @@
             event.preventDefault();
             self.index = Math.min(self.index + 1, self.matches.length - 1);
             updateScroll();
+            updateSelectionMessage();
             break;
         case $mdConstant.KEY_CODE.UP_ARROW:
             if (self.loading) return;
             event.preventDefault();
             self.index = Math.max(0, self.index - 1);
             updateScroll();
+            updateSelectionMessage();
             break;
         case $mdConstant.KEY_CODE.ENTER:
             if (self.loading || self.index < 0) return;
