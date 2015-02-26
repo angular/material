@@ -547,8 +547,7 @@ function SelectProvider($$interimElementProvider) {
 
       element.removeClass('md-leave');
     
-      var optionNodes = [];
-
+      var optionNodes = opts.selectEl[0].getElementsByTagName('md-option');
 
       if (opts.loadingAsync && opts.loadingAsync.then) {
         opts.loadingAsync.then(function() {
@@ -559,7 +558,6 @@ function SelectProvider($$interimElementProvider) {
               // Don't go forward if the select has been removed in this time...
               if (opts.isRemoved) return;
               animateSelect(scope, element, opts);
-              optionNodes = nodesToArray(opts.selectEl[0].getElementsByTagName('md-option'));
             });
           });
         });
@@ -587,7 +585,6 @@ function SelectProvider($$interimElementProvider) {
         $$rAF(function() {
           if (opts.isRemoved) return;
           animateSelect(scope, element, opts);
-          optionNodes = nodesToArray(element[0].querySelectorAll('md-option'));
         });
       });
 
@@ -630,27 +627,25 @@ function SelectProvider($$interimElementProvider) {
           }
         });
 
-        function focusNextOption() {
-          var index;
-          if ((index = optionNodes.indexOf(opts.focusedNode)) == -1) {
-            // We lost the previously focused element, reset to middle
-            index = Math.floor( (optionNodes.length - 1) / 2 );
-          } else {
-            if (index < optionNodes.length - 1) ++index;
+        function focusOption(direction) {
+          var optionsArray = nodesToArray(optionNodes);
+          var index = optionsArray.indexOf(opts.focusedNode);
+          if (index === -1) {
+            // We lost the previously focused element, reset to first option
+            index = 0;
+          } else if (direction === 'next' && index < optionsArray.length - 1) {
+            index++;
+          } else if (direction === 'prev' && index > 0) {
+            index--;
           }
-          opts.focusedNode = optionNodes[index];
-          optionNodes[index].focus();
+          var newOption = opts.focusedNode = optionsArray[index];
+          newOption && newOption.focus();
+        }
+        function focusNextOption() {
+          focusOption('next');
         }
         function focusPrevOption() {
-          var index;
-          if ((index = optionNodes.indexOf(opts.focusedNode)) == -1) {
-            // We lost the previously focused element, reset to middle
-            index = Math.floor( (optionNodes.length - 1) / 2 );
-          } else {
-            if (index > 0) --index;
-          }
-          opts.focusedNode = optionNodes[index];
-          optionNodes[index].focus();
+          focusOption('prev');
         }
 
         if (!selectCtrl.isMultiple) {
