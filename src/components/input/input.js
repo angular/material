@@ -186,8 +186,9 @@ function inputTextareaDirective($mdUtil, $window) {
 
           // Error text should not appear before user interaction with the field.
           // So we need to check on focus also
-          ngModelCtrl.$setTouched();
-          if ( isErrorGetter() ) containerCtrl.setInvalid(true);
+          //ngModelCtrl.$setTouched();
+          //if ( isErrorGetter() ) containerCtrl.setInvalid(true);
+          scope.$digest();
 
         })
         .on('blur', function(ev) {
