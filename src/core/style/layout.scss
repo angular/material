@@ -103,23 +103,26 @@
     }
   }
 
+  [#{$flexName}="33"], [#{$flexName}="34"] {
+    flex: 0 0 33.33%;
+  }
+  [#{$flexName}="66"], [#{$flexName}="67"] {
+    flex: 0 0 66.66%;
+  }
+
   [layout="row"] {
     > [#{$flexName}="33"], > [#{$flexName}="34"] {
-      flex: 0 0 33.33%;
       max-width: 33.33%;
     }
     > [#{$flexName}="66"], > [#{$flexName}="67"] {
-      flex: 0 0 66.66%;
       max-width: 66.66%;
     }
   }
   [layout="column"] {
     > [#{$flexName}="33"], > [#{$flexName}="34"] {
-      flex: 0 0 33.33%;
       max-height: 33.33%;
     }
     > [#{$flexName}="66"], > [#{$flexName}="67"] {
-      flex: 0 0 66.66%;
       max-height: 66.66%;
     }
   }
