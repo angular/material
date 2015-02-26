@@ -609,19 +609,30 @@ function SelectProvider($$interimElementProvider) {
         });
 
         // Escape to close
-        opts.selectEl.on('keydown', function(e) {
-          switch (e.keyCode) {
+        opts.selectEl.on('keydown', function(ev) {
+          switch (ev.keyCode) {
+            case $mdConstant.KEY_CODE.SPACE: 
+            case $mdConstant.KEY_CODE.ENTER: 
+              var option = $mdUtil.getClosest(ev.target, 'md-option');
+              if (option) {
+                opts.selectEl.triggerHandler({ 
+                  type: 'click',
+                  target: option
+                });
+                ev.preventDefault();
+              }
+              break;
             case $mdConstant.KEY_CODE.TAB:
             case $mdConstant.KEY_CODE.ESCAPE:
-              e.preventDefault();
+              ev.preventDefault();
               opts.restoreFocus = true;
               scope.$apply($mdSelect.cancel);
           }
         });
 
         // Cycling of options, and closing on enter
-        opts.selectEl.on('keydown', function(e) {
-          switch (e.keyCode) {
+        opts.selectEl.on('keydown', function(ev) {
+          switch (ev.keyCode) {
             case $mdConstant.KEY_CODE.UP_ARROW: return focusPrevOption();
             case $mdConstant.KEY_CODE.DOWN_ARROW: return focusNextOption();
           }
