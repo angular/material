@@ -58,10 +58,18 @@
     }
 
     function configureWatchers () {
-      var wait = parseInt($scope.delay, 10) || 0;
-      $scope.$watch('searchText', wait ? $mdUtil.debounce(handleSearchText, wait) : handleSearchText);
-      $scope.$watch('selectedItem', function (selectedItem, previousSelectedItem) {
-        if ($scope.itemChange && selectedItem !== previousSelectedItem) $scope.itemChange(getItemScope(selectedItem));
+      var watchers = [],
+          wait = parseInt($scope.delay, 10) || 0;
+      watchers.push($scope.$watch('searchText', wait
+          ? $mdUtil.debounce(handleSearchText, wait)
+          : handleSearchText));
+      watchers.push($scope.$watch('selectedItem', function (selectedItem, previousSelectedItem) {
+        if ($scope.itemChange && selectedItem !== previousSelectedItem)
+          $scope.itemChange(getItemScope(selectedItem));
+      }));
+      //-- remove watchers when element is destroyed
+      $element.on('$destroy', function () {
+        watchers.forEach(function (watcher) { watcher(); });
       });
     }
 
@@ -86,7 +94,8 @@
         self.fetch(searchText);
       }
       self.hidden = shouldHide();
-      if ($scope.textChange && searchText !== previousSearchText) $scope.textChange(getItemScope($scope.selectedItem));
+      if ($scope.textChange && searchText !== previousSearchText)
+        $scope.textChange(getItemScope($scope.selectedItem));
     }
 
     function fetchResults (searchText) {
@@ -114,7 +123,9 @@
       switch (self.matches.length) {
         case 0:  return self.messages.splice(0);
         case 1:  return self.messages.push({ display: 'There is 1 match available.' });
-        default: return self.messages.push({ display: 'There are ' + self.matches.length + ' matches available.' });
+        default: return self.messages.push({ display: 'There are '
+            + self.matches.length
+            + ' matches available.' });
       }
     }
 
