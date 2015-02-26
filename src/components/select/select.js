@@ -72,7 +72,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
 
   return {
     restrict: 'E',
-    require: ['mdSelect', '?ngModel'],
+    require: ['mdSelect', 'ngModel'],
     compile: compile,
     controller: function() { } // empty placeholder controller to be initialized in link
   };
@@ -124,6 +124,17 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
       var ngModel = ctrls[1];
       var labelEl = element.find('md-select-label');
       var customLabel = labelEl.text().length !== 0;
+      var selectContainer, selectScope;
+      createSelect();
+
+      var originalRender = ngModel.$render;
+      ngModel.$render = function() {
+        originalRender();
+        if (selectContainer) {
+          var selectMenuCtrl = selectContainer.find('md-select-menu').controller('mdSelectMenu');
+          mdSelectCtrl.setLabelText(selectMenuCtrl.selectedLabels());
+        }
+      };
 
       mdSelectCtrl.setLabelText = function(text) {
         if (customLabel) return; // Assume that user is handling it on their own
@@ -136,8 +147,6 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
       mdSelectCtrl.setIsPlaceholder = function(val) {
         val ? labelEl.addClass('md-placeholder') : labelEl.removeClass('md-placeholder');
       };
-
-      setInitialLabelValue();
 
       attr.$observe('disabled', function(disabled) {
         if (disabled !== undefined) {
@@ -166,26 +175,23 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
 
       scope.$on('$destroy', function() {
         if (isOpen) {
-          $mdSelect.cancel();
+          $mdSelect.cancel().then(function() {
+            selectContainer.remove();
+          });
+        } else {
+          selectContainer.remove();
         }
       });
 
 
       // Create a fake select to find out the label value
-      function setInitialLabelValue() {
-        if ($parse(attr.ngModel)(scope)) {
-          var fakeSelectEl = angular.element(selectTemplate.clone()).find('md-select-menu');
-          fakeSelectEl.data('$ngModelController', ngModel);
-          fakeSelectEl.data('$mdSelectController', mdSelectCtrl);
-          var fakeSelectScope = scope.$new();
-          fakeSelectEl = $compile(fakeSelectEl)(fakeSelectScope);
-          var fakeSelectCtrl = fakeSelectEl.controller('mdSelectMenu');
-          fakeSelectScope.$$postDigest(function() {
-            fakeSelectEl.scope().$destroy();
-          });
-        } else {
-          mdSelectCtrl.setLabelText();
-        }
+      function createSelect() {
+        selectContainer = angular.element(selectTemplate.clone());
+        var selectEl = selectContainer.find('md-select-menu');
+        selectEl.data('$ngModelController', ngModel);
+        selectEl.data('$mdSelectController', mdSelectCtrl);
+        selectScope = scope.$new();
+        selectContainer = $compile(selectContainer)(selectScope);
       }
 
       function openOnKeypress(e) {
@@ -199,13 +205,12 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
 
       function openSelect() {
         scope.$evalAsync(function() {
-          var selectEl = selectTemplate.clone();
-          selectEl.find('md-select-menu').data('$ngModelController', ngModel);
-          selectEl.find('md-select-menu').data('$mdSelectController', mdSelectCtrl);
           isOpen = true;
           $mdSelect.show({
-            scope: scope.$new(),
-            element: selectEl,
+            scope: selectScope,
+            preserveScope: true,
+            skipCompile: true,
+            element: selectContainer,
             target: element[0],
             hasBackdrop: true,
             loadingAsync: attr.mdOnOpen ? scope.$eval(attr.mdOnOpen) : false,
@@ -222,7 +227,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
 
   return {
     restrict: 'E',
-    require: ['mdSelectMenu', '?mdSelect', '?ngModel'],
+    require: ['mdSelectMenu', '?ngModel'],
     controller: SelectMenuController,
     link: { pre: preLink }
   };
@@ -231,13 +236,12 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
   // its child options run postLink.
   function preLink(scope, element, attr, ctrls) {
     var selectCtrl = ctrls[0];
-    var mdSelect = ctrls[1];
-    var ngModel = ctrls[2];
+    var ngModel = ctrls[1];
 
     $mdTheming(element);
     element.on('click', clickListener);
     element.on('keypress', keyListener);
-    if (ngModel) selectCtrl.init(ngModel, mdSelect);
+    if (ngModel) selectCtrl.init(ngModel);
     configureAria();
 
     function configureAria() {
@@ -292,9 +296,8 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
     self.options = {};
 
 
-    self.init = function(ngModel, mdSelect) {
+    self.init = function(ngModel) {
       self.ngModel = ngModel;
-      self.mdSelect = mdSelect;
 
       // Allow users to provide `ng-model="foo" ng-model-options="{trackBy: 'foo.id'}"` so
       // that we can properly compare objects set on the model to the available options
@@ -327,13 +330,6 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
         });
       } else {
         ngModel.$render = renderSingular;
-      }
-
-      if (self.mdSelect) {
-        $scope.$$postDigest(function() {
-          ngModel.$render();
-          self.mdSelect.setLabelText(self.selectedLabels());
-        });
       }
 
       function validateArray(modelValue, viewValue) {
@@ -539,16 +535,20 @@ function SelectProvider($$interimElementProvider) {
       }
 
       angular.extend(opts, {
+        isRemoved: false,
         target: angular.element(opts.target), //make sure it's not a naked dom node
         parent: angular.element(opts.parent),
         selectEl: element.find('md-select-menu'),
         contentEl: element.find('md-content'),
         backdrop: opts.hasBackdrop && angular.element('<md-backdrop class="md-select-backdrop">')
       });
+
+      configureAria();
+
+      element.removeClass('md-leave');
     
       var optionNodes = [];
 
-      configureAria();
 
       if (opts.loadingAsync && opts.loadingAsync.then) {
         opts.loadingAsync.then(function() {
@@ -571,7 +571,6 @@ function SelectProvider($$interimElementProvider) {
         opts.lastOverflow = opts.disableTarget.css('overflow');
         opts.disableTarget.css('overflow', 'hidden');
       }
-
       // Only activate click listeners after a short time to stop accidental double taps/clicks
       // from clicking the wrong item
       $timeout(activateInteraction, 75, false);
@@ -674,7 +673,8 @@ function SelectProvider($$interimElementProvider) {
 
     function onRemove(scope, element, opts) {
       opts.isRemoved = true;
-      element.addClass('md-leave').removeClass('md-clickable');
+      element.addClass('md-leave')
+        .removeClass('md-clickable');
       opts.target.attr('aria-expanded', 'false');
 
       if (opts.disableParentScroll && $mdUtil.floatingScrollbars()) {
@@ -689,7 +689,8 @@ function SelectProvider($$interimElementProvider) {
       }
 
       return $mdUtil.transitionEndPromise(element).then(function() {
-        element.remove();
+        element.removeClass('md-active');
+        opts.parent[0].removeChild(element[0]); // use browser to avoid $destroy event
         opts.backdrop && opts.backdrop.remove();
         if (opts.restoreFocus) opts.target.focus();
       });
