@@ -9,36 +9,32 @@
    * service. Allows configuration of direction.
    */
   function BiDirectionalProvider() {
-    return createBiDirectionalProvider;
+    var provider = {
+      rtlMode: rtlMode,
+      $get: factory
+    };
 
-    function createBiDirectionalProvider() {
-      var provider = {
-        rtlMode: rtlMode,
-        $get: factory
-      };
+    var direction = 'ltr';
 
-      var direction = 'ltr';
-
-      /**
-       * Enables rtl mode if true is passed
-       *
-       * @param {Boolean} mode
-       */
-      function rtlMode(mode) {
-        if (mode) {
-          direction = 'rtl';
-        }
+    /**
+     * Enables rtl mode if true is passed
+     *
+     * @param {Boolean} mode
+     */
+    function rtlMode(mode) {
+      if (mode) {
+        direction = 'rtl';
       }
-
-      /**
-       * Creates an instance of BiDirectional
-       */
-      function factory() {
-        return new BiDirectional(direction);
-      }
-
-      return provider;
     }
+
+    /**
+     * Creates an instance of BiDirectional
+     */
+    function factory() {
+      return new BiDirectional(direction);
+    }
+
+    return provider;
   }
 
   /**
