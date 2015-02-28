@@ -36,7 +36,13 @@
       </h1>
     </md-toolbar>
 
-    <md-content flex>
+    <ul class="skip-links">
+      <li class="md-whiteframe-z2">
+        <a ng-click="focusMainContent($event)" href="#">Skip to content</a>
+      </li>
+    </ul>
+
+    <md-content flex role="navigation">
       <ul class="docs-menu">
         <li ng-repeat="section in menu.sections" class="parent-list-item" ng-class="{'parentActive' : isSectionSelected(section)}">
           <h2 class="menu-heading" ng-if="section.type === 'heading'" id="heading_{{ section.name | nospace }}">
