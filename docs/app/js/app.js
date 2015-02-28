@@ -287,6 +287,12 @@ function(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
       $scope.isSelected = function() {
         return controller.isSelected($scope.section);
       };
+
+      $scope.focusSection = function() {
+        // set flag to be used later when
+        // $locationChangeSuccess calls openPage()
+        controller.autoFocusContent = true;
+      };
     }
   };
 })
@@ -328,6 +334,8 @@ function(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
   '$rootScope',
   '$log',
 function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope, $log) {
+  var self = this;
+
   $scope.COMPONENTS = COMPONENTS;
   $scope.BUILDCONFIG = BUILDCONFIG;
   $scope.menu = menu;
@@ -339,11 +347,14 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   $scope.isSectionSelected = isSectionSelected;
 
   $rootScope.$on('$locationChangeSuccess', openPage);
+  $scope.focusMainContent = focusMainContent;
 
   // Methods used by menuLink and menuToggle directives
   this.isOpen = isOpen;
   this.isSelected = isSelected;
   this.toggleOpen = toggleOpen;
+  this.autoFocusContent = false;
+
 
   var mainContentArea = document.querySelector("[role='main']");
 
@@ -370,6 +381,17 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
 
   function openPage() {
     $scope.closeMenu();
+
+    if (self.autoFocusContent) {
+      focusMainContent();
+      self.autoFocusContent = false;
+    }
+  }
+
+  function focusMainContent($event) {
+    // prevent skip link from redirecting
+    if ($event) { $event.preventDefault(); }
+
     mainContentArea.focus();
   }
 

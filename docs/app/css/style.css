@@ -51,6 +51,31 @@ ul li:first-child {
   margin-top: 0;
 }
 
+ul.skip-links li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+ul.skip-links li a {
+  background-color: #fff;
+  display: block;
+  font-size: 1.25em;
+  margin: 0.5em 0 0.5em 0.5em;
+  opacity: 0;
+  left: 0;
+  padding: 0.75em 0 0.75em 0.5em;
+  position: absolute;
+  top: 0;
+  width: 96%;
+  -webkit-transition: opacity   0.15s linear;
+  -moz-transition: opacity  0.15s linear;
+  transition: opacity   0.15s linear;
+}
+ul.skip-links li a:focus {
+  opacity: 1;
+  z-index: 2;
+}
+
 pre {
   white-space: pre;
   white-space: pre-wrap;
