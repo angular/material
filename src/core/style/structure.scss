@@ -203,14 +203,16 @@ input {
   opacity: 0;
   border-radius: 50%;
   &.md-ripple-placed {
-    transition: left 0.9s $swift-ease-out-timing-function,
-                top 0.9s $swift-ease-out-timing-function,
-                margin 0.65s $swift-ease-out-timing-function,
-                border 0.65s $swift-ease-out-timing-function,
-                width 0.65s $swift-ease-out-timing-function,
-                height 0.65s $swift-ease-out-timing-function,
-                opacity 0.65s $swift-ease-out-timing-function,
-                transform 0.65s $swift-ease-out-timing-function;
+    $positionDuration: 0.9s * 2;
+    $sizeDuration: 0.65s * 2;
+    transition: left $positionDuration $swift-ease-out-timing-function,
+                top $positionDuration $swift-ease-out-timing-function,
+                margin $sizeDuration $swift-ease-out-timing-function,
+                border $sizeDuration $swift-ease-out-timing-function,
+                width $sizeDuration $swift-ease-out-timing-function,
+                height $sizeDuration $swift-ease-out-timing-function,
+                opacity $sizeDuration $swift-ease-out-timing-function,
+                transform $sizeDuration $swift-ease-out-timing-function;
   }
   &.md-ripple-scaled {
     transform: scale(1);
@@ -220,6 +222,7 @@ input {
   }
 }
 
+/*
 md-tab {
   > .md-ripple-container {
     .md-ripple {
@@ -237,6 +240,7 @@ md-tab {
     }
   }
 }
+*/
 
 @function map-to-string($map) {
   $map-str: '{';
