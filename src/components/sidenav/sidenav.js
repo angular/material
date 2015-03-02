@@ -137,7 +137,7 @@ function SidenavService($mdComponentRegistry, $q) {
  *   - `<md-sidenav md-is-locked-open="$media('min-width: 1000px')"></md-sidenav>`
  *   - `<md-sidenav md-is-locked-open="$media('sm')"></md-sidenav>` (locks open on small screens)
  */
-function SidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $compile, $mdTheming, $q, $document) {
+function SidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $compile, $mdTheming, $q, $document, $rootScope) {
   return {
     restrict: 'E',
     scope: {
@@ -207,11 +207,14 @@ function SidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $co
         triggeringElement = $document[0].activeElement;
       }
 
+        
+        
       return promise = $q.all([
         $animate[isOpen ? 'enter' : 'leave'](backdrop, parent),
         $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed').then(function() {
           // If we opened, and haven't closed again before the animation finished
           if (scope.isOpen) {
+               $rootScope.$broadcast('$mdSideNavOpen', sidenavCtrl.$$mdHandle);
             element.focus();
           }
         })
@@ -273,6 +276,8 @@ function SidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $co
     function close(ev) {
       ev.preventDefault();
       ev.stopPropagation();
+        
+        $rootScope.$broadcast('$mdSideNavClose', sidenavCtrl.$$mdHandle);
 
       return sidenavCtrl.close();
     }

@@ -2,6 +2,21 @@
 angular.module('sidenavDemo1', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope, $timeout, $mdSidenav, $log) {
+    
+    
+$scope.$on('$mdSideNavOpen', function(e, navname){
+    
+    $log.debug('broadcast for open on: ' +navname);
+    
+});
+    
+    $scope.$on('$mdSideNavClose', function(e, navname){
+    
+    $log.debug('broadcast for close on: ' +navname);
+    
+    
+});
+    
   $scope.toggleLeft = function() {
     $mdSidenav('left').toggle()
                       .then(function(){
