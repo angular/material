@@ -415,7 +415,10 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
     // prevent skip link from redirecting
     if ($event) { $event.preventDefault(); }
 
-    mainContentArea.focus();
+    $timeout(function(){
+      mainContentArea.focus();
+    },90);
+
   }
 
   function isSelected(page) {

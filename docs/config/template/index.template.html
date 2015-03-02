@@ -38,7 +38,7 @@
 
     <ul class="skip-links">
       <li class="md-whiteframe-z2">
-        <a ng-click="focusMainContent($event)" href="#">Skip to content</a>
+        <md-button ng-click="focusMainContent($event)" href="#">Skip to content</md-button>
       </li>
     </ul>
 
@@ -82,8 +82,14 @@
           </div>
 
           <span flex></span> <!-- use up the empty space -->
-
           <div class="md-toolbar-item md-tools docs-tools" layout="column" layout-gt-md="row">
+            <div>
+              <md-button ng-if="!menu.currentPage || menu.currentSection.name === 'Getting Started'"
+                         target="_blank"
+                         ng-href="{{BUILDCONFIG.repository}}/commit/{{BUILDCONFIG.commit}}" >
+                  {{BUILDCONFIG.version}}  -  SHA {{BUILDCONFIG.commit.substring(0,7)}}
+              </md-button>
+            </div>
             <div ng-repeat="doc in currentComponent.docs">
               <md-button ng-href="#{{doc.url}}"
                 ng-class="{hide: path().indexOf('demo') == -1}"
