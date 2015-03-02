@@ -16,7 +16,8 @@
           input: $element[0].getElementsByTagName('input')[0]
         },
         promise = null,
-        cache = {};
+        cache = {},
+        noBlur = false;
 
     //-- public variables
     self.scope = $scope;
@@ -33,6 +34,11 @@
     self.getCurrentDisplayValue = getCurrentDisplayValue;
     self.fetch = $mdUtil.debounce(fetchResults);
     self.messages = [];
+
+    //-- While the mouse is inside of the dropdown, we don't want to handle input blur
+    //-- This is to allow the user to scroll the list without causing it to hide
+    self.listEnter = function () { noBlur = true; };
+    self.listLeave = function () { noBlur = false; };
 
     return init();
 
@@ -129,7 +135,7 @@
     }
 
     function blur () {
-      self.hidden = true;
+      if (!noBlur) self.hidden = true;
     }
 
     function keydown (event) {

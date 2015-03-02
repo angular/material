@@ -63,7 +63,9 @@
               ng-if="$mdAutocompleteCtrl.loading"\
               md-mode="indeterminate"></md-progress-linear>\
         </md-autocomplete-wrap>\
-        <ul role="presentation">\
+        <ul role="presentation"\
+            ng-mouseenter="$mdAutocompleteCtrl.listEnter()"\
+            ng-mouseleave="$mdAutocompleteCtrl.listLeave()">\
           <li ng-repeat="(index, item) in $mdAutocompleteCtrl.matches"\
               ng-class="{ selected: index === $mdAutocompleteCtrl.index }"\
               ng-show="searchText && !$mdAutocompleteCtrl.hidden"\
