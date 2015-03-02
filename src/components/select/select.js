@@ -588,7 +588,7 @@ function SelectProvider($$interimElementProvider) {
         });
       });
 
-      return $mdUtil.transitionEndPromise(opts.selectEl);
+      return $mdUtil.transitionEndPromise(opts.selectEl, {timeout: 100});
 
       function configureAria() {
         opts.selectEl.attr('aria-labelledby', opts.target.attr('id'));

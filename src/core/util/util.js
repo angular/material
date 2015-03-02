@@ -74,16 +74,18 @@ angular.module('material.core')
       node.dispatchEvent(newEvent);
     },
 
-    transitionEndPromise: function(element) {
+    transitionEndPromise: function(element, opts) {
+      opts = opts || {};
       var deferred = $q.defer();
       element.on($mdConstant.CSS.TRANSITIONEND, finished);
       function finished(ev) {
         // Make sure this transitionend didn't bubble up from a child
-        if (ev.target === element[0]) {
+        if (!ev || ev.target === element[0]) {
           element.off($mdConstant.CSS.TRANSITIONEND, finished);
           deferred.resolve();
         }
       }
+      if (opts.timeout) $timeout(finished, opts.timeout);
       return deferred.promise;
     },
 
