@@ -77,7 +77,7 @@ describe('mdSidenav', function() {
         $provide.value('$mdMedia', mdMediaSpy);
       });
       inject(function($rootScope, $animate, $document, $mdMedia) {
-        var el = setup('md-is-locked-open="$media(123)"');
+        var el = setup('md-is-locked-open="$mdMedia(123)"');
         expect($mdMedia).toHaveBeenCalledWith(123);
       });
     });

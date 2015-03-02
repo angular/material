@@ -21,7 +21,7 @@ angular.module('material.core')
  * @usage
  * <hljs lang="js">
  * app.controller('MyController', function($mdMedia, $scope) {
- *   $scope.$watch(function() { return $mdMedia('lg'); } function(big) {
+ *   $scope.$watch(function() { return $mdMedia('lg'); }, function(big) {
  *     $scope.bigScreen = big;
  *   });
  *
