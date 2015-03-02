@@ -1,12 +1,13 @@
 var DocsApp = angular.module('docsApp', ['ngMaterial', 'ngRoute', 'angularytics', 'ngMessages'])
 
 .config([
+  'SERVICES',
   'COMPONENTS',
   'DEMOS',
   'PAGES',
   '$routeProvider',
   '$mdThemingProvider',
-function(COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider) {
+function(SERVICES, COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider) {
   $routeProvider
     .when('/', {
       templateUrl: 'partials/home.tmpl.html'
@@ -63,6 +64,18 @@ function(COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider) {
     });
   });
 
+  angular.forEach(SERVICES, function(service) {
+    service.url = '/' + service.url;
+    $routeProvider.when(service.url, {
+      templateUrl: service.outputPath,
+      resolve: {
+        component: function() { return undefined; },
+        doc: function() { return service; }
+      },
+      controller: 'ComponentDocCtrl'
+    });
+  });
+
   angular.forEach(DEMOS, function(componentDemos) {
     var demoComponent;
     angular.forEach(COMPONENTS, function(component) {
@@ -97,12 +110,13 @@ function(Angularytics, $rootScope,$timeout) {
 }])
 
 .factory('menu', [
+  'SERVICES',
   'COMPONENTS',
   'DEMOS',
   'PAGES',
   '$location',
   '$rootScope',
-function(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
+function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
 
   var sections = [{
     name: 'Getting Started',
@@ -166,6 +180,15 @@ function(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
       docsByModule[doc.module] = docsByModule[doc.module] || [];
       docsByModule[doc.module].push(doc);
     });
+  });
+
+  SERVICES.forEach(function(service) {
+    if (angular.isDefined(service.private)) return;
+    apiDocs[service.type] = apiDocs[service.type] || [];
+    apiDocs[service.type].push(service);
+
+    docsByModule[service.module] = docsByModule[service.module] || [];
+    docsByModule[service.module].push(service);
   });
 
   sections.push({
