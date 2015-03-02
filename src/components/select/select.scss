@@ -48,7 +48,7 @@ $select-max-visible-options: 5;
 
 md-select {
   display: inline-block;
-  margin-top: 2.5 * $baseline-grid;
+  margin-top: 1.4em;
   &[disabled]:hover {
     cursor: default;
   }
@@ -73,7 +73,7 @@ md-select {
   padding-right: 4 * $baseline-grid;
   padding-bottom: $baseline-grid;
   border-bottom: 1px solid;
-  font-size: 0.875em;
+  font-size: 1em;
   line-height: 0.8em;
   position: relative;
   box-sizing: border-box;
@@ -134,7 +134,7 @@ md-option {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 0.875em;
+    font-size: 1em;
   }
   padding: 0 $select-option-padding 0 $select-option-padding;
   height: $select-option-height;
@@ -144,7 +144,7 @@ md-optgroup {
   display: block;
   label {
     display: block;
-    font-size: 0.75em;
+    font-size: 1em;
     text-transform: uppercase;
     padding: $baseline-grid * 2 $baseline-grid;
   }
