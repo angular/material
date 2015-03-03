@@ -39,6 +39,7 @@
     //-- This is to allow the user to scroll the list without causing it to hide
     self.listEnter = function () { noBlur = true; };
     self.listLeave = function () { noBlur = false; };
+    self.mouseUp   = function () { elements.input.focus(); };
 
     return init();
 
