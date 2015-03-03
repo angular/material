@@ -24,6 +24,14 @@ md-input-container {
   padding: $input-container-padding;
   padding-bottom: $input-container-padding + $input-error-height;
 
+  > md-icon {
+    position: absolute;
+    top: 5px;
+    left: 2px;
+    + input {
+      margin-left: 28px * 2;
+    }
+  }
 
   textarea,
   input[type="text"],

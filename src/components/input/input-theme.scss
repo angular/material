@@ -6,6 +6,10 @@ md-input-container.md-THEME_NAME-theme {
     text-shadow: '{{foreground-shadow}}';
   }
 
+  > md-icon {
+    fill: '{{foreground-1}}';
+  }
+
   label,
   .md-placeholder {
     text-shadow: '{{foreground-shadow}}';
@@ -25,6 +29,9 @@ md-input-container.md-THEME_NAME-theme {
       }
       label {
         color: '{{primary-500}}';
+      }
+      md-icon {
+        fill: '{{primary-500}}';
       }
       &.md-accent {
         .md-input {

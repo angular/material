@@ -29,6 +29,7 @@ angular.module('material.components.input', [
  * parent is provided.
  *
  * @param md-is-error {expression=} When the given expression evaluates to true, the input container will go into error state. Defaults to erroring if the input has been touched and is invalid.
+ * @param md-no-float {boolean=} When present, placeholders will not be converted to floating labels
  *
  * @usage
  * <hljs lang="html">
@@ -319,6 +320,7 @@ function placeholderDirective() {
 
   function postLink(scope, element, attr, inputContainer) {
     if (!inputContainer) return;
+    if (angular.isDefined(inputContainer.element.attr('md-no-float'))) return;
 
     var placeholderText = attr.placeholder;
     element.removeAttr('placeholder');
