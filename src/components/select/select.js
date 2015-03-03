@@ -127,12 +127,10 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
       createSelect();
 
       var originalRender = ngModel.$render;
+
       ngModel.$render = function() {
         originalRender();
-        if (selectContainer) {
-          var selectMenuCtrl = selectContainer.find('md-select-menu').controller('mdSelectMenu');
-          mdSelectCtrl.setLabelText(selectMenuCtrl.selectedLabels());
-        }
+        syncLabelText();
       };
 
       mdSelectCtrl.setLabelText = function(text) {
@@ -146,6 +144,15 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
       mdSelectCtrl.setIsPlaceholder = function(val) {
         val ? labelEl.addClass('md-placeholder') : labelEl.removeClass('md-placeholder');
       };
+
+      scope.$$postDigest(syncLabelText);
+
+      function syncLabelText() {
+        if (selectContainer) {
+          var selectMenuCtrl = selectContainer.find('md-select-menu').controller('mdSelectMenu');
+          mdSelectCtrl.setLabelText(selectMenuCtrl.selectedLabels());
+        }
+      }
 
       attr.$observe('disabled', function(disabled) {
         if (disabled !== undefined) {
