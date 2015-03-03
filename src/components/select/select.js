@@ -459,6 +459,19 @@ function OptionDirective($mdInkRipple, $mdUtil) {
       throw new Error("Expected either ngValue or value attr");
     }
 
+    attr.$observe('selected', function(selected) {
+      if (selected) {
+        selectCtrl.select(optionCtrl.hashKey, optionCtrl.value);
+        if (!selectCtrl.isMultiple) {
+          selectCtrl.deselect( Object.keys(selectCtrl.selected)[0] );
+        }
+      } else {
+        selectCtrl.deselect(optionCtrl.hashKey);
+      }
+      selectCtrl.refreshViewValue();
+      selectCtrl.ngModel.$render();
+    });
+
     $mdInkRipple.attachButtonBehavior(scope, element);
     configureAria();
 
