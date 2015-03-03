@@ -460,6 +460,7 @@ function OptionDirective($mdInkRipple, $mdUtil) {
     }
 
     attr.$observe('selected', function(selected) {
+      if (!angular.isDefined(selected)) return;
       if (selected) {
         if (!selectCtrl.isMultiple) {
           selectCtrl.deselect( Object.keys(selectCtrl.selected)[0] );
