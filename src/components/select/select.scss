@@ -70,7 +70,6 @@ md-select {
   display: flex;
   align-items: center;
   padding-top: $baseline-grid + 1;
-  padding-right: 4 * $baseline-grid;
   padding-bottom: $baseline-grid;
   border-bottom: 1px solid;
   font-size: 1em;
@@ -79,14 +78,18 @@ md-select {
   box-sizing: border-box;
   min-width: 8 * $baseline-grid;
 
+  .md-select-icon {
+    align-items: flex-end;
+    text-align: end;
+    width: 3 * $baseline-grid;
+    margin: 0 .5 * $baseline-grid;
+  }
+
   .md-select-icon:after {
+    display: block;
     content: '\25BC';
-    display: flex;
-    align-items: center;
-    position: absolute;
-    height: 100%;
-    top: 0px;
-    right: 2px;
+    position: relative;
+    top: 2px;
     speak: none;
     transform: scaleY(0.6) scaleX(1);
   }
