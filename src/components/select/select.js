@@ -461,10 +461,10 @@ function OptionDirective($mdInkRipple, $mdUtil) {
 
     attr.$observe('selected', function(selected) {
       if (selected) {
-        selectCtrl.select(optionCtrl.hashKey, optionCtrl.value);
         if (!selectCtrl.isMultiple) {
           selectCtrl.deselect( Object.keys(selectCtrl.selected)[0] );
         }
+        selectCtrl.select(optionCtrl.hashKey, optionCtrl.value);
       } else {
         selectCtrl.deselect(optionCtrl.hashKey);
       }
