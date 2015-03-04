@@ -1,3 +1,29 @@
+<a name="0.8.3"></a>
+### 0.8.3  (2015-03-03)
+
+
+#### Features
+
+* **ripple:** smooths out ripple animations ([ac47ca6c](https://github.com/angular/material/commit/ac47ca6c1df6a873615445d8c1f0cbb3eb3764f7), closes [#1750](https://github.com/angular/material/issues/1750))
+
+
+#### Bug Fixes
+
+* **autocomplete:** clicking on the scrollbar in the dropdown will no longer cause the list to hide ([2731f107](https://github.com/angular/material/commit/2731f1078efdd3c546629376ed71c7068501daf3), closes [#1739](https://github.com/angular/material/issues/1739))
+* **gestures:** resolves jQuery conflict with $mdGesture ([79505888](https://github.com/angular/material/commit/7950588882557a6d1670e2029ddda76d12027c45))
+* **select:**
+  * support rtl direction ([59e30a39](https://github.com/angular/material/commit/59e30a392ed7f0dc43ec71db22b60fcaa800ba7e))
+  * make md-option work with ng-selected ([425a76a3](https://github.com/angular/material/commit/425a76a3a5b4bce767e0f8ad766d7a8773e5463f))
+  * make select work with ng-disabled ([60514054](https://github.com/angular/material/commit/60514054984c3d1c5577c5150e80e7ca9e3a4083))
+  * fix select not setting initial value ([6dc46d52](https://github.com/angular/material/commit/6dc46d52dea21c4de3dc7984fb56d99076fdd1e6))
+  * fix closing select a second time on firefox ([e49a20e8](https://github.com/angular/material/commit/e49a20e85d808ca0533afc40ee11f8337535c315))
+  * fix positioning / sizing on firefox ([67618dc8](https://github.com/angular/material/commit/67618dc8fb5a81b23ed33879b062a6e316477a4a))
+  * fix resetting value for selects without placeholder ([2a0ea163](https://github.com/angular/material/commit/2a0ea1630fb286099a8c27e5035cadc5cc1ed0b8))
+  * fix empty select breaking page ([6e7b36cf](https://github.com/angular/material/commit/6e7b36cfa388227e3879120d3c332fc76e095e32))
+  * make select consistent with md-input ([6aa1c8a7](https://github.com/angular/material/commit/6aa1c8a782b67aee3a31f9ed38c99aebfdb3b1a9))
+  * positioning when to close to bottom or right ([cf78ba9f](https://github.com/angular/material/commit/cf78ba9f1fce7fdc3e613b3c83a4056ed8fb2e40))
+
+
 <a name="0.8.2"></a>
 ### 0.8.2  (2015-02-27)
 

@@ -1,6 +1,6 @@
 {
   "name": "angular-material-internal",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "private": "true",
   "main": [
     "dist/angular-material.js",
