@@ -9,20 +9,17 @@ describe('mdIcon directive', function() {
 
   var mockIconSvc = function(id) {
     var deferred = $q.defer();
-    switch(id) {
-      case 'android':
-        deferred.resolve('<svg><g id="android"></g></svg>');
-        break;
-      case 'cake':
-        deferred.resolve('<svg><g id="cake"></g></svg>');
-        break;
-      case 'android.svg':
-        deferred.resolve('<svg><g id="android"></g></svg>');
-        break;
-      case 'cake.svg':
-        deferred.resolve('<svg><g id="cake"></g></svg>');
-        break;
+
+    function getIcon(id) {
+      switch(id) {
+        case 'android': return '<svg><g id="android"></g></svg>';
+        case 'cake': return '<svg><g id="cake"></g></svg>';
+        case 'android.svg': return '<svg><g id="android"></g></svg>';
+        case 'cake.svg': return '<svg><g id="cake"></g></svg>';
+      }
     }
+
+    deferred.resolve(getIcon(id));
     return deferred.promise;
   }
 

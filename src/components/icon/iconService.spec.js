@@ -32,7 +32,7 @@ describe('mdIcon service', function() {
     it('should append configured SVG single icon', function() {
       var expected = updateDefaults('<svg><g id="android"></g></svg>');
       $mdIcon('android').then(function(el) {
-        expect(el[0].outerHTML).toEqual(expected);
+        expect(el.outerHTML).toEqual(expected);
       })
       $scope.$digest();
     });
@@ -40,7 +40,7 @@ describe('mdIcon service', function() {
     it('should append configured SVG icon from named group', function() {
       var expected = updateDefaults('<svg xmlns="http://www.w3.org/2000/svg"><g id="s1"></g></g></svg>');
       $mdIcon('social:s1').then(function(el) {
-        expect(el[0].outerHTML).toEqual(expected);
+        expect(el.outerHTML).toEqual(expected);
       })
       $scope.$digest();
     });
@@ -48,14 +48,14 @@ describe('mdIcon service', function() {
     it('should append configured SVG icon from default group', function() {
       var expected = updateDefaults('<svg xmlns="http://www.w3.org/2000/svg"><g id="c1"></g></g></svg>');
       $mdIcon('c1').then(function(el) {
-        expect(el[0].outerHTML).toEqual(expected);
+        expect(el.outerHTML).toEqual(expected);
       })
       $scope.$digest();
     });
 
     it('should allow single icon defs to override those defined in groups', function() {
       $mdIcon('c2').then(function(el) {
-        expect(el.find('g').hasClass('override')).toBe(true);
+        expect(el.querySelector('g').classList.contains('override')).toBe(true);
       })
       $scope.$digest();
     });
@@ -66,7 +66,7 @@ describe('mdIcon service', function() {
 
     it('should return correct SVG markup', function() {
       $mdIcon('android.svg').then(function(el) {
-        expect(el[0].outerHTML).toEqual( updateDefaults('<svg><g id="android"></g></svg>') );
+        expect(el.outerHTML).toEqual( updateDefaults('<svg><g id="android"></g></svg>') );
       })
       $scope.$digest();
     });
@@ -106,22 +106,27 @@ describe('mdIcon service', function() {
   });
 
   function updateDefaults(svg) {
-    svg = angular.element(svg);
+    svg = angular.element(svg)[0];
 
-    svg.attr({
+    angular.forEach({
       'xmlns' : 'http://www.w3.org/2000/svg',
       'fit'   : '',
       'height': '100%',
       'width' : '100%',
       'preserveAspectRatio': 'xMidYMid meet',
-      'viewBox' : svg.attr('viewBox') || '0 0 24 24'
-    })
-    .css( {
+      'viewBox' : svg.getAttribute('viewBox') || '0 0 24 24'
+    }, function(val, attr) {
+      svg.setAttribute(attr, val);
+    }, this);
+
+    angular.forEach({
       'pointer-events' : 'none',
       'display' : 'block'
-    });
+    }, function(val, style) {
+      svg.style[style] = val;
+    }, this);
 
-    return svg[0].outerHTML;
+    return svg.outerHTML;
   }
 
 });
