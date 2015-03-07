@@ -77,4 +77,100 @@ describe('util', function() {
       expect(originalFn).toHaveBeenCalledWith(1, 2, 3, 'test');
     });
   });
+
+  describe('capEvent', function () {
+    var scope, parentSpy, childSpy, element;
+    var template =
+      '<div ng-click="onParentClick($event)">' +
+        '<span id="sibling">Sibling</span>' +
+        '<button ng-click="capEvent(onChildClick)($event, true)">Cap Event</button>' +
+      '</div>';
+
+    function createMockEvent(detail) {
+      return new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        detail: detail !== undefined ? detail : -1,
+        view: window
+      });
+    }
+
+    beforeEach(inject(function ($compile, $mdUtil, $rootScope) {
+      scope = $rootScope.$new();
+      parentSpy = scope.onParentClick = jasmine.createSpy('parentSpy');
+      childSpy = scope.onChildClick = jasmine.createSpy('childSpy');
+      scope.capEvent = $mdUtil.capEvent;
+      element = $compile(template)(scope);
+      angular.element(document.body).append(element);
+    }));
+
+    afterEach(function () {
+      element.remove();
+      scope.$destroy();
+    });
+
+    it('should call `listener`, not ancestor event listeners', inject(function () {
+      var childElement = element.find('button');
+
+      childElement[0].dispatchEvent(createMockEvent());
+
+      expect(childSpy).toHaveBeenCalled();
+      expect(parentSpy).not.toHaveBeenCalled();
+    }));
+
+    it('should call `listener` with `scope` as the `this` object', inject(function () {
+      var childElement = element.find('button');
+
+      childElement[0].dispatchEvent(createMockEvent());
+
+      var context = childSpy.calls[0].object;
+      expect(context).toBe(scope);
+    }));
+
+    it("should call `listener` with the tiggering event as the first argument", inject(function () {
+      var childElement = element.find('button');
+
+      childElement[0].dispatchEvent(createMockEvent());
+
+      var event = childSpy.calls[0].args[0];
+      expect(event.target).toBe(childElement[0]);
+      expect(event.type).toBe('click');
+    }));
+
+    it("should call `listener` with multiple arguments", inject(function () {
+      var childElement = element.find('button');
+
+      childElement[0].dispatchEvent(createMockEvent());
+
+      var truth = childSpy.calls[0].args[1];
+      expect(truth).toBe(true);
+    }));
+
+    it("should call parent event listener when sibling is clicked", inject(function () {
+      var siblingElement = element.find('span');
+      var dispatchable = new Event('click', {
+        bubbles: true,
+        cancelable: true,
+        view: window
+      });
+
+      siblingElement[0].dispatchEvent(dispatchable);
+
+      expect(parentSpy).toHaveBeenCalled();
+      expect(childSpy).not.toHaveBeenCalled();
+    }));
+
+    it("should call parent event listener when parent is clicked", inject(function () {
+      var dispatchable = new Event('click', {
+        bubbles: true,
+        cancelable: true,
+        view: window
+      });
+
+      element[0].dispatchEvent(dispatchable);
+
+      expect(parentSpy).toHaveBeenCalled();
+      expect(childSpy).not.toHaveBeenCalled();
+    }));
+  })
 });
