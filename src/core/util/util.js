@@ -19,7 +19,7 @@ angular.module('material.core')
 
   return Util = {
     now: window.performance ?
-      angular.bind(window.performance, window.performance.now) : 
+      angular.bind(window.performance, window.performance.now) :
       Date.now,
 
     clientRect: function(element, offsetParent, isOffsetRect) {
@@ -30,7 +30,7 @@ angular.module('material.core')
       // The user can ask for an offsetRect: a rect relative to the offsetParent,
       // or a clientRect: a rect relative to the page
       var offsetRect = isOffsetRect ?
-        offsetParent.getBoundingClientRect() : 
+        offsetParent.getBoundingClientRect() :
         { left: 0, top: 0, width: 0, height: 0 };
       return {
         left: nodeRect.left - offsetRect.left + offsetParent.scrollLeft,
@@ -245,9 +245,58 @@ angular.module('material.core')
         }
       } while (el = el.parentNode);
       return null;
+    },
+
+    /**
+     * When used in templates, prevents an event handled by the Angular
+     * expression `listener` from bubbling up to DOM ancestors (but doesn’t
+     * prevent siblings from handling it). If the optional `preventDeafult`
+     * argument is `false`, then the browser’s default event listener
+     * implementation will be allowed to handle the event; otherwise the event
+     * will be canceled (assuming it is actually `cancelable`).
+     *
+     * @usage
+     * ### JS
+     *
+     * <hljs lang="js">
+     * app.controller('AppCtrl', ['$scope', '$mdUtil', function ($scope, $mdUtil) {
+     *   $scope.capEvent = $mdUtil.capEvent;
+     *   ...
+     * }]);
+     * </hljs>
+     *
+     * ### HTML
+     *
+     * <hljs lang="html">
+     * <md-button ng-click="capEvent(onClick)($event)">...</md-button>
+     * </hljs>
+     *
+     * @param {angular.Expression} listener The expression to evaluate.
+     * @param {boolean} [preventDefault=true] If `false`, then the default event
+     *   listener implementation (for example, the browser’s) will be allowed to
+     *   handle the event; otherwise the event will be canceled (if it is
+     *   actually `cancelable`).
+     *
+     * @return {function} A wrapper function that prevents the event from
+     *   propagating to ancestor elements and returns the result of executing
+     *   `listener`.
+     */
+    capEvent: function capEvent(listener, preventDefault) {
+      var scope = this;
+      preventDefault = preventDefault === undefined ? true : preventDefault;
+
+      return function (event) {
+        preventDefault && event.preventDefault();
+        event.stopPropagation();
+
+        if (listener) {
+          var result = listener.apply(scope, arguments);
+        }
+
+        return result;
+      }
     }
   };
-
 });
 
 /*
