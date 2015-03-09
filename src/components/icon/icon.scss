@@ -8,6 +8,10 @@ md-icon {
   width: 3 * $baseline-grid;
 }
 
+md-icon path {
+    fill: currentcolor;
+}
+
 //
 //@font-face {
 //  font-family:"material";
