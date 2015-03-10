@@ -127,7 +127,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
     });
 
   /* @ngInject */
-  function bottomSheetDefaults($animate, $mdConstant, $timeout, $$rAF, $compile, $mdTheming, $mdBottomSheet, $rootElement, $rootScope, $mdGesture) {
+  function bottomSheetDefaults($animate, $mdConstant, $mdUtil, $timeout, $compile, $mdTheming, $mdBottomSheet, $rootElement, $mdGesture) {
     var backdrop;
 
     return {
@@ -139,13 +139,16 @@ function MdBottomSheetProvider($$interimElementProvider) {
       disableParentScroll: true
     };
 
+
     function onShow(scope, element, options) {
+
+      element = $mdUtil.extractElementByName(element, 'md-bottom-sheet');
+
       // Add a backdrop that will close on click
       backdrop = $compile('<md-backdrop class="md-opaque md-bottom-sheet-backdrop">')(scope);
       backdrop.on('click', function() {
         $timeout($mdBottomSheet.cancel);
       });
-
       $mdTheming.inherit(backdrop, options.parent);
 
       $animate.enter(backdrop, options.parent, null);
@@ -184,8 +187,8 @@ function MdBottomSheetProvider($$interimElementProvider) {
     }
 
     function onRemove(scope, element, options) {
-      var bottomSheet = options.bottomSheet;
 
+      var bottomSheet = options.bottomSheet;
 
       $animate.leave(backdrop);
       return $animate.leave(bottomSheet.element).then(function() {

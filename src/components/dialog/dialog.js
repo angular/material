@@ -377,8 +377,7 @@ function MdDialogProvider($$interimElementProvider) {
   }
 
   /* @ngInject */
-  function dialogDefaultOptions($timeout, $rootElement, $compile, $animate, $mdAria, $document,
-                                $mdUtil, $mdConstant, $mdTheming, $$rAF, $q, $mdDialog) {
+  function dialogDefaultOptions($mdAria, $document, $mdUtil, $mdConstant, $mdTheming, $mdDialog, $timeout, $rootElement, $animate, $$rAF, $q) {
     return {
       hasBackdrop: true,
       isolateScope: true,
@@ -396,6 +395,8 @@ function MdDialogProvider($$interimElementProvider) {
 
     // On show method for dialogs
     function onShow(scope, element, options) {
+      element = $mdUtil.extractElementByName(element, 'md-dialog');
+
       // Incase the user provides a raw dom element, always wrap it in jqLite
       options.parent = angular.element(options.parent);
 

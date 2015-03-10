@@ -245,7 +245,21 @@ angular.module('material.core')
         }
       } while (el = el.parentNode);
       return null;
+    },
+
+    /**
+     * Functional equivalent for $element.filter(‘md-bottom-sheet’)
+     * useful with interimElements where the element and its container are important...
+     */
+    extractElementByName : function (element, nodeName) {
+      for (var i = 0, len = element.length; i < len; i++) {
+        if (element[i].nodeName.toLowerCase() === nodeName){
+          return angular.element(element[i]);
+        }
+      }
+      return element;
     }
+
   };
 
 });

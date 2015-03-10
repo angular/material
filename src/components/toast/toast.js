@@ -212,7 +212,7 @@ function MdToastProvider($$interimElementProvider) {
     return $mdToast;
 
   /* @ngInject */
-  function toastDefaultOptions($timeout, $animate, $mdToast) {
+  function toastDefaultOptions($timeout, $animate, $mdToast, $mdUtil) {
     return {
       onShow: onShow,
       onRemove: onRemove,
@@ -222,6 +222,8 @@ function MdToastProvider($$interimElementProvider) {
     };
 
     function onShow(scope, element, options) {
+      element = $mdUtil.extractElementByName(element, 'md-toast');
+
       // 'top left' -> 'md-top md-left'
       activeToastContent = options.content;
       element.addClass(options.position.split(' ').map(function(pos) {
