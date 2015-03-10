@@ -1,0 +1,7 @@
+<div ng-app="selectDemoBasic" ng-controller="AppCtrl" layout="column" layout-align="center center" style="min-height: 300px;">
+  <md-select ng-model="someVal">
+    <md-option value="1">One</md-option>
+    <md-option value="2" ng-selected="selected">Two</md-option>
+  </md-select>
+  <md-button ng-click="selected=true">Select</md-button>
+</div>

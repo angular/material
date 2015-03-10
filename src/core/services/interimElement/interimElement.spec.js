@@ -228,17 +228,25 @@ describe('$$interimElement service', function() {
         });
       inject(function(interimTest, $rootScope, $animate) {
         interimTest.show();
+        $rootScope.$digest();
+        $animate.triggerCallbacks();
         expect($compilerSpy.mostRecentCall.args[0].key).toBe('defaultValue');
         $compilerSpy.reset();
 
         interimTest.show({
           key: 'newValue'
         });
+        $rootScope.$digest();
+        $animate.triggerCallbacks();
+        $rootScope.$digest();
         $animate.triggerCallbacks();
         expect($compilerSpy.mostRecentCall.args[0].key).toBe('newValue');
         $compilerSpy.reset();
 
         interimTest.show(interimTest.preset());
+        $rootScope.$digest();
+        $animate.triggerCallbacks();
+        $rootScope.$digest();
         $animate.triggerCallbacks();
         expect($compilerSpy.mostRecentCall.args[0].key).toBe('defaultValue');
         expect($compilerSpy.mostRecentCall.args[0].key2).toBe('defaultValue2');
@@ -250,17 +258,26 @@ describe('$$interimElement service', function() {
             key2: 'newValue2'
           })
         );
+        $rootScope.$digest();
+        $animate.triggerCallbacks();
+        $rootScope.$digest();
         $animate.triggerCallbacks();
         expect($compilerSpy.mostRecentCall.args[0].key).toBe('newValue');
         expect($compilerSpy.mostRecentCall.args[0].key2).toBe('newValue2');
         
         $compilerSpy.reset();
+        $rootScope.$digest();
+        $animate.triggerCallbacks();
+        $rootScope.$digest();
         $animate.triggerCallbacks();
         interimTest.show(
           interimTest.preset({
             key2: 'newValue2'
           }).key2('superNewValue2')
         );
+        $rootScope.$digest();
+        $animate.triggerCallbacks();
+        $rootScope.$digest();
         $animate.triggerCallbacks();
         expect($compilerSpy.mostRecentCall.args[0].key).toBe('defaultValue');
         expect($compilerSpy.mostRecentCall.args[0].key2).toBe('superNewValue2');
@@ -306,7 +323,7 @@ describe('$$interimElement service', function() {
         expect(hideSpy).toHaveBeenCalled();
       }));
 
-      it('calls onRemove', inject(function($rootScope) {
+      it('calls onRemove', inject(function($rootScope, $animate) {
         var onRemoveCalled = false;
         Service.show({
           template: '<some-element />',
@@ -314,8 +331,10 @@ describe('$$interimElement service', function() {
           onRemove: onRemove
         });
         $rootScope.$digest();
+        $animate.triggerCallbacks();
         Service.hide();
         $rootScope.$digest();
+        $animate.triggerCallbacks();
         expect(onRemoveCalled).toBe(true);
 
         function onRemove(scope, el, options) {
@@ -356,6 +375,23 @@ describe('$$interimElement service', function() {
         expect(shown).toBe(true);
       }));
 
+      it('allows parent getter', inject(function($rootScope) {
+        var parent = angular.element('<div>');
+        var parentGetter = jasmine.createSpy('parentGetter').andReturn(parent);
+
+        var shown = false;
+        Service.show({
+          parent: parentGetter,
+          onShow: function(scope, element, options) {
+            expect(parentGetter).toHaveBeenCalledWith(scope, element, options);
+            expect(options.parent[0]).toBe(parent[0]);
+            shown = true;
+          }
+        });
+        $rootScope.$digest();
+        expect(shown).toBe(true);
+      }));
+
       it('allows string parent selector', inject(function($rootScope, $document) {
         var parent = angular.element('<div id="super-parent">');
         spyOn($document[0], 'querySelector').andReturn(parent[0]);
@@ -376,7 +412,7 @@ describe('$$interimElement service', function() {
 
 
     describe('#hide', function() {
-      it('calls onRemove', inject(function($rootScope) {
+      it('calls onRemove', inject(function($rootScope, $animate) {
         var onRemoveCalled = false;
         Service.show({
           template: '<some-element />',
@@ -384,8 +420,10 @@ describe('$$interimElement service', function() {
           onRemove: onRemove
         });
         $rootScope.$digest();
+        $animate.triggerCallbacks();
         Service.hide();
         $rootScope.$digest();
+        $animate.triggerCallbacks();
         expect(onRemoveCalled).toBe(true);
 
         function onRemove(scope, el, options) {
@@ -412,7 +450,7 @@ describe('$$interimElement service', function() {
     });
 
     describe('#cancel', function() {
-      it('calls onRemove', inject(function($rootScope) {
+      it('calls onRemove', inject(function($rootScope, $animate) {
         var onRemoveCalled = false;
         Service.show({
           template: '<some-element />',
@@ -420,8 +458,10 @@ describe('$$interimElement service', function() {
           onRemove: onRemove
         });
         $rootScope.$digest();
+        $animate.triggerCallbacks();
         Service.cancel();
         $rootScope.$digest();
+        $animate.triggerCallbacks();
         expect(onRemoveCalled).toBe(true);
 
         function onRemove(scope, el, options) {

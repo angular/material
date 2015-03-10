@@ -1,0 +1,14 @@
+<div ng-controller="SelectOptGroupController" layout="column" layout-align="center center">
+  <p>Option groups can help provide contextual groupings about the options provided:</p>
+  <div layout="column" layout-align="center center" style="height: 100px;">
+    <md-select ng-model="favoriteTopping" placeholder="Favorite Topping">
+      <md-optgroup label="Meats">
+        <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'meat' }">{{topping.name}}</md-option>
+      </md-option-group>
+      <md-optgroup label="Veggies">
+        <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'veg' }">{{topping.name}}</md-option>
+      </md-option-group>
+    </md-select>
+    <p class="result">{{ favoriteTopping ? 'Your favorite topping is ' + favoriteTopping : 'Please select a topping'}}</p>
+  </div>
+</div>

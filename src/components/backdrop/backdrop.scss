@@ -1,5 +1,8 @@
 md-backdrop {
   z-index: $z-index-backdrop;
+  &.md-select-backdrop {
+    z-index: $z-index-dialog + 1;
+  }
   &.md-dialog-backdrop {
     z-index: $z-index-dialog - 1;
   }
@@ -12,7 +15,7 @@ md-backdrop {
 
   background-color: rgba(0,0,0,0);
 
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   right: 0;

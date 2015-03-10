@@ -18,7 +18,7 @@
 
   <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2"
               md-component-id="left"
-              md-is-locked-open="$media('gt-sm')">
+              md-is-locked-open="$mdMedia('gt-sm')">
 
     <md-toolbar>
       <h1 class="md-toolbar-tools">
@@ -31,12 +31,18 @@
             <path d="M 50 7 L 83 75 L 72 75 L 65 59 L 50 59 L 50 50 L 61 50 L 50 26 Z" fill="#b2b2b2"></path>
             <path d="M 50 7 L 17 75 L 28 75 L 35 59 L 50 59 L 50 50 L 39 50 L 50 26 Z" fill="#fff"></path>
           </svg>
-          <div style="line-height:40px; text-indent: 15px;">Material Design</div>
+          <div class="docs-logotype">Material Design</div>
         </a>
       </h1>
     </md-toolbar>
 
-    <md-content flex>
+    <ul class="skip-links">
+      <li class="md-whiteframe-z2">
+        <md-button ng-click="focusMainContent($event)" href="#">Skip to content</md-button>
+      </li>
+    </ul>
+
+    <md-content flex role="navigation">
       <ul class="docs-menu">
         <li ng-repeat="section in menu.sections" class="parent-list-item" ng-class="{'parentActive' : isSectionSelected(section)}">
           <h2 class="menu-heading" ng-if="section.type === 'heading'" id="heading_{{ section.name | nospace }}">
@@ -60,24 +66,30 @@
     <md-toolbar>
 
       <div class="md-toolbar-tools" ng-click="openMenu()">
-        <button class="menu-icon" hide-gt-sm aria-label="Toggle Menu">
-          <md-icon svg-src="img/icons/ic_menu_24px.svg"></md-icon>
+        <button class="docs-menu-icon" hide-gt-sm aria-label="Toggle Menu">
+          <md-icon md-svg-src="img/icons/ic_menu_24px.svg"></md-icon>
         </button>
 
         <div layout="row" flex class="fill-height">
           <div class="md-toolbar-item md-breadcrumb">
             <span ng-if="menu.currentPage.name !== menu.currentSection.name">
               <span hide-sm hide-md>{{menu.currentSection.name}}</span>
-              <span class="menu-separator-icon" style="padding: 0 10px;" hide-sm hide-md>
-                <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true">
+              <span class="docs-menu-separator-icon" style="" hide-sm hide-md>
+                <img src="img/docArrow.png" alt="" aria-hidden="true">
               </span>
             </span>
-            <span style="display: inline-block;">{{(menu.currentPage | humanizeDoc) || 'Angular Material' }}</span>
+            <span class="md-breadcrumb-page">{{(menu.currentPage | humanizeDoc) || 'Angular Material' }}</span>
           </div>
 
           <span flex></span> <!-- use up the empty space -->
-
-          <div class="md-toolbar-item md-tools" layout="row">
+          <div class="md-toolbar-item md-tools docs-tools" layout="column" layout-gt-md="row">
+            <div>
+              <md-button ng-if="!menu.currentPage || menu.currentSection.name === 'Getting Started'"
+                         target="_blank"
+                         ng-href="{{BUILDCONFIG.repository}}/commit/{{BUILDCONFIG.commit}}" >
+                  {{BUILDCONFIG.version}}  -  SHA {{BUILDCONFIG.commit.substring(0,7)}}
+              </md-button>
+            </div>
             <div ng-repeat="doc in currentComponent.docs">
               <md-button ng-href="#{{doc.url}}"
                 ng-class="{hide: path().indexOf('demo') == -1}"
@@ -88,7 +100,7 @@
             <md-button ng-class="{hide: !currentDoc || !currentDoc.hasDemo}"
               ng-href="#/demo/{{currentComponent.name}}"
               style="position: relative; padding-left: 30px; margin-right: 15px;">
-              <md-icon svg-src="img/icons/ic_play_arrow_24px.svg" style="
+              <md-icon md-svg-src="img/icons/ic_play_arrow_24px.svg" style="
                   height: 36px;
                   position: absolute;
                   left: 0px;
@@ -101,7 +113,7 @@
               ng-href="{{currentDoc.githubUrl}}"
               hide-sm hide-md
               style="position: relative; padding-left: 30px; margin-right: 15px;">
-              <md-icon svg-src="img/icons/ic_launch_24px.svg" style="
+              <md-icon md-svg-src="img/icons/ic_launch_24px.svg" style="
                   height: 36px;
                   position: absolute;
                   left: 0px;

@@ -1,9 +1,9 @@
 
-<div ng-controller="AppCtrl" layout="column" layout-fill>
+<div ng-controller="AppCtrl" layout="column" style="height:500px;">
 
   <section layout="row" flex>
 
-    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$media('gt-md')">
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
 
       <md-toolbar class="md-theme-indigo">
         <h1 class="md-toolbar-tools">Sidenav Left</h1>
@@ -22,7 +22,7 @@
 
     <md-content flex class="md-padding">
 
-      <div layout="column" layout-fill layout-align="center center">
+      <div layout="column" layout-fill layout-align="top center">
         <p>
         The left sidenav will 'lock open' on a medium (>=960px wide) device.
         </p>
@@ -41,6 +41,8 @@
           </md-button>
         </div>
       </div>
+
+      <div flex></div>
 
     </md-content>
 

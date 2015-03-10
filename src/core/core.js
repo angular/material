@@ -6,11 +6,12 @@
  * requirements.
  */
 angular
-  .module('material.core', ['material.core.theming'])
-  .config(MdCoreConfigure);
+  .module('material.core', [ 'material.core.theming' ])
+  .config( MdCoreConfigure );
 
 
 function MdCoreConfigure($provide, $mdThemingProvider) {
+
   $provide.decorator('$$rAF', ["$delegate", rAFDecorator]);
 
   $mdThemingProvider.theme('default')

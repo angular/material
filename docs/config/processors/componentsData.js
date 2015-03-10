@@ -19,6 +19,22 @@ function publicDocData(doc, extraData) {
   }, extraData || {});
 }
 
+function coreServiceData(doc, extraData) {
+  var githubBaseUrl = buildConfig.repository + '/blob/master/src/core/services/';
+  doc = doc || {};
+  var jsName = doc.module.split('material.core.').pop();
+  return _.assign({
+    name: doc.name,
+    type: doc.docType,
+    outputPath: doc.outputPath,
+    url: doc.path,
+    label: doc.label || doc.name,
+    hasDemo: false,
+    module: 'material.core',
+    githubUrl: githubBaseUrl + '/' + jsName + '.js'
+  }, extraData || {});
+}
+
 module.exports = function componentsGenerateProcessor(log, moduleMap) {
   return {
     $runAfter: ['paths-computed'],
@@ -57,13 +73,26 @@ module.exports = function componentsGenerateProcessor(log, moduleMap) {
       .filter() //remove null items
       .value();
 
+    var EXPOSED_CORE_SERVICES = '$mdMedia';
+    var services = _(docs).filter(function(doc) {
+      return doc.docType == 'service' &&
+        doc.module == 'material.core' &&
+        EXPOSED_CORE_SERVICES.indexOf(doc.name) != -1;
+    }).map(coreServiceData).value();
+
+    docs.push({
+      name: 'SERVICES',
+      template: 'constant-data.template.js',
+      outputPath: 'js/services-data.js',
+      items: services
+    });
+
     docs.push({
       name: 'COMPONENTS',
       template: 'constant-data.template.js',
       outputPath: 'js/components-data.js',
       items: components
     });
-
   }
 };
 

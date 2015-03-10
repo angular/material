@@ -39,6 +39,7 @@ var IS_RELEASE_BUILD = !!argv.release;
 var IS_DEMO_BUILD = (!!argv.module || !!argv.m || !!argv.c);
 var BUILD_MODE = argv.mode;
 var VERSION = argv.version || pkg.version;
+var SHA = argv.sha;
 
 /** Grab-bag of build configuration. */
 var config = {
@@ -112,11 +113,15 @@ require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
 gulp.task('default', ['build']);
 gulp.task('validate', ['jshint', 'karma']);
 gulp.task('changelog', function(done) {
-  changelog({
+  var options = {
     repository: 'https://github.com/angular/material',
     version: VERSION,
     file: 'CHANGELOG.md'
-  }, function(err, log) {
+  };
+  if (SHA) {
+    options.from = SHA;
+  }
+  changelog(options, function(err, log) {
     fs.writeFileSync(__dirname + '/CHANGELOG.md', log);
   });
 });
@@ -164,7 +169,8 @@ gulp.task('karma-watch', function(done) {
   karma.start({
     singleRun:false,
     autoWatch:true,
-    configFile: __dirname + '/config/karma.conf.js'
+    configFile: __dirname + '/config/karma.conf.js',
+    browsers : argv.browsers ? argv.browsers.trim().split(',') : ['Chrome'],
   },done);
 });
 
@@ -280,8 +286,8 @@ function buildModuleStyles(name) {
  *
  ** ***************************************** */
 
-gulp.task('watch', ['build'], function() {
-  gulp.watch('src/**/*', ['build']);
+gulp.task('watch', ['docs'], function() {
+  gulp.watch('src/**/*', ['build', 'docs']);
 });
 
 gulp.task('watch-demo', ['build-demo'], function() {
@@ -299,9 +305,20 @@ gulp.task('watch-demo', ['build-demo'], function() {
   return gulp.watch('src/**/*', ['build-demo']);
 });
 
+gulp.task('site', function () {
+  return gulp.src('dist/docs')
+      .pipe(webserver({
+        host: '0.0.0.0',
+        livereload: true,
+        port: LR_PORT,
+        directoryListing: false
+      }));
+});
+
 gulp.task('server', function() {
   return gulp.src('.')
     .pipe(webserver({
+      host: '0.0.0.0',
       livereload: true,
       port: LR_PORT,
       directoryListing: true
@@ -359,7 +376,6 @@ function themeBuildStream() {
     .pipe(concat('default-theme.scss'))
     .pipe(utils.hoistScssVariables())
     .pipe(sass())
-    .pipe(gulp.dest('dist'))
     .pipe(utils.cssToNgConstant('material.core', '$MD_THEME_CSS'));
 }
 

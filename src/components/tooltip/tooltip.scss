@@ -1,21 +1,3 @@
-@keyframes tooltipBackgroundShow {
-  0% {
-    transform: scale(0.2);
-    opacity: 0.25;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.0);
-    opacity: 1;
-  }
-}
-@keyframes tooltipBackgroundHide {
-  0% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
 md-tooltip {
   position: absolute;
   font-size: 14px;
@@ -24,29 +6,31 @@ md-tooltip {
   pointer-events: none;
   border-radius: 4px;
 
-  &[md-direction="bottom"] {
-    transform: translate3d(0, -30%, 0);
-    margin-top: 8px;
-  }
-  &[md-direction="top"] {
-    transform: translate3d(0, 30%, 0);
-    margin-bottom: 8px;
-  }
-
   .md-background {
     position: absolute;
-    left: 50%;
-    width: 256px;
-    height: 256px;
-    margin-left: -128px;
-    margin-top: -128px;
-    border-radius: 256px;
-
-    opacity: 0.25;
-    transform: scale(0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+    &.md-show-add {
+      transition: $swift-ease-out;
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+    }
+    &.md-show, &.md-show-add-active {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+    &.md-show-remove {
+      transition: $swift-ease-in;
+      &.md-show-remove-active {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+      }
+    }
   }
 
   .md-content {
+    position: relative;
     max-width: 240px;
     white-space: nowrap;
     overflow: hidden;
@@ -54,8 +38,20 @@ md-tooltip {
 
     padding: 8px;
     background: transparent;
-    opacity: 0.3;
-    transition: inherit;
+    opacity: 0;
+    &.md-show-add {
+      transition: $swift-ease-out;
+      opacity: 0;
+    }
+    &.md-show, &.md-show-add-active {
+      opacity: 1;
+    }
+    &.md-show-remove {
+      transition: $swift-ease-in;
+      &.md-show-remove-active {
+        opacity: 0;
+      }
+    }
   }
 
   &.md-hide {
@@ -66,31 +62,5 @@ md-tooltip {
     transition: $swift-ease-out;
     pointer-events: auto;
     transform: translate3d(0,0,0);
-
-    .md-background {
-      transform: scale(1.0);
-      opacity: 1.0;
-      animation: tooltipBackgroundShow linear;
-    }
-    .md-content {
-      opacity: 0.99;
-    }
-  }
-  &.md-hide .md-background {
-    transform: scale(1.0);
-    opacity: 0;
-    animation: tooltipBackgroundHide 0.2s linear;
-  }
-
-  /**
-   * Depending on the tooltip's size as a multiple of 32 (set by JS),
-   * change the background's animation duration.
-   * The larger the tooltip, the less time the background should take to ripple outwards.
-   */
-  @for $i from 1 through 8 {
-    &[width-32="#{$i}"].md-show .md-background {
-      $duration: 1000 - $i * 100;
-      animation-duration: #{$duration}ms;
-    }
   }
 }

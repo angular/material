@@ -1,0 +1,28 @@
+<div ng-app="inputBasicDemo" ng-controller="DemoCtrl as ctrl" layout="column">
+
+  <md-content class="md-padding" layout="column">
+      <p>
+          Use <code>&lt;md-autocomplete&gt;</code> to search for matches from local or remote data sources.
+      </p>
+
+    <md-autocomplete
+        ng-disabled="ctrl.isDisabled"
+        md-no-cache="ctrl.noCache"
+        md-selected-item="ctrl.selectedItem"
+        md-search-text="ctrl.searchText"
+        md-items="item in ctrl.querySearch(ctrl.searchText)"
+        md-item-text="item.display"
+        placeholder="What is your favorite US state?">
+      <span md-highlight-text="ctrl.searchText">{{item.display}}</span>
+    </md-autocomplete>
+
+    <br/>
+    <md-checkbox ng-model="ctrl.simulateQuery">Simulate query for results?</md-checkbox>
+    <md-checkbox ng-model="ctrl.noCache">Disable caching of queries?</md-checkbox>
+    <md-checkbox ng-model="ctrl.isDisabled">Disable the input?</md-checkbox>
+
+    <p style="padding-left: 15px;">By default, <code>&lt;md-autocomplete&gt;</code> will cache results when performing a query.  After the initial call is performed, it will use the cached results to eliminate unnecessary server requests or lookup logic. This can be disabled above.</p>
+
+  </md-content>
+
+</div>

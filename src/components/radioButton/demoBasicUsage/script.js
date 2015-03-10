@@ -10,15 +10,15 @@ angular
     };
 
     $scope.avatarData = [{
-        id: "svg-1",
+        id: "avatars:svg-1",
         title: 'avatar 1',
         value: 'avatar-1'
       },{
-        id: "svg-2",
+        id: "avatars:svg-2",
         title: 'avatar 2',
         value: 'avatar-2'
       },{
-        id: "svg-3",
+        id: "avatars:svg-3",
         title: 'avatar 3',
         value: 'avatar-3'
     }];
@@ -46,5 +46,5 @@ angular
 
   })
   .config(function($mdIconProvider) {
-    $mdIconProvider.defaultIconSet('icons/avatar-icons.svg');
+    $mdIconProvider.iconSet("avatars", 'icons/avatar-icons.svg',128);
   });

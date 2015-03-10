@@ -19,8 +19,19 @@ md-input-container {
   display: flex;
   position: relative;
   flex-direction: column;
+
+  overflow-x: hidden;
   padding: $input-container-padding;
   padding-bottom: $input-container-padding + $input-error-height;
+
+  > md-icon {
+    position: absolute;
+    top: 5px;
+    left: 2px;
+    + input {
+      margin-left: 28px * 2;
+    }
+  }
 
   textarea,
   input[type="text"],
@@ -46,7 +57,7 @@ md-input-container {
     overflow: hidden;
   }
 
-  label, 
+  label:not(.md-no-float),
   .md-placeholder {
     order: 1;
     pointer-events: none;
@@ -74,8 +85,13 @@ md-input-container {
     opacity: 0;
   }
 
-  /* 
-   * The .md-input class is added to the input/textarea 
+  &:not( .md-input-has-value ) input:not( :focus ) {
+    color: transparent;
+  }
+
+
+  /*
+   * The .md-input class is added to the input/textarea
    */
   .md-input {
     flex: 1;
@@ -139,7 +155,7 @@ md-input-container {
 
   &.md-input-focused,
   &.md-input-has-value {
-    label {
+    label:not(.md-no-float) {
       transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);
     }
   }

@@ -1,12 +1,13 @@
 var DocsApp = angular.module('docsApp', ['ngMaterial', 'ngRoute', 'angularytics', 'ngMessages'])
 
 .config([
+  'SERVICES',
   'COMPONENTS',
   'DEMOS',
   'PAGES',
   '$routeProvider',
   '$mdThemingProvider',
-function(COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider) {
+function(SERVICES, COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider) {
   $routeProvider
     .when('/', {
       templateUrl: 'partials/home.tmpl.html'
@@ -63,6 +64,18 @@ function(COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider) {
     });
   });
 
+  angular.forEach(SERVICES, function(service) {
+    service.url = '/' + service.url;
+    $routeProvider.when(service.url, {
+      templateUrl: service.outputPath,
+      resolve: {
+        component: function() { return undefined; },
+        doc: function() { return service; }
+      },
+      controller: 'ComponentDocCtrl'
+    });
+  });
+
   angular.forEach(DEMOS, function(componentDemos) {
     var demoComponent;
     angular.forEach(COMPONENTS, function(component) {
@@ -97,12 +110,13 @@ function(Angularytics, $rootScope,$timeout) {
 }])
 
 .factory('menu', [
+  'SERVICES',
   'COMPONENTS',
   'DEMOS',
   'PAGES',
   '$location',
   '$rootScope',
-function(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
+function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
 
   var sections = [{
     name: 'Getting Started',
@@ -166,6 +180,15 @@ function(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
       docsByModule[doc.module] = docsByModule[doc.module] || [];
       docsByModule[doc.module].push(doc);
     });
+  });
+
+  SERVICES.forEach(function(service) {
+    if (angular.isDefined(service.private)) return;
+    apiDocs[service.type] = apiDocs[service.type] || [];
+    apiDocs[service.type].push(service);
+
+    docsByModule[service.module] = docsByModule[service.module] || [];
+    docsByModule[service.module].push(service);
   });
 
   sections.push({
@@ -287,6 +310,12 @@ function(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
       $scope.isSelected = function() {
         return controller.isSelected($scope.section);
       };
+
+      $scope.focusSection = function() {
+        // set flag to be used later when
+        // $locationChangeSuccess calls openPage()
+        controller.autoFocusContent = true;
+      };
     }
   };
 })
@@ -328,6 +357,8 @@ function(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
   '$rootScope',
   '$log',
 function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope, $log) {
+  var self = this;
+
   $scope.COMPONENTS = COMPONENTS;
   $scope.BUILDCONFIG = BUILDCONFIG;
   $scope.menu = menu;
@@ -339,11 +370,14 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   $scope.isSectionSelected = isSectionSelected;
 
   $rootScope.$on('$locationChangeSuccess', openPage);
+  $scope.focusMainContent = focusMainContent;
 
   // Methods used by menuLink and menuToggle directives
   this.isOpen = isOpen;
   this.isSelected = isSelected;
   this.toggleOpen = toggleOpen;
+  this.autoFocusContent = false;
+
 
   var mainContentArea = document.querySelector("[role='main']");
 
@@ -370,7 +404,21 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
 
   function openPage() {
     $scope.closeMenu();
-    mainContentArea.focus();
+
+    if (self.autoFocusContent) {
+      focusMainContent();
+      self.autoFocusContent = false;
+    }
+  }
+
+  function focusMainContent($event) {
+    // prevent skip link from redirecting
+    if ($event) { $event.preventDefault(); }
+
+    $timeout(function(){
+      mainContentArea.focus();
+    },90);
+
   }
 
   function isSelected(page) {

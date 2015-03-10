@@ -10,7 +10,7 @@ module.exports = function(config) {
       // demos in the tests, and Karma doesn't support advanced
       // globbing.
       'src/components/*/*.js',
-      'src/components/tabs/js/*.js'
+      'src/components/*/js/*.js'
   ];
 
   var COMPILED_SRC = [

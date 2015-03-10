@@ -32,6 +32,7 @@ function run {
 
   echo "-- Committing and tagging..."
   replaceJsonProp "bower.json" "version" "$VERSION"
+  replaceJsonProp "package.json" "version" "$VERSION"
 
   git add -A
   git commit -am "release: version $VERSION"

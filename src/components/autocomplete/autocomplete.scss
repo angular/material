@@ -1,0 +1,182 @@
+@keyframes md-autocomplete-list-out {
+  0% {
+    animation-timing-function: linear;
+  }
+  50% {
+    opacity: 0;
+    height: 40px;
+    animation-timing-function: ease-in;
+  }
+  100% {
+    height: 0;
+    opacity: 0;
+  }
+}
+@keyframes md-autocomplete-list-in {
+  0% {
+    opacity: 0;
+    height: 0;
+    animation-timing-function: ease-out;
+  }
+  50% {
+    opacity: 0;
+    height: 40px;
+  }
+  100% {
+    opacity: 1;
+    height: 40px;
+  }
+}
+md-content {
+  overflow: visible;
+}
+md-autocomplete {
+  box-shadow: 0 2px 5px rgba(black, 0.25);
+  border-radius: 2px;
+  display: block;
+  height: 40px;
+  position: relative;
+  overflow: visible;
+
+  md-autocomplete-wrap {
+    display: block;
+    position: relative;
+    overflow: visible;
+    height: 40px;
+
+    md-progress-linear {
+      position: absolute;
+      bottom: 0; left: 0; width: 100%;
+      height: 3px;
+      transition: none;
+
+      .md-container {
+        transition: none;
+        top: auto;
+        height: 3px;
+      }
+      &.ng-enter {
+        transition: opacity 0.15s linear;
+        &.ng-enter-active {
+          opacity: 1;
+        }
+      }
+      &.ng-leave {
+        transition: opacity 0.15s linear;
+        &.ng-leave-active {
+          opacity: 0;
+        }
+      }
+    }
+  }
+  input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    box-shadow: none;
+    padding: 0 15px;
+    font-size: 14px;
+    line-height: 40px;
+    height: 40px;
+    outline: none;
+    z-index: 2;
+    background: transparent;
+    &::-ms-clear {
+      display: none;
+    }
+  }
+  button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    line-height: 20px;
+    z-index: 2;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 50%;
+    padding: 0;
+    font-size: 12px;
+    background: transparent;
+    &:after {
+      content: '';
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      bottom: -6px;
+      left: -6px;
+      border-radius: 50%;
+      transform: scale(0);
+      opacity: 0;
+      transition: $swift-ease-out;
+      z-index: -1;
+    }
+    &:focus {
+      &:after {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    md-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0) scale(0.9);
+      path {
+        stroke-width: 0;
+      }
+    }
+    &.ng-enter {
+      transform: scale(0);
+      transition: transform 0.15s ease-out;
+      &.ng-enter-active {
+        transform: scale(1);
+      }
+    }
+    &.ng-leave {
+      transition: transform 0.15s ease-out;
+      &.ng-leave-active {
+        transform: scale(0);
+      }
+    }
+  }
+  ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    box-shadow: 0 2px 5px rgba(black, 0.25);
+    margin: 0;
+    list-style: none;
+    padding: 0;
+    overflow: auto;
+    max-height: 41px * 5.5;
+    z-index: $z-index-backdrop - 1;
+    li {
+      border-top: 1px solid #ddd;
+      padding: 0 15px;
+      line-height: 40px;
+      font-size: 14px;
+      overflow: hidden;
+      height: 40px;
+      transition: background 0.15s linear;
+      cursor: pointer;
+      margin: 0;
+      &.ng-enter,
+      &.ng-hide-remove {
+        transition: none;
+        animation: md-autocomplete-list-in 0.2s;
+      }
+      &.ng-leave,
+      &.ng-hide-add {
+        transition: none;
+        animation: md-autocomplete-list-out 0.2s;
+      }
+    }
+  }
+}
