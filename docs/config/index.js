@@ -1,7 +1,6 @@
 var _ = require('lodash');
 var path = require('canonical-path');
 var buildConfig = require('../../config/build.config');
-
 var projectPath = path.resolve(__dirname, '../..');
 var packagePath = __dirname;
 
@@ -15,6 +14,7 @@ module.exports = new Package('angular-md', [
 .processor(require('./processors/componentsData'))
 .processor(require('./processors/indexPage'))
 .processor(require('./processors/buildConfig'))
+.processor(require('./processors/versionConfig'))
 .processor(require('./processors/content'))
 
 .config(function(log, templateEngine, templateFinder) {
