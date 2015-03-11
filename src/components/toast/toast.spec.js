@@ -91,6 +91,25 @@ describe('$mdToast service', function() {
         expect(content.text()).toBe('Do something');
         expect(button.text()).toBe('Click me');
       }));
+
+
+      it('displays correctly with parent()', inject(function($mdToast, $rootScope) {
+              var parent = angular.element('<div>');
+              var toast = $mdToast.simple({
+                content: 'Do something',
+              })
+              .parent(parent)
+              .action('Click me');
+
+              $mdToast.show(toast);
+              $rootScope.$digest();
+
+              var content = parent.find('span').eq(0);
+              var button = parent.find('button');
+
+              expect(content.text()).toBe('Do something');
+              expect(button.text()).toBe('Click me');
+            }));
     });
 
     function hasConfigMethods(methods) {

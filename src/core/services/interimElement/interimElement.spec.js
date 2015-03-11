@@ -49,7 +49,7 @@ describe('$$interimElement service', function() {
 
         var builder = interimTest.build();
         [ 'controller', 'controllerAs', 'onRemove', 'onShow', 'resolve', 
-          'template', 'templateUrl', 'themable', 'transformTemplate'
+          'template', 'templateUrl', 'themable', 'transformTemplate', 'parent'
         ].forEach(function(methodName) {
           expect(builder[methodName]).toBeOfType('function');
         });

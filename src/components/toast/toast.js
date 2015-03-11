@@ -173,12 +173,12 @@ function MdToastProvider($$interimElementProvider) {
   var activeToastContent;
   var $mdToast = $$interimElementProvider('$mdToast')
     .setDefaults({
-      methods: ['position', 'hideDelay', 'capsule'],
+      methods: ['position', 'hideDelay', 'capsule' ],
       options: toastDefaultOptions
     })
     .addPreset('simple', {
       argOption: 'content',
-      methods: ['content', 'action', 'highlightAction', 'theme'],
+      methods: ['content', 'action', 'highlightAction', 'theme', 'parent'],
       options: /* @ngInject */ function($mdToast, $mdTheming) {
         var opts = {
           template: [

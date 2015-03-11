@@ -331,7 +331,7 @@ function MdDialogProvider($$interimElementProvider) {
 
   return $$interimElementProvider('$mdDialog')
     .setDefaults({
-      methods: ['disableParentScroll', 'hasBackdrop', 'clickOutsideToClose', 'escapeToClose', 'targetEvent'],
+      methods: ['disableParentScroll', 'hasBackdrop', 'clickOutsideToClose', 'escapeToClose', 'targetEvent', 'parent'],
       options: dialogDefaultOptions
     })
     .addPreset('alert', {

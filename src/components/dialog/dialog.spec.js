@@ -23,9 +23,9 @@ describe('$mdDialog', function() {
       var parent = angular.element('<div>');
       var resolved = false;
       $mdDialog.show(
-        $mdDialog.alert({
-          parent: parent
-        })
+        $mdDialog
+          .alert()
+          .parent( parent )
           .title('Title')
           .content('Hello world')
           .theme('some-theme')
