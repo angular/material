@@ -419,8 +419,8 @@ function MdDialogProvider($$interimElementProvider) {
 
       if (options.hasBackdrop) {
         // Fix for IE 10
-        var computeFrom = (options.parent[0] == $document[0].body && $document[0].documentElement 
-                           && $document[0].scrollTop) ? angular.element($document[0].documentElement) : options.parent;
+        var computeFrom = (options.parent[0] == $document[0].body && $document[0].documentElement
+                           && $document[0].documentElement.scrollTop) ? angular.element($document[0].documentElement) : options.parent;
         var parentOffset = computeFrom.prop('scrollTop');
         options.backdrop = angular.element('<md-backdrop class="md-dialog-backdrop md-opaque">');
         $mdTheming.inherit(options.backdrop, options.parent);

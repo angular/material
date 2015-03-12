@@ -1,5 +1,5 @@
 .dialogDemo1 {
-    height:500px;
+  height: 500px;
 }
 
 .full {
@@ -8,31 +8,29 @@
 }
 
 .gap {
-  width:50px;
+  width: 50px;
 }
 
+md-dialog md-content.sticky-container {
+  padding: 0;
+}
+  md-dialog md-content.sticky-container .dialog-content {
+    padding: 0 24px 24px;
+  }
 
 .md-subheader {
-    background-color: #dcedc8;
-    margin: 0px;
-}
-
-h2.md-subheader {
-    margin: 0px;
-    margin-left: -24px;
-    margin-right: -24px;
-    margin-top: -24px;
+  background-color: #dcedc8;
+  margin: 0px;
 }
 
 h2.md-subheader.md-sticky-clone {
-    margin-right:0px;
-    margin-top:0px;
+  margin-right: 0px;
+  margin-top: 0px;
 
-    box-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16);
+  box-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16);
 }
 
 h2 .md-subheader-content {
-    padding-left: 10px;
+  padding-left: 10px;
 }
-
 
