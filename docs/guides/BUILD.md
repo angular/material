@@ -6,7 +6,7 @@
 * [Building the Library](#builds)
 * [Using the Library with Bower](#bower)<br/><br/>
 * [Introducing Components](#comp)
-* [Buildng Individual Components](#comp_builds)
+* [Building Individual Components](#comp_builds)
 * [Component Debugging](#comp_debug)<br/><br/>
 * [Theming](#themes)
 
