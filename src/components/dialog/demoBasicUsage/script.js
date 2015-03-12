@@ -4,18 +4,24 @@ angular.module('dialogDemo1', ['ngMaterial'])
   $scope.alert = '';
 
   $scope.showAlert = function(ev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    // Modal dialogs should fully cover application
+    // to prevent interaction outside of dialog
     $mdDialog.show(
       $mdDialog.alert()
+        .parent(angular.element(document.body))
         .title('This is an alert title')
         .content('You can specify some description text in here.')
-        .ariaLabel('Password notification')
+        .ariaLabel('Alert Dialog Demo')
         .ok('Got it!')
         .targetEvent(ev)
     );
   };
 
   $scope.showConfirm = function(ev) {
+    // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
+      .parent(angular.element(document.body))
       .title('Would you like to delete your debt?')
       .content('All of the banks have agreed to forgive you your debts.')
       .ariaLabel('Lucky day')
