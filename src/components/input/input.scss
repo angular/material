@@ -57,6 +57,11 @@ md-input-container {
     overflow: hidden;
   }
 
+  textarea.md-input {
+    min-height: 2 * $input-line-height + $input-border-width-focused + $input-padding-top;
+    -ms-flex-preferred-size: auto; //IE fix
+  }
+
   label:not(.md-no-float),
   .md-placeholder {
     order: 1;
@@ -94,7 +99,7 @@ md-input-container {
    * The .md-input class is added to the input/textarea
    */
   .md-input {
-    flex: 1;
+    flex: 1 1 auto;
     order: 2;
     display: block;
 
