@@ -357,6 +357,61 @@ describe('$mdDialog', function() {
       expect(parent[0].querySelectorAll('md-backdrop').length).toBe(0);
     }));
 
+    it('should focusOnOpen == true', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
+      TestUtil.mockElementFocus(this);
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        focusOnOpen: true,
+        parent: parent,
+        template:
+          '<md-dialog>' +
+            '<div class="md-actions">' +
+              '<button id="a">A</md-button>' +
+              '<button id="focus-target">B</md-button>' +
+            '</div>' +
+          '</md-dialog>'
+      });
+
+      $rootScope.$apply();
+      $timeout.flush();
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      container.triggerHandler('transitionend');
+      $rootScope.$apply();
+      parent.find('md-dialog').triggerHandler('transitionend');
+      $rootScope.$apply();
+
+      expect($document.activeElement).toBe(parent[0].querySelector('#focus-target'));
+    }));
+
+    it('should focusOnOpen == false', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
+      TestUtil.mockElementFocus(this);
+
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        focusOnOpen: false,
+        parent: parent,
+        template:
+          '<md-dialog>' +
+            '<div class="md-actions">' +
+              '<button id="a">A</md-button>' +
+              '<button id="focus-target">B</md-button>' +
+            '</div>' +
+          '</md-dialog>',
+      });
+
+      $rootScope.$apply();
+      $timeout.flush();
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      container.triggerHandler('transitionend');
+      $rootScope.$apply();
+      parent.find('md-dialog').triggerHandler('transitionend');
+      $rootScope.$apply();
+
+      expect($document.activeElement).toBe(undefined);
+    }));
+
     it('should focus the last `md-button` in md-actions open if no `.dialog-close`', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
       TestUtil.mockElementFocus(this);
 
