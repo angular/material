@@ -463,6 +463,24 @@ describe('$mdDialog', function() {
       expect(dialog.attr('aria-label')).toEqual('Some Other Thing');
     }));
 
+    it('should add an ARIA label if supplied through chaining', inject(function($mdDialog, $rootScope, $animate){
+      var parent = angular.element('<div>');
+
+      $mdDialog.show(
+        $mdDialog.alert({
+          parent: parent
+        })
+        .ariaLabel('label')
+      );
+
+      $rootScope.$apply();
+      angular.element(parent[0].querySelector('.md-dialog-container')).triggerHandler('transitionend');
+      $rootScope.$apply();
+
+      var dialog = angular.element(parent[0].querySelector('md-dialog'));
+      expect(dialog.attr('aria-label')).toEqual('label');
+    }));
+
     it('should apply aria-hidden to siblings', inject(function($mdDialog, $rootScope, $timeout) {
 
       var template = '<md-dialog aria-label="Some Other Thing">Hello</md-dialog>';
