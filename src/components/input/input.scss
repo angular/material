@@ -158,6 +158,11 @@ md-input-container {
     right: $input-container-padding;
   }
 
+  textarea.md-input {
+    min-height: 2 * $input-line-height + $input-border-width-focused + $input-padding-top;
+    -ms-flex-preferred-size: auto; //IE fix
+  }
+
   &.md-input-focused,
   &.md-input-has-value {
     label:not(.md-no-float) {
