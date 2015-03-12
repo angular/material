@@ -387,6 +387,7 @@ function MdDialogProvider($$interimElementProvider) {
       escapeToClose: true,
       targetEvent: null,
       disableParentScroll: true,
+      focusCloseBtn: true,
       transformTemplate: function(template) {
         return '<div class="md-dialog-container">' + template + '</div>';
       }
@@ -445,7 +446,9 @@ function MdDialogProvider($$interimElementProvider) {
           };
           element.on('click', options.dialogClickOutsideCallback);
         }
-        closeButton.focus();
+        if (options.focusCloseBtn) {
+          closeButton.focus();
+        }
       });
 
 
