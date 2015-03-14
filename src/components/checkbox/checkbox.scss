@@ -2,12 +2,19 @@ $checkbox-width: 18px !default;
 $checkbox-height: $checkbox-width !default;
 
 md-checkbox {
+  box-sizing: border-box;
   display: block;
   margin: 15px;
   white-space: nowrap;
   cursor: pointer;
   outline: none;
   user-select: none;
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
 
   .md-container {
     position: relative;

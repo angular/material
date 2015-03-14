@@ -117,6 +117,8 @@ md-autocomplete {
       z-index: -1;
     }
     &:focus {
+      outline: none;
+
       &:after {
         transform: scale(1);
         opacity: 1;

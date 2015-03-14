@@ -66,6 +66,7 @@ var config = {
     'src/core/style/variables.scss',
     'src/core/style/mixins.scss',
     'src/core/style/structure.scss',
+    'src/core/style/typography.scss',
     'src/core/style/layout.scss'
   ],
   scssStandaloneFiles: [

@@ -6,6 +6,7 @@ $toolbar-indent-margin: 64px !default;
 $toolbar-padding: 16px !default;
 
 md-toolbar {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
 
@@ -17,6 +18,12 @@ md-toolbar {
   width: 100%;
 
   box-shadow: $whiteframe-shadow-z1;
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
 
   &.md-tall {
     height: $toolbar-tall-height;

@@ -49,6 +49,9 @@ $select-max-visible-options: 5;
 md-select {
   display: inline-block;
   margin-top: 1.4em;
+  &:focus {
+    outline: none;
+  }
   &[disabled]:hover {
     cursor: default;
   }
@@ -131,6 +134,10 @@ md-option {
   display: flex;
   align-items: center;
   width: auto;
+
+  &:focus {
+    outline: none;
+  }
 
   .md-text {
     width: auto;

@@ -3,10 +3,17 @@ $radio-height: $radio-width !default;
 
 md-radio-button,
 .md-switch-thumb { // Used in switch
+  box-sizing: border-box;
   display: block;
   margin: 15px;
   white-space: nowrap;
   cursor: pointer;
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
 
   input {
     display: none;
@@ -23,7 +30,7 @@ md-radio-button,
     .md-ripple-container {
       position: absolute;
       display: block;
-      width: $radio-width * 3; 
+      width: $radio-width * 3;
       height: $radio-width * 3;
       left: -$radio-width;
       top: -$radio-width;

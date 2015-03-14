@@ -17,3 +17,32 @@
     color: $color;
   }
 }
+@function map-to-string($map) {
+  $map-str: '{';
+  $keys: map-keys($map);
+  $len: length($keys);
+  @for $i from 1 through $len {
+    $key: nth($keys, $i);
+    $value: map-get($map, $key);
+    $map-str: $map-str + '_' + $key + '_: _' + map-get($map, $key) + '_';
+    @if $i != $len {
+      $map-str: $map-str + ',';
+    }
+  }
+  @return $map-str + '}';
+}
+
+@function map-to-string($map) {
+  $map-str: '{';
+  $keys: map-keys($map);
+  $len: length($keys);
+  @for $i from 1 through $len {
+    $key: nth($keys, $i);
+    $value: map-get($map, $key);
+    $map-str: $map-str + '_' + $key + '_: _' + map-get($map, $key) + '_';
+    @if $i != $len {
+      $map-str: $map-str + ',';
+    }
+  }
+  @return $map-str + '}';
+}

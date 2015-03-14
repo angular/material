@@ -1,0 +1,94 @@
+$h1-font-size-base: 2em !default;
+$h1-margin-base: 0.67em 0 !default;
+
+$h2-font-size-base: 1.5em !default;
+$h2-margin-base: 0.83em 0 !default;
+
+$h3-font-size-base: 1.17em !default;
+$h3-margin-base: 1em 0 !default;
+
+$h4-font-size-base: 1em !default;
+$h4-margin-base: 1.33em 0 !default;
+
+$h5-font-size-base: 0.83em !default;
+$h5-margin-base: 1.67em 0 !default;
+
+$h6-font-size-base: 0.75em !default;
+$h6-margin-base: 2.33em 0 !default;
+
+html, body {
+  font-size: 16px;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  p {
+    line-height: 1.846;
+  }
+}
+
+h1 {
+  font-size: $h1-font-size-base;
+  margin: $h1-margin-base;
+}
+h2 {
+  font-size: $h2-font-size-base;
+  margin: $h2-margin-base;
+}
+h3 {
+  font-size: $h3-font-size-base;
+  margin: $h3-margin-base;
+}
+h4 {
+  font-size: $h4-font-size-base;
+  margin: $h4-margin-base;
+}
+h5 {
+  font-size: $h5-font-size-base;
+  margin: $h5-margin-base;
+}
+h6 {
+  font-size: $h6-font-size-base;
+  margin: $h6-margin-base;
+}
+
+button,
+select,
+html,
+textarea,
+input {
+  font-family: $font-family;
+}
+
+select,
+button,
+textarea,
+input {
+  font-size: 100%;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+
+  li {
+    margin-left: 16px;
+    padding: 0;
+    margin-top: 3px;
+    list-style-position: inside;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+}
+
+a {
+  color: #3f51b5;
+  text-decoration: none;
+}
+a:hover, a:focus {
+  text-decoration: underline;
+}

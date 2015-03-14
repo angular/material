@@ -1,6 +1,13 @@
 md-grid-list {
+  box-sizing: border-box;
   display: block;
   position: relative;
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
 
   md-grid-tile {
     display: block;

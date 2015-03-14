@@ -42,6 +42,10 @@ md-dialog {
     &:not([layout=row]) > *:first-child:not(.md-subheader) {
       margin-top: 0px;
     }
+
+    &:focus {
+      outline: none;
+    }
   }
 
   .md-actions {
