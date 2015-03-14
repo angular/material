@@ -1,0 +1,129 @@
+html, body {
+  font-size: 16px;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+
+  p {
+    line-height: 1.846;
+  }
+}
+
+md-select, md-card, md-list, md-toolbar,
+ul, ol, p, h1, h2, h3, h4, h5, h6 {
+  text-rendering: optimizeLegibility;
+}
+
+/************
+ * Headings
+ ************/
+.md-display-1 {
+  font-size: $display-1-font-size-base;
+  font-weight: 400;
+
+  line-height: 2.5rem;
+}
+.md-display-2 {
+  font-size: $display-2-font-size-base;
+  font-weight: 400;
+  line-height: 3rem;
+}
+.md-display-3 {
+  font-size: $display-3-font-size-base;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+}
+.md-display-4 {
+  font-size: $display-4-font-size-base;
+  font-weight: 300;
+  letter-spacing: -0.010em;
+}
+.md-headline {
+  font-size: $headline-font-size-base;
+  font-weight: 400;
+}
+.md-title {
+  font-size: $title-font-size-base;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+}
+.md-subhead {
+  font-size: $subhead-font-size-base;
+  font-weight: 400;
+  letter-spacing: 0.010em;
+  line-height: 1.5rem;
+}
+/************
+ * Body Copy
+ ************/
+.md-body-1 {
+  font-size: $body-font-size-base;
+  font-weight: 400;
+  letter-spacing: 0.010em;
+  line-height: 1.25rem;
+}
+.md-body-2 {
+  font-size: $body-font-size-base;
+  font-weight: 500;
+  letter-spacing: 0.010em;
+  line-height: 1.5rem;
+}
+.md-caption {
+  font-size: $caption-font-size-base;
+  letter-spacing: 0.020em;
+}
+.md-button {
+  letter-spacing: 0.010em;
+}
+
+/************
+ * Defaults
+ ************/
+
+h1 {
+  @extend .md-display-1;
+  font-weight: 400;
+  margin: $h1-margin-base;
+}
+h2 {
+  @extend .md-headline;
+  margin: $h2-margin-base;
+}
+h3 {
+  @extend .md-title;
+  margin: $h3-margin-base;
+}
+h4 {
+  @extend .md-subhead;
+  margin: $h4-margin-base;
+}
+h5 {
+  margin: $h5-margin-base;
+}
+h6 {
+  margin: $h6-margin-base;
+}
+
+button,
+select,
+html,
+textarea,
+input {
+  font-family: $font-family;
+}
+
+select,
+button,
+textarea,
+input {
+  font-size: 100%;
+}
+
+a {
+  color: #3f51b5;
+  text-decoration: none;
+}
+a:hover, a:focus {
+  text-decoration: underline;
+}

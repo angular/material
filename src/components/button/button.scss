@@ -41,9 +41,9 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
   // Always uppercase buttons
   text-transform: uppercase;
   font-weight: 500;
+  font-size: $body-font-size-base;
   font-style: inherit;
   font-variant: inherit;
-  font-size: inherit;
   font-family: inherit;
   line-height: inherit;
   text-decoration: none;
@@ -66,7 +66,6 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
   &.ng-hide, &.ng-leave {
     transition: none;
   }
-;
 
   &.md-cornered {
     border-radius: 0;
@@ -192,5 +191,11 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
   &:last-child {
     border-right-width: 1px;
     border-radius: 0px 2px 2px 0px;
+  }
+}
+@media screen and (-ms-high-contrast: active) {
+  .md-button.md-raised,
+  .md-button.md-fab {
+    border: 1px solid #fff;
   }
 }

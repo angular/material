@@ -21,3 +21,10 @@ md-card {
     padding: $card-padding;
   }
 }
+
+@media screen and (-ms-high-contrast: active) {
+  md-card {
+    border: 1px solid #fff;
+  }
+}
+

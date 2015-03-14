@@ -4,10 +4,17 @@ $tabs-tab-width: $baseline-grid * 12 !default;
 $tabs-header-height: 48px !default;
 
 md-tabs {
+  box-sizing: border-box;
   display: block;
   width: 100%;
   font-weight: 500;
   overflow: auto;
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
 }
 
 .md-header {
@@ -32,6 +39,10 @@ md-tabs {
   background-position: center center;
 
   position: absolute;
+
+  &:focus {
+    outline: none;
+  }
   &.md-prev {
     left: 0;
   }

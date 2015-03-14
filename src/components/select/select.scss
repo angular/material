@@ -49,6 +49,9 @@ $select-max-visible-options: 5;
 md-select {
   display: inline-block;
   margin-top: 1.4em;
+  &:focus {
+    outline: none;
+  }
   &[disabled]:hover {
     cursor: default;
   }
@@ -142,6 +145,10 @@ md-option {
   align-items: center;
   width: auto;
 
+  &:focus {
+    outline: none;
+  }
+
   .md-text {
     width: auto;
     white-space: nowrap;
@@ -163,5 +170,11 @@ md-optgroup {
   }
   md-option {
     padding-left: $baseline-grid + $select-option-padding;
+  }
+}
+
+@media screen and (-ms-high-contrast: active) {
+  .md-select-backdrop {
+    background-color: transparent;
   }
 }
