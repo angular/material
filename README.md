@@ -25,7 +25,7 @@ Material is targeted for all browsers with versions n-1; where n is the current 
 
 ## <a name="demos"></a> Online Documentation (and Demos)
 
-![angularmaterial](https://cloud.githubusercontent.com/assets/210413/5148790/fb9ecf52-7187-11e4-9adc-fc5ef263b4ce.png)
+![Angular Material docs website](https://cloud.githubusercontent.com/assets/1045233/6678723/585f0c48-cbfb-11e4-8acc-273feb83365b.png)
 
 - Visit [Material.AngularJS.org](https://material.angularjs.org/) online to review the API, see the
   components in action with live Demos, and study the Layout system.
