@@ -60,9 +60,8 @@ md-progress-circular {
         width: $progress-circular-size;
         height: $progress-circular-size;
         box-sizing: border-box;
-        border-width: 5px;
-        border-style: solid;
-        border-color: black black transparent;
+        border: 5px solid black;
+        border-bottom-color: transparent;
         border-radius: 50%;
       }
     }
@@ -82,6 +81,8 @@ md-progress-circular {
     }
   }
 
+  // TODO: This while-loop generates about 2 kilobytes of css after gzip.
+  // Refactor progressCircular to animate with javascript.
   $i: 0;
   @while $i <= 100 {
     &[value="#{$i}"] {
@@ -109,8 +110,7 @@ md-progress-circular {
           }
         }
         .md-gap {
-          border-bottom-width: 5px;
-          border-bottom-style: solid;
+          border-bottom: 5px solid;
           @if $i <= 50 {
             border-bottom-color: transparent !important;
           } @else {
