@@ -21,6 +21,10 @@ md-backdrop {
   right: 0;
   bottom: 0;
 
+  &.md-click-catcher {
+    position: fixed;
+  }
+
   &.ng-enter {
     animation: $swift-ease-out-timing-function mdBackdropFadeIn 0.5s both;
   }

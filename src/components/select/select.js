@@ -569,7 +569,7 @@ function SelectProvider($$interimElementProvider) {
         parent: angular.element(opts.parent),
         selectEl: element.find('md-select-menu'),
         contentEl: element.find('md-content'),
-        backdrop: opts.hasBackdrop && angular.element('<md-backdrop class="md-select-backdrop">')
+        backdrop: opts.hasBackdrop && angular.element('<md-backdrop class="md-select-backdrop md-click-catcher">')
       });
 
       configureAria();
@@ -800,10 +800,6 @@ function SelectProvider($$interimElementProvider) {
       if ((focusedNode.tagName || '').toUpperCase() === 'MD-OPTGROUP') {
         focusedNode = optionNodes[0] || contentNode.firstElementChild || contentNode;
       }
-      if (focusedNode) {
-        opts.focusedNode = focusedNode;
-        focusedNode.focus();
-      }
 
       if (isScrollable) {
         var scrollBuffer = contentNode.offsetHeight / 2;
@@ -853,6 +849,11 @@ function SelectProvider($$interimElementProvider) {
         Math.min(targetRect.width / selectMenuRect.width, 1.0) + ',' +
         Math.min(targetRect.height / selectMenuRect.height, 1.0) +
       ')';
+
+      if (focusedNode) {
+        opts.focusedNode = focusedNode;
+        focusedNode.focus();
+      }
 
       $$rAF(function() {
         element.addClass('md-active');
