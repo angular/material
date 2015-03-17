@@ -16,10 +16,9 @@ md-backdrop {
   background-color: rgba(0,0,0,0);
 
   position: absolute;
+  height: 100%;
   left: 0;
-  top: 0;
   right: 0;
-  bottom: 0;
 
   &.md-click-catcher {
     position: fixed;
