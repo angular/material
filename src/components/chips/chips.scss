@@ -1,0 +1,28 @@
+md-chips {
+  md-chips-wrap {
+    li {
+      border: 1px solid #DCDCDC;
+      border-radius: 11px;
+      background: #F5F5F5;
+      padding-left:5px;
+      padding-top: 2px;
+      margin-left: 4px;
+      display: inline-block;
+      color: rgba(0,0,0,0.8);
+      font-family: roboto;
+      font-size: 13px;
+      height:22px;
+    }
+    ul {
+    }
+    ul * {
+      vertical-align: middle;
+    }
+  }
+  md-chips-wrap.readonly {
+    li {
+      padding-right: 5px;
+    }
+  }
+}
+
