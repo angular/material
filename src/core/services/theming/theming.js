@@ -360,7 +360,7 @@ function ThemableDirective($mdTheming) {
   return $mdTheming;
 }
 
-function parseRules(theme, colorType, rules) {
+function _parseRules(theme, colorType, rules) {
   checkValidPalette(theme, colorType);
 
   rules = rules.replace(/THEME_NAME/g, theme.name);
@@ -402,7 +402,11 @@ function parseRules(theme, colorType, rules) {
     generatedRules.push(newRule);
   });
 
-  return generatedRules.join('');
+  return generatedRules;
+}
+
+function parseRules(theme, colorType, rules) {
+  return _parseRules(theme, colorType, rules).join('');
 }
 
 // Generate our themes at run time given the state of THEMES and PALETTES
@@ -448,28 +452,30 @@ function generateThemes($injector) {
     return rulesByType[DEFAULT_COLOR_TYPE] += rule;
   });
 
-  var styleString = '';
-
   // For each theme, use the color palettes specified for `primary`, `warn` and `accent`
   // to generate CSS rules.
   angular.forEach(THEMES, function(theme) {
-    THEME_COLOR_TYPES.forEach(function(colorType) {
-      styleString += parseRules(theme, colorType, rulesByType[colorType] + '');
-    });
+      // Insert our newly minted styles into the DOM
+    if (!generationIsDone) {
+      var head = document.getElementsByTagName('head')[0];
+      var headFirstElementChild = head.firstElementChild;
+      THEME_COLOR_TYPES.forEach(function(colorType) {
+        var styleStrings = _parseRules(theme, colorType, rulesByType[colorType]);
+        while(styleStrings.length) {
+          var style = document.createElement('style');
+          style.setAttribute('type', 'text/css');
+          style.appendChild(document.createTextNode(styleStrings.shift()));
+          head.insertBefore(style, headFirstElementChild);
+        }
+      });
+      generationIsDone = true;
+    }
+
     if (theme.colors.primary.name == theme.colors.accent.name) {
       console.warn("$mdThemingProvider: Using the same palette for primary and" +
                    " accent. This violates the material design spec.");
     }
   });
-
-  // Insert our newly minted styles into the DOM
-  if (!generationIsDone) {
-    var style = document.createElement('style');
-    style.innerHTML = styleString;
-    var head = document.getElementsByTagName('head')[0];
-    head.insertBefore(style, head.firstElementChild);
-    generationIsDone = true;
-  }
 
   // The user specifies a 'default' contrast color as either light or dark,
   // then explicitly lists which hues are the opposite contrast (eg. A100 has dark, A200 has light)
