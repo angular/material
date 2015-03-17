@@ -6,7 +6,7 @@ $select-container-transition-duration: 350ms;
 $select-max-visible-options: 5;
 
 .md-select-menu-container {
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   z-index: 99;
