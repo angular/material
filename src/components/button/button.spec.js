@@ -49,6 +49,12 @@ describe('md-button', function() {
       expect(button[0].tagName.toLowerCase()).toEqual('a');
     }));
 
+    it('should be anchor if ui-sref attr', inject(function($compile, $rootScope) {
+      var button = $compile('<md-button ui-sref="state">')($rootScope.$new());
+      $rootScope.$apply();
+      expect(button[0].tagName.toLowerCase()).toEqual('a');
+    }));
+
     it('should be button otherwise', inject(function($compile, $rootScope) {
       var button = $compile('<md-button>')($rootScope.$new());
       $rootScope.$apply();
