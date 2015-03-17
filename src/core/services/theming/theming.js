@@ -453,23 +453,23 @@ function generateThemes($injector) {
   // For each theme, use the color palettes specified for `primary`, `warn` and `accent`
   // to generate CSS rules.
   angular.forEach(THEMES, function(theme) {
-    THEME_COLOR_TYPES.forEach(function(colorType) {
-      styleString += parseRules(theme, colorType, rulesByType[colorType] + '');
-    });
+      // Insert our newly minted styles into the DOM
+    if (!generationIsDone) {
+      THEME_COLOR_TYPES.forEach(function(colorType) {
+        styleString = parseRules(theme, colorType, rulesByType[colorType] + '');
+        var style = document.createElement('style');
+        style.innerHTML = styleString;
+        var head = document.getElementsByTagName('head')[0];
+        head.insertBefore(style, head.firstElementChild);
+      });
+      generationIsDone = true;
+    }
+
     if (theme.colors.primary.name == theme.colors.accent.name) {
       console.warn("$mdThemingProvider: Using the same palette for primary and" +
                    " accent. This violates the material design spec.");
     }
   });
-
-  // Insert our newly minted styles into the DOM
-  if (!generationIsDone) {
-    var style = document.createElement('style');
-    style.innerHTML = styleString;
-    var head = document.getElementsByTagName('head')[0];
-    head.insertBefore(style, head.firstElementChild);
-    generationIsDone = true;
-  }
 
   // The user specifies a 'default' contrast color as either light or dark,
   // then explicitly lists which hues are the opposite contrast (eg. A100 has dark, A200 has light)
