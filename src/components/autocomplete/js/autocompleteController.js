@@ -79,6 +79,7 @@
       self.index = 0;
       //-- clear selected item if search text no longer matches it
       if (searchText !== getDisplayValue($scope.selectedItem)) $scope.selectedItem = null;
+      else return;
       //-- cancel results if search text is not long enough
       if (!searchText || searchText.length < Math.max(parseInt($scope.minLength, 10), 1)) {
         self.loading = false;
