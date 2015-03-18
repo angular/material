@@ -4,7 +4,7 @@
       .module('material.components.autocomplete')
       .controller('MdAutocompleteCtrl', MdAutocompleteCtrl);
 
-  function MdAutocompleteCtrl ($scope, $element, $q, $mdUtil, $mdConstant) {
+  function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant) {
 
     //-- private variables
     var self = this,
@@ -107,7 +107,9 @@
         handleResults(items);
       } else {
         self.loading = true;
-        promise = $q.when(items).then(handleResults);
+        if (items.success) items.success(handleResults);
+        if (items.then)    items.then(handleResults);
+        if (items.error)   items.error(function () { self.loading = false; });
       }
       function handleResults (matches) {
         cache[term] = matches;
