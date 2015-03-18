@@ -45,6 +45,7 @@
 
     //-- start method definitions
     function init () {
+      if ($scope.autofocus) elements.input.focus();
       configureWatchers();
       configureAria();
     }
