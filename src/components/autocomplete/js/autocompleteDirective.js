@@ -42,6 +42,7 @@
       template:     '\
         <md-autocomplete-wrap role="listbox">\
           <input type="text"\
+              autocomplete="off"\
               ng-disabled="isDisabled"\
               ng-model="searchText"\
               ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
