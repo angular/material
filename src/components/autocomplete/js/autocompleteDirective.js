@@ -24,6 +24,7 @@
    * @param {boolean=} ng-disabled Determines whether or not to disable the input field
    * @param {number=} md-min-length Specifies the minimum length of text before autocomplete will make suggestions
    * @param {number=} md-delay Specifies the amount of time (in milliseconds) to wait before looking for results
+   * @param {boolean=} md-autofocus If true, will immediately focus the input element
    *
    * @usage
    * <hljs lang="html">
@@ -42,6 +43,7 @@
       template:     '\
         <md-autocomplete-wrap role="listbox">\
           <input type="text"\
+              autocomplete="off"\
               ng-disabled="isDisabled"\
               ng-model="searchText"\
               ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
@@ -54,7 +56,7 @@
               aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>\
           <button\
               type="button"\
-              ng-if="searchText"\
+              ng-if="searchText && !isDisabled"\
               ng-click="$mdAutocompleteCtrl.clear()">\
             <md-icon md-svg-icon="cancel"></md-icon>\
             <span class="visually-hidden">Clear</span>\
@@ -85,17 +87,18 @@
       controller:   'MdAutocompleteCtrl',
       controllerAs: '$mdAutocompleteCtrl',
       scope:        {
-        searchText:   '=mdSearchText',
-        selectedItem: '=mdSelectedItem',
+        searchText:   '=?mdSearchText',
+        selectedItem: '=?mdSelectedItem',
         itemsExpr:    '@mdItems',
         itemText:     '&mdItemText',
         placeholder:  '@placeholder',
-        noCache:      '=mdNoCache',
+        noCache:      '=?mdNoCache',
         itemChange:   '&mdSelectedItemChange',
         textChange:   '&mdSearchTextChange',
-        isDisabled:   '=ngDisabled',
-        minLength:    '=mdMinLength',
-        delay:        '=mdDelay'
+        isDisabled:   '=?ngDisabled',
+        minLength:    '=?mdMinLength',
+        delay:        '=?mdDelay',
+        autofocus:    '=?mdAutofocus'
       }
     };
   }

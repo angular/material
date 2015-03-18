@@ -4,7 +4,7 @@
       .module('material.components.autocomplete')
       .controller('MdAutocompleteCtrl', MdAutocompleteCtrl);
 
-  function MdAutocompleteCtrl ($scope, $element, $q, $mdUtil, $mdConstant) {
+  function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant) {
 
     //-- private variables
     var self = this,
@@ -45,6 +45,7 @@
 
     //-- start method definitions
     function init () {
+      if ($scope.autofocus) elements.input.focus();
       configureWatchers();
       configureAria();
     }
@@ -70,13 +71,22 @@
           ? $mdUtil.debounce(handleSearchText, wait)
           : handleSearchText);
       $scope.$watch('selectedItem', function (selectedItem, previousSelectedItem) {
+        if (selectedItem) {
+          $scope.searchText = getDisplayValue(selectedItem);
+        }
         if ($scope.itemChange && selectedItem !== previousSelectedItem)
           $scope.itemChange(getItemScope(selectedItem));
       });
     }
 
     function handleSearchText (searchText, previousSearchText) {
-      self.index = -1;
+      self.index = 0;
+      //-- do nothing on init if there is no initial value
+      if (!searchText && searchText === previousSearchText) return;
+      //-- clear selected item if search text no longer matches it
+      if (searchText !== getDisplayValue($scope.selectedItem)) $scope.selectedItem = null;
+      else return;
+      //-- cancel results if search text is not long enough
       if (!searchText || searchText.length < Math.max(parseInt($scope.minLength, 10), 1)) {
         self.loading = false;
         self.matches = [];
@@ -85,15 +95,17 @@
         return;
       }
       var term = searchText.toLowerCase();
+      //-- cancel promise if a promise is in progress
       if (promise && promise.cancel) {
         promise.cancel();
         promise = null;
       }
+      //-- if results are cached, pull in cached results
       if (!$scope.noCache && cache[term]) {
         self.matches = cache[term];
         updateMessages();
       } else {
-        self.fetch(searchText);
+        fetchResults(searchText);
       }
       self.hidden = shouldHide();
       if ($scope.textChange && searchText !== previousSearchText)
@@ -107,7 +119,9 @@
         handleResults(items);
       } else {
         self.loading = true;
-        promise = $q.when(items).then(handleResults);
+        if (items.success) items.success(handleResults);
+        if (items.then)    items.then(handleResults);
+        if (items.error)   items.error(function () { self.loading = false; });
       }
       function handleResults (matches) {
         cache[term] = matches;
@@ -163,7 +177,7 @@
         case $mdConstant.KEY_CODE.ESCAPE:
             self.matches = [];
             self.hidden = true;
-            self.index = -1;
+            self.index = 0;
             break;
         case $mdConstant.KEY_CODE.TAB:
             break;
@@ -178,7 +192,9 @@
     }
 
     function shouldHide () {
-      return self.matches.length === 1 && $scope.searchText === getDisplayValue(self.matches[0]);
+      return self.matches.length === 1
+          && $scope.searchText === getDisplayValue(self.matches[0])
+          && $scope.selectedItem === self.matches[0];
     }
 
     function getCurrentDisplayValue () {
@@ -193,7 +209,7 @@
       $scope.selectedItem = self.matches[index];
       $scope.searchText = getDisplayValue($scope.selectedItem) || $scope.searchText;
       self.hidden = true;
-      self.index = -1;
+      self.index = 0;
       self.matches = [];
     }
 
