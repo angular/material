@@ -97,11 +97,12 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
     width: $button-fab-width;
     height: $button-fab-height;
 
-    border-radius: 50%;
-
     @extend .md-shadow-bottom-z-1;
     border-radius: 50%;
+    background-clip: padding-box;
     overflow: hidden;
+    // The following hack causes Safari to respect overflow hidden for ripples
+    -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
 
     transform: translate3d(0,0,0);
 
