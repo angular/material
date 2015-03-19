@@ -101,13 +101,18 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
     border-radius: 50%;
     background-clip: padding-box;
     overflow: hidden;
-    // The following hack causes Safari to respect overflow hidden for ripples
-    -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
 
     transform: translate3d(0,0,0);
 
     transition: 0.2s linear;
     transition-property: transform, box-shadow;
+    .md-ripple-container {
+      border-radius: 50%;
+      background-clip: padding-box;
+      overflow: hidden;
+      // The following hack causes Safari to respect overflow hidden for ripples
+      -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
+    }
 
     md-icon {
       margin-top: 0;
