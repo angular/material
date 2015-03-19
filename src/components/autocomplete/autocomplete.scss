@@ -37,6 +37,7 @@ md-autocomplete {
   height: 40px;
   position: relative;
   overflow: visible;
+  min-width: 190px;
 
   md-autocomplete-wrap {
     display: block;
