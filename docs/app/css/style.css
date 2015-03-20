@@ -82,7 +82,7 @@ pre > code.highlight {
 }
 
 code {
-  font-size: 14px;
+  font-size: 0.875rem;
   background: #f6f6f6;
 }
 
@@ -141,7 +141,6 @@ code:not(.highlight) {
   border-radius: 0;
   color: inherit;
   cursor: pointer;
-  font-weight: 400;
   display: block;
   line-height: 40px;
   margin: 0;
@@ -160,10 +159,7 @@ code:not(.highlight) {
   color: #03a9f4;
 }
 .menu-heading {
-  color: #888;
   display: block;
-  font-size: inherit;
-  font-weight: 500;
   line-height: 40px;
   margin: 0;
   padding: 0px 16px;
@@ -192,6 +188,7 @@ code:not(.highlight) {
 }
 .docs-menu .menu-toggle-list a.md-button {
   display: block;
+  font-weight: 400;
   padding: 0 16px 0 32px;
   text-transform: none;
 }
@@ -342,7 +339,6 @@ md-tabs.demo-source-tabs .active md-tab-label {
 .small-demo .md-toolbar-tools {
   min-height: 48px;
   max-height: 48px;
-  font-size: 20px;
 }
 
 .show-source md-toolbar.demo-toolbar {
@@ -455,12 +451,6 @@ ul.buckets li a:focus {
 }
 code.api-type {
   font-weight: bold;
-}
-
-.layout-title {
-  font-size: 14px;
-  font-weight: bold;
-  text-transform: uppercase;
 }
 
 .api-params-content ul {

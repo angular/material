@@ -41,9 +41,9 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
   // Always uppercase buttons
   text-transform: uppercase;
   font-weight: 500;
+  font-size: $body-font-size-base;
   font-style: inherit;
   font-variant: inherit;
-  font-size: inherit;
   font-family: inherit;
   line-height: inherit;
   text-decoration: none;
