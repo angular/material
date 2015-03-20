@@ -38,7 +38,22 @@ md-autocomplete {
   position: relative;
   overflow: visible;
   min-width: 190px;
-
+  &[md-floating-label] {
+    box-shadow: none;
+    border-radius: 0;
+    background: transparent;
+    height: auto;
+    md-autocomplete-wrap {
+      height: auto;
+    }
+    md-input-container {
+      padding-bottom: 0;
+    }
+    button {
+      top: auto;
+      bottom: 5px;
+    }
+  }
   md-autocomplete-wrap {
     display: block;
     position: relative;
@@ -70,7 +85,7 @@ md-autocomplete {
       }
     }
   }
-  input {
+  input:not(.md-input) {
     position: absolute;
     left: 0;
     top: 0;
