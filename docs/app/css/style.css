@@ -518,3 +518,13 @@ md-content.demo-source-container > hljs > pre > code.highlight {
 .api-section h3 {
   padding-top: 20px;
 }
+
+/* Styles for Windows High Contrast mode */
+@media screen and (-ms-high-contrast: active) {
+  a {
+    text-decoration: underline;
+  }
+  iframe, hljs pre {
+    border: 1px solid #fff;
+  }
+}

@@ -181,4 +181,14 @@ md-autocomplete {
       }
     }
   }
+  @media screen and (-ms-high-contrast: active) {
+    $border-color: #fff;
+
+    input {
+      border: 1px solid $border-color;
+    }
+    li:focus {
+      color: #fff;
+    }
+  }
 }

@@ -80,5 +80,7 @@ md-toolbar {
   }
   .md-button {
     font-size: 16px;
+  @media screen and (-ms-high-contrast: active) {
+    border-bottom: 1px solid #fff;
   }
 }

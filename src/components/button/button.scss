@@ -187,3 +187,9 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
     border-radius: 0px 2px 2px 0px;
   }
 }
+@media screen and (-ms-high-contrast: active) {
+  .md-button.md-raised,
+  .md-button.md-fab {
+    border: 1px solid #fff;
+  }
+}

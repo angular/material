@@ -90,3 +90,9 @@ md-radio-group {
 .radioButtondemoBasicUsage  md-radio-group {
   border: none;
 }
+
+@media screen and (-ms-high-contrast: active) {
+  md-radio-button.md-default-theme .md-on {
+    background-color: #fff;
+  }
+}

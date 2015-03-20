@@ -183,3 +183,9 @@ md-input-container {
     }
   }
 }
+
+@media screen and (-ms-high-contrast: active) {
+  md-input-container.md-default-theme > md-icon {
+    fill: #fff;
+  }
+}

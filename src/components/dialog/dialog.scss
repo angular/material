@@ -66,3 +66,9 @@ md-dialog {
   }
 
 }
+
+@media screen and (-ms-high-contrast: active) {
+  md-dialog {
+    border: 1px solid #fff;
+  }
+}

@@ -162,3 +162,9 @@ md-optgroup {
     padding-left: $baseline-grid + $select-option-padding;
   }
 }
+
+@media screen and (-ms-high-contrast: active) {
+  .md-select-backdrop {
+    background-color: transparent;
+  }
+}

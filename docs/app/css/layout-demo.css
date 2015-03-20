@@ -66,3 +66,8 @@ demo-include {
 [ng-panel] .demo-content {
   background: white;
 }
+@media screen and (-ms-high-contrast: active) {
+  .layout-content demo-include [layout] > div {
+    border: 1px solid #fff !important;
+  }
+}
