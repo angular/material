@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   angular
-      .module('autocompleteDemo', ['ngMaterial'])
+      .module('autocompleteFloatingLabelDemo', ['ngMaterial'])
       .controller('DemoCtrl', DemoCtrl);
 
   function DemoCtrl ($timeout, $q) {
@@ -12,8 +12,6 @@
     self.selectedItem  = null;
     self.searchText    = null;
     self.querySearch   = querySearch;
-    self.simulateQuery = false;
-    self.isDisabled    = false;
 
     // ******************************
     // Internal methods
@@ -24,15 +22,8 @@
      * remote dataservice call.
      */
     function querySearch (query) {
-      var results = query ? self.states.filter( createFilterFor(query) ) : [],
-          deferred;
-      if (self.simulateQuery) {
-        deferred = $q.defer();
-        $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
-        return deferred.promise;
-      } else {
-        return results;
-      }
+      var results = query ? self.states.filter( createFilterFor(query) ) : [];
+      return results;
     }
 
     /**

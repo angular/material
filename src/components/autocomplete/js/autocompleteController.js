@@ -4,17 +4,13 @@
       .module('material.components.autocomplete')
       .controller('MdAutocompleteCtrl', MdAutocompleteCtrl);
 
-  function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant) {
+  function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout) {
 
     //-- private variables
     var self = this,
         itemParts = $scope.itemsExpr.split(/ in /i),
         itemExpr = itemParts[1],
-        elements = {
-          main:  $element[0],
-          ul:    $element[0].getElementsByTagName('ul')[0],
-          input: $element[0].getElementsByTagName('input')[0]
-        },
+        elements = null,
         promise = null,
         cache = {},
         noBlur = false;
@@ -34,6 +30,7 @@
     self.getCurrentDisplayValue = getCurrentDisplayValue;
     self.fetch = $mdUtil.debounce(fetchResults);
     self.messages = [];
+    self.id = $mdUtil.nextUid();
 
     //-- While the mouse is inside of the dropdown, we don't want to handle input blur
     //-- This is to allow the user to scroll the list without causing it to hide
@@ -47,15 +44,15 @@
     function init () {
       if ($scope.autofocus) elements.input.focus();
       configureWatchers();
-      configureAria();
+      $timeout(gatherElements);
     }
 
-    function configureAria () {
-      var ul = angular.element(elements.ul),
-          input = angular.element(elements.input),
-          id = ul.attr('id') || 'ul_' + $mdUtil.nextUid();
-      ul.attr('id', id);
-      input.attr('aria-owns', id);
+    function gatherElements () {
+      elements = {
+        main:  $element[0],
+        ul:    $element[0].getElementsByTagName('ul')[0],
+        input: $element[0].getElementsByTagName('input')[0]
+      };
     }
 
     function getItemScope (item) {
