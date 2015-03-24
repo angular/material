@@ -1,25 +1,32 @@
 
 <div ng-controller="AppCtrl">
   <md-content>
-
     <md-list>
-
-      <md-item ng-repeat="item in todos">
-        <md-item-content>
-          <div class="md-tile-left">
-              <img ng-src="{{item.face}}" class="face" alt="{{item.who}}">
-          </div>
-          <div class="md-tile-content">
-            <h3>{{item.what}}</h3>
-            <h4>{{item.who}}</h4>
-            <p>
-              {{item.notes}}
-            </p>
-          </div>
-        </md-item-content>
+      <md-subheader class="md-no-sticky">3 line item</md-subheader>
+      <md-item class="md-3-line" ng-repeat="item in todos">
+        <img ng-src="{{item.face}}?{{$index}}" class="md-avatar" alt="{{item.who}}" />
+        <div class="md-item-text">
+          <h3>{{ item.who }}</h3>
+          <h4>{{ item.what }}</h4>
+          <p>{{ item.notes }}</p>
+        </div>
       </md-item>
-
+      <md-subheader class="md-no-sticky">2 line item</md-subheader>
+      <md-item class="md-2-line">
+      <img ng-src="{{todos[0].face}}?20" class="md-avatar" alt="{{todos[0].who}}" />
+        <div class="md-item-text">
+          <h3>{{ todos[0].who }}</h3>
+          <p>Secondary text</p>
+        </div>
+      </md-item>
+      <md-subheader class="md-no-sticky">3 line item, long paragraph</md-subheader>
+      <md-item class="md-3-line">
+        <img ng-src="{{todos[0].face}}?25" class="md-avatar" alt="{{todos[0].who}}" />
+        <div class="md-item-text">
+          <h3>{{ todos[0].who }}</h3>
+          <p>Secondary line text Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam massa quam.</p>
+        </div>
+      </md-item>
     </md-list>
-
   </md-content>
 </div>
