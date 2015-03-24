@@ -33,6 +33,7 @@ angular
  * currently visible.
  * @param {number=} md-delay How many milliseconds to wait to show the tooltip after the user focuses, hovers, or touches the parent. Defaults to 400ms.
  * @param {string=} md-direction Which direction would you like the tooltip to go?  Supports left, right, top, and bottom.  Defaults to bottom.
+ * @param {boolean=} md-autohide If present or provided with a boolean value, the tooltip will hide on mouse leave, regardless of focus
  */
 function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdTheming, $rootElement, $animate, $q) {
 
@@ -47,7 +48,8 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
         <div class="md-content" ng-transclude></div>',
     scope: {
       visible: '=?mdVisible',
-      delay: '=?mdDelay'
+      delay: '=?mdDelay',
+      autohide: '=?mdAutohide'
     },
     link: postLink
   };
@@ -114,8 +116,9 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     }
 
     function bindEvents () {
+      var autohide = scope.hasOwnProperty('autohide') ? scope.autohide : attr.hasOwnProperty('mdAutohide');
       parent.on('focus mouseenter touchstart', function() { setVisible(true); });
-      parent.on('blur mouseleave touchend touchcancel', function() { if ($document[0].activeElement !== parent[0]) setVisible(false); });
+      parent.on('blur mouseleave touchend touchcancel', function() { if ($document[0].activeElement !== parent[0] || autohide) setVisible(false); });
       angular.element($window).on('resize', debouncedOnResize);
     }
 
