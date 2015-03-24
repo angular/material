@@ -4,13 +4,20 @@ html, body {
   -webkit-touch-callout: none;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 
   p {
     line-height: 1.846;
   }
 }
 
+md-select, md-card, md-list, md-toolbar,
+ul, ol, p, h1, h2, h3, h4, h5, h6 {
+  text-rendering: optimizeLegibility;
+}
+
+/************
+ * Headings
+ ************/
 .md-display-1 {
   font-size: $display-1-font-size-base;
   font-weight: 400;
@@ -47,6 +54,9 @@ html, body {
   letter-spacing: 0.010em;
   line-height: 1.5rem;
 }
+/************
+ * Body Copy
+ ************/
 .md-body-1 {
   font-size: $body-font-size-base;
   font-weight: 400;
@@ -66,6 +76,10 @@ html, body {
 .md-button {
   letter-spacing: 0.010em;
 }
+
+/************
+ * Defaults
+ ************/
 
 h1 {
   @extend .md-display-1;
