@@ -4,7 +4,7 @@
       .module('autocompleteDemo', ['ngMaterial'])
       .controller('DemoCtrl', DemoCtrl);
 
-  function DemoCtrl ($timeout, $q) {
+  function DemoCtrl ($timeout, $q, $log) {
     var self = this;
 
     // list of `state` value/display objects
@@ -14,6 +14,7 @@
     self.querySearch   = querySearch;
     self.simulateQuery = false;
     self.isDisabled    = false;
+    self.selectedItemChange = selectedItemChange;
 
     // ******************************
     // Internal methods
@@ -33,6 +34,10 @@
       } else {
         return results;
       }
+    }
+
+    function selectedItemChange(item) {
+      $log.info('Item changed to ' + item);
     }
 
     /**

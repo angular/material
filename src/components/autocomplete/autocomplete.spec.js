@@ -62,4 +62,91 @@ describe('<md-autocomplete>', function() {
     }));
   });
 
+  describe('API access', function() {
+    it('should clear the selected item', inject(function($timeout, $mdConstant) {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl    = element.controller('mdAutocomplete');
+
+      element.scope().searchText = 'fo';
+      ctrl.keydown({});
+      element.scope().$apply();
+      $timeout.flush();
+
+      ctrl.select(0);
+      element.scope().$apply();
+
+      expect(scope.searchText).toBe('foo');
+      expect(scope.selectedItem).not.toBeNull();
+      expect(scope.selectedItem.display).toBe('foo');
+      expect(scope.match(scope.searchText).length).toBe(1);
+
+      ctrl.clear();
+      element.scope().$apply();
+
+      expect(scope.searchText).toBe('');
+      expect(scope.selectedItem).toBe(null);
+    }));
+
+
+    it('should notify selected item watchers', inject(function($timeout, $mdConstant) {
+      var scope = createScope();
+      var scopeItemChanged = 1;
+      scope.itemChanged = jasmine.createSpy('itemChanged');
+
+      var registeredWatcher = jasmine.createSpy('registeredWatcher');
+
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-selected-item-change="itemChanged(item)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl    = element.controller('mdAutocomplete');
+
+      ctrl.registerSelectedItemWatcher(registeredWatcher);
+
+      element.scope().searchText = 'fo';
+      ctrl.keydown({});
+      element.scope().$apply();
+      $timeout.flush();
+
+      ctrl.select(0);
+      element.scope().$apply();
+
+      expect(scope.itemChanged).toHaveBeenCalled();
+      expect(scope.itemChanged.mostRecentCall.args[0].display).toBe('foo');
+      expect(registeredWatcher).toHaveBeenCalled();
+      expect(registeredWatcher.mostRecentCall.args[0].display).toBe('foo');
+      expect(registeredWatcher.mostRecentCall.args[1]).toBeNull();
+      expect(scope.selectedItem).not.toBeNull();
+      expect(scope.selectedItem.display).toBe('foo');
+
+      // Un-register the watcher
+      ctrl.unregisterSelectedItemWatcher(registeredWatcher);
+
+      ctrl.clear();
+      element.scope().$apply();
+
+      expect(registeredWatcher.callCount).toBe(1);
+      expect(scope.itemChanged.callCount).toBe(2);
+      expect(scope.itemChanged.mostRecentCall.args[0]).toBeUndefined();
+      expect(scope.selectedItem).toBe(null);
+    }));
+  });
+
 });
