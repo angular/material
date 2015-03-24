@@ -63,7 +63,7 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
     text-decoration: none;
   }
 
-  &.ng-hide {
+  &.ng-hide, &.ng-leave {
     transition: none;
   }
 ;
