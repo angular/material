@@ -7,6 +7,7 @@
           md-no-cache="ctrl.noCache"
           md-selected-item="ctrl.selectedItem"
           md-search-text="ctrl.searchText"
+          md-selected-item-change="ctrl.selectedItemChange(item)"
           md-items="item in ctrl.querySearch(ctrl.searchText)"
           md-item-text="item.display"
           placeholder="What is your favorite US state?">
