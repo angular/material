@@ -48,10 +48,8 @@ angular.module('material.components.list', [
 function mdListDirective() {
   return {
     restrict: 'E',
-    link: function($scope, $element, $attr) {
-      $element.attr({
-        'role' : 'list'
-      });
+    compile: function(element) {
+      element[0].setAttribute('role', 'list');
     }
   };
 }
@@ -79,10 +77,8 @@ function mdListDirective() {
 function mdItemDirective() {
   return {
     restrict: 'E',
-    link: function($scope, $element, $attr) {
-      $element.attr({
-        'role' : 'listitem'
-      });
+    compile: function(element) {
+      element[0].setAttribute('role', 'listitem');
     }
   };
 }
