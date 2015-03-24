@@ -78,6 +78,10 @@ md-select {
   box-sizing: border-box;
   min-width: 8 * $baseline-grid;
 
+  *:first-child {
+    flex: 1;
+  }
+
   .md-select-icon {
     align-items: flex-end;
     text-align: end;
