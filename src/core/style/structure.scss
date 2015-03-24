@@ -17,6 +17,15 @@ body {
   padding: 10px;
 }
 
+button.md-no-style {
+  font-weight: normal;
+  background-color: inherit;
+  text-align: left;
+  border: none;
+  padding: 0px;
+  margin: 0px;
+}
+
 select,
 button,
 textarea,
