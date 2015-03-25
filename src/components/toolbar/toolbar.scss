@@ -6,6 +6,7 @@ $toolbar-indent-margin: 64px !default;
 $toolbar-padding: 16px !default;
 
 md-toolbar {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
 
@@ -17,6 +18,12 @@ md-toolbar {
   width: 100%;
 
   box-shadow: $whiteframe-shadow-z1;
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
 
   &.md-tall {
     height: $toolbar-tall-height;
@@ -42,6 +49,8 @@ md-toolbar {
 }
 
 .md-toolbar-tools {
+  @extend .md-title;
+  font-weight: 400;
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -49,17 +58,9 @@ md-toolbar {
   width: 100%;
   height: $toolbar-tools-height;
   max-height: $toolbar-tools-height;
-  font-size: inherit;
-  font-weight: normal;
   padding: 0 $toolbar-padding;
   margin: 0;
 
-  > * {
-    font-size: inherit;
-  }
-  h2, h3 {
-    font-weight: normal;
-  }
   a {
     color: inherit;
     text-decoration: none;
@@ -71,7 +72,7 @@ md-toolbar {
   .md-tools {
     margin-left: auto;
   }
-  .md-button {
-    font-size: 16px;
+  @media screen and (-ms-high-contrast: active) {
+    border-bottom: 1px solid #fff;
   }
 }

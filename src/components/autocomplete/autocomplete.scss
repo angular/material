@@ -133,6 +133,8 @@ md-autocomplete {
       z-index: -1;
     }
     &:focus {
+      outline: none;
+
       &:after {
         transform: scale(1);
         opacity: 1;
@@ -193,6 +195,16 @@ md-autocomplete {
         transition: none;
         animation: md-autocomplete-list-out 0.2s;
       }
+    }
+  }
+  @media screen and (-ms-high-contrast: active) {
+    $border-color: #fff;
+
+    input {
+      border: 1px solid $border-color;
+    }
+    li:focus {
+      color: #fff;
     }
   }
 }

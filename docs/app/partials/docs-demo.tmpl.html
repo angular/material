@@ -13,13 +13,14 @@
           <span>{{demoCtrl.demoTitle}}</span>
           <span flex></span>
           <md-button
-            style="min-width: 72px;"
-            layout="row" layout-align="center center"
+            style="min-width: 72px; margin-left: auto;"
             ng-click="demoCtrl.$showSource = !demoCtrl.$showSource">
-            <md-icon md-svg-src="img/icons/ic_visibility_24px.svg"
-               style="margin: 0 4px 0 0;">
-            </md-icon>
-            Source
+            <div flex layout="row" layout-align="center center">
+              <md-icon md-svg-src="img/icons/ic_visibility_24px.svg"
+                 style="margin: 0 4px 0 0;">
+              </md-icon>
+              Source
+            </div>
           </md-button>
         </div>
       </md-toolbar>

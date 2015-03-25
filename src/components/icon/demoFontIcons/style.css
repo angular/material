@@ -3,6 +3,11 @@
     padding:25px;
     width: 100%;
 }
+.appDemoFontIcons,
+.appDemoFontIcons *:before,
+.appDemoFontIcons *:after {
+  box-sizing: border-box;
+}
 
     /* Bootstrap Overrides */
     [class^="icon-"]:before,

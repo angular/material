@@ -128,3 +128,9 @@ md-toast {
     }
   }
 }
+
+@media screen and (-ms-high-contrast: active) {
+  md-toast {
+    border: 1px solid #fff;
+  }
+}

@@ -13,3 +13,9 @@
 .md-whiteframe-z5 {
   box-shadow: $whiteframe-shadow-z5;
 }
+
+@media screen and (-ms-high-contrast: active) {
+  md-whiteframe {
+    border: 1px solid #fff;
+  }
+}

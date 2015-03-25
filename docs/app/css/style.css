@@ -4,17 +4,7 @@ body {
   overflow: hidden;
   max-width: 100%;
   max-height: 100%;
-  font-size: 16px;
 }
-
-a {
-  color: #3f51b5;
-  text-decoration: none;
-}
-a:hover, a:focus {
-  text-decoration: underline;
-}
-
 table {
   margin-bottom: 20px;
   max-width: 100%;
@@ -35,20 +25,6 @@ tr:nth-child(even) td {
 th {
   border-bottom: 1px solid #ccc;
   background-color: #f5f5f5;
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-}
-ul li {
-  margin-left: 16px;
-  padding: 0;
-  margin-top: 3px;
-  list-style-position: inside;
-}
-ul li:first-child {
-  margin-top: 0;
 }
 
 ul.skip-links li {
@@ -106,7 +82,7 @@ pre > code.highlight {
 }
 
 code {
-  font-size: 14px;
+  font-size: 0.875rem;
   background: #f6f6f6;
 }
 
@@ -165,7 +141,7 @@ code:not(.highlight) {
   border-radius: 0;
   color: inherit;
   cursor: pointer;
-  font-weight: 400;
+  display: block;
   line-height: 40px;
   margin: 0;
   max-height: 40px;
@@ -176,9 +152,6 @@ code:not(.highlight) {
   white-space: normal;
   width: 100%;
 }
-.docs-menu a.md-button {
-  display: block;
-}
 .docs-menu button.md-button::-moz-focus-inner {
   padding: 0;
 }
@@ -186,10 +159,7 @@ code:not(.highlight) {
   color: #03a9f4;
 }
 .menu-heading {
-  color: #888;
   display: block;
-  font-size: inherit;
-  font-weight: 500;
   line-height: 40px;
   margin: 0;
   padding: 0px 16px;
@@ -218,30 +188,36 @@ code:not(.highlight) {
 }
 .docs-menu .menu-toggle-list a.md-button {
   display: block;
+  font-weight: 400;
   padding: 0 16px 0 32px;
   text-transform: none;
 }
 .md-button-toggle .md-toggle-icon {
-  background: transparent url(img/icons/list_control_down.png) no-repeat center center;
-  background-size: 100% auto;
-  display: inline-block;
-  height: 24px;
-  margin: auto 0 auto auto;
+  display: block;
+  margin-left: auto;
   speak: none;
-  width: 24px;
+  vertical-align: middle;
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
   transition: transform 0.3s ease-in-out;
   -webkit-transition: -webkit-transform 0.3s ease-in-out;
 }
 .md-button-toggle .md-toggle-icon.toggled {
-  transform: rotate(180deg);
-  -webkit-transform: rotate(180deg);
+  transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
 }
 /* End Docs Menu */
 
-.docs-logotype {
-  line-height:40px;
-  text-indent: 15px;
+.docs-logo:focus {
+  outline: none;
 }
+  .docs-logo md-icon {
+    margin: 0 16px 0 0;
+  }
+  .docs-logotype {
+    line-height: 40px;
+    text-indent: 15px;
+  }
 .docs-menu-icon {
   background: none;
   border: none;
@@ -264,7 +240,6 @@ code:not(.highlight) {
     display: none;
   }
 }
-
 docs-demo {
   display: block;
   margin-top: 16px;
@@ -364,7 +339,6 @@ md-tabs.demo-source-tabs .active md-tab-label {
 .small-demo .md-toolbar-tools {
   min-height: 48px;
   max-height: 48px;
-  font-size: 20px;
 }
 
 .show-source md-toolbar.demo-toolbar {
@@ -479,13 +453,6 @@ code.api-type {
   font-weight: bold;
 }
 
-.layout-title {
-  color: #999999;
-  font-size: 14px;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
 .api-params-content ul {
   padding-left: 4px;
 }
@@ -539,5 +506,15 @@ md-content.demo-source-container > hljs > pre > code.highlight {
 }
 
 .api-section h3 {
-    padding-top:20px;
+  padding-top: 20px;
+}
+
+/* Styles for Windows High Contrast mode */
+@media screen and (-ms-high-contrast: active) {
+  a {
+    text-decoration: underline;
+  }
+  iframe, hljs pre {
+    border: 1px solid #fff;
+  }
 }

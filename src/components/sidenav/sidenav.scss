@@ -2,6 +2,7 @@ $sidenav-default-width: 304px !default;
 $sidenav-min-space: 56px !default;
 
 md-sidenav {
+  box-sizing: border-box;
   position: absolute;
 
   width: $sidenav-default-width;
@@ -12,6 +13,16 @@ md-sidenav {
   background-color: white;
   overflow: auto;
   flex-direction: column;
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
+
+  ul {
+    list-style: none;
+  }
 
   &.md-closed {
     display: none;
@@ -98,5 +109,14 @@ md-sidenav {
 @media (max-width: $sidenav-default-width + $sidenav-min-space) {
   md-sidenav {
     width: 85%;
+  }
+}
+
+@media screen and (-ms-high-contrast: active) {
+  .md-sidenav-left {
+    border-right: 1px solid #fff;
+  }
+  .md-sidenav-right {
+    border-left: 1px solid #fff;
   }
 }
