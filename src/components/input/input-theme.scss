@@ -16,6 +16,10 @@ md-input-container.md-THEME_NAME-theme {
     color: '{{foreground-3}}';
   }
 
+  div[ng-messages] {
+    color: '{{warn-500}}'
+  }
+
 
   &:not(.md-input-invalid) {
     &.md-input-has-value {

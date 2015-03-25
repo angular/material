@@ -1,0 +1,14 @@
+p {
+  padding: 0 20px;
+  text-align: center;
+}
+
+p.result {
+  font-size: 0.8em;
+  color: #777;
+}
+
+
+.demo-content  {
+    min-height: 348px;
+}

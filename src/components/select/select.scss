@@ -56,6 +56,12 @@ md-select {
     &:hover {
       cursor: pointer
     }
+    &.ng-invalid.ng-dirty {
+      .md-select-label {
+        padding-bottom: 7px;
+        border-bottom: 2px solid;
+      }
+    }
     &:focus {
       .md-select-label {
         border-bottom: 2px solid;
