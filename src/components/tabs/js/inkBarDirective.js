@@ -9,7 +9,7 @@
 angular.module('material.components.tabs')
   .directive('mdTabsInkBar', MdTabInkDirective);
 
-function MdTabInkDirective($$rAF) {
+function MdTabInkDirective($$rAF, $mdBiDirectional) {
 
   var lastIndex = 0;
 
@@ -40,14 +40,26 @@ function MdTabInkDirective($$rAF) {
       if (scope.pagination && scope.pagination.tabData) {
         var index = tabsCtrl.getSelectedIndex();
         var data = scope.pagination.tabData.tabs[index] || { left: 0, right: 0, width: 0 };
-        var right = element.parent().prop('offsetWidth') - data.right;
         var classNames = ['md-transition-left', 'md-transition-right', 'md-no-transition'];
         var classIndex = lastIndex > index ? 0 : lastIndex < index ? 1 : 2;
+        var to;
+
+        if($mdBiDirectional.isLTR()) {
+          to = {
+            left: data.left + 'px',
+            right: (element.parent().prop('offsetWidth') - data.right) + 'px'
+          };
+        } else {
+          to = {
+            left: (element.parent().prop('offsetWidth') - data.right) + 'px',
+            right: data.left + 'px'
+          };
+        }
 
         element
             .removeClass(classNames.join(' '))
             .addClass(classNames[classIndex])
-            .css({ left: data.left + 'px', right: right + 'px' });
+            .css(to);
 
         lastIndex = index;
       }
