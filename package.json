@@ -1,8 +1,10 @@
 {
   "name": "angular-material",
   "version": "0.8.3",
+  "branchVersion": "0.8.3",
+  "branchPattern": "0.8.*",
   "repository": {
-    "url": "git://github.com/angular/material.git"
+    "url": "https://github.com/angular/material.git"
   },
   "devDependencies": {
     "canonical-path": "0.0.2",
@@ -41,6 +43,8 @@
     "minimist": "^0.1.0",
     "mkdirp": "^0.5.0",
     "q": "^1.0.1",
+    "semver": "~4.0.3",
+    "shelljs": "~0.3.0",
     "stream-series": "^0.1.1",
     "through2": "^0.6.3"
   }

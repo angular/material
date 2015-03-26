@@ -44,6 +44,11 @@
 
     <md-content flex role="navigation">
       <ul class="docs-menu">
+        <li ng-controller="DocsVersionsCtrl">
+          <md-select ng-model="version" ng-change="jumpToDocsVersion(version)" placeholder="Version">
+            <md-option ng-value="v" ng-repeat="v in versions | filter: availableDocumentationVersions">v{{v.version}}</md-option>
+          </md-select>
+        </li>
         <li ng-repeat="section in menu.sections" class="parent-list-item" ng-class="{'parentActive' : isSectionSelected(section)}">
           <h2 class="menu-heading" ng-if="section.type === 'heading'" id="heading_{{ section.name | nospace }}">
             {{section.name}}

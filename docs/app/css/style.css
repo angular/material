@@ -161,6 +161,10 @@ code:not(.highlight) {
 .docs-menu > li {
   border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
+.docs-menu > li:nth-child(-n+2) {
+  border-top: none;
+}
+
 .docs-menu .md-button {
   border-radius: 0;
   color: inherit;
@@ -176,6 +180,25 @@ code:not(.highlight) {
   white-space: normal;
   width: 100%;
 }
+
+.docs-menu md-select {
+    margin-top: .5em;
+    width: 100%;
+}
+
+.docs-menu md-select md-select-label {
+    justify-content: flex-end;
+}
+
+.docs-menu md-select md-select-label span {
+    margin-right: auto;
+    padding-left: 16px;
+}
+
+.docs-menu md-select .md-select-icon {
+    margin-right: 28px;
+}
+
 .docs-menu a.md-button {
   display: block;
 }

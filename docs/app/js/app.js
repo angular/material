@@ -349,6 +349,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
   '$scope',
   'COMPONENTS',
   'BUILDCONFIG',
+  'VERSIONCONFIG',
   '$mdSidenav',
   '$timeout',
   '$mdDialog',
@@ -356,11 +357,12 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
   '$location',
   '$rootScope',
   '$log',
-function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope, $log) {
+  function($scope, COMPONENTS, BUILDCONFIG, VERSIONCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope, $log) {
   var self = this;
 
   $scope.COMPONENTS = COMPONENTS;
   $scope.BUILDCONFIG = BUILDCONFIG;
+  $scope.VERSIONCONFIG = VERSIONCONFIG
   $scope.menu = menu;
 
   $scope.path = path;
@@ -377,7 +379,6 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   this.isSelected = isSelected;
   this.toggleOpen = toggleOpen;
   this.autoFocusContent = false;
-
 
   var mainContentArea = document.querySelector("[role='main']");
 
@@ -448,6 +449,28 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   function toggleOpen(section) {
     menu.toggleSelectSection(section);
   }
+}])
+
+.controller('DocsVersionsCtrl', [
+  '$scope',
+  '$location',
+  '$window',
+  'VERSIONCONFIG',
+function($scope, $location, $window,VERSIONCONFIG) {
+  $scope.version = VERSIONCONFIG.currentVersion;
+  $scope.versions = VERSIONCONFIG.previousVersions.reverse();
+  $scope.versions.unshift(VERSIONCONFIG.currentVersion);
+
+  $scope.availableDocumentationVersions = function(element) {
+    return element.docsUrl != null || element.isSnapshot;
+  };
+
+  $scope.jumpToDocsVersion = function(version) {
+    var currentPagePath = $location.path().replace(/\/$/, '');
+
+    $window.location = version.docsUrl + currentPagePath;
+  };
+
 }])
 
 .controller('HomeCtrl', [
