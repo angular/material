@@ -47,7 +47,9 @@
 
           <ul ng-if="section.children" class="menu-nested-list">
             <li ng-repeat="child in section.children" ng-class="{'childActive' : isSectionSelected(child)}">
-              <menu-toggle section="child"></menu-toggle>
+              <menu-link section="child" ng-if="child.type === 'link'"></menu-link>
+
+              <menu-toggle section="child" ng-if="child.type === 'toggle'"></menu-toggle>
             </li>
           </ul>
         </li>
@@ -62,17 +64,17 @@
         <button class="docs-menu-icon" hide-gt-sm aria-label="Toggle Menu">
           <md-icon md-svg-src="img/icons/ic_menu_24px.svg"></md-icon>
         </button>
-
         <div layout="row" flex class="fill-height">
-          <div class="md-toolbar-item md-breadcrumb">
+          <h2 class="md-toolbar-item md-breadcrumb">
             <span ng-if="menu.currentPage.name !== menu.currentSection.name">
               <span hide-sm hide-md>{{menu.currentSection.name}}</span>
               <span class="docs-menu-separator-icon" style="" hide-sm hide-md>
+                <span class="visually-hidden">-</span>
                 <img src="img/docArrow.png" alt="" aria-hidden="true">
               </span>
             </span>
             <span class="md-breadcrumb-page">{{(menu.currentPage | humanizeDoc) || 'Angular Material' }}</span>
-          </div>
+          </h2>
 
           <span flex></span> <!-- use up the empty space -->
           <div class="md-toolbar-item md-tools docs-tools" layout="column" layout-gt-md="row">

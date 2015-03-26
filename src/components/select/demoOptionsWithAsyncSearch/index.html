@@ -5,6 +5,6 @@
       <md-select-label>{{ user ? user.name : 'Assign to user' }}</md-select-label>
       <md-option ng-value="user" ng-repeat="user in users">{{user.name}}</md-option>
     </md-select>
-    <p class="result">You have assigned the task to: {{ user ? user.name : 'No one yet' }}</p>
+    <p class="md-caption">You have assigned the task to: {{ user ? user.name : 'No one yet' }}</p>
   </div>
 </div>

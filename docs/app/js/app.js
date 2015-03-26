@@ -144,6 +144,14 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
     name: 'Customization',
     type: 'heading',
     children: [{
+      name: 'CSS',
+      type: 'toggle',
+      pages: [{
+        name: 'Typography',
+        url: '/CSS/typography',
+        type: 'link'
+      }]
+    },{
       name: 'Theming',
       type: 'toggle',
       pages: [{
@@ -249,7 +257,6 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
     },
 
     selectPage: function(section, page) {
-      page && page.url && $location.path(page.url);
       self.currentSection = section;
       self.currentPage = page;
     },

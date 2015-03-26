@@ -27,7 +27,6 @@ demo-include {
 .layout-demo :not([layout]) {
   border: 1px solid #eee;
   padding: 8px;
-  font-size: 16px;
 }
 
 .layout-content .demo-box {
