@@ -249,7 +249,6 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
     },
 
     selectPage: function(section, page) {
-      page && page.url && $location.path(page.url);
       self.currentSection = section;
       self.currentPage = page;
     },

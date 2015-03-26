@@ -27,6 +27,9 @@ th {
   background-color: #f5f5f5;
 }
 
+/************
+ * UTILS
+ ************/
 ul.skip-links li {
   list-style: none;
   margin: 0;
@@ -51,7 +54,13 @@ ul.skip-links li a:focus {
   opacity: 1;
   z-index: 2;
 }
-
+.extraPad {
+  padding-left:32px !important;
+  padding-right:32px !important;
+}
+/*******************
+ * CODE HIGHLIGHTING
+ *******************/
 pre {
   white-space: pre;
   white-space: pre-wrap;
@@ -97,21 +106,12 @@ code:not(.highlight) {
   margin-right: 1px;
   -webkit-font-smoothing: auto;
 }
-
-.layout-content,
-.doc-content {
-  max-width: 864px;
-  margin: auto;
-}
 .layout-content code.highlight {
   margin-bottom: 15px;
 }
-
-.extraPad {
-  padding-left:32px !important;
-  padding-right:32px !important;
-}
-
+/************
+ * DOCS MENU
+ ************/
 .site-sidenav,
 .site-sidenav.md-locked-open-add-active,
 .site-sidenav.md-locked-open {
@@ -123,9 +123,6 @@ code:not(.highlight) {
   min-width: 218px;
 }
 
-/************
- * DOCS MENU
- ************/
 .docs-menu,
 .docs-menu ul {
   list-style: none;
@@ -212,7 +209,9 @@ code:not(.highlight) {
   outline: none;
 }
   .docs-logo md-icon {
-    margin: 0 16px 0 0;
+    height: 40px;
+    margin: 0;
+    width: 40px;
   }
   .docs-logotype {
     line-height: 40px;
@@ -239,6 +238,11 @@ code:not(.highlight) {
   .docs-tools {
     display: none;
   }
+}
+.layout-content,
+.doc-content {
+  max-width: 864px;
+  margin: auto;
 }
 docs-demo {
   display: block;
@@ -377,7 +381,6 @@ md-toolbar.demo-toolbar .md-button {
   background-color: #f6f6f6;
   height: 400px;
 }
-}
 .show-source div[demo-include] {
   border-top: #ddd solid 2px;
 }
@@ -412,7 +415,6 @@ ul.buckets li a:focus {
   background-color: #03a9f4;
   color: white;
 }
-
 /************
  * API DOCS
  ************/
