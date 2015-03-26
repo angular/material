@@ -80,26 +80,26 @@ describe('<md-tabs>', function() {
       expect(tabItems.eq(0)).toBeActiveTab();
 
       // Boundary case, do nothing
-      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.LEFT_ARROW);
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.LEFT_ARROW);
       expect(tabItems.eq(0)).toBeActiveTab();
 
       // Tab 0 should still be active, but tab 2 focused (skip tab 1 it's disabled)
-      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
       expect(tabItems.eq(0)).toBeActiveTab();
 
-      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
       expect(tabItems.eq(2)).toBeActiveTab();
 
       // Boundary case, do nothing
-      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
       expect(tabItems.eq(2)).toBeActiveTab();
 
-      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
       expect(tabItems.eq(2)).toBeActiveTab();
 
       // Skip tab 1 again, it's disabled
-      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.LEFT_ARROW);
-      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.LEFT_ARROW);
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
       expect(tabItems.eq(0)).toBeActiveTab();
 
     }));
@@ -112,12 +112,12 @@ describe('<md-tabs>', function() {
       var tabItems = tabs.find('md-tab-item');
       tabs.find('md-tab-item').eq(0).triggerHandler('click');
 
-      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
-      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
       expect(tabItems.eq(1)).toBeActiveTab();
 
-      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.LEFT_ARROW);
-      triggerKeydown(tabs.find('md-tab-canvas').eq(0), $mdConstant.KEY_CODE.SPACE);
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.LEFT_ARROW);
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.SPACE);
       expect(tabItems.eq(0)).toBeActiveTab();
     }));
 
@@ -240,7 +240,7 @@ describe('<md-tabs>', function() {
       var tabItem = tabs.find('md-dummy-tab');
       var tabContent = angular.element(tabs[0].querySelector('md-tab-content'));
 
-      expect(tabs.find('md-tab-canvas').attr('role')).toBe('tablist');
+      expect(tabs.find('md-tabs-canvas').attr('role')).toBe('tablist');
 
       expect(tabItem.attr('id')).toBeTruthy();
       expect(tabItem.attr('role')).toBe('tab');
