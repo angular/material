@@ -24,7 +24,7 @@ section .md-button {
   position: absolute;
   bottom: 5px;
   left: 7px;
-  color: #ccc;
   font-size: 14px;
+  opacity: 0.54;
 }
 

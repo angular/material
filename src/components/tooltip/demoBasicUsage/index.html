@@ -1,7 +1,7 @@
 <div ng-controller="AppCtrl">
 
   <md-toolbar class="md-accent">
-    <h1 class="md-toolbar-tools">
+    <h2 class="md-toolbar-tools">
       <span flex>Awesome Md App</span>
       <md-button class="md-fab md-accent" aria-label="refresh">
         <md-tooltip>
@@ -10,7 +10,7 @@
         <md-icon icon="/img/icons/ic_refresh_24px.svg" style="width: 24px; height: 24px;">
         </md-icon>
       </md-button>
-    </h1>
+    </h2>
   </md-toolbar>
   <md-content class="md-padding">
 
@@ -31,14 +31,11 @@
       </md-tooltip>
     </md-button>
 
-    <br/><br/><br/><br/><br/><br/>
 
-    <p>
-      <div>
-        Additionally, the Tooltip's `md-visible` attribute can use data-binding to programmatically
-        show/hide itself. Toggle the checkbox below...
-      </div>
-    </p>
+    <div style="margin-top: 15rem;">
+      <p>Additionally, the Tooltip's `md-visible` attribute can use data-binding to programmatically show/hide itself. Toggle the checkbox below...</p>
+    </div>
+
 
     <md-checkbox ng-model="demo.showTooltip">
       Insert Drive

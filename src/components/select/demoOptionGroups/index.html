@@ -9,6 +9,6 @@
         <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'veg' }">{{topping.name}}</md-option>
       </md-optgroup>
     </md-select>
-    <p class="result">{{ favoriteTopping ? 'Your favorite topping is ' + favoriteTopping : 'Please select a topping'}}</p>
+    <p class="md-caption">{{ favoriteTopping ? 'Your favorite topping is ' + favoriteTopping : 'Please select a topping'}}</p>
   </div>
 </div>

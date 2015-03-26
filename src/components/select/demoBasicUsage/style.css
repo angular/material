@@ -3,8 +3,7 @@ p {
   text-align: center;
 }
 
-p.result {
-  font-size: 0.8em;
+p.md-caption {
   color: #777;
 }
 

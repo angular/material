@@ -13,7 +13,51 @@ table {
   border-collapse: collapse;
   background-color: transparent;
 }
-
+/***************
+ * TYPE DEFAULTS
+ ***************/
+a {
+  color: #3f51b5;
+  text-decoration: none;
+}
+a:hover, a:focus {
+  text-decoration: underline;
+}
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+h1 {
+  font-size: 3.400rem;
+  font-weight: 400;
+  line-height: 4rem;
+}
+h2 {
+  font-size: 2.400rem;
+  font-weight: 400;
+  line-height: 3.2rem;
+}
+h3 {
+  font-size: 2.000rem;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+}
+h4 {
+  font-size: 1.600rem;
+  font-weight: 400;
+  letter-spacing: 0.010em;
+  line-height: 2.4rem;
+}
+p {
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: 0.010em;
+  line-height: 2.2rem;
+  margin: 1.6rem 0;
+}
+strong {
+  font-weight: 500;
+}
 td, th {
   padding: 12px 6px;
   text-align: left;
@@ -21,12 +65,19 @@ td, th {
 tr:nth-child(even) td {
   background-color: #f5f5f5;
 }
-
 th {
   border-bottom: 1px solid #ccc;
   background-color: #f5f5f5;
 }
-
+blockquote {
+  border-left: 3px solid rgba(0, 0, 0, 0.12);
+  font-style: italic;
+  margin-left: 0;
+  padding-left: 16px;
+}
+/************
+ * UTILS
+ ************/
 ul.skip-links li {
   list-style: none;
   margin: 0;
@@ -51,7 +102,13 @@ ul.skip-links li a:focus {
   opacity: 1;
   z-index: 2;
 }
-
+.extraPad {
+  padding-left:32px !important;
+  padding-right:32px !important;
+}
+/*******************
+ * CODE HIGHLIGHTING
+ *******************/
 pre {
   white-space: pre;
   white-space: pre-wrap;
@@ -82,7 +139,7 @@ pre > code.highlight {
 }
 
 code {
-  font-size: 0.875rem;
+  font-size: 1.4rem;
   background: #f6f6f6;
 }
 
@@ -97,21 +154,12 @@ code:not(.highlight) {
   margin-right: 1px;
   -webkit-font-smoothing: auto;
 }
-
-.layout-content,
-.doc-content {
-  max-width: 864px;
-  margin: auto;
-}
 .layout-content code.highlight {
   margin-bottom: 15px;
 }
-
-.extraPad {
-  padding-left:32px !important;
-  padding-right:32px !important;
-}
-
+/************
+ * DOCS MENU
+ ************/
 .site-sidenav,
 .site-sidenav.md-locked-open-add-active,
 .site-sidenav.md-locked-open {
@@ -123,9 +171,6 @@ code:not(.highlight) {
   min-width: 218px;
 }
 
-/************
- * DOCS MENU
- ************/
 .docs-menu,
 .docs-menu ul {
   list-style: none;
@@ -212,7 +257,9 @@ code:not(.highlight) {
   outline: none;
 }
   .docs-logo md-icon {
-    margin: 0 16px 0 0;
+    height: 40px;
+    margin: 0;
+    width: 40px;
   }
   .docs-logotype {
     line-height: 40px;
@@ -239,6 +286,11 @@ code:not(.highlight) {
   .docs-tools {
     display: none;
   }
+}
+.layout-content,
+.doc-content {
+  max-width: 864px;
+  margin: auto;
 }
 docs-demo {
   display: block;
@@ -377,11 +429,22 @@ md-toolbar.demo-toolbar .md-button {
   background-color: #f6f6f6;
   height: 400px;
 }
-}
 .show-source div[demo-include] {
   border-top: #ddd solid 2px;
 }
-
+.docs-list {
+  padding: 16px;
+}
+.docs-descriptions h4 {
+  margin: 0;
+}
+.docs-list md-divider {
+  margin: 8px 0;
+}
+.docs-list li {
+  list-style: none;
+  margin: 0 0 8px;
+}
 
 /***************
  * Landing Page
@@ -412,7 +475,6 @@ ul.buckets li a:focus {
   background-color: #03a9f4;
   color: white;
 }
-
 /************
  * API DOCS
  ************/
@@ -462,7 +524,7 @@ ul.methods > li {
 
 ul.methods .method-function-syntax {
   font-weight: normal;
-  font-size: 20px;
+  font-size: 2.0rem;
   margin: 0;
   -webkit-margin-before: 0;
   -webkit-margin-after: 0;
@@ -475,7 +537,7 @@ ul.methods .method-function-syntax {
     list-style: default;
   }
   ul.methods .method-function-syntax {
-    font-size: 14px;
+    font-size: 1.4rem;
   }
 }
 

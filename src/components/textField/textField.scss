@@ -1,4 +1,4 @@
-$tff-font-size: 0.75em !default;
+$tff-font-size: 1.2rem !default;
 $tff-line-height:26px !default;
 $tff-transition: all 0.15s $swift-ease-in-out-timing-function !default;
 // - `label` element (aka hint)
@@ -100,7 +100,7 @@ md-input-group,
   display:  block;
 
   label {
-    font-size: 1em;
+    font-size: 1.6rem;
     z-index: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;

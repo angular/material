@@ -284,7 +284,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop behind the dialog.
  *     Default true.
  *   - `clickOutsideToClose` - `{boolean=}`: Whether the user can click outside the dialog to
- *     close it. Default true.
+ *     close it. Default false.
  *   - `escapeToClose` - `{boolean=}`: Whether the user can press escape to close the dialog.
  *     Default true.
  *   - `focusOnOpen` - `{boolean=}`: An option to override focus behavior on open. Only disable if
@@ -354,7 +354,7 @@ function MdDialogProvider($$interimElementProvider) {
       template: [
         '<md-dialog md-theme="{{ dialog.theme }}" aria-label="{{ dialog.ariaLabel }}">',
           '<md-content role="document" tabIndex="0">',
-            '<h2>{{ dialog.title }}</h2>',
+            '<h2 class="md-title">{{ dialog.title }}</h2>',
             '<p>{{ dialog.content }}</p>',
           '</md-content>',
           '<div class="md-actions">',
