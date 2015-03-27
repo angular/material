@@ -187,7 +187,6 @@
       //-- if the element is not visible, we will not be able to calculate sizes until it is
       //-- we should treat that as a resize event rather than just updating the ink bar
       if (!$element.prop('offsetParent')) return handleResizeWhenVisible();
-      else console.log($element.prop('offsetParent'));
       var index = $scope.selectedIndex,
           totalWidth = elements.wrapper.offsetWidth,
           tab = elements.tabs[index],
