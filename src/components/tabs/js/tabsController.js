@@ -129,6 +129,7 @@
           tab = angular.extend(proto, tabData);
       if (!angular.isString(tabData.template)) {
         ctrl.hasContent = false;
+        $element.addClass('md-no-tab-content');
       }
       if (angular.isDefined(index)) {
         ctrl.tabs.splice(index, 0, tab);

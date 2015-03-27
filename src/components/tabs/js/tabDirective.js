@@ -96,9 +96,9 @@
         if (attr.label) return attr.label;
         //-- otherwise, we have to search for the `md-tab-label` element
         var label = element.find('md-tab-label');
-        if (label) return label.html();
+        if (label.length) return label.html();
         //-- otherwise, we have no label.
-        return 'Missing Label';
+        return element.html();
       }
 
       function getTemplate () {
