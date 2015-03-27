@@ -1,8 +1,15 @@
 $button-border-radius: 3px !default;
 $button-fab-border-radius: 50% !default;
 
-md-toolbar .md-button.md-THEME_NAME-theme.md-fab {
-  background-color: white;
+.md-button.md-THEME_NAME-theme.md-fab {
+  color: '{{background-contrast}}';
+  background-color: '{{background-50}}';
+  &:not([disabled]) {
+    &:hover,
+    &:focus {
+      background-color: '{{background-200}}';
+    }
+  }
 }
 
 .md-button.md-THEME_NAME-theme {
