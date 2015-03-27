@@ -160,8 +160,33 @@
       $scope.$broadcast('$mdTabsChanged');
     }
 
+    function handleResizeWhenVisible () {
+      //-- if there is already a watcher waiting for resize, do nothing
+      if (handleResizeWhenVisible.watcher) return;
+      //-- otherwise, we will abuse the $watch function to check for visible
+      handleResizeWhenVisible.watcher = $scope.$watch(function () {
+        //-- since we are checking for DOM size, we use $timeout to wait for after the DOM updates
+        $timeout(function () {
+          //-- if the watcher has already run (ie. multiple digests in one cycle), do nothing
+          if (!handleResizeWhenVisible.watcher) return;
+
+          if ($element.prop('offsetParent')) {
+            handleResizeWhenVisible.watcher();
+            handleResizeWhenVisible.watcher = null;
+
+            //-- we have to trigger our own $apply so that the DOM bindings will update
+            $scope.$apply(handleWindowResize);
+          }
+        }, 0, false);
+      });
+    }
+
     function updateInkBarStyles () {
       if (!ctrl.tabs.length) return;
+      //-- if the element is not visible, we will not be able to calculate sizes until it is
+      //-- we should treat that as a resize event rather than just updating the ink bar
+      if (!$element.prop('offsetParent')) return handleResizeWhenVisible();
+      else console.log($element.prop('offsetParent'));
       var index = $scope.selectedIndex,
           totalWidth = elements.wrapper.offsetWidth,
           tab = elements.tabs[index],
@@ -208,7 +233,7 @@
     function shouldPaginate () {
       var canvasWidth = $element.prop('clientWidth');
       angular.forEach(elements.tabs, function (tab) { canvasWidth -= tab.offsetWidth; });
-      return canvasWidth <= 0;
+      return canvasWidth < 0;
     }
 
     function select (index) {

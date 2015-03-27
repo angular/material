@@ -393,9 +393,6 @@ md-tabs.demo-source-tabs .active md-tab-label {
   max-height: 48px;
 }
 
-.show-source md-toolbar.demo-toolbar {
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.36);
-}
 .demo-toolbar .md-button {
   color: #616161;
 }
@@ -405,8 +402,9 @@ md-toolbar.demo-toolbar {
 md-toolbar.demo-toolbar,
 .demo-source-tabs md-tab,
 .demo-source-tabs .tabs-header {
-  background: #E0E0E0 !important;
+  background: #f2f2f2 !important;
   color: #616161;
+  border-bottom: 1px solid #e5e5e5;
 }
 md-toolbar.demo-toolbar md-tab-label {
   color: #99E4EE
@@ -579,7 +577,4 @@ md-content.demo-source-container > hljs > pre > code.highlight {
   iframe, hljs pre {
     border: 1px solid #fff;
   }
-}
-demo-source-tabs md-tabs-content-wrapper {
-  height: 400px;
 }

@@ -164,7 +164,8 @@ md-tabs {
   md-tabs-content-wrapper {
     display: block;
     min-height: 200px;
-    position: relative;
+    position: absolute;
+    top: $tabs-header-height; left: 0; right: 0; bottom: 0;
     overflow: hidden;
     md-tab-content {
       display: block;
