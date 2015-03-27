@@ -554,7 +554,7 @@ md-content.demo-source-container > hljs > pre > code.highlight {
 }
 
 .dashed-bottom {
-  border-bottom: dashed 1px rgb(224, 224, 224);;
+  border-bottom: dashed 1px rgb(224, 224, 224);
   padding-bottom: 10px;
 }
 
