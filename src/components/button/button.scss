@@ -1,12 +1,16 @@
-$button-line-height: 25px !default;
-$button-padding: 2px 6px 3px !default;
+$button-line-height: 3.60rem !default;
+$button-padding: 0 0.600rem !default;
+$button-margin: 0.600rem 0.800rem !default;
+$button-min-width: 8.800rem !default;
 
 // Fab buttons
-$button-fab-width: 56px !default;
-$button-fab-height: 56px !default;
-$button-fab-padding: 16px !default;
-$button-fab-mini-width: 40px !default;
-$button-fab-mini-height: 40px !default;
+$button-fab-width: 5.600rem !default;
+$button-fab-height: 5.600rem !default;
+$button-fab-line-height: 5.600rem !default;
+$button-fab-padding: 1.60rem !default;
+$button-fab-mini-width: 4.00rem !default;
+$button-fab-mini-height: 4.00rem !default;
+$button-fab-mini-line-height: 4.00rem !default;
 
 $button-fab-toast-offset: $button-fab-height * 0.75;
 
@@ -24,6 +28,7 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
 }
 
 .md-button {
+  box-sizing: border-box;
   color: currentColor;
 
   user-select: none;
@@ -31,8 +36,10 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
 
   outline: none;
   border: 0;
-  padding: 6px;
-  margin: 0;
+  display: inline-block;
+  padding: $button-padding;
+  margin: $button-margin;
+  line-height: $button-line-height;
   background: transparent;
   white-space: nowrap;
 
@@ -45,21 +52,24 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
   font-style: inherit;
   font-variant: inherit;
   font-family: inherit;
-  line-height: inherit;
   text-decoration: none;
 
   cursor: pointer;
   overflow: hidden;   // for ink containment
 
   transition: box-shadow $swift-ease-out-duration $swift-ease-out-timing-function,
-              background-color $swift-ease-out-duration $swift-ease-out-timing-function,
-              transform $swift-ease-out-duration $swift-ease-out-timing-function;
+              background-color $swift-ease-out-duration $swift-ease-out-timing-function;
 
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
   &:focus {
     outline: none;
   }
 
-  &:hover {
+  &:hover, &:focus {
     text-decoration: none;
   }
 
@@ -77,11 +87,13 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
   }
 
   &.md-raised {
-    transform: translate3d(0, 0, 0);
-
     &:not([disabled]) {
       @extend .md-shadow-bottom-z-1;
     }
+  }
+
+  &:not(.md-fab) {
+    min-width: $button-min-width;
   }
 
   &.md-fab {
@@ -93,18 +105,18 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
 
     z-index: $z-index-fab;
 
+    line-height: $button-fab-line-height;
     width: $button-fab-width;
     height: $button-fab-height;
+    vertical-align: middle;
 
     @extend .md-shadow-bottom-z-1;
     border-radius: 50%;
     background-clip: padding-box;
     overflow: hidden;
 
-    transform: translate3d(0,0,0);
-
     transition: 0.2s linear;
-    transition-property: transform, box-shadow;
+    transition-property: background-color, box-shadow;
     .md-ripple-container {
       border-radius: 50%;
       background-clip: padding-box;
@@ -118,10 +130,9 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
     }
 
     &.md-mini {
+      line-height: $button-fab-mini-line-height;
       width: $button-fab-mini-width;
       height: $button-fab-mini-height;
-      md-icon {
-      }
     }
 
   }
@@ -129,9 +140,10 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
   &:not([disabled]) {
     &.md-raised,
     &.md-fab {
-      &:focus,
-      &:hover {
-        transform: translate3d(0, -1px, 0);
+      &:focus {
+        @extend .md-shadow-bottom-z-1;
+      }
+      &:active {
         @extend .md-shadow-bottom-z-2;
       }
     }
