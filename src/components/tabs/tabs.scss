@@ -16,6 +16,8 @@ md-tabs {
   margin: 0;
   border-radius: 2px;
   overflow: hidden;
+  min-height: 200 + $tabs-header-height;
+  position: relative;
   &[md-align-tabs="bottom"] {
     padding-bottom: $tabs-header-height;
     position: relative;
