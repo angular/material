@@ -17,7 +17,7 @@ md-tabs {
   border-radius: 2px;
   overflow: hidden;
   position: relative;
-  &:not('.md-no-tab-content') {
+  &:not(.md-no-tab-content) {
     min-height: 200 + $tabs-header-height;
   }
   &[md-align-tabs="bottom"] {

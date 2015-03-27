@@ -92,13 +92,7 @@
       scope.$on('$destroy', function () { ctrl.removeTab(data); });
 
       function getLabel () {
-        //-- if label provided, then send label
-        if (attr.label) return attr.label;
-        //-- otherwise, we have to search for the `md-tab-label` element
-        var label = element.find('md-tab-label');
-        if (label.length) return label.html();
-        //-- otherwise, we have no label.
-        return element.html();
+        return attr.label || (element.find('md-tab-label')[0] || element[0]).innerHTML;
       }
 
       function getTemplate () {
