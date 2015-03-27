@@ -1,0 +1,51 @@
+$chip-font-size: 13px !default;
+$chip-height: 22px !default;
+$chip-button-padding: 2px !default;
+$chip-padding: 0 8px 0 8px !default;
+$chip-margin: 0 0 0 8px !default;
+
+.md-chips {
+  box-shadow: $whiteframe-shadow-z1;
+  display: block;
+  font-family: $font-family;
+  font-size: $chip-font-size;
+  padding: 8px;
+  vertical-align: middle;
+
+  .md-chip {
+    border-radius: $chip-height / 2;
+    box-shadow: $whiteframe-shadow-z1;
+    display: inline-block;
+    height: $chip-height;
+    margin: $chip-margin;
+    line-height: $chip-height;
+    padding: $chip-padding;
+    transform: translate3d(0, 0, 0);
+
+    &:first-child {
+      margin: 0;
+    }
+
+    &.selected {
+      transform: translate3d(0, -1px, 0);
+    }
+
+    .md-button {
+      padding: $chip-button-padding;
+    }
+  }
+
+  .md-chip-worker {
+    display: inline-block;
+    line-height: $chip-height + 3px;  /* 3px are added to height of chip for...the shadow? */
+
+    &:not(:first-child) {
+      margin: $chip-margin;
+    }
+  }
+
+  .md-chip-input {
+    background-color:transparent;
+    border-width: 0px;
+  }
+}
