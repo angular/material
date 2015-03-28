@@ -360,7 +360,7 @@ function ThemableDirective($mdTheming) {
   return $mdTheming;
 }
 
-function parseRules(theme, colorType, rules) {
+function _parseRules(theme, colorType, rules) {
   checkValidPalette(theme, colorType);
 
   rules = rules.replace(/THEME_NAME/g, theme.name);
@@ -402,7 +402,11 @@ function parseRules(theme, colorType, rules) {
     generatedRules.push(newRule);
   });
 
-  return generatedRules.join('');
+  return generatedRules;
+}
+
+function parseRules(theme, colorType, rules) {
+  return _parseRules(theme, colorType, rules).join('');
 }
 
 // Generate our themes at run time given the state of THEMES and PALETTES
@@ -448,19 +452,20 @@ function generateThemes($injector) {
     return rulesByType[DEFAULT_COLOR_TYPE] += rule;
   });
 
-  var styleString = '';
-
   // For each theme, use the color palettes specified for `primary`, `warn` and `accent`
   // to generate CSS rules.
   angular.forEach(THEMES, function(theme) {
       // Insert our newly minted styles into the DOM
     if (!generationIsDone) {
+      var head = document.getElementsByTagName('head')[0];
       THEME_COLOR_TYPES.forEach(function(colorType) {
-        styleString = parseRules(theme, colorType, rulesByType[colorType] + '');
-        var style = document.createElement('style');
-        style.innerHTML = styleString;
-        var head = document.getElementsByTagName('head')[0];
-        head.insertBefore(style, head.firstElementChild);
+        var styleString = _parseRules(theme, colorType, rulesByType[colorType]);
+        while(styleString.length) {
+          var style = document.createElement('style');
+          style.setAttribute('type', 'text/css');
+          style.appendChild(document.createTextNode(styleString.shift()));
+          head.appendChild(style);
+        }
       });
       generationIsDone = true;
     }
