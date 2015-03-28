@@ -27,7 +27,6 @@ demo-include {
 .layout-demo :not([layout]) {
   border: 1px solid #eee;
   padding: 8px;
-  font-size: 16px;
 }
 
 .layout-content .demo-box {
@@ -65,4 +64,9 @@ demo-include {
 }
 [ng-panel] .demo-content {
   background: white;
+}
+@media screen and (-ms-high-contrast: active) {
+  .layout-content demo-include [layout] > div {
+    border: 1px solid #fff !important;
+  }
 }

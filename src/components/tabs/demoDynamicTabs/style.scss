@@ -1,33 +1,21 @@
-.sample {
-  height:500px;
-}
-
 .remove-tab {
   margin-bottom: 40px;
 }
-
-.demo-tab {
-  height: 300px;
-  text-align: center;
+.demo-tab > div > div {
+  padding: 25px;
+  box-sizing: border-box;
 }
-
-.demo-tab button {
-  margin-bottom: 40px;
+.edit-form input {
+  width: 100%;
 }
-
-.tab0, .tab1, .tab2, .tab3 {
-}
-
-md-tabs, md-tabs .md-header {
-  border-bottom: 1px solid #D8D8D8;
+md-tabs {
+  border-bottom: 1px solid rgba(0,0,0,0.12);
 }
 md-tab[disabled] {
   opacity: 0.5;
 }
-
-
-.md-tab-content {
-  background: white;
+label {
+  text-align: left;
 }
 
 .title {
@@ -35,26 +23,20 @@ md-tab[disabled] {
   padding-right: 8px;
   text-align: left;
   text-transform: uppercase;
-  color: #888;
   margin-top: 24px;
 }
-
-
 [layout-align] > * {
   margin-left: 8px;
 }
-
 form > [layout] > * {
   margin-left: 8px;
 }
 form > [layout] > span {
   padding-top:2px
 }
-
 .long > input {
   width: 264px;
 }
-
 .md-button.add-tab {
   margin-top:20px;
   max-height:30px !important;

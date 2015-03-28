@@ -1,6 +1,6 @@
 <div ng-controller="LayoutCtrl" layout="column" layout-fill class="layout-content">
 
-  <h3 class="layout-title">Overview</h3>
+  <h3>Overview</h3>
   <p>
     Angular Material's responsive CSS layout is built on
     <a href="http://www.w3.org/TR/css3-flexbox/">flexbox</a>.
@@ -8,12 +8,12 @@
 
   <p>
     The layout system is based upon element attributes rather than CSS classes.
-    Attributes provide an easy way to set a value (eg `layout="row"`), and additionally
+    Attributes provide an easy way to set a value (eg <code>layout="row"</code>), and additionally
     helps us separate concerns: attributes define layout, and classes define styling.
   </p>
 
   <md-divider></md-divider>
-  <h3 class="layout-title">Layout Attribute</h3>
+  <h3>Layout Attribute</h3>
   <p>
     Use the <code>layout</code> attribute on an element to arrange its children
     horizontally in a row (<code>layout="row"</code>), or vertically in
@@ -34,41 +34,4 @@
   <p>
     See <a href="#/layout/options">Layout Options</a> for information on responsive layouts and other options.
   </p>
-
-  <!--
-  <md-divider>
-  <docs-demo demo-title="Example App Layout" class="small-demo">
-    <demo-file name="index.html">
-      <div layout="column" layout-fill class="layout-demo">
-        <header>
-          Header
-        </header>
-
-        <section flex layout="column" layout-gt-sm="row">
-          <aside flex flex-gt-sm="20">
-            Menu<br />
-            flex flex-gt-sm="20"
-          </aside>
-          <main flex>
-            Main<br />flex
-          </main>
-        </section>
-
-        <footer>
-          Footer
-        </footer>
-      </div>
-    </demo-file>
-  </docs-demo>
-  <p>
-    In this layout, the header and footer are both using their normal height, while the main
-    content area is flexing, or stretching, to fill the remaining area.
-    <br/><gr/>
-    The app container is a vertical layout, while the main area is a responsive row/column
-    layout, depending upon the screen size. 
-    The aside menu is above on mobile, and to the left on larger devices.
-  </p>
-  -->
-</div>
-
 </div>

@@ -25,9 +25,9 @@ Material is targeted for all browsers with versions n-1; where n is the current 
 
 ## <a name="demos"></a> Online Documentation (and Demos)
 
-<p style="border: 1px solid #ccc">
-  <img src="https://cloud.githubusercontent.com/assets/1045233/6678772/12afad78-cbfc-11e4-8c9f-a13e336fb6a6.png" alt="Angular Material docs website">
-</p>
+<div style="border: 1px solid #ccc">
+  <img src="https://cloud.githubusercontent.com/assets/1045233/6678772/12afad78-cbfc-11e4-8c9f-a13e336fb6a6.png" alt="Angular Material docs website" style="display:block;">
+</div>
 
 - Visit [Material.AngularJS.org](https://material.angularjs.org/) online to review the API, see the
   components in action with live Demos, and study the Layout system.
@@ -85,7 +85,7 @@ debugging) developers should read the [Build Instructions](docs/guides/BUILD.md)
 
 ## <a name="installing"></a> Installing Build (Distribution Files)
 
-#### Bower 
+#### Bower
 
 For developers not interested in building the Angular Material library... use **bower** to install
 and use the Angular Material distribution files.
@@ -107,7 +107,7 @@ project.
 #### CDN
 
 CDN versions of Angular Material are now available at
-[Google Hosted Libraries](https://developers.google.com/speed/libraries/devguide#angularmaterial). 
+[Google Hosted Libraries](https://developers.google.com/speed/libraries/devguide#angularmaterial).
 
 With the Google CDN, you will not need to download local copies of the distribution files. Instead
 simply reference the CDN urls to easily use those remote library files. This is especially useful
@@ -117,24 +117,24 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://p
 ```html
   <head>
 
-    <!-- Angulars Material CSS now available via Google CDN; version 0.7 used here -->
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.7.0/angular-material.min.css">
+    <!-- Angulars Material CSS now available via Google CDN; version 0.8 used here -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.css">
 
   </head>
   <body>
-  
+
     <!-- Angular Material Dependencies -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.min.js"></script>
-    
-    
-    <!-- Angular Material Javascript now available via Google CDN; version 0.7 used here -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.7.0/angular-material.min.js"></script>
+
+
+    <!-- Angular Material Javascript now available via Google CDN; version 0.8 used here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.js"></script>
   </body>
 ```
 
-> Note that the above sample references the 0.7.0 CDN release. Your version will change based on the latest stable release version.
+> Note that the above sample references the 0.8.3 CDN release. Your version will change based on the latest stable release version.
 
 Developers seeking the latest, most-current build versions can use [RawGit.com](//rawgit.com) to
 pull directly from the distribution GitHub

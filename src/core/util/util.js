@@ -33,8 +33,8 @@ angular.module('material.core')
         offsetParent.getBoundingClientRect() : 
         { left: 0, top: 0, width: 0, height: 0 };
       return {
-        left: nodeRect.left - offsetRect.left + offsetParent.scrollLeft,
-        top: nodeRect.top - offsetRect.top + offsetParent.scrollTop,
+        left: nodeRect.left - offsetRect.left,
+        top: nodeRect.top - offsetRect.top,
         width: nodeRect.width,
         height: nodeRect.height
       };

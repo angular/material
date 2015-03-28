@@ -63,7 +63,7 @@ md-input-container {
   }
 
   label:not(.md-no-float),
-  .md-placeholder {
+  .md-placeholder:not(.md-select-label) {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
@@ -73,7 +73,7 @@ md-input-container {
     transform-origin: left top;
     transition: transform $swift-ease-out-timing-function 0.25s;
   }
-  .md-placeholder {
+  .md-placeholder:not(.md-select-label) {
     position: absolute;
     top: 0;
     opacity: 0;
@@ -181,5 +181,11 @@ md-input-container {
       background-size: 3px 1px;
       background-repeat: repeat-x;
     }
+  }
+}
+
+@media screen and (-ms-high-contrast: active) {
+  md-input-container.md-default-theme > md-icon {
+    fill: #fff;
   }
 }

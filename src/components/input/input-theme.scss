@@ -7,13 +7,17 @@ md-input-container.md-THEME_NAME-theme {
   }
 
   > md-icon {
-    fill: '{{foreground-1}}';
+    color: '{{foreground-1}}';
   }
 
   label,
   .md-placeholder {
     text-shadow: '{{foreground-shadow}}';
     color: '{{foreground-3}}';
+  }
+
+  div[ng-messages] {
+    color: '{{warn-500}}'
   }
 
 
@@ -31,7 +35,7 @@ md-input-container.md-THEME_NAME-theme {
         color: '{{primary-500}}';
       }
       md-icon {
-        fill: '{{primary-500}}';
+        color: '{{primary-500}}';
       }
       &.md-accent {
         .md-input {

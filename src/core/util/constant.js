@@ -20,7 +20,9 @@ function MdConstantFactory($$rAF, $sniffer) {
       UP_ARROW : 38,
       RIGHT_ARROW : 39,
       DOWN_ARROW : 40,
-      TAB : 9
+      TAB : 9,
+      BACKSPACE: 8,
+      DELETE: 46
     },
     CSS: {
       /* Constants */

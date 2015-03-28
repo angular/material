@@ -1,6 +1,13 @@
 md-grid-list {
+  box-sizing: border-box;
   display: block;
   position: relative;
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
 
   md-grid-tile {
     display: block;
@@ -60,5 +67,14 @@ md-grid-list {
     }
   }
 
+}
+
+@media screen and (-ms-high-contrast: active) {
+  md-grid-tile {
+    border: 1px solid #fff;
+  }
+  md-grid-tile-footer {
+    border-top: 1px solid #fff;
+  }
 }
 

@@ -1,0 +1,101 @@
+html {
+  font-size: 62.5%;
+  line-height: 1.4;
+}
+body {
+  font-size: 1.6rem;
+}
+html, body {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+md-select, md-card, md-list, md-toolbar,
+ul, ol, p, h1, h2, h3, h4, h5, h6 {
+  text-rendering: optimizeLegibility;
+}
+
+/************
+ * Headings
+ ************/
+.md-display-4 {
+  font-size: $display-4-font-size-base;
+  font-weight: 300;
+  letter-spacing: -0.010em;
+  line-height: $display-4-font-size-base;
+}
+.md-display-3 {
+  font-size: $display-3-font-size-base;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  line-height: $display-3-font-size-base;
+}
+.md-display-2 {
+  font-size: $display-2-font-size-base;
+  font-weight: 400;
+  line-height: 6.4rem;
+}
+.md-display-1 {
+  font-size: $display-1-font-size-base;
+  font-weight: 400;
+  line-height: 4rem;
+}
+.md-headline {
+  font-size: $headline-font-size-base;
+  font-weight: 400;
+  line-height: 3.2rem;
+}
+.md-title {
+  font-size: $title-font-size-base;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+}
+.md-subhead {
+  font-size: $subhead-font-size-base;
+  font-weight: 400;
+  letter-spacing: 0.010em;
+  line-height: 2.4rem;
+}
+/************
+ * Body Copy
+ ************/
+.md-body-1 {
+  font-size: $body-font-size-base;
+  font-weight: 400;
+  letter-spacing: 0.010em;
+  line-height: 2rem;
+}
+.md-body-2 {
+  font-size: $body-font-size-base;
+  font-weight: 500;
+  letter-spacing: 0.010em;
+  line-height: 2.4rem;
+}
+.md-caption {
+  font-size: $caption-font-size-base;
+  letter-spacing: 0.020em;
+}
+.md-button {
+  letter-spacing: 0.010em;
+}
+
+/************
+ * Defaults
+ ************/
+
+button,
+select,
+html,
+textarea,
+input {
+  font-family: $font-family;
+}
+
+select,
+button,
+textarea,
+input {
+  font-size: 100%;
+}

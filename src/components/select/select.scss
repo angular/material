@@ -49,12 +49,21 @@ $select-max-visible-options: 5;
 md-select {
   display: inline-block;
   margin-top: 1.4em;
+  &:focus {
+    outline: none;
+  }
   &[disabled]:hover {
     cursor: default;
   }
   &:not([disabled]) {
     &:hover {
       cursor: pointer
+    }
+    &.ng-invalid.ng-dirty {
+      .md-select-label {
+        padding-bottom: 7px;
+        border-bottom: 2px solid;
+      }
     }
     &:focus {
       .md-select-label {
@@ -72,11 +81,15 @@ md-select {
   padding-top: $baseline-grid + 1;
   padding-bottom: $baseline-grid;
   border-bottom: 1px solid;
-  font-size: 1em;
+  font-size: 1.6rem;
   line-height: 0.8em;
   position: relative;
   box-sizing: border-box;
   min-width: 8 * $baseline-grid;
+
+  *:first-child {
+    flex: 1;
+  }
 
   .md-select-icon {
     align-items: flex-end;
@@ -132,12 +145,16 @@ md-option {
   align-items: center;
   width: auto;
 
+  &:focus {
+    outline: none;
+  }
+
   .md-text {
     width: auto;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 1em;
+    font-size: 1.6rem;
   }
   padding: 0 $select-option-padding 0 $select-option-padding;
   height: $select-option-height;
@@ -147,11 +164,17 @@ md-optgroup {
   display: block;
   label {
     display: block;
-    font-size: 1em;
+    font-size: 1.6rem;
     text-transform: uppercase;
     padding: $baseline-grid * 2 $baseline-grid;
   }
   md-option {
     padding-left: $baseline-grid + $select-option-padding;
+  }
+}
+
+@media screen and (-ms-high-contrast: active) {
+  .md-select-backdrop {
+    background-color: transparent;
   }
 }

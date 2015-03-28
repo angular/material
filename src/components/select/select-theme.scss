@@ -1,4 +1,10 @@
 md-select.md-THEME_NAME-theme {
+  &.ng-invalid.ng-dirty {
+    .md-select-label {
+      color: '{{warn-500}}' !important;
+      border-bottom-color: '{{warn-500}}' !important;
+    }
+  }
   &:not([disabled]):focus {
     .md-select-label {
       border-bottom-color: '{{primary-color}}';

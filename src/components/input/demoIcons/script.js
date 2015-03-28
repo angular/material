@@ -3,8 +3,8 @@ angular
   .controller('DemoCtrl', function($scope) {
     $scope.user = {
       name: 'John Doe',
-      email: 'ipsum@lorem.com',
+      email: '',
       phone: '',
-      address: ''
+      address: 'Mountain View, CA'
     };
   });

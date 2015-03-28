@@ -94,3 +94,15 @@ md-switch {
   }
 
 }
+
+@media screen and (-ms-high-contrast: active) {
+  md-switch.md-default-theme .md-bar {
+    background-color: #666;
+  }
+  md-switch.md-default-theme.md-checked .md-bar {
+    background-color: #9E9E9E;
+  }
+  md-switch.md-default-theme .md-thumb {
+    background-color: #fff;
+  }
+}

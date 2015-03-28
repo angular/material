@@ -11,6 +11,11 @@
 
 [layout] {
   box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
   display: flex;
 }
 
@@ -40,7 +45,7 @@
   min-height: 100%;
   width: 100%;
 }
-@-moz-document url-prefix() { 
+@-moz-document url-prefix() {
   [layout-fill] {
     margin: 0;
     width: 100%;
@@ -69,6 +74,11 @@
 @mixin layout-for-name($name) {
   [layout-#{$name}] {
     box-sizing: border-box;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -moz-flex;
+    display: -ms-flexbox;
     display: flex;
   }
   [layout-#{$name}=column] {
@@ -86,6 +96,7 @@
   }
 
   [#{$flexName}] {
+    box-sizing: border-box;
     flex: 1;
   }
 
