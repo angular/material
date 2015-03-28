@@ -31,15 +31,15 @@ $toast-margin: $baseline-grid * 1 !default;
 
 // Whiteframes
 
-$whiteframe-shadow-z1: 0px 2px 5px 0 rgba(0,0,0,0.26) !default;
+$whiteframe-shadow-z1: 0px 2px 5px 0px rgba(0,0,0,0.16),0px 2px 5px 0px rgba(0,0,0,0.23) !default;
 $whiteframe-zindex-z1: 1 !default;
-$whiteframe-shadow-z2: 0px 8px 17px rgba(0,0,0,0.2) !default;
+$whiteframe-shadow-z2: 0px 6px 10px 0px rgba(0,0,0,0.16),0px 6px 10px 0px rgba(0,0,0,0.23) !default;
 $whiteframe-zindex-z2: 2 !default;
-$whiteframe-shadow-z3: 0px 17px 50px rgba(0,0,0,0.19) !default;
+$whiteframe-shadow-z3: 0px 13px 25px 0px rgba(0,0,0,0.16),0px 13px 18px 0px rgba(0,0,0,0.23) !default;
 $whiteframe-zindex-z3: 3 !default;
-$whiteframe-shadow-z4: 0px 16px 28px 0 rgba(0,0,0,0.22) !default;
+$whiteframe-shadow-z4: 0px 20px 40px 0px rgba(0,0,0,0.16),0px 20px 25px 0px rgba(0,0,0,0.23) !default;
 $whiteframe-zindex-z4: 4 !default;
-$whiteframe-shadow-z5: 0px 27px 24px 0 rgba(0,0,0,0.2) !default;
+$whiteframe-shadow-z5: 0px 27px 55px 0px rgba(0,0,0,0.16),0px 27px 35px 0px rgba(0,0,0,0.23) !default;
 $whiteframe-zindex-z5: 5 !default;
 
 
