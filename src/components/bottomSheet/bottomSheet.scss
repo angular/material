@@ -146,6 +146,7 @@ md-bottom-sheet {
       }
 
       .md-grid-item-content {
+        border: 1px solid transparent;
         display: flex;
         flex-direction: column;
         align-items: center;
