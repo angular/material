@@ -5,8 +5,10 @@ $button-padding: 2px 6px 3px !default;
 $button-fab-width: 56px !default;
 $button-fab-height: 56px !default;
 $button-fab-padding: 16px !default;
+$button-fab-anchor-line-height: 40px !default;
 $button-fab-mini-width: 40px !default;
 $button-fab-mini-height: 40px !default;
+$button-fab-mini-anchor-line-height: 25px !default;
 
 $button-fab-toast-offset: $button-fab-height * 0.75;
 
@@ -20,6 +22,13 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
     bottom: $bottom;
     left: $left;
     position: absolute;
+  }
+}
+
+a.md-button.md-fab {
+  line-height: $button-fab-anchor-line-height;
+  &.md-mini {
+    line-height: $button-fab-mini-anchor-line-height;
   }
 }
 
