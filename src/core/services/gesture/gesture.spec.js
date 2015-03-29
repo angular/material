@@ -164,53 +164,70 @@ describe('$mdGesture', function() {
 
   });
 
-  xdescribe('click', function() {
+  describe('click', function() {
 
-    it('should click if distance < options.maxDistance', inject(function($document) {
-      var spy = jasmine.createSpy('click');
-      var el = angular.element('<div>');
+    // Click tests should only be enabled when `$$hijackClicks == true` (for mobile)
 
-      el.on('click', spy);
+    it('should click if distance < options.maxDistance', inject(function($document, $mdGesture) {
+      if ( $mdGesture.$$hijackClicks ) {
+        var spy = jasmine.createSpy('click');
+        var el = angular.element('<div>');
 
-      expect(spy).not.toHaveBeenCalled();
-      $document.triggerHandler({
-        type: 'touchstart',
-        target: el[0],
-        touches: [{pageX: 100, pageY: 100 }]
-      });
-      expect(spy).not.toHaveBeenCalled();
-      $document.triggerHandler({
-        type: 'touchend',
-        target: el[0],
-        touches: [{pageX: 97, pageY: 102 }]
-      });
-      expect(spy).toHaveBeenCalled();
+        el.on('click', spy);
+
+        expect(spy).not.toHaveBeenCalled();
+        $document.triggerHandler({
+          type: 'touchstart',
+          target: el[0],
+          touches: [{pageX: 100, pageY: 100 }]
+        });
+        expect(spy).not.toHaveBeenCalled();
+        $document.triggerHandler({
+          type: 'touchend',
+          target: el[0],
+          touches: [{pageX: 97, pageY: 102 }]
+        });
+        expect(spy).toHaveBeenCalled();
+      }
+
     }));
 
     it('should not click if distance > options.maxDistance', inject(function($mdGesture, $document) {
-      var spy = jasmine.createSpy('click');
-      var el = angular.element('<div>');
+      if ( $mdGesture.$$hijackClicks ) {
+        var spy = jasmine.createSpy('click');
+        var el = angular.element('<div>');
 
-      el.on('click', spy);
+        el.on('click', spy);
 
-      $document.triggerHandler({
-        type: 'touchstart',
-        target: el[0],
-        touches: [{pageX: 100, pageY: 100 }]
-      });
-      expect(spy).not.toHaveBeenCalled();
+        $document.triggerHandler({
+          type: 'touchstart',
+          target: el[0],
+          touches: [{pageX: 100, pageY: 100 }]
+        });
+        expect(spy).not.toHaveBeenCalled();
 
-      $document.triggerHandler({
-        type: 'touchend',
-        target: el[0],
-        touches: [{pageX: 90, pageY: 110 }]
-      });
-      expect(spy).not.toHaveBeenCalled();
+        $document.triggerHandler({
+          type: 'touchend',
+          target: el[0],
+          touches: [{pageX: 90, pageY: 110 }]
+        });
+        expect(spy).not.toHaveBeenCalled();
+      }
+
     }));
 
   });
 
   describe('press', function() {
+
+    beforeEach(function() {
+      // Make sure `unexpected` prototype/inherited methods do not impact gestures
+      Object.prototype.test123 = function(x) {  };
+    });
+
+    afterEach(function() {
+       delete Object.prototype.test123;
+    });
 
     it('should pressdown/up on touchstart/end', inject(function($mdGesture, $document) {
       var downSpy = jasmine.createSpy('pressdown');
@@ -338,19 +355,19 @@ describe('$mdGesture', function() {
 
   describe('drag', function() {
 
-    var startSpy, el, moveSpy, endSpy, doc;
+    var startDragSpy, el, dragSpy, endDragSpy, doc;
     beforeEach(function() {
       inject(function($mdGesture, $document) {
         doc = $document;
-        startSpy = jasmine.createSpy('dragstart');
-        moveSpy = jasmine.createSpy('drag');
-        endSpy = jasmine.createSpy('dragend');
+        startDragSpy = jasmine.createSpy('dragstart');
+        dragSpy = jasmine.createSpy('drag');
+        endDragSpy = jasmine.createSpy('dragend');
         el = angular.element('<div>');
 
         $mdGesture.register(el, 'drag');
-        el.on('$md.dragstart', startSpy)
-          .on('$md.drag', moveSpy)
-          .on('$md.dragend', endSpy);
+        el.on('$md.dragstart', startDragSpy)
+          .on('$md.drag'     , dragSpy)
+          .on('$md.dragend'  , endDragSpy);
       });
     });
 
@@ -361,9 +378,9 @@ describe('$mdGesture', function() {
         target: el[0],
         touches: [{pageX: 100, pageY: 100}]
       });
-      expect(startSpy).not.toHaveBeenCalled();
-      expect(moveSpy).not.toHaveBeenCalled();
-      expect(endSpy).not.toHaveBeenCalled();
+      expect(startDragSpy).not.toHaveBeenCalled();
+      expect(dragSpy).not.toHaveBeenCalled();
+      expect(endDragSpy).not.toHaveBeenCalled();
 
       // Move 5 distanceX, no trigger
       doc.triggerHandler({
@@ -371,9 +388,9 @@ describe('$mdGesture', function() {
         target: el[0],
         touches: [{pageX: 95, pageY: 100}]
       });
-      expect(startSpy).not.toHaveBeenCalled();
-      expect(moveSpy).not.toHaveBeenCalled();
-      expect(endSpy).not.toHaveBeenCalled();
+      expect(startDragSpy).not.toHaveBeenCalled();
+      expect(dragSpy).not.toHaveBeenCalled();
+      expect(endDragSpy).not.toHaveBeenCalled();
 
       // Move 11 distanceX, trigger
       doc.triggerHandler({
@@ -381,44 +398,45 @@ describe('$mdGesture', function() {
         target: el[0],
         touches: [{pageX: 89, pageY: 100}]
       });
-      expect(startSpy).toHaveBeenCalled();
+      expect(startDragSpy).toHaveBeenCalled();
 
-      expect(startSpy.mostRecentCall.args[0].pointer).toHaveFields({
+      expect(startDragSpy.mostRecentCall.args[0].pointer).toHaveFields({
         startX: 89,
         startY: 100,
         x: 89,
         y: 100,
         distanceX: 0
       });
-      expect(moveSpy).not.toHaveBeenCalled();
-      expect(endSpy).not.toHaveBeenCalled();
+      expect(endDragSpy).not.toHaveBeenCalled();
 
-      startSpy.reset();
+      startDragSpy.reset();
       doc.triggerHandler({
         type: 'touchmove',
         target: el[0],
         touches: [{pageX: 90, pageY: 99}]
       });
-      expect(startSpy).not.toHaveBeenCalled();
-      expect(moveSpy).toHaveBeenCalled();
-      expect(moveSpy.mostRecentCall.args[0].pointer).toHaveFields({
+      expect(startDragSpy).not.toHaveBeenCalled();
+      expect(dragSpy).toHaveBeenCalled();
+      expect(dragSpy.mostRecentCall.args[0].pointer).toHaveFields({
         x: 90,
         y: 99,
         distanceX: 1,
         distanceY: -1
       });
-      expect(endSpy).not.toHaveBeenCalled();
+      expect(endDragSpy).not.toHaveBeenCalled();
 
-      moveSpy.reset();
+      dragSpy.reset();
       doc.triggerHandler({
         type: 'touchend',
         target: el[0],
         changedTouches: [{pageX: 200, pageY: 0}]
       });
-      expect(startSpy).not.toHaveBeenCalled();
-      expect(moveSpy).not.toHaveBeenCalled();
-      expect(endSpy).toHaveBeenCalled();
-      expect(endSpy.mostRecentCall.args[0].pointer).toHaveFields({
+      expect(startDragSpy).not.toHaveBeenCalled();
+      expect(dragSpy).not.toHaveBeenCalled();
+      expect(endDragSpy).toHaveBeenCalled();
+
+      var pointer = endDragSpy.mostRecentCall.args[0].pointer;
+      expect(pointer).toHaveFields({
         distanceX: 111,
         distanceY: -100,
         x: 200,
@@ -470,6 +488,7 @@ describe('$mdGesture', function() {
       el.on('$md.swipeleft', leftSpy)
         .on('$md.swiperight', rightSpy);
 
+      $document.triggerHandler('$$mdGestureReset');
       $document.triggerHandler({
         type: 'touchstart', target: el[0], pageX: 0, pageY: 0
       });
@@ -482,10 +501,11 @@ describe('$mdGesture', function() {
       });
       expect(leftSpy).not.toHaveBeenCalled();
       expect(rightSpy).toHaveBeenCalled();
-      expect(rightSpy.mostRecentCall.args[0].pointer).toHaveFields({
-        velocityX: 100,
-        distanceX: 100
-      });
+
+      var pointer = rightSpy.mostRecentCall.args[0].pointer;
+      expect(pointer.velocityX).toBe(100);
+      expect(pointer.distanceX).toBe(100);
+
     }));
 
     it('should not swipeleft is velocity is too low', inject(function($document) {
