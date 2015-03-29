@@ -113,6 +113,10 @@ md-tabs {
       font-size: 16px;
       background: transparent no-repeat center center;
       transition: $swift-ease-in-out;
+
+      &:focus {
+        outline: none;
+      }
       md-icon {
         position: absolute;
         top: 50%;

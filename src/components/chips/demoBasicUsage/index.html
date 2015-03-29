@@ -1,0 +1,45 @@
+<div ng-app="inputBasicDemo" ng-controller="DemoCtrl as ctrl" layout="column">
+
+  <md-content class="md-padding" layout="column">
+    <p>
+      Display a readonly list of strings as chips, using a custom chip template.
+    </p>
+
+    <md-chips ng-model="ctrl.roFruitNames"
+              readonly="true">
+      <md-chip><strong>{{$chip}}</strong></md-chip>
+    </md-chips>
+
+      <p>
+          Use the default chip template.
+      </p>
+
+      <md-chips
+          ng-model="ctrl.fruitNames"
+          readonly="ctrl.readonly"></md-chips>
+
+      <p>
+        Use Placeholders.
+      </p>
+
+      <md-chips
+          ng-model="ctrl.newFruitNames"
+          readonly="ctrl.readonly"
+          placeholder="Enter a fruit"
+          secondary-placeholder="+Fruit"></md-chips>
+
+  <p>
+      Display a list of objects as chips.
+  </p>
+
+  <md-chips ng-model="ctrl.vegObjs"
+            readonly="ctrl.readonly"
+            md-chip-append="ctrl.newVeg($chip)">
+      <md-chip><span>{{$chip.name}}:{{$chip.type}}</span></md-chip>
+  </md-chips>
+
+  <br/>
+  <md-checkbox ng-model="ctrl.readonly">Readonly</md-checkbox>
+
+  </md-content>
+</div>
