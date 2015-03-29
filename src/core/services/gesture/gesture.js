@@ -48,7 +48,7 @@ function runHandlers(handlerEvent, event) {
   var handler;
   for (var handlerName in HANDLERS) {
     handler = HANDLERS[handlerName];
-    if(handler) {
+    if(typeof handler === "GestureHandler") {
       if (handlerEvent === 'start') {
         // Run cancel to reset any handlers' state
         handler.cancel();
