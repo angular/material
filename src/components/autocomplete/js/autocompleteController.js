@@ -167,9 +167,10 @@
     }
 
     function shouldHide () {
-      return self.matches.length === 1
+      var hasFocus = (elements && elements.input === document.activeElement && (!document.hasFocus || document.hasFocus())) || false;
+      return !hasFocus || (self.matches.length === 1
           && $scope.searchText === getDisplayValue(self.matches[0])
-          && $scope.selectedItem === self.matches[0];
+          && $scope.selectedItem === self.matches[0]);
     }
 
     function getCurrentDisplayValue () {
