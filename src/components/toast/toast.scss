@@ -1,4 +1,6 @@
 // See height set globally, depended on by buttons
+
+
 md-toast {
   display: flex;
   position:absolute;
@@ -14,7 +16,7 @@ md-toast {
   font-size: 14px;
   cursor: default;
 
-  max-width: 879px;
+  max-width: 100%;
   max-height: 40px;
 
   height: $toast-height;
@@ -74,7 +76,6 @@ md-toast {
   }
 }
 
-
 @media (max-width: $layout-breakpoint-sm) {
   md-toast {
     left: 0;
@@ -128,6 +129,14 @@ md-toast {
     }
   }
 }
+
+@media (min-width: $layout-breakpoint-lg) {
+  md-toast {
+    max-width: $baseline-grid * 71;
+  }
+}
+
+
 
 @media screen and (-ms-high-contrast: active) {
   md-toast {
