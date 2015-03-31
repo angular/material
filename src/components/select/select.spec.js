@@ -635,6 +635,12 @@ describe('<md-select-menu>', function() {
         var selectMenu = angular.element($document.find('md-select-menu'));
         expect(selectMenu.length).toBe(1);
       }));
+
+      iit('supports typing an option name', inject(function($document, $rootScope) {
+        var el = setupSelect('ng-model="someModel"', [1, 2, 3]);
+        pressKey(el, 50);
+        expect($rootScope.someModel).toBe(2);
+      }));
     });
 
     describe('md-select-menu', function() {

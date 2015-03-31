@@ -129,7 +129,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
       var ngModel = ctrls[1];
       var labelEl = element.find('md-select-label');
       var customLabel = labelEl.text().length !== 0;
-      var selectContainer, selectScope;
+      var selectContainer, selectScope, selectMenuCtrl;
       createSelect();
 
       var originalRender = ngModel.$render;
@@ -171,7 +171,6 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
             element.removeAttr('multiple');
           }
           if (selectContainer) {
-            var selectMenuCtrl = selectContainer.find('md-select-menu').controller('mdSelectMenu');
             selectMenuCtrl.setMultiple(multiple);
             originalRender = ngModel.$render;
             ngModel.$render = function() {
@@ -196,17 +195,17 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
         if (disabled) {
           element.attr('tabindex', -1);
           element.off('click', openSelect);
-          element.off('keydown', openOnKeypress);
+          element.off('keydown', handleKeypress);
         } else {
           element.attr('tabindex', 0);
           element.on('click', openSelect);
-          element.on('keydown', openOnKeypress);
+          element.on('keydown', handleKeypress);
         }
       });
       if (!attr.disabled && !attr.ngDisabled) {
         element.attr('tabindex', 0);
         element.on('click', openSelect);
-        element.on('keydown', openOnKeypress);
+        element.on('keydown', handleKeypress);
       }
 
       element.attr({
@@ -236,14 +235,28 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
         selectEl.data('$mdSelectController', mdSelectCtrl);
         selectScope = scope.$new();
         selectContainer = $compile(selectContainer)(selectScope);
+        selectMenuCtrl = selectContainer.find('md-select-menu').controller('mdSelectMenu');
       }
 
-      function openOnKeypress(e) {
+      function handleKeypress(e) {
         var allowedCodes = [32, 13, 38, 40];
         if (allowedCodes.indexOf(e.keyCode) != -1 ) {
           // prevent page scrolling on interaction
           e.preventDefault();
           openSelect(e);
+        } else {
+          if (e.keyCode <= 90 && e.keyCode >= 31) {
+            e.preventDefault();
+            var node = selectMenuCtrl.optNodeForKeyboardSearch(e);
+            if (!node) return;
+            var optionCtrl = angular.element(node).controller('mdOption');
+            if (!selectMenuCtrl.isMultiple) {
+              selectMenuCtrl.deselect( Object.keys(selectMenuCtrl.selected)[0] );
+            }
+            selectMenuCtrl.select(optionCtrl.hashKey, optionCtrl.value);
+            selectMenuCtrl.refreshViewValue();
+            ngModel.$render();
+          }
         }
       }
 
@@ -363,6 +376,33 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
         // If a value is truthy but not an array, reject it.
         // If value is undefined/falsy, accept that it's an empty array.
         return angular.isArray(modelValue || viewValue || []);
+      }
+    };
+
+    var searchStr = '';
+    var clearSearchTimeout, optNodes, optText;
+    var CLEAR_SEARCH_AFTER = 300;
+    self.optNodeForKeyboardSearch = function(e) {
+      clearSearchTimeout && clearTimeout(clearSearchTimeout);
+      clearSearchTimeout = setTimeout(function() {
+        clearSearchTimeout = undefined;
+        searchStr = '';
+        optText = undefined;
+        optNodes = undefined;
+      }, CLEAR_SEARCH_AFTER);
+      searchStr += String.fromCharCode(e.keyCode);
+      var search = new RegExp('^' + searchStr, 'i');
+      if (!optNodes) {
+        optNodes = $element.find('md-option');
+        optText = new Array(optNodes.length);
+        angular.forEach(optNodes, function(el, i) {
+          optText[i] = el.textContent;
+        });
+      }
+      for (var i = 0; i < optText.length; ++i) {
+        if (search.test(optText[i])) {
+          return optNodes[i];
+        }
       }
     };
 
@@ -702,8 +742,14 @@ function SelectProvider($$interimElementProvider) {
           switch (ev.keyCode) {
             case $mdConstant.KEY_CODE.UP_ARROW: return focusPrevOption();
             case $mdConstant.KEY_CODE.DOWN_ARROW: return focusNextOption();
+            default: 
+              if (ev.keyCode >= 31 && ev.keyCode <= 90) {
+                var optNode = opts.selectEl.controller('mdSelectMenu').optNodeForKeyboardSearch(ev);
+                optNode && optNode.focus();
+              }
           }
         });
+
 
         function focusOption(direction) {
           var optionsArray = nodesToArray(optionNodes);
