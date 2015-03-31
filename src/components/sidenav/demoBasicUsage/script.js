@@ -2,13 +2,17 @@
 angular.module('sidenavDemo1', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope, $timeout, $mdSidenav, $log) {
+  $scope.data;
+
   $scope.toggleLeft = function() {
     $mdSidenav('left').toggle()
                       .then(function(){
                           $log.debug("toggle left is done");
                       });
   };
+
   $scope.toggleRight = function() {
+
     $mdSidenav('right').toggle()
                         .then(function(){
                           $log.debug("toggle RIGHT is done");
