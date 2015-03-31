@@ -14,6 +14,7 @@ angular.module('material.components.sidenav', [
   ])
   .factory('$mdSidenav', SidenavService )
   .directive('mdSidenav', SidenavDirective)
+  .directive('mdSidenavFocus', SidenavFocusDirective)
   .controller('$mdSidenavController', SidenavController);
 
 
@@ -33,8 +34,6 @@ angular.module('material.components.sidenav', [
  * $mdSidenav(componentId).then(function(instance) {
  *   $log.debug( componentId + "is now ready" );
  * });
- * </hljs>
- * <hljs lang="js">
  * // Async toggle the given sidenav;
  * // when instance is known ready and lazy lookup is not needed.
  * $mdSidenav(componentId)
@@ -42,28 +41,20 @@ angular.module('material.components.sidenav', [
  *    .then(function(){
  *      $log.debug('toggled');
  *    });
- * </hljs>
- * <hljs lang="js">
  * // Async open the given sidenav
  * $mdSidenav(componentId)
  *    .open();
  *    .then(function(){
  *      $log.debug('opened');
  *    });
- * </hljs>
- * <hljs lang="js">
  * // Async close the given sidenav
  * $mdSidenav(componentId)
  *    .close();
  *    .then(function(){
  *      $log.debug('closed');
  *    });
- * </hljs>
- * <hljs lang="js">
  * // Sync check to see if the specified sidenav is set to be open
  * $mdSidenav(componentId).isOpen();
- * </hljs>
- * <hljs lang="js">
  * // Sync check to whether given sidenav is locked open
  * // If this is true, the sidenav will be open regardless of close()
  * $mdSidenav(componentId).isLockedOpen();
@@ -122,7 +113,36 @@ function SidenavService($mdComponentRegistry, $q) {
     }
   };
 }
-
+/**
+ * @private
+ * @name mdSidenavFocus
+ * @restrict A
+ *
+ * @description
+ * `$mdSidenavFocus` provides a way to specify the focused element when a sidenav opens.
+ * This is completely optional, as the sidenav itself is focused by default.
+ *
+ * @usage
+ * <hljs lang="html">
+ * <md-sidenav>
+ *   <form>
+ *     <md-input-container>
+ *       <label for="testInput">Label</label>
+ *       <input id="testInput" type="text" md-sidenav-focus>
+ *     </md-input-container>
+ *   </form>
+ * </md-sidenav>
+ * </hljs>
+ **/
+function SidenavFocusDirective() {
+  return {
+    restrict: 'A',
+    require: '^mdSidenav',
+    link: function(scope, element, attr, sidenavCtrl) {
+      sidenavCtrl.focusElement(element);
+    }
+  };
+}
 /**
  * @ngdoc directive
  * @name mdSidenav
@@ -134,6 +154,9 @@ function SidenavService($mdComponentRegistry, $q) {
  * A Sidenav component that can be opened and closed programatically.
  *
  * By default, upon opening it will slide out on top of the main content area.
+ *
+ * For keyboard and screen reader accessibility, focus is sent to the sidenav wrapper by default.
+ * It can be overridden with the `md-sidenav-focus` directive on the child element you want focused.
  *
  * @usage
  * <hljs lang="html">
@@ -152,7 +175,13 @@ function SidenavService($mdComponentRegistry, $q) {
  *   <md-sidenav md-component-id="right"
  *     md-is-locked-open="$mdMedia('min-width: 333px')"
  *     class="md-sidenav-right">
- *     Right Nav!
+ *     <form>
+ *       <md-input-container>
+ *         <label for="testInput">Test input</label>
+ *         <input id="testInput" type="text"
+ *                ng-model="data" md-sidenav-focus>
+ *       </md-input-container>
+ *     </form>
  *   </md-sidenav>
  * </div>
  * </hljs>
@@ -225,6 +254,7 @@ function SidenavDirective($timeout, $animate, $parse, $log, $mdMedia, $mdConstan
 
     // Publish special accessor for the Controller instance
     sidenavCtrl.$toggleOpen = toggleOpen;
+    sidenavCtrl.focusElement( sidenavCtrl.focusElement() || element );
 
     /**
      * Toggle the DOM classes to indicate `locked`
@@ -254,15 +284,15 @@ function SidenavDirective($timeout, $animate, $parse, $log, $mdMedia, $mdConstan
         // Capture upon opening..
         triggeringElement = $document[0].activeElement;
       }
+      var focusEl = sidenavCtrl.focusElement();
 
       disableParentScroll(isOpen);
 
       return promise = $q.all([
         $animate[isOpen ? 'enter' : 'leave'](backdrop, parent),
         $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed').then(function() {
-          // If we opened, and haven't closed again before the animation finished
           if (scope.isOpen) {
-            element.focus();
+            focusEl && focusEl.focus();
           }
         })
       ]);
@@ -303,7 +333,7 @@ function SidenavDirective($timeout, $animate, $parse, $log, $mdMedia, $mdConstan
         $timeout(function() {
 
           // When the current `updateIsOpen()` animation finishes
-          promise.then(function(result){
+          promise.then(function(result) {
 
             if ( !scope.isOpen ) {
               // reset focus to originating element (if available) upon close
@@ -353,7 +383,8 @@ function SidenavDirective($timeout, $animate, $parse, $log, $mdMedia, $mdConstan
  */
 function SidenavController($scope, $element, $attrs, $mdComponentRegistry, $q) {
 
-  var self = this;
+  var self = this,
+      focusElement;
 
   // Use Default internal method until overridden by directive postLink
 
@@ -365,6 +396,12 @@ function SidenavController($scope, $element, $attrs, $mdComponentRegistry, $q) {
   self.open   = function() { return self.$toggleOpen( true );  };
   self.close  = function() { return self.$toggleOpen( false ); };
   self.toggle = function() { return self.$toggleOpen( !$scope.isOpen );  };
+  self.focusElement = function(el) {
+    if ( angular.isDefined(el) ) {
+      focusElement = el;
+    }
+    return focusElement;
+  };
 
   self.$toggleOpen = function() { return $q.when($scope.isOpen); };
 
