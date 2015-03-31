@@ -35,7 +35,10 @@
   <md-chips ng-model="ctrl.vegObjs"
             readonly="ctrl.readonly"
             md-chip-append="ctrl.newVeg($chip)">
-      <md-chip><span>{{$chip.name}}:{{$chip.type}}</span></md-chip>
+      <md-chip>
+        <span>{{$chip.name}}:{{$chip.type}}</span>
+        <md-chip-remove></md-chip-remove>
+      </md-chip>
   </md-chips>
 
   <br/>

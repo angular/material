@@ -1,33 +1,34 @@
-$chip-font-size: 13px !default;
-$chip-height: 22px !default;
-$chip-button-padding: 2px !default;
-$chip-padding: 0 8px 0 8px !default;
-$chip-margin: 0 0 0 8px !default;
+$chip-font-size: 1.3rem !default;
+$chip-height: 2.2rem !default;
+$chip-button-padding: 0.2rem !default;
+$chip-padding: 0 0.8rem 0 0.8rem !default;
+$chip-margin: 0 0 0 0.8rem !default;
+$chip-wrap-padding: 0.8rem !default;
 
 .md-chips {
   box-shadow: $whiteframe-shadow-z1;
   display: block;
   font-family: $font-family;
   font-size: $chip-font-size;
-  padding: 8px;
+  padding: $chip-wrap-padding;
   vertical-align: middle;
 
   .md-chip {
     border-radius: $chip-height / 2;
-    box-shadow: $whiteframe-shadow-z1;
     display: inline-block;
     height: $chip-height;
     margin: $chip-margin;
     line-height: $chip-height;
     padding: $chip-padding;
-    transform: translate3d(0, 0, 0);
 
     &:first-child {
       margin: 0;
     }
 
-    &.selected {
+    &.selected, &:focus {
+      outline: none;
       transform: translate3d(0, -1px, 0);
+      box-shadow: $whiteframe-shadow-z1;
     }
 
     .md-button {
@@ -35,12 +36,17 @@ $chip-margin: 0 0 0 8px !default;
       line-height: $chip-height - $chip-button-padding * 2;
       min-width: 0;
       margin: 0 0 0 0.5em;
+
+      md-icon {
+        height: 1.6rem;
+        width: 1.6rem;
+      }
     }
   }
 
   .md-chip-worker {
     display: inline-block;
-    line-height: $chip-height + 3px;  /* 3px are added to height of chip for...the shadow? */
+    line-height: $chip-height;
 
     &:not(:first-child) {
       margin: $chip-margin;
@@ -49,6 +55,6 @@ $chip-margin: 0 0 0 8px !default;
 
   .md-chip-input {
     background-color:transparent;
-    border-width: 0px;
+    border-width: 0;
   }
 }
