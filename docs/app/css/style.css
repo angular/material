@@ -265,12 +265,6 @@ code:not(.highlight) {
     line-height: 40px;
     text-indent: 15px;
   }
-.docs-menu-icon {
-  background: none;
-  border: none;
-  margin-right: 16px;
-  padding: 0;
-}
 .docs-menu-separator-icon {
   margin: 0;
   padding: 0 10px;
