@@ -705,16 +705,27 @@ function SelectProvider($$interimElementProvider) {
           }
         });
 
+        opts.selectEl.on('keypress', function(ev) {
+          focusOption(String.fromCharCode(ev.charCode));
+        });
+
         function focusOption(direction) {
           var optionsArray = nodesToArray(optionNodes);
           var index = optionsArray.indexOf(opts.focusedNode);
           if (index === -1) {
-            // We lost the previously focused element, reset to first option
-            index = 0;
+              // We lost the previously focused element, reset to first option
+              index = 0;
           } else if (direction === 'next' && index < optionsArray.length - 1) {
-            index++;
+              index++;
           } else if (direction === 'prev' && index > 0) {
-            index--;
+              index--;
+          } else {
+              for(var i = 0; i < optionsArray.length; i++ ){
+                  if(optionsArray[i].attributes.value.nodeValue.charAt(0).toLowerCase() === direction.toLowerCase()){
+                      index = i;
+                      break;
+                  }
+              }
           }
           var newOption = opts.focusedNode = optionsArray[index];
           newOption && newOption.focus();
