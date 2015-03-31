@@ -1,6 +1,10 @@
 md-chips.md-THEME_NAME-theme {
   .md-chip {
-    color: '{{background-contrast}}';
+    color: '{{background-contrast-0.6}}';
     background-color: '{{background-100}}';
+
+    .md-button {
+      color: '{{background-contrast}}';
+    }
   }
 }

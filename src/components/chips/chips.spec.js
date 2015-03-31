@@ -22,7 +22,7 @@ describe('<md-chips>', function() {
   }
 
   function getChipElements(root) {
-    return angular.element(root[0].querySelectorAll('div.md-chip'));
+    return angular.element(root[0].querySelectorAll('md-chip'));
   }
 
   describe('basic functionality', function () {
@@ -56,14 +56,14 @@ describe('<md-chips>', function() {
       var scope = createScope();
       var template =
           '<md-chips ng-model="items">' +
-          '  <md-chip class="mychiptemplate"></md-chip>' +
+          '  <md-chip><div class="mychiptemplate">{$chip}</div></md-chip>' +
           '</md-chips>';
       var element = compile(template, scope);
       var ctrl = element.controller('mdChips');
 
       element.scope().$apply();
       var chip = element.find('md-chip');
-      expect(chip).toHaveClass('mychiptemplate');
+      expect(chip.find('div')).toHaveClass('mychiptemplate');
     });
 
     it('should add a chip', function() {

@@ -12,6 +12,12 @@
    * `<md-chips>` is an input component for building lists of strings or objects. The list items are displayed as
    * 'chips'. This component can make use of an `<input>` element or an `<md-autocomplete>` element.
    *
+   * <strong>Custom `<md-chip>` template</strong>
+   * A custom template may be provided to render the content of each chip. This is achieved by specifying an `<md-chip>`
+   * element as a child of `<md-chips>`. Note: Any attributes on the passed `<md-chip>` will be dropped as only the
+   * innerHTML is used for the chip template. The variables `$chip` and `$index` are available in the scope of
+   * `<md-chip>`, representing the chip object and its index int he list of chips, respectively.
+   *
    * <h3> Pending Features </h3>
    * <ul style="padding-left:20px;">
    *   <ul>Expand input controls: Support md-autocomplete
@@ -75,13 +81,13 @@
 
 
   var MD_CHIPS_TEMPLATE = '\
-      <md-chips-wrap ng-class="{readonly : $mdChipsCtrl.readonly}" class="md-chips">\
+      <md-chips-wrap ng-if="!$mdChipsCtrl.readonly || $mdChipsCtrl.items.length > 0" class="md-chips">\
         <div role="presentation">\
-          <div ng-repeat="$chip in $mdChipsCtrl.items"\
+          <md-chip ng-repeat="$chip in $mdChipsCtrl.items"\
               ng-class="{selected: $mdChipsCtrl.selectedChip == $index}"\
               ng-click="!$mdChipsCtrl.readonly && $mdChipsCtrl.selectChip($index)"\
               class="md-chip">\
-          </div>\
+          </md-chip>\
           <div ng-if="!$mdChipsCtrl.readonly" class="md-chip-worker"></div>\
         </div>\
       </md-chips-wrap>';
@@ -95,11 +101,9 @@
             ng-keydown="$mdChipsCtrl.defaultInputKeydown($event)">';
 
   var CHIP_DEFAULT_TEMPLATE = '\
-      <md-chip>\
         <span>{{$chip}}</span>\
-        <md-button ng-if="!$mdChipsCtrl.readonly"\
-            md-chip-remove>x</md-button>\
-      </md-chip>';
+        <md-chip-remove ng-if="!$mdChipsCtrl.readonly"></md-chip-remove>';
+
 
 
   /**
@@ -134,16 +138,19 @@
     function compile(element, attr) {
       var userTemplate = attr['$mdUserTemplate'];
       var chipEl = userTemplate.find('md-chip');
+      var chipHtml;
       if (chipEl.length === 0) {
-        chipEl = angular.element(CHIP_DEFAULT_TEMPLATE);
+        chipHtml = CHIP_DEFAULT_TEMPLATE;
       } else {
         // Warn if no remove button is included in the template.
-        if (!chipEl[0].querySelector('[md-chip-remove]')) {
+        if (chipEl.find('md-chip-remove').length == 0) {
           $log.warn('md-chip-remove attribute not found in md-chip template.');
         }
+        // Take only the chip's inner HTML as the encasing repeater is an md-chip element.
+        chipHtml = chipEl[0].innerHTML;
       }
       var listNode = angular.element(element[0].querySelector('.md-chip'));
-      listNode.append(chipEl);
+      listNode.append(chipHtml);
 
       // Input Element: Look for an autocomplete or an input.
       var inputEl = userTemplate.find('md-autocomplete');
