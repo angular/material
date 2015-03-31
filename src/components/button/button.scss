@@ -14,6 +14,10 @@ $button-fab-mini-line-height: 4.00rem !default;
 
 $button-fab-toast-offset: $button-fab-height * 0.75;
 
+$icon-button-height: 4.800rem !default;
+$icon-button-width: 4.800rem !default;
+$icon-button-margin: 0.600rem !default;
+
 /**
  * Position a FAB button.
  */
@@ -42,6 +46,8 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
   line-height: $button-line-height;
   background: transparent;
   white-space: nowrap;
+  // override for FAB, icon buttons, etc.
+  min-width: $button-min-width;
 
   text-align: center;
 
@@ -92,8 +98,11 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
     }
   }
 
-  &:not(.md-fab) {
-    min-width: $button-min-width;
+  &.md-icon-button {
+    margin: 0 $icon-button-margin;
+    height: $icon-button-height;
+    min-width: 0;
+    width: $icon-button-width;
   }
 
   &.md-fab {
@@ -106,6 +115,7 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
     z-index: $z-index-fab;
 
     line-height: $button-fab-line-height;
+    min-width: 0;
     width: $button-fab-width;
     height: $button-fab-height;
     vertical-align: middle;

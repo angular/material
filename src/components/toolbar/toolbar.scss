@@ -5,6 +5,8 @@ $toolbar-tall-height: 128px !default;
 $toolbar-indent-margin: 64px !default;
 $toolbar-padding: 16px !default;
 
+$icon-button-margin-offset: -0.800rem !default;
+
 md-toolbar {
   box-sizing: border-box;
   display: flex;
@@ -76,6 +78,14 @@ md-toolbar {
   .md-tools {
     margin-left: auto;
   }
+
+  .md-button:first-of-type {
+    margin-left: $icon-button-margin-offset;
+  }
+  .md-button:last-of-type:not(:first-of-type) {
+    margin-right: $icon-button-margin-offset;
+  }
+
   @media screen and (-ms-high-contrast: active) {
     border-bottom: 1px solid #fff;
   }

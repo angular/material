@@ -73,6 +73,10 @@ md-toast {
     cursor: pointer;
     text-transform: uppercase;
     float: right;
+
+    &.md-button {
+      min-width: 0;
+    }
   }
 }
 
@@ -107,7 +111,7 @@ md-toast {
       top: $toast-margin;
     }
 
-    /* 
+    /*
      * When the toast doesn't take up the whole screen,
      * make it rotate when the user swipes it away
      */
