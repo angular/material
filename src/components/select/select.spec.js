@@ -636,7 +636,7 @@ describe('<md-select-menu>', function() {
         expect(selectMenu.length).toBe(1);
       }));
 
-      iit('supports typing an option name', inject(function($document, $rootScope) {
+      it('supports typing an option name', inject(function($document, $rootScope) {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]);
         pressKey(el, 50);
         expect($rootScope.someModel).toBe(2);
