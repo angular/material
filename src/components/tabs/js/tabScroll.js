@@ -3,20 +3,17 @@
   angular.module('material.components.tabs')
       .directive('mdTabScroll', MdTabScroll);
 
-  function MdTabScroll () {
+  function MdTabScroll ($parse) {
     return {
       restrict: 'A',
-      link: function (scope, element, attr) {
-        element.on('mousewheel', function (event) {
-          var newScope = scope.$new();
-          newScope.$event = event;
-          newScope.$element = element;
-          newScope.$apply(function () {
-            newScope.$eval(attr.mdTabScroll);
+      compile: function ($element, attr) {
+        var fn = $parse(attr.mdTabScroll, null, true);
+        return function ngEventHandler (scope, element) {
+          element.on('mousewheel', function (event) {
+            scope.$apply(function () { fn(scope, { $event: event }); });
           });
-        });
+        };
       }
-
     }
   }
 })();
