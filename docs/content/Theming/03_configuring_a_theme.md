@@ -30,6 +30,17 @@ angular.module('myApp', ['ngMaterial'])
 });
 </hljs>
 
+### Specifying Dark Themes
+
+You can mark a theme as dark by calling `theme.dark()`. 
+
+<hljs lang="js">
+angular.module('myApp', ['ngMaterial'])
+.config(function($mdThemingProvider) {
+  $mdThemingProvider.theme('default')
+    .dark();
+</hljs>
+
 ### Specifying Custom Hues For Color Intentions
 
 You can specify the hues from a palette that will be used by an intention group
