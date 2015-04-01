@@ -91,7 +91,7 @@
     return {
       scope: {
         dynamicHeight: '=?mdDynamicHeight',
-        selectedIndex: '=mdSelected',
+        selectedIndex: '=?mdSelected',
         stretchTabs: '@?mdStretchTabs'
       },
       transclude: true,
