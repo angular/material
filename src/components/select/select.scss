@@ -46,9 +46,15 @@ $select-max-visible-options: 5;
   }
 }
 
+md-input-container > md-select {
+  margin: 0;
+}
+
 md-select {
   display: inline-block;
-  margin-top: 1.4em;
+  margin-bottom: 1.4em;
+  margin-left: 2px;
+  margin-right: 2px;
   &:focus {
     outline: none;
   }
