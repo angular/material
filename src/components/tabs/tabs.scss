@@ -158,6 +158,14 @@ md-tabs {
       transition: left $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
       position: relative;
       width: 999999px;
+      left: 0;
+      transform: translate3d(0, 0, 0);
+      &.md-center-tabs {
+        width: initial;
+        float: left;
+        left: 50%;
+        transform: translate3d(-50%, 0, 0);
+      }
     }
     &.md-stretch-tabs {
       md-pagination-wrapper {

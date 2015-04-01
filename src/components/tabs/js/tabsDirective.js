@@ -57,6 +57,7 @@
  * @param {string=}  md-align-tabs Attribute to indicate position of tab buttons: `bottom` or `top`; default is `top`
  * @param {string=} md-stretch-tabs Attribute to indicate whether or not to stretch tabs: `auto`, `always`, or `never`; default is `auto`
  * @param {boolean=} md-dynamic-height When enabled, the tab wrapper will resize based on the contents of the selected tab
+ * @param {boolean=} md-center-tabs When enabled, tabs will be centered provided there is no need for pagination
  *
  * @usage
  * <hljs lang="html">
@@ -91,6 +92,7 @@
     return {
       scope: {
         dynamicHeight: '=?mdDynamicHeight',
+        centerTabs:    '=?mdCenterTabs',
         selectedIndex: '=?mdSelected',
         stretchTabs: '@?mdStretchTabs'
       },
@@ -126,6 +128,7 @@
               ng-keydown="$mdTabsCtrl.keydown($event)"\
               role="tablist">\
             <md-pagination-wrapper\
+                ng-class="{ \'md-center-tabs\': $mdTabsCtrl.shouldCenterTabs() }"\
                 md-tab-scroll="$mdTabsCtrl.scroll($event)">\
               <md-tab-item\
                   tabindex="-1"\

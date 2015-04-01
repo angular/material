@@ -23,6 +23,7 @@
     ctrl.attachRipple = attachRipple;
     ctrl.shouldStretchTabs = shouldStretchTabs;
     ctrl.shouldPaginate = shouldPaginate;
+    ctrl.shouldCenterTabs = shouldCenterTabs;
     ctrl.insertTab = insertTab;
     ctrl.removeTab = removeTab;
     ctrl.select = select;
@@ -97,7 +98,8 @@
     }
 
     function handleOffsetChange (left) {
-      angular.element(elements.paging).css('left', '-' + left + 'px');
+      var newValue = shouldCenterTabs() ? '' : '-' + left + 'px';
+      angular.element(elements.paging).css('left', newValue);
       $scope.$broadcast('$mdTabsPaginationChanged');
     }
 
@@ -113,6 +115,7 @@
     }
 
     function adjustOffset () {
+      if (shouldCenterTabs()) return;
       var tab = elements.tabs[ctrl.focusIndex],
           left = tab.offsetLeft,
           right = tab.offsetWidth + left;
@@ -247,6 +250,10 @@
         case 'never':  return false;
         default:       return !shouldPaginate() && $window.matchMedia('(max-width: 600px)').matches;
       }
+    }
+
+    function shouldCenterTabs () {
+      return $scope.centerTabs && !shouldPaginate();
     }
 
     function shouldPaginate () {
