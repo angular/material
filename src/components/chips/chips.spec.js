@@ -21,6 +21,15 @@ describe('<md-chips>', function() {
     return scope;
   }
 
+  function simulateInputEnterKey(ctrl) {
+    var event = {};
+    event.preventDefault = jasmine.createSpy('preventDefault');
+    inject(function($mdConstant) {
+      event.keyCode = $mdConstant.KEY_CODE.ENTER;
+    });
+    ctrl.defaultInputKeydown(event);
+  }
+
   function getChipElements(root) {
     return angular.element(root[0].querySelectorAll('md-chip'));
   }
@@ -75,9 +84,10 @@ describe('<md-chips>', function() {
       element.scope().$apply();
       ctrl.chipBuffer = 'Grape';
       element.scope().$apply();
-
-      ctrl.appendChipBuffer();
+      simulateInputEnterKey(ctrl);
       element.scope().$apply();
+
+      expect(scope.items.length).toBe(4);
 
       var chips = getChipElements(element);
       expect(chips.length).toBe(4);
@@ -85,6 +95,21 @@ describe('<md-chips>', function() {
       expect(chips[1].innerHTML).toContain('Banana');
       expect(chips[2].innerHTML).toContain('Orange');
       expect(chips[3].innerHTML).toContain('Grape');
+    });
+
+    it('should not add a blank chip', function() {
+      var scope = createScope();
+      var template = '<md-chips ng-model="items"></md-chips>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdChips');
+      element.scope().$apply();
+
+      ctrl.chipBuffer = '';
+      element.scope().$apply();
+      simulateInputEnterKey(ctrl);
+      element.scope().$apply();
+
+      expect(scope.items.length).toBe(3);
     });
 
     it('should remove a chip', function() {
