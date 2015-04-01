@@ -44,15 +44,24 @@
       $scope.$watch('$mdTabsCtrl.offsetLeft', handleOffsetChange);
       angular.element($window).on('resize', function () { $scope.$apply(handleWindowResize); });
       $timeout(updateInkBarStyles, 0, false);
+      $timeout(updateHeightFromContent, 0, false);
     }
 
     function getElements () {
-      var elements = {};
-      elements.canvas = $element[0].getElementsByTagName('md-tabs-canvas')[0];
-      elements.wrapper = elements.canvas.getElementsByTagName('md-pagination-wrapper')[0];
-      elements.tabs    = elements.wrapper.getElementsByTagName('md-tab-item');
-      elements.dummies = elements.canvas.getElementsByTagName('md-dummy-tab');
-      elements.inkBar  = elements.wrapper.getElementsByTagName('md-ink-bar')[0];
+      var elements      = {};
+
+      //-- gather tab bar elements
+      elements.wrapper  = $element[0].getElementsByTagName('md-tabs-wrapper')[0];
+      elements.canvas   = elements.wrapper.getElementsByTagName('md-tabs-canvas')[0];
+      elements.paging   = elements.canvas.getElementsByTagName('md-pagination-wrapper')[0];
+      elements.tabs     = elements.paging.getElementsByTagName('md-tab-item');
+      elements.dummies  = elements.canvas.getElementsByTagName('md-dummy-tab');
+      elements.inkBar   = elements.paging.getElementsByTagName('md-ink-bar')[0];
+
+      //-- gather tab content elements
+      elements.contentsWrapper = $element[0].getElementsByTagName('md-tabs-content-wrapper')[0];
+      elements.contents = elements.contentsWrapper.getElementsByTagName('md-tab-content');
+
       return elements;
     }
 
@@ -88,7 +97,7 @@
     }
 
     function handleOffsetChange (left) {
-      angular.element(elements.wrapper).css('left', '-' + left + 'px');
+      angular.element(elements.paging).css('left', '-' + left + 'px');
       $scope.$broadcast('$mdTabsPaginationChanged');
     }
 
@@ -158,6 +167,7 @@
       $scope.selectedIndex = getNearestSafeIndex(newValue);
       ctrl.lastSelectedIndex = oldValue;
       updateInkBarStyles();
+      updateHeightFromContent();
       $scope.$broadcast('$mdTabsChanged');
     }
 
@@ -182,19 +192,27 @@
       });
     }
 
+    function updateHeightFromContent () {
+      if (!$scope.dynamicHeight) return $element.css('height', '');
+      var tabContent = elements.contents[$scope.selectedIndex],
+          contentHeight = tabContent.offsetHeight,
+          tabsHeight    = elements.wrapper.offsetHeight,
+          newHeight     = contentHeight + tabsHeight;
+      $element.css('height', newHeight + 'px');
+    }
+
     function updateInkBarStyles () {
       if (!ctrl.tabs.length) return;
       //-- if the element is not visible, we will not be able to calculate sizes until it is
       //-- we should treat that as a resize event rather than just updating the ink bar
       if (!$element.prop('offsetParent')) return handleResizeWhenVisible();
       var index = $scope.selectedIndex,
-          totalWidth = elements.wrapper.offsetWidth,
+          totalWidth = elements.paging.offsetWidth,
           tab = elements.tabs[index],
           left = tab.offsetLeft,
           right = totalWidth - left - tab.offsetWidth;
       updateInkBarClassName();
       angular.element(elements.inkBar).css({ left: left + 'px', right: right + 'px' });
-
     }
 
     function updateInkBarClassName () {

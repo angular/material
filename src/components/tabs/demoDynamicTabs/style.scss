@@ -28,11 +28,15 @@ label {
 [layout-align] > * {
   margin-left: 8px;
 }
-form > [layout] > * {
-  margin-left: 8px;
-}
-form > [layout] > span {
-  padding-top:2px
+form {
+  > [layout] {
+    > * {
+      margin-left: 8px;
+    }
+    > span {
+      padding-top:2px
+    }
+  }
 }
 .long > input {
   width: 264px;

@@ -56,6 +56,7 @@
  * @param {boolean=} md-no-bar If present, disables the selection ink bar.
  * @param {string=}  md-align-tabs Attribute to indicate position of tab buttons: `bottom` or `top`; default is `top`
  * @param {string=} md-stretch-tabs Attribute to indicate whether or not to stretch tabs: `auto`, `always`, or `never`; default is `auto`
+ * @param {boolean=} md-dynamic-height When enabled, the tab wrapper will resize based on the contents of the selected tab
  *
  * @usage
  * <hljs lang="html">
@@ -89,7 +90,8 @@
   function MdTabs ($mdTheming) {
     return {
       scope: {
-        selectedIndex: '=?mdSelected',
+        dynamicHeight: '=?mdDynamicHeight',
+        selectedIndex: '=mdSelected',
         stretchTabs: '@?mdStretchTabs'
       },
       transclude: true,
@@ -159,15 +161,16 @@
             </div>\
           </md-tabs-canvas>\
         </md-tabs-wrapper>\
-        <md-tabs-content-wrapper ng-if="$mdTabsCtrl.hasContent">\
+        <md-tabs-content-wrapper ng-show="$mdTabsCtrl.hasContent">\
           <md-tab-content\
-              ng-repeat="(index, tab) in $mdTabsCtrl.tabs" \
-              md-tab-data="tab"\
               id="tab-content-{{tab.id}}"\
-              aria-labelledby="tab-item-{{tab.id}}"\
               role="tabpanel"\
+              aria-labelledby="tab-item-{{tab.id}}"\
+              md-tab-data="tab"\
               md-swipe-left="$mdTabsCtrl.incrementSelectedIndex(1)"\
               md-swipe-right="$mdTabsCtrl.incrementSelectedIndex(-1)"\
+              ng-if="$mdTabsCtrl.hasContent"\
+              ng-repeat="(index, tab) in $mdTabsCtrl.tabs" \
               ng-class="{\
                 \'md-no-transition\': $mdTabsCtrl.lastSelectedIndex == null,\
                 \'md-active\': tab.isActive(),\
@@ -179,6 +182,11 @@
       controller: 'MdTabsController',
       controllerAs: '$mdTabsCtrl',
       link: function (scope, element, attr) {
+        angular.forEach(scope.$$isolateBindings, function (binding, key) {
+          if (binding.optional && angular.isUndefined(scope[key])) {
+            scope[key] = attr.hasOwnProperty(attr.$normalize(binding.attrName));
+          }
+        });
         //-- watch attributes
         attr.$observe('mdNoBar', function (value) { scope.noInkBar = angular.isDefined(value); });
         //-- set default value for selectedIndex

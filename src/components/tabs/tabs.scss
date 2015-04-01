@@ -37,6 +37,14 @@ md-tabs {
       border-style: solid;
     }
   }
+  &[md-dynamic-height] {
+    transition: height $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+    md-tabs-content-wrapper {
+      md-tab-content {
+        bottom: initial;
+      }
+    }
+  }
   md-tabs-wrapper {
     display: block;
     position: relative;
