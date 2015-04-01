@@ -566,6 +566,20 @@ md-content.demo-source-container > hljs > pre > code.highlight {
 .api-section h3 {
   padding-top: 20px;
 }
+.responsive-video {
+  height: 0;
+  overflow: hidden;
+  padding-bottom: 75%;
+  position: relative;
+  margin-bottom: 25px;
+}
+.responsive-video iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 
 /* Styles for Windows High Contrast mode */
 @media screen and (-ms-high-contrast: active) {
