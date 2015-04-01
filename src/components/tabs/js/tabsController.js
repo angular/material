@@ -136,7 +136,7 @@
             id:       $mdUtil.nextUid()
           },
           tab = angular.extend(proto, tabData);
-      if (!angular.isString(tabData.template)) {
+      if (!tabData.template) {
         ctrl.hasContent = false;
         $element.addClass('md-no-tab-content');
       }
