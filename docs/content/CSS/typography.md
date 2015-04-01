@@ -10,13 +10,12 @@ consistency across your application.
 <section class="demo-container">
   <md-toolbar class="demo-toolbar">
     <div class="md-toolbar-tools">
-      <h3>Headings</h3>
+      <h3>Heading Styles</h3>
     </div>
   </md-toolbar>
   <div class="md-whiteframe-z1 docs-list">
     <p style="margin-top: 0;">To preserve <a href="http://webaim.org/techniques/semanticstructure/">semantic structures</a>, you should style the `<h1>` - `<h6>` heading tags with the styling classes shown below:</p>
 
-	<h4 class="md-title">Heading Styles</h4>
 	<div layout="row" class="docs-descriptions">
       <h4 class="md-body-1" flex="25" id="headings-selectors">Selectors</h4>
       <h4 class="md-body-1" id="headings-output">Output</h4>
@@ -74,7 +73,7 @@ consistency across your application.
     </hljs>
 	
 	  <br/>
-  <span style="font-size:.8em;">
+  <span class="md-body-1">
   	Note: Base font size is `10px` for easy rem units (1.2rem = 12px). Body font size is `16px`. sp = scaleable pixels.
 	</span>
 	
