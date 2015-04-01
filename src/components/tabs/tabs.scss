@@ -17,6 +17,7 @@ md-tabs {
   border-radius: 2px;
   overflow: hidden;
   position: relative;
+  transition: height $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
   &:not(.md-no-tab-content) {
     min-height: 200 + $tabs-header-height;
   }
@@ -35,14 +36,6 @@ md-tabs {
     md-tabs-wrapper {
       border-width: 0 0 1px;
       border-style: solid;
-    }
-  }
-  &[md-dynamic-height] {
-    transition: height $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
-    md-tabs-content-wrapper {
-      md-tab-content {
-        bottom: initial;
-      }
     }
   }
   md-tabs-wrapper {
@@ -189,6 +182,11 @@ md-tabs {
       top: 0; left: 0; right: 0; bottom: 0;
       transform: translateX(0);
       transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+      overflow: auto;
+      &.md-no-scroll {
+        bottom: auto;
+        overflow: hidden;
+      }
       &.ng-leave, &.md-no-transition {
         transition: none;
       }

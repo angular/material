@@ -175,7 +175,8 @@
                 \'md-no-transition\': $mdTabsCtrl.lastSelectedIndex == null,\
                 \'md-active\': tab.isActive(),\
                 \'md-left\':   tab.isLeft(),\
-                \'md-right\':  tab.isRight()\
+                \'md-right\':  tab.isRight(),\
+                \'md-no-scroll\': dynamicHeight\
               }"></md-tab-content>\
         </md-tabs-content-wrapper>\
       ',
