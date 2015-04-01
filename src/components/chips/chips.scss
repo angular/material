@@ -32,6 +32,9 @@ $chip-margin: 0 0 0 8px !default;
 
     .md-button {
       padding: $chip-button-padding;
+      line-height: $chip-height - $chip-button-padding * 2;
+      min-width: 0;
+      margin: 0 0 0 0.5em;
     }
   }
 
