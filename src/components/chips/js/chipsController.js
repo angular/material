@@ -67,8 +67,10 @@
   MdChipsCtrl.prototype.defaultInputKeydown = function(event) {
     switch (event.keyCode) {
       case this.$mdConstant.KEY_CODE.ENTER:
-        event.preventDefault();
-        this.appendChipBuffer();
+        if ( this.chipBuffer ) {
+          event.preventDefault();
+          this.appendChipBuffer();
+        }
         break;
       case this.$mdConstant.KEY_CODE.BACKSPACE: // backspace
         if (!this.chipBuffer) {

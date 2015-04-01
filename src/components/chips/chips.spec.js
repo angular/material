@@ -1,50 +1,25 @@
 describe('<md-chips>', function() {
+  var scope;
 
   beforeEach(module('material.components.chips'));
-
-  function compile (str, scope) {
-    var container;
-    inject(function ($compile) {
-      container = $compile(str)(scope);
-      scope.$apply();
-    });
-    return container;
-  }
-
-  function createScope () {
-    var scope;
-    var items = ['Apple', 'Banana', 'Orange'];
-    inject(function ($rootScope) {
-      scope = $rootScope.$new();
-      scope.items = items;
-    });
-    return scope;
-  }
-
-  function getChipElements(root) {
-    return angular.element(root[0].querySelectorAll('md-chip'));
-  }
+  beforeEach(inject(function ($rootScope) {
+    scope = $rootScope.$new();
+    scope.items = ['Apple', 'Banana', 'Orange'];
+  }));
 
   describe('basic functionality', function () {
     it('should render a default input element', function() {
-      var scope = createScope();
-      var template = '<md-chips ng-model="items"></md-chips>';
-      var element = compile(template, scope);
+      var element = buildChips('<md-chips ng-model="items"></md-chips>');
       var ctrl = element.controller('mdChips');
 
-      element.scope().$apply();
       var input = element.find('input');
       expect(input.length).toBe(1);
       expect(input).toHaveClass('md-chip-input');
     });
 
     it('should render a list of chips', function() {
-      var scope = createScope();
-      var template = '<md-chips ng-model="items"></md-chips>';
-      var element = compile(template, scope);
-      var ctrl = element.controller('mdChips');
+      var element = buildChips( '<md-chips ng-model="items"></md-chips>' );
 
-      element.scope().$apply();
       var chips = getChipElements(element);
       expect(chips.length).toBe(3);
       expect(chips[0].innerHTML).toContain('Apple');
@@ -53,31 +28,25 @@ describe('<md-chips>', function() {
     });
 
     it('should render a user-provided chip template', function() {
-      var scope = createScope();
       var template =
           '<md-chips ng-model="items">' +
           '  <md-chip><div class="mychiptemplate">{$chip}</div></md-chip>' +
           '</md-chips>';
-      var element = compile(template, scope);
-      var ctrl = element.controller('mdChips');
-
-      element.scope().$apply();
+      var element = buildChips( template );
       var chip = element.find('md-chip');
       expect(chip.find('div')).toHaveClass('mychiptemplate');
     });
 
     it('should add a chip', function() {
-      var scope = createScope();
-      var template = '<md-chips ng-model="items"></md-chips>';
-      var element = compile(template, scope);
+      var element = buildChips( '<md-chips ng-model="items"></md-chips>' );
       var ctrl = element.controller('mdChips');
 
-      element.scope().$apply();
-      ctrl.chipBuffer = 'Grape';
-      element.scope().$apply();
+      element.scope().$apply(function() {
+        ctrl.chipBuffer = 'Grape';
+        simulateInputEnterKey(ctrl);
+      });
 
-      ctrl.appendChipBuffer();
-      element.scope().$apply();
+      expect(scope.items.length).toBe(4);
 
       var chips = getChipElements(element);
       expect(chips.length).toBe(4);
@@ -87,17 +56,26 @@ describe('<md-chips>', function() {
       expect(chips[3].innerHTML).toContain('Grape');
     });
 
-    it('should remove a chip', function() {
-      var scope = createScope();
-      var template = '<md-chips ng-model="items"></md-chips>';
-      var element = compile(template, scope);
+    it('should not add a blank chip', function() {
+      var element = buildChips( '<md-chips ng-model="items"></md-chips>' );
       var ctrl = element.controller('mdChips');
 
-      element.scope().$apply();
+      element.scope().$apply(function() {
+        ctrl.chipBuffer = '';
+        simulateInputEnterKey(ctrl);
+      });
 
-      // Remove "Banana"
-      ctrl.removeChip(1);
-      element.scope().$apply();
+      expect(scope.items.length).toBe(3);
+    });
+
+    it('should remove a chip', function() {
+      var element = buildChips( '<md-chips ng-model="items"></md-chips>' );
+      var ctrl = element.controller('mdChips');
+
+      element.scope().$apply(function() {
+        // Remove "Banana"
+        ctrl.removeChip(1);
+      });
 
       var chips = getChipElements(element);
       expect(chips.length).toBe(2);
@@ -108,30 +86,54 @@ describe('<md-chips>', function() {
 
   describe('<md-chip-remove>', function() {
     it('should remove a chip', function() {
-      var scope = createScope();
-      var template = '<md-chips ng-model="items"></md-chips>';
-      var element = compile(template, scope);
+      var element = buildChips( '<md-chips ng-model="items"></md-chips>' );
+      var scope = element.scope();
       var ctrl = element.controller('mdChips');
-      element.scope().$apply();
-
       var chips = getChipElements(element);
+
       expect(chips.length).toBe(3);
       // Remove 'Banana'
       var db = angular.element(chips[1]).find('md-button');
       db[0].click();
-      element.scope().$apply();
 
+      scope.$digest();
       chips = getChipElements(element);
       expect(chips.length).toBe(2);
 
       // Remove 'Orange'
       db = angular.element(chips[1]).find('md-button');
       db[0].click();
-      element.scope().$apply();
 
+      scope.$digest();
       chips = getChipElements(element);
       expect(chips.length).toBe(1);
+
     });
   });
 
+  // *******************************
+  // Internal helper methods
+  // *******************************
+
+  function buildChips (str) {
+     var container;
+     inject(function ($compile) {
+       container = $compile(str)(scope);
+       container.scope().$apply();
+     });
+     return container;
+   }
+
+   function simulateInputEnterKey(ctrl) {
+     var event = {};
+     event.preventDefault = jasmine.createSpy('preventDefault');
+     inject(function($mdConstant) {
+       event.keyCode = $mdConstant.KEY_CODE.ENTER;
+     });
+     ctrl.defaultInputKeydown(event);
+   }
+
+   function getChipElements(root) {
+     return angular.element(root[0].querySelectorAll('md-chip'));
+   }
 });
