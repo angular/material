@@ -58,6 +58,7 @@
  * @param {string=} md-stretch-tabs Attribute to indicate whether or not to stretch tabs: `auto`, `always`, or `never`; default is `auto`
  * @param {boolean=} md-dynamic-height When enabled, the tab wrapper will resize based on the contents of the selected tab
  * @param {boolean=} md-center-tabs When enabled, tabs will be centered provided there is no need for pagination
+ * @param {boolean=} md-no-pagination When enabled, pagination will remain off
  *
  * @usage
  * <hljs lang="html">
@@ -91,6 +92,7 @@
   function MdTabs ($mdTheming) {
     return {
       scope: {
+        noPagination:  '=?mdNoPagination',
         dynamicHeight: '=?mdDynamicHeight',
         centerTabs:    '=?mdCenterTabs',
         selectedIndex: '=?mdSelected',

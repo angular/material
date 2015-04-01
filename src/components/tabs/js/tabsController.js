@@ -257,6 +257,7 @@
     }
 
     function shouldPaginate () {
+      if ($scope.noPagination) return false;
       var canvasWidth = $element.prop('clientWidth');
       angular.forEach(elements.tabs, function (tab) { canvasWidth -= tab.offsetWidth; });
       return canvasWidth < 0;
