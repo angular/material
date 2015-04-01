@@ -122,6 +122,7 @@
 
     function handleWindowResize () {
       ctrl.lastSelectedIndex = $scope.selectedIndex;
+      updateHeightFromContent();
       updateInkBarStyles();
       ctrl.offsetLeft = fixOffset(ctrl.offsetLeft);
     }
