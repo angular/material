@@ -18,7 +18,7 @@ document.contains || (document.contains = function(node) {
 var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 var isIos = userAgent.match(/iPad/i) || userAgent.match(/iPhone/i) || userAgent.match(/iPod/i);
 var isAndroid = userAgent.match(/Android/i);
-var shouldHijackClicks = isIos || isAndroid;
+var shouldHijackClicks = (isIos || isAndroid) && !window.jQuery;
 
 if (shouldHijackClicks) {
   document.addEventListener('click', function(ev) {
