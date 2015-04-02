@@ -25,17 +25,22 @@ angular.module('material.components.card', [
  * @description
  * The `<md-card>` directive is a container element used within `<md-content>` containers.
  *
+ * An image included as a direct descendant will fill the card's width, while the `<md-card-content>`
+ * container will wrap text content and provide padding.
+ *
  * Cards have constant width and variable heights; where the maximum height is limited to what can
- * fit within a single view on a platform, but it can temporarily expand as needed
+ * fit within a single view on a platform, but it can temporarily expand as needed.
  *
  * @usage
  * <hljs lang="html">
  * <md-card>
  *  <img src="img/washedout.png" class="md-card-image">
- *  <h2>Paracosm</h2>
- *  <p>
- *    The titles of Washed Out's breakthrough song and the first single from Paracosm share the * two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
- *  </p>
+ *  <md-card-content>
+ *    <h2>Paracosm</h2>
+ *    <p>
+ *      The titles of Washed Out's breakthrough song and the first single from Paracosm share the * two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
+ *    </p>
+ *  <md-card-content>
  * </md-card>
  * </hljs>
  *
