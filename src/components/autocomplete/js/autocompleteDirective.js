@@ -75,6 +75,7 @@
                   ng-model="$mdAutocompleteCtrl.scope.searchText"\
                   ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                   ng-blur="$mdAutocompleteCtrl.blur()"\
+                  ng-focus="$mdAutocompleteCtrl.focus()"\
                   aria-owns="ul-{{$mdAutocompleteCtrl.id}}"\
                   aria-label="{{floatingLabel}}"\
                   aria-autocomplete="list"\
@@ -92,6 +93,7 @@
                 ng-model="$mdAutocompleteCtrl.scope.searchText"\
                 ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                 ng-blur="$mdAutocompleteCtrl.blur()"\
+                ng-focus="$mdAutocompleteCtrl.focus()"\
                 placeholder="{{placeholder}}"\
                 aria-owns="ul-{{$mdAutocompleteCtrl.id}}"\
                 aria-label="{{placeholder}}"\
@@ -116,7 +118,7 @@
                 ng-mouseup="$mdAutocompleteCtrl.mouseUp()">\
               <li ng-repeat="(index, item) in $mdAutocompleteCtrl.matches"\
                   ng-class="{ selected: index === $mdAutocompleteCtrl.index }"\
-                  ng-show="$mdAutocompleteCtrl.scope.searchText && !$mdAutocompleteCtrl.hidden"\
+                  ng-hide="$mdAutocompleteCtrl.hidden"\
                   ng-click="$mdAutocompleteCtrl.select(index)"\
                   md-autocomplete-list-item-template="contents"\
                   md-autocomplete-list-item="$mdAutocompleteCtrl.itemName">\
