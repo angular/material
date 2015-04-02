@@ -487,7 +487,6 @@ ul.buckets li a:focus {
 
 .api-params-item {
   min-height: 72px;
-  border-bottom: 1px solid #ddd;
 }
 .api-params-label {
   margin-right: 8px;
@@ -573,6 +572,11 @@ md-content.demo-source-container > hljs > pre > code.highlight {
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+ul.no-style {
+  padding: 0;
+  list-style: none;
 }
 
 /* Styles for Windows High Contrast mode */
