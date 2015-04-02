@@ -11,8 +11,6 @@ angular.module('material.components.divider', [
 ])
   .directive('mdDivider', MdDividerDirective);
 
-function MdDividerController(){}
-
 /**
  * @ngdoc directive
  * @name mdDivider
@@ -34,8 +32,7 @@ function MdDividerController(){}
 function MdDividerDirective($mdTheming) {
   return {
     restrict: 'E',
-    link: $mdTheming,
-    controller: [MdDividerController]
+    link: $mdTheming
   };
 }
 })();

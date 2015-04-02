@@ -97,7 +97,7 @@ function mdItemDirective($document, $log, $mdUtil, $mdAria) {
         if (hasProxiedElement) {
           wrapIn('div');
         } else {
-          tEl.addClass('md-no-style');
+          tEl.addClass('md-no-proxy');
         }
       } else {
         wrapIn('button');
