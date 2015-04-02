@@ -46,19 +46,20 @@
       controllerAs: '$mdAutocompleteCtrl',
       link:         link,
       scope:        {
-        searchText:    '=mdSearchText',
-        selectedItem:  '=mdSelectedItem',
+        name:          '@',
+        searchText:    '=?mdSearchText',
+        selectedItem:  '=?mdSelectedItem',
         itemsExpr:     '@mdItems',
         itemText:      '&mdItemText',
         placeholder:   '@placeholder',
         noCache:       '=?mdNoCache',
-        itemChange:    '&mdSelectedItemChange',
-        textChange:    '&mdSearchTextChange',
-        isDisabled:    '=ngDisabled',
-        minLength:     '=mdMinLength',
-        delay:         '=mdDelay',
+        itemChange:    '&?mdSelectedItemChange',
+        textChange:    '&?mdSearchTextChange',
+        isDisabled:    '=?ngDisabled',
+        minLength:     '=?mdMinLength',
+        delay:         '=?mdDelay',
         autofocus:     '=?mdAutofocus',
-        floatingLabel: '@mdFloatingLabel',
+        floatingLabel: '@?mdFloatingLabel',
         autoselect:    '=?mdAutoselect'
       },
       template: '\
@@ -67,7 +68,7 @@
             <label>{{floatingLabel}}</label>\
             <input type="text"\
                 id="fl-input-{{$mdAutocompleteCtrl.id}}"\
-                name="fl-input-{{$mdAutocompleteCtrl.id}}"\
+                name="{{name}}"\
                 autocomplete="off"\
                 ng-disabled="isDisabled"\
                 ng-model="$mdAutocompleteCtrl.scope.searchText"\
@@ -83,7 +84,7 @@
           </md-input-container>\
           <input type="text"\
               id="input-{{$mdAutocompleteCtrl.id}}"\
-              name="input-{{$mdAutocompleteCtrl.id}}"\
+              name="{{name}}"\
               ng-if="!floatingLabel"\
               autocomplete="off"\
               ng-disabled="isDisabled"\
