@@ -67,6 +67,7 @@ md-bottom-sheet {
 
   &.md-list {
     md-item {
+      padding: 0;
       align-items: center;
       height: $bottom-sheet-list-item-height;
 
