@@ -8,37 +8,37 @@
 
     //-- private variables
 
-    var self = this,
+    var self      = this,
         itemParts = $scope.itemsExpr.split(/ in /i),
-        itemExpr = itemParts[1],
-        elements = null,
-        promise = null,
-        cache = {},
-        noBlur = false,
+        itemExpr  = itemParts[1],
+        elements  = null,
+        promise   = null,
+        cache     = {},
+        noBlur    = false,
         selectedItemWatchers = [];
 
     //-- public variables
 
-    self.scope = $scope;
-    self.parent = $scope.$parent;
+    self.scope    = $scope;
+    self.parent   = $scope.$parent;
     self.itemName = itemParts[0];
-    self.matches = [];
-    self.loading = false;
-    self.hidden = true;
-    self.index = null;
+    self.matches  = [];
+    self.loading  = false;
+    self.hidden   = true;
+    self.index    = null;
     self.messages = [];
-    self.id = $mdUtil.nextUid();
+    self.id       = $mdUtil.nextUid();
 
     //-- public methods
 
-    self.keydown = keydown;
-    self.blur = blur;
-    self.clear = clearValue;
-    self.select = select;
-    self.getCurrentDisplayValue = getCurrentDisplayValue;
-    self.fetch = $mdUtil.debounce(fetchResults);
-    self.registerSelectedItemWatcher = registerSelectedItemWatcher;
-    self.unregisterSelectedItemWatcher = unregisterSelectedItemWatcher;
+    self.keydown  = keydown;
+    self.blur     = blur;
+    self.clear    = clearValue;
+    self.select   = select;
+    self.fetch    = $mdUtil.debounce(fetchResults);
+    self.getCurrentDisplayValue         = getCurrentDisplayValue;
+    self.registerSelectedItemWatcher    = registerSelectedItemWatcher;
+    self.unregisterSelectedItemWatcher  = unregisterSelectedItemWatcher;
 
     self.listEnter = function () { noBlur = true; };
     self.listLeave = function () { noBlur = false; };
@@ -121,6 +121,9 @@
       //-- clear selected item if search text no longer matches it
       if (searchText !== getDisplayValue($scope.selectedItem)) $scope.selectedItem = null;
       else return;
+      //-- trigger change event if available
+      if ($scope.textChange && searchText !== previousSearchText)
+        $scope.textChange(getItemScope($scope.selectedItem));
       //-- cancel results if search text is not long enough
       if (!searchText || searchText.length < Math.max(parseInt($scope.minLength, 10), 1)) {
         self.loading = false;
@@ -143,8 +146,6 @@
         fetchResults(searchText);
       }
       self.hidden = shouldHide();
-      if ($scope.textChange && searchText !== previousSearchText)
-        $scope.textChange(getItemScope($scope.selectedItem));
     }
 
     function blur () {

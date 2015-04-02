@@ -15,6 +15,7 @@
     self.simulateQuery = false;
     self.isDisabled    = false;
     self.selectedItemChange = selectedItemChange;
+    self.searchTextChange   = searchTextChange;
 
     // ******************************
     // Internal methods
@@ -34,6 +35,10 @@
       } else {
         return results;
       }
+    }
+
+    function searchTextChange(text) {
+      $log.info('Text changed to ' + text);
     }
 
     function selectedItemChange(item) {
