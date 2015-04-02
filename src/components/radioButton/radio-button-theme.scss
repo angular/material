@@ -16,33 +16,50 @@ md-radio-button.md-THEME_NAME-theme {
   .md-container .md-ripple {
     color: '{{accent-600}}';
   }
+}
+
+md-radio-group.md-THEME_NAME-theme,
+md-radio-button.md-THEME_NAME-theme {
 
   &:not([disabled]) {
-
+    .md-primary,
     &.md-primary {
       .md-on {
         background-color: '{{primary-color-0.87}}';
       }
-      &.md-checked .md-off {
-        border-color: '{{primary-color-0.87}}';
+      .md-checked,
+      &.md-checked {
+        .md-off {
+          border-color: '{{primary-color-0.87}}';
+        }
       }
-      &.md-checked .md-ink-ripple {
-        color: '{{primary-color-0.87}}';
+      .md-checked,
+      &.md-checked {
+        .md-ink-ripple {
+          color: '{{primary-color-0.87}}';
+        }
       }
       .md-container .md-ripple {
         color: '{{primary-600}}';
       }
     }
 
+    .md-warn,
     &.md-warn {
       .md-on {
         background-color: '{{warn-color-0.87}}';
       }
-      &.md-checked .md-off {
-        border-color: '{{warn-color-0.87}}';
+      .md-checked,
+      &.md-checked {
+        .md-off {
+          border-color: '{{warn-color-0.87}}';
+        }
       }
-      &.md-checked .md-ink-ripple {
-        color: '{{warn-color-0.87}}';
+      .md-checked,
+      &.md-checked {
+        .md-ink-ripple {
+          color: '{{warn-color-0.87}}';
+        }
       }
       .md-container .md-ripple {
         color: '{{warn-600}}';

@@ -5,7 +5,7 @@
 
     <md-radio-group ng-model="data.group1">
 
-      <md-radio-button value="Apple">Apple</md-radio-button>
+      <md-radio-button value="Apple" class="md-primary">Apple</md-radio-button>
       <md-radio-button value="Banana"> Banana </md-radio-button>
       <md-radio-button value="Mango">Mango</md-radio-button>
 
@@ -15,7 +15,7 @@
 
     <p>Selected Value: <span class="radioValue">{{ data.group2 }}</span></p>
 
-    <md-radio-group ng-model="data.group2">
+    <md-radio-group ng-model="data.group2" class="md-primary">
 
         <md-radio-button ng-repeat="d in radioData"
                          ng-value="d.value"
@@ -26,8 +26,8 @@
     </md-radio-group>
 
     <p>
-      <md-button ng-click="addItem()" type="button">Add</md-button>
-      <md-button ng-click="removeItem()" type="button">Remove</md-button>
+      <md-button class="md-raised" ng-click="addItem()" type="button">Add</md-button>
+      <md-button class="md-raised" ng-click="removeItem()" type="button">Remove</md-button>
     </p>
 
     <hr />
