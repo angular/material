@@ -1,3 +1,52 @@
+@mixin md-tab-primary {
+  md-tabs-wrapper {
+    background-color: '{{primary-color}}';
+  }
+  md-tab-item:not([disabled]) {
+    color: '{{primary-100}}';
+    &.md-active, &.md-focus {
+      color: '{{primary-contrast}}';
+    }
+    &.md-focus {
+      background: '{{primary-contrast-0.1}}';
+    }
+  }
+}
+@mixin md-tab-warn {
+  md-tabs-wrapper {
+    background-color: '{{warn-color}}';
+  }
+
+  md-tab-item:not([disabled]) {
+    color: '{{warn-100}}';
+    &.md-active, &.md-focus {
+      color: '{{warn-contrast}}';
+    }
+    &.md-focus {
+      background: '{{warn-contrast-0.1}}';
+    }
+  }
+}
+@mixin md-tab-accent {
+  md-tabs-wrapper {
+    background-color: '{{accent-color}}';
+  }
+
+  md-tab-item:not([disabled]) {
+    color: '{{accent-100}}';
+    &.md-active, &.md-focus {
+      color: '{{accent-contrast}}';
+    }
+    &.md-focus {
+      background: '{{accent-contrast-0.1}}';
+    }
+  }
+
+  md-ink-bar {
+    color: '{{primary-600-1}}';
+    background: '{{primary-600-1}}';
+  }
+}
 md-tabs.md-THEME_NAME-theme {
   md-tabs-wrapper {
     background-color: transparent;
@@ -29,54 +78,24 @@ md-tabs.md-THEME_NAME-theme {
   }
 
   &.md-accent {
-    md-tabs-wrapper {
-      background-color: '{{accent-color}}';
-    }
-
-    md-tab:not([disabled]) {
-      color: '{{accent-100}}';
-      &.md-active, &.md-focus {
-        color: '{{accent-contrast}}';
-      }
-      &.md-focus {
-        background: '{{accent-contrast-0.1}}';
-      }
-    }
-
-    md-ink-bar {
-      color: '{{primary-600-1}}';
-      background: '{{primary-600-1}}';
-    }
+    @include md-tab-accent();
   }
 
   &.md-primary {
-    md-tabs-wrapper {
-      background-color: '{{primary-color}}';
-    }
-    md-tab:not([disabled]) {
-      color: '{{primary-100}}';
-      &.md-active, &.md-focus {
-        color: '{{primary-contrast}}';
-      }
-      &.md-focus {
-        background: '{{primary-contrast-0.1}}';
-      }
-    }
+    @include md-tab-primary();
   }
 
   &.md-warn {
-    md-tabs-wrapper {
-      background-color: '{{warn-color}}';
-    }
-
-    md-tab:not([disabled]) {
-      color: '{{warn-100}}';
-      &.md-active, &.md-focus {
-        color: '{{warn-contrast}}';
-      }
-      &.md-focus {
-        background: '{{warn-contrast-0.1}}';
-      }
-    }
+    @include md-tab-warn();
   }
+}
+
+md-toolbar > md-tabs.md-THEME_NAME-theme {
+  @include md-tab-primary();
+}
+md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme {
+  @include md-tab-accent();
+}
+md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme {
+  @include md-tab-warn();
 }

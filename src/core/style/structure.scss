@@ -153,3 +153,17 @@ ul {
     opacity: 0.20;
   }
 }
+
+.md-padding {
+  padding: 8px;
+}
+
+.md-margin {
+  margin: 8px;
+}
+
+@media (min-width: $layout-breakpoint-sm) {
+  .md-padding {
+    padding: 16px;
+  }
+}
