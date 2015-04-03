@@ -1,10 +1,16 @@
 md-chips.md-THEME_NAME-theme {
+  background: '{{background-50}}';
   .md-chip {
-    color: '{{background-contrast-0.6}}';
-    background-color: '{{background-100}}';
-
+    background: '{{background-300}}';
+    color: '{{background-800}}';
+  }
+  md-chip-remove {
     .md-button {
-      color: '{{background-contrast}}';
+      md-icon {
+        path {
+          fill: '{{background-500}}';
+        }
+      }
     }
   }
 }

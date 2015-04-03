@@ -1,0 +1,6 @@
+md-content.autocomplete {
+ min-height: 200px;
+}
+input[type=number] {
+ width: 11rem;
+}

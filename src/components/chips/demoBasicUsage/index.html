@@ -1,48 +1,50 @@
-<div ng-app="inputBasicDemo" ng-controller="DemoCtrl as ctrl" layout="column">
+<div ng-app="inputBasicDemo" ng-controller="BasicDemoCtrl as ctrl" layout="column">
 
   <md-content class="md-padding" layout="column">
     <p>
-      Display a readonly list of strings as chips, using a custom chip template.
+      Use a cusom chip template.
     </p>
 
     <md-chips ng-model="ctrl.roFruitNames"
-              readonly="true">
-      <md-chip><strong>{{$chip}}</strong></md-chip>
+              readonly="ctrl.readonly">
+      <md-chip-template>fruit:<strong>{{$chip}}</strong></md-chip-template>
     </md-chips>
 
-      <p>
-          Use the default chip template.
-      </p>
+    <p>
+        Use the default chip template.
+    </p>
 
-      <md-chips
-          ng-model="ctrl.fruitNames"
-          readonly="ctrl.readonly"></md-chips>
+    <md-chips
+            ng-model="ctrl.fruitNames"
+            readonly="ctrl.readonly"></md-chips>
 
-      <p>
-        Use Placeholders.
-      </p>
+    <p>
+      Use Placeholders.
+    </p>
 
-      <md-chips
-          ng-model="ctrl.newFruitNames"
-          readonly="ctrl.readonly"
-          placeholder="Enter a fruit"
-          secondary-placeholder="+Fruit"></md-chips>
+    <md-chips
+        ng-model="ctrl.newFruitNames"
+        readonly="ctrl.readonly"
+        placeholder="Enter a fruit"
+        delete-button-label="Remove Fruit"
+        delete-hint="Press delete to remove fruit"
+        secondary-placeholder="+Fruit"></md-chips>
 
-  <p>
-      Display a list of objects as chips.
-  </p>
+    <p>
+        Display an ordered set of objects as chips (with custom template).
+    </p>
 
-  <md-chips ng-model="ctrl.vegObjs"
-            readonly="ctrl.readonly"
-            md-chip-append="ctrl.newVeg($chip)">
-      <md-chip>
-        <span>{{$chip.name}}:{{$chip.type}}</span>
-        <md-chip-remove></md-chip-remove>
-      </md-chip>
-  </md-chips>
+    <md-chips ng-model="ctrl.vegObjs"
+              readonly="ctrl.readonly"
+              md-on-append="ctrl.newVeg($chip)">
+        <md-chip-template>
+          <span>{{$chip.name}}:{{$chip.type}}</span>
+          <md-button md-chip-remove  md-no-ink class="md-primary vegetablechip">del</md-button>
+        </md-chip-template>
+    </md-chips>
 
-  <br/>
-  <md-checkbox ng-model="ctrl.readonly">Readonly</md-checkbox>
+    <br/>
+    <md-checkbox ng-model="ctrl.readonly">Readonly</md-checkbox>
 
   </md-content>
 </div>

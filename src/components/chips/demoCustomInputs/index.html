@@ -1,0 +1,49 @@
+<div ng-app="customInputDemo" ng-controller="CustomInputDemoCtrl as ctrl" layout="column">
+
+  <md-content class="md-padding" layout="column">
+    <p>Use an <code>&lt;input&gt;</code> element with no model to build an ordered set of chips.</p>
+    <md-chips ng-model="ctrl.numberChips">
+      <input type="number" placeholder="Enter a number">
+    </md-chips>
+  </md-content>
+
+  <md-content class="md-padding" layout="column">
+    <p>Use an <code>&lt;input&gt;</code> element to build an ordered set of chips.</p>
+    <md-chips ng-model="ctrl.numberChips2">
+      <input type="number" ng-model="ctrl.numberBuffer" placeholder="Enter a number">
+    </md-chips>
+  </md-content>
+
+  <md-content class="md-padding autocomplete" layout="column">
+
+    <p>Use <code>&lt;md-autocomplete&gt;</code> to build an ordered set of chips.</p>
+
+    <md-chips ng-model="ctrl.selectedVegetables">
+      <md-autocomplete
+          md-selected-item="ctrl.selectedItem"
+          md-search-text="ctrl.searchText"
+          md-items="item in ctrl.querySearch(ctrl.searchText)"
+          md-item-text="item.name"
+          placeholder="Search for a vegetable">
+        <span md-highlight-text="ctrl.searchText">{{item.name}} :: {{item.type}}</span>
+      </md-autocomplete>
+      <md-chip-template>
+        <span>{{$chip.name}}::{{$chip.type}}</span>
+        <md-chip-remove></md-chip-remove>
+      </md-chip-template>
+    </md-chips>
+
+    <br />
+
+    <md-list>
+      <md-subheader class="md-no-sticky">Vegetable Options</md-subheader>
+      <md-item class="md-2-line" ng-repeat="veg in ctrl.vegetables">
+        <div class="md-item-text">
+          <h3>{{veg.name}}</h3>
+          <p>{{veg.type}}</p>
+        </div>
+      </md-item>
+    </md-list>
+
+  </md-content>
+</div>
