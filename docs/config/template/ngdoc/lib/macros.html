@@ -5,46 +5,52 @@
 
 {%- macro paramList(params) %}
   {% for param in params %}
-  <li class="api-params-item">
-    <div layout="row">
-      <div class="api-params-label" flex="35" flex-gt-sm="20">
-        {$ param.name $}
-        {% if param.alias %}| {$ param.alias $}{% endif %}
-        <span hide show-sm>
-          {$ typeList(param.typeList) $}
-        </span>
-        {% if param.type.optional %}<div><em>(optional)</em></div>{% endif %}
-      </div>
-      <div class="api-params-label" hide-sm flex="15">
-        {$ typeList(param.typeList) $}
-      </div>
-      <div class="api-params-content" flex>
-        <p>{$ param.description | marked $}
-        {% if param.default %}<p><em>(default: {$ param.default $})</em></p>{% endif %}
-        </p>
-      </div>
-    </div>
-  </li>
+    {%if not param.type.optional %}
+      <tr class="api-params-item">
+        <td style="white-space: nowrap;">
+          <b>* {$ param.name $}</b>
+          {% if param.alias %}| {$ param.alias $}{% endif %}
+          <span hide show-sm>{$ typeList(param.typeList) $}</span>
+        </td>
+        <td style="white-space: nowrap;">{$ typeList(param.typeList) $}</td>
+        <td class="description">
+          {$ param.description | marked $}
+          {% if param.default %}<p><em>(default: {$ param.default $})</em></p>{% endif %}
+        </td>
+      </tr>
+    {% endif %}
+  {% endfor %}
+  {% for param in params %}
+    {%if param.type.optional %}
+      <tr class="api-params-item">
+        <td style="white-space: nowrap;">
+          {$ param.name $}
+          {% if param.alias %}| {$ param.alias $}{% endif %}
+          <span hide show-sm>{$ typeList(param.typeList) $}</span>
+        </td>
+        <td style="white-space: nowrap;">{$ typeList(param.typeList) $}</td>
+        <td class="description">
+          {$ param.description | marked $}
+          {% if param.default %}<p><em>(default: {$ param.default $})</em></p>{% endif %}
+        </td>
+      </tr>
+    {% endif %}
   {% endfor %}
 {% endmacro -%}
 
 {%- macro paramTable(params) %}
-<ul class="no-style">
-  <li>
-    <div layout="row" class="dashed-bottom">
-      <div class="api-params-label api-params-title"  flex="20" layout layout-align="center center" >
-        Parameter
-      </div>
-      <div class="api-params-label api-params-title"  flex="15" layout layout-align="center center" block-sm >
-        Type
-      </div>
-      <div class="api-params-content api-params-title" flex     layout="row" layout-align="left center" style="padding-top:15px">
-        Description
-      </div>
-    </div>
-  </li>
+<table class="no-style">
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
   {$ paramList(params) $}
-</ul>
+  </tbody>
+</table>
 {% endmacro -%}
 
 

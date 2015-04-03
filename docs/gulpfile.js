@@ -122,7 +122,7 @@ module.exports = function(gulp, IS_RELEASE_BUILD) {
     return gulp.src([
       'dist/angular-material.css',
       'dist/themes/*.css',
-      'docs/app/css/highlightjs-codepen.css',
+      'docs/app/css/highlightjs-material.css',
       'docs/app/css/layout-demo.css',
       'docs/app/css/style.css'
     ])

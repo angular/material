@@ -12,6 +12,8 @@ table {
   border-spacing: 0;
   border-collapse: collapse;
   background-color: transparent;
+  border-radius: 2px;
+  overflow: hidden;
 }
 
 /***************
@@ -60,8 +62,17 @@ strong {
   font-weight: 500;
 }
 td, th {
-  padding: 12px 6px;
+  padding: 12px 8px;
   text-align: left;
+}
+td {
+  vertical-align: top;
+}
+td.description *:first-child {
+  margin-top: 0;
+}
+td.description *:last-child {
+  margin-bottom: 0;
 }
 tr:nth-child(even) td {
   background-color: #f5f5f5;
@@ -163,7 +174,7 @@ code.highlight {
 }
 
 code:not(.highlight) {
-  color: #4285f4;
+  color: #E91E63;
   margin-left: 1px;
   margin-right: 1px;
   -webkit-font-smoothing: auto;
@@ -300,7 +311,7 @@ code:not(.highlight) {
 .layout-content,
 .doc-content {
   max-width: 864px;
-  margin: auto;
+  margin: 0 16px;
 }
 docs-demo {
   display: block;
@@ -575,6 +586,9 @@ md-content.demo-source-container > hljs > pre > code.highlight {
   margin-top: 10px;
 }
 
+.api-section {
+  margin: 3em 0 0;
+}
 .api-section h3 {
   padding-top: 20px;
 }

@@ -1,0 +1,121 @@
+.hljs, hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #f5f5f5;
+  color: #333;
+  font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
+  line-height: 1.45;
+  tab-size: 2;
+  -webkit-font-smoothing: auto;
+  -webkit-text-size-adjust: none;
+}
+
+hljs pre > code.highlight {
+  background: #f5f5f5;
+}
+
+.hljs-comment,
+.hljs-title {
+  color: #E91E63;
+  color: #3F51B5;
+}
+
+.hljs-variable,
+.hljs-attribute,
+.hljs-tag,
+.hljs-regexp,
+.ruby .constant,
+.xml .tag .title,
+.xml .pi,
+.xml .doctype,
+.html .doctype {
+  color: #E91E63;
+  color: #3F51B5;
+}
+
+.css .value {
+  color: #E91E63;
+  color: #3F51B5;
+}
+
+.css .value .function,
+.css .value .string {
+  color: #E91E63;
+  color: #3F51B5;
+}
+
+.css .value .number {
+  color: #E91E63;
+  color: #3F51B5;
+}
+
+.css .id,
+.css .class,
+.css-pseudo,
+.css .selector,
+.css .tag {
+  color: #E91E63;
+  color: #3F51B5;
+}
+
+.hljs-number,
+.hljs-preprocessor,
+.hljs-built_in,
+.hljs-literal,
+.hljs-params,
+.hljs-constant {
+  color: #E91E63;
+  color: #3F51B5;
+}
+
+.ruby .class .title,
+.css .rules .attribute {
+  color: #E91E63;
+  color: #3F51B5;
+}
+
+.hljs-string,
+.hljs-value,
+.hljs-inheritance,
+.hljs-header,
+.ruby .symbol,
+.xml .cdata {
+  color: #3F51B5;
+  color: #E91E63;
+}
+
+.css .hexcolor {
+  color: #E91E63;
+  color: #3F51B5;
+}
+
+.function,
+.python .decorator,
+.python .title,
+.ruby .function .title,
+.ruby .title .keyword,
+.perl .sub,
+.javascript .title,
+.coffeescript .title {
+  color: #E91E63;
+  color: #3F51B5;
+}
+
+.hljs-keyword,
+.javascript .function {
+  color: #3F51B5;
+  color: #E91E63;
+}
+
+.coffeescript .javascript,
+.javascript,
+.javascript .xml,
+.tex .formula,
+.xml .javascript,
+.xml .vbscript,
+.xml .css,
+.xml .cdata {
+    background: transparent;
+    opacity: 1;
+}

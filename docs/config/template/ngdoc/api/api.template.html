@@ -4,13 +4,13 @@
 
 {% block header %}
 <header class="api-profile-header">
-    {% block related_components %}{% endblock %}
+  <h1 class="md-display-1" style="text-transform: uppercase;">{{menu.currentPage|humanizeDoc}}</h1>
+  {% block related_components %}{% endblock %}
 </header>
 
 {% endblock %}
 
-<div layout="row" class="api-options-bar with-icon">
-</div>
+<div layout="row" class="api-options-bar with-icon"></div>
 
 {% block description %}
 <div class="api-profile-description">
@@ -37,7 +37,7 @@
   {%- for example in doc.examples -%}
     {$ example | marked $}
   {%- endfor -%}
-  {% endif -%}  
+  {% endif -%}
   {% endblock %}
 </div>
 
