@@ -173,6 +173,8 @@
       updateInkBarStyles();
       updateHeightFromContent();
       $scope.$broadcast('$mdTabsChanged');
+      ctrl.tabs[oldValue] && ctrl.tabs[oldValue].scope.deselect();
+      ctrl.tabs[newValue].scope.select();
     }
 
     function handleResizeWhenVisible () {

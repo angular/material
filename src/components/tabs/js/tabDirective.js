@@ -61,7 +61,9 @@
       scope: {
         label:    '@',
         active:   '=?mdActive',
-        disabled: '=?ngDisabled'
+        disabled: '=?ngDisabled',
+        select:   '&?mdOnSelect',
+        deselect: '&?mdOnDeselect'
       },
       link: link
     };
@@ -70,11 +72,11 @@
       var tabs = element.parent()[0].getElementsByTagName('md-tab'),
           index = Array.prototype.indexOf.call(tabs, element[0]),
           data = ctrl.insertTab({
-            scope: scope,
-            parent: scope.$parent,
-            index: index,
+            scope:    scope,
+            parent:   scope.$parent,
+            index:    index,
             template: getTemplate(),
-            label: getLabel()
+            label:    getLabel()
           }, index);
 
       scope.$watch('active', function (active) { if (active) ctrl.select(data.getIndex()); });
