@@ -79,17 +79,15 @@ blockquote {
 ul {
   margin: 0;
   padding: 0;
-
-  li {
-    margin-left: 16px;
-    padding: 0;
-    margin-top: 3px;
-    list-style-position: inside;
-
-    &:first-child {
-      margin-top: 0;
-    }
-  }
+}
+ul li {
+  margin-left: 16px;
+  padding: 0;
+  margin-top: 3px;
+  list-style-position: inside;
+}
+ul li:first-child {
+  margin-top: 0;
 }
 /************
  * UTILS
