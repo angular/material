@@ -144,12 +144,13 @@ describe('<md-chips>', function() {
             <span md-highlight-text="searchText">{{itemtype}}</span>\
           </md-autocomplete>\
         </md-chips>';
+
       it('should use the selected item as a buffer', inject(function($timeout) {
-        setupScopeForAutocomplete()
+        setupScopeForAutocomplete();
         var element = buildChips(AUTOCOMPLETE_CHIPS_TEMPLATE);
         var ctrl = element.controller('mdChips');
-        var autocompleteCtrl = ctrl.mdAutocompleteCtrl;
         $timeout.flush(); // mdAutcomplete needs a flush for its init.
+        var autocompleteCtrl = ctrl.mdAutocompleteCtrl;
 
         element.scope().$apply(function() {
           autocompleteCtrl.scope.searchText = 'K';
@@ -175,9 +176,12 @@ describe('<md-chips>', function() {
           </md-chips>';
 
       describe('using ngModel', function() {
-        it('should add the ngModelCtrl.$viewValue when <enter> is pressed', function() {
+        it('should add the ngModelCtrl.$viewValue when <enter> is pressed',
+            inject(function($timeout) {
           var element = buildChips(NG_MODEL_TEMPLATE);
           var ctrl = element.controller('mdChips');
+          $timeout.flush();
+
           var ngModelCtrl = ctrl.userInputNgModelCtrl;
 
           element.scope().$apply(function() {
@@ -187,12 +191,14 @@ describe('<md-chips>', function() {
 
           expect(scope.items.length).toBe(4);
           expect(scope.items[3]).toBe('Grape');
-        });
+        }));
       });
+
       describe('without ngModel', function() {
-        it('should support an input without an ngModel', function () {
+        it('should support an input without an ngModel', inject(function ($timeout) {
           var element = buildChips(INPUT_TEMPLATE);
           var ctrl = element.controller('mdChips');
+          $timeout.flush();
 
           element.scope().$apply(function() {
             ctrl.userInputElement[0].value = 'Kiwi';
@@ -201,7 +207,7 @@ describe('<md-chips>', function() {
 
           expect(scope.items.length).toBe(4);
           expect(scope.items[3]).toBe('Kiwi');
-        });
+        }));
       });
     });
   });

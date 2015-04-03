@@ -19,7 +19,7 @@
             readonly="ctrl.readonly"></md-chips>
 
     <p>
-      Use Placeholders.
+      Use Placeholders and override hint texts.
     </p>
 
     <md-chips
@@ -39,8 +39,8 @@
               md-on-append="ctrl.newVeg($chip)">
         <md-chip-template>
           <span>{{$chip.name}}:{{$chip.type}}</span>
-          <md-button md-chip-remove  md-no-ink class="md-primary vegetablechip">del</md-button>
         </md-chip-template>
+        <md-button md-chip-remove  class="md-primary vegetablechip">del</md-button>
     </md-chips>
 
     <br/>

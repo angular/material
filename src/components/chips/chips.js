@@ -8,6 +8,7 @@
    * @see js folder for chips implementation
    */
   angular.module('material.components.chips', [
-    'material.core'
+    'material.core',
+    'material.components.autocomplete'
   ]);
 })();

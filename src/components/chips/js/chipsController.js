@@ -12,18 +12,20 @@
    * the models of various input components.
    *
    * @param $scope
-   * @param $mdUtil
    * @param $mdConstant
    * @param $log
    * @param $element
    * @constructor
    */
-  function MdChipsCtrl ($scope, $mdUtil, $mdConstant, $log, $element) {
+  function MdChipsCtrl ($scope, $mdConstant, $log, $element) {
     /** @type {Object} */
     this.$mdConstant = $mdConstant;
 
     /** @type {angular.$scope} */
     this.$scope = $scope;
+
+    /** @type {angular.$scope} */
+    this.parent = $scope.$parent;
 
     /** @type {$log} */
     this.$log = $log;
@@ -299,7 +301,7 @@
    */
   MdChipsCtrl.prototype.focusChip = function(index) {
     this.$element[0].querySelector('md-chip[index="' + index + '"] .md-chip-content').focus();
-  }
+  };
 
 
   /**
@@ -345,7 +347,11 @@
     this.userInputElement = inputElement;
 
     // Find the NgModelCtrl for the input element
-    this.userInputNgModelCtrl = inputElement.controller('ngModel');
+    var ngModelCtrl = inputElement.controller('ngModel');
+    // `.controller` will look in the parent as well.
+    if (ngModelCtrl != this.ngModelCtrl) {
+      this.userInputNgModelCtrl = ngModelCtrl;
+    }
 
     // Bind to keydown and focus events of input
     var scope = this.$scope;

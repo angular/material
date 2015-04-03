@@ -18,7 +18,7 @@
 
     <p>Use <code>&lt;md-autocomplete&gt;</code> to build an ordered set of chips.</p>
 
-    <md-chips ng-model="ctrl.selectedVegetables">
+    <md-chips ng-model="ctrl.selectedVegetables" md-autocomplete-snap>
       <md-autocomplete
           md-selected-item="ctrl.selectedItem"
           md-search-text="ctrl.searchText"
@@ -29,7 +29,6 @@
       </md-autocomplete>
       <md-chip-template>
         <span>{{$chip.name}}::{{$chip.type}}</span>
-        <md-chip-remove></md-chip-remove>
       </md-chip-template>
     </md-chips>
 

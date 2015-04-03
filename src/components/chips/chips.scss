@@ -4,6 +4,53 @@ $chip-padding: 0 0.8rem 0 1.2rem !default;
 $chip-margin: 0.8rem 0.8rem 0 0 !default;
 $chip-wrap-padding: 0 0.8rem 0.8rem 0.8rem !default;
 $chip-delete-icon-size: 1.8rem !default;
+$contact-chip-padding: 0 0.8rem 0 0 !default;
+$contact-chip-suggestion-image-height: 4.0rem !default;
+$contact-chip-suggestion-margin: 0.8rem !default;
+$contact-chip-name-width: 12rem !default;
+
+.md-contact-chips {
+  .md-chips {
+    .md-chip {
+      padding: $contact-chip-padding;
+
+      .md-contact-avatar {
+        float: left;
+        img {
+          height: $chip-height;
+          border-radius: $chip-height / 2;
+        }
+      }
+      .md-contact-name {
+        display: inline-block;
+        height: $chip-height;
+        margin-left: 0.8rem;
+      }
+    }
+  }
+}
+.md-contact-suggestion {
+  height: ($contact-chip-suggestion-margin * 2) + $contact-chip-suggestion-image-height;
+  img {
+    height: $contact-chip-suggestion-image-height;
+    border-radius: $contact-chip-suggestion-image-height / 2;
+    margin-top: $contact-chip-suggestion-margin;
+  }
+  .md-contact-name {
+    margin-left: $contact-chip-suggestion-margin;
+    width: $contact-chip-name-width;
+  }
+  .md-contact-name, .md-contact-email {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.md-contact-chips-suggestions li {
+  height: 100%;
+}
+
 
 .md-chips {
   box-shadow: $whiteframe-shadow-z1;
@@ -29,6 +76,10 @@ $chip-delete-icon-size: 1.8rem !default;
       }
     }
 
+    .md-chip-remove-container {
+      display: inline-block;
+    }
+
     &.selected {
       box-shadow: $whiteframe-shadow-z1;
     }
@@ -45,7 +96,9 @@ $chip-delete-icon-size: 1.8rem !default;
       }
 
     }
+
   }
+
 
   .md-chip-input-container {
     display: inline-block;
@@ -63,6 +116,37 @@ $chip-delete-icon-size: 1.8rem !default;
         &:focus {
           outline: none;
         }
+      }
+    }
+
+    md-autocomplete, md-autocomplete-wrap {
+      background: transparent;
+      height: $chip-height;
+    }
+
+    md-autocomplete {
+      box-shadow: none;
+
+      input {
+        position: relative;
+
+      }
+
+      button {
+        md-icon {
+          top: 1px; /* Reposition the (x) button in the autocomplete */
+        }
+      }
+    }
+
+    input {
+      border:0;
+      height: $chip-height;
+      line-height: $chip-height;
+      padding: 0;
+
+      &:focus {
+        outline:none;
       }
     }
 

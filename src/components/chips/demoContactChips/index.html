@@ -1,0 +1,45 @@
+<div ng-app="contactChipsDemo" ng-controller="ContactChipDemoCtrl as ctrl" layout="column">
+
+  <md-content class="md-padding autocomplete" layout="column">
+    <p>
+      Contact Chips.
+    </p>
+
+    <md-contact-chips
+        ng-model="ctrl.contacts"
+        md-contacts="ctrl.querySearch($query)"
+        md-contact-name="name"
+        md-contact-image="image"
+        md-contact-email="email"
+        filter-selected="ctrl.filterSelected"
+        placeholder="To">
+    </md-contact-chips>
+
+    <md-checkbox ng-model="ctrl.filterSelected">Filter selected contacts from options</md-checkbox>
+    <br />
+    <div layout="row">
+      <div flex>
+        <md-list>
+          <md-subheader class="md-no-sticky">Contacts</md-subheader>
+          <md-list-item class="md-2-line" ng-repeat="(index, contact) in ctrl.allContacts">
+            <img ng-src="{{contact.image}}" class="md-avatar" alt="{{contact.name}}" />
+            <div class="md-list-item-text compact">
+              <h3>{{contact.name}}</h3>
+              <p>{{contact.email}}</p>
+            </div>
+          </md-list-item>
+        </md-list>
+      </div>
+      <div flex>
+        <md-list>
+          <md-subheader class="md-no-sticky">Selected Contacts</md-subheader>
+          <ul>
+            <li ng-repeat="c in ctrl.contacts">
+              {{c.email}}
+            </li>
+          </ul>
+      </div>
+    </div>
+
+  </md-content>
+</div>
