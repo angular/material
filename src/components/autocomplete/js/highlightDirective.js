@@ -14,7 +14,13 @@
    * an element.  Highlighted text will be wrapped in `<span class="highlight"></span>` which can
    * be styled through CSS.  Please note that child elements may not be used with this directive.
    *
-   * @param {string=} md-highlight-text A model to be searched for
+   * @param {string} md-highlight-text A model to be searched for
+   * @param {string=} md-highlight-flags A list of flags (loosely based on JavaScript RexExp flags).
+   *    #### **Supported flags**:
+   *    - `g`: Find all matches within the provided text
+   *    - `i`: Ignore case when searching for matches
+   *    - `$`: Only match if the text ends with the search term
+   *    - `^`: Only match if the text begins with the search term
    *
    * @usage
    * <hljs lang="html">

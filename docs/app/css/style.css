@@ -154,7 +154,7 @@ pre > code.highlight {
 
 code {
   font-size: 1.4rem;
-  background: #f6f6f6;
+  background: #eee;
 }
 
 code.highlight {
@@ -167,6 +167,8 @@ code:not(.highlight) {
   margin-left: 1px;
   margin-right: 1px;
   -webkit-font-smoothing: auto;
+  padding: 0.125em 0.35em;
+  border-radius: 2px;
 }
 .layout-content code.highlight {
   margin-bottom: 15px;
