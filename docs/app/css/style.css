@@ -13,6 +13,7 @@ table {
   border-collapse: collapse;
   background-color: transparent;
 }
+
 /***************
  * TYPE DEFAULTS
  ***************/
@@ -74,6 +75,21 @@ blockquote {
   font-style: italic;
   margin-left: 0;
   padding-left: 16px;
+}
+ul {
+  margin: 0;
+  padding: 0;
+
+  li {
+    margin-left: 16px;
+    padding: 0;
+    margin-top: 3px;
+    list-style-position: inside;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
 }
 /************
  * UTILS
