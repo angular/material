@@ -11,19 +11,14 @@
    *
    * @description
    * `<md-chip-remove>`
-   * Creates a remove button for the given chip.
+   * Designates a button as a trigger to remove the chip.
    *
    * @usage
    * <hljs lang="html">
-   *   <md-chip>{{$chip}}<md-chip-remove></md-chip-remove></md-chip>
+   *   <md-chip-template>{{$chip}}<button md-chip-remove>DEL</button></md-chip-template>
    * </hljs>
    */
 
-  var REMOVE_CHIP_TEMPLATE = '\
-      <md-button ng-if="!$mdChipsCtrl.readonly" ng-click="$mdChipsCtrl.removeChip($index)">\
-        <md-icon md-svg-icon="close"></md-icon>\
-         <span class="visually-hidden">Remove</span>\
-      </md-button>';
 
   /**
    *
@@ -32,12 +27,26 @@
    * @returns {{restrict: string, require: string[], link: Function, scope: boolean}}
    * @constructor
    */
-  function MdChipRemove ($compile, $timeout) {
+  function MdChipRemove ($timeout) {
     return {
-      restrict: 'E',
-      template: REMOVE_CHIP_TEMPLATE,
-      require: ['^mdChips'],
-      scope: false
+      restrict: 'A',
+      require: '^mdChips',
+      scope: false,
+      link: postLink
     };
+
+    function postLink(scope, element, attr, ctrl) {
+      element.on('click', function(event) {
+        scope.$apply(function() {
+          ctrl.removeChip(scope.$index);
+        });
+      });
+
+      // Child elements aren't available until after a $timeout tick as they are hidden by an
+      // `ng-if`. see http://goo.gl/zIWfuw
+      $timeout(function() {
+        element.find('button').attr('tabindex', '-1');
+      });
+    }
   }
 })();

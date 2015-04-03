@@ -11,18 +11,25 @@
    * removing from the list of chips, marking chips as selected, and binding to
    * the models of various input components.
    *
+   * @param $scope
    * @param $mdUtil
    * @param $mdConstant
    * @param $log
-   * @ngInject
+   * @param $element
    * @constructor
    */
-  function MdChipsCtrl ($mdUtil, $mdConstant, $log) {
+  function MdChipsCtrl ($scope, $mdUtil, $mdConstant, $log, $element) {
     /** @type {Object} */
     this.$mdConstant = $mdConstant;
 
+    /** @type {angular.$scope} */
+    this.$scope = $scope;
+
     /** @type {$log} */
     this.$log = $log;
+
+    /** @type {$element} */
+    this.$element = $element;
 
     /** @type {angular.NgModelController} */
     this.ngModelCtrl = null;
@@ -30,11 +37,30 @@
     /** @type {Object} */
     this.mdAutocompleteCtrl = null;
 
+    /** @type {angular.NgModelController} */
+    this.userInputNgModelCtrl = null;
+
+    /** @type {Element} */
+    this.userInputElement = null;
+
     /** @type {Array.<Object>} */
     this.items = [];
 
     /** @type {number} */
     this.selectedChip = -1;
+
+
+    /**
+     * Hidden hint text for how to delete a chip. Used to give context to screen readers.
+     * @type {string}
+     */
+    this.deleteHint = 'Press delete to remove this chip.';
+
+    /**
+     * Hidden label for the delete button. Used to give context to screen readers.
+     * @type {string}
+     */
+    this.deleteButtonLabel = 'Remove';
 
     /**
      * Model used by the input element.
@@ -43,18 +69,11 @@
     this.chipBuffer = '';
 
     /**
-     * Whether to use the mdChipAppend expression to transform the chip buffer
+     * Whether to use the mdOnAppend expression to transform the chip buffer
      * before appending it to the list.
      * @type {boolean}
      */
-    this.useMdChipAppend = false;
-
-    /**
-     * Whether the Chip buffer is driven by an input element provided by the
-     * caller.
-     * @type {boolean}
-     */
-    this.hasInputElement = false;
+    this.useMdOnAppend = false;
   }
 
 
@@ -64,23 +83,76 @@
    * if the current buffer is empty.
    * @param event
    */
-  MdChipsCtrl.prototype.defaultInputKeydown = function(event) {
+  MdChipsCtrl.prototype.inputKeydown = function(event) {
     switch (event.keyCode) {
       case this.$mdConstant.KEY_CODE.ENTER:
-        if ( this.chipBuffer ) {
+        var chipBuffer = this.getChipBuffer();
+        if (chipBuffer) {
           event.preventDefault();
-          this.appendChipBuffer();
+          this.appendChip(chipBuffer);
+          this.resetChipBuffer();
         }
         break;
-      case this.$mdConstant.KEY_CODE.BACKSPACE: // backspace
+      case this.$mdConstant.KEY_CODE.BACKSPACE:
         if (!this.chipBuffer) {
-					event.preventDefault();
+          event.preventDefault();
           // TODO(typotter): Probably want to open the previous one for edit instead.
-          this.removeChip(this.items.length - 1);
+          if (this.items.length > 0) {
+            this.removeChip(this.items.length - 1);
+          }
+          event.target.focus();
         }
         break;
-      default:
     }
+  };
+
+
+  /**
+   * Handles the keydown event on an `<md-chip>` element.
+   * @param index
+   * @param event
+   */
+  MdChipsCtrl.prototype.chipKeydown = function(index, event) {
+    switch (event.keyCode) {
+      case this.$mdConstant.KEY_CODE.BACKSPACE:
+      // TODO(typotter): Probably want to open the current (prev?) one for edit instead.
+      case this.$mdConstant.KEY_CODE.DELETE:
+        if (index >= 0) {
+          event.preventDefault();
+          this.removeAndSelectAdjacentChip(index);
+        }
+        break;
+      case this.$mdConstant.KEY_CODE.LEFT_ARROW:
+        this.selectChipSafe(this.selectedChip - 1);
+        break;
+      case this.$mdConstant.KEY_CODE.RIGHT_ARROW:
+        this.selectChipSafe(this.selectedChip + 1);
+        break;
+    }
+  };
+
+
+  /**
+   * Get the input's placeholder - uses `placeholder` when list is empty and `secondary-placeholder`
+   * when the list is non-empty. If `secondary-placeholder` is not provided, `placeholder` is used
+   * always.
+   */
+  MdChipsCtrl.prototype.getPlaceholder = function() {
+    // Allow `secondary-placeholder` to be blank.
+    var useSecondary = (this.items.length &&
+        (this.secondaryPlaceholder == '' || this.secondaryPlaceholder));
+    return useSecondary ? this.placeholder : this.secondaryPlaceholder;
+  };
+
+
+  /**
+   * Removes chip at {@code index} and selects the adjacent chip.
+   * @param index
+   */
+  MdChipsCtrl.prototype.removeAndSelectAdjacentChip = function(index) {
+    var selIndex = this.getAdjacentChipIndex(index);
+    this.removeChip(index);
+    this.selectAndFocusChip(selIndex);
   };
 
 
@@ -93,28 +165,43 @@
 
 
   /**
-   * Append the contents of the buffer to the chip list. This method will first
-   * call out to the md-chip-append method, if provided
+   * Gets the index of an adjacent chip to select after deletion. Adjacency is
+   * determined as the next chip in the list, unless the target chip is the
+   * last in the list, then it is the chip immediately preceding the target. If
+   * there is only one item in the list, -1 is returned (select none).
+   * The number returned is the index to select AFTER the target has been
+   * removed.
+   * If the current chip is not selected, then -1 is returned to select none.
    */
-  MdChipsCtrl.prototype.appendChipBuffer = function() {
-    var newChip = this.getChipBuffer();
-    if (this.useMdChipAppend && this.mdChipAppend) {
-      newChip = this.mdChipAppend({'$chip': newChip});
-    }
-    this.items.push(newChip);
-    this.resetChipBuffer();
+  MdChipsCtrl.prototype.getAdjacentChipIndex = function(index) {
+    var len = this.items.length - 1;
+    return (len == 0) ? -1 :
+        (index == len) ? index -1 : index;
   };
 
 
   /**
-   * Sets whether to use the md-chip-append expression. This expression is
+   * Append the contents of the buffer to the chip list. This method will first
+   * call out to the md-on-append method, if provided
+   * @param newChip
+   */
+  MdChipsCtrl.prototype.appendChip = function(newChip) {
+    if (this.useMdOnAppend && this.mdOnAppend) {
+      newChip = this.mdOnAppend({'$chip': newChip});
+    }
+    this.items.push(newChip);
+  };
+
+
+  /**
+   * Sets whether to use the md-on-append expression. This expression is
    * bound to scope and controller in {@code MdChipsDirective} as
-   * {@code mdChipAppend}. Due to the nature of directive scope bindings, the
+   * {@code mdOnAppend}. Due to the nature of directive scope bindings, the
    * controller cannot know on its own/from the scope whether an expression was
    * actually provided.
    */
-  MdChipsCtrl.prototype.useMdChipAppendExpression = function() {
-    this.useMdChipAppend = true;
+  MdChipsCtrl.prototype.useMdOnAppendExpression = function() {
+    this.useMdOnAppend = true;
   };
 
 
@@ -128,21 +215,25 @@
    */
   MdChipsCtrl.prototype.getChipBuffer = function() {
     if (this.mdAutocompleteCtrl) {
-      this.$log.error('md-autocomplete not yet supported');
-    } else if (this.hasInputElement) {
-      this.$log.error('user-provided inputs not yet supported');
-    } else {
-      return this.chipBuffer;
+      throw Error('getChipBuffer should not be called if there is an md-autocomplete');
     }
+    return !this.userInputElement ? this.chipBuffer :
+        this.userInputNgModelCtrl ? this.userInputNgModelCtrl.$viewValue :
+            this.userInputElement[0].value;
   };
 
 
   /**
-   * Resets the input buffer.
+   * Resets the input buffer for either the internal input or user provided input element.
    */
   MdChipsCtrl.prototype.resetChipBuffer = function() {
-    if (this.mdAutocompleteCtrl) {
-      this.$log.error('md-autocomplete not yet supported');
+    if (this.userInputElement) {
+      if (this.userInputNgModelCtrl) {
+        this.userInputNgModelCtrl.$setViewValue('');
+        this.userInputNgModelCtrl.$render();
+      } else {
+        this.userInputElement[0].value = '';
+      }
     } else {
       this.chipBuffer = '';
     }
@@ -159,16 +250,56 @@
 
 
   /**
+   * Selects the chip at `index`,
+   * @param index
+   */
+  MdChipsCtrl.prototype.selectChipSafe = function(index) {
+    if (this.items.length == 0) {
+      this.selectChip(-1);
+      return;
+    }
+
+    if (index < 0) {
+      index = 0;
+    } else if (index > this.items.length - 1) {
+      index = this.items.length - 1;
+    }
+    this.selectChip(index);
+    this.focusChip(index);
+  };
+
+
+  /**
    * Marks the chip at the given index as selected.
    * @param index
    */
   MdChipsCtrl.prototype.selectChip = function(index) {
-    if (index >= 0 && index <= this.items.length) {
+    if (index >= -1 && index <= this.items.length) {
       this.selectedChip = index;
     } else {
       this.$log.warn('Selected Chip index out of bounds; ignoring.');
     }
   };
+
+
+  /**
+   * Selects the chip at `index` and gives it focus.
+   * @param index
+   */
+  MdChipsCtrl.prototype.selectAndFocusChip = function(index) {
+    this.selectChip(index);
+    if (index != -1) {
+      this.focusChip(index);
+    }
+  };
+
+
+  /**
+   * Call `focus()` on the chip at `index`
+   */
+  MdChipsCtrl.prototype.focusChip = function(index) {
+    this.$element[0].querySelector('md-chip[index="' + index + '"] .md-chip-content').focus();
+  }
 
 
   /**
@@ -193,6 +324,36 @@
    */
   MdChipsCtrl.prototype.configureMdAutocomplete = function(mdAutocompleteCtrl) {
     this.mdAutocompleteCtrl = mdAutocompleteCtrl;
-    // TODO(typotter): create and register a selectedItem watcher with mdAutocompleteCtrl.
+    this.mdAutocompleteCtrl.registerSelectedItemWatcher(
+        this.mdAutocompleteSelectedItemWatcher.bind(this));
+  };
+
+
+  MdChipsCtrl.prototype.mdAutocompleteSelectedItemWatcher = function(newItem, oldItem) {
+    if (newItem && newItem !== oldItem) {
+      this.appendChip(newItem);
+      this.mdAutocompleteCtrl.clear();
+    }
+  };
+
+
+  /**
+   * Configure event bindings on a user-provided input element.
+   * @param inputElement
+   */
+  MdChipsCtrl.prototype.configureUserInput = function(inputElement) {
+    this.userInputElement = inputElement;
+
+    // Find the NgModelCtrl for the input element
+    this.userInputNgModelCtrl = inputElement.controller('ngModel');
+
+    // Bind to keydown and focus events of input
+    var scope = this.$scope;
+    var ctrl = this;
+    inputElement.on('keydown', function(event) {
+      scope.$apply(function() {
+        ctrl.inputKeydown(event);
+      });
+    });
   };
 })();

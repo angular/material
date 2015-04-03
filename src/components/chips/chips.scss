@@ -1,9 +1,9 @@
 $chip-font-size: 1.3rem !default;
-$chip-height: 2.2rem !default;
-$chip-button-padding: 0.2rem !default;
-$chip-padding: 0 0.8rem 0 0.8rem !default;
-$chip-margin: 0 0 0 0.8rem !default;
-$chip-wrap-padding: 0.8rem !default;
+$chip-height: 3.2rem !default;
+$chip-padding: 0 0.8rem 0 1.2rem !default;
+$chip-margin: 0.8rem 0.8rem 0 0 !default;
+$chip-wrap-padding: 0 0.8rem 0.8rem 0.8rem !default;
+$chip-delete-icon-size: 1.8rem !default;
 
 .md-chips {
   box-shadow: $whiteframe-shadow-z1;
@@ -17,44 +17,80 @@ $chip-wrap-padding: 0.8rem !default;
     border-radius: $chip-height / 2;
     display: inline-block;
     height: $chip-height;
-    margin: $chip-margin;
     line-height: $chip-height;
+    margin: $chip-margin;
     padding: $chip-padding;
 
-    &:first-child {
-      margin: 0;
+    .md-chip-content {
+      display: inline-block;
+      padding-right:0.4rem;
+      &:focus {
+        outline: none;
+      }
     }
 
-    &.selected, &:focus {
-      outline: none;
-      transform: translate3d(0, -1px, 0);
+    &.selected {
       box-shadow: $whiteframe-shadow-z1;
     }
 
-    .md-button {
-      padding: $chip-button-padding;
-      line-height: $chip-height - $chip-button-padding * 2;
+    .md-button.md-chip-remove {
+      line-height: $chip-height;
+      margin: 0 0 0 0.4rem;
       min-width: 0;
-      margin: 0 0 0 0.5em;
+      padding: 0;
 
       md-icon {
-        height: 1.6rem;
-        width: 1.6rem;
+        height: $chip-delete-icon-size;
+        width: $chip-delete-icon-size;
       }
+
     }
   }
 
-  .md-chip-worker {
+  .md-chip-input-container {
     display: inline-block;
     line-height: $chip-height;
+    margin: $chip-margin;
+    padding: $chip-padding;
+
+    input {
+      &:not([type]),&[type="email"],&[type="number"],&[type="tel"],&[type="url"],&[type="text"] {
+        border: 0;
+        height: $chip-height;
+        line-height: $chip-height;
+        padding: 0;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+
+    md-autocomplete, md-autocomplete-wrap {
+      height: $chip-height;
+    }
+
+    md-autocomplete {
+      box-shadow: none;
+
+      input {
+        position: relative;
+      }
+
+      button {
+        md-icon {
+          top: 1px; /* Reposition the (x) button in the autocomplete */
+        }
+      }
+    }
 
     &:not(:first-child) {
       margin: $chip-margin;
     }
-  }
 
-  .md-chip-input {
-    background-color:transparent;
-    border-width: 0;
+    input {
+      background:transparent;
+      border-width: 0;
+    }
   }
 }
