@@ -20,6 +20,10 @@ md-card {
     order: 1;
     padding: $card-padding;
   }
+  md-card-footer {
+    order: 2;
+    padding: $card-padding;
+  }
 }
 
 @media screen and (-ms-high-contrast: active) {
