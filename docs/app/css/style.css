@@ -127,10 +127,6 @@ ul.skip-links li a:focus {
   opacity: 1;
   z-index: 2;
 }
-.extraPad {
-  padding-left:32px !important;
-  padding-right:32px !important;
-}
 /*******************
  * CODE HIGHLIGHTING
  *******************/
@@ -174,7 +170,7 @@ code.highlight {
 }
 
 code:not(.highlight) {
-  color: #E91E63;
+  color: #E42939;
   margin-left: 1px;
   margin-right: 1px;
   -webkit-font-smoothing: auto;
@@ -311,7 +307,8 @@ code:not(.highlight) {
 .layout-content,
 .doc-content {
   max-width: 864px;
-  margin: 0 16px;
+  margin: auto;
+  padding: 0 16px;
 }
 docs-demo {
   display: block;
