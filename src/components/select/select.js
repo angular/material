@@ -566,7 +566,8 @@ function OptionDirective($mdInkRipple, $mdUtil) {
     } else if (angular.isDefined(attr.value)) {
       setOptionValue(attr.value);
     } else {
-      throw new Error("Expected either ngValue or value attr");
+      debugger;
+      scope.$watch(function() { return element.text(); }, setOptionValue)
     }
 
     attr.$observe('selected', function(selected) {

@@ -146,12 +146,20 @@ describe('<md-select-menu>', function() {
     }));
   });
 
+  it('auto-infers a value when none specified', inject(function($rootScope) {
+      $rootScope.name = "Hannah";
+      var el = setup('ng-model="name"', '<md-option>Tom</md-option>' +
+            '<md-option>Hannah</md-option>');
+      expect(selectedOptions(el).length).toBe(1);
+  }));
+
   it('errors for duplicate md-options, non-dynamic value', inject(function($rootScope) {
     expect(function() {
       setup('ng-model="$root.model"', '<md-option value="a">Hello</md-option>' +
             '<md-option value="a">Goodbye</md-option>');
     }).toThrow();
   }));
+
   it('errors for duplicate md-options, ng-value', inject(function($rootScope) {
     setup('ng-model="$root.model"', '<md-option ng-value="foo">Hello</md-option>' +
           '<md-option ng-value="bar">Goodbye</md-option>');
