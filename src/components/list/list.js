@@ -11,7 +11,6 @@ angular.module('material.components.list', [
   'material.core'
 ])
   .directive('mdList', mdListDirective)
-  .directive('mdItem', mdItemDirective)
   .directive('mdListItem', mdItemDirective);
 
 /**
@@ -22,29 +21,22 @@ angular.module('material.components.list', [
  * @restrict E
  *
  * @description
- * The `<md-list>` directive is a list container for 1..n `<md-item>` tags.
+ * The `<md-list>` directive is a list container for 1..n `<md-list-item>` tags.
  *
  * @usage
  * <hljs lang="html">
  * <md-list>
- *   <md-item ng-repeat="item in todos">
- *     <md-item-content>
- *       <div class="md-tile-left">
- *         <img ng-src="{{item.face}}" class="face" alt="{{item.who}}">
- *       </div>
- *       <div class="md-tile-content">
- *         <h3>{{item.what}}</h3>
- *         <h4>{{item.who}}</h4>
- *         <p>
- *           {{item.notes}}
- *         </p>
- *       </div>
- *     </md-item-content>
- *   </md-item>
+ *   <md-list-item class="md-2-line" ng-repeat="item in todos">
+ *     <md-checkbox ng-model="item.done"></md-checkbox>
+ *     <div class="md-list-item-text">
+ *       <h3>{{item.title}}</h3>
+ *       <p>{{item.description}}</p>
+ *     </div>
+ *   </md-list-item>
  * </md-list>
  * </hljs>
- *
  */
+
 function mdListDirective($mdTheming) {
   return {
     restrict: 'E',
@@ -124,11 +116,11 @@ function mdItemDirective($document, $log, $mdUtil, $mdAria) {
       function wrapIn(type) {
         var container;
         if (type == 'div') {
-          container = angular.element('<div class="md-no-style md-item-inner">');
+          container = angular.element('<div class="md-no-style md-list-item-inner">');
           container.append(tEl.contents());
           tEl.addClass('md-proxy-focus');
         } else {
-          container = angular.element('<button tabindex="0" class="md-no-style"><div class="md-item-inner"></div></button>');
+          container = angular.element('<button tabindex="0" class="md-no-style"><div class="md-list-item-inner"></div></button>');
           container[0].setAttribute('ng-click', tEl[0].getAttribute('ng-click'));
           tEl[0].removeAttribute('ng-click');
           container.children().eq(0).append(tEl.contents());

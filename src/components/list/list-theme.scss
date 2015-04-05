@@ -1,6 +1,6 @@
 md-list.md-THEME_NAME-theme {
-  md-item.md-double-line .md-item-text,
-  md-item.md-triple-line .md-item-text {
+  md-list-item.md-2-line .md-list-item-text,
+  md-list-item.md-3-line .md-list-item-text {
     h3, h4 {
       color: '{{foreground-1}}';
     }
@@ -14,7 +14,7 @@ md-list.md-THEME_NAME-theme {
     background-color: '{{background-100}}';
   }
 
-  md-item > md-icon {
+  md-list-item > md-icon {
     color: '{{foreground-2}}';
 
     &.md-highlight {

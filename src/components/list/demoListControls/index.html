@@ -1,29 +1,29 @@
 <md-list ng-controller="ListCtrl">
   <md-subheader class="md-no-sticky">Single Action Checkboxes</md-subheader>
-  <md-item ng-repeat="topping in toppings">
+  <md-list-item ng-repeat="topping in toppings">
     <p> {{ topping.name }} </p>
     <md-checkbox class="md-secondary" ng-model="topping.wanted"></md-checkbox>
-  </md-item>
+  </md-list-item>
   <md-subheader class="md-no-sticky">Clickable Items with Secondary Controls</md-subheader>
-  <md-item ng-click="navigateTo(setting.extraScreen)" ng-repeat="setting in settings">
+  <md-list-item ng-click="navigateTo(setting.extraScreen)" ng-repeat="setting in settings">
     <md-icon md-svg-icon="{{setting.icon}}"></md-icon>
     <p> {{ setting.name }} </p>
     <md-switch class="md-secondary" ng-model="setting.enabled">
-  </md-item>
-  <md-item ng-click="navigateTo('data usage')">
+  </md-list-item>
+  <md-list-item ng-click="navigateTo('data usage')">
     <md-icon md-svg-icon="cached"></md-icon>
     <p>Data Usage</p>
-  </md-item>
+  </md-list-item>
   <md-subheader class="md-no-sticky">Checkbox with Secondary Action</md-subheader>
-  <md-item ng-repeat="message in messages">
+  <md-list-item ng-repeat="message in messages">
     <md-checkbox ng-model="message.selected"></md-checkbox>
     <p>{{message.title}}</p>
     <md-icon class="md-secondary" ng-click="doSecondaryAction()" aria-label="Chat" md-svg-icon="communication:message"></md-icon>
-  </md-item>
+  </md-list-item>
   <md-subheader class="md-no-sticky">Avatar with Secondary Action Icon</md-subheader>
-  <md-item ng-repeat="person in people" ng-click="goToPerson(person.name)">
+  <md-list-item ng-repeat="person in people" ng-click="goToPerson(person.name)">
     <img alt="avatar" src="http://lorempixel.com/100/100/people/?{{$index}}" class="md-avatar" />
     <p>{{ person.name }}</p>
     <md-icon md-svg-icon="communication:messenger" ng-click="doSecondaryAction()" aria-label="Open Chat" class="md-secondary md-hue-3" ng-class="{'md-primary': person.newMessage}"></md-icon>
-  </md-item>
+  </md-list-item>
 </md-list>
