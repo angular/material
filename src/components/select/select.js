@@ -164,12 +164,33 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
         syncLabelText();
       };
 
+      var lineHeight;
       mdSelectCtrl.setLabelText = function(text) {
         if (customLabel) return; // Assume that user is handling it on their own
         mdSelectCtrl.setIsPlaceholder(!text);
         var newText = text || attr.placeholder || '';
         var target = customLabel ? labelEl : labelEl.children().eq(0);
-        target.text(newText);
+
+        if (lineHeight === undefined) {
+          target.text('M');
+          lineHeight = target[0].offsetHeight;
+        }
+
+        var doneShrinking = false;
+        var didShrink = false;
+        do {
+          target.text(newText);
+          if (target[0].offsetHeight > lineHeight) {
+            newText = newText.slice(0, -1);
+            didShrink = true;
+          } else {
+            if (didShrink == true) {
+              newText = newText.slice(0, -3) + '...';
+              target.text(newText);
+            }
+            doneShrinking = true;
+          }
+        } while (!doneShrinking);
       };
 
       mdSelectCtrl.setIsPlaceholder = function(val) {
@@ -178,9 +199,10 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
 
       scope.$$postDigest(syncLabelText);
 
+      var selectMenuCtrl;
       function syncLabelText() {
         if (selectContainer) {
-          var selectMenuCtrl = selectContainer.find('md-select-menu').controller('mdSelectMenu');
+          selectMenuCtrl = selectMenuCtrl || selectContainer.find('md-select-menu').controller('mdSelectMenu');
           mdSelectCtrl.setLabelText(selectMenuCtrl.selectedLabels());
         }
       }
