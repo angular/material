@@ -566,7 +566,6 @@ function OptionDirective($mdInkRipple, $mdUtil) {
     } else if (angular.isDefined(attr.value)) {
       setOptionValue(attr.value);
     } else {
-      debugger;
       scope.$watch(function() { return element.text(); }, setOptionValue)
     }
 
