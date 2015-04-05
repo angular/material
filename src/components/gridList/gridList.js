@@ -290,7 +290,7 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia) {
           // Percent of the available vertical space that one row takes up.
           var vShare = (1 / rowCount) * 100;
 
-          // Base veritcal size of a row.
+          // Base vertical size of a row.
           var vUnit = UNIT({share: vShare, gutterShare: vGutterShare, gutter: gutter});
 
           style.top = POSITION({unit: vUnit, offset: position.row, gutter: gutter});
@@ -391,7 +391,7 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia) {
   }
 }
 
-  /* @ngInject */
+/* @ngInject */
 function GridListController($timeout) {
   this.invalidated = false;
   this.$timeout_ = $timeout;
