@@ -296,7 +296,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
             element: selectContainer,
             target: element[0],
             hasBackdrop: true,
-            loadingAsync: attr.mdOnOpen ? scope.$eval(attr.mdOnOpen) : false,
+            loadingAsync: attr.mdOnOpen ? scope.$eval(attr.mdOnOpen) || true : false,
           }).then(function(selectedText) {
             isOpen = false;
           });
@@ -694,6 +694,8 @@ function SelectProvider($$interimElementProvider) {
             });
           });
         });
+      } else if (opts.loadingAsync) {
+        scope.$$loadingAsyncDone = true;
       }
 
       if (opts.disableParentScroll) {
@@ -952,7 +954,6 @@ function SelectProvider($$interimElementProvider) {
 
       // Keep left and top within the window
       var containerRect = containerNode.getBoundingClientRect();
-      debugger;
       containerNode.style.left = clamp(bounds.left, left, bounds.right - containerRect.width) + 'px';
       containerNode.style.top = clamp(bounds.top, top, bounds.bottom - containerRect.height) + 'px';
       selectNode.style[$mdConstant.CSS.TRANSFORM_ORIGIN] = transformOrigin;
