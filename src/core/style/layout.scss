@@ -89,6 +89,26 @@
   }
 }
 
+@mixin offset-for-name($name: null) {
+  $offsetName: 'offset';
+  @if $name != null {
+    $offsetName: 'offset-#{$name}';
+  }
+  [#{$offsetName}] {
+    @for $i from 1 through 19 {
+      [#{$offsetName}="#{$i * 5}"] {
+        margin-left: #{$i * 5 + '%'};
+      }
+    }
+  }
+  [#{$offsetName}="33"], [#{$offsetName}="34"] {
+    margin-left: 33.33%;
+  }
+  [#{$offsetName}="66"], [#{$offsetName}="67"] {
+    margin-left: 66.66%;
+  }
+}
+
 @mixin flex-properties-for-name($name: null) {
   $flexName: 'flex';
   @if $name != null {
@@ -224,6 +244,7 @@
 @include flex-properties-for-name();
 @include layout-align-for-name();
 @include flex-order-for-name();
+@include offset-for-name();
 
 /**
  * `hide-gt-sm show-gt-lg` should hide from 600px to 1200px
@@ -242,6 +263,7 @@
   @include flex-order-for-name(sm);
   @include layout-align-for-name(sm);
   @include layout-for-name(sm);
+  @include offset-for-name(sm);
   @include flex-properties-for-name(sm);
 }
 
@@ -250,6 +272,7 @@
   @include flex-order-for-name(gt-sm);
   @include layout-align-for-name(gt-sm);
   @include layout-for-name(gt-sm);
+  @include offset-for-name(gt-sm);
   @include flex-properties-for-name(gt-sm);
 }
 
@@ -267,6 +290,7 @@
   @include flex-order-for-name(md);
   @include layout-align-for-name(md);
   @include layout-for-name(md);
+  @include offset-for-name(md);
   @include flex-properties-for-name(md);
 }
 
@@ -275,6 +299,7 @@
   @include flex-order-for-name(gt-md);
   @include layout-align-for-name(gt-md);
   @include layout-for-name(gt-md);
+  @include offset-for-name(gt-md);
   @include flex-properties-for-name(gt-md);
 }
 
@@ -292,6 +317,7 @@
   @include flex-order-for-name(lg);
   @include layout-align-for-name(lg);
   @include layout-for-name(lg);
+  @include offset-for-name(lg);
   @include flex-properties-for-name(lg);
 }
 
@@ -306,5 +332,6 @@
   @include flex-order-for-name(gt-lg);
   @include layout-align-for-name(gt-lg);
   @include layout-for-name(gt-lg);
+  @include offset-for-name(gt-lg);
   @include flex-properties-for-name(gt-lg);
 }
