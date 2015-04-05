@@ -152,36 +152,47 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia) {
       }
     }
 
+    var lastLayoutProps;
+
     /**
      * Invokes the layout engine, and uses its results to lay out our
      * tile elements.
      */
     function layoutDelegate() {
+      var props = {
+        tileSpans: getTileSpans(),
+        colCount: getColumnCount(),
+        rowMode: getRowMode(),
+        rowHeight: getRowHeight(),
+        gutter: getGutter()
+      };
+
+      if (angular.equals(props, lastLayoutProps)) {
+        return;
+      }
+
       var tiles = getTileElements(),
-          colCount = getColumnCount(),
-          rowMode = getRowMode(),
-          rowHeight = getRowHeight(),
-          gutter = getGutter(),
           performance =
-              $mdGridLayout(colCount, getTileSpans(), getTileElements())
-                  .map(function(tilePositions, rowCount) {
+            $mdGridLayout(props.colCount, props.tileSpans, tiles)
+              .map(function(tilePositions, rowCount) {
+                return {
+                  grid: {
+                    element: element,
+                    style: getGridStyle(props.colCount, rowCount,
+                        props.gutter, props.rowMode, props.rowHeight)
+                  },
+                  tiles: tilePositions.map(function(ps, i) {
                     return {
-                      grid: {
-                        element: element,
-                        style: getGridStyle(colCount, rowCount, gutter, rowMode, rowHeight)
-                      },
-                      tiles: tilePositions.map(function(ps, i) {
-                        return {
-                          element: angular.element(tiles[i]),
-                          style: getTileStyle(ps.position, ps.spans,
-                              colCount, rowCount,
-                              gutter, rowMode, rowHeight)
-                        }
-                      })
+                      element: angular.element(tiles[i]),
+                      style: getTileStyle(ps.position, ps.spans,
+                          props.colCount, props.rowCount,
+                          props.gutter, props.rowMode, props.rowHeight)
                     }
                   })
-                  .reflow()
-                  .performance();
+                }
+              })
+              .reflow()
+              .performance();
 
       // Report layout
       scope.mdOnLayout({
@@ -189,6 +200,8 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia) {
           performance: performance
         }
       });
+
+      lastLayoutProps = props;
     }
 
     // Use $interpolate to do some simple string interpolation as a convenience.
