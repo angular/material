@@ -726,6 +726,14 @@ function GridTileDirective($mdMedia) {
       unwatchAttrs();
       gridCtrl.removeTile(element, attrs);
     });
+
+    if (angular.isDefined(scope.$parent.$index)) {
+      scope.$watch(function() { return scope.$parent.$index; },
+        function indexChanged(newIdx, oldIdx) {
+          gridCtrl.removeTile(element, attrs);
+          gridCtrl.addTile(element, attrs, newIdx);
+        });
+    }
   }
 }
 

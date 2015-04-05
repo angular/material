@@ -9,6 +9,10 @@ angular
             background: ""
           });
 
+    this.rotate = function() {
+      this.tiles.unshift(this.tiles.pop());
+    };
+
     function buildGridModel(tileTmpl){
       var it, results = [ ];
 
@@ -17,7 +21,7 @@ angular
         it = angular.extend({},tileTmpl);
         it.icon  = it.icon + (j+1);
         it.title = it.title + (j+1);
-        it.span  = { row : "1", col : "1" };
+        it.span  = { row : 1, col : 1 };
 
         switch(j+1) {
           case 1:
