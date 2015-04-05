@@ -952,6 +952,7 @@ function SelectProvider($$interimElementProvider) {
 
       // Keep left and top within the window
       var containerRect = containerNode.getBoundingClientRect();
+      debugger;
       containerNode.style.left = clamp(bounds.left, left, bounds.right - containerRect.width) + 'px';
       containerNode.style.top = clamp(bounds.top, top, bounds.bottom - containerRect.height) + 'px';
       selectNode.style[$mdConstant.CSS.TRANSFORM_ORIGIN] = transformOrigin;
@@ -975,7 +976,7 @@ function SelectProvider($$interimElementProvider) {
   }
 
   function clamp(min, n, max) {
-    return Math.min(max, Math.max(n, min));
+    return Math.max(min, Math.min(n, max));
   }
 
   function getOffsetRect(node) {
