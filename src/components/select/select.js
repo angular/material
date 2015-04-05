@@ -673,7 +673,7 @@ function SelectProvider($$interimElementProvider) {
     });
 
   /* @ngInject */
-  function selectDefaultOptions($mdSelect, $mdConstant, $$rAF, $mdUtil, $mdTheming, $timeout) {
+  function selectDefaultOptions($mdSelect, $mdConstant, $$rAF, $mdUtil, $mdTheming, $timeout, $window) {
     return {
       parent: 'body',
       onShow: onShow,
@@ -697,6 +697,14 @@ function SelectProvider($$interimElementProvider) {
         contentEl: element.find('md-content'),
         backdrop: opts.hasBackdrop && angular.element('<md-backdrop class="md-select-backdrop md-click-catcher">')
       });
+
+      opts.resizeFn = function() {
+        animateSelect(scope, element, opts);
+      };
+
+      angular.element($window).on('resize', opts.resizeFn);
+      angular.element($window).on('orientationchange', opts.resizeFn);
+
 
       configureAria();
 
@@ -852,6 +860,10 @@ function SelectProvider($$interimElementProvider) {
         delete opts.lastOverflow;
         delete opts.disableTarget;
       }
+
+      angular.element($window).off('resize', opts.resizefn);
+      angular.element($window).off('orientationchange', opts.resizefn);
+      opts.resizeFn = undefined;
 
       var mdSelect = opts.selectEl.controller('mdSelect');
       if (mdSelect) {

@@ -21,6 +21,7 @@ md-backdrop {
   right: 0;
 
   &.md-click-catcher {
+    top: 0px;
     position: fixed;
   }
 
