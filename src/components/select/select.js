@@ -891,7 +891,7 @@ function SelectProvider($$interimElementProvider) {
             left: parentRect.left + SELECT_EDGE_MARGIN,
             top: SELECT_EDGE_MARGIN,
             bottom: parentRect.height - SELECT_EDGE_MARGIN,
-            right: parentRect.width - SELECT_EDGE_MARGIN
+            right: parentRect.width - SELECT_EDGE_MARGIN - ($mdUtil.floatingScrollbars() ? 16 : 0)
           },
           spaceAvailable = {
             top: targetRect.top - bounds.top,
