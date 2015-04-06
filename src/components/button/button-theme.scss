@@ -14,6 +14,9 @@ $button-fab-border-radius: 50% !default;
     border-radius: $button-fab-border-radius;
     background-color: '{{accent-color}}';
     color: '{{accent-contrast}}';
+    md-icon {
+      color: '{{accent-contrast}}';
+    }
     &:not([disabled]) {
       &:focus {
         background-color: '{{accent-A700}}';
@@ -27,6 +30,9 @@ $button-fab-border-radius: 50% !default;
     &.md-fab {
       color: '{{primary-contrast}}';
       background-color: '{{primary-color}}';
+      md-icon {
+        color: '{{primary-contrast}}';
+      }
       &:not([disabled]) {
         &:focus {
           background-color: '{{primary-600}}';
@@ -52,6 +58,9 @@ $button-fab-border-radius: 50% !default;
     &.md-fab {
       color: '{{warn-contrast}}';
       background-color: '{{warn-color}}';
+      md-icon {
+        color: '{{warn-contrast}}';
+      }
       &:not([disabled]) {
         &:focus {
           background-color: '{{warn-700}}';
@@ -62,11 +71,13 @@ $button-fab-border-radius: 50% !default;
 
   &.md-accent {
     color: '{{accent-color}}';
-
     &.md-raised,
     &.md-fab {
       color: '{{accent-contrast}}';
       background-color: '{{accent-color}}';
+      md-icon {
+        color: '{{accent-contrast}}';
+      }
       &:not([disabled]) {
         &:focus {
           background-color: '{{accent-700}}';

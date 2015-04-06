@@ -137,7 +137,7 @@ pre {
 }
 
 pre > code.highlight {
-  padding: 10px;
+  padding: 16px;
   font-weight: 400;
   -webkit-user-select: initial;
   -moz-user-select: initial;
@@ -156,7 +156,7 @@ pre, code {
 pre > code.highlight {
   background-color: transparent;
   font-weight: 400;
-  padding: 10px;
+  padding: 16px;
 }
 
 code {
@@ -307,8 +307,7 @@ code:not(.highlight) {
 .layout-content,
 .doc-content {
   max-width: 864px;
-  margin: auto;
-  padding: 0 16px;
+  padding: 16px;
 }
 docs-demo {
   display: block;
@@ -360,7 +359,6 @@ md-tabs.demo-source-tabs .active md-tab-label {
 .demo-content {
   position: relative;
   overflow:hidden;
-  min-height: 448px;
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -566,11 +564,13 @@ md-content.demo-source-container {
   background-color: transparent;
   border: none;
 }
+.demo-container > md-tabs {
+  border-radius: 0;
+}
+md-content.demo-source-container > hljs,
+md-content.demo-source-container > hljs > pre,
 md-content.demo-source-container > hljs > pre > code.highlight {
-  position : absolute;
-  top : 0px;
-  left: 0px;
-  right: 0px;
+  min-height: 100%;
 }
 
 .dashed-bottom {
@@ -607,6 +607,17 @@ md-content.demo-source-container > hljs > pre > code.highlight {
 ul.no-style {
   padding: 0;
   list-style: none;
+}
+
+ul.methods {
+  padding: 0;
+  list-style: none;
+}
+ul.methods > li {
+  margin: 0;
+}
+ul.methods > li:first-child > *:first-child {
+  padding-top: 0;
 }
 
 /* Styles for Windows High Contrast mode */

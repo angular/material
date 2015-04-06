@@ -29,7 +29,7 @@
       <md-tabs class="demo-source-tabs" ng-show="demoCtrl.$showSource" md-border-bottom>
         <md-tab ng-repeat="file in demoCtrl.orderedFiles" label="{{file.name}}">
           <md-content md-scroll-y class="demo-source-container">
-            <hljs code="file.contentsPromise" lang="{{file.fileType}}" should-interpolate="demoCtrl.interpolateCode">
+            <hljs class="no-header" code="file.contentsPromise" lang="{{file.fileType}}" should-interpolate="demoCtrl.interpolateCode">
             </hljs>
           </md-c>
         </md-tab>
