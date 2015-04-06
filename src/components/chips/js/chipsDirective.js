@@ -123,7 +123,7 @@
           ng-click="$mdChipsCtrl.removeChip($index)"\
           tabindex="-1">\
         <md-icon md-svg-icon="close"></md-icon>\
-        <span class="visually-hidden">\
+        <span class="md-visually-hidden">\
           {{$mdChipsCtrl.deleteButtonLabel}}\
         </span>\
       </md-button>';
