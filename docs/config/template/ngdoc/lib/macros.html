@@ -82,26 +82,18 @@
 {% endmacro -%}
 
 {%- macro returnTable(fn) -%}
-<ul class="no-style">
-  <li>
-    <div layout="row" class="dashed-top">
-      <div class="api-params-label api-params-title" layout layout-align="center center" flex="20" flex-sm="20">
-        Returns
-      </div>
-      <div class="api-params-content api-params-title" flex layout="row" layout-align="left center" flex  style="padding-top:15px">
-        Description
-      </div>
-    </div>
-  </li>
-  <li>
-    <div layout="row">
-      <div class="api-params-label" flex="20" flex-sm="20">
-        {$ typeList(fn.typeList) $}
-      </div>
-      <div class="api-params-content" flex>
-        {$ fn.description | marked $}
-      </div>
-    </div>
-  </li>
-</ul>
+<table class="no-style">
+  <thead>
+  <tr>
+    <th>Returns</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>{$ typeList(fn.typeList) $}</td>
+    <td class="description">{$ fn.description | marked $}</td>
+  </tr>
+  </tbody>
+</table>
 {%- endmacro -%}

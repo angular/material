@@ -1,78 +1,69 @@
 .hljs, hljs {
   display: block;
   overflow-x: auto;
-  padding: 0.5em;
-  background: #f5f5f5;
-  color: #333;
+  padding: 48px 0.5em 0.5em;
+  background: #263238;
+  color: white;
   font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
   line-height: 1.45;
   tab-size: 2;
   -webkit-font-smoothing: auto;
   -webkit-text-size-adjust: none;
+  position: relative;
+}
+.hljs:before, hljs:before {
+  content: attr(lang);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  line-height: 48px;
+  text-indent: 16px;
+  background: #e91e63;
 }
 
 hljs pre > code.highlight {
-  background: #f5f5f5;
+  background: transparent;
 }
 
 .hljs-comment,
-.hljs-title {
-  color: #E91E63;
-  color: #3F51B5;
-}
-
+.hljs-title,
 .hljs-variable,
-.hljs-attribute,
-.hljs-tag,
 .hljs-regexp,
-.ruby .constant,
 .xml .tag .title,
 .xml .pi,
 .xml .doctype,
-.html .doctype {
-  color: #E91E63;
-  color: #3F51B5;
-}
-
-.css .value {
-  color: #E91E63;
-  color: #3F51B5;
-}
-
+.html .doctype,
+.css .value,
 .css .value .function,
-.css .value .string {
-  color: #E91E63;
-  color: #3F51B5;
-}
-
-.css .value .number {
-  color: #E91E63;
-  color: #3F51B5;
-}
-
+.css .value .string,
+.css .value .number,
 .css .id,
 .css .class,
 .css-pseudo,
 .css .selector,
-.css .tag {
-  color: #E91E63;
-  color: #3F51B5;
-}
-
+.css .tag,
 .hljs-number,
 .hljs-preprocessor,
 .hljs-built_in,
 .hljs-literal,
 .hljs-params,
-.hljs-constant {
-  color: #E91E63;
-  color: #3F51B5;
+.hljs-constant,
+.ruby .class .title,
+.css .rules .attribute,
+.css .hexcolor,
+.function,
+.javascript .title {
+  color: #e91e63;
 }
 
-.ruby .class .title,
-.css .rules .attribute {
-  color: #E91E63;
-  color: #3F51B5;
+.hljs-attribute {
+  color: #f06292;
+}
+
+.hljs-tag {
+  color: #e91e63;
 }
 
 .hljs-string,
@@ -80,32 +71,10 @@ hljs pre > code.highlight {
 .hljs-inheritance,
 .hljs-header,
 .ruby .symbol,
-.xml .cdata {
-  color: #3F51B5;
-  color: #E91E63;
-}
-
-.css .hexcolor {
-  color: #E91E63;
-  color: #3F51B5;
-}
-
-.function,
-.python .decorator,
-.python .title,
-.ruby .function .title,
-.ruby .title .keyword,
-.perl .sub,
-.javascript .title,
-.coffeescript .title {
-  color: #E91E63;
-  color: #3F51B5;
-}
-
+.xml .cdata,
 .hljs-keyword,
 .javascript .function {
-  color: #3F51B5;
-  color: #E91E63;
+  color: #9FA8DA;
 }
 
 .coffeescript .javascript,

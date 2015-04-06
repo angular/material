@@ -1,5 +1,4 @@
 {%- if doc.params %}
-<section class="api-section">
   <h2>
     {% if doc.paramType %}
       {$ doc.paramType $}
@@ -9,6 +8,5 @@
       Arguments
     {% endif %}
   </h2>
-{$ paramTable(doc.params) $}
-</section>
+  {$ paramTable(doc.params) $}
 {%- endif -%}
