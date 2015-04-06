@@ -29,44 +29,71 @@ angular.module('material.components.sidenav', [
  *
  * @usage
  * <hljs lang="js">
- * // Toggle the given sidenav
- * $mdSidenav(componentId).toggle();
+ * // Async lookup for sidenav instance; will resolve when the instance is available
+ * $mdSidenav(componentId).then(function(instance) {
+ *   $log.debug( componentId + "is now ready" );
+ * });
  * </hljs>
  * <hljs lang="js">
- * // Open the given sidenav
- * $mdSidenav(componentId).open();
+ * // Async toggle the given sidenav;
+ * // when instance is known ready and lazy lookup is not needed.
+ * $mdSidenav(componentId)
+ *    .toggle()
+ *    .then(function(){
+ *      $log.debug('toggled');
+ *    });
  * </hljs>
  * <hljs lang="js">
- * // Close the given sidenav
- * $mdSidenav(componentId).close();
+ * // Async open the given sidenav
+ * $mdSidenav(componentId)
+ *    .open();
+ *    .then(function(){
+ *      $log.debug('opened');
+ *    });
  * </hljs>
  * <hljs lang="js">
- * // Exposes whether given sidenav is set to be open
+ * // Async close the given sidenav
+ * $mdSidenav(componentId)
+ *    .close();
+ *    .then(function(){
+ *      $log.debug('closed');
+ *    });
+ * </hljs>
+ * <hljs lang="js">
+ * // Sync check to see if the specified sidenav is set to be open
  * $mdSidenav(componentId).isOpen();
  * </hljs>
  * <hljs lang="js">
- * // Exposes whether given sidenav is locked open
- * // If this is true, the sidenav will be open regardless of isOpen()
+ * // Sync check to whether given sidenav is locked open
+ * // If this is true, the sidenav will be open regardless of close()
  * $mdSidenav(componentId).isLockedOpen();
  * </hljs>
  */
 function SidenavService($mdComponentRegistry, $q) {
   return function(handle) {
-    var errorMsg = "SideNav '" + handle + "' is not available!";
 
     // Lookup the controller instance for the specified sidNav instance
+    var self;
+    var errorMsg = "SideNav '" + handle + "' is not available!";
     var instance = $mdComponentRegistry.get(handle);
+
     if(!instance) {
       $mdComponentRegistry.notFoundError(handle);
     }
 
-    return {
+    return self = {
+      // -----------------
+      // Sync methods
+      // -----------------
       isOpen: function() {
         return instance && instance.isOpen();
       },
       isLockedOpen: function() {
         return instance && instance.isLockedOpen();
       },
+      // -----------------
+      // Async methods
+      // -----------------
       toggle: function() {
         return instance ? instance.toggle() : $q.reject(errorMsg);
       },
@@ -75,8 +102,24 @@ function SidenavService($mdComponentRegistry, $q) {
       },
       close: function() {
         return instance ? instance.close() : $q.reject(errorMsg);
+      },
+      then : function( callbackFn ) {
+        var promise = instance ? $q.when(instance) : waitForInstance();
+        return promise.then( callbackFn || angular.noop );
       }
     };
+
+    /**
+     * Deferred lookup of component instance using $component registry
+     */
+    function waitForInstance() {
+      return $mdComponentRegistry
+                .when(handle)
+                .then(function( it ){
+                  instance = it;
+                  return it;
+                });
+    }
   };
 }
 
@@ -162,7 +205,10 @@ function SidenavDirective($timeout, $animate, $parse, $log, $mdMedia, $mdConstan
     var isLockedOpenParsed = $parse(attr.mdIsLockedOpen);
     var isLocked = function() {
       return isLockedOpenParsed(scope.$parent, {
-        $media: function(arg) { $log.warn("$media is deprecated for is-locked-open. Use $mdMedia instead."); return $mdMedia(arg); },
+        $media: function(arg) {
+          $log.warn("$media is deprecated for is-locked-open. Use $mdMedia instead.");
+          return $mdMedia(arg);
+        },
         $mdMedia: $mdMedia
       });
     };
@@ -311,12 +357,16 @@ function SidenavController($scope, $element, $attrs, $mdComponentRegistry, $q) {
 
   // Use Default internal method until overridden by directive postLink
 
-  self.$toggleOpen = function() { return $q.when($scope.isOpen); };
+  // Synchronous getters
   self.isOpen = function() { return !!$scope.isOpen; };
   self.isLockedOpen = function() { return !!$scope.isLockedOpen; };
+
+  // Async actions
   self.open   = function() { return self.$toggleOpen( true );  };
   self.close  = function() { return self.$toggleOpen( false ); };
   self.toggle = function() { return self.$toggleOpen( !$scope.isOpen );  };
+
+  self.$toggleOpen = function() { return $q.when($scope.isOpen); };
 
   self.destroy = $mdComponentRegistry.register(self, $attrs.mdComponentId);
 }

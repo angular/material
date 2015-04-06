@@ -205,6 +205,15 @@ describe('mdSidenav', function() {
   });
 
   describe('$mdSidenav Service', function() {
+    var $rootScope, $timeout;
+
+
+        beforeEach( inject(function(_$rootScope_,_$timeout_) {
+            $rootScope = _$rootScope_;
+            $timeout = _$timeout_;
+        }));
+
+
     it('should grab instance', inject(function($mdSidenav) {
       var el = setup('md-component-id="left"');
       var scope = el.isolateScope();
@@ -253,6 +262,28 @@ describe('mdSidenav', function() {
       expect(instance.isOpen()).toBe(false);
       expect(instance.isLockedOpen()).toBe(true);
     }));
+
+    it('should find a deferred instantiation', inject(function($mdSidenav) {
+          var instance;
+
+          // Lookup deferred (not existing) instance
+          $mdSidenav('left').then( function(inst) { instance = inst; });
+          expect(instance).toBeUndefined();
+
+          // Instantiate `left` sidenav component
+          var el = setup('md-component-id="left"');
+
+          $timeout.flush();
+          expect(instance).toBeTruthy();
+          expect(instance.isOpen()).toBeFalsy();
+
+          // Lookup instance still available in the component registry
+          instance = undefined;
+          instance = $mdSidenav('left');
+
+          expect(instance).toBeTruthy();
+
+        }));
   });
 
 });
