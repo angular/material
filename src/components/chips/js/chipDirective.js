@@ -24,7 +24,7 @@
   // This hint text is hidden within a chip but used by screen readers to
   // inform the user how they can interact with a chip.
   var DELETE_HINT_TEMPLATE = '\
-      <span ng-if="!$mdChipsCtrl.readonly" class="visually-hidden">\
+      <span ng-if="!$mdChipsCtrl.readonly" class="md-visually-hidden">\
         {{$mdChipsCtrl.deleteHint}}\
       </span>';
 

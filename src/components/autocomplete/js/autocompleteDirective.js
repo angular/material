@@ -106,7 +106,7 @@
                 ng-if="$mdAutocompleteCtrl.scope.searchText && !isDisabled"\
                 ng-click="$mdAutocompleteCtrl.clear()">\
               <md-icon md-svg-icon="cancel"></md-icon>\
-              <span class="visually-hidden">Clear</span>\
+              <span class="md-visually-hidden">Clear</span>\
             </button>\
             <md-progress-linear\
                 ng-if="$mdAutocompleteCtrl.loading"\
@@ -127,7 +127,7 @@
             </ul>\
           </md-autocomplete-wrap>\
           <aria-status\
-              class="visually-hidden"\
+              class="md-visually-hidden"\
               role="status"\
               aria-live="assertive">\
             <p ng-repeat="message in $mdAutocompleteCtrl.messages">{{message.display}}</p>\
