@@ -28,10 +28,13 @@ $subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16) !default;
   font-size: $subheader-font-size;
   font-weight: $subheader-font-weight;
   line-height: $subheader-line-height;
-  padding: $subheader-padding;
   margin: $subheader-margin;
   margin-right: $subheader-margin-right;
   position: relative;
+
+  .md-subheader-inner {
+    padding: $subheader-padding;
+  }
 
   &:not(.md-sticky-no-effect) {
     &:after {
@@ -50,7 +53,7 @@ $subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16) !default;
     &[sticky-state="active"] {
       margin-top: -2px;
     }
-    &:not(.md-sticky-clone)[sticky-prev-state="active"]:after {
+    &:not(.md-sticky-clone)[sticky-prev-state="active"] .md-subheader-inner:after {
       animation: subheaderStickyHoverOut 0.3s ease-out both;
     }
   }
