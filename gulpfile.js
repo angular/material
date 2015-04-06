@@ -29,6 +29,7 @@ var rename = require('gulp-rename');
 var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
 var webserver = require('gulp-webserver');
+var sourcemaps = require('gulp-sourcemaps');
 
 /** Local dependencies */
 var buildConfig = require('./config/build.config');
@@ -359,7 +360,9 @@ function buildJs(isRelease) {
     .pipe(ngAnnotate());
 
   return series(jsBuildStream, themeBuildStream())
+    .pipe(gulpif(!isRelease, sourcemaps.init()))
     .pipe(concat('angular-material.js'))
+    .pipe(gulpif(!isRelease, sourcemaps.write()))
     .pipe(gulp.dest(config.outputDir))
     .pipe(gulpif(isRelease, lazypipe()
       .pipe(uglify, { preserveComments: 'some' })
