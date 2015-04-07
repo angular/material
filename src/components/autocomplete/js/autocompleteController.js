@@ -8,7 +8,7 @@
       MAX_HEIGHT = 5.5 * ITEM_HEIGHT,
       MENU_PADDING = 16;
 
-  function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $rootElement, $mdTheming, $window) {
+  function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $mdTheming, $window) {
 
     //-- private variables
 
@@ -112,7 +112,7 @@
         ul:    $element.find('ul')[0],
         input: $element.find('input')[0],
         wrap:  $element.find('md-autocomplete-wrap')[0],
-        root:  $rootElement[0]
+        root:  document.body
       };
       elements.$ = getAngularElements(elements);
     }
@@ -297,6 +297,7 @@
         self.matches = matches;
         self.hidden = shouldHide();
         updateMessages();
+        $timeout(positionDropdown, 0, false);
       }
     }
 
