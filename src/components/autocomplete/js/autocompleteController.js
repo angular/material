@@ -63,6 +63,7 @@
     }
 
     function positionDropdown () {
+      if (!elements) return $timeout(positionDropdown, 0, false);
       var rect   = elements.wrap.getBoundingClientRect(),
           root   = elements.root.getBoundingClientRect(),
           top    = rect.bottom - root.top,

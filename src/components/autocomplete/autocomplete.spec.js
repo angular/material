@@ -41,6 +41,7 @@ describe('<md-autocomplete>', function() {
           </md-autocomplete>';
       var element = compile(template, scope);
       var ctrl    = element.controller('mdAutocomplete');
+      var ul      = element.find('ul');
 
       expect(scope.searchText).toBe('');
       expect(scope.selectedItem).toBe(null);
@@ -52,7 +53,7 @@ describe('<md-autocomplete>', function() {
 
       expect(scope.searchText).toBe('fo');
       expect(scope.match(scope.searchText).length).toBe(1);
-      expect(element.find('li').length).toBe(1);
+      expect(ul.find('li').length).toBe(1);
 
       ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.DOWN_ARROW, preventDefault: angular.noop });
       ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.ENTER, preventDefault: angular.noop });
