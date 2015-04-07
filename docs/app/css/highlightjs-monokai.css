@@ -51,7 +51,7 @@ hljs {
 hljs .hljs-constant,
 .asciidoc .hljs-code,
 .markdown .hljs-code {
-	color: #66d9ef;
+	color: #80CBC4;
 }
 
 .hljs-code,
@@ -113,7 +113,7 @@ hljs .hljs-constant,
 .hljs-shebang,
 .apache .hljs-sqbracket,
 .tex .hljs-formula {
-  color: #75715e;
+  color: #607D8B;
 }
 
 .hljs-keyword,
