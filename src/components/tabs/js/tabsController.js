@@ -174,7 +174,7 @@
       updateHeightFromContent();
       $scope.$broadcast('$mdTabsChanged');
       ctrl.tabs[oldValue] && ctrl.tabs[oldValue].scope.deselect();
-      ctrl.tabs[newValue].scope.select();
+      ctrl.tabs[newValue] && ctrl.tabs[newValue].scope.select();
     }
 
     function handleResizeWhenVisible () {
@@ -277,6 +277,7 @@
     }
 
     function fixOffset (value) {
+      if (!elements.tabs.length) return;
       var lastTab = elements.tabs[elements.tabs.length - 1],
           totalWidth = lastTab.offsetLeft + lastTab.offsetWidth;
       value = Math.max(0, value);
