@@ -1,5 +1,5 @@
 <div ng-app="autocompleteFloatingLabelDemo" ng-controller="DemoCtrl as ctrl" layout="column">
-  <md-content class="md-padding" layout="column" style="min-height: 367px">
+  <md-content class="md-padding" layout="column">
     <form ng-submit="$event.preventDefault()">
       <p>The following example demonstrates floating labels being used as a normal form element.</p>
       <div layout-gt-sm="row">
@@ -8,7 +8,6 @@
           <input type="text"/>
         </md-input-container>
         <md-autocomplete flex
-            ng-disabled="ctrl.isDisabled"
             md-no-cache="ctrl.noCache"
             md-selected-item="ctrl.selectedItem"
             md-search-text="ctrl.searchText"
@@ -18,8 +17,6 @@
           <span md-highlight-text="ctrl.searchText">{{item.display}}</span>
         </md-autocomplete>
       </div>
-      <md-checkbox ng-model="ctrl.isDisabled">Disable the input?</md-checkbox>
     </form>
   </md-content>
-
 </div>
