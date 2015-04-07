@@ -212,7 +212,7 @@
           updateSelectionMessage();
           break;
         case $mdConstant.KEY_CODE.ENTER:
-          if (self.loading || self.index < 0) return;
+          if (self.hidden || self.loading || self.index < 0) return;
           event.preventDefault();
           select(self.index);
           break;
