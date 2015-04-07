@@ -28,7 +28,7 @@ describe('<md-autocomplete>', function() {
   }
 
   describe('basic functionality', function () {
-    it('should fail', inject(function($timeout, $mdConstant) {
+    it('should fail', inject(function($timeout, $mdConstant, $rootElement) {
       var scope = createScope();
       var template = '\
           <md-autocomplete\

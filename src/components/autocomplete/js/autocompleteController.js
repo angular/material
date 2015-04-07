@@ -4,7 +4,7 @@
       .module('material.components.autocomplete')
       .controller('MdAutocompleteCtrl', MdAutocompleteCtrl);
 
-  function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout) {
+  function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $rootElement, $mdTheming) {
 
     //-- private variables
 
@@ -54,7 +54,32 @@
       $timeout(function () {
         gatherElements();
         focusElement();
+        moveDropdown();
       });
+    }
+
+    function getNearestContentElement () {
+      var current = $element.parent()[0];
+      while (current && current !== $rootElement[0] && current !== document.body) {
+        if (current.tagName && current.tagName.toLowerCase() === 'md-content') break;
+        current = current.parentNode;
+      }
+      return current;
+    }
+
+    function positionDropdown () {
+      elements.$.ul.css({
+        left:  $element.prop('offsetLeft') + 'px',
+        top:   ($element.prop('offsetTop') + $element.prop('offsetHeight')) + 'px',
+        width: $element.prop('offsetWidth') + 'px'
+      });
+    }
+
+    function moveDropdown () {
+      if (!elements.$.root.length) return;
+      $mdTheming(elements.$.ul);
+      elements.$.ul.detach();
+      elements.$.root.append(elements.$.ul);
     }
 
     function focusElement () {
@@ -74,8 +99,18 @@
       elements = {
         main:  $element[0],
         ul:    $element[0].getElementsByTagName('ul')[0],
-        input: $element[0].getElementsByTagName('input')[0]
+        input: $element[0].getElementsByTagName('input')[0],
+        root:  getNearestContentElement()
       };
+      elements.$ = getAngularElements(elements);
+    }
+
+    function getAngularElements (elements) {
+      var obj = {};
+      for (var key in elements) {
+        obj[key] = angular.element(elements[key]);
+      }
+      return obj;
     }
 
     //-- event/change handlers
@@ -130,6 +165,7 @@
         self.loading = false;
         self.matches = [];
         self.hidden = shouldHide();
+        positionDropdown();
         updateMessages();
       } else {
         handleQuery();

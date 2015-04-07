@@ -6,13 +6,13 @@
 
   function MdAutocompleteListItem ($compile, $mdUtil) {
     return {
-      require: '^?mdAutocomplete',
       terminal: true,
       link: link,
       scope: false
     };
-    function link (scope, element, attr, ctrl) {
-      var newScope = ctrl.parent.$new(false, ctrl.parent),
+    function link (scope, element, attr) {
+      var ctrl     = scope.$parent.$mdAutocompleteCtrl,
+          newScope = ctrl.parent.$new(false, ctrl.parent),
           itemName = ctrl.scope.$eval(attr.mdAutocompleteListItem);
       newScope[itemName] = scope.item;
       element.html(ctrl.scope.$eval(attr.mdAutocompleteListItemTemplate));

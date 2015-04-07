@@ -27,9 +27,6 @@
     height: 40px;
   }
 }
-md-content {
-  overflow: visible;
-}
 md-autocomplete {
   box-shadow: 0 2px 5px rgba(black, 0.25);
   border-radius: 2px;
@@ -98,7 +95,6 @@ md-autocomplete {
     line-height: 40px;
     height: 40px;
     outline: none;
-    z-index: 2;
     background: transparent;
     &::-ms-clear {
       display: none;
@@ -109,7 +105,6 @@ md-autocomplete {
     top: 10px;
     right: 10px;
     line-height: 20px;
-    z-index: 2;
     text-align: center;
     width: 20px;
     height: 20px;
@@ -130,7 +125,6 @@ md-autocomplete {
       transform: scale(0);
       opacity: 0;
       transition: $swift-ease-out;
-      z-index: -1;
     }
     &:focus {
       outline: none;
@@ -163,40 +157,6 @@ md-autocomplete {
       }
     }
   }
-  ul {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    box-shadow: 0 2px 5px rgba(black, 0.25);
-    margin: 0;
-    list-style: none;
-    padding: 0;
-    overflow: auto;
-    max-height: 41px * 5.5;
-    z-index: $z-index-backdrop - 1;
-    li {
-      border-top: 1px solid #ddd;
-      padding: 0 15px;
-      line-height: 40px;
-      font-size: 14px;
-      overflow: hidden;
-      height: 40px;
-      transition: background 0.15s linear;
-      cursor: pointer;
-      margin: 0;
-      &.ng-enter,
-      &.ng-hide-remove {
-        transition: none;
-        animation: md-autocomplete-list-in 0.2s;
-      }
-      &.ng-leave,
-      &.ng-hide-add {
-        transition: none;
-        animation: md-autocomplete-list-out 0.2s;
-      }
-    }
-  }
   @media screen and (-ms-high-contrast: active) {
     $border-color: #fff;
 
@@ -205,6 +165,40 @@ md-autocomplete {
     }
     li:focus {
       color: #fff;
+    }
+  }
+}
+.md-autocomplete-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  box-shadow: 0 2px 5px rgba(black, 0.25);
+  margin: 0;
+  list-style: none;
+  padding: 0;
+  overflow: auto;
+  max-height: 41px * 5.5;
+  z-index: $z-index-backdrop - 1;
+  li {
+    border-top: 1px solid #ddd;
+    padding: 0 15px;
+    line-height: 40px;
+    font-size: 14px;
+    overflow: hidden;
+    height: 40px;
+    transition: background 0.15s linear;
+    cursor: pointer;
+    margin: 0;
+    &.ng-enter,
+    &.ng-hide-remove {
+      transition: none;
+      animation: md-autocomplete-list-in 0.2s;
+    }
+    &.ng-leave,
+    &.ng-hide-add {
+      transition: none;
+      animation: md-autocomplete-list-out 0.2s;
     }
   }
 }

@@ -39,7 +39,7 @@
    * </hljs>
    */
 
-  function MdAutocomplete () {
+  function MdAutocomplete ($mdTheming) {
     return {
       controller:   'MdAutocompleteCtrl',
       controllerAs: '$mdAutocompleteCtrl',
@@ -112,6 +112,7 @@
                 ng-if="$mdAutocompleteCtrl.loading"\
                 md-mode="indeterminate"></md-progress-linear>\
             <ul role="presentation"\
+                class="md-autocomplete-suggestions"\
                 id="ul-{{$mdAutocompleteCtrl.id}}"\
                 ng-mouseenter="$mdAutocompleteCtrl.listEnter()"\
                 ng-mouseleave="$mdAutocompleteCtrl.listLeave()"\
@@ -141,6 +142,7 @@
           scope[key] = attr.hasOwnProperty(attr.$normalize(binding.attrName));
         }
       });
+      $mdTheming(element);
     }
   }
 })();
