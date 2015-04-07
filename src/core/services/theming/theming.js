@@ -360,7 +360,7 @@ function ThemableDirective($mdTheming) {
   return $mdTheming;
 }
 
-function _parseRules(theme, colorType, rules) {
+function parseRules(theme, colorType, rules) {
   checkValidPalette(theme, colorType);
 
   rules = rules.replace(/THEME_NAME/g, theme.name);
@@ -402,11 +402,7 @@ function _parseRules(theme, colorType, rules) {
     generatedRules.push(newRule);
   });
 
-  return generatedRules;
-}
-
-function parseRules(theme, colorType, rules) {
-  return _parseRules(theme, colorType, rules).join('');
+  return generatedRules.join('');
 }
 
 // Generate our themes at run time given the state of THEMES and PALETTES
@@ -452,24 +448,23 @@ function generateThemes($injector) {
     return rulesByType[DEFAULT_COLOR_TYPE] += rule;
   });
 
+  // Insert our newly minted styles into the DOM
+  var head = document.getElementsByTagName('head')[0];
+  var firstChild = head.firstElementChild;
+
   // For each theme, use the color palettes specified for `primary`, `warn` and `accent`
   // to generate CSS rules.
   angular.forEach(THEMES, function(theme) {
-      // Insert our newly minted styles into the DOM
-    if (!generationIsDone) {
-      var head = document.getElementsByTagName('head')[0];
-      var headFirstElementChild = head.firstElementChild;
-      THEME_COLOR_TYPES.forEach(function(colorType) {
-        var styleStrings = _parseRules(theme, colorType, rulesByType[colorType]);
-        while(styleStrings.length) {
-          var style = document.createElement('style');
-          style.setAttribute('type', 'text/css');
-          style.appendChild(document.createTextNode(styleStrings.shift()));
-          head.insertBefore(style, headFirstElementChild);
-        }
-      });
-      generationIsDone = true;
-    }
+    var styleStrings = '';
+    var style = document.createElement('style');
+        style.setAttribute('type', 'text/css');
+
+    THEME_COLOR_TYPES.forEach(function(colorType) {
+      styleStrings += parseRules(theme, colorType, rulesByType[colorType] + '');
+    });
+
+    style.innerHTML = styleStrings;
+    head.insertBefore(style, firstChild);
 
     if (theme.colors.primary.name == theme.colors.accent.name) {
       console.warn("$mdThemingProvider: Using the same palette for primary and" +
