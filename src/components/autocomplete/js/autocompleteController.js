@@ -100,8 +100,8 @@
           : handleSearchText);
       registerSelectedItemWatcher(selectedItemChange);
       $scope.$watch('selectedItem', handleSelectedItemChange);
-      $scope.$watch('$mdAutocompleteCtrl.hidden', function (hidden) {
-        if (hidden) $timeout(positionDropdown, null, false);
+      $scope.$watch('$mdAutocompleteCtrl.hidden', function (hidden, oldHidden) {
+        if (hidden && !oldHidden) positionDropdown();
       });
       angular.element($window).on('resize', positionDropdown);
     }
@@ -297,7 +297,7 @@
         self.matches = matches;
         self.hidden = shouldHide();
         updateMessages();
-        $timeout(positionDropdown, 0, false);
+        positionDropdown();
       }
     }
 
