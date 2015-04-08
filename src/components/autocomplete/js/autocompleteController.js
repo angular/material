@@ -64,21 +64,22 @@
 
     function positionDropdown () {
       if (!elements) return $timeout(positionDropdown, 0, false);
-      var rect   = elements.wrap.getBoundingClientRect(),
+      var hrect  = elements.wrap.getBoundingClientRect(),
+          vrect  = elements.snap.getBoundingClientRect(),
           root   = elements.root.getBoundingClientRect(),
-          top    = rect.bottom - root.top,
-          bot    = root.height - rect.top,
-          left   = rect.left - root.left,
-          width  = rect.width,
+          top    = vrect.bottom - root.top,
+          bot    = root.height - vrect.top,
+          left   = hrect.left - root.left,
+          width  = hrect.width,
           styles = { left: left + 'px', width: width + 'px' };
-      if (top > bot && root.height - rect.bottom - MENU_PADDING < MAX_HEIGHT) {
+      if (top > bot && root.height - hrect.bottom - MENU_PADDING < MAX_HEIGHT) {
         styles.top = 'auto';
         styles.bottom = bot + 'px';
-        styles.maxHeight = Math.min(MAX_HEIGHT, rect.top - root.top - MENU_PADDING) + 'px';
+        styles.maxHeight = Math.min(MAX_HEIGHT, hrect.top - root.top - MENU_PADDING) + 'px';
       } else {
         styles.top = top + 'px';
         styles.bottom = 'auto';
-        styles.maxHeight = Math.min(MAX_HEIGHT, root.height - rect.bottom - MENU_PADDING) + 'px';
+        styles.maxHeight = Math.min(MAX_HEIGHT, root.height - hrect.bottom - MENU_PADDING) + 'px';
       }
       elements.$.ul.css(styles);
     }
@@ -115,7 +116,15 @@
         wrap:  $element.find('md-autocomplete-wrap')[0],
         root:  document.body
       };
+      elements.snap = getSnapTarget();
       elements.$ = getAngularElements(elements);
+    }
+
+    function getSnapTarget () {
+      for (var element = $element, max = 100; element.length; element = element.parent()) {
+        if (angular.isDefined(element.attr('md-autocomplete-snap'))) return element[0];
+      }
+      return elements.wrap;
     }
 
     function getAngularElements (elements) {
