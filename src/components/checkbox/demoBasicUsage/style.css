@@ -1,4 +1,6 @@
-
-body {
-  padding: 20px;
+.checkboxDemo1 div {
+  clear: both;
+}
+.checkboxDemo1 md-checkbox {
+  float: left;
 }
