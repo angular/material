@@ -59,7 +59,7 @@ md-input-container.md-THEME_NAME-theme {
     .md-input {
       border-color: '{{warn-500}}';
     }
-    label {
+    &.md-input-focused label {
       color: '{{warn-500}}';
     }
     ng-message, data-ng-message, x-ng-message,
