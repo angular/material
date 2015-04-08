@@ -122,15 +122,6 @@ md-progress-circular {
     $i: $i + 1;
   }
 
-  &:not([md-mode=indeterminate]) {
-    .md-inner {
-      .md-left, .md-right {
-        .md-half-circle {
-        }
-      }
-    }
-  }
-
   &[md-mode=indeterminate] {
     .md-spinner-wrapper {
       animation: outer-rotate $progress-circular-outer-duration linear infinite;
@@ -151,6 +142,28 @@ md-progress-circular {
         .md-right {
           .md-half-circle {
             animation-name: right-wobble;
+          }
+        }
+      }
+    }
+  }
+}
+
+.ng-hide md-progress-circular,
+md-progress-circular.ng-hide {
+  &[md-mode=indeterminate] {
+    .md-spinner-wrapper {
+      animation: none;
+      .md-inner {
+        animation: none;
+        .md-left {
+          .md-half-circle {
+            animation-name: none;
+          }
+        }
+        .md-right {
+          .md-half-circle {
+            animation-name: none;
           }
         }
       }
