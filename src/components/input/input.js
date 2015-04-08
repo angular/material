@@ -61,6 +61,9 @@ function mdInputContainerDirective($mdTheming, $parse) {
 
     self.isErrorGetter = $attrs.mdIsError && $parse($attrs.mdIsError);
 
+    self.delegateClick = function() {
+      self.input.focus();
+    };
     self.element = $element;
     self.setFocused = function(isFocused) {
       $element.toggleClass('md-input-focused', !!isFocused);
@@ -325,7 +328,9 @@ function placeholderDirective() {
     var placeholderText = attr.placeholder;
     element.removeAttr('placeholder');
 
-    inputContainer.element.append('<div class="md-placeholder">' + placeholderText + '</div>');
+    var placeholder = '<div class="md-placeholder" ng-click="delegateClick()">' +
+                       placeholderText + '</div>';
+    inputContainer.element.append(placeholder);
   }
 }
 
