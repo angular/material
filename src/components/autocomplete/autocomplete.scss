@@ -170,9 +170,6 @@ md-autocomplete {
 }
 .md-autocomplete-suggestions {
   position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
   box-shadow: 0 2px 5px rgba(black, 0.25);
   margin: 0;
   list-style: none;
@@ -190,6 +187,8 @@ md-autocomplete {
     transition: background 0.15s linear;
     cursor: pointer;
     margin: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     &.ng-enter,
     &.ng-hide-remove {
       transition: none;
