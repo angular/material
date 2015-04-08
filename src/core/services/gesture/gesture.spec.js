@@ -10,7 +10,7 @@ describe('$mdGesture', function() {
     var startSpy2, moveSpy2, endSpy2;
     var childEl, middleEl, parentEl;
     beforeEach(function() {
-      inject(function($mdGesture, $document) {
+      inject(function($mdGesture) {
         startSpy1 = jasmine.createSpy('start1');
         moveSpy1 = jasmine.createSpy('move1');
         endSpy1 = jasmine.createSpy('end1');
@@ -33,7 +33,6 @@ describe('$mdGesture', function() {
         childEl = angular.element('<child>');
         middleEl = angular.element('<middle>').append(childEl);
         parentEl = angular.element('<parent>').append(middleEl);
-        $document.append(childEl);
       });
     });
 
