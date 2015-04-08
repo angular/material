@@ -94,11 +94,9 @@
   @if $name != null {
     $offsetName: 'offset-#{$name}';
   }
-  [#{$offsetName}] {
-    @for $i from 1 through 19 {
-      [#{$offsetName}="#{$i * 5}"] {
-        margin-left: #{$i * 5 + '%'};
-      }
+  @for $i from 1 through 19 {
+    [#{$offsetName}="#{$i * 5}"] {
+      margin-left: #{$i * 5 + '%'};
     }
   }
   [#{$offsetName}="33"], [#{$offsetName}="34"] {
