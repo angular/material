@@ -6,6 +6,10 @@ md-icon {
   fill: currentcolor;
   height: 3 * $baseline-grid;
   width: 3 * $baseline-grid;
+
+  svg {
+    pointer-events: none;
+  }
 }
 
 //
