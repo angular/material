@@ -1,7 +1,7 @@
-.hljs, hljs {
+hljs {
   display: block;
   overflow-x: auto;
-  padding: 48px 0.5em 0.5em;
+  padding: 0;
   background: #263238;
   color: white;
   font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
@@ -10,81 +10,114 @@
   -webkit-font-smoothing: auto;
   -webkit-text-size-adjust: none;
   position: relative;
-}
-.hljs:before, hljs:before {
-  content: attr(lang);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: block;
-  line-height: 48px;
-  text-indent: 16px;
-  background: #e91e63;
+  border-radius: 2px;
+  margin: 0 0 1em;
 }
 
-hljs pre > code.highlight {
-  background: transparent;
+hljs:before {
+  content: attr(lang);
+  display: block;
+  background: #3949ab;
+  line-height: 48px;
+  padding: 0 16px;
+  border-radius: 2px 2px 0 0;
+}
+
+hljs.no-header:before {
+  display: none;
+}
+
+.hljs-tag,
+.hljs-tag .hljs-title,
+.hljs-keyword,
+.hljs-literal,
+.hljs-strong,
+.hljs-change,
+.hljs-winutils,
+.hljs-flow,
+.nginx .hljs-title,
+.tex .hljs-special {
+  color: #E5C3A2;
+}
+
+hljs {
+  color: #ddd;
+}
+
+hljs .hljs-constant,
+.asciidoc .hljs-code,
+.markdown .hljs-code {
+	color: #80CBC4;
+}
+
+.hljs-code,
+.hljs-class .hljs-title,
+.hljs-header {
+	color: white;
+}
+
+.hljs-link_label,
+.hljs-attribute,
+.hljs-symbol,
+.hljs-symbol .hljs-string,
+.hljs-value,
+.hljs-regexp {
+  color: #ABC0E7;
+}
+
+.hljs-link_url,
+.hljs-tag .hljs-value,
+.hljs-string,
+.hljs-bullet,
+.hljs-subst,
+.hljs-title,
+.hljs-emphasis,
+.hljs-type,
+.hljs-preprocessor,
+.hljs-pragma,
+.ruby .hljs-class .hljs-parent,
+.hljs-built_in,
+.django .hljs-template_tag,
+.django .hljs-variable,
+.smalltalk .hljs-class,
+.hljs-javadoc,
+.django .hljs-filter .hljs-argument,
+.smalltalk .hljs-localvars,
+.smalltalk .hljs-array,
+.hljs-attr_selector,
+.hljs-pseudo,
+.hljs-addition,
+.hljs-stream,
+.hljs-envvar,
+.apache .hljs-tag,
+.apache .hljs-cbracket,
+.tex .hljs-command,
+.hljs-prompt,
+.hljs-name {
+  color: #9ccc65;
 }
 
 .hljs-comment,
-.hljs-title,
-.hljs-variable,
-.hljs-regexp,
-.xml .tag .title,
-.xml .pi,
-.xml .doctype,
-.html .doctype,
-.css .value,
-.css .value .function,
-.css .value .string,
-.css .value .number,
-.css .id,
-.css .class,
-.css-pseudo,
-.css .selector,
-.css .tag,
-.hljs-number,
-.hljs-preprocessor,
-.hljs-built_in,
-.hljs-literal,
-.hljs-params,
-.hljs-constant,
-.ruby .class .title,
-.css .rules .attribute,
-.css .hexcolor,
-.function,
-.javascript .title {
-  color: #e91e63;
-}
-
-.hljs-attribute {
-  color: #f06292;
-}
-
-.hljs-tag {
-  color: #e91e63;
-}
-
-.hljs-string,
-.hljs-value,
-.hljs-inheritance,
-.hljs-header,
-.ruby .symbol,
-.xml .cdata,
-.hljs-keyword,
-.javascript .function {
-  color: #9FA8DA;
+.hljs-annotation,
+.smartquote,
+.hljs-blockquote,
+.hljs-horizontal_rule,
+.hljs-decorator,
+.hljs-pi,
+.hljs-doctype,
+.hljs-deletion,
+.hljs-shebang,
+.apache .hljs-sqbracket,
+.tex .hljs-formula {
+  color: #607D8B;
 }
 
 .coffeescript .javascript,
-.javascript,
 .javascript .xml,
-.tex .formula,
+.tex .hljs-formula,
 .xml .javascript,
 .xml .vbscript,
 .xml .css,
-.xml .cdata {
-    background: transparent;
-    opacity: 1;
+.xml .hljs-cdata {
+  opacity: 0.5;
 }
