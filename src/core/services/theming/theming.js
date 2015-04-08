@@ -28,6 +28,29 @@ angular.module('material.core.theming', ['material.core.theming.palette'])
  * classes when they change. Default is `false`. Enabling can reduce performance.
  */
 
+/* Some Example Valid Theming Expressions
+ * =======================================
+ *
+ * Intention group expansion: (valid for primary, accent, warn, background)
+ *
+ * {{primary-100}} - grab shade 100 from the primary palette
+ * {{primary-100-0.7}} - grab shade 100, apply opacity of 0.7
+ * {{primary-hue-1}} - grab the shade assigned to hue-1 from the primary palette
+ * {{primary-hue-1-0.7}} - apply 0.7 opacity to primary-hue-1
+ * {{primary-color}} - Generates .md-hue-1, .md-hue-2, .md-hue-3 with configured shades set for each hue
+ * {{primary-color-0.7}} - Apply 0.7 opacity to each of the above rules
+ * {{primary-contrast}} - Generates .md-hue-1, .md-hue-2, .md-hue-3 with configured contrast (ie. text) color shades set for each hue
+ * {{primary-contrast-0.7}} - Apply 0.7 opacity to each of the above rules
+ *
+ * Foreground expansion: Applies rgba to black/white foreground text
+ *
+ * {{foreground-1}} - used for primary text
+ * {{foreground-2}} - used for secondary text/divider
+ * {{foreground-3}} - used for disabled text
+ * {{foreground-4}} - used for dividers
+ *
+ */
+
 // In memory storage of defined themes and color palettes (both loaded by CSS, and user specified)
 var PALETTES = { };
 var THEMES = { };
@@ -65,14 +88,21 @@ var LIGHT_DEFAULT_HUES = {
     'hue-1': 'A100',
     'hue-2': 'A400',
     'hue-3': 'A700'
+  },
+  'background': {
+    'default': 'A100',
+    'hue-1': '300',
+    'hue-2': '800',
+    'hue-3': '900'
   }
 };
+
 var DARK_DEFAULT_HUES = {
   'background': {
-    'default': '500',
+    'default': '800',
     'hue-1': '300',
     'hue-2': '600',
-    'hue-3': '800'
+    'hue-3': '900'
   }
 };
 THEME_COLOR_TYPES.forEach(function(colorType) {
@@ -376,7 +406,7 @@ function parseRules(theme, colorType, rules) {
   var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue\-[0-3]|shadow)-?(\d\.?\d*)?\s*\}\}'?"?/g;
   var palette = PALETTES[color.name];
 
-  // find and replace simple variables where we use a specific hue, not angentire palette
+  // find and replace simple variables where we use a specific hue, not an entire palette
   // eg. "{{primary-100}}"
   //\(' + THEME_COLOR_TYPES.join('\|') + '\)'
   rules = rules.replace(simpleVariableRegex, function(match, colorType, hue, opacity) {
