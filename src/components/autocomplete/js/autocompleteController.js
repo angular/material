@@ -295,6 +295,7 @@
       self.hidden = true;
       self.index = 0;
       self.matches = [];
+      self.parent.$emit('$mdAutocompleteSelected', $scope.selectedItem);
     }
 
     function clearValue () {
