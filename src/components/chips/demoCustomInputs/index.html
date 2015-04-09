@@ -28,7 +28,10 @@
         <span md-highlight-text="ctrl.searchText">{{item.name}} :: {{item.type}}</span>
       </md-autocomplete>
       <md-chip-template>
-        <span>{{$chip.name}}::{{$chip.type}}</span>
+        <span>
+          <strong>{{$chip.name}}</strong>
+          <em>({{$chip.type}})</em>
+        </span>
       </md-chip-template>
     </md-chips>
 

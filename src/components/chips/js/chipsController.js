@@ -71,13 +71,6 @@
      * @type {boolean}
      */
     this.useMdOnAppend = false;
-
-    $scope.$parent.$on('$mdAutocompleteSelected', function (event, item) {
-      if (item) {
-        this.appendChip(item);
-        this.resetChipBuffer();
-      }
-    }.bind(this));
   }
 
   /**
@@ -297,5 +290,14 @@
         ctrl.inputKeydown(event);
       });
     });
+  };
+
+  MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {
+    ctrl.registerSelectedItemWatcher(function (item) {
+      if (item) {
+        this.appendChip(item);
+        this.resetChipBuffer();
+      }
+    }.bind(this));
   };
 })();
