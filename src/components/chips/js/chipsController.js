@@ -164,6 +164,7 @@
    * @param newChip
    */
   MdChipsCtrl.prototype.appendChip = function(newChip) {
+    if (this.items.indexOf(newChip) + 1) return;
     if (this.useMdOnAppend && this.mdOnAppend) {
       newChip = this.mdOnAppend({'$chip': newChip});
     }
