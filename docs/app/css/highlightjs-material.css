@@ -61,6 +61,7 @@ hljs .hljs-constant,
 .hljs-symbol,
 .hljs-symbol .hljs-string,
 .hljs-value,
+.hljs-params,
 .hljs-regexp {
   color: #ABC0E7;
 }
