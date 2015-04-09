@@ -36,9 +36,6 @@
     /** @type {angular.NgModelController} */
     this.ngModelCtrl = null;
 
-    /** @type {Object} */
-    this.mdAutocompleteCtrl = null;
-
     /** @type {angular.NgModelController} */
     this.userInputNgModelCtrl = null;
 
@@ -76,6 +73,13 @@
      * @type {boolean}
      */
     this.useMdOnAppend = false;
+
+    $scope.$parent.$on('$mdAutocompleteSelected', function (event, item) {
+      if (item) {
+        this.appendChip(item);
+        this.resetChipBuffer();
+      }
+    }.bind(this));
   }
 
 
@@ -86,9 +90,10 @@
    * @param event
    */
   MdChipsCtrl.prototype.inputKeydown = function(event) {
+    var chipBuffer;
     switch (event.keyCode) {
       case this.$mdConstant.KEY_CODE.ENTER:
-        var chipBuffer = this.getChipBuffer();
+        chipBuffer = this.getChipBuffer();
         if (chipBuffer) {
           event.preventDefault();
           this.appendChip(chipBuffer);
@@ -96,43 +101,14 @@
         }
         break;
       case this.$mdConstant.KEY_CODE.BACKSPACE:
-        if (!this.chipBuffer) {
+        if (!event.target.selectionStart) {
           event.preventDefault();
-          // TODO(typotter): Probably want to open the previous one for edit instead.
-          if (this.items.length > 0) {
-            this.removeChip(this.items.length - 1);
-          }
+          if (this.items.length) this.removeChip(this.items.length - 1);
           event.target.focus();
         }
         break;
     }
   };
-
-
-  /**
-   * Handles the keydown event on an `<md-chip>` element.
-   * @param index
-   * @param event
-   */
-  MdChipsCtrl.prototype.chipKeydown = function(index, event) {
-    switch (event.keyCode) {
-      case this.$mdConstant.KEY_CODE.BACKSPACE:
-      // TODO(typotter): Probably want to open the current (prev?) one for edit instead.
-      case this.$mdConstant.KEY_CODE.DELETE:
-        if (index >= 0) {
-          event.preventDefault();
-          this.removeAndSelectAdjacentChip(index);
-        }
-        break;
-      case this.$mdConstant.KEY_CODE.LEFT_ARROW:
-        this.selectChipSafe(this.selectedChip - 1);
-        break;
-      case this.$mdConstant.KEY_CODE.RIGHT_ARROW:
-        this.selectChipSafe(this.selectedChip + 1);
-        break;
-    }
-  };
-
 
   /**
    * Get the input's placeholder - uses `placeholder` when list is empty and `secondary-placeholder`
@@ -216,9 +192,6 @@
    * @return {Object|string}
    */
   MdChipsCtrl.prototype.getChipBuffer = function() {
-    if (this.mdAutocompleteCtrl) {
-      throw Error('getChipBuffer should not be called if there is an md-autocomplete');
-    }
     return !this.userInputElement ? this.chipBuffer :
         this.userInputNgModelCtrl ? this.userInputNgModelCtrl.$viewValue :
             this.userInputElement[0].value;
@@ -319,25 +292,10 @@
     };
   };
 
-
-  /**
-   * Configure bindings with the MdAutocomplete control.
-   * @param mdAutocompleteCtrl
-   */
-  MdChipsCtrl.prototype.configureMdAutocomplete = function(mdAutocompleteCtrl) {
-    this.mdAutocompleteCtrl = mdAutocompleteCtrl;
-    this.mdAutocompleteCtrl.registerSelectedItemWatcher(
-        this.mdAutocompleteSelectedItemWatcher.bind(this));
+  MdChipsCtrl.prototype.onFocus = function () {
+    var input = this.$element[0].querySelectorAll('input')[0];
+    input && input.focus();
   };
-
-
-  MdChipsCtrl.prototype.mdAutocompleteSelectedItemWatcher = function(newItem, oldItem) {
-    if (newItem && newItem !== oldItem) {
-      this.appendChip(newItem);
-      this.mdAutocompleteCtrl.clear();
-    }
-  };
-
 
   /**
    * Configure event bindings on a user-provided input element.

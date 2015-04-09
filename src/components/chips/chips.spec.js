@@ -150,7 +150,7 @@ describe('<md-chips>', function() {
         var element = buildChips(AUTOCOMPLETE_CHIPS_TEMPLATE);
         var ctrl = element.controller('mdChips');
         $timeout.flush(); // mdAutcomplete needs a flush for its init.
-        var autocompleteCtrl = ctrl.mdAutocompleteCtrl;
+        var autocompleteCtrl = element.find('md-autocomplete').controller('mdAutocomplete');
 
         element.scope().$apply(function() {
           autocompleteCtrl.scope.searchText = 'K';

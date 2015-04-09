@@ -92,13 +92,15 @@
 
   var MD_CHIPS_TEMPLATE = '\
       <md-chips-wrap\
-          ng-if="!$mdChipsCtrl.readonly || $mdChipsCtrl.items.length > 0" class="md-chips">\
+          ng-if="!$mdChipsCtrl.readonly || $mdChipsCtrl.items.length > 0"\
+          ng-focus="$mdChipsCtrl.onFocus()"\
+          tabindex="0"\
+          class="md-chips">\
         <md-chip ng-repeat="$chip in $mdChipsCtrl.items"\
             index="{{$index}}"\
             ng-class="{selected: $mdChipsCtrl.selectedChip == $index}">\
           <div class="md-chip-content"\
               ng-click="!$mdChipsCtrl.readonly && $mdChipsCtrl.selectChip($index)"\
-              ng-keydown="$mdChipsCtrl.chipKeydown($index, $event)"\
               md-chip-transclude="$mdChipsCtrl.chipContentsTemplate"></div>\
           <div class="md-chip-remove-container" \
               md-chip-transclude="$mdChipsCtrl.chipRemoveTemplate"></div>\
@@ -134,15 +136,8 @@
 
   /**
    * MDChips Directive Definition
-   *
-   * @param $mdTheming
-   * @param $log
-   * @param $compile
-   * @param $timeout
-   * @returns {*}
-   * @ngInject
    */
-  function MdChips ($mdTheming, $log, $compile, $timeout) {
+  function MdChips ($mdTheming, $compile, $timeout) {
     return {
       template: function(element, attrs) {
         // Clone the element into an attribute. By prepending the attribute
@@ -204,37 +199,17 @@
 
       // Set the chip remove, chip contents and chip input templates. The link function will put
       // them on the scope for transclusion later.
-      var chipRemoveTemplate = CHIP_REMOVE_TEMPLATE,
-          chipContentsTemplate = CHIP_DEFAULT_TEMPLATE,
-          chipInputTemplate = CHIP_INPUT_TEMPLATE,
-          hasAutocomplete = false,
-          hasNgModel = !!attr['ngModel'],
+      var chipRemoveTemplate   = getTemplateByQuery('[md-chip-remove]') || CHIP_REMOVE_TEMPLATE,
+          chipContentsTemplate = getTemplateByQuery('md-chip-template') || CHIP_DEFAULT_TEMPLATE,
+          chipInputTemplate    = getTemplateByQuery('md-autocomplete')
+              || getTemplateByQuery('input')
+              || CHIP_INPUT_TEMPLATE,
           staticChips = userTemplate.find('md-chip');
 
-      // Without an ngModel, it doesn't make sense to look for templates.
-      if (hasNgModel) {
-        var userChipTemplate = userTemplate.find('md-chip-template');
-        if (userChipTemplate.length > 0) {
-          chipContentsTemplate = userChipTemplate[0].outerHTML;
-        }
-        var userChipRemoveTemplate = userTemplate[0].querySelector('[md-chip-remove]');
-        if (userChipRemoveTemplate) {
-          chipRemoveTemplate = userChipRemoveTemplate.outerHTML;
-        }
-
-        // Input Element: Look for an autocomplete or an input.
-        var userInput = userTemplate.find('md-autocomplete');
-        if (userInput.length > 0) {
-          chipInputTemplate = userInput[0].outerHTML;
-          hasAutocomplete = true;
-        } else {
-          // Look for a plain input.
-          userInput = userTemplate.find('input');
-
-          if (userInput.length > 0) {
-            chipInputTemplate = userInput[0].outerHTML;
-          }
-        }
+      function getTemplateByQuery (query) {
+        if (!attr.ngModel) return;
+        var element = userTemplate[0].querySelector(query);
+        return element && element.outerHTML;
       }
 
       /**
@@ -245,47 +220,30 @@
         element.attr('tabindex', '-1');
         var mdChipsCtrl = controllers[0];
         mdChipsCtrl.chipContentsTemplate = chipContentsTemplate;
-        mdChipsCtrl.chipRemoveTemplate = chipRemoveTemplate;
-        mdChipsCtrl.chipInputTemplate = chipInputTemplate;
+        mdChipsCtrl.chipRemoveTemplate   = chipRemoveTemplate;
+        mdChipsCtrl.chipInputTemplate    = chipInputTemplate;
 
-        if (hasNgModel) {
-          var ngModelCtrl = element.controller('ngModel');
-
-          mdChipsCtrl.configureNgModel(ngModelCtrl);
+        if (attr.ngModel) {
+          mdChipsCtrl.configureNgModel(element.controller('ngModel'));
 
           // If an `md-on-append` attribute was set, tell the controller to use the expression
           // when appending chips.
-          if (attrs['mdOnAppend']) {
-            mdChipsCtrl.useMdOnAppendExpression();
-          }
+          if (attrs.mdOnAppend) mdChipsCtrl.useMdOnAppendExpression();
 
           // The md-autocomplete and input elements won't be compiled until after this directive
           // is complete (due to their nested nature). Wait a tick before looking for them to
           // configure the controller.
           if (chipInputTemplate != CHIP_INPUT_TEMPLATE) {
-            $timeout(function() {
-              if (hasAutocomplete) {
-                var mdAutocompleteCtrl =
-                    element.find('md-autocomplete').controller('mdAutocomplete');
-                mdChipsCtrl.configureMdAutocomplete(mdAutocompleteCtrl);
-              } else {
-                mdChipsCtrl.configureUserInput(element.find('input'));
-              }
-            });
+            $timeout(function() { mdChipsCtrl.configureUserInput(element.find('input')); });
           }
         }
 
         // Compile with the parent's scope and prepend any static chips to the wrapper.
         if (staticChips.length > 0) {
           var compiledStaticChips = $compile(staticChips)(scope.$parent);
-          $timeout(function() {
-            element.find('md-chips-wrap').prepend(compiledStaticChips);
-          });
+          $timeout(function() { element.find('md-chips-wrap').prepend(compiledStaticChips); });
         }
       };
-    }
-    function getInputContainer(el) {
-      return angular.element(el[0].querySelector('.md-chip-input-container'));
     }
   }
 })();
