@@ -51,7 +51,7 @@
         var contact = {
           name: c,
           email: cParts[0][0].toLowerCase() + '.' + cParts[1].toLowerCase() + '@example.com',
-          image: '//lorempixel.com/50/50/people?' + index
+          image: 'http://lorempixel.com/50/50/people?' + index
         };
         contact._lowername = contact.name.toLowerCase();
         return contact;
