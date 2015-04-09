@@ -14,6 +14,7 @@
     function link (scope, element, attr) {
       var ctrl = scope.$parent.$mdChipsCtrl,
           newScope = ctrl.parent.$new(false, ctrl.parent);
+      newScope.$$replacedScope = scope;
       newScope.$chip = scope.$chip;
       newScope.$mdChipsCtrl = ctrl;
       element.html(ctrl.$scope.$eval(attr.mdChipTransclude));

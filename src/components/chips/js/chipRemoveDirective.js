@@ -38,7 +38,7 @@
     function postLink(scope, element, attr, ctrl) {
       element.on('click', function(event) {
         scope.$apply(function() {
-          ctrl.removeChip(scope.$index);
+          ctrl.removeChip(scope.$$replacedScope.$index);
         });
       });
 

@@ -102,7 +102,7 @@
           <div class="md-chip-content"\
               ng-click="!$mdChipsCtrl.readonly && $mdChipsCtrl.selectChip($index)"\
               md-chip-transclude="$mdChipsCtrl.chipContentsTemplate"></div>\
-          <div class="md-chip-remove-container" \
+          <div class="md-chip-remove-container"\
               md-chip-transclude="$mdChipsCtrl.chipRemoveTemplate"></div>\
         </md-chip>\
         <div ng-if="!$mdChipsCtrl.readonly && $mdChipsCtrl.ngModelCtrl"\
@@ -126,7 +126,7 @@
       <button\
           class="md-chip-remove"\
           ng-if="!$mdChipsCtrl.readonly"\
-          ng-click="$mdChipsCtrl.removeChip($index)"\
+          ng-click="$mdChipsCtrl.removeChip($$replacedScope.$index)"\
           tabindex="-1">\
         <md-icon md-svg-icon="close"></md-icon>\
         <span class="md-visually-hidden">\

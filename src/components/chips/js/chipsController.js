@@ -4,8 +4,6 @@
       .module('material.components.chips')
       .controller('MdChipsCtrl', MdChipsCtrl);
 
-
-
   /**
    * Controller for the MdChips component. Responsible for adding to and
    * removing from the list of chips, marking chips as selected, and binding to
@@ -82,7 +80,6 @@
     }.bind(this));
   }
 
-
   /**
    * Handles the keydown event on the input element: <enter> appends the
    * buffer to the chip list, while backspace removes the last chip in the list
@@ -122,7 +119,6 @@
     return useSecondary ? this.placeholder : this.secondaryPlaceholder;
   };
 
-
   /**
    * Removes chip at {@code index} and selects the adjacent chip.
    * @param index
@@ -133,14 +129,12 @@
     this.selectAndFocusChip(selIndex);
   };
 
-
   /**
    * Sets the selected chip index to -1.
    */
   MdChipsCtrl.prototype.resetSelectedChip = function() {
     this.selectedChip = -1;
   };
-
 
   /**
    * Gets the index of an adjacent chip to select after deletion. Adjacency is
@@ -157,7 +151,6 @@
         (index == len) ? index -1 : index;
   };
 
-
   /**
    * Append the contents of the buffer to the chip list. This method will first
    * call out to the md-on-append method, if provided
@@ -171,7 +164,6 @@
     this.items.push(newChip);
   };
 
-
   /**
    * Sets whether to use the md-on-append expression. This expression is
    * bound to scope and controller in {@code MdChipsDirective} as
@@ -182,7 +174,6 @@
   MdChipsCtrl.prototype.useMdOnAppendExpression = function() {
     this.useMdOnAppend = true;
   };
-
 
   /**
    * Gets the input buffer. The input buffer can be the model bound to the
@@ -197,7 +188,6 @@
         this.userInputNgModelCtrl ? this.userInputNgModelCtrl.$viewValue :
             this.userInputElement[0].value;
   };
-
 
   /**
    * Resets the input buffer for either the internal input or user provided input element.
@@ -215,7 +205,6 @@
     }
   };
 
-
   /**
    * Removes the chip at the given index.
    * @param index
@@ -224,26 +213,17 @@
     this.items.splice(index, 1);
   };
 
-
   /**
    * Selects the chip at `index`,
    * @param index
    */
   MdChipsCtrl.prototype.selectChipSafe = function(index) {
-    if (this.items.length == 0) {
-      this.selectChip(-1);
-      return;
-    }
-
-    if (index < 0) {
-      index = 0;
-    } else if (index > this.items.length - 1) {
-      index = this.items.length - 1;
-    }
+    if (!this.items.length) return this.selectChip(-1);
+    index = Math.max(index, 0);
+    index = Math.min(index, this.items.length - 1);
     this.selectChip(index);
     this.focusChip(index);
   };
-
 
   /**
    * Marks the chip at the given index as selected.
@@ -257,7 +237,6 @@
     }
   };
 
-
   /**
    * Selects the chip at `index` and gives it focus.
    * @param index
@@ -269,14 +248,12 @@
     }
   };
 
-
   /**
    * Call `focus()` on the chip at `index`
    */
   MdChipsCtrl.prototype.focusChip = function(index) {
     this.$element[0].querySelector('md-chip[index="' + index + '"] .md-chip-content').focus();
   };
-
 
   /**
    * Configures the required interactions with the ngModel Controller.
