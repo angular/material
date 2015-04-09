@@ -99,7 +99,8 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
       }, attr, [ngModelCtrl]);
 
       element.on('click', listener)
-        .on('keypress', keypressHandler);
+        .on('keypress', keypressHandler)
+        .on('tap', listener);
       ngModelCtrl.$render = render;
 
       function keypressHandler(ev) {
