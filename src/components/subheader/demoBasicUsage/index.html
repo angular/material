@@ -3,78 +3,62 @@
   <md-content style="height: 600px;">
     <section>
       <md-subheader class="md-primary">Unread Messages</md-subheader>
-      <md-list layout="column">
-        <md-item ng-repeat="message in messages">
-          <md-item-content>
-            <div class="md-tile-left">
-                <img ng-src="{{message.face}}" class="face" alt="{{message.who}}">
-            </div>
-            <div class="md-tile-content">
+      <md-list layout-padding>
+        <md-list-item class="md-3-line" ng-repeat="message in messages">
+            <img ng-src="{{message.face}}" class="md-avatar" alt="{{message.who}}">
+            <div class="md-list-item-text">
               <h3>{{message.what}}</h3>
               <h4>{{message.who}}</h4>
               <p>
                 {{message.notes}}
               </p>
             </div>
-          </md-item-content>
-        </md-item>
+        </md-list-item>
       </md-list>
     </section>
     <section>
       <md-subheader class="md-warn">Late Messages</md-subheader>
-      <md-list layout="column">
-        <md-item ng-repeat="message in messages">
-          <md-item-content>
-            <div class="md-tile-left">
-                <img ng-src="{{message.face}}" class="face" alt="{{message.who}}">
-            </div>
-            <div class="md-tile-content">
-              <h3>{{message.what}}</h3>
-              <h4>{{message.who}}</h4>
-              <p>
-                {{message.notes}}
-              </p>
-            </div>
-          </md-item-content>
-        </md-item>
+      <md-list layout="column" layout-padding>
+        <md-list-item class="md-3-line" ng-repeat="message in messages">
+          <img ng-src="{{message.face}}" class="md-avatar" alt="{{message.who}}">
+          <div class="md-list-item-text">
+            <h3>{{message.what}}</h3>
+            <h4>{{message.who}}</h4>
+            <p>
+              {{message.notes}}
+            </p>
+          </div>
+        </md-list-item>
       </md-list>
     </section>
     <section>
       <md-subheader>Read Messages</md-subheader>
-      <md-list layout="column">
-        <md-item ng-repeat="message in messages">
-          <md-item-content>
-            <div class="md-tile-left">
-                <img ng-src="{{message.face}}" class="face" alt="{{message.who}}">
-            </div>
-            <div class="md-tile-content">
-              <h3>{{message.what}}</h3>
-              <h4>{{message.who}}</h4>
-              <p>
-                {{message.notes}}
-              </p>
-            </div>
-          </md-item-content>
-        </md-item>
+      <md-list layout="column" layout-padding>
+        <md-list-item class="md-3-line" ng-repeat="message in messages">
+          <img ng-src="{{message.face}}" class="md-avatar" alt="{{message.who}}">
+          <div class="md-list-item-text">
+            <h3>{{message.what}}</h3>
+            <h4>{{message.who}}</h4>
+            <p>
+              {{message.notes}}
+            </p>
+          </div>
+        </md-list-item>
       </md-list>
     </section>
     <section>
       <md-subheader class="md-accent">Archived messages</md-subheader>
-      <md-list layout="column">
-        <md-item ng-repeat="message in messages">
-          <md-item-content>
-            <div class="md-tile-left">
-                <img ng-src="{{message.face}}" class="face" alt="{{message.who}}">
-            </div>
-            <div class="md-tile-content">
-              <h3>{{message.what}}</h3>
-              <h4>{{message.who}}</h4>
-              <p>
-                {{message.notes}}
-              </p>
-            </div>
-          </md-item-content>
-        </md-item>
+      <md-list layout="column" layout-padding>
+        <md-list-item class="md-3-line" ng-repeat="message in messages">
+          <img ng-src="{{message.face}}" class="md-avatar" alt="{{message.who}}">
+          <div class="md-list-item-text">
+            <h3>{{message.what}}</h3>
+            <h4>{{message.who}}</h4>
+            <p>
+              {{message.notes}}
+            </p>
+          </div>
+        </md-list-item>
       </md-list>
     </section>
   </md-content>
