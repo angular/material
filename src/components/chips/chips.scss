@@ -27,6 +27,11 @@ $contact-chip-name-width: 12rem !default;
         margin-left: 0.8rem;
       }
     }
+    md-autocomplete {
+      button {
+        display: none;
+      }
+    }
   }
 }
 .md-contact-suggestion {
