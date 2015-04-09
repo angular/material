@@ -69,8 +69,9 @@ $contact-chip-name-width: 12rem !default;
     padding: $chip-padding;
 
     .md-chip-content {
-      display: inline-block;
+      display: block;
       padding-right:0.4rem;
+      float: left;
       &:focus {
         outline: none;
       }
