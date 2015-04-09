@@ -155,14 +155,27 @@ gulp.task('karma', function(done) {
   };
 
   gutil.log('Running unit tests on unminified source.');
-  karma.start(karmaConfig, done);
+  buildJs(true);
+  karma.start(karmaConfig, testMinified);
 
-  //function testMinified() {
-  //  gutil.log('Running unit tests on minified source.');
-  //  buildJs(true);
-  //  karmaConfig.releaseMode = true;
-  //  karma.start(karmaConfig, done);
-  //}
+  function testMinified() {
+    gutil.log('Running unit tests on minified source.');
+    process.env.KARMA_TEST_COMPRESSED = true;
+    karma.start(karmaConfig, testMinifiedJquery);
+  }
+
+  function testMinifiedJquery() {
+    gutil.log('Running unit tests on minified source w/ jquery.');
+    process.env.KARMA_TEST_COMPRESSED = true;
+    process.env.KARMA_TEST_JQUERY = true;
+    karma.start(karmaConfig, clearEnv);
+  }
+
+  function clearEnv() {
+    process.env.KARMA_TEST_COMPRESSED = undefined;
+    process.env.KARMA_TEST_JQUERY = undefined;
+    done();
+  }
 });
 
 gulp.task('karma-watch', function(done) {
