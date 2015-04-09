@@ -1,6 +1,6 @@
 $chip-font-size: 1.3rem !default;
 $chip-height: 3.2rem !default;
-$chip-padding: 0 0.8rem 0 1.2rem !default;
+$chip-padding: 0 0.3rem 0 1.2rem !default;
 $chip-margin: 0.8rem 0.8rem 0 0 !default;
 $chip-wrap-padding: 0 0.8rem 0.8rem 0.8rem !default;
 $chip-delete-icon-size: 1.8rem !default;
@@ -92,11 +92,16 @@ $contact-chip-name-width: 12rem !default;
       box-shadow: $whiteframe-shadow-z1;
     }
 
-    .md-button.md-chip-remove {
+    .md-chip-remove {
+      text-align: center;
+      width: $chip-height;
       line-height: $chip-height;
-      margin: 0 0 0 0.4rem;
       min-width: 0;
       padding: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      margin: 0;
 
       md-icon {
         height: $chip-delete-icon-size;

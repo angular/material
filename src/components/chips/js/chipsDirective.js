@@ -123,7 +123,7 @@
       <span>{{$chip}}</span>';
 
   var CHIP_REMOVE_TEMPLATE = '\
-      <md-button \
+      <button\
           class="md-chip-remove"\
           ng-if="!$mdChipsCtrl.readonly"\
           ng-click="$mdChipsCtrl.removeChip($index)"\
@@ -132,7 +132,7 @@
         <span class="md-visually-hidden">\
           {{$mdChipsCtrl.deleteButtonLabel}}\
         </span>\
-      </md-button>';
+      </button>';
 
   /**
    * MDChips Directive Definition
