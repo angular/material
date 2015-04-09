@@ -18,8 +18,7 @@
         elements  = null,
         promise   = null,
         cache     = {},
-        noBlur    = false,
-        selectedItemWatchers = [];
+        noBlur    = false;
 
     //-- public variables
 
@@ -41,9 +40,7 @@
     self.clear    = clearValue;
     self.select   = select;
     self.fetch    = $mdUtil.debounce(fetchResults);
-    self.getCurrentDisplayValue         = getCurrentDisplayValue;
-    self.registerSelectedItemWatcher    = registerSelectedItemWatcher;
-    self.unregisterSelectedItemWatcher  = unregisterSelectedItemWatcher;
+    self.getCurrentDisplayValue = getCurrentDisplayValue;
 
     self.listEnter = function () { noBlur = true; };
     self.listLeave = function () { noBlur = false; };
@@ -115,8 +112,7 @@
       $scope.$watch('searchText', wait
           ? $mdUtil.debounce(handleSearchText, wait)
           : handleSearchText);
-      registerSelectedItemWatcher(selectedItemChange);
-      $scope.$watch('selectedItem', handleSelectedItemChange);
+      $scope.$watch('selectedItem', selectedItemChange);
       $scope.$watch('$mdAutocompleteCtrl.hidden', function (hidden, oldHidden) {
         if (hidden && !oldHidden) positionDropdown();
       });
@@ -136,7 +132,7 @@
     }
 
     function getSnapTarget () {
-      for (var element = $element, max = 100; element.length; element = element.parent()) {
+      for (var element = $element; element.length; element = element.parent()) {
         if (angular.isDefined(element.attr('md-autocomplete-snap'))) return element[0];
       }
       return elements.wrap;
@@ -158,33 +154,6 @@
       }
       if ($scope.itemChange && selectedItem !== previousSelectedItem)
         $scope.itemChange(getItemScope(selectedItem));
-    }
-
-    function handleSelectedItemChange(selectedItem, previousSelectedItem) {
-      for (var i = 0; i < selectedItemWatchers.length; ++i) {
-        selectedItemWatchers[i](selectedItem, previousSelectedItem);
-      }
-    }
-
-    /**
-     * Register a function to be called when the selected item changes.
-     * @param cb
-     */
-    function registerSelectedItemWatcher(cb) {
-      if (selectedItemWatchers.indexOf(cb) == -1) {
-        selectedItemWatchers.push(cb);
-      }
-    }
-
-    /**
-     * Unregister a function previously registered for selected item changes.
-     * @param cb
-     */
-    function unregisterSelectedItemWatcher(cb) {
-      var i = selectedItemWatchers.indexOf(cb);
-      if (i != -1) {
-        selectedItemWatchers.splice(i, 1);
-      }
     }
 
     function handleSearchText (searchText, previousSearchText) {
