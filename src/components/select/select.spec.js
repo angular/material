@@ -379,7 +379,7 @@ describe('<md-select-menu>', function() {
         $rootScope.$apply('model.shift()');
 
         expect(selectedOptions(el).length).toBe(1);
-        expect(el.find('md-option').eq(1).attr('selected')).toBe('selected');
+        expect(el.find('md-option').eq(2).attr('selected')).toBe('selected');
         expect($rootScope.model).toEqual([3]);
       }));
 
