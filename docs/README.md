@@ -9,11 +9,12 @@ generator built by [Pete Bacon Darwin](https://github.com/petebacondarwin).
 
 To view the Live Docs (locally):
 
-1. Install the dependencies using `bower install`
-2. Build the docs using `gulp docs`
-3. Run `gulp watch` to auto-rebuild docs (optional)
-4. Start an HTTP Server; the example below uses port 8080
-5. Open browser at `http://localhost:8080`
+1. Install the dependencies using `npm install`
+2. Install the dependencies using `bower install`
+3. Build the docs using `gulp docs`
+4. Run `gulp watch` to auto-rebuild docs (optional)
+5. Start an HTTP Server; the example below uses port 8080
+6. Open browser at `http://localhost:8080`
 
 ```bash
 # Build & deploy docs to `dist/docs`
