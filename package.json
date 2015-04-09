@@ -37,7 +37,6 @@
     "karma-sauce-launcher": "^0.2.10",
     "lazypipe": "^0.2.2",
     "lodash": "^2.4.1",
-    "merge-stream": "^0.1.6",
     "minimist": "^0.1.0",
     "mkdirp": "^0.5.0",
     "q": "^1.0.1",

@@ -8,7 +8,6 @@ var glob = require('glob').sync;
 var gulp = require('gulp');
 var karma = require('karma').server;
 var lazypipe = require('lazypipe');
-var mergeStream = require('merge-stream');
 var path = require('path');
 var pkg = require('./package.json');
 var series = require('stream-series');
@@ -202,7 +201,7 @@ gulp.task('build-all-modules', function() {
 
       var stream;
       if (IS_RELEASE_BUILD && BUILD_MODE.useBower) {
-        stream = mergeStream(buildModule(moduleId, true), buildModule(moduleId, false));
+        stream = series(buildModule(moduleId, true), buildModule(moduleId, false));
       } else {
         stream = buildModule(moduleId, false);
       }
