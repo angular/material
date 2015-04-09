@@ -27,7 +27,7 @@ These commands are defined within two (2) **gulp** files:
 For each milestone release, always run:
 
 - `npm update` to update your local gulp dependencies
-- `bower update` to update AngularJS dependencies
+- `bower update` to update Angular for JS dependencies
 
 The following command line tasks are available:
 

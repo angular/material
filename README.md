@@ -1,8 +1,8 @@
-# Material Design for AngularJS Apps [![Build Status](https://travis-ci.org/angular/material.svg)](https://travis-ci.org/angular/material)
+# Material Design for Angular for JS Apps [![Build Status](https://travis-ci.org/angular/material.svg)](https://travis-ci.org/angular/material)
 
 [Material Design](https://www.google.com/design/spec/material-design/) is a specification for a
 unified system of visual, motion, and interaction design that adapts across different devices. Our
-goal is to deliver a lean, lightweight set of AngularJS-native UI elements that implement the
+goal is to deliver a lean, lightweight set of Angular for JS-native UI elements that implement the
 material design specification for use in Angular single-page applications (SPAs).
 
 ![venn diagram](https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png)
