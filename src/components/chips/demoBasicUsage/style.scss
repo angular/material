@@ -1,0 +1,36 @@
+.custom-chips {
+  .md-chip {
+    position: relative;
+    padding-right: 3.5rem;
+    .md-chip-remove-container {
+      position: absolute;
+      right: 0.4rem;
+      top: 0.4rem;
+      button.vegetablechip {
+        position: relative;
+        height: 2.4rem;
+        width: 2.4rem;
+        line-height: 3.0rem;
+        text-align: center;
+        background: rgba(black, 0.3);
+        border-radius: 50%;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        transition: background 0.15s linear;
+        md-icon {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate3d(-50%, -50%, 0) scale(0.7);
+          color: white;
+          fill: white;
+        }
+        &:hover, &:focus {
+          background: rgba(red, 0.8);
+        }
+      }
+    }
+  }
+}

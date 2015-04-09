@@ -37,13 +37,20 @@
         Display an ordered set of objects as chips (with custom template).
     </p>
 
-    <md-chips ng-model="ctrl.vegObjs"
-              readonly="ctrl.readonly"
-              md-on-append="ctrl.newVeg($chip)">
+    <md-chips
+        class="custom-chips"
+        ng-model="ctrl.vegObjs"
+        readonly="ctrl.readonly"
+        md-on-append="ctrl.newVeg($chip)">
         <md-chip-template>
-          <span>{{$chip.name}}:{{$chip.type}}</span>
+          <span>
+            <strong>{{$chip.name}}</strong>
+            <em>({{$chip.type}})</em>
+          </span>
         </md-chip-template>
-        <md-button md-chip-remove  class="md-primary vegetablechip">del</md-button>
+        <button md-chip-remove class="md-primary vegetablechip">
+          <md-icon md-svg-icon="close"></md-icon>
+        </button>
     </md-chips>
 
     <br/>
