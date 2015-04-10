@@ -69,6 +69,8 @@ md-radio-button.md-THEME_NAME-theme {
   }
 
   &[disabled] {
+    color: '{{foreground-3}}';
+
     .md-container .md-off {
       border-color: '{{foreground-3}}';
     }
