@@ -12,8 +12,6 @@ branches:
 before_script:
   - export DISPLAY=:99.0 # firefox virtual screen
   - sh -e /etc/init.d/xvfb start # firefox virtual screen
-  - npm install -g bower
-  - bower install
   - git config --global user.email "ngmaterial@googlegroups.com"
   - git config --global user.name "ngMaterial Bot"
 
