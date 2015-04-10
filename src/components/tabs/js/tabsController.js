@@ -6,7 +6,7 @@
       .controller('MdTabsController', MdTabsController);
 
   function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $mdInkRipple,
-                             $mdUtil) {
+                             $mdUtil, $animate) {
     var ctrl = this,
         elements = getElements();
 
@@ -126,7 +126,6 @@
 
     function handleWindowResize () {
       ctrl.lastSelectedIndex = $scope.selectedIndex;
-      updateHeightFromContent();
       updateInkBarStyles();
       ctrl.offsetLeft = fixOffset(ctrl.offsetLeft);
     }
@@ -201,12 +200,23 @@
     }
 
     function updateHeightFromContent () {
-      if (!$scope.dynamicHeight) return $element.css('min-height', '');
-      var tabContent = elements.contents[$scope.selectedIndex],
+      if (!$scope.dynamicHeight) return $element.css('height', '');
+      var tabContent    = elements.contents[$scope.selectedIndex],
           contentHeight = tabContent.offsetHeight,
           tabsHeight    = elements.wrapper.offsetHeight,
-          newHeight     = contentHeight + tabsHeight;
-      $element.css('min-height', newHeight + 'px');
+          newHeight     = contentHeight + tabsHeight,
+          currentHeight = $element.prop('clientHeight');
+      if (currentHeight === newHeight) return;
+      console.log('animateing from ' + currentHeight + ' to ' + newHeight);
+      $animate
+          .animate(
+            $element,
+            { height: currentHeight + 'px' },
+            { height: newHeight + 'px'}
+          )
+          .then(function () {
+            $timeout(function () { $element.css('height', ''); }, 0, false);
+          });
     }
 
     function updateInkBarStyles () {

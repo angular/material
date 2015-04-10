@@ -23,7 +23,7 @@ md-tabs {
   border-radius: 2px;
   overflow: hidden;
   position: relative;
-  transition: min-height $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+  transition: height $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
   &:not(.md-no-tab-content) {
     min-height: 200 + $tabs-header-height;
   }
