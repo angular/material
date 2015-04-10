@@ -24,4 +24,7 @@ md-list.md-THEME_NAME-theme {
       }
     }
   }
+  md-list-item button {
+    background-color: '{{background-color}}';
+  }
 }

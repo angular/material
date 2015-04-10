@@ -8,7 +8,7 @@
   <md-list-item ng-click="navigateTo(setting.extraScreen)" ng-repeat="setting in settings">
     <md-icon md-svg-icon="{{setting.icon}}"></md-icon>
     <p> {{ setting.name }} </p>
-    <md-switch class="md-secondary" ng-model="setting.enabled">
+    <md-switch class="md-secondary" ng-model="setting.enabled"></md-switch>
   </md-list-item>
   <md-list-item ng-click="navigateTo('data usage')">
     <md-icon md-svg-icon="cached"></md-icon>
