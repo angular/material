@@ -5,7 +5,8 @@
       .module('material.components.tabs')
       .controller('MdTabsController', MdTabsController);
 
-  function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $mdInkRipple, $mdUtil) {
+  function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $mdInkRipple,
+                             $mdUtil) {
     var ctrl = this,
         elements = getElements();
 
@@ -200,12 +201,12 @@
     }
 
     function updateHeightFromContent () {
-      if (!$scope.dynamicHeight) return $element.css('height', '');
+      if (!$scope.dynamicHeight) return $element.css('min-height', '');
       var tabContent = elements.contents[$scope.selectedIndex],
           contentHeight = tabContent.offsetHeight,
           tabsHeight    = elements.wrapper.offsetHeight,
           newHeight     = contentHeight + tabsHeight;
-      $element.css('height', newHeight + 'px');
+      $element.css('min-height', newHeight + 'px');
     }
 
     function updateInkBarStyles () {
