@@ -15,7 +15,7 @@ describe('$mdMedia', function() {
     matchMediaResult = false;
     listeners = [];
 
-    spyOn($window, 'matchMedia').andCallFake(function(media) {
+    spyOn($window, 'matchMedia').and.callFake(function(media) {
       return {
         media: media,
         matches: matchMediaResult, 
@@ -44,26 +44,26 @@ describe('$mdMedia', function() {
   }));
 
   it('should return cached results if available', inject(function($mdMedia, $window) {
-    expect($window.matchMedia.callCount).toBe(0);
+    expect($window.matchMedia.calls.count()).toBe(0);
 
     expect($mdMedia('query')).toBe(false);
-    expect($window.matchMedia.callCount).toBe(1);
+    expect($window.matchMedia.calls.count()).toBe(1);
 
     expect($mdMedia('query')).toBe(false);
-    expect($window.matchMedia.callCount).toBe(1);
+    expect($window.matchMedia.calls.count()).toBe(1);
   }));
 
   it('should change result when listener is called', inject(function($mdMedia, $window, $timeout) {
     matchMediaResult = true;
     expect($mdMedia('query')).toBe(true);
-    expect($window.matchMedia.callCount).toBe(1);
+    expect($window.matchMedia.calls.count()).toBe(1);
 
     expect($mdMedia('query')).toBe(true);
-    expect($window.matchMedia.callCount).toBe(1);
+    expect($window.matchMedia.calls.count()).toBe(1);
 
     matchMediaResult = false;
     expect($mdMedia('query')).toBe(true);
-    expect($window.matchMedia.callCount).toBe(1);
+    expect($window.matchMedia.calls.count()).toBe(1);
 
     runListeners();
     $timeout.flush();

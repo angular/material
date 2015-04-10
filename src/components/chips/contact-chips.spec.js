@@ -45,7 +45,7 @@ describe('<md-contact-chips>', function() {
 
     describe('filtering selected items', function() {
       it('should filter when enabled', inject(function($timeout) {
-        scope.querySearch = jasmine.createSpy('querySearch').andCallFake(function(q) {
+        scope.querySearch = jasmine.createSpy('querySearch').and.callFake(function(q) {
           return scope.allContacts;
         });
         scope.contacts.push(scope.allContacts[2]);
@@ -66,7 +66,7 @@ describe('<md-contact-chips>', function() {
       }));
 
       it('should not filter when disabled', inject(function($timeout) {
-        scope.querySearch = jasmine.createSpy('querySearch').andCallFake(function(q) {
+        scope.querySearch = jasmine.createSpy('querySearch').and.callFake(function(q) {
           return scope.allContacts;
         });
         scope.contacts.push(scope.allContacts[2]);

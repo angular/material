@@ -46,18 +46,18 @@ describe('util', function() {
 
     it('should not invoke the function again before (delay + 1) milliseconds', function() {
       throttledFn();
-      expect(originalFn.callCount).toBe(1);
+      expect(originalFn.calls.count()).toBe(1);
 
       throttledFn();
-      expect(originalFn.callCount).toBe(1);
+      expect(originalFn.calls.count()).toBe(1);
 
       nowMockValue += delay;
       throttledFn();
-      expect(originalFn.callCount).toBe(1);
+      expect(originalFn.calls.count()).toBe(1);
 
       nowMockValue += 1;
       throttledFn();
-      expect(originalFn.callCount).toBe(2);
+      expect(originalFn.calls.count()).toBe(2);
     });
 
     it('should pass the context to the original function', inject(function($mdUtil) {

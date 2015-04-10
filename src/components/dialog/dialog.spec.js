@@ -3,11 +3,11 @@ describe('$mdDialog', function() {
   beforeEach(module('material.components.dialog', 'ngAnimateMock'));
 
   beforeEach(inject(function spyOnMdEffects($$q, $animate) {
-    spyOn($animate, 'leave').andCallFake(function(element) {
+    spyOn($animate, 'leave').and.callFake(function(element) {
       element.remove();
       return $$q.when();
     });
-    spyOn($animate, 'enter').andCallFake(function(element, parent) {
+    spyOn($animate, 'enter').and.callFake(function(element, parent) {
       parent.append(element);
       return $$q.when();
     });

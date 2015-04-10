@@ -79,6 +79,10 @@
             label:    getLabel()
           }, index);
 
+      scope.deselect = scope.deselect || angular.noop;
+      scope.select = scope.select || angular.noop;
+
+
       scope.$watch('active', function (active) { if (active) ctrl.select(data.getIndex()); });
       scope.$watch('disabled', function () { ctrl.refreshIndex(); });
       scope.$watch(getTemplate, function (template, oldTemplate) {

@@ -58,7 +58,7 @@ describe('<md-tooltip> directive', function() {
   }));
 
   it('should not set parent to items with no pointer events', inject(function($window, $compile, $rootScope, $timeout) {
-    spyOn($window, 'getComputedStyle').andCallFake(function(el) {
+    spyOn($window, 'getComputedStyle').and.callFake(function(el) {
       if (el.nodeName == 'INNER') {
         return { 'pointer-events': 'none' };
       } else {

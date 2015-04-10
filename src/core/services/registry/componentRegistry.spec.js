@@ -49,7 +49,7 @@ describe('$mdComponentRegistry Service', function() {
       var el = setup('md-component-id="left"');
       var instance = $mdComponentRegistry.get('left');
 
-      expect(instance).toNotBe(null);
+      expect(instance).not.toBe(null);
     });
 
     it('should deregister component when element is destroyed', function() {

@@ -130,10 +130,10 @@ describe('<md-autocomplete>', function() {
       element.scope().$apply();
 
       expect(scope.itemChanged).toHaveBeenCalled();
-      expect(scope.itemChanged.mostRecentCall.args[0].display).toBe('foo');
+      expect(scope.itemChanged.calls.mostRecent().args[0].display).toBe('foo');
       expect(registeredWatcher).toHaveBeenCalled();
-      expect(registeredWatcher.mostRecentCall.args[0].display).toBe('foo');
-      expect(registeredWatcher.mostRecentCall.args[1]).toBeNull();
+      expect(registeredWatcher.calls.mostRecent().args[0].display).toBe('foo');
+      expect(registeredWatcher.calls.mostRecent().args[1]).toBeNull();
       expect(scope.selectedItem).not.toBeNull();
       expect(scope.selectedItem.display).toBe('foo');
 
@@ -143,9 +143,9 @@ describe('<md-autocomplete>', function() {
       ctrl.clear();
       element.scope().$apply();
 
-      expect(registeredWatcher.callCount).toBe(1);
-      expect(scope.itemChanged.callCount).toBe(2);
-      expect(scope.itemChanged.mostRecentCall.args[0]).toBeUndefined();
+      expect(registeredWatcher.calls.count()).toBe(1);
+      expect(scope.itemChanged.calls.count()).toBe(2);
+      expect(scope.itemChanged.calls.mostRecent().args[0]).toBeUndefined();
       expect(scope.selectedItem).toBe(null);
     }));
   });

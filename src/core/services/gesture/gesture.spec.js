@@ -39,15 +39,15 @@ describe('$mdGesture', function() {
     it('should pass provided options', inject(function($document, $mdGesture) {
       $mdGesture.register(childEl, 'gesture1', { optKey: 'optValue' });
 
-      startSpy1.andCallFake(function() {
-        expect(this.state).toHaveFields({
+      startSpy1.and.callFake(function() {
+        return {
           isRunning: true,
           options: {
             optKey: 'optValue',
             defaultKey: 'defaultVal'
           },
           registeredParent: childEl[0]
-        });
+        };
       });
       $document.triggerHandler({
         type: 'touchstart',
@@ -68,9 +68,9 @@ describe('$mdGesture', function() {
       $document.triggerHandler('touchend');
       expect(endSpy1).toHaveBeenCalled();
 
-      startSpy1.reset();
-      moveSpy1.reset();
-      endSpy1.reset();
+      startSpy1.calls.reset();
+      moveSpy1.calls.reset();
+      endSpy1.calls.reset();
 
       $document.triggerHandler({
         type: 'touchstart',
@@ -94,9 +94,9 @@ describe('$mdGesture', function() {
       $document.triggerHandler('pointerup');
       expect(endSpy1).toHaveBeenCalled();
 
-      startSpy1.reset();
-      moveSpy1.reset();
-      endSpy1.reset();
+      startSpy1.calls.reset();
+      moveSpy1.calls.reset();
+      endSpy1.calls.reset();
 
       $document.triggerHandler({
         type: 'pointerdown',
@@ -120,9 +120,9 @@ describe('$mdGesture', function() {
       $document.triggerHandler('mouseup');
       expect(endSpy1).toHaveBeenCalled();
 
-      startSpy1.reset();
-      moveSpy1.reset();
-      endSpy1.reset();
+      startSpy1.calls.reset();
+      moveSpy1.calls.reset();
+      endSpy1.calls.reset();
 
       $document.triggerHandler({
         type: 'mousedown',
@@ -137,7 +137,7 @@ describe('$mdGesture', function() {
 
     it('should not call start on an event with different type if <400ms have passed', inject(function($document) {
       var now = 0;
-      spyOn(Date, 'now').andCallFake(function() { return now; });
+      spyOn(Date, 'now').and.callFake(function() { return now; });
 
       $document.triggerHandler({
         type: 'touchstart',
@@ -146,7 +146,7 @@ describe('$mdGesture', function() {
       $document.triggerHandler('touchmove');
       $document.triggerHandler('touchend');
 
-      startSpy1.reset();
+      startSpy1.calls.reset();
       $document.triggerHandler({
         type: 'mousedown',
         target: childEl[0]
@@ -243,7 +243,7 @@ describe('$mdGesture', function() {
       expect(downSpy).toHaveBeenCalled();
       expect(upSpy).not.toHaveBeenCalled();
 
-      downSpy.reset();
+      downSpy.calls.reset();
 
       $document.triggerHandler({
         type: 'touchmove',
@@ -296,7 +296,7 @@ describe('$mdGesture', function() {
       });
 
       el.on('$md.hold', holdSpy);
-      spyOn($timeout, 'cancel').andCallThrough();
+      spyOn($timeout, 'cancel').and.callThrough();
 
       $document.triggerHandler({
         type: 'touchstart',
@@ -304,7 +304,7 @@ describe('$mdGesture', function() {
         touches: [{pageX: 100, pageY: 100}]
       });
       expect(holdSpy).not.toHaveBeenCalled();
-      $timeout.cancel.reset();
+      $timeout.cancel.calls.reset();
 
       $document.triggerHandler({
         type: 'touchmove',
@@ -399,7 +399,7 @@ describe('$mdGesture', function() {
       });
       expect(startDragSpy).toHaveBeenCalled();
 
-      expect(startDragSpy.mostRecentCall.args[0].pointer).toHaveFields({
+      expect(startDragSpy.calls.mostRecent().args[0].pointer).toHaveFields({
         startX: 89,
         startY: 100,
         x: 89,
@@ -408,7 +408,7 @@ describe('$mdGesture', function() {
       });
       expect(endDragSpy).not.toHaveBeenCalled();
 
-      startDragSpy.reset();
+      startDragSpy.calls.reset();
       doc.triggerHandler({
         type: 'touchmove',
         target: el[0],
@@ -416,7 +416,7 @@ describe('$mdGesture', function() {
       });
       expect(startDragSpy).not.toHaveBeenCalled();
       expect(dragSpy).toHaveBeenCalled();
-      expect(dragSpy.mostRecentCall.args[0].pointer).toHaveFields({
+      expect(dragSpy.calls.mostRecent().args[0].pointer).toHaveFields({
         x: 90,
         y: 99,
         distanceX: 1,
@@ -424,7 +424,7 @@ describe('$mdGesture', function() {
       });
       expect(endDragSpy).not.toHaveBeenCalled();
 
-      dragSpy.reset();
+      dragSpy.calls.reset();
       doc.triggerHandler({
         type: 'touchend',
         target: el[0],
@@ -434,7 +434,7 @@ describe('$mdGesture', function() {
       expect(dragSpy).not.toHaveBeenCalled();
       expect(endDragSpy).toHaveBeenCalled();
 
-      var pointer = endDragSpy.mostRecentCall.args[0].pointer;
+      var pointer = endDragSpy.calls.mostRecent().args[0].pointer;
       expect(pointer).toHaveFields({
         distanceX: 111,
         distanceY: -100,
@@ -449,7 +449,7 @@ describe('$mdGesture', function() {
 
     it('should swipeleft if velocity > minVelocity and distance > maxDistance', inject(function($mdGesture, $document) {
       var now = 0;
-      spyOn(Date, 'now').andCallFake(function() { return now; });
+      spyOn(Date, 'now').and.callFake(function() { return now; });
 
       var leftSpy = jasmine.createSpy('left');
       var rightSpy = jasmine.createSpy('right');
@@ -469,7 +469,7 @@ describe('$mdGesture', function() {
         type: 'touchend', target: el[0], pageX: -100, pageY: 0
       });
       expect(leftSpy).toHaveBeenCalled();
-      expect(leftSpy.mostRecentCall.args[0].pointer).toHaveFields({
+      expect(leftSpy.calls.mostRecent().args[0].pointer).toHaveFields({
         velocityX: -100,
         distanceX: -100
       });
@@ -478,7 +478,7 @@ describe('$mdGesture', function() {
 
     it('should swiperight if velocity > minVelocity and distance > maxDistance', inject(function($mdGesture, $document) {
       var now = 0;
-      spyOn(Date, 'now').andCallFake(function() { return now; });
+      spyOn(Date, 'now').and.callFake(function() { return now; });
 
       var leftSpy = jasmine.createSpy('left');
       var rightSpy = jasmine.createSpy('right');
@@ -501,7 +501,7 @@ describe('$mdGesture', function() {
       expect(leftSpy).not.toHaveBeenCalled();
       expect(rightSpy).toHaveBeenCalled();
 
-      var pointer = rightSpy.mostRecentCall.args[0].pointer;
+      var pointer = rightSpy.calls.mostRecent().args[0].pointer;
       expect(pointer.velocityX).toBe(100);
       expect(pointer.distanceX).toBe(100);
 
@@ -509,7 +509,7 @@ describe('$mdGesture', function() {
 
     it('should not swipeleft is velocity is too low', inject(function($document) {
       var now = 0;
-      spyOn(Date, 'now').andCallFake(function() { return now; });
+      spyOn(Date, 'now').and.callFake(function() { return now; });
 
       var leftSpy = jasmine.createSpy('left');
       var rightSpy = jasmine.createSpy('right');
@@ -543,7 +543,7 @@ describe('$mdGesture', function() {
 
     it('should not swiperight is distance is too low', inject(function($document) {
       var now = 0;
-      spyOn(Date, 'now').andCallFake(function() { return now; });
+      spyOn(Date, 'now').and.callFake(function() { return now; });
 
       var leftSpy = jasmine.createSpy('left');
       var rightSpy = jasmine.createSpy('right');

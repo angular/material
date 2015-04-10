@@ -12,7 +12,7 @@ describe('$$interimElement service', function() {
       $provide.value('$mdTheming', $themingSpy);
     });
     inject(function($q, $compile, $rootScope) {
-      $compilerSpy.andCallFake(function(opts) {
+      $compilerSpy.and.callFake(function(opts) {
         var el = $compile(opts.template);
         var deferred = $q.defer();
         deferred.resolve({
@@ -78,7 +78,7 @@ describe('$$interimElement service', function() {
     it('should not call onShow or onRemove on failing to load templates', function() {
       createInterimProvider('interimTest');
       inject(function($q, $rootScope, $rootElement, interimTest, $httpBackend, $animate) {
-        $compilerSpy.andCallFake(function() {
+        $compilerSpy.and.callFake(function() {
           var deferred = $q.defer();
           deferred.reject();
           return deferred.promise;
@@ -230,8 +230,8 @@ describe('$$interimElement service', function() {
         interimTest.show();
         $rootScope.$digest();
         $animate.triggerCallbacks();
-        expect($compilerSpy.mostRecentCall.args[0].key).toBe('defaultValue');
-        $compilerSpy.reset();
+        expect($compilerSpy.calls.mostRecent().args[0].key).toBe('defaultValue');
+        $compilerSpy.calls.reset();
 
         interimTest.show({
           key: 'newValue'
@@ -240,18 +240,18 @@ describe('$$interimElement service', function() {
         $animate.triggerCallbacks();
         $rootScope.$digest();
         $animate.triggerCallbacks();
-        expect($compilerSpy.mostRecentCall.args[0].key).toBe('newValue');
-        $compilerSpy.reset();
+        expect($compilerSpy.calls.mostRecent().args[0].key).toBe('newValue');
+        $compilerSpy.calls.reset();
 
         interimTest.show(interimTest.preset());
         $rootScope.$digest();
         $animate.triggerCallbacks();
         $rootScope.$digest();
         $animate.triggerCallbacks();
-        expect($compilerSpy.mostRecentCall.args[0].key).toBe('defaultValue');
-        expect($compilerSpy.mostRecentCall.args[0].key2).toBe('defaultValue2');
+        expect($compilerSpy.calls.mostRecent().args[0].key).toBe('defaultValue');
+        expect($compilerSpy.calls.mostRecent().args[0].key2).toBe('defaultValue2');
 
-        $compilerSpy.reset();
+        $compilerSpy.calls.reset();
         interimTest.show(
           interimTest.preset({
             key: 'newValue',
@@ -262,10 +262,10 @@ describe('$$interimElement service', function() {
         $animate.triggerCallbacks();
         $rootScope.$digest();
         $animate.triggerCallbacks();
-        expect($compilerSpy.mostRecentCall.args[0].key).toBe('newValue');
-        expect($compilerSpy.mostRecentCall.args[0].key2).toBe('newValue2');
+        expect($compilerSpy.calls.mostRecent().args[0].key).toBe('newValue');
+        expect($compilerSpy.calls.mostRecent().args[0].key2).toBe('newValue2');
         
-        $compilerSpy.reset();
+        $compilerSpy.calls.reset();
         $rootScope.$digest();
         $animate.triggerCallbacks();
         $rootScope.$digest();
@@ -279,8 +279,8 @@ describe('$$interimElement service', function() {
         $animate.triggerCallbacks();
         $rootScope.$digest();
         $animate.triggerCallbacks();
-        expect($compilerSpy.mostRecentCall.args[0].key).toBe('defaultValue');
-        expect($compilerSpy.mostRecentCall.args[0].key2).toBe('superNewValue2');
+        expect($compilerSpy.calls.mostRecent().args[0].key).toBe('defaultValue');
+        expect($compilerSpy.calls.mostRecent().args[0].key2).toBe('superNewValue2');
       });
     });
 
@@ -299,13 +299,13 @@ describe('$$interimElement service', function() {
       it('inherits default options', inject(function($$interimElement) {
         var defaults = { templateUrl: 'testing.html' };
         Service.show(defaults);
-        expect($compilerSpy.mostRecentCall.args[0].templateUrl).toBe('testing.html');
+        expect($compilerSpy.calls.mostRecent().args[0].templateUrl).toBe('testing.html');
       }));
 
       it('forwards options to $mdCompiler', inject(function($$interimElement) {
         var options = {template: '<testing />'};
         Service.show(options);
-        expect($compilerSpy.mostRecentCall.args[0].template).toBe('<testing />');
+        expect($compilerSpy.calls.mostRecent().args[0].template).toBe('<testing />');
       }));
 
       it('supports theming', inject(function($$interimElement, $rootScope) {
@@ -315,7 +315,7 @@ describe('$$interimElement service', function() {
       }));
 
       it('calls hide after hideDelay', inject(function($animate, $timeout, $rootScope) {
-        var hideSpy = spyOn(Service, 'cancel').andCallThrough();
+        var hideSpy = spyOn(Service, 'cancel').and.callThrough();
         Service.show({hideDelay: 1000});
         $rootScope.$digest();
         $animate.triggerCallbacks();
@@ -377,7 +377,7 @@ describe('$$interimElement service', function() {
 
       it('allows parent getter', inject(function($rootScope) {
         var parent = angular.element('<div>');
-        var parentGetter = jasmine.createSpy('parentGetter').andReturn(parent);
+        var parentGetter = jasmine.createSpy('parentGetter').and.returnValue(parent);
 
         var shown = false;
         Service.show({
@@ -394,7 +394,7 @@ describe('$$interimElement service', function() {
 
       it('allows string parent selector', inject(function($rootScope, $document) {
         var parent = angular.element('<div id="super-parent">');
-        spyOn($document[0], 'querySelector').andReturn(parent[0]);
+        spyOn($document[0], 'querySelector').and.returnValue(parent[0]);
 
         var shown = false;
         Service.show({

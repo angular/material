@@ -10,7 +10,7 @@ describe('md-slider', function() {
       spyOn(
         slider[0].querySelector('.md-track-container'), 
         'getBoundingClientRect'
-      ).andReturn(angular.extend({
+      ).and.returnValue(angular.extend({
         width: 100,
         left: 0,
         right: 0

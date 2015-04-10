@@ -381,7 +381,7 @@ describe('md-theme directive', function() {
       spyOn($log, 'warn');
       var el = $compile('<div md-theme="default"></div>')($rootScope);
       $rootScope.$apply();
-      expect($log.warn.calls.length).toBe(0);
+      expect($log.warn.calls.count()).toBe(0);
     });
   });
 });

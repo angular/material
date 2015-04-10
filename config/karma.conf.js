@@ -25,13 +25,13 @@ module.exports = function(config) {
   // releaseMode is a custom configuration option.
   var testSrc = process.env.KARMA_TEST_COMPRESSED ? COMPILED_SRC : UNCOMPILED_SRC;
   var dependencies = process.env.KARMA_TEST_JQUERY ? 
-      ['bower_components/jquery/dist/jquery.js'] : [];
+      ['node_modules/jquery/dist/jquery.js'] : [];
 
   dependencies = dependencies.concat([
-    'bower_components/angular/angular.js',
-    'bower_components/angular-animate/angular-animate.js',
-    'bower_components/angular-aria/angular-aria.js',
-    'bower_components/angular-mocks/angular-mocks.js',
+    'node_modules/angular/angular.js',
+    'node_modules/angular-animate/angular-animate.js',
+    'node_modules/angular-aria/angular-aria.js',
+    'node_modules/angular-mocks/angular-mocks.js',
     'config/test-utils.js'
   ]);
 

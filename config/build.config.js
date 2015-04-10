@@ -1,5 +1,4 @@
 var pkg = require('../package.json');
-var bower = require('../bower.json');
 var fs = require('fs');
 var versionFile = __dirname + '/../dist/commit';
 

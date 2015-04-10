@@ -23,7 +23,7 @@ describe('md-button', function() {
     $rootScope.$apply();
     expect($log.warn).toHaveBeenCalled();
 
-    $log.warn.reset();
+    $log.warn.calls.reset();
     button = $compile('<md-button aria-label="something"><md-icon></md-icon></md-button>')($rootScope);
     $rootScope.$apply();
     expect($log.warn).not.toHaveBeenCalled();

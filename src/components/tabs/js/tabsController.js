@@ -168,6 +168,7 @@
 
     function handleSelectedIndexChange (newValue, oldValue) {
       if (newValue === oldValue) return;
+
       $scope.selectedIndex = getNearestSafeIndex(newValue);
       ctrl.lastSelectedIndex = oldValue;
       updateInkBarStyles();

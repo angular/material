@@ -93,7 +93,7 @@ describe('<md-chips>', function() {
       var ctrl = element.controller('mdChips');
 
       var doubleText = function (text) { return "" + text + text; };
-      scope.appendChip = jasmine.createSpy('appendChip').andCallFake(doubleText);
+      scope.appendChip = jasmine.createSpy('appendChip').and.callFake(doubleText);
 
       element.scope().$apply(function() {
         ctrl.chipBuffer = 'Grape';
@@ -101,7 +101,7 @@ describe('<md-chips>', function() {
       });
 
       expect(scope.appendChip).toHaveBeenCalled();
-      expect(scope.appendChip.mostRecentCall.args[0]).toBe('Grape');
+      expect(scope.appendChip.calls.mostRecent().args[0]).toBe('Grape');
       expect(scope.items.length).toBe(4);
       expect(scope.items[3]).toBe('GrapeGrape');
     });
@@ -117,7 +117,7 @@ describe('<md-chips>', function() {
         };
       };
 
-      scope.appendChip = jasmine.createSpy('appendChip').andCallFake(chipObj);
+      scope.appendChip = jasmine.createSpy('appendChip').and.callFake(chipObj);
 
       element.scope().$apply(function() {
         ctrl.chipBuffer = 'Grape';
@@ -125,7 +125,7 @@ describe('<md-chips>', function() {
       });
 
       expect(scope.appendChip).toHaveBeenCalled();
-      expect(scope.appendChip.mostRecentCall.args[0]).toBe('Grape');
+      expect(scope.appendChip.calls.mostRecent().args[0]).toBe('Grape');
       expect(scope.items.length).toBe(4);
       expect(scope.items[3].name).toBe('Grape');
       expect(scope.items[3].uppername).toBe('GRAPE');

@@ -11,7 +11,7 @@ describe('<md-toolbar>', function() {
     parent.append(toolbar).append(contentEl);
 
     //Prop will be used for offsetHeight, give a fake offsetHeight
-    spyOn(toolbar, 'prop').andCallFake(function() {
+    spyOn(toolbar, 'prop').and.callFake(function() {
       return 100;
     });
 
@@ -19,11 +19,11 @@ describe('<md-toolbar>', function() {
     // no matter which browser the tests are being run on.
     // (IE, firefox, chrome all give different results when reading element.style)
     var toolbarCss = {};
-    spyOn(toolbar, 'css').andCallFake(function(k, v) {
+    spyOn(toolbar, 'css').and.callFake(function(k, v) {
       toolbarCss[k] = v;
     });
     var contentCss = {};
-    spyOn(contentEl, 'css').andCallFake(function(k, v) {
+    spyOn(contentEl, 'css').and.callFake(function(k, v) {
       contentCss[k] = v;
     });
 

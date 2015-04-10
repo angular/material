@@ -3,25 +3,35 @@ describe('<md-tabs>', function() {
   beforeEach(module('material.components.tabs'));
   beforeEach(function() {
     TestUtil.mockElementFocus(this);
-    this.addMatchers({
-      toBeActiveTab: function(checkFocus) {
-        var fails = [];
-        var actual = this.actual;
-        this.message = function() {
-          return 'Expected ' + angular.mock.dump(actual) + (this.isNot ? ' not ' : ' ') + 
-            'to be the active tab. Failures: ' + fails.join(', ');
+
+    jasmine.addMatchers({
+      toBeActiveTab: function() {
+        return {
+          compare: function(actual, expected) {
+            var fails = [];
+
+            if (!actual.length) {
+              fails.push('element not found');
+            } else {
+              if (!actual.hasClass('md-active')) {
+                fails.push('does not have active class');
+              }
+              if (actual.attr('aria-selected') != 'true') {
+                fails.push('aria-selected is not true');
+              }
+            }
+
+            var results = { pass : fails.length === 0 };
+            var negation = !results.pass ? "" : " not ";
+
+            results.message = "";
+            results.message += "Expected '";
+            results.message += angular.mock.dump(actual);
+            results.message += negation + "' to be the active tab. Failures: " + fails.join(', ');
+
+            return results;
+          }
         };
-        if (!actual.length) {
-          fails.push('element not found');
-          return;
-        }
-        if (!actual.hasClass('md-active')) {
-          fails.push('does not have active class');
-        }
-        if (actual.attr('aria-selected') != 'true') {
-          fails.push('aria-selected is not true');
-        }
-        return fails.length === 0;
       }
     });
   });

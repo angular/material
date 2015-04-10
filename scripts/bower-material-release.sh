@@ -18,13 +18,6 @@ function run {
   git clone https://angular:$GH_TOKEN@github.com/angular/bower-material \
     bower-material --depth=2
 
-  echo "-- Copying dependencies to external bower-material..."
-  BOWER_JSON=$(node -p 'var internalBower = require("./bower.json");
-    var externalBower = require("./bower-material/bower.json");
-    externalBower.dependencies = internalBower.dependencies;
-    JSON.stringify(externalBower, null, 2);')
-  echo $BOWER_JSON > bower-material/bower.json
-
   echo "-- Copying in build files..."
   cp -Rf dist/* bower-material/
 
