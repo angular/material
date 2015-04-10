@@ -8,6 +8,7 @@
   function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $mdInkRipple,
                              $mdUtil, $animate) {
     var ctrl = this,
+        locked = false,
         elements = getElements();
 
     ctrl.scope = $scope;
@@ -80,7 +81,7 @@
         case $mdConstant.KEY_CODE.SPACE:
         case $mdConstant.KEY_CODE.ENTER:
           event.preventDefault();
-          $scope.selectedIndex = ctrl.focusIndex;
+          if (!locked) $scope.selectedIndex = ctrl.focusIndex;
           break;
       }
       ctrl.lastClick = false;
@@ -207,7 +208,7 @@
           newHeight     = contentHeight + tabsHeight,
           currentHeight = $element.prop('clientHeight');
       if (currentHeight === newHeight) return;
-      console.log('animateing from ' + currentHeight + ' to ' + newHeight);
+      locked = true;
       $animate
           .animate(
             $element,
@@ -215,7 +216,10 @@
             { height: newHeight + 'px'}
           )
           .then(function () {
-            $timeout(function () { $element.css('height', ''); }, 0, false);
+            $timeout(function () {
+              $element.css('height', '');
+              locked = false;
+            }, 0, false);
           });
     }
 
@@ -278,7 +282,7 @@
     }
 
     function select (index) {
-      ctrl.focusIndex = $scope.selectedIndex = index;
+      if (!locked) ctrl.focusIndex = $scope.selectedIndex = index;
       ctrl.lastClick = true;
     }
 
