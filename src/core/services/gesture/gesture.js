@@ -28,7 +28,7 @@
       register: register,
       // TODO only hijack clicks on Android < 4.4
       // TODO allow an override for this (through provider?)
-      isHijackingClicks: isIos || isAndroid
+      isHijackingClicks: (isIos || isAndroid) && !jQuery
     };
 
     if (self.isHijackingClicks) {
