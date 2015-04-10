@@ -1,20 +1,20 @@
 <div ng-app="customInputDemo" ng-controller="CustomInputDemoCtrl as ctrl" layout="column">
 
-  <md-content class="md-padding" layout="column">
+  <md-content layout-padding layout="column">
     <p>Use an <code>&lt;input&gt;</code> element with no model to build an ordered set of chips.</p>
     <md-chips ng-model="ctrl.numberChips">
       <input type="number" placeholder="Enter a number">
     </md-chips>
   </md-content>
 
-  <md-content class="md-padding" layout="column">
+  <md-content layout-padding layout="column">
     <p>Use an <code>&lt;input&gt;</code> element to build an ordered set of chips.</p>
     <md-chips ng-model="ctrl.numberChips2">
       <input type="number" ng-model="ctrl.numberBuffer" placeholder="Enter a number">
     </md-chips>
   </md-content>
 
-  <md-content class="md-padding autocomplete" layout="column">
+  <md-content layout-padding class="autocomplete" layout="column">
 
     <p>Use <code>&lt;md-autocomplete&gt;</code> to build an ordered set of chips.</p>
 

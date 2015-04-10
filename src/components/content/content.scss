@@ -15,14 +15,5 @@ md-content {
   }
   &[md-scroll-xy] {
   }
-
-  &.md-padding {
-    padding: 8px;
-  }
 }
 
-@media (min-width: $layout-breakpoint-sm) {
-  md-content.md-padding {
-    padding: 16px;
-  }
-}
