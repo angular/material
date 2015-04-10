@@ -319,13 +319,18 @@
 
     /*
      * Dispatch an event with jQuery
-     * TODO: Make sure this sends bubbling events
+     * TODO: Make sure this sends $md.* bubbling events
      *
      * @param srcEvent the original DOM touch event that started this.
      * @param eventType the name of the custom event to send (eg 'click' or '$md.drag')
      * @param eventPointer the pointer object that matches this event.
      */
     function jQueryDispatchEvent(srcEvent, eventType, eventPointer) {
+      if (eventType === 'click') {
+        nativeDispatchEvent(srcEvent, eventType, eventPointer);
+        return;
+      }
+
       eventPointer = eventPointer || pointer;
       var eventObj = new angular.element.Event(eventType);
 
