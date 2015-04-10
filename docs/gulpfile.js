@@ -109,7 +109,7 @@ module.exports = function(gulp, IS_RELEASE_BUILD) {
 
   gulp.task('docs-js', ['docs-app', 'docs-html2js', 'demos', 'build'], function() {
     return gulp.src([
-      'bower_components/angularytics/dist/angularytics.js',
+      'node_modules/angularytics/dist/angularytics.js',
       'dist/angular-material.js',
       'dist/docs/js/**/*.js'
     ])
