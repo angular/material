@@ -100,7 +100,7 @@ md-list-item, md-list-item .md-list-item-inner {
     margin-bottom: 12px;
     align-self: center;
     .md-label { display: none; }
-    &:not(md-checkbox:first-child):focus {
+    &:not(:first-child):focus {
       padding: 6px;
       margin-right: -6px;
       margin-top: 8px;
