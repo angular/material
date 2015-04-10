@@ -8,4 +8,4 @@ cd "$(dirname "$0")"
 #
 # See: https://github.com/Coreh/hookshot
 #
-hookshot -p 9010 "git fetch && git reset --hard origin/master && npm install && bower install && rm -rf dist/ && gulp docs --release"
+hookshot -p 9010 "git fetch && git reset --hard origin/master && npm install && rm -rf dist/ && gulp docs --release"
