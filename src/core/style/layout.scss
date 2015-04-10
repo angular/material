@@ -28,11 +28,17 @@
 }
 
 [layout-padding],
-[layout-padding] > [flex] {
+[layout-padding] > [flex],
+[layout-padding] > [flex-sm],
+[layout-padding] > [flex-md],
+[layout-padding] > [flex-lg] {
   padding: $layout-gutter-width / 2;
 }
 [layout-margin],
-[layout-margin] > [flex] {
+[layout-margin] > [flex],
+[layout-margin] > [flex-sm],
+[layout-margin] > [flex-md],
+[layout-margin] > [flex-lg] {
   margin: $layout-gutter-width / 2;
 }
 
