@@ -1,6 +1,5 @@
-
-<div ng="radioDemo1">
-<form ng-submit="submit()" ng-controller="AppCtrl" >
+<div ng-app="radioDemo1">
+  <form ng-submit="submit()" ng-controller="AppCtrl">
     <p>Selected Value: <span class="radioValue">{{ data.group1 }}</span> </p>
 
     <md-radio-group ng-model="data.group1">
@@ -42,5 +41,5 @@
           <md-icon md-svg-icon="{{it.id}}"></md-icon>
       </md-radio-button>
     </md-radio-group>
-</form>
+  </form>
 </div>
