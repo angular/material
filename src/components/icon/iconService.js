@@ -446,7 +446,6 @@
          }, function(val, attr) {
            this.element.setAttribute(attr, val);
          }, this);
-         svg.get(0).setAttribute("viewBox", this.element.getAttribute('viewBox') || ('0 0 ' + iconSize + ' ' + iconSize));
 
          angular.forEach({
            'pointer-events' : 'none',
