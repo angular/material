@@ -45,14 +45,14 @@ md-select-menu.md-THEME_NAME-theme {
     }
   }
   md-option[selected] {
-    background-color: '{{primary-50}}';
+    color: '{{primary-500}}';
     &:focus {
-      background-color: '{{primary-100}}';
+      color: '{{primary-600}}';
     }
     &.md-accent {
-      background-color: '{{accent-50}}';
+      color: '{{accent-500}}';
       &:focus {
-        background-color: '{{accent-100}}';
+        color: '{{accent-600}}';
       }
     }
   }
