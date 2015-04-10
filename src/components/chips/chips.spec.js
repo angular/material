@@ -244,7 +244,7 @@ describe('<md-chips>', function() {
       expect(chips.length).toBe(3);
 
       // Remove 'Banana'
-      var db = angular.element(chips[1]).find('md-button');
+      var db = angular.element(chips[1]).find('button');
       db[0].click();
 
       scope.$digest();
@@ -252,7 +252,7 @@ describe('<md-chips>', function() {
       expect(chips.length).toBe(2);
 
       // Remove 'Orange'
-      db = angular.element(chips[1]).find('md-button');
+      db = angular.element(chips[1]).find('button');
       db[0].click();
 
       scope.$digest();
