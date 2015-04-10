@@ -34,6 +34,21 @@ describe('md-button', function() {
     expect(button.hasClass('md-button')).toBe(true);
   }));
 
+  it('should not set focus state on mousedown', inject(function ($compile, $rootScope){
+    var button = $compile('<md-button>')($rootScope.$new());
+    $rootScope.$apply();
+    button.triggerHandler('mousedown');
+    expect(button[0]).not.toHaveClass('focus');
+  }));
+
+  it('should set focus state on focus and remove on blur', inject(function ($compile, $rootScope){
+    var button = $compile('<md-button>')($rootScope.$new());
+    $rootScope.$apply();
+    button.triggerHandler('focus');
+    expect(button[0]).toHaveClass('focus');
+    button.triggerHandler('blur');
+    expect(button[0]).not.toHaveClass('focus');
+  }));
 
   describe('with href or ng-href', function() {
 
