@@ -150,7 +150,7 @@ $icon-button-margin: 0.600rem !default;
   &:not([disabled]) {
     &.md-raised,
     &.md-fab {
-      &:focus {
+      &.md-focused {
         @extend .md-shadow-bottom-z-1;
       }
       &:active {
@@ -165,7 +165,7 @@ $icon-button-margin: 0.600rem !default;
   .md-button.md-fab-top-right {
     transform: translate3d(0, $button-fab-toast-offset, 0);
     &:not([disabled]) {
-      &.focus,
+      &.md-focused,
       &:hover {
         transform: translate3d(0, $button-fab-toast-offset - 1, 0);
       }
@@ -177,14 +177,13 @@ $icon-button-margin: 0.600rem !default;
   .md-button.md-fab-bottom-right {
     transform: translate3d(0, -$button-fab-toast-offset, 0);
     &:not([disabled]) {
-      &.focus,
+      &.md-focused,
       &:hover {
         transform: translate3d(0, -$button-fab-toast-offset - 1, 0);
       }
     }
   }
 }
-
 
 .md-button-group {
   display: flex;

@@ -16,12 +16,42 @@ md-checkbox {
     box-sizing: border-box;
   }
 
+  &.md-focused:not([disabled]) {
+    .md-container:before {
+      left: -8px;
+      top: -8px;
+      right: -8px;
+      bottom: -8px;
+    }
+
+    &:not(.md-checked) {
+      .md-container:before {
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+    }
+  }
+
   .md-container {
     position: relative;
     top: 4px;
     display: inline-block;
     width: $checkbox-width;
     height: $checkbox-height;
+
+    &:before {
+      background-color: transparent;
+      border-radius: 50%;
+      content: '';
+      position: absolute;
+      display: block;
+      height: auto;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      transition: all 0.5s;
+      width: auto;
+    }
 
     &:after {
       content: '';
@@ -63,11 +93,6 @@ md-checkbox {
   // disabled
   &[disabled] {
     cursor: no-drop;
-  }
-
-  // focus
-  &:focus .md-label:not(:empty) {
-    border-color: black;
   }
 
 
