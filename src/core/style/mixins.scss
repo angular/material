@@ -40,3 +40,14 @@
   }
   @return $map-str + '}';
 }
+
+
+/* mixin definition ; sets LTR and RTL within the same style call */
+@mixin bidi-style($prop, $value, $inverse-prop, $default-value) {
+  #{$prop}: $value;
+
+  html[dir=rtl] & {
+    #{$inverse-prop}: $value;
+    #{$prop}: $default-value;
+  }
+}

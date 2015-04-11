@@ -62,6 +62,7 @@ md-input-container {
     -ms-flex-preferred-size: auto; //IE fix
   }
 
+
   label:not(.md-no-float),
   .md-placeholder:not(.md-select-label) {
     order: 1;
@@ -70,8 +71,9 @@ md-input-container {
     padding-left: $input-container-padding;
     z-index: 1;
     transform: translate3d(0, $input-label-default-offset, 0) scale($input-label-default-scale);
-    transform-origin: left top;
     transition: transform $swift-ease-out-timing-function 0.25s;
+
+    @include bidi-style(transform-origin, left top, transform-origin, right top);
   }
   .md-placeholder:not(.md-select-label) {
     position: absolute;
@@ -183,6 +185,7 @@ md-input-container {
     }
   }
 }
+
 
 @media screen and (-ms-high-contrast: active) {
   md-input-container.md-default-theme > md-icon {
