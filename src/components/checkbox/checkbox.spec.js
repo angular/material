@@ -67,8 +67,33 @@ describe('mdCheckbox', function() {
 
     checkbox.triggerHandler('click');
     expect($rootScope.blue).toBe(true);
+  }));
 
+  it('should not set focus state on mousedown', inject(function($compile, $rootScope) {
+    var checkbox = $compile('<md-checkbox ng-model="blue">')($rootScope.$new());
+    $rootScope.$apply();
+    checkbox.triggerHandler('mousedown');
+    expect(checkbox[0]).not.toHaveClass('md-focused');
+  }));
 
+  it('should set focus state on focus and remove on blur', inject(function($compile, $rootScope) {
+    var checkbox = $compile('<md-checkbox ng-model="blue">')($rootScope.$new());
+    $rootScope.$apply();
+    checkbox.triggerHandler('focus');
+    expect(checkbox[0]).toHaveClass('md-focused');
+    checkbox.triggerHandler('blur');
+    expect(checkbox[0]).not.toHaveClass('md-focused');
+  }));
+
+  it('should set focus state on keyboard interaction after clicking', inject(function($compile, $rootScope, $mdConstant) {
+    var checkbox = $compile('<md-checkbox ng-model="blue">')($rootScope.$new());
+    $rootScope.$apply();
+    checkbox.triggerHandler('mousedown');
+    checkbox.triggerHandler({
+      type: 'keypress',
+      keyCode: $mdConstant.KEY_CODE.SPACE
+    });
+    expect(checkbox[0]).toHaveClass('md-focused');
   }));
 
   describe('ng core checkbox tests', function() {

@@ -35,6 +35,21 @@ md-radio-button,
       left: -$radio-width;
       top: -$radio-width;
     }
+
+    &:before {
+      background-color: transparent;
+      border-radius: 50%;
+      content: '';
+      position: absolute;
+      display: block;
+      height: auto;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      transition: all 0.5s;
+      width: auto;
+    }
   }
 
 
@@ -81,14 +96,17 @@ md-radio-button,
 
 }
 md-radio-group {
-  border: 1px dotted transparent;
-  display: block;
-  outline: none;
-}
-
-
-.radioButtondemoBasicUsage  md-radio-group {
-  border: none;
+  &:focus {
+    outline: none;
+  }
+  &.md-focused {
+    .md-checked .md-container:before {
+      left: -8px;
+      top: -8px;
+      right: -8px;
+      bottom: -8px;
+    }
+  }
 }
 
 @media screen and (-ms-high-contrast: active) {

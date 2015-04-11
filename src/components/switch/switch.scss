@@ -31,6 +31,21 @@ md-switch {
     }
   }
 
+  &.md-focused:not([disabled]) {
+    .md-thumb:before {
+      left: -8px;
+      top: -8px;
+      right: -8px;
+      bottom: -8px;
+    }
+
+    &:not(.md-checked) {
+      .md-thumb:before {
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+    }
+  }
+
   .md-label {
     border-color: transparent;
     border-width: 0;
@@ -67,6 +82,21 @@ md-switch {
     width: $switch-thumb-size;
     border-radius: 50%;
     box-shadow: $whiteframe-shadow-z1;
+
+    &:before {
+      background-color: transparent;
+      border-radius: 50%;
+      content: '';
+      position: absolute;
+      display: block;
+      height: auto;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      transition: all 0.5s;
+      width: auto;
+    }
 
     .md-ripple-container {
       position: absolute;

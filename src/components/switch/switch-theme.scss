@@ -13,6 +13,9 @@ md-switch.md-THEME_NAME-theme {
     .md-bar {
       background-color: '{{accent-color-0.5}}';
     }
+    &.md-focused .md-thumb:before {
+      background-color: '{{accent-color-0.26}}';
+    }
 
     &.md-primary {
       .md-thumb {
@@ -20,6 +23,9 @@ md-switch.md-THEME_NAME-theme {
       }
       .md-bar {
         background-color: '{{primary-color-0.5}}';
+      }
+      &.md-focused .md-thumb:before {
+        background-color: '{{primary-color-0.26}}';
       }
     }
 
@@ -29,6 +35,9 @@ md-switch.md-THEME_NAME-theme {
       }
       .md-bar {
         background-color: '{{warn-color-0.5}}';
+      }
+      &.md-focused .md-thumb:before {
+        background-color: '{{warn-color-0.26}}';
       }
     }
   }
@@ -41,12 +50,4 @@ md-switch.md-THEME_NAME-theme {
       background-color: '{{foreground-4}}';
     }
   }
-
-  &:focus {
-    .md-label:not(:empty) {
-      border-color: '{{foreground-1}}';
-      border-style: dotted;
-    }
-  }
-
 }
