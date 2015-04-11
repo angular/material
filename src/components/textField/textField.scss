@@ -34,13 +34,14 @@ $tff-margin: 10px 0 (10px - $tff-line-focused-width) 0 !default;
       transform: translate3d(0, $tff-hint-offset-small, 0) scale($ttf-hint-offset-scale);
     } @else {
       transform: translate3d(0, $tff-hint-offset-large, 0);
-      transform-origin: left center;
       transition: $tff-transition;
     }
 
     @if( $transition != false ) {
       transition: $transition;
     }
+
+    @include bidi-style(transform-origin, left center, transform-origin, right center);
   }
 }
 
