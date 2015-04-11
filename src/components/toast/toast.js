@@ -127,7 +127,7 @@ function MdToastDirective() {
  *   - `controller` - `{string=}`: The controller to associate with this toast.
  *     The controller will be injected the local `$hideToast`, which is a function
  *     used to hide the toast.
- *   - `locals` - `{string=}`: An object containing key/value pairs. The keys will
+ *   - `locals` - `{object=}`: An object containing key/value pairs. The keys will
  *     be used as names of values to inject into the controller. For example,
  *     `locals: {three: 3}` would inject `three` into the controller with the value
  *     of 3.

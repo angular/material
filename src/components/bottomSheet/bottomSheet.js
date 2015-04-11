@@ -72,7 +72,7 @@ function MdBottomSheetDirective() {
  *     This scope will be destroyed when the bottom sheet is removed unless `preserveScope` is set to true.
  *   - `preserveScope` - `{boolean=}`: whether to preserve the scope when the element is removed. Default is false
  *   - `controller` - `{string=}`: The controller to associate with this bottom sheet.
- *   - `locals` - `{string=}`: An object containing key/value pairs. The keys will
+ *   - `locals` - `{object=}`: An object containing key/value pairs. The keys will
  *   be used as names of values to inject into the controller. For example,
  *   `locals: {three: 3}` would inject `three` into the controller with the value
  *   of 3.
