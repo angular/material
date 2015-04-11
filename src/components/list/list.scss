@@ -56,8 +56,8 @@ md-list-item {
 
   md-divider {
     position: absolute;
-    bottom: 0px;
-    left: 0px;
+    bottom: 0;
+    left: 0;
     width: 100%;
     &[md-inset] {
       left: $list-item-inset-divider-offset;
@@ -128,7 +128,7 @@ md-list-item, md-list-item .md-list-item-inner {
 
   md-checkbox.md-secondary,
   md-switch.md-secondary {
-    margin-right: 0px;
+    margin-right: 0;
   }
   .md-secondary {
     margin-left: $list-item-secondary-left-margin;

@@ -119,7 +119,7 @@ md-input-group,
     @include text-hint( small );
     @include text-field( false, $tff-line-focused-width );
     input {
-      padding-bottom: 0px;
+      padding-bottom: 0;
     }
   }
 

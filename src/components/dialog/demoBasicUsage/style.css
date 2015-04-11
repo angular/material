@@ -20,12 +20,12 @@ md-dialog md-content.sticky-container {
 
 .md-subheader {
   background-color: #dcedc8;
-  margin: 0px;
+  margin: 0;
 }
 
 h2.md-subheader.md-sticky-clone {
-  margin-right: 0px;
-  margin-top: 0px;
+  margin-right: 0;
+  margin-top: 0;
 
   box-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16);
 }

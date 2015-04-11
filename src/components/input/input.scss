@@ -170,7 +170,7 @@ md-input-container {
   // Use wide border in error state or in focused state
   &.md-input-focused .md-input,
   .md-input.ng-invalid.ng-dirty {
-    padding-bottom: 0px; // Increase border width by 1px, decrease padding by 1
+    padding-bottom: 0; // Increase border width by 1px, decrease padding by 1
     border-width: 0 0 $input-border-width-focused 0;
   }
 

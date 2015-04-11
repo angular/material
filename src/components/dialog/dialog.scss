@@ -40,7 +40,7 @@ md-dialog {
     -webkit-overflow-scrolling: touch;
 
     &:not([layout=row]) > *:first-child:not(.md-subheader) {
-      margin-top: 0px;
+      margin-top: 0;
     }
 
     &:focus {
