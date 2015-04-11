@@ -289,7 +289,7 @@ function SidenavDirective($timeout, $animate, $parse, $log, $mdMedia, $mdConstan
       disableParentScroll(isOpen);
 
       return promise = $q.all([
-        $animate[isOpen ? 'enter' : 'leave'](backdrop, parent),
+        isOpen ? $animate.enter(backdrop, parent) : $animate.leave(backdrop),
         $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed').then(function() {
           if (scope.isOpen) {
             focusEl && focusEl.focus();
