@@ -154,6 +154,7 @@ describe('$mdThemingProvider', function() {
 
     function parse(str) {
       return themingProvider._parseRules(testTheme, 'primary', str)
+        .join('')
         .split(/\}(?!(\}|'|"|;))/)
         .filter(function(val) { return !!val; })
         .map(function(rule) {
@@ -169,13 +170,13 @@ describe('$mdThemingProvider', function() {
     it('errors if given a theme with invalid palettes', function() {
       testTheme.primaryPalette('invalidPalette');
       expect(function() {
-        themingProvider._parseRules(testTheme, 'primary', '');
+        themingProvider._parseRules(testTheme, 'primary', '').join('');
       }).toThrow();
     });
     it('replaces THEME_NAME', function() {
       expect(themingProvider._parseRules(
         testTheme, 'primary', '.md-THEME_NAME-theme {}'
-      )).toContain('.md-test-theme {}');
+      ).join('')).toContain('.md-test-theme {}');
     });
     describe('parses foreground text and shadow', function() {
       it('for a light theme', function() {
