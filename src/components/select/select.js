@@ -675,13 +675,13 @@ function SelectProvider($$interimElementProvider) {
     });
 
   /* @ngInject */
-  function selectDefaultOptions($mdSelect, $mdConstant, $$rAF, $mdUtil, $mdTheming, $timeout, $window) {
+  function selectDefaultOptions($mdSelect, $mdConstant, $$rAF, $mdUtil, $mdTheming, $timeout, $window, $document) {
     return {
       parent: 'body',
       onShow: onShow,
       onRemove: onRemove,
       hasBackdrop: true,
-      disableParentScroll: $mdUtil.floatingScrollbars(),
+      disableParentScroll: true,
       themable: true
     };
 
@@ -733,11 +733,21 @@ function SelectProvider($$interimElementProvider) {
       if (opts.disableParentScroll) {
         opts.disableTarget = opts.parent.find('md-content');
         if (!opts.disableTarget.length) opts.disableTarget = opts.parent;
-        if ($mdUtil.floatingScrollbars()) {
-          opts.disableTarget.css('margin-right', '16px');
+        opts.lastDisableCss = opts.disableTarget.attr('style');
+        var heightOffset = opts.disableTarget[0].scrollTop;
+        if (heightOffset == 0 && (heightOffset = $document[0].documentElement.scrollTop)) {
+          opts.restoreScrollOnDocElement = true;
         }
-        opts.lastOverflow = opts.disableTarget.css('overflow');
-        opts.disableTarget.css('overflow', 'hidden');
+        opts.disableTargetOffset = heightOffset;
+        opts.disableTarget.css({
+          overflow: 'hidden',
+          position: 'fixed',
+          width: '100%',
+          top: (-1 * heightOffset) + 'px'
+        });
+        if (!$mdUtil.floatingScrollbars()) {
+          opts.disableTarget.parent().css('overflow-y', 'scroll');
+        }
       }
       // Only activate click listeners after a short time to stop accidental double taps/clicks
       // from clicking the wrong item
@@ -860,12 +870,6 @@ function SelectProvider($$interimElementProvider) {
         .removeClass('md-clickable');
       opts.target.attr('aria-expanded', 'false');
 
-      if (opts.disableParentScroll && $mdUtil.floatingScrollbars()) {
-        opts.disableTarget.css('overflow', opts.lastOverflow);
-        opts.disableTarget.css('margin-right', '0px');
-        delete opts.lastOverflow;
-        delete opts.disableTarget;
-      }
 
       angular.element($window).off('resize', opts.resizefn);
       angular.element($window).off('orientationchange', opts.resizefn);
@@ -881,6 +885,21 @@ function SelectProvider($$interimElementProvider) {
         opts.parent[0].removeChild(element[0]); // use browser to avoid $destroy event
         opts.backdrop && opts.backdrop.remove();
         if (opts.restoreFocus) opts.target.focus();
+        if (opts.disableParentScroll) {
+          opts.disableTarget.attr('style', opts.lastDisableCss || '');
+          if (opts.restoreScrollOnDocElement) {
+            $document[0].documentElement.scrollTop = opts.disableTargetOffset;
+          } else {
+            opts.disableTarget[0].scrollTop = opts.disableTargetOffset;
+          }
+          if (!$mdUtil.floatingScrollbars()) {
+            opts.disableTarget.parent().css('overflow-y', 'auto');
+          }
+          delete opts.lastDisableCss;
+          delete opts.disableTarget;
+          delete opts.disableTargetOffset;
+          delete opts.restoreScrollOnDocElement;
+        }
       });
     }
 
