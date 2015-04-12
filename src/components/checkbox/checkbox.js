@@ -6,9 +6,8 @@
  * @name material.components.checkbox
  * @description Checkbox module!
  */
-angular.module('material.components.checkbox', [
-  'material.core'
-])
+angular
+  .module('material.components.checkbox', ['material.core'])
   .directive('mdCheckbox', MdCheckboxDirective);
 
 /**
@@ -78,7 +77,6 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
 
     return function postLink(scope, element, attr, ngModelCtrl) {
       ngModelCtrl = ngModelCtrl || $mdUtil.fakeNgModel();
-      var checked = false;
       $mdTheming(element);
 
       if (attr.ngChecked) {
@@ -112,15 +110,14 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
         if (element[0].hasAttribute('disabled')) return;
 
         scope.$apply(function() {
-          checked = !checked;
-          ngModelCtrl.$setViewValue(checked, ev && ev.type);
+          // Toggle the checkbox value...
+          ngModelCtrl.$setViewValue( !ngModelCtrl.$viewValue, ev && ev.type);
           ngModelCtrl.$render();
         });
       }
 
       function render() {
-        checked = ngModelCtrl.$viewValue;
-        if(checked) {
+        if(ngModelCtrl.$viewValue) {
           element.addClass(CHECKED_CSS);
         } else {
           element.removeClass(CHECKED_CSS);
