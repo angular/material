@@ -171,7 +171,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $interpolate, $compile,
         var newText = text || attr.placeholder || '';
         var target = customLabel ? labelEl : labelEl.children().eq(0);
 
-        if (lineHeight === undefined) {
+        if (!lineHeight) {
           target.text('M');
           lineHeight = target[0].offsetHeight;
         }
