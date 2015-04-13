@@ -28,13 +28,13 @@
 }
 
 [layout-padding] > [flex-sm],
-[layout-padding] > [flex-lt-md],
+[layout-padding] > [flex-lt-md]
 {
   padding: $layout-gutter-width / 4;
 }
 [layout-padding],
 [layout-padding] > [flex],
-[layout-padding] > [flex-gt-sm]
+[layout-padding] > [flex-gt-sm],
 [layout-padding] > [flex-md],
 [layout-padding] > [flex-lt-lg]
 {
@@ -48,13 +48,13 @@
 
 
 [layout-margin] > [flex-sm],
-[layout-margin] > [flex-lt-md],
+[layout-margin] > [flex-lt-md]
 {
   margin: $layout-gutter-width / 4;
 }
 [layout-margin],
-[layout-margin] > [flex]
-[layout-margin] > [flex-gt-sm]
+[layout-margin] > [flex],
+[layout-margin] > [flex-gt-sm],
 [layout-margin] > [flex-md],
 [layout-margin] > [flex-lt-lg] {
   margin: $layout-gutter-width / 2;
