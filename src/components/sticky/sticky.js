@@ -40,7 +40,7 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
    */
   return function registerStickyElement(scope, element, stickyClone) {
     var contentCtrl = element.controller('mdContent');
-    if (!contentCtrl) return;
+    if (!contentCtrl) throw('$mdSticky used outside of md-content');
 
     if (browserStickySupport) {
       element.css({
