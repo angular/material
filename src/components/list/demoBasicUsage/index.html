@@ -11,6 +11,7 @@
           <p>{{ item.notes }}</p>
         </div>
       </md-list-item>
+      <md-divider ></md-divider>
       <md-subheader class="md-no-sticky">2 line item</md-subheader>
       <md-list-item class="md-2-line">
       <img ng-src="{{todos[0].face}}?20" class="md-avatar" alt="{{todos[0].who}}" />
@@ -19,6 +20,7 @@
           <p>Secondary text</p>
         </div>
       </md-list-item>
+      <md-divider ></md-divider>
       <md-subheader class="md-no-sticky">3 line item, long paragraph (see on mobile)</md-subheader>
       <md-list-item class="md-3-line">
         <img ng-src="{{todos[0].face}}?25" class="md-avatar" alt="{{todos[0].who}}" />
@@ -27,6 +29,7 @@
           <p>Secondary line text Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam massa quam.</p>
         </div>
       </md-list-item>
+      <md-divider ></md-divider>
       <md-subheader class="md-no-sticky">md-offset class</md-subheader>
       <md-list-item class="md-2-line" ng-repeat="phone in phones">
         <md-icon md-svg-icon="communication:phone" ng-if="$index === 0"></md-icon>
