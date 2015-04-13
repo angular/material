@@ -75,15 +75,12 @@ md-toolbar {
     display: flex;
     align-items: center;
   }
-  .md-tools {
-    margin-left: auto;
+  .md-button {
+    margin-top: 0;
+    margin-bottom: 0;
   }
-
-  .md-button:first-of-type {
+  &> .md-button:first-child {
     margin-left: $icon-button-margin-offset;
-  }
-  .md-button:last-of-type:not(:first-of-type) {
-    margin-right: $icon-button-margin-offset;
   }
 
   @media screen and (-ms-high-contrast: active) {

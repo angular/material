@@ -76,42 +76,31 @@
           </h2>
 
           <span flex></span> <!-- use up the empty space -->
-          <div class="md-toolbar-item md-tools docs-tools" layout="column" layout-gt-md="row">
-            <div>
-              <md-button ng-if="!menu.currentPage || menu.currentSection.name === 'Getting Started'"
-                         target="_blank"
-                         ng-href="{{BUILDCONFIG.repository}}/commit/{{BUILDCONFIG.commit}}" >
-                  {{BUILDCONFIG.version}}  -  SHA {{BUILDCONFIG.commit.substring(0,7)}}
-              </md-button>
-            </div>
-            <div ng-repeat="doc in currentComponent.docs">
-              <md-button ng-href="#{{doc.url}}"
-                ng-class="{hide: path().indexOf('demo') == -1}"
-                aria-label="{{ doc | humanizeDoc }}">
-                {{doc | humanizeDoc | directiveBrackets}}
-              </md-button>
-            </div>
+
+          <div class="md-toolbar-item docs-tools" layout="column" layout-gt-md="row">
+            <md-button ng-if="!menu.currentPage || menu.currentSection.name === 'Getting Started'"
+                       target="_blank"
+                       ng-href="{{BUILDCONFIG.repository}}/commit/{{BUILDCONFIG.commit}}" >
+                {{BUILDCONFIG.version}}  -  SHA {{BUILDCONFIG.commit.substring(0,7)}}
+            </md-button>
+
+            <md-button ng-repeat="doc in currentComponent.docs"
+              ng-href="#{{doc.url}}"
+              ng-class="{hide: path().indexOf('demo') == -1}"
+              aria-label="{{ doc | humanizeDoc }}">
+              {{doc | humanizeDoc | directiveBrackets}}
+            </md-button>
+
             <md-button ng-class="{hide: !currentDoc || !currentDoc.hasDemo}"
-              ng-href="#/demo/{{currentComponent.name}}"
-              style="position: relative; padding-left: 30px; margin-right: 15px;">
-              <md-icon md-svg-src="img/icons/ic_play_arrow_24px.svg" style="
-                  height: 36px;
-                  position: absolute;
-                  left: 0px;
-                  top: -1px;
-                  margin-top: 0;"></md-icon>
+              ng-href="#/demo/{{currentComponent.name}}">
+              <md-icon md-svg-src="img/icons/ic_play_arrow_24px.svg"></md-icon>
               <span>View Demo</span>
             </md-button>
 
             <md-button ng-class="{hide: !currentDoc}"
               ng-href="{{currentDoc.githubUrl}}"
-              hide-sm hide-md
-              style="position: relative; padding-left: 30px; margin-right: 15px;">
-              <md-icon md-svg-src="img/icons/ic_launch_24px.svg" style="
-                  height: 36px;
-                  position: absolute;
-                  left: 0px;
-                  margin-top: 0;"></md-icon>
+              hide-sm hide-md>
+              <md-icon md-svg-src="img/icons/ic_launch_24px.svg"></md-icon>
               <span>View on Github</span>
             </md-button>
           </div>
