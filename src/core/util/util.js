@@ -43,9 +43,67 @@ angular.module('material.core')
       return Util.clientRect(element, offsetParent, true);
     },
 
+    disableScrollAround: function(element) {
+      var parentContent = element[0] || element;
+      var disableTarget, scrollEl, useDocElement;
+      while (parentContent = this.getClosest(parentContent.parentNode, 'MD-CONTENT')) {
+        disableTarget = angular.element(parentContent);
+      }
+      if (!disableTarget) disableTarget = angular.element($document[0].body);
+
+      if (disableTarget[0].nodeName == 'BODY' && $document[0].documentElement.scrollTop) {
+        scrollEl = $document[0].documentElement;
+        useDocElement = true;
+      } else {
+        scrollEl = disableTarget[0];
+      }
+
+      var heightOffset = scrollEl.scrollTop;
+      var restoreOffset = heightOffset;
+
+      if (!useDocElement) {
+        heightOffset = heightOffset - disableTarget[0].offsetTop;
+      }
+
+      var wrapperEl = angular.element('<div>');
+      wrapperEl.append(disableTarget.children());
+      disableTarget.append(wrapperEl);
+
+      var computedStyle = $window.getComputedStyle(disableTarget[0]);
+
+      var scrollBarsShowing = !Util.floatingScrollbars() &&
+          scrollEl.scrollHeight > scrollEl.offsetHeight;
+
+      if (scrollBarsShowing) {
+        var restoreOverflowY = disableTarget.css('overflow-y');
+        disableTarget.css('overflow-y', 'scroll');
+      }
+
+      wrapperEl.css({
+        overflow: 'hidden',
+        position: 'fixed',
+        width: '100%',
+        'padding-top': computedStyle.paddingTop,
+        top: (-1 * heightOffset) + 'px'
+      });
+
+      return function restoreScroll() {
+        disableTarget.append(wrapperEl.children());
+        wrapperEl.remove();
+        if (scrollBarsShowing) {
+          disableTarget.css('overflow-y', restoreOverflowY || false);
+        }
+        if (useDocElement) {
+          $document[0].documentElement.scrollTop = restoreOffset;
+        } else {
+          disableTarget[0].scrollTop = restoreOffset;
+        }
+      };
+    },
+
     floatingScrollbars: function() {
       if (this.floatingScrollbars.cached === undefined) {
-        var tempNode = angular.element('<div style="z-index: -1; position: absolute; height: 1px; overflow-y: scroll"><div style="height: 2px;"></div></div>');
+        var tempNode = angular.element('<div style="width: 100%; z-index: -1; position: absolute; height: 35px; overflow-y: scroll"><div style="height: 60;"></div></div>');
         $document[0].body.appendChild(tempNode[0]);
         this.floatingScrollbars.cached = (tempNode[0].offsetWidth == tempNode[0].childNodes[0].offsetWidth);
         tempNode.remove();
