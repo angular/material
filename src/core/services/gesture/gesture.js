@@ -2,6 +2,7 @@
   'use strict';
 
   var HANDLERS = {};
+
   /* The state of the current 'pointer'
    * The pointer represents the state of the current touch.
    * It contains normalized x and y coordinates from DOM events,
@@ -9,11 +10,50 @@
    */
   var pointer, lastPointer;
 
+  // Used to disable click hijacking.
+  var forceSkipClickHijack = false;
+
   angular
-    .module('material.core.gestures', [ ])
-    .factory('$mdGesture', MdGesture)
+    .module('material.core.gestures', [])
+    .provider('$mdGesture', MdGestureProvider)
     .factory('$$MdGestureHandler', MdGestureHandler)
-    .run( attachToDocument );
+    .run(attachToDocument);
+
+  /**
+   * @ngdoc service
+   * @name $mdGestureProvider
+   * @module material.core.gestures
+   *
+   * @description
+   * In some scenarios on Mobile devices (without jQuery), the click events should NOT be hijacked.
+   * `$mdGestureProvider` is used to configure the Gesture module to ignore or skip click hijacking
+   * on mobile devices.
+   *
+   * <hljs lang="js">
+   *   app.config(function($mdGestureProvider) {
+   *
+   *     // For mobile devices without jQuery loaded, do not
+   *     // intercept click events during the capture phase.
+   *     $mdGestureProvider.skipClickHijack();
+   *
+   *   });
+   * </hljs>
+   *
+   */
+  function MdGestureProvider() {}
+
+  MdGestureProvider.prototype = {
+    // Publish access to setter to configure a variable BEFORE the
+    // $mdGesture service is instantiated...
+    skipClickHijack: function() {
+      return forceSkipClickHijack = true;
+    },
+
+    // $get is used to build an instance of $mdGesture 
+    $get: ['$$MdGestureHandler', '$$rAF', '$timeout', function($$MdGestureHandler, $$rAF, $timeout) {
+     return new MdGesture($$MdGestureHandler, $$rAF, $timeout);
+    }]
+  };
 
   /**
    * MdGesture factory construction function
@@ -26,9 +66,8 @@
     var self = {
       handler: addHandler,
       register: register,
-      // TODO only hijack clicks on Android < 4.4
-      // TODO allow an override for this (through provider?)
-      isHijackingClicks: (isIos || isAndroid) && !jQuery
+      // On mobile w/out jQuery, we normally intercept clicks. Should we skip that?
+      isHijackingClicks: (isIos || isAndroid) && !jQuery && !forceSkipClickHijack
     };
 
     if (self.isHijackingClicks) {
@@ -390,7 +429,7 @@
       return document.body.contains(node);
     });
 
-    if ( $mdGesture.isHijackingClicks ) {
+    if ($mdGesture.isHijackingClicks) {
       /*
        * If hijack clicks is true, we preventDefault any click that wasn't
        * sent by ngMaterial. This is because on older Android & iOS, a false, or 'ghost',
