@@ -58,12 +58,17 @@ md-checkbox.md-THEME_NAME-theme {
   }
 
   &[disabled] {
+
     .md-icon {
       border-color: '{{foreground-3}}';
     }
 
     &.md-checked .md-icon {
       background-color: '{{foreground-3}}';
+    }
+
+    .md-label {
+      color: '{{foreground-3}}';
     }
   }
 
