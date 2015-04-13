@@ -4,3 +4,6 @@
 .checkboxDemo1 md-checkbox {
   float: left;
 }
+p {
+  padding-left: 8px;
+}

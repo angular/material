@@ -1,10 +1,11 @@
 $checkbox-width: 18px !default;
 $checkbox-height: $checkbox-width !default;
+$checkbox-margin: 8px !default;
 
 md-checkbox {
   box-sizing: border-box;
   display: block;
-  margin: 15px;
+  margin: $checkbox-margin;
   white-space: nowrap;
   cursor: pointer;
   outline: none;

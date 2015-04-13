@@ -6,21 +6,22 @@
 }
 
 legend {
-  color : #0000ba;
+  color: #0000ba;
 }
 
 p {
-  padding-left : 10px;
+  padding-left: 8px;
 }
 
 .info {
-  padding-left:13px;
+  padding-left: 13px;
 }
 
 div.standard {
-  padding:10px;  padding-left:15px;
+  padding: 8px;
+  padding-left: 15px;
 }
 
 fieldset.standard {
-  margin-left:10px;
+  margin-left: 10px;
 }
