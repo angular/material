@@ -102,6 +102,9 @@ $icon-button-margin: 0.600rem !default;
     margin: 0 $icon-button-margin;
     height: $icon-button-height;
     min-width: 0;
+    line-height: $icon-button-height;
+    padding-left: 0;
+    padding-right: 0;
     width: $icon-button-width;
   }
 
