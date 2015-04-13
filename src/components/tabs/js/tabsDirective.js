@@ -96,7 +96,7 @@
         dynamicHeight: '=?mdDynamicHeight',
         centerTabs:    '=?mdCenterTabs',
         selectedIndex: '=?mdSelected',
-        stretchTabs: '@?mdStretchTabs'
+        stretchTabs:   '@?mdStretchTabs'
       },
       transclude: true,
       template: '\
