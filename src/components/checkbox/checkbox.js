@@ -111,7 +111,9 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
 
         scope.$apply(function() {
           // Toggle the checkbox value...
-          ngModelCtrl.$setViewValue( !ngModelCtrl.$viewValue, ev && ev.type);
+          var viewValue = attr.ngChecked ? attr.checked : !ngModelCtrl.$viewValue;
+
+          ngModelCtrl.$setViewValue( viewValue, ev && ev.type);
           ngModelCtrl.$render();
         });
       }

@@ -1,0 +1,30 @@
+<div ng-controller="AppCtrl" layout-padding >
+  <p> Using ngChecked: </p>
+
+  <div layout="row" layout-padding>
+
+    <fieldset layout="column">
+      <legend>Using &lt;md-checkbox&gt;</legend>
+      <md-checkbox ng-repeat="item in items" ng-checked="exists(item, selected)" ng-click="toggle(item, selected)">
+        {{ item }} <span ng-if="exists(item, selected)">selected</span>
+      </md-checkbox>
+    </fieldset>
+
+    <fieldset layout="column" class="standard">
+      <legend>Using &lt;input type="checkbox"&gt;</legend>
+      <div ng-repeat="item in items" class="standard" >
+        <label>
+          <input type="checkbox" ng-checked="exists(item, selected)" ng-click="toggle(item, selected)"/>
+          {{ item }}
+        </label>
+      </div>
+    </fieldset>
+
+  </div>
+
+  <div layout="column">
+    <md-checkbox ng-checked="selected.length >= 2" disabled>Two or more items are selected</md-checkbox>
+    <span class="info">Selected: {{ selected }}</span>
+  </div>
+
+</div>
