@@ -112,6 +112,42 @@ describe('radioButton', function() {
     expect($rootScope.color).toEqual('green');
   }));
 
+  it('should not set focus state on mousedown', inject(function($compile, $rootScope) {
+    var element = $compile('<md-radio-group ng-model="color">' +
+                            '<md-radio-button value="blue"></md-radio-button>' +
+                            '<md-radio-button value="green"></md-radio-button>' +
+                          '</md-radio-group>')($rootScope);
+    $rootScope.$apply();
+    element.triggerHandler('mousedown');
+    expect(element[0]).not.toHaveClass('md-focused');
+  }));
+
+  it('should set focus state on focus and remove on blur', inject(function($compile, $rootScope) {
+    var element = $compile('<md-radio-group ng-model="color">' +
+                            '<md-radio-button value="blue"></md-radio-button>' +
+                            '<md-radio-button value="green"></md-radio-button>' +
+                          '</md-radio-group>')($rootScope);
+    $rootScope.$apply();
+    element.triggerHandler('focus');
+    expect(element[0]).toHaveClass('md-focused');
+    element.triggerHandler('blur');
+    expect(element[0]).not.toHaveClass('md-focused');
+  }));
+
+  it('should set focus state on keyboard interaction after clicking', inject(function($compile, $rootScope, $mdConstant) {
+    var element = $compile('<md-radio-group ng-model="color">' +
+                            '<md-radio-button value="blue"></md-radio-button>' +
+                            '<md-radio-button value="green"></md-radio-button>' +
+                          '</md-radio-group>')($rootScope);
+    $rootScope.$apply();
+    element.triggerHandler('mousedown');
+    element.triggerHandler({
+      type: 'keydown',
+      keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
+    });
+    expect(element[0]).toHaveClass('md-focused');
+  }));
+
   describe('ng core radio button tests', function() {
 
     it('should noop with no model', inject(function($compile, $rootScope) {
