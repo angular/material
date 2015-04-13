@@ -1,32 +1,23 @@
 <div ng-controller="AppCtrl" class="sample" layout="column">
+  <md-content class="md-padding">
+    <md-tabs md-selected="selectedIndex" md-border-bottom>
+      <md-tab ng-repeat="tab in tabs"
+              ng-disabled="tab.disabled"
+              label="{{tab.title}}">
+        <div class="demo-tab tab{{$index%4}}" style="padding: 25px; text-align: center;">
+          <div ng-bind="tab.content"></div>
+          <br/>
+          <md-button class="md-primary md-raised" ng-click="removeTab( tab )" ng-disabled="tabs.length <= 1">Remove Tab</md-button>
+        </div>
+      </md-tab>
+    </md-tabs>
+  </md-content>
 
-  <md-tabs md-selected="selectedIndex" md-border-bottom>
-    <md-tab ng-repeat="tab in tabs"
-            ng-disabled="tab.disabled"
-            label="{{tab.title}}">
-      <div class="demo-tab tab{{$index%4}}" style="padding: 25px; text-align: center;">
-        <div ng-bind="tab.content"></div>
-        <br/>
-        <md-button class="md-primary md-raised" ng-click="removeTab( tab )" ng-disabled="tabs.length <= 1">Remove Tab</md-button>
+  <form ng-submit="addTab(tTitle,tContent)" layout="column" class="md-padding" style="padding-top: 0;">
+    <div layout="row" layout-sm="column">
+      <div flex style="position: relative;">
+        <h2 class="md-subhead" style="position: absolute; bottom: 0; left: 0; margin: 0; font-weight: 500; text-transform: uppercase; line-height: 35px; white-space: nowrap;">Add a new Tab:</h2>
       </div>
-    </md-tab>
-  </md-tabs>
-
-  <form ng-submit="addTab(tTitle,tContent)" layout="column" style="padding-top:20px;padding-left:20px;">
-    <div layout="row" layout-sm="column" layout-margin style="min-height: 75px;">
-      <md-input-container>
-        <label for="activeIndex">Active Index</label>
-        <input type="text" id="activeIndex" ng-model="selectedIndex" disabled>
-      </md-input-container>
-
-      <md-input-container>
-        <label for="activeTitle">Active Title</label>
-        <input type="text" id="activeTitle" ng-model="tabs[selectedIndex].title">
-      </md-input-container>
-    </div>
-
-    <div layout="row" layout-sm="column" layout-margin style="min-height: 75px;">
-      <span class="title">Add a new Tab:</span>
       <md-input-container>
         <label for="label">Label</label>
         <input type="text" id="label" ng-model="tTitle">
@@ -35,7 +26,7 @@
         <label for="content">Content</label>
         <input type="text" id="content" ng-model="tContent">
       </md-input-container>
-      <md-button class="add-tab md-primary"  type="submit" style="max-height: 40px" >Add Tab</md-button>
+      <md-button class="add-tab md-primary md-raised" ng-disabled="!tTitle || !tContent" type="submit" style="margin-right: 0;">Add Tab</md-button>
     </div>
   </form>
 

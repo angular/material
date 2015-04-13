@@ -1,5 +1,4 @@
 .sample {
-  height:450px;
   md-tab-content {
     padding: 25px;
     &:nth-child(1) {
@@ -13,7 +12,6 @@
     }
   }
   .after-tabs-area {
-    padding: 25px;
     > span {
       margin-top:25px;
       padding-right: 15px;

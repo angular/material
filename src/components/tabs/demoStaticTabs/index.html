@@ -1,5 +1,5 @@
-<div ng-controller="AppCtrl" class="tabsdemoStaticTabs sample">
-
+<div ng-controller="AppCtrl" class="tabsDemoStaticTabs sample">
+  <md-content class="md-padding">
     <md-tabs class="md-accent" md-selected="data.selectedIndex">
       <md-tab id="tab1">
         <md-tab-label>Item One</md-tab-label>
@@ -23,19 +23,12 @@
         </md-tab-template>
       </md-tab>
     </md-tabs>
+  </md-content>
 
-    <div class="after-tabs-area" layout="row" layout-sm="column" layout-margin layout-align="left center">
-        <md-input-container>
-          <label for="selectedIndex">Selected Index</label>
-          <input type="number" id="selectedIndex" ng-model="data.selectedIndex">
-        </md-input-container>
-        <div flex></div>
-        <span>Item Two: </span>
-        <md-checkbox ng-model="data.secondLocked" aria-label="Disabled">
-          Disabled
-        </md-checkbox>
-
-    </div>
-
-
+  <div class="md-padding" layout="row" layout-sm="column" layout-align="left center"
+       style="padding-top: 0;">
+    <md-checkbox ng-model="data.secondLocked" aria-label="Disable item two?" style="margin: 5px;">
+      Disable item two?
+    </md-checkbox>
+  </div>
 </div>

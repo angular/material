@@ -1,3 +1,21 @@
+md-content {
+  background-color: transparent !important;
+  md-tabs {
+    border: 1px solid #e1e1e1;
+    md-tab-content {
+      background: #f6f6f6;
+    }
+    md-tabs-canvas {
+      background: white;
+    }
+  }
+  h1:first-child {
+    margin-top: 0;
+  }
+}
+md-input-container {
+  padding-bottom: 0;
+}
 .remove-tab {
   margin-bottom: 40px;
 }
@@ -18,30 +36,9 @@ label {
   text-align: left;
 }
 
-.title {
-  padding-top: 8px;
-  padding-right: 8px;
-  text-align: left;
-  text-transform: uppercase;
-  margin-top: 24px;
-}
-[layout-align] > * {
-  margin-left: 8px;
-}
-form {
-  > [layout] {
-    > * {
-      margin-left: 8px;
-    }
-    > span {
-      padding-top:2px
-    }
-  }
-}
 .long > input {
   width: 264px;
 }
 .md-button.add-tab {
-  margin-top:20px;
-  max-height:30px !important;
+  transform: translateY(5px);
 }
