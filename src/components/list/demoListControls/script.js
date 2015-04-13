@@ -25,12 +25,10 @@ angular.module('listDemo2', ['ngMaterial'])
     {id: 3, title: "Message C", selected: true},
   ];
 
-
-
   $scope.people = [
-    { name: 'Janet Perkins', newMessage: true },
-    { name: 'Mary Johnson', newMessage: false },
-    { name: 'Peter Carlsson', newMessage: false }
+    { name: 'Janet Perkins', img: 'img/100-0.jpeg', newMessage: true },
+    { name: 'Mary Johnson', img: 'img/100-1.jpeg', newMessage: false },
+    { name: 'Peter Carlsson', img: 'img/100-2.jpeg', newMessage: false }
   ];
 
   $scope.goToPerson = function(person) {
