@@ -6,7 +6,7 @@ a.md-button.md-THEME_NAME-theme,
   border-radius: $button-border-radius;
 
   &:not([disabled]) {
-    &.focus {
+    &.md-focused {
       background-color: '{{background-500-0.2}}';
     }
   }
@@ -19,7 +19,7 @@ a.md-button.md-THEME_NAME-theme,
       color: '{{accent-contrast}}';
     }
     &:not([disabled]) {
-      &:focus {
+      &.md-focused {
         background-color: '{{accent-A700}}';
       }
     }
@@ -35,7 +35,7 @@ a.md-button.md-THEME_NAME-theme,
         color: '{{primary-contrast}}';
       }
       &:not([disabled]) {
-        &.focus {
+        &.md-focused {
           background-color: '{{primary-600}}';
         }
       }
@@ -47,7 +47,7 @@ a.md-button.md-THEME_NAME-theme,
     color: '{{accent-contrast}}';
     &:not([disabled]) {
       &:hover,
-      &.focus {
+      &.md-focused {
         background-color: '{{accent-A700}}';
       }
     }
@@ -57,7 +57,7 @@ a.md-button.md-THEME_NAME-theme,
     color: '{{background-contrast}}';
     background-color: '{{background-50}}';
     &:not([disabled]) {
-      &.focus {
+      &.md-focused {
         background-color: '{{background-200}}';
       }
     }
@@ -74,7 +74,7 @@ a.md-button.md-THEME_NAME-theme,
         color: '{{warn-contrast}}';
       }
       &:not([disabled]) {
-        &.focus {
+        &.md-focused {
           background-color: '{{warn-700}}';
         }
       }
@@ -91,7 +91,7 @@ a.md-button.md-THEME_NAME-theme,
         color: '{{accent-contrast}}';
       }
       &:not([disabled]) {
-        &.focus {
+        &.md-focused {
           background-color: '{{accent-700}}';
         }
       }
