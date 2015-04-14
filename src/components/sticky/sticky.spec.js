@@ -1,4 +1,4 @@
-ddescribe('$mdStickySpec', function() {
+describe('$mdStickySpec', function() {
   var $document, $compile, $rootScope, $mdSticky, $mdConstant;
 
   beforeEach(module('material.components.sticky'));
@@ -208,7 +208,7 @@ ddescribe('$mdStickySpec', function() {
 
         });
 
-        iit('pushes the current sticky off the page with the correct offset', function() {
+        it('pushes the current sticky off the page with the correct offset', function() {
           for(var height = 1; height < nextSticky.offsetHeight; height++) {
 
             scrollTo(nextSticky.offsetTop - height);
