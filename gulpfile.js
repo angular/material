@@ -250,7 +250,8 @@ function buildModule(module, isRelease) {
 
   function buildMin() {
     return lazypipe()
-      .pipe(gulpif, /.css$/, minifyCss(), uglify({ preserveComments: 'some' }))
+      .pipe(gulpif, /.css$/, minifyCss())
+      .pipe(gulpif, /.js$/, uglify({ preserveComments: 'some' }))
       .pipe(rename, function(path) {
         path.extname = path.extname
           .replace(/.js$/, '.min.js')
