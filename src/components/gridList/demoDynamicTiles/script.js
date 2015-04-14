@@ -9,10 +9,6 @@ angular
             background: ""
           });
 
-    this.rotate = function() {
-      this.tiles.unshift(this.tiles.pop());
-    };
-
     function buildGridModel(tileTmpl){
       var it, results = [ ];
 
