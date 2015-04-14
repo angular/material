@@ -98,8 +98,7 @@ function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria, $timeout) {
 
     // restrict focus styles to the keyboard
     scope.mouseActive = false;
-    element
-      .on('mousedown', function() {
+    element.on('mousedown', function() {
         scope.mouseActive = true;
         $timeout(function(){
           scope.mouseActive = false;

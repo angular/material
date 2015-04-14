@@ -100,8 +100,7 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
       }, attr, [ngModelCtrl]);
 
       scope.mouseActive = false;
-      element
-        .on('click', listener)
+      element.on('click', listener)
         .on('keypress', keypressHandler)
         .on('mousedown', function() {
           scope.mouseActive = true;
