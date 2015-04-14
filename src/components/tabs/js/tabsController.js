@@ -128,7 +128,7 @@
     function handleWindowResize () {
       ctrl.lastSelectedIndex = $scope.selectedIndex;
       updateInkBarStyles();
-      ctrl.offsetLeft = fixOffset(ctrl.offsetLeft);
+      ctrl.offsetLeft = shouldPaginate() ? fixOffset(ctrl.offsetLeft) : 0;
     }
 
     function insertTab (tabData, index) {
