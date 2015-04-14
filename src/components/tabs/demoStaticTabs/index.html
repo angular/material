@@ -1,6 +1,6 @@
 <div ng-controller="AppCtrl" class="tabsDemoStaticTabs sample">
   <md-content class="md-padding">
-    <md-tabs class="md-accent" md-selected="data.selectedIndex">
+    <md-tabs class="md-accent" md-selected="data.selectedIndex" md-align-tabs="{{bottom ? 'bottom' : 'top'}}">
       <md-tab id="tab1">
         <md-tab-label>Item One</md-tab-label>
         <md-tab-template>
@@ -29,6 +29,9 @@
        style="padding-top: 0;">
     <md-checkbox ng-model="data.secondLocked" aria-label="Disable item two?" style="margin: 5px;">
       Disable item two?
+    </md-checkbox>
+    <md-checkbox ng-model="data.bottom" aria-label="Align tabs to bottom?" style="margin: 5px;">
+      Align tabs to bottom?
     </md-checkbox>
   </div>
 </div>
