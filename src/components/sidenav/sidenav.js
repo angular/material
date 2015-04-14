@@ -114,8 +114,10 @@ function SidenavService($mdComponentRegistry, $q) {
   };
 }
 /**
- * @private
+ * @ngdoc directive
  * @name mdSidenavFocus
+ * @module material.components.sidenav
+ *
  * @restrict A
  *
  * @description
