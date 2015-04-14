@@ -153,7 +153,7 @@
                   md-label-template="tab.label"></md-tab-item>\
               <md-ink-bar ng-hide="noInkBar"></md-ink-bar>\
             </md-pagination-wrapper>\
-            <div class="md-visually-hidden">\
+            <div class="md-visually-hidden md-dummy-wrapper">\
               <md-dummy-tab\
                   tabindex="-1"\
                   id="tab-item-{{tab.id}}"\

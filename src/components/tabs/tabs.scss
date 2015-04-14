@@ -30,8 +30,17 @@ md-tabs {
     min-height: 200 + $tabs-header-height;
   }
   &[md-align-tabs="bottom"] {
-    padding-bottom: $tabs-header-height;
-    position: relative;
+    md-tabs-wrapper {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: $tabs-header-height;
+    }
+    md-tabs-content-wrapper {
+      top: 0;
+      bottom: $tabs-header-height;
+    }
   }
   &[md-dynamic-height] {
     md-tabs-content-wrapper {
@@ -44,15 +53,6 @@ md-tabs {
       &.md-active {
         position: relative;
       }
-    }
-  }
-  &[md-align-tabs="bottom"] {
-    md-tabs-wrapper {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: $tabs-header-height;
     }
   }
   &[md-border-bottom] {
@@ -124,6 +124,11 @@ md-tabs-canvas {
   position: relative;
   overflow: hidden;
   display: block;
+  .md-dummy-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
   &.md-paginated {
     margin: 0 $tabs-paginator-width;
   }
