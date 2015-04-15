@@ -95,9 +95,8 @@
         break;
       case this.$mdConstant.KEY_CODE.BACKSPACE:
         if (!event.target.value.length) {
-          event.preventDefault();
-          if (this.items.length) this.removeChip(this.items.length - 1);
-          event.target.focus();
+          event.stopPropagation();
+          if (this.items.length) this.selectAndFocusChipSafe(this.items.length - 1);
         }
         break;
     }
@@ -249,7 +248,11 @@
    * @param index
    */
   MdChipsCtrl.prototype.selectAndFocusChipSafe = function(index) {
-    if (!this.items.length) return this.selectChip(-1);
+    if (!this.items.length) {
+      this.selectChip(-1);
+      this.onFocus();
+      return;
+    }
     if (index === this.items.length) return this.onFocus();
     index = Math.max(index, 0);
     index = Math.min(index, this.items.length - 1);
