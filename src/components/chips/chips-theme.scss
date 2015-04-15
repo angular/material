@@ -3,6 +3,13 @@ md-chips.md-THEME_NAME-theme {
   .md-chip {
     background: '{{background-300}}';
     color: '{{background-800}}';
+    &.md-focused {
+      background: '{{primary-color}}';
+      color: '{{primary-contrast}}';
+      md-icon {
+        color: '{{primary-contrast}}';
+      }
+    }
   }
   md-chip-remove {
     .md-button {

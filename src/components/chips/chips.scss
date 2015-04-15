@@ -78,9 +78,6 @@ $contact-chip-name-width: 12rem !default;
       display: inline-block;
       margin-right: -0.5rem;
     }
-    &.selected {
-      box-shadow: $whiteframe-shadow-z1;
-    }
     .md-chip-remove {
       text-align: center;
       width: $chip-height;
