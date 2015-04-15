@@ -16,6 +16,9 @@ describe('<md-tabs>', function() {
               if (!actual.hasClass('md-active')) {
                 fails.push('does not have active class');
               }
+              if (actual.attr('aria-selected') != 'true') {
+                fails.push('aria-selected is not true');
+              }
             }
 
             var results = { pass : fails.length === 0 };
@@ -143,6 +146,8 @@ describe('<md-tabs>', function() {
 
       tabs.scope().$apply('current = 1');
       expect(tabItems.eq(1)).toBeActiveTab();
+
+      expect(tabItems.eq(0).attr('aria-selected')).toBe('false');
       expect(dummyTabs.eq(0).attr('aria-selected')).toBe('false');
       expect(dummyTabs.eq(1).attr('aria-selected')).toBe('true');
 
@@ -163,12 +168,18 @@ describe('<md-tabs>', function() {
 
       tabs.scope().$apply('disabled0 = true');
       expect(tabItems.eq(1)).toBeActiveTab();
+
+      expect(tabItems.eq(0).attr('aria-disabled')).toBe('true');
       expect(dummyTabs.eq(0).attr('aria-disabled')).toBe('true');
+      expect(tabItems.eq(1).attr('aria-disabled')).toBe('false');
       expect(dummyTabs.eq(1).attr('aria-disabled')).toBe('false');
 
       tabs.scope().$apply('disabled0 = false; disabled1 = true');
       expect(tabItems.eq(0)).toBeActiveTab();
+
+      expect(tabItems.eq(0).attr('aria-disabled')).toBe('false');
       expect(dummyTabs.eq(0).attr('aria-disabled')).toBe('false');
+      expect(tabItems.eq(1).attr('aria-disabled')).toBe('true');
       expect(dummyTabs.eq(1).attr('aria-disabled')).toBe('true');
     });
 

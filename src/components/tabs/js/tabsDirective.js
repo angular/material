@@ -137,7 +137,10 @@
                   class="md-tab"\
                   style="max-width: {{ tabWidth ? tabWidth + \'px\' : \'none\' }}"\
                   ng-repeat="tab in $mdTabsCtrl.tabs"\
-                  role="presentation"\
+                  role="tab"\
+                  aria-controls="tab-content-{{tab.id}}"\
+                  aria-selected="{{tab.isActive()}}"\
+                  aria-disabled="{{tab.scope.disabled || \'false\'}}"\
                   ng-click="$mdTabsCtrl.select(tab.getIndex())"\
                   ng-class="{\
                       \'md-active\':    tab.isActive(),\
