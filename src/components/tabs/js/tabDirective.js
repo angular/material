@@ -82,19 +82,8 @@
       scope.deselect = scope.deselect || angular.noop;
       scope.select = scope.select || angular.noop;
 
-
       scope.$watch('active', function (active) { if (active) ctrl.select(data.getIndex()); });
       scope.$watch('disabled', function () { ctrl.refreshIndex(); });
-      scope.$watch(getTemplate, function (template, oldTemplate) {
-        if (template === oldTemplate) return;
-        data.template = template;
-        ctrl.updateInkBarStyles();
-      });
-      scope.$watch(getLabel, function (label, oldLabel) {
-        if (label === oldLabel) return;
-        data.label = label;
-        ctrl.updateInkBarStyles();
-      });
       scope.$on('$destroy', function () { ctrl.removeTab(data); });
 
       function getLabel () {
@@ -102,8 +91,11 @@
       }
 
       function getTemplate () {
-        var content = element.find('md-tab-template');
-        return content.length ? content.html() : attr.label ? element.html() : null;
+        var content = element.find('md-tab-template'),
+            template = content.length ? content.html() : attr.label ? element.html() : null;
+        if (content.length) content.remove();
+        else element.empty();
+        return template;
       }
     }
   }
