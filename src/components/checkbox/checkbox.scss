@@ -112,13 +112,15 @@ md-checkbox {
   }
 
   .md-label {
-    border: 1px dotted transparent;
     position: relative;
     display: inline-block;
-    margin-left: 10px;
     vertical-align: middle;
     white-space: normal;
     pointer-events: none;
     user-select: text;
+
+    span {
+      margin-left: 10px;
+    }
   }
 }
