@@ -329,6 +329,7 @@
     var scope = this.$scope;
     var ctrl = this;
     inputElement
+        .attr({ tabindex: 0 })
         .on('keydown', function(event) { scope.$apply(function() { ctrl.inputKeydown(event); }); })
         .on('focus', function () { scope.$apply(function () { ctrl.selectedChip = null; }); });
   };

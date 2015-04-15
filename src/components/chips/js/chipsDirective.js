@@ -114,6 +114,7 @@
 
   var CHIP_INPUT_TEMPLATE = '\
         <input\
+            tabindex="0"\
             placeholder="{{$mdChipsCtrl.getPlaceholder()}}"\
             aria-label="{{$mdChipsCtrl.getPlaceholder()}}"\
             ng-model="$mdChipsCtrl.chipBuffer"\
@@ -147,7 +148,6 @@
         // element propagates to the link function via the attrs argument,
         // where various contained-elements can be consumed.
         attrs['$mdUserTemplate'] = element.clone();
-        attrs['tabindex'] = '0';
         return MD_CHIPS_TEMPLATE;
       },
       require: ['mdChips'],
@@ -219,13 +219,14 @@
        */
       return function postLink(scope, element, attrs, controllers) {
         $mdTheming(element);
-        element.attr('tabindex', '0');
         var mdChipsCtrl = controllers[0];
         mdChipsCtrl.chipContentsTemplate = chipContentsTemplate;
         mdChipsCtrl.chipRemoveTemplate   = chipRemoveTemplate;
         mdChipsCtrl.chipInputTemplate    = chipInputTemplate;
 
-        element.on('focus', function () { mdChipsCtrl.onFocus(); });
+        element
+            .attr({ ariaHidden: true, tabindex: -1 })
+            .on('focus', function () { mdChipsCtrl.onFocus(); });
 
         if (attr.ngModel) {
           mdChipsCtrl.configureNgModel(element.controller('ngModel'));
