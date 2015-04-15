@@ -124,7 +124,7 @@ function labelDirective() {
  *   <md-input-container>
  *     <label>Last Name</label>
  *     <input name="lastName" ng-model="lastName" required md-maxlength="10" minlength="4">
- *     <div ng-messages="userForm.lastName.$error" ng-show="userForm.bio.$dirty">
+ *     <div ng-messages="userForm.lastName.$error" ng-show="userForm.lastName.$dirty">
  *       <div ng-message="required">This is required!</div>
  *       <div ng-message="md-maxlength">That's too long!</div>
  *       <div ng-message="minlength">That's too short!</div>
