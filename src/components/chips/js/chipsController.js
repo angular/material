@@ -91,19 +91,12 @@
         }
         break;
       case this.$mdConstant.KEY_CODE.BACKSPACE:
-        if (shouldDeletePreviousItem(event.target)) {
+        if (!event.target.value.length) {
           event.preventDefault();
           if (this.items.length) this.removeChip(this.items.length - 1);
           event.target.focus();
         }
         break;
-    }
-    function shouldDeletePreviousItem (element) {
-      if ((/text|password|search|tel|url/).test(element.type)) {
-        return !element.selectionStart && !element.selectionEnd;
-      } else {
-        return !element.value.length;
-      }
     }
   };
 
