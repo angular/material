@@ -45,7 +45,7 @@
       // Child elements aren't available until after a $timeout tick as they are hidden by an
       // `ng-if`. see http://goo.gl/zIWfuw
       $timeout(function() {
-        element.attr('tabindex', '-1');
+        element.attr({ tabindex: -1, ariaHidden: true });
         element.find('button').attr('tabindex', '-1');
       });
     }
