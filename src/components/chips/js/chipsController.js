@@ -15,7 +15,10 @@
    * @param $element
    * @constructor
    */
-  function MdChipsCtrl ($scope, $mdConstant, $log, $element) {
+  function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout) {
+    /** @type {$timeout} **/
+    this.$timeout = $timeout;
+
     /** @type {Object} */
     this.$mdConstant = $mdConstant;
 
@@ -101,6 +104,37 @@
   };
 
   /**
+   * Handles the keydown event on the chip elements: backspace removes the selected chip, arrow
+   * keys switch which chips is active
+   * @param event
+   */
+  MdChipsCtrl.prototype.chipKeydown = function (event) {
+    switch (event.keyCode) {
+      case this.$mdConstant.KEY_CODE.BACKSPACE:
+      case this.$mdConstant.KEY_CODE.DELETE:
+        if (this.selectedChip < 0) return;
+        event.preventDefault();
+        this.removeAndSelectAdjacentChip(this.selectedChip);
+        break;
+      case this.$mdConstant.KEY_CODE.LEFT_ARROW:
+        if (this.selectedChip < 0) this.selectedChip = this.items.length;
+        event.preventDefault();
+        if (this.items.length) this.selectAndFocusChipSafe(this.selectedChip - 1);
+        break;
+      case this.$mdConstant.KEY_CODE.RIGHT_ARROW:
+        event.preventDefault();
+        this.selectAndFocusChipSafe(this.selectedChip + 1);
+        break;
+      case this.$mdConstant.KEY_CODE.ESCAPE:
+      case this.$mdConstant.KEY_CODE.TAB:
+        if (this.selectedChip < 0) return;
+        event.preventDefault();
+        this.selectAndFocusChipSafe(this.selectedChip);
+        break;
+    }
+  };
+
+  /**
    * Get the input's placeholder - uses `placeholder` when list is empty and `secondary-placeholder`
    * when the list is non-empty. If `secondary-placeholder` is not provided, `placeholder` is used
    * always.
@@ -119,7 +153,7 @@
   MdChipsCtrl.prototype.removeAndSelectAdjacentChip = function(index) {
     var selIndex = this.getAdjacentChipIndex(index);
     this.removeChip(index);
-    this.selectAndFocusChip(selIndex);
+    this.$timeout(function () { this.selectAndFocusChipSafe(selIndex); }.bind(this));
   };
 
   /**
@@ -206,12 +240,17 @@
     this.items.splice(index, 1);
   };
 
+  MdChipsCtrl.prototype.removeChipAndFocusInput = function (index) {
+    this.removeChip(index);
+    this.onFocus();
+  };
   /**
    * Selects the chip at `index`,
    * @param index
    */
-  MdChipsCtrl.prototype.selectChipSafe = function(index) {
+  MdChipsCtrl.prototype.selectAndFocusChipSafe = function(index) {
     if (!this.items.length) return this.selectChip(-1);
+    if (index === this.items.length) return this.onFocus();
     index = Math.max(index, 0);
     index = Math.min(index, this.items.length - 1);
     this.selectChip(index);
@@ -266,6 +305,7 @@
   MdChipsCtrl.prototype.onFocus = function () {
     var input = this.$element[0].querySelectorAll('input')[0];
     input && input.focus();
+    this.resetSelectedChip();
   };
 
   /**
@@ -285,11 +325,9 @@
     // Bind to keydown and focus events of input
     var scope = this.$scope;
     var ctrl = this;
-    inputElement.on('keydown', function(event) {
-      scope.$apply(function() {
-        ctrl.inputKeydown(event);
-      });
-    });
+    inputElement
+        .on('keydown', function(event) { scope.$apply(function() { ctrl.inputKeydown(event); }); })
+        .on('focus', function () { scope.$apply(function () { ctrl.selectedChip = null; }); });
   };
 
   MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {
