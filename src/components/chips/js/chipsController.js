@@ -128,7 +128,7 @@
       case this.$mdConstant.KEY_CODE.TAB:
         if (this.selectedChip < 0) return;
         event.preventDefault();
-        this.selectAndFocusChipSafe(this.selectedChip);
+        this.onFocus();
         break;
     }
   };
