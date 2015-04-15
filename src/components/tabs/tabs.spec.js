@@ -245,7 +245,7 @@ describe('<md-tabs>', function() {
       var tabs2 = setup('<md-tabs>\
         <md-tab>\
           <md-tab-label>label that!</md-tab-label>\
-          <md-tab-template><b>content</b> that!</md-tab-template>\
+          <md-tab-body><b>content</b> that!</md-tab-body>\
         </md-tab>\
       </md-tabs>');
       expect(tabs1.find('md-tab-item').text()).toBe('label that!');
