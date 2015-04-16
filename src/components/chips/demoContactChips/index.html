@@ -17,29 +17,24 @@
 
     <md-checkbox ng-model="ctrl.filterSelected">Filter selected contacts from options</md-checkbox>
     <br />
-    <div layout="row">
-      <div flex>
-        <md-list>
-          <md-subheader class="md-no-sticky">Contacts</md-subheader>
-          <md-list-item class="md-2-line" ng-repeat="(index, contact) in ctrl.allContacts">
-            <img ng-src="{{contact.image}}" class="md-avatar" alt="{{contact.name}}" />
-            <div class="md-list-item-text compact">
-              <h3>{{contact.name}}</h3>
-              <p>{{contact.email}}</p>
-            </div>
-          </md-list-item>
-        </md-list>
-      </div>
-      <div flex>
-        <md-list>
-          <md-subheader class="md-no-sticky">Selected Contacts</md-subheader>
-          <ul>
-            <li ng-repeat="c in ctrl.contacts">
-              {{c.email}}
-            </li>
-          </ul>
-      </div>
-    </div>
+    <md-list>
+      <md-subheader class="md-no-sticky">Contacts</md-subheader>
+      <md-list-item class="md-2-line contact-item" ng-repeat="(index, contact) in ctrl.allContacts"
+          ng-if="ctrl.contacts.indexOf(contact) < 0">
+        <img ng-src="{{contact.image}}" class="md-avatar" alt="{{contact.name}}" />
+        <div class="md-list-item-text compact">
+          <h3>{{contact.name}}</h3>
+          <p>{{contact.email}}</p>
+        </div>
+      </md-list-item>
+      <md-list-item class="md-2-line contact-item selected" ng-repeat="(index, contact) in ctrl.contacts">
+        <img ng-src="{{contact.image}}" class="md-avatar" alt="{{contact.name}}" />
+        <div class="md-list-item-text compact">
+          <h3>{{contact.name}}</h3>
+          <p>{{contact.email}}</p>
+        </div>
+      </md-list-item>
+    </md-list>
 
   </md-content>
 </div>

@@ -70,6 +70,7 @@ $contact-chip-name-width: 12rem !default;
       display: block;
       padding-right:0.4rem;
       float: left;
+      white-space: nowrap;
       &:focus {
         outline: none;
       }
@@ -95,10 +96,11 @@ $contact-chip-name-width: 12rem !default;
     }
   }
   .md-chip-input-container {
-    display: inline-block;
+    display: block;
     line-height: $chip-height;
     margin: $chip-margin;
     padding: $chip-padding;
+    float: left;
     input {
       &:not([type]),&[type="email"],&[type="number"],&[type="tel"],&[type="url"],&[type="text"] {
         border: 0;
