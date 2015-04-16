@@ -66,6 +66,7 @@ angular.module('material.core')
       }
 
       var wrapperEl = angular.element('<div>');
+      disableTarget.addClass('md-overflow-wrapper-shown');
       wrapperEl.append(disableTarget.children());
       disableTarget.append(wrapperEl);
 
