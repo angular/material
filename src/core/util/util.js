@@ -82,7 +82,7 @@ angular.module('material.core')
       wrapperEl.css({
         overflow: 'hidden',
         position: 'fixed',
-        width: '100%',
+        width: wrapperEl[0].getBoundingClientRect().width + 'px',
         'padding-top': computedStyle.paddingTop,
         top: (-1 * heightOffset) + 'px'
       });
