@@ -85,7 +85,7 @@ angular.module('material.core')
         display: computedStyle.display,
         'padding-top': computedStyle.paddingTop,
         top: (-1 * heightOffset) + 'px',
-        height: '100%',
+        'min-height': '100%',
         width: '100%'
       });
 
