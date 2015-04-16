@@ -67,7 +67,7 @@ function mdListDirective($mdTheming) {
  * </hljs>
  *
  */
-function mdListItemDirective($mdAria) {
+function mdListItemDirective($mdAria, $mdConstant) {
   var proxiedTypes = ['md-checkbox', 'md-switch'];
   return {
     restrict: 'E',
@@ -187,10 +187,12 @@ function mdListItemDirective($mdAria) {
 
         if (!$element[0].firstElementChild.hasAttribute('ng-click') && !proxies.length) {
           $element[0].firstElementChild.addEventListener('keypress', function(e) {
-            if (e.keyCode == 13 || e.keyCode == 32) {
-              $element[0].firstElementChild.click();
-              e.preventDefault();
-              e.stopPropagation();
+            if (e.target.nodeName != 'INPUT') {
+              if (e.keyCode == $mdConstant.KEY_CODE.SPACE) {
+                $element[0].firstElementChild.click();
+                e.preventDefault();
+                e.stopPropagation();
+              }
             }
           });
         }
