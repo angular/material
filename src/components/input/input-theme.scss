@@ -16,7 +16,8 @@ md-input-container.md-THEME_NAME-theme {
     color: '{{foreground-3}}';
   }
 
-  div[ng-messages] {
+  ng-messages,
+  [ng-message], [data-ng-message], [x-ng-message] {
     color: '{{warn-500}}'
   }
 
