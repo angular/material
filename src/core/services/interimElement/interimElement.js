@@ -369,6 +369,9 @@ function InterimElementProvider() {
               if (!(options.parent || {}).length) {
                 options.parent = $rootElement.find('body');
                 if (!options.parent.length) options.parent = $rootElement;
+                if (options.parent[0].nodeName == '#comment') {
+                  options.parent = $document.find('body');
+                }
               }
 
               if (options.themable) $mdTheming(element);

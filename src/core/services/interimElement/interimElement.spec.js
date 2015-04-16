@@ -360,6 +360,22 @@ describe('$$interimElement service', function() {
         expect(shown).toBe(true);
       }));
 
+      it('falls back to $document.body if $rootElement was removed', inject(function($document, $rootElement, $rootScope) {
+        var shown = false;
+        var originalRoot = $rootElement[0];
+        var commentEl = angular.element('<!-- I am a comment -->');
+        $rootElement[0] = commentEl[0];
+        Service.show({
+          onShow: function(scope, element, options) {
+            expect(options.parent[0]).toBe($document[0].body);
+            shown = true;
+          }
+        });
+        $rootScope.$digest();
+        $rootElement[0] = originalRoot;
+        expect(shown).toBe(true);
+      }));
+
       it('allows parent reference', inject(function($rootScope) {
         var parent = angular.element('<div>');
 
