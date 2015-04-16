@@ -561,13 +561,6 @@ describe('<md-select-menu>', function() {
       selectMenus.remove();
     }));
 
-    it('sets up the aria-owns attribute', inject(function($document) {
-      openSelect(el);
-      var selectMenu = $document.find('md-select-menu');
-      var selectMenuId = selectMenu.attr('id');
-      expect(selectMenuId.length).toBeTruthy();
-      expect(el.attr('aria-owns')).toBe(selectMenuId);
-    }));
     it('sets up the aria-labeledby attribute', inject(function($document) {
       openSelect(el);
       var selectId = el.attr('id');
