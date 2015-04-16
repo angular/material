@@ -86,6 +86,7 @@
     var chipBuffer;
     switch (event.keyCode) {
       case this.$mdConstant.KEY_CODE.ENTER:
+        if (this.$scope.requireMatch) break;
         chipBuffer = this.getChipBuffer();
         if (chipBuffer) {
           event.preventDefault();

@@ -51,6 +51,7 @@
   var MD_CONTACT_CHIPS_TEMPLATE = '\
       <md-chips class="md-contact-chips"\
           ng-model="$mdContactChipsCtrl.contacts"\
+          md-require-match="$mdContactChipsCtrl.requireMatch"\
           md-autocomplete-snap>\
           <md-autocomplete\
               md-menu-class="md-contact-chips-suggestions"\
@@ -110,12 +111,21 @@
         contactImage: '@mdContactImage',
         contactEmail: '@mdContactEmail',
         filterSelected: '=',
-        contacts: '=ngModel'
+        contacts: '=ngModel',
+        requireMatch: '=?mdRequireMatch'
       }
     };
 
     function compile(element, attr) {
       return function postLink(scope, element, attrs, controllers) {
+
+        //-- give optional properties with no value a boolean true by default
+        angular.forEach(scope.$$isolateBindings, function (binding, key) {
+          if (binding.optional && angular.isUndefined(scope[key])) {
+            scope[key] = attr.hasOwnProperty(attr.$normalize(binding.attrName));
+          }
+        });
+
         $mdTheming(element);
         element.attr('tabindex', '-1');
       };
