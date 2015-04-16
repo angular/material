@@ -701,7 +701,11 @@ function SelectProvider($$interimElementProvider) {
       });
 
       opts.resizeFn = function() {
-        animateSelect(scope, element, opts);
+        $$rAF(function() {
+          $$rAF(function() {
+            animateSelect(scope, element, opts);
+          });
+        });
       };
 
       angular.element($window).on('resize', opts.resizeFn);

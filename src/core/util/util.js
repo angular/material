@@ -82,14 +82,26 @@ angular.module('material.core')
       wrapperEl.css({
         overflow: 'hidden',
         position: 'fixed',
-        width: '100%',
+        display: computedStyle.display,
         'padding-top': computedStyle.paddingTop,
         top: (-1 * heightOffset) + 'px'
       });
 
+
+      computeSize();
+
+      angular.element($window).on('resize', computeSize);
+
+      function computeSize() {
+        wrapperEl.css({
+          'max-width': disableTarget[0].offsetWidth
+        });
+      }
+
       return function restoreScroll() {
         disableTarget.append(wrapperEl.children());
         wrapperEl.remove();
+        angular.element($window).off('resize', computeSize);
         if (scrollBarsShowing) {
           disableTarget.css('overflow-y', restoreOverflowY || false);
         }
