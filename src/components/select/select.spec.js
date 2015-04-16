@@ -109,6 +109,21 @@ describe('<md-select-menu>', function() {
     expect($document.find('md-select-menu').length).toBe(0);
   }));
 
+  iit('restores focus to select when the menu is closed', inject(function($document) {
+    var select = setupSelect('ng-model="val"');
+    openSelect(select);
+    waitForSelectOpen();
+
+    $document[0].body.appendChild(select[0]);
+
+    var selectMenu = $document.find('md-select-menu');
+    pressKey(selectMenu, 27);
+    waitForSelectClose();
+
+    expect($document[0].activeElement).toBe(select[0]);
+    select.remove();
+  }));
+
   describe('label behavior', function() {
     it('defaults to the placeholder text', function() {
       var select = setupSelect('ng-model="someVal", placeholder="Hello world"');
