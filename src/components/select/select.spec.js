@@ -109,7 +109,7 @@ describe('<md-select-menu>', function() {
     expect($document.find('md-select-menu').length).toBe(0);
   }));
 
-  iit('restores focus to select when the menu is closed', inject(function($document) {
+  it('restores focus to select when the menu is closed', inject(function($document) {
     var select = setupSelect('ng-model="val"');
     openSelect(select);
     waitForSelectOpen();
