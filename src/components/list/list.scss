@@ -72,6 +72,7 @@ md-list-item, md-list-item .md-list-item-inner {
   justify-content: flex-start;
   align-items: center;
 
+
   // Layout for controls in primary or secondary divs, or auto-infered first child
   & > div.md-primary > md-icon,
   & > div.md-secondary > md-icon,
@@ -130,11 +131,31 @@ md-list-item, md-list-item .md-list-item-inner {
   md-switch.md-secondary {
     margin-right: 0;
   }
+
+  button.md-button.md-secondary-container {
+    width: $list-item-primary-icon-width;
+    align-self: center;
+    margin-right: 0px;
+    box-sizing: content-box;
+    border-radius: 50%;
+    min-width: 0px;
+    .md-ripple,
+    .md-ripple-container {
+      border-radius: 50%;
+    }
+  }
+
+  .md-secondary-container,
   .md-secondary {
     margin-left: $list-item-secondary-left-margin;
     position: absolute;
     right: $list-item-padding-horizontal;
     top: 0;
+  }
+
+  & > .md-button.md-secondary-container > .md-secondary {
+    margin-left: 0px;
+    position: static;
   }
 
   & > p, & > .md-list-item-inner > p {
