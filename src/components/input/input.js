@@ -110,6 +110,8 @@ function labelDirective() {
  *
  * @param {number=} md-maxlength The maximum number of characters allowed in this input. If this is specified, a character counter will be shown underneath the input.<br/><br/>
  * The purpose of **`md-maxlength`** is exactly to show the max length counter text. If you don't want the counter text and only need "plain" validation, you can use the "simple" `ng-maxlength` or maxlength attributes.
+ * @param {string=} aria-label Aria-label is required when no label is present.  A warning message will be logged in the console if not present.
+ * @param {string=} placeholder An alternative approach to using aria-label when the label is not present.  The placeholder text is copied to the aria-label attribute.
  *
  * @usage
  * <hljs lang="html">
@@ -137,6 +139,12 @@ function labelDirective() {
  *       <div ng-message="required">This is required!</div>
  *       <div ng-message="md-maxlength">That's too long!</div>
  *     </div>
+ *   </md-input-container>
+ *   <md-input-container>
+ *     <input aria-label='title' ng-model='title'>
+ *   </md-input-container>
+ *   <md-input-container>
+ *     <input placeholder='title' ng-model='title'>
  *   </md-input-container>
  * </form>
  * </hljs>
