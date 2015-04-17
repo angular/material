@@ -28,6 +28,12 @@ md-content.autocomplete {
   }
   @media (min-width: 900px) {
     float: left;
-    width: 50%;
+    width: 33%;
   }
+}
+
+.md-chips {
+  border-bottom : 1px solid rgba(0,0,0,0.1);
+  padding: 0.5rem 0 0.8rem ;
+  margin-bottom : 1rem;
 }
