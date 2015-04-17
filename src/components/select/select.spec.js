@@ -92,11 +92,22 @@ describe('<md-select-menu>', function() {
     });
   }
 
+  it('should preserve tabindex', inject(function($document) {
+    var select = setupSelect('tabindex="2", ng-model="val"');
+    expect(select.attr('tabindex')).toBe('2');
+  }));
+
+  it('supports non-disabled state', inject(function($document) {
+    var select = setupSelect('ng-model="val"');
+    expect(select.attr('aria-disabled')).toBe('false');
+  }));
+
   it('supports disabled state', inject(function($document) {
     var select = setupSelect('disabled="disabled", ng-model="val"');
     openSelect(select);
     waitForSelectOpen();
     expect($document.find('md-select-menu').length).toBe(0);
+    expect(select.attr('aria-disabled')).toBe('true');
   }));
 
   it('closes the menu if the element is destroyed', inject(function($document) {
