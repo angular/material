@@ -145,7 +145,7 @@ function labelDirective() {
  *
  */
 
-function inputTextareaDirective($mdUtil, $window) {
+function inputTextareaDirective($mdUtil, $window, $mdAria) {
   return {
     restrict: 'E',
     require: ['^?mdInputContainer', '?ngModel'],
@@ -163,6 +163,10 @@ function inputTextareaDirective($mdUtil, $window) {
       throw new Error("<md-input-container> can only have *one* <input> or <textarea> child element!");
     }
     containerCtrl.input = element;
+
+    if(!containerCtrl.label) {
+      $mdAria.expect(element, 'aria-label', element.attr('placeholder'));
+    }
 
     element.addClass('md-input');
     if (!element.attr('id')) {
