@@ -6,6 +6,9 @@ a.md-button.md-THEME_NAME-theme,
   border-radius: $button-border-radius;
 
   &:not([disabled]) {
+    &:hover {
+      background-color: '{{background-500-0.2}}';
+    }
     &.md-focused {
       background-color: '{{background-500-0.2}}';
     }
@@ -19,6 +22,9 @@ a.md-button.md-THEME_NAME-theme,
       color: '{{accent-contrast}}';
     }
     &:not([disabled]) {
+      &:hover {
+        background-color: '{{accent-color}}';
+      }
       &.md-focused {
         background-color: '{{accent-A700}}';
       }
@@ -35,6 +41,9 @@ a.md-button.md-THEME_NAME-theme,
         color: '{{primary-contrast}}';
       }
       &:not([disabled]) {
+        &:hover {
+          background-color: '{{primary-color}}';
+        }
         &.md-focused {
           background-color: '{{primary-600}}';
         }
@@ -46,7 +55,9 @@ a.md-button.md-THEME_NAME-theme,
     background-color: '{{accent-color}}';
     color: '{{accent-contrast}}';
     &:not([disabled]) {
-      &:hover,
+      &:hover {
+        background-color: '{{accent-color}}';
+      }
       &.md-focused {
         background-color: '{{accent-A700}}';
       }
@@ -57,6 +68,9 @@ a.md-button.md-THEME_NAME-theme,
     color: '{{background-contrast}}';
     background-color: '{{background-50}}';
     &:not([disabled]) {
+      &:hover {
+        background-color: '{{background-50}}';
+      }
       &.md-focused {
         background-color: '{{background-200}}';
       }
@@ -74,6 +88,9 @@ a.md-button.md-THEME_NAME-theme,
         color: '{{warn-contrast}}';
       }
       &:not([disabled]) {
+        &:hover {
+          background-color: '{{warn-color}}';
+        }
         &.md-focused {
           background-color: '{{warn-700}}';
         }
@@ -91,6 +108,9 @@ a.md-button.md-THEME_NAME-theme,
         color: '{{accent-contrast}}';
       }
       &:not([disabled]) {
+        &:hover {
+          background-color: '{{accent-color}}';
+        }
         &.md-focused {
           background-color: '{{accent-700}}';
         }
@@ -103,6 +123,10 @@ a.md-button.md-THEME_NAME-theme,
   &.md-fab[disabled] {
     color: '{{foreground-2}}';
     cursor: not-allowed;
+
+    md-icon {
+      color: '{{foreground-2}}';
+    }
   }
   &.md-raised[disabled],
   &.md-fab[disabled] {
