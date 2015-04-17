@@ -1,6 +1,12 @@
 describe('$mdStickySpec', function() {
   var $document, $compile, $rootScope, $mdSticky, $mdConstant, $featureSupport, $container, $scope;
 
+  beforeEach(function() {
+    jasmine.addMatchers({
+      toTranslateVerticalPositionBy: translateMatcher
+    });
+  });
+
   beforeEach(module('material.components.sticky'));
   beforeEach(function() {
     $featureSupport = jasmine.createSpyObj('featureSupport', ['sticky']);
@@ -172,9 +178,8 @@ describe('$mdStickySpec', function() {
               expect(cloned(0).attr('sticky-state')).toBe('next');
               expect(cloned(1).attr('sticky-state')).toBe('active');
 
-              var translate3d = 'translate3d(0px, ' + (height - nextSticky.offsetHeight) + 'px, 0px)';
-
-              expect(cloned(1).css($mdConstant.CSS.TRANSFORM)).toBe(translate3d);
+              var expected = height - nextSticky.offsetHeight;
+              expect(cloned(1).css($mdConstant.CSS.TRANSFORM)).toTranslateVerticalPositionBy(expected);
             }
           });
 
@@ -238,8 +243,8 @@ describe('$mdStickySpec', function() {
           });
 
           it('translates the current sticky position', function() {
-            var translate3d = 'translate3d(0px, ' +  -(stickyHeight - 1) + 'px, 0px)';
-            expect(cloned(1).css($mdConstant.CSS.TRANSFORM)).toBe(translate3d);
+            var expected = -(stickyHeight - 1);
+            expect(cloned(1).css($mdConstant.CSS.TRANSFORM)).toTranslateVerticalPositionBy(-(stickyHeight - 1));
           });
 
         });
@@ -267,9 +272,9 @@ describe('$mdStickySpec', function() {
               expect(cloned(0).attr('sticky-state')).toBe('next');
               expect(cloned(1).attr('sticky-state')).toBe('active');
 
-              var translate3d = 'translate3d(0px, ' + -(nextSticky.offsetHeight - height) + 'px, 0px)';
+              var expected = -(nextSticky.offsetHeight - height);
 
-              expect(cloned(1).css($mdConstant.CSS.TRANSFORM)).toBe(translate3d);
+              expect(cloned(1).css($mdConstant.CSS.TRANSFORM)).toTranslateVerticalPositionBy(expected);
             }
           });
 
@@ -341,5 +346,34 @@ describe('$mdStickySpec', function() {
 
     $container[0].scrollTop = scrollTop;
     $container.triggerHandler('$scroll');
+  }
+
+  function translateMatcher() {
+    return {
+      compare: function(actual, expected) {
+        var chrome = 'translate3d(0px, ' + expected + 'px, 0px)';
+        var safari = 'translate3d(0px, ' + expected + 'px, 0)';
+        var firefox = 'matrix(1, 0, 0, 1, 0, ' + expected + ')';
+
+        var possibleMatches = [chrome, safari, firefox];
+
+        for( var i = 0; i < possibleMatches.length; i++) {
+          if (actual === possibleMatches[i]) {
+            return { pass: true }
+          }
+        }
+
+        var message = '';
+        message += "Expected '";
+        message += actual;
+        message += "' to match one of the possible css values: ";
+        message += JSON.stringify(possibleMatches);
+
+        return {
+          pass: false,
+          message: message
+        };
+      }
+    }
   }
 });
