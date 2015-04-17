@@ -35,7 +35,7 @@ md-dialog {
 
   md-content {
     order: 1;
-    padding: 24px;
+    padding: $baseline-grid * 3;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 
@@ -54,11 +54,12 @@ md-dialog {
     box-sizing: border-box;
     align-items: center;
     justify-content: flex-end;
-    padding: 16px 16px;
+    padding: $baseline-grid;
+    padding-left: $baseline-grid * 3;
     min-height: $baseline-grid * 5;
 
     > * {
-      margin-left: 8px;
+      margin-left: $baseline-grid / 2;
       margin-right: 0;
     }
   }
