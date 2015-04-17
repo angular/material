@@ -50,7 +50,6 @@ $contact-chip-name-width: 12rem !default;
 }
 .md-chips {
   @include pie-clearfix();
-  box-shadow: $whiteframe-shadow-z1;
   display: block;
   font-family: $font-family;
   font-size: $chip-font-size;
