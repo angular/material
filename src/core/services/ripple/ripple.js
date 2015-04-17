@@ -27,6 +27,7 @@ function InkRippleService($window, $timeout) {
     attachButtonBehavior: attachButtonBehavior,
     attachCheckboxBehavior: attachCheckboxBehavior,
     attachTabBehavior: attachTabBehavior,
+    attachListControlBehavior: attachListControlBehavior,
     attach: attach
   };
 
@@ -48,6 +49,15 @@ function InkRippleService($window, $timeout) {
   }
 
   function attachTabBehavior(scope, element, options) {
+    return attach(scope, element, angular.extend({
+      center: false,
+      dimBackground: true,
+      outline: false,
+      rippleSize: 'full'
+    }, options));
+  }
+
+  function attachListControlBehavior(scope, element, options) {
     return attach(scope, element, angular.extend({
       center: false,
       dimBackground: true,

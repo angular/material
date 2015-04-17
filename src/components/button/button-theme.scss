@@ -12,6 +12,9 @@ a.md-button.md-THEME_NAME-theme,
     &.md-focused {
       background-color: '{{background-500-0.2}}';
     }
+    &.md-icon-button:hover {
+      background-color: transparent;
+    }
   }
 
   &.md-fab {

@@ -25,7 +25,7 @@ describe('mdListItem directive', function() {
   it('creates buttons when used with ng-click', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()"><p>Hello world</p></md-list-item>');
     var firstChild = listItem.children()[0];
-    expect(firstChild.nodeName).toBe('BUTTON');
+    expect(firstChild.nodeName).toBe('MD-BUTTON');
     expect(firstChild.childNodes[0].nodeName).toBe('DIV');
     expect(firstChild.childNodes[0].childNodes[0].nodeName).toBe('P');
   });
@@ -33,7 +33,7 @@ describe('mdListItem directive', function() {
   it('moves md-secondary items outside of the button', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()"><p>Hello World</p><md-icon class="md-secondary" ng-click="goWild()"></md-icon></md-list-item>');
     var firstChild = listItem.children()[0];
-    expect(firstChild.nodeName).toBe('BUTTON');
+    expect(firstChild.nodeName).toBe('MD-BUTTON');
     expect(firstChild.childNodes.length).toBe(1);
     var secondChild = listItem.children()[1];
     expect(secondChild.nodeName).toBe('MD-BUTTON');
