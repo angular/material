@@ -67,7 +67,7 @@ function mdListDirective($mdTheming) {
  * </hljs>
  *
  */
-function mdListItemDirective($mdAria) {
+function mdListItemDirective($mdAria, $mdConstant) {
   var proxiedTypes = ['md-checkbox', 'md-switch'];
   return {
     restrict: 'E',
@@ -131,6 +131,13 @@ function mdListItemDirective($mdAria) {
 
         if (secondaryItem && secondaryItem.hasAttribute('ng-click')) {
           $mdAria.expect(secondaryItem, 'aria-label');
+          var buttonWrapper = angular.element('<md-button class="md-secondary-container">');
+          buttonWrapper.attr('ng-click', secondaryItem.getAttribute('ng-click'));
+          secondaryItem.removeAttribute('ng-click');
+          secondaryItem.setAttribute('tabindex', '-1');
+          secondaryItem.classList.remove('md-secondary');
+          buttonWrapper.append(secondaryItem);
+          secondaryItem = buttonWrapper[0];
         }
 
         // Check for a secondary item and move it outside
@@ -187,10 +194,12 @@ function mdListItemDirective($mdAria) {
 
         if (!$element[0].firstElementChild.hasAttribute('ng-click') && !proxies.length) {
           $element[0].firstElementChild.addEventListener('keypress', function(e) {
-            if (e.keyCode == 13 || e.keyCode == 32) {
-              $element[0].firstElementChild.click();
-              e.preventDefault();
-              e.stopPropagation();
+            if (e.target.nodeName != 'INPUT') {
+              if (e.keyCode == $mdConstant.KEY_CODE.SPACE) {
+                $element[0].firstElementChild.click();
+                e.preventDefault();
+                e.stopPropagation();
+              }
             }
           });
         }

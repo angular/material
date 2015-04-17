@@ -83,21 +83,18 @@
    * @param event
    */
   MdChipsCtrl.prototype.inputKeydown = function(event) {
-    var chipBuffer;
+    var chipBuffer = this.getChipBuffer();
     switch (event.keyCode) {
       case this.$mdConstant.KEY_CODE.ENTER:
-        chipBuffer = this.getChipBuffer();
-        if (chipBuffer) {
-          event.preventDefault();
-          this.appendChip(chipBuffer);
-          this.resetChipBuffer();
-        }
+        if (this.$scope.requireMatch || !chipBuffer) break;
+        event.preventDefault();
+        this.appendChip(chipBuffer);
+        this.resetChipBuffer();
         break;
       case this.$mdConstant.KEY_CODE.BACKSPACE:
-        if (!event.target.value.length) {
-          event.stopPropagation();
-          if (this.items.length) this.selectAndFocusChipSafe(this.items.length - 1);
-        }
+        if (chipBuffer) break;
+        event.stopPropagation();
+        if (this.items.length) this.selectAndFocusChipSafe(this.items.length - 1);
         break;
     }
   };
@@ -108,6 +105,7 @@
    * @param event
    */
   MdChipsCtrl.prototype.chipKeydown = function (event) {
+    if (this.getChipBuffer()) return;
     switch (event.keyCode) {
       case this.$mdConstant.KEY_CODE.BACKSPACE:
       case this.$mdConstant.KEY_CODE.DELETE:
@@ -116,8 +114,8 @@
         this.removeAndSelectAdjacentChip(this.selectedChip);
         break;
       case this.$mdConstant.KEY_CODE.LEFT_ARROW:
-        if (this.selectedChip < 0) this.selectedChip = this.items.length;
         event.preventDefault();
+        if (this.selectedChip < 0) this.selectedChip = this.items.length;
         if (this.items.length) this.selectAndFocusChipSafe(this.selectedChip - 1);
         break;
       case this.$mdConstant.KEY_CODE.RIGHT_ARROW:
@@ -331,7 +329,7 @@
     inputElement
         .attr({ tabindex: 0 })
         .on('keydown', function(event) { scope.$apply(function() { ctrl.inputKeydown(event); }); })
-        .on('focus', function () { scope.$apply(function () { ctrl.selectedChip = null; }); });
+        .on('focus', function () { ctrl.selectedChip = -1; });
   };
 
   MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {

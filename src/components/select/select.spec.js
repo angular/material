@@ -92,11 +92,22 @@ describe('<md-select-menu>', function() {
     });
   }
 
+  it('should preserve tabindex', inject(function($document) {
+    var select = setupSelect('tabindex="2", ng-model="val"');
+    expect(select.attr('tabindex')).toBe('2');
+  }));
+
+  it('supports non-disabled state', inject(function($document) {
+    var select = setupSelect('ng-model="val"');
+    expect(select.attr('aria-disabled')).toBe('false');
+  }));
+
   it('supports disabled state', inject(function($document) {
     var select = setupSelect('disabled="disabled", ng-model="val"');
     openSelect(select);
     waitForSelectOpen();
     expect($document.find('md-select-menu').length).toBe(0);
+    expect(select.attr('aria-disabled')).toBe('true');
   }));
 
   it('closes the menu if the element is destroyed', inject(function($document) {
@@ -107,6 +118,21 @@ describe('<md-select-menu>', function() {
     select.scope().$destroy();
     waitForSelectClose();
     expect($document.find('md-select-menu').length).toBe(0);
+  }));
+
+  it('restores focus to select when the menu is closed', inject(function($document) {
+    var select = setupSelect('ng-model="val"');
+    openSelect(select);
+    waitForSelectOpen();
+
+    $document[0].body.appendChild(select[0]);
+
+    var selectMenu = $document.find('md-select-menu');
+    pressKey(selectMenu, 27);
+    waitForSelectClose();
+
+    expect($document[0].activeElement).toBe(select[0]);
+    select.remove();
   }));
 
   describe('label behavior', function() {
@@ -561,13 +587,6 @@ describe('<md-select-menu>', function() {
       selectMenus.remove();
     }));
 
-    it('sets up the aria-owns attribute', inject(function($document) {
-      openSelect(el);
-      var selectMenu = $document.find('md-select-menu');
-      var selectMenuId = selectMenu.attr('id');
-      expect(selectMenuId.length).toBeTruthy();
-      expect(el.attr('aria-owns')).toBe(selectMenuId);
-    }));
     it('sets up the aria-labeledby attribute', inject(function($document) {
       openSelect(el);
       var selectId = el.attr('id');

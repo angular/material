@@ -162,7 +162,8 @@
         secondaryPlaceholder: '@',
         mdOnAppend: '&',
         deleteHint: '@',
-        deleteButtonLabel: '@'
+        deleteButtonLabel: '@',
+        requireMatch: '=?mdRequireMatch'
       }
     };
 
@@ -218,6 +219,14 @@
        * Configures controller and transcludes.
        */
       return function postLink(scope, element, attrs, controllers) {
+
+        //-- give optional properties with no value a boolean true by default
+        angular.forEach(scope.$$isolateBindings, function (binding, key) {
+          if (binding.optional && angular.isUndefined(scope[key])) {
+            scope[key] = attr.hasOwnProperty(attr.$normalize(binding.attrName));
+          }
+        });
+
         $mdTheming(element);
         var mdChipsCtrl = controllers[0];
         mdChipsCtrl.chipContentsTemplate = chipContentsTemplate;

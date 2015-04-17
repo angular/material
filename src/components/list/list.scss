@@ -1,10 +1,7 @@
-$list-h3-font-size: 1em !default;
 $list-h3-margin: 0 0 6px 0 !default;
-$list-h3-font-weight: 400 !default;
-$list-h4-font-size: 0.875em !default;
-$list-h4-font-weight: 400 !default;
 $list-h4-margin: 10px 0 5px 0 !default;
-$list-p-font-size: 0.75em !default;
+$list-h4-font-weight: 400 !default;
+$list-header-line-height: 0.75em !default;
 $list-p-margin: 0 0 0px 0 !default;
 $list-p-line-height: 1.6em !default;
 
@@ -32,8 +29,8 @@ md-list {
   padding: $list-padding-top $list-padding-right $list-padding-bottom $list-padding-left;
 
   .md-subheader {
-    font-weight: 500;
-    font-size: 0.875em;
+    @extend .md-body-2;
+    line-height: $list-header-line-height;
   }
 }
 
@@ -71,6 +68,7 @@ md-list-item, md-list-item .md-list-item-inner {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+
 
   // Layout for controls in primary or secondary divs, or auto-infered first child
   & > div.md-primary > md-icon,
@@ -130,11 +128,31 @@ md-list-item, md-list-item .md-list-item-inner {
   md-switch.md-secondary {
     margin-right: 0;
   }
+
+  button.md-button.md-secondary-container {
+    width: $list-item-primary-icon-width;
+    align-self: center;
+    margin-right: 0px;
+    box-sizing: content-box;
+    border-radius: 50%;
+    min-width: 0px;
+    .md-ripple,
+    .md-ripple-container {
+      border-radius: 50%;
+    }
+  }
+
+  .md-secondary-container,
   .md-secondary {
     margin-left: $list-item-secondary-left-margin;
     position: absolute;
     right: $list-item-padding-horizontal;
     top: 0;
+  }
+
+  & > .md-button.md-secondary-container > .md-secondary {
+    margin-left: 0px;
+    position: static;
   }
 
   & > p, & > .md-list-item-inner > p {
@@ -160,20 +178,19 @@ md-list-item.md-3-line > .md-no-style {
     }
 
     h3 {
+      @extend .md-subhead;
       margin: $list-h3-margin;
-      font-weight: $list-h3-font-weight;
-      font-size: $list-h3-font-size;
-      line-height: 0.75em;
+      line-height: $list-header-line-height;
     }
     h4 {
-      margin: $list-h4-margin;
+      @extend .md-body-2;
       font-weight: $list-h4-font-weight;
-      font-size: $list-h4-font-size;
-      line-height: 0.75em;
+      margin: $list-h4-margin;
+      line-height: $list-header-line-height;
     }
     p {
+      @extend .md-body-2;
       margin: $list-p-margin;
-      font-size: $list-p-font-size;
       line-height: $list-p-line-height;
     }
   }

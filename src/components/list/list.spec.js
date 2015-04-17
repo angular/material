@@ -36,7 +36,7 @@ describe('mdListItem directive', function() {
     expect(firstChild.nodeName).toBe('BUTTON');
     expect(firstChild.childNodes.length).toBe(1);
     var secondChild = listItem.children()[1];
-    expect(secondChild.nodeName).toBe('MD-ICON');
+    expect(secondChild.nodeName).toBe('MD-BUTTON');
   });
 
 });

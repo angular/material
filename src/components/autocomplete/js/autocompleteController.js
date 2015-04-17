@@ -116,7 +116,7 @@
       registerSelectedItemWatcher(selectedItemChange);
       $scope.$watch('selectedItem', handleSelectedItemChange);
       $scope.$watch('$mdAutocompleteCtrl.hidden', function (hidden, oldHidden) {
-        if (hidden && !oldHidden) positionDropdown();
+        if (!hidden && oldHidden) positionDropdown();
       });
       angular.element($window).on('resize', positionDropdown);
     }

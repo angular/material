@@ -144,7 +144,7 @@
                   ng-click="$mdTabsCtrl.select(tab.getIndex())"\
                   ng-class="{\
                       \'md-active\':    tab.isActive(),\
-                      \'md-focus\':     tab.hasFocus(),\
+                      \'md-focused\':   tab.hasFocus(),\
                       \'md-disabled\':  tab.scope.disabled\
                   }"\
                   ng-disabled="tab.scope.disabled"\

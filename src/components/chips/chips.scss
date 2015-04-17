@@ -70,6 +70,7 @@ $contact-chip-name-width: 12rem !default;
       display: block;
       padding-right:0.4rem;
       float: left;
+      white-space: nowrap;
       &:focus {
         outline: none;
       }
@@ -81,24 +82,30 @@ $contact-chip-name-width: 12rem !default;
     .md-chip-remove {
       text-align: center;
       width: $chip-height;
-      line-height: $chip-height;
+      height: $chip-height;
       min-width: 0;
       padding: 0;
       background: transparent;
       border: none;
       box-shadow: none;
       margin: 0;
+      position: relative;
       md-icon {
         height: $chip-delete-icon-size;
         width: $chip-delete-icon-size;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0);
       }
     }
   }
   .md-chip-input-container {
-    display: inline-block;
+    display: block;
     line-height: $chip-height;
     margin: $chip-margin;
     padding: $chip-padding;
+    float: left;
     input {
       &:not([type]),&[type="email"],&[type="number"],&[type="tel"],&[type="url"],&[type="text"] {
         border: 0;

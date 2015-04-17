@@ -6,7 +6,7 @@ angular.module('listDemo2', ['ngMaterial'])
     .iconSet('communication', 'img/icons/sets/communication-icons.svg', 24)
     .defaultIconSet('img/icons/sets/core-icons.svg', 24);
 })
-.controller('ListCtrl', function($scope) {
+.controller('ListCtrl', function($scope, $mdDialog) {
   $scope.toppings = [
     { name: 'Pepperoni', wanted: true },
     { name: 'Sausage', wanted: false },
@@ -31,16 +31,37 @@ angular.module('listDemo2', ['ngMaterial'])
     { name: 'Peter Carlsson', img: 'img/100-2.jpeg', newMessage: false }
   ];
 
-  $scope.goToPerson = function(person) {
-    alert('Inspect ' + person);
+  $scope.goToPerson = function(person, event) {
+    $mdDialog.show(
+      $mdDialog.alert()
+        .title('Navigating')
+        .content('Inspect ' + person)
+        .ariaLabel('Person inspect demo')
+        .ok('Neat!')
+        .targetEvent(event)
+    );
   };
 
-  $scope.navigateTo = function(to) {
-    alert('Imagine being taken to ' + to);
+  $scope.navigateTo = function(to, event) {
+    $mdDialog.show(
+      $mdDialog.alert()
+        .title('Navigating')
+        .content('Imagine being taken to ' + to)
+        .ariaLabel('Navigation demo')
+        .ok('Neat!')
+        .targetEvent(event)
+    );
   };
 
   $scope.doSecondaryAction = function() {
-    alert('Seconday action clicked');
+    $mdDialog.show(
+      $mdDialog.alert()
+        .title('Secondary Action')
+        .content('Secondary actions can be used for one click actions')
+        .ariaLabel('Secondary click demo')
+        .ok('Neat!')
+        .targetEvent(event)
+    );
   };
 
 });
