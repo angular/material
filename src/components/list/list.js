@@ -187,7 +187,8 @@ function mdListItemDirective($mdAria, $mdConstant, $timeout) {
         }
 
         function computeProxies() {
-          if (!$element.children()[0].hasAttribute('ng-click')) {
+          var children = $element.children();
+          if (children.length && !children[0].hasAttribute('ng-click')) {
             angular.forEach(proxiedTypes, function(type) {
               angular.forEach($element[0].firstElementChild.querySelectorAll(type), function(child) {
                 proxies.push(child);
