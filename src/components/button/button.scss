@@ -44,6 +44,7 @@ $icon-button-margin: 0.600rem !default;
   padding: $button-padding;
   margin: $button-margin;
   line-height: $button-line-height;
+  height: $button-line-height;
   background: transparent;
   white-space: nowrap;
   // override for FAB, icon buttons, etc.
