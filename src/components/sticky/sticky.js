@@ -13,7 +13,6 @@ angular.module('material.components.sticky', [
   'material.core',
   'material.components.content'
 ])
-    .factory('$featureSupport', FeatureSupport)
     .factory('$mdSticky', MdSticky);
 
 /*
@@ -285,30 +284,4 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil, $featureSupp
   }
 
 }
-
-function FeatureSupport() {
-
-  return {
-    sticky: checkStickySupport
-  };
-
-  // Function to check for browser sticky support
-  function checkStickySupport($el) {
-    var stickyProp;
-    var testEl = angular.element('<div>');
-    $document[0].body.appendChild(testEl[0]);
-
-    var stickyProps = ['sticky', '-webkit-sticky'];
-    for (var i = 0; i < stickyProps.length; ++i) {
-      testEl.css({position: stickyProps[i], top: 0, 'z-index': 2});
-      if (testEl.css('position') == stickyProps[i]) {
-        stickyProp = stickyProps[i];
-        break;
-      }
-    }
-    testEl.remove();
-    return stickyProp;
-  }
-}
-
 })();
