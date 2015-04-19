@@ -4,9 +4,9 @@ describe('md-input-container directive', function() {
   function setup(attrs, isForm) {
     var container;
     inject(function($rootScope, $compile) {
-      container = $compile((isForm ? '<form>' : '') + 
-          '<md-input-container><input ' +(attrs||'')+ '><label></label></md-input-container>' +
-          (isForm ? '<form>' : ''))($rootScope);
+      container = $compile((isForm ? '<form>' : '') +
+                           '<md-input-container><input ' +(attrs||'')+ '><label></label></md-input-container>' +
+                           (isForm ? '<form>' : ''))($rootScope);
       $rootScope.$apply();
     });
     return container;
@@ -14,7 +14,7 @@ describe('md-input-container directive', function() {
 
   it('should by default show error on $touched and $invalid', inject(function($rootScope) {
     var el = setup('ng-model="foo"');
-    
+
     expect(el).not.toHaveClass('md-input-invalid');
 
     var model = el.find('input').controller('ngModel');
@@ -105,9 +105,9 @@ describe('md-input-container directive', function() {
 
     it('should work with a constant', inject(function($rootScope, $compile) {
       var el = $compile('<form name="form">' +
-                          '<md-input-container>' +
-                            '<input md-maxlength="5" ng-model="foo" name="foo">' +
-                          '</md-input-container>' +
+                        '<md-input-container>' +
+                        '<input md-maxlength="5" ng-model="foo" name="foo">' +
+                        '</md-input-container>' +
                         '</form>')($rootScope);
       $rootScope.$apply();
       expect($rootScope.form.foo.$error['md-maxlength']).toBeFalsy();
@@ -130,9 +130,9 @@ describe('md-input-container directive', function() {
 
     it('should add and remove maxlength element & error with expression', inject(function($rootScope, $compile) {
       var el = $compile('<form name="form">' +
-                          '<md-input-container>' +
-                            '<input md-maxlength="max" ng-model="foo" name="foo">' +
-                          '</md-input-container>' +
+                        '<md-input-container>' +
+                        '<input md-maxlength="max" ng-model="foo" name="foo">' +
+                        '</md-input-container>' +
                         '</form>')($rootScope);
 
       $rootScope.$apply();
@@ -159,4 +159,18 @@ describe('md-input-container directive', function() {
     expect(placeholder).toBeTruthy();
     expect(placeholder.textContent).toEqual('some placeholder');
   });
+
+  it('should expect an aria-label on the input when no label is present', inject(function($rootScope, $compile, $mdAria) {
+    spyOn($mdAria, 'expect');
+
+    var el = $compile('<form name="form">' +
+                      '<md-input-container md-no-float>' +
+                      '<input placeholder="baz" md-maxlength="max" ng-model="foo" name="foo">' +
+                      '</md-input-container>' +
+                      '</form>')($rootScope);
+
+    $rootScope.$apply();
+
+    expect($mdAria.expect).toHaveBeenCalledWith(jasmine.any(Object), 'aria-label', 'baz');
+  }));
 });
