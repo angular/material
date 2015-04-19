@@ -12,16 +12,21 @@ md-card {
 
   > img,
   > :not(md-card-content) img {
-    order: 0;
     width: 100%;
   }
 
   md-card-content {
-    order: 1;
     padding: $card-padding;
   }
+  md-action-bar {
+    margin: 0;
+
+    .md-button {
+      margin-bottom: $card-margin;
+      margin-top: $card-margin;
+    }
+  }
   md-card-footer {
-    order: 2;
     padding: $card-padding;
   }
 }
