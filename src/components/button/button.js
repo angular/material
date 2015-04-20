@@ -56,6 +56,9 @@ angular.module('material.components.button', [
  *  <md-button class="md-fab md-mini" aria-label="Mini FAB">
  *    <md-icon md-svg-src="your/icon.svg"></md-icon>
  *  </md-button>
+ *  <md-button class="md-icon-button" aria-label="Custom Icon Button">
+ *    <md-icon md-svg-icon="path/to/your.svg"></md-icon>
+ *  </md-button>
  * </hljs>
  */
 function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria, $timeout) {
