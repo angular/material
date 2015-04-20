@@ -53,7 +53,7 @@
     }
 
     function handleHasContent (hasContent) {
-      $element[hasContent ? 'removeClass' : 'hasClass']('md-no-tab-content');
+      $element[hasContent ? 'removeClass' : 'addClass']('md-no-tab-content');
     }
 
     function getElements () {
