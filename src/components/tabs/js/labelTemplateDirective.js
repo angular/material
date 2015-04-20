@@ -9,9 +9,10 @@
       restrict: 'A',
       link: link,
       scope: { template: '=mdLabelTemplate' },
-      require: '^mdTabs'
+      require: '^?mdTabs'
     };
     function link (scope, element, attr, ctrl) {
+      if (!ctrl) return;
       var index = scope.$parent.$index;
       scope.$watch('template', function (html) {
         element.html(html);

@@ -61,7 +61,7 @@
 
   function MdTab () {
     return {
-      require: '^mdTabs',
+      require: '^?mdTabs',
       terminal: true,
       scope: {
         label:    '@',
@@ -74,6 +74,7 @@
     };
 
     function postLink (scope, element, attr, ctrl) {
+      if (!ctrl) return;
       var tabs = element.parent()[0].getElementsByTagName('md-tab'),
           index = Array.prototype.indexOf.call(tabs, element[0]),
           data = ctrl.insertTab({
