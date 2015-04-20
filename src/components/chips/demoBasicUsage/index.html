@@ -1,29 +1,20 @@
 <div ng-app="inputBasicDemo" ng-controller="BasicDemoCtrl as ctrl" layout="column">
 
-  <md-content layout-padding layout="column">
-    <p>
-      Use a custom chip template.
-    </p>
+  <md-content class="md-padding" layout="column">
+    <p>Use a custom chip template.</p>
 
-    <md-chips ng-model="ctrl.roFruitNames"
-              readonly="ctrl.readonly">
+    <md-chips ng-model="ctrl.roFruitNames" readonly="ctrl.readonly">
       <md-chip-template>
         <strong>{{$chip}}</strong>
         <em>(fruit)</em>
       </md-chip-template>
     </md-chips>
 
-    <p>
-        Use the default chip template.
-    </p>
+    <p>Use the default chip template.</p>
 
-    <md-chips
-            ng-model="ctrl.fruitNames"
-            readonly="ctrl.readonly"></md-chips>
+    <md-chips ng-model="ctrl.fruitNames" readonly="ctrl.readonly"></md-chips>
 
-    <p>
-      Use Placeholders and override hint texts.
-    </p>
+    <p>Use Placeholders and override hint texts.</p>
 
     <md-chips
         ng-model="ctrl.newFruitNames"
@@ -33,24 +24,19 @@
         delete-hint="Press delete to remove fruit"
         secondary-placeholder="+Fruit"></md-chips>
 
-    <p>
-        Display an ordered set of objects as chips (with custom template).
-    </p>
+    <p>Display an ordered set of objects as chips (with custom template).</p>
 
-    <md-chips
-        class="custom-chips"
-        ng-model="ctrl.vegObjs"
-        readonly="ctrl.readonly"
+    <md-chips class="custom-chips" ng-model="ctrl.vegObjs" readonly="ctrl.readonly"
         md-on-append="ctrl.newVeg($chip)">
-        <md-chip-template>
-          <span>
-            <strong>{{$chip.name}}</strong>
-            <em>({{$chip.type}})</em>
-          </span>
-        </md-chip-template>
-        <button md-chip-remove class="md-primary vegetablechip">
-          <md-icon md-svg-icon="close"></md-icon>
-        </button>
+      <md-chip-template>
+        <span>
+          <strong>{{$chip.name}}</strong>
+          <em>({{$chip.type}})</em>
+        </span>
+      </md-chip-template>
+      <button md-chip-remove class="md-primary vegetablechip">
+        <md-icon md-svg-icon="close"></md-icon>
+      </button>
     </md-chips>
 
     <br/>

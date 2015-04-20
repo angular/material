@@ -1,5 +1,10 @@
 md-chips.md-THEME_NAME-theme {
-  background: '{{background-50}}';
+  .md-chips {
+    box-shadow: 0 1px '{{background-300}}';
+    &.md-focused {
+      box-shadow: 0 2px '{{primary-color}}';
+    }
+  }
   .md-chip {
     background: '{{background-300}}';
     color: '{{background-800}}';

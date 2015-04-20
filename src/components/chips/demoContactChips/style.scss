@@ -32,8 +32,10 @@ md-content.autocomplete {
   }
 }
 
-.md-chips {
-  border-bottom : 1px solid rgba(0,0,0,0.1);
-  padding: 0.5rem 0 0.8rem ;
+md-contact-chips {
   margin-bottom : 1rem;
+}
+
+.md-chips {
+  padding: 0.5rem 0 0.8rem ;
 }
