@@ -1,6 +1,49 @@
-<div ng-app="selectDemoBasic" ng-controller="AppCtrl" layout="column" layout-align="center center" flex>
-  <md-select placeholder="Pick" ng-model="someVal">
-    <md-option value="1">One</md-option>
-    <md-option value="2">Two</md-option>
-  </md-select>
-</div>
+<div ng-controller="AppCtrl" ng-app="selectDemoBasic" layout="column" layout-fill>
+      <md-toolbar class="md-accent">
+        <div class="md-toolbar-tools">
+          This works
+        </div>
+      </md-toolbar>
+      
+      <md-select ng-model="select" placeholder="Select...">
+        <md-option value="1">Option 1</md-option>
+        <md-option value="2">Option 2</md-option>
+        <md-option value="3">Option 3</md-option>
+        <md-option value="4">Option 4</md-option>
+      </md-select>
+      
+      <div layout="row">
+        <md-content layout="column" flex>
+          <md-toolbar class="md-accent">
+            <div class="md-toolbar-tools">
+              This doesn't work when there is a layout attribute on md-content
+            </div>
+          </md-toolbar>
+          <md-select ng-model="select" placeholder="Select..." layout-margin>
+            <md-option value="1">Option 1</md-option>
+            <md-option value="2">Option 2</md-option>
+            <md-option value="3">Option 3</md-option>
+            <md-option value="4">Option 4</md-option>
+          </md-select>
+        </md-content>
+      </div> 
+
+      <div layout="row">
+        <md-content flex>
+          <div layout="column">
+            <md-toolbar class="md-accent">
+              <div class="md-toolbar-tools">
+                This works when there is no layout attribute on md-content
+              </div>
+            </md-toolbar>
+            <div layout="column">
+              <md-select ng-model="select" placeholder="Select..." layout-margin>
+                <md-option value="1">Option 1</md-option>
+                <md-option value="2">Option 2</md-option>
+                <md-option value="3">Option 3</md-option>
+                <md-option value="4">Option 4</md-option>
+              </md-select>
+            </div>
+          </div>
+        </md-content>
+      </div> 
