@@ -94,6 +94,7 @@
       <md-chips-wrap\
           ng-if="!$mdChipsCtrl.readonly || $mdChipsCtrl.items.length > 0"\
           ng-keydown="$mdChipsCtrl.chipKeydown($event)"\
+          ng-class="{ \'md-focused\': $mdChipsCtrl.hasFocus() }"\
           class="md-chips">\
         <md-chip ng-repeat="$chip in $mdChipsCtrl.items"\
             index="{{$index}}"\
@@ -118,7 +119,8 @@
             placeholder="{{$mdChipsCtrl.getPlaceholder()}}"\
             aria-label="{{$mdChipsCtrl.getPlaceholder()}}"\
             ng-model="$mdChipsCtrl.chipBuffer"\
-            ng-focus="$mdChipsCtrl.resetSelectedChip()"\
+            ng-focus="$mdChipsCtrl.onInputFocus()"\
+            ng-blur="$mdChipsCtrl.onInputBlur()"\
             ng-keydown="$mdChipsCtrl.inputKeydown($event)">';
 
   var CHIP_DEFAULT_TEMPLATE = '\
@@ -249,7 +251,10 @@
           // configure the controller.
           if (chipInputTemplate != CHIP_INPUT_TEMPLATE) {
             $timeout(function() {
-              if (chipInputTemplate.indexOf('<md-autocomplete') === 0) mdChipsCtrl.configureAutocomplete(element.find('md-autocomplete').controller('mdAutocomplete'));
+              if (chipInputTemplate.indexOf('<md-autocomplete') === 0)
+                mdChipsCtrl
+                    .configureAutocomplete(element.find('md-autocomplete')
+                        .controller('mdAutocomplete'));
               mdChipsCtrl.configureUserInput(element.find('input'));
             });
           }

@@ -304,9 +304,18 @@
   };
 
   MdChipsCtrl.prototype.onFocus = function () {
-    var input = this.$element[0].querySelectorAll('input')[0];
+    var input = this.$element[0].querySelector('input');
     input && input.focus();
     this.resetSelectedChip();
+  };
+
+  MdChipsCtrl.prototype.onInputFocus = function () {
+    this.inputHasFocus = true;
+    this.resetSelectedChip();
+  };
+
+  MdChipsCtrl.prototype.onInputBlur = function () {
+    this.inputHasFocus = false;
   };
 
   /**
@@ -329,7 +338,8 @@
     inputElement
         .attr({ tabindex: 0 })
         .on('keydown', function(event) { scope.$apply(function() { ctrl.inputKeydown(event); }); })
-        .on('focus', function () { ctrl.selectedChip = -1; });
+        .on('focus', function () { this.$scope.$apply(this.onInputFocus.bind(this)); }.bind(this))
+        .on('blur', function () { this.$scope.$apply(this.onInputBlur.bind(this)); }.bind(this));
   };
 
   MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {
@@ -339,5 +349,12 @@
         this.resetChipBuffer();
       }
     }.bind(this));
+    this.$element.find('input')
+        .on('focus', function () { this.$scope.$apply(this.onInputFocus.bind(this)); }.bind(this))
+        .on('blur', function () { this.$scope.$apply(this.onInputBlur.bind(this)); }.bind(this));
+  };
+
+  MdChipsCtrl.prototype.hasFocus = function () {
+    return this.inputHasFocus || this.selectedChip >= 0;
   };
 })();
