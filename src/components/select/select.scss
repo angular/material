@@ -76,7 +76,7 @@ md-select {
     &:focus {
       .md-select-label {
         border-bottom: 2px solid;
-        padding-bottom: $baseline-grid - 1;
+        padding-bottom: $baseline-grid + 1;
       }
     }
   }
@@ -86,8 +86,8 @@ md-select {
 .md-select-label {
   display: flex;
   align-items: center;
-  padding-top: $baseline-grid + 1;
-  padding-bottom: $baseline-grid;
+  padding-top: $baseline-grid - 1;
+  padding-bottom: $baseline-grid + 2;
   border-bottom: 1px solid;
   font-size: 1.6rem;
   line-height: 0.8em;
