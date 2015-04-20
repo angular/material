@@ -7,9 +7,10 @@
 
   function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $mdInkRipple,
                              $mdUtil, $animate) {
-    var ctrl = this,
-        locked = false,
-        elements = getElements();
+    var ctrl     = this,
+        locked   = false,
+        elements = getElements(),
+        queue    = [];
 
     ctrl.scope = $scope;
     ctrl.parent = $scope.$parent;
@@ -131,6 +132,11 @@
       ctrl.offsetLeft = fixOffset(ctrl.offsetLeft);
     }
 
+    function processQueue () {
+      queue.forEach(function (func) { $timeout(func); });
+      queue = [];
+    }
+
     function insertTab (tabData, index) {
       var proto = {
             getIndex: function () { return ctrl.tabs.indexOf(tab); },
@@ -150,6 +156,7 @@
       } else {
         ctrl.tabs.push(tab);
       }
+      processQueue();
       return tab;
     }
 
@@ -202,6 +209,7 @@
 
     function updateHeightFromContent () {
       if (!$scope.dynamicHeight) return $element.css('height', '');
+      if (!ctrl.tabs.length) return queue.push(updateHeightFromContent);
       var tabContent    = elements.contents[$scope.selectedIndex],
           contentHeight = tabContent.offsetHeight,
           tabsHeight    = elements.wrapper.offsetHeight,
@@ -222,7 +230,7 @@
     }
 
     function updateInkBarStyles () {
-      if (!ctrl.tabs.length) return;
+      if (!ctrl.tabs.length) return queue.push(updateInkBarStyles);
       //-- if the element is not visible, we will not be able to calculate sizes until it is
       //-- we should treat that as a resize event rather than just updating the ink bar
       if (!$element.prop('offsetParent')) return handleResizeWhenVisible();
