@@ -873,8 +873,8 @@ function SelectProvider($$interimElementProvider) {
 
       return $mdUtil.transitionEndPromise(element, { timeout: 350 }).then(function() {
         element.removeClass('md-active');
-        opts.parent[0].removeChild(element[0]); // use browser to avoid $destroy event
         opts.backdrop && opts.backdrop.remove();
+        opts.parent[0].removeChild(element[0]); // use browser to avoid $destroy event
         if (opts.disableParentScroll) {
           opts.restoreScroll();
         }
