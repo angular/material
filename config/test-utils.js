@@ -39,6 +39,8 @@ beforeEach(function() {
         cb.apply(this, arguments);
       };
     };
+    mockRaf.flush = angular.noop;
+
   });
 
   jasmine.addMatchers({
