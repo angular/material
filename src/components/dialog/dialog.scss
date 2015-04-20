@@ -33,7 +33,7 @@ md-dialog {
   display: flex;
   flex-direction: column;
 
-  md-content {
+  > md-content {
     order: 1;
     padding: $baseline-grid * 3;
     overflow: auto;
