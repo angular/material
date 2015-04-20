@@ -129,7 +129,7 @@ angular.module('material.core')
 
       function computeScrollbars(computedStyle) {
         var scrollBarsShowing = !Util.floatingScrollbars() &&
-            isScrolling(scrollEl);
+            isScrolling(scrollEl) && computedStyle.overflowY != 'hidden';
 
         if (scrollBarsShowing) {
           disableTarget.css('overflow-y', 'scroll');
