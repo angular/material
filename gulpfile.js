@@ -183,7 +183,7 @@ gulp.task('karma-watch', function(done) {
     singleRun:false,
     autoWatch:true,
     configFile: __dirname + '/config/karma.conf.js',
-    browsers : argv.browsers ? argv.browsers.trim().split(',') : ['Chrome'],
+    browsers : argv.browsers ? argv.browsers.trim().split(',') : ['Chrome']
   },done);
 });
 
@@ -207,25 +207,19 @@ gulp.task('build-resources', function() {
 
 gulp.task('build-all-modules', function() {
   return series(gulp.src(['src/components/*', 'src/core/'])
-    .pipe(through2.obj(function(folder, enc, next) {
-      var moduleId = folder.path.indexOf('components') > -1 ?
-        'material.components.' + path.basename(folder.path) :
-        'material.' + path.basename(folder.path);
-
-      var stream;
-      if (IS_RELEASE_BUILD && BUILD_MODE.useBower) {
-        stream = series(buildModule(moduleId, true), buildModule(moduleId, false));
-      } else {
-        stream = buildModule(moduleId, false);
-      }
-
-      stream.on('end', function() {
-        next();
-      });
-    })),
-  themeBuildStream().pipe(
-      gulp.dest(path.join(BUILD_MODE.outputDir, 'core'))
-  ));
+      .pipe(through2.obj(function(folder, enc, next) {
+        var moduleId = folder.path.indexOf('components') > -1
+            ? 'material.components.' + path.basename(folder.path)
+            : 'material.' + path.basename(folder.path);
+        var stream = (IS_RELEASE_BUILD && BUILD_MODE.useBower)
+            ? series(buildModule(moduleId, true), buildModule(moduleId, false))
+            : buildModule(moduleId, false);
+        stream.on('end', function() { next(); });
+      })),
+      themeBuildStream()
+          .pipe(BUILD_MODE.transform())
+          .pipe(gulp.dest(path.join(BUILD_MODE.outputDir, 'core')))
+  );
 });
 
 function buildModule(module, isRelease) {
@@ -390,9 +384,7 @@ function buildJs(isRelease) {
 
 // builds the theming related css and provides it as a JS const for angular
 function themeBuildStream() {
-  return gulp.src(
-    config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss'))
-  )
+  return gulp.src( config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss')) )
     .pipe(concat('default-theme.scss'))
     .pipe(utils.hoistScssVariables())
     .pipe(sass())
@@ -462,7 +454,7 @@ gulp.task('build-module-demo', function() {
 
 gulp.task('build-scss', function() {
   var modules   = argv['modules'],
-      overrides = argv['css-override'],
+      overrides = argv['override'],
       dest      = argv['output-dir'] || config.outputDir,
       filename  = argv['filename'] || 'angular-material',
       paths     = getPaths();
