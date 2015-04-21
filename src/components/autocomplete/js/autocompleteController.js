@@ -196,7 +196,7 @@
       if ($scope.textChange && searchText !== previousSearchText)
         $scope.textChange(getItemScope($scope.selectedItem));
       //-- cancel results if search text is not long enough
-      if (!isMinLengthMet()) {
+      if (!isMinLengthMet() && !shouldAutoOpen()) {
         self.loading = false;
         self.matches = [];
         self.hidden = shouldHide();
@@ -270,8 +270,14 @@
       return $scope.autoselect ? 0 : -1;
     }
 
+    function shouldAutoOpen() {
+      return $scope.autoopen;
+    }
+
     function shouldHide () {
+      if (shouldAutoOpen()) return false;
       if (!isMinLengthMet()) return true;
+
       return self.matches.length === 1
           && $scope.searchText === getDisplayValue(self.matches[0])
           && $scope.selectedItem === self.matches[0];
@@ -314,7 +320,7 @@
       }
       function handleResults (matches) {
         cache[term] = matches;
-        if (searchText !== $scope.searchText) return; //-- just cache the results if old request
+        if (searchText && (searchText !== $scope.searchText)) return; //-- just cache the results if old request
         promise = null;
         self.loading = false;
         self.matches = matches;
