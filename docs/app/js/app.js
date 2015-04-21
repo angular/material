@@ -273,6 +273,12 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
   function onLocationChange() {
     var path = $location.path();
 
+    if (path == '/') {
+      self.selectSection(null);
+      self.selectPage(null, null);
+      return;
+    }
+
     var matchPage = function(section, page) {
       if (path === page.url) {
         self.selectSection(section);
