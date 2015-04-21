@@ -360,6 +360,6 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
 
   function attachRipple (scope, element) {
     var options = { colorElement: angular.element(elements.inkBar) };
-    $mdInkRipple.attachTabBehavior(scope, element, options);
+    $mdTabInkRipple.attach(scope, element, options);
   }
 }
