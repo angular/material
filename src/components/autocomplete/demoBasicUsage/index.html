@@ -11,6 +11,7 @@
           md-selected-item-change="ctrl.selectedItemChange(item)"
           md-items="item in ctrl.querySearch(ctrl.searchText)"
           md-item-text="item.display"
+          md-min-length="0"
           placeholder="What is your favorite US state?">
         <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
       </md-autocomplete>

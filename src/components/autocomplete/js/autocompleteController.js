@@ -212,7 +212,7 @@
 
     function focus () {
       //-- if searchText is null, let's force it to be a string
-      if (!angular.isString($scope.searchText)) return $scope.searchText = '';
+      if (!angular.isString($scope.searchText)) $scope.searchText = '';
       self.hidden = shouldHide();
       if (!self.hidden) handleQuery();
     }
