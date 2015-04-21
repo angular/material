@@ -47,7 +47,11 @@
   #{$prop}: $value;
 
   html[dir=rtl] & {
-    #{$inverse-prop}: $value;
-    #{$prop}: $default-value;
+    @if $prop == $inverse-prop {
+      #{$prop}: $default-value;
+    } @else {
+      #{$inverse-prop}: $value;
+      #{$prop}: $default-value;
+    }
   }
 }

@@ -461,24 +461,29 @@ gulp.task('build-module-demo', function() {
  ** ***************************************** */
 
 gulp.task('build-scss', function() {
-  var scssGlob = path.join(config.paths, '*.scss');
+  var modules   = argv['modules'],
+      overrides = argv['css-override'],
+      dest      = argv['output-dir'] || config.outputDir,
+      filename  = argv['filename'] || 'angular-material',
+      paths     = getPaths();
 
   gutil.log("Building css files...");
   var streams = [];
   streams.push(
-    gulp.src(config.scssBaseFiles.concat(scssGlob))
+    gulp.src(paths)
       .pipe(filterNonCodeFiles())
       .pipe(filter(['**', '!**/*-theme.scss'])) // remove once ported
       .pipe(concat('angular-material.scss'))
       // .pipe(insert.append(defaultThemeContents))
       .pipe(sass())
+      .pipe(rename({ basename: filename }))
       .pipe(autoprefix())
       .pipe(insert.prepend(config.banner))
-      .pipe(gulp.dest(config.outputDir))
+      .pipe(gulp.dest(dest))
       .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
           .pipe(minifyCss)
           .pipe(rename, {extname: '.min.css'})
-          .pipe(gulp.dest, config.outputDir)
+          .pipe(gulp.dest, dest)
         ()
       ))
   );
@@ -491,10 +496,23 @@ gulp.task('build-scss', function() {
         .pipe(autoprefix())
         .pipe(insert.prepend(config.banner))
         .pipe(rename({prefix: 'angular-material-'}))
-        .pipe(gulp.dest(path.join(config.outputDir, 'modules', 'css')))
+        .pipe(gulp.dest(path.join(dest, 'modules', 'css')))
     );
   }
   return series(streams);
+  function getPaths () {
+    var paths = config.scssBaseFiles.slice();
+    if (modules) {
+      paths.push.apply(paths, modules.split(',').map(function (module) {
+        return 'src/components/' + module + '/*.scss';
+      }));
+    } else {
+      paths.push(path.join(config.paths, '*.scss'));
+    }
+    overrides && paths.unshift(overrides);
+    console.log(paths);
+    return paths;
+  }
 });
 
 /** *****************************************

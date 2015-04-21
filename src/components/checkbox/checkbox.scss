@@ -1,6 +1,9 @@
 $checkbox-width: 18px !default;
 $checkbox-height: $checkbox-width !default;
 $checkbox-margin: 8px !default;
+$checkbox-border-radius: 2px !default;
+$checkbox-border-width: 2px !default;
+$checkbox-text-margin: 10px !default;
 
 md-checkbox {
   box-sizing: border-box;
@@ -10,6 +13,9 @@ md-checkbox {
   cursor: pointer;
   outline: none;
   user-select: none;
+  padding-left: $checkbox-width;
+  position: relative;
+  line-height: $checkbox-width + $checkbox-margin;
 
   *,
   *:before,
@@ -33,11 +39,13 @@ md-checkbox {
   }
 
   .md-container {
-    position: relative;
-    top: 4px;
+    position: absolute;
+    top: 50%;
+    left: 0;
     display: inline-block;
     width: $checkbox-width;
     height: $checkbox-height;
+    transform: translateY(-50%);
 
     &:before {
       background-color: transparent;
@@ -83,8 +91,8 @@ md-checkbox {
     left: 0;
     width: $checkbox-width;
     height: $checkbox-height;
-    border: 2px solid;
-    border-radius: 2px;
+    border: $checkbox-border-width solid;
+    border-radius: $checkbox-border-radius;
   }
 
   &.md-checked .md-icon {
@@ -100,15 +108,15 @@ md-checkbox {
   &.md-checked .md-icon:after {
     transform: rotate(45deg);
     position: absolute;
-    left: 6px;
-    top: 2px;
+    left: $checkbox-width / 3;
+    top: $checkbox-width / 9;
     display: table;
-    width: 6px;
-    height: 12px;
-    border: 2px solid;
+    width: $checkbox-width / 3;
+    height: $checkbox-width * 2 / 3;
+    border: $checkbox-border-width solid;
     border-top: 0;
     border-left: 0;
-    content: ' ';
+    content: '';
   }
 
   .md-label {
@@ -120,7 +128,7 @@ md-checkbox {
     user-select: text;
 
     span {
-      margin-left: 10px;
+      margin-left: $checkbox-text-margin;
     }
   }
 }
