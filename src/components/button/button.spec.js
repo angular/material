@@ -144,4 +144,15 @@ describe('md-button', function() {
 
   });
 
+  describe('ripple effects for button', function() {
+
+    it('attaches button ripple effects', inject(function($mdButtonInkRipple, $compile, $rootScope) {
+      spyOn($mdButtonInkRipple, 'attach');
+
+      var button = $compile("<md-button class='md-fab'><md-icon><md-icon></md-button>")($rootScope);
+      $rootScope.$apply();
+
+      expect($mdButtonInkRipple.attach).toHaveBeenCalledWith($rootScope, button);
+    }));
+  });
 });
