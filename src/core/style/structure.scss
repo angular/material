@@ -146,6 +146,18 @@ input {
   margin: 8px;
 }
 
+.md-virtual-scroll-container {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.md-virtual-scroller {
+  position: absolute;
+  width: 100%;
+}
+
 @media (min-width: $layout-breakpoint-sm) {
   .md-padding {
     padding: 16px;

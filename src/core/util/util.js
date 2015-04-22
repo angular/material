@@ -60,27 +60,20 @@ angular.module('material.core')
       }
 
       var heightOffset = scrollEl.scrollTop;
-      var restoreOffset = heightOffset;
-
-      if (!useDocElement) {
-        heightOffset = heightOffset - disableTarget[0].offsetTop;
-      }
+      var originalWidth = scrollEl.clientWidth;
 
       var restoreStyle = disableTarget.attr('style');
       var disableStyle = $window.getComputedStyle(disableTarget[0]);
-
-      var wrapperEl = angular.element('<div>');
-      disableTarget.addClass('md-overflow-wrapper-shown');
-      wrapperEl.append(disableTarget.children());
+      var wrapperEl = angular.element('<div class="md-virtual-scroll-container"><div class="md-virtual-scroller"></div></div>');
+      var virtualScroller = wrapperEl.children().eq(0);
+      virtualScroller.append(disableTarget.children());
       disableTarget.append(wrapperEl);
+      var originalScrollBarShow = originalWidth < scrollEl.clientWidth;
 
       computeScrollbars(disableStyle);
 
-      wrapperEl.attr('layout-margin', disableTarget.attr('layout-margin'));
-
-      wrapperEl.css({
-        overflow: 'hidden',
-        position: 'fixed',
+      virtualScroller.attr('layout-margin', disableTarget.attr('layout-margin'));
+      virtualScroller.css({
         display: disableStyle.display,
         '-webkit-flex-direction': disableStyle.webkitFlexDirection,
         '-ms-flex-direction': disableStyle.msFlexDirection,
@@ -93,14 +86,8 @@ angular.module('material.core')
         'justify-content': disableStyle.justifyContent,
         '-webkit-flex': disableStyle.webkitFlex,
         '-ms-flex': disableStyle.msFlex,
-        flex: disableStyle.flex,
-        'padding-top': disableStyle.paddingTop,
-        'margin-top': '0px',
-        'margin-left': disableStyle.marginLeft,
-        top: (-1 * heightOffset) + 'px',
-        width: '100%'
+        flex: disableStyle.flex
       });
-
 
       computeSize();
 
@@ -112,10 +99,10 @@ angular.module('material.core')
         } else {
           disableTarget[0].removeAttribute('style');
         }
-        wrapperEl.css('position', 'static');
+        virtualScroller.css('position', 'static');
         var computedStyle = $window.getComputedStyle(disableTarget[0]);
         computeScrollbars(computedStyle);
-        var innerWidth = parseFloat(computedStyle.width, 10);
+        var innerWidth = disableTarget[0].clientWidth;
         if (computedStyle.boxSizing == 'border-box') {
           innerWidth -= parseFloat(computedStyle.paddingLeft, 10);
           innerWidth -= parseFloat(computedStyle.paddingRight, 10);
@@ -124,16 +111,24 @@ angular.module('material.core')
           'max-width': innerWidth + 'px'
         });
         disableTarget.css('position', 'relative');
-        wrapperEl.css('position', 'fixed');
+        virtualScroller.css('position', 'absolute');
       }
 
       function computeScrollbars(computedStyle) {
-        var scrollBarsShowing = !Util.floatingScrollbars() &&
-            isScrolling(scrollEl) && computedStyle.overflowY != 'hidden';
+        var scrollBarsShowing = !Util.floatingScrollbars()
+            && computedStyle.overflowY != 'hidden'
+            && (
+              virtualScroller[0].clientHeight > scrollEl.clientHeight
+              || originalScrollBarShow
+            );
+
+        var scrollerOffset = -1 * (heightOffset - parseFloat(disableStyle.paddingTop, 10));
+        disableTarget.css('padding-top', '0px');
 
         if (scrollBarsShowing) {
           disableTarget.css('overflow-y', 'scroll');
         }
+        virtualScroller.css('top', scrollerOffset + 'px');
 
         var innerHeight = parseFloat(computedStyle.height, 10);
         if (computedStyle.boxSizing == 'border-box') {
@@ -141,13 +136,8 @@ angular.module('material.core')
           innerHeight -= parseFloat(computedStyle.paddingBottom, 10);
         }
 
-        if (isScrolling(scrollEl)) {
-          wrapperEl.css('min-height', '100%');
-        } else {
-          wrapperEl.css('max-height', innerHeight + 'px');
-          wrapperEl.css('height', '100%');
-        }
-        disableTarget.css('height', innerHeight + 'px');
+        wrapperEl.css('height', innerHeight + 'px');
+        return scrollBarsShowing;
       }
 
       function isScrolling(el) {
@@ -156,14 +146,14 @@ angular.module('material.core')
       }
 
       return function restoreScroll() {
-        disableTarget.append(wrapperEl.children());
+        disableTarget.append(virtualScroller.children());
         wrapperEl.remove();
         angular.element($window).off('resize', computeSize);
         disableTarget.attr('style', restoreStyle || false);
         if (useDocElement) {
-          $document[0].documentElement.scrollTop = restoreOffset;
+          $document[0].documentElement.scrollTop = heightOffset;
         } else {
-          disableTarget[0].scrollTop = restoreOffset;
+          disableTarget[0].scrollTop = heightOffset;
         }
       };
     },
