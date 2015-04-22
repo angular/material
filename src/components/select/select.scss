@@ -134,7 +134,8 @@ md-select-menu {
   max-height: ($select-option-height * $select-max-visible-options) + 2 * $baseline-grid;
   overflow-y: hidden;
 
-  @include bidi-style(transform-origin, left top, transform-origin, right top);
+  @include rtl(transform-origin, left top, right top);
+
   transform: scale(1.0);
 
   md-content {

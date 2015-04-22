@@ -73,7 +73,7 @@ md-input-container {
     transform: translate3d(0, $input-label-default-offset, 0) scale($input-label-default-scale);
     transition: transform $swift-ease-out-timing-function 0.25s;
 
-    @include bidi-style(transform-origin, left top, transform-origin, right top);
+    @include rtl(transform-origin, left top, right top);
   }
   .md-placeholder:not(.md-select-label) {
     position: absolute;
