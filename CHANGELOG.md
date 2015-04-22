@@ -1,7 +1,7 @@
 <a name="0.9.0-rc2"></a>
 ### 0.9.0-rc2  (2015-04-20)
 
-This RC2 release contains more polish and bug fixes to stabilize performance and layout and improve the UX for Chips, List, Select, and Tabs.
+This RC2 release contains more polish and bug fixes to stabilize performance, layout, and improve the UX for Chips, List, Select, and Tabs.
 
 #### Features
 
@@ -16,7 +16,14 @@ This RC2 release contains more polish and bug fixes to stabilize performance and
 
 #### Breaking Changes
 
-* When using `md-tab-label`, the content of your tab **must** be wrapped in `md-tab-body`
+* List
+  * `md-item` has been renamed to `md-list-item`
+  * `md-item-content` element is now a `.md-list-item-text` class
+  * List styles of `.md-tile-left` changed to `.md-avatar` for avatar-like images
+  * `md-list-item` uses `.md-no-proxy` and `.md-no-style`
+* Tabs
+  * When using `md-tab-label`, the content of your tab **must** be wrapped in `md-tab-body`
+* Typography changes have significantly impacted the `<h1>`...`<h4>` types.
 
  ([f1db7534](https://github.com/angular/material/commit/f1db7534ae73de3820f0f84b6b2b40f4011770e0))
 
@@ -56,14 +63,14 @@ This RC2 release contains more polish and bug fixes to stabilize performance and
   * improve keyboard filtering ([f3c113c9](https://github.com/angular/material/commit/f3c113c9083dfd079c06e26bbcc8da5c52ba8586))
   * improve disable scroll layout ([68395a25](https://github.com/angular/material/commit/68395a254e70a8e57ccd2e03019228bf158435a4))
 * **tabs:**
-  * tabs will no longer assume that all tabs have no content if the first one doesn' ([1b789fed](https://github.com/angular/material/commit/1b789fed4cf55443e2d106537e6912fa1df605e2), closes [#2398](https://github.com/angular/material/issues/2398))
+  * tabs will no longer assume that all tabs have no content if the first one doesn't ([1b789fed](https://github.com/angular/material/commit/1b789fed4cf55443e2d106537e6912fa1df605e2), closes [#2398](https://github.com/angular/material/issues/2398))
   * adds a queue for delayed function calls ([0e2ccd23](https://github.com/angular/material/commit/0e2ccd23dc220392c0082f9cb05ccfddf42d22a1), closes [#2402](https://github.com/angular/material/issues/2402))
   * resolves issue where `md-tabs` is used within `ui-view` by removing hard require ([43508032](https://github.com/angular/material/commit/4350803267a8e19a15a240ccf657cd2ba098e0ae), closes [#2414](https://github.com/angular/material/issues/2414))
   * apply ARIA only to dummy tabs ([5ad44728](https://github.com/angular/material/commit/5ad447284c7cda2261da1440819e3e0101a7b1ae))
   * cleans up label/template fetch logic ([17aecd2d](https://github.com/angular/material/commit/17aecd2dbc3acfe48006ff5adb12cad5e15aa70b))
   * id's should no longer cause issues when used within tab labels or contents ([ea185eab](https://github.com/angular/material/commit/ea185eabd13bbcce3e07628891836b0626f609e5), closes [#2326](https://github.com/angular/material/issues/2326))
 * **tests:** mock .flush() added for Angular 1.4.x ([1e3f1a59](https://github.com/angular/material/commit/1e3f1a591f8f2f7c6bd54153df080367970b8a2d))
-* **texfield:** removed unstable, deprecated textfield component Replaced with md-input-containe ([b5c4390b](https://github.com/angular/material/commit/b5c4390bf7cb81809fea0df93c7d01e410b5585a))
+* **textfield:** removed unstable, deprecated textfield component Replaced with md-input-container ([b5c4390b](https://github.com/angular/material/commit/b5c4390bf7cb81809fea0df93c7d01e410b5585a))
 
 
 
