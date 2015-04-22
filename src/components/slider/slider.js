@@ -1,6 +1,3 @@
-(function() {
-  'use strict';
-
   /**
    * @ngdoc module
    * @name material.components.slider
@@ -391,5 +388,3 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     }
   }
 }
-
-})();

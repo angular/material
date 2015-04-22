@@ -51,69 +51,64 @@
  * </hljs>
  *
  */
+angular
+    .module('material.components.tabs')
+    .directive('mdTab', MdTab);
 
-(function () {
-  'use strict';
+function MdTab () {
+  return {
+    require: '^?mdTabs',
+    terminal: true,
+    scope: {
+      label:    '@',
+      active:   '=?mdActive',
+      disabled: '=?ngDisabled',
+      select:   '&?mdOnSelect',
+      deselect: '&?mdOnDeselect'
+    },
+    link: postLink
+  };
 
-  angular
-      .module('material.components.tabs')
-      .directive('mdTab', MdTab);
+  function postLink (scope, element, attr, ctrl) {
+    if (!ctrl) return;
+    var tabs = element.parent()[0].getElementsByTagName('md-tab'),
+        index = Array.prototype.indexOf.call(tabs, element[0]),
+        data = ctrl.insertTab({
+          scope:    scope,
+          parent:   scope.$parent,
+          index:    index,
+          template: getTemplate(),
+          label:    getLabel()
+        }, index);
 
-  function MdTab () {
-    return {
-      require: '^?mdTabs',
-      terminal: true,
-      scope: {
-        label:    '@',
-        active:   '=?mdActive',
-        disabled: '=?ngDisabled',
-        select:   '&?mdOnSelect',
-        deselect: '&?mdOnDeselect'
-      },
-      link: postLink
-    };
+    scope.deselect = scope.deselect || angular.noop;
+    scope.select = scope.select || angular.noop;
 
-    function postLink (scope, element, attr, ctrl) {
-      if (!ctrl) return;
-      var tabs = element.parent()[0].getElementsByTagName('md-tab'),
-          index = Array.prototype.indexOf.call(tabs, element[0]),
-          data = ctrl.insertTab({
-            scope:    scope,
-            parent:   scope.$parent,
-            index:    index,
-            template: getTemplate(),
-            label:    getLabel()
-          }, index);
+    scope.$watch('active', function (active) { if (active) ctrl.select(data.getIndex()); });
+    scope.$watch('disabled', function () { ctrl.refreshIndex(); });
+    scope.$on('$destroy', function () { ctrl.removeTab(data); });
 
-      scope.deselect = scope.deselect || angular.noop;
-      scope.select = scope.select || angular.noop;
-
-      scope.$watch('active', function (active) { if (active) ctrl.select(data.getIndex()); });
-      scope.$watch('disabled', function () { ctrl.refreshIndex(); });
-      scope.$on('$destroy', function () { ctrl.removeTab(data); });
-
-      function getLabel () {
-        var label = attr.label || (element.find('md-tab-label')[0] || element[0]).innerHTML;
-        return getLabelAttribute() || getLabelElement() || getElementContents();
-        function getLabelAttribute () { return attr.label; }
-        function getLabelElement () {
-          var label = element.find('md-tab-label');
-          if (label.length) return label.remove().html();
-        }
-        function getElementContents () {
-          var html = element.html();
-          element.empty();
-          return html;
-        }
+    function getLabel () {
+      var label = attr.label || (element.find('md-tab-label')[0] || element[0]).innerHTML;
+      return getLabelAttribute() || getLabelElement() || getElementContents();
+      function getLabelAttribute () { return attr.label; }
+      function getLabelElement () {
+        var label = element.find('md-tab-label');
+        if (label.length) return label.remove().html();
       }
-
-      function getTemplate () {
-        var content = element.find('md-tab-body'),
-            template = content.length ? content.html() : attr.label ? element.html() : null;
-        if (content.length) content.remove();
-        else if (attr.label) element.empty();
-        return template;
+      function getElementContents () {
+        var html = element.html();
+        element.empty();
+        return html;
       }
     }
+
+    function getTemplate () {
+      var content = element.find('md-tab-body'),
+          template = content.length ? content.html() : attr.label ? element.html() : null;
+      if (content.length) content.remove();
+      else if (attr.label) element.empty();
+      return template;
+    }
   }
-})();
+}

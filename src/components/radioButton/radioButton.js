@@ -1,7 +1,3 @@
-(function() {
-'use strict';
-
-
 /**
  * @ngdoc module
  * @name material.components.radioButton
@@ -302,5 +298,3 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
     }
   }
 }
-
-})();

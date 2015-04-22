@@ -1,7 +1,3 @@
-(function() {
-'use strict';
-
-
 /**
  * @ngdoc module
  * @name material.components.progressLinear
@@ -116,6 +112,4 @@ var transforms = (function() {
     var translateX = (value-100)/2;
     return 'translateX(' + translateX.toString() + '%) scale(' + scale.toString() + ', 1)';
   }
-})();
-
 })();

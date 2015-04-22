@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.subheader
@@ -82,4 +79,3 @@ function MdSubheaderDirective($mdSticky, $compile, $mdTheming) {
     }
   };
 }
-})();

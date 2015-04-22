@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.bottomSheet
@@ -255,5 +252,3 @@ function MdBottomSheetProvider($$interimElementProvider) {
   }
 
 }
-
-})();

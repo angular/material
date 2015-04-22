@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.icon
@@ -101,5 +98,3 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria ) {
     }
   }
 }
-
-})();

@@ -84,12 +84,12 @@ var buildModes = {
     useBower: false
   },
   'demos': {
-    transform: gutil.noop,
+    transform: utils.addJsWrapper,
     outputDir: path.join(config.outputDir, 'demos') + path.sep,
     useBower: false
   },
   'default': {
-    transform: gutil.noop,
+    transform: utils.addJsWrapper,
     outputDir: path.join(config.outputDir, 'modules/js') + path.sep,
     useBower: true
   }

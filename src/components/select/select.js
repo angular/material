@@ -1,5 +1,3 @@
-(function() {
-'use strict';
 /**
  * @ngdoc module
  * @name material.components.select
@@ -1036,5 +1034,3 @@ function nodesToArray(nodes) {
   }
   return results;
 }
-})();
-

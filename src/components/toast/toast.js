@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.toast
@@ -253,5 +250,3 @@ function MdToastProvider($$interimElementProvider) {
   }
 
 }
-
-})();

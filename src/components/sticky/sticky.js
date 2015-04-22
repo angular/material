@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /*
  * @ngdoc module
  * @name material.components.sticky
@@ -301,4 +298,3 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
   }
 
 }
-})();

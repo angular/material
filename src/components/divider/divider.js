@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.divider
@@ -35,4 +32,3 @@ function MdDividerDirective($mdTheming) {
     link: $mdTheming
   };
 }
-})();

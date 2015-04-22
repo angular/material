@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.list
@@ -251,4 +248,3 @@ function MdListController($scope, $element, $mdInkRipple) {
     $mdInkRipple.attachListControlBehavior(scope, element, options);
   }
 }
-})();

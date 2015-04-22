@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /*
  * @ngdoc module
  * @name material.components.backdrop
@@ -28,4 +25,3 @@ angular.module('material.components.backdrop', [
 function BackdropDirective($mdTheming) {
   return $mdTheming;
 }
-})();

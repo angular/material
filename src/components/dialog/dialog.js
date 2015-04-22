@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.dialog
@@ -655,5 +652,3 @@ function MdDialogProvider($$interimElementProvider) {
 
   }
 }
-
-})();

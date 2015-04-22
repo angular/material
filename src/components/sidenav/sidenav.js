@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.sidenav
@@ -411,7 +408,3 @@ function SidenavController($scope, $element, $attrs, $mdComponentRegistry, $q) {
 
   self.destroy = $mdComponentRegistry.register(self, $attrs.mdComponentId);
 }
-
-
-
-})();

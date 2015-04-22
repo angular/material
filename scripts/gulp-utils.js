@@ -172,21 +172,17 @@ exports.addClosurePrefixes = function() {
   return through2.obj(function(file, enc, next) {
     var moduleInfo = getModuleInfo(file.contents);
     if (moduleInfo.module) {
-
       var closureModuleName = moduleNameToClosureName(moduleInfo.module);
-      var provide = 'goog.provide(\'' + closureModuleName + '\');';
       var requires = (moduleInfo.dependencies || []).sort().map(function(dep) {
         return dep.indexOf(moduleInfo.module) === 0 ? '' : 'goog.require(\'' + moduleNameToClosureName(dep) + '\');';
       }).join('\n');
-      
-      var contents = file.contents.toString();
 
-      // Assign the module to the provided Closure namespace:
-      contents = contents.replace('angular.module', closureModuleName + ' = angular.module');
-
-      file.contents = new Buffer(
-        provide + '\n' + requires + '\n' + contents
-      );
+      file.contents = new Buffer([
+          'goog.provide(\'' + closureModuleName + '\');',
+          requires,
+          file.contents.toString(),
+          closureModuleName + '= angular.module(' + moduleInfo.module + ');'
+      ].join('\n'));
     }
     this.push(file);
     next();
@@ -196,17 +192,13 @@ exports.addClosurePrefixes = function() {
 exports.buildModuleBower = function(name, version) {
   return through2.obj(function(file, enc, next) {
     this.push(file);
-
-    
     var moduleInfo = getModuleInfo(file.contents);
     if (moduleInfo.module) {
       var bowerDeps = {};
-
       (moduleInfo.dependencies || []).forEach(function(dep) {
         var convertedName = 'angular-material-' + dep.split('.').pop();
         bowerDeps[convertedName] = version;
       });
-
       var bowerContents = JSON.stringify({
         name: 'angular-material-' + name,
         version: version,

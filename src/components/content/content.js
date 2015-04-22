@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.content
@@ -74,4 +71,3 @@ function iosScrollFix(node) {
     }
   });
 }
-})();

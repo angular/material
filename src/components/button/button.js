@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.button
@@ -8,10 +5,9 @@
  *
  * Button
  */
-angular.module('material.components.button', [
-  'material.core'
-])
-  .directive('mdButton', MdButtonDirective);
+angular
+    .module('material.components.button', [ 'material.core' ])
+    .directive('mdButton', MdButtonDirective);
 
 /**
  * @ngdoc directive
@@ -114,4 +110,3 @@ function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria, $timeout) {
   }
 
 }
-})();

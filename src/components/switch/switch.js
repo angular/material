@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @private
  * @ngdoc module
@@ -157,5 +154,3 @@ function MdSwitch(mdCheckboxDirective, $mdTheming, $mdUtil, $document, $mdConsta
 
 
 }
-
-})();

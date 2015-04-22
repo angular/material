@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.gridList
@@ -763,5 +760,3 @@ function GridTileCaptionDirective() {
     transclude: true
   };
 }
-
-})();

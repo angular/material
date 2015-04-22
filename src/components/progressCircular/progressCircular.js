@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.progressCircular
@@ -99,4 +96,3 @@ function MdProgressCircularDirective($mdConstant, $mdTheming) {
     return Math.max(0, Math.min(value || 0, 100));
   }
 }
-})();

@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.card
@@ -55,4 +52,3 @@ function mdCardDirective($mdTheming) {
     }
   };
 }
-})();

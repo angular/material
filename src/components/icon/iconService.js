@@ -1,6 +1,3 @@
-(function() {
-  'use strict';
-
   angular
     .module('material.components.icon' )
     .provider('$mdIcon', MdIconProvider);
@@ -463,5 +460,3 @@
    }
 
  }
-
-})();
