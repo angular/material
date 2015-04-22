@@ -677,7 +677,7 @@ function SelectProvider($$interimElementProvider) {
     });
 
   /* @ngInject */
-  function selectDefaultOptions($mdSelect, $mdConstant, $$rAF, $mdUtil, $mdTheming, $timeout, $window, $document) {
+  function selectDefaultOptions($mdSelect, $mdConstant, $$rAF, $mdUtil, $mdTheming, $timeout, $window ) {
     return {
       parent: 'body',
       onShow: onShow,
@@ -942,7 +942,7 @@ function SelectProvider($$interimElementProvider) {
       var centeredRect = getOffsetRect(centeredNode);
 
       if (centeredNode) {
-        var centeredStyle = window.getComputedStyle(centeredNode);
+        var centeredStyle = $window.getComputedStyle(centeredNode);
         centeredRect.paddingLeft = parseInt(centeredStyle.paddingLeft, 10) || 0;
         centeredRect.paddingRight = parseInt(centeredStyle.paddingRight, 10) || 0;
       }
