@@ -168,6 +168,21 @@ exports.buildNgMaterialDefinition = function() {
 function moduleNameToClosureName(name) {
   return 'ng.' + name;
 }
+exports.addJsWrapper = function() {
+  return through2.obj(function(file, enc, next) {
+    var moduleInfo = getModuleInfo(file.contents);
+    if (moduleInfo.module) {
+      file.contents = new Buffer([
+          '(function () {',
+          '"use strict";',
+          file.contents.toString(),
+          '})();'
+      ].join('\n'));
+    }
+    this.push(file);
+    next();
+  });
+};
 exports.addClosurePrefixes = function() {
   return through2.obj(function(file, enc, next) {
     var moduleInfo = getModuleInfo(file.contents);
