@@ -53,7 +53,7 @@ angular.module('listDemo2', ['ngMaterial'])
     );
   };
 
-  $scope.doSecondaryAction = function() {
+  $scope.doSecondaryAction = function(event) {
     $mdDialog.show(
       $mdDialog.alert()
         .title('Secondary Action')
