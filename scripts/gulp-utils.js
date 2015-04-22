@@ -196,7 +196,7 @@ exports.addClosurePrefixes = function() {
           'goog.provide(\'' + closureModuleName + '\');',
           requires,
           file.contents.toString(),
-          closureModuleName + ' = angular.module(' + moduleInfo.module + ');'
+          closureModuleName + ' = angular.module("' + moduleInfo.module + '");'
       ].join('\n'));
     }
     this.push(file);
