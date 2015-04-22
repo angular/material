@@ -302,6 +302,9 @@
     function clearValue () {
       $scope.searchText = '';
       select(-1);
+      var eventObj = document.createEvent('CustomEvent');
+      eventObj.initCustomEvent('input', true, true, {value: $scope.searchText});
+      elements.input.dispatchEvent(eventObj);
       elements.input.focus();
     }
 
