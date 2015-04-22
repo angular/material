@@ -72,7 +72,7 @@ function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria, $timeout) {
   };
 
   function isAnchor(attr) {
-    return angular.isDefined(attr.href) || angular.isDefined(attr.ngHref) || angular.isDefined(attr.uiSref);
+    return angular.isDefined(attr.href) || angular.isDefined(attr.ngHref) || angular.isDefined(attr.ngLink) || angular.isDefined(attr.uiSref);
   }
   
   function getTemplate(element, attr) {
