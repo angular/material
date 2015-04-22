@@ -70,6 +70,12 @@ describe('md-button', function() {
       expect(button[0].tagName.toLowerCase()).toEqual('a');
     }));
 
+    it('should be anchor if ng-link attr', inject(function($compile, $rootScope) {
+      var button = $compile('<md-button ng-link="component">')($rootScope.$new());
+      $rootScope.$apply();
+      expect(button[0].tagName.toLowerCase()).toEqual('a');
+    }));
+
     it('should be button otherwise', inject(function($compile, $rootScope) {
       var button = $compile('<md-button>')($rootScope.$new());
       $rootScope.$apply();
