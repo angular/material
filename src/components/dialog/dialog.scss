@@ -61,6 +61,7 @@ md-dialog {
     > * {
       margin-left: $baseline-grid / 2;
       margin-right: 0;
+      margin-bottom: 0;
     }
   }
   &.md-content-overflow .md-actions {
