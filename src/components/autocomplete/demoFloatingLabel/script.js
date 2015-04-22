@@ -22,7 +22,7 @@
      * remote dataservice call.
      */
     function querySearch (query) {
-      var results = query ? self.states.filter( createFilterFor(query) ) : [];
+      var results = query ? self.states.filter( createFilterFor(query) ) : self.states;
       return results;
     }
 

@@ -60,6 +60,7 @@
         delay:         '=?mdDelay',
         autofocus:     '=?mdAutofocus',
         floatingLabel: '@?mdFloatingLabel',
+        autoopen:      '@?mdAutoopen',
         autoselect:    '=?mdAutoselect',
         menuClass:     '@?mdMenuClass'
       },
@@ -143,6 +144,8 @@
 
     function link (scope, element, attr) {
       scope.contents = attr.$mdAutocompleteTemplate;
+      if ( scope.autoopen ) scope.autoopen = scope.$parent.$eval(attr.mdAutoopen);
+
       delete attr.$mdAutocompleteTemplate;
       angular.forEach(scope.$$isolateBindings, function (binding, key) {
         if (binding.optional && angular.isUndefined(scope[key])) {
