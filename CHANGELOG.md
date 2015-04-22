@@ -16,7 +16,14 @@ This RC2 release contains more polish and bug fixes to stabilize performance and
 
 #### Breaking Changes
 
-* When using `md-tab-label`, the content of your tab **must** be wrapped in `md-tab-body`
+* List
+  * `md-item` has been renamed to `md-list-item`
+  * `md-item-content` element is now a `.md-list-item-text` class
+  * List styles of `.md-tile-left` changed to `.md-avatar` for avatar-like images
+  * `md-list-item` uses `.md-no-proxy` and `.md-no-style`
+* Tabs
+  * When using `md-tab-label`, the content of your tab **must** be wrapped in `md-tab-body`
+* Typography changes have significantly impacted the `<h1>`...`<h4>` types.
 
  ([f1db7534](https://github.com/angular/material/commit/f1db7534ae73de3820f0f84b6b2b40f4011770e0))
 
