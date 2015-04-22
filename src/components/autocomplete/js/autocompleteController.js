@@ -19,7 +19,8 @@
         promise   = null,
         cache     = {},
         noBlur    = false,
-        selectedItemWatchers = [];
+        selectedItemWatchers = [],
+        hasFocus  = false;
 
     //-- public variables
 
@@ -45,7 +46,10 @@
     self.unregisterSelectedItemWatcher  = unregisterSelectedItemWatcher;
 
     self.listEnter = function () { noBlur = true; };
-    self.listLeave = function () { noBlur = false; };
+    self.listLeave = function () {
+      noBlur = false;
+      if (!hasFocus) self.hidden = true;
+    };
     self.mouseUp   = function () { elements.input.focus(); };
 
     return init();
@@ -207,12 +211,15 @@
     }
 
     function blur () {
+      hasFocus = false;
       if (!noBlur) self.hidden = true;
     }
 
     function focus () {
+      hasFocus = true;
       //-- if searchText is null, let's force it to be a string
       if (!angular.isString($scope.searchText)) $scope.searchText = '';
+      if ($scope.minLength > 0) return;
       self.hidden = shouldHide();
       if (!self.hidden) handleQuery();
     }
@@ -272,9 +279,6 @@
 
     function shouldHide () {
       if (!isMinLengthMet()) return true;
-      return self.matches.length === 1
-          && $scope.searchText === getDisplayValue(self.matches[0])
-          && $scope.selectedItem === self.matches[0];
     }
 
     function getCurrentDisplayValue () {
