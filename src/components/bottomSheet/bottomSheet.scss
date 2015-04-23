@@ -56,7 +56,7 @@ md-bottom-sheet {
     fill: #444;
   }
 
-  md-item {
+  md-list-item {
     display: flex;
     outline: none;
 
@@ -66,7 +66,7 @@ md-bottom-sheet {
   }
 
   &.md-list {
-    md-item {
+    md-list-item {
       padding: 0;
       align-items: center;
       height: $bottom-sheet-list-item-height;
@@ -94,7 +94,7 @@ md-bottom-sheet {
       align-items: center;
     }
 
-    md-item {
+    md-list-item {
       flex-direction: column;
       align-items: center;
       transition: all 0.5s;
@@ -138,7 +138,7 @@ md-bottom-sheet {
 
 
 
-      .md-item-content {
+      .md-list-item-content {
         display: flex;
         flex-direction: column;
         align-items: center;

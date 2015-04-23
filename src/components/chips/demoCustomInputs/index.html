@@ -39,12 +39,12 @@
 
     <md-list>
       <md-subheader class="md-no-sticky">Vegetable Options</md-subheader>
-      <md-item class="md-2-line veggie-option" ng-repeat="veg in ctrl.vegetables">
+      <md-list-item class="md-2-line veggie-option" ng-repeat="veg in ctrl.vegetables">
         <div class="md-item-text md-whiteframe-z1">
           <h3>{{veg.name}}</h3>
           <p>{{veg.type}}</p>
         </div>
-      </md-item>
+      </md-list-item>
     </md-list>
 
   </md-content>

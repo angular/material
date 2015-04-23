@@ -7,6 +7,10 @@
   vertical-align: middle;
 
 }
+
+.md-grid-item-content {
+  height:96px;
+}
 .md-grid-item-content md-icon {
   height: 48px;
   width: 48px;

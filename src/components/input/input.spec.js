@@ -154,12 +154,15 @@ describe('md-input-container directive', function() {
     }));
   });
 
-  it('should put placeholder into separate element', function() {
+  it('should put placeholder into a label element', function() {
     var el = setup('placeholder="some placeholder"');
     var placeholder = el[0].querySelector('.md-placeholder');
     expect(el.find('input')[0].hasAttribute('placeholder')).toBe(false);
-    expect(placeholder).toBeTruthy();
-    expect(placeholder.textContent).toEqual('some placeholder');
+
+    var label = el.find('label')[0];
+
+    expect(label).toBeTruthy();
+    expect(label.textContent).toEqual('some placeholder');
   });
 
   it('should expect an aria-label on the input when no label is present', inject(function($rootScope, $compile) {

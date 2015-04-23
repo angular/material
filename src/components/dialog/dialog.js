@@ -104,7 +104,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *            '<md-dialog aria-label="List dialog">' +
  *            '  <md-content>'+
  *            '    <md-list>'+
- *            '      <md-item ng-repeat="item in items">'+
+ *            '      <md-list-item ng-repeat="item in items">'+
  *            '       <p>Number {{item}}</p>' +
  *            '      </md-item>'+
  *            '    </md-list>'+
