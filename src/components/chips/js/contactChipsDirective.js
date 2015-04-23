@@ -91,7 +91,7 @@ var MD_CONTACT_CHIPS_TEMPLATE = '\
  * @returns {*}
  * @ngInject
  */
-function MdContactChips ($mdTheming) {
+function MdContactChips ($mdTheming, $mdUtil) {
   return {
     template: function(element, attrs) {
       return MD_CONTACT_CHIPS_TEMPLATE;
@@ -117,14 +117,9 @@ function MdContactChips ($mdTheming) {
   function compile(element, attr) {
     return function postLink(scope, element, attrs, controllers) {
 
-      //-- give optional properties with no value a boolean true by default
-      angular.forEach(scope.$$isolateBindings, function (binding, key) {
-        if (binding.optional && angular.isUndefined(scope[key])) {
-          scope[key] = attr.hasOwnProperty(attr.$normalize(binding.attrName));
-        }
-      });
-
+      $mdUtil.initOptionalProperties(scope, attr);
       $mdTheming(element);
+
       element.attr('tabindex', '-1');
     };
   }

@@ -7,13 +7,12 @@
   function DemoCtrl ($timeout, $q, $log) {
     var self = this;
 
-    // list of `state` value/display objects
-    self.states        = loadAll();
-    self.selectedItem  = null;
-    self.searchText    = null;
-    self.querySearch   = querySearch;
     self.simulateQuery = false;
     self.isDisabled    = false;
+
+    // list of `state` value/display objects
+    self.states        = loadAll();
+    self.querySearch   = querySearch;
     self.selectedItemChange = selectedItemChange;
     self.searchTextChange   = searchTextChange;
 
@@ -42,7 +41,7 @@
     }
 
     function selectedItemChange(item) {
-      $log.info('Item changed to ' + item);
+      $log.info('Item changed to ' + JSON.stringify(item));
     }
 
     /**

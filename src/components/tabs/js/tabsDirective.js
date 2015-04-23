@@ -85,7 +85,7 @@ angular
     .module('material.components.tabs')
     .directive('mdTabs', MdTabs);
 
-function MdTabs ($mdTheming) {
+function MdTabs ($mdTheming, $mdUtil) {
   return {
     scope: {
       noPagination:  '=?mdNoPagination',
@@ -189,11 +189,9 @@ function MdTabs ($mdTheming) {
     controller: 'MdTabsController',
     controllerAs: '$mdTabsCtrl',
     link: function (scope, element, attr) {
-      angular.forEach(scope.$$isolateBindings, function (binding, key) {
-        if (binding.optional && angular.isUndefined(scope[key])) {
-          scope[key] = attr.hasOwnProperty(attr.$normalize(binding.attrName));
-        }
-      });
+
+      $mdUtil.initOptionalProperties(scope, attr);
+
       //-- watch attributes
       attr.$observe('mdNoBar', function (value) { scope.noInkBar = angular.isDefined(value); });
       //-- set default value for selectedIndex

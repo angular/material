@@ -38,7 +38,7 @@ angular
  * </hljs>
  */
 
-function MdAutocomplete ($mdTheming) {
+function MdAutocomplete ($mdTheming, $mdUtil) {
   return {
     controller:   'MdAutocompleteCtrl',
     controllerAs: '$mdAutocompleteCtrl',
@@ -142,11 +142,9 @@ function MdAutocomplete ($mdTheming) {
   function link (scope, element, attr) {
     scope.contents = attr.$mdAutocompleteTemplate;
     delete attr.$mdAutocompleteTemplate;
-    angular.forEach(scope.$$isolateBindings, function (binding, key) {
-      if (binding.optional && angular.isUndefined(scope[key])) {
-        scope[key] = attr.hasOwnProperty(attr.$normalize(binding.attrName));
-      }
-    });
+
+    $mdUtil.initOptionalProperties(scope, attr, {searchText:null, selectedItem:null} );
+
     $mdTheming(element);
   }
 }

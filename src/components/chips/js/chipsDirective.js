@@ -140,7 +140,7 @@ var CHIP_REMOVE_TEMPLATE = '\
 /**
  * MDChips Directive Definition
  */
-function MdChips ($mdTheming, $compile, $timeout) {
+function MdChips ($mdTheming, $mdUtil, $compile, $timeout) {
   return {
     template: function(element, attrs) {
       // Clone the element into an attribute. By prepending the attribute
@@ -220,12 +220,7 @@ function MdChips ($mdTheming, $compile, $timeout) {
      */
     return function postLink(scope, element, attrs, controllers) {
 
-      //-- give optional properties with no value a boolean true by default
-      angular.forEach(scope.$$isolateBindings, function (binding, key) {
-        if (binding.optional && angular.isUndefined(scope[key])) {
-          scope[key] = attr.hasOwnProperty(attr.$normalize(binding.attrName));
-        }
-      });
+      $mdUtil.initOptionalProperties(scope, attr);
 
       $mdTheming(element);
       var mdChipsCtrl = controllers[0];
