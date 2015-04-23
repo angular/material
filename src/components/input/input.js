@@ -326,7 +326,7 @@ function mdMaxlengthDirective($animate) {
   }
 }
 
-function placeholderDirective() {
+function placeholderDirective($log) {
   return {
     restrict: 'A',
     require: '^^?mdInputContainer',
@@ -341,10 +341,14 @@ function placeholderDirective() {
     var placeholderText = attr.placeholder;
     element.removeAttr('placeholder');
 
-    var placeholder = '<label ng-click="delegateClick()">' + placeholderText + '</label>';
+    if ( inputContainer.element.find('label').length == 0 ) {
+      var placeholder = '<label ng-click="delegateClick()">' + placeholderText + '</label>';
 
-    inputContainer.element.addClass('md-icon-float');
-    inputContainer.element.prepend(placeholder);
+      inputContainer.element.addClass('md-icon-float');
+      inputContainer.element.prepend(placeholder);
+    } else {
+      $log.warn("The placeholder='" + placeholderText + "' will be ignored since this md-input-container has a child label element.");
+    }
 
   }
 }
