@@ -367,11 +367,15 @@ function InterimElementProvider() {
               // If parent querySelector/getter function fails, or it's just null,
               // find a default.
               if (!(options.parent || {}).length) {
-                options.parent = $rootElement.find('body');
-                if (!options.parent.length) options.parent = $rootElement;
-                if (options.parent[0].nodeName == '#comment') {
-                  options.parent = $document.find('body');
+                var el;
+                if ($rootElement[0] && $rootElement[0].querySelector) {
+                  el = $rootElement[0].querySelector(':not(svg) > body');
                 }
+                if (!el) el = $rootElement[0];
+                if (el.nodeName == '#comment') {
+                  el = $document[0].body;
+                }
+                options.parent = angular.element(el);
               }
 
               if (options.themable) $mdTheming(element);

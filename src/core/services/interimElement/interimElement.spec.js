@@ -360,6 +360,22 @@ describe('$$interimElement service', function() {
         expect(shown).toBe(true);
       }));
 
+      it('does not select svg body tags', inject(function($rootScope, $rootElement, $document) {
+        var shown = false;
+        var originalRoot = $rootElement[0];
+        var svgEl = angular.element('<div><svg><body></body></svg></div>');
+        $rootElement[0] = svgEl[0];
+        Service.show({
+          onShow: function(scope, element, options) {
+            expect(options.parent[0]).toBe(svgEl[0]);
+            shown = true;
+          }
+        });
+        $rootScope.$digest();
+        $rootElement[0] = originalRoot;
+        expect(shown).toBe(true);
+      }));
+
       it('falls back to $document.body if $rootElement was removed', inject(function($document, $rootElement, $rootScope) {
         var shown = false;
         var originalRoot = $rootElement[0];
