@@ -15,6 +15,8 @@ $input-padding-top: 2px !default;
 $input-error-font-size: 12px !default;
 $input-error-height: 24px !default;
 
+$icon-offset : 36px !default;
+
 md-input-container {
   display: flex;
   position: relative;
@@ -29,7 +31,7 @@ md-input-container {
     top: 5px;
     left: 2px;
     + input {
-      margin-left: 28px * 2;
+          margin-left: $icon-offset;
     }
   }
 
@@ -162,8 +164,12 @@ md-input-container {
 
   &.md-input-focused,
   &.md-input-has-value {
-    label:not(.md-no-float) {
+    label:not(.md-no-float)  {
       transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);
+
+      &.md-icon-float {
+        transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);
+      }
     }
   }
 
@@ -186,6 +192,42 @@ md-input-container {
   }
 }
 
+md-input-container.md-icon-float {
+
+  margin-top : -16px;
+  transition : margin-top 0.5s $swift-ease-out-timing-function ;
+
+
+  > label  {
+      pointer-events:none;
+      position:absolute;
+      margin-left: $icon-offset;
+  }
+
+  > md-icon {
+    top: 26px;
+    left: 2px;
+    + input {
+          margin-left: $icon-offset;
+    }
+  }
+
+  > input {
+    padding-top : $input-line-height - $input-container-padding;
+  }
+
+  &.md-input-focused,
+  &.md-input-has-value {
+
+    margin-top:-8px;
+
+    label {
+        transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);
+        transition: transform $swift-ease-out-timing-function 0.5s;
+      }
+  }
+
+}
 
 @media screen and (-ms-high-contrast: active) {
   md-input-container.md-default-theme > md-icon {

@@ -330,6 +330,7 @@ function placeholderDirective() {
   return {
     restrict: 'A',
     require: '^^?mdInputContainer',
+    priority:200,
     link: postLink
   };
 
@@ -340,9 +341,11 @@ function placeholderDirective() {
     var placeholderText = attr.placeholder;
     element.removeAttr('placeholder');
 
-    var placeholder = '<div class="md-placeholder" ng-click="delegateClick()">' +
-                       placeholderText + '</div>';
-    inputContainer.element.append(placeholder);
+    var placeholder = '<label ng-click="delegateClick()">' + placeholderText + '</label>';
+
+    inputContainer.element.addClass('md-icon-float');
+    inputContainer.element.prepend(placeholder);
+
   }
 }
 
