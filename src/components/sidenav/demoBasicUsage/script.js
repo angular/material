@@ -1,6 +1,6 @@
 angular
   .module('sidenavDemo1', ['ngMaterial'])
-  .controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log) {
+  .controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $mdUtil, $log) {
 
     $scope.toggleLeft = buildToggler('left');
     $scope.toggleRight = buildToggler('right');
@@ -10,12 +10,15 @@ angular
      * report completion in console
      */
     function buildToggler(navID) {
-      return function() {
-        return $mdSidenav(navID).toggle()
-          .then(function () {
-            $log.debug("toggle " + navID + " is done");
-          });
-      }
+      var debounceFn =  $mdUtil.debounce(function(){
+            $mdSidenav(navID)
+              .toggle()
+              .then(function () {
+                $log.debug("toggle " + navID + " is done");
+              });
+          },300);
+
+      return debounceFn;
     }
 
   })
