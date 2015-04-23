@@ -5,7 +5,7 @@ angular
 /**
  * @ngInject
  */
-function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $mdInkRipple,
+function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $mdTabInkRipple,
                            $mdUtil, $animate) {
   var ctrl     = this,
       locked   = false,
