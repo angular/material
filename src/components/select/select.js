@@ -859,7 +859,7 @@ function SelectProvider($$interimElementProvider) {
       opts.target.attr('aria-expanded', 'false');
 
 
-      angular.element($window).off('resize', opts.resizefn);
+      angular.element($window).off('resize', opts.resizeFn);
       angular.element($window).off('orientationchange', opts.resizefn);
       opts.resizeFn = undefined;
 
