@@ -154,8 +154,8 @@ input {
 }
 
 .md-virtual-scroller {
-  position: absolute;
   width: 100%;
+  min-height: 100%;
 }
 
 @media (min-width: $layout-breakpoint-sm) {
