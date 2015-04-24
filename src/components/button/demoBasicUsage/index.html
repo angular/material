@@ -71,11 +71,12 @@
       <md-button class="md-icon-button" aria-label="More">
         <md-icon md-svg-icon="img/icons/more_vert.svg"></md-icon>
       </md-button>
-      <md-button class="md-icon-button launch"
-                 href="http://google.com"
-                 aria-label="Google.com"
+      <md-button href="http://google.com"
+                 title="Launch Google.com in new window"
                  target="_blank"
-                 title="Launch Google.com in new window">
+                 ng-disabled="true"
+                 aria-label="Google.com"
+                 class="md-icon-button launch" >
         <md-icon md-svg-icon="img/icons/launch.svg"></md-icon>
       </md-button>
       <div class="label">Icon Button</div>

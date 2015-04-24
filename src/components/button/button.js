@@ -99,6 +99,7 @@ function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria, $timeout) {
     element.on('click', function(e){
       if (attr.disabled === true) {
         e.preventDefault();
+        e.stopImmediatePropagation();
       }
     });
 
