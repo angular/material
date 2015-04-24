@@ -1,5 +1,7 @@
 # Material Design for AngularJS Apps [![Build Status](https://travis-ci.org/angular/material.svg)](https://travis-ci.org/angular/material)
 
+[![Join the chat at https://gitter.im/angular/material](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/angular/material?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [Material Design](https://www.google.com/design/spec/material-design/) is a specification for a
 unified system of visual, motion, and interaction design that adapts across different devices. Our
 goal is to deliver a lean, lightweight set of AngularJS-native UI elements that implement the
