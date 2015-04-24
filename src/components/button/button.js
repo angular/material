@@ -95,6 +95,13 @@ function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria, $timeout) {
       });
     }
 
+    // disabling click event when disabled is true
+    element.on('click', function(e){
+      if (attr.disabled === true) {
+        e.preventDefault();
+      }
+    });
+
     // restrict focus styles to the keyboard
     scope.mouseActive = false;
     element.on('mousedown', function() {
