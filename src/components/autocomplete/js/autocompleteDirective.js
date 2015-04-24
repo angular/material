@@ -53,7 +53,6 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
       noCache:       '=?mdNoCache',
       itemChange:    '&?mdSelectedItemChange',
       textChange:    '&?mdSearchTextChange',
-      isDisabled:    '=?ngDisabled',
       minLength:     '=?mdMinLength',
       delay:         '=?mdDelay',
       autofocus:     '=?mdAutofocus',
@@ -140,6 +139,9 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
   };
 
   function link (scope, element, attr) {
+    if (attr.ngDisabled) {
+      scope.$parent.$watch(attr.ngDisabled, function (val) { scope.isDisabled = val; });
+    }
     scope.contents = attr.$mdAutocompleteTemplate;
     delete attr.$mdAutocompleteTemplate;
 
