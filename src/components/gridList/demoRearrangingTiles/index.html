@@ -1,0 +1,16 @@
+<div ng-app="gridListDemo" ng-controller="gridListDemoCtrl as vm" flex>
+  <md-select ng-model="vm.order" ng-change="vm.sortTiles()">
+    <md-option ng-value="0">Ascending</md-option>
+    <md-option ng-value="1">Descending</md-option>
+  </md-select>
+
+  <md-grid-list
+        md-cols-sm="1" md-cols-md="2" md-cols-gt-md="6"
+        md-row-height-gt-md="1:1" md-row-height="4:3"
+        md-gutter="8px" md-gutter-gt-sm="4px" >
+
+    <md-grid-tile ng-repeat="tile in vm.getTiles()" md-colspan-sm="1" >
+      <md-grid-tile-content><h3>{{tile.name}}</h3></md-grid-tile-content>
+    </md-grid-tile>
+  </md-grid-list>
+</div>
