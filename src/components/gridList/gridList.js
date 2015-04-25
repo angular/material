@@ -415,12 +415,12 @@ function GridListController($timeout) {
 }
 
 GridListController.prototype = {
-  addTile: function(tileElement, tileAttrs, idx) {
-    var tile = { element: tileElement, attrs: tileAttrs };
-    if (angular.isUndefined(idx)) {
+  addTile: function(tileElement, tileAttrs, tileViewModel) {
+    var tile = { element: tileElement, attrs: tileAttrs, vm: tileViewModel };
+    if (angular.isUndefined(tileViewModel)) {
       this.tiles.push(tile);
     } else {
-      this.tiles.splice(idx, 0, tile);
+      this.tiles.splice(tileViewModel.getCurrentIndex(), 0, tile);
     }
     this.tilesAdded = true;
     this.invalidateLayout();
@@ -433,6 +433,13 @@ GridListController.prototype = {
     }
     this.tiles.splice(idx, 1);
     this.invalidateLayout();
+  },
+
+  reorderTiles: function() {
+    this.tiles.forEach(function(tile){
+      this.removeTile(tile.element, tile.attrs);
+      this.addTile(tile.element, tile.attrs, tile.vm);
+    }.bind(this));
   },
 
   invalidateLayout: function() {
@@ -731,6 +738,12 @@ function GridTileDirective($mdMedia) {
     // Apply semantics
     element.attr('role', 'listitem');
 
+    var viewModel = {
+      getCurrentIndex: function() {
+        return scope.$parent.$index;
+      }
+    };
+
     // If our colspan or rowspan changes, trigger a layout
     var unwatchAttrs = $mdMedia.watchResponsiveAttributes(['md-colspan', 'md-rowspan'],
         attrs, angular.bind(gridCtrl, gridCtrl.invalidateLayout));
@@ -738,7 +751,7 @@ function GridTileDirective($mdMedia) {
     // Tile registration/deregistration
     // TODO(shyndman): Kind of gross to access parent scope like this.
     //    Consider other options.
-    gridCtrl.addTile(element, attrs, scope.$parent.$index);
+    gridCtrl.addTile(element, attrs, viewModel);
     scope.$on('$destroy', function() {
       unwatchAttrs();
       gridCtrl.removeTile(element, attrs);
@@ -747,8 +760,10 @@ function GridTileDirective($mdMedia) {
     if (angular.isDefined(scope.$parent.$index)) {
       scope.$watch(function() { return scope.$parent.$index; },
         function indexChanged(newIdx, oldIdx) {
-          gridCtrl.removeTile(element, attrs);
-          gridCtrl.addTile(element, attrs, newIdx);
+          if (newIdx === oldIdx) {
+            return;
+          }
+          gridCtrl.reorderTiles();
         });
     }
   }
