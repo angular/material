@@ -54,13 +54,18 @@ md-dialog {
     box-sizing: border-box;
     align-items: center;
     justify-content: flex-end;
-    padding: $baseline-grid;
+    margin-bottom: 0;
+    padding-right: $baseline-grid;
     padding-left: $baseline-grid * 3;
-    min-height: $baseline-grid * 5;
+    min-height: $baseline-grid * 6.5;
 
     > * {
       margin-left: $baseline-grid / 2;
       margin-right: 0;
+    }
+    .md-button {
+      margin-bottom: $baseline-grid;
+      margin-top: $baseline-grid;
     }
   }
   &.md-content-overflow .md-actions {

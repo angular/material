@@ -26,13 +26,17 @@ angular.module('material.components.card', [
  * container will wrap text content and provide padding. An `<md-card-footer>` element can be
  * optionally included to put content flush against the bottom edge of the card.
  *
+ * Action buttons can be included in an element with the `.md-actions` class, also used in `md-dialog`.
+ * You can then position buttons using layout attributes.
+ *
  * Cards have constant width and variable heights; where the maximum height is limited to what can
  * fit within a single view on a platform, but it can temporarily expand as needed.
  *
  * @usage
+ * ###Card with optional footer
  * <hljs lang="html">
  * <md-card>
- *  <img src="card-image.png" class="md-card-image">
+ *  <img src="card-image.png" class="md-card-image" alt="image caption">
  *  <md-card-content>
  *    <h2>Card headline</h2>
  *    <p>Card content</p>
@@ -40,6 +44,21 @@ angular.module('material.components.card', [
  *  <md-card-footer>
  *    Card footer
  *  </md-card-footer>
+ * </md-card>
+ * </hljs>
+ *
+ * ###Card with actions
+ * <hljs lang="html">
+ * <md-card>
+ *  <img src="card-image.png" class="md-card-image" alt="image caption">
+ *  <md-card-content>
+ *    <h2>Card headline</h2>
+ *    <p>Card content</p>
+ *  </md-card-content>
+ *  <div class="md-actions" layout="row" layout-align="end center">
+ *    <md-button>Action 1</md-button>
+ *    <md-button>Action 2</md-button>
+ *  </div>
  * </md-card>
  * </hljs>
  *

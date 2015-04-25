@@ -1,4 +1,3 @@
-$card-margin: 8px !default;
 $card-padding: 16px !default;
 $card-box-shadow: $whiteframe-shadow-z1 !default;
 
@@ -6,7 +5,7 @@ md-card {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  margin: $card-margin;
+  margin: $baseline-grid;
 
   box-shadow: $card-box-shadow;
 
@@ -18,12 +17,14 @@ md-card {
   md-card-content {
     padding: $card-padding;
   }
-  md-action-bar {
+  .md-actions {
     margin: 0;
 
     .md-button {
-      margin-bottom: $card-margin;
-      margin-top: $card-margin;
+      margin-bottom: $baseline-grid;
+      margin-top: $baseline-grid;
+      margin-right: $baseline-grid * .5;
+      margin-left: $baseline-grid * .5;
     }
   }
   md-card-footer {
