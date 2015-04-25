@@ -65,7 +65,7 @@ describe('$mdDialog', function() {
     }));
 
 
-    it('should focus `md-content` on open', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
+    it('should focus `md-dialog-content` on open', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
       TestUtil.mockElementFocus(this);
 
       var parent = angular.element('<div>');
@@ -74,9 +74,9 @@ describe('$mdDialog', function() {
         $mdDialog.alert({
           template:
             '<md-dialog>' +
-              '<md-content tabIndex="0">' +
+              '<md-dialog-content tabIndex="0">' +
                 '<p>Muppets are the best</p>' +
-              '</md-content>' +
+              '</md-dialog-content>' +
               '</md-dialog>',
           parent: parent
         })
@@ -92,7 +92,7 @@ describe('$mdDialog', function() {
       parent.find('md-dialog').triggerHandler('transitionend');
       $rootScope.$apply();
 
-      expect($document.activeElement).toBe(parent[0].querySelector('md-content'));
+      expect($document.activeElement).toBe(parent[0].querySelector('md-dialog-content'));
     }));
   });
 
@@ -594,7 +594,7 @@ describe('$mdDialog with custom interpolation symbols', function() {
 
     var mdContainer = angular.element(parent[0].querySelector('.md-dialog-container'));
     var mdDialog = mdContainer.find('md-dialog');
-    var mdContent = mdDialog.find('md-content');
+    var mdContent = mdDialog.find('md-dialog-content');
     var title = mdContent.find('h2');
     var content = mdContent.find('p');
     var mdActions = angular.element(mdDialog[0].querySelector('.md-actions'));
@@ -621,7 +621,7 @@ describe('$mdDialog with custom interpolation symbols', function() {
 
     var mdContainer = angular.element(parent[0].querySelector('.md-dialog-container'));
     var mdDialog = mdContainer.find('md-dialog');
-    var mdContent = mdDialog.find('md-content');
+    var mdContent = mdDialog.find('md-dialog-content');
     var title = mdContent.find('h2');
     var content = mdContent.find('p');
     var mdActions = angular.element(mdDialog[0].querySelector('.md-actions'));

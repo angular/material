@@ -4,18 +4,22 @@
     send focus back to the triggering button.
   </p>
 
-  <div layout="column" layout-align="center" >
-    <md-button class="md-primary" ng-click="showAlert($event)">
-      Alert Dialog
-    </md-button>
-    <div class="gap"></div>
-    <md-button class="md-primary" ng-click="showConfirm($event)">
-      Confirm Dialog
-    </md-button>
-    <div class="gap"></div>
-    <md-button class="md-primary" ng-click="showAdvanced($event)">
-      Custom Dialog
-    </md-button>
+  <div layout="column" layout-align="center" class="dialog-demo-content">
+    <div>
+      <md-button class="md-primary" ng-click="showAlert($event)">
+        Alert Dialog
+      </md-button>
+    </div>
+    <div>
+      <md-button class="md-primary" ng-click="showConfirm($event)">
+        Confirm Dialog
+      </md-button>
+    </div>
+    <div>
+      <md-button class="md-primary" ng-click="showAdvanced($event)">
+        Custom Dialog
+      </md-button>
+    </div>
   </div>
   
   <br/>

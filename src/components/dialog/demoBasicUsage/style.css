@@ -7,14 +7,17 @@
   height: 100%;
 }
 
-.gap {
-  width: 50px;
+.dialog-demo-content div {
+  text-align: center;
+}
+.dialog-demo-content div .md-button {
+  display: inline-block;
 }
 
-md-dialog md-content.sticky-container {
+md-dialog md-dialog-content.sticky-container {
   padding: 0;
 }
-  md-dialog md-content.sticky-container .dialog-content {
+  md-dialog md-dialog-content.sticky-container > div {
     padding: 0 24px 24px;
   }
 
