@@ -40,7 +40,7 @@
     *     $mdIconProvider.defaultIconSet('my/app/icons.svg')
     *
     *   })
-    *   .run(function($http, $templateCache){
+    *   .run(function($http, $templateCache) {
     *
     *     // Pre-fetch icons sources by URL and cache in the $templateCache...
     *     // subsequent $http calls will look there first.
@@ -239,7 +239,7 @@
        }
      ];
 
-     svgRegistry.forEach(function(asset){
+     svgRegistry.forEach(function(asset) {
        iconProvider.icon(asset.id,  asset.url);
        $templateCache.put(asset.url, asset.svg);
      });
@@ -327,7 +327,7 @@
    /**
     * Prepare and cache the loaded icon for the specified `id`
     */
-   function cacheIcon( id ) {
+   function cacheIcon(id) {
 
      return function updateCache( icon ) {
        iconCache[id] = isIcon(icon) ? icon : new Icon(icon, config[id]);
@@ -455,7 +455,7 @@
    /**
     * Clone the Icon DOM element.
     */
-   function cloneSVG(){
+   function cloneSVG() {
      return this.element.cloneNode(true);
    }
 

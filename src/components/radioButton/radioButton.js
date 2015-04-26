@@ -276,7 +276,7 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
     /**
      * Inject ARIA-specific attributes appropriate for each radio button
      */
-    function configureAria( element, scope ){
+    function configureAria(element, scope) {
       scope.ariaId = buildAriaID();
 
       element.attr({

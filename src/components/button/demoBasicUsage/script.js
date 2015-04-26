@@ -1,4 +1,3 @@
-
 angular.module('buttonsDemo1', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope) {
@@ -7,5 +6,4 @@ angular.module('buttonsDemo1', ['ngMaterial'])
   $scope.isDisabled = true;
 
   $scope.googleUrl = 'http://google.com';
-
 });

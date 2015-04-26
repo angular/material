@@ -385,7 +385,7 @@ angular.module('material.core')
      */
     extractElementByName: function (element, nodeName) {
       for (var i = 0, len = element.length; i < len; i++) {
-        if (element[i].nodeName.toLowerCase() === nodeName){
+        if (element[i].nodeName.toLowerCase() === nodeName) {
           return angular.element(element[i]);
         }
       }

@@ -1,4 +1,4 @@
-(function(){
+(function() {
 
 angular.module('material.core')
 .factory('$mdMedia', mdMediaFactory);

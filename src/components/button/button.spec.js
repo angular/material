@@ -34,14 +34,14 @@ describe('md-button', function() {
     expect(button.hasClass('md-button')).toBe(true);
   }));
 
-  it('should not set focus state on mousedown', inject(function ($compile, $rootScope){
+  it('should not set focus state on mousedown', inject(function ($compile, $rootScope) {
     var button = $compile('<md-button>')($rootScope.$new());
     $rootScope.$apply();
     button.triggerHandler('mousedown');
     expect(button[0]).not.toHaveClass('md-focused');
   }));
 
-  it('should set focus state on focus and remove on blur', inject(function ($compile, $rootScope){
+  it('should set focus state on focus and remove on blur', inject(function ($compile, $rootScope) {
     var button = $compile('<md-button>')($rootScope.$new());
     $rootScope.$apply();
     button.triggerHandler('focus');
@@ -102,7 +102,7 @@ describe('md-button', function() {
       $rootScope.$apply();
       expect(button.attr('tabindex')).toBe("-1");
 
-      $rootScope.$apply(function(){
+      $rootScope.$apply(function() {
         scope.isDisabled = false;
       });
       expect(button.attr('tabindex')).toBe("0");
@@ -119,7 +119,7 @@ describe('md-button', function() {
 
     it('should not trigger click on button when disabled', inject(function ($compile, $rootScope) {
       var clicked = false;
-      var onClick = function(){ clicked = true;};
+      var onClick = function() { clicked = true;};
       var scope   = angular.extend( $rootScope.$new(), { isDisabled : true, onClick : onClick} );
 
       var element = $compile('<md-button ng-disabled="isDisabled" ng-click="onClick()">button</md-button>')(scope);
@@ -131,7 +131,7 @@ describe('md-button', function() {
 
     it('should not trigger click on anchor when disabled', inject(function ($compile, $rootScope) {
       var clicked = false;
-      var onClick = function(){ clicked = true;};
+      var onClick = function() { clicked = true;};
       var scope   = angular.extend( $rootScope.$new(), { isDisabled : true, onClick : onClick} );
 
       var element = $compile('<md-button ng-disabled="isDisabled" ng-href="#" ng-click="onClick()">button</md-button>')(scope);

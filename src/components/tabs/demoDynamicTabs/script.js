@@ -21,7 +21,7 @@
         previous = null;
     $scope.tabs = tabs;
     $scope.selectedIndex = 2;
-    $scope.$watch('selectedIndex', function(current, old){
+    $scope.$watch('selectedIndex', function(current, old) {
       previous = selected;
       selected = tabs[current];
       if ( old && (old != current)) $log.debug('Goodbye ' + previous.title + '!');

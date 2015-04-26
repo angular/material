@@ -169,7 +169,7 @@ function mdListItemDirective($mdAria, $mdConstant, $timeout) {
             $scope.mouseActive = false;
             proxy.on('mousedown', function() {
               $scope.mouseActive = true;
-              $timeout(function(){
+              $timeout(function() {
                 $scope.mouseActive = false;
               }, 100);
             })

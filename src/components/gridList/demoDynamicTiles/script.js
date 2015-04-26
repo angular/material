@@ -9,7 +9,7 @@ angular
             background: ""
           });
 
-    function buildGridModel(tileTmpl){
+    function buildGridModel(tileTmpl) {
       var it, results = [ ];
 
       for (var j=0; j<11; j++) {
@@ -50,6 +50,6 @@ angular
       return results;
     }
   })
-  .config( function( $mdIconProvider ){
+  .config(function($mdIconProvider) {
     $mdIconProvider.iconSet("avatar", './icons/avatar-icons.svg', 128);
   });

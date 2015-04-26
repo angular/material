@@ -14,7 +14,7 @@ angular
       postalCode : '94043'
     };
   })
-  .config( function($mdThemingProvider){
+  .config(function($mdThemingProvider) {
 
     // Configure a dark theme with primary foreground yellow
 

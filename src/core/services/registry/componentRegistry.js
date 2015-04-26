@@ -115,7 +115,7 @@
 
     };
 
-    function isValidID(handle){
+    function isValidID(handle) {
       return handle && (handle !== "");
     }
 

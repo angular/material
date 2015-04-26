@@ -66,7 +66,7 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
   // Private Methods
   // **********************************************************
 
-  function compile (tElement, tAttrs) {
+  function compile(tElement, tAttrs) {
 
     tAttrs.type = 'checkbox';
     tAttrs.tabindex = tAttrs.tabindex || '0';
@@ -101,7 +101,7 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
         .on('keypress', keypressHandler)
         .on('mousedown', function() {
           scope.mouseActive = true;
-          $timeout(function(){
+          $timeout(function() {
             scope.mouseActive = false;
           }, 100);
         })
@@ -143,7 +143,7 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
       }
 
       function render() {
-        if(ngModelCtrl.$viewValue) {
+        if (ngModelCtrl.$viewValue) {
           element.addClass(CHECKED_CSS);
         } else {
           element.removeClass(CHECKED_CSS);

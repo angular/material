@@ -139,7 +139,7 @@ describe('md-slider', function() {
     expect($log.warn).not.toHaveBeenCalled();
   }));
 
-  it('should add aria attributes', inject(function($compile, $rootScope, $timeout, $mdConstant){
+  it('should add aria attributes', inject(function($compile, $rootScope, $timeout, $mdConstant) {
     var slider = setup('min="100" max="104" step="2" ng-model="model"');
 
     $rootScope.$apply('model = 102');

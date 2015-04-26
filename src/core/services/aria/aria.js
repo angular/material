@@ -67,10 +67,10 @@ function AriaService($$rAF, $log, $window) {
 
     if(hasChildren) {
       var children = node.childNodes;
-      for(var i=0; i<children.length; i++){
+      for(var i=0; i<children.length; i++) {
         var child = children[i];
         if(child.nodeType === 1 && child.hasAttribute(attrName)) {
-          if(!isHidden(child)){
+          if(!isHidden(child)) {
             hasAttr = true;
           }
         }

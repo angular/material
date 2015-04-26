@@ -96,7 +96,7 @@ function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria, $timeout) {
     }
 
     // disabling click event when disabled is true
-    element.on('click', function(e){
+    element.on('click', function(e) {
       if (attr.disabled === true) {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -107,7 +107,7 @@ function MdButtonDirective($mdInkRipple, $mdTheming, $mdAria, $timeout) {
     scope.mouseActive = false;
     element.on('mousedown', function() {
         scope.mouseActive = true;
-        $timeout(function(){
+        $timeout(function() {
           scope.mouseActive = false;
         }, 100);
       })

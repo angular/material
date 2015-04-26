@@ -35,19 +35,19 @@ angular.module('material.components.sidenav', [
  * // when instance is known ready and lazy lookup is not needed.
  * $mdSidenav(componentId)
  *    .toggle()
- *    .then(function(){
+ *    .then(function() {
  *      $log.debug('toggled');
  *    });
  * // Async open the given sidenav
  * $mdSidenav(componentId)
  *    .open()
- *    .then(function(){
+ *    .then(function() {
  *      $log.debug('opened');
  *    });
  * // Async close the given sidenav
  * $mdSidenav(componentId)
  *    .close()
- *    .then(function(){
+ *    .then(function() {
  *      $log.debug('closed');
  *    });
  * // Sync check to see if the specified sidenav is set to be open
@@ -103,7 +103,7 @@ function SidenavService($mdComponentRegistry, $q) {
     function waitForInstance() {
       return $mdComponentRegistry
                 .when(handle)
-                .then(function( it ){
+                .then(function( it ) {
                   instance = it;
                   return it;
                 });

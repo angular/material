@@ -22,9 +22,9 @@ exports.humanizeCamelCase = function(str) {
  */
 exports.copyDemoAssets = function(component, srcDir, distDir) {
   gulp.src(srcDir + component + '/demo*/')
-      .pipe(through2.obj( copyAssetsFor ));
+      .pipe(through2.obj(copyAssetsFor));
 
-  function copyAssetsFor( demo, enc, next){
+  function copyAssetsFor(demo, enc, next) {
     var demoID = component + "/" + path.basename(demo.path);
     var demoDir = demo.path + "/**/*";
 

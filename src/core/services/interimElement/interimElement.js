@@ -381,7 +381,7 @@ function InterimElementProvider() {
               if (options.themable) $mdTheming(element);
               var ret = options.onShow(options.scope, element, options);
               return $q.when(ret)
-                .then(function(){
+                .then(function() {
                   // Issue onComplete callback when the `show()` finishes
                   (options.onComplete || angular.noop)(options.scope, element, options);
                   startHideTimeout();

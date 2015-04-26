@@ -11,7 +11,7 @@ describe('<md-switch>', function() {
                              '</md-switch>' +
                            '</div>')($rootScope);
 
-    $rootScope.$apply(function(){
+    $rootScope.$apply(function() {
       $rootScope.blue = false;
       $rootScope.green = true;
     });
@@ -24,7 +24,7 @@ describe('<md-switch>', function() {
     expect(switches.eq(1).attr('aria-checked')).toEqual('true');
     expect(switches.eq(0).attr('role')).toEqual('checkbox');
 
-    $rootScope.$apply(function(){
+    $rootScope.$apply(function() {
       $rootScope.blue = true;
       $rootScope.green = false;
     });

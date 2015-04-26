@@ -44,7 +44,7 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
     { name: 'Share', icon: 'share-arrow' },
     { name: 'Upload', icon: 'upload' },
     { name: 'Copy', icon: 'copy' },
-    { name: 'Print this page', icon: 'print' },
+    { name: 'Print this page', icon: 'print' }
   ];
 
   $scope.listItemClick = function($index) {
@@ -59,7 +59,7 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
     { name: 'Message', icon: 'message' },
     { name: 'Copy', icon: 'copy2' },
     { name: 'Facebook', icon: 'facebook' },
-    { name: 'Twitter', icon: 'twitter' },
+    { name: 'Twitter', icon: 'twitter' }
   ];
 
   $scope.listItemClick = function($index) {

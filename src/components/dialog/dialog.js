@@ -75,7 +75,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *
  * ### JavaScript: object syntax
  * <hljs lang="js">
- * (function(angular, undefined){
+ * (function(angular, undefined) {
  *   "use strict";
  *
  *   angular
@@ -141,7 +141,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *
  * ### JavaScript: promise API syntax, custom dialog template
  * <hljs lang="js">
- * (function(angular, undefined){
+ * (function(angular, undefined) {
  *   "use strict";
  *
  *   angular
@@ -546,7 +546,7 @@ function MdDialogProvider($$interimElementProvider) {
       });
 
       var dialogContent = element.find('md-dialog-content');
-      if (dialogContent.length === 0){
+      if (dialogContent.length === 0) {
         dialogContent = element;
       }
 
