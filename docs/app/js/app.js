@@ -13,7 +13,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider)
       templateUrl: 'partials/home.tmpl.html'
     })
     .when('/layout/:tmpl', {
-      templateUrl: function(params){
+      templateUrl: function(params) {
         return 'partials/layout-' + params.tmpl + '.tmpl.html';
       }
     })
@@ -289,9 +289,9 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
     sections.forEach(function(section) {
       if(section.children) {
         // matches nested section toggles, such as API or Customization
-        section.children.forEach(function(childSection){
-          if(childSection.pages){
-            childSection.pages.forEach(function(page){
+        section.children.forEach(function(childSection) {
+          if(childSection.pages) {
+            childSection.pages.forEach(function(page) {
               matchPage(childSection, page);
             });
           }
@@ -428,7 +428,7 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
     // prevent skip link from redirecting
     if ($event) { $event.preventDefault(); }
 
-    $timeout(function(){
+    $timeout(function() {
       mainContentArea.focus();
     },90);
 
@@ -441,12 +441,12 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   function isSectionSelected(section) {
     var selected = false;
     var openedSection = menu.openedSection;
-    if(openedSection === section){
+    if(openedSection === section) {
       selected = true;
     }
     else if(section.children) {
       section.children.forEach(function(childSection) {
-        if(childSection === openedSection){
+        if(childSection === openedSection) {
           selected = true;
         }
       });
@@ -479,7 +479,7 @@ function($scope, $rootScope, $http) {
   var versionFile = "version.json" + "?ts=" + now;
 
   $http.get("version.json")
-    .then(function(response){
+    .then(function(response) {
       var sha = response.data.sha || "";
       var url = response.data.url;
 

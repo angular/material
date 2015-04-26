@@ -5,7 +5,7 @@ describe('mdIcon service', function() {
   var $scope;
 
   beforeEach(module('material.core'));
-  beforeEach(module('material.components.icon',function($mdIconProvider){
+  beforeEach(module('material.components.icon', function($mdIconProvider) {
     $mdIconProvider
       .icon('android',   'android.svg')
       .icon('c2',        'c2.svg')
@@ -14,7 +14,7 @@ describe('mdIcon service', function() {
       .defaultIconSet('core.svg');
   }));
 
-  beforeEach(inject(function($templateCache, _$httpBackend_, _$mdIcon_, $rootScope){
+  beforeEach(inject(function($templateCache, _$httpBackend_, _$mdIcon_, $rootScope) {
     $mdIcon = _$mdIcon_;
     $httpBackend = _$httpBackend_;
     $scope = $rootScope;
@@ -33,7 +33,7 @@ describe('mdIcon service', function() {
       var expected = updateDefaults('<svg><g id="android"></g></svg>');
       $mdIcon('android').then(function(el) {
         expect(el.outerHTML).toEqual(expected);
-      })
+      });
       $scope.$digest();
     });
 
@@ -41,7 +41,7 @@ describe('mdIcon service', function() {
       var expected = updateDefaults('<svg xmlns="http://www.w3.org/2000/svg"><g id="s1"></g></g></svg>');
       $mdIcon('social:s1').then(function(el) {
         expect(el.outerHTML).toEqual(expected);
-      })
+      });
       $scope.$digest();
     });
 
@@ -49,14 +49,14 @@ describe('mdIcon service', function() {
       var expected = updateDefaults('<svg xmlns="http://www.w3.org/2000/svg"><g id="c1"></g></g></svg>');
       $mdIcon('c1').then(function(el) {
         expect(el.outerHTML).toEqual(expected);
-      })
+      });
       $scope.$digest();
     });
 
     it('should allow single icon defs to override those defined in groups', function() {
       $mdIcon('c2').then(function(el) {
         expect(el.querySelector('g').classList.contains('override')).toBe(true);
-      })
+      });
       $scope.$digest();
     });
 
@@ -67,7 +67,7 @@ describe('mdIcon service', function() {
     it('should return correct SVG markup', function() {
       $mdIcon('android.svg').then(function(el) {
         expect(el.outerHTML).toEqual( updateDefaults('<svg><g id="android"></g></svg>') );
-      })
+      });
       $scope.$digest();
     });
 
@@ -78,7 +78,7 @@ describe('mdIcon service', function() {
       var msg;
       try {
         $mdIcon('notconfigured')
-          .catch(function(error){
+          .catch(function(error) {
             msg = error;
           });
 
@@ -94,7 +94,7 @@ describe('mdIcon service', function() {
       var msg;
       try {
         $mdIcon('notfound:someIcon')
-          .catch(function(error){
+          .catch(function(error) {
             msg = error;
           });
 

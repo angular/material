@@ -66,7 +66,7 @@ describe('$mdComponentRegistry Service', function() {
       var instance = $mdComponentRegistry.get('left');
       var resolved = false;
 
-      promise.then(function(inst){   resolved = inst;  });
+      promise.then(function(inst) { resolved = inst; });
       $timeout.flush();
 
       expect(instance).toBe(resolved);
@@ -78,14 +78,14 @@ describe('$mdComponentRegistry Service', function() {
       var promise = $mdComponentRegistry.when('left');
       var el = setup('md-component-id="left"');
 
-      promise.then(function(inst){ count += 1; });
+      promise.then(function(inst) { count += 1; });
       $timeout.flush();
 
       el.triggerHandler('$destroy');
 
       el = setup('md-component-id="left"');
       promise = $mdComponentRegistry.when('left');
-      promise.then(function(inst){
+      promise.then(function(inst) {
         resolved = inst;
         count += 1;
       });
@@ -102,7 +102,7 @@ describe('$mdComponentRegistry Service', function() {
   describe('component ids', function() {
     var $mdComponentRegistry, $timeout;
 
-    beforeEach( inject(function(_$mdComponentRegistry_, _$timeout_) {
+    beforeEach(inject(function(_$mdComponentRegistry_, _$timeout_) {
       $mdComponentRegistry = _$mdComponentRegistry_;
       $timeout = _$timeout_;
     }));
@@ -115,7 +115,7 @@ describe('$mdComponentRegistry Service', function() {
       var promise = $mdComponentRegistry.when('left');
       var instance = $mdComponentRegistry.get('left');
 
-      promise.then(function(inst){ resolved = inst; count += 1; });
+      promise.then(function(inst) { resolved = inst; count += 1; });
       $timeout.flush();
 
       expect(count).toBe(0);

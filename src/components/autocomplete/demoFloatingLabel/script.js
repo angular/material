@@ -4,7 +4,7 @@
       .module('autocompleteFloatingLabelDemo', ['ngMaterial'])
       .controller('DemoCtrl', DemoCtrl);
 
-  function DemoCtrl ($timeout, $q) {
+  function DemoCtrl($timeout, $q) {
     var self = this;
 
     // list of `state` value/display objects
@@ -21,7 +21,7 @@
      * Search for states... use $timeout to simulate
      * remote dataservice call.
      */
-    function querySearch (query) {
+    function querySearch(query) {
       var results = query ? self.states.filter( createFilterFor(query) ) : [];
       return results;
     }

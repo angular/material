@@ -917,7 +917,7 @@ function SelectProvider($$interimElementProvider) {
       } else if (optgroupNodes.length) {
         centeredNode = optgroupNodes[0];
       // Otherwise, center around the first optionNode
-      } else if (optionNodes.length){
+      } else if (optionNodes.length) {
         centeredNode = optionNodes[0];
       // In case there are no options, center on whatever's in there... (eg progress indicator)
       } else {

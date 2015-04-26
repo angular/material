@@ -1,7 +1,7 @@
 describe('$mdAria service', function() {
   beforeEach(module('material.core'));
 
-  describe('expecting attributes', function(){
+  describe('expecting attributes', function() {
     it('should warn if element is missing attribute', inject(function($compile, $rootScope, $log, $mdAria) {
       spyOn($log, 'warn');
       var button = $compile('<button><md-icon></md-icon></button>')($rootScope);

@@ -18,7 +18,7 @@ module.exports = function buildConfigProcessor(log) {
     });
 
     return q.all([ getSHA(), getCommitDate() ])
-            .then( function(){
+            .then(function() {
               return docs;
           });
   }

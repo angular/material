@@ -21,7 +21,7 @@ describe('mdIcon directive', function() {
 
     deferred.resolve(getIcon(id));
     return deferred.promise;
-  }
+  };
 
   function make(html) {
     var el;
@@ -35,7 +35,7 @@ describe('mdIcon directive', function() {
       $provide.value('$mdIcon', mockIconSvc);
     });
 
-    inject(function($rootScope, _$compile_, _$q_){
+    inject(function($rootScope, _$compile_, _$q_) {
       $scope = $rootScope;
       $compile = _$compile_;
       $q = _$q_;
@@ -46,7 +46,7 @@ describe('mdIcon directive', function() {
   describe('using md-font-icon=""', function() {
 
     it('should render correct HTML with md-font-icon value as class', function() {
-      el = make( '<md-icon md-font-icon="android"></md-icon>');
+      el = make('<md-icon md-font-icon="android"></md-icon>');
       expect(el.html()).toEqual('<span class="md-font android" ng-class="fontIcon"></span>');
     });
 

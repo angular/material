@@ -101,13 +101,13 @@ function MdProgressLinearDirective($$rAF, $mdConstant, $mdTheming) {
 // **********************************************************
 var transforms = (function() {
   var values = new Array(101);
-  for(var i = 0; i < 101; i++){
+  for(var i = 0; i < 101; i++) {
     values[i] = makeTransform(i);
   }
 
   return values;
 
-  function makeTransform(value){
+  function makeTransform(value) {
     var scale = value/100;
     var translateX = (value-100)/2;
     return 'translateX(' + translateX.toString() + '%) scale(' + scale.toString() + ', 1)';

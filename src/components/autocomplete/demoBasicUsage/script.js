@@ -4,7 +4,7 @@
       .module('autocompleteDemo', ['ngMaterial'])
       .controller('DemoCtrl', DemoCtrl);
 
-  function DemoCtrl ($timeout, $q, $log) {
+  function DemoCtrl($timeout, $q, $log) {
     var self = this;
 
     self.simulateQuery = false;
@@ -24,7 +24,7 @@
      * Search for states... use $timeout to simulate
      * remote dataservice call.
      */
-    function querySearch (query) {
+    function querySearch(query) {
       var results = query ? self.states.filter( createFilterFor(query) ) : self.states,
           deferred;
       if (self.simulateQuery) {

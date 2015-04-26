@@ -502,7 +502,7 @@ describe('$mdDialog', function() {
       expect(dialog.attr('aria-label')).toEqual(dialog.text());
     }));
 
-    it('should not modify an existing ARIA label', inject(function($mdDialog, $rootScope){
+    it('should not modify an existing ARIA label', inject(function($mdDialog, $rootScope) {
       var template = '<md-dialog aria-label="Some Other Thing">Hello</md-dialog>';
       var parent = angular.element('<div>');
 
@@ -518,7 +518,7 @@ describe('$mdDialog', function() {
       expect(dialog.attr('aria-label')).toEqual('Some Other Thing');
     }));
 
-    it('should add an ARIA label if supplied through chaining', inject(function($mdDialog, $rootScope, $animate){
+    it('should add an ARIA label if supplied through chaining', inject(function($mdDialog, $rootScope, $animate) {
       var parent = angular.element('<div>');
 
       $mdDialog.show(

@@ -9,7 +9,7 @@ describe('radioButton', function() {
                             '<md-radio-button value="green"></md-radio-button>' +
                           '</md-radio-group>')($rootScope);
 
-    $rootScope.$apply(function(){
+    $rootScope.$apply(function() {
       $rootScope.color = 'green';
     });
 
@@ -25,7 +25,7 @@ describe('radioButton', function() {
                             '<md-radio-button value="2"></md-radio-button>' +
                           '</md-radio-group>')($rootScope);
 
-    $rootScope.$apply(function(){
+    $rootScope.$apply(function() {
       $rootScope.value = 1;
     });
 
@@ -51,7 +51,7 @@ describe('radioButton', function() {
                             '<md-radio-button value="green"></md-radio-button>' +
                           '</md-radio-group>')($rootScope);
 
-    $rootScope.$apply(function(){
+    $rootScope.$apply(function() {
       $rootScope.color = 'green';
     });
 
@@ -64,7 +64,7 @@ describe('radioButton', function() {
     expect(element.attr('aria-activedescendant')).not.toEqual(rbElements.eq(0).attr('id'));
   }));
 
-  it('should warn developers they need a label', inject(function($compile, $rootScope, $log){
+  it('should warn developers they need a label', inject(function($compile, $rootScope, $log) {
     spyOn($log, "warn");
     var element = $compile('<md-radio-group ng-model="color">' +
                             '<md-radio-button value="blue"></md-radio-button>' +
@@ -99,7 +99,7 @@ describe('radioButton', function() {
                             '<md-radio-button value="blue"></md-radio-button>' +
                             '<md-radio-button value="green"></md-radio-button>' +
                           '</md-radio-group>')($rootScope);
-    $rootScope.$apply(function(){
+    $rootScope.$apply(function() {
       $rootScope.color = 'blue';
     });
 
@@ -154,8 +154,8 @@ describe('radioButton', function() {
       var el;
       expect(function() {
         el = $compile('<md-radio-group>' +
-                              '<md-radio-button value="white">' +
-                              '</md-radio-group>')($rootScope);
+                      '<md-radio-button value="white">' +
+                      '</md-radio-group>')($rootScope);
       }).not.toThrow();
       var rbElements = el.find('md-radio-button');
 
@@ -192,7 +192,7 @@ describe('radioButton', function() {
     it('should trigger a submit', inject(function($compile, $rootScope, $mdConstant) {
 
       $rootScope.testValue = false;
-      $rootScope.submitFn = function(){
+      $rootScope.submitFn = function() {
         $rootScope.testValue = true;
       };
       var element = $compile('<div><form ng-submit="submitFn()">' +

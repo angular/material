@@ -1,9 +1,9 @@
-(function(){
+(function() {
 
   angular
     .module('material.core')
-    .config( function($provide){
-       $provide.decorator('$mdUtil', ['$delegate', function ($delegate){
+    .config(function($provide) {
+       $provide.decorator('$mdUtil', ['$delegate', function($delegate) {
            /**
             * Inject the iterator facade to easily support iteration and accessors
             * @see iterator below
@@ -150,7 +150,7 @@
      * @param item
      */
     function remove(item) {
-      if ( contains(item) ){
+      if ( contains(item) ) {
         _items.splice(indexOf(item), 1);
       }
     }

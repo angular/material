@@ -223,7 +223,7 @@ gulp.task('build-all-modules', function() {
 });
 
 function buildModule(module, isRelease) {
-  if ( module.indexOf(".") < 0) {
+  if (module.indexOf(".") < 0) {
     module = "material.components." + module;
   }
 
@@ -240,7 +240,6 @@ function buildModule(module, isRelease) {
     .pipe(insert.prepend(config.banner))
     .pipe(gulpif(isRelease, buildMin()))
     .pipe(gulp.dest(BUILD_MODE.outputDir + name));
-
 
   function buildMin() {
     return lazypipe()
@@ -261,33 +260,32 @@ function buildModule(module, isRelease) {
       ();
   }
 
-function buildModuleJs(name) {
-  return lazypipe()
-    .pipe(plumber)
-    .pipe(ngAnnotate)
-    .pipe(concat, name + '.js')
-    ();
-}
+  function buildModuleJs(name) {
+    return lazypipe()
+      .pipe(plumber)
+      .pipe(ngAnnotate)
+      .pipe(concat, name + '.js')
+      ();
+  }
 
-function buildModuleStyles(name) {
-  var files = [];
-  config.themeBaseFiles.forEach(function(fileGlob) {
-    files = files.concat(glob(fileGlob, { cwd: __dirname }));
-  });
-  var baseStyles = files.map(function(fileName) {
-    return fs.readFileSync(fileName, 'utf8').toString();
-  }).join('\n');
+  function buildModuleStyles(name) {
+    var files = [];
+    config.themeBaseFiles.forEach(function(fileGlob) {
+      files = files.concat(glob(fileGlob, { cwd: __dirname }));
+    });
+    var baseStyles = files.map(function(fileName) {
+      return fs.readFileSync(fileName, 'utf8').toString();
+    }).join('\n');
 
-  return lazypipe()
-    .pipe(insert.prepend, baseStyles)
-    .pipe(gulpif, /theme.scss/,
-      rename(name + '-default-theme.scss'), concat(name + '.scss')
-    )
-    .pipe(sass)
-    .pipe(autoprefix)
-    (); // invoke the returning fn to create our pipe
-}
-
+    return lazypipe()
+      .pipe(insert.prepend, baseStyles)
+      .pipe(gulpif, /theme.scss/,
+        rename(name + '-default-theme.scss'), concat(name + '.scss')
+      )
+      .pipe(sass)
+      .pipe(autoprefix)
+      (); // invoke the returning fn to create our pipe
+  }
 }
 
 /** *****************************************
@@ -319,7 +317,7 @@ gulp.task('watch-demo', ['build-demo'], function() {
   return gulp.watch('src/**/*', ['build-demo']);
 });
 
-gulp.task('site', function () {
+gulp.task('site', function() {
   return gulp.src('dist/docs')
       .pipe(webserver({
         host: '0.0.0.0',
@@ -442,7 +440,6 @@ gulp.task('build-module-demo', function() {
     );
     next();
   }));
-
 });
 
 
@@ -492,10 +489,10 @@ gulp.task('build-scss', function() {
     );
   }
   return series(streams);
-  function getPaths () {
+  function getPaths() {
     var paths = config.scssBaseFiles.slice();
     if (modules) {
-      paths.push.apply(paths, modules.split(',').map(function (module) {
+      paths.push.apply(paths, modules.split(',').map(function(module) {
         return 'src/components/' + module + '/*.scss';
       }));
     } else {

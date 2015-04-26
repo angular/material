@@ -5,7 +5,7 @@ describe('mdCheckbox', function() {
   beforeEach(module('material.components.checkbox'));
   beforeEach(module('ngAria'));
 
-  it('should warn developers they need a label', inject(function($compile, $rootScope, $log){
+  it('should warn developers they need a label', inject(function($compile, $rootScope, $log) {
     spyOn($log, "warn");
 
     var element = $compile('<div>' +
@@ -16,7 +16,7 @@ describe('mdCheckbox', function() {
     expect($log.warn).toHaveBeenCalled();
   }));
 
-  it('should copy text content to aria-label', inject(function($compile, $rootScope){
+  it('should copy text content to aria-label', inject(function($compile, $rootScope) {
     var element = $compile('<div>' +
                              '<md-checkbox ng-model="blue">' +
                              'Some text' +
@@ -35,7 +35,7 @@ describe('mdCheckbox', function() {
                              '</md-checkbox>' +
                            '</div>')($rootScope);
 
-    $rootScope.$apply(function(){
+    $rootScope.$apply(function() {
       $rootScope.blue = false;
       $rootScope.green = true;
     });
