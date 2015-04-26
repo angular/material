@@ -60,17 +60,6 @@ var config = {
     'src/core/style/variables.scss',
     'src/core/style/mixins.scss'
   ],
-  scssBaseFiles: [
-    'src/core/style/color-palette.scss',
-    'src/core/style/variables.scss',
-    'src/core/style/mixins.scss',
-    'src/core/style/structure.scss',
-    'src/core/style/typography.scss',
-    'src/core/style/layout.scss'
-  ],
-  scssStandaloneFiles: [
-    'src/core/style/layout.scss'
-  ],
   paths: 'src/{components,services}/**',
   outputDir: 'dist/'
 };
@@ -453,22 +442,17 @@ gulp.task('build-module-demo', function() {
  ** ***************************************** */
 
 gulp.task('build-scss', function() {
-  var modules   = argv['modules'],
-      overrides = argv['override'],
-      dest      = argv['output-dir'] || config.outputDir,
-      filename  = argv['filename'] || 'angular-material',
-      paths     = getPaths();
+  var dest = argv['output-dir'] || config.outputDir;
 
   gutil.log("Building css files...");
-  var streams = [];
-  streams.push(
-    gulp.src(paths)
-      .pipe(filterNonCodeFiles())
-      .pipe(filter(['**', '!**/*-theme.scss'])) // remove once ported
-      .pipe(concat('angular-material.scss'))
-      // .pipe(insert.append(defaultThemeContents))
+
+  // Copy scss files to dist directory
+  gulp.src(['src/**/*.scss'])
+    .pipe(gulp.dest(path.join(dest, 'src')));
+
+  var streams =
+    gulp.src('src/angular-material.scss')
       .pipe(sass())
-      .pipe(rename({ basename: filename }))
       .pipe(autoprefix())
       .pipe(insert.prepend(config.banner))
       .pipe(gulp.dest(dest))
@@ -477,34 +461,8 @@ gulp.task('build-scss', function() {
           .pipe(rename, {extname: '.min.css'})
           .pipe(gulp.dest, dest)
         ()
-      ))
-  );
-  if (IS_RELEASE_BUILD) {
-    var baseVars = fs.readFileSync('src/core/style/variables.scss', 'utf8').toString();
-    streams.push(
-      gulp.src(config.scssStandaloneFiles)
-        .pipe(insert.prepend(baseVars))
-        .pipe(sass())
-        .pipe(autoprefix())
-        .pipe(insert.prepend(config.banner))
-        .pipe(rename({prefix: 'angular-material-'}))
-        .pipe(gulp.dest(path.join(dest, 'modules', 'css')))
-    );
-  }
+      ));
   return series(streams);
-  function getPaths () {
-    var paths = config.scssBaseFiles.slice();
-    if (modules) {
-      paths.push.apply(paths, modules.split(',').map(function (module) {
-        return 'src/components/' + module + '/*.scss';
-      }));
-    } else {
-      paths.push(path.join(config.paths, '*.scss'));
-    }
-    overrides && paths.unshift(overrides);
-    console.log(paths);
-    return paths;
-  }
 });
 
 /** *****************************************
