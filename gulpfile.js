@@ -367,12 +367,12 @@ function buildJs(isRelease) {
   )
     .pipe(filterNonCodeFiles())
     .pipe(utils.buildNgMaterialDefinition())
-    .pipe(insert.prepend(config.banner))
     .pipe(plumber())
     .pipe(ngAnnotate());
 
   return series(jsBuildStream, themeBuildStream())
     .pipe(concat('angular-material.js'))
+    .pipe(insert.prepend(config.banner))
     .pipe(gulp.dest(config.outputDir))
     .pipe(gulpif(isRelease, lazypipe()
       .pipe(uglify, { preserveComments: 'some' })
