@@ -1,15 +1,5 @@
 *.log
-*.sw*
-.DS_STORE
-.sass-cache/
-bower_components
+.DS_Store
 node_modules
 dist
-/src/themes/_default-theme.scss
-
 /.idea/
-/components
-/vendor
-/material-font
-
-.polymer-qp
