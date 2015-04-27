@@ -44,10 +44,12 @@ md-list-item {
     transition: background-color 0.15s linear;
 
     &.md-button {
+      font-size: inherit;
       height: inherit;
       text-align: left;
       text-transform: none;
       width: 100%;
+      white-space: normal;
     }
     &:focus {
       outline: none
