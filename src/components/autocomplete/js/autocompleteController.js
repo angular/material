@@ -239,8 +239,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
         updateScroll();
         updateSelectionMessage();
         break;
+      case $mdConstant.KEY_CODE.TAB:
       case $mdConstant.KEY_CODE.ENTER:
-        if (self.hidden || self.loading || self.index < 0) return;
+        if (self.hidden || self.loading || self.index < 0 || self.matches.length < 1) return;
         event.preventDefault();
         select(self.index);
         break;
@@ -248,8 +249,6 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
         self.matches = [];
         self.hidden = true;
         self.index = getDefaultIndex();
-        break;
-      case $mdConstant.KEY_CODE.TAB:
         break;
       default:
     }
