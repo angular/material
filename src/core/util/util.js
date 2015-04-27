@@ -76,7 +76,7 @@ angular.module('material.core')
       var disableStyle = $window.getComputedStyle(disableTarget[0]);
       var wrapperEl = angular.element('<div class="md-virtual-scroll-container"><div class="md-virtual-scroller"></div></div>');
       var virtualScroller = wrapperEl.children().eq(0);
-      virtualScroller.append(disableTarget.children());
+      virtualScroller.append(disableTarget[0].childNodes);
       disableTarget.append(wrapperEl);
       var originalScrollBarShow = originalWidth < scrollEl.clientWidth;
 
