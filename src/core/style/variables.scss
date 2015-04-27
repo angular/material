@@ -31,15 +31,21 @@ $toast-margin: $baseline-grid * 1 !default;
 
 // Whiteframes
 
-$whiteframe-shadow-z1: 0px 2px 5px 0 rgba(0,0,0,0.26) !default;
+$shadow-key-umbra-opacity: 0.2;
+$shadow-key-penumbra-opacity: 0.14;
+$shadow-ambient-shadow-opacity: 0.12;
+
+// NOTE(shyndman): gulp-sass seems to be failing if I split the shadow defs across
+//    multiple lines. Ugly. Sorry.
+$whiteframe-shadow-z1: 0px 3px 1px -2px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 2px 2px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 1px 5px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
 $whiteframe-zindex-z1: 1 !default;
-$whiteframe-shadow-z2: 0px 8px 17px rgba(0,0,0,0.2) !default;
+$whiteframe-shadow-z2: 0px 3px 3px -2px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 3px 4px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 1px 8px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
 $whiteframe-zindex-z2: 2 !default;
-$whiteframe-shadow-z3: 0px 17px 50px rgba(0,0,0,0.19) !default;
+$whiteframe-shadow-z3: 0px 3px 5px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 6px 10px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 1px 18px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
 $whiteframe-zindex-z3: 3 !default;
-$whiteframe-shadow-z4: 0px 16px 28px 0 rgba(0,0,0,0.22) !default;
+$whiteframe-shadow-z4: 0px 5px 5px -3px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 8px 10px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 3px 14px 2px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
 $whiteframe-zindex-z4: 4 !default;
-$whiteframe-shadow-z5: 0px 27px 24px 0 rgba(0,0,0,0.2) !default;
+$whiteframe-shadow-z5: 0px 8px 10px -5px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 16px 24px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 6px 30px 5px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
 $whiteframe-zindex-z5: 5 !default;
 
 
