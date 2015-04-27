@@ -16,6 +16,8 @@ md-checkbox {
   padding-left: $checkbox-width;
   position: relative;
   line-height: $checkbox-width + $checkbox-margin;
+  min-width: $checkbox-width;
+  min-height: $checkbox-width;
 
   *,
   *:before,

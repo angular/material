@@ -79,7 +79,7 @@ md-list-item, md-list-item .md-list-item-inner {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-
+  min-height: 48px;
 
   // Layout for controls in primary or secondary divs, or auto-infered first child
   & > div.md-primary > md-icon,
@@ -90,14 +90,6 @@ md-list-item, md-list-item .md-list-item-inner {
     margin-top: 12px;
     margin-bottom: 12px;
     box-sizing: content-box;
-    &:focus {
-      border-radius: 2px;
-      outline: none;
-      padding: 6px;
-      margin-top: 6px;
-      margin-bottom: 6px;
-      margin-right: -6px;
-    }
   }
   & > div.md-primary > md-checkbox,
   & > div.md-secondary > md-checkbox,
@@ -105,12 +97,6 @@ md-list-item, md-list-item .md-list-item-inner {
   md-checkbox.md-secondary {
     align-self: center;
     .md-label { display: none; }
-    &:not(:first-child):focus {
-      padding: 6px;
-      margin-right: -6px;
-      margin-top: 8px;
-      margin-bottom: 6px;
-    }
   }
 
   & > md-icon:first-child {
@@ -134,6 +120,8 @@ md-list-item, md-list-item .md-list-item-inner {
   md-checkbox.md-secondary,
   md-switch.md-secondary {
     margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 
   button.md-button.md-secondary-container {
@@ -153,7 +141,8 @@ md-list-item, md-list-item .md-list-item-inner {
     margin-left: $list-item-secondary-left-margin;
     position: absolute;
     right: $list-item-padding-horizontal;
-    top: 0;
+    top: 50%;
+    transform: translate3d(0, -50%, 0);
   }
 
   & > .md-button.md-secondary-container > .md-secondary {
