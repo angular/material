@@ -194,15 +194,19 @@ function mdListItemDirective($mdAria, $mdConstant, $timeout) {
           }
         }
         function computeClickable() {
-          if (proxies.length || $element[0].firstElementChild.hasAttribute('ng-click')) {
-            $element.addClass('md-clickable');
+            if ($element[0].children.length != 0) {
+              if (proxies.length || $element[0].firstElementChild.hasAttribute('ng-click')) {
+                $element.addClass('md-clickable');
 
-            ctrl.attachRipple($scope, angular.element($element[0].querySelector('.md-no-style')));
-          }
+                ctrl.attachRipple($scope, angular.element($element[0].querySelector('.md-no-style')));
+              }
+            }
+
         }
 
-        if (!$element[0].firstElementChild.hasAttribute('ng-click') && !proxies.length) {
-          $element[0].firstElementChild.addEventListener('keypress', function(e) {
+        if ($element[0].children.length != 0){
+          if (!$element[0].firstElementChild.hasAttribute('ng-click') && !proxies.length) {
+            $element[0].firstElementChild.addEventListener('keypress', function (e) {
             if (e.target.nodeName != 'INPUT') {
               if (e.keyCode == $mdConstant.KEY_CODE.SPACE) {
                 $element[0].firstElementChild.click();
@@ -212,6 +216,7 @@ function mdListItemDirective($mdAria, $mdConstant, $timeout) {
             }
           });
         }
+      }
 
         $element.off('click');
         $element.off('keypress');
