@@ -336,20 +336,22 @@ MdChipsCtrl.prototype.configureUserInput = function(inputElement) {
   inputElement
       .attr({ tabindex: 0 })
       .on('keydown', function(event) { scope.$apply(function() { ctrl.inputKeydown(event); }); })
-      .on('focus', function () { this.$scope.$apply(this.onInputFocus.bind(this)); }.bind(this))
-      .on('blur', function () { this.$scope.$apply(this.onInputBlur.bind(this)); }.bind(this));
+      .on('focus', ctrl.onInputFocus.bind(ctrl) )
+      .on('blur', ctrl.onInputBlur.bind(ctrl) );
 };
 
 MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {
+
   ctrl.registerSelectedItemWatcher(function (item) {
     if (item) {
       this.appendChip(item);
       this.resetChipBuffer();
     }
   }.bind(this));
+
   this.$element.find('input')
-      .on('focus', function () { this.$scope.$apply(this.onInputFocus.bind(this)); }.bind(this))
-      .on('blur', function () { this.$scope.$apply(this.onInputBlur.bind(this)); }.bind(this));
+      .on('focus',this.onInputFocus.bind(this) )
+      .on('blur', this.onInputBlur.bind(this) );
 };
 
 MdChipsCtrl.prototype.hasFocus = function () {
