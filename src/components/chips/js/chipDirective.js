@@ -43,12 +43,13 @@ function MdChip($mdTheming) {
   function compile(element, attr) {
     element.append(DELETE_HINT_TEMPLATE);
     return function postLink(scope, element, attr, ctrl) {
-      if (ctrl) angular.element(element[0].querySelector('.md-chip-content'))
-          .on('blur', function () {
-            ctrl.$scope.$apply(function () { ctrl.selectedChip = -1; });
-          });
       element.addClass('md-chip');
       $mdTheming(element);
+
+      if (ctrl) angular.element(element[0].querySelector('.md-chip-content'))
+          .on('blur', function () {
+            ctrl.selectedChip = -1;
+          });
     };
   }
 }
