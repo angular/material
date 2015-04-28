@@ -9,12 +9,12 @@ function($mdUtil) {
     scope: true,
     templateUrl: 'partials/docs-demo.tmpl.html',
     transclude: true,
-    controller: ['$scope', '$element', '$attrs', '$interpolate', DocsDemoCtrl],
+    controller: ['$scope', '$element', '$attrs', '$interpolate', '$codepen', DocsDemoCtrl],
     controllerAs: 'demoCtrl',
     bindToController: true
   };
 
-  function DocsDemoCtrl($scope, $element, $attrs, $interpolate) {
+  function DocsDemoCtrl($scope, $element, $attrs, $interpolate, $codepen) {
     var self = this;
 
     self.interpolateCode = angular.isDefined($attrs.interpolateCode);
@@ -49,6 +49,10 @@ function($mdUtil) {
         .concat(self.files.js || [])
         .concat(self.files.css || [])
         .concat(self.files.html || []);
+
+      self.editExample = function() {
+        $codepen.editExample({title: self.demoTitle, files: self.files});
+      }
     };
 
     function convertName(name) {

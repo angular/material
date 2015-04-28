@@ -1,4 +1,4 @@
-<div ng-controller="AppCtrl" layout-fill layout="column" class="inset">
+<div ng-app="toastDemo1" ng-controller="AppCtrl" layout-fill layout="column" class="inset">
     <p>Toast can be dismissed with a swipe, a timer, or a button.</p>
 
     <div layout="row" layout-sm="column" layout-align="space-around">
@@ -20,7 +20,7 @@
       <b>Toast Position: "{{getToastPosition()}}"</b>
       <br/>
       <md-checkbox ng-repeat="(name, isSelected) in toastPosition"
-        ng-model="toastPosition[name]"> 
+        ng-model="toastPosition[name]">
         {{name}}
       </md-checkbox>
       <md-button class="md-primary md-fab md-fab-bottom-right">
