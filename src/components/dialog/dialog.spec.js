@@ -485,7 +485,7 @@ describe('$mdDialog', function() {
       expect(dialog.attr('role')).toBe('dialog');
     }));
 
-    it('should create an ARIA label if one is missing', inject(function($mdDialog, $rootScope) {
+    it('should create an ARIA label if one is missing', inject(function($mdDialog, $rootScope, $$rAF) {
       var template = '<md-dialog>Hello</md-dialog>';
       var parent = angular.element('<div>');
 
@@ -497,6 +497,7 @@ describe('$mdDialog', function() {
       $rootScope.$apply();
       angular.element(parent[0].querySelector('.md-dialog-container')).triggerHandler('transitionend');
       $rootScope.$apply();
+      $$rAF.flush();
 
       var dialog = angular.element(parent[0].querySelector('md-dialog'));
       expect(dialog.attr('aria-label')).toEqual(dialog.text());

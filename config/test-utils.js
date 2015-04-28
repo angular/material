@@ -29,19 +29,29 @@ beforeEach(function() {
    * Create a fake version of $$rAF that does things synchronously
    */
   module('ng', function($provide) {
-    $provide.value('$$rAF', mockRaf);
+    /**
+     * Add throttle() and wrap .flush() to catch `no callbacks present`
+     * errors
+     */
+    $provide.decorator('$$rAF', function throttleInjector($delegate){
 
-    function mockRaf(cb) {
-      cb();
-    }
-    mockRaf.throttle = function(cb) {
-      return function() {
-        cb.apply(this, arguments);
+      $delegate.throttle = function(cb) {
+        return function() {
+          cb.apply(this, arguments);
+        };
       };
-    };
-    mockRaf.flush = angular.noop;
+
+      var ngFlush = $delegate.flush;
+      $delegate.flush = function() {
+          try      { ngFlush();  }
+          catch(e) { ;           }
+      };
+
+      return $delegate;
+    });
 
   });
+
 
   jasmine.addMatchers({
 
@@ -118,5 +128,30 @@ beforeEach(function() {
     }
 
   });
+
+});
+
+
+beforeEach(function() {
+
+    /**
+     * Create a fake version of $$rAF that does things synchronously
+     */
+    module('material.core', function($provide) {
+
+      /**
+       * Intercept to make .expectWithText() to be synchronous
+       */
+      $provide.decorator('$mdAria', function($delegate){
+
+        $delegate.expectWithText = function(element, attrName){
+          $delegate.expect(element, attrName, element.text().trim());
+        };
+
+        return $delegate;
+      });
+
+    });
+
 
 });

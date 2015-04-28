@@ -41,6 +41,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
   return {
     restrict: 'E',
     transclude: true,
+    priority:210, // Before ngAria
     template: '\
         <div class="md-background"></div>\
         <div class="md-content" ng-transclude></div>',

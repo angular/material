@@ -19,10 +19,12 @@ describe('<md-switch>', function() {
     var switches = angular.element(element[0].querySelectorAll('md-switch'));
 
     expect(switches.eq(0).hasClass(CHECKED_CSS)).toEqual(false);
-    expect(switches.eq(1).hasClass(CHECKED_CSS)).toEqual(true);
     expect(switches.eq(0).attr('aria-checked')).toEqual('false');
-    expect(switches.eq(1).attr('aria-checked')).toEqual('true');
     expect(switches.eq(0).attr('role')).toEqual('checkbox');
+
+    expect(switches.eq(1).hasClass(CHECKED_CSS)).toEqual(true);
+    expect(switches.eq(1).attr('aria-checked')).toEqual('true');
+    expect(switches.eq(1).attr('role')).toEqual('checkbox');
 
     $rootScope.$apply(function(){
       $rootScope.blue = true;

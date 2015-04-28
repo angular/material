@@ -355,6 +355,7 @@ describe('$mdGesture', function() {
   describe('drag', function() {
 
     var startDragSpy, el, dragSpy, endDragSpy, doc;
+
     beforeEach(function() {
       inject(function($mdGesture, $document) {
         doc = $document;
@@ -415,13 +416,7 @@ describe('$mdGesture', function() {
         touches: [{pageX: 90, pageY: 99}]
       });
       expect(startDragSpy).not.toHaveBeenCalled();
-      expect(dragSpy).toHaveBeenCalled();
-      expect(dragSpy.calls.mostRecent().args[0].pointer).toHaveFields({
-        x: 90,
-        y: 99,
-        distanceX: 1,
-        distanceY: -1
-      });
+      expect(dragSpy).not.toHaveBeenCalled();
       expect(endDragSpy).not.toHaveBeenCalled();
 
       dragSpy.calls.reset();

@@ -54,6 +54,7 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
     restrict: 'E',
     transclude: true,
     require: '?ngModel',
+    priority:210, // Run before ngAria
     template: 
       '<div class="md-container" md-ink-ripple md-ink-ripple-checkbox>' +
         '<div class="md-icon"></div>' +

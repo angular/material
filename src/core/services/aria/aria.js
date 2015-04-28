@@ -4,6 +4,9 @@
 angular.module('material.core')
   .service('$mdAria', AriaService);
 
+/*
+ * @ngInject
+ */
 function AriaService($$rAF, $log, $window) {
 
   return {

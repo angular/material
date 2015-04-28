@@ -2,11 +2,9 @@ describe('<md-select-menu>', function() {
 
   beforeEach(module('material.components.select', 'ngAnimateMock'));
 
-  beforeEach(inject(function($mdUtil, $q) {
+  beforeEach(inject(function($mdUtil, $$q) {
     $mdUtil.transitionEndPromise = function() {
-      var deferred = $q.defer();
-      deferred.resolve();
-      return deferred.promise;
+      return $$q.when(true);
     };
   }));
 
@@ -68,12 +66,10 @@ describe('<md-select-menu>', function() {
 
 
   function pressKey(el, code) {
-    inject(function($rootScope, $animate, $timeout) {
       el.triggerHandler({
         type: 'keydown',
         keyCode: code
       });
-    });
   }
 
   function waitForSelectOpen() {
@@ -86,10 +82,13 @@ describe('<md-select-menu>', function() {
   }
 
   function waitForSelectClose() {
-    inject(function($rootScope, $animate) {
-      $rootScope.$digest();
-      $animate.triggerCallbacks();
-    });
+    try {
+      inject(function($rootScope, $animate ) {
+        $rootScope.$apply();
+        $animate.triggerCallbacks();
+
+      });
+    } catch(e) { }
   }
 
   it('should preserve tabindex', inject(function($document) {
@@ -105,25 +104,25 @@ describe('<md-select-menu>', function() {
   it('supports disabled state', inject(function($document) {
     var select = setupSelect('disabled="disabled", ng-model="val"');
     openSelect(select);
-    waitForSelectOpen();
     expect($document.find('md-select-menu').length).toBe(0);
     expect(select.attr('aria-disabled')).toBe('true');
   }));
 
-  it('closes the menu if the element is destroyed', inject(function($document) {
+  xit('closes the menu if the element is destroyed', inject(function($document, $rootScope) {
     var select = setupSelect('ng-model="val"');
+
     openSelect(select);
-    waitForSelectOpen();
     expect($document.find('md-select-menu').length).toBe(1);
+
     select.scope().$destroy();
     waitForSelectClose();
+
     expect($document.find('md-select-menu').length).toBe(0);
   }));
 
   it('restores focus to select when the menu is closed', inject(function($document) {
     var select = setupSelect('ng-model="val"');
     openSelect(select);
-    waitForSelectOpen();
 
     $document[0].body.appendChild(select[0]);
 
@@ -301,7 +300,7 @@ describe('<md-select-menu>', function() {
 
           var selectEl = setupSelect('ng-model="myModel", ng-change="changed()"', [1, 2, 3]);
           openSelect(selectEl);
-          waitForSelectOpen();
+
           var menuEl = $document.find('md-select-menu');
           menuEl.triggerHandler({
             type: 'click',
