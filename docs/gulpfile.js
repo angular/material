@@ -107,10 +107,14 @@ module.exports = function(gulp, IS_RELEASE_BUILD) {
       .pipe(gulp.dest('dist/docs'));
   });
 
-  gulp.task('docs-js', ['docs-app', 'docs-html2js', 'demos', 'build'], function() {
+  gulp.task('docs-js-dependencies', ['build'], function() {
+    return gulp.src('dist/angular-material.js')
+      .pipe(gulp.dest('dist/docs'));
+  });
+
+  gulp.task('docs-js', ['docs-app', 'docs-html2js', 'demos', 'build', 'docs-js-dependencies'], function() {
     return gulp.src([
       'node_modules/angularytics/dist/angularytics.js',
-      'dist/angular-material.js',
       'dist/docs/js/**/*.js'
     ])
       .pipe(concat('docs.js'))
@@ -118,9 +122,13 @@ module.exports = function(gulp, IS_RELEASE_BUILD) {
       .pipe(gulp.dest('dist/docs'));
   });
 
-  gulp.task('docs-css', ['docs-app', 'build'], function() {
+  gulp.task('docs-css-dependencies', ['build'], function() {
+    return gulp.src('dist/angular-material.css')
+      .pipe(gulp.dest('dist/docs'));
+  });
+
+  gulp.task('docs-css', ['docs-app', 'build', 'docs-css-dependencies'], function() {
     return gulp.src([
-      'dist/angular-material.css',
       'dist/themes/*.css',
       'docs/app/css/highlightjs-material.css',
       'docs/app/css/layout-demo.css',
