@@ -159,7 +159,7 @@ angular.module('material.core')
       }
 
       return function restoreScroll() {
-        disableTarget.append(virtualScroller.children());
+        disableTarget.append(virtualScroller[0].childNodes);
         wrapperEl.remove();
         angular.element($window).off('resize', computeSize);
         disableTarget.attr('style', restoreStyle || false);
