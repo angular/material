@@ -144,7 +144,9 @@ a.md-button.md-THEME_NAME-theme,
 
   &[disabled],
   &.md-raised[disabled],
-  &.md-fab[disabled] {
+  &.md-fab[disabled],
+  &.md-accent[disabled],
+  &.md-warn[disabled] {
     color: '{{foreground-3}}';
     cursor: not-allowed;
 
