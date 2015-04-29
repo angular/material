@@ -1,4 +1,6 @@
 $autocomplete-option-height: 48px;
+$input-container-padding: 2px !default;
+$input-error-height: 24px !default;
 
 @keyframes md-autocomplete-list-out {
   0% {
@@ -38,10 +40,14 @@ md-autocomplete {
   overflow: visible;
   min-width: 190px;
   &[md-floating-label] {
+    padding-bottom: $input-container-padding + $input-error-height;
     box-shadow: none;
     border-radius: 0;
     background: transparent;
     height: auto;
+    md-input-container {
+      padding-bottom: 0;
+    }
     md-autocomplete-wrap {
       height: auto;
     }
