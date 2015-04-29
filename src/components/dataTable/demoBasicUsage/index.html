@@ -1,10 +1,154 @@
 
-<div ng-controller="AppCtrl">
-  <md-content>
+<div ng-controller="AppCtrl as ctrl">
+  
+  <style>
+  .outer {
+    height: 340px;
+    overflow: hidden;
+    position: relative;
+    width: 800px;
+  }
+  
+  .outer .header {
+    position: absolute;
+  }
+  
+  .outer table {
+    table-layout: fixed;
+  }
+  
+  .outer td {
+    background-color: white !important;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .outer td,
+  .outer th {
+    box-sizing: border-box;
+    height: 40px;
+    width: 100px;
+  }
+  
+  .header-sticky,
+  .header-scrollx {
+    position: absolute;
+  }
+  
+  .header-sticky {
+    width: 200px;
+    z-index: 100;
+  }
+  
+  .header-scrollx {
+    left: 200px;
+    width: 800px;
+  }
+  
+  .sizery {
+    height: 800px; /* 40 * 20 */
+    width: 1px;
+    visibility: hidden;
+  }
+  
+  .sticky {
+    height: 300px;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    width: 200px;
+  }
+  
+  .scrolly-relative {
+    height: 300px;
+    position: absolute;
+    top: 40px;
+    width: 100%;
+  }
+  
+  .scrolly {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+  }
+  
+  .scrollx {
+    height: 100%;
+    left: 200px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: absolute;
+    top: 0;
+    width: 584px; /* Leave 16px for scrollbar */
+  }
+  
+  .scrollx td:nth-child(-n+2),
+  .scrollx thead {
+    display: none;
+  }
+  </style>
+  
+  <md>
 
-    <section layout="row" layout-sm="column" layout-align="center center">
+    <div class="outer grid-a">
+      <table class="header-sticky" aria-hidden="true">
+        <thead>
+          <tr>
+            <th ng-repeat="col in ctrl.cols.slice(0, 2)">
+              Col {{col}}
+            </th>
+          </tr>
+        </thead>
+      </table>
       
-    </section>
-
+      <table class="header-scrollx" aria-hidden="true">
+        <thead>
+          <tr>
+            <th ng-repeat="col in ctrl.cols.slice(2)">
+              Col {{col}}
+            </th>
+          </tr>
+        </thead>
+      </table>
+      
+      <div class="scrolly-relative">
+        <div class="scrolly">
+        
+          <div class="sizery"></div>
+        
+          <div class="sticky" aria-hidden="true">
+            <table>
+              <tbody>
+                <tr ng-repeat="row in ctrl.rows">
+                  <td ng-repeat="col in ctrl.cols.slice(0, 2)">
+                    {{row}} : {{col}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+      
+          <div class="scrollx">
+            <table>
+              <thead>
+                <tr>
+                  <th ng-repeat="col in ctrl.cols" aria-hidden="false">
+                    Col {{col}}
+                  </th>
+                </tr>
+              </thead>
+        
+              <tbody>
+                <tr ng-repeat="row in ctrl.rows">
+                  <td ng-repeat="col in ctrl.cols" aria-hidden="false">
+                    {{row}} : {{col}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </md-content>
 </div>
