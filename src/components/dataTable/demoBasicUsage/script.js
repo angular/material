@@ -3,6 +3,7 @@ angular.module('dataTableDemo', ['ngMaterial'])
 .controller('AppCtrl', function($document, $scope) {
   var ROW_HEIGHT = 40;
   var CONTAINER_HEIGHT = 300;
+  var HEADER_OFFSET = 1;
   
   this.allRows = []
   for (var i = 0; i < 1000; i++) {
@@ -27,7 +28,7 @@ angular.module('dataTableDemo', ['ngMaterial'])
     }
     
     this.rows = this.allRows.slice(start, end);
-    console.log(this.rows);
+    // console.log(this.rows);
     return true;
   };
 
@@ -39,7 +40,7 @@ angular.module('dataTableDemo', ['ngMaterial'])
   var stickyTable = $element[0].querySelector('.sticky > table');
   var headerScrollx = $element[0].querySelector('.header-scrollx');
 
-  sizery.style.height = ROW_HEIGHT * this.allRows.length;
+  sizery.style.height = (ROW_HEIGHT * this.allRows.length) + 'px';
   this.updateRows(CONTAINER_HEIGHT);
 
   angular.element(scrollx).on('scroll', function() {
@@ -50,16 +51,20 @@ angular.module('dataTableDemo', ['ngMaterial'])
     headerScrollx.style.transform = 'translateX(' + -scrollLeft + 'px)';
   }.bind(this));
 
+  var animationId;
   angular.element(scrolly).on('scroll', function() {
-    var scrollTop = scrolly.scrollTop;
+    window.cancelAnimationFrame(animationId);
+    animationId = window.requestAnimationFrame(function() {
+      var scrollTop = scrolly.scrollTop;
     
-    // stickyTable.style.transform = 'translateY(' + -scrollTop + 'px)';
-    // scrollxTable.style.transform = 'translateY(' + -scrollTop + 'px)';
+      // stickyTable.style.transform = 'translateY(' + -scrollTop + 'px)';
+      // scrollxTable.style.transform = 'translateY(' + -scrollTop + 'px)';
     
-    stickyTable.style.transform = 'translateY(' + -(scrollTop % ROW_HEIGHT) + 'px)';
-    scrollxTable.style.transform = 'translateY(' + -(scrollTop % ROW_HEIGHT) + 'px)';
-    if (this.updateRows(CONTAINER_HEIGHT, scrollTop)) {
-      $scope.$digest();
-    }
+      stickyTable.style.transform = 'translateY(' + -(scrollTop % ROW_HEIGHT) + 'px)';
+      scrollxTable.style.transform = 'translateY(' + -(HEADER_OFFSET + scrollTop % ROW_HEIGHT) + 'px)';
+      if (this.updateRows(CONTAINER_HEIGHT, scrollTop)) {
+        $scope.$digest();
+      }
+    }.bind(this));
   }.bind(this));
 });
