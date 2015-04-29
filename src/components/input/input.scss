@@ -56,6 +56,13 @@ md-input-container {
     -moz-appearance: none;
     -webkit-appearance: none;
   }
+  input[type="date"],
+  input[type="datetime-local"],
+  input[type="month"],
+  input[type="time"],
+  input[type="week"] {
+    min-height: $input-line-height;
+  }
   textarea {
     resize: none;
     overflow: hidden;
@@ -140,6 +147,10 @@ md-input-container {
     position: absolute;
     font-size: $input-error-font-size;
     line-height: $input-error-height;
+
+    &:not(.md-char-counter) {
+      padding-right: 3rem;
+    }
 
     &.ng-enter {
       transition: $swift-ease-out;
