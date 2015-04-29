@@ -26,31 +26,31 @@ consistency across your application.
         <span flex="25" class="docs-definition" aria-describedby="headings-selectors">
           <code>.md-display-4</code>
         </span>
-        <h5 aria-describedby="headings-output" class="md-display-4 docs-output">Light 11.2sp</h5>
+        <h5 aria-describedby="headings-output" class="md-display-4 docs-output">Light 112px</h5>
       </li>
       <li layout="row" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="headings-selectors">
           <code>.md-display-3</code>
         </span>
-        <h5 aria-describedby="headings-output" class="md-display-3 docs-output">Regular 5.6sp</h5>
+        <h5 aria-describedby="headings-output" class="md-display-3 docs-output">Regular 56px</h5>
       </li>
       <li layout="row" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="headings-selectors">
           <code>.md-display-2</code>
         </span>
-        <h5 aria-describedby="headings-output" class="md-display-2 docs-output">Regular 4.5sp</h5>
+        <h5 aria-describedby="headings-output" class="md-display-2 docs-output">Regular 45px</h5>
       </li>
       <li layout="row" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="headings-selectors">
           <code>.md-display-1</code>
         </span>
-        <h5 aria-describedby="headings-output" class="md-display-1 docs-output">Regular 3.4sp</h5>
+        <h5 aria-describedby="headings-output" class="md-display-1 docs-output">Regular 34px</h5>
       </li>
       <li layout="row" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="headings-selectors">
           <code>.md-headline</code>
         </span>
-        <h5 aria-describedby="headings-output" class="md-headline docs-output">Regular 2.4sp</h5>
+        <h5 aria-describedby="headings-output" class="md-headline docs-output">Regular 24px</h5>
       </li>
       <li layout="row" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="headings-selectors">
@@ -62,7 +62,7 @@ consistency across your application.
         <span flex="25" class="docs-definition" aria-describedby="headings-selectors">
           <code>.md-subhead</code>
         </span>
-        <h5 aria-describedby="headings-output" class="md-subhead docs-output">Regular 1.6sp</h5>
+        <h5 aria-describedby="headings-output" class="md-subhead docs-output">Regular 16px</h5>
       </li>
     </ul>
     <h4 class="md-title">Example</h4>
@@ -74,7 +74,7 @@ consistency across your application.
 
 	  <br/>
   <span class="md-body-1">
-  	Note: Base font size is `10px` for easy rem units (1.2rem = 12px). Body font size is `16px`. sp = scaleable pixels.
+  	Note: Base font size is `10px` for easy rem units (1.2rem = 12px). Body font size is `14px`. sp = scaleable pixels.
 	</span>
 
   </div>
@@ -98,28 +98,28 @@ consistency across your application.
         <span flex="25" class="docs-definition" aria-describedby="body-selectors">
           <code>.md-body-1</code><br>
         </span>
-        <p class="docs-output" aria-describedby="body-output">Regular 1.4sp</p>
+        <p class="docs-output" aria-describedby="body-output">Regular 14px</p>
       </li>
       <li layout="row" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="body-selectors"><code>
           .md-body-2</code>
         </span>
-        <p class="md-body-2 docs-output" aria-describedby="body-output">Medium 1.4sp</p>
-      </li>
-      <li layout="row" layout-align="start center">
-        <span flex="25" class="docs-definition" aria-describedby="body-selectors">
-          <code>.md-caption</code><br>
-        </span>
-        <div class="docs-output" aria-describedby="body-output">
-          <small class="md-caption">Regular 1.2sp</small>
-        </div>
+        <p class="md-body-2 docs-output" aria-describedby="body-output">Medium 14px</p>
       </li>
       <li layout="row" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="body-selectors">
           <code>.md-button</code>
         </span>
         <div class="docs-output" aria-describedby="body-output">
-          <md-button>Medium 1.4sp</md-button>
+          <md-button>Medium 14px</md-button>
+        </div>
+      </li>
+      <li layout="row" layout-align="start center">
+        <span flex="25" class="docs-definition" aria-describedby="body-selectors">
+          <code>.md-caption</code><br>
+        </span>
+        <div class="docs-output" aria-describedby="body-output">
+          <small class="md-caption">Regular 12px</small>
         </div>
       </li>
     </ul>
