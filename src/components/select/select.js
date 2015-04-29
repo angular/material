@@ -939,6 +939,7 @@ function SelectProvider($$interimElementProvider) {
         .removeClass('md-clickable');
 
       opts.target.attr('aria-expanded', 'false');
+      opts.selectEl.off('keydown');
       opts.isRemoved = true;
 
       angular.element($window).off('resize', opts.resizeFn);
