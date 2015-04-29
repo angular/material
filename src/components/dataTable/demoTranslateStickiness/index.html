@@ -1,0 +1,55 @@
+
+<div ng-controller="AppCtrl as ctrl">
+  
+  <style>
+/*  .outer {
+    position: relative;
+  }
+
+  .scrolly {
+    height: 300px;
+    margin-left: 200px;
+    margin-top: 40px;
+    overflow: auto;
+    width: 600px;
+  }
+
+  .scrolly table {
+    margin: -40px 0 0 -200px;
+    position: absolute;
+    table-layout: fixed;
+    transform: translate(-200px, -40px);
+  }
+
+  .scrolly td,
+  .scrolly th {
+    height: 40px;
+    width: 100px;
+  }
+*/  </style>
+  
+  <md-content>
+
+    <div class="outer">
+      <div class="scrolly">
+        <table>
+          <thead>
+            <tr>
+              <th ng-repeat="col in ctrl.cols">
+                Col {{col}}
+              </th>
+            </tr>
+          </thead>
+        
+          <tbody>
+            <tr ng-repeat="row in ctrl.rows">
+              <td ng-repeat="col in ctrl.cols">
+                {{row}} : {{col}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </md-content>
+</div>
