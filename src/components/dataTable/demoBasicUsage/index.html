@@ -22,6 +22,10 @@
     border-bottom: 1px solid #ddd;
   }
   
+  .outer th {
+    padding: 8px;
+  }
+  
   .outer td,
   .outer th {
     box-sizing: border-box;
@@ -83,8 +87,23 @@
   }
   
   .scrollx td:nth-child(-n+2),
-  .scrollx thead {
-    display: none;
+  .scrollx th:nth-child(-n+2) {
+/*    clip: rect(1px, 1px, 1px, 1px);*/
+    left: -200px;
+    position: absolute;
+  }
+  
+  .scrollx > table {
+    transform: translateY(-1px);
+  }
+  
+  .scrollx thead th {
+    border: none;
+    height: 1px;
+    line-height: 1px;
+    margin: 0;
+    opacity: 0;
+    padding: 0;
   }
   </style>
   
@@ -101,7 +120,7 @@
         </thead>
       </table>
       
-      <table class="header-scrollx" aria-hidden="true">
+      <table class="header-scrollx" aria-hidden="true" role="presentation">
         <thead>
           <tr>
             <th ng-repeat="col in ctrl.cols.slice(2)">
@@ -116,7 +135,7 @@
         
           <div class="sizery"></div>
         
-          <div class="sticky" aria-hidden="true">
+          <div class="sticky" aria-hidden="true" role="presentation">
             <table>
               <tbody>
                 <tr ng-repeat="row in ctrl.rows">
@@ -128,7 +147,7 @@
             </table>
           </div>
       
-          <div class="scrollx">
+          <div class="scrollx" aria-live="polite">
             <table>
               <thead>
                 <tr>
