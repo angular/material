@@ -3,8 +3,8 @@
 @description
 
 In most applications, declaring multiple themes is **not** necessary. Instead,
-you should configure the `default` theme for your needs. If you need multiple 
-themes in a single application, Angular Material does provide tools 
+you should configure the `default` theme for your needs. If you need multiple
+themes in a single application, Angular Material does provide tools
 to make this possible.
 
 ### Registering another theme
@@ -15,7 +15,6 @@ registered the second theme, you can configure it with the same chainable
 interface used on the default theme.
 
 <hljs lang="js">
-angular.module(
 angular.module('myApp', ['ngMaterial'])
 .config(function($mdThemingProvider) {
   $mdThemingProvider.theme('altTheme')
