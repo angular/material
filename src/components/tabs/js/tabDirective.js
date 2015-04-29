@@ -63,8 +63,8 @@ function MdTab () {
       label:    '@',
       active:   '=?mdActive',
       disabled: '=?ngDisabled',
-      selectExpr:   '@?mdOnSelect',
-      deselectExpr: '@?mdOnDeselect'
+      select:   '&?mdOnSelect',
+      deselect: '&?mdOnDeselect'
     },
     link: postLink
   };
@@ -81,8 +81,8 @@ function MdTab () {
           label:    getLabel()
         }, index);
 
-    scope.deselect = function () { ctrl.parent.$eval(scope.deselectExpr || ''); };
-    scope.select = function () { ctrl.parent.$eval(scope.selectExpr || ''); };
+    scope.select   = scope.select   || angular.noop;
+    scope.deselect = scope.deselect || angular.noop;
 
     scope.$watch('active', function (active) { if (active) ctrl.select(data.getIndex()); });
     scope.$watch('disabled', function () { ctrl.refreshIndex(); });
