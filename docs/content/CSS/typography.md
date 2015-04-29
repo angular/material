@@ -111,7 +111,7 @@ consistency across your application.
           <code>.md-button</code>
         </span>
         <div class="docs-output" aria-describedby="body-output">
-          <md-button>Medium 14px</md-button>
+		  <p class=".md-button">Medium 14px</p>
         </div>
       </li>
       <li layout="row" layout-align="start center">
