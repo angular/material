@@ -83,6 +83,21 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
             ngModelCtrl.$setViewValue.bind(ngModelCtrl)
         );
       }
+
+      // Initial state
+      // Like standard HTML checkbox, 'checked' property should be false by default
+      element[0].checked = false;
+
+      // Watch external changes made to 'checked' property
+      scope.$watch(
+        function() {
+          return element[0].checked;
+        },
+        function(newValue, oldValue) {
+          ngModelCtrl.$setViewValue(newValue);
+        }
+      );
+
       $$watchExpr('ngDisabled', 'tabindex', {
         true: '-1',
         false: attr.tabindex
@@ -141,10 +156,15 @@ function MdCheckboxDirective(inputDirective, $mdInkRipple, $mdAria, $mdConstant,
           ngModelCtrl.$setViewValue( viewValue, ev && ev.type);
           ngModelCtrl.$render();
         });
+
+        // Emit 'change' event
+        element.triggerHandler('change');
       }
 
       function render() {
-        if(ngModelCtrl.$viewValue) {
+        element[0].checked = ngModelCtrl.$viewValue;
+
+        if (element[0].checked) {
           element.addClass(CHECKED_CSS);
         } else {
           element.removeClass(CHECKED_CSS);
