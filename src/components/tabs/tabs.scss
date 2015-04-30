@@ -133,6 +133,10 @@ md-tabs-canvas {
   &.md-paginated {
     margin: 0 $tabs-paginator-width;
   }
+  &.md-center-tabs {
+    display: flex;
+    flex-direction: column;
+  }
 }
 md-pagination-wrapper {
   @include pie-clearfix;
@@ -144,10 +148,10 @@ md-pagination-wrapper {
   left: 0;
   transform: translate3d(0, 0, 0);
   &.md-center-tabs {
+    position: relative;
     width: initial;
-    float: left;
-    left: 50%;
-    transform: translate3d(-50%, 0, 0);
+    flex: 1;
+    margin: 0 auto;
   }
 }
 md-tabs-content-wrapper {
