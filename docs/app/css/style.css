@@ -202,6 +202,12 @@ code:not(.highlight) {
 .docs-menu li {
   margin: 0;
 }
+.docs-menu > li:nth-child(1) {
+  border-top: none;
+}
+.md-whiteframe-glow-z2 {
+  box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.2), 0px 0 4px 3px rgba(0, 0, 0, 0.14), 0px 0px 8px 1px rgba(0, 0, 0, 0.12);
+}
 .docs-menu > li {
   border-top: 1px solid rgba(0, 0, 0, 0.12);
 }

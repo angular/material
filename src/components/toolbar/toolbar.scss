@@ -18,6 +18,7 @@ md-toolbar {
   font-size: 2.0rem;
   min-height: $baseline-grid * 8;
   width: 100%;
+  transition: box-shadow $swift-ease-in-out-duration linear;
 
   *,
   *:before,

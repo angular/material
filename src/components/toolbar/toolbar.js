@@ -127,6 +127,8 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming) {
             Math.max(0, y + scrollTop - prevScrollTop)
           );
 
+          element[y ? 'addClass' : 'removeClass']('md-whiteframe-z1');
+
           element.css(
             $mdConstant.CSS.TRANSFORM,
             'translate3d(0,' + (-y * shrinkSpeedFactor) + 'px,0)'
