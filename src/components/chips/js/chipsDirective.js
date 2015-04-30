@@ -131,7 +131,7 @@ var CHIP_REMOVE_TEMPLATE = '\
         ng-click="$mdChipsCtrl.removeChipAndFocusInput($$replacedScope.$index)"\
         aria-hidden="true"\
         tabindex="-1">\
-      <md-icon md-svg-icon="close"></md-icon>\
+      <md-icon md-svg-icon="md-close"></md-icon>\
       <span class="md-visually-hidden">\
         {{$mdChipsCtrl.deleteButtonLabel}}\
       </span>\
