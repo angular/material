@@ -39,7 +39,7 @@ $shadow-ambient-shadow-opacity: 0.12;
 //    multiple lines. Ugly. Sorry.
 $whiteframe-shadow-z1: 0px 3px 1px -2px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 2px 2px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 1px 5px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
 $whiteframe-zindex-z1: 1 !default;
-$whiteframe-shadow-z2: 0px 3px 3px -2px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 3px 4px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 1px 8px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-z2: 0 2px 4px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0 4px 5px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0 1px 10px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
 $whiteframe-zindex-z2: 2 !default;
 $whiteframe-shadow-z3: 0px 3px 5px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 6px 10px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 1px 18px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
 $whiteframe-zindex-z3: 3 !default;
