@@ -5,7 +5,7 @@ $toolbar-tall-height: 128px !default;
 $toolbar-indent-margin: 64px !default;
 $toolbar-padding: 16px !default;
 
-$icon-button-margin-offset: -rem(0.800) !default;
+$icon-button-margin-offset: rem(-0.800) !default;
 
 md-toolbar {
   box-sizing: border-box;
