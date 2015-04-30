@@ -112,7 +112,7 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia) {
 
     var invalidateLayout = angular.bind(ctrl, ctrl.invalidateLayout),
         unwatchAttrs = watchMedia();
-    scope.$on('$destroy', unwatchMedia);
+      scope.$on('$destroy', unwatchMedia);
 
     /**
      * Watches for changes in media, invalidating layout as necessary.
@@ -128,6 +128,8 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia) {
     }
 
     function unwatchMedia() {
+      ctrl.layoutDelegate = angular.noop;
+
       unwatchAttrs();
       for (var mediaName in $mdConstant.MEDIA) {
         $mdMedia.getQuery($mdConstant.MEDIA[mediaName])
