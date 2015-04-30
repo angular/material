@@ -5,7 +5,7 @@ $toolbar-tall-height: 128px !default;
 $toolbar-indent-margin: 64px !default;
 $toolbar-padding: 16px !default;
 
-$icon-button-margin-offset: -0.800rem !default;
+$icon-button-margin-offset: -rem(0.800) !default;
 
 md-toolbar {
   box-sizing: border-box;
@@ -15,7 +15,7 @@ md-toolbar {
   position: relative;
   z-index: 2;
 
-  font-size: 2.0rem;
+  font-size: rem(2.0);
   min-height: $baseline-grid * 8;
   width: 100%;
   transition: box-shadow $swift-ease-in-out-duration linear;

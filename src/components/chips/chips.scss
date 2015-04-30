@@ -1,13 +1,13 @@
-$chip-font-size: 1.3rem !default;
-$chip-height: 3.2rem !default;
-$chip-padding: 0 0.8rem 0 1.2rem !default;
-$chip-margin: 0.8rem 0.8rem 0 0 !default;
-$chip-wrap-padding: 0 0 0.8rem 0 !default;
-$chip-delete-icon-size: 1.8rem !default;
-$contact-chip-padding: 0 0.8rem 0 0 !default;
-$contact-chip-suggestion-image-height: 4.0rem !default;
-$contact-chip-suggestion-margin: 0.8rem !default;
-$contact-chip-name-width: 12rem !default;
+$chip-font-size: rem(1.3) !default;
+$chip-height: rem(3.2) !default;
+$chip-padding: 0 rem(0.8) 0 rem(1.2) !default;
+$chip-margin: rem(0.8) rem(0.8) 0 0 !default;
+$chip-wrap-padding: 0 0 rem(0.8) 0 !default;
+$chip-delete-icon-size: rem(1.8) !default;
+$contact-chip-padding: 0 rem(0.8) 0 0 !default;
+$contact-chip-suggestion-image-height: rem(4.0) !default;
+$contact-chip-suggestion-margin: rem(0.8) !default;
+$contact-chip-name-width: rem(12) !default;
 
 .md-contact-chips {
   .md-chips {
@@ -23,7 +23,7 @@ $contact-chip-name-width: 12rem !default;
       .md-contact-name {
         display: inline-block;
         height: $chip-height;
-        margin-left: 0.8rem;
+        margin-left: rem(0.8);
       }
     }
   }
@@ -67,7 +67,7 @@ $contact-chip-name-width: 12rem !default;
     float: left;
     .md-chip-content {
       display: block;
-      padding-right:0.4rem;
+      padding-right:rem(0.4);
       float: left;
       white-space: nowrap;
       &:focus {
@@ -76,7 +76,7 @@ $contact-chip-name-width: 12rem !default;
     }
     .md-chip-remove-container {
       display: inline-block;
-      margin-right: -0.5rem;
+      margin-right: -rem(0.5);
     }
     .md-chip-remove {
       text-align: center;

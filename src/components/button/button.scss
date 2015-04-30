@@ -1,22 +1,22 @@
-$button-line-height: 3.60rem !default;
-$button-padding: 0 0.600rem !default;
-$button-margin: 0.600rem 0.800rem !default;
-$button-min-width: 8.800rem !default;
+$button-line-height: rem(3.60) !default;
+$button-padding: 0 rem(0.600) !default;
+$button-margin: rem(0.600) rem(0.800) !default;
+$button-min-width: rem(8.800) !default;
 
 // Fab buttons
-$button-fab-width: 5.600rem !default;
-$button-fab-height: 5.600rem !default;
-$button-fab-line-height: 5.600rem !default;
-$button-fab-padding: 1.60rem !default;
-$button-fab-mini-width: 4.00rem !default;
-$button-fab-mini-height: 4.00rem !default;
-$button-fab-mini-line-height: 4.00rem !default;
+$button-fab-width: rem(5.600) !default;
+$button-fab-height: rem(5.600) !default;
+$button-fab-line-height: rem(5.600) !default;
+$button-fab-padding: rem(1.60) !default;
+$button-fab-mini-width: rem(4.00) !default;
+$button-fab-mini-height: rem(4.00) !default;
+$button-fab-mini-line-height: rem(4.00) !default;
 
 $button-fab-toast-offset: $button-fab-height * 0.75 !default;
 
-$icon-button-height: 4.800rem !default;
-$icon-button-width: 4.800rem !default;
-$icon-button-margin: 0.600rem !default;
+$icon-button-height: rem(4.800) !default;
+$icon-button-width: rem(4.800) !default;
+$icon-button-margin: rem(0.600) !default;
 
 /**
  * Position a FAB button.

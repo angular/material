@@ -89,7 +89,7 @@ md-select {
   padding-top: $baseline-grid - 1;
   padding-bottom: $baseline-grid + 2;
   border-bottom: 1px solid;
-  font-size: 1.6rem;
+  font-size: rem(1.6);
   line-height: 0.8em;
   position: relative;
   box-sizing: border-box;
@@ -164,7 +164,7 @@ md-option {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 1.6rem;
+    font-size: rem(1.6);
   }
   padding: 0 $select-option-padding 0 $select-option-padding;
   height: $select-option-height;
@@ -174,7 +174,7 @@ md-optgroup {
   display: block;
   label {
     display: block;
-    font-size: 1.6rem;
+    font-size: rem(1.6);
     text-transform: uppercase;
     padding: $baseline-grid * 2 $baseline-grid;
   }

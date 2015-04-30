@@ -149,7 +149,7 @@ md-input-container {
     line-height: $input-error-height;
 
     &:not(.md-char-counter) {
-      padding-right: 3rem;
+      padding-right: rem(3);
     }
 
     &.ng-enter {
