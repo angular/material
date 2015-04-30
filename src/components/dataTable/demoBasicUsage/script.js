@@ -1,6 +1,6 @@
 
 angular.module('dataTableDemo', ['ngMaterial'])
-.controller('AppCtrl', function($document, $scope) {
+.controller('AppCtrl', function($animate, $document, $scope) {
   var ROW_HEIGHT = 40;
   var CONTAINER_HEIGHT = 300;
   var HEADER_OFFSET = 1;
@@ -12,24 +12,28 @@ angular.module('dataTableDemo', ['ngMaterial'])
   
   this.cols = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   this.rows = [];
+  this.logicalRows = [];
 
   // Returns whether the rowset changed.
   this.prevStart = 0;
   this.prevEnd = 0;
   
-  this.updateRows = function(opt_height, opt_scrollTop) {
+  this.updateRows = function updateRows(opt_height, opt_scrollTop) {
     var containerHeight = opt_height == null ? scrolly.clientHeight : opt_height;
     var scrollTop = opt_scrollTop == null ? scrolly.scrollTop : opt_scrollTop;
-    var start = scrollTop / ROW_HEIGHT;
-    var end = (scrollTop + containerHeight) / ROW_HEIGHT;
+    var start = Math.floor(scrollTop / ROW_HEIGHT);
+    var end = Math.floor((scrollTop + containerHeight) / ROW_HEIGHT);
 
     if (this.prevStart === start && this.prevEnd === end) {
-      return false;
+      return 0;
     }
     
-    this.rows = this.allRows.slice(start, end);
-    // console.log(this.rows);
-    return true;
+    var prevStart = this.prevStart;
+    this.prevStart = start;
+    this.prevEnd = end;
+    this.logicalRows = this.allRows.slice(start, end);
+    // We're just assuming the the size never changes at this point
+    return start - prevStart;
   };
 
   var $element = angular.element($document[0].querySelector('.grid-a'));
@@ -41,20 +45,32 @@ angular.module('dataTableDemo', ['ngMaterial'])
   var headerScrollx = $element[0].querySelector('.header-scrollx');
 
   sizery.style.height = (ROW_HEIGHT * this.allRows.length) + 'px';
-  this.updateRows(CONTAINER_HEIGHT);
+  this.updateRows(CONTAINER_HEIGHT, 0);
+  this.rows = this.logicalRows;
 
-  angular.element(scrollx).on('scroll', function() {
-    var scrollLeft = scrollx.scrollLeft;
+  // Disable ng-animate for the table.
+  // In reality, what we'll need to do is have a custom ng-repeat that does
+  // not hook up to ng-animate so that we are not blocking the table's contents
+  // from animating.
+  // $animate.enabled($element, false);
+  $animate.enabled(false);
 
-    // angular.element(header.querySelectorAll('th:nth-last-child(-n+8)'))
-    //     .css('transform', 'translateX(' + -scrollLeft + 'px)');
-    headerScrollx.style.transform = 'translateX(' + -scrollLeft + 'px)';
+  var animationIdX;
+  angular.element(scrollx).on('scroll', function scrollx() {
+    window.cancelAnimationFrame(animationIdX);
+    animationIdX = window.requestAnimationFrame(function animatey() {
+      var scrollLeft = scrollx.scrollLeft;
+
+      // angular.element(header.querySelectorAll('th:nth-last-child(-n+8)'))
+      //     .css('transform', 'translateX(' + -scrollLeft + 'px)');
+      headerScrollx.style.transform = 'translateX(' + -scrollLeft + 'px)';
+    });
   }.bind(this));
 
-  var animationId;
-  angular.element(scrolly).on('scroll', function() {
-    window.cancelAnimationFrame(animationId);
-    animationId = window.requestAnimationFrame(function() {
+  var animationIdY;
+  angular.element(scrolly).on('scroll', function scrolly() {
+    window.cancelAnimationFrame(animationIdY);
+    animationIdY = window.requestAnimationFrame(function animatey() {
       var scrollTop = scrolly.scrollTop;
     
       // stickyTable.style.transform = 'translateY(' + -scrollTop + 'px)';
@@ -63,8 +79,48 @@ angular.module('dataTableDemo', ['ngMaterial'])
       stickyTable.style.transform = 'translateY(' + -(scrollTop % ROW_HEIGHT) + 'px)';
       scrollxTable.style.transform = 'translateY(' + -(HEADER_OFFSET + scrollTop % ROW_HEIGHT) + 'px)';
       if (this.updateRows(CONTAINER_HEIGHT, scrollTop)) {
+        this.rows = this.logicalRows;
         $scope.$digest();
+      }
+
+      // stickyTable.style.transform = 'translateY(' + -(scrollTop % ROW_HEIGHT) + 'px)';
+//       scrollxTable.style.transform = 'translateY(' + -(HEADER_OFFSET + scrollTop % ROW_HEIGHT) + 'px)';
+//
+      if (this.updateRows(CONTAINER_HEIGHT, scrollTop)) {
+        // var getSwapDistance = function(array1, array2, maxSwap) {
+//           maxSwap = maxSwap || 10;
+//           for (var swapDistance = maxSwap; swapDistance > 0; swapDistance--) {
+//             var swap = true;
+//
+//             for (var idx = 0, end = array1.length - swapDistance; idx < end; idx++) {
+//               if (array1[idx + swapDistance] !== array2[idx]) {
+//                 swap = false;
+//                 break;
+//               }
+//             }
+//
+//             if (swap) {
+//               return swapDistance;
+//             }
+//           }
+//
+//           return 0;
+//         };
+
+        
+        
+        // $scope.$digest();
       }
     }.bind(this));
   }.bind(this));
+  
+  var mousewheel = function mousewheel(evt) {
+    scrolly.scrollTop += evt.deltaY;
+    scrollx.scrollLeft += evt.deltaX;
+    evt.preventDefault();
+  };
+  angular.element(stickyTable).on('wheel', mousewheel);
+  angular.element(scrollxTable).on('wheel', mousewheel);
+  
+  // Also would need to do touch momentum scrolling (and probably cancel wheel handling in those cases)
 });
