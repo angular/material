@@ -413,12 +413,13 @@ md-tabs.demo-source-tabs .active md-tab-label {
 md-toolbar.demo-toolbar {
   border-radius: 4px 4px 0 0;
 }
-md-toolbar.demo-toolbar,
-.demo-source-tabs md-tab,
-.demo-source-tabs .tabs-header {
+md-toolbar.demo-toolbar {
   background: #f2f2f2 !important;
   color: #616161;
   border-bottom: 1px solid #e5e5e5;
+}
+md-toolbar.demo-toolbar md-icon {
+  color: #616161;
 }
 md-toolbar.demo-toolbar md-tab-label {
   color: #99E4EE

@@ -139,9 +139,7 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
   };
 
   function link (scope, element, attr) {
-    if (attr.ngDisabled) {
-      scope.$parent.$watch(attr.ngDisabled, function (val) { scope.isDisabled = val; });
-    }
+    attr.$observe('disabled', function (value) { scope.isDisabled = value; });
     scope.contents = attr.$mdAutocompleteTemplate;
     delete attr.$mdAutocompleteTemplate;
 
