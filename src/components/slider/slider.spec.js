@@ -24,12 +24,12 @@ describe('md-slider', function() {
     $rootScope.$apply('value = 50');
 
     slider.triggerHandler({type: '$md.pressdown', pointer: { x: 30 }});
-    slider.triggerHandler({type: '$md.dragstart', pointer: { x: 30 } });
+    slider.triggerHandler({type: '$md.dragstart', pointer: { x: 30 }});
     $timeout.flush();
     expect($rootScope.value).toBe(30);
 
     //When going past max, it should clamp to max
-    slider.triggerHandler({type: '$md.drag', pointer: { x: 150 } });
+    slider.triggerHandler({type: '$md.drag', pointer: { x: 150 }});
     $timeout.flush();
     expect($rootScope.value).toBe(100);
 
@@ -193,6 +193,37 @@ describe('md-slider', function() {
       pointer: {}
     });
     expect(slider).not.toHaveClass('active');
+  }));
+  
+  it('should increment at a predictable step', inject(function($rootScope, $timeout) {
+
+    buildSlider(0.1, 1).drag({x:70});
+    expect($rootScope.value).toBe(0.7);
+
+    buildSlider(0.25, 1).drag({x:45});
+    expect($rootScope.value).toBe(0.5);
+
+    buildSlider(0.25, 1).drag({x:35});
+    expect($rootScope.value).toBe(0.25);
+
+    buildSlider(1, 100).drag({x:90});
+    expect($rootScope.value).toBe(90);
+
+    function buildSlider(step, max) {
+      var slider = setup('ng-model="value" min="0" max="' + max + '" step="' + step + '"');
+          $rootScope.$apply('value = 0.5');
+
+      return {
+        drag : function simulateDrag(drag) {
+
+          slider.triggerHandler({type: '$md.pressdown', pointer: drag });
+          slider.triggerHandler({type: '$md.dragstart', pointer: drag });
+
+          $timeout.flush();
+        }
+      };
+    }
+
   }));
 
 });
