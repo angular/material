@@ -2,38 +2,11 @@
   height: 500px;
 }
 
-.full {
-  width: 100%;
-  height: 100%;
-}
-
 .dialog-demo-content div {
   text-align: center;
 }
-.dialog-demo-content div .md-button {
-  display: inline-block;
-}
-
-md-dialog md-dialog-content.sticky-container {
-  padding: 0;
-}
-  md-dialog md-dialog-content.sticky-container > div {
-    padding: 0 24px 24px;
-  }
 
 .md-subheader {
   background-color: #dcedc8;
   margin: 0;
 }
-
-h2.md-subheader.md-sticky-clone {
-  margin-right: 0;
-  margin-top: 0;
-
-  box-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16);
-}
-
-h2 .md-subheader-content {
-  padding-left: 10px;
-}
-

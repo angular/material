@@ -1,3 +1,5 @@
+$dialog-padding: $baseline-grid * 3;
+
 .md-dialog-is-showing {
   max-height: 100%;
 }
@@ -38,7 +40,7 @@ md-dialog {
 
   md-dialog-content {
     order: 1;
-    padding: $baseline-grid * 3;
+    padding: $dialog-padding;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 
@@ -48,6 +50,22 @@ md-dialog {
 
     &:focus {
       outline: none;
+    }
+
+    .md-subheader {
+      margin: 0;
+
+      &.sticky-clone {
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+      }
+    }
+    &.sticky-container {
+      padding: 0;
+
+      &> div {
+        padding: $dialog-padding;
+        padding-top: 0;
+      }
     }
   }
 
@@ -59,15 +77,13 @@ md-dialog {
     justify-content: flex-end;
     margin-bottom: 0;
     padding-right: $baseline-grid;
-    padding-left: $baseline-grid * 3;
+    padding-left: $baseline-grid * 2;
     min-height: $baseline-grid * 6.5;
 
-    > * {
-      margin-left: $baseline-grid / 2;
-      margin-right: 0;
-    }
     .md-button {
       margin-bottom: $baseline-grid;
+      margin-left: $baseline-grid;
+      margin-right: 0;
       margin-top: $baseline-grid;
     }
   }
