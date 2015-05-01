@@ -1,6 +1,6 @@
 
 angular.module('dataTableDemo', ['ngMaterial'])
-.controller('AppCtrl', function($animate, $document, $scope) {
+.controller('AppCtrl', function($animate, $document, $scope, $window) {
   var ROW_HEIGHT = 40;
   var CONTAINER_HEIGHT = 300;
   var HEADER_OFFSET = 1;
@@ -56,28 +56,29 @@ angular.module('dataTableDemo', ['ngMaterial'])
   $animate.enabled(false);
 
   var animationIdX;
-  angular.element(scrollx).on('scroll', function scrollx() {
-    window.cancelAnimationFrame(animationIdX);
-    animationIdX = window.requestAnimationFrame(function animatey() {
+  angular.element(scrollx).on('scroll', function() {
+    $window.cancelAnimationFrame(animationIdX);
+    animationIdX = $window.requestAnimationFrame(function animatex() {
       var scrollLeft = scrollx.scrollLeft;
 
-      // angular.element(header.querySelectorAll('th:nth-last-child(-n+8)'))
-      //     .css('transform', 'translateX(' + -scrollLeft + 'px)');
-      headerScrollx.style.transform = 'translateX(' + -scrollLeft + 'px)';
+      var transform = 'translateX(' + -scrollLeft + 'px)';
+      headerScrollx.style.webkitTransform = transform;
+      headerScrollx.style.transform = transform;
     });
   }.bind(this));
 
   var animationIdY;
-  angular.element(scrolly).on('scroll', function scrolly() {
-    window.cancelAnimationFrame(animationIdY);
-    animationIdY = window.requestAnimationFrame(function animatey() {
+  angular.element(scrolly).on('scroll', function () {
+    $window.cancelAnimationFrame(animationIdY);
+    animationIdY = $window.requestAnimationFrame(function animatey() {
       var scrollTop = scrolly.scrollTop;
-    
-      // stickyTable.style.transform = 'translateY(' + -scrollTop + 'px)';
-      // scrollxTable.style.transform = 'translateY(' + -scrollTop + 'px)';
-    
-      stickyTable.style.transform = 'translateY(' + -(scrollTop % ROW_HEIGHT) + 'px)';
-      scrollxTable.style.transform = 'translateY(' + -(HEADER_OFFSET + scrollTop % ROW_HEIGHT) + 'px)';
+
+      var stickyTransform = 'translateY(' + -(scrollTop % ROW_HEIGHT) + 'px)';
+      var scrollxTransform = 'translateY(' + -(HEADER_OFFSET + scrollTop % ROW_HEIGHT) + 'px)';
+      stickyTable.style.webkitTransform = stickyTransform;
+      stickyTable.style.transform = stickyTransform;
+      scrollxTable.style.webkitTransform = scrollxTransform;
+      scrollxTable.style.transform = scrollxTransform;
       if (this.updateRows(CONTAINER_HEIGHT, scrollTop)) {
         this.rows = this.logicalRows;
         $scope.$digest();
