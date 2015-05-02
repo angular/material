@@ -54,27 +54,41 @@ describe('$mdCompiler service', function() {
       expect(data.element.html()).toBe('hello world');
     });
 
-    it('resolve and locals should work', function() {
-      module(function($provide) {
-        $provide.constant('StrawberryColor', 'red');
+    describe('with resolve and locals options', function() {
+      var options;
+
+      beforeEach(function() {
+        module(function($provide) {
+          $provide.constant('StrawberryColor', 'red');
+        });
+
+        options = {
+          resolve: {
+            //Resolve a factory inline
+            fruit: function($q) {
+              return $q.when('apple');
+            },
+            //Resolve a DI token's value
+            color: 'StrawberryColor'
+          },
+          locals: {
+            vegetable: 'carrot'
+          }
+        };
       });
 
-      var data = compile({
-        resolve: {
-          //Resolve a factory inline
-          fruit: function($q) {
-            return $q.when('apple');
-          },
-          //Resolve a DI token's value
-          color: 'StrawberryColor'
-        },
-        locals: {
-          vegetable: 'carrot'
-        }
+      it('should work', function() {
+        var data = compile(options);
+        expect(data.locals.fruit).toBe('apple');
+        expect(data.locals.vegetable).toBe('carrot');
+        expect(data.locals.color).toBe('red');
       });
-      expect(data.locals.fruit).toBe('apple');
-      expect(data.locals.vegetable).toBe('carrot');
-      expect(data.locals.color).toBe('red');
+
+      it('should not overwrite the original values', function() {
+        var clone = angular.copy(options);
+        compile(options);
+        expect(options).toEqual(clone);
+      });
     });
 
     describe('after link()', function() {
