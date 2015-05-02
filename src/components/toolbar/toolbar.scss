@@ -18,10 +18,8 @@ md-toolbar {
   font-size: rem(2.0);
   min-height: $baseline-grid * 8;
   width: 100%;
-  transition: box-shadow $swift-ease-in-out-duration linear;
-
-  &.ng-animate {
-    transition: none;
+  &.md-whiteframe-z1-add, &.md-whiteframe-z1-remove {
+    transition: box-shadow $swift-ease-in-out-duration linear;
   }
 
   *,
