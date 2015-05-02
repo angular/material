@@ -117,7 +117,7 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://p
 ```html
   <head>
 
-    <!-- Angulars Material CSS now available via Google CDN; version 0.8 used here -->
+    <!-- Angular Material CSS now available via Google CDN; version 0.8 used here -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.css">
 
   </head>
@@ -143,7 +143,7 @@ pull directly from the distribution GitHub
 ```html
   <head>
 
-    <!-- Angulars Material CSS using RawGit to load directly from `bower-material/master` -->
+    <!-- Angular Material CSS using RawGit to load directly from `bower-material/master` -->
     <link rel="stylesheet" href="https://rawgit.com/angular/bower-material/master/angular-material.css">
 
   </head>

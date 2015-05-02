@@ -11,7 +11,7 @@ Simply:
 -  Rename all files from `_name_*.js` with the name of your component;
 > e.g. &nbsp;&nbsp;&nbsp; gridlist.js, &nbsp;&nbsp; select.js
 -  Rename **jsDoc** ** references to `_name_`
--  Rename **source** refernces to `_name_`
+-  Rename **source** references to `_name_`
 
 
 

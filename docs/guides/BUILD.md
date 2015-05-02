@@ -57,7 +57,7 @@ library comprises:
 
 * `angular-material.js` - components
 * `angular-material.css` - styles and default theme stylesheet
-* `/themes/**.css` - default theme override styesheets
+* `/themes/**.css` - default theme override stylesheets
 
 To build from the source, simply use:
 
@@ -105,7 +105,7 @@ Angular Material supports the construction and deployment of individual componen
 Angular Material, each component is contained within its own module and specifies its own
 dependencies.
 
-> At a minimum, all components have a dependecy upon the `core` module.
+> At a minimum, all components have a dependency upon the `core` module.
 
 For example, the **slider** component is registered as a **material.components.slider** module.
 
@@ -165,7 +165,7 @@ Debugging a demo in the Live Docs is complicated due the multiple demos loading 
 more practical approach is to open and debug a specific, standalone Component demo.
 
 To open a Component demo outside of the Docs application, just build, deploy and debug that
-compnent's demo(s).
+component's demo(s).
 
 For example, to debug the **textfield** component:
 
