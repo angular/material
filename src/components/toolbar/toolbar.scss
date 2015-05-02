@@ -20,6 +20,10 @@ md-toolbar {
   width: 100%;
   transition: box-shadow $swift-ease-in-out-duration linear;
 
+  &.ng-animate {
+    transition: none;
+  }
+
   *,
   *:before,
   *:after {
