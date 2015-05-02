@@ -74,7 +74,7 @@ consistency across your application.
 
 	  <br/>
   <span class="md-body-1">
-  	Note: Base font size is `10px` for easy rem units (1.2rem = 12px). Body font size is `14px`. sp = scaleable pixels.
+  	Note: Base font size is `10px` for easy rem units (1.2rem = 12px). Body font size is `14px`. sp = scalable pixels.
 	</span>
 
   </div>
