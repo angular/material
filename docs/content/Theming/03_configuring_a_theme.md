@@ -32,19 +32,20 @@ angular.module('myApp', ['ngMaterial'])
 
 ### Specifying Dark Themes
 
-You can mark a theme as dark by calling `theme.dark()`. 
+You can mark a theme as dark by calling `theme.dark()`.
 
 <hljs lang="js">
 angular.module('myApp', ['ngMaterial'])
 .config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')
     .dark();
+});
 </hljs>
 
 ### Specifying Custom Hues For Color Intentions
 
 You can specify the hues from a palette that will be used by an intention group
-by default and for the `md-hue-1`, `md-hue-2`, `md-hue-3` classes. 
+by default and for the `md-hue-1`, `md-hue-2`, `md-hue-3` classes.
 
 By default, shades `500`, `300` `800` and `A100` are used for `primary` and
 `warn` intentions, while `400`, `300`, `800` and `A100` are used for `accent`.
@@ -72,7 +73,7 @@ angular.module('myApp', ['ngMaterial'])
 ### Defining Custom Palettes
 
 As mentioned before, Angular Material ships with the Material Design
-Spec's color palettes built in. In the event that you need to define a custom color palette, you can use `$mdThemingProvider` to define it, thereby making 
+Spec's color palettes built in. In the event that you need to define a custom color palette, you can use `$mdThemingProvider` to define it, thereby making
 it available to your theme for use in its intention groups. Note that you must
 specify all hues in the definition map.
 
@@ -95,7 +96,7 @@ angular.module('myApp', ['ngMaterial'])
     'A200': 'ff5252',
     'A400': 'ff1744',
     'A700': 'd50000',
-    'contrastDefaultColor': 'light',    // whether, by default, text (contrast) 
+    'contrastDefaultColor': 'light',    // whether, by default, text (contrast)
                                         // on this palette should be dark or light
 
     'contrastDarkColors': ['50', '100', //hues which contrast should be 'dark' by default
@@ -110,7 +111,7 @@ angular.module('myApp', ['ngMaterial'])
 </hljs>
 
 Sometimes it is easier to extend an existing color palette to overwrite a few
-colors than define a whole new one. You can use `$mdThemingProvider.extendPalette` 
+colors than define a whole new one. You can use `$mdThemingProvider.extendPalette`
 to quickly extend an existing color palette.
 
 <hljs lang="js">
