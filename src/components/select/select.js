@@ -66,9 +66,6 @@ angular.module('material.components.select', [
  * </hljs>
  */
 function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, $compile, $parse) {
-  var intStart = $interpolate.startSymbol();
-  var intEnd = $interpolate.endSymbol();
-
   return {
     restrict: 'E',
     require: ['mdSelect', 'ngModel', '?^form'],
@@ -410,6 +407,10 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
     // and values matching every option's controller.
     self.options = {};
 
+    $scope.$watch(function() { return self.options; }, function() {
+      self.ngModel.$render();
+    }, true);
+
     var deregisterCollectionWatch;
     self.setMultiple = function(isMultiple) {
       var ngModel = self.ngModel;
@@ -599,7 +600,7 @@ function OptionDirective($mdInkRipple, $mdUtil) {
     } else if (angular.isDefined(attr.value)) {
       setOptionValue(attr.value);
     } else {
-      scope.$watch(function() { return element.text(); }, setOptionValue)
+      scope.$watch(function() { return element.text(); }, setOptionValue);
     }
 
     scope.$$postDigest(function() {

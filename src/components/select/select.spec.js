@@ -9,10 +9,10 @@ describe('<md-select-menu>', function() {
   }));
 
   function setupSelect(attrs, options) {
-    var innerTpl = setup(attrs, options, true);
     var el;
     inject(function($compile, $rootScope) {
-      var template = angular.element('<md-select ' + (attrs || '') + '>' + optTemplate(options) + '</md-select>');
+      var src = '<md-select ' + (attrs || '') + '>' + optTemplate(options) + '</md-select>';
+      var template = angular.element(src);
       el = $compile(template)($rootScope);
       $rootScope.$digest();
       $rootScope.$digest();
@@ -24,7 +24,7 @@ describe('<md-select-menu>', function() {
     var el;
     inject(function($compile, $rootScope) {
       var optionsTpl = optTemplate(options);
-      var fullTpl = '<md-select-menu '+(attrs || '')+'>' + optionsTpl +
+      var fullTpl = '<md-select-menu ' + (attrs || '') + '>' + optionsTpl +
                '</md-select-menu>';
       el = $compile(fullTpl)($rootScope);
       $rootScope.$apply();
@@ -42,7 +42,7 @@ describe('<md-select-menu>', function() {
     inject(function($rootScope) {
       if (angular.isArray(options)) {
         $rootScope.$$values = options;
-        optionsTpl = '<md-option ng-repeat="value in $$values" ng-value="value">{{value}}"></md-option>';
+        optionsTpl = '<md-option ng-repeat="value in $$values" ng-value="value">{{value}}</md-option>';
       } else if (angular.isString(options)) {
         optionsTpl = options;
       }
@@ -192,6 +192,17 @@ describe('<md-select-menu>', function() {
     expect(function() {
       $rootScope.$apply('bar = "a"');
     }).toThrow();
+  }));
+
+  it('watches the collection for changes', inject(function($rootScope) {
+    $rootScope.val = 1;
+    var select = setupSelect('ng-model="val"', [1, 2, 3]);
+    var label = select.find('md-select-label')[0];
+    expect(label.textContent).toBe('1');
+    $rootScope.val = 4;
+    $rootScope.$$values = [4, 5, 6];
+    $rootScope.$digest();
+    expect(label.textContent).toBe('4');
   }));
 
   describe('non-multiple', function() {
