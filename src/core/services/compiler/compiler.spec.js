@@ -116,9 +116,14 @@ describe('$mdCompiler service', function() {
       }));
 
       it('should work with bindToController', inject(function($rootScope) {
+        var called = false;
         var data = compile({
           template: 'hello',
-          controller: function() { },
+          controller: function($scope) {
+            expect(this.name).toBe('Bob');
+            expect($scope.$apply).toBeTruthy(); // test DI working properly
+            called = true;
+          },
           controllerAs: 'ctrl',
           bindToController: true,
           locals: { name: 'Bob' }
@@ -126,6 +131,7 @@ describe('$mdCompiler service', function() {
         var scope = $rootScope.$new();
         data.link(scope);
         expect(scope.ctrl.name).toBe('Bob');
+        expect(called).toBe(true);
       }));
     });
   });
