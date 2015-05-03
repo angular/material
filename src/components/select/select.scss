@@ -48,13 +48,13 @@ $select-max-visible-options: 5;
 
 md-input-container > md-select {
   margin: 0;
-  margin-top: 1.4em;
+  margin-top: 3px;
 }
 
 md-select {
   display: inline-block;
-  margin-top: 1.5em;
-  margin-bottom: 1.625em;
+  margin-top: 0.35em;
+  margin-bottom: 0.80em;
   margin-left: 2px;
   margin-right: 2px;
   &:focus {
@@ -76,7 +76,7 @@ md-select {
     &:focus {
       .md-select-label {
         border-bottom: 2px solid;
-        padding-bottom: $baseline-grid + 1;
+        padding-bottom: $baseline-grid - 1;
       }
     }
   }
@@ -86,17 +86,20 @@ md-select {
 .md-select-label {
   display: flex;
   align-items: center;
-  padding-top: $baseline-grid - 1;
-  padding-bottom: $baseline-grid + 2;
+  padding-top: (2 * $baseline-grid) + 1;
+  padding-bottom: $baseline-grid;
   border-bottom: 1px solid;
-  font-size: rem(1.6);
-  line-height: 0.8em;
   position: relative;
   box-sizing: border-box;
   min-width: 8 * $baseline-grid;
 
   *:first-child {
     flex: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    line-height: 1.2rem;
+    max-width: calc(100% - 2*#{$baseline-grid});
   }
 
   .md-select-icon {

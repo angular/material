@@ -73,6 +73,11 @@ md-input-container {
     -ms-flex-preferred-size: auto; //IE fix
   }
 
+  label {
+    position: relative;
+    top: -2px;
+  }
+
 
   label:not(.md-no-float),
   .md-placeholder:not(.md-select-label) {
