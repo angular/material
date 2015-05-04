@@ -6,7 +6,7 @@ var ITEM_HEIGHT = 41,
     MAX_HEIGHT = 5.5 * ITEM_HEIGHT,
     MENU_PADDING = 8;
 
-function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $mdTheming, $window, $animate, $rootElement) {
+function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $mdTheming, $window, $animate, $rootElement, $q) {
 
   //-- private variables
 
@@ -156,7 +156,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
 
   function selectedItemChange (selectedItem, previousSelectedItem) {
     if (selectedItem) {
-      $scope.searchText = getDisplayValue(selectedItem);
+      getDisplayValue(selectedItem).then(function(val){
+        $scope.searchText = val;
+      });
     }
     if ($scope.itemChange && selectedItem !== previousSelectedItem)
       $scope.itemChange(getItemScope(selectedItem));
@@ -194,20 +196,23 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     //-- do nothing on init
     if (searchText === previousSearchText) return;
     //-- clear selected item if search text no longer matches it
-    if (searchText !== getDisplayValue($scope.selectedItem)) $scope.selectedItem = null;
-    else return;
-    //-- trigger change event if available
-    if ($scope.textChange && searchText !== previousSearchText)
-      $scope.textChange(getItemScope($scope.selectedItem));
-    //-- cancel results if search text is not long enough
-    if (!isMinLengthMet()) {
-      self.loading = false;
-      self.matches = [];
-      self.hidden = shouldHide();
-      updateMessages();
-    } else {
-      handleQuery();
-    }
+    getDisplayValue($scope.selectedItem).then(function(val) {
+      if (searchText !== val) $scope.selectedItem = null;
+        else return;
+
+      //-- trigger change event if available
+      if ($scope.textChange && searchText !== previousSearchText)
+        $scope.textChange(getItemScope($scope.selectedItem));
+      //-- cancel results if search text is not long enough
+      if (!isMinLengthMet()) {
+        self.loading = false;
+        self.matches = [];
+        self.hidden = shouldHide();
+        updateMessages();
+      } else {
+        handleQuery();
+      }
+    });
   }
 
   function blur () {
@@ -262,7 +267,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
   }
 
   function getDisplayValue (item) {
-    return (item && $scope.itemText) ? $scope.itemText(getItemScope(item)) : item;
+    return (item && $scope.itemText) ? $q.when($scope.itemText(getItemScope(item))) : $q.when(item);
   }
 
   function getItemScope (item) {
@@ -292,10 +297,12 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
 
   function select (index) {
     $scope.selectedItem = self.matches[index];
-    $scope.searchText = getDisplayValue($scope.selectedItem) || $scope.searchText;
-    self.hidden = true;
-    self.index = 0;
-    self.matches = [];
+    getDisplayValue($scope.selectedItem).then(function(val){
+      $scope.searchText = val;
+      self.hidden = true;
+      self.index = 0;
+      self.matches = [];
+    });
   }
 
   function clearValue () {
@@ -345,7 +352,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
   }
 
   function updateSelectionMessage () {
-    self.messages.push({ display: getCurrentDisplayValue() });
+    getCurrentDisplayValue().then(function(msg){
+      self.messages.push({ display:  msg});      
+    });
   }
 
   function updateScroll () {
