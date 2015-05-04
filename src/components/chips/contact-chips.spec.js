@@ -7,7 +7,6 @@ describe('<md-contact-chips>', function() {
           md-contact-name="name"\
           md-contact-image="image"\
           md-contact-email="email"\
-          filter-selected="filterSelected"\
           placeholder="To">\
       </md-contact-chips>';
 
@@ -44,12 +43,11 @@ describe('<md-contact-chips>', function() {
     }));
 
     describe('filtering selected items', function() {
-      it('should filter when enabled', inject(function($timeout) {
+      it('should filter', inject(function($timeout) {
         scope.querySearch = jasmine.createSpy('querySearch').and.callFake(function(q) {
           return scope.allContacts;
         });
         scope.contacts.push(scope.allContacts[2]);
-        scope.filterSelected = true;
         var element = buildChips(CONTACT_CHIPS_TEMPLATE);
         var ctrl = element.controller('mdContactChips');
         $timeout.flush();
@@ -65,7 +63,7 @@ describe('<md-contact-chips>', function() {
         expect(matches.length).toBe(2);
       }));
 
-      it('should not filter when disabled', inject(function($timeout) {
+      /* it('should not filter when disabled', inject(function($timeout) {
         scope.querySearch = jasmine.createSpy('querySearch').and.callFake(function(q) {
           return scope.allContacts;
         });
@@ -84,7 +82,7 @@ describe('<md-contact-chips>', function() {
 
         var matches = autocompleteCtrl.matches;
         expect(matches.length).toBe(3);
-      }));
+      }));*/
     });
 
   });
