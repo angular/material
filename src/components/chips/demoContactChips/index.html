@@ -14,8 +14,6 @@
         placeholder="To">
     </md-contact-chips>
 
-    <md-checkbox ng-model="ctrl.filterSelected">Filter selected contacts from options</md-checkbox>
-    <br />
     <md-list class="fixedRows">
       <md-subheader class="md-no-sticky">Contacts</md-subheader>
       <md-list-item class="md-2-line contact-item" ng-repeat="(index, contact) in ctrl.allContacts"

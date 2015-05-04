@@ -19,8 +19,7 @@ function MdContactChipsCtrl () {
 
 MdContactChipsCtrl.prototype.queryContact = function(searchText) {
   var results = this.contactQuery({'$query': searchText});
-  return this.filterSelected ?
-      results.filter(this.filterSelectedContacts.bind(this)) : results;
+  return results.filter(this.filterSelectedContacts.bind(this));
 };
 
 
