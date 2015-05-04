@@ -1,3 +1,49 @@
+<a name="0.9.0"></a>
+## 0.9.0  (2015-05-04)
+
+
+#### Features
+
+* **autocomplete:** adds support for messages to be displayed when no results are found ([e057e271](https://github.com/angular/material/commit/e057e27171f15b1923d740a27447e7fafa66673a), closes [#2574](https://github.com/angular/material/issues/2574), [#1525](https://github.com/angular/material/issues/1525))
+
+#### Breaking Changes
+
+* **styles:** removes global `line-height` and `font-size` from `html` and `body` ([666e3311](https://github.com/angular/material/commit/666e3311a8b66fb0910dc745192aaca23587bd29))
+* **icons:** namespaces built-in icons ([539ec5e3](https://github.com/angular/material/commit/539ec5e36281aa8a6f645376bcd4512911165fb9))
+* **gridlist:** `md-grid-tiles` must be direct children of `md-grid-list` ([5d9142ea](https://github.com/angular/material/commit/5d9142ea8d77e60350e8a7ddd02be6642218c0fa))
+
+
+#### Bug Fixes
+
+* **autocomplete:**
+  * improves logic behind scrolling items into view on keyboard navigation ([211a31ea](https://github.com/angular/material/commit/211a31ea363a721240d23b9f591e7652ab5f313e), closes [#2615](https://github.com/angular/material/issues/2615))
+  * addresses issue where dropdown shows if there is an initial value ([85846922](https://github.com/angular/material/commit/85846922934226d2d62646df06d96f644e332378), closes [#2517](https://github.com/angular/material/issues/2517))
+  * fixes positioning issue with clear button ([1fcb79a6](https://github.com/angular/material/commit/1fcb79a6e56e2c8d337c2875eca3740a8aafb235), closes [#2593](https://github.com/angular/material/issues/2593))
+* **button:** disable warn and accent buttons ([973c4d75](https://github.com/angular/material/commit/973c4d75847479d670dff620e1cc3104435bbcfc), closes [#2586](https://github.com/angular/material/issues/2586))
+* **compiler:** make bindToController vars available to instantiation fn ([e414091a](https://github.com/angular/material/commit/e414091ac0272652217010ca64ad96389f657e46))
+* **dialog:** makes sure that body is not more than 100% height when dialog is showing ([6806f554](https://github.com/angular/material/commit/6806f5546bd51929793b77d86675725670fa7bea))
+* **gridlist:**  noops layoutDelegate ([2b6dd4dc](https://github.com/angular/material/commit/2b6dd4dced54e62721a1339143cf7b8996ba9e88), closes [#2613](https://github.com/angular/material/issues/2613))
+* **icons:** namespaces built-in icons ([539ec5e3](https://github.com/angular/material/commit/539ec5e36281aa8a6f645376bcd4512911165fb9))
+* **input:**
+  * minimize overlapping on iOS ([ea817874](https://github.com/angular/material/commit/ea817874b0b46fbae883e5191b234d1d4e38179c))
+  * remove overflow-x causing drop on iOS ([f1df6dc0](https://github.com/angular/material/commit/f1df6dc09c20635d42ffaada32ae2f036666a5ba), closes [#2539](https://github.com/angular/material/issues/2539))
+* **list:** Do not ignore spaces in descendant textareas. ([f737fb04](https://github.com/angular/material/commit/f737fb04d4e93033365bb2a178c5ecbafaab42f0))
+* **select:**
+  * fix theming ([7e0a2aaa](https://github.com/angular/material/commit/7e0a2aaaf79e87da6b7536fcf4bf66f4213227e9))
+  * update rendering on option changes ([4e855c7f](https://github.com/angular/material/commit/4e855c7fb6dda3a24811597fdb10d2f62048920e))
+  * expose and preserve aria-label ([bd3d8fba](https://github.com/angular/material/commit/bd3d8fba5045bd4cfda5a46463ea15ecd23a30fc), closes [#1893](https://github.com/angular/material/issues/1893))
+  * rendering in input group ([aa9058fe](https://github.com/angular/material/commit/aa9058fe737f69d3d36fbffaebd7fb1774e9ee39))
+* **slider:** adds box-sizing to fix slider ripple positioning ([e982547b](https://github.com/angular/material/commit/e982547b0e8a0502c0180099e5a7b3f4c3431ffb))
+* **styles:** fixes rem syntax for negative values ([2fef6cad](https://github.com/angular/material/commit/2fef6cada79dc6a3b42f1ab14f8a143f7044ae48))
+* **tabs:**
+  * fixes `md-center-tabs` css bug ([44e6984a](https://github.com/angular/material/commit/44e6984ad36544326cccbbf34aeeb08337b41e2c), closes [#2638](https://github.com/angular/material/issues/2638))
+  * cleans up scope tree for tabs ([294e0664](https://github.com/angular/material/commit/294e06645c3a7b9323a95db10879844c0bbc9150), closes [#2600](https://github.com/angular/material/issues/2600))
+* **toolbar:**
+  * prevents transition lag on ng-if/ng-hide/ng-show ([544cb270](https://github.com/angular/material/commit/544cb270c65f86b44d9f882460ca784d43546b30), closes [#2663](https://github.com/angular/material/issues/2663))
+  * adds shadow when content moves under 'scroll shrink' toolbar ([92ed4657](https://github.com/angular/material/commit/92ed46578001eeb54c009bfc9f302be783f79137))
+  * sets icon color to primary contrast color within toolbars ([8ea0dc1d](https://github.com/angular/material/commit/8ea0dc1da8f75d8fdb1262e955156e8a62119a90), closes [#2622](https://github.com/angular/material/issues/2622))
+
+
 <a name="0.9.0-rc3"></a>
 ### 0.9.0-rc3  (2015-04-28)
 
