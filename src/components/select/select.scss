@@ -69,14 +69,14 @@ md-select {
     }
     &.ng-invalid.ng-dirty {
       .md-select-label {
-        padding-bottom: 7px;
         border-bottom: 2px solid;
+        padding-bottom: $baseline-grid - 5
       }
     }
     &:focus {
       .md-select-label {
         border-bottom: 2px solid;
-        padding-bottom: $baseline-grid - 1;
+        padding-bottom: $baseline-grid - 5;
       }
     }
   }
@@ -86,8 +86,9 @@ md-select {
 .md-select-label {
   display: flex;
   align-items: center;
-  padding-top: (2 * $baseline-grid) + 1;
-  padding-bottom: $baseline-grid;
+  padding-left: 3px;
+  padding-top: (2 * $baseline-grid) + 4;
+  padding-bottom: $baseline-grid - 4;
   border-bottom: 1px solid;
   position: relative;
   box-sizing: border-box;
@@ -98,7 +99,6 @@ md-select {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    line-height: 1.2rem;
     max-width: calc(100% - 2*#{$baseline-grid});
   }
 
@@ -135,6 +135,7 @@ md-select-menu {
 
   box-shadow: $whiteframe-shadow-z1;
   max-height: ($select-option-height * $select-max-visible-options) + 2 * $baseline-grid;
+  min-height: $select-option-height;
   overflow-y: hidden;
 
   @include rtl(transform-origin, left top, right top);
@@ -143,6 +144,7 @@ md-select-menu {
 
   md-content {
     min-width: 136px;
+    min-height: $select-option-height;
     max-height: ($select-option-height * $select-max-visible-options) + 2 * $baseline-grid;
     overflow-y: auto;
   }

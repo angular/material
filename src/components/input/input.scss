@@ -2,7 +2,7 @@ $input-container-padding: 2px !default;
 
 $input-label-default-offset: 24px !default;
 $input-label-default-scale: 1.0 !default;
-$input-label-float-offset: 4px !default;
+$input-label-float-offset: 6px !default;
 $input-label-float-scale: 0.75 !default;
 
 $input-placeholder-offset: $input-label-default-offset !default;
@@ -86,7 +86,7 @@ md-input-container {
     -webkit-font-smoothing: antialiased;
     padding-left: $input-container-padding;
     z-index: 1;
-    transform: translate3d(0, $input-label-default-offset, 0) scale($input-label-default-scale);
+    transform: translate3d(0, $input-label-default-offset + 6, 0) scale($input-label-default-scale);
     transition: transform $swift-ease-out-timing-function 0.25s;
 
     @include rtl(transform-origin, left top, right top);
