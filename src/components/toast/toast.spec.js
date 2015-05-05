@@ -150,12 +150,13 @@ describe('$mdToast service', function() {
 
       it('should hide after duration', inject(function($timeout, $animate, $rootElement) {
         var parent = angular.element('<div>');
+        var hideDelay = 1234;
         setup({
           template: '<md-toast />',
-          hideTimeout: 1234
+          hideDelay: hideDelay
         });
         expect($rootElement.find('md-toast').length).toBe(1);
-        $timeout.flush();
+        $timeout.flush(hideDelay);
         expect($rootElement.find('md-toast').length).toBe(0);
       }));
 
