@@ -79,9 +79,6 @@ require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
 
 
 
-gulp.task('karma-sauce', function(done) {
-  karma.start(require('./config/karma-sauce.conf.js'), done);
-});
 
 
 /** *****************************************
