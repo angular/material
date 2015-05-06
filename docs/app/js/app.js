@@ -507,6 +507,7 @@ function($rootScope) {
 function($scope, $attrs, $location, $rootScope) {
   $rootScope.currentComponent = $rootScope.currentDoc = null;
 
+  $scope.exampleNotEditable = true;
   $scope.layoutDemo = {
     mainAxis: 'center',
     crossAxis: 'center',
