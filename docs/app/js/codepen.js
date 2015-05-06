@@ -120,7 +120,7 @@
         replaceEscapedCharacters
       ];
 
-      angular.forEach(processors, function(processor) {
+      processors.forEach(function(processor) {
         index = processor(index, demo);
       });
 
