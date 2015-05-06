@@ -88,7 +88,6 @@ function MdTab () {
     scope.$watch('disabled', function () { ctrl.refreshIndex(); });
     scope.$watch(
         function () {
-          var tabs = element.parent()[0].getElementsByTagName('md-tab');
           return Array.prototype.indexOf.call(tabs, element[0]);
         },
         function (newIndex) {
