@@ -20,6 +20,8 @@
     /**
      * @ngdoc function
      * @name codepen.editOnCodepen
+     * @description Creates a codepen from the given demo model by posting to Codepen's API
+     * using a hidden form.  The hidden form is necessary to avoid a CORS issue.
      * @param {object} demo The object representing the metadata and contents for a demo
      * @usage
      * codepen.editOnCodepen({
@@ -44,12 +46,13 @@
 
     function buildForm(data) {
       var form = angular.element('<form style="display: none;" method="post" target="_blank" action="' + CODEPEN_API + '"></form>');
-      var input = '<input type="hidden" name="data" value="' + cleanseJson(data) + '" />';
+      var input = '<input type="hidden" name="data" value="' + escapeJsonQuotes(data) + '" />';
       form.append(input);
       return form;
     };
 
-    function cleanseJson(json) {
+    //Recommended by Codepen to escape quotes.  See (http://blog.codepen.io/documentation/api/prefill)
+    function escapeJsonQuotes(json) {
       return JSON.stringify(json)
         .replace(/"/g, "&quot;")
         .replace(/"/g, "&apos;");
@@ -59,8 +62,6 @@
   /**
    * @ngdoc service
    * @description
-   * ** INTENDED FOR INTERNAL USE **
-   *
    * Translates demo metadata and files into Codepen's post form data.  See api documentation for
    * additional fields not used by this service. (http://blog.codepen.io/documentation/api/prefill)
    */
@@ -77,6 +78,7 @@
     /**
      * @ngdoc function
      * @name codepenDataAdapter.translate
+     * @description Translates a demo model to match Codepen's post data
      * @param {object} demo The object representing the metadata and contents for a demo
      * @param {Array} externalScripts Any additional dependent scripts
      * @usage
