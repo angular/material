@@ -44,6 +44,7 @@
       form.remove();
     };
 
+    // Builds a hidden form with data necessary to create a codepen.
     function buildForm(data) {
       var form = angular.element(
         '<form style="display: none;" method="post" target="_blank" action="' +
