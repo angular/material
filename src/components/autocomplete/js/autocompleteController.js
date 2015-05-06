@@ -285,7 +285,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
   }
 
   function isMinLengthMet () {
-    return $scope.searchText.length >= getMinLength();
+    var minLength = getMinLength();
+    if (!minLength) return true;
+    return $scope.searchText && $scope.searchText.length >= minLength;
   }
 
   //-- actions

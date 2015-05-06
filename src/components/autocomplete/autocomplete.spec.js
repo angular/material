@@ -28,7 +28,7 @@ describe('<md-autocomplete>', function() {
   }
 
   describe('basic functionality', function () {
-    it('should fail', inject(function($timeout, $mdConstant, $rootElement) {
+    it('should update selected item and search text', inject(function($timeout, $mdConstant, $rootElement) {
       var scope = createScope();
       var template = '\
           <md-autocomplete\
@@ -38,6 +38,44 @@ describe('<md-autocomplete>', function() {
               md-item-text="item.display"\
               placeholder="placeholder">\
             <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl    = element.controller('mdAutocomplete');
+      var ul      = element.find('ul');
+
+      expect(scope.searchText).toBe('');
+      expect(scope.selectedItem).toBe(null);
+
+      element.scope().searchText = 'fo';
+      ctrl.keydown({});
+      element.scope().$apply();
+      $timeout.flush();
+
+      expect(scope.searchText).toBe('fo');
+      expect(scope.match(scope.searchText).length).toBe(1);
+      expect(ul.find('li').length).toBe(1);
+
+      ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.DOWN_ARROW, preventDefault: angular.noop });
+      ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.ENTER, preventDefault: angular.noop });
+      scope.$apply();
+      expect(scope.searchText).toBe('foo');
+      expect(scope.selectedItem).toBe(scope.match(scope.searchText)[0]);
+    }));
+  });
+
+  describe('basic functionality with template', function () {
+    it('should update selected item and search text', inject(function($timeout, $mdConstant, $rootElement) {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <md-item-template>\
+              <span md-highlight-text="searchText">{{item.display}}</span>\
+            </md-item-template>\
           </md-autocomplete>';
       var element = compile(template, scope);
       var ctrl    = element.controller('mdAutocomplete');

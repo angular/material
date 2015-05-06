@@ -10,7 +10,11 @@ function MdAutocompleteParentScope ($compile, $mdUtil) {
     scope: false
   };
   function postLink (scope, element, attr) {
-    var ctrl     = scope.$parent.$mdAutocompleteCtrl;
+    var ctrl = scope.$parent.$mdAutocompleteCtrl;
     $compile(element.contents())(ctrl.parent);
+    if (attr.hasOwnProperty('mdAutocompleteReplace')) {
+      element.after(element.contents());
+      element.remove();
+    }
   }
 }
