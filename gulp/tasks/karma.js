@@ -1,5 +1,3 @@
-var karma = require('karma').server;
-
 exports.task = function (done) {
   var karmaConfig = {
     singleRun: true,
