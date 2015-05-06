@@ -18,7 +18,6 @@ module.exports = function(config) {
     'node_modules/angular-messages/angular-messages.js',
     'node_modules/angular-route/angular-route.js',
     'node_modules/angular-mocks/angular-mocks.js',
-    'bower_components/angularytics/dist/angularytics.js',
     'dist/angular-material.js',
     'config/test-utils.js',
     'dist/docs/docs.js',
