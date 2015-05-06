@@ -38,7 +38,7 @@ angular
  *       md-contact-name="name"
  *       md-contact-image="image"
  *       md-contact-email="email"
- *       md-filter-selected="ctrl.filterSelected"
+ *       filter-selected="ctrl.filterSelected"
  *       placeholder="To">
  *   </md-contact-chips>
  * </hljs>
