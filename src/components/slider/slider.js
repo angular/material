@@ -271,7 +271,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       if (angular.isNumber(value)) {
         var formattedValue = (Math.round(value / step) * step);
         // Format to 3 digits after the decimal point - fixes #2015.
-        return parseFloat(formattedValue.toFixed(3));
+        return (Math.round(formattedValue * 1000) / 1000);
       }
     }
 
