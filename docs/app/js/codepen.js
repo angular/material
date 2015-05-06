@@ -122,7 +122,7 @@
       var processors = [
         applyAngularAttributesToParentElement,
         insertTemplatesAsScriptTags,
-        replaceEscapedCharacters
+        htmlEscapeAmpersand
       ];
 
       processors.forEach(function(processor) {
@@ -170,7 +170,7 @@
 
     // Escapes ampersands so that after codepen unescapes the html the escaped code block
     // uses the correct escaped characters
-    function replaceEscapedCharacters(html) {
+    function htmlEscapeAmpersand(html) {
       return html
         .replace(/&gt;/g, "&amp;gt;")
         .replace(/&lt;/g, "&amp;lt;");
