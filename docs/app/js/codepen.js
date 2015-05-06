@@ -168,7 +168,10 @@
         .replace(/&lt;/g, "&amp;lt;");
     };
 
-    //Required to make codepen work.  Without replacing the module, the asset cache will not work
+    // Required to make codepen work. Demos define their own module when running on the
+    // docs site.  In order to ensure the codepen example can use the asset-cache, the
+    // module needs to match so that the $templateCache is populated with the necessary
+    // assets.
     function replaceDemoModuleWithCodepenModule(file) {
       var matchAngularModule =  /\.module\(('[^']*'|"[^"]*")\s*,(?:\s*\[([^\]]*)\])?/g;
       return file.replace(matchAngularModule, ".module('MyApp'");
