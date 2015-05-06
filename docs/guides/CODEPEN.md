@@ -13,7 +13,7 @@ It has less accessibility problems then some of the other tools.
 
 ## How does it work?
 
-When the user clicks on the edit on codepen button, all files including
+When the user clicks on the **'Edit on codepen'** button, all files including
 html, css, js, templates are used to create the new codepen by posting
 to the [Codepen API](http://blog.codepen.io/documentation/api/prefill/).  An
 additional script is appended to the example to initialize the
@@ -37,7 +37,7 @@ SVG images are stored in an asset cache using `$templateCache`.  A
 script is delivered to codepen that initializes the cache within the
 demo module.
 
-### Why is it needed?
+### Why is an asset cache needed for Codepen?
 
 Components within angular material at times use icons or SVG.  Images
 are fetched over http.  Without having a server that will allow cross
