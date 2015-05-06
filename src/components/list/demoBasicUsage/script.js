@@ -1,6 +1,9 @@
 
 angular.module('listDemo1', ['ngMaterial'])
-
+.config(function($mdIconProvider) {
+  $mdIconProvider
+    .iconSet('communication', 'img/icons/sets/communication-icons.svg', 24);
+})
 .controller('AppCtrl', function($scope) {
     var imagePath = 'https://material.angularjs.org/img/list/60.jpeg';
 
@@ -46,4 +49,3 @@ angular.module('listDemo1', ['ngMaterial'])
       },
     ];
 });
-
