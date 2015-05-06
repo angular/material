@@ -1,15 +1,12 @@
+global.root = __dirname;
+require('./gulp/globals');
 
 /** Regular npm dependendencies */
 var _ = require('lodash');
-var argv = require('minimist')(process.argv.slice(2));
-var changelog = require('conventional-changelog');
-var fs = require('fs');
 var glob = require('glob').sync;
-var gulp = require('gulp');
 var karma = require('karma').server;
 var lazypipe = require('lazypipe');
 var path = require('path');
-var pkg = require('./package.json');
 var series = require('stream-series');
 var through2 = require('through2');
 
@@ -18,7 +15,6 @@ var autoprefixer = require('gulp-autoprefixer');
 var concat = require('gulp-concat');
 var filter = require('gulp-filter');
 var gulpif = require('gulp-if');
-var gutil = require('gulp-util');
 var insert = require('gulp-insert');
 var jshint = require('gulp-jshint');
 var minifyCss = require('gulp-minify-css');
@@ -34,46 +30,9 @@ var buildConfig = require('./config/build.config');
 var utils = require('./scripts/gulp-utils.js');
 
 /** Arguments */
-var IS_RELEASE_BUILD = !!argv.release;
-var IS_DEMO_BUILD = (!!argv.module || !!argv.m || !!argv.c);
-var BUILD_MODE = argv.mode;
-var VERSION = argv.version || pkg.version;
-var SHA = argv.sha;
 
 /** Grab-bag of build configuration. */
-var config = {
-  banner:
-    '/*!\n' +
-    ' * Angular Material Design\n' +
-    ' * https://github.com/angular/material\n' +
-    ' * @license MIT\n' +
-    ' * v' + VERSION + '\n' +
-    ' */\n',
-  jsBaseFiles: [
-    'src/core/**/*.js',
-    '!src/core/**/*.spec.js'
-  ],
-  jsFiles: [
-    'src/**/*.js'
-  ],
-  themeBaseFiles: [
-    'src/core/style/variables.scss',
-    'src/core/style/mixins.scss'
-  ],
-  scssBaseFiles: [
-    'src/core/style/color-palette.scss',
-    'src/core/style/variables.scss',
-    'src/core/style/mixins.scss',
-    'src/core/style/structure.scss',
-    'src/core/style/typography.scss',
-    'src/core/style/layout.scss'
-  ],
-  scssStandaloneFiles: [
-    'src/core/style/layout.scss'
-  ],
-  paths: 'src/{components,services}/**',
-  outputDir: 'dist/'
-};
+var config = require('./gulp/config');
 
 var LR_PORT = argv.port || argv.p || 8080;
 
@@ -110,34 +69,6 @@ require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
 
 
 
-gulp.task('default', ['build']);
-gulp.task('validate', ['jshint', 'karma']);
-gulp.task('changelog', function(done) {
-  var options = {
-    repository: 'https://github.com/angular/material',
-    version: VERSION,
-    file: 'CHANGELOG.md'
-  };
-  if (SHA) {
-    options.from = SHA;
-  }
-  changelog(options, function(err, log) {
-    fs.writeFileSync(__dirname + '/CHANGELOG.md', log);
-  });
-});
-gulp.task('jshint', function() {
-  return gulp.src(
-    config.jsFiles
-  )
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter(require('jshint-summary')({
-      fileColCol: ',bold',
-      positionCol: ',bold',
-      codeCol: 'green,bold',
-      reasonCol: 'cyan'
-    })))
-    .pipe(jshint.reporter('fail'));
-});
 
 
 /** *****************************************
@@ -146,37 +77,6 @@ gulp.task('jshint', function() {
  *
  ** ***************************************** */
 
-gulp.task('karma', function(done) {
-  var karmaConfig = {
-    singleRun: true,
-    autoWatch: false,
-    browsers : argv.browsers ? argv.browsers.trim().split(',') : ['Chrome'],
-    configFile: __dirname + '/config/karma.conf.js'
-  };
-
-  gutil.log('Running unit tests on unminified source.');
-  buildJs(true);
-  karma.start(karmaConfig, testMinified);
-
-  function testMinified() {
-    gutil.log('Running unit tests on minified source.');
-    process.env.KARMA_TEST_COMPRESSED = true;
-    karma.start(karmaConfig, testMinifiedJquery);
-  }
-
-  function testMinifiedJquery() {
-    gutil.log('Running unit tests on minified source w/ jquery.');
-    process.env.KARMA_TEST_COMPRESSED = true;
-    process.env.KARMA_TEST_JQUERY = true;
-    karma.start(karmaConfig, clearEnv);
-  }
-
-  function clearEnv() {
-    process.env.KARMA_TEST_COMPRESSED = undefined;
-    process.env.KARMA_TEST_JQUERY = undefined;
-    done();
-  }
-});
 
 gulp.task('karma-watch', function(done) {
   karma.start({
@@ -359,7 +259,7 @@ gulp.task('build-js-release', function() {
  * Builds the entire component library javascript.
  * @param {boolean} isRelease Whether to build in release mode.
  */
-function buildJs(isRelease) {
+global.buildJs = function buildJs(isRelease) {
   gutil.log("building js files...");
 
   var jsBuildStream = gulp.src(
@@ -383,7 +283,7 @@ function buildJs(isRelease) {
 }
 
 // builds the theming related css and provides it as a JS const for angular
-function themeBuildStream() {
+global.themeBuildStream = function themeBuildStream() {
   return gulp.src( config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss')) )
     .pipe(concat('default-theme.scss'))
     .pipe(utils.hoistScssVariables())
@@ -537,3 +437,18 @@ function autoprefix() {
     'last 2 versions', 'last 4 Android versions'
   ]});
 }
+
+//-- read in all files from gulp/tasks and create tasks for them
+fs.readdirSync('./gulp/tasks')
+    .filter(function (filename) {
+      return filename.match(/\.js$/i);
+    })
+    .map(function (filename) {
+      return {
+        name: filename.substr(0, filename.length - 3),
+        contents: require('./gulp/tasks/' + filename)
+      };
+    })
+    .filter(function (file) {
+      gulp.task(file.name, file.contents.dependencies, file.contents.task);
+    });
