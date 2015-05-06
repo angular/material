@@ -45,13 +45,18 @@
     };
 
     function buildForm(data) {
-      var form = angular.element('<form style="display: none;" method="post" target="_blank" action="' + CODEPEN_API + '"></form>');
+      var form = angular.element(
+        '<form style="display: none;" method="post" target="_blank" action="' +
+          CODEPEN_API +
+          '"></form>'
+      );
       var input = '<input type="hidden" name="data" value="' + escapeJsonQuotes(data) + '" />';
       form.append(input);
       return form;
     };
 
-    //Recommended by Codepen to escape quotes.  See (http://blog.codepen.io/documentation/api/prefill)
+    // Recommended by Codepen to escape quotes.
+    // See (http://blog.codepen.io/documentation/api/prefill)
     function escapeJsonQuotes(json) {
       return JSON.stringify(json)
         .replace(/"/g, "&quot;")
@@ -139,8 +144,8 @@
       });
     };
 
-    //Adds class to parent element so that styles are applied correctly
-    //Adds ng-app attribute.  This is the same module name provided in the asset-cache.js
+    // Adds class to parent element so that styles are applied correctly
+    // Adds ng-app attribute.  This is the same module name provided in the asset-cache.js
     function applyAngularAttributesToParentElement(html, demo) {
       var tmp = angular.element(html);
       tmp.addClass(demo.id);
@@ -148,20 +153,23 @@
       return tmp[0].outerHTML;
     };
 
-    //Adds templates inline in the html, so that templates are cache in the example
+    // Adds templates inline in the html, so that templates are cache in the example
     function insertTemplatesAsScriptTags(indexHtml, demo) {
       if (demo.files.html.length) {
         var tmp = angular.element(indexHtml);
         angular.forEach(demo.files.html, function(template) {
-          tmp.append("<script type='text/ng-template' id='" + template.name + "'>" + template.contents + "</script>");
+          tmp.append("<script type='text/ng-template' id='" +
+                     template.name + "'>" +
+                     template.contents +
+                     "</script>");
         });
         return tmp[0].outerHTML;
       }
       return indexHtml;
     };
 
-    //Escapes ampersands so that after codepen unescapes the html the escaped code block
-    //uses the correct escaped characters
+    // Escapes ampersands so that after codepen unescapes the html the escaped code block
+    // uses the correct escaped characters
     function replaceEscapedCharacters(html) {
       return html
         .replace(/&gt;/g, "&amp;gt;")
