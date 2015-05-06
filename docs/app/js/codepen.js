@@ -3,12 +3,7 @@
     .factory('codepenDataAdapter', CodepenDataAdapter)
     .factory('codepen', ['$demoAngularScripts', '$document', 'codepenDataAdapter', Codepen]);
 
-  /**
-   * @ngdoc service
-   * @name codepen
-   * @description
-   * Provides a service to open a code example in codepen.
-   */
+  // Provides a service to open a code example in codepen.
   function Codepen($demoAngularScripts, $document, codepenDataAdapter) {
 
     var CODEPEN_API = 'http://codepen.io/pen/define/';
@@ -17,25 +12,9 @@
       editOnCodepen: editOnCodepen
     };
 
-    /**
-     * @ngdoc function
-     * @name codepen.editOnCodepen
-     * @description Creates a codepen from the given demo model by posting to Codepen's API
-     * using a hidden form.  The hidden form is necessary to avoid a CORS issue.
-     * @param {object} demo The object representing the metadata and contents for a demo
-     * @usage
-     * codepen.editOnCodepen({
-     *   id: 'demo-id',
-     *   title: 'title',
-     *   module: 'module-name',
-     *   files: {
-     *     html: [{ name: 'relative-path', contents: '...'}],
-     *     css: [{ name: 'relative-path', contents: '...'],
-     *     index: { contents: '...' },
-     *     js: [{ contents: '...' }]
-     *   }
-     * });
-     */
+    // Creates a codepen from the given demo model by posting to Codepen's API
+    // using a hidden form.  The hidden form is necessary to avoid a CORS issue.
+    // See http://blog.codepen.io/documentation/api/prefill
     function editOnCodepen(demo) {
       var data = codepenDataAdapter.translate(demo, $demoAngularScripts.all());
       var form = buildForm(data);
@@ -57,7 +36,7 @@
     };
 
     // Recommended by Codepen to escape quotes.
-    // See (http://blog.codepen.io/documentation/api/prefill)
+    // See http://blog.codepen.io/documentation/api/prefill
     function escapeJsonQuotes(json) {
       return JSON.stringify(json)
         .replace(/"/g, "&quot;")
@@ -65,12 +44,8 @@
     };
   };
 
-  /**
-   * @ngdoc service
-   * @description
-   * Translates demo metadata and files into Codepen's post form data.  See api documentation for
-   * additional fields not used by this service. (http://blog.codepen.io/documentation/api/prefill)
-   */
+  // Translates demo metadata and files into Codepen's post form data.  See api documentation for
+  // additional fields not used by this service. http://blog.codepen.io/documentation/api/prefill
   function CodepenDataAdapter() {
 
     var CORE_JS = 'https://cdn.rawgit.com/angular/bower-material/master/angular-material.js';
@@ -81,29 +56,8 @@
       translate: translate
     };
 
-    /**
-     * @ngdoc function
-     * @name codepenDataAdapter.translate
-     * @description Translates a demo model to match Codepen's post data
-     * @param {object} demo The object representing the metadata and contents for a demo
-     * @param {Array} externalScripts Any additional dependent scripts
-     * @usage
-     * var demo = {
-     *   id: 'demo-id',
-     *   title: 'title',
-     *   module: 'module-name',
-     *   files: {
-     *     html: [{ name: 'relative-path', contents: '...'}],
-     *     css: [{ name: 'relative-path', contents: '...'],
-     *     index: { contents: '...' },
-     *     js: [{ contents: '...' }]
-     *    }
-     * };
-     *
-     * var externalScripts = ['pathToScript1', 'pathToScript2'];
-     *
-     * codepen.editOnCodepen(demo, externalScripts);
-     */
+    // Translates a demo model to match Codepen's post data
+    // See http://blog.codepen.io/documentation/api/prefill
     function translate(demo, externalScripts) {
       var files = demo.files;
 
@@ -117,6 +71,8 @@
       };
     };
 
+    // Modifies index.html with neccesary changes in order to display correctly in codepen
+    // See each processor to determine how each modifies the html
     function processHtml(demo) {
       var index = demo.files.index.contents;
 
@@ -133,12 +89,16 @@
       return index;
     };
 
+    // Applies modifications the javascript prior to sending to codepen.
+    // Currently merges js files and replaces the module with the Codepen
+    // module.  See documentation for replaceDemoModuleWithCodepenModule.
     function processJs(jsFiles) {
       var mergedJs = mergeFiles(jsFiles).join(' ');
       var script = replaceDemoModuleWithCodepenModule(mergedJs);
       return script;
     };
 
+    // Maps file contents to an array
     function mergeFiles(files) {
       return files.map(function(file) {
         return file.contents;
@@ -154,7 +114,7 @@
       return tmp[0].outerHTML;
     };
 
-    // Adds templates inline in the html, so that templates are cache in the example
+    // Adds templates inline in the html, so that templates are cached in the example
     function insertTemplatesAsScriptTags(indexHtml, demo) {
       if (demo.files.html.length) {
         var tmp = angular.element(indexHtml);
@@ -185,5 +145,5 @@
       var matchAngularModule =  /\.module\(('[^']*'|"[^"]*")\s*,(?:\s*\[([^\]]*)\])?/g;
       return file.replace(matchAngularModule, ".module('MyApp'");
     };
- };
+  };
 })();
