@@ -9,12 +9,12 @@ function($mdUtil) {
     scope: true,
     templateUrl: 'partials/docs-demo.tmpl.html',
     transclude: true,
-    controller: ['$scope', '$element', '$attrs', '$interpolate', '$codepen', DocsDemoCtrl],
+    controller: ['$scope', '$element', '$attrs', '$interpolate', 'codepen', DocsDemoCtrl],
     controllerAs: 'demoCtrl',
     bindToController: true
   };
 
-  function DocsDemoCtrl($scope, $element, $attrs, $interpolate, $codepen) {
+  function DocsDemoCtrl($scope, $element, $attrs, $interpolate, codepen) {
     var self = this;
 
     self.interpolateCode = angular.isDefined($attrs.interpolateCode);
@@ -53,7 +53,7 @@ function($mdUtil) {
     };
 
     self.editOnCodepen = function() {
-      $codepen.editOnCodepen({
+      codepen.editOnCodepen({
         title: self.demoTitle,
         files: self.files,
         id: self.demoId,
@@ -87,7 +87,7 @@ function($mdUtil) {
 
     return function postLink(scope, element, attr, docsDemoCtrl) {
       docsDemoCtrl.addFile(
-        $interpolate(name)(scope), 
+        $interpolate(name)(scope),
         $q.when(scope.$eval(contentsAttr) || html)
       );
       element.remove();

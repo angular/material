@@ -2,13 +2,13 @@ describe('docsDemo', function() {
 
   beforeEach(module('docsApp', 'ngMaterial'));
 
-  var $codepen, element, $httpBackend, demoModel;
+  var codepen, element, $httpBackend, demoModel;
 
-  beforeEach(inject(function($rootScope, $compile, $q, _$codepen_, _$httpBackend_) {
-    $codepen = _$codepen_;
+  beforeEach(inject(function($rootScope, $compile, $q, _codepen_, _$httpBackend_) {
+    codepen = _codepen_;
     $httpBackend = _$httpBackend_;
 
-    spyOn($codepen, 'editOnCodepen');
+    spyOn(codepen, 'editOnCodepen');
 
     stubHttpRequestsForImages();
 
@@ -38,14 +38,14 @@ describe('docsDemo', function() {
     });
 
     it('sends codepen the demo information', function() {
-      expect($codepen.editOnCodepen).toHaveBeenCalled();
+      expect(codepen.editOnCodepen).toHaveBeenCalled();
     });
 
     describe('demo information supplied to codepen', function() {
 
       var demo;
       beforeEach(function() {
-        demo = $codepen.editOnCodepen.calls.mostRecent().args[0];
+        demo = codepen.editOnCodepen.calls.mostRecent().args[0];
       });
 
       it('includes the title of the demo', function() {

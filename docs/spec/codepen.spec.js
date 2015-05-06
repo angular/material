@@ -1,10 +1,10 @@
 describe('CodepenDataAdapter', function() {
 
-  var $codepenDataAdapter, demo, data, externalScripts;
+  var codepenDataAdapter, demo, data, externalScripts;
   beforeEach(module('docsApp'));
 
-  beforeEach(inject(function(_$codepenDataAdapter_) {
-    $codepenDataAdapter = _$codepenDataAdapter_;
+  beforeEach(inject(function(_codepenDataAdapter_) {
+    codepenDataAdapter = _codepenDataAdapter_;
   }));
 
   beforeEach(function() {
@@ -35,7 +35,7 @@ describe('CodepenDataAdapter', function() {
 
     describe('the most common usage', function() {
       beforeEach(function() {
-        data = $codepenDataAdapter.translate(demo, externalScripts);
+        data = codepenDataAdapter.translate(demo, externalScripts);
       });
 
       it('provides the title of the codepen', function() {
@@ -84,7 +84,7 @@ describe('CodepenDataAdapter', function() {
 
         demo.files.html.push(template);
 
-        data = $codepenDataAdapter.translate(demo, externalScripts);
+        data = codepenDataAdapter.translate(demo, externalScripts);
 
         script = angular.element(data.html).find('script');
       });
@@ -106,13 +106,13 @@ describe('CodepenDataAdapter', function() {
 
       it('escapes the ampersand, so that codepen does not unescape the angle brackets', function() {
         demo.files.index.contents = '<div><code>&gt;md-autocomplete&lt;</code></div>';
-        data = $codepenDataAdapter.translate(demo, externalScripts);
+        data = codepenDataAdapter.translate(demo, externalScripts);
         expect(angular.element(data.html).html()).toBe('<code>&amp;gt;md-autocomplete&amp;lt;</code>');
       });
 
       it('handles multiple code blocks', function() {
         demo.files.index.contents = '<div><code>&gt;md-autocomplete&lt;</code><code>&gt;md-input&lt;</code></div>';
-        data = $codepenDataAdapter.translate(demo, externalScripts);
+        data = codepenDataAdapter.translate(demo, externalScripts);
         expect(angular.element(data.html).html()).toBe('<code>&amp;gt;md-autocomplete&amp;lt;</code><code>&amp;gt;md-input&amp;lt;</code>');
       });
 
@@ -125,7 +125,7 @@ describe('CodepenDataAdapter', function() {
 []);";
         demo.files.js = [{ contents: script }];
 
-        data = $codepenDataAdapter.translate(demo, externalScripts);
+        data = codepenDataAdapter.translate(demo, externalScripts);
         expect(data.js).toBe("angular.module('MyApp');");
       });
 
@@ -136,7 +136,7 @@ describe('CodepenDataAdapter', function() {
 ]);";
         demo.files.js = [{ contents: script }];
 
-        data = $codepenDataAdapter.translate(demo, externalScripts);
+        data = codepenDataAdapter.translate(demo, externalScripts);
         expect(data.js).toBe("angular.module('MyApp');");
       });
 
@@ -148,7 +148,7 @@ describe('CodepenDataAdapter', function() {
 ]);";
         demo.files.js = [{ contents: script }];
 
-        data = $codepenDataAdapter.translate(demo, externalScripts);
+        data = codepenDataAdapter.translate(demo, externalScripts);
         expect(data.js).toBe("angular\n\
 .module('MyApp');");
       });

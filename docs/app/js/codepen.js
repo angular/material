@@ -1,7 +1,7 @@
 (function() {
   DocsApp
-    .factory('$codepenDataAdapter', CodepenDataAdapter)
-    .factory('$codepen', ['$demoAngularScripts', '$document', '$codepenDataAdapter', Codepen]);
+    .factory('codepenDataAdapter', CodepenDataAdapter)
+    .factory('codepen', ['$demoAngularScripts', '$document', 'codepenDataAdapter', Codepen]);
 
   /**
    * @ngdoc service
@@ -9,7 +9,7 @@
    * @description
    * Provides a service to open a code example in codepen.
    */
-  function Codepen($demoAngularScripts, $document, $codepenDataAdapter) {
+  function Codepen($demoAngularScripts, $document, codepenDataAdapter) {
 
     var CODEPEN_API = 'http://codepen.io/pen/define/';
 
@@ -19,10 +19,10 @@
 
     /**
      * @ngdoc function
-     * @name $codepen.editOnCodepen
+     * @name codepen.editOnCodepen
      * @param {object} demo The object representing the metadata and contents for a demo
      * @usage
-     * $codepen.editOnCodepen({
+     * codepen.editOnCodepen({
      *   id: 'demo-id',
      *   title: 'title',
      *   module: 'module-name',
@@ -35,7 +35,7 @@
      * });
      */
     function editOnCodepen(demo) {
-      var data = $codepenDataAdapter.translate(demo, $demoAngularScripts.all());
+      var data = codepenDataAdapter.translate(demo, $demoAngularScripts.all());
       var form = buildForm(data);
       $document.find('body').append(form);
       form[0].submit();
@@ -76,7 +76,7 @@
 
     /**
      * @ngdoc function
-     * @name $codepenDataAdapter.translate
+     * @name codepenDataAdapter.translate
      * @param {object} demo The object representing the metadata and contents for a demo
      * @param {Array} externalScripts Any additional dependent scripts
      * @usage
@@ -94,7 +94,7 @@
      *
      * var externalScripts = ['pathToScript1', 'pathToScript2'];
      *
-     * $codepen.editOnCodepen(demo, externalScripts);
+     * codepen.editOnCodepen(demo, externalScripts);
      */
     function translate(demo, externalScripts) {
       var files = demo.files;
