@@ -1,4 +1,4 @@
-<div ng-app="selectDemoOptionsAsync" ng-controller="SelectAsyncController" layout="column" layout-align="center center" style="padding:40px">
+<div ng-controller="SelectAsyncController" layout="column" layout-align="center center" style="padding:40px">
   <p>Select can call an arbitrary function on show. If this function returns a promise, it will display a loading indicator while it is being resolved:</p>
   <div layout="column" layout-align="center center" style="height: 100px;">
     <md-select ng-model="user" md-on-open="loadUsers()" style="min-width: 200px;">
