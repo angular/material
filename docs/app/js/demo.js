@@ -50,9 +50,15 @@ function($mdUtil) {
         .concat(self.files.css || [])
         .concat(self.files.html || []);
 
-      self.editExample = function() {
-        $codepen.editExample({title: self.demoTitle, files: self.files});
-      }
+    };
+
+    self.editOnCodepen = function() {
+      $codepen.editOnCodepen({
+        title: self.demoTitle,
+        files: self.files,
+        id: self.demoId,
+        module: self.demoModule
+      });
     };
 
     function convertName(name) {
