@@ -86,6 +86,15 @@ function MdTab () {
 
     scope.$watch('active', function (active) { if (active) ctrl.select(data.getIndex()); });
     scope.$watch('disabled', function () { ctrl.refreshIndex(); });
+    scope.$watch(
+        function () {
+          var tabs = element.parent()[0].getElementsByTagName('md-tab');
+          return Array.prototype.indexOf.call(tabs, element[0]);
+        },
+        function (newIndex) {
+          data.index = newIndex;
+          ctrl.updateTabOrder();
+        });
     scope.$on('$destroy', function () { ctrl.removeTab(data); });
 
     function getLabel () {
