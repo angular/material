@@ -49,6 +49,18 @@ md-toolbar {
   .md-indent {
     margin-left: $toolbar-indent-margin;
   }
+
+  ~ md-content {
+    > md-list {
+      padding: 0;
+
+      md-list-item:last-child {
+        md-divider {
+          display: none;
+        }
+      }
+    }
+  }
 }
 
 .md-toolbar-tools {

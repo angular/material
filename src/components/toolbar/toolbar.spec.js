@@ -41,6 +41,7 @@ describe('<md-toolbar>', function() {
     //Expect everything to be in its proper initial state.
     expect(toolbarCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,0px,0)');
     expect(contentCss['margin-top']).toEqual('-100px');
+    expect(contentCss['margin-bottom']).toEqual('-100px');
     expect(contentCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,100px,0)');
 
     // Fake scroll to the bottom
