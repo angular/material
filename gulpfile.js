@@ -1,77 +1,11 @@
 global.root = __dirname;
 require('./gulp/globals');
 
-/** Regular npm dependendencies */
-var _ = require('lodash');
-var glob = require('glob').sync;
-var lazypipe = require('lazypipe');
-var series = require('stream-series');
-var through2 = require('through2');
-
-/** Gulp dependencies */
-var autoprefixer = require('gulp-autoprefixer');
-var concat = require('gulp-concat');
-var filter = require('gulp-filter');
-var gulpif = require('gulp-if');
-var insert = require('gulp-insert');
-var jshint = require('gulp-jshint');
-var minifyCss = require('gulp-minify-css');
-var ngAnnotate = require('gulp-ng-annotate');
-var plumber = require('gulp-plumber');
-var rename = require('gulp-rename');
-var sass = require('gulp-sass');
-var uglify = require('gulp-uglify');
-var webserver = require('gulp-webserver');
-
-/** Local dependencies */
-var buildConfig = require('./config/build.config');
-var utils = require('./scripts/gulp-utils.js');
-
-/** Arguments */
-
-/** Grab-bag of build configuration. */
-var config = require('./gulp/config');
-
-var LR_PORT = argv.port || argv.p || 8080;
-
-var buildModes = {
-  'closure': {
-    transform: utils.addClosurePrefixes,
-    outputDir: path.join(config.outputDir, 'modules/closure') + path.sep,
-    useBower: false
-  },
-  'demos': {
-    transform: utils.addJsWrapper,
-    outputDir: path.join(config.outputDir, 'demos') + path.sep,
-    useBower: false
-  },
-  'default': {
-    transform: utils.addJsWrapper,
-    outputDir: path.join(config.outputDir, 'modules/js') + path.sep,
-    useBower: true
-  }
-};
-
-IS_DEMO_BUILD && (BUILD_MODE="demos");
-BUILD_MODE = buildModes[BUILD_MODE] || buildModes['default'];
-
-
 if (IS_RELEASE_BUILD) {
-  console.log(
-    gutil.colors.red('--release:'),
-    'Building release version (minified)...'
-  );
+  console.log(gutil.colors.red('--release:'), 'Building release version (minified)...');
 }
 
 require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
-
-/** *****************************************
- *
- * Project-wide Build Tasks
- *
- ** ***************************************** */
-
-
 
 gulp.task('build-all-modules', function() {
   return series(gulp.src(['src/components/*', 'src/core/'])
@@ -248,7 +182,7 @@ global.buildJs = function buildJs(isRelease) {
       .pipe(gulp.dest, config.outputDir)
       ()
     ));
-}
+};
 
 // builds the theming related css and provides it as a JS const for angular
 global.themeBuildStream = function themeBuildStream() {
@@ -257,7 +191,7 @@ global.themeBuildStream = function themeBuildStream() {
     .pipe(utils.hoistScssVariables())
     .pipe(sass())
     .pipe(utils.cssToNgConstant('material.core', '$MD_THEME_CSS'));
-}
+};
 
 
 /** *****************************************
@@ -320,60 +254,6 @@ gulp.task('build-module-demo', function() {
  *
  ** ***************************************** */
 
-gulp.task('build-scss', function() {
-  var modules   = argv['modules'],
-      overrides = argv['override'],
-      dest      = argv['output-dir'] || config.outputDir,
-      filename  = argv['filename'] || 'angular-material',
-      paths     = getPaths();
-
-  gutil.log("Building css files...");
-  var streams = [];
-  streams.push(
-    gulp.src(paths)
-      .pipe(filterNonCodeFiles())
-      .pipe(filter(['**', '!**/*-theme.scss'])) // remove once ported
-      .pipe(concat('angular-material.scss'))
-      // .pipe(insert.append(defaultThemeContents))
-      .pipe(sass())
-      .pipe(rename({ basename: filename }))
-      .pipe(autoprefix())
-      .pipe(insert.prepend(config.banner))
-      .pipe(gulp.dest(dest))
-      .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
-          .pipe(minifyCss)
-          .pipe(rename, {extname: '.min.css'})
-          .pipe(gulp.dest, dest)
-        ()
-      ))
-  );
-  if (IS_RELEASE_BUILD) {
-    var baseVars = fs.readFileSync('src/core/style/variables.scss', 'utf8').toString();
-    streams.push(
-      gulp.src(config.scssStandaloneFiles)
-        .pipe(insert.prepend(baseVars))
-        .pipe(sass())
-        .pipe(autoprefix())
-        .pipe(insert.prepend(config.banner))
-        .pipe(rename({prefix: 'angular-material-'}))
-        .pipe(gulp.dest(path.join(dest, 'modules', 'css')))
-    );
-  }
-  return series(streams);
-  function getPaths () {
-    var paths = config.scssBaseFiles.slice();
-    if (modules) {
-      paths.push.apply(paths, modules.split(',').map(function (module) {
-        return 'src/components/' + module + '/*.scss';
-      }));
-    } else {
-      paths.push(path.join(config.paths, '*.scss'));
-    }
-    overrides && paths.unshift(overrides);
-    console.log(paths);
-    return paths;
-  }
-});
 
 /** *****************************************
  *
@@ -394,17 +274,17 @@ function readModuleArg() {
   return module;
 }
 
-function filterNonCodeFiles() {
+global.filterNonCodeFiles = function filterNonCodeFiles() {
   return filter(function(file) {
     return !/demo|module\.json|\.spec.js|README/.test(file.path);
   });
-}
+};
 
-function autoprefix() {
+global.autoprefix = function autoprefix() {
   return autoprefixer({browsers: [
     'last 2 versions', 'last 4 Android versions'
   ]});
-}
+};
 
 //-- read in all files from gulp/tasks and create tasks for them
 fs.readdirSync('./gulp/tasks')

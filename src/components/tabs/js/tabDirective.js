@@ -93,7 +93,8 @@ function MdTab () {
         function (newIndex) {
           data.index = newIndex;
           ctrl.updateTabOrder();
-        });
+        }
+    );
     scope.$on('$destroy', function () { ctrl.removeTab(data); });
 
     function getLabel () {
