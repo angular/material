@@ -4,9 +4,7 @@ require('./gulp/globals');
 /** Regular npm dependendencies */
 var _ = require('lodash');
 var glob = require('glob').sync;
-var karma = require('karma').server;
 var lazypipe = require('lazypipe');
-var path = require('path');
 var series = require('stream-series');
 var through2 = require('through2');
 
@@ -67,32 +65,13 @@ if (IS_RELEASE_BUILD) {
 
 require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
 
-
-
-
-
-/** *****************************************
- *
- * Tasks for Karma Test
- *
- ** ***************************************** */
-
-
-
-
-
 /** *****************************************
  *
  * Project-wide Build Tasks
  *
  ** ***************************************** */
 
-gulp.task('build', ['build-resources', 'build-scss', 'build-js']);
 
-gulp.task('build-resources', function() {
-  return gulp.src(['material-font/*'])
-    .pipe(gulp.dest(path.join(config.outputDir, 'material-font')));
-});
 
 gulp.task('build-all-modules', function() {
   return series(gulp.src(['src/components/*', 'src/core/'])

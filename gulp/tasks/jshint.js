@@ -1,5 +1,4 @@
 var jshint = require('gulp-jshint');
-var config = require('../config');
 
 exports.task = function() {
   return gulp.src(config.jsFiles)
