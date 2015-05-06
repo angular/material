@@ -439,12 +439,13 @@
        * The only way to know if this click is real is to prevent any normal
        * click events, and add a flag to events sent by material so we know not to prevent those.
        * 
-       * One exception to click events that should be prevented is click events sent by the
-       * keyboard (eg form submit). 
+       * Two exceptions to click events that should be prevented are:
+       *  - click events sent by the keyboard (eg form submit)
+       *  - events that originate from an Ionic app
        */
       document.addEventListener('click', function clickHijacker(ev) {
         var isKeyClick = ev.clientX === 0 && ev.clientY === 0;
-        if (!isKeyClick && !ev.$material) {
+        if (!isKeyClick && !ev.$material && !ev.isIonicTap) {
           ev.preventDefault();
           ev.stopPropagation();
         }
