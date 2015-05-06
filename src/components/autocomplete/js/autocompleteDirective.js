@@ -153,9 +153,10 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
             </li>\
             ' + (function () {
               return noItemsTemplate
-                  ? '<li ng-if="!$mdAutocompleteCtrl.matches.length"\
-                        ng-hide="$mdAutocompleteCtrl.hidden"\
-                        md-autocomplete-parent-scope>' + noItemsTemplate + '</li>'
+                  ? '<li ng-if="!$mdAutocompleteCtrl.matches.length && !$mdAutocompleteCtrl.loading\
+                         && !$mdAutocompleteCtrl.hidden"\
+                         ng-hide="$mdAutocompleteCtrl.hidden"\
+                         md-autocomplete-parent-scope>' + noItemsTemplate + '</li>'
                   : '';
             })() + '\
           </ul>\
