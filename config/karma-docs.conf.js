@@ -1,5 +1,5 @@
-//Used for running unit tests against the docs site
-//Unit tests can be run using gulp docs-karma
+// Used for running unit tests against the docs site
+// Unit tests can be run using gulp docs-karma
 module.exports = function(config) {
 
   var UNCOMPILED_SRC = [
