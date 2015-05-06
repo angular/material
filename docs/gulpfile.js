@@ -11,6 +11,9 @@ var sass = require('gulp-sass');
 var through2 = require('through2');
 var uglify = require('gulp-uglify');
 var utils = require('../scripts/gulp-utils.js');
+var karma = require('karma').server;
+var argv = require('minimist')(process.argv.slice(2));
+var gutil = require('gulp-util');
 
 var config = {
   demoFolder: 'demo-partials'
@@ -107,10 +110,14 @@ module.exports = function(gulp, IS_RELEASE_BUILD) {
       .pipe(gulp.dest('dist/docs'));
   });
 
-  gulp.task('docs-js', ['docs-app', 'docs-html2js', 'demos', 'build'], function() {
+  gulp.task('docs-js-dependencies', ['build'], function() {
+    return gulp.src('dist/angular-material.js')
+      .pipe(gulp.dest('dist/docs'));
+  });
+
+  gulp.task('docs-js', ['docs-app', 'docs-html2js', 'demos', 'build', 'docs-js-dependencies'], function() {
     return gulp.src([
       'node_modules/angularytics/dist/angularytics.js',
-      'dist/angular-material.js',
       'dist/docs/js/**/*.js'
     ])
       .pipe(concat('docs.js'))
@@ -118,9 +125,13 @@ module.exports = function(gulp, IS_RELEASE_BUILD) {
       .pipe(gulp.dest('dist/docs'));
   });
 
-  gulp.task('docs-css', ['docs-app', 'build'], function() {
+  gulp.task('docs-css-dependencies', ['build'], function() {
+    return gulp.src('dist/angular-material.css')
+      .pipe(gulp.dest('dist/docs'));
+  });
+
+  gulp.task('docs-css', ['docs-app', 'build', 'docs-css-dependencies'], function() {
     return gulp.src([
-      'dist/angular-material.css',
       'dist/themes/*.css',
       'docs/app/css/highlightjs-material.css',
       'docs/app/css/layout-demo.css',
@@ -140,4 +151,20 @@ module.exports = function(gulp, IS_RELEASE_BUILD) {
       .pipe(gulp.dest('dist/docs/js'));
   });
 
+  gulp.task('docs-karma', ['docs-js'], function(done) {
+    var karmaConfig = {
+      singleRun: true,
+      autoWatch: false,
+      browsers : argv.browsers ? argv.browsers.trim().split(',') : ['Chrome'],
+      configFile: __dirname + '/../config/karma-docs.conf.js'
+    };
+
+    karma.start(karmaConfig, function(exitCode){
+       if (exitCode != 0) {
+         gutil.log(gutil.colors.red("Karma exited with the following exit code: " + exitCode));
+         process.exit(exitCode);
+       }
+       done();
+    });
+ });
 };

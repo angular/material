@@ -51,5 +51,5 @@ angular
     }
   })
   .config( function( $mdIconProvider ){
-    $mdIconProvider.iconSet("avatar", './icons/avatar-icons.svg', 128);
+    $mdIconProvider.iconSet("avatar", 'icons/avatar-icons.svg', 128);
   });

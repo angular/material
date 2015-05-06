@@ -1,4 +1,4 @@
-<div ng-app="inputIconDemo" ng-controller="DemoCtrl" layout="column">
+<div ng-controller="DemoCtrl" layout="column">
 
   <br/>
   <md-content layout-padding>
@@ -6,23 +6,23 @@
     <md-input-container class="md-icon-float" >
       <!-- Use floating label instead of placeholder -->
       <label>Name</label>
-      <md-icon md-svg-src="/demo-partials/input/demoIcons/icons/ic_person_24px.svg" class="name"></md-icon>
+      <md-icon md-svg-src="img/icons/ic_person_24px.svg" class="name"></md-icon>
       <input ng-model="user.name" type="text">
     </md-input-container>
 
     <md-input-container md-no-float>
-      <md-icon md-svg-src="/demo-partials/input/demoIcons/icons/ic_phone_24px.svg"></md-icon>
+      <md-icon md-svg-src="img/icons/ic_phone_24px.svg"></md-icon>
       <input ng-model="user.phone" type="text" placeholder="Phone Number">
     </md-input-container>
 
     <md-input-container >
       <!-- Use floating placeholder instead of label -->
-      <md-icon md-svg-src="/demo-partials/input/demoIcons/icons/ic_email_24px.svg" class="email"></md-icon>
+      <md-icon md-svg-src="img/icons/ic_email_24px.svg" class="email"></md-icon>
       <input ng-model="user.email" type="email" placeholder="Email (required)" ng-required="true">
     </md-input-container>
 
     <md-input-container md-no-float>
-      <md-icon md-svg-src="/demo-partials/input/demoIcons/icons/ic_place_24px.svg" style="display:inline-block;"></md-icon>
+      <md-icon md-svg-src="img/icons/ic_place_24px.svg" style="display:inline-block;"></md-icon>
       <input ng-model="user.address" type="text" placeholder="Address" >
     </md-input-container>
 
