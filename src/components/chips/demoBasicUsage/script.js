@@ -12,7 +12,7 @@
     // Lists of fruit names and Vegetable objects
     self.fruitNames = ['Apple', 'Banana', 'Orange'];
     self.roFruitNames = angular.copy(self.fruitNames);
-    self.newFruitNames = [];
+    self.tags = [];
     self.vegObjs = [
       {
         'name' : 'Broccoli',
