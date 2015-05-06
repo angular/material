@@ -30,7 +30,7 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
     files: dependencies.concat(testSrc),
 
-    port: 9876,
+    port: 9877,
     reporters: ['progress'],
     colors: true,
 
