@@ -296,9 +296,15 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
   //-- actions
 
   function select (index) {
-    $scope.selectedItem = self.matches[index];
-    getDisplayValue($scope.selectedItem).then(function(val){
+    getDisplayValue(self.matches[index]).then(function(val){
+      $scope.selectedItem = self.matches[index];
       $scope.searchText = val;
+    }, function() {
+      $scope.selectedItem = null;
+      $scope.searchText = '';
+    })
+    .finally(function() {
+      // Hide the dropdown and clear the matches
       self.hidden = true;
       self.index = 0;
       self.matches = [];
