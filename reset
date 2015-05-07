@@ -1,0 +1,4 @@
+git co package.json CHANGELOG.md 2> /dev/null
+git co build 2> /dev/null
+git br -q -D v0.9.0-rc1 v0.9.1 v0.10.0 v1.0.0 2> /dev/null
+git tag -d v0.9.0-rc1 v0.9.1 v0.10.0 v1.0.0 2> /dev/null
