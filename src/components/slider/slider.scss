@@ -86,6 +86,12 @@ md-slider {
     right: 0;
     height: 100%;
   }
+  .md-track-ticks canvas {
+    // Restrict the width of the canvas so that ticks are rendered correctly
+    // when parent elements are resized. Else, the position of the ticks might
+    // be incorrect as we only update the canvas width attribute on window resize.
+    width: 100%;
+  }
 
   /**
    * Slider thumb
