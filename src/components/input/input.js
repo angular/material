@@ -321,7 +321,7 @@ function mdMaxlengthDirective($animate) {
     };
 
     function renderCharCount(value) {
-      charCountEl.text( ( element.val() || value || '' ).length  + '/' + maxlength );
+      charCountEl.text( ( element.val() || value || '' ).length + '/' + maxlength );
       return value;
     }
   }
