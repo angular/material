@@ -68,6 +68,13 @@ describe('mdListItem directive', function() {
     expect(firstChild.childNodes[0].childNodes[0].nodeName).toBe('P');
   });
 
+  it('moves aria-label to primary action', function() {
+    var listItem = setup('<md-list-item ng-click="sayHello()" aria-label="Hello"></md-list-item>');
+    var listItemChildren = listItem.children();
+    expect(listItemChildren[0].nodeName).toBe('MD-BUTTON');
+    expect(listItemChildren.attr('aria-label')).toBe('Hello');
+  });
+
   it('moves md-secondary items outside of the button', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()"><p>Hello World</p><md-icon class="md-secondary" ng-click="goWild()"></md-icon></md-list-item>');
     var firstChild = listItem.children()[0];
