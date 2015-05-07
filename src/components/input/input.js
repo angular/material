@@ -295,9 +295,9 @@ function mdMaxlengthDirective($animate) {
 
     ngModelCtrl.$formatters.push(renderCharCount);
     ngModelCtrl.$viewChangeListeners.push(renderCharCount);
-    element.on('input keydown', function() {
-      renderCharCount(); //make sure it's called with no args
-    });
+    scope.$watch(attr.ngModel, renderCharCount);
+
+    element.on('input keydown', renderCharCount);
 
     scope.$watch(attr.mdMaxlength, function(value) {
       maxlength = value;
@@ -320,7 +320,7 @@ function mdMaxlengthDirective($animate) {
     };
 
     function renderCharCount(value) {
-      charCountEl.text( ( element.val() || value || '' ).length + '/' + maxlength );
+      charCountEl.text( ( ( element.val() || value || '' ).length || 0 )  + '/' + maxlength );
       return value;
     }
   }
