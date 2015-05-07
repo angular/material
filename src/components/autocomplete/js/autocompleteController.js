@@ -296,7 +296,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
   //-- actions
 
   function select (index) {
-    getDisplayValue(self.matches[index]).then(function(val){
+    return getDisplayValue(self.matches[index]).then(function(val){
       $scope.selectedItem = self.matches[index];
       $scope.searchText = val;
     }, function() {
@@ -313,14 +313,14 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
 
   function clearValue () {
     $scope.searchText = '';
-    select(-1);
+    return  select(-1).then(function(){
+      // Per http://www.w3schools.com/jsref/event_oninput.asp
+      var eventObj = document.createEvent('CustomEvent');
+      eventObj.initCustomEvent('input', true, true, {value: $scope.searchText});
+      elements.input.dispatchEvent(eventObj);
 
-    // Per http://www.w3schools.com/jsref/event_oninput.asp
-    var eventObj = document.createEvent('CustomEvent');
-    eventObj.initCustomEvent('input', true, true, {value: $scope.searchText});
-    elements.input.dispatchEvent(eventObj);
-
-    elements.input.focus();
+      elements.input.focus();
+    });    
   }
 
   function fetchResults (searchText) {

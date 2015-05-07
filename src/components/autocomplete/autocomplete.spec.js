@@ -91,11 +91,13 @@ describe('<md-autocomplete>', function() {
       expect(scope.selectedItem.display).toBe('foo');
       expect(scope.match(scope.searchText).length).toBe(1);
 
-      ctrl.clear();
-      element.scope().$apply();
+      ctrl.clear().finally(function() {
+        element.scope().$apply();
 
-      expect(scope.searchText).toBe('');
-      expect(scope.selectedItem).toBe(null);
+        expect(scope.searchText).toBe('');
+        expect(scope.selectedItem).toBe(null);
+      });
+
     }));
 
 
@@ -140,13 +142,15 @@ describe('<md-autocomplete>', function() {
       // Un-register the watcher
       ctrl.unregisterSelectedItemWatcher(registeredWatcher);
 
-      ctrl.clear();
-      element.scope().$apply();
+      ctrl.clear().finally(function() {
+        element.scope().$apply();
 
-      expect(registeredWatcher.calls.count()).toBe(1);
-      expect(scope.itemChanged.calls.count()).toBe(2);
-      expect(scope.itemChanged.calls.mostRecent().args[0]).toBeUndefined();
-      expect(scope.selectedItem).toBe(null);
+        expect(registeredWatcher.calls.count()).toBe(1);
+        expect(scope.itemChanged.calls.count()).toBe(2);
+        expect(scope.itemChanged.calls.mostRecent().args[0]).toBeUndefined();
+        expect(scope.selectedItem).toBe(null);
+      });
+      
     }));
   });
 
