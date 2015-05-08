@@ -282,11 +282,11 @@ describe('$mdDialog', function() {
       var parent = angular.element('<div>');
       $mdDialog.show({
         template: '' +
-        '<md-dialog>' +
-        '  <div class="md-actions">' +
-        '    <button class="dialog-close">Close</button>' +
-        '  </div>' +
-        '</md-dialog>',
+          '<md-dialog>' +
+            '<md-dialog-actions>' +
+              '<button class="dialog-close">Close</button>' +
+            '</md-dialog-actions>' +
+          '</md-dialog>',
         parent: parent
       });
       runAnimation();
@@ -756,12 +756,13 @@ describe('$mdDialog', function() {
       $mdDialog.show({
         focusOnOpen: true,
         parent: parent,
-        template: '<md-dialog>' +
-        '<div class="md-actions">' +
-        '<button id="a">A</md-button>' +
-        '<button id="focus-target">B</md-button>' +
-        '</div>' +
-        '</md-dialog>'
+        template:
+          '<md-dialog>' +
+            '<md-dialog-actions>' +
+              '<button id="a">A</md-button>' +
+              '<button id="focus-target">B</md-button>' +
+            '</md-dialog-actions>' +
+          '</md-dialog>'
       });
 
       $rootScope.$apply();
@@ -777,12 +778,13 @@ describe('$mdDialog', function() {
       $mdDialog.show({
         focusOnOpen: false,
         parent: parent,
-        template: '<md-dialog>' +
-        '<div class="md-actions">' +
-        '<button id="a">A</md-button>' +
-        '<button id="focus-target">B</md-button>' +
-        '</div>' +
-        '</md-dialog>',
+        template:
+          '<md-dialog>' +
+            '<md-dialog-actions>' +
+              '<button id="a">A</md-button>' +
+              '<button id="focus-target">B</md-button>' +
+            '</md-dialog-actions>' +
+          '</md-dialog>',
       });
 
       $rootScope.$apply();
@@ -930,23 +932,76 @@ describe('$mdDialog', function() {
         'translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
     }));
 
-    it('should focus the last `md-button` in md-actions open if no `.dialog-close`', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
+    it('should focus the last `md-button` in md-dialog-actions open if no `.dialog-close`', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
       jasmine.mockElementFocus(this);
 
       var parent = angular.element('<div>');
       $mdDialog.show({
-        template: '<md-dialog>' +
-        '<div class="md-actions">' +
-        '<button id="a">A</md-button>' +
-        '<button id="focus-target">B</md-button>' +
-        '</div>' +
-        '</md-dialog>',
+        template:
+          '<md-dialog>' +
+            '<md-dialog-actions>' +
+              '<button id="a">A</md-button>' +
+              '<button id="focus-target">B</md-button>' +
+            '</md-dialog-actions>' +
+          '</md-dialog>',
         parent: parent
       });
 
       runAnimation();
 
       expect($document.activeElement).toBe(parent[0].querySelector('#focus-target'));
+    }));
+
+    it('should warn if md-dialog-actions does not contain actions', inject(function($mdDialog, $rootScope, $log, $timeout) {
+      spyOn($log, 'warn');
+
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template:
+          '<md-dialog>' +
+            '<md-dialog-actions>' +
+              '<p>Why is this here</p>' +
+            '</md-dialog-actions>' +
+          '</md-dialog>',
+        parent: parent
+      });
+
+      $rootScope.$apply();
+      $timeout.flush();
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+
+      container.triggerHandler('transitionend');
+      $rootScope.$apply();
+      parent.find('md-dialog').triggerHandler('transitionend');
+      $rootScope.$apply();
+
+      expect($log.warn).toHaveBeenCalled();
+    }));
+
+    it('should not warn if md-dialog-actions has actions', inject(function($mdDialog, $rootScope, $log, $timeout) {
+      spyOn($log, 'warn');
+
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template:
+          '<md-dialog>' +
+            '<md-dialog-actions>' +
+              '<button class="md-button">Ok good</button>' +
+            '</md-dialog-actions>' +
+          '</md-dialog>',
+        parent: parent
+      });
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      $rootScope.$apply();
+      $timeout.flush();
+      container.triggerHandler('transitionend');
+      $rootScope.$apply();
+      parent.find('md-dialog').triggerHandler('transitionend');
+      $rootScope.$apply();
+
+      expect($log.warn).not.toHaveBeenCalled();
     }));
 
     it('should only allow one open at a time', inject(function($mdDialog, $rootScope, $animate) {
@@ -1163,7 +1218,7 @@ describe('$mdDialog with custom interpolation symbols', function() {
     var mdContent = mdDialog.find('md-dialog-content');
     var title = mdContent.find('h2');
     var content = mdContent.find('p');
-    var mdActions = angular.element(mdDialog[0].querySelector('.md-actions'));
+    var mdActions = angular.element(mdDialog[0].querySelector('md-dialog-actions'));
     var buttons = mdActions.find('md-button');
 
     expect(mdDialog.attr('aria-label')).toBe('test alert');
@@ -1190,7 +1245,7 @@ describe('$mdDialog with custom interpolation symbols', function() {
     var mdContent = mdDialog.find('md-dialog-content');
     var title = mdContent.find('h2');
     var content = mdContent.find('p');
-    var mdActions = angular.element(mdDialog[0].querySelector('.md-actions'));
+    var mdActions = angular.element(mdDialog[0].querySelector('md-dialog-actions'));
     var buttons = mdActions.find('md-button');
 
     expect(mdDialog.attr('aria-label')).toBe('test alert');
