@@ -1,6 +1,9 @@
 
 angular.module('subheaderBasicDemo', ['ngMaterial'])
-
+.config(function($mdThemingProvider) {
+  $mdThemingProvider.theme('altTheme')
+    .primaryPalette('purple');
+})
 .controller('SubheaderAppCtrl', function($scope) {
     var imagePath = 'https://material.angularjs.org/img/list/60.jpeg';
     $scope.messages = [
