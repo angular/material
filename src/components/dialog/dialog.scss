@@ -38,8 +38,14 @@ md-dialog {
   display: flex;
   flex-direction: column;
 
+  &> form {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+  }
   md-dialog-content {
     order: 1;
+    flex-direction: column;
     padding: $dialog-padding;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
