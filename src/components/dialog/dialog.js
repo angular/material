@@ -392,7 +392,7 @@ function MdDialogProvider($$interimElementProvider) {
     return {
       template: [
         '<md-dialog md-theme="{{ dialog.theme }}" aria-label="{{ dialog.ariaLabel }}">',
-          '<md-dialog-content role="document" tabIndex="0">',
+          '<md-dialog-content role="document" tabIndex="-1">',
             '<h2 class="md-title">{{ dialog.title }}</h2>',
             '<p>{{ dialog.content }}</p>',
           '</md-dialog-content>',
