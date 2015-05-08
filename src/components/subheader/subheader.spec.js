@@ -25,4 +25,12 @@ describe('mdSubheader', function() {
     expect($mdStickyMock.args[0]).toBe(scope);
   }));
 
+  it('should apply the theme to the header and clone', inject(function($compile, $rootScope) {
+    var scope = $rootScope.$new();
+    $compile('<div md-theme="somethingElse">' + basicHtml + '</div>')(scope);
+    var element = $mdStickyMock.args[1];
+    var clone = $mdStickyMock.args[2];
+    expect(element.hasClass('md-somethingElse-theme')).toBe(true);
+    expect(clone.hasClass('md-somethingElse-theme')).toBe(true);
+  }));
 });
