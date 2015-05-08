@@ -22,7 +22,7 @@ md-card {
     padding: $card-padding;
   }
 
-  .md-actions {
+  .md-actions, md-card-actions {
     margin: 0;
 
     .md-button {
