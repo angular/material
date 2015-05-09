@@ -55,7 +55,7 @@ and serve the cached content.
   literal to your paste buffer.
 * paste object literal as `var assetMap = { ... }` in the
   [asset-cache.js](../app/asset-cache.js)
-* [update](#build_cdn) the CDN with the new script
+* [update](#update_cdn) the CDN with the new script
 * commit asset-cache.js
 
 ### <a name="update_cdn"></a> Update Codepen Asset Cache
