@@ -13,15 +13,19 @@ describe('<md-tooltip> directive', function() {
              '</md-button>')($rootScope);
 
     $rootScope.$apply();
+    $animate.triggerCallbacks();
+
     expect(findTooltip().length).toBe(0);
 
     $rootScope.$apply('isVisible = true');
     $animate.triggerCallbacks();
+
     expect(findTooltip().length).toBe(1);
     expect(findTooltip().hasClass('md-show')).toBe(true);
 
     $rootScope.$apply('isVisible = false');
     $animate.triggerCallbacks();
+
     expect(findTooltip().length).toBe(0);
   }));
 
@@ -31,12 +35,14 @@ describe('<md-tooltip> directive', function() {
                '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
              '</md-button>')($rootScope);
 
-    $rootScope.$apply('isVisible = true');
-    $animate.triggerCallbacks();
+      $rootScope.$apply('isVisible = true');
+      $animate.triggerCallbacks();
 
     expect(element.attr('aria-describedby')).toEqual(findTooltip().attr('id'));
 
-    $rootScope.$apply('isVisible = false'); $animate.triggerCallbacks();
+      $rootScope.$apply('isVisible = false');
+      $animate.triggerCallbacks();
+
     expect(element.attr('aria-describedby')).toBeFalsy();
 
   }));
@@ -49,12 +55,14 @@ describe('<md-tooltip> directive', function() {
 
     $rootScope.$apply();
 
-    element.triggerHandler('mouseenter');
-    $timeout.flush();
+      element.triggerHandler('mouseenter');
+      $timeout.flush();
+
     expect($rootScope.isVisible).toBe(true);
 
-    element.triggerHandler('mouseleave');
-    $timeout.flush();
+      element.triggerHandler('mouseleave');
+      $timeout.flush();
+
     expect($rootScope.isVisible).toBe(false);
   }));
 
@@ -69,10 +77,11 @@ describe('<md-tooltip> directive', function() {
 
     var element = $compile('<outer><inner><md-tooltip md-visible="isVisible">Hello world' +
                            '</md-tooltip></inner></outer>')($rootScope);
+    $rootScope.$apply();
 
     element.triggerHandler('mouseenter');
-    $timeout.flush();
-    expect($rootScope.isVisible).toBe(true);
+
+    expect($rootScope.isVisible).toBeUndefined();
   }));
 
   it('should set visible on focus and blur', inject(function($compile, $rootScope, $timeout) {
@@ -80,15 +89,16 @@ describe('<md-tooltip> directive', function() {
                'Hello' +
                '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
              '</md-button>')($rootScope);
-
     $rootScope.$apply();
 
     element.triggerHandler('focus');
     $timeout.flush();
+
     expect($rootScope.isVisible).toBe(true);
 
     element.triggerHandler('blur');
     $timeout.flush();
+
     expect($rootScope.isVisible).toBe(false);
   }));
 

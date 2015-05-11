@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 angular.module('material.core')
   .factory('$mdInkRipple', InkRippleService)
   .directive('mdInkRipple', InkRippleDirective)
@@ -422,4 +419,3 @@ function attrNoDirective() {
     };
   };
 }
-})();

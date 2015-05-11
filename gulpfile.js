@@ -8,40 +8,40 @@ if (IS_RELEASE_BUILD) {
 require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
 
 gulp.task('build-all-modules', function() {
-  return series(gulp.src(['src/components/*', 'src/core/'])
-      .pipe(through2.obj(function(folder, enc, next) {
-        var moduleId = folder.path.indexOf('components') > -1
-            ? 'material.components.' + path.basename(folder.path)
-            : 'material.' + path.basename(folder.path);
-        var stream = (IS_RELEASE_BUILD && BUILD_MODE.useBower)
-            ? series(buildModule(moduleId, true), buildModule(moduleId, false))
-            : buildModule(moduleId, false);
-        stream.on('end', function() { next(); });
-      })),
-      themeBuildStream()
-          .pipe(BUILD_MODE.transform())
-          .pipe(gulp.dest(path.join(BUILD_MODE.outputDir, 'core')))
-  );
+  return series(
+    gulp.src(['src/core/', 'src/components/*' ])
+        .pipe(through2.obj(function(folder, enc, next) {
+          var moduleId = folder.path.indexOf('components') > -1
+              ? 'material.components.' + path.basename(folder.path)
+              : 'material.' + path.basename(folder.path);
+          var stream = (IS_RELEASE_BUILD && BUILD_MODE.useBower)
+              ? series(buildModule(moduleId, true), buildModule(moduleId, false))
+              : buildModule(moduleId, false);
+          stream.on('end', function() { next(); });
+        })),
+    themeBuildStream()
+      .pipe(BUILD_MODE.transform())
+      .pipe(gulp.dest(path.join(BUILD_MODE.outputDir, 'core'))
+  )).pipe(BUILD_MODE.transform());
 });
 
 function buildModule(module, isRelease) {
   if ( module.indexOf(".") < 0) {
     module = "material.components." + module;
   }
-
-  var name = module.split('.').pop();
   gutil.log('Building ' + module + (isRelease && ' minified' || '') + ' ...');
 
+  var name = module.split('.').pop();
   utils.copyDemoAssets(name, 'src/components/', 'dist/demos/');
 
   return utils.filesForModule(module)
-    .pipe(filterNonCodeFiles())
-    .pipe(gulpif('*.scss', buildModuleStyles(name)))
-    .pipe(gulpif('*.js', buildModuleJs(name)))
-    .pipe(BUILD_MODE.transform())
-    .pipe(insert.prepend(config.banner))
-    .pipe(gulpif(isRelease, buildMin()))
-    .pipe(gulp.dest(BUILD_MODE.outputDir + name));
+        .pipe(filterNonCodeFiles())
+        .pipe(gulpif('*.scss', buildModuleStyles(name)))
+        .pipe(gulpif('*.js', buildModuleJs(name)))
+        .pipe(BUILD_MODE.transform())
+        .pipe(insert.prepend(config.banner))
+        .pipe(gulpif(isRelease, buildMin()))
+        .pipe(gulp.dest(BUILD_MODE.outputDir + name));
 
 
   function buildMin() {
@@ -65,8 +65,9 @@ function buildModule(module, isRelease) {
 
 function buildModuleJs(name) {
   return lazypipe()
-    .pipe(plumber)
-    .pipe(ngAnnotate)
+    .pipe(plumber())
+    .pipe(ngAnnotate())
+    .pipe(BUILD_MODE.transform())
     .pipe(concat, name + '.js')
     ();
 }
@@ -153,7 +154,7 @@ gulp.task('build-js', function() {
 });
 
 gulp.task('build-js-release', function() {
-  buildJs(true);
+  return buildJs(true);
 });
 
 
@@ -162,27 +163,41 @@ gulp.task('build-js-release', function() {
  * @param {boolean} isRelease Whether to build in release mode.
  */
 global.buildJs = function buildJs(isRelease) {
+  var jsFiles = config.jsBaseFiles.concat([path.join(config.paths, '*.js')]);
+
   gutil.log("building js files...");
 
-  var jsBuildStream = gulp.src(
-    config.jsBaseFiles.concat([path.join(config.paths, '*.js')])
-  )
-    .pipe(filterNonCodeFiles())
-    .pipe(utils.buildNgMaterialDefinition())
-    .pipe(plumber())
-    .pipe(ngAnnotate());
+  var jsBuildStream = gulp.src( jsFiles )
+        .pipe(filterNonCodeFiles())
+        .pipe(utils.buildNgMaterialDefinition())
+        .pipe(plumber())
+        .pipe(ngAnnotate())
+        .pipe(utils.addJsWrapper(true));
 
-  return series(jsBuildStream, themeBuildStream())
-    .pipe(concat('angular-material.js'))
-    .pipe(insert.prepend(config.banner))
-    .pipe(gulp.dest(config.outputDir))
-    .pipe(gulpif(isRelease, lazypipe()
-      .pipe(uglify, { preserveComments: 'some' })
-      .pipe(rename, { extname: '.min.js' })
-      .pipe(gulp.dest, config.outputDir)
-      ()
-    ));
+  var jsProcess = series(jsBuildStream, themeBuildStream() )
+        .pipe(concat('angular-material.js'))
+        .pipe(BUILD_MODE.transform())
+        .pipe(insert.prepend(config.banner))
+        .pipe(gulp.dest(config.outputDir))
+        .pipe(gulpif(isRelease, lazypipe()
+          .pipe(uglify, { preserveComments: 'some' })
+          .pipe(rename, { extname: '.min.js' })
+          .pipe(gulp.dest, config.outputDir)
+          ()
+        ));
+
+  return series(jsProcess, deployMaterialMocks())
 };
+
+
+// Deploy the `angular-material-mocks.js` file to the `dist` directory
+global.deployMaterialMocks = function deployMaterialMocks() {
+
+  return gulp.src(config.mockFiles)
+    .pipe(gulp.dest(config.outputDir));
+
+};
+
 
 // builds the theming related css and provides it as a JS const for angular
 global.themeBuildStream = function themeBuildStream() {

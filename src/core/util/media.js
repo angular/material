@@ -1,5 +1,3 @@
-(function(){
-
 angular.module('material.core')
 .factory('$mdMedia', mdMediaFactory);
 
@@ -126,6 +124,3 @@ function mdMediaFactory($mdConstant, $rootScope, $window) {
         (normalizeCache[attrName] = attrs.$normalize(attrName));
   }
 }
-
-
-})();

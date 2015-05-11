@@ -53,7 +53,7 @@ describe('mdSidenav', function() {
     }));
 
     it('should focus sidenav on open', inject(function($rootScope, $animate, $document) {
-      TestUtil.mockElementFocus(this);
+      jasmine.mockElementFocus(this);
       var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
 
@@ -62,7 +62,7 @@ describe('mdSidenav', function() {
     }));
 
     it('should focus child directive with md-sidenav-focus', inject(function($rootScope, $animate, $document, $compile) {
-      TestUtil.mockElementFocus(this);
+      jasmine.mockElementFocus(this);
       var parent = angular.element('<div>');
       var markup = '<md-sidenav md-is-open="show">'+
                       '<md-input-container><label>Label</label>' +
@@ -80,7 +80,7 @@ describe('mdSidenav', function() {
     }));
 
     it('should focus on last md-sidenav-focus element', inject(function($rootScope, $animate, $document, $compile) {
-      TestUtil.mockElementFocus(this);
+      jasmine.mockElementFocus(this);
       var parent = angular.element('<div>');
       var markup = '<md-sidenav md-is-open="show">'+
                       '<md-button md-sidenav-focus>Button</md-button>'+

@@ -1,16 +1,5 @@
 describe('mdInkRipple diretive', function() {
 
-  function simulateEventAt(centerX, eventType) {
-    return {
-      eventType: eventType,
-      center: { x: centerX },
-      preventDefault: angular.noop,
-      srcEvent : {
-        stopPropagation : angular.noop
-      }
-    };
-  }
-
   beforeEach(module('material.core'));
 
   it('should support custom colors via md-ink-ripple', inject(function ($timeout, $compile, $rootScope) {

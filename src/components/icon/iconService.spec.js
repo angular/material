@@ -55,8 +55,15 @@ describe('mdIcon service', function() {
 
     it('should allow single icon defs to override those defined in groups', function() {
       $mdIcon('c2').then(function(el) {
-        expect(el.querySelector('g').classList.contains('override')).toBe(true);
-      })
+        var list = el.querySelector('g').classList;
+
+        if ( list ) {
+          // classList is a part of HTMLElement, but isn't available for SVGElement
+          expect(list.contains('override')).toBe(true);
+        }
+
+      });
+
       $scope.$digest();
     });
 

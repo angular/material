@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /*
  * This var has to be outside the angular factory, otherwise when
  * there are multiple material apps on the same page, each app
@@ -430,5 +427,3 @@ angular.element.prototype.blur = angular.element.prototype.blur || function() {
   }
   return this;
 };
-
-})();

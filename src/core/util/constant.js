@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 angular.module('material.core')
 .factory('$mdConstant', MdConstantFactory);
 
@@ -57,5 +54,3 @@ function MdConstantFactory($$rAF, $sniffer) {
     ]
   };
 }
-
-})();

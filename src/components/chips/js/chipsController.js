@@ -148,7 +148,9 @@ MdChipsCtrl.prototype.getPlaceholder = function() {
 MdChipsCtrl.prototype.removeAndSelectAdjacentChip = function(index) {
   var selIndex = this.getAdjacentChipIndex(index);
   this.removeChip(index);
-  this.$timeout(function () { this.selectAndFocusChipSafe(selIndex); }.bind(this));
+  this.$timeout(angular.bind(this, function () {
+      this.selectAndFocusChipSafe(selIndex);
+  }));
 };
 
 /**
@@ -335,23 +337,23 @@ MdChipsCtrl.prototype.configureUserInput = function(inputElement) {
   var ctrl = this;
   inputElement
       .attr({ tabindex: 0 })
-      .on('keydown', function(event) { scope.$apply(function() { ctrl.inputKeydown(event); }); })
-      .on('focus', ctrl.onInputFocus.bind(ctrl) )
-      .on('blur', ctrl.onInputBlur.bind(ctrl) );
+      .on('keydown', function(event) { scope.$apply( angular.bind(ctrl, function() { ctrl.inputKeydown(event); })) })
+      .on('focus', angular.bind(ctrl, ctrl.onInputFocus))
+      .on('blur', angular.bind(ctrl, ctrl.onInputBlur));
 };
 
 MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {
 
-  ctrl.registerSelectedItemWatcher(function (item) {
+  ctrl.registerSelectedItemWatcher(angular.bind(this, function (item) {
     if (item) {
       this.appendChip(item);
       this.resetChipBuffer();
     }
-  }.bind(this));
+  }));
 
   this.$element.find('input')
-      .on('focus',this.onInputFocus.bind(this) )
-      .on('blur', this.onInputBlur.bind(this) );
+      .on('focus',angular.bind(this, this.onInputFocus) )
+      .on('blur', angular.bind(this, this.onInputBlur) );
 };
 
 MdChipsCtrl.prototype.hasFocus = function () {

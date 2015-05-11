@@ -416,7 +416,7 @@ describe('$mdGesture', function() {
         touches: [{pageX: 90, pageY: 99}]
       });
       expect(startDragSpy).not.toHaveBeenCalled();
-      expect(dragSpy).not.toHaveBeenCalled();
+      expect(dragSpy).toHaveBeenCalled();
       expect(endDragSpy).not.toHaveBeenCalled();
 
       dragSpy.calls.reset();

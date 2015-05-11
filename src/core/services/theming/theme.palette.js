@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 angular.module('material.core.theming.palette', [])
 .constant('$mdColorPalette', {
   'red': {
@@ -362,4 +359,3 @@ angular.module('material.core.theming.palette', [])
     'contrastStrongLightColors': '400 500'
   }
 });
-})();

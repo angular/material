@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 angular.module('material.core')
   .provider('$$interimElement', InterimElementProvider);
 
@@ -429,5 +426,3 @@ function InterimElementProvider() {
   }
 
 }
-
-})();

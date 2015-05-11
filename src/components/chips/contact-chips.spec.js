@@ -60,7 +60,7 @@ describe('<md-contact-chips>', function() {
         });
 
         var matches = autocompleteCtrl.matches;
-        expect(matches.length).toBe(2);
+        expect(matches.length).toBe(3);
       }));
 
       /* it('should not filter when disabled', inject(function($timeout) {

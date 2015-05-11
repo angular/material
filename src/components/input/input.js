@@ -1,5 +1,3 @@
-(function() {
-
 /**
  * @ngdoc module
  * @name material.components.input
@@ -354,5 +352,3 @@ function placeholderDirective($log) {
 
   }
 }
-
-})();
