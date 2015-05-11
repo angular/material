@@ -10,7 +10,7 @@ exports.task = function (done) {
 
   /**
    * For each cycle of testings (unminified, minified, minified w/ jQuery)
-   * interrogate the exitCode to capture the exitCode...
+   * capgture the exitCode to update the error count...
    * Then report any errors that may manifest [e.g.  in the minified tests]
    */
   function captureError(next) {
