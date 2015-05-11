@@ -9,9 +9,13 @@ exports.task = function (done) {
   };
 
   /**
-   * For each cycle of testings (unminified, minified, minified w/ jQuery)
-   * capgture the exitCode to update the error count...
-   * Then report any errors that may manifest [e.g.  in the minified tests]
+   * For each version of testings (unminified, minified, minified w/ jQuery)
+   * capture the exitCode and update the error count...
+   *
+   * When all versions are done, report any errors that may manifest
+   * [e.g. perhaps in the minified tests]
+   *
+   * NOTE: All versions must pass before the CI server will announce 'success'
    */
   function captureError(next) {
     return function(exitCode) {
