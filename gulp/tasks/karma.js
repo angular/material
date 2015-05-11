@@ -1,3 +1,5 @@
+var buildJs = require('../helpers').buildJs;
+
 exports.task = function (done) {
   var errorCount = 0;
   var karmaConfig = {
