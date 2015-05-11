@@ -84,7 +84,7 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
           name: path.basename(file.path),
           label: path.basename(file.path),
           fileType: path.extname(file.path).substring(1),
-          outputPath: 'demo-partials/' + name + '/' + path.basename(demoFolder.path) + '/' + path.basename(file.path),
+          outputPath: 'demo-partials/' + name + '/' + path.basename(demoFolder.path) + '/' + path.basename(file.path)
         };
       }
     }));
@@ -259,9 +259,8 @@ exports.hoistScssVariables = function() {
 exports.cssToNgConstant = function(ngModule, factoryName) {
   return through2.obj(function(file, enc, next) {
 
-    var template = '(function(){ \n angular.module("%1").constant("%2", "%3"); \n})();';
-    var output = file.contents.toString().replace(/\n/g, '')
-      .replace(/\"/,'\\"');
+    var template = 'angular.module("%1").constant("%2", "%3"); \n';
+    var output = file.contents.toString().replace(/\n/g, '').replace(/\"/,'\\"');
 
     var jsFile = new gutil.File({
       base: file.base,

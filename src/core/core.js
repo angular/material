@@ -1,5 +1,3 @@
-(function() {
-'use strict';
 
 /**
  * Initialization function that validates environment
@@ -51,5 +49,3 @@ function rAFDecorator( $delegate ) {
   };
   return $delegate;
 }
-
-})();

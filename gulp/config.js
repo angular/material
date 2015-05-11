@@ -7,11 +7,11 @@ module.exports = {
   ' * v' + VERSION + '\n' +
   ' */\n',
   jsBaseFiles: [
-    'src/core/**/*.js',
-    '!src/core/**/*.spec.js'
+    'src/core/**/*.js'
   ],
   jsFiles: [
-    'src/**/*.js'
+    'src/**/*.js',
+    '!src/**/*.spec.js'
   ],
   themeBaseFiles: [
     'src/core/style/variables.scss',

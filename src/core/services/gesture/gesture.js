@@ -1,6 +1,3 @@
-(function (jQuery) {
-  'use strict';
-
   var HANDLERS = {};
   /* The state of the current 'pointer'
    * The pointer represents the state of the current touch.
@@ -600,5 +597,3 @@
       (ev.changedTouches && ev.changedTouches[0]) ||
       ev;
   }
-
-})(window.jQuery);

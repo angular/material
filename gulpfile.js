@@ -8,40 +8,40 @@ if (IS_RELEASE_BUILD) {
 require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
 
 gulp.task('build-all-modules', function() {
-  return series(gulp.src(['src/components/*', 'src/core/'])
-      .pipe(through2.obj(function(folder, enc, next) {
-        var moduleId = folder.path.indexOf('components') > -1
-            ? 'material.components.' + path.basename(folder.path)
-            : 'material.' + path.basename(folder.path);
-        var stream = (IS_RELEASE_BUILD && BUILD_MODE.useBower)
-            ? series(buildModule(moduleId, true), buildModule(moduleId, false))
-            : buildModule(moduleId, false);
-        stream.on('end', function() { next(); });
-      })),
-      themeBuildStream()
-          .pipe(BUILD_MODE.transform())
-          .pipe(gulp.dest(path.join(BUILD_MODE.outputDir, 'core')))
-  );
+  return series(
+    gulp.src(['src/core/', 'src/components/*' ])
+        .pipe(through2.obj(function(folder, enc, next) {
+          var moduleId = folder.path.indexOf('components') > -1
+              ? 'material.components.' + path.basename(folder.path)
+              : 'material.' + path.basename(folder.path);
+          var stream = (IS_RELEASE_BUILD && BUILD_MODE.useBower)
+              ? series(buildModule(moduleId, true), buildModule(moduleId, false))
+              : buildModule(moduleId, false);
+          stream.on('end', function() { next(); });
+        })),
+    themeBuildStream()
+      .pipe(gulp.dest(path.join(BUILD_MODE.outputDir, 'core'))
+  )).pipe(BUILD_MODE.transform());
 });
 
 function buildModule(module, isRelease) {
   if ( module.indexOf(".") < 0) {
     module = "material.components." + module;
   }
-
-  var name = module.split('.').pop();
   gutil.log('Building ' + module + (isRelease && ' minified' || '') + ' ...');
 
+  var name = module.split('.').pop();
   utils.copyDemoAssets(name, 'src/components/', 'dist/demos/');
 
-  return utils.filesForModule(module)
-    .pipe(filterNonCodeFiles())
-    .pipe(gulpif('*.scss', buildModuleStyles(name)))
-    .pipe(gulpif('*.js', buildModuleJs(name)))
-    .pipe(BUILD_MODE.transform())
-    .pipe(insert.prepend(config.banner))
-    .pipe(gulpif(isRelease, buildMin()))
-    .pipe(gulp.dest(BUILD_MODE.outputDir + name));
+  var stream = utils.filesForModule(module)
+        .pipe(filterNonCodeFiles())
+        .pipe(gulpif('*.scss', buildModuleStyles(name)))
+        .pipe(gulpif('*.js', buildModuleJs(name)))
+        .pipe(insert.prepend(config.banner))
+        .pipe(gulpif(isRelease, buildMin()))
+        .pipe(gulp.dest(BUILD_MODE.outputDir + name));
+
+  return stream;
 
 
   function buildMin() {
@@ -175,6 +175,7 @@ global.buildJs = function buildJs(isRelease) {
   return series(jsBuildStream, themeBuildStream())
     .pipe(concat('angular-material.js'))
     .pipe(insert.prepend(config.banner))
+    .pipe(BUILD_MODE.transform())
     .pipe(gulp.dest(config.outputDir))
     .pipe(gulpif(isRelease, lazypipe()
       .pipe(uglify, { preserveComments: 'some' })

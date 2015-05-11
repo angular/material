@@ -2,7 +2,7 @@ describe('<md-tabs>', function() {
 
   beforeEach(module('material.components.tabs'));
   beforeEach(function() {
-    TestUtil.mockElementFocus(this);
+    jasmine.mockElementFocus(this);
 
     jasmine.addMatchers({
       toBeActiveTab: function() {

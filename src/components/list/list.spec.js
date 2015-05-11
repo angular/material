@@ -12,14 +12,24 @@ describe('mdListItem directive', function() {
 
   it('forwards click events for md-checkbox', inject(function($rootScope) {
     var listItem = setup('<md-list-item><md-checkbox ng-model="modelVal"></md-checkbox></md-list-item>');
-    listItem[0].querySelector('div').click();
-    expect($rootScope.modelVal).toBe(true);
+    var cntr = listItem[0].querySelector('div');
+
+    if (cntr && cntr.click ) {
+      cntr.click();
+      expect($rootScope.modelVal).toBe(true);
+    }
+
   }));
 
   it('forwards click events for md-switch', inject(function($rootScope) {
     var listItem = setup('<md-list-item><md-switch ng-model="modelVal"></md-switch></md-list-item>');
-    listItem[0].querySelector('div').click();
-    expect($rootScope.modelVal).toBe(true);
+    var cntr = listItem[0].querySelector('div');
+
+    if (cntr && cntr.click ) {
+      cntr.click();
+      expect($rootScope.modelVal).toBe(true);
+    }
+
   }));
 
   it('should convert spacebar keypress events as clicks', inject(function($compile, $rootScope, $mdConstant) {
