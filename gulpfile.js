@@ -7,25 +7,7 @@ if (IS_RELEASE_BUILD) {
 
 require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
 
-gulp.task('build-all-modules', function() {
-  return series(
-    gulp.src(['src/core/', 'src/components/*' ])
-        .pipe(through2.obj(function(folder, enc, next) {
-          var moduleId = folder.path.indexOf('components') > -1
-              ? 'material.components.' + path.basename(folder.path)
-              : 'material.' + path.basename(folder.path);
-          var stream = (IS_RELEASE_BUILD && BUILD_MODE.useBower)
-              ? series(buildModule(moduleId, true), buildModule(moduleId, false))
-              : buildModule(moduleId, false);
-          stream.on('end', function() { next(); });
-        })),
-    themeBuildStream()
-      .pipe(BUILD_MODE.transform())
-      .pipe(gulp.dest(path.join(BUILD_MODE.outputDir, 'core'))
-  )).pipe(BUILD_MODE.transform());
-});
-
-function buildModule(module, isRelease) {
+public.buildModule = function buildModule(module, isRelease) {
   if ( module.indexOf(".") < 0) {
     module = "material.components." + module;
   }
@@ -92,71 +74,6 @@ function buildModuleStyles(name) {
 
 }
 
-/** *****************************************
- *
- * Tasks for Watch features
- *
- * `gulp watch` - Watch, build and deploy all modules and css
- * `gulp watch-demo -c textfield` - Watch, build and deploy the 'textfield' demos
- * `gulp watch-demo -m material.components.textfield` - Watch, build and deploy the 'textfield' module's demos
- *
- ** ***************************************** */
-
-gulp.task('watch', ['docs'], function() {
-  gulp.watch(['docs/**/*', 'src/**/*'], ['build', 'docs']);
-});
-
-gulp.task('watch-demo', ['build-demo'], function() {
-  var module = readModuleArg();
-  var name = module.split('.').pop();
-  var dir  = "/dist/demos/"+name.trim();
-  gutil.log('\n',
-    '-- Rebuilding', dir, 'when source files change...\n',
-    '--', gutil.colors.green('Hint:'), 'Run',
-    gutil.colors.cyan('`gulp server`'),
-    'to start a livereload server in root, then navigate to\n',
-    '--', gutil.colors.green('"dist/demos/' + name + '/"'), 'in your browser to develop.'
-   );
-
-  return gulp.watch('src/**/*', ['build-demo']);
-});
-
-gulp.task('site', function () {
-  return gulp.src('dist/docs')
-      .pipe(webserver({
-        host: '0.0.0.0',
-        livereload: true,
-        port: LR_PORT,
-        directoryListing: false
-      }));
-});
-
-gulp.task('server', function() {
-  return gulp.src('.')
-    .pipe(webserver({
-      host: '0.0.0.0',
-      livereload: true,
-      port: LR_PORT,
-      directoryListing: true
-    }));
-});
-
-
-/** *****************************************
- *
- * Tasks and functions for module Javascript
- *
- ** ***************************************** */
-
-gulp.task('build-js', function() {
-  return buildJs(IS_RELEASE_BUILD);
-});
-
-gulp.task('build-js-release', function() {
-  return buildJs(true);
-});
-
-
 /**
  * Builds the entire component library javascript.
  * @param {boolean} isRelease Whether to build in release mode.
@@ -207,76 +124,7 @@ global.themeBuildStream = function themeBuildStream() {
     .pipe(utils.cssToNgConstant('material.core', '$MD_THEME_CSS'));
 };
 
-
-/** *****************************************
- *
- * Component Demos Tasks and commands
- *
- * Build and deploy demos for a module. This is
- * useful for debugging a specific module independent of
- * the docs build; which has all modules and all demos loaded.
- *
- * To build, watch for changes, and launch web server :
- *
- * ```sh
- *    gulp watch-demo -c button
- *    gulp server
- * ```
- *
- * To build demo files:
- *
- * ```sh
- *    gulp build-demo -c button
- * ```
- *
- ** ***************************************** */
-
-gulp.task('build-demo', ['build', 'build-module-demo'], function() {
-  return buildModule(readModuleArg(), false);
-});
-
-gulp.task('build-module-demo', function() {
-  var mod = readModuleArg();
-  var name = mod.split('.').pop();
-  var demoIndexTemplate = fs.readFileSync(
-    __dirname + '/docs/config/template/demo-index.template.html', 'utf8'
-  ).toString();
-
-  gutil.log('Building demos for', mod, '...');
-
-  return utils.readModuleDemos(mod, function() {
-    return lazypipe()
-        .pipe(gulpif, /.css$/, sass())
-        .pipe(gulpif, /.css$/, autoprefix())
-        .pipe(gulp.dest, BUILD_MODE.outputDir + name)
-        ();
-  })
-  .pipe(through2.obj(function(demo, enc, next) {
-    fs.writeFileSync(
-      path.resolve(BUILD_MODE.outputDir, name, demo.name, 'index.html'),
-      _.template(demoIndexTemplate, demo)
-    );
-    next();
-  }));
-
-});
-
-
-/** *****************************************
- *
- * Tasks and functions for Themes and CSS
- *
- ** ***************************************** */
-
-
-/** *****************************************
- *
- * Internal helper functions
- *
- ** ***************************************** */
-
-
-function readModuleArg() {
+global.readModuleArg = function readModuleArg() {
   var module = argv.c ? 'material.components.' + argv.c : (argv.module || argv.m);
   if (!module) {
     gutil.log('\nProvide a compnent argument via `-c`:',
