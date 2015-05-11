@@ -24,6 +24,8 @@ global.sass             = require('gulp-sass');
 global.uglify           = require('gulp-uglify');
 global.webserver        = require('gulp-webserver');
 
+global.root             = global.path.normalize(__dirname + '/..');
+
 global.IS_RELEASE_BUILD = !!argv.release;
 global.IS_DEMO_BUILD    = (!!argv.module || !!argv.m || !!argv.c);
 global.VERSION          = argv.version || require('../package.json').version;

@@ -1,9 +1,11 @@
-global.root = __dirname;
+//-- include global variables
 require('./gulp/globals');
 
+//-- announce release build if necessary
 IS_RELEASE_BUILD && console.log(gutil.colors.red('--release:'),
     'Building release version (minified)...');
 
+//-- include docs gulpfile (should eventually be factored out)
 require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
 
 //-- read in all files from gulp/tasks and create tasks for them
