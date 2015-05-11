@@ -34,7 +34,7 @@ function buildModule(module, isRelease) {
   var name = module.split('.').pop();
   utils.copyDemoAssets(name, 'src/components/', 'dist/demos/');
 
-  var stream = utils.filesForModule(module)
+  return utils.filesForModule(module)
         .pipe(filterNonCodeFiles())
         .pipe(gulpif('*.scss', buildModuleStyles(name)))
         .pipe(gulpif('*.js', buildModuleJs(name)))
@@ -42,8 +42,6 @@ function buildModule(module, isRelease) {
         .pipe(insert.prepend(config.banner))
         .pipe(gulpif(isRelease, buildMin()))
         .pipe(gulp.dest(BUILD_MODE.outputDir + name));
-
-  return stream;
 
 
   function buildMin() {

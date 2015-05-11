@@ -1,4 +1,5 @@
 exports.task = function (done) {
+  var errorCount = 0;
   var karmaConfig = {
     logLevel: 'warn',
     singleRun: true,
@@ -7,8 +8,11 @@ exports.task = function (done) {
     configFile: root + '/config/karma.conf.js'
   };
 
-  var errorCount = 0;
-
+  /**
+   * For each cycle of testings (unminified, minified, minified w/ jQuery)
+   * interrogate the exitCode to capture the exitCode...
+   * Then report any errors that may manifest [e.g.  in the minified tests]
+   */
   function captureError(next) {
     return function(exitCode) {
       if (exitCode != 0) {

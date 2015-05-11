@@ -84,7 +84,12 @@ module.exports = function(config) {
               });
           }
         },
-        flags: ['--web-security=no', '--proxy-type=none', '--remote-debugger-port=9000', '--remote-debugger-autorun=yes']
+        flags: [
+          '--web-security=no',
+          '--proxy-type=none',
+          '--remote-debugger-port=9000',
+          '--remote-debugger-autorun=yes'
+        ]
       }
     }
   });

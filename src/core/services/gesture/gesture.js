@@ -45,9 +45,11 @@
     skipClickHijack: function() {
       return forceSkipClickHijack = true;
     },
-    
-    // $get is used to build an instance of $mdGesture
-    /* @ngInject */
+
+    /**
+     * $get is used to build an instance of $mdGesture
+     * @ngInject
+     */
     $get : function($$MdGestureHandler, $$rAF, $timeout) {
          return new MdGesture($$MdGestureHandler, $$rAF, $timeout);
     }
