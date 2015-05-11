@@ -13,6 +13,9 @@ module.exports = {
     'src/**/*.js',
     '!src/**/*.spec.js'
   ],
+  mockFiles : [
+    'src/spec/angular-material-mocks.js'
+  ],
   themeBaseFiles: [
     'src/core/style/variables.scss',
     'src/core/style/mixins.scss'

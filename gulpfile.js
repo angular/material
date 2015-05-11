@@ -153,7 +153,7 @@ gulp.task('build-js', function() {
 });
 
 gulp.task('build-js-release', function() {
-  buildJs(true);
+  return buildJs(true);
 });
 
 
@@ -172,7 +172,7 @@ global.buildJs = function buildJs(isRelease) {
     .pipe(plumber())
     .pipe(ngAnnotate());
 
-  return series(jsBuildStream, themeBuildStream())
+  return series(jsBuildStream, themeBuildStream(), deployMaterialMocks())
     .pipe(concat('angular-material.js'))
     .pipe(insert.prepend(config.banner))
     .pipe(BUILD_MODE.transform())
@@ -184,6 +184,13 @@ global.buildJs = function buildJs(isRelease) {
       ()
     ));
 };
+
+
+global.deployMaterialMocks = function deployMaterialMocks() {
+   return gulp.src(config.mockFiles)
+     .pipe(gulp.dest(config.outputDir));
+};
+
 
 // builds the theming related css and provides it as a JS const for angular
 global.themeBuildStream = function themeBuildStream() {
