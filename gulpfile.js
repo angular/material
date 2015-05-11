@@ -65,9 +65,8 @@ function buildModule(module, isRelease) {
 
 function buildModuleJs(name) {
   return lazypipe()
-    .pipe(plumber())
-    .pipe(ngAnnotate())
-    .pipe(BUILD_MODE.transform())
+    .pipe(plumber)
+    .pipe(ngAnnotate)
     .pipe(concat, name + '.js')
     ();
 }
