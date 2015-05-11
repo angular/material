@@ -20,6 +20,7 @@ gulp.task('build-all-modules', function() {
           stream.on('end', function() { next(); });
         })),
     themeBuildStream()
+      .pipe(BUILD_MODE.transform())
       .pipe(gulp.dest(path.join(BUILD_MODE.outputDir, 'core'))
   )).pipe(BUILD_MODE.transform());
 });
@@ -37,6 +38,7 @@ function buildModule(module, isRelease) {
         .pipe(filterNonCodeFiles())
         .pipe(gulpif('*.scss', buildModuleStyles(name)))
         .pipe(gulpif('*.js', buildModuleJs(name)))
+        .pipe(BUILD_MODE.transform())
         .pipe(insert.prepend(config.banner))
         .pipe(gulpif(isRelease, buildMin()))
         .pipe(gulp.dest(BUILD_MODE.outputDir + name));
@@ -65,8 +67,9 @@ function buildModule(module, isRelease) {
 
 function buildModuleJs(name) {
   return lazypipe()
-    .pipe(plumber)
-    .pipe(ngAnnotate)
+    .pipe(plumber())
+    .pipe(ngAnnotate())
+    .pipe(BUILD_MODE.transform())
     .pipe(concat, name + '.js')
     ();
 }
@@ -162,20 +165,20 @@ gulp.task('build-js-release', function() {
  * @param {boolean} isRelease Whether to build in release mode.
  */
 global.buildJs = function buildJs(isRelease) {
+  var jsFiles = config.jsBaseFiles.concat([path.join(config.paths, '*.js')]);
+
   gutil.log("building js files...");
 
-  var jsBuildStream = gulp.src(
-    config.jsBaseFiles.concat([path.join(config.paths, '*.js')])
-  )
+  var jsBuildStream = gulp.src( jsFiles )
     .pipe(filterNonCodeFiles())
     .pipe(utils.buildNgMaterialDefinition())
     .pipe(plumber())
     .pipe(ngAnnotate());
 
-  return series(jsBuildStream, themeBuildStream(), deployMaterialMocks())
+  var jsProcess = series(jsBuildStream, themeBuildStream() )
     .pipe(concat('angular-material.js'))
-    .pipe(insert.prepend(config.banner))
     .pipe(BUILD_MODE.transform())
+    .pipe(insert.prepend(config.banner))
     .pipe(gulp.dest(config.outputDir))
     .pipe(gulpif(isRelease, lazypipe()
       .pipe(uglify, { preserveComments: 'some' })
@@ -183,12 +186,17 @@ global.buildJs = function buildJs(isRelease) {
       .pipe(gulp.dest, config.outputDir)
       ()
     ));
+
+  return series(jsProcess, deployMaterialMocks(isRelease))
 };
 
 
-global.deployMaterialMocks = function deployMaterialMocks() {
-   return gulp.src(config.mockFiles)
-     .pipe(gulp.dest(config.outputDir));
+global.deployMaterialMocks = function deployMaterialMocks(isRelease) {
+  var isReleaseFn = function() { return isRelease; };
+
+  return gulp.src(config.mockFiles)
+    .pipe(gulp.dest(config.outputDir));
+
 };
 
 

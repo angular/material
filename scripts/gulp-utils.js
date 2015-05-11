@@ -173,10 +173,10 @@ exports.addJsWrapper = function() {
     var moduleInfo = getModuleInfo(file.contents);
     if (moduleInfo.module) {
       file.contents = new Buffer([
-          '(function () {',
+          '(function (window, angular, undefined) {',
           '"use strict";',
           file.contents.toString(),
-          '})();'
+          '})(window, window.angular);'
       ].join('\n'));
     }
     this.push(file);
@@ -259,7 +259,7 @@ exports.hoistScssVariables = function() {
 exports.cssToNgConstant = function(ngModule, factoryName) {
   return through2.obj(function(file, enc, next) {
 
-    var template = 'angular.module("%1").constant("%2", "%3"); \n';
+    var template = '(function(){ \nangular.module("%1").constant("%2", "%3"); \n})();\n\n';
     var output = file.contents.toString().replace(/\n/g, '').replace(/\"/,'\\"');
 
     var jsFile = new gutil.File({
