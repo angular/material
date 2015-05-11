@@ -1,7 +1,9 @@
+var util = require('../util');
+
 exports.dependencies = ['build-demo'];
 
 exports.task = function() {
-  var module = readModuleArg();
+  var module = util.readModuleArg();
   var name = module.split('.').pop();
   var dir  = "/dist/demos/"+name.trim();
   gutil.log('\n',

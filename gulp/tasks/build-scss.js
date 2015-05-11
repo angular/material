@@ -11,7 +11,7 @@ exports.task = function() {
   var streams = [];
   streams.push(
       gulp.src(paths)
-          .pipe(filterNonCodeFiles())
+          .pipe(util.filterNonCodeFiles())
           .pipe(filter(['**', '!**/*-theme.scss']))
           .pipe(concat('angular-material.scss'))
           .pipe(sass())

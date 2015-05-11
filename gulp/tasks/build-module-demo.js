@@ -1,7 +1,7 @@
 var util = require('../util');
 
 exports.task = function() {
-  var mod = readModuleArg();
+  var mod = util.readModuleArg();
   var name = mod.split('.').pop();
   var demoIndexTemplate = fs.readFileSync(
       root + '/docs/config/template/demo-index.template.html', 'utf8'

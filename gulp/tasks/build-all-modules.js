@@ -1,3 +1,5 @@
+var util = require('../util');
+
 exports.task = function() {
   return series(
       gulp.src(['src/core/', 'src/components/*' ])
@@ -6,12 +8,13 @@ exports.task = function() {
                 ? 'material.components.' + path.basename(folder.path)
                 : 'material.' + path.basename(folder.path);
             var stream = (IS_RELEASE_BUILD && BUILD_MODE.useBower)
-                ? series(buildModule(moduleId, true), buildModule(moduleId, false))
-                : buildModule(moduleId, false);
+                ? series(util.buildModule(moduleId, true), util.buildModule(moduleId, false))
+                : util.buildModule(moduleId, false);
             stream.on('end', function() { next(); });
           })),
-      themeBuildStream()
+      util.themeBuildStream()
           .pipe(BUILD_MODE.transform())
           .pipe(gulp.dest(path.join(BUILD_MODE.outputDir, 'core'))
       )).pipe(BUILD_MODE.transform());
+
 };
