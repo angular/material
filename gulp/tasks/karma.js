@@ -1,6 +1,6 @@
 exports.task = function (done) {
   var karmaConfig = {
-    logLevel: 'debug',
+    logLevel: 'warn',
     singleRun: true,
     autoWatch: false,
     browsers : argv.browsers ? argv.browsers.trim().split(',') : ['Chrome'],

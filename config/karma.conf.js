@@ -33,8 +33,8 @@ module.exports = function(config) {
         'node_modules/angular-animate/angular-animate.js',
         'node_modules/angular-aria/angular-aria.js',
         'node_modules/angular-mocks/angular-mocks.js',
-        'src/spec/angular-material-mocks.js',
-        'src/spec/angular-material-spec.js'
+        'test/angular-material-mocks.js',
+        'test/angular-material-spec.js'
       ]);
 
   var testSrc = process.env.KARMA_TEST_COMPRESSED ? COMPILED_SRC : UNCOMPILED_SRC;

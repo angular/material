@@ -11,12 +11,10 @@ module.exports = {
   ],
   jsFiles: [
     'src/**/*.js',
-    '!src/**/*.spec.js',
-    '!src/spec/**/*.js'
-
+    '!src/**/*.spec.js'
   ],
   mockFiles : [
-    'src/spec/angular-material-mocks.js'
+    'test/angular-material-mocks.js'
   ],
   themeBaseFiles: [
     'src/core/style/variables.scss',

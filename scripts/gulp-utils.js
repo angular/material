@@ -168,15 +168,15 @@ exports.buildNgMaterialDefinition = function() {
 function moduleNameToClosureName(name) {
   return 'ng.' + name;
 }
-exports.addJsWrapper = function() {
+exports.addJsWrapper = function(enforce) {
   return through2.obj(function(file, enc, next) {
     var moduleInfo = getModuleInfo(file.contents);
-    if (moduleInfo.module) {
+    if (!!enforce || moduleInfo.module) {
       file.contents = new Buffer([
-          '(function (window, angular, undefined) {',
-          '"use strict";',
+          !!enforce ? '(function(){' : '(function( window, angular, undefined ){',
+          '"use strict";\n',
           file.contents.toString(),
-          '})(window, window.angular);'
+          !!enforce ? '})();' : '})(window, window.angular);'
       ].join('\n'));
     }
     this.push(file);

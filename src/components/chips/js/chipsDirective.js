@@ -1,5 +1,3 @@
-(function(){
-
   angular
       .module('material.components.chips')
       .directive('mdChips', MdChips);
@@ -269,5 +267,3 @@
       };
     }
   }
-
-})();

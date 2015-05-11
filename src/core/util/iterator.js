@@ -1,5 +1,3 @@
-(function(){
-
   angular
     .module('material.core')
     .config( function($provide){
@@ -227,4 +225,3 @@
     }
   }
 
-})();
