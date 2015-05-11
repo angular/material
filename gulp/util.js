@@ -2,7 +2,7 @@
  * Builds the entire component library javascript.
  * @param {boolean} isRelease Whether to build in release mode.
  */
-exports.buildJs = function buildJs(isRelease) {
+exports.buildJs = function buildJs (isRelease) {
   var jsFiles = config.jsBaseFiles.concat([path.join(config.paths, '*.js')]);
 
   gutil.log("building js files...");
@@ -27,4 +27,10 @@ exports.buildJs = function buildJs(isRelease) {
       ));
 
   return series(jsProcess, deployMaterialMocks())
+};
+
+exports.autoprefix = function autoprefix () {
+  return autoprefixer({browsers: [
+    'last 2 versions', 'last 4 Android versions'
+  ]});
 };

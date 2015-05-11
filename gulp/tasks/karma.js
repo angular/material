@@ -1,4 +1,4 @@
-var buildJs = require('../helpers').buildJs;
+var util = require('../util');
 
 exports.task = function (done) {
   var errorCount = 0;
@@ -31,7 +31,7 @@ exports.task = function (done) {
 
 
   gutil.log('Running unit tests on unminified source.');
-  buildJs(true);
+  util.buildJs(true);
   karma.start(karmaConfig, captureError(testMinified));
 
   function testMinified() {

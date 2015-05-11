@@ -1,3 +1,5 @@
+var util = require('../util');
+
 exports.task = function() {
   var mod = readModuleArg();
   var name = mod.split('.').pop();
@@ -10,7 +12,7 @@ exports.task = function() {
   return utils.readModuleDemos(mod, function() {
     return lazypipe()
         .pipe(gulpif, /.css$/, sass())
-        .pipe(gulpif, /.css$/, autoprefix())
+        .pipe(gulpif, /.css$/, util.autoprefix())
         .pipe(gulp.dest, BUILD_MODE.outputDir + name)
     ();
   })

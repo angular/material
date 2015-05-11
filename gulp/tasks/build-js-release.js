@@ -1,5 +1,5 @@
-var buildJs = require('../helpers').buildJs;
+var util = require('../util');
 
 exports.task = function() {
-  buildJs(true);
+  util.buildJs(true);
 };

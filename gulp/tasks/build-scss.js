@@ -1,3 +1,5 @@
+var util = require('../util');
+
 exports.task = function() {
   var modules   = argv['modules'],
       overrides = argv['override'],
@@ -14,7 +16,7 @@ exports.task = function() {
           .pipe(concat('angular-material.scss'))
           .pipe(sass())
           .pipe(rename({ basename: filename }))
-          .pipe(autoprefix())
+          .pipe(util.autoprefix())
           .pipe(insert.prepend(config.banner))
           .pipe(gulp.dest(dest))
           .pipe(gulpif(IS_RELEASE_BUILD, lazypipe()
@@ -30,7 +32,7 @@ exports.task = function() {
         gulp.src(config.scssStandaloneFiles)
             .pipe(insert.prepend(baseVars))
             .pipe(sass())
-            .pipe(autoprefix())
+            .pipe(util.autoprefix())
             .pipe(insert.prepend(config.banner))
             .pipe(rename({prefix: 'angular-material-'}))
             .pipe(gulp.dest(path.join(dest, 'modules', 'css')))

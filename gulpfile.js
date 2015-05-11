@@ -7,7 +7,7 @@ if (IS_RELEASE_BUILD) {
 
 require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
 
-public.buildModule = function buildModule(module, isRelease) {
+global.buildModule = function buildModule(module, isRelease) {
   if ( module.indexOf(".") < 0) {
     module = "material.components." + module;
   }
@@ -107,12 +107,6 @@ global.filterNonCodeFiles = function filterNonCodeFiles() {
   return filter(function(file) {
     return !/demo|module\.json|\.spec.js|README/.test(file.path);
   });
-};
-
-global.autoprefix = function autoprefix() {
-  return autoprefixer({browsers: [
-    'last 2 versions', 'last 4 Android versions'
-  ]});
 };
 
 //-- read in all files from gulp/tasks and create tasks for them
