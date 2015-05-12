@@ -87,7 +87,7 @@ md-list-item, md-list-item .md-list-item-inner {
   & > md-icon:first-child, 
   > md-icon.md-secondary {
     width: $list-item-primary-icon-width;
-    margin-top: 12px;
+    margin-top: 16px;
     margin-bottom: 12px;
     box-sizing: content-box;
   }
@@ -197,7 +197,7 @@ md-list-item.md-2-line > .md-no-style {
     margin-top: $baseline-grid * 1.5;
   }
   > md-icon:first-child {
-    align-self: center;
+    align-self: flex-start;
   }
   .md-list-item-text {
     flex: 1;
