@@ -141,6 +141,7 @@
     // uses the correct escaped characters
     function htmlEscapeAmpersand(html) {
       return html
+        .replace(/&mdash;/g, "&amp;mdash;")
         .replace(/&gt;/g, "&amp;gt;")
         .replace(/&nbsp;/g, "&amp;nbsp;")
         .replace(/&lt;/g, "&amp;lt;");
