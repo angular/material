@@ -19,12 +19,9 @@ exports.task = function() {
           .pipe(util.autoprefix())
           .pipe(insert.prepend(config.banner))
           .pipe(gulp.dest(dest))
-          .pipe(gulpif(true, lazypipe()
-              .pipe(gulpif, !IS_DEV, minifyCss)
-              .pipe(rename, {extname: '.min.css'})
-              .pipe(gulp.dest, dest)
-              ()
-          ))
+          .pipe(gulpif(!IS_DEV, minifyCss()))
+          .pipe(rename({extname: '.min.css'}))
+          .pipe(gulp.dest(dest))
   );
   streams.push(
       gulp.src(config.scssStandaloneFiles)

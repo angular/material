@@ -26,12 +26,9 @@ function buildJs (isRelease) {
       .pipe(BUILD_MODE.transform())
       .pipe(insert.prepend(config.banner))
       .pipe(gulp.dest(config.outputDir))
-      .pipe(gulpif(isRelease, lazypipe()
-              .pipe(gulpif, !IS_DEV, uglify({ preserveComments: 'some' }))
-              .pipe(rename, { extname: '.min.js' })
-              .pipe(gulp.dest, config.outputDir)
-          ()
-      ));
+      .pipe(gulpif(!IS_DEV, uglify({ preserveComments: 'some' })))
+      .pipe(rename({ extname: '.min.js' }))
+      .pipe(gulp.dest(config.outputDir));
 
   return series(jsProcess, deployMaterialMocks());
 
