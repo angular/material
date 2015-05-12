@@ -7,7 +7,7 @@ exports.task = function() {
             var moduleId = folder.path.indexOf('components') > -1
                 ? 'material.components.' + path.basename(folder.path)
                 : 'material.' + path.basename(folder.path);
-            var stream = (IS_RELEASE_BUILD && BUILD_MODE.useBower)
+            var stream = BUILD_MODE.useBower
                 ? series(util.buildModule(moduleId, true), util.buildModule(moduleId, false))
                 : util.buildModule(moduleId, false);
             stream.on('end', function() { next(); });

@@ -6,7 +6,7 @@ IS_RELEASE_BUILD && console.log(gutil.colors.red('--release:'),
     'Building release version (minified)...');
 
 //-- include docs gulpfile (should eventually be factored out)
-require('./docs/gulpfile')(gulp, IS_RELEASE_BUILD);
+require('./docs/gulpfile')(gulp, true);
 
 //-- read in all files from gulp/tasks and create tasks for them
 fs.readdirSync('./gulp/tasks')
