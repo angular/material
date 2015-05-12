@@ -111,7 +111,7 @@ module.exports = function(gulp, IS_RELEASE_BUILD) {
   });
 
   gulp.task('docs-js-dependencies', ['build'], function() {
-    return gulp.src('dist/angular-material.js')
+    return gulp.src(['dist/angular-material.js','dist/angular-material.min.js'])
       .pipe(gulp.dest('dist/docs'));
   });
 
@@ -126,7 +126,7 @@ module.exports = function(gulp, IS_RELEASE_BUILD) {
   });
 
   gulp.task('docs-css-dependencies', ['build'], function() {
-    return gulp.src('dist/angular-material.css')
+    return gulp.src(['dist/angular-material.css','dist/angular-material.min.css'])
       .pipe(gulp.dest('dist/docs'));
   });
 
