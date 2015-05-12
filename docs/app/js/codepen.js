@@ -6,7 +6,7 @@
   // Provides a service to open a code example in codepen.
   function Codepen($demoAngularScripts, $document, codepenDataAdapter) {
 
-    var CODEPEN_API = 'http://codepen.io/pen/define/';
+    var CODEPEN_API = 'https://codepen.io/pen/define/';
 
     return {
       editOnCodepen: editOnCodepen
