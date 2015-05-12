@@ -118,6 +118,15 @@ describe('CodepenDataAdapter', function() {
 
     });
 
+    describe('when the html example includes &nbsp;', function() {
+
+      it('escapes the ampersand, so that the codepen does not translate to an invalid character', function() {
+        demo.files.index.contents = '<div>&nbsp;&nbsp;</div>';
+        data = codepenDataAdapter.translate(demo, externalScripts);
+        expect(angular.element(data.html).html()).toBe('&amp;nbsp;&amp;nbsp;');
+      });
+    });
+
     describe('when the module definition in the js file is formatted in different ways', function() {
 
       it('handles second argument on a new line', function() {
