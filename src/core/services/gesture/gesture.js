@@ -65,12 +65,13 @@
     var userAgent = navigator.userAgent || navigator.vendor || window.opera;
     var isIos = userAgent.match(/ipad|iphone|ipod/i);
     var isAndroid = userAgent.match(/android/i);
+    var hasJQuery =  (typeof window.jQuery !== 'undefined') && (angular.element === window.jQuery);
 
     var self = {
       handler: addHandler,
       register: register,
       // On mobile w/out jQuery, we normally intercept clicks. Should we skip that?
-      isHijackingClicks: (isIos || isAndroid) && !jQuery && !forceSkipClickHijack
+      isHijackingClicks: (isIos || isAndroid) && !hasJQuery && !forceSkipClickHijack
     };
 
     if (self.isHijackingClicks) {
@@ -281,7 +282,7 @@
   }
 
   function MdGestureHandler() {
-    var hasJQuery =  typeof jQuery !== 'undefined' && angular.element === jQuery;
+    var hasJQuery =  (typeof window.jQuery !== 'undefined') && (angular.element === window.jQuery);
 
     GestureHandler.prototype = {
       options: {},
