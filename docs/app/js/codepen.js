@@ -39,8 +39,8 @@
     // See http://blog.codepen.io/documentation/api/prefill
     function escapeJsonQuotes(json) {
       return JSON.stringify(json)
-        .replace(/"/g, "&quot;")
-        .replace(/"/g, "&apos;");
+        .replace(/'/g, "&amp;apos;")
+        .replace(/"/g, "&amp;quot;");
     }
   }
 
@@ -141,6 +141,7 @@
     // uses the correct escaped characters
     function htmlEscapeAmpersand(html) {
       return html
+        .replace(/&mdash;/g, "&amp;mdash;")
         .replace(/&gt;/g, "&amp;gt;")
         .replace(/&nbsp;/g, "&amp;nbsp;")
         .replace(/&lt;/g, "&amp;lt;");
