@@ -27,7 +27,7 @@ function buildJs (isRelease) {
       .pipe(insert.prepend(config.banner))
       .pipe(gulp.dest(config.outputDir))
       .pipe(gulpif(isRelease, lazypipe()
-              .pipe(uglify, { preserveComments: 'some' })
+              .pipe(gulpif, !IS_DEV, uglify({ preserveComments: 'some' }))
               .pipe(rename, { extname: '.min.js' })
               .pipe(gulp.dest, config.outputDir)
           ()

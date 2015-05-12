@@ -26,10 +26,10 @@ global.webserver        = require('gulp-webserver');
 
 global.root             = global.path.normalize(__dirname + '/..');
 
-global.IS_RELEASE_BUILD = !!argv.release;
 global.IS_DEMO_BUILD    = (!!argv.module || !!argv.m || !!argv.c);
 global.VERSION          = argv.version || require('../package.json').version;
 global.LR_PORT          = argv.port || argv.p || 8080;
+global.IS_DEV           = !!argv.dev;
 
 global.config           = require('./config');
 global.utils            = require(root + '/scripts/gulp-utils.js');

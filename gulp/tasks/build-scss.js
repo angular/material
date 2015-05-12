@@ -20,7 +20,7 @@ exports.task = function() {
           .pipe(insert.prepend(config.banner))
           .pipe(gulp.dest(dest))
           .pipe(gulpif(true, lazypipe()
-              .pipe(minifyCss)
+              .pipe(gulpif, !IS_DEV, minifyCss)
               .pipe(rename, {extname: '.min.css'})
               .pipe(gulp.dest, dest)
               ()
