@@ -14,13 +14,20 @@ var utils = require('../scripts/gulp-utils.js');
 var karma = require('karma').server;
 var argv = require('minimist')(process.argv.slice(2));
 var gutil = require('gulp-util');
+var runSequence = require('run-sequence');
 
 var config = {
   demoFolder: 'demo-partials'
 };
 
 module.exports = function(gulp, IS_RELEASE_BUILD) {
-  gulp.task('docs', ['docs-js', 'docs-css', 'docs-demo-scripts']);
+  gulp.task('docs', function(callback) {
+
+    // For docs, always build minified versions of material CSS and JS files
+    global.IS_RELEASE_BUILD = IS_RELEASE_BUILD = true;
+
+    runSequence(['docs-js', 'docs-css', 'docs-demo-scripts'],callback);
+  });
 
   gulp.task('demos', function() {
     var demos = [];
