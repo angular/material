@@ -85,6 +85,9 @@ md-toolbar {
   &> .md-button:first-child {
     margin-left: $icon-button-margin-offset;
   }
+  &> .md-button:last-child {
+    margin-right: $icon-button-margin-offset;
+  }
 
   @media screen and (-ms-high-contrast: active) {
     border-bottom: 1px solid #fff;
