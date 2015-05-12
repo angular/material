@@ -3,21 +3,12 @@
 <head>
 <title ng-bind="(menu.currentSection.name || 'Material Design') + (menu.currentPage ? (' > ' + (menu.currentPage | humanizeDoc)) : '')">Material Design</title>
 <meta name="viewport" content="initial-scale=1" />
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-animate.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-route.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-aria.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-messages.min.js"></script>
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
-
-<script src="angular-material.min.js"></script>
-<script src="docs.js"></script>
-<script src="docs-demo-scripts.js"></script>
 <link rel="stylesheet" href="angular-material.css">
 <link rel="stylesheet" href="docs.css">
 </head>
-<body layout="row">
+<body layout="row" ng-cloak>
 
   <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2"
               md-component-id="left"
@@ -116,6 +107,18 @@
     <md-content ng-view md-scroll-y flex layout-padding></md-content>
 
   </div>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-animate.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-route.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-aria.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-messages.min.js"></script>
+
+  <script src="angular-material.min.js"></script>
+  <script src="docs.js"></script>
+  <script src="docs-demo-scripts.js"></script>
+
   <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

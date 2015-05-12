@@ -643,3 +643,8 @@ ul.methods > li:first-child > *:first-child {
     border: 1px solid #fff;
   }
 }
+
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
