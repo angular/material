@@ -42,7 +42,7 @@
         'Anita Gros',
         'Megan Smith',
         'Tsvetko Metzger',
-        'Hector Šimek',
+        'Hector Simek',
         'Some-guy withalongalastaname'
       ];
 
