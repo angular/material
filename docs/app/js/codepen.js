@@ -142,6 +142,7 @@
     function htmlEscapeAmpersand(html) {
       return html
         .replace(/&gt;/g, "&amp;gt;")
+        .replace(/&nbsp;/g, "&amp;nbsp;")
         .replace(/&lt;/g, "&amp;lt;");
     }
 
