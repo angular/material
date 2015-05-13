@@ -19,6 +19,7 @@ before_script:
 script:
   - gulp karma --browsers=Firefox
   - ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT
+  - ./scripts/snapshot-docs-site.sh --sha=$TRAVIS_COMMIT
 
 notifications:
   flowdock: ca58afe1354053b15fe75a763138829d
