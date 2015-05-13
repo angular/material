@@ -4,6 +4,9 @@ var child_process = require('child_process');
 var pkg = require('./package.json');
 var oldVersion = pkg.version;
 var newVersion = getNewVersion();
+var reset = [ 'git co master', 'rm reset' ];
+
+console.log('\n--------\n');
 
 //-- do stuff
 checkoutVersionBranch();
@@ -13,6 +16,7 @@ commitChanges();
 tagRelease();
 cloneBower();
 removeBower();
+writeResetScript();
 
 console.log('\n--------\n');
 console.log('Your repo is ready to be pushed.');
@@ -21,6 +25,7 @@ console.log('Please look over CHANGELOG.md and amend-commit any changes.');
 //-- utility methods
 function checkoutVersionBranch () {
   child_process.execSync(fill('git co -b v{{newVersion}}'));
+  reset.push(fill('git br -D v{{newVersion}}'));
 }
 
 function updateVersion () {
@@ -28,6 +33,7 @@ function updateVersion () {
   pkg.version = newVersion;
   fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
   console.log('done.');
+  reset.push('git co package.json');
 }
 
 function createChangelog () {
@@ -35,6 +41,7 @@ function createChangelog () {
   var cmd = fill('gulp changelog --sha=$(git merge-base v{{oldVersion}} HEAD)');
   child_process.execSync(cmd);
   console.log('done.');
+  reset.push('git co CHANGELOG.md');
 }
 
 function clear () {
@@ -45,8 +52,10 @@ function getNewVersion () {
   clear();
   var options = getVersionOptions(oldVersion), key, type, version;
   console.log(fill('The current version is {{oldVersion}}.'));
+  console.log('');
   console.log('What type of release is this?');
   for (key in options) { console.log((+key + 1) + ') ' + options[key]); }
+  console.log('');
   process.stdout.write('Please select a new version: ');
   type = prompt();
 
@@ -54,7 +63,13 @@ function getNewVersion () {
   else if (type.match(/^\d+\.\d+\.\d+(-rc\d+)?$/)) version = type;
   else throw new Error('Your entry was invalid.');
 
-  clear();
+  if (version.indexOf('rc') < 0) {
+    console.log('');
+    process.stdout.write('Is this a release candidate? [yes/no] ');
+    if (prompt() === 'yes') version += '-rc1';
+  }
+
+  console.log('');
   process.stdout.write('The new version will be ' + version + '.  Is this correct? [yes/no] ');
   return prompt() === 'yes' ? version : getNewVersion();
 
@@ -62,8 +77,7 @@ function getNewVersion () {
     return version.match(/-rc\d+$/)
         ? [ increment(version, 'rc'),
             increment(version, 'minor') ]
-        : [ increment(version, 'rc'),
-            increment(version, 'patch'),
+        : [ increment(version, 'patch'),
             increment(version, 'minor'),
             increment(version, 'major') ];
 
@@ -103,6 +117,7 @@ function tagRelease () {
   process.stdout.write('Tagging release...');
   child_process.execSync(fill('git tag v{{newVersion}}'));
   console.log('done.');
+  reset.push(fill('git tag -d v{{newVersion}}'));
 }
 
 function commitChanges () {
@@ -129,4 +144,17 @@ function fill(str) {
   });
 }
 
+function writeResetScript () {
+  if (fs.existsSync('reset')) {
+    reset.unshift.apply(reset, fs.readFileSync('reset', { encoding: 'ascii' }).split('\n'));
+  }
+  fs.writeFileSync('reset', removeDuplicates(reset).join('\n'));
+  child_process.execSync('chmod +x reset');
+}
 
+function removeDuplicates (arr) {
+  return arr.reduce(function (arr, cmd) {
+    if (arr.indexOf(cmd) < 0) arr.push(cmd);
+    return arr;
+  }, []);
+}
