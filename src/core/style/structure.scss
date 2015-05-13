@@ -146,16 +146,19 @@ input {
   margin: 8px;
 }
 
-.md-virtual-scroll-container {
-  display: block;
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-}
-
-.md-virtual-scroller {
-  width: 100%;
-  min-height: 100%;
+.md-scroll-mask {
+  position: absolute;
+  background-color: transparent;
+  > .md-scroll-mask-bar {
+    display: block;
+    position: absolute;
+    background-color: #fafafa;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: $z-index-scroll-mask;
+    box-shadow: inset 0px 0px 1px rgba(0, 0, 0, 0.3)
+  }
 }
 
 @media (min-width: $layout-breakpoint-sm) {
