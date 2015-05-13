@@ -119,7 +119,7 @@ function removeBower () {
 
 function cloneBower () {
   process.stdout.write('Cloning bower-material from Github...');
-  child_process.execSync('git clone https://github.com/angular/bower-material.git');
+  child_process.execSync('git clone https://github.com/angular/bower-material.git --depth=1');
   console.log('done.');
 }
 
