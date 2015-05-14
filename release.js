@@ -4,7 +4,8 @@ var child_process = require('child_process');
 var pkg = require('./package.json');
 var oldVersion = pkg.version;
 var newVersion = getNewVersion();
-var reset = [ 'git co master', 'rm reset' ];
+var abort = [ 'git checkout master', 'rm abort push' ];
+var push  = [ 'git commit --amend --no-edit', 'rm abort push'];
 
 console.log('\n--------\n');
 
@@ -14,18 +15,24 @@ updateVersion();
 createChangelog();
 commitChanges();
 tagRelease();
-cloneBower();
-removeBower();
-writeResetScript();
+cloneRepo('bower-material', 2);
+updateBowerVersion();
+cloneRepo('code.material.angularjs.org', 1);
+updateSite();
+writeScript('abort', abort);
+writeScript('push', push);
 
 console.log('\n--------\n');
 console.log('Your repo is ready to be pushed.');
-console.log('Please look over CHANGELOG.md and amend-commit any changes.');
+console.log('Please look over CHANGELOG.md and make any changes.');
+console.log('When you are ready, please run "./push" to finish the process.');
+console.log('If you would like to cancel this release, please run "./abort"');
 
 //-- utility methods
 function checkoutVersionBranch () {
-  child_process.execSync(fill('git co -b v{{newVersion}}'));
-  reset.push(fill('git br -D v{{newVersion}}'));
+  child_process.execSync(fill('git checkout -b br-v{{newVersion}}'));
+  abort.push(fill('git branch -D br-v{{newVersion}}'));
+  push.push(fill('git push'))
 }
 
 function updateVersion () {
@@ -33,7 +40,8 @@ function updateVersion () {
   pkg.version = newVersion;
   fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
   console.log('done.');
-  reset.push('git co package.json');
+  abort.push('git checkout package.json');
+  push.push('git add package.json');
 }
 
 function createChangelog () {
@@ -41,7 +49,8 @@ function createChangelog () {
   var cmd = fill('gulp changelog --sha=$(git merge-base v{{oldVersion}} HEAD)');
   child_process.execSync(cmd);
   console.log('done.');
-  reset.push('git co CHANGELOG.md');
+  abort.push('git checkout CHANGELOG.md');
+  push.push('git add CHANGELOG.md');
 }
 
 function clear () {
@@ -117,7 +126,8 @@ function tagRelease () {
   process.stdout.write('Tagging release...');
   child_process.execSync(fill('git tag v{{newVersion}}'));
   console.log('done.');
-  reset.push(fill('git tag -d v{{newVersion}}'));
+  abort.push(fill('git tag -d v{{newVersion}}'));
+  push.push(fill('git push origin v{{newVersion}}'));
 }
 
 function commitChanges () {
@@ -126,16 +136,12 @@ function commitChanges () {
   console.log('done.');
 }
 
-function removeBower () {
-  process.stdout.write('Removing bower-material...');
-  child_process.execSync('rm -rf bower-material');
+function cloneRepo (repo, depth) {
+  depth = depth || 1;
+  process.stdout.write('Cloning ' + repo + ' from Github...');
+  child_process.execSync('git clone https://github.com/angular/' + repo + '.git --depth=' + depth + ' 2> /dev/null');
   console.log('done.');
-}
-
-function cloneBower () {
-  process.stdout.write('Cloning bower-material from Github...');
-  child_process.execSync('git clone https://github.com/angular/bower-material.git --depth=1');
-  console.log('done.');
+  abort.push('rm -rf ' + repo);
 }
 
 function fill(str) {
@@ -144,17 +150,65 @@ function fill(str) {
   });
 }
 
-function writeResetScript () {
-  if (fs.existsSync('reset')) {
-    reset.unshift.apply(reset, fs.readFileSync('reset', { encoding: 'ascii' }).split('\n'));
-  }
-  fs.writeFileSync('reset', removeDuplicates(reset).join('\n'));
-  child_process.execSync('chmod +x reset');
+function writeScript (name, cmds) {
+  fs.writeFileSync(name, cmds.join('\n'));
+  child_process.execSync('chmod +x ' + name);
 }
 
-function removeDuplicates (arr) {
-  return arr.reduce(function (arr, cmd) {
-    if (arr.indexOf(cmd) < 0) arr.push(cmd);
-    return arr;
-  }, []);
+function updateBowerVersion () {
+  process.stdout.write('Updating bower version...');
+  var options = { cwd: './bower-material', encoding: 'ascii' },
+      bower = require(options.cwd + '/bower.json'),
+      package = require(options.cwd + '/package.json');
+  //-- update versions in config files
+  bower.version = package.version = newVersion;
+  fs.writeFileSync(options.cwd + '/package.json', JSON.stringify(package, null, 2));
+  fs.writeFileSync(options.cwd + '/bower.json', JSON.stringify(bower, null, 2));
+  console.log('done.');
+  process.stdout.write('Building bower files...');
+  //-- build files for bower
+  child_process.execSync('rm -rf dist');
+  child_process.execSync('gulp build');
+  child_process.execSync('gulp build --mode=default');
+  child_process.execSync('gulp build --mode=closure');
+  console.log('done.');
+  process.stdout.write('Copy files into bower repo...');
+  //-- copy files over to bower repo
+  child_process.execSync('cp -Rf ../dist/* ./', Object.create(options));
+  child_process.execSync('git add -A', Object.create(options));
+  child_process.execSync(fill('git commit -m "release: version {{newVersion}}"'), Object.create(options));
+  child_process.execSync(fill('git tag -f v{{newVersion}}'), Object.create(options));
+  child_process.execSync('rm -rf dist');
+  console.log('done.');
+  //-- add steps to push script
+  push.push(
+      'cd ' + options.cwd,
+      'git push -q origin master',
+      fill('git push -q origin v{{newVersion}}'),
+      'cd ..'
+  );
+}
+
+function updateSite () {
+  process.stdout.write('Adding new version of the docs site...');
+  var options = { cwd: './code.material.angularjs.org', encoding: 'ascii' };
+  //-- build files for bower
+  child_process.execSync('rm -rf dist');
+  child_process.execSync('gulp docs');
+  //-- copy files over to site repo
+  child_process.execSync('rm -rf latest', Object.create(options));
+  child_process.execSync(fill('cp -Rf ../dist/docs {{newVersion}}'), Object.create(options));
+  child_process.execSync(fill('cp -Rf ../dist/docs latest'), Object.create(options));
+  child_process.execSync('git add -A', Object.create(options));
+  child_process.execSync(fill('git commit -m "release: version {{newVersion}}"'), Object.create(options));
+  child_process.execSync(fill('git tag -f v{{newVersion}}'), Object.create(options));
+  child_process.execSync('rm -rf dist');
+  console.log('done.');
+  //-- add steps to push script
+  push.push(
+      'cd ' + options.cwd,
+      'git push -q origin master',
+      fill('git push -q origin v{{newVersion}}'),
+      'cd ..'
+  );
 }
