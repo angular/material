@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ARG_DEFS=(
-  "--sha=(.*)"
+  "--version=(.*)"
 )
 
 function run {
@@ -25,7 +25,7 @@ function run {
 
   echo "-- Commiting snapshot..."
   git add -A
-  git commit -m "snapshot: $SHA"
+  git commit -m "snapshot: $VERSION"
 
   echo "-- Pushing snapshot..."
   git push -q origin master
