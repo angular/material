@@ -10,7 +10,6 @@ var push  = [ 'rm abort push'];
 var defaultOptions = { encoding: 'utf-8' };
 
 if (validate()) {
-  clear();
   newVersion = getNewVersion();
 
   console.log('\n--------\n');
@@ -81,6 +80,7 @@ function clear () {
 }
 
 function getNewVersion () {
+  clear();
   var options = getVersionOptions(oldVersion), key, type, version;
   console.log(fill('The current version is {{oldVersion}}.'));
   console.log('');
