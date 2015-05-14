@@ -145,8 +145,7 @@ function tagRelease () {
   abort.push(fill('git tag -d v{{newVersion}}'));
   push.push(
       fill('git push origin v{{newVersion}}'),
-      fill('git push --set-upstream origin release/{{newVersion}}'),
-      'npm publish'
+      fill('git push --set-upstream origin release/{{newVersion}}')
   );
 }
 
@@ -206,6 +205,7 @@ function updateBowerVersion () {
       'cd ' + options.cwd,
       'git push -q origin master',
       fill('git push -q origin v{{newVersion}}'),
+      'npm publish',
       'cd ..'
   );
 }
