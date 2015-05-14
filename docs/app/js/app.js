@@ -496,30 +496,8 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
 .controller('HomeCtrl', [
   '$scope',
   '$rootScope',
-  '$http',
-function($scope, $rootScope, $http) {
+function($scope, $rootScope) {
   $rootScope.currentComponent = $rootScope.currentDoc = null;
-
-  $scope.version = "";
-  $scope.versionURL = "";
-
-  // Load build version information; to be
-  // used in the header bar area
-  var now = Math.round(new Date().getTime()/1000);
-  var versionFile = "version.json" + "?ts=" + now;
-
-  $http.get("version.json")
-    .then(function(response){
-      var sha = response.data.sha || "";
-      var url = response.data.url;
-
-      if (sha) {
-        $scope.versionURL = url + sha;
-        $scope.version = sha.substr(0,6);
-      }
-    });
-
-
 }])
 
 
