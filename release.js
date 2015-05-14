@@ -37,12 +37,12 @@ if (validate()) {
 //-- utility methods
 
 function validate () {
-  if (exec('git pull -q --rebase origin master 2> /dev/null') instanceof Error) {
-    log('Please make sure your local branch is synced with origin/master.');
-  } else if (exec('npm whoami') !== 'angularcore') {
+  if (exec('npm whoami') !== 'angularcore') {
     log('You must be authenticated with npm as "angularcore" to perform a release.');
   } else if (exec('git rev-parse --abbrev-ref HEAD') !== 'master') {
     log('Releases can only performed from master at this time.');
+  } else if (exec('git pull -q --rebase origin master 2> /dev/null') instanceof Error) {
+    log('Please make sure your local branch is synced with origin/master.');
   } else {
     return true;
   }
@@ -247,9 +247,11 @@ function updateSite () {
 function updateMaster () {
   push.push(
       'git co master',
+      'git pull --rebase origin master',
       'node -e "' + stringifyFunction(buildCommand) + '"',
       'git add package.json',
-      fill('git commit -m "update version number in package.json to {{newVersion}}"')
+      fill('git commit -m "update version number in package.json to {{newVersion}}"'),
+      'git push origin master'
   );
   function buildCommand () {
     require('fs').writeFileSync('package.json', JSON.stringify(getUpdatedJson(), null, 2));
