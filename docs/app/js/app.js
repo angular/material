@@ -487,33 +487,43 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   }
 }])
 
+.controller('DocsVersionsCtrl', [
+  '$scope',
+  '$window',
+  '$http',
+  function($scope, $window, $http) {
+    var versionFromPath = $window.location.pathname.match(/^\/([^\/]+)/);
+
+    $scope.versions = [];
+    $scope.showVersionSelection = true;
+
+    $http.get("/docs.json")
+      .success(function(response) {
+        var commonVersions = [{ version: 'HEAD', label: 'HEAD'}];
+        var knownVersions = response.versions.map(function(version) {
+          return { version: version, label: 'v' + version };
+        });
+
+        $scope.versions = commonVersions.concat(knownVersions);
+        if (versionFromPath) {
+          var version = versionFromPath[1];
+          $scope.version = version == 'latest' ? response.latest : version;
+        }
+      })
+      .error(function() {
+        $scope.showVersionSelection = false;
+      });
+
+    $scope.redirectToVersion = function(version) {
+      window.location = '/' + version;
+    };
+  }])
+
 .controller('HomeCtrl', [
   '$scope',
   '$rootScope',
-  '$http',
-function($scope, $rootScope, $http) {
+function($scope, $rootScope) {
   $rootScope.currentComponent = $rootScope.currentDoc = null;
-
-  $scope.version = "";
-  $scope.versionURL = "";
-
-  // Load build version information; to be
-  // used in the header bar area
-  var now = Math.round(new Date().getTime()/1000);
-  var versionFile = "version.json" + "?ts=" + now;
-
-  $http.get("version.json")
-    .then(function(response){
-      var sha = response.data.sha || "";
-      var url = response.data.url;
-
-      if (sha) {
-        $scope.versionURL = url + sha;
-        $scope.version = sha.substr(0,6);
-      }
-    });
-
-
 }])
 
 
