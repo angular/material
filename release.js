@@ -10,6 +10,7 @@ var push  = [ 'rm abort push'];
 var defaultOptions = { encoding: 'utf-8' };
 
 if (validate()) {
+  clear();
   newVersion = getNewVersion();
 
   console.log('\n--------\n');
@@ -37,12 +38,18 @@ if (validate()) {
 //-- utility methods
 
 function validate () {
-  if (exec('npm whoami') !== 'angularcore') {
-    console.log('You must be authenticated with npm as "angularcore" to perform a release.'.red);
+  if (exec('git pull -q --rebase origin master 2> /dev/null') instanceof Error) {
+    log('Please make sure your local branch is synced with origin/master.');
+  } else if (exec('npm whoami') !== 'angularcore') {
+    log('You must be authenticated with npm as "angularcore" to perform a release.');
   } else if (exec('git rev-parse --abbrev-ref HEAD') !== 'master') {
-    console.log('Releases can only performed from master at this time.'.red);
+    log('Releases can only performed from master at this time.');
   } else {
     return true;
+  }
+  function log (msg) {
+    var str = 'Error: ' + msg;
+    console.log(str.red);
   }
 }
 
@@ -74,7 +81,6 @@ function clear () {
 }
 
 function getNewVersion () {
-  clear();
   var options = getVersionOptions(oldVersion), key, type, version;
   console.log(fill('The current version is {{oldVersion}}.'));
   console.log('');
@@ -269,7 +275,11 @@ function done () {
 }
 
 function exec (cmd, userOptions) {
-  var options = Object.create(defaultOptions);
-  for (var key in userOptions) options[key] = userOptions[key];
-  return child_process.execSync(cmd, options).trim();
+  try {
+    var options = Object.create(defaultOptions);
+    for (var key in userOptions) options[key] = userOptions[key];
+    return child_process.execSync(cmd, options).trim();
+  } catch (err) {
+    return err;
+  }
 }
