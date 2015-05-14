@@ -150,8 +150,8 @@ function tagRelease () {
   done();
   abort.push(fill('git tag -d v{{newVersion}}'));
   push.push(
-      fill('git push origin v{{newVersion}}'),
-      fill('git push --set-upstream origin release/{{newVersion}}')
+      fill('git push origin v{{newVersion}} # push the version tag'),
+      fill('git push origin release/{{newVersion}} # push the version branch')
   );
 }
 
@@ -208,6 +208,7 @@ function updateBowerVersion () {
   done();
   //-- add steps to push script
   push.push(
+      '# push to bower (master and tag) and publish to npm',
       'cd ' + options.cwd,
       'git push -q origin master',
       fill('git push -q origin v{{newVersion}}'),
@@ -232,20 +233,20 @@ function updateSite () {
   exec(fill('cp -Rf ../dist/docs latest'), options);
   exec('git add -A', options);
   exec(fill('git commit -m "release: version {{newVersion}}"'), options);
-  exec(fill('git tag -f v{{newVersion}}'), options);
   exec('rm -rf dist');
   done();
   //-- add steps to push script
   push.push(
+      '# push the site',
       'cd ' + options.cwd,
       'git push -q origin master',
-      fill('git push -q origin v{{newVersion}}'),
       'cd ..'
   );
 }
 
 function updateMaster () {
   push.push(
+      '# update package.json in master',
       'git co master',
       'git pull --rebase origin master',
       'node -e "' + stringifyFunction(buildCommand) + '"',
