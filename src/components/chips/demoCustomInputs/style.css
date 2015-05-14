@@ -2,7 +2,7 @@ md-content.autocomplete {
  min-height: 200px;
 }
 input[type=number] {
- width: 11rem;
+ width: 110px;
 }
 .veggie-option {
  float: left;
