@@ -13,7 +13,7 @@ function run {
 
   echo "-- Cloning code.material.angularjs.org..."
   rm -rf code.material.angularjs.org
-  git clone https://github.com/angular/code.material.angularjs.org.git --depth=1
+  git clone https://angular:$GF_TOKEN@github.com/angular/code.material.angularjs.org.git --depth=1
 
   echo "-- Remove previous snapshot..."
   rm -rf code.material.angularjs.org/snapshot
