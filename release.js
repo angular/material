@@ -5,7 +5,7 @@ var pkg = require('./package.json');
 var oldVersion = pkg.version;
 var newVersion = getNewVersion();
 var abort = [ 'git checkout master', 'rm abort push' ];
-var push  = [ 'git commit --amend --no-edit', 'rm abort push'];
+var push  = [ 'rm abort push'];
 
 console.log('\n--------\n');
 
@@ -19,6 +19,7 @@ cloneRepo('bower-material', 2);
 updateBowerVersion();
 cloneRepo('code.material.angularjs.org', 1);
 updateSite();
+updateMaster();
 writeScript('abort', abort);
 writeScript('push', push);
 
@@ -30,9 +31,8 @@ console.log('If you would like to cancel this release, please run "./abort"');
 
 //-- utility methods
 function checkoutVersionBranch () {
-  child_process.execSync(fill('git checkout -b br-v{{newVersion}}'));
-  abort.push(fill('git branch -D br-v{{newVersion}}'));
-  push.push(fill('git push'))
+  child_process.execSync(fill('git checkout -b release/{{newVersion}}'));
+  abort.push(fill('git branch -D release/{{newVersion}}'));
 }
 
 function updateVersion () {
@@ -127,13 +127,17 @@ function tagRelease () {
   child_process.execSync(fill('git tag v{{newVersion}}'));
   console.log('done.');
   abort.push(fill('git tag -d v{{newVersion}}'));
-  push.push(fill('git push origin v{{newVersion}}'));
+  push.push(
+      fill('git push origin v{{newVersion}}'),
+      fill('git push --set-upstream origin release/{{newVersion}}')
+  );
 }
 
 function commitChanges () {
   process.stdout.write('Committing changes...');
   child_process.execSync(fill('git commit -am "release: version {{newVersion}}"'));
   console.log('done.');
+  push.push('git commit --amend --no-edit');
 }
 
 function cloneRepo (repo, depth) {
@@ -191,7 +195,11 @@ function updateBowerVersion () {
 
 function updateSite () {
   process.stdout.write('Adding new version of the docs site...');
-  var options = { cwd: './code.material.angularjs.org', encoding: 'ascii' };
+  var options = { cwd: './code.material.angularjs.org', encoding: 'ascii'},
+      config  = require(options.cwd + '/docs.json');
+  config.versions.unshift(newVersion);
+  config.latest = newVersion;
+  fs.writeFileSync(options.cwd + '/docs.json', JSON.stringify(config, null, 2));
   //-- build files for bower
   child_process.execSync('rm -rf dist');
   child_process.execSync('gulp docs');
@@ -211,4 +219,30 @@ function updateSite () {
       fill('git push -q origin v{{newVersion}}'),
       'cd ..'
   );
+}
+
+function updateMaster () {
+  push.push(
+      'git co master',
+      'node -e "' + stringifyFunction(buildCommand) + '"',
+      'git add package.json',
+      fill('git commit -m "update version number in package.json to {{newVersion}}"')
+  );
+  function buildCommand () {
+    require('fs').writeFileSync('package.json', JSON.stringify(getUpdatedJson(), null, 2));
+    function getUpdatedJson () {
+      var json = require('./package.json');
+      json.version = '{{newVersion}}';
+      return json;
+    }
+  }
+  function stringifyFunction (method) {
+    return fill(method
+        .toString()
+        .split('\n')
+        .slice(1, -1)
+        .map(function (line) { return line.trim(); })
+        .join(' ')
+        .replace(/\"/g, '\\\"'));
+  }
 }
