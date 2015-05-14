@@ -470,7 +470,7 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   function($scope, $window, $http) {
 
     $scope.versions = [];
-    $scope.showVersionSelection = false;
+    $scope.showVersionSelection = true;
 
     $http.get("/docs.json")
       .success(function(response) {
@@ -480,7 +480,9 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
         });
 
         $scope.versions = commonVersions.concat(knownVersions);
-        $scope.showVersionSelection = true;
+      })
+      .error(function() {
+        $scope.showVersionSelection = false;
       });
 
     var versionFromPath = $window.location.pathname.match(/^\/([^\/]+)/);
