@@ -463,6 +463,36 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   }
 }])
 
+.controller('DocsVersionsCtrl', [
+  '$scope',
+  '$window',
+  '$http',
+  function($scope, $window, $http) {
+
+    $scope.versions = [];
+    $scope.showVersionSelection = false;
+
+    $http.get("/docs.json")
+      .success(function(response) {
+        var commonVersions = [{ version: 'HEAD', label: 'HEAD'}];
+        var knownVersions = response.versions.map(function(version) {
+          return { version: version, label: 'v' + version };
+        });
+
+        $scope.versions = commonVersions.concat(knownVersions);
+        $scope.showVersionSelection = true;
+      });
+
+    var versionFromPath = $window.location.pathname.match(/^\/([^\/]+)/);
+    if (versionFromPath) {
+      $scope.version = versionFromPath[1];
+    }
+
+    $scope.redirectToVersion = function(version) {
+      window.location = '/' + version;
+    };
+  }])
+
 .controller('HomeCtrl', [
   '$scope',
   '$rootScope',
