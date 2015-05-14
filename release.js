@@ -177,7 +177,7 @@ function fill(str) {
 }
 
 function writeScript (name, cmds) {
-  fs.writeFileSync(name, cmds.join('\n'));
+  fs.writeFileSync(name, '#!/usr/bin/env bash\n\n' + cmds.join('\n'));
   exec('chmod +x ' + name);
 }
 
@@ -208,7 +208,7 @@ function updateBowerVersion () {
   done();
   //-- add steps to push script
   push.push(
-      '# push to bower (master and tag) and publish to npm',
+      comment('push to bower (master and tag) and publish to npm'),
       'cd ' + options.cwd,
       'git push -q origin master',
       fill('git push -q origin v{{newVersion}}'),
@@ -237,7 +237,7 @@ function updateSite () {
   done();
   //-- add steps to push script
   push.push(
-      '# push the site',
+      comment('push the site'),
       'cd ' + options.cwd,
       'git push -q origin master',
       'cd ..'
@@ -246,7 +246,7 @@ function updateSite () {
 
 function updateMaster () {
   push.push(
-      '# update package.json in master',
+      comment('update package.json in master'),
       'git co master',
       'git pull --rebase origin master',
       'node -e "' + stringifyFunction(buildCommand) + '"',
@@ -285,4 +285,8 @@ function exec (cmd, userOptions) {
   } catch (err) {
     return err;
   }
+}
+
+function comment (msg) {
+  return '\n# ' + msg + '\n';
 }
