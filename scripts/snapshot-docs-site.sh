@@ -16,10 +16,10 @@ function run {
   git clone https://angular:$GH_TOKEN@github.com/angular/code.material.angularjs.org.git --depth=1
 
   echo "-- Remove previous snapshot..."
-  rm -rf code.material.angularjs.org/snapshot
+  rm -rf code.material.angularjs.org/HEAD
 
   echo "-- Copying docs site to snapshot..."
-  cp -Rf dist/docs code.material.angularjs.org/snapshot
+  cp -Rf dist/docs code.material.angularjs.org/HEAD
 
   cd code.material.angularjs.org
 
