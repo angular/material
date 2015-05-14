@@ -9,6 +9,7 @@
   var oldVersion     = pkg.version;
   var abortCmds      = [ 'git checkout master', 'rm abort push' ];
   var pushCmds       = [ 'rm abort push'];
+  var cleanupCmds    = [];
   var defaultOptions = { encoding: 'utf-8' };
   var newVersion;
 
@@ -27,8 +28,8 @@
     cloneRepo('code.material.angularjs.org', 1);
     updateSite();
     updateMaster();
-    writeScript('abort', abortCmds);
-    writeScript('push', pushCmds);
+    writeScript('abort', abortCmds.concat(cleanupCmds));
+    writeScript('push', pushCmds.concat(cleanupCmds));
 
     console.log('\n--------\n');
     console.log('Your repo is ready to be pushed.');
@@ -70,7 +71,7 @@
   }
 
   function createChangelog () {
-    process.stdout.write(fill('Generating changelog from v{{oldVersion}} to v{{newVersion}}...'));
+    process.stdout.write(fill('Generating changelog from {{oldVersion}} to {{newVersion}}...'));
     var cmd = fill('gulp changelog --sha=$(git merge-base v{{oldVersion}} HEAD)');
     exec(cmd);
     done();
@@ -170,7 +171,7 @@
     process.stdout.write('Cloning ' + repo + ' from Github...');
     exec('git clone https://github.com/angular/' + repo + '.git --depth=' + depth + ' 2> /dev/null');
     done();
-    abortCmds.push('rm -rf ' + repo);
+    cleanupCmds.push('rm -rf ' + repo);
   }
 
   function fill(str) {
