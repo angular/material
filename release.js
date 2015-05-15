@@ -2,6 +2,7 @@
   'use strict';
 
   var colors         = require('colors');
+  var strip          = require('cli-color/strip');
   var fs             = require('fs');
   var prompt         = require('prompt-sync');
   var child_process  = require('child_process');
@@ -12,31 +13,32 @@
   var cleanupCmds    = [];
   var defaultOptions = { encoding: 'utf-8' };
   var origin         = 'https://github.com/angular/material.git';
+  var lineWidth      = 65;
   var newVersion;
 
   if (validate()) {
     newVersion = getNewVersion();
 
-    console.log('\n--------\n');
+    line();
 
     checkoutVersionBranch();
     updateVersion();
     createChangelog();
     commitChanges();
     tagRelease();
-    cloneRepo('bower-material', 2);
+    cloneRepo('bower-material');
     updateBowerVersion();
-    cloneRepo('code.material.angularjs.org', 1);
+    cloneRepo('code.material.angularjs.org');
     updateSite();
     updateMaster();
     writeScript('abort', abortCmds.concat(cleanupCmds));
     writeScript('push', pushCmds.concat(cleanupCmds));
 
-    console.log('\n--------\n');
-    console.log('Your repo is ready to be pushed.');
-    console.log('Please look over CHANGELOG.md and make any changes.');
-    console.log('When you are ready, please run "./push" to finish the process.');
-    console.log('If you would like to cancel this release, please run "./abort"');
+    line();
+    log('Your repo is ready to be pushed.');
+    log('Please look over {{"CHANGELOG.md".cyan}} and make any changes.');
+    log('When you are ready, please run "{{"./push".cyan}}" to finish the process.');
+    log('If you would like to cancel this release, please run "./abort"');
   }
 
   //-- utility methods
@@ -53,7 +55,7 @@
     }
     function log (msg) {
       var str = 'Error: ' + msg;
-      console.log(str.red);
+      log(str.red);
     }
   }
 
@@ -63,7 +65,7 @@
   }
 
   function updateVersion () {
-    process.stdout.write(fill('Updating package.json version from {{oldVersion}} to {{newVersion}}...'));
+    start(fill('Updating {{"package.json".cyan}} version from {{oldVersion.cyan}} to {{newVersion.cyan}}...'));
     pkg.version = newVersion;
     fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
     done();
@@ -72,7 +74,7 @@
   }
 
   function createChangelog () {
-    process.stdout.write(fill('Generating changelog from {{oldVersion}} to {{newVersion}}...'));
+    start(fill('Generating changelog from {{oldVersion.cyan}} to {{newVersion.cyan}}...'));
     var cmd = fill('gulp changelog --sha=$(git merge-base v{{oldVersion}} HEAD)');
     exec(cmd);
     done();
@@ -81,18 +83,18 @@
   }
 
   function clear () {
-    process.stdout.write("\u001b[2J\u001b[0;0H");
+    write("\u001b[2J\u001b[0;0H");
   }
 
   function getNewVersion () {
     clear();
     var options = getVersionOptions(oldVersion), key, type, version;
-    console.log(fill('The current version is {{oldVersion}}.'));
-    console.log('');
-    console.log('What type of release is this?');
-    for (key in options) { console.log((+key + 1) + ') ' + options[key]); }
-    console.log('');
-    process.stdout.write('Please select a new version: ');
+    log('The current version is {{oldVersion.cyan}}.');
+    log('');
+    log('What type of release is this?');
+    for (key in options) { log((+key + 1) + ') ' + options[key].cyan); }
+    log('');
+    write('Please select a new version: ');
     type = prompt();
 
     if (options[type - 1]) version = options[type - 1];
@@ -100,13 +102,14 @@
     else throw new Error('Your entry was invalid.');
 
     if (version.indexOf('rc') < 0) {
-      console.log('');
-      process.stdout.write('Is this a release candidate? [yes/no] ');
+      log('');
+      write('Is this a release candidate? {{"[yes/no]".cyan}} ');
       if (prompt() === 'yes') version += '-rc1';
     }
 
-    console.log('');
-    process.stdout.write('The new version will be ' + version + '.  Is this correct? [yes/no] ');
+    log('');
+    log('The new version will be ' + version.cyan + '.');
+    write('Is this correct? {{"[yes/no]".cyan}} ');
     return prompt() === 'yes' ? version : getNewVersion();
 
     function getVersionOptions (version) {
@@ -150,7 +153,7 @@
   }
 
   function tagRelease () {
-    process.stdout.write('Tagging release...');
+    start('Tagging release...');
     exec(fill('git tag v{{newVersion}}'));
     done();
     abortCmds.push(fill('git tag -d v{{newVersion}}'));
@@ -161,16 +164,15 @@
   }
 
   function commitChanges () {
-    process.stdout.write('Committing changes...');
+    start('Committing changes...');
     exec(fill('git commit -am "release: version {{newVersion}}"'));
     done();
     pushCmds.push('git commit --amend --no-edit');
   }
 
-  function cloneRepo (repo, depth) {
-    depth = depth || 1;
-    process.stdout.write('Cloning ' + repo + ' from Github...');
-    exec('git clone https://github.com/angular/' + repo + '.git --depth=' + depth + ' 2> /dev/null');
+  function cloneRepo (repo) {
+    start('Cloning ' + repo.cyan + ' from Github...');
+    exec('git clone https://github.com/angular/' + repo + '.git --depth=1 2> /dev/null');
     done();
     cleanupCmds.push('rm -rf ' + repo);
   }
@@ -187,7 +189,7 @@
   }
 
   function updateBowerVersion () {
-    process.stdout.write('Updating bower version...');
+    start('Updating bower version...');
     var options = { cwd: './bower-material' },
         bower = require(options.cwd + '/bower.json'),
         pkg = require(options.cwd + '/package.json');
@@ -196,14 +198,15 @@
     fs.writeFileSync(options.cwd + '/package.json', JSON.stringify(pkg, null, 2));
     fs.writeFileSync(options.cwd + '/bower.json', JSON.stringify(bower, null, 2));
     done();
-    process.stdout.write('Building bower files...');
+    start('Building bower files...');
     //-- build files for bower
     exec('rm -rf dist');
     exec('gulp build');
     exec('gulp build --mode=default');
     exec('gulp build --mode=closure');
+    exec('rm -rf dist/demos');
     done();
-    process.stdout.write('Copy files into bower repo...');
+    start('Copy files into bower repo...');
     //-- copy files over to bower repo
     exec('cp -Rf ../dist/* ./', options);
     exec('git add -A', options);
@@ -223,7 +226,7 @@
   }
 
   function updateSite () {
-    process.stdout.write('Adding new version of the docs site...');
+    start('Adding new version of the docs site...');
     var options = { cwd: './code.material.angularjs.org' },
         config  = require(options.cwd + '/docs.json');
     config.versions.unshift(newVersion);
@@ -279,7 +282,7 @@
   }
 
   function done () {
-    console.log('done.'.green);
+    log('done'.green);
   }
 
   function exec (cmd, userOptions) {
@@ -296,4 +299,21 @@
     return '\n# ' + msg + '\n';
   }
 
+  function start (msg) {
+    var msgLength = strip(msg).length,
+        diff = lineWidth - 4 - msgLength;
+    write(msg + Array(diff + 1).join(' '));
+  }
+
+  function log (msg) {
+    console.log(fill(msg));
+  }
+
+  function write (msg) {
+    process.stdout.write(fill(msg));
+  }
+
+  function line () {
+    log(Array(lineWidth + 1).join('-'));
+  }
 })();
