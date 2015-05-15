@@ -10,7 +10,7 @@ This interim relase **fixes** an incorrect deployment of `angular-material.js`; 
 
 #### Bug Fixes
 
-* **build:** fixes issue where JS files were being generated with Closure code, closes [#2852](https://github.com/angular/material/issues/2852))
+* **build:** fixes issue where JS files were being generated with Closure code ([ca940384](https://github.com/angular/material/commit/ca94038439982e81077020962042ec9f453dbf0e)), closes [#2852](https://github.com/angular/material/issues/2852))
 
 
 <a name="0.9.3"></a>
