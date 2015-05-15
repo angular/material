@@ -249,11 +249,12 @@ code:not(.highlight) {
 
 .docs-menu md-select md-select-label {
   justify-content: flex-end;
+  padding-top: 10px;
 }
 
 .docs-menu md-select md-select-label span {
   margin-right: auto;
-  padding-left: 16px;
+  padding-left: 13px;
 }
 
 .docs-menu md-select .md-select-icon {
@@ -268,11 +269,12 @@ code:not(.highlight) {
 }
 .menu-heading {
   display: block;
-  line-height: 40px;
+  line-height: 32px;
   margin: 0;
-  padding: 0px 16px;
+  padding: 8px 16px 0;
   text-align: left;
   width: 100%;
+  color: rgba(0,0,0, 0.54)
 }
 .docs-menu li.parentActive,
 .docs-menu li.parentActive .menu-toggle-list {
