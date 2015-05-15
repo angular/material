@@ -16,6 +16,7 @@ This interim relase **fixes** an incorrect deployment of `angular-material.js`; 
 <a name="0.9.3"></a>
 ### 0.9.3  (2015-05-14)
 
+This release is also using enhanced scripting to automate the build and release processes. Releases will now also deploy versioned docs to http://github.com/angular/code.material.angularjs.org.
 
 #### Bug Fixes
 
