@@ -202,8 +202,8 @@
     //-- build files for bower
     exec('rm -rf dist');
     exec('gulp build');
-    exec('gulp build --mode=default');
-    exec('gulp build --mode=closure');
+    exec('gulp build-all-modules --mode=default');
+    exec('gulp build-all-modules --mode=closure');
     exec('rm -rf dist/demos');
     done();
     start('Copy files into bower repo...');
