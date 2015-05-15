@@ -152,11 +152,8 @@
   }
 
   function tagRelease () {
-    start('Tagging release...');
-    exec('git tag v{{newVersion}}');
-    done();
-    abortCmds.push('git tag -d v{{newVersion}}');
     pushCmds.push(
+        'git tag v{{newVersion}}',
         'git push {{origin}} HEAD',
         'git push --tags'
     );
@@ -213,7 +210,6 @@
       'cp -Rf ../dist/* ./',
       'git add -A',
       'git commit -m "release: version {{newVersion}}"',
-      'git tag -f v{{newVersion}}',
       'rm -rf ../dist'
     ], options);
     done();
@@ -224,6 +220,7 @@
         'cp ../CHANGELOG.md .',
         'git add CHANGELOG.md',
         'git commit --amend --no-edit',
+        'git tag -f v{{newVersion}}',
         'git push',
         'git push --tags',
         'npm publish',
