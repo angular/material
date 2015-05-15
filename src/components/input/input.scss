@@ -182,6 +182,7 @@ md-input-container {
 
   &.md-input-focused,
   &.md-input-has-value {
+    
     label:not(.md-no-float)  {
       transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);
     }
