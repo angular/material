@@ -55,7 +55,7 @@
     }
     function err (msg) {
       var str = 'Error: ' + msg;
-      err(str.red);
+      log(str.red);
     }
   }
 
@@ -296,7 +296,7 @@
 
   function exec (cmd, userOptions) {
     if (cmd instanceof Array) {
-      return cmd.forEach(function (cmd) { exec(cmd, userOptions); });
+      return cmd.map(function (cmd) { return exec(cmd, userOptions); });
     }
     try {
       var options = Object.create(defaultOptions);
