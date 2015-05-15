@@ -45,27 +45,27 @@
 
   function validate () {
     if (exec('npm whoami') !== 'angularcore') {
-      log('You must be authenticated with npm as "angularcore" to perform a release.');
+      err('You must be authenticated with npm as "angularcore" to perform a release.');
     } else if (exec('git rev-parse --abbrev-ref HEAD') !== 'master') {
-      log('Releases can only performed from master at this time.');
-    } else if (exec(fill('git pull -q --rebase {{origin}} master 2> /dev/null')) instanceof Error) {
-      log('Please make sure your local branch is synced with origin/master.');
+      err('Releases can only performed from master at this time.');
+    } else if (exec('git pull -q --rebase {{origin}} master 2> /dev/null') instanceof Error) {
+      err('Please make sure your local branch is synced with origin/master.');
     } else {
       return true;
     }
-    function log (msg) {
+    function err (msg) {
       var str = 'Error: ' + msg;
-      log(str.red);
+      err(str.red);
     }
   }
 
   function checkoutVersionBranch () {
-    exec(fill('git checkout -q -b release/{{newVersion}}'));
-    abortCmds.push(fill('git branch -D release/{{newVersion}}'));
+    exec('git checkout -q -b release/{{newVersion}}');
+    abortCmds.push('git branch -D release/{{newVersion}}');
   }
 
   function updateVersion () {
-    start(fill('Updating {{"package.json".cyan}} version from {{oldVersion.cyan}} to {{newVersion.cyan}}...'));
+    start('Updating {{"package.json".cyan}} version from {{oldVersion.cyan}} to {{newVersion.cyan}}...');
     pkg.version = newVersion;
     fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
     done();
@@ -74,9 +74,8 @@
   }
 
   function createChangelog () {
-    start(fill('Generating changelog from {{oldVersion.cyan}} to {{newVersion.cyan}}...'));
-    var cmd = fill('gulp changelog --sha=$(git merge-base v{{oldVersion}} HEAD)');
-    exec(cmd);
+    start('Generating changelog from {{oldVersion.cyan}} to {{newVersion.cyan}}...');
+    exec('gulp changelog --sha=$(git merge-base v{{oldVersion}} HEAD)');
     done();
     abortCmds.push('git checkout CHANGELOG.md');
     pushCmds.push('git add CHANGELOG.md');
@@ -154,18 +153,18 @@
 
   function tagRelease () {
     start('Tagging release...');
-    exec(fill('git tag v{{newVersion}}'));
+    exec('git tag v{{newVersion}}');
     done();
-    abortCmds.push(fill('git tag -d v{{newVersion}}'));
+    abortCmds.push('git tag -d v{{newVersion}}');
     pushCmds.push(
-        fill('git push {{origin}} HEAD'),
-        fill('git push --tags')
+        'git push {{origin}} HEAD',
+        'git push --tags'
     );
   }
 
   function commitChanges () {
     start('Committing changes...');
-    exec(fill('git commit -am "release: version {{newVersion}}"'));
+    exec('git commit -am "release: version {{newVersion}}"');
     done();
     pushCmds.push('git commit --amend --no-edit');
   }
@@ -184,7 +183,7 @@
   }
 
   function writeScript (name, cmds) {
-    fs.writeFileSync(name, '#!/usr/bin/env bash\n\n' + cmds.join('\n'));
+    fs.writeFileSync(name, '#!/usr/bin/env bash\n\n' + fill(cmds.join('\n')));
     exec('chmod +x ' + name);
   }
 
@@ -200,24 +199,31 @@
     done();
     start('Building bower files...');
     //-- build files for bower
-    exec('rm -rf dist');
-    exec('gulp build');
-    exec('gulp build-all-modules --mode=default');
-    exec('gulp build-all-modules --mode=closure');
-    exec('rm -rf dist/demos');
+    exec([
+      'rm -rf dist',
+      'gulp build',
+      'gulp build-all-modules --mode=default',
+      'gulp build-all-modules --mode=closure',
+      'rm -rf dist/demos'
+    ]);
     done();
     start('Copy files into bower repo...');
     //-- copy files over to bower repo
-    exec('cp -Rf ../dist/* ./', options);
-    exec('git add -A', options);
-    exec(fill('git commit -m "release: version {{newVersion}}"'), options);
-    exec(fill('git tag -f v{{newVersion}}'), options);
-    exec('rm -rf dist');
+    exec([
+      'cp -Rf ../dist/* ./',
+      'git add -A',
+      'git commit -m "release: version {{newVersion}}"',
+      'git tag -f v{{newVersion}}',
+      'rm -rf ../dist'
+    ], options);
     done();
     //-- add steps to push script
     pushCmds.push(
         comment('push to bower (master and tag) and publish to npm'),
         'cd ' + options.cwd,
+        'cp ../CHANGELOG.md .',
+        'git add CHANGELOG.md',
+        'git commit --amend --no-edit',
         'git push',
         'git push --tags',
         'npm publish',
@@ -233,15 +239,19 @@
     config.latest = newVersion;
     fs.writeFileSync(options.cwd + '/docs.json', JSON.stringify(config, null, 2));
     //-- build files for bower
-    exec('rm -rf dist');
-    exec('gulp docs');
+    exec([
+      'rm -rf dist',
+      'gulp docs'
+    ]);
     //-- copy files over to site repo
-    exec('rm -rf latest', options);
-    exec(fill('cp -Rf ../dist/docs {{newVersion}}'), options);
-    exec(fill('cp -Rf ../dist/docs latest'), options);
-    exec('git add -A', options);
-    exec(fill('git commit -m "release: version {{newVersion}}"'), options);
-    exec('rm -rf dist');
+    exec([
+      'rm -rf latest',
+      'cp -Rf ../dist/docs {{newVersion}}',
+      'cp -Rf ../dist/docs latest',
+      'git add -A',
+      'git commit -m "release: version {{newVersion}}"',
+      'rm -rf ../dist'
+    ], options);
     done();
     //-- add steps to push script
     pushCmds.push(
@@ -256,10 +266,10 @@
     pushCmds.push(
         comment('update package.json in master'),
         'git co master',
-        fill('git pull --rebase {{origin}} master'),
+        'git pull --rebase {{origin}} master',
         'node -e "' + stringifyFunction(buildCommand) + '"',
         'git add package.json',
-        fill('git commit -m "update version number in package.json to {{newVersion}}"'),
+        'git commit -m "update version number in package.json to {{newVersion}}"',
         'git push'
     );
     function buildCommand () {
@@ -271,13 +281,13 @@
       }
     }
     function stringifyFunction (method) {
-      return fill(method
+      return method
           .toString()
           .split('\n')
           .slice(1, -1)
           .map(function (line) { return line.trim(); })
           .join(' ')
-          .replace(/\"/g, '\\\"'));
+          .replace(/\"/g, '\\\"');
     }
   }
 
@@ -286,10 +296,13 @@
   }
 
   function exec (cmd, userOptions) {
+    if (cmd instanceof Array) {
+      return cmd.forEach(function (cmd) { exec(cmd, userOptions); });
+    }
     try {
       var options = Object.create(defaultOptions);
       for (var key in userOptions) options[key] = userOptions[key];
-      return child_process.execSync(cmd, options).trim();
+      return child_process.execSync(fill(cmd), options).trim();
     } catch (err) {
       return err;
     }
@@ -300,9 +313,10 @@
   }
 
   function start (msg) {
-    var msgLength = strip(msg).length,
+    var parsedMsg = fill(msg),
+        msgLength = strip(parsedMsg).length,
         diff = lineWidth - 4 - msgLength;
-    write(msg + Array(diff + 1).join(' '));
+    write(parsedMsg + Array(diff + 1).join(' '));
   }
 
   function log (msg) {
