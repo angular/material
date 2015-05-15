@@ -468,6 +468,7 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   '$window',
   '$http',
   function($scope, $window, $http) {
+    var versionFromPath = $window.location.pathname.match(/^\/([^\/]+)/);
 
     $scope.versions = [];
     $scope.showVersionSelection = true;
@@ -480,15 +481,14 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
         });
 
         $scope.versions = commonVersions.concat(knownVersions);
+        if (versionFromPath) {
+          var version = versionFromPath[1];
+          $scope.version = version == 'latest' ? response.latest : version;
+        }
       })
       .error(function() {
         $scope.showVersionSelection = false;
       });
-
-    var versionFromPath = $window.location.pathname.match(/^\/([^\/]+)/);
-    if (versionFromPath) {
-      $scope.version = versionFromPath[1];
-    }
 
     $scope.redirectToVersion = function(version) {
       window.location = '/' + version;
