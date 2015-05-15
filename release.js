@@ -286,7 +286,7 @@
           .slice(1, -1)
           .map(function (line) { return line.trim(); })
           .join(' ')
-          .replace(/\"/g, '\\\"');
+          .replace(/"/g, '\\"');
     }
   }
 
