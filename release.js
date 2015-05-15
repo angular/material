@@ -214,8 +214,8 @@
     pushCmds.push(
         comment('push to bower (master and tag) and publish to npm'),
         'cd ' + options.cwd,
-        'git push -q origin master',
-        fill('git push -q origin v{{newVersion}}'),
+        'git push -q',
+        'git push -q --tags',
         'npm publish',
         'cd ..'
     );
@@ -243,7 +243,7 @@
     pushCmds.push(
         comment('push the site'),
         'cd ' + options.cwd,
-        'git push -q origin master',
+        'git push',
         'cd ..'
     );
   }
@@ -256,7 +256,7 @@
         'node -e "' + stringifyFunction(buildCommand) + '"',
         'git add package.json',
         fill('git commit -m "update version number in package.json to {{newVersion}}"'),
-        'git push origin master'
+        'git push'
     );
     function buildCommand () {
       require('fs').writeFileSync('package.json', JSON.stringify(getUpdatedJson(), null, 2));
