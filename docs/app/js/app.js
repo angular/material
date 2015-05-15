@@ -473,7 +473,7 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
     $scope.versions = [];
     $scope.showVersionSelection = true;
 
-    $http.get("https://cdn.rawgit.com/angular/code.material.angularjs.org/master/docs.json")
+    $http.get("/docs.json")
       .success(function(response) {
         var commonVersions = [{ version: 'HEAD', label: 'HEAD'}];
         var knownVersions = response.versions.map(function(version) {
