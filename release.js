@@ -264,7 +264,9 @@
         comment('update package.json in master'),
         'git co master',
         'git pull --rebase {{origin}} master',
+        'git checkout release/{{newVersion}} -- CHANGELOG.md',
         'node -e "' + stringifyFunction(buildCommand) + '"',
+        'git add CHANGELOG.md',
         'git add package.json',
         'git commit -m "update version number in package.json to {{newVersion}}"',
         'git push'
