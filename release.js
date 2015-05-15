@@ -11,6 +11,7 @@
   var pushCmds       = [ 'rm abort push'];
   var cleanupCmds    = [];
   var defaultOptions = { encoding: 'utf-8' };
+  var origin         = 'https://github.com/angular/material.git';
   var newVersion;
 
   if (validate()) {
@@ -45,7 +46,7 @@
       log('You must be authenticated with npm as "angularcore" to perform a release.');
     } else if (exec('git rev-parse --abbrev-ref HEAD') !== 'master') {
       log('Releases can only performed from master at this time.');
-    } else if (exec('git pull -q --rebase origin master 2> /dev/null') instanceof Error) {
+    } else if (exec(fill('git pull -q --rebase {{origin}} master 2> /dev/null')) instanceof Error) {
       log('Please make sure your local branch is synced with origin/master.');
     } else {
       return true;
@@ -154,8 +155,8 @@
     done();
     abortCmds.push(fill('git tag -d v{{newVersion}}'));
     pushCmds.push(
-        fill('git push origin v{{newVersion}} # push the version tag'),
-        fill('git push origin release/{{newVersion}} # push the version branch')
+        fill('git push {{origin}} HEAD'),
+        fill('git push --tags')
     );
   }
 
@@ -214,8 +215,8 @@
     pushCmds.push(
         comment('push to bower (master and tag) and publish to npm'),
         'cd ' + options.cwd,
-        'git push -q',
-        'git push -q --tags',
+        'git push',
+        'git push --tags',
         'npm publish',
         'cd ..'
     );
@@ -252,7 +253,7 @@
     pushCmds.push(
         comment('update package.json in master'),
         'git co master',
-        'git pull --rebase origin master',
+        fill('git pull --rebase {{origin}} master'),
         'node -e "' + stringifyFunction(buildCommand) + '"',
         'git add package.json',
         fill('git commit -m "update version number in package.json to {{newVersion}}"'),
