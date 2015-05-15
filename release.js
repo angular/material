@@ -75,7 +75,10 @@
 
   function createChangelog () {
     start('Generating changelog from {{oldVersion.cyan}} to {{newVersion.cyan}}...');
-    exec('gulp changelog --sha=$(git merge-base v{{oldVersion}} HEAD)');
+    exec([
+      'git fetch --tags',
+      'gulp changelog --sha=$(git merge-base v{{oldVersion}} HEAD)'
+    ]);
     done();
     abortCmds.push('git checkout CHANGELOG.md');
     pushCmds.push('git add CHANGELOG.md');
