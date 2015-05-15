@@ -86,7 +86,7 @@ md-input-container {
     -webkit-font-smoothing: antialiased;
     padding-left: $input-container-padding;
     z-index: 1;
-    transform: translate3d(0, $input-label-default-offset + 6, 0) scale($input-label-default-scale);
+    transform: translate3d(0, $input-label-default-offset + 4, 0) scale($input-label-default-scale);
     transition: transform $swift-ease-out-timing-function 0.25s;
 
     @include rtl(transform-origin, left top, right top);
@@ -200,8 +200,9 @@ md-input-container {
       background-position: 0 bottom;
       // This background-size is coordinated with a linear-gradient set in input-theme.scss
       // to create a dotted line under the input.
-      background-size: 3px 1px;
+      background-size: 4px 1px;
       background-repeat: repeat-x;
+      margin-bottom: -1px; // Shift downward so dotted line is positioned the same as other bottom borders
     }
   }
 }
