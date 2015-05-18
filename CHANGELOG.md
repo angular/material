@@ -1,7 +1,7 @@
 <a name="0.9.4"></a>
 ### 0.9.4  (2015-05-15)
 
-This interim relase **fixes** an incorrect deployment of `angular-material.js`; which added the Closure Library **Namespace** features using `goog.provide()`. Only source in `/modules/closure/**.js` should use this namespacing. 
+This interim release **fixes** an incorrect deployment of `angular-material.js`; which added the Closure Library **Namespace** features using `goog.provide()`. Only source in `/modules/closure/**.js` should use this namespacing. 
 
 #### Features
 
