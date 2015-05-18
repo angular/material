@@ -110,6 +110,7 @@ function labelDirective() {
  * The purpose of **`md-maxlength`** is exactly to show the max length counter text. If you don't want the counter text and only need "plain" validation, you can use the "simple" `ng-maxlength` or maxlength attributes.
  * @param {string=} aria-label Aria-label is required when no label is present.  A warning message will be logged in the console if not present.
  * @param {string=} placeholder An alternative approach to using aria-label when the label is not present.  The placeholder text is copied to the aria-label attribute.
+ * @param md-no-autogrow {boolean=} When present, textareas will not grow automatically.
  *
  * @usage
  * <hljs lang="html">
@@ -228,6 +229,10 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
     }
 
     function setupTextarea() {
+      if(angular.isDefined(element.attr('md-no-autogrow'))) {
+        return;
+      }
+
       var node = element[0];
       var onChangeTextarea = $mdUtil.debounce(growTextarea, 1);
 
