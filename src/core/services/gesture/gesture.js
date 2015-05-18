@@ -34,7 +34,7 @@
      *
      *   });
      * </hljs>
-     *
+     * @ngInject
      */
   function MdGestureProvider() { }
 
