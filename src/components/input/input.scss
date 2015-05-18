@@ -141,6 +141,10 @@ md-input-container {
       outline: none;
       box-shadow: none;
     }
+
+    &.md-no-flex {
+      flex: none !important;
+    }
   }
 
   ng-messages, data-ng-messages, x-ng-messages,
