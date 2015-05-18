@@ -34,7 +34,7 @@
      *
      *   });
      * </hljs>
-     *
+     * @ngInject
      */
   function MdGestureProvider() { }
 
@@ -48,7 +48,6 @@
 
     /**
      * $get is used to build an instance of $mdGesture
-     * @ngInject
      */
     $get : function($$MdGestureHandler, $$rAF, $timeout) {
          return new MdGesture($$MdGestureHandler, $$rAF, $timeout);
