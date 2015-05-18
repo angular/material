@@ -33,7 +33,8 @@
       <ul class="docs-menu">
         <li class="parent-list-item" ng-show="showVersionSelection"
             ng-controller="DocsVersionsCtrl">
-          <h2 class="menu-heading md-subhead" id="version">Version</h2>
+          <h2 class="menu-heading md-subhead" id="version">Current API
+          Version</h2>
           <md-select ng-model="version" placeholder="Version">
             <md-option ng-value="v.version" ng-click="redirectToVersion(v.version)" ng-repeat="v in versions">{{v.label}}</md-option>
           </md-select>
