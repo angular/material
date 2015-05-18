@@ -154,4 +154,35 @@ describe('<md-tooltip> directive', function() {
 
   }));
 
+  it('should not be visible on mousedown and then mouseleave', inject(function($rootScope, $compile, $timeout, $document) {
+    jasmine.mockElementFocus(this);
+
+    var element = $compile('<md-button>' +
+               'Hello' +
+               '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
+             '</md-button>')($rootScope);
+
+    $rootScope.$apply();
+
+      // this focus is needed to set `$document.activeElement`
+      // and wouldn't be required if `document.activeElement` was settable.
+      element.focus();
+      element.triggerHandler('focus');
+      element.triggerHandler('mousedown');
+      $timeout.flush();
+
+    expect($document.activeElement).toBe(element[0]);
+    expect($rootScope.isVisible).toBe(true);
+
+      element.triggerHandler('mouseleave');
+      $timeout.flush();
+
+    // very weak test since this is really always set to false because
+    // we are not able to set `document.activeElement` to the parent
+    // of `md-tooltip`. we compensate by testing `$document.activeElement`
+    // which sort of mocks the behavior through `jasmine.mockElementFocus`
+    // which should be replaced by a true `document.activeElement` check
+    // if the problem gets fixed.
+    expect($rootScope.isVisible).toBe(false);
+  }));
 });
