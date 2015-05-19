@@ -307,7 +307,7 @@
   CalendarCtrl.prototype.focus = function() {
     this.focusDateElement(this.selectedDate);
   };
-  
+
 
   /*** Animation ***/
 
@@ -719,8 +719,8 @@
     return [
       'md',
       this.id,
-      date.getFullYear(), 
-      date.getMonth(), 
+      date.getFullYear(),
+      date.getMonth(),
       date.getDate()
     ].join('-');
   };
