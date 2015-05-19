@@ -9,13 +9,10 @@
   angular.module('material.components.calendar', ['material.core'])
       .directive('mdCalendar', calendarDirective);
 
-  // TODO(jelbourn): i18n [month names, day names, days of month, date formatting]
   // TODO(jelbourn): Date cell IDs need to be unique per-calendar.
-
-  // TODO(jelbourn): a11y (announcements and labels)
+  // TODO(jelbourn): internationalize a11y announcements.
 
   // TODO(jelbourn): Update the selected date on [click, tap, enter]
-
   // TODO(jelbourn): Shown month transition on [swipe, scroll, keyboard, ngModel change]
   // TODO(jelbourn): Introduce free scrolling that works w/ mobile momemtum scrolling (+snapping)
 
@@ -26,24 +23,17 @@
   // TODO(jelbourn): Minimum and maximum date
   // TODO(jelbourn): Make sure the *time* on the written date makes sense (probably midnight).
   // TODO(jelbourn): Refactor "sections" into separate files.
-  // TODO(jelbourn): Highlight today.
   // TODO(jelbourn): Horizontal line between months (pending spec finalization)
   // TODO(jelbourn): Alt+down in date input to open calendar
   // TODO(jelbourn): Animations should use `.finally()` instead of `.then()`
-
-  var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-  var fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
-      'September', 'October', 'November', 'December'];
-  var fullDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  // TODO(jelbourn): improve default date parser in locale provider.
+  // TODO(jelbourn): read-only state.
 
   function calendarDirective() {
     return {
       template:
         '<div>' +
-          '<table class="md-calendar-day-header"><thead><tr>' +
-            '<th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th>' +
-          '</tr></thead></table>' +
+          '<table class="md-calendar-day-header"><thead></thead></table>' +
           '<div class="md-calendar-container">' +
             '<table class="md-calendar"></table>' +
           '</div>' +
@@ -74,20 +64,6 @@
     DISTANT_PAST: 4
   };
 
-  // TODO(jelbourn): Refactor this to core and share with other components.
-  /** @enum {number} */
-  var Keys = {
-    ENTER: 13,
-    PAGE_UP: 33,
-    PAGE_DOWN: 34,
-    END: 35,
-    HOME: 36,
-    LEFT: 37,
-    UP: 38,
-    RIGHT: 39,
-    DOWN: 40
-  };
-
   /** Class applied to the selected date cell/. */
   var SELECTED_DATE_CLASS = 'md-calendar-selected-date';
 
@@ -108,7 +84,9 @@
    * Controller for the mdCalendar component.
    * @ngInject @constructor
    */
-  function CalendarCtrl($element, $scope, $animate, $q, $$mdDateUtil, $$mdDateLocale, $mdInkRipple, $mdUtil) {
+  function CalendarCtrl($element, $scope, $animate, $q, $mdConstant,
+      $$mdDateUtil, $$mdDateLocale, $mdInkRipple, $mdUtil) {
+
     /** @final {!angular.$animate} */
     this.$animate = $animate;
 
@@ -122,7 +100,13 @@
     this.$mdUtil = $mdUtil;
 
     /** @final */
+    this.keyCode = $mdConstant.KEY_CODE;
+
+    /** @final */
     this.dateUtil = $$mdDateUtil;
+
+    /** @final */
+    this.dateLocale = $$mdDateLocale;
 
     /** @final {!angular.JQLite} */
     this.$element = $element;
@@ -209,6 +193,8 @@
    * Initialization should occur after the ngModel value is known.
    */
   CalendarCtrl.prototype.buildInitialCalendarDisplay = function() {
+    this.buildWeekHeader();
+
     this.displayDate = this.selectedDate || new Date();
     var nextMonth = this.dateUtil.getDateInNextMonth(this.displayDate);
     this.calendarElement.appendChild(this.buildCalendarForMonth(this.displayDate));
@@ -250,7 +236,7 @@
     this.$scope.$apply(function() {
       // Handled key events fall into two categories: selection and navigation.
       // Start by checking if this is a selection event.
-      if (event.which === Keys.ENTER) {
+      if (event.which === self.keyCode.ENTER) {
         self.ngModelCtrl.$setViewValue(self.displayDate);
         self.ngModelCtrl.$render();
         event.preventDefault();
@@ -280,16 +266,17 @@
    */
   CalendarCtrl.prototype.getFocusDateFromKeyEvent = function(event) {
     var dateUtil = this.dateUtil;
+    var keyCode = this.keyCode;
 
     switch (event.which) {
-      case Keys.RIGHT: return dateUtil.incrementDays(this.displayDate, 1);
-      case Keys.LEFT: return dateUtil.incrementDays(this.displayDate, -1);
-      case Keys.DOWN: return dateUtil.incrementDays(this.displayDate, 7);
-      case Keys.UP: return dateUtil.incrementDays(this.displayDate, -7);
-      case Keys.PAGE_DOWN: return dateUtil.incrementMonths(this.displayDate, 1);
-      case Keys.PAGE_UP: return dateUtil.incrementMonths(this.displayDate, -1);
-      case Keys.HOME: return dateUtil.getFirstDateOfMonth(this.displayDate);
-      case Keys.END: return dateUtil.getLastDateOfMonth(this.displayDate);
+      case keyCode.RIGHT_ARROW: return dateUtil.incrementDays(this.displayDate, 1);
+      case keyCode.LEFT_ARROW: return dateUtil.incrementDays(this.displayDate, -1);
+      case keyCode.DOWN_ARROW: return dateUtil.incrementDays(this.displayDate, 7);
+      case keyCode.UP_ARROW: return dateUtil.incrementDays(this.displayDate, -7);
+      case keyCode.PAGE_DOWN: return dateUtil.incrementMonths(this.displayDate, 1);
+      case keyCode.PAGE_UP: return dateUtil.incrementMonths(this.displayDate, -1);
+      case keyCode.HOME: return dateUtil.getFirstDateOfMonth(this.displayDate);
+      case keyCode.END: return dateUtil.getLastDateOfMonth(this.displayDate);
       default: return this.displayDate;
     }
   };
@@ -572,11 +559,13 @@
     var annoucement = '';
 
     if (!previousDate || !this.dateUtil.isSameMonthAndYear(previousDate, currentDate)) {
-      annoucement += currentDate.getFullYear() + '. ' + fullMonths[currentDate.getMonth()] + '. ';
+      annoucement += currentDate.getFullYear() +
+          '. ' +
+          this.dateLocale.months[currentDate.getMonth()] + '. ';
     }
 
     if (previousDate.getDate() !== currentDate.getDate()) {
-      annoucement += fullDays[currentDate.getDay()] + '. ' + currentDate.getDate() ;
+      annoucement += this.dateLocale.days[currentDate.getDay()] + '. ' + currentDate.getDate() ;
     }
 
     this.ariaLiveElement.textContent = annoucement;
@@ -584,6 +573,21 @@
 
 
   /*** Constructing the calendar table ***/
+
+  /**
+   * Builds and appends a day-of-the-week header to the calendar.
+   * This should only need to be called once during initialization.
+   */
+  CalendarCtrl.prototype.buildWeekHeader = function() {
+    var row = document.createElement('tr');
+    for (var i = 0; i < 7; i++) {
+      var th = document.createElement('th');
+      th.textContent = this.dateLocale.shortDays[i];
+      row.appendChild(th);
+    }
+
+    this.$element.find('thead').append(row);
+  };
 
   /**
    * Creates a single cell to contain a date in the calendar with all appropriate
@@ -601,7 +605,7 @@
       var selectionIndicator = document.createElement('span');
       cell.appendChild(selectionIndicator);
       selectionIndicator.classList.add('md-calendar-date-selection-indicator');
-      selectionIndicator.textContent = opt_date.getDate();
+      selectionIndicator.textContent = this.dateLocale.dates[opt_date.getDate()];
       //selectionIndicator.setAttribute('aria-label', '');
 
       cell.setAttribute('tabindex', '-1');
@@ -629,7 +633,7 @@
     // Store rows for the month in a document fragment so that we can append them all at once.
     var monthBody = document.createElement('tbody');
     monthBody.classList.add('md-calendar-month');
-    monthBody.setAttribute('aria-hidden', 'true')
+    monthBody.setAttribute('aria-hidden', 'true');
 
     var row = document.createElement('tr');
     monthBody.appendChild(row);
@@ -642,7 +646,7 @@
     monthLabelCell.classList.add('md-calendar-month-label');
     if (firstDayOfTheWeek <= 1) {
       monthLabelCell.setAttribute('colspan', '7');
-      monthLabelCell.textContent = months[date.getMonth()];
+      monthLabelCell.textContent = this.dateLocale.shortMonths[date.getMonth()];
 
       var monthLabelRow = document.createElement('tr');
       monthLabelRow.appendChild(monthLabelCell);
@@ -650,7 +654,7 @@
     } else {
       blankCellOffset = 2;
       monthLabelCell.setAttribute('colspan', '2');
-      monthLabelCell.textContent = months[date.getMonth()];
+      monthLabelCell.textContent = this.dateLocale.shortMonths[date.getMonth()];
 
       row.appendChild(monthLabelCell);
     }
