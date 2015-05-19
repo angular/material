@@ -36,13 +36,15 @@ md-list {
 }
 
 md-list-item {
+  &.md-proxy-focus.md-focused .md-no-style {
+    transition: background-color 0.15s linear;
+  }
   &.md-no-proxy,
   .md-no-style {
     position: relative;
     padding: $list-item-padding-vertical $list-item-padding-horizontal;
     flex: 1;
-    transition: background-color 0.15s linear;
-
+    
     &.md-button {
       font-size: inherit;
       height: inherit;
