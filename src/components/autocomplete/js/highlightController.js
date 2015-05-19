@@ -4,7 +4,7 @@ angular
 
 function MdHighlightCtrl ($scope, $element, $interpolate) {
   var term = $element.attr('md-highlight-text'),
-      text = $interpolate($element.text())($scope),
+      text = $interpolate($element.html())($scope),
       flags = $element.attr('md-highlight-flags') || '',
       watcher = $scope.$watch(term, function (term) {
         var regex = getRegExp(term, flags),
