@@ -29,7 +29,8 @@ module.exports = new Package('angular-md', [
 .config(function(readFilesProcessor, writeFilesProcessor) {
   readFilesProcessor.basePath = projectPath;
   readFilesProcessor.sourceFiles = [
-    { include: 'dist/angular-material.js', basePath: 'dist' },
+    { include: 'src/components/**/*.js', basePath: '.' },
+    { include: 'src/core/**/*.js', basePath: '.' },
     { include: 'docs/content/**/*.md', basePath: 'docs/content', fileReader: 'ngdocFileReader' }
   ];
 
