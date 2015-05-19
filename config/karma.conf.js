@@ -45,7 +45,7 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
     files: dependencies.concat(testSrc),
 
-    logLevel:'warn',
+    logLevel: config.LOG_WARN,
     port: 9876,
     reporters: ['progress'],
     colors: true,
