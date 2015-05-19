@@ -424,6 +424,7 @@
 
   /**
    * Attach Gestures: hook document and check shouldHijack clicks
+   * @ngInject
    */
   function attachToDocument( $mdGesture, $$MdGestureHandler ) {
 
