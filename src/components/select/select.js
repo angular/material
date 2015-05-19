@@ -462,7 +462,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
       } else {
         self.hashGetter = function getHashValue(value) {
           if (angular.isObject(value)) {
-            return '$$object_' + (value.$$mdSelectId || (value.$$mdSelectId = ++selectNextId));
+            return 'object_' + (value.$$mdSelectId || (value.$$mdSelectId = ++selectNextId));
           }
           return value;
         };
