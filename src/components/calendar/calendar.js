@@ -9,13 +9,10 @@
   angular.module('material.components.calendar', ['material.core'])
       .directive('mdCalendar', calendarDirective);
 
-  // TODO(jelbourn): i18n [month names, day names, days of month, date formatting]
   // TODO(jelbourn): Date cell IDs need to be unique per-calendar.
-
-  // TODO(jelbourn): a11y (announcements and labels)
+  // TODO(jelbourn): internationalize a11y announcements.
 
   // TODO(jelbourn): Update the selected date on [click, tap, enter]
-
   // TODO(jelbourn): Shown month transition on [swipe, scroll, keyboard, ngModel change]
   // TODO(jelbourn): Introduce free scrolling that works w/ mobile momemtum scrolling (+snapping)
 
@@ -26,11 +23,9 @@
   // TODO(jelbourn): Minimum and maximum date
   // TODO(jelbourn): Make sure the *time* on the written date makes sense (probably midnight).
   // TODO(jelbourn): Refactor "sections" into separate files.
-  // TODO(jelbourn): Highlight today.
   // TODO(jelbourn): Horizontal line between months (pending spec finalization)
   // TODO(jelbourn): Alt+down in date input to open calendar
   // TODO(jelbourn): Animations should use `.finally()` instead of `.then()`
-  // TODO(jelbourn): Make sure $locale in dateLocaleProvider does nto error if module not loaded.
   // TODO(jelbourn): improve default date parser in locale provider.
 
   function calendarDirective() {
