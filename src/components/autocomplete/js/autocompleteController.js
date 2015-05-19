@@ -6,7 +6,7 @@ var ITEM_HEIGHT = 41,
     MAX_HEIGHT = 5.5 * ITEM_HEIGHT,
     MENU_PADDING = 8;
 
-function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $mdTheming, $window, $animate, $rootElement) {
+function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $mdTheming, $window, $animate, $rootElement, $q) {
 
   //-- private variables
 
@@ -38,7 +38,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
   self.blur     = blur;
   self.focus    = focus;
   self.clear    = clearValue;
-  self.select   = select;
+  self.preSelect                      = preSelect;
   self.getCurrentDisplayValue         = getCurrentDisplayValue;
   self.registerSelectedItemWatcher    = registerSelectedItemWatcher;
   self.unregisterSelectedItemWatcher  = unregisterSelectedItemWatcher;
@@ -244,7 +244,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
       case $mdConstant.KEY_CODE.ENTER:
         if (self.hidden || self.loading || self.index < 0 || self.matches.length < 1) return;
         event.preventDefault();
-        select(self.index);
+        preSelect(self.index);
         break;
       case $mdConstant.KEY_CODE.ESCAPE:
         self.matches = [];
@@ -290,17 +290,29 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
 
   //-- actions
 
+  function preSelect (index){
+    self.hidden = true;
+    if(angular.isDefined($element.attr('md-pre-selected-item-change')) && self.matches[index]){
+      $q.when($scope.preItemChange(getItemScope(self.matches[index]),$scope.selectedItem)).then(function(result){
+        if(result) select(index);
+      }, function(){
+        self.hidden = false;
+      })
+    } else {
+      select(index);
+    }
+  }
+
   function select (index) {
     $scope.selectedItem = self.matches[index];
     $scope.searchText = getDisplayValue($scope.selectedItem) || $scope.searchText;
-    self.hidden = true;
     self.index = 0;
     self.matches = [];
   }
 
   function clearValue () {
     $scope.searchText = '';
-    select(-1);
+    preSelect(-1);
 
     // Per http://www.w3schools.com/jsref/event_oninput.asp
     var eventObj = document.createEvent('CustomEvent');
