@@ -236,6 +236,8 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
       }
 
       var node = element[0];
+      var container = containerCtrl.element[0];
+
       var onChangeTextarea = $mdUtil.debounce(growTextarea, 1);
 
       function pipelineListener(value) {
@@ -259,10 +261,20 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
       });
 
       function growTextarea() {
+        // sets the md-input-container height to avoid jumping around
+        container.style.height = container.offsetHeight + 'px';
+
+        // temporarily disables element's flex so its height 'runs free'
+        element.addClass('md-no-flex');
+
         node.style.height = "auto";
         node.scrollTop = 0;
         var height = getHeight();
         if (height) node.style.height = height + 'px';
+
+        // reset everything back to normal
+        element.removeClass('md-no-flex');
+        container.style.height = 'auto';
       }
 
       function getHeight () {
