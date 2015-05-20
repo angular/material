@@ -1,4 +1,4 @@
-ddescribe('mdListItem directive', function() {
+describe('mdListItem directive', function() {
   beforeEach(module('material.components.list', 'material.components.checkbox', 'material.components.switch'));
 
   function setup(html) {

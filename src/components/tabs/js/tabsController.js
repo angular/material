@@ -2,6 +2,9 @@ angular
     .module('material.components.tabs')
     .controller('MdTabsController', MdTabsController);
 
+/**
+ * @ngInject
+ */
 function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $mdInkRipple,
                            $mdUtil, $animate) {
   var ctrl     = this,

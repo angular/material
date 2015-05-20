@@ -148,7 +148,7 @@
         // name with '$', Angular won't write it into the DOM. The cloned
         // element propagates to the link function via the attrs argument,
         // where various contained-elements can be consumed.
-        attrs['$mdUserTemplate'] = element.clone();
+        var content = attrs['$mdUserTemplate'] = element.clone();
         return MD_CHIPS_TEMPLATE;
       },
       require: ['mdChips'],
