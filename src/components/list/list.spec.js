@@ -71,9 +71,10 @@ describe('mdListItem directive', function() {
 
 
   it('creates buttons when used with ng-click', function() {
-    var listItem = setup('<md-list-item ng-click="sayHello()"><p>Hello world</p></md-list-item>');
+    var listItem = setup('<md-list-item ng-click="sayHello()" ng-disabled="true"><p>Hello world</p></md-list-item>');
     var firstChild = listItem.children()[0];
     expect(firstChild.nodeName).toBe('MD-BUTTON');
+    expect(firstChild.hasAttribute('ng-disabled')).toBeTruthy();
     expect(firstChild.childNodes[0].nodeName).toBe('DIV');
     expect(firstChild.childNodes[0].childNodes[0].nodeName).toBe('P');
   });
