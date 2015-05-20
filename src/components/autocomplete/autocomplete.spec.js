@@ -102,7 +102,7 @@ describe('<md-autocomplete>', function() {
   });
 
   describe('xss prevention', function () {
-    it('should not allow html to slip through', inject(function($timeout, $mdConstant, $rootElement) {
+    it('should not allow html to slip through', function() {
       var html = 'foo <img src="img" onerror="alert(1)" />';
       var scope = createScope([ { display: html } ]);
       var template = '\
@@ -122,18 +122,13 @@ describe('<md-autocomplete>', function() {
       expect(scope.searchText).toBe('');
       expect(scope.selectedItem).toBe(null);
 
-      element.scope().searchText = 'fo';
-      ctrl.keydown({});
-      element.scope().$apply();
-      $timeout.flush();
+      scope.$apply('searchText = "fo"');
 
       expect(scope.searchText).toBe('fo');
       expect(scope.match(scope.searchText).length).toBe(1);
       expect(ul.find('li').length).toBe(1);
       expect(ul.find('li').find('img').length).toBe(0);
-
-      scope.$apply();
-    }));
+    });
   });
 
   describe('API access', function() {
