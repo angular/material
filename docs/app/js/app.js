@@ -140,7 +140,9 @@ function(Angularytics, $rootScope,$timeout) {
   'PAGES',
   '$location',
   '$rootScope',
-function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
+  '$http',
+  '$window',
+function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $window) {
 
   var sections = [{
     name: 'Getting Started',
@@ -266,6 +268,30 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
   var self;
 
   $rootScope.$on('$locationChangeSuccess', onLocationChange);
+
+  $http.get("/docs.json")
+      .success(function(response) {
+        var versionFromPath = $window.location.pathname.match(/^\/([^\/]+)/) || '0.9.0';
+        var commonVersions = [
+          { type: 'version', url: '/latest', id: 'latest', name: 'latest' },
+          { type: 'version', url: '/HEAD', id: 'HEAD', name: 'HEAD' }
+        ];
+        var knownVersions = response.versions.map(function(version) {
+          return { type: 'version', url: '/' + version, name: 'v' + version, id: version };
+        });
+        sections.unshift({
+          name: 'Current API version',
+          type: 'heading',
+          className: 'version-picker',
+          children: [
+            {
+              name: versionFromPath,
+              type: 'toggle',
+              pages: commonVersions.concat(knownVersions)
+            }
+          ]
+        });
+      });
 
   return self = {
     sections: sections,
@@ -486,38 +512,6 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
     menu.toggleSelectSection(section);
   }
 }])
-
-.controller('DocsVersionsCtrl', [
-  '$scope',
-  '$window',
-  '$http',
-  function($scope, $window, $http) {
-    var versionFromPath = $window.location.pathname.match(/^\/([^\/]+)/);
-
-    $scope.versions = [];
-    $scope.showVersionSelection = true;
-
-    $http.get("/docs.json")
-      .success(function(response) {
-        var commonVersions = [{ version: 'HEAD', label: 'HEAD'}];
-        var knownVersions = response.versions.map(function(version) {
-          return { version: version, label: 'v' + version };
-        });
-
-        $scope.versions = commonVersions.concat(knownVersions);
-        if (versionFromPath) {
-          var version = versionFromPath[1];
-          $scope.version = version == 'latest' ? response.latest : version;
-        }
-      })
-      .error(function() {
-        $scope.showVersionSelection = false;
-      });
-
-    $scope.redirectToVersion = function(version) {
-      window.location = '/' + version;
-    };
-  }])
 
 .controller('HomeCtrl', [
   '$scope',

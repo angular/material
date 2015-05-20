@@ -678,3 +678,11 @@ ul.methods > li:first-child > *:first-child {
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
+
+.version-picker {
+  background: #DCECC9 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12)
+}
+.version-picker .menu-toggle-list {
+  background: #DCECC9 !important;
+}
