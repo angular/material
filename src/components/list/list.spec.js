@@ -1,4 +1,4 @@
-describe('mdListItem directive', function() {
+ddescribe('mdListItem directive', function() {
   beforeEach(module('material.components.list', 'material.components.checkbox', 'material.components.switch'));
 
   function setup(html) {
@@ -92,6 +92,11 @@ describe('mdListItem directive', function() {
     expect(firstChild.childNodes.length).toBe(1);
     var secondChild = listItem.children()[1];
     expect(secondChild.nodeName).toBe('MD-BUTTON');
+  });
+
+  it('should detect non-compiled md-buttons', function() {
+    var listItem = setup('<md-list-item><md-button ng-click="sayHello()">Hello</md-button></md-list-item>');
+    expect(listItem.hasClass('md-no-proxy')).toBeFalsy();
   });
 
 });
