@@ -89,7 +89,9 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
     }
     labelEl.append('<span class="md-select-icon" aria-hidden="true"></span>');
     labelEl.addClass('md-select-label');
-    labelEl.attr('id', 'select_label_' + $mdUtil.nextUid());
+    if (!labelEl[0].hasAttribute('id')) {
+      labelEl.attr('id', 'select_label_' + $mdUtil.nextUid());
+    }
 
     // There's got to be an md-content inside. If there's not one, let's add it.
     if (!element.find('md-content').length) {
@@ -233,22 +235,25 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
           element.off('click', openSelect);
           element.off('keydown', handleKeypress);
         } else {
-          element.attr({'tabindex': attr.tabindex, 'aria-disabled':'false'});
+          element.attr({'tabindex': attr.tabindex, 'aria-disabled': 'false'});
           element.on('click', openSelect);
           element.on('keydown', handleKeypress);
         }
       });
       if (!attr.disabled && !attr.ngDisabled) {
-        element.attr({'tabindex': attr.tabindex, 'aria-disabled':'false'});
+        element.attr({'tabindex': attr.tabindex, 'aria-disabled': 'false'});
         element.on('click', openSelect);
         element.on('keydown', handleKeypress);
       }
 
-      element.attr({
-        'role': 'combobox',
-        'id': 'select_' + $mdUtil.nextUid(),
+      var ariaAttrs = {
+        role: 'combobox',
         'aria-expanded': 'false'
-      });
+      };
+      if (!element[0].hasAttribute('id')) {
+        ariaAttrs.id = 'select_' + $mdUtil.nextUid();
+      }
+      element.attr(ariaAttrs);
 
       scope.$on('$destroy', function() {
         if (isOpen) {
@@ -617,11 +622,15 @@ function OptionDirective($mdInkRipple, $mdUtil) {
     });
 
     function configureAria() {
-      element.attr({
+      var ariaAttrs = {
         'role': 'option',
-        'aria-selected': 'false',
-        'id': 'select_option_'+ $mdUtil.nextUid()
-      });
+        'aria-selected': 'false'
+      };
+
+      if (!element[0].hasAttribute('id')) {
+        ariaAttrs.id = 'select_option_' + $mdUtil.nextUid();
+      }
+      element.attr(ariaAttrs);
     }
   }
 
