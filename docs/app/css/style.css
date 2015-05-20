@@ -218,6 +218,10 @@ code:not(.highlight) {
 .docs-menu > li {
   border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
+.docs-menu > li:nth-child(-n+2) {
+  border-top: none;
+}
+
 .docs-menu .md-button {
   border-radius: 0;
   color: inherit;
@@ -233,6 +237,30 @@ code:not(.highlight) {
   white-space: normal;
   width: 100%;
 }
+
+.docs-menu md-select {
+
+ /* Override md-select margins.  With margins the menu will look incorrect and causes mobile list
+    to not be scrollable.
+  */
+  margin: 0;
+  width: 100%;
+}
+
+.docs-menu md-select md-select-label {
+  justify-content: flex-end;
+  padding-top: 10px;
+}
+
+.docs-menu md-select md-select-label span {
+  margin-right: auto;
+  padding-left: 13px;
+}
+
+.docs-menu md-select .md-select-icon {
+  margin-right: 28px;
+}
+
 .docs-menu button.md-button::-moz-focus-inner {
   padding: 0;
 }
@@ -241,11 +269,12 @@ code:not(.highlight) {
 }
 .menu-heading {
   display: block;
-  line-height: 40px;
+  line-height: 32px;
   margin: 0;
-  padding: 0px 16px;
+  padding: 8px 16px 0;
   text-align: left;
   width: 100%;
+  color: rgba(0,0,0, 0.54)
 }
 .docs-menu li.parentActive,
 .docs-menu li.parentActive .menu-toggle-list {
@@ -287,6 +316,7 @@ code:not(.highlight) {
   transform: rotate(0deg);
   -webkit-transform: rotate(0deg);
 }
+
 /* End Docs Menu */
 
 .docs-logo:focus {

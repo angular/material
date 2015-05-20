@@ -2,8 +2,8 @@
 <html ng-app="docsApp" ng-controller="DocsCtrl" lang="en" ng-strict-di>
 <head>
 <title ng-bind="(menu.currentSection.name || 'Material Design') + (menu.currentPage ? (' > ' + (menu.currentPage | humanizeDoc)) : '')">Material Design</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
 <meta name="viewport" content="initial-scale=1" />
-
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
 <link rel="stylesheet" href="angular-material.min.css">
 <link rel="stylesheet" href="docs.css">
@@ -31,6 +31,14 @@
 
     <md-content flex role="navigation">
       <ul class="docs-menu">
+        <li class="parent-list-item" ng-show="showVersionSelection"
+            ng-controller="DocsVersionsCtrl">
+          <h2 class="menu-heading md-subhead" id="version">Current API
+          Version</h2>
+          <md-select ng-model="version" placeholder="Version">
+            <md-option ng-value="v.version" ng-click="redirectToVersion(v.version)" ng-repeat="v in versions">{{v.label}}</md-option>
+          </md-select>
+        </li>
         <li ng-repeat="section in menu.sections" class="parent-list-item" ng-class="{'parentActive' : isSectionSelected(section)}">
           <h2 class="menu-heading md-subhead" ng-if="section.type === 'heading'" id="heading_{{ section.name | nospace }}">
             {{section.name}}
