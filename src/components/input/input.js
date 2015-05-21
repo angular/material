@@ -235,6 +235,7 @@ function inputTextareaDirective($mdUtil, $window) {
       element.on('keydown input', onChangeTextarea);
       element.on('scroll', onScroll);
       angular.element($window).on('resize', onChangeTextarea);
+      element.attr('rows', '1');
 
       scope.$on('$destroy', function() {
         angular.element($window).off('resize', onChangeTextarea);
