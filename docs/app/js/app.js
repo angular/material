@@ -271,7 +271,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
 
   $http.get("/docs.json")
       .success(function(response) {
-        var versionFromPath = $window.location.pathname.replace(/^\//, '').replace(/\/.*/, '');
+        var versionFromPath = $window.location.pathname.substr(1).match(/[^\/]+/)[0] || 'latest';
         var commonVersions = [
           { type: 'version', url: '/latest', id: 'latest', name: 'latest' },
           { type: 'version', url: '/HEAD', id: 'HEAD', name: 'HEAD' }
