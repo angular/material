@@ -271,26 +271,60 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
 
   $http.get("/docs.json")
       .success(function(response) {
-        var versionFromPath = $window.location.pathname.substr(1).match(/[^\/]+/)[0] || 'latest';
-        var commonVersions = [
-          { type: 'version', url: '/latest', id: 'latest', name: 'latest' },
-          { type: 'version', url: '/HEAD', id: 'HEAD', name: 'HEAD' }
-        ];
-        var knownVersions = response.versions.map(function(version) {
-          return { type: 'version', url: '/' + version, name: 'v' + version, id: version };
-        });
+        var versionId = getVersionIdFromPath();
+        var head = { type: 'version', url: '/HEAD', id: 'head', name: 'HEAD (master)' };
+        var commonVersions = versionId === 'head' ? [] : [ head ];
+        var knownVersions = getAllVersions();
+        var listVersions = knownVersions.filter(removeCurrentVersion);
+        var currentVersion = getCurrentVersion();
         sections.unshift({
-          name: 'Current API version',
+          name: 'Documentation Version',
           type: 'heading',
           className: 'version-picker',
-          children: [
-            {
-              name: versionFromPath,
-              type: 'toggle',
-              pages: commonVersions.concat(knownVersions)
-            }
-          ]
+          children: [ {
+            name: currentVersion.name,
+            type: 'toggle',
+            pages: commonVersions.concat(listVersions)
+          } ]
         });
+        function removeCurrentVersion (version) {
+          switch (versionId) {
+            case version.id: return false;
+            case 'latest': return !version.latest;
+            default: return true;
+          }
+        }
+        function getAllVersions () {
+          return response.versions.map(function(version) {
+            var latest = response.latest === version;
+            return {
+              type: 'version',
+              url: '/' + version,
+              name: getVersionFullString({ id: version, latest: latest }),
+              id: version,
+              latest: latest
+            };
+          });
+        }
+        function getVersionFullString (version) {
+          return version.latest
+              ? 'Latest Release (' + version.id + ')'
+              : 'Release ' + version.id;
+        }
+        function getCurrentVersion () {
+          switch (versionId) {
+            case 'head': return head;
+            case 'latest': return knownVersions.filter(getLatest)[0];
+            default: return knownVersions.filter(getVersion)[0];
+          }
+          function getLatest (version) { return version.latest; }
+          function getVersion (version) { return versionId === version.id; }
+        }
+        function getVersionIdFromPath () {
+          var path = $window.location.pathname;
+          if (path.length < 2) path = 'HEAD';
+          return path.match(/[^\/]+/)[0].toLowerCase();
+        }
       });
 
   return self = {

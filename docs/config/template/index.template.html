@@ -73,10 +73,12 @@
           <span flex></span> <!-- use up the empty space -->
 
           <div class="md-toolbar-item docs-tools" layout="column" layout-gt-md="row">
-            <md-button ng-if="!menu.currentPage || menu.currentSection.name === 'Getting Started'"
+            <md-button class="md-icon-button"
+                       aria-label="View on Github"
+                       ng-if="!menu.currentPage || menu.currentSection.name === 'Getting Started'"
                        target="_blank"
-                       ng-href="{{BUILDCONFIG.repository}}/commit/{{BUILDCONFIG.commit}}" >
-                Version {{BUILDCONFIG.version}}
+                       ng-href="{{BUILDCONFIG.repository}}/commit/{{BUILDCONFIG.commit}}">
+              <md-icon md-svg-src="/img/icons/github-icon.svg"></md-icon>
             </md-button>
 
             <md-button ng-repeat="doc in currentComponent.docs"
