@@ -141,8 +141,7 @@ function(Angularytics, $rootScope,$timeout) {
   '$location',
   '$rootScope',
   '$http',
-  '$window',
-function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $window) {
+function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http) {
 
   var sections = [{
     name: 'Getting Started',
@@ -271,7 +270,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
 
   $http.get("/docs.json")
       .success(function(response) {
-        var versionFromPath = $window.location.pathname.match(/^\/([^\/]+)/) || '0.9.0';
+        var versionFromPath = $location.pathname.replace(/^\//, '').replace(/\/.*/, '');
         var commonVersions = [
           { type: 'version', url: '/latest', id: 'latest', name: 'latest' },
           { type: 'version', url: '/HEAD', id: 'HEAD', name: 'HEAD' }
