@@ -76,7 +76,7 @@
             <md-button ng-if="!menu.currentPage || menu.currentSection.name === 'Getting Started'"
                        target="_blank"
                        ng-href="{{BUILDCONFIG.repository}}/commit/{{BUILDCONFIG.commit}}" >
-                {{BUILDCONFIG.version}}  -  SHA {{BUILDCONFIG.commit.substring(0,7)}}
+                Version {{BUILDCONFIG.version}}
             </md-button>
 
             <md-button ng-repeat="doc in currentComponent.docs"
