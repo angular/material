@@ -210,3 +210,9 @@ md-autocomplete {
 
   }
 }
+@media screen and (-ms-high-contrast: active) {
+  md-autocomplete,
+  .md-autocomplete-suggestions {
+    border: 1px solid #fff;
+  }
+}

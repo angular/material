@@ -176,3 +176,9 @@ md-bottom-sheet {
     }
   }
 }
+
+@media screen and (-ms-high-contrast: active) {
+  md-bottom-sheet {
+    border: 1px solid #fff;
+  }
+}
