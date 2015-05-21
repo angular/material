@@ -69,7 +69,7 @@ md-input-container {
   }
 
   textarea.md-input {
-    min-height: 2 * $input-line-height + $input-border-width-focused + $input-padding-top;
+    min-height: $input-line-height;
     -ms-flex-preferred-size: auto; //IE fix
   }
 
