@@ -1,6 +1,6 @@
 describe('MdButtonInkRipple', function() {
 
-  beforeEach(module('material.core'));
+  beforeEach(module('material.components.button', 'material.core'));
 
   var $element, $rootScope, $mdButtonInkRipple, $mdInkRipple;
   beforeEach(inject(function(_$rootScope_, _$mdButtonInkRipple_, _$mdInkRipple_) {
@@ -11,6 +11,16 @@ describe('MdButtonInkRipple', function() {
     $element = angular.element('<button></button>');
     spyOn($mdInkRipple, 'attach');
   }));
+
+  xit('attaches button ripple effects', inject(function($mdButtonInkRipple, $compile, $rootScope) {
+    spyOn($mdButtonInkRipple, 'attach');
+
+    var button = $compile("<md-button class='md-fab'><md-icon><md-icon></md-button>")($rootScope);
+    $rootScope.$apply();
+
+    expect($mdButtonInkRipple.attach).toHaveBeenCalledWith($rootScope, button);
+  }));
+
 
   it('applies the correct ripple configuration for a md-icon-button', function() {
     $element.addClass('md-icon-button');
