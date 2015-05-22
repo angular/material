@@ -27,6 +27,7 @@
   // TODO(jelbourn): Alt+down in date input to open calendar
   // TODO(jelbourn): Animations should use `.finally()` instead of `.then()`
   // TODO(jelbourn): improve default date parser in locale provider.
+  // TODO(jelbourn): read-only state.
 
   function calendarDirective() {
     return {
