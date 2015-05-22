@@ -14,3 +14,7 @@ fieldset.standard {
 legend {
   color: #3F51B5;
 }
+legend code {
+  color: #3F51B5;
+  font-weight: normal;
+}
