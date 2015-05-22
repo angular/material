@@ -74,20 +74,27 @@
 
           <div class="md-toolbar-item docs-tools" layout="column" layout-gt-md="row">
             <md-button class="md-icon-button"
+                       aria-label="View Bower Repo on Github"
+                       ng-if="!menu.currentPage || menu.currentSection.name === 'Getting Started'"
+                       target="_blank"
+                       ng-href="https://github.com/angular/bower-material">
+              <md-tooltip md-autohide>View Bower Source on Github</md-tooltip>
+              <md-icon md-svg-src="img/icons/bower-logo.svg"></md-icon>
+            </md-button>
+            <md-button class="md-icon-button"
                        aria-label="View on NPM"
                        ng-if="!menu.currentPage || menu.currentSection.name === 'Getting Started'"
                        target="_blank"
-                       style="transform: scale(1.3)"
                        ng-href="https://www.npmjs.com/package/angular-material">
-              <md-tooltip>View on NPM</md-tooltip>
-              <md-icon md-svg-src="img/icons/npm-logo.svg"></md-icon>
+              <md-tooltip md-autohide>View on NPM</md-tooltip>
+              <md-icon md-svg-src="img/icons/npm-logo.svg" style="transform: scale(1.3)"></md-icon>
             </md-button>
             <md-button class="md-icon-button"
                        aria-label="View Source on Github"
                        ng-if="!menu.currentPage || menu.currentSection.name === 'Getting Started'"
                        target="_blank"
                        ng-href="{{BUILDCONFIG.repository}}/{{menu.version.current.github}}">
-              <md-tooltip>View Source on Github</md-tooltip>
+              <md-tooltip md-autohide>View Source on Github</md-tooltip>
               <md-icon md-svg-src="img/icons/github-icon.svg"></md-icon>
             </md-button>
 
