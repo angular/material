@@ -7,23 +7,40 @@
   var child_process  = require('child_process');
   var defaultOptions = { encoding: 'utf-8' };
 
-  exec('git clone https://github.com/angular/code.material.angularjs.org.git');
+  exec('git clone https://github.com/angular/code.material.angularjs.org.git --depth=1');
 
   var docs           = require('./code.material.angularjs.org/docs.json');
 
   docs.versions.forEach(function (version) {
     exec([
-      'git co master',
-      'git co v{{version}}',
-      'git co origin/master -- docs/app/js/app.js',
-      'git co origin/master -- docs/app/css/style.css',
-      'git co origin/master -- docs/app/img/icons/github-icon.svg',
-      'git co origin/master -- docs/config/template/index.template.html',
+      'git checkout master',
+      'git checkout v{{version}}',
+      'git checkout origin/master -- docs/app/js/app.js',
+      'git checkout origin/master -- docs/app/css/style.css',
+      'git checkout origin/master -- docs/app/img/icons/github-icon.svg',
+      'git checkout origin/master -- docs/config/template/index.template.html',
       'gulp docs --release',
       'cp -r dist/docs/docs.js ../code.material.angularjs.org/{{version}}/',
       'cp -r dist/docs/docs.css ../code.material.angularjs.org/{{version}}/',
       'cp -r dist/docs/index.html ../code.material.angularjs.org/{{version}}/'
     ]);
+    function fill(str) {
+      return str.replace(/\{\{[^\}]+\}\}/g, function (match) {
+        return eval(match.substr(2, match.length - 4));
+      });
+    }
+    function exec (cmd, userOptions) {
+      if (cmd instanceof Array) {
+        return cmd.map(function (cmd) { return exec(cmd, userOptions); });
+      }
+      try {
+        var options = Object.create(defaultOptions);
+        for (var key in userOptions) options[key] = userOptions[key];
+        return child_process.execSync(fill(cmd), options).trim();
+      } catch (err) {
+        return err;
+      }
+    }
   });
   exec([
       'cd code.material.angularjs.org',
@@ -54,7 +71,7 @@
     try {
       var options = Object.create(defaultOptions);
       for (var key in userOptions) options[key] = userOptions[key];
-      return child_process.execSync(fill(cmd), options).trim();
+      return log(child_process.execSync(fill(cmd), options).trim());
     } catch (err) {
       return err;
     }
