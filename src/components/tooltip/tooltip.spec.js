@@ -29,7 +29,7 @@ describe('<md-tooltip> directive', function() {
     expect(findTooltip().length).toBe(0);
   }));
 
-  it('should describe parent', inject(function($compile, $rootScope, $animate) {
+  it('should preserve parent text', inject(function($compile, $rootScope, $animate) {
     var element = $compile('<md-button>' +
                'Hello' +
                '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
@@ -38,13 +38,23 @@ describe('<md-tooltip> directive', function() {
       $rootScope.$apply('isVisible = true');
       $animate.triggerCallbacks();
 
-    expect(element.attr('aria-describedby')).toEqual(findTooltip().attr('id'));
+    expect(element.attr('aria-label')).toBeUndefined();
+  }));
+
+  it('should label parent', inject(function($compile, $rootScope, $animate) {
+    var element = $compile('<md-button>' +
+               '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
+             '</md-button>')($rootScope);
+
+      $rootScope.$apply('isVisible = true');
+      $animate.triggerCallbacks();
+
+    expect(element.attr('aria-label')).toEqual('Tooltip');
 
       $rootScope.$apply('isVisible = false');
       $animate.triggerCallbacks();
 
-    expect(element.attr('aria-describedby')).toBeFalsy();
-
+    expect(element.attr('aria-label')).toEqual('Tooltip');
   }));
 
   it('should set visible on mouseenter and mouseleave', inject(function($compile, $rootScope, $timeout) {
