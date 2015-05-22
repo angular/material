@@ -13,18 +13,15 @@
           <h3>{{demoCtrl.demoTitle}}</h3>
           <span flex></span>
           <md-button
-            style="min-width: 72px; margin-left: auto;"
+            class="md-icon-button"
             ng-click="demoCtrl.$showSource = !demoCtrl.$showSource">
-            <div flex layout="row" layout-align="center center">
-              <md-icon md-svg-src="img/icons/ic_visibility_24px.svg"
-                 style="margin: 0 4px 0 0;">
-              </md-icon>
-              Source
-            </div>
+              <md-tooltip>View Source</md-tooltip>
+              <md-icon md-svg-src="img/icons/ic_code_24px.svg"></md-icon>
           </md-button>
-          <md-button ng-hide="{{exampleNotEditable}}" hide-sm ng-click="demoCtrl.editOnCodepen()">
+          <md-button ng-hide="{{exampleNotEditable}}" hide-sm ng-click="demoCtrl.editOnCodepen()"
+              class="md-icon-button">
+            <md-tooltip>Edit on CodePen</md-tooltip>
             <md-icon md-svg-src="img/icons/codepen-logo.svg"></md-icon>
-            Edit on codepen
           </md-button>
         </div>
       </md-toolbar>

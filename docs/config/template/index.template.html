@@ -58,7 +58,7 @@
         <md-button class="md-icon-button" hide-gt-sm aria-label="Toggle Menu">
           <md-icon md-svg-src="img/icons/ic_menu_24px.svg"></md-icon>
         </md-button>
-        <div layout="row" flex class="fill-height">
+        <div layout="row" flex class="fill-height" style="max-width: 864px; margin-left: 8px;">
           <h2 class="md-toolbar-item md-breadcrumb">
             <span ng-if="menu.currentPage.name !== menu.currentSection.name">
               <span hide-sm hide-md>{{menu.currentSection.name}}</span>
@@ -78,6 +78,7 @@
                        ng-if="!menu.currentPage || menu.currentSection.name === 'Getting Started'"
                        target="_blank"
                        ng-href="{{BUILDCONFIG.repository}}/{{menu.version.current.github}}">
+              <md-tooltip>View on Github</md-tooltip>
               <md-icon md-svg-src="img/icons/github-icon.svg"></md-icon>
             </md-button>
 
@@ -88,17 +89,21 @@
               {{doc | humanizeDoc | directiveBrackets}}
             </md-button>
 
-            <md-button ng-class="{hide: !currentDoc || !currentDoc.hasDemo}"
+            <md-button
+              class="md-icon-button"
+              ng-class="{hide: !currentDoc || !currentDoc.hasDemo}"
               ng-href="#/demo/{{currentComponent.name}}">
-              <md-icon md-svg-src="img/icons/ic_play_arrow_24px.svg"></md-icon>
-              <span>View Demo</span>
+              <md-icon md-svg-src="img/icons/ic_play_circle_fill_24px.svg"></md-icon>
+              <md-tooltip>View Demo</md-tooltip>
             </md-button>
 
-            <md-button ng-class="{hide: !currentDoc}"
+            <md-button
+              class="md-icon-button"
+              ng-class="{hide: !currentDoc}"
               ng-href="{{currentDoc.githubUrl}}"
               hide-sm hide-md>
-              <md-icon md-svg-src="img/icons/ic_launch_24px.svg"></md-icon>
-              <span>View on Github</span>
+              <md-icon md-svg-src="img/icons/github-icon.svg"></md-icon>
+              <md-tooltip>View on Github</md-tooltip>
             </md-button>
           </div>
         </div>
