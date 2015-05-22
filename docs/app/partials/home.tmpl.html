@@ -1,76 +1,51 @@
 <div ng-controller="HomeCtrl" layout="column" class="doc-content">
-    <md-content>
-        <p>The <strong>Angular Material</strong> project is an implementation of Material Design in Angular.js. This project provides a set of reusable, well-tested, and accessible UI components based on the Material Design system.</p>
+  <md-content>
+    <h2 class="md-title" style="margin-top: 0;">What is Angular Material?</h2>
+    <p>The Angular Material project is an implementation of Material Design in Angular.js. This project provides a set of reusable, well-tested, and accessible UI components based on the Material Design system.</p>
+    <p>Similar to the
+      <a href="http://www.polymer-project.org/">Polymer</a> project's
+      <a href="http://www.polymer-project.org/docs/elements/paper-elements.html">Paper elements</a> collection, Angular Material is supported internally at Google by the Angular.js, Material Design UX and other product teams.
+    </p>
+    <ul class="buckets" layout layout-align="center center" layout-wrap>
+      <li flex="25" flex-md="50" flex-sm="50" ng-repeat="(index, link) in [
+        { href: 'getting-started', icon: 'school', text: 'Getting Started' },
+        { href: 'demo', icon: 'play_circle_fill', text: 'Demos' },
+        { href: 'CSS/typography', icon: 'build', text: 'Customization' },
+        { href: 'api', icon: 'code', text: 'API Reference' }
+      ]">
+        <md-button class="md-primary md-raised" ng-href="#/{{link.href}}" style="{{ index === 3 ? 'margin-right:0;' : index ? '' : 'margin-left:0;' }}">
+          <md-icon class="block" md-svg-src="img/icons/ic_{{link.icon}}_24px.svg"></md-icon>
+          {{link.text}}
+        </md-button>
+      </li>
+    </ul>
 
-        <p>Similar to the
-            <a href="http://www.polymer-project.org/">Polymer</a> project's
-            <a href="http://www.polymer-project.org/docs/elements/paper-elements.html">Paper elements</a> collection, Angular Material is supported internally at Google by the Angular.js, Material Design UX and other product teams.
-        </p>
+    <br/>
+    <h2 class="md-title">What is Material Design?</h2>
+    <p>
+      Material Design is a specification for a
+      unified system of visual, motion, and interaction design that adapts across different devices and different
+      screen sizes.
+    </p>
+    <ul class="buckets" layout layout-align="center center" layout-wrap>
+      <li flex="50" flex-md="100" flex-sm="100" ng-repeat="(index, link) in [
+        { href: 'https://www.youtube.com/watch?v=Q8TXgCzxEnw', icon: 'ondemand_video', text: 'Watch a video about Material Design' },
+        { href: 'http://www.google.com/design/spec/material-design/', icon: 'launch', text: 'Learn more about Material Design' }
+      ]">
+        <md-button style="margin-{{index ? 'right' : 'left'}}: 0" class="md-primary md-raised" ng-href="{{link.href}}">
+          <md-icon class="block" md-svg-src="img/icons/ic_{{link.icon}}_24px.svg"></md-icon>
+          {{link.text}}
+        </md-button>
+      </li>
+    </ul>
 
-        <ul class="buckets" layout layout-align="center center" layout-wrap>
-          <li flex="25" flex-md="50" flex-sm="50">
-            <md-card>
-              <md-card-content>
-                <a ng-href="#/getting-started">Getting Started</a>
-              </md-card-content>
-            </md-card>
-          </li>
-          <li flex="25" flex-md="50" flex-sm="50">
-            <md-card>
-              <md-card-content>
-                <a ng-href="#/demo/">Demos</a>
-              </md-card-content>
-            </md-card>
-          </li>
-          <li flex="25" flex-md="50" flex-sm="50">
-            <md-card>
-              <md-card-content>
-                <a ng-href="#/CSS/typography">Customization</a>
-              </md-card-content>
-            </md-card>
-          </li>
-          <li flex="25" flex-md="50" flex-sm="50">
-            <md-card>
-              <md-card-content>
-                <a ng-href="#/api/">API Reference</a>
-              </md-card-content>
-            </md-card>
-          </li>
-        </ul>
-
-        <h2 class="md-title">What is Material Design?</h2>
-        <p>
-            <a href="http://www.google.com/design/spec/material-design/">Material Design</a> is a specification for a
-            unified system of visual, motion, and interaction design that adapts across different devices and different
-            screen sizes.
-
-            Below is a brief video that presents the Material Design system:
-        </p>
-
-        <md-content>
-          <div style="max-width: 560px; margin: 0 auto;">
-            <div class="responsive-video">
-              <iframe title="Material Design" src="//www.youtube.com/embed/Q8TXgCzxEnw" frameborder="0" allowfullscreen></iframe>
-            </div>
-          </div>
-        </md-content>
-        <ul>
-            <li>These docs were generated from source in the `master` branch:
-                <ul style="padding-top:5px;">
-                    <li>
-                        at commit <a ng-href="{{BUILDCONFIG.repository}}/commit/{{BUILDCONFIG.commit}}" target="_blank">
-                        v{{BUILDCONFIG.version}}  -  SHA {{BUILDCONFIG.commit.substring(0,7)}}
-                    </a>.
-                    </li>
-                    <li>
-                        on {{BUILDCONFIG.date}} GMT.
-                    </li>
-                </ul>
-
-            </li>
-        </ul>
-        <br/>
-        <br/>
-    </md-content>
+    <br/>
+    <md-divider></md-divider>
+    <p class="md-caption" style="text-align: center; margin-bottom: 0;">
+      These docs were generated from
+      (<a ng-href="{{BUILDCONFIG.repository}}/commit/{{BUILDCONFIG.commit}}" target="_blank">v{{BUILDCONFIG.version}} - SHA {{BUILDCONFIG.commit.substring(0,7)}}</a>)
+      on (<strong>{{BUILDCONFIG.date}}</strong>) GMT.
+    </p>
+  </md-content>
 </div>
 

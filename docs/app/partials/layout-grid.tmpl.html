@@ -1,11 +1,9 @@
-<div ng-controller="LayoutCtrl" layout="column" layout-fill class="layout-content">
+<div ng-controller="LayoutCtrl" class="layout-content">
 
   <p>
     To customize the size and position of elements in a layout, use the
     <code>flex</code>, <code>offset</code>, and <code>flex-order</code> attributes.
   </p>
-
-  <md-divider></md-divider>
 
   <docs-demo demo-title="Flex Attribute" class="small-demo">
     <demo-file name="index.html">
@@ -26,9 +24,6 @@
     Add the <code>flex</code> attribute to a layout's child element, and it
     will flex (stretch) to fill the available area.
   </p>
-
-
-  <md-divider></md-divider>
 
   <docs-demo demo-title="Flex Percent Values" class="small-demo">
     <demo-file name="index.html">
@@ -51,6 +46,7 @@
       </div>
     </demo-file>
   </docs-demo>
+
   <p>
     A layout child's <code>flex</code> attribute can be given an integer value from 0-100.
     The element will stretch to the percentage of available space matching the value.
@@ -64,7 +60,6 @@
   See the <a href="#/layout/options">layout options page</a> for more information on responsive flex attributes.
   </p>
 
-  <md-divider></md-divider>
   <docs-demo demo-title="Flex Order Attribute" class="small-demo">
     <demo-file name="index.html">
       <div layout="row" layout-margin>
@@ -114,7 +109,7 @@
       <td>Sets element order on devices greater than 1200px wide.</td>
     </tr>
   </table>
-  <md-divider></md-divider>
+
   <docs-demo demo-title="Flex Offset Attribute" class="small-demo">
     <demo-file name="index.html">
       <div layout="row">

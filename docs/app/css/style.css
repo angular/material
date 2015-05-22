@@ -27,11 +27,21 @@ table {
  * TYPE DEFAULTS
  ***************/
 a {
-  color: #3f51b5;
+  color: #4054B2;
   text-decoration: none;
+  font-weight: 400;
+  border-bottom: 1px solid rgba(64, 84, 178, 0.25);
+  -webkit-transition: border-bottom 0.35s;
+  -moz-transition: border-bottom 0.35s;
+  -ms-transition: border-bottom 0.35s;
+  -o-transition: border-bottom 0.35s;
+  transition: border-bottom 0.35s;
 }
 a:hover, a:focus {
-  text-decoration: underline;
+  border-bottom: 1px solid #4054B2;
+}
+a.md-button {
+  border-bottom: none;
 }
 h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
@@ -62,8 +72,9 @@ p {
   font-size: 1.6rem;
   font-weight: 400;
   letter-spacing: 0.010em;
-  line-height: 2.2rem;
-  margin: 1.6rem 0;
+  line-height: 1.6em;
+  margin: 0.8em 0 1.6em;
+  -webkit-margin-collapse: ;
 }
 strong {
   font-weight: 500;
@@ -531,7 +542,11 @@ ul.buckets li a {
 }
 ul.buckets li a:hover,
 ul.buckets li a:focus {
-  background-color: #03a9f4;
+  background-color: #3F51B5;
+  color: white;
+}
+ul.buckets li a:hover md-icon,
+ul.buckets li a:focus md-icon {
   color: white;
 }
 /************
@@ -638,7 +653,6 @@ md-content.demo-source-container > hljs > pre > code.highlight {
   overflow: hidden;
   padding-bottom: 75%;
   position: relative;
-  margin-bottom: 25px;
 }
 .responsive-video iframe {
   position: absolute;
@@ -686,3 +700,9 @@ ul.methods > li:first-child > *:first-child {
 .version-picker .menu-toggle-list {
   background: #f6f6f6 !important;
 }
+ md-icon.block {
+   color: #3F51B5;
+   display: block;
+   height: 50px;
+   width:  50px;
+ }
