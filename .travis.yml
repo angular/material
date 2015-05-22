@@ -18,6 +18,8 @@ before_script:
 
 script:
   - gulp karma --browsers=Firefox
+
+after_success:
   - ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT
 
 notifications:
