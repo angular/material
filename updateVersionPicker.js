@@ -19,17 +19,21 @@
     exec([
       'rm -rf dist',
       'git checkout v' + version,
-      'git checkout origin/master -- docs/app/js/app.js',
-      'git checkout origin/master -- docs/app/css/style.css',
-      'git checkout origin/master -- docs/app/img/icons/github-icon.svg',
-      'git checkout origin/master -- docs/config/template/index.template.html',
-      'git checkout origin/master -- docs/app/partials/menu-link.tmpl.html',
+      checkout('app/js/app.js'),
+      checkout('app/css/style.css'),
+      checkout('app/img/icons'),
+      checkout('app/partials'),
+      checkout('config/template/index.template.html'),
       'gulp docs --release',
       'cp -r dist/docs/docs.js /tmp/ngcode/' + version,
       'cp -r dist/docs/docs.css /tmp/ngcode/' + version,
       'cp -r dist/docs/index.html /tmp/ngcode/' + version,
+      'cp -r dist/docs/img/icons/* /tmp/ngcode/' + version + '/img/icons',
       'git checkout master'
     ]);
+    function checkout (filename) {
+      return 'git checkout origin/master -- docs/' + filename;
+    }
   });
   exec([
       'ls',
