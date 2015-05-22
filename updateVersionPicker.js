@@ -14,6 +14,7 @@
   docs.versions.forEach(function (version) {
     exec([
       'git checkout master',
+      'rm -rf dist',
       'git checkout v{{version}}',
       'git checkout origin/master -- docs/app/js/app.js',
       'git checkout origin/master -- docs/app/css/style.css',
@@ -44,12 +45,14 @@
   });
   exec([
       'cd code.material.angularjs.org',
+      'ls',
       'rm -rf latest',
       'cp -r {{docs.latest}} latest',
       'git add -A',
-      'git commit -m "updating version picker for old releases"',
-      'cd ..',
-      'rm -rf code.material.angularjs.org'
+      //'git commit -m "updating version picker for old releases"',
+      //'git push',
+      //'cd ..',
+      //'rm -rf code.material.angularjs.org'
   ]);
 
   //-- utility methods
@@ -71,6 +74,7 @@
     try {
       var options = Object.create(defaultOptions);
       for (var key in userOptions) options[key] = userOptions[key];
+      log('\n--------\n' + fill(cmd));
       return log(child_process.execSync(fill(cmd), options).trim());
     } catch (err) {
       return err;
