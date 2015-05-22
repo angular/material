@@ -23,7 +23,7 @@ angular
  *   <md-tooltip>
  *     Play Music
  *   </md-tooltip>
- *   <md-icon icon="/img/icons/ic_play_arrow_24px.svg"></md-icon>
+ *   <md-icon icon="img/icons/ic_play_arrow_24px.svg"></md-icon>
  * </md-button>
  * </hljs>
  *

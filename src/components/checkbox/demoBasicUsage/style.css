@@ -7,3 +7,10 @@
 p {
   padding-left: 8px;
 }
+fieldset.standard {
+  border-style: solid;
+  border-width: 1px;
+}
+legend {
+  color: #3F51B5;
+}

@@ -1,7 +1,7 @@
 var app = angular.module('toolbarDemo2', ['ngMaterial']);
 
 app.controller('AppCtrl', function($scope) {
-  var imagePath = 'https://material.angularjs.org/img/list/60.jpeg';
+  var imagePath = 'img/list/60.jpeg';
 
   $scope.todos = [];
   for (var i = 0; i < 15; i++) {

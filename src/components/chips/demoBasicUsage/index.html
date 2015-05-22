@@ -1,7 +1,7 @@
 <div ng-controller="BasicDemoCtrl as ctrl" layout="column">
 
   <md-content class="md-padding" layout="column">
-    <p>Use a custom chip template.</p>
+    <h2 class="md-title">Use a custom chip template.</h2>
 
     <md-chips ng-model="ctrl.roFruitNames" readonly="ctrl.readonly">
       <md-chip-template>
@@ -10,11 +10,13 @@
       </md-chip-template>
     </md-chips>
 
-    <p>Use the default chip template.</p>
+    <br/>
+    <h2 class="md-title">Use the default chip template.</h2>
 
     <md-chips ng-model="ctrl.fruitNames" readonly="ctrl.readonly"></md-chips>
 
-    <p>Use Placeholders and override hint texts.</p>
+    <br/>
+    <h2 class="md-title">Use Placeholders and override hint texts.</h2>
 
     <md-chips
         ng-model="ctrl.tags"
@@ -24,7 +26,8 @@
         delete-hint="Press delete to remove tag"
         secondary-placeholder="+Tag"></md-chips>
 
-    <p>Display an ordered set of objects as chips (with custom template).</p>
+    <br/>
+    <h2 class="md-title">Display an ordered set of objects as chips (with custom template).</h2>
 
     <md-chips class="custom-chips" ng-model="ctrl.vegObjs" readonly="ctrl.readonly"
         md-on-append="ctrl.newVeg($chip)">

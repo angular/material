@@ -5,7 +5,7 @@ angular.module('listDemo1', ['ngMaterial'])
     .iconSet('communication', 'img/icons/sets/communication-icons.svg', 24);
 })
 .controller('AppCtrl', function($scope) {
-    var imagePath = 'https://material.angularjs.org/img/list/60.jpeg';
+    var imagePath = 'img/list/60.jpeg';
 
     $scope.phones = [
       { type: 'Home', number: '(555) 251-1234' },
