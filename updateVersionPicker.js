@@ -7,7 +7,10 @@
   var child_process  = require('child_process');
   var defaultOptions = { encoding: 'utf-8' };
 
-  exec('git clone https://github.com/angular/code.material.angularjs.org.git --depth=1');
+  exec(
+      'rm -rf /tmp/ngcode',
+      'git clone https://github.com/angular/code.material.angularjs.org.git /tmp/ngcode --depth=1'
+  );
 
   var docs           = require('./code.material.angularjs.org/docs.json');
 
@@ -21,9 +24,10 @@
       'git checkout origin/master -- docs/app/img/icons/github-icon.svg',
       'git checkout origin/master -- docs/config/template/index.template.html',
       'gulp docs --release',
-      'cp -r dist/docs/docs.js ../code.material.angularjs.org/{{version}}/',
-      'cp -r dist/docs/docs.css ../code.material.angularjs.org/{{version}}/',
-      'cp -r dist/docs/index.html ../code.material.angularjs.org/{{version}}/'
+      'cp -r dist/docs/docs.js /tmp/ngcode/{{version}}/',
+      'cp -r dist/docs/docs.css /tmp/ngcode/{{version}}/',
+      'cp -r dist/docs/index.html /tmp/ngcode/{{version}}/',
+      'cp -r dist/docs/img/icons/github-icon.svg /tmp/ngcode/{{version}}/img/icons/'
     ]);
     function fill(str) {
       return str.replace(/\{\{[^\}]+\}\}/g, function (match) {
