@@ -13,7 +13,11 @@
         { href: 'CSS/typography', icon: 'build', text: 'Customization' },
         { href: 'api', icon: 'code', text: 'API Reference' }
       ]">
-        <md-button class="md-primary md-raised" ng-href="#/{{link.href}}" style="{{ index === 3 ? 'margin-right:0;' : index ? '' : 'margin-left:0;' }}">
+        <md-button
+            class="md-primary md-raised"
+            ng-href="#/{{link.href}}"
+            aria-label="{{link.text}}"
+            style="{{ index === 3 ? 'margin-right:0;' : index ? '' : 'margin-left:0;' }}">
           <md-icon class="block" md-svg-src="img/icons/ic_{{link.icon}}_24px.svg"></md-icon>
           {{link.text}}
         </md-button>
@@ -32,7 +36,12 @@
         { href: 'https://www.youtube.com/watch?v=Q8TXgCzxEnw', icon: 'ondemand_video', text: 'Watch a video about Material Design' },
         { href: 'http://www.google.com/design/spec/material-design/', icon: 'launch', text: 'Learn more about Material Design' }
       ]">
-        <md-button style="margin-{{index ? 'right' : 'left'}}: 0" class="md-primary md-raised" ng-href="{{link.href}}">
+        <md-button
+            style="margin-{{index ? 'right' : 'left'}}: 0"
+            class="md-primary md-raised"
+            target="_blank"
+            aria-label="{{link.text}}"
+            ng-href="{{link.href}}">
           <md-icon class="block" md-svg-src="img/icons/ic_{{link.icon}}_24px.svg"></md-icon>
           {{link.text}}
         </md-button>

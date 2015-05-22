@@ -700,9 +700,15 @@ ul.methods > li:first-child > *:first-child {
 .version-picker .menu-toggle-list {
   background: #f6f6f6 !important;
 }
- md-icon.block {
-   color: #3F51B5;
-   display: block;
-   height: 50px;
-   width:  50px;
- }
+md-icon.block {
+  color: #3F51B5;
+  display: block;
+  height: 50px;
+  width:  50px;
+}
+.doc-demo-content {
+  padding: 0;
+}
+docs-demo .doc-demo-content {
+  padding: 16px 0 16px 16px;
+}

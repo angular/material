@@ -1,4 +1,4 @@
-<div layout="column" class="doc-content" style="padding: 0;">
+<div layout="column" class="doc-demo-content doc-content">
   <div flex layout="column" style="z-index:1">
 
     <div class="doc-description" ng-bind-html="demoCtrl.demoDescription.contents | toHtml"></div>
@@ -15,12 +15,12 @@
           <md-button
             class="md-icon-button"
             ng-click="demoCtrl.$showSource = !demoCtrl.$showSource">
-              <md-tooltip>View Source</md-tooltip>
+              <md-tooltip md-autohide>View Source</md-tooltip>
               <md-icon md-svg-src="img/icons/ic_code_24px.svg"></md-icon>
           </md-button>
           <md-button ng-hide="{{exampleNotEditable}}" hide-sm ng-click="demoCtrl.editOnCodepen()"
               class="md-icon-button">
-            <md-tooltip>Edit on CodePen</md-tooltip>
+            <md-tooltip md-autohide>Edit on CodePen</md-tooltip>
             <md-icon md-svg-src="img/icons/codepen-logo.svg"></md-icon>
           </md-button>
         </div>
