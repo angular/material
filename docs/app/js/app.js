@@ -144,6 +144,8 @@ function(Angularytics, $rootScope,$timeout) {
   '$window',
 function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $window) {
 
+  var version = {};
+
   var sections = [{
     name: 'Getting Started',
     url: '/getting-started',
@@ -272,11 +274,12 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   $http.get("/docs.json")
       .success(function(response) {
         var versionId = getVersionIdFromPath();
-        var head = { type: 'version', url: '/HEAD', id: 'head', name: 'HEAD (master)' };
+        var head = { type: 'version', url: '/HEAD', id: 'head', name: 'HEAD (master)', github: '' };
         var commonVersions = versionId === 'head' ? [] : [ head ];
         var knownVersions = getAllVersions();
         var listVersions = knownVersions.filter(removeCurrentVersion);
         var currentVersion = getCurrentVersion();
+        version.current = currentVersion;
         sections.unshift({
           name: 'Documentation Version',
           type: 'heading',
@@ -302,7 +305,8 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
               url: '/' + version,
               name: getVersionFullString({ id: version, latest: latest }),
               id: version,
-              latest: latest
+              latest: latest,
+              github: 'tree/v' + version
             };
           });
         }
@@ -328,6 +332,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       });
 
   return self = {
+    version:  version,
     sections: sections,
 
     selectSection: function(section) {

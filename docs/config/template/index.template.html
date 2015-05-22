@@ -77,7 +77,7 @@
                        aria-label="View on Github"
                        ng-if="!menu.currentPage || menu.currentSection.name === 'Getting Started'"
                        target="_blank"
-                       ng-href="{{BUILDCONFIG.repository}}/commit/{{BUILDCONFIG.commit}}">
+                       ng-href="{{BUILDCONFIG.repository}}/{{menu.version.current.github}}">
               <md-icon md-svg-src="img/icons/github-icon.svg"></md-icon>
             </md-button>
 

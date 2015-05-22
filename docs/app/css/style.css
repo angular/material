@@ -680,9 +680,9 @@ ul.methods > li:first-child > *:first-child {
 }
 
 .version-picker {
-  background: #EDEDED !important;
+  background: #f6f6f6 !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12)
 }
 .version-picker .menu-toggle-list {
-  background: #EDEDED !important;
+  background: #f6f6f6 !important;
 }
