@@ -79,7 +79,7 @@
                        target="_blank"
                        ng-href="https://github.com/angular/bower-material">
               <md-tooltip md-autohide>View Bower Source on Github</md-tooltip>
-              <md-icon md-svg-src="img/icons/bower-logo.svg"></md-icon>
+              <md-icon md-svg-src="img/icons/bower-logo-grayscale.svg"></md-icon>
             </md-button>
             <md-button class="md-icon-button"
                        aria-label="View on NPM"
@@ -87,7 +87,7 @@
                        target="_blank"
                        ng-href="https://www.npmjs.com/package/angular-material">
               <md-tooltip md-autohide>View on NPM</md-tooltip>
-              <md-icon md-svg-src="img/icons/npm-logo.svg" style="transform: scale(1.3)"></md-icon>
+              <md-icon md-svg-src="img/icons/npm-logo-color.svg" style="transform: scale(1.3)"></md-icon>
             </md-button>
             <md-button class="md-icon-button"
                        aria-label="View Source on Github"
@@ -95,7 +95,7 @@
                        target="_blank"
                        ng-href="{{BUILDCONFIG.repository}}/{{menu.version.current.github}}">
               <md-tooltip md-autohide>View Source on Github</md-tooltip>
-              <md-icon md-svg-src="img/icons/github-icon.svg"></md-icon>
+              <md-icon md-svg-src="img/icons/github-icon.svg" style="color: rgba(255,255,255,0.97);"></md-icon>
             </md-button>
 
             <md-button ng-repeat="doc in currentComponent.docs"
