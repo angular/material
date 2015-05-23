@@ -14,10 +14,10 @@ angular
 
       // Create a set of sizes...
       $scope.sizes = [
-        {size:12,padding:0},
-        {size:21,padding:2},
+        {size:48,padding:10},
         {size:36,padding:6},
-        {size:48,padding:10}
+        {size:21,padding:2},
+        {size:12,padding:0}
       ];
 
       $scope.fonts = [].concat(iconData);
