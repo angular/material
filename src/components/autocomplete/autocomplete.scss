@@ -32,7 +32,6 @@ $input-error-height: 24px !default;
   }
 }
 md-autocomplete {
-  box-shadow: 0 2px 5px rgba(black, 0.25);
   border-radius: 2px;
   display: block;
   height: 40px;
@@ -41,7 +40,6 @@ md-autocomplete {
   min-width: 190px;
   &[md-floating-label] {
     padding-bottom: $input-container-padding + $input-error-height;
-    box-shadow: none;
     border-radius: 0;
     background: transparent;
     height: auto;
@@ -175,7 +173,6 @@ md-autocomplete {
 }
 .md-autocomplete-suggestions {
   position: absolute;
-  box-shadow: 0 2px 5px rgba(black, 0.25);
   margin: 0;
   list-style: none;
   padding: 0;

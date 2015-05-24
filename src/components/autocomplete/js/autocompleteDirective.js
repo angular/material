@@ -89,7 +89,7 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
     },
     template: function (element, attr) {
       return '\
-        <md-autocomplete-wrap role="listbox">\
+        <md-autocomplete-wrap ng-class="{ \'md-whiteframe-z1\': !floatingLabel }" role="listbox">\
           ' + getInputElement() + '\
           <button\
               type="button"\
@@ -103,7 +103,7 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
               ng-if="$mdAutocompleteCtrl.loading"\
               md-mode="indeterminate"></md-progress-linear>\
           <ul role="presentation"\
-              class="md-autocomplete-suggestions {{menuClass || \'\'}}"\
+              class="md-autocomplete-suggestions md-whiteframe-z1 {{menuClass || \'\'}}"\
               id="ul-{{$mdAutocompleteCtrl.id}}"\
               ng-mouseenter="$mdAutocompleteCtrl.listEnter()"\
               ng-mouseleave="$mdAutocompleteCtrl.listLeave()"\
