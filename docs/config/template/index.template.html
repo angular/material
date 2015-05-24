@@ -1,7 +1,10 @@
 <!doctype html>
 <html ng-app="docsApp" ng-controller="DocsCtrl" lang="en" ng-strict-di>
 <head>
-<title ng-bind="(menu.currentSection.name || 'Material Design') + (menu.currentPage ? (' > ' + (menu.currentPage | humanizeDoc)) : '')">Material Design</title>
+<title ng-bind="'Angular Material - ' + menu.currentSection.name +
+    (menu.currentSection === menu.currentPage ? '' : ' > ' + menu.currentPage.name)">
+  Angular Material
+</title>
 <link rel="icon" type="image/x-icon" href="favicon.ico" />
 <meta name="viewport" content="initial-scale=1" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
@@ -14,14 +17,12 @@
               md-component-id="left"
               md-is-locked-open="$mdMedia('gt-sm')">
 
-    <md-toolbar class="md-whiteframe-glow-z2">
-      <h1 class="md-toolbar-tools">
-        <a ng-href="#/" layout="row" flex class="docs-logo">
-          <md-icon md-svg-src="md-menu"></md-icon>
-          <div class="docs-logotype">Material Design</div>
-        </a>
-      </h1>
-    </md-toolbar>
+    <header class="nav-header md-whiteframe-glow-z1">
+      <a ng-href="#/" class="docs-logo">
+        <img src="img/icons/angular-logo.svg"/>
+        <h1 class="docs-logotype md-heading">Angular Material</h1>
+      </a>
+    </header>
 
     <ul class="skip-links">
       <li class="md-whiteframe-z2">
@@ -52,30 +53,33 @@
   </md-sidenav>
 
   <div layout="column" tabIndex="-1" role="main" flex>
-    <md-toolbar class="md-whiteframe-glow-z2">
+    <md-toolbar class="md-whiteframe-glow-z1 site-content-toolbar">
 
-      <div class="md-toolbar-tools docs-toolbar-tools" ng-click="openMenu()" tabIndex="-1" style="padding-left: 8px;">
+      <div class="md-toolbar-tools docs-toolbar-tools" ng-click="openMenu()" tabIndex="-1">
         <md-button class="md-icon-button" hide-gt-sm aria-label="Toggle Menu">
           <md-icon md-svg-src="img/icons/ic_menu_24px.svg"></md-icon>
         </md-button>
-        <div layout="row" flex class="fill-height" style="max-width: 864px; margin-left: 8px;">
-          <h2 class="md-toolbar-item md-breadcrumb">
+        <div layout="row" flex class="fill-height">
+          <h2 class="md-toolbar-item md-breadcrumb md-headline">
             <span ng-if="menu.currentPage.name !== menu.currentSection.name">
               <span hide-sm hide-md>{{menu.currentSection.name}}</span>
               <span class="docs-menu-separator-icon" hide-sm hide-md style="transform: translate3d(0, 1px, 0)">
                 <span class="md-visually-hidden">-</span>
-                <img src="img/docArrow.png" alt="" aria-hidden="true">
+                <md-icon
+                    aria-hidden="true"
+                    md-svg-src="img/icons/ic_chevron_right_24px.svg"
+                    style="transform:translateY(-2px)"></md-icon>
               </span>
             </span>
-            <span class="md-breadcrumb-page">{{(menu.currentPage | humanizeDoc) || 'Angular Material' }}</span>
+            <span class="md-breadcrumb-page">{{menu.currentPage | humanizeDoc}}</span>
           </h2>
 
           <span flex></span> <!-- use up the empty space -->
 
-          <div class="md-toolbar-item docs-tools" layout="column" layout-gt-md="row">
+          <div class="md-toolbar-item docs-tools" layout="row">
             <md-button class="md-icon-button"
                        aria-label="Install with Bower"
-                       ng-if="!menu.currentPage || menu.currentSection.name === 'Getting Started'"
+                       ng-if="!currentComponent.docs.length"
                        target="_blank"
                        ng-href="https://github.com/angular/bower-material">
               <md-tooltip md-autohide>Install with Bower</md-tooltip>
@@ -83,27 +87,35 @@
             </md-button>
             <md-button class="md-icon-button"
                        aria-label="Install with NPM"
-                       ng-if="!menu.currentPage || menu.currentSection.name === 'Getting Started'"
+                       ng-if="!currentComponent.docs.length"
                        target="_blank"
                        ng-href="https://www.npmjs.com/package/angular-material">
               <md-tooltip md-autohide>Install with NPM</md-tooltip>
-              <md-icon md-svg-src="img/icons/npm-logo-color.svg" style="transform: scale(1.3)"></md-icon>
+              <md-icon md-svg-src="img/icons/npm-logo.svg" style="transform: scale(1.3)"></md-icon>
             </md-button>
             <md-button class="md-icon-button"
                        aria-label="View Source on Github"
-                       ng-if="!menu.currentPage || menu.currentSection.name === 'Getting Started'"
+                       ng-if="!currentComponent.docs.length"
                        target="_blank"
                        ng-href="{{BUILDCONFIG.repository}}/{{menu.version.current.github}}">
               <md-tooltip md-autohide>View Source on Github</md-tooltip>
-              <md-icon md-svg-src="img/icons/github-icon.svg" style="color: rgba(255,255,255,0.97);"></md-icon>
+              <md-icon md-svg-src="img/icons/github.svg" style="color: rgba(255,255,255,0.97);"></md-icon>
             </md-button>
 
-            <md-button ng-repeat="doc in currentComponent.docs"
-              ng-href="#{{doc.url}}"
-              ng-class="{hide: path().indexOf('demo') == -1}"
-              aria-label="{{ doc | humanizeDoc }}">
-              {{doc | humanizeDoc | directiveBrackets}}
-            </md-button>
+            <md-select
+                ng-if="currentComponent.docs.length"
+                ng-class="{ hide: path().indexOf('demo') == -1 }"
+                ng-model="relatedPage"
+                placeholder="Related Pages"
+                class="md-body-1">
+              <md-option
+                  ng-repeat="doc in currentComponent.docs"
+                  ng-value="doc.url"
+                  ng-click="redirectToUrl(doc.url)"
+                  aria-label="{{ doc | humanizeDoc }}">
+                {{doc | humanizeDoc | directiveBrackets}}
+              </md-option>
+            </md-select>
 
             <md-button
               class="md-icon-button"

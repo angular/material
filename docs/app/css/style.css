@@ -201,6 +201,12 @@ code:not(.highlight) {
 /************
  * DOCS MENU
  ************/
+.site-sidenav {
+  background: #3F51B5;
+}
+.site-sidenav md-content {
+  background: transparent;
+}
 .site-sidenav,
 .site-sidenav.md-locked-open-add-active,
 .site-sidenav.md-locked-open {
@@ -223,19 +229,18 @@ code:not(.highlight) {
 .docs-menu > li:nth-child(1) {
   border-top: none;
 }
-.md-whiteframe-glow-z2 {
-  box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.2), 0px 0 4px 3px rgba(0, 0, 0, 0.14), 0px 0px 8px 1px rgba(0, 0, 0, 0.12);
+.md-whiteframe-glow-z1 {
+  box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.14),
+              0px 0px 2px 2px rgba(0, 0, 0, 0.098),
+              0px 0px 5px 1px rgba(0, 0, 0, 0.084);
 }
 .docs-menu > li {
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-}
-.docs-menu > li:nth-child(-n+2) {
-  border-top: none;
+  border-bottom: 1px solid #6674C4;
 }
 
 .docs-menu .md-button {
   border-radius: 0;
-  color: inherit;
+  color: white;
   cursor: pointer;
   display: block;
   line-height: 40px;
@@ -247,6 +252,13 @@ code:not(.highlight) {
   text-decoration: none;
   white-space: normal;
   width: 100%;
+}
+.docs-menu .md-button:hover,
+.docs-menu .md-button:focus {
+  background: #6070C7 !important;
+}
+.docs-menu .md-button md-icon {
+  color: white;
 }
 
 .docs-menu md-select {
@@ -276,7 +288,7 @@ code:not(.highlight) {
   padding: 0;
 }
 .docs-menu .md-button.active {
-  color: #03a9f4;
+  background: #6070C7;
 }
 .menu-heading {
   display: block;
@@ -285,14 +297,13 @@ code:not(.highlight) {
   padding: 8px 16px 0;
   text-align: left;
   width: 100%;
-  color: rgba(0,0,0, 0.54)
+  color: rgba(255, 255, 255, 0.54)
 }
 .docs-menu li.parentActive,
 .docs-menu li.parentActive .menu-toggle-list {
-  background-color: #f6f6f6;
+  /*background-color: #5262BC !important;*/
 }
 .menu-toggle-list {
-  background: #fff;
   max-height: 2000px;
   overflow: hidden;
   position: relative;
@@ -330,28 +341,66 @@ code:not(.highlight) {
 
 /* End Docs Menu */
 
+.docs-logo {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 16px;
+}
 .docs-logo:focus {
   outline: none;
 }
-  .docs-logo md-icon {
-    height: 40px;
-    margin: 0;
-    width: 40px;
-  }
-  .docs-logotype {
-    line-height: 40px;
-    text-indent: 15px;
-  }
+.docs-logo > img {
+  height: 150px;
+  width: auto;
+  display: block;
+}
+.nav-header {
+  background: #3F51B5;
+  border-bottom: 1px solid #6674C4;
+  flex-shrink: 0;
+  z-index: 2;
+}
+.docs-logotype {
+  color: white;
+  text-align: center;
+  font-weight: 400;
+  font-size: 26px;
+}
 .docs-menu-separator-icon {
   margin: 0;
-  padding: 0 10px;
 }
 .docs-menu-separator-icon img {
   height: 16px;
 }
+.md-breadcrumb {
+  font-size: 24px !important;
+  font-weight: 400 !important;
+}
+.md-breadcrumb md-icon {
+  color: #666 !important;
+}
 .md-breadcrumb-page {
   display: inline-block;
   word-wrap: break-word;
+}
+.docs-toolbar-tools {
+  max-width: 864px;
+  padding: 0;
+  margin: 0 24px;
+  width: auto;
+}
+.docs-tools .md-button {
+  padding: 0;
+  margin: 0 0 0 8px;
+}
+.docs-tools .md-button,
+.docs-tools .md-button md-icon {
+  color: #666 !important;
+}
+.docs-toolbar-tools .md-button md-icon {
+  color: #666 !important;
 }
 @media (max-width: 400px) {
   .docs-tools {
@@ -361,7 +410,8 @@ code:not(.highlight) {
 .layout-content,
 .doc-content {
   max-width: 864px;
-  padding: 16px;
+  margin: 16px;
+  box-sizing: border-box;
 }
 docs-demo {
   display: block;
@@ -385,6 +435,9 @@ docs-demo {
   height: 448px;
   background: #fff;
   overflow: hidden;
+}
+.demo-source-tabs md-tabs-wrapper {
+  background-color: #5262BC !important;
 }
 
 md-tabs.demo-source-tabs md-tab,
@@ -461,27 +514,18 @@ md-tabs.demo-source-tabs .active md-tab-label {
   max-height: 48px;
 }
 
-.demo-toolbar .md-button {
-  color: #616161;
-}
 md-toolbar.demo-toolbar {
-  border-radius: 4px 4px 0 0;
-}
-md-toolbar.demo-toolbar {
-  background: #f2f2f2 !important;
-  color: #616161;
-  border-bottom: 1px solid #e5e5e5;
-}
-md-toolbar.demo-toolbar md-icon {
-  color: #616161;
+  border-radius: 3px 3px 0 0;
+  box-shadow: 0 1px rgba(255, 255, 255, 0.1);
 }
 md-toolbar.demo-toolbar md-tab-label {
   color: #99E4EE
 }
-md-toolbar.demo-toolbar .md-button:hover,
-md-toolbar.demo-toolbar .md-button:focus,
-md-toolbar.demo-toolbar .md-button.active {
+md-toolbar.demo-toolbar .md-button:hover {
   background: rgba(0,0,0,0.1);
+}
+md-toolbar.demo-toolbar .md-button.active, md-toolbar.demo-toolbar .md-button.active md-icon {
+  color: #8ECD47;
 }
 
 md-toolbar.demo-toolbar .md-button {
@@ -495,6 +539,10 @@ md-toolbar.demo-toolbar .md-button {
   border: 1px solid #ddd;
   background-color: #f6f6f6;
   height: 400px;
+}
+.demo-source-container hljs {
+  margin-bottom: 0;
+  border-radius: 0;
 }
 .show-source div[demo-include] {
   border-top: #ddd solid 2px;
@@ -520,8 +568,9 @@ md-toolbar.demo-toolbar .md-button {
  * Landing Page
  ***************/
 ul.buckets {
-  margin: 24px 0;
+  margin: 24px 0 24px -8px;
   padding: 0;
+  position: relative;
 }
 ul.buckets li {
   list-style: none;
@@ -532,22 +581,26 @@ ul.buckets li md-card md-card-content {
   padding: 0;
 }
 ul.buckets li a {
-  background-color: transparent;
   display: block;
   font-weight: 500;
   padding: 16px 0;
   text-decoration: none;
   -webkit-transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
   transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
+  background-color: #f6f6f6 !important;
+  box-shadow: none !important;
+  margin-right: 0;
+  margin-top: 0;
+}
+ul.buckets li a,
+ul.buckets li a md-icon {
+  color: #666 !important;
 }
 ul.buckets li a:hover,
-ul.buckets li a:focus {
-  background-color: #3F51B5;
-  color: white;
-}
+ul.buckets li a:focus,
 ul.buckets li a:hover md-icon,
 ul.buckets li a:focus md-icon {
-  color: white;
+  color: #3F51B5 !important;
 }
 /************
  * API DOCS
@@ -694,11 +747,13 @@ ul.methods > li:first-child > *:first-child {
 }
 
 .version-picker {
-  background: #f6f6f6 !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12)
+  background: #5262BC !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  z-index: 3;
+  position: relative;
 }
 .version-picker .menu-toggle-list {
-  background: #f6f6f6 !important;
+  background: transparent !important;
 }
 md-icon.block {
   color: #3F51B5;
@@ -710,5 +765,15 @@ md-icon.block {
   padding: 0;
 }
 docs-demo .doc-demo-content {
-  padding: 16px 0 16px 16px;
+  margin: 16px;
+}
+.site-content-toolbar {
+  background: #f6f6f6 !important;
+  color: #666 !important;
+  z-index: 3;
+}
+.site-content-toolbar {
+  background: #f6f6f6 !important;
+  color: #202020 !important;
+  z-index: 3;
 }
