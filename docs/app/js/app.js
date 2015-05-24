@@ -40,26 +40,13 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider)
     .primaryPalette('yellow')
     .dark();
 
-  $mdThemingProvider.definePalette('docs-green', {
-    '50': '#f1f8e9',
-    '100': '#dcedc8',
-    '200': '#c5e1a5',
-    '300': '#aed581',
-    '400': '#9ccc65',
-    '500': '#8bc34a',
-    '600': '#7cb342',
-    '700': '#689f38',
-    '800': '#558b2f',
-    '900': '#33691e',
-    'A100': '#ccff90',
-    'A200': '#8ECD47',
-    'A400': '#76ff03',
-    'A700': '#64dd17',
-    'contrastDefaultColor': 'dark',
-    'contrastLightColors': '800 900',
-    'contrastStrongLightColors': '800 900'
-  });
-
+  $mdThemingProvider.definePalette('docs-green', $mdThemingProvider.extendPalette('light-green', {
+    A100: '#ccff90',
+    A200: '#8ECD47',
+    A400: '#76ff03',
+    A700: '#64dd17',
+    contrastLightColors: [ 'A200', 'A700' ]
+  }));
   $mdThemingProvider.theme('default')
       .primaryPalette('indigo')
       .accentPalette('docs-green');
@@ -361,10 +348,15 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
 
   function onLocationChange() {
     var path = $location.path();
+    var introLink = {
+      name: "Introduction",
+      url:  "/",
+      type: "link"
+    };
 
     if (path == '/') {
-      self.selectSection(null);
-      self.selectPage(null, null);
+      self.selectSection(introLink);
+      self.selectPage(introLink, introLink);
       return;
     }
 
@@ -457,8 +449,9 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   'menu',
   '$location',
   '$rootScope',
+  '$window',
   '$log',
-function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope, $log) {
+function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope, $window, $log) {
   var self = this;
 
   $scope.COMPONENTS = COMPONENTS;
@@ -473,6 +466,18 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
 
   $rootScope.$on('$locationChangeSuccess', openPage);
   $scope.focusMainContent = focusMainContent;
+
+  //-- Define a fake model for the related page selector
+  Object.defineProperty($rootScope, "relatedPage", {
+    get: function () { return null; },
+    set: angular.noop,
+    enumerable: true,
+    configurable: true
+  });
+  $rootScope.redirectToUrl = function (url) {
+    $window.location.hash = url;
+    $timeout(function () { $rootScope.relatedPage = null; }, 100);
+  };
 
   // Methods used by menuLink and menuToggle directives
   this.isOpen = isOpen;

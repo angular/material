@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 120 120">
+  <defs>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feOffset result="offOut" in="SourceAlpha" dx="0" dy="0"></feOffset>
+      <feGaussianBlur result="blurOut" in="offOut" stdDeviation="3"></feGaussianBlur>
+      <feComponentTransfer in="blurOut" result="opacityOut">
+        <feFuncA type="linear" slope="0.5"></feFuncA>
+      </feComponentTransfer>
+      <feBlend in="SourceGraphic" in2="opacityOut" mode="normal"></feBlend>
+    </filter>
+  </defs>
+  <path d="      M 5 18.25      L 50 2.25      L 96 18      L 88.5 77      L 50 98.25      L 12 77.25      Z" fill="black" filter="url(#shadow)" class="outline"></path>
+  <path d="      M 5 18.25      L 50 2.25      L 50 98.25      L 12 77.25      Z" fill="#de3641" class="left"></path>
+  <path d="      M 50 2.25      L 96 18      L 88.5 77      L 50 98.25      Z" fill="#b13138" class="right"></path>
+  <path d="      M 50 13      L 79.25 75.5      L 69.25 75.5      L 63 61.25      L 50 61.25      L 50 52.75      L 59.5 52.75      L 50 33.1      L 42 52.75      L 50 52.75      L 50 61.25      L 38.1 61.25      L 32.5 75.5      L 21.75 75.5      Z" fill="white" class="letter"></path>
+</svg>

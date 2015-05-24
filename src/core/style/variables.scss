@@ -39,9 +39,10 @@ $toast-margin: $baseline-grid * 1 !default;
 
 // Whiteframes
 
-$shadow-key-umbra-opacity: 0.2;
-$shadow-key-penumbra-opacity: 0.14;
-$shadow-ambient-shadow-opacity: 0.12;
+$shadow-multiplier: 0.7;
+$shadow-key-umbra-opacity:      $shadow-multiplier * 0.2;
+$shadow-key-penumbra-opacity:   $shadow-multiplier * 0.14;
+$shadow-ambient-shadow-opacity: $shadow-multiplier * 0.12;
 
 // NOTE(shyndman): gulp-sass seems to be failing if I split the shadow defs across
 //    multiple lines. Ugly. Sorry.

@@ -1,6 +1,6 @@
 <div ng-controller="HomeCtrl" class="doc-content">
   <md-content>
-    <h2 class="md-heading" style="margin-top: 0;">What is Angular Material?</h2>
+    <h2 class="md-headline" style="margin-top: 0;">What is Angular Material?</h2>
     <p>The Angular Material project is an implementation of Material Design in Angular.js. This project provides a set of reusable, well-tested, and accessible UI components based on the Material Design system.</p>
     <p>Similar to the
       <a href="http://www.polymer-project.org/">Polymer</a> project's
@@ -16,8 +16,7 @@
         <md-button
             class="md-primary md-raised"
             ng-href="#/{{link.href}}"
-            aria-label="{{link.text}}"
-            style="{{ index === 3 ? 'margin-right:0;' : index ? '' : 'margin-left:0;' }}">
+            aria-label="{{link.text}}">
           <md-icon class="block" md-svg-src="img/icons/ic_{{link.icon}}_24px.svg"></md-icon>
           {{link.text}}
         </md-button>
@@ -25,7 +24,7 @@
     </ul>
 
     <br/>
-    <h2 class="md-heading">What is Material Design?</h2>
+    <h2 class="md-headline">What is Material Design?</h2>
     <p>
       Material Design is a specification for a
       unified system of visual, motion, and interaction design that adapts across different devices and different
@@ -37,7 +36,6 @@
         { href: 'http://www.google.com/design/spec/material-design/', icon: 'launch', text: 'Learn more about Material Design' }
       ]">
         <md-button
-            style="margin-{{index ? 'right' : 'left'}}: 0"
             class="md-primary md-raised"
             target="_blank"
             aria-label="{{link.text}}"
