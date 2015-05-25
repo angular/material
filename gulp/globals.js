@@ -22,7 +22,6 @@ global.ngAnnotate       = require('gulp-ng-annotate');
 global.plumber          = require('gulp-plumber');
 global.sass             = require('gulp-sass');
 global.uglify           = require('gulp-uglify');
-global.webserver        = require('gulp-webserver');
 
 global.root             = global.path.normalize(__dirname + '/..');
 

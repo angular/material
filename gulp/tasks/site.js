@@ -1,9 +1,9 @@
+var connect = require('gulp-connect');
+
 exports.task = function () {
-  return gulp.src('dist/docs')
-      .pipe(webserver({
-        host: '0.0.0.0',
-        livereload: true,
-        port: LR_PORT,
-        directoryListing: false
-      }));
+  connect.server({
+    root: './dist/docs',
+    livereload: true,
+    port: LR_PORT
+  });
 };

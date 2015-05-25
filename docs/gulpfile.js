@@ -14,12 +14,16 @@ var utils = require('../scripts/gulp-utils.js');
 var karma = require('karma').server;
 var argv = require('minimist')(process.argv.slice(2));
 var gutil = require('gulp-util');
+var connect = require('gulp-connect');
 
 var config = {
   demoFolder: 'demo-partials'
 };
 
-gulp.task('docs', ['docs-js', 'docs-css', 'docs-demo-scripts']);
+gulp.task('docs', ['docs-js', 'docs-css', 'docs-demo-scripts'], function () {
+  gulp.src('.')
+      .pipe(connect.reload());
+});
 
 gulp.task('demos', function() {
   var demos = [];
