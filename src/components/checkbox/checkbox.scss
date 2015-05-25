@@ -121,7 +121,7 @@ md-checkbox {
     content: '';
   }
 
-  .md-label {
+  > .md-label {
     position: relative;
     display: inline-block;
     vertical-align: middle;
@@ -129,7 +129,7 @@ md-checkbox {
     pointer-events: none;
     user-select: text;
 
-    span {
+    > span:first-child {
       margin-left: $checkbox-text-margin;
     }
   }
