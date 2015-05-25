@@ -121,7 +121,9 @@ $contact-chip-name-width: rem(12) !default;
       height: $chip-height;
     }
     md-autocomplete {
-      box-shadow: none;
+      md-autocomplete-wrap {
+        box-shadow: none;
+      }
       input {
         position: relative;
       }
