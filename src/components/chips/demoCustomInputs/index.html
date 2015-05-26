@@ -1,19 +1,19 @@
 <div ng-controller="CustomInputDemoCtrl as ctrl" layout="column">
 
   <md-content class="md-padding" layout="column">
-    <h2 class="md-title">Use an <code>&lt;input&gt;</code> element with no model to build an ordered set of chips.</h2>
+    <h2 class="md-title">Use an <code>input</code> element with no model to build an ordered set of chips.</h2>
     <md-chips ng-model="ctrl.numberChips">
       <input type="number" placeholder="Enter a number">
     </md-chips>
 
     <br/>
-    <h2 class="md-title">Use an <code>&lt;input&gt;</code> element to build an ordered set of chips.</h2>
+    <h2 class="md-title">Use an <code>input</code>  element to build an ordered set of chips.</h2>
     <md-chips ng-model="ctrl.numberChips2">
       <input type="number" ng-model="ctrl.numberBuffer" placeholder="Enter a number">
     </md-chips>
 
     <br/>
-    <h2 class="md-title">Use <code>&lt;md-autocomplete&gt;</code> to build an ordered set of chips.</h2>
+    <h2 class="md-title">Use <code>md-autocomplete</code>  to build an ordered set of chips.</h2>
 
     <md-chips ng-model="ctrl.selectedVegetables" md-autocomplete-snap md-require-match>
       <md-autocomplete
