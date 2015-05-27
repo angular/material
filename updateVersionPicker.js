@@ -19,6 +19,7 @@
     exec([
       'rm -rf dist',
       'git checkout v' + version,
+      'npm install',
       checkout('app/js/app.js'),
       checkout('app/css/style.css'),
       checkout('app/img/icons'),
