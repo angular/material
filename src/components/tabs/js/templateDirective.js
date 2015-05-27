@@ -15,23 +15,19 @@ function MdTemplate ($compile, $mdUtil, $timeout) {
   };
   function link (scope, element, attr, ctrl) {
     if (!ctrl) return;
-    var connected = true;
+    var compileScope = scope.compileScope.$new();
     element.html(scope.template);
-    $compile(element.contents())(scope.compileScope);
-    $timeout(handleScope);
+    $compile(element.contents())(compileScope);
+    return $timeout(handleScope);
     function handleScope () {
-      scope.$watch('connected', function (value) { value ? disconnect() : reconnect(); });
+      scope.$watch('connected', function (value) { value ? reconnect() : disconnect(); });
       scope.$on('$destroy', reconnect);
     }
     function disconnect () {
-      if (!connected) return;
-      $mdUtil.disconnectScope(scope.compileScope);
-      connected = false;
+      $mdUtil.disconnectScope(compileScope);
     }
     function reconnect () {
-      if (connected) return;
-      $mdUtil.reconnectScope(scope.compileScope);
-      connected = true;
+      $mdUtil.reconnectScope(compileScope);
     }
   }
 }
