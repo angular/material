@@ -181,6 +181,7 @@ function MdTabs ($mdTheming, $mdUtil, $compile) {
               ng-repeat="(index, tab) in $mdTabsCtrl.tabs" \
               md-template="tab.template"\
               md-scope="tab.parent"\
+              ng-if="tab.isActive()"\
               ng-class="{\
                 \'md-no-transition\': $mdTabsCtrl.lastSelectedIndex == null,\
                 \'md-active\':        tab.isActive(),\
