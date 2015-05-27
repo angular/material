@@ -1,9 +1,11 @@
-var connect = require('gulp-connect');
+var webserver = require('gulp-webserver');
 
 exports.task = function() {
-  connect.server({
-    root: '.',
-    livereload: true,
-    port: LR_PORT
-  });
+  return gulp.src('.')
+      .pipe(webserver({
+        host: '0.0.0.0',
+        livereload: true,
+        port: LR_PORT,
+        directoryListing: true
+      }));
 };
