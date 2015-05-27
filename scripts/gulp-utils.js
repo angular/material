@@ -4,6 +4,7 @@ var through2 = require('through2');
 var lazypipe = require('lazypipe');
 var gutil = require('gulp-util');
 var Buffer = require('buffer').Buffer;
+var fs = require('fs');
 
 var path = require('path');
 
@@ -135,6 +136,25 @@ exports.filesForModule = function(name) {
         else next();
       }));
   }
+};
+
+exports.appendToFile = function(filePath) {
+  var bufferedContents;
+  return through2.obj(function(file, enc, next) {
+    bufferedContents = file.contents.toString('utf8') + '\n';
+    next();
+  }, function(done) {
+    var existing = fs.readFileSync(filePath, 'utf8');
+    bufferedContents = existing + '\n' + bufferedContents;
+    var outputFile = new gutil.File({
+      cwd: process.cwd(),
+      base: path.dirname(filePath),
+      path: filePath,
+      contents: new Buffer(bufferedContents)
+    });
+    this.push(outputFile);
+    done();
+  });
 };
 
 exports.buildNgMaterialDefinition = function() {

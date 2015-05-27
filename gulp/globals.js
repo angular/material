@@ -38,16 +38,19 @@ global.BUILD_MODE       = getBuildMode(global.IS_DEMO_BUILD ? 'demos' : argv.mod
 function getBuildMode (mode) {
   switch (mode) {
     case 'closure': return {
+      name: 'closure',
       transform: utils.addClosurePrefixes,
       outputDir: path.join(config.outputDir, 'modules/closure') + path.sep,
       useBower: false
     };
     case 'demos': return {
+      name: 'demos',
       transform: utils.addJsWrapper,
       outputDir: path.join(config.outputDir, 'demos') + path.sep,
       useBower: false
     };
     default: return {
+      name: 'default',
       transform: utils.addJsWrapper,
       outputDir: path.join(config.outputDir, 'modules/js') + path.sep,
       useBower: true
