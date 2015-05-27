@@ -108,13 +108,24 @@
                 ng-model="relatedPage"
                 placeholder="API Reference"
                 class="md-body-1">
-              <md-option
-                  ng-repeat="doc in currentComponent.docs"
-                  ng-value="doc.url"
-                  ng-click="redirectToUrl(doc.url)"
-                  aria-label="{{ doc | humanizeDoc }}">
-                {{doc | humanizeDoc | directiveBrackets}}
-              </md-option>
+              <md-optgroup label="Directives" ng-if="(currentComponent.docs | filter: { type: 'directive' }).length">
+                <md-option
+                    ng-repeat="doc in currentComponent.docs | filter: { type: 'directive' }"
+                    ng-value="doc.url"
+                    ng-click="redirectToUrl(doc.url)"
+                    aria-label="{{ doc | humanizeDoc }}">
+                  {{doc | humanizeDoc | directiveBrackets}}
+                </md-option>
+              </md-optgroup>
+              <md-optgroup label="Services" ng-if="(currentComponent.docs | filter: { type: 'service' }).length">
+                <md-option
+                    ng-repeat="doc in currentComponent.docs | filter: { type: 'service' }"
+                    ng-value="doc.url"
+                    ng-click="redirectToUrl(doc.url)"
+                    aria-label="{{ doc | humanizeDoc }}">
+                  {{doc | humanizeDoc | directiveBrackets}}
+                </md-option>
+              </md-optgroup>
             </md-select>
 
             <md-button

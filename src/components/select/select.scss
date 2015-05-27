@@ -179,12 +179,14 @@ md-optgroup {
   display: block;
   label {
     display: block;
-    font-size: rem(1.6);
+    font-size: rem(1.4);
     text-transform: uppercase;
-    padding: $baseline-grid * 2 $baseline-grid;
+    padding: $baseline-grid * 2;
+    font-weight: 500;
   }
   md-option {
-    padding-left: $baseline-grid + $select-option-padding;
+    padding-left: $select-option-padding * 2;
+    padding-right: $select-option-padding * 2;
   }
 }
 
