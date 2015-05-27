@@ -586,7 +586,6 @@ ul.buckets li a {
   padding: 16px 0;
   text-decoration: none;
   -webkit-transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
-  transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
   background-color: #f6f6f6 !important;
   box-shadow: none !important;
   margin-right: 0;
@@ -595,12 +594,14 @@ ul.buckets li a {
 ul.buckets li a,
 ul.buckets li a md-icon {
   color: #666 !important;
+  transition: all 0.15s cubic-bezier(0.35, 0, 0.25, 1);
 }
 ul.buckets li a:hover,
 ul.buckets li a:focus,
 ul.buckets li a:hover md-icon,
 ul.buckets li a:focus md-icon {
-  color: #3F51B5 !important;
+  color: #3f51b5 !important;
+  background-color: #ebebeb !important;
 }
 /************
  * API DOCS
