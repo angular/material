@@ -63,6 +63,11 @@ md-tabs {
         padding-bottom: 11px;
       }
     }
+    &:not([md-dynamic-height]) {
+      md-tabs-content-wrapper {
+        top: $tabs-header-height + 1;
+      }
+    }
   }
 }
 md-tabs-wrapper {
