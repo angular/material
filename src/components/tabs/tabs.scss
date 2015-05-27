@@ -142,7 +142,7 @@ md-pagination-wrapper {
   @include pie-clearfix;
   height: $tabs-header-height;
   display: block;
-  transition: left $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+  transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
   position: absolute;
   width: 999999px;
   left: 0;

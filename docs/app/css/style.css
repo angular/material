@@ -750,8 +750,6 @@ ul.methods > li:first-child > *:first-child {
 .version-picker {
   background: #5262BC !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  z-index: 3;
-  position: relative;
 }
 .version-picker .menu-toggle-list {
   background: transparent !important;
