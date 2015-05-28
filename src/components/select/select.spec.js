@@ -717,6 +717,23 @@ describe('<md-select-menu>', function() {
         pressKey(el, 50);
         expect($rootScope.someModel).toBe(2);
       }));
+
+      it('supports advancing when typing first char of option name when 2 matches exist', inject(function($document, $rootScope) {
+        var el = setupSelect('ng-model="someModel"', [1, '2a', '2b', 3]);
+        $rootScope.$apply('someModel = "2a"');
+        expect($rootScope.someModel).toBe('2a');
+        pressKey(el, 50);
+        expect($rootScope.someModel).toBe('2b');
+      }));
+
+      it('supports advancing when typing first char of option name when multiple matches exist', inject(function($document, $rootScope) {
+        var el = setupSelect('ng-model="someModel"', [1, '2a', '2b', '2c', 3]);
+        $rootScope.$apply('someModel = "2b"');
+        expect($rootScope.someModel).toBe('2b');
+        pressKey(el, 50);
+        expect($rootScope.someModel).toBe('2c');
+      }));
+
     });
 
     describe('md-select-menu', function() {

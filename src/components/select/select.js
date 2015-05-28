@@ -423,7 +423,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
     };
 
     var searchStr = '';
-    var clearSearchTimeout, optNodes, optText;
+    var clearSearchTimeout, optNodes, optText, selected;
     var CLEAR_SEARCH_AFTER = 300;
     self.optNodeForKeyboardSearch = function(e) {
       clearSearchTimeout && clearTimeout(clearSearchTimeout);
@@ -442,9 +442,20 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
           optText[i] = el.textContent.trim();
         });
       }
-      for (var i = 0; i < optText.length; ++i) {
-        if (search.test(optText[i])) {
-          return optNodes[i];
+      if (!selected || selected === '') {
+        selected = self.selectedLabels();  
+      }
+      var searchIndex = 0;
+      angular.forEach(optNodes, function(el, i) {
+        if (selected === optText[i]){
+          searchIndex = i;
+        }       
+      });
+      for (searchIndex; searchIndex < optText.length; ++searchIndex) {
+        if (search.test(optText[searchIndex])) {
+          if (selected !== optNodes[searchIndex].textContent){
+            return optNodes[searchIndex];  
+          }
         }
       }
     };
