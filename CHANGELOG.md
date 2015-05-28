@@ -1,3 +1,13 @@
+<a name="0.9.6"></a>
+### 0.9.6  (2015-05-28)
+
+
+#### Bug Fixes
+
+* **build:** fixes bug where versions in 0.9.5 comments were wrong. ([7a1ad41f](https://github.com/angular/material/commit/7a1ad41f3c1df6cb1dfa750cb817f166f02097ee))
+* **closure:** fixes issue in core.js where multiple `goog.provide` lines were included
+
+
 <a name="0.9.5"></a>
 ### 0.9.5  (2015-05-28)
 
