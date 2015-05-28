@@ -35,6 +35,9 @@ function MdHighlight () {
   return {
     terminal: true,
     scope: false,
-    controller: 'MdHighlightCtrl'
+    controller: 'MdHighlightCtrl',
+    link: function (scope, element, attr, ctrl) {
+      ctrl.init(attr.mdHighlightText);
+    }
   };
 }
