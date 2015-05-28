@@ -1,6 +1,7 @@
 var config = require('./config');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
+var frep = require('gulp-frep');
 var fs = require('fs');
 var args = require('minimist')(process.argv.slice(2));
 var path = require('path');
@@ -82,14 +83,26 @@ function buildModule(module, isRelease) {
   var name = module.split('.').pop();
   utils.copyDemoAssets(name, 'src/components/', 'dist/demos/');
 
-  return utils.filesForModule(module)
+  var stream = utils.filesForModule(module)
       .pipe(filterNonCodeFiles())
       .pipe(gulpif('*.scss', buildModuleStyles(name)))
-      .pipe(gulpif('*.js', buildModuleJs(name)))
+      .pipe(gulpif('*.js', buildModuleJs(name)));
+  if (module === 'material.core') {
+    stream = splitStream(stream);
+  }
+  return stream
       .pipe(BUILD_MODE.transform())
       .pipe(insert.prepend(config.banner))
       .pipe(gulpif(isRelease, buildMin()))
       .pipe(gulp.dest(BUILD_MODE.outputDir + name));
+
+  function splitStream (stream) {
+    var js = series(stream, themeBuildStream())
+        .pipe(filter('*.js'))
+        .pipe(concat('core.js'));
+    var css = stream.pipe(filter('*.css'));
+    return series(js, css);
+  }
 
   function buildMin() {
     return lazypipe()
@@ -111,9 +124,16 @@ function buildModule(module, isRelease) {
   }
 
   function buildModuleJs(name) {
+    var patterns = [
+      {
+        pattern: /\@ngInject/g,
+        replacement: 'ngInject'
+      }
+    ];
     return lazypipe()
         .pipe(plumber)
         .pipe(ngAnnotate)
+        .pipe(frep, patterns)
         .pipe(concat, name + '.js')
     ();
   }
