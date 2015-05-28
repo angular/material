@@ -1,5 +1,5 @@
-//-- include global variables
-require('./gulp/globals');
+var gulp = require('gulp');
+var fs = require('fs');
 
 //-- include docs gulpfile (should eventually be factored out)
 require('./docs/gulpfile');

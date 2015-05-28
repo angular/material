@@ -1,3 +1,5 @@
+var config = require('../config');
+var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 
 exports.task = function() {

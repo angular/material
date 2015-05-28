@@ -1,3 +1,5 @@
+var gulp = require('gulp');
+
 exports.dependencies = ['docs'];
 
 exports.task = function() {

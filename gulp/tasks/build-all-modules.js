@@ -1,5 +1,12 @@
+var BUILD_MODE = require('../const').BUILD_MODE;
+
+var gulp = require('gulp');
+var path = require('path');
+var through2 = require('through2');
+var series = require('stream-series');
 var util = require('../util');
 var gulpif = require('gulp-if');
+var utils = require('../../scripts/gulp-utils.js');
 
 exports.task = function() {
   var stream = series(

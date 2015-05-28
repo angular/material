@@ -1,3 +1,5 @@
+var VERSION = require('./const').VERSION;
+
 module.exports = {
   banner:
   '/*!\n' +

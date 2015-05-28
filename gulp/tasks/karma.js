@@ -1,4 +1,8 @@
+var gutil = require('gulp-util');
+var karma = require('karma').server;
 var util = require('../util');
+var ROOT = require('../const').ROOT;
+var args = util.args;
 
 exports.task = function (done) {
   var errorCount = 0;
@@ -6,8 +10,8 @@ exports.task = function (done) {
     logLevel: 'warn',
     singleRun: true,
     autoWatch: false,
-    browsers : argv.browsers ? argv.browsers.trim().split(',') : ['Chrome'],
-    configFile: root + '/config/karma.conf.js'
+    browsers: args.browsers ? args.browsers.trim().split(',') : ['Chrome'],
+    configFile: ROOT + '/config/karma.conf.js'
   };
 
   /**

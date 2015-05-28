@@ -1,4 +1,6 @@
+var gulp = require('gulp');
 var webserver = require('gulp-webserver');
+var LR_PORT = require('../const').LR_PORT;
 
 exports.task = function() {
   return gulp.src('.')

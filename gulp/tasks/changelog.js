@@ -1,5 +1,9 @@
-var SHA = argv.sha;
+var fs = require('fs');
 var changelog = require('conventional-changelog');
+var util = require('../util');
+var ROOT = require('../const').ROOT;
+var SHA = require('../const').SHA;
+var VERSION = require('../const').VERSION;
 
 exports.task = function () {
   var options = {
@@ -11,6 +15,6 @@ exports.task = function () {
     options.from = SHA;
   }
   changelog(options, function(err, log) {
-    fs.writeFileSync(root + '/CHANGELOG.md', log);
+    fs.writeFileSync(ROOT + '/CHANGELOG.md', log);
   });
 };
