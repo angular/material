@@ -16,7 +16,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   ctrl.parent = $scope.$parent;
   ctrl.tabs = [];
   ctrl.lastSelectedIndex = null;
-  ctrl.focusIndex = 0;
+  ctrl.focusIndex = $scope.selectedIndex || 0;
   ctrl.offsetLeft = 0;
   ctrl.hasContent = false;
   ctrl.hasFocus = false;
@@ -51,6 +51,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     angular.element($window).on('resize', function () { $scope.$apply(handleWindowResize); });
     $timeout(updateInkBarStyles, 0, false);
     $timeout(updateHeightFromContent, 0, false);
+    $timeout(adjustOffset);
   }
 
   function handleHasContent (hasContent) {
