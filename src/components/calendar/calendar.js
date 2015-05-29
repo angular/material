@@ -9,7 +9,6 @@
   angular.module('material.components.calendar', ['material.core'])
       .directive('mdCalendar', calendarDirective);
 
-  // TODO(jelbourn): Date cell IDs need to be unique per-calendar.
   // TODO(jelbourn): internationalize a11y announcements.
 
   // TODO(jelbourn): Update the selected date on [click, tap, enter]
@@ -30,6 +29,9 @@
   // TODO(jelbourn): read-only state.
 
   function calendarDirective() {
+    // Generate a unique ID for each instance of the directive.
+    var directiveId = 0;
+
     return {
       template:
         '<div>' +
@@ -48,6 +50,7 @@
       link: function(scope, element, attrs, controllers) {
         var ngModelCtrl = controllers[0];
         var mdCalendarCtrl = controllers[1];
+        mdCalendarCtrl.directiveId = directiveId++;
         mdCalendarCtrl.configureNgModel(ngModelCtrl);
       }
     };
@@ -70,16 +73,6 @@
 
   /** Class applied to the cell for today. */
   var TODAY_CLASS = 'md-calendar-date-today';
-
-
-  /**
-   * Gets a unique identifier for a date for internal purposes. Not to be displayed.
-   * @param {Date} date
-   * @returns {string}
-   */
-  function getDateId(date) {
-    return 'md-' + date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
-  }
 
   /**
    * Controller for the mdCalendar component.
@@ -255,7 +248,7 @@
       self.changeDisplayDate(date).then(function() {
         self.focusDateElement(date);
       });
-    })
+    });
   };
 
   /**
@@ -295,7 +288,7 @@
    * @param {Date} date
    */
   CalendarCtrl.prototype.focusDateElement = function(date) {
-    var cellId = getDateId(date);
+    var cellId = this.getDateId_(date);
     var cell = this.calendarElement.querySelector('#' + cellId);
     cell.focus();
   };
@@ -481,7 +474,7 @@
 
       // Remove the selected class from the previously selected date, if any.
       if (self.selectedDate) {
-        var prevDateCell = self.calendarElement.querySelector('#' + getDateId(self.selectedDate));
+        var prevDateCell = self.calendarElement.querySelector('#' + self.getDateId_(self.selectedDate));
         if (prevDateCell) {
           prevDateCell.classList.remove(SELECTED_DATE_CLASS);
         }
@@ -489,7 +482,7 @@
 
       // Apply the select class to the new selected date if it is set.
       if (date) {
-        var dateCell = self.calendarElement.querySelector('#' + getDateId(date));
+        var dateCell = self.calendarElement.querySelector('#' + self.getDateId_(date));
         if (dateCell) {
           dateCell.classList.add(SELECTED_DATE_CLASS);
         }
@@ -544,7 +537,7 @@
    * Highlight the cell corresponding to today if it is on the screen.
    */
   CalendarCtrl.prototype.highlightToday = function() {
-    var todayCell = this.calendarElement.querySelector('#' + getDateId(this.today));
+    var todayCell = this.calendarElement.querySelector('#' + this.getDateId_(this.today));
     if (todayCell) {
       todayCell.classList.add(TODAY_CLASS);
     }
@@ -618,7 +611,7 @@
       //selectionIndicator.setAttribute('aria-label', '');
 
       cell.setAttribute('tabindex', '-1');
-      cell.id = getDateId(opt_date);
+      cell.id = this.getDateId_(opt_date);
       cell.dataset.timestamp = opt_date.getTime();
       cell.addEventListener('click', this.cellClickHandler);
     }
@@ -695,5 +688,23 @@
     }
 
     return monthBody;
+  };
+
+
+  /**
+   * Gets an identifier for a date unique to the calendar instance for internal
+   * purposes. Not to be displayed.
+   * @param {Date} date
+   * @returns {string}
+   * @private
+   */
+  CalendarCtrl.prototype.getDateId_ = function (date) {
+    return [
+      'md',
+      this.directiveId,
+      date.getFullYear(), 
+      date.getMonth(), 
+      date.getDate()
+    ].join('-');
   };
 })();
