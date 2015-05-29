@@ -1,6 +1,18 @@
-<div ng-controller="AppCtrl" layout="column" layout-align="center center" flex>
-  <md-select placeholder="Pick" ng-model="someVal">
-    <md-option value="1">One</md-option>
-    <md-option value="2">Two</md-option>
-  </md-select>
+<div ng-controller="AppCtrl as ctrl" class="md-padding">
+  <div>
+    <h1 class="md-title">Enter an address</h1>
+    <div layout="row">
+      <md-input-container>
+        <label>Street Name</label>
+        <input type="text"/>
+      </md-input-container>
+      <md-input-container>
+        <label>City</label>
+        <input type="text"/>
+      </md-input-container>
+      <md-select placeholder="State" ng-model="ctrl.userState">
+        <md-option ng-repeat="state in ctrl.states" value="{{state.abbrev}}">{{state.abbrev}}</md-option>
+      </md-select>
+    </div>
+  </div>
 </div>
