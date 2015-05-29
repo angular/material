@@ -122,8 +122,16 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
     function bindEvents () {
       var autohide = scope.hasOwnProperty('autohide') ? scope.autohide : attr.hasOwnProperty('mdAutohide');
+      var mouseActive = false;
+      // to avoid `synthetic clicks` we listen to mousedown instead of `click`
+      parent.on('mousedown', function() { mouseActive = true; });
       parent.on('focus mouseenter touchstart', function() { setVisible(true); });
-      parent.on('blur mouseleave touchend touchcancel', function() { if ($document[0].activeElement !== parent[0] || autohide) setVisible(false); });
+      parent.on('blur mouseleave touchend touchcancel', function() {
+        if ($document[0].activeElement !== parent[0] || autohide || mouseActive) {
+          setVisible(false);
+        }
+        mouseActive = false;
+      });
       angular.element($window).on('resize', debouncedOnResize);
     }
 
