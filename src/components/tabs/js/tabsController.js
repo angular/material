@@ -48,10 +48,16 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     $scope.$watch('$mdTabsCtrl.focusIndex', handleFocusIndexChange);
     $scope.$watch('$mdTabsCtrl.offsetLeft', handleOffsetChange);
     $scope.$watch('$mdTabsCtrl.hasContent', handleHasContent);
-    angular.element($window).on('resize', function () { $scope.$apply(handleWindowResize); });
-    $timeout(updateInkBarStyles, 0, false);
+    angular.element($window).on('resize', handleWindowResize);
+    angular.element(elements.paging).on('DOMSubtreeModified', updateInkBarStyles);
     $timeout(updateHeightFromContent, 0, false);
     $timeout(adjustOffset);
+    $scope.$on('$destroy', cleanup);
+  }
+
+  function cleanup () {
+    angular.element($window).off('resize', handleWindowResize);
+    angular.element(elements.paging).off('DOMSubtreeModified', updateInkBarStyles);
   }
 
   //-- Change handlers
@@ -100,7 +106,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
           handleResizeWhenVisible.watcher = null;
 
           //-- we have to trigger our own $apply so that the DOM bindings will update
-          $scope.$apply(handleWindowResize);
+          handleWindowResize();
         }
       }, 0, false);
     });
@@ -159,9 +165,11 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   }
 
   function handleWindowResize () {
-    ctrl.lastSelectedIndex = $scope.selectedIndex;
-    ctrl.offsetLeft = fixOffset(ctrl.offsetLeft);
-    $timeout(updateInkBarStyles, 0, false);
+    $scope.$apply(function () {
+      ctrl.lastSelectedIndex = $scope.selectedIndex;
+      ctrl.offsetLeft = fixOffset(ctrl.offsetLeft);
+      $timeout(updateInkBarStyles, 0, false);
+    });
   }
 
   function removeTab (tabData) {
@@ -175,7 +183,6 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
       ctrl.tabs[$scope.selectedIndex] && ctrl.tabs[$scope.selectedIndex].scope.select();
     }
     $timeout(function () {
-      updateInkBarStyles();
       ctrl.offsetLeft = fixOffset(ctrl.offsetLeft);
     });
   }
@@ -270,7 +277,6 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     });
     $scope.selectedIndex = ctrl.tabs.indexOf(selectedItem);
     ctrl.focusIndex = ctrl.tabs.indexOf(focusItem);
-    $timeout(updateInkBarStyles, 0, false);
   }
 
   function incrementSelectedIndex (inc, focus) {
@@ -339,6 +345,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   }
 
   function updateInkBarStyles () {
+    if (!elements.tabs[$scope.selectedIndex]) return;
     if (!ctrl.tabs.length) return queue.push(updateInkBarStyles);
     //-- if the element is not visible, we will not be able to calculate sizes until it is
     //-- we should treat that as a resize event rather than just updating the ink bar

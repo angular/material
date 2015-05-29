@@ -20,7 +20,7 @@ function MdTemplate ($compile, $mdUtil, $timeout) {
     $compile(element.contents())(compileScope);
     return $timeout(handleScope);
     function handleScope () {
-      scope.$watch('connected', function (value) { value ? reconnect() : disconnect(); });
+      scope.$watch('connected', function (value) { value === false ? disconnect() : reconnect(); });
       scope.$on('$destroy', reconnect);
     }
     function disconnect () {
