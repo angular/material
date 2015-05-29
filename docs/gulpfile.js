@@ -21,11 +21,6 @@ var config = {
   demoFolder: 'demo-partials'
 };
 
-gulp.task('docs', ['docs-js', 'docs-css', 'docs-demo-scripts'], function () {
-  gulp.src('.')
-      .pipe(connect.reload());
-});
-
 gulp.task('demos', function() {
   var demos = [];
   return generateDemos()

@@ -35,5 +35,8 @@ module.exports = {
     'src/core/style/layout.scss'
   ],
   paths: 'src/{components,services}/**',
-  outputDir: 'dist/'
+  outputDir: 'dist/',
+  demoFolder: 'demo-partials'
 };
+
+
