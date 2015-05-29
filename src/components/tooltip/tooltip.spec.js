@@ -69,12 +69,6 @@ describe('<md-tooltip> directive', function() {
 
   describe('show and hide', function() {
 
-    afterEach(function() {
-        // Make sure to remove/cleanup after each test
-        element && element.remove();
-        element = undefined;
-      });
-
     it('should show and hide when visible is set',  function() {
 
       expect(findTooltip().length).toBe(0);
@@ -196,9 +190,6 @@ describe('<md-tooltip> directive', function() {
     else                  $rootScope.$apply( applyExp || 'isVisible = true' );
     $animate.triggerCallbacks();
 
-    element.on('$destroy', function() {
-      var i = 1;
-    })
     return element;
   }
 
