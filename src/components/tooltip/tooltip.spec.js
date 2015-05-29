@@ -15,20 +15,24 @@ describe('<md-tooltip> directive', function() {
   });
 
   it('should preserve parent text', function(){
-      buildTooltip('<md-button>' +
-                    'Hello' +
-                   '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
-                  '</md-button>');
+      buildTooltip(
+        '<md-button>' +
+          'Hello' +
+         '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
+        '</md-button>'
+      );
 
       expect(element.attr('aria-label')).toBeUndefined();
   });
 
   it('should label parent', function(){
-      buildTooltip('<md-button><md-tooltip md-visible="isVisible">Tooltip</md-tooltip></md-button>');
-
-      expect(element.attr('aria-label')).toEqual('Tooltip');
-
-      hideTooltip();
+      buildTooltip(
+        '<md-button>' +
+          '<md-tooltip md-visible="isVisible">' +
+            'Tooltip' +
+          '</md-tooltip>'+
+        '</md-button>'
+      );
 
       expect(element.attr('aria-label')).toEqual('Tooltip');
   });
@@ -38,7 +42,15 @@ describe('<md-tooltip> directive', function() {
         return { 'pointer-events': el.nodeName == 'INNER' ? 'none' : '' };
     });
 
-    buildTooltip('<outer><inner><md-tooltip md-visible="isVisible">Hello world</md-tooltip></inner></outer>', '');
+    buildTooltip(
+      '<outer>' +
+        '<inner>' +
+          '<md-tooltip md-visible="isVisible">' +
+            'Hello world' +
+          '</md-tooltip>' +
+        '</inner>' +
+      '</outer>'
+    );
 
     element.triggerHandler('mouseenter');
     expect($rootScope.isVisible).toBeUndefined();
@@ -46,15 +58,16 @@ describe('<md-tooltip> directive', function() {
   }));
 
   it('should show after tooltipDelay ms', inject(function($timeout) {
-    buildTooltip('<md-button>' +
-               'Hello' +
-               '<md-tooltip md-visible="isVisible" md-delay="99">' +
-                 'Tooltip' +
-               '</md-tooltip>' +
-             '</md-button>', '');
+    buildTooltip(
+      '<md-button>' +
+       'Hello' +
+       '<md-tooltip md-visible="isVisible" md-delay="99">' +
+         'Tooltip' +
+       '</md-tooltip>' +
+      '</md-button>'
+    );
 
     element.triggerHandler('focus');
-
     expect($rootScope.isVisible).toBeFalsy();
 
     // Wait 1 below delay, nothing should happen
@@ -73,16 +86,22 @@ describe('<md-tooltip> directive', function() {
 
       expect(findTooltip().length).toBe(0);
 
-      buildTooltip('<md-button>' +
-                 'Hello' +
-                 '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
-               '</md-button>');
+      buildTooltip(
+        '<md-button>' +
+          'Hello' +
+          '<md-tooltip md-visible="isVisible">' +
+            'Tooltip' +
+          '</md-tooltip>' +
+        '</md-button>'
+      );
 
+
+      showTooltip(true);
 
       expect(findTooltip().length).toBe(1);
       expect(findTooltip().hasClass('md-show')).toBe(true);
 
-      hideTooltip();
+      showTooltip(false);
 
       expect(findTooltip().length).toBe(0);
     });
@@ -90,10 +109,12 @@ describe('<md-tooltip> directive', function() {
     it('should set visible on mouseenter and mouseleave', inject(function($timeout) {
         buildTooltip(
           '<md-button>' +
-           'Hello' +
-           '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
+             'Hello' +
+             '<md-tooltip md-visible="isVisible">' +
+              'Tooltip' +
+            '</md-tooltip>' +
           '</md-button>'
-        ,'');
+        );
 
         element.triggerHandler('mouseenter');
         $timeout.flush();
@@ -109,10 +130,12 @@ describe('<md-tooltip> directive', function() {
     it('should set visible on focus and blur', inject(function($timeout) {
       buildTooltip(
         '<md-button>' +
-         'Hello' +
-         '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
+           'Hello' +
+           '<md-tooltip md-visible="isVisible">' +
+              'Tooltip' +
+          '</md-tooltip>' +
         '</md-button>'
-      ,'');
+      );
 
       element.triggerHandler('focus');
       $timeout.flush();
@@ -128,10 +151,12 @@ describe('<md-tooltip> directive', function() {
     it('should set visible on touchstart and touchend', inject(function($timeout) {
       buildTooltip(
         '<md-button>' +
-         'Hello' +
-         '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
+          'Hello' +
+          '<md-tooltip md-visible="isVisible">' +
+            'Tooltip' +
+          '</md-tooltip>' +
         '</md-button>'
-      , '');
+      );
 
 
       element.triggerHandler('touchstart');
@@ -151,9 +176,11 @@ describe('<md-tooltip> directive', function() {
       buildTooltip(
         '<md-button>' +
          'Hello' +
-         '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
+         '<md-tooltip md-visible="isVisible">' +
+            'Tooltip' +
+          '</md-tooltip>' +
         '</md-button>'
-      ,'')
+      )
 
       // this focus is needed to set `$document.activeElement`
       // and wouldn't be required if `document.activeElement` was settable.
@@ -179,23 +206,26 @@ describe('<md-tooltip> directive', function() {
   });
 
 
-  function findTooltip() {
-    return angular.element(document.body).find('md-tooltip');
-  }
+  function buildTooltip(markup) {
 
-  function buildTooltip(markup, applyExp) {
     element = $compile(markup)($rootScope);
 
-    if ( applyExp == '' ) $rootScope.$apply();
-    else                  $rootScope.$apply( applyExp || 'isVisible = true' );
+    $rootScope.$apply();
     $animate.triggerCallbacks();
 
     return element;
   }
 
-  function hideTooltip() {
-    $rootScope.$apply('isVisible = false');
+  function showTooltip(isVisible) {
+    if (angular.isUndefined(isVisible)) isVisible = true;
+
+    $rootScope.$apply('isVisible = ' + (isVisible ? 'true' : 'false') );
     $animate.triggerCallbacks();
   }
+
+  function findTooltip() {
+    return angular.element(document.body).find('md-tooltip');
+  }
+
 
 });
