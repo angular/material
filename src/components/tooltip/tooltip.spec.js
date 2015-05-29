@@ -53,7 +53,7 @@ describe('<md-tooltip> directive', function() {
       '</outer>'
     );
 
-    simulateEvent('mouseenter', true);
+    triggerEvent('mouseenter', true);
     expect($rootScope.isVisible).toBeUndefined();
 
   }));
@@ -68,7 +68,7 @@ describe('<md-tooltip> directive', function() {
       '</md-button>'
     );
 
-    element.triggerHandler('focus');
+    triggerEvent('focus', true);
     expect($rootScope.isVisible).toBeFalsy();
 
     // Wait 1 below delay, nothing should happen
@@ -117,10 +117,10 @@ describe('<md-tooltip> directive', function() {
           '</md-button>'
         );
 
-        simulateEvent('mouseenter');
+        triggerEvent('mouseenter');
         expect($rootScope.isVisible).toBe(true);
 
-        simulateEvent('mouseleave');
+        triggerEvent('mouseleave');
         expect($rootScope.isVisible).toBe(false);
     });
 
@@ -134,10 +134,10 @@ describe('<md-tooltip> directive', function() {
         '</md-button>'
       );
 
-      simulateEvent('focus');
+      triggerEvent('focus');
       expect($rootScope.isVisible).toBe(true);
 
-      simulateEvent('blur');
+      triggerEvent('blur');
       expect($rootScope.isVisible).toBe(false);
     });
 
@@ -152,10 +152,10 @@ describe('<md-tooltip> directive', function() {
       );
 
 
-      simulateEvent('touchstart');
+      triggerEvent('touchstart');
       expect($rootScope.isVisible).toBe(true);
 
-      simulateEvent('touchend');
+      triggerEvent('touchend');
       expect($rootScope.isVisible).toBe(false);
 
     });
@@ -175,12 +175,12 @@ describe('<md-tooltip> directive', function() {
       // this focus is needed to set `$document.activeElement`
       // and wouldn't be required if `document.activeElement` was settable.
       element.focus();
-      simulateEvent('focus, mousedown');
+      triggerEvent('focus, mousedown');
 
       expect($document.activeElement).toBe(element[0]);
       expect($rootScope.isVisible).toBe(true);
 
-      simulateEvent('mouseleave');
+      triggerEvent('mouseleave');
 
       // very weak test since this is really always set to false because
       // we are not able to set `document.activeElement` to the parent
@@ -192,6 +192,9 @@ describe('<md-tooltip> directive', function() {
     }));
   });
 
+  // ******************************************************
+  // Internal Utility methods
+  // ******************************************************
 
   function buildTooltip(markup) {
 
@@ -215,7 +218,7 @@ describe('<md-tooltip> directive', function() {
   }
 
 
-  function simulateEvent(eventType, skipFlush) {
+  function triggerEvent(eventType, skipFlush) {
     angular.forEach(eventType.split(','),function(name) {
       element.triggerHandler(name);
     });
