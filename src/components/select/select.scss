@@ -52,8 +52,8 @@ md-input-container > md-select {
 }
 
 md-select {
-  display: inline-block;
-  margin: 0.125em 2px 1.3em;
+  padding: 24px 2px 26px;
+  display: flex;
   &:focus {
     outline: none;
   }
@@ -67,13 +67,13 @@ md-select {
     &.ng-invalid.ng-dirty {
       .md-select-label {
         border-bottom: 2px solid;
-        padding-bottom: $baseline-grid - 5
+        padding-bottom: 0;
       }
     }
     &:focus {
       .md-select-label {
         border-bottom: 2px solid;
-        padding-bottom: $baseline-grid - 5;
+        padding-bottom: 0;
       }
     }
   }
@@ -83,13 +83,12 @@ md-select {
 .md-select-label {
   display: flex;
   align-items: center;
-  padding-left: 3px;
-  padding-top: (2 * $baseline-grid) + 4;
-  padding-bottom: $baseline-grid - 4;
+  padding: 2px 2px 1px;
   border-bottom: 1px solid;
   position: relative;
-  box-sizing: border-box;
+  box-sizing: content-box;
   min-width: 8 * $baseline-grid;
+  min-height: 26px;
 
   *:first-child {
     flex: 1;
@@ -97,7 +96,7 @@ md-select {
     white-space: nowrap;
     overflow: hidden;
     max-width: calc(100% - 2*#{$baseline-grid});
-    transform: translate3d(0, 3px, 0);
+    transform: translate3d(0, 2px, 0);
   }
 
   .md-select-icon {
