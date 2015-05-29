@@ -23,25 +23,26 @@ exports.task = function (done) {
    *
    * NOTE: All versions must pass before the CI server will announce 'success'
    */
-  function captureError(next) {
+  function captureError(next,done) {
     return function(exitCode) {
       if (exitCode != 0) {
         gutil.log(gutil.colors.red("Karma exited with the following exit code: " + exitCode));
         errorCount++;
       }
-      next();
+      // Do not process next set of tests if current set had >0 errors.
+      (errorCount > 0) && done() || next();
     };
   }
 
 
   gutil.log('Running unit tests on unminified source.');
   util.buildJs(true);
-  karma.start(karmaConfig, captureError(testMinified));
+  karma.start(karmaConfig, captureError(testMinified,clearEnv));
 
   function testMinified() {
     gutil.log('Running unit tests on minified source.');
     process.env.KARMA_TEST_COMPRESSED = true;
-    karma.start(karmaConfig, captureError(testMinifiedJquery));
+    karma.start(karmaConfig, captureError(testMinifiedJquery,clearEnv));
   }
 
   function testMinifiedJquery() {
