@@ -40,6 +40,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   ctrl.incrementSelectedIndex = incrementSelectedIndex;
   ctrl.updateInkBarStyles = updateInkBarStyles;
   ctrl.updateTabOrder = $mdUtil.debounce(updateTabOrder, 100);
+  ctrl.getTabElementIndex = getTabElementIndex;
 
   init();
 
@@ -73,6 +74,11 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     elements.contents = elements.contentsWrapper.getElementsByTagName('md-tab-content');
 
     return elements;
+  }
+
+  function getTabElementIndex(tabEl){
+    var tabs = $element[0].getElementsByTagName('md-tab');
+    return Array.prototype.indexOf.call(tabs, tabEl[0]);
   }
 
   function keydown (event) {
