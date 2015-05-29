@@ -78,6 +78,7 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
       itemText:      '&mdItemText',
       placeholder:   '@placeholder',
       noCache:       '=?mdNoCache',
+      preItemChange: '&?mdPreSelectedItemChange',
       itemChange:    '&?mdSelectedItemChange',
       textChange:    '&?mdSearchTextChange',
       minLength:     '=?mdMinLength',
@@ -111,7 +112,7 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
             <li ng-repeat="(index, item) in $mdAutocompleteCtrl.matches"\
                 ng-class="{ selected: index === $mdAutocompleteCtrl.index }"\
                 ng-hide="$mdAutocompleteCtrl.hidden"\
-                ng-click="$mdAutocompleteCtrl.select(index)"\
+                ng-click="$mdAutocompleteCtrl.preSelect(index)"\
                 md-autocomplete-list-item="$mdAutocompleteCtrl.itemName">\
                 ' + getItemTemplate() + '\
             </li>\

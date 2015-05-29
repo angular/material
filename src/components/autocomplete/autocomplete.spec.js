@@ -118,7 +118,7 @@ describe('<md-autocomplete>', function() {
       element.scope().$apply();
       $timeout.flush();
 
-      ctrl.select(0);
+      ctrl.preSelect(0);
       element.scope().$apply();
 
       expect(scope.searchText).toBe('foo');
@@ -161,7 +161,7 @@ describe('<md-autocomplete>', function() {
       element.scope().$apply();
       $timeout.flush();
 
-      ctrl.select(0);
+      ctrl.preSelect(0);
       element.scope().$apply();
 
       expect(scope.itemChanged).toHaveBeenCalled();
@@ -182,6 +182,73 @@ describe('<md-autocomplete>', function() {
       expect(scope.itemChanged.calls.count()).toBe(2);
       expect(scope.itemChanged.calls.mostRecent().args[0]).toBeUndefined();
       expect(scope.selectedItem).toBe(null);
+    }));
+
+    it('should notify selected item watchers when md-pre-selected-item-change returns true', inject(function($timeout, $mdConstant) {
+      var scope = createScope();
+      scope.itemChanged = jasmine.createSpy('itemChanged');
+
+      scope.preSelectedItemChange = function(item){
+        return item.display !== 'foo';
+      };
+      spyOn(scope, 'preSelectedItemChange').and.callThrough();
+
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-selected-item-change="itemChanged(item)"\
+              md-pre-selected-item-change="preSelectedItemChange(item)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl    = element.controller('mdAutocomplete');
+
+      element.scope().searchText = 'fo';
+      ctrl.keydown({});
+      element.scope().$apply();
+      $timeout.flush();
+
+      ctrl.preSelect(0);
+      element.scope().$apply();
+
+      expect(scope.preSelectedItemChange).toHaveBeenCalled();
+      expect(scope.preSelectedItemChange.calls.mostRecent().args[0].display).toBe('foo');
+      expect(scope.itemChanged.calls.count()).toBe(0);
+
+      expect(scope.selectedItem).toBeNull();
+
+      ctrl.clear();
+      element.scope().$apply();
+
+      expect(scope.itemChanged.calls.count()).toBe(0);
+      expect(scope.selectedItem).toBeNull();
+
+      element.scope().searchText = 'ba';
+      ctrl.keydown({});
+      element.scope().$apply();
+      $timeout.flush();
+
+      ctrl.preSelect(0);
+      element.scope().$apply();
+
+      expect(scope.preSelectedItemChange).toHaveBeenCalled();
+      expect(scope.preSelectedItemChange.calls.mostRecent().args[0].display).toBe('bar');
+      expect(scope.itemChanged.calls.count()).toBe(1);
+
+      expect(scope.selectedItem.display).toBe('bar');
+
+      ctrl.clear();
+      element.scope().$apply();
+
+      expect(scope.itemChanged.calls.count()).toBe(2);
+      expect(scope.itemChanged.calls.mostRecent().args[0]).toBeUndefined();
+      expect(scope.selectedItem).toBeNull();
+
+
     }));
   });
 

@@ -157,7 +157,7 @@ describe('<md-chips>', function() {
         });
 
         element.scope().$apply(function() {
-          autocompleteCtrl.select(0);
+          autocompleteCtrl.preSelect(0);
         });
 
         expect(scope.items.length).toBe(4);
