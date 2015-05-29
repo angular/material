@@ -38,7 +38,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   ctrl.canPageBack = canPageBack;
   ctrl.refreshIndex = refreshIndex;
   ctrl.incrementSelectedIndex = incrementSelectedIndex;
-  ctrl.updateInkBarStyles = updateInkBarStyles;
+  ctrl.updateInkBarStyles = $mdUtil.debounce(updateInkBarStyles, 100);
   ctrl.updateTabOrder = $mdUtil.debounce(updateTabOrder, 100);
 
   init();
@@ -49,7 +49,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     $scope.$watch('$mdTabsCtrl.offsetLeft', handleOffsetChange);
     $scope.$watch('$mdTabsCtrl.hasContent', handleHasContent);
     angular.element($window).on('resize', handleWindowResize);
-    angular.element(elements.paging).on('DOMSubtreeModified', updateInkBarStyles);
+    angular.element(elements.paging).on('DOMSubtreeModified', ctrl.updateInkBarStyles);
     $timeout(updateHeightFromContent, 0, false);
     $timeout(adjustOffset);
     $scope.$on('$destroy', cleanup);
@@ -57,7 +57,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
 
   function cleanup () {
     angular.element($window).off('resize', handleWindowResize);
-    angular.element(elements.paging).off('DOMSubtreeModified', updateInkBarStyles);
+    angular.element(elements.paging).off('DOMSubtreeModified', ctrl.updateInkBarStyles);
   }
 
   //-- Change handlers
@@ -84,7 +84,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
 
     $scope.selectedIndex = getNearestSafeIndex(newValue);
     ctrl.lastSelectedIndex = oldValue;
-    updateInkBarStyles();
+    ctrl.updateInkBarStyles();
     updateHeightFromContent();
     $scope.$broadcast('$mdTabsChanged');
     ctrl.tabs[oldValue] && ctrl.tabs[oldValue].scope.deselect();
@@ -168,7 +168,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     $scope.$apply(function () {
       ctrl.lastSelectedIndex = $scope.selectedIndex;
       ctrl.offsetLeft = fixOffset(ctrl.offsetLeft);
-      $timeout(updateInkBarStyles, 0, false);
+      $timeout(ctrl.updateInkBarStyles, 0, false);
     });
   }
 
@@ -346,7 +346,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
 
   function updateInkBarStyles () {
     if (!elements.tabs[$scope.selectedIndex]) return;
-    if (!ctrl.tabs.length) return queue.push(updateInkBarStyles);
+    if (!ctrl.tabs.length) return queue.push(ctrl.updateInkBarStyles);
     //-- if the element is not visible, we will not be able to calculate sizes until it is
     //-- we should treat that as a resize event rather than just updating the ink bar
     if (!$element.prop('offsetParent')) return handleResizeWhenVisible();
