@@ -53,10 +53,7 @@ md-input-container > md-select {
 
 md-select {
   display: inline-block;
-  margin-top: 0.35em;
-  margin-bottom: 0.80em;
-  margin-left: 2px;
-  margin-right: 2px;
+  margin: 0.125em 2px 1.3em;
   &:focus {
     outline: none;
   }
@@ -100,6 +97,7 @@ md-select {
     white-space: nowrap;
     overflow: hidden;
     max-width: calc(100% - 2*#{$baseline-grid});
+    transform: translate3d(0, 3px, 0);
   }
 
   .md-select-icon {
@@ -107,6 +105,7 @@ md-select {
     text-align: end;
     width: 3 * $baseline-grid;
     margin: 0 .5 * $baseline-grid;
+    transform: translate3d(0, 1px, 0);
   }
 
   .md-select-icon:after {
