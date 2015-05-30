@@ -89,7 +89,10 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
     },
     template: function (element, attr) {
       return '\
-        <md-autocomplete-wrap ng-class="{ \'md-whiteframe-z1\': !floatingLabel }" role="listbox">\
+        <md-autocomplete-wrap\
+            layout="row"\
+            ng-class="{ \'md-whiteframe-z1\': !floatingLabel }"\
+            role="listbox">\
           ' + getInputElement() + '\
           <button\
               type="button"\
@@ -145,7 +148,7 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
       function getInputElement() {
         if (attr.mdFloatingLabel) {
           return '\
-            <md-input-container ng-if="floatingLabel">\
+            <md-input-container flex ng-if="floatingLabel">\
               <label>{{floatingLabel}}</label>\
               <input type="search"\
                   id="fl-input-{{$mdAutocompleteCtrl.id}}"\
@@ -165,7 +168,7 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
             </md-input-container>';
         } else {
           return '\
-            <input type="search"\
+            <input flex type="search"\
                 id="input-{{$mdAutocompleteCtrl.id}}"\
                 name="{{name}}"\
                 ng-if="!floatingLabel"\

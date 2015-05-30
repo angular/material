@@ -59,7 +59,6 @@ md-autocomplete {
     position: relative;
     overflow: visible;
     height: 40px;
-
     md-progress-linear {
       position: absolute;
       bottom: 0; left: 0; width: 100%;
@@ -86,9 +85,6 @@ md-autocomplete {
     }
   }
   input:not(.md-input) {
-    position: absolute;
-    left: 0;
-    top: 0;
     width: 100%;
     box-sizing: border-box;
     border: none;
@@ -104,13 +100,10 @@ md-autocomplete {
     }
   }
   button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    position: relative;
     line-height: 20px;
     text-align: center;
-    width: 20px;
-    height: 20px;
+    width: 40px;
     cursor: pointer;
     border: none;
     border-radius: 50%;
