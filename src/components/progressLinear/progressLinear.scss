@@ -1,6 +1,6 @@
-$progress-linear-bar-height:5px !default;
+$progress-linear-bar-height: 5px !default;
 
-md-progress-linear {
+md-progress-linear:not([md-mode="indeterminate"]) {
   display: block;
   width: 100%;
   height: $progress-linear-bar-height;
@@ -34,16 +34,6 @@ md-progress-linear {
     }
   }
 
-  &[md-mode=indeterminate] {
-    .md-bar1 {
-      animation: indeterminate1 4s infinite linear;
-    }
-
-    .md-bar2 {
-      animation: indeterminate2 4s infinite linear;
-    }
-  }
-
   &[md-mode=buffer] {
     .md-container {
       background-color: transparent !important;
@@ -70,108 +60,34 @@ md-progress-linear {
   }
 }
 
-@keyframes indeterminate1 {
-  0% {
-    transform: translateX(-25%) scale(.5, 1);
-  }
-  10% {
-    transform: translateX(25%) scale(.5, 1);
-  }
-  19.99% {
-    transform: translateX(50%) scale(0, 1);
-  }
-  20% {
-    transform: translateX(-37.5%) scale(.25, 1);
-  }
-  30% {
-    transform: translateX(37.5%) scale(.25, 1);
-  }
-  34.99% {
-    transform: translateX(50%) scale(0, 1);
-  }
-  36.99% {
-    transform: translateX(50%) scale(0, 1);
-  }
-  37% {
-    transform: translateX(-37.5%) scale(.25, 1);
-  }
-  47% {
-    transform: translateX(20%) scale(.25, 1);
-  }
-  52% {
-    transform: translateX(35%) scale(.05, 1);
-  }
-  55% {
-    transform: translateX(35%) scale(.1, 1);
-  }
-  58% {
-    transform: translateX(50%) scale(.1, 1);
-  }
-  61.99% {
-    transform: translateX(50%) scale(0, 1);
-  }
-  69.99% {
-    transform: translateX(50%) scale(0, 1);
-  }
-  70% {
-    transform: translateX(-37.5%) scale(.25, 1);
-  }
-  80% {
-    transform: translateX(20%) scale(.25, 1);
-  }
-  85% {
-    transform: translateX(35%) scale(.05, 1);
-  }
-  88% {
-    transform: translateX(35%) scale(.1, 1);
-  }
-  91% {
-    transform: translateX(50%) scale(.1, 1);
-  }
-  92.99% {
-    transform: translateX(50%) scale(0, 1);
-  }
-  93% {
-    transform: translateX(-50%) scale(0, 1);
-  }
-  100% {
-    transform: translateX(-25%) scale(.5, 1);
-  }
-}
-
-@keyframes indeterminate2 {
-  0% {
-    transform: translateX(-50%) scale(0, 1);
-  }
-  25.99%{
-    transform: translateX(-50%) scale(0, 1);
-  }
-  28% {
-    transform: translateX(-37.5%) scale(.25, 1);
-  }
-  38% {
-    transform: translateX(37.5%) scale(.25, 1);
-  }
-  42.99% {
-    transform: translateX(50%) scale(0, 1);
-  }
-  46.99% {
-    transform: translateX(50%) scale(0, 1);
-  }
-  49.99% {
-    transform: translateX(50%) scale(0, 1);
-  }
-  50% {
-    transform: translateX(-50%) scale(0, 1);
-  }
-  60% {
-    transform: translateX(-25%) scale(.5, 1);
-  }
-  70% {
-    transform: translateX(25%) scale(.5, 1);
-  }
-  79.99% {
-    transform: translateX(50%) scale(0, 1);
+md-progress-linear[md-mode="indeterminate"] {
+  display: block;
+  width: 100%;
+  height: $progress-linear-bar-height;
+  position: relative;
+  .md-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    height: $progress-linear-bar-height;
+    top: $progress-linear-bar-height;
+    transition: all .3s linear;
+    .md-bar {
+      height: $progress-linear-bar-height;
+      left: 0;
+      width: 288 * 100% / 360;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+    }
+    .md-bar1 {
+      animation: md-progress-linear-indeterminate-scale-1 4s infinite,
+                 md-progress-linear-indeterminate-1 4s infinite;
+    }
+    .md-bar2 {
+      animation: md-progress-linear-indeterminate-scale-2 4s infinite,
+                 md-progress-linear-indeterminate-2 4s infinite;
+    }
   }
 }
 
@@ -197,5 +113,77 @@ md-progress-linear {
   100% {
     opacity: 1;
     background-position: -200px -23px;
+  }
+}
+
+@keyframes md-progress-linear-indeterminate-scale-1 {
+  0% {
+    transform: scaleX(0.1);
+    animation-timing-function: linear;
+  }
+  36.6% {
+    transform: scaleX(0.1);
+    animation-timing-function: cubic-bezier(0.334731432, 0.124819821, 0.785843996, 1);
+  }
+  69.15% {
+    transform: scaleX(0.83);
+    animation-timing-function: cubic-bezier(0.225732004, 0, 0.233648906, 1.3709798);
+  }
+  100% {
+    transform: scaleX(0.1);
+  }
+}
+
+@keyframes md-progress-linear-indeterminate-1 {
+  0% {
+    left: -378.6 * 100% / 360;
+    animation-timing-function: linear;
+  }
+  20% {
+    left: -378.6 * 100% / 360;
+    animation-timing-function: cubic-bezier(0.5, 0, 0.701732, 0.495818703);
+  }
+  69.15% {
+    left: 77.4 * 100% / 360;
+    animation-timing-function: cubic-bezier(0.302435, 0.38135197, 0.55, 0.956352125);
+  }
+  100% {
+    left: 343.6 * 100% / 360;
+  }
+}
+
+@keyframes md-progress-linear-indeterminate-scale-2 {
+  0% {
+    transform: scaleX(0.1);
+    animation-timing-function: cubic-bezier(0.205028172, 0.057050836, 0.57660995, 0.453970841);
+  }
+  19.15% {
+    transform: scaleX(0.57);
+    animation-timing-function: cubic-bezier(0.152312994, 0.196431957, 0.648373778, 1.00431535);
+  }
+  44.15% {
+    transform: scaleX(0.91);
+    animation-timing-function: cubic-bezier(0.25775882, -0.003163357, 0.211761916, 1.38178961);
+  }
+  100% {
+    transform: scaleX(0.1);
+  }
+}
+
+@keyframes md-progress-linear-indeterminate-2 {
+  0% {
+    left: -197.6 * 100% / 360;
+    animation-timing-function: cubic-bezier(0.15, 0, 0.5150584, 0.409684966);
+  }
+  25% {
+    left: -62.1 * 100% / 360;
+    animation-timing-function: cubic-bezier(0.3103299, 0.284057684, 0.8, 0.733718979);
+  }
+  48.35% {
+    left: 106.2 * 100% / 360;
+    animation-timing-function: cubic-bezier(0.4, 0.627034903, 0.6, 0.902025796);
+  }
+  100% {
+    left: 422.6 * 100% / 360;
   }
 }
