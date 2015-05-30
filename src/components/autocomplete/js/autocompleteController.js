@@ -349,6 +349,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
   }
 
   function updateScroll () {
+    if (!elements.li[self.index]) return;
     var li  = elements.li[self.index],
         top = li.offsetTop,
         bot = top + li.offsetHeight,
