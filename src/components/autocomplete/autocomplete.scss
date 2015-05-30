@@ -50,8 +50,12 @@ md-autocomplete {
       height: auto;
     }
     button {
+      position: absolute;
       top: auto;
-      bottom: 5px;
+      bottom: 0;
+      right: 0;
+      width: 30px;
+      height: 30px;
     }
   }
   md-autocomplete-wrap {
@@ -103,13 +107,15 @@ md-autocomplete {
     position: relative;
     line-height: 20px;
     text-align: center;
-    width: 40px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
     border: none;
     border-radius: 50%;
     padding: 0;
     font-size: 12px;
     background: transparent;
+    margin: auto 5px;
     &:after {
       content: '';
       position: absolute;
