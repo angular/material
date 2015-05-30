@@ -715,7 +715,7 @@
    * @returns {string}
    * @private
    */
-  CalendarCtrl.prototype.getDateId_ = function (date) {
+  CalendarCtrl.prototype.getDateId_ = function(date) {
     return [
       'md',
       this.id,
