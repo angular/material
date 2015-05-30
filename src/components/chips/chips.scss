@@ -89,6 +89,8 @@ $contact-chip-name-width: rem(12) !default;
       box-shadow: none;
       margin: 0;
       position: relative;
+      display: inline-block;
+      vertical-align: middle;
       md-icon {
         height: $chip-delete-icon-size;
         width: $chip-delete-icon-size;
