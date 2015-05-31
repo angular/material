@@ -4,7 +4,9 @@
   <ul class="methods">
     {%- for method in doc.methods %}
     <li id="{$ method.name $}">
-      <h3 class="method-function-syntax"><code class="method-function-syntax">{$ doc.name $}.{$ functionSyntax(method) $}</code></h3>
+      <h3 class="method-function-syntax">
+        <code class="method-function-syntax">{$ doc.name $}.{$ functionSyntax(method) $}</code>
+      </h3>
       <div>{$ method.description | marked $}</div>
 
       {% if method.params %}
