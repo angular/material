@@ -43,14 +43,14 @@ describe('CodepenDataAdapter', function() {
       });
 
       it('includes the core angular css', function() {
-        expect(data.css_external).toBe('https://cdn.rawgit.com/angular/bower-material/master/angular-material.css');
+        expect(data.css_external).toBe('https://rawgit.com/angular/bower-material/master/angular-material.css');
       });
 
       it('includes the external js files, including the asset cache required to serve svgs to codepen', function() {
 
         var expected = [
           'http://some-url-to-external-js-files-required-for-codepen',
-          'https://cdn.rawgit.com/angular/bower-material/master/angular-material.js',
+          'https://rawgit.com/angular/bower-material/master/angular-material.js',
           'https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/assets-cache.js'
         ].join(';');
         expect(data.js_external).toBe(expected)

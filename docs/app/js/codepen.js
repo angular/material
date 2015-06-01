@@ -48,8 +48,8 @@
   // additional fields not used by this service. http://blog.codepen.io/documentation/api/prefill
   function CodepenDataAdapter() {
 
-    var CORE_JS = 'https://cdn.rawgit.com/angular/bower-material/master/angular-material.js';
-    var CORE_CSS = 'https://cdn.rawgit.com/angular/bower-material/master/angular-material.css';
+    var CORE_JS = 'https://rawgit.com/angular/bower-material/master/angular-material.js';
+    var CORE_CSS = 'https://rawgit.com/angular/bower-material/master/angular-material.css';
     var ASSET_CACHE_JS = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/assets-cache.js';
 
     return {
