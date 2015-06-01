@@ -2,7 +2,7 @@ hljs {
   display: block;
   overflow-x: auto;
   padding: 0;
-  background: #181E37;
+  background: #0C2238;
   color: white;
   font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
   line-height: 1.45;
@@ -17,7 +17,8 @@ hljs {
 hljs:before {
   content: attr(lang);
   display: block;
-  background: #3949ab;
+  background: #1C5792;
+  color: white;
   line-height: 48px;
   padding: 0 16px;
   border-radius: 2px 2px 0 0;
@@ -63,7 +64,7 @@ hljs .hljs-constant,
 .hljs-value,
 .hljs-params,
 .hljs-regexp {
-  color: #ABC0E7;
+  color: #7DB9F4;
 }
 
 .hljs-link_url,

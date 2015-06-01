@@ -35,21 +35,32 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider)
     .when('/getting-started', {
       templateUrl: 'partials/getting-started.tmpl.html'
     });
+  $mdThemingProvider.definePalette('docs-blue', $mdThemingProvider.extendPalette('blue', {
+      '50':   '#DCEFFF',
+      '100':  '#AAD1F9',
+      '200':  '#7BB8F5',
+      '300':  '#4C9EF1',
+      '400':  '#1C85ED',
+      '500':  '#106CC8',
+      '600':  '#0159A2',
+      '700':  '#025EE9',
+      '800':  '#014AB6',
+      '900':  '#013583',
+      'contrastDefaultColor': 'light',
+      'contrastDarkColors': '50 100 200 A100',
+      'contrastStrongLightColors': '300 400 A200 A400'
+  }));
+  $mdThemingProvider.definePalette('docs-red', $mdThemingProvider.extendPalette('red', {
+    'A100': '#DE3641'
+  }));
 
   $mdThemingProvider.theme('docs-dark', 'default')
     .primaryPalette('yellow')
     .dark();
 
-  $mdThemingProvider.definePalette('docs-green', $mdThemingProvider.extendPalette('light-green', {
-    A100: '#ccff90',
-    A200: '#8ECD47',
-    A400: '#76ff03',
-    A700: '#64dd17',
-    contrastLightColors: [ 'A200', 'A700' ]
-  }));
   $mdThemingProvider.theme('default')
-      .primaryPalette('indigo')
-      .accentPalette('docs-green');
+      .primaryPalette('docs-blue')
+      .accentPalette('docs-red');
 
   angular.forEach(PAGES, function(pages, area) {
     angular.forEach(pages, function(page) {
