@@ -133,7 +133,7 @@
               aria-label="View Demo"
               ng-class="{hide: !currentDoc || !currentDoc.hasDemo}"
               ng-href="#/demo/{{currentComponent.name}}">
-              <md-icon md-svg-src="img/icons/ic_play_circle_fill_24px.svg"></md-icon>
+              <md-icon md-svg-src="img/icons/ic_play_circle_fill_24px.svg" style="fill:green"></md-icon>
               <md-tooltip>View Demo</md-tooltip>
             </md-button>
 
@@ -143,7 +143,7 @@
               ng-class="{hide: !currentDoc}"
               ng-href="{{currentDoc.githubUrl}}"
               hide-sm hide-md>
-              <md-icon md-svg-src="img/icons/github-icon.svg"></md-icon>
+              <md-icon md-svg-src="img/icons/github.svg" style="color: rgba(255,255,255,0.97);"></md-icon>
               <md-tooltip>View Source on Github</md-tooltip>
             </md-button>
           </div>
