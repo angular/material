@@ -13,7 +13,7 @@ body {
   max-height: 100%;
 }
 table {
-  margin-bottom: 20px;
+  margin-bottom: 8px;
   max-width: 100%;
   width: 100%;
   border-spacing: 0;
@@ -347,6 +347,7 @@ code:not(.highlight) {
   flex-direction: column;
   align-items: center;
   padding: 0 0 16px;
+  margin: 0 auto;
 }
 .docs-logo:focus {
   outline: none;
@@ -653,7 +654,7 @@ ul.buckets li a:focus md-icon {
   padding-left: 4px;
 }
 ul.methods > li {
-  margin-bottom: 48px;
+  margin: 0 0 48px;
 }
 
 ul.methods .method-function-syntax {
@@ -740,9 +741,6 @@ ul.methods {
   padding: 0;
   list-style: none;
 }
-ul.methods > li {
-  margin: 0;
-}
 ul.methods > li:first-child > *:first-child {
   padding-top: 0;
 }
@@ -790,4 +788,16 @@ docs-demo .doc-demo-content {
   background: #f6f6f6 !important;
   color: #202020 !important;
   z-index: 3;
+}
+.service-desc {
+  overflow: hidden;
+  background: #E3ECF5;
+  padding: 16px;
+  margin: 0 0 8px;
+}
+.service-desc > p:first-child {
+  margin-top: 0;
+}
+.service-desc > p:last-child {
+  margin-bottom: 0;
 }
