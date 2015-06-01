@@ -1,11 +1,11 @@
 
-.appDemoFontIcons {
+.appDemoFontIconsWithClassnames {
     padding:25px;
     width: 100%;
 }
-.appDemoFontIcons,
-.appDemoFontIcons *:before,
-.appDemoFontIcons *:after {
+.appDemoFontIconsWithClassnames,
+.appDemoFontIconsWithClassnames *:before,
+.appDemoFontIconsWithClassnames *:after {
   box-sizing: border-box;
 }
 
@@ -18,7 +18,7 @@
       line-height:1;
       font-weight:normal;
       font-style:normal;
-      speak:none;
+
       text-decoration:inherit;
       text-transform:none;
       text-rendering:optimizeLegibility;

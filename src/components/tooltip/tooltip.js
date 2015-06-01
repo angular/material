@@ -135,7 +135,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       };
       var leaveHandler = function () {
         var autohide = scope.hasOwnProperty('autohide') ? scope.autohide : attr.hasOwnProperty('mdAutohide');
-        if ($document[0].activeElement !== parent[0] || autohide || mouseActive) {
+        if (autohide || mouseActive || ($document[0].activeElement !== parent[0]) ) {
           setVisible(false);
         }
         mouseActive = false;

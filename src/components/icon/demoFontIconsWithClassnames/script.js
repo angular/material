@@ -1,6 +1,6 @@
 
 angular
-  .module('appDemoFontIcons', ['ngMaterial'])
+  .module('appDemoFontIconsWithClassnames', ['ngMaterial'])
   .controller('DemoCtrl', function( $scope ) {
       // Create list of font-icon names with color overrides
       var iconData = [
