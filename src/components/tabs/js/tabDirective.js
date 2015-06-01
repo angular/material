@@ -103,6 +103,7 @@ function MdTab () {
           scope:    scope,
           parent:   scope.$parent,
           index:    index,
+          element:  element,
           template: element.find('md-tab-body').html(),
           label:    element.find('md-tab-label').html()
         }, index);

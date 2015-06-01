@@ -136,6 +136,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   function select (index) {
     if (!locked) ctrl.focusIndex = $scope.selectedIndex = index;
     ctrl.lastClick = true;
+    ctrl.tabs[index].element.triggerHandler('click');
   }
 
   function scroll (event) {
