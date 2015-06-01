@@ -320,9 +320,14 @@ code:not(.highlight) {
 }
 .docs-menu .menu-toggle-list a.md-button {
   display: block;
-  font-weight: 400;
   padding: 0 16px 0 32px;
   text-transform: none;
+  text-rendering: optimizeLegibility;
+  font-weight: 500;
+}
+
+ul#docs-menu-Directives {
+  margin-bottom: 20px;
 }
 .md-button-toggle .md-toggle-icon {
   display: block;
@@ -712,7 +717,7 @@ md-content.demo-source-container > hljs > pre > code.highlight {
   margin-top: 10px;
 }
 
-.api-section {
+.api-section, .api-param-section {
   margin: 3em 0 0;
 }
 .api-section h3 {
