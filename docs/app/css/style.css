@@ -19,7 +19,7 @@ table {
   border-spacing: 0;
   border-radius: 2px;
   overflow: hidden;
-  border: 1px solid #eee;
+  border: 1px solid rgba(238, 238, 238, 0.47);
 }
 
 /***************
@@ -637,19 +637,41 @@ ul.buckets li a:focus md-icon {
   color: #888;
 }
 
+code.api-type {
+  font-weight: bold;
+}
+
 .api-params-content ul {
   padding-left: 4px;
 }
-ul.methods > li {
+ul.methods > li#id {
   margin-bottom: 48px;
 }
 
 ul.methods .method-function-syntax {
+
+  color: rgb(63, 81, 181);
   font-weight: normal;
   font-size: 1.6rem;
   margin: 0;
   -webkit-margin-before: 0;
   -webkit-margin-after: 0;
+}
+
+ul.methods .method-param-table, .api-param-table {
+  border: 1px solid rgba(238, 238, 238, 0.47);
+  border-radius: 9px;
+  overflow: hidden;
+}
+
+.api-param-table > table,
+.method-param-table > table {
+  border-bottom: none;
+  margin-bottom : 0px;
+}
+
+.api-param-section {
+  margin-top: 40px;
 }
 
 h3 .method-function-syntax {
@@ -729,6 +751,7 @@ ul.methods {
 }
 ul.methods > li {
   margin: 0;
+  margin-bottom: 20px;
 }
 ul.methods > li:first-child > *:first-child {
   padding-top: 0;
@@ -777,4 +800,20 @@ docs-demo .doc-demo-content {
   background: #f6f6f6 !important;
   color: #202020 !important;
   z-index: 3;
+}
+
+header.api-profile-header {
+  color: rgb(63, 81, 181);
+  font-weight: bold;
+}
+
+.api-profile-description ol li {
+  padding-bottom: 8px;
+}
+
+.image_caption {
+    padding-left: 30%;
+    font-size: .7em;
+    margin-top: -15px;
+    display: block;
 }
