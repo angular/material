@@ -1,3 +1,38 @@
+<a name="0.9.7"></a>
+### 0.9.7  (2015-06-01)
+
+
+#### Features
+
+* **autocomplete:** adds support for validation/ng-messages ([1f0a8450](https://github.com/angular/material/commit/1f0a845033df53244c54b47b42173fb37241586c), closes [#2808](https://github.com/angular/material/issues/2808), [#2664](https://github.com/angular/material/issues/2664))
+* **icons:** add support for font-icons with ligatures and Material-Icon demos ([a1074907](https://github.com/angular/material/commit/a10749074ee05b5f12685c546c52165bf7420eb9), closes [#3059](https://github.com/angular/material/issues/3059))
+
+
+#### Breaking Changes
+
+* **autocomplete:** `name` attribute has been changed to `input-name` to more clearly show its purpose
+
+
+#### Bug Fixes
+
+* **autocomplete:**
+  * only 2 messages will be displayed at any given time for autocomplete ([6b4e95ce](https://github.com/angular/material/commit/6b4e95ce23dded8787329cc0f394fe9178d5bc06), closes [#2785](https://github.com/angular/material/issues/2785))
+  * prevents text from going under the `clear` button ([73e03a70](https://github.com/angular/material/commit/73e03a704124475cadb2eec5de09403c9a447186), closes [#2193](https://github.com/angular/material/issues/2193), [#2578](https://github.com/angular/material/issues/2578))
+  * prevents error on keydown when menu is hidden ([a7dcfb6d](https://github.com/angular/material/commit/a7dcfb6d9427d0645ed98f53f9575925177dcbe6), closes [#2774](https://github.com/angular/material/issues/2774))
+  * autocomplete will no longer show the dropdown on value changes when not focused ([c3ec08d8](https://github.com/angular/material/commit/c3ec08d8aa5ccfa95fec4f41a5be09369cd19f73), closes [#2756](https://github.com/angular/material/issues/2756))
+* **input:** update disabled underline styles ([8f2b2c68](https://github.com/angular/material/commit/8f2b2c6835feb151e362d9e135c795055f9a5ccd), closes [#2870](https://github.com/angular/material/issues/2870))
+* **progressLinear:** rewrites animation for progress linear ([1d478ebd](https://github.com/angular/material/commit/1d478ebd6e5c6ddb6453cc1a708064459075a75e), closes [#2762](https://github.com/angular/material/issues/2762))
+* **tabs:**
+  * adds ui-sref/ng-href support to tabs ([6c53d112](https://github.com/angular/material/commit/6c53d1127fc1cb7d2a86802e5831642a40ff1e41), closes [#2344](https://github.com/angular/material/issues/2344))
+  * updating dynamic tab labels will now be reflected ([8ac4fa1b](https://github.com/angular/material/commit/8ac4fa1b3f23f1f73125cc7e2425d349d7ad546e))
+  * select/deselect events will now fire when a tab is removed but the index does no ([5e47b52b](https://github.com/angular/material/commit/5e47b52bd6a8817b2624ca6797b8267a162f84af), closes [#2837](https://github.com/angular/material/issues/2837))
+  * initial state will now scroll to selected tab ([120c271b](https://github.com/angular/material/commit/120c271be0058ec96e676c34dd55baf53357ae6d), closes [#2838](https://github.com/angular/material/issues/2838))
+* **toolbar:** add h1 to toolbar tools headings ([c100ef10](https://github.com/angular/material/commit/c100ef10069f769f90d606792c68ca9042fe67a4))
+* **tooltip:**
+  * pointer-events 'none' used properly with activate events ([667e4c24](https://github.com/angular/material/commit/667e4c244ccd9a1dfef6894a64b6df0c5e2f6305))
+  * hide tooltip after mouseleave if focus is achieved through mousedown ([e73d290c](https://github.com/angular/material/commit/e73d290cc84f07612d0faf08aec014714f18011a))
+
+
 <a name="0.9.6"></a>
 ### 0.9.6  (2015-05-28)
 
