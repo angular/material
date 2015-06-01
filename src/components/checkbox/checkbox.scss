@@ -13,7 +13,8 @@ md-checkbox {
   cursor: pointer;
   outline: none;
   user-select: none;
-  padding-left: $checkbox-width;
+  @include rtl(padding-left, $checkbox-width, 0);
+  @include rtl(padding-right, 0, $checkbox-width);
   position: relative;
   line-height: $checkbox-width + $checkbox-margin;
   min-width: $checkbox-width;
@@ -43,11 +44,12 @@ md-checkbox {
   .md-container {
     position: absolute;
     top: 50%;
-    left: 0;
     display: inline-block;
     width: $checkbox-width;
     height: $checkbox-height;
     transform: translateY(-50%);
+    @include rtl(left, 0, auto);
+    @include rtl(right, auto, 0);
 
     &:before {
       background-color: transparent;
@@ -130,7 +132,8 @@ md-checkbox {
     user-select: text;
 
     span {
-      margin-left: $checkbox-text-margin;
+      @include rtl(margin-left, $checkbox-text-margin, 0);
+      @include rtl(margin-right, 0, $checkbox-text-margin);
     }
   }
 }
