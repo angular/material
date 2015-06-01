@@ -98,7 +98,7 @@ consistency across your application.
         <span flex="25" class="docs-definition" aria-describedby="body-selectors">
           <code>.md-body-1</code><br>
         </span>
-        <p class="docs-output" aria-describedby="body-output">Regular 14px</p>
+        <p class="docs-output md-body-1" aria-describedby="body-output">Regular 14px</p>
       </li>
       <li layout="row" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="body-selectors"><code>
