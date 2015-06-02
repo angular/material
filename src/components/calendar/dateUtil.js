@@ -19,7 +19,8 @@
       incrementDays: incrementDays,
       incrementMonths: incrementMonths,
       getLastDateOfMonth: getLastDateOfMonth,
-      isSameDay: isSameDay
+      isSameDay: isSameDay,
+      isValidDate: isValidDate
     };
 
     /**
@@ -161,6 +162,15 @@
      */
     function getLastDateOfMonth(date) {
       return new Date(date.getFullYear(), date.getMonth(), getNumberOfDaysInMonth(date));
+    }
+
+    /**
+     * Checks whether a date is valid.
+     * @param {Date} date
+     * @return {boolean} Whether the date is a valid Date.
+     */
+    function isValidDate(date) {
+      return date != null && date.getTime && !isNaN(date.getTime());
     }
   });
 })();
