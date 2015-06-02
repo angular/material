@@ -1,1 +1,4 @@
 /** Demo styles for mdCalendar. */
+.md-date-picker {
+  border: 2px solid darkred;
+}
