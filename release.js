@@ -204,7 +204,8 @@
       'gulp build',
       'gulp build-all-modules --mode=default',
       'gulp build-all-modules --mode=closure',
-      'rm -rf dist/demos'
+      'rm -rf dist/demos',
+      'sed -i \'\' \'s/\\/rawgit\\.com\\/angular\\/bower-material\\/master\\/angular-material\\.js/\\/cdn.rawgit.com/angular/bower-material/v0.9.7/angular-material.js/\' dist/docs/docs.js'
     ]);
     done();
     start('Copy files into bower repo...');
