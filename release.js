@@ -48,7 +48,7 @@
       err('You must be authenticated with npm as "angularcore" to perform a release.');
     } else if (exec('git rev-parse --abbrev-ref HEAD') !== 'master') {
       err('Releases can only performed from master at this time.');
-    } else if (exec('git pull -q --rebase {{origin}} master 2> /dev/null') instanceof Error) {
+    } else if (exec('git pull -q --rebase {{origin}} master') instanceof Error) {
       err('Please make sure your local branch is synced with origin/master.');
     } else {
       return true;
@@ -171,7 +171,7 @@
 
   function cloneRepo (repo) {
     start('Cloning ' + repo.cyan + ' from Github...');
-    exec('git clone https://github.com/angular/' + repo + '.git --depth=1 2> /dev/null');
+    exec('git clone https://github.com/angular/' + repo + '.git --depth=1');
     done();
     cleanupCmds.push('rm -rf ' + repo);
   }
@@ -205,7 +205,6 @@
       'gulp build-all-modules --mode=default',
       'gulp build-all-modules --mode=closure',
       'rm -rf dist/demos',
-      'sed -i \'\' \'s,\\/rawgit\\.com\\/angular\\/bower-material\\/master\\/angular-material,\\/cdn.rawgit.com/angular/bower-material/v{{newVersion}}/angular-material,g\' dist/docs/docs.js'
     ]);
     done();
     start('Copy files into bower repo...');
@@ -242,7 +241,8 @@
     //-- build files for bower
     exec([
       'rm -rf dist',
-      'gulp docs'
+      'gulp docs',
+      'sed -i \'\' \'s,\\/rawgit\\.com\\/angular\\/bower-material\\/master\\/angular-material,\\/cdn.rawgit.com/angular/bower-material/v{{newVersion}}/angular-material,g\' dist/docs/docs.js'
     ]);
     //-- copy files over to site repo
     exec([
@@ -305,7 +305,7 @@
     try {
       var options = Object.create(defaultOptions);
       for (var key in userOptions) options[key] = userOptions[key];
-      return child_process.execSync(fill(cmd), options).trim();
+      return child_process.execSync(fill(cmd) + ' 2> /dev/null', options).trim();
     } catch (err) {
       return err;
     }
