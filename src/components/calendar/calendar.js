@@ -39,6 +39,7 @@
           '</div>' +
           '<div aria-live="polite"></div>' +
         '</div>',
+      scope: {},
       restrict: 'E',
       require: ['ngModel', 'mdCalendar'],
       controller: CalendarCtrl,
@@ -160,9 +161,8 @@
     this.cellClickHandler = function() {
       if (this.dataset.timestamp) {
         $scope.$apply(function() {
-          self.ngModelCtrl.$setViewValue(new Date(Number(this.dataset.timestamp)));
-          self.ngModelCtrl.$render();
-        }.bind(this));
+          self.setNgModelValue(new Date(Number(this.dataset.timestamp)));
+        }.bind(this)); // The `this` here is the cell element.
       }
     };
 
@@ -195,7 +195,7 @@
   CalendarCtrl.prototype.buildInitialCalendarDisplay = function() {
     this.buildWeekHeader();
 
-    this.displayDate = this.selectedDate || new Date();
+    this.displayDate = this.selectedDate || new Date(Date.now());
     var nextMonth = this.dateUtil.getDateInNextMonth(this.displayDate);
     this.calendarElement.appendChild(this.buildCalendarForMonth(this.displayDate));
     this.calendarElement.appendChild(this.buildCalendarForMonth(nextMonth));
@@ -237,8 +237,7 @@
       // Handled key events fall into two categories: selection and navigation.
       // Start by checking if this is a selection event.
       if (event.which === self.keyCode.ENTER) {
-        self.ngModelCtrl.$setViewValue(self.displayDate);
-        self.ngModelCtrl.$render();
+        self.setNgModelValue(self.displayDate);
         event.preventDefault();
         return;
       }
@@ -279,6 +278,16 @@
       case keyCode.END: return dateUtil.getLastDateOfMonth(this.displayDate);
       default: return this.displayDate;
     }
+  };
+
+  /**
+   *
+   * @param {Date} date
+   */
+  CalendarCtrl.prototype.setNgModelValue = function(date) {
+    this.$scope.$emit('md-calendar-change', date);
+    this.ngModelCtrl.$setViewValue(date);
+    this.ngModelCtrl.$render();
   };
 
   /**
@@ -504,8 +513,8 @@
       return this.$q.when();
     }
 
-    // If trying to show a null or undefined date, do nothing.
-    if (!date) {
+    // If trying to show an invalid date, do nothing.
+    if (!this.dateUtil.isValidDate(date)) {
       return this.$q.when();
     }
 
