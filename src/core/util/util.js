@@ -44,6 +44,11 @@ angular.module('material.core')
     // and uses CSS/JS to prevent it from scrolling
     disableScrollAround: function(element) {
       element = element instanceof angular.element ? element[0] : element;
+
+      if (this.getClosest(element, 'MD-DIALOG')) {
+        return angular.noop;
+      }
+
       var parentEl = element;
       var disableTarget;
 

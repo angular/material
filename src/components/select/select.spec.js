@@ -1,4 +1,4 @@
-describe('<md-select-menu>', function() {
+describe('<md-select>', function() {
 
   beforeEach(module('material.components.select', 'ngAnimateMock'));
 
