@@ -1,6 +1,7 @@
 md-divider {
   display: block;
-  border-top: 1px solid;
+  border-top-width: 1px;
+  border-top-style: solid;
   margin: 0;
 
   &[md-inset] {

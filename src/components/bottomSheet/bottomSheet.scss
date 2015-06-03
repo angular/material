@@ -14,7 +14,8 @@ md-bottom-sheet {
   padding: $bottom-sheet-vertical-padding $bottom-sheet-horizontal-padding $bottom-sheet-vertical-padding + $bottom-sheet-hidden-bottom-padding $bottom-sheet-horizontal-padding;
   z-index: $z-index-bottom-sheet;
 
-  border-top: 1px solid;
+  border-top-width: 1px;
+  border-top-style: solid;
 
   transform: translate3d(0, $bottom-sheet-hidden-bottom-padding, 0);
   transition: $swift-ease-out;

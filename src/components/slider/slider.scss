@@ -115,7 +115,8 @@ md-slider {
       width: $slider-thumb-width;
       height: $slider-thumb-height;
       border-radius: max($slider-thumb-width, $slider-thumb-height);
-      border: 3px solid;
+      border-width: 3px;
+      border-style: solid;
     }
 
     transform: scale($slider-thumb-default-scale);
@@ -186,7 +187,8 @@ md-slider {
       $slider-thumb-height + $slider-thumb-disabled-border * 2
     );
     transform: scale($slider-thumb-disabled-scale);
-    border: $slider-thumb-disabled-border solid;
+    border-width: $slider-thumb-disabled-border;
+    border-style: solid;
     display: none;
   }
 

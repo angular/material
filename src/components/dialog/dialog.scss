@@ -94,7 +94,8 @@ md-dialog {
     }
   }
   &.md-content-overflow .md-actions {
-    border-top: 1px solid;
+    border-top-width: 1px;
+    border-top-style: solid;
   }
 
 }

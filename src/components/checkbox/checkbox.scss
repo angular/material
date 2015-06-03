@@ -95,7 +95,8 @@ md-checkbox {
     left: 0;
     width: $checkbox-width;
     height: $checkbox-height;
-    border: $checkbox-border-width solid;
+    border-width: $checkbox-border-width;
+    border-style: solid;
     border-radius: $checkbox-border-radius;
   }
 
@@ -117,7 +118,8 @@ md-checkbox {
     display: table;
     width: $checkbox-width / 3;
     height: $checkbox-width * 2 / 3;
-    border: $checkbox-border-width solid;
+    border-width: $checkbox-border-width;
+    border-style: solid;
     border-top: 0;
     border-left: 0;
     content: '';
