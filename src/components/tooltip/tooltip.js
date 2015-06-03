@@ -111,9 +111,14 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       return parent;
     }
 
-    function getNearestContentElement () {
-      return $rootElement;
-    }
+     function getNearestContentElement () {
+       var current = element.parent()[0];
+       // Look for the nearest parent md-content, stopping at the rootElement.
+       while (current && current !== $rootElement[0] && current !== document.body) {
+         current = current.parentNode;
+       }
+       return current;
+     }
 
     function hasComputedStyleValue(key, value) {
         // Check if we should show it or not...
