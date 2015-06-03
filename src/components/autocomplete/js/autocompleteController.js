@@ -344,6 +344,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     if (lastCount === self.matches.length) return '';
     lastCount = self.matches.length;
     switch (self.matches.length) {
+      case 0:  return 'There are no matches available.';
       case 1:  return 'There is 1 match available.';
       default: return 'There are ' + self.matches.length + ' matches available.';
     }
