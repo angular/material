@@ -38,10 +38,10 @@ angular.module('dialogDemo1', ['ngMaterial'])
 
   $scope.showAdvanced = function(ev) {
     $mdDialog.show({
-      parent:       angular.element(document.body),
-      controller:   DialogController,
-      templateUrl:  'dialog1.tmpl.html',
-      targetEvent:  ev
+      controller: DialogController,
+      templateUrl: 'dialog1.tmpl.html',
+      parent: angular.element(document.body),
+      targetEvent: ev,
     })
     .then(function(answer) {
       $scope.alert = 'You said the information was "' + answer + '".';
