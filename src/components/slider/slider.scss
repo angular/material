@@ -150,7 +150,8 @@ md-slider {
       top: 19px;
       border-left: $slider-arrow-width / 2 solid transparent;
       border-right: $slider-arrow-width / 2 solid transparent;
-      border-top: $slider-arrow-height solid;
+      border-top-width: $slider-arrow-height;
+      border-top-style: solid;
 
       opacity: 0;
       transform: translate3d(0,-8px,0);
