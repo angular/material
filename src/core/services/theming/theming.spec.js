@@ -189,11 +189,19 @@ describe('$mdThemingProvider', function() {
         themingProvider._parseRules(testTheme, 'primary', '').join('');
       }).toThrow();
     });
+
+    it('drops the default theme name from the selectors', function() {
+      expect(themingProvider._parseRules(
+        defaultTheme, 'primary', '.md-THEME_NAME-theme.md-button { }'
+      ).join('')).toContain('.md-button { }');
+    });
+
     it('replaces THEME_NAME', function() {
       expect(themingProvider._parseRules(
         testTheme, 'primary', '.md-THEME_NAME-theme {}'
       ).join('')).toContain('.md-test-theme {}');
     });
+
     describe('parses foreground text and shadow', function() {
       it('for a light theme', function() {
         testTheme.dark(false);
