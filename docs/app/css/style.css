@@ -766,8 +766,9 @@ ul.methods > li:first-child > *:first-child {
 }
 
 .version-picker {
-  background: #2C80D2 !important;
+  background: #267ED5 !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  margin-bottom: 1px !important;
 }
 .version-picker .menu-toggle-list {
   background: transparent !important;
