@@ -27,7 +27,7 @@ $select-max-visible-options: 5;
   &.md-active {
     opacity: 1;
     md-select-menu {
-      transition: transform $swift-ease-out;
+      transition: $swift-ease-out;
       transition-duration: 200ms;
       > * {
         opacity: 1;
