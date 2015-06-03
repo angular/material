@@ -2,7 +2,7 @@
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 99;
+  z-index: $z-index-menu;
   opacity: 0;
 
   md-menu-divider {
@@ -47,43 +47,43 @@ md-menu-content {
   flex-direction: column;
   padding: $baseline-grid 0;
 
-  > md-menu-item {
-    display: flex;
-    flex-direction: row;
-    height: 6 * $baseline-grid;
-    align-content: center;
-    justify-content: flex-start;
+  &.md-dense md-menu-item {
+    height: 4 * $baseline-grid;
+  }
+}
 
-    > * {
-      width: 100%;
-      margin: auto 0;
-      padding-left: 2*$baseline-grid;
-      padding-right: 2*$baseline-grid;
-    }
+md-menu-item {
+  display: flex;
+  flex-direction: row;
+  height: 6 * $baseline-grid;
+  align-content: center;
+  justify-content: flex-start;
 
-    > .md-button {
-      border-radius: 0;
-      margin: auto 0;
-      font-size: (2*$baseline-grid) - 1;
-      text-transform: none;
-      font-weight: 400;
-      text-align: start;
-      height: 100%;
-      padding-left: 2*$baseline-grid;
-      padding-right: 2*$baseline-grid;
-      display: flex;
-      md-icon {
-        margin: auto 2*$baseline-grid auto 0;
-      }
-      p {
-        margin: auto;
-        flex: 1;
-      }
-    }
+  > * {
+    width: 100%;
+    margin: auto 0;
+    padding-left: 2*$baseline-grid;
+    padding-right: 2*$baseline-grid;
   }
 
-  &.md-dense > md-menu-item {
-    height: 4 * $baseline-grid;
+  > .md-button {
+    border-radius: 0;
+    margin: auto 0;
+    font-size: (2*$baseline-grid) - 1;
+    text-transform: none;
+    font-weight: 400;
+    text-align: start;
+    height: 100%;
+    padding-left: 2*$baseline-grid;
+    padding-right: 2*$baseline-grid;
+    display: flex;
+    md-icon {
+      margin: auto 2*$baseline-grid auto 0;
+    }
+    p {
+      margin: auto;
+      flex: 1;
+    }
   }
 }
 
