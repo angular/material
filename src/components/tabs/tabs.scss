@@ -119,7 +119,7 @@ md-tabs-wrapper {
       display: flex;
       flex-direction: row;
       md-tab-item {
-        flex: 1;
+        flex-grow: 1;
       }
     }
   }
@@ -232,6 +232,7 @@ md-tab {
   text-transform: uppercase;
   float: left;
   font-weight: 500;
+  box-sizing: border-box;
   &.md-focused {
     box-shadow: none;
     outline: none;
