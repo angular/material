@@ -38,6 +38,11 @@ md-autocomplete {
   position: relative;
   overflow: visible;
   min-width: 190px;
+  &[disabled] {
+    input {
+      cursor: not-allowed;
+    }
+  }
   &[md-floating-label] {
     padding-bottom: $input-container-padding + $input-error-height;
     border-radius: 0;
