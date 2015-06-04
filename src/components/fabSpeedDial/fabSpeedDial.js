@@ -140,8 +140,11 @@
 
       // Always reset the items to their natural position/state
       angular.forEach(items, function(item, index) {
-        item.style.transform = '';
-        item.style.transitionDelay = '';
+        var styles = item.style;
+
+        styles.transform = '';
+        styles.transitionDelay = '';
+        styles.opacity = 1;
 
         // Make the items closest to the trigger have the highest z-index
         item.style.zIndex = (items.length - index) + startZIndex;
