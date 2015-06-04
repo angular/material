@@ -4,32 +4,30 @@
       You may supply a direction of <code>left</code>, <code>up</code>, <code>down</code>, or
       <code>right</code> through the <code>md-direction</code> attribute.
     </p>
-  </md-content>
 
-  <div class="lock-size" layout="row" layout-align="center center">
-    <md-fab-speed-dial md-open="demo.isOpen" md-direction="{{demo.selectedDirection}}"
-                       ng-class="demo.selectedMode">
-      <md-fab-trigger>
-        <md-button aria-label="menu" class="md-fab md-warn">
-          <md-icon md-svg-src="img/icons/menu.svg"></md-icon>
-        </md-button>
-      </md-fab-trigger>
+    <div class="lock-size" layout="row" layout-align="center center">
+      <md-fab-speed-dial md-open="demo.isOpen" md-direction="{{demo.selectedDirection}}"
+                         ng-class="demo.selectedMode">
+        <md-fab-trigger>
+          <md-button aria-label="menu" class="md-fab md-warn">
+            <md-icon md-svg-src="img/icons/menu.svg"></md-icon>
+          </md-button>
+        </md-fab-trigger>
 
-      <md-fab-actions>
-        <md-button aria-label="twitter" class="md-fab md-raised md-mini">
-          <md-icon md-svg-src="img/icons/twitter.svg"></md-icon>
-        </md-button>
-        <md-button aria-label="facebook" class="md-fab md-raised md-mini">
-          <md-icon md-svg-src="img/icons/facebook.svg"></md-icon>
-        </md-button>
-        <md-button aria-label="Google hangout" class="md-fab md-raised md-mini">
-          <md-icon md-svg-src="img/icons/hangout.svg"></md-icon>
-        </md-button>
-      </md-fab-actions>
-    </md-fab-speed-dial>
-  </div>
+        <md-fab-actions>
+          <md-button aria-label="twitter" class="md-fab md-raised md-mini">
+            <md-icon md-svg-src="img/icons/twitter.svg"></md-icon>
+          </md-button>
+          <md-button aria-label="facebook" class="md-fab md-raised md-mini">
+            <md-icon md-svg-src="img/icons/facebook.svg"></md-icon>
+          </md-button>
+          <md-button aria-label="Google hangout" class="md-fab md-raised md-mini">
+            <md-icon md-svg-src="img/icons/hangout.svg"></md-icon>
+          </md-button>
+        </md-fab-actions>
+      </md-fab-speed-dial>
+    </div>
 
-  <md-content class="md-padding" layout="column">
     <div layout="row" layout-align="space-around">
       <div layout="column">
         <b>Direction</b>
