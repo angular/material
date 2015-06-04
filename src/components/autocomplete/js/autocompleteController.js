@@ -297,6 +297,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     self.hidden = true;
     self.index = 0;
     self.matches = [];
+    //-- force form to update state for validation
+    elements.$.input.controller('ngModel').$setViewValue($scope.searchText);
   }
 
   function clearValue () {
