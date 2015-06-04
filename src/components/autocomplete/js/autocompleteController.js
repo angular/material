@@ -304,6 +304,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     //-- force form to update state for validation
     $timeout(function () {
       elements.$.input.controller('ngModel').$setViewValue(getDisplayValue($scope.selectedItem) || $scope.searchText);
+      self.hidden = true;
     });
   }
 
