@@ -108,30 +108,43 @@ angular.module('material.components.icon', [
  * When using Font Icons with classnames:
  * <hljs lang="html">
  *
- *  <md-icon md-font-icon="android" alt="android" ></md-icon>
- *  <md-icon md-font-icon="fa-magic" class="fa" alt="magic wand"></md-icon>
+ *  <md-icon md-font-icon="android" aria-label="android" ></md-icon>
+ *  <md-icon class="icon_home"      aria-label="Home"    ></md-icon>
  *
  * </hljs>
  *
- * When using Font Icons with ligatures:
+ * When using Material Font Icons with ligatures:
  * <hljs lang="html">
- *
- *  <md-icon md-font-library="material-icons">face</md-icon>
- *  <md-icon md-font-library="material-icons">#xE87C;</md-icon>
- *  <md-icon md-font-library="material-icons" class="md-light md-48">face</md-icon>
- *
+ *  <!-- For Material Design Icons -->
+ *  <!-- The class '.material-icons' is auto-added. -->
+ *  <md-icon> face </md-icon>
+ *  <md-icon class="md-light md-48"> face </md-icon>
+ *  <md-icon md-font-set="material-icons"> face </md-icon>
+ *  <md-icon> #xE87C; </md-icon>
  * </hljs>
  *
+ * When using other Font-Icon libraries:
+ *
+ * <hljs lang="js">
+ *  // Specify a font-icon style alias
+ *  angular.config(function($mdIconProvider) {
+ *    $mdIconProvider.fontSet('fa', 'fontawesome');
+ *  });
+ * </hljs>
+ *
+ * <hljs lang="html">
+ *  <md-icon md-font-set="fa">email</md-icon>
+ * </hljs>
  *
  */
 function mdIconDirective($mdIcon, $mdTheming, $mdAria, $interpolate ) {
 
   return {
     scope: {
-      fontLib: '@mdFontLibrary',
+      fontSet : '@mdFontSet',
       fontIcon: '@mdFontIcon',
-      svgIcon: '@mdSvgIcon',
-      svgSrc: '@mdSvgSrc'
+      svgIcon : '@mdSvgIcon',
+      svgSrc  : '@mdSvgSrc'
     },
     restrict: 'E',
     transclude:true,
@@ -140,18 +153,26 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $interpolate ) {
   };
 
   function getTemplate(element, attr) {
-    var hasAttrValue = function(key) { return attr[key] && attr[key].length      };
-    var attrValue    = function(key) { return hasAttrValue(key) ? attr[key] : '' };
+    var isEmptyAttr  = function(key) { return angular.isDefined(attr[key]) ? attr[key].length == 0 : false    },
+        hasAttrValue = function(key) { return attr[key] && attr[key].length;     },
+        attrValue    = function(key) { return hasAttrValue(key) ? attr[key] : '' };
 
-    // If using font-icons, transclude the ligature or NRCs
-    var tmpl = hasAttrValue('mdFontIcon')    ? '<span class="md-font {{classNames}}" ng-class="fontIcon"></span>' :
-               hasAttrValue('mdFontLibrary') ? '<span ng-transclude></span>' : '';
+    // If using the deprecated md-font-icon API
+    // If using ligature-based font-icons, transclude the ligature or NRCs
 
-    // Transpose the mdFontLibrary name to the list of classnames
-    // For example, Material Icons expects classnames like `.material-icons.md-48` instead of `.material-icons .md-48`
+    var tmplFontIcon = '<span class="md-font {{classNames}}" ng-class="fontIcon"></span>';
+    var tmplFontSet  = '<span class="{{classNames}}" ng-transclude></span>';
 
-    var names = (attrValue('mdFontLibrary')  + ' ' +  attrValue('class')).trim();
-    element.attr('class',names);
+    var tmpl = hasAttrValue('mdSvgIcon')     ? ''           :
+               hasAttrValue('mdSvgSrc')      ? ''           :
+               isEmptyAttr('mdFontIcon')     ? ''           :
+               hasAttrValue('mdFontIcon')    ? tmplFontIcon : tmplFontSet;
+
+    // If available, lookup the fontSet style and add to the list of classnames
+    // NOTE: Material Icons expects classnames like `.material-icons.md-48` instead of `.material-icons .md-48`
+
+    var names = (tmpl == tmplFontSet) ? $mdIcon.fontSet(attrValue('mdFontSet'))  + ' ' : '';
+        names = (names + attrValue('class')).trim();
 
     return $interpolate( tmpl )({ classNames: names });
   }
@@ -167,17 +188,19 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $interpolate ) {
     // If using a font-icon, then the textual name of the icon itself
     // provides the aria-label.
 
-    var ariaLabel = attr.alt || scope.fontIcon || scope.svgIcon;
+    var ariaLabel = attr.alt || scope.fontIcon || scope.svgIcon || element.text();
     var attrName = attr.$normalize(attr.$attr.mdSvgIcon || attr.$attr.mdSvgSrc || '');
 
-    if ( !attr.mdFontLibrary ) {
-      if (attr.alt != '' && !parentsHaveText() ) {
-        $mdAria.expect(element, 'aria-label', ariaLabel);
-        $mdAria.expect(element, 'role', 'img');
-      } else {
-        // Hide from the accessibility layer.
-        $mdAria.expect(element, 'aria-hidden', 'true');
-      }
+    if (attr.alt != '' && !parentsHaveText() ) {
+
+      $mdAria.expect(element, 'aria-label', ariaLabel);
+      $mdAria.expect(element, 'role', 'img');
+
+    } else if ( !element.text() ) {
+      // If not a font-icon with ligature, then
+      // hide from the accessibility layer.
+
+      $mdAria.expect(element, 'aria-hidden', 'true');
     }
 
     if (attrName) {
