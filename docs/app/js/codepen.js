@@ -48,8 +48,8 @@
   // additional fields not used by this service. http://blog.codepen.io/documentation/api/prefill
   function CodepenDataAdapter() {
 
-    var CORE_JS = 'https://rawgit.com/angular/bower-material/master/angular-material.js';
-    var CORE_CSS = 'https://rawgit.com/angular/bower-material/master/angular-material.css';
+    var CORE_JS = 'http://localhost:8080/angular-material.js';
+    var CORE_CSS = 'http://localhost:8080/angular-material.css';
     var ASSET_CACHE_JS = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/assets-cache.js';
 
     return {
@@ -65,7 +65,7 @@
         title: demo.title,
         html: processHtml(demo),
         css: mergeFiles(files.css).join(' '),
-        js: processJs(files.js),
+        js: 'document.body.innerHTML = document.body.innerHTML.replace(/\{\{\{amp\}\}\}/g, \'&\');' + processJs(files.js),
         js_external: externalScripts.concat([CORE_JS, ASSET_CACHE_JS]).join(';'),
         css_external: CORE_CSS
       };
@@ -141,10 +141,7 @@
     // uses the correct escaped characters
     function htmlEscapeAmpersand(html) {
       return html
-        .replace(/&mdash;/g, "&amp;mdash;")
-        .replace(/&gt;/g, "&amp;gt;")
-        .replace(/&nbsp;/g, "&amp;nbsp;")
-        .replace(/&lt;/g, "&amp;lt;");
+        .replace(/&/g, "{{{amp}}}");
     }
 
     // Required to make codepen work. Demos define their own module when running on the

@@ -120,7 +120,7 @@ gulp.task('docs-js', ['docs-app', 'docs-html2js', 'demos', 'build', 'docs-js-dep
     'dist/docs/js/**/*.js'
   ])
     .pipe(concat('docs.js'))
-    .pipe(gulpif(true, uglify()))
+    .pipe(gulpif(!argv.dev, uglify()))
     .pipe(gulp.dest('dist/docs'));
 });
 

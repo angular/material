@@ -242,7 +242,7 @@
     exec([
       'rm -rf dist',
       'gulp docs',
-      'sed -i \'\' \'s,\\/rawgit\\.com\\/angular\\/bower-material\\/master\\/angular-material,\\/cdn.rawgit.com/angular/bower-material/v{{newVersion}}/angular-material,g\' dist/docs/docs.js'
+      'sed -i \'\' \'s,http:\\/\\/localhost:8080\\/angular-material,http:\\/\\/cdn.rawgit.com/angular/bower-material/v{{newVersion}}/angular-material,g\' dist/docs/docs.js'
     ]);
     //-- copy files over to site repo
     exec([
