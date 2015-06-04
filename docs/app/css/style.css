@@ -750,16 +750,6 @@ ul.methods > li:first-child > *:first-child {
   padding-top: 0;
 }
 
-/* Styles for Windows High Contrast mode */
-@media screen and (-ms-high-contrast: active) {
-  a {
-    text-decoration: underline;
-  }
-  iframe, hljs pre {
-    border: 1px solid #fff;
-  }
-}
-
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
@@ -807,3 +797,42 @@ docs-demo .doc-demo-content {
 .service-desc > p:last-child {
   margin-bottom: 0;
 }
+
+/* ---------------------
+*  Demo Workarounds
+*
+*  Necessary for component demos that append DOM subtrees outside of the demo app.
+*  Because our docs build prepends CSS classes onto custom demo styles provided for developers,
+*  these styles are needed for the docs website.
+*/
+.autocomplete-custom-template li {
+  border-bottom: 1px solid #ccc;
+  height: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  white-space: normal;
+}
+.autocomplete-custom-template li:last-child {
+  border-bottom-width: 0;
+}
+.autocomplete-custom-template .item-title,
+.autocomplete-custom-template .item-metadata {
+  display: block;
+  line-height: 2;
+}
+.autocomplete-custom-template .item-title md-icon {
+  height: 18px;
+  width: 18px;
+}
+
+
+/* Styles for Windows High Contrast mode */
+@media screen and (-ms-high-contrast: active) {
+  a {
+    text-decoration: underline;
+  }
+  iframe, hljs pre {
+    border: 1px solid #fff;
+  }
+}
+
