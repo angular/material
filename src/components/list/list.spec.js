@@ -1,5 +1,11 @@
 describe('mdListItem directive', function() {
+  var $compile, $rootScope;
+
   beforeEach(module('material.components.list', 'material.components.checkbox', 'material.components.switch'));
+  beforeEach(inject(function(_$compile_, _$rootScope_){
+    $compile = _$compile_;
+    $rootScope = _$rootScope_;
+  }));
 
   function setup(html) {
     var el;
@@ -10,7 +16,23 @@ describe('mdListItem directive', function() {
     return el;
   }
 
-  it('forwards click events for md-checkbox', inject(function($rootScope) {
+  it('supports empty list items',function() {
+    var list = setup('\
+                 <md-list>\
+                   <md-list-item></md-list-item>\
+                 </md-list>'
+               );
+
+    var cntr = list[0].querySelector('div');
+
+    if (cntr && cntr.click ) {
+      cntr.click();
+      expect($rootScope.modelVal).toBe(false);
+    }
+
+  });
+
+  it('forwards click events for md-checkbox', function() {
     var listItem = setup('<md-list-item><md-checkbox ng-model="modelVal"></md-checkbox></md-list-item>');
     var cntr = listItem[0].querySelector('div');
 
@@ -19,9 +41,9 @@ describe('mdListItem directive', function() {
       expect($rootScope.modelVal).toBe(true);
     }
 
-  }));
+  });
 
-  it('forwards click events for md-switch', inject(function($rootScope) {
+  it('forwards click events for md-switch', function() {
     var listItem = setup('<md-list-item><md-switch ng-model="modelVal"></md-switch></md-list-item>');
     var cntr = listItem[0].querySelector('div');
 
@@ -30,9 +52,9 @@ describe('mdListItem directive', function() {
       expect($rootScope.modelVal).toBe(true);
     }
 
-  }));
+  });
 
-  it('should convert spacebar keypress events as clicks', inject(function($compile, $rootScope, $mdConstant) {
+  it('should convert spacebar keypress events as clicks', inject(function($mdConstant) {
       var listItem = setup('<md-list-item><md-checkbox ng-model="modelVal"></md-checkbox></md-list-item>');
       var checkbox = angular.element(listItem[0].querySelector('md-checkbox'));
 
@@ -44,7 +66,7 @@ describe('mdListItem directive', function() {
       expect($rootScope.modelVal).toBe(true);
   }));
 
-  it('should not convert spacebar keypress for text areas', inject(function($compile, $rootScope, $mdConstant) {
+  it('should not convert spacebar keypress for text areas', inject(function($mdConstant) {
       var listItem = setup('<md-list-item><textarea ng-model="modelVal"></md-list-item>');
       var inputEl = angular.element(listItem[0].querySelector('textarea')[0]);
 
@@ -56,7 +78,7 @@ describe('mdListItem directive', function() {
       expect($rootScope.modelVal).toBeFalsy();
   }));
 
-  xit('should not convert spacebar keypress for text inputs', inject(function($compile, $rootScope, $mdConstant) {
+  xit('should not convert spacebar keypress for text inputs', inject(function($mdConstant) {
 
       var listItem = setup('<md-list-item><input ng-keypress="pressed = true" type="text"></md-list-item>');
       var inputEl = angular.element(listItem[0].querySelector('input')[0]);

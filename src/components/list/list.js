@@ -208,13 +208,15 @@ function mdListItemDirective($mdAria, $mdConstant, $timeout) {
         }
 
         if (!hasClick && !proxies.length) {
-          firstChild.addEventListener('keypress', function(e) {
+          firstChild && firstChild.addEventListener('keypress', function(e) {
             if (e.target.nodeName != 'INPUT' && e.target.nodeName != 'TEXTAREA') {
               var keyCode = e.which || e.keyCode;
               if (keyCode == $mdConstant.KEY_CODE.SPACE) {
-                firstChild.click();
-                e.preventDefault();
-                e.stopPropagation();
+                if (firstChild) {
+                  firstChild.click();
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
               }
             }
           });
@@ -255,3 +257,4 @@ function MdListController($scope, $element, $mdListInkRipple) {
     $mdListInkRipple.attach(scope, element, options);
   }
 }
+
