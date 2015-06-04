@@ -1,50 +1,56 @@
+@ngdoc content
+@name button
+@description
+
 #&lt;md-button&gt;
 
 Below is a snapshot of the Angular Material **button** component demos with the default themes and standard options:
 
 ![buttonsdemo](https://cloud.githubusercontent.com/assets/210413/7947020/fafde934-093f-11e5-9584-27eb2deedd0f.png)
 
+<br/>
 ### CSS Styles
 
-The base class for all buttons is `.md-button`. This class is applied automatically to the `<md-button .../>` directive:
+The base CSS class for all `<md-button>` components is `.md-button`: 
 
-```css
-.md-button {      
-  padding:        0 6px 0 6px;
-  margin:         6px 8px 6px 8px;
-  min-width:      88px;
-  border-radius:  3px;
-  font-size:      14px;
-  text-align:     center;
+<hljs lang="css">
+.md-button {
+  padding: 0 6px 0 6px;
+  margin: 6px 8px 6px 8px;
+  min-width: 88px;
+  border-radius: 3px;
+  font-size: 14px;
+  text-align: center;
   text-transform: uppercase;
   text-decoration:none;
-  border:         none;
-  outline:        none;
+  border: none;
+  outline: none;
 }
-```
+</hljs>
 
+When defining custom CSS overrides, developers should create their own CSS class. For example, to define a `.btn1` override to **md-button** use:
+
+<hljs lang="css">
+.btn1 {
+ // your custom overrides here
+}
+</hljs>
+
+<hljs lang="html">
+  <md-button class="btn1" ng-click="acceptOffer();"> Accept </md-button>
+</hljs>
+
+<br/>
 ### Theme Requirements
 
-All Angular Material components have specific CSS rules dependent upon the **theme** name and theme-class overrides.
-For example, if using the **default** theme, then each component will have a `.md-default-theme` class. Standard theme color overrides include optional classes `md-primary`, `md-accent`, and `md-warn`.
+All Angular Material components have specific CSS rules constructed using the theme name and theme-class overrides. For the **Default** theme, however, these rules are added to the components styles using the `.md-default-theme` class. If, however, you have configured a custom theme called `companyX` that is **NOT** the default theme, then any CSS overrides **must** use fully-specified classname. For `<md-button>` the **fully-specified classname** will be `.md-button.md-companyX-theme.btn1`.
 
-When defining custom CSS overrides, developers should create their own class and then append it to the full class style specification for that component. For example, to define a `.btn1` override to **md-button** default theme styles,  use:
-
-```css
-.md-button.md-default-theme.btn1            { ... }  /* for <md-button class="btn1" ...> */
-.md-button.md-default-theme.md-primary.btn1 { ... }  /* for <md-button class="md-primary btn1" ...> */
-.md-button.md-default-theme.md-accent.btn1  { ... }  /* for <md-button class="md-accent btn1" ...> */
-.md-button.md-default-theme.md-warn.btn1    { ... }  /* for <md-button class="md-warn btn1" ...> */
-```
-
-If you have configured a custom theme called `companyX`, then the **fully-specified** classname will be `.md-button.md-companyX-theme.btn1`.
-
-```css
-.md-button.md-companyX-theme.btn1            { ... }  /* for <md-button class="btn1" /> */
-.md-button.md-companyX-theme.md-primary.btn1 { ... }  /* for <md-button class="md-primary btn1" /> */
-.md-button.md-companyX-theme.md-accent.btn1  { ... }  /* for <md-button class="md-accent btn1" /> */
-.md-button.md-companyX-theme.md-warn.btn1    { ... }  /* for <md-button class="md-warn btn1" /> */
-```
+<hljs lang="css">
+.md-button.md-companyX-theme.btn1            {  }
+.md-button.md-companyX-theme.md-primary.btn1 {  }
+.md-button.md-companyX-theme.md-accent.btn1  {  }
+.md-button.md-companyX-theme.md-warn.btn1    {  }
+</hljs>
 
 
 <br/>
@@ -52,26 +58,28 @@ If you have configured a custom theme called `companyX`, then the **fully-specif
 
 ![mdbuttonflatdefault3](https://cloud.githubusercontent.com/assets/210413/7945984/bda14884-0939-11e5-9196-131ded20ca77.png)
 
-```html 
-<md-button> Button </md-button> 
-```
-```css
-.md-button.md-default-theme { 
-  color : currentColor; 
-}
-```
+<hljs lang="html">
+<md-button> Button </md-button>
+</hljs>
 
-```css
-.md-button.md-default-theme:not([disabled]):hover { 
+<hljs lang="css">
+.md-button {
+  color : currentColor;
+}
+</hljs>
+
+<hljs lang="css">
+.md-button:not([disabled]):hover {
   background-color: rgba(158, 158, 158, 0.2);
 }
-```
-```css
-.md-button.md-default-theme[disabled] { 
+</hljs>
+
+<hljs lang="css">
+.md-button[disabled] {
   color : rgba(0, 0, 0, 0.26);
   background-color: transparent;
 }
-```
+</hljs>
 
 <br/>
 
@@ -80,31 +88,31 @@ If you have configured a custom theme called `companyX`, then the **fully-specif
 ![mdbuttonflatdefault_overrides2](https://cloud.githubusercontent.com/assets/210413/7945987/c1b1c700-0939-11e5-879c-ba804ca03267.png)
 
 
-```html 
+<hljs lang="html"> 
 <md-button class="btn1"> Button </md-button> 
-```
-```css
-.md-button.md-default-theme.btn1 { 
+</hljs>
+<hljs lang="css">
+.btn1 { 
   color : rgb(49, 46, 46);
   background-color: rgba(255, 222, 121, 0.96);
   border-radius: 10px 0 0 10px;
   font-size: 16px;
 }
-```
+</hljs>
 
-```css
-.md-button.md-default-theme.btn1:not([disabled]):hover { 
+<hljs lang="css">
+.btn1:not([disabled]):hover { 
   background-color: rgba(107, 103, 91, 0.96);
   color: white;
 }
-```
+</hljs>
 
-```css
-.md-button.md-default-theme.btn1[disabled] { 
+<hljs lang="css">
+.btn1[disabled] { 
   color : rgb(187, 187, 187);
   background-color: rgba(230, 230, 229, 0.96);
 }
-```
+</hljs>
 
 <br/>
 ##Raised Buttons
@@ -113,15 +121,15 @@ If you have configured a custom theme called `companyX`, then the **fully-specif
 
 Add the `.md-raised` class to create a raised button:
 
-```html
+<hljs lang="html">
 <md-button class="md-raised">Button</md-button>
-```
+</hljs>
 
-```css
-.md-button.md-default-theme.md-raised:not([disabled]) {
+<hljs lang="css">
+.md-button.md-raised:not([disabled]) {
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 }
-```
+</hljs>
 
 <br/>
 ##Cornered buttons
@@ -130,15 +138,15 @@ Add the `.md-raised` class to create a raised button:
 
 Add the `.md-cornered` class to create a button with corners:
 
-```html
+<hljs lang="html">
 <md-button class="md-raised md-cornered">Button</md-button>
-```
+</hljs>
 
-```css
-.md-button.md-default-theme.md-cornered {
+<hljs lang="css">
+.md-button.md-cornered {
     border-radius: 0; 
 }
-```
+</hljs>
 
 <br/>
 ##Default FAB Button
@@ -147,20 +155,20 @@ Add the `.md-cornered` class to create a button with corners:
 
 Add the `.md-fab` class in order to create a floating action button (aka FAB):
 
-```html
+<hljs lang="html">
 <md-button class="md-fab" aria-label="Eat cake">
-	<md-icon md-svg-src="img/icons/cake.svg"></md-icon>
+  <md-icon md-svg-src="img/icons/cake.svg"></md-icon>
 </md-button>
-```
-```css
-.md-button.md-default-theme.md-fab {
-	line-height: 5.6rem;
-	min-width: 0;
-	width: 5.6rem;
-	height: 5.6rem;
-	border-radius: 50%;
+</hljs>
+<hljs lang="css">
+.md-button.md-fab {
+  line-height: 5.6rem;
+  min-width: 0;
+  width: 5.6rem;
+  height: 5.6rem;
+  border-radius: 50%;
 }
-```
+</hljs>
 
 <br/>
 ##Mini FAB Button
@@ -169,19 +177,19 @@ Add the `.md-fab` class in order to create a floating action button (aka FAB):
 
 Add add the `.md-mini` class in order to create small, mini-FAB buttons: 
 
-```html
+<hljs lang="html">
 <md-button class="md-fab md-mini" aria-label="Eat cake">
-	<md-icon md-svg-src="img/icons/cake.svg"></md-icon>
+  <md-icon md-svg-src="img/icons/cake.svg"></md-icon>
 </md-button>
-```
+</hljs>
 
-```css
-.md-button.md-default-theme.md-fab.md-mini {
+<hljs lang="css">
+.md-button.md-fab.md-mini {
       line-height: 4rem;
       width: 4rem;
       height: 4rem;
 }
-```
+</hljs>
 
 <br/>
 ##Icon button using SVGs
@@ -190,12 +198,12 @@ Add add the `.md-mini` class in order to create small, mini-FAB buttons:
 
 Create icon buttons by adding the `<md-icon ...>` class:
 
-```html
+<hljs lang="html">
 <md-button class="md-icon-button md-primary" aria-label="Settings">
         <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
 </md-button>
-```
-```css
+</hljs>
+<hljs lang="css">
 .md-button.md-icon-button {
     margin: 0 0.6rem;
     height: 4.8rem;
@@ -205,7 +213,7 @@ Create icon buttons by adding the `<md-icon ...>` class:
     padding-right: 0;
     width: 4.8rem; 
 }
-```
+</hljs>
 
 <br/>
 ##Icon button using Font-icons
@@ -215,13 +223,13 @@ Create icon buttons by adding the `<md-icon ...>` class:
 
 Here is another example of a button with font icons:
 
-```html
+<hljs lang="html">
 <md-button>
  <md-icon md-font-icon="icon-home" 
           ng-style="{color: 'green', 'font-size':'36px', height:'36px'}" >
  </md-icon>
 </md-button>
-```
+</hljs>
 
 
 <br/>
@@ -231,46 +239,45 @@ Here is another example of a button with font icons:
 
 Using the customization approaches documented above, we can easily create a mdButtonGroup:
 
-```html
-<section id="vendorGroup"
-         layout="row" layout-sm="column" 
+<hljs lang="html">
+<section layout="row" layout-sm="column" 
          layout-align="center center" >
-  <md-button class="left">Apple</md-button>
-  <md-button class="middle">Samsung</md-button>
-  <md-button class="middle">Sony</md-button>
-  <md-button class="right">B&O</md-button>
+  <md-button class="groupX left">Apple</md-button>
+  <md-button class="groupX middle">Samsung</md-button>
+  <md-button class="groupX middle">Sony</md-button>
+  <md-button class="groupX right">B&O</md-button>
 </section>
-```
+</hljs>
 
-```css
-#vendorGroup > .md-button.md-default-theme {
-    font-size: 16px;
-    margin: 20px 0;
-    padding: 3px 15px 3px 15px;
-    color: rgb(49, 46, 46);
-    background-color: rgba(224, 224, 224, 0.96);
+<hljs lang="css">
+.groupX {
+	font-size: 16px;
+	margin: 20px 0;
+	padding: 3px 15px 3px 15px;
+	color: rgb(49, 46, 46);
+	background-color: rgba(224, 224, 224, 0.96);
 	text-transform: none;
     font-weight: 400;
     min-width:100px;
 }
 
-.md-button.md-default-theme.left {
+.md-button.left {
     border-radius: 10px 0 0 10px;
 }
 
-.md-button.md-default-theme.middle {
+.md-button.middle {
     border-radius: 0;
     border-left: 1px solid rgba(230, 230, 230, 0.96);
     border-right: 1px solid rgba(230, 230, 230, 0.96);
 }
 
-.md-button.md-default-theme.right {
+.md-button.right {
     border-radius: 0 10px 10px 0;
 }
 
-.md-button.md-default-theme:not([disabled]):hover {
+.md-button:not([disabled]):hover {
     background-color: rgba(193, 193, 193, 0.96);
     color: rgba(44, 65, 164, 0.96);
     transition: 0.3s;
 }
-```
+</hljs>
