@@ -293,12 +293,13 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
 
   function select (index) {
     $scope.selectedItem = self.matches[index];
-    $scope.searchText = getDisplayValue($scope.selectedItem) || $scope.searchText;
     self.hidden = true;
     self.index = 0;
     self.matches = [];
     //-- force form to update state for validation
-    elements.$.input.controller('ngModel').$setViewValue($scope.searchText);
+    $timeout(function () {
+      elements.$.input.controller('ngModel').$setViewValue(getDisplayValue($scope.selectedItem) || $scope.searchText);
+    });
   }
 
   function clearValue () {
