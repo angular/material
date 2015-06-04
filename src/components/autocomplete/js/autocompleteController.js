@@ -123,6 +123,11 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
       if (!hidden && oldHidden) positionDropdown();
     });
     angular.element($window).on('resize', positionDropdown);
+    $scope.$on('$destroy', cleanup);
+  }
+
+  function cleanup () {
+    elements.$.ul.remove();
   }
 
   function gatherElements () {
