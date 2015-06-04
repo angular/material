@@ -332,8 +332,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     }
     function handleResults (matches) {
       cache[term] = matches;
-      self.loading = false;
       if (searchText !== $scope.searchText) return; //-- just cache the results if old request
+      self.loading = false;
       promise = null;
       self.matches = matches;
       self.hidden = shouldHide();
