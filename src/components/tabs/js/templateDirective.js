@@ -24,9 +24,11 @@ function MdTemplate ($compile, $mdUtil, $timeout) {
       scope.$on('$destroy', reconnect);
     }
     function disconnect () {
+      if (ctrl.scope.noDisconnect) return;
       $mdUtil.disconnectScope(compileScope);
     }
     function reconnect () {
+      if (ctrl.scope.noDisconnect) return;
       $mdUtil.reconnectScope(compileScope);
     }
   }
