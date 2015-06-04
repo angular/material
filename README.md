@@ -47,7 +47,7 @@ Developers interested in contributing should read the following guidelines:
   enhancements, or request new features. For general questions and discussions, use the
   [Angular Material Forum](https://groups.google.com/forum/#!forum/ngmaterial).
 
-It is important to note that for each release, the [ChangeLog](CHANGELOG.md) is a resource that will
+It is important to note that for each release, the [CHANGELOG](CHANGELOG.md) is a resource that will
 itemize all:
 
 - Bug Fixes
