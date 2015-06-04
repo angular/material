@@ -304,19 +304,18 @@ code:not(.highlight) {
   /*background-color: #2C80D2 !important;*/
 }
 .menu-toggle-list {
-  max-height: 2000px;
   overflow: hidden;
   position: relative;
   z-index: 1;
   -webkit-transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
-  -webkit-transition-property: max-height;
+  -webkit-transition-property: height;
   -moz-transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
-  -moz-transition-property: max-height;
+  -moz-transition-property: height;
   transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
-  transition-property: max-height;
+  transition-property: height;
 }
 .menu-toggle-list.ng-hide {
-  max-height: 0;
+  height: 0;
 }
 .docs-menu .menu-toggle-list a.md-button {
   display: block;
