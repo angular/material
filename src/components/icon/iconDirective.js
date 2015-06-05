@@ -58,7 +58,7 @@ angular.module('material.components.icon', [
  *
  * <a href="https://www.google.com/design/icons/#ic_accessibility" target="_blank" style="border-bottom:none;">
  * <img src="https://cloud.githubusercontent.com/assets/210413/7902490/fe8dd14c-0780-11e5-98fb-c821cc6475e6.png"
- *      alt="Material Design Icon-Selector" style="max-width:75%;padding-left:10%">
+ *      aria-label="Material Design Icon-Selector" style="max-width:75%;padding-left:10%">
  * </a>
  *
  * <span class="image_caption">
@@ -74,8 +74,8 @@ angular.module('material.components.icon', [
  * @param {string} md-svg-icon String name used for lookup of the icon from the internal cache; interpolated strings or
  * expressions may also be used. Specific set names can be used with the syntax `<set name>:<icon name>`.<br/><br/>
  * To use icon sets, developers are required to pre-register the sets using the `$mdIconProvider` service.
- * @param {string=} alt Labels icon for accessibility. If an empty string is provided, icon
- * will be hidden from accessibility layer with `aria-hidden="true"`. If there's no alt on the icon
+ * @param {string=} aria-label Labels icon for accessibility. If an empty string is provided, icon
+ * will be hidden from accessibility layer with `aria-hidden="true"`. If there's no aria-label on the icon
  * nor a label on the parent element, a warning will be logged to the console.
  *
  * @usage
@@ -83,11 +83,11 @@ angular.module('material.components.icon', [
  * <hljs lang="html">
  *
  *  <!-- Icon ID; may contain optional icon set prefix; icons must registered using $mdIconProvider -->
- *  <md-icon md-svg-icon="social:android"    alt="android " ></md-icon>
+ *  <md-icon md-svg-icon="social:android"    aria-label="android " ></md-icon>
  *
  *  <!-- Icon urls; may be preloaded in templateCache -->
- *  <md-icon md-svg-src="/android.svg"       alt="android " ></md-icon>
- *  <md-icon md-svg-src="{{ getAndroid() }}" alt="android " ></md-icon>
+ *  <md-icon md-svg-src="/android.svg"       aria-label="android " ></md-icon>
+ *  <md-icon md-svg-src="{{ getAndroid() }}" aria-label="android " ></md-icon>
  *
  * </hljs>
  *
@@ -154,7 +154,7 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $interpolate ) {
 
   function getTemplate(element, attr) {
     var isEmptyAttr  = function(key) { return angular.isDefined(attr[key]) ? attr[key].length == 0 : false    },
-        hasAttrValue = function(key) { return attr[key] && attr[key].length;     },
+        hasAttrValue = function(key) { return attr[key] && attr[key].length > 0;     },
         attrValue    = function(key) { return hasAttrValue(key) ? attr[key] : '' };
 
     // If using the deprecated md-font-icon API
@@ -188,19 +188,22 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $interpolate ) {
     // If using a font-icon, then the textual name of the icon itself
     // provides the aria-label.
 
-    var ariaLabel = attr.alt || scope.fontIcon || scope.svgIcon || element.text();
+    var label = attr.alt || scope.fontIcon || scope.svgIcon || element.text();
     var attrName = attr.$normalize(attr.$attr.mdSvgIcon || attr.$attr.mdSvgSrc || '');
 
-    if (attr.alt != '' && !parentsHaveText() ) {
+    if ( !attr['aria-label'] ) {
 
-      $mdAria.expect(element, 'aria-label', ariaLabel);
-      $mdAria.expect(element, 'role', 'img');
+      if (label != '' && !parentsHaveText() ) {
 
-    } else if ( !element.text() ) {
-      // If not a font-icon with ligature, then
-      // hide from the accessibility layer.
+        $mdAria.expect(element, 'aria-label', label);
+        $mdAria.expect(element, 'role', 'img');
 
-      $mdAria.expect(element, 'aria-hidden', 'true');
+      } else if ( !element.text() ) {
+        // If not a font-icon with ligature, then
+        // hide from the accessibility layer.
+
+        $mdAria.expect(element, 'aria-hidden', 'true');
+      }
     }
 
     if (attrName) {

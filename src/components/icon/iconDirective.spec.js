@@ -98,10 +98,11 @@ describe('mdIcon directive', function() {
 
               function getIcon(id) {
                 switch(id) {
-                  case 'android'    : return '<svg><g id="android"></g></svg>';
-                  case 'cake'       : return '<svg><g id="cake"></g></svg>';
-                  case 'android.svg': return '<svg><g id="android"></g></svg>';
-                  case 'cake.svg'   : return '<svg><g id="cake"></g></svg>';
+                  case 'android'      : return '<svg><g id="android"></g></svg>';
+                  case 'cake'         : return '<svg><g id="cake"></g></svg>';
+                  case 'android.svg'  : return '<svg><g id="android"></g></svg>';
+                  case 'cake.svg'     : return '<svg><g id="cake"></g></svg>';
+                  case 'image:android': return '';
                 }
               }
 
@@ -131,6 +132,13 @@ describe('mdIcon directive', function() {
         expect(iScope.svgIcon).toEqual('cake');
       });
 
+      it('should not include a ng-transclude when using mdSvgIcon', function() {
+
+        el = make('<md-icon md-svg-icon="image:android"></md-icon>');
+        expect(el.html()).toEqual('');
+      });
+
+
     });
 
     describe('using md-svg-src=""', function() {
@@ -144,6 +152,13 @@ describe('mdIcon directive', function() {
         $scope.$digest();
         expect(iScope.svgSrc).toEqual('cake.svg');
       });
+
+      it('should not include a ng-transclude when using mdSvgSrc', inject(function($templateCache) {
+        $templateCache.put('img/android.svg', '');
+
+        el = make('<md-icon md-svg-src="img/android.svg"></md-icon>');
+        expect(el.html()).toEqual('');
+      }));
 
     });
 
@@ -167,27 +182,29 @@ describe('mdIcon directive', function() {
         expect(el.find('md-icon').attr('aria-hidden')).toEqual('true');
       });
 
-      it('should apply aria-hidden="true" when alt is empty string', function() {
-        el = make('<md-icon md-svg-icon="android" alt=""></md-icon>');
-        expect(el.attr('aria-hidden')).toEqual('true');
+      it('should apply aria-hidden="true" when aria-label is empty string', function() {
+        el = make('<md-icon md-svg-icon="android" ></md-icon>');
+        expect(el.attr('aria-label')).toEqual('android');
+        expect(el.attr('aria-hidden')).toBeUndefined();
       });
 
-      it('should apply alt value to aria-label when set', function() {
-        el = make('<md-icon md-svg-icon="android" alt="my android icon"></md-icon>');
+      it('should apply use the aria-label value when set', function() {
+        el = make('<md-icon md-svg-icon="android" aria-label="my android icon"></md-icon>');
         expect(el.attr('aria-label')).toEqual('my android icon');
       });
 
-      it('should apply font-icon value to aria-label when alt not set', function() {
+      it('should apply font-icon value to aria-label when aria-label not set', function() {
         el = make('<md-icon md-font-icon="android"></md-icon>');
         expect(el.attr('aria-label')).toEqual('android');
       });
 
-      it('should apply svg-icon value to aria-label when alt not set', function() {
+      it('should apply svg-icon value to aria-label when aria-label not set', function() {
         el = make('<md-icon md-svg-icon="android"></md-icon>');
         expect(el.attr('aria-label')).toEqual('android');
       });
 
-    });  });
+    });
+  });
 
 
 
