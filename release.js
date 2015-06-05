@@ -226,7 +226,7 @@
         'git tag -f v{{newVersion}}',
         'git push',
         'git push --tags',
-        'npm publish',
+        ( newVersion.indexOf('rc') < 0 ? 'npm publish' : '# skipped npm publish due to RC version' ),
         'cd ..'
     );
   }
