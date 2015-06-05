@@ -177,9 +177,9 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     var selectedIndex = $scope.selectedIndex,
         tab = ctrl.tabs.splice(tabData.getIndex(), 1)[0];
     refreshIndex();
-    //-- when removing a tab, if the selected index did not change, we have to manually trigger the
-    //   tab select/deselect events
-    if ($scope.selectedIndex === selectedIndex) {
+    //-- when removing a tab, if the selected index did not change, and the $scope is not destroyed,
+    //   we have to manually trigger the tab select/deselect events
+    if (!$scope.$$destroyed && $scope.selectedIndex === selectedIndex) {
       tab.scope.deselect();
       ctrl.tabs[$scope.selectedIndex] && ctrl.tabs[$scope.selectedIndex].scope.select();
     }
