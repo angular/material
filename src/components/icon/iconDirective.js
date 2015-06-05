@@ -66,13 +66,13 @@ angular.module('material.components.icon', [
  *  <a href="https://www.google.com/design/icons/#ic_accessibility" target="_blank">Material Design Icon-Selector</a>.
  * </span>
  *
- * @param {string} md-font-icon String name of CSS icon associated with the font-face will be used
+ * @param {string} md-font-icon Name of CSS icon associated with the font-face will be used
  * to render the icon. Requires the fonts and the named CSS styles to be preloaded.
- * @param {string} md-font-set String CSS style name associated with the font library; which will be assigned as
+ * @param {string} md-font-set CSS style name associated with the font library; which will be assigned as
  * the class for the font-icon ligature. This value may also be an alias that is used to lookup the classname;
  * internally use `$mdIconProvider.fontSet(<alias>)` to determine the style name.
- * @param {string} md-svg-src String URL [or expression ] used to load, cache, and display an external SVG.
- * @param {string} md-svg-icon String name used for lookup of the icon from the internal cache; interpolated strings or
+ * @param {string} md-svg-src URL [or expression ] used to load, cache, and display an external SVG.
+ * @param {string} md-svg-icon Name used for lookup of the icon from the internal cache; interpolated strings or
  * expressions may also be used. Specific set names can be used with the syntax `<set name>:<icon name>`.<br/><br/>
  * To use icon sets, developers are required to pre-register the sets using the `$mdIconProvider` service.
  * @param {string=} aria-label Labels icon for accessibility. If an empty string is provided, icon
