@@ -17,8 +17,8 @@ angular.module('material.components.icon', [
  * @restrict E
  *
  * @description
- * The `<md-icon />` directive is an markup element useful for showing an icon based on a font-icon
- * or a SVG. Icons are view-only elements that should not be used directly as buttons; instead nest a `<md-icon />`
+ * The `<md-icon>` directive is an markup element useful for showing an icon based on a font-icon
+ * or a SVG. Icons are view-only elements that should not be used directly as buttons; instead nest a `<md-icon>`
  * inside a `md-button` to add hover and click features.
  *
  * When using SVGs, both external SVGs (via URLs) or sets of SVGs [from icon sets] can be
