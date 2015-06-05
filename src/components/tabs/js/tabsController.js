@@ -82,7 +82,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   function handleSelectedIndexChange (newValue, oldValue) {
     if (newValue === oldValue) return;
 
-    $scope.selectedIndex = getNearestSafeIndex(newValue);
+    $scope.selectedIndex = ctrl.focusIndex = getNearestSafeIndex(newValue);
     ctrl.lastSelectedIndex = oldValue;
     ctrl.updateInkBarStyles();
     updateHeightFromContent();
