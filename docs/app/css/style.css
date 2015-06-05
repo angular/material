@@ -638,6 +638,11 @@ ul.buckets li a:focus md-icon {
   margin-left: 22px;
 }
 
+header.api-profile-header > h2 {
+  margin: 0;
+  color: #164371;
+}
+
 .api-params-item {
   min-height: 72px;
 }
