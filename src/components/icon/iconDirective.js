@@ -31,8 +31,8 @@ angular.module('material.components.icon', [
  * </li>
  * <li> Use either (a) font-icon class names or (b) font ligatures to render the font glyph by using its textual name</li>
  * <li> Use &lt;md-icon md-font-icon="classname" /&gt; or <br/>
- *     use &lt;md-icon md-font-library="library_style_name"&gt; textual_name &lt;/md-icon&gt; or <br/>
- *     use &lt;md-icon md-font-library="library_style_name"&gt; numerical_character_reference &lt;/md-icon&gt;
+ *     use &lt;md-icon md-font-set="font library classname or alias"&gt; textual_name &lt;/md-icon&gt; or <br/>
+ *     use &lt;md-icon md-font-set="font library classname or alias"&gt; numerical_character_reference &lt;/md-icon&gt;
  * </li>
  * </ol>
  *
@@ -68,8 +68,9 @@ angular.module('material.components.icon', [
  *
  * @param {string} md-font-icon String name of CSS icon associated with the font-face will be used
  * to render the icon. Requires the fonts and the named CSS styles to be preloaded.
- * @param {string} md-font-library String name of CSS icon associated with the font-face will be used
- * to render the icon. Requires the fonts and the named CSS styles to be preloaded.
+ * @param {string} md-font-set String CSS style name associated with the font library; which will be assigned as
+ * the class for the font-icon ligature. This value may also be an alias that is used to lookup the classname;
+ * internally use `$mdIconProvider.fontSet(<alias>)` to determine the style name.
  * @param {string} md-svg-src String URL [or expression ] used to load, cache, and display an external SVG.
  * @param {string} md-svg-icon String name used for lookup of the icon from the internal cache; interpolated strings or
  * expressions may also be used. Specific set names can be used with the syntax `<set name>:<icon name>`.<br/><br/>

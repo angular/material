@@ -40,20 +40,25 @@ describe('mdIcon directive', function() {
 
     });
 
-    describe('using font-icons with ligatures: md-font-library=""', function() {
+    describe('using font-icons with ligatures: md-font-set=""', function() {
 
-      it('should render correct HTML with ligature and md-font-library value as class', function() {
+      it('should render correct HTML with ligatures', function() {
         el = make( '<md-icon class="md-48">face</md-icon>');
         expect(el.html()).toEqual('<span class="material-icons md-48" ng-transclude=""><span class="ng-scope">face</span></span>');
       });
 
-      it('should render correct HTML with ligature and md-font-library value as class', function() {
+      it('should render correctly using a md-font-set alias', function() {
         $mdIconProvider.fontSet('fa', 'fontawesome');
 
         el = make( '<md-icon md-font-set="fa">email</md-icon>');
         expect(el.html()).toEqual('<span class="fontawesome" ng-transclude=""><span class="ng-scope">email</span></span>');
       });
 
+      it('should render correctly using md-font-set value as class', function() {
+
+        el = make( '<md-icon md-font-set="fontawesome">email</md-icon>');
+        expect(el.html()).toEqual('<span class="fontawesome" ng-transclude=""><span class="ng-scope">email</span></span>');
+      });
     });
 
     describe('using font-icons with classnames', function() {
