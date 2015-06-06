@@ -196,6 +196,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
           isActive: function () { return this.getIndex() === $scope.selectedIndex; },
           isLeft:   function () { return this.getIndex() < $scope.selectedIndex; },
           isRight:  function () { return this.getIndex() > $scope.selectedIndex; },
+          shouldRender: function () { return !$scope.noDisconnect || this.isActive(); },
           hasFocus: function () { return !ctrl.lastClick && ctrl.hasFocus && this.getIndex() === ctrl.focusIndex; },
           id:       $mdUtil.nextUid()
         },

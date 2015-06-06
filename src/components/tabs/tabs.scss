@@ -199,6 +199,9 @@ md-tab-content {
       visibility: hidden;
     }
   }
+  > div.ng-leave {
+    animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
+  }
 }
 md-ink-bar {
   position: absolute;

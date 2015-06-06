@@ -240,7 +240,7 @@ describe('<md-tabs>', function() {
                         '<md-tab label="label that!"><b>content</b> that!</md-tab>' +
                         '</md-tabs>');
       expect(tabs1.find('md-tab-item').text()).toBe('label that!');
-      expect(tabs1[0].querySelector('md-tab-content').textContent).toBe('content that!');
+      expect(tabs1[0].querySelector('md-tab-content').textContent.trim()).toBe('content that!');
 
       var tabs2 = setup('<md-tabs>\
         <md-tab>\
@@ -249,8 +249,7 @@ describe('<md-tabs>', function() {
         </md-tab>\
       </md-tabs>');
       expect(tabs1.find('md-tab-item').text()).toBe('label that!');
-      expect(tabs1[0].querySelector('md-tab-content').textContent)
-        .toBe('content that!');
+      expect(tabs1[0].querySelector('md-tab-content').textContent.trim()).toBe('content that!');
     });
 
   });

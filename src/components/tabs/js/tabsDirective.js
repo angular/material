@@ -182,9 +182,7 @@ function MdTabs ($mdTheming, $mdUtil, $compile) {
               md-swipe-left="swipeContent && $mdTabsCtrl.incrementSelectedIndex(1)"\
               md-swipe-right="swipeContent && $mdTabsCtrl.incrementSelectedIndex(-1)"\
               ng-if="$mdTabsCtrl.hasContent"\
-              ng-repeat="(index, tab) in $mdTabsCtrl.tabs" \
-              md-template="tab.template"\
-              md-scope="tab.parent"\
+              ng-repeat="(index, tab) in $mdTabsCtrl.tabs"\
               md-connected-if="tab.isActive()"\
               ng-class="{\
                 \'md-no-transition\': $mdTabsCtrl.lastSelectedIndex == null,\
@@ -192,7 +190,12 @@ function MdTabs ($mdTheming, $mdUtil, $compile) {
                 \'md-left\':          tab.isLeft(),\
                 \'md-right\':         tab.isRight(),\
                 \'md-no-scroll\':     dynamicHeight\
-              }"></md-tab-content>\
+              }">\
+            <div\
+                md-template="tab.template"\
+                md-scope="tab.parent"\
+                ng-if="tab.shouldRender()"></div>\
+          </md-tab-content>\
         </md-tabs-content-wrapper>\
       ';
     },
