@@ -7,10 +7,11 @@ angular
  */
 function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $mdTabInkRipple,
                            $mdUtil, $animate) {
-  var ctrl     = this,
-      locked   = false,
-      elements = getElements(),
-      queue    = [];
+  var ctrl      = this,
+      locked    = false,
+      elements  = getElements(),
+      queue     = [],
+      destroyed = false;
 
   ctrl.scope = $scope;
   ctrl.parent = $scope.$parent;
@@ -56,6 +57,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   }
 
   function cleanup () {
+    destroyed = true;
     angular.element($window).off('resize', handleWindowResize);
     angular.element(elements.paging).off('DOMSubtreeModified', ctrl.updateInkBarStyles);
   }
@@ -179,7 +181,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     refreshIndex();
     //-- when removing a tab, if the selected index did not change, we have to manually trigger the
     //   tab select/deselect events
-    if ($scope.selectedIndex === selectedIndex) {
+    if ($scope.selectedIndex === selectedIndex && !destroyed) {
       tab.scope.deselect();
       ctrl.tabs[$scope.selectedIndex] && ctrl.tabs[$scope.selectedIndex].scope.select();
     }
