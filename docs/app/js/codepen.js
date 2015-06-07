@@ -65,7 +65,7 @@
         title: demo.title,
         html: processHtml(demo),
         css: mergeFiles(files.css).join(' '),
-        js: 'document.body.innerHTML = document.body.innerHTML.replace(/\{\{\{amp\}\}\}/g, \'&\');' + processJs(files.js),
+        js: processJs(files.js),
         js_external: externalScripts.concat([CORE_JS, ASSET_CACHE_JS]).join(';'),
         css_external: CORE_CSS
       };
@@ -79,6 +79,7 @@
       var processors = [
         applyAngularAttributesToParentElement,
         insertTemplatesAsScriptTags,
+        htmlEscapeAmpersand,
         htmlEscapeAmpersand
       ];
 
@@ -141,7 +142,7 @@
     // uses the correct escaped characters
     function htmlEscapeAmpersand(html) {
       return html
-        .replace(/&/g, "{{{amp}}}");
+        .replace(/&/g, "&amp;");
     }
 
     // Required to make codepen work. Demos define their own module when running on the
