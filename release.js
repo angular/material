@@ -103,7 +103,7 @@
     else if (type.match(/^\d+\.\d+\.\d+(-rc\d+)?$/)) version = type;
     else throw new Error('Your entry was invalid.');
 
-    if (version.indexOf('rc') < 0) {
+    if (version.indexOf('rc') < 0 && oldVersion.indexOf('rc') < 0) {
       log('');
       write('Is this a release candidate? {{"[yes/no]".cyan}} ');
       if (prompt() === 'yes') version += '-rc1';
@@ -236,7 +236,8 @@
     var options = { cwd: './code.material.angularjs.org' },
         config  = require(options.cwd + '/docs.json');
     config.versions.unshift(newVersion);
-    config.latest = newVersion;
+    //-- only set to default if not a release candidate
+    if (newVersion.indexOf('rc') < 0) config.latest = newVersion;
     fs.writeFileSync(options.cwd + '/docs.json', JSON.stringify(config, null, 2));
     //-- build files for bower
     exec([
@@ -246,9 +247,8 @@
     ]);
     //-- copy files over to site repo
     exec([
-      'rm -rf latest',
       'cp -Rf ../dist/docs {{newVersion}}',
-      'cp -Rf ../dist/docs latest',
+      ( newVersion.indexOf('rc') < 0 ? 'rm -rf latest && cp -Rf ../dist/docs latest' : '# skipped latest because this is a release candidate' ),
       'git add -A',
       'git commit -m "release: version {{newVersion}}"',
       'rm -rf ../dist'
