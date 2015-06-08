@@ -48,7 +48,7 @@ You can specify the hues from a palette that will be used by an intention group
 by default and for the `md-hue-1`, `md-hue-2`, `md-hue-3` classes. 
 
 By default, shades `500`, `300` `800` and `A100` are used for `primary` and
-`warn` intentions, while `400`, `300`, `800` and `A100` are used for `accent`.
+`warn` intentions, while `A200`, `A100`, `A400` and `A700` are used for `accent`.
 
 <hljs lang="js">
 angular.module('myApp', ['ngMaterial'])
