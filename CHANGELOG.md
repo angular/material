@@ -1,3 +1,14 @@
+<a name="0.9.8"></a>
+### 0.9.8  (2015-06-08)
+
+
+#### Bug Fixes
+
+* **tabs:**
+  * prevents tabs from shrinking when used with flexbox ([dd041927](https://github.com/angular/material/commit/dd0419277523a44f8d06e45dc3c31b2afb3c8101), closes [#3011](https://github.com/angular/material/issues/3011))
+  * prevents select/deselect events from firing on destroy ([1ba0686e](https://github.com/angular/material/commit/1ba0686e7b42fef6072d011bf2f61fc3576a2017))
+
+
 <a name="0.9.8-rc1"></a>
 ### 0.9.8-rc1  (2015-06-05)
 
