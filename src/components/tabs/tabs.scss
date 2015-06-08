@@ -23,6 +23,7 @@ md-tabs {
   border-radius: 2px;
   overflow: hidden;
   position: relative;
+  flex-shrink: 0;
   &.ng-animate {
     transition: height $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
   }
