@@ -435,7 +435,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   };
 })
 
-.directive('menuToggle', function() {
+.directive('menuToggle', [ '$timeout', function($timeout) {
   return {
     scope: {
       section: '='
@@ -457,8 +457,21 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
             return controller.isOpen($scope.section);
           },
           function (open) {
-            if (!open) originalHeight = $ul.prop('clientHeight');
-            $element.find('ul').css({ height: (open ? originalHeight : 0) + 'px' });
+            var $ul = $element.find('ul');
+            var targetHeight = open ? getTargetHeight() : 0;
+            $timeout(function () {
+              $ul.css({ height: targetHeight + 'px' });
+            }, 0, false);
+
+            function getTargetHeight () {
+              var targetHeight;
+              $ul.addClass('no-transition');
+              $ul.css('height', '');
+              targetHeight = $ul.prop('clientHeight');
+              $ul.css('height', 0);
+              $ul.removeClass('no-transition');
+              return targetHeight;
+            }
           }
       );
 
@@ -470,7 +483,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       }
     }
   };
-})
+}])
 
 .controller('DocsCtrl', [
   '$scope',

@@ -314,9 +314,6 @@ code:not(.highlight) {
   transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
   transition-property: height;
 }
-.menu-toggle-list.ng-hide {
-  height: 0;
-}
 .docs-menu .menu-toggle-list a.md-button {
   display: block;
   padding: 0 16px 0 32px;
@@ -840,3 +837,10 @@ docs-demo .doc-demo-content {
   }
 }
 
+.no-transition {
+  -webkit-transition: none !important;
+  -moz-transition:    none !important;
+  -ms-transition:     none !important;
+  -o-transition:      none !important;
+  transition:         none !important;
+}
