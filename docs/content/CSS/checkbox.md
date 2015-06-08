@@ -53,6 +53,32 @@ In order to change the color when a disabled checkbox is checked:
 ![checkboxdisabledred](https://cloud.githubusercontent.com/assets/1292882/8036177/dc941a86-0dfe-11e5-8892-ac19ec6926fe.PNG)
 
 
+#### Borders
+In order to add a custom border do the following:
+<hljs lang="html">
+ <div>
+        <md-checkbox ng-model="data.cb2" aria-label="Checkbox 2" ng-true-value="'yup'" ng-false-value="'nope'">
+            Default Border
+        </md-checkbox>
+    </div>
+    <div>
+        <md-checkbox ng-model="data.cb2" aria-label="Checkbox 2" ng-true-value="'yup'" class="dotted" ng-false-value="'nope'">
+            Custom Border
+        </md-checkbox>
+    </div>
+</hljs>
+<hljs lang="css">
+md-checkbox.dotted .md-icon{
+        border-width: 1px;
+        border-style: dashed;
+
+    }
+</hljs>
+
+![checkboxcustomborder](https://cloud.githubusercontent.com/assets/1292882/8037214/388dd40c-0e05-11e5-82a7-4bfa2541e968.PNG)
+
+
+
 #### Bi-Di
 
 The mdCheckbox directive is sensible to the html direction:
