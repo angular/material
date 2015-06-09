@@ -1,9 +1,20 @@
 (function() {
   'use strict';
 
-  // TODO(jelbourn): md-calendar shown in floating panel.
-  // TODO(jelbourn): little calendar icon next to input
-  // TODO(jelbourn): only one open md-calendar panel at a time per application
+  // PRE RELEASE
+  // TODO(jelbourn): aria attributes tying together date input and floating calendar.
+  // TODO(jelbourn): actual calendar icon next to input
+  // TODO(jelbourn): something for mobile (probably calendar panel should take up entire screen)
+  // TODO(jelbourn): style to match specification
+  // TODO(jelbourn): make sure this plays well with validation and ngMessages.
+  // TODO(jelbourn): forward more attributes to the internal input (required, autofocus, etc.)
+  // TODO(jelbourn): floating panel open animation (see animation for menu in spec).
+  // TODO(jelbourn): error state
+
+  // FUTURE VERSION
+  // TODO(jelbourn): input behavior (masking? auto-complete?)
+  // TODO(jelbourn): UTC mode
+  // TODO(jelbourn): RTL
 
 
   angular.module('material.components.calendar')
@@ -12,11 +23,21 @@
   function datePickerDirective() {
     return {
       template:
-          '<input><button type="button" ng-click="ctrl.openCalendarPane()">📅</button>' +
+          '<md-button class="md-date-picker-button md-icon-button" type="button" ' +
+              'ng-click="ctrl.openCalendarPane()">📅</md-button>' +
+          '<div class="md-datepicker-input-container">' +
+            '<input class="md-datepicker-input">' +
+          '</div>' +
+
+          // This pane (and its shadow) will be detached from here and re-attached to the
+          // document body.
           '<div class="md-date-calendar-pane">' +
             '<md-calendar ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen"></md-calendar>' +
-          '</div>',
-      // <md-calendar ng-model="ctrl.date"></md-calendar>
+          '</div>' +
+
+          // We have a separate shadow element in order to wrap both the floating pane and the
+          // inline input / trigger as one shadowed whole.
+          '<div class="md-date-calendar-pane-shadow md-whiteframe-z1"></div>',
       require: ['ngModel', 'mdDatePicker'],
       scope: {},
       controller: DatePickerCtrl,
@@ -26,6 +47,9 @@
         var mdDatePickerCtrl = controllers[1];
 
         mdDatePickerCtrl.configureNgModel(ngModelCtrl);
+
+        // DEBUG
+        window.dCtrl = mdDatePickerCtrl;
       }
     };
   }
@@ -61,11 +85,14 @@
     /** @type {HTMLInputElement} */
     this.inputElement = $element[0].querySelector('input');
 
-    /** @type {HTMLElement} Floating calendar pane (instantiated lazily) */
+    /** @type {HTMLElement} */
+    this.inputContainer = $element[0].querySelector('.md-datepicker-input-container');
+
+    /** @type {HTMLElement} Floating calendar pane. */
     this.calendarPane = $element[0].querySelector('.md-date-calendar-pane');
 
-    /** @type {Date} */
-    this.date = null;
+    /** @type {HTMLElement} Shadow for floating calendar pane and input trigger. */
+    this.calendarShadow = $element[0].querySelector('.md-date-calendar-pane-shadow');
 
     /** @final {!angular.JQLite} */
     this.$element = $element;
@@ -73,12 +100,20 @@
     /** @final {!angular.Scope} */
     this.$scope = $scope;
 
+    /** @type {Date} */
+    this.date = null;
+
+    /** @type {boolean} */
+    this.isDisabled;
+    this.setDisabled($element[0].disabled);
+
     /** @type {boolean} Whether the date-picker's calendar pane is open. */
     this.isCalendarOpen = false;
 
     /** Pre-bound click handler is saved so that the event listener can be removed. */
     this.bodyClickHandler = this.handleBodyClick.bind(this);
 
+    this.installPropertyInterceptors();
     this.attachChangeListeners();
     this.attachInterationListeners();
 
@@ -116,10 +151,14 @@
       self.closeCalendarPane();
     });
 
-    // TODO(jelbourn): debounce
+    // TODO(jelbourn): Debounce this input event.
     self.inputElement.addEventListener('input', function() {
-      var parsedDate = self.dateLocale.parseDate(self.inputElement.value);
+      var inputString = self.inputElement.value;
+      var parsedDate = self.dateLocale.parseDate(inputString);
       if (self.dateUtil.isValidDate(parsedDate)) {
+        // TODO(jelbourn): if we can detect here that `inputString` is a "complete" date,
+        // set the ng-model value.
+
         self.date = parsedDate;
         self.$scope.$apply();
       }
@@ -145,20 +184,54 @@
     });
   };
 
+  /** Capture properties set to the date-picker and imperitively handle internal changes. */
+  DatePickerCtrl.prototype.installPropertyInterceptors = function() {
+    var self = this;
+
+    // Intercept disabled on the date-picker element to disable the internal input.
+    // This avoids two bindings (outer scope to ctrl, ctrl to input).
+    Object.defineProperty(this.$element[0], 'disabled', {
+      get: function() { return self.isDisabled; },
+      set: function(value) { self.setDisabled(value) }
+    });
+  };
+
+  /**
+   * Sets whether the date-picker is disabled.
+   * @param {boolean} isDisabled
+   */
+  DatePickerCtrl.prototype.setDisabled = function(isDisabled) {
+    this.isDisabled = isDisabled;
+    this.inputElement.disabled = isDisabled;
+  };
+
   /** Position and attach the floating calendar to the document. */
   DatePickerCtrl.prototype.attachCalendarPane = function() {
-    var elementRect = this.$element[0].getBoundingClientRect();
+    this.inputContainer.classList.add('md-open');
+    var elementRect = this.inputContainer.getBoundingClientRect();
 
-    this.calendarPane.style.left = elementRect.left + 'px';
-    this.calendarPane.style.top = elementRect.bottom + 'px';
+    this.calendarPane.style.left = (elementRect.left + window.pageXOffset) + 'px';
+    this.calendarPane.style.top = (elementRect.bottom + window.pageYOffset) + 'px';
     document.body.appendChild(this.calendarPane);
+
+    // Add shadow to the calendar pane only after the UI thread has reached idle, allowing the
+    // content of the calender pane to be rendered.
+    this.$timeout(function() {
+      this.calendarShadow.style.top = (elementRect.top + window.pageYOffset) + 'px';
+      this.calendarShadow.style.left = this.calendarPane.style.left;
+      this.calendarShadow.style.height =
+          (this.calendarPane.getBoundingClientRect().bottom - elementRect.top) + 'px';
+      document.body.appendChild(this.calendarShadow);
+    }.bind(this), 0, false);
   };
 
   /** Detach the floating calendar pane from the document. */
   DatePickerCtrl.prototype.detachCalendarPane = function() {
+    this.inputContainer.classList.remove('md-open');
     // Use native DOM removal because we do not want any of the angular state of this element
     // to be disposed.
     this.calendarPane.parentNode.removeChild(this.calendarPane);
+    this.calendarShadow.parentNode.removeChild(this.calendarShadow);
   };
 
   /** Open the floating calendar pane. */
@@ -166,7 +239,6 @@
     if (!this.isCalendarOpen) {
       this.isCalendarOpen = true;
       this.attachCalendarPane();
-      // TODO(jelbourn): dispatch to tell other date pickers to close.
       this.focusCalendar();
 
       // Attach click listener inside of a timeout because, if this open call was triggered by a
@@ -207,10 +279,13 @@
    */
   DatePickerCtrl.prototype.handleBodyClick = function(event) {
     if (this.isCalendarOpen) {
+      // TODO(jelbourn): way want to also include the md-datepicker itself in this check.
       var isInCalendar = this.$mdUtil.getClosest(event.target, 'md-calendar');
       if (!isInCalendar) {
         this.closeCalendarPane();
       }
+
+      this.$scope.$digest();
     }
   };
 })();
