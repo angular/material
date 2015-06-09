@@ -224,6 +224,7 @@
         'git add CHANGELOG.md',
         'git commit --amend --no-edit',
         'git tag -f v{{newVersion}}',
+        'git pull --rebase',
         'git push',
         'git push --tags',
         ( newVersion.indexOf('rc') < 0 ? 'npm publish' : '# skipped npm publish due to RC version' ),
@@ -258,6 +259,7 @@
     pushCmds.push(
         comment('push the site'),
         'cd ' + options.cwd,
+        'git pull --rebase',
         'git push',
         'cd ..'
     );
