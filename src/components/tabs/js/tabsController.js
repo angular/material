@@ -11,7 +11,8 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
       locked    = false,
       elements  = getElements(),
       queue     = [],
-      destroyed = false;
+      destroyed = false,
+      loaded    = false;
 
   ctrl.scope = $scope;
   ctrl.parent = $scope.$parent;
@@ -51,8 +52,11 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     $scope.$watch('$mdTabsCtrl.hasContent', handleHasContent);
     angular.element($window).on('resize', handleWindowResize);
     angular.element(elements.paging).on('DOMSubtreeModified', ctrl.updateInkBarStyles);
-    $timeout(updateHeightFromContent, 0, false);
-    $timeout(adjustOffset);
+    $timeout(function () {
+      updateHeightFromContent();
+      adjustOffset();
+      loaded = true;
+    });
     $scope.$on('$destroy', cleanup);
   }
 
@@ -88,6 +92,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     ctrl.lastSelectedIndex = oldValue;
     ctrl.updateInkBarStyles();
     updateHeightFromContent();
+    adjustOffset();
     $scope.$broadcast('$mdTabsChanged');
     ctrl.tabs[oldValue] && ctrl.tabs[oldValue].scope.deselect();
     ctrl.tabs[newValue] && ctrl.tabs[newValue].scope.select();
@@ -208,6 +213,8 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     }
     processQueue();
     updateHasContent();
+    //-- if autoselect is enabled, select the newly added tab
+    if (loaded && $scope.autoselect) $timeout(function () { select(ctrl.tabs.indexOf(tab)); });
     return tab;
   }
 

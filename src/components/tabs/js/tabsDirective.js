@@ -61,6 +61,7 @@
  * @param {boolean=} md-no-pagination When enabled, pagination will remain off
  * @param {boolean=} md-swipe-content When enabled, swipe gestures will be enabled for the content area to jump between tabs
  * @param {boolean=} md-no-disconnect If your tab content has background tasks (ie. event listeners), you will want to include this to prevent the scope from being disconnected
+ * @param {boolean=} md-autoselect When present, any tabs added after the initial load will be automatically selected
  *
  * @usage
  * <hljs lang="html">
@@ -96,7 +97,8 @@ function MdTabs ($mdTheming, $mdUtil, $compile) {
       selectedIndex: '=?mdSelected',
       stretchTabs:   '@?mdStretchTabs',
       swipeContent:  '=?mdSwipeContent',
-      noDisconnect:  '=?mdNoDisconnect'
+      noDisconnect:  '=?mdNoDisconnect',
+      autoselect:    '=?mdAutoselect'
     },
     template: function (element, attr) {
       attr["$mdTabsTemplate"] = element.html();
