@@ -27,7 +27,7 @@
 
       /**
        * Function that converts the date portion of a Date to a string.
-       * @type {function(Date): string)}
+       * @type {(function(Date): string)}
        */
       this.formatDate = null;
 
@@ -36,6 +36,26 @@
        * @type {function(string): Date}
        */
       this.parseDate = null;
+
+      /**
+       * Function that formats a Date into a month header string.
+       * @type {function(Date): string}
+       */
+      this.monthHeaderFormatter = null;
+
+      /**
+       * Function that formats a date into a short aria-live announcement that is read when
+       * the focused date changes within the same month.
+       * @type {function(Date): string}
+       */
+      this.shortAnnounceFormatter = null;
+
+      /**
+       * Function that formats a date into a long aria-live announcement that is read when
+       * the focused date changes to a date in a different month.
+       * @type {function(Date): string}
+       */
+      this.longAnnounceFormatter = null;
     }
 
     /**
@@ -47,7 +67,7 @@
     DateLocaleProvider.prototype.$get = function($locale) {
       /**
        * Default date-to-string formatting function.
-       * @param {Date} date
+       * @param {!Date} date
        * @returns {string}
        */
       function defaultFormatDate(date) {
@@ -57,10 +77,44 @@
       /**
        * Default string-to-date parsing function.
        * @param {string} dateString
-       * @returns {Date}
+       * @returns {!Date}
        */
       function defaultParseDate(dateString) {
         return new Date(dateString);
+      }
+
+      /**
+       * Default date-to-string formatter to get a month header.
+       * @param {!Date} date
+       * @returns {string}
+       */
+      function defaultMonthHeaderFormatter(date) {
+        return service.shortMonths[date.getMonth()] + ' ' + date.getFullYear();
+      }
+
+      /**
+       * Default formatter for short aria-live announcements.
+       * @param {!Date} date
+       * @returns {string}
+       */
+      function defaultShortAnnounceFormatter(date) {
+        // Example: 'Tuesday 12'
+        return service.days[date.getDay()] + ' ' + service.dates[date.getDate()];
+      }
+
+      /**
+       * Default formatter for long aria-live announcements.
+       * @param {!Date} date
+       * @returns {string}
+       */
+      function defaultLongAnnounceFormatter(date) {
+        // Example: '2015 June Thursday 18'
+        return [
+          date.getFullYear(),
+          service.months[date.getMonth()],
+          service.days[date.getDay()],
+          service.dates[date.getDate()]
+        ].join(' ');
       }
 
       // The default "short" day strings are the first character of each day,
@@ -75,18 +129,21 @@
         defaultDates[i] = i;
       }
 
-      window.$locale = $locale;
-
       // TODO(jelbourn): Freeze this object.
-      return {
+      var service = {
         months: this.months || $locale.DATETIME_FORMATS.MONTH,
         shortMonths: this.shortMonths || $locale.DATETIME_FORMATS.SHORTMONTH,
         days: this.days || $locale.DATETIME_FORMATS.DAY,
         shortDays: this.shortDays || defaultShortDays,
         dates: this.dates || defaultDates,
         formatDate: this.formatDate || defaultFormatDate,
-        parseDate: this.parseDate || defaultParseDate
+        parseDate: this.parseDate || defaultParseDate,
+        monthHeaderFormatter: this.monthHeaderFormatter || defaultMonthHeaderFormatter,
+        shortAnnounceFormatter: this.shortAnnounceFormatter || defaultShortAnnounceFormatter,
+        longAnnounceFormatter: this.longAnnounceFormatter || defaultLongAnnounceFormatter
       };
+
+      return service;
     };
 
     $provide.provider('$$mdDateLocale', new DateLocaleProvider());
