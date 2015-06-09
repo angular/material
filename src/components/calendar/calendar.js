@@ -30,9 +30,6 @@
   // TODO(jelbourn): make aria-live element visibly hidden (but still present on the page).
 
   function calendarDirective() {
-    // Generate a unique ID for each instance of the directive.
-    var directiveId = 0;
-
     return {
       template:
         '<div>' +
@@ -51,7 +48,6 @@
       link: function(scope, element, attrs, controllers) {
         var ngModelCtrl = controllers[0];
         var mdCalendarCtrl = controllers[1];
-        mdCalendarCtrl.directiveId = directiveId++;
         mdCalendarCtrl.configureNgModel(ngModelCtrl);
       }
     };
@@ -311,7 +307,6 @@
   CalendarCtrl.prototype.focus = function() {
     this.focusDateElement(this.selectedDate);
   };
-
 
   /*** Animation ***/
 
