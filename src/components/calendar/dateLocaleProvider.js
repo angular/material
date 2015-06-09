@@ -77,6 +77,7 @@
 
       window.$locale = $locale;
 
+      // TODO(jelbourn): Freeze this object.
       return {
         months: this.months || $locale.DATETIME_FORMATS.MONTH,
         shortMonths: this.shortMonths || $locale.DATETIME_FORMATS.SHORTMONTH,
