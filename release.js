@@ -20,9 +20,9 @@
 
   header();
   write('Is this a dry-run? {{"[yes/no]".cyan}} ');
-  dryRun = prompt();
+  dryRun = prompt() !== 'no';
 
-  if (dryRun !== 'no') {
+  if (dryRun) {
     write('What would you like the old version to be? (default: {{oldVersion.cyan}}) ');
     oldVersion = prompt() || oldVersion;
     build();
