@@ -72,6 +72,10 @@ $z-index-sidenav: 60 !default;
 $z-index-backdrop: 50 !default;
 $z-index-fab: 20 !default;
 
+// It is important that datepicker shadow is underneath both the trigger and the floating pane.
+$z-index-datepicker-trigger: 5 !default;
+$z-index-datepicker-shadow:  4 !default;
+
 // Easing Curves
 //--------------------------------------------
 
