@@ -27,11 +27,9 @@
   // TODO(jelbourn): Animations should use `.finally()` instead of `.then()`
   // TODO(jelbourn): improve default date parser in locale provider.
   // TODO(jelbourn): read-only state.
+  // TODO(jelbourn): make aria-live element visibly hidden (but still present on the page).
 
   function calendarDirective() {
-    // Generate a unique ID for each instance of the directive.
-    var directiveId = 0;
-
     return {
       template:
         '<div>' +
@@ -50,7 +48,6 @@
       link: function(scope, element, attrs, controllers) {
         var ngModelCtrl = controllers[0];
         var mdCalendarCtrl = controllers[1];
-        mdCalendarCtrl.directiveId = directiveId++;
         mdCalendarCtrl.configureNgModel(ngModelCtrl);
       }
     };
@@ -73,6 +70,9 @@
 
   /** Class applied to the cell for today. */
   var TODAY_CLASS = 'md-calendar-date-today';
+
+  /** Next idientifier for calendar instance. */
+  var nextUniqueId = 0;
 
   /**
    * Controller for the mdCalendar component.
@@ -116,6 +116,9 @@
 
     /** @final {Date} */
     this.today = new Date();
+
+    /** @final {number} Unique ID for this calendar instance. */
+    this.id = nextUniqueId++;
 
     /** @type {!angular.NgModelController} */
     this.ngModelCtrl = null;
@@ -227,7 +230,14 @@
   CalendarCtrl.prototype.handleKeyEvent = function(event) {
     var self = this;
     this.$scope.$apply(function() {
-      // Handled key events fall into two categories: selection and navigation.
+      // Capture escape and emit back up so that a wrapping component (such as a date-picker)
+      // can decide to close.
+      if (event.which == self.keyCode.ESCAPE) {
+        self.$scope.$emit('md-calendar-escape');
+        return;
+      }
+
+      // Remaining key events fall into two categories: selection and navigation.
       // Start by checking if this is a selection event.
       if (event.which === self.keyCode.ENTER) {
         self.setNgModelValue(self.displayDate);
@@ -291,6 +301,11 @@
     var cellId = this.getDateId_(date);
     var cell = this.calendarElement.querySelector('#' + cellId);
     cell.focus();
+  };
+
+  /** Focus the calendar. */
+  CalendarCtrl.prototype.focus = function() {
+    this.focusDateElement(this.selectedDate);
   };
   
 
@@ -470,11 +485,15 @@
    */
   CalendarCtrl.prototype.changeSelectedDate = function(date) {
     var self = this;
+    var previousSelectedDate = this.selectedDate;
+    this.selectedDate = date;
+
     this.changeDisplayDate(date).then(function() {
 
       // Remove the selected class from the previously selected date, if any.
-      if (self.selectedDate) {
-        var prevDateCell = self.calendarElement.querySelector('#' + self.getDateId_(self.selectedDate));
+      if (previousSelectedDate) {
+        var prevDateCell =
+            self.calendarElement.querySelector('#' + self.getDateId_(previousSelectedDate));
         if (prevDateCell) {
           prevDateCell.classList.remove(SELECTED_DATE_CLASS);
         }
@@ -487,8 +506,6 @@
           dateCell.classList.add(SELECTED_DATE_CLASS);
         }
       }
-
-      self.selectedDate = date;
     });
   };
 
@@ -701,7 +718,7 @@
   CalendarCtrl.prototype.getDateId_ = function (date) {
     return [
       'md',
-      this.directiveId,
+      this.id,
       date.getFullYear(), 
       date.getMonth(), 
       date.getDate()
