@@ -24,11 +24,11 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   ctrl.hasFocus = false;
   ctrl.lastClick = true;
   ctrl.shouldPaginate = false;
+  ctrl.shouldCenterTabs = shouldCenterTabs();
 
   ctrl.redirectFocus = redirectFocus;
   ctrl.attachRipple = attachRipple;
   ctrl.shouldStretchTabs = shouldStretchTabs;
-  ctrl.shouldCenterTabs = shouldCenterTabs;
   ctrl.insertTab = insertTab;
   ctrl.removeTab = removeTab;
   ctrl.select = select;
@@ -76,7 +76,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   }
 
   function handleOffsetChange (left) {
-    var newValue = shouldCenterTabs() ? '' : '-' + left + 'px';
+    var newValue = ctrl.shouldCenterTabs ? '' : '-' + left + 'px';
     angular.element(elements.paging).css('transform', 'translate3d(' + newValue + ', 0, 0)');
     $scope.$broadcast('$mdTabsPaginationChanged');
   }
@@ -288,6 +288,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
 
   function updatePagination () {
     ctrl.shouldPaginate = shouldPaginate();
+    ctrl.shouldCenterTabs = shouldCenterTabs();
   }
 
   function updateTabOrder () {
@@ -317,7 +318,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   }
 
   function adjustOffset () {
-    if (shouldCenterTabs()) return;
+    if (ctrl.shouldCenterTabs) return;
     var tab = elements.tabs[ctrl.focusIndex],
         left = tab.offsetLeft,
         right = tab.offsetWidth + left;
