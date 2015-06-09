@@ -1,9 +1,68 @@
+$md-datepicker-button-size: 48px;
+$md-datepicker-button-gap: 20px;
+
+@mixin md-flat-input() {
+  font-size: 14px;
+  line-height: 40px;
+
+  box-sizing: border-box;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  background: transparent;
+
+  &::-ms-clear {
+    display: none;
+  }
+}
+
+.md-date-picker-button {
+  margin-right: $md-datepicker-button-gap;
+  height: $md-datepicker-button-size;
+  width: $md-datepicker-button-size;
+  background: none;
+}
+
+.md-datepicker-input {
+  @include md-flat-input();
+  width: 100%;
+  line-height: 21px;
+}
+
+.md-datepicker-input-container {
+  position: relative;
+  z-index: $z-index-datepicker-trigger;
+
+  display: inline-block;
+  border-bottom: 1px solid #e0e0e0;
+  width: 120px;
+
+  &.md-open {
+    border: 1px solid #e0e0e0;
+    border-bottom: none;
+    min-width: $md-calendar-width;
+
+    .md-datepicker-input {
+      margin-left: 24px;
+      line-height: 40px;
+    }
+  }
+}
+
+
 .md-date-calendar-pane {
   position: absolute;
   top: 0;
   left: 0;
+  z-index: $z-index-menu;
 
-  // DEBUG
-  box-shadow: 0 4px 4px;
+  border: 1px solid #e0e0e0;
+  border-top: none;
   background: white;
+}
+
+.md-date-calendar-pane-shadow {
+  position: absolute;
+  z-index: $z-index-datepicker-shadow;
+  width: $md-calendar-width;
 }
