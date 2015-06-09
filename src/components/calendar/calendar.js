@@ -1,3 +1,4 @@
+console.log('calendar');
 (function() {
   'use strict';
 
@@ -6,7 +7,7 @@
    * @name material.components.calendar
    * @description Calendar
    */
-  angular.module('material.components.calendar', ['material.core'])
+  angular.module('material.components.calendar')
       .directive('mdCalendar', calendarDirective);
 
   // TODO(jelbourn): internationalize a11y announcements.
@@ -34,9 +35,13 @@
       template:
         '<div>' +
           '<table class="md-calendar-day-header"><thead></thead></table>' +
-          '<div class="md-calendar-container">' +
-            '<table class="md-calendar"></table>' +
-          '</div>' +
+          '<md-virtual-repeat-container class="md-calendar-container">' +
+            '<table class="md-calendar">' +
+              '<tbody md-virtual-repeat="i in ctrl.items" md-calendar-month ' +
+                  'md-month-offset="$index" class="md-calendar-month" aria-hidden="true" ' +
+                  'md-size="288"></tbody>' +
+            '</table>' +
+          '</md-virtual-repeat-container>' +
           '<div aria-live="polite"></div>' +
         '</div>',
       scope: {},
@@ -74,12 +79,20 @@
   /** Next idientifier for calendar instance. */
   var nextUniqueId = 0;
 
+  var dummyArray = Array(200000);
+  for (var dummyArrayIndex = 0; dummyArrayIndex < dummyArray.length; dummyArrayIndex++) {
+    dummyArray[dummyArrayIndex] = dummyArrayIndex - (dummyArray.length / 2);
+  }
+
   /**
    * Controller for the mdCalendar component.
    * @ngInject @constructor
    */
   function CalendarCtrl($element, $scope, $animate, $q, $mdConstant,
       $$mdDateUtil, $$mdDateLocale, $mdInkRipple, $mdUtil) {
+
+
+    this.items = dummyArray;
 
     /** @final {!angular.$animate} */
     this.$animate = $animate;
@@ -192,10 +205,6 @@
     this.buildWeekHeader();
 
     this.displayDate = this.selectedDate || new Date(Date.now());
-    var nextMonth = this.dateUtil.getDateInNextMonth(this.displayDate);
-    this.calendarElement.appendChild(this.buildCalendarForMonth(this.displayDate));
-    this.calendarElement.appendChild(this.buildCalendarForMonth(nextMonth));
-
     this.isInitialized = true;
   };
 
@@ -203,21 +212,8 @@
    * Attach event listeners for the calendar.
    */
   CalendarCtrl.prototype.attachCalendarEventListeners = function() {
-    var self = this;
-
     // Keyboard interaction.
     this.calendarElement.addEventListener('keydown', this.handleKeyEvent.bind(this));
-
-    // EXPERIMENT: does this weel event work on all browsers?
-    this.calendarElement.addEventListener('wheel', function(event) {
-      event.preventDefault();
-      self.$scope.$apply(self.$mdUtil.debounce(function() {
-        var transitionToDate = event.deltaY > 0 ?
-            self.dateUtil.getDateInNextMonth(self.displayDate) :
-            self.dateUtil.getDateInPreviousMonth(self.displayDate);
-        self.changeDisplayDate(transitionToDate);
-      }, 100));
-    });
   };
   
   /*** User input handling ***/
@@ -298,7 +294,7 @@
    * @param {Date} date
    */
   CalendarCtrl.prototype.focusDateElement = function(date) {
-    var cellId = this.getDateId_(date);
+    var cellId = this.getDateId(date);
     var cell = this.calendarElement.querySelector('#' + cellId);
     cell.focus();
   };
@@ -311,168 +307,12 @@
   /*** Animation ***/
 
   /**
-   * Animates the calendar to the next month.
-   * @param date
-   * @returns {angular.$q.Promise} The animation promise.
-   */
-  CalendarCtrl.prototype.animateToNextMonth = function(date) {
-    var currentMonth = this.calendarElement.querySelector('tbody');
-    var amountToMove = -(currentMonth.clientHeight) + 'px'; // todo: Why is this 2px off (Chrome)?
-
-    var newMonthToShow = this.buildCalendarForMonth(this.dateUtil.getDateInNextMonth(date));
-    this.calendarElement.appendChild(newMonthToShow);
-
-    var animatePromise = this.$animate.animate(angular.element(this.calendarElement),
-        {transform: 'translateY(0)'},
-        {transform: 'translateY(' + amountToMove + ')'});
-
-    var self = this;
-    return animatePromise.then(function() {
-      self.calendarElement.removeChild(currentMonth);
-      self.calendarElement.style.transform = '';
-    });
-  };
-
-
-  /**
-   * Animates the calendar to the previous month.
-   * @param date
-   * @returns {angular.$q.Promise} The animation promise.
-   */
-  CalendarCtrl.prototype.animateToPreviousMonth = function(date) {
-    var displayedMonths = this.calendarElement.querySelectorAll('tbody');
-    var currentMonth = displayedMonths[0];
-    var nextMonth = displayedMonths[1];
-
-    var newMonthToShow = this.buildCalendarForMonth(date);
-    this.calendarElement.insertBefore(newMonthToShow, currentMonth);
-    var amountToMove = newMonthToShow.clientHeight + 'px';
-
-    var animatePromise = this.$animate.animate(angular.element(this.calendarElement),
-          {transform: 'translateY(-' + amountToMove + ')'},
-          {transform: 'translateY(0)'});
-
-    var self = this;
-    return animatePromise.then(function() {
-      self.calendarElement.removeChild(nextMonth);
-      self.calendarElement.style.transform = '';
-    });
-  };
-
-
-  /**
-   * Animates the calendar to a date further than one month in the future.
-   * @param date
-   * @returns {angular.$q.Promise} The animation promise.
-   */
-  CalendarCtrl.prototype.animateToDistantFuture = function(date) {
-    var displayedMonths = this.calendarElement.querySelectorAll('tbody');
-    var currentMonth = displayedMonths[0];
-    var nextMonth = displayedMonths[1];
-
-    var midpointDate = this.dateUtil.getDateMidpoint(this.displayDate, date);
-    var midpointMonth = this.buildCalendarForMonth(midpointDate);
-    this.calendarElement.appendChild(midpointMonth);
-
-    var amountToMove = -(currentMonth.clientHeight +
-        nextMonth.clientHeight + midpointMonth.clientHeight) + 'px';
-
-    var targetMonth = this.buildCalendarForMonth(date);
-    this.calendarElement.appendChild(targetMonth);
-
-    var monthAfterTargetMonth = this.buildCalendarForMonth(this.dateUtil.getDateInNextMonth(date));
-    this.calendarElement.appendChild(monthAfterTargetMonth);
-
-    var animatePromise = this.$animate.animate(angular.element(this.calendarElement),
-        {transform: 'translateY(0)'},
-        {transform: 'translateY(' + amountToMove + ')'});
-
-    var self = this;
-    return animatePromise.then(function() {
-      self.calendarElement.removeChild(currentMonth);
-      self.calendarElement.removeChild(nextMonth);
-      self.calendarElement.removeChild(midpointMonth);
-      self.calendarElement.style.transform = '';
-    });
-  };
-
-
-  /**
-   * Animates the calendar to a date further than one month in the past.
-   * @param date
-   * @returns {angular.$q.Promise} The animation promise.
-   */
-  CalendarCtrl.prototype.animateToDistantPast = function(date) {
-    var displayedMonths = this.calendarElement.querySelectorAll('tbody');
-    var currentMonth = displayedMonths[0];
-    var nextMonth = displayedMonths[1];
-
-    var midpointDate = this.dateUtil.getDateMidpoint(this.displayDate, date);
-    var midpointMonth = this.buildCalendarForMonth(midpointDate);
-    this.calendarElement.insertBefore(midpointMonth, currentMonth);
-
-    var monthAfterTargetMonth = this.buildCalendarForMonth(this.dateUtil.getDateInNextMonth(date));
-    this.calendarElement.insertBefore(monthAfterTargetMonth, midpointMonth);
-
-    var targetMonth = this.buildCalendarForMonth(date);
-    this.calendarElement.insertBefore(targetMonth, monthAfterTargetMonth);
-
-    var amountToMove = -(targetMonth.clientHeight + midpointMonth.clientHeight +
-        monthAfterTargetMonth.clientHeight) + 'px';
-
-    var animatePromise = this.$animate.animate(angular.element(this.calendarElement),
-          {transform: 'translateY(' + amountToMove + ')'},
-          {transform: 'translateY(0)'});
-
-    var self = this;
-    return animatePromise.then(function() {
-      self.calendarElement.removeChild(nextMonth);
-      self.calendarElement.removeChild(currentMonth);
-      self.calendarElement.removeChild(midpointMonth);
-      self.calendarElement.style.transform = '';
-    });
-  };
-
-
-  /**
    * Animates the transition from the calendar's current month to the given month.
    * @param date
    * @returns {angular.$q.Promise} The animation promise.
    */
   CalendarCtrl.prototype.animateDateChange = function(date) {
-    var dateChangeType = this.getDateChangeType(date);
-    switch (dateChangeType) {
-      case DateChangeType.NEXT_MONTH: return this.animateToNextMonth(date);
-      case DateChangeType.PREVIOUS_MONTH: return this.animateToPreviousMonth(date);
-      case DateChangeType.DISTANT_FUTURE: return this.animateToDistantFuture(date);
-      case DateChangeType.DISTANT_PAST: return this.animateToDistantPast(date);
-      default: return this.$q.when();
-    }
-  };
-
-  /**
-   * Given a date, determines the type of transition that will occur from the currently shown date.
-   * @param {Date} date
-   * @returns {DateChangeType}
-   */
-  CalendarCtrl.prototype.getDateChangeType = function(date) {
-    if (date && this.displayDate && !this.dateUtil.isSameMonthAndYear(date, this.displayDate)) {
-      if (this.dateUtil.isInNextMonth(this.displayDate, date)) {
-        return DateChangeType.NEXT_MONTH;
-      }
-
-      if (this.dateUtil.isInPreviousMonth(this.displayDate, date)) {
-        return DateChangeType.PREVIOUS_MONTH;
-      }
-
-      if (date > this.displayDate) {
-        return DateChangeType.DISTANT_FUTURE;
-      }
-
-      return DateChangeType.DISTANT_PAST;
-    }
-
-    return DateChangeType.SAME_MONTH;
+    return this.$q.when();
   };
 
 
@@ -492,7 +332,7 @@
       // Remove the selected class from the previously selected date, if any.
       if (previousSelectedDate) {
         var prevDateCell =
-            self.calendarElement.querySelector('#' + self.getDateId_(previousSelectedDate));
+            self.calendarElement.querySelector('#' + self.getDateId(previousSelectedDate));
         if (prevDateCell) {
           prevDateCell.classList.remove(SELECTED_DATE_CLASS);
         }
@@ -500,7 +340,7 @@
 
       // Apply the select class to the new selected date if it is set.
       if (date) {
-        var dateCell = self.calendarElement.querySelector('#' + self.getDateId_(date));
+        var dateCell = self.calendarElement.querySelector('#' + self.getDateId(date));
         if (dateCell) {
           dateCell.classList.add(SELECTED_DATE_CLASS);
         }
@@ -519,6 +359,7 @@
     // the starting value of ngModel.
     if (!this.isInitialized) {
       this.buildInitialCalendarDisplay();
+      this.highlightToday();
       return this.$q.when();
     }
 
@@ -553,7 +394,7 @@
    * Highlight the cell corresponding to today if it is on the screen.
    */
   CalendarCtrl.prototype.highlightToday = function() {
-    var todayCell = this.calendarElement.querySelector('#' + this.getDateId_(this.today));
+    var todayCell = this.calendarElement.querySelector('#' + this.getDateId(this.today));
     if (todayCell) {
       todayCell.classList.add(TODAY_CLASS);
     }
@@ -607,114 +448,14 @@
     this.$element.find('thead').append(row);
   };
 
-  /**
-   * Creates a single cell to contain a date in the calendar with all appropriate
-   * attributes and classes added. If a date is given, the cell content will be set
-   * based on the date.
-   * @param {Date=} opt_date
-   * @returns {HTMLElement}
-   */
-  CalendarCtrl.prototype.buildDateCell = function(opt_date) {
-    var cell = document.createElement('td');
-    cell.classList.add('md-calendar-date');
-
-    if (opt_date) {
-      // Add a indicator for select, hover, and focus states.
-      var selectionIndicator = document.createElement('span');
-      cell.appendChild(selectionIndicator);
-      selectionIndicator.classList.add('md-calendar-date-selection-indicator');
-      selectionIndicator.textContent = this.dateLocale.dates[opt_date.getDate()];
-      //selectionIndicator.setAttribute('aria-label', '');
-
-      cell.setAttribute('tabindex', '-1');
-      cell.id = this.getDateId_(opt_date);
-      cell.dataset.timestamp = opt_date.getTime();
-      cell.addEventListener('click', this.cellClickHandler);
-    }
-
-    return cell;
-  };
-
-
-  /**
-   * Builds a <tbody> element for the given date's month.
-   * @param {Date=} opt_dateInMonth
-   * @returns {HTMLTableSectionElement} A <tbody> containing the <tr> elements.
-   */
-  CalendarCtrl.prototype.buildCalendarForMonth = function(opt_dateInMonth) {
-    var date = opt_dateInMonth || new Date();
-
-    var firstDayOfMonth = this.dateUtil.getFirstDateOfMonth(date);
-    var firstDayOfTheWeek = firstDayOfMonth.getDay();
-    var numberOfDaysInMonth = this.dateUtil.getNumberOfDaysInMonth(date);
-
-    // Store rows for the month in a document fragment so that we can append them all at once.
-    var monthBody = document.createElement('tbody');
-    monthBody.classList.add('md-calendar-month');
-    monthBody.setAttribute('aria-hidden', 'true');
-
-    var row = document.createElement('tr');
-    monthBody.appendChild(row);
-
-    // Add a label for the month. If the month starts on a Sunday or a Monday, the month label
-    // goes on a row above the first of the month. Otherwise, the month label takes up the first
-    // two cells of the first row.
-    var blankCellOffset = 0;
-    var monthLabelCell = document.createElement('td');
-    monthLabelCell.classList.add('md-calendar-month-label');
-    if (firstDayOfTheWeek <= 1) {
-      monthLabelCell.setAttribute('colspan', '7');
-      monthLabelCell.textContent = this.dateLocale.shortMonths[date.getMonth()];
-
-      var monthLabelRow = document.createElement('tr');
-      monthLabelRow.appendChild(monthLabelCell);
-      monthBody.insertBefore(monthLabelRow, row);
-    } else {
-      blankCellOffset = 2;
-      monthLabelCell.setAttribute('colspan', '2');
-      monthLabelCell.textContent = this.dateLocale.shortMonths[date.getMonth()];
-
-      row.appendChild(monthLabelCell);
-    }
-
-    // Add a blank cell for each day of the week that occurs before the first of the month.
-    // For example, if the first day of the month is a Tuesday, add blank cells for Sun and Mon.
-    // The blankCellOffset is needed in cases where the first N cells are used by the month label.
-    for (var i = blankCellOffset; i < firstDayOfTheWeek; i++) {
-      row.appendChild(this.buildDateCell());
-    }
-
-    // Add a cell for each day of the month, keeping track of the day of the week so that
-    // we know when to start a new row.
-    var dayOfWeek = firstDayOfTheWeek;
-    var iterationDate = firstDayOfMonth;
-    for (var d = 1; d <= numberOfDaysInMonth; d++) {
-      // If we've reached the end of the week, start a new row.
-      if (dayOfWeek === 7) {
-        dayOfWeek = 0;
-        row = document.createElement('tr');
-        monthBody.appendChild(row);
-      }
-
-      iterationDate.setDate(d);
-      var cell = this.buildDateCell(iterationDate);
-      row.appendChild(cell);
-
-      dayOfWeek++;
-    }
-
-    return monthBody;
-  };
-
-
-  /**
+    /**
    * Gets an identifier for a date unique to the calendar instance for internal
    * purposes. Not to be displayed.
    * @param {Date} date
    * @returns {string}
    * @private
    */
-  CalendarCtrl.prototype.getDateId_ = function(date) {
+  CalendarCtrl.prototype.getDateId = function(date) {
     return [
       'md',
       this.id,
