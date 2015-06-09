@@ -1,0 +1,6 @@
+.md-date-picker-root.md-THEME_NAME-theme {
+  background: white;
+  &[disabled] {
+    background: '{{background-100}}';
+  }
+}

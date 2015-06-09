@@ -20,6 +20,7 @@
       incrementMonths: incrementMonths,
       getLastDateOfMonth: getLastDateOfMonth,
       isSameDay: isSameDay,
+      getMonthDistance: getMonthDistance,
       isValidDate: isValidDate
     };
 
@@ -153,6 +154,19 @@
       }
 
       return dateInTargetMonth;
+    }
+
+    /**
+     * Get the integer distance between two months. This *only* considers the month and year
+     * portion of the Date instances.
+     *
+     * @param {Date} start
+     * @param {Date} end
+     * @returns {number} Number of months between `start` and `end`. If `end` is before `start`
+     *     chronologically, this number will be negative.
+     */
+    function getMonthDistance(start, end) {
+      return (12 * (end.getFullYear() - start.getFullYear())) + (end.getMonth() - start.getMonth());
     }
 
     /**
