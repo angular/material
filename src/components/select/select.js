@@ -75,7 +75,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
 
   function compile(element, attr) {
     // The user is allowed to provide a label for the select as md-select-label child
-    var labelEl = element.find('md-select-label').remove();
+    var labelEl = element.parent().find('label').remove();
 
     // If not provided, we automatically make one
     if (!labelEl.length) {
