@@ -17,7 +17,16 @@
 * The API has changed for `md-icon` - `iconSize` has been
 changed to `viewBoxSize`
 
- ([f93e117a](https://github.com/angular/material/commit/f93e117a38d4ccd9fca4f504b4e9d86bc5e8962f))
+ ([f93e117a](https://github.com/angular/material/commit/f93e117a))
+
+
+#### Bug Fixes
+
+* **autocomplete:** fixes issue where setting a min-length of 0 was not working ([d3f65195](https://github.com/angular/material/commit/d3f65195))
+* **button:** fixes style inconsistencies between `md-buttons` using `a` and `button` under th ([cc07e63d](https://github.com/angular/material/commit/cc07e63d), closes [#2440](https://github.com/angular/material/issues/2440))
+* **icon:** Change iconSize param to viewBoxSize. ([f93e117a](https://github.com/angular/material/commit/f93e117a), closes [#1679](https://github.com/angular/material/issues/1679), [#3123](https://github.com/angular/material/issues/3123))
+* **icons:** support for ngDirectives using compile phase ([9521a1e0](https://github.com/angular/material/commit/9521a1e0))
+* **tabs:** fixes issue with tab pagination in Angular 1.4 ([4273f52b](https://github.com/angular/material/commit/4273f52b))
 
 
 <a name="0.9.8"></a>
