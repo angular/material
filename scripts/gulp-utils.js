@@ -11,10 +11,16 @@ var path = require('path');
 var getModuleInfo = require('../config/ngModuleData.js');
 
 exports.humanizeCamelCase = function(str) {
-  return str.charAt(0).toUpperCase() +
-    str.substring(1).replace(/[A-Z]/g, function($1) {
-      return ' ' + $1.toUpperCase();
-    });
+  switch (str) {
+    case 'fabSpeedDial':
+      return 'FAB Speed Dial';
+    case 'fabToolbar':
+      return 'FAB Toolbar';
+    default:
+      return str.charAt(0).toUpperCase() + str.substring(1).replace(/[A-Z]/g, function($1) {
+            return ' ' + $1.toUpperCase();
+          });
+  }
 };
 
 /**
