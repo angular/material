@@ -1,15 +1,22 @@
-<a name"0.10.0-rc2"></a>
-### 0.10.0-rc2 (2015-06-09)
+<a name="0.10.0-rc2"></a>
+### 0.10.0-rc2  (2015-06-09)
+
+
+#### Bug Fixes
+
+* **autocomplete:** fixes issue where setting a min-length of 0 was not working ([d3f65195](https://github.com/angular/material/commit/d3f6519561d638b16a7c31e1b53a3babce0f5082))
+* **button:** fixes style inconsistencies between `md-buttons` using `a` and `button` under th ([cc07e63d](https://github.com/angular/material/commit/cc07e63dc5a37b5b220691c3cf8e4b3d08bd2500), closes [#2440](https://github.com/angular/material/issues/2440))
+* **icon:** Change iconSize param to viewBoxSize. ([f93e117a](https://github.com/angular/material/commit/f93e117a38d4ccd9fca4f504b4e9d86bc5e8962f), closes [#1679](https://github.com/angular/material/issues/1679), [#3123](https://github.com/angular/material/issues/3123))
+* **icons:** support for ngDirectives using compile phase ([9521a1e0](https://github.com/angular/material/commit/9521a1e03e108e8ac5a5857f18fc67110ba5fae3))
+* **tabs:** fixes issue with tab pagination in Angular 1.4 ([4273f52b](https://github.com/angular/material/commit/4273f52bedcb600e325928d614e5e438abb19c89))
 
 
 #### Features
 
-* **fabSpeedDial:** adds fabSpeedDial component ([e813dcdb](https://github.com/angular/material/commit/e813dcdb))
-* **fabToolbar:** adds fabToolbar component ([30a53c30](https://github.com/angular/material/commit/30a53c30))
-* **menu:** add a basic dropdown menu component ([3f6b4af4](https://github.com/angular/material/commit/3f6b4af4), closes [#3173](https://github.com/angular/material/issues/3173))
+* **menu:** add a basic dropdown menu component ([3f6b4af4](https://github.com/angular/material/commit/3f6b4af4e0c2afe35007f3df9918bbcb6775fc63), closes [#3173](https://github.com/angular/material/issues/3173))
 * **tabs:**
-  * replaces unnecessary watches with getter/setter syntax for improved performance ([c806e8be](https://github.com/angular/material/commit/c806e8be))
-  * adds support for `md-autoselect` ([8285e2d0](https://github.com/angular/material/commit/8285e2d0))
+  * replaces unnecessary watches with getter/setter syntax for improved performance ([c806e8be](https://github.com/angular/material/commit/c806e8bedcf3368b3f412ea0f6c42ed97f8ab46c))
+  * adds support for `md-autoselect` ([8285e2d0](https://github.com/angular/material/commit/8285e2d0bb6efbc72e311ee85b619cbbe8437072))
 
 
 #### Breaking Changes
@@ -17,16 +24,7 @@
 * The API has changed for `md-icon` - `iconSize` has been
 changed to `viewBoxSize`
 
- ([f93e117a](https://github.com/angular/material/commit/f93e117a))
-
-
-#### Bug Fixes
-
-* **autocomplete:** fixes issue where setting a min-length of 0 was not working ([d3f65195](https://github.com/angular/material/commit/d3f65195))
-* **button:** fixes style inconsistencies between `md-buttons` using `a` and `button` under th ([cc07e63d](https://github.com/angular/material/commit/cc07e63d), closes [#2440](https://github.com/angular/material/issues/2440))
-* **icon:** Change iconSize param to viewBoxSize. ([f93e117a](https://github.com/angular/material/commit/f93e117a), closes [#1679](https://github.com/angular/material/issues/1679), [#3123](https://github.com/angular/material/issues/3123))
-* **icons:** support for ngDirectives using compile phase ([9521a1e0](https://github.com/angular/material/commit/9521a1e0))
-* **tabs:** fixes issue with tab pagination in Angular 1.4 ([4273f52b](https://github.com/angular/material/commit/4273f52b))
+ ([f93e117a](https://github.com/angular/material/commit/f93e117a38d4ccd9fca4f504b4e9d86bc5e8962f))
 
 
 <a name="0.9.8"></a>
