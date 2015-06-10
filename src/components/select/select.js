@@ -68,7 +68,7 @@ angular.module('material.components.select', [
 function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, $compile, $parse) {
   return {
     restrict: 'E',
-    require: ['mdSelect', 'ngModel', '?^form'],
+    require: ['^?mdInputContainer', 'mdSelect', 'ngModel', '?^form'],
     compile: compile,
     controller: function() { } // empty placeholder controller to be initialized in link
   };
@@ -143,9 +143,10 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
       var isOpen;
       var isDisabled;
 
-      var mdSelectCtrl = ctrls[0];
-      var ngModel = ctrls[1];
-      var formCtrl = ctrls[2];
+      var containerCtrl = ctrls[0];
+      var mdSelectCtrl = ctrls[1];
+      var ngModel = ctrls[2];
+      var formCtrl = ctrls[3];
 
       var labelEl = element.find('md-select-label');
       var customLabel = labelEl.text().length !== 0;

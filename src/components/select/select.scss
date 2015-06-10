@@ -11,6 +11,7 @@ $select-max-visible-options: 5;
   top: 0;
   z-index: 99;
   opacity: 0;
+  border: solid 1px;
 
   // Don't let the user select a new choice while it's animating
   &:not(.md-clickable) {

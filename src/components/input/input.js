@@ -168,7 +168,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
 
     if ( !containerCtrl ) return;
     if (containerCtrl.input) {
-      throw new Error("<md-input-container> can only have *one* <input> or <textarea> child element!");
+      throw new Error("<md-input-container> can only have *one* child <input>, <textarea> or <select> element!");
     }
     containerCtrl.input = element;
 
@@ -327,7 +327,6 @@ function mdMaxlengthDirective($animate) {
 }
 
 function placeholderDirective($log) {
-  var blackListElements = ['MD-SELECT'];
   return {
     restrict: 'A',
     require: '^^?mdInputContainer',
@@ -337,7 +336,6 @@ function placeholderDirective($log) {
 
   function postLink(scope, element, attr, inputContainer) {
     if (!inputContainer) return;
-    if (blackListElements.indexOf(element[0].nodeName) != -1) return;
     if (angular.isDefined(inputContainer.element.attr('md-no-float'))) return;
 
     var placeholderText = attr.placeholder;
