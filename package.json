@@ -15,7 +15,7 @@
     "canonical-path": "0.0.2",
     "cli-color": "^1.0.0",
     "colors": "^1.1.0",
-    "conventional-changelog": "0.0.9",
+    "conventional-changelog": "git://github.com/robertmesserle/conventional-changelog.git",
     "dgeni": "^0.4.1",
     "dgeni-packages": "^0.10.3",
     "esprima": "^1.2.2",
