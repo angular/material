@@ -256,6 +256,7 @@
       alias : alias,
       fontSet : className || alias
     });
+    return this;
    },
 
    /**
