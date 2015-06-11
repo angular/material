@@ -39,70 +39,43 @@ angular.module('material.core')
     offsetRect: function(element, offsetParent) {
       return Util.clientRect(element, offsetParent, true);
     },
-    // Disables scroll around the passed element. Goes up the DOM to find a
-    // disableTarget (a md-content that is scrolling, or the body as a fallback)
-    // and uses CSS/JS to prevent it from scrolling
+
+    // Disables scroll around the passed element.
     disableScrollAround: function(element) {
-      element = element instanceof angular.element ? element[0] : element;
+      if (Util.disableScrollAround._enableScrolling) return Util.disableScrollAround._enableScrolling;
+      element = angular.element(element);
+      var body = $document[0].body;
+      disableBodyScroll();
+      disableElementScroll();
 
-      if (this.getClosest(element, 'MD-DIALOG')) {
-        return angular.noop;
-      }
-
-      var parentEl = element;
-      var disableTarget;
-
-      // Find the highest level scrolling md-content
-      while (parentEl = this.getClosest(parentEl, 'MD-CONTENT', true)) {
-        if (isScrolling(parentEl)) {
-          disableTarget = angular.element(parentEl)[0];
-        }
-      }
-
-      // Default to the body if no scrolling md-content
-      if (!disableTarget) {
-        disableTarget = $document[0].body;
-        if (!isScrolling(disableTarget)) return angular.noop;
-      }
-
-      if (disableTarget.nodeName == 'BODY') {
-        return disableBodyScroll();
-      } else {
-        return disableElementScroll();
-      }
+      return Util.disableScrollAround._enableScrolling;
 
       // Creates a virtual scrolling mask to absorb touchmove, keyboard, scrollbar clicking, and wheel events
       function disableElementScroll() {
-        var scrollMask = angular.element('<div class="md-scroll-mask"><div class="md-scroll-mask-bar"></div></div>');
-        var computedStyle = $window.getComputedStyle(disableTarget);
-        var disableRect = disableTarget.getBoundingClientRect();
-        var scrollWidth = disableRect.width - disableTarget.clientWidth;
-        applyStyles(scrollMask[0], {
-          zIndex: computedStyle.zIndex == 'auto' ? 2 : computedStyle.zIndex + 1,
-          width: disableRect.width + 'px',
-          height: disableRect.height + 'px',
-          top: disableRect.top + 'px',
-          left: disableRect.left + 'px'
-        });
-        scrollMask[0].firstElementChild.style.width = scrollWidth + 'px';
-        $document[0].body.appendChild(scrollMask[0]);
+        var zIndex = $window.getComputedStyle(element[0]).zIndex;
+        var scrollMask = angular.element(
+            '<div class="md-scroll-mask" style="z-index: ' + zIndex + '">' +
+            '  <div class="md-scroll-mask-bar"></div>' +
+            '</div>');
+        body.appendChild(scrollMask[0]);
 
         scrollMask.on('wheel', preventDefault);
         scrollMask.on('touchmove', preventDefault);
         $document.on('keydown', disableKeyNav);
 
-        return function restoreScroll() {
+        Util.disableScrollAround._enableScrolling = function restoreScroll () {
           scrollMask.off('wheel');
           scrollMask.off('touchmove');
           scrollMask[0].parentNode.removeChild(scrollMask[0]);
           $document.off('keydown', disableKeyNav);
+          delete Util.disableScrollAround._enableScrolling;
         };
 
-        // Prevent keypresses from elements inside the disableTarget
+        // Prevent keypresses from elements inside the body
         // used to stop the keypresses that could cause the page to scroll
         // (arrow keys, spacebar, tab, etc).
         function disableKeyNav(e) {
-          if (disableTarget.contains(e.target)) {
+          if (!element[0].contains(e.target)) {
             e.preventDefault();
             e.stopImmediatePropagation();
           }
@@ -113,12 +86,13 @@ angular.module('material.core')
         }
       }
 
-      // Converts the disableTarget (body) to a position fixed block and translate it to the propper scroll position
+      // Converts the body to a position fixed block and translate it to the proper scroll
+      // position
       function disableBodyScroll() {
-        var restoreStyle = disableTarget.getAttribute('style') || '';
-        var scrollOffset = disableTarget.scrollTop;
+        var restoreStyle = body.getAttribute('style') || '';
+        var scrollOffset = body.scrollTop;
 
-        applyStyles(disableTarget, {
+        applyStyles(body, {
           position: 'fixed',
           width: '100%',
           overflowY: 'scroll',
@@ -126,8 +100,8 @@ angular.module('material.core')
         });
 
         return function restoreScroll() {
-          disableTarget.setAttribute('style', restoreStyle);
-          disableTarget.scrollTop = scrollOffset;
+          body.setAttribute('style', restoreStyle);
+          body.scrollTop = scrollOffset;
         };
       }
 
@@ -136,13 +110,11 @@ angular.module('material.core')
           el.style[key] = styles[key];
         }
       }
-
-      function isScrolling(el) {
-        if (el instanceof angular.element) el = el[0];
-        return el.scrollHeight > el.offsetHeight;
-      }
     },
-
+    enableScrolling: function () {
+      var method = this.disableScrollAround._enableScrolling;
+      method && method();
+    },
     floatingScrollbars: function() {
       if (this.floatingScrollbars.cached === undefined) {
         var tempNode = angular.element('<div style="width: 100%; z-index: -1; position: absolute; height: 35px; overflow-y: scroll"><div style="height: 60;"></div></div>');
