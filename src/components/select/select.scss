@@ -66,13 +66,15 @@ md-select {
     }
     &.ng-invalid.ng-dirty {
       .md-select-label {
-        border-bottom: 2px solid;
+        border-bottom-width: 2px;
+        border-bottom-style: solid;
         padding-bottom: 0;
       }
     }
     &:focus {
       .md-select-label {
-        border-bottom: 2px solid;
+        border-bottom-width: 2px;
+        border-bottom-style: solid;
         padding-bottom: 0;
       }
     }
