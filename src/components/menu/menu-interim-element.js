@@ -244,7 +244,6 @@ function MenuProvider($$interimElementProvider) {
      * @param {object} opts - the interim element options object
      */
     function positionMenu(el, opts) {
-      debugger;
       if (opts.isRemoved) return;
 
       var containerNode = el[0],

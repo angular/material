@@ -162,6 +162,13 @@ function MenuDirective($mdMenu) {
     menuContainer.append(menuContents);
     mdMenuCtrl.init(menuContainer);
 
+    scope.$on('$destroy', function() {
+      if (mdMenuCtrl.isOpen) {
+        menuContainer.remove();
+        mdMenuCtrl.close();
+      }
+    });
+
   }
 }
 
@@ -178,6 +185,7 @@ function MenuController($mdMenu, $attrs, $element, $scope) {
 
   // Uses the $mdMenu interim element service to open the menu contents
   this.open = function openMenu() {
+    ctrl.isOpen = true;
     $element.attr('aria-expanded', 'true');
     $mdMenu.show({
       mdMenuCtrl: ctrl,
@@ -190,6 +198,7 @@ function MenuController($mdMenu, $attrs, $element, $scope) {
 
   // Use the $mdMenu interim element service to close the menu contents
   this.close = function closeMenu(skipFocus) {
+    ctrl.isOpen = false;
     $element.attr('aria-expanded', 'false');
     $mdMenu.hide();
 
