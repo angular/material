@@ -108,6 +108,20 @@ describe('<md-select>', function() {
     expect(select.attr('aria-disabled')).toBe('true');
   }));
 
+  it('calls the md-on-close fn on close', inject(function($document, $rootScope) {
+    var called = false;
+    $rootScope.onClose = function() {
+      called = true;
+    };
+    var select = setupSelect('ng-model="val", md-on-close="onClose()"', [1, 2, 3]);
+    openSelect(select);
+
+    $document.find('md-option')[0].click();
+    waitForSelectClose();
+
+    expect(called).toBe(true);
+  }));
+
   xit('closes the menu if the element is destroyed', inject(function($document, $rootScope) {
     var select = setupSelect('ng-model="val"');
 
