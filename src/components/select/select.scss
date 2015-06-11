@@ -86,7 +86,8 @@ md-select {
   display: flex;
   align-items: center;
   padding: 2px 2px 1px;
-  border-bottom: 1px solid;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
   position: relative;
   box-sizing: content-box;
   min-width: 8 * $baseline-grid;

@@ -45,7 +45,8 @@ md-progress-circular {
       right: $progress-circular-size * 0.5 - 1;
       top: 0;
       bottom: 0;
-      border-top: 5px solid black;
+      border-top-width: 5px;
+      border-top-style: solid;
       box-sizing: border-box;
     }
     .md-left, .md-right {
@@ -60,7 +61,8 @@ md-progress-circular {
         width: $progress-circular-size;
         height: $progress-circular-size;
         box-sizing: border-box;
-        border: 5px solid black;
+        border-width: 5px;
+        border-style: solid;
         border-bottom-color: transparent;
         border-radius: 50%;
       }
@@ -110,7 +112,8 @@ md-progress-circular {
           }
         }
         .md-gap {
-          border-bottom: 5px solid;
+          border-bottom-width: 5px;
+          border-bottom-style: solid;
           @if $i <= 50 {
             border-bottom-color: transparent !important;
           } @else {
