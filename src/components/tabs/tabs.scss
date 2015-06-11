@@ -142,6 +142,11 @@ md-tabs-canvas {
   &.md-center-tabs {
     display: flex;
     flex-direction: column;
+    text-align: center;
+    .md-tab {
+      float: none;
+      display: inline-block;
+    }
   }
 }
 md-pagination-wrapper {
