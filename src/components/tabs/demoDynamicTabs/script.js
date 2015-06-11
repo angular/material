@@ -24,8 +24,8 @@
     $scope.$watch('selectedIndex', function(current, old){
       previous = selected;
       selected = tabs[current];
-      if ( old && (old != current)) $log.debug('Goodbye ' + previous.title + '!');
-      if ( current )                $log.debug('Hello ' + selected.title + '!');
+      if ( old + 1 && (old != current)) $log.debug('Goodbye ' + previous.title + '!');
+      if ( current + 1 )                $log.debug('Hello ' + selected.title + '!');
     });
     $scope.addTab = function (title, view) {
       view = view || title + " Content View";
