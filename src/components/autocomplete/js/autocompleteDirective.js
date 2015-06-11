@@ -106,7 +106,6 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
   return {
     controller:   'MdAutocompleteCtrl',
     controllerAs: '$mdAutocompleteCtrl',
-    link:         link,
     scope:        {
       inputName:      '@mdInputName',
       inputMinlength: '@mdInputMinlength',
@@ -142,12 +141,12 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
           <ul role="presentation"\
               class="md-autocomplete-suggestions md-whiteframe-z1 {{menuClass || \'\'}}"\
               id="ul-{{$mdAutocompleteCtrl.id}}"\
+              ng-hide="$mdAutocompleteCtrl.hidden"\
               ng-mouseenter="$mdAutocompleteCtrl.listEnter()"\
               ng-mouseleave="$mdAutocompleteCtrl.listLeave()"\
               ng-mouseup="$mdAutocompleteCtrl.mouseUp()">\
             <li ng-repeat="(index, item) in $mdAutocompleteCtrl.matches"\
                 ng-class="{ selected: index === $mdAutocompleteCtrl.index }"\
-                ng-hide="$mdAutocompleteCtrl.hidden"\
                 ng-click="$mdAutocompleteCtrl.select(index)"\
                 md-autocomplete-list-item="$mdAutocompleteCtrl.itemName">\
                 ' + itemTemplate + '\
@@ -193,7 +192,7 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
                   ng-required="isRequired"\
                   ng-minlength="inputMinlength"\
                   ng-maxlength="inputMaxlength"\
-                  ng-disabled="isDisabled"\
+                  ng-disabled="$mdAutocompleteCtrl.isDisabled"\
                   ng-model="$mdAutocompleteCtrl.scope.searchText"\
                   ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                   ng-blur="$mdAutocompleteCtrl.blur()"\
@@ -214,7 +213,7 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
                 ng-if="!floatingLabel"\
                 autocomplete="off"\
                 ng-required="isRequired"\
-                ng-disabled="isDisabled"\
+                ng-disabled="$mdAutocompleteCtrl.isDisabled"\
                 ng-model="$mdAutocompleteCtrl.scope.searchText"\
                 ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                 ng-blur="$mdAutocompleteCtrl.blur()"\
@@ -229,7 +228,7 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
             <button\
                 type="button"\
                 tabindex="-1"\
-                ng-if="$mdAutocompleteCtrl.scope.searchText && !isDisabled"\
+                ng-if="$mdAutocompleteCtrl.scope.searchText && !$mdAutocompleteCtrl.isDisabled"\
                 ng-click="$mdAutocompleteCtrl.clear()">\
               <md-icon md-svg-icon="md-close"></md-icon>\
               <span class="md-visually-hidden">Clear</span>\
@@ -239,13 +238,4 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
       }
     }
   };
-
-  function link (scope, element, attr) {
-    attr.$observe('disabled', function (value) { scope.isDisabled = value; });
-    attr.$observe('required', function (value) { scope.isRequired = value !== null; });
-
-    $mdUtil.initOptionalProperties(scope, attr, {searchText:null, selectedItem:null} );
-
-    $mdTheming(element);
-  }
 }
