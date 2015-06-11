@@ -86,7 +86,7 @@ function MenuProvider($$interimElementProvider) {
       /** Wireup various resize listeners for screen changes */
       function handleResizing() {
         opts.resizeFn = function() {
-          positionMenu(scope, element, opts);
+          positionMenu(element, opts);
         };
         angular.element($window).on('resize', opts.resizeFn);
         angular.element($window).on('orientationchange', opts.resizeFn);
@@ -103,7 +103,7 @@ function MenuProvider($$interimElementProvider) {
         // so all of our computed positions/sizes are accurate
         $$rAF(function() {
           $$rAF(function() {
-            positionMenu(scope, element, opts);
+            positionMenu(element, opts);
             // Wait a frame before fading in menu (md-active) so that we don't trigger
             // transitions on the menu position changing
             $$rAF(function() {
