@@ -119,7 +119,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
    */
   function handleOffsetChange (left) {
     var newValue = ctrl.shouldCenterTabs ? '' : '-' + left + 'px';
-    angular.element(elements.paging).css('transform', 'translate3d(' + newValue + ', 0, 0)');
+    angular.element(elements.paging).css($mdConstant.CSS.TRANSFORM, 'translate3d(' + newValue + ', 0, 0)');
     $scope.$broadcast('$mdTabsPaginationChanged');
   }
 
