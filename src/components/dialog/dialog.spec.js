@@ -414,7 +414,7 @@ describe('$mdDialog', function() {
               '<button id="a">A</md-button>' +
               '<button id="focus-target">B</md-button>' +
             '</div>' +
-          '</md-dialog>',
+          '</md-dialog>'
       });
 
       $rootScope.$apply();
