@@ -40,6 +40,15 @@ angular.module('material.core')
       return Util.clientRect(element, offsetParent, true);
     },
 
+    // Annoying method to copy nodes to an array, thanks to IE
+    nodesToArray: function (nodes) {
+      var results = [];
+      for (var i = 0; i < nodes.length; ++i) {
+        results.push(nodes.item(i));
+      }
+      return results;
+    },
+
     // Disables scroll around the passed element.
     disableScrollAround: function(element) {
       if (Util.disableScrollAround._enableScrolling) return Util.disableScrollAround._enableScrolling;

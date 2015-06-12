@@ -181,7 +181,7 @@ function MenuProvider($$interimElementProvider) {
     function focusMenuItem(e, menuEl, opts, direction) {
       var currentItem = $mdUtil.getClosest(e.target, 'MD-MENU-ITEM');
 
-      var items = nodesToArray(menuEl[0].children);
+      var items = $mdUtil.nodesToArray(menuEl[0].children);
       var currentIndex = items.indexOf(currentItem);
 
       // Traverse through our elements in the specified direction (+/-1) and try to
@@ -350,11 +350,4 @@ function MenuProvider($$interimElementProvider) {
       }
     }
   }
-}
-
-// Annoying method to copy nodes to an array, thanks to IE
-function nodesToArray(nodes) {
-  var results = [];
-  for (var i = nodes.length; i--; results.unshift(nodes[i])) {}
-  return results;
 }

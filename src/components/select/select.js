@@ -482,7 +482,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
     };
 
     self.selectedLabels = function() {
-      var selectedOptionEls = nodesToArray($element[0].querySelectorAll('md-option[selected]'));
+      var selectedOptionEls = $mdUtil.nodesToArray($element[0].querySelectorAll('md-option[selected]'));
       if (selectedOptionEls.length) {
         return selectedOptionEls.map(function(el) { return el.textContent; }).join(', ');
       } else {
@@ -819,7 +819,7 @@ function SelectProvider($$interimElementProvider) {
 
 
         function focusOption(direction) {
-          var optionsArray = nodesToArray(optionNodes);
+          var optionsArray = $mdUtil.nodesToArray(optionNodes);
           var index = optionsArray.indexOf(opts.focusedNode);
           if (index === -1) {
             // We lost the previously focused element, reset to first option
@@ -1035,11 +1035,3 @@ function SelectProvider($$interimElementProvider) {
   }
 }
 
-// Annoying method to copy nodes to an array, thanks to IE
-function nodesToArray(nodes) {
-  var results = [];
-  for (var i = 0; i < nodes.length; ++i) {
-    results.push(nodes.item(i));
-  }
-  return results;
-}
