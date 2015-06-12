@@ -96,7 +96,7 @@ describe('$mdToast service', function() {
       it('displays correctly with parent()', inject(function($mdToast, $rootScope) {
               var parent = angular.element('<div>');
               var toast = $mdToast.simple({
-                content: 'Do something',
+                content: 'Do something'
               })
               .parent(parent)
               .action('Click me');
@@ -173,7 +173,7 @@ describe('$mdToast service', function() {
       it('should have templateUrl', inject(function($timeout, $rootScope, $templateCache, $rootElement) {
         $templateCache.put('template.html', '<md-toast>hello, {{1}}</md-toast>');
         setup({
-          templateUrl: 'template.html',
+          templateUrl: 'template.html'
         });
         var toast = $rootElement.find('md-toast');
         expect(toast.text()).toBe('hello, 1');
