@@ -60,9 +60,6 @@ md-tabs {
     md-tabs-wrapper {
       border-width: 0 0 1px;
       border-style: solid;
-      .md-tab {
-        padding-bottom: 11px;
-      }
     }
     &:not(.md-dynamic-height) {
       md-tabs-content-wrapper {

@@ -162,6 +162,7 @@ function MdTabs ($mdTheming, $mdUtil, $compile) {
             </md-pagination-wrapper>\
             <div class="md-visually-hidden md-dummy-wrapper">\
               <md-dummy-tab\
+                  class="md-tab"\
                   tabindex="-1"\
                   id="tab-item-{{tab.id}}"\
                   role="tab"\
