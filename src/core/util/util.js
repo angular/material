@@ -106,7 +106,7 @@ angular.module('material.core')
       // position
       function disableBodyScroll() {
         var restoreStyle = body.getAttribute('style') || '';
-        var scrollOffset = body.scrollTop;
+        var scrollOffset = body.scrollTop + body.parentElement.scrollTop;
 
         applyStyles(body, {
           position: 'fixed',
