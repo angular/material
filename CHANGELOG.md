@@ -1,5 +1,5 @@
-<a name"0.10.0-rc4"></a>
-### 0.10.0-rc4 (2015-06-11)
+<a name"0.10.0"></a>
+## 0.10.0 (2015-06-15)
 
 
 #### Features
@@ -24,6 +24,8 @@ changed to `viewBoxSize`
 #### Bug Fixes
 
 * **autocomplete:**
+  * prevents an error when passing null instead of an array ([afa213df](https://github.com/angular/material/commit/afa213df))
+  * waits for screen to reposition on focus before locking scrolling ([6bfc31ea](https://github.com/angular/material/commit/6bfc31ea), closes [#2973](https://github.com/angular/material/issues/2973))
   * fixes typo in autocomplete mouseup method ([67817713](https://github.com/angular/material/commit/67817713))
   * locks scrolling while autocomplete menu is visible ([deae957b](https://github.com/angular/material/commit/deae957b), closes [#2973](https://github.com/angular/material/issues/2973))
   * fixes issue where setting a min-length of 0 was not working ([d3f65195](https://github.com/angular/material/commit/d3f65195))
@@ -38,8 +40,11 @@ changed to `viewBoxSize`
   * re-enable keyboard controls ([25131532](https://github.com/angular/material/commit/25131532), closes [#3205](https://github.com/angular/material/issues/3205))
   * fix rc2 complete break ([fb245fb8](https://github.com/angular/material/commit/fb245fb8), closes [#3197](https://github.com/angular/material/issues/3197))
 * **radioButton:** fixes potential theming bug due to CSS specificity ([e8ec2b5e](https://github.com/angular/material/commit/e8ec2b5e))
-* **select:** fix focus color not picking up theming ([781a4bcf](https://github.com/angular/material/commit/781a4bcf), closes [#3128](https://github.com/angular/material/issues/3128))
+* **select:**
+  * fixes screen jump in Firefox ([7b8efe21](https://github.com/angular/material/commit/7b8efe21))
+  * fix focus color not picking up theming ([781a4bcf](https://github.com/angular/material/commit/781a4bcf), closes [#3128](https://github.com/angular/material/issues/3128))
 * **tabs:**
+  * programmatically changing tabs will now adjust pagination to show the selected t ([6d45f104](https://github.com/angular/material/commit/6d45f104), closes [#3139](https://github.com/angular/material/issues/3139))
   * calls on-select for the initially selected item ([cc1d9d2b](https://github.com/angular/material/commit/cc1d9d2b), closes [#3169](https://github.com/angular/material/issues/3169))
   * fixes CSS to respect non-truthy values for `md-dynamic-height` ([60197180](https://github.com/angular/material/commit/60197180), closes [#3184](https://github.com/angular/material/issues/3184))
   * fixes centered tabs for Safari ([25526864](https://github.com/angular/material/commit/25526864), closes [#3198](https://github.com/angular/material/issues/3198))
