@@ -117,6 +117,15 @@ md-select {
     transform: scaleY(0.6) scaleX(1);
   }
 
+  &.md-select-placeholder {
+    display: flex;
+    order: 1;
+    pointer-events: none;
+    -webkit-font-smoothing: antialiased;
+    padding-left: 2px;
+    z-index: 1;
+    color: rgba(0,0,0,0.26);
+  }
 
 }
 
