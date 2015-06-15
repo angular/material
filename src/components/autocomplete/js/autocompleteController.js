@@ -478,7 +478,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
         term = searchText.toLowerCase();
     if (angular.isArray(items)) {
       handleResults(items);
-    } else {
+    } else if (items) {
       ctrl.loading = true;
       if (items.success) items.success(handleResults);
       if (items.then)    items.then(handleResults);
