@@ -98,6 +98,7 @@ md-input-container {
     transition-property: opacity, transform;
     transform: translate3d(0, $input-placeholder-offset + $baseline-grid * 0.75, 0);
   }
+
   &.md-input-focused .md-placeholder {
     opacity: 1;
     transform: translate3d(0, $input-placeholder-offset, 0);
@@ -111,6 +112,9 @@ md-input-container {
   &:not( .md-input-has-value ) input:not( :focus ) {
     color: transparent;
   }
+
+
+
 
 
   /*
