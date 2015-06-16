@@ -1,5 +1,5 @@
 @ngdoc content
-@name button
+@name checkbox
 @description
 
 ### CSS Styles
