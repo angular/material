@@ -131,6 +131,8 @@ $icon-button-margin: rem(0.600) !default;
     width: $button-fab-width;
     height: $button-fab-height;
     vertical-align: middle;
+    flex-grow: 0;
+    flex-shrink: 0;
 
     @extend .md-shadow-bottom-z-1;
     border-radius: 50%;
