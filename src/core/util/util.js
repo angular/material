@@ -116,7 +116,7 @@ angular.module('material.core')
           top: -scrollOffset + 'px'
         });
 
-        if (body.clientWidth < clientWidth) applyStyles(body, { overflow: 'auto' });
+        if (body.clientWidth < clientWidth) applyStyles(body, { overflow: 'hidden' });
 
         return function restoreScroll() {
           body.setAttribute('style', restoreStyle);
