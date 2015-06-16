@@ -287,7 +287,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     if (searchText !== getDisplayValue($scope.selectedItem)) $scope.selectedItem = null;
     else return;
     //-- trigger change event if available
-    if ($scope.textChange && searchText !== previousSearchText)
+    if (angular.isFunction($scope.textChange) && searchText !== previousSearchText)
       $scope.textChange(getItemScope($scope.selectedItem));
     //-- cancel results if search text is not long enough
     if (!isMinLengthMet()) {
