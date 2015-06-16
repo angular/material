@@ -6,7 +6,7 @@
 
 The css decalaration of the `<md-checkbox>` component is:
  
- <code lang="css">
+ ```css
  md-checkbox {
    margin: 8px;
    cursor: pointer;
@@ -15,7 +15,7 @@ The css decalaration of the `<md-checkbox>` component is:
    line-height: 26px;
    min-width: 18px;
    min-height: 18px; }
- </code>
+ ```
  
 #### Ink color
 
@@ -23,39 +23,39 @@ The css decalaration of the `<md-checkbox>` component is:
 
 In order to change the color when the checkbox is checked:
 
-<code lang="html">
+```html
  <md-checkbox class="green">
       Green Checkbox
     </md-checkbox>
-</code>
+```
 
- <code lang="css">
+ ```css
  md-checkbox.md-checked.green .md-icon {
         background-color: rgba(0, 255, 0, 0.87);
     }
- </code>
+ ```
 
 
 
 In order to change the color when a disabled checkbox is checked:
 
-<code lang="html">
+```html
  <md-checkbox ng-disabled="true" class="red" ng-model="data.cb4" ng-init="data.cb4=true">
             Checkbox: Disabled, Checked
         </md-checkbox>
-</code>
+```
 
- <code lang="css">
+ ```css
   md-checkbox.md-checked[disabled].red .md-icon {
         background-color: rgba(255, 0, 0, 0.26);
     }
- </code>
+ ```
 ![checkboxdisabledred](https://cloud.githubusercontent.com/assets/1292882/8036177/dc941a86-0dfe-11e5-8892-ac19ec6926fe.PNG)
 
 
 #### Borders
 In order to add a custom border do the following:
-<code lang="html">
+```html
  <div>
         <md-checkbox ng-model="data.cb2" aria-label="Checkbox 2" ng-true-value="'yup'" ng-false-value="'nope'">
             Default Border
@@ -66,14 +66,14 @@ In order to add a custom border do the following:
             Custom Border
         </md-checkbox>
     </div>
-</code>
-<code lang="css">
+```
+```css
 md-checkbox.dotted .md-icon{
         border-width: 1px;
         border-style: dashed;
 
     }
-</code>
+```
 
 ![checkboxcustomborder](https://cloud.githubusercontent.com/assets/1292882/8037214/388dd40c-0e05-11e5-82a7-4bfa2541e968.PNG)
 
@@ -82,9 +82,9 @@ md-checkbox.dotted .md-icon{
 #### Bi-Di
 
 The mdCheckbox directive is sensible to the html direction:
-<code lang="html">
+```html
 <html dir="rtl">
-</code>
+```
 
 results in :
 
