@@ -107,6 +107,7 @@ angular.module('material.core')
       function disableBodyScroll() {
         var restoreStyle = body.getAttribute('style') || '';
         var scrollOffset = body.scrollTop + body.parentElement.scrollTop;
+        var clientWidth  = body.clientWidth;
 
         applyStyles(body, {
           position: 'fixed',
@@ -114,6 +115,8 @@ angular.module('material.core')
           overflowY: 'scroll',
           top: -scrollOffset + 'px'
         });
+
+        if (body.clientWidth < clientWidth) applyStyles(body, { overflow: 'auto' });
 
         return function restoreScroll() {
           body.setAttribute('style', restoreStyle);
