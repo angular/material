@@ -14,15 +14,17 @@ module.exports = function(config) {
     // demos in the tests, and Karma doesn't support advanced
     // globbing.
 
+    'dist/angular-material.css',
+
     'src/core/**/*.js',
     'src/components/*/*.js',
     'src/components/*/js/*.js',
 
     'src/**/*.spec.js'
-
   ];
 
   var COMPILED_SRC = [
+    'dist/angular-material.min.css',
     'dist/angular-material.min.js',   // Minified source
     'src/**/*.spec.js'
   ];
