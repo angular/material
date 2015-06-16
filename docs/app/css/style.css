@@ -243,6 +243,7 @@ code:not(.highlight) {
   color: white;
   cursor: pointer;
   display: block;
+  align-items: inherit;
   line-height: 40px;
   margin: 0;
   max-height: 40px;
