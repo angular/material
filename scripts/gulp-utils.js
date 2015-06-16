@@ -58,7 +58,8 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
       var srcPath = demoFolder.path.substring(demoFolder.path.indexOf('src/') + 4);
       var split = srcPath.split('/');
 
-      var demo = { 
+      var demo = {
+        ngModule: '',
         id: demoId,
         css:[], html:[], js:[]
       };
@@ -67,7 +68,7 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
         .pipe(fileTasks(demoId))
         .pipe(through2.obj(function(file, enc, cb) {
           if (/index.html$/.test(file.path)) {
-            demo.moduleName = moduleName,
+            demo.moduleName = moduleName;
             demo.name = path.basename(demoFolder.path);
             demo.label = exports.humanizeCamelCase(path.basename(demoFolder.path).replace(/^demo/, ''));
             demo.id = demoId;

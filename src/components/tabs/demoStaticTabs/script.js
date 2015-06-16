@@ -1,6 +1,10 @@
 (function () {
   'use strict';
-  angular.module('tabsDemo1', ['ngMaterial'] ).controller('AppCtrl', AppCtrl);
+
+  angular
+      .module('tabsDemoStaticTabs', ['ngMaterial'] )
+      .controller('AppCtrl', AppCtrl);
+
   function AppCtrl ( $scope ) {
     $scope.data = {
       selectedIndex: 0,
