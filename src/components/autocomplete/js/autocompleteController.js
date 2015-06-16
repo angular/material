@@ -237,7 +237,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     if (selectedItem) {
       $scope.searchText = getDisplayValue(selectedItem);
     }
-    if ($scope.itemChange && selectedItem !== previousSelectedItem)
+    if (angular.isFunction($scope.itemChange) && selectedItem !== previousSelectedItem)
       $scope.itemChange(getItemScope(selectedItem));
   }
 
