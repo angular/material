@@ -15,7 +15,7 @@ describe('md-menu directive', function() {
     inject(function($compile, $rootScope) {
       menu = $compile([
         '<md-menu>',
-          '<button ng-click="$mdOpenMenu()">Hello World</button>',
+          '<button ng-click="$mdOpenMenu($event)">Hello World</button>',
           '<md-menu-content>',
             '<li><md-button ng-click="doSomething()"></md-button></li>',
           '</md-menu-content>'
