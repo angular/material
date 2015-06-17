@@ -1,4 +1,4 @@
-ddescribe('mdIcon directive', function() {
+describe('mdIcon directive', function() {
   var el;
   var $scope;
   var $compile;
