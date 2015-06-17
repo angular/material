@@ -71,8 +71,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
     restrict: 'E',
     require: ['^?mdInputContainer', 'mdSelect', 'ngModel', '?^form'],
     compile: compile,
-    controller: function() {
-    } // empty placeholder controller to be initialized in link
+    controller: function() {} // empty placeholder controller to be initialized in link
   };
 
   function compile(element, attr) {
@@ -138,9 +137,16 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
       var mdSelectCtrl = ctrls[1];
       var ngModelCtrl = ctrls[2];
       var formCtrl = ctrls[3];
-
+      // grab a reference to the select menu value label
+      var valueEl = element.find( 'md-select-value' );
       var isReadonly = angular.isDefined(attr.readonly);
-      if ( !containerCtrl ) return;
+
+      if ( !containerCtrl ) {
+          // remove the visible value label
+          valueEl.remove();
+          return;
+      }
+
       if (containerCtrl.input) {
           throw new Error("<md-input-container> can only have *one* child <input>, <textarea> or <select> element!");
       }
@@ -149,8 +155,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
       if(!containerCtrl.label) {
         $mdAria.expect(element, 'aria-label', element.attr('placeholder'));
       }
-      // grab a reference to the select menu value label
-      var valueEl = element.find( 'md-select-value' );
+
       var selectContainer, selectScope, selectMenuCtrl;
       createSelect();
       $mdTheming(element);
@@ -176,22 +181,36 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
 
       mdSelectCtrl.setLabelText = function(text) {
         mdSelectCtrl.setIsPlaceholder(!text);
-        // if we have a label, use that as the placeholder in our md-select-value label, otherwise fall back to the actual placeholder
-        var tmpPlaceholder = containerCtrl.label.length > 0 ? containerCtrl.label.text() : attr.placeholder;
+        // if we have a label, use that as the placeholder in our md-select-value label,
+        // otherwise fall back to the actual placeholder
+        var tmpPlaceholder = containerCtrl.label ? containerCtrl.label.text() : attr.placeholder;
         text = text || tmpPlaceholder || '';
         var target = valueEl.children().eq(0);
         target.text(text);
       };
 
       mdSelectCtrl.setIsPlaceholder = function(val) {
-        val ? valueEl.addClass('md-select-placeholder') : valueEl.removeClass('md-select-placeholder');
-        val ? containerCtrl.label.addClass('md-placeholder') : containerCtrl.label.removeClass('md-placeholder');
+        if ( val ) {
+          valueEl.addClass('md-select-placeholder');
+          if ( containerCtrl.label ) {
+            containerCtrl.label.addClass('md-placeholder');
+          }
+        } else {
+          valueEl.removeClass('md-select-placeholder');
+          if ( containerCtrl.label ) {
+            containerCtrl.label.removeClass( 'md-placeholder' );
+          }
+        }
       };
 
       if (!isReadonly) {
         element
           .on('focus', function(ev) {
-            containerCtrl.setFocused(true);
+            // only set focus on if we don't currently have a selected value. This avoids the "bounce"
+            // on the label transition because the focus will immediately switch to the open menu.
+            if ( containerCtrl.element.hasClass('md-input-has-value')) {
+              containerCtrl.setFocused(true);
+            }
           })
           .on('blur', function(ev) {
             containerCtrl.setFocused(false);
@@ -291,15 +310,15 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
           containerCtrl.input = null;
       });
 
-        function ngModelPipelineCheckValue(arg) {
-            containerCtrl.setHasValue(!ngModelCtrl.$isEmpty(arg));
-            return arg;
-        }
-        function inputCheckValue() {
-            // The select counts as having a value if one or more options are selected,
-            // or if the input's validity state says it has bad input (eg string in a number input)
-            containerCtrl.setHasValue(selectMenuCtrl.selectedLabels().length > 0 || (element[0].validity||{}).badInput);
-        }
+     function ngModelPipelineCheckValue(arg) {
+       containerCtrl.setHasValue(!ngModelCtrl.$isEmpty(arg));
+       return arg;
+     }
+     function inputCheckValue() {
+       // The select counts as having a value if one or more options are selected,
+       // or if the input's validity state says it has bad input (eg string in a number input)
+       containerCtrl.setHasValue(selectMenuCtrl.selectedLabels().length > 0 || (element[0].validity||{}).badInput);
+     }
 
       // Create a fake select to find out the label value
       function createSelect() {
