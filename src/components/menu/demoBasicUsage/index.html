@@ -4,7 +4,7 @@
     <h2 class="md-title">Simple dropdown menu</h2>
     <p>Note that applying the <code>md-menu-origin</code> and <code>md-menu-align-target</code> attributes ensure that the menu elements align</p>
     <md-menu>
-      <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="$mdOpenMenu()">
+      <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
         <md-icon md-menu-origin md-svg-icon="call:phone"></md-icon>
       </md-button>
       <md-menu-content width="4">
