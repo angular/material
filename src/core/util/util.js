@@ -334,18 +334,20 @@ angular.module('material.core')
     },
 
     /**
-     * Give optional properties with no value a boolean true by default
+     * Give optional properties with no value a boolean true if attr provided or false otherwise
      */
     initOptionalProperties: function (scope, attr, defaults ) {
        defaults = defaults || { };
        angular.forEach(scope.$$isolateBindings, function (binding, key) {
+         var normalizedAttrName = attr.$normalize(binding.attrName);
          if (binding.optional && angular.isUndefined(scope[key])) {
-           var hasKey = attr.hasOwnProperty(attr.$normalize(binding.attrName));
+           var attrIsDefined = normalizedAttrName in attr &&  !angular.isUndefined(attr[normalizedAttrName]);
 
-           scope[key] = angular.isDefined(defaults[key]) ? defaults[key] : hasKey;
+           scope[key] = angular.isDefined(defaults[key]) ? defaults[key] : attrIsDefined;
          }
        });
     }
+
 
   };
 
