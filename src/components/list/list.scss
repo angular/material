@@ -52,6 +52,8 @@ md-list-item {
       text-transform: none;
       width: 100%;
       white-space: normal;
+      flex-direction: inherit;
+      align-items: inherit;
     }
     &:focus {
       outline: none

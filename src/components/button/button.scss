@@ -151,10 +151,6 @@ $icon-button-margin: rem(0.600) !default;
       -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
     }
 
-    md-icon {
-      margin-top: 0;
-    }
-
     &.md-mini {
       line-height: $button-fab-mini-line-height;
       width: $button-fab-mini-width;
