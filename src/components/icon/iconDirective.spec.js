@@ -1,4 +1,4 @@
-describe('mdIcon directive', function() {
+ddescribe('mdIcon directive', function() {
   var el;
   var $scope;
   var $compile;
@@ -11,6 +11,7 @@ describe('mdIcon directive', function() {
    }));
    afterEach( function() {
      $mdIconProvider.defaultFontSet('material-icons');
+     $mdIconProvider.fontSet('fa', 'fa');
    });
 
 
@@ -20,6 +21,7 @@ describe('mdIcon directive', function() {
         $scope = $rootScope;
         $compile = _$compile_;
     }));
+
 
     describe('using font-icons with deprecated md-font-icon=""', function() {
 
@@ -64,7 +66,7 @@ describe('mdIcon directive', function() {
 
         expect(el.attr('md-font-icon')).toBe($scope.font.name);
         expect(el.hasClass('step')).toBe(true);
-        expect(el.hasClass('material-icons')).toBe(true);
+        expect(el.hasClass('material-icons')).toBe(false);
         expect(el.attr('aria-label')).toBe($scope.font.name + $scope.font.size);
         expect(el.attr('role')).toBe('img');
       })
@@ -77,7 +79,7 @@ describe('mdIcon directive', function() {
         el = make( '<md-icon class="md-48">face</md-icon>');
 
         expect(el.text()).toEqual('face');
-        expect(el.hasClass('material-icons')).toBeTruthy();
+        expect(el.hasClass('material-icons')).toBeFalsy();
         expect(el.hasClass('md-48')).toBeTruthy();
       });
 
@@ -90,6 +92,15 @@ describe('mdIcon directive', function() {
         expect( clean(el.attr('class')) ).toEqual("fontawesome");
       });
 
+
+      it('should render correctly using a md-font-set alias', function() {
+        el = make( '<md-icon md-font-set="fa" md-font-icon="fa-info"></md-icon>');
+
+        expect( clean(el.attr('class')) ).toEqual("md-font fa-info fa");
+      });
+
+
+
       it('should render correctly using md-font-set value as class', function() {
 
         el = make( '<md-icon md-font-set="fontawesome">email</md-icon>');
@@ -101,11 +112,19 @@ describe('mdIcon directive', function() {
 
     describe('using font-icons with classnames', function() {
 
+      it('should auto-add the material-icons style', function() {
+        el = make( '<md-icon>apple</md-icon>');
+
+        expect(el.text()).toEqual('apple');
+        expect(el.hasClass('material-icons')).toBeTruthy();
+      });
+
+
       it('should render with icon classname', function() {
         el = make( '<md-icon class="custom-cake"></md-icon>');
 
         expect(el.text()).toEqual('');
-        expect(el.hasClass('material-icons')).toBeTruthy();
+        expect(el.hasClass('material-icons')).toBeFalsy();
         expect(el.hasClass('custom-cake')).toBeTruthy();
       });
 
