@@ -72,6 +72,22 @@ angular.module('ngMaterial-mock', ['ngMock', 'material.core'])
       return $delegate;
     });
 
+    /**
+     * Capture $timeout.flush() errors: "No deferred tasks to be flushed"
+     * errors
+     */
+    $provide.decorator('$timeout', function throttleInjector($delegate){
+
+      var ngFlush = $delegate.flush;
+      $delegate.flush = function() {
+          var args = Array.prototype.slice.call(arguments);
+          try      { ngFlush.apply($delegate, args);  }
+          catch(e) { ;           }
+      };
+
+      return $delegate;
+    });
+
   }]);
 
 })(window, window.angular);

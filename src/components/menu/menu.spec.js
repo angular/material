@@ -1,8 +1,10 @@
 describe('md-menu directive', function() {
-  var $mdMenu;
+  var $mdMenu,$timeout;
+
   beforeEach(module('material.components.menu', 'ngAnimateMock'));
-  beforeEach(inject(function($mdUtil, $$q, $document, _$mdMenu_) {
+  beforeEach(inject(function($mdUtil, $$q, $document, _$mdMenu_, _$timeout_) {
     $mdMenu = _$mdMenu_;
+    $timeout = _$timeout_;
     $mdUtil.transitionEndPromise = function() {
       return $$q.when(true);
     };
@@ -11,15 +13,17 @@ describe('md-menu directive', function() {
   }));
 
   function setup() {
-    var menu;
+    var menu,
+        template = ''+
+          '<md-menu>'+
+            '<button ng-click="$mdOpenMenu($event)">Hello World</button>' +
+            '<md-menu-content>' +
+              '<li><md-button ng-click="doSomething()"></md-button></li>'+
+            '</md-menu-content>' +
+          '</md-menu>';
+
     inject(function($compile, $rootScope) {
-      menu = $compile([
-        '<md-menu>',
-          '<button ng-click="$mdOpenMenu($event)">Hello World</button>',
-          '<md-menu-content>',
-            '<li><md-button ng-click="doSomething()"></md-button></li>',
-          '</md-menu-content>'
-      ].join(''))($rootScope);
+      menu = $compile(template)($rootScope);
     });
     return menu;
   }
@@ -40,12 +44,20 @@ describe('md-menu directive', function() {
   it('opens on click', function() {
     var menu = setup();
     openMenu(menu);
-    var menuContainer = getOpenMenuContainer();
-    expect(menuContainer.length).toBe(1);
+    expect(getOpenMenuContainer().length).toBe(1);
     closeMenu(menu);
-    menuContainer = getOpenMenuContainer();
-    expect(menuContainer.length).toBe(0);
+    expect(getOpenMenuContainer().length).toBe(0);
   });
+
+  it('should not propagate the click event', function() {
+      var clickDetected = false,  menu = setup();
+      menu.on('click',function() {  clickDetected = true; });
+
+      openMenu(menu);
+      expect( clickDetected ).toBe(false);
+      closeMenu(menu);
+      expect( clickDetected ).toBe(false);
+    });
 
   it('closes on backdrop click', inject(function($document) {
     var menu = setup();
@@ -82,18 +94,6 @@ describe('md-menu directive', function() {
     expect(menuContainer.length).toBe(0);
   }));
 
-  function flushTimeout() {
-    try {
-      inject(function($timeout) {
-        $timeout.flush();
-      });
-    } catch(e) {
-      if (e.message != 'No deferred tasks to be flushed') {
-        throw e;
-      }
-    }
-  }
-
   function getOpenMenuContainer() {
     var res;
     inject(function($document) {
@@ -105,7 +105,7 @@ describe('md-menu directive', function() {
   function openMenu(el) {
     el.children().eq(0).triggerHandler('click');
     waitForMenuOpen();
-    flushTimeout();
+    $timeout.flush();
   }
 
   function closeMenu() {
@@ -126,7 +126,7 @@ describe('md-menu directive', function() {
     inject(function($rootScope, $animate) {
         $rootScope.$digest();
         $animate.triggerCallbacks();
-        flushTimeout();
+        $timeout.flush();
     });
   }
 
