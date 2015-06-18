@@ -60,22 +60,22 @@ function mdInputContainerDirective($mdTheming, $parse) {
 
     self.isErrorGetter = $attrs.mdIsError && $parse($attrs.mdIsError);
 
-    self.delegateClick = function () {
+    self.delegateClick = function() {
       self.input.focus();
     };
     self.element = $element;
-    self.setFocused = function (isFocused) {
+    self.setFocused = function(isFocused) {
       $element.toggleClass('md-input-focused', !!isFocused);
     };
-    self.setHasValue = function (hasValue) {
+    self.setHasValue = function(hasValue) {
       $element.toggleClass('md-input-has-value', !!hasValue);
     };
-    self.setInvalid = function (isInvalid) {
+    self.setInvalid = function(isInvalid) {
       $element.toggleClass('md-input-invalid', !!isInvalid);
     };
-    $scope.$watch(function () {
+    $scope.$watch(function() {
       return self.label && self.input;
-    }, function (hasLabelAndInput) {
+    }, function(hasLabelAndInput) {
       if (hasLabelAndInput && !self.label.attr('for')) {
         self.label.attr('for', self.input.attr('id'));
       }
@@ -87,11 +87,11 @@ function labelDirective() {
   return {
     restrict: 'E',
     require: '^?mdInputContainer',
-    link: function (scope, element, attr, containerCtrl) {
+    link: function(scope, element, attr, containerCtrl) {
       if (!containerCtrl || attr.mdNoFloat) return;
 
       containerCtrl.label = element;
-      scope.$on('$destroy', function () {
+      scope.$on('$destroy', function() {
         containerCtrl.label = null;
       });
     }
@@ -186,7 +186,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
       setupTextarea();
     }
 
-    var isErrorGetter = containerCtrl.isErrorGetter || function () {
+    var isErrorGetter = containerCtrl.isErrorGetter || function() {
         return ngModelCtrl.$invalid && ngModelCtrl.$touched;
       };
     scope.$watch(isErrorGetter, containerCtrl.setInvalid);
@@ -198,10 +198,10 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
 
     if (!isReadonly) {
       element
-        .on('focus', function (ev) {
+        .on('focus', function(ev) {
           containerCtrl.setFocused(true);
         })
-        .on('blur', function (ev) {
+        .on('blur', function(ev) {
           containerCtrl.setFocused(false);
           inputCheckValue();
         });
@@ -211,7 +211,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
     //ngModelCtrl.$setTouched();
     //if( ngModelCtrl.$invalid ) containerCtrl.setInvalid();
 
-    scope.$on('$destroy', function () {
+    scope.$on('$destroy', function() {
       containerCtrl.setFocused(false);
       containerCtrl.setHasValue(false);
       containerCtrl.input = null;
@@ -250,7 +250,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
       element.on('scroll', onScroll);
       angular.element($window).on('resize', onChangeTextarea);
 
-      scope.$on('$destroy', function () {
+      scope.$on('$destroy', function() {
         angular.element($window).off('resize', onChangeTextarea);
       });
 
@@ -297,11 +297,11 @@ function mdMaxlengthDirective($animate) {
 
     ngModelCtrl.$formatters.push(renderCharCount);
     ngModelCtrl.$viewChangeListeners.push(renderCharCount);
-    element.on('input keydown', function () {
+    element.on('input keydown', function() {
       renderCharCount(); //make sure it's called with no args
     });
 
-    scope.$watch(attr.mdMaxlength, function (value) {
+    scope.$watch(attr.mdMaxlength, function(value) {
       maxlength = value;
       if (angular.isNumber(value) && value > 0) {
         if (!charCountEl.parent().length) {
@@ -314,7 +314,7 @@ function mdMaxlengthDirective($animate) {
       }
     });
 
-    ngModelCtrl.$validators['md-maxlength'] = function (modelValue, viewValue) {
+    ngModelCtrl.$validators['md-maxlength'] = function(modelValue, viewValue) {
       if (!angular.isNumber(maxlength) || maxlength < 0) {
         return true;
       }

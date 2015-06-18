@@ -1,17 +1,17 @@
-describe('<md-select>', function () {
+describe('<md-select>', function() {
 
   beforeEach(module('material.components.input'));
   beforeEach(module('material.components.select', 'ngAnimateMock'));
 
-  beforeEach(inject(function ($mdUtil, $$q) {
-    $mdUtil.transitionEndPromise = function () {
+  beforeEach(inject(function($mdUtil, $$q) {
+    $mdUtil.transitionEndPromise = function() {
       return $$q.when(true);
     };
   }));
 
   function setupSelect(attrs, options, bNoLabel) {
     var el;
-    inject(function ($compile, $rootScope) {
+    inject(function($compile, $rootScope) {
       var src = '<md-input-container>';
       if (!bNoLabel) {
         src += '<label>Label</label>';
@@ -27,7 +27,7 @@ describe('<md-select>', function () {
 
   function setup(attrs, options) {
     var el;
-    inject(function ($compile, $rootScope) {
+    inject(function($compile, $rootScope) {
       var optionsTpl = optTemplate(options);
       var fullTpl = '<md-select-menu ' + (attrs || '') + '>' + optionsTpl +
         '</md-select-menu>';
@@ -44,7 +44,7 @@ describe('<md-select>', function () {
 
   function optTemplate(options) {
     var optionsTpl = '';
-    inject(function ($rootScope) {
+    inject(function($rootScope) {
       if (angular.isArray(options)) {
         $rootScope.$$values = options;
         optionsTpl = '<md-option ng-repeat="value in $$values" ng-value="value">{{value}}</md-option>';
@@ -63,7 +63,7 @@ describe('<md-select>', function () {
     try {
       el.triggerHandler('click');
       waitForSelectOpen();
-      inject(function ($timeout) {
+      inject(function($timeout) {
         $timeout.flush();
       });
     } catch (e) {
@@ -80,7 +80,7 @@ describe('<md-select>', function () {
 
   function waitForSelectOpen() {
     try {
-      inject(function ($rootScope, $animate) {
+      inject(function($rootScope, $animate) {
         $rootScope.$digest();
         $animate.triggerCallbacks();
       });
@@ -90,7 +90,7 @@ describe('<md-select>', function () {
 
   function waitForSelectClose() {
     try {
-      inject(function ($rootScope, $animate) {
+      inject(function($rootScope, $animate) {
         $rootScope.$apply();
         $animate.triggerCallbacks();
 
@@ -99,26 +99,26 @@ describe('<md-select>', function () {
     }
   }
 
-  it('should preserve tabindex', inject(function ($document) {
+  it('should preserve tabindex', inject(function($document) {
     var select = setupSelect('tabindex="2", ng-model="val"').find('md-select');
     expect(select.attr('tabindex')).toBe('2');
   }));
 
-  it('supports non-disabled state', inject(function ($document) {
+  it('supports non-disabled state', inject(function($document) {
     var select = setupSelect('ng-model="val"').find('md-select');
     expect(select.attr('aria-disabled')).toBe('false');
   }));
 
-  it('supports disabled state', inject(function ($document) {
+  it('supports disabled state', inject(function($document) {
     var select = setupSelect('disabled="disabled", ng-model="val"').find('md-select');
     openSelect(select);
     expect($document.find('md-select-menu').length).toBe(0);
     expect(select.attr('aria-disabled')).toBe('true');
   }));
 
-  it('closes the menu if the element is destroyed', inject(function ($document, $rootScope) {
+  it('closes the menu if the element is destroyed', inject(function($document, $rootScope) {
     var called = false;
-    $rootScope.onClose = function () {
+    $rootScope.onClose = function() {
       called = true;
     };
     var select = setupSelect('ng-model="val", md-on-close="onClose()"', [1, 2, 3]).find('md-select');
@@ -130,7 +130,7 @@ describe('<md-select>', function () {
     expect(called).toBe(true);
   }));
 
-  it('restores focus to select when the menu is closed', inject(function ($document) {
+  it('restores focus to select when the menu is closed', inject(function($document) {
     var select = setupSelect('ng-model="val"').find('md-select');
     openSelect(select);
 
@@ -144,8 +144,8 @@ describe('<md-select>', function () {
     select.remove();
   }));
 
-  describe('input container', function () {
-    it('should set has-value class on container for non-ng-model input', inject(function ($rootScope) {
+  describe('input container', function() {
+    it('should set has-value class on container for non-ng-model input', inject(function($rootScope) {
       $rootScope.model = 0;
       var el = setupSelect('ng-model="$root.model"', [1, 2, 3]);
       var select = el.find('md-select');
@@ -159,7 +159,7 @@ describe('<md-select>', function () {
       expect(el).toHaveClass('md-input-has-value');
     }));
 
-    it('should set has-value class on container for ng-model input', inject(function ($rootScope) {
+    it('should set has-value class on container for ng-model input', inject(function($rootScope) {
       $rootScope.value = 'test';
       var el = setupSelect('ng-model="$root.value"');
       expect(el).toHaveClass('md-input-has-value');
@@ -171,28 +171,28 @@ describe('<md-select>', function () {
       expect(el).not.toHaveClass('md-input-has-value');
     }));
 
-    it('should match label to given input id', inject(function ($rootScope) {
+    it('should match label to given input id', inject(function($rootScope) {
       var el = setupSelect('ng-model="$root.value", id="foo"');
       expect(el.find('label').attr('for')).toBe('foo');
       expect(el.find('md-select').attr('id')).toBe('foo');
     }));
 
-    it('should match label to automatic input id', inject(function ($rootScope) {
+    it('should match label to automatic input id', inject(function($rootScope) {
       var el = setupSelect('ng-model="$root.value"');
       expect(el.find('md-select').attr('id')).toBeTruthy();
       expect(el.find('label').attr('for')).toBe(el.find('md-select').attr('id'));
     }));
   });
 
-  describe('label behavior', function () {
-    it('defaults to the placeholder text', function () {
+  describe('label behavior', function() {
+    it('defaults to the placeholder text', function() {
       var select = setupSelect('ng-model="someVal", placeholder="Hello world"', null, true).find('md-select');
       var label = select.find('md-select-value');
       expect(label.text()).toBe('Hello world');
       expect(label.hasClass('md-select-placeholder')).toBe(true);
     });
 
-    it('sets itself to the selected option\'s label', inject(function ($rootScope, $compile) {
+    it('sets itself to the selected option\'s label', inject(function($rootScope, $compile) {
       $rootScope.val = 2;
       var select = $compile('<md-input-container>' +
       '<label>Label</label>' +
@@ -209,7 +209,7 @@ describe('<md-select>', function () {
       expect(label.hasClass('md-select-placeholder')).toBe(false);
     }));
 
-    it('supports rendering multiple', inject(function ($rootScope, $compile) {
+    it('supports rendering multiple', inject(function($rootScope, $compile) {
       $rootScope.val = [1, 3];
       var select = $compile('<md-input-container>' +
       '<label>Label</label>' +
@@ -227,30 +227,30 @@ describe('<md-select>', function () {
     }));
   });
 
-  it('auto-infers a value when none specified', inject(function ($rootScope) {
+  it('auto-infers a value when none specified', inject(function($rootScope) {
     $rootScope.name = "Hannah";
     var el = setup('ng-model="name"', '<md-option>Tom</md-option>' +
     '<md-option>Hannah</md-option>');
     expect(selectedOptions(el).length).toBe(1);
   }));
 
-  it('errors for duplicate md-options, non-dynamic value', inject(function ($rootScope) {
-    expect(function () {
+  it('errors for duplicate md-options, non-dynamic value', inject(function($rootScope) {
+    expect(function() {
       setup('ng-model="$root.model"', '<md-option value="a">Hello</md-option>' +
       '<md-option value="a">Goodbye</md-option>');
     }).toThrow();
   }));
 
-  it('errors for duplicate md-options, ng-value', inject(function ($rootScope) {
+  it('errors for duplicate md-options, ng-value', inject(function($rootScope) {
     setup('ng-model="$root.model"', '<md-option ng-value="foo">Hello</md-option>' +
     '<md-option ng-value="bar">Goodbye</md-option>');
     $rootScope.$apply('foo = "a"');
-    expect(function () {
+    expect(function() {
       $rootScope.$apply('bar = "a"');
     }).toThrow();
   }));
 
-  it('watches the collection for changes', inject(function ($rootScope) {
+  it('watches the collection for changes', inject(function($rootScope) {
     $rootScope.val = 1;
     var select = setupSelect('ng-model="val"', [1, 2, 3]).find('md-select');
     var label = select.find('md-select-value')[0];
@@ -261,11 +261,11 @@ describe('<md-select>', function () {
     expect(label.textContent).toBe('4');
   }));
 
-  describe('non-multiple', function () {
+  describe('non-multiple', function() {
 
-    describe('model->view', function () {
+    describe('model->view', function() {
 
-      it('renders initial model value', inject(function ($rootScope) {
+      it('renders initial model value', inject(function($rootScope) {
         $rootScope.$apply('model = "b"');
         var el = setup('ng-model="$root.model"', ['a', 'b', 'c']);
 
@@ -273,12 +273,12 @@ describe('<md-select>', function () {
         expect(el.find('md-option').eq(1).attr('selected')).toBe('selected');
       }));
 
-      it('renders nothing if no initial value is set', function () {
+      it('renders nothing if no initial value is set', function() {
         var el = setup('ng-model="$root.model"', ['a', 'b', 'c']);
         expect(selectedOptions(el).length).toBe(0);
       });
 
-      it('renders model change by selecting new and deselecting old', inject(function ($rootScope) {
+      it('renders model change by selecting new and deselecting old', inject(function($rootScope) {
         $rootScope.$apply('model = "b"');
         var el = setup('ng-model="$root.model"', ['a', 'b', 'c']);
 
@@ -290,7 +290,7 @@ describe('<md-select>', function () {
         expect(selectedOptions(el).length).toBe(1);
       }));
 
-      it('renders invalid model change by deselecting old and selecting nothing', inject(function ($rootScope) {
+      it('renders invalid model change by deselecting old and selecting nothing', inject(function($rootScope) {
         $rootScope.$apply('model = "b"');
         var el = setup('ng-model="$root.model"', ['a', 'b', 'c']);
 
@@ -301,7 +301,7 @@ describe('<md-select>', function () {
         expect(selectedOptions(el).length).toBe(0);
       }));
 
-      it('renders model change to undefined by deselecting old and selecting nothing', inject(function ($rootScope) {
+      it('renders model change to undefined by deselecting old and selecting nothing', inject(function($rootScope) {
         $rootScope.$apply('model = "b"');
         var el = setup('ng-model="$root.model"', ['a', 'b', 'c']);
 
@@ -312,7 +312,7 @@ describe('<md-select>', function () {
         expect(selectedOptions(el).length).toBe(0);
       }));
 
-      it('uses track by if given to compare objects', inject(function ($rootScope) {
+      it('uses track by if given to compare objects', inject(function($rootScope) {
         $rootScope.$apply('model = {id:2}');
         var el = setup('ng-model="$root.model" ng-model-options="{trackBy: \'$value.id\'}"',
           [{id: 1}, {id: 2}, {id: 3}]);
@@ -326,7 +326,7 @@ describe('<md-select>', function () {
         expect(el.find('md-option').eq(2).attr('selected')).toBe('selected');
       }));
 
-      it('uses uid by default to compare objects', inject(function ($rootScope) {
+      it('uses uid by default to compare objects', inject(function($rootScope) {
         var one = {}, two = {}, three = {};
         $rootScope.model = two;
         var el = setup('ng-model="$root.model"', [one, two, three]);
@@ -341,9 +341,9 @@ describe('<md-select>', function () {
 
     });
 
-    describe('view->model', function () {
+    describe('view->model', function() {
 
-      it('should do nothing if clicking selected option', inject(function ($rootScope) {
+      it('should do nothing if clicking selected option', inject(function($rootScope) {
         $rootScope.model = 3;
         var el = setup('ng-model="$root.model"', [1, 2, 3]);
 
@@ -359,9 +359,9 @@ describe('<md-select>', function () {
         expect($rootScope.model).toBe(3);
       }));
 
-      it('should support the ng-change event', inject(function ($rootScope, $document) {
+      it('should support the ng-change event', inject(function($rootScope, $document) {
         var changeCalled = false;
-        $rootScope.changed = function () {
+        $rootScope.changed = function() {
           changeCalled = true;
         };
 
@@ -376,7 +376,7 @@ describe('<md-select>', function () {
         expect(changeCalled).toBe(true);
       }));
 
-      it('should deselect old and select new on click', inject(function ($rootScope) {
+      it('should deselect old and select new on click', inject(function($rootScope) {
         $rootScope.model = 3;
         var el = setup('ng-model="$root.model"', [1, 2, 3]);
 
@@ -392,7 +392,7 @@ describe('<md-select>', function () {
         expect($rootScope.model).toBe(2);
       }));
 
-      it('should keep model value if selected option is removed', inject(function ($rootScope) {
+      it('should keep model value if selected option is removed', inject(function($rootScope) {
         $rootScope.model = 3;
         $rootScope.values = [1, 2, 3];
         var el = setup('ng-model="$root.model"', '<md-option ng-repeat="v in values" ng-value="v">{{v}}</md-option>');
@@ -407,7 +407,7 @@ describe('<md-select>', function () {
         expect($rootScope.model).toBe(3);
       }));
 
-      it('should select an option that was just added matching the modelValue', inject(function ($rootScope) {
+      it('should select an option that was just added matching the modelValue', inject(function($rootScope) {
         $rootScope.model = 4;
         $rootScope.values = [1, 2, 3];
         var el = setup('ng-model="$root.model"', '<md-option ng-repeat="v in values" ng-value="v">{{v}}</md-option>');
@@ -425,11 +425,11 @@ describe('<md-select>', function () {
     });
   });
 
-  describe('multiple', function () {
+  describe('multiple', function() {
 
-    describe('model->view', function () {
+    describe('model->view', function() {
 
-      it('renders initial model value', inject(function ($rootScope) {
+      it('renders initial model value', inject(function($rootScope) {
         $rootScope.model = [1, 3];
         var el = setupMultiple('ng-model="$root.model"', [1, 2, 3, 4]);
 
@@ -439,7 +439,7 @@ describe('<md-select>', function () {
         expect($rootScope.model).toEqual([1, 3]);
       }));
 
-      it('renders nothing if empty array is set', inject(function ($rootScope) {
+      it('renders nothing if empty array is set', inject(function($rootScope) {
         $rootScope.model = [];
         var el = setupMultiple('ng-model="$root.model"', [1, 2, 3, 4]);
 
@@ -447,7 +447,7 @@ describe('<md-select>', function () {
         expect($rootScope.model).toEqual([]);
       }));
 
-      it('adding a valid value to the model selects its option', inject(function ($rootScope) {
+      it('adding a valid value to the model selects its option', inject(function($rootScope) {
         $rootScope.model = [];
         var el = setupMultiple('ng-model="$root.model"', [1, 2, 3, 4]);
 
@@ -461,7 +461,7 @@ describe('<md-select>', function () {
         expect($rootScope.model).toEqual([2]);
       }));
 
-      it('removing a valid value from the model deselects its option', inject(function ($rootScope) {
+      it('removing a valid value from the model deselects its option', inject(function($rootScope) {
         $rootScope.model = [2, 3];
         var el = setupMultiple('ng-model="$root.model"', [1, 2, 3, 4]);
 
@@ -475,7 +475,7 @@ describe('<md-select>', function () {
         expect($rootScope.model).toEqual([3]);
       }));
 
-      it('deselects all options when setting to an empty model', inject(function ($rootScope) {
+      it('deselects all options when setting to an empty model', inject(function($rootScope) {
         $rootScope.model = [2, 3];
         var el = setupMultiple('ng-model="$root.model"', [1, 2, 3, 4]);
 
@@ -488,7 +488,7 @@ describe('<md-select>', function () {
         expect($rootScope.model).toEqual([]);
       }));
 
-      it('adding multiple valid values to a model selects their options', inject(function ($rootScope) {
+      it('adding multiple valid values to a model selects their options', inject(function($rootScope) {
         $rootScope.model = [2, 3];
         var el = setupMultiple('ng-model="$root.model"', [1, 2, 3, 4]);
 
@@ -505,7 +505,7 @@ describe('<md-select>', function () {
         expect($rootScope.model).toEqual([2, 3, 1, 4]);
       }));
 
-      it('correctly selects and deselects options for complete reassignment of model', inject(function ($rootScope) {
+      it('correctly selects and deselects options for complete reassignment of model', inject(function($rootScope) {
         $rootScope.model = [2, 4, 5, 6];
         var el = setupMultiple('ng-model="$root.model"', [1, 2, 3, 4, 5, 6]);
 
@@ -521,7 +521,7 @@ describe('<md-select>', function () {
         expect($rootScope.model).toEqual([1, 2, 3]);
       }));
 
-      it('does not select any options if the models value does not match an option', inject(function ($rootScope) {
+      it('does not select any options if the models value does not match an option', inject(function($rootScope) {
         $rootScope.model = [];
         $rootScope.obj = {};
         var el = setupMultiple('ng-model="$root.model"', [1, 2, 3, 4, 5, 6]);
@@ -535,7 +535,7 @@ describe('<md-select>', function () {
         expect($rootScope.model).toEqual(["bar", $rootScope.obj]);
       }));
 
-      it('uses track by if given to compare objects', inject(function ($rootScope) {
+      it('uses track by if given to compare objects', inject(function($rootScope) {
         $rootScope.$apply('model = [{id:2}]');
         var el = setupMultiple('ng-model="$root.model" ng-model-options="{trackBy: \'$value.id\'}"',
           [{id: 1}, {id: 2}, {id: 3}]);
@@ -550,7 +550,7 @@ describe('<md-select>', function () {
         expect(el.find('md-option').eq(2).attr('selected')).toBe('selected');
       }));
 
-      it('uses uid by default to compare objects', inject(function ($rootScope) {
+      it('uses uid by default to compare objects', inject(function($rootScope) {
         var one = {}, two = {}, three = {};
         $rootScope.model = [two];
         var el = setupMultiple('ng-model="$root.model"', [one, two, three]);
@@ -563,7 +563,7 @@ describe('<md-select>', function () {
         expect(selectedOptions(el).length).toBe(0);
       }));
 
-      it('errors the model if model value is truthy and not an array', inject(function ($rootScope) {
+      it('errors the model if model value is truthy and not an array', inject(function($rootScope) {
         $rootScope.model = 'string';
         var el = setupMultiple('ng-model="$root.model"', [1, 2, 3]);
         var ngModelCtrl = el.controller('ngModel');
@@ -576,9 +576,9 @@ describe('<md-select>', function () {
 
     });
 
-    describe('view->model', function () {
+    describe('view->model', function() {
 
-      it('should deselect a selected option on click', inject(function ($rootScope) {
+      it('should deselect a selected option on click', inject(function($rootScope) {
         $rootScope.model = [1];
         var el = setupMultiple('ng-model="$root.model"', [1, 2]);
 
@@ -594,7 +594,7 @@ describe('<md-select>', function () {
         expect($rootScope.model).toEqual([]);
       }));
 
-      it('selects a deselected option on click', inject(function ($rootScope) {
+      it('selects a deselected option on click', inject(function($rootScope) {
         $rootScope.model = [1];
         var el = setupMultiple('ng-model="$root.model"', [1, 2]);
 
@@ -610,7 +610,7 @@ describe('<md-select>', function () {
         expect($rootScope.model).toEqual([1, 2]);
       }));
 
-      it('should keep model value if a selected option is removed', inject(function ($rootScope) {
+      it('should keep model value if a selected option is removed', inject(function($rootScope) {
         $rootScope.model = [1];
         $rootScope.values = [1, 2];
         var el = setupMultiple('ng-model="$root.model"',
@@ -625,7 +625,7 @@ describe('<md-select>', function () {
         expect($rootScope.model).toEqual([1]);
       }));
 
-      it('should select an option that was just added matching the modelValue', inject(function ($rootScope) {
+      it('should select an option that was just added matching the modelValue', inject(function($rootScope) {
         $rootScope.model = [1, 3];
         $rootScope.values = [1, 2];
         var el = setupMultiple('ng-model="$root.model"',
@@ -645,20 +645,20 @@ describe('<md-select>', function () {
     });
   });
 
-  describe('aria', function () {
+  describe('aria', function() {
     var el;
-    beforeEach(inject(function ($q, $document) {
+    beforeEach(inject(function($q, $document) {
       el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
       var selectMenus = $document.find('md-select-menu');
       selectMenus.remove();
     }));
 
-    it('adds an aria-label from placeholder', function () {
+    it('adds an aria-label from placeholder', function() {
       var select = setupSelect('ng-model="someVal", placeholder="Hello world"', null, true).find('md-select');
       expect(select.attr('aria-label')).toBe('Hello world');
     });
 
-    it('preserves aria-label on value change', inject(function ($rootScope, $compile) {
+    it('preserves aria-label on value change', inject(function($rootScope, $compile) {
       var select = $compile('<md-input-container>' +
       '<label>Pick</label>' +
       '<md-select ng-model="val">' +
@@ -673,12 +673,12 @@ describe('<md-select>', function () {
       expect(select.attr('aria-label')).toBe('Pick');
     }));
 
-    it('preserves existing aria-label', inject(function ($rootScope) {
+    it('preserves existing aria-label', inject(function($rootScope) {
       var select = setupSelect('ng-model="someVal", aria-label="Hello world", placeholder="Pick"').find('md-select');
       expect(select.attr('aria-label')).toBe('Hello world');
     }));
 
-    it('should expect an aria-label if none is present', inject(function ($compile, $rootScope, $log) {
+    it('should expect an aria-label if none is present', inject(function($compile, $rootScope, $log) {
       spyOn($log, 'warn');
       var select = setupSelect('ng-model="someVal"', null, true).find('md-select');
       $rootScope.$apply();
@@ -690,7 +690,7 @@ describe('<md-select>', function () {
       expect($log.warn).not.toHaveBeenCalled();
     }));
 
-    it('sets up the aria-expanded attribute', inject(function ($document) {
+    it('sets up the aria-expanded attribute', inject(function($document) {
       expect(el.attr('aria-expanded')).toBe('false');
       openSelect(el);
       expect(el.attr('aria-expanded')).toBe('true');
@@ -700,13 +700,13 @@ describe('<md-select>', function () {
       waitForSelectClose();
       expect(el.attr('aria-expanded')).toBe('false');
     }));
-    it('sets up the aria-multiselectable attribute', inject(function ($document, $rootScope) {
+    it('sets up the aria-multiselectable attribute', inject(function($document, $rootScope) {
       $rootScope.model = [1, 3];
       var el = setupMultiple('ng-model="$root.model"', [1, 2, 3]);
 
       expect(el.attr('aria-multiselectable')).toBe('true');
     }));
-    it('sets up the aria-selected attribute', inject(function ($rootScope) {
+    it('sets up the aria-selected attribute', inject(function($rootScope) {
       var el = setup('ng-model="$root.model"', [1, 2, 3]);
       var options = el.find('md-option');
       expect(options.eq(2).attr('aria-selected')).toBe('false');
@@ -718,16 +718,16 @@ describe('<md-select>', function () {
     }));
   });
 
-  describe('keyboard controls', function () {
+  describe('keyboard controls', function() {
 
 
-    afterEach(inject(function ($document) {
+    afterEach(inject(function($document) {
       var selectMenus = $document.find('md-select-menu');
       selectMenus.remove();
     }));
 
-    describe('md-select', function () {
-      it('can be opened with a space key', inject(function ($document) {
+    describe('md-select', function() {
+      it('can be opened with a space key', inject(function($document) {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
         pressKey(el, 32);
         waitForSelectOpen();
@@ -735,7 +735,7 @@ describe('<md-select>', function () {
         expect(selectMenu.length).toBe(1);
       }));
 
-      it('can be opened with an enter key', inject(function ($document) {
+      it('can be opened with an enter key', inject(function($document) {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
         pressKey(el, 13);
         waitForSelectOpen();
@@ -743,7 +743,7 @@ describe('<md-select>', function () {
         expect(selectMenu.length).toBe(1);
       }));
 
-      it('can be opened with the up key', inject(function ($document) {
+      it('can be opened with the up key', inject(function($document) {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
         pressKey(el, 38);
         waitForSelectOpen();
@@ -751,7 +751,7 @@ describe('<md-select>', function () {
         expect(selectMenu.length).toBe(1);
       }));
 
-      it('can be opened with the down key', inject(function ($document) {
+      it('can be opened with the down key', inject(function($document) {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
         pressKey(el, 40);
         waitForSelectOpen();
@@ -759,15 +759,15 @@ describe('<md-select>', function () {
         expect(selectMenu.length).toBe(1);
       }));
 
-      it('supports typing an option name', inject(function ($document, $rootScope) {
+      it('supports typing an option name', inject(function($document, $rootScope) {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
         pressKey(el, 50);
         expect($rootScope.someModel).toBe(2);
       }));
     });
 
-    describe('md-select-menu', function () {
-      it('can be closed with escape', inject(function ($document, $rootScope, $animate) {
+    describe('md-select-menu', function() {
+      it('can be closed with escape', inject(function($document, $rootScope, $animate) {
         var el = setupSelect('ng-model="someVal"', [1, 2, 3]).find('md-select');
         openSelect(el);
         var selectMenu = angular.element($document.find('md-select-menu'));

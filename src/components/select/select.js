@@ -76,7 +76,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
     restrict: 'E',
     require: ['^?mdInputContainer', 'mdSelect', 'ngModel', '?^form'],
     compile: compile,
-    controller: function () {
+    controller: function() {
     } // empty placeholder controller to be initialized in link
   };
 
@@ -114,7 +114,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
         'tabindex': '-1'
       });
       var opts = element.find('md-option');
-      angular.forEach(opts, function (el) {
+      angular.forEach(opts, function(el) {
         var newEl = angular.element('<option>' + el.innerHTML + '</option>');
         if (el.hasAttribute('ng-value')) newEl.attr('ng-value', el.getAttribute('ng-value'));
         else if (el.hasAttribute('value')) newEl.attr('value', el.getAttribute('value'));
@@ -171,7 +171,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
         formCtrl.$removeControl(angular.element(selectEl).controller());
       }
 
-      var isErrorGetter = containerCtrl.isErrorGetter || function () {
+      var isErrorGetter = containerCtrl.isErrorGetter || function() {
           return ngModelCtrl.$invalid && ngModelCtrl.$touched;
         };
       scope.$watch(isErrorGetter, containerCtrl.setInvalid);
@@ -180,12 +180,12 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
       ngModelCtrl.$formatters.push(ngModelPipelineCheckValue);
 
       var originalRender = ngModelCtrl.$render;
-      ngModelCtrl.$render = function () {
+      ngModelCtrl.$render = function() {
         originalRender();
         syncLabelText();
       };
 
-      mdSelectCtrl.setLabelText = function (text) {
+      mdSelectCtrl.setLabelText = function(text) {
         mdSelectCtrl.setIsPlaceholder(!text);
         // if we have a label, use that as the placeholder in our md-select-value label,
         // otherwise fall back to the actual placeholder
@@ -195,7 +195,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
         target.text(text);
       };
 
-      mdSelectCtrl.setIsPlaceholder = function (val) {
+      mdSelectCtrl.setIsPlaceholder = function(val) {
         if (val) {
           valueEl.addClass('md-select-placeholder');
           if (containerCtrl.label) {
@@ -211,24 +211,24 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
 
       if (!isReadonly) {
         element
-          .on('focus', function (ev) {
+          .on('focus', function(ev) {
             // only set focus on if we don't currently have a selected value. This avoids the "bounce"
             // on the label transition because the focus will immediately switch to the open menu.
             if (containerCtrl.element.hasClass('md-input-has-value')) {
               containerCtrl.setFocused(true);
             }
           })
-          .on('blur', function (ev) {
+          .on('blur', function(ev) {
             containerCtrl.setFocused(false);
             inputCheckValue();
           });
       }
 
-      mdSelectCtrl.triggerClose = function () {
+      mdSelectCtrl.triggerClose = function() {
         $parse(attr.mdOnClose)(scope);
       };
 
-      scope.$$postDigest(function () {
+      scope.$$postDigest(function() {
         setAriaLabel();
         syncLabelText();
       });
@@ -249,12 +249,12 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
       }
 
       var deregisterWatcher;
-      attr.$observe('ngMultiple', function (val) {
+      attr.$observe('ngMultiple', function(val) {
         if (deregisterWatcher) deregisterWatcher();
         var parser = $parse(val);
-        deregisterWatcher = scope.$watch(function () {
+        deregisterWatcher = scope.$watch(function() {
           return parser(scope);
-        }, function (multiple, prevVal) {
+        }, function(multiple, prevVal) {
           if (multiple === undefined && prevVal === undefined) return; // assume compiler did a good job
           if (multiple) {
             element.attr('multiple', 'multiple');
@@ -264,7 +264,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
           if (selectContainer) {
             selectMenuCtrl.setMultiple(multiple);
             originalRender = ngModelCtrl.$render;
-            ngModelCtrl.$render = function () {
+            ngModelCtrl.$render = function() {
               originalRender();
               syncLabelText();
             };
@@ -274,7 +274,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
         });
       });
 
-      attr.$observe('disabled', function (disabled) {
+      attr.$observe('disabled', function(disabled) {
         if (typeof disabled == "string") {
           disabled = true;
         }
@@ -309,9 +309,9 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
       }
       element.attr(ariaAttrs);
 
-      scope.$on('$destroy', function () {
+      scope.$on('$destroy', function() {
         if (isOpen) {
-          $mdSelect.cancel().then(function () {
+          $mdSelect.cancel().then(function() {
             selectContainer.remove();
           });
         } else {
@@ -367,7 +367,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
       }
 
       function openSelect() {
-        scope.$evalAsync(function () {
+        scope.$evalAsync(function() {
           isOpen = true;
           $mdSelect.show({
             scope: selectScope,
@@ -377,7 +377,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
             target: element[0],
             hasBackdrop: true,
             loadingAsync: attr.mdOnOpen ? scope.$eval(attr.mdOnOpen) || true : false,
-          }).then(function (selectedText) {
+          }).then(function(selectedText) {
             isOpen = false;
           });
         });
@@ -429,7 +429,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
       var optionHashKey = selectCtrl.hashGetter(optionCtrl.value);
       var isSelected = angular.isDefined(selectCtrl.selected[optionHashKey]);
 
-      scope.$apply(function () {
+      scope.$apply(function() {
         if (selectCtrl.isMultiple) {
           if (isSelected) {
             selectCtrl.deselect(optionHashKey);
@@ -457,14 +457,14 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
     // and values matching every option's controller.
     self.options = {};
 
-    $scope.$watch(function () {
+    $scope.$watch(function() {
       return self.options;
-    }, function () {
+    }, function() {
       self.ngModel.$render();
     }, true);
 
     var deregisterCollectionWatch;
-    self.setMultiple = function (isMultiple) {
+    self.setMultiple = function(isMultiple) {
       var ngModel = self.ngModel;
       self.isMultiple = isMultiple;
       if (deregisterCollectionWatch) deregisterCollectionWatch();
@@ -475,7 +475,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
 
         // watchCollection on the model because by default ngModel only watches the model's
         // reference. This allowed the developer to also push and pop from their array.
-        $scope.$watchCollection($attrs.ngModel, function (value) {
+        $scope.$watchCollection($attrs.ngModel, function(value) {
           if (validateArray(value)) renderMultiple(value);
         });
       } else {
@@ -493,9 +493,9 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
     var searchStr = '';
     var clearSearchTimeout, optNodes, optText;
     var CLEAR_SEARCH_AFTER = 300;
-    self.optNodeForKeyboardSearch = function (e) {
+    self.optNodeForKeyboardSearch = function(e) {
       clearSearchTimeout && clearTimeout(clearSearchTimeout);
-      clearSearchTimeout = setTimeout(function () {
+      clearSearchTimeout = setTimeout(function() {
         clearSearchTimeout = undefined;
         searchStr = '';
         optText = undefined;
@@ -506,7 +506,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
       if (!optNodes) {
         optNodes = $element.find('md-option');
         optText = new Array(optNodes.length);
-        angular.forEach(optNodes, function (el, i) {
+        angular.forEach(optNodes, function(el, i) {
           optText[i] = el.textContent.trim();
         });
       }
@@ -518,7 +518,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
     };
 
 
-    self.init = function (ngModel) {
+    self.init = function(ngModel) {
       self.ngModel = ngModel;
 
       // Allow users to provide `ng-model="foo" ng-model-options="{trackBy: 'foo.id'}"` so
@@ -526,7 +526,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
       if (ngModel.$options && ngModel.$options.trackBy) {
         var trackByLocals = {};
         var trackByParsed = $parse(ngModel.$options.trackBy);
-        self.hashGetter = function (value, valueScope) {
+        self.hashGetter = function(value, valueScope) {
           trackByLocals.$value = value;
           return trackByParsed(valueScope || $scope, trackByLocals);
         };
@@ -543,10 +543,10 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
       self.setMultiple(self.isMultiple);
     };
 
-    self.selectedLabels = function () {
+    self.selectedLabels = function() {
       var selectedOptionEls = $mdUtil.nodesToArray($element[0].querySelectorAll('md-option[selected]'));
       if (selectedOptionEls.length) {
-        return selectedOptionEls.map(function (el) {
+        return selectedOptionEls.map(function(el) {
           return el.textContent;
         }).join(', ');
       } else {
@@ -554,18 +554,18 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
       }
     };
 
-    self.select = function (hashKey, hashedValue) {
+    self.select = function(hashKey, hashedValue) {
       var option = self.options[hashKey];
       option && option.setSelected(true);
       self.selected[hashKey] = hashedValue;
     };
-    self.deselect = function (hashKey) {
+    self.deselect = function(hashKey) {
       var option = self.options[hashKey];
       option && option.setSelected(false);
       delete self.selected[hashKey];
     };
 
-    self.addOption = function (hashKey, optionCtrl) {
+    self.addOption = function(hashKey, optionCtrl) {
       if (angular.isDefined(self.options[hashKey])) {
         throw new Error('Duplicate md-option values are not allowed in a select. ' +
         'Duplicate value "' + optionCtrl.value + '" found.');
@@ -578,13 +578,13 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
         self.refreshViewValue();
       }
     };
-    self.removeOption = function (hashKey) {
+    self.removeOption = function(hashKey) {
       delete self.options[hashKey];
       // Don't deselect an option when it's removed - the user's ngModel should be allowed
       // to have values that do not match a currently available option.
     };
 
-    self.refreshViewValue = function () {
+    self.refreshViewValue = function() {
       var values = [];
       var option;
       for (var hashKey in self.selected) {
@@ -610,12 +610,12 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
       var oldSelected = Object.keys(self.selected);
 
       var newSelectedHashes = newSelectedValues.map(self.hashGetter);
-      var deselected = oldSelected.filter(function (hash) {
+      var deselected = oldSelected.filter(function(hash) {
         return newSelectedHashes.indexOf(hash) === -1;
       });
 
       deselected.forEach(self.deselect);
-      newSelectedHashes.forEach(function (hashKey, i) {
+      newSelectedHashes.forEach(function(hashKey, i) {
         self.select(hashKey, newSelectedValues[i]);
       });
     }
@@ -655,13 +655,13 @@ function OptionDirective($mdButtonInkRipple, $mdUtil) {
     } else if (angular.isDefined(attr.value)) {
       setOptionValue(attr.value);
     } else {
-      scope.$watch(function () {
+      scope.$watch(function() {
         return element.text();
       }, setOptionValue);
     }
 
-    scope.$$postDigest(function () {
-      attr.$observe('selected', function (selected) {
+    scope.$$postDigest(function() {
+      attr.$observe('selected', function(selected) {
         if (!angular.isDefined(selected)) return;
         if (selected) {
           if (!selectCtrl.isMultiple) {
@@ -690,7 +690,7 @@ function OptionDirective($mdButtonInkRipple, $mdUtil) {
       selectCtrl.addOption(newHashKey, optionCtrl);
     }
 
-    scope.$on('$destroy', function () {
+    scope.$on('$destroy', function() {
       selectCtrl.removeOption(optionCtrl.hashKey, optionCtrl);
     });
 
@@ -709,7 +709,7 @@ function OptionDirective($mdButtonInkRipple, $mdUtil) {
 
   function OptionController($element) {
     this.selected = false;
-    this.setSelected = function (isSelected) {
+    this.setSelected = function(isSelected) {
       if (isSelected && !this.selected) {
         $element.attr({
           'selected': 'selected',
@@ -773,9 +773,9 @@ function SelectProvider($$interimElementProvider) {
         backdrop: opts.hasBackdrop && angular.element('<md-backdrop class="md-select-backdrop md-click-catcher">')
       });
 
-      opts.resizeFn = function () {
-        $$rAF(function () {
-          $$rAF(function () {
+      opts.resizeFn = function() {
+        $$rAF(function() {
+          $$rAF(function() {
             animateSelect(scope, element, opts);
           });
         });
@@ -792,11 +792,11 @@ function SelectProvider($$interimElementProvider) {
       var optionNodes = opts.selectEl[0].getElementsByTagName('md-option');
 
       if (opts.loadingAsync && opts.loadingAsync.then) {
-        opts.loadingAsync.then(function () {
+        opts.loadingAsync.then(function() {
           scope.$$loadingAsyncDone = true;
           // Give ourselves two frames for the progress loader to clear out.
-          $$rAF(function () {
-            $$rAF(function () {
+          $$rAF(function() {
+            $$rAF(function() {
               // Don't go forward if the select has been removed in this time...
               if (opts.isRemoved) return;
               animateSelect(scope, element, opts);
@@ -824,8 +824,8 @@ function SelectProvider($$interimElementProvider) {
 
       // Give the select a frame to 'initialize' in the DOM,
       // so we can read its height/width/position
-      $$rAF(function () {
-        $$rAF(function () {
+      $$rAF(function() {
+        $$rAF(function() {
           if (opts.isRemoved) return;
           animateSelect(scope, element, opts);
         });
@@ -842,7 +842,7 @@ function SelectProvider($$interimElementProvider) {
         var selectCtrl = opts.selectEl.controller('mdSelectMenu') || {};
         element.addClass('md-clickable');
 
-        opts.backdrop && opts.backdrop.on('click', function (e) {
+        opts.backdrop && opts.backdrop.on('click', function(e) {
           e.preventDefault();
           e.stopPropagation();
           opts.restoreFocus = false;
@@ -850,7 +850,7 @@ function SelectProvider($$interimElementProvider) {
         });
 
         // Escape to close
-        opts.selectEl.on('keydown', function (ev) {
+        opts.selectEl.on('keydown', function(ev) {
           switch (ev.keyCode) {
             case $mdConstant.KEY_CODE.SPACE:
             case $mdConstant.KEY_CODE.ENTER:
@@ -872,7 +872,7 @@ function SelectProvider($$interimElementProvider) {
         });
 
         // Cycling of options, and closing on enter
-        opts.selectEl.on('keydown', function (ev) {
+        opts.selectEl.on('keydown', function(ev) {
           switch (ev.keyCode) {
             case $mdConstant.KEY_CODE.UP_ARROW:
               return focusPrevOption();
@@ -911,7 +911,7 @@ function SelectProvider($$interimElementProvider) {
         }
 
         opts.selectEl.on('click', checkCloseMenu);
-        opts.selectEl.on('keydown', function (e) {
+        opts.selectEl.on('keydown', function(e) {
           if (e.keyCode == 32 || e.keyCode == 13) {
             checkCloseMenu();
           }
@@ -920,7 +920,7 @@ function SelectProvider($$interimElementProvider) {
         function checkCloseMenu() {
           if (!selectCtrl.isMultiple) {
             opts.restoreFocus = true;
-            scope.$evalAsync(function () {
+            scope.$evalAsync(function() {
               $mdSelect.hide(selectCtrl.ngModel.$viewValue);
             });
           }
@@ -945,7 +945,7 @@ function SelectProvider($$interimElementProvider) {
         mdSelect.setLabelText(opts.selectEl.controller('mdSelectMenu').selectedLabels());
       }
 
-      return $mdUtil.transitionEndPromise(element, {timeout: 350}).then(function () {
+      return $mdUtil.transitionEndPromise(element, {timeout: 350}).then(function() {
         element.removeClass('md-active');
         opts.backdrop && opts.backdrop.remove();
         if (element[0].parentNode === opts.parent[0]) {
@@ -1080,7 +1080,7 @@ function SelectProvider($$interimElementProvider) {
       ')';
 
 
-      $$rAF(function () {
+      $$rAF(function() {
         element.addClass('md-active');
         selectNode.style[$mdConstant.CSS.TRANSFORM] = '';
         if (focusedNode) {
