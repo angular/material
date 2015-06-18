@@ -99,7 +99,7 @@ describe('<md-virtual-repeat>', function() {
     // Don't quite scroll past the first item.
     scroller[0].scrollTop = ITEM_SIZE - 1;
     scroller.triggerHandler('scroll');
-    expect(offsetter[0].style.webkitTransform).toBe('translateY(0px)');
+    expect(getTransform(offsetter)).toBe('translateY(0px)');
     repeated = getRepeated();
     expect(repeated.length).toBe(VERTICAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA);
     expect(repeated[0].textContent.trim()).toBe('s0s 0');
@@ -108,7 +108,7 @@ describe('<md-virtual-repeat>', function() {
     // Expect that one new item is created.
     scroller[0].scrollTop = ITEM_SIZE;
     scroller.triggerHandler('scroll');
-    expect(offsetter[0].style.webkitTransform).toBe('translateY(0px)');
+    expect(getTransform(offsetter)).toBe('translateY(0px)');
     repeated = getRepeated();
     expect(repeated.length).toBe(VERTICAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA + 1);
     expect(repeated[0].textContent.trim()).toBe('s0s 0');
@@ -117,7 +117,7 @@ describe('<md-virtual-repeat>', function() {
     // Expect that we now have the full set of extra items above and below.
     scroller[0].scrollTop = ITEM_SIZE * (VirtualRepeatController.NUM_EXTRA + 1);
     scroller.triggerHandler('scroll');
-    expect(offsetter[0].style.webkitTransform).toBe('translateY(10px)');
+    expect(getTransform(offsetter)).toBe('translateY(10px)');
     repeated = getRepeated();
     expect(repeated.length).toBe(VERTICAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA * 2);
     expect(repeated[0].textContent.trim()).toBe('s2s 1');
@@ -126,7 +126,7 @@ describe('<md-virtual-repeat>', function() {
     // Expect the bottom extra items to be removed (pooled).
     scroller[0].scrollTop = 1000;
     scroller.triggerHandler('scroll');
-    expect(offsetter[0].style.webkitTransform).toBe('translateY(970px)');
+    expect(getTransform(offsetter)).toBe('translateY(970px)');
     repeated = getRepeated();
     expect(repeated.length).toBe(VERTICAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA);
     expect(repeated[0].textContent.trim()).toBe('s194s 97');
@@ -144,7 +144,7 @@ describe('<md-virtual-repeat>', function() {
     // Don't quite scroll past the first item.
     scroller[0].scrollLeft = ITEM_SIZE - 1;
     scroller.triggerHandler('scroll');
-    expect(offsetter[0].style.webkitTransform).toBe('translateX(0px)');
+    expect(getTransform(offsetter)).toBe('translateX(0px)');
     repeated = getRepeated();
     expect(repeated.length).toBe(HORIZONTAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA);
     expect(repeated[0].textContent.trim()).toBe('s0s 0');
@@ -153,7 +153,7 @@ describe('<md-virtual-repeat>', function() {
     // Expect that we now have the full set of extra items above and below.
     scroller[0].scrollLeft = ITEM_SIZE;
     scroller.triggerHandler('scroll');
-    expect(offsetter[0].style.webkitTransform).toBe('translateX(0px)');
+    expect(getTransform(offsetter)).toBe('translateX(0px)');
     repeated = getRepeated();
     expect(repeated.length)
         .toBe(HORIZONTAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA + 1);
@@ -163,7 +163,7 @@ describe('<md-virtual-repeat>', function() {
     // Expect that one new item is created.
     scroller[0].scrollLeft = ITEM_SIZE * (VirtualRepeatController.NUM_EXTRA + 1);;
     scroller.triggerHandler('scroll');
-    expect(offsetter[0].style.webkitTransform).toBe('translateX(10px)');
+    expect(getTransform(offsetter)).toBe('translateX(10px)');
     repeated = getRepeated();
     expect(repeated.length)
         .toBe(HORIZONTAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA * 2);
@@ -173,11 +173,13 @@ describe('<md-virtual-repeat>', function() {
     // Expect the bottom extra items to be removed (pooled).
     scroller[0].scrollLeft = 950;
     scroller.triggerHandler('scroll');
-    expect(offsetter[0].style.webkitTransform).toBe('translateX(920px)');
+    expect(getTransform(offsetter)).toBe('translateX(920px)');
     repeated = getRepeated();
     expect(repeated.length).toBe(HORIZONTAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA);
     expect(repeated[0].textContent.trim()).toBe('s184s 92');
   });
+
+
 
   it('should dirty-check only the swapped scope on scroll', function() {
     createRepeater();
@@ -222,4 +224,14 @@ describe('<md-virtual-repeat>', function() {
     expect(scroller[0].scrollTop).toBe(0);
     expect(getRepeated()[0].textContent.trim()).toBe('a 0');
   });
+
+  /**
+   * Facade to access transform properly even when jQuery is used;
+   * since jQuery's css function is obtaining the computed style (not wanted)
+   */
+  function getTransform(target) {
+    return target[0].style.transform || target.css('transform');
+  }
+
+
 });
