@@ -23,7 +23,7 @@ function MenuProvider($$interimElementProvider) {
   /* @ngInject */
   function menuDefaultOptions($$rAF, $window, $mdUtil, $mdTheming, $timeout, $mdConstant, $document) {
     return {
-      parent: 'body',
+      parent: 'md-content',
       onShow: onShow,
       onRemove: onRemove,
       hasBackdrop: true,
@@ -76,7 +76,7 @@ function MenuProvider($$interimElementProvider) {
         angular.extend(opts, {
           alreadyOpen: false,
           isRemoved: false,
-          target: angular.element(opts.target), //make sure it's not a naked dom node
+          target: angular.element('md-content'), //make sure it's not a naked dom node
           parent: angular.element(opts.parent),
           menuContentEl: angular.element(element[0].querySelector('md-menu-content')),
           backdrop: opts.hasBackdrop && angular.element('<md-backdrop class="md-menu-backdrop md-click-catcher">')
