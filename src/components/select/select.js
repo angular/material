@@ -5,17 +5,17 @@
 
 /***************************************************
 
- ### TODO ###
- **DOCUMENTATION AND DEMOS**
+### TODO ###
+**DOCUMENTATION AND DEMOS**
 
- - [ ] ng-model with child mdOptions (basic)
- - [ ] ng-model="foo" ng-model-options="{ trackBy: '$value.id' }" for objects
- - [ ] mdOption with value
- - [ ] Usage with input inside
+- [ ] ng-model with child mdOptions (basic)
+- [ ] ng-model="foo" ng-model-options="{ trackBy: '$value.id' }" for objects
+- [ ] mdOption with value
+- [ ] Usage with input inside
 
- ### TODO - POST RC1 ###
- - [ ] Abstract placement logic in $mdSelect service to $mdMenu service
- ***************************************************/
+### TODO - POST RC1 ###
+- [ ] Abstract placement logic in $mdSelect service to $mdMenu service
+***************************************************/
 
 var SELECT_EDGE_MARGIN = 8;
 var selectNextId = 0;
@@ -24,11 +24,11 @@ angular.module('material.components.select',[
   'material.core',
   'material.components.backdrop'
 ])
-  .directive('mdSelect',SelectDirective)
-  .directive('mdSelectMenu',SelectMenuDirective)
-  .directive('mdOption',OptionDirective)
-  .directive('mdOptgroup',OptgroupDirective)
-  .provider('$mdSelect',SelectProvider);
+.directive('mdSelect',SelectDirective)
+.directive('mdSelectMenu',SelectMenuDirective)
+.directive('mdOption',OptionDirective)
+.directive('mdOptgroup',OptgroupDirective)
+.provider('$mdSelect',SelectProvider);
 
 
 /**
