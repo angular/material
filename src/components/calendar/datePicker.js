@@ -171,7 +171,8 @@
     var $scope = this.$scope;
     var keyCodes = this.$mdConstant.KEY_CODE;
 
-    self.inputElement.addEventListener('keydown', function(event) {
+    // Add event listener through angular so that we can triggerHandler in unit tests.
+    angular.element(self.inputElement).on('keydown', function(event) {
       $scope.$apply(function() {
         if (event.altKey && event.keyCode == keyCodes.DOWN_ARROW) {
           self.openCalendarPane();
