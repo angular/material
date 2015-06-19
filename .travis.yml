@@ -17,7 +17,7 @@ before_script:
   - git config --global user.name "ngMaterial Bot"
 
 script:
-  - gulp build
+  - gulp build-scss
   - gulp karma --browsers=PhantomJS
 
 after_success:
