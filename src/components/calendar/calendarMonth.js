@@ -2,9 +2,8 @@
   'use strict';
 
 
-  angular.module('material.components.calendar', [
-    'material.core', 'material.components.virtualRepeater'
-  ]).directive('mdCalendarMonth', mdCalendarMonthDirective);
+  angular.module('material.components.calendar')
+      .directive('mdCalendarMonth', mdCalendarMonthDirective);
 
 
   /**
