@@ -45,7 +45,7 @@
 
                 '<tbody md-virtual-repeat="i in ctrl.items" md-calendar-month ' +
                     'md-month-offset="$index" class="md-calendar-month" aria-hidden="true" ' +
-                    'md-size="' + TBODY_HEIGHT + '"></tbody>' +
+                    'md-item-size="' + TBODY_HEIGHT + '"></tbody>' +
               '</table>' +
             '</md-virtual-repeat-container>' +
           '</div>' +
@@ -237,6 +237,10 @@
    * @param {Date} date
    */
   CalendarCtrl.prototype.scrollToMonth = function(date) {
+    if (!this.dateUtil.isValidDate(date)) {
+      return;
+    }
+
     var monthDistance = this.dateUtil.getMonthDistance(firstRenderableDate, date);
     this.calendarScroller.scrollTop = monthDistance * TBODY_HEIGHT;
   };
