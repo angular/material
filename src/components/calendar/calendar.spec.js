@@ -1,12 +1,12 @@
 
-describe('md-calendar', function() {
+ddescribe('md-calendar', function() {
   // When constructing a Date, the month is zero-based. This can be confusing, since people are
   // used to seeing them one-based. So we create these aliases to make reading the tests easier.
   var JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9,
       NOV = 10, DEC = 11;
 
   var ngElement, element, scope, pageScope, controller, $animate, $compile, $$rAF;
-  var $rootScope, dateLocale, $mdUtil;
+  var $rootScope, dateLocale, $mdUtil, keyCodes, dateUtil;
 
   /**
    * To apply a change in the date, a scope $apply() AND a manual triggering of animation
@@ -47,6 +47,15 @@ describe('md-calendar', function() {
     }
   }
 
+  /**
+   * Gets the month label for a given date cell.
+   * @param {HTMLElement|DocumentView} cell
+   * @returns {string}
+   */
+  function getMonthLabelForDateCell(cell) {
+    return $mdUtil.getClosest(cell, 'tbody').querySelector('.md-calendar-month-label').textContent;
+  }
+
 
   /** Creates and compiles an md-calendar element. */
   function createElement(parentScope) {
@@ -59,6 +68,24 @@ describe('md-calendar', function() {
     return newElement;
   }
 
+  /**
+   * Dispatches a KeyboardEvent for the calendar.
+   * @param {number} keyCode
+   * @param {Object=} opt_modifiers
+   */
+  function dispatchKeyEvent(keyCode, opt_modifiers) {
+    var mod = opt_modifiers || {};
+
+    angular.element(controller.calendarElement).triggerHandler({
+      type: 'keydown',
+      keyCode: keyCode,
+      which: keyCode,
+      ctrlKey: mod.ctrl,
+      altKey: mod.alt,
+      shortKey: mod.shift
+    });
+  }
+
   beforeEach(module('material.components.calendar', 'ngAnimateMock'));
 
   beforeEach(inject(function($injector) {
@@ -67,7 +94,9 @@ describe('md-calendar', function() {
     $rootScope = $injector.get('$rootScope');
     $$rAF = $injector.get('$$rAF');
     dateLocale = $injector.get('$$mdDateLocale');
+    dateUtil = $injector.get('$$mdDateUtil');
     $mdUtil = $injector.get('$mdUtil');
+    keyCodes = $injector.get('$mdConstant').KEY_CODE;
 
     pageScope = $rootScope.$new();
     pageScope.myDate = null;
@@ -83,20 +112,15 @@ describe('md-calendar', function() {
   });
 
   describe('ngModel binding', function() {
-
     it('should update the calendar based on ngModel change', function() {
       pageScope.myDate = new Date(2014, MAY, 30);
-
       applyDateChange();
 
       var selectedDate = element.querySelector('.md-calendar-selected-date');
-      var displayedMonth =
-          $mdUtil.getClosest(selectedDate, 'tbody').querySelector('.md-calendar-month-label');
 
-      expect(displayedMonth.textContent).toBe('May 2014');
+      expect(getMonthLabelForDateCell(selectedDate)).toBe('May 2014');
       expect(selectedDate.textContent).toBe('30');
     });
-
   });
 
   describe('calendar construction', function() {
@@ -158,7 +182,6 @@ describe('md-calendar', function() {
       });
     });
 
-
     it('should highlight today', function() {
       pageScope.myDate = controller.today;
       applyDateChange();
@@ -189,16 +212,78 @@ describe('md-calendar', function() {
   });
 
   describe('keyboard events', function() {
+    it('should navigate around the calendar based on key presses', function() {
+      pageScope.myDate = new Date(2014, FEB, 11);
+      applyDateChange();
 
-  });
+      var selectedDate = element.querySelector('.md-calendar-selected-date');
+      selectedDate.focus();
 
-  describe('focus behavior', function() {
+      dispatchKeyEvent(keyCodes.LEFT_ARROW);
+      expect(document.activeElement.textContent).toBe('10');
+      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
 
+      dispatchKeyEvent(keyCodes.UP_ARROW);
+      expect(document.activeElement.textContent).toBe('3');
+      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
+
+      dispatchKeyEvent(keyCodes.RIGHT_ARROW);
+      expect(document.activeElement.textContent).toBe('4');
+      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
+
+      dispatchKeyEvent(keyCodes.DOWN_ARROW);
+      expect(document.activeElement.textContent).toBe('11');
+      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
+
+      dispatchKeyEvent(keyCodes.HOME);
+      expect(document.activeElement.textContent).toBe('1');
+      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
+
+      dispatchKeyEvent(keyCodes.END);
+      expect(document.activeElement.textContent).toBe('28');
+      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
+
+      dispatchKeyEvent(keyCodes.RIGHT_ARROW);
+      expect(document.activeElement.textContent).toBe('1');
+      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Mar 2014');
+
+      dispatchKeyEvent(keyCodes.PAGE_UP);
+      expect(document.activeElement.textContent).toBe('1');
+      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
+
+      dispatchKeyEvent(keyCodes.PAGE_DOWN);
+      expect(document.activeElement.textContent).toBe('1');
+      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Mar 2014');
+
+      dispatchKeyEvent(keyCodes.ENTER);
+      applyDateChange();
+      expect(dateUtil.isSameDay(controller.selectedDate, new Date(2014, MAR, 1))).toBe(true);
+    });
+
+    it('should fire an event when escape is pressed', function() {
+      var escapeHandler = jasmine.createSpy('escapeHandler');
+      pageScope.$on('md-calendar-escape', escapeHandler);
+
+      pageScope.myDate = new Date(2014, FEB, 11);
+      applyDateChange();
+      var selectedDate = element.querySelector('.md-calendar-selected-date');
+      selectedDate.focus();
+
+      dispatchKeyEvent(keyCodes.ESCAPE);
+      pageScope.$apply();
+      expect(escapeHandler).toHaveBeenCalled();
+    });
   });
 
   describe('a11y announcements', function() {
-  });
+    it('should announce date changes in the aria-live region', function() {
+      pageScope.myDate = new Date(2015, MAY, 20);
+      applyDateChange();
+      var selectedDate = element.querySelector('.md-calendar-selected-date');
+      selectedDate.focus();
 
-  describe('i18n', function() {
+      dispatchKeyEvent(keyCodes.LEFT_ARROW);
+      expect(controller.ariaLiveElement.textContent).toBe('Tuesday 19');
+    });
   });
 });

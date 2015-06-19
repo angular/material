@@ -1,6 +1,8 @@
 $md-datepicker-button-size: 48px;
 $md-datepicker-button-gap: 20px;
 
+// Mixin for a "flat" input that can be used for components that contain an input
+// (datepicker, autocomplete).
 @mixin md-flat-input() {
   font-size: 14px;
   line-height: 40px;
@@ -16,6 +18,7 @@ $md-datepicker-button-gap: 20px;
   }
 }
 
+// The calendar icon button used to open the calendar pane.
 .md-date-picker-button {
   margin-right: $md-datepicker-button-gap;
   height: $md-datepicker-button-size;
@@ -23,12 +26,14 @@ $md-datepicker-button-gap: 20px;
   background: none;
 }
 
+// The input into which the user can type the date.
 .md-datepicker-input {
   @include md-flat-input();
   width: 100%;
   line-height: 21px;
 }
 
+// Container for the datepicker input.
 .md-datepicker-input-container {
   position: relative;
   z-index: $z-index-datepicker-trigger;
@@ -50,6 +55,7 @@ $md-datepicker-button-gap: 20px;
 }
 
 
+// Floating pane that contains the calendar at the bottom of the input.
 .md-date-calendar-pane {
   position: absolute;
   top: 0;
@@ -61,6 +67,7 @@ $md-datepicker-button-gap: 20px;
   background: white;
 }
 
+// Shadow that wraps around both the floating calendar pane and the in-line input.
 .md-date-calendar-pane-shadow {
   position: absolute;
   z-index: $z-index-datepicker-shadow;
