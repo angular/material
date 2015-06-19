@@ -15,6 +15,9 @@
   // TODO(jelbourn): Scroll snapping
   // TODO(jelbourn): Month headers stick to top when scrolling
   // TODO(jelbourn): Previous month opacity is lowered when partially scrolled out of view.
+  // TODO(jelbourn): Support md-calendar standalone on a page (as a tabstop w/ aria-live
+  //     announcement and key handling).
+
 
   // PRE RELEASE
   // TODO(jelbourn): Base colors on the theme
@@ -23,6 +26,8 @@
   // TODO(jelbourn): Make sure the *time* on the written date makes sense (probably midnight).
   // TODO(jelbourn): Date "isComplete" logic
   // TODO(jelbourn): Apple + up / down == PgDown and PgUp
+  // TODO(jelbourn): Documentation
+  // TODO(jelbourn): Demo that uses moment.js
 
   // COULD GO EITHER WAY
   // TODO(jelbourn): Clicking on the month label opens the month-picker.
@@ -43,7 +48,6 @@
           '<div class="md-calendar-scroll-mask">' +
             '<md-virtual-repeat-container class="md-calendar-scroller">' +
               '<table class="md-calendar">' +
-
                 '<tbody md-virtual-repeat="i in ctrl.items" md-calendar-month ' +
                     'md-month-offset="$index" class="md-calendar-month" aria-hidden="true" ' +
                     'md-item-size="' + TBODY_HEIGHT + '"></tbody>' +
@@ -78,7 +82,7 @@
    * Controller for the mdCalendar component.
    * @ngInject @constructor
    */
-  function CalendarCtrl($element, $scope, $animate, $q, $mdConstant,
+  function CalendarCtrl($element, $attrs, $scope, $animate, $q, $mdConstant,
       $$mdDateUtil, $$mdDateLocale, $mdInkRipple, $mdUtil) {
 
     /** @type {Array<number>} Dummy array-like object for virtual-repeat to iterate over. */
@@ -156,6 +160,13 @@
 
     /** @type {boolean} */
     this.isMonthTransitionInProgress = false;
+
+    // Unless the user specifies so, the calendar should not be a tab stop.
+    // This is necessary because ngAria might add a tabindex to anything with an ng-model
+    // (based on whether or not the user has turned that particular feature on/off).
+    if (!$attrs['tabindex']) {
+      $element.attr('tabindex', '-1');
+    }
 
     var self = this;
 
@@ -251,7 +262,7 @@
    */
   CalendarCtrl.prototype.attachCalendarEventListeners = function() {
     // Keyboard interaction.
-    this.calendarElement.addEventListener('keydown', this.handleKeyEvent.bind(this));
+    angular.element(this.calendarElement).on('keydown', this.handleKeyEvent.bind(this));
   };
   
   /*** User input handling ***/
@@ -434,8 +445,9 @@
 
     // If the date has changed to another date within the same month and year, make a short
     // announcement.
-    if (previousDate && !this.dateUtil.isSameMonthAndYear(previousDate, currentDate)) {
+    if (previousDate && this.dateUtil.isSameMonthAndYear(previousDate, currentDate)) {
       this.ariaLiveElement.textContent = this.dateLocale.shortAnnounceFormatter(currentDate);
+      return;
     }
 
     // If the date has changed to another date in a different month and/or year, make a long
