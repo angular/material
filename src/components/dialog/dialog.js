@@ -506,7 +506,7 @@ function MdDialogProvider($$interimElementProvider) {
               $timeout($mdDialog.cancel);
             }
           };
-          $rootElement.on('keyup', options.rootElementKeyupCallback);
+          $rootElement.on('keydown', options.rootElementKeyupCallback);
         }
 
         if (options.clickOutsideToClose) {
