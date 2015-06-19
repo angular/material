@@ -1,8 +1,8 @@
 /**
  * @ngdoc module
- * @name material.components.virtualRepeater
+ * @name material.components.virtualRepeat
  */
-angular.module('material.components.virtualRepeater', [
+angular.module('material.components.virtualRepeat', [
   'material.core'
 ])
 .directive('mdVirtualRepeatContainer', VirtualRepeatContainerDirective)

@@ -1,5 +1,5 @@
-ddescribe('<md-virtual-repeat>', function() {
-  beforeEach(module('ngMaterial-mock', 'material.components.virtualRepeater'));
+describe('<md-virtual-repeat>', function() {
+  beforeEach(module('ngMaterial-mock', 'material.components.virtualRepeat'));
 
   var VirtualRepeatController = { NUM_EXTRA : 3 };
 
@@ -71,8 +71,9 @@ ddescribe('<md-virtual-repeat>', function() {
     scope.$apply();
     $$rAF.flush();
 
-    expect(getRepeated().length)
-        .toBe(VERTICAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA);
+    var numItemRenderers = VERTICAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA;
+
+    expect(getRepeated().length).toBe(numItemRenderers);
     expect(sizer[0].offsetHeight).toBe(NUM_ITEMS * ITEM_SIZE);
   });
 
@@ -83,8 +84,9 @@ ddescribe('<md-virtual-repeat>', function() {
     scope.$apply();
     $$rAF.flush();
 
-    expect(getRepeated().length)
-        .toBe(HORIZONTAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA);
+    var numItemRenderers = HORIZONTAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA;
+
+    expect(getRepeated().length).toBe(numItemRenderers);
     expect(sizer[0].offsetWidth).toBe(NUM_ITEMS * ITEM_SIZE);
   });
 
