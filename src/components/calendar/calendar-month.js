@@ -3,7 +3,7 @@
 
 
   angular.module('material.components.calendar', [
-    'material.core', 'material.components.virtualRepeat'
+    'material.core', 'material.components.virtualRepeater'
   ]).directive('mdCalendarMonth', mdCalendarMonthDirective);
 
 
@@ -106,7 +106,8 @@
         cell.classList.add(TODAY_CLASS);
       }
 
-      if (this.dateUtil.isSameDay(opt_date, this.calendarCtrl.selectedDate)) {
+      if (this.dateUtil.isValidDate(this.calendarCtrl.selectedDate) &&
+          this.dateUtil.isSameDay(opt_date, this.calendarCtrl.selectedDate)) {
         cell.classList.add(SELECTED_DATE_CLASS);
       }
     }
