@@ -5,8 +5,8 @@ describe('md-calendar', function() {
   var JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9,
       NOV = 10, DEC = 11;
 
-  var ngElement, element, scope, pageScope, controller, $animate, $compile;
-  var $rootScope, dateLocale;
+  var ngElement, element, scope, pageScope, controller, $animate, $compile, $$rAF;
+  var $rootScope, dateLocale, $mdUtil;
 
   /**
    * To apply a change in the date, a scope $apply() AND a manual triggering of animation
@@ -15,11 +15,16 @@ describe('md-calendar', function() {
   function applyDateChange() {
     pageScope.$apply();
     $animate.triggerCallbacks();
+    $$rAF.flush();
+
+    // Internally, the calendar sets scrollTop to scroll to the month for a change.
+    // The handler for that scroll won't be invoked unless we manually trigger it.
+    if (controller) {
+      angular.element(controller.calendarScroller).triggerHandler('scroll');
+    }
   }
 
-  /**
-   * Extracts text as an array (one element per cell) from a tr element.
-   */
+  /** Extracts text as an array (one element per cell) from a tr element. */
   function extractRowText(tr) {
     var cellContents = [];
     angular.forEach(tr.children, function(tableElement) {
@@ -29,9 +34,7 @@ describe('md-calendar', function() {
     return cellContents;
   }
 
-  /**
-   * Finds a date td given a day of the month from an .md-calendar-month element.
-   */
+  /** Finds a date td given a day of the month from an .md-calendar-month element. */
   function findDateElement(monthElement, day) {
     var tds = monthElement.querySelectorAll('td');
     var td;
@@ -45,14 +48,14 @@ describe('md-calendar', function() {
   }
 
 
-  /**
-   * Creates and compiles an md-calendar element.
-   */
+  /** Creates and compiles an md-calendar element. */
   function createElement(parentScope) {
     var directiveScope = parentScope || $rootScope.$new();
     var template = '<md-calendar ng-model="myDate"></md-calendar>';
-    var newElement = $compile(template)(directiveScope);
-    directiveScope.$apply();
+    var attachedElement = angular.element(template);
+    document.body.appendChild(attachedElement[0]);
+    var newElement = $compile(attachedElement)(directiveScope);
+    applyDateChange();
     return newElement;
   }
 
@@ -62,7 +65,9 @@ describe('md-calendar', function() {
     $animate = $injector.get('$animate');
     $compile = $injector.get('$compile');
     $rootScope = $injector.get('$rootScope');
+    $$rAF = $injector.get('$$rAF');
     dateLocale = $injector.get('$$mdDateLocale');
+    $mdUtil = $injector.get('$mdUtil');
 
     pageScope = $rootScope.$new();
     pageScope.myDate = null;
@@ -73,16 +78,22 @@ describe('md-calendar', function() {
     controller = ngElement.controller('mdCalendar');
   }));
 
+  afterEach(function() {
+    ngElement.remove();
+  });
+
   describe('ngModel binding', function() {
 
     it('should update the calendar based on ngModel change', function() {
       pageScope.myDate = new Date(2014, MAY, 30);
+
       applyDateChange();
 
-      var displayedMonth = element.querySelector('.md-calendar-month-label');
       var selectedDate = element.querySelector('.md-calendar-selected-date');
+      var displayedMonth =
+          $mdUtil.getClosest(selectedDate, 'tbody').querySelector('.md-calendar-month-label');
 
-      expect(displayedMonth.textContent).toBe('May');
+      expect(displayedMonth.textContent).toBe('May 2014');
       expect(selectedDate.textContent).toBe('30');
     });
 
@@ -109,9 +120,16 @@ describe('md-calendar', function() {
     });
 
     describe('#buildCalendarForMonth', function() {
+      var monthCtrl;
+
+      beforeEach(function() {
+        monthCtrl = angular.element(element.querySelector('[md-calendar-month]'))
+            .controller('mdCalendarMonth');
+      });
+
       it('should render a month correctly as a table', function() {
         var date = new Date(2014, MAY, 30);
-        var monthElement = controller.buildCalendarForMonth(date);
+        var monthElement = monthCtrl.buildCalendarForMonth(date);
 
         var calendarRows = monthElement.querySelectorAll('tr');
         var calendarDates = [];
@@ -121,21 +139,22 @@ describe('md-calendar', function() {
         });
 
         var expectedDates = [
-          ['May', '', '', '1', '2', '3'],
+          ['May 2014', '', '', '1', '2', '3'],
           ['4', '5', '6', '7', '8', '9', '10'],
           ['11', '12', '13', '14', '15', '16', '17'],
           ['18', '19', '20', '21', '22', '23', '24'],
           ['25', '26', '27', '28', '29', '30', '31'],
+          ['', '', '', '', '', '', ''],
         ];
         expect(calendarDates).toEqual(expectedDates);
       });
 
       it('should show the month on its own row if the first day is before Tuesday', function() {
         var date = new Date(2014, JUN, 30); // 1st on Sunday
-        var monthElement = controller.buildCalendarForMonth(date);
+        var monthElement = monthCtrl.buildCalendarForMonth(date);
 
         var firstRow = monthElement.querySelector('tr');
-        expect(extractRowText(firstRow)).toEqual(['Jun']);
+        expect(extractRowText(firstRow)).toEqual(['Jun 2014']);
       });
     });
 
@@ -144,11 +163,9 @@ describe('md-calendar', function() {
       pageScope.myDate = controller.today;
       applyDateChange();
 
-      var monthElement = element.querySelector('.md-calendar-month');
-      var day = controller.today.getDate();
-
-      var dateElement = findDateElement(monthElement, day);
-      expect(dateElement.classList.contains('md-calendar-date-today')).toBe(true);
+      var todayElement = element.querySelector('.md-calendar-date-today');
+      expect(todayElement).not.toBeNull();
+      expect(todayElement.textContent).toBe(controller.today.getDate() + '');
     });
 
     it('should have ids for date elements unique to the directive instance', function() {
