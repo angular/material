@@ -236,7 +236,7 @@ describe('$mdDialog', function() {
 
       expect(parent.find('md-dialog').length).toBe(1);
 
-      $rootElement.triggerHandler({type: 'keyup',
+      $rootElement.triggerHandler({type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.ESCAPE
       });
 
@@ -261,7 +261,7 @@ describe('$mdDialog', function() {
 
       expect(parent.find('md-dialog').length).toBe(1);
 
-      $rootElement.triggerHandler({ type: 'keyup', keyCode: $mdConstant.KEY_CODE.ESCAPE });
+      $rootElement.triggerHandler({ type: 'keydown', keyCode: $mdConstant.KEY_CODE.ESCAPE });
 
       $timeout.flush();
       $animate.triggerCallbacks();
