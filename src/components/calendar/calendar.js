@@ -6,8 +6,9 @@
    * @name material.components.calendar
    * @description Calendar
    */
-  angular.module('material.components.calendar')
-      .directive('mdCalendar', calendarDirective);
+  angular.module('material.components.calendar', [
+    'material.core', 'material.components.virtualRepeat'
+  ]).directive('mdCalendar', calendarDirective);
 
   // FUTURE VERSION
   // TODO(jelbourn): Animated month transition on ng-model change.
@@ -67,10 +68,10 @@
   /** Class applied to the selected date cell/. */
   var SELECTED_DATE_CLASS = 'md-calendar-selected-date';
 
-  /** Next idientifier for calendar instance. */
+  /** Next identifier for calendar instance. */
   var nextUniqueId = 0;
 
-  /** The first renderable date in the virtual-scrolling calendar. */
+  /** The first renderable date in the virtual-scrolling calendar (for all instances). */
   var firstRenderableDate = null;
 
   /**
