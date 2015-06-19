@@ -350,6 +350,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
         ctrl.matches = [];
         ctrl.hidden = true;
         ctrl.index = getDefaultIndex();
+        event.stopPropagation();
         break;
       default:
     }
