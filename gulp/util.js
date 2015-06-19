@@ -38,7 +38,7 @@ exports.args = args;
  * Builds the entire component library javascript.
  * @param {boolean} isRelease Whether to build in release mode.
  */
-function buildJs (isRelease) {
+function buildJs () {
   var jsFiles = config.jsBaseFiles.concat([path.join(config.paths, '*.js')]);
 
   gutil.log("building js files...");

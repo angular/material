@@ -4,8 +4,8 @@ var util = require('../util');
 var ROOT = require('../const').ROOT;
 var args = util.args;
 
-// Make full build of JS and CSS
-exports.dependencies = ['build'];
+// NOTE: `karma-fas` does NOT pre-make a full build of JS and CSS
+// exports.dependencies = ['build'];
 
 exports.task = function (done) {
   var errorCount = 0;
@@ -15,6 +15,22 @@ exports.task = function (done) {
     autoWatch: false,
     configFile: ROOT + '/config/karma.conf.js'
   };
+
+  if ( args.browsers ) {
+    karmaConfig.browsers = args.browsers.trim().split(',');
+  }
+
+  gutil.log('Running unit tests on unminified source.');
+  karma.start(karmaConfig, captureError(clearEnv,clearEnv));
+
+
+  function clearEnv() {
+    process.env.KARMA_TEST_COMPRESSED = undefined;
+    process.env.KARMA_TEST_JQUERY = undefined;
+
+    if (errorCount > 0) { process.exit(errorCount); }
+    done();
+  }
 
   /**
    * For each version of testings (unminified, minified, minified w/ jQuery)
@@ -37,31 +53,4 @@ exports.task = function (done) {
   }
 
 
-  if ( args.browsers ) {
-    karmaConfig.browsers = args.browsers.trim().split(',');
-  }
-
-  gutil.log('Running unit tests on unminified source.');
-  karma.start(karmaConfig, captureError(testMinified,clearEnv));
-
-  function testMinified() {
-    gutil.log('Running unit tests on minified source.');
-    process.env.KARMA_TEST_COMPRESSED = true;
-    karma.start(karmaConfig, captureError(testMinifiedJquery,clearEnv));
-  }
-
-  function testMinifiedJquery() {
-    gutil.log('Running unit tests on minified source w/ jquery.');
-    process.env.KARMA_TEST_COMPRESSED = true;
-    process.env.KARMA_TEST_JQUERY = true;
-    karma.start(karmaConfig, clearEnv);
-  }
-
-  function clearEnv() {
-    process.env.KARMA_TEST_COMPRESSED = undefined;
-    process.env.KARMA_TEST_JQUERY = undefined;
-
-    if (errorCount > 0) { process.exit(errorCount); }
-    done();
-  }
 };
