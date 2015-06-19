@@ -1,4 +1,4 @@
-describe('<md-virtual-repeat>', function() {
+ddescribe('<md-virtual-repeat>', function() {
   beforeEach(module('ngMaterial-mock', 'material.components.virtualRepeater'));
 
   var VirtualRepeatController = { NUM_EXTRA : 3 };
@@ -230,7 +230,7 @@ describe('<md-virtual-repeat>', function() {
    * since jQuery's css function is obtaining the computed style (not wanted)
    */
   function getTransform(target) {
-    return target[0].style.transform || target.css('transform');
+    return target[0].style.webkitTransform || target.css('transform');
   }
 
 
