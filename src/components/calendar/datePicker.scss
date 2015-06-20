@@ -1,11 +1,11 @@
 $md-datepicker-button-size: 48px;
-$md-datepicker-button-gap: 20px;
+$md-datepicker-button-gap: 12px;
+
 
 // Mixin for a "flat" input that can be used for components that contain an input
 // (datepicker, autocomplete).
 @mixin md-flat-input() {
   font-size: 14px;
-  line-height: 40px;
 
   box-sizing: border-box;
   border: none;
@@ -19,10 +19,10 @@ $md-datepicker-button-gap: 20px;
 }
 
 // The calendar icon button used to open the calendar pane.
+// Need absurd specificty to override md-button.md-icon-button.
 .md-date-picker-button {
-  margin-right: $md-datepicker-button-gap;
-  height: $md-datepicker-button-size;
-  width: $md-datepicker-button-size;
+  display: inline-block;
+  box-sizing: border-box;
   background: none;
 }
 
@@ -41,11 +41,13 @@ $md-datepicker-button-gap: 20px;
   display: inline-block;
   border-bottom: 1px solid #e0e0e0;
   width: 120px;
+  margin-left: $md-datepicker-button-gap;
 
   &.md-open {
     border: 1px solid #e0e0e0;
     border-bottom: none;
     min-width: $md-calendar-width;
+    margin-left: -$md-datepicker-button-gap;
 
     .md-datepicker-input {
       margin-left: 24px;
@@ -72,4 +74,18 @@ $md-datepicker-button-gap: 20px;
   position: absolute;
   z-index: $z-index-datepicker-shadow;
   width: $md-calendar-width;
+}
+
+
+$md-date-arrow-size: 6px;
+.md-datepicker-expand-triangle {
+  position: absolute;
+  right: 0;
+  top: 50%;
+
+  width: 0;
+  height: 0;
+  border-left: $md-date-arrow-size solid transparent;
+  border-right: $md-date-arrow-size solid transparent;
+  border-top: $md-date-arrow-size solid rgba(black, 0.20);
 }
