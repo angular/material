@@ -24,9 +24,12 @@
     return {
       template:
           '<md-button class="md-date-picker-button md-icon-button" type="button" ' +
-              'ng-click="ctrl.openCalendarPane()">📅</md-button>' +
+              'ng-click="ctrl.openCalendarPane()">' +
+              '<md-icon md-svg-icon="md-calendar"></md-icon>' +
+          '</md-button>' +
           '<div class="md-datepicker-input-container">' +
             '<input class="md-datepicker-input">' +
+            '<div class="md-datepicker-expand-triangle" ng-hide="ctrl.isCalendarOpen"></div>' +
           '</div>' +
 
           // This pane (and its shadow) will be detached from here and re-attached to the
