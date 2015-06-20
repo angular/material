@@ -2,6 +2,7 @@
   'use strict';
 
   // PRE RELEASE
+  // TODO(jelbourn): make down-arrow a button to open the calendar
   // TODO(jelbourn): aria attributes tying together date input and floating calendar.
   // TODO(jelbourn): actual calendar icon next to input
   // TODO(jelbourn): something for mobile (probably calendar panel should take up entire screen)
@@ -62,7 +63,7 @@
    *
    * @ngInject @constructor
    */
-  function DatePickerCtrl($scope, $element, $compile, $timeout, $mdConstant, $mdUtil,
+  function DatePickerCtrl($scope, $element, $attrs, $compile, $timeout, $mdConstant, $mdUtil,
       $$mdDateLocale, $$mdDateUtil) {
     /** @final */
     this.$compile = $compile;
@@ -115,6 +116,13 @@
 
     /** Pre-bound click handler is saved so that the event listener can be removed. */
     this.bodyClickHandler = this.handleBodyClick.bind(this);
+
+    // Unless the user specifies so, the calendar should not be a tab stop.
+    // This is necessary because ngAria might add a tabindex to anything with an ng-model
+    // (based on whether or not the user has turned that particular feature on/off).
+    if (!$attrs['tabindex']) {
+      $element.attr('tabindex', '-1');
+    }
 
     this.installPropertyInterceptors();
     this.attachChangeListeners();
