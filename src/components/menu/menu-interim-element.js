@@ -148,7 +148,7 @@ function MenuProvider($$interimElementProvider) {
           // Traverse up the event until we get to the menuContentEl to see if
           // there is an ng-click and that the ng-click is not disabled
           do {
-            if (target && target.hasAttribute('ng-click')) {
+            if (hasAnyAttribute(target, ['ng-click', 'data-ng-click', 'x-ng-click'])) {
               if (!target.hasAttribute('disabled')) {
                 close();
               }
@@ -160,6 +160,16 @@ function MenuProvider($$interimElementProvider) {
             scope.$apply(function() {
               opts.mdMenuCtrl.close();
             });
+          }
+
+          function hasAnyAttribute(target, attrs) {
+            if (!target) return false;
+            for (var i = 0, attr; attr = attrs[i]; ++i) {
+              if (target.hasAttribute(attr)) {
+                return true;
+              }
+            }
+            return false;
           }
         });
 

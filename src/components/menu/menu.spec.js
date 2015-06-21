@@ -72,23 +72,72 @@ describe('md-menu directive', function () {
     expect(getOpenMenuContainer().length).toBe(0);
   }));
 
-  it('closes on option click', function () {
-    expect(getOpenMenuContainer().length).toBe(0);
+  describe('closes with ng-click', function() {
+    it('closes on normal option click', function () {
+      expect(getOpenMenuContainer().length).toBe(0);
 
-    openMenu(setup());
+      openMenu(setup());
 
-    expect(something).toBeFalsy();
-    expect(getOpenMenuContainer().length).toBe(1);
+      expect(something).toBeFalsy();
+      expect(getOpenMenuContainer().length).toBe(1);
 
-    var btn = angular.element(getOpenMenuContainer()[0].querySelector('md-button'));
-        btn.triggerHandler({ type: 'click' });
+      var btn = getOpenMenuContainer()[0].querySelector('md-button');
+          btn.click();
 
-    waitForMenuClose();
+      waitForMenuClose();
 
-    expect(something).toBeTruthy();
+      expect(something).toBeTruthy();
 
-    // FIXME - why is the menu not auto-closing ?
-    //expect(getOpenMenuContainer().length).toBe(0);
+      expect(getOpenMenuContainer().length).toBe(0);
+    });
+
+    it('closes with data-ng-click', inject(function($rootScope, $compile) {
+      expect(getOpenMenuContainer().length).toBe(0);
+
+      var template = '' +
+        '<md-menu>' +
+        ' <button ng-click="$mdOpenMenu($event)">Hello World</button>' +
+        ' <md-menu-content>' +
+        '  <md-menu-item>' +
+        '    <md-button data-ng-click="doSomething($event)"></md-button>' +
+        '  </md-menu-item>' +
+        ' </md-menu-content>' +
+        '</md-menu>';
+
+      openMenu($compile(template)($rootScope));
+      expect(getOpenMenuContainer().length).toBe(1);
+
+      var btn = getOpenMenuContainer()[0].querySelector('md-button');
+          btn.click();
+
+      waitForMenuClose();
+
+      expect(getOpenMenuContainer().length).toBe(0);
+    }));
+
+    it('closes with x-ng-click', inject(function($rootScope, $compile) {
+      expect(getOpenMenuContainer().length).toBe(0);
+
+      var template = '' +
+        '<md-menu>' +
+        ' <button ng-click="$mdOpenMenu($event)">Hello World</button>' +
+        ' <md-menu-content>' +
+        '  <md-menu-item>' +
+        '    <md-button x-ng-click="doSomething($event)"></md-button>' +
+        '  </md-menu-item>' +
+        ' </md-menu-content>' +
+        '</md-menu>';
+
+      openMenu($compile(template)($rootScope));
+      expect(getOpenMenuContainer().length).toBe(1);
+
+      var btn = getOpenMenuContainer()[0].querySelector('md-button');
+          btn.click();
+
+      waitForMenuClose();
+
+      expect(getOpenMenuContainer().length).toBe(0);
+    }));
   });
 
   // ********************************************
