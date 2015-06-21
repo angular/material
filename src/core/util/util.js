@@ -105,7 +105,9 @@ angular.module('material.core')
         // Converts the body to a position fixed block and translate it to the proper scroll
         // position
         function disableBodyScroll() {
-          var restoreStyle = body.getAttribute('style') || '';
+          var htmlNode = body.parentNode;
+          var restoreHtmlStyle = htmlNode.getAttribute('style') || '';
+          var restoreBodyStyle = body.getAttribute('style') || '';
           var scrollOffset = body.scrollTop + body.parentElement.scrollTop;
           var clientWidth = body.clientWidth;
 
@@ -116,10 +118,15 @@ angular.module('material.core')
             top: -scrollOffset + 'px'
           });
 
+          applyStyles(htmlNode, {
+            overflowY: 'hidden'
+          });
+
           if (body.clientWidth < clientWidth) applyStyles(body, {overflow: 'hidden'});
 
           return function restoreScroll() {
-            body.setAttribute('style', restoreStyle);
+            body.setAttribute('style', restoreBodyStyle);
+            htmlNode.setAttribute('style', restoreHtmlStyle);
             body.scrollTop = scrollOffset;
           };
         }
