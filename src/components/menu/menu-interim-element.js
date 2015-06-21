@@ -127,7 +127,9 @@ function MenuProvider($$interimElementProvider) {
         opts.backdrop && opts.backdrop.on('click', function(e) {
           e.preventDefault();
           e.stopPropagation();
-          opts.mdMenuCtrl.close(true);
+          scope.$apply(function() {
+            opts.mdMenuCtrl.close(true);
+          });
         });
 
         // Wire up keyboard listeners.
