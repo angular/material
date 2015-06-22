@@ -30,7 +30,7 @@ md-list {
   padding: $list-padding-top $list-padding-right $list-padding-bottom $list-padding-left;
 
   .md-subheader {
-    @extend .md-body-2;
+    @include md-body-2();
     line-height: $list-header-line-height;
   }
 }
@@ -177,18 +177,18 @@ md-list-item.md-3-line > .md-no-style {
     }
 
     h3 {
-      @extend .md-subhead;
+      @include md-subhead();
       margin: $list-h3-margin;
       line-height: $list-header-line-height;
     }
     h4 {
-      @extend .md-body-2;
+      @include md-body-2();
       font-weight: $list-h4-font-weight;
       margin: $list-h4-margin;
       line-height: $list-header-line-height;
     }
     p {
-      @extend .md-body-2;
+      @include md-body-2();
       margin: $list-p-margin;
       line-height: $list-p-line-height;
     }
