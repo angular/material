@@ -24,6 +24,16 @@ exports.task = function() {
   var streams = [];
   var baseVars = fs.readFileSync('src/core/style/variables.scss', 'utf8').toString();
   gutil.log("Building css files...");
+  
+  // create SCSS file for distribution
+  streams.push(
+    gulp.src(paths)
+      .pipe(util.filterNonCodeFiles())
+      .pipe(filter(['**', '!**/*-theme.scss']))
+      .pipe(concat('angular-material.scss'))
+      .pipe(gulp.dest(dest))
+  );
+  
   streams.push(
       gulp.src(paths)
           .pipe(util.filterNonCodeFiles())
