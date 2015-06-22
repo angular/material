@@ -97,7 +97,7 @@ $icon-button-margin: rem(0.600) !default;
 
   &.md-raised {
     &:not([disabled]) {
-      @extend .md-shadow-bottom-z-1;
+      @include md-shadow-bottom-z-1();
     }
   }
 
@@ -136,7 +136,7 @@ $icon-button-margin: rem(0.600) !default;
     flex-grow: 0;
     flex-shrink: 0;
 
-    @extend .md-shadow-bottom-z-1;
+    @include md-shadow-bottom-z-1();
     border-radius: 50%;
     background-clip: padding-box;
     overflow: hidden;
@@ -163,10 +163,10 @@ $icon-button-margin: rem(0.600) !default;
     &.md-raised,
     &.md-fab {
       &.md-focused {
-        @extend .md-shadow-bottom-z-1;
+        @include md-shadow-bottom-z-1();
       }
       &:active {
-        @extend .md-shadow-bottom-z-2;
+        @include md-shadow-bottom-z-2();
       }
     }
   }

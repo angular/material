@@ -41,30 +41,19 @@ ul, ol, p, h1, h2, h3, h4, h5, h6 {
   line-height: rem(3.2);
 }
 .md-title {
-  font-size: $title-font-size-base;
-  font-weight: 500;
-  letter-spacing: 0.005em;
+  @include md-title();
 }
 .md-subhead {
-  font-size: $subhead-font-size-base;
-  font-weight: 400;
-  letter-spacing: 0.010em;
-  line-height: rem(2.4);
+  @include md-subhead();
 }
 /************
  * Body Copy
  ************/
 .md-body-1 {
-  font-size: $body-font-size-base;
-  font-weight: 400;
-  letter-spacing: 0.010em;
-  line-height: rem(2);
+  @include md-body-1();
 }
 .md-body-2 {
-  font-size: $body-font-size-base;
-  font-weight: 500;
-  letter-spacing: 0.010em;
-  line-height: rem(2.4);
+  @include md-body-2();
 }
 .md-caption {
   font-size: $caption-font-size-base;
