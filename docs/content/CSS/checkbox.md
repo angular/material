@@ -37,8 +37,12 @@ In order to change the color when the checkbox is checked:
  ```
 
 
+#### Disabled 
 
 In order to change the color when a disabled checkbox is checked:
+
+![checkboxdisabledred](https://cloud.githubusercontent.com/assets/1292882/8036177/dc941a86-0dfe-11e5-8892-ac19ec6926fe.PNG)
+
 
 ```html
 <md-checkbox ng-disabled="true" class="red" ng-model="data.cb4" ng-init="data.cb4=true">
@@ -51,11 +55,13 @@ md-checkbox.md-checked[disabled].red .md-icon {
   background-color: rgba(255, 0, 0, 0.26);
 }
  ```
-![checkboxdisabledred](https://cloud.githubusercontent.com/assets/1292882/8036177/dc941a86-0dfe-11e5-8892-ac19ec6926fe.PNG)
-
 
 #### Borders
 In order to add a custom border do the following:
+
+![checkboxcustomborder](https://cloud.githubusercontent.com/assets/1292882/8037214/388dd40c-0e05-11e5-82a7-4bfa2541e968.PNG)
+
+
 ```html
  <div>
   <md-checkbox ng-model="data.cb2" aria-label="Checkbox 2" ng-true-value="'yup'" ng-false-value="'nope'">
@@ -75,19 +81,18 @@ md-checkbox.dotted .md-icon {
 }
 ```
 
-![checkboxcustomborder](https://cloud.githubusercontent.com/assets/1292882/8037214/388dd40c-0e05-11e5-82a7-4bfa2541e968.PNG)
-
 
 
 #### Bi-Di
 
-The mdCheckbox directive is sensible to the html direction:
+The mdCheckbox directive supports bi-directional specifiers in the `<html>` tag:
+
+![checkboxrtl](https://cloud.githubusercontent.com/assets/1292882/8036091/fb40bcf6-0dfd-11e5-8319-25e68939d1a3.PNG)
+
+
 ```html
 <html dir="rtl">
 ```
 
-results in :
-
-![checkboxrtl](https://cloud.githubusercontent.com/assets/1292882/8036091/fb40bcf6-0dfd-11e5-8319-25e68939d1a3.PNG)
 
 
