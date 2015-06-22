@@ -15,6 +15,6 @@ fs.readdirSync('./gulp/tasks')
         contents: require('./gulp/tasks/' + filename)
       };
     })
-    .filter(function (file) {
+    .forEach(function (file) {
       gulp.task(file.name, file.contents.dependencies, file.contents.task);
     });
