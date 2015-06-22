@@ -560,7 +560,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
     self.addOption = function(hashKey, optionCtrl) {
       if (angular.isDefined(self.options[hashKey])) {
         throw new Error('Duplicate md-option values are not allowed in a select. ' +
-        'Duplicate value "' + optionCtrl.value + '" found.');
+                        'Duplicate value "' + optionCtrl.value + '" found.');
       }
       self.options[hashKey] = optionCtrl;
 
@@ -584,11 +584,11 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
          if ((option = self.options[hashKey])) {
            values.push(option.value);
          } else {
-         // Otherwise, the given hashKey has no associated option, and we got it
-         // from an ngModel value at an earlier time. Push the unhashed value of
-         // this hashKey to the model.
-         // This allows the developer to put a value in the model that doesn't yet have
-         // an associated option.
+           // Otherwise, the given hashKey has no associated option, and we got it
+           // from an ngModel value at an earlier time. Push the unhashed value of
+           // this hashKey to the model.
+           // This allows the developer to put a value in the model that doesn't yet have
+           // an associated option.
            values.push(self.selected[hashKey]);
          }
       }
@@ -863,10 +863,8 @@ function SelectProvider($$interimElementProvider) {
         // Cycling of options, and closing on enter
         opts.selectEl.on('keydown', function(ev) {
           switch (ev.keyCode) {
-            case $mdConstant.KEY_CODE.UP_ARROW:
-              return focusPrevOption();
-            case $mdConstant.KEY_CODE.DOWN_ARROW:
-              return focusNextOption();
+            case $mdConstant.KEY_CODE.UP_ARROW: return focusPrevOption();
+            case $mdConstant.KEY_CODE.DOWN_ARROW: return focusNextOption();
             default:
               if (ev.keyCode >= 31 && ev.keyCode <= 90) {
                 var optNode = opts.selectEl.controller('mdSelectMenu').optNodeForKeyboardSearch(ev);
@@ -890,11 +888,9 @@ function SelectProvider($$interimElementProvider) {
           var newOption = opts.focusedNode = optionsArray[index];
           newOption && newOption.focus();
         }
-
         function focusNextOption() {
           focusOption('next');
         }
-
         function focusPrevOption() {
           focusOption('prev');
         }
@@ -1094,3 +1090,4 @@ function SelectProvider($$interimElementProvider) {
     } : { left: 0, top: 0, width: 0, height: 0 };
   }
 }
+
