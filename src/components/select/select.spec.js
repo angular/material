@@ -29,7 +29,8 @@ describe('<md-select>', function() {
     var el;
     inject(function($compile, $rootScope) {
       var optionsTpl = optTemplate(options);
-      var fullTpl = '<md-select-menu ' + (attrs || '') + '>' + optionsTpl + '</md-select-menu>';
+      var fullTpl = '<md-select-menu ' + (attrs || '') + '>' + optionsTpl +
+               '</md-select-menu>';
       el = $compile(fullTpl)($rootScope);
       $rootScope.$apply();
     });
@@ -376,6 +377,7 @@ describe('<md-select>', function() {
 
         expect(selectedOptions(el).length).toBe(1);
         expect(el.find('md-option').eq(2).attr('selected')).toBe('selected');
+
         el.triggerHandler({
           type: 'click',
           target: el.find('md-option')[1]
@@ -425,6 +427,7 @@ describe('<md-select>', function() {
       it('renders initial model value', inject(function($rootScope) {
         $rootScope.model = [1,3];
         var el = setupMultiple('ng-model="$root.model"', [1,2,3,4]);
+
         expect(selectedOptions(el).length).toBe(2);
         expect(el.find('md-option').eq(0).attr('selected')).toBe('selected');
         expect(el.find('md-option').eq(2).attr('selected')).toBe('selected');
@@ -452,6 +455,7 @@ describe('<md-select>', function() {
         expect(el.find('md-option').eq(1).attr('selected')).toBe('selected');
         expect($rootScope.model).toEqual([2]);
       }));
+
 
       it('removing a valid value from the model deselects its option', inject(function($rootScope) {
         $rootScope.model = [2,3];
@@ -530,7 +534,7 @@ describe('<md-select>', function() {
       it('uses track by if given to compare objects', inject(function($rootScope) {
         $rootScope.$apply('model = [{id:2}]');
         var el=setupMultiple('ng-model="$root.model" ng-model-options="{trackBy: \'$value.id\'}"',
-          [{id:1}, {id:2}, {id:3}]);
+            [{id:1}, {id:2}, {id:3}]);
 
         expect(selectedOptions(el).length).toBe(1);
         expect(el.find('md-option').eq(1).attr('selected')).toBe('selected');
@@ -616,6 +620,7 @@ describe('<md-select>', function() {
         expect(selectedOptions(el).length).toBe(0);
         expect($rootScope.model).toEqual([1]);
       }));
+
       it('should select an option that was just added matching the modelValue', inject(function($rootScope) {
         $rootScope.model = [1,3];
         $rootScope.values = [1,2];
@@ -630,7 +635,7 @@ describe('<md-select>', function() {
         expect(selectedOptions(el).length).toBe(2);
         expect(el.find('md-option').eq(0).attr('selected')).toBe('selected');
         expect(el.find('md-option').eq(2).attr('selected')).toBe('selected');
-        expect($rootScope.model).toEqual([1, 3]);
+        expect($rootScope.model).toEqual([1,3]);
       }));
 
     });
