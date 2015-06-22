@@ -33,7 +33,7 @@ md-input-container {
     top: 5px;
     left: 2px;
     + input {
-      margin-left: $icon-offset;
+          margin-left: $icon-offset;
     }
   }
 
@@ -214,16 +214,16 @@ md-input-container.md-icon-float {
 
 
   > label  {
-    pointer-events:none;
-    position:absolute;
-    margin-left: $icon-offset;
+      pointer-events:none;
+      position:absolute;
+      margin-left: $icon-offset;
   }
 
   > md-icon {
     top: 26px;
     left: 2px;
     + input {
-      margin-left: $icon-offset;
+          margin-left: $icon-offset;
     }
   }
 
@@ -237,9 +237,9 @@ md-input-container.md-icon-float {
     margin-top: $icon-float-focused-top;
 
     label {
-      transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);
-      transition: transform $swift-ease-out-timing-function 0.5s;
-    }
+        transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);
+        transition: transform $swift-ease-out-timing-function 0.5s;
+      }
   }
 
 }

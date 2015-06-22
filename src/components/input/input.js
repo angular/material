@@ -54,7 +54,6 @@ function mdInputContainerDirective($mdTheming, $parse) {
   function postLink(scope, element, attr) {
     $mdTheming(element);
   }
-
   function ContainerCtrl($scope, $element, $attrs) {
     var self = this;
 
@@ -167,13 +166,13 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
     var ngModelCtrl = ctrls[1] || $mdUtil.fakeNgModel();
     var isReadonly = angular.isDefined(attr.readonly);
 
-    if (!containerCtrl) return;
+    if ( !containerCtrl ) return;
     if (containerCtrl.input) {
       throw new Error("<md-input-container> can only have *one* <input>, <textarea> or <md-select> child element!");
     }
     containerCtrl.input = element;
 
-    if (!containerCtrl.label) {
+    if(!containerCtrl.label) {
       $mdAria.expect(element, 'aria-label', element.attr('placeholder'));
     }
 
@@ -187,8 +186,8 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
     }
 
     var isErrorGetter = containerCtrl.isErrorGetter || function() {
-        return ngModelCtrl.$invalid && ngModelCtrl.$touched;
-      };
+      return ngModelCtrl.$invalid && ngModelCtrl.$touched;
+    };
     scope.$watch(isErrorGetter, containerCtrl.setInvalid);
 
     ngModelCtrl.$parsers.push(ngModelPipelineCheckValue);
@@ -224,11 +223,10 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
       containerCtrl.setHasValue(!ngModelCtrl.$isEmpty(arg));
       return arg;
     }
-
     function inputCheckValue() {
       // An input's value counts if its length > 0,
       // or if the input's validity state says it has bad input (eg string in a number input)
-      containerCtrl.setHasValue(element.val().length > 0 || (element[0].validity || {}).badInput);
+      containerCtrl.setHasValue(element.val().length > 0 || (element[0].validity||{}).badInput);
     }
 
     function setupTextarea() {
@@ -261,7 +259,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
         if (height) node.style.height = height + 'px';
       }
 
-      function getHeight() {
+      function getHeight () {
         var line = node.scrollHeight - node.offsetHeight;
         return node.offsetHeight + (line > 0 ? line : 0);
       }
@@ -306,7 +304,7 @@ function mdMaxlengthDirective($animate) {
       if (angular.isNumber(value) && value > 0) {
         if (!charCountEl.parent().length) {
           $animate.enter(charCountEl, containerCtrl.element,
-            angular.element(containerCtrl.element[0].lastElementChild));
+                         angular.element(containerCtrl.element[0].lastElementChild));
         }
         renderCharCount();
       } else {
@@ -322,7 +320,7 @@ function mdMaxlengthDirective($animate) {
     };
 
     function renderCharCount(value) {
-      charCountEl.text(( element.val() || value || '' ).length + '/' + maxlength);
+      charCountEl.text( ( element.val() || value || '' ).length + '/' + maxlength );
       return value;
     }
   }
@@ -343,7 +341,7 @@ function placeholderDirective($log) {
     var placeholderText = attr.placeholder;
     element.removeAttr('placeholder');
 
-    if (inputContainer.element.find('label').length == 0) {
+    if ( inputContainer.element.find('label').length == 0 ) {
       var placeholder = '<label ng-click="delegateClick()">' + placeholderText + '</label>';
 
       inputContainer.element.addClass('md-icon-float');
