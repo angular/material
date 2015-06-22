@@ -22,7 +22,9 @@ angular.module('material.components.virtualRepeat', [
  *
  * @usage
  * <hljs lang="html">
- * <md-virtual-repeat-container></md-virtual-repeat-container>
+ * <md-virtual-repeat-container>
+ *   <div md-virtual-repeat="i in items" md-item-size="10">Hello {{i}}!</div>
+ * </md-virtual-repeat-container>
  *
  * <md-virtual-repeat-container md-orient-horizontal>
  *   <div md-virtual-repeat="i in items" md-item-size="20">Hello {{i}}!</div>
@@ -95,7 +97,7 @@ function VirtualRepeatContainerController($$rAF, $scope, $element, $attrs) {
 /** Called by the md-virtual-repeat inside of the container at startup. */
 VirtualRepeatContainerController.prototype.register = function(repeaterCtrl) {
   this.repeater = repeaterCtrl;
-  
+
   angular.element(this.scroller)
       .on('scroll wheel touchmove touchend', angular.bind(this, this.handleScroll_));
 };
