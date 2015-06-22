@@ -444,6 +444,8 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
     }
   }
 
+
+
   function SelectMenuController($scope, $attrs, $element) {
     var self = this;
     self.isMultiple = angular.isDefined($attrs.multiple);
