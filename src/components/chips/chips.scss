@@ -121,7 +121,9 @@ $contact-chip-name-width: rem(12) !default;
       height: $chip-height;
     }
     md-autocomplete {
-      box-shadow: none;
+      md-autocomplete-wrap {
+        box-shadow: none;
+      }
       input {
         position: relative;
       }
@@ -158,3 +160,13 @@ $contact-chip-name-width: rem(12) !default;
     }
   }
 }
+@media screen and (-ms-high-contrast: active) {
+  .md-chip-input-container,
+  md-chip {
+    border: 1px solid #fff;
+  }
+  .md-chip-input-container md-autocomplete {
+    border: none;
+  }
+}
+

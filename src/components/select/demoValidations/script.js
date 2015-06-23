@@ -1,4 +1,4 @@
-angular.module('selectDemoBasic', ['ngMaterial', 'ngMessages'])
+angular.module('selectDemoValidation', ['ngMaterial', 'ngMessages'])
 .controller('AppCtrl', function($scope) {
   $scope.clearValue = function() {
     $scope.myModel = undefined;

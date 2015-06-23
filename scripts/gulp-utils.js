@@ -4,16 +4,23 @@ var through2 = require('through2');
 var lazypipe = require('lazypipe');
 var gutil = require('gulp-util');
 var Buffer = require('buffer').Buffer;
+var fs = require('fs');
 
 var path = require('path');
 
 var getModuleInfo = require('../config/ngModuleData.js');
 
 exports.humanizeCamelCase = function(str) {
-  return str.charAt(0).toUpperCase() +
-    str.substring(1).replace(/[A-Z]/g, function($1) {
-      return ' ' + $1.toUpperCase();
-    });
+  switch (str) {
+    case 'fabSpeedDial':
+      return 'FAB Speed Dial';
+    case 'fabToolbar':
+      return 'FAB Toolbar';
+    default:
+      return str.charAt(0).toUpperCase() + str.substring(1).replace(/[A-Z]/g, function($1) {
+            return ' ' + $1.toUpperCase();
+          });
+  }
 };
 
 /**
@@ -51,7 +58,8 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
       var srcPath = demoFolder.path.substring(demoFolder.path.indexOf('src/') + 4);
       var split = srcPath.split('/');
 
-      var demo = { 
+      var demo = {
+        ngModule: '',
         id: demoId,
         css:[], html:[], js:[]
       };
@@ -60,7 +68,7 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
         .pipe(fileTasks(demoId))
         .pipe(through2.obj(function(file, enc, cb) {
           if (/index.html$/.test(file.path)) {
-            demo.moduleName = moduleName,
+            demo.moduleName = moduleName;
             demo.name = path.basename(demoFolder.path);
             demo.label = exports.humanizeCamelCase(path.basename(demoFolder.path).replace(/^demo/, ''));
             demo.id = demoId;
@@ -84,7 +92,7 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
           name: path.basename(file.path),
           label: path.basename(file.path),
           fileType: path.extname(file.path).substring(1),
-          outputPath: 'demo-partials/' + name + '/' + path.basename(demoFolder.path) + '/' + path.basename(file.path),
+          outputPath: 'demo-partials/' + name + '/' + path.basename(demoFolder.path) + '/' + path.basename(file.path)
         };
       }
     }));
@@ -137,6 +145,25 @@ exports.filesForModule = function(name) {
   }
 };
 
+exports.appendToFile = function(filePath) {
+  var bufferedContents;
+  return through2.obj(function(file, enc, next) {
+    bufferedContents = file.contents.toString('utf8') + '\n';
+    next();
+  }, function(done) {
+    var existing = fs.readFileSync(filePath, 'utf8');
+    bufferedContents = existing + '\n' + bufferedContents;
+    var outputFile = new gutil.File({
+      cwd: process.cwd(),
+      base: path.dirname(filePath),
+      path: filePath,
+      contents: new Buffer(bufferedContents)
+    });
+    this.push(outputFile);
+    done();
+  });
+};
+
 exports.buildNgMaterialDefinition = function() {
   var buffer = [];
   var modulesSeen = [];
@@ -168,15 +195,15 @@ exports.buildNgMaterialDefinition = function() {
 function moduleNameToClosureName(name) {
   return 'ng.' + name;
 }
-exports.addJsWrapper = function() {
+exports.addJsWrapper = function(enforce) {
   return through2.obj(function(file, enc, next) {
     var moduleInfo = getModuleInfo(file.contents);
-    if (moduleInfo.module) {
+    if (!!enforce || moduleInfo.module) {
       file.contents = new Buffer([
-          '(function () {',
-          '"use strict";',
+          !!enforce ? '(function(){' : '(function( window, angular, undefined ){',
+          '"use strict";\n',
           file.contents.toString(),
-          '})();'
+          !!enforce ? '})();' : '})(window, window.angular);'
       ].join('\n'));
     }
     this.push(file);
@@ -259,9 +286,8 @@ exports.hoistScssVariables = function() {
 exports.cssToNgConstant = function(ngModule, factoryName) {
   return through2.obj(function(file, enc, next) {
 
-    var template = '(function(){ \n angular.module("%1").constant("%2", "%3"); \n})();';
-    var output = file.contents.toString().replace(/\n/g, '')
-      .replace(/\"/,'\\"');
+    var template = '(function(){ \nangular.module("%1").constant("%2", "%3"); \n})();\n\n';
+    var output = file.contents.toString().replace(/\n/g, '').replace(/\"/,'\\"');
 
     var jsFile = new gutil.File({
       base: file.base,

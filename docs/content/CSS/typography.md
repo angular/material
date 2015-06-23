@@ -98,7 +98,7 @@ consistency across your application.
         <span flex="25" class="docs-definition" aria-describedby="body-selectors">
           <code>.md-body-1</code><br>
         </span>
-        <p class="docs-output" aria-describedby="body-output">Regular 14px</p>
+        <p class="docs-output md-body-1" aria-describedby="body-output">Regular 14px</p>
       </li>
       <li layout="row" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="body-selectors"><code>
@@ -111,7 +111,7 @@ consistency across your application.
           <code>.md-button</code>
         </span>
         <div class="docs-output" aria-describedby="body-output">
-		  <p class=".md-button">Medium 14px</p>
+    		  <md-button class="md-raised" style="margin-left:0; margin-right:0;">Medium 14px</md-button>
         </div>
       </li>
       <li layout="row" layout-align="start center">

@@ -1,0 +1,1 @@
+exports.dependencies = ['jshint', 'karma'];

@@ -1,14 +1,19 @@
-<div ng-controller="SelectOptGroupController" layout="column" layout-align="center center">
-  <p>Option groups can help provide contextual groupings about the options provided:</p>
-  <div layout="column" layout-align="center center" style="height: 100px;">
-    <md-select ng-model="favoriteTopping" placeholder="Favorite Topping">
-      <md-optgroup label="Meats">
-        <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'meat' }">{{topping.name}}</md-option>
-      </md-optgroup>
-      <md-optgroup label="Veggies">
-        <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'veg' }">{{topping.name}}</md-option>
-      </md-optgroup>
-    </md-select>
-    <p class="md-caption">{{ favoriteTopping ? 'Your favorite topping is ' + favoriteTopping : 'Please select a topping'}}</p>
+<div ng-controller="SelectOptGroupController" class="md-padding">
+  <div>
+    <h1 class="md-title">Pick your pizza below</h1>
+    <div layout="row">
+      <md-select ng-model="size" placeholder="Size">
+        <md-option ng-repeat="size in sizes" value="{{size}}">{{size}}</md-option>
+      </md-select>
+      <md-select ng-model="topping" placeholder="Topping">
+        <md-optgroup label="Meats">
+          <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'meat' }">{{topping.name}}</md-option>
+        </md-optgroup>
+        <md-optgroup label="Veggies">
+          <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'veg' }">{{topping.name}}</md-option>
+        </md-optgroup>
+      </md-select>
+    </div>
+    <p ng-if="topping">You ordered a {{size.toLowerCase()}} pizza with {{topping.toLowerCase()}}.</p>
   </div>
 </div>

@@ -1,18 +1,18 @@
-<div ng-controller="BottomSheetExample" style="min-height: 367px;">
-  <p style="padding-left: 20px;" class="md-body-1">
-    Bottom sheet can be dismissed with the service or a swipe down.
-  </p>
+<div ng-controller="BottomSheetExample" class="md-padding">
+  <h2 class="md-title">Usage</h2>
+  <p>Bottom sheets can be displayed by clicking one of the buttons below.  Once shown, it can be
+  dismissed by either swiping down or clicking in the shaded area.</p>
+  <h2 class="md-title">Actions</h2>
+  <p>Use one of the following buttons to display a bottom sheet.</p>
   <div class="bottom-sheet-demo inset" layout="row" layout-sm="column" layout-align="center">
-    <md-button class="md-primary" ng-click="showListBottomSheet($event)">
-      Show as List
-    </md-button>
-    <md-button class="md-primary" ng-click="showGridBottomSheet($event)">
-      Show as Grid
-    </md-button>
+    <md-button flex="50" class="md-primary md-raised" ng-click="showListBottomSheet($event)">Show as List</md-button>
+    <md-button flex="50" class="md-primary md-raised" ng-click="showGridBottomSheet($event)">Show as Grid</md-button>
   </div>
 
-  <br/>
-  <b layout="row" layout-align="center center" layout-margin>
-    {{alert}}
-  </b>
+  <div ng-if="alert">
+    <br/>
+    <b layout="row" layout-align="center center" class="md-padding">
+      {{alert}}
+    </b>
+  </div>
 </div>

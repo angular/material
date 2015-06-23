@@ -5,8 +5,22 @@ describe('$mdThemingProvider', function() {
   var testTheme;
   var testPalette;
   var startAngular = inject;
+
+  beforeEach(function() {
+
+    module('material.core', function($provide) {
+      /**
+       *  material-mocks.js clears the $MD_THEME_CSS for Karma testing performance
+       *  performance optimizations. Here inject some length into our theme_css so that
+       *  palettes are parsed/generated
+       */
+      $provide.constant('$MD_THEME_CSS', '/**/');
+    });
+
+  });
+
   function setup() {
-    module('material.core.theming', function($mdThemingProvider, $provide) {
+    module('material.core', function($mdThemingProvider) {
       themingProvider = $mdThemingProvider;
 
       testPalette = themingProvider._PALETTES.testPalette = themingProvider._PALETTES.otherTestPalette = {
@@ -28,6 +42,8 @@ describe('$mdThemingProvider', function() {
         'contrastDarkColors': ['50', '100', '200', '300', '400', 'A100'],
         'contrastStrongLightColors': ['900']
       };
+
+
       defaultTheme = themingProvider.theme('default')
         .primaryPalette('testPalette')
         .warnPalette('testPalette')
@@ -173,11 +189,19 @@ describe('$mdThemingProvider', function() {
         themingProvider._parseRules(testTheme, 'primary', '').join('');
       }).toThrow();
     });
+
+    it('drops the default theme name from the selectors', function() {
+      expect(themingProvider._parseRules(
+        defaultTheme, 'primary', '.md-THEME_NAME-theme.md-button { }'
+      ).join('')).toContain('.md-button { }');
+    });
+
     it('replaces THEME_NAME', function() {
       expect(themingProvider._parseRules(
         testTheme, 'primary', '.md-THEME_NAME-theme {}'
       ).join('')).toContain('.md-test-theme {}');
     });
+
     describe('parses foreground text and shadow', function() {
       it('for a light theme', function() {
         testTheme.dark(false);

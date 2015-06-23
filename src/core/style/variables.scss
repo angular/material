@@ -39,9 +39,10 @@ $toast-margin: $baseline-grid * 1 !default;
 
 // Whiteframes
 
-$shadow-key-umbra-opacity: 0.2;
-$shadow-key-penumbra-opacity: 0.14;
-$shadow-ambient-shadow-opacity: 0.12;
+$shadow-multiplier: 0.7;
+$shadow-key-umbra-opacity:      $shadow-multiplier * 0.2;
+$shadow-key-penumbra-opacity:   $shadow-multiplier * 0.14;
+$shadow-ambient-shadow-opacity: $shadow-multiplier * 0.12;
 
 // NOTE(shyndman): gulp-sass seems to be failing if I split the shadow defs across
 //    multiple lines. Ugly. Sorry.
@@ -62,9 +63,11 @@ $whiteframe-zindex-z5: 5 !default;
 //--------------------------------------------
 
 $z-index-tooltip: 100 !default;
+$z-index-menu: 99 !default;
 $z-index-dialog: 80 !default;
 $z-index-toast: 90 !default;
 $z-index-bottom-sheet: 70 !default;
+$z-index-scroll-mask: 65 !default;
 $z-index-sidenav: 60 !default;
 $z-index-backdrop: 50 !default;
 $z-index-fab: 20 !default;

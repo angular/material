@@ -1,5 +1,6 @@
 $button-border-radius: 3px !default;
 $button-fab-border-radius: 50% !default;
+$button-icon-border-radius: $button-fab-border-radius;
 
 a.md-button.md-THEME_NAME-theme,
 .md-button.md-THEME_NAME-theme {
@@ -32,6 +33,10 @@ a.md-button.md-THEME_NAME-theme,
         background-color: '{{accent-A700}}';
       }
     }
+  }
+
+  &.md-icon-button {
+    border-radius: $button-icon-border-radius;
   }
 
   &.md-primary {

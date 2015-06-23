@@ -1,5 +1,8 @@
 md-autocomplete.md-THEME_NAME-theme {
   background: '{{background-50}}';
+  &[disabled] {
+    background: '{{background-100}}';
+  }
   button {
     md-icon {
       path {

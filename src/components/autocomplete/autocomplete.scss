@@ -32,16 +32,19 @@ $input-error-height: 24px !default;
   }
 }
 md-autocomplete {
-  box-shadow: 0 2px 5px rgba(black, 0.25);
   border-radius: 2px;
   display: block;
   height: 40px;
   position: relative;
   overflow: visible;
   min-width: 190px;
+  &[disabled] {
+    input {
+      cursor: not-allowed;
+    }
+  }
   &[md-floating-label] {
     padding-bottom: $input-container-padding + $input-error-height;
-    box-shadow: none;
     border-radius: 0;
     background: transparent;
     height: auto;
@@ -52,8 +55,12 @@ md-autocomplete {
       height: auto;
     }
     button {
+      position: absolute;
       top: auto;
-      bottom: 5px;
+      bottom: 0;
+      right: 0;
+      width: 30px;
+      height: 30px;
     }
   }
   md-autocomplete-wrap {
@@ -61,8 +68,7 @@ md-autocomplete {
     position: relative;
     overflow: visible;
     height: 40px;
-
-    md-progress-linear {
+    md-progress-linear[md-mode=indeterminate] {
       position: absolute;
       bottom: 0; left: 0; width: 100%;
       height: 3px;
@@ -88,9 +94,6 @@ md-autocomplete {
     }
   }
   input:not(.md-input) {
-    position: absolute;
-    left: 0;
-    top: 0;
     width: 100%;
     box-sizing: border-box;
     border: none;
@@ -106,19 +109,18 @@ md-autocomplete {
     }
   }
   button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    position: relative;
     line-height: 20px;
     text-align: center;
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
     border: none;
     border-radius: 50%;
     padding: 0;
     font-size: 12px;
     background: transparent;
+    margin: auto 5px;
     &:after {
       content: '';
       position: absolute;
@@ -175,7 +177,6 @@ md-autocomplete {
 }
 .md-autocomplete-suggestions {
   position: absolute;
-  box-shadow: 0 2px 5px rgba(black, 0.25);
   margin: 0;
   list-style: none;
   padding: 0;
@@ -208,5 +209,11 @@ md-autocomplete {
         outline: none;
       }
 
+  }
+}
+@media screen and (-ms-high-contrast: active) {
+  md-autocomplete,
+  .md-autocomplete-suggestions {
+    border: 1px solid #fff;
   }
 }

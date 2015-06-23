@@ -59,8 +59,34 @@ function MdTab () {
   return {
     require: '^?mdTabs',
     terminal: true,
+    template: function (element, attr) {
+      var label = getLabel(),
+          body  = getTemplate();
+      return '' +
+          '<md-tab-label>' + label + '</md-tab-label>' +
+          '<md-tab-body>' + body + '</md-tab-body>';
+      function getLabel () {
+        return getLabelElement() || getLabelAttribute() || getElementContents();
+        function getLabelAttribute () { return attr.label; }
+        function getLabelElement () {
+          var label = element.find('md-tab-label').eq(0);
+          if (label.length) return label.remove().html();
+        }
+        function getElementContents () {
+          var html = element.html();
+          element.empty();
+          return html;
+        }
+      }
+      function getTemplate () {
+        var content = element.find('md-tab-body').eq(0),
+            template = content.length ? content.html() : attr.label ? element.html() : '';
+        if (content.length) content.remove();
+        else if (attr.label) element.empty();
+        return template;
+      }
+    },
     scope: {
-      label:    '@',
       active:   '=?mdActive',
       disabled: '=?ngDisabled',
       select:   '&?mdOnSelect',
@@ -73,12 +99,15 @@ function MdTab () {
     if (!ctrl) return;
     var tabs = element.parent()[0].getElementsByTagName('md-tab'),
         index = Array.prototype.indexOf.call(tabs, element[0]),
+        body = element.find('md-tab-body').eq(0).remove(),
+        label = element.find('md-tab-label').eq(0).remove(),
         data = ctrl.insertTab({
           scope:    scope,
           parent:   scope.$parent,
           index:    index,
-          template: getTemplate(),
-          label:    getLabel()
+          element:  element,
+          template: body.html(),
+          label:    label.html()
         }, index);
 
     scope.select   = scope.select   || angular.noop;
@@ -86,29 +115,16 @@ function MdTab () {
 
     scope.$watch('active', function (active) { if (active) ctrl.select(data.getIndex()); });
     scope.$watch('disabled', function () { ctrl.refreshIndex(); });
+    scope.$watch(
+        function () {
+          return Array.prototype.indexOf.call(tabs, element[0]);
+        },
+        function (newIndex) {
+          data.index = newIndex;
+          ctrl.updateTabOrder();
+        }
+    );
     scope.$on('$destroy', function () { ctrl.removeTab(data); });
 
-    function getLabel () {
-      var label = attr.label || (element.find('md-tab-label')[0] || element[0]).innerHTML;
-      return getLabelAttribute() || getLabelElement() || getElementContents();
-      function getLabelAttribute () { return attr.label; }
-      function getLabelElement () {
-        var label = element.find('md-tab-label');
-        if (label.length) return label.remove().html();
-      }
-      function getElementContents () {
-        var html = element.html();
-        element.empty();
-        return html;
-      }
-    }
-
-    function getTemplate () {
-      var content = element.find('md-tab-body'),
-          template = content.length ? content.html() : attr.label ? element.html() : null;
-      if (content.length) content.remove();
-      else if (attr.label) element.empty();
-      return template;
-    }
   }
 }

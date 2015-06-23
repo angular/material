@@ -12,6 +12,7 @@ function run {
   gulp build --release --version=$VERSION
   gulp build-all-modules --release --mode=default --version=$VERSION
   gulp build-all-modules --release --mode=closure --version=$VERSION
+  rm -rf dist/demos
 
   echo "-- Cloning bower-material..."
   rm -rf bower-material

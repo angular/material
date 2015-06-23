@@ -1,6 +1,3 @@
-(function() {
-  'use strict';
-
   /**
    * @ngdoc module
    * @name material.core.componentRegistry
@@ -120,6 +117,3 @@
     }
 
   }
-
-
-})();

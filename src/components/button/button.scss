@@ -40,7 +40,9 @@ $icon-button-margin: rem(0.600) !default;
 
   outline: none;
   border: 0;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  flex-direction: column;
   padding: $button-padding;
   margin: $button-margin;
   line-height: $button-line-height;
@@ -95,7 +97,7 @@ $icon-button-margin: rem(0.600) !default;
 
   &.md-raised {
     &:not([disabled]) {
-      @extend .md-shadow-bottom-z-1;
+      @include md-shadow-bottom-z-1();
     }
   }
 
@@ -107,6 +109,14 @@ $icon-button-margin: rem(0.600) !default;
     padding-left: 0;
     padding-right: 0;
     width: $icon-button-width;
+    border-radius: 50%;
+    .md-ripple-container {
+      border-radius: 50%;
+      background-clip: padding-box;
+      overflow: hidden;
+      // The following hack causes Safari/Chrome to respect overflow hidden for ripples
+      -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
+    }
   }
 
   &.md-fab {
@@ -123,8 +133,10 @@ $icon-button-margin: rem(0.600) !default;
     width: $button-fab-width;
     height: $button-fab-height;
     vertical-align: middle;
+    flex-grow: 0;
+    flex-shrink: 0;
 
-    @extend .md-shadow-bottom-z-1;
+    @include md-shadow-bottom-z-1();
     border-radius: 50%;
     background-clip: padding-box;
     overflow: hidden;
@@ -135,12 +147,8 @@ $icon-button-margin: rem(0.600) !default;
       border-radius: 50%;
       background-clip: padding-box;
       overflow: hidden;
-      // The following hack causes Safari to respect overflow hidden for ripples
+      // The following hack causes Safari/Chrome to respect overflow hidden for ripples
       -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
-    }
-
-    md-icon {
-      margin-top: 0;
     }
 
     &.md-mini {
@@ -155,10 +163,10 @@ $icon-button-margin: rem(0.600) !default;
     &.md-raised,
     &.md-fab {
       &.md-focused {
-        @extend .md-shadow-bottom-z-1;
+        @include md-shadow-bottom-z-1();
       }
       &:active {
-        @extend .md-shadow-bottom-z-2;
+        @include md-shadow-bottom-z-2();
       }
     }
   }

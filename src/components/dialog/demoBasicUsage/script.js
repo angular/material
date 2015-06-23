@@ -40,6 +40,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
     $mdDialog.show({
       controller: DialogController,
       templateUrl: 'dialog1.tmpl.html',
+      parent: angular.element(document.body),
       targetEvent: ev,
     })
     .then(function(answer) {

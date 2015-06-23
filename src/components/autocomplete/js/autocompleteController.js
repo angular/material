@@ -6,11 +6,10 @@ var ITEM_HEIGHT = 41,
     MAX_HEIGHT = 5.5 * ITEM_HEIGHT,
     MENU_PADDING = 8;
 
-function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $mdTheming, $window, $animate, $rootElement) {
-
+function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $mdTheming, $window,
+                             $animate, $rootElement, $attrs) {
   //-- private variables
-
-  var self      = this,
+  var ctrl      = this,
       itemParts = $scope.itemsExpr.split(/ in /i),
       itemExpr  = itemParts[1],
       elements  = null,
@@ -18,43 +17,48 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
       cache     = {},
       noBlur    = false,
       selectedItemWatchers = [],
-      hasFocus  = false;
+      hasFocus  = false,
+      lastCount = 0;
+
+  //-- public variables with handlers
+  defineProperty('hidden', handleHiddenChange, true);
 
   //-- public variables
-
-  self.scope    = $scope;
-  self.parent   = $scope.$parent;
-  self.itemName = itemParts[0];
-  self.matches  = [];
-  self.loading  = false;
-  self.hidden   = true;
-  self.index    = null;
-  self.messages = [];
-  self.id       = $mdUtil.nextUid();
+  ctrl.scope      = $scope;
+  ctrl.parent     = $scope.$parent;
+  ctrl.itemName   = itemParts[0];
+  ctrl.matches    = [];
+  ctrl.loading    = false;
+  ctrl.hidden     = true;
+  ctrl.index      = null;
+  ctrl.messages   = [];
+  ctrl.id         = $mdUtil.nextUid();
+  ctrl.isDisabled = null;
+  ctrl.isRequired = null;
 
   //-- public methods
-
-  self.keydown  = keydown;
-  self.blur     = blur;
-  self.focus    = focus;
-  self.clear    = clearValue;
-  self.select   = select;
-  self.getCurrentDisplayValue         = getCurrentDisplayValue;
-  self.registerSelectedItemWatcher    = registerSelectedItemWatcher;
-  self.unregisterSelectedItemWatcher  = unregisterSelectedItemWatcher;
-
-  self.listEnter = function () { noBlur = true; };
-  self.listLeave = function () {
-    noBlur = false;
-    if (!hasFocus) self.hidden = true;
-  };
-  self.mouseUp   = function () { elements.input.focus(); };
+  ctrl.keydown    = keydown;
+  ctrl.blur       = blur;
+  ctrl.focus      = focus;
+  ctrl.clear      = clearValue;
+  ctrl.select     = select;
+  ctrl.listEnter  = onListEnter;
+  ctrl.listLeave  = onListLeave;
+  ctrl.mouseUp    = onMouseup;
+  ctrl.getCurrentDisplayValue         = getCurrentDisplayValue;
+  ctrl.registerSelectedItemWatcher    = registerSelectedItemWatcher;
+  ctrl.unregisterSelectedItemWatcher  = unregisterSelectedItemWatcher;
 
   return init();
 
   //-- initialization methods
 
+  /**
+   * Initialize the controller, setup watchers, gather elements
+   */
   function init () {
+    $mdUtil.initOptionalProperties($scope, $attrs, { searchText: null, selectedItem: null } );
+    $mdTheming($element);
     configureWatchers();
     $timeout(function () {
       gatherElements();
@@ -63,6 +67,10 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     });
   }
 
+  /**
+   * Calculates the dropdown's position and applies the new styles to the menu element
+   * @returns {*}
+   */
   function positionDropdown () {
     if (!elements) return $timeout(positionDropdown, 0, false);
     var hrect  = elements.wrap.getBoundingClientRect(),
@@ -89,6 +97,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     elements.$.ul.css(styles);
     $timeout(correctHorizontalAlignment, 0, false);
 
+    /**
+     * Makes sure that the menu doesn't go off of the screen on either side.
+     */
     function correctHorizontalAlignment () {
       var dropdown = elements.ul.getBoundingClientRect(),
           styles   = {};
@@ -99,6 +110,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     }
   }
 
+  /**
+   * Moves the dropdown menu to the body tag in order to avoid z-index and overflow issues.
+   */
   function moveDropdown () {
     if (!elements.$.root.length) return;
     $mdTheming(elements.$.ul);
@@ -107,23 +121,38 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     if ($animate.pin) $animate.pin(elements.$.ul, $rootElement);
   }
 
+  /**
+   * Sends focus to the input element.
+   */
   function focusElement () {
     if ($scope.autofocus) elements.input.focus();
   }
 
+  /**
+   * Sets up any watchers used by autocomplete
+   */
   function configureWatchers () {
     var wait = parseInt($scope.delay, 10) || 0;
-    $scope.$watch('searchText', wait
-        ? $mdUtil.debounce(handleSearchText, wait)
-        : handleSearchText);
+    $attrs.$observe('disabled', function (value) { ctrl.isDisabled = value; });
+    $attrs.$observe('required', function (value) { ctrl.isRequired = value !== null; });
+    $scope.$watch('searchText', wait ? $mdUtil.debounce(handleSearchText, wait) : handleSearchText);
     registerSelectedItemWatcher(selectedItemChange);
     $scope.$watch('selectedItem', handleSelectedItemChange);
-    $scope.$watch('$mdAutocompleteCtrl.hidden', function (hidden, oldHidden) {
-      if (!hidden && oldHidden) positionDropdown();
-    });
     angular.element($window).on('resize', positionDropdown);
+    $scope.$on('$destroy', cleanup);
   }
 
+  /**
+   * Removes any events or leftover elements created by this controller
+   */
+  function cleanup () {
+    angular.element($window).off('resize', positionDropdown);
+    elements.$.ul.remove();
+  }
+
+  /**
+   * Gathers all of the elements needed for this controller
+   */
   function gatherElements () {
     elements = {
       main:  $element[0],
@@ -137,6 +166,10 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     elements.$ = getAngularElements(elements);
   }
 
+  /**
+   * Finds the element that the menu will base its position on
+   * @returns {*}
+   */
   function getSnapTarget () {
     for (var element = $element; element.length; element = element.parent()) {
       if (angular.isDefined(element.attr('md-autocomplete-snap'))) return element[0];
@@ -144,6 +177,11 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     return elements.wrap;
   }
 
+  /**
+   * Gathers angular-wrapped versions of each element
+   * @param elements
+   * @returns {{}}
+   */
   function getAngularElements (elements) {
     var obj = {};
     for (var key in elements) {
@@ -154,14 +192,61 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
 
   //-- event/change handlers
 
+  /**
+   * Handles changes to the `hidden` property.
+   * @param hidden
+   * @param oldHidden
+   */
+  function handleHiddenChange (hidden, oldHidden) {
+    if (!hidden && oldHidden) positionDropdown();
+    if (!hidden) {
+      if (elements) $timeout(function () { $mdUtil.disableScrollAround(elements.ul); }, 0, false);
+    } else {
+      $mdUtil.enableScrolling();
+    }
+  }
+
+  /**
+   * When the user mouses over the dropdown menu, ignore blur events.
+   */
+  function onListEnter () {
+    noBlur = true;
+  }
+
+  /**
+   * When the user's mouse leaves the menu, blur events may hide the menu again.
+   */
+  function onListLeave () {
+    noBlur = false;
+    if (!hasFocus) ctrl.hidden = true;
+  }
+
+  /**
+   * When the mouse button is released, send focus back to the input field.
+   */
+  function onMouseup () {
+    elements.input.focus();
+  }
+
+  /**
+   * Handles changes to the selected item.
+   * @param selectedItem
+   * @param previousSelectedItem
+   */
   function selectedItemChange (selectedItem, previousSelectedItem) {
     if (selectedItem) {
       $scope.searchText = getDisplayValue(selectedItem);
     }
-    if ($scope.itemChange && selectedItem !== previousSelectedItem)
+    if (angular.isFunction($scope.itemChange) && selectedItem !== previousSelectedItem)
       $scope.itemChange(getItemScope(selectedItem));
   }
 
+  /**
+   * Calls any external watchers listening for the selected item.  Used in conjunction with
+   * `registerSelectedItemWatcher`.
+   * @param selectedItem
+   * @param previousSelectedItem
+   */
   function handleSelectedItemChange(selectedItem, previousSelectedItem) {
     for (var i = 0; i < selectedItemWatchers.length; ++i) {
       selectedItemWatchers[i](selectedItem, previousSelectedItem);
@@ -189,67 +274,82 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     }
   }
 
+  /**
+   * Handles changes to the searchText property.
+   * @param searchText
+   * @param previousSearchText
+   */
   function handleSearchText (searchText, previousSearchText) {
-    self.index = getDefaultIndex();
+    ctrl.index = getDefaultIndex();
     //-- do nothing on init
     if (searchText === previousSearchText) return;
     //-- clear selected item if search text no longer matches it
     if (searchText !== getDisplayValue($scope.selectedItem)) $scope.selectedItem = null;
     else return;
     //-- trigger change event if available
-    if ($scope.textChange && searchText !== previousSearchText)
+    if (angular.isFunction($scope.textChange) && searchText !== previousSearchText)
       $scope.textChange(getItemScope($scope.selectedItem));
     //-- cancel results if search text is not long enough
     if (!isMinLengthMet()) {
-      self.loading = false;
-      self.matches = [];
-      self.hidden = shouldHide();
+      ctrl.loading = false;
+      ctrl.matches = [];
+      ctrl.hidden = shouldHide();
       updateMessages();
     } else {
       handleQuery();
     }
   }
 
+  /**
+   * Handles input blur event, determines if the dropdown should hide.
+   */
   function blur () {
     hasFocus = false;
-    if (!noBlur) self.hidden = true;
+    if (!noBlur) ctrl.hidden = true;
   }
 
+  /**
+   * Handles input focus event, determines if the dropdown should show.
+   */
   function focus () {
     hasFocus = true;
     //-- if searchText is null, let's force it to be a string
     if (!angular.isString($scope.searchText)) $scope.searchText = '';
     if ($scope.minLength > 0) return;
-    self.hidden = shouldHide();
-    if (!self.hidden) handleQuery();
+    ctrl.hidden = shouldHide();
+    if (!ctrl.hidden) handleQuery();
   }
 
+  /**
+   * Handles keyboard input.
+   * @param event
+   */
   function keydown (event) {
     switch (event.keyCode) {
       case $mdConstant.KEY_CODE.DOWN_ARROW:
-        if (self.loading) return;
+        if (ctrl.loading) return;
         event.preventDefault();
-        self.index = Math.min(self.index + 1, self.matches.length - 1);
+        ctrl.index = Math.min(ctrl.index + 1, ctrl.matches.length - 1);
         updateScroll();
-        updateSelectionMessage();
+        updateMessages();
         break;
       case $mdConstant.KEY_CODE.UP_ARROW:
-        if (self.loading) return;
+        if (ctrl.loading) return;
         event.preventDefault();
-        self.index = self.index < 0 ? self.matches.length - 1 : Math.max(0, self.index - 1);
+        ctrl.index = ctrl.index < 0 ? ctrl.matches.length - 1 : Math.max(0, ctrl.index - 1);
         updateScroll();
-        updateSelectionMessage();
+        updateMessages();
         break;
       case $mdConstant.KEY_CODE.TAB:
       case $mdConstant.KEY_CODE.ENTER:
-        if (self.hidden || self.loading || self.index < 0 || self.matches.length < 1) return;
+        if (ctrl.hidden || ctrl.loading || ctrl.index < 0 || ctrl.matches.length < 1) return;
         event.preventDefault();
-        select(self.index);
+        select(ctrl.index);
         break;
       case $mdConstant.KEY_CODE.ESCAPE:
-        self.matches = [];
-        self.hidden = true;
-        self.index = getDefaultIndex();
+        ctrl.matches = [];
+        ctrl.hidden = true;
+        ctrl.index = getDefaultIndex();
         break;
       default:
     }
@@ -257,47 +357,106 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
 
   //-- getters
 
+  /**
+   * Returns the minimum length needed to display the dropdown.
+   * @returns {*}
+   */
   function getMinLength () {
     return angular.isNumber($scope.minLength) ? $scope.minLength : 1;
   }
 
+  /**
+   * Returns the display value for an item.
+   * @param item
+   * @returns {*}
+   */
   function getDisplayValue (item) {
     return (item && $scope.itemText) ? $scope.itemText(getItemScope(item)) : item;
   }
 
+  /**
+   * Returns the locals object for compiling item templates.
+   * @param item
+   * @returns {{}}
+   */
   function getItemScope (item) {
     if (!item) return;
     var locals = {};
-    if (self.itemName) locals[self.itemName] = item;
+    if (ctrl.itemName) locals[ctrl.itemName] = item;
     return locals;
   }
 
+  /**
+   * Returns the default index based on whether or not autoselect is enabled.
+   * @returns {number}
+   */
   function getDefaultIndex () {
     return $scope.autoselect ? 0 : -1;
   }
 
+  /**
+   * Determines if the menu should be hidden.
+   * @returns {boolean}
+   */
   function shouldHide () {
     if (!isMinLengthMet()) return true;
   }
 
+  /**
+   * Returns the display value of the current item.
+   * @returns {*}
+   */
   function getCurrentDisplayValue () {
-    return getDisplayValue(self.matches[self.index]);
+    return getDisplayValue(ctrl.matches[ctrl.index]);
   }
 
+  /**
+   * Determines if the minimum length is met by the search text.
+   * @returns {*}
+   */
   function isMinLengthMet () {
-    return $scope.searchText.length >= getMinLength();
+    return angular.isDefined($scope.searchText) && $scope.searchText.length >= getMinLength();
   }
 
   //-- actions
 
-  function select (index) {
-    $scope.selectedItem = self.matches[index];
-    $scope.searchText = getDisplayValue($scope.selectedItem) || $scope.searchText;
-    self.hidden = true;
-    self.index = 0;
-    self.matches = [];
+  /**
+   * Defines a public property with a handler and a default value.
+   * @param key
+   * @param handler
+   * @param value
+   */
+  function defineProperty (key, handler, value) {
+    Object.defineProperty(ctrl, key, {
+      get: function () { return value; },
+      set: function (newValue) {
+        var oldValue = value;
+        value = newValue;
+        handler(newValue, oldValue);
+      }
+    });
   }
 
+  /**
+   * Selects the item at the given index.
+   * @param index
+   */
+  function select (index) {
+    $scope.selectedItem = ctrl.matches[index];
+    ctrl.hidden = true;
+    ctrl.index = 0;
+    ctrl.matches = [];
+    //-- force form to update state for validation
+    $timeout(function () {
+      elements.$.input.controller('ngModel').$setViewValue(getDisplayValue($scope.selectedItem) ||
+          $scope.searchText);
+      ctrl.hidden = true;
+    });
+  }
+
+  /**
+   * Clears the searchText value and selected item.
+   */
   function clearValue () {
     $scope.searchText = '';
     select(-1);
@@ -310,46 +469,60 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     elements.input.focus();
   }
 
+  /**
+   * Fetches the results for the provided search text.
+   * @param searchText
+   */
   function fetchResults (searchText) {
     var items = $scope.$parent.$eval(itemExpr),
         term = searchText.toLowerCase();
     if (angular.isArray(items)) {
       handleResults(items);
-    } else {
-      self.loading = true;
+    } else if (items) {
+      ctrl.loading = true;
       if (items.success) items.success(handleResults);
       if (items.then)    items.then(handleResults);
-      if (items.error)   items.error(function () { self.loading = false; });
+      if (items.error)   items.error(function () { ctrl.loading = false; });
     }
     function handleResults (matches) {
       cache[term] = matches;
-      self.loading = false;
       if (searchText !== $scope.searchText) return; //-- just cache the results if old request
+      ctrl.loading = false;
       promise = null;
-      self.matches = matches;
-      self.hidden = shouldHide();
+      ctrl.matches = matches;
+      ctrl.hidden = shouldHide();
       updateMessages();
       positionDropdown();
     }
   }
 
+  /**
+   * Updates the ARIA messages
+   */
   function updateMessages () {
-    if (self.hidden) return;
-    switch (self.matches.length) {
-      case 0:  return self.messages.splice(0);
-      case 1:  return self.messages.push({ display: 'There is 1 match available.' });
-      default: return self.messages.push({ display: 'There are '
-          + self.matches.length
-          + ' matches available.' });
+    ctrl.messages = [ getCountMessage(), getCurrentDisplayValue() ];
+  }
+
+  /**
+   * Returns the ARIA message for how many results match the current query.
+   * @returns {*}
+   */
+  function getCountMessage () {
+    if (lastCount === ctrl.matches.length) return '';
+    lastCount = ctrl.matches.length;
+    switch (ctrl.matches.length) {
+      case 0:  return 'There are no matches available.';
+      case 1:  return 'There is 1 match available.';
+      default: return 'There are ' + ctrl.matches.length + ' matches available.';
     }
   }
 
-  function updateSelectionMessage () {
-    self.messages.push({ display: getCurrentDisplayValue() });
-  }
-
+  /**
+   * Makes sure that the focused element is within view.
+   */
   function updateScroll () {
-    var li  = elements.li[self.index],
+    if (!elements.li[ctrl.index]) return;
+    var li  = elements.li[ctrl.index],
         top = li.offsetTop,
         bot = top + li.offsetHeight,
         hgt = elements.ul.clientHeight;
@@ -360,6 +533,10 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     }
   }
 
+  /**
+   * Starts the query to gather the results for the current searchText.  Attempts to return cached
+   * results first, then forwards the process to `fetchResults` if necessary.
+   */
   function handleQuery () {
     var searchText = $scope.searchText,
         term = searchText.toLowerCase();
@@ -370,12 +547,12 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     }
     //-- if results are cached, pull in cached results
     if (!$scope.noCache && cache[term]) {
-      self.matches = cache[term];
+      ctrl.matches = cache[term];
       updateMessages();
     } else {
       fetchResults(searchText);
     }
-    self.hidden = shouldHide();
+    if (hasFocus) ctrl.hidden = shouldHide();
   }
 
 }

@@ -1,0 +1,30 @@
+<div ng-controller="DemoCtrl" ng-cloak >
+
+  <p>
+    Display 4 Material Design font-icons using ligatures [instead of CSS names]; each with different sizes and colors<br/>
+  </p>
+
+  <!-- Display font icons from Icomoon.io: -->
+  <div class="glyph" ng-repeat="font in fonts" layout="row">
+    <div ng-repeat="it in sizes" flex layout-align="center center" style="text-align: center;" layout="column">
+      <div flex></div>
+      <div class="preview-glyphs">
+        <md-icon ng-style="{color: font.color}"
+            aria-label="{{ font.name }}"
+            class="material-icons step"
+            ng-class="it.size">
+          {{ font.name }}
+        </md-icon>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size:0.7em;padding-left: 25%">
+    <span style="color:darkblue; font-weight: bold">Cool Tip</span>:
+    Copy an icon and then paste in a text editor to see its textual name!
+  </p>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet">
+
+</div>

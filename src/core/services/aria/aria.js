@@ -1,5 +1,3 @@
-(function() {
-'use strict';
 
 angular.module('material.core')
   .service('$mdAria', AriaService);
@@ -82,4 +80,3 @@ function AriaService($$rAF, $log, $window) {
     return hasAttr;
   }
 }
-})();

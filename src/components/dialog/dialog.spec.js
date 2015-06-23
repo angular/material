@@ -66,7 +66,7 @@ describe('$mdDialog', function() {
 
 
     it('should focus `md-dialog-content` on open', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
-      TestUtil.mockElementFocus(this);
+      jasmine.mockElementFocus(this);
 
       var parent = angular.element('<div>');
 
@@ -150,7 +150,7 @@ describe('$mdDialog', function() {
     }));
 
     it('should focus `md-button.dialog-close` on open', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
-      TestUtil.mockElementFocus(this);
+      jasmine.mockElementFocus(this);
 
       var parent = angular.element('<div>');
       $mdDialog.show({
@@ -358,7 +358,7 @@ describe('$mdDialog', function() {
     }));
 
     it('should focusOnOpen == true', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
-      TestUtil.mockElementFocus(this);
+      jasmine.mockElementFocus(this);
       var parent = angular.element('<div>');
       $mdDialog.show({
         focusOnOpen: true,
@@ -385,7 +385,7 @@ describe('$mdDialog', function() {
     }));
 
     it('should focusOnOpen == false', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
-      TestUtil.mockElementFocus(this);
+      jasmine.mockElementFocus(this);
 
       var parent = angular.element('<div>');
       $mdDialog.show({
@@ -413,7 +413,7 @@ describe('$mdDialog', function() {
     }));
 
     it('should focus the last `md-button` in md-actions open if no `.dialog-close`', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
-      TestUtil.mockElementFocus(this);
+      jasmine.mockElementFocus(this);
 
       var parent = angular.element('<div>');
       $mdDialog.show({

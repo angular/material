@@ -9,7 +9,7 @@ $tabs-header-height: 48px !default;
 }
 
 md-tab-data {
-  position: relative;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -23,10 +23,11 @@ md-tabs {
   border-radius: 2px;
   overflow: hidden;
   position: relative;
+  flex-shrink: 0;
   &.ng-animate {
     transition: height $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
   }
-  &:not(.md-no-tab-content):not([md-dynamic-height]) {
+  &:not(.md-no-tab-content):not(.md-dynamic-height) {
     min-height: 200 + $tabs-header-height;
   }
   &[md-align-tabs="bottom"] {
@@ -42,7 +43,7 @@ md-tabs {
       bottom: $tabs-header-height;
     }
   }
-  &[md-dynamic-height] {
+  &.md-dynamic-height {
     md-tabs-content-wrapper {
       min-height: 0;
       position: relative;
@@ -59,8 +60,10 @@ md-tabs {
     md-tabs-wrapper {
       border-width: 0 0 1px;
       border-style: solid;
-      .md-tab {
-        padding-bottom: 11px;
+    }
+    &:not(.md-dynamic-height) {
+      md-tabs-content-wrapper {
+        top: $tabs-header-height + 1;
       }
     }
   }
@@ -114,7 +117,7 @@ md-tabs-wrapper {
       display: flex;
       flex-direction: row;
       md-tab-item {
-        flex: 1;
+        flex-grow: 1;
       }
     }
   }
@@ -136,13 +139,18 @@ md-tabs-canvas {
   &.md-center-tabs {
     display: flex;
     flex-direction: column;
+    text-align: center;
+    .md-tab {
+      float: none;
+      display: inline-block;
+    }
   }
 }
 md-pagination-wrapper {
   @include pie-clearfix;
   height: $tabs-header-height;
   display: block;
-  transition: left $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+  transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
   position: absolute;
   width: 999999px;
   left: 0;
@@ -194,6 +202,9 @@ md-tab-content {
       visibility: hidden;
     }
   }
+  > div.ng-leave {
+    animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
+  }
 }
 md-ink-bar {
   position: absolute;
@@ -211,18 +222,9 @@ md-ink-bar {
   }
 }
 md-tab {
-  padding: 12px 24px 14px;
   position: absolute;
   z-index: -1;
-  white-space: nowrap;
-  box-shadow: none;
-  border: none;
   left: -9999px;
-  text-transform: uppercase;
-  font-size: 14px;
-  &:after {
-    content: attr(label);
-  }
 }
 .md-tab {
   font-size: 14px;
@@ -236,6 +238,7 @@ md-tab {
   text-transform: uppercase;
   float: left;
   font-weight: 500;
+  box-sizing: border-box;
   &.md-focused {
     box-shadow: none;
     outline: none;

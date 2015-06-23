@@ -202,7 +202,4 @@ refactor(content): prefix mdContent scroll- attributes
 Please sign our Contributor License Agreement (CLA) before sending pull requests. For any code
 changes to be accepted, the CLA must be signed. It's a quick process, we promise!
 
-* For individuals we have a
-  [simple click-through form](https://cla.developers.google.com/about/google-individual?csw=1).
-* For corporations we'll need you to
-  [print, sign and one of scan+email, fax or mail the form](https://developers.google.com/open-source/cla/corporate?csw=1).
+To learn more and sign the CLA, visit [cla.developers.google.com](http://cla.developers.google.com).

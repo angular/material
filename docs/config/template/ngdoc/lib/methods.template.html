@@ -1,11 +1,16 @@
 {%- if doc.methods %}
 <section class="api-section">
   <h2>Methods</h2>
+  <br/>
   <ul class="methods">
     {%- for method in doc.methods %}
     <li id="{$ method.name $}">
-      <h3 class="method-function-syntax"><code class="method-function-syntax">{$ doc.name $}.{$ functionSyntax(method) $}</code></h3>
-      <div>{$ method.description | marked $}</div>
+      <h3 class="method-function-syntax">
+        <code class="method-function-syntax">{$ doc.name $}.{$ functionSyntax(method) $}</code>
+      </h3>
+      <div class="service-desc">{$ method.description | marked $}</div>
+
+      <div class="method-param-table">
 
       {% if method.params %}
       {$ paramTable(method.params) $}
@@ -19,6 +24,8 @@
       {% if method.returns %}
       {$ returnTable(method.returns) $}
       {% endif %}
+
+      </div>
 
     </li>
     {% endfor -%}

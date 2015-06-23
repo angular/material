@@ -49,10 +49,22 @@ md-toolbar {
   .md-indent {
     margin-left: $toolbar-indent-margin;
   }
+
+  ~ md-content {
+    > md-list {
+      padding: 0;
+
+      md-list-item:last-child {
+        md-divider {
+          display: none;
+        }
+      }
+    }
+  }
 }
 
 .md-toolbar-tools {
-  @extend .md-title;
+  @include md-title();
   font-weight: 400;
   display: flex;
   align-items: center;
@@ -64,7 +76,7 @@ md-toolbar {
   padding: 0 $toolbar-padding;
   margin: 0;
 
-  h2, h3 {
+  h1, h2, h3 {
     font-size: inherit;
     font-weight: inherit;
     margin: inherit;
@@ -84,6 +96,9 @@ md-toolbar {
   }
   &> .md-button:first-child {
     margin-left: $icon-button-margin-offset;
+  }
+  &> .md-button:last-child {
+    margin-right: $icon-button-margin-offset;
   }
 
   @media screen and (-ms-high-contrast: active) {

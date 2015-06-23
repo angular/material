@@ -1,18 +1,18 @@
 .custom-chips {
   .md-chip {
     position: relative;
-    padding-right: 3.5rem;
+    padding-right: 35px;
     .md-chip-remove-container {
       position: absolute;
-      right: 0.4rem;
-      top: 0.4rem;
+      right: 4px;
+      top: 4px;
       margin-right: 0;
-      height: 2.4rem;
+      height: 24px;
       button.vegetablechip {
         position: relative;
-        height: 2.4rem;
-        width: 2.4rem;
-        line-height: 3.0rem;
+        height: 24px;
+        width: 24px;
+        line-height: 30px;
         text-align: center;
         background: rgba(black, 0.3);
         border-radius: 50%;

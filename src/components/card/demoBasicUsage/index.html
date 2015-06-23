@@ -1,10 +1,10 @@
 
 <div ng-controller="AppCtrl">
 
-  <md-content>
+  <md-content class="md-padding">
 
     <md-card>
-      <img src="img/washedout.png" class="md-card-image" alt="Washed Out">
+      <img ng-src="{{imagePath}}" class="md-card-image" alt="Washed Out">
       <md-card-content>
         <h2 class="md-title">Paracosm</h2>
         <p>
@@ -17,9 +17,10 @@
         <md-button>Action 2</md-button>
       </div>
     </md-card>
+    <br/>
 
     <md-card>
-      <img src="img/washedout.png" class="md-card-image" alt="Washed Out">
+      <img ng-src="{{imagePath}}" class="md-card-image" alt="Washed Out">
       <md-card-content>
         <h2 class="md-title">Paracosm</h2>
         <p>
@@ -28,9 +29,10 @@
         </p>
       </md-card-content>
     </md-card>
+    <br/>
 
     <md-card>
-      <img src="img/washedout.png" class="md-card-image" alt="Washed Out">
+      <img ng-src="{{imagePath}}" class="md-card-image" alt="Washed Out">
       <md-card-content>
         <h2 class="md-title">Paracosm</h2>
         <p>
@@ -39,7 +41,5 @@
         </p>
       </md-card-content>
     </md-card>
-
-
   </md-content>
 </div>

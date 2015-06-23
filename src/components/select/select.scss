@@ -27,7 +27,7 @@ $select-max-visible-options: 5;
   &.md-active {
     opacity: 1;
     md-select-menu {
-      transition: transform $swift-ease-out;
+      transition: $swift-ease-out;
       transition-duration: 200ms;
       > * {
         opacity: 1;
@@ -52,11 +52,8 @@ md-input-container > md-select {
 }
 
 md-select {
-  display: inline-block;
-  margin-top: 0.35em;
-  margin-bottom: 0.80em;
-  margin-left: 2px;
-  margin-right: 2px;
+  padding: 24px 2px 26px;
+  display: flex;
   &:focus {
     outline: none;
   }
@@ -69,14 +66,16 @@ md-select {
     }
     &.ng-invalid.ng-dirty {
       .md-select-label {
-        padding-bottom: 7px;
-        border-bottom: 2px solid;
+        border-bottom-width: 2px;
+        border-bottom-style: solid;
+        padding-bottom: 0;
       }
     }
     &:focus {
       .md-select-label {
-        border-bottom: 2px solid;
-        padding-bottom: $baseline-grid - 1;
+        border-bottom-width: 2px;
+        border-bottom-style: solid;
+        padding-bottom: 0;
       }
     }
   }
@@ -86,20 +85,21 @@ md-select {
 .md-select-label {
   display: flex;
   align-items: center;
-  padding-top: (2 * $baseline-grid) + 1;
-  padding-bottom: $baseline-grid;
-  border-bottom: 1px solid;
+  padding: 2px 2px 1px;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
   position: relative;
-  box-sizing: border-box;
+  box-sizing: content-box;
   min-width: 8 * $baseline-grid;
+  min-height: 26px;
 
   *:first-child {
     flex: 1;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    line-height: 1.2rem;
     max-width: calc(100% - 2*#{$baseline-grid});
+    transform: translate3d(0, 2px, 0);
   }
 
   .md-select-icon {
@@ -107,6 +107,7 @@ md-select {
     text-align: end;
     width: 3 * $baseline-grid;
     margin: 0 .5 * $baseline-grid;
+    transform: translate3d(0, 1px, 0);
   }
 
   .md-select-icon:after {
@@ -135,6 +136,7 @@ md-select-menu {
 
   box-shadow: $whiteframe-shadow-z1;
   max-height: ($select-option-height * $select-max-visible-options) + 2 * $baseline-grid;
+  min-height: $select-option-height;
   overflow-y: hidden;
 
   @include rtl(transform-origin, left top, right top);
@@ -143,6 +145,7 @@ md-select-menu {
 
   md-content {
     min-width: 136px;
+    min-height: $select-option-height;
     max-height: ($select-option-height * $select-max-visible-options) + 2 * $baseline-grid;
     overflow-y: auto;
   }
@@ -177,17 +180,22 @@ md-optgroup {
   display: block;
   label {
     display: block;
-    font-size: rem(1.6);
+    font-size: rem(1.4);
     text-transform: uppercase;
-    padding: $baseline-grid * 2 $baseline-grid;
+    padding: $baseline-grid * 2;
+    font-weight: 500;
   }
   md-option {
-    padding-left: $baseline-grid + $select-option-padding;
+    padding-left: $select-option-padding * 2;
+    padding-right: $select-option-padding * 2;
   }
 }
 
 @media screen and (-ms-high-contrast: active) {
   .md-select-backdrop {
     background-color: transparent;
+  }
+  md-select-menu {
+    border: 1px solid #fff;
   }
 }

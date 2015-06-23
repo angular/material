@@ -117,8 +117,8 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://p
 ```html
   <head>
 
-    <!-- Angular Material CSS now available via Google CDN; version 0.8 used here -->
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.css">
+    <!-- Angular Material CSS now available via Google CDN; version 0.10 used here -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.css">
 
   </head>
   <body>
@@ -129,22 +129,22 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://p
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
 
 
-    <!-- Angular Material Javascript now available via Google CDN; version 0.8 used here -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.js"></script>
+    <!-- Angular Material Javascript now available via Google CDN; version 0.10 used here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.js"></script>
   </body>
 ```
 
-> Note that the above sample references the 0.8.3 CDN release. Your version will change based on the latest stable release version.
+> Note that the above sample references the 0.10.0 CDN release. Your version will change based on the latest stable release version.
 
-Developers seeking the latest, most-current build versions can use [RawGit.com](//rawgit.com) to
+Developers seeking the latest, most-current build versions can use [GitCDN.xyz](//gitcdn.xyz) to
 pull directly from the distribution GitHub
 [Bower-Material](https://github.com/angular/bower-material) repository:
 
 ```html
   <head>
 
-    <!-- Angular Material CSS using RawGit to load directly from `bower-material/master` -->
-    <link rel="stylesheet" href="https://rawgit.com/angular/bower-material/master/angular-material.css">
+    <!-- Angular Material CSS using GitCDN to load directly from `bower-material/master` -->
+    <link rel="stylesheet" href="https://gitcdn.xyz/repo/angular/bower-material/master/angular-material.css">
 
   </head>
   <body>
@@ -154,11 +154,9 @@ pull directly from the distribution GitHub
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.js"></script>
 
-    <!-- Angular Material Javascript using RawGit to load directly from `bower-material/master` -->
-    <script src="https://rawgit.com/angular/bower-material/master/angular-material.js"></script>
+    <!-- Angular Material Javascript using GitCDN to load directly from `bower-material/master` -->
+    <script src="https://gitcdn.xyz/repo/angular/bower-material/master/angular-material.js"></script>
 
   </body>
 ```
 
-> Please note that the above RawGit access is intended **ONLY** for development purposes or sharing
-  low-traffic, temporary examples or demos with small numbers of people.

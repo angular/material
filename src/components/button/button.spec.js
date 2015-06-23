@@ -141,7 +141,6 @@ describe('md-button', function() {
       expect(clicked).toBe(false);
     }));
 
-
   });
 
 });

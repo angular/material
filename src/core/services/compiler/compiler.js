@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 angular.module('material.core')
   .service('$mdCompiler', mdCompilerService);
 
@@ -135,4 +132,3 @@ function mdCompilerService($q, $http, $injector, $compile, $controller, $templat
 
   };
 }
-})();
