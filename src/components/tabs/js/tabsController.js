@@ -79,7 +79,6 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
 
   function bindEvents () {
     angular.element($window).on('resize', handleWindowResize);
-    angular.element(elements.paging).on('DOMSubtreeModified', handleDOMSubtreeModified);
   }
 
   function configureWatchers () {
@@ -99,7 +98,6 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   function cleanup () {
     destroyed = true;
     angular.element($window).off('resize', handleWindowResize);
-    angular.element(elements.paging).off('DOMSubtreeModified', handleDOMSubtreeModified);
   }
 
   //-- Change handlers
@@ -259,17 +257,6 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
       $timeout(ctrl.updateInkBarStyles, 0, false);
       $timeout(updatePagination);
     });
-  }
-
-  function handleDOMSubtreeModified() {
-    var self = this;
-    if (self.handlingDOMSubtreeModified) {
-        self.handlingDOMSubtreeModified = setTimeout(function () {
-            ctrl.updateInkBarStyles();
-            updatePagination();
-            self.handlingDOMSubtreeModified = null;
-        }, 300)
-    }
   }
 
   /**
