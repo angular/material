@@ -813,6 +813,7 @@ function SelectProvider($$interimElementProvider) {
             default:
               if (ev.keyCode >= 31 && ev.keyCode <= 90) {
                 var optNode = opts.selectEl.controller('mdSelectMenu').optNodeForKeyboardSearch(ev);
+                opts.focusedNode = optNode || opts.focusedNode;
                 optNode && optNode.focus();
               }
           }
@@ -864,6 +865,7 @@ function SelectProvider($$interimElementProvider) {
       element.addClass('md-leave')
         .removeClass('md-clickable');
       opts.target.attr('aria-expanded', 'false');
+      opts.selectEl.off('keydown');
 
 
       angular.element($window).off('resize', opts.resizeFn);
