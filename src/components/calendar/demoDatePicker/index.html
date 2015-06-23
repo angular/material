@@ -11,7 +11,17 @@
     </p>
     <hr>
 
-    <md-date-picker ng-model="myDate"></md-date-picker>
+    <md-date-picker ng-model="myDate" md-placeholder="Enter date"></md-date-picker>
+
+    <hr>
+    <h3>Disabled with ng-disabled</h3>
+    <md-date-picker ng-model="myDate" md-placeholder="Enter date" ng-disabled="true">
+    </md-date-picker>
+
+    <hr>
+
+    <h3>Disabled with static disabled attribute</h3>
+    <md-date-picker ng-model="myDate" placeholder="Enter date" disabled></md-date-picker>
 
     <br><br>
     <br><br>
