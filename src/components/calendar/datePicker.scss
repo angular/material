@@ -24,6 +24,10 @@ $md-datepicker-button-gap: 12px;
   display: inline-block;
   box-sizing: border-box;
   background: none;
+
+  &.md-open {
+    fill: lightblue;
+  }
 }
 
 // The input into which the user can type the date.
@@ -51,7 +55,12 @@ $md-datepicker-button-gap: 12px;
 
     .md-datepicker-input {
       margin-left: 24px;
-      line-height: 40px;
+      //line-height: 40px;
+      height: 40px;
+    }
+
+    .md-datepicker-expand-triangle {
+      display: none;
     }
   }
 }
@@ -77,11 +86,30 @@ $md-datepicker-button-gap: 12px;
 }
 
 
-$md-date-arrow-size: 6px;
-.md-datepicker-expand-triangle {
+.md-datepicker-triangle-button {
   position: absolute;
   right: 0;
+  top: 0;
+  transform: translateY(-25%) translateX(45%);
+
+  &:hover .md-datepicker-expand-triangle {
+    border-top-color: rgba(black, 0.54);
+  }
+}
+
+// Need crazy specificity to override .md-button.md-icon-button
+.md-datepicker-triangle-button.md-button.md-icon-button {
+  height: auto;
+}
+
+$md-date-arrow-size: 6px;
+.md-datepicker-expand-triangle {
+  // Center the triangle inside of the button so that the
+  // ink ripple origin looks correct.
+  position: absolute;
   top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
   width: 0;
   height: 0;
