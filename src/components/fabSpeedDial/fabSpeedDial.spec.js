@@ -32,33 +32,37 @@ describe('<md-fab-speed-dial> directive', function() {
     expect(element.hasClass('md-right')).toBe(true);
   }));
 
-  it('opens when the trigger element is focused', inject(function() {
+  it('opens when the trigger element is focused', inject(function($timeout) {
     compileAndLink(
       '<md-fab-speed-dial><md-fab-trigger><button></button></md-fab-trigger></md-fab-speed-dial>'
     );
 
     element.find('button').triggerHandler('focus');
+    $timeout.flush();
     expect(controller.isOpen).toBe(true);
   }));
 
-  it('opens when the speed dial elements are focused', inject(function() {
+  it('opens when the speed dial elements are focused', inject(function($timeout) {
     compileAndLink(
       '<md-fab-speed-dial><md-fab-actions><button></button></md-fab-actions></md-fab-speed-dial>'
     );
 
     element.find('button').triggerHandler('focus');
+    $timeout.flush();
     expect(controller.isOpen).toBe(true);
   }));
 
-  it('closes when the speed dial elements are blurred', inject(function() {
+  it('closes when the speed dial elements are blurred', inject(function($timeout) {
     compileAndLink(
       '<md-fab-speed-dial><md-fab-actions><button></button></md-fab-actions></md-fab-speed-dial>'
     );
 
     element.find('button').triggerHandler('focus');
+    $timeout.flush();
     expect(controller.isOpen).toBe(true);
 
     element.find('button').triggerHandler('blur');
+    $timeout.flush();
     expect(controller.isOpen).toBe(false);
   }));
 

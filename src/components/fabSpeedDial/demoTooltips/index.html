@@ -1,0 +1,35 @@
+<div ng-controller="AppCtrl" layout="column">
+  <md-content class="md-padding" layout="column">
+    <p>
+      You may add tooltips to both the trigger and actions.
+    </p>
+
+    <div class="lock-size" layout="row" layout-align="center center">
+      <md-fab-speed-dial md-direction="down" class="md-fling">
+        <md-fab-trigger>
+          <md-button aria-label="menu" class="md-fab md-warn">
+            <md-tooltip md-direction="top">Menu</md-tooltip>
+            <md-icon md-svg-src="img/icons/menu.svg"></md-icon>
+          </md-button>
+        </md-fab-trigger>
+
+        <md-fab-actions>
+          <md-button aria-label="twitter" class="md-fab md-raised md-mini">
+            <md-tooltip md-direction="left">Twitter</md-tooltip>
+            <md-icon md-svg-src="img/icons/twitter.svg"></md-icon>
+          </md-button>
+
+          <md-button aria-label="facebook" class="md-fab md-raised md-mini">
+            <md-tooltip md-direction="right">Facebook</md-tooltip>
+            <md-icon md-svg-src="img/icons/facebook.svg"></md-icon>
+          </md-button>
+
+          <md-button aria-label="Google Hangout" class="md-fab md-raised md-mini">
+            <md-tooltip md-direction="left">Google Hangout</md-tooltip>
+            <md-icon md-svg-src="img/icons/hangout.svg"></md-icon>
+          </md-button>
+        </md-fab-actions>
+      </md-fab-speed-dial>
+    </div>
+  </md-content>
+</div>
