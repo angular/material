@@ -76,14 +76,13 @@ md-menu-item {
     height: 100%;
     padding-left: 2*$baseline-grid;
     padding-right: 2*$baseline-grid;
-    display: flex;
-    flex-direction: row;
+    display: inline-block;
     md-icon {
       margin: auto 2*$baseline-grid auto 0;
     }
     p {
       margin: auto;
-      flex: 1;
+      width:100%;
     }
     span {
       margin-top: auto;
