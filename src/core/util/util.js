@@ -42,6 +42,8 @@ angular.module('material.core')
 
       // Annoying method to copy nodes to an array, thanks to IE
       nodesToArray: function (nodes) {
+        nodes = nodes || [ ];
+
         var results = [];
         for (var i = 0; i < nodes.length; ++i) {
           results.push(nodes.item(i));
