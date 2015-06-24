@@ -1,6 +1,14 @@
 
 angular.module('sliderDemo1', ['ngMaterial'])
 
+.config(function($mdThemingProvider) {
+  $mdThemingProvider.theme('altTheme')
+    .primaryPalette('blue')
+    .accentPalette('green')
+    .warnPalette('red');
+  $mdThemingProvider.setDefaultTheme('altTheme');
+})
+
 .controller('AppCtrl', function($scope) {
 
   $scope.color = {
@@ -15,5 +23,4 @@ angular.module('sliderDemo1', ['ngMaterial'])
 
   $scope.disabled1 = 0;
   $scope.disabled2 = 70;
-
 });
