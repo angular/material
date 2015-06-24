@@ -83,4 +83,40 @@ describe('<md-fab-speed-dial> directive', function() {
     expect(controller.isOpen).toBe(false);
   }));
 
+  it('properly finishes the fling animation', inject(function(mdFabSpeedDialFlingAnimation) {
+    compileAndLink(
+      '<md-fab-speed-dial md-open="isOpen" class="md-fling">' +
+      '  <md-fab-trigger><button></button></md-fab-trigger>' +
+      '  <md-fab-actions><button></button></md-fab-actions>' +
+      '</md-fab-speed-dial>'
+    );
+
+    var addDone = jasmine.createSpy('addDone');
+    var removeDone = jasmine.createSpy('removeDone');
+
+    mdFabSpeedDialFlingAnimation.addClass(element, 'md-is-open', addDone);
+    expect(addDone).toHaveBeenCalled();
+
+    mdFabSpeedDialFlingAnimation.removeClass(element, 'md-is-open', removeDone);
+    expect(removeDone).toHaveBeenCalled();
+  }));
+
+  it('properly finishes the scale animation', inject(function(mdFabSpeedDialScaleAnimation) {
+    compileAndLink(
+      '<md-fab-speed-dial md-open="isOpen" class="md-fling">' +
+      '  <md-fab-trigger><button></button></md-fab-trigger>' +
+      '  <md-fab-actions><button></button></md-fab-actions>' +
+      '</md-fab-speed-dial>'
+    );
+
+    var addDone = jasmine.createSpy('addDone');
+    var removeDone = jasmine.createSpy('removeDone');
+
+    mdFabSpeedDialScaleAnimation.addClass(element, 'md-is-open', addDone);
+    expect(addDone).toHaveBeenCalled();
+
+    mdFabSpeedDialScaleAnimation.removeClass(element, 'md-is-open', removeDone);
+    expect(removeDone).toHaveBeenCalled();
+  }));
+
 });
