@@ -1,0 +1,42 @@
+<div ng-controller="DemoCtrl as demo" layout="column">
+  <md-content class="md-padding" layout="column">
+    <p>
+      You can also use the buttons to open a dialog.
+    </p>
+
+    <div class="lock-size" layout="row" layout-align="center center">
+      <md-fab-speed-dial md-direction="down" class="md-fling">
+        <md-fab-trigger>
+          <md-button aria-label="Menu" class="md-fab md-warn">
+            <md-tooltip md-direction="top">Menu</md-tooltip>
+            <md-icon md-svg-src="img/icons/menu.svg"></md-icon>
+          </md-button>
+        </md-fab-trigger>
+
+        <md-fab-actions>
+          <md-button aria-label="Open dialog" class="md-fab md-raised md-mini"
+                     ng-click="demo.openDialog($event)">
+            <md-tooltip md-direction="left">Open dialog</md-tooltip>
+            <md-icon md-svg-src="img/icons/launch.svg"></md-icon>
+          </md-button>
+        </md-fab-actions>
+      </md-fab-speed-dial>
+    </div>
+  </md-content>
+
+  <script type="text/ng-template" id="dialog.html">
+    <md-dialog>
+      <md-dialog-content>Hello User!!!</md-dialog-content>
+
+      <div class="md-actions">
+        <md-button aria-label="Close dialog" ng-click="dialog.close()" class="md-primary">
+          Close Greeting
+        </md-button>
+
+        <md-button aria-label="Submit dialog" ng-click="dialog.submit()" class="md-primary">
+          Submit
+        </md-button>
+      </div>
+    </md-dialog>
+  </script>
+</div>
