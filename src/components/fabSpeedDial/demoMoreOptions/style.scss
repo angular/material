@@ -1,15 +1,3 @@
-.text-capitalize {
-  text-transform: capitalize;
-}
-
-.md-fab:hover, .md-fab.md-focused {
-  background-color: #000 !important;
-}
-
-p.note {
-  font-size: 1.2rem;
-}
-
 .lock-size {
   min-width: 300px;
   min-height: 300px;
@@ -27,4 +15,11 @@ p.note {
 
 .md-fab.demo-fab.action-fab {
   background-color: #aaa;
+}
+
+
+md-content div {
+  &[flex="50"] {
+    padding: 15px;
+  }
 }

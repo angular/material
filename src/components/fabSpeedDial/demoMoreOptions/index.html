@@ -1,0 +1,91 @@
+<div layout="column" ng-controller="DemoCtrl as demo">
+  <md-content class="md-padding" layout="column">
+    <p>
+      The speed dial supports many advanced usage scenarios. This demo shows many of them mixed
+      together.
+    </p>
+
+    <div class="lock-size" layout="row" layout-align="center center">
+      <md-fab-speed-dial ng-hide="demo.hidden" md-direction="down" class="md-fling">
+        <md-fab-trigger>
+          <md-button aria-label="menu" class="md-fab md-warn">
+            <md-tooltip md-direction="top">Menu</md-tooltip>
+            <md-icon md-svg-src="img/icons/menu.svg"></md-icon>
+          </md-button>
+        </md-fab-trigger>
+
+        <md-fab-actions>
+          <div ng-repeat="item in demo.items">
+            <md-button aria-label="{{item.name}}" class="md-fab md-raised md-mini"
+                       ng-click="demo.openDialog($event, item)">
+              <md-tooltip md-direction="{{item.direction}}">{{item.name}}</md-tooltip>
+              <md-icon md-svg-src="{{item.icon}}"></md-icon>
+            </md-button>
+          </div>
+        </md-fab-actions>
+      </md-fab-speed-dial>
+    </div>
+  </md-content>
+
+  <md-content class="md-padding" layout="row">
+    <div flex="50">
+      <h3>ngRepeat</h3>
+
+      <p>
+        You can easily use <code>ng-repeat</code> with the speed dial, but it requires a slightly
+        different HTML structure in order to support the necessary DOM changes/styling.
+      </p>
+
+      <p>
+        Simply ensure that your <code>ng-repeat</code> is on a <code>div</code> (or any other tag)
+        that wraps your items.
+      </p>
+    </div>
+    <div flex="50">
+      <h3>$mdDialog</h3>
+
+      <p>
+        You can also use the buttons to open a dialog. When clicked, the buttons above will open a
+        dialog showing a message which item was clicked.
+      </p>
+    </div>
+  </md-content>
+
+  <md-content class="md-padding" layout="row">
+    <div flex="50">
+      <h3>ngHide</h3>
+
+      <p>
+        The speed dial also supports hiding using the standard <code>ng-hide</code> attribute.
+
+        <md-checkbox ng-model="demo.hidden">
+          Hide the speed dial.
+        </md-checkbox>
+      </p>
+    </div>
+    <div flex="50">
+      <h3>Tooltips</h3>
+
+      <p>
+        Each action item supports a tooltip using the standard approach as can be seen above.
+      </p>
+    </div>
+  </md-content>
+
+  <script type="text/ng-template" id="dialog.html">
+    <md-dialog>
+      <md-dialog-content>Hello User! You clicked {{dialog.item.name}}.</md-dialog-content>
+
+      <div class="md-actions">
+        <md-button aria-label="Close dialog" ng-click="dialog.close()" class="md-primary">
+          Close Greeting
+        </md-button>
+
+        <md-button aria-label="Submit dialog" ng-click="dialog.submit()" class="md-primary">
+          Submit
+        </md-button>
+      </div>
+    </md-dialog>
+  </script>
+
+</div>

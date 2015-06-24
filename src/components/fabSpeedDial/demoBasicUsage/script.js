@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('fabSpeedDialBasicUsageDemo', ['ngMaterial'])
+  angular.module('fabSpeedDialDemoBasicUsage', ['ngMaterial'])
     .controller('DemoCtrl', function() {
       this.topDirections = ['left', 'up'];
       this.bottomDirections = ['down', 'right'];

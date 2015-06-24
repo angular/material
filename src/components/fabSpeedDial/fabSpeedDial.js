@@ -2,14 +2,23 @@
   'use strict';
 
   angular
+    // Declare our module
     .module('material.components.fabSpeedDial', [
       'material.core',
       'material.components.fabTrigger',
       'material.components.fabActions'
     ])
+
+    // Register our directive
     .directive('mdFabSpeedDial', MdFabSpeedDialDirective)
+
+    // Register our custom animations
     .animation('.md-fling', MdFabSpeedDialFlingAnimation)
-    .animation('.md-scale', MdFabSpeedDialScaleAnimation);
+    .animation('.md-scale', MdFabSpeedDialScaleAnimation)
+
+    // Register a service for each animation so that we can easily inject them into unit tests
+    .service('mdFabSpeedDialFlingAnimation', MdFabSpeedDialFlingAnimation)
+    .service('mdFabSpeedDialScaleAnimation', MdFabSpeedDialScaleAnimation);
 
   /**
    * @ngdoc directive
@@ -73,7 +82,7 @@
       element.prepend('<div class="md-css-variables"></div>');
     }
 
-    function FabSpeedDialController($scope, $element, $animate) {
+    function FabSpeedDialController($scope, $element, $animate, $timeout) {
       var vm = this;
 
       // Define our open/close functions
@@ -102,6 +111,11 @@
       setupDefaults();
       setupListeners();
       setupWatchers();
+
+      // Fire the animations once in a separate digest loop to initialize them
+      $timeout(function() {
+        $animate.addClass($element, 'md-noop');
+      }, 0);
 
       // Set our default variables
       function setupDefaults() {
@@ -199,10 +213,12 @@
       addClass: function(element, className, done) {
         if (element.hasClass('md-fling')) {
           runAnimation(element);
+          done();
         }
       },
       removeClass: function(element, className, done) {
         runAnimation(element);
+        done();
       }
     }
   }
@@ -229,10 +245,12 @@
     return {
       addClass: function(element, className, done) {
         runAnimation(element);
+        done();
       },
 
       removeClass: function(element, className, done) {
         runAnimation(element);
+        done();
       }
     }
   }
