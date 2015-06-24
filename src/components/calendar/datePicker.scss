@@ -99,7 +99,7 @@ $md-datepicker-button-gap: 12px;
 
 // Need crazy specificity to override .md-button.md-icon-button
 .md-datepicker-triangle-button.md-button.md-icon-button {
-  height: auto;
+  height: 100%;
 }
 
 $md-date-arrow-size: 6px;
