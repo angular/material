@@ -181,8 +181,6 @@ describe('<md-virtual-repeat>', function() {
     expect(repeated[0].textContent.trim()).toBe('s184s 92');
   });
 
-
-
   it('should dirty-check only the swapped scope on scroll', function() {
     createRepeater();
     scope.items = createItems(NUM_ITEMS);
@@ -225,6 +223,30 @@ describe('<md-virtual-repeat>', function() {
 
     expect(scroller[0].scrollTop).toBe(0);
     expect(getRepeated()[0].textContent.trim()).toBe('a 0');
+  });
+
+  it('should cap individual element size for the sizer in large item sets', function() {
+    // Copy max element size because we don't have a good way to reference it.
+    var maxElementSize = 1533917;
+
+    // Create a much larger number of items than will fit in one maximum element size.
+    var numItems = 2000000;
+    createRepeater();
+    scope.items = createItems(numItems);
+    scope.$apply();
+    $$rAF.flush();
+
+    // Expect that the sizer as a whole is still exactly the height it should be.
+    expect(sizer[0].offsetHeight).toBe(numItems * ITEM_SIZE);
+
+    // Expect that sizer only adds as many children as it needs to.
+    var numChildren = sizer[0].childNodes.length;
+    expect(numChildren).toBe(Math.ceil(numItems * ITEM_SIZE / maxElementSize));
+
+    // Expect that every child of sizer does not exceed the maximum element size.
+    for (var i = 0; i < numChildren; i++) {
+      expect(sizer[0].childNodes[i].offsetHeight).toBeLessThan(maxElementSize + 1);
+    }
   });
 
   /**
