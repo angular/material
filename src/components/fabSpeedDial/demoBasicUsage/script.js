@@ -2,18 +2,16 @@
   'use strict';
 
   angular.module('fabSpeedDialBasicUsageDemo', ['ngMaterial'])
-    .controller('AppCtrl', function($scope) {
-      $scope.demo = {
-        topDirections: ['left', 'up'],
-        bottomDirections: ['down', 'right'],
+    .controller('DemoCtrl', function() {
+      this.topDirections = ['left', 'up'];
+      this.bottomDirections = ['down', 'right'];
 
-        isOpen: false,
+      this.isOpen = false;
 
-        availableModes: ['md-fling', 'md-scale'],
-        selectedMode: 'md-fling',
+      this.availableModes = ['md-fling', 'md-scale'];
+      this.selectedMode = 'md-fling';
 
-        availableDirections: ['up', 'down', 'left', 'right'],
-        selectedDirection: 'up'
-      };
+      this.availableDirections = ['up', 'down', 'left', 'right'];
+      this.selectedDirection = 'up';
     });
 })();

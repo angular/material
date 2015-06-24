@@ -38,6 +38,7 @@ describe('<md-fab-speed-dial> directive', function() {
     );
 
     element.find('button').triggerHandler('focus');
+    pageScope.$digest();
     expect(controller.isOpen).toBe(true);
   }));
 
@@ -47,6 +48,7 @@ describe('<md-fab-speed-dial> directive', function() {
     );
 
     element.find('button').triggerHandler('focus');
+    pageScope.$digest();
     expect(controller.isOpen).toBe(true);
   }));
 
@@ -56,9 +58,11 @@ describe('<md-fab-speed-dial> directive', function() {
     );
 
     element.find('button').triggerHandler('focus');
+    pageScope.$digest();
     expect(controller.isOpen).toBe(true);
 
     element.find('button').triggerHandler('blur');
+    pageScope.$digest();
     expect(controller.isOpen).toBe(false);
   }));
 
