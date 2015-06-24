@@ -83,7 +83,7 @@ angular
  * <form name="autocompleteForm">
  *   <md-autocomplete
  *       required
- *       input-name="autocomplete"
+ *       md-input-name="autocomplete"
  *       md-selected-item="selectedItem"
  *       md-search-text="searchText"
  *       md-items="item in getMatches(searchText)"
