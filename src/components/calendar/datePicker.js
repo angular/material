@@ -240,9 +240,10 @@
     this.calendarButton.classList.add('md-open');
 
     var elementRect = this.inputContainer.getBoundingClientRect();
+    var bodyRect = document.body.getBoundingClientRect();
 
-    this.calendarPane.style.left = (elementRect.left + window.pageXOffset) + 'px';
-    this.calendarPane.style.top = (elementRect.bottom + window.pageYOffset) + 'px';
+    this.calendarPane.style.left = (elementRect.left - bodyRect.left) + 'px';
+    this.calendarPane.style.top = (elementRect.bottom - bodyRect.top) + 'px';
     document.body.appendChild(this.calendarPane);
 
     // Add shadow to the calendar pane only after the UI thread has reached idle, allowing the
