@@ -182,6 +182,11 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
             name : 'Button',
             url: '/CSS/button',
             type: 'link'
+          },
+          {
+            name : 'Checkbox',
+            url: '/CSS/checkbox',
+            type: 'link'
           }]
       },
       {
