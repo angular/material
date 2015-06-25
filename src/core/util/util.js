@@ -116,7 +116,7 @@ angular.module('material.core')
           applyStyles(body, {
             position: 'fixed',
             width: '100%',
-            overflowY: 'scroll',
+            overflowY: 'auto',
             top: -scrollOffset + 'px'
           });
 
