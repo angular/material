@@ -80,7 +80,7 @@ md-input-container {
 
 
   label:not(.md-no-float),
-  .md-placeholder:not(.md-select-label) {
+  .md-placeholder {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
@@ -91,12 +91,15 @@ md-input-container {
 
     @include rtl(transform-origin, left top, right top);
   }
-  .md-placeholder:not(.md-select-label) {
+  .md-placeholder {
     position: absolute;
     top: 0;
     opacity: 0;
     transition-property: opacity, transform;
     transform: translate3d(0, $input-placeholder-offset + $baseline-grid * 0.75, 0);
+    &.md-static {
+      position: static;
+    }
   }
   &.md-input-focused .md-placeholder {
     opacity: 1;

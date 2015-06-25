@@ -41,8 +41,8 @@ angular.module('material.components.select', [
  * @description Displays a select box, bound to an ng-model.
  *
  * @param {expression} ng-model The model!
- * @param {expression=} md-on-close expression to be evaluated when the select is closed
  * @param {boolean=} multiple Whether it's multiple.
+ * @param {expression=} md-on-close expression to be evaluated when the select is closed
  * @param {string=} placeholder Placeholder hint text.
  * @param {string=} aria-label Optional label for accessibility. Only necessary if no placeholder or
  * explicit label is present.
@@ -50,48 +50,41 @@ angular.module('material.components.select', [
  * @usage
  * With a placeholder (label and aria-label are added dynamically)
  * <hljs lang="html">
- *   <md-select
- *     ng-model="someModel"
- *     placeholder="Select a state">
- *     <md-option ng-value="opt" ng-repeat="opt in neighborhoods2">{{ opt }}</md-option>
- *   </md-select>
+ *   <md-input-container>
+ *     <md-select
+ *       ng-model="someModel"
+ *       placeholder="Select a state">
+ *       <md-option ng-value="opt" ng-repeat="opt in neighborhoods2">{{ opt }}</md-option>
+ *     </md-select>
+ *   </md-input-container>
  * </hljs>
  *
  * With an explicit label
  * <hljs lang="html">
- *   <md-select
- *     ng-model="someModel">
- *     <md-select-label>Select a state</md-select-label>
- *     <md-option ng-value="opt" ng-repeat="opt in neighborhoods2">{{ opt }}</md-option>
- *   </md-select>
+ *   <md-input-container>
+ *     <label>State</label>
+ *     <md-select
+ *       ng-model="someModel">
+ *       <md-option ng-value="opt" ng-repeat="opt in neighborhoods2">{{ opt }}</md-option>
+ *     </md-select>
+ *   </md-input-container>
  * </hljs>
  */
 function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, $compile, $parse) {
   return {
     restrict: 'E',
-    require: ['mdSelect', 'ngModel', '?^form'],
+    require: ['^?mdInputContainer', 'mdSelect', 'ngModel', '?^form'],
     compile: compile,
     controller: function() { } // empty placeholder controller to be initialized in link
   };
 
   function compile(element, attr) {
-    // The user is allowed to provide a label for the select as md-select-label child
-    var labelEl = element.find('md-select-label').remove();
-
-    // If not provided, we automatically make one
-    if (!labelEl.length) {
-      labelEl = angular.element('<md-select-label><span></span></md-select-label>');
-    } else {
-      if (!labelEl[0].firstElementChild) {
-        var spanWrapper = angular.element('<span>');
-        spanWrapper.append(labelEl.contents());
-        labelEl.append(spanWrapper);
-      }
-    }
-    labelEl.append('<span class="md-select-icon" aria-hidden="true"></span>');
-    labelEl.addClass('md-select-label');
-    if (!labelEl[0].hasAttribute('id')) {
-      labelEl.attr('id', 'select_label_' + $mdUtil.nextUid());
+    // add the select value that will hold our placeholder or selected option value
+    var valueEl = angular.element('<md-select-value><span></span></md-select-value>');
+    valueEl.append('<span class="md-select-icon" aria-hidden="true"></span>');
+    valueEl.addClass('md-select-value');
+    if (!valueEl[0].hasAttribute('id')) {
+      valueEl.attr('id', 'select_value_label_' + $mdUtil.nextUid());
     }
 
     // There's got to be an md-content inside. If there's not one, let's add it.
@@ -136,7 +129,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
           element.html() +
         '</md-select-menu></div>';
 
-    element.empty().append(labelEl);
+    element.empty().append(valueEl);
 
     attr.tabindex = attr.tabindex || '0';
 
@@ -144,12 +137,30 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
       var isOpen;
       var isDisabled;
 
-      var mdSelectCtrl = ctrls[0];
-      var ngModel = ctrls[1];
-      var formCtrl = ctrls[2];
+      var containerCtrl = ctrls[0];
+      var mdSelectCtrl = ctrls[1];
+      var ngModelCtrl = ctrls[2];
+      var formCtrl = ctrls[3];
+      // grab a reference to the select menu value label
+      var valueEl = element.find('md-select-value');
+      var isReadonly = angular.isDefined(attr.readonly);
 
-      var labelEl = element.find('md-select-label');
-      var customLabel = labelEl.text().length !== 0;
+      if (containerCtrl) {
+        if (containerCtrl.input) {
+          throw new Error("<md-input-container> can only have *one* child <input>, <textarea> or <select> element!");
+        }
+        containerCtrl.input = element;
+        if (!containerCtrl.label) {
+          $mdAria.expect(element, 'aria-label', element.attr('placeholder'));
+        }
+
+        var isErrorGetter = containerCtrl && containerCtrl.isErrorGetter || function() {
+          return ngModelCtrl.$invalid && ngModelCtrl.$touched;
+        };
+        scope.$watch(isErrorGetter, containerCtrl.setInvalid);
+      }
+
+
       var selectContainer, selectScope, selectMenuCtrl;
       createSelect();
 
@@ -160,23 +171,53 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
         formCtrl.$removeControl(angular.element(selectEl).controller());
       }
 
-      var originalRender = ngModel.$render;
-      ngModel.$render = function() {
+
+      ngModelCtrl.$parsers.push(ngModelPipelineCheckValue);
+      ngModelCtrl.$formatters.push(ngModelPipelineCheckValue);
+
+      var originalRender = ngModelCtrl.$render;
+      ngModelCtrl.$render = function() {
         originalRender();
         syncLabelText();
       };
 
       mdSelectCtrl.setLabelText = function(text) {
-        if (customLabel) return; // Assume that user is handling it on their own
         mdSelectCtrl.setIsPlaceholder(!text);
-        text = text || attr.placeholder || '';
-        var target = customLabel ? labelEl : labelEl.children().eq(0);
+        // Use placeholder attribute, otherwise fallback to the md-input-container label
+        var tmpPlaceholder = attr.placeholder || (containerCtrl.label ? containerCtrl.label.text() : '');
+        text = text || tmpPlaceholder || '';
+        var target = valueEl.children().eq(0);
         target.text(text);
       };
 
-      mdSelectCtrl.setIsPlaceholder = function(val) {
-        val ? labelEl.addClass('md-placeholder') : labelEl.removeClass('md-placeholder');
+      mdSelectCtrl.setIsPlaceholder = function(isPlaceholder) {
+        if (isPlaceholder) {
+          valueEl.addClass('md-select-placeholder');
+          if (containerCtrl && containerCtrl.label) {
+            containerCtrl.label.addClass('md-placeholder md-static');
+          }
+        } else {
+          valueEl.removeClass('md-select-placeholder');
+          if (containerCtrl && containerCtrl.label) {
+            containerCtrl.label.removeClass('md-placeholder');
+          }
+        }
       };
+
+      if (!isReadonly) {
+        element
+          .on('focus', function(ev) {
+            // only set focus on if we don't currently have a selected value. This avoids the "bounce"
+            // on the label transition because the focus will immediately switch to the open menu.
+            if (containerCtrl && containerCtrl.element.hasClass('md-input-has-value')) {
+              containerCtrl.setFocused(true);
+            }
+          })
+          .on('blur', function(ev) {
+            containerCtrl && containerCtrl.setFocused(false);
+            inputCheckValue();
+          });
+      }
 
       mdSelectCtrl.triggerClose = function() {
         $parse(attr.mdOnClose)(scope);
@@ -190,7 +231,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
       function setAriaLabel() {
         var labelText = element.attr('placeholder');
         if (!labelText) {
-          labelText = element.find('md-select-label').text();
+          labelText = containerCtrl.element.find('label').text();
         }
         $mdAria.expect(element, 'aria-label', labelText);
       }
@@ -215,13 +256,13 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
           }
           if (selectContainer) {
             selectMenuCtrl.setMultiple(multiple);
-            originalRender = ngModel.$render;
-            ngModel.$render = function() {
+            originalRender = ngModelCtrl.$render;
+            ngModelCtrl.$render = function() {
               originalRender();
               syncLabelText();
             };
             selectMenuCtrl.refreshViewValue();
-            ngModel.$render();
+            ngModelCtrl.$render();
           }
         });
       });
@@ -269,14 +310,29 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
         } else {
           selectContainer.remove();
         }
+        if (containerCtrl) {
+          containerCtrl.setFocused(false);
+          containerCtrl.setHasValue(false);
+          containerCtrl.input = null;
+        }
       });
 
+      function ngModelPipelineCheckValue(arg) {
+        containerCtrl && containerCtrl.setHasValue(!ngModelCtrl.$isEmpty(arg));
+        return arg;
+      }
+
+      function inputCheckValue() {
+        // The select counts as having a value if one or more options are selected,
+        // or if the input's validity state says it has bad input (eg string in a number input)
+        containerCtrl && containerCtrl.setHasValue(selectMenuCtrl.selectedLabels().length > 0 || (element[0].validity || {}).badInput);
+      }
 
       // Create a fake select to find out the label value
       function createSelect() {
         selectContainer = angular.element(selectTemplate);
         var selectEl = selectContainer.find('md-select-menu');
-        selectEl.data('$ngModelController', ngModel);
+        selectEl.data('$ngModelController', ngModelCtrl);
         selectEl.data('$mdSelectController', mdSelectCtrl);
         selectScope = scope.$new();
         $mdTheming.inherit(selectContainer, element);
@@ -301,7 +357,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
             }
             selectMenuCtrl.select(optionCtrl.hashKey, optionCtrl.value);
             selectMenuCtrl.refreshViewValue();
-            ngModel.$render();
+            ngModelCtrl.$render();
           }
         }
       }
