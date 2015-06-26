@@ -3,7 +3,7 @@ describe('$$interimElement service', function() {
   var $compilerSpy, $themingSpy, resolvingPromise;
 
   function setup() {
-    module('material.core', 'ngAnimateMock', function($provide) {
+    module('material.core', function($provide) {
       var $mdCompiler = { compile: angular.noop };
       $compilerSpy = spyOn($mdCompiler, 'compile');
       $themingSpy = jasmine.createSpy('$mdTheming');

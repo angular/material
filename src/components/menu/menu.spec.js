@@ -1,7 +1,7 @@
 describe('md-menu directive', function () {
   var $mdMenu, $timeout, something;
 
-  beforeEach(module('material.components.menu', 'ngAnimateMock'));
+  beforeEach(module('material.components.menu'));
   beforeEach(inject(function ($mdUtil, $$q, $document, _$mdMenu_, _$timeout_) {
     $mdMenu = _$mdMenu_;
     $timeout = _$timeout_;

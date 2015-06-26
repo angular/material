@@ -1,5 +1,5 @@
 describe('$mdToast service', function() {
-  beforeEach(module('material.components.toast', 'ngAnimateMock', function($provide) {
+  beforeEach(module('material.components.toast', function($provide) {
   }));
 
   function setup(options) {

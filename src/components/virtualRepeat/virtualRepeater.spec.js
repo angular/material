@@ -1,5 +1,5 @@
 describe('<md-virtual-repeat>', function() {
-  beforeEach(module('ngMaterial-mock', 'material.components.virtualRepeat'));
+  beforeEach(module('material.components.virtualRepeat'));
 
   var VirtualRepeatController = { NUM_EXTRA : 3 };
 

@@ -1,5 +1,5 @@
 describe('mdSidenav', function() {
-  beforeEach(module('material.components.sidenav', 'ngAnimateMock'));
+  beforeEach(module('material.components.sidenav'));
 
   function setup(attrs) {
     var el;

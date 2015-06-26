@@ -1,5 +1,5 @@
 describe('$mdBottomSheet service', function() {
-  beforeEach(module('material.components.bottomSheet', 'ngAnimateMock'));
+  beforeEach(module('material.components.bottomSheet'));
 
   describe('#build()', function() {
     it('should escapeToClose == true', inject(function($mdBottomSheet, $rootScope, $rootElement, $timeout, $animate, $mdConstant) {

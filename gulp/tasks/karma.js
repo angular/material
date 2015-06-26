@@ -39,6 +39,8 @@ exports.task = function (done) {
 
   if ( args.browsers ) {
     karmaConfig.browsers = args.browsers.trim().split(',');
+  } else {
+    karmaConfig.browsers = ['Firefox', 'PhantomJS'];
   }
 
   gutil.log('Running unit tests on unminified source.');

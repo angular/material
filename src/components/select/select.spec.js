@@ -1,7 +1,7 @@
 describe('<md-select>', function() {
 
   beforeEach(module('material.components.input'));
-  beforeEach(module('material.components.select', 'ngAnimateMock'));
+  beforeEach(module('material.components.select'));
 
   beforeEach(inject(function($mdUtil, $$q) {
     $mdUtil.transitionEndPromise = function() {

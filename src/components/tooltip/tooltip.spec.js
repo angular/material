@@ -2,7 +2,7 @@ describe('<md-tooltip> directive', function() {
   var $compile, $rootScope, $animate, $timeout;
   var element;
 
-  beforeEach(module('material.components.tooltip', 'ngAnimateMock'));
+  beforeEach(module('material.components.tooltip'));
   beforeEach(inject(function(_$compile_, _$rootScope_, _$animate_, _$timeout_){
     $compile   = _$compile_;
     $rootScope = _$rootScope_;
@@ -75,7 +75,7 @@ describe('<md-tooltip> directive', function() {
     $timeout.flush(98);
     expect($rootScope.isVisible).toBeFalsy();
 
-    // Total 99 == tooltipDelay
+    // Total 300 == tooltipDelay
     $timeout.flush(1);
     expect($rootScope.isVisible).toBe(true);
 
@@ -170,7 +170,7 @@ describe('<md-tooltip> directive', function() {
             'Tooltip' +
           '</md-tooltip>' +
         '</md-button>'
-      )
+      );
 
       // this focus is needed to set `$document.activeElement`
       // and wouldn't be required if `document.activeElement` was settable.

@@ -1,6 +1,6 @@
 describe('$mdDialog', function() {
 
-  beforeEach(module('material.components.dialog', 'ngAnimateMock'));
+  beforeEach(module('material.components.dialog'));
 
   beforeEach(inject(function spyOnMdEffects($$q, $animate) {
     spyOn($animate, 'leave').and.callFake(function(element) {
@@ -576,7 +576,7 @@ describe('$mdDialog', function() {
 });
 
 describe('$mdDialog with custom interpolation symbols', function() {
-  beforeEach(module('material.components.dialog', 'ngAnimateMock'));
+  beforeEach(module('material.components.dialog'));
 
   beforeEach(module(function($interpolateProvider) {
     $interpolateProvider.startSymbol('[[').endSymbol(']]');
