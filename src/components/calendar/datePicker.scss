@@ -1,9 +1,10 @@
-$md-datepicker-button-size: 48px;
+// Space between the text input and the calendar-icon button.
 $md-datepicker-button-gap: 12px;
 
 
 // Mixin for a "flat" input that can be used for components that contain an input
 // (datepicker, autocomplete).
+// TODO(jelbourn): actually use this w/ autocomplete.
 @mixin md-flat-input() {
   font-size: 14px;
 
@@ -20,21 +21,16 @@ $md-datepicker-button-gap: 12px;
 
 // The calendar icon button used to open the calendar pane.
 // Need absurd specificty to override md-button.md-icon-button.
-.md-date-picker-button {
+.md-datepicker-button {
   display: inline-block;
   box-sizing: border-box;
   background: none;
-
-  &.md-open {
-    fill: lightblue;
-  }
 }
 
 // The input into which the user can type the date.
 .md-datepicker-input {
   @include md-flat-input();
   width: 100%;
-  line-height: 21px;
 }
 
 // Container for the datepicker input.
@@ -46,28 +42,11 @@ $md-datepicker-button-gap: 12px;
   border-bottom: 1px solid #e0e0e0;
   width: 120px;
   margin-left: $md-datepicker-button-gap;
-
-  &.md-open {
-    border: 1px solid #e0e0e0;
-    border-bottom: none;
-    min-width: $md-calendar-width;
-    margin-left: -$md-datepicker-button-gap;
-
-    .md-datepicker-input {
-      margin-left: 24px;
-      //line-height: 40px;
-      height: 40px;
-    }
-
-    .md-datepicker-expand-triangle {
-      display: none;
-    }
-  }
 }
 
 
 // Floating pane that contains the calendar at the bottom of the input.
-.md-date-calendar-pane {
+.md-datepicker-calendar-pane {
   position: absolute;
   top: 0;
   left: 0;
@@ -79,29 +58,15 @@ $md-datepicker-button-gap: 12px;
 }
 
 // Shadow that wraps around both the floating calendar pane and the in-line input.
-.md-date-calendar-pane-shadow {
+.md-datepicker-calendar-pane-shadow {
   position: absolute;
   z-index: $z-index-datepicker-shadow;
   width: $md-calendar-width;
 }
 
-
-.md-datepicker-triangle-button {
-  position: absolute;
-  right: 0;
-  top: 0;
-  transform: translateY(-25%) translateX(45%);
-
-  &:hover .md-datepicker-expand-triangle {
-    border-top-color: rgba(black, 0.54);
-  }
-}
-
-// Need crazy specificity to override .md-button.md-icon-button
-.md-datepicker-triangle-button.md-button.md-icon-button {
-  height: 100%;
-}
-
+// Down "disclosure" triangle/arrow indicating that the datepicker can be opened.
+// We can do this entirely with CSS without needing to load an icon.
+// See https://css-tricks.com/snippets/css/css-triangle/
 $md-date-arrow-size: 6px;
 .md-datepicker-expand-triangle {
   // Center the triangle inside of the button so that the
@@ -116,4 +81,46 @@ $md-date-arrow-size: 6px;
   border-left: $md-date-arrow-size solid transparent;
   border-right: $md-date-arrow-size solid transparent;
   border-top: $md-date-arrow-size solid rgba(black, 0.20);
+}
+
+// Button containing the down "disclosure" triangle/arrow.
+.md-datepicker-triangle-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateY(-25%) translateX(45%);
+
+  &:hover .md-datepicker-expand-triangle {
+    border-top-color: rgba(black, 0.54);
+  }
+}
+
+// Need crazy specificity to override .md-button.md-icon-button.
+// Only apply this high specifiy to the property we need to override.
+.md-datepicker-triangle-button.md-button.md-icon-button {
+  height: 100%;
+}
+
+
+// Open state for all of the elements of the picker.
+.md-datepicker-open {
+  .md-datepicker-input-container {
+    border: 1px solid #e0e0e0;
+    border-bottom: none;
+    min-width: $md-calendar-width;
+    margin-left: -$md-datepicker-button-gap;
+  }
+
+  .md-datepicker-input {
+    margin-left: 24px;
+    height: 40px;
+  }
+
+  .md-datepicker-expand-triangle {
+    display: none;
+  }
+
+  .md-datepicker-calendar-icon {
+    fill: #2196f3;
+  }
 }
