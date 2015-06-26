@@ -44,18 +44,18 @@
   function calendarDirective() {
     return {
       template:
-          '<div class="md-calendar-month-floating-label"></div>' +
           '<table class="md-calendar-day-header"><thead></thead></table>' +
           '<div class="md-calendar-scroll-mask">' +
             '<md-virtual-repeat-container class="md-calendar-scroller">' +
               '<table class="md-calendar">' +
                 '<tbody md-virtual-repeat="i in ctrl.items" md-calendar-month ' +
                     'md-month-offset="$index" class="md-calendar-month" aria-hidden="true" ' +
+                    'md-start-index="1000" ' +
                     'md-item-size="' + TBODY_HEIGHT + '"></tbody>' +
               '</table>' +
             '</md-virtual-repeat-container>' +
           '</div>' +
-          '<div aria-live="polite" class="md-visually-hidden"></div>',
+          '<div aria-live="assertive" aria-atomic="true" class="md-visually-hidden"></div>',
       scope: {},
       restrict: 'E',
       require: ['ngModel', 'mdCalendar'],
@@ -186,7 +186,7 @@
 
     // Do a one-time scroll to the selected date once the months have done their initial render.
     var off = $scope.$on('md-calendar-month-initial-render', function() {
-      self.scrollToMonth(self.selectedDate);
+      //self.scrollToMonth(self.selectedDate);
       off();
     });
 
