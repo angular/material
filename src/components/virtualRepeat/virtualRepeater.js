@@ -111,7 +111,7 @@ function VirtualRepeatContainerController($$rAF, $scope, $element, $attrs) {
 /** Called by the md-virtual-repeat inside of the container at startup. */
 VirtualRepeatContainerController.prototype.register = function(repeaterCtrl) {
   this.repeater = repeaterCtrl;
-  
+
   angular.element(this.scroller)
       .on('scroll wheel touchmove touchend', angular.bind(this, this.handleScroll_));
 };
@@ -192,10 +192,17 @@ VirtualRepeatContainerController.prototype.getScrollOffset = function() {
   return this.scrollOffset;
 };
 
+/**
+ * Scrolls to a given scrollTop position.
+ * @param {number} position
+ */
+VirtualRepeatContainerController.prototype.scrollTo = function(position) {
+  this.scroller[this.isHorizontal() ? 'scrollLeft' : 'scrollTop'] = position;
+  this.handleScroll_();
+};
 
 VirtualRepeatContainerController.prototype.resetScroll = function() {
-  this.scroller[this.isHorizontal() ? 'scrollLeft' : 'scrollTop'] = 0;
-  this.handleScroll_();
+  this.scrollTo(0);
 };
 
 
@@ -293,6 +300,13 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document) 
   // getComputedStyle?
   /** @type {number} Height/width of repeated elements. */
   this.itemSize = $scope.$eval($attrs.mdItemSize);
+
+  /** @type {boolean} Whether this is the first time that items are rendered. */
+  this.isFirstRender = true;
+
+  /** @type {number} Most recently seen length of items. */
+  this.itemsLength = 0;
+
   /**
    * Presently rendered blocks by repeat index.
    * @type {Object<number, !VirtualRepeatController.Block}
@@ -371,6 +385,12 @@ VirtualRepeatController.prototype.getItemSize = function() {
  */
 VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItems) {
   var itemsLength = items ? items.length : 0;
+  var lengthChanged = false;
+
+  if (itemsLength !== this.itemsLength) {
+    lengthChanged = true;
+    this.itemsLength = itemsLength;
+  }
 
   // If the number of items shrank, scroll up to the top.
   if (this.items && itemsLength < this.items.length && this.container.getScrollOffset() !== 0) {
@@ -385,7 +405,16 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
   }
 
   this.parentNode = this.$element[0].parentNode;
-  this.container.setScrollSize(itemsLength * this.itemSize);
+
+  if (lengthChanged) {
+    this.container.setScrollSize(itemsLength * this.itemSize);
+  }
+
+  if (this.isFirstRender) {
+    this.isFirstRender = false;
+    var startIndex = this.$attrs.mdStartIndex ? this.$scope.$eval(this.$attrs.mdStartIndex) : 0;
+    this.container.scrollTo(startIndex * this.itemSize);
+  }
 
   // Detach and pool any blocks that are no longer in the viewport.
   Object.keys(this.blocks).forEach(function(blockIndex) {
