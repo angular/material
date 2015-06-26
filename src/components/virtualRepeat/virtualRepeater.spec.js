@@ -9,6 +9,7 @@ describe('<md-virtual-repeat>', function() {
   var REPEATER_HTML = ''+
       '<div md-virtual-repeat="i in items" ' +
       '     md-item-size="10" ' +
+      '     md-start-index="startIndex" ' +
       '     style="height: 10px; width: 10px; box-sizing: border-box;">' +
       '       {{i}} {{$index}}' +
       '</div>';
@@ -28,6 +29,7 @@ describe('<md-virtual-repeat>', function() {
     $compile = _$compile_;
     $document = _$document_;
     scope = $rootScope.$new();
+    scope.startIndex = 0;
     scroller = null;
     sizer = null;
     offsetter = null;
@@ -247,6 +249,16 @@ describe('<md-virtual-repeat>', function() {
     for (var i = 0; i < numChildren; i++) {
       expect(sizer[0].childNodes[i].offsetHeight).toBeLessThan(maxElementSize + 1);
     }
+  });
+
+  it('should start at the given scroll position', function() {
+    scope.startIndex = 10;
+    scope.items = createItems(200);
+    createRepeater();
+    scope.$apply();
+    $$rAF.flush();
+
+    expect(scroller[0].scrollTop).toBe(10 * ITEM_SIZE);
   });
 
   /**
