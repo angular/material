@@ -189,7 +189,7 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
                   id="fl-input-{{$mdAutocompleteCtrl.id}}"\
                   name="{{inputName}}"\
                   autocomplete="off"\
-                  ng-required="isRequired"\
+                  ng-required="$mdAutocompleteCtrl.isRequired"\
                   ng-minlength="inputMinlength"\
                   ng-maxlength="inputMaxlength"\
                   ng-disabled="$mdAutocompleteCtrl.isDisabled"\
@@ -212,7 +212,7 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
                 name="{{inputName}}"\
                 ng-if="!floatingLabel"\
                 autocomplete="off"\
-                ng-required="isRequired"\
+                ng-required="$mdAutocompleteCtrl.isRequired"\
                 ng-disabled="$mdAutocompleteCtrl.isDisabled"\
                 ng-model="$mdAutocompleteCtrl.scope.searchText"\
                 ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
