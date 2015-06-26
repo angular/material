@@ -23,9 +23,9 @@
   function datePickerDirective() {
     return {
       template:
-          '<md-button class="md-date-picker-button md-icon-button" type="button" ' +
+          '<md-button class="md-datepicker-button md-icon-button" type="button" ' +
               'ng-click="ctrl.openCalendarPane()">' +
-              '<md-icon md-svg-icon="md-calendar"></md-icon>' +
+              '<md-icon class="md-datepicker-calendar-icon" md-svg-icon="md-calendar"></md-icon>' +
           '</md-button>' +
           '<div class="md-datepicker-input-container">' +
             '<input class="md-datepicker-input">' +
@@ -38,13 +38,13 @@
 
           // This pane (and its shadow) will be detached from here and re-attached to the
           // document body.
-          '<div class="md-date-calendar-pane">' +
+          '<div class="md-datepicker-calendar-pane">' +
             '<md-calendar ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen"></md-calendar>' +
           '</div>' +
 
           // We have a separate shadow element in order to wrap both the floating pane and the
           // inline input / trigger as one shadowed whole.
-          '<div class="md-date-calendar-pane-shadow md-whiteframe-z1"></div>',
+          '<div class="md-datepicker-calendar-pane-shadow md-whiteframe-z1"></div>',
       require: ['ngModel', 'mdDatePicker'],
       scope: {
         placeholder: '@mdPlaceholder'
@@ -99,13 +99,13 @@
     this.inputContainer = $element[0].querySelector('.md-datepicker-input-container');
 
     /** @type {HTMLElement} Floating calendar pane. */
-    this.calendarPane = $element[0].querySelector('.md-date-calendar-pane');
+    this.calendarPane = $element[0].querySelector('.md-datepicker-calendar-pane');
 
     /** @type {HTMLElement} Shadow for floating calendar pane and input trigger. */
-    this.calendarShadow = $element[0].querySelector('.md-date-calendar-pane-shadow');
+    this.calendarShadow = $element[0].querySelector('.md-datepicker-calendar-pane-shadow');
 
     /** @type {HTMLElement} Calendar icon button. */
-    this.calendarButton = $element[0].querySelector('.md-date-picker-button');
+    this.calendarButton = $element[0].querySelector('.md-datepicker-button');
 
     /** @final {!angular.JQLite} */
     this.$element = $element;
@@ -122,6 +122,8 @@
 
     /** @type {boolean} Whether the date-picker's calendar pane is open. */
     this.isCalendarOpen = false;
+
+    this.calendarPane.id = 'md-date-pane' + $mdUtil.nextUid();
 
     /** Pre-bound click handler is saved so that the event listener can be removed. */
     this.bodyClickHandler = this.handleBodyClick.bind(this);
@@ -232,12 +234,12 @@
   DatePickerCtrl.prototype.setDisabled = function(isDisabled) {
     this.isDisabled = isDisabled;
     this.inputElement.disabled = isDisabled;
+    this.calendarButton.disabled = isDisabled;
   };
 
   /** Position and attach the floating calendar to the document. */
   DatePickerCtrl.prototype.attachCalendarPane = function() {
-    this.inputContainer.classList.add('md-open');
-    this.calendarButton.classList.add('md-open');
+    this.$element.addClass('md-datepicker-open');
 
     var elementRect = this.inputContainer.getBoundingClientRect();
     var bodyRect = document.body.getBoundingClientRect();
@@ -249,7 +251,7 @@
     // Add shadow to the calendar pane only after the UI thread has reached idle, allowing the
     // content of the calender pane to be rendered.
     this.$timeout(function() {
-      this.calendarShadow.style.top = (elementRect.top + window.pageYOffset) + 'px';
+      this.calendarShadow.style.top = (elementRect.top - bodyRect.top) + 'px';
       this.calendarShadow.style.left = this.calendarPane.style.left;
       this.calendarShadow.style.height =
           (this.calendarPane.getBoundingClientRect().bottom - elementRect.top) + 'px';
@@ -259,8 +261,7 @@
 
   /** Detach the floating calendar pane from the document. */
   DatePickerCtrl.prototype.detachCalendarPane = function() {
-    this.inputContainer.classList.remove('md-open');
-    this.calendarButton.classList.remove('md-open');
+    this.$element.removeClass('md-datepicker-open');
 
     // Use native DOM removal because we do not want any of the angular state of this element
     // to be disposed.
