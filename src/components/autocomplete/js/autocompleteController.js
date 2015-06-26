@@ -443,6 +443,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
    */
   function select (index) {
     $scope.selectedItem = ctrl.matches[index];
+    ctrl.loading = false;
     ctrl.hidden = true;
     ctrl.index = 0;
     ctrl.matches = [];

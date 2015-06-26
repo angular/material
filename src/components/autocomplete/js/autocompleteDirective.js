@@ -136,7 +136,7 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
             role="listbox">\
           ' + getInputElement() + '\
           <md-progress-linear\
-              ng-if="$mdAutocompleteCtrl.loading"\
+              ng-if="$mdAutocompleteCtrl.loading && !$mdAutocompleteCtrl.hidden"\
               md-mode="indeterminate"></md-progress-linear>\
           <ul role="presentation"\
               class="md-autocomplete-suggestions md-whiteframe-z1 {{menuClass || \'\'}}"\
