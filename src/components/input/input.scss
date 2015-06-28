@@ -120,9 +120,9 @@ md-input-container {
    * The .md-input class is added to the input/textarea
    */
   .md-input {
-    flex: 1 1 auto;
     order: 2;
     display: block;
+    margin-top: auto;
 
     background: none;
     padding-top: $input-padding-top;

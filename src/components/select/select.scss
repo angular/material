@@ -47,12 +47,12 @@ $select-max-visible-options: 5;
 }
 
 md-input-container > md-select {
-  margin: 0;
+  margin: auto 0 0 0;
+  order: 2;
 }
 
 md-select {
   display: flex;
-  order: 2;
   margin: 2.5*$baseline-grid 0 3*$baseline-grid + 2 0;
   &:focus {
     outline: none;
