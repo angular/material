@@ -113,6 +113,14 @@ describe('<md-select>', function() {
     expect(select.attr('aria-disabled')).toBe('true');
   }));
 
+  it('supports passing classes to the container', inject(function($document) {
+    var select = setupSelect('ng-model="val", md-container-class="test"').find('md-select');
+    openSelect(select);
+    var container = $document[0].querySelector('.md-select-menu-container');
+    expect(container).toBeTruthy();
+    expect(container.classList.contains('test')).toBe(true);
+  }));
+
   it('closes the menu if the element is destroyed', inject(function($document, $rootScope) {
     var called = false;
     $rootScope.onClose = function() {
