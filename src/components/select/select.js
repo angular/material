@@ -173,13 +173,11 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
       }
 
 
-      ngModelCtrl.$parsers.push(ngModelPipelineCheckValue);
-      ngModelCtrl.$formatters.push(ngModelPipelineCheckValue);
-
       var originalRender = ngModelCtrl.$render;
       ngModelCtrl.$render = function() {
         originalRender();
         syncLabelText();
+        inputCheckValue();
       };
 
       mdSelectCtrl.setLabelText = function(text) {
@@ -317,11 +315,6 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
           containerCtrl.input = null;
         }
       });
-
-      function ngModelPipelineCheckValue(arg) {
-        containerCtrl && containerCtrl.setHasValue(!ngModelCtrl.$isEmpty(arg));
-        return arg;
-      }
 
       function inputCheckValue() {
         // The select counts as having a value if one or more options are selected,
