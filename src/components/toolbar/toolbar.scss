@@ -101,6 +101,13 @@ md-toolbar {
     margin-right: $icon-button-margin-offset;
   }
 
+  &> md-menu:last-child {
+    margin-right: $icon-button-margin-offset;
+    & > .md-button {
+      margin-right: 0;
+    }
+  }
+
   @media screen and (-ms-high-contrast: active) {
     border-bottom: 1px solid #fff;
   }
