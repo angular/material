@@ -184,7 +184,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
       mdSelectCtrl.setLabelText = function(text) {
         mdSelectCtrl.setIsPlaceholder(!text);
         // Use placeholder attribute, otherwise fallback to the md-input-container label
-        var tmpPlaceholder = attr.placeholder || (containerCtrl.label ? containerCtrl.label.text() : '');
+        var tmpPlaceholder = attr.placeholder || (containerCtrl && containerCtrl.label ? containerCtrl.label.text() : '');
         text = text || tmpPlaceholder || '';
         var target = valueEl.children().eq(0);
         target.text(text);
@@ -372,7 +372,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
             element: selectContainer,
             target: element[0],
             hasBackdrop: true,
-            loadingAsync: attr.mdOnOpen ? scope.$eval(attr.mdOnOpen) || true : false,
+            loadingAsync: attr.mdOnOpen ? scope.$eval(attr.mdOnOpen) || true : false
           }).then(function(selectedText) {
             isOpen = false;
           });
