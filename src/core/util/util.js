@@ -117,14 +117,14 @@ angular.module('material.core')
             applyStyles(body, {
               position: 'fixed',
               width: '100%',
-              overflowY: 'scroll',
               top: -scrollOffset + 'px'
+            });
+
+            applyStyles(htmlNode, {
+              overflowY: 'scroll'
             });
           }
 
-          applyStyles(htmlNode, {
-            overflowY: 'hidden'
-          });
 
           if (body.clientWidth < clientWidth) applyStyles(body, {overflow: 'hidden'});
 
