@@ -229,8 +229,8 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
 
       function setAriaLabel() {
         var labelText = element.attr('placeholder');
-        if (!labelText) {
-          labelText = containerCtrl.element.find('label').text();
+        if (!labelText && containerCtrl && containerCtrl.label) {
+          labelText = containerCtrl.label.text();
         }
         $mdAria.expect(element, 'aria-label', labelText);
       }
@@ -648,6 +648,7 @@ function OptionDirective($mdButtonInkRipple, $mdUtil) {
     scope.$$postDigest(function() {
       attr.$observe('selected', function(selected) {
         if (!angular.isDefined(selected)) return;
+        if (typeof selected == 'string') selected = true;
         if (selected) {
           if (!selectCtrl.isMultiple) {
             selectCtrl.deselect( Object.keys(selectCtrl.selected)[0] );
