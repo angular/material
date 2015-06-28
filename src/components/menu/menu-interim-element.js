@@ -145,7 +145,7 @@ function MenuProvider($$interimElementProvider) {
         });
 
         // Close menu on menu item click, if said menu-item is not disabled
-        opts.menuContentEl.on('click', function(e) {
+        opts.menuContentEl[0].addEventListener('click', function(e) {
           var target = e.target;
           // Traverse up the event until we get to the menuContentEl to see if
           // there is an ng-click and that the ng-click is not disabled
@@ -174,7 +174,7 @@ function MenuProvider($$interimElementProvider) {
             }
             return false;
           }
-        });
+        }, true);
 
         // kick off initial focus in the menu on the first element
         var focusTarget = opts.menuContentEl[0].querySelector('[md-menu-focus-target]');
