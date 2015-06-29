@@ -79,8 +79,6 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
 
   function bindEvents () {
     angular.element($window).on('resize', handleWindowResize);
-    angular.element(elements.paging).on('DOMSubtreeModified', ctrl.updateInkBarStyles);
-    angular.element(elements.paging).on('DOMSubtreeModified', ctrl.updatePagination);
   }
 
   function configureWatchers () {

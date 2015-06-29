@@ -18,6 +18,10 @@ function MdTemplate ($compile, $mdUtil, $timeout) {
     var compileScope = scope.compileScope.$new();
     element.html(scope.template);
     $compile(element.contents())(compileScope);
+    element.on('DOMSubtreeModified', function () {
+      ctrl.updatePagination();
+      ctrl.updateInkBarStyles();
+    });
     return $timeout(handleScope);
     function handleScope () {
       scope.$watch('connected', function (value) { value === false ? disconnect() : reconnect(); });
