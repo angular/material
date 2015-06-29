@@ -157,26 +157,27 @@ describe('<md-select>', function() {
   }));
 
   describe('input container', function() {
-    it('should set has-value class on container for non-ng-model input', inject(function($rootScope) {
-      $rootScope.model = 0;
+    beforeEach(inject(function($document) {
+      var selectMenus = $document.find('md-select-menu');
+      selectMenus.remove();
+    }));
+
+    it('should set has-value class on container for non-ng-model input', inject(function($rootScope, $document) {
       var el = setupSelect('ng-model="$root.model"', [1, 2, 3]);
       var select = el.find('md-select');
-      expect(selectedOptions(select).length).toBe(0);
 
-      el.triggerHandler({
-        type: 'click',
-        target: select.find('md-option')[1]
-      });
+      openSelect(select);
+
+      var opt = $document.find('md-option')[0].click();
+
+      waitForSelectClose();
 
       expect(el).toHaveClass('md-input-has-value');
     }));
 
     it('should set has-value class on container for ng-model input', inject(function($rootScope) {
       $rootScope.value = 'test';
-      var el = setupSelect('ng-model="$root.value"');
-      expect(el).toHaveClass('md-input-has-value');
-
-      $rootScope.$apply('value = "3"');
+      var el = setupSelect('ng-model="$root.value"', ['test', 'no-test']);
       expect(el).toHaveClass('md-input-has-value');
 
       $rootScope.$apply('value = null');

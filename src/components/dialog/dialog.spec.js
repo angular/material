@@ -316,7 +316,8 @@ describe('$mdDialog', function() {
       expect(parent[0].querySelectorAll('md-dialog').length).toBe(1);
     }));
 
-    it('should disableParentScroll == true', inject(function($mdDialog, $animate, $rootScope) {
+    it('should disableParentScroll == true', inject(function($mdDialog, $animate, $rootScope, $mdUtil) {
+      spyOn($mdUtil, 'disableScrollAround');
       var parent = angular.element('<div>');
       $mdDialog.show({
         template: '<md-dialog>',
@@ -326,7 +327,7 @@ describe('$mdDialog', function() {
       $rootScope.$apply();
       $animate.triggerCallbacks();
       $rootScope.$apply();
-      expect(parent.css('overflow')).toBe('hidden');
+      expect($mdUtil.disableScrollAround).toHaveBeenCalled();
     }));
 
     it('should hasBackdrop == true', inject(function($mdDialog, $animate, $rootScope) {
