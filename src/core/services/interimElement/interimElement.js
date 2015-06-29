@@ -401,6 +401,10 @@ function InterimElementProvider() {
             self.cancelTimeout();
             return removeDone = $q.when(showDone).then(function() {
               var ret = element ? options.onRemove(options.scope, element, options) : true;
+              if (ret) {
+                  // Issue onRemoving callback when `remove()` is called and is not canceled.
+                  (options.onRemoving || angular.noop)(options.scope, element, options);
+              }
               return $q.when(ret).then(function() {
                 if (!options.preserveScope) options.scope.$destroy();
                 removeDone = true;

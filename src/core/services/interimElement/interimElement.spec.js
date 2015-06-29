@@ -344,6 +344,26 @@ describe('$$interimElement service', function() {
         }
       }));
 
+      it('calls onRemoving', inject(function($rootScope, $animate) {
+        var onRemovingCalled = false;
+        Service.show({
+          template: '<some-element />',
+          isPassingOptions: true,
+          onRemoving: onRemoving
+        });
+        $rootScope.$digest();
+        $animate.triggerCallbacks();
+        Service.hide();
+        $rootScope.$digest();
+        expect(onRemovingCalled).toBe(true);
+
+        function onRemoving(scope, el, options) {
+          onRemovingCalled = true;
+          expect(options.isPassingOptions).toBe(true);
+          expect(el[0]).toBeTruthy();
+        }
+      }));
+
       it('returns a promise', inject(function($$interimElement) {
         expect(typeof Service.show().then).toBe('function');
       }));
