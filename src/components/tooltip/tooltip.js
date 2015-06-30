@@ -129,7 +129,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     function bindEvents () {
       var mouseActive = false;
       var enterHandler = function() {
-        if (!hasComputedStyleValue('pointer-events','none')) {
+        if (!hasComputedStyleValue('pointer-events','block')) {
           setVisible(true);
         }
       };
