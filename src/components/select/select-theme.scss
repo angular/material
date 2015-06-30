@@ -37,6 +37,9 @@ md-select.md-THEME_NAME-theme {
 }
 
 md-select-menu.md-THEME_NAME-theme {
+  md-option[disabled] {
+    color: '{{foreground-3}}';
+  }
 
   md-optgroup {
     color: '{{foreground-2}}';
