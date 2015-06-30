@@ -71,8 +71,7 @@ angular.module('material.core')
 
         // Creates a virtual scrolling mask to absorb touchmove, keyboard, scrollbar clicking, and wheel events
         function disableElementScroll() {
-          var zIndex = $window.getComputedStyle(element[0]).zIndex - 1;
-          if (isNaN(zIndex)) zIndex = 50;
+          var zIndex = 50;
           var scrollMask = angular.element(
             '<div class="md-scroll-mask" style="z-index: ' + zIndex + '">' +
             '  <div class="md-scroll-mask-bar"></div>' +
