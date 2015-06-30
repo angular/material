@@ -127,7 +127,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
    * @param handler
    */
   function defineBooleanAttribute (key, handler) {
-    var attr = 'md' + key.charAt(0).toUpperCase() + key.substr(1);
+    var attr = $attrs.$normalize('md-' + key);
     if (handler) defineProperty(key, handler);
     $attrs.$observe(attr, function (newValue) { ctrl[key] = newValue !== 'false'; });
   }
