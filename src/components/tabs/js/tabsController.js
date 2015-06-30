@@ -112,12 +112,12 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
       model && model.assign(ctrl.scope, newValue);
       handler(newValue, oldValue);
     }, value);
-    $attrs.$observe(attr, function (attrValue) {
-      model = $parse(attrValue);
-      ctrl.scope.$watch(attrValue, function (newValue) {
+    if ($attrs.hasOwnProperty(attr)) {
+      model = $parse($attrs[attr]);
+      $scope.$watch($attrs[attr], function (newValue) {
         ctrl[key] = newValue || 0;
       });
-    });
+    }
   }
 
   /**
