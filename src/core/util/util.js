@@ -53,6 +53,8 @@ angular.module('material.core')
 
       // Disables scroll around the passed element.
       disableScrollAround: function (element) {
+        Util.disableScrollAround._count = Util.disableScrollAround._count || 0;
+        ++Util.disableScrollAround._count;
         if (Util.disableScrollAround._enableScrolling) return Util.disableScrollAround._enableScrolling;
         element = angular.element(element);
         var body = $document[0].body,
@@ -60,9 +62,11 @@ angular.module('material.core')
           restoreElement = disableElementScroll();
 
         return Util.disableScrollAround._enableScrolling = function () {
-          restoreBody();
-          restoreElement();
-          delete Util.disableScrollAround._enableScrolling;
+          if (!--Util.disableScrollAround._count) {
+            restoreBody();
+            restoreElement();
+            delete Util.disableScrollAround._enableScrolling;
+          }
         };
 
         // Creates a virtual scrolling mask to absorb touchmove, keyboard, scrollbar clicking, and wheel events
