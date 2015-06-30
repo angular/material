@@ -65,6 +65,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
       adjustOffset();
       updatePagination();
       ctrl.tabs[$scope.selectedIndex] && ctrl.tabs[$scope.selectedIndex].scope.select();
+      ctrl.updateInkBarStyles();
       loaded = true;
     });
   }
@@ -98,8 +99,6 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   function cleanup () {
     destroyed = true;
     angular.element($window).off('resize', handleWindowResize);
-    angular.element(elements.paging).off('DOMSubtreeModified', ctrl.updateInkBarStyles);
-    angular.element(elements.paging).off('DOMSubtreeModified', updatePagination);
   }
 
   //-- Change handlers
