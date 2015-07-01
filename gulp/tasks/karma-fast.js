@@ -4,7 +4,7 @@ var util = require('../util');
 var ROOT = require('../const').ROOT;
 var args = util.args;
 
-// NOTE: `karma-fas` does NOT pre-make a full build of JS and CSS
+// NOTE: `karma-fast` does NOT pre-make a full build of JS and CSS
 // exports.dependencies = ['build'];
 
 exports.task = function (done) {
@@ -19,6 +19,7 @@ exports.task = function (done) {
   if ( args.browsers ) {
     karmaConfig.browsers = args.browsers.trim().split(',');
   }
+  // NOTE: `karma-fast` does NOT test Firefox by default.
 
   gutil.log('Running unit tests on unminified source.');
   karma.start(karmaConfig, captureError(clearEnv,clearEnv));

@@ -170,7 +170,7 @@ describe('<md-tooltip> directive', function() {
             'Tooltip' +
           '</md-tooltip>' +
         '</md-button>'
-      )
+      );
 
       // this focus is needed to set `$document.activeElement`
       // and wouldn't be required if `document.activeElement` was settable.
