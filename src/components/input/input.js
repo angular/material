@@ -262,11 +262,12 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
       element.on('keydown input', onChangeTextarea);
 
       if(isNaN(min_rows)) {
+        element.attr('rows', '1');
+
         element.on('scroll', onScroll);
       }
 
       angular.element($window).on('resize', onChangeTextarea);
-      element.attr('rows', '1');
 
       scope.$on('$destroy', function() {
         angular.element($window).off('resize', onChangeTextarea);
