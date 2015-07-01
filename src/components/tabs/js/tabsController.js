@@ -109,7 +109,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   function defineBinding (key, attr, defaultValue, handler) {
     var value = defaultValue, model;
     defineProperty(key, function (newValue, oldValue) {
-      model && model.assign(ctrl.scope, newValue);
+      model && model.assign && model.assign(ctrl.scope, newValue);
       handler(newValue, oldValue);
     }, value);
     if ($attrs.hasOwnProperty(attr)) {
