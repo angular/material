@@ -472,6 +472,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
    * This is triggered by `tabDirective.js` when the user's tabs have been re-ordered.
    */
   function updateTabOrder () {
+    if (!ctrl.tabs[ctrl.selectedIndex]) return;
     var selectedItem = ctrl.tabs[ctrl.selectedIndex],
         focusItem = ctrl.tabs[ctrl.focusIndex];
     ctrl.tabs = ctrl.tabs.sort(function (a, b) {
