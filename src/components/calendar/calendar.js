@@ -11,6 +11,17 @@
     'material.core', 'material.components.icon'
   ]).directive('mdCalendar', calendarDirective);
 
+
+  // PRE RELEASE
+  // TODO(jelbourn): Base colors on the theme
+  // TODO(jelbourn): read-only state.
+  // TODO(jelbourn): Make sure the *time* on the written date makes sense (probably midnight).
+  // TODO(jelbourn): Date "isComplete" logic
+  // TODO(jelbourn): Apple + up / down == PgDown and PgUp
+  // TODO(jelbourn): Documentation
+  // TODO(jelbourn): Demo that uses moment.js
+  // TODO(jelbourn): Fix NVDA stealing key presses (IE) ???
+
   // FUTURE VERSION
   // TODO(jelbourn): Animated month transition on ng-model change.
   // TODO(jelbourn): Scroll snapping
@@ -18,17 +29,6 @@
   // TODO(jelbourn): Previous month opacity is lowered when partially scrolled out of view.
   // TODO(jelbourn): Support md-calendar standalone on a page (as a tabstop w/ aria-live
   //     announcement and key handling).
-
-
-  // PRE RELEASE
-  // TODO(jelbourn): Base colors on the theme
-  // TODO(jelbourn): Align style with spec
-  // TODO(jelbourn): read-only state.
-  // TODO(jelbourn): Make sure the *time* on the written date makes sense (probably midnight).
-  // TODO(jelbourn): Date "isComplete" logic
-  // TODO(jelbourn): Apple + up / down == PgDown and PgUp
-  // TODO(jelbourn): Documentation
-  // TODO(jelbourn): Demo that uses moment.js
 
   // COULD GO EITHER WAY
   // TODO(jelbourn): Clicking on the month label opens the month-picker.
@@ -47,10 +47,10 @@
           '<table class="md-calendar-day-header"><thead></thead></table>' +
           '<div class="md-calendar-scroll-mask">' +
             '<md-virtual-repeat-container class="md-calendar-scroller">' +
-              '<table class="md-calendar">' +
-                '<tbody md-virtual-repeat="i in ctrl.items" md-calendar-month ' +
+              '<table role="grid" class="md-calendar">' +
+                '<tbody role="rowgroup" md-virtual-repeat="i in ctrl.items" md-calendar-month ' +
                     'md-month-offset="$index" class="md-calendar-month" aria-hidden="true" ' +
-                    'md-start-index="1000" ' +
+                    'md-start-index="ctrl.getSelectedMonthIndex()" ' +
                     'md-item-size="' + TBODY_HEIGHT + '"></tbody>' +
               '</table>' +
             '</md-virtual-repeat-container>' +
@@ -87,7 +87,7 @@
       $$mdDateUtil, $$mdDateLocale, $mdInkRipple, $mdUtil) {
 
     /** @type {Array<number>} Dummy array-like object for virtual-repeat to iterate over. */
-    this.items = {length: 2000};
+    this.items = {length: 2000 * 12};
 
     /** @final {!angular.$animate} */
     this.$animate = $animate;
@@ -156,6 +156,12 @@
      */
     this.displayDate = null;
 
+    /**
+     * The date that has or should have browser focus.
+     * @type {Date}
+     */
+    this.focusDate = null;
+
     /** @type {boolean} */
     this.isInitialized = false;
 
@@ -183,12 +189,6 @@
         }.bind(this)); // The `this` here is the cell element.
       }
     };
-
-    // Do a one-time scroll to the selected date once the months have done their initial render.
-    var off = $scope.$on('md-calendar-month-initial-render', function() {
-      //self.scrollToMonth(self.selectedDate);
-      off();
-    });
 
     this.attachCalendarEventListeners();
 
@@ -222,6 +222,14 @@
 
     this.displayDate = this.selectedDate || new Date(Date.now());
     this.isInitialized = true;
+  };
+
+  /**
+   * Gets the "index" of the currently selected date as it would be in the virtual-repeat.
+   * @returns {number}
+   */
+  CalendarCtrl.prototype.getSelectedMonthIndex = function() {
+    return this.dateUtil.getMonthDistance(firstRenderableDate, this.selectedDate || this.today);
   };
 
   /**
@@ -263,7 +271,7 @@
    */
   CalendarCtrl.prototype.attachCalendarEventListeners = function() {
     // Keyboard interaction.
-    angular.element(this.calendarElement).on('keydown', this.handleKeyEvent.bind(this));
+    this.$element.on('keydown', this.handleKeyEvent.bind(this));
   };
   
   /*** User input handling ***/
@@ -293,11 +301,7 @@
 
       // Selection isn't occuring, so the key event is either navigation or nothing.
       var date = self.getFocusDateFromKeyEvent(event);
-
-      // Prevent the default on the key event only if it triggered a date navigation.
-      if (!self.dateUtil.isSameDay(date, self.displayDate)) {
-        event.preventDefault();
-      }
+      event.preventDefault();
 
       // Since this is a keyboard interaction, actually give the newly focused date keyboard
       // focus after the been brought into view.
@@ -344,10 +348,13 @@
    * @param {Date=} opt_date
    */
   CalendarCtrl.prototype.focus = function(opt_date) {
-    var cellId = this.getDateId(opt_date || this.selectedDate);
+    var date = opt_date || this.selectedDate;
+    var cellId = this.getDateId(date);
     var cell = this.calendarElement.querySelector('#' + cellId);
     if (cell) {
       cell.focus();
+    } else {
+      this.focusDate = date;
     }
   };
 
