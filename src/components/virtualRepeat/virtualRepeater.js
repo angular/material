@@ -31,6 +31,10 @@ angular.module('material.components.virtualRepeat', [
  *
  * @param {boolean=} md-orient-horizontal Whether the container should scroll horizontally
  *     (defaults to scrolling vertically).
+ * @param {boolean=} md-auto-shrink When present, the container will shrink to fit
+ *     the number of items when that number is less than its original size.
+ * @param {number=} md-auto-shrink-min Minimum number of items that md-auto-shrink
+ *     will shrink to (default: 0).
  */
 function VirtualRepeatContainerDirective() {
   return {
@@ -89,6 +93,12 @@ function VirtualRepeatContainerController($$rAF, $scope, $element, $attrs) {
   this.horizontal = this.$attrs.hasOwnProperty('mdOrientHorizontal');
   /** @type {!VirtualRepeatController} The repeater inside of this container */
   this.repeater = null;
+  /** @type {boolean} Whether auto-shrink is enabled */
+  this.autoShrink = this.$attrs.hasOwnProperty('mdAutoShrink');
+  /** @type {number} Minimum number of items to auto-shrink to */
+  this.autoShrinkMin = parseInt(this.$attrs.mdAutoShrinkMin, 10) || 0;
+  /** @type {?number} Original container size when shrank */
+  this.originalSize = null;
 
   this.scroller = $element[0].getElementsByClassName('md-virtual-repeat-scroller')[0];
   this.sizer = this.scroller.getElementsByClassName('md-virtual-repeat-sizer')[0];
@@ -129,8 +139,21 @@ VirtualRepeatContainerController.prototype.getSize = function() {
 };
 
 
+/**
+ * Resizes the container.
+ * @private
+ * @param {number} The new size to set.
+ */
+VirtualRepeatContainerController.prototype.setSize_ = function(size) {
+  this.size = size;
+  this.$element[0].style[this.isHorizontal() ? 'width' : 'height'] = size + 'px';
+};
+
+
 /** Instructs the container to re-measure its size. */
 VirtualRepeatContainerController.prototype.updateSize = function() {
+  if (this.originalSize) return;
+
   this.size = this.isHorizontal()
       ? this.$element[0].clientWidth
       : this.$element[0].clientHeight;
@@ -145,44 +168,76 @@ VirtualRepeatContainerController.prototype.getScrollSize = function() {
 
 
 /**
+ * Sets the scroller element to the specified size.
+ * @private
+ * @param {number} size The new size.
+ */
+VirtualRepeatContainerController.prototype.sizeScroller_ = function(size) {
+  var dimension =  this.isHorizontal() ? 'width' : 'height';
+  var crossDimension = this.isHorizontal() ? 'height' : 'width';
+
+  // If the size falls within the browser's maximum explicit size for a single element, we can
+  // set the size and be done. Otherwise, we have to create children that add up the the desired
+  // size.
+  if (size < MAX_ELEMENT_SIZE) {
+    this.sizer.style[dimension] = size + 'px';
+  } else {
+    // Clear any existing dimensions.
+    this.sizer.innerHTML = '';
+    this.sizer.style[dimension] = 'auto';
+    this.sizer.style[crossDimension] = 'auto';
+
+    // Divide the total size we have to render into N max-size pieces.
+    var numChildren = Math.floor(size / MAX_ELEMENT_SIZE);
+
+    // Element template to clone for each max-size piece.
+    var sizerChild = document.createElement('div');
+    sizerChild.style[dimension] = MAX_ELEMENT_SIZE + 'px';
+    sizerChild.style[crossDimension] = '1px';
+
+    for (var i = 0; i < numChildren; i++) {
+      this.sizer.appendChild(sizerChild.cloneNode(false));
+    }
+
+    // Re-use the element template for the remainder.
+    sizerChild.style[dimension] = (size - (numChildren * MAX_ELEMENT_SIZE)) + 'px';
+    this.sizer.appendChild(sizerChild);
+  }
+};
+
+
+/**
+ * If auto-shrinking is enabled, shrinks or unshrinks as appropriate.
+ * @private
+ * @param {number} size The new size.
+ */
+VirtualRepeatContainerController.prototype.autoShrink_ = function(size) {
+  var shrinkSize = Math.max(size, this.autoShrinkMin * this.repeater.getItemSize());
+  if (this.autoShrink && shrinkSize !== this.size) {
+    if (shrinkSize < (this.originalSize || this.size)) {
+      if (!this.originalSize) {
+        this.originalSize = this.size;
+      }
+
+      this.setSize_(shrinkSize);
+    } else if (this.originalSize) {
+      this.setSize_(this.originalSize);
+      this.originalSize = null;
+    }
+  }
+};
+
+
+/**
  * Sets the scrollHeight or scrollWidth. Called by the repeater based on
  * its item count and item size.
  * @param {number} size The new size.
  */
 VirtualRepeatContainerController.prototype.setScrollSize = function(size) {
-  if (this.scrollSize !== size) {
-    var dimension =  this.isHorizontal() ? 'width' : 'height';
-    var crossDimension = this.isHorizontal() ? 'height' : 'width';
+  if (this.scrollSize === size) return;
 
-    // If the size falls within the browser's maximum explicit size for a single element, we can
-    // set the size and be done. Otherwise, we have to create children that add up the the desired
-    // size.
-    if (size < MAX_ELEMENT_SIZE) {
-      this.sizer.style[dimension] = size + 'px';
-    } else {
-      // Clear any existing dimensions.
-      this.sizer.innerHTML = '';
-      this.sizer.style[dimension] = 'auto';
-      this.sizer.style[crossDimension] = 'auto';
-
-      // Divide the total size we have to render into N max-size pieces.
-      var numChildren = Math.floor(size / MAX_ELEMENT_SIZE);
-
-      // Element template to clone for each max-size piece.
-      var sizerChild = document.createElement('div');
-      sizerChild.style[dimension] = MAX_ELEMENT_SIZE + 'px';
-      sizerChild.style[crossDimension] = '1px';
-
-      for (var i = 0; i < numChildren; i++) {
-        this.sizer.appendChild(sizerChild.cloneNode(false));
-      }
-
-      // Re-use the element template for the remainder.
-      sizerChild.style[dimension] = (size - (numChildren * MAX_ELEMENT_SIZE)) + 'px';
-      this.sizer.appendChild(sizerChild);
-    }
-  }
-
+  this.sizeScroller_(size);
+  this.autoShrink_(size);
   this.scrollSize = size;
 };
 

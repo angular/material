@@ -261,6 +261,106 @@ describe('<md-virtual-repeat>', function() {
     expect(scroller[0].scrollTop).toBe(10 * ITEM_SIZE);
   });
 
+  it('should shrink the container when the number of items goes down (vertical)', function() {
+    container.attr('md-auto-shrink', '');
+    createRepeater();
+    scope.items = createItems(NUM_ITEMS);
+    scope.$apply();
+    $$rAF.flush();
+
+    expect(container[0].offsetHeight).toBe(100);
+
+    // With 5 items...
+    scope.items = createItems(5);
+    scope.$apply();
+    expect(container[0].offsetHeight).toBe(5 * ITEM_SIZE);
+
+    // With 0 items...
+    scope.items = [];
+    scope.$apply();
+    expect(container[0].offsetHeight).toBe(0);
+
+    // With lots of items again...
+    scope.items = createItems(NUM_ITEMS);
+    scope.$apply();
+    expect(container[0].offsetHeight).toBe(100);
+  });
+
+  it('should shrink the container when the number of items goes down (horizontal)', function() {
+    container.attr({
+      'md-auto-shrink': '',
+      'md-orient-horizontal': ''
+    });
+    createRepeater();
+    scope.items = createItems(NUM_ITEMS);
+    scope.$apply();
+    $$rAF.flush();
+
+    expect(container[0].offsetWidth).toBe(150);
+
+    // With 5 items...
+    scope.items = createItems(5);
+    scope.$apply();
+    expect(container[0].offsetWidth).toBe(5 * ITEM_SIZE);
+
+    // With 0 items...
+    scope.items = [];
+    scope.$apply();
+    expect(container[0].offsetWidth).toBe(0);
+
+    // With lots of items again...
+    scope.items = createItems(NUM_ITEMS);
+    scope.$apply();
+    expect(container[0].offsetWidth).toBe(150);
+  });
+
+  it('should not shrink below the specified md-auto-shrink-min (vertical)', function() {
+    container.attr({
+      'md-auto-shrink': '',
+      'md-auto-shrink-min': '2'
+    });
+    createRepeater();
+    scope.items = createItems(NUM_ITEMS);
+    scope.$apply();
+    $$rAF.flush();
+
+    expect(container[0].offsetHeight).toBe(100);
+
+    // With 5 items...
+    scope.items = createItems(5);
+    scope.$apply();
+    expect(container[0].offsetHeight).toBe(5 * ITEM_SIZE);
+
+    // With 0 items...
+    scope.items = [];
+    scope.$apply();
+    expect(container[0].offsetHeight).toBe(2 * ITEM_SIZE);
+  });
+
+  it('should not shrink below the specified md-auto-shrink-min (horizontal)', function() {
+    container.attr({
+      'md-auto-shrink': '',
+      'md-auto-shrink-min': '2',
+      'md-orient-horizontal': ''
+    });
+    createRepeater();
+    scope.items = createItems(NUM_ITEMS);
+    scope.$apply();
+    $$rAF.flush();
+
+    expect(container[0].offsetWidth).toBe(150);
+
+    // With 5 items...
+    scope.items = createItems(5);
+    scope.$apply();
+    expect(container[0].offsetWidth).toBe(5 * ITEM_SIZE);
+
+    // With 0 items...
+    scope.items = [];
+    scope.$apply();
+    expect(container[0].offsetWidth).toBe(2 * ITEM_SIZE);
+  });
+
   /**
    * Facade to access transform properly even when jQuery is used;
    * since jQuery's css function is obtaining the computed style (not wanted)
