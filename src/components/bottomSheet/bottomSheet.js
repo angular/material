@@ -71,8 +71,9 @@ function MdBottomSheetDirective() {
  *   - `controller` - `{string=}`: The controller to associate with this bottom sheet.
  *   - `locals` - `{string=}`: An object containing key/value pairs. The keys will
  *   be used as names of values to inject into the controller. For example,
- *   `locals: {three: 3}` would inject `three` into the controller with the value
- *   of 3.
+ *   `locals: {three: 3}` would inject `three` into the controller with the value of 3.
+ *   - `focusOnOpen` - `{boolean=}`: An option to override focus behavior on open. Only disable if focusing some other way,
+ *   as focus management is required for bottom sheets to be accessible. Defaults to true.
  *   - `targetEvent` - `{DOMClickEvent=}`: A click's event object. When passed in as an option,
  *   the location of the click will be used as the starting point for the opening animation
  *   of the the dialog.
@@ -134,7 +135,8 @@ function MdBottomSheetProvider($$interimElementProvider) {
       onShow: onShow,
       onRemove: onRemove,
       escapeToClose: true,
-      disableParentScroll: true
+      disableParentScroll: true,
+      focusOnOpen: true,
     };
 
 
@@ -165,12 +167,16 @@ function MdBottomSheetProvider($$interimElementProvider) {
 
       return $animate.enter(bottomSheet.element, options.parent)
         .then(function() {
+
           var focusable = angular.element(
             element[0].querySelector('button') ||
             element[0].querySelector('a') ||
             element[0].querySelector('[ng-click]')
           );
-          focusable.focus();
+
+          if (options.focusOnOpen) {
+            focusable.focus();
+          }
 
           if (options.escapeToClose) {
             options.rootElementKeyupCallback = function(e) {
