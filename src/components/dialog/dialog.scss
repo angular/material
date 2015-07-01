@@ -16,12 +16,12 @@ $dialog-padding: $baseline-grid * 3;
 }
 
 md-dialog {
-  &.transition-in {
+  &.md-transition-in {
     opacity: 1;
     transition: $swift-ease-out;
     transform: translate3d(0,0,0) scale(1.0);
   }
-  &.transition-out {
+  &.md-transition-out {
     transition: $swift-ease-out;
     transform: translate3d(0,100%,0) scale(0.2);
   }
