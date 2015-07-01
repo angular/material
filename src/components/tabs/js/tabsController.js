@@ -6,7 +6,7 @@ angular
  * @ngInject
  */
 function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $mdTabInkRipple,
-                           $mdUtil, $animate, $attrs, $compile, $mdTheming, $parse) {
+                           $mdUtil, $animate, $attrs, $compile, $mdTheming) {
   //-- define private properties
   var ctrl       = this,
       locked     = false,
@@ -14,9 +14,6 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
       queue      = [],
       destroyed  = false,
       loaded     = false;
-
-  //-- define two-way binding
-  defineBinding('selectedIndex', 'mdSelected', 0, handleSelectedIndexChange);
 
   //-- define public properties with change handlers
   defineProperty('focusIndex', handleFocusIndexChange, ctrl.selectedIndex || 0);
@@ -34,6 +31,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
 
   //-- define public properties
   ctrl.scope = $scope;
+  ctrl.parent = $scope.$parent;
   ctrl.tabs = [];
   ctrl.lastSelectedIndex = null;
   ctrl.hasFocus = false;
@@ -68,12 +66,14 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   function init () {
     ctrl.selectedIndex = ctrl.selectedIndex || 0;
     compileTemplate();
+    configureWatchers();
     bindEvents();
     $mdTheming($element);
     $timeout(function () {
       updateHeightFromContent();
       adjustOffset();
       updatePagination();
+      updateInkBarStyles();
       ctrl.tabs[ctrl.selectedIndex] && ctrl.tabs[ctrl.selectedIndex].scope.select();
       loaded = true;
     });
@@ -87,7 +87,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     var template = $attrs.$mdTabsTemplate,
         element  = angular.element(elements.data);
     element.html(template);
-    $compile(element.contents())(ctrl.scope);
+    $compile(element.contents())(ctrl.parent);
     delete $attrs.$mdTabsTemplate;
   }
 
@@ -99,25 +99,8 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     $scope.$on('$destroy', cleanup);
   }
 
-  /**
-   * Defines a two-way data-binding without requiring an isolated scope.
-   * @param key
-   * @param attr
-   * @param defaultValue
-   * @param handler
-   */
-  function defineBinding (key, attr, defaultValue, handler) {
-    var value = defaultValue, model;
-    defineProperty(key, function (newValue, oldValue) {
-      model && model.assign && model.assign(ctrl.scope, newValue);
-      handler(newValue, oldValue);
-    }, value);
-    if ($attrs.hasOwnProperty(attr)) {
-      model = $parse($attrs[attr]);
-      $scope.$watch($attrs[attr], function (newValue) {
-        ctrl[key] = newValue || 0;
-      });
-    }
+  function configureWatchers () {
+    $scope.$watch('$mdTabsCtrl.selectedIndex', handleSelectedIndexChange);
   }
 
   /**
