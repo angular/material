@@ -22,7 +22,9 @@ angular.module('material.components.virtualRepeat', [
  *
  * @usage
  * <hljs lang="html">
- * <md-virtual-repeat-container></md-virtual-repeat-container>
+ * <md-virtual-repeat-container>
+ *   <div md-virtual-repeat="i in items" md-item-size="10">Hello {{i}}!</div>
+ * </md-virtual-repeat-container>
  *
  * <md-virtual-repeat-container md-orient-horizontal>
  *   <div md-virtual-repeat="i in items" md-item-size="20">Hello {{i}}!</div>
