@@ -2,7 +2,6 @@
   'use strict';
 
   // PRE RELEASE
-  // TODO(jelbourn): make down-arrow a button to open the calendar
   // TODO(jelbourn): aria attributes tying together date input and floating calendar.
   // TODO(jelbourn): something for mobile (probably calendar panel should take up entire screen)
   // TODO(jelbourn): make sure this plays well with validation and ngMessages.
@@ -251,6 +250,8 @@
     // Add shadow to the calendar pane only after the UI thread has reached idle, allowing the
     // content of the calender pane to be rendered.
     this.$timeout(function() {
+      this.calendarPane.classList.add('md-pane-open');
+
       this.calendarShadow.style.top = (elementRect.top - bodyRect.top) + 'px';
       this.calendarShadow.style.left = this.calendarPane.style.left;
       this.calendarShadow.style.height =
@@ -262,6 +263,7 @@
   /** Detach the floating calendar pane from the document. */
   DatePickerCtrl.prototype.detachCalendarPane = function() {
     this.$element.removeClass('md-datepicker-open');
+    this.calendarPane.classList.remove('md-pane-open');
 
     // Use native DOM removal because we do not want any of the angular state of this element
     // to be disposed.
