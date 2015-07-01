@@ -22,15 +22,14 @@ angular.module('material.components.virtualRepeat', [
  *
  * @usage
  * <hljs lang="html">
- * <md-virtual-repeat-container></md-virtual-repeat-container>
  *
- * <md-virtual-repeat-container md-orient-horizontal>
+ * <md-virtual-repeat-container>
  *   <div md-virtual-repeat="i in items" md-item-size="20">Hello {{i}}!</div>
  * </md-virtual-repeat-container>
  * </hljs>
  *
  * @param {boolean=} md-orient-horizontal Whether the container should scroll horizontally
- *     (defaults to scrolling vertically).
+ *     (defaults to orientation and scrolling vertically).
  * @param {boolean=} md-auto-shrink When present, the container will shrink to fit
  *     the number of items when that number is less than its original size.
  * @param {number=} md-auto-shrink-min Minimum number of items that md-auto-shrink
@@ -266,6 +265,8 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
   if (offset === this.scrollOffset) return;
 
   var itemSize = this.repeater.getItemSize();
+  if (!itemSize) return;
+
   var numItems = Math.max(0, Math.floor(offset / itemSize) - NUM_EXTRA);
 
   var transform = this.isHorizontal() ? 'translateX(' : 'translateY(';
@@ -296,7 +297,7 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
  * @usage
  * <hljs lang="html">
  * <md-virtual-repeat-container>
- *   <div md-virtual-repeat="i in items" md-item-size="10">Hello {{i}}!</div>
+ *   <div md-virtual-repeat="i in items">Hello {{i}}!</div>
  * </md-virtual-repeat-container>
  *
  * <md-virtual-repeat-container md-orient-horizontal>
@@ -304,8 +305,10 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
  * </md-virtual-repeat-container>
  * </hljs>
  *
- * @param {number} md-item-size The height or width of the repeated elements (which
- *     must be identical for each element). Required.
+ * @param {number=} md-item-size The height or width of the repeated elements (which
+ *     must be identical for each element). Optional. Will attempt to read the size
+ *     from the dom if missing, but still assumes that all repeated nodes have same
+ *     height or width.
  * @param {string=} md-extra-name Evaluates to an additional name to which
  *     the current iterated item can be assigned on the repeated scope. (Needed
  *     for use in md-autocomplete).
@@ -334,12 +337,13 @@ function VirtualRepeatDirective($parse) {
 
 
 /** @ngInject */
-function VirtualRepeatController($scope, $element, $attrs, $browser, $document) {
+function VirtualRepeatController($scope, $element, $attrs, $browser, $document, $$rAF) {
   this.$scope = $scope;
   this.$element = $element;
   this.$attrs = $attrs;
   this.$browser = $browser;
   this.$document = $document;
+  this.$$rAF = $$rAF;
 
   /** @type {!Function} Backup reference to $browser.$$checkUrlChange */
   this.browserCheckUrlChange = $browser.$$checkUrlChange;
@@ -353,8 +357,8 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document) 
   this.endIndex = 0;
   // TODO: measure width/height of first element from dom if not provided.
   // getComputedStyle?
-  /** @type {number} Height/width of repeated elements. */
-  this.itemSize = $scope.$eval($attrs.mdItemSize);
+  /** @type {?number} Height/width of repeated elements. */
+  this.itemSize = $scope.$eval($attrs.mdItemSize) || null;
 
   /** @type {boolean} Whether this is the first time that items are rendered. */
   this.isFirstRender = true;
@@ -402,16 +406,42 @@ VirtualRepeatController.prototype.link_ =
 };
 
 
+/** @private Attempts to set itemSize by measuring a repeated element in the dom */
+VirtualRepeatController.prototype.readItemSize_ = function() {
+  this.items = this.repeatListExpression(this.$scope);
+  this.parentNode = this.$element[0].parentNode;
+  var block = this.getBlock_(0);
+
+  this.itemSize = block.element[0][
+      this.container.isHorizontal() ? 'offsetWidth' : 'offsetHeight'] || null;
+
+  this.blocks[0] = block;
+  this.poolBlock_(0);
+
+  if (this.itemSize) {
+    this.containerUpdated();
+  }
+};
+
+
 /**
  * Called by the container. Informs us that the containers scroll or size has
  * changed.
  */
 VirtualRepeatController.prototype.containerUpdated = function() {
+  // If itemSize is unknown, attempt to measure it.
+  if (!this.itemSize) {
+    this.$$rAF(angular.bind(this, this.readItemSize_));
+
+    return;
+  } else if (!this.sized) {
+    this.items = this.repeatListExpression(this.$scope);
+  }
+
   if (!this.sized) {
     this.sized = true;
     this.$scope.$watchCollection(this.repeatListExpression,
         angular.bind(this, this.virtualRepeatUpdate_));
-    this.items = this.repeatListExpression(this.$scope);
   }
 
   this.updateIndexes_();
@@ -426,7 +456,7 @@ VirtualRepeatController.prototype.containerUpdated = function() {
 
 /**
  * Called by the container. Returns the size of a single repeated item.
- * @return {number} Size of a repeated item.
+ * @return {?number} Size of a repeated item.
  */
 VirtualRepeatController.prototype.getItemSize = function() {
   return this.itemSize;
@@ -592,7 +622,7 @@ VirtualRepeatController.prototype.updateBlock_ = function(block, index) {
  */
 VirtualRepeatController.prototype.updateScope_ = function(scope, index) {
   scope.$index = index;
-  scope[this.repeatName] = this.items[index];
+  scope[this.repeatName] = this.items && this.items[index];
   if (this.extraName) scope[this.extraName(this.$scope)] = this.items[index];
 };
 
