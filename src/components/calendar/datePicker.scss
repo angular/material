@@ -64,7 +64,7 @@ $md-datepicker-button-gap: 12px;
   width: $md-calendar-width;
 }
 
-// Down "disclosure" triangle/arrow indicating that the datepicker can be opened.
+// Down triangle/arrow indicating that the datepicker can be opened.
 // We can do this entirely with CSS without needing to load an icon.
 // See https://css-tricks.com/snippets/css/css-triangle/
 $md-date-arrow-size: 6px;
@@ -116,7 +116,7 @@ $md-date-arrow-size: 6px;
     height: 40px;
   }
 
-  .md-datepicker-expand-triangle {
+  .md-datepicker-triangle-button {
     display: none;
   }
 
