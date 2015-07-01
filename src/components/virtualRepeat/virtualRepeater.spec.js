@@ -92,6 +92,37 @@ describe('<md-virtual-repeat>', function() {
     expect(sizer[0].offsetWidth).toBe(NUM_ITEMS * ITEM_SIZE);
   });
 
+  it('should render only enough items to fill the viewport + 3 (vertical, no md-item-size)',
+      function() {
+    repeater.removeAttr('md-item-size');
+    createRepeater();
+    $$rAF.flush();
+    scope.items = createItems(NUM_ITEMS);
+    scope.$apply();
+    $$rAF.flush();
+
+    var numItemRenderers = VERTICAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA;
+
+    expect(getRepeated().length).toBe(numItemRenderers);
+    expect(sizer[0].offsetHeight).toBe(NUM_ITEMS * ITEM_SIZE);
+  });
+
+  it('should render only enough items to fill the viewport + 3 (horizontal, no md-item-size)',
+      function() {
+    container.attr('md-orient-horizontal', '');
+    repeater.removeAttr('md-item-size');
+    createRepeater();
+    $$rAF.flush();
+    scope.items = createItems(NUM_ITEMS);
+    scope.$apply();
+    $$rAF.flush();
+
+    var numItemRenderers = HORIZONTAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA;
+
+    expect(getRepeated().length).toBe(numItemRenderers);
+    expect(sizer[0].offsetWidth).toBe(NUM_ITEMS * ITEM_SIZE);
+  });
+
   it('should reposition and swap items on scroll (vertical)', function() {
     createRepeater();
     scope.items = createItems(NUM_ITEMS);
