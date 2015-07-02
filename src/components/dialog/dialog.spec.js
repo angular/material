@@ -236,13 +236,13 @@ describe('$mdDialog', function() {
 
       expect(parent.find('md-dialog').length).toBe(1);
 
-      $rootElement.triggerHandler({type: 'keyup',
+      parent.triggerHandler({type: 'keyup',
         keyCode: $mdConstant.KEY_CODE.ESCAPE
       });
-
       $timeout.flush();
       parent.find('md-dialog').triggerHandler('transitionend');
       $rootScope.$apply();
+
       expect(parent.find('md-dialog').length).toBe(0);
     }));
 
@@ -411,6 +411,161 @@ describe('$mdDialog', function() {
       $rootScope.$apply();
 
       expect($document.activeElement).toBe(undefined);
+    }));
+
+    /**
+     * Verifies that an element has the expected CSS for its transform property.
+     * Works by creating a new element, setting the expected CSS on that
+     * element, and comparing to the element being tested. This convoluted
+     * approach is needed because if jQuery is installed it can rewrite
+     * 'translate3d' values to equivalent 'matrix' values, for example turning
+     * 'translate3d(240px, 120px, 0px) scale(0.5, 0.5)' into
+     * 'matrix(0.5, 0, 0, 0.5, 240, 120)'.
+     */
+    var verifyTransformCss = function(element, transformAttr, expectedCss) {
+      var testDiv = angular.element('<div>');
+      testDiv.css(transformAttr, expectedCss);
+      expect(element.css(transformAttr)).toBe(testDiv.css(transformAttr));
+    };
+
+    it('should expand from and shrink to targetEvent element', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
+      // Create a targetEvent parameter pointing to a fake element with a
+      // defined bounding rectangle.
+      var fakeEvent = {
+        target: {
+          getBoundingClientRect: function() {
+            return {top: 100, left: 200, bottom: 140, right: 280, height: 40, width: 80};
+          }
+        }
+      };
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template: '<md-dialog>',
+        parent: parent,
+        targetEvent: fakeEvent,
+        clickOutsideToClose: true
+      });
+      $rootScope.$apply();
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      var dialog = parent.find('md-dialog');
+
+      dialog.triggerHandler('transitionend');
+      $rootScope.$apply();
+
+      // The dialog's bounding rectangle is always zero size and position in
+      // these tests, so the target of the CSS transform should be the midpoint
+      // of the targetEvent element's bounding rect.
+      verifyTransformCss(dialog, $mdConstant.CSS.TRANSFORM,
+          'translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
+
+      // Clear the animation CSS so we can be sure it gets reset.
+      dialog.css($mdConstant.CSS.TRANSFORM, '');
+
+      // When the dialog is closed (here by an outside click), the animation
+      // should shrink to the same point it expanded from.
+      container.triggerHandler({
+        type: 'click',
+        target: container[0]
+      });
+      $timeout.flush();
+
+      verifyTransformCss(dialog, $mdConstant.CSS.TRANSFORM,
+          'translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
+    }));
+
+    it('should shrink to updated targetEvent element location', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
+      // Create a targetEvent parameter pointing to a fake element with a
+      // defined bounding rectangle.
+      var fakeEvent = {
+        target: {
+          getBoundingClientRect: function() {
+            return {top: 100, left: 200, bottom: 140, right: 280, height: 40, width: 80};
+          }
+        }
+      };
+
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template: '<md-dialog>',
+        parent: parent,
+        targetEvent: fakeEvent,
+        clickOutsideToClose: true
+      });
+      $rootScope.$apply();
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      var dialog = parent.find('md-dialog');
+
+      dialog.triggerHandler('transitionend');
+      $rootScope.$apply();
+
+      verifyTransformCss(dialog, $mdConstant.CSS.TRANSFORM,
+          'translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
+
+      // Simulate the event target element moving on the page. When the dialog
+      // is closed, it should animate to the new midpoint.
+      fakeEvent.target.getBoundingClientRect = function() {
+        return {top: 300, left: 400, bottom: 360, right: 500, height: 60, width: 100};
+      };
+      container.triggerHandler({
+        type: 'click',
+        target: container[0]
+      });
+      $timeout.flush();
+
+      verifyTransformCss(dialog, $mdConstant.CSS.TRANSFORM,
+          'translate3d(450px, 330px, 0px) scale(0.5, 0.5)');
+    }));
+
+    it('should shrink to original targetEvent element location if element is hidden', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
+      // Create a targetEvent parameter pointing to a fake element with a
+      // defined bounding rectangle.
+      var fakeEvent = {
+        target: {
+          getBoundingClientRect: function() {
+            return {top: 100, left: 200, bottom: 140, right: 280, height: 40, width: 80};
+          }
+        }
+      };
+
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template: '<md-dialog>',
+        parent: parent,
+        targetEvent: fakeEvent,
+        clickOutsideToClose: true
+      });
+      $rootScope.$apply();
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      var dialog = parent.find('md-dialog');
+
+      $timeout.flush();
+      verifyTransformCss(dialog, $mdConstant.CSS.TRANSFORM,
+          'translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
+
+      dialog.triggerHandler('transitionend');
+      $rootScope.$apply();
+
+      // Clear the animation CSS so we can be sure it gets reset.
+      dialog.css($mdConstant.CSS.TRANSFORM, '');
+
+      // Simulate the event target element being hidden, which would cause
+      // getBoundingClientRect() to return a rect with zero position and size.
+      // When the dialog is closed, the animation should shrink to the point
+      // it originally expanded from.
+      fakeEvent.target.getBoundingClientRect = function() {
+        return {top: 0, left: 0, bottom: 0, right: 0, height: 0, width: 0};
+      };
+      container.triggerHandler({
+        type: 'click',
+        target: container[0]
+      });
+      $timeout.flush();
+
+      verifyTransformCss(dialog, $mdConstant.CSS.TRANSFORM,
+          'translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
     }));
 
     it('should focus the last `md-button` in md-actions open if no `.dialog-close`', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
