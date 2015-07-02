@@ -481,6 +481,13 @@ function MdDialogProvider($$interimElementProvider) {
         options.restoreScroll = $mdUtil.disableScrollAround(element);
       }
 
+      if (options.popInTarget && options.popInTarget.length) {
+        // Compute and save the event target's bounding rect, so that if the
+        // element is hidden when the dialog closes, we can shrink the dialog
+        // back to the same position it expanded from.
+        options.popInTargetRect = options.popInTarget[0].getBoundingClientRect();
+      }
+
       return dialogPopIn(
         element,
         options.parent,
@@ -551,7 +558,8 @@ function MdDialogProvider($$interimElementProvider) {
       return dialogPopOut(
         element,
         options.parent,
-        options.popInTarget && options.popInTarget.length && options.popInTarget
+        options.popInTarget && options.popInTarget.length && options.popInTarget,
+        options.popInTargetRect
       ).then(function() {
         element.remove();
         options.popInTarget && options.popInTarget.focus();
@@ -644,18 +652,27 @@ function MdDialogProvider($$interimElementProvider) {
       return $mdUtil.transitionEndPromise(dialogEl);
     }
 
-    function dialogPopOut(container, parentElement, clickElement) {
+    function dialogPopOut(container, parentElement, clickElement, initialClickRect) {
       var dialogEl = container.find('md-dialog');
 
       dialogEl.addClass('transition-out').removeClass('transition-in');
-      transformToClickElement(dialogEl, clickElement);
+      transformToClickElement(dialogEl, clickElement, initialClickRect);
 
       return $mdUtil.transitionEndPromise(dialogEl);
     }
 
-    function transformToClickElement(dialogEl, clickElement) {
+    function isPositiveSizeClientRect(rect) {
+      return (rect && rect.width > 0 && rect.height > 0);
+    }
+
+    function transformToClickElement(dialogEl, clickElement, initialClickRect) {
       if (clickElement) {
         var clickRect = clickElement[0].getBoundingClientRect();
+        // If the event target element has zero size, it has probably been hidden.
+        // Use its initial position if available.
+        if (!isPositiveSizeClientRect(clickRect) && isPositiveSizeClientRect(initialClickRect)) {
+          clickRect = initialClickRect;
+        }
         var dialogRect = dialogEl[0].getBoundingClientRect();
 
         var scaleX = Math.min(0.5, clickRect.width / dialogRect.width);
