@@ -16,7 +16,7 @@ describe('$$interimElement service', function() {
         expect(interimTest.show).toBeOfType('function');
 
         var builder = interimTest.build();
-        [ 'controller', 'controllerAs', 'onRemove', 'onShow', 'resolve', 
+        [ 'controller', 'controllerAs', 'onRemove', 'onShow', 'resolve',
           'template', 'templateUrl', 'themable', 'transformTemplate', 'parent'
         ].forEach(function(methodName) {
           expect(builder[methodName]).toBeOfType('function');
@@ -226,7 +226,7 @@ describe('$$interimElement service', function() {
         flush();
         expect($compilerSpy.calls.mostRecent().args[0].key).toBe('newValue');
         expect($compilerSpy.calls.mostRecent().args[0].key2).toBe('newValue2');
-        
+
         $compilerSpy.calls.reset();
         flush();
         flush();
@@ -277,7 +277,7 @@ describe('$$interimElement service', function() {
       }));
 
       it('calls hide after hideDelay', inject(function($animate, $timeout, $rootScope) {
-        var hideSpy = spyOn(Service, 'cancel').and.callThrough();
+        var hideSpy = spyOn(Service, 'hide').and.callThrough();
         Service.show({hideDelay: 1000});
         expect(hideSpy).toHaveBeenCalled();
       }));
@@ -540,4 +540,3 @@ describe('$$interimElement service', function() {
   }
 
 });
-

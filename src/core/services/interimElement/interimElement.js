@@ -339,7 +339,7 @@ function InterimElementProvider() {
           show: function() {
             var compilePromise;
             if (options.skipCompile) {
-              compilePromise = $q(function(resolve) { 
+              compilePromise = $q(function(resolve) {
                 resolve({
                   locals: {},
                   link: function() { return options.element; }
@@ -386,7 +386,7 @@ function InterimElementProvider() {
 
               function startHideTimeout() {
                 if (options.hideDelay) {
-                  hideTimeout = $timeout(service.cancel, options.hideDelay) ;
+                  hideTimeout = $timeout(service.hide, options.hideDelay);
                 }
               }
             },
