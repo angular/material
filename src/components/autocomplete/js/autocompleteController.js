@@ -7,7 +7,7 @@ var ITEM_HEIGHT = 41,
     MENU_PADDING = 8;
 
 function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $mdTheming, $window,
-                             $animate, $rootElement, $attrs) {
+                             $animate, $rootElement, $attrs, $q) {
   //-- private variables
   var ctrl      = this,
       itemParts = $scope.itemsExpr.split(/ in /i),
@@ -235,7 +235,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
    */
   function selectedItemChange (selectedItem, previousSelectedItem) {
     if (selectedItem) {
-      $scope.searchText = getDisplayValue(selectedItem);
+      getDisplayValue(selectedItem).then(function(val) {
+        $scope.searchText = val;
+      });
     }
     if (angular.isFunction($scope.itemChange) && selectedItem !== previousSelectedItem)
       $scope.itemChange(getItemScope(selectedItem));
@@ -283,21 +285,26 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
     ctrl.index = getDefaultIndex();
     //-- do nothing on init
     if (searchText === previousSearchText) return;
-    //-- clear selected item if search text no longer matches it
-    if (searchText !== getDisplayValue($scope.selectedItem)) $scope.selectedItem = null;
-    else return;
-    //-- trigger change event if available
-    if (angular.isFunction($scope.textChange) && searchText !== previousSearchText)
-      $scope.textChange(getItemScope($scope.selectedItem));
-    //-- cancel results if search text is not long enough
-    if (!isMinLengthMet()) {
-      ctrl.loading = false;
-      ctrl.matches = [];
-      ctrl.hidden = shouldHide();
-      updateMessages();
-    } else {
-      handleQuery();
-    }
+
+    getDisplayValue($scope.selectedItem).then(function(val) {
+      //-- clear selected item if search text no longer matches it
+      if (searchText !== val) $scope.selectedItem = null;
+      else return;
+
+      //-- trigger change event if available
+      if (angular.isFunction($scope.textChange) && searchText !== previousSearchText)
+        $scope.textChange(getItemScope($scope.selectedItem));
+      //-- cancel results if search text is not long enough
+      if (!isMinLengthMet()) {
+        ctrl.loading = false;
+        ctrl.matches = [];
+        ctrl.hidden = shouldHide();
+        updateMessages();
+      } else {
+        handleQuery();
+      }
+    });
+   
   }
 
   /**
@@ -371,7 +378,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
    * @returns {*}
    */
   function getDisplayValue (item) {
-    return (item && $scope.itemText) ? $scope.itemText(getItemScope(item)) : item;
+    return (item && $scope.itemText) ? $q.when($scope.itemText(getItemScope(item))) : $q.when(item);
   }
 
   /**
@@ -441,19 +448,23 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
    * Selects the item at the given index.
    * @param index
    */
-  function select (index) {
-    $scope.selectedItem = ctrl.matches[index];
-    ctrl.loading = false;
-    ctrl.hidden = true;
-    ctrl.index = 0;
-    ctrl.matches = [];
+  function select(index) {
     //-- force form to update state for validation
-    $timeout(function () {
-      elements.$.input.controller('ngModel').$setViewValue(getDisplayValue($scope.selectedItem) ||
-          $scope.searchText);
-      ctrl.hidden = true;
+    $timeout(function() {
+      getDisplayValue(ctrl.matches[index]).then(function(val) {
+        var ngModel = elements.$.input.controller('ngModel');
+        ngModel.$setViewValue(val);
+        ngModel.$render();
+      }).finally(function() {
+        $scope.selectedItem = ctrl.matches[index];
+        ctrl.loading = false;
+        ctrl.hidden = true;
+        ctrl.index = 0;
+        ctrl.matches = [];
+      });
     });
   }
+
 
   /**
    * Clears the searchText value and selected item.
@@ -501,7 +512,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
    * Updates the ARIA messages
    */
   function updateMessages () {
-    ctrl.messages = [ getCountMessage(), getCurrentDisplayValue() ];
+    getCurrentDisplayValue().then(function(msg) {
+      ctrl.messages = [ getCountMessage(), msg ];
+    });
   }
 
   /**

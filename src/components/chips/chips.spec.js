@@ -159,7 +159,8 @@ describe('<md-chips>', function() {
         element.scope().$apply(function() {
           autocompleteCtrl.select(0);
         });
-
+        $timeout.flush();
+        
         expect(scope.items.length).toBe(4);
         expect(scope.items[3]).toBe('Kiwi');
       }));
