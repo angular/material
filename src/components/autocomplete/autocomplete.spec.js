@@ -58,6 +58,8 @@ describe('<md-autocomplete>', function() {
       ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.DOWN_ARROW, preventDefault: angular.noop });
       ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.ENTER, preventDefault: angular.noop });
       scope.$apply();
+      $timeout.flush();
+
       expect(scope.searchText).toBe('foo');
       expect(scope.selectedItem).toBe(scope.match(scope.searchText)[0]);
     }));
@@ -96,6 +98,8 @@ describe('<md-autocomplete>', function() {
       ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.DOWN_ARROW, preventDefault: angular.noop });
       ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.ENTER, preventDefault: angular.noop });
       scope.$apply();
+      $timeout.flush();
+
       expect(scope.searchText).toBe('foo');
       expect(scope.selectedItem).toBe(scope.match(scope.searchText)[0]);
     }));
@@ -153,6 +157,7 @@ describe('<md-autocomplete>', function() {
 
       ctrl.select(0);
       element.scope().$apply();
+      $timeout.flush();
 
       expect(scope.searchText).toBe('foo');
       expect(scope.selectedItem).not.toBeNull();
@@ -196,6 +201,7 @@ describe('<md-autocomplete>', function() {
 
       ctrl.select(0);
       element.scope().$apply();
+      $timeout.flush();
 
       expect(scope.itemChanged).toHaveBeenCalled();
       expect(scope.itemChanged.calls.mostRecent().args[0].display).toBe('foo');
