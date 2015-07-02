@@ -413,7 +413,7 @@ describe('$mdDialog', function() {
       expect($document.activeElement).toBe(undefined);
     }));
 
-    it('should expand from and shrink to targetEvent element', inject(function($mdDialog, $rootScope, $timeout) {
+    it('should expand from and shrink to targetEvent element', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
       // Create a targetEvent parameter pointing to a fake element with a
       // defined bounding rectangle.
       var fakeEvent = {
@@ -441,10 +441,11 @@ describe('$mdDialog', function() {
       // The dialog's bounding rectangle is always zero size and position in
       // these tests, so the target of the CSS transform should be the midpoint
       // of the targetEvent element's bounding rect.
-      expect(dialog.css('-webkit-transform')).toBe('translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
+      verifyTransformCss(dialog, $mdConstant.CSS.TRANSFORM,
+          'translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
 
       // Clear the animation CSS so we can be sure it gets reset.
-      dialog.css('-webkit-transform', '');
+      dialog.css($mdConstant.CSS.TRANSFORM, '');
 
       // When the dialog is closed (here by an outside click), the animation
       // should shrink to the same point it expanded from.
@@ -454,10 +455,26 @@ describe('$mdDialog', function() {
       });
       $timeout.flush();
 
-      expect(dialog.css('-webkit-transform')).toBe('translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
+      verifyTransformCss(dialog, $mdConstant.CSS.TRANSFORM,
+          'translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
     }));
 
-    it('should shrink to updated targetEvent element location', inject(function($mdDialog, $rootScope, $timeout) {
+    /**
+     * Verifies that an element has the expected CSS for its transform property.
+     * Works by creating a new element, setting the expected CSS on that
+     * element, and comparing to the element being tested. This convoluted
+     * approach is needed because if jQuery is installed it can rewrite
+     * 'translate3d' values to equivalent 'matrix' values, for example turning
+     * 'translate3d(240px, 120px, 0px) scale(0.5, 0.5)' into
+     * 'matrix(0.5, 0, 0, 0.5, 240, 120)'.
+     */
+    var verifyTransformCss = function(element, transformAttr, expectedCss) {
+      var testDiv = angular.element('<div>');
+      testDiv.css(transformAttr, expectedCss);
+      expect(element.css(transformAttr)).toBe(testDiv.css(transformAttr));
+    };
+
+    it('should shrink to updated targetEvent element location', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
       // Create a targetEvent parameter pointing to a fake element with a
       // defined bounding rectangle.
       var fakeEvent = {
@@ -483,7 +500,8 @@ describe('$mdDialog', function() {
       dialog.triggerHandler('transitionend');
       $rootScope.$apply();
 
-      expect(dialog.css('-webkit-transform')).toBe('translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
+      verifyTransformCss(dialog, $mdConstant.CSS.TRANSFORM,
+          'translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
 
       // Simulate the event target element moving on the page. When the dialog
       // is closed, it should animate to the new midpoint.
@@ -496,10 +514,11 @@ describe('$mdDialog', function() {
       });
       $timeout.flush();
 
-      expect(dialog.css('-webkit-transform')).toBe('translate3d(450px, 330px, 0px) scale(0.5, 0.5)');
+      verifyTransformCss(dialog, $mdConstant.CSS.TRANSFORM,
+          'translate3d(450px, 330px, 0px) scale(0.5, 0.5)');
     }));
 
-    it('should shrink to original targetEvent element location if element is hidden', inject(function($mdDialog, $rootScope, $timeout) {
+    it('should shrink to original targetEvent element location if element is hidden', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
       // Create a targetEvent parameter pointing to a fake element with a
       // defined bounding rectangle.
       var fakeEvent = {
@@ -523,13 +542,14 @@ describe('$mdDialog', function() {
       var dialog = parent.find('md-dialog');
 
       $timeout.flush();
-      expect(dialog.css('-webkit-transform')).toBe('translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
+      verifyTransformCss(dialog, $mdConstant.CSS.TRANSFORM,
+          'translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
 
       dialog.triggerHandler('transitionend');
       $rootScope.$apply();
 
       // Clear the animation CSS so we can be sure it gets reset.
-      dialog.css('-webkit-transform', '');
+      dialog.css($mdConstant.CSS.TRANSFORM, '');
 
       // Simulate the event target element being hidden, which would cause
       // getBoundingClientRect() to return a rect with zero position and size.
@@ -544,7 +564,8 @@ describe('$mdDialog', function() {
       });
       $timeout.flush();
 
-      expect(dialog.css('-webkit-transform')).toBe('translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
+      verifyTransformCss(dialog, $mdConstant.CSS.TRANSFORM,
+          'translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
     }));
 
     it('should focus the last `md-button` in md-actions open if no `.dialog-close`', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {

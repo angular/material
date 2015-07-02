@@ -482,7 +482,7 @@ function MdDialogProvider($$interimElementProvider) {
       }
 
       if (options.popInTarget && options.popInTarget.length) {
-        // Compute and save the event target's bounding rect, so that if the
+        // Compute and save the target element's bounding rect, so that if the
         // element is hidden when the dialog closes, we can shrink the dialog
         // back to the same position it expanded from.
         options.popInTargetRect = options.popInTarget[0].getBoundingClientRect();
