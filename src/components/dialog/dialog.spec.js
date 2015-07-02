@@ -413,6 +413,21 @@ describe('$mdDialog', function() {
       expect($document.activeElement).toBe(undefined);
     }));
 
+    /**
+     * Verifies that an element has the expected CSS for its transform property.
+     * Works by creating a new element, setting the expected CSS on that
+     * element, and comparing to the element being tested. This convoluted
+     * approach is needed because if jQuery is installed it can rewrite
+     * 'translate3d' values to equivalent 'matrix' values, for example turning
+     * 'translate3d(240px, 120px, 0px) scale(0.5, 0.5)' into
+     * 'matrix(0.5, 0, 0, 0.5, 240, 120)'.
+     */
+    var verifyTransformCss = function(element, transformAttr, expectedCss) {
+      var testDiv = angular.element('<div>');
+      testDiv.css(transformAttr, expectedCss);
+      expect(element.css(transformAttr)).toBe(testDiv.css(transformAttr));
+    };
+
     it('should expand from and shrink to targetEvent element', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
       // Create a targetEvent parameter pointing to a fake element with a
       // defined bounding rectangle.
@@ -458,21 +473,6 @@ describe('$mdDialog', function() {
       verifyTransformCss(dialog, $mdConstant.CSS.TRANSFORM,
           'translate3d(240px, 120px, 0px) scale(0.5, 0.5)');
     }));
-
-    /**
-     * Verifies that an element has the expected CSS for its transform property.
-     * Works by creating a new element, setting the expected CSS on that
-     * element, and comparing to the element being tested. This convoluted
-     * approach is needed because if jQuery is installed it can rewrite
-     * 'translate3d' values to equivalent 'matrix' values, for example turning
-     * 'translate3d(240px, 120px, 0px) scale(0.5, 0.5)' into
-     * 'matrix(0.5, 0, 0, 0.5, 240, 120)'.
-     */
-    var verifyTransformCss = function(element, transformAttr, expectedCss) {
-      var testDiv = angular.element('<div>');
-      testDiv.css(transformAttr, expectedCss);
-      expect(element.css(transformAttr)).toBe(testDiv.css(transformAttr));
-    };
 
     it('should shrink to updated targetEvent element location', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
       // Create a targetEvent parameter pointing to a fake element with a
