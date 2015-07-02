@@ -239,8 +239,19 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
         $scope.searchText = val;
       });
     }
-    if (angular.isFunction($scope.itemChange) && selectedItem !== previousSelectedItem)
-      $scope.itemChange(getItemScope(selectedItem));
+
+    if (selectedItem !== previousSelectedItem) announceItemChange(selectedItem);
+  }
+
+  /**
+   * Use the user-defined expression to announce changes each time a new item is selected
+   */
+  function announceItemChange( current ) {
+    angular.isFunction($scope.itemChange) &&  $scope.itemChange( getItemAsNameVal(current) );
+  }
+
+  function announceTextChange( value ) {
+    angular.isFunction($scope.textChange) && $scope.textChange(value);
   }
 
   /**
@@ -283,25 +294,27 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
    */
   function handleSearchText (searchText, previousSearchText) {
     ctrl.index = getDefaultIndex();
-    //-- do nothing on init
+    // do nothing on init
     if (searchText === previousSearchText) return;
 
     getDisplayValue($scope.selectedItem).then(function(val) {
-      //-- clear selected item if search text no longer matches it
-      if (searchText !== val) $scope.selectedItem = null;
-      else return;
+      // clear selected item if search text no longer matches it
+      if (searchText !== val)
+      {
+        $scope.selectedItem = null;
 
-      //-- trigger change event if available
-      if (angular.isFunction($scope.textChange) && searchText !== previousSearchText)
-        $scope.textChange(getItemScope($scope.selectedItem));
-      //-- cancel results if search text is not long enough
-      if (!isMinLengthMet()) {
-        ctrl.loading = false;
-        ctrl.matches = [];
-        ctrl.hidden = shouldHide();
-        updateMessages();
-      } else {
-        handleQuery();
+        // trigger change event if available
+        if ( searchText !== previousSearchText ) announceTextChange(searchText);
+
+        // cancel results if search text is not long enough
+        if (!isMinLengthMet()) {
+          ctrl.loading = false;
+          ctrl.matches = [];
+          ctrl.hidden = shouldHide();
+          updateMessages();
+        } else {
+          handleQuery();
+        }
       }
     });
    
@@ -378,7 +391,15 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
    * @returns {*}
    */
   function getDisplayValue (item) {
-    return (item && $scope.itemText) ? $q.when($scope.itemText(getItemScope(item))) : $q.when(item);
+    return $q.when( getItemText(item) || item );
+
+    /**
+     * Getter function to invoke user-defined expression (in the directive)
+     * to convert your object to a single string.
+     */
+    function getItemText(item) {
+      return (item && $scope.itemText) ? $scope.itemText(getItemAsNameVal(item)) : null;
+    }
   }
 
   /**
@@ -386,12 +407,17 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
    * @param item
    * @returns {{}}
    */
-  function getItemScope (item) {
-    if (!item) return;
+  function getItemAsNameVal (item) {
+    if (!item) return undefined;
+
     var locals = {};
     if (ctrl.itemName) locals[ctrl.itemName] = item;
+
     return locals;
   }
+
+
+
 
   /**
    * Returns the default index based on whether or not autoselect is enabled.
@@ -414,7 +440,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
    * @returns {*}
    */
   function getCurrentDisplayValue () {
-    return getDisplayValue(ctrl.matches[ctrl.index]);
+    return getDisplayValue( ctrl.matches[ctrl.index] );
   }
 
   /**
