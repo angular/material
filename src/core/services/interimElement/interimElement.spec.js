@@ -277,7 +277,7 @@ describe('$$interimElement service', function() {
       }));
 
       it('calls hide after hideDelay', inject(function($animate, $timeout, $rootScope) {
-        var hideSpy = spyOn(Service, 'cancel').and.callThrough();
+        var hideSpy = spyOn(Service, 'hide').and.callThrough();
         Service.show({hideDelay: 1000});
         expect(hideSpy).toHaveBeenCalled();
       }));

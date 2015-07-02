@@ -386,7 +386,7 @@ function InterimElementProvider() {
 
               function startHideTimeout() {
                 if (options.hideDelay) {
-                  hideTimeout = $timeout(service.cancel, options.hideDelay) ;
+                  hideTimeout = $timeout(service.hide, options.hideDelay) ;
                 }
               }
             },

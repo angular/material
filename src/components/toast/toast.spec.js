@@ -16,7 +16,7 @@ describe('$mdToast service', function() {
     hasConfigMethods(['content', 'action', 'capsule', 'highlightAction', 'theme']);
 
     it('supports a basic toast', inject(function($mdToast, $rootScope, $timeout, $animate) {
-      var rejected = false;
+      var resolved = false;
       var parent = angular.element('<div>');
       $mdToast.show(
         $mdToast.simple({
@@ -25,8 +25,8 @@ describe('$mdToast service', function() {
           theme: 'some-theme',
           capsule: true
         })
-      ).catch(function() {
-        rejected = true;
+      ).then(function() {
+        resolved = true;
       });
       $rootScope.$digest();
       expect(parent.find('span').text()).toBe('Do something');
@@ -35,7 +35,7 @@ describe('$mdToast service', function() {
       $animate.triggerCallbacks();
       $timeout.flush();
       $animate.triggerCallbacks();
-      expect(rejected).toBe(true);
+      expect(resolved).toBe(true);
     }));
 
     it('supports dynamicly updating the content', inject(function($mdToast, $rootScope, $rootElement) {
