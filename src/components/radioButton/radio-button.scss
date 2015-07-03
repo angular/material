@@ -1,5 +1,7 @@
 $radio-width: 16px !default;
 $radio-height: $radio-width !default;
+$radio-text-margin: 10px !default;
+$radio-top-left: -15px !default;
 
 md-radio-button,
 .md-switch-thumb { // Used in switch
@@ -52,6 +54,9 @@ md-radio-button,
     }
   }
 
+  &.md-align-top-left > div.md-container {
+     top: $radio-top-left;
+   }
 
   .md-off {
     position: absolute;
@@ -83,8 +88,10 @@ md-radio-button,
   .md-label {
     position: relative;
     display: inline-block;
-    margin-left: 10px;
-    margin-right: 10px;
+
+    @include rtl(margin-left, $radio-text-margin, 0);
+    @include rtl(margin-right, 0, $radio-text-margin);
+
     vertical-align: middle;
     white-space: normal;
     pointer-events: none;

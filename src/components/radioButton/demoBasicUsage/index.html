@@ -18,8 +18,16 @@
 
         <md-radio-button ng-repeat="d in radioData"
                          ng-value="d.value"
-                         ng-disabled=" d.isDisabled ">
-            {{ d.label }}
+                         ng-disabled=" d.isDisabled "
+                         ng-class="{'md-align-top-left': $index==1}" >
+            {{ d.label }}<br/>
+          <span class="ipsum"
+                ng-if="$index == 1">
+            Duis placerat lectus et justo mollis, nec sodales orci congue. Vestibulum semper non urna ac suscipit.
+            Vestibulum tempor, ligula id laoreet hendrerit, massa augue iaculis magna,
+            sit amet dapibus tortor ligula non nibh.
+          </span>
+
         </md-radio-button>
 
     </md-radio-group>
