@@ -314,12 +314,13 @@ describe('$$interimElement service', function() {
         expect($themingSpy).toHaveBeenCalled();
       }));
 
-      it('calls hide after hideDelay', inject(function($animate, $timeout, $rootScope) {
+      it('calls hide after hideDelay', inject(function($animate, $interval, $rootScope) {
         var hideSpy = spyOn(Service, 'cancel').and.callThrough();
-        Service.show({hideDelay: 1000});
+        var hideDelay = 1000;
+        Service.show({hideDelay: hideDelay});
         $rootScope.$digest();
         $animate.triggerCallbacks();
-        $timeout.flush();
+        $interval.flush(hideDelay);
         expect(hideSpy).toHaveBeenCalled();
       }));
 

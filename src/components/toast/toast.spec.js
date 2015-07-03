@@ -15,8 +15,9 @@ describe('$mdToast service', function() {
   describe('simple()', function() {
     hasConfigMethods(['content', 'action', 'capsule', 'highlightAction', 'theme']);
 
-    it('supports a basic toast', inject(function($mdToast, $rootScope, $timeout, $animate) {
+    it('supports a basic toast', inject(function($mdToast, $rootScope, $interval, $animate) {
       var rejected = false;
+      var hideDelayDefault = 3000;
       var parent = angular.element('<div>');
       $mdToast.show(
         $mdToast.simple({
@@ -33,7 +34,7 @@ describe('$mdToast service', function() {
       expect(parent.find('md-toast')).toHaveClass('md-capsule');
       expect(parent.find('md-toast').attr('md-theme')).toBe('some-theme');
       $animate.triggerCallbacks();
-      $timeout.flush();
+      $interval.flush(hideDelayDefault);
       $animate.triggerCallbacks();
       expect(rejected).toBe(true);
     }));
@@ -148,29 +149,29 @@ describe('$mdToast service', function() {
         expect($rootElement[0].querySelector('md-toast.three')).toBeTruthy();
       }));
 
-      it('should hide after duration', inject(function($timeout, $animate, $rootElement) {
+      it('should hide after duration', inject(function($interval, $animate, $rootElement) {
         var parent = angular.element('<div>');
+        var timeout = 1234;
         setup({
           template: '<md-toast />',
-          hideTimeout: 1234
+          hideDelay: timeout
         });
         expect($rootElement.find('md-toast').length).toBe(1);
-        $timeout.flush();
+        $interval.flush(timeout);
         expect($rootElement.find('md-toast').length).toBe(0);
       }));
 
-      it('should have template', inject(function($timeout, $rootScope, $rootElement) {
+      it('should have template', inject(function($interval, $rootScope, $rootElement) {
         var parent = angular.element('<div>');
         setup({
           template: '<md-toast>{{1}}234</md-toast>',
           appendTo: parent
         });
         var toast = $rootElement.find('md-toast');
-        $timeout.flush();
         expect(toast.text()).toBe('1234');
       }));
 
-      it('should have templateUrl', inject(function($timeout, $rootScope, $templateCache, $rootElement) {
+      it('should have templateUrl', inject(function($interval, $rootScope, $templateCache, $rootElement) {
         $templateCache.put('template.html', '<md-toast>hello, {{1}}</md-toast>');
         setup({
           templateUrl: 'template.html',
@@ -179,13 +180,12 @@ describe('$mdToast service', function() {
         expect(toast.text()).toBe('hello, 1');
       }));
 
-      it('should add position class to tast', inject(function($rootElement, $timeout) {
+      it('should add position class to tast', inject(function($rootElement, $interval) {
         setup({
           template: '<md-toast>',
           position: 'top left'
         });
         var toast = $rootElement.find('md-toast');
-        $timeout.flush();
         expect(toast.hasClass('md-top')).toBe(true);
         expect(toast.hasClass('md-left')).toBe(true);
       }));

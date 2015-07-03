@@ -217,7 +217,7 @@ function InterimElementProvider() {
   }
 
   /* @ngInject */
-  function InterimElementFactory($document, $q, $rootScope, $timeout, $rootElement, $animate,
+  function InterimElementFactory($document, $q, $rootScope, $interval, $rootElement, $animate,
                                  $interpolate, $mdCompiler, $mdTheming ) {
     var startSymbol = $interpolate.startSymbol(),
         endSymbol = $interpolate.endSymbol(),
@@ -386,14 +386,14 @@ function InterimElementProvider() {
 
               function startHideTimeout() {
                 if (options.hideDelay) {
-                  hideTimeout = $timeout(service.cancel, options.hideDelay) ;
+                  hideTimeout = $interval(service.cancel, options.hideDelay, 1) ;
                 }
               }
             }, function(reason) { showDone = true; self.deferred.reject(reason); });
           },
           cancelTimeout: function() {
             if (hideTimeout) {
-              $timeout.cancel(hideTimeout);
+              $interval.cancel(hideTimeout);
               hideTimeout = undefined;
             }
           },
