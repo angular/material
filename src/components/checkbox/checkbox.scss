@@ -128,13 +128,10 @@ md-checkbox {
   .md-label {
     position: relative;
     display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
     vertical-align: middle;
     white-space: normal;
     user-select: text;
-
-    span {
-      @include rtl(margin-left, $checkbox-text-margin, 0);
-      @include rtl(margin-right, 0, $checkbox-text-margin);
-    }
   }
 }
