@@ -17,9 +17,34 @@ angular.module('material.components.icon', [
  * @restrict E
  *
  * @description
- * The `<md-icon>` directive is an markup element useful for showing an icon based on a font-icon
- * or a SVG. Icons are view-only elements that should not be used directly as buttons; instead nest a `<md-icon>`
+ * The `md-icon` directive makes it easier to use vector-based icons in your app (as opposed to
+ * raster-based icons types like PNG). The directive supports both icon fonts and SVG icons.
+ *
+ * Icons should be consider view-only elements that should not be used directly as buttons; instead nest a `<md-icon>`
  * inside a `md-button` to add hover and click features.
+ *
+ * ### Icon fonts
+ * Icon fonts are a technique in which you use a font where the glyphs in the font are
+ * your icons instead of text. Benefits include a straightforward way to bundle everything into a
+ * single HTTP request, simple scaling, easy color changing, and more.
+ *
+ * `md-icon` let's you consume an icon font by letting you reference specific icons in that font
+ * by name rather than character code.
+ *
+ * ### SVG
+ * For SVGs, the problem with using `<img>` or a CSS `background-image` is that you can't take
+ * advantage of some SVG features, such as styling specific parts of the icon with CSS or SVG
+ * animation.
+ *
+ * `md-icon` makes it easier to use SVG icons by *inlining* the SVG into an `<svg>` element in the
+ * document. The most straightforward way of referencing an SVG icon is via URL, just like a
+ * traditional `<img>`. `$mdIconProvider`, as a convenience, let's you _name_ an icon so you can
+ * reference it by name instead of URL throughout your templates.
+ *
+ * Additionally, you may not want to make separate HTTP requests for every icon, so you can bundle
+ * your SVG icons together and pre-load them with $mdIconProvider as an icon set. An icon set can
+ * also be given a name, which acts as a namespace for individual icons, so you can reference them
+ * like `"social:cake"`.
  *
  * When using SVGs, both external SVGs (via URLs) or sets of SVGs [from icon sets] can be
  * easily loaded and used.When use font-icons, developers must following three (3) simple steps:
@@ -66,19 +91,23 @@ angular.module('material.components.icon', [
  *  <a href="https://www.google.com/design/icons/#ic_accessibility" target="_blank">Material Design Icon-Selector</a>.
  * </span>
  *
- * @param {string} md-font-icon Name of CSS icon associated with the font-face will be used
+ * @param {string} md-font-icon String name of CSS icon associated with the font-face will be used
  * to render the icon. Requires the fonts and the named CSS styles to be preloaded.
  * @param {string} md-font-set CSS style name associated with the font library; which will be assigned as
  * the class for the font-icon ligature. This value may also be an alias that is used to lookup the classname;
  * internally use `$mdIconProvider.fontSet(<alias>)` to determine the style name.
- * @param {string} md-svg-src URL [or expression ] used to load, cache, and display an external SVG.
- * @param {string} md-svg-icon Name used for lookup of the icon from the internal cache; interpolated strings or
- * expressions may also be used. Specific set names can be used with the syntax `<set name>:<icon name>`.<br/><br/>
+ * @param {string} md-svg-src String URL (or expression) used to load, cache, and display an
+ *     external SVG.
+ * @param {string} md-svg-icon md-svg-icon String name used for lookup of the icon from the internal cache;
+ *     interpolated strings or expressions may also be used. Specific set names can be used with
+ *     the syntax `<set name>:<icon name>`.<br/><br/>
  * To use icon sets, developers are required to pre-register the sets using the `$mdIconProvider` service.
  * @param {string=} aria-label Labels icon for accessibility. If an empty string is provided, icon
  * will be hidden from accessibility layer with `aria-hidden="true"`. If there's no aria-label on the icon
  * nor a label on the parent element, a warning will be logged to the console.
- *
+ * @param {string=} alt Labels icon for accessibility. If an empty string is provided, icon
+ * will be hidden from accessibility layer with `aria-hidden="true"`. If there's no alt on the icon
+ * nor a label on the parent element, a warning will be logged to the console. *
  * @usage
  * When using SVGs:
  * <hljs lang="html">
