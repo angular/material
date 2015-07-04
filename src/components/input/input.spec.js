@@ -88,13 +88,13 @@ describe('md-input-container directive', function() {
     expect(el).not.toHaveClass('md-input-has-value');
   }));
 
-  it('should match label to given input id', inject(function($rootScope) {
+  it('should match label to given input id', inject(function() {
     var el = setup('id="foo"');
     expect(el.find('label').attr('for')).toBe('foo');
     expect(el.find('input').attr('id')).toBe('foo');
   }));
 
-  it('should match label to automatic input id', inject(function($rootScope) {
+  it('should match label to automatic input id', inject(function() {
     var el = setup();
     expect(el.find('input').attr('id')).toBeTruthy();
     expect(el.find('label').attr('for')).toBe(el.find('input').attr('id'));
@@ -164,7 +164,7 @@ describe('md-input-container directive', function() {
     expect(label.textContent).toEqual('some placeholder');
   }));
 
-  it('should put ignore placeholder when a label element is present', inject(function($rootScope, $compile) {
+  it('should ignore placeholder when a label element is present', inject(function($rootScope, $compile) {
       var el = $compile('<md-input-container><label>Hello</label><input ng-model="foo" placeholder="some placeholder"></md-input-container>')($rootScope);
       var placeholder = el[0].querySelector('.md-placeholder');
       var label = el.find('label')[0];
@@ -174,8 +174,7 @@ describe('md-input-container directive', function() {
       expect(label.textContent).toEqual('Hello');
     }));
 
-  it('should expect an aria-label on the input when no label is present', inject(function($rootScope, $compile) {
-
+  it('should put an aria-label on the input when no label is present', inject(function($rootScope, $compile) {
     var el = $compile('<form name="form">' +
                       ' <md-input-container md-no-float>' +
                       '   <input placeholder="baz" md-maxlength="max" ng-model="foo" name="foo">' +
