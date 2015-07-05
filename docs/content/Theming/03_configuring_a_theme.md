@@ -39,6 +39,7 @@ angular.module('myApp', ['ngMaterial'])
 .config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')
     .dark();
+});
 </hljs>
 
 ### Specifying Custom Hues For Color Intentions
