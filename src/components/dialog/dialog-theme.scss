@@ -4,7 +4,7 @@ md-dialog.md-THEME_NAME-theme {
   border-radius: $dialog-border-radius;
   background-color: '{{background-color}}';
 
-  &.md-content-overflow .md-actions {
+  &.md-content-overflow md-dialog-actions {
     border-top-color: '{{foreground-4}}';
   }
 }
