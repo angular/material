@@ -62,4 +62,22 @@ describe('<md-fab-toolbar> directive', function() {
     expect(controller.isOpen).toBe(false);
   }));
 
+  it('properly finishes the animation', inject(function(mdFabToolbarAnimation) {
+    compileAndLink(
+      '<md-fab-toolbar md-open="isOpen">' +
+      '  <md-fab-trigger><button></button></md-fab-trigger>' +
+      '  <md-fab-actions><button></button></md-fab-actions>' +
+      '</md-fab-toolbar>'
+    );
+
+    var addDone = jasmine.createSpy('addDone');
+    var removeDone = jasmine.createSpy('removeDone');
+
+    mdFabToolbarAnimation.addClass(element, 'md-is-open', addDone);
+    expect(addDone).toHaveBeenCalled();
+
+    mdFabToolbarAnimation.removeClass(element, 'md-is-open', removeDone);
+    expect(removeDone).toHaveBeenCalled();
+  }));
+
 });
