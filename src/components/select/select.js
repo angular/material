@@ -960,7 +960,7 @@ function SelectProvider($$interimElementProvider) {
         if (opts.disableParentScroll) {
           opts.restoreScroll();
         }
-        if (opts.restoreFocus) opts.target.focus();
+        if (opts.restoreFocus && !opts.target.hasClass('md-disable-restore-focus')) opts.target.focus();
         mdSelect && mdSelect.triggerClose();
       });
     }
@@ -1111,4 +1111,3 @@ function SelectProvider($$interimElementProvider) {
     } : { left: 0, top: 0, width: 0, height: 0 };
   }
 }
-
