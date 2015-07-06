@@ -699,7 +699,7 @@ function MdDialogProvider($$interimElementProvider) {
       transformToClickElement(dialogEl, options.origin);
 
       $$rAF(function () {
-        dialogEl.addClass('transition-in')
+        dialogEl.addClass('md-transition-in')
           .css($mdConstant.CSS.TRANSFORM, '');
       });
 
@@ -712,7 +712,7 @@ function MdDialogProvider($$interimElementProvider) {
     function dialogPopOut(container, options) {
       var dialogEl = container.find('md-dialog');
 
-      dialogEl.addClass('transition-out').removeClass('transition-in');
+      dialogEl.addClass('md-transition-out').removeClass('md-transition-in');
       transformToClickElement(dialogEl, options.origin);
 
       return $mdUtil.transitionEndPromise(dialogEl);
