@@ -33,6 +33,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   defineBooleanAttribute('noDisconnect');
   defineBooleanAttribute('autoselect');
   defineBooleanAttribute('centerTabs', handleCenterTabs);
+  defineBooleanAttribute('noTabsIfSingle');
 
   // define public properties
   ctrl.scope             = $scope;
@@ -58,6 +59,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   ctrl.canPageBack        = canPageBack;
   ctrl.refreshIndex       = refreshIndex;
   ctrl.incrementIndex     = incrementIndex;
+  ctrl.shouldShowTabs = shouldShowTabs;
   ctrl.updateInkBarStyles = $mdUtil.debounce(updateInkBarStyles, 100);
   ctrl.updateTabOrder     = $mdUtil.debounce(updateTabOrder, 100);
 
@@ -479,6 +481,14 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     var canvasWidth = Math.min($element.prop('clientWidth'), ctrl.maxTabWidth);
     angular.forEach(elements.dummies, function (tab) { canvasWidth -= tab.offsetWidth; });
     return canvasWidth < 0;
+  }
+
+  /**
+   * Determines if the UI should hide the tabs when only one exists.
+   * @returns {boolean}
+   */
+  function shouldShowTabs () {
+    return !ctrl.noTabsIfSingle || elements.tabs.length > 1;
   }
 
   /**
