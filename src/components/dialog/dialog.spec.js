@@ -205,6 +205,38 @@ describe('$mdDialog', function() {
       expect(ready).toBe( true );
     }));
 
+    it('should support onRemoving callbacks when `hide()` starts', inject(function($mdDialog, $rootScope, $timeout, $mdConstant ) {
+
+      var template = '<md-dialog>Hello</md-dialog>';
+      var parent = angular.element('<div>');
+      var closing = false;
+
+      $mdDialog.show({
+        template: template,
+        parent: parent,
+        escapeToClose: true,
+        onRemoving: function(scope, element) {
+          expect( arguments.length ).toEqual( 2 );
+          closing = true;
+        }
+      });
+      $rootScope.$apply();
+      expect(closing).toBe( false );
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      parent.find('md-dialog').triggerHandler('transitionend');
+      $rootScope.$apply();
+
+       parent.triggerHandler({type: 'keyup',
+         keyCode: $mdConstant.KEY_CODE.ESCAPE
+       });
+       $timeout.flush();
+
+       expect(closing).toBe( true );
+
+    }));
+
+
     it('should append dialog with container', inject(function($mdDialog, $rootScope) {
 
       var template = '<md-dialog>Hello</md-dialog>';
