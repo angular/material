@@ -28,6 +28,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   defineBooleanAttribute('swipeContent');
   defineBooleanAttribute('noDisconnect');
   defineBooleanAttribute('autoselect');
+  defineBooleanAttribute('centerTabs');
 
   //-- define public properties
   ctrl.scope = $scope;
