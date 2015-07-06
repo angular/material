@@ -164,7 +164,7 @@ md-input-container {
   ng-message, data-ng-message, x-ng-message,
   [ng-message], [data-ng-message], [x-ng-message],
   .md-char-counter {
-    -webkit-font-smoothing: antialiased;
+    //-webkit-font-smoothing: antialiased;
     position: absolute;
     font-size: $input-error-font-size;
     line-height: $input-error-height;

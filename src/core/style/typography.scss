@@ -2,12 +2,12 @@ html, body {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   -webkit-touch-callout: none;
   -webkit-text-size-adjust: 100%;
-  -webkit-font-smoothing: antialiased;
+  //-webkit-font-smoothing: antialiased;
 }
 
 md-select, md-card, md-list, md-toolbar,
 ul, ol, p, h1, h2, h3, h4, h5, h6 {
-  text-rendering: optimizeLegibility;
+  //text-rendering: optimizeLegibility;
 }
 
 /************
