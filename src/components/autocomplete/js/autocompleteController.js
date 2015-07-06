@@ -200,10 +200,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
   function handleHiddenChange (hidden, oldHidden) {
     if (!hidden && oldHidden) {
       positionDropdown();
-      console.log("Disable scroll");
       if (elements) $timeout(function () { $mdUtil.disableScrollAround(elements.ul); }, 0, false);
     } else if (hidden && !oldHidden) {
-      console.log("Enable scroll");
       $timeout(function() {
         $mdUtil.enableScrolling();
       }, 0, false);
