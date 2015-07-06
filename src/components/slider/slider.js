@@ -184,6 +184,10 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     var tickCanvas, tickCtx;
     function redrawTicks() {
       if (!angular.isDefined(attr.mdDiscrete)) return;
+      
+      if (0 >= step) {
+        throw new Error('Step must be greater than zero when in discrete mode');
+      }
 
       if (step > 0) {
 
