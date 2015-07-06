@@ -40,9 +40,8 @@ $icon-button-margin: rem(0.600) !default;
 
   outline: none;
   border: 0;
-  display: inline-flex;
+  display: inline-block;
   align-items: center;
-  flex-direction: column;
   padding: $button-padding;
   margin: $button-margin;
   line-height: $button-line-height;
@@ -133,8 +132,6 @@ $icon-button-margin: rem(0.600) !default;
     width: $button-fab-width;
     height: $button-fab-height;
     vertical-align: middle;
-    flex-grow: 0;
-    flex-shrink: 0;
 
     @include md-shadow-bottom-z-1();
     border-radius: 50%;
