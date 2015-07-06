@@ -15,6 +15,9 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
       destroyed  = false,
       loaded     = false;
 
+  //-- define one-way bindings
+  defineOneWayBinding('stretchTabs');
+
   //-- define public properties with change handlers
   defineProperty('focusIndex', handleFocusIndexChange, ctrl.selectedIndex || 0);
   defineProperty('offsetLeft', handleOffsetChange, 0);
@@ -24,7 +27,6 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   defineBooleanAttribute('noInkBar');
   defineBooleanAttribute('dynamicHeight', handleDynamicHeight);
   defineBooleanAttribute('noPagination');
-  defineBooleanAttribute('stretchTabs');
   defineBooleanAttribute('swipeContent');
   defineBooleanAttribute('noDisconnect');
   defineBooleanAttribute('autoselect');
@@ -102,6 +104,11 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
 
   function configureWatchers () {
     $scope.$watch('$mdTabsCtrl.selectedIndex', handleSelectedIndexChange);
+  }
+
+  function defineOneWayBinding (key) {
+    var attr = $attrs.$normalize('md-' + key);
+    $attrs.$observe(attr, function (newValue) { ctrl[key] = newValue; });
   }
 
   /**
