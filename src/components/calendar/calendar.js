@@ -17,14 +17,13 @@
   // TODO(jelbourn): read-only state.
   // TODO(jelbourn): Date "isComplete" logic
   // TODO(jelbourn): Apple + up / down == PgDown and PgUp
-  // TODO(jelbourn): Documentation
-  // TODO(jelbourn): Demo that uses moment.js
   // TODO(jelbourn): Fix NVDA stealing key presses (IE) ???
 
-  // FUTURE VERSION
-  // TODO(jelbourn): Animated month transition on ng-model change.
-  // TODO(jelbourn): Scroll snapping
-  // TODO(jelbourn): Month headers stick to top when scrolling
+  // POST RELEASE
+  // TODO(jelbourn): Animated month transition on ng-model change (virtual-repeat)
+  // TODO(jelbourn): Scroll snapping (virtual repeat)
+  // TODO(jelbourn): Remove superfluous row from short months (virtual-repeat)
+  // TODO(jelbourn): Month headers stick to top when scrolling.
   // TODO(jelbourn): Previous month opacity is lowered when partially scrolled out of view.
   // TODO(jelbourn): Support md-calendar standalone on a page (as a tabstop w/ aria-live
   //     announcement and key handling).
