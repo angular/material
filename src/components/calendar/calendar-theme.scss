@@ -28,7 +28,8 @@
 }
 
 // Selected style goes after hover and focus so that it takes priority.
-.md-calendar-date.md-calendar-selected-date {
+.md-calendar-date.md-calendar-selected-date,
+.md-calendar-date:focus.md-calendar-selected-date {
   .md-calendar-date-selection-indicator {
     background-color: '{{primary-500}}'; // blue-500
     color: '{{primary-contrast}}'; // SHOULD BE WHITE (ish)
