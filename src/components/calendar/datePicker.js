@@ -37,15 +37,13 @@
             '</md-button>' +
           '</div>' +
 
-          // This pane (and its shadow) will be detached from here and re-attached to the
-          // document body.
-          '<div class="md-datepicker-calendar-pane">' +
-            '<md-calendar ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen"></md-calendar>' +
-          '</div>' +
-
-          // We have a separate shadow element in order to wrap both the floating pane and the
-          // inline input / trigger as one shadowed whole.
-          '<div class="md-datepicker-calendar-pane-shadow md-whiteframe-z1"></div>',
+          // This pane will be detached from here and re-attached to the document body.
+          '<div class="md-datepicker-calendar-pane md-whiteframe-z1">' +
+            '<div class="md-datepicker-input-mask"></div>' +
+            '<div class="md-datepicker-calendar">' +
+              '<md-calendar ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen"></md-calendar>' +
+            '</div>' +
+          '</div>',
       require: ['ngModel', 'mdDatePicker'],
       scope: {
         placeholder: '@mdPlaceholder'
@@ -71,7 +69,7 @@
    * @ngInject @constructor
    */
   function DatePickerCtrl($scope, $element, $attrs, $compile, $timeout, $mdConstant, $mdUtil,
-      $$mdDateLocale, $$mdDateUtil) {
+      $$mdDateLocale, $$mdDateUtil, $mdMenu, $$rAF) {
     /** @final */
     this.$compile = $compile;
 
@@ -90,6 +88,11 @@
     /* @final */
     this.$mdUtil = $mdUtil;
 
+    /** @final */
+    this.$mdMenu = $mdMenu;
+
+    this.$$rAF = $$rAF;
+
     /** @type {!angular.NgModelController} */
     this.ngModelCtrl = null;
 
@@ -101,9 +104,6 @@
 
     /** @type {HTMLElement} Floating calendar pane. */
     this.calendarPane = $element[0].querySelector('.md-datepicker-calendar-pane');
-
-    /** @type {HTMLElement} Shadow for floating calendar pane and input trigger. */
-    this.calendarShadow = $element[0].querySelector('.md-datepicker-calendar-pane-shadow');
 
     /** @type {HTMLElement} Calendar icon button. */
     this.calendarButton = $element[0].querySelector('.md-datepicker-button');
@@ -240,26 +240,20 @@
 
   /** Position and attach the floating calendar to the document. */
   DatePickerCtrl.prototype.attachCalendarPane = function() {
+    var calendarPane = this.calendarPane;
     this.$element.addClass('md-datepicker-open');
 
     var elementRect = this.inputContainer.getBoundingClientRect();
     var bodyRect = document.body.getBoundingClientRect();
 
-    this.calendarPane.style.left = (elementRect.left - bodyRect.left) + 'px';
-    this.calendarPane.style.top = (elementRect.bottom - bodyRect.top) + 'px';
+    calendarPane.style.left = (elementRect.left - bodyRect.left) + 'px';
+    calendarPane.style.top = (elementRect.top - bodyRect.top) + 'px';
     document.body.appendChild(this.calendarPane);
 
-    // Add shadow to the calendar pane only after the UI thread has reached idle, allowing the
-    // content of the calender pane to be rendered.
-    this.$timeout(function() {
-      this.calendarPane.classList.add('md-pane-open');
-
-      this.calendarShadow.style.top = (elementRect.top - bodyRect.top) + 'px';
-      this.calendarShadow.style.left = this.calendarPane.style.left;
-      this.calendarShadow.style.height =
-          (this.calendarPane.getBoundingClientRect().bottom - elementRect.top) + 'px';
-      document.body.appendChild(this.calendarShadow);
-    }.bind(this), 0, false);
+    // Add CSS class after one frame to trigger animation.
+    this.$$rAF(function() {
+      calendarPane.classList.add('md-pane-open');
+    });
   };
 
   /** Detach the floating calendar pane from the document. */
@@ -270,7 +264,6 @@
     // Use native DOM removal because we do not want any of the angular state of this element
     // to be disposed.
     this.calendarPane.parentNode.removeChild(this.calendarPane);
-    this.calendarShadow.parentNode.removeChild(this.calendarShadow);
   };
 
   /** Open the floating calendar pane. */

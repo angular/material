@@ -36,11 +36,11 @@ $md-datepicker-button-gap: 12px;
 // Container for the datepicker input.
 .md-datepicker-input-container {
   position: relative;
-  z-index: $z-index-datepicker-trigger;
 
-  display: inline-block;
   border-bottom-width: 1px;
   border-bottom-style: solid;
+
+  display: inline-block;
   width: 120px;
   margin-left: $md-datepicker-button-gap;
 }
@@ -55,15 +55,35 @@ $md-datepicker-button-gap: 12px;
 
   border-width: 1px;
   border-style: solid;
-  border-top: none;
-  background: white;
+  background: transparent;
+
+  transform: scale(0);
+  transform-origin: 0 0;
+  transition: transform 0.2s $swift-ease-out-timing-function;
+
+  &.md-pane-open {
+    transform: scale(1);
+  }
 }
 
-// Shadow that wraps around both the floating calendar pane and the in-line input.
-.md-datepicker-calendar-pane-shadow {
-  position: absolute;
-  z-index: $z-index-datepicker-shadow;
+// Portion of the floating panel that sits, invisibly, on top of the input.
+.md-datepicker-input-mask {
+  height: 40px;
   width: $md-calendar-width;
+
+  background: transparent;
+  pointer-events: none;
+  cursor: text;
+}
+
+// The calendar portion of the floating pane (vs. the input mask).
+.md-datepicker-calendar {
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.5, 0, 0.25, 1);
+
+  .md-pane-open & {
+    opacity: 1;
+  }
 }
 
 // Down triangle/arrow indicating that the datepicker can be opened.
@@ -97,17 +117,16 @@ $md-date-arrow-size: 6px;
 // Only apply this high specifiy to the property we need to override.
 .md-datepicker-triangle-button.md-button.md-icon-button {
   height: 100%;
+  position: absolute;
 }
 
 
 // Open state for all of the elements of the picker.
 .md-datepicker-open {
   .md-datepicker-input-container {
-    border-width: 1px;
-    border-style: solid;
-    border-bottom: none;
     min-width: $md-calendar-width;
     margin-left: -$md-datepicker-button-gap;
+    border: none;
   }
 
   .md-datepicker-input {
