@@ -39,7 +39,8 @@ $md-datepicker-button-gap: 12px;
   z-index: $z-index-datepicker-trigger;
 
   display: inline-block;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
   width: 120px;
   margin-left: $md-datepicker-button-gap;
 }
@@ -52,7 +53,8 @@ $md-datepicker-button-gap: 12px;
   left: 0;
   z-index: $z-index-menu;
 
-  border: 1px solid #e0e0e0;
+  border-width: 1px;
+  border-style: solid;
   border-top: none;
   background: white;
 }
@@ -89,10 +91,6 @@ $md-date-arrow-size: 6px;
   right: 0;
   top: 0;
   transform: translateY(-25%) translateX(45%);
-
-  &:hover .md-datepicker-expand-triangle {
-    border-top-color: rgba(black, 0.54);
-  }
 }
 
 // Need crazy specificity to override .md-button.md-icon-button.
@@ -105,7 +103,8 @@ $md-date-arrow-size: 6px;
 // Open state for all of the elements of the picker.
 .md-datepicker-open {
   .md-datepicker-input-container {
-    border: 1px solid #e0e0e0;
+    border-width: 1px;
+    border-style: solid;
     border-bottom: none;
     min-width: $md-calendar-width;
     margin-left: -$md-datepicker-button-gap;
@@ -118,9 +117,5 @@ $md-date-arrow-size: 6px;
 
   .md-datepicker-triangle-button {
     display: none;
-  }
-
-  .md-datepicker-calendar-icon {
-    fill: #2196f3;
   }
 }
