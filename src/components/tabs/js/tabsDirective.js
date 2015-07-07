@@ -151,7 +151,7 @@ function MdTabs ($mdTheming, $mdUtil, $compile) {
                   md-swipe-right="$mdTabsCtrl.previousPage()"\
                   md-template="::tab.label"\
                   md-scope="::tab.parent"></md-tab-item>\
-              <md-ink-bar ng-hide="$mdTabsCtrl.noInkBar"></md-ink-bar>\
+              <md-ink-bar></md-ink-bar>\
             </md-pagination-wrapper>\
             <div class="md-visually-hidden md-dummy-wrapper">\
               <md-dummy-tab\

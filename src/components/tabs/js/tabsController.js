@@ -24,7 +24,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   defineProperty('hasContent', handleHasContent, false);
 
   //-- define boolean attributes
-  defineBooleanAttribute('noInkBar');
+  defineBooleanAttribute('noInkBar', handleInkBar);
   defineBooleanAttribute('dynamicHeight', handleDynamicHeight);
   defineBooleanAttribute('noPagination');
   defineBooleanAttribute('swipeContent');
@@ -295,6 +295,10 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
       $timeout(ctrl.updateInkBarStyles, 0, false);
       $timeout(updatePagination);
     });
+  }
+
+  function handleInkBar (hide) {
+    angular.element(elements.inkBar).toggleClass('ng-hide', hide);
   }
 
   /**
