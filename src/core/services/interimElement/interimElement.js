@@ -282,7 +282,7 @@ function InterimElementProvider() {
        */
       function hide(response) {
         var interimElement = stack.shift();
-        return interimElement && interimElement.remove().then(function() {
+        return $q.when(interimElement && interimElement.remove()).then(function() {
           interimElement.deferred.resolve(response);
         });
       }
@@ -301,9 +301,9 @@ function InterimElementProvider() {
        */
       function cancel(reason) {
         var interimElement = stack.shift();
-        return $q.when(interimElement && interimElement.remove().then(function() {
+        return $q.when(interimElement && interimElement.remove()).then(function() {
           interimElement.deferred.reject(reason);
-        }));
+        });
       }
 
 
