@@ -4,3 +4,28 @@
     background: '{{background-100}}';
   }
 }
+
+.md-datepicker-input-container {
+  border-bottom-color: '{{background-300}}';
+}
+
+.md-datepicker-calendar-pane {
+  border-color: '{{background-300}}';
+}
+
+.md-datepicker-triangle-button {
+  &:hover .md-datepicker-expand-triangle {
+    border-top-color: '{{foreground-2}}';
+  }
+}
+
+// Open state for all of the elements of the picker.
+.md-datepicker-open {
+  .md-datepicker-input-container {
+    border-color: '{{background-300}}';
+  }
+
+  .md-datepicker-calendar-icon {
+    fill: '{{primary-500}}';
+  }
+}
