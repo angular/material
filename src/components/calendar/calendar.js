@@ -15,7 +15,6 @@
   // PRE RELEASE
   // TODO(jelbourn): Base colors on the theme
   // TODO(jelbourn): read-only state.
-  // TODO(jelbourn): Make sure the *time* on the written date makes sense (probably midnight).
   // TODO(jelbourn): Date "isComplete" logic
   // TODO(jelbourn): Apple + up / down == PgDown and PgUp
   // TODO(jelbourn): Documentation
@@ -126,7 +125,7 @@
     this.calendarScroller = $element[0].querySelector('.md-virtual-repeat-scroller');
 
     /** @final {Date} */
-    this.today = new Date();
+    this.today = this.dateUtil.createDateAtMidnight();
 
     // Set the first renderable date once for all calendar instances.
     firstRenderableDate =
@@ -185,7 +184,8 @@
     this.cellClickHandler = function() {
       if (this.hasAttribute('data-timestamp')) {
         $scope.$apply(function() {
-          self.setNgModelValue(new Date(Number(this.getAttribute('data-timestamp'))));
+          var timestamp = Number(this.getAttribute('data-timestamp'));
+          self.setNgModelValue(self.dateUtil.createDateAtMidnight(timestamp));
         }.bind(this)); // The `this` here is the cell element.
       }
     };
@@ -220,7 +220,7 @@
     this.buildWeekHeader();
     this.hideVerticalScrollbar();
 
-    this.displayDate = this.selectedDate || new Date(Date.now());
+    this.displayDate = this.selectedDate || this.today;
     this.isInitialized = true;
   };
 

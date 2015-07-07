@@ -21,7 +21,8 @@
       getLastDateOfMonth: getLastDateOfMonth,
       isSameDay: isSameDay,
       getMonthDistance: getMonthDistance,
-      isValidDate: isValidDate
+      isValidDate: isValidDate,
+      createDateAtMidnight: createDateAtMidnight
     };
 
     /**
@@ -109,7 +110,7 @@
      * @returns {Date}
      */
     function getDateMidpoint(d1, d2) {
-      return new Date((d1.getTime() + d2.getTime()) / 2);
+      return createDateAtMidnight((d1.getTime() + d2.getTime()) / 2);
     }
 
     /**
@@ -184,7 +185,26 @@
      * @return {boolean} Whether the date is a valid Date.
      */
     function isValidDate(date) {
-      return date != null && date.getTime && !isNaN(date.getTime());
+      return date !== null && date.getTime && !isNaN(date.getTime());
+    }
+
+    /**
+     * Creates a date with the time set to midnight.
+     * Drop-in replacement for two forms of the Date constructor:
+     * 1. No argument for Date representing now.
+     * 2. Single-argument value representing number of seconds since Unix Epoch.
+     * @param {number=} opt_value
+     * @return {Date} New date with time set to midnight.
+     */
+    function createDateAtMidnight(opt_value) {
+      var date;
+      if (angular.isUndefined(opt_value)) {
+        date = new Date();
+      } else {
+        date = new Date(opt_value);
+      }
+      date.setHours(0, 0, 0, 0);
+      return date;
     }
   });
 })();
