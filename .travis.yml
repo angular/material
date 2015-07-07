@@ -17,6 +17,8 @@ before_script:
   - git config --global user.name "ngMaterial Bot"
 
 script:
+  # Fail builds which use iit/ddescribe, but run the tests anyways
+  - gulp ddescribe-iit
   - gulp karma
 
 after_success:
