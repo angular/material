@@ -21,6 +21,11 @@ exports.task = function (done) {
   }
   // NOTE: `karma-fast` does NOT test Firefox by default.
 
+  if ( args.reporters ) {
+    karmaConfig.reporters = args.reporters.trim().split(',');
+  }
+
+
   gutil.log('Running unit tests on unminified source.');
   karma.start(karmaConfig, captureError(clearEnv,clearEnv));
 
