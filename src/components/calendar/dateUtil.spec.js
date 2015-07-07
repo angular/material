@@ -185,7 +185,7 @@ describe('$$mdDateUtil', function() {
     var end = new Date(2010, MAR, 20);
     var midpoint = dateUtil.getDateMidpoint(start, end);
 
-    expect(dateUtil.isSameDay(midpoint, new Date(2010, MAR, 15))).toBe(true);
+    expect(midpoint.getTime()).toEqual(new Date(2010, MAR, 15).getTime());
   });
 
   it('should get the week of the month in which a given date appears', function() {
@@ -282,5 +282,25 @@ describe('$$mdDateUtil', function() {
     date = new Date(2015, APR, 3);
     lastOfMonth = new Date(2015, APR, 30);
     expect(dateUtil.isSameDay(dateUtil.getLastDateOfMonth(date), lastOfMonth)).toBe(true);
+  });
+
+  it('should create a date at midnight today', function() {
+    var today = new Date();
+    var todayAtMidnight = dateUtil.createDateAtMidnight();
+    expect(dateUtil.isSameDay(todayAtMidnight, today)).toBe(true);
+    expect(todayAtMidnight.getHours()).toBe(0);
+    expect(todayAtMidnight.getMinutes()).toBe(0);
+    expect(todayAtMidnight.getSeconds()).toBe(0);
+    expect(todayAtMidnight.getMilliseconds()).toBe(0);
+  });
+
+  it('should create a date at midnight the day of a timestamp', function() {
+    var day = new Date(2015, JUN, 1, 12, 30);
+    var dayAtMidnight = dateUtil.createDateAtMidnight(day.getTime());
+    expect(dateUtil.isSameDay(dayAtMidnight, day)).toBe(true);
+    expect(dayAtMidnight.getHours()).toBe(0);
+    expect(dayAtMidnight.getMinutes()).toBe(0);
+    expect(dayAtMidnight.getSeconds()).toBe(0);
+    expect(dayAtMidnight.getMilliseconds()).toBe(0);
   });
 });
