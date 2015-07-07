@@ -21,11 +21,11 @@
 
 // Open state for all of the elements of the picker.
 .md-datepicker-open {
-  .md-datepicker-input-container {
-    border-color: '{{background-300}}';
-  }
-
   .md-datepicker-calendar-icon {
     fill: '{{primary-500}}';
   }
+}
+
+.md-datepicker-calendar {
+  background: white;
 }
