@@ -1,28 +1,36 @@
 // Theme styles for mdCalendar.
 
+.md-calendar {
+  color: '{{foreground-2}}';
+
+  tr:last-child td {
+    border-bottom-color: '{{background-200}}';
+  }
+}
+
 .md-calendar-day-header {
-  background-color: #eeeeee; // grey-200
-  color: #616161; // need spec; currently grey-700
+  background-color: '{{background-200}}'; // grey-200
+  color: '{{foreground-2}}'; // grey-700
 }
 
 .md-calendar-date.md-calendar-date-today {
-  color: #2196f3; // blue-500
+  color: '{{primary-500}}'; // blue-500
 }
 
 .md-calendar-date:focus {
   .md-calendar-date-selection-indicator {
-    background-color: #e0e0e0; // grey-300
+    background-color: '{{background-300}}'; // grey-300
   }
 }
 
 .md-calendar-date-selection-indicator:hover {
-  background-color: #e0e0e0; // grey-300
+  background-color: '{{background-300}}'; // grey-300
 }
 
 // Selected style goes after hover and focus so that it takes priority.
 .md-calendar-date.md-calendar-selected-date {
   .md-calendar-date-selection-indicator {
-    background-color: #2196f3; // blue-500
-    color: white; // ?
+    background-color: '{{primary-500}}'; // blue-500
+    color: '{{primary-contrast}}'; // SHOULD BE WHITE (ish)
   }
 }
