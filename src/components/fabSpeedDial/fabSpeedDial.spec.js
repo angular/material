@@ -1,21 +1,17 @@
-describe('<md-fab-speed-dial> directive', function() {
-
-  beforeEach(module('material.components.fabSpeedDial'));
+describe('<md-fab-speed-dial> directive', function () {
 
   var pageScope, element, controller;
+  var $rootScope, $animate, $timeout;
 
-  function compileAndLink(template) {
-    inject(function($compile, $rootScope) {
-      pageScope = $rootScope.$new();
-      element = $compile(template)(pageScope);
-      controller = element.controller('mdFabSpeedDial');
+  beforeEach(module('material.components.fabSpeedDial'));
+  beforeEach(inject(function (_$rootScope_, _$animate_, _$timeout_) {
+    $rootScope = _$rootScope_;
+    $animate = _$animate_;
+    $timeout = _$timeout_;
+  }));
 
-      pageScope.$apply();
-    });
-  }
-
-  it('applies a class for each direction', inject(function() {
-    compileAndLink(
+  it('applies a class for each direction', inject(function () {
+    build(
       '<md-fab-speed-dial md-direction="{{direction}}"></md-fab-speed-dial>'
     );
 
@@ -32,8 +28,8 @@ describe('<md-fab-speed-dial> directive', function() {
     expect(element.hasClass('md-right')).toBe(true);
   }));
 
-  it('opens when the trigger element is focused', inject(function() {
-    compileAndLink(
+  it('opens when the trigger element is focused', inject(function () {
+    build(
       '<md-fab-speed-dial><md-fab-trigger><button></button></md-fab-trigger></md-fab-speed-dial>'
     );
 
@@ -42,32 +38,46 @@ describe('<md-fab-speed-dial> directive', function() {
     expect(controller.isOpen).toBe(true);
   }));
 
-  it('opens when the speed dial elements are focused', inject(function() {
-    compileAndLink(
+  it('opens when the speed dial elements are focused', inject(function () {
+    build(
       '<md-fab-speed-dial><md-fab-actions><button></button></md-fab-actions></md-fab-speed-dial>'
     );
 
     element.find('button').triggerHandler('focus');
     pageScope.$digest();
+
     expect(controller.isOpen).toBe(true);
   }));
 
-  it('closes when the speed dial elements are blurred', inject(function() {
-    compileAndLink(
-      '<md-fab-speed-dial><md-fab-actions><button></button></md-fab-actions></md-fab-speed-dial>'
+  it('closes when the speed dial elements are blurred', inject(function () {
+    build(
+      '<md-fab-speed-dial>'+
+      ' <md-fab-trigger>' +
+      '   <button>Show Actions</button>' +
+      ' </md-fab-trigger>' +
+      ' </md-fab-actions>' +
+      ' <md-fab-actions>' +
+      '   <button>Action 1</button>' +
+      ' </md-fab-actions>' +
+      '</md-fab-speed-dial>'
     );
 
     element.find('button').triggerHandler('focus');
     pageScope.$digest();
+
     expect(controller.isOpen).toBe(true);
 
-    element.find('button').triggerHandler('blur');
+    var actionBtn = element.find('md-fab-actions').find('button');
+    actionBtn.triggerHandler('focus');
     pageScope.$digest();
+    actionBtn.triggerHandler('blur');
+    pageScope.$digest();
+
     expect(controller.isOpen).toBe(false);
   }));
 
-  it('allows programmatic opening through the md-open attribute', inject(function() {
-    compileAndLink(
+  it('allows programmatic opening through the md-open attribute', inject(function () {
+    build(
       '<md-fab-speed-dial md-open="isOpen"></md-fab-speed-dial>'
     );
 
@@ -83,8 +93,8 @@ describe('<md-fab-speed-dial> directive', function() {
     expect(controller.isOpen).toBe(false);
   }));
 
-  it('properly finishes the fling animation', inject(function(mdFabSpeedDialFlingAnimation) {
-    compileAndLink(
+  it('properly finishes the fling animation', inject(function (mdFabSpeedDialFlingAnimation) {
+    build(
       '<md-fab-speed-dial md-open="isOpen" class="md-fling">' +
       '  <md-fab-trigger><button></button></md-fab-trigger>' +
       '  <md-fab-actions><button></button></md-fab-actions>' +
@@ -101,8 +111,8 @@ describe('<md-fab-speed-dial> directive', function() {
     expect(removeDone).toHaveBeenCalled();
   }));
 
-  it('properly finishes the scale animation', inject(function(mdFabSpeedDialScaleAnimation) {
-    compileAndLink(
+  it('properly finishes the scale animation', inject(function (mdFabSpeedDialScaleAnimation) {
+    build(
       '<md-fab-speed-dial md-open="isOpen" class="md-fling">' +
       '  <md-fab-trigger><button></button></md-fab-trigger>' +
       '  <md-fab-actions><button></button></md-fab-actions>' +
@@ -118,5 +128,15 @@ describe('<md-fab-speed-dial> directive', function() {
     mdFabSpeedDialScaleAnimation.removeClass(element, 'md-is-open', removeDone);
     expect(removeDone).toHaveBeenCalled();
   }));
+
+  function build(template) {
+    inject(function ($compile) {
+      pageScope = $rootScope.$new();
+      element = $compile(template)(pageScope);
+      controller = element.controller('mdFabSpeedDial');
+
+      pageScope.$apply();
+    });
+  }
 
 });
