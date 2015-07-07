@@ -1,8 +1,21 @@
+// Global page styles
+//
+// [2] Ensure the page always fills at least the entire height of the viewport.
+// [3] Prevent iOS text size adjust after orientation change, without disabling user zoom
+// [4] Fonts on OSX will look more consistent with other systems that do not
+// render text using sub-pixel anti-aliasing.
+
 html, body {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   -webkit-touch-callout: none;
-  -webkit-text-size-adjust: 100%;
-  //-webkit-font-smoothing: antialiased;
+
+  min-height: 100%; // [2]
+
+  -webkit-text-size-adjust: 100%; // [3]
+  -ms-text-size-adjust: 100%; // [3]
+
+  -webkit-font-smoothing: antialiased; // [4]
+  -moz-osx-font-smoothing: grayscale; // [4]
 }
 
 md-select, md-card, md-list, md-toolbar,
