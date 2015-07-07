@@ -2,15 +2,17 @@
   'use strict';
 
   // PRE RELEASE
+  // TODO(jelbourn): Documentation
+  // TODO(jelbourn): Demo that uses moment.js
   // TODO(jelbourn): aria attributes tying together date input and floating calendar.
-  // TODO(jelbourn): something for mobile (probably calendar panel should take up entire screen)
   // TODO(jelbourn): make sure this plays well with validation and ngMessages.
   // TODO(jelbourn): forward more attributes to the internal input (required, autofocus, etc.)
   // TODO(jelbourn): floating panel open animation (see animation for menu in spec).
-  // TODO(jelbourn): error state
   // TODO(jelbourn): auto-grow input to accomodate longer dates
 
-  // FUTURE VERSION
+  // POST RELEASE
+  // TODO(jelbourn): error state
+  // TODO(jelbourn): something better for mobile (calendar panel takes up entire screen?)
   // TODO(jelbourn): input behavior (masking? auto-complete?)
   // TODO(jelbourn): UTC mode
   // TODO(jelbourn): RTL
