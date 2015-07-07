@@ -32,6 +32,6 @@
 .md-calendar-date:focus.md-calendar-selected-date {
   .md-calendar-date-selection-indicator {
     background-color: '{{primary-500}}'; // blue-500
-    color: '{{primary-contrast}}'; // SHOULD BE WHITE (ish)
+    color: '{{primary-500-contrast}}'; // SHOULD BE WHITE (ish)
   }
 }
