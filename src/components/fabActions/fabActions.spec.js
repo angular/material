@@ -1,4 +1,4 @@
-ddescribe('<md-fab-actions> directive', function() {
+describe('<md-fab-actions> directive', function() {
 
   beforeEach(module('material.components.fabActions'));
 
