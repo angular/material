@@ -8,7 +8,7 @@
   var child_process  = require('child_process');
   var pkg            = require('./package.json');
   var oldVersion     = pkg.version;
-  var abortCmds      = [ 'git checkout master', 'rm abort push' ];
+  var abortCmds      = [ 'git reset --hard', 'git checkout master', 'rm abort push' ];
   var pushCmds       = [ 'rm abort push'];
   var cleanupCmds    = [];
   var defaultOptions = { encoding: 'utf-8' };
