@@ -96,7 +96,7 @@ function MdTabs ($mdTheming, $mdUtil, $compile) {
     template: function (element, attr) {
       attr["$mdTabsTemplate"] = element.html();
       return '\
-        <md-tabs-wrapper ng-class="{ \'md-stretch-tabs\': $mdTabsCtrl.shouldStretchTabs() }">\
+        <md-tabs-wrapper>\
           <md-tab-data></md-tab-data>\
           <md-prev-button\
               tabindex="-1"\

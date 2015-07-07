@@ -16,7 +16,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
       loaded     = false;
 
   //-- define one-way bindings
-  defineOneWayBinding('stretchTabs');
+  defineOneWayBinding('stretchTabs', handleStretchTabs);
 
   //-- define public properties with change handlers
   defineProperty('focusIndex', handleFocusIndexChange, ctrl.selectedIndex || 0);
@@ -46,7 +46,6 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   ctrl.updatePagination = $mdUtil.debounce(updatePagination, 100);
   ctrl.redirectFocus = redirectFocus;
   ctrl.attachRipple = attachRipple;
-  ctrl.shouldStretchTabs = shouldStretchTabs;
   ctrl.insertTab = insertTab;
   ctrl.removeTab = removeTab;
   ctrl.select = select;
@@ -106,8 +105,9 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     $scope.$watch('$mdTabsCtrl.selectedIndex', handleSelectedIndexChange);
   }
 
-  function defineOneWayBinding (key) {
+  function defineOneWayBinding (key, handler) {
     var attr = $attrs.$normalize('md-' + key);
+    if (handler) defineProperty(key, handler);
     $attrs.$observe(attr, function (newValue) { ctrl[key] = newValue; });
   }
 
@@ -134,6 +134,11 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   }
 
   //-- Change handlers
+
+  function handleStretchTabs (stretchTabs) {
+    angular.element(elements.wrapper).toggleClass('md-stretch-tabs', shouldStretchTabs());
+    updateInkBarStyles();
+  }
 
   /**
    * Add/remove the `md-no-tab-content` class depending on `ctrl.hasContent`
