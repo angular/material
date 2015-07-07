@@ -68,6 +68,9 @@ md-autocomplete {
     position: relative;
     overflow: visible;
     height: 40px;
+    &.md-menu-showing {
+      z-index: $z-index-backdrop + 1;
+    }
     md-progress-linear[md-mode=indeterminate] {
       position: absolute;
       bottom: 0; left: 0; width: 100%;
