@@ -1,9 +1,13 @@
+$menu-border-radius: 2px;
+
 .md-open-menu-container {
   position: fixed;
   left: 0;
   top: 0;
   z-index: $z-index-menu;
   opacity: 0;
+  border-radius: $menu-border-radius;
+  overflow: hidden;
 
   md-menu-divider {
     margin-top: $baseline-grid / 2;
@@ -11,7 +15,6 @@
     height: 1px;
     width: 100%;
   }
-
 
   md-menu-content > * {
     opacity: 0;
