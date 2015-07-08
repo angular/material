@@ -43,6 +43,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
       templateUrl: 'dialog1.tmpl.html',
       parent: angular.element(document.body),
       targetEvent: ev,
+      clickOutsideToClose:true
     })
     .then(function(answer) {
       $scope.alert = 'You said the information was "' + answer + '".';

@@ -21,3 +21,6 @@ section .md-button {
   opacity: 0.54;
 }
 
+.launch {
+  padding-top:12px;
+}

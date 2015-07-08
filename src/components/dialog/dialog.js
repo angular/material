@@ -16,7 +16,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
       $mdTheming(element);
       $$rAF(function () {
         var content = element[0].querySelector('md-dialog-content');
-        if (content && content.scrollHeight > content.clientHeight) {
+        if (content && content.scrollHeight >= content.clientHeight) {
           element.addClass('md-content-overflow');
         }
       });

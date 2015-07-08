@@ -85,6 +85,7 @@ md-dialog {
     padding-right: $baseline-grid;
     padding-left: $baseline-grid * 2;
     min-height: $baseline-grid * 6.5;
+    overflow: hidden;
 
     .md-button {
       margin-bottom: $baseline-grid;
