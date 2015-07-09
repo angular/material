@@ -76,7 +76,7 @@ describe('md-calendar', function() {
   function dispatchKeyEvent(keyCode, opt_modifiers) {
     var mod = opt_modifiers || {};
 
-    angular.element(controller.calendarElement).triggerHandler({
+    angular.element(controller.$element).triggerHandler({
       type: 'keydown',
       keyCode: keyCode,
       which: keyCode,
