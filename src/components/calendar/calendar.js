@@ -8,7 +8,7 @@
    */
   angular.module('material.components.calendar', [
     'material.core', 'material.components.virtualRepeat',
-    'material.core', 'material.components.icon'
+    'material.components.icon', 'material.components.menu'
   ]).directive('mdCalendar', calendarDirective);
 
 
