@@ -1,4 +1,4 @@
-// Styles for mdCalendar.
+/** Styles for mdCalendar. */
 $md-calendar-cell-size: 44px !default;
 $md-calendar-header-height: 40px;
 $md-calendar-cell-emphasis-size: 40px !default;
@@ -52,32 +52,37 @@ md-calendar {
 }
 
 // Wrap the scroll with overflow: hidden in order to hide the scrollbar.
-// The inner .md-calendar-scroller will using a padding-right to push the
+// The inner .md-calendar-scroll-container will using a padding-right to push the
 // scrollbar into the hidden area (done with javascript).
 .md-calendar-scroll-mask {
   display: inline-block;
   overflow: hidden;
   height: $md-calendar-weeks-to-show * $md-calendar-cell-size;
 
+  // The actual scrolling element.
   .md-virtual-repeat-scroller {
+    // These two properties are needed to get touch momentum to work.
+    // See https://css-tricks.com/snippets/css/momentum-scrolling-on-ios-overflow-elements
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
+  // Offsetter is the element that is translateY'ed into view of the user and contains the
+  // calendar content.
   .md-virtual-repeat-offsetter {
     width: 100%;
   }
 }
 
-// Scrolling element (the md-virtual-repeat-container).
-.md-calendar-scroller {
+// Contains the scrolling element (this is the md-virtual-repeat-container).
+.md-calendar-scroll-container {
   display: inline-block;
   height: $md-calendar-weeks-to-show * $md-calendar-cell-size;
   width: $md-calendar-width;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
 }
 
 // A single date cell in the calendar table.
@@ -85,11 +90,9 @@ md-calendar {
   @include md-calendar-cell();
 }
 
-// Element inside of every date cell that can indicate that the date is selected.
+// Circle element inside of every date cell used to indicate selection or focus.
 .md-calendar-date-selection-indicator {
-  transition-property: background-color, color;
-  transition-duration: $swift-ease-out-duration;
-  transition-timing-function: $swift-ease-out-timing-function;
+  transition: background-color, color $swift-ease-out-duration $swift-ease-out-timing-function;
 
   border-radius: 50%;
   display: inline-block;
@@ -129,7 +132,7 @@ md-calendar {
     border-bottom-style: solid;
   }
 
-  // The divider between months doesn't actualyl change the height of the tbody in which the
+  // The divider between months doesn't actually change the height of the tbody in which the
   // border appear; it changes the height of the following tbody. The causes the first-child to be
   // 1px shorter than the other months. We fix this by adding an invisible border-top.
   &:first-child {

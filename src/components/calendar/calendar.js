@@ -14,7 +14,7 @@
 
 
   // PRE RELEASE
-  // TODO(jelbourn): Date "isComplete" logic
+  // TODO(mchen): Date "isComplete" logic
   // TODO(jelbourn): Fix NVDA stealing key presses (IE) ???
 
   // POST RELEASE
@@ -41,10 +41,10 @@
   function calendarDirective() {
     return {
       template:
-          '<table class="md-calendar-day-header"><thead></thead></table>' +
-          '<div class="md-calendar-scroll-mask">' +
-            '<md-virtual-repeat-container class="md-calendar-scroller">' +
-              '<table role="grid" class="md-calendar">' +
+          '<table aria-hidden="true" class="md-calendar-day-header"><thead></thead></table>' +
+          '<div  aria-hidden="true" class="md-calendar-scroll-mask">' +
+            '<md-virtual-repeat-container class="md-calendar-scroll-container">' +
+              '<table class="md-calendar">' +
                 '<tbody role="rowgroup" md-virtual-repeat="i in ctrl.items" md-calendar-month ' +
                     'md-month-offset="$index" class="md-calendar-month" aria-hidden="true" ' +
                     'md-start-index="ctrl.getSelectedMonthIndex()" ' +
@@ -83,7 +83,10 @@
   function CalendarCtrl($element, $attrs, $scope, $animate, $q, $mdConstant,
       $$mdDateUtil, $$mdDateLocale, $mdInkRipple, $mdUtil) {
 
-    /** @type {Array<number>} Dummy array-like object for virtual-repeat to iterate over. */
+    /** @type {Array<number>}
+     * Dummy array-like object for virtual-repeat to iterate over. The length is the total
+     * number of months that can be viewed.
+     * */
     this.items = {length: 2000};
 
     /** @final {!angular.$animate} */
@@ -192,9 +195,6 @@
     };
 
     this.attachCalendarEventListeners();
-
-    // DEBUG
-    window.ctrl = this;
   }
 
 
@@ -226,14 +226,6 @@
   };
 
   /**
-   * Gets the "index" of the currently selected date as it would be in the virtual-repeat.
-   * @returns {number}
-   */
-  CalendarCtrl.prototype.getSelectedMonthIndex = function() {
-    return this.dateUtil.getMonthDistance(firstRenderableDate, this.selectedDate || this.today);
-  };
-
-  /**
    * Hides the vertical scrollbar on the calendar scroller by setting the width on the
    * calendar scroller and the `overflow: hidden` wrapper around the scroller, and then setting
    * a padding-right on the scroller equal to the width of the browser's scrollbar.
@@ -254,22 +246,8 @@
     scroller.style.paddingRight = scrollbarWidth + 'px';
   };
 
-  /**
-   * Scrolls to the month of the given date.
-   * @param {Date} date
-   */
-  CalendarCtrl.prototype.scrollToMonth = function(date) {
-    if (!this.dateUtil.isValidDate(date)) {
-      return;
-    }
 
-    var monthDistance = this.dateUtil.getMonthDistance(firstRenderableDate, date);
-    this.calendarScroller.scrollTop = monthDistance * TBODY_HEIGHT;
-  };
-
-  /**
-   * Attach event listeners for the calendar.
-   */
+  /** Attach event listeners for the calendar. */
   CalendarCtrl.prototype.attachCalendarEventListeners = function() {
     // Keyboard interaction.
     this.$element.on('keydown', this.handleKeyEvent.bind(this));
@@ -341,6 +319,27 @@
   };
 
   /**
+   * Gets the "index" of the currently selected date as it would be in the virtual-repeat.
+   * @returns {number}
+   */
+  CalendarCtrl.prototype.getSelectedMonthIndex = function() {
+    return this.dateUtil.getMonthDistance(firstRenderableDate, this.selectedDate || this.today);
+  };
+
+  /**
+   * Scrolls to the month of the given date.
+   * @param {Date} date
+   */
+  CalendarCtrl.prototype.scrollToMonth = function(date) {
+    if (!this.dateUtil.isValidDate(date)) {
+      return;
+    }
+
+    var monthDistance = this.dateUtil.getMonthDistance(firstRenderableDate, date);
+    this.calendarScroller.scrollTop = monthDistance * TBODY_HEIGHT;
+  };
+
+  /**
    * Sets the ng-model value for the calendar and emits a change event.
    * @param {Date} date
    */
@@ -356,6 +355,7 @@
    */
   CalendarCtrl.prototype.focus = function(opt_date) {
     this.$element[0].focus();
+    this.announceDisplayDateChange(null, opt_date);
 
     var previousFocus = this.calendarElement.querySelector('.md-focus');
     if (previousFocus) {
@@ -371,19 +371,6 @@
       this.focusDate = date;
     }
   };
-
-  /*** Animation ***/
-
-  /**
-   * Animates the transition from the calendar's current month to the given month.
-   * @param date
-   * @returns {angular.$q.Promise} The animation promise.
-   */
-  CalendarCtrl.prototype.animateDateChange = function(date) {
-    this.scrollToMonth(date);
-    return this.$q.when();
-  };
-
 
   /*** Updating the displayed / selected date ***/
 
@@ -452,6 +439,16 @@
     });
 
     return animationPromise;
+  };
+
+  /**
+   * Animates the transition from the calendar's current month to the given month.
+   * @param {Date} date
+   * @returns {angular.$q.Promise} The animation promise.
+   */
+  CalendarCtrl.prototype.animateDateChange = function(date) {
+    this.scrollToMonth(date);
+    return this.$q.when();
   };
 
   /**
