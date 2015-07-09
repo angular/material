@@ -108,6 +108,9 @@
     /** @type {HTMLElement} Calendar icon button. */
     this.calendarButton = $element[0].querySelector('.md-datepicker-button');
 
+    /** @type {HTMLElement} Datepicker opener button. */
+    this.openerButton = $element[0].querySelector('.md-datepicker-triangle-button');
+
     /** @final {!angular.JQLite} */
     this.$element = $element;
 
@@ -236,6 +239,7 @@
     this.isDisabled = isDisabled;
     this.inputElement.disabled = isDisabled;
     this.calendarButton.disabled = isDisabled;
+    this.openerButton.disabled = isDisabled;
   };
 
   /** Position and attach the floating calendar to the document. */
