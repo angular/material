@@ -14,7 +14,7 @@
 }
 
 .md-datepicker-triangle-button {
-  &:hover .md-datepicker-expand-triangle {
+  &:not([disabled]):hover .md-datepicker-expand-triangle {
     border-top-color: '{{foreground-2}}';
   }
 }

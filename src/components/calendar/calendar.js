@@ -14,7 +14,6 @@
 
   // PRE RELEASE
   // TODO(jelbourn): Base colors on the theme
-  // TODO(jelbourn): read-only state.
   // TODO(jelbourn): Date "isComplete" logic
   // TODO(jelbourn): Apple + up / down == PgDown and PgUp
   // TODO(jelbourn): Fix NVDA stealing key presses (IE) ???
