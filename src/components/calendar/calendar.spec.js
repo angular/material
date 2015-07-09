@@ -87,6 +87,10 @@ describe('md-calendar', function() {
     });
   }
 
+  function getFocusedDateElement() {
+    return element.querySelector('.md-focus');
+  }
+
   beforeEach(module('material.components.calendar', 'ngAnimateMock'));
 
   beforeEach(inject(function($injector) {
@@ -221,48 +225,48 @@ describe('md-calendar', function() {
       selectedDate.focus();
 
       dispatchKeyEvent(keyCodes.LEFT_ARROW);
-      expect(document.activeElement.textContent).toBe('10');
-      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
+      expect(getFocusedDateElement().textContent).toBe('10');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.UP_ARROW);
-      expect(document.activeElement.textContent).toBe('3');
-      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
+      expect(getFocusedDateElement().textContent).toBe('3');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.RIGHT_ARROW);
-      expect(document.activeElement.textContent).toBe('4');
-      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
+      expect(getFocusedDateElement().textContent).toBe('4');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.DOWN_ARROW);
-      expect(document.activeElement.textContent).toBe('11');
-      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
+      expect(getFocusedDateElement().textContent).toBe('11');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.HOME);
-      expect(document.activeElement.textContent).toBe('1');
-      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
+      expect(getFocusedDateElement().textContent).toBe('1');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.END);
-      expect(document.activeElement.textContent).toBe('28');
-      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
+      expect(getFocusedDateElement().textContent).toBe('28');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.RIGHT_ARROW);
-      expect(document.activeElement.textContent).toBe('1');
-      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Mar 2014');
+      expect(getFocusedDateElement().textContent).toBe('1');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Mar 2014');
 
       dispatchKeyEvent(keyCodes.PAGE_UP);
-      expect(document.activeElement.textContent).toBe('1');
-      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
+      expect(getFocusedDateElement().textContent).toBe('1');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.PAGE_DOWN);
-      expect(document.activeElement.textContent).toBe('1');
-      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Mar 2014');
+      expect(getFocusedDateElement().textContent).toBe('1');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Mar 2014');
 
       dispatchKeyEvent(keyCodes.UP_ARROW, {meta: true});
-      expect(document.activeElement.textContent).toBe('1');
-      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
+      expect(getFocusedDateElement().textContent).toBe('1');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.DOWN_ARROW, {meta: true});
-      expect(document.activeElement.textContent).toBe('1');
-      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Mar 2014');
+      expect(getFocusedDateElement().textContent).toBe('1');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Mar 2014');
 
       dispatchKeyEvent(keyCodes.ENTER);
       applyDateChange();

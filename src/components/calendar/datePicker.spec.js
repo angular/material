@@ -24,12 +24,12 @@ describe('md-date-picker', function() {
     pageScope.myDate = initialDate;
     pageScope.isDisabled = false;
 
-    var template = '<md-date-picker ng-model="myDate" ng-disabled="isDisabled"></md-date-picker>';
+    var template = '<md-datepicker ng-model="myDate" ng-disabled="isDisabled"></md-datepicker>';
     ngElement = $compile(template)(pageScope);
     $rootScope.$apply();
 
     scope = ngElement.scope();
-    controller = ngElement.controller('mdDatePicker');
+    controller = ngElement.controller('mdDatepicker');
     element = ngElement[0];
   }));
 
