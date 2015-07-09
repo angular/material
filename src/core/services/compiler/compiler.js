@@ -1,7 +1,7 @@
 angular.module('material.core')
   .service('$mdCompiler', mdCompilerService);
 
-function mdCompilerService($q, $http, $injector, $compile, $controller, $templateCache) {
+function mdCompilerService($q, $http, $compile, $controller, $templateCache, $mdResolve) {
   /* jshint validthis: true */
 
   /*
@@ -73,20 +73,6 @@ function mdCompilerService($q, $http, $injector, $compile, $controller, $templat
     var transformTemplate = options.transformTemplate || angular.identity;
     var bindToController = options.bindToController;
 
-    // Take resolve values and invoke them.  
-    // Resolves can either be a string (value: 'MyRegisteredAngularConst'),
-    // or an invokable 'factory' of sorts: (value: function ValueGetter($dependency) {})
-    angular.forEach(resolve, function(value, key) {
-      if (angular.isString(value)) {
-        resolve[key] = $injector.get(value);
-      } else {
-        resolve[key] = $injector.invoke(value);
-      }
-    });
-    //Add the locals, which are just straight values to inject
-    //eg locals: { three: 3 }, will inject three into the controller
-    angular.extend(resolve, locals);
-
     if (templateUrl) {
       resolve.$template = $http.get(templateUrl, {cache: $templateCache})
         .then(function(response) {
@@ -96,9 +82,8 @@ function mdCompilerService($q, $http, $injector, $compile, $controller, $templat
       resolve.$template = $q.when(template);
     }
 
-    // Wait for all the resolves to finish if they are promises
-    return $q.all(resolve).then(function(locals) {
-
+    // Wait for $mdResolve
+    return $mdResolve(resolve, locals).then(function (locals) {
       var template = transformTemplate(locals.$template);
       var element = options.element || angular.element('<div>').html(template.trim()).contents();
       var linkFn = $compile(element);
