@@ -746,7 +746,7 @@ function SelectProvider($$interimElementProvider) {
     });
 
   /* @ngInject */
-  function selectDefaultOptions($mdSelect, $mdConstant, $$rAF, $mdUtil, $mdTheming, $timeout, $window ) {
+  function selectDefaultOptions($mdSelect, $mdConstant, $$rAF, $mdUtil, $mdTheming, $window ) {
     return {
       parent: 'body',
       onShow: onShow,
@@ -810,10 +810,6 @@ function SelectProvider($$interimElementProvider) {
       } else {
         opts.disableParentScroll = false;
       }
-      // Only activate click listeners after a short time to stop accidental double taps/clicks
-      // from clicking the wrong item
-      $timeout(activateInteraction, 75, false);
-
       if (opts.backdrop) {
         $mdTheming.inherit(opts.backdrop, opts.target);
         opts.parent.append(opts.backdrop);
@@ -829,7 +825,10 @@ function SelectProvider($$interimElementProvider) {
         });
       });
 
-      return $mdUtil.transitionEndPromise(opts.selectEl, {timeout: 350});
+      return $mdUtil.transitionEndPromise(opts.selectEl, {timeout: 350}).then(function(res) {
+        activateInteraction();
+        return res;
+      });
 
       function configureAria() {
         opts.target.attr('aria-expanded', 'true');
