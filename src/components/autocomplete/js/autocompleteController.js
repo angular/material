@@ -242,18 +242,18 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
       });
     }
 
-    if (selectedItem !== previousSelectedItem) announceItemChange(selectedItem);
+    if (selectedItem !== previousSelectedItem) announceItemChange();
   }
 
   /**
    * Use the user-defined expression to announce changes each time a new item is selected
    */
-  function announceItemChange( current ) {
-    angular.isFunction($scope.itemChange) &&  $scope.itemChange( getItemAsNameVal(current) );
+  function announceItemChange() {
+    angular.isFunction($scope.itemChange) &&  $scope.itemChange();
   }
 
-  function announceTextChange( value ) {
-    angular.isFunction($scope.textChange) && $scope.textChange(value);
+  function announceTextChange() {
+    angular.isFunction($scope.textChange) && $scope.textChange();
   }
 
   /**
@@ -306,7 +306,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $timeout, $
         $scope.selectedItem = null;
 
         // trigger change event if available
-        if ( searchText !== previousSearchText ) announceTextChange(searchText);
+        if ( searchText !== previousSearchText ) announceTextChange();
 
         // cancel results if search text is not long enough
         if (!isMinLengthMet()) {
