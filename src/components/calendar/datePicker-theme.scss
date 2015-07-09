@@ -1,8 +1,5 @@
-.md-datepicker-root.md-THEME_NAME-theme {
+md-datepicker.md-THEME_NAME-theme {
   background: white;
-  &[disabled] {
-    background: '{{background-100}}';
-  }
 }
 
 .md-datepicker-input-container {

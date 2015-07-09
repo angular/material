@@ -13,7 +13,6 @@
 
 
   // PRE RELEASE
-  // TODO(jelbourn): Base colors on the theme
   // TODO(jelbourn): read-only state.
   // TODO(jelbourn): Date "isComplete" logic
   // TODO(jelbourn): Apple + up / down == PgDown and PgUp
@@ -85,7 +84,7 @@
       $$mdDateUtil, $$mdDateLocale, $mdInkRipple, $mdUtil) {
 
     /** @type {Array<number>} Dummy array-like object for virtual-repeat to iterate over. */
-    this.items = {length: 2000 * 12};
+    this.items = {length: 2000};
 
     /** @final {!angular.$animate} */
     this.$animate = $animate;
@@ -119,6 +118,9 @@
 
     /** @final {HTMLElement} */
     this.ariaLiveElement = $element[0].querySelector('[aria-live]');
+
+    this.ariaLiveElement.parentNode.removeChild(this.ariaLiveElement);
+    document.body.appendChild(this.ariaLiveElement);
 
     /** @final {HTMLElement} */
     this.calendarScroller = $element[0].querySelector('.md-virtual-repeat-scroller');
@@ -347,11 +349,18 @@
    * @param {Date=} opt_date
    */
   CalendarCtrl.prototype.focus = function(opt_date) {
+    this.$element[0].focus();
+
+    var previousFocus = this.calendarElement.querySelector('.md-focus');
+    if (previousFocus) {
+      previousFocus.classList.remove('md-focus');
+    }
+
     var date = opt_date || this.selectedDate;
     var cellId = this.getDateId(date);
     var cell = this.calendarElement.querySelector('#' + cellId);
     if (cell) {
-      cell.focus();
+      cell.classList.add('md-focus');
     } else {
       this.focusDate = date;
     }
