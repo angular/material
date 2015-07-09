@@ -56,6 +56,18 @@
        * @type {function(Date): string}
        */
       this.longAnnounceFormatter = null;
+
+      /**
+       * ARIA label for the calendar "dialog" used in the datepicker.
+       * @type {string}
+       */
+      this.msgCalendar = '';
+
+      /**
+       * ARIA label for the datepicker's "Open calendar" buttons.
+       * @type {string}
+       */
+      this.msgOpenCalendar = '';
     }
 
     /**
@@ -64,7 +76,7 @@
      * @param $locale
      * @returns {DateLocale}
      */
-    DateLocaleProvider.prototype.$get = function($locale) {
+    DateLocaleProvider.prototype.$get = function($locale, $filter) {
       /**
        * Default date-to-string formatting function.
        * @param {!Date} date
@@ -99,7 +111,7 @@
        */
       function defaultShortAnnounceFormatter(date) {
         // Example: 'Tuesday 12'
-        return service.days[date.getDay()] + ' ' + service.dates[date.getDate()];
+        return $filter('date')(date, 'EEEE d');
       }
 
       /**
@@ -108,13 +120,8 @@
        * @returns {string}
        */
       function defaultLongAnnounceFormatter(date) {
-        // Example: '2015 June Thursday 18'
-        return [
-          date.getFullYear(),
-          service.months[date.getMonth()],
-          service.days[date.getDay()],
-          service.dates[date.getDate()]
-        ].join(' ');
+        // Example: 'Thursday June 18 2015'
+        return $filter('date')(date, 'fulldate');
       }
 
       // The default "short" day strings are the first character of each day,
@@ -129,8 +136,11 @@
         defaultDates[i] = i;
       }
 
-      // TODO(jelbourn): Freeze this object.
-      var service = {
+      // Default ARIA messages are in English (US).
+      var defaultMsgCalendar = 'Calendar';
+      var defaultMsgOpenCalendar = 'Open calendar';
+
+      var service = Object.freeze({
         months: this.months || $locale.DATETIME_FORMATS.MONTH,
         shortMonths: this.shortMonths || $locale.DATETIME_FORMATS.SHORTMONTH,
         days: this.days || $locale.DATETIME_FORMATS.DAY,
@@ -140,8 +150,10 @@
         parseDate: this.parseDate || defaultParseDate,
         monthHeaderFormatter: this.monthHeaderFormatter || defaultMonthHeaderFormatter,
         shortAnnounceFormatter: this.shortAnnounceFormatter || defaultShortAnnounceFormatter,
-        longAnnounceFormatter: this.longAnnounceFormatter || defaultLongAnnounceFormatter
-      };
+        longAnnounceFormatter: this.longAnnounceFormatter || defaultLongAnnounceFormatter,
+        msgCalendar: this.msgCalendar || defaultMsgCalendar,
+        msgOpenCalendar: this.msgOpenCalendar || defaultMsgOpenCalendar
+      });
 
       return service;
     };

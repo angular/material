@@ -1,4 +1,4 @@
-// Theme styles for mdCalendar.
+/** Theme styles for mdCalendar. */
 
 .md-calendar {
   color: '{{foreground-2}}';
@@ -17,6 +17,8 @@
   color: '{{primary-500}}'; // blue-500
 }
 
+// The CSS class `md-focus` is used instead of real browser focus for accessibility reasons
+// (the root md-calendar holds browser focus).
 .md-calendar-date.md-focus {
   .md-calendar-date-selection-indicator {
     background-color: '{{background-300}}'; // grey-300

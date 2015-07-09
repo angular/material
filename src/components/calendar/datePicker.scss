@@ -1,23 +1,8 @@
-// Space between the text input and the calendar-icon button.
-$md-datepicker-button-gap: 12px;
+/** Styles for mdDatepicker. */
+$md-datepicker-button-gap: 12px;  // Space between the text input and the calendar-icon button.
+$md-datepicker-border-bottom-gap: 5px;  // Space between input and the grey underline.
+$md-datepicker-open-animation-duration: 0.2s;
 
-
-// Mixin for a "flat" input that can be used for components that contain an input
-// (datepicker, autocomplete).
-// TODO(jelbourn): actually use this w/ autocomplete.
-@mixin md-flat-input() {
-  font-size: 14px;
-
-  box-sizing: border-box;
-  border: none;
-  box-shadow: none;
-  outline: none;
-  background: transparent;
-
-  &::-ms-clear {
-    display: none;
-  }
-}
 
 // The calendar icon button used to open the calendar pane.
 // Need absurd specificty to override md-button.md-icon-button.
@@ -38,17 +23,13 @@ $md-datepicker-button-gap: 12px;
   // Position relative in order to absolutely position the down-triangle button within.
   position: relative;
 
-  padding-bottom: 5px;
+  padding-bottom: $md-datepicker-border-bottom-gap;
   border-bottom-width: 1px;
   border-bottom-style: solid;
 
   display: inline-block;
   width: 120px;
   margin-left: $md-datepicker-button-gap;
-
-  md-datepicker[disabled] & {
-    border-bottom-color: transparent;
-  }
 }
 
 
@@ -65,7 +46,7 @@ $md-datepicker-button-gap: 12px;
 
   transform: scale(0);
   transform-origin: 0 0;
-  transition: transform 0.2s $swift-ease-out-timing-function;
+  transition: transform $md-datepicker-open-animation-duration $swift-ease-out-timing-function;
 
   &.md-pane-open {
     transform: scale(1);
@@ -85,7 +66,10 @@ $md-datepicker-button-gap: 12px;
 // The calendar portion of the floating pane (vs. the input mask).
 .md-datepicker-calendar {
   opacity: 0;
-  transition: opacity 0.2s cubic-bezier(0.5, 0, 0.25, 1);
+  // Use a modified timing function (from swift-ease-out) so that the opacity part of the
+  // animation doesn't come in as quickly so that the floating pane doesn't ever seem to
+  // cover up the trigger input.
+  transition: opacity $md-datepicker-open-animation-duration cubic-bezier(0.5, 0, 0.25, 1);
 
   .md-pane-open & {
     opacity: 1;
@@ -116,11 +100,9 @@ $md-date-arrow-size: 5px;
   position: absolute;
   right: 0;
   top: 0;
-  transform: translateY(-25%) translateX(45%);
 
-  md-datepicker[disabled] & {
-    display: none;
-  }
+  // TODO(jelbourn): This position isn't great on all platforms.
+  transform: translateY(-25%) translateX(45%);
 }
 
 // Need crazy specificity to override .md-button.md-icon-button.
@@ -130,6 +112,16 @@ $md-date-arrow-size: 5px;
   position: absolute;
 }
 
+// Disabled state for all elements of the picker.
+md-datepicker[disabled] {
+  .md-datepicker-input-container {
+    border-bottom-color: transparent;
+  }
+
+  .md-datepicker-triangle-button {
+    display: none;
+  }
+}
 
 // Open state for all of the elements of the picker.
 .md-datepicker-open {
