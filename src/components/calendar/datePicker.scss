@@ -30,19 +30,25 @@ $md-datepicker-button-gap: 12px;
 // The input into which the user can type the date.
 .md-datepicker-input {
   @include md-flat-input();
-  width: 100%;
+  min-width: 100%;
 }
 
 // Container for the datepicker input.
 .md-datepicker-input-container {
+  // Position relative in order to absolutely position the down-triangle button within.
   position: relative;
 
+  padding-bottom: 5px;
   border-bottom-width: 1px;
   border-bottom-style: solid;
 
   display: inline-block;
   width: 120px;
   margin-left: $md-datepicker-button-gap;
+
+  md-datepicker[disabled] & {
+    border-bottom-color: transparent;
+  }
 }
 
 
@@ -89,7 +95,7 @@ $md-datepicker-button-gap: 12px;
 // Down triangle/arrow indicating that the datepicker can be opened.
 // We can do this entirely with CSS without needing to load an icon.
 // See https://css-tricks.com/snippets/css/css-triangle/
-$md-date-arrow-size: 6px;
+$md-date-arrow-size: 5px;
 .md-datepicker-expand-triangle {
   // Center the triangle inside of the button so that the
   // ink ripple origin looks correct.
@@ -111,6 +117,10 @@ $md-date-arrow-size: 6px;
   right: 0;
   top: 0;
   transform: translateY(-25%) translateX(45%);
+
+  md-datepicker[disabled] & {
+    display: none;
+  }
 }
 
 // Need crazy specificity to override .md-button.md-icon-button.

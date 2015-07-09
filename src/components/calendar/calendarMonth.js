@@ -75,7 +75,7 @@
     this.$element.empty();
     this.$element.append(this.buildCalendarForMonth(date));
     if (this.focusAfterAppend) {
-      this.focusAfterAppend.focus();
+      this.focusAfterAppend.classList.add('md-focus');
       this.focusAfterAppend = null;
     }
   };
