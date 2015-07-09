@@ -14,7 +14,6 @@
 
 
   // PRE RELEASE
-  // TODO(jelbourn): read-only state.
   // TODO(jelbourn): Date "isComplete" logic
   // TODO(jelbourn): Fix NVDA stealing key presses (IE) ???
 
@@ -26,6 +25,7 @@
   // TODO(jelbourn): Previous month opacity is lowered when partially scrolled out of view.
   // TODO(jelbourn): Support md-calendar standalone on a page (as a tabstop w/ aria-live
   //     announcement and key handling).
+  // Read-only calendar (not just date-picker).
 
   // COULD GO EITHER WAY
   // TODO(jelbourn): Clicking on the month label opens the month-picker.
