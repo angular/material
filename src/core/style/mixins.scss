@@ -39,6 +39,23 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
 }
 
+// Mixin for a "flat" input that can be used for components that contain an input
+// (datepicker, autocomplete).
+@mixin md-flat-input() {
+  font-size: 14px;
+
+  box-sizing: border-box;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  background: transparent;
+
+  // The the "clear X" that IE adds to input[type="search"]
+  &::-ms-clear {
+    display: none;
+  }
+}
+
 // Typography mixins
 
 @mixin md-title() {
