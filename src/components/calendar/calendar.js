@@ -16,7 +16,6 @@
   // PRE RELEASE
   // TODO(jelbourn): read-only state.
   // TODO(jelbourn): Date "isComplete" logic
-  // TODO(jelbourn): Apple + up / down == PgDown and PgUp
   // TODO(jelbourn): Fix NVDA stealing key presses (IE) ???
 
   // POST RELEASE
@@ -325,8 +324,14 @@
     switch (event.which) {
       case keyCode.RIGHT_ARROW: return dateUtil.incrementDays(this.displayDate, 1);
       case keyCode.LEFT_ARROW: return dateUtil.incrementDays(this.displayDate, -1);
-      case keyCode.DOWN_ARROW: return dateUtil.incrementDays(this.displayDate, 7);
-      case keyCode.UP_ARROW: return dateUtil.incrementDays(this.displayDate, -7);
+      case keyCode.DOWN_ARROW:
+        return event.metaKey ?
+          dateUtil.incrementMonths(this.displayDate, 1) :
+          dateUtil.incrementDays(this.displayDate, 7);
+      case keyCode.UP_ARROW:
+        return event.metaKey ?
+          dateUtil.incrementMonths(this.displayDate, -1) :
+          dateUtil.incrementDays(this.displayDate, -7);
       case keyCode.PAGE_DOWN: return dateUtil.incrementMonths(this.displayDate, 1);
       case keyCode.PAGE_UP: return dateUtil.incrementMonths(this.displayDate, -1);
       case keyCode.HOME: return dateUtil.getFirstDateOfMonth(this.displayDate);

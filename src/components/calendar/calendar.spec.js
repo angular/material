@@ -82,6 +82,7 @@ describe('md-calendar', function() {
       which: keyCode,
       ctrlKey: mod.ctrl,
       altKey: mod.alt,
+      metaKey: mod.meta,
       shortKey: mod.shift
     });
   }
@@ -252,6 +253,14 @@ describe('md-calendar', function() {
       expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.PAGE_DOWN);
+      expect(document.activeElement.textContent).toBe('1');
+      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Mar 2014');
+
+      dispatchKeyEvent(keyCodes.UP_ARROW, {meta: true});
+      expect(document.activeElement.textContent).toBe('1');
+      expect(getMonthLabelForDateCell(document.activeElement)).toBe('Feb 2014');
+
+      dispatchKeyEvent(keyCodes.DOWN_ARROW, {meta: true});
       expect(document.activeElement.textContent).toBe('1');
       expect(getMonthLabelForDateCell(document.activeElement)).toBe('Mar 2014');
 
