@@ -97,19 +97,11 @@ md-autocomplete {
     }
   }
   input:not(.md-input) {
+    @include md-flat-input();
     width: 100%;
-    box-sizing: border-box;
-    border: none;
-    box-shadow: none;
     padding: 0 15px;
-    font-size: 14px;
     line-height: 40px;
     height: 40px;
-    outline: none;
-    background: transparent;
-    &::-ms-clear {
-      display: none;
-    }
   }
   button {
     position: relative;

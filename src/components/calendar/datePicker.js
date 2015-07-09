@@ -4,8 +4,6 @@
   // PRE RELEASE
   // TODO(jelbourn): Documentation
   // TODO(jelbourn): Demo that uses moment.js
-
-  // TODO(jelbourn): aria attributes tying together date input and floating calendar.
   // TODO(jelbourn): make sure this plays well with validation and ngMessages.
   // TODO(jelbourn): auto-grow input to accomodate longer dates
 
@@ -28,7 +26,7 @@
           // interaction on the text input, and multiple tab stops for one component (picker)
           // may be confusing.
           '<md-button class="md-datepicker-button md-icon-button" type="button" ' +
-              'tabindex="-1" aria-label="Open calendar" ' +
+              'tabindex="-1" aria-label="{{::ctrl.dateLocale.msgOpenCalendar}}" ' +
               'ng-click="ctrl.openCalendarPane()">' +
               '<md-icon class="md-datepicker-calendar-icon" md-svg-icon="md-calendar"></md-icon>' +
           '</md-button>' +
@@ -36,7 +34,8 @@
             '<input class="md-datepicker-input">' +
 
             '<md-button md-no-ink class="md-datepicker-triangle-button md-icon-button" ' +
-                'ng-click="ctrl.openCalendarPane()" tabindex="-1" aria-label="Open calendar">' +
+                'ng-click="ctrl.openCalendarPane()" tabindex="-1" ' +
+                'aria-label="{{::ctrl.dateLocale.msgOpenCalendar}}">' +
               '<div class="md-datepicker-expand-triangle"></div>' +
             '</md-button>' +
           '</div>' +
@@ -45,7 +44,8 @@
           '<div class="md-datepicker-calendar-pane md-whiteframe-z1">' +
             '<div class="md-datepicker-input-mask"></div>' +
             '<div class="md-datepicker-calendar">' +
-              '<md-calendar role="dialog" aria-label="Calendar" tabindex="0" ' +
+              '<md-calendar role="dialog" aria-label="{{::ctrl.dateLocale.msgCalendar}}" ' +
+                  'tabindex="0" ' +
                   'ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen"></md-calendar>' +
             '</div>' +
           '</div>',
@@ -61,9 +61,6 @@
         var mdDatePickerCtrl = controllers[1];
 
         mdDatePickerCtrl.configureNgModel(ngModelCtrl);
-
-        // DEBUG
-        window.dCtrl = mdDatePickerCtrl;
       }
     };
   }
