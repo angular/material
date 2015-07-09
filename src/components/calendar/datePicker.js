@@ -7,7 +7,6 @@
   // TODO(jelbourn): aria attributes tying together date input and floating calendar.
   // TODO(jelbourn): make sure this plays well with validation and ngMessages.
   // TODO(jelbourn): forward more attributes to the internal input (required, autofocus, etc.)
-  // TODO(jelbourn): floating panel open animation (see animation for menu in spec).
   // TODO(jelbourn): auto-grow input to accomodate longer dates
 
   // POST RELEASE
@@ -19,12 +18,16 @@
 
 
   angular.module('material.components.calendar')
-      .directive('mdDatePicker', datePickerDirective);
+      .directive('mdDatepicker', datePickerDirective);
 
   function datePickerDirective() {
     return {
       template:
+          // Buttons are not in the tab order because users can open the calendar via keyboard
+          // interaction on the text input, and multiple tab stops for one component (picker)
+          // may be confusing.
           '<md-button class="md-datepicker-button md-icon-button" type="button" ' +
+              'tabindex="-1" aria-label="Open calendar" ' +
               'ng-click="ctrl.openCalendarPane()">' +
               '<md-icon class="md-datepicker-calendar-icon" md-svg-icon="md-calendar"></md-icon>' +
           '</md-button>' +
@@ -32,7 +35,7 @@
             '<input class="md-datepicker-input">' +
 
             '<md-button md-no-ink class="md-datepicker-triangle-button md-icon-button" ' +
-                'ng-click="ctrl.openCalendarPane()">' +
+                'ng-click="ctrl.openCalendarPane()" tabindex="-1" aria-label="Open calendar">' +
               '<div class="md-datepicker-expand-triangle"></div>' +
             '</md-button>' +
           '</div>' +
@@ -41,10 +44,11 @@
           '<div class="md-datepicker-calendar-pane md-whiteframe-z1">' +
             '<div class="md-datepicker-input-mask"></div>' +
             '<div class="md-datepicker-calendar">' +
-              '<md-calendar ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen"></md-calendar>' +
+              '<md-calendar role="dialog" aria-label="Calendar" tabindex="0" ' +
+                  'ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen"></md-calendar>' +
             '</div>' +
           '</div>',
-      require: ['ngModel', 'mdDatePicker'],
+      require: ['ngModel', 'mdDatepicker'],
       scope: {
         placeholder: '@mdPlaceholder'
       },
@@ -69,7 +73,7 @@
    * @ngInject @constructor
    */
   function DatePickerCtrl($scope, $element, $attrs, $compile, $timeout, $mdConstant, $mdUtil,
-      $$mdDateLocale, $$mdDateUtil, $mdMenu, $$rAF) {
+      $$mdDateLocale, $$mdDateUtil, $$rAF) {
     /** @final */
     this.$compile = $compile;
 
@@ -89,8 +93,6 @@
     this.$mdUtil = $mdUtil;
 
     /** @final */
-    this.$mdMenu = $mdMenu;
-
     this.$$rAF = $$rAF;
 
     /** @type {!angular.NgModelController} */
@@ -250,7 +252,7 @@
     calendarPane.style.top = (elementRect.top - bodyRect.top) + 'px';
     document.body.appendChild(this.calendarPane);
 
-    // Add CSS class after one frame to trigger animation.
+    // Add CSS class after one frame to trigger open animation.
     this.$$rAF(function() {
       calendarPane.classList.add('md-pane-open');
     });
