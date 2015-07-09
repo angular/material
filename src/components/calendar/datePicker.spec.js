@@ -40,18 +40,15 @@ describe('md-date-picker', function() {
   it('should open and close the floating calendar pane (with shadow)', function() {
     // We can asset that the calendarPane is in the DOM by checking if it has a height.
     expect(controller.calendarPane.offsetHeight).toBe(0);
-    expect(controller.calendarShadow.offsetHeight).toBe(0);
 
     element.querySelector('md-button').click();
     $timeout.flush();
 
     expect(controller.calendarPane.offsetHeight).toBeGreaterThan(0);
-    expect(controller.calendarShadow.offsetHeight).toBeGreaterThan(0);
 
     // Click off of the calendar.
     document.body.click();
     expect(controller.calendarPane.offsetHeight).toBe(0);
-    expect(controller.calendarShadow.offsetHeight).toBe(0);
   });
 
   it('should open and close the floating calendar pane via keyboard', function() {
@@ -67,7 +64,6 @@ describe('md-date-picker', function() {
     // Fake an escape event coming the the calendar.
     pageScope.$broadcast('md-calendar-escape');
 
-    expect(controller.calendarShadow.offsetHeight).toBe(0);
   });
 
   it('should disable the internal input based on ng-disabled binding', function() {
