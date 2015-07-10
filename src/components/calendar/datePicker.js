@@ -31,7 +31,7 @@
               '<md-icon class="md-datepicker-calendar-icon" md-svg-icon="md-calendar"></md-icon>' +
           '</md-button>' +
           '<div class="md-datepicker-input-container">' +
-            '<input class="md-datepicker-input">' +
+            '<input class="md-datepicker-input" aria-haspopup="true">' +
 
             '<md-button md-no-ink class="md-datepicker-triangle-button md-icon-button" ' +
                 'ng-click="ctrl.openCalendarPane()" tabindex="-1" ' +
@@ -64,6 +64,9 @@
       }
     };
   }
+
+  /** Additional offset for the input's `size` attribute, which is updated based on its content. */
+  var EXTRA_INPUT_SIZE = 3;
 
   /**
    * Controller for md-date-picker.
@@ -127,7 +130,7 @@
     this.calendarPane.id = 'md-date-pane' + $mdUtil.nextUid();
 
     /** Pre-bound click handler is saved so that the event listener can be removed. */
-    this.bodyClickHandler = this.handleBodyClick.bind(this);
+    this.bodyClickHandler = angular.bind(this, this.handleBodyClick);
 
     // Unless the user specifies so, the datepicker should not be a tab stop.
     // This is necessary because ngAria might add a tabindex to anything with an ng-model
@@ -157,6 +160,7 @@
     ngModelCtrl.$render = function() {
       self.date = self.ngModelCtrl.$viewValue;
       self.inputElement.value = self.dateLocale.formatDate(self.date);
+      self.inputElement.size = self.inputElement.value.length + EXTRA_INPUT_SIZE;
     };
   };
 
@@ -178,10 +182,12 @@
     self.inputElement.addEventListener('input', function() {
       var inputString = self.inputElement.value;
       var parsedDate = self.dateLocale.parseDate(inputString);
+
+      self.inputElement.size = inputString.length + EXTRA_INPUT_SIZE;
+
       if (self.dateUtil.isValidDate(parsedDate)) {
         // TODO(jelbourn): if we can detect here that `inputString` is a "complete" date,
         // set the ng-model value.
-
         self.date = parsedDate;
         self.$scope.$apply();
       }
