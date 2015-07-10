@@ -41,11 +41,12 @@
   function calendarDirective() {
     return {
       template:
+          //'<input class="md-calendar-focus-holder" tabindex="-1">' +
           '<table aria-hidden="true" class="md-calendar-day-header"><thead></thead></table>' +
-          '<div  aria-hidden="true" class="md-calendar-scroll-mask">' +
+          '<div aria-hidden="true" class="md-calendar-scroll-mask">' +
             '<md-virtual-repeat-container class="md-calendar-scroll-container">' +
               '<table class="md-calendar">' +
-                '<tbody role="rowgroup" md-virtual-repeat="i in ctrl.items" md-calendar-month ' +
+                '<tbody md-virtual-repeat="i in ctrl.items" md-calendar-month ' +
                     'md-month-offset="$index" class="md-calendar-month" aria-hidden="true" ' +
                     'md-start-index="ctrl.getSelectedMonthIndex()" ' +
                     'md-item-size="' + TBODY_HEIGHT + '"></tbody>' +
@@ -54,7 +55,6 @@
           '</div>' +
           '<div aria-live="assertive" aria-atomic="true" class="md-visually-hidden"></div>',
       scope: {},
-      restrict: 'E',
       require: ['ngModel', 'mdCalendar'],
       controller: CalendarCtrl,
       controllerAs: 'ctrl',
@@ -187,11 +187,12 @@
      * @this {HTMLTableCellElement} The cell that was clicked.
      */
     this.cellClickHandler = function() {
+      var cellElement = this;
       if (this.hasAttribute('data-timestamp')) {
         $scope.$apply(function() {
-          var timestamp = Number(this.getAttribute('data-timestamp'));
+          var timestamp = Number(cellElement.getAttribute('data-timestamp'));
           self.setNgModelValue(self.dateUtil.createDateAtMidnight(timestamp));
-        }.bind(this)); // The `this` here is the cell element.
+        });
       }
     };
 
@@ -251,7 +252,7 @@
   /** Attach event listeners for the calendar. */
   CalendarCtrl.prototype.attachCalendarEventListeners = function() {
     // Keyboard interaction.
-    this.$element.on('keydown', this.handleKeyEvent.bind(this));
+    this.$element.on('keydown', angular.bind(this, this.handleKeyEvent));
   };
   
   /*** User input handling ***/
@@ -355,6 +356,7 @@
    * @param {Date=} opt_date
    */
   CalendarCtrl.prototype.focus = function(opt_date) {
+    //this.$element[0].querySelector('.md-calendar-focus-holder').focus();
     this.$element[0].focus();
     this.announceDisplayDateChange(null, opt_date);
 
