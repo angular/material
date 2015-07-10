@@ -83,10 +83,11 @@
   function CalendarCtrl($element, $attrs, $scope, $animate, $q, $mdConstant,
       $$mdDateUtil, $$mdDateLocale, $mdInkRipple, $mdUtil) {
 
-    /** @type {Array<number>}
+    /**
      * Dummy array-like object for virtual-repeat to iterate over. The length is the total
-     * number of months that can be viewed.
-     * */
+     * number of months that can be viewed. This is shorter than ideal because of (potential)
+     * Firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=1181658.
+     */
     this.items = {length: 2000};
 
     /** @final {!angular.$animate} */
@@ -160,7 +161,7 @@
     this.displayDate = null;
 
     /**
-     * The date that has or should have browser focus.
+     * The date that has or should have focus.
      * @type {Date}
      */
     this.focusDate = null;
