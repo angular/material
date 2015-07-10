@@ -3,6 +3,9 @@ md-fab-speed-dial {
   display: flex;
   align-items: center;
 
+  // Include the top/left/bottom/right fab positions
+  @include fab-all-positions();
+
   .md-css-variables {
     z-index: $z-index-fab;
   }
