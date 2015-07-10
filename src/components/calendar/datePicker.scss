@@ -15,7 +15,8 @@ $md-datepicker-open-animation-duration: 0.2s;
 // The input into which the user can type the date.
 .md-datepicker-input {
   @include md-flat-input();
-  min-width: 100%;
+  min-width: 120px;
+  max-width: $md-calendar-width;
 }
 
 // Container for the datepicker input.
@@ -28,7 +29,7 @@ $md-datepicker-open-animation-duration: 0.2s;
   border-bottom-style: solid;
 
   display: inline-block;
-  width: 120px;
+  width: auto;
   margin-left: $md-datepicker-button-gap;
 }
 
@@ -73,6 +74,10 @@ $md-datepicker-open-animation-duration: 0.2s;
 
   .md-pane-open & {
     opacity: 1;
+  }
+
+  md-calendar:focus {
+    outline: none;
   }
 }
 
