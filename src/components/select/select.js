@@ -169,7 +169,11 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $interpolate, 
 
       if (attr.name && formCtrl) {
         var selectEl = element.parent()[0].querySelector('select[name=".' + attr.name + '"]');
-        formCtrl.$removeControl(angular.element(selectEl).controller());
+        var controller = angular.element(selectEl).controller();
+        
+        if (controller) {
+          formCtrl.$removeControl(controller);
+        }
       }
 
 
