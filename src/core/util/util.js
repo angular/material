@@ -370,8 +370,14 @@ angular.module('material.core')
         if (!this.nextTick.timeout) {
           this.nextTick.timeout = true;
           $timeout(function () {
+            //-- grab a copy of the current queue
+            var queue = this.nextTick.queue;
+            //-- reset the queue just in case any callbacks use nextTick
+            this.nextTick.queue = [];
             this.nextTick.callback = false;
-            this.nextTick.queue.forEach(function (callback) { callback(); });
+            this.nextTick.timeout = false;
+            //-- process the existing queue
+            queue.forEach(function (callback) { callback(); });
           }.bind(this));
         }
       }
