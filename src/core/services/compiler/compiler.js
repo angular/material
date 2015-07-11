@@ -69,7 +69,7 @@ function mdCompilerService($q, $http, $compile, $controller, $templateCache, $md
     var controller = options.controller;
     var controllerAs = options.controllerAs;
     var resolve = angular.copy(options.resolve || {});
-    var locals = angular.copy(options.locals || {});
+    var locals = options.locals;
     var transformTemplate = options.transformTemplate || angular.identity;
     var bindToController = options.bindToController;
 

@@ -56,6 +56,12 @@ describe('$mdResolve service', function () {
       expect(resolved.two).toBe('TWO');
     }));
 
+    it('should resolve if resole & locals are not defined', inject(function () {
+      var resolved = mdResolve();
+
+      expect(resolved).toEqual({});
+    }));
+
     it('should resolve dependencies', inject(function ($q) {
       var locals = {
         one: 'one'

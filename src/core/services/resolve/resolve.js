@@ -41,8 +41,11 @@ function ResolveService($q, $injector) {
   return function mdResolve(resolve, locals) {
     var resolved = angular.extend({}, locals);
 
-    for (var name in resolve) {
-      invoke(name, resolve, resolved);
+    if (angular.isObject(resolve)) {
+      for (var name in resolve) {
+        if (!resolve.hasOwnProperty(name)) continue;
+        invoke(name, resolve, resolved);
+      }
     }
 
     return $q.all(resolved);
