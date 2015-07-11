@@ -39,7 +39,7 @@ function ResolveService($q, $injector) {
    * @returns {object=} promise A promise, which will be resolved with a `resolved` object.
    */
   return function mdResolve(resolve, locals) {
-    var resolved = angular.extend({}, locals);
+    var resolved = angular.isObject(locals) ? angular.copy(locals) : {};
 
     if (angular.isObject(resolve)) {
       for (var name in resolve) {
