@@ -127,5 +127,17 @@ describe('$mdResolve service', function () {
       expect(locals).toEqual(localsCopy);
       expect(resolve).toEqual(resolveCopy);
     });
+
+    it('should pass locals by reference', inject(function () {
+      var value = {};
+
+      var locals = {
+        value: value
+      };
+
+      var resolved = mdResolve(null, locals);
+
+      expect(resolved.value).toBe(value);
+    }));
   });
 });
