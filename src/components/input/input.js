@@ -384,6 +384,7 @@ function placeholderDirective($log) {
     if (!inputContainer) return;
     if (angular.isDefined(inputContainer.element.attr('md-no-float'))) return;
 
+    var inputContainerScope = inputContainer.element.scope();
     var placeholderText = attr.placeholder;
     element.removeAttr('placeholder');
 
@@ -391,8 +392,9 @@ function placeholderDirective($log) {
       if (inputContainer.input && inputContainer.input[0].nodeName != 'MD-SELECT') {
         var placeholder = '<label ng-click="delegateClick()">' + placeholderText + '</label>';
 
+        inputContainerScope.delegateClick = inputContainer.delegateClick;
         inputContainer.element.addClass('md-icon-float');
-        inputContainer.element.prepend(placeholder);
+        inputContainer.element.prepend($compile(placeholder)(inputContainerScope));
       }
     } else if (element[0].nodeName != 'MD-SELECT') {
       $log.warn("The placeholder='" + placeholderText + "' will be ignored since this md-input-container has a child label element.");
