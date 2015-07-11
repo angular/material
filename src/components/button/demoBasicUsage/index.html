@@ -2,7 +2,7 @@
 <div ng-controller="AppCtrl">
   <md-content>
 
-    <section layout="row" layout-sm="column" layout-align="center center">
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
       <md-button>{{title1}}</md-button>
       <md-button md-no-ink class="md-primary">Primary (md-noink)</md-button>
       <md-button ng-disabled="true" class="md-primary">Disabled</md-button>
@@ -10,7 +10,7 @@
       <div class="label">Flat</div>
     </section>
 
-    <section layout="row" layout-sm="column" layout-align="center center">
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
       <md-button class="md-raised">Button</md-button>
       <md-button class="md-raised md-primary">Primary</md-button>
       <md-button ng-disabled="true" class="md-raised md-primary">Disabled</md-button>
@@ -18,7 +18,7 @@
       <div class="label">Raised</div>
     </section>
 
-    <section layout="row" layout-sm="column" layout-align="center center">
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
         <md-button class="md-fab" aria-label="Eat cake">
             <md-icon md-svg-src="img/icons/cake.svg"></md-icon>
         </md-button>
@@ -45,7 +45,7 @@
       <div class="label">FAB</div>
     </section>
 
-    <section layout="row" layout-sm="column" layout-align="center center">
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
         <md-button ng-href="{{googleUrl}}" target="_blank">Default Link</md-button>
         <md-button class="md-primary" ng-href="{{googleUrl}}" target="_blank">Primary Link</md-button>
 
@@ -53,7 +53,7 @@
       <div class="label">Link vs. Button</div>
     </section>
 
-    <section layout="row" layout-sm="column" layout-align="center center">
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
       <md-button class="md-primary md-hue-1">Primary Hue 1</md-button>
       <md-button class="md-warn md-raised md-hue-2">Warn Hue 2</md-button>
       <md-button class="md-accent">Accent</md-button>
@@ -61,7 +61,7 @@
       <div class="label">Themed</div>
     </section>
 
-    <section layout="row" layout-sm="column" layout-align="center center">
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
       <md-button class="md-icon-button md-primary" aria-label="Settings">
         <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
       </md-button>
