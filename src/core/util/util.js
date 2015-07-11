@@ -179,20 +179,39 @@ angular.module('material.core')
         node.dispatchEvent(newEvent);
       },
 
+      /**
+       * Listen for transitionEnd event (with optional timeout)
+       * Announce completion or failure via promise handlers
+       */
       transitionEndPromise: function (element, opts) {
-        opts = opts || {};
-        var deferred = $q.defer();
-        element.on($mdConstant.CSS.TRANSITIONEND, finished);
-        function finished(ev) {
-          // Make sure this transitionend didn't bubble up from a child
-          if (!ev || ev.target === element[0]) {
-            element.off($mdConstant.CSS.TRANSITIONEND, finished);
-            deferred.resolve();
-          }
-        }
+        var TIMEOUT = 10000; // fallback is 10 secs
 
-        if (opts.timeout) $timeout(finished, opts.timeout);
-        return deferred.promise;
+        return $q(function(resolve, reject){
+          opts = opts || { };
+
+          var timer = $timeout(finished, opts.timeout || TIMEOUT);
+          element.on($mdConstant.CSS.TRANSITIONEND, finished);
+
+          /**
+           * Upon timeout or transitionEnd, reject or resolve (respectively) this promise.
+           * NOTE: Make sure this transitionEnd didn't bubble up from a child
+           */
+          function finished(ev) {
+            if ( ev && ev.target !== element[0]) return;
+
+            element.off($mdConstant.CSS.TRANSITIONEND, finished);
+            if ( ev  ) $timeout.cancel(timer);
+
+            // Only reject if timeout triggered
+            var announce = ( ev ) ? resolve : reject;
+
+            announce({
+              element:element,
+              options:opts
+            });
+          }
+
+        });
       },
 
       fakeNgModel: function () {
