@@ -71,7 +71,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     configureWatchers();
     bindEvents();
     $mdTheming($element);
-    $timeout(function () {
+    $mdUtil.nextTick(function () {
       updateHeightFromContent();
       adjustOffset();
       updatePagination();
@@ -293,7 +293,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
       ctrl.lastSelectedIndex = ctrl.selectedIndex;
       ctrl.offsetLeft = fixOffset(ctrl.offsetLeft);
       $timeout(ctrl.updateInkBarStyles, 0, false);
-      $timeout(updatePagination);
+      $mdUtil.nextTick(updatePagination);
     });
   }
 
@@ -323,7 +323,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
       tab.scope.deselect();
       ctrl.tabs[ctrl.selectedIndex] && ctrl.tabs[ctrl.selectedIndex].scope.select();
     }
-    $timeout(function () {
+    $mdUtil.nextTick(function () {
       updatePagination();
       ctrl.offsetLeft = fixOffset(ctrl.offsetLeft);
     });
@@ -355,8 +355,8 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
     processQueue();
     updateHasContent();
     //-- if autoselect is enabled, select the newly added tab
-    if (loaded && ctrl.autoselect) $timeout(function () { select(ctrl.tabs.indexOf(tab)); });
-    $timeout(updatePagination);
+    if (loaded && ctrl.autoselect) $mdUtil.nextTick(function () { select(ctrl.tabs.indexOf(tab)); });
+    $mdUtil.nextTick(updatePagination);
     return tab;
   }
 
@@ -479,9 +479,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
   function updatePagination () {
     ctrl.shouldPaginate = shouldPaginate();
     ctrl.shouldCenterTabs = shouldCenterTabs();
-    $timeout(function () {
-      adjustOffset(ctrl.selectedIndex);
-    });
+    $mdUtil.nextTick(function () { adjustOffset(ctrl.selectedIndex); });
   }
 
   /**
@@ -540,7 +538,7 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
    * are called before the UI is ready, such as size calculations.
    */
   function processQueue () {
-    queue.forEach(function (func) { $timeout(func); });
+    queue.forEach(function (func) { $mdUtil.nextTick(func); });
     queue = [];
   }
 
