@@ -361,8 +361,20 @@ angular.module('material.core')
             scope[key] = angular.isDefined(defaults[key]) ? defaults[key] : attrIsDefined;
           }
         });
-      }
+      },
 
+      nextTick: function (callback) {
+        this.nextTick.queue = this.nextTick.queue || [];
+        this.nextTick.queue.push(callback);
+
+        if (!this.nextTick.timeout) {
+          this.nextTick.timeout = true;
+          $timeout(function () {
+            this.nextTick.callback = false;
+            this.nextTick.queue.forEach(function (callback) { callback(); });
+          }.bind(this));
+        }
+      }
     };
 
   });
