@@ -55,7 +55,7 @@ md-menu-content {
   flex-direction: column;
   padding: $baseline-grid 0;
   max-height: $max-menu-height;
-  overflow-y: scroll;
+  overflow-y: auto;
   &.md-dense {
     max-height: $max-dense-menu-height;
     md-menu-item {
