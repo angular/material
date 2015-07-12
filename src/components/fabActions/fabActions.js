@@ -8,7 +8,7 @@
   /**
    * @ngdoc directive
    * @name mdFabActions
-   * @module material.components.fabSpeedDial
+   * @module material.components.fabActions
    *
    * @restrict E
    *
@@ -29,8 +29,14 @@
       compile: function(element, attributes) {
         var children = element.children();
 
-        // Support both ng-repat and static content
-        if (children.attr('ng-repeat')) {
+        var hasNgRepeat = false;
+
+        angular.forEach(['', 'data-', 'x-'], function(prefix) {
+          hasNgRepeat = hasNgRepeat || (children.attr(prefix + 'ng-repeat') ? true : false);
+        });
+
+        // Support both ng-repeat and static content
+        if (hasNgRepeat) {
           children.addClass('md-fab-action-item');
         } else {
           // Wrap every child in a new div and add a class that we can scale/fling independently
