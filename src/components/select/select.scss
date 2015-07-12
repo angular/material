@@ -91,6 +91,7 @@ md-select {
   box-sizing: content-box;
   min-width: 8 * $baseline-grid;
   min-height: 26px;
+  flex-grow: 1;
 
   *:first-child {
     flex: 1;
@@ -120,7 +121,6 @@ md-select {
 
   &.md-select-placeholder {
     display: flex;
-    flex-grow: 1;
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
