@@ -72,7 +72,7 @@ describe('md-menu directive', function () {
     expect(getOpenMenuContainer().length).toBe(0);
   }));
 
-  ddescribe('closes with -', function() {
+  describe('closes with -', function() {
     it('closes on normal option click', function () {
       expect(getOpenMenuContainer().length).toBe(0);
 
