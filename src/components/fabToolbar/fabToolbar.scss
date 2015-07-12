@@ -79,6 +79,7 @@ md-fab-toolbar {
 
   md-toolbar {
     background-color: transparent !important;
+    pointer-events: none;
     z-index: $z-index-fab + 3;
 
     .md-toolbar-tools {

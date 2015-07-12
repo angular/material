@@ -4,7 +4,7 @@ describe('<md-fab-toolbar> directive', function() {
 
   var pageScope, element, controller;
 
-  function compileAndLink(template) {
+  function build(template) {
     inject(function($compile, $rootScope) {
       pageScope = $rootScope.$new();
       element = $compile(template)(pageScope);
@@ -15,7 +15,7 @@ describe('<md-fab-toolbar> directive', function() {
   }
 
   it('disables tabbing to the trigger (go straight to first element instead)', inject(function() {
-    compileAndLink(
+    build(
       '<md-fab-toolbar><md-fab-trigger><button></button></md-fab-trigger></md-fab-toolbar>'
     );
 
@@ -24,7 +24,7 @@ describe('<md-fab-toolbar> directive', function() {
 
 
   it('opens when the toolbar elements are focused', inject(function() {
-    compileAndLink(
+    build(
       '<md-fab-toolbar><md-fab-trigger><a></a></md-fab-trigger>' +
       '<md-fab-actions><button></button></md-fab-actions></md-fab-toolbar>'
     );
@@ -34,7 +34,7 @@ describe('<md-fab-toolbar> directive', function() {
   }));
 
   it('closes when the toolbar elements are blurred', inject(function() {
-    compileAndLink(
+    build(
       '<md-fab-toolbar><md-fab-actions><button></button></md-fab-actions></md-fab-toolbar>'
     );
 
@@ -46,7 +46,7 @@ describe('<md-fab-toolbar> directive', function() {
   }));
 
   it('allows programmatic opening through the md-open attribute', inject(function() {
-    compileAndLink(
+    build(
       '<md-fab-toolbar md-open="isOpen"></md-fab-toolbar>'
     );
 
@@ -63,7 +63,7 @@ describe('<md-fab-toolbar> directive', function() {
   }));
 
   it('properly finishes the animation', inject(function(mdFabToolbarAnimation) {
-    compileAndLink(
+    build(
       '<md-fab-toolbar md-open="isOpen">' +
       '  <md-fab-trigger><button></button></md-fab-trigger>' +
       '  <md-fab-actions><button></button></md-fab-actions>' +
