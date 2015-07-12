@@ -39,16 +39,19 @@ function ResolveService($q, $injector) {
    * @returns {object=} promise A promise, which will be resolved with a `resolved` object.
    */
   return function mdResolve(resolve, locals) {
-    var resolved = angular.extend({}, locals);
+    locals = angular.extend({}, locals);
+    var resolved = {};
 
     if (angular.isObject(resolve)) {
       for (var name in resolve) {
         if (!resolve.hasOwnProperty(name)) continue;
-        invoke(name, resolve, resolved);
+        invoke(name, resolve, locals, resolved);
       }
     }
 
-    return $q.all(resolved);
+    return $q.all(resolved).then(function (resolved) {
+      return angular.extend(resolved, locals);
+    });
   };
 
   /**
@@ -57,27 +60,31 @@ function ResolveService($q, $injector) {
    * or an invokable 'factory' of sorts: (value: function ValueGetter($dependency) {}),
    * or Promise (value: $http.get(url).then(...)).
    */
-  function invoke(name, resolve, resolved) {
-    if (resolved.hasOwnProperty(name)) return resolved[name];
-    if (!resolve.hasOwnProperty(name)) return;
+  function invoke(name, resolve, locals, resolved) {
+    if (locals.hasOwnProperty(name) ||
+      resolved.hasOwnProperty(name) || !resolve.hasOwnProperty(name)) return;
 
     var value = resolve[name];
 
     if (angular.isString(value)) {
-      resolved[name] = $injector.get(value);
+      locals[name] = $injector.get(value);
     } else if (isPromise(value)) {
       resolved[name] = value;
     } else {
-      var promises = {};
+      var _resolved = {}, _locals = {};
       $injector.annotate(value).forEach(function (name) {
-        var value = invoke(name, resolve, resolved);
-        if (!angular.isUndefined(value)) promises[name] = value;
+        invoke(name, resolve, locals, resolved);
+        if (locals.hasOwnProperty(name)) {
+          _locals[name] = locals[name];
+        } else if (resolved.hasOwnProperty(name)) {
+          _resolved[name] = resolved[name];
+        }
       });
 
-      resolved[name] = $q.all(promises).then(angular.bind($injector, $injector.invoke, value, null));
+      resolved[name] = $q.all(_resolved).then(function (resolved) {
+        return $injector.invoke(value, null, angular.extend(resolved, _locals));
+      });
     }
-
-    return resolved[name];
   }
 
   /**
