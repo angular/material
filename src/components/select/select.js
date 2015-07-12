@@ -1018,9 +1018,16 @@ function SelectProvider($$interimElementProvider) {
         selectNode.classList.add('md-overflow');
       }
 
+      var focusedNode = centeredNode;
+      if ((focusedNode.tagName || '').toUpperCase() === 'MD-OPTGROUP') {
+        focusedNode = optionNodes[0] || contentNode.firstElementChild || contentNode;
+        centeredNode = focusedNode;
+      }
+
       // Get the selectMenuRect *after* max-width is possibly set above
       var selectMenuRect = selectNode.getBoundingClientRect();
       var centeredRect = getOffsetRect(centeredNode);
+
 
       if (centeredNode) {
         var centeredStyle = $window.getComputedStyle(centeredNode);
@@ -1028,10 +1035,6 @@ function SelectProvider($$interimElementProvider) {
         centeredRect.paddingRight = parseInt(centeredStyle.paddingRight, 10) || 0;
       }
 
-      var focusedNode = centeredNode;
-      if ((focusedNode.tagName || '').toUpperCase() === 'MD-OPTGROUP') {
-        focusedNode = optionNodes[0] || contentNode.firstElementChild || contentNode;
-      }
 
       if (isScrollable) {
         var scrollBuffer = contentNode.offsetHeight / 2;
