@@ -76,7 +76,7 @@
      * @param $locale
      * @returns {DateLocale}
      */
-    DateLocaleProvider.prototype.$get = function($locale, $filter) {
+    DateLocaleProvider.prototype.$get = function($locale) {
       /**
        * Default date-to-string formatting function.
        * @param {!Date} date
@@ -111,7 +111,7 @@
        */
       function defaultShortAnnounceFormatter(date) {
         // Example: 'Tuesday 12'
-        return $filter('date')(date, 'EEEE d');
+        return service.days[date.getDay()] + ' ' + service.dates[date.getDate()];
       }
 
       /**
@@ -121,7 +121,12 @@
        */
       function defaultLongAnnounceFormatter(date) {
         // Example: 'Thursday June 18 2015'
-        return $filter('date')(date, 'fulldate');
+        return [
+          service.days[date.getDay()],
+          service.months[date.getMonth()],
+          service.dates[date.getDate()],
+          date.getFullYear()
+        ].join(' ');
       }
 
       // The default "short" day strings are the first character of each day,
