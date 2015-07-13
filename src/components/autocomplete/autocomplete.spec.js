@@ -222,6 +222,39 @@ describe('<md-autocomplete>', function() {
       expect(scope.itemChanged.calls.mostRecent().args[0]).toBeNull();
       expect(scope.selectedItem).toBeNull();
     }));
-  });
+    it('should pass value to item watcher', inject(function($timeout, $mdConstant) {
+      var scope = createScope();
+      var itemValue = null;
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-selected-item-change="itemChanged(item)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      scope.itemChanged = function(item) {
+        itemValue = item;
+      };
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
 
+      element.scope().searchText = 'fo';
+      ctrl.keydown({});
+      element.scope().$apply();
+      $timeout.flush();
+
+      ctrl.select(0);
+      element.scope().$apply();
+      $timeout.flush();
+
+      expect(itemValue).not.toBeNull();
+      expect(itemValue.display).toBe('foo');
+
+      ctrl.clear();
+      element.scope().$apply();
+    }));
+  });
 });
