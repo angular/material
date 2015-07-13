@@ -55,8 +55,8 @@ describe('<md-autocomplete>', function() {
       expect(scope.match(scope.searchText).length).toBe(1);
       expect(ul.find('li').length).toBe(1);
 
-      ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.DOWN_ARROW, preventDefault: angular.noop });
-      ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.ENTER, preventDefault: angular.noop });
+      ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.DOWN_ARROW, stopPropagation: angular.noop });
+      ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.ENTER, stopPropagation: angular.noop });
       scope.$apply();
       $timeout.flush();
 
@@ -95,8 +95,8 @@ describe('<md-autocomplete>', function() {
       expect(scope.match(scope.searchText).length).toBe(1);
       expect(ul.find('li').length).toBe(1);
 
-      ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.DOWN_ARROW, preventDefault: angular.noop });
-      ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.ENTER, preventDefault: angular.noop });
+      ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.DOWN_ARROW, stopPropagation: angular.noop });
+      ctrl.keydown({ keyCode: $mdConstant.KEY_CODE.ENTER, stopPropagation: angular.noop });
       scope.$apply();
       $timeout.flush();
 
