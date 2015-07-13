@@ -41,7 +41,6 @@
   function calendarDirective() {
     return {
       template:
-          //'<input class="md-calendar-focus-holder" tabindex="-1">' +
           '<table aria-hidden="true" class="md-calendar-day-header"><thead></thead></table>' +
           '<div aria-hidden="true" class="md-calendar-scroll-mask">' +
             '<md-virtual-repeat-container class="md-calendar-scroll-container">' +
@@ -282,20 +281,22 @@
 
       // Selection isn't occuring, so the key event is either navigation or nothing.
       var date = self.getFocusDateFromKeyEvent(event);
-      event.preventDefault();
+      if (date) {
+        event.preventDefault();
 
-      // Since this is a keyboard interaction, actually give the newly focused date keyboard
-      // focus after the been brought into view.
-      self.changeDisplayDate(date).then(function() {
-        self.focus(date);
-      });
+        // Since this is a keyboard interaction, actually give the newly focused date keyboard
+        // focus after the been brought into view.
+        self.changeDisplayDate(date).then(function () {
+          self.focus(date);
+        });
+      }
     });
   };
 
   /**
    * Gets the date to focus as the result of a key event.
    * @param {KeyboardEvent} event
-   * @returns {Date}
+   * @returns {Date} Date to navigate to, or null if the key does not match a calendar shortcut.
    */
   CalendarCtrl.prototype.getFocusDateFromKeyEvent = function(event) {
     var dateUtil = this.dateUtil;
@@ -316,7 +317,7 @@
       case keyCode.PAGE_UP: return dateUtil.incrementMonths(this.displayDate, -1);
       case keyCode.HOME: return dateUtil.getFirstDateOfMonth(this.displayDate);
       case keyCode.END: return dateUtil.getLastDateOfMonth(this.displayDate);
-      default: return this.displayDate;
+      default: return null;
     }
   };
 
@@ -356,16 +357,21 @@
    * @param {Date=} opt_date
    */
   CalendarCtrl.prototype.focus = function(opt_date) {
+    var date = opt_date || this.selectedDate;
+
     //this.$element[0].querySelector('.md-calendar-focus-holder').focus();
     this.$element[0].focus();
-    this.announceDisplayDateChange(null, opt_date);
+
+    if (!opt_date) {
+      this.announceDisplayDateChange(null, date);
+    }
 
     var previousFocus = this.calendarElement.querySelector('.md-focus');
     if (previousFocus) {
       previousFocus.classList.remove('md-focus');
     }
 
-    var date = opt_date || this.selectedDate;
+
     var cellId = this.getDateId(date);
     var cell = this.calendarElement.querySelector('#' + cellId);
     if (cell) {
@@ -425,7 +431,7 @@
       return this.$q.when();
     }
 
-    // WORK IN PROGRESS: do nothing if animation is in progress.
+    // Do nothing if animation is in progress.
     if (this.isMonthTransitionInProgress) {
       return this.$q.when();
     }
