@@ -239,6 +239,8 @@ md-tab {
   float: left;
   font-weight: 500;
   box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
   &.md-focused {
     box-shadow: none;
     outline: none;
