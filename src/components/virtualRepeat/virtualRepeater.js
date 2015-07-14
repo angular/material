@@ -38,7 +38,6 @@ angular.module('material.components.virtualRepeat', [
 function VirtualRepeatContainerDirective() {
   return {
     controller: VirtualRepeatContainerController,
-    restrict: 'E',
     template: virtualRepeatContainerTemplate,
     compile: function virtualRepeatContainerCompile($element, $attrs) {
       $element
