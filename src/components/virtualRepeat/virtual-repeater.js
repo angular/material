@@ -436,6 +436,9 @@ VirtualRepeatController.prototype.readItemSize_ = function() {
   this.items = this.repeatListExpression(this.$scope);
   this.parentNode = this.$element[0].parentNode;
   var block = this.getBlock_(0);
+  if (!block.element[0].parentNode) {
+    this.parentNode.appendChild(block.element[0]);
+  }
 
   this.itemSize = block.element[0][
       this.container.isHorizontal() ? 'offsetWidth' : 'offsetHeight'] || null;
@@ -475,7 +478,7 @@ VirtualRepeatController.prototype.repeatListExpression_ = function(scope) {
 VirtualRepeatController.prototype.containerUpdated = function() {
   // If itemSize is unknown, attempt to measure it.
   if (!this.itemSize) {
-    this.unwatchItemSize_ = this.$scope.$watch(
+    this.unwatchItemSize_ = this.$scope.$watchCollection(
         this.repeatListExpression,
         angular.bind(this, function(items) {
           if (items && items.length) {
