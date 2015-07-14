@@ -385,7 +385,7 @@ angular.module('material.core')
 
       nextTick: function (callback, digest) {
         //-- grab function reference for storing state details
-        var nextTick = this.nextTick;
+        var nextTick = Util.nextTick;
         var timeout = nextTick.timeout;
         var queue = nextTick.queue || [];
 
