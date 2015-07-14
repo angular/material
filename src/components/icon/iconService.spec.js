@@ -11,6 +11,7 @@ describe('mdIcon service', function() {
     $mdIconProvider
       .icon('android'     , 'android.svg')
       .icon('c2'          , 'c2.svg')
+      .icon('notfound'    ,'notfoundicon.svg')
       .iconSet('social'   , 'social.svg' )
       .iconSet('notfound' , 'notfoundgroup.svg' )
       .defaultIconSet('core.svg');
@@ -26,6 +27,7 @@ describe('mdIcon service', function() {
     $templateCache.put('c2.svg'     , '<svg><g id="c2" class="override"></g></svg>');
 
     $httpBackend.whenGET('notfoundgroup.svg').respond(404, 'Cannot GET notfoundgroup.svg');
+    $httpBackend.whenGET('notfoundicon.svg').respond(404, 'Cannot GET notfoundicon.svg');
 
   }));
 
@@ -104,7 +106,7 @@ describe('mdIcon service', function() {
     });
 
     describe('icon set URL is not found', function() {
-      it('should throw Error', function() {
+      it('should log Error', function() {
         var msg;
         try {
           $mdIcon('notconfigured')
@@ -119,8 +121,8 @@ describe('mdIcon service', function() {
       });
     });
 
-    describe('icon is not found', function() {
-      it('should throw Error', function() {
+    describe('icon group is not found', function() {
+      it('should log Error', function() {
         var msg;
         try {
           $mdIcon('notfound:someIcon')
@@ -135,6 +137,15 @@ describe('mdIcon service', function() {
       });
     });
 
+    describe('icon is not found', function() {
+      it('should not throw Error', function() {
+        expect(function(){
+          $mdIcon('notfound');
+
+          $httpBackend.flush();
+        }).not.toThrow();
+      });
+    });
   });
 
   function updateDefaults(svg) {
