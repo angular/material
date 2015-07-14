@@ -746,6 +746,8 @@ function SelectProvider($$interimElementProvider) {
 
   /* @ngInject */
   function selectDefaultOptions($mdSelect, $mdConstant, $$rAF, $mdUtil, $mdTheming, $window ) {
+    var aniamtor = $mdUtil.dom.animator;
+
     return {
       parent: 'body',
       onShow: onShow,
@@ -756,7 +758,7 @@ function SelectProvider($$interimElementProvider) {
     };
 
     function onShow(scope, element, opts) {
-      var waitTransitionEnd = $mdUtil.dom.animator.waitTransitionEnd;
+
 
       if (!opts.target) {
         throw new Error('$mdSelect.show() expected a target element in options.target but got ' +
@@ -826,7 +828,7 @@ function SelectProvider($$interimElementProvider) {
         });
       });
 
-      return waitTransitionEnd(opts.selectEl, {timeout: 350}).then(function(res) {
+      return aniamtor.waitTransitionEnd(opts.selectEl, {timeout: 350}).then(function(res) {
         activateInteraction();
         return res;
       });
@@ -934,8 +936,6 @@ function SelectProvider($$interimElementProvider) {
     }
 
     function onRemove(scope, element, opts) {
-      var waitTransitionEnd = $mdUtil.dom.animator.waitTransitionEnd;
-
       element
         .addClass('md-leave')
         .removeClass('md-clickable');
@@ -953,7 +953,7 @@ function SelectProvider($$interimElementProvider) {
         mdSelect.setLabelText(opts.selectEl.controller('mdSelectMenu').selectedLabels());
       }
 
-      return waitTransitionEnd(element, { timeout: 350 }).then(function() {
+      return aniamtor.waitTransitionEnd(element, { timeout: 350 }).then(function() {
         element.removeClass('md-active');
         opts.backdrop && opts.backdrop.remove();
         if (element[0].parentNode === opts.parent[0]) {
