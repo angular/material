@@ -82,7 +82,7 @@
       element.prepend('<div class="md-css-variables"></div>');
     }
 
-    function FabSpeedDialController($scope, $element, $animate, $timeout) {
+    function FabSpeedDialController($scope, $element, $animate, $mdUtil) {
       var vm = this;
 
       // Define our open/close functions
@@ -113,9 +113,9 @@
       setupWatchers();
 
       // Fire the animations once in a separate digest loop to initialize them
-      $timeout(function() {
+      $mdUtil.nextTick(function() {
         $animate.addClass($element, 'md-noop');
-      }, 0);
+      });
 
       // Set our default variables
       function setupDefaults() {
