@@ -18,8 +18,9 @@ md-backdrop {
 
   background-color: rgba(0,0,0,0);
 
-  position: fixed;
+  position: absolute;
   height: 100%;
+  bottom:0;
   left: 0;
   right: 0;
 
@@ -32,7 +33,11 @@ md-backdrop {
     animation: $swift-ease-out-timing-function mdBackdropFadeIn 0.5s both;
   }
   &.ng-leave {
-    animation: $swift-ease-in-timing-function mdBackdropFadeOut 0.2s both;
+    animation: $swift-ease-in-timing-function mdBackdropFadeOut 0.4s both;
+  }
+
+  &.md-opaque {
+    background-color: rgba(0,0,0,0.42);
   }
 }
 
