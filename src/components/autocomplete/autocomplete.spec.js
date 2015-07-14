@@ -36,6 +36,21 @@ describe('<md-autocomplete>', function () {
     };
   }
 
+  function waitForVirtualRepeat(element) {
+    // Because the autocomplete does not make the suggestions menu visible
+    // off the bat, the virtual repeat needs a couple more iterations to
+    // figure out how tall it is and then how tall the repeated items are.
+
+    // Using md-item-size would reduce this to a single flush, but given that
+    // autocomplete allows for custom row templates, it's better to measure
+    // rather than assuming a given size.
+    inject(function ($$rAF) {
+      $$rAF.flush();
+      element.scope().$apply();
+      $$rAF.flush();
+    });
+  }
+
   describe('basic functionality', function () {
     it('should update selected item and search text', inject(function ($timeout, $mdConstant) {
       var scope    = createScope();
@@ -57,9 +72,11 @@ describe('<md-autocomplete>', function () {
 
       element.scope().searchText = 'fo';
       $timeout.flush();
+      waitForVirtualRepeat(element);
 
       expect(scope.searchText).toBe('fo');
       expect(scope.match(scope.searchText).length).toBe(1);
+
       expect(ul.find('li').length).toBe(1);
 
       ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
@@ -165,6 +182,7 @@ describe('<md-autocomplete>', function () {
 
       element.scope().searchText = 'fo';
       $timeout.flush();
+      waitForVirtualRepeat(element);
 
       expect(scope.searchText).toBe('fo');
       expect(scope.match(scope.searchText).length).toBe(1);
@@ -182,9 +200,9 @@ describe('<md-autocomplete>', function () {
   });
 
   describe('xss prevention', function () {
-    it('should not allow html to slip through', function () {
-      var html     = 'foo <img src="img" onerror="alert(1)" />';
-      var scope    = createScope([ { display: html } ]);
+    it('should not allow html to slip through', inject(function($timeout) {
+      var html = 'foo <img src="img" onerror="alert(1)" />';
+      var scope = createScope([ { display: html } ]);
       var template = '\
           <md-autocomplete\
               md-selected-item="selectedItem"\
@@ -202,6 +220,8 @@ describe('<md-autocomplete>', function () {
       expect(scope.selectedItem).toBe(null);
 
       scope.$apply('searchText = "fo"');
+      $timeout.flush();
+      waitForVirtualRepeat(element);
 
       expect(scope.searchText).toBe('fo');
       expect(scope.match(scope.searchText).length).toBe(1);
@@ -209,7 +229,7 @@ describe('<md-autocomplete>', function () {
       expect(ul.find('li').find('img').length).toBe(0);
 
       element.remove();
-    });
+    }));
   });
 
   describe('API access', function () {

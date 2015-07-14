@@ -47,6 +47,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   ctrl.getCurrentDisplayValue        = getCurrentDisplayValue;
   ctrl.registerSelectedItemWatcher   = registerSelectedItemWatcher;
   ctrl.unregisterSelectedItemWatcher = unregisterSelectedItemWatcher;
+  ctrl.notFoundVisible               = notFoundVisible;
 
   return init();
 
@@ -94,19 +95,20 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       styles.bottom    = 'auto';
       styles.maxHeight = Math.min(MAX_HEIGHT, root.bottom - hrect.bottom - MENU_PADDING) + 'px';
     }
-    elements.$.ul.css(styles);
+
+    elements.$.scrollContainer.css(styles);
     $mdUtil.nextTick(correctHorizontalAlignment, false);
 
     /**
      * Makes sure that the menu doesn't go off of the screen on either side.
      */
     function correctHorizontalAlignment () {
-      var dropdown = elements.ul.getBoundingClientRect(),
+      var dropdown = elements.scrollContainer.getBoundingClientRect(),
           styles   = {};
       if (dropdown.right > root.right - MENU_PADDING) {
         styles.left = (hrect.right - dropdown.width) + 'px';
       }
-      elements.$.ul.css(styles);
+      elements.$.scrollContainer.css(styles);
     }
   }
 
@@ -115,10 +117,10 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    */
   function moveDropdown () {
     if (!elements.$.root.length) return;
-    $mdTheming(elements.$.ul);
-    elements.$.ul.detach();
-    elements.$.root.append(elements.$.ul);
-    if ($animate.pin) $animate.pin(elements.$.ul, $rootElement);
+    $mdTheming(elements.$.scrollContainer);
+    elements.$.scrollContainer.detach();
+    elements.$.root.append(elements.$.scrollContainer);
+    if ($animate.pin) $animate.pin(elements.$.scrollContainer, $rootElement);
   }
 
   /**
@@ -146,18 +148,20 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    */
   function cleanup () {
     angular.element($window).off('resize', positionDropdown);
-    elements.$.ul.remove();
+    elements.$.scrollContainer.remove();
   }
 
   /**
    * Gathers all of the elements needed for this controller
    */
   function gatherElements () {
-    elements      = {
-      main:  $element[ 0 ],
-      ul:    $element.find('ul')[ 0 ],
-      input: $element.find('input')[ 0 ],
-      wrap:  $element.find('md-autocomplete-wrap')[ 0 ],
+    elements = {
+      main:  $element[0],
+      scrollContainer: $element[0].getElementsByClassName('md-virtual-repeat-container')[0],
+      scroller: $element[0].getElementsByClassName('md-virtual-repeat-scroller')[0],
+      ul:    $element.find('ul')[0],
+      input: $element.find('input')[0],
+      wrap:  $element.find('md-autocomplete-wrap')[0],
       root:  document.body
     };
     elements.li   = elements.ul.getElementsByTagName('li');
@@ -567,16 +571,25 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * Makes sure that the focused element is within view.
    */
   function updateScroll () {
-    if (!elements.li[ ctrl.index ]) return;
-    var li  = elements.li[ ctrl.index ],
-        top = li.offsetTop,
-        bot = top + li.offsetHeight,
-        hgt = elements.ul.clientHeight;
-    if (top < elements.ul.scrollTop) {
-      elements.ul.scrollTop = top;
-    } else if (bot > elements.ul.scrollTop + hgt) {
-      elements.ul.scrollTop = bot - hgt;
+    if (!elements.li[0]) return;
+    var height = elements.li[0].offsetHeight,
+        top = height * ctrl.index,
+        bot = top + height,
+        hgt = elements.scroller.clientHeight,
+        scrollTop = elements.scroller.scrollTop;
+    if (top < scrollTop) {
+      scrollTo(top);
+    } else if (bot > scrollTop + hgt) {
+      scrollTo(bot - hgt);
     }
+  }
+
+  function scrollTo (offset) {
+    elements.$.scrollContainer.controller('mdVirtualRepeatContainer').scrollTo(offset);
+  }
+
+  function notFoundVisible () {
+    return !ctrl.matches.length && !ctrl.loading && ctrl.scope.searchText;
   }
 
   /**
