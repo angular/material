@@ -406,7 +406,7 @@ angular.module('material.core')
         nextTick.queue = queue;
 
         //-- return either the existing timeout or the newly created one
-        return timeout || $timeout(processQueue, 0, false);
+        return timeout || (nextTick.timeout = $timeout(processQueue, 0, false));
 
         function processQueue () {
           //-- grab a copy of the current queue
