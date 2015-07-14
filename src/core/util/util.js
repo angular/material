@@ -175,14 +175,6 @@ angular.module('material.core')
           },
 
           /**
-           * Listen for transitionEnd event (with optional timeout)
-           * Announce completion or failure via promise handlers
-           */
-          transitionEndPromise: function (element, opts) {
-            return $mdUtil.dom.animator.waitTransitionEnd(element,opts);
-          },
-
-          /**
            * supplant() method from Crockford's `Remedial Javascript`
            * Equivalent to use of $interpolate; without dependency on
            * interpolation symbols and scope. Note: the '{<token>}' can

@@ -4,7 +4,7 @@ describe('<md-select>', function() {
   beforeEach(module('material.components.select'));
 
   beforeEach(inject(function($mdUtil, $$q) {
-    $mdUtil.transitionEndPromise = function() {
+    $mdUtil.dom.animator.waitTransitionEnd = function() {
       return $$q.when(true);
     };
   }));

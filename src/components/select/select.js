@@ -756,6 +756,8 @@ function SelectProvider($$interimElementProvider) {
     };
 
     function onShow(scope, element, opts) {
+      var waitTransitionEnd = $mdUtil.dom.animator.waitTransitionEnd;
+
       if (!opts.target) {
         throw new Error('$mdSelect.show() expected a target element in options.target but got ' +
                         '"' + opts.target + '"!');
@@ -824,7 +826,7 @@ function SelectProvider($$interimElementProvider) {
         });
       });
 
-      return $mdUtil.transitionEndPromise(opts.selectEl, {timeout: 350}).then(function(res) {
+      return waitTransitionEnd(opts.selectEl, {timeout: 350}).then(function(res) {
         activateInteraction();
         return res;
       });
@@ -932,6 +934,8 @@ function SelectProvider($$interimElementProvider) {
     }
 
     function onRemove(scope, element, opts) {
+      var waitTransitionEnd = $mdUtil.dom.animator.waitTransitionEnd;
+
       element
         .addClass('md-leave')
         .removeClass('md-clickable');
@@ -949,7 +953,7 @@ function SelectProvider($$interimElementProvider) {
         mdSelect.setLabelText(opts.selectEl.controller('mdSelectMenu').selectedLabels());
       }
 
-      return $mdUtil.transitionEndPromise(element, { timeout: 350 }).then(function() {
+      return waitTransitionEnd(element, { timeout: 350 }).then(function() {
         element.removeClass('md-active');
         opts.backdrop && opts.backdrop.remove();
         if (element[0].parentNode === opts.parent[0]) {

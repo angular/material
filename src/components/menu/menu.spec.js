@@ -5,7 +5,7 @@ describe('md-menu directive', function () {
   beforeEach(inject(function ($mdUtil, $$q, $document, _$mdMenu_, _$timeout_) {
     $mdMenu = _$mdMenu_;
     $timeout = _$timeout_;
-    $mdUtil.transitionEndPromise = function () {
+    $mdUtil.dom.animator.waitTransitionEnd = function () {
       return $$q.when(true);
     };
     var abandonedMenus = $document[0].querySelectorAll('.md-menu-container');

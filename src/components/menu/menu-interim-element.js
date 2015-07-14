@@ -22,6 +22,7 @@ function MenuProvider($$interimElementProvider) {
 
   /* @ngInject */
   function menuDefaultOptions($$rAF, $window, $mdUtil, $mdTheming, $mdConstant, $document) {
+
     return {
       parent: 'body',
       onShow: onShow,
@@ -39,6 +40,8 @@ function MenuProvider($$interimElementProvider) {
      * various interaction events
      */
     function onShow(scope, element, opts) {
+      var waitTransitionEnd = $mdUtil.dom.animator.waitTransitionEnd;
+
       // Sanitize and set defaults on opts
       buildOpts(opts);
 
@@ -60,7 +63,7 @@ function MenuProvider($$interimElementProvider) {
       showMenu();
 
       // Return the promise for when our menu is done animating in
-      return $mdUtil.transitionEndPromise(element, {timeout: 350}).then(function(res) {
+      return waitTransitionEnd(element, {timeout: 350}).then(function(res) {
         activateInteraction();
         return res;
       });
@@ -233,6 +236,8 @@ function MenuProvider($$interimElementProvider) {
      * and removing various listeners
      */
     function onRemove(scope, element, opts) {
+      var waitTransitionEnd = $mdUtil.dom.animator.waitTransitionEnd;
+
       opts.isRemoved = true;
       element.addClass('md-leave')
         .removeClass('md-clickable');
@@ -243,7 +248,7 @@ function MenuProvider($$interimElementProvider) {
       opts.resizeFn = undefined;
 
       // Wait for animate out, then remove from the DOM
-      return $mdUtil.transitionEndPromise(element, { timeout: 350 }).then(function() {
+      return waitTransitionEnd(element, { timeout: 350 }).then(function() {
         element.removeClass('md-active');
         opts.backdrop && opts.backdrop.remove();
         if (element[0].parentNode === opts.parent[0]) {
