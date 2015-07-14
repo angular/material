@@ -746,7 +746,7 @@ function SelectProvider($$interimElementProvider) {
 
   /* @ngInject */
   function selectDefaultOptions($mdSelect, $mdConstant, $$rAF, $mdUtil, $mdTheming, $window ) {
-    var aniamtor = $mdUtil.dom.animator;
+    var animator = $mdUtil.dom.animator;
 
     return {
       parent: 'body',
@@ -828,7 +828,7 @@ function SelectProvider($$interimElementProvider) {
         });
       });
 
-      return aniamtor.waitTransitionEnd(opts.selectEl, {timeout: 350}).then(function(res) {
+      return animator.waitTransitionEnd(opts.selectEl, {timeout: 350}).then(function(res) {
         activateInteraction();
         return res;
       });
@@ -953,7 +953,7 @@ function SelectProvider($$interimElementProvider) {
         mdSelect.setLabelText(opts.selectEl.controller('mdSelectMenu').selectedLabels());
       }
 
-      return aniamtor.waitTransitionEnd(element, { timeout: 350 }).then(function() {
+      return animator.waitTransitionEnd(element, { timeout: 350 }).then(function() {
         element.removeClass('md-active');
         opts.backdrop && opts.backdrop.remove();
         if (element[0].parentNode === opts.parent[0]) {
