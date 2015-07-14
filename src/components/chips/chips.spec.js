@@ -163,6 +163,7 @@ describe('<md-chips>', function() {
         
         expect(scope.items.length).toBe(4);
         expect(scope.items[3]).toBe('Kiwi');
+        expect(element.find('input').val()).toBe('');
       }));
     });
 
