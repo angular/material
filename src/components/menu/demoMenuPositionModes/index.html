@@ -24,7 +24,7 @@
       <div layout="column" flex-sm="100" flex="33" layout-align="center center">
         <p>Target mode with <code>md-offset</code></p>
         <md-menu md-offset="0 -5">
-          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="ctrl.openMenu($mdOpenMenu, $event)">
             <md-icon md-menu-origin md-svg-icon="call:ring-volume"></md-icon>
           </md-button>
           <md-menu-content width="4">

@@ -16,7 +16,7 @@ angular
               .then(function () {
                 $log.debug("toggle " + navID + " is done");
               });
-          },300);
+          },200);
 
       return debounceFn;
     }

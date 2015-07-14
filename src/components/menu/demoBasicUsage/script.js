@@ -1,28 +1,38 @@
-angular.module('menuDemoBasic', ['ngMaterial'])
-.config(function($mdIconProvider) {
-  $mdIconProvider
-    .iconSet("call", 'img/icons/sets/communication-icons.svg', 24)
-    .iconSet("social", 'img/icons/sets/social-icons.svg', 24);
-})
-.controller('BasicDemoCtrl', DemoCtrl);
+angular
+  .module('menuDemoBasic', ['ngMaterial'])
+  .config(function($mdIconProvider) {
+    $mdIconProvider
+      .iconSet("call", 'img/icons/sets/communication-icons.svg', 24)
+      .iconSet("social", 'img/icons/sets/social-icons.svg', 24);
+  })
+  .controller('BasicDemoCtrl', function DemoCtrl($mdDialog) {
+    var originatorEv;
 
-function DemoCtrl($mdDialog) {
-  var vm = this;
-  vm.notificationsEnabled = true;
-  vm.toggleNotifications = function() {
-    vm.notificationsEnabled = !vm.notificationsEnabled;
-  };
+    this.openMenu = function($mdOpenMenu, ev) {
+      originatorEv = ev;
+      $mdOpenMenu(ev);
+    };
 
-  vm.redial = function(e) {
-    $mdDialog.show(
-      $mdDialog.alert()
-        .title('Suddenly, a redial')
-        .content('You just called someone back. They told you the most amazing story that has ever been told. Have a cookie.')
-        .ok('That was easy')
-    );
-  };
+    this.notificationsEnabled = true;
+    this.toggleNotifications = function() {
+      this.notificationsEnabled = !this.notificationsEnabled;
+    };
 
-  vm.checkVoicemail = function() {
-    // This never happens.
-  };
-}
+    this.redial = function() {
+      $mdDialog.show(
+        $mdDialog.alert()
+          .targetEvent(originatorEv)
+          .clickOutsideToClose(true)
+          .parent('body')
+          .title('Suddenly, a redial')
+          .content('You just called a friend; who told you the most amazing story. Have a cookie!')
+          .ok('That was easy')
+      );
+
+      originatorEv = null;
+    };
+
+    this.checkVoicemail = function() {
+      // This never happens.
+    };
+  });

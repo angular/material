@@ -9,7 +9,7 @@ angular.module('material.components.dialog', [
   .directive('mdDialog', MdDialogDirective)
   .provider('$mdDialog', MdDialogProvider);
 
-function MdDialogDirective($$rAF, $mdTheming, $timeout) {
+function MdDialogDirective($$rAF, $mdTheming) {
   return {
     restrict: 'E',
     link: function (scope, element, attr) {
@@ -430,7 +430,8 @@ function MdDialogProvider($$interimElementProvider) {
   }
 
   /* @ngInject */
-  function dialogDefaultOptions($mdAria, $document, $mdUtil, $mdConstant, $mdTheming, $mdDialog, $timeout, $rootElement, $animate, $$rAF) {
+  function dialogDefaultOptions($mdAria, $document, $mdUtil, $mdConstant, $mdTheming, $mdDialog, $animate, $q ) {
+
     return {
       hasBackdrop: true,
       isolateScope: true,
@@ -520,7 +521,7 @@ function MdDialogProvider($$interimElementProvider) {
            }
          }
 
-         // Incase the user provides a raw dom element, always wrap it in jqLite
+         // In case the user provides a raw dom element, always wrap it in jqLite
          options.parent = angular.element(options.parent);
 
          if (options.disableParentScroll) {
@@ -541,7 +542,7 @@ function MdDialogProvider($$interimElementProvider) {
                 ev.stopPropagation();
                 ev.preventDefault();
 
-                $timeout($mdDialog.cancel);
+                $mdUtil.nextTick($mdDialog.cancel);
               }
             };
 
@@ -563,7 +564,7 @@ function MdDialogProvider($$interimElementProvider) {
                 ev.stopPropagation();
                 ev.preventDefault();
 
-                $timeout($mdDialog.cancel);
+                $mdUtil.nextTick($mdDialog.cancel);
               }
             };
 
@@ -598,12 +599,13 @@ function MdDialogProvider($$interimElementProvider) {
         var computeFrom = hasScrollTop ? angular.element(docElement) : options.parent;
         var parentOffset = computeFrom.prop('scrollTop');
 
+        element.css('top', parentOffset + 'px');
+
         options.backdrop = angular.element('<md-backdrop class="md-dialog-backdrop md-opaque">');
         options.backdrop.css('top', parentOffset + 'px');
         $mdTheming.inherit(options.backdrop, options.parent);
 
         $animate.enter(options.backdrop, options.parent);
-        element.css('top', parentOffset + 'px');
       }
 
       /**
@@ -701,29 +703,41 @@ function MdDialogProvider($$interimElementProvider) {
      *  Dialog open and pop-in animation
      */
     function dialogPopIn(container, options ) {
-      var dialogEl = container.find('md-dialog');
-
       options.parent.append(container);
-      transformToClickElement(dialogEl, options.origin);
 
-      $$rAF(function () {
-        dialogEl.addClass('md-transition-in')
-          .css($mdConstant.CSS.TRANSFORM, '');
-      });
+      var animator = $mdUtil.dom.animator ;
+      var buildTranslateToOrigin = animator.calculateZoomToOrigin;
+      var translateOptions = { transitionInClass :'md-transition-in' , transitionOutClass : 'md-transition-out' };
 
-      return $mdUtil.transitionEndPromise(dialogEl);
+      var dialogEl = container.find('md-dialog');
+      var from = animator.toTransformCss( buildTranslateToOrigin(dialogEl, options.origin) );
+      var to = animator.toTransformCss("");  // defaults to center display (or parent or $rootElement)
+
+      return animator
+         .translate3d(dialogEl,from,to,translateOptions)
+         .then(function(animateReversal){
+           // Build a reversal translate function synched to this translation...
+           options.reverseAnimate = function() {
+
+             delete options.reverseAnimate;
+             return animateReversal(
+               animator.toTransformCss(
+                 // in case the origin element has moved or is hidden,
+                 // let's recalculate the translateCSS
+                 buildTranslateToOrigin(dialogEl, options.origin)
+               )
+             );
+
+           };
+           return true;
+         });
     }
 
     /**
      * Dialog close and pop-out animation
      */
     function dialogPopOut(container, options) {
-      var dialogEl = container.find('md-dialog');
-
-      dialogEl.addClass('md-transition-out').removeClass('md-transition-in');
-      transformToClickElement(dialogEl, options.origin);
-
-      return $mdUtil.transitionEndPromise(dialogEl);
+      return options.reverseAnimate();
     }
 
     /**
@@ -736,33 +750,6 @@ function MdDialogProvider($$interimElementProvider) {
     }
 
 
-    function isPositiveSizeClientRect(rect) {
-      return rect && (rect.width > 0) && (rect.height > 0);
-    }
-
-    function transformToClickElement(dialogEl, originator) {
-      var target = originator.element;
-      var targetBnds = originator.bounds;
-
-      if (target) {
-        var currentBnds = target[0].getBoundingClientRect();
-        // If the event target element has zero size, it has probably been hidden.
-        // Use its initial position if available.
-        if (isPositiveSizeClientRect(currentBnds)) {
-          targetBnds = currentBnds;
-        }
-
-        var dialogRect = dialogEl[0].getBoundingClientRect();
-        var scaleX = Math.min(0.5, targetBnds.width / dialogRect.width);
-        var scaleY = Math.min(0.5, targetBnds.height / dialogRect.height);
-
-        dialogEl.css($mdConstant.CSS.TRANSFORM, 'translate3d(' +
-          (-dialogRect.left + targetBnds.left + targetBnds.width / 2 - dialogRect.width / 2) + 'px,' +
-          (-dialogRect.top + targetBnds.top + targetBnds.height / 2 - dialogRect.height / 2) + 'px,' +
-          '0) scale(' + scaleX + ',' + scaleY + ')'
-        );
-      }
-    }
 
   }
 }
