@@ -41,12 +41,13 @@
   function calendarDirective() {
     return {
       template:
+          //'<input class="md-visually-hidden md-dummy" aria-label="Select a date">' +
           '<table aria-hidden="true" class="md-calendar-day-header"><thead></thead></table>' +
-          '<div aria-hidden="true" class="md-calendar-scroll-mask">' +
+          '<div class="md-calendar-scroll-mask">' +
             '<md-virtual-repeat-container class="md-calendar-scroll-container">' +
-              '<table class="md-calendar">' +
-                '<tbody md-virtual-repeat="i in ctrl.items" md-calendar-month ' +
-                    'md-month-offset="$index" class="md-calendar-month" aria-hidden="true" ' +
+              '<table role="grid" tabindex="0" class="md-calendar" aria-readonly="true">' +
+                '<tbody role="rowgroup" md-virtual-repeat="i in ctrl.items" md-calendar-month ' +
+                    'md-month-offset="$index" class="md-calendar-month" ' +
                     'md-start-index="ctrl.getSelectedMonthIndex()" ' +
                     'md-item-size="' + TBODY_HEIGHT + '"></tbody>' +
               '</table>' +
@@ -122,8 +123,9 @@
     /** @final {HTMLElement} */
     this.ariaLiveElement = $element[0].querySelector('[aria-live]');
 
-    this.ariaLiveElement.parentNode.removeChild(this.ariaLiveElement);
-    document.body.appendChild(this.ariaLiveElement);
+    // TODO(jelbourn): one global live region.
+    //this.ariaLiveElement.parentNode.removeChild(this.ariaLiveElement);
+    //document.body.appendChild(this.ariaLiveElement);
 
     /** @final {HTMLElement} */
     this.calendarScroller = $element[0].querySelector('.md-virtual-repeat-scroller');
@@ -251,6 +253,7 @@
   /** Attach event listeners for the calendar. */
   CalendarCtrl.prototype.attachCalendarEventListeners = function() {
     // Keyboard interaction.
+    //this.calendarElement.addEventListener('keydown', angular.bind(this, this.handleKeyEvent));
     this.$element.on('keydown', angular.bind(this, this.handleKeyEvent));
   };
   
@@ -282,7 +285,9 @@
       // Selection isn't occuring, so the key event is either navigation or nothing.
       var date = self.getFocusDateFromKeyEvent(event);
       if (date) {
+        console.log('key event');
         event.preventDefault();
+        event.stopPropagation();
 
         // Since this is a keyboard interaction, actually give the newly focused date keyboard
         // focus after the been brought into view.
@@ -359,9 +364,6 @@
   CalendarCtrl.prototype.focus = function(opt_date) {
     var date = opt_date || this.selectedDate;
 
-    //this.$element[0].querySelector('.md-calendar-focus-holder').focus();
-    this.$element[0].focus();
-
     if (!opt_date) {
       this.announceDisplayDateChange(null, date);
     }
@@ -369,6 +371,7 @@
     var previousFocus = this.calendarElement.querySelector('.md-focus');
     if (previousFocus) {
       previousFocus.classList.remove('md-focus');
+      //previousFocus.setAttribute('aria-selected', 'false');
     }
 
 
@@ -376,9 +379,17 @@
     var cell = this.calendarElement.querySelector('#' + cellId);
     if (cell) {
       cell.classList.add('md-focus');
+      cell.focus();
+      //this.calendarElement.setAttribute('aria-activedescendant', cell.id);
+      //cell.setAttribute('aria-selected', 'true');
     } else {
       this.focusDate = date;
     }
+
+    //this.calendarElement.focus();
+
+    //this.$element[0].querySelector('.md-dummy').focus();
+    //this.calendarElement.focus();
   };
 
   /*** Updating the displayed / selected date ***/
@@ -466,6 +477,8 @@
    * @param {Date} currentDate
    */
   CalendarCtrl.prototype.announceDisplayDateChange = function(previousDate, currentDate) {
+    return;
+
     // If the date has not changed at all, do nothing.
     if (previousDate && this.dateUtil.isSameDay(previousDate, currentDate)) {
       return;
@@ -480,7 +493,7 @@
 
     // If the date has changed to another date in a different month and/or year, make a long
     // announcement.
-    if (!previousDate || previousDate.getDate() !== currentDate.getDate()) {
+    if (!previousDate || !this.dateUtil.isSameDay(previousDate, currentDate)) {
       this.ariaLiveElement.textContent = this.dateLocale.longAnnounceFormatter(currentDate);
     }
   };

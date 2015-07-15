@@ -31,7 +31,8 @@
               '<md-icon class="md-datepicker-calendar-icon" md-svg-icon="md-calendar"></md-icon>' +
           '</md-button>' +
           '<div class="md-datepicker-input-container">' +
-            '<input class="md-datepicker-input" aria-haspopup="true">' +
+            '<input class="md-datepicker-input" aria-haspopup="true" aria-describedby="xxx">' +
+            '<span id="xxx" class="md-visually-hidden">Press Alt + Down to open the calendar</span>' +
 
             '<md-button md-no-ink class="md-datepicker-triangle-button md-icon-button" ' +
                 'ng-click="ctrl.openCalendarPane()" tabindex="-1" ' +
@@ -45,7 +46,6 @@
             '<div class="md-datepicker-input-mask"></div>' +
             '<div class="md-datepicker-calendar">' +
               '<md-calendar role="dialog" aria-label="{{::ctrl.dateLocale.msgCalendar}}" ' +
-                  'tabindex="0" ' +
                   'ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen"></md-calendar>' +
             '</div>' +
           '</div>',
