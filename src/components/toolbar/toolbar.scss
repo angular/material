@@ -4,6 +4,7 @@ $toolbar-medium-tall-height: 88px !default;
 $toolbar-tall-height: 128px !default;
 $toolbar-indent-margin: 64px !default;
 $toolbar-padding: 16px !default;
+$toolbar-scroll-height: 180px !default;
 
 $icon-button-margin-offset: rem(-0.800) !default;
 
@@ -11,7 +12,6 @@ md-toolbar {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-
   position: relative;
   z-index: 2;
 
@@ -49,6 +49,49 @@ md-toolbar {
   .md-indent {
     margin-left: $toolbar-indent-margin;
   }
+  &[md-scroll-fade]{
+    min-height: $toolbar-scroll-height;
+    max-height: $toolbar-scroll-height;
+  }
+  [md-expanded-container]{
+    position:absolute;
+    height:100%;
+    width:100%;
+    overflow:hidden;
+  }
+  [md-expanded]{
+    background-size: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 0;
+    overflow: hidden;
+    .image{
+      position: relative;
+      width:100%;
+      height:0; /* Simple trick to keep a 16:9 ratio on your background image (height=0;padding-bottom=56.25%) */
+      padding-bottom: 56.25%;
+      background-size:160%; /* You can override this value if your picture has a weird ratio */
+      background-position:50% 50%;
+    }
+  }
+
+  [md-toolbar-fab] {
+    position:absolute;
+    right: 16px;
+    bottom:-32px;
+    z-index: 20;
+  }
+  [md-toolbar-fab].hide {
+    transform:scale(0,0);
+    transition: transform .1s ease-out;
+  }
+  [md-toolbar-fab].show {
+    transform:scale(1,1);
+    transition: transform .1s ease-out;
+  }
 
   ~ md-content {
     > md-list {
@@ -59,6 +102,10 @@ md-toolbar {
           display: none;
         }
       }
+    }
+    &.md-offset {
+      background:transparent;
+      z-index: 3;
     }
   }
 }

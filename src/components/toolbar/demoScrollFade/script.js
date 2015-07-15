@@ -1,4 +1,4 @@
-var app = angular.module('toolbarDemo5', ['ngMaterial']);
+var app = angular.module('toolbarDemo3', ['ngMaterial']);
 
 app.controller('AppCtrl', function($scope) {
   var imagePath = 'img/list/60.jpeg';

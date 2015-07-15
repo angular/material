@@ -1,0 +1,43 @@
+<div ng-controller="AppCtrl" layout="column" layout-fill>
+
+    <md-toolbar md-scroll-fade layout class="md-tall">
+        <div md-expanded
+             style="background-image:url(http://1.bp.blogspot.com/-oi_1AVAk8JM/UQfsIE-5f1I/AAAAAAAAjIo/6cBUbKbmRZI/s1600/The-Eiffel-Tower-at-night.jpg)"></div>
+        <div class="md-toolbar-tools">
+            <md-button class="md-icon-button" aria-label="Settings">
+                <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+            </md-button>
+            <h3 md-toolbar-title flex>Scroll Fade Shrink</h3>
+            <md-button class="md-icon-button" aria-label="Favorite">
+                <md-icon md-svg-icon="img/icons/favorite.svg" style="color: greenyellow;"></md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="More">
+                <md-icon md-svg-icon="img/icons/more_vert.svg"></md-icon>
+            </md-button>
+        </div>
+        <md-button md-toolbar-fab aria-label="Float Action Button" class="md-fab md-accent">
+            <md-icon md-svg-icon="img/icons/favorite.svg" style="color: greenyellow;"></md-icon>
+        </md-button>
+    </md-toolbar>
+
+    <md-content style="height: 600px;">
+        <md-list>
+            <md-list-item class="md-3-line" ng-repeat="item in todos">
+                <img ng-src="{{item.face}}" alt="{{item.who}}" class="md-avatar">
+
+                <div class="md-list-item-text">
+                    <h3>{{item.what}}</h3>
+                    <h4>{{item.who}}</h4>
+
+                    <p>
+                        {{item.notes}}
+                    </p>
+                </div>
+                <md-divider inset></md-divider>
+            </md-list-item>
+        </md-list>
+    </md-content>
+</div>
+
+</body>
+</html>

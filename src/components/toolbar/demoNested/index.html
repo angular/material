@@ -1,0 +1,51 @@
+<div ng-controller="AppCtrl" layout="column" layout-fill style="height: 600px;">
+
+  <md-toolbar class="md-primary" id="toolbar1">
+    <div class="md-toolbar-tools">
+      <md-button class="md-icon-button" aria-label="Settings">
+        <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+      </md-button>
+      <h2>
+        <span>App Toolbar</span>
+      </h2>
+      <span flex></span>
+      <md-button class="md-icon-button" aria-label="Favorite">
+        <md-icon md-svg-icon="img/icons/favorite.svg" style="color: greenyellow;"></md-icon>
+      </md-button>
+      <md-button class="md-icon-button" aria-label="More">
+        <md-icon md-svg-icon="img/icons/more_vert.svg"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <!--Set the overflow to hidden to avoid scrolling on the expanded scroll toolbar-->
+  <md-content layout="column" flex >
+    <md-toolbar md-scroll-fade md-keep-condensed layout class="md-tall md-accent" id="toolbar2">
+      <div md-expanded style="background-image:url(https://upload.wikimedia.org/wikipedia/commons/d/de/0327New_York_City_Statue_of_Liberty.JPG)"></div>
+      <div class="md-toolbar-tools">
+        <h3 md-toolbar-title>Scroll Fade</h3>
+        <span flex></span>
+        <md-button ng-show="toolbarCondensed" class="md-icon-button" aria-label="Favorite md-primary">
+          <md-icon md-svg-icon="img/icons/favorite.svg" style="color: greenyellow;"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-content layout="column" flex>
+      <md-list >
+        <md-list-item class="md-3-line" ng-repeat="item in todos">
+          <img ng-src="{{item.face}}" alt="{{item.who}}" class="md-avatar">
+          <div class="md-list-item-text">
+            <h3>{{item.what}}</h3>
+            <h4>{{item.who}}</h4>
+            <p>
+              {{item.notes}}
+            </p>
+          </div>
+          <md-divider inset></md-divider>
+        </md-list-item>
+
+      </md-list>
+    </md-content>
+
+  </md-content>
+
+</div>

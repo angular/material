@@ -1,0 +1,44 @@
+<div ng-controller="AppCtrl" layout="column" layout-fill style="height: 600px;">
+  <!--Use absolute position on the demo controller to simulate a body tag-->
+
+  <md-toolbar md-scroll-fade
+              layout class="md-tall"
+              md-keep-condensed
+              md-title-scale-factor="1.5"
+              md-shrink-speed-factor="1"
+              md-expanded-speed-factor=".25"
+              md-expanded-keep="0"
+              md-content-offset="50"
+              md-content-speed-factor=".5">
+    <div md-expanded md-no-fade md-expanded-keep="180" style="background-image:url(https://upload.wikimedia.org/wikipedia/commons/d/de/0327New_York_City_Statue_of_Liberty.JPG)"></div>
+    <div class="md-toolbar-tools">
+      <md-button class="md-icon-button" aria-label="Settings">
+        <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+      </md-button>
+      <h3 ng-show="toolbarCondensed">Scroll Fade</h3>
+      <span flex></span>
+      <md-button class="md-icon-button" aria-label="Favorite">
+        <md-icon md-svg-icon="img/icons/favorite.svg" style="color: green;"></md-icon>
+      </md-button>
+      <md-button class="md-icon-button" aria-label="More">
+        <md-icon md-svg-icon="img/icons/more_vert.svg"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-content flex layout-fill style="  background-color: transparent; z-index:3">
+    <md-grid-list md-cols="2" md-row-height="2:2" md-gutter="12px" layout-fill>
+      <md-grid-tile ng-repeat="item in todos" ng-class="item.color">
+        <md-grid-tile-header>
+          <div class="md-list-item-text">
+            <h3>{{item.what}}</h3>
+            <h4>{{item.who}}</h4>
+            <p>
+              {{item.notes}}
+            </p>
+          </div>
+        </md-grid-tile-header>
+      </md-grid-tile>
+    </md-grid-list>
+    </md-content>
+</div>
