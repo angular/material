@@ -127,6 +127,7 @@
       if (this.dateUtil.isValidDate(calendarCtrl.selectedDate) &&
           this.dateUtil.isSameDay(opt_date, calendarCtrl.selectedDate)) {
         cell.classList.add(SELECTED_DATE_CLASS);
+        cell.setAttribute('aria-selected', 'true');
       }
 
       if (calendarCtrl.focusDate && this.dateUtil.isSameDay(opt_date, calendarCtrl.focusDate)) {
@@ -136,10 +137,21 @@
 
     return cell;
   };
-  
-  CalendarMonthCtrl.prototype.buildDateRow = function() {
+
+  /**
+   * Builds a `tr` element for the calendar grid.
+   * @param rowNumber The week number within the month.
+   * @returns {HTMLElement}
+   */
+  CalendarMonthCtrl.prototype.buildDateRow = function(rowNumber) {
     var row = document.createElement('tr');
     row.setAttribute('role', 'row');
+
+    // Because of an NVDA bug (with Firefox), the row needs an aria-label in order
+    // to prevent the entire row being read aloud when the user moves between rows.
+    // See http://community.nvda-project.org/ticket/4643.
+    //row.setAttribute('aria-label', this.dateLocale.weekNumberFormatter(rowNumber));
+
     return row;
   };
 
@@ -158,7 +170,8 @@
     // Store rows for the month in a document fragment so that we can append them all at once.
     var monthBody = document.createDocumentFragment();
 
-    var row = this.buildDateRow();
+    var rowNumber = 1;
+    var row = this.buildDateRow(rowNumber);
     monthBody.appendChild(row);
 
     // Add a label for the month. If the month starts on a Sun/Mon/Tues, the month label
@@ -196,7 +209,8 @@
       // If we've reached the end of the week, start a new row.
       if (dayOfWeek === 7) {
         dayOfWeek = 0;
-        row = this.buildDateRow();
+        rowNumber++;
+        row = this.buildDateRow(rowNumber);
         monthBody.appendChild(row);
       }
 

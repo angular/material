@@ -44,6 +44,12 @@
       this.monthHeaderFormatter = null;
 
       /**
+       * Function that formats a week number into a label for the week.
+       * @type {function(number): string}
+       */
+      this.weekNumberFormatter = null;
+
+      /**
        * Function that formats a date into a short aria-live announcement that is read when
        * the focused date changes within the same month.
        * @type {function(Date): string}
@@ -105,6 +111,15 @@
       }
 
       /**
+       * Default week number formatter.
+       * @param number
+       * @returns {string}
+       */
+      function defaultWeekNumberFormatter(number) {
+        return 'Week ' + number;
+      }
+
+      /**
        * Default formatter for short aria-live announcements.
        * @param {!Date} date
        * @returns {string}
@@ -154,6 +169,7 @@
         formatDate: this.formatDate || defaultFormatDate,
         parseDate: this.parseDate || defaultParseDate,
         monthHeaderFormatter: this.monthHeaderFormatter || defaultMonthHeaderFormatter,
+        weekNumberFormatter: this.weekNumberFormatter || defaultWeekNumberFormatter,
         shortAnnounceFormatter: this.shortAnnounceFormatter || defaultShortAnnounceFormatter,
         longAnnounceFormatter: this.longAnnounceFormatter || defaultLongAnnounceFormatter,
         msgCalendar: this.msgCalendar || defaultMsgCalendar,
