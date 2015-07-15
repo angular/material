@@ -828,10 +828,12 @@ function SelectProvider($$interimElementProvider) {
         });
       });
 
-      return animator.waitTransitionEnd(opts.selectEl, {timeout: 350}).then(function(res) {
-        activateInteraction();
-        return res;
-      });
+      return animator
+        .waitTransitionEnd(opts.selectEl, {timeout: 370})
+        .then(function(res) {
+          activateInteraction();
+          return res;
+        });
 
       function configureAria() {
         opts.target.attr('aria-expanded', 'true');
@@ -953,18 +955,20 @@ function SelectProvider($$interimElementProvider) {
         mdSelect.setLabelText(opts.selectEl.controller('mdSelectMenu').selectedLabels());
       }
 
-      return animator.waitTransitionEnd(element, { timeout: 350 }).then(function() {
-        element.removeClass('md-active');
-        opts.backdrop && opts.backdrop.remove();
-        if (element[0].parentNode === opts.parent[0]) {
-          opts.parent[0].removeChild(element[0]); // use browser to avoid $destroy event
-        }
-        if (opts.disableParentScroll) {
-          opts.restoreScroll();
-        }
-        if (opts.restoreFocus) opts.target.focus();
-        mdSelect && mdSelect.triggerClose();
-      });
+      return animator
+        .waitTransitionEnd(element, { timeout: 370 })
+        .finally(function() {
+          element.removeClass('md-active');
+          opts.backdrop && opts.backdrop.remove();
+          if (element[0].parentNode === opts.parent[0]) {
+            opts.parent[0].removeChild(element[0]); // use browser to avoid $destroy event
+          }
+          if (opts.disableParentScroll) {
+            opts.restoreScroll();
+          }
+          if (opts.restoreFocus) opts.target.focus();
+          mdSelect && mdSelect.triggerClose();
+        });
     }
 
     function animateSelect(scope, element, opts) {

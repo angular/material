@@ -503,11 +503,8 @@ function MdDialogProvider($$interimElementProvider) {
     }
 
     function captureSourceAndParent(element, options) {
-         options.origin = {
-           element: null,
-           bounds: null,
-           focus: angular.noop
-         };
+         var origin = { element: null, bounds: null,  focus: angular.noop };
+         options.origin = angular.extend({ }, origin, options.origin || {} );
 
          var source = angular.element((options.targetEvent || {}).target);
          if (source && source.length) {
