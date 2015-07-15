@@ -70,12 +70,18 @@
 
   /** Generate and append the content for this month to the directive element. */
   CalendarMonthCtrl.prototype.generateContent = function() {
-    var offset = (-this.calendarCtrl.items.length / 2) + this.offset;
-    var date = this.dateUtil.incrementMonths(this.calendarCtrl.today, offset);
+    var calendarCtrl = this.calendarCtrl;
+    var offset = (-calendarCtrl.items.length / 2) + this.offset;
+    var date = this.dateUtil.incrementMonths(calendarCtrl.today, offset);
+
     this.$element.empty();
     this.$element.append(this.buildCalendarForMonth(date));
+
     if (this.focusAfterAppend) {
       this.focusAfterAppend.classList.add('md-focus');
+      this.focusAfterAppend.focus();
+      //this.focusAfterAppend.setAttribute('aria-selected', 'true');
+      //calendarCtrl.calendarElement.setAttribute('aria-activedescendant', this.focusAfterAppend.id);
       this.focusAfterAppend = null;
     }
   };
@@ -92,8 +98,10 @@
 
     // TODO(jelbourn): cloneNode is likely a faster way of doing this.
     var cell = document.createElement('td');
+    cell.tabIndex = -1;
     cell.classList.add('md-calendar-date');
     cell.setAttribute('role', 'gridcell');
+    //cell.setAttribute('', 'true');
 
     if (opt_date) {
       // Add a indicator for select, hover, and focus states.
@@ -103,6 +111,7 @@
       selectionIndicator.textContent = this.dateLocale.dates[opt_date.getDate()];
 
       cell.setAttribute('tabindex', '-1');
+      cell.setAttribute('aria-label', this.dateLocale.longAnnounceFormatter(opt_date));
       cell.id = calendarCtrl.getDateId(opt_date);
       cell.addEventListener('click', calendarCtrl.cellClickHandler);
 
