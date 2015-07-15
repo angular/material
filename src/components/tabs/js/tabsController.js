@@ -41,7 +41,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   ctrl.lastSelectedIndex = null;
   ctrl.hasFocus = false;
   ctrl.lastClick = true;
-  ctrl.shouldCenterTabs = shouldCenterTabs();
+  ctrl.centerTabs = shouldCenterTabs();
 
   //-- define public methods
   ctrl.updatePagination = $mdUtil.debounce(updatePagination, 100);
@@ -162,7 +162,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   function handleShouldPaginate (newValue, oldValue) {
     if (newValue !== oldValue) {
       ctrl.maxTabWidth = getMaxTabWidth();
-      ctrl.shouldCenterTabs = shouldCenterTabs();
+      ctrl.centerTabs = shouldCenterTabs();
       $mdUtil.nextTick(function () {
         ctrl.maxTabWidth = getMaxTabWidth();
         adjustOffset(ctrl.selectedIndex);
@@ -183,7 +183,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    * @param left
    */
   function handleOffsetChange (left) {
-    var newValue = ctrl.shouldCenterTabs ? '' : '-' + left + 'px';
+    var newValue = ctrl.centerTabs ? '' : '-' + left + 'px';
     angular.element(elements.paging).css($mdConstant.CSS.TRANSFORM, 'translate3d(' + newValue + ', 0, 0)');
     $scope.$broadcast('$mdTabsPaginationChanged');
   }
@@ -561,7 +561,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    */
   function adjustOffset (index) {
     if (!elements.tabs[index]) return;
-    if (ctrl.shouldCenterTabs) return;
+    if (ctrl.centerTabs) return;
     if (index == null) index = ctrl.focusIndex;
     var tab = elements.tabs[index],
         left = tab.offsetLeft,
@@ -640,7 +640,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
         left = tab.offsetLeft,
         right = totalWidth - left - tab.offsetWidth,
         tabWidth;
-    if (ctrl.shouldCenterTabs) {
+    if (ctrl.centerTabs) {
       tabWidth = Array.prototype.slice.call(elements.tabs).reduce(function (value, element) {
         return value + element.offsetWidth;
       }, 0);
