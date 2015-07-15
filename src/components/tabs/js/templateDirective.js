@@ -2,7 +2,7 @@ angular
     .module('material.components.tabs')
     .directive('mdTemplate', MdTemplate);
 
-function MdTemplate ($compile, $mdUtil, $timeout) {
+function MdTemplate ($compile, $mdUtil) {
   return {
     restrict: 'A',
     link: link,
@@ -22,7 +22,7 @@ function MdTemplate ($compile, $mdUtil, $timeout) {
       ctrl.updatePagination();
       ctrl.updateInkBarStyles();
     });
-    return $timeout(handleScope);
+    return $mdUtil.nextTick(handleScope);
     function handleScope () {
       scope.$watch('connected', function (value) { value === false ? disconnect() : reconnect(); });
       scope.$on('$destroy', reconnect);
