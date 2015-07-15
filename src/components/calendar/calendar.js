@@ -252,6 +252,14 @@
     // Keyboard interaction.
     //this.calendarElement.addEventListener('keydown', angular.bind(this, this.handleKeyEvent));
     this.$element.on('keydown', angular.bind(this, this.handleKeyEvent));
+
+    var self = this;
+    this.calendarScroller.addEventListener('scroll', function() {
+      if (self.calendarScroller.scrollTop == 0 &&
+          !self.dateUtil.isSameMonthAndYear(firstRenderableDate, self.displayDate)) {
+        self.changeDisplayDate(self.displayDate);
+      }
+    });
   };
   
   /*** User input handling ***/
