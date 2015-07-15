@@ -377,27 +377,24 @@ angular.module('material.core')
             var timeout = nextTick.timeout;
             var queue = nextTick.queue || [];
 
-            //-- set default value for digest to true
-            if (digest == null) digest = true;
-
-            //-- store updated digest value
-            nextTick.digest = nextTick.digest || digest;
-
-            //-- update queue/digest values
-            queue = nextTick.queue || [];
+            //-- add callback to the queue
             queue.push(callback);
 
-            //-- store the queue
+            //-- set default value for digest
+            if (digest == null) digest = true;
+
+            //-- store updated digest/queue values
+            nextTick.digest = nextTick.digest || digest;
             nextTick.queue = queue;
 
-            //-- return either the existing timeout or the newly created one
+            //-- either return existing timeout or create a new one
             return timeout || (nextTick.timeout = $timeout(processQueue, 0, false));
 
             /**
              * Grab a copy of the current queue
-             * reset the queue just in case any callbacks use nextTick
-             * process the existing queue
-             * trigger digest if necessary
+             * Clear the queue for future use
+             * Process the existing queue
+             * Trigger digest if necessary
              */
             function processQueue () {
               var queue = nextTick.queue;
