@@ -26,16 +26,16 @@
           // interaction on the text input, and multiple tab stops for one component (picker)
           // may be confusing.
           '<md-button class="md-datepicker-button md-icon-button" type="button" ' +
-              'tabindex="-1" aria-label="{{::ctrl.dateLocale.msgOpenCalendar}}" ' +
-              'ng-click="ctrl.openCalendarPane()">' +
+              'tabindex="-1" aria-hidden="true" ' +
+              'ng-click="ctrl.openCalendarPane($event)">' +
               '<md-icon class="md-datepicker-calendar-icon" md-svg-icon="md-calendar"></md-icon>' +
           '</md-button>' +
           '<div class="md-datepicker-input-container">' +
-            '<input class="md-datepicker-input" aria-haspopup="true" aria-describedby="xxx">' +
-            '<span id="xxx" class="md-visually-hidden">Press Alt + Down to open the calendar</span>' +
+            '<input class="md-datepicker-input" aria-haspopup="true">' +
+            //'<span id="xxx" class="md-visually-hidden">Press Alt + Down to open the calendar</span>' +
 
             '<md-button md-no-ink class="md-datepicker-triangle-button md-icon-button" ' +
-                'ng-click="ctrl.openCalendarPane()" tabindex="-1" ' +
+                'ng-click="ctrl.openCalendarPane($event)" ' +
                 'aria-label="{{::ctrl.dateLocale.msgOpenCalendar}}">' +
               '<div class="md-datepicker-expand-triangle"></div>' +
             '</md-button>' +
@@ -127,6 +127,13 @@
     /** @type {boolean} Whether the date-picker's calendar pane is open. */
     this.isCalendarOpen = false;
 
+    /**
+     * Element from which the calendar pane was opened. Keep track of this so that we can return
+     * focus to it when the pane is closed.
+     * @type {HTMLElement}
+     */
+    this.calendarPaneOpenedFrom = null;
+
     this.calendarPane.id = 'md-date-pane' + $mdUtil.nextUid();
 
     /** Pre-bound click handler is saved so that the event listener can be removed. */
@@ -204,12 +211,12 @@
     angular.element(self.inputElement).on('keydown', function(event) {
       $scope.$apply(function() {
         if (event.altKey && event.keyCode == keyCodes.DOWN_ARROW) {
-          self.openCalendarPane();
+          self.openCalendarPane(event);
         }
       });
     });
 
-    self.$scope.$on('md-calendar-escape', function() {
+    self.$scope.$on('md-calendar-close', function() {
       self.closeCalendarPane();
     });
   };
@@ -272,10 +279,14 @@
     this.calendarPane.parentNode.removeChild(this.calendarPane);
   };
 
-  /** Open the floating calendar pane. */
-  DatePickerCtrl.prototype.openCalendarPane = function() {
+  /**
+   * Open the floating calendar pane.
+   * @param {Event} event
+   */
+  DatePickerCtrl.prototype.openCalendarPane = function(event) {
     if (!this.isCalendarOpen && !this.isDisabled) {
       this.isCalendarOpen = true;
+      this.calendarPaneOpenedFrom = event.target;
       this.attachCalendarPane();
       this.focusCalendar();
 
@@ -292,7 +303,8 @@
   DatePickerCtrl.prototype.closeCalendarPane = function() {
     this.isCalendarOpen = false;
     this.detachCalendarPane();
-    this.inputElement.focus();
+    this.calendarPaneOpenedFrom.focus();
+    this.calendarPaneOpenedFrom = null;
     document.body.removeEventListener('click', this.bodyClickHandler);
   };
 

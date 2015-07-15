@@ -62,7 +62,7 @@ describe('md-date-picker', function() {
     expect(controller.calendarPane.offsetHeight).toBeGreaterThan(0);
 
     // Fake an escape event coming the the calendar.
-    pageScope.$broadcast('md-calendar-escape');
+    pageScope.$broadcast('md-calendar-close');
 
   });
 
