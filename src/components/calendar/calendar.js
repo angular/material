@@ -15,7 +15,6 @@
 
   // PRE RELEASE
   // TODO(mchen): Date "isComplete" logic
-  // TODO(jelbourn): Fix NVDA stealing key presses (IE) ???
 
   // POST RELEASE
   // TODO(jelbourn): Animated month transition on ng-model change (virtual-repeat)
@@ -41,7 +40,6 @@
   function calendarDirective() {
     return {
       template:
-          //'<input class="md-visually-hidden md-dummy" aria-label="Select a date">' +
           '<table aria-hidden="true" class="md-calendar-day-header"><thead></thead></table>' +
           '<div class="md-calendar-scroll-mask">' +
             '<md-virtual-repeat-container class="md-calendar-scroll-container">' +
@@ -52,8 +50,7 @@
                     'md-item-size="' + TBODY_HEIGHT + '"></tbody>' +
               '</table>' +
             '</md-virtual-repeat-container>' +
-          '</div>' +
-          '<div aria-live="assertive" aria-atomic="true" class="md-visually-hidden"></div>',
+          '</div>',
       scope: {},
       require: ['ngModel', 'mdCalendar'],
       controller: CalendarCtrl,
@@ -269,8 +266,13 @@
     this.$scope.$apply(function() {
       // Capture escape and emit back up so that a wrapping component
       // (such as a date-picker) can decide to close.
-      if (event.which == self.keyCode.ESCAPE) {
-        self.$scope.$emit('md-calendar-escape');
+      if (event.which == self.keyCode.ESCAPE || event.which == self.keyCode.TAB) {
+        self.$scope.$emit('md-calendar-close');
+
+        if (event.which == self.keyCode.TAB) {
+          event.preventDefault();
+        }
+
         return;
       }
 
@@ -285,7 +287,6 @@
       // Selection isn't occuring, so the key event is either navigation or nothing.
       var date = self.getFocusDateFromKeyEvent(event);
       if (date) {
-        console.log('key event');
         event.preventDefault();
         event.stopPropagation();
 
@@ -410,6 +411,7 @@
             self.calendarElement.querySelector('#' + self.getDateId(previousSelectedDate));
         if (prevDateCell) {
           prevDateCell.classList.remove(SELECTED_DATE_CLASS);
+          prevDateCell.setAttribute('aria-selected', 'false');
         }
       }
 
@@ -418,6 +420,7 @@
         var dateCell = self.calendarElement.querySelector('#' + self.getDateId(date));
         if (dateCell) {
           dateCell.classList.add(SELECTED_DATE_CLASS);
+          dateCell.setAttribute('aria-selected', 'true');
         }
       }
     });

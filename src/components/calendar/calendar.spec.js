@@ -275,7 +275,7 @@ describe('md-calendar', function() {
 
     it('should fire an event when escape is pressed', function() {
       var escapeHandler = jasmine.createSpy('escapeHandler');
-      pageScope.$on('md-calendar-escape', escapeHandler);
+      pageScope.$on('md-calendar-close', escapeHandler);
 
       pageScope.myDate = new Date(2014, FEB, 11);
       applyDateChange();
