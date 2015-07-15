@@ -22,44 +22,115 @@ angular.module('material.components.toolbar', [
  * You can change the height of the toolbar by adding either the
  * `md-medium-tall` or `md-tall` class to the toolbar.
  *
- * ### Scroll-Fade Toolbar
+ * ### Action Buttons and Titles
+ *
+ * An element with the class `.md-toolbar-tools` can be used to show action buttons on the toolbar.
+ * The `.md-toolbar-tools` will be fixed at the top of the toolbar. When using the `md-scroll-fade` or `md-shrink`
+ * modes the tools scroll with the toolbar when the tools are smaller then the toolbar. Adding the `.fill-height`
+ * class to items in the `.md-toolbar-tools` will cause them to flex to the height of the tools
+ *
+ * ## Scroll-Fade Toolbar
  *
  * The `md-scroll-fade` attribute can be included on the `md-toolbar` to create a smooth fade effect.
- * This is most often used with a picture that fades to a solid color while the user scrolls
- * down the page. When using the `md-scroll-fade` attribute the toolbar can contain an element with
+ * This is most often used with a picture that fades to a solid color, while the user scrolls
+ * down the page.
+ *
+ * ### md-expanded
+ *
+ * When using the `md-scroll-fade` attribute the toolbar can contain an element with
  * the `md-expanded` attribute. This element will fill the height of the toolbar and have the attribute
- * `md-fade-out` added to it (see below). By default the overflow content of the `md-expanded` element
- * will be visible outside of the toolbar. This can be avoided by wrapping the `md-expanded` element
- * in an element with the attribute `md-expanded-container`. An element with the class `.image` can
- * be included inside of the `md-expanded` element with a background image that will fill the toolbar
- * when it is expanded.
+ * `md-fade-out` added to it (see below). By default, if the `md-expanded-speed-factor` is slower then
+ * the `md-shrink-speed-factor` the overflow of the `md-expanded` element will be visible outside of the toolbar.
+ * This can be avoided by wrapping the `md-expanded` element in an element with the attribute
+ * `md-expanded-container`. An element with the class `.image` can be included inside of the `md-expanded`
+ * element with a background image that will fill the toolbar when it is expanded.
  *
- * An element with the class `md-toolbar-tools` can be used to show action buttons on the toolbar.
- * The `md-toolbar-tools` will be fixed at the top of the toolbar unless the toolbar scrolls more then
- * the height of the tools, then the tools will scroll with the toolbar.
+ * <hljs lang="html">
+ * <md-toolbar md-scroll-fade>
+ *     <div md-expanded-container>
+ *         <div md-expanded>
+ *             <div style="background-image:url(my-cool-image.jpg)" class="image"></div>
+ *         </div>
+ *     </div>
+ * </md-toolbar>
+ * </hljs>
  *
+ * ### md-toolbar-title
  * The toolbar can also contain an element with the attribute `md-toolbar-title`. This element will be
  * placed at the bottom of the toolbar and scroll up with the toolbar, resting in the default location.
  * The `md-toolbar-title` will also be scaled while the user scrolls. The default scale is 1.5, but can
- * be modified with the `md-title-scale` attribute.
+ * be modified with the `md-title-scale` attribute on the root `md-toolbar` element.
  *
- * The scroll-fade toolbar will scroll up until the toolbar is 64px high, then it will be fixed at the
+ * <hljs lang="html">
+ * <md-toolbar md-scroll-fade md-toolbar-scale="1.5">
+ *     <div class="md-toolbar-tools">
+ *          <md-button class="md-icon-button" aria-label="Settings">
+                <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+            </md-button>
+            <h2>
+               <span>Toolbar with Icon Buttons</span>
+            </h2>
+            <span flex></span>
+            <md-button class="md-icon-button" aria-label="Favorite">
+               <md-icon md-svg-icon="img/icons/favorite.svg" style="color: greenyellow;"></md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="More">
+               <md-icon md-svg-icon="img/icons/more_vert.svg"></md-icon>
+            </md-button>
+ *     </div>
+ * </md-toolbar>
+ * </hljs>
+ *
+ * ### md-keep-condensed
+ * The scroll-fade toolbar will scroll up until the toolbar is the default height (64px), then it will be fixed at the
  * top of the parent container. This can be modified via the `md-keep-condensed` attribute, where the
  * value of the attribute is the amount of pixels to keep of the toolbar.
  *
  * Much like the `md-keep-condensed` the `md-expanded-keep` attribute on the element with the attribute
- * `md-expanded` will keep the expanded background at the specified pixels.
+ * `md-expanded` will keep the expanded background at the specified pixels. Default is 0px
  *
+ * <hljs lang="html">
+ * <md-toolbar md-scroll-fade>
+ *     <div md-expanded md-expanded-keep="0">
+ *         <div style="background-image:url(my-cool-image.jpg)" class="image"></div>
+ *     </div>
+ * </md-toolbar>
+ * </hljs>
+ *
+ * ### md-fade-in and md-fade-out
  * When using the `md-scroll-fade` attribute any element in the toolbar can be faded in or out
  * by adding the `md-fade-in` or `md-fade-out` directives. The `md-no-fade` attribute can be used
- * to counteract the `md-fade-in` or `md-fade-out` actions. The `md-fade-out` attribute is added to the
- * `md-expanded` element by default. In order to counteract this add the `md-no-fade` attribute to the
- * element.
+ * to disable the `md-fade-in` or `md-fade-out` actions, for example on the `md-expanded` element.
+ * <hljs lang="html">
+ * <md-toolbar md-scroll-fade>
+ *     <div md-expanded md-no-fade>
+ *         <!--I Won't Fade!-->
+ *         <div style="background-image:url(my-cool-image.jpg)" class="image"></div>
+ *     </div>
+ *     <h1 md-fade-out>I Will Fade Out!</h1>
+ *     <h1 md-fade-in>I Will Fade In!</h1>
+ * </md-toolbar>
+ * </hljs>
  *
+ * ### md-toolbar-fab
+ * When using the `md-scroll-fade` a '.md-fab` button with the attribute `md-toolbar-fab` can
+ * be included. The toolbar will be positioned with a margin of 16px on the right and the center aligned with
+ * the bottom of the toolbar. The fab will hide when the toolbar is scrolled within 28px (half the size
+ * of the fab) of the minimum scroll.
+ *
+ * <hljs lang="html">
+ * <md-toolbar md-scroll-fade>
+ *     <md-button md-toolbar-fab class="md-fab">
+ *         <md-icon md-svg-icon="img/icons/favorite.svg"></md-icon>
+ *     </md-button>
+ * </md-toolbar>
+ * </hljs>
+ *
+ * ###Overlapping Content
  * To achieve an overlapping of the content and the toolbar add the `md-content-offset` to the toolbar,
  * where the value is the amount, in pixels, to overlap the content onto the toolbar.
  *
- *
+ * ### Events
  * A toolbar with the `md-shrink` or `md-scroll-fade` attributes will emit the event `$mdToolbarCondensed`
  * when it reaches the minimum height and `$mdToolbarExpanded` when it grows bigger than the Minimum height.
  * This can be used, for example, to show a button only when the toolbar is condensed by listening to the
@@ -93,7 +164,7 @@ angular.module('material.components.toolbar', [
  * `md-content` element, placed before it. See the scroll shrink demo.
  *
  *
- * @param {number=} md-shrink-speed-factor How much to change the speed of the toolbar's
+ * @param {number=} md-shrink-speed-factor How much to change the speed of the toolbars
  * shrinking by. For example, if 0.25 is given then the toolbar will shrink
  * at one fourth the rate at which the user scrolls down. Default 0.5.
  *
@@ -212,6 +283,9 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate ) 
           toolbarMinHeight = parseInt(attr.mdKeepCondensed) || MIN_ANIMATE_HEIGHT;
         }
 
+        var fadeOutElements = angular.element(element[0].querySelectorAll('[md-fade-in]:not([md-no-fade])'));
+        var fadeInElements = angular.element(element[0].querySelectorAll('[md-fade-out]:not([md-no-fade])'));
+
         var condensedEventEmitted = false;
         var expandedEventEmitted = false;
 
@@ -299,10 +373,8 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate ) 
           //If this is a scroll fade toolbar set the opacity on the fade Elements
           // and do the transitions on the title, fab and tools
           if (angular.isDefined(attr.mdScrollFade) || angular.isDefined(attr.mdScrollShrink)) {
-            var fadeOutElements = angular.element(element[0].querySelectorAll('[md-fade-in]:not([md-no-fade])'));
             var ratio = Math.min(Math.max((scaledY / (ANIMATE_AMOUNT-fadeStop)), 0), 1);
             fadeOutElements.css('opacity', ratio );
-            var fadeInElements = angular.element(element[0].querySelectorAll('[md-fade-out]:not([md-no-fade])'));
             fadeInElements.css('opacity', (1-ratio));
 
             if (expandedElement) {
