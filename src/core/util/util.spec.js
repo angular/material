@@ -88,6 +88,24 @@ describe('util', function() {
     });
   });
 
+  describe('nextTick', function () {
+    it('should combine multiple calls into a single digest', inject(function ($mdUtil, $rootScope, $timeout) {
+      var digestWatchFn = jasmine.createSpy('watchFn');
+      var callback = jasmine.createSpy('callback');
+      $rootScope.$watch(digestWatchFn);
+      expect(digestWatchFn).not.toHaveBeenCalled();
+      expect(callback).not.toHaveBeenCalled();
+      //-- Add a bunch of calls to prove that they are batched
+      for (var i = 0; i < 10; i++) $mdUtil.nextTick(callback);
+      $timeout.flush();
+      expect(digestWatchFn).toHaveBeenCalled();
+      //-- $digest seems to be called one extra time here
+      expect(digestWatchFn.calls.count()).toBe(2);
+      //-- but callback is still called more
+      expect(callback.calls.count()).toBe(10);
+    }));
+  });
+
   function flush() {
     $rootScope.$digest();
     $animate.triggerCallbacks();
