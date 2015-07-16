@@ -29,6 +29,8 @@
    *
    * @description
    * `<md-datepicker>` is a component used to select a single date.
+   * For information on how to configure internationalization for the date piicker,
+   * see `$mdDateLocaleProvider`.
    *
    * @usage
    * <hljs lang="html">
@@ -45,7 +47,7 @@
           '<md-button class="md-datepicker-button md-icon-button" type="button" ' +
               'tabindex="-1" aria-hidden="true" ' +
               'ng-click="ctrl.openCalendarPane($event)">' +
-              '<md-icon class="md-datepicker-calendar-icon" md-svg-icon="md-calendar"></md-icon>' +
+            '<md-icon class="md-datepicker-calendar-icon" md-svg-icon="md-calendar"></md-icon>' +
           '</md-button>' +
           '<div class="md-datepicker-input-container">' +
             '<input class="md-datepicker-input" aria-haspopup="true">' +
@@ -90,7 +92,7 @@
    * @ngInject @constructor
    */
   function DatePickerCtrl($scope, $element, $attrs, $compile, $timeout, $mdConstant, $mdTheming,
-      $mdUtil, $$mdDateLocale, $$mdDateUtil, $$rAF) {
+      $mdUtil, $mdDateLocale, $$mdDateUtil, $$rAF) {
     /** @final */
     this.$compile = $compile;
 
@@ -98,7 +100,7 @@
     this.$timeout = $timeout;
 
     /** @final */
-    this.dateLocale = $$mdDateLocale;
+    this.dateLocale = $mdDateLocale;
 
     /** @final */
     this.dateUtil = $$mdDateUtil;

@@ -76,7 +76,7 @@
    * @ngInject @constructor
    */
   function CalendarCtrl($element, $attrs, $scope, $animate, $q, $mdConstant,
-      $mdTheming, $$mdDateUtil, $$mdDateLocale, $mdInkRipple, $mdUtil) {
+      $mdTheming, $$mdDateUtil, $mdDateLocale, $mdInkRipple, $mdUtil) {
     $mdTheming($element);
     /**
      * Dummy array-like object for virtual-repeat to iterate over. The length is the total
@@ -104,7 +104,7 @@
     this.dateUtil = $$mdDateUtil;
 
     /** @final */
-    this.dateLocale = $$mdDateLocale;
+    this.dateLocale = $mdDateLocale;
 
     /** @final {!angular.JQLite} */
     this.$element = $element;
