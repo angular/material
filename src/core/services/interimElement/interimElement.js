@@ -193,7 +193,9 @@ function InterimElementProvider() {
       function showInterimElement(opts) {
         // opts is either a preset which stores its options on an _options field,
         // or just an object made up of options
-        if (opts && opts._options) opts = opts._options;
+        opts = opts || { };
+        if (opts._options) opts = opts._options;
+
         return interimElementService.show(
           angular.extend({}, defaultOptions, opts)
         );
@@ -281,12 +283,14 @@ function InterimElementProvider() {
        *
        */
       function hide(response) {
+        response = response || true;
         var interimElement = stack.shift();
-        return !interimElement ? $q.when(true) :
+        return !interimElement ? $q.when(response) :
                interimElement
                   .remove()
                   .then(function() {
                     interimElement.deferred.resolve(response);
+                    return interimElement.deferred.promise;
                   });
       }
 
@@ -303,8 +307,9 @@ function InterimElementProvider() {
        *
        */
       function cancel(reason) {
+        reason = reason || false;
         var interimElement = stack.shift();
-        return !interimElement ? $q.when(true) :
+        return !interimElement ? $q.when(reason) :
                interimElement
                   .remove()
                   .then(function() {
@@ -396,7 +401,7 @@ function InterimElementProvider() {
                 }
               }
             },
-            function(reason) { showDone = true; self.deferred.reject(reason); })
+            function(reason) { showDone = true; self.deferred.reject(reason || false); })
           },
           cancelTimeout: function() {
             if (hideTimeout) {
