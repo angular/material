@@ -543,12 +543,12 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    */
   function incrementSelectedIndex (inc) {
     var newIndex,
-        index = ctrl.focusIndex;
+        index = ctrl.selectedIndex;
     for (newIndex = index + inc;
          ctrl.tabs[newIndex] && ctrl.tabs[newIndex].scope.disabled;
          newIndex += inc) {}
     if (ctrl.tabs[newIndex]) {
-      ctrl.focusIndex = newIndex;
+      ctrl.selectedIndex = newIndex;
     }
   }
 
