@@ -12,7 +12,8 @@ body {
   max-width: 100%;
   max-height: 100%;
 }
-table {
+
+.md-api-table {
   margin-bottom: 8px;
   max-width: 100%;
   width: 100%;
@@ -76,26 +77,29 @@ p {
 strong {
   font-weight: 500;
 }
-td, th {
+
+.md-api-table td,
+.md-api-table th {
   padding: 12px 16px;
   text-align: left;
 }
-td {
+
+.md-api-table td {
   vertical-align: top;
 }
-td.description *:first-child {
+.md-api-table td.description *:first-child {
   margin-top: 0;
 }
-td.description *:last-child {
+.md-api-table td.description *:last-child {
   margin-bottom: 0;
 }
-tr:nth-child(odd) td {
+.md-api-table tr:nth-child(odd) td {
   background-color: #E3ECF5;
 }
-tr:nth-child(even) td {
+.md-api-table tr:nth-child(even) td {
   background-color: #D1DEEC;
 }
-th {
+.md-api-table th {
   background-color: #4C9EF0;
   color: white;
 }
