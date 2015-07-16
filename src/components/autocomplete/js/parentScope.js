@@ -2,15 +2,15 @@ angular
     .module('material.components.autocomplete')
     .directive('mdAutocompleteParentScope', MdAutocompleteParentScope);
 
-function MdAutocompleteParentScope ($compile, $mdUtil) {
+function MdAutocompleteParentScope ($compile) {
   return {
     restrict: 'A',
     terminal: true,
-    link: postLink,
-    scope: false
+    link:     postLink,
+    scope:    false
   };
   function postLink (scope, element, attr) {
-    var ctrl     = scope.$parent.$mdAutocompleteCtrl;
+    var ctrl = scope.$parent.$mdAutocompleteCtrl;
     $compile(element.contents())(ctrl.parent);
     if (attr.hasOwnProperty('mdAutocompleteReplace')) {
       element.after(element.contents());

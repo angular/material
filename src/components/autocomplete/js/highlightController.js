@@ -9,11 +9,11 @@ function MdHighlightCtrl ($scope, $element, $interpolate) {
 
   function init (term) {
     var unsafeText = $interpolate($element.html())($scope),
-        text = angular.element('<div>').text(unsafeText).html(),
-        flags = $element.attr('md-highlight-flags') || '',
-        watcher = $scope.$watch(term, function (term) {
+        text       = angular.element('<div>').text(unsafeText).html(),
+        flags      = $element.attr('md-highlight-flags') || '',
+        watcher    = $scope.$watch(term, function (term) {
           var regex = getRegExp(term, flags),
-              html = text.replace(regex, '<span class="highlight">$&</span>');
+              html  = text.replace(regex, '<span class="highlight">$&</span>');
           $element.html(html);
         });
     $element.on('$destroy', function () { watcher(); });
@@ -21,7 +21,7 @@ function MdHighlightCtrl ($scope, $element, $interpolate) {
 
   function sanitize (term) {
     if (!term) return term;
-    return term.replace(/[\\\^\$\*\+\?\.\(\)\|\{\}\[\]]/g, '\\$&');
+    return term.replace(/[\\\^\$\*\+\?\.\(\)\|\{}\[\]]/g, '\\$&');
   }
 
   function getRegExp (text, flags) {

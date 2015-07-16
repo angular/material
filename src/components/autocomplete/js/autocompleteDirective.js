@@ -8,20 +8,22 @@ angular
  * @module material.components.autocomplete
  *
  * @description
- * `<md-autocomplete>` is a special input component with a drop-down of all possible matches to a custom query.
- * This component allows you to provide real-time suggestions as the user types in the input area.
+ * `<md-autocomplete>` is a special input component with a drop-down of all possible matches to a
+ *     custom query. This component allows you to provide real-time suggestions as the user types
+ *     in the input area.
  *
- * To start, you will need to specify the required parameters and provide a template for your results.
- * The content inside `md-autocomplete` will be treated as a template.
+ * To start, you will need to specify the required parameters and provide a template for your
+ *     results. The content inside `md-autocomplete` will be treated as a template.
  *
  * In more complex cases, you may want to include other content such as a message to display when
- * no matches were found.  You can do this by wrapping your template in `md-item-template` and adding
- * a tag for `md-not-found`.  An example of this is shown below.
+ *     no matches were found.  You can do this by wrapping your template in `md-item-template` and
+ *     adding a tag for `md-not-found`.  An example of this is shown below.
+ *
  * ### Validation
  *
  * You can use `ng-messages` to include validation the same way that you would normally validate;
- * however, if you want to replicate a standard input with a floating label, you will have to do the
- * following:
+ *     however, if you want to replicate a standard input with a floating label, you will have to
+ *     do the following:
  *
  * - Make sure that your template is wrapped in `md-item-template`
  * - Add your `ng-messages` code inside of `md-autocomplete`
@@ -31,22 +33,29 @@ angular
  * There is an example below of how this should look.
  *
  *
- * @param {expression} md-items An expression in the format of `item in items` to iterate over matches for your search.
- * @param {expression=} md-selected-item-change An expression to be run each time a new item is selected
- * @param {expression=} md-search-text-change An expression to be run each time the search text updates
+ * @param {expression} md-items An expression in the format of `item in items` to iterate over
+ *     matches for your search.
+ * @param {expression=} md-selected-item-change An expression to be run each time a new item is
+ *     selected
+ * @param {expression=} md-search-text-change An expression to be run each time the search text
+ *     updates
  * @param {string=} md-search-text A model to bind the search query text to
  * @param {object=} md-selected-item A model to bind the selected item to
  * @param {string=} md-item-text An expression that will convert your object to a single string.
  * @param {string=} placeholder Placeholder text that will be forwarded to the input.
  * @param {boolean=} md-no-cache Disables the internal caching that happens in autocomplete
  * @param {boolean=} ng-disabled Determines whether or not to disable the input field
- * @param {number=} md-min-length Specifies the minimum length of text before autocomplete will make suggestions
- * @param {number=} md-delay Specifies the amount of time (in milliseconds) to wait before looking for results
+ * @param {number=} md-min-length Specifies the minimum length of text before autocomplete will
+ *     make suggestions
+ * @param {number=} md-delay Specifies the amount of time (in milliseconds) to wait before looking
+ *     for results
  * @param {boolean=} md-autofocus If true, will immediately focus the input element
  * @param {boolean=} md-autoselect If true, the first item will be selected by default
  * @param {string=} md-menu-class This will be applied to the dropdown menu for styling
- * @param {string=} md-floating-label This will add a floating label to autocomplete and wrap it in `md-input-container`
- * @param {string=} md-input-name The name attribute given to the input element to be used with FormController
+ * @param {string=} md-floating-label This will add a floating label to autocomplete and wrap it in
+ *     `md-input-container`
+ * @param {string=} md-input-name The name attribute given to the input element to be used with
+ *     FormController
  * @param {number=} md-input-minlength The minimum length for the input's value for validation
  * @param {number=} md-input-maxlength The maximum length for the input's value for validation
  *
@@ -78,8 +87,8 @@ angular
  * </md-autocomplete>
  * </hljs>
  *
- * In this example, our code utilizes `md-item-template` and `md-not-found` to specify the different
- * parts that make up our component.
+ * In this example, our code utilizes `md-item-template` and `md-not-found` to specify the
+ *     different parts that make up our component.
  *
  * ### Example with validation
  * <hljs lang="html">
@@ -101,11 +110,11 @@ angular
  * </form>
  * </hljs>
  *
- * In this example, our code utilizes `md-item-template` and `md-not-found` to specify the different
- * parts that make up our component.
+ * In this example, our code utilizes `md-item-template` and `md-not-found` to specify the
+ *     different parts that make up our component.
  */
 
-function MdAutocomplete ($mdTheming, $mdUtil) {
+function MdAutocomplete () {
   return {
     controller:   'MdAutocompleteCtrl',
     controllerAs: '$mdAutocompleteCtrl',
@@ -128,10 +137,10 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
       autoselect:     '=?mdAutoselect',
       menuClass:      '@?mdMenuClass'
     },
-    template: function (element, attr) {
+    template:     function (element, attr) {
       var noItemsTemplate = getNoItemsTemplate(),
-          itemTemplate = getItemTemplate(),
-          leftover = element.html();
+          itemTemplate    = getItemTemplate(),
+          leftover        = element.html();
       return '\
         <md-autocomplete-wrap\
             layout="row"\
@@ -164,26 +173,26 @@ function MdAutocomplete ($mdTheming, $mdUtil) {
           <p ng-repeat="message in $mdAutocompleteCtrl.messages track by $index" ng-if="message">{{message}}</p>\
         </aria-status>';
 
-      function getItemTemplate() {
+      function getItemTemplate () {
         var templateTag = element.find('md-item-template').remove(),
-            html = templateTag.length ? templateTag.html() : element.html();
+            html        = templateTag.length ? templateTag.html() : element.html();
         if (!templateTag.length) element.empty();
         return html;
       }
 
-      function getNoItemsTemplate() {
+      function getNoItemsTemplate () {
         var templateTag = element.find('md-not-found').remove(),
-            template = templateTag.length ? templateTag.html() : '';
+            template    = templateTag.length ? templateTag.html() : '';
         return template
             ? '<li ng-if="!$mdAutocompleteCtrl.matches.length && !$mdAutocompleteCtrl.loading\
-                         && !$mdAutocompleteCtrl.hidden"\
-                         ng-hide="$mdAutocompleteCtrl.hidden"\
-                         md-autocomplete-parent-scope>' + template + '</li>'
+                       && !$mdAutocompleteCtrl.hidden"\
+                   ng-hide="$mdAutocompleteCtrl.hidden"\
+                   md-autocomplete-parent-scope>' + template + '</li>'
             : '';
 
       }
 
-      function getInputElement() {
+      function getInputElement () {
         if (attr.mdFloatingLabel) {
           return '\
             <md-input-container flex ng-if="floatingLabel">\
