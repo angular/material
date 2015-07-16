@@ -80,8 +80,6 @@
     if (this.focusAfterAppend) {
       this.focusAfterAppend.classList.add('md-focus');
       this.focusAfterAppend.focus();
-      //this.focusAfterAppend.setAttribute('aria-selected', 'true');
-      //calendarCtrl.calendarElement.setAttribute('aria-activedescendant', this.focusAfterAppend.id);
       this.focusAfterAppend = null;
     }
   };
@@ -101,7 +99,6 @@
     cell.tabIndex = -1;
     cell.classList.add('md-calendar-date');
     cell.setAttribute('role', 'gridcell');
-    //cell.setAttribute('', 'true');
 
     if (opt_date) {
       // Add a indicator for select, hover, and focus states.
