@@ -565,9 +565,9 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    * Forces the pagination to move the focused tab into view.
    */
   function adjustOffset (index) {
+    if (index == null) index = ctrl.focusIndex;
     if (!elements.tabs[index]) return;
     if (ctrl.shouldCenterTabs) return;
-    if (index == null) index = ctrl.focusIndex;
     var tab = elements.tabs[index],
         left = tab.offsetLeft,
         right = tab.offsetWidth + left;
