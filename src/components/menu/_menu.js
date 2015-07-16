@@ -167,8 +167,8 @@ function MenuDirective($mdMenu) {
     mdMenuCtrl.init(menuContainer);
 
     scope.$on('$destroy', function() {
+      menuContainer.remove();
       if (mdMenuCtrl.isOpen) {
-        menuContainer.remove();
         mdMenuCtrl.close();
       }
     });
