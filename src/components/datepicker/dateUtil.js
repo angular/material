@@ -5,7 +5,7 @@
    * Utility for performing date calculations to facilitate operation of the calendar and
    * datepicker.
    */
-  angular.module('material.components.calendar').factory('$$mdDateUtil', function() {
+  angular.module('material.components.datepicker').factory('$$mdDateUtil', function() {
     return {
       getFirstDateOfMonth: getFirstDateOfMonth,
       getNumberOfDaysInMonth: getNumberOfDaysInMonth,

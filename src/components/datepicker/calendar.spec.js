@@ -91,7 +91,7 @@ describe('md-calendar', function() {
     return element.querySelector('.md-focus');
   }
 
-  beforeEach(module('material.components.calendar', 'ngAnimateMock'));
+  beforeEach(module('material.components.datepicker', 'ngAnimateMock'));
 
   beforeEach(inject(function($injector) {
     $animate = $injector.get('$animate');

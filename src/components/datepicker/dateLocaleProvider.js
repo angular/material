@@ -5,7 +5,7 @@
    * Provider that allows the user to specify messages, formatters, and parsers for date
    * internationalization.
    */
-  angular.module('material.components.calendar').config(function($provide) {
+  angular.module('material.components.datepicker').config(function($provide) {
     // TODO(jelbourn): Assert provided values are correctly formatted. Need assertions.
 
     /** @constructor */

@@ -2,7 +2,7 @@
   'use strict';
 
 
-  angular.module('material.components.calendar')
+  angular.module('material.components.datepicker')
       .directive('mdCalendarMonth', mdCalendarMonthDirective);
 
 
