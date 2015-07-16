@@ -184,6 +184,7 @@
 
   function cloneRepo (repo) {
     start('Cloning ' + repo.cyan + ' from Github...');
+    exec('rm -rf ' + repo);
     exec('git clone https://github.com/angular/' + repo + '.git --depth=1');
     done();
     cleanupCmds.push('rm -rf ' + repo);
