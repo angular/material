@@ -98,7 +98,7 @@ describe('md-calendar', function() {
     $compile = $injector.get('$compile');
     $rootScope = $injector.get('$rootScope');
     $$rAF = $injector.get('$$rAF');
-    dateLocale = $injector.get('$$mdDateLocale');
+    dateLocale = $injector.get('$mdDateLocale');
     dateUtil = $injector.get('$$mdDateUtil');
     $mdUtil = $injector.get('$mdUtil');
     keyCodes = $injector.get('$mdConstant').KEY_CODE;
@@ -136,7 +136,7 @@ describe('md-calendar', function() {
         expect(extractRowText(header)).toEqual(['S', 'M', 'T', 'W', 'T', 'F' ,'S']);
       });
 
-      it('should use $$mdDateLocale.shortDays as weeks header values', function() {
+      it('should use $mdDateLocale.shortDays as weeks header values', function() {
         var oldShortDays = dateLocale.shortDays;
         dateLocale.shortDays = ['SZ', 'MZ', 'TZ', 'WZ', 'TZ', 'FZ', 'SZ'];
 

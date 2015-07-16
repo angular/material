@@ -48,9 +48,9 @@
    * Controller for a single calendar month.
    * @ngInject @constructor
    */
-  function CalendarMonthCtrl($element, $$mdDateUtil, $$mdDateLocale) {
+  function CalendarMonthCtrl($element, $$mdDateUtil, $mdDateLocale) {
     this.dateUtil = $$mdDateUtil;
-    this.dateLocale = $$mdDateLocale;
+    this.dateLocale = $mdDateLocale;
     this.$element = $element;
     this.calendarCtrl = null;
 
@@ -108,7 +108,7 @@
       selectionIndicator.textContent = this.dateLocale.dates[opt_date.getDate()];
 
       cell.setAttribute('tabindex', '-1');
-      cell.setAttribute('aria-label', this.dateLocale.longAnnounceFormatter(opt_date));
+      cell.setAttribute('aria-label', this.dateLocale.longDateFormatter(opt_date));
       cell.id = calendarCtrl.getDateId(opt_date);
       cell.addEventListener('click', calendarCtrl.cellClickHandler);
 

@@ -1,5 +1,5 @@
 
-describe('$$mdDateLocale', function() {
+describe('$mdDateLocale', function() {
   var dateLocale, dateUtil;
 
   // Fake $locale with made-up days and months.
@@ -19,8 +19,8 @@ describe('$$mdDateLocale', function() {
       $provide.value('$locale', $localeFake);
     }));
 
-    beforeEach(inject(function($$mdDateLocale, $$mdDateUtil) {
-      dateLocale = $$mdDateLocale;
+    beforeEach(inject(function($mdDateLocale, $$mdDateUtil) {
+      dateLocale = $mdDateLocale;
       dateUtil = $$mdDateUtil;
     }));
 
@@ -55,23 +55,23 @@ describe('$$mdDateLocale', function() {
         'X12', 'X13', 'X14', 'X15', 'X16', 'X17', 'X18', 'X19', 'X20', 'X21', 'X22', 'X23', 'X24',
         'X25', 'X26', 'X27', 'X28', 'X29', 'X30', 'X31'];
 
-    beforeEach(module(function($$mdDateLocaleProvider) {
-      $$mdDateLocaleProvider.months = fakeMonths;
-      $$mdDateLocaleProvider.shortMonths = fakeshortMonths;
-      $$mdDateLocaleProvider.days = fakeDays;
-      $$mdDateLocaleProvider.shortDays = fakeShortDays;
-      $$mdDateLocaleProvider.dates = fakeDates;
-      $$mdDateLocaleProvider.formatDate = function() {
+    beforeEach(module(function($mdDateLocaleProvider) {
+      $mdDateLocaleProvider.months = fakeMonths;
+      $mdDateLocaleProvider.shortMonths = fakeshortMonths;
+      $mdDateLocaleProvider.days = fakeDays;
+      $mdDateLocaleProvider.shortDays = fakeShortDays;
+      $mdDateLocaleProvider.dates = fakeDates;
+      $mdDateLocaleProvider.formatDate = function() {
         return 'Your birthday!'
       };
-      $$mdDateLocaleProvider.parseDate = function() {
+      $mdDateLocaleProvider.parseDate = function() {
         return new Date(1969, 6, 16);
       };
     }));
 
 
-    beforeEach(inject(function($$mdDateLocale, $$mdDateUtil) {
-      dateLocale = $$mdDateLocale;
+    beforeEach(inject(function($mdDateLocale, $$mdDateUtil) {
+      dateLocale = $mdDateLocale;
       dateUtil = $$mdDateUtil;
     }));
 
