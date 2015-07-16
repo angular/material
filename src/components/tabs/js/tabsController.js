@@ -32,7 +32,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   defineBooleanAttribute('swipeContent');
   defineBooleanAttribute('noDisconnect');
   defineBooleanAttribute('autoselect');
-  defineBooleanAttribute('centerTabs');
+  defineBooleanAttribute('centerTabs', handleCenterTabs);
 
   //-- define public properties
   ctrl.scope = $scope;
@@ -151,6 +151,10 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   function handleStretchTabs (stretchTabs) {
     angular.element(elements.wrapper).toggleClass('md-stretch-tabs', shouldStretchTabs());
     updateInkBarStyles();
+  }
+
+  function handleCenterTabs (newValue) {
+    ctrl.shouldCenterTabs = shouldCenterTabs();
   }
 
   function handleMaxTabWidth (newWidth, oldWidth) {
