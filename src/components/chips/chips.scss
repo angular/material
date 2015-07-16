@@ -65,11 +65,16 @@ $contact-chip-name-width: rem(12) !default;
     margin: $chip-margin;
     padding: $chip-padding;
     float: left;
+    box-sizing: border-box;
+    max-width: 100%;
     .md-chip-content {
       display: block;
       padding-right:rem(0.4);
       float: left;
       white-space: nowrap;
+      max-width: calc(100% - 31px);
+      overflow: hidden;
+      text-overflow: ellipsis;
       &:focus {
         outline: none;
       }
