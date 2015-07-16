@@ -31,7 +31,6 @@
           '</md-button>' +
           '<div class="md-datepicker-input-container">' +
             '<input class="md-datepicker-input" aria-haspopup="true">' +
-            //'<span id="xxx" class="md-visually-hidden">Press Alt + Down to open the calendar</span>' +
 
             '<md-button md-no-ink class="md-datepicker-triangle-button md-icon-button" ' +
                 'ng-click="ctrl.openCalendarPane($event)" ' +
