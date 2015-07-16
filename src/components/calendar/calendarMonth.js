@@ -150,7 +150,7 @@
     // Because of an NVDA bug (with Firefox), the row needs an aria-label in order
     // to prevent the entire row being read aloud when the user moves between rows.
     // See http://community.nvda-project.org/ticket/4643.
-    //row.setAttribute('aria-label', this.dateLocale.weekNumberFormatter(rowNumber));
+    row.setAttribute('aria-label', this.dateLocale.weekNumberFormatter(rowNumber));
 
     return row;
   };

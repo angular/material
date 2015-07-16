@@ -5,7 +5,6 @@
   // TODO(jelbourn): Documentation
   // TODO(jelbourn): Demo that uses moment.js
   // TODO(jelbourn): make sure this plays well with validation and ngMessages.
-  // TODO(jelbourn): auto-grow input to accomodate longer dates
 
   // POST RELEASE
   // TODO(jelbourn): forward more attributes to the internal input (required, autofocus, etc.)
