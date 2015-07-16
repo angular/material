@@ -10,7 +10,7 @@ describe('md-date-picker', function() {
   var ngElement, element, scope, pageScope, controller;
   var $timeout, $$rAF, $animate, keyCodes, dateUtil, dateLocale;
 
-  beforeEach(module('material.components.calendar', 'ngAnimateMock'));
+  beforeEach(module('material.components.datepicker', 'ngAnimateMock'));
 
   beforeEach(inject(function($compile, $rootScope, $injector) {
     $$rAF = $injector.get('$$rAF');

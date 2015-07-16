@@ -3,10 +3,10 @@
 
   /**
    * @ngdoc module
-   * @name material.components.calendar
-   * @description Calendar
+   * @name material.components.datepicker
+   * @description Datepicker
    */
-  angular.module('material.components.calendar', [
+  angular.module('material.components.datepicker', [
     'material.core',
     'material.components.virtualRepeat',
     'material.components.icon'
@@ -17,6 +17,9 @@
   // TODO(mchen): Date "isComplete" logic
 
   // POST RELEASE
+  // TODO(jelbourn): Clicking on the month label opens the month-picker.
+  // TODO(jelbourn): Minimum and maximum date
+  // TODO(jelbourn): Define virtual scrolling constants (compactness).
   // TODO(jelbourn): Animated month transition on ng-model change (virtual-repeat)
   // TODO(jelbourn): Scroll snapping (virtual repeat)
   // TODO(jelbourn): Remove superfluous row from short months (virtual-repeat)
@@ -25,11 +28,6 @@
   // TODO(jelbourn): Support md-calendar standalone on a page (as a tabstop w/ aria-live
   //     announcement and key handling).
   // Read-only calendar (not just date-picker).
-
-  // COULD GO EITHER WAY
-  // TODO(jelbourn): Clicking on the month label opens the month-picker.
-  // TODO(jelbourn): Minimum and maximum date
-  // TODO(jelbourn): Define virtual scrolling constants (compactness).
 
   /**
    * Height of one calendar month tbody. This must be made known to the virtual-repeat and is
@@ -78,8 +76,8 @@
    * @ngInject @constructor
    */
   function CalendarCtrl($element, $attrs, $scope, $animate, $q, $mdConstant,
-      $$mdDateUtil, $$mdDateLocale, $mdInkRipple, $mdUtil) {
-
+      $mdTheming, $$mdDateUtil, $$mdDateLocale, $mdInkRipple, $mdUtil) {
+    $mdTheming($element);
     /**
      * Dummy array-like object for virtual-repeat to iterate over. The length is the total
      * number of months that can be viewed. This is shorter than ideal because of (potential)

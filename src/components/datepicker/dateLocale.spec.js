@@ -12,7 +12,7 @@ describe('$$mdDateLocale', function() {
     }
   };
 
-  beforeEach(module('material.components.calendar'));
+  beforeEach(module('material.components.datepicker'));
 
   describe('with default values', function() {
     beforeEach(module(function($provide) {
