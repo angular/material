@@ -118,13 +118,6 @@
     this.calendarElement = $element[0].querySelector('.md-calendar');
 
     /** @final {HTMLElement} */
-    this.ariaLiveElement = $element[0].querySelector('[aria-live]');
-
-    // TODO(jelbourn): one global live region.
-    //this.ariaLiveElement.parentNode.removeChild(this.ariaLiveElement);
-    //document.body.appendChild(this.ariaLiveElement);
-
-    /** @final {HTMLElement} */
     this.calendarScroller = $element[0].querySelector('.md-virtual-repeat-scroller');
 
     /** @final {Date} */
@@ -373,32 +366,19 @@
   CalendarCtrl.prototype.focus = function(opt_date) {
     var date = opt_date || this.selectedDate;
 
-    if (!opt_date) {
-      this.announceDisplayDateChange(null, date);
-    }
-
     var previousFocus = this.calendarElement.querySelector('.md-focus');
     if (previousFocus) {
       previousFocus.classList.remove('md-focus');
-      //previousFocus.setAttribute('aria-selected', 'false');
     }
-
 
     var cellId = this.getDateId(date);
     var cell = this.calendarElement.querySelector('#' + cellId);
     if (cell) {
       cell.classList.add('md-focus');
       cell.focus();
-      //this.calendarElement.setAttribute('aria-activedescendant', cell.id);
-      //cell.setAttribute('aria-selected', 'true');
     } else {
       this.focusDate = date;
     }
-
-    //this.calendarElement.focus();
-
-    //this.$element[0].querySelector('.md-dummy').focus();
-    //this.calendarElement.focus();
   };
 
   /*** Updating the displayed / selected date ***/
@@ -461,7 +441,6 @@
     this.isMonthTransitionInProgress = true;
     var animationPromise = this.animateDateChange(date);
 
-    this.announceDisplayDateChange(this.displayDate, date);
     this.displayDate = date;
 
     var self = this;
@@ -481,34 +460,6 @@
     this.scrollToMonth(date);
     return this.$q.when();
   };
-
-  /**
-   * Announces a change in date to the calendar's aria-live region.
-   * @param {Date} previousDate
-   * @param {Date} currentDate
-   */
-  CalendarCtrl.prototype.announceDisplayDateChange = function(previousDate, currentDate) {
-    return;
-
-    // If the date has not changed at all, do nothing.
-    if (previousDate && this.dateUtil.isSameDay(previousDate, currentDate)) {
-      return;
-    }
-
-    // If the date has changed to another date within the same month and year, make a short
-    // announcement.
-    if (previousDate && this.dateUtil.isSameMonthAndYear(previousDate, currentDate)) {
-      this.ariaLiveElement.textContent = this.dateLocale.shortAnnounceFormatter(currentDate);
-      return;
-    }
-
-    // If the date has changed to another date in a different month and/or year, make a long
-    // announcement.
-    if (!previousDate || !this.dateUtil.isSameDay(previousDate, currentDate)) {
-      this.ariaLiveElement.textContent = this.dateLocale.longAnnounceFormatter(currentDate);
-    }
-  };
-
 
   /*** Constructing the calendar table ***/
 
