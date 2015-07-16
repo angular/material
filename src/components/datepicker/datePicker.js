@@ -7,6 +7,7 @@
   // TODO(jelbourn): make sure this plays well with validation and ngMessages.
 
   // POST RELEASE
+  // TODO(jelbourn): calendar pane doesn't open up outside of visible viewport.
   // TODO(jelbourn): forward more attributes to the internal input (required, autofocus, etc.)
   // TODO(jelbourn): error state
   // TODO(jelbourn): something better for mobile (calendar panel takes up entire screen?)
@@ -15,9 +16,26 @@
   // TODO(jelbourn): RTL
 
 
-  angular.module('material.components.calendar')
+  angular.module('material.components.datepicker')
       .directive('mdDatepicker', datePickerDirective);
 
+  /**
+   * @ngdoc directive
+   * @name mdDatepicker
+   * @module material.components.datepicker
+   *
+   * @param {Date} ng-model The component's model. Uses a JavaScript Date object.
+   * @param {boolean=} disabled Whether the datepicker is disabled.
+   *
+   * @description
+   * `<md-datepicker>` is a component used to select a single date.
+   *
+   * @usage
+   * <hljs lang="html">
+   *   <md-date-picker ng-model="birthday"></md-date-picker>
+   * </hljs>
+   *
+   */
   function datePickerDirective() {
     return {
       template:
@@ -71,8 +89,8 @@
    *
    * @ngInject @constructor
    */
-  function DatePickerCtrl($scope, $element, $attrs, $compile, $timeout, $mdConstant, $mdUtil,
-      $$mdDateLocale, $$mdDateUtil, $$rAF) {
+  function DatePickerCtrl($scope, $element, $attrs, $compile, $timeout, $mdConstant, $mdTheming,
+      $mdUtil, $$mdDateLocale, $$mdDateUtil, $$rAF) {
     /** @final */
     this.$compile = $compile;
 
@@ -133,6 +151,8 @@
     this.calendarPaneOpenedFrom = null;
 
     this.calendarPane.id = 'md-date-pane' + $mdUtil.nextUid();
+
+    $mdTheming($element);
 
     /** Pre-bound click handler is saved so that the event listener can be removed. */
     this.bodyClickHandler = angular.bind(this, this.handleBodyClick);

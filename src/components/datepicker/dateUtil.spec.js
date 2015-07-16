@@ -7,7 +7,7 @@ describe('$$mdDateUtil', function() {
 
   var dateUtil;
 
-  beforeEach(module('material.components.calendar'));
+  beforeEach(module('material.components.datepicker'));
 
   beforeEach(inject(function($$mdDateUtil) {
     dateUtil = $$mdDateUtil;
