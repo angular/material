@@ -57,7 +57,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   ctrl.canPageForward = canPageForward;
   ctrl.canPageBack = canPageBack;
   ctrl.refreshIndex = refreshIndex;
-  ctrl.incrementSelectedIndex = incrementSelectedIndex;
+  ctrl.incrementIndex = incrementIndex;
   ctrl.updateInkBarStyles = $mdUtil.debounce(updateInkBarStyles, 100);
   ctrl.updateTabOrder = $mdUtil.debounce(updateTabOrder, 100);
 
@@ -257,11 +257,11 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     switch (event.keyCode) {
       case $mdConstant.KEY_CODE.LEFT_ARROW:
         event.preventDefault();
-        incrementSelectedIndex(-1, true);
+        incrementIndex(-1, true);
         break;
       case $mdConstant.KEY_CODE.RIGHT_ARROW:
         event.preventDefault();
-        incrementSelectedIndex(1, true);
+        incrementIndex(1, true);
         break;
       case $mdConstant.KEY_CODE.SPACE:
       case $mdConstant.KEY_CODE.ENTER:
@@ -541,14 +541,15 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    * This moves the selected or focus index left or right.  This is used by the keydown handler.
    * @param inc
    */
-  function incrementSelectedIndex (inc) {
+  function incrementIndex (inc, focus) {
     var newIndex,
-        index = ctrl.selectedIndex;
+        key = focus ? 'focusIndex' : 'selectedIndex',
+        index = ctrl[key];
     for (newIndex = index + inc;
          ctrl.tabs[newIndex] && ctrl.tabs[newIndex].scope.disabled;
          newIndex += inc) {}
     if (ctrl.tabs[newIndex]) {
-      ctrl.selectedIndex = newIndex;
+      ctrl[key] = newIndex;
     }
   }
 
