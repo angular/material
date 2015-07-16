@@ -5,6 +5,53 @@
    * Provider that allows the user to specify messages, formatters, and parsers for date
    * internationalization.
    */
+
+
+  /**
+   * @ngdoc service
+   * @name $mdDateLocaleProvider
+   * @module material.components.datepicker
+   *
+   * @description
+   * The `$mdDateLocaleProvider` is the provider that creates the `$mdDateLocale` service.
+   * This provider that allows the user to specify messages, formatters, and parsers for date
+   * internationalization. The `$mdDateLocale` service itself is consumed by Angular Material
+   * components that that deal with dates.
+   *
+   * @usage
+   * <hljs lang="js">
+   *   myAppModule.config(function($mdDateLocaleProvider) {
+   *
+   *     // Example of a French localization.
+   *     $mdDateLocaleProvider.months = ['Janvier', 'Février', 'Mars', ...];
+   *     $mdDateLocaleProvider.shortMonths = ['Janv', 'Févr', 'Mars', ...];
+   *     $mdDateLocaleProvider.days = ['Lundi', 'Mardi', 'Mercredi', ...];
+   *     $mdDateLocaleProvider.shortDays = ['L', 'M', 'M', ...];
+   *     $mdDateLocaleProvider.dates = [1, 2, 3, 4, 5, 6, ...];
+   *
+   *     // Example uses moment.js to parse and format dates.
+   *     $mdDateLocaleProvider.formatDate = function(date) {
+   *       return moment(date).format
+   *     };
+   *     $mdDateLocaleProvider.parseDate = function(dateString) {
+   *       return moment(dateString).toDate('L');
+   *     };
+   *
+   *     $mdDateLocaleProvider.monthHeaderFormatter = function(date) {
+   *       $mdDateLocale.shortMonths[date.getMonth()] + ' ' + date.getFullYear();
+   *     };
+   *
+   *     $mdDateLocaleProvider.weekNumberFormatter = function(weekNumber) {
+   *       return 'Semaine ' + weekNumber;
+   *     };
+   *
+   *     $mdDateLocaleProvider.msgCalendar = 'Calendrier';
+   *     $mdDateLocaleProvider.msgOpenCalendar = 'Ouvrir le calendrier';
+   *
+   * });
+   * </hljs>
+   *
+   */
   angular.module('material.components.datepicker').config(function($provide) {
     // TODO(jelbourn): Assert provided values are correctly formatted. Need assertions.
 
@@ -50,18 +97,11 @@
       this.weekNumberFormatter = null;
 
       /**
-       * Function that formats a date into a short aria-live announcement that is read when
-       * the focused date changes within the same month.
+       * Function that formats a date into a long aria-label that is read
+       * when the focused date changes.
        * @type {function(Date): string}
        */
-      this.shortAnnounceFormatter = null;
-
-      /**
-       * Function that formats a date into a long aria-live announcement that is read when
-       * the focused date changes to a date in a different month.
-       * @type {function(Date): string}
-       */
-      this.longAnnounceFormatter = null;
+      this.longDateFormatter = null;
 
       /**
        * ARIA label for the calendar "dialog" used in the datepicker.
@@ -120,21 +160,11 @@
       }
 
       /**
-       * Default formatter for short aria-live announcements.
+       * Default formatter for date cell aria-labels.
        * @param {!Date} date
        * @returns {string}
        */
-      function defaultShortAnnounceFormatter(date) {
-        // Example: 'Tuesday 12'
-        return service.days[date.getDay()] + ' ' + service.dates[date.getDate()];
-      }
-
-      /**
-       * Default formatter for long aria-live announcements.
-       * @param {!Date} date
-       * @returns {string}
-       */
-      function defaultLongAnnounceFormatter(date) {
+      function defaultLongDateFormatter(date) {
         // Example: 'Thursday June 18 2015'
         return [
           service.days[date.getDay()],
@@ -170,8 +200,7 @@
         parseDate: this.parseDate || defaultParseDate,
         monthHeaderFormatter: this.monthHeaderFormatter || defaultMonthHeaderFormatter,
         weekNumberFormatter: this.weekNumberFormatter || defaultWeekNumberFormatter,
-        shortAnnounceFormatter: this.shortAnnounceFormatter || defaultShortAnnounceFormatter,
-        longAnnounceFormatter: this.longAnnounceFormatter || defaultLongAnnounceFormatter,
+        longDateFormatter: this.longDateFormatter || defaultLongDateFormatter,
         msgCalendar: this.msgCalendar || defaultMsgCalendar,
         msgOpenCalendar: this.msgOpenCalendar || defaultMsgOpenCalendar
       });
@@ -179,6 +208,6 @@
       return service;
     };
 
-    $provide.provider('$$mdDateLocale', new DateLocaleProvider());
+    $provide.provider('$mdDateLocale', new DateLocaleProvider());
   });
 })();

@@ -16,7 +16,7 @@ describe('md-date-picker', function() {
     $$rAF = $injector.get('$$rAF');
     $animate = $injector.get('$animate');
     dateUtil = $injector.get('$$mdDateUtil');
-    dateLocale = $injector.get('$$mdDateLocale');
+    dateLocale = $injector.get('$mdDateLocale');
     $timeout = $injector.get('$timeout');
     keyCodes = $injector.get('$mdConstant').KEY_CODE;
 
