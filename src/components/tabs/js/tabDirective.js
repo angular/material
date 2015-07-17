@@ -57,51 +57,44 @@ angular
 
 function MdTab () {
   return {
-    require: '^?mdTabs',
+    require:  '^?mdTabs',
     terminal: true,
-    template: function (element, attr) {
-      var label = getLabel(),
-          body  = getTemplate();
-      return '' +
-          '<md-tab-label>' + label + '</md-tab-label>' +
-          '<md-tab-body>' + body + '</md-tab-body>';
-      function getLabel () {
-        return getLabelElement() || getLabelAttribute() || getElementContents();
-        function getLabelAttribute () { return attr.label; }
-        function getLabelElement () {
-          var label = element.find('md-tab-label').eq(0);
-          if (label.length) return label.remove().html();
-        }
-        function getElementContents () {
-          var html = element.html();
-          element.empty();
-          return html;
-        }
+    compile:  function (element, attr) {
+      var label = element.find('md-tab-label'),
+          body  = element.find('md-tab-body');
+
+      if (label.length == 0) {
+        label = angular.element('<md-tab-label></md-tab-label>');
+        if (attr.label) label.text(attr.label);
+        else label.append(element.contents());
       }
-      function getTemplate () {
-        var content = element.find('md-tab-body').eq(0),
-            template = content.length ? content.html() : attr.label ? element.html() : '';
-        if (content.length) content.remove();
-        else if (attr.label) element.empty();
-        return template;
+
+      if (body.length == 0) {
+        var contents = element.contents().detach();
+        body         = angular.element('<md-tab-body></md-tab-body>');
+        body.append(contents);
       }
+
+      element.append(label);
+      if (body.html()) element.append(body);
+
+      return postLink;
     },
-    scope: {
+    scope:    {
       active:   '=?mdActive',
       disabled: '=?ngDisabled',
       select:   '&?mdOnSelect',
       deselect: '&?mdOnDeselect'
-    },
-    link: postLink
+    }
   };
 
   function postLink (scope, element, attr, ctrl) {
     if (!ctrl) return;
-    var tabs = element.parent()[0].getElementsByTagName('md-tab'),
-        index = Array.prototype.indexOf.call(tabs, element[0]),
-        body = element.find('md-tab-body').eq(0).remove(),
+    var tabs  = element.parent()[ 0 ].getElementsByTagName('md-tab'),
+        index = Array.prototype.indexOf.call(tabs, element[ 0 ]),
+        body  = element.find('md-tab-body').eq(0).remove(),
         label = element.find('md-tab-label').eq(0).remove(),
-        data = ctrl.insertTab({
+        data  = ctrl.insertTab({
           scope:    scope,
           parent:   scope.$parent,
           index:    index,
@@ -110,14 +103,14 @@ function MdTab () {
           label:    label.html()
         }, index);
 
-    scope.select   = scope.select   || angular.noop;
+    scope.select   = scope.select || angular.noop;
     scope.deselect = scope.deselect || angular.noop;
 
     scope.$watch('active', function (active) { if (active) ctrl.select(data.getIndex()); });
     scope.$watch('disabled', function () { ctrl.refreshIndex(); });
     scope.$watch(
         function () {
-          return Array.prototype.indexOf.call(tabs, element[0]);
+          return Array.prototype.indexOf.call(tabs, element[ 0 ]);
         },
         function (newIndex) {
           data.index = newIndex;
