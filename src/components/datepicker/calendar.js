@@ -8,8 +8,8 @@
    */
   angular.module('material.components.datepicker', [
     'material.core',
-    'material.components.virtualRepeat',
-    'material.components.icon'
+    'material.components.icon',
+    'material.components.virtualRepeat'
   ]).directive('mdCalendar', calendarDirective);
 
 
@@ -19,7 +19,8 @@
   // POST RELEASE
   // TODO(jelbourn): Clicking on the month label opens the month-picker.
   // TODO(jelbourn): Minimum and maximum date
-  // TODO(jelbourn): Define virtual scrolling constants (compactness).
+  // TODO(jelbourn): Refactor month element creation to use cloneNode (performance).
+  // TODO(jelbourn): Define virtual scrolling constants (compactness) users can override.
   // TODO(jelbourn): Animated month transition on ng-model change (virtual-repeat)
   // TODO(jelbourn): Scroll snapping (virtual repeat)
   // TODO(jelbourn): Remove superfluous row from short months (virtual-repeat)
@@ -361,7 +362,7 @@
     }
 
     var cellId = this.getDateId(date);
-    var cell = this.calendarElement.querySelector('#' + cellId);
+    var cell = document.getElementById(cellId);
     if (cell) {
       cell.classList.add('md-focus');
       cell.focus();
@@ -385,7 +386,7 @@
       // Remove the selected class from the previously selected date, if any.
       if (previousSelectedDate) {
         var prevDateCell =
-            self.calendarElement.querySelector('#' + self.getDateId(previousSelectedDate));
+            document.getElementById(self.getDateId(previousSelectedDate));
         if (prevDateCell) {
           prevDateCell.classList.remove(SELECTED_DATE_CLASS);
           prevDateCell.setAttribute('aria-selected', 'false');
@@ -394,7 +395,7 @@
 
       // Apply the select class to the new selected date if it is set.
       if (date) {
-        var dateCell = self.calendarElement.querySelector('#' + self.getDateId(date));
+        var dateCell = document.getElementById(self.getDateId(date));
         if (dateCell) {
           dateCell.classList.add(SELECTED_DATE_CLASS);
           dateCell.setAttribute('aria-selected', 'true');
@@ -417,13 +418,8 @@
       return this.$q.when();
     }
 
-    // If trying to show an invalid date, do nothing.
-    if (!this.dateUtil.isValidDate(date)) {
-      return this.$q.when();
-    }
-
-    // Do nothing if animation is in progress.
-    if (this.isMonthTransitionInProgress) {
+    // If trying to show an invalid date or a transition is in progress, do nothing.
+    if (!this.dateUtil.isValidDate(date) || this.isMonthTransitionInProgress) {
       return this.$q.when();
     }
 
