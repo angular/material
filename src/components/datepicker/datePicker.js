@@ -229,14 +229,13 @@
 
     // Add event listener through angular so that we can triggerHandler in unit tests.
     angular.element(self.inputElement).on('keydown', function(event) {
-      $scope.$apply(function() {
-        if (event.altKey && event.keyCode == keyCodes.DOWN_ARROW) {
-          self.openCalendarPane(event);
-        }
-      });
+      if (event.altKey && event.keyCode == keyCodes.DOWN_ARROW) {
+        self.openCalendarPane(event);
+        $scope.$digest();
+      }
     });
 
-    self.$scope.$on('md-calendar-close', function() {
+    $scope.$on('md-calendar-close', function() {
       self.closeCalendarPane();
     });
   };
@@ -252,7 +251,7 @@
     // This avoids two bindings (outer scope to ctrl, ctrl to input).
     Object.defineProperty(this.$element[0], 'disabled', {
       get: function() { return self.isDisabled; },
-      set: function(value) { self.setDisabled(value) }
+      set: angular.bind(self.setDisabled, self)
     });
 
     Object.defineProperty(this, 'placeholder', {
@@ -313,9 +312,9 @@
       // Attach click listener inside of a timeout because, if this open call was triggered by a
       // click, we don't want it to be immediately propogated up to the body and handled.
       var self = this;
-      this.$timeout(function() {
+      this.$mdUtil.nextTick(function() {
         document.body.addEventListener('click', self.bodyClickHandler);
-      }, 0, false);
+      }, false);
     }
   };
 
@@ -337,9 +336,9 @@
   DatePickerCtrl.prototype.focusCalendar = function() {
     // Use a timeout in order to allow the calendar to be rendered, as it is gated behind an ng-if.
     var self = this;
-    this.$timeout(function() {
+    this.$mdUtil.nextTick(function() {
       self.getCalendarCtrl().focus();
-    }, 0, false);
+    }, false);
   };
 
   /**
