@@ -2,12 +2,6 @@
   'use strict';
 
   /**
-   * Provider that allows the user to specify messages, formatters, and parsers for date
-   * internationalization.
-   */
-
-
-  /**
    * @ngdoc service
    * @name $mdDateLocaleProvider
    * @module material.components.datepicker
@@ -30,16 +24,20 @@
    *     $mdDateLocaleProvider.dates = [1, 2, 3, 4, 5, 6, ...];
    *
    *     // Example uses moment.js to parse and format dates.
-   *     $mdDateLocaleProvider.formatDate = function(date) {
-   *       return moment(date).format
-   *     };
    *     $mdDateLocaleProvider.parseDate = function(dateString) {
-   *       return moment(dateString).toDate('L');
+   *       return moment(dateString).toDate();
+   *     };
+   *
+   *     $mdDateLocaleProvider.formatDate = function(date) {
+   *       return moment(date).format('L');
    *     };
    *
    *     $mdDateLocaleProvider.monthHeaderFormatter = function(date) {
-   *       $mdDateLocale.shortMonths[date.getMonth()] + ' ' + date.getFullYear();
+   *       myShortMonths[date.getMonth()] + ' ' + date.getFullYear();
    *     };
+   *
+   *     // In addition to date display, date components also need localized messages
+   *     // for aria-labels for screen-reader users.
    *
    *     $mdDateLocaleProvider.weekNumberFormatter = function(weekNumber) {
    *       return 'Semaine ' + weekNumber;
