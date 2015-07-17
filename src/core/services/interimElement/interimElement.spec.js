@@ -46,10 +46,10 @@ describe('$$interimElement service', function() {
     it('should not call onShow or onRemove on failing to load templates', function() {
       createInterimProvider('interimTest');
       inject(function($q, $rootScope, $rootElement, interimTest, $httpBackend, $animate) {
-        $compilerSpy.and.callFake(function() {
-          var deferred = $q.defer();
-          deferred.reject();
-          return deferred.promise;
+        $compilerSpy.and.callFake(function(reason) {
+          return $q(function(resolve,reject){
+            reject(reason || false);
+          });
         });
         $httpBackend.when('GET', '/fail-url.html').respond(500, '');
         var onShowCalled = false, onHideCalled = false;
@@ -59,8 +59,9 @@ describe('$$interimElement service', function() {
           onRemove: function() { onHideCalled = true; }
         });
         $animate.triggerCallbacks();
-        interimTest.hide();
+        interimTest.cancel();
         $animate.triggerCallbacks();
+
         expect(onShowCalled).toBe(false);
         expect(onHideCalled).toBe(false);
       });
@@ -501,13 +502,13 @@ describe('$$interimElement service', function() {
 
       $compilerSpy.and.callFake(function(opts) {
         var el = $compile(opts.template);
-        var deferred = $q.defer();
-        deferred.resolve({
-          link: el,
-          locals: {}
+        return $q(function(resolve){
+          resolve({
+            link: el,
+            locals: {}
+          });
+          !$rootScope.$$phase && $rootScope.$apply();
         });
-        !$rootScope.$$phase && $rootScope.$apply();
-        return deferred.promise;
       });
     });
   }

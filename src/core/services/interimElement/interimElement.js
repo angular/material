@@ -258,7 +258,7 @@ function InterimElementProvider() {
        */
       function show(options) {
         if (stack.length) {
-          return service.cancel().then(function() {
+          return service.cancel().finally(function() {
             return show(options);
           });
         } else {
@@ -314,6 +314,7 @@ function InterimElementProvider() {
                   .remove()
                   .then(function() {
                     interimElement.deferred.reject(reason);
+                    return interimElement.deferred.promise;
                   });
       }
 
@@ -417,7 +418,7 @@ function InterimElementProvider() {
               // Trigger onRemoving callback *before* the remove operation starts
               (options.onRemoving || angular.noop)(options.scope, element);
 
-              return $q.when(ret).then(function() {
+              return $q.when(ret).finally(function() {
                 if (!options.preserveScope) options.scope.$destroy();
                 removeDone = true;
               });

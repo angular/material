@@ -52,7 +52,7 @@ function AnimateDomUtils($mdUtil, $$rAF, $q, $timeout, $mdConstant) {
      * Announce completion or failure via promise handlers
      */
     waitTransitionEnd: function (element, opts) {
-        var TIMEOUT = 10000; // fallback is 10 secs
+        var TIMEOUT = 3000; // fallback is 3 secs
 
         return $q(function(resolve, reject){
           opts = opts || { };
