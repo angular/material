@@ -34,7 +34,7 @@
    *
    * @usage
    * <hljs lang="html">
-   *   <md-date-picker ng-model="birthday"></md-date-picker>
+   *   <md-datepicker ng-model="birthday"></md-datepicker>
    * </hljs>
    *
    */
@@ -87,7 +87,7 @@
   var EXTRA_INPUT_SIZE = 3;
 
   /**
-   * Controller for md-date-picker.
+   * Controller for md-datepicker.
    *
    * @ngInject @constructor
    */
@@ -251,7 +251,7 @@
     // This avoids two bindings (outer scope to ctrl, ctrl to input).
     Object.defineProperty(this.$element[0], 'disabled', {
       get: function() { return self.isDisabled; },
-      set: angular.bind(self.setDisabled, self)
+      set: angular.bind(self, self.setDisabled)
     });
 
     Object.defineProperty(this, 'placeholder', {
