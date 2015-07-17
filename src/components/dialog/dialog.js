@@ -563,7 +563,7 @@ function MdDialogProvider($$interimElementProvider) {
       if (options.clickOutsideToClose) {
         var target = element;
         var clickHandler = function (ev) {
-              // Only close if we click the flex container outside the backdrop
+              // Only close if we click the flex container outside on the backdrop
               if (ev.target === target[0]) {
                 ev.stopPropagation();
                 ev.preventDefault();

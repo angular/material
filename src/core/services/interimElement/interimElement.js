@@ -420,7 +420,7 @@ function InterimElementProvider() {
 
               return $q.when(ret).finally(function() {
                 if (!options.preserveScope) options.scope.$destroy();
-                removeDone = true;
+                return removeDone = true;
               });
             });
           }
