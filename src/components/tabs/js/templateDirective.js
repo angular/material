@@ -5,13 +5,13 @@ angular
 function MdTemplate ($compile, $mdUtil) {
   return {
     restrict: 'A',
-    link: link,
-    scope: {
-      template: '=mdTemplate',
+    link:     link,
+    scope:    {
+      template:     '=mdTemplate',
       compileScope: '=mdScope',
-      connected: '=?mdConnectedIf'
+      connected:    '=?mdConnectedIf'
     },
-    require: '^?mdTabs'
+    require:  '^?mdTabs'
   };
   function link (scope, element, attr, ctrl) {
     if (!ctrl) return;
@@ -27,10 +27,12 @@ function MdTemplate ($compile, $mdUtil) {
       scope.$watch('connected', function (value) { value === false ? disconnect() : reconnect(); });
       scope.$on('$destroy', reconnect);
     }
+
     function disconnect () {
       if (ctrl.scope.noDisconnect) return;
       $mdUtil.disconnectScope(compileScope);
     }
+
     function reconnect () {
       if (ctrl.scope.noDisconnect) return;
       $mdUtil.reconnectScope(compileScope);

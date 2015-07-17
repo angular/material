@@ -90,11 +90,11 @@ angular
 
 function MdTabs ($mdTheming, $mdUtil, $compile) {
   return {
-    scope: {
+    scope:            {
       selectedIndex: '=?mdSelected',
     },
-    template: function (element, attr) {
-      attr["$mdTabsTemplate"] = element.html();
+    template:         function (element, attr) {
+      attr[ "$mdTabsTemplate" ] = element.html();
       return '\
         <md-tabs-wrapper>\
           <md-tab-data></md-tab-data>\
@@ -195,8 +195,8 @@ function MdTabs ($mdTheming, $mdUtil, $compile) {
         </md-tabs-content-wrapper>\
       ';
     },
-    controller: 'MdTabsController',
-    controllerAs: '$mdTabsCtrl',
+    controller:       'MdTabsController',
+    controllerAs:     '$mdTabsCtrl',
     bindToController: true
   };
 }

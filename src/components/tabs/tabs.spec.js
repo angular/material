@@ -183,41 +183,6 @@ describe('<md-tabs>', function () {
       expect(dummyTabs.eq(1).attr('aria-disabled')).toBe('true');
     });
 
-    it('swiping tabs', function () {
-      var tabs     = setup('<md-tabs>' +
-                           '<md-tab></md-tab>' +
-                           '<md-tab></md-tab>' +
-                           '</md-tabs>');
-      var tabItems = tabs.find('md-tab');
-
-      return; //-- TODO: Wire up swipe logic
-
-      tabItems.eq(0).isolateScope().onSwipe({
-        type: 'swipeleft'
-      });
-      expect(tabItems.eq(1)).toBeActiveTab();
-
-      tabItems.eq(1).isolateScope().onSwipe({
-        type: 'swipeleft'
-      });
-      expect(tabItems.eq(1)).toBeActiveTab();
-
-      tabItems.eq(1).isolateScope().onSwipe({
-        type: 'swipeleft'
-      });
-      expect(tabItems.eq(1)).toBeActiveTab();
-
-      tabItems.eq(1).isolateScope().onSwipe({
-        type: 'swiperight'
-      });
-      expect(tabItems.eq(0)).toBeActiveTab();
-
-      tabItems.eq(0).isolateScope().onSwipe({
-        type: 'swiperight'
-      });
-      expect(tabItems.eq(0)).toBeActiveTab();
-    });
-
   });
 
   describe('tab label & content DOM', function () {
