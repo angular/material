@@ -348,12 +348,13 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    * @param tabData
    */
   function removeTab (tabData) {
+    if (destroyed) return;
     var selectedIndex = ctrl.selectedIndex,
         tab           = ctrl.tabs.splice(tabData.getIndex(), 1)[ 0 ];
     refreshIndex();
     // when removing a tab, if the selected index did not change, we have to manually trigger the
     //   tab select/deselect events
-    if (ctrl.selectedIndex === selectedIndex && !destroyed) {
+    if (ctrl.selectedIndex === selectedIndex) {
       tab.scope.deselect();
       ctrl.tabs[ ctrl.selectedIndex ] && ctrl.tabs[ ctrl.selectedIndex ].scope.select();
     }
