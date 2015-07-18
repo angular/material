@@ -412,7 +412,7 @@ function InterimElementProvider() {
           },
           remove: function() {
             self.cancelTimeout();
-            return removeDone = $q.when(showDone).then(function() {
+            return removeDone = $q.when(showDone).finally(function() {
               var ret = element ? options.onRemove(options.scope, element, options) : true;
 
               // Trigger onRemoving callback *before* the remove operation starts
