@@ -44,6 +44,30 @@ describe('$mdDateLocale', function() {
       var dateStr = '2014-03-25';
       expect(dateLocale.parseDate(dateStr)).toEqual(jasmine.any(Date));
     });
+
+    it('should have default date completion detection', function() {
+      // Valid dates.
+      expect(dateLocale.isDateComplete('04/05/15')).toBe(true);
+      expect(dateLocale.isDateComplete('04/05/2015')).toBe(true);
+      expect(dateLocale.isDateComplete('4/5/2015')).toBe(true);
+      expect(dateLocale.isDateComplete('2015 04 05')).toBe(true);
+      expect(dateLocale.isDateComplete('2015-04-05')).toBe(true);
+      expect(dateLocale.isDateComplete('2015,04,05')).toBe(true);
+      expect(dateLocale.isDateComplete('2015.04.05')).toBe(true);
+      expect(dateLocale.isDateComplete('April 5, 2015')).toBe(true);
+      expect(dateLocale.isDateComplete('April 5 2015')).toBe(true);
+      expect(dateLocale.isDateComplete('Apr 5, 2015')).toBe(true);
+      expect(dateLocale.isDateComplete('Apr 5 2015')).toBe(true);
+      expect(dateLocale.isDateComplete('2015 Apr 5')).toBe(true);
+
+      // Invalid dates.
+      expect(dateLocale.isDateComplete('5')).toBe(false);
+      expect(dateLocale.isDateComplete('4/5')).toBe(false);
+      expect(dateLocale.isDateComplete('04/05')).toBe(false);
+      expect(dateLocale.isDateComplete('Apr 5')).toBe(false);
+      expect(dateLocale.isDateComplete('April 5')).toBe(false);
+      expect(dateLocale.isDateComplete('April 5 200000')).toBe(false);
+    });
   });
 
   describe('with custom values', function() {
@@ -62,10 +86,13 @@ describe('$mdDateLocale', function() {
       $mdDateLocaleProvider.shortDays = fakeShortDays;
       $mdDateLocaleProvider.dates = fakeDates;
       $mdDateLocaleProvider.formatDate = function() {
-        return 'Your birthday!'
+        return 'Your birthday!';
       };
       $mdDateLocaleProvider.parseDate = function() {
         return new Date(1969, 6, 16);
+      };
+      $mdDateLocaleProvider.isDateComplete = function(dateString) {
+        return dateString === 'The One True Date';
       };
     }));
 
@@ -83,6 +110,9 @@ describe('$mdDateLocale', function() {
       expect(dateLocale.dates).toEqual(fakeDates);
       expect(dateLocale.formatDate(new Date())).toEqual('Your birthday!');
       expect(dateLocale.parseDate('2020-01-20')).toEqual(new Date(1969, 6, 16));
+      expect(dateLocale.parseDate('2020-01-20')).toEqual(new Date(1969, 6, 16));
+      expect(dateLocale.isDateComplete('The One True Date')).toBe(true);
+      expect(dateLocale.isDateComplete('Anything Else')).toBe(false);
     });
   });
 });
