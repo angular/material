@@ -391,7 +391,6 @@ function placeholderDirective($log) {
       if (inputContainer.input && inputContainer.input[0].nodeName != 'MD-SELECT') {
         var placeholder = '<label ng-click="delegateClick()">' + placeholderText + '</label>';
 
-        inputContainer.element.addClass('md-icon-float');
         inputContainer.element.prepend(placeholder);
       }
     } else if (element[0].nodeName != 'MD-SELECT') {
