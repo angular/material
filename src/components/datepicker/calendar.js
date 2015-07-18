@@ -13,9 +13,6 @@
   ]).directive('mdCalendar', calendarDirective);
 
 
-  // PRE RELEASE
-  // TODO(mchen): Date "isComplete" logic
-
   // POST RELEASE
   // TODO(jelbourn): Mac Cmd + left / right == Home / End
   // TODO(jelbourn): Clicking on the month label opens the month-picker.

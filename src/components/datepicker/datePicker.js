@@ -212,9 +212,7 @@
 
       self.inputElement.size = inputString.length + EXTRA_INPUT_SIZE;
 
-      if (self.dateUtil.isValidDate(parsedDate)) {
-        // TODO(jelbourn): if we can detect here that `inputString` is a "complete" date,
-        // set the ng-model value.
+      if (self.dateUtil.isValidDate(parsedDate) && self.dateLocale.isDateComplete(inputString)) {
         self.date = parsedDate;
         self.$scope.$apply();
       }
