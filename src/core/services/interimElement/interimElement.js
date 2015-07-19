@@ -300,17 +300,15 @@ function InterimElementProvider() {
        */
       function hide(reason) {
         var interim = stack.shift();
-        if ( interim ) {
+        if ( !interim ) return $q.when(reason);
 
-          interim
-            .remove(reason || SHOW_CLOSED, false)
-            .catch(function( reason ) {
-              $log.error("InterimElement.hide() error: " + reason );
-            });
+        interim
+          .remove(reason || SHOW_CLOSED, false)
+          .catch(function( reason ) {
+            $log.error("InterimElement.hide() error: " + reason );
+          });
 
-          return interim.deferred.promise;
-        }
-        return $q.when(reason);
+        return interim.deferred.promise;
       }
 
       /*
@@ -327,17 +325,15 @@ function InterimElementProvider() {
        */
       function cancel(reason) {
         var interim = stack.shift();
-        if ( interim ) {
+        if ( !interim ) return $q.when(reason);
 
-          interim
-            .remove(reason || SHOW_CANCELLED, true)
-            .catch(function( reason ) {
-              $log.error("InterimElement.cancel() error: " + reason );
-            });
+        interim
+          .remove(reason || SHOW_CANCELLED, true)
+          .catch(function( reason ) {
+            $log.error("InterimElement.cancel() error: " + reason );
+          });
 
-          return interim.deferred.promise;
-        }
-        return $q.when(reason);
+        return interim.deferred.promise;
       }
 
 
@@ -440,16 +436,16 @@ function InterimElementProvider() {
             scope: options.scope || $rootScope.$new(options.isolateScope),
 
             /**
-             * Use $animate to transition-in; can be easily overridden via 'options'
+             * Default usage to enable $animate to transition-in; can be easily overridden via 'options'
              */
-            onShow: function(scope, element, options) {
+            onShow: function transitionIn(scope, element, options) {
               return $animate.enter(element, options.parent);
             },
 
             /**
-             * Use $animate to transition-out; can be easily overridden via 'options'
+             * Default usage to enable $animate to transition-out; can be easily overridden via 'options'
              */
-            onRemove: function(scope, element, options) {
+            onRemove: function transitionOut(scope, element) {
               // Element could be undefined if a new element is shown before
               // the old one finishes compiling.
               return element && $animate.leave(element) || $q.when();
