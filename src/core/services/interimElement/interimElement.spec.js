@@ -259,11 +259,71 @@ describe('$$interimElement service', function() {
       });
     });
 
+
     describe('instance#show', function() {
+
+
       it('inherits default options', inject(function($$interimElement) {
         var defaults = { templateUrl: 'testing.html' };
         Service.show(defaults);
         expect($compilerSpy.calls.mostRecent().args[0].templateUrl).toBe('testing.html');
+      }));
+
+      describe('captures and fails with ',function(){
+
+       it('internal reject during show()', inject(function($q,$timeout) {
+         var showFailed, onShowFail = function() {
+           showFailed = true;
+         };
+
+         Service.show({
+           templateUrl: 'testing.html',
+           onShow : function() {   return $q.reject("failed"); }
+         })
+         .catch( onShowFail );
+         $timeout.flush();
+
+         expect(showFailed).toBe(true);
+       }));
+
+       it('internal exception during show()', inject(function($q,$timeout) {
+         var showFailed, onShowFail = function(reason) {
+           showFailed = reason;
+         };
+
+         Service.show({
+           templateUrl: 'testing.html',
+           onShow : function() {   throw new Error("exception"); }
+         })
+         .catch( onShowFail );
+         $timeout.flush();
+
+         expect(showFailed).toBe('exception');
+       }));
+
+      });
+
+      it('show() captures pending promise that resolves with hide()', inject(function($q,$timeout) {
+        var showFinished, onShowHandler = function() {
+          showFinished = true;
+        };
+
+        Service.show({
+          templateUrl: 'testing.html',
+          onShow : function() {
+            return $q.when(true);
+          }
+        })
+        .then( onShowHandler );
+        $timeout.flush();
+
+        expect(showFinished).toBeUndefined();
+
+        Service.hide('confirmed');
+        $timeout.flush();
+
+        expect(showFinished).toBe(true);
+
       }));
 
       it('forwards options to $mdCompiler', inject(function($$interimElement) {
@@ -445,6 +505,62 @@ describe('$$interimElement service', function() {
 
         expect(resolved).toBe(true);
       }));
+
+      describe('captures and fails with ',function(){
+
+       it('internal exception during hide()', inject(function($q, $timeout) {
+         var showGood, hideFail,
+             onShowHandler = function(reason) {  showGood = true;},
+             onHideHandler = function(reason) {
+               hideFail  = true;
+             };
+         var options = {
+               templateUrl: 'testing.html',
+               onShow   : function() {  return $q.when(true)  },
+               onRemove : function() {  throw new Error("exception"); }
+             };
+
+         Service.show(options).then( onShowHandler, onHideHandler );
+         $timeout.flush();
+
+         expect(showGood).toBeUndefined();
+         expect(hideFail).toBeUndefined();
+
+         Service.hide().then( onShowHandler, onHideHandler );
+         $timeout.flush();
+
+         expect(showGood).toBeUndefined();
+         expect(hideFail).toBe(true);
+       }));
+
+       it('internal reject during hide()', inject(function($q, $timeout) {
+          var showGood, hideFail,
+              onShowHandler = function(reason) {  showGood = true;},
+              onHideHandler = function(reason) {
+                hideFail  = reason;
+              };
+          var options = {
+                templateUrl: 'testing.html',
+                onShow   : function() {  return $q.when(true)  },
+                onRemove : function() {  return $q.reject("failed");  }
+              };
+
+          Service.show(options).then( onShowHandler, onHideHandler );
+          $timeout.flush();
+
+          expect(showGood).toBeUndefined();
+          expect(hideFail).toBeUndefined();
+
+          Service.hide().then( onShowHandler, onHideHandler );
+          $timeout.flush();
+
+          expect(showGood).toBeUndefined();
+          expect(hideFail).toBe("failed");
+        }));
+
+      });
+
+
     });
 
     describe('#cancel', function() {

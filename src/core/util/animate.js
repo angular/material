@@ -66,12 +66,19 @@ function AnimateDomUtils($mdUtil, $$rAF, $q, $timeout, $mdConstant) {
            */
           function finished(ev) {
             if ( ev && ev.target !== element[0]) return;
-
             element.off($mdConstant.CSS.TRANSITIONEND, finished);
-            if ( ev  ) $timeout.cancel(timer);
 
-            // Only reject if timeout triggered
-            (ev ? resolve : reject)();
+            if ( ev  ) {
+
+              $timeout.cancel(timer);
+              resolve();
+
+            } else {
+
+              // Only reject if timeout triggered
+              reject("waitTransitionEnd() timeout");
+
+            }
           }
 
         });
