@@ -30,7 +30,7 @@ describe('md-menu directive', function () {
     expect(menu.firstElementChild.nodeName).toBe('BUTTON');
   });
 
-  iit('specifies button type', inject(function($compile, $rootScope) {
+  it('specifies button type', inject(function($compile, $rootScope) {
     var menu = setup()[0];
     expect(menu.firstElementChild.getAttribute('type')).toBe('button');
   }));
