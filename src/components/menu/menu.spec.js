@@ -23,11 +23,17 @@ describe('md-menu directive', function () {
     expect(buildBadMenu).toThrow();
   }));
 
+
   it('removes everything but the first element', function () {
     var menu = setup()[0];
     expect(menu.children.length).toBe(1);
     expect(menu.firstElementChild.nodeName).toBe('BUTTON');
   });
+
+  iit('specifies button type', inject(function($compile, $rootScope) {
+    var menu = setup()[0];
+    expect(menu.firstElementChild.getAttribute('type')).toBe('button');
+  }));
 
   it('opens on click', function () {
     var menu = setup();
