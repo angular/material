@@ -34,6 +34,16 @@ md-toolbar {
     transition: box-shadow $swift-ease-in-out-duration linear;
   }
 
+  md-toolbar-filler {
+    width: 9 * $baseline-grid;
+  }
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
+
   &.md-tall {
     height: $toolbar-tall-height;
     min-height: $toolbar-tall-height;
@@ -52,7 +62,7 @@ md-toolbar {
     }
   }
 
-  .md-indent {
+  > .md-indent {
     margin-left: $toolbar-indent-margin;
   }
 
