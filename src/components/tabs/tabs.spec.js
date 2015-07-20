@@ -277,4 +277,24 @@ describe('<md-tabs>', function () {
       expect(tab.find('md-tab-body').length).toBe(0);
     });
   });
+
+  describe('internal scope', function () {
+    it('should have the same internal scope as external', function () {
+      var template = '\
+        <md-tabs md-selected="selectedTab">\
+          <md-tab label="a">\
+            <md-button ng-click="data = false">Set data to false</md-button>\
+          </md-tab>\
+        </md-tabs>\
+      ';
+      var element = setup(template);
+      var button = element.find('md-button');
+
+      expect(button[0 ].tagName).toBe('MD-BUTTON');
+
+      button.triggerHandler('click');
+
+      expect(element.scope().data).toBe(false);
+    });
+  });
 });
