@@ -275,7 +275,7 @@ function InterimElementProvider() {
           interimElement
             .show()
             .catch(function( reason ) {
-              $log.error("InterimElement.show() error: " + reason );
+              // $log.error("InterimElement.show() error: " + reason );
             });
 
         });
@@ -305,7 +305,7 @@ function InterimElementProvider() {
         interim
           .remove(reason || SHOW_CLOSED, false)
           .catch(function( reason ) {
-            $log.error("InterimElement.hide() error: " + reason );
+            // $log.error("InterimElement.hide() error: " + reason );
           });
 
         return interim.deferred.promise;
@@ -330,7 +330,7 @@ function InterimElementProvider() {
         interim
           .remove(reason || SHOW_CANCELLED, true)
           .catch(function( reason ) {
-            $log.error("InterimElement.cancel() error: " + reason );
+            // $log.error("InterimElement.cancel() error: " + reason );
           });
 
         return interim.deferred.promise;
