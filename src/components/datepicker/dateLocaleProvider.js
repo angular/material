@@ -190,7 +190,7 @@
       var defaultMsgCalendar = 'Calendar';
       var defaultMsgOpenCalendar = 'Open calendar';
 
-      var service = Object.freeze({
+      var service = {
         months: this.months || $locale.DATETIME_FORMATS.MONTH,
         shortMonths: this.shortMonths || $locale.DATETIME_FORMATS.SHORTMONTH,
         days: this.days || $locale.DATETIME_FORMATS.DAY,
@@ -203,7 +203,7 @@
         longDateFormatter: this.longDateFormatter || defaultLongDateFormatter,
         msgCalendar: this.msgCalendar || defaultMsgCalendar,
         msgOpenCalendar: this.msgOpenCalendar || defaultMsgOpenCalendar
-      });
+      };
 
       return service;
     };
