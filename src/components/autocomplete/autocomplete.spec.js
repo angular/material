@@ -28,7 +28,7 @@ describe('<md-autocomplete>', function () {
   }
 
   describe('basic functionality', function () {
-    it('should update selected item and search text', inject(function ($timeout, $mdConstant, $rootElement) {
+    it('should update selected item and search text', inject(function ($timeout, $mdConstant) {
       var scope    = createScope();
       var template = '\
           <md-autocomplete\
@@ -47,8 +47,6 @@ describe('<md-autocomplete>', function () {
       expect(scope.selectedItem).toBe(null);
 
       element.scope().searchText = 'fo';
-      ctrl.keydown({});
-      element.scope().$apply();
       $timeout.flush();
 
       expect(scope.searchText).toBe('fo');
@@ -65,7 +63,6 @@ describe('<md-autocomplete>', function () {
         preventDefault:  angular.noop,
         stopPropagation: angular.noop
       });
-      scope.$apply();
       $timeout.flush();
 
       expect(scope.searchText).toBe('foo');
@@ -95,8 +92,6 @@ describe('<md-autocomplete>', function () {
       expect(scope.selectedItem).toBe(null);
 
       element.scope().searchText = 'fo';
-      ctrl.keydown({});
-      element.scope().$apply();
       $timeout.flush();
 
       expect(scope.searchText).toBe('fo');
@@ -113,7 +108,6 @@ describe('<md-autocomplete>', function () {
         preventDefault:  angular.noop,
         stopPropagation: angular.noop
       });
-      scope.$apply();
       $timeout.flush();
 
       expect(scope.searchText).toBe('foo');
@@ -136,7 +130,6 @@ describe('<md-autocomplete>', function () {
             <span md-highlight-text="searchText">{{item.display}}</span>\
           </md-autocomplete>';
       var element  = compile(template, scope);
-      var ctrl     = element.controller('mdAutocomplete');
       var ul       = element.find('ul');
 
       expect(scope.searchText).toBe('');
@@ -152,7 +145,7 @@ describe('<md-autocomplete>', function () {
   });
 
   describe('API access', function () {
-    it('should clear the selected item', inject(function ($timeout, $mdConstant) {
+    it('should clear the selected item', inject(function ($timeout) {
       var scope    = createScope();
       var template = '\
           <md-autocomplete\
@@ -167,12 +160,9 @@ describe('<md-autocomplete>', function () {
       var ctrl     = element.controller('mdAutocomplete');
 
       element.scope().searchText = 'fo';
-      ctrl.keydown({});
-      element.scope().$apply();
       $timeout.flush();
 
       ctrl.select(0);
-      element.scope().$apply();
       $timeout.flush();
 
       expect(scope.searchText).toBe('foo');
@@ -187,10 +177,9 @@ describe('<md-autocomplete>', function () {
       expect(scope.selectedItem).toBe(null);
     }));
 
-    it('should notify selected item watchers', inject(function ($timeout, $mdConstant) {
-      var scope            = createScope();
-      var scopeItemChanged = 1;
-      scope.itemChanged    = jasmine.createSpy('itemChanged');
+    it('should notify selected item watchers', inject(function ($timeout) {
+      var scope         = createScope();
+      scope.itemChanged = jasmine.createSpy('itemChanged');
 
       var registeredWatcher = jasmine.createSpy('registeredWatcher');
 
@@ -210,12 +199,9 @@ describe('<md-autocomplete>', function () {
       ctrl.registerSelectedItemWatcher(registeredWatcher);
 
       element.scope().searchText = 'fo';
-      ctrl.keydown({});
-      element.scope().$apply();
       $timeout.flush();
 
       ctrl.select(0);
-      element.scope().$apply();
       $timeout.flush();
 
       expect(scope.itemChanged).toHaveBeenCalled();
@@ -237,7 +223,7 @@ describe('<md-autocomplete>', function () {
       expect(scope.itemChanged.calls.mostRecent().args[ 0 ]).toBeNull();
       expect(scope.selectedItem).toBeNull();
     }));
-    it('should pass value to item watcher', inject(function ($timeout, $mdConstant) {
+    it('should pass value to item watcher', inject(function ($timeout) {
       var scope         = createScope();
       var itemValue     = null;
       var template      = '\
@@ -257,12 +243,9 @@ describe('<md-autocomplete>', function () {
       var ctrl          = element.controller('mdAutocomplete');
 
       element.scope().searchText = 'fo';
-      ctrl.keydown({});
-      element.scope().$apply();
       $timeout.flush();
 
       ctrl.select(0);
-      element.scope().$apply();
       $timeout.flush();
 
       expect(itemValue).not.toBeNull();
@@ -270,6 +253,53 @@ describe('<md-autocomplete>', function () {
 
       ctrl.clear();
       element.scope().$apply();
+    }));
+  });
+
+  describe('md-select-on-match', function () {
+    it('should select matching item on exact match when `md-select-on-match` is toggled', inject(function ($timeout) {
+      var scope    = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-select-on-match\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element  = compile(template, scope);
+
+      expect(scope.searchText).toBe('');
+      expect(scope.selectedItem).toBe(null);
+
+      element.scope().searchText = 'foo';
+      $timeout.flush();
+
+      expect(scope.selectedItem).not.toBe(null);
+      expect(scope.selectedItem.display).toBe('foo');
+    }));
+    it('should not select matching item on exact match when `md-select-on-match` is NOT toggled', inject(function ($timeout) {
+      var scope    = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element  = compile(template, scope);
+
+      expect(scope.searchText).toBe('');
+      expect(scope.selectedItem).toBe(null);
+
+      element.scope().searchText = 'foo';
+      $timeout.flush();
+
+      expect(scope.selectedItem).toBe(null);
     }));
   });
 });
