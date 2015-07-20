@@ -287,16 +287,4 @@ describe('md-calendar', function() {
       expect(escapeHandler).toHaveBeenCalled();
     });
   });
-
-  describe('a11y announcements', function() {
-    it('should announce date changes in the aria-live region', function() {
-      pageScope.myDate = new Date(2015, MAY, 20);
-      applyDateChange();
-      var selectedDate = element.querySelector('.md-calendar-selected-date');
-      selectedDate.focus();
-
-      dispatchKeyEvent(keyCodes.LEFT_ARROW);
-      expect(controller.ariaLiveElement.textContent).toBe('Tuesday 19');
-    });
-  });
 });
