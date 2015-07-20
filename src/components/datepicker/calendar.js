@@ -17,6 +17,7 @@
   // TODO(mchen): Date "isComplete" logic
 
   // POST RELEASE
+  // TODO(jelbourn): Mac Cmd + left / right == Home / End
   // TODO(jelbourn): Clicking on the month label opens the month-picker.
   // TODO(jelbourn): Minimum and maximum date
   // TODO(jelbourn): Refactor month element creation to use cloneNode (performance).
@@ -65,6 +66,9 @@
 
   /** Class applied to the selected date cell/. */
   var SELECTED_DATE_CLASS = 'md-calendar-selected-date';
+
+  /** Class applied to the focused date cell/. */
+  var FOCUSED_DATE_CLASS = 'md-focus';
 
   /** Next identifier for calendar instance. */
   var nextUniqueId = 0;
@@ -358,13 +362,13 @@
 
     var previousFocus = this.calendarElement.querySelector('.md-focus');
     if (previousFocus) {
-      previousFocus.classList.remove('md-focus');
+      previousFocus.classList.remove(FOCUSED_DATE_CLASS);
     }
 
     var cellId = this.getDateId(date);
     var cell = document.getElementById(cellId);
     if (cell) {
-      cell.classList.add('md-focus');
+      cell.classList.add(FOCUSED_DATE_CLASS);
       cell.focus();
     } else {
       this.focusDate = date;
