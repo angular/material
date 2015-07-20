@@ -17,10 +17,12 @@
    *   myAppModule.config(function($mdDateLocaleProvider) {
    *
    *     // Example of a French localization.
-   *     $mdDateLocaleProvider.months = ['Janvier', 'Février', 'Mars', ...];
-   *     $mdDateLocaleProvider.shortMonths = ['Janv', 'Févr', 'Mars', ...];
-   *     $mdDateLocaleProvider.days = ['Lundi', 'Mardi', 'Mercredi', ...];
-   *     $mdDateLocaleProvider.shortDays = ['L', 'M', 'M', ...];
+   *     $mdDateLocaleProvider.months = ['janvier', 'février', 'mars', ...];
+   *     $mdDateLocaleProvider.shortMonths = ['janv', 'févr', 'mars', ...];
+   *     $mdDateLocaleProvider.days = ['dimanche', 'lundi', 'mardi', ...];
+   *     $mdDateLocaleProvider.shortDays = ['Di', 'Lu', 'Ma', ...];
+   *
+   *     // Optional.
    *     $mdDateLocaleProvider.dates = [1, 2, 3, 4, 5, 6, ...];
    *
    *     // Example uses moment.js to parse and format dates.

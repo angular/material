@@ -1,4 +1,4 @@
-angular.module('calendarDemo1', ['ngMaterial'])
+angular.module('datepickerBasicUsage', ['ngMaterial'])
     .controller('AppCtrl', function($scope) {
       $scope.myDate = new Date();
 

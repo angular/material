@@ -44,6 +44,9 @@
   /** Class applied to the selected date cell/. */
   var SELECTED_DATE_CLASS = 'md-calendar-selected-date';
 
+  /** Class applied to the focused date cell/. */
+  var FOCUSED_DATE_CLASS = 'md-focus';
+
   /**
    * Controller for a single calendar month.
    * @ngInject @constructor
@@ -78,7 +81,7 @@
     this.$element.append(this.buildCalendarForMonth(date));
 
     if (this.focusAfterAppend) {
-      this.focusAfterAppend.classList.add('md-focus');
+      this.focusAfterAppend.classList.add(FOCUSED_DATE_CLASS);
       this.focusAfterAppend.focus();
       this.focusAfterAppend = null;
     }
