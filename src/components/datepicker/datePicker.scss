@@ -16,7 +16,7 @@ $md-datepicker-open-animation-duration: 0.2s;
 .md-datepicker-input {
   @include md-flat-input();
   min-width: 120px;
-  max-width: $md-calendar-width;
+  max-width: $md-calendar-width - $md-datepicker-button-gap;
 }
 
 // Container for the datepicker input.

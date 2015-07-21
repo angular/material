@@ -4,9 +4,9 @@
   // PRE RELEASE
   // TODO(jelbourn): Documentation
   // TODO(jelbourn): Demo that uses moment.js
-  // TODO(jelbourn): make sure this plays well with validation and ngMessages.
 
   // POST RELEASE
+  // TODO(jelbourn): make sure this plays well with validation and ngMessages.
   // TODO(jelbourn): calendar pane doesn't open up outside of visible viewport.
   // TODO(jelbourn): forward more attributes to the internal input (required, autofocus, etc.)
   // TODO(jelbourn): error state
@@ -307,6 +307,13 @@
       this.attachCalendarPane();
       this.focusCalendar();
 
+      // Because the calendar pane is attached directly to the body, it is possible that the
+      // rest of the component (input, etc) is in a different scrolling container, such as
+      // an md-content. This means that, if the container is scrolled, the pane would remain
+      // stationary. To remedy this, we disable scrolling while the calendar pane is open, which
+      // also matches the native behavior for things like `<select>` on Mac and Windows.
+      this.$mdUtil.disableScrollAround(this.calendarPane);
+
       // Attach click listener inside of a timeout because, if this open call was triggered by a
       // click, we don't want it to be immediately propogated up to the body and handled.
       var self = this;
@@ -322,6 +329,8 @@
     this.detachCalendarPane();
     this.calendarPaneOpenedFrom.focus();
     this.calendarPaneOpenedFrom = null;
+    this.$mdUtil.enableScrolling();
+
     document.body.removeEventListener('click', this.bodyClickHandler);
   };
 
