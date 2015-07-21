@@ -312,6 +312,27 @@ describe('<md-tabs>', function () {
       var scope = element.scope();
 
       expect(scope.selectedIndex).toBe(-1);
+      expect(element.find('md-tab-item').eq(0).hasClass('md-active')).toBe(false);
+      expect(element.find('md-tab-item').eq(1).hasClass('md-active')).toBe(false);
+      expect(element.find('md-tabs-content-wrapper').hasClass('ng-hide')).toBe(true);
+
+      element.find('md-tab-item').eq(0).triggerHandler('click');
+
+      expect(element.find('md-tab-item').eq(0).hasClass('md-active')).toBe(true);
+      expect(element.find('md-tab-item').eq(1).hasClass('md-active')).toBe(false);
+      expect(scope.selectedIndex).toBe(0);
+
+      element.find('md-tab-item').eq(1).triggerHandler('click');
+
+      expect(element.find('md-tab-item').eq(0).hasClass('md-active')).toBe(false);
+      expect(element.find('md-tab-item').eq(1).hasClass('md-active')).toBe(true);
+      expect(scope.selectedIndex).toBe(1);
+
+      scope.$apply('selectedIndex = -1');
+
+      expect(scope.selectedIndex).toBe(-1);
+      expect(element.find('md-tab-item').eq(0).hasClass('md-active')).toBe(false);
+      expect(element.find('md-tab-item').eq(1).hasClass('md-active')).toBe(false);
       expect(element.find('md-tabs-content-wrapper').hasClass('ng-hide')).toBe(true);
     }));
   });
