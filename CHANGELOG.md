@@ -1,10 +1,12 @@
-<a name"0.10.1-rc2"></a>
-### 0.10.1-rc2 (2015-07-16)
+<a name"0.10.1-rc3"></a>
+### 0.10.1-rc3 (2015-07-21)
 
 
 #### Features
 
-* **autocomplete:** Add promise support to md-item-text ([7430e687](https://github.com/angular/material/commit/7430e687))
+* **autocomplete:**
+  * adds a new attribute option `md-select-on-match` ([d16d2b66](https://github.com/angular/material/commit/d16d2b66), closes [#3324](https://github.com/angular/material/issues/3324), [#3825](https://github.com/angular/material/issues/3825))
+  * Add promise support to md-item-text ([7430e687](https://github.com/angular/material/commit/7430e687))
 * **menu:** do not propagate event in mdOpenMenu ([b8045df5](https://github.com/angular/material/commit/b8045df5), closes [#3296](https://github.com/angular/material/issues/3296), [#3332](https://github.com/angular/material/issues/3332))
 * **select:**
   * add support for disabled ([adcee7d1](https://github.com/angular/material/commit/adcee7d1), closes [#3518](https://github.com/angular/material/issues/3518))
@@ -14,10 +16,31 @@
   * Add md-auto-shrink and md-auto-shrink-min ([79dcbf73](https://github.com/angular/material/commit/79dcbf73), closes [#3536](https://github.com/angular/material/issues/3536))
   * add md-start-index attribute. ([9a045fb7](https://github.com/angular/material/commit/9a045fb7))
   * allow for scrolling areas larger than the browser's maximum element size. ([98e91ae2](https://github.com/angular/material/commit/98e91ae2))
-  
+
+
 #### Breaking Changes
 
-* **select:** `md-select-label` has been removed and you should use `md-input-container` + `label` now.
+* **input:** change `min-height` for textarea to one row
+(and remove extra padding space); set `rows=1` since it defaults to 2
+
+ ([2132cd29](https://github.com/angular/material/commit/2132cd29))
+* **css:** media queries for `sm`, `lg`, and `md` have
+modified `max-width` values
+
+ ([51dbd402](https://github.com/angular/material/commit/51dbd402))
+* **button:** `md-button` class now uses `display:
+inline-block` instead of `display: flex`; removes associated flexbox
+styles
+
+ ([fd331c87](https://github.com/angular/material/commit/fd331c87))
+* **dialog:** changes classes `transition-in` and
+`transition-out` to `md-transition-in` and `md-transition-out`
+
+ ([4210ade7](https://github.com/angular/material/commit/4210ade7))
+* **select:** `md-select-label` has been removed.  Users must use
+`md-input-container` and `label` going forward.
+
+ ([712bc721](https://github.com/angular/material/commit/712bc721))
 
 
 #### Bug Fixes
@@ -75,6 +98,8 @@
 * **mdTooltip:** fix regression that broke tooltips on Firefox ([6fc9212c](https://github.com/angular/material/commit/6fc9212c), closes [#3047](https://github.com/angular/material/issues/3047), [#3250](https://github.com/angular/material/issues/3250), [#3430](https://github.com/angular/material/issues/3430), [#3467](https://github.com/angular/material/issues/3467))
 * **mdUtil:** fix double scrollbar ([7ed0af6b](https://github.com/angular/material/commit/7ed0af6b), closes [#3382](https://github.com/angular/material/issues/3382))
 * **menu:**
+  * ensure menu button is type=button ([d203d722](https://github.com/angular/material/commit/d203d722), closes [#3821](https://github.com/angular/material/issues/3821))
+  * fix memory leak on component destroy ([1a9a5300](https://github.com/angular/material/commit/1a9a5300), closes [#3775](https://github.com/angular/material/issues/3775))
   * cleanup click listeners on close ([9b57c2ec](https://github.com/angular/material/commit/9b57c2ec))
   * fix menu positioning when using display:none items ([8609318f](https://github.com/angular/material/commit/8609318f), closes [#3444](https://github.com/angular/material/issues/3444))
   * fix scrolling menu always showing scrollbar ([86e9bf0d](https://github.com/angular/material/commit/86e9bf0d))
@@ -85,6 +110,8 @@
   * fix options with x-ng-click and data-ng-click not working ([17f38b0b](https://github.com/angular/material/commit/17f38b0b), closes [#3258](https://github.com/angular/material/issues/3258))
   * prevents scrollbar from unnecessarily showing up on the body ([5c08d5c9](https://github.com/angular/material/commit/5c08d5c9), closes [#3266](https://github.com/angular/material/issues/3266))
 * **select:**
+  * interimElement will resolve its promise even when transition end event is not fi ([d6a938e9](https://github.com/angular/material/commit/d6a938e9), closes [#3704](https://github.com/angular/material/issues/3704), [#3780](https://github.com/angular/material/issues/3780), [#3800](https://github.com/angular/material/issues/3800), [#3794](https://github.com/angular/material/issues/3794))
+  * restore ngModel functionality ([86a4ca99](https://github.com/angular/material/commit/86a4ca99), closes [#3767](https://github.com/angular/material/issues/3767))
   * fix slight pixel miss-alignment on select open ([2b423587](https://github.com/angular/material/commit/2b423587), closes [#3594](https://github.com/angular/material/issues/3594))
   * fix positioning when using option groups ([d8d3e4ca](https://github.com/angular/material/commit/d8d3e4ca))
   * remove correct controller from formCtrl w/ name ([ed6b45c7](https://github.com/angular/material/commit/ed6b45c7), closes [#3062](https://github.com/angular/material/issues/3062), [#3671](https://github.com/angular/material/issues/3671))
@@ -105,6 +132,8 @@
   * check for invalid discrete step value ([273fff4c](https://github.com/angular/material/commit/273fff4c), closes [#3590](https://github.com/angular/material/issues/3590))
   * render issues with ticks that occur when parent elements are resized ([5b0c256a](https://github.com/angular/material/commit/5b0c256a), closes [#1996](https://github.com/angular/material/issues/1996), [#2764](https://github.com/angular/material/issues/2764))
 * **tabs:**
+  * internal scope will now be the same as external scope ([c5c148df](https://github.com/angular/material/commit/c5c148df), closes [#3300](https://github.com/angular/material/issues/3300))
+  * prevents error when navigating away from tabs section while using Angular 1.4.x ([31bb1210](https://github.com/angular/material/commit/31bb1210))
   * focused item will once again scroll into view properly on focus ([5616f48f](https://github.com/angular/material/commit/5616f48f))
   * fixes `md-swipe-content` support ([0982c76a](https://github.com/angular/material/commit/0982c76a), closes [#3225](https://github.com/angular/material/issues/3225))
   * `md-center-tabs` should work now ([aa1e47d3](https://github.com/angular/material/commit/aa1e47d3))
