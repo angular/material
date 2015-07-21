@@ -11,7 +11,7 @@ describe('<md-autocomplete>', function () {
     return container;
   }
 
-  function createScope (items) {
+  function createScope (items, obj) {
     var scope;
     items = items || [ 'foo', 'bar', 'baz' ].map(function (item) { return { display: item }; });
     inject(function ($rootScope) {
@@ -23,6 +23,7 @@ describe('<md-autocomplete>', function () {
       };
       scope.searchText   = '';
       scope.selectedItem = null;
+      for (var key in obj) scope[key] = obj[key];
     });
     return scope;
   }
@@ -302,4 +303,25 @@ describe('<md-autocomplete>', function () {
       expect(scope.selectedItem).toBe(null);
     }));
   });
+
+  describe('md-highlight-text', function () {
+    it('should update when content is modified', inject(function () {
+      var template = '<div md-highlight-text="query">{{message}}</div>';
+      var scope = createScope(null, { message: 'some text', query: 'some' });
+      var element = compile(template, scope);
+
+      expect(element.html()).toBe('<span class="highlight">some</span> text');
+
+      scope.query = 'so';
+      scope.$apply();
+
+      expect(element.html()).toBe('<span class="highlight">so</span>me text');
+
+      scope.message = 'some more text';
+      scope.$apply();
+
+      expect(element.html()).toBe('<span class="highlight">so</span>me more text');
+    }));
+  });
+
 });
