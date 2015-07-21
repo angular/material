@@ -218,12 +218,15 @@ function MenuProvider($$interimElementProvider) {
             switch (ev.keyCode) {
               case keyCodes.ESCAPE:
                 opts.mdMenuCtrl.close();
+                ev.stopPropagation();
                 break;
               case keyCodes.UP_ARROW:
                 focusMenuItem(ev, opts.menuContentEl, opts, -1);
+                ev.stopPropagation();
                 break;
               case keyCodes.DOWN_ARROW:
                 focusMenuItem(ev, opts.menuContentEl, opts, 1);
+                ev.stopPropagation();
                 break;
             }
           });
