@@ -7,7 +7,7 @@
 var nextUniqueId = 0;
 
 angular.module('material.core')
-  .factory('$mdUtil', function ($cacheFactory, $document, $timeout, $q, $window, $mdConstant, $$rAF, $rootScope, $$mdAnimate) {
+  .factory('$mdUtil', function ($cacheFactory, $document, $timeout, $q, $compile, $window, $mdConstant, $$rAF, $rootScope, $$mdAnimate) {
     var $mdUtil = {
           dom : { },
           now: window.performance ?
@@ -47,14 +47,14 @@ angular.module('material.core')
           },
 
           // Disables scroll around the passed element.
-          disableScrollAround: function (element) {
+          disableScrollAround: function (element, parent) {
             $mdUtil.disableScrollAround._count = $mdUtil.disableScrollAround._count || 0;
             ++$mdUtil.disableScrollAround._count;
             if ($mdUtil.disableScrollAround._enableScrolling) return $mdUtil.disableScrollAround._enableScrolling;
             element = angular.element(element);
             var body = $document[0].body,
               restoreBody = disableBodyScroll(),
-              restoreElement = disableElementScroll();
+              restoreElement = disableElementScroll(parent);
 
             return $mdUtil.disableScrollAround._enableScrolling = function () {
               if (!--$mdUtil.disableScrollAround._count) {
@@ -65,13 +65,14 @@ angular.module('material.core')
             };
 
             // Creates a virtual scrolling mask to absorb touchmove, keyboard, scrollbar clicking, and wheel events
-            function disableElementScroll() {
+            function disableElementScroll(element) {
+              element = angular.element(element || body)[0];
               var zIndex = 50;
               var scrollMask = angular.element(
                 '<div class="md-scroll-mask" style="z-index: ' + zIndex + '">' +
                 '  <div class="md-scroll-mask-bar"></div>' +
                 '</div>');
-              body.appendChild(scrollMask[0]);
+              element.appendChild(scrollMask[0]);
 
               scrollMask.on('wheel', preventDefault);
               scrollMask.on('touchmove', preventDefault);
@@ -172,6 +173,14 @@ angular.module('material.core')
             newEvent.$material = true;
             newEvent.$focus = true;
             node.dispatchEvent(newEvent);
+          },
+
+          /**
+           * facade to build md-backdrop element with desired styles
+           * NOTE: Use $compile to trigger backdrop postLink function
+           */
+          createBackdrop : function(scope, addClass){
+            return $compile( $mdUtil.supplant('<md-backdrop class="{0}">',[addClass]) )(scope);
           },
 
           /**

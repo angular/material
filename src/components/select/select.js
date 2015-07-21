@@ -748,7 +748,7 @@ function SelectProvider($$interimElementProvider) {
     });
 
   /* @ngInject */
-  function selectDefaultOptions($mdSelect, $mdConstant, $$rAF, $mdUtil, $mdTheming, $window, $q, $log ) {
+  function selectDefaultOptions($mdSelect, $mdConstant, $$rAF, $mdUtil, $mdTheming, $window, $q, $compile ) {
     var animator = $mdUtil.dom.animator;
 
     return {
@@ -774,7 +774,7 @@ function SelectProvider($$interimElementProvider) {
         parent: angular.element(opts.parent),
         selectEl: element.find('md-select-menu'),
         contentEl: element.find('md-content'),
-        backdrop: opts.hasBackdrop && angular.element('<md-backdrop class="md-select-backdrop md-click-catcher">')
+        backdrop: opts.hasBackdrop && $mdUtil.createBackdrop(scope, "md-select-backdrop md-click-catcher")
       });
 
       opts.resizeFn = function() {
@@ -847,8 +847,6 @@ function SelectProvider($$interimElementProvider) {
         element.addClass('md-clickable');
 
         opts.backdrop && opts.backdrop.on('click', function(e) {
-          $log.debug("backdrop click");
-
           e.preventDefault();
           e.stopPropagation();
           opts.restoreFocus = false;

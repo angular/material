@@ -151,7 +151,6 @@ function MenuDirective($mdMenu) {
       triggerElement = triggerElement.querySelector('[ng-click]');
     }
     triggerElement && triggerElement.setAttribute('aria-haspopup', 'true');
-    triggerElement.setAttribute('type', 'button');
     if (templateElement.children().length != 2) {
       throw Error('Invalid HTML for md-menu. Expected two children elements.');
     }
