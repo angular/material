@@ -235,7 +235,7 @@
         mdChipsCtrl.chipInputTemplate    = chipInputTemplate;
 
         element
-            .attr({ ariaHidden: true, tabindex: -1 })
+            .attr({ 'aria-hidden': true, tabindex: -1 })
             .on('focus', function () { mdChipsCtrl.onFocus(); });
 
         if (attr.ngModel) {
