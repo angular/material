@@ -430,8 +430,7 @@ function MdDialogProvider($$interimElementProvider) {
   }
 
   /* @ngInject */
-  function dialogDefaultOptions($mdAria, $document, $mdUtil, $mdConstant, $mdTheming, $mdDialog, $animate, $q ) {
-
+  function dialogDefaultOptions($mdDialog, $mdAria, $mdUtil, $mdConstant, $animate, $document) {
     return {
       hasBackdrop: true,
       isolateScope: true,
@@ -456,7 +455,7 @@ function MdDialogProvider($$interimElementProvider) {
 
       captureSourceAndParent(element, options);
       configureAria(element.find('md-dialog'), options);
-      showBackdrop(element, options);
+      showBackdrop(scope, element, options);
 
       return dialogPopIn(element, options)
         .then(function () {
@@ -492,10 +491,11 @@ function MdDialogProvider($$interimElementProvider) {
       options.deactivateListeners();
       options.unlockScreenReader();
 
+      options.hideBackdrop();
+
       return dialogPopOut(element, options)
         .finally(function () {
           angular.element($document[0].body).removeClass('md-dialog-is-showing');
-          options.hideBackdrop();
           element.remove();
 
           options.origin.focus();
@@ -522,7 +522,7 @@ function MdDialogProvider($$interimElementProvider) {
          options.parent = angular.element(options.parent);
 
          if (options.disableParentScroll) {
-           options.restoreScroll = $mdUtil.disableScrollAround(element);
+           options.restoreScroll = $mdUtil.disableScrollAround(element,options.parent);
          }
        }
 
@@ -594,7 +594,7 @@ function MdDialogProvider($$interimElementProvider) {
     /**
      * Show modal backdrop element...
      */
-    function showBackdrop(element, options) {
+    function showBackdrop(scope, element, options) {
 
       if (options.hasBackdrop) {
         // Fix for IE 10
@@ -605,9 +605,7 @@ function MdDialogProvider($$interimElementProvider) {
 
         element.css('top', parentOffset + 'px');
 
-        options.backdrop = angular.element('<md-backdrop class="md-dialog-backdrop md-opaque">');
-        options.backdrop.css('top', parentOffset + 'px');
-        $mdTheming.inherit(options.backdrop, options.parent);
+        options.backdrop = $mdUtil.createBackdrop(scope, "md-dialog-backdrop md-opaque");
 
         $animate.enter(options.backdrop, options.parent);
       }

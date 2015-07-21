@@ -9,7 +9,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
     // to prevent interaction outside of dialog
     $mdDialog.show(
       $mdDialog.alert()
-        .parent(angular.element(document.body))
+        .parent(angular.element(document.querySelector('#popupContainer')))
         .clickOutsideToClose(true)
         .title('This is an alert title')
         .content('You can specify some description text in here.')
@@ -22,7 +22,6 @@ angular.module('dialogDemo1', ['ngMaterial'])
   $scope.showConfirm = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
-          .parent(angular.element(document.body))
           .title('Would you like to delete your debt?')
           .content('All of the banks have agreed to forgive you your debts.')
           .ariaLabel('Lucky day')

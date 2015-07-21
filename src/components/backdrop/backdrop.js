@@ -17,11 +17,35 @@
  *
  */
 
-angular.module('material.components.backdrop', [
-  'material.core'
-])
-  .directive('mdBackdrop', BackdropDirective);
+angular
+  .module('material.components.backdrop', ['material.core'])
+  .directive('mdBackdrop', function BackdropDirective($mdTheming, $animate, $rootElement, $window, $log, $$rAF) {
 
-function BackdropDirective($mdTheming) {
-  return $mdTheming;
-}
+    return {
+        restrict: 'E',
+        link: postLink
+      };
+
+    function postLink(scope, element, attrs) {
+      // backdrop may be outside the $rootElement, tell ngAnimate to animate regardless
+      if( $animate.pin ) $animate.pin(element,$rootElement);
+
+      $$rAF(function(){
+        // Often $animate.enter() is used to append the backDrop element
+        // so let's wait until $animate is done...
+
+        var parent = element.parent()[0];
+        if ( parent ) {
+          var position = $window.getComputedStyle(parent).getPropertyValue('position');
+          if (position == 'static') {
+            // backdrop uses position:absolute and will not work properly with parent position:static (default)
+            var positionError = "<md-backdrop> may not work properly in a scrolled, static-positioned parent container.";
+            $log.warn( positionError );
+          }
+        }
+
+        $mdTheming.inherit(element, element.parent());
+      });
+
+    };
+  });

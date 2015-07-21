@@ -2,7 +2,7 @@ describe('$$interimElement service', function() {
 
   beforeEach(module('material.core'));
 
-  var $rootScope, $animate, $timeout;
+  var $rootScope, $animate, $q, $timeout;
   var $compilerSpy, $themingSpy;
 
   describe('provider', function() {
@@ -250,7 +250,10 @@ describe('$$interimElement service', function() {
 
     beforeEach(function() {
       setup();
-      inject(function($$interimElement) {
+      inject(function($$interimElement, _$q_, _$timeout_) {
+        $q = _$q_;
+        $timeout = _$timeout_;
+
         Service = $$interimElement();
 
         Service.show = tailHook(Service.show, flush);
