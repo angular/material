@@ -69,6 +69,43 @@ describe('<md-autocomplete>', function () {
       expect(scope.searchText).toBe('foo');
       expect(scope.selectedItem).toBe(scope.match(scope.searchText)[ 0 ]);
     }));
+
+    it('should allow you to set an input id without floating label', inject(function () {
+      var scope    = createScope(null, { inputId: 'custom-input-id' });
+      var template = '\
+          <md-autocomplete\
+              md-input-id="{{inputId}}"\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element  = compile(template, scope);
+      var input    = element.find('input');
+
+      expect(input.attr('id')).toBe(scope.inputId);
+    }));
+
+    it('should allow you to set an input id without floating label', inject(function () {
+      var scope    = createScope(null, { inputId: 'custom-input-id' });
+      var template = '\
+          <md-autocomplete\
+              md-floating-label="Some Label"\
+              md-input-id="{{inputId}}"\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element  = compile(template, scope);
+      var input    = element.find('input');
+
+      expect(input.attr('id')).toBe(scope.inputId);
+    }));
   });
 
   describe('basic functionality with template', function () {
