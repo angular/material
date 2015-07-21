@@ -170,7 +170,7 @@ function MdTabs ($mdTheming, $mdUtil, $compile) {
             </div>\
           </md-tabs-canvas>\
         </md-tabs-wrapper>\
-        <md-tabs-content-wrapper ng-show="$mdTabsCtrl.hasContent">\
+        <md-tabs-content-wrapper ng-show="$mdTabsCtrl.hasContent && $mdTabsCtrl.selectedIndex >= 0">\
           <md-tab-content\
               id="tab-content-{{::tab.id}}"\
               role="tabpanel"\

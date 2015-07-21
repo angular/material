@@ -36,11 +36,13 @@ describe('<md-tabs>', function () {
     });
   });
 
-  function setup (template) {
+  function setup (template, scope) {
     var el;
     inject(function ($compile, $rootScope) {
-      el = $compile(template)($rootScope.$new());
-      $rootScope.$apply();
+      newScope = $rootScope.$new();
+      for (var key in scope || {}) newScope[key] = scope[key];
+      el = $compile(template)(newScope);
+      newScope.$apply();
     });
     return el;
   }
@@ -287,14 +289,30 @@ describe('<md-tabs>', function () {
           </md-tab>\
         </md-tabs>\
       ';
-      var element = setup(template);
-      var button = element.find('md-button');
+      var element  = setup(template);
+      var button   = element.find('md-button');
 
-      expect(button[0 ].tagName).toBe('MD-BUTTON');
+      expect(button[ 0 ].tagName).toBe('MD-BUTTON');
 
       button.triggerHandler('click');
 
       expect(element.scope().data).toBe(false);
     });
+  });
+
+  describe('no tab selected', function () {
+    it('should allow cases where no tabs are selected', inject(function () {
+      var template = '\
+        <md-tabs md-selected="selectedIndex">\
+          <md-tab label="a">tab content</md-tab>\
+          <md-tab label="b">tab content</md-tab>\
+        </md-tabs>\
+      ';
+      var element  = setup(template, { selectedIndex: -1 });
+      var scope = element.scope();
+
+      expect(scope.selectedIndex).toBe(-1);
+      expect(element.find('md-tabs-content-wrapper').hasClass('ng-hide')).toBe(true);
+    }));
   });
 });

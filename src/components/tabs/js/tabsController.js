@@ -485,6 +485,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    * @returns {*}
    */
   function getNearestSafeIndex (newIndex) {
+    if (newIndex === -1) return -1;
     var maxOffset = Math.max(ctrl.tabs.length - newIndex, newIndex),
         i, tab;
     for (i = 0; i <= maxOffset; i++) {
