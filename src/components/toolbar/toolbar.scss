@@ -34,12 +34,6 @@ md-toolbar {
     transition: box-shadow $swift-ease-in-out-duration linear;
   }
 
-  *,
-  *:before,
-  *:after {
-    box-sizing: border-box;
-  }
-
   &.md-tall {
     height: $toolbar-tall-height;
     min-height: $toolbar-tall-height;
@@ -78,6 +72,7 @@ md-toolbar {
 .md-toolbar-tools {
   font-size: $title-font-size-base;
   letter-spacing: 0.005em;
+  box-sizing: border-box;
   font-weight: 400;
   display: flex;
   align-items: center;
