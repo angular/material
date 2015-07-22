@@ -67,6 +67,7 @@ md-menu-content {
 md-menu-item {
   display: flex;
   flex-direction: row;
+  min-height: $menu-item-height;
   height: $menu-item-height;
   align-content: center;
   justify-content: flex-start;
