@@ -17,9 +17,11 @@ md-backdrop {
   }
 
   opacity: 1;
-  transition: background-color 500ms $swift-ease-in-timing-function;
 
-  background-color: rgba(0,0,0,0);
+  // - Animate background-color alpha only for `.md-opaque` stylings
+  // !!Important - Theme-based Background-color and animations can be enabled in backdrop-theme.scss
+
+  transition: background-color 450ms $swift-ease-in-timing-function;
 
   position: absolute;
   top:0;
@@ -31,24 +33,8 @@ md-backdrop {
     position: fixed;
   }
 
-  &.md-opaque.ng-enter {
-    background-color: rgba(0,0,0,0);
-
-    &.md-opaque.ng-enter-active {
-      background-color: rgba(0,0,0,0.42);
-    }
-  }
-
   &.md-opaque.ng-leave {
     transition: background-color 400ms linear;
-
-    &.md-opaque.ng-leave-active {
-      background-color: rgba(0,0,0,0);
-    }
-  }
-
-  &.md-opaque {
-    background-color: rgba(0,0,0,0.42);
   }
 
 }
