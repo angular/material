@@ -103,7 +103,7 @@ md-select {
   }
 
   .md-select-icon {
-    align-items: flex-end;
+    @include rtl(align-items, flex-end, flex-start);
     @include rtl(text-align, right, left);
     width: 3 * $baseline-grid;
     margin: 0 .5 * $baseline-grid;
