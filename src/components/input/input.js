@@ -291,7 +291,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
           if(!lineHeight) {
             node.style.minHeight = '0';
 
-            lineHeight = element.height();
+            lineHeight = element[0].offsetHeight;
 
             node.style.minHeight = null;
           }
