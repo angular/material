@@ -278,7 +278,10 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   function select (index) {
     if (!locked) ctrl.focusIndex = ctrl.selectedIndex = index;
     ctrl.lastClick = true;
-    ctrl.tabs[ index ].element.triggerHandler('click');
+    // nextTick is required to prevent errors in user-defined click events
+    $mdUtil.nextTick(function () {
+      ctrl.tabs[ index ].element.triggerHandler('click');
+    }, false);
   }
 
   /**
