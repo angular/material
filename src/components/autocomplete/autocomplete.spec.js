@@ -28,6 +28,14 @@ describe('<md-autocomplete>', function () {
     return scope;
   }
 
+  function keydownEvent (keyCode) {
+    return {
+      keyCode: keyCode,
+      stopPropagation: angular.noop,
+      preventDefault:  angular.noop
+    };
+  }
+
   describe('basic functionality', function () {
     it('should update selected item and search text', inject(function ($timeout, $mdConstant) {
       var scope    = createScope();
@@ -54,16 +62,8 @@ describe('<md-autocomplete>', function () {
       expect(scope.match(scope.searchText).length).toBe(1);
       expect(ul.find('li').length).toBe(1);
 
-      ctrl.keydown({
-        keyCode:         $mdConstant.KEY_CODE.DOWN_ARROW,
-        preventDefault:  angular.noop,
-        stopPropagation: angular.noop
-      });
-      ctrl.keydown({
-        keyCode:         $mdConstant.KEY_CODE.ENTER,
-        preventDefault:  angular.noop,
-        stopPropagation: angular.noop
-      });
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ENTER));
       $timeout.flush();
 
       expect(scope.searchText).toBe('foo');
@@ -88,7 +88,7 @@ describe('<md-autocomplete>', function () {
       expect(input.attr('id')).toBe(scope.inputId);
     }));
 
-    it('should allow you to set an input id without floating label', inject(function () {
+    it('should allow you to set an input id with floating label', inject(function () {
       var scope    = createScope(null, { inputId: 'custom-input-id' });
       var template = '\
           <md-autocomplete\
@@ -105,6 +105,32 @@ describe('<md-autocomplete>', function () {
       var input    = element.find('input');
 
       expect(input.attr('id')).toBe(scope.inputId);
+    }));
+
+    it('should clear value when hitting escape', inject(function ($mdConstant, $timeout) {
+      var scope    = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element  = compile(template, scope);
+      var input    = element.find('input');
+      var ctrl     = element.controller('mdAutocomplete');
+
+      expect(scope.searchText).toBe('');
+
+      scope.$apply('searchText = "test"');
+
+      expect(scope.searchText).toBe('test');
+
+      $timeout.flush();
+      scope.$apply(function () { ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE)); });
+
+      expect(scope.searchText).toBe('');
     }));
   });
 
@@ -136,16 +162,8 @@ describe('<md-autocomplete>', function () {
       expect(scope.match(scope.searchText).length).toBe(1);
       expect(ul.find('li').length).toBe(1);
 
-      ctrl.keydown({
-        keyCode:         $mdConstant.KEY_CODE.DOWN_ARROW,
-        preventDefault:  angular.noop,
-        stopPropagation: angular.noop
-      });
-      ctrl.keydown({
-        keyCode:         $mdConstant.KEY_CODE.ENTER,
-        preventDefault:  angular.noop,
-        stopPropagation: angular.noop
-      });
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ENTER));
       $timeout.flush();
 
       expect(scope.searchText).toBe('foo');

@@ -371,6 +371,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       case $mdConstant.KEY_CODE.ESCAPE:
         event.stopPropagation();
         event.preventDefault();
+        clearValue();
         ctrl.matches = [];
         ctrl.hidden  = true;
         ctrl.index   = getDefaultIndex();
