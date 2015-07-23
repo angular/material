@@ -213,7 +213,7 @@
       self.inputElement.size = inputString.length + EXTRA_INPUT_SIZE;
 
       if (self.dateUtil.isValidDate(parsedDate) && self.dateLocale.isDateComplete(inputString)) {
-        self.date = parsedDate;
+        self.ngModelCtrl.$setViewValue(parsedDate);
         self.$scope.$apply();
       }
     });
