@@ -22,10 +22,10 @@ a.md-button.md-THEME_NAME-theme,
     border-radius: $button-fab-border-radius;
     background-color: '{{accent-color}}';
     color: '{{accent-contrast}}';
-    md-icon {
-      color: '{{accent-contrast}}';
-    }
     &:not([disabled]) {
+      .md-icon {
+        color: '{{accent-contrast}}';
+      }
       &:hover {
         background-color: '{{accent-color}}';
       }
@@ -60,22 +60,6 @@ a.md-button.md-THEME_NAME-theme,
     &:not([disabled]) {
       md-icon {
         color: '{{primary-color}}';
-      }
-    }
-  }
-  &.md-fab {
-    border-radius: $button-fab-border-radius;
-    background-color: '{{accent-color}}';
-    color: '{{accent-contrast}}';
-    &:not([disabled]) {
-      .md-icon {
-        color: '{{accent-contrast}}';
-      }
-      &:hover {
-        background-color: '{{accent-color}}';
-      }
-      &.md-focused {
-        background-color: '{{accent-A700}}';
       }
     }
   }
