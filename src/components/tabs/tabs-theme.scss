@@ -1,51 +1,61 @@
 @mixin md-tab-primary {
-  md-tabs-wrapper {
+  > md-tabs-wrapper {
     background-color: '{{primary-color}}';
-  }
-  md-tab-item:not([disabled]) {
-    color: '{{primary-100}}';
-    &.md-active, &.md-focused {
-      color: '{{primary-contrast}}';
-    }
-    &.md-focused {
-      background: '{{primary-contrast-0.1}}';
+    > md-tabs-canvas {
+      > md-pagination-wrapper {
+        > md-tab-item:not([disabled]) {
+          color: '{{primary-100}}';
+          &.md-active, &.md-focused {
+            color: '{{primary-contrast}}';
+          }
+          &.md-focused {
+            background: '{{primary-contrast-0.1}}';
+          }
+        }
+      }
     }
   }
 }
 @mixin md-tab-warn {
-  md-tabs-wrapper {
+  > md-tabs-wrapper {
     background-color: '{{warn-color}}';
-  }
-
-  md-tab-item:not([disabled]) {
-    color: '{{warn-100}}';
-    &.md-active, &.md-focused {
-      color: '{{warn-contrast}}';
-    }
-    &.md-focused {
-      background: '{{warn-contrast-0.1}}';
+    > md-tabs-canvas {
+      > md-pagination-wrapper {
+        > md-tab-item:not([disabled]) {
+          color: '{{warn-100}}';
+          &.md-active, &.md-focused {
+            color: '{{warn-contrast}}';
+          }
+          &.md-focused {
+            background: '{{warn-contrast-0.1}}';
+          }
+        }
+      }
     }
   }
 }
 @mixin md-tab-accent {
-  md-tabs-wrapper {
+  > md-tabs-wrapper {
     background-color: '{{accent-color}}';
+    > md-tabs-canvas {
+      > md-pagination-wrapper {
+        > md-tab-item:not([disabled]) {
+          color: '{{accent-100}}';
+          &.md-active, &.md-focused {
+            color: '{{accent-contrast}}';
+          }
+          &.md-focused {
+            background: '{{accent-contrast-0.1}}';
+          }
+        }
+        > md-ink-bar {
+          color: '{{primary-600-1}}';
+          background: '{{primary-600-1}}';
+        }
+      }
+    }
   }
 
-  md-tab-item:not([disabled]) {
-    color: '{{accent-100}}';
-    &.md-active, &.md-focused {
-      color: '{{accent-contrast}}';
-    }
-    &.md-focused {
-      background: '{{accent-contrast-0.1}}';
-    }
-  }
-
-  md-ink-bar {
-    color: '{{primary-600-1}}';
-    background: '{{primary-600-1}}';
-  }
 }
 md-tabs.md-THEME_NAME-theme {
   md-tabs-wrapper {
