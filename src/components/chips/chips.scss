@@ -72,7 +72,7 @@ $contact-chip-name-width: rem(12) !default;
       padding-right:rem(0.4);
       float: left;
       white-space: nowrap;
-      max-width: calc(100% - 31px);
+      max-width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
       &:focus {
