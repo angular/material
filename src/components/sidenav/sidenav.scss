@@ -109,6 +109,7 @@ md-sidenav {
 @media (max-width: $sidenav-default-width + $sidenav-min-space) {
   md-sidenav {
     width: 85%;
+    min-width:0;
   }
 }
 
