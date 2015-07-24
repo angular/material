@@ -223,7 +223,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * When the mouse button is released, send focus back to the input field.
    */
   function onMouseup () {
-    elements.input.focus();
+    $mdUtil.nextTick(elements.input.focus);
   }
 
   /**
