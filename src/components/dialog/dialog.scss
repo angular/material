@@ -13,6 +13,7 @@ $dialog-padding: $baseline-grid * 3;
   width: 100%;
   height: 100%;
   z-index: $z-index-dialog;
+  overflow: hidden;
 }
 
 md-dialog {

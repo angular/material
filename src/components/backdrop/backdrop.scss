@@ -30,7 +30,7 @@ md-backdrop {
   right: 0;
 
   &.md-click-catcher {
-    position: fixed;
+    position: absolute;
   }
 
   &.md-opaque.ng-leave {

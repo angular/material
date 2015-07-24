@@ -46,6 +46,19 @@ angular.module('material.core')
             return results;
           },
 
+          /**
+           * Calculate the positive scroll offset
+           */
+          scrollTop : function(element) {
+            element = angular.element(element || $document[0].body);
+
+            var body = (element[0] == $document[0].body) ? $document[0].body : undefined;
+            var scrollTop = body ? body.scrollTop + body.parentElement.scrollTop : 0;
+
+             // Calculate the positive scroll offset
+            return scrollTop || Math.abs(element[0].getBoundingClientRect().top);
+          },
+
           // Disables scroll around the passed element.
           disableScrollAround: function (element, parent) {
             $mdUtil.disableScrollAround._count = $mdUtil.disableScrollAround._count || 0;
@@ -109,7 +122,7 @@ angular.module('material.core')
               var htmlNode = body.parentNode;
               var restoreHtmlStyle = htmlNode.getAttribute('style') || '';
               var restoreBodyStyle = body.getAttribute('style') || '';
-              var scrollOffset = body.scrollTop + body.parentElement.scrollTop;
+              var scrollOffset = $mdUtil.scrollTop(body);
               var clientWidth = body.clientWidth;
 
               if (body.scrollHeight > body.clientHeight) {
