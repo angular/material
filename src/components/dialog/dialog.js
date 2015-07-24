@@ -430,7 +430,7 @@ function MdDialogProvider($$interimElementProvider) {
   }
 
   /* @ngInject */
-  function dialogDefaultOptions($mdDialog, $mdAria, $mdUtil, $mdConstant, $animate, $document) {
+  function dialogDefaultOptions($mdDialog, $mdAria, $mdUtil, $mdConstant, $animate, $document, $window, $rootElement) {
     return {
       hasBackdrop: true,
       isolateScope: true,
@@ -464,6 +464,10 @@ function MdDialogProvider($$interimElementProvider) {
           focusOnOpen();
         });
 
+      /**
+       * For alerts, focus on content... otherwise focus on
+       * the close button (or equivalent)
+       */
       function focusOnOpen() {
         if (options.focusOnOpen) {
           var target = (options.$type === 'alert') ? element.find('md-dialog-content') : findCloseButton();
@@ -502,6 +506,11 @@ function MdDialogProvider($$interimElementProvider) {
         });
     }
 
+    /**
+     * Capture originator/trigger element information (if available)
+     * and the parent container for the dialog; defaults to the $rootElement
+     * unless overridden in the options.parent
+     */
     function captureSourceAndParent(element, options) {
          var origin = { element: null, bounds: null,  focus: angular.noop };
          options.origin = angular.extend({ }, origin, options.origin || {} );
@@ -519,7 +528,7 @@ function MdDialogProvider($$interimElementProvider) {
          }
 
          // In case the user provides a raw dom element, always wrap it in jqLite
-         options.parent = angular.element(options.parent);
+         options.parent = angular.element(options.parent || $rootElement);
 
          if (options.disableParentScroll) {
            options.restoreScroll = $mdUtil.disableScrollAround(element,options.parent);
@@ -597,16 +606,7 @@ function MdDialogProvider($$interimElementProvider) {
     function showBackdrop(scope, element, options) {
 
       if (options.hasBackdrop) {
-        // Fix for IE 10
-        var docElement = $document[0].documentElement;
-        var hasScrollTop = (options.parent[0] == $document[0].body) && (docElement && docElement.scrollTop);
-        var computeFrom = hasScrollTop ? angular.element(docElement) : options.parent;
-        var parentOffset = computeFrom.prop('scrollTop');
-
-        element.css('top', parentOffset + 'px');
-
         options.backdrop = $mdUtil.createBackdrop(scope, "md-dialog-backdrop md-opaque");
-
         $animate.enter(options.backdrop, options.parent);
       }
 
@@ -702,18 +702,38 @@ function MdDialogProvider($$interimElementProvider) {
     }
 
     /**
+     * Ensure the dialog container fill-stretches to the viewport
+     */
+    function adjustDialogContainer(container, options) {
+
+      var isFixed = $window.getComputedStyle($document[0].body).position == 'fixed';
+      var backdrop = options.backdrop ? $window.getComputedStyle(options.backdrop[0]) : null;
+      var height = backdrop ? Math.ceil(Math.abs(parseInt(backdrop.height,10))) : 0;
+
+      container.css({
+        top: (isFixed ? $mdUtil.scrollTop(options.parent)/2 : 0) + 'px',
+        height: height ? height +'px' : '100%'
+      });
+
+      return container;
+    }
+
+    /**
      *  Dialog open and pop-in animation
      */
     function dialogPopIn(container, options ) {
-      options.parent.append(container);
 
+      // Add the `md-dialog-container` to the DOM
+      options.parent.append( container );
+      adjustDialogContainer(container,options);
+
+      var dialogEl = container.find('md-dialog');
       var animator = $mdUtil.dom.animator ;
       var buildTranslateToOrigin = animator.calculateZoomToOrigin;
       var translateOptions = { transitionInClass :'md-transition-in' , transitionOutClass : 'md-transition-out' };
-
-      var dialogEl = container.find('md-dialog');
       var from = animator.toTransformCss( buildTranslateToOrigin(dialogEl, options.origin) );
-      var to = animator.toTransformCss("");  // defaults to center display (or parent or $rootElement)
+      var to = animator.toTransformCss( "" );  // defaults to center display (or parent or $rootElement)
+
 
       return animator
          .translate3d(dialogEl,from,to,translateOptions)
