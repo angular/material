@@ -35,7 +35,7 @@ module.exports = {
     'src/core/style/layout.scss'
   ],
   paths: 'src/{components,services}/**',
-  outputDir: '~/repos/spoti/tags/app/assets/lib/',
+  outputDir: '../spoti/tags/app/assets/lib/',
   demoFolder: 'demo-partials'
 };
 
