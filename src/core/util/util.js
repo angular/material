@@ -48,6 +48,8 @@ angular.module('material.core')
 
           /**
            * Calculate the positive scroll offset
+           * TODO: Check with pinch-zoom in IE/Chrome;
+           *       https://code.google.com/p/chromium/issues/detail?id=496285
            */
           scrollTop : function(element) {
             element = angular.element(element || $document[0].body);

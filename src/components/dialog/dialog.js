@@ -24,7 +24,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
           //-- delayed image loading may impact scroll height, check after images are loaded
           angular.element(images).on('load', addOverflowClass);
         }
-        function addOverflowClass () {
+        function addOverflowClass() {
           element.toggleClass('md-content-overflow', content.scrollHeight > content.clientHeight);
         }
       });
@@ -418,10 +418,14 @@ function MdDialogProvider($$interimElementProvider) {
         '   </md-button>',
         ' </div>',
         '</md-dialog>'
-      ].join('').replace(/\s\s+/g,''),
+      ].join('').replace(/\s\s+/g, ''),
       controller: function mdDialogCtrl() {
-        this.hide = function () { $mdDialog.hide(true); };
-        this.abort = function (){ $mdDialog.cancel(); };
+        this.hide = function () {
+          $mdDialog.hide(true);
+        };
+        this.abort = function () {
+          $mdDialog.cancel();
+        };
       },
       controllerAs: 'dialog',
       bindToController: true,
@@ -512,59 +516,59 @@ function MdDialogProvider($$interimElementProvider) {
      * unless overridden in the options.parent
      */
     function captureSourceAndParent(element, options) {
-         var origin = { element: null, bounds: null,  focus: angular.noop };
-         options.origin = angular.extend({ }, origin, options.origin || {} );
+      var origin = {element: null, bounds: null, focus: angular.noop};
+      options.origin = angular.extend({}, origin, options.origin || {});
 
-         var source = angular.element((options.targetEvent || {}).target);
-         if (source && source.length) {
-           // Compute and save the target element's bounding rect, so that if the
-           // element is hidden when the dialog closes, we can shrink the dialog
-           // back to the same position it expanded from.
-           options.origin.element = source;
-           options.origin.bounds = source[0].getBoundingClientRect();
-           options.origin.focus = function () {
-             source.focus();
-           }
-         }
+      var source = angular.element((options.targetEvent || {}).target);
+      if (source && source.length) {
+        // Compute and save the target element's bounding rect, so that if the
+        // element is hidden when the dialog closes, we can shrink the dialog
+        // back to the same position it expanded from.
+        options.origin.element = source;
+        options.origin.bounds = source[0].getBoundingClientRect();
+        options.origin.focus = function () {
+          source.focus();
+        }
+      }
 
-         // In case the user provides a raw dom element, always wrap it in jqLite
-         options.parent = angular.element(options.parent || $rootElement);
+      // In case the user provides a raw dom element, always wrap it in jqLite
+      options.parent = angular.element(options.parent || $rootElement);
 
-         if (options.disableParentScroll) {
-           options.restoreScroll = $mdUtil.disableScrollAround(element,options.parent);
-         }
-       }
+      if (options.disableParentScroll) {
+        options.restoreScroll = $mdUtil.disableScrollAround(element, options.parent);
+      }
+    }
 
     /**
      * Listen for escape keys and outside clicks to auto close
      */
     function activateListeners(element, options) {
-      var removeListeners = [ ];
-      var smartClose = function() {
+      var removeListeners = [];
+      var smartClose = function () {
         // Only 'confirm' dialogs have a cancel button... escape/clickOutside will
         // cancel or fallback to hide.
-        var closeFn =  ( options.$type == 'alert' ) ? $mdDialog.hide : $mdDialog.cancel;
+        var closeFn = ( options.$type == 'alert' ) ? $mdDialog.hide : $mdDialog.cancel;
 
-        $mdUtil.nextTick( closeFn, true );
+        $mdUtil.nextTick(closeFn, true);
       };
 
       if (options.escapeToClose) {
         var target = options.parent;
         var keyHandlerFn = function (ev) {
-              if (ev.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
-                ev.stopPropagation();
-                ev.preventDefault();
+          if (ev.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
+            ev.stopPropagation();
+            ev.preventDefault();
 
-                smartClose();
-              }
-            };
+            smartClose();
+          }
+        };
 
         // Add keyup listeners
         element.on('keyup', keyHandlerFn);
         target.on('keyup', keyHandlerFn);
 
         // Queue remove listeners function
-        removeListeners.push(function() {
+        removeListeners.push(function () {
           element.off('keyup', keyHandlerFn);
           target.off('keyup', keyHandlerFn);
         });
@@ -572,33 +576,32 @@ function MdDialogProvider($$interimElementProvider) {
       if (options.clickOutsideToClose) {
         var target = element;
         var clickHandler = function (ev) {
-              // Only close if we click the flex container outside on the backdrop
-              if (ev.target === target[0]) {
-                ev.stopPropagation();
-                ev.preventDefault();
+          // Only close if we click the flex container outside on the backdrop
+          if (ev.target === target[0]) {
+            ev.stopPropagation();
+            ev.preventDefault();
 
-                smartClose();
-              }
-            };
+            smartClose();
+          }
+        };
 
         // Add click listeners
         target.on('click', clickHandler);
 
         // Queue remove listeners function
-        removeListeners.push(function(){
-          target.off('click',clickHandler);
+        removeListeners.push(function () {
+          target.off('click', clickHandler);
         });
       }
 
       // Attach specific `remove` listener handler
-      options.deactivateListeners = function() {
-        removeListeners.forEach(function(removeFn){
+      options.deactivateListeners = function () {
+        removeListeners.forEach(function (removeFn) {
           removeFn();
         });
         options.deactivateListeners = null;
       };
     }
-
 
     /**
      * Show modal backdrop element...
@@ -624,8 +627,6 @@ function MdDialogProvider($$interimElementProvider) {
         options.hideBackdrop = null;
       }
     }
-
-
 
     /**
      * Inject ARIA-specific attributes appropriate for Dialogs
@@ -670,7 +671,7 @@ function MdDialogProvider($$interimElementProvider) {
       // get raw DOM node
       walkDOM(element[0]);
 
-      options.unlockScreenReader = function() {
+      options.unlockScreenReader = function () {
         isHidden = false;
         walkDOM(element[0]);
 
@@ -704,15 +705,15 @@ function MdDialogProvider($$interimElementProvider) {
     /**
      * Ensure the dialog container fill-stretches to the viewport
      */
-    function adjustDialogContainer(container, options) {
+    function stretchDialogContainerToViewport(container, options) {
 
       var isFixed = $window.getComputedStyle($document[0].body).position == 'fixed';
       var backdrop = options.backdrop ? $window.getComputedStyle(options.backdrop[0]) : null;
-      var height = backdrop ? Math.ceil(Math.abs(parseInt(backdrop.height,10))) : 0;
+      var height = backdrop ? Math.ceil(Math.abs(parseInt(backdrop.height, 10))) : 0;
 
       container.css({
-        top: (isFixed ? $mdUtil.scrollTop(options.parent)/2 : 0) + 'px',
-        height: height ? height +'px' : '100%'
+        top: (isFixed ? $mdUtil.scrollTop(options.parent) / 2 : 0) + 'px',
+        height: height ? height + 'px' : '100%'
       });
 
       return container;
@@ -721,38 +722,37 @@ function MdDialogProvider($$interimElementProvider) {
     /**
      *  Dialog open and pop-in animation
      */
-    function dialogPopIn(container, options ) {
+    function dialogPopIn(container, options) {
 
       // Add the `md-dialog-container` to the DOM
-      options.parent.append( container );
-      adjustDialogContainer(container,options);
+      options.parent.append(container);
+      stretchDialogContainerToViewport(container, options);
 
       var dialogEl = container.find('md-dialog');
-      var animator = $mdUtil.dom.animator ;
+      var animator = $mdUtil.dom.animator;
       var buildTranslateToOrigin = animator.calculateZoomToOrigin;
-      var translateOptions = { transitionInClass :'md-transition-in' , transitionOutClass : 'md-transition-out' };
-      var from = animator.toTransformCss( buildTranslateToOrigin(dialogEl, options.origin) );
-      var to = animator.toTransformCss( "" );  // defaults to center display (or parent or $rootElement)
-
+      var translateOptions = {transitionInClass: 'md-transition-in', transitionOutClass: 'md-transition-out'};
+      var from = animator.toTransformCss(buildTranslateToOrigin(dialogEl, options.origin));
+      var to = animator.toTransformCss("");  // defaults to center display (or parent or $rootElement)
 
       return animator
-         .translate3d(dialogEl,from,to,translateOptions)
-         .then(function(animateReversal){
-           // Build a reversal translate function synched to this translation...
-           options.reverseAnimate = function() {
+        .translate3d(dialogEl, from, to, translateOptions)
+        .then(function (animateReversal) {
+          // Build a reversal translate function synched to this translation...
+          options.reverseAnimate = function () {
 
-             delete options.reverseAnimate;
-             return animateReversal(
-               animator.toTransformCss(
-                 // in case the origin element has moved or is hidden,
-                 // let's recalculate the translateCSS
-                 buildTranslateToOrigin(dialogEl, options.origin)
-               )
-             );
+            delete options.reverseAnimate;
+            return animateReversal(
+              animator.toTransformCss(
+                // in case the origin element has moved or is hidden,
+                // let's recalculate the translateCSS
+                buildTranslateToOrigin(dialogEl, options.origin)
+              )
+            );
 
-           };
-           return true;
-         });
+          };
+          return true;
+        });
     }
 
     /**
@@ -770,8 +770,6 @@ function MdDialogProvider($$interimElementProvider) {
         return true;
       }
     }
-
-
 
   }
 }
