@@ -13,7 +13,7 @@ describe('md-button', function() {
     var button = $compile('<md-button md-ink-ripple="#f00">button</md-button>')($rootScope);
 
     button.triggerHandler({ type: '$md.pressdown', pointer: { x: 0, y: 0 } });
-    expect(button[0].getElementsByClassName('md-ripple-container').length).toBe(1);
+    expect(button[0].getElementsByClassName('md-ripple-container').length).toBe(0);
   }));
 
 

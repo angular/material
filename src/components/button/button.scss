@@ -1,3 +1,7 @@
+$button-border-radius: 3px !default;
+$button-fab-border-radius: 50% !default;
+$button-icon-border-radius: $button-fab-border-radius;
+
 $button-line-height: rem(3.60) !default;
 $button-padding: 0 rem(0.600) !default;
 $button-margin: rem(0.600) rem(0.800) !default;
@@ -16,6 +20,7 @@ $icon-button-width: rem(4.800) !default;
 $icon-button-margin: rem(0.600) !default;
 
 .md-button {
+  border-radius: $button-border-radius;
   box-sizing: border-box;
   color: currentColor;
 
@@ -92,9 +97,9 @@ $icon-button-margin: rem(0.600) !default;
     padding-left: 0;
     padding-right: 0;
     width: $icon-button-width;
-    border-radius: 50%;
+    border-radius: $button-icon-border-radius;
     .md-ripple-container {
-      border-radius: 50%;
+      border-radius: $button-icon-border-radius;
       background-clip: padding-box;
       overflow: hidden;
       // The following hack causes Safari/Chrome to respect overflow hidden for ripples
@@ -116,14 +121,14 @@ $icon-button-margin: rem(0.600) !default;
     vertical-align: middle;
 
     @include md-shadow-bottom-z-1();
-    border-radius: 50%;
+    border-radius: $button-fab-border-radius;
     background-clip: padding-box;
     overflow: hidden;
 
     transition: 0.2s linear;
     transition-property: background-color, box-shadow;
     .md-ripple-container {
-      border-radius: 50%;
+      border-radius: $button-fab-border-radius;
       background-clip: padding-box;
       overflow: hidden;
       // The following hack causes Safari/Chrome to respect overflow hidden for ripples
@@ -148,6 +153,14 @@ $icon-button-margin: rem(0.600) !default;
         @include md-shadow-bottom-z-2();
       }
     }
+  }
+
+  .md-ripple-container {
+    border-radius: $button-border-radius;
+    background-clip: padding-box;
+    overflow: hidden;
+    // The following hack causes Safari/Chrome to respect overflow hidden for ripples
+    -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
   }
 }
 
