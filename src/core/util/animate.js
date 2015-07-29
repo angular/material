@@ -66,19 +66,13 @@ function AnimateDomUtils($mdUtil, $$rAF, $q, $timeout, $mdConstant) {
            */
           function finished(ev) {
             if ( ev && ev.target !== element[0]) return;
+
+            if ( ev  ) $timeout.cancel(timer);
             element.off($mdConstant.CSS.TRANSITIONEND, finished);
 
-            if ( ev  ) {
+            // Never reject since ngAnimate may cause timeouts due missed transitionEnd events
+            resolve();
 
-              $timeout.cancel(timer);
-              resolve();
-
-            } else {
-
-              // Only reject if timeout triggered
-              reject("waitTransitionEnd() timeout");
-
-            }
           }
 
         });

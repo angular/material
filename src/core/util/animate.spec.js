@@ -24,7 +24,7 @@ describe('animate', function() {
           });
         flush();
 
-        expect(expired).toBe(true);
+        expect(expired).not.toBe(true);
       }));
 
       it('using custom timeout duration',inject(function() {
@@ -38,7 +38,7 @@ describe('animate', function() {
           });
         flush();
 
-        expect(expired).toBe(true);
+        expect(expired).not.toBe(true);
       }));
 
     });
