@@ -5,9 +5,6 @@ describe('md-menu directive', function () {
   beforeEach(inject(function ($mdUtil, $$q, $document, _$mdMenu_, _$timeout_) {
     $mdMenu = _$mdMenu_;
     $timeout = _$timeout_;
-    $mdUtil.dom.animator.waitTransitionEnd = function () {
-      return $$q.when(true);
-    };
     var abandonedMenus = $document[0].querySelectorAll('.md-menu-container');
     angular.element(abandonedMenus).remove();
   }));
@@ -177,16 +174,18 @@ describe('md-menu directive', function () {
   }
 
   function waitForMenuOpen() {
-    inject(function ($rootScope, $animate) {
+    inject(function ($rootScope, $animate, $$rAF) {
       $rootScope.$digest();
       $animate.triggerCallbacks();
+      $$rAF.flush();
     });
   }
 
   function waitForMenuClose() {
-    inject(function ($rootScope, $animate) {
+    inject(function ($rootScope, $animate, $$rAF) {
       $rootScope.$digest();
       $animate.triggerCallbacks();
+      $$rAF.flush();
       $timeout.flush();
     });
   }

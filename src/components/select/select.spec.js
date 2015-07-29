@@ -3,12 +3,6 @@ describe('<md-select>', function() {
   beforeEach(module('material.components.input'));
   beforeEach(module('material.components.select'));
 
-  beforeEach(inject(function($mdUtil, $$q) {
-    $mdUtil.dom.animator.waitTransitionEnd = function() {
-      return $$q.when(true);
-    };
-  }));
-
   function setupSelect(attrs, options, bNoLabel) {
     var el;
     inject(function($compile, $rootScope) {
@@ -79,21 +73,23 @@ describe('<md-select>', function() {
 
   function waitForSelectOpen() {
     try {
-      inject(function($rootScope, $animate) {
+      inject(function($rootScope, $animate, $$rAF) {
           $rootScope.$digest();
           $animate.triggerCallbacks();
+          $$rAF.flush();
       });
     } catch(e) { }
   }
 
   function waitForSelectClose() {
     try {
-      inject(function($rootScope, $animate ) {
-        $rootScope.$apply();
+      inject(function($timeout, $animate, $$rAF) {
+        $timeout.flush();
         $animate.triggerCallbacks();
-
+        $$rAF.flush();
+        $timeout.flush();
       });
-    } catch(e) { }
+    } catch(e) { ; }
   }
 
   it('should preserve tabindex', inject(function($document) {
@@ -113,9 +109,10 @@ describe('<md-select>', function() {
     expect(select.attr('aria-disabled')).toBe('true');
   }));
 
-  it('supports passing classes to the container', inject(function($document) {
+  it('supports passing classes to the container', inject(function($document, $timeout) {
     var select = setupSelect('ng-model="val", md-container-class="test"').find('md-select');
     openSelect(select);
+
     var container = $document[0].querySelector('.md-select-menu-container');
     expect(container).toBeTruthy();
     expect(container.classList.contains('test')).toBe(true);
