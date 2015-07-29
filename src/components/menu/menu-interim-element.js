@@ -141,9 +141,9 @@ function MenuProvider($$interimElementProvider) {
         opts.menuContentEl.on('keydown', function(ev) {
           scope.$apply(function() {
             switch (ev.keyCode) {
-              case $mdConstant.KEY_CODE.ESCAPE: opts.mdMenuCtrl.close(); break;
-              case $mdConstant.KEY_CODE.UP_ARROW: focusMenuItem(ev, opts.menuContentEl, opts, -1); break;
-              case $mdConstant.KEY_CODE.DOWN_ARROW: focusMenuItem(ev, opts.menuContentEl, opts, 1); break;
+              case $mdConstant.KEY_CODE.ESCAPE: opts.mdMenuCtrl.close(); ev.stopPropagation(); ev.preventDefault(); break;
+              case $mdConstant.KEY_CODE.UP_ARROW: focusMenuItem(ev, opts.menuContentEl, opts, -1); ev.stopPropagation(); break;
+              case $mdConstant.KEY_CODE.DOWN_ARROW: focusMenuItem(ev, opts.menuContentEl, opts, 1); ev.stopPropagation(); break;
             }
           });
         });
