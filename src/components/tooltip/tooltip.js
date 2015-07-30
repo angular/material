@@ -246,7 +246,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
           : dir === 'top'
           ? { left: parentRect.left + parentRect.width / 2 - tipRect.width / 2,
               top: parentRect.top - tipRect.height - TOOLTIP_WINDOW_EDGE_SPACE }
-          : { left: parentRect.left + parentRect.width / 2 - tipRect.width / 2,
+          : { left: parentRect.left,
               top: parentRect.top + parentRect.height + TOOLTIP_WINDOW_EDGE_SPACE };
       }
     }

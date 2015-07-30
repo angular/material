@@ -16,11 +16,11 @@ md-progress-linear.md-THEME_NAME-theme {
   }
 
   &.md-accent .md-container {
-    background-color: '{{accent-100}}';
+    background-color: '{{accent-900}}';
   }
 
   &.md-accent .md-bar {
-    background-color: '{{accent-color}}';
+    background-color: '{{accent-700}}';
   }
 
   &[md-mode=buffer] {

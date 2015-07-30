@@ -33,12 +33,12 @@ exports.task = function() {
           .pipe(rename({ basename: filename }))
           .pipe(util.autoprefix())
           .pipe(insert.prepend(config.banner))
-          .pipe(gulp.dest(dest))
+          //.pipe(gulp.dest(dest))
           .pipe(gulpif(!IS_DEV, minifyCss()))
           .pipe(rename({extname: '.min.css'}))
           .pipe(gulp.dest(dest))
   );
-  streams.push(
+/*  streams.push(
       gulp.src(config.scssStandaloneFiles)
           .pipe(insert.prepend(baseVars))
           .pipe(sass())
@@ -46,7 +46,7 @@ exports.task = function() {
           .pipe(insert.prepend(config.banner))
           .pipe(rename({prefix: 'angular-material-'}))
           .pipe(gulp.dest(path.join(dest, 'modules', 'css')))
-  );
+  );*/
   return series(streams);
   function getPaths () {
     var paths = config.scssBaseFiles.slice();
