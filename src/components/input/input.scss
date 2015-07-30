@@ -238,12 +238,14 @@ md-input-container.md-icon-float {
   > md-icon {
     top: 26px;
     left: 2px;
-    + input {
+    + input,
+    + textarea {
           margin-left: $icon-offset;
     }
   }
 
-  > input {
+  > input,
+  > textarea {
     padding-top : $input-line-height - $input-container-padding;
   }
 
