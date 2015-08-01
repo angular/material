@@ -8,6 +8,10 @@ md-datepicker.md-THEME_NAME-theme {
 
   .md-datepicker-input-container {
     border-bottom-color: '{{background-300}}';
+
+    &.md-datepicker-invalid {
+      border-bottom-color: '{{warn-500}}';
+    }
   }
 
   .md-datepicker-calendar-pane {
