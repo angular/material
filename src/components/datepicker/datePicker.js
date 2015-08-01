@@ -9,7 +9,6 @@
   // TODO(jelbourn): make sure this plays well with validation and ngMessages.
   // TODO(jelbourn): calendar pane doesn't open up outside of visible viewport.
   // TODO(jelbourn): forward more attributes to the internal input (required, autofocus, etc.)
-  // TODO(jelbourn): error state
   // TODO(jelbourn): something better for mobile (calendar panel takes up entire screen?)
   // TODO(jelbourn): input behavior (masking? auto-complete?)
   // TODO(jelbourn): UTC mode
@@ -85,6 +84,9 @@
 
   /** Additional offset for the input's `size` attribute, which is updated based on its content. */
   var EXTRA_INPUT_SIZE = 3;
+
+  /** Class applied to the container if the date is invalid. */
+  var INVALID_CLASS = 'md-datepicker-invalid';
 
   /**
    * Controller for md-datepicker.
@@ -214,7 +216,11 @@
 
       if (self.dateUtil.isValidDate(parsedDate) && self.dateLocale.isDateComplete(inputString)) {
         self.ngModelCtrl.$setViewValue(parsedDate);
+        self.inputContainer.classList.remove(INVALID_CLASS);
         self.$scope.$apply();
+      } else {
+        // If there's an input string, it's an invalid date.
+        self.inputContainer.classList.toggle(INVALID_CLASS, inputString);
       }
     });
   };
