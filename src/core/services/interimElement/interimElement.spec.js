@@ -30,7 +30,7 @@ describe('$$interimElement service', function() {
         var shown = false;
         interimTest.show(
           interimTest.build({
-            controller: 'test ctrl',
+            controller: 'test ctrl'
           })
           .onShow(function(scope, element, options) {
             shown = true;
