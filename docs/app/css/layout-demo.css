@@ -20,6 +20,9 @@ demo-include {
 .layout-content demo-include [layout] > div:nth-child(4) {
   background-color: #8bc34a;
 }
+.layout-content demo-include [layout] > div:nth-child(5) {
+  background-color: #009688;
+}
 .layout-content md-divider {
   margin-top: 16px;
 }
