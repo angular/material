@@ -21,10 +21,12 @@
 
 [layout=column] {
   flex-direction: column;
+  -webkit-flex-direction: column;
 }
 
 [layout=row] {
   flex-direction: row;
+  -webkit-flex-direction: row;
 }
 
 [layout-padding] > [flex-sm],
