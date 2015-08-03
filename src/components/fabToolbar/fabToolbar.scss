@@ -11,8 +11,8 @@ md-fab-toolbar {
     position: relative;
     overflow: hidden;
 
-    // Account for the size of the trigger (5.6rem) plus it's margin/shadow (0.6rem * 2)
-    height: 6.8rem;
+    // Account for the size of the trigger plus it's margin/shadow
+    height: $button-fab-width + ($icon-button-margin * 2);
   }
 
   md-fab-trigger {
