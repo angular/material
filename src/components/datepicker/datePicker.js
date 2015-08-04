@@ -88,6 +88,9 @@
   /** Class applied to the container if the date is invalid. */
   var INVALID_CLASS = 'md-datepicker-invalid';
 
+  /** Default time in ms to debounce input event by. */
+  var DEFAULT_DEBOUNCE_INTERVAL = 500;
+
   /**
    * Controller for md-datepicker.
    *
@@ -189,7 +192,7 @@
     ngModelCtrl.$render = function() {
       self.date = self.ngModelCtrl.$viewValue;
       self.inputElement.value = self.dateLocale.formatDate(self.date);
-      self.inputElement.size = self.inputElement.value.length + EXTRA_INPUT_SIZE;
+      self.resizeInputElement();
     };
   };
 
@@ -207,22 +210,10 @@
       self.closeCalendarPane();
     });
 
-    // TODO(jelbourn): Debounce this input event.
-    self.inputElement.addEventListener('input', function() {
-      var inputString = self.inputElement.value;
-      var parsedDate = self.dateLocale.parseDate(inputString);
-
-      self.inputElement.size = inputString.length + EXTRA_INPUT_SIZE;
-
-      if (self.dateUtil.isValidDate(parsedDate) && self.dateLocale.isDateComplete(inputString)) {
-        self.ngModelCtrl.$setViewValue(parsedDate);
-        self.inputContainer.classList.remove(INVALID_CLASS);
-        self.$scope.$apply();
-      } else {
-        // If there's an input string, it's an invalid date.
-        self.inputContainer.classList.toggle(INVALID_CLASS, inputString);
-      }
-    });
+    self.inputElement.addEventListener('input', angular.bind(self, self.resizeInputElement));
+    // TODO(chenmike): Add ability for users to specify this interval.
+    self.inputElement.addEventListener('input', self.$mdUtil.debounce(self.handleInputEvent,
+        DEFAULT_DEBOUNCE_INTERVAL, self));
   };
 
   /** Attach event listeners for user interaction. */
@@ -259,7 +250,7 @@
     });
 
     Object.defineProperty(this, 'placeholder', {
-      get: function() { return self.inputElement.placeholder },
+      get: function() { return self.inputElement.placeholder; },
       set: function(value) { self.inputElement.placeholder = value; }
     });
   };
@@ -272,6 +263,31 @@
     this.isDisabled = isDisabled;
     this.inputElement.disabled = isDisabled;
     this.calendarButton.disabled = isDisabled;
+  };
+
+  /**
+   * Resizes the input element based on the size of its content.
+   */
+  DatePickerCtrl.prototype.resizeInputElement = function() {
+    this.inputElement.size = this.inputElement.value.length + EXTRA_INPUT_SIZE;
+  };
+
+  /**
+   * Sets the model value if the user input is a valid date.
+   * Adds an invalid class to the input element if not.
+   */
+  DatePickerCtrl.prototype.handleInputEvent = function() {
+    var inputString = this.inputElement.value;
+    var parsedDate = this.dateLocale.parseDate(inputString);
+
+    if (this.dateUtil.isValidDate(parsedDate) && this.dateLocale.isDateComplete(inputString)) {
+      this.ngModelCtrl.$setViewValue(parsedDate);
+      this.inputContainer.classList.remove(INVALID_CLASS);
+      this.$scope.$apply();
+    } else {
+      // If there's an input string, it's an invalid date.
+      this.inputContainer.classList.toggle(INVALID_CLASS, inputString);
+    }
   };
 
   /** Position and attach the floating calendar to the document. */
