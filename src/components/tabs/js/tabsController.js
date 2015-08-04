@@ -528,7 +528,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   }
 
   function getMaxTabWidth () {
-    return elements.canvas.clientWidth;
+    return $element.prop('clientWidth');
   }
 
   /**
