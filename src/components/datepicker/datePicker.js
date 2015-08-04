@@ -178,7 +178,7 @@
 
     this.installPropertyInterceptors();
     this.attachChangeListeners();
-    this.attachInterationListeners();
+    this.attachInteractionListeners();
 
     var self = this;
     $scope.$on('$destroy', function() {
@@ -215,14 +215,15 @@
       self.closeCalendarPane();
     });
 
-    self.inputElement.addEventListener('input', angular.bind(self, self.resizeInputElement));
+    var ngElement = angular.element(self.inputElement);
+    ngElement.on('input', angular.bind(self, self.resizeInputElement));
     // TODO(chenmike): Add ability for users to specify this interval.
-    self.inputElement.addEventListener('input', self.$mdUtil.debounce(self.handleInputEvent,
+    ngElement.on('input', self.$mdUtil.debounce(self.handleInputEvent,
         DEFAULT_DEBOUNCE_INTERVAL, self));
   };
 
   /** Attach event listeners for user interaction. */
-  DatePickerCtrl.prototype.attachInterationListeners = function() {
+  DatePickerCtrl.prototype.attachInteractionListeners = function() {
     var self = this;
     var $scope = this.$scope;
     var keyCodes = this.$mdConstant.KEY_CODE;

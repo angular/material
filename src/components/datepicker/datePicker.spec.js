@@ -28,7 +28,7 @@ describe('md-date-picker', function() {
     ngElement = $compile(template)(pageScope);
     $rootScope.$apply();
 
-    scope = ngElement.scope();
+    scope = ngElement.isolateScope();
     controller = ngElement.controller('mdDatepicker');
     element = ngElement[0];
   }));
@@ -37,7 +37,7 @@ describe('md-date-picker', function() {
     expect(controller.inputElement.value).toBe(dateLocale.formatDate(initialDate));
   });
 
-  it('should open and close the floating calendar pane (with shadow)', function() {
+  it('should open and close the floating calendar pane element', function() {
     // We can asset that the calendarPane is in the DOM by checking if it has a height.
     expect(controller.calendarPane.offsetHeight).toBe(0);
 
@@ -51,7 +51,7 @@ describe('md-date-picker', function() {
     expect(controller.calendarPane.offsetHeight).toBe(0);
   });
 
-  it('should open and close the floating calendar pane via keyboard', function() {
+  it('should open and close the floating calendar pane element via keyboard', function() {
     angular.element(controller.inputElement).triggerHandler({
       type: 'keydown',
       altKey: true,
@@ -61,18 +61,93 @@ describe('md-date-picker', function() {
 
     expect(controller.calendarPane.offsetHeight).toBeGreaterThan(0);
 
-    // Fake an escape event coming the the calendar.
+    // Fake an escape event closing the calendar.
     pageScope.$broadcast('md-calendar-close');
 
   });
 
-  it('should disable the internal input based on ng-disabled binding', function() {
+  it('should disable the internal inputs based on ng-disabled binding', function() {
     expect(controller.inputElement.disabled).toBe(false);
+    expect(controller.calendarButton.disabled).toBe(false);
 
     pageScope.isDisabled = true;
     pageScope.$apply();
 
     expect(controller.inputElement.disabled).toBe(true);
+    expect(controller.calendarButton.disabled).toBe(true);
+  });
+
+  it('should not open the calendar pane if disabled', function() {
+    controller.setDisabled(true);
+    controller.openCalendarPane({
+      target: controller.inputElement
+    });
+    scope.$apply();
+    expect(controller.isCalendarOpen).toBeFalsy();
+    expect(controller.calendarPane.offsetHeight).toBe(0);
+  });
+
+  it('should update the internal input placeholder', function() {
+    expect(controller.inputElement.placeholder).toBeFalsy();
+    controller.placeholder = 'Fancy new placeholder';
+
+    expect(controller.inputElement.placeholder).toBe('Fancy new placeholder');
+  });
+
+  describe('input event', function() {
+    it('should update the model value when user enters a valid date', function() {
+      var expectedDate = new Date(2015, JUN, 1);
+      controller.inputElement.value = '6/1/2015';
+      angular.element(controller.inputElement).triggerHandler('input');
+      $timeout.flush();
+      expect(controller.ngModelCtrl.$modelValue).toEqual(expectedDate);
+    });
+
+    it('should not update the model value when user enters an invalid date', function() {
+      controller.inputElement.value = '7';
+      angular.element(controller.inputElement).triggerHandler('input');
+      $timeout.flush();
+      expect(controller.ngModelCtrl.$modelValue).toEqual(initialDate);
+    });
+
+    it('should add and remove the invalid class', function() {
+      controller.inputElement.value = '6/1/2015';
+      angular.element(controller.inputElement).triggerHandler('input');
+      $timeout.flush();
+      expect(controller.inputContainer.classList.contains('md-datepicker-invalid')).toBe(false);
+
+      controller.inputElement.value = '7';
+      angular.element(controller.inputElement).triggerHandler('input');
+      $timeout.flush();
+      expect(controller.inputContainer.classList.contains('md-datepicker-invalid')).toBe(true);
+    });
+  });
+
+  it('should close the calendar pane on md-calendar-close', function() {
+    controller.openCalendarPane({
+      target: controller.inputElement
+    });
+
+    scope.$emit('md-calendar-close');
+    scope.$apply();
+    expect(controller.calendarPaneOpenedFrom).toBe(null);
+    expect(controller.isCalendarOpen).toBe(false);
+  });
+
+  it('should update the model value and close the calendar pane on md-calendar-change', function() {
+    var date = new Date(2015, JUN, 1);
+    controller.openCalendarPane({
+      target: controller.inputElement
+    });
+
+    scope.$emit('md-calendar-change', date);
+    scope.$apply();
+    expect(pageScope.myDate).toEqual(date);
+    expect(controller.ngModelCtrl.$modelValue).toEqual(date);
+
+    expect(controller.inputElement.value).toEqual(date.toLocaleDateString());
+    expect(controller.calendarPaneOpenedFrom).toBe(null);
+    expect(controller.isCalendarOpen).toBe(false);
   });
 
 });

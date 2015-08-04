@@ -94,6 +94,29 @@ describe('md-calendar', function() {
   beforeEach(module('material.components.datepicker', 'ngAnimateMock'));
 
   beforeEach(inject(function($injector) {
+    jasmine.addMatchers({
+      toBeSameDayAs: function() {
+        return {
+          compare: function(actual, expected) {
+            var results = {
+              pass: dateUtil.isSameDay(actual, expected)
+            };
+
+            var negation = !results.pass ? '' : 'not ';
+
+            results.message = [
+              'Expected',
+              actual,
+              negation + 'to be the same day as',
+              expected
+            ].join(' ');
+
+            return results;
+          }
+        };
+      }
+    });
+
     $animate = $injector.get('$animate');
     $compile = $injector.get('$compile');
     $rootScope = $injector.get('$rootScope');
@@ -185,6 +208,18 @@ describe('md-calendar', function() {
         var firstRow = monthElement.querySelector('tr');
         expect(extractRowText(firstRow)).toEqual(['Jun 2014']);
       });
+
+      it('should apply the locale-specific month header formatter', function() {
+        var date = new Date(2014, JUN, 30);
+        spyOn(dateLocale, 'monthHeaderFormatter').and.callFake(function(expectedDateArg) {
+          expect(expectedDateArg).toBeSameDayAs(date);
+          return 'Junz 2014';
+        });
+        var monthElement = monthCtrl.buildCalendarForMonth(date);
+
+        var monthHeader = monthElement.querySelector('tr');
+        expect(monthHeader.textContent).toEqual('Junz 2014');
+      });
     });
 
     it('should highlight today', function() {
@@ -194,6 +229,16 @@ describe('md-calendar', function() {
       var todayElement = element.querySelector('.md-calendar-date-today');
       expect(todayElement).not.toBeNull();
       expect(todayElement.textContent).toBe(controller.today.getDate() + '');
+    });
+
+    it('should highlight the selected date', function() {
+      pageScope.myDate = controller.selectedDate = new Date(2014, JUN, 30);
+      applyDateChange();
+
+      var selectedElement = element.querySelector('.md-calendar-selected-date');
+      expect(selectedElement).not.toBeNull();
+      expect(selectedElement.textContent).toBe(controller.selectedDate.getDate() + '');
+
     });
 
     it('should have ids for date elements unique to the directive instance', function() {
@@ -270,7 +315,7 @@ describe('md-calendar', function() {
 
       dispatchKeyEvent(keyCodes.ENTER);
       applyDateChange();
-      expect(dateUtil.isSameDay(controller.selectedDate, new Date(2014, MAR, 1))).toBe(true);
+      expect(controller.selectedDate).toBeSameDayAs(new Date(2014, MAR, 1));
     });
 
     it('should fire an event when escape is pressed', function() {
@@ -286,5 +331,20 @@ describe('md-calendar', function() {
       pageScope.$apply();
       expect(escapeHandler).toHaveBeenCalled();
     });
+  });
+
+  it('should block month transitions when a month transition is happening', function() {
+    var earlierDate = new Date(2014, FEB, 11);
+    var laterDate = new Date(2014, MAR, 11);
+
+    controller.changeDisplayDate(earlierDate);
+    expect(controller.displayDate).toBeSameDayAs(earlierDate);
+
+    controller.changeDisplayDate(laterDate);
+    expect(controller.displayDate).toBeSameDayAs(earlierDate);
+
+    $animate.triggerCallbacks();
+    controller.changeDisplayDate(laterDate);
+    expect(controller.displayDate).toBeSameDayAs(laterDate);
   });
 });
