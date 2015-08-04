@@ -86,7 +86,7 @@ md-dialog {
     justify-content: flex-end;
     margin-bottom: 0;
     padding-right: $baseline-grid;
-    padding-left: $baseline-grid * 2;
+    padding-left: $dialog-padding;
     min-height: $baseline-grid * 6.5;
     overflow: hidden;
 
