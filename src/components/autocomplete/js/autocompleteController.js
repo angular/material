@@ -199,7 +199,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     if (!hidden && oldHidden) {
       positionDropdown();
       if (elements) $mdUtil.nextTick(function () { $mdUtil.disableScrollAround(elements.ul); }, false);
-    } else if (hidden && !oldHidden) {
+    } else if (hidden !== false && !oldHidden) {
       $mdUtil.nextTick(function () { $mdUtil.enableScrolling(); }, false);
     }
   }
