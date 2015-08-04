@@ -140,6 +140,18 @@ describe('mdIcon directive', function() {
 
       });
 
+      it('should support custom default fontset', function() {
+        $mdIconProvider.defaultFontSet('fa');
+
+        el = make( '<md-icon></md-icon>');
+        expect( clean(el.attr('class')) ).toEqual("fa");
+
+        el = make( '<md-icon>apple</md-icon>');
+        expect(el.text()).toEqual('apple');
+        expect( clean(el.attr('class')) ).toEqual("fa");
+
+      });
+
       it('should support clearing an invalid font alias', function() {
 
         el = make( '<md-icon md-font-set="none" class="custom-cake"></md-icon>');
