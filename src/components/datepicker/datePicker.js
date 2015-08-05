@@ -282,6 +282,7 @@
 
     if (this.dateUtil.isValidDate(parsedDate) && this.dateLocale.isDateComplete(inputString)) {
       this.ngModelCtrl.$setViewValue(parsedDate);
+      this.date = parsedDate;
       this.inputContainer.classList.remove(INVALID_CLASS);
       this.$scope.$apply();
     } else {
