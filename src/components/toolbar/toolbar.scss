@@ -65,7 +65,7 @@ md-toolbar {
 
 .md-toolbar-tools {
   @include md-title();
-  font-weight: 400;
+  /* @alternate */ font-weight: 400;
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -74,7 +74,7 @@ md-toolbar {
   height: $toolbar-tools-height;
   max-height: $toolbar-tools-height;
   padding: 0 $toolbar-padding;
-  /* @alternate */ margin: 0;
+  margin: 0;
 
   h1, h2, h3 {
     font-size: inherit;
