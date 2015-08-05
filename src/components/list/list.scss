@@ -2,7 +2,7 @@ $list-h3-margin: 0 0 6px 0 !default;
 $list-h4-margin: 10px 0 5px 0 !default;
 $list-h4-font-weight: 400 !default;
 $list-header-line-height: 0.75em !default;
-$list-p-margin: 0 0 0px 0 !default;
+$list-p-margin: 0 0 0 0 !default;
 $list-p-line-height: 1.6em !default;
 
 $list-padding-top: $baseline-grid !default;
@@ -31,8 +31,7 @@ md-list {
 
   .md-subheader {
     @include md-body-2();
-    /* @alternate */
-    line-height: $list-header-line-height;
+    /* @alternate */ line-height: $list-header-line-height;
   }
 }
 
@@ -180,21 +179,18 @@ md-list-item.md-3-line > .md-no-style {
     h3 {
       @include md-subhead();
       margin: $list-h3-margin;
-      /* @alternate */
-      line-height: $list-header-line-height;
+      /* @alternate */ line-height: $list-header-line-height;
     }
     h4 {
       @include md-body-2();
       margin: $list-h4-margin;
-      /* @alternate */
-      font-weight: $list-h4-font-weight;
-      /* @alternate */
-      line-height: $list-header-line-height;
+      /* @alternate */ font-weight: $list-h4-font-weight;
+      /* @alternate */ line-height: $list-header-line-height;
     }
     p {
       @include md-body-2();
       margin: $list-p-margin;
-      line-height: $list-p-line-height;
+      /* @alternate */ line-height: $list-p-line-height;
     }
   }
 }
