@@ -48,9 +48,10 @@
               'ng-click="ctrl.openCalendarPane($event)">' +
             '<md-icon class="md-datepicker-calendar-icon" md-svg-icon="md-calendar"></md-icon>' +
           '</md-button>' +
-          '<div class="md-datepicker-input-container">' +
-            '<input class="md-datepicker-input" aria-haspopup="true">' +
-
+          '<div class="md-datepicker-input-container" ' +
+              'ng-class="{\'md-datepicker-focused\': ctrl.isFocused}">' +
+            '<input class="md-datepicker-input" aria-haspopup="true" ' +
+                'ng-focus="ctrl.setFocused(true)" ng-blur="ctrl.setFocused(false)">' +
             '<md-button md-no-ink class="md-datepicker-triangle-button md-icon-button" ' +
                 'ng-click="ctrl.openCalendarPane($event)" ' +
                 'aria-label="{{::ctrl.dateLocale.msgOpenCalendar}}">' +
@@ -142,6 +143,9 @@
 
     /** @type {Date} */
     this.date = null;
+
+    /** @type {boolean} */
+    this.isFocused = false;
 
     /** @type {boolean} */
     this.isDisabled;
@@ -369,6 +373,14 @@
     this.$mdUtil.nextTick(function() {
       self.getCalendarCtrl().focus();
     }, false);
+  };
+
+  /**
+   * Sets whether the input is currently focused.
+   * @param {boolean} isFocused
+   */
+  DatePickerCtrl.prototype.setFocused = function(isFocused) {
+    this.isFocused = isFocused;
   };
 
   /**
