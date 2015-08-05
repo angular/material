@@ -30,9 +30,8 @@ md-list {
   padding: $list-padding-top $list-padding-right $list-padding-bottom $list-padding-left;
 
   .md-subheader {
-    font-size: $body-font-size-base;
-    font-weight: 500;
-    letter-spacing: 0.010em;
+    @include md-body-2();
+    /* @alternate */
     line-height: $list-header-line-height;
   }
 }
@@ -179,17 +178,17 @@ md-list-item.md-3-line > .md-no-style {
     }
 
     h3 {
-      font-size: $subhead-font-size-base;
-      font-weight: 400;
-      letter-spacing: 0.010em;
+      @include md-subhead();
       margin: $list-h3-margin;
+      /* @alternate */
       line-height: $list-header-line-height;
     }
     h4 {
-      font-size: $body-font-size-base;
-      letter-spacing: 0.010em;
-      font-weight: $list-h4-font-weight;
+      @include md-body-2();
       margin: $list-h4-margin;
+      /* @alternate */
+      font-weight: $list-h4-font-weight;
+      /* @alternate */
       line-height: $list-header-line-height;
     }
     p {
