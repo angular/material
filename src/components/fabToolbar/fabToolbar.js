@@ -57,10 +57,9 @@
     return {
       restrict: 'E',
       transclude: true,
-      template:
-        '<div class="md-fab-toolbar-wrapper">' +
-        '  <div class="md-fab-toolbar-content" ng-transclude></div>' +
-        '</div>',
+      template: '<div class="md-fab-toolbar-wrapper">' +
+      '  <div class="md-fab-toolbar-content" ng-transclude></div>' +
+      '</div>',
 
       scope: {
         isOpen: '=?mdOpen'
@@ -73,37 +72,56 @@
       link: link
     };
 
-    function FabToolbarController($scope, $element, $animate) {
+    function FabToolbarController($scope, $element, $animate, $mdUtil) {
       var vm = this;
 
-      // Set the default to be closed
-      vm.isOpen = vm.isOpen || false;
+      // TODO: Most of the following code is copy/pasted from FABSpeedDial. Need to refactor.
+      //
+      // I currently see 3 possible solutions to this issue:
+      //
+      //   1. Create/utilize a service
+      //   2. Inherit/extend/use a common controller
+      //   3. [Ideal?] Merge both components into a single <md-fab type="toolbar"> component
 
       vm.open = function() {
-        vm.isOpen = true;
-        $scope.$apply();
+        $scope.$evalAsync("vm.isOpen = true");
       };
 
       vm.close = function() {
-        vm.isOpen = false;
-        $scope.$apply();
+        // Async eval to avoid conflicts with existing digest loops
+        $scope.$evalAsync("vm.isOpen = false");
       };
 
-      // Add our class so we can trigger the animation on start
-      $element.addClass('md-fab-toolbar');
+      // Toggle the open/close state when the trigger is clicked
+      vm.toggle = function() {
+        $scope.$evalAsync("vm.isOpen = !vm.isOpen");
+      };
 
-      // Setup some mouse events so the hover effect can be triggered
-      // anywhere over the toolbar
-      $element.on('mouseenter', vm.open);
-      $element.on('mouseleave', vm.close);
+      setupDefaults();
+      setupWatchers();
+      fireInitialAnimations();
 
-      // Watch for changes to md-open and toggle our class
-      $scope.$watch('vm.isOpen', function(isOpen) {
-        var toAdd = isOpen ? 'md-is-open' : '';
-        var toRemove = isOpen ? '' : 'md-is-open';
+      function setupDefaults() {
+        // Set the default to be closed
+        vm.isOpen = vm.isOpen || false;
+      }
 
-        $animate.setClass($element, toAdd, toRemove);
-      });
+      function setupWatchers() {
+        // Watch for changes to md-open and toggle our class
+        $scope.$watch('vm.isOpen', function(isOpen) {
+          var toAdd = isOpen ? 'md-is-open' : '';
+          var toRemove = isOpen ? '' : 'md-is-open';
+
+          $animate.setClass($element, toAdd, toRemove);
+        });
+      }
+
+      // Fire the animations once in a separate digest loop to initialize them
+      function fireInitialAnimations() {
+        $mdUtil.nextTick(function() {
+          $animate.addClass($element, 'md-fab-toolbar');
+        });
+      }
     }
 
     function link(scope, element, attributes) {
@@ -117,15 +135,20 @@
   }
 
   function MdFabToolbarAnimation() {
-    var originalIconDelay;
 
     function runAnimation(element, className, done) {
+      // If no className was specified, don't do anything
+      if (!className) {
+        return;
+      }
+
       var el = element[0];
       var ctrl = element.controller('mdFabToolbar');
 
       // Grab the relevant child elements
       var backgroundElement = el.querySelector('.md-fab-toolbar-background');
       var triggerElement = el.querySelector('md-fab-trigger button');
+      var toolbarElement = el.querySelector('md-toolbar');
       var iconElement = el.querySelector('md-fab-trigger button md-icon');
       var actions = element.find('md-fab-actions').children();
 
@@ -145,6 +168,9 @@
 
         // If we're open
         if (ctrl.isOpen) {
+          // Turn on toolbar pointer events when closed
+          toolbarElement.style.pointerEvents = 'initial';
+
           // Set the width/height to take up the full toolbar width
           backgroundElement.style.width = scale + 'px';
           backgroundElement.style.height = scale + 'px';
@@ -171,6 +197,9 @@
             action.style.transitionDelay = (actions.length - index) * 25 + 'ms';
           });
         } else {
+          // Turn off toolbar pointer events when closed
+          toolbarElement.style.pointerEvents = 'none';
+
           // Otherwise, set the width/height to the trigger's width/height
           backgroundElement.style.width = triggerElement.offsetWidth + 'px';
           backgroundElement.style.height = triggerElement.offsetHeight + 'px';
@@ -194,7 +223,7 @@
 
           // Apply a transition delay to actions
           angular.forEach(actions, function(action, index) {
-            action.style.transitionDelay = (index * 25) + 'ms';
+            action.style.transitionDelay = 200 + (index * 25) + 'ms';
           });
         }
       }

@@ -30,11 +30,9 @@
         // Grab whichever parent controller is used
         var controller = controllers[0] || controllers[1];
 
-        // Make the children open/close their parent directive
         if (controller) {
           angular.forEach(element.children(), function(child) {
-            angular.element(child).on('focus', controller.open);
-            angular.element(child).on('blur', controller.close);
+            angular.element(child).on('click', controller.toggle);
           });
         }
       }

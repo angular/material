@@ -6,7 +6,9 @@
     </p>
 
     <div class="lock-size" layout="row" layout-align="center center">
-      <md-fab-speed-dial ng-hide="demo.hidden" md-direction="down" class="md-fling">
+      <md-fab-speed-dial ng-hide="demo.hidden" md-direction="down" class="md-fling"
+                         md-open="demo.isOpen"
+                         ng-mouseenter="demo.isOpen=true" ng-mouseleave="demo.isOpen=false">
         <md-fab-trigger>
           <md-button aria-label="menu" class="md-fab md-warn">
             <md-tooltip md-direction="top">Menu</md-tooltip>
@@ -71,6 +73,22 @@
       </p>
     </div>
   </md-content>
+
+  <md-content class="md-padding" layout="row">
+    <div flex="50">
+      <h3>Hovering</h3>
+
+      <p>
+        You can also easily setup the speed dial to open on hover using the
+        <code>ng-mouseenter</code> and <code>ng-mouseleave</code> attributes.
+      </p>
+
+      <p>
+        See the example code for more information.
+      </p>
+    </div>
+  </md-content>
+
 
   <script type="text/ng-template" id="dialog.html">
     <md-dialog>

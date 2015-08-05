@@ -28,57 +28,13 @@ describe('<md-fab-speed-dial> directive', function () {
     expect(element.hasClass('md-right')).toBe(true);
   }));
 
-  it('opens when the trigger element is focused', inject(function () {
-    build(
-      '<md-fab-speed-dial><md-fab-trigger><button></button></md-fab-trigger></md-fab-speed-dial>'
-    );
-
-    element.find('button').triggerHandler('focus');
-    pageScope.$digest();
-    expect(controller.isOpen).toBe(true);
-  }));
-
-  it('opens when the speed dial elements are focused', inject(function () {
-    build(
-      '<md-fab-speed-dial><md-fab-actions><button></button></md-fab-actions></md-fab-speed-dial>'
-    );
-
-    element.find('button').triggerHandler('focus');
-    pageScope.$digest();
-
-    expect(controller.isOpen).toBe(true);
-  }));
-
-  it('closes when the speed dial elements are blurred', inject(function () {
-    build(
-      '<md-fab-speed-dial>'+
-      ' <md-fab-trigger>' +
-      '   <button>Show Actions</button>' +
-      ' </md-fab-trigger>' +
-      ' </md-fab-actions>' +
-      ' <md-fab-actions>' +
-      '   <button>Action 1</button>' +
-      ' </md-fab-actions>' +
-      '</md-fab-speed-dial>'
-    );
-
-    element.find('button').triggerHandler('focus');
-    pageScope.$digest();
-
-    expect(controller.isOpen).toBe(true);
-
-    var actionBtn = element.find('md-fab-actions').find('button');
-    actionBtn.triggerHandler('focus');
-    pageScope.$digest();
-    actionBtn.triggerHandler('blur');
-    pageScope.$digest();
-
-    expect(controller.isOpen).toBe(false);
-  }));
-
   it('allows programmatic opening through the md-open attribute', inject(function () {
     build(
-      '<md-fab-speed-dial md-open="isOpen"></md-fab-speed-dial>'
+      '<md-fab-speed-dial md-open="isOpen">' +
+      '  <md-fab-trigger>' +
+      '    <md-button></md-button>' +
+      '  </md-fab-trigger>' +
+      '</md-fab-speed-dial>'
     );
 
     // By default, it should be closed
