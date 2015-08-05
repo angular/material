@@ -1,16 +1,16 @@
-describe('<md-fab-speed-dial> directive', function () {
+describe('<md-fab-speed-dial> directive', function() {
 
   var pageScope, element, controller;
   var $rootScope, $animate, $timeout;
 
   beforeEach(module('material.components.fabSpeedDial'));
-  beforeEach(inject(function (_$rootScope_, _$animate_, _$timeout_) {
+  beforeEach(inject(function(_$rootScope_, _$animate_, _$timeout_) {
     $rootScope = _$rootScope_;
     $animate = _$animate_;
     $timeout = _$timeout_;
   }));
 
-  it('applies a class for each direction', inject(function () {
+  it('applies a class for each direction', inject(function() {
     build(
       '<md-fab-speed-dial md-direction="{{direction}}"></md-fab-speed-dial>'
     );
@@ -28,57 +28,13 @@ describe('<md-fab-speed-dial> directive', function () {
     expect(element.hasClass('md-right')).toBe(true);
   }));
 
-  it('opens when the trigger element is focused', inject(function () {
+  it('allows programmatic opening through the md-open attribute', inject(function() {
     build(
-      '<md-fab-speed-dial><md-fab-trigger><button></button></md-fab-trigger></md-fab-speed-dial>'
-    );
-
-    element.find('button').triggerHandler('focus');
-    pageScope.$digest();
-    expect(controller.isOpen).toBe(true);
-  }));
-
-  it('opens when the speed dial elements are focused', inject(function () {
-    build(
-      '<md-fab-speed-dial><md-fab-actions><button></button></md-fab-actions></md-fab-speed-dial>'
-    );
-
-    element.find('button').triggerHandler('focus');
-    pageScope.$digest();
-
-    expect(controller.isOpen).toBe(true);
-  }));
-
-  it('closes when the speed dial elements are blurred', inject(function () {
-    build(
-      '<md-fab-speed-dial>'+
-      ' <md-fab-trigger>' +
-      '   <button>Show Actions</button>' +
-      ' </md-fab-trigger>' +
-      ' </md-fab-actions>' +
-      ' <md-fab-actions>' +
-      '   <button>Action 1</button>' +
-      ' </md-fab-actions>' +
+      '<md-fab-speed-dial md-open="isOpen">' +
+      '  <md-fab-trigger>' +
+      '    <md-button></md-button>' +
+      '  </md-fab-trigger>' +
       '</md-fab-speed-dial>'
-    );
-
-    element.find('button').triggerHandler('focus');
-    pageScope.$digest();
-
-    expect(controller.isOpen).toBe(true);
-
-    var actionBtn = element.find('md-fab-actions').find('button');
-    actionBtn.triggerHandler('focus');
-    pageScope.$digest();
-    actionBtn.triggerHandler('blur');
-    pageScope.$digest();
-
-    expect(controller.isOpen).toBe(false);
-  }));
-
-  it('allows programmatic opening through the md-open attribute', inject(function () {
-    build(
-      '<md-fab-speed-dial md-open="isOpen"></md-fab-speed-dial>'
     );
 
     // By default, it should be closed
@@ -93,7 +49,110 @@ describe('<md-fab-speed-dial> directive', function () {
     expect(controller.isOpen).toBe(false);
   }));
 
-  it('properly finishes the fling animation', inject(function (mdFabSpeedDialFlingAnimation) {
+  it('toggles the menu when the trigger clicked', inject(function() {
+    build(
+      '<md-fab-speed-dial>' +
+      '  <md-fab-trigger>' +
+      '    <md-button></md-button>' +
+      '  </md-fab-trigger>' +
+      '</md-fab-speed-dial>'
+    );
+
+    // Click to open
+    var clickEvent = {
+      type: 'click',
+      target: element.find('md-button')
+    };
+    element.triggerHandler(clickEvent);
+    pageScope.$digest();
+
+    expect(controller.isOpen).toBe(true);
+
+    // Click to close
+    element.triggerHandler(clickEvent);
+    pageScope.$digest();
+
+    expect(controller.isOpen).toBe(false);
+  }));
+
+
+  it('closes the menu when an action is clicked', inject(function() {
+    build(
+      '<md-fab-speed-dial>' +
+      '  <md-fab-trigger>' +
+      '    <md-button></md-button>' +
+      '  </md-fab-trigger>' +
+      '  <md-fab-actions>' +
+      '    <md-button></md-button>' +
+      '  </md-fab-actions>' +
+      '</md-fab-speed-dial>'
+    );
+
+    var clickEvent = {
+      type: 'click',
+      target: element.find('md-fab-actions').find('md-button')
+    };
+
+    // Set the menu to be open
+    controller.isOpen = true;
+    pageScope.$digest();
+
+    // Click the action to close
+    element.triggerHandler(clickEvent);
+    pageScope.$digest();
+
+    expect(controller.isOpen).toBe(false);
+  }));
+
+  it('opens the menu when the trigger is focused', inject(function() {
+    build(
+      '<md-fab-speed-dial>' +
+      '  <md-fab-trigger>' +
+      '    <md-button></md-button>' +
+      '  </md-fab-trigger>' +
+      '</md-fab-speed-dial>'
+    );
+
+    var focusEvent = {
+      type: 'focusin',
+      target: element.find('md-fab-trigger').find('md-button')
+    };
+
+    element.triggerHandler(focusEvent);
+    pageScope.$digest();
+    expect(controller.isOpen).toBe(true);
+  }));
+
+  it('closes the menu when the trigger is blurred', inject(function() {
+    build(
+      '<md-fab-speed-dial>' +
+      '  <md-fab-trigger>' +
+      '    <md-button></md-button>' +
+      '  </md-fab-trigger>' +
+      '</md-fab-speed-dial>'
+    );
+
+    var focusInEvent = {
+      type: 'focusin',
+      target: element.find('md-fab-trigger').find('md-button')
+    };
+
+    var focusOutEvent = {
+      type: 'focusout',
+      target: element.find('md-fab-trigger').find('md-button')
+    };
+
+    element.triggerHandler(focusInEvent);
+    pageScope.$digest();
+    expect(controller.isOpen).toBe(true);
+
+    element.triggerHandler(focusOutEvent);
+    pageScope.$digest();
+    expect(controller.isOpen).toBe(false);
+  }));
+
+
+  it('properly finishes the fling animation', inject(function(mdFabSpeedDialFlingAnimation) {
     build(
       '<md-fab-speed-dial md-open="isOpen" class="md-fling">' +
       '  <md-fab-trigger><button></button></md-fab-trigger>' +
@@ -111,7 +170,7 @@ describe('<md-fab-speed-dial> directive', function () {
     expect(removeDone).toHaveBeenCalled();
   }));
 
-  it('properly finishes the scale animation', inject(function (mdFabSpeedDialScaleAnimation) {
+  it('properly finishes the scale animation', inject(function(mdFabSpeedDialScaleAnimation) {
     build(
       '<md-fab-speed-dial md-open="isOpen" class="md-fling">' +
       '  <md-fab-trigger><button></button></md-fab-trigger>' +
@@ -130,7 +189,7 @@ describe('<md-fab-speed-dial> directive', function () {
   }));
 
   function build(template) {
-    inject(function ($compile) {
+    inject(function($compile) {
       pageScope = $rootScope.$new();
       element = $compile(template)(pageScope);
       controller = element.controller('mdFabSpeedDial');
