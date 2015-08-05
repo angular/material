@@ -30,7 +30,9 @@ md-list {
   padding: $list-padding-top $list-padding-right $list-padding-bottom $list-padding-left;
 
   .md-subheader {
-    @include md-body-2();
+    font-size: $body-font-size-base;
+    font-weight: 500;
+    letter-spacing: 0.010em;
     line-height: $list-header-line-height;
   }
 }
@@ -177,12 +179,15 @@ md-list-item.md-3-line > .md-no-style {
     }
 
     h3 {
-      @include md-subhead();
+      font-size: $subhead-font-size-base;
+      font-weight: 400;
+      letter-spacing: 0.010em;
       margin: $list-h3-margin;
       line-height: $list-header-line-height;
     }
     h4 {
-      @include md-body-2();
+      font-size: $body-font-size-base;
+      letter-spacing: 0.010em;
       font-weight: $list-h4-font-weight;
       margin: $list-h4-margin;
       line-height: $list-header-line-height;
