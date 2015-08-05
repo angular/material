@@ -14,37 +14,6 @@ describe('<md-fab-toolbar> directive', function() {
     });
   }
 
-  it('disables tabbing to the trigger (go straight to first element instead)', inject(function() {
-    build(
-      '<md-fab-toolbar><md-fab-trigger><button></button></md-fab-trigger></md-fab-toolbar>'
-    );
-
-    expect(element.find('md-fab-trigger').find('button').attr('tabindex')).toBe('-1');
-  }));
-
-
-  it('opens when the toolbar elements are focused', inject(function() {
-    build(
-      '<md-fab-toolbar><md-fab-trigger><a></a></md-fab-trigger>' +
-      '<md-fab-actions><button></button></md-fab-actions></md-fab-toolbar>'
-    );
-
-    element.find('button').triggerHandler('focus');
-    expect(controller.isOpen).toBe(true);
-  }));
-
-  it('closes when the toolbar elements are blurred', inject(function() {
-    build(
-      '<md-fab-toolbar><md-fab-actions><button></button></md-fab-actions></md-fab-toolbar>'
-    );
-
-    element.find('button').triggerHandler('focus');
-    expect(controller.isOpen).toBe(true);
-
-    element.find('button').triggerHandler('blur');
-    expect(controller.isOpen).toBe(false);
-  }));
-
   it('allows programmatic opening through the md-open attribute', inject(function() {
     build(
       '<md-fab-toolbar md-open="isOpen"></md-fab-toolbar>'
@@ -66,7 +35,7 @@ describe('<md-fab-toolbar> directive', function() {
     build(
       '<md-fab-toolbar md-open="isOpen">' +
       '  <md-fab-trigger><button></button></md-fab-trigger>' +
-      '  <md-fab-actions><button></button></md-fab-actions>' +
+      '  <md-fab-actions><md-toolbar><button></button></md-toolbar></md-fab-actions>' +
       '</md-fab-toolbar>'
     );
 
