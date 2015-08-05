@@ -31,6 +31,10 @@ $md-datepicker-open-animation-duration: 0.2s;
   display: inline-block;
   width: auto;
   margin-left: $md-datepicker-button-gap;
+
+  &.md-datepicker-focused {
+    border-bottom-width: 2px;
+  }
 }
 
 
