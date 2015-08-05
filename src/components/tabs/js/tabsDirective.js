@@ -55,13 +55,14 @@
  * @param {boolean=} md-no-ink If present, disables ink ripple effects.
  * @param {boolean=} md-no-bar If present, disables the selection ink bar.
  * @param {string=}  md-align-tabs Attribute to indicate position of tab buttons: `bottom` or `top`; default is `top`
- * @param {string=} md-stretch-tabs Attribute to indicate whether or not to stretch tabs: `auto`, `always`, or `never`; default is `auto`
+ * @param {string=}  md-stretch-tabs Attribute to indicate whether or not to stretch tabs: `auto`, `always`, or `never`; default is `auto`
  * @param {boolean=} md-dynamic-height When enabled, the tab wrapper will resize based on the contents of the selected tab
  * @param {boolean=} md-center-tabs When enabled, tabs will be centered provided there is no need for pagination
  * @param {boolean=} md-no-pagination When enabled, pagination will remain off
  * @param {boolean=} md-swipe-content When enabled, swipe gestures will be enabled for the content area to jump between tabs
  * @param {boolean=} md-no-disconnect If your tab content has background tasks (ie. event listeners), you will want to include this to prevent the scope from being disconnected
  * @param {boolean=} md-autoselect When present, any tabs added after the initial load will be automatically selected
+ * @param {boolean=} md-no-tabs-if-single If present, the tab bar will not be shown if only one tab exists.
  *
  * @usage
  * <hljs lang="html">
@@ -96,7 +97,7 @@ function MdTabs ($mdTheming, $mdUtil, $compile) {
     template:         function (element, attr) {
       attr[ "$mdTabsTemplate" ] = element.html();
       return '\
-        <md-tabs-wrapper>\
+        <md-tabs-wrapper ng-show="$mdTabsCtrl.shouldShowTabs()">\
           <md-tab-data></md-tab-data>\
           <md-prev-button\
               tabindex="-1"\

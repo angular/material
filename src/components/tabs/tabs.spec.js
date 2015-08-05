@@ -219,6 +219,16 @@ describe('<md-tabs>', function () {
       expect(tabs1[ 0 ].querySelector('md-tab-content').textContent.trim()).toBe('content that!');
     });
 
+    it('should hide tabs if there is only one tab and md-no-tabs-if-single', function() {
+      var tabs = setup('<md-tabs md-no-tabs-if-single>' +
+                       '<md-tab></md-tab>' +
+                       '</md-tabs>');
+
+      var tabsWrapper = tabs.find('md-tabs-wrapper');
+
+      expect(tabsWrapper.eq(0).hasClass('ng-hide')).toBe(true);
+    });
+
   });
 
   describe('aria', function () {

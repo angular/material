@@ -6,7 +6,7 @@
 
   function AppCtrl ($scope, $log) {
     var tabs = [
-          { title: 'One', content: "Tabs will become paginated if there isn't enough room for them."},
+          { title: 'One', content: "Tabs will become paginated if there isn't enough room for them. They can also hide when only one tab is left, if you set md-no-tabs-if-single."},
           { title: 'Two', content: "You can swipe left and right on a mobile device to change tabs."},
           { title: 'Three', content: "You can bind the selected tab via the selected attribute on the md-tabs element."},
           { title: 'Four', content: "If you set the selected tab binding to -1, it will leave no tab selected."},

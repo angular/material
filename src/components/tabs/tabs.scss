@@ -13,6 +13,35 @@ $tabs-header-height: 48px !default;
     opacity: 0;
   }
 }
+@keyframes md-tab-bar-out {
+  0% {
+    animation-timing-function: linear;
+  }
+  50% {
+    opacity: 0;
+    height: $tabs-header-height;
+    animation-timing-function: ease-in;
+  }
+  100% {
+    height: 0;
+    opacity: 0;
+  }
+}
+@keyframes md-tab-bar-in {
+  0% {
+    opacity: 0;
+    height: 0;
+    animation-timing-function: ease-out;
+  }
+  50% {
+    opacity: 0;
+    height: $tabs-header-height;
+  }
+  100% {
+    opacity: 1;
+    height: $tabs-header-height;
+  }
+}
 
 md-tab-data {
   position: absolute;
@@ -25,7 +54,8 @@ md-tab-data {
 }
 
 md-tabs {
-  display: block;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   border-radius: 2px;
   overflow: hidden;
@@ -39,15 +69,7 @@ md-tabs {
   }
   &[md-align-tabs="bottom"] {
     md-tabs-wrapper {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: $tabs-header-height;
-    }
-    md-tabs-content-wrapper {
-      top: 0;
-      bottom: $tabs-header-height;
+      order: 2;
     }
   }
   &.md-dynamic-height {
@@ -58,6 +80,7 @@ md-tabs {
       left: auto;
       right: auto;
       bottom: auto;
+      flex: inherit;
       overflow: visible;
     }
     md-tab-content {
@@ -71,17 +94,13 @@ md-tabs {
       border-width: 0 0 1px;
       border-style: solid;
     }
-    &:not(.md-dynamic-height) {
-      md-tabs-content-wrapper {
-        top: $tabs-header-height + 1;
-      }
-    }
   }
 }
 
 md-tabs-wrapper {
   display: block;
   position: relative;
+  order: 0;
   md-prev-button, md-next-button {
     height: 100%;
     width: $tabs-paginator-width;
@@ -132,6 +151,12 @@ md-tabs-wrapper {
       }
     }
   }
+  &.ng-hide-add {
+    animation: 2 * $swift-ease-in-out-duration md-tab-bar-out;
+  }
+  &.ng-hide-remove {
+    animation: 2 * $swift-ease-in-out-duration md-tab-bar-in;
+  }
 }
 
 md-tabs-canvas {
@@ -177,12 +202,9 @@ md-pagination-wrapper {
 }
 
 md-tabs-content-wrapper {
-  display: block;
-  position: absolute;
-  top: $tabs-header-height;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: relative;
+  flex: 1;
+  order: 1;
   overflow: hidden;
 }
 
