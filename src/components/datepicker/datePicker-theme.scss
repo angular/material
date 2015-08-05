@@ -9,6 +9,10 @@ md-datepicker.md-THEME_NAME-theme {
   .md-datepicker-input-container {
     border-bottom-color: '{{background-300}}';
 
+    &.md-datepicker-focused {
+      border-bottom-color: '{{primary-500}}'
+    }
+
     &.md-datepicker-invalid {
       border-bottom-color: '{{warn-500}}';
     }
