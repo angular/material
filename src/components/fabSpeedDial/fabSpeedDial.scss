@@ -18,7 +18,7 @@ md-fab-speed-dial {
     display: flex;
 
     // Set the height so that the z-index in the JS animation works
-    height: initial;
+    height: auto;
 
     .md-fab-action-item {
       visibility: hidden;

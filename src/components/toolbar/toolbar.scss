@@ -65,7 +65,7 @@ md-toolbar {
 
 .md-toolbar-tools {
   @include md-title();
-  font-weight: 400;
+  /* @alternate */ font-weight: 400;
   display: flex;
   align-items: center;
   flex-direction: row;

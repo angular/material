@@ -66,15 +66,11 @@ All Angular Material components have specific CSS rules constructed using the th
 .md-button {
   color : currentColor;
 }
-</hljs>
 
-<hljs lang="css">
 .md-button:not([disabled]):hover {
   background-color: rgba(158, 158, 158, 0.2);
 }
-</hljs>
 
-<hljs lang="css">
 .md-button[disabled] {
   color : rgba(0, 0, 0, 0.26);
   background-color: transparent;
@@ -98,16 +94,12 @@ All Angular Material components have specific CSS rules constructed using the th
   border-radius: 10px 0 0 10px;
   font-size: 16px;
 }
-</hljs>
 
-<hljs lang="css">
 .btn1:not([disabled]):hover { 
   background-color: rgba(107, 103, 91, 0.96);
   color: white;
 }
-</hljs>
 
-<hljs lang="css">
 .btn1[disabled] { 
   color : rgb(187, 187, 187);
   background-color: rgba(230, 230, 229, 0.96);

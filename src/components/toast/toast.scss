@@ -4,6 +4,8 @@
 md-toast {
   display: flex;
   position:absolute;
+  z-index: $z-index-toast;
+
   box-sizing: border-box;
   align-items: center;
 
@@ -16,11 +18,13 @@ md-toast {
   font-size: 14px;
   cursor: default;
 
-  max-width: 100%;
-  max-height: 40px;
+  height:auto;
+  min-height: 2*$toast-height;
+  max-height: 7*$toast-height;
 
-  height: $toast-height;
-  z-index: $z-index-toast;
+  max-width: 100%;
+
+  overflow:hidden;
 
   &.md-capsule {
     border-radius: 24px;
