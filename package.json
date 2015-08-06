@@ -2,7 +2,7 @@
   "name": "angular-material-source",
   "version": "0.10.1-rc5",
   "repository": {
-    "url": "git://github.com/angular/material.git"
+    "url": "git://github.com/clshortfuse/material.git"
   },
   "devDependencies": {
     "angular": "^1.4.0",
