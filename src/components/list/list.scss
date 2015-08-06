@@ -24,6 +24,7 @@ $list-item-secondary-button-width: $baseline-grid * 6 !default;
 $list-item-text-padding-top: $baseline-grid * 2 !default;
 $list-item-text-padding-bottom: $baseline-grid * 2.5 !default;
 $list-item-inset-divider-offset: 12 * $baseline-grid !default;
+$list-item-height: 8 * $baseline-grid !default;
 
 md-list {
   display: block;
@@ -83,7 +84,7 @@ md-list-item, md-list-item .md-list-item-inner {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  min-height: 48px;
+  min-height: $list-item-height;
 
   // Layout for controls in primary or secondary divs, or auto-infered first child
   & > div.md-primary > md-icon,
