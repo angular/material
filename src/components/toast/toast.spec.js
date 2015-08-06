@@ -1,6 +1,7 @@
 describe('$mdToast service', function() {
-  beforeEach(module('material.components.toast', function($provide) {
-  }));
+
+  beforeEach(module('material.components.toast'));
+
   afterEach(inject(function($timeout, $animate) {
     $animate.triggerCallbacks();
     $timeout.flush();
@@ -8,14 +9,17 @@ describe('$mdToast service', function() {
 
   function setup(options) {
     var promise;
-    inject(function($mdToast, $rootScope, $animate) {
+    inject(function($mdToast, $rootScope, $$rAF, $timeout) {
       options = options || {};
-      $animate.triggerCallbacks();
+
+      $$rAF.flush();
 
       promise = $mdToast.show(options);
 
-      $rootScope.$apply();
-      $animate.triggerCallbacks();
+      $rootScope.$digest();
+      $$rAF.flush();
+      $timeout.flush();
+
     });
     return promise;
   }
@@ -167,8 +171,11 @@ describe('$mdToast service', function() {
   });
 
   describe('lifecycle', function() {
+
     describe('should hide',function() {
       it('current toast when showing new one', inject(function($rootElement) {
+        disableAnimations();
+
         setup({
           template: '<md-toast class="one">'
         });
@@ -179,6 +186,7 @@ describe('$mdToast service', function() {
         setup({
           template: '<md-toast class="two">'
         });
+
         expect($rootElement[0].querySelector('md-toast.one')).toBeFalsy();
         expect($rootElement[0].querySelector('md-toast.two')).toBeTruthy();
         expect($rootElement[0].querySelector('md-toast.three')).toBeFalsy();
@@ -192,6 +200,8 @@ describe('$mdToast service', function() {
       }));
 
       it('after duration', inject(function($timeout, $animate, $rootElement) {
+        disableAnimations();
+
         var parent = angular.element('<div>');
         var hideDelay = 1234;
         setup({
@@ -204,6 +214,8 @@ describe('$mdToast service', function() {
       }));
 
       it('and resolve with default `true`', inject(function($timeout, $animate, $mdToast) {
+        disableAnimations();
+
         var hideDelay = 1234, result, fault;
         setup({
           template: '<md-toast />',
@@ -224,6 +236,8 @@ describe('$mdToast service', function() {
       }));
 
       it('and resolve with specified value', inject(function($timeout, $animate, $mdToast) {
+        disableAnimations();
+
         var hideDelay = 1234, result, fault;
         setup({
           template: '<md-toast />',
@@ -244,6 +258,8 @@ describe('$mdToast service', function() {
       }));
 
       it('and resolve `true` after timeout', inject(function($timeout, $animate) {
+        disableAnimations();
+
         var hideDelay = 1234, result, fault;
         setup({
           template: '<md-toast />',
@@ -290,6 +306,8 @@ describe('$mdToast service', function() {
     });
 
     it('should add class to toastParent', inject(function($rootElement) {
+      disableAnimations();
+
       setup({
         template: '<md-toast>'
       });
