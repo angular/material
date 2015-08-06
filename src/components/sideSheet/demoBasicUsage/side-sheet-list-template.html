@@ -1,0 +1,21 @@
+<md-side-sheet class="md-list md-has-header">
+    <md-subheader>Comment Actions</md-subheader>
+    <md-list>
+        <md-list-item ng-repeat="item in items">
+
+            <md-button class="md-list-item-content" ng-click="listItemClick($index)">
+                <md-icon md-svg-src="{{item.icon}}"></md-icon>
+                <span class="md-inline-list-icon-label">{{ item.name }}</span>
+            </md-button>
+
+        </md-list-item>
+    </md-list>
+    <!--<form>-->
+        <!--<md-input-container>-->
+            <!--<label for="testInput">Test input</label>-->
+            <!--<input type="text" id="testInput"-->
+                   <!--ng-model="items" md-side-sheet-focus>-->
+        <!--</md-input-container>-->
+    <!--</form>-->
+
+</md-side-sheet>

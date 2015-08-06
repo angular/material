@@ -13,6 +13,9 @@ md-backdrop {
   &.md-bottom-sheet-backdrop {
     z-index: $z-index-bottom-sheet - 1;
   }
+  &.md-side-sheet-backdrop {
+    z-index: $z-index-side-sheet - 1;
+  }
   &.md-sidenav-backdrop {
     z-index: $z-index-sidenav - 1;
   }
