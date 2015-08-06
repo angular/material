@@ -219,6 +219,7 @@ function MdToastProvider($$interimElementProvider) {
 
   /* @ngInject */
   function toastDefaultOptions($animate, $mdToast, $mdUtil) {
+    var SWIPE_EVENTS = '$md.swipeleft $md.swiperight';
     return {
       onShow: onShow,
       onRemove: onRemove,
@@ -228,27 +229,31 @@ function MdToastProvider($$interimElementProvider) {
     };
 
     function onShow(scope, element, options) {
-      element = $mdUtil.extractElementByName(element, 'md-toast');
-
-      // 'top left' -> 'md-top md-left'
       activeToastContent = options.content;
-      element.addClass(options.position.split(' ').map(function(pos) {
-        return 'md-' + pos;
-      }).join(' '));
-      options.parent.addClass(toastOpenClass(options.position));
 
+      element = $mdUtil.extractElementByName(element, 'md-toast');
       options.onSwipe = function(ev, gesture) {
         //Add swipeleft/swiperight class to element so it can animate correctly
         element.addClass('md-' + ev.type.replace('$md.',''));
         $mdUtil.nextTick($mdToast.cancel);
       };
-      element.on('$md.swipeleft $md.swiperight', options.onSwipe);
+      options.openClass = toastOpenClass(options.position);
+
+
+      // 'top left' -> 'md-top md-left'
+      options.parent.addClass(options.openClass);
+      element.on(SWIPE_EVENTS, options.onSwipe);
+      element.addClass(options.position.split(' ').map(function(pos) {
+        return 'md-' + pos;
+      }).join(' '));
+
       return $animate.enter(element, options.parent);
     }
 
     function onRemove(scope, element, options) {
-      element.off('$md.swipeleft $md.swiperight', options.onSwipe);
-      options.parent.removeClass(toastOpenClass(options.position));
+      element.off(SWIPE_EVENTS, options.onSwipe);
+      options.parent.removeClass(options.openClass);
+
       return $animate.leave(element);
     }
 
