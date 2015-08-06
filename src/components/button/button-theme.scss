@@ -27,7 +27,7 @@ a.md-button.md-THEME_NAME-theme,
     }
     &:not([disabled]) {
       &:hover {
-        background-color: '{{accent-A600}}';
+        background-color: '{{accent-600}}';
       }
       &.md-focused {
         background-color: '{{accent-A600}}';
@@ -72,7 +72,7 @@ a.md-button.md-THEME_NAME-theme,
         color: '{{accent-contrast}}';
       }
       &:hover {
-        background-color: '{{accent-A600}}';
+        background-color: '{{accent-600}}';
       }
       &.md-focused {
         background-color: '{{accent-A600}}';
