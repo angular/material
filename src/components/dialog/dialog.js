@@ -12,9 +12,9 @@ angular.module('material.components.dialog', [
 function MdDialogDirective($$rAF, $mdTheming) {
   return {
     restrict: 'E',
-    link: function (scope, element, attr) {
+    link: function(scope, element, attr) {
       $mdTheming(element);
-      $$rAF(function () {
+      $$rAF(function() {
         var images;
         var content = element[0].querySelector('md-dialog-content');
 
@@ -420,10 +420,10 @@ function MdDialogProvider($$interimElementProvider) {
         '</md-dialog>'
       ].join('').replace(/\s\s+/g, ''),
       controller: function mdDialogCtrl() {
-        this.hide = function () {
+        this.hide = function() {
           $mdDialog.hide(true);
         };
-        this.abort = function () {
+        this.abort = function() {
           $mdDialog.cancel();
         };
       },
@@ -445,7 +445,7 @@ function MdDialogProvider($$interimElementProvider) {
       targetEvent: null,
       focusOnOpen: true,
       disableParentScroll: true,
-      transformTemplate: function (template) {
+      transformTemplate: function(template) {
         return '<div class="md-dialog-container">' + template + '</div>';
       }
     };
@@ -462,7 +462,7 @@ function MdDialogProvider($$interimElementProvider) {
       showBackdrop(scope, element, options);
 
       return dialogPopIn(element, options)
-        .then(function () {
+        .then(function() {
           activateListeners(element, options);
           lockScreenReader(element, options);
           focusOnOpen();
@@ -502,7 +502,7 @@ function MdDialogProvider($$interimElementProvider) {
       options.hideBackdrop();
 
       return dialogPopOut(element, options)
-        .finally(function () {
+        .finally(function() {
           angular.element($document[0].body).removeClass('md-dialog-is-showing');
           element.remove();
 
@@ -526,7 +526,7 @@ function MdDialogProvider($$interimElementProvider) {
         // back to the same position it expanded from.
         options.origin.element = source;
         options.origin.bounds = source[0].getBoundingClientRect();
-        options.origin.focus = function () {
+        options.origin.focus = function() {
           source.focus();
         }
       }
@@ -534,9 +534,6 @@ function MdDialogProvider($$interimElementProvider) {
       // In case the user provides a raw dom element, always wrap it in jqLite
       options.parent = angular.element(options.parent || $rootElement);
 
-      if (options.disableParentScroll) {
-        options.restoreScroll = $mdUtil.disableScrollAround(element, options.parent);
-      }
     }
 
     /**
@@ -544,7 +541,7 @@ function MdDialogProvider($$interimElementProvider) {
      */
     function activateListeners(element, options) {
       var removeListeners = [];
-      var smartClose = function () {
+      var smartClose = function() {
         // Only 'confirm' dialogs have a cancel button... escape/clickOutside will
         // cancel or fallback to hide.
         var closeFn = ( options.$type == 'alert' ) ? $mdDialog.hide : $mdDialog.cancel;
@@ -554,7 +551,7 @@ function MdDialogProvider($$interimElementProvider) {
 
       if (options.escapeToClose) {
         var target = options.parent;
-        var keyHandlerFn = function (ev) {
+        var keyHandlerFn = function(ev) {
           if (ev.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
             ev.stopPropagation();
             ev.preventDefault();
@@ -568,14 +565,14 @@ function MdDialogProvider($$interimElementProvider) {
         target.on('keyup', keyHandlerFn);
 
         // Queue remove listeners function
-        removeListeners.push(function () {
+        removeListeners.push(function() {
           element.off('keyup', keyHandlerFn);
           target.off('keyup', keyHandlerFn);
         });
       }
       if (options.clickOutsideToClose) {
         var target = element;
-        var clickHandler = function (ev) {
+        var clickHandler = function(ev) {
           // Only close if we click the flex container outside on the backdrop
           if (ev.target === target[0]) {
             ev.stopPropagation();
@@ -589,14 +586,14 @@ function MdDialogProvider($$interimElementProvider) {
         target.on('click', clickHandler);
 
         // Queue remove listeners function
-        removeListeners.push(function () {
+        removeListeners.push(function() {
           target.off('click', clickHandler);
         });
       }
 
       // Attach specific `remove` listener handler
-      options.deactivateListeners = function () {
-        removeListeners.forEach(function (removeFn) {
+      options.deactivateListeners = function() {
+        removeListeners.forEach(function(removeFn) {
           removeFn();
         });
         options.deactivateListeners = null;
@@ -607,6 +604,12 @@ function MdDialogProvider($$interimElementProvider) {
      * Show modal backdrop element...
      */
     function showBackdrop(scope, element, options) {
+
+      if (options.disableParentScroll) {
+        // !! DO this before creating the backdrop; since disableScrollAround()
+        //    configures the scroll offset; which is used by mdBackDrop postLink()
+        options.restoreScroll = $mdUtil.disableScrollAround(element, options.parent);
+      }
 
       if (options.hasBackdrop) {
         options.backdrop = $mdUtil.createBackdrop(scope, "md-dialog-backdrop md-opaque");
@@ -622,6 +625,7 @@ function MdDialogProvider($$interimElementProvider) {
         }
         if (options.disableParentScroll) {
           options.restoreScroll();
+          delete options.restoreScroll;
         }
 
         options.hideBackdrop = null;
@@ -653,7 +657,7 @@ function MdDialogProvider($$interimElementProvider) {
         $mdAria.expect(element, 'aria-label', options.ariaLabel);
       }
       else {
-        $mdAria.expectAsync(element, 'aria-label', function () {
+        $mdAria.expectAsync(element, 'aria-label', function() {
           var words = dialogContent.text().split(/\s+/);
           if (words.length > 3) words = words.slice(0, 3).concat('...');
           return words.join(' ');
@@ -671,7 +675,7 @@ function MdDialogProvider($$interimElementProvider) {
       // get raw DOM node
       walkDOM(element[0]);
 
-      options.unlockScreenReader = function () {
+      options.unlockScreenReader = function() {
         isHidden = false;
         walkDOM(element[0]);
 
@@ -737,9 +741,9 @@ function MdDialogProvider($$interimElementProvider) {
 
       return animator
         .translate3d(dialogEl, from, to, translateOptions)
-        .then(function (animateReversal) {
+        .then(function(animateReversal) {
           // Build a reversal translate function synched to this translation...
-          options.reverseAnimate = function () {
+          options.reverseAnimate = function() {
 
             delete options.reverseAnimate;
             return animateReversal(
