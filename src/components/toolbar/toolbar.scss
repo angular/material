@@ -64,8 +64,9 @@ md-toolbar {
 }
 
 .md-toolbar-tools {
-  @include md-title();
-  /* @alternate */ font-weight: 400;
+  font-size: $title-font-size-base;
+  letter-spacing: 0.005em;
+  font-weight: 400;
   display: flex;
   align-items: center;
   flex-direction: row;
