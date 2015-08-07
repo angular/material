@@ -255,7 +255,7 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria ) {
       }
 
       function shouldUseDefaultFontSet() {
-        return !scope.fontIcon && !scope.fontSet && !attr.hasOwnProperty('class');
+        return !scope.fontIcon && !scope.fontSet;
       }
     }
   }
