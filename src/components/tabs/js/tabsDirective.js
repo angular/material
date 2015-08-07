@@ -88,10 +88,10 @@ angular
     .module('material.components.tabs')
     .directive('mdTabs', MdTabs);
 
-function MdTabs ($mdTheming, $mdUtil, $compile) {
+function MdTabs () {
   return {
     scope:            {
-      selectedIndex: '=?mdSelected',
+      selectedIndex: '=?mdSelected'
     },
     template:         function (element, attr) {
       attr[ "$mdTabsTemplate" ] = element.html();
@@ -179,7 +179,6 @@ function MdTabs ($mdTheming, $mdUtil, $compile) {
               md-swipe-right="$mdTabsCtrl.swipeContent && $mdTabsCtrl.incrementIndex(-1)"\
               ng-if="$mdTabsCtrl.hasContent"\
               ng-repeat="(index, tab) in $mdTabsCtrl.tabs"\
-              md-connected-if="tab.isActive()"\
               ng-class="{\
                 \'md-no-transition\': $mdTabsCtrl.lastSelectedIndex == null,\
                 \'md-active\':        tab.isActive(),\
@@ -189,8 +188,9 @@ function MdTabs ($mdTheming, $mdUtil, $compile) {
               }">\
             <div\
                 md-template="::tab.template"\
+                md-connected-if="tab.isActive()"\
                 md-scope="::tab.parent"\
-                ng-if="tab.shouldRender()"></div>\
+                ng-if="$mdTabsCtrl.enableDisconnect || tab.shouldRender()"></div>\
           </md-tab-content>\
         </md-tabs-content-wrapper>\
       ';

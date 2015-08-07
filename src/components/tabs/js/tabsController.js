@@ -33,6 +33,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   defineBooleanAttribute('noDisconnect');
   defineBooleanAttribute('autoselect');
   defineBooleanAttribute('centerTabs', handleCenterTabs);
+  defineBooleanAttribute('enableDisconnect');
 
   // define public properties
   ctrl.scope             = $scope;
