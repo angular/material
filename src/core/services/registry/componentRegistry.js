@@ -56,12 +56,14 @@
       /**
        * Register an instance.
        * @param instance the instance to register
-       * @param handle the handle to identify the instance under.
+       * @param handle the handle to identify the instance under
+       * @param api= an optional api that other components will have access to
        */
-      register: function(instance, handle) {
+      register: function(instance, handle, api) {
         if ( !handle ) return angular.noop;
 
         instance.$$mdHandle = handle;
+        instance.$$api = api;
         instances.push(instance);
         resolveWhen();
 
@@ -86,6 +88,20 @@
             dfd.resolve( instance );
             delete pendings[handle];
           }
+        }
+      },
+
+      /**
+       * Returns a component's api.
+       * @return object
+       */
+      getAPI: function(handle) {
+        var component = this.get(handle);
+        
+        if (!component) {
+          return;
+        } else {
+          return component.$$api;
         }
       },
 

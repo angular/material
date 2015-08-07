@@ -70,7 +70,7 @@ angular.module('material.components.select', [
  *   </md-input-container>
  * </hljs>
  */
-function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $parse) {
+function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $parse, $mdComponentRegistry) {
   return {
     restrict: 'E',
     require: ['^?mdInputContainer', 'mdSelect', 'ngModel', '?^form'],
@@ -239,6 +239,15 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         $parse(attr.mdOnClose)(scope);
       };
 
+
+      mdSelectCtrl.open = showSelect;
+
+      // Allow this component to be accessed remotely.
+      $mdComponentRegistry.register(mdSelectCtrl, attr.mdComponentId, {
+        open: mdSelectCtrl.open,
+        close: mdSelectCtrl.triggerClose
+      });
+
       scope.$$postDigest(function() {
         setAriaLabel();
         syncLabelText();
@@ -384,7 +393,10 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
 
       function openSelect() {
         selectScope.isOpen = true;
-
+        showSelect();
+      }
+      
+      function showSelect() {
         $mdSelect.show({
           scope: selectScope,
           preserveScope: true,

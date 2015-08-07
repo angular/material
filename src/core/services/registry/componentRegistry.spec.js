@@ -94,9 +94,20 @@ describe('$mdComponentRegistry Service', function() {
 
       expect(resolved).toBeDefined();
       expect(count).toBe(2);
-
     });
+    
+    it('should return a remote API if available', function() {
+      var selectAPI = {
+        open: angular.noop,
+        close: angular.noop
+      };
 
+      $mdComponentRegistry.register({}, 'sidenav');
+      $mdComponentRegistry.register({}, 'select', selectAPI);
+
+      expect($mdComponentRegistry.getAPI('sidenav')).toBeUndefined();
+      expect($mdComponentRegistry.getAPI('select')).toEqual(selectAPI);
+    });
   });
 
   describe('component ids', function() {

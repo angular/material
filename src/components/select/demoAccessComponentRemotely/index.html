@@ -1,0 +1,14 @@
+<div ng-controller="AppCtrl as ctrl" class="md-padding">
+  <div>
+    <div layout="row">
+      <md-button ng-click="openSelect()">Click me!</md-button>
+    </div>
+    <div layout="row">
+      <md-input-container>
+        <md-select placeholder="Favorite State" md-component-id="remote-select" ng-model="state">
+          <md-option ng-repeat="option in options" value="{{option}}">{{option}}</md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+  </div>
+</div>
