@@ -148,7 +148,7 @@ function MenuDirective($mdMenu) {
     templateElement.addClass('md-menu');
     var triggerElement = templateElement.children()[0];
     if (!triggerElement.hasAttribute('ng-click')) {
-      triggerElement = triggerElement.querySelector('[ng-click]');
+      triggerElement = triggerElement.querySelector('[ng-click],[ng-mouseenter]');
     }
     triggerElement && triggerElement.setAttribute('aria-haspopup', 'true');
     if (templateElement.children().length != 2) {
@@ -184,7 +184,7 @@ function MenuController($mdMenu, $attrs, $element, $scope) {
   // element removed during link
   this.init = function(setMenuContainer) {
     menuContainer = setMenuContainer;
-    triggerElement = $element[0].querySelector('[ng-click]');
+    triggerElement = $element[0].querySelector('[ng-click],[ng-mouseenter]');
   };
 
   // Uses the $mdMenu interim element service to open the menu contents
