@@ -67,11 +67,18 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout) {
   this.chipBuffer = '';
 
   /**
-   * Whether to use the mdOnAppend expression to transform the chip buffer
+   * Whether to use the onAppend expression to transform the chip buffer
    * before appending it to the list.
    * @type {boolean}
    */
-  this.useMdOnAppend = false;
+  this.useOnAppend = false;
+
+  /**
+   * Whether to use the onSelect expression to notify the component's user
+   * after selecting a chip from the list.
+   * @type {boolean}
+   */
+  this.useOnSelect = false;
 }
 
 /**
@@ -181,8 +188,8 @@ MdChipsCtrl.prototype.getAdjacentChipIndex = function(index) {
  * @param newChip
  */
 MdChipsCtrl.prototype.appendChip = function(newChip) {
-  if (this.useMdOnAppend && this.mdOnAppend) {
-    newChip = this.mdOnAppend({'$chip': newChip});
+  if (this.useOnAppend && this.onAppend) {
+    newChip = this.onAppend({'$chip': newChip});
   }
   if (this.items.indexOf(newChip) + 1) return;
   this.items.push(newChip);
@@ -191,23 +198,34 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
 /**
  * Sets whether to use the md-on-append expression. This expression is
  * bound to scope and controller in {@code MdChipsDirective} as
- * {@code mdOnAppend}. Due to the nature of directive scope bindings, the
+ * {@code onAppend}. Due to the nature of directive scope bindings, the
  * controller cannot know on its own/from the scope whether an expression was
  * actually provided.
  */
-MdChipsCtrl.prototype.useMdOnAppendExpression = function() {
-  this.useMdOnAppend = true;
+MdChipsCtrl.prototype.useOnAppendExpression = function() {
+  this.useOnAppend = true;
 };
 
 /**
  * Sets whether to use the md-on-remove expression. This expression is
  * bound to scope and controller in {@code MdChipsDirective} as
- * {@code mdOnRemove}. Due to the nature of directive scope bindings, the
+ * {@code onRemove}. Due to the nature of directive scope bindings, the
  * controller cannot know on its own/from the scope whether an expression was
  * actually provided.
  */
-MdChipsCtrl.prototype.useMdOnRemoveExpression = function() {
-  this.useMdOnRemove = true;
+MdChipsCtrl.prototype.useOnRemoveExpression = function() {
+  this.useOnRemove = true;
+};
+
+/*
+ * Sets whether to use the md-on-select expression. This expression is
+ * bound to scope and controller in {@code MdChipsDirective} as
+ * {@code onSelect}. Due to the nature of directive scope bindings, the
+ * controller cannot know on its own/from the scope whether an expression was
+ * actually provided.
+ */
+MdChipsCtrl.prototype.useOnSelectExpression = function() {
+  this.useOnSelect = true;
 };
 
 /**
@@ -247,8 +265,8 @@ MdChipsCtrl.prototype.resetChipBuffer = function() {
 MdChipsCtrl.prototype.removeChip = function(index) {
   var removed = this.items.splice(index, 1);
 
-  if (removed && removed.length && this.useMdOnRemove && this.mdOnRemove) {
-    this.mdOnRemove({ '$chip': removed[0], '$index': index });
+  if (removed && removed.length && this.useOnRemove && this.onRemove) {
+    this.onRemove({ '$chip': removed[0], '$index': index });
   }
 };
 
@@ -280,6 +298,11 @@ MdChipsCtrl.prototype.selectAndFocusChipSafe = function(index) {
 MdChipsCtrl.prototype.selectChip = function(index) {
   if (index >= -1 && index <= this.items.length) {
     this.selectedChip = index;
+
+    // Fire the onSelect if provided
+    if (this.useOnSelect && this.onSelect) {
+      this.onSelect({'$chip': this.items[this.selectedChip] });
+    }
   } else {
     this.$log.warn('Selected Chip index out of bounds; ignoring.');
   }

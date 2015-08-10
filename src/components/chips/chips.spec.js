@@ -6,6 +6,8 @@ describe('<md-chips>', function() {
     '<md-chips ng-model="items" md-on-append="appendChip($chip)"></md-chips>';
   var CHIP_REMOVE_TEMPLATE =
     '<md-chips ng-model="items" md-on-remove="removeChip($chip, $index)"></md-chips>';
+  var CHIP_SELECT_TEMPLATE =
+    '<md-chips ng-model="items" md-on-select="selectChip($chip)"></md-chips>';
   var CHIP_READONLY_AUTOCOMPLETE_TEMPLATE =
     '<md-chips ng-model="items" readonly="true">' +
     '  <md-autocomplete md-items="item in [\'hi\', \'ho\', \'he\']"></md-autocomplete>' +
@@ -133,6 +135,21 @@ describe('<md-chips>', function() {
         expect(scope.removeChip.calls.mostRecent().args[1]).toBe(0);       // Index
       });
 
+
+      it('should call the select method when selecting a chip', function() {
+        var element = buildChips(CHIP_SELECT_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        scope.selectChip = jasmine.createSpy('selectChip');
+
+        element.scope().$apply(function() {
+          ctrl.items = ['Grape'];
+          ctrl.selectChip(0);
+        });
+
+        expect(scope.selectChip).toHaveBeenCalled();
+        expect(scope.selectChip.calls.mostRecent().args[0]).toBe('Grape');
+      });
 
       it('should handle appending an object chip', function() {
         var element = buildChips(CHIP_APPEND_TEMPLATE);
@@ -394,9 +411,9 @@ describe('<md-chips>', function() {
     });
   });
 
-// *******************************
-// Internal helper methods
-// *******************************
+  // *******************************
+  // Internal helper methods
+  // *******************************
 
   function buildChips(str) {
     var container;
