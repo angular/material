@@ -1,7 +1,6 @@
 .custom-chips {
   .md-chip {
     position: relative;
-    padding-right: 35px;
     .md-chip-remove-container {
       position: absolute;
       right: 4px;
@@ -33,6 +32,11 @@
         &:hover, &:focus {
           background: rgba(red, 0.8);
         }
+      }
+    }
+    &:not(.md-readonly) {
+      md-chip-template {
+        padding-right: 20px;
       }
     }
   }

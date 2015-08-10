@@ -96,14 +96,15 @@
           class="md-chips">\
         <md-chip ng-repeat="$chip in $mdChipsCtrl.items"\
             index="{{$index}}"\
-            ng-class="{\'md-focused\': $mdChipsCtrl.selectedChip == $index}">\
+            ng-class="{\'md-focused\': $mdChipsCtrl.selectedChip == $index, \'md-readonly\': $mdChipsCtrl.readonly}">\
           <div class="md-chip-content"\
               tabindex="-1"\
               aria-hidden="true"\
               ng-focus="!$mdChipsCtrl.readonly && $mdChipsCtrl.selectChip($index)"\
               md-chip-transclude="$mdChipsCtrl.chipContentsTemplate"></div>\
-          <div class="md-chip-remove-container"\
-              md-chip-transclude="$mdChipsCtrl.chipRemoveTemplate"></div>\
+          <div ng-if="!$mdChipsCtrl.readonly"\
+               class="md-chip-remove-container"\
+               md-chip-transclude="$mdChipsCtrl.chipRemoveTemplate"></div>\
         </md-chip>\
         <div ng-if="!$mdChipsCtrl.readonly && $mdChipsCtrl.ngModelCtrl"\
             class="md-chip-input-container"\
