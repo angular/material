@@ -14,6 +14,7 @@ function MdChipTransclude ($compile) {
         newScope = ctrl.parent.$new(false, ctrl.parent);
     newScope.$$replacedScope = scope;
     newScope.$chip = scope.$chip;
+    newScope.$index = scope.$index;
     newScope.$mdChipsCtrl = ctrl;
 
     var newHtml = ctrl.$scope.$eval(attr.mdChipTransclude);
