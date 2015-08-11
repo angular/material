@@ -30,12 +30,7 @@
    *     <li>Colours for hover, press states (ripple?).</li>
    *   </ul>
    *
-   *   <ul>List Manipulation
-   *     <li>delete item via DEL or backspace keys when selected</li>
-   *   </ul>
-   *
    *   <ul>Validation
-   *     <li>de-dupe values (or support duplicates, but fix the ng-repeat duplicate key issue)</li>
    *     <li>allow a validation callback</li>
    *     <li>hilighting style for invalid chips</li>
    *   </ul>
@@ -92,7 +87,7 @@
       <md-chips-wrap\
           ng-if="!$mdChipsCtrl.readonly || $mdChipsCtrl.items.length > 0"\
           ng-keydown="$mdChipsCtrl.chipKeydown($event)"\
-          ng-class="{ \'md-focused\': $mdChipsCtrl.hasFocus() }"\
+          ng-class="{ \'md-focused\': $mdChipsCtrl.hasFocus(), \'md-readonly\': !$mdChipsCtrl.ngModelCtrl }"\
           class="md-chips">\
         <md-chip ng-repeat="$chip in $mdChipsCtrl.items"\
             index="{{$index}}"\
