@@ -92,11 +92,12 @@ describe('<md-virtual-repeat>', function() {
     expect(sizer[0].offsetWidth).toBe(NUM_ITEMS * ITEM_SIZE);
   });
 
-  xit('should render only enough items to fill the viewport + 3 (vertical, no md-item-size)', function() {
+  it('should render only enough items to fill the viewport + 3 (vertical, no md-item-size)', function() {
     repeater.removeAttr('md-item-size');
     createRepeater();
     scope.items = createItems(NUM_ITEMS);
     scope.$apply();
+    $$rAF.flush();
     $$rAF.flush();
 
     var numItemRenderers = VERTICAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA;
@@ -105,7 +106,7 @@ describe('<md-virtual-repeat>', function() {
     expect(sizer[0].offsetHeight).toBe(NUM_ITEMS * ITEM_SIZE);
   });
 
-  xit('should render only enough items to fill the viewport + 3 (horizontal, no md-item-size)', function() {
+  it('should render only enough items to fill the viewport + 3 (horizontal, no md-item-size)', function() {
 
     container.attr('md-orient-horizontal', '');
     repeater.removeAttr('md-item-size');
@@ -113,7 +114,7 @@ describe('<md-virtual-repeat>', function() {
     scope.items = createItems(NUM_ITEMS);
     scope.$digest();
     $$rAF.flush();
-
+    $$rAF.flush();
 
     var numItemRenderers = HORIZONTAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA;
 
