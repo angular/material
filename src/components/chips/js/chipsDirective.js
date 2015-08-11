@@ -66,6 +66,8 @@
    *    the input and delete buttons
    * @param {expression} md-on-append An expression expected to convert the input string into an
    *    object when adding a chip.
+   * @param {expression} md-on-remove An expression which will be called when a chip has been
+   *    removed.
    * @param {string=} delete-hint A string read by screen readers instructing users that pressing
    *    the delete key will remove the chip.
    * @param {string=} delete-button-label A label for the delete button. Also hidden and read by
@@ -161,6 +163,7 @@
         placeholder: '@',
         secondaryPlaceholder: '@',
         mdOnAppend: '&',
+        mdOnRemove: '&',
         deleteHint: '@',
         deleteButtonLabel: '@',
         requireMatch: '=?mdRequireMatch'
@@ -243,6 +246,10 @@
           // If an `md-on-append` attribute was set, tell the controller to use the expression
           // when appending chips.
           if (attrs.mdOnAppend) mdChipsCtrl.useMdOnAppendExpression();
+
+          // If an `md-on-remove` attribute was set, tell the controller to use the expression
+          // when removing chips.
+          if (attrs.mdOnRemove) mdChipsCtrl.useMdOnRemoveExpression();
 
           // The md-autocomplete and input elements won't be compiled until after this directive
           // is complete (due to their nested nature). Wait a tick before looking for them to

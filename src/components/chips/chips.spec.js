@@ -5,6 +5,8 @@ describe('<md-chips>', function() {
     '<md-chips ng-model="items"></md-chips>';
   var CHIP_APPEND_TEMPLATE =
     '<md-chips ng-model="items" md-on-append="appendChip($chip)"></md-chips>';
+  var CHIP_REMOVE_TEMPLATE =
+    '<md-chips ng-model="items" md-on-remove="removeChip($chip, $index)"></md-chips>';
 
   describe('with no overrides', function() {
 
@@ -110,6 +112,23 @@ describe('<md-chips>', function() {
         expect(scope.items.length).toBe(4);
         expect(scope.items[3]).toBe('GrapeGrape');
       });
+
+      it('should call the remove method when removing a chip', function() {
+        var element = buildChips(CHIP_REMOVE_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        scope.removeChip = jasmine.createSpy('removeChip');
+
+        element.scope().$apply(function() {
+          ctrl.items = ['Grape'];
+          ctrl.removeChip(0);
+        });
+
+        expect(scope.removeChip).toHaveBeenCalled();
+        expect(scope.removeChip.calls.mostRecent().args[0]).toBe('Grape'); // Chip
+        expect(scope.removeChip.calls.mostRecent().args[1]).toBe(0);       // Index
+      });
+
 
       it('should handle appending an object chip', function() {
         var element = buildChips(CHIP_APPEND_TEMPLATE);
