@@ -74,11 +74,12 @@ function autoprefix () {
   ]});
 }
 
-function buildModule(module, isRelease) {
+function buildModule(module, opts) {
+  opts = opts || {};
   if ( module.indexOf(".") < 0) {
     module = "material.components." + module;
   }
-  gutil.log('Building ' + module + (isRelease && ' minified' || '') + ' ...');
+  gutil.log('Building ' + module + (opts.isRelease && ' minified' || '') + ' ...');
 
   var name = module.split('.').pop();
   utils.copyDemoAssets(name, 'src/components/', 'dist/demos/');
@@ -93,7 +94,8 @@ function buildModule(module, isRelease) {
   return stream
       .pipe(BUILD_MODE.transform())
       .pipe(insert.prepend(config.banner))
-      .pipe(gulpif(isRelease, buildMin()))
+      .pipe(gulpif(opts.minify, buildMin()))
+      .pipe(gulpif(opts.useBower, buildBower()))
       .pipe(gulp.dest(BUILD_MODE.outputDir + name));
 
   function splitStream (stream) {
@@ -119,8 +121,12 @@ function buildModule(module, isRelease) {
               .replace(/.js$/, '.min.js')
               .replace(/.css$/, '.min.css');
         })
-        .pipe(utils.buildModuleBower, name, VERSION)
     ();
+  }
+
+  function buildBower() {
+    return lazypipe()
+      .pipe(utils.buildModuleBower, name, VERSION)();
   }
 
   function buildModuleJs(name) {
