@@ -55,7 +55,10 @@ $contact-chip-name-width: rem(12) !default;
   font-size: $chip-font-size;
   padding: $chip-wrap-padding;
   vertical-align: middle;
-  cursor: text;
+
+  &:not('.md-readonly') {
+    cursor: text;
+  }
   .md-chip {
     cursor: default;
     border-radius: $chip-height / 2;
