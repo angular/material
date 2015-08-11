@@ -135,6 +135,30 @@ describe('<md-chips>', function() {
         expect(scope.items[3].name).toBe('Grape');
         expect(scope.items[3].uppername).toBe('GRAPE');
       });
+
+      it('should disallow duplicate object chips', function() {
+        var element = buildChips(CHIP_APPEND_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        // Manually set the items
+        ctrl.items = [{name: 'Apple', uppername: 'APPLE'}];
+
+        // Make our custom appendChip function return our existing item
+        var chipObj = function(chip) {
+          return ctrl.items[0];
+        };
+
+        scope.appendChip = jasmine.createSpy('appendChip').and.callFake(chipObj);
+
+        element.scope().$apply(function() {
+          ctrl.chipBuffer = 'Apple';
+          simulateInputEnterKey(ctrl);
+        });
+
+        expect(ctrl.items.length).toBe(1);
+        expect(scope.appendChip).toHaveBeenCalled();
+        expect(scope.appendChip.calls.mostRecent().args[0]).toBe('Apple');
+      });
     });
 
     describe('custom inputs', function() {
@@ -309,9 +333,9 @@ describe('<md-chips>', function() {
     });
   });
 
-  // *******************************
-  // Internal helper methods
-  // *******************************
+// *******************************
+// Internal helper methods
+// *******************************
 
   function buildChips(str) {
     var container;
