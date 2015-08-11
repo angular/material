@@ -8,6 +8,23 @@ describe('util', function() {
       $timeout = _$timeout_;
   }));
 
+  describe('now',function(){
+
+      it('returns proper values', inject(function($mdUtil, $timeout) {
+        var t1 = $mdUtil.now(), t2;
+
+        expect( t1 ).toBeGreaterThan(0);
+
+        $timeout(function() {
+          t2 = $mdUtil.now();
+        },10,false);
+
+        $timeout.flush();
+        expect( t2 - t1 ).toBeGreaterThan(0);
+      }));
+
+    });
+
   describe('disconnect',function(){
     var disconnectScope, reconnectScope;
     beforeEach(inject(function($mdUtil) {
