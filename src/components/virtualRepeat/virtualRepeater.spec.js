@@ -390,6 +390,22 @@ describe('<md-virtual-repeat>', function() {
     expect(container[0].offsetWidth).toBe(2 * ITEM_SIZE);
   });
 
+  it('should measure item size after data has loaded (no md-item-size)', function() {
+    repeater.removeAttr('md-item-size');
+    createRepeater();
+    scope.$apply();
+    $$rAF.flush();
+
+    expect(getRepeated().length).toBe(0);
+
+    scope.items = createItems(NUM_ITEMS);
+    scope.$apply();
+    $$rAF.flush();
+
+    var numItemRenderers = VERTICAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA;
+    expect(getRepeated().length).toBe(numItemRenderers);
+  });
+
   /**
    * Facade to access transform properly even when jQuery is used;
    * since jQuery's css function is obtaining the computed style (not wanted)
