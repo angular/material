@@ -648,7 +648,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    */
   function updateInkBarStyles () {
     if (!elements.tabs[ ctrl.selectedIndex ]) {
-      angular.element(elements.inkBar).css({ left: 'auto' });
+      angular.element(elements.inkBar).css({ left: 'auto', right 'auto' });
       return;
     }
     if (!ctrl.tabs.length) return queue.push(ctrl.updateInkBarStyles);
