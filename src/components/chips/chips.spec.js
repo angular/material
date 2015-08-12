@@ -1,19 +1,23 @@
 describe('<md-chips>', function() {
-  var scope;
-
+  var scope, $exceptionHandler, $timeout;
   var BASIC_CHIP_TEMPLATE =
     '<md-chips ng-model="items"></md-chips>';
   var CHIP_APPEND_TEMPLATE =
     '<md-chips ng-model="items" md-on-append="appendChip($chip)"></md-chips>';
   var CHIP_REMOVE_TEMPLATE =
     '<md-chips ng-model="items" md-on-remove="removeChip($chip, $index)"></md-chips>';
+  var CHIP_READONLY_AUTOCOMPLETE_TEMPLATE =
+    '<md-chips ng-model="items" readonly="true">' +
+    '  <md-autocomplete md-items="item in [\'hi\', \'ho\', \'he\']"></md-autocomplete>' +
+    '</md-chips>';
 
   describe('with no overrides', function() {
-
     beforeEach(module('material.components.chips', 'material.components.autocomplete'));
-    beforeEach(inject(function($rootScope) {
+    beforeEach(inject(function($rootScope, _$exceptionHandler_, _$timeout_) {
       scope = $rootScope.$new();
       scope.items = ['Apple', 'Banana', 'Orange'];
+      $exceptionHandler = _$exceptionHandler_;
+      $timeout = _$timeout_;
     }));
 
     describe('basic functionality', function() {
@@ -155,6 +159,14 @@ describe('<md-chips>', function() {
         expect(scope.items[3].uppername).toBe('GRAPE');
       });
 
+      it('should not throw an error when using readonly with an autocomplete', function() {
+        var element = buildChips(CHIP_READONLY_AUTOCOMPLETE_TEMPLATE);
+
+        $timeout.flush();
+
+        expect($exceptionHandler.errors).toEqual([]);
+      });
+
       it('should disallow duplicate object chips', function() {
         var element = buildChips(CHIP_APPEND_TEMPLATE);
         var ctrl = element.controller('mdChips');
@@ -270,6 +282,17 @@ describe('<md-chips>', function() {
           <md-chip>Baseball</md-chip>\
           <md-chip>{{chipItem}}</md-chip>\
         </md-chips>';
+
+      var STATIC_CHIPS_NGREPEAT_TEMPLATE = '\
+        <div>\
+          <div ng-repeat="i in [1,2,3]">\
+            <md-chips>\
+              <md-chip>{{i}}</md-chip>\
+            </md-chips>\
+          </div>\
+        </div>\
+      ';
+
       it('should transclude static chips', inject(function($timeout) {
         scope.chipItem = 'Football';
         var element = buildChips(STATIC_CHIPS_TEMPLATE);
@@ -283,6 +306,25 @@ describe('<md-chips>', function() {
         expect(chips[2].innerHTML).toContain('Baseball');
         expect(chips[3].innerHTML).toContain('Football');
       }));
+
+      it('allows ng-repeat outside of md-chips', function() {
+        var element = buildChips(STATIC_CHIPS_NGREPEAT_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        $timeout.flush();
+
+        var chipsArray = getChipsElements(element);
+        var chipArray = getChipElements(element);
+
+        // Check the lengths
+        expect(chipsArray.length).toBe(3);
+        expect(chipArray.length).toBe(3);
+
+        // Check the chip's text
+        expect(chipArray[0].innerHTML).toContain('1');
+        expect(chipArray[1].innerHTML).toContain('2');
+        expect(chipArray[2].innerHTML).toContain('3');
+      });
     });
 
     describe('<md-chip-remove>', function() {
@@ -331,11 +373,11 @@ describe('<md-chips>', function() {
         '  <md-chip-template><div class="mychiptemplate">[[$chip]]</div></md-chip-template>' +
         '</md-chips>';
       var element = buildChips(template);
-      var chips = element.find('md-chip');
+      var chips = element[0].querySelectorAll('md-chip .mychiptemplate');
 
-      expect(chips.eq(0).text().trim()).toEqual('Apple');
-      expect(chips.eq(1).text().trim()).toEqual('Banana');
-      expect(chips.eq(2).text().trim()).toEqual('Orange');
+      expect(angular.element(chips[0]).text().trim()).toEqual('Apple');
+      expect(angular.element(chips[1]).text().trim()).toEqual('Banana');
+      expect(angular.element(chips[2]).text().trim()).toEqual('Orange');
     });
 
     it('should not interpolate old-style tags in a user-provided chip template', function() {
@@ -344,11 +386,11 @@ describe('<md-chips>', function() {
         '  <md-chip-template><div class="mychiptemplate">{{$chip}}</div></md-chip-template>' +
         '</md-chips>';
       var element = buildChips(template);
-      var chips = element.find('md-chip');
+      var chips = element[0].querySelectorAll('md-chip .mychiptemplate');
 
-      expect(chips.eq(0).text().trim()).toEqual('{{$chip}}');
-      expect(chips.eq(1).text().trim()).toEqual('{{$chip}}');
-      expect(chips.eq(2).text().trim()).toEqual('{{$chip}}');
+      expect(angular.element(chips[0]).text().trim()).toEqual('{{$chip}}');
+      expect(angular.element(chips[1]).text().trim()).toEqual('{{$chip}}');
+      expect(angular.element(chips[2]).text().trim()).toEqual('{{$chip}}');
     });
   });
 
@@ -383,6 +425,10 @@ describe('<md-chips>', function() {
       event.keyCode = $mdConstant.KEY_CODE.ENTER;
     });
     ctrl.inputKeydown(event);
+  }
+
+  function getChipsElements(root) {
+    return angular.element(root[0].querySelectorAll('md-chips'));
   }
 
   function getChipElements(root) {
