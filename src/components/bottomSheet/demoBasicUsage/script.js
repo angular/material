@@ -12,7 +12,7 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
       .icon('facebook', 'img/icons/facebook.svg', 24)
       .icon('twitter', 'img/icons/twitter.svg', 24);
   })
-.controller('BottomSheetExample', function($scope, $timeout, $mdBottomSheet) {
+.controller('BottomSheetExample', function($scope, $timeout, $mdBottomSheet, $mdToast) {
   $scope.alert = '';
 
   $scope.showListBottomSheet = function($event) {
@@ -33,7 +33,12 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
       controller: 'GridBottomSheetCtrl',
       targetEvent: $event
     }).then(function(clickedItem) {
-      $scope.alert = clickedItem.name + ' clicked!';
+      $mdToast.show(
+            $mdToast.simple()
+              .content(clickedItem.name + ' clicked!')
+              .position('top right')
+              .hideDelay(1500)
+          );
     });
   };
 })

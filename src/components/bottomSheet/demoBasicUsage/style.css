@@ -35,3 +35,12 @@ h2 {
 .md-subheader .md-subheader-inner {
   padding: 0px;
 }
+
+
+md-toast {
+  background-color: #B14141;
+}
+
+md-toast > * {
+  font-weight: bolder;
+}
