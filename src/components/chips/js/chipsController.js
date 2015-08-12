@@ -185,7 +185,7 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
   if (this.useMdOnAppend && this.mdOnAppend) {
     newChip = this.mdOnAppend({'$chip': newChip});
   }
-  this.items.push(newChip);
+  if(newChip!==undefined) this.items.push(newChip);
 };
 
 /**
