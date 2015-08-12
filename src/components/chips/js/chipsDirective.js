@@ -140,7 +140,7 @@
    * MDChips Directive Definition
    */
   function MdChips ($mdTheming, $mdUtil, $compile, $log, $timeout) {
-    // Run our templates through $mdUtil.processTemplate() to allow custom start/end symbosl
+    // Run our templates through $mdUtil.processTemplate() to allow custom start/end symbols
     convertTemplates();
 
     return {
@@ -149,7 +149,7 @@
         // name with '$', Angular won't write it into the DOM. The cloned
         // element propagates to the link function via the attrs argument,
         // where various contained-elements can be consumed.
-        var content = attrs['$mdUserTemplate'] = element.clone();
+        attrs['$mdUserTemplate'] = element.clone();
         return MD_CHIPS_TEMPLATE;
       },
       require: ['mdChips'],
@@ -255,19 +255,27 @@
           // is complete (due to their nested nature). Wait a tick before looking for them to
           // configure the controller.
           if (chipInputTemplate != CHIP_INPUT_TEMPLATE) {
-            $timeout(function() {
-              if (chipInputTemplate.indexOf('<md-autocomplete') === 0)
-                mdChipsCtrl
-                    .configureAutocomplete(element.find('md-autocomplete')
-                        .controller('mdAutocomplete'));
-              mdChipsCtrl.configureUserInput(element.find('input'));
+            // The autocomplete will not appear until the readonly attribute is not true (i.e.
+            // false or undefined), so we have to watch the readonly and then on the next tick
+            // after the chip transclusion has run, we can configure the autocomplete and user
+            // input.
+            scope.$watch('$mdChipsCtrl.readonly', function(readonly) {
+              if (!readonly) {
+                $mdUtil.nextTick(function(){
+                  if (chipInputTemplate.indexOf('<md-autocomplete') === 0)
+                    mdChipsCtrl
+                        .configureAutocomplete(element.find('md-autocomplete')
+                            .controller('mdAutocomplete'));
+                  mdChipsCtrl.configureUserInput(element.find('input'));
+                });
+              }
             });
           }
         }
 
         // Compile with the parent's scope and prepend any static chips to the wrapper.
         if (staticChips.length > 0) {
-          var compiledStaticChips = $compile(staticChips)(scope.$parent);
+          var compiledStaticChips = $compile(staticChips.clone())(scope.$parent);
           $timeout(function() { element.find('md-chips-wrap').prepend(compiledStaticChips); });
         }
       };
