@@ -1,8 +1,9 @@
 describe('md-menu directive', function() {
-  var $mdMenu, $timeout, something;
+  var $mdMenu, $timeout, something, $mdUtil;
 
   beforeEach(module('material.components.menu'));
-  beforeEach(inject(function($mdUtil, $$q, $document, _$mdMenu_, _$timeout_) {
+  beforeEach(inject(function(_$mdUtil_, _$mdMenu_, _$timeout_, $document) {
+    $mdUtil = _$mdUtil_;
     $mdMenu = _$mdMenu_;
     $timeout = _$timeout_;
     var abandonedMenus = $document[0].querySelectorAll('.md-menu-container');
@@ -33,6 +34,32 @@ describe('md-menu directive', function() {
     closeMenu(menu);
     expect(getOpenMenuContainer().length).toBe(0);
   });
+
+  it('opens on click without $event', function() {
+    var noEvent = true;
+    var menu = setup('ng-click', noEvent);
+    openMenu(menu);
+    expect(getOpenMenuContainer().length).toBe(1);
+    closeMenu(menu);
+    expect(getOpenMenuContainer().length).toBe(0);
+  });
+
+  it('opens on mouseEnter', function() {
+      var menu = setup('ng-mouseenter');
+      openMenu(menu, 'mouseenter');
+      expect(getOpenMenuContainer().length).toBe(1);
+      closeMenu(menu);
+      expect(getOpenMenuContainer().length).toBe(0);
+    });
+
+  it('opens on mouseEnter without $event', function() {
+      var noEvent = true;
+      var menu = setup('ng-mouseenter', noEvent);
+      openMenu(menu, 'mouseenter');
+      expect(getOpenMenuContainer().length).toBe(1);
+      closeMenu(menu);
+      expect(getOpenMenuContainer().length).toBe(0);
+    });
 
   it('should not propagate the click event', function() {
     var clickDetected = false, menu = setup();
@@ -129,17 +156,17 @@ describe('md-menu directive', function() {
   // Internal methods
   // ********************************************
 
-  function setup() {
+  function setup(triggerType, noEvent) {
     var menu,
-      template = '' +
+      template = $mdUtil.supplant('' +
         '<md-menu>' +
-        ' <button ng-click="$mdOpenMenu($event)">Hello World</button>' +
+        ' <button {0}="$mdOpenMenu({1})">Hello World</button>' +
         ' <md-menu-content>' +
         '  <md-menu-item>' +
         '    <md-button ng-click="doSomething($event)"></md-button>' +
         '  </md-menu-item>' +
         ' </md-menu-content>' +
-        '</md-menu>';
+        '</md-menu>',[ triggerType || 'ng-click', noEvent ? '' : "$event" ]);
 
     inject(function($compile, $rootScope) {
       $rootScope.doSomething = function($event) {
@@ -159,8 +186,8 @@ describe('md-menu directive', function() {
     return res;
   }
 
-  function openMenu(el) {
-    el.children().eq(0).triggerHandler('click');
+  function openMenu(el, triggerType) {
+    el.children().eq(0).triggerHandler(triggerType || 'click');
     waitForMenuOpen();
   }
 

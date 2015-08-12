@@ -66,7 +66,7 @@ describe('mdIcon directive', function() {
 
         expect(el.attr('md-font-icon')).toBe($scope.font.name);
         expect(el.hasClass('step')).toBe(true);
-        expect(el.hasClass('material-icons')).toBe(false);
+        expect(el.hasClass('material-icons')).toBe(true);
         expect(el.attr('aria-label')).toBe($scope.font.name + $scope.font.size);
         expect(el.attr('role')).toBe('img');
       })
@@ -79,7 +79,7 @@ describe('mdIcon directive', function() {
         el = make( '<md-icon class="md-48">face</md-icon>');
 
         expect(el.text()).toEqual('face');
-        expect(el.hasClass('material-icons')).toBeFalsy();
+        expect(el.hasClass('material-icons')).toBeTruthy();
         expect(el.hasClass('md-48')).toBeTruthy();
       });
 
@@ -124,7 +124,7 @@ describe('mdIcon directive', function() {
         el = make( '<md-icon class="custom-cake"></md-icon>');
 
         expect(el.text()).toEqual('');
-        expect(el.hasClass('material-icons')).toBeFalsy();
+        expect(el.hasClass('material-icons')).toBeTruthy();
         expect(el.hasClass('custom-cake')).toBeTruthy();
       });
 

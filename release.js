@@ -8,7 +8,7 @@
   var child_process  = require('child_process');
   var pkg            = require('./package.json');
   var oldVersion     = pkg.version;
-  var abortCmds      = [ 'git reset --hard', 'git checkout master', 'rm abort push' ];
+  var abortCmds      = [ 'git reset --hard', 'git checkout staging', 'rm abort push' ];
   var pushCmds       = [ 'rm abort push'];
   var cleanupCmds    = [];
   var defaultOptions = { encoding: 'utf-8' };
@@ -60,10 +60,8 @@
   function validate () {
     if (exec('npm whoami') !== 'angularcore') {
       err('You must be authenticated with npm as "angularcore" to perform a release.');
-    } else if (exec('git rev-parse --abbrev-ref HEAD') !== 'master') {
-      err('Releases can only performed from master at this time.');
-    } else if (exec('git pull -q --rebase {{origin}} master') instanceof Error) {
-      err('Please make sure your local branch is synced with origin/master.');
+    } else if (exec('git rev-parse --abbrev-ref HEAD') !== 'staging') {
+      err('Releases can only performed from "staging" at this time.');
     } else {
       return true;
     }
