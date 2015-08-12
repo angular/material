@@ -1,16 +1,21 @@
 /*
-  * This var has to be outside the angular factory, otherwise when
-  * there are multiple material apps on the same page, each app
-  * will create its own instance of this array and the app's IDs
-  * will not be unique.
-  */
+ * This var has to be outside the angular factory, otherwise when
+ * there are multiple material apps on the same page, each app
+ * will create its own instance of this array and the app's IDs
+ * will not be unique.
+ */
 var nextUniqueId = 0;
 
 angular
   .module('material.core')
   .factory('$mdUtil', UtilFactory);
 
-function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate) {
+function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $interpolate) {
+  // Setup some core variables for the processTemplate method
+  var startSymbol = $interpolate.startSymbol(),
+    endSymbol = $interpolate.endSymbol(),
+    usesStandardSymbols = ((startSymbol === '{{') && (endSymbol === '}}'));
+
   var $mdUtil = {
     dom: {},
     now: window.performance ?
@@ -505,8 +510,23 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate) {
 
         if (digest) $rootScope.$digest();
       }
-    }
+    },
 
+    /**
+     * Processes a template and replaces the start/end symbols if the application has
+     * overriden them.
+     *
+     * @param template The template to process whose start/end tags may be replaced.
+     * @returns {*}
+     */
+    processTemplate: function(template) {
+      if (usesStandardSymbols) {
+        return template;
+      } else {
+        if (!template || !angular.isString(template)) return template;
+        return template.replace(/\{\{/g, startSymbol).replace(/}}/g, endSymbol);
+      }
+    }
   };
 
 // Instantiate other namespace utility methods
