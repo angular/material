@@ -8,6 +8,15 @@ describe('util', function() {
       $timeout = _$timeout_;
   }));
 
+  describe('now',function(){
+
+      it('returns proper time values', inject(function($mdUtil, $timeout) {
+        var t1 = $mdUtil.now();
+        expect( t1 ).toBeGreaterThan(0);
+      }));
+
+    });
+
   describe('disconnect',function(){
     var disconnectScope, reconnectScope;
     beforeEach(inject(function($mdUtil) {

@@ -11,8 +11,9 @@ angular.module('material.core')
     var $mdUtil = {
           dom : { },
           now: window.performance ?
-            angular.bind(window.performance, window.performance.now) :
-            Date.now,
+            angular.bind(window.performance, window.performance.now) : Date.now || function() {
+              return new Date().getTime();
+            },
 
           clientRect: function (element, offsetParent, isOffsetRect) {
             var node = getNode(element);
