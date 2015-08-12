@@ -142,6 +142,9 @@
    * MDChips Directive Definition
    */
   function MdChips ($mdTheming, $mdUtil, $compile, $log, $timeout) {
+    // Run our templates through $mdUtil.processTemplate() to allow custom start/end symbosl
+    convertTemplates();
+
     return {
       template: function(element, attrs) {
         // Clone the element into an attribute. By prepending the attribute
@@ -265,5 +268,12 @@
           $timeout(function() { element.find('md-chips-wrap').prepend(compiledStaticChips); });
         }
       };
+    }
+
+    function convertTemplates() {
+      MD_CHIPS_TEMPLATE = $mdUtil.processTemplate(MD_CHIPS_TEMPLATE);
+      CHIP_INPUT_TEMPLATE = $mdUtil.processTemplate(CHIP_INPUT_TEMPLATE);
+      CHIP_DEFAULT_TEMPLATE = $mdUtil.processTemplate(CHIP_DEFAULT_TEMPLATE);
+      CHIP_REMOVE_TEMPLATE = $mdUtil.processTemplate(CHIP_REMOVE_TEMPLATE);
     }
   }

@@ -220,12 +220,7 @@ function InterimElementProvider() {
 
   /* @ngInject */
   function InterimElementFactory($document, $q, $rootScope, $timeout, $rootElement, $animate,
-                                 $interpolate, $mdCompiler, $mdTheming, $log ) {
-    var startSymbol = $interpolate.startSymbol(),
-        endSymbol = $interpolate.endSymbol(),
-        usesStandardSymbols = ((startSymbol === '{{') && (endSymbol === '}}')),
-        processTemplate  = usesStandardSymbols ? angular.identity : replaceInterpolationSymbols;
-
+                                 $mdUtil, $mdCompiler, $mdTheming, $log ) {
     return function createInterimElementService() {
       var SHOW_CANCELLED = false;
       var SHOW_CLOSED = true;
@@ -427,7 +422,7 @@ function InterimElementProvider() {
         function configureScopeAndTransitions(options) {
           options = options || { };
           if ( options.template ) {
-            options.template = processTemplate(options.template);
+            options.template = $mdUtil.processTemplate(options.template);
           }
 
           return angular.extend({
