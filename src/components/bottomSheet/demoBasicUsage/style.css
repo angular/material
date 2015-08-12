@@ -19,3 +19,19 @@
 .md-grid-text {
   padding-bottom: 5px;
   }
+
+
+md-list-item, md-list-item .md-list-item-inner {
+  min-height: 48px;
+
+}
+
+h2 {
+  line-height: 36px;
+    padding-top: 10px;
+}
+
+
+.md-subheader .md-subheader-inner {
+  padding: 0px;
+}
