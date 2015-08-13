@@ -285,48 +285,55 @@ function MdSideSheetProvider($$interimElementProvider) {
         /**
          * SideSheet class to apply side-sheet behavior to an element
          */
-        function SideSheet(element, parent) {
-            var deregister = $mdGesture.register(parent, 'drag', {horizontal: true, vertical: false});
-            parent.on('$md.dragstart', onDragStart)
-                .on('$md.drag', onDrag)
-                .on('$md.dragend', onDragEnd);
-
+        function SideSheet(element) {
             return {
-                element: element,
-                cleanup: function cleanup() {
-                    deregister();
-                    parent.off('$md.dragstart', onDragStart)
-                        .off('$md.drag', onDrag)
-                        .off('$md.dragend', onDragEnd);
-                }
+                element: element
             };
 
-            function onDragStart(ev) {
-                // Disable transitions on transform so that it feels fast
-                element.css($mdConstant.CSS.TRANSITION_DURATION, '0ms');
-            }
-
-            function onDrag(ev) {
-                var transform = ev.pointer.distanceX;
-                if (transform < 5) {
-                    // Slow down drag when trying to drag up, and stop after PADDING
-                    transform = Math.max(-PADDING, transform / 2);
-                }
-                element.css($mdConstant.CSS.TRANSFORM, 'translate3d(' + (PADDING + transform) + 'px,0,0)');
-            }
-
-            function onDragEnd(ev) {
-                if (ev.pointer.distanceX > 0 &&
-                    (ev.pointer.distanceX > 20 || Math.abs(ev.pointer.velocityX) > CLOSING_VELOCITY)) {
-                    var distanceRemaining = element.prop('offsetWidth') - ev.pointer.distanceX;
-                    var transitionDuration = Math.min(distanceRemaining / ev.pointer.velocityX * 0.75, 500);
-                    element.css($mdConstant.CSS.TRANSITION_DURATION, transitionDuration + 'ms');
-                    $mdUtil.nextTick($mdSideSheet.cancel, true);
-                } else {
-                    element.css($mdConstant.CSS.TRANSITION_DURATION, '');
-                    element.css($mdConstant.CSS.TRANSFORM, '');
-                }
-            }
         }
+
+        //function SideSheet(element, parent) {
+        //    var deregister = $mdGesture.register(parent, 'drag', {horizontal: true, vertical: false});
+        //    parent.on('$md.dragstart', onDragStart)
+        //        .on('$md.drag', onDrag)
+        //        .on('$md.dragend', onDragEnd);
+        //
+        //    return {
+        //        element: element,
+        //        cleanup: function cleanup() {
+        //            deregister();
+        //            parent.off('$md.dragstart', onDragStart)
+        //                .off('$md.drag', onDrag)
+        //                .off('$md.dragend', onDragEnd);
+        //        }
+        //    };
+        //
+        //    function onDragStart(ev) {
+        //        // Disable transitions on transform so that it feels fast
+        //        element.css($mdConstant.CSS.TRANSITION_DURATION, '0ms');
+        //    }
+        //
+        //    function onDrag(ev) {
+        //        var transform = ev.pointer.distanceX;
+        //        if (transform < 5) {
+        //            // Slow down drag when trying to drag up, and stop after PADDING
+        //            transform = Math.max(-PADDING, transform / 2);
+        //        }
+        //        element.css($mdConstant.CSS.TRANSFORM, 'translate3d(' + (PADDING + transform) + 'px,0,0)');
+        //    }
+        //
+        //    function onDragEnd(ev) {
+        //        if (ev.pointer.distanceX > 0 &&
+        //            (ev.pointer.distanceX > 20 || Math.abs(ev.pointer.velocityX) > CLOSING_VELOCITY)) {
+        //            var distanceRemaining = element.prop('offsetWidth') - ev.pointer.distanceX;
+        //            var transitionDuration = Math.min(distanceRemaining / ev.pointer.velocityX * 0.75, 500);
+        //            element.css($mdConstant.CSS.TRANSITION_DURATION, transitionDuration + 'ms');
+        //            $mdUtil.nextTick($mdSideSheet.cancel, true);
+        //        } else {
+        //            element.css($mdConstant.CSS.TRANSITION_DURATION, '');
+        //            element.css($mdConstant.CSS.TRANSFORM, '');
+        //        }
+        //    }
+        //}
     }
 }
