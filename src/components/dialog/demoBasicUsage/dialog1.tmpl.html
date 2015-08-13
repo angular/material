@@ -4,7 +4,7 @@
     <div class="md-toolbar-tools">
       <h2>Mango (Fruit)</h2>
       <span flex></span>
-      <md-button class="md-icon-button" ng-click="answer('not applicable')">
+      <md-button class="md-icon-button" ng-click="answer('not applicable')" >
         <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
       </md-button>
     </div>
@@ -27,14 +27,14 @@
   </md-dialog-content>
 
   <div class="md-actions" layout="row">
-    <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" hide show-md>
+    <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" md-auto-focus>
       More on Wikipedia
     </md-button>
     <span flex></span>
-    <md-button ng-click="answer('not useful')">
+    <md-button ng-click="answer('not useful')" >
      Not Useful
     </md-button>
-    <md-button ng-click="answer('useful')" style="margin-right:20px;">
+    <md-button ng-click="answer('useful')" style="margin-right:20px;" >
       Useful
     </md-button>
   </div>

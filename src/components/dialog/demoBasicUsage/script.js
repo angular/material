@@ -25,9 +25,9 @@ angular.module('dialogDemo1', ['ngMaterial'])
           .title('Would you like to delete your debt?')
           .content('All of the banks have agreed to forgive you your debts.')
           .ariaLabel('Lucky day')
+          .targetEvent(ev)
           .ok('Please do it!')
-          .cancel('Sounds like a scam')
-          .targetEvent(ev);
+          .cancel('Sounds like a scam');
 
     $mdDialog.show(confirm).then(function() {
       $scope.status = 'You decided to get rid of your debt.';

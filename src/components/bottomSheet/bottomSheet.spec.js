@@ -15,7 +15,8 @@ describe('$mdBottomSheet service', function() {
 
       expect(parent.find('md-bottom-sheet').length).toBe(1);
 
-      $rootElement.triggerHandler({type: 'keyup',
+      $rootElement.triggerHandler({
+        type: 'keyup',
         keyCode: $mdConstant.KEY_CODE.ESCAPE
       });
 
@@ -36,9 +37,38 @@ describe('$mdBottomSheet service', function() {
 
       expect(parent.find('md-bottom-sheet').length).toBe(1);
 
-      $rootElement.triggerHandler({ type: 'keyup', keyCode: $mdConstant.KEY_CODE.ESCAPE });
+      $rootElement.triggerHandler({type: 'keyup', keyCode: $mdConstant.KEY_CODE.ESCAPE});
 
       expect(parent.find('md-bottom-sheet').length).toBe(1);
+    }));
+
+    it('should focus child with md-auto-focus', inject(function($rootScope, $animate, $document, $mdBottomSheet) {
+      jasmine.mockElementFocus(this);
+      var parent = angular.element('<div>');
+      var markup = '' +
+        '<md-bottom-sheet>' +
+        '  <md-input-container><label>Label</label>' +
+        '    <input type="text" md-auto-focus>' +
+        '  </md-input-container>' +
+        '  <md-input-container><label>Label</label>' +
+        '    <input type="text" md-auto-focus>' +
+        '  </md-input-container>' +
+        '<md-bottom-sheet>';
+
+      $mdBottomSheet.show({
+        template: '<md-bottom-sheet>',
+        parent: parent,
+        escapeToClose: false
+      });
+      $rootScope.$apply();
+      $animate.triggerCallbacks();
+
+      var sheet = parent.find('md-bottom-sheet');
+      expect(sheet.length).toBe(1);
+      var focusEl = sheet.find('input');
+
+      // Focus should be on the last md-auto-focus element
+      expect($document.activeElement).toBe(focusEl[1]);
     }));
   });
 });

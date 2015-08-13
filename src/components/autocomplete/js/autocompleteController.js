@@ -61,8 +61,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     configureWatchers();
     $mdUtil.nextTick(function () {
       gatherElements();
-      focusElement();
       moveDropdown();
+      focusElement();
     });
   }
 
@@ -124,7 +124,10 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * Sends focus to the input element.
    */
   function focusElement () {
-    if ($scope.autofocus) elements.input.focus();
+    if ($scope.enableAutofocus) {
+      $mdUtil.findFocusTarget($element);
+    }
+    //elements.input.focus();
   }
 
   /**

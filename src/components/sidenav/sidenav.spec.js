@@ -61,7 +61,7 @@ describe('mdSidenav', function() {
       expect($document.activeElement).toBe(el[0]);
     }));
 
-    it('should focus child directive with md-sidenav-focus', inject(function($rootScope, $animate, $document, $compile) {
+    it('should focus child with md-sidenav-focus', inject(function($rootScope, $animate, $document, $compile) {
       jasmine.mockElementFocus(this);
       var parent = angular.element('<div>');
       var markup = '<md-sidenav md-is-open="show">'+
@@ -78,6 +78,25 @@ describe('mdSidenav', function() {
       $animate.triggerCallbacks();
       expect($document.activeElement).toBe(focusEl[0]);
     }));
+
+    it('should focus child with md-auto-focus', inject(function($rootScope, $animate, $document, $compile) {
+      jasmine.mockElementFocus(this);
+      var parent = angular.element('<div>');
+      var markup = '<md-sidenav md-is-open="show">'+
+                      '<md-input-container><label>Label</label>' +
+                        '<input type="text" md-auto-focus>' +
+                      '</md-input-container>' +
+                    '<md-sidenav>';
+      var sidenavEl = angular.element(markup);
+      parent.append(sidenavEl);
+      $compile(parent)($rootScope);
+      $rootScope.$apply('show = true');
+
+      var focusEl = sidenavEl.find('input');
+      $animate.triggerCallbacks();
+      expect($document.activeElement).toBe(focusEl[0]);
+    }));
+
 
     it('should focus on last md-sidenav-focus element', inject(function($rootScope, $animate, $document, $compile) {
       jasmine.mockElementFocus(this);

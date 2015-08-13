@@ -100,12 +100,13 @@ function mdCompilerService($q, $http, $injector, $compile, $controller, $templat
     // Wait for all the resolves to finish if they are promises
     return $q.all(resolve).then(function(locals) {
 
+      var compiledData;
       var template = transformTemplate(locals.$template);
       var element = options.element || angular.element('<div>').html(template.trim()).contents();
       var linkFn = $compile(element);
 
-      //Return a linking function that can be used later when the element is ready
-      return {
+      // Return a linking function that can be used later when the element is ready
+      return compiledData = {
         locals: locals,
         element: element,
         link: function link(scope) {
@@ -125,6 +126,9 @@ function mdCompilerService($q, $http, $injector, $compile, $controller, $templat
             if (controllerAs) {
               scope[controllerAs] = ctrl;
             }
+
+            // Publish reference to this controller
+            compiledData.controller = ctrl;
           }
           return linkFn(scope);
         }

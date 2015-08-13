@@ -364,7 +364,7 @@ function InterimElementProvider() {
               .then(function( compiledData ) {
                 element = linkElement( compiledData, options );
 
-                showAction = showElement(element, options)
+                showAction = showElement(element, options, compiledData.controller)
                   .then(resolve, rejectAll );
 
               });
@@ -543,7 +543,7 @@ function InterimElementProvider() {
          * Show the element ( with transitions), notify complete and start
          * optional auto-Hide
          */
-        function showElement(element, options) {
+        function showElement(element, options, controller) {
           // Trigger onComplete callback when the `show()` finishes
           var notifyComplete = options.onComplete || angular.noop;
 
@@ -551,7 +551,7 @@ function InterimElementProvider() {
             try {
 
               // Start transitionIn
-              $q.when(options.onShow(options.scope, element, options))
+              $q.when(options.onShow(options.scope, element, options, controller))
                 .then(function () {
 
                   notifyComplete(options.scope, element, options);
