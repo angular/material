@@ -1,13 +1,9 @@
 {%- if doc.properties %}
 <section class="api-section">
   <h2>Properties</h2>
-  <ul class="properties">
-    {%- for property in doc.properties %}
-    <li id="{$ property.name $}">
-      <h3>{$ property.name | code $}</h3>
-      TYPE INFO FOR {$ property | json $}
-    </li>
-    {% endfor -%}
+  <div class="api-param-table">
+    {$ propertyTable(doc.properties) $}
+  </div>
   </ul>
 </section>
 {%- endif -%}

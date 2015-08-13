@@ -1,11 +1,8 @@
 (function() {
   'use strict';
 
-  // PRE RELEASE
-  // TODO(jelbourn): Documentation
-  // TODO(jelbourn): Demo that uses moment.js
-
   // POST RELEASE
+  // TODO(jelbourn): Demo that uses moment.js
   // TODO(jelbourn): make sure this plays well with validation and ngMessages.
   // TODO(jelbourn): calendar pane doesn't open up outside of visible viewport.
   // TODO(jelbourn): forward more attributes to the internal input (required, autofocus, etc.)
@@ -23,12 +20,12 @@
    * @name mdDatepicker
    * @module material.components.datepicker
    *
-   * @param {Date} ng-model The component's model. Uses a JavaScript Date object.
+   * @param {Date} ng-model The component's model. Expects a JavaScript Date object.
    * @param {boolean=} disabled Whether the datepicker is disabled.
    *
    * @description
    * `<md-datepicker>` is a component used to select a single date.
-   * For information on how to configure internationalization for the date piicker,
+   * For information on how to configure internationalization for the date picker,
    * see `$mdDateLocaleProvider`.
    *
    * @usage
