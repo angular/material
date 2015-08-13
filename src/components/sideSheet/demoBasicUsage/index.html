@@ -1,18 +1,23 @@
 <div ng-controller="SideSheetExample" class="md-padding">
-  <h2 class="md-title">Usage</h2>
-  <p>Side sheets can be displayed by clicking one of the buttons below.  Once shown, it can be
-  dismissed by either swiping left/right or clicking in the shaded area, if enabled.</p>
-  <h2 class="md-title">Actions</h2>
-  <p>Use one of the following buttons to display a side sheet.</p>
-  <div class="side-sheet-demo inset" layout="row" layout-sm="column" layout-align="center">
-    <md-button flex="50" class="md-primary md-raised" ng-click="showListSideSheet($event)">Show as List</md-button>
-    <md-button flex="50" class="md-primary md-raised" ng-click="showGridSideSheet($event)">Show as Grid</md-button>
-  </div>
+    <h2 class="md-title">Usage</h2>
 
-  <div ng-if="alert">
-    <br/>
-    <b layout="row" layout-align="center center" class="md-padding">
-      {{alert}}
-    </b>
-  </div>
+    <p>Side sheets can be displayed by clicking one of the buttons below. Once shown, it can be
+        dismissed by either swiping left/right or clicking in the shaded area, if enabled.</p>
+
+    <h2 class="md-title">Actions</h2>
+
+    <p>Use one of the following buttons to display a side sheet.</p>
+
+    <div class="side-sheet-demo inset" layout="row" layout-sm="column" layout-align="center">
+        <md-button flex="50" class="md-primary md-raised" ng-click="showListSideSheet($event)">Left</md-button>
+        <md-button flex="50" class="md-primary md-raised" ng-click="showAutoSideSheet($event)">Auto</md-button>
+        <md-button flex="50" class="md-primary md-raised" ng-click="showGridSideSheet($event)">Right</md-button>
+    </div>
+
+    <div ng-if="alert">
+        <br/>
+        <b layout="row" layout-align="center center" class="md-padding">
+            {{alert}}
+        </b>
+    </div>
 </div>

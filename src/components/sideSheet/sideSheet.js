@@ -10,11 +10,13 @@ angular.module('material.components.sideSheet', [
 ])
     .provider('$mdSideSheet', MdSideSheetProvider)
     .directive('mdSideSheet', MdSideSheetDirective)
-    .directive('mdSideSheetFocus', SideSheetFocusDirective);
+    .directive('mdSideSheetFocus', MdSideSheetFocusDirective);
 
 function MdSideSheetDirective() {
     return {
-        restrict: 'E'
+        restrict: 'E',
+        controller: function () {
+        }
     };
 }
 
@@ -69,18 +71,18 @@ function MdSideSheetDirective() {
  *   <form>
  *     <md-input-container>
  *       <label for="testInput">Label</label>
- *       <input id="testInput" type="text" md-sidenav-focus>
+ *       <input id="testInput" type="text" md-side-sheet-focus>
  *     </md-input-container>
  *   </form>
  * </md-side-sheet>
  * </hljs>
  **/
-function SideSheetFocusDirective() {
+function MdSideSheetFocusDirective() {
     return {
         restrict: 'A',
         require: '^mdSideSheet',
-        link: function(scope, element, attr, sideSheetCtrl) {
-            sideSheetCtrl.focusElement(element);
+        link: function () {
+            // @see $mdUtil.findFocusTarget(...)
         }
     };
 }
@@ -99,29 +101,31 @@ function SideSheetFocusDirective() {
  *   have an outer `md-side-sheet` element.
  *   - `template` - `{string=}`: Same as templateUrl, except this is an actual
  *   template string.
- *   - `scope` - `{object=}`: the scope to link the template / controller to. If none is specified, it will create a new child scope.
- *     This scope will be destroyed when the side sheet is removed unless `preserveScope` is set to true.
- *   - `preserveScope` - `{boolean=}`: whether to preserve the scope when the element is removed. Default is false
- *   - `controller` - `{string=}`: The controller to associate with this side sheet.
- *   - `locals` - `{string=}`: An object containing key/value pairs. The keys will
- *   be used as names of values to inject into the controller. For example,
- *   `locals: {three: 3}` would inject `three` into the controller with the value
- *   of 3.
  *   - `targetEvent` - `{DOMClickEvent=}`: A click's event object. When passed in as an option,
  *   the location of the click will be used as the starting point for the opening animation
  *   of the the dialog.
+ *   - `scope` - `{object=}`: the scope to link the template / controller to. If none is specified, it will create a new child scope.
+ *     This scope will be destroyed when the side sheet is removed unless `preserveScope` is set to true.
+ *   - `preserveScope` - `{boolean=}`: whether to preserve the scope when the element is removed. Default is false
+ *   - `disableParentScroll` - `{boolean=}`: Whether to disable scrolling while the side sheet is open.
+ *   - `controller` - `{string=}`: The controller to associate with this side sheet.
+ *   - `locals` - `{object=}`: An object containing key/value pairs. The keys will be used as names of values to inject
+ *   into the controller.  For example, `locals: {three: 3}` would inject `three` into the controller, with the value 3.
+ *   If `bindToController` is true, they will be copied to the controller instead.
+ *   - `bindToController` - `{boolean=}`: binds the locals to the controller, instead of passing them in.
+ *   These values will not be available until after initialization.
  *   - `resolve` - `{object=}`: Similar to locals, except it takes promises as values
  *   and the side sheet will not open until the promises resolve.
  *   - `controllerAs` - `{string=}`: An alias to assign the controller to on the scope.
  *   - `parent` - `{element=}`: The element to append the side sheet to. The `parent` may be a `function`, `string`,
  *   `object`, or null. Defaults to appending to the body of the root element (or the root element) of the application.
  *   e.g. angular.element(document.getElementById('content')) or "#content"
- *   - `disableParentScroll` - `{boolean=}`: Whether to disable scrolling while the side sheet is open.
- *     Default true.
  *   - `hasBackDrop` - `{boolean=}`: Whether the side sheet has a backdrop.
+ *     Default false.
+ *   - `clickOutsideToClose` - `{boolean=}`: Whether clicking anywhere outside the sheet to close it.
  *     Default true.
- *   - `clickToClose` - `{boolean=}`: Whether clicking anywhere outside the sheet closes the side sheet.
- *     Default true.
+ *   - `escapeToClose` - `{boolean=}`: Whether the user can press escape to close the dialog. Default true.
+ *     Default false.
  *   - `side` - `{string=}`: Which side the side sheet opens on. Values are 'left', 'right' or 'auto.
  *     Default auto.
  *
@@ -165,7 +169,7 @@ function MdSideSheetProvider($$interimElementProvider) {
         });
 
     /* @ngInject */
-    function sideSheetDefaults($animate, $mdConstant, $mdUtil, $mdTheming, $mdSideSheet, $rootElement, $mdGesture) {
+    function sideSheetDefaults($timeout, $animate, $mdConstant, $mdUtil, $mdTheming, $mdSideSheet, $rootElement, $mdGesture) {
         var backdrop;
 
         return {
@@ -173,16 +177,17 @@ function MdSideSheetProvider($$interimElementProvider) {
             targetEvent: null,
             onShow: onShow,
             onRemove: onRemove,
-            escapeToClose: true,
+            escapeToClose: false,
             disableParentScroll: true,
-            backDrop: false,
-            clickToClose: true,
+            hasBackdrop: false,
+            clickOutsideToClose: true,
             side: 'auto'
         };
 
         function onShow(scope, element, options) {
 
             element = $mdUtil.extractElementByName(element, 'md-side-sheet');
+            var focusEl = $mdUtil.findFocusTarget(element) || $mdUtil.findFocusTarget(element, '[md-side-sheet-focus]') || element;
 
             // Left, Right or Auto?
             var sideClass;
@@ -190,26 +195,31 @@ function MdSideSheetProvider($$interimElementProvider) {
                 sideClass = 'md-side-sheet-left';
             } else if ('right' === options.side.toLowerCase()) {
                 sideClass = 'md-side-sheet-right';
-            } else if (options.targetEvent){
-                // whatever side the event happened from, use the opposite
-                sideClass = 'md-side-sheet-right';
+            } else if (options.targetEvent) {
+                if (options.targetEvent) {
+                    sideClass = options.targetEvent.pageX > (options.targetEvent.view.innerWidth / 2)
+                        ? 'md-side-sheet-left' : sideClass = 'md-side-sheet-right';
+                } else {
+                    sideClass = 'md-side-sheet-left';
+                }
             }
 
             element.addClass(sideClass);
 
             // Add a backdrop that will close on click
-            var c = options.backDrop ? "md-side-sheet-backdrop md-opaque" : "md-side-sheet-backdrop";
-            backdrop = $mdUtil.createBackdrop(scope, c);
+            if (options.hasBackdrop) {
+                backdrop = $mdUtil.createBackdrop(scope, 'md-side-sheet-backdrop md-opaque');
 
-            if (options.clickToClose) {
-                backdrop.on('click', function () {
-                    $mdUtil.nextTick($mdSideSheet.cancel, true);
-                });
+                if (options.clickOutsideToClose) {
+                    backdrop.on('click', function () {
+                        $mdUtil.nextTick($mdSideSheet.cancel, true);
+                    });
+                }
+
+                $mdTheming.inherit(backdrop, options.parent);
+
+                $animate.enter(backdrop, options.parent);
             }
-
-            $mdTheming.inherit(backdrop, options.parent);
-
-            $animate.enter(backdrop, options.parent, null);
 
             var sideSheet = new SideSheet(element, options.parent);
             options.sideSheet = sideSheet;
@@ -223,31 +233,42 @@ function MdSideSheetProvider($$interimElementProvider) {
                 options.parent.css('overflow', 'hidden');
             }
 
-            return $animate.enter(sideSheet.element, options.parent)
-                .then(function () {
+            $animate.enter(sideSheet.element, options.parent).then(function () {
+
+                if (options.escapeToClose) {
+                    options.rootElementKeyupCallback = function (e) {
+                        if (e.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
+                            $mdUtil.nextTick($mdSideSheet.cancel, true);
+                        }
+                    };
+                    $rootElement.on('keyup', options.rootElementKeyupCallback);
+                }
+
+                if (focusEl) {
+
+                    $timeout(function () {
+                        focusEl.focus();
+                    }, 50);
+
+                } else {
                     var focusable = angular.element(
                         element[0].querySelector('button') ||
                         element[0].querySelector('a') ||
                         element[0].querySelector('[ng-click]')
                     );
                     focusable.focus();
-
-                    if (options.escapeToClose) {
-                        options.rootElementKeyupCallback = function (e) {
-                            if (e.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
-                                $mdUtil.nextTick($mdSideSheet.cancel, true);
-                            }
-                        };
-                        $rootElement.on('keyup', options.rootElementKeyupCallback);
-                    }
-                });
+                }
+            });
         }
 
         function onRemove(scope, element, options) {
 
             var sideSheet = options.sideSheet;
 
-            $animate.leave(backdrop);
+            if (options.hasBackdrop) {
+                $animate.leave(backdrop);
+            }
+
             return $animate.leave(sideSheet.element).then(function () {
                 if (options.disableParentScroll) {
                     options.parent.css('overflow', options.lastOverflow);
@@ -265,7 +286,7 @@ function MdSideSheetProvider($$interimElementProvider) {
          * SideSheet class to apply side-sheet behavior to an element
          */
         function SideSheet(element, parent) {
-            var deregister = $mdGesture.register(parent, 'drag', {horizontal: false});
+            var deregister = $mdGesture.register(parent, 'drag', {horizontal: true, vertical: false});
             parent.on('$md.dragstart', onDragStart)
                 .on('$md.drag', onDrag)
                 .on('$md.dragend', onDragEnd);
@@ -286,19 +307,19 @@ function MdSideSheetProvider($$interimElementProvider) {
             }
 
             function onDrag(ev) {
-                var transform = ev.pointer.distanceY;
+                var transform = ev.pointer.distanceX;
                 if (transform < 5) {
                     // Slow down drag when trying to drag up, and stop after PADDING
                     transform = Math.max(-PADDING, transform / 2);
                 }
-                element.css($mdConstant.CSS.TRANSFORM, 'translate3d(0,' + (PADDING + transform) + 'px,0)');
+                element.css($mdConstant.CSS.TRANSFORM, 'translate3d(' + (PADDING + transform) + 'px,0,0)');
             }
 
             function onDragEnd(ev) {
-                if (ev.pointer.distanceY > 0 &&
-                    (ev.pointer.distanceY > 20 || Math.abs(ev.pointer.velocityY) > CLOSING_VELOCITY)) {
-                    var distanceRemaining = element.prop('offsetHeight') - ev.pointer.distanceY;
-                    var transitionDuration = Math.min(distanceRemaining / ev.pointer.velocityY * 0.75, 500);
+                if (ev.pointer.distanceX > 0 &&
+                    (ev.pointer.distanceX > 20 || Math.abs(ev.pointer.velocityX) > CLOSING_VELOCITY)) {
+                    var distanceRemaining = element.prop('offsetWidth') - ev.pointer.distanceX;
+                    var transitionDuration = Math.min(distanceRemaining / ev.pointer.velocityX * 0.75, 500);
                     element.css($mdConstant.CSS.TRANSITION_DURATION, transitionDuration + 'ms');
                     $mdUtil.nextTick($mdSideSheet.cancel, true);
                 } else {

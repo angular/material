@@ -11,10 +11,10 @@ $side-sheet-min-space: 56px !default;
 md-side-sheet {
   position: absolute;
   height: 100%;
-
+  transition: $swift-ease-in-duration;
   width: $side-sheet-default-width;
-  min-width: $side-sheet-default-width;
-  max-width: $side-sheet-default-width;
+  //min-width: $side-sheet-default-width;
+  //max-width: $side-sheet-default-width;
 
   padding: $side-sheet-vertical-padding $side-sheet-horizontal-padding $side-sheet-vertical-padding + $side-sheet-hidden-side-padding $side-sheet-horizontal-padding;
   z-index: $z-index-side-sheet;
@@ -22,27 +22,8 @@ md-side-sheet {
   //border-top-width: 1px;
   //border-top-style: solid;
 
-  transition: $swift-ease-in-duration;
-  transition-property: width, min-width;
-
   &.md-has-header {
     padding-top: 0;
-  }
-
-  &.ng-enter {
-    opacity: 0;
-    transform: translate3d(100%, 0, 0);
-  }
-
-  &.ng-enter-active {
-    opacity: 1;
-    display: block;
-    //transform: translate3d(0, $side-sheet-hidden-side-padding, 0) !important;
-  }
-
-  &.ng-leave-active {
-    //transform: translate3d(0, 100%, 0) !important;
-    //transition: $swift-ease-in;
   }
 
   .md-subheader {
@@ -121,7 +102,7 @@ md-side-sheet {
           }
         }
       }
-      
+
       @media screen and (max-width: $layout-breakpoint-sm) {
         @include grid-items-per-row(3, true);
       }
@@ -180,26 +161,49 @@ md-side-sheet {
 .md-side-sheet-left {
   left: 0;
   top: 0;
-  transform: translate3d(0%, 0, 0);
-  //&.md-closed {
-  //  transform: translate3d(-100%, 0, 0);
-  //}
 }
 
 .md-side-sheet-right {
-  left: 100%;
+  right: 0;
   top: 0;
-  transform: translate3d(-100%, 0, 0);
-  &.ng-enter {
-    opacity: 0;
-    transform: translate3d(100%, 0, 0);
+}
+
+.ng-animate {
+  &.md-side-sheet-left {
+    &.ng-enter {
+      opacity: .9;
+      transform: translate3d(-100%, 0, 0);
+    }
+    &.ng-enter-active {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+    &.ng-leave {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+    &.ng-leave-active {
+      opacity: .9;
+      transform: translate3d(-100%, 0, 0);
+    }
   }
-  &.ng-leave-active {
-    transform: translate3d(0%, 0, 0) !important;
-    transition: $swift-ease-in;
-  }
-  &.md-closed {
-    transform: translate3d(0%, 0, 0);
+  &.md-side-sheet-right {
+    &.ng-enter {
+      opacity: .9;
+      transform: translate3d(100%, 0, 0);
+    }
+    &.ng-enter-active {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+    &.ng-leave {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+    &.ng-leave-active {
+      opacity: .9;
+      transform: translate3d(100%, 0, 0);
+    }
   }
 }
 

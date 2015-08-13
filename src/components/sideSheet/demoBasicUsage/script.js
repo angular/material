@@ -12,29 +12,37 @@ angular.module('sideSheetDemo1', ['ngMaterial'])
             .icon('facebook', 'img/icons/facebook.svg', 24)
             .icon('twitter', 'img/icons/twitter.svg', 24);
     })
-    .controller('SideSheetExample', function ($scope, $timeout, $mdSideSheet) {
-        $scope.alert = '';
 
-        $scope.showListSideSheet = function ($event) {
-            $scope.alert = '';
+    .controller('SideSheetExample', function ($scope, $timeout, $mdSideSheet) {
+
+        $scope.showAutoSideSheet = function ($event) {
             $mdSideSheet.show({
-                parent: angular.element(document.getElementsByTagName('body')),
+                side: 'auto',
                 templateUrl: 'side-sheet-list-template.html',
                 controller: 'ListSideSheetCtrl',
                 targetEvent: $event
-            }).then(function (clickedItem) {
-                $scope.alert = clickedItem.name + ' clicked!';
+            });
+        };
+
+        $scope.showListSideSheet = function ($event) {
+            $mdSideSheet.show({
+                side: 'left',
+                clickOutsideToClose: false,
+                escapeToClose: true,
+                hasBackdrop: true,
+                //parent: angular.element(document.getElementsByTagName('body')),
+                templateUrl: 'side-sheet-list-template.html',
+                controller: 'ListSideSheetCtrl',
+                targetEvent: $event
             });
         };
 
         $scope.showGridSideSheet = function ($event) {
-            $scope.alert = '';
             $mdSideSheet.show({
+                side: 'right',
                 templateUrl: 'side-sheet-grid-template.html',
                 controller: 'GridSideSheetCtrl',
                 targetEvent: $event
-            }).then(function (clickedItem) {
-                $scope.alert = clickedItem.name + ' clicked!';
             });
         };
     })
@@ -53,6 +61,7 @@ angular.module('sideSheetDemo1', ['ngMaterial'])
             $mdSideSheet.hide(clickedItem);
         };
     })
+
     .controller('GridSideSheetCtrl', function ($scope, $mdSideSheet) {
         $scope.items = [
             {name: 'Hangout', icon: 'hangout'},
@@ -68,6 +77,7 @@ angular.module('sideSheetDemo1', ['ngMaterial'])
             $mdSideSheet.hide(clickedItem);
         };
     })
+
     .run(function ($http, $templateCache) {
 
         var urls = [
