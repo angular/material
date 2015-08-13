@@ -78,7 +78,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate) {
      *   <form>
      *     <md-input-container>
      *       <label for="testInput">Label</label>
-     *       <input id="testInput" type="text" md-auto-focus>
+     *       <input id="testInput" type="text" md-autofocus>
      *     </md-input-container>
      *   </form>
      * </md-dialog>
@@ -90,7 +90,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate) {
      *  <md-list>
      *    <md-list-item ng-repeat="item in items">
      *
-     *      <md-button md-auto-focus="$index == 2">
+     *      <md-button md-autofocus="$index == 2">
      *        <md-icon md-svg-src="{{item.icon}}"></md-icon>
      *        <span class="md-inline-list-icon-label">{{ item.name }}</span>
      *      </md-button>
@@ -102,14 +102,14 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate) {
      *
      **/
     findFocusTarget: function(containerEl, attributeVal) {
-      var elToFocus, items = containerEl[0].querySelectorAll(attributeVal || '[md-auto-focus]');
+      var elToFocus, items = containerEl[0].querySelectorAll(attributeVal || '[md-autofocus]');
 
       // Find the last child element with the focus attribute
       items.length && angular.forEach(items, function(it) {
         it = angular.element(it);
 
         // If the expression evaluates to FALSE, then it is not focusable target
-        var focusExpression = it[0].getAttribute('md-auto-focus');
+        var focusExpression = it[0].getAttribute('md-autofocus');
         var isFocusable = focusExpression ? (it.scope().$eval(focusExpression) !== false ) : true;
 
         if (isFocusable) elToFocus = it;

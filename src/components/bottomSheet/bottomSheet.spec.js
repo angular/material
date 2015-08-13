@@ -42,16 +42,16 @@ describe('$mdBottomSheet service', function() {
       expect(parent.find('md-bottom-sheet').length).toBe(1);
     }));
 
-    it('should focus child with md-auto-focus', inject(function($rootScope, $animate, $document, $mdBottomSheet) {
+    it('should focus child with md-autofocus', inject(function($rootScope, $animate, $document, $mdBottomSheet) {
       jasmine.mockElementFocus(this);
       var parent = angular.element('<div>');
       var markup = '' +
         '<md-bottom-sheet>' +
         '  <md-input-container><label>Label</label>' +
-        '    <input type="text" md-auto-focus>' +
+        '    <input type="text" md-autofocus>' +
         '  </md-input-container>' +
         '  <md-input-container><label>Label</label>' +
-        '    <input type="text" md-auto-focus>' +
+        '    <input type="text" md-autofocus>' +
         '  </md-input-container>' +
         '<md-bottom-sheet>';
 
@@ -67,7 +67,7 @@ describe('$mdBottomSheet service', function() {
       expect(sheet.length).toBe(1);
       var focusEl = sheet.find('input');
 
-      // Focus should be on the last md-auto-focus element
+      // Focus should be on the last md-autofocus element
       expect($document.activeElement).toBe(focusEl[1]);
     }));
   });

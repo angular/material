@@ -79,7 +79,7 @@ describe('$mdDialog', function() {
       $mdDialog.show(
         $mdDialog.alert({
           template: '<md-dialog>' +
-          '<md-dialog-content tabIndex="0" md-auto-focus>' +
+          '<md-dialog-content tabIndex="0" md-autofocus>' +
           '<p>Muppets are the best</p>' +
           '</md-dialog-content>' +
           '</md-dialog>',

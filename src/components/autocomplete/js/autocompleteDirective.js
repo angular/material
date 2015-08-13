@@ -49,7 +49,7 @@ angular
  *     make suggestions
  * @param {number=} md-delay Specifies the amount of time (in milliseconds) to wait before looking
  *     for results
- * @param {boolean=} md-enable-autofocus If true, will immediately focus the input element
+ * @param {boolean=} md-autofocus If true, will immediately focus the input element
  * @param {boolean=} md-autoselect If true, the first item will be selected by default
  * @param {string=} md-menu-class This will be applied to the dropdown menu for styling
  * @param {string=} md-floating-label This will add a floating label to autocomplete and wrap it in
@@ -136,7 +136,7 @@ function MdAutocomplete () {
       textChange:     '&?mdSearchTextChange',
       minLength:      '=?mdMinLength',
       delay:          '=?mdDelay',
-      enableAutofocus:'=?mdEnableAutofocus',
+      autofocus:      '=?mdAutofocus',
       floatingLabel:  '@?mdFloatingLabel',
       autoselect:     '=?mdAutoselect',
       menuClass:      '@?mdMenuClass',
@@ -219,8 +219,7 @@ function MdAutocomplete () {
                   aria-autocomplete="list"\
                   aria-haspopup="true"\
                   aria-activedescendant=""\
-                  aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"\
-                  md-auto-focus/>\
+                  aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>\
               <div md-autocomplete-parent-scope md-autocomplete-replace>' + leftover + '</div>\
             </md-input-container>';
         } else {
@@ -242,8 +241,7 @@ function MdAutocomplete () {
                 aria-autocomplete="list"\
                 aria-haspopup="true"\
                 aria-activedescendant=""\
-                aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"\
-                md-auto-focus/>\
+                aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>\
             <button\
                 type="button"\
                 tabindex="-1"\
