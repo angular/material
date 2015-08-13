@@ -135,6 +135,9 @@
     /** @final {!angular.JQLite} */
     this.$element = $element;
 
+    /** @final {!angular.Attributes} */
+    this.$attrs = $attrs;
+
     /** @final {!angular.Scope} */
     this.$scope = $scope;
 
@@ -243,12 +246,13 @@
   DatePickerCtrl.prototype.installPropertyInterceptors = function() {
     var self = this;
 
-    // Intercept disabled on the date-picker element to disable the internal input.
-    // This avoids two bindings (outer scope to ctrl, ctrl to input).
-    Object.defineProperty(this.$element[0], 'disabled', {
-      get: function() { return self.isDisabled; },
-      set: angular.bind(self, self.setDisabled)
-    });
+    if (this.$attrs['ngDisabled']) {
+      // The expression is to be evaluated against the directive element's scope and not
+      // the directive's isolate scope.
+      this.$element.scope().$watch(this.$attrs['ngDisabled'], function(isDisabled) {
+        self.setDisabled(isDisabled);
+      });
+    }
 
     Object.defineProperty(this, 'placeholder', {
       get: function() { return self.inputElement.placeholder; },
