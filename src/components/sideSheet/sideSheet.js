@@ -275,7 +275,7 @@ function MdSideSheetProvider($$interimElementProvider) {
                     delete options.lastOverflow;
                 }
 
-                sideSheet.cleanup();
+                //sideSheet.cleanup();
 
                 // Restore focus
                 options.targetEvent && angular.element(options.targetEvent.target).focus();
