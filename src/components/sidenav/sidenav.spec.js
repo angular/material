@@ -79,12 +79,12 @@ describe('mdSidenav', function() {
       expect($document.activeElement).toBe(focusEl[0]);
     }));
 
-    it('should focus child with md-auto-focus', inject(function($rootScope, $animate, $document, $compile) {
+    it('should focus child with md-autofocus', inject(function($rootScope, $animate, $document, $compile) {
       jasmine.mockElementFocus(this);
       var parent = angular.element('<div>');
       var markup = '<md-sidenav md-is-open="show">'+
                       '<md-input-container><label>Label</label>' +
-                        '<input type="text" md-auto-focus>' +
+                        '<input type="text" md-autofocus>' +
                       '</md-input-container>' +
                     '<md-sidenav>';
       var sidenavEl = angular.element(markup);

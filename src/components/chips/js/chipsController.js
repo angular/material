@@ -181,10 +181,10 @@ MdChipsCtrl.prototype.getAdjacentChipIndex = function(index) {
  * @param newChip
  */
 MdChipsCtrl.prototype.appendChip = function(newChip) {
-  if (this.items.indexOf(newChip) + 1) return;
   if (this.useMdOnAppend && this.mdOnAppend) {
     newChip = this.mdOnAppend({'$chip': newChip});
   }
+  if (this.items.indexOf(newChip) + 1) return;
   this.items.push(newChip);
 };
 
@@ -197,6 +197,17 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
  */
 MdChipsCtrl.prototype.useMdOnAppendExpression = function() {
   this.useMdOnAppend = true;
+};
+
+/**
+ * Sets whether to use the md-on-remove expression. This expression is
+ * bound to scope and controller in {@code MdChipsDirective} as
+ * {@code mdOnRemove}. Due to the nature of directive scope bindings, the
+ * controller cannot know on its own/from the scope whether an expression was
+ * actually provided.
+ */
+MdChipsCtrl.prototype.useMdOnRemoveExpression = function() {
+  this.useMdOnRemove = true;
 };
 
 /**
@@ -234,7 +245,11 @@ MdChipsCtrl.prototype.resetChipBuffer = function() {
  * @param index
  */
 MdChipsCtrl.prototype.removeChip = function(index) {
-  this.items.splice(index, 1);
+  var removed = this.items.splice(index, 1);
+
+  if (removed && removed.length && this.useMdOnRemove && this.mdOnRemove) {
+    this.mdOnRemove({ '$chip': removed[0], '$index': index });
+  }
 };
 
 MdChipsCtrl.prototype.removeChipAndFocusInput = function (index) {

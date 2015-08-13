@@ -1,16 +1,21 @@
 /*
-  * This var has to be outside the angular factory, otherwise when
-  * there are multiple material apps on the same page, each app
-  * will create its own instance of this array and the app's IDs
-  * will not be unique.
-  */
+ * This var has to be outside the angular factory, otherwise when
+ * there are multiple material apps on the same page, each app
+ * will create its own instance of this array and the app's IDs
+ * will not be unique.
+ */
 var nextUniqueId = 0;
 
 angular
   .module('material.core')
   .factory('$mdUtil', UtilFactory);
 
-function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate) {
+function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $interpolate) {
+  // Setup some core variables for the processTemplate method
+  var startSymbol = $interpolate.startSymbol(),
+    endSymbol = $interpolate.endSymbol(),
+    usesStandardSymbols = ((startSymbol === '{{') && (endSymbol === '}}'));
+
   var $mdUtil = {
     dom: {},
     now: window.performance ?
@@ -78,7 +83,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate) {
      *   <form>
      *     <md-input-container>
      *       <label for="testInput">Label</label>
-     *       <input id="testInput" type="text" md-auto-focus>
+     *       <input id="testInput" type="text" md-autofocus>
      *     </md-input-container>
      *   </form>
      * </md-dialog>
@@ -90,7 +95,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate) {
      *  <md-list>
      *    <md-list-item ng-repeat="item in items">
      *
-     *      <md-button md-auto-focus="$index == 2">
+     *      <md-button md-autofocus="$index == 2">
      *        <md-icon md-svg-src="{{item.icon}}"></md-icon>
      *        <span class="md-inline-list-icon-label">{{ item.name }}</span>
      *      </md-button>
@@ -102,14 +107,14 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate) {
      *
      **/
     findFocusTarget: function(containerEl, attributeVal) {
-      var elToFocus, items = containerEl[0].querySelectorAll(attributeVal || '[md-auto-focus]');
+      var elToFocus, items = containerEl[0].querySelectorAll(attributeVal || '[md-autofocus]');
 
       // Find the last child element with the focus attribute
       items.length && angular.forEach(items, function(it) {
         it = angular.element(it);
 
         // If the expression evaluates to FALSE, then it is not focusable target
-        var focusExpression = it[0].getAttribute('md-auto-focus');
+        var focusExpression = it[0].getAttribute('md-autofocus');
         var isFocusable = focusExpression ? (it.scope().$eval(focusExpression) !== false ) : true;
 
         if (isFocusable) elToFocus = it;
@@ -505,8 +510,23 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate) {
 
         if (digest) $rootScope.$digest();
       }
-    }
+    },
 
+    /**
+     * Processes a template and replaces the start/end symbols if the application has
+     * overriden them.
+     *
+     * @param template The template to process whose start/end tags may be replaced.
+     * @returns {*}
+     */
+    processTemplate: function(template) {
+      if (usesStandardSymbols) {
+        return template;
+      } else {
+        if (!template || !angular.isString(template)) return template;
+        return template.replace(/\{\{/g, startSymbol).replace(/}}/g, endSymbol);
+      }
+    }
   };
 
 // Instantiate other namespace utility methods
