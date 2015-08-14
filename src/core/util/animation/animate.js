@@ -1,3 +1,4 @@
+// Polyfill angular < 1.4 (provide $animateCss)
 angular
   .module('material.core')
   .factory('$$mdAnimate', function($q, $timeout, $mdConstant, $animateCss){

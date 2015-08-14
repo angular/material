@@ -5,10 +5,10 @@
  */
 angular
   .module('material.core', [
-    'ngAnimate',                 // Core uses $animate
-    'material.animate',          // for $animateCss polyfill with Angular < 1.4
-    'material.core.gestures',    // for $mdGesture
-    'material.core.theming'      // for $mdTheme
+    'ngAnimate',
+    'material.animate',
+    'material.core.gestures',
+    'material.core.theming'
   ])
   .config( MdCoreConfigure );
 
