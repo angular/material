@@ -40,42 +40,48 @@ angular.module('material.components.subheader', [
  * </hljs>
  */
 
-function MdSubheaderDirective($mdSticky, $compile, $mdTheming) {
+function MdSubheaderDirective($mdSticky, $compile, $mdTheming, $mdUtil) {
   return {
     restrict: 'E',
     replace: true,
     transclude: true,
-    template: 
-      '<h2 class="md-subheader">' +
-        '<div class="md-subheader-inner">' +
-          '<span class="md-subheader-content"></span>' +
-        '</div>' +
-      '</h2>',
-    compile: function(element, attr, transclude) {
-      return function postLink(scope, element, attr) {
-        $mdTheming(element);
-        var outerHTML = element[0].outerHTML;
+    template: (
+    '<h2 class="md-subheader">' +
+    '  <div class="md-subheader-inner">' +
+    '    <span class="md-subheader-content"></span>' +
+    '  </div>' +
+    '</h2>'
+    ),
+    link: function postLink(scope, element, attr, controllers, transclude) {
+      $mdTheming(element);
+      var outerHTML = element[0].outerHTML;
 
-        function getContent(el) {
-          return angular.element(el[0].querySelector('.md-subheader-content'));
-        }
+      function getContent(el) {
+        return angular.element(el[0].querySelector('.md-subheader-content'));
+      }
 
-        // Transclude the user-given contents of the subheader
-        // the conventional way.
+      // Transclude the user-given contents of the subheader
+      // the conventional way.
+      transclude(scope, function(clone) {
+        getContent(element).append(clone);
+      });
+
+      // Create another clone, that uses the outer and inner contents
+      // of the element, that will be 'stickied' as the user scrolls.
+      if (!element.hasClass('md-no-sticky')) {
         transclude(scope, function(clone) {
-          getContent(element).append(clone);
-        });
+          var wrapperHtml = '<div class="md-subheader-wrapper">' + outerHTML + '</div>';
+          var stickyClone = $compile(wrapperHtml)(scope);
 
-        // Create another clone, that uses the outer and inner contents
-        // of the element, that will be 'stickied' as the user scrolls.
-        if (!element.hasClass('md-no-sticky')) {
-          transclude(scope, function(clone) {
-            var stickyClone = $compile(angular.element(outerHTML))(scope);
+          // Append the sticky
+          $mdSticky(scope, element, stickyClone);
+
+          // Wait until the next tick when the
+          $mdUtil.nextTick(function() {
             getContent(stickyClone).append(clone);
-            $mdSticky(scope, element, stickyClone);
           });
-        }
-      };
+        });
+      }
     }
-  };
+  }
 }
