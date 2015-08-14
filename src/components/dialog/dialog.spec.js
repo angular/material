@@ -19,6 +19,7 @@ describe('$mdDialog', function() {
       $timeout.flush(); // flush to start animations
       $$rAF.flush();    // flush animations
       $animate.triggerCallbacks();
+      //$rootScope.$digest();
       $timeout.flush(); // flush responses after animation completions
     }
   }));
@@ -42,8 +43,8 @@ describe('$mdDialog', function() {
           .theme('some-theme')
           .ok('Next')
       ).then(function() {
-        resolved = true;
-      });
+          resolved = true;
+        });
 
       $rootScope.$apply();
       runAnimation();
@@ -130,7 +131,7 @@ describe('$mdDialog', function() {
       'ok', 'cancel', 'targetEvent', 'theme'
     ]);
 
-    it('shows a basic confirm dialog', inject(function($rootScope, $mdDialog, $animate) {
+    it('shows a basic confirm dialog with simple text content', inject(function($rootScope, $mdDialog, $animate) {
       var parent = angular.element('<div>');
       var rejected = false;
       $mdDialog.show(
@@ -149,15 +150,13 @@ describe('$mdDialog', function() {
 
       var container = angular.element(parent[0].querySelector('.md-dialog-container'));
       var dialog = parent.find('md-dialog');
-      expect(dialog.attr('role')).toBe('dialog');
-
       var title = parent.find('h2');
-      expect(title.text()).toBe('Title');
-
       var content = parent.find('p');
-      expect(content.text()).toBe('Hello world');
-
       var buttons = parent.find('md-button');
+
+      expect(dialog.attr('role')).toBe('dialog');
+      expect(title.text()).toBe('Title');
+      expect(content.text()).toBe('Hello world');
       expect(buttons.length).toBe(2);
       expect(buttons.eq(0).text()).toBe('Next');
       expect(buttons.eq(1).text()).toBe('Forget it');
@@ -169,17 +168,60 @@ describe('$mdDialog', function() {
       expect(rejected).toBe(true);
     }));
 
+    it('shows a basic confirm dialog with HTML content', inject(function($rootScope, $mdDialog, $animate) {
+      var parent = angular.element('<div>');
+
+      $mdDialog.show(
+        $mdDialog.confirm({
+          parent: parent,
+          ok: 'Next',
+          cancel: 'Back',
+          title: 'Which Way ',
+          content: '<div class="mine">Choose</div>'
+        })
+      );
+
+      runAnimation();
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      var content = angular.element(container[0].querySelector('.mine'));
+
+      expect(content.text()).toBe('Choose');
+    }));
+
+    it('shows a basic confirm dialog with HTML content using custom types', inject(function($rootScope, $mdDialog, $animate) {
+      var parent = angular.element('<div>');
+
+      $mdDialog.show(
+        $mdDialog.confirm({
+          parent: parent,
+          ok: 'Next',
+          cancel: 'Back',
+          title: 'Which Way ',
+          content: '<my-content class="mine">Choose</my-content>'
+        })
+      );
+
+      runAnimation();
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      var content = angular.element(container[0].querySelector('.mine'));
+
+      expect(content.text()).toBe('Choose');
+    }));
+
     it('should focus `md-button.dialog-close` on open', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
       jasmine.mockElementFocus(this);
 
       var parent = angular.element('<div>');
       $mdDialog.show({
-        template: '<md-dialog>' +
-        '<div class="md-actions">' +
-        '<button class="dialog-close">Close</button>' +
-        '</div>' +
+        template: '' +
+        '<md-dialog>' +
+        '  <div class="md-actions">' +
+        '    <button class="dialog-close">Close</button>' +
+        '  </div>' +
         '</md-dialog>',
-        parent: parent,
+        parent: parent
       });
       runAnimation();
 

@@ -149,7 +149,7 @@ function MdTabs () {
                   ng-disabled="tab.scope.disabled"\
                   md-swipe-left="$mdTabsCtrl.nextPage()"\
                   md-swipe-right="$mdTabsCtrl.previousPage()"\
-                  md-template="::tab.label"\
+                  md-tabs-template="::tab.label"\
                   md-scope="::tab.parent"></md-tab-item>\
               <md-ink-bar></md-ink-bar>\
             </md-pagination-wrapper>\
@@ -165,7 +165,7 @@ function MdTabs () {
                   ng-focus="$mdTabsCtrl.hasFocus = true"\
                   ng-blur="$mdTabsCtrl.hasFocus = false"\
                   ng-repeat="tab in $mdTabsCtrl.tabs"\
-                  md-template="::tab.label"\
+                  md-tabs-template="::tab.label"\
                   md-scope="::tab.parent"></md-dummy-tab>\
             </div>\
           </md-tabs-canvas>\
@@ -187,7 +187,7 @@ function MdTabs () {
                 \'md-no-scroll\':     $mdTabsCtrl.dynamicHeight\
               }">\
             <div\
-                md-template="::tab.template"\
+                md-tabs-template="::tab.template"\
                 md-connected-if="tab.isActive()"\
                 md-scope="::tab.parent"\
                 ng-if="$mdTabsCtrl.enableDisconnect || tab.shouldRender()"></div>\
