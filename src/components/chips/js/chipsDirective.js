@@ -64,8 +64,8 @@
    *    displayed when there is at least on item in the list
    * @param {boolean=} readonly Disables list manipulation (deleting or adding list items), hiding
    *    the input and delete buttons
-   * @param {expression} md-on-append An expression expected to convert the input string into an
-   *    object when adding a chip.
+   * @param {expression} md-on-append An expression that when called expects you to return an object
+   *    representation of the chip input string.
    * @param {expression=} md-on-remove An expression which will be called when a chip has been
    *    removed.
    * @param {expression=} md-on-select An expression which will be called when a chip is selected.
