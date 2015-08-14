@@ -100,6 +100,7 @@
       },
       restrict: 'E',
       controller: 'MdContactChipsCtrl',
+      require: '?ngModel',
       controllerAs: '$mdContactChipsCtrl',
       bindToController: true,
       compile: compile,
@@ -116,10 +117,12 @@
     };
 
     function compile(element, attr) {
-      return function postLink(scope, element, attrs, controllers) {
+      return function postLink(scope, element, attrs, ngModelCtrl) {
 
         $mdUtil.initOptionalProperties(scope, attr);
         $mdTheming(element);
+        scope.$mdContactChipsCtrl.$setViewValue = ngModelCtrl ?
+          ngModelCtrl.$setViewValue : angular.noop;
 
         element.attr('tabindex', '-1');
       };

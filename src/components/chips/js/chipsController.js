@@ -193,6 +193,8 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
   }
   if (this.items.indexOf(newChip) + 1) return;
   this.items.push(newChip);
+
+  this.ngModelCtrl.$setViewValue(angular.copy(this.items));
 };
 
 /**
@@ -268,6 +270,8 @@ MdChipsCtrl.prototype.removeChip = function(index) {
   if (removed && removed.length && this.useOnRemove && this.onRemove) {
     this.onRemove({ '$chip': removed[0], '$index': index });
   }
+
+  this.ngModelCtrl.$setViewValue(angular.copy(this.items));
 };
 
 MdChipsCtrl.prototype.removeChipAndFocusInput = function (index) {
