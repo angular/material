@@ -27,10 +27,8 @@ angular.module('sideSheetDemo1', ['ngMaterial'])
         $scope.showListSideSheet = function ($event) {
             $mdSideSheet.show({
                 side: 'left',
-                clickOutsideToClose: false,
                 escapeToClose: true,
                 hasBackdrop: true,
-                //parent: angular.element(document.getElementsByTagName('body')),
                 templateUrl: 'side-sheet-list-template.html',
                 controller: 'ListSideSheetCtrl',
                 targetEvent: $event
@@ -40,6 +38,7 @@ angular.module('sideSheetDemo1', ['ngMaterial'])
         $scope.showGridSideSheet = function ($event) {
             $mdSideSheet.show({
                 side: 'right',
+                clickOutsideToClose: true,
                 templateUrl: 'side-sheet-grid-template.html',
                 controller: 'GridSideSheetCtrl',
                 targetEvent: $event
