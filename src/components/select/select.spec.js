@@ -463,6 +463,15 @@ describe('<md-select>', function() {
         expect($rootScope.model).toEqual([]);
       }));
 
+      it('renders nothing if undefined is set', inject(function($rootScope) {
+        $rootScope.model = [1, 2];
+        var el = setupMultiple('ng-model="$root.model"', [1,2,3,4]);
+        expect(selectedOptions(el).length).toBe(2);
+        $rootScope.$apply('model = undefined');
+        $rootScope.$digest();
+        expect(selectedOptions(el).length).toBe(0);
+      }));
+
       it('adding a valid value to the model selects its option', inject(function($rootScope) {
         $rootScope.model = [];
         var el = setupMultiple('ng-model="$root.model"', [1,2,3,4]);

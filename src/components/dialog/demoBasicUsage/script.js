@@ -23,7 +23,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
           .title('Would you like to delete your debt?')
-          .content('All of the banks have agreed to forgive you your debts.')
+          .content('All of the banks have agreed to <span class="debt-be-gone">forgive</span> you your debts.')
           .ariaLabel('Lucky day')
           .targetEvent(ev)
           .ok('Please do it!')

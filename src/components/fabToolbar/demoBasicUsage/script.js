@@ -8,7 +8,7 @@
       $scope.demo = {
         isOpen: false,
         count: 0,
-        selectedAlignment: 'md-left'
+        selectedDirection: 'left'
       };
     });
 })();

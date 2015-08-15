@@ -53,6 +53,21 @@
 </table>
 {% endmacro -%}
 
+{%- macro propertyTable(params) %}
+<table class="md-api-table">
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+  {$ paramList(params) $}
+  </tbody>
+</table>
+{% endmacro -%}
+
 
 
 {%- macro directiveParam(name, type, join, sep) %}
