@@ -1,6 +1,10 @@
 (function() {
   'use strict';
 
+  /**
+   * @ngdoc module
+   * @name material.components.fabTrigger
+   */
   angular
     .module('material.components.fabTrigger', ['material.core'])
     .directive('mdFabTrigger', MdFabTriggerDirective);
