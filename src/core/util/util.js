@@ -107,14 +107,17 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      *
      **/
     findFocusTarget: function(containerEl, attributeVal) {
-      var elToFocus, items = containerEl[0].querySelectorAll(attributeVal || '[md-autofocus]');
+      var elToFocus, items = containerEl[0].querySelectorAll(attributeVal ||
+        '[md-autofocus],[data-md-autofocus],[x-md-autofocus]');
 
       // Find the last child element with the focus attribute
       items.length && angular.forEach(items, function(it) {
         it = angular.element(it);
 
         // If the expression evaluates to FALSE, then it is not focusable target
-        var focusExpression = it[0].getAttribute('md-autofocus');
+        var focusExpression = it[0].getAttribute('md-autofocus') ||
+          it[0].getAttribute('data-md-autofocus') ||
+          it[0].getAttribute('x-md-autofocus');
         var isFocusable = focusExpression ? (it.scope().$eval(focusExpression) !== false ) : true;
 
         if (isFocusable) elToFocus = it;
