@@ -14,6 +14,26 @@ describe('<md-fab-toolbar> directive', function() {
     });
   }
 
+  it('applies a class for each direction', inject(function() {
+    build(
+      '<md-fab-toolbar md-direction="{{direction}}"></md-fab-toolbar>'
+    );
+
+    pageScope.$apply('direction = "left"');
+    expect(element.hasClass('md-left')).toBe(true);
+
+    pageScope.$apply('direction = "right"');
+    expect(element.hasClass('md-right')).toBe(true);
+  }));
+
+  it('accepts a string for md-direction', inject(function() {
+    build(
+      '<md-fab-toolbar md-direction="right"></md-fab-toolbar>'
+    );
+
+    expect(element.hasClass('md-right')).toBe(true);
+  }));
+
   it('allows programmatic opening through the md-open attribute', inject(function() {
     build(
       '<md-fab-toolbar md-open="isOpen"></md-fab-toolbar>'
