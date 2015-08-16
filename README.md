@@ -107,7 +107,7 @@ project.
 #### CDN
 
 CDN versions of Angular Material are now available at
-[Google Hosted Libraries](https://developers.google.com/speed/libraries/devguide#angularmaterial).
+[Google Hosted Libraries](https://developers.google.com/speed/libraries/#angular-material).
 
 With the Google CDN, you will not need to download local copies of the distribution files. Instead
 simply reference the CDN urls to easily use those remote library files. This is especially useful
