@@ -217,12 +217,15 @@ function MenuProvider($$interimElementProvider) {
             var keyCodes = $mdConstant.KEY_CODE;
             switch (ev.keyCode) {
               case keyCodes.ESCAPE:
+                ev.stopPropagation();
                 opts.mdMenuCtrl.close();
                 break;
               case keyCodes.UP_ARROW:
+                ev.stopPropagation();
                 focusMenuItem(ev, opts.menuContentEl, opts, -1);
                 break;
               case keyCodes.DOWN_ARROW:
+                ev.stopPropagation();
                 focusMenuItem(ev, opts.menuContentEl, opts, 1);
                 break;
             }
