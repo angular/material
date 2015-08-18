@@ -311,6 +311,15 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
  * @param {string=} md-extra-name Evaluates to an additional name to which
  *     the current iterated item can be assigned on the repeated scope. (Needed
  *     for use in md-autocomplete).
+ * @param {boolean=} md-on-demand When present, treats the md-virtual-repeat argument
+ *     as an object that can fetch rows rather than an array. This object must implement
+ *     the following two methods:
+ *     getItemAtIndex: function(index) -> item at that index or null if it is not yet
+ *         loaded (It should start downloading the item in that case).
+ *     getLength: function() -> number The data legnth to which the repeater container
+ *         should be sized. Ideally, when the count is known, this method should return it.
+ *         Otherwise, return a higher number than the currently loaded items to produce an
+ *         infinite-scroll behavior.
  */
 function VirtualRepeatDirective($parse) {
   return {
@@ -344,12 +353,16 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document, 
   this.$document = $document;
   this.$$rAF = $$rAF;
 
+  /** @type {boolean} Whether we are in on-demand mode. */
+  this.onDemand = $attrs.hasOwnProperty('mdOnDemand');
   /** @type {!Function} Backup reference to $browser.$$checkUrlChange */
   this.browserCheckUrlChange = $browser.$$checkUrlChange;
   /** @type {number} Most recent starting repeat index (based on scroll offset) */
   this.newStartIndex = 0;
   /** @type {number} Most recent ending repeat index (based on scroll offset) */
   this.newEndIndex = 0;
+  /** @type {number} Most recent end visible index (based on scroll offset) */
+  this.newVisibleEnd = 0;
   /** @type {number} Previous starting repeat index (based on scroll offset) */
   this.startIndex = 0;
   /** @type {number} Previous ending repeat index (based on scroll offset) */
@@ -403,9 +416,11 @@ VirtualRepeatController.prototype.link_ =
   this.container = container;
   this.transclude = transclude;
   this.repeatName = repeatName;
-  this.repeatListExpression = repeatListExpression;
+  this.rawRepeatListExpression = repeatListExpression;
   this.extraName = extraName;
   this.sized = false;
+
+  this.repeatListExpression = angular.bind(this, this.repeatListExpression_);
 
   this.container.register(this);
 };
@@ -430,6 +445,25 @@ VirtualRepeatController.prototype.readItemSize_ = function() {
 
   if (this.itemSize) {
     this.containerUpdated();
+  }
+};
+
+
+/**
+ * Returns the user-specified repeat list, transforming it into an array-like
+ * object in the case of infinite scroll/dynamic load mode.
+ * @param {!angular.Scope} The scope.
+ * @return {!Array|!Object} An array or array-like object for iteration.
+ */
+VirtualRepeatController.prototype.repeatListExpression_ = function(scope) {
+  var repeatList = this.rawRepeatListExpression(scope);
+
+  if (this.onDemand && repeatList) {
+    var virtualList = new VirtualRepeatModelArrayLike(repeatList);
+    virtualList.$$includeIndexes(this.newStartIndex, this.newVisibleEnd);
+    return virtualList;
+  } else {
+    return repeatList;
   }
 };
 
@@ -467,6 +501,9 @@ VirtualRepeatController.prototype.containerUpdated = function() {
   if (this.newStartIndex !== this.startIndex ||
       this.newEndIndex !== this.endIndex ||
       this.container.getScrollOffset() > this.container.getScrollSize()) {
+    if (this.items instanceof VirtualRepeatModelArrayLike) {
+      this.items.$$includeIndexes(this.newStartIndex, this.newEndIndex);
+    }
     this.virtualRepeatUpdate_(this.items, this.items);
   }
 };
@@ -503,7 +540,7 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
   }
 
   this.items = items;
-  if (items !== oldItems) {
+  if (items !== oldItems || lengthChanged) {
     this.updateIndexes_();
   }
 
@@ -684,6 +721,33 @@ VirtualRepeatController.prototype.updateIndexes_ = function() {
   this.newStartIndex = Math.max(0, Math.min(
       itemsLength - containerLength,
       Math.floor(this.container.getScrollOffset() / this.itemSize)));
-  this.newEndIndex = Math.min(itemsLength, this.newStartIndex + containerLength + NUM_EXTRA);
+  this.newVisibleEnd = this.newStartIndex + containerLength + NUM_EXTRA;
+  this.newEndIndex = Math.min(itemsLength, this.newVisibleEnd);
   this.newStartIndex = Math.max(0, this.newStartIndex - NUM_EXTRA);
 };
+
+
+function VirtualRepeatModelArrayLike(model) {
+  if (!angular.isFunction(model.getItemAtIndex) ||
+      !angular.isFunction(model.getLength)) {
+    throw Error('Object passed to md-virtual-repeat must implement getItemAtIndex ' +
+        'and getLength when md-on-demand is enabled');
+  }
+
+  this.model = model;
+};
+
+
+VirtualRepeatModelArrayLike.prototype.$$includeIndexes = function(start, end) {
+  for (var i = start; i < end; i++) {
+    if (!this.hasOwnProperty(i)) {
+      this[i] = this.model.getItemAtIndex(i);
+    }
+  }
+  this.length = this.model.getLength();
+};
+
+
+function abstractMethod() {
+  throw Error('Non-overridden abstract method called.');
+}
