@@ -51,17 +51,28 @@ function InkRippleCtrl ($scope, $element, rippleOptions, $window, $timeout, $mdU
   this.options    = rippleOptions;
   this.mousedown  = false;
   this.ripples    = [];
-  this.container  = null;
-  this.color      = null;
-  this.background = null;
   this.timeout    = null; // Stores a reference to the most-recent ripple timeout
   this.lastRipple = null;
+
+  this.valueOnUse('container', angular.bind(this, this.createContainer));
+  this.valueOnUse('color', angular.bind(this, this.getColor, 1));
+  this.valueOnUse('background', angular.bind(this, this.getColor, 0.5));
 
   // attach method for unit tests
   ($element.controller('mdInkRipple') || {}).createRipple = angular.bind(this, this.createRipple);
 
   this.bindEvents();
 }
+
+InkRippleCtrl.prototype.valueOnUse = function (key, getter) {
+  var value = null;
+  Object.defineProperty(this, key, {
+    get: function () {
+      if (value === null) value = getter();
+      return value;
+    }
+  });
+};
 
 /**
  * Returns the color that the ripple should be (either based on CSS or hard-coded)
@@ -189,10 +200,6 @@ InkRippleCtrl.prototype.clearTimeout = function () {
  * @param top
  */
 InkRippleCtrl.prototype.createRipple = function (left, top) {
-  if (!this.container) this.container = this.createContainer();
-  if (!this.color) this.color = this.getColor();
-  if (!this.background) this.background = this.getColor(0.5);
-
   var ctrl        = this;
   var ripple      = angular.element('<div class="md-ripple"></div>');
   var width       = this.$element.prop('clientWidth');
