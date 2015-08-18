@@ -49,7 +49,8 @@
               'ng-class="{\'md-datepicker-focused\': ctrl.isFocused}">' +
             '<input class="md-datepicker-input" aria-haspopup="true" ' +
                 'ng-focus="ctrl.setFocused(true)" ng-blur="ctrl.setFocused(false)">' +
-            '<md-button md-no-ink class="md-datepicker-triangle-button md-icon-button" ' +
+            '<md-button type="button" md-no-ink ' +
+                'class="md-datepicker-triangle-button md-icon-button" ' +
                 'ng-click="ctrl.openCalendarPane($event)" ' +
                 'aria-label="{{::ctrl.dateLocale.msgOpenCalendar}}">' +
               '<div class="md-datepicker-expand-triangle"></div>' +
@@ -319,9 +320,11 @@
     this.$element.removeClass('md-datepicker-open');
     this.calendarPane.classList.remove('md-pane-open');
 
-    // Use native DOM removal because we do not want any of the angular state of this element
-    // to be disposed.
-    this.calendarPane.parentNode.removeChild(this.calendarPane);
+    if (this.calendarPane.parentNode) {
+      // Use native DOM removal because we do not want any of the angular state of this element
+      // to be disposed.
+      this.calendarPane.parentNode.removeChild(this.calendarPane);
+    }
   };
 
   /**
