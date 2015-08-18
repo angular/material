@@ -21,12 +21,6 @@ md-checkbox {
   min-width: $checkbox-width;
   min-height: $checkbox-width;
 
-  *,
-  *:before,
-  *:after {
-    box-sizing: border-box;
-  }
-
   &.md-focused:not([disabled]) {
     .md-container:before {
       left: -8px;
@@ -46,13 +40,17 @@ md-checkbox {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+
+    box-sizing: border-box;
     display: inline-block;
+
     width: $checkbox-width;
     height: $checkbox-height;
     @include rtl(left, 0, auto);
     @include rtl(right, auto, 0);
 
     &:before {
+      box-sizing: border-box;
       background-color: transparent;
       border-radius: 50%;
       content: '';
@@ -68,6 +66,7 @@ md-checkbox {
     }
 
     &:after {
+      box-sizing: border-box;
       content: '';
       position: absolute;
       top: -10px;
@@ -94,6 +93,7 @@ md-checkbox {
 
   // unchecked
   .md-icon {
+    box-sizing: border-box;
     transition: 240ms;
     position: absolute;
     top: 0;
@@ -116,6 +116,7 @@ md-checkbox {
 
 
   &.md-checked .md-icon:after {
+    box-sizing: border-box;
     transform: rotate(45deg);
     position: absolute;
     left: $checkbox-width / 3;
@@ -131,6 +132,7 @@ md-checkbox {
   }
 
   .md-label {
+    box-sizing: border-box;
     position: relative;
     display: inline-block;
     vertical-align: middle;
