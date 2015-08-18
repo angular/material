@@ -58,11 +58,11 @@
     this.calendarCtrl = null;
 
     /**
-     * Number of months from the start of the month "items"
-     * that the currently rendered month occurs.
+     * Number of months from the start of the month "items" that the currently rendered month
+     * occurs. Set via angular data binding.
      * @type {number}
      */
-    this.offset = 0;
+    this.offset;
 
     /**
      * Date cell to focus after appending the month to the document.
