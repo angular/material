@@ -146,7 +146,7 @@
        * @returns {string}
        */
       function defaultFormatDate(date) {
-        return date.toLocaleDateString();
+        return date ? date.toLocaleDateString() : '';
       }
 
       /**

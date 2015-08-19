@@ -355,7 +355,7 @@
    * @param {Date=} opt_date
    */
   CalendarCtrl.prototype.focus = function(opt_date) {
-    var date = opt_date || this.selectedDate;
+    var date = opt_date || this.selectedDate || this.today;
 
     var previousFocus = this.calendarElement.querySelector('.md-focus');
     if (previousFocus) {
