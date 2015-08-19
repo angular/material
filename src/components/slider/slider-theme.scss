@@ -10,7 +10,7 @@ md-slider.md-THEME_NAME-theme {
     background-color: '{{foreground-2}}';
   }
   .md-focus-ring {
-    border-color: '{{foreground-4}}';
+    background-color: '{{accent-color}}';
   }
   .md-disabled-thumb {
     border-color: '{{background-color}}';
@@ -37,6 +37,9 @@ md-slider.md-THEME_NAME-theme {
   }
 
   &.md-warn {
+    .md-focus-ring {
+      background-color: '{{warn-color}}';
+    }
     .md-track.md-track-fill {
       background-color: '{{warn-color}}';
     }
@@ -57,6 +60,9 @@ md-slider.md-THEME_NAME-theme {
   }
 
   &.md-primary {
+    .md-focus-ring {
+      background-color: '{{primary-color}}';
+    }
     .md-track.md-track-fill {
       background-color: '{{primary-color}}';
     }
