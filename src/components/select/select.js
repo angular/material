@@ -1108,6 +1108,17 @@ function SelectProvider($$interimElementProvider) {
         function checkCloseMenu(ev) {
           if (ev && ( ev.type == 'mouseup') && (ev.currentTarget != dropDown[0])) return;
 
+          // check if the mouseup event was on a scrollbar
+          if(ev.currentTarget.children.length > 0) {
+            var child = ev.currentTarget.children[0];
+            var hasScrollbar = child.scrollHeight > child.clientHeight
+            if (hasScrollbar && child.children.length > 0) {
+              var relPosX = ev.pageX - ev.currentTarget.getBoundingClientRect().left;
+              if(relPosX > child.children[0].offsetWidth) 
+                return;
+            }
+          }
+          
           if (!selectCtrl.isMultiple) {
             opts.restoreFocus = true;
 
