@@ -8,6 +8,9 @@ describe('md-calendar', function() {
   var ngElement, element, scope, pageScope, controller, $animate, $compile, $$rAF;
   var $rootScope, dateLocale, $mdUtil, keyCodes, dateUtil;
 
+  // List of calendar elements added to the DOM so we can remove them after every test.
+  var attachedCalendarElements = [];
+
   /**
    * To apply a change in the date, a scope $apply() AND a manual triggering of animation
    * callbacks is necessary.
@@ -64,6 +67,7 @@ describe('md-calendar', function() {
     var attachedElement = angular.element(template);
     document.body.appendChild(attachedElement[0]);
     var newElement = $compile(attachedElement)(directiveScope);
+    attachedCalendarElements.push(newElement);
     applyDateChange();
     return newElement;
   }
@@ -136,7 +140,10 @@ describe('md-calendar', function() {
   }));
 
   afterEach(function() {
-    ngElement.remove();
+    attachedCalendarElements.forEach(function(element) {
+      element.remove();
+    });
+    attachedCalendarElements = [];
   });
 
   describe('ngModel binding', function() {
