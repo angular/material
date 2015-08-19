@@ -135,7 +135,7 @@ angular.module('material.components.menu', [
  *
  */
 
-function MenuDirective($mdMenu) {
+function MenuDirective() {
   var INVALID_PREFIX = 'Invalid HTML for md-menu: ';
   return {
     restrict: 'E',
