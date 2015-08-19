@@ -21,6 +21,7 @@
    * @module material.components.datepicker
    *
    * @param {Date} ng-model The component's model. Expects a JavaScript Date object.
+   * @param {expression=} ng-change Expression evaluated when the model value changes.
    * @param {boolean=} disabled Whether the datepicker is disabled.
    *
    * @description
