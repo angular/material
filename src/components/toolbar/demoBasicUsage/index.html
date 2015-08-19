@@ -4,12 +4,22 @@
   <md-content>
 
     <md-toolbar>
-      <h2 class="md-toolbar-tools">
-        <span>Toolbar</span>
-      </h2>
+      <div class="md-toolbar-tools">
+        <md-button class="md-icon-button" aria-label="Settings">
+          <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+        </md-button>
+        <h2>
+          <span>Toolbar with Icon Buttons</span>
+        </h2>
+        <span flex></span>
+        <md-button class="md-icon-button" aria-label="Favorite">
+          <md-icon md-svg-icon="img/icons/favorite.svg" style="color: greenyellow;"></md-icon>
+        </md-button>
+        <md-button class="md-icon-button" aria-label="More">
+          <md-icon md-svg-icon="img/icons/more_vert.svg"></md-icon>
+        </md-button>
+      </div>
     </md-toolbar>
-
-    <br>
 
     <br>
 
@@ -27,6 +37,5 @@
         <span class="md-flex">Toolbar: tall with actions pin to the bottom (md-warn md-hue-3)</span>
       </h2>
     </md-toolbar>
-
   </md-content>
 </div>

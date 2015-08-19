@@ -1,4 +1,3 @@
-$card-margin: 8px !default;
 $card-padding: 16px !default;
 $card-box-shadow: $whiteframe-shadow-z1 !default;
 
@@ -6,18 +5,36 @@ md-card {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  margin: $card-margin;
+  margin: $baseline-grid;
 
   box-shadow: $card-box-shadow;
 
   > img,
   > :not(md-card-content) img {
-    order: 0;
     width: 100%;
   }
 
   md-card-content {
-    order: 1;
+    padding: $card-padding;
+  }
+  .md-actions {
+    margin: 0;
+
+    .md-button {
+      margin-bottom: $baseline-grid;
+      margin-top: $baseline-grid;
+      margin-right: $baseline-grid * .5;
+      margin-left: $baseline-grid * .5;
+    }
+  }
+  md-card-footer {
     padding: $card-padding;
   }
 }
+
+@media screen and (-ms-high-contrast: active) {
+  md-card {
+    border: 1px solid #fff;
+  }
+}
+

@@ -5,46 +5,67 @@
 
 {%- macro paramList(params) %}
   {% for param in params %}
-  <md-item class="api-params-item">
-    <md-item-content>
-      <div class="api-params-label" flex="35" flex-gt-sm="20">
-        {$ param.name $}
-        {% if param.alias %}| {$ param.alias $}{% endif %}
-        <span hide show-sm>
-          {$ typeList(param.typeList) $}
-        </span>
-        {% if param.type.optional %}<div><em>(optional)</em></div>{% endif %}
-      </div>
-      <div class="api-params-label" hide-sm flex="15">
-        {$ typeList(param.typeList) $}
-      </div>
-      <div class="api-params-content" flex>
-        <p>{$ param.description | marked $}
-        {% if param.default %}<p><em>(default: {$ param.default $})</em></p>{% endif %}
-        </p>
-      </div>
-    </md-item-content>
-  </md-item>
+    {%if not param.type.optional %}
+      <tr class="api-params-item">
+        <td style="white-space: nowrap;">
+          <b>* {$ param.name $}</b>
+          {% if param.alias %}| {$ param.alias $}{% endif %}
+          <span hide show-sm>{$ typeList(param.typeList) $}</span>
+        </td>
+        <td style="white-space: nowrap;">{$ typeList(param.typeList) $}</td>
+        <td class="description">
+          {$ param.description | marked $}
+          {% if param.default %}<p><em>(default: {$ param.default $})</em></p>{% endif %}
+        </td>
+      </tr>
+    {% endif %}
+  {% endfor %}
+  {% for param in params %}
+    {%if param.type.optional %}
+      <tr class="api-params-item">
+        <td style="white-space: nowrap;">
+          {$ param.name $}
+          {% if param.alias %}| {$ param.alias $}{% endif %}
+          <span hide show-sm>{$ typeList(param.typeList) $}</span>
+        </td>
+        <td style="white-space: nowrap;">{$ typeList(param.typeList) $}</td>
+        <td class="description">
+          {$ param.description | marked $}
+          {% if param.default %}<p><em>(default: {$ param.default $})</em></p>{% endif %}
+        </td>
+      </tr>
+    {% endif %}
   {% endfor %}
 {% endmacro -%}
 
 {%- macro paramTable(params) %}
-<md-list>
-  <md-item>
-    <md-item-content class="dashed-bottom">
-      <div class="api-params-label api-params-title"  flex="20" layout layout-align="center center" >
-        Parameter
-      </div>
-      <div class="api-params-label api-params-title"  flex="15" layout layout-align="center center" block-sm >
-        Type
-      </div>
-      <div class="api-params-content api-params-title" flex     layout="row" layout-align="left center" style="padding-top:15px">
-        Description
-      </div>
-    </md-item-content>
-  </md-item>
+<table class="md-api-table">
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
   {$ paramList(params) $}
-</md-list>
+  </tbody>
+</table>
+{% endmacro -%}
+
+{%- macro propertyTable(params) %}
+<table class="md-api-table">
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+  {$ paramList(params) $}
+  </tbody>
+</table>
 {% endmacro -%}
 
 
@@ -76,26 +97,18 @@
 {% endmacro -%}
 
 {%- macro returnTable(fn) -%}
-<md-list>
-  <md-item>
-    <md-item-content class="dashed-top">
-      <div class="api-params-label api-params-title" layout layout-align="center center" flex="20" flex-sm="20">
-        Returns
-      </div>
-      <div class="api-params-content api-params-title" flex layout="row" layout-align="left center" flex  style="padding-top:15px">
-        Description
-      </div>
-    </md-item-content>
-  </md-item>
-  <md-item>
-    <md-item-content>
-      <div class="api-params-label" flex="20" flex-sm="20">
-        {$ typeList(fn.typeList) $}
-      </div>
-      <div class="api-params-content" flex>
-        {$ fn.description | marked $}
-      </div>
-    </md-item-content>
-  </md-item>
-</md-list>
+<table class="md-api-table">
+  <thead>
+  <tr>
+    <th>Returns</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>{$ typeList(fn.typeList) $}</td>
+    <td class="description">{$ fn.description | marked $}</td>
+  </tr>
+  </tbody>
+</table>
 {%- endmacro -%}

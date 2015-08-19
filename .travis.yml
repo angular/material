@@ -1,6 +1,7 @@
 language: node_js
+sudo: false
 node_js:
-  - '0.10'
+  - '0.12'
 env:
   global:
     secure: TWmpBzRG68b9e5wbJ7I6ox8TrZTnU/XpOkBvggJyuMgvUz27accp92Y9U7DWUPiXYXcWnoc7pqVAvEbwd1/ykHKCqezmyEXsrzZo6POg2lNFXkI9vSuDukL8A4Ct9zANVmr+5Y+kEBtQ/viyO5Rxc5H9bZskSeMaegqR60ZT2E8=
@@ -12,13 +13,15 @@ branches:
 before_script:
   - export DISPLAY=:99.0 # firefox virtual screen
   - sh -e /etc/init.d/xvfb start # firefox virtual screen
-  - npm install -g bower
-  - bower install
   - git config --global user.email "ngmaterial@googlegroups.com"
   - git config --global user.name "ngMaterial Bot"
 
 script:
-  - gulp karma --browsers=Firefox
+  # Fail builds which use iit/ddescribe, but run the tests anyways
+  - gulp ddescribe-iit
+  - gulp karma --reporters='dots'
+
+after_success:
   - ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT
 
 notifications:

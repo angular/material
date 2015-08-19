@@ -1,7 +1,11 @@
 md-backdrop {
   z-index: $z-index-backdrop;
+  &.md-menu-backdrop {
+    z-index: $z-index-menu - 1;
+  }
   &.md-select-backdrop {
     z-index: $z-index-dialog + 1;
+    transition-duration: 0;
   }
   &.md-dialog-backdrop {
     z-index: $z-index-dialog - 1;
@@ -13,27 +17,26 @@ md-backdrop {
     z-index: $z-index-sidenav - 1;
   }
 
-  background-color: rgba(0,0,0,0);
+  opacity: 1;
 
-  position: fixed;
+  // - Animate background-color alpha only for `.md-opaque` stylings
+  // !!Important - Theme-based Background-color and animations can be enabled in backdrop-theme.scss
+
+  transition: background-color 450ms $swift-ease-in-timing-function;
+
+  position: absolute;
+  top:0;
+  bottom:0;
   left: 0;
-  top: 0;
   right: 0;
-  bottom: 0;
 
-  &.ng-enter {
-    animation: $swift-ease-out-timing-function mdBackdropFadeIn 0.5s both;
+  &.md-click-catcher {
+    position: absolute;
   }
-  &.ng-leave {
-    animation: $swift-ease-in-timing-function mdBackdropFadeOut 0.2s both;
+
+  &.md-opaque.ng-leave {
+    transition: background-color 400ms linear;
   }
+
 }
 
-@keyframes mdBackdropFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes mdBackdropFadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}

@@ -1,5 +1,25 @@
-// Font Variables
-$font-family: RobotoDraft, Roboto, 'Helvetica Neue', sans-serif !default;
+// Function
+//-- Must be defined before variables
+@function rem($multiplier) {
+  $font-size: 10px;
+  @return $multiplier * $font-size;
+}
+
+// Typography
+// ------------------------------
+$font-family: Roboto, 'Helvetica Neue', sans-serif !default;
+$font-size:   10px;
+
+$display-4-font-size-base: rem(11.20) !default;
+$display-3-font-size-base: rem(5.600) !default;
+$display-2-font-size-base: rem(4.500) !default;
+$display-1-font-size-base: rem(3.400) !default;
+$headline-font-size-base:  rem(2.400) !default;
+$title-font-size-base:     rem(2.000) !default;
+$subhead-font-size-base:   rem(1.600) !default;
+
+$body-font-size-base:      rem(1.400) !default;
+$caption-font-size-base:   rem(1.200) !default;
 
 // Layout
 // ------------------------------
@@ -19,15 +39,22 @@ $toast-margin: $baseline-grid * 1 !default;
 
 // Whiteframes
 
-$whiteframe-shadow-z1: 0px 2px 5px 0 rgba(0,0,0,0.26) !default;
+$shadow-multiplier: 0.7;
+$shadow-key-umbra-opacity:      $shadow-multiplier * 0.2;
+$shadow-key-penumbra-opacity:   $shadow-multiplier * 0.14;
+$shadow-ambient-shadow-opacity: $shadow-multiplier * 0.12;
+
+// NOTE(shyndman): gulp-sass seems to be failing if I split the shadow defs across
+//    multiple lines. Ugly. Sorry.
+$whiteframe-shadow-z1: 0px 3px 1px -2px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 2px 2px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 1px 5px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
 $whiteframe-zindex-z1: 1 !default;
-$whiteframe-shadow-z2: 0px 8px 17px rgba(0,0,0,0.2) !default;
+$whiteframe-shadow-z2: 0 2px 4px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0 4px 5px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0 1px 10px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
 $whiteframe-zindex-z2: 2 !default;
-$whiteframe-shadow-z3: 0px 17px 50px rgba(0,0,0,0.19) !default;
+$whiteframe-shadow-z3: 0px 3px 5px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 6px 10px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 1px 18px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
 $whiteframe-zindex-z3: 3 !default;
-$whiteframe-shadow-z4: 0px 16px 28px 0 rgba(0,0,0,0.22) !default;
+$whiteframe-shadow-z4: 0px 5px 5px -3px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 8px 10px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 3px 14px 2px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
 $whiteframe-zindex-z4: 4 !default;
-$whiteframe-shadow-z5: 0px 27px 24px 0 rgba(0,0,0,0.2) !default;
+$whiteframe-shadow-z5: 0px 8px 10px -5px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 16px 24px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 6px 30px 5px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
 $whiteframe-zindex-z5: 5 !default;
 
 
@@ -36,9 +63,12 @@ $whiteframe-zindex-z5: 5 !default;
 //--------------------------------------------
 
 $z-index-tooltip: 100 !default;
+$z-index-menu: 99 !default;
+$z-index-select: 99 !default;
 $z-index-dialog: 80 !default;
 $z-index-toast: 90 !default;
 $z-index-bottom-sheet: 70 !default;
+$z-index-scroll-mask: 65 !default;
 $z-index-sidenav: 60 !default;
 $z-index-backdrop: 50 !default;
 $z-index-fab: 20 !default;
@@ -57,3 +87,9 @@ $swift-ease-in: all $swift-ease-in-duration $swift-ease-in-timing-function !defa
 $swift-ease-in-out-duration: 0.5s !default;
 $swift-ease-in-out-timing-function: cubic-bezier(0.35, 0, 0.25, 1) !default;
 $swift-ease-in-out: all $swift-ease-in-out-duration $swift-ease-in-out-timing-function !default;
+
+// Fab Buttons (shared between buttons.scss and fab*.scss)
+// -------------------------------------------
+$button-fab-width: rem(5.600) !default;
+$button-fab-height: rem(5.600) !default;
+$button-fab-padding: rem(1.60) !default;

@@ -1,51 +1,41 @@
 <div ng-controller="AppCtrl">
 
   <md-toolbar class="md-theme-light">
-    <h1 class="md-toolbar-tools">
+    <h2 class="md-toolbar-tools">
       <span>Full Bleed</span>
-    </h1>
+    </h2>
   </md-toolbar>
 
   <md-content>
     <md-list>
-      <md-item ng-repeat="item in messages">
-        <md-item-content>
-          <div class="md-tile-content">
-            <h3>{{item.what}}</h3>
-            <h4>{{item.who}}</h4>
-            <p>
-              {{item.notes}}
-            </p>
-          </div>
-        </md-item-content>
+      <md-list-item class="md-3-line" ng-repeat="item in messages">
+        <div class="md-list-item-text">
+          <h3>{{item.what}}</h3>
+          <h4>{{item.who}}</h4>
+          <p>{{item.notes}}</p>
+        </div>
         <md-divider ng-if="!$last"></md-divider>
-      </md-item>
+      </md-list-item>
     </md-list>
   </md-content>
 
   <md-toolbar class="md-theme-light">
-    <h1 class="md-toolbar-tools">
+    <h2 class="md-toolbar-tools">
       <span>Inset</span>
-    </h1>
+    </h2>
   </md-toolbar>
 
   <md-content>
     <md-list>
-      <md-item ng-repeat="item in messages">
-        <md-item-content>
-          <div class="md-tile-left">
-            <img ng-src="{{item.face}}" class="face" alt="{{item.who}}">
-          </div>
-          <div class="md-tile-content">
-            <h3>{{item.what}}</h3>
-            <h4>{{item.who}}</h4>
-            <p>
-              {{item.notes}}
-            </p>
-          </div>
-        </md-item-content>
+      <md-list-item class="md-3-line" ng-repeat="item in messages">
+        <img ng-src="{{item.face}}?{{$index}}" class="face" alt="{{item.who}}">
+        <div class="md-list-item-text">
+          <h3>{{item.what}}</h3>
+          <h4>{{item.who}}</h4>
+          <p>{{item.notes}}</p>
+        </div>
         <md-divider md-inset ng-if="!$last"></md-divider>
-      </md-item>
+      </md-list-item>
     </md-list>
   </md-content>
 </div>

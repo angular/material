@@ -1,5 +1,5 @@
 describe('mdSidenav', function() {
-  beforeEach(module('material.components.sidenav', 'ngAnimateMock'));
+  beforeEach(module('material.components.sidenav'));
 
   function setup(attrs) {
     var el;
@@ -53,12 +53,68 @@ describe('mdSidenav', function() {
     }));
 
     it('should focus sidenav on open', inject(function($rootScope, $animate, $document) {
-      TestUtil.mockElementFocus(this);
+      jasmine.mockElementFocus(this);
       var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
 
       $animate.triggerCallbacks();
       expect($document.activeElement).toBe(el[0]);
+    }));
+
+    it('should focus child with md-sidenav-focus', inject(function($rootScope, $animate, $document, $compile) {
+      jasmine.mockElementFocus(this);
+      var parent = angular.element('<div>');
+      var markup = '<md-sidenav md-is-open="show">'+
+                      '<md-input-container><label>Label</label>' +
+                        '<input type="text" md-sidenav-focus>' +
+                      '</md-input-container>' +
+                    '<md-sidenav>';
+      var sidenavEl = angular.element(markup);
+      parent.append(sidenavEl);
+      $compile(parent)($rootScope);
+      $rootScope.$apply('show = true');
+
+      var focusEl = sidenavEl.find('input');
+      $animate.triggerCallbacks();
+      expect($document.activeElement).toBe(focusEl[0]);
+    }));
+
+    it('should focus child with md-autofocus', inject(function($rootScope, $animate, $document, $compile) {
+      jasmine.mockElementFocus(this);
+      var parent = angular.element('<div>');
+      var markup = '<md-sidenav md-is-open="show">'+
+                      '<md-input-container><label>Label</label>' +
+                        '<input type="text" md-autofocus>' +
+                      '</md-input-container>' +
+                    '<md-sidenav>';
+      var sidenavEl = angular.element(markup);
+      parent.append(sidenavEl);
+      $compile(parent)($rootScope);
+      $rootScope.$apply('show = true');
+
+      var focusEl = sidenavEl.find('input');
+      $animate.triggerCallbacks();
+      expect($document.activeElement).toBe(focusEl[0]);
+    }));
+
+
+    it('should focus on last md-sidenav-focus element', inject(function($rootScope, $animate, $document, $compile) {
+      jasmine.mockElementFocus(this);
+      var parent = angular.element('<div>');
+      var markup = '<md-sidenav md-is-open="show">'+
+                      '<md-button md-sidenav-focus>Button</md-button>'+
+                      '<md-input-container><label>Label</label>' +
+                        '<input type="text" md-sidenav-focus>' +
+                      '</md-input-container>' +
+                    '<md-sidenav>';
+      var sidenavEl = angular.element(markup);
+      parent.append(sidenavEl);
+      $compile(parent)($rootScope);
+      $rootScope.$apply('show = true');
+
+      $animate.triggerCallbacks();
+      var focusEl = sidenavEl.find('input');
+      expect($document.activeElement).toBe(focusEl[0]);
     }));
 
     it('should lock open when is-locked-open is true', inject(function($rootScope, $animate, $document) {
@@ -205,6 +261,15 @@ describe('mdSidenav', function() {
   });
 
   describe('$mdSidenav Service', function() {
+    var $rootScope, $timeout;
+
+
+        beforeEach( inject(function(_$rootScope_,_$timeout_) {
+            $rootScope = _$rootScope_;
+            $timeout = _$timeout_;
+        }));
+
+
     it('should grab instance', inject(function($mdSidenav) {
       var el = setup('md-component-id="left"');
       var scope = el.isolateScope();
@@ -253,6 +318,28 @@ describe('mdSidenav', function() {
       expect(instance.isOpen()).toBe(false);
       expect(instance.isLockedOpen()).toBe(true);
     }));
+
+    it('should find a deferred instantiation', inject(function($mdSidenav) {
+          var instance;
+
+          // Lookup deferred (not existing) instance
+          $mdSidenav('left').then( function(inst) { instance = inst; });
+          expect(instance).toBeUndefined();
+
+          // Instantiate `left` sidenav component
+          var el = setup('md-component-id="left"');
+
+          $timeout.flush();
+          expect(instance).toBeTruthy();
+          expect(instance.isOpen()).toBeFalsy();
+
+          // Lookup instance still available in the component registry
+          instance = undefined;
+          instance = $mdSidenav('left');
+
+          expect(instance).toBeTruthy();
+
+        }));
   });
 
 });

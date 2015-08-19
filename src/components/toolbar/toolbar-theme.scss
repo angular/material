@@ -2,6 +2,10 @@ md-toolbar.md-THEME_NAME-theme {
   background-color: '{{primary-color}}';
   color: '{{primary-contrast}}';
 
+  md-icon {
+    color: '{{primary-contrast}}';
+  }
+
   .md-button {
     color: '{{primary-contrast}}';
   }

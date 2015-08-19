@@ -35,10 +35,32 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider)
     .when('/getting-started', {
       templateUrl: 'partials/getting-started.tmpl.html'
     });
+  $mdThemingProvider.definePalette('docs-blue', $mdThemingProvider.extendPalette('blue', {
+      '50':   '#DCEFFF',
+      '100':  '#AAD1F9',
+      '200':  '#7BB8F5',
+      '300':  '#4C9EF1',
+      '400':  '#1C85ED',
+      '500':  '#106CC8',
+      '600':  '#0159A2',
+      '700':  '#025EE9',
+      '800':  '#014AB6',
+      '900':  '#013583',
+      'contrastDefaultColor': 'light',
+      'contrastDarkColors': '50 100 200 A100',
+      'contrastStrongLightColors': '300 400 A200 A400'
+  }));
+  $mdThemingProvider.definePalette('docs-red', $mdThemingProvider.extendPalette('red', {
+    'A100': '#DE3641'
+  }));
 
   $mdThemingProvider.theme('docs-dark', 'default')
     .primaryPalette('yellow')
     .dark();
+
+  $mdThemingProvider.theme('default')
+      .primaryPalette('docs-blue')
+      .accentPalette('docs-red');
 
   angular.forEach(PAGES, function(pages, area) {
     angular.forEach(pages, function(page) {
@@ -116,7 +138,11 @@ function(Angularytics, $rootScope,$timeout) {
   'PAGES',
   '$location',
   '$rootScope',
-function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
+  '$http',
+  '$window',
+function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $window) {
+
+  var version = {};
 
   var sections = [{
     name: 'Getting Started',
@@ -143,30 +169,53 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
   sections.push({
     name: 'Customization',
     type: 'heading',
-    children: [{
-      name: 'Theming',
-      type: 'toggle',
-      pages: [{
-        name: 'Introduction and Terms',
-        url: '/Theming/01_introduction',
-        type: 'link'
+    children: [
+      {
+        name: 'CSS',
+        type: 'toggle',
+        pages: [{
+            name: 'Typography',
+            url: '/CSS/typography',
+            type: 'link'
+          },
+          {
+            name : 'Button',
+            url: '/CSS/button',
+            type: 'link'
+          },
+          {
+            name : 'Checkbox',
+            url: '/CSS/checkbox',
+            type: 'link'
+          }]
       },
       {
-        name: 'Declarative Syntax',
-        url: '/Theming/02_declarative_syntax',
-        type: 'link'
-      },
-      {
-        name: 'Configuring a Theme',
-        url: '/Theming/03_configuring_a_theme',
-        type: 'link'
-      },
-      {
-        name: 'Multiple Themes',
-        url: '/Theming/04_multiple_themes',
-        type: 'link'
-      }]
-    }]
+        name: 'Theming',
+        type: 'toggle',
+        pages: [
+          {
+            name: 'Introduction and Terms',
+            url: '/Theming/01_introduction',
+            type: 'link'
+          },
+          {
+            name: 'Declarative Syntax',
+            url: '/Theming/02_declarative_syntax',
+            type: 'link'
+          },
+          {
+            name: 'Configuring a Theme',
+            url: '/Theming/03_configuring_a_theme',
+            type: 'link'
+          },
+          {
+            name: 'Multiple Themes',
+            url: '/Theming/04_multiple_themes',
+            type: 'link'
+          }
+        ]
+      }
+    ]
   });
 
   var docsByModule = {};
@@ -235,7 +284,68 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
 
   $rootScope.$on('$locationChangeSuccess', onLocationChange);
 
+  $http.get("/docs.json")
+      .success(function(response) {
+        var versionId = getVersionIdFromPath();
+        var head = { type: 'version', url: '/HEAD', id: 'head', name: 'HEAD (master)', github: '' };
+        var commonVersions = versionId === 'head' ? [] : [ head ];
+        var knownVersions = getAllVersions();
+        var listVersions = knownVersions.filter(removeCurrentVersion);
+        var currentVersion = getCurrentVersion();
+        version.current = currentVersion;
+        sections.unshift({
+          name: 'Documentation Version',
+          type: 'heading',
+          className: 'version-picker',
+          children: [ {
+            name: currentVersion.name,
+            type: 'toggle',
+            pages: commonVersions.concat(listVersions)
+          } ]
+        });
+        function removeCurrentVersion (version) {
+          switch (versionId) {
+            case version.id: return false;
+            case 'latest': return !version.latest;
+            default: return true;
+          }
+        }
+        function getAllVersions () {
+          return response.versions.map(function(version) {
+            var latest = response.latest === version;
+            return {
+              type: 'version',
+              url: '/' + version,
+              name: getVersionFullString({ id: version, latest: latest }),
+              id: version,
+              latest: latest,
+              github: 'tree/v' + version
+            };
+          });
+        }
+        function getVersionFullString (version) {
+          return version.latest
+              ? 'Latest Release (' + version.id + ')'
+              : 'Release ' + version.id;
+        }
+        function getCurrentVersion () {
+          switch (versionId) {
+            case 'head': return head;
+            case 'latest': return knownVersions.filter(getLatest)[0];
+            default: return knownVersions.filter(getVersion)[0];
+          }
+          function getLatest (version) { return version.latest; }
+          function getVersion (version) { return versionId === version.id; }
+        }
+        function getVersionIdFromPath () {
+          var path = $window.location.pathname;
+          if (path.length < 2) path = 'HEAD';
+          return path.match(/[^\/]+/)[0].toLowerCase();
+        }
+      });
+
   return self = {
+    version:  version,
     sections: sections,
 
     selectSection: function(section) {
@@ -249,7 +359,6 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
     },
 
     selectPage: function(section, page) {
-      page && page.url && $location.path(page.url);
       self.currentSection = section;
       self.currentPage = page;
     },
@@ -265,6 +374,17 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
 
   function onLocationChange() {
     var path = $location.path();
+    var introLink = {
+      name: "Introduction",
+      url:  "/",
+      type: "link"
+    };
+
+    if (path == '/') {
+      self.selectSection(introLink);
+      self.selectPage(introLink, introLink);
+      return;
+    }
 
     var matchPage = function(section, page) {
       if (path === page.url) {
@@ -320,7 +440,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
   };
 })
 
-.directive('menuToggle', function() {
+.directive('menuToggle', [ '$timeout', function($timeout) {
   return {
     scope: {
       section: '='
@@ -328,6 +448,8 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
     templateUrl: 'partials/menu-toggle.tmpl.html',
     link: function($scope, $element) {
       var controller = $element.parent().controller();
+      var $ul = $element.find('ul');
+      var originalHeight;
 
       $scope.isOpen = function() {
         return controller.isOpen($scope.section);
@@ -335,6 +457,29 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
       $scope.toggle = function() {
         controller.toggleOpen($scope.section);
       };
+      $scope.$watch(
+          function () {
+            return controller.isOpen($scope.section);
+          },
+          function (open) {
+            var $ul = $element.find('ul');
+            var targetHeight = open ? getTargetHeight() : 0;
+            $timeout(function () {
+              $ul.css({ height: targetHeight + 'px' });
+            }, 0, false);
+
+            function getTargetHeight () {
+              var targetHeight;
+              $ul.addClass('no-transition');
+              $ul.css('height', '');
+              targetHeight = $ul.prop('clientHeight');
+              $ul.css('height', 0);
+              $ul.removeClass('no-transition');
+              return targetHeight;
+            }
+          }
+      );
+
 
       var parentNode = $element[0].parentNode.parentNode.parentNode;
       if(parentNode.classList.contains('parent-list-item')) {
@@ -343,7 +488,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
       }
     }
   };
-})
+}])
 
 .controller('DocsCtrl', [
   '$scope',
@@ -355,8 +500,9 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
   'menu',
   '$location',
   '$rootScope',
+  '$window',
   '$log',
-function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope, $log) {
+function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope, $window, $log) {
   var self = this;
 
   $scope.COMPONENTS = COMPONENTS;
@@ -371,6 +517,18 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
 
   $rootScope.$on('$locationChangeSuccess', openPage);
   $scope.focusMainContent = focusMainContent;
+
+  //-- Define a fake model for the related page selector
+  Object.defineProperty($rootScope, "relatedPage", {
+    get: function () { return null; },
+    set: angular.noop,
+    enumerable: true,
+    configurable: true
+  });
+  $rootScope.redirectToUrl = function (url) {
+    $window.location.hash = url;
+    $timeout(function () { $rootScope.relatedPage = null; }, 100);
+  };
 
   // Methods used by menuLink and menuToggle directives
   this.isOpen = isOpen;
@@ -453,30 +611,8 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
 .controller('HomeCtrl', [
   '$scope',
   '$rootScope',
-  '$http',
-function($scope, $rootScope, $http) {
+function($scope, $rootScope) {
   $rootScope.currentComponent = $rootScope.currentDoc = null;
-
-  $scope.version = "";
-  $scope.versionURL = "";
-
-  // Load build version information; to be
-  // used in the header bar area
-  var now = Math.round(new Date().getTime()/1000);
-  var versionFile = "version.json" + "?ts=" + now;
-
-  $http.get("version.json")
-    .then(function(response){
-      var sha = response.data.sha || "";
-      var url = response.data.url;
-
-      if (sha) {
-        $scope.versionURL = url + sha;
-        $scope.version = sha.substr(0,6);
-      }
-    });
-
-
 }])
 
 
@@ -494,6 +630,7 @@ function($rootScope) {
 function($scope, $attrs, $location, $rootScope) {
   $rootScope.currentComponent = $rootScope.currentDoc = null;
 
+  $scope.exampleNotEditable = true;
   $scope.layoutDemo = {
     mainAxis: 'center',
     crossAxis: 'center',

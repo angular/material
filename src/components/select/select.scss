@@ -6,10 +6,10 @@ $select-container-transition-duration: 350ms;
 $select-max-visible-options: 5;
 
 .md-select-menu-container {
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
-  z-index: 99;
+  z-index: $z-index-select;
   opacity: 0;
 
   // Don't let the user select a new choice while it's animating
@@ -27,12 +27,12 @@ $select-max-visible-options: 5;
   &.md-active {
     opacity: 1;
     md-select-menu {
-      transition: transform $swift-ease-out;
-      transition-duration: 200ms;
+      transition: $swift-ease-out;
+      transition-duration: 150ms;
       > * {
         opacity: 1;
         transition: $swift-ease-in;
-        transition-duration: 200ms;
+        transition-duration: 150ms;
         transition-delay: 100ms;
       }
     }
@@ -46,9 +46,17 @@ $select-max-visible-options: 5;
   }
 }
 
+md-input-container > md-select {
+  margin: auto 0 0 0;
+  order: 2;
+}
+
 md-select {
-  display: inline-block;
-  margin-top: 1.4em;
+  display: flex;
+  margin: 2.5*$baseline-grid 0 3*$baseline-grid + 2 0;
+  &:focus {
+    outline: none;
+  }
   &[disabled]:hover {
     cursor: default;
   }
@@ -56,33 +64,52 @@ md-select {
     &:hover {
       cursor: pointer
     }
-    &:focus {
-      .md-select-label {
+    &.ng-invalid.ng-dirty {
+      .md-select-value {
         border-bottom: 2px solid;
-        padding-bottom: $baseline-grid - 1;
+        padding-bottom: 0;
+      }
+    }
+    &:focus {
+      .md-select-value {
+        border-bottom-width: 2px;
+        border-bottom-style: solid;
+        padding-bottom: 0;
       }
     }
   }
 }
 
 
-.md-select-label {
+.md-select-value {
   display: flex;
   align-items: center;
-  padding-top: $baseline-grid + 1;
-  padding-bottom: $baseline-grid;
-  border-bottom: 1px solid;
-  font-size: 1em;
-  line-height: 0.8em;
+  padding: 2px 2px 1px;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  background-color: rgba(0,0,0,0);
   position: relative;
-  box-sizing: border-box;
+  box-sizing: content-box;
   min-width: 8 * $baseline-grid;
+  min-height: 26px;
+  flex-grow: 1;
+
+  *:first-child {
+    flex: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: calc(100% - 2*#{$baseline-grid});
+    transform: translate3d(0, 2px, 0);
+  }
 
   .md-select-icon {
+    display: block;
     align-items: flex-end;
     text-align: end;
     width: 3 * $baseline-grid;
     margin: 0 .5 * $baseline-grid;
+    transform: translate3d(0, 1px, 0);
   }
 
   .md-select-icon:after {
@@ -92,6 +119,15 @@ md-select {
     top: 2px;
     speak: none;
     transform: scaleY(0.6) scaleX(1);
+  }
+
+  &.md-select-placeholder {
+    display: flex;
+    order: 1;
+    pointer-events: none;
+    -webkit-font-smoothing: antialiased;
+    padding-left: 2px;
+    z-index: 1;
   }
 }
 
@@ -110,13 +146,17 @@ md-select-menu {
   }
 
   box-shadow: $whiteframe-shadow-z1;
-  transform-origin: 0 0;
-  transform: scale(1.0);
   max-height: ($select-option-height * $select-max-visible-options) + 2 * $baseline-grid;
+  min-height: $select-option-height;
   overflow-y: hidden;
+
+  @include rtl(transform-origin, left top, right top);
+
+  transform: scale(1.0);
 
   md-content {
     min-width: 136px;
+    min-height: $select-option-height;
     max-height: ($select-option-height * $select-max-visible-options) + 2 * $baseline-grid;
     overflow-y: auto;
   }
@@ -132,12 +172,17 @@ md-option {
   align-items: center;
   width: auto;
 
+  &:focus {
+    outline: none;
+  }
+
   .md-text {
+    @include not-selectable();
     width: auto;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 1em;
+    font-size: rem(1.6);
   }
   padding: 0 $select-option-padding 0 $select-option-padding;
   height: $select-option-height;
@@ -147,11 +192,22 @@ md-optgroup {
   display: block;
   label {
     display: block;
-    font-size: 1em;
+    font-size: rem(1.4);
     text-transform: uppercase;
-    padding: $baseline-grid * 2 $baseline-grid;
+    padding: $baseline-grid * 2;
+    font-weight: 500;
   }
   md-option {
-    padding-left: $baseline-grid + $select-option-padding;
+    padding-left: $select-option-padding * 2;
+    padding-right: $select-option-padding * 2;
+  }
+}
+
+@media screen and (-ms-high-contrast: active) {
+  .md-select-backdrop {
+    background-color: transparent;
+  }
+  md-select-menu {
+    border: 1px solid #fff;
   }
 }

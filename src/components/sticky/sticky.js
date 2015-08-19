@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /*
  * @ngdoc module
  * @name material.components.sticky
@@ -155,6 +152,9 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
       }
       item.height = item.element.prop('offsetHeight');
       item.clone.css('margin-left', item.left + 'px');
+      if ($mdUtil.floatingScrollbars()) {
+        item.clone.css('margin-right', '0');
+      }
     }
 
 
@@ -301,4 +301,3 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
   }
 
 }
-})();

@@ -45,7 +45,8 @@ md-progress-circular {
       right: $progress-circular-size * 0.5 - 1;
       top: 0;
       bottom: 0;
-      border-top: 5px solid black;
+      border-top-width: 5px;
+      border-top-style: solid;
       box-sizing: border-box;
     }
     .md-left, .md-right {
@@ -62,7 +63,7 @@ md-progress-circular {
         box-sizing: border-box;
         border-width: 5px;
         border-style: solid;
-        border-color: black black transparent;
+        border-bottom-color: transparent;
         border-radius: 50%;
       }
     }
@@ -82,6 +83,8 @@ md-progress-circular {
     }
   }
 
+  // TODO: This while-loop generates about 2 kilobytes of css after gzip.
+  // Refactor progressCircular to animate with javascript.
   $i: 0;
   @while $i <= 100 {
     &[value="#{$i}"] {
@@ -122,15 +125,6 @@ md-progress-circular {
     $i: $i + 1;
   }
 
-  &:not([md-mode=indeterminate]) {
-    .md-inner {
-      .md-left, .md-right {
-        .md-half-circle {
-        }
-      }
-    }
-  }
-
   &[md-mode=indeterminate] {
     .md-spinner-wrapper {
       animation: outer-rotate $progress-circular-outer-duration linear infinite;
@@ -151,6 +145,28 @@ md-progress-circular {
         .md-right {
           .md-half-circle {
             animation-name: right-wobble;
+          }
+        }
+      }
+    }
+  }
+}
+
+.ng-hide md-progress-circular,
+md-progress-circular.ng-hide {
+  &[md-mode=indeterminate] {
+    .md-spinner-wrapper {
+      animation: none;
+      .md-inner {
+        animation: none;
+        .md-left {
+          .md-half-circle {
+            animation-name: none;
+          }
+        }
+        .md-right {
+          .md-half-circle {
+            animation-name: none;
           }
         }
       }

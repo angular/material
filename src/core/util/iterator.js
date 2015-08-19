@@ -1,5 +1,3 @@
-(function(){
-
   angular
     .module('material.core')
     .config( function($provide){
@@ -8,7 +6,7 @@
             * Inject the iterator facade to easily support iteration and accessors
             * @see iterator below
             */
-           $delegate.iterator = Iterator;
+           $delegate.iterator = MdIterator;
 
            return $delegate;
          }
@@ -21,7 +19,7 @@
    * @param items Array list which this iterator will enumerate
    * @param reloop Boolean enables iterator to consider the list as an endless reloop
    */
-  function Iterator(items, reloop) {
+  function MdIterator(items, reloop) {
     var trueFn = function() { return true; };
 
     if (items && !angular.isArray(items)) {
@@ -227,4 +225,3 @@
     }
   }
 
-})();

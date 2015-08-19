@@ -16,33 +16,50 @@ md-radio-button.md-THEME_NAME-theme {
   .md-container .md-ripple {
     color: '{{accent-600}}';
   }
+}
+
+md-radio-group.md-THEME_NAME-theme,
+md-radio-button.md-THEME_NAME-theme {
 
   &:not([disabled]) {
-
+    .md-primary,
     &.md-primary {
       .md-on {
         background-color: '{{primary-color-0.87}}';
       }
-      &.md-checked .md-off {
-        border-color: '{{primary-color-0.87}}';
+      .md-checked,
+      &.md-checked {
+        .md-off {
+          border-color: '{{primary-color-0.87}}';
+        }
       }
-      &.md-checked .md-ink-ripple {
-        color: '{{primary-color-0.87}}';
+      .md-checked,
+      &.md-checked {
+        .md-ink-ripple {
+          color: '{{primary-color-0.87}}';
+        }
       }
       .md-container .md-ripple {
         color: '{{primary-600}}';
       }
     }
 
+    .md-warn,
     &.md-warn {
       .md-on {
         background-color: '{{warn-color-0.87}}';
       }
-      &.md-checked .md-off {
-        border-color: '{{warn-color-0.87}}';
+      .md-checked,
+      &.md-checked {
+        .md-off {
+          border-color: '{{warn-color-0.87}}';
+        }
       }
-      &.md-checked .md-ink-ripple {
-        color: '{{warn-color-0.87}}';
+      .md-checked,
+      &.md-checked {
+        .md-ink-ripple {
+          color: '{{warn-color-0.87}}';
+        }
       }
       .md-container .md-ripple {
         color: '{{warn-600}}';
@@ -52,6 +69,8 @@ md-radio-button.md-THEME_NAME-theme {
   }
 
   &[disabled] {
+    color: '{{foreground-3}}';
+
     .md-container .md-off {
       border-color: '{{foreground-3}}';
     }
@@ -63,6 +82,14 @@ md-radio-button.md-THEME_NAME-theme {
 }
 
 
-md-radio-group.md-THEME_NAME-theme:focus:not(:empty) {
-  border-color: '{{foreground-1}}';
+md-radio-group.md-THEME_NAME-theme.md-focused:not(:empty) {
+  .md-checked .md-container:before {
+    background-color: '{{accent-color-0.26}}';
+  }
+  .md-checked:not([disabled]).md-primary .md-container:before {
+    background-color: '{{primary-color-0.26}}';
+  }
+  .md-checked.md-primary .md-container:before {
+    background-color: '{{warn-color-0.26}}';
+  }
 }

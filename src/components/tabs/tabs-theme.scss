@@ -1,84 +1,111 @@
+@mixin md-tab-primary {
+  > md-tabs-wrapper {
+    background-color: '{{primary-color}}';
+    > md-tabs-canvas {
+      > md-pagination-wrapper {
+        > md-tab-item:not([disabled]) {
+          color: '{{primary-100}}';
+          &.md-active, &.md-focused {
+            color: '{{primary-contrast}}';
+          }
+          &.md-focused {
+            background: '{{primary-contrast-0.1}}';
+          }
+        }
+      }
+    }
+  }
+}
+@mixin md-tab-warn {
+  > md-tabs-wrapper {
+    background-color: '{{warn-color}}';
+    > md-tabs-canvas {
+      > md-pagination-wrapper {
+        > md-tab-item:not([disabled]) {
+          color: '{{warn-100}}';
+          &.md-active, &.md-focused {
+            color: '{{warn-contrast}}';
+          }
+          &.md-focused {
+            background: '{{warn-contrast-0.1}}';
+          }
+        }
+      }
+    }
+  }
+}
+@mixin md-tab-accent {
+  > md-tabs-wrapper {
+    background-color: '{{accent-color}}';
+    > md-tabs-canvas {
+      > md-pagination-wrapper {
+        > md-tab-item:not([disabled]) {
+          color: '{{accent-100}}';
+          &.md-active, &.md-focused {
+            color: '{{accent-contrast}}';
+          }
+          &.md-focused {
+            background: '{{accent-contrast-0.1}}';
+          }
+        }
+        > md-ink-bar {
+          color: '{{primary-600-1}}';
+          background: '{{primary-600-1}}';
+        }
+      }
+    }
+  }
+
+}
 md-tabs.md-THEME_NAME-theme {
-  .md-header {
+  md-tabs-wrapper {
     background-color: transparent;
+    border-color: '{{foreground-4}}';
   }
   .md-paginator md-icon {
     color: '{{primary-color}}';
   }
 
-  &.md-accent {
-    .md-header {
-      background-color: '{{accent-color}}';
-    }
-
-    md-tab:not([disabled]) {
-      color: '{{accent-100}}';
-      &.active {
-        color: '{{accent-contrast}}';
-      }
-    }
-  }
-
-  &.md-primary {
-    .md-header {
-      background-color: '{{primary-color}}';
-    }
-    md-tab:not([disabled]) {
-      color: '{{primary-100}}';
-      &.active {
-        color: '{{primary-contrast}}';
-      }
-    }
-    md-tab {
-      color: '{{primary-100}}';
-      &[disabled] {
-        color: '{{foreground-3}}';
-      }
-      &:focus {
-        color: '{{primary-contrast}}';
-        background-color: '{{primary-contrast-0.1}}';
-      }
-      &.active {
-        color: '{{primary-contrast}}';
-      }
-      .md-ripple-container {
-        color: '{{primary-contrast}}';
-      }
-    }
-  }
-
-  &.md-warn {
-    .md-header {
-      background-color: '{{warn-color}}';
-    }
-
-    md-tab:not([disabled]) {
-      color: '{{warn-100}}';
-      &.active {
-        color: '{{warn-contrast}}';
-      }
-    }
-  }
-
-
-  md-tabs-ink-bar {
+  md-ink-bar {
     color: '{{accent-color}}';
     background: '{{accent-color}}';
   }
 
-  md-tab {
+  .md-tab {
     color: '{{foreground-2}}';
     &[disabled] {
       color: '{{foreground-3}}';
     }
-    &:focus {
-      color: '{{foreground-1}}';
-    }
-    &.active {
+    &.md-active, &.md-focused {
       color: '{{primary-color}}';
+    }
+    &.md-focused {
+      background: '{{primary-color-0.1}}';
     }
     .md-ripple-container {
       color: '{{accent-100}}';
     }
   }
+
+  &.md-accent {
+    @include md-tab-accent();
+  }
+
+  &.md-primary {
+    @include md-tab-primary();
+  }
+
+  &.md-warn {
+    @include md-tab-warn();
+  }
+}
+
+md-toolbar > md-tabs.md-THEME_NAME-theme {
+  @include md-tab-primary();
+}
+md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme {
+  @include md-tab-accent();
+}
+md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme {
+  @include md-tab-warn();
 }

@@ -1,12 +1,21 @@
 $radio-width: 16px !default;
 $radio-height: $radio-width !default;
+$radio-text-margin: 10px !default;
+$radio-top-left: -15px !default;
 
 md-radio-button,
 .md-switch-thumb { // Used in switch
+  box-sizing: border-box;
   display: block;
   margin: 15px;
   white-space: nowrap;
   cursor: pointer;
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
 
   input {
     display: none;
@@ -23,21 +32,40 @@ md-radio-button,
     .md-ripple-container {
       position: absolute;
       display: block;
-      width: $radio-width * 3; 
+      width: $radio-width * 3;
       height: $radio-width * 3;
       left: -$radio-width;
       top: -$radio-width;
     }
+
+    &:before {
+      background-color: transparent;
+      border-radius: 50%;
+      content: '';
+      position: absolute;
+      display: block;
+      height: auto;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      transition: all 0.5s;
+      width: auto;
+    }
   }
 
+  &.md-align-top-left > div.md-container {
+     top: $radio-top-left;
+   }
 
   .md-off {
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     width: $radio-width;
     height: $radio-width;
-    border: solid 2px;
+    border-style: solid;
+    border-width: 2px;
     border-radius: 50%;
     transition: border-color ease 0.28s;
   }
@@ -54,14 +82,16 @@ md-radio-button,
   }
 
   &.md-checked .md-on {
-    transform: scale(0.55);
+    transform: scale(0.50);
   }
 
   .md-label {
     position: relative;
     display: inline-block;
-    margin-left: 10px;
-    margin-right: 10px;
+
+    @include rtl(margin-left, $radio-text-margin, 0);
+    @include rtl(margin-right, 0, $radio-text-margin);
+
     vertical-align: middle;
     white-space: normal;
     pointer-events: none;
@@ -74,12 +104,21 @@ md-radio-button,
 
 }
 md-radio-group {
-  border: 1px dotted transparent;
-  display: block;
-  outline: none;
+  &:focus {
+    outline: none;
+  }
+  &.md-focused {
+    .md-checked .md-container:before {
+      left: -8px;
+      top: -8px;
+      right: -8px;
+      bottom: -8px;
+    }
+  }
 }
 
-
-.radioButtondemoBasicUsage  md-radio-group {
-  border: none;
+@media screen and (-ms-high-contrast: active) {
+  md-radio-button.md-default-theme .md-on {
+    background-color: #fff;
+  }
 }

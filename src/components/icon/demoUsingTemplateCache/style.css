@@ -5,7 +5,7 @@ md-progress-circular {
 
 md-icon {
     margin: 20px;
-    margin-top:0px;
+    margin-top: 0;
     width: 24px;
     height: 24px;
 }
@@ -19,7 +19,7 @@ md-icon {
 }
 
 .note {
-    font-size: .8em;
+    font-size: 12px;
     display: block;
     margin-top: -2px;
     padding-left: 25px;

@@ -1,11 +1,22 @@
+$icon-size: rem(2.4);
+
 md-icon {
   margin: auto;
   background-repeat: no-repeat no-repeat;
   display: inline-block;
   vertical-align: middle;
-  fill: currentcolor;
-  height: 3 * $baseline-grid;
-  width: 3 * $baseline-grid;
+  fill: currentColor;
+  height: $icon-size;
+  width: $icon-size;
+
+  svg {
+    pointer-events: none;
+  }
+
+  &[md-font-icon] {
+    line-height: 1;
+    width: auto;
+  }
 }
 
 //

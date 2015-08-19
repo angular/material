@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.content
@@ -23,13 +20,12 @@ angular.module('material.components.content', [
  * @description
  * The `<md-content>` directive is a container element useful for scrollable content
  *
- * ### Restrictions
- *
- * - Add the `md-padding` class to make the content padded.
- *
  * @usage
+ *
+ * - Add the `[layout-padding]` attribute to make the content padded.
+ *
  * <hljs lang="html">
- *  <md-content class="md-padding">
+ *  <md-content layout-padding>
  *      Lorem ipsum dolor sit amet, ne quod novum mei.
  *  </md-content>
  * </hljs>
@@ -75,4 +71,3 @@ function iosScrollFix(node) {
     }
   });
 }
-})();

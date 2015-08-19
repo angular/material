@@ -1,29 +1,27 @@
-$button-line-height: 25px !default;
-$button-padding: 2px 6px 3px !default;
+$button-border-radius: 3px !default;
+$button-fab-border-radius: 50% !default;
+$button-icon-border-radius: $button-fab-border-radius;
+
+$button-line-height: rem(3.60) !default;
+$button-padding: 0 rem(0.600) !default;
+$button-margin: rem(0.600) rem(0.800) !default;
+$button-min-width: rem(8.800) !default;
 
 // Fab buttons
-$button-fab-width: 56px !default;
-$button-fab-height: 56px !default;
-$button-fab-padding: 16px !default;
-$button-fab-mini-width: 40px !default;
-$button-fab-mini-height: 40px !default;
+$button-fab-line-height: rem(5.600) !default;
+$button-fab-mini-width: rem(4.00) !default;
+$button-fab-mini-height: rem(4.00) !default;
+$button-fab-mini-line-height: rem(4.00) !default;
 
-$button-fab-toast-offset: $button-fab-height * 0.75;
+$button-fab-toast-offset: $button-fab-height * 0.75 !default;
 
-/**
- * Position a FAB button.
- */
-@mixin fab-position($spot, $top: auto, $right: auto, $bottom: auto, $left: auto) {
-  &.md-fab-#{$spot} {
-    top: $top;
-    right: $right;
-    bottom: $bottom;
-    left: $left;
-    position: absolute;
-  }
-}
+$icon-button-height: rem(4.800) !default;
+$icon-button-width: rem(4.800) !default;
+$icon-button-margin: rem(0.600) !default;
 
 .md-button {
+  border-radius: $button-border-radius;
+  box-sizing: border-box;
   color: currentColor;
 
   user-select: none;
@@ -31,42 +29,50 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
 
   outline: none;
   border: 0;
-  padding: 6px;
-  margin: 0;
+  display: inline-block;
+  align-items: center;
+  padding: $button-padding;
+  margin: $button-margin;
+  line-height: $button-line-height;
+  min-height: $button-line-height;
   background: transparent;
   white-space: nowrap;
+  // override for FAB, icon buttons, etc.
+  min-width: $button-min-width;
 
   text-align: center;
 
   // Always uppercase buttons
   text-transform: uppercase;
   font-weight: 500;
+  font-size: $body-font-size-base;
   font-style: inherit;
   font-variant: inherit;
-  font-size: inherit;
   font-family: inherit;
-  line-height: inherit;
   text-decoration: none;
 
   cursor: pointer;
   overflow: hidden;   // for ink containment
 
   transition: box-shadow $swift-ease-out-duration $swift-ease-out-timing-function,
-              background-color $swift-ease-out-duration $swift-ease-out-timing-function,
-              transform $swift-ease-out-duration $swift-ease-out-timing-function;
+              background-color $swift-ease-out-duration $swift-ease-out-timing-function;
 
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
   &:focus {
     outline: none;
   }
 
-  &:hover {
+  &:hover, &:focus {
     text-decoration: none;
   }
 
-  &.ng-hide {
+  &.ng-hide, &.ng-leave {
     transition: none;
   }
-;
 
   &.md-cornered {
     border-radius: 0;
@@ -78,45 +84,61 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
   }
 
   &.md-raised {
-    transform: translate3d(0, 0, 0);
-
     &:not([disabled]) {
-      @extend .md-shadow-bottom-z-1;
+      @include md-shadow-bottom-z-1();
+    }
+  }
+
+  &.md-icon-button {
+    margin: 0 $icon-button-margin;
+    height: $icon-button-height;
+    min-width: 0;
+    line-height: $icon-button-height;
+    padding-left: 0;
+    padding-right: 0;
+    width: $icon-button-width;
+    border-radius: $button-icon-border-radius;
+    .md-ripple-container {
+      border-radius: $button-icon-border-radius;
+      background-clip: padding-box;
+      overflow: hidden;
+      // The following hack causes Safari/Chrome to respect overflow hidden for ripples
+      -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
     }
   }
 
   &.md-fab {
 
-    @include fab-position(bottom-right, auto, ($button-fab-width - $button-fab-padding)/2, ($button-fab-height - $button-fab-padding)/2, auto);
-    @include fab-position(bottom-left, auto, auto, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2);
-    @include fab-position(top-right, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2, auto, auto);
-    @include fab-position(top-left, ($button-fab-height - $button-fab-padding)/2, auto, auto, ($button-fab-width - $button-fab-padding)/2);
+    // Include the top/left/bottom/right fab positions
+    @include fab-all-positions();
 
     z-index: $z-index-fab;
 
+    line-height: $button-fab-line-height;
+    min-width: 0;
     width: $button-fab-width;
     height: $button-fab-height;
+    vertical-align: middle;
 
-    border-radius: 50%;
-
-    @extend .md-shadow-bottom-z-1;
-    border-radius: 50%;
+    @include md-shadow-bottom-z-1();
+    border-radius: $button-fab-border-radius;
+    background-clip: padding-box;
     overflow: hidden;
 
-    transform: translate3d(0,0,0);
-
     transition: 0.2s linear;
-    transition-property: transform, box-shadow;
-
-    md-icon {
-      margin-top: 0;
+    transition-property: background-color, box-shadow;
+    .md-ripple-container {
+      border-radius: $button-fab-border-radius;
+      background-clip: padding-box;
+      overflow: hidden;
+      // The following hack causes Safari/Chrome to respect overflow hidden for ripples
+      -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
     }
 
     &.md-mini {
+      line-height: $button-fab-mini-line-height;
       width: $button-fab-mini-width;
       height: $button-fab-mini-height;
-      md-icon {
-      }
     }
 
   }
@@ -124,12 +146,21 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
   &:not([disabled]) {
     &.md-raised,
     &.md-fab {
-      &:focus,
-      &:hover {
-        transform: translate3d(0, -1px, 0);
-        @extend .md-shadow-bottom-z-2;
+      &.md-focused {
+        @include md-shadow-bottom-z-1();
+      }
+      &:active {
+        @include md-shadow-bottom-z-2();
       }
     }
+  }
+
+  .md-ripple-container {
+    border-radius: $button-border-radius;
+    background-clip: padding-box;
+    overflow: hidden;
+    // The following hack causes Safari/Chrome to respect overflow hidden for ripples
+    -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
   }
 }
 
@@ -138,19 +169,20 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
   .md-button.md-fab-top-right {
     transform: translate3d(0, $button-fab-toast-offset, 0);
     &:not([disabled]) {
-      &:focus,
+      &.md-focused,
       &:hover {
         transform: translate3d(0, $button-fab-toast-offset - 1, 0);
       }
     }
   }
 }
+
 .md-toast-open-bottom {
   .md-button.md-fab-bottom-left,
   .md-button.md-fab-bottom-right {
     transform: translate3d(0, -$button-fab-toast-offset, 0);
     &:not([disabled]) {
-      &:focus,
+      &.md-focused,
       &:hover {
         transform: translate3d(0, -$button-fab-toast-offset - 1, 0);
       }
@@ -158,12 +190,12 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
   }
 }
 
-
 .md-button-group {
   display: flex;
   flex: 1;
   width: 100%;
 }
+
 .md-button-group > .md-button {
   flex: 1;
 
@@ -186,5 +218,11 @@ $button-fab-toast-offset: $button-fab-height * 0.75;
   &:last-child {
     border-right-width: 1px;
     border-radius: 0px 2px 2px 0px;
+  }
+}
+@media screen and (-ms-high-contrast: active) {
+  .md-button.md-raised,
+  .md-button.md-fab {
+    border: 1px solid #fff;
   }
 }

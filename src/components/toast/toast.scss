@@ -1,7 +1,11 @@
 // See height set globally, depended on by buttons
+
+
 md-toast {
   display: flex;
   position:absolute;
+  z-index: $z-index-toast;
+
   box-sizing: border-box;
   align-items: center;
 
@@ -14,11 +18,11 @@ md-toast {
   font-size: 14px;
   cursor: default;
 
-  max-width: 879px;
-  max-height: 40px;
+  height:auto;
+  max-height: 7*$toast-height;
+  max-width: 100%;
 
-  height: $toast-height;
-  z-index: $z-index-toast;
+  overflow:hidden;
 
   &.md-capsule {
     border-radius: 24px;
@@ -71,9 +75,12 @@ md-toast {
     cursor: pointer;
     text-transform: uppercase;
     float: right;
+
+    &.md-button {
+      min-width: 0;
+    }
   }
 }
-
 
 @media (max-width: $layout-breakpoint-sm) {
   md-toast {
@@ -106,7 +113,7 @@ md-toast {
       top: $toast-margin;
     }
 
-    /* 
+    /*
      * When the toast doesn't take up the whole screen,
      * make it rotate when the user swipes it away
      */
@@ -126,5 +133,19 @@ md-toast {
         }
       }
     }
+  }
+}
+
+@media (min-width: $layout-breakpoint-lg) {
+  md-toast {
+    max-width: $baseline-grid * 71;
+  }
+}
+
+
+
+@media screen and (-ms-high-contrast: active) {
+  md-toast {
+    border: 1px solid #fff;
   }
 }

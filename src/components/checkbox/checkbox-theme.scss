@@ -6,6 +6,9 @@ md-checkbox.md-THEME_NAME-theme {
   &.md-checked .md-ripple {
     color: '{{background-600}}';
   }
+  &.md-checked.md-focused .md-container:before {
+    background-color: '{{accent-color-0.26}}';
+  }
 
   .md-icon {
     border-color: '{{foreground-2}}';
@@ -34,6 +37,10 @@ md-checkbox.md-THEME_NAME-theme {
         background-color: '{{primary-color-0.87}}';
       }
 
+      &.md-checked.md-focused .md-container:before {
+        background-color: '{{primary-color-0.26}}';
+      }
+
       &.md-checked .md-icon:after {
         border-color: '{{background-200}}';
       }
@@ -43,14 +50,15 @@ md-checkbox.md-THEME_NAME-theme {
       .md-ripple {
         color: '{{warn-600}}';
       }
-
       .md-icon {
         border-color: '{{foreground-2}}';
       }
       &.md-checked .md-icon {
         background-color: '{{warn-color-0.87}}';
       }
-
+      &.md-checked.md-focused:not([disabled]) .md-container:before {
+        background-color: '{{warn-color-0.26}}';
+      }
       &.md-checked .md-icon:after {
         border-color: '{{background-200}}';
       }
@@ -58,12 +66,17 @@ md-checkbox.md-THEME_NAME-theme {
   }
 
   &[disabled] {
+
     .md-icon {
       border-color: '{{foreground-3}}';
     }
 
     &.md-checked .md-icon {
       background-color: '{{foreground-3}}';
+    }
+
+    .md-label {
+      color: '{{foreground-3}}';
     }
   }
 

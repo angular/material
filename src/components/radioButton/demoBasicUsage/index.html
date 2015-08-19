@@ -1,11 +1,10 @@
-
-<div ng="radioDemo1">
-<form ng-submit="submit()" ng-controller="AppCtrl" >
+<div>
+  <form ng-submit="submit()" ng-controller="AppCtrl">
     <p>Selected Value: <span class="radioValue">{{ data.group1 }}</span> </p>
 
     <md-radio-group ng-model="data.group1">
 
-      <md-radio-button value="Apple">Apple</md-radio-button>
+      <md-radio-button value="Apple" class="md-primary">Apple</md-radio-button>
       <md-radio-button value="Banana"> Banana </md-radio-button>
       <md-radio-button value="Mango">Mango</md-radio-button>
 
@@ -15,19 +14,27 @@
 
     <p>Selected Value: <span class="radioValue">{{ data.group2 }}</span></p>
 
-    <md-radio-group ng-model="data.group2">
+    <md-radio-group ng-model="data.group2" class="md-primary">
 
         <md-radio-button ng-repeat="d in radioData"
                          ng-value="d.value"
-                         ng-disabled=" d.isDisabled ">
-            {{ d.label }}
+                         ng-disabled=" d.isDisabled "
+                         ng-class="{'md-align-top-left': $index==1}" >
+            {{ d.label }}<br/>
+          <span class="ipsum"
+                ng-if="$index == 1">
+            Duis placerat lectus et justo mollis, nec sodales orci congue. Vestibulum semper non urna ac suscipit.
+            Vestibulum tempor, ligula id laoreet hendrerit, massa augue iaculis magna,
+            sit amet dapibus tortor ligula non nibh.
+          </span>
+
         </md-radio-button>
 
     </md-radio-group>
 
     <p>
-      <md-button ng-click="addItem()" type="button">Add</md-button>
-      <md-button ng-click="removeItem()" type="button">Remove</md-button>
+      <md-button class="md-raised" ng-click="addItem()" type="button">Add</md-button>
+      <md-button class="md-raised" ng-click="removeItem()" type="button">Remove</md-button>
     </p>
 
     <hr />
@@ -42,5 +49,5 @@
           <md-icon md-svg-icon="{{it.id}}"></md-icon>
       </md-radio-button>
     </md-radio-group>
-</form>
+  </form>
 </div>

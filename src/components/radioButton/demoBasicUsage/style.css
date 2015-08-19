@@ -30,8 +30,13 @@ p:last-child {
 
 md-icon {
     margin: 20px;
-    margin-top:0px;
+    margin-top: 0;
     width: 128px;
     height: 128px;
 }
 
+
+.ipsum {
+  color: saddlebrown;
+  font-size: 0.9em;
+}

@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.sidenav
@@ -14,6 +11,7 @@ angular.module('material.components.sidenav', [
   ])
   .factory('$mdSidenav', SidenavService )
   .directive('mdSidenav', SidenavDirective)
+  .directive('mdSidenavFocus', SidenavFocusDirective)
   .controller('$mdSidenavController', SidenavController);
 
 
@@ -29,44 +27,61 @@ angular.module('material.components.sidenav', [
  *
  * @usage
  * <hljs lang="js">
- * // Toggle the given sidenav
- * $mdSidenav(componentId).toggle();
- * </hljs>
- * <hljs lang="js">
- * // Open the given sidenav
- * $mdSidenav(componentId).open();
- * </hljs>
- * <hljs lang="js">
- * // Close the given sidenav
- * $mdSidenav(componentId).close();
- * </hljs>
- * <hljs lang="js">
- * // Exposes whether given sidenav is set to be open
+ * // Async lookup for sidenav instance; will resolve when the instance is available
+ * $mdSidenav(componentId).then(function(instance) {
+ *   $log.debug( componentId + "is now ready" );
+ * });
+ * // Async toggle the given sidenav;
+ * // when instance is known ready and lazy lookup is not needed.
+ * $mdSidenav(componentId)
+ *    .toggle()
+ *    .then(function(){
+ *      $log.debug('toggled');
+ *    });
+ * // Async open the given sidenav
+ * $mdSidenav(componentId)
+ *    .open()
+ *    .then(function(){
+ *      $log.debug('opened');
+ *    });
+ * // Async close the given sidenav
+ * $mdSidenav(componentId)
+ *    .close()
+ *    .then(function(){
+ *      $log.debug('closed');
+ *    });
+ * // Sync check to see if the specified sidenav is set to be open
  * $mdSidenav(componentId).isOpen();
- * </hljs>
- * <hljs lang="js">
- * // Exposes whether given sidenav is locked open
- * // If this is true, the sidenav will be open regardless of isOpen()
+ * // Sync check to whether given sidenav is locked open
+ * // If this is true, the sidenav will be open regardless of close()
  * $mdSidenav(componentId).isLockedOpen();
  * </hljs>
  */
 function SidenavService($mdComponentRegistry, $q) {
   return function(handle) {
-    var errorMsg = "SideNav '" + handle + "' is not available!";
 
     // Lookup the controller instance for the specified sidNav instance
+    var self;
+    var errorMsg = "SideNav '" + handle + "' is not available!";
     var instance = $mdComponentRegistry.get(handle);
+
     if(!instance) {
       $mdComponentRegistry.notFoundError(handle);
     }
 
-    return {
+    return self = {
+      // -----------------
+      // Sync methods
+      // -----------------
       isOpen: function() {
         return instance && instance.isOpen();
       },
       isLockedOpen: function() {
         return instance && instance.isLockedOpen();
       },
+      // -----------------
+      // Async methods
+      // -----------------
       toggle: function() {
         return instance ? instance.toggle() : $q.reject(errorMsg);
       },
@@ -75,11 +90,58 @@ function SidenavService($mdComponentRegistry, $q) {
       },
       close: function() {
         return instance ? instance.close() : $q.reject(errorMsg);
+      },
+      then : function( callbackFn ) {
+        var promise = instance ? $q.when(instance) : waitForInstance();
+        return promise.then( callbackFn || angular.noop );
       }
     };
+
+    /**
+     * Deferred lookup of component instance using $component registry
+     */
+    function waitForInstance() {
+      return $mdComponentRegistry
+                .when(handle)
+                .then(function( it ){
+                  instance = it;
+                  return it;
+                });
+    }
   };
 }
-
+/**
+ * @ngdoc directive
+ * @name mdSidenavFocus
+ * @module material.components.sidenav
+ *
+ * @restrict A
+ *
+ * @description
+ * `mdSidenavFocus` provides a way to specify the focused element when a sidenav opens.
+ * This is completely optional, as the sidenav itself is focused by default.
+ *
+ * @usage
+ * <hljs lang="html">
+ * <md-sidenav>
+ *   <form>
+ *     <md-input-container>
+ *       <label for="testInput">Label</label>
+ *       <input id="testInput" type="text" md-sidenav-focus>
+ *     </md-input-container>
+ *   </form>
+ * </md-sidenav>
+ * </hljs>
+ **/
+function SidenavFocusDirective() {
+  return {
+    restrict: 'A',
+    require: '^mdSidenav',
+    link: function(scope, element, attr, sidenavCtrl) {
+      // @see $mdUtil.findFocusTarget(...)
+    }
+  };
+}
 /**
  * @ngdoc directive
  * @name mdSidenav
@@ -91,6 +153,9 @@ function SidenavService($mdComponentRegistry, $q) {
  * A Sidenav component that can be opened and closed programatically.
  *
  * By default, upon opening it will slide out on top of the main content area.
+ *
+ * For keyboard and screen reader accessibility, focus is sent to the sidenav wrapper by default.
+ * It can be overridden with the `md-sidenav-focus` directive on the child element you want focused.
  *
  * @usage
  * <hljs lang="html">
@@ -109,7 +174,13 @@ function SidenavService($mdComponentRegistry, $q) {
  *   <md-sidenav md-component-id="right"
  *     md-is-locked-open="$mdMedia('min-width: 333px')"
  *     class="md-sidenav-right">
- *     Right Nav!
+ *     <form>
+ *       <md-input-container>
+ *         <label for="testInput">Test input</label>
+ *         <input id="testInput" type="text"
+ *                ng-model="data" md-sidenav-focus>
+ *       </md-input-container>
+ *     </form>
  *   </md-sidenav>
  * </div>
  * </hljs>
@@ -137,7 +208,7 @@ function SidenavService($mdComponentRegistry, $q) {
  *   - `<md-sidenav md-is-locked-open="$mdMedia('min-width: 1000px')"></md-sidenav>`
  *   - `<md-sidenav md-is-locked-open="$mdMedia('sm')"></md-sidenav>` (locks open on small screens)
  */
-function SidenavDirective($timeout, $animate, $parse, $log, $mdMedia, $mdConstant, $compile, $mdTheming, $q, $document) {
+function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, $compile, $parse, $log, $q, $document) {
   return {
     restrict: 'E',
     scope: {
@@ -155,19 +226,21 @@ function SidenavDirective($timeout, $animate, $parse, $log, $mdMedia, $mdConstan
    * Directive Post Link function...
    */
   function postLink(scope, element, attr, sidenavCtrl) {
+    var lastParentOverFlow;
     var triggeringElement = null;
     var promise = $q.when(true);
 
     var isLockedOpenParsed = $parse(attr.mdIsLockedOpen);
     var isLocked = function() {
       return isLockedOpenParsed(scope.$parent, {
-        $media: function(arg) { $log.warn("$media is deprecated for is-locked-open. Use $mdMedia instead."); return $mdMedia(arg); },
+        $media: function(arg) {
+          $log.warn("$media is deprecated for is-locked-open. Use $mdMedia instead.");
+          return $mdMedia(arg);
+        },
         $mdMedia: $mdMedia
       });
     };
-    var backdrop = $compile(
-      '<md-backdrop class="md-sidenav-backdrop md-opaque ng-enter">'
-    )(scope);
+    var backdrop = $mdUtil.createBackdrop(scope, "md-sidenav-backdrop md-opaque ng-enter");
 
     element.on('$destroy', sidenavCtrl.destroy);
     $mdTheming.inherit(backdrop, element);
@@ -198,6 +271,8 @@ function SidenavDirective($timeout, $animate, $parse, $log, $mdMedia, $mdConstan
      * @param isOpen
      */
     function updateIsOpen(isOpen) {
+      // Support deprecated md-sidenav-focus attribute as fallback
+      var focusEl = $mdUtil.findFocusTarget(element) || $mdUtil.findFocusTarget(element,'[md-sidenav-focus]') || element;
       var parent = element.parent();
 
       parent[isOpen ? 'on' : 'off']('keydown', onKeyDown);
@@ -208,15 +283,36 @@ function SidenavDirective($timeout, $animate, $parse, $log, $mdMedia, $mdConstan
         triggeringElement = $document[0].activeElement;
       }
 
+      disableParentScroll(isOpen);
+
       return promise = $q.all([
-        $animate[isOpen ? 'enter' : 'leave'](backdrop, parent),
-        $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed').then(function() {
-          // If we opened, and haven't closed again before the animation finished
-          if (scope.isOpen) {
-            element.focus();
-          }
-        })
-      ]);
+                isOpen ? $animate.enter(backdrop, parent) : $animate.leave(backdrop),
+                $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed')
+              ])
+              .then(function() {
+                // Perform focus when animations are ALL done...
+                if (scope.isOpen) {
+                  focusEl && focusEl.focus();
+                }
+              });
+    }
+
+    /**
+     * Prevent parent scrolling (when the SideNav is open)
+     */
+    function disableParentScroll(disabled) {
+      var parent = element.parent();
+      if ( disabled && !lastParentOverFlow ) {
+
+        lastParentOverFlow = parent.css('overflow');
+        parent.css('overflow', 'hidden');
+
+      } else if (angular.isDefined(lastParentOverFlow)) {
+
+        parent.css('overflow', lastParentOverFlow);
+        lastParentOverFlow = undefined;
+
+      }
     }
 
     /**
@@ -232,28 +328,26 @@ function SidenavDirective($timeout, $animate, $parse, $log, $mdMedia, $mdConstan
         return $q.when(true);
 
       } else {
-        var deferred = $q.defer();
+        return $q(function(resolve){
+          // Toggle value to force an async `updateIsOpen()` to run
+          scope.isOpen = isOpen;
 
-        // Toggle value to force an async `updateIsOpen()` to run
-        scope.isOpen = isOpen;
+          $mdUtil.nextTick(function() {
+            // When the current `updateIsOpen()` animation finishes
+            promise.then(function(result) {
 
-        $timeout(function() {
+              if ( !scope.isOpen ) {
+                // reset focus to originating element (if available) upon close
+                triggeringElement && triggeringElement.focus();
+                triggeringElement = null;
+              }
 
-          // When the current `updateIsOpen()` animation finishes
-          promise.then(function(result){
-
-            if ( !scope.isOpen ) {
-              // reset focus to originating element (if available) upon close
-              triggeringElement && triggeringElement.focus();
-              triggeringElement = null;
-            }
-
-            deferred.resolve(result);
+              resolve(result);
+            });
           });
 
-        },0,false);
+        });
 
-        return deferred.promise;
       }
     }
 
@@ -294,16 +388,15 @@ function SidenavController($scope, $element, $attrs, $mdComponentRegistry, $q) {
 
   // Use Default internal method until overridden by directive postLink
 
-  self.$toggleOpen = function() { return $q.when($scope.isOpen); };
+  // Synchronous getters
   self.isOpen = function() { return !!$scope.isOpen; };
   self.isLockedOpen = function() { return !!$scope.isLockedOpen; };
+
+  // Async actions
   self.open   = function() { return self.$toggleOpen( true );  };
   self.close  = function() { return self.$toggleOpen( false ); };
   self.toggle = function() { return self.$toggleOpen( !$scope.isOpen );  };
+  self.$toggleOpen = function(value) { return $q.when($scope.isOpen = value); };
 
   self.destroy = $mdComponentRegistry.register(self, $attrs.mdComponentId);
 }
-
-
-
-})();

@@ -2,7 +2,7 @@ describe('<md-toolbar>', function() {
 
   beforeEach(module('material.components.toolbar'));
 
-  it('with scrollShrink, it should shrink scrollbar when going to bottom', inject(function($compile, $rootScope, $mdConstant, mdToolbarDirective) {
+  it('with scrollShrink, it should shrink scrollbar when going to bottom', inject(function($compile, $rootScope, $mdConstant, mdToolbarDirective, $$rAF) {
 
     var parent = angular.element('<div>');
     var toolbar = angular.element('<md-toolbar>');
@@ -11,7 +11,7 @@ describe('<md-toolbar>', function() {
     parent.append(toolbar).append(contentEl);
 
     //Prop will be used for offsetHeight, give a fake offsetHeight
-    spyOn(toolbar, 'prop').andCallFake(function() {
+    spyOn(toolbar, 'prop').and.callFake(function() {
       return 100;
     });
 
@@ -19,11 +19,11 @@ describe('<md-toolbar>', function() {
     // no matter which browser the tests are being run on.
     // (IE, firefox, chrome all give different results when reading element.style)
     var toolbarCss = {};
-    spyOn(toolbar, 'css').andCallFake(function(k, v) {
+    spyOn(toolbar, 'css').and.callFake(function(k, v) {
       toolbarCss[k] = v;
     });
     var contentCss = {};
-    spyOn(contentEl, 'css').andCallFake(function(k, v) {
+    spyOn(contentEl, 'css').and.callFake(function(k, v) {
       contentCss[k] = v;
     });
 
@@ -33,11 +33,15 @@ describe('<md-toolbar>', function() {
       mdShrinkSpeedFactor: 1
     });
 
+    $rootScope.$apply();
     $rootScope.$broadcast('$mdContentLoaded', contentEl);
+    $$rAF.flush();
+
 
     //Expect everything to be in its proper initial state.
     expect(toolbarCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,0px,0)');
     expect(contentCss['margin-top']).toEqual('-100px');
+    expect(contentCss['margin-bottom']).toEqual('-100px');
     expect(contentCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,100px,0)');
 
     // Fake scroll to the bottom
@@ -45,6 +49,7 @@ describe('<md-toolbar>', function() {
       type: 'scroll',
       target: { scrollTop: 500 }
     });
+    $$rAF.flush();
 
     expect(toolbarCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,-100px,0)');
     expect(contentCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,0px,0)');
@@ -54,6 +59,7 @@ describe('<md-toolbar>', function() {
       type: 'scroll',
       target: { scrollTop: 0 }
     });
+    $$rAF.flush();
 
     expect(toolbarCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,0px,0)');
     expect(contentCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,100px,0)');

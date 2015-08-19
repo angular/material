@@ -1,22 +1,34 @@
 describe('$mdToast service', function() {
-  beforeEach(module('material.components.toast', 'ngAnimateMock', function($provide) {
+
+  beforeEach(module('material.components.toast'));
+
+  afterEach(inject(function($timeout, $animate) {
+    $animate.triggerCallbacks();
+    $timeout.flush();
   }));
 
   function setup(options) {
-    inject(function($mdToast, $rootScope, $animate) {
-      $animate.triggerCallbacks();
+    var promise;
+    inject(function($mdToast, $rootScope, $$rAF, $timeout) {
       options = options || {};
-      $mdToast.show(options);
-      $rootScope.$apply();
-      $animate.triggerCallbacks();
+
+      $$rAF.flush();
+
+      promise = $mdToast.show(options);
+
+      $rootScope.$digest();
+      $$rAF.flush();
+      $timeout.flush();
+
     });
+    return promise;
   }
 
   describe('simple()', function() {
     hasConfigMethods(['content', 'action', 'capsule', 'highlightAction', 'theme']);
 
     it('supports a basic toast', inject(function($mdToast, $rootScope, $timeout, $animate) {
-      var rejected = false;
+      var openAndclosed = false;
       var parent = angular.element('<div>');
       $mdToast.show(
         $mdToast.simple({
@@ -25,8 +37,8 @@ describe('$mdToast service', function() {
           theme: 'some-theme',
           capsule: true
         })
-      ).catch(function() {
-        rejected = true;
+      ).then(function() {
+          openAndclosed = true;
       });
       $rootScope.$digest();
       expect(parent.find('span').text()).toBe('Do something');
@@ -35,7 +47,7 @@ describe('$mdToast service', function() {
       $animate.triggerCallbacks();
       $timeout.flush();
       $animate.triggerCallbacks();
-      expect(rejected).toBe(true);
+      expect(openAndclosed).toBe(true);
     }));
 
     it('supports dynamicly updating the content', inject(function($mdToast, $rootScope, $rootElement) {
@@ -91,6 +103,25 @@ describe('$mdToast service', function() {
         expect(content.text()).toBe('Do something');
         expect(button.text()).toBe('Click me');
       }));
+
+
+      it('displays correctly with parent()', inject(function($mdToast, $rootScope) {
+              var parent = angular.element('<div>');
+              var toast = $mdToast.simple({
+                content: 'Do something',
+              })
+              .parent(parent)
+              .action('Click me');
+
+              $mdToast.show(toast);
+              $rootScope.$digest();
+
+              var content = parent.find('span').eq(0);
+              var button = parent.find('button');
+
+              expect(content.text()).toBe('Do something');
+              expect(button.text()).toBe('Click me');
+            }));
     });
 
     function hasConfigMethods(methods) {
@@ -106,40 +137,6 @@ describe('$mdToast service', function() {
 
   describe('build()', function() {
     describe('options', function() {
-      it('should hide current toast when showing new one', inject(function($rootElement) {
-        setup({
-          template: '<md-toast class="one">'
-        });
-        expect($rootElement[0].querySelector('md-toast.one')).toBeTruthy();
-        expect($rootElement[0].querySelector('md-toast.two')).toBeFalsy();
-        expect($rootElement[0].querySelector('md-toast.three')).toBeFalsy();
-
-        setup({
-          template: '<md-toast class="two">'
-        });
-        expect($rootElement[0].querySelector('md-toast.one')).toBeFalsy();
-        expect($rootElement[0].querySelector('md-toast.two')).toBeTruthy();
-        expect($rootElement[0].querySelector('md-toast.three')).toBeFalsy();
-
-        setup({
-          template: '<md-toast class="three">'
-        });
-        expect($rootElement[0].querySelector('md-toast.one')).toBeFalsy();
-        expect($rootElement[0].querySelector('md-toast.two')).toBeFalsy();
-        expect($rootElement[0].querySelector('md-toast.three')).toBeTruthy();
-      }));
-
-      it('should hide after duration', inject(function($timeout, $animate, $rootElement) {
-        var parent = angular.element('<div>');
-        setup({
-          template: '<md-toast />',
-          hideTimeout: 1234
-        });
-        expect($rootElement.find('md-toast').length).toBe(1);
-        $timeout.flush();
-        expect($rootElement.find('md-toast').length).toBe(0);
-      }));
-
       it('should have template', inject(function($timeout, $rootScope, $rootElement) {
         var parent = angular.element('<div>');
         setup({
@@ -171,9 +168,14 @@ describe('$mdToast service', function() {
         expect(toast.hasClass('md-left')).toBe(true);
       }));
     });
+  });
 
-    describe('lifecycle', function() {
-      it('should hide current toast when showing new one', inject(function($rootElement) {
+  describe('lifecycle', function() {
+
+    describe('should hide',function() {
+      it('current toast when showing new one', inject(function($rootElement) {
+        disableAnimations();
+
         setup({
           template: '<md-toast class="one">'
         });
@@ -184,6 +186,7 @@ describe('$mdToast service', function() {
         setup({
           template: '<md-toast class="two">'
         });
+
         expect($rootElement[0].querySelector('md-toast.one')).toBeFalsy();
         expect($rootElement[0].querySelector('md-toast.two')).toBeTruthy();
         expect($rootElement[0].querySelector('md-toast.three')).toBeFalsy();
@@ -196,18 +199,126 @@ describe('$mdToast service', function() {
         expect($rootElement[0].querySelector('md-toast.three')).toBeTruthy();
       }));
 
-      it('should add class to toastParent', inject(function($rootElement) {
-        setup({
-          template: '<md-toast>'
-        });
-        expect($rootElement.hasClass('md-toast-open-bottom')).toBe(true);
+      it('after duration', inject(function($timeout, $animate, $rootElement) {
+        disableAnimations();
 
+        var parent = angular.element('<div>');
+        var hideDelay = 1234;
         setup({
-          template: '<md-toast>',
-          position: 'top'
+          template: '<md-toast />',
+          hideDelay: hideDelay
         });
-        expect($rootElement.hasClass('md-toast-open-top')).toBe(true);
+        expect($rootElement.find('md-toast').length).toBe(1);
+        $timeout.flush(hideDelay);
+        expect($rootElement.find('md-toast').length).toBe(0);
+      }));
+
+      it('and resolve with default `true`', inject(function($timeout, $animate, $mdToast) {
+        disableAnimations();
+
+        var hideDelay = 1234, result, fault;
+        setup({
+          template: '<md-toast />',
+          hideDelay: 1234
+        }).then(
+          function(response){ result = response;  },
+          function(error){ fault = error;  }
+        );
+
+        $mdToast.hide();
+
+          $timeout.flush();
+          $animate.triggerCallbacks();
+
+        expect(result).toBe(true);
+        expect(angular.isUndefined(fault)).toBe(true);
+
+      }));
+
+      it('and resolve with specified value', inject(function($timeout, $animate, $mdToast) {
+        disableAnimations();
+
+        var hideDelay = 1234, result, fault;
+        setup({
+          template: '<md-toast />',
+          hideDelay: 1234
+        }).then(
+          function(response){ result = response;  },
+          function(error){ fault = error;  }
+        );
+
+        $mdToast.hide("secret");
+
+          $timeout.flush();
+          $animate.triggerCallbacks();
+
+        expect(result).toBe("secret");
+        expect(angular.isUndefined(fault)).toBe(true);
+
+      }));
+
+      it('and resolve `true` after timeout', inject(function($timeout, $animate) {
+        disableAnimations();
+
+        var hideDelay = 1234, result, fault;
+        setup({
+          template: '<md-toast />',
+          hideDelay: 1234
+        }).then(
+          function(response){ result = response;  },
+          function(error){ fault = error;  }
+        );
+
+        $timeout.flush();
+        $animate.triggerCallbacks();
+
+        expect(result).toBe(true);
+        expect(angular.isUndefined(fault)).toBe(true);
+
+      }));
+
+      it('and resolve `ok` with click on OK button', inject(function($mdToast, $rootScope, $timeout, $animate) {
+        var result, fault;
+        var parent = angular.element('<div>');
+        var toast = $mdToast.simple({
+          parent: parent,
+          content: 'Do something'
+        }).action('Close with "ok" response');
+
+        $mdToast
+          .show(toast)
+          .then(
+            function(response){ result = response;  },
+            function(error){ fault = error;  }
+          );
+        $rootScope.$digest();
+        $animate.triggerCallbacks();
+
+        parent.find('button').triggerHandler('click');
+
+        $timeout.flush();
+        $animate.triggerCallbacks();
+
+        expect(result).toBe('ok');
+        expect(angular.isUndefined(fault)).toBe(true);
+
       }));
     });
+
+    it('should add class to toastParent', inject(function($rootElement) {
+      disableAnimations();
+
+      setup({
+        template: '<md-toast>'
+      });
+      expect($rootElement.hasClass('md-toast-open-bottom')).toBe(true);
+
+      setup({
+        template: '<md-toast>',
+        position: 'top'
+      });
+      expect($rootElement.hasClass('md-toast-open-top')).toBe(true);
+    }));
   });
+
 });

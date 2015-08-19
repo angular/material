@@ -1,3 +1,7 @@
+$autocomplete-option-height: 48px;
+$input-container-padding: 2px !default;
+$input-error-height: 24px !default;
+
 @keyframes md-autocomplete-list-out {
   0% {
     animation-timing-function: linear;
@@ -27,24 +31,47 @@
     height: 40px;
   }
 }
-md-content {
-  overflow: visible;
-}
 md-autocomplete {
-  box-shadow: 0 2px 5px rgba(black, 0.25);
   border-radius: 2px;
   display: block;
   height: 40px;
   position: relative;
   overflow: visible;
-
+  min-width: 190px;
+  &[disabled] {
+    input {
+      cursor: not-allowed;
+    }
+  }
+  &[md-floating-label] {
+    padding-bottom: $input-container-padding + $input-error-height;
+    border-radius: 0;
+    background: transparent;
+    height: auto;
+    md-input-container {
+      padding-bottom: 0;
+    }
+    md-autocomplete-wrap {
+      height: auto;
+    }
+    button {
+      position: absolute;
+      top: auto;
+      bottom: 0;
+      right: 0;
+      width: 30px;
+      height: 30px;
+    }
+  }
   md-autocomplete-wrap {
     display: block;
     position: relative;
     overflow: visible;
     height: 40px;
-
-    md-progress-linear {
+    &.md-menu-showing {
+      z-index: $z-index-backdrop + 1;
+    }
+    md-progress-linear[md-mode=indeterminate] {
       position: absolute;
       bottom: 0; left: 0; width: 100%;
       height: 3px;
@@ -69,40 +96,26 @@ md-autocomplete {
       }
     }
   }
-  input {
-    position: absolute;
-    left: 0;
-    top: 0;
+  input:not(.md-input) {
+    @include md-flat-input();
     width: 100%;
-    box-sizing: border-box;
-    border: none;
-    box-shadow: none;
     padding: 0 15px;
-    font-size: 14px;
     line-height: 40px;
     height: 40px;
-    outline: none;
-    z-index: 2;
-    background: transparent;
-    &::-ms-clear {
-      display: none;
-    }
   }
   button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    position: relative;
     line-height: 20px;
-    z-index: 2;
     text-align: center;
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
     border: none;
     border-radius: 50%;
     padding: 0;
     font-size: 12px;
     background: transparent;
+    margin: auto 5px;
     &:after {
       content: '';
       position: absolute;
@@ -114,9 +127,10 @@ md-autocomplete {
       transform: scale(0);
       opacity: 0;
       transition: $swift-ease-out;
-      z-index: -1;
     }
     &:focus {
+      outline: none;
+
       &:after {
         transform: scale(1);
         opacity: 1;
@@ -145,38 +159,56 @@ md-autocomplete {
       }
     }
   }
-  ul {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    box-shadow: 0 2px 5px rgba(black, 0.25);
-    margin: 0;
-    list-style: none;
-    padding: 0;
-    overflow: auto;
-    max-height: 41px * 5.5;
-    z-index: $z-index-backdrop - 1;
-    li {
-      border-top: 1px solid #ddd;
-      padding: 0 15px;
-      line-height: 40px;
-      font-size: 14px;
-      overflow: hidden;
-      height: 40px;
-      transition: background 0.15s linear;
-      cursor: pointer;
-      margin: 0;
-      &.ng-enter,
-      &.ng-hide-remove {
-        transition: none;
-        animation: md-autocomplete-list-in 0.2s;
-      }
-      &.ng-leave,
-      &.ng-hide-add {
-        transition: none;
-        animation: md-autocomplete-list-out 0.2s;
-      }
+  @media screen and (-ms-high-contrast: active) {
+    $border-color: #fff;
+
+    input {
+      border: 1px solid $border-color;
     }
+    li:focus {
+      color: #fff;
+    }
+  }
+}
+.md-autocomplete-suggestions {
+  position: absolute;
+  margin: 0;
+  list-style: none;
+  padding: 0;
+  overflow: auto;
+  max-height: 41px * 5.5;
+  z-index: $z-index-tooltip;
+  li {
+    cursor: pointer;
+    font-size: 14px;
+    overflow: hidden;
+    padding: 0 15px;
+    line-height: $autocomplete-option-height;
+    height: $autocomplete-option-height;
+    transition: background 0.15s linear;
+    margin: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    &.ng-enter,
+    &.ng-hide-remove {
+      transition: none;
+      animation: md-autocomplete-list-in 0.2s;
+    }
+    &.ng-leave,
+    &.ng-hide-add {
+      transition: none;
+      animation: md-autocomplete-list-out 0.2s;
+    }
+
+    &:focus {
+        outline: none;
+      }
+
+  }
+}
+@media screen and (-ms-high-contrast: active) {
+  md-autocomplete,
+  .md-autocomplete-suggestions {
+    border: 1px solid #fff;
   }
 }

@@ -1,42 +1,49 @@
-<div layout="column" class="doc-content">
+<div class="doc-demo-content doc-content">
   <div flex layout="column" style="z-index:1">
 
     <div class="doc-description" ng-bind-html="demoCtrl.demoDescription.contents | toHtml"></div>
 
     <div ng-transclude></div>
 
-    <section class="demo-container"
+    <section class="demo-container md-whiteframe-z1"
       ng-class="{'show-source': demoCtrl.$showSource}" >
 
-      <md-toolbar class="demo-toolbar">
+      <md-toolbar class="demo-toolbar md-primary">
         <div class="md-toolbar-tools">
-          <span>{{demoCtrl.demoTitle}}</span>
+          <h3>{{demoCtrl.demoTitle}}</h3>
           <span flex></span>
           <md-button
-            style="min-width: 72px;"
-            layout="row" layout-align="center center"
+            class="md-icon-button"
+            aria-label="View Source"
+            ng-class="{ active: demoCtrl.$showSource }"
             ng-click="demoCtrl.$showSource = !demoCtrl.$showSource">
-            <md-icon md-svg-src="img/icons/ic_visibility_24px.svg"
-               style="margin: 0 4px 0 0;">
-            </md-icon>
-            Source
+              <md-tooltip md-autohide>View Source</md-tooltip>
+              <md-icon md-svg-src="img/icons/ic_code_24px.svg"></md-icon>
+          </md-button>
+          <md-button
+              ng-hide="{{exampleNotEditable}}"
+              hide-sm
+              ng-click="demoCtrl.editOnCodepen()"
+              aria-label="Edit on CodePen"
+              class="md-icon-button">
+            <md-tooltip md-autohide>Edit on CodePen</md-tooltip>
+            <md-icon md-svg-src="img/icons/codepen-logo.svg"></md-icon>
           </md-button>
         </div>
       </md-toolbar>
 
       <!-- Source views -->
-      <md-tabs style="border-top: solid 1px #00ADC3;"
-        class="demo-source-tabs" ng-show="demoCtrl.$showSource">
+      <md-tabs class="demo-source-tabs md-primary" ng-show="demoCtrl.$showSource" style="min-height: 0;">
         <md-tab ng-repeat="file in demoCtrl.orderedFiles" label="{{file.name}}">
           <md-content md-scroll-y class="demo-source-container">
-            <hljs code="file.contentsPromise" lang="{{file.fileType}}" should-interpolate="demoCtrl.interpolateCode">
+            <hljs class="no-header" code="file.contentsPromise" lang="{{file.fileType}}" should-interpolate="demoCtrl.interpolateCode">
             </hljs>
-          </md-c>
+          </md-content>
         </md-tab>
       </md-tabs>
 
       <!-- Live Demos -->
-      <demo-include files="demoCtrl.files" module="demoCtrl.demoModule" class="md-whiteframe-z1 {{demoCtrl.demoId}}">
+      <demo-include files="demoCtrl.files" module="demoCtrl.demoModule" class="{{demoCtrl.demoId}}">
       </demo-include>
     </section>
 

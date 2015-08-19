@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @private
  * @ngdoc module
@@ -55,6 +52,7 @@ function MdSwitch(mdCheckboxDirective, $mdTheming, $mdUtil, $document, $mdConsta
 
   return {
     restrict: 'E',
+    priority:210, // Run before ngAria
     transclude: true,
     template:
       '<div class="md-container">' +
@@ -157,5 +155,3 @@ function MdSwitch(mdCheckboxDirective, $mdTheming, $mdUtil, $document, $mdConsta
 
 
 }
-
-})();

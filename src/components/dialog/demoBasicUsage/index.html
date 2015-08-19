@@ -1,25 +1,25 @@
-<div ng-controller="AppCtrl" class="full" layout="column" layout-margin>
+<div ng-controller="AppCtrl" class="md-padding" id="popupContainer">
   <p class="inset">
     Open a dialog over the app's content. Press escape or click outside to close the dialog and
     send focus back to the triggering button.
   </p>
 
-  <div layout="column" layout-align="center" >
-    <md-button class="md-primary" ng-click="showAlert($event)">
+  <div class="dialog-demo-content" layout="row" layout-wrap >
+    <md-button class="md-primary md-raised" ng-click="showAlert($event)" flex flex-md="100">
       Alert Dialog
     </md-button>
-    <div class="gap"></div>
-    <md-button class="md-primary" ng-click="showConfirm($event)">
+    <md-button class="md-primary md-raised" ng-click="showConfirm($event)" flex flex-md="100">
       Confirm Dialog
     </md-button>
-    <div class="gap"></div>
-    <md-button class="md-primary" ng-click="showAdvanced($event)">
+    <md-button class="md-primary md-raised" ng-click="showAdvanced($event)" flex flex-md="100">
       Custom Dialog
     </md-button>
   </div>
-  
-  <br/>
-  <b layout="row" layout-align="center center" layout-margin>
-    {{alert}}
-  </b>
+
+  <div ng-if="status">
+    <br/>
+    <b layout="row" layout-align="center center" class="md-padding">
+      {{status}}
+    </b>
+  </div>
 </div>

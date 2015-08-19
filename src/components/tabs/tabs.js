@@ -1,6 +1,3 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.tabs
@@ -28,5 +25,3 @@ angular.module('material.components.tabs', [
   'material.core',
   'material.components.icon'
 ]);
-
-})();

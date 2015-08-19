@@ -13,10 +13,10 @@ md-slider.md-THEME_NAME-theme {
     border-color: '{{foreground-4}}';
   }
   .md-disabled-thumb {
-    border-color: '{{background-hue-3}}';
+    border-color: '{{background-color}}';
   }
   &.md-min .md-thumb:after {
-    background-color: '{{background-hue-3}}';
+    background-color: '{{background-color}}';
   }
 
   .md-track.md-track-fill {

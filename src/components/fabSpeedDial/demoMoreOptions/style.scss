@@ -1,0 +1,25 @@
+.lock-size {
+  min-width: 300px;
+  min-height: 300px;
+  width: 300px;
+  height: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.md-fab.demo-fab.trigger-fab, .md-fab.demo-fab.action-fab {
+  &:hover, &.md-focused {
+    background-color: #333;
+  }
+}
+
+.md-fab.demo-fab.action-fab {
+  background-color: #aaa;
+}
+
+
+md-content div {
+  &[flex="50"] {
+    padding: 15px;
+  }
+}

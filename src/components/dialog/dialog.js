@@ -1,14 +1,12 @@
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.dialog
  */
-angular.module('material.components.dialog', [
-  'material.core',
-  'material.components.backdrop'
-])
+angular
+  .module('material.components.dialog', [
+    'material.core',
+    'material.components.backdrop'
+  ])
   .directive('mdDialog', MdDialogDirective)
   .provider('$mdDialog', MdDialogProvider);
 
@@ -18,9 +16,17 @@ function MdDialogDirective($$rAF, $mdTheming) {
     link: function(scope, element, attr) {
       $mdTheming(element);
       $$rAF(function() {
-        var content = element[0].querySelector('md-content');
-        if (content && content.scrollHeight > content.clientHeight) {
-          element.addClass('md-content-overflow');
+        var images;
+        var content = element[0].querySelector('md-dialog-content');
+
+        if (content) {
+          images = content.getElementsByTagName('img');
+          addOverflowClass();
+          //-- delayed image loading may impact scroll height, check after images are loaded
+          angular.element(images).on('load', addOverflowClass);
+        }
+        function addOverflowClass() {
+          element.toggleClass('md-content-overflow', content.scrollHeight > content.clientHeight);
         }
       });
     }
@@ -41,26 +47,38 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *
  * - The dialog is always given an isolate scope.
  * - The dialog's template must have an outer `<md-dialog>` element.
- *   Inside, use an `<md-content>` element for the dialog's content, and use
+ *   Inside, use an `<md-dialog-content>` element for the dialog's content, and use
  *   an element with class `md-actions` for the dialog's actions.
+ * - Dialogs must cover the entire application to keep interactions inside of them.
+ * Use the `parent` option to change where dialogs are appended.
+ *
+ * ## Sizing
+ * - Complex dialogs can be sized with `flex="percentage"`, i.e. `flex="66"`.
+ * - Default max-width is 80% of the `rootElement` or `parent`.
  *
  * @usage
- * ### HTML
- *
  * <hljs lang="html">
  * <div  ng-app="demoApp" ng-controller="EmployeeController">
- *   <md-button ng-click="showAlert()" class="md-raised md-warn">
- *     Employee Alert!
- *   </md-button>
- *   <md-button ng-click="showDialog($event)" class="md-raised">
- *     Custom Dialog
- *   </md-button>
- *   <md-button ng-click="closeAlert()" ng-disabled="!hasAlert()" class="md-raised">
- *     Close Alert
- *   </md-button>
- *   <md-button ng-click="showGreeting($event)" class="md-raised md-primary" >
- *     Greet Employee
- *   </md-button>
+ *   <div>
+ *     <md-button ng-click="showAlert()" class="md-raised md-warn">
+ *       Employee Alert!
+ *       </md-button>
+ *   </div>
+ *   <div>
+ *     <md-button ng-click="showDialog($event)" class="md-raised">
+ *       Custom Dialog
+ *       </md-button>
+ *   </div>
+ *   <div>
+ *     <md-button ng-click="closeAlert()" ng-disabled="!hasAlert()" class="md-raised">
+ *       Close Alert
+ *     </md-button>
+ *   </div>
+ *   <div>
+ *     <md-button ng-click="showGreeting($event)" class="md-raised md-primary" >
+ *       Greet Employee
+ *       </md-button>
+ *   </div>
  * </div>
  * </hljs>
  *
@@ -101,15 +119,15 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *          targetEvent: $event,
  *          template:
  *            '<md-dialog aria-label="List dialog">' +
- *            '  <md-content>'+
+ *            '  <md-dialog-content>'+
  *            '    <md-list>'+
- *            '      <md-item ng-repeat="item in items">'+
+ *            '      <md-list-item ng-repeat="item in items">'+
  *            '       <p>Number {{item}}</p>' +
  *            '      </md-item>'+
  *            '    </md-list>'+
- *            '  </md-content>' +
+ *            '  </md-dialog-content>' +
  *            '  <div class="md-actions">' +
- *            '    <md-button ng-click="closeDialog()">' +
+ *            '    <md-button ng-click="closeDialog()" class="md-primary">' +
  *            '      Close Dialog' +
  *            '    </md-button>' +
  *            '  </div>' +
@@ -119,14 +137,14 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *          },
  *          controller: DialogController
  *       });
- *       function DialogController(scope, $mdDialog, items) {
- *         scope.items = items;
- *         scope.closeDialog = function() {
+ *       function DialogController($scope, $mdDialog, items) {
+ *         $scope.items = items;
+ *         $scope.closeDialog = function() {
  *           $mdDialog.hide();
  *         }
  *       }
  *     }
- *
+ *   }
  * })(angular);
  * </hljs>
  *
@@ -185,12 +203,11 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *           template:
  *             '<md-dialog>' +
  *
- *             '  <md-content>Hello {{ employee }}!</md-content>' +
+ *             '  <md-dialog-content>Hello {{ employee }}!</md-dialog-content>' +
  *
  *             '  <div class="md-actions">' +
- *             '    <md-button ng-click="closeDialog()">' +
+ *             '    <md-button ng-click="closeDialog()" class="md-primary">' +
  *             '      Close Greeting' +
- *
  *             '    </md-button>' +
  *             '  </div>' +
  *             '</md-dialog>',
@@ -205,6 +222,37 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *            // post-show code here: DOM element focus, etc.
  *         }
  *     }
+ *
+ *     // Dialog #3 - Demonstrate use of ControllerAs and passing $scope to dialog
+ *     //             Here we used ng-controller="GreetingController as vm" and
+ *     //             $scope.vm === <controller instance>
+ *
+ *     function showCustomGreeting() {
+ *
+ *        $mdDialog.show({
+ *           clickOutsideToClose: true,
+ *
+ *           scope: $scope,        // use parent scope in template
+ *           preserveScope: true,  // do not forget this if use parent scope
+
+ *           // Since GreetingController is instantiated with ControllerAs syntax
+ *           // AND we are passing the parent '$scope' to the dialog, we MUST
+ *           // use 'vm.<xxx>' in the template markup
+ *
+ *           template: '<md-dialog>' +
+ *                     '  <md-dialog-content>' +
+ *                     '     Hi There {{vm.employee}}' +
+ *                     '  </md-dialog-content>' +
+ *                     '</md-dialog>',
+ *
+ *           controller: function DialogController($scope, $mdDialog) {
+ *             $scope.closeDialog = function() {
+ *               $mdDialog.hide();
+ *             }
+ *           }
+ *        });
+ *     }
+ *
  *   }
  *
  *   // Greeting controller used with the more complex 'showCustomGreeting()' custom dialog
@@ -224,7 +272,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
  * </hljs>
  */
 
- /**
+/**
  * @ngdoc method
  * @name $mdDialog#alert
  *
@@ -240,7 +288,7 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *
  */
 
- /**
+/**
  * @ngdoc method
  * @name $mdDialog#confirm
  *
@@ -275,7 +323,8 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *   - `targetEvent` - `{DOMClickEvent=}`: A click's event object. When passed in as an option,
  *     the location of the click will be used as the starting point for the opening animation
  *     of the the dialog.
- *   - `scope` - `{object=}`: the scope to link the template / controller to. If none is specified, it will create a new isolate scope.
+ *   - `scope` - `{object=}`: the scope to link the template / controller to. If none is specified,
+ *     it will create a new isolate scope.
  *     This scope will be destroyed when the dialog is removed unless `preserveScope` is set to true.
  *   - `preserveScope` - `{boolean=}`: whether to preserve the scope when the element is removed. Default is false
  *   - `disableParentScroll` - `{boolean=}`: Whether to disable scrolling while the dialog is open.
@@ -283,16 +332,20 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop behind the dialog.
  *     Default true.
  *   - `clickOutsideToClose` - `{boolean=}`: Whether the user can click outside the dialog to
- *     close it. Default true.
+ *     close it. Default false.
  *   - `escapeToClose` - `{boolean=}`: Whether the user can press escape to close the dialog.
  *     Default true.
+ *   - `focusOnOpen` - `{boolean=}`: An option to override focus behavior on open. Only disable if
+ *     focusing some other way, as focus management is required for dialogs to be accessible.
+ *     Defaults to true.
  *   - `controller` - `{string=}`: The controller to associate with the dialog. The controller
  *     will be injected with the local `$mdDialog`, which passes along a scope for the dialog.
  *   - `locals` - `{object=}`: An object containing key/value pairs. The keys will be used as names
  *     of values to inject into the controller. For example, `locals: {three: 3}` would inject
  *     `three` into the controller, with the value 3. If `bindToController` is true, they will be
- *     copied to the controller instead. 
- *   - `bindToController` - `bool`: bind the locals to the controller, instead of passing them in. These values will not be available until after initialization.
+ *     copied to the controller instead.
+ *   - `bindToController` - `bool`: bind the locals to the controller, instead of passing them in.
+ *     These values will not be available until after initialization.
  *   - `resolve` - `{object=}`: Similar to locals, except it takes promises as values, and the
  *     dialog will not open until all of the promises resolve.
  *   - `controllerAs` - `{string=}`: An alias to assign the controller to on the scope.
@@ -300,6 +353,8 @@ function MdDialogDirective($$rAF, $mdTheming) {
  *     to the root element of the application.
  *   - `onComplete` `{function=}`: Callback function used to announce when the show() action is
  *     finished.
+ *   - `onRemoving` `{function=} Callback function used to announce the close/hide() action is
+ *     starting. This allows developers to run custom animations in parallel the close animations.
  *
  * @returns {promise} A promise that can be resolved with `$mdDialog.hide()` or
  * rejected with `$mdDialog.cancel()`.
@@ -313,6 +368,8 @@ function MdDialogDirective($$rAF, $mdTheming) {
  * Hide an existing dialog and resolve the promise returned from `$mdDialog.show()`.
  *
  * @param {*=} response An argument for the resolved promise.
+ *
+ * @returns {promise} A promise that is resolved when the dialog has been closed.
  */
 
 /**
@@ -323,15 +380,15 @@ function MdDialogDirective($$rAF, $mdTheming) {
  * Hide an existing dialog and reject the promise returned from `$mdDialog.show()`.
  *
  * @param {*=} response An argument for the rejected promise.
+ *
+ * @returns {promise} A promise that is resolved when the dialog has been closed.
  */
 
 function MdDialogProvider($$interimElementProvider) {
 
-  var alertDialogMethods = ['title', 'content', 'ariaLabel', 'ok'];
-
   return $$interimElementProvider('$mdDialog')
     .setDefaults({
-      methods: ['disableParentScroll', 'hasBackdrop', 'clickOutsideToClose', 'escapeToClose', 'targetEvent'],
+      methods: ['disableParentScroll', 'hasBackdrop', 'clickOutsideToClose', 'escapeToClose', 'targetEvent', 'parent'],
       options: dialogDefaultOptions
     })
     .addPreset('alert', {
@@ -348,20 +405,21 @@ function MdDialogProvider($$interimElementProvider) {
     return {
       template: [
         '<md-dialog md-theme="{{ dialog.theme }}" aria-label="{{ dialog.ariaLabel }}">',
-          '<md-content>',
-            '<h2>{{ dialog.title }}</h2>',
-            '<p>{{ dialog.content }}</p>',
-          '</md-content>',
-          '<div class="md-actions">',
-            '<md-button ng-if="dialog.$type == \'confirm\'" ng-click="dialog.abort()">',
-              '{{ dialog.cancel }}',
-            '</md-button>',
-            '<md-button ng-click="dialog.hide()" class="md-primary">',
-              '{{ dialog.ok }}',
-            '</md-button>',
-          '</div>',
+        ' <md-dialog-content role="document" tabIndex="-1">',
+        '   <h2 class="md-title">{{ dialog.title }}</h2>',
+        '   <div class="md-dialog-content-body" md-template="::dialog.content"></div>',
+        ' </md-dialog-content>',
+        ' <div class="md-actions">',
+        '   <md-button ng-if="dialog.$type == \'confirm\'"' +
+        '     ng-click="dialog.abort()" class="md-primary">',
+        '     {{ dialog.cancel }}',
+        '   </md-button>',
+        '   <md-button ng-click="dialog.hide()" class="md-primary" md-autofocus="dialog.$type!=\'confirm\'">',
+        '     {{ dialog.ok }}',
+        '   </md-button>',
+        ' </div>',
         '</md-dialog>'
-      ].join(''),
+      ].join('').replace(/\s\s+/g, ''),
       controller: function mdDialogCtrl() {
         this.hide = function() {
           $mdDialog.hide(true);
@@ -377,190 +435,370 @@ function MdDialogProvider($$interimElementProvider) {
   }
 
   /* @ngInject */
-  function dialogDefaultOptions($timeout, $rootElement, $compile, $animate, $mdAria, $document,
-                                $mdUtil, $mdConstant, $mdTheming, $$rAF, $q, $mdDialog) {
+  function dialogDefaultOptions($mdDialog, $mdAria, $mdUtil, $mdConstant, $animate, $document, $window, $rootElement) {
     return {
       hasBackdrop: true,
       isolateScope: true,
       onShow: onShow,
       onRemove: onRemove,
-      clickOutsideToClose: true,
+      clickOutsideToClose: false,
       escapeToClose: true,
       targetEvent: null,
+      focusOnOpen: true,
       disableParentScroll: true,
       transformTemplate: function(template) {
         return '<div class="md-dialog-container">' + template + '</div>';
       }
     };
 
+    /**
+     * Show method for dialogs
+     */
+    function onShow(scope, element, options, controller) {
+      element = $mdUtil.extractElementByName(element, 'md-dialog');
+      angular.element($document[0].body).addClass('md-dialog-is-showing');
 
-    // On show method for dialogs
-    function onShow(scope, element, options) {
-      // Incase the user provides a raw dom element, always wrap it in jqLite
-      options.parent = angular.element(options.parent);
+      wrapSimpleContent();
 
-      options.popInTarget = angular.element((options.targetEvent || {}).target);
-      var closeButton = findCloseButton();
+      captureSourceAndParent(element, options);
+      configureAria(element.find('md-dialog'), options);
+      showBackdrop(scope, element, options);
 
-      configureAria(element.find('md-dialog'));
+      return dialogPopIn(element, options)
+        .then(function() {
+          activateListeners(element, options);
+          lockScreenReader(element, options);
+          focusOnOpen();
+        });
 
-      if (options.hasBackdrop) {
-        // Fix for IE 10
-        var computeFrom = (options.parent[0] == $document[0].body && $document[0].documentElement 
-                           && $document[0].scrollTop) ? angular.element($document[0].documentElement) : options.parent;
-        var parentOffset = computeFrom.prop('scrollTop');
-        options.backdrop = angular.element('<md-backdrop class="md-dialog-backdrop md-opaque">');
-        $mdTheming.inherit(options.backdrop, options.parent);
-        $animate.enter(options.backdrop, options.parent);
-        element.css('top', parentOffset +'px');
+      /**
+       * For alerts, focus on content... otherwise focus on
+       * the close button (or equivalent)
+       */
+      function focusOnOpen() {
+        if (options.focusOnOpen) {
+          var target = $mdUtil.findFocusTarget(element) || findCloseButton();
+          target.focus();
+        }
+
+        /**
+         *  If no element with class dialog-close, try to find the last
+         *  button child in md-actions and assume it is a close button
+         */
+        function findCloseButton() {
+          var closeButton = element[0].querySelector('.dialog-close');
+          if (!closeButton) {
+            var actionButtons = element[0].querySelectorAll('.md-actions button');
+            closeButton = actionButtons[actionButtons.length - 1];
+          }
+          return angular.element(closeButton);
+        }
       }
 
-      if (options.disableParentScroll) {
-        options.lastOverflow = options.parent.css('overflow');
-        options.parent.css('overflow', 'hidden');
-      }
+      /**
+       * Wrap any simple content [specified via .content("")] in <p></p> tags.
+       * otherwise accept HTML content within the dialog content area...
+       * NOTE: Dialog uses the md-template directive to safely inject HTML content.
+       */
+      function wrapSimpleContent() {
+        if ( controller ) {
+          var HTML_END_TAG = /<\/[\w-]*>/gm;
+          var content = controller.content;
 
-      return dialogPopIn(
-        element,
-        options.parent,
-        options.popInTarget && options.popInTarget.length && options.popInTarget
-      )
-      .then(function() {
-        if (options.escapeToClose) {
-          options.rootElementKeyupCallback = function(e) {
-            if (e.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
-              $timeout($mdDialog.cancel);
-            }
-          };
-          $rootElement.on('keyup', options.rootElementKeyupCallback);
+          var hasHTML = HTML_END_TAG.test(content);
+          if (!hasHTML) {
+            content = $mdUtil.supplant("<p>{0}</p>", [content]);
+          }
+
+          // Publish updated dialog content body... to be compiled by mdTemplate directive
+          controller.content = content;
         }
-
-        if (options.clickOutsideToClose) {
-          options.dialogClickOutsideCallback = function(ev) {
-            // Only close if we click the flex container outside the backdrop
-            if (ev.target === element[0]) {
-              $timeout($mdDialog.cancel);
-            }
-          };
-          element.on('click', options.dialogClickOutsideCallback);
-        }
-        closeButton.focus();
-      });
-
-
-      function findCloseButton() {
-        //If no element with class dialog-close, try to find the last
-        //button child in md-actions and assume it is a close button
-        var closeButton = element[0].querySelector('.dialog-close');
-        if (!closeButton) {
-          var actionButtons = element[0].querySelectorAll('.md-actions button');
-          closeButton = actionButtons[ actionButtons.length - 1 ];
-        }
-        return angular.element(closeButton);
       }
 
     }
 
-    // On remove function for all dialogs
+    /**
+     * Remove function for all dialogs
+     */
     function onRemove(scope, element, options) {
+      options.deactivateListeners();
+      options.unlockScreenReader();
 
-      if (options.backdrop) {
-        $animate.leave(options.backdrop);
+      options.hideBackdrop();
+
+      return dialogPopOut(element, options)
+        .finally(function() {
+          angular.element($document[0].body).removeClass('md-dialog-is-showing');
+          element.remove();
+
+          options.origin.focus();
+        });
+    }
+
+    /**
+     * Capture originator/trigger element information (if available)
+     * and the parent container for the dialog; defaults to the $rootElement
+     * unless overridden in the options.parent
+     */
+    function captureSourceAndParent(element, options) {
+      var origin = {element: null, bounds: null, focus: angular.noop};
+      options.origin = angular.extend({}, origin, options.origin || {});
+
+      var source = angular.element((options.targetEvent || {}).target);
+      if (source && source.length) {
+        // Compute and save the target element's bounding rect, so that if the
+        // element is hidden when the dialog closes, we can shrink the dialog
+        // back to the same position it expanded from.
+        options.origin.element = source;
+        options.origin.bounds = source[0].getBoundingClientRect();
+        options.origin.focus = function() {
+          source.focus();
+        }
       }
-      if (options.disableParentScroll) {
-        options.parent.css('overflow', options.lastOverflow);
-        delete options.lastOverflow;
-      }
+
+      // In case the user provides a raw dom element, always wrap it in jqLite
+      options.parent = angular.element(options.parent || $rootElement);
+
+    }
+
+    /**
+     * Listen for escape keys and outside clicks to auto close
+     */
+    function activateListeners(element, options) {
+      var removeListeners = [];
+      var smartClose = function() {
+        // Only 'confirm' dialogs have a cancel button... escape/clickOutside will
+        // cancel or fallback to hide.
+        var closeFn = ( options.$type == 'alert' ) ? $mdDialog.hide : $mdDialog.cancel;
+
+        $mdUtil.nextTick(closeFn, true);
+      };
+
       if (options.escapeToClose) {
-        $rootElement.off('keyup', options.rootElementKeyupCallback);
+        var target = options.parent;
+        var keyHandlerFn = function(ev) {
+          if (ev.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
+            ev.stopPropagation();
+            ev.preventDefault();
+
+            smartClose();
+          }
+        };
+
+        // Add keyup listeners
+        element.on('keyup', keyHandlerFn);
+        target.on('keyup', keyHandlerFn);
+
+        // Queue remove listeners function
+        removeListeners.push(function() {
+          element.off('keyup', keyHandlerFn);
+          target.off('keyup', keyHandlerFn);
+        });
       }
       if (options.clickOutsideToClose) {
-        element.off('click', options.dialogClickOutsideCallback);
-      }
-      return dialogPopOut(
-        element,
-        options.parent,
-        options.popInTarget && options.popInTarget.length && options.popInTarget
-      ).then(function() {
-        options.scope.$destroy();
-        element.remove();
-        options.popInTarget && options.popInTarget.focus();
-      });
+        var target = element;
+        var clickHandler = function(ev) {
+          // Only close if we click the flex container outside on the backdrop
+          if (ev.target === target[0]) {
+            ev.stopPropagation();
+            ev.preventDefault();
 
+            smartClose();
+          }
+        };
+
+        // Add click listeners
+        target.on('click', clickHandler);
+
+        // Queue remove listeners function
+        removeListeners.push(function() {
+          target.off('click', clickHandler);
+        });
+      }
+
+      // Attach specific `remove` listener handler
+      options.deactivateListeners = function() {
+        removeListeners.forEach(function(removeFn) {
+          removeFn();
+        });
+        options.deactivateListeners = null;
+      };
+    }
+
+    /**
+     * Show modal backdrop element...
+     */
+    function showBackdrop(scope, element, options) {
+
+      if (options.disableParentScroll) {
+        // !! DO this before creating the backdrop; since disableScrollAround()
+        //    configures the scroll offset; which is used by mdBackDrop postLink()
+        options.restoreScroll = $mdUtil.disableScrollAround(element, options.parent);
+      }
+
+      if (options.hasBackdrop) {
+        options.backdrop = $mdUtil.createBackdrop(scope, "md-dialog-backdrop md-opaque");
+        $animate.enter(options.backdrop, options.parent);
+      }
+
+      /**
+       * Hide modal backdrop element...
+       */
+      options.hideBackdrop = function hideBackdrop() {
+        if (options.backdrop) {
+          $animate.leave(options.backdrop);
+        }
+        if (options.disableParentScroll) {
+          options.restoreScroll();
+          delete options.restoreScroll;
+        }
+
+        options.hideBackdrop = null;
+      }
     }
 
     /**
      * Inject ARIA-specific attributes appropriate for Dialogs
      */
-    function configureAria(element) {
+    function configureAria(element, options) {
+
+      var role = (options.$type === 'alert') ? 'alertdialog' : 'dialog';
+      var dialogContent = element.find('md-dialog-content');
+      var dialogId = element.attr('id') || ('dialog_' + $mdUtil.nextUid());
+
       element.attr({
-        'role': 'dialog'
+        'role': role,
+        'tabIndex': '-1'
       });
 
-      var dialogContent = element.find('md-content');
-      if (dialogContent.length === 0){
+      if (dialogContent.length === 0) {
         dialogContent = element;
       }
-      $mdAria.expectAsync(element, 'aria-label', function() {
-        var words = dialogContent.text().split(/\s+/);
-        if (words.length > 3) words = words.slice(0,3).concat('...');
-        return words.join(' ');
-      });
-    }
 
-    function dialogPopIn(container, parentElement, clickElement) {
-      var dialogEl = container.find('md-dialog');
+      dialogContent.attr('id', dialogId);
+      element.attr('aria-describedby', dialogId);
 
-      parentElement.append(container);
-      transformToClickElement(dialogEl, clickElement);
-
-      $$rAF(function() {
-        dialogEl.addClass('transition-in')
-          .css($mdConstant.CSS.TRANSFORM, '');
-      });
-
-      return $mdUtil.transitionEndPromise(dialogEl);
-    }
-
-    function dialogPopOut(container, parentElement, clickElement) {
-      var dialogEl = container.find('md-dialog');
-
-      dialogEl.addClass('transition-out').removeClass('transition-in');
-      transformToClickElement(dialogEl, clickElement);
-
-      return $mdUtil.transitionEndPromise(dialogEl);
-    }
-
-    function transformToClickElement(dialogEl, clickElement) {
-      if (clickElement) {
-        var clickRect = clickElement[0].getBoundingClientRect();
-        var dialogRect = dialogEl[0].getBoundingClientRect();
-
-        var scaleX = Math.min(0.5, clickRect.width / dialogRect.width);
-        var scaleY = Math.min(0.5, clickRect.height / dialogRect.height);
-
-        dialogEl.css($mdConstant.CSS.TRANSFORM, 'translate3d(' +
-          (-dialogRect.left + clickRect.left + clickRect.width/2 - dialogRect.width/2) + 'px,' +
-          (-dialogRect.top + clickRect.top + clickRect.height/2 - dialogRect.height/2) + 'px,' +
-          '0) scale(' + scaleX + ',' + scaleY + ')'
-        );
+      if (options.ariaLabel) {
+        $mdAria.expect(element, 'aria-label', options.ariaLabel);
+      }
+      else {
+        $mdAria.expectAsync(element, 'aria-label', function() {
+          var words = dialogContent.text().split(/\s+/);
+          if (words.length > 3) words = words.slice(0, 3).concat('...');
+          return words.join(' ');
+        });
       }
     }
 
-    function dialogTransitionEnd(dialogEl) {
-      var deferred = $q.defer();
-      dialogEl.on($mdConstant.CSS.TRANSITIONEND, finished);
-      function finished(ev) {
-        //Make sure this transitionend didn't bubble up from a child
-        if (ev.target === dialogEl[0]) {
-          dialogEl.off($mdConstant.CSS.TRANSITIONEND, finished);
-          deferred.resolve();
+    /**
+     * Prevents screen reader interaction behind modal window
+     * on swipe interfaces
+     */
+    function lockScreenReader(element, options) {
+      var isHidden = true;
+
+      // get raw DOM node
+      walkDOM(element[0]);
+
+      options.unlockScreenReader = function() {
+        isHidden = false;
+        walkDOM(element[0]);
+
+        options.unlockScreenReader = null;
+      };
+
+      /**
+       * Walk DOM to apply or remove aria-hidden on sibling nodes
+       * and parent sibling nodes
+       *
+       */
+      function walkDOM(element) {
+        while (element.parentNode) {
+          if (element === document.body) {
+            return;
+          }
+          var children = element.parentNode.children;
+          for (var i = 0; i < children.length; i++) {
+            // skip over child if it is an ascendant of the dialog
+            // or a script or style tag
+            if (element !== children[i] && !isNodeOneOf(children[i], ['SCRIPT', 'STYLE'])) {
+              children[i].setAttribute('aria-hidden', isHidden);
+            }
+          }
+
+          walkDOM(element = element.parentNode);
         }
       }
-      return deferred.promise;
+    }
+
+    /**
+     * Ensure the dialog container fill-stretches to the viewport
+     */
+    function stretchDialogContainerToViewport(container, options) {
+
+      var isFixed = $window.getComputedStyle($document[0].body).position == 'fixed';
+      var backdrop = options.backdrop ? $window.getComputedStyle(options.backdrop[0]) : null;
+      var height = backdrop ? Math.ceil(Math.abs(parseInt(backdrop.height, 10))) : 0;
+
+      container.css({
+        top: (isFixed ? $mdUtil.scrollTop(options.parent) / 2 : 0) + 'px',
+        height: height ? height + 'px' : '100%'
+      });
+
+      return container;
+    }
+
+    /**
+     *  Dialog open and pop-in animation
+     */
+    function dialogPopIn(container, options) {
+
+      // Add the `md-dialog-container` to the DOM
+      options.parent.append(container);
+      stretchDialogContainerToViewport(container, options);
+
+      var dialogEl = container.find('md-dialog');
+      var animator = $mdUtil.dom.animator;
+      var buildTranslateToOrigin = animator.calculateZoomToOrigin;
+      var translateOptions = {transitionInClass: 'md-transition-in', transitionOutClass: 'md-transition-out'};
+      var from = animator.toTransformCss(buildTranslateToOrigin(dialogEl, options.origin));
+      var to = animator.toTransformCss("");  // defaults to center display (or parent or $rootElement)
+
+      return animator
+        .translate3d(dialogEl, from, to, translateOptions)
+        .then(function(animateReversal) {
+          // Build a reversal translate function synched to this translation...
+          options.reverseAnimate = function() {
+
+            delete options.reverseAnimate;
+            return animateReversal(
+              animator.toTransformCss(
+                // in case the origin element has moved or is hidden,
+                // let's recalculate the translateCSS
+                buildTranslateToOrigin(dialogEl, options.origin)
+              )
+            );
+
+          };
+          return true;
+        });
+    }
+
+    /**
+     * Dialog close and pop-out animation
+     */
+    function dialogPopOut(container, options) {
+      return options.reverseAnimate();
+    }
+
+    /**
+     * Utility function to filter out raw DOM nodes
+     */
+    function isNodeOneOf(elem, nodeTypeArray) {
+      if (nodeTypeArray.indexOf(elem.nodeName) !== -1) {
+        return true;
+      }
     }
 
   }
 }
-
-})();

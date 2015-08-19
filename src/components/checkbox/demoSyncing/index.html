@@ -1,0 +1,36 @@
+<div ng-controller="AppCtrl" class="md-padding">
+  <div layout="row">
+
+    <div flex="50" flex-md="100" layout="column">
+      <fieldset class="standard" flex>
+        <legend>Using <code>md-checkbox</code> with <code>ng-checked</code></legend>
+        <div layout="row" layout-wrap>
+          <div flex="50" ng-repeat="item in items">
+            <md-checkbox ng-checked="exists(item, selected)" ng-click="toggle(item, selected)">
+              {{ item }} <span ng-if="exists(item, selected)">selected</span>
+            </md-checkbox>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div flex="50" flex-md="100" layout="column">
+      <fieldset class="standard" flex>
+        <legend>Using <code>&lt;input type="checkbox"&gt;</code></legend>
+        <div layout="row" layout-wrap>
+          <div ng-repeat="item in items" class="standard" flex="50">
+            <label>
+              <input type="checkbox" ng-checked="exists(item, selected)" ng-click="toggle(item, selected)"/>
+              {{ item }}
+            </label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+  </div>
+
+  <h2 class="md-title">Selected Items</h2>
+  <code style="display: block; padding: 8px;">{{selected | json}}</code>
+
+</div>
