@@ -259,16 +259,16 @@ function MenuController($mdMenu, $attrs, $element, $scope) {
    * the offset of top and left in pixels.
    */
   function offsets() {
-    var offsets = ($attrs.mdOffset || '0 0').split(' ').map(parseFloat);
-    if (offsets.length == 2) {
+    var topLeftOffsets = ($attrs.mdOffset || '0 0').split(' ').map(parseFloat);
+    if (topLeftOffsets.length == 2) {
       return {
-        left: offsets[0],
-        top: offsets[1]
+        left: topLeftOffsets[0],
+        top: topLeftOffsets[1]
       };
-    } else if (offsets.length == 1) {
+    } else if (topLeftOffsets.length == 1) {
       return {
-        top: offsets[0],
-        left: offsets[0]
+        top: topLeftOffsets[0],
+        left: topLeftOffsets[0]
       };
     } else {
       throw Error('Invalid offsets specified. Please follow format <x, y> or <n>');
