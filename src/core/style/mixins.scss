@@ -107,6 +107,9 @@
   html[dir=rtl] & {
     #{$prop}: $rtl-value;
   }
+  body[dir=rtl] & {
+    #{$prop}: $rtl-value;
+  }
 }
 
 // Position a FAB button.
