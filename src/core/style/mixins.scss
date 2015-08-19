@@ -101,7 +101,7 @@
 }
 
 
-/* mixin definition ; sets LTR and RTL within the same style call */
+// mixin definition ; sets LTR and RTL within the same style call
 @mixin rtl($prop, $value, $rtl-value) {
   #{$prop}: $value;
   html[dir=rtl] & {
@@ -109,9 +109,7 @@
   }
 }
 
-/**
- * Position a FAB button.
- */
+// Position a FAB button.
 @mixin fab-position($spot, $top: auto, $right: auto, $bottom: auto, $left: auto) {
   &.md-fab-#{$spot} {
     top: $top;
