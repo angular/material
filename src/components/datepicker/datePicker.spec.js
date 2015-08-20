@@ -114,12 +114,12 @@ describe('md-date-picker', function() {
       controller.inputElement.value = '6/1/2015';
       angular.element(controller.inputElement).triggerHandler('input');
       $timeout.flush();
-      expect(controller.inputContainer.classList.contains('md-datepicker-invalid')).toBe(false);
+      expect(controller.inputContainer).not.toHaveClass('md-datepicker-invalid');
 
       controller.inputElement.value = '7';
       angular.element(controller.inputElement).triggerHandler('input');
       $timeout.flush();
-      expect(controller.inputContainer.classList.contains('md-datepicker-invalid')).toBe(true);
+      expect(controller.inputContainer).toHaveClass('md-datepicker-invalid');
     });
   });
 
@@ -134,20 +134,33 @@ describe('md-date-picker', function() {
     expect(controller.isCalendarOpen).toBe(false);
   });
 
-  it('should update the model value and close the calendar pane on md-calendar-change', function() {
-    var date = new Date(2015, JUN, 1);
-    controller.openCalendarPane({
-      target: controller.inputElement
+  describe('md-calendar-change', function() {
+    it('should update the model value and close the calendar pane', function() {
+      var date = new Date(2015, JUN, 1);
+      controller.openCalendarPane({
+        target: controller.inputElement
+      });
+      scope.$emit('md-calendar-change', date);
+      scope.$apply();
+      expect(pageScope.myDate).toEqual(date);
+      expect(controller.ngModelCtrl.$modelValue).toEqual(date);
+
+      expect(controller.inputElement.value).toEqual(date.toLocaleDateString());
+      expect(controller.calendarPaneOpenedFrom).toBe(null);
+      expect(controller.isCalendarOpen).toBe(false);
     });
 
-    scope.$emit('md-calendar-change', date);
-    scope.$apply();
-    expect(pageScope.myDate).toEqual(date);
-    expect(controller.ngModelCtrl.$modelValue).toEqual(date);
+    it('should remove the invalid state if present', function() {
+      controller.inputElement.value = '7';
+      angular.element(controller.inputElement).triggerHandler('input');
+      $timeout.flush();
+      expect(controller.inputContainer).toHaveClass('md-datepicker-invalid');
 
-    expect(controller.inputElement.value).toEqual(date.toLocaleDateString());
-    expect(controller.calendarPaneOpenedFrom).toBe(null);
-    expect(controller.isCalendarOpen).toBe(false);
+      controller.openCalendarPane({
+        target: controller.inputElement
+      });
+      scope.$emit('md-calendar-change', new Date());
+      expect(controller.inputContainer).not.toHaveClass('md-datepicker-invalid');
+    });
   });
-
 });
