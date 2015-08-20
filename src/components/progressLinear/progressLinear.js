@@ -23,7 +23,7 @@ angular.module('material.components.progressLinear', [
  *
  * @param {string} md-mode Select from one of four modes: determinate, indeterminate, buffer or query.
  * @param {number=} value In determinate and buffer modes, this number represents the percentage of the primary progress bar. Default: 0
- * @param {number=} md-buffer-value In the buffer mode, this number represents the precentage of the secondary progress bar. Default: 0
+ * @param {number=} md-buffer-value In the buffer mode, this number represents the percentage of the secondary progress bar. Default: 0
  *
  * @usage
  * <hljs lang="html">
