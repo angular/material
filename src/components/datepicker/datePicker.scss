@@ -3,6 +3,10 @@ $md-datepicker-button-gap: 12px;  // Space between the text input and the calend
 $md-datepicker-border-bottom-gap: 5px;  // Space between input and the grey underline.
 $md-datepicker-open-animation-duration: 0.2s;
 
+md-datepicker {
+  // Don't let linebreaks happen between the open icon-button and the input.
+  white-space: nowrap;
+}
 
 // The calendar icon button used to open the calendar pane.
 // Need absurd specificty to override md-button.md-icon-button.
@@ -62,10 +66,20 @@ $md-datepicker-open-animation-duration: 0.2s;
 .md-datepicker-input-mask {
   height: 40px;
   width: $md-calendar-width;
+  position: relative;
 
   background: transparent;
   pointer-events: none;
   cursor: text;
+}
+
+.md-datepicker-input-mask-opaque {
+  position: absolute;
+  right: 0;
+  left: 120px;
+  background: white;
+
+  height: 100%;
 }
 
 // The calendar portion of the floating pane (vs. the input mask).
@@ -136,7 +150,6 @@ md-datepicker[disabled] {
 // Open state for all of the elements of the picker.
 .md-datepicker-open {
   .md-datepicker-input-container {
-    min-width: $md-calendar-width;
     margin-left: -$md-datepicker-button-gap;
     border: none;
   }

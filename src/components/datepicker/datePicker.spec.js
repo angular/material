@@ -45,6 +45,7 @@ describe('md-date-picker', function() {
     $timeout.flush();
 
     expect(controller.calendarPane.offsetHeight).toBeGreaterThan(0);
+    expect(controller.inputMask.style.left).toBe(controller.inputContainer.clientWidth + 'px');
 
     // Click off of the calendar.
     document.body.click();

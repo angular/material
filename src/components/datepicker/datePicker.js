@@ -60,7 +60,9 @@
 
           // This pane will be detached from here and re-attached to the document body.
           '<div class="md-datepicker-calendar-pane md-whiteframe-z1">' +
-            '<div class="md-datepicker-input-mask"></div>' +
+            '<div class="md-datepicker-input-mask">' +
+              '<div class="md-datepicker-input-mask-opaque"></div>' +
+            '</div>' +
             '<div class="md-datepicker-calendar">' +
               '<md-calendar role="dialog" aria-label="{{::ctrl.dateLocale.msgCalendar}}" ' +
                   'ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen"></md-calendar>' +
@@ -133,6 +135,12 @@
 
     /** @type {HTMLElement} Calendar icon button. */
     this.calendarButton = $element[0].querySelector('.md-datepicker-button');
+
+    /**
+     * Element covering everything but the input in the top of the floating calendar pane.
+     * @type {HTMLElement}
+     */
+    this.inputMask = $element[0].querySelector('.md-datepicker-input-mask-opaque');
 
     /** @final {!angular.JQLite} */
     this.$element = $element;
@@ -262,7 +270,7 @@
 
     Object.defineProperty(this, 'placeholder', {
       get: function() { return self.inputElement.placeholder; },
-      set: function(value) { self.inputElement.placeholder = value; }
+      set: function(value) { self.inputElement.placeholder = value || ''; }
     });
   };
 
@@ -312,6 +320,12 @@
     calendarPane.style.left = (elementRect.left - bodyRect.left) + 'px';
     calendarPane.style.top = (elementRect.top - bodyRect.top) + 'px';
     document.body.appendChild(this.calendarPane);
+
+    // The top of the calendar pane is a transparent box that shows the text input underneath.
+    // Since the pane is flowing, though, the page underneath the pane *adjacent* to the input is
+    // also shown unless we cover it up. The inputMask does this by filling up the remaining space
+    // based on the width of the input.
+    this.inputMask.style.left = elementRect.width + 'px';
 
     // Add CSS class after one frame to trigger open animation.
     this.$$rAF(function() {
