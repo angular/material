@@ -159,6 +159,15 @@ describe('<md-select>', function() {
     select.remove();
   }));
 
+  it('should not convert numbers to strings', inject(function($compile, $rootScope) {
+    $rootScope.value = 1;
+    $compile('<md-select ng-model="value">' +
+      '<md-option ng-repeat="value in [1, 2, 3]" value="{{value}}">{{value}}</md-option>' +
+      '</md-select>')($rootScope);
+    $rootScope.$digest();
+    expect($rootScope.value).toBe(1);
+  }));
+
   describe('input container', function() {
     beforeEach(inject(function($document) {
       var selectMenus = $document.find('md-select-menu');
