@@ -4,6 +4,7 @@ angular
     $scope.user = {
       title: 'Developer',
       email: 'ipsum@lorem.com',
+      submissionDate: new Date(),
       firstName: '',
       lastName: '' ,
       company: 'Google' ,
