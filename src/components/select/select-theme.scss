@@ -6,7 +6,7 @@ md-select.md-THEME_NAME-theme {
     border-bottom-color: '{{foreground-4}}';
   }
   &.ng-invalid.ng-dirty {
-    .md-select-label {
+    .md-select-value {
       color: '{{warn-500}}' !important;
       border-bottom-color: '{{warn-500}}' !important;
     }

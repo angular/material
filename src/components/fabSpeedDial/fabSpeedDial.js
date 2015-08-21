@@ -1,10 +1,15 @@
 (function() {
   'use strict';
 
+  /**
+   * @ngdoc module
+   * @name material.components.fabSpeedDial
+   */
   angular
     // Declare our module
     .module('material.components.fabSpeedDial', [
       'material.core',
+      'material.components.fabShared',
       'material.components.fabTrigger',
       'material.components.fabActions'
     ])
@@ -38,9 +43,19 @@
    *    appropriate positions.
    *  - `md-scale` - The speed dial items appear in their proper places by scaling from 0% to 100%.
    *
+   * You may also easily position the trigger by applying one one of the following classes to the
+   * `<md-fab-speed-dial>` element:
+   *  - `md-fab-top-left`
+   *  - `md-fab-top-right`
+   *  - `md-fab-bottom-left`
+   *  - `md-fab-bottom-right`
+   *
+   * These CSS classes use `position: absolute`, so you need to ensure that the container element
+   * also uses `position: absolute` or `position: relative` in order for them to work.
+   *
    * @usage
    * <hljs lang="html">
-   * <md-fab-speed-dial direction="up" class="md-fling">
+   * <md-fab-speed-dial md-direction="up" class="md-fling">
    *   <md-fab-trigger>
    *     <md-button aria-label="Add..."><md-icon icon="/img/icons/plus.svg"></md-icon></md-button>
    *   </md-fab-trigger>
@@ -71,7 +86,7 @@
       },
 
       bindToController: true,
-      controller: FabSpeedDialController,
+      controller: 'FabController',
       controllerAs: 'vm',
 
       link: FabSpeedDialLink
@@ -81,76 +96,6 @@
       // Prepend an element to hold our CSS variables so we can use them in the animations below
       element.prepend('<div class="md-css-variables"></div>');
     }
-
-    function FabSpeedDialController($scope, $element, $animate, $mdUtil) {
-      var vm = this;
-
-      // Define our open/close functions
-      // Note: Used by fabTrigger and fabActions directives
-      vm.open = function() {
-        // Async eval to avoid conflicts with existing digest loops
-        $scope.$evalAsync("vm.isOpen = true");
-      };
-
-      vm.close = function() {
-        // Async eval to avoid conflicts with existing digest loops
-        // Only close if we do not currently have mouse focus (since child elements can call this)
-        !vm.moused && $scope.$evalAsync("vm.isOpen = false");
-      };
-
-      vm.mouseenter = function() {
-        vm.moused = true;
-        vm.open();
-      };
-
-      vm.mouseleave = function() {
-        vm.moused = false;
-        vm.close();
-      };
-
-      setupDefaults();
-      setupListeners();
-      setupWatchers();
-
-      // Fire the animations once in a separate digest loop to initialize them
-      $mdUtil.nextTick(function() {
-        $animate.addClass($element, 'md-noop');
-      });
-
-      // Set our default variables
-      function setupDefaults() {
-        // Set the default direction to 'down' if none is specified
-        vm.direction = vm.direction || 'down';
-
-        // Set the default to be closed
-        vm.isOpen = vm.isOpen || false;
-      }
-
-      // Setup our event listeners
-      function setupListeners() {
-        $element.on('mouseenter', vm.mouseenter);
-        $element.on('mouseleave', vm.mouseleave);
-      }
-
-      // Setup our watchers
-      function setupWatchers() {
-        // Watch for changes to the direction and update classes/attributes
-        $scope.$watch('vm.direction', function(newDir, oldDir) {
-          // Add the appropriate classes so we can target the direction in the CSS
-          $animate.removeClass($element, 'md-' + oldDir);
-          $animate.addClass($element, 'md-' + newDir);
-        });
-
-
-        // Watch for changes to md-open
-        $scope.$watch('vm.isOpen', function(isOpen) {
-          var toAdd = isOpen ? 'md-is-open' : '';
-          var toRemove = isOpen ? '' : 'md-is-open';
-
-          $animate.setClass($element, toAdd, toRemove);
-        });
-      }
-    }
   }
 
   function MdFabSpeedDialFlingAnimation() {
@@ -159,11 +104,14 @@
       var ctrl = element.controller('mdFabSpeedDial');
       var items = el.querySelectorAll('.md-fab-action-item');
 
+      // Grab our trigger element
+      var triggerElement = el.querySelector('md-fab-trigger');
+
       // Grab our element which stores CSS variables
       var variablesElement = el.querySelector('.md-css-variables');
 
       // Setup JS variables based on our CSS variables
-      var startZIndex = variablesElement.style.zIndex;
+      var startZIndex = parseInt(window.getComputedStyle(variablesElement).zIndex);
 
       // Always reset the items to their natural position/state
       angular.forEach(items, function(item, index) {
@@ -176,6 +124,9 @@
         // Make the items closest to the trigger have the highest z-index
         styles.zIndex = (items.length - index) + startZIndex;
       });
+
+      // Set the trigger to be above all of the actions so they disappear behind it.
+      triggerElement.style.zIndex = startZIndex + items.length + 1;
 
       // If the control is closed, hide the items behind the trigger
       if (!ctrl.isOpen) {
@@ -238,7 +189,7 @@
 
         styles.opacity = ctrl.isOpen ? 1 : 0;
         styles.transform = styles.webkitTransform = ctrl.isOpen ? 'scale(1)' : 'scale(0)';
-        styles.transitionDelay = (ctrl.isOpen ?  offsetDelay : (items.length - offsetDelay)) + 'ms';
+        styles.transitionDelay = (ctrl.isOpen ? offsetDelay : (items.length - offsetDelay)) + 'ms';
       });
     }
 

@@ -24,6 +24,11 @@ MdContactChipsCtrl.prototype.queryContact = function(searchText) {
 };
 
 
+MdContactChipsCtrl.prototype.itemName = function(item) {
+  return item[this.contactName];
+};
+
+
 MdContactChipsCtrl.prototype.filterSelectedContacts = function(contact) {
   return this.contacts.indexOf(contact) == -1;
 };

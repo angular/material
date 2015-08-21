@@ -39,6 +39,23 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
 }
 
+// Mixin for a "flat" input that can be used for components that contain an input
+// (datepicker, autocomplete).
+@mixin md-flat-input() {
+  font-size: 14px;
+
+  box-sizing: border-box;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  background: transparent;
+
+  // The the "clear X" that IE adds to input[type="search"]
+  &::-ms-clear {
+    display: none;
+  }
+}
+
 // Typography mixins
 
 @mixin md-title() {
@@ -84,10 +101,47 @@
 }
 
 
-/* mixin definition ; sets LTR and RTL within the same style call */
+// mixin definition ; sets LTR and RTL within the same style call
+// @see https://css-tricks.com/almanac/properties/d/direction/
+
 @mixin rtl($prop, $value, $rtl-value) {
   #{$prop}: $value;
+
   html[dir=rtl] & {
     #{$prop}: $rtl-value;
+    unicode-bidi: embed;
   }
+  body[dir=rtl] & {
+    #{$prop}: $rtl-value;
+    unicode-bidi: embed;
+  }
+
+  bdo[dir=rtl] {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+  }
+  bdo[dir=ltr] {
+    direction: ltr;
+    unicode-bidi: bidi-override;
+  }
+
+
+}
+
+// Position a FAB button.
+@mixin fab-position($spot, $top: auto, $right: auto, $bottom: auto, $left: auto) {
+  &.md-fab-#{$spot} {
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+    position: absolute;
+  }
+}
+
+@mixin fab-all-positions() {
+  @include fab-position(bottom-right, auto, ($button-fab-width - $button-fab-padding)/2, ($button-fab-height - $button-fab-padding)/2, auto);
+  @include fab-position(bottom-left, auto, auto, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2);
+  @include fab-position(top-right, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2, auto, auto);
+  @include fab-position(top-left, ($button-fab-height - $button-fab-padding)/2, auto, auto, ($button-fab-width - $button-fab-padding)/2);
 }

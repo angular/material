@@ -159,6 +159,15 @@ describe('<md-select>', function() {
     select.remove();
   }));
 
+  it('should not convert numbers to strings', inject(function($compile, $rootScope) {
+    $rootScope.value = 1;
+    $compile('<md-select ng-model="value">' +
+      '<md-option ng-repeat="value in [1, 2, 3]" value="{{value}}">{{value}}</md-option>' +
+      '</md-select>')($rootScope);
+    $rootScope.$digest();
+    expect($rootScope.value).toBe(1);
+  }));
+
   describe('input container', function() {
     beforeEach(inject(function($document) {
       var selectMenus = $document.find('md-select-menu');
@@ -461,6 +470,15 @@ describe('<md-select>', function() {
 
         expect(selectedOptions(el).length).toBe(0);
         expect($rootScope.model).toEqual([]);
+      }));
+
+      it('renders nothing if undefined is set', inject(function($rootScope) {
+        $rootScope.model = [1, 2];
+        var el = setupMultiple('ng-model="$root.model"', [1,2,3,4]);
+        expect(selectedOptions(el).length).toBe(2);
+        $rootScope.$apply('model = undefined');
+        $rootScope.$digest();
+        expect(selectedOptions(el).length).toBe(0);
       }));
 
       it('adding a valid value to the model selects its option', inject(function($rootScope) {

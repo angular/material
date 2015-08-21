@@ -58,7 +58,7 @@
               md-selected-item="$mdContactChipsCtrl.selectedItem"\
               md-search-text="$mdContactChipsCtrl.searchText"\
               md-items="item in $mdContactChipsCtrl.queryContact($mdContactChipsCtrl.searchText)"\
-              md-item-text="$mdContactChipsCtrl.mdContactName"\
+              md-item-text="$mdContactChipsCtrl.itemName(item)"\
               md-no-cache="true"\
               md-autoselect\
               placeholder="{{$mdContactChipsCtrl.contacts.length == 0 ?\

@@ -1,13 +1,14 @@
+$button-border-radius: 3px !default;
+$button-fab-border-radius: 50% !default;
+$button-icon-border-radius: $button-fab-border-radius;
+
 $button-line-height: rem(3.60) !default;
 $button-padding: 0 rem(0.600) !default;
 $button-margin: rem(0.600) rem(0.800) !default;
 $button-min-width: rem(8.800) !default;
 
 // Fab buttons
-$button-fab-width: rem(5.600) !default;
-$button-fab-height: rem(5.600) !default;
 $button-fab-line-height: rem(5.600) !default;
-$button-fab-padding: rem(1.60) !default;
 $button-fab-mini-width: rem(4.00) !default;
 $button-fab-mini-height: rem(4.00) !default;
 $button-fab-mini-line-height: rem(4.00) !default;
@@ -18,20 +19,8 @@ $icon-button-height: rem(4.800) !default;
 $icon-button-width: rem(4.800) !default;
 $icon-button-margin: rem(0.600) !default;
 
-/**
- * Position a FAB button.
- */
-@mixin fab-position($spot, $top: auto, $right: auto, $bottom: auto, $left: auto) {
-  &.md-fab-#{$spot} {
-    top: $top;
-    right: $right;
-    bottom: $bottom;
-    left: $left;
-    position: absolute;
-  }
-}
-
 .md-button {
+  border-radius: $button-border-radius;
   box-sizing: border-box;
   color: currentColor;
 
@@ -68,11 +57,6 @@ $icon-button-margin: rem(0.600) !default;
   transition: box-shadow $swift-ease-out-duration $swift-ease-out-timing-function,
               background-color $swift-ease-out-duration $swift-ease-out-timing-function;
 
-  *,
-  *:before,
-  *:after {
-    box-sizing: border-box;
-  }
   &:focus {
     outline: none;
   }
@@ -108,9 +92,9 @@ $icon-button-margin: rem(0.600) !default;
     padding-left: 0;
     padding-right: 0;
     width: $icon-button-width;
-    border-radius: 50%;
+    border-radius: $button-icon-border-radius;
     .md-ripple-container {
-      border-radius: 50%;
+      border-radius: $button-icon-border-radius;
       background-clip: padding-box;
       overflow: hidden;
       // The following hack causes Safari/Chrome to respect overflow hidden for ripples
@@ -120,10 +104,8 @@ $icon-button-margin: rem(0.600) !default;
 
   &.md-fab {
 
-    @include fab-position(bottom-right, auto, ($button-fab-width - $button-fab-padding)/2, ($button-fab-height - $button-fab-padding)/2, auto);
-    @include fab-position(bottom-left, auto, auto, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2);
-    @include fab-position(top-right, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2, auto, auto);
-    @include fab-position(top-left, ($button-fab-height - $button-fab-padding)/2, auto, auto, ($button-fab-width - $button-fab-padding)/2);
+    // Include the top/left/bottom/right fab positions
+    @include fab-all-positions();
 
     z-index: $z-index-fab;
 
@@ -134,14 +116,14 @@ $icon-button-margin: rem(0.600) !default;
     vertical-align: middle;
 
     @include md-shadow-bottom-z-1();
-    border-radius: 50%;
+    border-radius: $button-fab-border-radius;
     background-clip: padding-box;
     overflow: hidden;
 
     transition: 0.2s linear;
     transition-property: background-color, box-shadow;
     .md-ripple-container {
-      border-radius: 50%;
+      border-radius: $button-fab-border-radius;
       background-clip: padding-box;
       overflow: hidden;
       // The following hack causes Safari/Chrome to respect overflow hidden for ripples
@@ -167,6 +149,14 @@ $icon-button-margin: rem(0.600) !default;
       }
     }
   }
+
+  .md-ripple-container {
+    border-radius: $button-border-radius;
+    background-clip: padding-box;
+    overflow: hidden;
+    // The following hack causes Safari/Chrome to respect overflow hidden for ripples
+    -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
+  }
 }
 
 .md-toast-open-top {
@@ -181,6 +171,7 @@ $icon-button-margin: rem(0.600) !default;
     }
   }
 }
+
 .md-toast-open-bottom {
   .md-button.md-fab-bottom-left,
   .md-button.md-fab-bottom-right {
@@ -199,6 +190,7 @@ $icon-button-margin: rem(0.600) !default;
   flex: 1;
   width: 100%;
 }
+
 .md-button-group > .md-button {
   flex: 1;
 

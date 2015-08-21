@@ -186,4 +186,18 @@ describe('md-input-container directive', function() {
     var input = el.find('input');
     expect(input.attr('aria-label')).toBe('baz');
   }));
+
+  it('should put the container in "has value" state when input has a static value', inject(function($rootScope, $compile) {
+    var scope = $rootScope.$new();
+    var template =
+        '<md-input-container>' +
+          '<label>Name</label>' +
+          '<input value="Larry">' +
+        '</md-input-container>';
+
+    var element = $compile(template)(scope);
+    scope.$apply();
+
+    expect(element.hasClass('md-input-has-value')).toBe(true);
+  }));
 });

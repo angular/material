@@ -220,12 +220,7 @@ function InterimElementProvider() {
 
   /* @ngInject */
   function InterimElementFactory($document, $q, $rootScope, $timeout, $rootElement, $animate,
-                                 $interpolate, $mdCompiler, $mdTheming, $log ) {
-    var startSymbol = $interpolate.startSymbol(),
-        endSymbol = $interpolate.endSymbol(),
-        usesStandardSymbols = ((startSymbol === '{{') && (endSymbol === '}}')),
-        processTemplate  = usesStandardSymbols ? angular.identity : replaceInterpolationSymbols;
-
+                                 $mdUtil, $mdCompiler, $mdTheming, $log ) {
     return function createInterimElementService() {
       var SHOW_CANCELLED = false;
       var SHOW_CLOSED = true;
@@ -364,7 +359,7 @@ function InterimElementProvider() {
               .then(function( compiledData ) {
                 element = linkElement( compiledData, options );
 
-                showAction = showElement(element, options)
+                showAction = showElement(element, options, compiledData.controller)
                   .then(resolve, rejectAll );
 
               });
@@ -427,7 +422,7 @@ function InterimElementProvider() {
         function configureScopeAndTransitions(options) {
           options = options || { };
           if ( options.template ) {
-            options.template = processTemplate(options.template);
+            options.template = $mdUtil.processTemplate(options.template);
           }
 
           return angular.extend({
@@ -543,7 +538,7 @@ function InterimElementProvider() {
          * Show the element ( with transitions), notify complete and start
          * optional auto-Hide
          */
-        function showElement(element, options) {
+        function showElement(element, options, controller) {
           // Trigger onComplete callback when the `show()` finishes
           var notifyComplete = options.onComplete || angular.noop;
 
@@ -551,7 +546,7 @@ function InterimElementProvider() {
             try {
 
               // Start transitionIn
-              $q.when(options.onShow(options.scope, element, options))
+              $q.when(options.onShow(options.scope, element, options, controller))
                 .then(function () {
 
                   notifyComplete(options.scope, element, options);

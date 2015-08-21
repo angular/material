@@ -15,15 +15,12 @@
     <form name="userForm">
 
       <div layout layout-sm="column">
-        <md-input-container style="width:80%">
+        <md-input-container style="width:70%">
             <label>Company (Disabled)</label>
             <input ng-model="user.company" disabled>
           </md-input-container>
 
-        <md-input-container flex>
-          <label>Submission Date</label>
-          <input type="date" ng-model="user.submissionDate">
-        </md-input-container>
+        <md-datepicker ng-model="user.submissionDate" md-placeholder="Enter date"></md-datepicker>
       </div>
 
       <div layout layout-sm="column">

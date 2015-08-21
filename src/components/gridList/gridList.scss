@@ -3,9 +3,10 @@ md-grid-list {
   display: block;
   position: relative;
 
-  *,
-  *:before,
-  *:after {
+  md-grid-tile,
+  md-grid-tile > figure,
+  md-grid-tile-header,
+  md-grid-tile-footer {
     box-sizing: border-box;
   }
 

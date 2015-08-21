@@ -219,14 +219,17 @@ function MenuProvider($$interimElementProvider) {
               case keyCodes.ESCAPE:
                 ev.stopPropagation();
                 opts.mdMenuCtrl.close();
+                ev.stopPropagation();
                 break;
               case keyCodes.UP_ARROW:
                 ev.stopPropagation();
                 focusMenuItem(ev, opts.menuContentEl, opts, -1);
+                ev.stopPropagation();
                 break;
               case keyCodes.DOWN_ARROW:
                 ev.stopPropagation();
                 focusMenuItem(ev, opts.menuContentEl, opts, 1);
+                ev.stopPropagation();
                 break;
             }
           });

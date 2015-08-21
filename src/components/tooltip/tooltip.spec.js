@@ -3,6 +3,7 @@ describe('<md-tooltip> directive', function() {
   var element;
 
   beforeEach(module('material.components.tooltip'));
+  beforeEach(module('material.components.button'));
   beforeEach(inject(function(_$compile_, _$rootScope_, _$animate_, _$timeout_){
     $compile   = _$compile_;
     $rootScope = _$rootScope_;
@@ -19,7 +20,7 @@ describe('<md-tooltip> directive', function() {
       buildTooltip(
         '<md-button>' +
           'Hello' +
-         '<md-tooltip md-visible="isVisible">Tooltip</md-tooltip>' +
+         '<md-tooltip md-visible="testModel.isVisible">Tooltip</md-tooltip>' +
         '</md-button>'
       );
 
@@ -29,7 +30,7 @@ describe('<md-tooltip> directive', function() {
   it('should label parent', function(){
       buildTooltip(
         '<md-button>' +
-          '<md-tooltip md-visible="isVisible">' +
+          '<md-tooltip md-visible="testModel.isVisible">' +
             'Tooltip' +
           '</md-tooltip>'+
         '</md-button>'
@@ -46,7 +47,7 @@ describe('<md-tooltip> directive', function() {
     buildTooltip(
       '<outer>' +
         '<inner>' +
-          '<md-tooltip md-visible="isVisible">' +
+          '<md-tooltip md-visible="testModel.isVisible">' +
             'Hello world' +
           '</md-tooltip>' +
         '</inner>' +
@@ -54,7 +55,7 @@ describe('<md-tooltip> directive', function() {
     );
 
     triggerEvent('mouseenter', true);
-    expect($rootScope.isVisible).toBeUndefined();
+    expect($rootScope.testModel.isVisible).toBeUndefined();
 
   }));
 
@@ -62,22 +63,22 @@ describe('<md-tooltip> directive', function() {
     buildTooltip(
       '<md-button>' +
        'Hello' +
-       '<md-tooltip md-visible="isVisible" md-delay="99">' +
+       '<md-tooltip md-visible="testModel.isVisible" md-delay="99">' +
          'Tooltip' +
        '</md-tooltip>' +
       '</md-button>'
     );
 
     triggerEvent('focus', true);
-    expect($rootScope.isVisible).toBeFalsy();
+    expect($rootScope.testModel.isVisible).toBeFalsy();
 
     // Wait 1 below delay, nothing should happen
     $timeout.flush(98);
-    expect($rootScope.isVisible).toBeFalsy();
+    expect($rootScope.testModel.isVisible).toBeFalsy();
 
     // Total 300 == tooltipDelay
     $timeout.flush(1);
-    expect($rootScope.isVisible).toBe(true);
+    expect($rootScope.testModel.isVisible).toBe(true);
 
   });
 
@@ -90,7 +91,7 @@ describe('<md-tooltip> directive', function() {
       buildTooltip(
         '<md-button>' +
           'Hello' +
-          '<md-tooltip md-visible="isVisible">' +
+          '<md-tooltip md-visible="testModel.isVisible">' +
             'Tooltip' +
           '</md-tooltip>' +
         '</md-button>'
@@ -111,41 +112,41 @@ describe('<md-tooltip> directive', function() {
         buildTooltip(
           '<md-button>' +
              'Hello' +
-             '<md-tooltip md-visible="isVisible">' +
+             '<md-tooltip md-visible="testModel.isVisible">' +
               'Tooltip' +
             '</md-tooltip>' +
           '</md-button>'
         );
 
         triggerEvent('mouseenter');
-        expect($rootScope.isVisible).toBe(true);
+        expect($rootScope.testModel.isVisible).toBe(true);
 
         triggerEvent('mouseleave');
-        expect($rootScope.isVisible).toBe(false);
+        expect($rootScope.testModel.isVisible).toBe(false);
     });
 
     it('should set visible on focus and blur', function() {
       buildTooltip(
         '<md-button>' +
            'Hello' +
-           '<md-tooltip md-visible="isVisible">' +
+           '<md-tooltip md-visible="testModel.isVisible">' +
               'Tooltip' +
           '</md-tooltip>' +
         '</md-button>'
       );
 
       triggerEvent('focus');
-      expect($rootScope.isVisible).toBe(true);
+      expect($rootScope.testModel.isVisible).toBe(true);
 
       triggerEvent('blur');
-      expect($rootScope.isVisible).toBe(false);
+      expect($rootScope.testModel.isVisible).toBe(false);
     });
 
     it('should set visible on touchstart and touchend', function() {
       buildTooltip(
         '<md-button>' +
           'Hello' +
-          '<md-tooltip md-visible="isVisible">' +
+          '<md-tooltip md-visible="testModel.isVisible">' +
             'Tooltip' +
           '</md-tooltip>' +
         '</md-button>'
@@ -153,42 +154,59 @@ describe('<md-tooltip> directive', function() {
 
 
       triggerEvent('touchstart');
-      expect($rootScope.isVisible).toBe(true);
+      expect($rootScope.testModel.isVisible).toBe(true);
 
       triggerEvent('touchend');
-      expect($rootScope.isVisible).toBe(false);
+      expect($rootScope.testModel.isVisible).toBe(false);
 
     });
 
-    it('should not be visible on mousedown and then mouseleave', inject(function( $document) {
-      jasmine.mockElementFocus(this);
-
+    it('should not be visible on mousedown and then mouseleave', inject(function($document) {
       buildTooltip(
         '<md-button>' +
          'Hello' +
-         '<md-tooltip md-visible="isVisible">' +
+         '<md-tooltip md-visible="testModel.isVisible">' +
             'Tooltip' +
           '</md-tooltip>' +
         '</md-button>'
       );
 
-      // this focus is needed to set `$document.activeElement`
-      // and wouldn't be required if `document.activeElement` was settable.
-      element.focus();
-      triggerEvent('focus, mousedown');
+      // Append element to DOM so it can be set as activeElement.
+      $document[0].body.appendChild(element[0]);
+      element[0].focus();
+      triggerEvent('focus,mousedown');
 
-      expect($document.activeElement).toBe(element[0]);
-      expect($rootScope.isVisible).toBe(true);
+      expect($document[0].activeElement).toBe(element[0]);
+      expect($rootScope.testModel.isVisible).toBe(true);
+
+      triggerEvent('mouseleave');
+      expect($rootScope.testModel.isVisible).toBe(false);
+    }));
+
+    it('should not be visible when the window is refocused', inject(function($window, $document) {
+      buildTooltip(
+        '<md-button>' +
+         'Hello' +
+         '<md-tooltip md-visible="testModel.isVisible">' +
+            'Tooltip' +
+          '</md-tooltip>' +
+        '</md-button>'
+      );
+
+      // Append element to DOM so it can be set as activeElement.
+      $document[0].body.appendChild(element[0]);
+      element[0].focus();
+      triggerEvent('focus,mousedown');
+      expect(document.activeElement).toBe(element[0]);
 
       triggerEvent('mouseleave');
 
-      // very weak test since this is really always set to false because
-      // we are not able to set `document.activeElement` to the parent
-      // of `md-tooltip`. we compensate by testing `$document.activeElement`
-      // which sort of mocks the behavior through `jasmine.mockElementFocus`
-      // which should be replaced by a true `document.activeElement` check
-      // if the problem gets fixed.
-      expect($rootScope.isVisible).toBe(false);
+      // Simulate tabbing away.
+      angular.element($window).triggerHandler('blur');
+
+      // Simulate focus event that occurs when tabbing back to the window.
+      triggerEvent('focus');
+      expect($rootScope.testModel.isVisible).toBe(false);
     }));
   });
 
@@ -199,6 +217,7 @@ describe('<md-tooltip> directive', function() {
   function buildTooltip(markup) {
 
     element = $compile(markup)($rootScope);
+    $rootScope.testModel = {};
 
     $rootScope.$apply();
     $animate.triggerCallbacks();
@@ -209,7 +228,7 @@ describe('<md-tooltip> directive', function() {
   function showTooltip(isVisible) {
     if (angular.isUndefined(isVisible)) isVisible = true;
 
-    $rootScope.$apply('isVisible = ' + (isVisible ? 'true' : 'false') );
+    $rootScope.$apply('testModel.isVisible = ' + (isVisible ? 'true' : 'false') );
     $animate.triggerCallbacks();
   }
 

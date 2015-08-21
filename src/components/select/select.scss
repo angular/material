@@ -104,6 +104,7 @@ md-select {
   }
 
   .md-select-icon {
+    display: block;
     align-items: flex-end;
     text-align: end;
     width: 3 * $baseline-grid;
