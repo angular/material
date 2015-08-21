@@ -1,10 +1,12 @@
 $chip-font-size: rem(1.6) !default;
 $chip-height: rem(3.2) !default;
-$chip-padding: 0 rem(0.8) 0 rem(1.2) !default;
+$chip-padding: 0 rem(1.2) 0 rem(1.2) !default;
+$chip-remove-padding-right: rem(2.2) !default;
+$chip-remove-line-height: rem(2.2) !default;
 $chip-margin: rem(0.8) rem(0.8) 0 0 !default;
 $chip-wrap-padding: 0 0 rem(0.8) rem(0.3) !default;
 $chip-delete-icon-size: rem(1.8) !default;
-$contact-chip-padding: 0 rem(0.8) 0 0 !default;
+$contact-chip-padding: 0 rem(2.5) 0 0 !default;
 $contact-chip-suggestion-image-height: rem(4.0) !default;
 $contact-chip-suggestion-margin: rem(0.8) !default;
 $contact-chip-name-width: rem(12) !default;
@@ -50,15 +52,21 @@ $contact-chip-name-width: rem(12) !default;
 }
 .md-chips {
   @include pie-clearfix();
+
   display: block;
   font-family: $font-family;
   font-size: $chip-font-size;
   padding: $chip-wrap-padding;
   vertical-align: middle;
 
-  &:not('.md-readonly') {
+  &:not(.md-readonly) {
     cursor: text;
+
+    .md-chip {
+      padding-right: $chip-remove-padding-right;
+    }
   }
+
   .md-chip {
     cursor: default;
     border-radius: $chip-height / 2;
@@ -70,6 +78,8 @@ $contact-chip-name-width: rem(12) !default;
     float: left;
     box-sizing: border-box;
     max-width: 100%;
+    position: relative;
+
     .md-chip-content {
       display: block;
       padding-right:rem(0.4);
@@ -83,8 +93,9 @@ $contact-chip-name-width: rem(12) !default;
       }
     }
     .md-chip-remove-container {
-      display: inline-block;
-      margin-right: rem(-0.5);
+      position: absolute;
+      right: 0;
+      line-height: $chip-remove-line-height;
     }
     .md-chip-remove {
       text-align: center;
