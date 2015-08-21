@@ -12,28 +12,36 @@ describe('<md-contact-chips>', function() {
 
   beforeEach(module('material.components.chips'));
 
-  beforeEach(inject(function ($rootScope) {
+  beforeEach(inject(function($rootScope) {
     scope = $rootScope.$new();
     var img = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
     scope.allContacts = [
       {
-        name : 'NAME',
-        email : 'email',
-        image : img
-      },{
-        name : 'NAME2',
-        email : 'email2',
-        image : img
-      },{
-        name : 'NAME3',
-        email : 'email3',
-        image : img
+        name: 'NAME',
+        email: 'email',
+        image: img
+      }, {
+        name: 'NAME2',
+        email: 'email2',
+        image: img
+      }, {
+        name: 'NAME3',
+        email: 'email3',
+        image: img
       }
     ];
     scope.contacts = [];
   }));
 
-  describe('basic functionality', function () {
+  var attachedElements = [];
+  afterEach(function() {
+    attachedElements.forEach(function(element) {
+      element.remove();
+    });
+    attachedElements = [];
+  });
+
+  describe('basic functionality', function() {
     it('should show the placeholder', inject(function($timeout) {
       var element = buildChips(CONTACT_CHIPS_TEMPLATE);
       var ctrl = element.controller('mdContactChips');
@@ -91,12 +99,13 @@ describe('<md-contact-chips>', function() {
   // Internal helper methods
   // *******************************
 
-  function buildChips (str) {
+  function buildChips(str) {
     var container;
-    inject(function ($compile) {
+    inject(function($compile) {
       container = $compile(str)(scope);
       container.scope().$apply();
     });
+    attachedElements.push(container);
     return container;
   }
 

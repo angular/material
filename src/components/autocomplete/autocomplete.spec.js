@@ -68,6 +68,8 @@ describe('<md-autocomplete>', function () {
 
       expect(scope.searchText).toBe('foo');
       expect(scope.selectedItem).toBe(scope.match(scope.searchText)[ 0 ]);
+
+      element.remove();
     }));
 
     it('should allow you to set an input id without floating label', inject(function () {
@@ -86,6 +88,8 @@ describe('<md-autocomplete>', function () {
       var input    = element.find('input');
 
       expect(input.attr('id')).toBe(scope.inputId);
+
+      element.remove();
     }));
 
     it('should allow you to set an input id with floating label', inject(function () {
@@ -105,6 +109,8 @@ describe('<md-autocomplete>', function () {
       var input    = element.find('input');
 
       expect(input.attr('id')).toBe(scope.inputId);
+
+      element.remove();
     }));
 
     it('should clear value when hitting escape', inject(function ($mdConstant, $timeout) {
@@ -131,6 +137,8 @@ describe('<md-autocomplete>', function () {
       scope.$apply(function () { ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE)); });
 
       expect(scope.searchText).toBe('');
+
+      element.remove();
     }));
   });
 
@@ -168,6 +176,8 @@ describe('<md-autocomplete>', function () {
 
       expect(scope.searchText).toBe('foo');
       expect(scope.selectedItem).toBe(scope.match(scope.searchText)[ 0 ]);
+
+      element.remove();
     }));
   });
 
@@ -197,6 +207,8 @@ describe('<md-autocomplete>', function () {
       expect(scope.match(scope.searchText).length).toBe(1);
       expect(ul.find('li').length).toBe(1);
       expect(ul.find('li').find('img').length).toBe(0);
+
+      element.remove();
     });
   });
 
@@ -231,6 +243,8 @@ describe('<md-autocomplete>', function () {
 
       expect(scope.searchText).toBe('');
       expect(scope.selectedItem).toBe(null);
+
+      element.remove();
     }));
 
     it('should notify selected item watchers', inject(function ($timeout) {
@@ -278,6 +292,8 @@ describe('<md-autocomplete>', function () {
       expect(scope.itemChanged.calls.count()).toBe(2);
       expect(scope.itemChanged.calls.mostRecent().args[ 0 ]).toBeNull();
       expect(scope.selectedItem).toBeNull();
+
+      element.remove();
     }));
     it('should pass value to item watcher', inject(function ($timeout) {
       var scope         = createScope();
@@ -309,6 +325,8 @@ describe('<md-autocomplete>', function () {
 
       ctrl.clear();
       element.scope().$apply();
+
+      element.remove();
     }));
   });
 
@@ -335,6 +353,8 @@ describe('<md-autocomplete>', function () {
 
       expect(scope.selectedItem).not.toBe(null);
       expect(scope.selectedItem.display).toBe('foo');
+
+      element.remove();
     }));
     it('should not select matching item on exact match when `md-select-on-match` is NOT toggled', inject(function ($timeout) {
       var scope    = createScope();
@@ -356,6 +376,8 @@ describe('<md-autocomplete>', function () {
       $timeout.flush();
 
       expect(scope.selectedItem).toBe(null);
+
+      element.remove();
     }));
   });
 
@@ -376,6 +398,8 @@ describe('<md-autocomplete>', function () {
       scope.$apply();
 
       expect(element.html()).toBe('<span class="highlight">so</span>me more text');
+
+      element.remove();
     }));
   });
 

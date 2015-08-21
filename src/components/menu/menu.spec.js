@@ -1,4 +1,5 @@
 describe('material.components.menu', function() {
+  var attachedElements = [];
   var $mdMenu, $timeout, menuActionPerformed, $mdUtil;
 
   beforeEach(module('material.components.menu'));
@@ -11,6 +12,10 @@ describe('material.components.menu', function() {
   }));
   afterEach(function() {
     menuActionPerformed = false;
+    attachedElements.forEach(function(element) {
+      element.remove();
+    });
+    attachedElements = [];
   });
 
   describe('md-menu directive', function() {
@@ -178,6 +183,7 @@ describe('material.components.menu', function() {
         menu = $compile(template)($rootScope);
       });
 
+      attachedElements.push(menu);
       return menu;
     }
   });

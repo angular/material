@@ -1,5 +1,7 @@
 describe('<md-chips>', function() {
+  var attachedElements = [];
   var scope, $exceptionHandler, $timeout;
+
   var BASIC_CHIP_TEMPLATE =
     '<md-chips ng-model="items"></md-chips>';
   var CHIP_APPEND_TEMPLATE =
@@ -12,6 +14,14 @@ describe('<md-chips>', function() {
     '<md-chips ng-model="items" readonly="true">' +
     '  <md-autocomplete md-items="item in [\'hi\', \'ho\', \'he\']"></md-autocomplete>' +
     '</md-chips>';
+
+  afterEach(function() {
+    attachedElements.forEach(function(element) {
+      element.remove();
+    });
+    attachedElements = [];
+  });
+
 
   describe('with no overrides', function() {
     beforeEach(module('material.components.chips', 'material.components.autocomplete'));
@@ -421,6 +431,7 @@ describe('<md-chips>', function() {
       container = $compile(str)(scope);
       container.scope().$apply();
     });
+    attachedElements.push(container);
     return container;
   }
 
