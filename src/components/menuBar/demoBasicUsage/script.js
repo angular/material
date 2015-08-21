@@ -2,8 +2,7 @@ angular
   .module('menuBarDemoBasic', ['ngMaterial'])
   .config(function($mdIconProvider) {
     $mdIconProvider
-      .defaultIconSet('/dist/docs/img/icons/sets/core-icons.svg', 24)
-      .iconSet('call', '/dist/docs/img/icons/sets/communication-icons.svg', 24);
+      .defaultIconSet('img/icons/sets/core-icons.svg', 24);
   })
   .filter('keyboardShortcut', function($window) {
     return function(str) {
