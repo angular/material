@@ -7,7 +7,7 @@
 
 // Typography
 // ------------------------------
-$font-family: RobotoDraft, Roboto, 'Helvetica Neue', sans-serif !default;
+$font-family: Roboto, 'Helvetica Neue', sans-serif !default;
 $font-size:   10px;
 
 $display-4-font-size-base: rem(11.20) !default;
@@ -88,6 +88,12 @@ $swift-ease-in-out-duration: 0.5s !default;
 $swift-ease-in-out-timing-function: cubic-bezier(0.35, 0, 0.25, 1) !default;
 $swift-ease-in-out: all $swift-ease-in-out-duration $swift-ease-in-out-timing-function !default;
 
+// Fab Buttons (shared between buttons.scss and fab*.scss)
+// -------------------------------------------
+$button-fab-width: rem(5.600) !default;
+$button-fab-height: rem(5.600) !default;
+$button-fab-padding: rem(1.60) !default;
+
 @mixin margin-selectors($before:1em, $after:1em, $start:0px, $end:0px) {
   -webkit-margin-before: $before;
   -webkit-margin-after: $after;
@@ -127,6 +133,23 @@ $swift-ease-in-out: all $swift-ease-in-out-duration $swift-ease-in-out-timing-fu
 
 @mixin md-shadow-bottom-z-2() {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+}
+
+// Mixin for a "flat" input that can be used for components that contain an input
+// (datepicker, autocomplete).
+@mixin md-flat-input() {
+  font-size: 14px;
+
+  box-sizing: border-box;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  background: transparent;
+
+  // The the "clear X" that IE adds to input[type="search"]
+  &::-ms-clear {
+    display: none;
+  }
 }
 
 // Typography mixins
@@ -174,12 +197,49 @@ $swift-ease-in-out: all $swift-ease-in-out-duration $swift-ease-in-out-timing-fu
 }
 
 
-/* mixin definition ; sets LTR and RTL within the same style call */
+// mixin definition ; sets LTR and RTL within the same style call
+// @see https://css-tricks.com/almanac/properties/d/direction/
+
 @mixin rtl($prop, $value, $rtl-value) {
   #{$prop}: $value;
+
   html[dir=rtl] & {
     #{$prop}: $rtl-value;
+    unicode-bidi: embed;
   }
+  body[dir=rtl] & {
+    #{$prop}: $rtl-value;
+    unicode-bidi: embed;
+  }
+
+  bdo[dir=rtl] {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+  }
+  bdo[dir=ltr] {
+    direction: ltr;
+    unicode-bidi: bidi-override;
+  }
+
+
+}
+
+// Position a FAB button.
+@mixin fab-position($spot, $top: auto, $right: auto, $bottom: auto, $left: auto) {
+  &.md-fab-#{$spot} {
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+    position: absolute;
+  }
+}
+
+@mixin fab-all-positions() {
+  @include fab-position(bottom-right, auto, ($button-fab-width - $button-fab-padding)/2, ($button-fab-height - $button-fab-padding)/2, auto);
+  @include fab-position(bottom-left, auto, auto, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2);
+  @include fab-position(top-right, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2, auto, auto);
+  @include fab-position(top-left, ($button-fab-height - $button-fab-padding)/2, auto, auto, ($button-fab-width - $button-fab-padding)/2);
 }
 
 html, body {
@@ -298,16 +358,13 @@ input {
 
 .md-ripple {
   position: absolute;
-  transform: scale(0);
+  transform: translate(-50%, -50%) scale(0);
   transform-origin: 50% 50%;
   opacity: 0;
   border-radius: 50%;
   &.md-ripple-placed {
-    $positionDuration: 0.9s * 2;
-    $sizeDuration: 0.65s * 2;
-    transition: left $positionDuration $swift-ease-out-timing-function,
-                top $positionDuration $swift-ease-out-timing-function,
-                margin $sizeDuration $swift-ease-out-timing-function,
+    $sizeDuration: 0.45s * 2;
+    transition: margin $sizeDuration $swift-ease-out-timing-function,
                 border $sizeDuration $swift-ease-out-timing-function,
                 width $sizeDuration $swift-ease-out-timing-function,
                 height $sizeDuration $swift-ease-out-timing-function,
@@ -315,7 +372,7 @@ input {
                 transform $sizeDuration $swift-ease-out-timing-function;
   }
   &.md-ripple-scaled {
-    transform: scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
   &.md-ripple-active, &.md-ripple-full, &.md-ripple-visible {
     opacity: 0.20;
@@ -920,19 +977,11 @@ md-autocomplete {
     }
   }
   input:not(.md-input) {
+    @include md-flat-input();
     width: 100%;
-    box-sizing: border-box;
-    border: none;
-    box-shadow: none;
     padding: 0 15px;
-    font-size: 14px;
     line-height: 40px;
     height: 40px;
-    outline: none;
-    background: transparent;
-    &::-ms-clear {
-      display: none;
-    }
   }
   button {
     position: relative;
@@ -1273,16 +1322,17 @@ md-bottom-sheet {
   }
 }
 
+$button-border-radius: 3px !default;
+$button-fab-border-radius: 50% !default;
+$button-icon-border-radius: $button-fab-border-radius;
+
 $button-line-height: rem(3.60) !default;
 $button-padding: 0 rem(0.600) !default;
 $button-margin: rem(0.600) rem(0.800) !default;
 $button-min-width: rem(8.800) !default;
 
 // Fab buttons
-$button-fab-width: rem(5.600) !default;
-$button-fab-height: rem(5.600) !default;
 $button-fab-line-height: rem(5.600) !default;
-$button-fab-padding: rem(1.60) !default;
 $button-fab-mini-width: rem(4.00) !default;
 $button-fab-mini-height: rem(4.00) !default;
 $button-fab-mini-line-height: rem(4.00) !default;
@@ -1293,20 +1343,8 @@ $icon-button-height: rem(4.800) !default;
 $icon-button-width: rem(4.800) !default;
 $icon-button-margin: rem(0.600) !default;
 
-/**
- * Position a FAB button.
- */
-@mixin fab-position($spot, $top: auto, $right: auto, $bottom: auto, $left: auto) {
-  &.md-fab-#{$spot} {
-    top: $top;
-    right: $right;
-    bottom: $bottom;
-    left: $left;
-    position: absolute;
-  }
-}
-
 .md-button {
+  border-radius: $button-border-radius;
   box-sizing: border-box;
   color: currentColor;
 
@@ -1343,11 +1381,6 @@ $icon-button-margin: rem(0.600) !default;
   transition: box-shadow $swift-ease-out-duration $swift-ease-out-timing-function,
               background-color $swift-ease-out-duration $swift-ease-out-timing-function;
 
-  *,
-  *:before,
-  *:after {
-    box-sizing: border-box;
-  }
   &:focus {
     outline: none;
   }
@@ -1383,9 +1416,9 @@ $icon-button-margin: rem(0.600) !default;
     padding-left: 0;
     padding-right: 0;
     width: $icon-button-width;
-    border-radius: 50%;
+    border-radius: $button-icon-border-radius;
     .md-ripple-container {
-      border-radius: 50%;
+      border-radius: $button-icon-border-radius;
       background-clip: padding-box;
       overflow: hidden;
       // The following hack causes Safari/Chrome to respect overflow hidden for ripples
@@ -1395,10 +1428,8 @@ $icon-button-margin: rem(0.600) !default;
 
   &.md-fab {
 
-    @include fab-position(bottom-right, auto, ($button-fab-width - $button-fab-padding)/2, ($button-fab-height - $button-fab-padding)/2, auto);
-    @include fab-position(bottom-left, auto, auto, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2);
-    @include fab-position(top-right, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2, auto, auto);
-    @include fab-position(top-left, ($button-fab-height - $button-fab-padding)/2, auto, auto, ($button-fab-width - $button-fab-padding)/2);
+    // Include the top/left/bottom/right fab positions
+    @include fab-all-positions();
 
     z-index: $z-index-fab;
 
@@ -1409,14 +1440,14 @@ $icon-button-margin: rem(0.600) !default;
     vertical-align: middle;
 
     @include md-shadow-bottom-z-1();
-    border-radius: 50%;
+    border-radius: $button-fab-border-radius;
     background-clip: padding-box;
     overflow: hidden;
 
     transition: 0.2s linear;
     transition-property: background-color, box-shadow;
     .md-ripple-container {
-      border-radius: 50%;
+      border-radius: $button-fab-border-radius;
       background-clip: padding-box;
       overflow: hidden;
       // The following hack causes Safari/Chrome to respect overflow hidden for ripples
@@ -1442,6 +1473,14 @@ $icon-button-margin: rem(0.600) !default;
       }
     }
   }
+
+  .md-ripple-container {
+    border-radius: $button-border-radius;
+    background-clip: padding-box;
+    overflow: hidden;
+    // The following hack causes Safari/Chrome to respect overflow hidden for ripples
+    -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
+  }
 }
 
 .md-toast-open-top {
@@ -1456,6 +1495,7 @@ $icon-button-margin: rem(0.600) !default;
     }
   }
 }
+
 .md-toast-open-bottom {
   .md-button.md-fab-bottom-left,
   .md-button.md-fab-bottom-right {
@@ -1474,6 +1514,7 @@ $icon-button-margin: rem(0.600) !default;
   flex: 1;
   width: 100%;
 }
+
 .md-button-group > .md-button {
   flex: 1;
 
@@ -1569,12 +1610,6 @@ md-checkbox {
   min-width: $checkbox-width;
   min-height: $checkbox-width;
 
-  *,
-  *:before,
-  *:after {
-    box-sizing: border-box;
-  }
-
   &.md-focused:not([disabled]) {
     .md-container:before {
       left: -8px;
@@ -1594,13 +1629,17 @@ md-checkbox {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+
+    box-sizing: border-box;
     display: inline-block;
+
     width: $checkbox-width;
     height: $checkbox-height;
     @include rtl(left, 0, auto);
     @include rtl(right, auto, 0);
 
     &:before {
+      box-sizing: border-box;
       background-color: transparent;
       border-radius: 50%;
       content: '';
@@ -1616,6 +1655,7 @@ md-checkbox {
     }
 
     &:after {
+      box-sizing: border-box;
       content: '';
       position: absolute;
       top: -10px;
@@ -1642,6 +1682,7 @@ md-checkbox {
 
   // unchecked
   .md-icon {
+    box-sizing: border-box;
     transition: 240ms;
     position: absolute;
     top: 0;
@@ -1664,6 +1705,7 @@ md-checkbox {
 
 
   &.md-checked .md-icon:after {
+    box-sizing: border-box;
     transform: rotate(45deg);
     position: absolute;
     left: $checkbox-width / 3;
@@ -1679,6 +1721,7 @@ md-checkbox {
   }
 
   .md-label {
+    box-sizing: border-box;
     position: relative;
     display: inline-block;
     vertical-align: middle;
@@ -1691,11 +1734,11 @@ md-checkbox {
   }
 }
 
-$chip-font-size: rem(1.3) !default;
+$chip-font-size: rem(1.6) !default;
 $chip-height: rem(3.2) !default;
 $chip-padding: 0 rem(0.8) 0 rem(1.2) !default;
 $chip-margin: rem(0.8) rem(0.8) 0 0 !default;
-$chip-wrap-padding: 0 0 rem(0.8) 0 !default;
+$chip-wrap-padding: 0 0 rem(0.8) rem(0.3) !default;
 $chip-delete-icon-size: rem(1.8) !default;
 $contact-chip-padding: 0 rem(0.8) 0 0 !default;
 $contact-chip-suggestion-image-height: rem(4.0) !default;
@@ -1748,7 +1791,10 @@ $contact-chip-name-width: rem(12) !default;
   font-size: $chip-font-size;
   padding: $chip-wrap-padding;
   vertical-align: middle;
-  cursor: text;
+
+  &:not('.md-readonly') {
+    cursor: text;
+  }
   .md-chip {
     cursor: default;
     border-radius: $chip-height / 2;
@@ -1897,6 +1943,314 @@ md-content {
 
 
 
+/** Styles for mdCalendar. */
+$md-calendar-cell-size: 44px !default;
+$md-calendar-header-height: 40px;
+$md-calendar-cell-emphasis-size: 40px !default;
+$md-calendar-side-padding: 16px !default;
+$md-calendar-weeks-to-show: 7 !default;
+
+$md-calendar-month-label-padding: 8px !default;
+$md-calendar-month-label-font-size: 13px !default;
+
+$md-calendar-width: (7 * $md-calendar-cell-size) + (2 * $md-calendar-side-padding);
+$md-calendar-height:
+    ($md-calendar-weeks-to-show * $md-calendar-cell-size) + $md-calendar-header-height;
+
+
+// Styles for date cells, including day-of-the-week header cells.
+@mixin md-calendar-cell() {
+  height: $md-calendar-cell-size;
+  width: $md-calendar-cell-size;
+
+  text-align: center;
+
+  // Remove all padding and borders so we can completely
+  // control the size of the table cells.
+  padding: 0;
+  border: none;
+
+  // The left / right padding is applied to the cells instead of the wrapper
+  // because we want the header background and the month dividing border to
+  // extend the entire width of the calendar.
+  &:first-child {
+    padding-left: $md-calendar-side-padding;
+  }
+
+  &:last-child {
+    padding-right: $md-calendar-side-padding;
+  }
+}
+
+// Styles for tables used in mdCalendar (the day-of-the-week header and the table of dates itself).
+@mixin md-calendar-table() {
+  // Fixed table layout makes IE faster.
+  // https://msdn.microsoft.com/en-us/library/ms533020(VS.85).aspx
+  table-layout: fixed;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+md-calendar {
+  font-size: 13px;
+  user-select: none;
+}
+
+// Wrap the scroll with overflow: hidden in order to hide the scrollbar.
+// The inner .md-calendar-scroll-container will using a padding-right to push the
+// scrollbar into the hidden area (done with javascript).
+.md-calendar-scroll-mask {
+  display: inline-block;
+  overflow: hidden;
+  height: $md-calendar-weeks-to-show * $md-calendar-cell-size;
+
+  // The actual scrolling element.
+  .md-virtual-repeat-scroller {
+    // These two properties are needed to get touch momentum to work.
+    // See https://css-tricks.com/snippets/css/momentum-scrolling-on-ios-overflow-elements
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  // Offsetter is the element that is translateY'ed into view of the user and contains the
+  // calendar content.
+  .md-virtual-repeat-offsetter {
+    width: 100%;
+  }
+}
+
+// Contains the scrolling element (this is the md-virtual-repeat-container).
+.md-calendar-scroll-container {
+  display: inline-block;
+  height: $md-calendar-weeks-to-show * $md-calendar-cell-size;
+  width: $md-calendar-width;
+}
+
+// A single date cell in the calendar table.
+.md-calendar-date {
+  @include md-calendar-cell();
+}
+
+// Circle element inside of every date cell used to indicate selection or focus.
+.md-calendar-date-selection-indicator {
+  transition: background-color, color $swift-ease-out-duration $swift-ease-out-timing-function;
+
+  border-radius: 50%;
+  display: inline-block;
+
+  cursor: pointer;
+
+  width: $md-calendar-cell-emphasis-size;
+  height: $md-calendar-cell-emphasis-size;
+  line-height: $md-calendar-cell-emphasis-size;
+}
+
+// The label above each month (containing the month name and the year, e.g. "Jun 2014").
+.md-calendar-month-label {
+  height: $md-calendar-cell-size;
+  font-size: $md-calendar-month-label-font-size;
+  padding: 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding;
+}
+
+// Table containing the day-of-the-week header.
+.md-calendar-day-header {
+  @include md-calendar-table();
+
+  th {
+    @include md-calendar-cell();
+    font-weight: normal;
+    height: $md-calendar-header-height;
+  }
+}
+
+// Primary table containing all date cells. Each month is a tbody in this table.
+.md-calendar {
+  @include md-calendar-table();
+
+  // Divider between months.
+  tr:last-child td {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+  }
+
+  // The divider between months doesn't actually change the height of the tbody in which the
+  // border appear; it changes the height of the following tbody. The causes the first-child to be
+  // 1px shorter than the other months. We fix this by adding an invisible border-top.
+  &:first-child {
+    border-top: 1px solid transparent;
+  }
+}
+
+/** Styles for mdDatepicker. */
+$md-datepicker-button-gap: 12px;  // Space between the text input and the calendar-icon button.
+$md-datepicker-border-bottom-gap: 5px;  // Space between input and the grey underline.
+$md-datepicker-open-animation-duration: 0.2s;
+
+md-datepicker {
+  // Don't let linebreaks happen between the open icon-button and the input.
+  white-space: nowrap;
+}
+
+// The calendar icon button used to open the calendar pane.
+// Need absurd specificty to override md-button.md-icon-button.
+.md-datepicker-button {
+  display: inline-block;
+  box-sizing: border-box;
+  background: none;
+}
+
+// The input into which the user can type the date.
+.md-datepicker-input {
+  @include md-flat-input();
+  min-width: 120px;
+  max-width: $md-calendar-width - $md-datepicker-button-gap;
+}
+
+// Container for the datepicker input.
+.md-datepicker-input-container {
+  // Position relative in order to absolutely position the down-triangle button within.
+  position: relative;
+
+  padding-bottom: $md-datepicker-border-bottom-gap;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+
+  display: inline-block;
+  width: auto;
+  margin-left: $md-datepicker-button-gap;
+
+  &.md-datepicker-focused {
+    border-bottom-width: 2px;
+  }
+}
+
+
+// Floating pane that contains the calendar at the bottom of the input.
+.md-datepicker-calendar-pane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: $z-index-menu;
+
+  border-width: 1px;
+  border-style: solid;
+  background: transparent;
+
+  transform: scale(0);
+  transform-origin: 0 0;
+  transition: transform $md-datepicker-open-animation-duration $swift-ease-out-timing-function;
+
+  &.md-pane-open {
+    transform: scale(1);
+  }
+}
+
+// Portion of the floating panel that sits, invisibly, on top of the input.
+.md-datepicker-input-mask {
+  height: 40px;
+  width: $md-calendar-width;
+  position: relative;
+
+  background: transparent;
+  pointer-events: none;
+  cursor: text;
+}
+
+.md-datepicker-input-mask-opaque {
+  position: absolute;
+  right: 0;
+  left: 120px;
+  background: white;
+
+  height: 100%;
+}
+
+// The calendar portion of the floating pane (vs. the input mask).
+.md-datepicker-calendar {
+  opacity: 0;
+  // Use a modified timing function (from swift-ease-out) so that the opacity part of the
+  // animation doesn't come in as quickly so that the floating pane doesn't ever seem to
+  // cover up the trigger input.
+  transition: opacity $md-datepicker-open-animation-duration cubic-bezier(0.5, 0, 0.25, 1);
+
+  .md-pane-open & {
+    opacity: 1;
+  }
+
+  md-calendar:focus {
+    outline: none;
+  }
+}
+
+// Down triangle/arrow indicating that the datepicker can be opened.
+// We can do this entirely with CSS without needing to load an icon.
+// See https://css-tricks.com/snippets/css/css-triangle/
+$md-date-arrow-size: 5px;
+.md-datepicker-expand-triangle {
+  // Center the triangle inside of the button so that the
+  // ink ripple origin looks correct.
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 0;
+  height: 0;
+  border-left: $md-date-arrow-size solid transparent;
+  border-right: $md-date-arrow-size solid transparent;
+  border-top: $md-date-arrow-size solid rgba(black, 0.20);
+}
+
+// Button containing the down "disclosure" triangle/arrow.
+.md-datepicker-triangle-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  // TODO(jelbourn): This position isn't great on all platforms.
+  transform: translateY(-25%) translateX(45%);
+}
+
+// Need crazy specificity to override .md-button.md-icon-button.
+// Only apply this high specifiy to the property we need to override.
+.md-datepicker-triangle-button.md-button.md-icon-button {
+  height: 100%;
+  width: 36px;
+  position: absolute;
+}
+
+// Disabled state for all elements of the picker.
+md-datepicker[disabled] {
+  .md-datepicker-input-container {
+    border-bottom-color: transparent;
+  }
+
+  .md-datepicker-triangle-button {
+    display: none;
+  }
+}
+
+// Open state for all of the elements of the picker.
+.md-datepicker-open {
+  .md-datepicker-input-container {
+    margin-left: -$md-datepicker-button-gap;
+    border: none;
+  }
+
+  .md-datepicker-input {
+    margin-left: 24px;
+    height: 40px;
+  }
+
+  .md-datepicker-triangle-button {
+    display: none;
+  }
+}
+
 $dialog-padding: $baseline-grid * 3;
 
 .md-dialog-is-showing {
@@ -1975,6 +2329,10 @@ md-dialog {
         padding-top: 0;
       }
     }
+
+    .md-dialog-content-body {
+      width:100%;
+    }
   }
 
   .md-actions {
@@ -2024,6 +2382,9 @@ md-fab-speed-dial {
   position: relative;
   display: flex;
   align-items: center;
+
+  // Include the top/left/bottom/right fab positions
+  @include fab-all-positions();
 
   .md-css-variables {
     z-index: $z-index-fab;
@@ -2129,6 +2490,9 @@ $icon-button-margin: rem(0.600) !default;
 md-fab-toolbar {
   $icon-delay: 200ms;
 
+  // Include the top/left/bottom/right fab positions
+  @include fab-all-positions();
+
   display: block;
 
   /*
@@ -2173,16 +2537,6 @@ md-fab-toolbar {
 
   &.md-left {
     md-fab-trigger {
-      left: 0;
-    }
-
-    .md-toolbar-tools {
-      flex-direction: row;
-    }
-  }
-
-  &.md-right {
-    md-fab-trigger {
       right: 0;
     }
 
@@ -2190,11 +2544,11 @@ md-fab-toolbar {
       flex-direction: row-reverse;
 
       > .md-button:first-child {
-        margin-left: 0.6rem;
+        margin-right: 0.6rem;
       }
 
       > .md-button:first-child {
-        margin-right: -0.8rem;
+        margin-left: -0.8rem;
       }
 
 
@@ -2202,6 +2556,16 @@ md-fab-toolbar {
         margin-right: 8px;
       }
 
+    }
+  }
+
+  &.md-right {
+    md-fab-trigger {
+      left: 0;
+    }
+
+    .md-toolbar-tools {
+      flex-direction: row;
     }
   }
 
@@ -2249,9 +2613,10 @@ md-grid-list {
   display: block;
   position: relative;
 
-  *,
-  *:before,
-  *:after {
+  md-grid-tile,
+  md-grid-tile > figure,
+  md-grid-tile-header,
+  md-grid-tile-footer {
     box-sizing: border-box;
   }
 
@@ -3399,17 +3764,8 @@ md-radio-button,
   white-space: nowrap;
   cursor: pointer;
 
-  *,
-  *:before,
-  *:after {
-    box-sizing: border-box;
-  }
-
-  input {
-    display: none;
-  }
-
   .md-container {
+    box-sizing: border-box;
     position: relative;
     top: 4px;
     display: inline-block;
@@ -3427,6 +3783,7 @@ md-radio-button,
     }
 
     &:before {
+      box-sizing: border-box;
       background-color: transparent;
       border-radius: 50%;
       content: '';
@@ -3447,6 +3804,7 @@ md-radio-button,
    }
 
   .md-off {
+    box-sizing: border-box;
     position: absolute;
     top: 0;
     left: 0;
@@ -3459,6 +3817,7 @@ md-radio-button,
   }
 
   .md-on {
+    box-sizing: border-box;
     position: absolute;
     top: 0;
     left: 0;
@@ -3474,6 +3833,7 @@ md-radio-button,
   }
 
   .md-label {
+    box-sizing: border-box;
     position: relative;
     display: inline-block;
 
@@ -3617,6 +3977,7 @@ md-select {
   }
 
   .md-select-icon {
+    display: block;
     align-items: flex-end;
     text-align: end;
     width: 3 * $baseline-grid;
@@ -3739,12 +4100,6 @@ md-sidenav {
   bottom: 0;
   background-color: white;
   overflow: auto;
-
-  *,
-  *:before,
-  *:after {
-    box-sizing: border-box;
-  }
 
   ul {
     list-style: none;
@@ -4032,10 +4387,9 @@ md-slider {
   }
   .md-focus-ring {
     @include slider-thumb-position($slider-focus-thumb-width, $slider-focus-thumb-height);
-    border: 2px solid #D6D6D6;
-    background-color: transparent;
     transform: scale(0);
     transition: all 0.2s linear;
+    opacity: 0.26;
   }
   .md-disabled-thumb {
     @include slider-thumb-position(
@@ -4184,6 +4538,39 @@ $subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16) !default;
   }
 }
 
+.md-subheader-wrapper {
+
+  &:not(.md-sticky-no-effect) {
+    .md-subheader {
+      margin: 0;
+    }
+
+    .md-subheader:after {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      top: 0;
+      right: -$subheader-margin-right;
+      content: '';
+    }
+
+    transition: 0.2s ease-out margin;
+
+    &.md-sticky-clone {
+      z-index: 2;
+    }
+
+    &[sticky-state="active"] {
+      margin-top: -2px;
+    }
+
+    &:not(.md-sticky-clone)[sticky-prev-state="active"] .md-subheader-inner:after {
+      animation: subheaderStickyHoverOut 0.3s ease-out both;
+    }
+  }
+
+}
+
 .md-subheader {
   display: block;
   font-size: $subheader-font-size;
@@ -4195,28 +4582,6 @@ $subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16) !default;
 
   .md-subheader-inner {
     padding: $subheader-padding;
-  }
-
-  &:not(.md-sticky-no-effect) {
-    &:after {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      top: 0;
-      right: -$subheader-margin-right;
-      content: '';
-    }
-
-    transition: 0.2s ease-out margin;
-    &.md-sticky-clone {
-      z-index: 2;
-    }
-    &[sticky-state="active"] {
-      margin-top: -2px;
-    }
-    &:not(.md-sticky-clone)[sticky-prev-state="active"] .md-subheader-inner:after {
-      animation: subheaderStickyHoverOut 0.3s ease-out both;
-    }
   }
 
   .md-subheader-content {
@@ -4808,10 +5173,21 @@ md-toast {
   }
 }
 
+// Standard/Desktop Heights
 $toolbar-tools-height: 64px !default;
 $toolbar-height: 64px !default;
 $toolbar-medium-tall-height: 88px !default;
 $toolbar-tall-height: 128px !default;
+
+// Mobile portrait heights
+$toolbar-tools-height-mobile-portrait: 56px !default;
+$toolbar-height-mobile-portrait: 56px !default;
+
+// Mobile landscape heights
+$toolbar-tools-height-mobile-landscape: 48px !default;
+$toolbar-height-mobile-landscape: 48px !default;
+
+
 $toolbar-indent-margin: 64px !default;
 $toolbar-padding: 16px !default;
 
@@ -4828,14 +5204,9 @@ md-toolbar {
   font-size: rem(2.0);
   min-height: $baseline-grid * 8;
   width: 100%;
+
   &.md-whiteframe-z1-add, &.md-whiteframe-z1-remove {
     transition: box-shadow $swift-ease-in-out-duration linear;
-  }
-
-  *,
-  *:before,
-  *:after {
-    box-sizing: border-box;
   }
 
   &.md-tall {
@@ -4876,6 +5247,7 @@ md-toolbar {
 .md-toolbar-tools {
   font-size: $title-font-size-base;
   letter-spacing: 0.005em;
+  box-sizing: border-box;
   font-weight: 400;
   display: flex;
   align-items: center;
@@ -4923,6 +5295,33 @@ md-toolbar {
     border-bottom: 1px solid #fff;
   }
 }
+
+// Handle mobile portrait
+@media only screen and (min-width: 0) and (max-width: $layout-breakpoint-sm) and
+  (orientation: portrait) {
+  md-toolbar {
+    min-height: $toolbar-height-mobile-portrait;
+  }
+
+  .md-toolbar-tools {
+    height: $toolbar-height-mobile-portrait;
+    max-height: $toolbar-height-mobile-portrait;
+  }
+}
+
+// Handle mobile landscape
+@media only screen and (min-width: 0) and (max-width: $layout-breakpoint-sm) and
+  (orientation: landscape) {
+  md-toolbar {
+    min-height: $toolbar-height-mobile-landscape;
+  }
+
+  .md-toolbar-tools {
+    height: $toolbar-height-mobile-landscape;
+    max-height: $toolbar-height-mobile-landscape;
+  }
+}
+
 
 $tooltip-fontsize-lg: rem(1);
 $tooltip-fontsize-sm: rem(1.4);
@@ -5030,7 +5429,6 @@ $virtual-repeat-scrollbar-width: 16px;
     left: 0;
     margin: 0;
     overflow-x: hidden;
-    overflow-y: auto;
     padding: 0;
     position: absolute;
     right: 0;
