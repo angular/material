@@ -28,7 +28,7 @@ angular.module('material.components.sticky', [
  *     If not provided, it will use the result of `element.clone()`.
  */
 
-function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
+function MdSticky($document, $mdConstant, $$rAF, $mdUtil) {
 
   var browserStickySupport = checkStickySupport();
 
@@ -95,7 +95,9 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
       };
       self.items.push(item);
 
-      contentEl.parent().prepend(item.clone);
+      $mdUtil.nextTick(function() {
+        contentEl.prepend(item.clone);
+      });
 
       debouncedRefreshElements();
 
@@ -162,43 +164,60 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
     function onScroll() {
       var scrollTop = contentEl.prop('scrollTop');
       var isScrollingDown = scrollTop > (onScroll.prevScrollTop || 0);
+
+      // Store the previous scroll so we know which direction we are scrolling
       onScroll.prevScrollTop = scrollTop;
 
-      // At the top?
+      //
+      // AT TOP (not scrolling)
+      //
       if (scrollTop === 0) {
+        // If we're at the top, just clear the current item and return
         setCurrentItem(null);
+        return;
+      }
 
-      // Going to next item?
-      } else if (isScrollingDown && self.next) {
-        if (self.next.top - scrollTop <= 0) {
-          // Sticky the next item if we've scrolled past its position.
+      //
+      // SCROLLING DOWN (going towards the next item)
+      //
+      if (isScrollingDown) {
+
+        // If we've scrolled down past the next item's position, sticky it and return
+        if (self.next && self.next.top <= scrollTop) {
           setCurrentItem(self.next);
-        } else if (self.current) {
-          // Push the current item up when we're almost at the next item.
-          if (self.next.top - scrollTop <= self.next.height) {
-            translate(self.current, self.next.top - self.next.height - scrollTop);
-          } else {
-            translate(self.current, null);
-          }
+          return;
         }
-        
-      // Scrolling up with a current sticky item?
-      } else if (!isScrollingDown && self.current) {
-        if (scrollTop < self.current.top) {
-          // Sticky the previous item if we've scrolled up past
-          // the original position of the currently stickied item.
+
+        // If the next item is close to the current one, push the current one up out of the way
+        if (self.current && self.next && self.next.top - scrollTop <= self.next.height) {
+          translate(self.current, scrollTop + (self.next.top - self.next.height - scrollTop));
+          return;
+        }
+      }
+
+      //
+      // SCROLLING UP (not at the top & not scrolling down; must be scrolling up)
+      //
+      if (!isScrollingDown) {
+
+        // If we've scrolled up past the previous item's position, sticky it and return
+        if (self.current && self.prev && scrollTop < self.current.top) {
           setCurrentItem(self.prev);
+          return;
         }
-        // Scrolling up, and just bumping into the item above (just set to current)?
-        // If we have a next item bumping into the current item, translate
-        // the current item up from the top as it scrolls into view.
-        if (self.current && self.next) {
-          if (scrollTop >= self.next.top - self.current.height) {
-            translate(self.current, self.next.top - scrollTop - self.current.height);
-          } else {
-            translate(self.current, null);
-          }
+
+        // If the next item is close to the current one, pull the current one down into view
+        if (self.next && scrollTop >= self.next.top - self.current.height) {
+          translate(self.current, scrollTop + (self.next.top - scrollTop - self.current.height));
+          return;
         }
+      }
+
+      //
+      // Otherwise, just move the current item to the proper place (scrolling up or down)
+      //
+      if (self.current) {
+        translate(self.current, scrollTop);
       }
     }
      
