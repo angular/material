@@ -30,15 +30,6 @@ $subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16) !default;
       margin: 0;
     }
 
-    .md-subheader:after {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      top: 0;
-      right: -$subheader-margin-right;
-      content: '';
-    }
-
     transition: 0.2s ease-out margin;
 
     &.md-sticky-clone {
