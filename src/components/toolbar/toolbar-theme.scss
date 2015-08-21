@@ -1,4 +1,4 @@
-md-toolbar.md-THEME_NAME-theme {
+md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) {
   background-color: '{{primary-color}}';
   color: '{{primary-contrast}}';
 
