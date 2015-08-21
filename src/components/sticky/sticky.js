@@ -246,7 +246,7 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
        item.translateY = amount;
        item.clone.css(
          $mdConstant.CSS.TRANSFORM, 
-         'translate3d(' + item.left + 'px,' + amount + 'px,0)'
+         'translate3d(0,' + amount + 'px,0)'
        );
      }
    }
