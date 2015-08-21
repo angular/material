@@ -316,7 +316,11 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
       tab = elements.tabs[ i ];
       if (tab.offsetLeft + tab.offsetWidth > totalWidth) break;
     }
-    ctrl.offsetLeft = fixOffset(tab.offsetLeft);
+    if(i === elements.tabs.length - 1 && (tab.offsetLeft + tab.offsetWidth > totalWidth) && ctrl.offsetLeft === tab.offsetLeft){
+      ctrl.offsetLeft = fixOffset((tab.offsetLeft + tab.offsetWidth) - viewportWidth);
+    } else {
+      ctrl.offsetLeft = fixOffset(tab.offsetLeft);
+    }
   }
 
   /**
@@ -328,7 +332,11 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
       tab = elements.tabs[ i ];
       if (tab.offsetLeft + tab.offsetWidth >= ctrl.offsetLeft) break;
     }
-    ctrl.offsetLeft = fixOffset(tab.offsetLeft + tab.offsetWidth - elements.canvas.clientWidth);
+    if(tabs.offsetWidth > elements.canvas.clientWidth){
+      ctrl.offsetWidth = fixOffset(tab.offsetLeft);
+    } else {
+      ctrl.offsetWidth = fixOffset(tab.offsetLeft + tab.offsetWidth - elements.canvas.clientWidth);
+    }
   }
 
   /**
