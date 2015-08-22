@@ -7,6 +7,7 @@ angular
     'ngAnimate',
     'material.animate',
     'material.core.gestures',
+    'material.core.layout',
     'material.core.theming'
   ])
   .directive('mdTemplate', MdTemplateDirective)

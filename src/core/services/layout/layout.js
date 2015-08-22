@@ -2,7 +2,46 @@
 
   'use strict';
 
-  angular.module('material.layouts', ['material.core'])
+    /**
+     *
+     *   The original ngMaterial Layout solution used attribute selectors and CSS.
+     *
+     *  ```html
+     *  <div layout="column"> My Content </div>
+     *  ```
+     *
+     *  ```css
+     *  [layout] {
+     *    box-sizing: border-box;
+     *    display:flex;
+     *  }
+     *  [layout=column] {
+     *    flex-direction : column
+     *  }
+     *  ```
+     *
+     *  Use of attribute selectors creates significant performance impacts in some
+     *  browsers... mainly IE.
+     *
+     *  This module registers directives that allow the same layout attributes to be
+     *  interpreted and converted to class selectors. The directive will add equivalent classes to each element that
+     *  contains a Layout directive.
+     *
+     * ```html
+     *   <div layout="column" class="layout layout-column"> My Content </div>
+     *```
+     *
+     *  ```css
+     *  .layout {
+     *    box-sizing: border-box;
+     *    display:flex;
+     *  }
+     *  .layout-column {
+     *    flex-direction : column
+     *  }
+     *  ```
+     */
+    angular.module('material.core.layout', [ ])
 
       // Attribute directives with optional value(s)
 
