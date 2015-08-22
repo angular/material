@@ -1,3 +1,14 @@
+// Responsive attributes
+// ------------------------------
+
+// hide means hide everywhere
+/* Sizes:
+  0    <= size < 600  Phone
+  600  <= size < 960  Tablet
+  960  <= size < 1200 Tablet-Landscape
+  1200 <= size         PC
+*/
+
 .layout {
   box-sizing: border-box;
   display: -webkit-box;
@@ -66,6 +77,14 @@
   margin: 0;
   min-height: 100%;
   width: 100%;
+}
+@-moz-document url-prefix() {
+  .layout-fill {
+    margin: 0;
+    width: 100%;
+    min-height: auto;
+    height: inherit;
+  }
 }
 
 @mixin flex-order-for-name($suffix: null) {
@@ -266,8 +285,8 @@
 
 // SMALL SCREEN
 @media (max-width: $layout-breakpoint-sm - 1) {
-  [hide-sm], [hide] {
-    &:not([show-sm]):not([show]) {
+  .hide-sm, .hide {
+    &:not(.show-sm):not(.show) {
       display: none;
     }
   }
@@ -290,12 +309,12 @@
 
 // MEDIUM SCREEN
 @media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
-  [hide], [hide-gt-sm] {
-    &:not([show-gt-sm]):not([show-md]):not([show]) {
+  .hide, .hide-gt-sm {
+    &:not(.show-gt-sm):not(.show-md):not(.show) {
       display: none;
     }
   }
-  [hide-md]:not([show-md]):not([show]) {
+  .hide-md:not(.show-md):not(.show) {
     display: none;
   }
 
@@ -317,12 +336,12 @@
 
 // LARGE SCREEN
 @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
-  [hide], [hide-gt-sm], [hide-gt-md] {
-    &:not([show-gt-sm]):not([show-gt-md]):not([show-lg]):not([show]) {
+  .hide, .hide-gt-sm, .hide-gt-md {
+    &:not(.show-gt-sm):not(.show-gt-md):not(.show-lg):not(.show) {
       display: none;
     }
   }
-  [hide-lg]:not([show-lg]):not([show]) {
+  .hide-lg:not(.show-lg):not(.show) {
     display: none;
   }
 
@@ -335,8 +354,8 @@
 
 // BIGGER THAN LARGE SCREEN
 @media (min-width: $layout-breakpoint-lg) {
-  [hide-gt-sm], [hide-gt-md], [hide-gt-lg], [hide] {
-    &:not([show-gt-sm]):not([show-gt-md]):not([show-gt-lg]):not([show]) {
+  .hide-gt-sm, .hide-gt-md, .hide-gt-lg, .hide {
+    &:not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show) {
       display: none;
     }
   }
