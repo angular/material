@@ -60,6 +60,7 @@
               md-items="item in $mdContactChipsCtrl.queryContact($mdContactChipsCtrl.searchText)"\
               md-item-text="$mdContactChipsCtrl.itemName(item)"\
               md-no-cache="true"\
+              md-delay="$mdContactChipsCtrl.delay"\
               md-autoselect\
               placeholder="{{$mdContactChipsCtrl.contacts.length == 0 ?\
                   $mdContactChipsCtrl.placeholder : $mdContactChipsCtrl.secondaryPlaceholder}}">\
@@ -111,7 +112,8 @@
         contactImage: '@mdContactImage',
         contactEmail: '@mdContactEmail',
         contacts: '=ngModel',
-        requireMatch: '=?mdRequireMatch'
+        requireMatch: '=?mdRequireMatch',
+        delay: '@mdDelay'
       }
     };
 
