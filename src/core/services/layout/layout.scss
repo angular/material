@@ -1,15 +1,4 @@
-// Responsive attributes
-// ------------------------------
-
-// hide means hide everywhere
-/* Sizes:
-  0    <= size < 600  Phone
-  600  <= size < 960  Tablet
-  960  <= size < 1200 Tablet-Landscape
-  1200 <= size         PC
-*/
-
-[layout] {
+.layout {
   box-sizing: border-box;
   display: -webkit-box;
   display: -webkit-flex;
@@ -19,72 +8,64 @@
   display: flex;
 }
 
-[layout=column] {
+.layout-column {
   flex-direction: column;
   -webkit-flex-direction: column;
 }
 
-[layout=row] {
+.layout-row {
   flex-direction: row;
   -webkit-flex-direction: row;
 }
 
-[layout-padding] > [flex-sm],
-[layout-padding] > [flex-lt-md]
+.layout-padding > .flex-sm,
+.layout-padding > .flex-lt-md
 {
   padding: $layout-gutter-width / 4;
 }
-[layout-padding],
-[layout-padding] > [flex],
-[layout-padding] > [flex-gt-sm],
-[layout-padding] > [flex-md],
-[layout-padding] > [flex-lt-lg]
+.layout-padding,
+.layout-padding > .flex,
+.layout-padding > .flex-gt-sm,
+.layout-padding > .flex-md,
+.layout-padding > .flex-lt-lg
 {
   padding: $layout-gutter-width / 2;
 }
-[layout-padding] > [flex-gt-md],
-[layout-padding] > [flex-lg]
+.layout-padding > .flex-gt-md,
+.layout-padding > .flex-lg
 {
   padding: $layout-gutter-width / 1;
 }
 
 
-[layout-margin] > [flex-sm],
-[layout-margin] > [flex-lt-md]
+.layout-margin > .flex-sm,
+.layout-margin > .flex-lt-md
 {
   margin: $layout-gutter-width / 4;
 }
-[layout-margin],
-[layout-margin] > [flex],
-[layout-margin] > [flex-gt-sm],
-[layout-margin] > [flex-md],
-[layout-margin] > [flex-lt-lg] {
+.layout-margin,
+.layout-margin > .flex,
+.layout-margin > .flex-gt-sm,
+.layout-margin > .flex-md,
+.layout-margin > .flex-lt-lg {
   margin: $layout-gutter-width / 2;
 }
-[layout-margin] > [flex-gt-md],
-[layout-margin] > [flex-lg]
+.layout-margin > .flex-gt-md,
+.layout-margin > .flex-lg
 {
   margin: $layout-gutter-width / 1;
 }
 
 
 
-[layout-wrap] {
+.layout-wrap {
   flex-wrap: wrap;
 }
 
-[layout-fill] {
+.layout-fill {
   margin: 0;
   min-height: 100%;
   width: 100%;
-}
-@-moz-document url-prefix() {
-  [layout-fill] {
-    margin: 0;
-    width: 100%;
-    min-height: auto;
-    height: inherit;
-  }
 }
 
 @mixin flex-order-for-name($suffix: null) {
@@ -92,20 +73,20 @@
   @if $suffix != null {
     $selector: 'flex-order-#{$suffix}';
   }
-  [#{$selector}="0"] { order: 0; }
-  [#{$selector}="1"] { order: 1; }
-  [#{$selector}="2"] { order: 2; }
-  [#{$selector}="3"] { order: 3; }
-  [#{$selector}="4"] { order: 4; }
-  [#{$selector}="5"] { order: 5; }
-  [#{$selector}="6"] { order: 6; }
-  [#{$selector}="7"] { order: 7; }
-  [#{$selector}="8"] { order: 8; }
-  [#{$selector}="9"] { order: 9; }
+  .#{$selector}-0 { order: 0; }
+  .#{$selector}-1 { order: 1; }
+  .#{$selector}-2 { order: 2; }
+  .#{$selector}-3 { order: 3; }
+  .#{$selector}-4 { order: 4; }
+  .#{$selector}-5 { order: 5; }
+  .#{$selector}-6 { order: 6; }
+  .#{$selector}-7 { order: 7; }
+  .#{$selector}-8 { order: 8; }
+  .#{$selector}-9 { order: 9; }
 }
 
 @mixin layout-for-name($name) {
-  [layout-#{$name}] {
+  .layout-#{$name} {
     box-sizing: border-box;
     display: -webkit-box;
     display: -webkit-flex;
@@ -114,10 +95,10 @@
     display: -ms-flexbox;
     display: flex;
   }
-  [layout-#{$name}=column] {
+  .layout-#{$name}-column {
     flex-direction: column;
   }
-  [layout-#{$name}=row] {
+  .layout-#{$name}-row {
     flex-direction: row;
   }
 }
@@ -128,14 +109,14 @@
     $offsetName: 'offset-#{$name}';
   }
   @for $i from 1 through 19 {
-    [#{$offsetName}="#{$i * 5}"] {
+    .#{$offsetName}-#{$i * 5} {
       margin-left: #{$i * 5 + '%'};
     }
   }
-  [#{$offsetName}="33"], [#{$offsetName}="34"] {
+  .#{$offsetName}-33, .#{$offsetName}-34 {
     margin-left: 33.33%;
   }
-  [#{$offsetName}="66"], [#{$offsetName}="67"] {
+  .#{$offsetName}-66, .#{$offsetName}-67 {
     margin-left: 66.66%;
   }
 }
@@ -146,7 +127,7 @@
     $flexName: 'flex-#{$name}';
   }
 
-  [#{$flexName}] {
+  .#{$flexName} {
     box-sizing: border-box;
     flex: 1;
   }
@@ -154,37 +135,37 @@
 
   // (0-20) * 5 = 0-100%
   @for $i from 0 through 20 {
-    [#{$flexName}="#{$i * 5}"] {
+    .#{$flexName}-#{$i * 5} {
       flex: 0 0 #{$i * 5 + '%'};
     }
-    [layout="row"] > [#{$flexName}="#{$i * 5}"] {
+    .layout-row > .#{$flexName}-#{$i * 5} {
       max-width: #{$i * 5 + '%'};
     }
-    [layout="column"] > [#{$flexName}="#{$i * 5}"] {
+    .layout-column > .#{$flexName}-#{$i * 5} {
       max-height: #{$i * 5 + '%'};
     }
   }
 
-  [#{$flexName}="33"], [#{$flexName}="34"] {
+  .#{$flexName}-33, .#{$flexName}-34 {
     flex: 0 0 33.33%;
   }
-  [#{$flexName}="66"], [#{$flexName}="67"] {
+  .#{$flexName}-66, .#{$flexName}-67 {
     flex: 0 0 66.66%;
   }
 
-  [layout="row"] {
-    > [#{$flexName}="33"], > [#{$flexName}="34"] {
+  .layout-row {
+    > .#{$flexName}-33, > .#{$flexName}-34 {
       max-width: 33.33%;
     }
-    > [#{$flexName}="66"], > [#{$flexName}="67"] {
+    > .#{$flexName}-66, > .#{$flexName}-67 {
       max-width: 66.66%;
     }
   }
-  [layout="column"] {
-    > [#{$flexName}="33"], > [#{$flexName}="34"] {
+  .layout-column {
+    > .#{$flexName}-33, > .#{$flexName}-34 {
       max-height: 33.33%;
     }
-    > [#{$flexName}="66"], > [#{$flexName}="67"] {
+    > .#{$flexName}-66, > .#{$flexName}-67 {
       max-height: 66.66%;
     }
   }
@@ -203,34 +184,34 @@
   }
 
   // Main Axis Center
-  [#{$name}="center"], //stretch
-  [#{$name}="center center"],
-  [#{$name}="center start"],
-  [#{$name}="center end"] {
+  .#{$name}-center, //stretch
+  .#{$name}-center-center,
+  .#{$name}-center-start,
+  .#{$name}-center-end {
     justify-content: center;
   }
 
   // Main Axis End
-  [#{$name}="end"], //stretch
-  [#{$name}="end center"],
-  [#{$name}="end start"],
-  [#{$name}="end end"] {
+  .#{$name}-end, //stretch
+  .#{$name}-end-center,
+  .#{$name}-end-start,
+  .#{$name}-end-end {
     justify-content: flex-end;
   }
 
   // Main Axis Space Around
-  [#{$name}="space-around"], //stretch
-  [#{$name}="space-around center"],
-  [#{$name}="space-around start"],
-  [#{$name}="space-around end"] {
+  .#{$name}-space-around, //stretch
+  .#{$name}-space-around-center,
+  .#{$name}-space-around-start,
+  .#{$name}-space-around-end {
     justify-content: space-around;
   }
 
   // Main Axis Space Between
-  [#{$name}="space-between"], //stretch
-  [#{$name}="space-between center"],
-  [#{$name}="space-between start"],
-  [#{$name}="space-between end"] {
+  .#{$name}-space-between, //stretch
+  .#{$name}-space-between-center,
+  .#{$name}-space-between-start,
+  .#{$name}-space-between-end {
     justify-content: space-between;
   }
 
@@ -241,29 +222,29 @@
   // ------------------------------
 
   // Cross Axis Center
-  [#{$name}="center center"],
-  [#{$name}="start center"],
-  [#{$name}="end center"],
-  [#{$name}="space-between center"],
-  [#{$name}="space-around center"] {
+  .#{$name}-center-center,
+  .#{$name}-start-center,
+  .#{$name}-end-center,
+  .#{$name}-space-between-center,
+  .#{$name}-space-around-center {
     align-items: center;
   }
 
   // Cross Axis Start
-  [#{$name}="center start"],
-  [#{$name}="start start"],
-  [#{$name}="end start"],
-  [#{$name}="space-between start"],
-  [#{$name}="space-around start"] {
+  .#{$name}-center-start,
+  .#{$name}-start-start,
+  .#{$name}-end-start,
+  .#{$name}-space-between-start,
+  .#{$name}-space-around-start {
     align-items: flex-start;
   }
 
   // Cross Axis End
-  [#{$name}="center end"],
-  [#{$name}="start end"],
-  [#{$name}="end end"],
-  [#{$name}="space-between end"],
-  [#{$name}="space-around end"] {
+  .#{$name}-center-end,
+  .#{$name}-start-end,
+  .#{$name}-end-end,
+  .#{$name}-space-between-end,
+  .#{$name}-space-around-end {
     align-items: flex-end;
   }
 
