@@ -182,7 +182,6 @@ function MenuDirective($mdMenu, $mdUtil, $timeout) {
 
   function link(scope, element, attrs, ctrls) {
     var mdMenuCtrl = ctrls[0];
-    debugger;
     var isInMenuBar = ctrls[1] != undefined;
     // Move everything into a md-menu-container and pass it to the controller
     var menuContainer = angular.element(
