@@ -22,7 +22,9 @@
       isSameDay: isSameDay,
       getMonthDistance: getMonthDistance,
       isValidDate: isValidDate,
-      createDateAtMidnight: createDateAtMidnight
+      setDateTimeToMidnight: setDateTimeToMidnight,
+      createDateAtMidnight: createDateAtMidnight,
+      isDateWithinRange: isDateWithinRange
     };
 
     /**
@@ -189,6 +191,14 @@
     }
 
     /**
+     * Sets a date's time to midnight.
+     * @param {Date} date
+     */
+    function setDateTimeToMidnight(date) {
+      date.setHours(0, 0, 0, 0);
+    }
+
+    /**
      * Creates a date with the time set to midnight.
      * Drop-in replacement for two forms of the Date constructor:
      * 1. No argument for Date representing now.
@@ -203,8 +213,20 @@
       } else {
         date = new Date(opt_value);
       }
-      date.setHours(0, 0, 0, 0);
+      setDateTimeToMidnight(date);
       return date;
     }
+
+     /**
+      * Checks if a date is within a min and max range.
+      * If minDate or maxDate are not dates, they are ignored.
+      * @param {Date} date
+      * @param {Date} minDate
+      * @param {Date} maxDate
+      */
+     function isDateWithinRange(date, minDate, maxDate) {
+       return (!angular.isDate(minDate) || minDate <= date) &&
+           (!angular.isDate(maxDate) || maxDate >= date);
+     }
   });
 })();
