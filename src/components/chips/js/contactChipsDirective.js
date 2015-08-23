@@ -111,6 +111,7 @@
         contactImage: '@mdContactImage',
         contactEmail: '@mdContactEmail',
         contacts: '=ngModel',
+        filterSelected: '=?filterSelected',
         requireMatch: '=?mdRequireMatch'
       }
     };
