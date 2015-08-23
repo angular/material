@@ -5,7 +5,6 @@ describe('layout directives', function() {
   describe('expecting layout classes', function() {
 
     var suffixes = ['sm', 'gt-sm', 'md', 'gt-md', 'lg', 'gt-lg'];
-
     var directionValues = ['row', 'column'];
     var flexOrderValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     var flexValues = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 33, 34, 66, 67];
@@ -19,19 +18,18 @@ describe('layout directives', function() {
           'center start', 'start start', 'end start', 'space-between start', 'space-around start',
           'center end', 'start end', 'end end', 'space-between end', 'space-around end'
         ];
-
     var mappings = [
-            { attribute: 'layout', suffixes: suffixes, values: directionValues, addDirectiveAsClass: true, testStandAlone: true },
-            { attribute: 'layout-align', suffixes: suffixes, values: alignmentValues },
+            { attribute: 'flex',           suffixes: suffixes, values: flexValues, addDirectiveAsClass: true, testStandAlone: true},
+            { attribute: 'flex-order',     suffixes: suffixes, values: flexOrderValues },
+            { attribute: 'offset',         suffixes: suffixes, values: offsetValues },
+            { attribute: 'hide',           suffixes: suffixes, testStandAlone: true },
+            { attribute: 'show',           suffixes: suffixes, testStandAlone: true },
+            { attribute: 'layout',         suffixes: suffixes, values: directionValues, addDirectiveAsClass: true, testStandAlone: true },
+            { attribute: 'layout-align',   suffixes: suffixes, values: alignmentValues },
             { attribute: 'layout-padding', testStandAlone: true },
-            { attribute: 'layout-margin', testStandAlone: true },
-            { attribute: 'layout-wrap', testStandAlone: true },
-            { attribute: 'layout-fill', testStandAlone: true },
-            { attribute: 'flex', suffixes: suffixes, values: flexValues, addDirectiveAsClass: true, testStandAlone: true},
-            { attribute: 'flex-order', suffixes: suffixes, values: flexOrderValues },
-            { attribute: 'offset', suffixes: suffixes, values: offsetValues },
-            { attribute: 'hide', suffixes: suffixes, testStandAlone: true },
-            { attribute: 'show', suffixes: suffixes, testStandAlone: true }
+            { attribute: 'layout-margin',  testStandAlone: true },
+            { attribute: 'layout-wrap',    testStandAlone: true },
+            { attribute: 'layout-fill',    testStandAlone: true }
         ];
 
     // Run all the tests; iterating the mappings...
@@ -39,15 +37,18 @@ describe('layout directives', function() {
     for (var i = 0; i < mappings.length; i++) {
       var map = mappings[i];
 
-      if (map.testStandAlone) testMapping(map.attribute, map.attribute);
-      if (map.suffixes)       testWithSuffix(map.attribute, map.suffixes, map.values, map.testStandAlone, map.addDirectiveAsClass);
+      if (map.testStandAlone) testSimpleDirective(map.attribute);
       if (map.values)         testWithSuffixAndValue(map.attribute, map.values, undefined, map.addDirectiveAsClass);
+      if (map.suffixes)       testWithSuffix(map.attribute, map.suffixes, map.values, map.testStandAlone, map.addDirectiveAsClass);
     }
 
     /**
-     *
+     * Test a simple layout directive to validate that the layout class is added.
      */
-    function testMapping(attribute, expectedClass) {
+    function testSimpleDirective(attribute, expectedClass) {
+      // default fallback is attribute as class...
+      expectedClass = expectedClass || attribute;
+
       it('should fail if the class ' + expectedClass + ' was not added for attribute ' + attribute, inject(function($compile, $rootScope) {
         var element = $compile('<div ' + attribute + '>Layout</div>')($rootScope);
         expect(element.hasClass(expectedClass)).toBe(true);
@@ -55,7 +56,7 @@ describe('layout directives', function() {
     }
 
     /**
-     *
+     * Test directives with 'sm', 'gt-sm', 'md', 'gt-md', 'lg', and 'gt-lg' suffixes
      */
     function testWithSuffixAndValue(attribute, values, suffix, addDirectiveAsClass) {
 
@@ -67,7 +68,7 @@ describe('layout directives', function() {
         var expectedClass = buildExpectedClass(attr, value);
 
         // Run each test.
-        testMapping(attrWithValue, expectedClass);
+        testSimpleDirective(attrWithValue, expectedClass);
       }
 
       /**
@@ -102,14 +103,15 @@ describe('layout directives', function() {
     }
 
     /**
-     *
+     * Test directive as simple with media suffix and with associated values.
+     * e.g.  layout-gt-md="row"
      */
     function testWithSuffix(attribute, suffixes, values, testStandAlone, addDirectiveAsClass) {
       for (var j = 0; j < suffixes.length; j++) {
         var suffix = suffixes[j];
         var attr = attribute + '-' + suffix;
 
-        if (testStandAlone) testMapping(attr, attr);
+        if (testStandAlone) testSimpleDirective(attr);
         if (values) testWithSuffixAndValue(attribute, values, suffix, addDirectiveAsClass);
       }
     }
