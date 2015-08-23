@@ -12,7 +12,6 @@ $md-calendar-width: (7 * $md-calendar-cell-size) + (2 * $md-calendar-side-paddin
 $md-calendar-height:
     ($md-calendar-weeks-to-show * $md-calendar-cell-size) + $md-calendar-header-height;
 
-
 // Styles for date cells, including day-of-the-week header cells.
 @mixin md-calendar-cell() {
   height: $md-calendar-cell-size;
@@ -88,6 +87,10 @@ md-calendar {
 // A single date cell in the calendar table.
 .md-calendar-date {
   @include md-calendar-cell();
+
+  &.md-calendar-date-disabled {
+    cursor: default;
+  }
 }
 
 // Circle element inside of every date cell used to indicate selection or focus.
@@ -97,11 +100,13 @@ md-calendar {
   border-radius: 50%;
   display: inline-block;
 
-  cursor: pointer;
-
   width: $md-calendar-cell-emphasis-size;
   height: $md-calendar-cell-emphasis-size;
   line-height: $md-calendar-cell-emphasis-size;
+
+  .md-calendar-date:not(.md-disabled) & {
+    cursor: pointer;
+  }
 }
 
 // The label above each month (containing the month name and the year, e.g. "Jun 2014").

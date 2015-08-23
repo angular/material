@@ -74,8 +74,7 @@
   /** Generate and append the content for this month to the directive element. */
   CalendarMonthCtrl.prototype.generateContent = function() {
     var calendarCtrl = this.calendarCtrl;
-    var offset = (-calendarCtrl.items.length / 2) + this.offset;
-    var date = this.dateUtil.incrementMonths(calendarCtrl.today, offset);
+    var date = this.dateUtil.incrementMonths(calendarCtrl.firstRenderableDate, this.offset);
 
     this.$element.empty();
     this.$element.append(this.buildCalendarForMonth(date));
@@ -104,16 +103,9 @@
     cell.setAttribute('role', 'gridcell');
 
     if (opt_date) {
-      // Add a indicator for select, hover, and focus states.
-      var selectionIndicator = document.createElement('span');
-      cell.appendChild(selectionIndicator);
-      selectionIndicator.classList.add('md-calendar-date-selection-indicator');
-      selectionIndicator.textContent = this.dateLocale.dates[opt_date.getDate()];
-
       cell.setAttribute('tabindex', '-1');
       cell.setAttribute('aria-label', this.dateLocale.longDateFormatter(opt_date));
       cell.id = calendarCtrl.getDateId(opt_date);
-      cell.addEventListener('click', calendarCtrl.cellClickHandler);
 
       // Use `data-timestamp` attribute because IE10 does not support the `dataset` property.
       cell.setAttribute('data-timestamp', opt_date.getTime());
@@ -130,8 +122,24 @@
         cell.setAttribute('aria-selected', 'true');
       }
 
-      if (calendarCtrl.focusDate && this.dateUtil.isSameDay(opt_date, calendarCtrl.focusDate)) {
-        this.focusAfterAppend = cell;
+      var cellText = this.dateLocale.dates[opt_date.getDate()];
+
+      if (this.dateUtil.isDateWithinRange(opt_date,
+          this.calendarCtrl.minDate, this.calendarCtrl.maxDate)) {
+        // Add a indicator for select, hover, and focus states.
+        var selectionIndicator = document.createElement('span');
+        cell.appendChild(selectionIndicator);
+        selectionIndicator.classList.add('md-calendar-date-selection-indicator');
+        selectionIndicator.textContent = cellText;
+
+        cell.addEventListener('click', calendarCtrl.cellClickHandler);
+
+        if (calendarCtrl.focusDate && this.dateUtil.isSameDay(opt_date, calendarCtrl.focusDate)) {
+          this.focusAfterAppend = cell;
+        }
+      } else {
+        cell.classList.add('md-calendar-date-disabled');
+        cell.textContent = cellText;
       }
     }
 
@@ -174,25 +182,37 @@
     var row = this.buildDateRow(rowNumber);
     monthBody.appendChild(row);
 
+    // If this is the final month in the list of items, only the first week should render,
+    // so we should return immediately after the first row is complete and has been
+    // attached to the body.
+    var isFinalMonth = this.offset === this.calendarCtrl.items.length - 1;
+
     // Add a label for the month. If the month starts on a Sun/Mon/Tues, the month label
     // goes on a row above the first of the month. Otherwise, the month label takes up the first
     // two cells of the first row.
     var blankCellOffset = 0;
     var monthLabelCell = document.createElement('td');
     monthLabelCell.classList.add('md-calendar-month-label');
+    // If the entire month is after the max date, render the label as a disabled state.
+    if (this.calendarCtrl.maxDate && firstDayOfMonth > this.calendarCtrl.maxDate) {
+      monthLabelCell.classList.add('md-calendar-month-label-disabled');
+    }
+    monthLabelCell.textContent = this.dateLocale.monthHeaderFormatter(date);
     if (firstDayOfTheWeek <= 2) {
       monthLabelCell.setAttribute('colspan', '7');
 
       var monthLabelRow = this.buildDateRow();
       monthLabelRow.appendChild(monthLabelCell);
       monthBody.insertBefore(monthLabelRow, row);
+
+      if (isFinalMonth) {
+        return monthBody;
+      }
     } else {
       blankCellOffset = 2;
       monthLabelCell.setAttribute('colspan', '2');
       row.appendChild(monthLabelCell);
     }
-
-    monthLabelCell.textContent = this.dateLocale.monthHeaderFormatter(date);
 
     // Add a blank cell for each day of the week that occurs before the first of the month.
     // For example, if the first day of the month is a Tuesday, add blank cells for Sun and Mon.
@@ -208,6 +228,10 @@
     for (var d = 1; d <= numberOfDaysInMonth; d++) {
       // If we've reached the end of the week, start a new row.
       if (dayOfWeek === 7) {
+        // We've finished the first row, so we're done if this is the final month.
+        if (isFinalMonth) {
+          return monthBody;
+        }
         dayOfWeek = 0;
         rowNumber++;
         row = this.buildDateRow(rowNumber);
