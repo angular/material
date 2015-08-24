@@ -6,8 +6,8 @@ angular
   .module('material.core', [
     'ngAnimate',
     'material.animate',
+    'material.layout',
     'material.core.gestures',
-    'material.core.layout',
     'material.core.theming'
   ])
   .directive('mdTemplate', MdTemplateDirective)

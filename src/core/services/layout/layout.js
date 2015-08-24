@@ -41,7 +41,7 @@
      *  }
      *  ```
      */
-    angular.module('material.core.layout', [ ])
+    angular.module('material.layout', [ ])
 
       // Attribute directives with optional value(s)
 

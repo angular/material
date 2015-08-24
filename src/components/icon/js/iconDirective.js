@@ -1,9 +1,3 @@
-/**
- * @ngdoc directive
- * @name material.components.icon
- * @description
- * Icon
- */
 angular
   .module('material.components.icon')
   .directive('mdIcon', ['$mdIcon', '$mdTheming', '$mdAria', mdIconDirective]);
