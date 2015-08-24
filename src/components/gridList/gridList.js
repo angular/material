@@ -179,6 +179,7 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia) {
       var performance =
         $mdGridLayout(props.colCount, props.tileSpans, tiles)
           .map(function(tilePositions, rowCount) {
+            props.rowCount = rowCount;
             return {
               grid: {
                 element: element,
