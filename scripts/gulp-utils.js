@@ -169,7 +169,7 @@ exports.buildNgMaterialDefinition = function() {
   var modulesSeen = [];
   return through2.obj(function(file, enc, next) {
     var moduleName;
-    if (moduleName = getModuleInfo(file.contents).module) {
+    if (moduleName = getModuleInfo(file.contents, true).module) {
       modulesSeen.push(moduleName);
     }
     buffer.push(file);
