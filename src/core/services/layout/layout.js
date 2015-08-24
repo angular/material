@@ -110,38 +110,73 @@
       .directive('showGtLg'            , attribute_noValue('show-gt-lg')            );
 
     /**
-     * Creates a registration function with Directive postLink function
-     * for ngMaterial Layout attribute directive
+     * Creates a registration function with for ngMaterial Layout attribute directive
      *
      * Note: This provides easy translation to switch ngMaterial
      * attribute selectors to CLASS selectors and directives.
      *
      * !! This is important for IE Browser performance
      *
-     * @param classname String like flex-gt-md
+     * @param classname String attribute name; eg `layout-gt-md` with value ="row"
      * @param addDirectiveAsClass Boolean
      */
     function attribute_withValue(className, addDirectiveAsClass) {
         return [function() {
             return {
-                link: function(link, element, attrs) {
-                    var directive = attrs.$normalize(className);
-                    if (addDirectiveAsClass)  element.addClass(className);
-                    if (attrs[directive])
-                        element.addClass(className + "-" + attrs[directive].replace(/\s+/g, "-"));
+                compile : function (element, attr) {
+                  attributeValueToClass(null, element, attr);
+
+                  // !! use for postLink to account for transforms after ng-transclude
+                  return attributeValueToClass;
                 }
             };
         }];
+
+        /**
+         * Add as transformed class selector(s), then
+         * remove the deprecated attribute selector
+         */
+        function attributeValueToClass(scope, element, attr) {
+          var directive = attr.$normalize(className);
+
+          // Add transformed class selector(s)
+          if (addDirectiveAsClass)  element.addClass(className);
+          if (attr[directive])
+              element.addClass(className + "-" + attr[directive].replace(/\s+/g, "-"));
+
+          try {
+            element.removeAttr(className);
+          } catch(e) { }
+        }
     }
 
+    /**
+     * Creates a registration function with for ngMaterial Layout attribute directive
+     *
+     * Simple transpose of attribute usage to class usage
+     */
     function attribute_noValue(className) {
         return [function() {
             return {
-                link: function(link, element, attrs) {
-                    element.addClass(className);
+              compile : function (element, attr) {
+                  attributeToClass(null, element);
+
+                  // !! use for postLink to account for transforms after ng-transclude
+                  return attributeToClass;
                 }
             };
         }];
+
+      /**
+       * Add as transformed class selector, then
+       * remove the deprecated attribute selector
+       */
+      function attributeToClass(scope, element) {
+        element.addClass(className);
+        try {
+          element.removeAttr(className);
+        } catch(e) { }
+      }
     }
 
 })();
