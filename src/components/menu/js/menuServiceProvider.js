@@ -1,4 +1,5 @@
-angular.module('material.components.menu')
+angular
+  .module('material.components.menu')
   .provider('$mdMenu', MenuProvider);
 
 /*
