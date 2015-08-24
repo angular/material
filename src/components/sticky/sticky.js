@@ -10,7 +10,7 @@ angular.module('material.components.sticky', [
   'material.core',
   'material.components.content'
 ])
-  .factory('$mdSticky', MdSticky);
+    .factory('$mdSticky', MdSticky);
 
 /*
  * @ngdoc service
@@ -28,16 +28,16 @@ angular.module('material.components.sticky', [
  *     If not provided, it will use the result of `element.clone()`.
  */
 
-function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
+function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil, $featureSupport) {
 
-  var browserStickySupport = checkStickySupport();
+  var browserStickySupport = $featureSupport.sticky();
 
   /**
    * Registers an element as sticky, used internally by directives to register themselves
    */
   return function registerStickyElement(scope, element, stickyClone) {
     var contentCtrl = element.controller('mdContent');
-    if (!contentCtrl) return;
+    if (!contentCtrl) throw('$mdSticky used outside of md-content');
 
     if (browserStickySupport) {
       element.css({
@@ -119,7 +119,7 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
         return a.top < b.top ? -1 : 1;
       });
 
-      // Find which item in the list should be active, 
+      // Find which item in the list should be active,
       // based upon the content's current scroll position
       var item;
       var currentScrollTop = contentEl.prop('scrollTop');
@@ -140,7 +140,7 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
     // Find the `top` of an item relative to the content element,
     // and also the height.
     function refreshPosition(item) {
-      // Find the top of an item by adding to the offsetHeight until we reach the 
+      // Find the top of an item by adding to the offsetHeight until we reach the
       // content element.
       var current = item.element[0];
       item.top = 0;
@@ -181,7 +181,7 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
             translate(self.current, null);
           }
         }
-        
+
       // Scrolling up with a current sticky item?
       } else if (!isScrollingDown && self.current) {
         if (scrollTop < self.current.top) {
@@ -201,7 +201,7 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
         }
       }
     }
-     
+
    function setCurrentItem(item) {
      if (self.current === item) return;
      // Deactivate currently active item
@@ -245,34 +245,17 @@ function MdSticky($document, $mdConstant, $compile, $$rAF, $mdUtil) {
      } else {
        item.translateY = amount;
        item.clone.css(
-         $mdConstant.CSS.TRANSFORM, 
+         $mdConstant.CSS.TRANSFORM,
          'translate3d(' + item.left + 'px,' + amount + 'px,0)'
        );
      }
    }
   }
 
-  // Function to check for browser sticky support
-  function checkStickySupport($el) {
-    var stickyProp;
-    var testEl = angular.element('<div>');
-    $document[0].body.appendChild(testEl[0]);
-
-    var stickyProps = ['sticky', '-webkit-sticky'];
-    for (var i = 0; i < stickyProps.length; ++i) {
-      testEl.css({position: stickyProps[i], top: 0, 'z-index': 2});
-      if (testEl.css('position') == stickyProps[i]) {
-        stickyProp = stickyProps[i];
-        break;
-      }
-    }
-    testEl.remove();
-    return stickyProp;
-  }
 
   // Android 4.4 don't accurately give scroll events.
   // To fix this problem, we setup a fake scroll event. We say:
-  // > If a scroll or touchmove event has happened in the last DELAY milliseconds, 
+  // > If a scroll or touchmove event has happened in the last DELAY milliseconds,
   //   then send a `$scroll` event every animationFrame.
   // Additionally, we add $scrollstart and $scrollend events.
   function setupAugmentedScrollEvents(element) {
