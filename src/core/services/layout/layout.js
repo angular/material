@@ -45,69 +45,69 @@
 
       // Attribute directives with optional value(s)
 
-      .directive('layout'              , attribute_withValue('layout'      , true)  )
-      .directive('layoutSm'            , attribute_withValue('layout-sm'   , true)  )
-      .directive('layoutGtSm'          , attribute_withValue('layout-gt-sm', true)  )
-      .directive('layoutMd'            , attribute_withValue('layout-md'   , true)  )
-      .directive('layoutGtMd'          , attribute_withValue('layout-gt-md', true)  )
-      .directive('layoutLg'            , attribute_withValue('layout-lg'   , true)  )
-      .directive('layoutGtLg'          , attribute_withValue('layout-gt-lg', true)  )
+      .directive('layout'              , attributeWithValue('layout'      , true)  )
+      .directive('layoutSm'            , attributeWithValue('layout-sm'   , true)  )
+      .directive('layoutGtSm'          , attributeWithValue('layout-gt-sm', true)  )
+      .directive('layoutMd'            , attributeWithValue('layout-md'   , true)  )
+      .directive('layoutGtMd'          , attributeWithValue('layout-gt-md', true)  )
+      .directive('layoutLg'            , attributeWithValue('layout-lg'   , true)  )
+      .directive('layoutGtLg'          , attributeWithValue('layout-gt-lg', true)  )
 
-      .directive('flex'                , attribute_withValue('flex'        , true)  )
-      .directive('flexSm'              , attribute_withValue('flex-sm'     , true)  )
-      .directive('flexGtSm'            , attribute_withValue('flex-gt-sm'  , true)  )
-      .directive('flexMd'              , attribute_withValue('flex-md'     , true)  )
-      .directive('flexGtMd'            , attribute_withValue('flex-gt-md'  , true)  )
-      .directive('flexLg'              , attribute_withValue('flex-lg'     , true)  )
-      .directive('flexGtLg'            , attribute_withValue('flex-gt-lg'  , true)  )
+      .directive('flex'                , attributeWithValue('flex'        , true)  )
+      .directive('flexSm'              , attributeWithValue('flex-sm'     , true)  )
+      .directive('flexGtSm'            , attributeWithValue('flex-gt-sm'  , true)  )
+      .directive('flexMd'              , attributeWithValue('flex-md'     , true)  )
+      .directive('flexGtMd'            , attributeWithValue('flex-gt-md'  , true)  )
+      .directive('flexLg'              , attributeWithValue('flex-lg'     , true)  )
+      .directive('flexGtLg'            , attributeWithValue('flex-gt-lg'  , true)  )
 
       // Attribute directives with optional value(s) but directiveName is NOT added as a class
 
-      .directive('layoutAlign'         , attribute_withValue('layout-align')        )
-      .directive('layoutAlignSm'       , attribute_withValue('layout-align-sm')     )
-      .directive('layoutAlignGtSm'     , attribute_withValue('layout-align-gt-sm')  )
-      .directive('layoutAlignMd'       , attribute_withValue('layout-align-md')     )
-      .directive('layoutAlignGtMd'     , attribute_withValue('layout-align-gt-md')  )
-      .directive('layoutAlignLg'       , attribute_withValue('layout-align-lg')     )
-      .directive('layoutAlignGtLg'     , attribute_withValue('layout-align-gt-lg')  )
+      .directive('layoutAlign'         , attributeWithValue('layout-align')        )
+      .directive('layoutAlignSm'       , attributeWithValue('layout-align-sm')     )
+      .directive('layoutAlignGtSm'     , attributeWithValue('layout-align-gt-sm')  )
+      .directive('layoutAlignMd'       , attributeWithValue('layout-align-md')     )
+      .directive('layoutAlignGtMd'     , attributeWithValue('layout-align-gt-md')  )
+      .directive('layoutAlignLg'       , attributeWithValue('layout-align-lg')     )
+      .directive('layoutAlignGtLg'     , attributeWithValue('layout-align-gt-lg')  )
 
-      .directive('flexOrder'           , attribute_withValue('flex-order')          )
-      .directive('flexOrderSm'         , attribute_withValue('flex-order-sm')       )
-      .directive('flexOrderGtSm'       , attribute_withValue('flex-order-gt-sm')    )
-      .directive('flexOrderMd'         , attribute_withValue('flex-order-md')       )
-      .directive('flexOrderGtMd'       , attribute_withValue('flex-order-gt-md')    )
-      .directive('flexOrderLg'         , attribute_withValue('flex-order-lg')       )
-      .directive('flexOrderGtLg'       , attribute_withValue('flex-order-gt-lg')    )
+      .directive('flexOrder'           , attributeWithValue('flex-order')          )
+      .directive('flexOrderSm'         , attributeWithValue('flex-order-sm')       )
+      .directive('flexOrderGtSm'       , attributeWithValue('flex-order-gt-sm')    )
+      .directive('flexOrderMd'         , attributeWithValue('flex-order-md')       )
+      .directive('flexOrderGtMd'       , attributeWithValue('flex-order-gt-md')    )
+      .directive('flexOrderLg'         , attributeWithValue('flex-order-lg')       )
+      .directive('flexOrderGtLg'       , attributeWithValue('flex-order-gt-lg')    )
 
-      .directive('offset'              , attribute_withValue('offset')              )
-      .directive('offsetSm'            , attribute_withValue('offset-sm')           )
-      .directive('offsetGtSm'          , attribute_withValue('offset-gt-sm')        )
-      .directive('offsetMd'            , attribute_withValue('offset-md')           )
-      .directive('offsetGtMd'          , attribute_withValue('offset-gt-md')        )
-      .directive('offsetLg'            , attribute_withValue('offset-lg')           )
-      .directive('offsetGtLg'          , attribute_withValue('offset-gt-lg')        )
+      .directive('offset'              , attributeWithValue('offset')              )
+      .directive('offsetSm'            , attributeWithValue('offset-sm')           )
+      .directive('offsetGtSm'          , attributeWithValue('offset-gt-sm')        )
+      .directive('offsetMd'            , attributeWithValue('offset-md')           )
+      .directive('offsetGtMd'          , attributeWithValue('offset-gt-md')        )
+      .directive('offsetLg'            , attributeWithValue('offset-lg')           )
+      .directive('offsetGtLg'          , attributeWithValue('offset-gt-lg')        )
 
-      // Attribute directives with no value(s )
+      // Attribute directives with no value(s)
 
-      .directive('layoutMargin'        , attribute_noValue('layout-margin')         )
-      .directive('layoutPadding'       , attribute_noValue('layout-padding')        )
-      .directive('layoutWrap'          , attribute_noValue('layout-wrap')           )
-      .directive('layoutFill'          , attribute_noValue('layout-fill')           )
+      .directive('layoutMargin'        , attributeWithoutValue('layout-margin')         )
+      .directive('layoutPadding'       , attributeWithoutValue('layout-padding')        )
+      .directive('layoutWrap'          , attributeWithoutValue('layout-wrap')           )
+      .directive('layoutFill'          , attributeWithoutValue('layout-fill')           )
 
-      .directive('hide'                , attribute_noValue('hide')                  )
-      .directive('hideSm'              , attribute_noValue('hide-sm')               )
-      .directive('hideGtSm'            , attribute_noValue('hide-gt-sm')            )
-      .directive('hideMd'              , attribute_noValue('hide-md')               )
-      .directive('hideGtMd'            , attribute_noValue('hide-gt-md')            )
-      .directive('hideLg'              , attribute_noValue('hide-lg')               )
-      .directive('hideGtLg'            , attribute_noValue('hide-gt-lg')            )
-      .directive('show'                , attribute_noValue('show')                  )
-      .directive('showSm'              , attribute_noValue('show-sm')               )
-      .directive('showGtSm'            , attribute_noValue('show-gt-sm')            )
-      .directive('showMd'              , attribute_noValue('show-md')               )
-      .directive('showGtMd'            , attribute_noValue('show-gt-md')            )
-      .directive('showLg'              , attribute_noValue('show-lg')               )
-      .directive('showGtLg'            , attribute_noValue('show-gt-lg')            );
+      .directive('hide'                , attributeWithoutValue('hide')                  )
+      .directive('hideSm'              , attributeWithoutValue('hide-sm')               )
+      .directive('hideGtSm'            , attributeWithoutValue('hide-gt-sm')            )
+      .directive('hideMd'              , attributeWithoutValue('hide-md')               )
+      .directive('hideGtMd'            , attributeWithoutValue('hide-gt-md')            )
+      .directive('hideLg'              , attributeWithoutValue('hide-lg')               )
+      .directive('hideGtLg'            , attributeWithoutValue('hide-gt-lg')            )
+      .directive('show'                , attributeWithoutValue('show')                  )
+      .directive('showSm'              , attributeWithoutValue('show-sm')               )
+      .directive('showGtSm'            , attributeWithoutValue('show-gt-sm')            )
+      .directive('showMd'              , attributeWithoutValue('show-md')               )
+      .directive('showGtMd'            , attributeWithoutValue('show-gt-md')            )
+      .directive('showLg'              , attributeWithoutValue('show-lg')               )
+      .directive('showGtLg'            , attributeWithoutValue('show-gt-lg')            );
 
     /**
      * Creates a registration function with for ngMaterial Layout attribute directive
@@ -115,39 +115,41 @@
      * Note: This provides easy translation to switch ngMaterial
      * attribute selectors to CLASS selectors and directives.
      *
-     * !! This is important for IE Browser performance
+     * *This is important for IE Browser performance*
      *
-     * @param classname String attribute name; eg `layout-gt-md` with value ="row"
-     * @param addDirectiveAsClass Boolean
+     * @param {string} className attribute name; eg `layout-gt-md` with value ="row"
+     * @param {boolean=} addDirectiveAsClass
      */
-    function attribute_withValue(className, addDirectiveAsClass) {
-        return [function() {
-            return {
-                compile : function (element, attr) {
-                  attributeValueToClass(null, element, attr);
+    function attributeWithValue(className, addDirectiveAsClass) {
+      return function() {
+        return {
+            compile: function(element, attr) {
+              attributeValueToClass(null, element, attr);
 
-                  // !! use for postLink to account for transforms after ng-transclude
-                  return attributeValueToClass;
-                }
-            };
-        }];
+              // Use for postLink to account for transforms after ng-transclude.
+              return attributeValueToClass;
+            }
+        };
+      };
 
-        /**
-         * Add as transformed class selector(s), then
-         * remove the deprecated attribute selector
-         */
-        function attributeValueToClass(scope, element, attr) {
-          var directive = attr.$normalize(className);
+      /**
+       * Add as transformed class selector(s), then
+       * remove the deprecated attribute selector
+       */
+      function attributeValueToClass(scope, element, attr) {
+        var directive = attr.$normalize(className);
 
-          // Add transformed class selector(s)
-          if (addDirectiveAsClass)  element.addClass(className);
-          if (attr[directive])
-              element.addClass(className + "-" + attr[directive].replace(/\s+/g, "-"));
-
-          try {
-            element.removeAttr(className);
-          } catch(e) { }
+        // Add transformed class selector(s)
+        if (addDirectiveAsClass) {
+          element.addClass(className);
         }
+
+        if (attr[directive]) {
+          element.addClass(className + "-" + attr[directive].replace(/\s+/g, "-"));
+        }
+
+        element.removeAttr(className);
+      }
     }
 
     /**
@@ -155,28 +157,25 @@
      *
      * Simple transpose of attribute usage to class usage
      */
-    function attribute_noValue(className) {
-        return [function() {
-            return {
-              compile : function (element, attr) {
-                  attributeToClass(null, element);
+    function attributeWithoutValue(className) {
+      return function() {
+        return {
+          compile: function(element, attr) {
+            attributeToClass(null, element);
 
-                  // !! use for postLink to account for transforms after ng-transclude
-                  return attributeToClass;
-                }
-            };
-        }];
+            // Use for postLink to account for transforms after ng-transclude.
+            return attributeToClass;
+          }
+        };
+      };
 
-      /**
-       * Add as transformed class selector, then
-       * remove the deprecated attribute selector
-       */
-      function attributeToClass(scope, element) {
-        element.addClass(className);
-        try {
-          element.removeAttr(className);
-        } catch(e) { }
-      }
+    /**
+     * Add as transformed class selector, then
+     * remove the deprecated attribute selector
+     */
+    function attributeToClass(scope, element) {
+      element.addClass(className);
+      element.removeAttr(className);
     }
-
+  }
 })();
