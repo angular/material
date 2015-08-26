@@ -204,7 +204,7 @@ function MdSticky($document, $mdConstant, $$rAF, $mdUtil) {
         }
 
         // If the next item is close to the current one, pull the current one down into view
-        if (self.next && scrollTop >= self.next.top - self.current.height) {
+        if (self.next && self.current && (scrollTop >= (self.next.top - self.current.height))) {
           translate(self.current, scrollTop + (self.next.top - scrollTop - self.current.height));
           return;
         }
