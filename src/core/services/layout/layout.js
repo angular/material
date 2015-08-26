@@ -45,68 +45,56 @@
       // Attribute directives with optional value(s)
 
       .directive('layout'              , attributeWithObserve('layout' , true)       )
-
       .directive('layoutSm'            , attributeWithObserve('layout-sm'   , true)  )
       .directive('layoutGtSm'          , attributeWithObserve('layout-gt-sm', true)  )
+      .directive('layoutLtMd'          , warnAttrNotSupported('layout-lt-md',true)   )
       .directive('layoutMd'            , attributeWithObserve('layout-md'   , true)  )
       .directive('layoutGtMd'          , attributeWithObserve('layout-gt-md', true)  )
+      .directive('layoutLtLg'          , warnAttrNotSupported('layout-lt-lg',true)   )
       .directive('layoutLg'            , attributeWithObserve('layout-lg'   , true)  )
       .directive('layoutGtLg'          , attributeWithObserve('layout-gt-lg', true)  )
-
-      // Not supported; use -gt- variations !
-      .directive('layoutLtMd'          , warnAttrNotSupported('layout-lt-md',true)   )
-      .directive('layoutLtLg'          , warnAttrNotSupported('layout-lt-lg',true)   )
 
       .directive('flex'                , attributeWithObserve('flex'        , true)  )
       .directive('flexSm'              , attributeWithObserve('flex-sm'     , true)  )
       .directive('flexGtSm'            , attributeWithObserve('flex-gt-sm'  , true)  )
+      .directive('flexLtMd'            , warnAttrNotSupported('flex-lt-md'  ,true)   )
       .directive('flexMd'              , attributeWithObserve('flex-md'     , true)  )
       .directive('flexGtMd'            , attributeWithObserve('flex-gt-md'  , true)  )
+      .directive('flexLtLg'            , warnAttrNotSupported('flex-lt-lg'  ,true)   )
       .directive('flexLg'              , attributeWithObserve('flex-lg'     , true)  )
       .directive('flexGtLg'            , attributeWithObserve('flex-gt-lg'  , true)  )
-
-      // Not supported; use -gt- variations !
-      .directive('flexLtMd'            , warnAttrNotSupported('flex-lt-md'  ,true)   )
-      .directive('flexLtLg'            , warnAttrNotSupported('flex-lt-lg'  ,true)   )
 
       // Attribute directives with optional value(s) but directiveName is NOT added as a class
 
       .directive('layoutAlign'         , attributeWithObserve('layout-align')        )
-
       .directive('layoutAlignSm'       , attributeWithObserve('layout-align-sm')     )
       .directive('layoutAlignGtSm'     , attributeWithObserve('layout-align-gt-sm')  )
+      .directive('layoutAlignLtMd'     , warnAttrNotSupported('layout-align-lt-md')  )
       .directive('layoutAlignMd'       , attributeWithObserve('layout-align-md')     )
       .directive('layoutAlignGtMd'     , attributeWithObserve('layout-align-gt-md')  )
+      .directive('layoutAlignLtLg'     , warnAttrNotSupported('layout-align-lt-lg')  )
       .directive('layoutAlignLg'       , attributeWithObserve('layout-align-lg')     )
       .directive('layoutAlignGtLg'     , attributeWithObserve('layout-align-gt-lg')  )
-
-      // Not supported; use -gt- variations !
-      .directive('layoutAlignLtMd'     , warnAttrNotSupported('layout-align-lt-md')  )
-      .directive('layoutAlignLtLg'     , warnAttrNotSupported('layout-align-lt-lg')  )
 
       .directive('flexOrder'           , attributeWithObserve('flex-order')          )
       .directive('flexOrderSm'         , attributeWithObserve('flex-order-sm')       )
       .directive('flexOrderGtSm'       , attributeWithObserve('flex-order-gt-sm')    )
+      .directive('flexOrderLtMd'       , warnAttrNotSupported('flex-order-lt-md')    )
       .directive('flexOrderMd'         , attributeWithObserve('flex-order-md')       )
       .directive('flexOrderGtMd'       , attributeWithObserve('flex-order-gt-md')    )
+      .directive('flexOrderLtLg'       , warnAttrNotSupported('flex-order-lt-lg')    )
       .directive('flexOrderLg'         , attributeWithObserve('flex-order-lg')       )
       .directive('flexOrderGtLg'       , attributeWithObserve('flex-order-gt-lg')    )
-
-      // Not supported; use -gt- variations !
-      .directive('flexOrderLtMd'       , warnAttrNotSupported('flex-order-lt-md')    )
-      .directive('flexOrderLtLg'       , warnAttrNotSupported('flex-order-lt-lg')    )
 
       .directive('offset'              , attributeWithObserve('offset')              )
       .directive('offsetSm'            , attributeWithObserve('offset-sm')           )
       .directive('offsetGtSm'          , attributeWithObserve('offset-gt-sm')        )
+      .directive('offsetLtMd'          , warnAttrNotSupported('offset-lt-md')        )
       .directive('offsetMd'            , attributeWithObserve('offset-md')           )
       .directive('offsetGtMd'          , attributeWithObserve('offset-gt-md')        )
+      .directive('offsetLtLg'          , warnAttrNotSupported('offset-lt-lg')        )
       .directive('offsetLg'            , attributeWithObserve('offset-lg')           )
       .directive('offsetGtLg'          , attributeWithObserve('offset-gt-lg')        )
-
-      // Not supported; use -gt- variations !
-      .directive('offsetLtMd'          , warnAttrNotSupported('offset-lt-md')        )
-      .directive('offsetLtLg'          , warnAttrNotSupported('offset-lt-lg')        )
 
       // Attribute directives with no value(s)
 
@@ -118,23 +106,21 @@
       .directive('hide'                , attributeWithoutValue('hide')               )
       .directive('hideSm'              , attributeWithoutValue('hide-sm')            )
       .directive('hideGtSm'            , attributeWithoutValue('hide-gt-sm')         )
+      .directive('hideLtMd'            , warnAttrNotSupported ('hide-lt-md')         )
       .directive('hideMd'              , attributeWithoutValue('hide-md')            )
       .directive('hideGtMd'            , attributeWithoutValue('hide-gt-md')         )
+      .directive('hideLtLg'            , warnAttrNotSupported ('hide-lt-lg')         )
       .directive('hideLg'              , attributeWithoutValue('hide-lg')            )
       .directive('hideGtLg'            , attributeWithoutValue('hide-gt-lg')         )
       .directive('show'                , attributeWithoutValue('show')               )
       .directive('showSm'              , attributeWithoutValue('show-sm')            )
       .directive('showGtSm'            , attributeWithoutValue('show-gt-sm')         )
+      .directive('showLtMd'            , warnAttrNotSupported ('show-lt-md')         )
       .directive('showMd'              , attributeWithoutValue('show-md')            )
       .directive('showGtMd'            , attributeWithoutValue('show-gt-md')         )
+      .directive('showLtLg'            , warnAttrNotSupported ('show-lt-lg')         )
       .directive('showLg'              , attributeWithoutValue('show-lg')            )
-      .directive('showGtLg'            , attributeWithoutValue('show-gt-lg')         )
-
-      // Not supported; use -gt- variations !
-      .directive('hideLtMd'            , warnAttrNotSupported('hide-lt-md')          )
-      .directive('hideLtLg'            , warnAttrNotSupported('hide-lt-lg')          )
-      .directive('showLtMd'            , warnAttrNotSupported('show-lt-md')          )
-      .directive('showLtLg'            , warnAttrNotSupported('show-lt-lg')          );
+      .directive('showGtLg'            , attributeWithoutValue('show-gt-lg')         );
 
     /**
      * These functions create registration functions for ngMaterial Layout attribute directives
