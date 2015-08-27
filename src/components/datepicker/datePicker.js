@@ -22,6 +22,8 @@
    *
    * @param {Date} ng-model The component's model. Expects a JavaScript Date object.
    * @param {expression=} ng-change Expression evaluated when the model value changes.
+   * @param {expression=} md-min-date Expression representing a min date (inclusive).
+   * @param {expression=} md-max-date Expression representing a max date (inclusive).
    * @param {boolean=} disabled Whether the datepicker is disabled.
    *
    * @description
@@ -65,11 +67,15 @@
             '</div>' +
             '<div class="md-datepicker-calendar">' +
               '<md-calendar role="dialog" aria-label="{{::ctrl.dateLocale.msgCalendar}}" ' +
-                  'ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen"></md-calendar>' +
+                  'md-min-date="ctrl.minDate" md-max-date="ctrl.maxDate"' +
+                  'ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen">' +
+              '</md-calendar>' +
             '</div>' +
           '</div>',
       require: ['ngModel', 'mdDatepicker'],
       scope: {
+        minDate: '=mdMinDate',
+        maxDate: '=mdMaxDate',
         placeholder: '@mdPlaceholder'
       },
       controller: DatePickerCtrl,
@@ -126,6 +132,9 @@
 
     /** @type {HTMLInputElement} */
     this.inputElement = $element[0].querySelector('input');
+
+    /** @final {!angular.JQLite} */
+    this.ngInputElement = angular.element(this.inputElement);
 
     /** @type {HTMLElement} */
     this.inputContainer = $element[0].querySelector('.md-datepicker-input-container');
@@ -227,10 +236,9 @@
       self.inputContainer.classList.remove(INVALID_CLASS);
     });
 
-    var ngElement = angular.element(self.inputElement);
-    ngElement.on('input', angular.bind(self, self.resizeInputElement));
+    self.ngInputElement.on('input', angular.bind(self, self.resizeInputElement));
     // TODO(chenmike): Add ability for users to specify this interval.
-    ngElement.on('input', self.$mdUtil.debounce(self.handleInputEvent,
+    self.ngInputElement.on('input', self.$mdUtil.debounce(self.handleInputEvent,
         DEFAULT_DEBOUNCE_INTERVAL, self));
   };
 
@@ -241,7 +249,7 @@
     var keyCodes = this.$mdConstant.KEY_CODE;
 
     // Add event listener through angular so that we can triggerHandler in unit tests.
-    angular.element(self.inputElement).on('keydown', function(event) {
+    self.ngInputElement.on('keydown', function(event) {
       if (event.altKey && event.keyCode == keyCodes.DOWN_ARROW) {
         self.openCalendarPane(event);
         $scope.$digest();
@@ -298,8 +306,11 @@
   DatePickerCtrl.prototype.handleInputEvent = function() {
     var inputString = this.inputElement.value;
     var parsedDate = this.dateLocale.parseDate(inputString);
+    this.dateUtil.setDateTimeToMidnight(parsedDate);
 
-    if (this.dateUtil.isValidDate(parsedDate) && this.dateLocale.isDateComplete(inputString)) {
+    if (this.dateUtil.isValidDate(parsedDate) &&
+        this.dateLocale.isDateComplete(inputString) &&
+        this.dateUtil.isDateWithinRange(parsedDate, this.minDate, this.maxDate)) {
       this.ngModelCtrl.$setViewValue(parsedDate);
       this.date = parsedDate;
       this.inputContainer.classList.remove(INVALID_CLASS);

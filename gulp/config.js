@@ -29,10 +29,10 @@ module.exports = {
     'src/core/style/mixins.scss',
     'src/core/style/structure.scss',
     'src/core/style/typography.scss',
-    'src/core/style/layout.scss'
+    'src/core/services/layout/layout.scss'
   ],
   scssStandaloneFiles: [
-    'src/core/style/layout.scss'
+    'src/core/services/layout/layout.scss'
   ],
   paths: 'src/{components,services}/**',
   outputDir: 'dist/',

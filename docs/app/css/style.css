@@ -226,6 +226,8 @@ code:not(.highlight) {
 .docs-menu ul {
   list-style: none;
   padding: 0;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 .docs-menu li {
   margin: 0;

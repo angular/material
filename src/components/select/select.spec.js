@@ -1,7 +1,16 @@
 describe('<md-select>', function() {
+  var attachedElements = [];
+
+  afterEach(function() {
+    attachedElements.forEach(function(element) {
+      element.remove();
+    });
+    attachedElements = [];
+  });
 
   beforeEach(module('material.components.input'));
   beforeEach(module('material.components.select'));
+
 
   function setupSelect(attrs, options, bNoLabel) {
     var el;
@@ -16,6 +25,8 @@ describe('<md-select>', function() {
       el = $compile(template)($rootScope);
       $rootScope.$digest();
     });
+    attachedElements.push(el);
+
     return el;
   }
 
@@ -28,6 +39,8 @@ describe('<md-select>', function() {
       el = $compile(fullTpl)($rootScope);
       $rootScope.$apply();
     });
+    attachedElements.push(el);
+
     return el;
   }
 

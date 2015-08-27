@@ -70,5 +70,22 @@ describe('$mdBottomSheet service', function() {
       // Focus should be on the last md-autofocus element
       expect($document.activeElement).toBe(focusEl[1]);
     }));
+
+    // This test is mainly for touch devices as the -webkit-overflow-scrolling causes z-index issues
+    // if the scroll mask is appended to the body element
+    it('appends the scroll mask to the same parent', inject(function($mdBottomSheet, $rootScope) {
+      var parent = angular.element('<div>');
+
+      $mdBottomSheet.show({
+        template: '<md-bottom-sheet>',
+        parent: parent
+      });
+
+      $rootScope.$apply();
+
+      var scrollMask = parent[0].querySelector('.md-scroll-mask');
+
+      expect(scrollMask).not.toBeNull();
+    }));
   });
 });

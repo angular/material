@@ -170,14 +170,18 @@ md-autocomplete {
     }
   }
 }
-.md-autocomplete-suggestions {
+
+.md-virtual-repeat-container.md-autocomplete-suggestions-container {
   position: absolute;
+  box-shadow: 0 2px 5px rgba(black, 0.25);
+  height: 41px * 5.5;
+  max-height: 41px * 5.5;
+  z-index: $z-index-tooltip;
+}
+.md-autocomplete-suggestions {
   margin: 0;
   list-style: none;
   padding: 0;
-  overflow: auto;
-  max-height: 41px * 5.5;
-  z-index: $z-index-tooltip;
   li {
     cursor: pointer;
     font-size: 14px;
@@ -189,23 +193,13 @@ md-autocomplete {
     margin: 0;
     white-space: nowrap;
     text-overflow: ellipsis;
-    &.ng-enter,
-    &.ng-hide-remove {
-      transition: none;
-      animation: md-autocomplete-list-in 0.2s;
-    }
-    &.ng-leave,
-    &.ng-hide-add {
-      transition: none;
-      animation: md-autocomplete-list-out 0.2s;
-    }
 
     &:focus {
-        outline: none;
-      }
-
+      outline: none;
+    }
   }
 }
+
 @media screen and (-ms-high-contrast: active) {
   md-autocomplete,
   .md-autocomplete-suggestions {
