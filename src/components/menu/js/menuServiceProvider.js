@@ -222,28 +222,6 @@ function MenuProvider($$interimElementProvider) {
         // ************************************
 
         function onMenuKeyDown(ev) {
-<<<<<<< HEAD:src/components/menu/menu-interim-element.js
-          scope.$apply(function() {
-            var keyCodes = $mdConstant.KEY_CODE;
-            switch (ev.keyCode) {
-              case keyCodes.ESCAPE:
-                ev.stopPropagation();
-                opts.mdMenuCtrl.close();
-                ev.stopPropagation();
-                break;
-              case keyCodes.UP_ARROW:
-                ev.stopPropagation();
-                focusMenuItem(ev, opts.menuContentEl, opts, -1);
-                ev.stopPropagation();
-                break;
-              case keyCodes.DOWN_ARROW:
-                ev.stopPropagation();
-                focusMenuItem(ev, opts.menuContentEl, opts, 1);
-                ev.stopPropagation();
-                break;
-            }
-          });
-=======
           var handled;
           var keyCodes = $mdConstant.KEY_CODE;
           switch (ev.keyCode) {
@@ -285,7 +263,6 @@ function MenuProvider($$interimElementProvider) {
             ev.preventDefault();
             ev.stopImmediatePropagation();
           }
->>>>>>> e26a2754105d71915e9f915ca59cf242bfc5afcc:src/components/menu/js/menuServiceProvider.js
         }
 
         function onBackdropClick(e) {
