@@ -20,7 +20,8 @@ function AriaService($$rAF, $log, $window) {
    * @param {optional} defaultValue What to set the attr to if no value is found
    */
   function expect(element, attrName, defaultValue) {
-    var node = element[0] || element;
+
+    var node = angular.element(element)[0] || element;
 
     // if node exists and neither it nor its children have the attribute
     if (node &&

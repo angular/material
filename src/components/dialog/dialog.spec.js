@@ -348,6 +348,39 @@ describe('$mdDialog', function() {
       expect(closing).toBe(true);
     }));
 
+
+    it('should not wrap content with existing md-dialog', inject(function($mdDialog, $rootScope) {
+
+      var template = '<md-dialog><div id="rawContent">Hello</div></md-dialog>';
+      var parent = angular.element('<div>');
+
+      $mdDialog.show({
+        template: template,
+        parent: parent
+      });
+
+      $rootScope.$apply();
+
+      var container = parent[0].querySelectorAll('md-dialog');
+      expect(container.length).toBe(1);
+    }));
+
+    it('should wrap raw content with md-dialog', inject(function($mdDialog, $rootScope) {
+
+      var template = '<div id="rawContent">Hello</div>';
+      var parent = angular.element('<div>');
+
+      $mdDialog.show({
+        template: template,
+        parent: parent
+      });
+
+      $rootScope.$apply();
+
+      var container = parent[0].querySelectorAll('md-dialog');
+      expect(container.length).toBe(1);
+    }));
+
     it('should append dialog with container', inject(function($mdDialog, $rootScope) {
 
       var template = '<md-dialog>Hello</md-dialog>';
@@ -367,7 +400,7 @@ describe('$mdDialog', function() {
     it('should escapeToClose == true', inject(function($mdDialog, $rootScope, $rootElement, $timeout, $animate, $mdConstant) {
       var parent = angular.element('<div>');
       $mdDialog.show({
-        template: '<md-dialog>',
+        template: '<md-dialog></md-dialog>',
         parent: parent,
         escapeToClose: true
       });
@@ -391,7 +424,7 @@ describe('$mdDialog', function() {
     it('should escapeToClose == false', inject(function($mdDialog, $rootScope, $rootElement, $timeout, $animate, $mdConstant) {
       var parent = angular.element('<div>');
       $mdDialog.show({
-        template: '<md-dialog>',
+        template: '',
         parent: parent,
         escapeToClose: false
       });
@@ -411,7 +444,7 @@ describe('$mdDialog', function() {
 
       var parent = angular.element('<div>');
       $mdDialog.show({
-        template: '<md-dialog>',
+        template: '',
         parent: parent,
         clickOutsideToClose: true
       });
@@ -434,7 +467,7 @@ describe('$mdDialog', function() {
 
       var parent = angular.element('<div>');
       $mdDialog.show({
-        template: '<md-dialog>',
+        template: '',
         parent: parent,
         clickOutsideToClose: false
       });
@@ -458,7 +491,7 @@ describe('$mdDialog', function() {
       spyOn($mdUtil, 'disableScrollAround');
       var parent = angular.element('<div>');
       $mdDialog.show({
-        template: '<md-dialog>',
+        template: '',
         parent: parent,
         disableParentScroll: true
       });
@@ -469,7 +502,7 @@ describe('$mdDialog', function() {
     it('should hasBackdrop == true', inject(function($mdDialog, $animate, $rootScope) {
       var parent = angular.element('<div>');
       $mdDialog.show({
-        template: '<md-dialog>',
+        template: '',
         parent: parent,
         hasBackdrop: true
       });
@@ -482,7 +515,7 @@ describe('$mdDialog', function() {
     it('should hasBackdrop == false', inject(function($mdDialog, $rootScope) {
       var parent = angular.element('<div>');
       $mdDialog.show({
-        template: '<md-dialog>',
+        template: '',
         parent: parent,
         hasBackdrop: false
       });
