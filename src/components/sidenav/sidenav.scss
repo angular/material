@@ -24,9 +24,7 @@ md-sidenav {
   &.md-closed-add,
   &.md-closed-remove {
     display: flex;
-    /* this is required as of 1.3x to properly
-       apply all styling in a show/hide animation */
-    transition: 0s all;
+    transition: 0.2s ease-in all;
   }
 
   &.md-closed-add.md-closed-add-active,

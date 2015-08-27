@@ -179,7 +179,7 @@ function readModuleArg() {
 
 function filterNonCodeFiles() {
   return filter(function(file) {
-    return !/demo|module\.json|\.spec.js|README/.test(file.path);
+    return !/demo|module\.json|script\.js|\.spec.js|README/.test(file.path);
   });
 }
 

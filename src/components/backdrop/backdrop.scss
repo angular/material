@@ -1,6 +1,7 @@
 md-backdrop {
   z-index: $z-index-backdrop;
   &.md-menu-backdrop {
+    position: fixed !important;
     z-index: $z-index-menu - 1;
   }
   &.md-select-backdrop {

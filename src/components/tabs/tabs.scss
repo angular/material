@@ -31,9 +31,6 @@ md-tabs {
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
-  &.ng-animate {
-    transition: height $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
-  }
   &:not(.md-no-tab-content):not(.md-dynamic-height) {
     min-height: 200 + $tabs-header-height;
   }

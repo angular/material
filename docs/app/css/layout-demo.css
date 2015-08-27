@@ -2,29 +2,39 @@ demo-include {
   display: block;
 }
 
-.layout-content demo-include [layout] > div {
+.layout-content demo-include .layout > div {
   padding: 8px;
   box-shadow: 0px 2px 5px 0 rgba(0,0,0,0.26);
   opacity: 0.9;
   color: white;
 }
-.layout-content demo-include [layout] > div:nth-child(1) {
+.layout-content demo-include [layout] > div:nth-child(1),
+.layout-content demo-include .layout > div:nth-child(1) {
   background-color: #009688;
 }
-.layout-content demo-include [layout] > div:nth-child(2) {
+.layout-content demo-include [layout] > div:nth-child(2),
+.layout-content demo-include .layout > div:nth-child(2) {
   background-color: #3949ab;
 }
-.layout-content demo-include [layout] > div:nth-child(3) {
+.layout-content demo-include [layout] > div:nth-child(3),
+.layout-content demo-include .layout > div:nth-child(3) {
   background-color: #9c27b0;
 }
-.layout-content demo-include [layout] > div:nth-child(4) {
+.layout-content demo-include [layout] > div:nth-child(4),
+.layout-content demo-include .layout > div:nth-child(4) {
   background-color: #8bc34a;
 }
+.layout-content demo-include [layout] > div:nth-child(5),
+.layout-content demo-include .layout > div:nth-child(5) {
+  background-color: #deb867;
+}
+
+
 .layout-content md-divider {
   margin-top: 16px;
 }
 
-.layout-demo :not([layout]) {
+.layout-demo :not(.layout) {
   border: 1px solid #eee;
   padding: 8px;
 }
@@ -67,7 +77,7 @@ demo-include {
   background: white;
 }
 @media screen and (-ms-high-contrast: active) {
-  .layout-content demo-include [layout] > div {
+  .layout-content demo-include .layout > div {
     border: 1px solid #fff !important;
   }
 }

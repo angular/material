@@ -16,6 +16,10 @@
 
   .md-calendar-date.md-calendar-date-today {
     color: '{{primary-500}}'; // blue-500
+
+    &.md-calendar-date-disabled {
+      color: '{{primary-500-0.6}}';
+    }
   }
 
   // The CSS class `md-focus` is used instead of real browser focus for accessibility reasons
@@ -39,4 +43,8 @@
     }
   }
 
+  .md-calendar-date-disabled,
+  .md-calendar-month-label-disabled {
+    color: '{{background-400}}'; // grey-400
+  }
 }

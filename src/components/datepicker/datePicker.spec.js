@@ -24,7 +24,12 @@ describe('md-date-picker', function() {
     pageScope.myDate = initialDate;
     pageScope.isDisabled = false;
 
-    var template = '<md-datepicker ng-model="myDate" ng-disabled="isDisabled"></md-datepicker>';
+    var template = '<md-datepicker ' +
+          'md-max-date="maxDate" ' +
+          'md-min-date="minDate" ' +
+          'ng-model="myDate" ' +
+          'ng-disabled="isDisabled">' +
+      '</md-datepicker>';
     ngElement = $compile(template)(pageScope);
     $rootScope.$apply();
 
@@ -32,6 +37,14 @@ describe('md-date-picker', function() {
     controller = ngElement.controller('mdDatepicker');
     element = ngElement[0];
   }));
+
+  /**
+   * Populates the inputElement with a value and triggers the input events.
+   */
+  function populateInputElement(inputString) {
+    controller.ngInputElement.val(inputString).triggerHandler('input');
+    $timeout.flush();
+  }
 
   it('should set initial value from ng-model', function() {
     expect(controller.inputElement.value).toBe(dateLocale.formatDate(initialDate));
@@ -53,7 +66,7 @@ describe('md-date-picker', function() {
   });
 
   it('should open and close the floating calendar pane element via keyboard', function() {
-    angular.element(controller.inputElement).triggerHandler({
+    controller.ngInputElement.triggerHandler({
       type: 'keydown',
       altKey: true,
       keyCode: keyCodes.DOWN_ARROW
@@ -98,28 +111,35 @@ describe('md-date-picker', function() {
   describe('input event', function() {
     it('should update the model value when user enters a valid date', function() {
       var expectedDate = new Date(2015, JUN, 1);
-      controller.inputElement.value = '6/1/2015';
-      angular.element(controller.inputElement).triggerHandler('input');
-      $timeout.flush();
+      populateInputElement('6/1/2015');
       expect(controller.ngModelCtrl.$modelValue).toEqual(expectedDate);
     });
 
     it('should not update the model value when user enters an invalid date', function() {
-      controller.inputElement.value = '7';
-      angular.element(controller.inputElement).triggerHandler('input');
-      $timeout.flush();
+      populateInputElement('7');
       expect(controller.ngModelCtrl.$modelValue).toEqual(initialDate);
     });
 
+    it('should not update the model value when input is outside min/max bounds', function() {
+      pageScope.minDate = new Date(2014, JUN, 1);
+      pageScope.maxDate = new Date(2014, JUN, 3);
+      pageScope.$apply();
+
+      populateInputElement('5/30/2014');
+      expect(controller.ngModelCtrl.$modelValue).toEqual(initialDate);
+
+      populateInputElement('6/4/2014');
+      expect(controller.ngModelCtrl.$modelValue).toEqual(initialDate);
+
+      populateInputElement('6/2/2014');
+      expect(controller.ngModelCtrl.$modelValue).toEqual(new Date(2014, JUN, 2));
+    });
+
     it('should add and remove the invalid class', function() {
-      controller.inputElement.value = '6/1/2015';
-      angular.element(controller.inputElement).triggerHandler('input');
-      $timeout.flush();
+      populateInputElement('6/1/2015');
       expect(controller.inputContainer).not.toHaveClass('md-datepicker-invalid');
 
-      controller.inputElement.value = '7';
-      angular.element(controller.inputElement).triggerHandler('input');
-      $timeout.flush();
+      populateInputElement('7');
       expect(controller.inputContainer).toHaveClass('md-datepicker-invalid');
     });
   });
@@ -152,9 +172,7 @@ describe('md-date-picker', function() {
     });
 
     it('should remove the invalid state if present', function() {
-      controller.inputElement.value = '7';
-      angular.element(controller.inputElement).triggerHandler('input');
-      $timeout.flush();
+      populateInputElement('7');
       expect(controller.inputContainer).toHaveClass('md-datepicker-invalid');
 
       controller.openCalendarPane({

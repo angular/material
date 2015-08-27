@@ -34,12 +34,19 @@
    */
   var TBODY_HEIGHT = 265;
 
+  /**
+   * Height of a calendar month with a single row. This is needed to calculate the offset for
+   * rendering an extra month in virtual-repeat that only contains one row.
+   */
+  var TBODY_SINGLE_ROW_HEIGHT = 45;
+
   function calendarDirective() {
     return {
       template:
           '<table aria-hidden="true" class="md-calendar-day-header"><thead></thead></table>' +
           '<div class="md-calendar-scroll-mask">' +
-            '<md-virtual-repeat-container class="md-calendar-scroll-container">' +
+          '<md-virtual-repeat-container class="md-calendar-scroll-container" ' +
+                'md-offset-size="' + (TBODY_SINGLE_ROW_HEIGHT - TBODY_HEIGHT) + '">' +
               '<table role="grid" tabindex="0" class="md-calendar" aria-readonly="true">' +
                 '<tbody role="rowgroup" md-virtual-repeat="i in ctrl.items" md-calendar-month ' +
                     'md-month-offset="$index" class="md-calendar-month" ' +
@@ -48,7 +55,10 @@
               '</table>' +
             '</md-virtual-repeat-container>' +
           '</div>',
-      scope: {},
+      scope: {
+        minDate: '=mdMinDate',
+        maxDate: '=mdMaxDate',
+      },
       require: ['ngModel', 'mdCalendar'],
       controller: CalendarCtrl,
       controllerAs: 'ctrl',
@@ -87,6 +97,15 @@
      */
     this.items = {length: 2000};
 
+    if (this.maxDate && this.minDate) {
+      // Limit the number of months if min and max dates are set.
+      var numMonths = $$mdDateUtil.getMonthDistance(this.minDate, this.maxDate) + 1;
+      numMonths = Math.max(numMonths, 1);
+      // Add an additional month as the final dummy month for rendering purposes.
+      numMonths += 1;
+      this.items.length = numMonths;
+    }
+
     /** @final {!angular.$animate} */
     this.$animate = $animate;
 
@@ -123,9 +142,19 @@
     /** @final {Date} */
     this.today = this.dateUtil.createDateAtMidnight();
 
-    // Set the first renderable date once for all calendar instances.
-    firstRenderableDate =
-        firstRenderableDate || this.dateUtil.incrementMonths(this.today, -this.items.length / 2);
+    /** @type {Date} */
+    this.firstRenderableDate = this.dateUtil.incrementMonths(this.today, -this.items.length / 2);
+
+    if (this.minDate && this.minDate > this.firstRenderableDate) {
+      this.firstRenderableDate = this.minDate;
+    } else if (this.maxDate) {
+      // Calculate the difference between the start date and max date.
+      // Subtract 1 because it's an inclusive difference and 1 for the final dummy month.
+      //
+      var monthDifference = this.items.length - 2;
+      this.firstRenderableDate = this.dateUtil.incrementMonths(this.maxDate, -(this.items.length - 2));
+    }
+
 
     /** @final {number} Unique ID for this calendar instance. */
     this.id = nextUniqueId++;
@@ -279,6 +308,7 @@
       // Selection isn't occuring, so the key event is either navigation or nothing.
       var date = self.getFocusDateFromKeyEvent(event);
       if (date) {
+        date = self.boundDateByMinAndMax(date);
         event.preventDefault();
         event.stopPropagation();
 
@@ -324,7 +354,8 @@
    * @returns {number}
    */
   CalendarCtrl.prototype.getSelectedMonthIndex = function() {
-    return this.dateUtil.getMonthDistance(firstRenderableDate, this.selectedDate || this.today);
+    return this.dateUtil.getMonthDistance(this.firstRenderableDate,
+        this.selectedDate || this.today);
   };
 
   /**
@@ -336,7 +367,7 @@
       return;
     }
 
-    var monthDistance = this.dateUtil.getMonthDistance(firstRenderableDate, date);
+    var monthDistance = this.dateUtil.getMonthDistance(this.firstRenderableDate, date);
     this.calendarScroller.scrollTop = monthDistance * TBODY_HEIGHT;
   };
 
@@ -370,6 +401,23 @@
     } else {
       this.focusDate = date;
     }
+  };
+
+  /**
+   * If a date exceeds minDate or maxDate, returns date matching minDate or maxDate, respectively.
+   * Otherwise, returns the date.
+   * @param {Date} date
+   * @return {Date}
+   */
+  CalendarCtrl.prototype.boundDateByMinAndMax = function(date) {
+    var boundDate = date;
+    if (this.minDate && date < this.minDate) {
+      boundDate = new Date(this.minDate.getTime());
+    }
+    if (this.maxDate && date > this.maxDate) {
+      boundDate = new Date(this.maxDate.getTime());
+    }
+    return boundDate;
   };
 
   /*** Updating the displayed / selected date ***/

@@ -11,6 +11,9 @@ function MdAutocompleteParentScope ($compile) {
   };
   function postLink (scope, element, attr) {
     var ctrl = scope.$parent.$mdAutocompleteCtrl;
+
+    // TODO: transclude self might make it possible to do this without
+    // re-compiling, which is slow.
     $compile(element.contents())(ctrl.parent);
     if (attr.hasOwnProperty('mdAutocompleteReplace')) {
       element.after(element.contents());
