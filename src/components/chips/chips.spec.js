@@ -217,6 +217,58 @@ describe('<md-chips>', function() {
         expect(scope.appendChip).toHaveBeenCalled();
         expect(scope.appendChip.calls.mostRecent().args[0]).toBe('Apple');
       });
+
+      it('should prevent the default when backspace is pressed', inject(function($mdConstant) {
+        var element = buildChips(BASIC_CHIP_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        var backspaceEvent = {
+          type: 'keydown',
+          keyCode: $mdConstant.KEY_CODE.BACKSPACE,
+          which: $mdConstant.KEY_CODE.BACKSPACE,
+          preventDefault: jasmine.createSpy('preventDefault')
+        };
+
+        element.find('input').triggerHandler(backspaceEvent);
+
+        expect(backspaceEvent.preventDefault).toHaveBeenCalled();
+      }));
+
+      describe('with input text', function() {
+
+        it('should prevent the default when enter is pressed', inject(function($mdConstant) {
+          var element = buildChips(BASIC_CHIP_TEMPLATE);
+          var ctrl = element.controller('mdChips');
+
+          var enterEvent = {
+            type: 'keydown',
+            keyCode: $mdConstant.KEY_CODE.ENTER,
+            which: $mdConstant.KEY_CODE.ENTER,
+            preventDefault: jasmine.createSpy('preventDefault')
+          };
+
+          ctrl.chipBuffer = 'Test';
+          element.find('input').triggerHandler(enterEvent);
+
+          expect(enterEvent.preventDefault).toHaveBeenCalled();
+        }));
+      });
+
+      it('focuses/blurs the component when focusing/blurring the input', inject(function() {
+        var element = buildChips(BASIC_CHIP_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        // Focus the input and check
+        element.find('input').triggerHandler('focus');
+        expect(ctrl.inputHasFocus).toBe(true);
+        expect(element.find('md-chips-wrap').hasClass('md-focused')).toBe(true);
+
+        // Blur the input and check
+        element.find('input').triggerHandler('blur');
+        expect(ctrl.inputHasFocus).toBe(false);
+        expect(element.find('md-chips-wrap').hasClass('md-focused')).toBe(false);
+      }));
+
     });
 
     describe('custom inputs', function() {
@@ -263,6 +315,24 @@ describe('<md-chips>', function() {
           <md-chips ng-model="items">\
             <input type="text">\
           </md-chips>';
+
+        it('focuses/blurs the component when focusing/blurring the input', inject(function($timeout) {
+          var element = buildChips(INPUT_TEMPLATE);
+          var ctrl = element.controller('mdChips');
+          $timeout.flush();
+
+          // Focus the input and check
+          element.find('input').triggerHandler('focus');
+          $timeout.flush();
+          expect(ctrl.inputHasFocus).toBe(true);
+          expect(element.find('md-chips-wrap').hasClass('md-focused')).toBe(true);
+
+          // Blur the input and check
+          element.find('input').triggerHandler('blur');
+          $timeout.flush();
+          expect(ctrl.inputHasFocus).toBe(false);
+          expect(element.find('md-chips-wrap').hasClass('md-focused')).toBe(false);
+        }));
 
         describe('using ngModel', function() {
           it('should add the ngModelCtrl.$viewValue when <enter> is pressed',

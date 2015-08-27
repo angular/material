@@ -92,6 +92,7 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout) {
  */
 MdChipsCtrl.prototype.inputKeydown = function(event) {
   var chipBuffer = this.getChipBuffer();
+
   switch (event.keyCode) {
     case this.$mdConstant.KEY_CODE.ENTER:
       if ((this.hasAutocomplete && this.requireMatch) || !chipBuffer) break;
@@ -101,6 +102,7 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
       break;
     case this.$mdConstant.KEY_CODE.BACKSPACE:
       if (chipBuffer) break;
+      event.preventDefault();
       event.stopPropagation();
       if (this.items.length) this.selectAndFocusChipSafe(this.items.length - 1);
       break;
@@ -373,14 +375,20 @@ MdChipsCtrl.prototype.configureUserInput = function(inputElement) {
     this.userInputNgModelCtrl = ngModelCtrl;
   }
 
-  // Bind to keydown and focus events of input
   var scope = this.$scope;
   var ctrl = this;
+
+  // Run all of the events using evalAsync because a focus may fire a blur in the same digest loop
+  var scopeApplyFn = function(event, fn) {
+    scope.$evalAsync(angular.bind(ctrl, fn, event));
+  };
+
+  // Bind to keydown and focus events of input
   inputElement
       .attr({ tabindex: 0 })
-      .on('keydown', function(event) { scope.$apply( angular.bind(ctrl, function() { ctrl.inputKeydown(event); })) })
-      .on('focus', angular.bind(ctrl, ctrl.onInputFocus))
-      .on('blur', angular.bind(ctrl, ctrl.onInputBlur));
+      .on('keydown', function(event) { scopeApplyFn(event, ctrl.inputKeydown) })
+      .on('focus', function(event) { scopeApplyFn(event, ctrl.onInputFocus) })
+      .on('blur', function(event) { scopeApplyFn(event, ctrl.onInputBlur) })
 };
 
 MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {
