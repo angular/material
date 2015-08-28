@@ -73,11 +73,25 @@ md-sidenav {
     min-width: $sidenav-default-width;
     transform: translate3d(0%, 0, 0);
   }
+  
+  &:not(.md-closed):not(.md-locked-open) {
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
 
   @extend .md-sidenav-left;
 }
-.md-sidenav-backdrop.md-locked-open {
-  display: none;
+.md-sidenav-backdrop {
+  &.md-locked-open {
+    display: none;
+  }
+  
+  &:not(.md-locked-open) {
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
 }
 
 .md-sidenav-left {
