@@ -1,5 +1,5 @@
 describe('mdProgressCircular', function() {
-  var $compile, $rootScope;
+  var $compile, $rootScope, element;
 
   beforeEach(module('material.components.progressCircular'));
   beforeEach(inject(function(_$compile_, _$rootScope_) {
@@ -7,8 +7,12 @@ describe('mdProgressCircular', function() {
     $rootScope = _$rootScope_;
   }));
 
+  afterEach(function() {
+    element.remove();
+  });
+
   it('should update aria-valuenow', inject(function($compile, $rootScope) {
-    var element = $compile('<div>' +
+    element = $compile('<div>' +
       '<md-progress-circular value="{{progress}}">' +
       '</md-progress-circular>' +
       '</div>')($rootScope);
@@ -18,7 +22,6 @@ describe('mdProgressCircular', function() {
     });
 
     var progress = element.find('md-progress-circular');
-
     expect(progress.eq(0).attr('aria-valuenow')).toEqual('50');
   }));
 
@@ -40,7 +43,7 @@ describe('mdProgressCircular', function() {
    * Build a progressCircular
    */
   function buildIndicator(template) {
-    var element = $compile('<div>' + template + '</div>')($rootScope);
+    element = $compile('<div>' + template + '</div>')($rootScope);
         $rootScope.$digest();
 
     return element.find('md-progress-circular');
