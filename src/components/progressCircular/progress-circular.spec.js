@@ -1,4 +1,4 @@
-ddescribe('mdProgressCircular', function() {
+describe('mdProgressCircular', function() {
   var $compile, $rootScope;
 
   beforeEach(module('material.components.progressCircular'));
