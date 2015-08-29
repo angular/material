@@ -197,6 +197,48 @@ describe('<md-autocomplete>', function () {
 
       element.remove();
     }));
+
+    it('should compile the template against the parent scope', inject(function ($timeout) {
+      var scope    = createScope(null, { bang: 'boom' });
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <md-item-template>\
+              <span class="find-parent-scope">{{bang}}</span>\
+              <span class="find-index">{{$index}}</span>\
+              <span class="find-item">{{item.display}}</span>\
+            </md-item-template>\
+          </md-autocomplete>';
+      var element  = compile(template, scope);
+      var ctrl     = element.controller('mdAutocomplete');
+      var ul       = element.find('ul');
+
+      expect(scope.bang).toBe('boom');
+
+      element.scope().searchText = 'fo';
+
+      // Run our initial flush
+      $timeout.flush();
+      waitForVirtualRepeat(element);
+
+      // Wait for the next tick when the values will be updated
+      $timeout.flush();
+
+      var li = ul.find('li')[0];
+
+      // Expect it to be compiled against the parent scope and have our variables copied
+      expect(li.querySelector('.find-parent-scope').innerHTML).toBe('boom');
+      expect(li.querySelector('.find-index').innerHTML).toBe('0');
+      expect(li.querySelector('.find-item').innerHTML).toBe('foo');
+
+      $timeout.flush();
+
+      element.remove();
+    }));
   });
 
   describe('xss prevention', function () {
