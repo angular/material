@@ -31,7 +31,7 @@ describe('mdProgressCircular', function() {
   });
 
   it('should set scaling using pixel values', function() {
-    var DEFAULT_SIZE = 96;
+    var DEFAULT_SIZE = 100;
 
     var progress = buildIndicator('<md-progress-circular md-diameter="37px"></md-progress-circular>');
     var value = Math.round( (37 / DEFAULT_SIZE) * 100 )/100;

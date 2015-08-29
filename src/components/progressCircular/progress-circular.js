@@ -45,6 +45,9 @@ angular.module('material.components.progressCircular', [
  * </hljs>
  */
 function MdProgressCircularDirective($mdConstant, $mdTheming) {
+  var DEFAULT_PROGRESS_SIZE = 100;
+  var DEFAULT_SCALING = 0.5;
+
   return {
     restrict: 'E',
     template:
@@ -91,15 +94,15 @@ function MdProgressCircularDirective($mdConstant, $mdTheming) {
      * May be express as float, percentage, or integer
      */
     function getDiameterRatio() {
-      if ( !attr.mdDiameter ) return 0.5;
+      if ( !attr.mdDiameter ) return DEFAULT_SCALING;
 
       var match = /([0-9]*)%/.exec(attr.mdDiameter);
       var value = match && match[1]/100;
 
       value = Math.max(0, value || parseFloat(attr.mdDiameter));
 
-      // should return ratio; 96px is default size
-      return  (value > 1) ? value / 96 : value;
+      // should return ratio; DEFAULT_PROGRESS_SIZE === 100px is default size
+      return  (value > 1) ? value / DEFAULT_PROGRESS_SIZE : value;
     }
   }
 
