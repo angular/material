@@ -3,7 +3,8 @@ $progress-circular-duration : 5.25s !default;
 $progress-circular-circle-duration : $progress-circular-duration * 0.25 !default;
 $progress-circular-outer-duration : $progress-circular-duration * (5 / 9) !default;
 $progress-circular-sporadic-duration : $progress-circular-duration !default;
-$progress-circular-size : 50px !default;
+$progress-border-width : 10px;
+$progress-circular-size : 10 * $progress-border-width !default;
 
 @keyframes outer-rotate {
   100% { transform: rotate(360deg); }
@@ -35,6 +36,8 @@ md-progress-circular {
   padding-top: 0 !important;
   margin-bottom: 0 !important;
   overflow: hidden;
+  transform: scale(0.5);
+
   .md-inner {
     width: $progress-circular-size;
     height: $progress-circular-size;
@@ -45,7 +48,7 @@ md-progress-circular {
       right: $progress-circular-size * 0.5 - 1;
       top: 0;
       bottom: 0;
-      border-top-width: 5px;
+      border-top-width: $progress-border-width;
       border-top-style: solid;
       box-sizing: border-box;
     }
@@ -53,7 +56,7 @@ md-progress-circular {
       position: absolute;
       top: 0;
       height: $progress-circular-size;
-      width: $progress-circular-size * 0.5;
+      width: $progress-circular-size * 0.49;
       overflow: hidden;
       .md-half-circle {
         position: absolute;
@@ -61,7 +64,7 @@ md-progress-circular {
         width: $progress-circular-size;
         height: $progress-circular-size;
         box-sizing: border-box;
-        border-width: 5px;
+        border-width: $progress-border-width;
         border-style: solid;
         border-bottom-color: transparent;
         border-radius: 50%;
@@ -91,11 +94,11 @@ md-progress-circular {
       .md-inner {
         .md-left {
           .md-half-circle {
-            @if $i <= 50 {
+            @if $i < 50 {
               transform: rotate(135deg);
             } @else {
               transition: transform 0.1s linear;
-              $deg: ($i - 50) / 50 * 180 + 135;
+              $deg: ((($i - 50) / 50) * 180) + 135;
               transform: rotate(#{$deg}deg);
             }
           }
@@ -112,7 +115,7 @@ md-progress-circular {
           }
         }
         .md-gap {
-          border-bottom-width: 5px;
+          border-bottom-width: $progress-border-width;
           border-bottom-style: solid;
           @if $i <= 50 {
             border-bottom-color: transparent !important;
