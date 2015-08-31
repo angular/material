@@ -1058,7 +1058,7 @@ function SelectProvider($$interimElementProvider) {
                 });
                 ev.preventDefault();
               }
-              checkCloseMenu();
+              checkCloseMenu(ev);
               break;
             case keyCodes.TAB:
             case keyCodes.ESCAPE:
