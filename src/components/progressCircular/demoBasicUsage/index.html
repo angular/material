@@ -14,28 +14,27 @@
 
     <h4>Theming  </h4>
 
-    <p>Use `md-warn` or `md-accent` to apply theme colors to your loader.</p>
+    <p>Your current theme colors can be used to easily colorize your progress indicator with `md-warn` or `md-accent` colors:</p>
     <div layout="row" layout-sm="column" layout-align="space-around" >
       <md-progress-circular class="md-hue-2" md-mode="{{vm.modes[0]}}" md-diameter="20px" ></md-progress-circular>
       <md-progress-circular class="md-accent" md-mode="{{vm.modes[1]}}" md-diameter="40" ></md-progress-circular>
-        <md-progress-circular class="md-accent md-hue-1" md-mode="{{vm.modes[2]}}" md-diameter="60" ></md-progress-circular>
+      <md-progress-circular class="md-accent md-hue-1" md-mode="{{vm.modes[2]}}" md-diameter="60" ></md-progress-circular>
       <md-progress-circular class="md-warn md-hue-3" md-mode="{{vm.modes[3]}}" md-diameter="70"></md-progress-circular>
       <md-progress-circular md-mode="{{vm.modes[4]}}" md-diameter="96"></md-progress-circular>
     </div>
 
-  <div layout="row" id="loaders">
+    <div layout="row" id="loaders">
 
-    <p style="margin-right: 20px">Show Progress Circular Indicators: </p>
+      <p style="margin-right: 20px">Show Progress Circular Indicators: </p>
 
-    <h5>Off</h5>
-    <md-switch
-          ng-model="vm.activated"
-          ng-change="vm.toggleActivation()"
-          style=""
-          aria-label="Toggle Progress Circular Indicators">
-      <h5>On</h5>
-    </md-switch>
-  </div>
+      <h5>Off</h5>
+      <md-switch
+            ng-model="vm.activated"
+            ng-change="vm.toggleActivation()"
+            aria-label="Toggle Progress Circular Indicators">
+        <h5>On</h5>
+      </md-switch>
+    </div>
 
 
 </div>

@@ -44,12 +44,17 @@ angular.module('material.components.progressCircular', [
  * <md-progress-circular md-mode="indeterminate"></md-progress-circular>
  * </hljs>
  */
-function MdProgressCircularDirective($mdConstant, $mdTheming) {
+function MdProgressCircularDirective($mdConstant, $mdTheming, $mdUtil) {
   var DEFAULT_PROGRESS_SIZE = 100;
   var DEFAULT_SCALING = 0.5;
 
+  var MODE_DETERMINATE = "determinate",
+      MODE_INDETERMINATE = "indeterminate";
+
+
   return {
     restrict: 'E',
+    scope : true,
     template:
         // The progress 'circle' is composed of two half-circles: the left side and the right
         // side. Each side has CSS applied to 'fill-in' the half-circle to the appropriate progress.
@@ -79,18 +84,78 @@ function MdProgressCircularDirective($mdConstant, $mdTheming) {
 
   function postLink(scope, element, attr) {
     $mdTheming(element);
+
     var circle = element[0];
+    var spinnerWrapper =  angular.element(element.children()[0]);
+
+    var lastMode, toVendorCSS = $mdUtil.dom.animator.toCss;
+
+    // Update size/scaling of the progress indicator
+    // Watch the "value" and "md-mode" attributes
+
     circle.style[$mdConstant.CSS.TRANSFORM] = 'scale(' + getDiameterRatio() + ')';
 
     attr.$observe('value', function(value) {
       var percentValue = clamp(value);
       element.attr('aria-valuenow', percentValue);
+
+      if (attr.mdMode == "determinate") {
+        animateIndicator(percentValue);
+      }
     });
 
-    var spinnerWrapper =  angular.element(element.children()[0]);
     attr.$observe('mdMode',function(mode){
-      spinnerWrapper[mode ? 'removeClass' : 'addClass']('ng-hide');
+      switch( mode ) {
+        case MODE_DETERMINATE:
+        case MODE_INDETERMINATE:
+          spinnerWrapper.removeClass('ng-hide');
+
+          // Inject class selector instead of attribute selector
+          // (@see layout.js changes for IE performance issues)
+
+          if ( lastMode ) spinnerWrapper.removeClass( lastMode );
+               lastMode = "md-mode-" + mode;
+          if ( lastMode ) spinnerWrapper.addClass( lastMode );
+
+          break;
+        default:
+          spinnerWrapper.addClass('ng-hide');
+      }
     });
+
+    var leftC, rightC, gap;
+
+    /**
+     * Manually animate the Determinate indicator based on the specified
+     * percentage value (0-100).
+     *
+     * Note: this animation was previously done using SCSS.
+     * - generated 54K of styles
+     * - use attribute selectors which had poor performances in IE
+     */
+    function animateIndicator(value) {
+      leftC  = leftC  || angular.element(element[0].querySelector('.md-left > .md-half-circle'));
+      rightC = rightC || angular.element(element[0].querySelector('.md-right > .md-half-circle'));
+      gap    = gap    || angular.element(element[0].querySelector('.md-gap'));
+
+      var gapStyles = removeEmptyValues({
+          borderBottomColor: (value <= 50) ? "transparent !important" : "",
+          transition: (value <= 50) ? "" : "borderBottomColor 0.1s linear"
+        }),
+        leftStyles = removeEmptyValues({
+          transition: (value <= 50) ? "transform 0.1s linear" : "",
+          transform: $mdUtil.supplant("rotate({0}deg)", [value <= 50 ? 135 : ((((value - 50) / 50) * 180) + 135)])
+        }),
+        rightStyles = removeEmptyValues({
+          transition: (value >= 50) ? "transform 0.1s linear" : "",
+          transform: $mdUtil.supplant("rotate({0}deg)", [value >= 50 ? 45 : (value / 50 * 180 - 135)])
+        });
+
+      leftC.css(toVendorCSS(leftStyles));
+      rightC.css(toVendorCSS(rightStyles));
+      gap.css(toVendorCSS(gapStyles));
+
+    }
 
     /**
      * We will scale the progress circle based on the default diameter.
@@ -102,9 +167,7 @@ function MdProgressCircularDirective($mdConstant, $mdTheming) {
       if ( !attr.mdDiameter ) return DEFAULT_SCALING;
 
       var match = /([0-9]*)%/.exec(attr.mdDiameter);
-      var value = match && match[1]/100;
-
-      value = Math.max(0, value || parseFloat(attr.mdDiameter));
+      var value = Math.max(0, (match && match[1]/100) || parseFloat(attr.mdDiameter));
 
       // should return ratio; DEFAULT_PROGRESS_SIZE === 100px is default size
       return  (value > 1) ? value / DEFAULT_PROGRESS_SIZE : value;
@@ -118,5 +181,15 @@ function MdProgressCircularDirective($mdConstant, $mdTheming) {
    */
   function clamp(value) {
     return Math.max(0, Math.min(value || 0, 100));
+  }
+
+  function removeEmptyValues(target) {
+    for (var key in target) {
+      if (target.hasOwnProperty(key)) {
+        if ( target[key] == "" ) delete target[key];
+      }
+    }
+
+    return target;
   }
 }
