@@ -1,9 +1,9 @@
-<div ng-controller="AppCtrl" layout="column" layout-margin style="padding:25px;">
+<div ng-controller="AppCtrl as vm" layout="column" layout-margin style="padding:25px;">
 
     <h4 style="margin-top:10px">Determinate</h4>
     <p>For operations where the percentage of the operation completed can be determined, use a determinate indicator. They give users a quick sense of how long an operation will take.</p>
     <div layout="row" layout-sm="column" layout-align="space-around">
-      <md-progress-circular md-mode="determinate" value="{{determinateValue}}"></md-progress-circular>
+      <md-progress-circular md-mode="determinate" value="{{vm.determinateValue}}"></md-progress-circular>
     </div>
 
     <h4>Indeterminate</h4>
@@ -12,14 +12,30 @@
       <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
 
-    <h4>Theming</h4>
+    <h4>Theming  </h4>
 
-    <div layout="row" layout-sm="column" layout-align="space-around">
-      <md-progress-circular class="md-hue-2" md-mode="indeterminate" md-diameter="20px"></md-progress-circular>
-      <md-progress-circular class="md-accent" md-mode="indeterminate" md-diameter="40"></md-progress-circular>
-      <md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" md-diameter="60"></md-progress-circular>
-      <md-progress-circular class="md-warn md-hue-3" md-mode="indeterminate" md-diameter="70"></md-progress-circular>
-      <md-progress-circular class="md-warn" md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+    <p>Use `md-warn` or `md-accent` to apply theme colors to your loader.</p>
+    <div layout="row" layout-sm="column" layout-align="space-around" >
+      <md-progress-circular class="md-hue-2" md-mode="{{vm.modes[0]}}" md-diameter="20px" ></md-progress-circular>
+      <md-progress-circular class="md-accent" md-mode="{{vm.modes[1]}}" md-diameter="40" ></md-progress-circular>
+        <md-progress-circular class="md-accent md-hue-1" md-mode="{{vm.modes[2]}}" md-diameter="60" ></md-progress-circular>
+      <md-progress-circular class="md-warn md-hue-3" md-mode="{{vm.modes[3]}}" md-diameter="70"></md-progress-circular>
+      <md-progress-circular md-mode="{{vm.modes[4]}}" md-diameter="96"></md-progress-circular>
     </div>
+
+  <div layout="row" id="loaders">
+
+    <p style="margin-right: 20px">Show Progress Circular Indicators: </p>
+
+    <h5>Off</h5>
+    <md-switch
+          ng-model="vm.activated"
+          ng-change="vm.toggleActivation()"
+          style=""
+          aria-label="Toggle Progress Circular Indicators">
+      <h5>On</h5>
+    </md-switch>
+  </div>
+
 
 </div>

@@ -87,6 +87,11 @@ function MdProgressCircularDirective($mdConstant, $mdTheming) {
       element.attr('aria-valuenow', percentValue);
     });
 
+    var spinnerWrapper =  angular.element(element.children()[0]);
+    attr.$observe('mdMode',function(mode){
+      spinnerWrapper[mode ? 'removeClass' : 'addClass']('ng-hide');
+    });
+
     /**
      * We will scale the progress circle based on the default diameter.
      *
