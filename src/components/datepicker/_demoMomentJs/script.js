@@ -20,7 +20,7 @@ angular.module('datepickerMomentJs', ['ngMaterial'])
       //};
       //
       //$mdDateLocaleProvider.monthHeaderFormatter = function(date) {
-      //  moment.monthsShort()[date.getMonth()] + ' ' + date.getFullYear();
+      //  return moment.monthsShort()[date.getMonth()] + ' ' + date.getFullYear();
       //};
       //
       //$mdDateLocaleProvider.weekNumberFormatter = function(weekNumber) {
