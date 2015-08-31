@@ -140,6 +140,7 @@ InkRippleCtrl.prototype.bindEvents = function () {
  * @param event {MouseEvent}
  */
 InkRippleCtrl.prototype.handleMousedown = function (event) {
+  if (event.hasOwnProperty('originalEvent')) event = event.originalEvent;
   this.mousedown = true;
   if (this.options.center) {
     this.createRipple(this.container.prop('clientWidth') / 2, this.container.prop('clientWidth') / 2);
