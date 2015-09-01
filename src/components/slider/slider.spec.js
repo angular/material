@@ -189,7 +189,7 @@ describe('md-slider', function() {
 
   it('should disable via the `disabled` attribute', function() {
     var slider = setup('disabled');
-    
+
     // Check for disabled state by triggering the pressdown handler and asserting that
     // the slider is not active.
     slider.triggerHandler({
@@ -242,20 +242,23 @@ describe('md-slider', function() {
 
   it('should increment at a predictable step', function() {
 
-    buildSlider(0.1, 1).drag({x:70});
+    buildSlider(0.1, 0, 1).drag({x:70});
     expect(pageScope.value).toBe(0.7);
 
-    buildSlider(0.25, 1).drag({x:45});
+    buildSlider(0.25, 0, 1).drag({x:45});
     expect(pageScope.value).toBe(0.5);
 
-    buildSlider(0.25, 1).drag({x:35});
+    buildSlider(0.25, 0, 1).drag({x:35});
     expect(pageScope.value).toBe(0.25);
 
-    buildSlider(1, 100).drag({x:90});
+    buildSlider(1, 0, 100).drag({x:90});
     expect(pageScope.value).toBe(90);
 
-    function buildSlider(step, max) {
-      var slider = setup('ng-model="value" min="0" max="' + max + '" step="' + step + '"');
+    buildSlider(20, 5, 45).drag({x:50});
+    expect(pageScope.value).toBe(25);
+
+    function buildSlider(step, min, max) {
+      var slider = setup('ng-model="value" min="' + min + '" max="' + max + '" step="' + step + '"');
           pageScope.$apply('value = 0.5');
 
       return {
