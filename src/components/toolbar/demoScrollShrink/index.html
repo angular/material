@@ -1,9 +1,9 @@
 <div ng-controller="AppCtrl" layout="column" style="height:600px">
 
-  <md-toolbar md-scroll-shrink>
+  <md-toolbar md-scroll-shrink ng-if="true" ng-controller="TitleController">
     <div class="md-toolbar-tools">
       <h3>
-        <span>My App Title</span>
+        <span>{{title}}</span>
       </h3>
     </div>
   </md-toolbar>
