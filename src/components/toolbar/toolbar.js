@@ -47,8 +47,12 @@ angular.module('material.components.toolbar', [
  *
  * @param {boolean=} md-scroll-shrink Whether the header should shrink away as
  * the user scrolls down, and reveal itself as the user scrolls up.
- * Note: for scrollShrink to work, the toolbar must be a sibling of a
- * `md-content` element, placed before it. See the scroll shrink demo.
+ *
+ * _**Note:** for scrollShrink to work, the toolbar must be a sibling of a
+ * `md-content` element, placed before it. See the scroll shrink demo._
+ *
+ * _**Note:** The `md-scroll-shrink` attribute is only parsed on component
+ * initialization, it does not watch for scope changes._
  *
  *
  * @param {number=} md-shrink-speed-factor How much to change the speed of the toolbar's
@@ -61,12 +65,7 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
 
   return {
     restrict: 'E',
-    template: '<div ng-transclude></div>',
-    transclude: true,
-    controller: angular.noop,
-    scope: {
-      scrollShrink: '=?mdScrollShrink'
-    },
+
     link: function(scope, element, attr) {
 
       $mdTheming(element);
@@ -97,7 +96,7 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
         // If the toolbar is used inside an ng-if statement, we may miss the
         // $mdContentLoaded event, so we attempt to fake it if we have a
         // md-content close enough.
-        scope.$watch('scrollShrink', onChangeScrollShrink);
+        attr.$observe('mdScrollShrink', onScrollShrinkDefined);
 
         // If the scope is destroyed (which could happen with ng-if), make sure
         // to disable scroll shrinking again
@@ -105,7 +104,7 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
           disableScrollShrink();
         });
 
-        function onChangeScrollShrink(scrollShrink) {
+        function onScrollShrinkDefined(scrollShrink) {
           var closestContent = element.parent().find('md-content');
 
           // If we have a content element, fake the call; this might still fail
