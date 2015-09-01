@@ -129,16 +129,15 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
           contentElement.attr('scroll-shrink', 'true');
 
           $$rAF(updateToolbarHeight);
-
-          return function disableScrollShrink() {
-            contentElement.off('scroll', debouncedContentScroll);
-            contentElement.attr('scroll-shrink', 'false');
-
-            $$rAF(updateToolbarHeight);
-          }
         }
+        
+        function disableScrollShrink() {
+          contentElement.off('scroll', debouncedContentScroll);
+          contentElement.attr('scroll-shrink', 'false');
 
-
+          $$rAF(updateToolbarHeight);
+        }
+        
         function onMdContentLoad($event, newContentEl) {
           // Toolbar and content must be siblings
           if (newContentEl && element.parent()[0] === newContentEl.parent()[0]) {
