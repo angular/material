@@ -113,9 +113,9 @@ function MdProgressCircularDirective($mdConstant, $mdTheming, $mdUtil) {
           // Inject class selector instead of attribute selector
           // (@see layout.js changes for IE performance issues)
 
-          if ( lastMode ) spinnerWrapper.removeClass(lastMode);
-          lastMode = mode;
-          if ( lastMode ) spinnerWrapper.addClass( "md-mode-" + lastMode );
+          if ( lastMode ) spinnerWrapper.removeClass( lastMode );
+               lastMode = "md-mode-" + mode;
+          if ( lastMode ) spinnerWrapper.addClass( lastMode );
 
           break;
         default:
