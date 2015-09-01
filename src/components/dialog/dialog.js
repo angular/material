@@ -447,7 +447,15 @@ function MdDialogProvider($$interimElementProvider) {
       focusOnOpen: true,
       disableParentScroll: true,
       transformTemplate: function(template) {
-        return '<div class="md-dialog-container">' + template + '</div>';
+        return '<div class="md-dialog-container">' + validatedTemplate(template) + '</div>';
+
+        /**
+         * The specified template should contain a <md-dialog> wrapper element....
+         */
+        function validatedTemplate(template) {
+          template || ""
+          return /<\/md-dialog>/g.test(template) ? template : "<md-dialog>" + template + "</md-dialog>";
+        }
       }
     };
 

@@ -1,10 +1,15 @@
 <div ng-controller="AppCtrl" layout="column" layout-margin style="padding:25px;">
 
+  <h2 class="md-title">Determinate</h2>
+  <p>For operations where the percentage of the operation completed can be determined, use a determinate indicator. They give users a quick sense of how long an operation will take.</p>
+  <md-progress-linear md-mode="determinate" value="{{determinateValue}}"></md-progress-linear>
+  <p>Buffer indicates loading from the server</p>
+  <md-progress-linear class="md-warn" md-mode="buffer" value="{{determinateValue}}" md-buffer-value="{{determinateValue2}}"></md-progress-linear>
+
+  <h4 class="md-title">Indeterminate</h4>
+  <p>For operations where the user is asked to wait a moment while something finishes up, and it's not necessary to expose what's happening behind the scenes and how long it will take, use an indeterminate indicator.</p>
   <md-progress-linear md-mode="indeterminate"></md-progress-linear>
-
-  <md-progress-linear class="md-warn" md-mode="buffer" value="{{determinateValue}}" md-buffer-value="{{determinateValue2}}">
-  </md-progress-linear>
-
-  <md-progress-linear class="md-accent" md-mode="{{mode}}" value="{{determinateValue}}"></md-progress-linear>
+  <p>Query indicates pre-loading situation until the loading can actually be made</p>
+  <md-progress-linear md-mode="query"></md-progress-linear>
 
 </div>

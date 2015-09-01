@@ -10,7 +10,7 @@ angular
   .module('material.core')
   .factory('$mdUtil', UtilFactory);
 
-function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $interpolate) {
+function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $interpolate, $log) {
   // Setup some core variables for the processTemplate method
   var startSymbol = $interpolate.startSymbol(),
     endSymbol = $interpolate.endSymbol(),
@@ -462,6 +462,8 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
           return angular.element(element[i]);
         }
       }
+
+      $log.warn( $mdUtil.supplant("Unable to find node '{0}' in element.",[nodeName]) );
       return element;
     },
 
