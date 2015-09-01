@@ -1087,8 +1087,20 @@ md-autocomplete {
   }
 }
 
+// !!Important - Theme-based Background-color can be configured in backdrop-theme.scss
+//             - Animate background-color opacityy only for `.md-opaque` styles
+
 md-backdrop {
+  transition: opacity 450ms;
+
+  position: absolute;
+  top:0;
+  bottom:0;
+  left: 0;
+  right: 0;
+
   z-index: $z-index-backdrop;
+
   &.md-menu-backdrop {
     position: fixed !important;
     z-index: $z-index-menu - 1;
@@ -1107,25 +1119,28 @@ md-backdrop {
     z-index: $z-index-sidenav - 1;
   }
 
-  opacity: 1;
-
-  // - Animate background-color alpha only for `.md-opaque` stylings
-  // !!Important - Theme-based Background-color and animations can be enabled in backdrop-theme.scss
-
-  transition: background-color 450ms $swift-ease-in-timing-function;
-
-  position: absolute;
-  top:0;
-  bottom:0;
-  left: 0;
-  right: 0;
 
   &.md-click-catcher {
     position: absolute;
   }
 
-  &.md-opaque.ng-leave {
-    transition: background-color 400ms linear;
+  &.md-opaque {
+
+    opacity: .48;
+
+    &.ng-enter {
+      opacity: 0;
+    }
+    &.ng-enter.md-opaque.ng-enter-active {
+      opacity: .48;
+    }
+    &.ng-leave {
+      opacity: .48;
+      transition: opacity 400ms;
+    }
+    &.ng-leave.md-opaque.ng-leave-active {
+      opacity: 0;
+    }
   }
 
 }
@@ -3361,6 +3376,9 @@ md-menu-item {
       margin-top: auto;
       margin-bottom: auto;
     }
+    .md-ripple-container {
+      border-radius: inherit;
+    }
   }
 }
 
@@ -3492,29 +3510,8 @@ $progress-circular-duration : 5.25s !default;
 $progress-circular-circle-duration : $progress-circular-duration * 0.25 !default;
 $progress-circular-outer-duration : $progress-circular-duration * (5 / 9) !default;
 $progress-circular-sporadic-duration : $progress-circular-duration !default;
-$progress-circular-size : 50px !default;
-
-@keyframes outer-rotate {
-  100% { transform: rotate(360deg); }
-}
-@keyframes left-wobble {
-  0%, 100% { transform: rotate(130deg); }
-  50% { transform: rotate( -5deg); }
-}
-@keyframes right-wobble {
-  0%, 100% { transform: rotate(-130deg); }
-  50% { transform: rotate(   5deg); }
-}
-@keyframes sporadic-rotate {
-  12.5% { transform: rotate( 135deg); }
-  25% { transform: rotate( 270deg); }
-  37.5% { transform: rotate( 405deg); }
-  50% { transform: rotate( 540deg); }
-  62.5% { transform: rotate( 675deg); }
-  75% { transform: rotate( 810deg); }
-  87.5% { transform: rotate( 945deg); }
-  100% { transform: rotate(1080deg); }
-}
+$progress-border-width : 10px;
+$progress-circular-size : 10 * $progress-border-width !default;
 
 md-progress-circular {
   width: $progress-circular-size;
@@ -3524,6 +3521,8 @@ md-progress-circular {
   padding-top: 0 !important;
   margin-bottom: 0 !important;
   overflow: hidden;
+  transform: scale(0.5);
+
   .md-inner {
     width: $progress-circular-size;
     height: $progress-circular-size;
@@ -3534,7 +3533,7 @@ md-progress-circular {
       right: $progress-circular-size * 0.5 - 1;
       top: 0;
       bottom: 0;
-      border-top-width: 5px;
+      border-top-width: $progress-border-width;
       border-top-style: solid;
       box-sizing: border-box;
     }
@@ -3542,7 +3541,7 @@ md-progress-circular {
       position: absolute;
       top: 0;
       height: $progress-circular-size;
-      width: $progress-circular-size * 0.5;
+      width: $progress-circular-size * 0.50;
       overflow: hidden;
       .md-half-circle {
         position: absolute;
@@ -3550,7 +3549,7 @@ md-progress-circular {
         width: $progress-circular-size;
         height: $progress-circular-size;
         box-sizing: border-box;
-        border-width: 5px;
+        border-width: $progress-border-width;
         border-style: solid;
         border-bottom-color: transparent;
         border-radius: 50%;
@@ -3572,79 +3571,32 @@ md-progress-circular {
     }
   }
 
-  // TODO: This while-loop generates about 2 kilobytes of css after gzip.
-  // Refactor progressCircular to animate with javascript.
-  $i: 0;
-  @while $i <= 100 {
-    &[value="#{$i}"] {
-      .md-inner {
-        .md-left {
-          .md-half-circle {
-            @if $i <= 50 {
-              transform: rotate(135deg);
-            } @else {
-              transition: transform 0.1s linear;
-              $deg: ($i - 50) / 50 * 180 + 135;
-              transform: rotate(#{$deg}deg);
-            }
-          }
-        }
-        .md-right {
-          .md-half-circle {
-            @if $i <= 50 {
-              transition: transform 0.1s linear;
-              $deg: $i / 50 * 180 - 135;
-              transform: rotate(#{$deg}deg);
-            } @else {
-              transform: rotate(45deg);
-            }
-          }
-        }
-        .md-gap {
-          border-bottom-width: 5px;
-          border-bottom-style: solid;
-          @if $i <= 50 {
-            border-bottom-color: transparent !important;
-          } @else {
-            transition: border-bottom-color 0.1s linear;
-          }
+  .md-spinner-wrapper.md-mode-indeterminate  {
+    animation: outer-rotate $progress-circular-outer-duration linear infinite;
+    .md-inner {
+      animation: sporadic-rotate $progress-circular-sporadic-duration $progress-circular-ease-in-out infinite;
+      .md-left, .md-right {
+        .md-half-circle {
+          animation-iteration-count: infinite;
+          animation-duration: ($progress-circular-duration * 0.25);
+          animation-timing-function: $progress-circular-ease-in-out;
         }
       }
-    }
-    $i: $i + 1;
-  }
-
-  &[md-mode=indeterminate] {
-    .md-spinner-wrapper {
-      animation: outer-rotate $progress-circular-outer-duration linear infinite;
-      .md-inner {
-        animation: sporadic-rotate $progress-circular-sporadic-duration $progress-circular-ease-in-out infinite;
-        .md-left, .md-right {
-          .md-half-circle {
-            animation-iteration-count: infinite;
-            animation-duration: ($progress-circular-duration * 0.25);
-            animation-timing-function: $progress-circular-ease-in-out;
-          }
+      .md-left {
+        .md-half-circle {
+          animation-name: left-wobble;
         }
-        .md-left {
-          .md-half-circle {
-            animation-name: left-wobble;
-          }
-        }
-        .md-right {
-          .md-half-circle {
-            animation-name: right-wobble;
-          }
+      }
+      .md-right {
+        .md-half-circle {
+          animation-name: right-wobble;
         }
       }
     }
   }
-}
 
-.ng-hide md-progress-circular,
-md-progress-circular.ng-hide {
-  &[md-mode=indeterminate] {
-    .md-spinner-wrapper {
+  .ng-hide md-progress-circular, md-progress-circular.ng-hide {
+    .md-spinner-wrapper  {
       animation: none;
       .md-inner {
         animation: none;
@@ -3661,7 +3613,52 @@ md-progress-circular.ng-hide {
       }
     }
   }
+
+  .md-spinner-wrapper.ng-hide {
+    animation: none;
+    .md-inner {
+      animation: none;
+      .md-left {
+        .md-half-circle {
+          animation-name: none;
+        }
+      }
+      .md-right {
+        .md-half-circle {
+          animation-name: none;
+        }
+      }
+    }
+  }
+
 }
+
+
+//
+// Keyframe animation for the Indeterminate Progress
+//
+@keyframes outer-rotate {
+ 100%     { transform: rotate(360deg); }
+}
+@keyframes left-wobble {
+ 0%, 100% { transform: rotate(130deg); }
+ 50%      { transform: rotate( -5deg); }
+}
+@keyframes right-wobble {
+ 0%, 100% { transform: rotate(-130deg); }
+ 50%      { transform: rotate(   5deg); }
+}
+@keyframes sporadic-rotate {
+ 12.5%    { transform: rotate( 135deg); }
+ 25%      { transform: rotate( 270deg); }
+ 37.5%    { transform: rotate( 405deg); }
+ 50%      { transform: rotate( 540deg); }
+ 62.5%    { transform: rotate( 675deg); }
+ 75%      { transform: rotate( 810deg); }
+ 87.5%    { transform: rotate( 945deg); }
+ 100%     { transform: rotate(1080deg); }
+}
+
 
 $progress-linear-bar-height: 5px !default;
 
