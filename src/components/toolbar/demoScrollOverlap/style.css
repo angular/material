@@ -1,0 +1,17 @@
+.face {
+  width: 48px;
+  margin: 16px;
+  border-radius: 48px;
+  border: 1px solid #ddd;
+}
+
+.green {
+  background: #b9f6ca; }
+.yellow {
+  background: #ffff8d; }
+.blue {
+  background: #84ffff; }
+.purple {
+  background: #b388ff; }
+.red {
+  background: #ff8a80; }
