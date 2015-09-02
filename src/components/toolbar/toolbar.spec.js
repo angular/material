@@ -131,6 +131,17 @@ describe('<md-toolbar>', function() {
     expect($exceptionHandler.errors).toEqual([]);
   }));
 
+  it('disables scroll shrink when the attribute is not provided', inject(function() {
+    build(
+      '<div>' +
+      '  <md-toolbar></md-toolbar>' +
+      '  <md-content></md-content>' +
+      '</div>'
+    );
+
+    expect(element.find('md-content').attr('scroll-shrink')).toEqual(undefined);
+  }));
+
   it('enables scroll shrink when the attribute has no value', function() {
     build(
       '<div>' +
@@ -142,9 +153,37 @@ describe('<md-toolbar>', function() {
     expect(element.find('md-content').attr('scroll-shrink')).toEqual('true');
   });
 
-  function build(template) {
+  it('disables scroll shrink if the expression evaluates to false', function() {
+    var pageScope = $rootScope.$new();
+
+    // Set the value to false
+    pageScope.$apply('someValue = false');
+
+    // Build the element
+    build(
+      // Pass our template
+      '<div>' +
+      '  <md-toolbar md-scroll-shrink="someValue"></md-toolbar>' +
+      '  <md-content></md-content>' +
+      '</div>',
+
+      // Pass our custom pageScope
+      pageScope
+    );
+
+    // Check that scroll shrink is disabled
+    expect(element.find('md-content').attr('scroll-shrink')).toEqual('false');
+  });
+
+
+  function build(template, scope) {
     inject(function($compile) {
-      pageScope = $rootScope.$new();
+      if (scope) {
+        pageScope = scope
+      } else {
+        pageScope = $rootScope.$new();
+      }
+
       element = $compile(template)(pageScope);
       controller = element.controller('mdToolbar');
 
