@@ -82,10 +82,12 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
     function configureWatchers () {
       scope.$on('$destroy', function() {
-        scope.visible = false;
+        if (scope.visible !== false) {
+          scope.visible = false;
+          $mdUtil.nextTick(checkVisibility);
+        }
         element.remove();
         angular.element($window).off('resize', debouncedOnResize);
-        checkVisibility();
       });
     }
     
@@ -184,14 +186,18 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
         if (value) {
           setVisible.queued = true;
           $timeout(function() {
-            scope.visible = setVisible.value;
+            if (scope.visible !== setVisible.value) {
+              scope.visible = setVisible.value;
+              $mdUtil.nextTick(checkVisibility);
+            }
             setVisible.queued = false;
-            checkVisibility();
           }, scope.delay);
         } else {
           $mdUtil.nextTick(function() { 
-              scope.visible = false; 
-              checkVisibility();
+              if (scope.visible !== false) {
+                scope.visible = false; 
+                checkVisibility();
+              }
           });
         }
       }
@@ -205,9 +211,11 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       // Check if we should display it or not.
       // This handles hide-* and show-* along with any user defined css
       if ( hasComputedStyleValue('display','none') ) {
-        scope.visible = false;
+        if (scope.visible !== false) {
+          scope.visible = false;
+          $mdUtil.nextTick(checkVisibility);
+        }
         element.detach();
-        checkVisibility();
         return;
       }
 
