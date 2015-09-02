@@ -84,11 +84,15 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
         scope.visible = false;
         element.remove();
         angular.element($window).off('resize', debouncedOnResize);
+        checkVisibility();
       });
-      scope.$watch('visible', function (isVisible) {
-        if (isVisible) showTooltip();
-        else hideTooltip();
-      });
+    }
+    
+    function checkVisibility () {
+      if (scope.visible)
+        showTooltip();
+      else
+        hideTooltip();
     }
 
     function addAriaLabel () {
@@ -181,9 +185,13 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
           $timeout(function() {
             scope.visible = setVisible.value;
             setVisible.queued = false;
+            checkVisibility();
           }, scope.delay);
         } else {
-          $mdUtil.nextTick(function() { scope.visible = false; });
+          $mdUtil.nextTick(function() { 
+              scope.visible = false; 
+              checkVisibility();
+          });
         }
       }
     }
@@ -198,6 +206,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       if ( hasComputedStyleValue('display','none') ) {
         scope.visible = false;
         element.detach();
+        checkVisibility();
         return;
       }
 
