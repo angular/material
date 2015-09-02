@@ -73,6 +73,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     bindEvents();
     configureWatchers();
     addAriaLabel();
+    checkVisibility();
 
 
     function setDefaults () {
