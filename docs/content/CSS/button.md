@@ -54,7 +54,7 @@ All Angular Material components have specific CSS rules constructed using the th
 
 
 <br/>
-##Flat Buttons
+## Flat Buttons
 
 ![mdbuttonflatdefault3](https://cloud.githubusercontent.com/assets/210413/7945984/bda14884-0939-11e5-9196-131ded20ca77.png)
 
@@ -107,7 +107,7 @@ All Angular Material components have specific CSS rules constructed using the th
 </hljs>
 
 <br/>
-##Raised Buttons
+## Raised Buttons
 
 ![raisedbutton](https://cloud.githubusercontent.com/assets/1292882/7254163/fe898728-e849-11e4-943b-a9cd88ec9573.PNG)
 
@@ -124,7 +124,7 @@ Add the `.md-raised` class to create a raised button:
 </hljs>
 
 <br/>
-##Cornered buttons
+## Cornered buttons
 
 ![corneredbutton](https://cloud.githubusercontent.com/assets/1292882/7254379/682592ac-e84b-11e4-8d33-78314cea8bda.PNG)
 
@@ -141,7 +141,7 @@ Add the `.md-cornered` class to create a button with corners:
 </hljs>
 
 <br/>
-##Default FAB Button
+## Default FAB Button
 
 ![floatingbutton](https://cloud.githubusercontent.com/assets/1292882/7254736/8fec7ee8-e84d-11e4-9cf9-58ea9221c3c2.PNG)
 
@@ -163,7 +163,7 @@ Add the `.md-fab` class in order to create a floating action button (aka FAB):
 </hljs>
 
 <br/>
-##Mini FAB Button
+## Mini FAB Button
 
 ![minibutton](https://cloud.githubusercontent.com/assets/1292882/7273617/1fcca280-e8fe-11e4-9588-231a9e860be1.PNG)
 
@@ -184,7 +184,7 @@ Add the `.md-mini` class in order to create small, mini-FAB buttons:
 </hljs>
 
 <br/>
-##Icon button using SVGs
+## Icon button using SVGs
 
 ![iconbutton](https://cloud.githubusercontent.com/assets/1292882/7273908/d701bd8a-e900-11e4-84c7-44c580c7372d.PNG)
 
@@ -208,7 +208,7 @@ Create icon buttons by adding the `.md-icon-button` class and the `<md-icon ...>
 </hljs>
 
 <br/>
-##Icon button using Font-icons
+## Icon button using Font-icons
 
 
 ![fonticonbutton](https://cloud.githubusercontent.com/assets/1292882/7670414/f57721ba-fcab-11e4-9a22-67970063797c.PNG)
