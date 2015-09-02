@@ -2,7 +2,7 @@
 @name button
 @description
 
-#&lt;md-button&gt;
+# &lt;md-button&gt;
 
 Below is a snapshot of the Angular Material **button** component demos with the default themes and standard options:
 
