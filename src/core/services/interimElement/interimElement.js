@@ -295,7 +295,7 @@ function InterimElementProvider() {
        *
        */
       function hide(reason, options) {
-        if ( !stack.length ) return $q.when(reason);
+        if ( !stack.length ) return $q.when(reason || SHOW_CLOSED);
         options = options || {};
 
         if (options.closeAll) {
@@ -333,7 +333,7 @@ function InterimElementProvider() {
        */
       function cancel(reason) {
         var interim = stack.shift();
-        if ( !interim ) return $q.when(reason);
+        if ( !interim ) return $q.when(reason || SHOW_CANCELLED);
 
         interim
           .remove(reason || SHOW_CANCELLED, true)
