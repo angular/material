@@ -511,7 +511,7 @@ function MdDialogProvider($$interimElementProvider) {
       function wrapSimpleContent() {
         if ( controller ) {
           var HTML_END_TAG = /<\/[\w-]*>/gm;
-          var content = controller.content;
+          var content = controller.content || "";
 
           var hasHTML = HTML_END_TAG.test(content);
           if (!hasHTML) {
