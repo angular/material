@@ -2678,24 +2678,23 @@ md-autocomplete {
     height: 40px; }
     md-autocomplete md-autocomplete-wrap.md-menu-showing {
       z-index: 51; }
-    md-autocomplete md-autocomplete-wrap md-progress-linear[md-mode=indeterminate] {
+    md-autocomplete md-autocomplete-wrap md-progress-linear .md-mode-indeterminate {
       position: absolute;
-      bottom: 0;
+      top: 20px;
       left: 0;
       width: 100%;
       height: 3px;
       transition: none; }
-      md-autocomplete md-autocomplete-wrap md-progress-linear[md-mode=indeterminate] .md-container {
+      md-autocomplete md-autocomplete-wrap md-progress-linear .md-mode-indeterminate .md-container {
         transition: none;
-        top: auto;
         height: 3px; }
-      md-autocomplete md-autocomplete-wrap md-progress-linear[md-mode=indeterminate].ng-enter {
+      md-autocomplete md-autocomplete-wrap md-progress-linear .md-mode-indeterminate.ng-enter {
         transition: opacity 0.15s linear; }
-        md-autocomplete md-autocomplete-wrap md-progress-linear[md-mode=indeterminate].ng-enter.ng-enter-active {
+        md-autocomplete md-autocomplete-wrap md-progress-linear .md-mode-indeterminate.ng-enter.ng-enter-active {
           opacity: 1; }
-      md-autocomplete md-autocomplete-wrap md-progress-linear[md-mode=indeterminate].ng-leave {
+      md-autocomplete md-autocomplete-wrap md-progress-linear .md-mode-indeterminate.ng-leave {
         transition: opacity 0.15s linear; }
-        md-autocomplete md-autocomplete-wrap md-progress-linear[md-mode=indeterminate].ng-leave.ng-leave-active {
+        md-autocomplete md-autocomplete-wrap md-progress-linear .md-mode-indeterminate.ng-leave.ng-leave-active {
           opacity: 0; }
   md-autocomplete input:not(.md-input) {
     font-size: 14px;
@@ -4655,54 +4654,57 @@ md-menu-content.md-menu-bar-menu.md-dense {
         right: 28px; }
 
 md-progress-circular {
-  width: 100px;
-  height: 100px;
   display: block;
   position: relative;
+  width: 100px;
+  height: 100px;
   padding-top: 0 !important;
   margin-bottom: 0 !important;
-  overflow: hidden;
   -webkit-transform: scale(0.5);
           transform: scale(0.5); }
-  md-progress-circular .md-inner {
-    width: 100px;
-    height: 100px;
-    position: relative; }
-    md-progress-circular .md-inner .md-gap {
-      position: absolute;
-      left: 49px;
-      right: 49px;
-      top: 0;
-      bottom: 0;
-      border-top-width: 10px;
-      border-top-style: solid;
-      box-sizing: border-box; }
-    md-progress-circular .md-inner .md-left, md-progress-circular .md-inner .md-right {
-      position: absolute;
-      top: 0;
+  md-progress-circular .md-spinner-wrapper {
+    display: block;
+    position: relative;
+    overflow: hidden; }
+    md-progress-circular .md-spinner-wrapper .md-inner {
+      width: 100px;
       height: 100px;
-      width: 50px;
-      overflow: hidden; }
-      md-progress-circular .md-inner .md-left .md-half-circle, md-progress-circular .md-inner .md-right .md-half-circle {
+      position: relative; }
+      md-progress-circular .md-spinner-wrapper .md-inner .md-gap {
+        position: absolute;
+        left: 49px;
+        right: 49px;
+        top: 0;
+        bottom: 0;
+        border-top-width: 10px;
+        border-top-style: solid;
+        box-sizing: border-box; }
+      md-progress-circular .md-spinner-wrapper .md-inner .md-left, md-progress-circular .md-spinner-wrapper .md-inner .md-right {
         position: absolute;
         top: 0;
-        width: 100px;
         height: 100px;
-        box-sizing: border-box;
-        border-width: 10px;
-        border-style: solid;
-        border-bottom-color: transparent;
-        border-radius: 50%; }
-    md-progress-circular .md-inner .md-left {
-      left: 0; }
-      md-progress-circular .md-inner .md-left .md-half-circle {
-        left: 0;
-        border-right-color: transparent; }
-    md-progress-circular .md-inner .md-right {
-      right: 0; }
-      md-progress-circular .md-inner .md-right .md-half-circle {
-        right: 0;
-        border-left-color: transparent; }
+        width: 50px;
+        overflow: hidden; }
+        md-progress-circular .md-spinner-wrapper .md-inner .md-left .md-half-circle, md-progress-circular .md-spinner-wrapper .md-inner .md-right .md-half-circle {
+          position: absolute;
+          top: 0;
+          width: 100px;
+          height: 100px;
+          box-sizing: border-box;
+          border-width: 10px;
+          border-style: solid;
+          border-bottom-color: transparent;
+          border-radius: 50%; }
+      md-progress-circular .md-spinner-wrapper .md-inner .md-left {
+        left: 0; }
+        md-progress-circular .md-spinner-wrapper .md-inner .md-left .md-half-circle {
+          left: 0;
+          border-right-color: transparent; }
+      md-progress-circular .md-spinner-wrapper .md-inner .md-right {
+        right: 0; }
+        md-progress-circular .md-spinner-wrapper .md-inner .md-right .md-half-circle {
+          right: 0;
+          border-left-color: transparent; }
   md-progress-circular .md-spinner-wrapper.md-mode-indeterminate {
     -webkit-animation: outer-rotate 2.91667s linear infinite;
             animation: outer-rotate 2.91667s linear infinite; }
@@ -4722,16 +4724,16 @@ md-progress-circular {
       md-progress-circular .md-spinner-wrapper.md-mode-indeterminate .md-inner .md-right .md-half-circle {
         -webkit-animation-name: right-wobble;
                 animation-name: right-wobble; }
-  md-progress-circular .ng-hide md-progress-circular .md-spinner-wrapper, md-progress-circular md-progress-circular.ng-hide .md-spinner-wrapper {
+  md-progress-circular md-progress-circular.ng-hide .md-spinner-wrapper {
     -webkit-animation: none;
             animation: none; }
-    md-progress-circular .ng-hide md-progress-circular .md-spinner-wrapper .md-inner, md-progress-circular md-progress-circular.ng-hide .md-spinner-wrapper .md-inner {
+    md-progress-circular md-progress-circular.ng-hide .md-spinner-wrapper .md-inner {
       -webkit-animation: none;
               animation: none; }
-      md-progress-circular .ng-hide md-progress-circular .md-spinner-wrapper .md-inner .md-left .md-half-circle, md-progress-circular md-progress-circular.ng-hide .md-spinner-wrapper .md-inner .md-left .md-half-circle {
+      md-progress-circular md-progress-circular.ng-hide .md-spinner-wrapper .md-inner .md-left .md-half-circle {
         -webkit-animation-name: none;
                 animation-name: none; }
-      md-progress-circular .ng-hide md-progress-circular .md-spinner-wrapper .md-inner .md-right .md-half-circle, md-progress-circular md-progress-circular.ng-hide .md-spinner-wrapper .md-inner .md-right .md-half-circle {
+      md-progress-circular md-progress-circular.ng-hide .md-spinner-wrapper .md-inner .md-right .md-half-circle {
         -webkit-animation-name: none;
                 animation-name: none; }
   md-progress-circular .md-spinner-wrapper.ng-hide {
@@ -4859,72 +4861,71 @@ md-progress-circular {
     -webkit-transform: rotate(1080deg);
             transform: rotate(1080deg); } }
 
-md-progress-linear:not([md-mode="indeterminate"]) {
+md-progress-linear {
   display: block;
-  width: 100%;
-  height: 5px; }
-  md-progress-linear:not([md-mode="indeterminate"]) .md-container {
-    overflow: hidden;
-    position: relative;
-    height: 5px;
-    top: 5px;
-    -webkit-transform: translate(0, 5px) scale(1, 0);
-            transform: translate(0, 5px) scale(1, 0);
-    transition: all .3s linear; }
-  md-progress-linear:not([md-mode="indeterminate"]) .md-container.md-ready {
-    -webkit-transform: translate(0, 0) scale(1, 1);
-            transform: translate(0, 0) scale(1, 1); }
-  md-progress-linear:not([md-mode="indeterminate"]) .md-bar {
-    height: 5px;
-    position: absolute;
-    width: 100%; }
-  md-progress-linear:not([md-mode="indeterminate"]) .md-bar1, md-progress-linear:not([md-mode="indeterminate"]) .md-bar2 {
-    transition: all 0.2s linear; }
-  md-progress-linear:not([md-mode="indeterminate"])[md-mode=determinate] .md-bar1 {
-    display: none; }
-  md-progress-linear:not([md-mode="indeterminate"])[md-mode=buffer] .md-container {
-    background-color: transparent !important; }
-  md-progress-linear:not([md-mode="indeterminate"])[md-mode=buffer] .md-dashed:before {
-    content: "";
-    display: block;
-    height: 5px;
-    width: 100%;
-    margin-top: 0;
-    position: absolute;
-    background-color: transparent;
-    background-size: 10px 10px !important;
-    background-position: 0px -23px;
-    -webkit-animation: buffer 3s infinite linear;
-            animation: buffer 3s infinite linear; }
-  md-progress-linear:not([md-mode="indeterminate"])[md-mode=query] .md-bar2 {
-    -webkit-animation: query .8s infinite cubic-bezier(0.39, 0.575, 0.565, 1);
-            animation: query .8s infinite cubic-bezier(0.39, 0.575, 0.565, 1); }
-
-md-progress-linear[md-mode="indeterminate"] {
-  display: block;
+  position: relative;
   width: 100%;
   height: 5px;
-  position: relative; }
-  md-progress-linear[md-mode="indeterminate"] .md-container {
-    width: 100%;
-    overflow: hidden;
+  padding-top: 0 !important;
+  margin-bottom: 0 !important; }
+  md-progress-linear .md-container {
+    display: block;
     position: relative;
+    overflow: hidden;
+    width: 100%;
     height: 5px;
-    top: 5px;
-    transition: all .3s linear; }
-    md-progress-linear[md-mode="indeterminate"] .md-container .md-bar {
-      height: 5px;
-      left: 0;
-      width: 80%;
+    -webkit-transform: translate(0, 0) scale(1, 1);
+            transform: translate(0, 0) scale(1, 1); }
+    md-progress-linear .md-container .md-bar {
       position: absolute;
+      left: 0;
       top: 0;
-      bottom: 0; }
-    md-progress-linear[md-mode="indeterminate"] .md-container .md-bar1 {
+      bottom: 0;
+      width: 100%;
+      height: 5px; }
+    md-progress-linear .md-container .md-dashed:before {
+      content: "";
+      display: none;
+      position: absolute;
+      margin-top: 0;
+      height: 5px;
+      width: 100%;
+      background-color: transparent;
+      background-size: 10px 10px !important;
+      background-position: 0px -23px; }
+    md-progress-linear .md-container .md-bar1, md-progress-linear .md-container .md-bar2 {
+      transition: -webkit-transform 0.2s linear;
+      transition: transform 0.2s linear; }
+    md-progress-linear .md-container.md-mode-query .md-bar1 {
+      display: none; }
+    md-progress-linear .md-container.md-mode-query .md-bar2 {
+      transition: all 0.2s linear;
+      -webkit-animation: query .8s infinite cubic-bezier(0.39, 0.575, 0.565, 1);
+              animation: query .8s infinite cubic-bezier(0.39, 0.575, 0.565, 1); }
+    md-progress-linear .md-container.md-mode-determinate .md-bar1 {
+      display: none; }
+    md-progress-linear .md-container.md-mode-indeterminate .md-bar1 {
       -webkit-animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite;
               animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
-    md-progress-linear[md-mode="indeterminate"] .md-container .md-bar2 {
+    md-progress-linear .md-container.md-mode-indeterminate .md-bar2 {
       -webkit-animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite;
               animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
+    md-progress-linear .md-container.ng-hide {
+      -webkit-animation: none;
+              animation: none; }
+      md-progress-linear .md-container.ng-hide .md-bar1 {
+        -webkit-animation-name: none;
+                animation-name: none; }
+      md-progress-linear .md-container.ng-hide .md-bar2 {
+        -webkit-animation-name: none;
+                animation-name: none; }
+  md-progress-linear .md-container.md-mode-buffer {
+    background-color: transparent !important;
+    transition: all 0.2s linear; }
+    md-progress-linear .md-container.md-mode-buffer .md-dashed:before {
+      display: block;
+      -webkit-animation: buffer 3s infinite linear;
+              animation: buffer 3s infinite linear; }
 
 @-webkit-keyframes query {
   0% {
