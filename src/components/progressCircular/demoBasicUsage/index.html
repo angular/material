@@ -26,9 +26,12 @@
       <md-progress-circular md-mode="{{vm.modes[4]}}" md-diameter="96"></md-progress-circular>
     </div>
 
+
+    <hr ng-class="{'visible' : vm.activated}">
+
     <div layout="row" id="loaders">
 
-      <p style="margin-right: 20px">Show Progress Circular Indicators: </p>
+      <p>Progress Circular Indicators: </p>
 
       <h5>Off</h5>
       <md-switch
@@ -39,5 +42,9 @@
       </md-switch>
     </div>
 
+  <p class="small">
+    Note: With above switch -- that simply clears the md-mode in each <code>&lt;md-progress-linear md-mode=""&gt;</code> element --
+    developers can easily disable the animations and hide their progress indicators.
+  </p>
 
 </div>
