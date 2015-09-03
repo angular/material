@@ -136,7 +136,7 @@ if (angular.version.minor >= 4) {
   }];
 
   angular
-    .module('material.animate', [])
+    .module('material.core.animate', [])
     .factory('$$forceReflow', $$ForceReflowFactory)
     .factory('$$AnimateRunner', $$AnimateRunnerFactory)
     .factory('$$rAFMutex', $$rAFMutexFactory)

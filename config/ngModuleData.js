@@ -4,7 +4,7 @@
  *
  * angular.module('ngMaterial', [
  *    "ng","ngAnimate","ngAria",
- *    "material.core","material.core.gestures","material.layout","material.core.theming.palette",
+ *    "material.core","material.core.gestures","material.core.layout","material.core.theming.palette",
  *    ...
  *  ]);
  *

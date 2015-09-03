@@ -7,7 +7,7 @@ describe('$animateCss', function() {
   var element, ss, doneSpy;
   var triggerAnimationStartFrame, moveAnimationClock;
 
-  beforeEach(module('material.animate'));
+  beforeEach(module('material.core.animate'));
 
   beforeEach(module(function() {
     return function($window, $document, $$rAF, $timeout, $rootElement) {

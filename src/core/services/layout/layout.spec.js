@@ -1,5 +1,5 @@
 describe('layout directives', function() {
-  beforeEach(module('material.core', 'material.layout'));
+  beforeEach(module('material.core', 'material.core.layout'));
 
   describe('expecting layout classes', function() {
 
