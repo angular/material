@@ -71,15 +71,14 @@ md-autocomplete {
     &.md-menu-showing {
       z-index: $z-index-backdrop + 1;
     }
-    md-progress-linear[md-mode=indeterminate] {
+    md-progress-linear .md-mode-indeterminate {
       position: absolute;
-      bottom: 0; left: 0; width: 100%;
+      top: 20px; left: 0; width: 100%;
       height: 3px;
       transition: none;
 
       .md-container {
         transition: none;
-        top: auto;
         height: 3px;
       }
       &.ng-enter {

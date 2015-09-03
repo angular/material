@@ -30,6 +30,42 @@ describe('$mdDialog', function() {
       'ok', 'targetEvent', 'theme'
     ]);
 
+    it('shows a basic confirm dialog without content', inject(function($animate, $rootScope, $mdDialog) {
+          var parent = angular.element('<div>');
+          var resolved = false;
+
+          $mdDialog.show(
+            $mdDialog
+              .confirm()
+              .parent(parent)
+              .title('')
+              .ok('Next')
+              .cancel("Back")
+          ).then(function() {
+              resolved = true;
+            });
+
+          $rootScope.$apply();
+          runAnimation();
+
+          var mdContainer = angular.element(parent[0].querySelector('.md-dialog-container'));
+          var mdDialog = mdContainer.find('md-dialog');
+          var mdContent = mdDialog.find('md-dialog-content');
+          var title = mdContent.find('h2');
+          var content = mdContent.find('p');
+          var buttons = parent.find('md-button');
+
+          expect(title.text()).toBe('');
+          expect(content.text()).toBe('');
+
+          buttons.eq(0).triggerHandler('click');
+
+          $rootScope.$apply();
+          runAnimation();
+
+          expect(resolved).toBe(true);
+        }));
+
     it('shows a basic alert dialog', inject(function($animate, $rootScope, $mdDialog, $mdConstant) {
       var parent = angular.element('<div>');
       var resolved = false;

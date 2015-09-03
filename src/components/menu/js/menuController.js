@@ -31,7 +31,9 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout) {
 
     menuContainer.on('$mdInterimElementRemove', function() {
       self.isOpen = false;
+      $mdUtil.nextTick(function(){ $scope.onIsOpenChanged(self.isOpen);});
     });
+    $mdUtil.nextTick(function(){ $scope.onIsOpenChanged(self.isOpen);});
   };
 
   this.enableHoverListener = function() {
@@ -89,6 +91,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout) {
     ev && ev.preventDefault();
     if (self.isOpen) return;
     self.isOpen = true;
+    $mdUtil.nextTick(function(){ $scope.onIsOpenChanged(self.isOpen);});
     triggerElement = triggerElement || (ev ? ev.target : $element[0]);
     $scope.$emit('$mdMenuOpen', $element);
     $mdMenu.show({
@@ -104,8 +107,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout) {
 
   // Expose a open function to the child scope for html to use
   $scope.$mdOpenMenu = this.open;
-
-  $scope.$watch(function() { return self.isOpen; }, function(isOpen) {
+  $scope.onIsOpenChanged = function(isOpen) {
     if (isOpen) {
       triggerElement.setAttribute('aria-expanded', 'true');
       $element[0].classList.add('md-open');
@@ -117,7 +119,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout) {
       $element[0].classList.remove('md-open');
     }
     $scope.$mdMenuIsOpen = self.isOpen;
-  });
+  };
 
   this.focusMenuContainer = function focusMenuContainer() {
     var focusTarget = menuContainer[0].querySelector('[md-menu-focus-target]');
@@ -137,7 +139,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout) {
   this.close = function closeMenu(skipFocus, closeOpts) {
     if ( !self.isOpen ) return;
     self.isOpen = false;
-
+    $mdUtil.nextTick(function(){ $scope.onIsOpenChanged(self.isOpen);});
     $scope.$emit('$mdMenuClose', $element);
     $mdMenu.hide(null, closeOpts);
     if (!skipFocus) {
