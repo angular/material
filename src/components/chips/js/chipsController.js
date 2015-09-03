@@ -180,7 +180,7 @@ MdChipsCtrl.prototype.isEditingChip = function(){
 MdChipsCtrl.prototype.chipKeydown = function (event) {
   if (this.getChipBuffer()) return;
   if (this.isEditingChip()) return;
-  
+
   switch (event.keyCode) {
     case this.$mdConstant.KEY_CODE.BACKSPACE:
     case this.$mdConstant.KEY_CODE.DELETE:
@@ -278,7 +278,7 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
   }
 
   // Check for a null (but not undefined), or existing chip and cancel appending
-  if (newChip == null || this.items.indexOf(newChip) + 1) return;
+  if (angular.isUndefined(newChip) || newChip == null || this.items.indexOf(newChip) + 1) return;
 
   // Append the new chip onto our list
   var index = this.items.push(newChip);
