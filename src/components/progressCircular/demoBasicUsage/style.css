@@ -20,3 +20,29 @@ md-progress-circular {
 #loaders > h5 {
     padding-top: 8px;
 }
+
+#loaders > p {
+    margin-right: 20px;
+}
+
+
+p.small {
+  font-size: 0.8em;
+  margin-top: -18px;
+}
+
+
+hr {
+  width: 100%;
+  margin-top: 20px;
+  border-color: rgba(221, 221, 177, 0.1);
+}
+
+p.small > code {
+    font-size: 0.8em;
+}
+
+
+.visible  {
+    border-color: rgba(221, 221, 177, 0);
+}

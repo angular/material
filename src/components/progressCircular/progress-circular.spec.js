@@ -11,6 +11,36 @@ describe('mdProgressCircular', function() {
     element.remove();
   });
 
+  it('should auto-set the md-mode to "indeterminate" if not specified', inject(function($compile, $rootScope, $mdConstant) {
+    element = $compile('<div>' +
+          '<md-progress-circular></md-progress-circular>' +
+          '</div>')($rootScope);
+
+    $rootScope.$apply(function() {
+      $rootScope.progress = 50;
+      $rootScope.mode = "";
+    });
+
+    var progress = element.find('md-progress-circular');
+    expect(progress.attr('md-mode')).toEqual('indeterminate');
+  }));
+
+  it('should auto-set the md-mode to "determinate" if not specified but has value', inject(function($compile, $rootScope, $mdConstant) {
+    var element = $compile('<div>' +
+      '<md-progress-circular value="{{progress}}"></md-progress-circular>' +
+      '</div>')($rootScope);
+
+    $rootScope.$apply(function() {
+      $rootScope.progress = 50;
+      $rootScope.mode = "";
+    });
+
+    var progress = element.find('md-progress-circular');
+    expect(progress.attr('md-mode')).toEqual('determinate');
+  }));
+
+
+
   it('should update aria-valuenow', inject(function($compile, $rootScope) {
     element = $compile('<div>' +
       '<md-progress-circular value="{{progress}}">' +
