@@ -1,7 +1,7 @@
 "use strict";
 
 if (angular.version.minor >= 4) {
-  angular.module('material.animate', []);
+  angular.module('material.core.animate', []);
 } else {
 (function() {
 
