@@ -7,62 +7,71 @@ $progress-border-width : 10px;
 $progress-circular-size : 10 * $progress-border-width !default;
 
 md-progress-circular {
-  width: $progress-circular-size;
-  height: $progress-circular-size;
   display: block;
   position: relative;
+
+  width: $progress-circular-size;
+  height: $progress-circular-size;
+
   padding-top: 0 !important;
   margin-bottom: 0 !important;
-  overflow: hidden;
+
   transform: scale(0.5);
 
-  .md-inner {
-    width: $progress-circular-size;
-    height: $progress-circular-size;
+  .md-spinner-wrapper {
+    display:block;
     position: relative;
-    .md-gap {
-      position: absolute;
-      left: $progress-circular-size * 0.5 - 1;
-      right: $progress-circular-size * 0.5 - 1;
-      top: 0;
-      bottom: 0;
-      border-top-width: $progress-border-width;
-      border-top-style: solid;
-      box-sizing: border-box;
-    }
-    .md-left, .md-right {
-      position: absolute;
-      top: 0;
-      height: $progress-circular-size;
-      width: $progress-circular-size * 0.50;
-      overflow: hidden;
-      .md-half-circle {
-        position: absolute;
-        top: 0;
-        width: $progress-circular-size;
-        height: $progress-circular-size;
-        box-sizing: border-box;
-        border-width: $progress-border-width;
-        border-style: solid;
-        border-bottom-color: transparent;
-        border-radius: 50%;
-      }
-    }
-    .md-left {
-      left: 0;
-      .md-half-circle {
-        left: 0;
-        border-right-color: transparent;
-      }
-    }
-    .md-right {
-      right: 0;
-      .md-half-circle {
-        right: 0;
-        border-left-color: transparent;
-      }
-    }
+    overflow: hidden;
+
+    .md-inner {
+       width: $progress-circular-size;
+       height: $progress-circular-size;
+       position: relative;
+       .md-gap {
+         position: absolute;
+         left: $progress-circular-size * 0.5 - 1;
+         right: $progress-circular-size * 0.5 - 1;
+         top: 0;
+         bottom: 0;
+         border-top-width: $progress-border-width;
+         border-top-style: solid;
+         box-sizing: border-box;
+       }
+       .md-left, .md-right {
+         position: absolute;
+         top: 0;
+         height: $progress-circular-size;
+         width: $progress-circular-size * 0.50;
+         overflow: hidden;
+         .md-half-circle {
+           position: absolute;
+           top: 0;
+           width: $progress-circular-size;
+           height: $progress-circular-size;
+           box-sizing: border-box;
+           border-width: $progress-border-width;
+           border-style: solid;
+           border-bottom-color: transparent;
+           border-radius: 50%;
+         }
+       }
+       .md-left {
+         left: 0;
+         .md-half-circle {
+           left: 0;
+           border-right-color: transparent;
+         }
+       }
+       .md-right {
+         right: 0;
+         .md-half-circle {
+           right: 0;
+           border-left-color: transparent;
+         }
+       }
+     }
   }
+
 
   .md-spinner-wrapper.md-mode-indeterminate  {
     animation: outer-rotate $progress-circular-outer-duration linear infinite;
@@ -88,7 +97,7 @@ md-progress-circular {
     }
   }
 
-  .ng-hide md-progress-circular, md-progress-circular.ng-hide {
+  md-progress-circular.ng-hide {
     .md-spinner-wrapper  {
       animation: none;
       .md-inner {

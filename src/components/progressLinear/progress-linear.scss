@@ -1,92 +1,110 @@
 $progress-linear-bar-height: 5px !default;
 
-md-progress-linear:not([md-mode="indeterminate"]) {
+md-progress-linear {
   display: block;
+  position: relative;
   width: 100%;
   height: $progress-linear-bar-height;
 
+  padding-top: 0 !important;
+  margin-bottom: 0 !important;
+
   .md-container {
-    overflow: hidden;
+    display:block;
     position: relative;
+    overflow: hidden;
+
+    width:100%;
     height: $progress-linear-bar-height;
-    top: $progress-linear-bar-height;
-    transform: translate(0, 5px) scale(1, 0);
-    transition: all .3s linear;
-  }
 
-  .md-container.md-ready {
-    transform: translate(0, 0) scale(1, 1);
-  }
+    transform: translate(0, 0) scale(1, 1);;
 
-  .md-bar {
-    height: $progress-linear-bar-height;
-    position: absolute;
-    width: 100%;
-  }
+    .md-bar {
+      position: absolute;
 
-  .md-bar1, .md-bar2 {
-    transition: all 0.2s linear;
-  }
+      left: 0;
+      top: 0;
+      bottom: 0;
 
-  &[md-mode=determinate] {
-    .md-bar1 {
-      display: none;
-    }
-  }
-
-  &[md-mode=buffer] {
-    .md-container {
-      background-color: transparent !important;
+      width: 100%;
+      height: $progress-linear-bar-height;
     }
 
     .md-dashed:before {
       content: "";
-      display: block;
+      display: none;
+      position: absolute;
+
+      margin-top: 0;
       height: $progress-linear-bar-height;
       width: 100%;
-      margin-top: 0;
-      position: absolute;
+
       background-color: transparent;
       background-size: 10px 10px !important;
       background-position: 0px -23px;
+    }
+
+    .md-bar1, .md-bar2 {
+
+      // Just set the transition information here.
+      // Note: the actual transform values are calculated in JS
+
+      transition: transform 0.2s linear;
+    }
+
+    // ************************************************************
+    // Animations for modes: Determinate, InDeterminate, and Query
+    // ************************************************************
+
+    &.md-mode-query {
+        .md-bar1 {
+          display: none;
+        }
+        .md-bar2 {
+          transition: all 0.2s linear;
+          animation: query .8s infinite cubic-bezier(0.390, 0.575, 0.565, 1.000);
+        }
+      }
+
+    &.md-mode-determinate {
+      .md-bar1 {
+        display: none;
+      }
+    }
+
+    &.md-mode-indeterminate {
+      .md-bar1 {
+        animation: md-progress-linear-indeterminate-scale-1 4s infinite,
+                   md-progress-linear-indeterminate-1 4s infinite;
+      }
+      .md-bar2 {
+        animation: md-progress-linear-indeterminate-scale-2 4s infinite,
+                   md-progress-linear-indeterminate-2 4s infinite;
+      }
+    }
+
+    &.ng-hide {
+      animation: none;
+
+      .md-bar1 {
+        animation-name: none;
+      }
+      .md-bar2 {
+        animation-name: none;
+      }
+    }
+  }
+
+  // Special animations for the `buffer` mode
+
+  .md-container.md-mode-buffer {
+    background-color: transparent !important;
+
+    transition: all 0.2s linear;
+
+    .md-dashed:before {
+      display: block;
       animation: buffer 3s infinite linear;
-    }
-  }
-
-  &[md-mode=query] {
-    .md-bar2 {
-      animation: query .8s infinite cubic-bezier(0.390, 0.575, 0.565, 1.000);
-    }
-  }
-}
-
-md-progress-linear[md-mode="indeterminate"] {
-  display: block;
-  width: 100%;
-  height: $progress-linear-bar-height;
-  position: relative;
-  .md-container {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-    height: $progress-linear-bar-height;
-    top: $progress-linear-bar-height;
-    transition: all .3s linear;
-    .md-bar {
-      height: $progress-linear-bar-height;
-      left: 0;
-      width: 288 * 100% / 360;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-    }
-    .md-bar1 {
-      animation: md-progress-linear-indeterminate-scale-1 4s infinite,
-                 md-progress-linear-indeterminate-1 4s infinite;
-    }
-    .md-bar2 {
-      animation: md-progress-linear-indeterminate-scale-2 4s infinite,
-                 md-progress-linear-indeterminate-2 4s infinite;
     }
   }
 }
@@ -101,7 +119,6 @@ md-progress-linear[md-mode="indeterminate"] {
     transform: translateX(-50%) scale(0, 1);
   }
 }
-
 @keyframes buffer {
   0% {
     opacity: 1;
@@ -115,7 +132,6 @@ md-progress-linear[md-mode="indeterminate"] {
     background-position: -200px -23px;
   }
 }
-
 @keyframes md-progress-linear-indeterminate-scale-1 {
   0% {
     transform: scaleX(0.1);
@@ -133,7 +149,6 @@ md-progress-linear[md-mode="indeterminate"] {
     transform: scaleX(0.1);
   }
 }
-
 @keyframes md-progress-linear-indeterminate-1 {
   0% {
     left: -378.6 * 100% / 360;
@@ -151,7 +166,6 @@ md-progress-linear[md-mode="indeterminate"] {
     left: 343.6 * 100% / 360;
   }
 }
-
 @keyframes md-progress-linear-indeterminate-scale-2 {
   0% {
     transform: scaleX(0.1);
@@ -169,7 +183,6 @@ md-progress-linear[md-mode="indeterminate"] {
     transform: scaleX(0.1);
   }
 }
-
 @keyframes md-progress-linear-indeterminate-2 {
   0% {
     left: -197.6 * 100% / 360;
@@ -187,3 +200,5 @@ md-progress-linear[md-mode="indeterminate"] {
     left: 422.6 * 100% / 360;
   }
 }
+
+
