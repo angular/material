@@ -1,11 +1,13 @@
-<a name"0.11.0-rc1"></a>
-### 0.11.0-rc1 (2015-09-01)
+<a name"0.11.0-rc2"></a>
+### 0.11.0-rc2 (2015-09-03)
 
 This release is comprised of three major efforts:
 
 * Release of new components: DatePicker and MenuBar
+* Performance and API improvements for ProgressLinear and ProgressCircular
 * Performance improvements to Layout and use of Flexbox
 * Performance improvements to Ripple
+
 
 #### Features
 
@@ -18,7 +20,7 @@ This release is comprised of three major efforts:
   * improve datepicker css ([56df8d51](https://github.com/angular/material/commit/56df8d51))
   * add clickable arrow button and placeholder ([c9a23242](https://github.com/angular/material/commit/c9a23242))
   * add calendar icon and associated styles ([24ae0fa3](https://github.com/angular/material/commit/24ae0fa3))
-  * implement virtual scrolling in calendar ([34eb48cf](https://github.com/angular/material/commit/34eb48cf))
+  * imeplement virtual scrolling in calendar ([34eb48cf](https://github.com/angular/material/commit/34eb48cf))
   * fix up $$mdDateLocaleProvider and use in calendar. ([36eae116](https://github.com/angular/material/commit/36eae116))
   * starting work for date-picker. ([b158d15b](https://github.com/angular/material/commit/b158d15b))
   * fix up $$mdDateLocaleProvider and use in calendar. ([b789eef8](https://github.com/angular/material/commit/b789eef8))
@@ -112,6 +114,31 @@ Fixes #1495.
 
  ([81e94b4f](https://github.com/angular/material/commit/81e94b4f))
 
+* progressLinear and progressCircular indicators explicitly set `display` and `position` styles
+
+Before:
+
+```css
+md-progress-linear {
+  display: block;
+}
+md-progress-circular {
+   // display not set
+   // position not set
+}
+```
+
+```css
+md-progress-linear {
+  display: block;
+  position: relative;
+}
+md-progress-circular {
+  display: block;
+  position: relative;
+}
+```
+
 
 #### Bug Fixes
 
@@ -153,6 +180,7 @@ Fixes #1495.
   * prevent scrolling while calendar pane is open. ([e6053736](https://github.com/angular/material/commit/e6053736))
   * fix pane position when pinch-zoomed ([1e28d521](https://github.com/angular/material/commit/1e28d521))
 * **dialog:**
+  * allow Confirm dialogs to have empty/undefined content ([ffbcff39](https://github.com/angular/material/commit/ffbcff39), closes [#4429](https://github.com/angular/material/issues/4429))
   * improve support for template and templateUrl options ([22c34bad](https://github.com/angular/material/commit/22c34bad), closes [#3191](https://github.com/angular/material/issues/3191), [#4206](https://github.com/angular/material/issues/4206))
   * enable support for html content for alert and confirm dialogs ([81e94b4f](https://github.com/angular/material/commit/81e94b4f), closes [#1495](https://github.com/angular/material/issues/1495))
 * **docs:** Build on Windows results in broken docs site ([35ce9b8f](https://github.com/angular/material/commit/35ce9b8f), closes [#4226](https://github.com/angular/material/issues/4226), [#4227](https://github.com/angular/material/issues/4227))
@@ -177,7 +205,10 @@ Fixes #1495.
 * **mdSelect:**
   * Close menu on hitting Enter key ([303ab0dc](https://github.com/angular/material/commit/303ab0dc), closes [#4377](https://github.com/angular/material/issues/4377), [#4384](https://github.com/angular/material/issues/4384), [#4372](https://github.com/angular/material/issues/4372))
   * Close menu on hitting Enter key ([925301f2](https://github.com/angular/material/commit/925301f2), closes [#4377](https://github.com/angular/material/issues/4377), [#4384](https://github.com/angular/material/issues/4384))
-* **mdToolbar:** Allow md-scroll-shrink usage with ng-if. ([9b861fdb](https://github.com/angular/material/commit/9b861fdb), closes [#2751](https://github.com/angular/material/issues/2751), [#4394](https://github.com/angular/material/issues/4394))
+* **mdSubheader:** Non top-level md-content causes incorrect position. ([391479b0](https://github.com/angular/material/commit/391479b0), closes [#4420](https://github.com/angular/material/issues/4420), [#4439](https://github.com/angular/material/issues/4439))
+* **mdToolbar:**
+  * Better fix for ng-if that allows ng-controller. ([a09b9abb](https://github.com/angular/material/commit/a09b9abb), closes [#4144](https://github.com/angular/material/issues/4144), [#4423](https://github.com/angular/material/issues/4423))
+  * Allow md-scroll-shrink usage with ng-if. ([9b861fdb](https://github.com/angular/material/commit/9b861fdb), closes [#2751](https://github.com/angular/material/issues/2751), [#4394](https://github.com/angular/material/issues/4394))
 * **progressCircular:** css reduction with js animations ([b1f7dc41](https://github.com/angular/material/commit/b1f7dc41))
 * **ripple:**
   * fixes ripple when jQuery is loaded ([4e048ff8](https://github.com/angular/material/commit/4e048ff8), closes [#4375](https://github.com/angular/material/issues/4375))
