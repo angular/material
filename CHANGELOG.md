@@ -14,7 +14,7 @@ This release is comprised of 1 major effort:
   * watch md-mode for changes
   * refactor animation SCSS
   * enable hiding and no-animations with undefined/empty md-mode attributes
-  * for both indicators, use `display:inline-block;`
+  * for both indicators, use `display:block;`
   * update demos with enable switch
   * fix query mode
   * update Select to use enhanced progressCircular component
