@@ -8,7 +8,7 @@ This release is comprised of 1 major effort:
 #### Features
 
 * **progressCircular:** css reduction with js animations ([b1f7dc41](https://github.com/angular/material/commit/b1f7dc41))
-* **progressLinear, progressCircular** sync logic, fix linear animations, performance upgrades
+* **progressLinear, progressCircular** sync logic, fix linear animations, performance upgrades ([d74f93a84](https://github.com/angular/material/commit/d74f93a8463727a01cc5ed89d04d1108ba413359))
   * synchronize progressLinear with similar logic used in progressCircular.
   * improve animation performances
   * watch md-mode for changes
