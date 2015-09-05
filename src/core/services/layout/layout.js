@@ -138,6 +138,7 @@
     function attributeWithObserve(className, addDirectiveAsClass) {
       return function() {
         return {
+            restrict : 'A',
             compile: function(element, attr) {
               attributeValueToClass(null, element, attr);
 
@@ -201,6 +202,7 @@
     function attributeWithoutValue(className) {
       return function() {
         return {
+          restrict : 'A',
           compile: function(element, attr) {
             attributeToClass(null, element);
 
