@@ -192,13 +192,19 @@ MdChipsCtrl.prototype.getAdjacentChipIndex = function(index) {
  * call out to the md-on-append method, if provided
  * @param newChip
  */
-MdChipsCtrl.prototype.appendChip = function(newChip) {
-  if (this.useOnAppend && this.onAppend) {
-    newChip = this.onAppend({'$chip': newChip});
-  }
-  if (this.items.indexOf(newChip) + 1) return;
-  this.items.push(newChip);
-};
+ MdChipsCtrl.prototype.appendChip = function(newChip) {
+   if (this.useOnAppend && this.onAppend) {
+     newChip = this.onAppend({'$chip': newChip});
+   }
+   if(typeof newChip === 'object'){
+     var identical = this.items.filter(function(item){
+       return angular.equals(newChip, item);
+     });
+     if(identical.length > 0) return;
+   }
+   if (this.items.indexOf(newChip) + 1) return;
+   this.items.push(newChip);
+ };
 
 /**
  * Sets whether to use the md-on-append expression. This expression is

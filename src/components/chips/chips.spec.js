@@ -218,6 +218,30 @@ describe('<md-chips>', function() {
         expect(scope.appendChip.calls.mostRecent().args[0]).toBe('Apple');
       });
 
+      it('should disallow identical object chips', function() {
+        var element = buildChips(CHIP_APPEND_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        ctrl.items = [{name: 'Apple', uppername: 'APPLE'}];
+
+        var chipObj = function(chip) {
+          return {
+            name: chip,
+            uppername: chip.toUpperCase()
+          };
+        };
+        scope.appendChip = jasmine.createSpy('appendChip').and.callFake(chipObj);
+
+        element.scope().$apply(function() {
+          ctrl.chipBuffer = 'Apple';
+          simulateInputEnterKey(ctrl);
+        });
+
+        expect(ctrl.items.length).toBe(1);
+        expect(scope.appendChip).toHaveBeenCalled();
+        expect(scope.appendChip.calls.mostRecent().args[0]).toBe('Apple');
+      });
+
       it('should prevent the default when backspace is pressed', inject(function($mdConstant) {
         var element = buildChips(BASIC_CHIP_TEMPLATE);
         var ctrl = element.controller('mdChips');
