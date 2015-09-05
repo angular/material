@@ -157,36 +157,25 @@
     .#{$flexName}-#{$i * 5} {
       flex: 0 0 #{$i * 5 + '%'};
     }
-    .layout-row > .#{$flexName}-#{$i * 5} {
-      max-width: #{$i * 5 + '%'};
-    }
-    .layout-column > .#{$flexName}-#{$i * 5} {
-      max-height: #{$i * 5 + '%'};
-    }
+    .layout-row > .#{$flexName}-#{$i * 5} {  }
+    .layout-column > .#{$flexName}-#{$i * 5} {  }
   }
 
   .#{$flexName}-33, .#{$flexName}-34 {
-    flex: 0 0 33.33%;
+    flex: 0 0 34%;
   }
   .#{$flexName}-66, .#{$flexName}-67 {
-    flex: 0 0 66.66%;
+    flex: 0 0 66%;
+
   }
 
   .layout-row {
-    > .#{$flexName}-33, > .#{$flexName}-34 {
-      max-width: 33.33%;
-    }
-    > .#{$flexName}-66, > .#{$flexName}-67 {
-      max-width: 66.66%;
-    }
+    > .#{$flexName}-33, > .#{$flexName}-34 {  }
+    > .#{$flexName}-66, > .#{$flexName}-67 {  }
   }
   .layout-column {
-    > .#{$flexName}-33, > .#{$flexName}-34 {
-      max-height: 33.33%;
-    }
-    > .#{$flexName}-66, > .#{$flexName}-67 {
-      max-height: 66.66%;
-    }
+    > .#{$flexName}-33, > .#{$flexName}-34 {  }
+    > .#{$flexName}-66, > .#{$flexName}-67 {  }
   }
 }
 
