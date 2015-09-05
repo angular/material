@@ -26,8 +26,6 @@ This release is comprised of 1 major effort:
     *  add API doc details regarding md-mode auto-injection
   * fix tests
 Fixes [#4421](https://github.com/angular/material/issues/4421). Fixes [#4409](https://github.com/angular/material/issues/4409). Fixes [#2540](https://github.com/angular/material/issues/2540). Fixes [#2364](https://github.com/angular/material/issues/2364). Fixes [#1926](https://github.com/angular/material/issues/1926). Fixes [#3802](https://github.com/angular/material/issues/3802). Closes [#4454](https://github.com/angular/material/issues/4454).
-* **menuBar:** add menu bar component ([d9ba0e13](https://github.com/angular/material/commit/d9ba0e13), closes [#78](https://github.com/angular/material/issues/78))
-
 
 #### Breaking Changes
 
