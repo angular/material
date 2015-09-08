@@ -1,4 +1,10 @@
 <a name"0.11.0-rc2"></a>
+### 0.11.0 (2015-09-08)
+
+This release includes all changes from RC1 and RC2.
+
+
+<a name"0.11.0-rc2"></a>
 ### 0.11.0-rc2 (2015-09-03)
 
 This release is comprised of 1 major effort:
