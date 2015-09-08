@@ -18,6 +18,8 @@
    * @property {(Array<string>)=} shortDays Array of abbreviated dayes of the week.
    * @property {(Array<string>)=} dates Array of dates of the month. Only necessary for locales
    *     using a numeral system other than [1, 2, 3...].
+   * @property {(Array<string>)=} firstDayOfWeek The first day of the week. Sunday = 0, Monday = 1,
+   *    etc.
    * @property {(function(string): Date)=} parseDate Function to parse a date object from a string.
    * @property {(function(Date): string)=} formatDate Function to format a date object to a string.
    * @property {(function(Date): string)=} monthHeaderFormatter Function that returns the label for
@@ -38,6 +40,9 @@
    *     $mdDateLocaleProvider.days = ['dimanche', 'lundi', 'mardi', ...];
    *     $mdDateLocaleProvider.shortDays = ['Di', 'Lu', 'Ma', ...];
    *
+   *     // Can change week display to start on Monday.
+   *     $mdDateLocaleProvider.firstDayOfWeek = 1;
+   *
    *     // Optional.
    *     $mdDateLocaleProvider.dates = [1, 2, 3, 4, 5, 6, ...];
    *
@@ -51,7 +56,7 @@
    *     };
    *
    *     $mdDateLocaleProvider.monthHeaderFormatter = function(date) {
-   *       myShortMonths[date.getMonth()] + ' ' + date.getFullYear();
+   *       return myShortMonths[date.getMonth()] + ' ' + date.getFullYear();
    *     };
    *
    *     // In addition to date display, date components also need localized messages
@@ -88,6 +93,9 @@
 
       /** Array of dates of a month (1 - 31). Characters might be different in some locales. */
       this.dates = null;
+
+      /** Index of the first day of the week. 0 = Sunday, 1 = Monday, etc. */
+      this.firstDayOfWeek = 0;
 
       /**
        * Function that converts the date portion of a Date to a string.
@@ -231,6 +239,7 @@
         days: this.days || $locale.DATETIME_FORMATS.DAY,
         shortDays: this.shortDays || defaultShortDays,
         dates: this.dates || defaultDates,
+        firstDayOfWeek: this.firstDayOfWeek || 0,
         formatDate: this.formatDate || defaultFormatDate,
         parseDate: this.parseDate || defaultParseDate,
         isDateComplete: this.isDateComplete || defaultIsDateComplete,
