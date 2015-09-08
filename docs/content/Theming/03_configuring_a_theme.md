@@ -21,26 +21,26 @@ You can specify a color palette for a given color intention by calling the
 appropriate configuration method (`theme.primaryPalette`, `theme.accentPalette`,
 `theme.warnPalette`, `theme.backgroundPalette`).
 
-<hljs lang="js">
+```
 angular.module('myApp', ['ngMaterial'])
 .config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')
     .primaryPalette('pink')
     .accentPalette('orange');
 });
-</hljs>
+```
 
 ### Specifying Dark Themes
 
 You can mark a theme as dark by calling `theme.dark()`. 
 
-<hljs lang="js">
+```
 angular.module('myApp', ['ngMaterial'])
 .config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')
     .dark();
 });
-</hljs>
+```
 
 ### Specifying Custom Hues For Color Intentions
 
@@ -50,7 +50,7 @@ by default and for the `md-hue-1`, `md-hue-2`, `md-hue-3` classes.
 By default, shades `500`, `300` `800` and `A100` are used for `primary` and
 `warn` intentions, while `A200`, `A100`, `A400` and `A700` are used for `accent`.
 
-<hljs lang="js">
+```
 angular.module('myApp', ['ngMaterial'])
 .config(function($mdThemingProvider) {
 
@@ -68,7 +68,7 @@ angular.module('myApp', ['ngMaterial'])
     });
 
 });
-</hljs>
+```
 
 ### Defining Custom Palettes
 
@@ -77,7 +77,7 @@ Spec's color palettes built in. In the event that you need to define a custom co
 it available to your theme for use in its intention groups. Note that you must
 specify all hues in the definition map.
 
-<hljs lang="js">
+```
 angular.module('myApp', ['ngMaterial'])
 .config(function($mdThemingProvider) {
 
@@ -108,13 +108,13 @@ angular.module('myApp', ['ngMaterial'])
     .primaryPalette('amazingPaletteName')
 
 });
-</hljs>
+```
 
 Sometimes it is easier to extend an existing color palette to overwrite a few
 colors than define a whole new one. You can use `$mdThemingProvider.extendPalette` 
 to quickly extend an existing color palette.
 
-<hljs lang="js">
+```
 angular.module('myApp', ['ngMaterial'])
 .config(function($mdThemingProvider) {
 
@@ -131,4 +131,4 @@ angular.module('myApp', ['ngMaterial'])
     .primaryPalette('neonRed')
 
 });
-</hljs>
+```
