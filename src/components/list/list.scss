@@ -51,7 +51,7 @@ md-list-item {
     &.md-button {
       font-size: inherit;
       height: inherit;
-      text-align: left;
+      @include rtl(text-align, left, right);
       text-transform: none;
       width: 100%;
       white-space: normal;
@@ -72,10 +72,12 @@ md-list-item {
   md-divider {
     position: absolute;
     bottom: 0;
-    left: 0;
+    @include rtl(left, 0, null);
+    @include rtl(right, null, 0);
     width: 100%;
     &[md-inset] {
-      left: $list-item-inset-divider-offset;
+      @include rtl(left, $list-item-inset-divider-offset, null);
+      @include rtl(right, null, $list-item-inset-divider-offset);
       width: calc(100% - #{$list-item-inset-divider-offset});
       margin: 0;
     }
@@ -107,26 +109,29 @@ md-list-item, md-list-item .md-list-item-inner {
   }
 
   & > md-icon:first-child {
-    margin-right: $list-item-primary-width - $list-item-primary-icon-width;
+    @include rtl(margin-right, $list-item-primary-width - $list-item-primary-icon-width, null);
+    @include rtl(margin-left, null, $list-item-primary-width - $list-item-primary-icon-width);
   }
   & > md-checkbox:first-child {
     width: 3 * $baseline-grid;
-    margin-left: 3px;
-    margin-right: 29px;
+    @include rtl(margin-left, 3px, 29px);
+    @include rtl(margin-right, 29px, 3px);
   }
   & > .md-avatar:first-child {
     width: $list-item-primary-avatar-width;
     height: $list-item-primary-avatar-width;
     margin-top: $baseline-grid;
     margin-bottom: $baseline-grid;
-    margin-right: $list-item-primary-width - $list-item-primary-avatar-width;
+    @include rtl(margin-right, $list-item-primary-width - $list-item-primary-avatar-width, null);
+    @include rtl(margin-left, null, $list-item-primary-width - $list-item-primary-avatar-width);
     border-radius: 50%;
     box-sizing: content-box;
   }
 
   md-checkbox.md-secondary,
   md-switch.md-secondary {
-    margin-right: 0;
+    @include rtl(margin-right, 0, null);
+    @include rtl(margin-left,null, 0);
     margin-top: 0;
     margin-bottom: 0;
   }
@@ -145,15 +150,18 @@ md-list-item, md-list-item .md-list-item-inner {
 
   .md-secondary-container,
   .md-secondary {
-    margin-left: $list-item-secondary-left-margin;
+    @include rtl(margin-left, $list-item-secondary-left-margin, null);
+    @include rtl(margin-right, null, $list-item-secondary-left-margin);
     position: absolute;
-    right: $list-item-padding-horizontal;
+    @include rtl(right, $list-item-padding-horizontal, null);
+    @include rtl(left, null, $list-item-padding-horizontal);
     top: 50%;
     transform: translate3d(0, -50%, 0);
   }
 
   & > .md-button.md-secondary-container > .md-secondary {
-    margin-left: 0px;
+    @include rtl(margin-left, 0px, null);
+    @include rtl(margin-right, null, 0px);
     position: static;
   }
 
@@ -176,7 +184,8 @@ md-list-item.md-3-line > .md-no-style {
     text-overflow: ellipsis;
 
     &.md-offset {
-      margin-left: $list-item-primary-width;
+      @include rtl(margin-left, $list-item-primary-width, null);
+      @include rtl(margin-right, null, $list-item-primary-width);
     }
 
     h3 {

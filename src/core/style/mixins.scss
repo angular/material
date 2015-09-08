@@ -103,7 +103,15 @@
 // @see https://css-tricks.com/almanac/properties/d/direction/
 
 @mixin rtl($prop, $value, $rtl-value) {
-  #{$prop}: $value;
+  html[dir=ltr] & {
+    #{$prop}: $value;
+  }
+  body[dir=ltr] & {
+    #{$prop}: $value;
+  }
+  html:not([dir]) body:not([dir]) & {
+    #{$prop}: $value;
+  }
 
   html[dir=rtl] & {
     #{$prop}: $rtl-value;
@@ -122,8 +130,17 @@
     direction: ltr;
     unicode-bidi: bidi-override;
   }
+}
 
-
+// To reverse padding (top left bottom right) -> (top right bottom left)
+@function reverse($list) {
+  @if length($list) == 4 {
+    @return nth($list, 1) nth($list, 4) nth($list, 3) nth($list, 2)
+  }
+  @if length($list) == 5 {
+    @return nth($list, 1) nth($list, 4) nth($list, 3) nth($list, 2) nth($list, 5)
+  }
+  @return $list;
 }
 
 // Position a FAB button.
