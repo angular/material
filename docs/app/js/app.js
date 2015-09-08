@@ -504,7 +504,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   '$log',
 function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope, $window, $log) {
   var self = this;
-
+  $scope.direction = "ltr";
   $scope.COMPONENTS = COMPONENTS;
   $scope.BUILDCONFIG = BUILDCONFIG;
   $scope.menu = menu;
