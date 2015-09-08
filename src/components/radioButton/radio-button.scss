@@ -84,8 +84,8 @@ md-radio-button,
     position: relative;
     display: inline-block;
 
-    @include rtl(margin-left, $radio-text-margin, 0);
-    @include rtl(margin-right, 0, $radio-text-margin);
+    @include rtl(margin-left, $radio-text-margin, null);
+    @include rtl(margin-right, null, $radio-text-margin);
 
     vertical-align: middle;
     white-space: normal;
