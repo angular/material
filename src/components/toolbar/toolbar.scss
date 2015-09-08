@@ -63,7 +63,8 @@ md-toolbar {
   }
 
   > .md-indent {
-    margin-left: $toolbar-indent-margin;
+    @include rtl(margin-left, $toolbar-indent-margin, null);
+    @include rtl(margin-right, null, $toolbar-indent-margin);
   }
 
   ~ md-content {
@@ -113,16 +114,20 @@ md-toolbar {
     margin-bottom: 0;
   }
   &> .md-button:first-child {
-    margin-left: $icon-button-margin-offset;
+    @include rtl(margin-left, $icon-button-margin-offset, null);
+    @include rtl(margin-right, null, $icon-button-margin-offset);
   }
   &> .md-button:last-child {
-    margin-right: $icon-button-margin-offset;
+    @include rtl(margin-right, $icon-button-margin-offset, null);
+    @include rtl(margin-left, null, $icon-button-margin-offset);
   }
 
   &> md-menu:last-child {
-    margin-right: $icon-button-margin-offset;
+    @include rtl(margin-right, $icon-button-margin-offset, null);
+    @include rtl(margin-left, null, $icon-button-margin-offset);
     & > .md-button {
-      margin-right: 0;
+      @include rtl(margin-right, 0, null);
+      @include rtl(margin-left, null, 0);
     }
   }
 
