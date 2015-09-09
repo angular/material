@@ -31,9 +31,11 @@ md-input-container {
   > md-icon {
     position: absolute;
     top: 5px;
-    left: 2px;
+    @include rtl(left, 2px, null);
+    @include rtl(right, null, 2px);
     + input {
-          margin-left: $icon-offset;
+          @include rtl(margin-left, $icon-offset, null);
+          @include rtl(margin-right, null, $icon-offset);
     }
   }
 
@@ -84,7 +86,8 @@ md-input-container {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
-    padding-left: $input-container-padding;
+    @include rtl(padding-left, $input-container-padding, null);
+    @include rtl(padding-right, null, $input-container-padding);
     z-index: 1;
     transform: translate3d(0, $input-label-default-offset + 4, 0) scale($input-label-default-scale);
     transition: transform $swift-ease-out-timing-function 0.25s;
@@ -170,7 +173,8 @@ md-input-container {
     line-height: $input-error-height;
 
     &:not(.md-char-counter) {
-      padding-right: rem(3);
+      @include rtl(padding-right, rem(3), null);
+      @include rtl(padding-left, null, rem(3));
     }
 
     &.ng-enter {
@@ -193,7 +197,8 @@ md-input-container {
   }
   .md-char-counter {
     bottom: $input-container-padding;
-    right: $input-container-padding;
+    @include rtl(right, $input-container-padding, null);
+    @include rtl(left, null, $input-container-padding);
   }
 
   &.md-input-focused,
@@ -232,15 +237,18 @@ md-input-container.md-icon-float {
   > label  {
       pointer-events:none;
       position:absolute;
-      margin-left: $icon-offset;
+      @include rtl(margin-left, $icon-offset, null);
+      @include rtl(margin-right, null, $icon-offset);
   }
 
   > md-icon {
     top: 26px;
-    left: 2px;
+    @include rtl(left, 2px, null);
+    @include rtl(right, null, 2px);
     + input,
     + textarea {
-          margin-left: $icon-offset;
+          @include rtl(margin-left, $icon-offset, null);
+          @include rtl(margin-right, null, $icon-offset);
     }
   }
 
