@@ -80,8 +80,8 @@ md-progress-circular {
 This release is comprised of three major efforts:
 
 * Release of new components: DatePicker and MenuBar
-* Performance improvements to Layout and use of Flexbox
-* Performance improvements to Ripple
+* Performance improvements to Layout and use of Flexbox ([372d911a](https://github.com/angular/material/commit/372d911a7893214cfe0c47db4dafb19470221cad))
+* Performance improvements to Ripple ([e92dd263](https://github.com/angular/material/commit/e92dd2632baf1216a89aa8534381fcba2bfcdc35))
 
 #### Features
 
