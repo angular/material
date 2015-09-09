@@ -79,7 +79,6 @@
       var processors = [
         applyAngularAttributesToParentElement,
         insertTemplatesAsScriptTags,
-        htmlEscapeAmpersand,
         htmlEscapeAmpersand
       ];
 
@@ -113,7 +112,7 @@
 
       // Grab only the DIV for the demo...
       angular.forEach(angular.element(html), function(it,key){
-        if ((it.nodeName != "SCRIPT") || (it.nodeName != "#text")) {
+        if ((it.nodeName != "SCRIPT") && (it.nodeName != "#text")) {
           tmp = angular.element(it);
         }
       });
