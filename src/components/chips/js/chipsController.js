@@ -197,10 +197,10 @@ MdChipsCtrl.prototype.getAdjacentChipIndex = function(index) {
      newChip = this.onAppend({'$chip': newChip});
    }
    if(typeof newChip === 'object'){
-     var identical = this.items.filter(function(item){
+     var identical = this.items.some(function(item){
        return angular.equals(newChip, item);
      });
-     if(identical.length > 0) return;
+     if(identical) return;
    }
    if (this.items.indexOf(newChip) + 1) return;
    this.items.push(newChip);
