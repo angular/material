@@ -15,12 +15,10 @@
 }
 
 @mixin input-placeholder-color($color) {
-  &::-webkit-input-placeholder,
-  &::-moz-placeholder, /* Firefox 19+ */
-  &:-moz-placeholder, /* Firefox 18- */
-  &:-ms-input-placeholder {
-    color: $color;
-  }
+  &::-webkit-input-placeholder { color: $color; }
+  &::-moz-placeholder { color: $color; } /* Firefox 19+ */
+  &:-moz-placeholder { color: $color; } /* Firefox 18- */
+  &:-ms-input-placeholder { color: $color; }
 }
 
 @mixin pie-clearfix {
