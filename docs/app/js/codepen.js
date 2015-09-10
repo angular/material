@@ -51,6 +51,7 @@
     var CORE_JS = 'http://localhost:8080/angular-material.js';
     var CORE_CSS = 'http://localhost:8080/angular-material.css';
     var ASSET_CACHE_JS = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/assets-cache.js';
+    var DOC_CSS = 'https://material.angularjs.org/HEAD/docs.css';
 
     return {
       translate: translate
@@ -64,14 +65,15 @@
       return {
         title: demo.title,
         html: processHtml(demo),
-        css: mergeFiles(files.css).join(' '),
+        head: '<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">',
+        css: mergeFiles([files.css,DOC_CSS]).join(' '),
         js: processJs(files.js),
         js_external: externalScripts.concat([CORE_JS, ASSET_CACHE_JS]).join(';'),
         css_external: CORE_CSS
       };
     }
 
-    // Modifies index.html with neccesary changes in order to display correctly in codepen
+    // Modifies index.html with necessary changes in order to display correctly in codepen
     // See each processor to determine how each modifies the html
     function processHtml(demo) {
       var index = demo.files.index.contents;
