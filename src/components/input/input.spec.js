@@ -7,8 +7,8 @@ describe('md-input-container directive', function() {
     var container;
     inject(function($rootScope, $compile) {
       container = $compile((isForm ? '<form>' : '') +
-                           '<md-input-container><input ' +(attrs||'')+ '><label></label></md-input-container>' +
-                           (isForm ? '<form>' : ''))($rootScope);
+        '<md-input-container><input ' + (attrs || '') + '><label></label></md-input-container>' +
+        (isForm ? '<form>' : ''))($rootScope);
       $rootScope.$apply();
     });
     return container;
@@ -107,10 +107,10 @@ describe('md-input-container directive', function() {
 
     it('should work with a constant', inject(function($rootScope, $compile) {
       var el = $compile('<form name="form">' +
-                        ' <md-input-container>' +
-                        '   <input md-maxlength="5" ng-model="foo" name="foo">' +
-                        ' </md-input-container>' +
-                        '</form>')($rootScope);
+        ' <md-input-container>' +
+        '   <input md-maxlength="5" ng-model="foo" name="foo">' +
+        ' </md-input-container>' +
+        '</form>')($rootScope);
       $rootScope.$apply();
       expect($rootScope.form.foo.$error['md-maxlength']).toBeFalsy();
       expect(getCharCounter(el).text()).toBe('0/5');
@@ -132,10 +132,10 @@ describe('md-input-container directive', function() {
 
     it('should add and remove maxlength element & error with expression', inject(function($rootScope, $compile) {
       var el = $compile('<form name="form">' +
-                        ' <md-input-container>' +
-                        '   <input md-maxlength="max" ng-model="foo" name="foo">' +
-                        ' </md-input-container>' +
-                        '</form>')($rootScope);
+        ' <md-input-container>' +
+        '   <input md-maxlength="max" ng-model="foo" name="foo">' +
+        ' </md-input-container>' +
+        '</form>')($rootScope);
 
       $rootScope.$apply();
       expect($rootScope.form.foo.$error['md-maxlength']).toBeFalsy();
@@ -165,21 +165,26 @@ describe('md-input-container directive', function() {
   }));
 
   it('should ignore placeholder when a label element is present', inject(function($rootScope, $compile) {
-      var el = $compile('<md-input-container><label>Hello</label><input ng-model="foo" placeholder="some placeholder"></md-input-container>')($rootScope);
-      var placeholder = el[0].querySelector('.md-placeholder');
-      var label = el.find('label')[0];
+    var el = $compile(
+      '<md-input-container>' +
+      '  <label>Hello</label>' +
+      '  <input ng-model="foo" placeholder="some placeholder" />' +
+      '</md-input-container>'
+    )($rootScope);
 
-      expect(el.find('input')[0].hasAttribute('placeholder')).toBe(false);
-      expect(label).toBeTruthy();
-      expect(label.textContent).toEqual('Hello');
-    }));
+    var label = el.find('label')[0];
+
+    expect(el.find('input')[0].hasAttribute('placeholder')).toBe(true);
+    expect(label).toBeTruthy();
+    expect(label.textContent).toEqual('Hello');
+  }));
 
   it('should put an aria-label on the input when no label is present', inject(function($rootScope, $compile) {
     var el = $compile('<form name="form">' +
-                      ' <md-input-container md-no-float>' +
-                      '   <input placeholder="baz" md-maxlength="max" ng-model="foo" name="foo">' +
-                      ' </md-input-container>' +
-                      '</form>')($rootScope);
+      ' <md-input-container md-no-float>' +
+      '   <input placeholder="baz" md-maxlength="max" ng-model="foo" name="foo">' +
+      ' </md-input-container>' +
+      '</form>')($rootScope);
 
     $rootScope.$apply();
 
@@ -190,10 +195,10 @@ describe('md-input-container directive', function() {
   it('should put the container in "has value" state when input has a static value', inject(function($rootScope, $compile) {
     var scope = $rootScope.$new();
     var template =
-        '<md-input-container>' +
-          '<label>Name</label>' +
-          '<input value="Larry">' +
-        '</md-input-container>';
+      '<md-input-container>' +
+      '<label>Name</label>' +
+      '<input value="Larry">' +
+      '</md-input-container>';
 
     var element = $compile(template)(scope);
     scope.$apply();
