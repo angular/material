@@ -8,6 +8,8 @@ $md-calendar-weeks-to-show: 7 !default;
 $md-calendar-month-label-padding: 8px !default;
 $md-calendar-month-label-font-size: 13px !default;
 
+$md-calendar-scroll-cue-shadow-radius: 6px;
+
 $md-calendar-width: (7 * $md-calendar-cell-size) + (2 * $md-calendar-side-padding);
 $md-calendar-height:
     ($md-calendar-weeks-to-show * $md-calendar-cell-size) + $md-calendar-header-height;
@@ -79,9 +81,16 @@ md-calendar {
 
 // Contains the scrolling element (this is the md-virtual-repeat-container).
 .md-calendar-scroll-container {
+  // Add an inset shadow to help cue users that the calendar is scrollable. Use a negative x
+  // offset to push the vertical edge shadow off to the right so that it's cut off by the edge
+  // of the calendar container.
+  box-shadow: inset -3px 3px $md-calendar-scroll-cue-shadow-radius rgba(black, 0.2);
+
   display: inline-block;
   height: $md-calendar-weeks-to-show * $md-calendar-cell-size;
-  width: $md-calendar-width;
+
+  // Add the shadow radius to the width so that the shadow os pushed off to the side and cut off.
+  width: $md-calendar-width + $md-calendar-scroll-cue-shadow-radius;
 }
 
 // A single date cell in the calendar table.
