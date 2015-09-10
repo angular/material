@@ -155,7 +155,7 @@ function SidenavFocusDirective() {
  * By default, upon opening it will slide out on top of the main content area.
  *
  * For keyboard and screen reader accessibility, focus is sent to the sidenav wrapper by default.
- * It can be overridden with the `md-sidenav-focus` directive on the child element you want focused.
+ * It can be overridden with the `md-autofocus` directive on the child element you want focused.
  *
  * @usage
  * <hljs lang="html">
@@ -178,7 +178,7 @@ function SidenavFocusDirective() {
  *       <md-input-container>
  *         <label for="testInput">Test input</label>
  *         <input id="testInput" type="text"
- *                ng-model="data" md-sidenav-focus>
+ *                ng-model="data" md-autofocus>
  *       </md-input-container>
  *     </form>
  *   </md-sidenav>
