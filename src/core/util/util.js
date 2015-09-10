@@ -298,7 +298,9 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
           r = values;
         try {
           for (var s in p) {
-            r = r[p[s]];
+            if (p.hasOwnProperty(s) ) {
+              r = r[p[s]];
+            }
           }
         } catch (e) {
           r = a;

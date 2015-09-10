@@ -46,6 +46,24 @@ describe('util', function() {
 
     });
 
+    describe('supplant', function() {
+
+      it('should replace with HTML arguments', inject(function($mdUtil) {
+        var param1 = "", param2 = '' +
+              '<md-content>' +
+              '   <md-option ng-repeat="value in values" value="{{value}}">' +
+              '      {{value}}  ' +
+              '   </md-option>  ' +
+              '</md-content>    ';
+        var template = '<div class="md-select-menu-container"><md-select-menu {0}>{1}</md-select-menu></div>';
+        var results = $mdUtil.supplant(template,[param1, param2]);
+        var segment = '<md-select-menu >';  // After supplant() part of the result should be...
+
+        expect( results.indexOf(segment) > -1 ).toBe(true);
+
+      }));
+
+    });
 
     describe('findFocusTarget', function() {
 
