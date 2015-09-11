@@ -19,7 +19,6 @@ describe('$mdDialog', function() {
       $timeout.flush(); // flush to start animations
       $$rAF.flush();    // flush animations
       $animate.triggerCallbacks();
-      //$rootScope.$digest();
       $timeout.flush(); // flush responses after animation completions
     }
   }));
@@ -384,6 +383,30 @@ describe('$mdDialog', function() {
       expect(closing).toBe(true);
     }));
 
+    it('should support specifying a parent using a string selector', inject(function($mdDialog, $rootScope, $document) {
+      var body = angular.element($document[0].querySelector("body"));
+      var nodes = angular.element(''+
+            '<div class="wrapper">' +
+            '  <md-content> </md-content>' +
+            '  <div id="owner">' +
+            '  </div>' +
+            '</div>'
+      );
+
+      body.append( nodes );
+      $mdDialog.show({
+        template: '<md-dialog>Hello</md-dialog>',
+        parent: "#owner",
+      });
+      $rootScope.$apply();
+      runAnimation();
+
+      var owner = angular.element(body[0].querySelector('#owner'));
+      var container = angular.element(body[0].querySelector('.md-dialog-container'));
+
+      expect(container[0].parentNode === owner[0]).toBe(true);
+      nodes.remove();
+    }));
 
     it('should not wrap content with existing md-dialog', inject(function($mdDialog, $rootScope) {
 
@@ -417,7 +440,7 @@ describe('$mdDialog', function() {
       expect(container.length).toBe(1);
     }));
 
-    it('should append dialog with container', inject(function($mdDialog, $rootScope) {
+    it('should append dialog within a md-dialog-container', inject(function($mdDialog, $rootScope) {
 
       var template = '<md-dialog>Hello</md-dialog>';
       var parent = angular.element('<div>');
