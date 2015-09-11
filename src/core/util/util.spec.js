@@ -1,7 +1,6 @@
 describe('util', function() {
 
   describe('with no overrides', function() {
-
     beforeEach(module('material.core'));
 
     var $rootScope, $timeout, $$mdAnimate;
@@ -132,7 +131,7 @@ describe('util', function() {
         var target = $mdUtil.extractElementByName(widget, 'md-button');
 
         // Returns same element
-        expect( target === widget ).toBe(true);
+        expect( target[0] === widget[0] ).toBe(true);
       }));
 
       it('should not find valid element for shallow scan', inject(function($rootScope, $compile, $mdUtil) {
@@ -140,7 +139,7 @@ describe('util', function() {
         $rootScope.$apply();
         var target = $mdUtil.extractElementByName(widget, 'md-button');
 
-        expect( target !== widget ).toBe(false);
+        expect( target[0] !== widget[0] ).toBe(false);
       }));
 
       it('should find valid element for deep scan', inject(function($rootScope, $compile, $mdUtil) {
@@ -241,15 +240,41 @@ describe('util', function() {
       }));
     });
 
-    describe('processTemplate', function() {
-      it('should return exact template when using the default start/end symbols',
-        inject(function($mdUtil) {
-          var output = $mdUtil.processTemplate('<some-tag>{{some-var}}</some-tag>');
+    it('should use scope argument and `scope.$$destroyed` to skip the callback', inject(function($mdUtil) {
+      var callBackUsed, callback = function(){ callBackUsed = true; };
+      var scope = $rootScope.$new(true);
 
-          expect(output).toEqual('<some-tag>{{some-var}}</some-tag>');
-        })
-      );
-    });
+      $mdUtil.nextTick(callback,false,scope);
+      scope.$destroy();
+
+      flush(function(){ expect( callBackUsed ).toBeUndefined(); });
+    }));
+
+    it('should use scope argument and `!scope.$$destroyed` to invoke the callback', inject(function($mdUtil) {
+       var callBackUsed, callback = function(){ callBackUsed = true; };
+       var scope = $rootScope.$new(true);
+
+       $mdUtil.nextTick(callback,false,scope);
+       flush(function(){ expect( callBackUsed ).toBe(true); });
+     }));
+
+    function flush(expectation) {
+
+      $rootScope.$digest();
+      $animate.triggerCallbacks();
+      $timeout.flush();
+
+      expectation && expectation();
+    }
+  });
+
+  describe('processTemplate', function() {
+    it('should return exact template when using the default start/end symbols', inject(function($mdUtil) {
+        var output = $mdUtil.processTemplate('<some-tag>{{some-var}}</some-tag>');
+
+        expect(output).toEqual('<some-tag>{{some-var}}</some-tag>');
+      })
+    );
   });
 
   describe('with $interpolate.start/endSymbol override', function() {
@@ -268,9 +293,4 @@ describe('util', function() {
     });
   });
 
-  function flush() {
-    $rootScope.$digest();
-    $animate.triggerCallbacks();
-    $timeout.flush();
-  }
 });
