@@ -80,6 +80,28 @@ describe('md-date-picker', function() {
 
   });
 
+  it('should adjust the position of the floating pane if it would go off-screen', function() {
+    // Absolutely position the picker near the edge of the screen.
+    var bodyRect = document.body.getBoundingClientRect();
+    element.style.position = 'absolute';
+    element.style.top = bodyRect.bottom + 'px';
+    element.style.left = bodyRect.right + 'px';
+    document.body.appendChild(element);
+
+    // Open the pane.
+    element.querySelector('md-button').click();
+    $timeout.flush();
+
+    // Expect that the whole pane is on-screen.
+    var paneRect = controller.calendarPane.getBoundingClientRect();
+    expect(paneRect.right).toBeLessThan(bodyRect.right + 1);
+    expect(paneRect.bottom).toBeLessThan(bodyRect.bottom + 1);
+    expect(paneRect.top).toBeGreaterThan(0);
+    expect(paneRect.left).toBeGreaterThan(0);
+
+    document.body.removeChild(element);
+  });
+
   it('should disable the internal inputs based on ng-disabled binding', function() {
     expect(controller.inputElement.disabled).toBe(false);
     expect(controller.calendarButton.disabled).toBe(false);

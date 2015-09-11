@@ -164,6 +164,13 @@ md-datepicker[disabled] {
   }
 }
 
+// When the position of the floating calendar pane is adjusted to remain inside
+// of the viewport, hide the inputput mask, as the text input will no longer be
+// directly underneath it.
+.md-datepicker-pos-adjusted .md-datepicker-input-mask {
+  display: none;
+}
+
 // Animate the calendar inside of the floating calendar pane such that it appears to "scroll" into
 // view while the pane is opening. This is done as a cue to users that the calendar is scrollable.
 .md-datepicker-calendar-pane {

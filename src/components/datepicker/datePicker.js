@@ -100,6 +100,26 @@
   var DEFAULT_DEBOUNCE_INTERVAL = 500;
 
   /**
+   * Height of the calendar pane used to check if the pane is going outside the boundary of
+   * the viewport. See calendar.scss for how $md-calendar-height is computed; an extra 20px is
+   * also added to space the pane away from the exact edge of the screen.
+   *
+   *  This is computed statically now, but can be changed to be measured if the circumstances
+   *  of calendar sizing are changed.
+   */
+  var CALENDAR_PANE_HEIGHT = 368;
+
+  /**
+   * Width of the calendar pane used to check if the pane is going outside the boundary of
+   * the viewport. See calendar.scss for how $md-calendar-width is computed; an extra 20px is
+   * also added to space the pane away from the exact edge of the screen.
+   *
+   *  This is computed statically now, but can be changed to be measured if the circumstances
+   *  of calendar sizing are changed.
+   */
+  var CALENDAR_PANE_WIDTH = 360;
+
+  /**
    * Controller for md-datepicker.
    *
    * @ngInject @constructor
@@ -186,6 +206,9 @@
 
     /** Pre-bound click handler is saved so that the event listener can be removed. */
     this.bodyClickHandler = angular.bind(this, this.handleBodyClick);
+
+    /** Pre-bound resize handler so that the event listener can be removed. */
+    this.windowResizeHandler = $mdUtil.debounce(angular.bind(this, this.closeCalendarPane), 100);
 
     // Unless the user specifies so, the datepicker should not be a tab stop.
     // This is necessary because ngAria might add a tabindex to anything with an ng-model
@@ -328,12 +351,33 @@
     var elementRect = this.inputContainer.getBoundingClientRect();
     var bodyRect = document.body.getBoundingClientRect();
 
-    calendarPane.style.left = (elementRect.left - bodyRect.left) + 'px';
-    calendarPane.style.top = (elementRect.top - bodyRect.top) + 'px';
+    // Check to see if the calendar pane would go off the screen. If so, adjust position
+    // accordingly to keep it within the viewport.
+    var paneTop = elementRect.top - bodyRect.top;
+    var paneLeft = elementRect.left - bodyRect.left;
+
+    // If the right edge of the pane would be off the screen and shifting it left by the
+    // difference would not go past the left edge of the screen.
+    if (paneLeft + CALENDAR_PANE_WIDTH > bodyRect.right &&
+        bodyRect.right - CALENDAR_PANE_WIDTH > 0) {
+      paneLeft = bodyRect.right - CALENDAR_PANE_WIDTH;
+      calendarPane.classList.add('md-datepicker-pos-adjusted');
+    }
+
+    // If the bottom edge of the pane would be off the screen and shifting it up by the
+    // difference would not go past the top edge of the screen.
+    if (paneTop + CALENDAR_PANE_HEIGHT > bodyRect.bottom &&
+        bodyRect.bottom - CALENDAR_PANE_HEIGHT > 0) {
+      paneTop = bodyRect.bottom - CALENDAR_PANE_HEIGHT;
+      calendarPane.classList.add('md-datepicker-pos-adjusted');
+    }
+
+    calendarPane.style.left = paneLeft + 'px';
+    calendarPane.style.top = paneTop + 'px';
     document.body.appendChild(this.calendarPane);
 
     // The top of the calendar pane is a transparent box that shows the text input underneath.
-    // Since the pane is flowing, though, the page underneath the pane *adjacent* to the input is
+    // Since the pane is floating, though, the page underneath the pane *adjacent* to the input is
     // also shown unless we cover it up. The inputMask does this by filling up the remaining space
     // based on the width of the input.
     this.inputMask.style.left = elementRect.width + 'px';
@@ -344,10 +388,15 @@
     });
   };
 
+  DatePickerCtrl.prototype.positionCalendarPane = function() {
+
+  };
+
   /** Detach the floating calendar pane from the document. */
   DatePickerCtrl.prototype.detachCalendarPane = function() {
     this.$element.removeClass('md-datepicker-open');
     this.calendarPane.classList.remove('md-pane-open');
+    this.calendarPane.classList.remove('md-datepicker-pos-adjusted');
 
     if (this.calendarPane.parentNode) {
       // Use native DOM removal because we do not want any of the angular state of this element
@@ -380,6 +429,8 @@
       this.$mdUtil.nextTick(function() {
         document.body.addEventListener('click', self.bodyClickHandler);
       }, false);
+
+      window.addEventListener('resize', this.windowResizeHandler);
     }
   };
 
@@ -392,6 +443,7 @@
     this.$mdUtil.enableScrolling();
 
     document.body.removeEventListener('click', this.bodyClickHandler);
+    window.removeEventListener('resize', this.windowResizeHandler);
   };
 
   /** Gets the controller instance for the calendar in the floating pane. */
