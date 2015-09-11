@@ -118,6 +118,9 @@ function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $timeout) {
       .on('focus', function() {
         if (scope.mouseActive === false) { element.addClass('md-focused'); }
       })
+      .on('mouseleave', function() {
+        element.removeClass('md-focused');
+      })
       .on('blur', function() { element.removeClass('md-focused'); });
   }
 
