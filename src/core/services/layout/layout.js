@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  var _$$mdLayout, _$parse;
+
     /**
      *
      *   The original ngMaterial Layout solution used attribute selectors and CSS.
@@ -41,6 +43,26 @@
      *  ```
      */
     angular.module('material.core.layout', [ 'ng' ])
+
+      /**
+       * Model of flags used by the Layout directives
+       * Allows changes while running tests or runtime app changes
+       */
+      .factory("$$mdLayout", function() {
+        return {
+          /**
+           * Should we remove the original layout Attribute selectors
+           * after translation injection
+           */
+          removeAttributes : true,
+
+          /**
+           * Special internal flag used to optimize
+           * noop(s) for the directive postLinks below
+           */
+          disablePostLinks : undefined
+        };
+      })
 
       // Attribute directives with optional value(s)
 
@@ -136,17 +158,24 @@
      * @param {boolean=} addDirectiveAsClass
      */
     function attributeWithObserve(className, addDirectiveAsClass) {
-      return function() {
+      return ['$$mdLayout', '$document', '$parse', function($$mdLayout, $document, $parse) {
+        _$$mdLayout = $$mdLayout;
+        _$parse = $parse;
+
         return {
             restrict : 'A',
             compile: function(element, attr) {
+              if ( postLinkIsDisabled($document[0]) ) return angular.noop;
+
               attributeValueToClass(null, element, attr);
 
               // Use for postLink to account for transforms after ng-transclude.
               return attributeValueToClass;
             }
         };
-      };
+      }];
+
+
 
       /**
        * Add as transformed class selector(s), then
@@ -154,14 +183,19 @@
        */
       function attributeValueToClass(scope, element, attr) {
         var directive = attr.$normalize(className);
+        var attrExpression = _$parse( directive[directive] );
 
         // Add transformed class selector(s)
         if (addDirectiveAsClass) {
           element.addClass(className);
         }
 
-        if (attr[directive]) {
+        if ( attr[directive] ) {
           element.addClass(className + "-" + attr[directive].replace(/\s+/g, "-"));
+
+          if ( _$$mdLayout.removeAttributes ) {
+            element.removeAttr(directive);
+          }
         }
 
         if ( scope ) {
@@ -170,7 +204,7 @@
            * Instead watch the attribute so interpolated data-bindings to layout
            * selectors will continue to be supported.
            *
-           * $observe the className and update with new class (after removing the last one)
+           * $observe() the className and update with new class (after removing the last one)
            *
            * e.g. `layout="{{layoutDemo.direction}}"` will update...
            */
@@ -178,7 +212,7 @@
 
           attr.$observe(function() {
 
-            return attr[className];
+            return attrExpression(scope);
 
           }, function(newVal) {
 
@@ -200,17 +234,20 @@
      * This is a `simple` transpose of attribute usage to class usage
      */
     function attributeWithoutValue(className) {
-      return function() {
+      return ['$$mdLayout', '$document', function($$mdLayout, $document) {
+        _$$mdLayout = $$mdLayout;
         return {
           restrict : 'A',
           compile: function(element, attr) {
+            if ( postLinkIsDisabled($document[0]) ) return angular.noop;
+
             attributeToClass(null, element);
 
             // Use for postLink to account for transforms after ng-transclude.
             return attributeToClass;
           }
         };
-      };
+      }];
 
       /**
        * Add as transformed class selector, then
@@ -219,7 +256,7 @@
       function attributeToClass(scope, element) {
         element.addClass(className);
 
-        if ( scope ) {
+        if ( scope && _$$mdLayout.removeAttributes ) {
           // After link-phase, remove deprecated layout attribute selector
           element.removeAttr(className);
         }
@@ -237,6 +274,34 @@
         return angular.noop;
       }];
 
+    }
+
+    /**
+     * Scan the body element. If it has a class 'md-css-only', then do NOT
+     * postLink process the directives for Attribute selectors.
+     * (recall that postlink injects Class selectors based on attribute selector settings)
+     *
+     * Instead the Layout CSS for Attributes is used:
+     * e.g
+     *       .md-css-only [layout=row] {
+     *          flex-direction: row;
+     *          -webkit-flex-direction: row;
+     *       }
+     *
+     * Note: this means that 'md-css-only' will not work for IE (due to performance issues)
+     * In these cases, the Layout translators (directives) should be enabled.
+     */
+    function postLinkIsDisabled(document) {
+      var disablePostLinks = _$$mdLayout.disablePostLinks;
+
+      if ( angular.isUndefined(disablePostLinks) ) {
+        var body = document.querySelectorAll("body")[0];
+        var styles = body.getAttribute('class');
+
+        disablePostLinks = styles ? (styles.indexOf('md-css-only') > -1) : false;
+      }
+
+      return _$$mdLayout.disablePostLinks = disablePostLinks;
     }
 
 })();
