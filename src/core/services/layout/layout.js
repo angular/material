@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var _$$mdLayout, _$parse;
+  var $$mdLayout, $parse, $interpolate;
 
     /**
      *
@@ -69,20 +69,16 @@
       .directive('layout'              , attributeWithObserve('layout' , true)       )
       .directive('layoutSm'            , attributeWithObserve('layout-sm'   , true)  )
       .directive('layoutGtSm'          , attributeWithObserve('layout-gt-sm', true)  )
-      .directive('layoutLtMd'          , warnAttrNotSupported('layout-lt-md',true)   )
       .directive('layoutMd'            , attributeWithObserve('layout-md'   , true)  )
       .directive('layoutGtMd'          , attributeWithObserve('layout-gt-md', true)  )
-      .directive('layoutLtLg'          , warnAttrNotSupported('layout-lt-lg',true)   )
       .directive('layoutLg'            , attributeWithObserve('layout-lg'   , true)  )
       .directive('layoutGtLg'          , attributeWithObserve('layout-gt-lg', true)  )
 
       .directive('flex'                , attributeWithObserve('flex'        , true)  )
       .directive('flexSm'              , attributeWithObserve('flex-sm'     , true)  )
       .directive('flexGtSm'            , attributeWithObserve('flex-gt-sm'  , true)  )
-      .directive('flexLtMd'            , warnAttrNotSupported('flex-lt-md'  ,true)   )
       .directive('flexMd'              , attributeWithObserve('flex-md'     , true)  )
       .directive('flexGtMd'            , attributeWithObserve('flex-gt-md'  , true)  )
-      .directive('flexLtLg'            , warnAttrNotSupported('flex-lt-lg'  ,true)   )
       .directive('flexLg'              , attributeWithObserve('flex-lg'     , true)  )
       .directive('flexGtLg'            , attributeWithObserve('flex-gt-lg'  , true)  )
 
@@ -91,30 +87,24 @@
       .directive('layoutAlign'         , attributeWithObserve('layout-align')        )
       .directive('layoutAlignSm'       , attributeWithObserve('layout-align-sm')     )
       .directive('layoutAlignGtSm'     , attributeWithObserve('layout-align-gt-sm')  )
-      .directive('layoutAlignLtMd'     , warnAttrNotSupported('layout-align-lt-md')  )
       .directive('layoutAlignMd'       , attributeWithObserve('layout-align-md')     )
       .directive('layoutAlignGtMd'     , attributeWithObserve('layout-align-gt-md')  )
-      .directive('layoutAlignLtLg'     , warnAttrNotSupported('layout-align-lt-lg')  )
       .directive('layoutAlignLg'       , attributeWithObserve('layout-align-lg')     )
       .directive('layoutAlignGtLg'     , attributeWithObserve('layout-align-gt-lg')  )
 
       .directive('flexOrder'           , attributeWithObserve('flex-order')          )
       .directive('flexOrderSm'         , attributeWithObserve('flex-order-sm')       )
       .directive('flexOrderGtSm'       , attributeWithObserve('flex-order-gt-sm')    )
-      .directive('flexOrderLtMd'       , warnAttrNotSupported('flex-order-lt-md')    )
       .directive('flexOrderMd'         , attributeWithObserve('flex-order-md')       )
       .directive('flexOrderGtMd'       , attributeWithObserve('flex-order-gt-md')    )
-      .directive('flexOrderLtLg'       , warnAttrNotSupported('flex-order-lt-lg')    )
       .directive('flexOrderLg'         , attributeWithObserve('flex-order-lg')       )
       .directive('flexOrderGtLg'       , attributeWithObserve('flex-order-gt-lg')    )
 
       .directive('offset'              , attributeWithObserve('offset')              )
       .directive('offsetSm'            , attributeWithObserve('offset-sm')           )
       .directive('offsetGtSm'          , attributeWithObserve('offset-gt-sm')        )
-      .directive('offsetLtMd'          , warnAttrNotSupported('offset-lt-md')        )
       .directive('offsetMd'            , attributeWithObserve('offset-md')           )
       .directive('offsetGtMd'          , attributeWithObserve('offset-gt-md')        )
-      .directive('offsetLtLg'          , warnAttrNotSupported('offset-lt-lg')        )
       .directive('offsetLg'            , attributeWithObserve('offset-lg')           )
       .directive('offsetGtLg'          , attributeWithObserve('offset-gt-lg')        )
 
@@ -128,21 +118,36 @@
       .directive('hide'                , attributeWithoutValue('hide')               )
       .directive('hideSm'              , attributeWithoutValue('hide-sm')            )
       .directive('hideGtSm'            , attributeWithoutValue('hide-gt-sm')         )
-      .directive('hideLtMd'            , warnAttrNotSupported ('hide-lt-md')         )
       .directive('hideMd'              , attributeWithoutValue('hide-md')            )
       .directive('hideGtMd'            , attributeWithoutValue('hide-gt-md')         )
-      .directive('hideLtLg'            , warnAttrNotSupported ('hide-lt-lg')         )
       .directive('hideLg'              , attributeWithoutValue('hide-lg')            )
       .directive('hideGtLg'            , attributeWithoutValue('hide-gt-lg')         )
       .directive('show'                , attributeWithoutValue('show')               )
       .directive('showSm'              , attributeWithoutValue('show-sm')            )
       .directive('showGtSm'            , attributeWithoutValue('show-gt-sm')         )
-      .directive('showLtMd'            , warnAttrNotSupported ('show-lt-md')         )
       .directive('showMd'              , attributeWithoutValue('show-md')            )
       .directive('showGtMd'            , attributeWithoutValue('show-gt-md')         )
-      .directive('showLtLg'            , warnAttrNotSupported ('show-lt-lg')         )
       .directive('showLg'              , attributeWithoutValue('show-lg')            )
-      .directive('showGtLg'            , attributeWithoutValue('show-gt-lg')         );
+      .directive('showGtLg'            , attributeWithoutValue('show-gt-lg')         )
+
+      // !! Deprecated attributes: use the `-lt` (aka less-than) notations
+
+      .directive('layoutLtMd'          , warnAttrNotSupported('layout-lt-md',true)   )
+      .directive('layoutLtLg'          , warnAttrNotSupported('layout-lt-lg',true)   )
+      .directive('flexLtMd'            , warnAttrNotSupported('flex-lt-md'  ,true)   )
+      .directive('flexLtLg'            , warnAttrNotSupported('flex-lt-lg'  ,true)   )
+
+      .directive('layoutAlignLtMd'     , warnAttrNotSupported('layout-align-lt-md')  )
+      .directive('layoutAlignLtLg'     , warnAttrNotSupported('layout-align-lt-lg')  )
+      .directive('flexOrderLtMd'       , warnAttrNotSupported('flex-order-lt-md')    )
+      .directive('flexOrderLtLg'       , warnAttrNotSupported('flex-order-lt-lg')    )
+      .directive('offsetLtMd'          , warnAttrNotSupported('offset-lt-md')        )
+      .directive('offsetLtLg'          , warnAttrNotSupported('offset-lt-lg')        )
+
+      .directive('hideLtMd'            , warnAttrNotSupported ('hide-lt-md')         )
+      .directive('hideLtLg'            , warnAttrNotSupported ('hide-lt-lg')         )
+      .directive('showLtMd'            , warnAttrNotSupported ('show-lt-md')         )
+      .directive('showLtLg'            , warnAttrNotSupported ('show-lt-lg')         );
 
     /**
      * These functions create registration functions for ngMaterial Layout attribute directives
@@ -158,9 +163,11 @@
      * @param {boolean=} addDirectiveAsClass
      */
     function attributeWithObserve(className, addDirectiveAsClass) {
-      return ['$$mdLayout', '$document', '$parse', function($$mdLayout, $document, $parse) {
-        _$$mdLayout = $$mdLayout;
-        _$parse = $parse;
+
+      return ['$$mdLayout', '$document', '$parse', '$interpolate', function(_$$mdLayout_, $document, _$parse_, _$interpolate_) {
+        $$mdLayout = _$$mdLayout_;
+        $parse = _$parse_;
+        $interpolate = _$interpolate_;
 
         return {
             restrict : 'A',
@@ -176,57 +183,64 @@
       }];
 
 
-
       /**
        * Add as transformed class selector(s), then
        * remove the deprecated attribute selector
        */
-      function attributeValueToClass(scope, element, attr) {
-        var directive = attr.$normalize(className);
-        var attrExpression = _$parse( directive[directive] );
+      function attributeValueToClass(scope, element, attrs) {
+        var updateClassFn = updateClassWithValue(element,className, attrs);
+        var normalizedAttr = attrs.$normalize(className);
+        var attrValue = attrs[normalizedAttr] ? attrs[normalizedAttr].replace(/\s+/g, "-") : null;
+        var addImmediate = attrValue ? !needsInterpolation(attrValue) : false;
+        var watchValue   = needsInterpolation(attrValue);
 
         // Add transformed class selector(s)
-        if (addDirectiveAsClass) {
-          element.addClass(className);
-        }
+        if (addDirectiveAsClass) element.addClass(className);
 
-        if ( attr[directive] ) {
-          element.addClass(className + "-" + attr[directive].replace(/\s+/g, "-"));
-
-          if ( _$$mdLayout.removeAttributes ) {
-            element.removeAttr(directive);
-          }
-        }
-
-        if ( scope ) {
-          /**
-           * After link-phase, do NOT remove deprecated layout attribute selector.
-           * Instead watch the attribute so interpolated data-bindings to layout
-           * selectors will continue to be supported.
-           *
-           * $observe() the className and update with new class (after removing the last one)
-           *
-           * e.g. `layout="{{layoutDemo.direction}}"` will update...
-           */
-          var lastClass;
-
-          attr.$observe(function() {
-
-            return attrExpression(scope);
-
-          }, function(newVal) {
-
-            element.removeClass(lastClass);
-
-              lastClass = className + "-" + String(newVal).replace(/\s+/g, "-");
-
-            element.addClass(lastClass);
-
-          });
-
-        }
-
+        if ( addImmediate ) element.addClass(className + "-" + attrValue);
+        if ( watchValue ) attrs.$observe( normalizedAttr, updateClassFn );
+        if ( $$mdLayout.removeAttributes ) element.removeAttr(className);
       }
+
+    }
+
+    /**
+     * See if the original value has interpolation symbols:
+     * e.g.  flex-gt-md="{{triggerPoint}}"
+     */
+    function needsInterpolation(value) {
+      return (value ||"").indexOf($interpolate.startSymbol()) > -1;
+    }
+
+    /**
+     * After link-phase, do NOT remove deprecated layout attribute selector.
+     * Instead watch the attribute so interpolated data-bindings to layout
+     * selectors will continue to be supported.
+     *
+     * $observe() the className and update with new class (after removing the last one)
+     *
+     * e.g. `layout="{{layoutDemo.direction}}"` will update...
+     *
+     * NOTE: The value must match one of the specified styles in the CSS.
+     * For example `flex-gt-md="{{size}}`  where `scope.size == 47` will NOT work since
+     * only breakpoints for 0, 5, 10, 15... 100, 33, 34, 66, 67 are defined.
+     *
+     */
+    function updateClassWithValue(element, className, attr) {
+      var lastClass;
+
+      return function updateClassWithValue(newValue) {
+        var value = String(newValue || "").replace(/\s+/g, "-");
+
+        element.removeClass(lastClass);
+        lastClass = !value ? className : className + "-" + value;
+        element.addClass(lastClass);
+
+        // Conditionally remove the attribute selector in case the browser attempts to
+        // read it and suffers a performance downgrade (IE).
+
+        if ( $$mdLayout.removeAttributes ) element.removeAttr(className);
+      };
     }
 
     /**
@@ -234,11 +248,11 @@
      * This is a `simple` transpose of attribute usage to class usage
      */
     function attributeWithoutValue(className) {
-      return ['$$mdLayout', '$document', function($$mdLayout, $document) {
-        _$$mdLayout = $$mdLayout;
+      return ['$$mdLayout', '$document', function(_$$mdLayout_, $document) {
+        $$mdLayout = _$$mdLayout_;
         return {
           restrict : 'A',
-          compile: function(element, attr) {
+          compile: function(element, attrs) {
             if ( postLinkIsDisabled($document[0]) ) return angular.noop;
 
             attributeToClass(null, element);
@@ -256,7 +270,7 @@
       function attributeToClass(scope, element) {
         element.addClass(className);
 
-        if ( scope && _$$mdLayout.removeAttributes ) {
+        if ( $$mdLayout.removeAttributes ) {
           // After link-phase, remove deprecated layout attribute selector
           element.removeAttr(className);
         }
@@ -289,10 +303,13 @@
      *       }
      *
      * Note: this means that 'md-css-only' will not work for IE (due to performance issues)
-     * In these cases, the Layout translators (directives) should be enabled.
+     * In these cases, the Layout translators (directives) should be enabled and the
+     * `angular-material.[min.]js` must be loaded.
      */
     function postLinkIsDisabled(document) {
-      var disablePostLinks = _$$mdLayout.disablePostLinks;
+      var disablePostLinks = $$mdLayout.disablePostLinks;
+
+      // Perform a read-once (1x) check for the `md-css-only` class on the BODY
 
       if ( angular.isUndefined(disablePostLinks) ) {
         var body = document.querySelectorAll("body")[0];
@@ -301,7 +318,7 @@
         disablePostLinks = styles ? (styles.indexOf('md-css-only') > -1) : false;
       }
 
-      return _$$mdLayout.disablePostLinks = disablePostLinks;
+      return $$mdLayout.disablePostLinks = disablePostLinks;
     }
 
 })();

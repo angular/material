@@ -6,7 +6,7 @@ describe('layout directives', function() {
     $$mdLayout.disablePostLinks = undefined;
   }));
 
-  describe('expecting layout classes', function() {
+  describe('translated to layout classes', function() {
 
     var suffixes = ['sm', 'gt-sm', 'md', 'gt-md', 'lg', 'gt-lg'];
     var directionValues = ['row', 'column'];
@@ -123,4 +123,32 @@ describe('layout directives', function() {
     }
   });
 
+  describe('layout attribute with dynamic values', function() {
+
+    it('should observe the attribute value and update the layout class(es)', inject(function($rootScope, $compile) {
+      var scope = $rootScope.$new();
+          scope.size = undefined;
+
+      var element = angular.element($compile('<div flex-gt-md="{{size}}"></div>')(scope));
+
+      expect(element.hasClass('flex-gt-md')).toBe(true);
+      expect(element.hasClass('flex-gt-md-size')).toBe(false);
+
+      scope.$apply(function() {
+        scope.size = 32;
+      });
+
+      expect(element.hasClass('flex-gt-md-32')).toBe(true);
+
+      scope.$apply(function() {
+        scope.size = "fishCheeks";
+      });
+
+      expect(element.hasClass('flex-gt-md-32')).toBe(false);
+      expect(element.hasClass('flex-gt-md-fishCheeks')).toBe(true);
+
+      expect(element.attr('flex-gt-md')).toBeFalsy();
+    }));
+
+  })
 });
