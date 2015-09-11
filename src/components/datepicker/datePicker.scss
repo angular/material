@@ -163,3 +163,17 @@ md-datepicker[disabled] {
     display: none;
   }
 }
+
+// Animate the calendar inside of the floating calendar pane such that it appears to "scroll" into
+// view while the pane is opening. This is done as a cue to users that the calendar is scrollable.
+.md-datepicker-calendar-pane {
+  .md-calendar {
+    transform: translateY(150px);
+    transition: transform 0.4s $swift-ease-out-timing-function;
+    transition-delay: 0.1s;
+  }
+
+  &.md-pane-open .md-calendar {
+    transform: translateY(0);
+  }
+}

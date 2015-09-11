@@ -194,6 +194,19 @@ describe('md-calendar', function() {
         expect(extractRowText(header)).toEqual(['SZ', 'MZ', 'TZ', 'WZ', 'TZ', 'FZ','SZ']);
         dateLocale.shortDays = oldShortDays;
       });
+
+      it('should allow changing the first day of the week to Monday', function() {
+        var oldShortDays = dateLocale.shortDays;
+        dateLocale.shortDays = ['SZ', 'MZ', 'TZ', 'WZ', 'TZ', 'FZ', 'SZ'];
+        dateLocale.firstDayOfWeek = 1;
+
+        var newElement = createElement()[0];
+        var header = newElement.querySelector('.md-calendar-day-header tr');
+
+        expect(extractRowText(header)).toEqual(['MZ', 'TZ', 'WZ', 'TZ', 'FZ','SZ', 'SZ']);
+        dateLocale.shortDays = oldShortDays;
+        dateLocale.firstDayOfWeek = 0;
+      });
     });
 
     describe('#buildCalendarForMonth', function() {
@@ -224,6 +237,30 @@ describe('md-calendar', function() {
           ['', '', '', '', '', '', ''],
         ];
         expect(calendarDates).toEqual(expectedDates);
+      });
+
+      it('should render a month correctly when the first day of the week is Monday', function() {
+        dateLocale.firstDayOfWeek = 1;
+        var date = new Date(2014, MAY, 30);
+        var monthElement = monthCtrl.buildCalendarForMonth(date);
+
+        var calendarRows = monthElement.querySelectorAll('tr');
+        var calendarDates = [];
+
+        angular.forEach(calendarRows, function(tr) {
+          calendarDates.push(extractRowText(tr));
+        });
+
+        var expectedDates = [
+          ['May 2014', '', '1', '2', '3', '4'],
+          ['5', '6', '7', '8', '9', '10', '11'],
+          ['12', '13', '14', '15', '16', '17', '18'],
+          ['19', '20', '21', '22', '23', '24', '25'],
+          ['26', '27', '28', '29', '30', '31', ''],
+          ['', '', '', '', '', '', ''],
+        ];
+        expect(calendarDates).toEqual(expectedDates);
+        dateLocale.firstDayOfWeek = 0;
       });
 
       it('should show the month on its own row if the first day is before Tuesday', function() {

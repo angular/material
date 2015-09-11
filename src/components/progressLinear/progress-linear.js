@@ -110,8 +110,7 @@ function MdProgressLinearDirective($mdTheming, $mdUtil, $log) {
           case MODE_BUFFER:
           case MODE_DETERMINATE:
           case MODE_INDETERMINATE:
-            container.removeClass('ng-hide');
-            container.removeClass( lastMode );
+            container.removeClass( 'ng-hide' + ' ' + lastMode );
             container.addClass( lastMode = "md-mode-" + mode );
             break;
           default:

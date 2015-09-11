@@ -1,11 +1,87 @@
+<a name"0.11.0-rc2"></a>
+### 0.11.0 (2015-09-08)
+
+This release includes all changes from RC1 and RC2.
+
+
+<a name"0.11.0-rc2"></a>
+### 0.11.0-rc2 (2015-09-03)
+
+This release is comprised of 1 major effort:
+
+* Performance and API improvements for ProgressLinear and ProgressCircular
+
+#### Features
+
+* **progressCircular:** css reduction with js animations ([b1f7dc41](https://github.com/angular/material/commit/b1f7dc41))
+* **progressLinear, progressCircular** sync logic, fix linear animations, performance upgrades ([d74f93a84](https://github.com/angular/material/commit/d74f93a8463727a01cc5ed89d04d1108ba413359))
+  * synchronize progressLinear with similar logic used in progressCircular.
+  * improve animation performances
+  * watch md-mode for changes
+  * refactor animation SCSS
+  * enable hiding and no-animations with undefined/empty md-mode attributes
+  * for both indicators, use `display:block;`
+  * update demos with enable switch
+  * fix query mode
+  * update Select to use enhanced progressCircular component
+  * fix autocomplete styling of progress-linear.md-mode-indeterminate
+  *  auto-inject md-mode attribute if missing
+    *  use 'determinate' if value attribute is defined
+    *  otherwise use 'indeterminate'
+    *  $log.debug() notify user (via $log.debug) of injection
+    *  add API doc details regarding md-mode auto-injection
+  * fix tests
+Fixes [#4421](https://github.com/angular/material/issues/4421). Fixes [#4409](https://github.com/angular/material/issues/4409). Fixes [#2540](https://github.com/angular/material/issues/2540). Fixes [#2364](https://github.com/angular/material/issues/2364). Fixes [#1926](https://github.com/angular/material/issues/1926). Fixes [#3802](https://github.com/angular/material/issues/3802). Closes [#4454](https://github.com/angular/material/issues/4454).
+
+#### Breaking Changes
+
+* progressLinear and progressCircular indicators explicitly set `display` and `position` styles
+
+Before:
+
+```css
+md-progress-linear {
+  display: block;
+}
+md-progress-circular {
+   // display not set
+   // position not set
+}
+```
+
+```css
+md-progress-linear {
+  display: block;
+  position: relative;
+}
+md-progress-circular {
+  display: block;
+  position: relative;
+}
+```
+
+
+#### Bug Fixes
+
+* **dialog:**
+  * allow Confirm dialogs to have empty/undefined content ([ffbcff39](https://github.com/angular/material/commit/ffbcff39), closes [#4429](https://github.com/angular/material/issues/4429))
+* **gesture:** fix overzealous preventDefault on label+input clicks. ([912bcefd](https://github.com/angular/material/commit/912bcefd), closes [#4110](https://github.com/angular/material/issues/4110), [#4110](https://github.com/angular/material/issues/4110), [#4223](https://github.com/angular/material/issues/4223))
+* **mdSubheader:** Non top-level md-content causes incorrect position. ([391479b0](https://github.com/angular/material/commit/391479b0), closes [#4420](https://github.com/angular/material/issues/4420), [#4439](https://github.com/angular/material/issues/4439))
+* **mdToolbar:**
+  * Better fix for ng-if that allows ng-controller. ([a09b9abb](https://github.com/angular/material/commit/a09b9abb), closes [#4144](https://github.com/angular/material/issues/4144), [#4423](https://github.com/angular/material/issues/4423))
+* **ripple:**
+  * fixes ripple when jQuery is loaded ([4e048ff8](https://github.com/angular/material/commit/4e048ff8), closes [#4375](https://github.com/angular/material/issues/4375))
+  * fixes js error on button click for date picker ([be4311ac](https://github.com/angular/material/commit/be4311ac))
+
+
 <a name"0.11.0-rc1"></a>
 ### 0.11.0-rc1 (2015-09-01)
 
 This release is comprised of three major efforts:
 
 * Release of new components: DatePicker and MenuBar
-* Performance improvements to Layout and use of Flexbox
-* Performance improvements to Ripple
+* Performance improvements to Layout and use of Flexbox ([372d911a](https://github.com/angular/material/commit/372d911a7893214cfe0c47db4dafb19470221cad))
+* Performance improvements to Ripple ([e92dd263](https://github.com/angular/material/commit/e92dd2632baf1216a89aa8534381fcba2bfcdc35))
 
 #### Features
 
