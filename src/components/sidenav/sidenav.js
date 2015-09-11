@@ -227,7 +227,6 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
    */
   function postLink(scope, element, attr, sidenavCtrl) {
     var lastParentOverFlow;
-    var triggeringElement = null;
     var promise = $q.when(true);
 
     var isLockedOpenParsed = $parse(attr.mdIsLockedOpen);
@@ -277,11 +276,6 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
 
       parent[isOpen ? 'on' : 'off']('keydown', onKeyDown);
       backdrop[isOpen ? 'on' : 'off']('click', close);
-
-      if ( isOpen ) {
-        // Capture upon opening..
-        triggeringElement = $document[0].activeElement;
-      }
 
       disableParentScroll(isOpen);
 
@@ -335,13 +329,6 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
           $mdUtil.nextTick(function() {
             // When the current `updateIsOpen()` animation finishes
             promise.then(function(result) {
-
-              if ( !scope.isOpen ) {
-                // reset focus to originating element (if available) upon close
-                triggeringElement && triggeringElement.focus();
-                triggeringElement = null;
-              }
-
               resolve(result);
             });
           });
