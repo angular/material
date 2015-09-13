@@ -751,8 +751,8 @@ function MdDialogProvider($$interimElementProvider) {
       };
 
       /**
-       * Walk DOM to apply or remove aria-hidden on sibling nodes
-       * and parent sibling nodes
+       * Walk DOM to apply or remove aria-hidden and set tabindex appropriately
+       * based on aria-hidden value on sibling nodes and parent sibling nodes
        *
        */
       function walkDOM(element) {
@@ -760,12 +760,37 @@ function MdDialogProvider($$interimElementProvider) {
           if (element === document.body) {
             return;
           }
-          var children = element.parentNode.children;
+          var children = element.parentNode.children,
+            attrToSet = 'md-saved-tabindex',
+            attrToDefault = 'tabindex',
+            tabModifierSelector = '[md-saved-tabindex]:not([md-saved-tabindex="-1"])';
+
+          if (isHidden) {
+            attrToSet = 'tabindex';
+            attrToDefault = 'md-saved-tabindex';
+            tabModifierSelector = 'button:not([tabindex="-1"]),\
+              a[href]:not([tabindex="-1"]),\
+              input:not([tabindex="-1"]),\
+              textarea:not([tabindex="-1"]),\
+              select:not([tabindex="-1"]),\
+              [tabindex]:not([tabindex="-1"])';
+          }
+
           for (var i = 0; i < children.length; i++) {
             // skip over child if it is an ascendant of the dialog
             // or a script or style tag
             if (element !== children[i] && !isNodeOneOf(children[i], ['SCRIPT', 'STYLE'])) {
+              var tabbables = children[i].querySelectorAll(tabModifierSelector);
+
               children[i].setAttribute('aria-hidden', isHidden);
+
+              for (var j = 0; j < tabbables.length; j++) {
+                var tabbable = tabbables[j],
+                  attrToSetValue = tabbable.getAttribute(attrToSet) || '0',
+                  attrToDefaultValue = tabbable.getAttribute(attrToDefault) || '-1';
+                tabbable.setAttribute(attrToDefault, attrToSetValue);
+                tabbable.setAttribute(attrToSet, attrToDefaultValue);
+              }
             }
           }
 

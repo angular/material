@@ -907,6 +907,68 @@ describe('$mdDialog', function() {
       var sibling = angular.element(parent[0].querySelector('.sibling'));
       expect(sibling.attr('aria-hidden')).toBe('true');
     }));
+
+    it('should set tabindex of to sibling\'s tabbable nodes to -1', inject(function($mdDialog, $rootScope, $timeout) {
+
+      var template = '<md-dialog aria-label="Some Other Thing">Hello</md-dialog>';
+      var parent = angular.element('<a href="a">');
+      parent.append('<div class="sibling">\
+          <button></button>\
+          <a href="b"></a>\
+          <span tabindex="0"></span>\
+          <input/>\
+          <textarea></textarea>\
+          <select></select>\
+        </div>');
+
+      $mdDialog.show({
+        template: template,
+        parent: parent
+      });
+
+      runAnimation();
+
+      var dialog = angular.element(parent.find('md-dialog'));
+      expect(dialog.parent().attr('tabindex')).toBe(undefined);
+
+      var siblingTabbables = angular.element(parent[0].querySelectorAll('.sibling [tabindex="-1"]'));      
+      expect(siblingTabbables.length).toEqual(6);
+    }));
+
+    it('should set tabindex of sibling\'s tabbables to the original value', inject(function($mdDialog, $mdConstant, $rootScope, $timeout) {
+
+      var template = '<md-dialog aria-label="Some Other Thing">Hello</md-dialog>';
+      var parent = angular.element('<div>');
+      var expectedIndex = [ -1, 0, 1, 0, 3, 0 ];
+      parent.append('<div class="sibling">\
+          <button tabindex="-1"></button>\
+          <a href="b"></a>\
+          <span tabindex="1"></span>\
+          <input/>\
+          <textarea tabindex="3"></textarea>\
+          <select></select>\
+        </div>');
+
+      $mdDialog.show({
+        template: template,
+        parent: parent,
+        escapeToClose: true
+      });
+
+      runAnimation();
+
+      parent.triggerHandler({
+        type: 'keyup',
+        keyCode: $mdConstant.KEY_CODE.ESCAPE
+      });
+
+      runAnimation();
+      
+      var siblingTabbables = angular.element(parent[0].querySelectorAll('.sibling [tabindex]'));
+      for (var i = 0; i < 6; i ++) {
+        expect(siblingTabbables[i].tabIndex).toBe(expectedIndex[i]);
+      }
+     }));
   });
 
   function hasConfigurationMethods(preset, methods) {
