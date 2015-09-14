@@ -197,7 +197,7 @@ InkRippleCtrl.prototype.clearTimeout = function () {
 InkRippleCtrl.prototype.isRippleAllowed = function () {
   var element = this.$element[0];
   do {
-    if (element.tagName && element.tagName !== 'BODY') break;
+    if (!element.tagName || element.tagName === 'BODY') break;
     if (element && element.hasAttribute && element.hasAttribute('disabled')) return false;
   } while (element = element.parentNode);
   return true;
