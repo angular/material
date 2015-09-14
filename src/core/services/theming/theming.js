@@ -100,8 +100,8 @@ var LIGHT_DEFAULT_HUES = {
 var DARK_DEFAULT_HUES = {
   'background': {
     'default': '800',
-    'hue-1': '300',
-    'hue-2': '600',
+    'hue-1': '600',
+    'hue-2': '300',
     'hue-3': '900'
   }
 };
