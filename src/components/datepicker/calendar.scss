@@ -6,7 +6,7 @@ $md-calendar-side-padding: 16px !default;
 $md-calendar-weeks-to-show: 7 !default;
 
 $md-calendar-month-label-padding: 8px !default;
-$md-calendar-month-label-font-size: 13px !default;
+$md-calendar-month-label-font-size: 14px !default;
 
 $md-calendar-scroll-cue-shadow-radius: 6px;
 
@@ -122,6 +122,7 @@ md-calendar {
 .md-calendar-month-label {
   height: $md-calendar-cell-size;
   font-size: $md-calendar-month-label-font-size;
+  font-weight: 500; // Roboto Medium
   padding: 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding;
 }
 
