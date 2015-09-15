@@ -174,9 +174,9 @@ md-datepicker[disabled] {
 // view while the pane is opening. This is done as a cue to users that the calendar is scrollable.
 .md-datepicker-calendar-pane {
   .md-calendar {
-    transform: translateY(150px);
-    transition: transform 0.4s $swift-ease-out-timing-function;
-    transition-delay: 0.1s;
+    transform: translateY(-85px);
+    transition: transform 0.65s $swift-ease-out-timing-function;
+    transition-delay: 0.125s;
   }
 
   &.md-pane-open .md-calendar {

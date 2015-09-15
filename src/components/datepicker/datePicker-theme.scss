@@ -7,6 +7,7 @@ md-datepicker.md-THEME_NAME-theme {
 .md-THEME_NAME-theme {
 
   .md-datepicker-input {
+    @include input-placeholder-color('{{foreground-3}}');
     color: '{{background-contrast}}';
     background: '{{background-color}}';
   }
