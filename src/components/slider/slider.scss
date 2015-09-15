@@ -214,7 +214,7 @@ md-slider {
   }
 
   /* Don't animate left/right while panning */
-  &.dragging {
+  &.md-dragging {
     .md-thumb-container,
     .md-track-fill {
       transition: none;
@@ -236,7 +236,7 @@ md-slider {
       }
 
       &:focus,
-      &.active {
+      &.md-active {
         .md-focus-thumb {
           display: block;
         }
@@ -259,7 +259,7 @@ md-slider {
 
     &:not([disabled]) {
       &:focus,
-      &.active {
+      &.md-active {
         .md-sign,
         .md-sign:after {
           opacity: 1;
