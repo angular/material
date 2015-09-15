@@ -79,6 +79,10 @@ md-menu-item {
     padding-right: 2*$baseline-grid;
   }
 
+  > a.md-button {
+    display: flex;
+  }
+
   > .md-button {
     border-radius: 0;
     margin: auto 0;
