@@ -569,7 +569,7 @@ function MdDialogProvider($$interimElementProvider) {
       // If the parent specifier is a simple string selector, then query for
       // the DOM element.
       if ( angular.isString(options.parent) ) {
-        var simpleSelector = options.parent;
+        var simpleSelector = options.parent,
             container = $document[0].querySelectorAll(selector);
         options.parent = container.length ? container[0] : null;
       }
