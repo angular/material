@@ -1,4 +1,9 @@
 md-select.md-THEME_NAME-theme {
+  &[disabled] .md-select-value {
+    border-bottom-color: transparent;
+    background-image: linear-gradient(to right, '{{foreground-3}}' 0%, '{{foreground-3}}' 33%, transparent 0%);
+    background-image: -ms-linear-gradient(left, transparent 0%, '{{foreground-3}}' 100%);
+  }
   .md-select-value {
     &.md-select-placeholder {
       color: '{{foreground-3}}';
