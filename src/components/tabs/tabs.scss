@@ -226,18 +226,20 @@ md-tab-content {
 }
 
 md-ink-bar {
+  $duration: $swift-ease-in-out-duration * 0.5;
+  $multiplier: 0.5;
   position: absolute;
   left: auto;
   right: auto;
   bottom: 0;
   height: 2px;
   &.md-left {
-    transition: left ($swift-ease-in-out-duration * 0.45) $swift-ease-in-out-timing-function,
-        right $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+    transition: left ($duration * $multiplier) $swift-ease-in-out-timing-function,
+        right $duration $swift-ease-in-out-timing-function;
   }
   &.md-right {
-    transition: left $swift-ease-in-out-duration $swift-ease-in-out-timing-function,
-        right ($swift-ease-in-out-duration * 0.45) $swift-ease-in-out-timing-function;
+    transition: left $duration $swift-ease-in-out-timing-function,
+        right ($duration * $multiplier) $swift-ease-in-out-timing-function;
   }
 }
 
