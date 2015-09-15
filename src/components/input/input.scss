@@ -28,6 +28,12 @@ md-input-container {
   padding: $input-container-padding;
   padding-bottom: $input-container-padding + $input-error-height;
 
+  // When we have ng-messages, remove the input error height from our bottom padding, since the
+  // ng-messages wrapper has a min-height of 1 error (so we don't adjust height as often; see below)
+  &.md-input-has-messages {
+    padding-bottom: $input-container-padding;
+  }
+
   > md-icon {
     position: absolute;
     top: 5px;
@@ -143,6 +149,9 @@ md-input-container {
     -ms-flex-preferred-size: $input-line-height; //IE fix
     border-radius: 0;
 
+    // Fix number inputs in Firefox to be full-width
+    width: auto;
+
     &:focus {
       outline: none;
     }
@@ -156,44 +165,65 @@ md-input-container {
     }
   }
 
+  .md-char-counter {
+    position: absolute;
+    right: 0;
+    order: 3;
+  }
+
   ng-messages, data-ng-messages, x-ng-messages,
   [ng-messages], [data-ng-messages], [x-ng-messages] {
-    order: 3;
     position: relative;
+    order: 4;
+    min-height: $input-error-height;
   }
+
   ng-message, data-ng-message, x-ng-message,
   [ng-message], [data-ng-message], [x-ng-message],
+  [ng-message-exp], [data-ng-message-exp], [x-ng-message-exp],
   .md-char-counter {
+    $input-error-line-height: $input-error-font-size + 2px;
     //-webkit-font-smoothing: antialiased;
-    position: absolute;
     font-size: $input-error-font-size;
-    line-height: $input-error-height;
+    line-height: $input-error-line-height;
+    overflow: hidden;
+
+    // Add some top padding which is equal to half the difference between the expected height
+    // and the actual height
+    $error-padding-top: ($input-error-height - $input-error-line-height) / 2;
+    padding-top: $error-padding-top;
 
     &:not(.md-char-counter) {
-      padding-right: rem(3);
+      padding-right: rem(5);
     }
 
     &.ng-enter {
-      transition: $swift-ease-out;
-      transition-delay: 0.2s;
+      transition: $swift-ease-in;
+
+      // Delay the enter transition so it happens after the leave
+      transition-delay: $swift-ease-in-duration / 1.5;
+
+      // Since we're delaying the transition, we speed up the duration a little bit to compensate
+      transition-duration: $swift-ease-in-duration / 1.5;
     }
     &.ng-leave {
-      transition: $swift-ease-in;
+      transition: $swift-ease-out;
+
+      // Speed up the duration (see enter comment above)
+      transition-duration: $swift-ease-out-duration / 1.5;
     }
     &.ng-enter,
     &.ng-leave.ng-leave-active {
+      // Move the error upwards off the screen and fade it out
+      margin-top: -$input-error-line-height - $error-padding-top;
       opacity: 0;
-      transform: translate3d(0, -20%, 0);
     }
     &.ng-leave,
     &.ng-enter.ng-enter-active {
+      // Move the error down into position and fade it in
+      margin-top: 0;
       opacity: 1;
-      transform: translate3d(0, 0, 0);
     }
-  }
-  .md-char-counter {
-    bottom: $input-container-padding;
-    right: $input-container-padding;
   }
 
   &.md-input-focused,
