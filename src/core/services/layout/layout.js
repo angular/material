@@ -176,18 +176,10 @@
            */
           var lastClass;
 
-          attr.$observe(function() {
-
-            return attr[className];
-
-          }, function(newVal) {
-
+          attr.$observe(attr.$normalize(className), function(newVal) {
             element.removeClass(lastClass);
-
-              lastClass = className + "-" + String(newVal).replace(/\s+/g, "-");
-
+            lastClass = className + '-' + String(newVal).replace(/\s+/g, '-');
             element.addClass(lastClass);
-
           });
 
         }
