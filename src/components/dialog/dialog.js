@@ -570,7 +570,7 @@ function MdDialogProvider($$interimElementProvider) {
       // the DOM element.
       if ( angular.isString(options.parent) ) {
         var simpleSelector = options.parent,
-            container = $document[0].querySelectorAll(selector);
+            container = $document[0].querySelectorAll(simpleSelector);
         options.parent = container.length ? container[0] : null;
       }
       // If we have a reference to a raw dom element, always wrap it in jqLite
