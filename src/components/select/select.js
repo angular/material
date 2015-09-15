@@ -70,7 +70,7 @@ angular.module('material.components.select', [
  *   </md-input-container>
  * </hljs>
  */
-function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $rootElement, $compile, $parse) {
+function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $parse) {
   return {
     restrict: 'E',
     require: ['^?mdInputContainer', 'mdSelect', 'ngModel', '?^form'],
@@ -281,7 +281,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $rootElement, 
       });
 
       attr.$observe('disabled', function(disabled) {
-        if (typeof disabled == "string") {
+        if (angular.isString(disabled)) {
           disabled = true;
         }
         // Prevent click event being registered twice

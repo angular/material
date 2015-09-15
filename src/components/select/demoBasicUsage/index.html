@@ -2,18 +2,23 @@
   <div>
     <h1 class="md-title">Enter an address</h1>
     <div layout="row">
+
       <md-input-container>
         <label>Street Name</label>
-        <input type="text"/>
+        <input>
       </md-input-container>
+
       <md-input-container>
         <label>City</label>
-        <input type="text"/>
+        <input>
       </md-input-container>
+
       <md-input-container>
         <label>State</label>
         <md-select ng-model="ctrl.userState">
-          <md-option ng-repeat="state in ctrl.states" value="{{state.abbrev}}">{{state.abbrev}}</md-option>
+          <md-option ng-repeat="state in ctrl.states" value="{{state.abbrev}}">
+            {{state.abbrev}}
+          </md-option>
         </md-select>
       </md-input-container>
     </div>
