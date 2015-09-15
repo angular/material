@@ -2,16 +2,15 @@ describe('$mdBottomSheet service', function() {
   beforeEach(module('material.components.bottomSheet'));
 
   describe('#build()', function() {
-    it('should close when `escapeToClose == true`', inject(function($mdBottomSheet, $rootScope, $rootElement, $timeout, $animate, $mdConstant) {
+    it('should close when `escapeToClose == true`', inject(function($mdBottomSheet, $rootElement, $material, $mdConstant) {
       var parent = angular.element('<div>');
       $mdBottomSheet.show({
         template: '<md-bottom-sheet>',
         parent: parent,
         escapeToClose: true
       });
-      $rootScope.$apply();
 
-      $animate.triggerCallbacks();
+      $material.flushOutstandingAnimations();
 
       expect(parent.find('md-bottom-sheet').length).toBe(1);
 
@@ -20,7 +19,7 @@ describe('$mdBottomSheet service', function() {
         keyCode: $mdConstant.KEY_CODE.ESCAPE
       });
 
-      $timeout.flush();
+      $material.flushInterimElement();
       expect(parent.find('md-bottom-sheet').length).toBe(0);
     }));
 
@@ -33,8 +32,6 @@ describe('$mdBottomSheet service', function() {
       });
       $rootScope.$apply();
 
-      $animate.triggerCallbacks();
-
       expect(parent.find('md-bottom-sheet').length).toBe(1);
 
       $rootElement.triggerHandler({type: 'keyup', keyCode: $mdConstant.KEY_CODE.ESCAPE});
@@ -42,7 +39,7 @@ describe('$mdBottomSheet service', function() {
       expect(parent.find('md-bottom-sheet').length).toBe(1);
     }));
 
-    it('should close when navigation fires `scope.$destroy()`', inject(function($mdBottomSheet, $rootScope, $rootElement, $timeout, $animate, $mdConstant) {
+    it('should close when navigation fires `scope.$destroy()`', inject(function($mdBottomSheet, $rootScope, $rootElement, $timeout, $material, $mdConstant) {
           var parent = angular.element('<div>');
           $mdBottomSheet.show({
             template: '<md-bottom-sheet>',
@@ -51,11 +48,12 @@ describe('$mdBottomSheet service', function() {
           });
 
           $rootScope.$apply();
-          $animate.triggerCallbacks();
+          $material.flushOutstandingAnimations();
 
           expect(parent.find('md-bottom-sheet').length).toBe(1);
 
           $rootScope.$destroy();
+          $material.flushInterimElement();
           expect(parent.find('md-bottom-sheet').length).toBe(0);
         }));
 
@@ -78,7 +76,6 @@ describe('$mdBottomSheet service', function() {
         escapeToClose: false
       });
       $rootScope.$apply();
-      $animate.triggerCallbacks();
 
       var sheet = parent.find('md-bottom-sheet');
       expect(sheet.length).toBe(1);

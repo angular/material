@@ -5,7 +5,7 @@ describe('md-calendar', function() {
   var JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9,
       NOV = 10, DEC = 11;
 
-  var ngElement, element, scope, pageScope, controller, $animate, $compile, $$rAF;
+  var ngElement, element, scope, pageScope, controller, $material, $compile, $$rAF;
   var $rootScope, dateLocale, $mdUtil, keyCodes, dateUtil;
 
   // List of calendar elements added to the DOM so we can remove them after every test.
@@ -17,8 +17,7 @@ describe('md-calendar', function() {
    */
   function applyDateChange() {
     pageScope.$apply();
-    $animate.triggerCallbacks();
-    $$rAF.flush();
+    $material.flushOutstandingAnimations();
 
     // Internally, the calendar sets scrollTop to scroll to the month for a change.
     // The handler for that scroll won't be invoked unless we manually trigger it.
@@ -139,7 +138,7 @@ describe('md-calendar', function() {
       }
     });
 
-    $animate = $injector.get('$animate');
+    $material = $injector.get('$material');
     $compile = $injector.get('$compile');
     $rootScope = $injector.get('$rootScope');
     $$rAF = $injector.get('$$rAF');
@@ -474,7 +473,7 @@ describe('md-calendar', function() {
     controller.changeDisplayDate(laterDate);
     expect(controller.displayDate).toBeSameDayAs(earlierDate);
 
-    $animate.triggerCallbacks();
+    $material.flushOutstandingAnimations();
     controller.changeDisplayDate(laterDate);
     expect(controller.displayDate).toBeSameDayAs(laterDate);
   });

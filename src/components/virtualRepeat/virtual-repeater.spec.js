@@ -21,11 +21,12 @@ describe('<md-virtual-repeat>', function() {
       HORIZONTAL_PX = 150,
       ITEM_SIZE = 10;
 
-  beforeEach(inject(function(_$$rAF_, _$compile_, _$document_, $rootScope) {
+  beforeEach(inject(function(_$$rAF_, _$compile_, _$document_, $rootScope, _$material_) {
     repeater = angular.element(REPEATER_HTML);
     container = angular.element(CONTAINER_HTML).append(repeater);
     component = null;
     $$rAF = _$$rAF_;
+    $material = _$material_;
     $compile = _$compile_;
     $document = _$document_;
     scope = $rootScope.$new();
@@ -49,6 +50,8 @@ describe('<md-virtual-repeat>', function() {
     scroller  = angular.element(component[0].querySelector('.md-virtual-repeat-scroller'));
     sizer     = angular.element(component[0].querySelector('.md-virtual-repeat-sizer'));
     offsetter = angular.element(component[0].querySelector('.md-virtual-repeat-offsetter'));
+
+    $material.flushOutstandingAnimations();
 
     return component;
   }
@@ -96,9 +99,7 @@ describe('<md-virtual-repeat>', function() {
     repeater.removeAttr('md-item-size');
     createRepeater();
     scope.items = createItems(NUM_ITEMS);
-    scope.$apply();
-    $$rAF.flush();
-    $$rAF.flush();
+    $material.flushInterimElement();
 
     var numItemRenderers = VERTICAL_PX / ITEM_SIZE + VirtualRepeatController.NUM_EXTRA;
 

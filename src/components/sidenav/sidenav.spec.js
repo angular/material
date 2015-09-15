@@ -15,25 +15,25 @@ describe('mdSidenav', function() {
 
   describe('directive', function() {
 
-    it('should bind isOpen attribute', inject(function($rootScope, $animate) {
+    it('should bind isOpen attribute', inject(function($rootScope, $material) {
       var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
 
-      $animate.triggerCallbacks();
+      $material.flushOutstandingAnimations();
       expect(el.hasClass('md-closed')).toBe(false);
       expect(el.parent().find('md-backdrop').length).toBe(1);
 
       $rootScope.$apply('show = false');
-      $animate.triggerCallbacks();
+      $material.flushOutstandingAnimations();
       expect(el.hasClass('md-closed')).toBe(true);
       expect(el.parent().find('md-backdrop').length).toBe(0);
     }));
 
-    it('should close on escape', inject(function($rootScope, $animate, $mdConstant, $timeout) {
+    it('should close on escape', inject(function($rootScope, $material, $mdConstant, $timeout) {
       var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
 
-      $animate.triggerCallbacks();
+      $material.flushOutstandingAnimations();
       el.parent().triggerHandler({
         type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.ESCAPE
@@ -42,26 +42,26 @@ describe('mdSidenav', function() {
       expect($rootScope.show).toBe(false);
     }));
 
-    it('should close on backdrop click', inject(function($rootScope, $animate, $timeout) {
+    it('should close on backdrop click', inject(function($rootScope, $material, $timeout) {
       var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
 
-      $animate.triggerCallbacks();
+      $material.flushOutstandingAnimations();
       el.parent().find('md-backdrop').triggerHandler('click');
       $timeout.flush();
       expect($rootScope.show).toBe(false);
     }));
 
-    it('should focus sidenav on open', inject(function($rootScope, $animate, $document) {
+    it('should focus sidenav on open', inject(function($rootScope, $material, $document) {
       jasmine.mockElementFocus(this);
       var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
 
-      $animate.triggerCallbacks();
+      $material.flushOutstandingAnimations();
       expect($document.activeElement).toBe(el[0]);
     }));
 
-    it('should focus child with md-sidenav-focus', inject(function($rootScope, $animate, $document, $compile) {
+    it('should focus child with md-sidenav-focus', inject(function($rootScope, $material, $document, $compile) {
       jasmine.mockElementFocus(this);
       var parent = angular.element('<div>');
       var markup = '<md-sidenav md-is-open="show">'+
@@ -75,11 +75,11 @@ describe('mdSidenav', function() {
       $rootScope.$apply('show = true');
 
       var focusEl = sidenavEl.find('input');
-      $animate.triggerCallbacks();
+      $material.flushOutstandingAnimations();
       expect($document.activeElement).toBe(focusEl[0]);
     }));
 
-    it('should focus child with md-autofocus', inject(function($rootScope, $animate, $document, $compile) {
+    it('should focus child with md-autofocus', inject(function($rootScope, $material, $document, $compile) {
       jasmine.mockElementFocus(this);
       var parent = angular.element('<div>');
       var markup = '<md-sidenav md-is-open="show">'+
@@ -93,12 +93,12 @@ describe('mdSidenav', function() {
       $rootScope.$apply('show = true');
 
       var focusEl = sidenavEl.find('input');
-      $animate.triggerCallbacks();
+      $material.flushOutstandingAnimations();
       expect($document.activeElement).toBe(focusEl[0]);
     }));
 
 
-    it('should focus on last md-sidenav-focus element', inject(function($rootScope, $animate, $document, $compile) {
+    it('should focus on last md-sidenav-focus element', inject(function($rootScope, $material, $document, $compile) {
       jasmine.mockElementFocus(this);
       var parent = angular.element('<div>');
       var markup = '<md-sidenav md-is-open="show">'+
@@ -112,18 +112,18 @@ describe('mdSidenav', function() {
       $compile(parent)($rootScope);
       $rootScope.$apply('show = true');
 
-      $animate.triggerCallbacks();
+      $material.flushOutstandingAnimations();
       var focusEl = sidenavEl.find('input');
       expect($document.activeElement).toBe(focusEl[0]);
     }));
 
-    it('should lock open when is-locked-open is true', inject(function($rootScope, $animate, $document) {
+    it('should lock open when is-locked-open is true', inject(function($rootScope, $material, $document) {
       var el = setup('md-is-open="show" md-is-locked-open="lock"');
       expect(el.hasClass('md-locked-open')).toBe(false);
       $rootScope.$apply('lock = true');
       expect(el.hasClass('md-locked-open')).toBe(true);
       $rootScope.$apply('show = true');
-      $animate.triggerCallbacks();
+      $material.flushOutstandingAnimations();
       expect(el.parent().find('md-backdrop').hasClass('md-locked-open')).toBe(true);
     }));
 
@@ -174,17 +174,14 @@ describe('mdSidenav', function() {
   });
 
   describe("controller Promise API", function() {
-    var $animate, $rootScope;
+    var $material, $rootScope;
 
-      function flush() {
-        if ( !$rootScope.$$phase) {
-          $rootScope.$apply();
-        }
-        $animate.triggerCallbacks();
-      }
+    function flush() {
+      $material.flushInterimElement();
+    }
 
-    beforeEach( inject(function(_$animate_,_$rootScope_,_$timeout_) {
-        $animate = _$animate_;
+    beforeEach( inject(function(_$material_,_$rootScope_,_$timeout_) {
+        $material = _$material_;
         $rootScope = _$rootScope_;
         $timeout = _$timeout_;
     }));

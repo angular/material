@@ -10,7 +10,9 @@ describe('$animateCss', function() {
   beforeEach(module('material.core.animate'));
 
   beforeEach(module(function() {
-    return function($window, $document, $$rAF, $timeout, $rootElement) {
+    return function($window, $document, $$rAF, $timeout, $rootElement, $animate, $injector, $rootScope) {
+      $animate.enabled(true);
+
       ss = createMockStyleSheet($document, $window);
       element = jqLite('<div></div>');
       $rootElement.append(element);
@@ -19,8 +21,18 @@ describe('$animateCss', function() {
       ss.addRule('.to-add', 'transition:0.5s linear all; font-size:100px;');
       ss.addRule('.to-remove', 'transition:0.5s linear all; border:10px solid black;');
 
+      var asyncRun = angular.noop;
+      if ($injector.has('$$animateAsyncRun')) {
+        var asyncFlush = $injector.get('$$animateAsyncRun');
+        asyncRun = function() {
+          asyncFlush.flush();
+        };
+      }
+
       triggerAnimationStartFrame = function() {
         $$rAF.flush();
+        asyncRun();
+        $rootScope.$digest();
       };
 
       doneSpy = jasmine.createSpy();
@@ -30,6 +42,8 @@ describe('$animateCss', function() {
       moveAnimationClock = function(duration, delay) {
         var time = (delay || 0) + duration * 1.5;
         $timeout.flush(time * 1000);
+        asyncRun();
+        $$rAF.flush();
       }
     };
   }));
