@@ -50,6 +50,14 @@ describe('md-date-picker', function() {
     expect(controller.inputElement.value).toBe(dateLocale.formatDate(initialDate));
   });
 
+  it('should set the ngModel value to null when the text input is emptied', function() {
+    controller.inputElement.value = '';
+    controller.ngInputElement.triggerHandler('input');
+    $timeout.flush();
+
+    expect(pageScope.myDate).toBeNull();
+  });
+
   it('should open and close the floating calendar pane element', function() {
     // We can asset that the calendarPane is in the DOM by checking if it has a height.
     expect(controller.calendarPane.offsetHeight).toBe(0);
