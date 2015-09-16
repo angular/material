@@ -100,7 +100,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout) {
       preserveElement: self.isInMenuBar || self.nestedMenus.length > 0,
       parent: self.isInMenuBar ? $element : 'body'
     });
-  }
+  };
 
   // Expose a open function to the child scope for html to use
   $scope.$mdOpenMenu = this.open;
@@ -133,6 +133,10 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout) {
     this.containerProxy && this.containerProxy(ev);
   };
 
+  this.destroy = function() {
+    return $mdMenu.destroy();
+  };
+
   // Use the $mdMenu interim element service to close the menu contents
   this.close = function closeMenu(skipFocus, closeOpts) {
     if ( !self.isOpen ) return;
@@ -140,12 +144,13 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout) {
 
     $scope.$emit('$mdMenuClose', $element);
     $mdMenu.hide(null, closeOpts);
+
     if (!skipFocus) {
       var el = self.restoreFocusTo || $element.find('button')[0];
       if (el instanceof angular.element) el = el[0];
       el.focus();
     }
-  }
+  };
 
   /**
    * Build a nice object out of our string attribute which specifies the

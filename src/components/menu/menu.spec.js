@@ -86,6 +86,7 @@ describe('material.components.menu', function() {
     });
 
     it('closes on backdrop click', inject(function($document) {
+
       openMenu(setup());
 
       expect(getOpenMenuContainer().length).toBe(1);
@@ -96,6 +97,7 @@ describe('material.components.menu', function() {
       expect(getOpenMenuContainer().length).toBe(0);
     }));
 
+
     it('closes on escape', inject(function($document, $mdConstant) {
       openMenu(setup());
       expect(getOpenMenuContainer().length).toBe(1);
@@ -104,6 +106,16 @@ describe('material.components.menu', function() {
 
       pressKey(openMenuEl, $mdConstant.KEY_CODE.ESCAPE);
       waitForMenuClose();
+
+      expect(getOpenMenuContainer().length).toBe(0);
+    }));
+
+    it('closes on $destroy', inject(function($document, $rootScope) {
+      var scope = $rootScope.$new();
+      openMenu( setup(null,false,scope) );
+
+      expect(getOpenMenuContainer().length).toBe(1);
+      scope.$destroy();
 
       expect(getOpenMenuContainer().length).toBe(0);
     }));
@@ -164,7 +176,7 @@ describe('material.components.menu', function() {
       }
     });
 
-    function setup(triggerType, noEvent) {
+    function setup(triggerType, noEvent, scope) {
       var menu,
         template = $mdUtil.supplant('' +
           '<md-menu>' +
@@ -180,7 +192,7 @@ describe('material.components.menu', function() {
         $rootScope.doSomething = function($event) {
           menuActionPerformed = true;
         };
-        menu = $compile(template)($rootScope);
+        menu = $compile(template)(scope || $rootScope);
       });
 
       attachedElements.push(menu);
@@ -192,7 +204,6 @@ describe('material.components.menu', function() {
   // ********************************************
   // Internal methods
   // ********************************************
-
 
   function getOpenMenuContainer() {
     var res;
