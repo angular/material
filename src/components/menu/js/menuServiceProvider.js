@@ -22,7 +22,7 @@ function MenuProvider($$interimElementProvider) {
     });
 
   /* @ngInject */
-  function menuDefaultOptions($mdUtil, $mdTheming, $mdConstant, $document, $window, $q, $$rAF, $animateCss, $animate, $timeout) {
+  function menuDefaultOptions($mdUtil, $mdTheming, $mdConstant, $document, $window, $q, $$rAF, $animateCss, $animate) {
     var animator = $mdUtil.dom.animator;
 
     return {
@@ -63,14 +63,8 @@ function MenuProvider($$interimElementProvider) {
        * Hide and destroys the backdrop created by showBackdrop()
        */
       return function hideBackdrop() {
-        if (options.backdrop) {
-          // Override duration to immediately remove invisible backdrop
-          options.backdrop.off('click');
-          $animate.leave(options.backdrop, {duration:0});
-        }
-        if (options.disableParentScroll) {
-          options.restoreScroll();
-        }
+        if (options.backdrop) options.backdrop.remove();
+        if (options.disableParentScroll) options.restoreScroll();
       };
     }
 
@@ -83,14 +77,28 @@ function MenuProvider($$interimElementProvider) {
       opts.cleanupResizing();
       opts.hideBackdrop();
 
-      return $animateCss(element, {addClass: 'md-leave'})
-        .start()
-        .then(function() {
-          element.removeClass('md-active');
+      // For navigation $destroy events, do a quick, non-animated removal,
+      // but for normal closes (from clicks, etc) animate the removal
 
-          detachElement(element, opts);
-          opts.alreadyOpen = false;
-        });
+      return (opts.$destroy === true) ? detachAndClean() : animateRemoval().then( detachAndClean );
+
+      /**
+       * For normal closes, animate the removal.
+       * For forced closes (like $destroy events), skip the animations
+       */
+      function animateRemoval() {
+        return $animateCss(element, {addClass: 'md-leave'}).start();
+      }
+
+      /**
+       * Detach the element
+       */
+      function detachAndClean() {
+        element.removeClass('md-active');
+        detachElement(element, opts);
+        opts.alreadyOpen = false;
+      }
+
     }
 
     /**
@@ -361,7 +369,7 @@ function MenuProvider($$interimElementProvider) {
     }
 
     /**
-     * Use browser to remove this element without triggering a $destory event
+     * Use browser to remove this element without triggering a $destroy event
      */
     function detachElement(element, opts) {
       if (!opts.preserveElement) {
