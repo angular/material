@@ -1,6 +1,7 @@
 <!doctype html>
 <html ng-app="docsApp" ng-controller="DocsCtrl" lang="en" ng-strict-di>
 <head>
+<base href="/">
 <title ng-bind="'Angular Material - ' + menu.currentSection.name +
     (menu.currentSection === menu.currentPage ? '' : ' > ' + menu.currentPage.name)">
   Angular Material
@@ -19,7 +20,7 @@
               md-is-locked-open="$mdMedia('gt-sm')">
 
     <header class="nav-header">
-      <a ng-href="#/" class="docs-logo">
+      <a ng-href="/" class="docs-logo">
         <img src="img/icons/angular-logo.svg" alt="" />
         <h1 class="docs-logotype md-heading">Angular Material</h1>
       </a>
@@ -133,7 +134,7 @@
               class="md-icon-button"
               aria-label="View Demo"
               ng-class="{hide: !currentDoc || !currentDoc.hasDemo}"
-              ng-href="#/demo/{{currentComponent.name}}">
+              ng-href="{{currentComponent.demoUrl}}">
               <md-icon md-svg-src="img/icons/ic_play_circle_fill_24px.svg" style="fill:green"></md-icon>
               <md-tooltip>View Demo</md-tooltip>
             </md-button>
