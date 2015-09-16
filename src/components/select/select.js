@@ -144,7 +144,6 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
     attr.tabindex = attr.tabindex || '0';
 
     return function postLink(scope, element, attr, ctrls) {
-      var isOpen;
       var isDisabled;
 
       var containerCtrl = ctrls[0];
@@ -316,19 +315,22 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
       element.attr(ariaAttrs);
 
       scope.$on('$destroy', function() {
-        if (isOpen) {
-          $mdSelect.hide().finally(function() {
-            selectContainer.remove();
+        $mdSelect
+          .destroy()
+          .finally(function() {
+            if ( selectContainer ) {
+              selectContainer.remove();
+            }
+
+            if (containerCtrl) {
+              containerCtrl.setFocused(false);
+              containerCtrl.setHasValue(false);
+              containerCtrl.input = null;
+            }
           });
-        } else {
-          selectContainer.remove();
-        }
-        if (containerCtrl) {
-          containerCtrl.setFocused(false);
-          containerCtrl.setHasValue(false);
-          containerCtrl.input = null;
-        }
       });
+
+
 
       function inputCheckValue() {
         // The select counts as having a value if one or more options are selected,
@@ -345,7 +347,8 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         selectScope = scope.$new();
         $mdTheming.inherit(selectContainer, element);
         if (element.attr('md-container-class')) {
-          selectContainer[0].setAttribute('class', selectContainer[0].getAttribute('class') + ' ' + element.attr('md-container-class'));
+          var value = selectContainer[0].getAttribute('class') + ' ' + element.attr('md-container-class');
+          selectContainer[0].setAttribute('class', value);
         }
         selectContainer = $compile(selectContainer)(selectScope);
         selectMenuCtrl = selectContainer.find('md-select-menu').controller('mdSelectMenu');
@@ -374,7 +377,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
       }
 
       function openSelect() {
-        scope.$apply('isOpen = true');
+        selectScope.isOpen = true;
 
         $mdSelect.show({
           scope: selectScope,
@@ -385,7 +388,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
           hasBackdrop: true,
           loadingAsync: attr.mdOnOpen ? scope.$eval(attr.mdOnOpen) || true : false
         }).then(function() {
-          isOpen = false;
+          selectScope.isOpen = false;
         });
       }
     };
@@ -782,38 +785,42 @@ function SelectProvider($$interimElementProvider) {
      * Interim-element onRemove logic....
      */
     function onRemove(scope, element, opts) {
+      opts = opts || { };
       opts.cleanupInteraction();
       opts.cleanupResizing();
       opts.hideBackdrop();
 
-      return $animateCss(element, {addClass: 'md-leave'})
-         .start()
-         .then(function(response) {
+      // For navigation $destroy events, do a quick, non-animated removal,
+      // but for normal closes (from clicks, etc) animate the removal
 
-           configureAria(opts.target, false);
-           element.removeClass('md-active');
+      return  (opts.$destroy === true) ? detachAndClean() : animateRemoval().then( detachAndClean );
 
-           announceClosed(opts);
-           detachElement(element, opts);
+      /**
+       * For normal closes (eg clicks), animate the removal.
+       * For forced closes (like $destroy events from navigation),
+       * skip the animations
+       */
+      function animateRemoval() {
+        return $animateCss(element, {addClass: 'md-leave'}).start();
+      }
 
-           return response;
-         })
-         .finally(function() {
-           opts.restoreFocus && opts.target.focus();
-         });
+      /**
+       * Detach the element and cleanup prior changes
+       */
+      function detachAndClean() {
+        configureAria(opts.target, false);
 
-      // If we want to ignore leave animations (and remove immediately):
-      //
-      //     configureAria(opts.target, false);
-      //
-      //     element.addClass('md-leave');
-      //     element.removeClass('md-active');
-      //
-      //     announceClosed(opts);
-      //     detachElement(element, opts);
-      //     opts.restoreFocus && opts.target.focus();
-      //
-      //     return $q.when(true);
+        element.attr('opacity', 0);
+        element.removeClass('md-active');
+        detachElement(element, opts);
+
+        announceClosed(opts);
+
+        if (!opts.$destroy && opts.restoreFocus) {
+          opts.target.focus();
+        }
+      }
+
     }
 
     /**
@@ -911,14 +918,10 @@ function SelectProvider($$interimElementProvider) {
          * Hide modal backdrop element...
          */
         return function hideBackdrop() {
-          if (options.backdrop) {
-            // Override duration to immediately remove invisible backdrop
-            $animate.leave(options.backdrop, {duration: 0});
-          }
-          if (options.disableParentScroll) {
-            options.restoreScroll();
-            delete options.restoreScroll;
-          }
+          if (options.backdrop) options.backdrop.remove();
+          if (options.disableParentScroll) options.restoreScroll();
+
+          delete options.restoreScroll;
         }
       }
 
@@ -1164,7 +1167,7 @@ function SelectProvider($$interimElementProvider) {
     }
 
     /**
-     * Use browser to remove this element without triggering a $destory event
+     * Use browser to remove this element without triggering a $destroy event
      */
     function detachElement(element, opts) {
       if (element[0].parentNode === opts.parent[0]) {

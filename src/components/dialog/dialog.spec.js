@@ -158,6 +158,28 @@ describe('$mdDialog', function() {
       expect(container.length).toBe(0);
     }));
 
+    it('should remove `md-dialog-container` on scope.$destroy()', inject(function($mdDialog, $rootScope, $timeout) {
+      var container, parent = angular.element('<div>');
+
+      $mdDialog.show(
+        $mdDialog.alert({
+          template: '' +
+            '<md-dialog>' +
+            '  <md-dialog-content tabIndex="0">' +
+            '    <p>Muppets are the best</p>' +
+            '  </md-dialog-content>' +
+            '</md-dialog>',
+          parent: parent
+        })
+      );
+
+      runAnimation(parent.find('md-dialog'));
+        $rootScope.$destroy();
+      container = angular.element(parent[0].querySelector('.md-dialog-container'));
+
+      expect(container.length).toBe(0);
+    }));
+
   });
 
   describe('#confirm()', function() {

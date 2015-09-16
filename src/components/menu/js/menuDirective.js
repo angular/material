@@ -191,8 +191,11 @@ function MenuDirective($mdUtil) {
     mdMenuCtrl.init(menuContainer, { isInMenuBar: isInMenuBar });
 
     scope.$on('$destroy', function() {
-      menuContainer.remove();
-      mdMenuCtrl.close();
+      mdMenuCtrl
+        .destroy()
+        .finally(function(){
+          menuContainer.remove();
+        });
     });
 
   }
