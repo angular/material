@@ -755,10 +755,11 @@ function MdDialogProvider($$interimElementProvider) {
 
       var isFixed = $window.getComputedStyle($document[0].body).position == 'fixed';
       var backdrop = options.backdrop ? $window.getComputedStyle(options.backdrop[0]) : null;
-      var height = backdrop ? Math.ceil(Math.abs(parseInt(backdrop.height, 10))) : 0;
+
+      var height = backdrop ? Math.min($document[0].body.clientHeight, Math.ceil(Math.abs(parseInt(backdrop.height, 10)))) : 0;
 
       container.css({
-        top: (isFixed ? $mdUtil.scrollTop(options.parent) / 2 : 0) + 'px',
+        top: (isFixed ? $mdUtil.scrollTop(options.parent) : 0) + 'px',
         height: height ? height + 'px' : '100%'
       });
 
