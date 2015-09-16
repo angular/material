@@ -36,11 +36,13 @@ gulp.task('demos', function() {
       var demoIndex = _(demos)
         .groupBy('moduleName')
         .map(function(moduleDemos, moduleName) {
+          var componentName = moduleName.split('.').pop();
           return {
-            name: moduleName,
-            label: utils.humanizeCamelCase(moduleName.split('.').pop()),
+            name: componentName,
+            moduleName: moduleName,
+            label: utils.humanizeCamelCase(componentName),
             demos: moduleDemos,
-            url: '/demo/' + moduleName
+            url: 'demo/' + componentName
           };
         })
         .value();
