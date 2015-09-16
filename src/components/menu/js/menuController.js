@@ -148,7 +148,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout) {
     if (!skipFocus) {
       var el = self.restoreFocusTo || $element.find('button')[0];
       if (el instanceof angular.element) el = el[0];
-      el.focus();
+      if (el) el.focus();
     }
   };
 
