@@ -162,7 +162,7 @@ md-input-container {
     position: relative;
   }
   ng-message, data-ng-message, x-ng-message,
-  [ng-message], [data-ng-message], [x-ng-message],
+  [ng-message], [data-ng-message], [x-ng-message], [ng-message-exp]
   .md-char-counter {
     //-webkit-font-smoothing: antialiased;
     position: absolute;
