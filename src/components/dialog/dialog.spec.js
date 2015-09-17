@@ -13,14 +13,10 @@ describe('$mdDialog', function() {
       return $$q.when();
     });
   }));
-  beforeEach(inject(function($rootScope, $timeout, $$rAF, $animate) {
-
+  beforeEach(inject(function($material) {
     runAnimation = function() {
-      $timeout.flush(); // flush to start animations
-      $$rAF.flush();    // flush animations
-      $animate.triggerCallbacks();
-      $timeout.flush(); // flush responses after animation completions
-    }
+      $material.flushInterimElement();
+    };
   }));
 
   describe('#alert()', function() {
@@ -144,7 +140,7 @@ describe('$mdDialog', function() {
         })
       );
 
-      runAnimation(parent.find('md-dialog'));
+      runAnimation();
 
       container = angular.element(parent[0].querySelector('.md-dialog-container'));
       container.triggerHandler({
@@ -152,7 +148,8 @@ describe('$mdDialog', function() {
         target: container[0]
       });
 
-      runAnimation(parent.find('md-dialog'));
+      $timeout.flush();
+      runAnimation();
 
       container = angular.element(parent[0].querySelector('.md-dialog-container'));
       expect(container.length).toBe(0);
@@ -188,7 +185,7 @@ describe('$mdDialog', function() {
       'ok', 'cancel', 'targetEvent', 'theme'
     ]);
 
-    it('shows a basic confirm dialog with simple text content', inject(function($rootScope, $mdDialog, $animate) {
+    it('shows a basic confirm dialog with simple text content', inject(function($rootScope, $mdDialog, $animate, $timeout) {
       var parent = angular.element('<div>');
       var rejected = false;
       $mdDialog.show(
@@ -285,7 +282,7 @@ describe('$mdDialog', function() {
       expect($document.activeElement).toBe(parent[0].querySelector('.dialog-close'));
     }));
 
-    it('should remove `md-dialog-container` after click outside', inject(function($mdDialog, $rootScope, $timeout) {
+    it('should remove `md-dialog-container` after click outside', inject(function($mdDialog, $rootScope, $timeout, $animate) {
       jasmine.mockElementFocus(this);
       var container, parent = angular.element('<div>');
 
@@ -309,6 +306,8 @@ describe('$mdDialog', function() {
         type: 'click',
         target: container[0]
       });
+
+      runAnimation();
       runAnimation();
 
       container = angular.element(parent[0].querySelector('.md-dialog-container'));
@@ -342,6 +341,7 @@ describe('$mdDialog', function() {
         type: 'keyup',
         keyCode: $mdConstant.KEY_CODE.ESCAPE
       });
+      runAnimation();
       runAnimation();
 
       container = angular.element(parent[0].querySelector('.md-dialog-container'));
@@ -539,6 +539,7 @@ describe('$mdDialog', function() {
         type: 'click',
         target: container[0]
       });
+      runAnimation();
       runAnimation();
 
       expect(parent.find('md-dialog').length).toBe(0);

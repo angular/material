@@ -33,6 +33,24 @@ angular.module('ngMaterial-mock', [
   ])
   .config(['$provide', function($provide) {
 
+    $provide.factory('$material', ['$animate', '$timeout', function($animate, $timeout) {
+      return {
+        flushOutstandingAnimations: function() {
+          // this code is placed in a try-catch statement
+          // since 1.3 and 1.4 handle their animations differently
+          // and there may be situations where follow-up animations
+          // are run in one version and not the other
+          try { $animate.flush(); } catch(e) {}
+        },
+        flushInterimElement: function() {
+          this.flushOutstandingAnimations();
+          $timeout.flush();
+          this.flushOutstandingAnimations();
+          $timeout.flush();
+        }
+      };
+    }]);
+
     /**
       * Angular Material dynamically generates Style tags
       * based on themes and palletes; for each ng-app.
@@ -69,8 +87,8 @@ angular.module('ngMaterial-mock', [
 
       var ngFlush = $delegate.flush;
       $delegate.flush = function() {
-          try      { ngFlush();  }
-          catch(e) { ;           }
+        try      { ngFlush();  }
+        catch(e) { ;           }
       };
 
       return $delegate;
@@ -92,7 +110,7 @@ angular.module('ngMaterial-mock', [
       return $delegate;
     });
 
-  }]);
+  }])
 
   /**
    * Stylesheet Mocks used by `animateCss.spec.js`
