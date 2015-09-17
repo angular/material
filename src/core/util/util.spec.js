@@ -259,11 +259,8 @@ describe('util', function() {
      }));
 
     function flush(expectation) {
-
       $rootScope.$digest();
-      $animate.triggerCallbacks();
       $timeout.flush();
-
       expectation && expectation();
     }
   });
@@ -292,5 +289,4 @@ describe('util', function() {
       }));
     });
   });
-
 });
