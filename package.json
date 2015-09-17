@@ -5,12 +5,12 @@
     "url": "git://github.com/angular/material.git"
   },
   "devDependencies": {
-    "angular": "1.4.4",
-    "angular-animate": "1.4.4",
-    "angular-aria": "1.4.4",
-    "angular-messages": "1.4.4",
-    "angular-mocks": "1.4.4",
-    "angular-route": "1.4.4",
+    "angular": "1.4.6",
+    "angular-animate": "1.4.6",
+    "angular-aria": "1.4.6",
+    "angular-messages": "1.4.6",
+    "angular-mocks": "1.4.6",
+    "angular-route": "1.4.6",
     "angularytics": "^0.3.0",
     "canonical-path": "0.0.2",
     "cli-color": "^1.0.0",
