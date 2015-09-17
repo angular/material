@@ -429,7 +429,7 @@ function InterimElementProvider() {
          * - perform optional clean up scope.
          */
         function transitionOutAndRemove(response, isCancelled, opts) {
-          options = angular.merge(options || {}, opts || {});
+          options = angular.extend(options || {}, opts || {});
           options.cancelAutoHide && options.cancelAutoHide();
           options.element.triggerHandler('$mdInterimElementRemove');
 
