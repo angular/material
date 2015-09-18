@@ -29,7 +29,7 @@
     </div>
 
     <div layout="row" layout-align="space-around">
-      <div layout="column">
+      <div layout="column" layout-align="start center">
         <b>Direction</b>
 
         <md-radio-group ng-model="demo.selectedDirection">
@@ -40,7 +40,7 @@
         </md-radio-group>
       </div>
 
-      <div layout="column">
+      <div layout="column" layout-align="start center">
         <b>Open/Closed</b>
 
         <md-radio-group ng-model="demo.isOpen">
@@ -49,7 +49,7 @@
         </md-radio-group>
       </div>
 
-      <div layout="column">
+      <div layout="column" layout-align="start center">
         <b>Animation Modes</b>
 
         <md-radio-group ng-model="demo.selectedMode">
@@ -60,9 +60,5 @@
       </div>
     </div>
 
-    <p class="note">
-      Note that you can also hover over the directive's area or tab through each button to open and
-      activate the speed dial menu.
-    </p>
   </md-content>
 </div>
