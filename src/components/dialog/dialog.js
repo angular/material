@@ -606,12 +606,16 @@ function MdDialogProvider($$interimElementProvider) {
      * Listen for escape keys and outside clicks to auto close
      */
     function activateListeners(element, options) {
+      var window = angular.element($window);
+      var onWindowResize = $mdUtil.debounce(function(){
+        stretchDialogContainerToViewport(element, options);
+      }, 60);
+
       var removeListeners = [];
       var smartClose = function() {
         // Only 'confirm' dialogs have a cancel button... escape/clickOutside will
         // cancel or fallback to hide.
         var closeFn = ( options.$type == 'alert' ) ? $mdDialog.hide : $mdDialog.cancel;
-
         $mdUtil.nextTick(closeFn, true);
       };
 
@@ -629,11 +633,15 @@ function MdDialogProvider($$interimElementProvider) {
         // Add keyup listeners
         element.on('keyup', keyHandlerFn);
         target.on('keyup', keyHandlerFn);
+        window.on('resize', onWindowResize);
 
         // Queue remove listeners function
         removeListeners.push(function() {
+
           element.off('keyup', keyHandlerFn);
           target.off('keyup', keyHandlerFn);
+          window.off('resize', onWindowResize);
+
         });
       }
       if (options.clickOutsideToClose) {
@@ -810,6 +818,9 @@ function MdDialogProvider($$interimElementProvider) {
       return animator
         .translate3d(dialogEl, from, to, translateOptions)
         .then(function(animateReversal) {
+
+
+
           // Build a reversal translate function synched to this translation...
           options.reverseAnimate = function() {
 
