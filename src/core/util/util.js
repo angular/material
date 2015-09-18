@@ -141,7 +141,8 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
             // If the expression evaluates to FALSE, then it is not focusable target
             var focusExpression = it[0].getAttribute(attribute);
-            var isFocusable = focusExpression ? (it.scope().$eval(focusExpression) !== false ) : true;
+            var isFocusable = !focusExpression || !$mdUtil.validateScope(it) ? true :
+                              (it.scope().$eval(focusExpression) !== false );
 
             if (isFocusable) elFound = it;
           });
@@ -402,6 +403,22 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      */
     nextUid: function() {
       return '' + nextUniqueId++;
+    },
+
+    /**
+     * By default AngularJS attaches information about binding and scopes to DOM nodes,
+     * and adds CSS classes to data-bound elements. But this information is NOT available
+     * when `$compileProvider.debugInfoEnabled(false);`
+     *
+     * @see https://docs.angularjs.org/guide/production
+     */
+    validateScope : function(element) {
+      var hasScope = element && angular.isDefined(element.scope());
+      if ( !hasScope ) {
+        $log.warn("element.scope() is not available when 'debug mode' == false. @see https://docs.angularjs.org/guide/production!");
+      }
+
+      return hasScope;
     },
 
     // Stop watchers and events from firing on a scope without destroying it,
