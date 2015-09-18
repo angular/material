@@ -34,6 +34,7 @@ describe('$mdDialog', function() {
               .confirm()
               .parent(parent)
               .title('')
+              .css('someClass anotherClass')
               .ok('Next')
               .cancel("Back")
           ).then(function() {
@@ -49,9 +50,12 @@ describe('$mdDialog', function() {
           var title = mdContent.find('h2');
           var content = mdContent.find('p');
           var buttons = parent.find('md-button');
+          var css = mdDialog.attr('class').split(' ');
 
           expect(title.text()).toBe('');
           expect(content.text()).toBe('');
+          expect(css).toContain('someClass');
+          expect(css).toContain('anotherClass');
 
           buttons.eq(0).triggerHandler('click');
 
@@ -72,6 +76,7 @@ describe('$mdDialog', function() {
           .title('Title')
           .content('Hello world')
           .theme('some-theme')
+          .css('someClass anotherClass')
           .ok('Next')
       ).then(function() {
           resolved = true;
@@ -87,12 +92,15 @@ describe('$mdDialog', function() {
       var content = mdContent.find('p');
       var buttons = parent.find('md-button');
       var theme = mdDialog.attr('md-theme');
+      var css = mdDialog.attr('class').split(' ');
 
       expect(title.text()).toBe('Title');
       expect(content.text()).toBe('Hello world');
       expect(buttons.length).toBe(1);
       expect(buttons.eq(0).text()).toBe('Next');
       expect(theme).toBe('some-theme');
+      expect(css).toContain('someClass');
+      expect(css).toContain('anotherClass');
       expect(mdDialog.attr('role')).toBe('alertdialog');
 
       buttons.eq(0).triggerHandler('click');
