@@ -153,7 +153,7 @@ md-select-menu {
     }
   }
 
-  box-shadow: $whiteframe-shadow-z1;
+  box-shadow: $whiteframe-shadow-1dp;
   max-height: ($select-option-height * $select-max-visible-options) + 2 * $baseline-grid;
   min-height: $select-option-height;
   overflow-y: hidden;
