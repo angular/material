@@ -1154,4 +1154,66 @@ describe('<md-autocomplete>', function() {
     }));
   });
 
+  describe('required', function () {
+    it('should respect the required attribute', inject(function () {
+      var scope    = createScope();
+      var template = '\
+          <form name="searchForm">\
+          <md-autocomplete\
+              required\
+              md-input-name="autocompleteField"\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>\
+          </form>';
+      var element  = compile(template, scope);
+
+      expect(scope.searchText).toBe('');
+      expect(scope.searchForm.autocompleteField.$invalid).toBe(true);
+
+      element.scope().searchText = 'foo';
+      scope.$apply();
+
+      expect(scope.searchForm.autocompleteField.$invalid).toBe(false);
+
+      element.remove();
+    }));
+    it('should respect the ng-required attribute', inject(function () {
+      var scope    = createScope();
+      var template = '\
+          <form name="searchForm">\
+          <md-autocomplete\
+              ng-required="required"\
+              md-input-name="autocompleteField"\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>\
+          </form>';
+      var element  = compile(template, scope);
+
+      expect(scope.searchText).toBe('');
+      expect(scope.searchForm.autocompleteField.$invalid).toBe(false);
+
+      element.scope().required = false;
+      scope.$apply();
+
+      expect(scope.searchForm.autocompleteField.$invalid).toBe(false);
+
+      element.scope().required = true;
+      scope.$apply();
+
+      expect(scope.searchForm.autocompleteField.$invalid).toBe(true);
+
+      element.remove();
+    }));
+  });
+
 });
