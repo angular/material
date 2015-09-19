@@ -1,5 +1,5 @@
 describe('md-input-container directive', function() {
-  var $compile, pageScope;
+  var $rootScope, $compile, $timeout, pageScope;
 
   beforeEach(module('ngAria', 'material.components.input'));
 
@@ -7,6 +7,12 @@ describe('md-input-container directive', function() {
     $compile = $injector.get('$compile');
 
     pageScope = $injector.get('$rootScope').$new();
+  }));
+
+  beforeEach(inject(function($injector) {
+    $rootScope = $injector.get('$rootScope');
+    $compile = $injector.get('$compile');
+    $timeout = $injector.get('$timeout');
   }));
 
   function setup(attrs, isForm) {
@@ -257,5 +263,76 @@ describe('md-input-container directive', function() {
     scope.$apply();
 
     expect(element.hasClass('md-input-has-value')).toBe(true);
+  });
+
+  describe('Textarea auto-sizing', function() {
+    var ngElement, element, ngTextarea, textarea, scope, parentElement;
+
+    function createAndAppendElement(attrs) {
+      scope = $rootScope.$new();
+
+      attrs = attrs || '';
+      var template =
+        '<div ng-hide="parentHidden">' +
+          '<md-input-container>' +
+            '<label>Biography</label>' +
+            '<textarea ' + attrs + '>Single line</textarea>' +
+          '</md-input-container>' +
+        '</div>';
+      parentElement = $compile(template)(scope);
+      ngElement = parentElement.find('md-input-container');
+      element = ngElement[0];
+      ngTextarea = ngElement.find('textarea');
+      textarea = ngTextarea[0];
+      document.body.appendChild(parentElement[0]);
+    }
+
+    afterEach(function() {
+      document.body.removeChild(parentElement[0]);
+    });
+
+    it('should auto-size the textarea as the user types', function() {
+      createAndAppendElement();
+      var oldHeight = textarea.offsetHeight;
+      ngTextarea.val('Multiple\nlines\nof\ntext');
+      ngTextarea.triggerHandler('input');
+      scope.$apply();
+      $timeout.flush();
+      var newHeight = textarea.offsetHeight;
+      expect(newHeight).toBeGreaterThan(oldHeight);
+    });
+
+    it('should not auto-size if md-no-autogrow is present', function() {
+      createAndAppendElement('md-no-autogrow');
+      var oldHeight = textarea.offsetHeight;
+      ngTextarea.val('Multiple\nlines\nof\ntext');
+      ngTextarea.triggerHandler('input');
+      scope.$apply();
+      $timeout.flush();
+      var newHeight = textarea.offsetHeight;
+      expect(newHeight).toEqual(oldHeight);
+    });
+
+    it('should auto-size when revealed if md-detect-hidden is present', function() {
+      createAndAppendElement('md-detect-hidden');
+
+      var oldHeight = textarea.offsetHeight;
+
+      scope.parentHidden = true;
+      ngTextarea.val('Multiple\nlines\nof\ntext');
+      ngTextarea.triggerHandler('input');
+      scope.$apply();
+      $timeout.flush();
+
+      // Textarea should still be hidden.
+      expect(textarea.offsetHeight).toBe(0);
+
+      scope.parentHidden = false;
+      scope.$apply();
+
+      $timeout.flush();
+      var newHeight = textarea.offsetHeight;
+      expect(textarea.offsetHeight).toBeGreaterThan(oldHeight);
+    });
   });
 });
