@@ -63,9 +63,9 @@ module.exports = function(config) {
     // - Firefox
     // - Opera (has to be installed with `npm install karma-opera-launcher`)
     // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
-    // - PhantomJS
+    // - PhantomJS/PhantomJS2
     // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    browsers: ['Firefox', 'PhantomJS'],
+    browsers: ['Firefox', 'PhantomJS2'],
 
     // you can define custom flags
     customLaunchers: {
