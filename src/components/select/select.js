@@ -184,6 +184,12 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         }
       }
 
+      if (formCtrl) {
+        $mdUtil.nextTick(function() {
+          formCtrl.$setPristine();
+        });
+      }
+
       var originalRender = ngModelCtrl.$render;
       ngModelCtrl.$render = function() {
         originalRender();
@@ -489,6 +495,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
         // reference. This allowed the developer to also push and pop from their array.
         $scope.$watchCollection($attrs.ngModel, function(value) {
           if (validateArray(value)) renderMultiple(value);
+          self.ngModel.$setPristine();
         });
       } else {
         delete ngModel.$validators['md-multiple'];
