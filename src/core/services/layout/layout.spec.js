@@ -14,14 +14,11 @@ describe('layout directives', function() {
     var flexValues = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 33, 34, 66, 67];
     var offsetValues = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 33, 34, 66, 67];
     var alignmentValues = [
-      'center', 'center center', 'center start', 'center end',
-      'end', 'end-center', 'end start', 'end end',
-      'space-around', 'space-around center', 'space-around start', 'space-around end',
-      'space-between', 'space-between center', 'space-between start', 'space-between end',
-      'center center', 'start center', 'end center', 'space-between center', 'space-around center',
-      'center start', 'start start', 'end start', 'space-between start', 'space-around start',
-      'center end', 'start end', 'end end', 'space-between end', 'space-around end'
-    ];
+      "center", "center center", "center start", "center end",
+      "end", "end center", "end start", "end end",
+      "space-around", "space-around center", "space-around start", "space-around end",
+      "space-between", "space-between center", "space-between start", "space-between end",
+      "start center", "start start", "start end"];
     var mappings = [
       { attribute: 'flex',           suffixes: suffixes, values: flexValues, addDirectiveAsClass: true, testStandAlone: true},
       { attribute: 'flex-order',     suffixes: suffixes, values: flexOrderValues },
