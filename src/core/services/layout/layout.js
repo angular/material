@@ -161,7 +161,7 @@
         }
 
         if (attr[directive]) {
-          element.addClass(className + "-" + attr[directive].replace(/\s+/g, "-"));
+          element.addClass(className + '-' + attr[directive].replace(/\s+/g, '-'));
         }
 
         if ( scope ) {
@@ -176,18 +176,10 @@
            */
           var lastClass;
 
-          attr.$observe(function() {
-
-            return attr[className];
-
-          }, function(newVal) {
-
+          attr.$observe(attr.$normalize(className), function(newVal) {
             element.removeClass(lastClass);
-
-              lastClass = className + "-" + String(newVal).replace(/\s+/g, "-");
-
+            lastClass = className + '-' + String(newVal).replace(/\s+/g, '-');
             element.addClass(lastClass);
-
           });
 
         }
@@ -230,10 +222,10 @@
      * Provide console warning that this layout attribute has been deprecated
      */
     function warnAttrNotSupported(className) {
-      var parts = className.split("-");
+      var parts = className.split('-');
 
-      return ["$log", function($log) {
-        $log.warn( className + "has been deprecated. Please use a `" + parts[0] + "-gt-<xxx>` variant.");
+      return ['$log', function($log) {
+        $log.warn( className + 'has been deprecated. Please use a `' + parts[0] + '-gt-<xxx>` variant.');
         return angular.noop;
       }];
 
