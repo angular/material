@@ -25,6 +25,19 @@ describe('mdProgressCircular', function() {
     expect(progress.attr('md-mode')).toEqual('indeterminate');
   }));
 
+  it('should trim the md-mode value', inject(function($compile, $rootScope, $mdConstant) {
+    element = $compile('<div>' +
+          '<md-progress-circular md-mode=" indeterminate"></md-progress-circular>' +
+          '</div>')($rootScope);
+
+    $rootScope.$apply(function() {
+      $rootScope.progress = 50;
+    });
+
+    var progress = element.find('md-progress-circular');
+    expect(progress.attr('md-mode')).toEqual('indeterminate');
+  }));
+
   it('should auto-set the md-mode to "determinate" if not specified but has value', inject(function($compile, $rootScope, $mdConstant) {
     var element = $compile('<div>' +
       '<md-progress-circular value="{{progress}}"></md-progress-circular>' +
