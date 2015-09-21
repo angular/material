@@ -312,10 +312,7 @@
       // Perform a read-once (1x) check for the `md-css-only` class on the BODY
 
       if ( angular.isUndefined(disablePostLinks) ) {
-        var body = document.querySelectorAll("body")[0];
-        var styles = body.getAttribute('class');
-
-        disablePostLinks = styles ? (styles.indexOf('md-css-only') > -1) : false;
+        disablePostLinks = document.body.classList.contains('md-css-only');
       }
 
       return $$mdLayout.disablePostLinks = disablePostLinks;
