@@ -1,109 +1,15 @@
-// Responsive attributes
-//
-// References:
-// 1) https://scotch.io/tutorials/a-visual-guide-to-css3-flexbox-properties#flex
-// 2) https://css-tricks.com/almanac/properties/f/flex/
-// 3) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
-//
-// ------------------------------
-
-// hide means hide everywhere
-/* Sizes:
-  0    <= size < 600  Phone
-  600  <= size < 960  Tablet
-  960  <= size < 1200 Tablet-Landscape
-  1200 <= size         PC
+/*
+*
+*  Responsive attributes
+*
+*  References:
+*  1) https://scotch.io/tutorials/a-visual-guide-to-css3-flexbox-properties#flex
+*  2) https://css-tricks.com/almanac/properties/f/flex/
+*  3) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
+*  4) http://godban.com.ua/projects/flexgrid
+*
 */
 
-.layout, .md-css-only [layout]  {
-  box-sizing: border-box;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.layout-column, .md-css-only [layout=column] {
-  flex-direction: column;
-  -webkit-flex-direction: column;
-}
-
-.layout-row, .md-css-only [layout=row] {
-  flex-direction: row;
-  -webkit-flex-direction: row;
-}
-
-.layout-padding > .flex-sm,
-.layout-padding > .flex-lt-md,
-.md-css-only [layout-padding] > [flex-sm],
-.md-css-only [layout-padding] > [flex-lt-md]
-{
-  padding: $layout-gutter-width / 4;
-}
-
-.layout-padding,
-.layout-padding > .flex,
-.layout-padding > .flex-gt-sm,
-.layout-padding > .flex-md,
-.layout-padding > .flex-lt-lg,
-.md-css-only [layout-padding],
-.md-css-only [layout-padding] > .md-css-only [flex],
-.md-css-only [layout-padding] > .md-css-only [flex-gt-sm],
-.md-css-only [layout-padding] > .md-css-only [flex-md],
-.md-css-only [layout-padding] > .md-css-only [flex-lt-lg]
-{
-  padding: $layout-gutter-width / 2;
-}
-.layout-padding > .flex-gt-md,
-.layout-padding > .flex-lg,
-.md-css-only [layout-padding] > .md-css-only [flex-gt-md],
-.md-css-only [layout-padding] > .md-css-only [flex-lg]
-{
-  padding: $layout-gutter-width / 1;
-}
-
-.layout-margin > .flex-sm,
-.layout-margin > .flex-lt-md,
-.md-css-only [layout-margin] >  .md-css-only [flex-sm],
-.md-css-only [layout-margin] >  .md-css-only [flex-lt-md]
-{
-  margin: $layout-gutter-width / 4;
-}
-
-.layout-margin,
-.layout-margin > .flex,
-.layout-margin > .flex-gt-sm,
-.layout-margin > .flex-md,
-.layout-margin > .flex-lt-lg,
-.md-css-only [layout-margin],
-.md-css-only [layout-margin] >  .md-css-only [flex],
-.md-css-only [layout-margin] >  .md-css-only [flex-gt-sm],
-.md-css-only [layout-margin] >  .md-css-only [flex-md],
-.md-css-only [layout-margin] >  .md-css-only [flex-lt-lg]
-{
-  margin: $layout-gutter-width / 2;
-}
-
-.layout-margin > .flex-gt-md,
-.layout-margin > .flex-lg,
-.md-css-only [layout-margin] >  .md-css-only [flex-gt-md],
-.md-css-only [layout-margin] >  .md-css-only [flex-lg]
-{
-  margin: $layout-gutter-width / 1;
-}
-
-.layout-wrap, .md-css-only [layout-wrap]  {
-  flex-wrap: wrap;
-}
-
-.layout-fill, .md-css-only [layout-fill] {
-  margin: 0;
-  width: 100%;
-  min-height: 100%;
-  height: 100%;
-}
 @-moz-document url-prefix() {
   .layout-fill, .md-css-only [layout-fill] {
     margin: 0;
@@ -126,24 +32,47 @@
   }
 }
 
-@mixin layout-for-name($name) {
-  .layout-#{$name}, .md-css-only [layout-#{$name}] {
-    box-sizing: border-box;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -moz-flex;
-    display: -ms-flexbox;
-    display: flex;
+@mixin layout-for-name($name: null) {
+  @if $name == null {
+    .layout, .md-css-only [layout]  {
+      box-sizing: border-box;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -moz-box;
+      display: -moz-flex;
+      display: -ms-flexbox;
+      display: flex;
+    }
+
+    .layout-column, .md-css-only [layout=column] {
+      flex-direction: column;
+      -webkit-flex-direction: column;
+    }
+
+    .layout-row, .md-css-only [layout=row] {
+      flex-direction: row;
+      -webkit-flex-direction: row;
+    }
   }
-  .layout-#{$name}-column,
-  .md-css-only [layout-#{$name}=column] {
-    flex-direction: column;
-  }
-  .layout-#{$name}-row,
-  .md-css-only [layout-#{$name}=row] {
-    flex-direction: row;
-    flex-wrap: wrap;
+
+  @if $name != null {
+    .layout-#{$name}, .md-css-only [layout-#{$name}] {
+      box-sizing: border-box;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: flex;
+    }
+    .layout-#{$name}-column,
+    .md-css-only [layout-#{$name}=column] {
+      flex-direction: column;
+    }
+    .layout-#{$name}-row,
+    .md-css-only [layout-#{$name}=row] {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
   }
 }
 
@@ -208,16 +137,18 @@
     {
       flex: 0 0 #{$i * 5 + '%'};
     }
-    .layout-row > .#{$flexName}-#{$i * 5},
+    .layout-#{$name}-row > .#{$flexName}-#{$i * 5},
     .md-css-only [layout="row"] > .md-css-only [#{$flexName}="#{$i * 5}"]
     {
       max-width: #{$i * 5 + '%'};
+      max-height: 100%;
     }
 
-    .layout-column > .#{$flexName}-#{$i * 5},
+    .layout-#{$name}-column > .#{$flexName}-#{$i * 5},
     .md-css-only [layout="column"] > .md-css-only [#{$flexName}="#{$i * 5}"]
     {
       max-height: #{$i * 5 + '%'};
+      max-width: 100%;
     }
   }
 
@@ -225,32 +156,35 @@
   {
     flex: 0 0 33%;
     max-width: 33%;
+    max-height: 100%;
   }
 
   .#{$flexName}-66, .#{$flexName}-67
   {
     flex: 0 0 67%;
     max-width: 67%;
+    max-height: 100%;
 
   }
 
-  .layout-row, .md-css-only [layout="row"] {
-    > .#{$flexName}-33, > .#{$flexName}-34 { max-width: 33%; }
-    > .#{$flexName}-66, > .#{$flexName}-67 { max-width: 67%;  }
+  .layout-#{$name}-row, .md-css-only [layout="row"] {
+    > .#{$flexName}-33, > .#{$flexName}-34 { max-width: 33%; max-height: 100%;}
+    > .#{$flexName}-66, > .#{$flexName}-67 { max-width: 67%; max-height: 100%;  }
   }
-  .layout-column, .md-css-only [layout="column"] {
-    > .#{$flexName}-33, > .#{$flexName}-34 { max-height: 33%;  }
-    > .#{$flexName}-66, > .#{$flexName}-67 { max-height: 67%; }
+  .layout-#{$name}-column, .md-css-only [layout="column"] {
+    > .#{$flexName}-33, > .#{$flexName}-34 { max-height: 33%; max-width: 100%; }
+    > .#{$flexName}-66, > .#{$flexName}-67 { max-height: 67%; max-width: 100%;}
   }
 }
 
-// Alignment attributes for layout containers' children
-// Arrange on the Main Axis
-// center, start, end, space-between, space-around
-// flex-start is the default for justify-content
-// ------------------------------
-
 @mixin layout-align-for-name($suffix: null) {
+
+  // Alignment attributes for layout containers' children
+  // Arrange on the Main Axis
+  // center, start, end, space-between, space-around
+  // flex-start is the default for justify-content
+  // ------------------------------
+
   $name: 'layout-align';
   @if $suffix != null {
     $name: 'layout-align-#{$suffix}';
@@ -363,19 +297,101 @@
 
 }
 
-// Flex attributes for layout children
-// ------------------------------
+/*
+ *  Apply Mixins to create Layout/Flexbox styles
+ *
+ */
 
+@include layout-for-name();
 @include flex-properties-for-name();
 @include layout-align-for-name();
 @include flex-order-for-name();
 @include offset-for-name();
 
+
+
+.layout-padding > .flex-sm,
+.layout-padding > .flex-lt-md,
+.md-css-only [layout-padding] > [flex-sm],
+.md-css-only [layout-padding] > [flex-lt-md]
+{
+  padding: $layout-gutter-width / 4;
+}
+
+.layout-padding,
+.layout-padding > .flex,
+.layout-padding > .flex-gt-sm,
+.layout-padding > .flex-md,
+.layout-padding > .flex-lt-lg,
+.md-css-only [layout-padding],
+.md-css-only [layout-padding] > .md-css-only [flex],
+.md-css-only [layout-padding] > .md-css-only [flex-gt-sm],
+.md-css-only [layout-padding] > .md-css-only [flex-md],
+.md-css-only [layout-padding] > .md-css-only [flex-lt-lg]
+{
+  padding: $layout-gutter-width / 2;
+}
+.layout-padding > .flex-gt-md,
+.layout-padding > .flex-lg,
+.md-css-only [layout-padding] > .md-css-only [flex-gt-md],
+.md-css-only [layout-padding] > .md-css-only [flex-lg]
+{
+  padding: $layout-gutter-width / 1;
+}
+
+.layout-margin > .flex-sm,
+.layout-margin > .flex-lt-md,
+.md-css-only [layout-margin] >  .md-css-only [flex-sm],
+.md-css-only [layout-margin] >  .md-css-only [flex-lt-md]
+{
+  margin: $layout-gutter-width / 4;
+}
+
+.layout-margin,
+.layout-margin > .flex,
+.layout-margin > .flex-gt-sm,
+.layout-margin > .flex-md,
+.layout-margin > .flex-lt-lg,
+.md-css-only [layout-margin],
+.md-css-only [layout-margin] >  .md-css-only [flex],
+.md-css-only [layout-margin] >  .md-css-only [flex-gt-sm],
+.md-css-only [layout-margin] >  .md-css-only [flex-md],
+.md-css-only [layout-margin] >  .md-css-only [flex-lt-lg]
+{
+  margin: $layout-gutter-width / 2;
+}
+
+.layout-margin > .flex-gt-md,
+.layout-margin > .flex-lg,
+.md-css-only [layout-margin] >  .md-css-only [flex-gt-md],
+.md-css-only [layout-margin] >  .md-css-only [flex-lg]
+{
+  margin: $layout-gutter-width / 1;
+}
+
+.layout-wrap, .md-css-only [layout-wrap]  {
+  flex-wrap: wrap;
+}
+
+.layout-fill, .md-css-only [layout-fill] {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  height: 100%;
+}
+
 /**
  * `hide-gt-sm show-gt-lg` should hide from 600px to 1200px
  * `show-md hide-gt-sm` should show from 0px to 960px and hide at >960px
  * `hide-gt-md show-gt-sm` should show everywhere (show overrides hide)`
+ *
+ *  hide means hide everywhere
+ *  Sizes:
+ *         0    <= size < 600  Phone
+ *         600  <= size < 960  Tablet
+ *         960  <= size < 1200 Tablet-Landscape
  */
+
 
 // SMALL SCREEN
 @media (max-width: $layout-breakpoint-sm - 1) {
@@ -391,20 +407,20 @@
     }
   }
 
-  @include flex-order-for-name(sm);
-  @include layout-align-for-name(sm);
   @include layout-for-name(sm);
-  @include offset-for-name(sm);
   @include flex-properties-for-name(sm);
+  @include layout-align-for-name(sm);
+  @include offset-for-name(sm);
+  @include flex-order-for-name(sm);
 }
 
 // BIGGER THAN SMALL SCREEN
 @media (min-width: $layout-breakpoint-sm) {
-  @include flex-order-for-name(gt-sm);
-  @include layout-align-for-name(gt-sm);
   @include layout-for-name(gt-sm);
-  @include offset-for-name(gt-sm);
   @include flex-properties-for-name(gt-sm);
+  @include layout-align-for-name(gt-sm);
+  @include offset-for-name(gt-sm);
+  @include flex-order-for-name(gt-sm);
 }
 
 // MEDIUM SCREEN
@@ -428,20 +444,20 @@
     display: none;
   }
 
-  @include flex-order-for-name(md);
-  @include layout-align-for-name(md);
   @include layout-for-name(md);
-  @include offset-for-name(md);
   @include flex-properties-for-name(md);
+  @include layout-align-for-name(md);
+  @include offset-for-name(md);
+  @include flex-order-for-name(md);
 }
 
 // BIGGER THAN MEDIUM SCREEN
 @media (min-width: $layout-breakpoint-md) {
-  @include flex-order-for-name(gt-md);
-  @include layout-align-for-name(gt-md);
   @include layout-for-name(gt-md);
-  @include offset-for-name(gt-md);
   @include flex-properties-for-name(gt-md);
+  @include layout-align-for-name(gt-md);
+  @include offset-for-name(gt-md);
+  @include flex-order-for-name(gt-md);
 }
 
 // LARGE SCREEN
@@ -464,12 +480,13 @@
     display: none;
   }
 
-  @include flex-order-for-name(lg);
-  @include layout-align-for-name(lg);
   @include layout-for-name(lg);
-  @include offset-for-name(lg);
   @include flex-properties-for-name(lg);
+  @include layout-align-for-name(lg);
+  @include offset-for-name(lg);
+  @include flex-order-for-name(lg);
 }
+
 
 // BIGGER THAN LARGE SCREEN
 @media (min-width: $layout-breakpoint-lg) {
@@ -485,9 +502,9 @@
     }
   }
 
-  @include flex-order-for-name(gt-lg);
-  @include layout-align-for-name(gt-lg);
   @include layout-for-name(gt-lg);
-  @include offset-for-name(gt-lg);
   @include flex-properties-for-name(gt-lg);
+  @include layout-align-for-name(gt-lg);
+  @include offset-for-name(gt-lg);
+  @include flex-order-for-name(gt-lg);
 }
