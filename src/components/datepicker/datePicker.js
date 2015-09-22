@@ -22,8 +22,8 @@
    *
    * @param {Date} ng-model The component's model. Expects a JavaScript Date object.
    * @param {expression=} ng-change Expression evaluated when the model value changes.
-   * @param {expression=} md-min-date Expression representing a min date (inclusive).
-   * @param {expression=} md-max-date Expression representing a max date (inclusive).
+   * @param {Date=} md-min-date Expression representing a min date (inclusive).
+   * @param {Date=} md-max-date Expression representing a max date (inclusive).
    * @param {boolean=} disabled Whether the datepicker is disabled.
    *
    * @description
