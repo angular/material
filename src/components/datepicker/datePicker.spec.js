@@ -110,6 +110,21 @@ describe('md-date-picker', function() {
     document.body.removeChild(element);
   });
 
+  it('should shink the calendar pane when it would otherwise not fit on the screen', function() {
+    // Make the body narrow so that the calendar pane won't fit on-screen.
+    document.body.style.width = '300px';
+
+    // Open the calendar pane.
+    element.querySelector('md-button').click();
+    $timeout.flush();
+
+    // Expect the calendarPane to be scaled by an amount between zero and one.
+    expect(controller.calendarPane.style.transform).toMatch(/scale\(0\.\d+\)/);
+
+    // Reset the body width.
+    document.body.style.width = '';
+  });
+
   it('should disable the internal inputs based on ng-disabled binding', function() {
     expect(controller.inputElement.disabled).toBe(false);
     expect(controller.calendarButton.disabled).toBe(false);
