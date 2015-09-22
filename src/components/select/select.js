@@ -1138,7 +1138,7 @@ function SelectProvider($$interimElementProvider) {
           }
 
           /**
-           * check if the mouseup event was on a scrollbar
+           * check if the mousedown event was on a scrollbar
            */
           function mouseOnScrollbar() {
             var clickOnScrollbar = false;
@@ -1151,6 +1151,7 @@ function SelectProvider($$interimElementProvider) {
                   clickOnScrollbar = true;
               }
             }
+            mouseDownXPosition = null;
             return clickOnScrollbar;
           }
         }
