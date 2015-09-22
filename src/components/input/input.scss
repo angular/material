@@ -166,8 +166,8 @@ md-input-container {
   }
 
   .md-char-counter {
-    position: absolute;
-    right: 0;
+    position: relative;
+    text-align: right;
     order: 3;
   }
 
@@ -176,6 +176,12 @@ md-input-container {
     position: relative;
     order: 4;
     min-height: $input-error-height;
+
+    .md-char-counter {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
   }
 
   ng-message, data-ng-message, x-ng-message,
