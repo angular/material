@@ -5,7 +5,8 @@
 angular
   .module('material.core', [
     'ngAnimate',
-    'material.animate',
+    'material.core.animate',
+    'material.core.layout',
     'material.core.gestures',
     'material.core.theming'
   ])

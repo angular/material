@@ -303,4 +303,19 @@ describe('$$mdDateUtil', function() {
     expect(dayAtMidnight.getSeconds()).toBe(0);
     expect(dayAtMidnight.getMilliseconds()).toBe(0);
   });
+
+  it('should determine whether dates are valid', function() {
+    expect(dateUtil.isValidDate(null)).toBeFalsy();
+    expect(dateUtil.isValidDate(undefined)).toBeFalsy();
+    expect(dateUtil.isValidDate('')).toBeFalsy();
+    expect(dateUtil.isValidDate(0)).toBeFalsy();
+    expect(dateUtil.isValidDate(NaN)).toBeFalsy();
+    expect(dateUtil.isValidDate(123456789)).toBeFalsy();
+    expect(dateUtil.isValidDate('123456789')).toBeFalsy();
+    expect(dateUtil.isValidDate(new Date(''))).toBeFalsy();
+    expect(dateUtil.isValidDate(new Date('Banjo'))).toBeFalsy();
+    expect(dateUtil.isValidDate(new Date(NaN))).toBeFalsy();
+
+    expect(dateUtil.isValidDate(new Date())).toBe(true);
+  });
 });

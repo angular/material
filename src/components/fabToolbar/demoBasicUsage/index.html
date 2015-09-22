@@ -12,7 +12,8 @@
     </p>
   </md-content>
 
-  <md-fab-toolbar md-open="demo.isOpen" count="demo.count" md-direction="demo.selectedDirection">
+  <md-fab-toolbar md-open="demo.isOpen" count="demo.count"
+                  md-direction="{{demo.selectedDirection}}">
     <md-fab-trigger class="align-with-text">
       <md-button aria-label="menu" class="md-fab md-primary">
         <md-icon md-svg-src="img/icons/menu.svg"></md-icon>

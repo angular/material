@@ -5,8 +5,8 @@ describe('md-button', function() {
   it('should convert attributes on an md-button to attributes on the generated button', inject(function($compile, $rootScope) {
     var button = $compile('<md-button hide hide-sm></md-button>')($rootScope);
     $rootScope.$apply();
-    expect(button[0].hasAttribute('hide')).toBe(true);
-    expect(button[0].hasAttribute('hide-sm')).toBe(true);
+    expect(button[0]).toHaveClass('hide');
+    expect(button[0]).toHaveClass('hide-sm');
   }));
 
   it('should only have one ripple container when a custom ripple color is set', inject(function ($compile, $rootScope, $timeout) {

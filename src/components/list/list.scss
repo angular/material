@@ -185,6 +185,9 @@ md-list-item.md-3-line > .md-no-style {
       letter-spacing: 0.010em;
       margin: $list-h3-margin;
       line-height: $list-header-line-height;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
     h4 {
       font-size: $body-font-size-base;
@@ -192,6 +195,9 @@ md-list-item.md-3-line > .md-no-style {
       margin: $list-h4-margin;
       font-weight: $list-h4-font-weight;
       line-height: $list-header-line-height;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
     p {
       font-size: $body-font-size-base;

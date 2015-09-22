@@ -14,7 +14,7 @@ md-autocomplete.md-THEME_NAME-theme {
     }
   }
 }
-.md-autocomplete-suggestions.md-THEME_NAME-theme {
+.md-autocomplete-suggestions-container.md-THEME_NAME-theme, {
   background: '{{background-50}}';
   li {
     color: '{{background-900}}';

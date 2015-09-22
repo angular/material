@@ -1,27 +1,9 @@
 md-backdrop {
 
-  // - Animate background-color alpha only for `.md-opaque` stylings
-
   background-color: '{{background-900-0.0}}';
 
   &.md-opaque.md-THEME_NAME-theme {
-    background-color: '{{background-900-0.48}}';
-  }
-
-  &.md-opaque.md-THEME_NAME-theme.ng-enter {
-    background-color: '{{background-900-0.0}}';
-
-    &.md-opaque.md-THEME_NAME-theme.ng-enter-active {
-      background-color: '{{background-900-0.48}}';
-    }
-  }
-
-  &.md-opaque.md-THEME_NAME-theme.ng-leave {
-    //transition: background-color 400ms linear;
-
-    &.md-opaque.md-THEME_NAME-theme.ng-leave-active {
-      background-color: '{{background-900-0.0}}';
-    }
+    background-color: '{{background-900-1.0}}';
   }
 
 }

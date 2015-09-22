@@ -1,4 +1,4 @@
-var DocsApp = angular.module('docsApp', ['ngMaterial', 'ngRoute', 'angularytics', 'ngMessages'])
+var DocsApp = angular.module('docsApp', [ 'angularytics', 'ngRoute', 'ngMessages', 'ngMaterial' ])
 
 .config([
   'SERVICES',
@@ -716,5 +716,4 @@ function($rootScope, $scope, component, demos, $http, $templateCache, $q) {
     }
     return str;
   };
-})
-;
+});

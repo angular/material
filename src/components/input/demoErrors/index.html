@@ -26,12 +26,41 @@
       </md-input-container>
 
       <md-input-container>
+        <label>Client Email</label>
+        <input required type="email" name="clientEmail" ng-model="project.clientEmail"
+               minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+
+        <div ng-messages="projectForm.clientEmail.$error" role="alert">
+          <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+            Your email must be between 10 and 100 characters long and look like an e-mail address.
+          </div>
+        </div>
+      </md-input-container>
+
+      <md-input-container>
         <label>Hourly Rate (USD)</label>
-        <input required type="number" step="any" name="rate" ng-model="project.rate" min="800" max="4999">
-        <div ng-messages="projectForm.rate.$error">
-          <div ng-message="required">You've got to charge something! You can't just <b>give away</b> a Missile Defense System.</div>
-          <div ng-message="min">You should charge at least $800 an hour. This job is a big deal... if you mess up, everyone dies!</div>
-          <div ng-message="max">$5,000 an hour? That's a little ridiculous. I doubt event Bill Clinton could afford that.</div>
+        <input required type="number" step="any" name="rate" ng-model="project.rate" min="800"
+               max="4999" ng-pattern="/^1234$/">
+
+        <div ng-messages="projectForm.rate.$error" multiple>
+          <div ng-message="required">
+            You've got to charge something! You can't just <b>give away</b> a Missile Defense
+            System.
+          </div>
+
+          <div ng-message="min">
+            You should charge at least $800 an hour. This job is a big deal... if you mess up,
+            everyone dies!
+          </div>
+
+          <div ng-message="pattern">
+            You should charge exactly $1,234.
+          </div>
+
+          <div ng-message="max">
+            {{projectForm.rate.$viewValue | currency:"$":0}} an hour? That's a little ridiculous. I
+            doubt event Bill Clinton could afford that.
+          </div>
         </div>
       </md-input-container>
     </form>

@@ -6,6 +6,12 @@
    */
   var pointer, lastPointer, forceSkipClickHijack = false;
 
+  /**
+   * The position of the most recent click if that click was on a label element.
+   * @type {{x: number, y: number}?}
+   */
+  var lastLabelClickPos = null;
+
   // Used to attach event listeners once when multiple ng-apps are running.
   var isInitialized = false;
   
@@ -448,9 +454,16 @@
        */
       document.addEventListener('click', function clickHijacker(ev) {
         var isKeyClick = ev.clientX === 0 && ev.clientY === 0;
-        if (!isKeyClick && !ev.$material && !ev.isIonicTap) {
+        if (!isKeyClick && !ev.$material && !ev.isIonicTap
+            && !isInputEventFromLabelClick(ev)) {
           ev.preventDefault();
           ev.stopPropagation();
+          lastLabelClickPos = null;
+        } else {
+          lastLabelClickPos = null;
+          if (ev.target.tagName.toLowerCase() == 'label') {
+            lastLabelClickPos = {x: ev.x, y: ev.y};
+          }
         }
       }, true);
       
@@ -568,6 +581,28 @@
    */
   function typesMatch(ev, pointer) {
     return ev && pointer && ev.type.charAt(0) === pointer.type;
+  }
+
+  /**
+   * Gets whether the given event is an input event that was caused by clicking on an
+   * associated label element.
+   *
+   * This is necessary because the browser will, upon clicking on a label element, fire an
+   * *extra* click event on its associated input (if any). mdGesture is able to flag the label
+   * click as with `$material` correctly, but not the second input click.
+   *
+   * In order to determine whether an input event is from a label click, we compare the (x, y) for
+   * the event to the (x, y) for the most recent label click (which is cleared whenever a non-label
+   * click occurs). Unfortunately, there are no event properties that tie the input and the label
+   * together (such as relatedTarget).
+   *
+   * @param {MouseEvent} event
+   * @returns {boolean}
+   */
+  function isInputEventFromLabelClick(event) {
+    return lastLabelClickPos
+        && lastLabelClickPos.x == event.x
+        && lastLabelClickPos.y == event.y;
   }
 
   /*

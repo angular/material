@@ -1,101 +1,112 @@
 describe('md-slider', function() {
+  var $compile, $timeout, $log, $mdConstant, pageScope;
 
   beforeEach(module('ngAria'));
   beforeEach(module('material.components.slider'));
 
+  beforeEach(inject(function($injector) {
+    var $rootScope = $injector.get('$rootScope');
+    pageScope = $rootScope.$new();
+
+    $compile = $injector.get('$compile');
+    $timeout = $injector.get('$timeout');
+    $mdConstant = $injector.get('$mdConstant');
+    $log = $injector.get('$log');
+  }));
+
   function setup(attrs, dimensions) {
     var slider;
-    inject(function($compile, $rootScope) { 
-      slider = $compile('<md-slider ' + (attrs || '') + '>')($rootScope);
-      spyOn(
-        slider[0].querySelector('.md-track-container'), 
-        'getBoundingClientRect'
-      ).and.returnValue(angular.extend({
-        width: 100,
-        left: 0,
-        right: 0
-      }, dimensions || {}));
-    });
+
+    slider = $compile('<md-slider ' + (attrs || '') + '>')(pageScope);
+    spyOn(
+      slider[0].querySelector('.md-track-container'),
+      'getBoundingClientRect'
+    ).and.returnValue(angular.extend({
+      width: 100,
+      left: 0,
+      right: 0
+    }, dimensions || {}));
+
     return slider;
   }
 
-  it('should set model on press', inject(function($compile, $rootScope, $timeout) {
+  it('should set model on press', function() {
     var slider = setup('ng-model="value" min="0" max="100"');
-    $rootScope.$apply('value = 50');
+    pageScope.$apply('value = 50');
 
     slider.triggerHandler({type: '$md.pressdown', pointer: { x: 30 }});
     slider.triggerHandler({type: '$md.dragstart', pointer: { x: 30 }});
     $timeout.flush();
-    expect($rootScope.value).toBe(30);
+    expect(pageScope.value).toBe(30);
 
-    //When going past max, it should clamp to max
+    // When going past max, it should clamp to max.
     slider.triggerHandler({type: '$md.drag', pointer: { x: 150 }});
     $timeout.flush();
-    expect($rootScope.value).toBe(100);
+    expect(pageScope.value).toBe(100);
 
     slider.triggerHandler({type: '$md.drag', pointer: { x: 50 }});
     $timeout.flush();
-    expect($rootScope.value).toBe(50);
-  }));
+    expect(pageScope.value).toBe(50);
+  });
 
-  it('should increment model on right arrow', inject(function($compile, $rootScope, $timeout, $mdConstant) {
+  it('should increment model on right arrow', function() {
     var slider = setup('min="100" max="104" step="2" ng-model="model"');
-    $rootScope.$apply('model = 100');
+    pageScope.$apply('model = 100');
 
     slider.triggerHandler({
       type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
     });
     $timeout.flush();
-    expect($rootScope.model).toBe(102);
+    expect(pageScope.model).toBe(102);
 
     slider.triggerHandler({
       type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
     });
     $timeout.flush();
-    expect($rootScope.model).toBe(104);
+    expect(pageScope.model).toBe(104);
 
-    // Stays at max
+    // Stays at max.
     slider.triggerHandler({
       type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
     });
     $timeout.flush();
-    expect($rootScope.model).toBe(104);
-  }));
+    expect(pageScope.model).toBe(104);
+  });
 
-  it('should decrement model on left arrow', inject(function($compile, $rootScope, $timeout, $mdConstant) {
+  it('should decrement model on left arrow', function() {
     var slider = setup('min="100" max="104" step="2" ng-model="model"');
-    $rootScope.$apply('model = 104');
+    pageScope.$apply('model = 104');
 
     slider.triggerHandler({
       type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
     });
     $timeout.flush();
-    expect($rootScope.model).toBe(102);
+    expect(pageScope.model).toBe(102);
 
     slider.triggerHandler({
       type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
     });
     $timeout.flush();
-    expect($rootScope.model).toBe(100);
+    expect(pageScope.model).toBe(100);
 
-    // Stays at min
+    // Stays at min.
     slider.triggerHandler({
       type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
     });
     $timeout.flush();
-    expect($rootScope.model).toBe(100);
-  }));
+    expect(pageScope.model).toBe(100);
+  });
 
-  it('should update the thumb text', inject(function($compile, $rootScope, $timeout, $mdConstant) {
+  it('should update the thumb text', function() {
     var slider = setup('ng-model="value" md-discrete min="0" max="100" step="1"');
 
-    $rootScope.$apply('value = 30');
+    pageScope.$apply('value = 30');
     expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('30');
 
     slider.triggerHandler({
@@ -111,38 +122,37 @@ describe('md-slider', function() {
     slider.triggerHandler({type: '$md.dragstart', pointer: { x: 31 }});
     slider.triggerHandler({type: '$md.drag', pointer: { x: 31 }});
     expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('31');
-  }));
+  });
 
-  it('should update the thumb text with the model value when using ng-change', inject(function($compile, $rootScope, $timeout) {
-    $rootScope.stayAt50 = function () {
-      $rootScope.value = 50;
+  it('should update the thumb text with the model value when using ng-change', function() {
+    pageScope.stayAt50 = function () {
+      pageScope.value = 50;
     };
 
     var slider = setup('ng-model="value" min="0" max="100" ng-change="stayAt50()"');
-    var sliderCtrl = slider.controller('mdSlider');
 
     slider.triggerHandler({type: '$md.pressdown', pointer: { x: 30 }});
     $timeout.flush();
-    expect($rootScope.value).toBe(50);
+    expect(pageScope.value).toBe(50);
     expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('50');
-  }));
+  });
 
-  it('should call $log.warn if aria-label isnt provided', inject(function($compile, $rootScope, $timeout, $log) {
+  it('should call $log.warn if aria-label isnt provided', function() {
     spyOn($log, "warn");
-    var element = setup('min="100" max="104" step="2" ng-model="model"');
+    setup('min="100" max="104" step="2" ng-model="model"');
     expect($log.warn).toHaveBeenCalled();
-  }));
+  });
 
-  it('should not call $log.warn if aria-label is provided', inject(function($compile, $rootScope, $timeout, $log) {
+  it('should not call $log.warn if aria-label is provided', function() {
     spyOn($log, "warn");
-    var element = setup('aria-label="banana" min="100" max="104" step="2" ng-model="model"');
+    setup('aria-label="banana" min="100" max="104" step="2" ng-model="model"');
     expect($log.warn).not.toHaveBeenCalled();
-  }));
+  });
 
-  it('should add aria attributes', inject(function($compile, $rootScope, $timeout, $mdConstant){
+  it('should add aria attributes', function() {
     var slider = setup('min="100" max="104" step="2" ng-model="model"');
 
-    $rootScope.$apply('model = 102');
+    pageScope.$apply('model = 102');
 
     expect(slider.attr('role')).toEqual('slider');
     expect(slider.attr('aria-valuemin')).toEqual('100');
@@ -155,10 +165,10 @@ describe('md-slider', function() {
     });
     $timeout.flush();
     expect(slider.attr('aria-valuenow')).toEqual('100');
-  }));
+  });
 
-  it('should ignore pressdown events when disabled', inject(function($compile, $rootScope, $timeout) {
-    $rootScope.isDisabled = true;
+  it('should ignore pressdown events when disabled', function() {
+    pageScope.isDisabled = true;
     var slider = setup('ng-disabled="isDisabled"');
 
     // Doesn't add active class on pressdown when disabled
@@ -166,52 +176,64 @@ describe('md-slider', function() {
       type: '$md.pressdown',
       pointer: {}
     });
-    expect(slider).not.toHaveClass('active');
+    expect(slider).not.toHaveClass('md-active');
 
     // Doesn't remove active class up on pressup when disabled
-    slider.addClass('active');
+    slider.addClass('md-active');
     slider.triggerHandler({
       type: '$md.pressup',
       pointer: {}
     });
-    expect(slider).toHaveClass('active');
-  }));
+    expect(slider).toHaveClass('md-active');
+  });
 
-  it('should add active class on pressdown and remove on pressup', inject(function($rootScope) {
+  it('should disable via the `disabled` attribute', function() {
+    var slider = setup('disabled');
+    
+    // Check for disabled state by triggering the pressdown handler and asserting that
+    // the slider is not active.
+    slider.triggerHandler({
+      type: '$md.pressdown',
+      pointer: {}
+    });
+    expect(slider).not.toHaveClass('md-active');
+  });
+
+  it('should add active class on pressdown and remove on pressup', function() {
     var slider = setup();
 
-    expect(slider).not.toHaveClass('active');
+    expect(slider).not.toHaveClass('md-active');
 
     slider.triggerHandler({
       type: '$md.pressdown',
       pointer: {}
     });
-    expect(slider).toHaveClass('active');
+    expect(slider).toHaveClass('md-active');
 
     slider.triggerHandler({
       type: '$md.pressup',
       pointer: {}
     });
-    expect(slider).not.toHaveClass('active');
-  }));
+    expect(slider).not.toHaveClass('md-active');
+  });
   
-  it('should increment at a predictable step', inject(function($rootScope, $timeout) {
+  it('should increment at a predictable step', function() {
 
     buildSlider(0.1, 1).drag({x:70});
-    expect($rootScope.value).toBe(0.7);
+    expect(pageScope.value).toBe(0.7);
 
     buildSlider(0.25, 1).drag({x:45});
-    expect($rootScope.value).toBe(0.5);
+    expect(pageScope.value).toBe(0.5);
 
     buildSlider(0.25, 1).drag({x:35});
-    expect($rootScope.value).toBe(0.25);
+    expect(pageScope.value).toBe(0.25);
 
     buildSlider(1, 100).drag({x:90});
-    expect($rootScope.value).toBe(90);
+    expect(pageScope.value).toBe(90);
 
     function buildSlider(step, max) {
       var slider = setup('ng-model="value" min="0" max="' + max + '" step="' + step + '"');
-          $rootScope.$apply('value = 0.5');
+          pageScope.$apply('value = 0.5');
 
       return {
         drag : function simulateDrag(drag) {
@@ -224,6 +246,6 @@ describe('md-slider', function() {
       };
     }
 
-  }));
+  });
 
 });

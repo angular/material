@@ -57,11 +57,6 @@ $icon-button-margin: rem(0.600) !default;
   transition: box-shadow $swift-ease-out-duration $swift-ease-out-timing-function,
               background-color $swift-ease-out-duration $swift-ease-out-timing-function;
 
-  *,
-  *:before,
-  *:after {
-    box-sizing: border-box;
-  }
   &:focus {
     outline: none;
   }

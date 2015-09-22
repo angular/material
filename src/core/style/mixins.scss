@@ -16,11 +16,11 @@
 
 @mixin input-placeholder-color($color) {
   &::-webkit-input-placeholder,
-  &::-moz-placeholder, /* Firefox 19+ */
-  &:-moz-placeholder, /* Firefox 18- */
-  &:-ms-input-placeholder {
-    color: $color;
-  }
+    &::-moz-placeholder,
+    &:-moz-placeholder,
+    &:-ms-input-placeholder {
+      color: $color;
+    }
 }
 
 @mixin pie-clearfix {
@@ -101,17 +101,34 @@
 }
 
 
-/* mixin definition ; sets LTR and RTL within the same style call */
+// mixin definition ; sets LTR and RTL within the same style call
+// @see https://css-tricks.com/almanac/properties/d/direction/
+
 @mixin rtl($prop, $value, $rtl-value) {
   #{$prop}: $value;
+
   html[dir=rtl] & {
     #{$prop}: $rtl-value;
+    unicode-bidi: embed;
   }
+  body[dir=rtl] & {
+    #{$prop}: $rtl-value;
+    unicode-bidi: embed;
+  }
+
+  bdo[dir=rtl] {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+  }
+  bdo[dir=ltr] {
+    direction: ltr;
+    unicode-bidi: bidi-override;
+  }
+
+
 }
 
-/**
- * Position a FAB button.
- */
+// Position a FAB button.
 @mixin fab-position($spot, $top: auto, $right: auto, $bottom: auto, $left: auto) {
   &.md-fab-#{$spot} {
     top: $top;

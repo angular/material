@@ -183,10 +183,9 @@ md-slider {
   }
   .md-focus-ring {
     @include slider-thumb-position($slider-focus-thumb-width, $slider-focus-thumb-height);
-    border: 2px solid #D6D6D6;
-    background-color: transparent;
     transform: scale(0);
     transition: all 0.2s linear;
+    opacity: 0.26;
   }
   .md-disabled-thumb {
     @include slider-thumb-position(
@@ -215,7 +214,7 @@ md-slider {
   }
 
   /* Don't animate left/right while panning */
-  &.dragging {
+  &.md-dragging {
     .md-thumb-container,
     .md-track-fill {
       transition: none;
@@ -237,7 +236,7 @@ md-slider {
       }
 
       &:focus,
-      &.active {
+      &.md-active {
         .md-focus-thumb {
           display: block;
         }
@@ -260,7 +259,7 @@ md-slider {
 
     &:not([disabled]) {
       &:focus,
-      &.active {
+      &.md-active {
         .md-sign,
         .md-sign:after {
           opacity: 1;

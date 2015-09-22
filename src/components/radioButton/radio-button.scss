@@ -11,17 +11,8 @@ md-radio-button,
   white-space: nowrap;
   cursor: pointer;
 
-  *,
-  *:before,
-  *:after {
-    box-sizing: border-box;
-  }
-
-  input {
-    display: none;
-  }
-
   .md-container {
+    box-sizing: border-box;
     position: relative;
     top: 4px;
     display: inline-block;
@@ -39,6 +30,7 @@ md-radio-button,
     }
 
     &:before {
+      box-sizing: border-box;
       background-color: transparent;
       border-radius: 50%;
       content: '';
@@ -59,6 +51,7 @@ md-radio-button,
    }
 
   .md-off {
+    box-sizing: border-box;
     position: absolute;
     top: 0;
     left: 0;
@@ -71,6 +64,7 @@ md-radio-button,
   }
 
   .md-on {
+    box-sizing: border-box;
     position: absolute;
     top: 0;
     left: 0;
@@ -86,6 +80,7 @@ md-radio-button,
   }
 
   .md-label {
+    box-sizing: border-box;
     position: relative;
     display: inline-block;
 

@@ -79,7 +79,7 @@
       '</div>',
 
       scope: {
-        direction: '=?mdDirection',
+        direction: '@?mdDirection',
         isOpen: '=?mdOpen'
       },
 

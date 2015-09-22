@@ -124,6 +124,9 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
           css[key] = value + 'px';
         } else {
           switch (key) {
+            case 'transition':
+              convertToVendor(key, $mdConstant.CSS.TRANSITION, value);
+              break;
             case 'transform':
               convertToVendor(key, $mdConstant.CSS.TRANSFORM, value);
               break;

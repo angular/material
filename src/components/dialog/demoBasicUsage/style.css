@@ -7,3 +7,14 @@
     color:blue;
     text-decoration: underline;
 }
+
+.footer {
+    width:100%;
+    text-align: center;
+    margin-left:20px;
+}
+ .footer, .footer > code {
+    font-size: 0.8em;
+    margin-top:50px;
+}
+

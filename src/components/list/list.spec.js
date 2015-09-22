@@ -1,4 +1,5 @@
 describe('mdListItem directive', function() {
+  var attachedElements = [];
   var $compile, $rootScope;
 
   beforeEach(module('material.components.list', 'material.components.checkbox', 'material.components.switch'));
@@ -7,12 +8,21 @@ describe('mdListItem directive', function() {
     $rootScope = _$rootScope_;
   }));
 
+  afterEach(function() {
+    attachedElements.forEach(function(element) {
+      element.remove();
+    });
+    attachedElements = [];
+  });
+
   function setup(html) {
     var el;
     inject(function($compile, $rootScope) {
       el = $compile(html)($rootScope);
       $rootScope.$apply();
     });
+    attachedElements.push(el);
+
     return el;
   }
 

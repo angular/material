@@ -15,7 +15,6 @@ var utils = require('../scripts/gulp-utils.js');
 var karma = require('karma').server;
 var argv = require('minimist')(process.argv.slice(2));
 var gutil = require('gulp-util');
-var connect = require('gulp-connect');
 
 var config = {
   demoFolder: 'demo-partials'
@@ -39,7 +38,7 @@ gulp.task('demos', function() {
         .map(function(moduleDemos, moduleName) {
           return {
             name: moduleName,
-            label: utils.humanizeCamelCase( moduleName.split('.').pop() ),
+            label: utils.humanizeCamelCase(moduleName.split('.').pop()),
             demos: moduleDemos,
             url: '/demo/' + moduleName
           };
@@ -70,12 +69,12 @@ function generateDemos() {
         return lazypipe()
           .pipe(gulpif, /.css$/, transformCss(demoId))
           .pipe(gulp.dest, 'dist/docs/demo-partials/' + name)
-          ();
+        ();
       })
-      .on('data', function(demo) {
-        self.push(demo);
-      })
-      .on('end', next);
+        .on('data', function(demo) {
+          self.push(demo);
+        })
+        .on('end', next);
 
       function transformCss(demoId) {
         return lazypipe()
@@ -86,7 +85,7 @@ function generateDemos() {
             next(null, file);
           })
           .pipe(sass)
-          ();
+        ();
       }
     }));
 }
@@ -110,7 +109,7 @@ gulp.task('docs-demo-scripts', ['demos'], function() {
 });
 
 gulp.task('docs-js-dependencies', ['build'], function() {
-  return gulp.src(['dist/angular-material.js','dist/angular-material.min.js'])
+  return gulp.src(['dist/angular-material.js', 'dist/angular-material.min.js'])
     .pipe(gulp.dest('dist/docs'));
 });
 
@@ -119,50 +118,53 @@ gulp.task('docs-js', ['docs-app', 'docs-html2js', 'demos', 'build', 'docs-js-dep
     'node_modules/angularytics/dist/angularytics.js',
     'dist/docs/js/**/*.js'
   ])
-    .pipe(concat('docs.js'))
-    .pipe(gulpif(!argv.dev, uglify()))
-    .pipe(gulp.dest('dist/docs'));
+  .pipe(concat('docs.js'))
+  .pipe(gulpif(!argv.dev, uglify()))
+  .pipe(gulp.dest('dist/docs'));
 });
 
 gulp.task('docs-css-dependencies', ['build'], function() {
-                                                       return gulp.src(['dist/angular-material.css','dist/angular-material.min.css'])
-                                                       .pipe(gulp.dest('dist/docs'));
-                                                       });
+  return gulp.src([
+    'dist/angular-material.css',
+    'dist/angular-material.min.css'
+  ])
+  .pipe(gulp.dest('dist/docs'));
+});
 
 gulp.task('docs-css', ['docs-app', 'build', 'docs-css-dependencies'], function() {
-                                                                               return gulp.src([
-                                                                               'dist/themes/*.css',
-                                                                               'docs/app/css/highlightjs-material.css',
-                                                                               'docs/app/css/layout-demo.css',
-                                                                               'docs/app/css/style.css'
-                                                                               ])
-                                                                               .pipe(concat('docs.css'))
-                                                                               .pipe(gulp.dest('dist/docs'));
-                                                                               });
+  return gulp.src([
+    'dist/themes/*.css',
+    'docs/app/css/highlightjs-material.css',
+    'docs/app/css/layout-demo.css',
+    'docs/app/css/style.css'
+  ])
+  .pipe(concat('docs.css'))
+  .pipe(gulp.dest('dist/docs'));
+});
 
 gulp.task('docs-html2js', function() {
-                                   return gulp.src('docs/app/**/*.tmpl.html')
-                                   .pipe(ngHtml2js({
-                                   moduleName: 'docsApp',
-                                   declareModule: false
-                                   }))
-                                   .pipe(concat('docs-templates.js'))
-                                   .pipe(gulp.dest('dist/docs/js'));
-                                   });
+  return gulp.src('docs/app/**/*.tmpl.html')
+    .pipe(ngHtml2js({
+      moduleName: 'docsApp',
+      declareModule: false
+    }))
+    .pipe(concat('docs-templates.js'))
+    .pipe(gulp.dest('dist/docs/js'));
+});
 
 gulp.task('docs-karma', ['docs-js'], function(done) {
-    var karmaConfig = {
-      singleRun: true,
-      autoWatch: false,
-      browsers : argv.browsers ? argv.browsers.trim().split(',') : ['Chrome'],
-      configFile: __dirname + '/../config/karma-docs.conf.js'
-    };
+  var karmaConfig = {
+    singleRun: true,
+    autoWatch: false,
+    browsers: argv.browsers ? argv.browsers.trim().split(',') : ['Chrome'],
+    configFile: __dirname + '/../config/karma-docs.conf.js'
+  };
 
-    karma.start(karmaConfig, function(exitCode){
-       if (exitCode != 0) {
-         gutil.log(gutil.colors.red("Karma exited with the following exit code: " + exitCode));
-         process.exit(exitCode);
-       }
-       done();
-    });
- });
+  karma.start(karmaConfig, function(exitCode) {
+    if (exitCode != 0) {
+      gutil.log(gutil.colors.red("Karma exited with the following exit code: " + exitCode));
+      process.exit(exitCode);
+    }
+    done();
+  });
+});

@@ -16,10 +16,11 @@
  *  > To improve the visual grouping of content, use the system color for your subheaders.
  *
  */
-angular.module('material.components.subheader', [
-  'material.core',
-  'material.components.sticky'
-])
+angular
+  .module('material.components.subheader', [
+    'material.core',
+    'material.components.sticky'
+  ])
   .directive('mdSubheader', MdSubheaderDirective);
 
 /**
@@ -46,11 +47,11 @@ function MdSubheaderDirective($mdSticky, $compile, $mdTheming, $mdUtil) {
     replace: true,
     transclude: true,
     template: (
-    '<h2 class="md-subheader">' +
+    '<div class="md-subheader">' +
     '  <div class="md-subheader-inner">' +
     '    <span class="md-subheader-content"></span>' +
     '  </div>' +
-    '</h2>'
+    '</div>'
     ),
     link: function postLink(scope, element, attr, controllers, transclude) {
       $mdTheming(element);
@@ -70,15 +71,18 @@ function MdSubheaderDirective($mdSticky, $compile, $mdTheming, $mdUtil) {
       // of the element, that will be 'stickied' as the user scrolls.
       if (!element.hasClass('md-no-sticky')) {
         transclude(scope, function(clone) {
-          // Wrap to avoid multiple transclusion errors on same element, then append the sticky
+          // If the user adds an ng-if or ng-repeat directly to the md-subheader element, the
+          // compiled clone below will only be a comment tag (since they replace their elements with
+          // a comment) which cannot be properly passed to the $mdSticky; so we wrap it in our own
+          // DIV to ensure we have something $mdSticky can use
           var wrapperHtml = '<div class="md-subheader-wrapper">' + outerHTML + '</div>';
           var stickyClone = $compile(wrapperHtml)(scope);
 
+          // Append the sticky
           $mdSticky(scope, element, stickyClone);
 
           // Delay initialization until after any `ng-if`/`ng-repeat`/etc has finished before
           // attempting to create the clone
-
           $mdUtil.nextTick(function() {
             getContent(stickyClone).append(clone);
           });
