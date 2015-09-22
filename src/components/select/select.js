@@ -1021,6 +1021,7 @@ function SelectProvider($$interimElementProvider) {
 
         var dropDown = opts.selectEl;
         var selectCtrl = dropDown.controller('mdSelectMenu') || {};
+        var mouseDownXPosition = null;
 
         element.addClass('md-clickable');
 
@@ -1031,6 +1032,7 @@ function SelectProvider($$interimElementProvider) {
         // Cycling of options, and closing on enter
         dropDown.on('keydown', onMenuKeyDown);
         dropDown.on('mouseup', checkCloseMenu);
+        dropDown.on('mousedown', storeMousePosition);
 
         return function cleanupInteraction() {
           opts.backdrop && opts.backdrop.off('click', onBackdropClick);
@@ -1119,6 +1121,10 @@ function SelectProvider($$interimElementProvider) {
           focusOption('prev');
         }
 
+        function storeMousePosition(ev) {
+          mouseDownXPosition = ev.clientX;
+        }
+
         function checkCloseMenu(ev) {
           if (ev && ( ev.type == 'mouseup') && (ev.currentTarget != dropDown[0])) return;
           if ( mouseOnScrollbar() ) return;
@@ -1136,11 +1142,11 @@ function SelectProvider($$interimElementProvider) {
            */
           function mouseOnScrollbar() {
             var clickOnScrollbar = false;
-            if (ev && (ev.currentTarget.children.length > 0)) {
+            if (mouseDownXPosition != null && ev && (ev.currentTarget.children.length > 0)) {
               var child = ev.currentTarget.children[0];
               var hasScrollbar = child.scrollHeight > child.clientHeight;
               if (hasScrollbar && child.children.length > 0) {
-                var relPosX = ev.pageX - ev.currentTarget.getBoundingClientRect().left;
+                var relPosX = mouseDownXPosition - ev.currentTarget.getBoundingClientRect().left;
                 if (relPosX > child.querySelector('md-option').offsetWidth)
                   clickOnScrollbar = true;
               }
