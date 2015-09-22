@@ -92,16 +92,11 @@
   @if $suffix != null {
     $selector: 'flex-order-#{$suffix}';
   }
-  .#{$selector}-0 { order: 0; }
-  .#{$selector}-1 { order: 1; }
-  .#{$selector}-2 { order: 2; }
-  .#{$selector}-3 { order: 3; }
-  .#{$selector}-4 { order: 4; }
-  .#{$selector}-5 { order: 5; }
-  .#{$selector}-6 { order: 6; }
-  .#{$selector}-7 { order: 7; }
-  .#{$selector}-8 { order: 8; }
-  .#{$selector}-9 { order: 9; }
+  @for $i from -9 through 9 {
+    .#{$selector}-#{$i} {
+      order: #{$i};
+    }
+  }
 }
 
 @mixin layout-for-name($name) {
