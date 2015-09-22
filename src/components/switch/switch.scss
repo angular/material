@@ -20,7 +20,8 @@ md-switch {
     height: $switch-height;
     position: relative;
     user-select: none;
-    margin-right: 8px;
+    @include rtl(margin-right, 8px, null);
+    @include rtl(margin-left, null, 8px);
   }
 
   // If the user moves his mouse off the switch, stil display grabbing cursor

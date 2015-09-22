@@ -53,12 +53,13 @@ $subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16) !default;
   font-weight: $subheader-font-weight;
   line-height: $subheader-line-height;
   margin: $subheader-margin;
-  margin-right: $subheader-margin-right;
+  @include rtl(margin-right, $subheader-margin-right, null);
+  @include rtl(margin-left, null, $subheader-margin-right);
   position: relative;
 
   .md-subheader-inner {
     display: block;
-    padding: $subheader-padding;
+    @include rtl(padding, $subheader-padding, reverse($subheader-padding));
   }
 
   .md-subheader-content {

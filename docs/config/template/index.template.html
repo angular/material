@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="docsApp" ng-controller="DocsCtrl" lang="en" ng-strict-di>
+<html ng-app="docsApp" ng-controller="DocsCtrl" lang="en" ng-strict-di dir="{{direction}}">
 <head>
 <title ng-bind="'Angular Material - ' + menu.currentSection.name +
     (menu.currentSection === menu.currentPage ? '' : ' > ' + menu.currentPage.name)">
@@ -60,6 +60,16 @@
           <md-icon md-svg-src="img/icons/ic_menu_24px.svg"></md-icon>
         </md-button>
         <div layout="row" flex class="fill-height">
+          <div class="md-toolbar-item">
+            <md-checkbox
+                ng-model="direction"
+                aria-label="rtl"
+                ng-true-value="'rtl'"
+                ng-false-value="'ltr'"
+                class="md-warn md-align-top-left">
+                RTL
+            </md-checkbox>
+          </div>
           <h2 class="md-toolbar-item md-breadcrumb md-headline">
             <span ng-if="menu.currentPage.name !== menu.currentSection.name">
               <span hide-sm hide-md>{{menu.currentSection.name}}</span>

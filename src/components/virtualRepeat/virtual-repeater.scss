@@ -31,13 +31,13 @@ $virtual-repeat-scrollbar-width: 16px;
 
   .md-virtual-repeat-offsetter {
     box-sizing: border-box;
-    left: 0;
+    @include rtl(left, 0, $virtual-repeat-scrollbar-width);
     margin: 0;
     padding: 0;
     position: absolute;
     // Leave room for the scroll bar.
     // TODO: Will probably need to perform measurements at runtime.
-    right: $virtual-repeat-scrollbar-width;
+    @include rtl(right, $virtual-repeat-scrollbar-width, 0);
     top: 0;
   }
 }
@@ -52,7 +52,8 @@ $virtual-repeat-scrollbar-width: 16px;
     // Leave room for the scroll bar.
     // TODO: Will probably need to perform measurements at runtime.
     bottom: $virtual-repeat-scrollbar-width;
-    right: auto;
+    @include rtl(right, auto, null);
+    @include rtl(left, null, auto);
     white-space: nowrap;
   }
 }
