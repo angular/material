@@ -40,7 +40,7 @@
       <md-input-container>
         <label>Hourly Rate (USD)</label>
         <input required type="number" step="any" name="rate" ng-model="project.rate" min="800"
-               max="4999" ng-pattern="/^1234$/">
+               max="4999" ng-pattern="/^1234$/" md-maxlength="20" />
 
         <div ng-messages="projectForm.rate.$error" multiple>
           <div ng-message="required">
