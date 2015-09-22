@@ -93,7 +93,7 @@ describe('$animateCss', function() {
     it('should trigger an animation if a keyframe is detected on the class that is being added',
       inject(function($animateCss) {
 
-      ss.addRule('.something-spinny', 'animation: 0.5s rotate linear; animation: 0.5s rotate linear;');
+      ss.addRule('.something-spinny', '-webkit-animation: 0.5s rotate linear; animation: 0.5s rotate linear;');
 
       $animateCss(element, { addClass: 'something-spinny' }).start().done(doneSpy);
       triggerAnimationStartFrame();
@@ -107,7 +107,7 @@ describe('$animateCss', function() {
       inject(function($animateCss) {
 
       ss.addRule('.something-shiny', 'transition:1.5s linear all; background-color: gold;');
-      ss.addRule('.something-spinny', 'webkit-animation: 0.5s rotate linear; animation: 0.5s rotate linear;');
+      ss.addRule('.something-spinny', '-webkit-animation: 0.5s rotate linear; animation: 0.5s rotate linear;');
 
       $animateCss(element, { addClass: 'something-spinny something-shiny' }).start().done(doneSpy);
       triggerAnimationStartFrame();
@@ -167,7 +167,7 @@ describe('$animateCss', function() {
     it('should trigger an animation if the element contains a keyframe already when the class is removed',
       inject(function($animateCss) {
 
-      ss.addRule('.something-that-spins', 'webkit-animation: 0.5s rotate linear; animation: 0.5s rotate linear;');
+      ss.addRule('.something-that-spins', '-webkit-animation: 0.5s rotate linear; animation: 0.5s rotate linear;');
 
       element.addClass('something-that-spins');
       element.addClass('something-to-remove');
