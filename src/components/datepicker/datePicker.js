@@ -25,11 +25,18 @@
    * @param {Date=} md-min-date Expression representing a min date (inclusive).
    * @param {Date=} md-max-date Expression representing a max date (inclusive).
    * @param {boolean=} disabled Whether the datepicker is disabled.
+   * @param {boolean=} required Whether a value is required for the datepicker.
    *
    * @description
    * `<md-datepicker>` is a component used to select a single date.
    * For information on how to configure internationalization for the date picker,
    * see `$mdDateLocaleProvider`.
+   *
+   * This component supports [ngMessages](https://docs.angularjs.org/api/ngMessages/directive/ngMessages).
+   * Supported attributes are:
+   * * `required`: whether a required date is not set.
+   * * `mindate`: whether the selected date is before the minimum allowed date.
+   * * `maxdate`: whether the selected date is after the maximum allowed date.
    *
    * @usage
    * <hljs lang="html">
@@ -239,6 +246,7 @@
       self.date = self.ngModelCtrl.$viewValue;
       self.inputElement.value = self.dateLocale.formatDate(self.date);
       self.resizeInputElement();
+      self.setErrorFlags();
     };
   };
 
@@ -319,6 +327,23 @@
     this.calendarButton.disabled = isDisabled;
   };
 
+  /**
+   * Sets the custom ngModel.$error flags to be consumed by ngMessages. Flags are:
+   *   - mindate: whether the selected date is before the minimum date.
+   *   - maxdate: whether the selected flag is after the maximum date.
+   */
+  DatePickerCtrl.prototype.setErrorFlags = function() {
+    if (this.dateUtil.isValidDate(this.date)) {
+      if (this.dateUtil.isValidDate(this.minDate)) {
+        this.ngModelCtrl.$error['mindate'] = this.date < this.minDate;
+      }
+
+      if (this.dateUtil.isValidDate(this.maxDate)) {
+        this.ngModelCtrl.$error['maxdate'] = this.date > this.maxDate;
+      }
+    }
+  };
+
   /** Resizes the input element based on the size of its content. */
   DatePickerCtrl.prototype.resizeInputElement = function() {
     this.inputElement.size = this.inputElement.value.length + EXTRA_INPUT_SIZE;
@@ -332,7 +357,6 @@
     var inputString = this.inputElement.value;
     var parsedDate = this.dateLocale.parseDate(inputString);
     this.dateUtil.setDateTimeToMidnight(parsedDate);
-
     if (inputString === '') {
       this.ngModelCtrl.$setViewValue(null);
       this.date = null;
