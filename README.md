@@ -26,7 +26,7 @@ Material is targeted for all browsers with versions n-1; where n is the current 
 ## <a name="demos"></a> Online Documentation (and Demos)
 
 <div style="border: 1px solid #ccc">
-  <img src="https://cloud.githubusercontent.com/assets/1045233/6678772/12afad78-cbfc-11e4-8c9f-a13e336fb6a6.png" alt="Angular Material docs website" style="display:block;">
+  <img src="https://cloud.githubusercontent.com/assets/11819543/10056006/4aee3b68-6207-11e5-8497-a0656f85902a.PNG" alt="Angular Material docs website" style="display:block;">
 </div>
 
 - Visit [Material.AngularJS.org](https://material.angularjs.org/) online to review the API, see the
