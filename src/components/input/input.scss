@@ -308,6 +308,17 @@ md-input-container.md-icon-float {
 
 }
 
+md-input-container.md-icon-right {
+  input {
+    margin-right: $icon-offset;
+    + md-icon {
+      top: 26px;
+      right: 2px;
+      margin-right: 0;
+    }
+  }
+}
+
 @media screen and (-ms-high-contrast: active) {
   md-input-container.md-default-theme > md-icon {
     fill: #fff;
