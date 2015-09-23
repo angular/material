@@ -3,7 +3,7 @@
   <br/>
   <md-content layout-padding class="autoScroll">
 
-    <md-input-container class="md-icon-float" >
+    <md-input-container class="md-icon-float">
       <!-- Use floating label instead of placeholder -->
       <label>Name</label>
       <md-icon md-svg-src="img/icons/ic_person_24px.svg" class="name"></md-icon>
@@ -24,6 +24,13 @@
     <md-input-container md-no-float>
       <md-icon md-svg-src="img/icons/ic_place_24px.svg" style="display:inline-block;"></md-icon>
       <input ng-model="user.address" type="text" placeholder="Address" >
+    </md-input-container>
+
+    <md-input-container class="md-icon-float md-icon-right">
+      <label>Donation Amount</label>
+      <md-icon md-svg-src="img/icons/ic_card_giftcard_24px.svg"></md-icon>
+      <input ng-model="user.donation" type="number" step="0.01">
+      <md-icon md-svg-src="img/icons/ic_euro_24px.svg"></md-icon>
     </md-input-container>
 
   </md-content>
