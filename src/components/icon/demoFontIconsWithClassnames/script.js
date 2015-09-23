@@ -16,7 +16,7 @@ angular
       $scope.sizes = [
         {size:48,padding:10},
         {size:36,padding:6},
-        {size:21,padding:2},
+        {size:24,padding:2},
         {size:12,padding:0}
       ];
 
