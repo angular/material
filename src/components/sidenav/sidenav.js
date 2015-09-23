@@ -249,7 +249,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
       sidenavCtrl.destroy();
     });
 
-    scope.$on('$destroy', backdrop.remove );
+    scope.$on('$destroy', backdrop.remove.bind(backdrop));
     scope.$watch(isLocked, updateIsLocked);
     scope.$watch('isOpen', updateIsOpen);
 
