@@ -98,18 +98,17 @@ function mdMediaFactory($mdConstant, $rootScope, $window) {
     var unwatchFns = [];
     attrNames.forEach(function(attrName) {
       var normalizedName = getNormalizedName(attrs, attrName);
-      if (attrs[normalizedName]) {
+      if (angular.isDefined(attrs[normalizedName])) {
         unwatchFns.push(
             attrs.$observe(normalizedName, angular.bind(void 0, watchFn, null)));
       }
 
       for (var mediaName in $mdConstant.MEDIA) {
         normalizedName = getNormalizedName(attrs, attrName + '-' + mediaName);
-        if (!attrs[normalizedName]) {
-          return;
+        if (angular.isDefined(attrs[normalizedName])) {
+          unwatchFns.push(
+              attrs.$observe(normalizedName, angular.bind(void 0, watchFn, mediaName)));
         }
-
-        unwatchFns.push(attrs.$observe(normalizedName, angular.bind(void 0, watchFn, mediaName)));
       }
     });
 
