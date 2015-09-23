@@ -304,6 +304,12 @@ describe('$$mdDateUtil', function() {
     expect(dayAtMidnight.getMilliseconds()).toBe(0);
   });
 
+  it('should not error when trying to set an invalid date to midnight', function() {
+    dateUtil.setDateTimeToMidnight(new Date(NaN));
+    dateUtil.setDateTimeToMidnight(null);
+    dateUtil.setDateTimeToMidnight(undefined);
+  });
+
   it('should determine whether dates are valid', function() {
     expect(dateUtil.isValidDate(null)).toBeFalsy();
     expect(dateUtil.isValidDate(undefined)).toBeFalsy();
