@@ -106,9 +106,12 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
      */
     function getParentWithPointerEvents () {
       var parent = element.parent();
-      while (parent && hasComputedStyleValue('pointer-events','none', parent[0])) {
+
+      // jqLite might return a non-null, but still empty, parent; so check for parent and length
+      while (parent && parent.length && hasComputedStyleValue('pointer-events','none', parent[0])) {
         parent = parent.parent();
       }
+
       return parent;
     }
 
