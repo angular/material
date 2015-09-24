@@ -362,6 +362,28 @@ describe('$$interimElement service', function() {
         expect(autoClosed).toBe(true);
       }));
 
+      it('calls onShowing before onShow', inject(function() {
+        var onShowingCalled = false;
+
+        Service.show({
+          template: '<some-element />',
+          passingOptions: true,
+          onShowing: onShowing,
+          onShow: onShow
+        });
+
+        expect(onShowingCalled).toBe(true);
+
+        function onShowing(scope, el, options) {
+          expect(arguments.length).toEqual(3);
+          onShowingCalled = true;
+        }
+
+        function onShow(scope, el, options) {
+          expect(onShowingCalled).toBe(true);
+        }
+      }));
+
       it('calls onRemove', inject(function() {
         var onRemoveCalled = false;
         Service.show({
