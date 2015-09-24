@@ -114,7 +114,7 @@ md-switch {
     .md-bar,
     .md-thumb-container,
     .md-thumb {
-      transition: $swift-ease-in-out;
+      transition: $swift-linear;
       transition-property: transform, background-color;
     }
     .md-bar,
