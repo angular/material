@@ -55,11 +55,14 @@ function InkRippleCtrl ($scope, $element, rippleOptions, $window, $timeout, $mdU
   this.lastRipple = null;
 
   $mdUtil.valueOnUse(this, 'container', this.createContainer);
-  $mdUtil.valueOnUse(this, 'color', this.getColor, 1);
   $mdUtil.valueOnUse(this, 'background', this.getColor, 0.5);
+
+  this.color = this.getColor(1);
+  this.$element.addClass('md-ink-ripple');
 
   // attach method for unit tests
   ($element.controller('mdInkRipple') || {}).createRipple = angular.bind(this, this.createRipple);
+  ($element.controller('mdInkRipple') || {}).setColor = angular.bind(this, this.setColor);
 
   this.bindEvents();
 }
@@ -68,10 +71,9 @@ function InkRippleCtrl ($scope, $element, rippleOptions, $window, $timeout, $mdU
  * Returns the color that the ripple should be (either based on CSS or hard-coded)
  * @returns {string}
  */
-InkRippleCtrl.prototype.getColor = function (multiplier) {
-  multiplier = multiplier || 1;
-  return parseColor(this.$element.attr('md-ink-ripple'))
-      || parseColor(getElementColor.call(this));
+InkRippleCtrl.prototype.getColor = function () {
+  return this._parseColor(this.$element.attr('md-ink-ripple'))
+      || this._parseColor(getElementColor.call(this));
 
   /**
    * Finds the color element and returns its text color for use as default ripple color
@@ -82,46 +84,48 @@ InkRippleCtrl.prototype.getColor = function (multiplier) {
     colorElement     = colorElement || this.$element[ 0 ];
     return colorElement ? this.$window.getComputedStyle(colorElement).color : 'rgb(0,0,0)';
   }
+};
+/**
+ * Takes a string color and converts it to RGBA format
+ * @param color {string}
+ * @param [multiplier] {int}
+ * @returns {string}
+ */
+
+InkRippleCtrl.prototype._parseColor = function parseColor (color, multiplier) {
+  multiplier = multiplier || 1;
+
+  if (!color) return;
+  if (color.indexOf('rgba') === 0) return color.replace(/\d?\.?\d*\s*\)\s*$/, (0.1 * multiplier).toString() + ')');
+  if (color.indexOf('rgb') === 0) return rgbToRGBA(color);
+  if (color.indexOf('#') === 0) return hexToRGBA(color);
 
   /**
-   * Takes a string color and converts it to RGBA format
+   * Converts hex value to RGBA string
    * @param color {string}
    * @returns {string}
    */
-  function parseColor (color) {
-    if (!color) return;
-    if (color.indexOf('rgba') === 0) return color.replace(/\d?\.?\d*\s*\)\s*$/, (0.1 * multiplier).toString() + ')');
-    if (color.indexOf('rgb') === 0) return rgbToRGBA(color);
-    if (color.indexOf('#') === 0) return hexToRGBA(color);
-
-    /**
-     * Converts hex value to RGBA string
-     * @param color {string}
-     * @returns {string}
-     */
-    function hexToRGBA (color) {
-      var hex   = color[ 0 ] === '#' ? color.substr(1) : color,
-          dig   = hex.length / 3,
-          red   = hex.substr(0, dig),
-          green = hex.substr(dig, dig),
-          blue  = hex.substr(dig * 2);
-      if (dig === 1) {
-        red += red;
-        green += green;
-        blue += blue;
-      }
-      return 'rgba(' + parseInt(red, 16) + ',' + parseInt(green, 16) + ',' + parseInt(blue, 16) + ',0.1)';
+  function hexToRGBA (color) {
+    var hex   = color[ 0 ] === '#' ? color.substr(1) : color,
+      dig   = hex.length / 3,
+      red   = hex.substr(0, dig),
+      green = hex.substr(dig, dig),
+      blue  = hex.substr(dig * 2);
+    if (dig === 1) {
+      red += red;
+      green += green;
+      blue += blue;
     }
+    return 'rgba(' + parseInt(red, 16) + ',' + parseInt(green, 16) + ',' + parseInt(blue, 16) + ',0.1)';
+  }
 
-    /**
-     * Converts an RGB color to RGBA
-     * @param color {string}
-     * @returns {string}
-     */
-    function rgbToRGBA (color) {
-      return color.replace(')', ', 0.1)').replace('(', 'a(');
-    }
-
+  /**
+   * Converts an RGB color to RGBA
+   * @param color {string}
+   * @returns {string}
+   */
+  function rgbToRGBA (color) {
+    return color.replace(')', ', 0.1)').replace('(', 'a(');
   }
 
 };
@@ -142,6 +146,8 @@ InkRippleCtrl.prototype.bindEvents = function () {
 InkRippleCtrl.prototype.handleMousedown = function (event) {
   if ( this.mousedown ) return;
 
+  this.setColor(window.getComputedStyle(this.$element[0])['color']);
+
   // When jQuery is loaded, we have to get the original event
   if (event.hasOwnProperty('originalEvent')) event = event.originalEvent;
   this.mousedown = true;
@@ -150,7 +156,6 @@ InkRippleCtrl.prototype.handleMousedown = function (event) {
   } else {
     this.createRipple(event.layerX, event.layerY);
   }
-
 };
 
 /**
@@ -262,6 +267,10 @@ InkRippleCtrl.prototype.createRipple = function (left, top) {
         ? Math.max(x, y)
         : Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
   }
+};
+
+InkRippleCtrl.prototype.setColor = function (color) {
+  this.color = this._parseColor(color);
 };
 
 /**

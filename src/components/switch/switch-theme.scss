@@ -1,4 +1,7 @@
 md-switch.md-THEME_NAME-theme {
+  .md-ink-ripple {
+    color: '{{background-500}}';
+  }
   .md-thumb {
     background-color: '{{background-50}}';
   }
@@ -7,6 +10,9 @@ md-switch.md-THEME_NAME-theme {
   }
 
   &.md-checked {
+    .md-ink-ripple {
+      color: '{{accent-color}}';
+    }
     .md-thumb {
       background-color: '{{accent-color}}';
     }
@@ -18,6 +24,9 @@ md-switch.md-THEME_NAME-theme {
     }
 
     &.md-primary {
+      .md-ink-ripple {
+        color: '{{primary-color}}';
+      }
       .md-thumb {
         background-color: '{{primary-color}}';
       }
@@ -30,6 +39,9 @@ md-switch.md-THEME_NAME-theme {
     }
 
     &.md-warn {
+      .md-ink-ripple {
+        color: '{{warn-color}}';
+      }
       .md-thumb {
         background-color: '{{warn-color}}';
       }
