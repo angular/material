@@ -359,6 +359,31 @@ describe('$mdDialog', function() {
   });
 
   describe('#build()', function() {
+    it('should support onShowing callbacks before `show()` starts', inject(function($mdDialog, $rootScope) {
+
+      var template = '<md-dialog>Hello</md-dialog>';
+      var parent = angular.element('<div>');
+      var showing = false;
+
+      $mdDialog.show({
+        template: template,
+        parent: parent,
+        onShowing: onShowing
+      });
+      $rootScope.$apply();
+
+      runAnimation();
+
+      function onShowing(scope, element, options) {
+        showing = true;
+        container = angular.element(parent[0].querySelector('.md-dialog-container'));
+        expect(arguments.length).toEqual(3);
+        expect(container.length).toBe(0);
+      }
+
+      expect(showing).toBe(true);
+    }));
+
     it('should support onComplete callbacks within `show()`', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
 
       var template = '<md-dialog>Hello</md-dialog>';
