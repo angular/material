@@ -60,7 +60,7 @@ exports.task = function() {
   return series(streams);
   function getPaths () {
     var paths = config.scssBaseFiles.slice();
-    if (modules) {
+    if (false) {    //modules) {
       paths.push.apply(paths, modules.split(',').map(function (module) {
         return 'src/components/' + module + '/*.scss';
       }));

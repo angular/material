@@ -11,7 +11,7 @@
 */
 
 @-moz-document url-prefix() {
-  .layout-fill, .md-css-only [layout-fill] {
+  .layout-fill {
     margin: 0;
     width: 100%;
     min-height: 100%;
@@ -26,7 +26,7 @@
   }
 
   @for $i from -9 through 9 {
-    .#{$selector}-#{$i}, .md-css-only .#{$selector}-#{$i} {
+    .#{$selector}-#{$i} {
       order: #{$i};
     }
   }
@@ -34,7 +34,7 @@
 
 @mixin layout-for-name($name: null) {
   @if $name == null {
-    .layout, .md-css-only [layout]  {
+    .layout {
       box-sizing: border-box;
       display: -webkit-box;
       display: -webkit-flex;
@@ -44,19 +44,19 @@
       display: flex;
     }
 
-    .layout-column, .md-css-only [layout=column] {
+    .layout-column {
       flex-direction: column;
       -webkit-flex-direction: column;
     }
 
-    .layout-row, .md-css-only [layout=row] {
+    .layout-row {
       flex-direction: row;
       -webkit-flex-direction: row;
     }
   }
 
   @if $name != null {
-    .layout-#{$name}, .md-css-only [layout-#{$name}] {
+    .layout-#{$name} {
       box-sizing: border-box;
       display: -webkit-box;
       display: -webkit-flex;
@@ -88,14 +88,10 @@
       margin-left: #{$i * 5 + '%'};
     }
   }
-  .#{$offsetName}-33, .#{$offsetName}-34,
-  .md-css-only [#{$offsetName}="33"], .md-css-only [#{$offsetName}="34"]
-  {
+  .#{$offsetName}-33, .#{$offsetName}-34 {
     margin-left: 34%;
   }
-  .#{$offsetName}-66, .#{$offsetName}-67,
-  .md-css-only [#{$offsetName}="66"], .md-css-only [#{$offsetName}="67"]
-  {
+  .#{$offsetName}-66, .#{$offsetName}-67 {
     margin-left: 66%;
   }
 }
@@ -106,25 +102,24 @@
     $flexName: 'flex-#{$name}';
   }
 
-  .#{$flexName}, .md-css-only [#{$flexName}] {
+  .#{$flexName} {
     box-sizing: border-box;
     flex: 1;
   }
   
   @if ( $name == 'flex' ) {
-    .flex, .md-css-only [flex=""],
-    .flex-initial, .md-css-only [flex="initial"] {
+    .flex, .flex-initial {
       box-sizing: border-box;
       flex: 0 1 auto;
     }
 
 
-    .flex-1, .md-css-only [flex="1"] {
+    .flex-1 {
       box-sizing: border-box;
       flex: 1 1 0%;
     }
   
-    .flex-auto, .md-css-only [flex="auto"] {
+    .flex-auto {
       box-sizing: border-box;
       flex: 1 1 auto;
     }
@@ -167,11 +162,11 @@
 
   }
 
-  .layout-#{$name}-row, .md-css-only [layout="row"] {
+  .layout-#{$name}-row {
     > .#{$flexName}-33, > .#{$flexName}-34 { max-width: 33%; max-height: 100%;}
     > .#{$flexName}-66, > .#{$flexName}-67 { max-width: 67%; max-height: 100%;  }
   }
-  .layout-#{$name}-column, .md-css-only [layout="column"] {
+  .layout-#{$name}-column {
     > .#{$flexName}-33, > .#{$flexName}-34 { max-height: 33%; max-width: 100%; }
     > .#{$flexName}-66, > .#{$flexName}-67 { max-height: 67%; max-width: 100%;}
   }
@@ -297,6 +292,79 @@
 
 }
 
+@mixin layout-padding-margin() {
+
+  .layout-padding > .flex-sm,
+  .layout-padding > .flex-lt-md,
+  .md-css-only [layout-padding] > [flex-sm],
+  .md-css-only [layout-padding] > [flex-lt-md]
+  {
+    padding: $layout-gutter-width / 4;
+  }
+
+  .layout-padding,
+  .layout-padding > .flex,
+  .layout-padding > .flex-gt-sm,
+  .layout-padding > .flex-md,
+  .layout-padding > .flex-lt-lg,
+  .md-css-only [layout-padding],
+  .md-css-only [layout-padding] > .md-css-only [flex],
+  .md-css-only [layout-padding] > .md-css-only [flex-gt-sm],
+  .md-css-only [layout-padding] > .md-css-only [flex-md],
+  .md-css-only [layout-padding] > .md-css-only [flex-lt-lg]
+  {
+    padding: $layout-gutter-width / 2;
+  }
+  .layout-padding > .flex-gt-md,
+  .layout-padding > .flex-lg,
+  .md-css-only [layout-padding] > .md-css-only [flex-gt-md],
+  .md-css-only [layout-padding] > .md-css-only [flex-lg]
+  {
+    padding: $layout-gutter-width / 1;
+  }
+
+  .layout-margin > .flex-sm,
+  .layout-margin > .flex-lt-md,
+  .md-css-only [layout-margin] >  .md-css-only [flex-sm],
+  .md-css-only [layout-margin] >  .md-css-only [flex-lt-md]
+  {
+    margin: $layout-gutter-width / 4;
+  }
+
+  .layout-margin,
+  .layout-margin > .flex,
+  .layout-margin > .flex-gt-sm,
+  .layout-margin > .flex-md,
+  .layout-margin > .flex-lt-lg,
+  .md-css-only [layout-margin],
+  .md-css-only [layout-margin] >  .md-css-only [flex],
+  .md-css-only [layout-margin] >  .md-css-only [flex-gt-sm],
+  .md-css-only [layout-margin] >  .md-css-only [flex-md],
+  .md-css-only [layout-margin] >  .md-css-only [flex-lt-lg]
+  {
+    margin: $layout-gutter-width / 2;
+  }
+
+  .layout-margin > .flex-gt-md,
+  .layout-margin > .flex-lg,
+  .md-css-only [layout-margin] >  .md-css-only [flex-gt-md],
+  .md-css-only [layout-margin] >  .md-css-only [flex-lg]
+  {
+    margin: $layout-gutter-width / 1;
+  }
+
+  .layout-wrap {
+    flex-wrap: wrap;
+  }
+
+  .layout-fill {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+  }
+}
+
 /*
  *  Apply Mixins to create Layout/Flexbox styles
  *
@@ -307,78 +375,9 @@
 @include layout-align-for-name();
 @include flex-order-for-name();
 @include offset-for-name();
+@include layout-padding-margin();
 
 
-
-.layout-padding > .flex-sm,
-.layout-padding > .flex-lt-md,
-.md-css-only [layout-padding] > [flex-sm],
-.md-css-only [layout-padding] > [flex-lt-md]
-{
-  padding: $layout-gutter-width / 4;
-}
-
-.layout-padding,
-.layout-padding > .flex,
-.layout-padding > .flex-gt-sm,
-.layout-padding > .flex-md,
-.layout-padding > .flex-lt-lg,
-.md-css-only [layout-padding],
-.md-css-only [layout-padding] > .md-css-only [flex],
-.md-css-only [layout-padding] > .md-css-only [flex-gt-sm],
-.md-css-only [layout-padding] > .md-css-only [flex-md],
-.md-css-only [layout-padding] > .md-css-only [flex-lt-lg]
-{
-  padding: $layout-gutter-width / 2;
-}
-.layout-padding > .flex-gt-md,
-.layout-padding > .flex-lg,
-.md-css-only [layout-padding] > .md-css-only [flex-gt-md],
-.md-css-only [layout-padding] > .md-css-only [flex-lg]
-{
-  padding: $layout-gutter-width / 1;
-}
-
-.layout-margin > .flex-sm,
-.layout-margin > .flex-lt-md,
-.md-css-only [layout-margin] >  .md-css-only [flex-sm],
-.md-css-only [layout-margin] >  .md-css-only [flex-lt-md]
-{
-  margin: $layout-gutter-width / 4;
-}
-
-.layout-margin,
-.layout-margin > .flex,
-.layout-margin > .flex-gt-sm,
-.layout-margin > .flex-md,
-.layout-margin > .flex-lt-lg,
-.md-css-only [layout-margin],
-.md-css-only [layout-margin] >  .md-css-only [flex],
-.md-css-only [layout-margin] >  .md-css-only [flex-gt-sm],
-.md-css-only [layout-margin] >  .md-css-only [flex-md],
-.md-css-only [layout-margin] >  .md-css-only [flex-lt-lg]
-{
-  margin: $layout-gutter-width / 2;
-}
-
-.layout-margin > .flex-gt-md,
-.layout-margin > .flex-lg,
-.md-css-only [layout-margin] >  .md-css-only [flex-gt-md],
-.md-css-only [layout-margin] >  .md-css-only [flex-lg]
-{
-  margin: $layout-gutter-width / 1;
-}
-
-.layout-wrap, .md-css-only [layout-wrap]  {
-  flex-wrap: wrap;
-}
-
-.layout-fill, .md-css-only [layout-fill] {
-  margin: 0;
-  width: 100%;
-  min-height: 100%;
-  height: 100%;
-}
 
 /**
  * `hide-gt-sm show-gt-lg` should hide from 600px to 1200px
@@ -401,26 +400,14 @@
     }
   }
 
-  .md-css-only [hide-sm], .md-css-only [hide] {
-    &:not([show-sm]):not([show]) {
-      display: none;
-    }
-  }
-
   @include layout-for-name(sm);
   @include flex-properties-for-name(sm);
-  @include layout-align-for-name(sm);
-  @include offset-for-name(sm);
-  @include flex-order-for-name(sm);
 }
 
 // BIGGER THAN SMALL SCREEN
 @media (min-width: $layout-breakpoint-sm) {
   @include layout-for-name(gt-sm);
   @include flex-properties-for-name(gt-sm);
-  @include layout-align-for-name(gt-sm);
-  @include offset-for-name(gt-sm);
-  @include flex-order-for-name(gt-sm);
 }
 
 // MEDIUM SCREEN
@@ -435,29 +422,15 @@
     display: none;
   }
 
-  .md-css-only [hide], .md-css-only [hide-gt-sm] {
-    &:not([show-gt-sm]):not([show-md]):not([show]) {
-      display: none;
-    }
-  }
-  .md-css-only [hide-md]:not([show-md]):not([show]) {
-    display: none;
-  }
 
   @include layout-for-name(md);
   @include flex-properties-for-name(md);
-  @include layout-align-for-name(md);
-  @include offset-for-name(md);
-  @include flex-order-for-name(md);
 }
 
 // BIGGER THAN MEDIUM SCREEN
 @media (min-width: $layout-breakpoint-md) {
   @include layout-for-name(gt-md);
   @include flex-properties-for-name(gt-md);
-  @include layout-align-for-name(gt-md);
-  @include offset-for-name(gt-md);
-  @include flex-order-for-name(gt-md);
 }
 
 // LARGE SCREEN
@@ -471,20 +444,8 @@
     display: none;
   }
 
-  .md-css-only [hide], .md-css-only [hide-gt-sm], .md-css-only [hide-gt-md] {
-    &:not([show-gt-sm]):not([show-gt-md]):not([show-lg]):not([show]) {
-      display: none;
-    }
-  }
-  .md-css-only [hide-lg]:not([show-lg]):not([show]) {
-    display: none;
-  }
-
   @include layout-for-name(lg);
   @include flex-properties-for-name(lg);
-  @include layout-align-for-name(lg);
-  @include offset-for-name(lg);
-  @include flex-order-for-name(lg);
 }
 
 
@@ -496,15 +457,6 @@
     }
   }
 
-  .md-css-only [hide-gt-sm], .md-css-only [hide-gt-md], .md-css-only [hide-gt-lg], .md-css-only [hide] {
-    &:not([show-gt-sm]):not([show-gt-md]):not([show-gt-lg]):not([show]) {
-      display: none;
-    }
-  }
-
   @include layout-for-name(gt-lg);
   @include flex-properties-for-name(gt-lg);
-  @include layout-align-for-name(gt-lg);
-  @include offset-for-name(gt-lg);
-  @include flex-order-for-name(gt-lg);
 }
