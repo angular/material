@@ -348,7 +348,7 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia) {
 
     function getTileElements() {
       return [].filter.call(element.children(), function(ele) {
-        return ele.tagName == 'MD-GRID-TILE';
+        return ele.tagName == 'MD-GRID-TILE' && !ele.$$mdDestroyed;
       });
     }
 
@@ -722,6 +722,9 @@ function GridTileDirective($mdMedia) {
     // Tile registration/deregistration
     gridCtrl.invalidateTiles();
     scope.$on('$destroy', function() {
+      // Mark the tile as destroyed so it is no longer considered in layout,
+      // even if the DOM element sticks around (like during a leave animation)
+      element.$$mdDestroyed = true;
       unwatchAttrs();
       gridCtrl.invalidateLayout();
     });
