@@ -7,7 +7,7 @@ if (angular.version.minor >= 4) {
 
   var forEach = angular.forEach;
 
-  var WEBKIT = window.ontransitionend === undefined && window.onwebkittransitionend !== undefined;
+  var WEBKIT = angular.isDefined(document.documentElement.style.WebkitAppearance);
   var TRANSITION_PROP = WEBKIT ? 'WebkitTransition' : 'transition';
   var ANIMATION_PROP = WEBKIT ? 'WebkitAnimation' : 'animation';
   var PREFIX = WEBKIT ? '-webkit-' : '';

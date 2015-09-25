@@ -22,6 +22,7 @@
 
 # Available Options are: 1.X, 1.X.X, 1.X.X-(beta|rc).X or snapshot
 VERSIONS=(1.3 1.4 1.5 snapshot)
+BROWSERS="Firefox,Chrome,Safari"
 
 #
 # DO NOT EDIT PASSED THIS LINE 
@@ -102,7 +103,7 @@ for VERSION in "${VERSIONS[@]}"; do
   done
 
   echo "\n"
-  node ./node_modules/gulp/bin/gulp.js karma --reporters='dots'
+  node ./node_modules/gulp/bin/gulp.js karma --reporters='dots' --browsers=$BROWSERS
   LAST_EXIT_CODE=$?
 
   echo "\n\n--- Finished Testing AngularMaterial against AngularJS (${VERSION}) ---"
