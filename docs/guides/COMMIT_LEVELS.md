@@ -2,7 +2,9 @@
 
 The Angular Material team has a very specific process for change commits.
 
-Our commit process is intentionally restrictive to support the rapid iterations and manage change complexity within Angular Material. Angular Material uses a "Pull Request" process to allow team leaders opportunities to maintain code reviews, ensure sanity checks, encourage coding standards, and provide feedbackto the developer. 
+Our commit process is intentionally restrictive to (a) support the rapid evolution of Angular Material and (b) manage change complexity and coding standards within the framework. 
+
+Angular Material uses a "Pull Request" process to allow team leaders opportunities to maintain code reviews, ensure sanity checks, encourage coding standards, and provide feedbackto the developer. 
 
 #### General Rules
 
