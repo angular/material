@@ -19,16 +19,41 @@
   }
 }
 
-@mixin flex-order-for-name($suffix: null) {
-  $selector: 'flex-order';
-  @if $suffix != null {
-    $selector: 'flex-order-#{$suffix}';
-  }
 
+
+@mixin flex-order-for-name() {
+  $sizes : '', sm, gt-sm, md, gt-md, lg, gt-lg;
+
+  //  .flex-order--1, .flex-order-sm--1, .flex-order-gt-sm--1, .flex-order-md--1, .flex-order-gt-md--1, .flex-order-lg--1, .flex-order-gt-lg--1 {
+  //    order: -1;
+  //  }
+  //
+  //  .flex-order-0, .flex-order-sm-0, .flex-order-gt-sm-0, .flex-order-md-0, .flex-order-gt-md-0, .flex-order-lg-0, .flex-order-gt-lg-0 {
+  //    order: 0;
+  //  }
+  //
+  //  .flex-order-1, .flex-order-sm-1, .flex-order-gt-sm-1, .flex-order-md-1, .flex-order-gt-md-1, .flex-order-lg-1, .flex-order-gt-lg-1 {
+  //    order: 1;
+  //  }
+  //
+  $offsets : '.flex-order, ';
   @for $i from -9 through 9 {
-    .#{$selector}-#{$i} {
+    @each $s in $sizes {
+      @if $s != '' {
+        $s : '#{$s}-#{$i}';
+      } @else {
+        $s : '#{$i}';
+      }
+      $offsets : $offsets + '.flex-order-#{$s}, ';
+
+      $s : '';
+    }
+
+    #{$offsets} {
       order: #{$i};
     }
+
+    $offsets : '';
   }
 }
 
