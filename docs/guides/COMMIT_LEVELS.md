@@ -27,7 +27,7 @@ The development team has defined three (3) Github levels of **commit authorizati
 
 * General : 
   * Developers in this group includes any team members not listed under Core or Team Leads below
-  * Must use Angular Materila Forked repositories for any and all changes (see above)
+  * For any and all changes, developers must use a fork of the Angular Material repository 
     * Please do not make or submit any changes from the master branch. 
   * Are not authorized to merge PRs
   * Should not reassign issue or change issue milestones
