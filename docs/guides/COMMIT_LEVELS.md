@@ -16,10 +16,10 @@ Angular Material uses a "Pull Request" process to allow team leaders opportuniti
 * Please **NEVER** use the *green* merge button on GitHub
   * Angular Material maintains a *flat*, linear change history using a specific **manual merge process**
   * Do not use Github's automated merge process
-* All PR source (component or core) changes should have accompanying unit tests
-* All PRs must have 100% Karma test scores
+* Please include unit tests with all your source (component or core) changes
+* All unit tests must have 100% passing before the PR will be accepted/merged.
 
-> These process guidelines are especially important: our team membership is growing rapidly.
+> These process guidelines are especially important: our framework features and the team membership is growing rapidly.
 
 #### Commit Authorization Rules
 
