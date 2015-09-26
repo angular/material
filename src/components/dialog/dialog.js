@@ -417,7 +417,7 @@ function MdDialogProvider($$interimElementProvider) {
         '<md-dialog md-theme="{{ dialog.theme }}" aria-label="{{ dialog.ariaLabel }}" class="{{ dialog.css }}">',
         ' <md-dialog-content role="document" tabIndex="-1">',
         '   <h2 class="md-title">{{ dialog.title }}</h2>',
-        '   <div class="md-dialog-content-body" md-template="::dialog.content"></div>',
+        '   <div class="md-dialog-content-body" md-template="::dialog.mdContent"></div>',
         ' </md-dialog-content>',
         ' <div class="md-actions">',
         '   <md-button ng-if="dialog.$type == \'confirm\'"' +
@@ -520,7 +520,7 @@ function MdDialogProvider($$interimElementProvider) {
       function wrapSimpleContent() {
         if ( controller ) {
           var HTML_END_TAG = /<\/[\w-]*>/gm;
-          var content = controller.content || "";
+          var content = controller.content || options.content || "";
 
           var hasHTML = HTML_END_TAG.test(content);
           if (!hasHTML) {
@@ -528,7 +528,7 @@ function MdDialogProvider($$interimElementProvider) {
           }
 
           // Publish updated dialog content body... to be compiled by mdTemplate directive
-          controller.content = content;
+          controller.mdContent = content;
         }
       }
 
