@@ -243,7 +243,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * When the mouse button is released, send focus back to the input field.
    */
   function onMouseup () {
-    elements.input.focus();
+    // BirdJournal: We don't want to re-focus on the input after select.
+    //elements.input.focus();
   }
 
   /**
