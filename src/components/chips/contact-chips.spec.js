@@ -60,6 +60,28 @@ describe('<md-contact-chips>', function() {
       expect(ctrl.highlightFlags).toEqual('i');
     });
 
+    it('renders an image element for contacts with an image property', function() {
+        scope.contacts.push(scope.allContacts[2]);
+
+        var element = buildChips(CONTACT_CHIPS_TEMPLATE);
+        var ctrl = element.controller('mdContactChips');
+        var chip = angular.element(element[0].querySelector('.md-chip-content'));
+
+        expect(chip.find('img').length).toBe(1);
+    });
+
+    it('does not render an image element for contacts without an image property', function() {
+        var noImageContact = scope.allContacts[2];
+        delete noImageContact.image;
+        scope.contacts.push(noImageContact);
+
+        var element = buildChips(CONTACT_CHIPS_TEMPLATE);
+        var ctrl = element.controller('mdContactChips');
+        var chip = angular.element(element[0].querySelector('.md-chip-content'));
+
+        expect(chip.find('img').length).toBe(0);
+    });
+
     describe('filtering selected items', function() {
       it('should filter', inject(function() {
         scope.querySearch = jasmine.createSpy('querySearch').and.callFake(function(q) {
