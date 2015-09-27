@@ -1,7 +1,7 @@
-$list-h3-margin: 0 0 6px 0 !default;
-$list-h4-margin: 10px 0 5px 0 !default;
+$list-h3-margin: 0 0 0px 0 !default;
+$list-h4-margin: 3px 0 1px 0 !default;
 $list-h4-font-weight: 400 !default;
-$list-header-line-height: 0.75em !default;
+$list-header-line-height: 1.2em !default;
 $list-p-margin: 0 0 0 0 !default;
 $list-p-line-height: 1.6em !default;
 
@@ -21,10 +21,10 @@ $list-item-primary-avatar-width: $baseline-grid * 5 !default;
 $list-item-primary-icon-width: $baseline-grid * 3 !default;
 $list-item-secondary-left-margin: $baseline-grid * 2 !default;
 $list-item-secondary-button-width: $baseline-grid * 6 !default;
-$list-item-text-padding-top: $baseline-grid * 2 !default;
-$list-item-text-padding-bottom: $baseline-grid * 2.5 !default;
 $list-item-inset-divider-offset: 12 * $baseline-grid !default;
 $list-item-height: 6 * $baseline-grid !default;
+$list-item-two-line-height: 9 * $baseline-grid !default;
+$list-item-three-line-height: 11 * $baseline-grid !default;
 
 md-list {
   display: block;
@@ -169,10 +169,11 @@ md-list-item.md-2-line > .md-no-style,
 md-list-item.md-3-line,
 md-list-item.md-3-line > .md-no-style {
   align-items: flex-start;
+  justify-content: center;
 
   .md-list-item-text {
     flex: 1;
-    padding: $baseline-grid * 2 0;
+    margin: auto;
     text-overflow: ellipsis;
 
     &.md-offset {
@@ -211,6 +212,7 @@ md-list-item.md-3-line > .md-no-style {
 
 md-list-item.md-2-line,
 md-list-item.md-2-line > .md-no-style {
+  height: $list-item-two-line-height;
   > .md-avatar:first-child {
     margin-top: $baseline-grid * 1.5;
   }
@@ -219,12 +221,12 @@ md-list-item.md-2-line > .md-no-style {
   }
   .md-list-item-text {
     flex: 1;
-    padding-top: ($baseline-grid * 2.5) - 1;
   }
 }
 
 md-list-item.md-3-line,
 md-list-item.md-3-line > .md-no-style {
+  height: $list-item-three-line-height;
   > md-icon:first-child, 
   > .md-avatar:first-child {
     margin-top: $baseline-grid * 2;

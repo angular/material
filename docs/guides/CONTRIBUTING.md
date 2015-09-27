@@ -5,6 +5,7 @@
  - [Question or Problem?](#question)
  - [Issues and Bugs](#bug)
  - [Feature Requests](#feature)
+ - [Guidelines for Developer Commits and Authorizations](#pr_forks)
  - [Submission Guidelines](#submit)
 
 ## <a name="coc"></a> Code of Conduct
@@ -195,6 +196,13 @@ refactor(content): prefix mdContent scroll- attributes
     <md-content md-scroll-x md-scroll-y md-scroll-xy>
     ```
 ```
+
+<br/>
+## <a name="pr_forks"></a> Guidelines for Developer Commit Authorizations
+
+Please review the [Commit Level and Authorization Guidelines](https://github.com/angular/material/blob/master/docs/guides/COMMIT_LEVELS.md) for details on how to implement and submit your fixes, changes, or enchancements to Angular Material. This guideline provides details on creating a repository Fork of the Angular Material repository and how to submit Pull Requests.
+
+
 
 <br/>
 ## <a name="cla"></a> Signing the CLA
