@@ -541,9 +541,7 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
 
   // If the number of items shrank, scroll up to the top.
   if (this.items && itemsLength < this.items.length && this.container.getScrollOffset() !== 0) {
-    this.items = items;
     this.container.resetScroll();
-    return;
   }
 
   this.items = items;
