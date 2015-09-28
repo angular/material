@@ -197,6 +197,8 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         inputCheckValue();
       };
 
+      attr.$observe('placeholder', ngModelCtrl.$render);
+
       mdSelectCtrl.setLabelText = function(text) {
         mdSelectCtrl.setIsPlaceholder(!text);
         // Use placeholder attribute, otherwise fallback to the md-input-container label
