@@ -21,10 +21,10 @@ a.md-button.md-THEME_NAME-theme,
     }
     &:not([disabled]) {
       &:hover {
-        background-color: '{{accent-color}}';
+        background-color: '{{accent-600}}';
       }
       &.md-focused {
-        background-color: '{{accent-A700}}';
+        background-color: '{{accent-600}}';
       }
     }
   }
@@ -40,7 +40,7 @@ a.md-button.md-THEME_NAME-theme,
           color: '{{primary-contrast}}';
         }
         &:hover {
-          background-color: '{{primary-color}}';
+          background-color: '{{primary-600}}';
         }
         &.md-focused {
           background-color: '{{primary-600}}';
@@ -61,10 +61,10 @@ a.md-button.md-THEME_NAME-theme,
         color: '{{accent-contrast}}';
       }
       &:hover {
-        background-color: '{{accent-color}}';
+        background-color: '{{accent-600}}';
       }
       &.md-focused {
-        background-color: '{{accent-A700}}';
+        background-color: '{{accent-600}}';
       }
     }
   }
@@ -97,10 +97,10 @@ a.md-button.md-THEME_NAME-theme,
           color: '{{warn-contrast}}';
         }
         &:hover {
-          background-color: '{{warn-color}}';
+          background-color: '{{warn-600}}';
         }
         &.md-focused {
-          background-color: '{{warn-700}}';
+          background-color: '{{warn-600}}';
         }
       }
     }
@@ -122,10 +122,10 @@ a.md-button.md-THEME_NAME-theme,
           color: '{{accent-contrast}}';
         }
         &:hover {
-          background-color: '{{accent-color}}';
+          background-color: '{{accent-600}}';
         }
         &.md-focused {
-          background-color: '{{accent-700}}';
+          background-color: '{{accent-600}}';
         }
       }
     }

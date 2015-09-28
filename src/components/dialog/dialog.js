@@ -633,6 +633,7 @@ function MdDialogProvider($$interimElementProvider) {
         // Add keydown listeners
         element.on('keydown', keyHandlerFn);
         target.on('keydown', keyHandlerFn);
+<<<<<<< HEAD
         window.on('resize', onWindowResize);
 
         // Queue remove listeners function
@@ -642,6 +643,13 @@ function MdDialogProvider($$interimElementProvider) {
           target.off('keydown', keyHandlerFn);
           window.off('resize', onWindowResize);
 
+=======
+
+        // Queue remove listeners function
+        removeListeners.push(function() {
+          element.off('keydown', keyHandlerFn);
+          target.off('keydown', keyHandlerFn);
+>>>>>>> master
         });
       }
       if (options.clickOutsideToClose) {

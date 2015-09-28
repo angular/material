@@ -7,8 +7,12 @@
   "bugs": "https://github.com/angular/material/issues",
   "license": "MIT",
   "repository": {
+<<<<<<< HEAD
     "type": "git",
     "url": "git://github.com/angular/material.git"
+=======
+    "url": "git://github.com/clshortfuse/material.git"
+>>>>>>> master
   },
   "devDependencies": {
     "angular": "1.4.6",
