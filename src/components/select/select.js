@@ -673,7 +673,7 @@ function OptionDirective($mdButtonInkRipple, $mdUtil) {
     if (angular.isDefined(attr.ngValue)) {
       scope.$watch(attr.ngValue, setOptionValue);
     } else if (angular.isDefined(attr.value)) {
-      setOptionValue(isNaN(attr.value) ? attr.value : Number(attr.value));
+      setOptionValue(attr.value);
     } else {
       scope.$watch(function() {
         return element.text();
