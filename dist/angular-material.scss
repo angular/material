@@ -39,25 +39,36 @@ $toast-margin: $baseline-grid * 1 !default;
 
 // Whiteframes
 
-$shadow-multiplier: 0.7;
-$shadow-key-umbra-opacity:      $shadow-multiplier * 0.2;
-$shadow-key-penumbra-opacity:   $shadow-multiplier * 0.14;
-$shadow-ambient-shadow-opacity: $shadow-multiplier * 0.12;
+$shadow-key-umbra-opacity:      0.2;
+$shadow-key-penumbra-opacity:   0.14;
+$shadow-ambient-shadow-opacity: 0.12;
 
 // NOTE(shyndman): gulp-sass seems to be failing if I split the shadow defs across
 //    multiple lines. Ugly. Sorry.
-$whiteframe-shadow-z1: 0px 3px 1px -2px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 2px 2px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 1px 5px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
-$whiteframe-zindex-z1: 1 !default;
-$whiteframe-shadow-z2: 0 2px 4px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0 4px 5px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0 1px 10px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity);
-$whiteframe-zindex-z2: 2 !default;
-$whiteframe-shadow-z3: 0px 3px 5px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 6px 10px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 1px 18px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
-$whiteframe-zindex-z3: 3 !default;
-$whiteframe-shadow-z4: 0px 5px 5px -3px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 8px 10px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 3px 14px 2px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
-$whiteframe-zindex-z4: 4 !default;
-$whiteframe-shadow-z5: 0px 8px 10px -5px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 16px 24px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 6px 30px 5px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
-$whiteframe-zindex-z5: 5 !default;
-
-
+$whiteframe-shadow-1dp: 0px 1px 3px 0px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 1px 1px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 2px 1px -1px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-2dp: 0px 1px 5px 0px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 2px 2px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 3px 1px -2px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-3dp: 0px 1px 8px 0px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 3px 4px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 3px 3px -2px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-4dp: 0px 2px 4px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 4px 5px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 1px 10px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-5dp: 0px 3px 5px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 5px 8px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 1px 14px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-6dp: 0px 3px 5px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 6px 10px 0px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 1px 18px 0px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-7dp: 0px 4px 5px -2px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 7px 10px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 2px 16px 1px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-8dp: 0px 5px 5px -3px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 8px 10px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 3px 14px 2px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-9dp: 0px 5px 6px -3px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 9px 12px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 3px 16px 2px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-10dp: 0px 6px 6px -3px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 10px 14px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 4px 18px 3px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-11dp: 0px 6px 7px -4px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 11px 15px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 4px 20px 3px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-12dp: 0px 7px 8px -4px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 12px 17px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 5px 22px 4px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-13dp: 0px 7px 8px -4px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 13px 19px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 5px 24px 4px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-14dp: 0px 7px 9px -4px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 14px 21px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 5px 26px 4px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-15dp: 0px 8px 9px -5px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 15px 22px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 6px 28px 5px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-16dp: 0px 8px 10px -5px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 16px 24px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 6px 30px 5px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-17dp: 0px 8px 11px -5px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 17px 26px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 6px 32px 5px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-18dp: 0px 9px 11px -5px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 18px 28px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 7px 34px 6px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-19dp: 0px 9px 12px -6px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 19px 29px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 7px 36px 6px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-20dp: 0px 10px 13px -6px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 20px 31px 3px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 8px 38px 7px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-21dp: 0px 10px 13px -6px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 21px 33px 3px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 8px 40px 7px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-22dp: 0px 10px 14px -6px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 22px 35px 3px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 8px 42px 7px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-23dp: 0px 11px 14px -7px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 23px 36px 3px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 9px 44px 8px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
+$whiteframe-shadow-24dp: 0px 11px 15px -7px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0px 24px 38px 3px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0px 9px 46px 8px rgba(0, 0, 0, $shadow-ambient-shadow-opacity) !default;
 
 // Z-indexes
 //--------------------------------------------
@@ -112,11 +123,11 @@ $button-fab-padding: rem(1.60) !default;
 
 @mixin input-placeholder-color($color) {
   &::-webkit-input-placeholder,
-  &::-moz-placeholder, /* Firefox 19+ */
-  &:-moz-placeholder, /* Firefox 18- */
-  &:-ms-input-placeholder {
-    color: $color;
-  }
+    &::-moz-placeholder,
+    &:-moz-placeholder,
+    &:-ms-input-placeholder {
+      color: $color;
+    }
 }
 
 @mixin pie-clearfix {
@@ -509,127 +520,106 @@ input {
   font-size: 100%;
 }
 
-// Responsive attributes
-// ------------------------------
-
-// hide means hide everywhere
-/* Sizes:
-  0    <= size < 600  Phone
-  600  <= size < 960  Tablet
-  960  <= size < 1200 Tablet-Landscape
-  1200 <= size         PC
+/*
+*
+*  Responsive attributes
+*
+*  References:
+*  1) https://scotch.io/tutorials/a-visual-guide-to-css3-flexbox-properties#flex
+*  2) https://css-tricks.com/almanac/properties/f/flex/
+*  3) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
+*  4) http://godban.com.ua/projects/flexgrid
+*
 */
 
-.layout {
-  box-sizing: border-box;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.layout-column {
-  flex-direction: column;
-  -webkit-flex-direction: column;
-}
-
-.layout-row {
-  flex-direction: row;
-  -webkit-flex-direction: row;
-}
-
-.layout-padding > .flex-sm,
-.layout-padding > .flex-lt-md
-{
-  padding: $layout-gutter-width / 4;
-}
-.layout-padding,
-.layout-padding > .flex,
-.layout-padding > .flex-gt-sm,
-.layout-padding > .flex-md,
-.layout-padding > .flex-lt-lg
-{
-  padding: $layout-gutter-width / 2;
-}
-.layout-padding > .flex-gt-md,
-.layout-padding > .flex-lg
-{
-  padding: $layout-gutter-width / 1;
-}
-
-
-.layout-margin > .flex-sm,
-.layout-margin > .flex-lt-md
-{
-  margin: $layout-gutter-width / 4;
-}
-.layout-margin,
-.layout-margin > .flex,
-.layout-margin > .flex-gt-sm,
-.layout-margin > .flex-md,
-.layout-margin > .flex-lt-lg {
-  margin: $layout-gutter-width / 2;
-}
-.layout-margin > .flex-gt-md,
-.layout-margin > .flex-lg
-{
-  margin: $layout-gutter-width / 1;
-}
-
-
-
-.layout-wrap {
-  flex-wrap: wrap;
-}
-
-.layout-fill {
-  margin: 0;
-  min-height: 100%;
-  width: 100%;
-}
 @-moz-document url-prefix() {
   .layout-fill {
     margin: 0;
     width: 100%;
-    min-height: auto;
-    height: inherit;
+    min-height: 100%;
+    height: 100%;
   }
 }
 
-@mixin flex-order-for-name($suffix: null) {
-  $selector: 'flex-order';
-  @if $suffix != null {
-    $selector: 'flex-order-#{$suffix}';
+
+
+@mixin flex-order-for-name() {
+  $sizes : '', sm, gt-sm, md, gt-md, lg, gt-lg;
+
+  //  .flex-order--1, .flex-order-sm--1, .flex-order-gt-sm--1, .flex-order-md--1, .flex-order-gt-md--1, .flex-order-lg--1, .flex-order-gt-lg--1 {
+  //    order: -1;
+  //  }
+  //
+  //  .flex-order-0, .flex-order-sm-0, .flex-order-gt-sm-0, .flex-order-md-0, .flex-order-gt-md-0, .flex-order-lg-0, .flex-order-gt-lg-0 {
+  //    order: 0;
+  //  }
+  //
+  //  .flex-order-1, .flex-order-sm-1, .flex-order-gt-sm-1, .flex-order-md-1, .flex-order-gt-md-1, .flex-order-lg-1, .flex-order-gt-lg-1 {
+  //    order: 1;
+  //  }
+  //
+  $offsets : '.flex-order, ';
+  @for $i from -9 through 9 {
+    @each $s in $sizes {
+      @if $s != '' {
+        $s : '#{$s}-#{$i}';
+      } @else {
+        $s : '#{$i}';
+      }
+      $offsets : $offsets + '.flex-order-#{$s}, ';
+
+      $s : '';
+    }
+
+    #{$offsets} {
+      order: #{$i};
+    }
+
+    $offsets : '';
   }
-  .#{$selector}-0 { order: 0; }
-  .#{$selector}-1 { order: 1; }
-  .#{$selector}-2 { order: 2; }
-  .#{$selector}-3 { order: 3; }
-  .#{$selector}-4 { order: 4; }
-  .#{$selector}-5 { order: 5; }
-  .#{$selector}-6 { order: 6; }
-  .#{$selector}-7 { order: 7; }
-  .#{$selector}-8 { order: 8; }
-  .#{$selector}-9 { order: 9; }
 }
 
-@mixin layout-for-name($name) {
-  .layout-#{$name} {
-    box-sizing: border-box;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -moz-flex;
-    display: -ms-flexbox;
-    display: flex;
+@mixin layout-for-name($name: null) {
+  @if $name == null {
+    .layout {
+      box-sizing: border-box;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -moz-box;
+      display: -moz-flex;
+      display: -ms-flexbox;
+      display: flex;
+    }
+
+    .layout-column {
+      flex-direction: column;
+      -webkit-flex-direction: column;
+    }
+
+    .layout-row {
+      flex-direction: row;
+      -webkit-flex-direction: row;
+    }
   }
-  .layout-#{$name}-column {
-    flex-direction: column;
-  }
-  .layout-#{$name}-row {
-    flex-direction: row;
+
+  @if $name != null {
+    .layout-#{$name} {
+      box-sizing: border-box;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: flex;
+    }
+    .layout-#{$name}-column,
+    .md-css-only [layout-#{$name}=column] {
+      flex-direction: column;
+    }
+    .layout-#{$name}-row,
+    .md-css-only [layout-#{$name}=row] {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
   }
 }
 
@@ -639,15 +629,17 @@ input {
     $offsetName: 'offset-#{$name}';
   }
   @for $i from 1 through 19 {
-    .#{$offsetName}-#{$i * 5} {
+    .#{$offsetName}-#{$i * 5},
+    .md-css-only [#{$offsetName}="#{$i * 5}"]
+    {
       margin-left: #{$i * 5 + '%'};
     }
   }
   .#{$offsetName}-33, .#{$offsetName}-34 {
-    margin-left: 33.33%;
+    margin-left: 34%;
   }
   .#{$offsetName}-66, .#{$offsetName}-67 {
-    margin-left: 66.66%;
+    margin-left: 66%;
   }
 }
 
@@ -661,63 +653,95 @@ input {
     box-sizing: border-box;
     flex: 1;
   }
+  
+  @if ( $name == 'flex' ) {
+    .flex, .flex-initial {
+      box-sizing: border-box;
+      flex: 0 1 auto;
+    }
 
 
-  // (0-20) * 5 = 0-100%
-  @for $i from 0 through 20 {
-    .#{$flexName}-#{$i * 5} {
+    .flex-1 {
+      box-sizing: border-box;
+      flex: 1 1 0%;
+    }
+  
+    .flex-auto {
+      box-sizing: border-box;
+      flex: 1 1 auto;
+    }
+  }
+
+  // (1-20) * 5 = 0-100%
+  @for $i from 1 through 20 {
+    .#{$flexName}-#{$i * 5},
+    .md-css-only [#{$flexName}="#{$i * 5}"]
+    {
       flex: 0 0 #{$i * 5 + '%'};
     }
-    .layout-row > .#{$flexName}-#{$i * 5} {
+    .layout-#{$name}-row > .#{$flexName}-#{$i * 5},
+    .md-css-only [layout="row"] > .md-css-only [#{$flexName}="#{$i * 5}"]
+    {
       max-width: #{$i * 5 + '%'};
+      max-height: 100%;
     }
-    .layout-column > .#{$flexName}-#{$i * 5} {
+
+    .layout-#{$name}-column > .#{$flexName}-#{$i * 5},
+    .md-css-only [layout="column"] > .md-css-only [#{$flexName}="#{$i * 5}"]
+    {
       max-height: #{$i * 5 + '%'};
+      max-width: 100%;
     }
   }
 
-  .#{$flexName}-33, .#{$flexName}-34 {
-    flex: 0 0 33.33%;
-  }
-  .#{$flexName}-66, .#{$flexName}-67 {
-    flex: 0 0 66.66%;
+  .#{$flexName}-33, .#{$flexName}-34
+  {
+    flex: 0 0 33%;
+    max-width: 33%;
+    max-height: 100%;
   }
 
-  .layout-row {
-    > .#{$flexName}-33, > .#{$flexName}-34 {
-      max-width: 33.33%;
-    }
-    > .#{$flexName}-66, > .#{$flexName}-67 {
-      max-width: 66.66%;
-    }
+  .#{$flexName}-66, .#{$flexName}-67
+  {
+    flex: 0 0 67%;
+    max-width: 67%;
+    max-height: 100%;
+
   }
-  .layout-column {
-    > .#{$flexName}-33, > .#{$flexName}-34 {
-      max-height: 33.33%;
-    }
-    > .#{$flexName}-66, > .#{$flexName}-67 {
-      max-height: 66.66%;
-    }
+
+  .layout-#{$name}-row {
+    > .#{$flexName}-33, > .#{$flexName}-34 { max-width: 33%; max-height: 100%;}
+    > .#{$flexName}-66, > .#{$flexName}-67 { max-width: 67%; max-height: 100%;  }
+  }
+  .layout-#{$name}-column {
+    > .#{$flexName}-33, > .#{$flexName}-34 { max-height: 33%; max-width: 100%; }
+    > .#{$flexName}-66, > .#{$flexName}-67 { max-height: 67%; max-width: 100%;}
   }
 }
 
-// Alignment attributes for layout containers' children
-// Arrange on the Main Axis
-// center, start, end, space-between, space-around
-// flex-start is the default for justify-content
-// ------------------------------
-
 @mixin layout-align-for-name($suffix: null) {
+
+  // Alignment attributes for layout containers' children
+  // Arrange on the Main Axis
+  // center, start, end, space-between, space-around
+  // flex-start is the default for justify-content
+  // ------------------------------
+
   $name: 'layout-align';
   @if $suffix != null {
     $name: 'layout-align-#{$suffix}';
   }
 
   // Main Axis Center
-  .#{$name}-center, //stretch
+  .#{$name}-center,           //stretch
   .#{$name}-center-center,
   .#{$name}-center-start,
-  .#{$name}-center-end {
+  .#{$name}-center-end,
+  .md-css-only [#{$name}="center"],
+  .md-css-only [#{$name}="center center"],
+  .md-css-only [#{$name}="center start"],
+  .md-css-only [#{$name}="center end"]
+  {
     justify-content: center;
   }
 
@@ -725,7 +749,12 @@ input {
   .#{$name}-end, //stretch
   .#{$name}-end-center,
   .#{$name}-end-start,
-  .#{$name}-end-end {
+  .#{$name}-end-end,
+  .md-css-only [#{$name}="end"], //stretch
+  .md-css-only [#{$name}="end center"],
+  .md-css-only [#{$name}="end start"],
+  .md-css-only [#{$name}="end end"]
+  {
     justify-content: flex-end;
   }
 
@@ -733,7 +762,12 @@ input {
   .#{$name}-space-around, //stretch
   .#{$name}-space-around-center,
   .#{$name}-space-around-start,
-  .#{$name}-space-around-end {
+  .#{$name}-space-around-end,
+  .md-css-only [#{$name}="space-around"], //stretch
+  .md-css-only [#{$name}="space-around center"],
+  .md-css-only [#{$name}="space-around start"],
+  .md-css-only [#{$name}="space-around end"]
+  {
     justify-content: space-around;
   }
 
@@ -741,7 +775,12 @@ input {
   .#{$name}-space-between, //stretch
   .#{$name}-space-between-center,
   .#{$name}-space-between-start,
-  .#{$name}-space-between-end {
+  .#{$name}-space-between-end,
+  .md-css-only [#{$name}="space-between"], //stretch
+  .md-css-only [#{$name}="space-between center"],
+  .md-css-only [#{$name}="space-between start"],
+  .md-css-only [#{$name}="space-between end"]
+  {
     justify-content: space-between;
   }
 
@@ -751,22 +790,36 @@ input {
   // stretch is the default for align-items
   // ------------------------------
 
-  // Cross Axis Center
-  .#{$name}-center-center,
-  .#{$name}-start-center,
-  .#{$name}-end-center,
-  .#{$name}-space-between-center,
-  .#{$name}-space-around-center {
-    align-items: center;
-  }
-
   // Cross Axis Start
   .#{$name}-center-start,
   .#{$name}-start-start,
   .#{$name}-end-start,
   .#{$name}-space-between-start,
-  .#{$name}-space-around-start {
+  .#{$name}-space-around-start,
+  .md-css-only [#{$name}="center start"],
+  .md-css-only [#{$name}="start start"],
+  .md-css-only [#{$name}="end start"],
+  .md-css-only [#{$name}="space-between start"],
+  .md-css-only [#{$name}="space-around start"]
+  {
     align-items: flex-start;
+  }
+
+  // Cross Axis Center
+  .#{$name}-center-center,
+  .#{$name}-start-center,
+  .#{$name}-end-center,
+  .#{$name}-space-between-center,
+  .#{$name}-space-around-center,
+  .md-css-only [#{$name}="center center"],
+  .md-css-only [#{$name}="start center"],
+  .md-css-only [#{$name}="end center"],
+  .md-css-only [#{$name}="space-between center"],
+  .md-css-only [#{$name}="space-around center"]
+  {
+    align-items: center;
+    max-width: 100%;
+
   }
 
   // Cross Axis End
@@ -774,25 +827,117 @@ input {
   .#{$name}-start-end,
   .#{$name}-end-end,
   .#{$name}-space-between-end,
-  .#{$name}-space-around-end {
+  .#{$name}-space-around-end,
+  .md-css-only [#{$name}="center end"],
+  .md-css-only [#{$name}="start end"],
+  .md-css-only [#{$name}="end end"],
+  .md-css-only [#{$name}="space-between end"],
+  .md-css-only [#{$name}="space-around end"]
+  {
     align-items: flex-end;
   }
 
 }
 
-// Flex attributes for layout children
-// ------------------------------
+@mixin layout-padding-margin() {
 
+  .layout-padding > .flex-sm,
+  .layout-padding > .flex-lt-md,
+  .md-css-only [layout-padding] > [flex-sm],
+  .md-css-only [layout-padding] > [flex-lt-md]
+  {
+    padding: $layout-gutter-width / 4;
+  }
+
+  .layout-padding,
+  .layout-padding > .flex,
+  .layout-padding > .flex-gt-sm,
+  .layout-padding > .flex-md,
+  .layout-padding > .flex-lt-lg,
+  .md-css-only [layout-padding],
+  .md-css-only [layout-padding] > .md-css-only [flex],
+  .md-css-only [layout-padding] > .md-css-only [flex-gt-sm],
+  .md-css-only [layout-padding] > .md-css-only [flex-md],
+  .md-css-only [layout-padding] > .md-css-only [flex-lt-lg]
+  {
+    padding: $layout-gutter-width / 2;
+  }
+  .layout-padding > .flex-gt-md,
+  .layout-padding > .flex-lg,
+  .md-css-only [layout-padding] > .md-css-only [flex-gt-md],
+  .md-css-only [layout-padding] > .md-css-only [flex-lg]
+  {
+    padding: $layout-gutter-width / 1;
+  }
+
+  .layout-margin > .flex-sm,
+  .layout-margin > .flex-lt-md,
+  .md-css-only [layout-margin] >  .md-css-only [flex-sm],
+  .md-css-only [layout-margin] >  .md-css-only [flex-lt-md]
+  {
+    margin: $layout-gutter-width / 4;
+  }
+
+  .layout-margin,
+  .layout-margin > .flex,
+  .layout-margin > .flex-gt-sm,
+  .layout-margin > .flex-md,
+  .layout-margin > .flex-lt-lg,
+  .md-css-only [layout-margin],
+  .md-css-only [layout-margin] >  .md-css-only [flex],
+  .md-css-only [layout-margin] >  .md-css-only [flex-gt-sm],
+  .md-css-only [layout-margin] >  .md-css-only [flex-md],
+  .md-css-only [layout-margin] >  .md-css-only [flex-lt-lg]
+  {
+    margin: $layout-gutter-width / 2;
+  }
+
+  .layout-margin > .flex-gt-md,
+  .layout-margin > .flex-lg,
+  .md-css-only [layout-margin] >  .md-css-only [flex-gt-md],
+  .md-css-only [layout-margin] >  .md-css-only [flex-lg]
+  {
+    margin: $layout-gutter-width / 1;
+  }
+
+  .layout-wrap {
+    flex-wrap: wrap;
+  }
+
+  .layout-fill {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+  }
+}
+
+/*
+ *  Apply Mixins to create Layout/Flexbox styles
+ *
+ */
+
+@include layout-for-name();
 @include flex-properties-for-name();
 @include layout-align-for-name();
 @include flex-order-for-name();
 @include offset-for-name();
+@include layout-padding-margin();
+
+
 
 /**
  * `hide-gt-sm show-gt-lg` should hide from 600px to 1200px
  * `show-md hide-gt-sm` should show from 0px to 960px and hide at >960px
  * `hide-gt-md show-gt-sm` should show everywhere (show overrides hide)`
+ *
+ *  hide means hide everywhere
+ *  Sizes:
+ *         0    <= size < 600  Phone
+ *         600  <= size < 960  Tablet
+ *         960  <= size < 1200 Tablet-Landscape
  */
+
 
 // SMALL SCREEN
 @media (max-width: $layout-breakpoint-sm - 1) {
@@ -802,46 +947,36 @@ input {
     }
   }
 
-  @include flex-order-for-name(sm);
-  @include layout-align-for-name(sm);
   @include layout-for-name(sm);
-  @include offset-for-name(sm);
   @include flex-properties-for-name(sm);
 }
 
 // BIGGER THAN SMALL SCREEN
 @media (min-width: $layout-breakpoint-sm) {
-  @include flex-order-for-name(gt-sm);
-  @include layout-align-for-name(gt-sm);
   @include layout-for-name(gt-sm);
-  @include offset-for-name(gt-sm);
   @include flex-properties-for-name(gt-sm);
 }
 
 // MEDIUM SCREEN
 @media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
-  .hide, .hide-gt-sm {
+  .hide, .hide-gt-sm, {
     &:not(.show-gt-sm):not(.show-md):not(.show) {
       display: none;
     }
   }
+
   .hide-md:not(.show-md):not(.show) {
     display: none;
   }
 
-  @include flex-order-for-name(md);
-  @include layout-align-for-name(md);
+
   @include layout-for-name(md);
-  @include offset-for-name(md);
   @include flex-properties-for-name(md);
 }
 
 // BIGGER THAN MEDIUM SCREEN
 @media (min-width: $layout-breakpoint-md) {
-  @include flex-order-for-name(gt-md);
-  @include layout-align-for-name(gt-md);
   @include layout-for-name(gt-md);
-  @include offset-for-name(gt-md);
   @include flex-properties-for-name(gt-md);
 }
 
@@ -856,12 +991,10 @@ input {
     display: none;
   }
 
-  @include flex-order-for-name(lg);
-  @include layout-align-for-name(lg);
   @include layout-for-name(lg);
-  @include offset-for-name(lg);
   @include flex-properties-for-name(lg);
 }
+
 
 // BIGGER THAN LARGE SCREEN
 @media (min-width: $layout-breakpoint-lg) {
@@ -871,10 +1004,7 @@ input {
     }
   }
 
-  @include flex-order-for-name(gt-lg);
-  @include layout-align-for-name(gt-lg);
   @include layout-for-name(gt-lg);
-  @include offset-for-name(gt-lg);
   @include flex-properties-for-name(gt-lg);
 }
 
@@ -924,12 +1054,19 @@ md-autocomplete {
     }
   }
   &[md-floating-label] {
-    padding-bottom: $input-container-padding + $input-error-height;
     border-radius: 0;
     background: transparent;
     height: auto;
+
     md-input-container {
-      padding-bottom: 0;
+      padding-bottom: $input-container-padding + $input-error-height;
+
+      // When we have ng-messages, remove the input error height from our bottom padding, since the
+      // ng-messages wrapper has a min-height of 1 error (so we don't adjust height as often; see
+      // input.scss file)
+      &.md-input-has-messages {
+        padding-bottom: $input-container-padding;
+      }
     }
     md-autocomplete-wrap {
       height: auto;
@@ -1556,7 +1693,7 @@ $icon-button-margin: rem(0.600) !default;
 }
 
 $card-padding: 16px !default;
-$card-box-shadow: $whiteframe-shadow-z1 !default;
+$card-box-shadow: $whiteframe-shadow-1dp !default;
 
 md-card {
   box-sizing: border-box;
@@ -1971,7 +2108,9 @@ $md-calendar-side-padding: 16px !default;
 $md-calendar-weeks-to-show: 7 !default;
 
 $md-calendar-month-label-padding: 8px !default;
-$md-calendar-month-label-font-size: 13px !default;
+$md-calendar-month-label-font-size: 14px !default;
+
+$md-calendar-scroll-cue-shadow-radius: 6px;
 
 $md-calendar-width: (7 * $md-calendar-cell-size) + (2 * $md-calendar-side-padding);
 $md-calendar-height:
@@ -2044,9 +2183,16 @@ md-calendar {
 
 // Contains the scrolling element (this is the md-virtual-repeat-container).
 .md-calendar-scroll-container {
+  // Add an inset shadow to help cue users that the calendar is scrollable. Use a negative x
+  // offset to push the vertical edge shadow off to the right so that it's cut off by the edge
+  // of the calendar container.
+  box-shadow: inset -3px 3px $md-calendar-scroll-cue-shadow-radius rgba(black, 0.2);
+
   display: inline-block;
   height: $md-calendar-weeks-to-show * $md-calendar-cell-size;
-  width: $md-calendar-width;
+
+  // Add the shadow radius to the width so that the shadow os pushed off to the side and cut off.
+  width: $md-calendar-width + $md-calendar-scroll-cue-shadow-radius;
 }
 
 // A single date cell in the calendar table.
@@ -2078,6 +2224,7 @@ md-calendar {
 .md-calendar-month-label {
   height: $md-calendar-cell-size;
   font-size: $md-calendar-month-label-font-size;
+  font-weight: 500; // Roboto Medium
   padding: 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding;
 }
 
@@ -2189,7 +2336,6 @@ md-datepicker {
   position: absolute;
   right: 0;
   left: 120px;
-  background: white;
 
   height: 100%;
 }
@@ -2227,7 +2373,7 @@ $md-date-arrow-size: 5px;
   height: 0;
   border-left: $md-date-arrow-size solid transparent;
   border-right: $md-date-arrow-size solid transparent;
-  border-top: $md-date-arrow-size solid rgba(black, 0.20);
+  border-top: $md-date-arrow-size solid;
 }
 
 // Button containing the down "disclosure" triangle/arrow.
@@ -2276,6 +2422,27 @@ md-datepicker[disabled] {
   }
 }
 
+// When the position of the floating calendar pane is adjusted to remain inside
+// of the viewport, hide the inputput mask, as the text input will no longer be
+// directly underneath it.
+.md-datepicker-pos-adjusted .md-datepicker-input-mask {
+  display: none;
+}
+
+// Animate the calendar inside of the floating calendar pane such that it appears to "scroll" into
+// view while the pane is opening. This is done as a cue to users that the calendar is scrollable.
+.md-datepicker-calendar-pane {
+  .md-calendar {
+    transform: translateY(-85px);
+    transition: transform 0.65s $swift-ease-out-timing-function;
+    transition-delay: 0.125s;
+  }
+
+  &.md-pane-open .md-calendar {
+    transform: translateY(0);
+  }
+}
+
 $dialog-padding: $baseline-grid * 3;
 
 .md-dialog-is-showing {
@@ -2314,7 +2481,7 @@ md-dialog {
   position: relative;
   overflow: auto; // stop content from leaking out of dialog parent and fix IE
 
-  box-shadow: $whiteframe-shadow-z5;
+  box-shadow: $whiteframe-shadow-13dp;
 
   display: flex;
   flex-direction: column;
@@ -2802,6 +2969,12 @@ md-input-container {
   padding: $input-container-padding;
   padding-bottom: $input-container-padding + $input-error-height;
 
+  // When we have ng-messages, remove the input error height from our bottom padding, since the
+  // ng-messages wrapper has a min-height of 1 error (so we don't adjust height as often; see below)
+  &.md-input-has-messages {
+    padding-bottom: $input-container-padding;
+  }
+
   > md-icon {
     position: absolute;
     top: 5px;
@@ -2917,6 +3090,9 @@ md-input-container {
     -ms-flex-preferred-size: $input-line-height; //IE fix
     border-radius: 0;
 
+    // Fix number inputs in Firefox to be full-width
+    width: auto;
+
     &:focus {
       outline: none;
     }
@@ -2930,50 +3106,86 @@ md-input-container {
     }
   }
 
+  .md-char-counter {
+    position: relative;
+    text-align: right;
+    order: 3;
+  }
+
   ng-messages, data-ng-messages, x-ng-messages,
   [ng-messages], [data-ng-messages], [x-ng-messages] {
-    order: 3;
     position: relative;
+    order: 4;
+    min-height: $input-error-height;
+
+    .md-char-counter {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
   }
+
   ng-message, data-ng-message, x-ng-message,
   [ng-message], [data-ng-message], [x-ng-message],
+  [ng-message-exp], [data-ng-message-exp], [x-ng-message-exp],
   .md-char-counter {
+    $input-error-line-height: $input-error-font-size + 2px;
     //-webkit-font-smoothing: antialiased;
-    position: absolute;
     font-size: $input-error-font-size;
-    line-height: $input-error-height;
+    line-height: $input-error-line-height;
+    overflow: hidden;
+
+    // Add some top padding which is equal to half the difference between the expected height
+    // and the actual height
+    $error-padding-top: ($input-error-height - $input-error-line-height) / 2;
+    padding-top: $error-padding-top;
 
     &:not(.md-char-counter) {
-      padding-right: rem(3);
+      padding-right: rem(5);
     }
 
     &.ng-enter {
-      transition: $swift-ease-out;
-      transition-delay: 0.2s;
+      transition: $swift-ease-in;
+
+      // Delay the enter transition so it happens after the leave
+      transition-delay: $swift-ease-in-duration / 1.5;
+
+      // Since we're delaying the transition, we speed up the duration a little bit to compensate
+      transition-duration: $swift-ease-in-duration / 1.5;
     }
     &.ng-leave {
-      transition: $swift-ease-in;
+      transition: $swift-ease-out;
+
+      // Speed up the duration (see enter comment above)
+      transition-duration: $swift-ease-out-duration / 1.5;
     }
     &.ng-enter,
     &.ng-leave.ng-leave-active {
+      // Move the error upwards off the screen and fade it out
+      margin-top: -$input-error-line-height - $error-padding-top;
       opacity: 0;
-      transform: translate3d(0, -20%, 0);
     }
     &.ng-leave,
     &.ng-enter.ng-enter-active {
+      // Move the error down into position and fade it in
+      margin-top: 0;
       opacity: 1;
-      transform: translate3d(0, 0, 0);
     }
-  }
-  .md-char-counter {
-    bottom: $input-container-padding;
-    right: $input-container-padding;
   }
 
   &.md-input-focused,
+  &.md-input-has-placeholder,
   &.md-input-has-value {
-    label:not(.md-no-float)  {
+    label:not(.md-no-float) {
       transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);
+    }
+  }
+
+  // If we have an existing value; don't animate the transform as it happens on page load and
+  // causes erratic/unnecessary animation
+  &.md-input-has-value {
+    label {
+      transition: none;
     }
   }
 
@@ -3042,10 +3254,10 @@ md-input-container.md-icon-float {
   }
 }
 
-$list-h3-margin: 0 0 6px 0 !default;
-$list-h4-margin: 10px 0 5px 0 !default;
+$list-h3-margin: 0 0 0px 0 !default;
+$list-h4-margin: 3px 0 1px 0 !default;
 $list-h4-font-weight: 400 !default;
-$list-header-line-height: 0.75em !default;
+$list-header-line-height: 1.2em !default;
 $list-p-margin: 0 0 0 0 !default;
 $list-p-line-height: 1.6em !default;
 
@@ -3065,10 +3277,10 @@ $list-item-primary-avatar-width: $baseline-grid * 5 !default;
 $list-item-primary-icon-width: $baseline-grid * 3 !default;
 $list-item-secondary-left-margin: $baseline-grid * 2 !default;
 $list-item-secondary-button-width: $baseline-grid * 6 !default;
-$list-item-text-padding-top: $baseline-grid * 2 !default;
-$list-item-text-padding-bottom: $baseline-grid * 2.5 !default;
 $list-item-inset-divider-offset: 12 * $baseline-grid !default;
-$list-item-height: 8 * $baseline-grid !default;
+$list-item-height: 6 * $baseline-grid !default;
+$list-item-two-line-height: 9 * $baseline-grid !default;
+$list-item-three-line-height: 11 * $baseline-grid !default;
 
 md-list {
   display: block;
@@ -3213,10 +3425,11 @@ md-list-item.md-2-line > .md-no-style,
 md-list-item.md-3-line,
 md-list-item.md-3-line > .md-no-style {
   align-items: flex-start;
+  justify-content: center;
 
   .md-list-item-text {
     flex: 1;
-    padding: $baseline-grid * 2 0;
+    margin: auto;
     text-overflow: ellipsis;
 
     &.md-offset {
@@ -3229,6 +3442,9 @@ md-list-item.md-3-line > .md-no-style {
       letter-spacing: 0.010em;
       margin: $list-h3-margin;
       line-height: $list-header-line-height;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
     h4 {
       font-size: $body-font-size-base;
@@ -3236,6 +3452,9 @@ md-list-item.md-3-line > .md-no-style {
       margin: $list-h4-margin;
       font-weight: $list-h4-font-weight;
       line-height: $list-header-line-height;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
     p {
       font-size: $body-font-size-base;
@@ -3249,6 +3468,7 @@ md-list-item.md-3-line > .md-no-style {
 
 md-list-item.md-2-line,
 md-list-item.md-2-line > .md-no-style {
+  height: $list-item-two-line-height;
   > .md-avatar:first-child {
     margin-top: $baseline-grid * 1.5;
   }
@@ -3257,12 +3477,12 @@ md-list-item.md-2-line > .md-no-style {
   }
   .md-list-item-text {
     flex: 1;
-    padding-top: ($baseline-grid * 2.5) - 1;
   }
 }
 
 md-list-item.md-3-line,
 md-list-item.md-3-line > .md-no-style {
+  height: $list-item-three-line-height;
   > md-icon:first-child, 
   > .md-avatar:first-child {
     margin-top: $baseline-grid * 2;
@@ -3348,6 +3568,10 @@ md-menu-item {
     margin: auto 0;
     padding-left: 2*$baseline-grid;
     padding-right: 2*$baseline-grid;
+  }
+
+  > a.md-button {
+    display: flex;
   }
 
   > .md-button {
@@ -4049,6 +4273,14 @@ md-input-container > md-select {
 md-select {
   display: flex;
   margin: 2.5*$baseline-grid 0 3*$baseline-grid + 2 0;
+  &[disabled] .md-select-value {
+    background-position: 0 bottom;
+    // This background-size is coordinated with a linear-gradient set in select-theme.scss
+    // to create a dotted line under the input.
+    background-size: 4px 1px;
+    background-repeat: repeat-x;
+    margin-bottom: -1px; // Shift downward so dotted line is positioned the same as other bottom borders
+  }
   &:focus {
     outline: none;
   }
@@ -4140,7 +4372,7 @@ md-select-menu {
     }
   }
 
-  box-shadow: $whiteframe-shadow-z1;
+  box-shadow: $whiteframe-shadow-1dp;
   max-height: ($select-option-height * $select-max-visible-options) + 2 * $baseline-grid;
   min-height: $select-option-height;
   overflow-y: hidden;
@@ -4538,7 +4770,7 @@ md-slider {
   }
 
   /* Don't animate left/right while panning */
-  &.dragging {
+  &.md-dragging {
     .md-thumb-container,
     .md-track-fill {
       transition: none;
@@ -4560,7 +4792,7 @@ md-slider {
       }
 
       &:focus,
-      &.active {
+      &.md-active {
         .md-focus-thumb {
           display: block;
         }
@@ -4583,7 +4815,7 @@ md-slider {
 
     &:not([disabled]) {
       &:focus,
-      &.active {
+      &.md-active {
         .md-sign,
         .md-sign:after {
           opacity: 1;
@@ -4786,7 +5018,7 @@ md-switch {
     height: $switch-thumb-size;
     width: $switch-thumb-size;
     border-radius: 50%;
-    box-shadow: $whiteframe-shadow-z1;
+    box-shadow: $whiteframe-shadow-1dp;
 
     &:before {
       background-color: transparent;
@@ -5070,18 +5302,20 @@ md-tab-content {
 }
 
 md-ink-bar {
+  $duration: $swift-ease-in-out-duration * 0.5;
+  $multiplier: 0.5;
   position: absolute;
   left: auto;
   right: auto;
   bottom: 0;
   height: 2px;
   &.md-left {
-    transition: left ($swift-ease-in-out-duration * 0.45) $swift-ease-in-out-timing-function,
-        right $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+    transition: left ($duration * $multiplier) $swift-ease-in-out-timing-function,
+        right $duration $swift-ease-in-out-timing-function;
   }
   &.md-right {
-    transition: left $swift-ease-in-out-duration $swift-ease-in-out-timing-function,
-        right ($swift-ease-in-out-duration * 0.45) $swift-ease-in-out-timing-function;
+    transition: left $duration $swift-ease-in-out-timing-function,
+        right ($duration * $multiplier) $swift-ease-in-out-timing-function;
   }
 }
 
@@ -5592,20 +5826,77 @@ $virtual-repeat-scrollbar-width: 16px;
   }
 }
 
-.md-whiteframe-z1 {
-  box-shadow: $whiteframe-shadow-z1;
+.md-whiteframe-1dp, .md-whiteframe-z1 {
+  box-shadow: $whiteframe-shadow-1dp;
 }
-.md-whiteframe-z2 {
-  box-shadow: $whiteframe-shadow-z2;
+.md-whiteframe-2dp {
+  box-shadow: $whiteframe-shadow-2dp;
 }
-.md-whiteframe-z3 {
-  box-shadow: $whiteframe-shadow-z3;
+.md-whiteframe-3dp {
+  box-shadow: $whiteframe-shadow-3dp;
 }
-.md-whiteframe-z4 {
-  box-shadow: $whiteframe-shadow-z4;
+.md-whiteframe-4dp, .md-whiteframe-z2{
+  box-shadow: $whiteframe-shadow-4dp;
 }
-.md-whiteframe-z5 {
-  box-shadow: $whiteframe-shadow-z5;
+.md-whiteframe-5dp {
+  box-shadow: $whiteframe-shadow-5dp;
+}
+.md-whiteframe-6dp {
+  box-shadow: $whiteframe-shadow-6dp;
+}
+.md-whiteframe-7dp, .md-whiteframe-z3 {
+  box-shadow: $whiteframe-shadow-7dp;
+}
+.md-whiteframe-8dp {
+  box-shadow: $whiteframe-shadow-8dp;
+}
+.md-whiteframe-9dp {
+  box-shadow: $whiteframe-shadow-9dp;
+}
+.md-whiteframe-10dp, .md-whiteframe-z4 {
+  box-shadow: $whiteframe-shadow-10dp;
+}
+.md-whiteframe-11dp {
+  box-shadow: $whiteframe-shadow-11dp;
+}
+.md-whiteframe-12dp {
+  box-shadow: $whiteframe-shadow-12dp;
+}
+.md-whiteframe-13dp, .md-whiteframe-z5{
+  box-shadow: $whiteframe-shadow-13dp;
+}
+.md-whiteframe-14dp {
+  box-shadow: $whiteframe-shadow-14dp;
+}
+.md-whiteframe-15dp {
+  box-shadow: $whiteframe-shadow-15dp;
+}
+.md-whiteframe-16dp {
+  box-shadow: $whiteframe-shadow-16dp;
+}
+.md-whiteframe-17dp {
+  box-shadow: $whiteframe-shadow-17dp;
+}
+.md-whiteframe-18dp {
+  box-shadow: $whiteframe-shadow-18dp;
+}
+.md-whiteframe-19dp {
+  box-shadow: $whiteframe-shadow-19dp;
+}
+.md-whiteframe-20dp {
+  box-shadow: $whiteframe-shadow-20dp;
+}
+.md-whiteframe-21dp {
+  box-shadow: $whiteframe-shadow-21dp;
+}
+.md-whiteframe-22dp {
+  box-shadow: $whiteframe-shadow-22dp;
+}
+.md-whiteframe-23dp {
+  box-shadow: $whiteframe-shadow-23dp;
+}
+.md-whiteframe-24dp {
+  box-shadow: $whiteframe-shadow-24dp;
 }
 
 @media screen and (-ms-high-contrast: active) {
