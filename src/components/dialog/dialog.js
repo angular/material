@@ -632,16 +632,16 @@ function MdDialogProvider($$interimElementProvider) {
           }
         };
 
-        // Add keyup listeners
-        element.on('keyup', keyHandlerFn);
-        target.on('keyup', keyHandlerFn);
+        // Add keydown listeners
+        element.on('keydown', keyHandlerFn);
+        target.on('keydown', keyHandlerFn);
         window.on('resize', onWindowResize);
 
         // Queue remove listeners function
         removeListeners.push(function() {
 
-          element.off('keyup', keyHandlerFn);
-          target.off('keyup', keyHandlerFn);
+          element.off('keydown', keyHandlerFn);
+          target.off('keydown', keyHandlerFn);
           window.off('resize', onWindowResize);
 
         });
