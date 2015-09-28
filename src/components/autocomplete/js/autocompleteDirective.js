@@ -187,7 +187,7 @@ function MdAutocomplete () {
         var templateTag = element.find('md-item-template').detach(),
             html = templateTag.length ? templateTag.html() : element.html();
         if (!templateTag.length) element.empty();
-        return html;
+        return '<md-autocomplete-parent-scope md-autocomplete-replace>' + html + '</md-autocomplete-parent-scope>';
       }
 
       function getNoItemsTemplate() {

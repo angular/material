@@ -11,7 +11,7 @@
    *
    * @param {object=} scope Scope within the current context
    * @param {object=} element The element the ripple effect should be applied to
-   * @param {object=} options (Optional) Configuration options to override the defaultripple configuration
+   * @param {object=} options (Optional) Configuration options to override the default ripple configuration
    */
 
   angular.module('material.core')
@@ -19,12 +19,11 @@
 
   function MdButtonInkRipple($mdInkRipple) {
     return {
-      attach: attach
-    };
+      attach: function attachRipple(scope, element, options) {
+        options = angular.extend(optionsForElement(element), options);
 
-    function attach(scope, element, options) {
-      var elementOptions = optionsForElement(element);
-      return $mdInkRipple.attach(scope, element, angular.extend(elementOptions, options));
+        return $mdInkRipple.attach(scope, element, options);
+      }
     };
 
     function optionsForElement(element) {

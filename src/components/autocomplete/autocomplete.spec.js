@@ -44,15 +44,14 @@ describe('<md-autocomplete>', function () {
     // Using md-item-size would reduce this to a single flush, but given that
     // autocomplete allows for custom row templates, it's better to measure
     // rather than assuming a given size.
-    inject(function ($$rAF) {
-      $$rAF.flush();
-      element.scope().$apply();
-      $$rAF.flush();
+    inject(function ($material, $timeout) {
+      $material.flushOutstandingAnimations();
+      $timeout.flush();
     });
   }
 
   describe('basic functionality', function () {
-    it('should update selected item and search text', inject(function ($timeout, $mdConstant) {
+    it('should update selected item and search text', inject(function ($timeout, $mdConstant, $material) {
       var scope    = createScope();
       var template = '\
           <md-autocomplete\
@@ -67,11 +66,12 @@ describe('<md-autocomplete>', function () {
       var ctrl     = element.controller('mdAutocomplete');
       var ul       = element.find('ul');
 
+      $material.flushInterimElement();
+
       expect(scope.searchText).toBe('');
       expect(scope.selectedItem).toBe(null);
 
       element.scope().searchText = 'fo';
-      $timeout.flush();
       waitForVirtualRepeat(element);
 
       expect(scope.searchText).toBe('fo');
@@ -160,7 +160,7 @@ describe('<md-autocomplete>', function () {
   });
 
   describe('basic functionality with template', function () {
-    it('should update selected item and search text', inject(function ($timeout, $mdConstant) {
+    it('should update selected item and search text', inject(function ($timeout, $material, $mdConstant) {
       var scope    = createScope();
       var template = '\
           <md-autocomplete\
@@ -180,8 +180,9 @@ describe('<md-autocomplete>', function () {
       expect(scope.searchText).toBe('');
       expect(scope.selectedItem).toBe(null);
 
+      $material.flushInterimElement();
+
       element.scope().searchText = 'fo';
-      $timeout.flush();
       waitForVirtualRepeat(element);
 
       expect(scope.searchText).toBe('fo');
@@ -190,6 +191,7 @@ describe('<md-autocomplete>', function () {
 
       ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
       ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ENTER));
+
       $timeout.flush();
 
       expect(scope.searchText).toBe('foo');
@@ -197,10 +199,54 @@ describe('<md-autocomplete>', function () {
 
       element.remove();
     }));
+
+    it('should compile the template against the parent scope', inject(function ($timeout, $material) {
+      var scope    = createScope(null, { bang: 'boom' });
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <md-item-template>\
+              <span class="find-parent-scope">{{bang}}</span>\
+              <span class="find-index">{{$index}}</span>\
+              <span class="find-item">{{item.display}}</span>\
+            </md-item-template>\
+          </md-autocomplete>';
+      var element  = compile(template, scope);
+      var ctrl     = element.controller('mdAutocomplete');
+      var ul       = element.find('ul');
+
+      $material.flushOutstandingAnimations();
+
+      expect(scope.bang).toBe('boom');
+
+      element.scope().searchText = 'fo';
+
+      // Run our initial flush
+      $timeout.flush();
+      waitForVirtualRepeat(element);
+
+      // Wait for the next tick when the values will be updated
+      $timeout.flush();
+
+      var li = ul.find('li')[0];
+
+      // Expect it to be compiled against the parent scope and have our variables copied
+      expect(li.querySelector('.find-parent-scope').innerHTML).toBe('boom');
+      expect(li.querySelector('.find-index').innerHTML).toBe('0');
+      expect(li.querySelector('.find-item').innerHTML).toBe('foo');
+
+      $timeout.flush();
+
+      element.remove();
+    }));
   });
 
   describe('xss prevention', function () {
-    it('should not allow html to slip through', inject(function($timeout) {
+    it('should not allow html to slip through', inject(function($timeout, $material) {
       var html = 'foo <img src="img" onerror="alert(1)" />';
       var scope = createScope([ { display: html } ]);
       var template = '\
@@ -215,6 +261,8 @@ describe('<md-autocomplete>', function () {
           </md-autocomplete>';
       var element  = compile(template, scope);
       var ul       = element.find('ul');
+
+      $material.flushOutstandingAnimations();
 
       expect(scope.searchText).toBe('');
       expect(scope.selectedItem).toBe(null);

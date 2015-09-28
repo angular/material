@@ -10,7 +10,7 @@ angular
   .directive('mdDialog', MdDialogDirective)
   .provider('$mdDialog', MdDialogProvider);
 
-function MdDialogDirective($$rAF, $mdTheming) {
+function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
   return {
     restrict: 'E',
     link: function(scope, element, attr) {
@@ -25,9 +25,19 @@ function MdDialogDirective($$rAF, $mdTheming) {
           //-- delayed image loading may impact scroll height, check after images are loaded
           angular.element(images).on('load', addOverflowClass);
         }
+
+        scope.$on('$destroy', function() {
+          $mdDialog.destroy();
+        });
+
+        /**
+         *
+         */
         function addOverflowClass() {
           element.toggleClass('md-content-overflow', content.scrollHeight > content.clientHeight);
         }
+
+
       });
     }
   };
@@ -392,11 +402,11 @@ function MdDialogProvider($$interimElementProvider) {
       options: dialogDefaultOptions
     })
     .addPreset('alert', {
-      methods: ['title', 'content', 'ariaLabel', 'ok', 'theme'],
+      methods: ['title', 'content', 'ariaLabel', 'ok', 'theme', 'css'],
       options: advancedDialogOptions
     })
     .addPreset('confirm', {
-      methods: ['title', 'content', 'ariaLabel', 'ok', 'cancel', 'theme'],
+      methods: ['title', 'content', 'ariaLabel', 'ok', 'cancel', 'theme', 'css'],
       options: advancedDialogOptions
     });
 
@@ -404,10 +414,10 @@ function MdDialogProvider($$interimElementProvider) {
   function advancedDialogOptions($mdDialog, $mdTheming) {
     return {
       template: [
-        '<md-dialog md-theme="{{ dialog.theme }}" aria-label="{{ dialog.ariaLabel }}">',
+        '<md-dialog md-theme="{{ dialog.theme }}" aria-label="{{ dialog.ariaLabel }}" class="{{ dialog.css }}">',
         ' <md-dialog-content role="document" tabIndex="-1">',
         '   <h2 class="md-title">{{ dialog.title }}</h2>',
-        '   <div class="md-dialog-content-body" md-template="::dialog.content"></div>',
+        '   <div class="md-dialog-content-body" md-template="::dialog.mdContent"></div>',
         ' </md-dialog-content>',
         ' <div class="md-actions">',
         '   <md-button ng-if="dialog.$type == \'confirm\'"' +
@@ -463,7 +473,6 @@ function MdDialogProvider($$interimElementProvider) {
      * Show method for dialogs
      */
     function onShow(scope, element, options, controller) {
-      element = $mdUtil.extractElementByName(element, 'md-dialog');
       angular.element($document[0].body).addClass('md-dialog-is-showing');
 
       wrapSimpleContent();
@@ -511,7 +520,7 @@ function MdDialogProvider($$interimElementProvider) {
       function wrapSimpleContent() {
         if ( controller ) {
           var HTML_END_TAG = /<\/[\w-]*>/gm;
-          var content = controller.content || "";
+          var content = controller.content || options.content || "";
 
           var hasHTML = HTML_END_TAG.test(content);
           if (!hasHTML) {
@@ -519,7 +528,7 @@ function MdDialogProvider($$interimElementProvider) {
           }
 
           // Publish updated dialog content body... to be compiled by mdTemplate directive
-          controller.content = content;
+          controller.mdContent = content;
         }
       }
 
@@ -531,16 +540,30 @@ function MdDialogProvider($$interimElementProvider) {
     function onRemove(scope, element, options) {
       options.deactivateListeners();
       options.unlockScreenReader();
+      options.hideBackdrop(options.$destroy);
 
-      options.hideBackdrop();
+      // For navigation $destroy events, do a quick, non-animated removal,
+      // but for normal closes (from clicks, etc) animate the removal
 
-      return dialogPopOut(element, options)
-        .finally(function() {
-          angular.element($document[0].body).removeClass('md-dialog-is-showing');
-          element.remove();
+      return !!options.$destroy ? detachAndClean() : animateRemoval().then( detachAndClean );
 
-          options.origin.focus();
-        });
+      /**
+       * For normal closes, animate the removal.
+       * For forced closes (like $destroy events), skip the animations
+       */
+      function animateRemoval() {
+        return dialogPopOut(element, options);
+      }
+
+      /**
+       * Detach the element
+       */
+      function detachAndClean() {
+        angular.element($document[0].body).removeClass('md-dialog-is-showing');
+        element.remove();
+
+        if (!options.$destroy) options.origin.focus();
+      }
     }
 
     /**
@@ -549,8 +572,11 @@ function MdDialogProvider($$interimElementProvider) {
      * unless overridden in the options.parent
      */
     function captureSourceAndParent(element, options) {
-      var origin = {element: null, bounds: null, focus: angular.noop};
-      options.origin = angular.extend({}, origin, options.origin || {});
+      options.origin = angular.extend({
+        element: null,
+        bounds: null,
+        focus: angular.noop
+      }, options.origin || {});
 
       var source = angular.element((options.targetEvent || {}).target);
       if (source && source.length) {
@@ -564,7 +590,14 @@ function MdDialogProvider($$interimElementProvider) {
         }
       }
 
-      // In case the user provides a raw dom element, always wrap it in jqLite
+      // If the parent specifier is a simple string selector, then query for
+      // the DOM element.
+      if ( angular.isString(options.parent) ) {
+        var simpleSelector = options.parent,
+            container = $document[0].querySelectorAll(simpleSelector);
+        options.parent = container.length ? container[0] : null;
+      }
+      // If we have a reference to a raw dom element, always wrap it in jqLite
       options.parent = angular.element(options.parent || $rootElement);
 
     }
@@ -573,12 +606,16 @@ function MdDialogProvider($$interimElementProvider) {
      * Listen for escape keys and outside clicks to auto close
      */
     function activateListeners(element, options) {
+      var window = angular.element($window);
+      var onWindowResize = $mdUtil.debounce(function(){
+        stretchDialogContainerToViewport(element, options);
+      }, 60);
+
       var removeListeners = [];
       var smartClose = function() {
         // Only 'confirm' dialogs have a cancel button... escape/clickOutside will
         // cancel or fallback to hide.
         var closeFn = ( options.$type == 'alert' ) ? $mdDialog.hide : $mdDialog.cancel;
-
         $mdUtil.nextTick(closeFn, true);
       };
 
@@ -596,11 +633,23 @@ function MdDialogProvider($$interimElementProvider) {
         // Add keydown listeners
         element.on('keydown', keyHandlerFn);
         target.on('keydown', keyHandlerFn);
+<<<<<<< HEAD
+        window.on('resize', onWindowResize);
+
+        // Queue remove listeners function
+        removeListeners.push(function() {
+
+          element.off('keydown', keyHandlerFn);
+          target.off('keydown', keyHandlerFn);
+          window.off('resize', onWindowResize);
+
+=======
 
         // Queue remove listeners function
         removeListeners.push(function() {
           element.off('keydown', keyHandlerFn);
           target.off('keydown', keyHandlerFn);
+>>>>>>> master
         });
       }
       if (options.clickOutsideToClose) {
@@ -652,10 +701,12 @@ function MdDialogProvider($$interimElementProvider) {
       /**
        * Hide modal backdrop element...
        */
-      options.hideBackdrop = function hideBackdrop() {
+      options.hideBackdrop = function hideBackdrop($destroy) {
         if (options.backdrop) {
-          $animate.leave(options.backdrop);
+          if ( !!$destroy ) options.backdrop.remove();
+          else              $animate.leave(options.backdrop);
         }
+
         if (options.disableParentScroll) {
           options.restoreScroll();
           delete options.restoreScroll;
@@ -746,10 +797,10 @@ function MdDialogProvider($$interimElementProvider) {
 
       var isFixed = $window.getComputedStyle($document[0].body).position == 'fixed';
       var backdrop = options.backdrop ? $window.getComputedStyle(options.backdrop[0]) : null;
-      var height = backdrop ? Math.ceil(Math.abs(parseInt(backdrop.height, 10))) : 0;
+      var height = backdrop ? Math.min($document[0].body.clientHeight, Math.ceil(Math.abs(parseInt(backdrop.height, 10)))) : 0;
 
       container.css({
-        top: (isFixed ? $mdUtil.scrollTop(options.parent) / 2 : 0) + 'px',
+        top: (isFixed ? $mdUtil.scrollTop(options.parent) : 0) + 'px',
         height: height ? height + 'px' : '100%'
       });
 
@@ -775,6 +826,9 @@ function MdDialogProvider($$interimElementProvider) {
       return animator
         .translate3d(dialogEl, from, to, translateOptions)
         .then(function(animateReversal) {
+
+
+
           // Build a reversal translate function synched to this translation...
           options.reverseAnimate = function() {
 

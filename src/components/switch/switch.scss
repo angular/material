@@ -81,7 +81,7 @@ md-switch {
     height: $switch-thumb-size;
     width: $switch-thumb-size;
     border-radius: 50%;
-    box-shadow: $whiteframe-shadow-z1;
+    box-shadow: $whiteframe-shadow-1dp;
 
     &:before {
       background-color: transparent;

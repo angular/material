@@ -1,22 +1,24 @@
 describe('layout directives', function() {
   beforeEach(module('material.core', 'material.core.layout'));
 
-  describe('expecting layout classes', function() {
+  afterEach(inject(function($document, $$mdLayout) {
+    angular.element($document[0].body).removeClass('md-css-only');
+    $$mdLayout.disablePostLinks = undefined;
+  }));
+
+  describe('translated to layout classes', function() {
 
     var suffixes = ['sm', 'gt-sm', 'md', 'gt-md', 'lg', 'gt-lg'];
     var directionValues = ['row', 'column'];
-    var flexOrderValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    var flexOrderValues = [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     var flexValues = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 33, 34, 66, 67];
     var offsetValues = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 33, 34, 66, 67];
     var alignmentValues = [
-      'center', 'center center', 'center start', 'center end',
-      'end', 'end-center', 'end start', 'end end',
-      'space-around', 'space-around center', 'space-around start', 'space-around end',
-      'space-between', 'space-between center', 'space-between start', 'space-between end',
-      'center center', 'start center', 'end center', 'space-between center', 'space-around center',
-      'center start', 'start start', 'end start', 'space-between start', 'space-around start',
-      'center end', 'start end', 'end end', 'space-between end', 'space-around end'
-    ];
+      "center", "center center", "center start", "center end",
+      "end", "end center", "end start", "end end",
+      "space-around", "space-around center", "space-around start", "space-around end",
+      "space-between", "space-between center", "space-between start", "space-between end",
+      "start center", "start start", "start end"];
     var mappings = [
       { attribute: 'flex',           suffixes: suffixes, values: flexValues, addDirectiveAsClass: true, testStandAlone: true},
       { attribute: 'flex-order',     suffixes: suffixes, values: flexOrderValues },
@@ -49,6 +51,13 @@ describe('layout directives', function() {
       it('should fail if the class ' + expectedClass + ' was not added for attribute ' + attribute, inject(function($compile, $rootScope) {
         var element = $compile('<div ' + attribute + '>Layout</div>')($rootScope.$new());
         expect(element.hasClass(expectedClass)).toBe(true);
+      }));
+
+      it('should not add the class ' + expectedClass + ' if the body class has "md-css-only" ' + attribute, inject(function($compile, $rootScope, $document) {
+        angular.element($document[0].body).addClass('md-css-only');
+
+        var element = $compile('<div ' + attribute + '>Layout</div>')($rootScope.$new());
+        expect(element.hasClass(expectedClass)).toBe(false);
       }));
     }
 
@@ -111,4 +120,32 @@ describe('layout directives', function() {
     }
   });
 
+  describe('layout attribute with dynamic values', function() {
+
+    it('should observe the attribute value and update the layout class(es)', inject(function($rootScope, $compile) {
+      var scope = $rootScope.$new();
+          scope.size = undefined;
+
+      var element = angular.element($compile('<div flex-gt-md="{{size}}"></div>')(scope));
+
+      expect(element.hasClass('flex-gt-md')).toBe(true);
+      expect(element.hasClass('flex-gt-md-size')).toBe(false);
+
+      scope.$apply(function() {
+        scope.size = 32;
+      });
+
+      expect(element.hasClass('flex-gt-md-32')).toBe(true);
+
+      scope.$apply(function() {
+        scope.size = "fishCheeks";
+      });
+
+      expect(element.hasClass('flex-gt-md-32')).toBe(false);
+      expect(element.hasClass('flex-gt-md-fishCheeks')).toBe(true);
+
+      expect(element.attr('flex-gt-md')).toBeFalsy();
+    }));
+
+  })
 });

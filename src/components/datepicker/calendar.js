@@ -502,10 +502,13 @@
    * This should only need to be called once during initialization.
    */
   CalendarCtrl.prototype.buildWeekHeader = function() {
+    var firstDayOfWeek = this.dateLocale.firstDayOfWeek;
+    var shortDays = this.dateLocale.shortDays;
+
     var row = document.createElement('tr');
     for (var i = 0; i < 7; i++) {
       var th = document.createElement('th');
-      th.textContent = this.dateLocale.shortDays[i];
+      th.textContent = shortDays[(i + firstDayOfWeek) % 7];
       row.appendChild(th);
     }
 

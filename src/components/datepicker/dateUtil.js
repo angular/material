@@ -195,7 +195,9 @@
      * @param {Date} date
      */
     function setDateTimeToMidnight(date) {
-      date.setHours(0, 0, 0, 0);
+      if (isValidDate(date)) {
+        date.setHours(0, 0, 0, 0);
+      }
     }
 
     /**

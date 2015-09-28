@@ -189,7 +189,7 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia) {
                 return {
                   element: angular.element(tiles[i]),
                   style: getTileStyle(ps.position, ps.spans,
-                      props.colCount, props.rowCount,
+                      props.colCount, rowCount,
                       props.gutter, props.rowMode, props.rowHeight)
                 }
               })

@@ -43,9 +43,8 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     restrict: 'E',
     transclude: true,
     priority:210, // Before ngAria
-    template: '\
-        <div class="md-background"></div>\
-        <div class="md-content" ng-transclude></div>',
+    template: '<div class="md-background"></div>' +
+              '<div class="md-content" ng-transclude></div>',
     scope: {
       visible: '=?mdVisible',
       delay: '=?mdDelay',
@@ -111,9 +110,12 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
      */
     function getParentWithPointerEvents () {
       var parent = element.parent();
-      while (parent && hasComputedStyleValue('pointer-events','none', parent[0])) {
+
+      // jqLite might return a non-null, but still empty, parent; so check for parent and length
+      while (hasComputedStyleValue('pointer-events','none', parent)) {
         parent = parent.parent();
       }
+
       return parent;
     }
 
@@ -128,12 +130,17 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
 
     function hasComputedStyleValue(key, value, target) {
-      key    = attr.$normalize(key);
-      target = target || element[0];
+      var hasValue = false;
 
-      var computedStyles = $window.getComputedStyle(target);
+      if ( target && target.length  ) {
+        key    = attr.$normalize(key);
+        target = target[0] || element[0];
 
-      return angular.isDefined(computedStyles[key]) && (computedStyles[key] == value);
+        var computedStyles = $window.getComputedStyle(target);
+        hasValue = angular.isDefined(computedStyles[key]) && (computedStyles[key] == value);
+      }
+
+      return hasValue;
     }
 
     function bindEvents () {
@@ -164,6 +171,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
         var autohide = scope.hasOwnProperty('autohide') ? scope.autohide : attr.hasOwnProperty('mdAutohide');
         if (autohide || mouseActive || ($document[0].activeElement !== parent[0]) ) {
           parent.off('blur mouseleave touchend touchcancel', leaveHandler );
+          parent.triggerHandler("blur");
           setVisible(false);
         }
         mouseActive = false;

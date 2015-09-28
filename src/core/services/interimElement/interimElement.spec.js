@@ -2,7 +2,7 @@ describe('$$interimElement service', function() {
 
   beforeEach(module('material.core'));
 
-  var $rootScope, $$rAF, $q, $timeout;
+  var $rootScope, $q, $timeout;
   var $compilerSpy, $themingSpy;
 
   describe('provider', function() {
@@ -46,24 +46,31 @@ describe('$$interimElement service', function() {
     it('should not call onShow or onRemove on failing to load templates', function() {
       createInterimProvider('interimTest');
       inject(function($q, $rootScope, $rootElement, interimTest, $httpBackend) {
+        var templateCompiled = true;
+
         $compilerSpy.and.callFake(function(reason) {
           return $q(function(resolve,reject){
-            reject(reason || false);
+            templateCompiled = false;
+            reject(500 || false);
           });
         });
         $httpBackend.when('GET', '/fail-url.html').respond(500, '');
+
         var onShowCalled = false, onHideCalled = false;
+
         interimTest.show({
           templateUrl: '/fail-url.html',
-          onShow: function(scope, el) { onShowCalled = true; },
+          onShow: function() { onShowCalled = true; },
           onRemove: function() { onHideCalled = true; }
         });
-        $$rAF.flush();
+
+        $material.flushOutstandingAnimations();
         interimTest.cancel();
-        $$rAF.flush();
+        $material.flushOutstandingAnimations();
 
         expect(onShowCalled).toBe(false);
         expect(onHideCalled).toBe(false);
+        expect(templateCompiled).toBe(false);
       });
     });
 
@@ -351,6 +358,7 @@ describe('$$interimElement service', function() {
           });
 
         flush();
+        $timeout.flush();
         expect(autoClosed).toBe(true);
       }));
 
@@ -622,10 +630,10 @@ describe('$$interimElement service', function() {
       $provide.value('$mdCompiler', $mdCompiler);
       $provide.value('$mdTheming', $themingSpy);
     });
-    inject(function($q, $compile, _$rootScope_, _$$rAF_, _$timeout_) {
+    inject(function($q, $compile, _$rootScope_, _$timeout_, _$material_) {
       $rootScope = _$rootScope_;
-      $$rAF = _$$rAF_;
       $timeout = _$timeout_;
+      $material = _$material_;
 
       $compilerSpy.and.callFake(function(opts) {
         var el = $compile(opts.template || "<div></div>");
@@ -652,13 +660,7 @@ describe('$$interimElement service', function() {
   }
 
   function flush() {
-    try {
-      $timeout.flush();
-      $rootScope.$apply();
-      $$rAF.flush();
-    } finally {
-      $timeout.flush();
-    }
+    $material.flushInterimElement();
   }
 
   function tailHook( sourceFn, hookFn ) {

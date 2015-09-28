@@ -1,10 +1,10 @@
 describe('animate', function() {
   beforeEach(module('material.core'));
 
-  var $animate, $rootScope, $timeout, $$mdAnimate;
-  beforeEach( inject(function(_$animate_,_$rootScope_,_$timeout_, _$$mdAnimate_, $mdUtil) {
+  var $material, $rootScope, $timeout, $$mdAnimate;
+  beforeEach( inject(function(_$material_,_$rootScope_,_$timeout_, _$$mdAnimate_, $mdUtil) {
       $$mdAnimate = _$$mdAnimate_($mdUtil);
-      $animate = _$animate_;
+      $material = _$material_;
       $rootScope = _$rootScope_;
       $timeout = _$timeout_;
   }));
@@ -88,7 +88,6 @@ describe('animate', function() {
 
   function flush() {
     $rootScope.$digest();
-    $animate.triggerCallbacks();
-    $timeout.flush();
+    $material.flushOutstandingAnimations();
   }
 });

@@ -95,6 +95,8 @@ function MdProgressCircularDirective($mdTheming, $mdUtil, $log) {
     var spinnerWrapper =  angular.element(element.children()[0]);
     var lastMode, toVendorCSS = $mdUtil.dom.animator.toCss;
 
+    element.attr('md-mode', mode());
+
     updateScale();
     validateMode();
     watchAttributes();
@@ -210,7 +212,7 @@ function MdProgressCircularDirective($mdTheming, $mdUtil, $log) {
      * Is the md-mode a valid option?
      */
     function mode() {
-      var value = attr.mdMode;
+      var value = (attr.mdMode || "").trim();
       if ( value ) {
         switch(value) {
           case MODE_DETERMINATE :

@@ -172,7 +172,7 @@
     var date = this.dateUtil.isValidDate(opt_dateInMonth) ? opt_dateInMonth : new Date();
 
     var firstDayOfMonth = this.dateUtil.getFirstDateOfMonth(date);
-    var firstDayOfTheWeek = firstDayOfMonth.getDay();
+    var firstDayOfTheWeek = this.getLocaleDay_(firstDayOfMonth);
     var numberOfDaysInMonth = this.dateUtil.getNumberOfDaysInMonth(date);
 
     // Store rows for the month in a document fragment so that we can append them all at once.
@@ -263,4 +263,13 @@
     return monthBody;
   };
 
+  /**
+   * Gets the day-of-the-week index for a date for the current locale.
+   * @private
+   * @param {Date} date
+   * @returns {number} The column index of the date in the calendar.
+   */
+  CalendarMonthCtrl.prototype.getLocaleDay_ = function(date) {
+    return (date.getDay() + (7 - this.dateLocale.firstDayOfWeek)) % 7
+  };
 })();

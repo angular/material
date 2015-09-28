@@ -489,7 +489,7 @@ VirtualRepeatController.prototype.containerUpdated = function() {
             this.$$rAF(angular.bind(this, this.readItemSize_));
           }
         }));
-    this.$scope.$digest();
+    if (!this.$scope.$root.$$phase) this.$scope.$digest();
 
     return;
   } else if (!this.sized) {

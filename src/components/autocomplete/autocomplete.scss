@@ -44,12 +44,19 @@ md-autocomplete {
     }
   }
   &[md-floating-label] {
-    padding-bottom: $input-container-padding + $input-error-height;
     border-radius: 0;
     background: transparent;
     height: auto;
+
     md-input-container {
-      padding-bottom: 0;
+      padding-bottom: $input-container-padding + $input-error-height;
+
+      // When we have ng-messages, remove the input error height from our bottom padding, since the
+      // ng-messages wrapper has a min-height of 1 error (so we don't adjust height as often; see
+      // input.scss file)
+      &.md-input-has-messages {
+        padding-bottom: $input-container-padding;
+      }
     }
     md-autocomplete-wrap {
       height: auto;

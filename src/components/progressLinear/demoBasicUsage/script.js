@@ -16,7 +16,11 @@ angular.module('progressLinearDemo1', ['ngMaterial'])
      */
     self.toggleActivation = function() {
         if ( !self.activated ) self.modes = [ ];
-        if (  self.activated ) j = counter = 0;
+        if (  self.activated ) {
+          j = counter = 0;
+          self.determinateValue = 30;
+          self.determinateValue2 = 30;
+        }
     };
 
     $interval(function() {
