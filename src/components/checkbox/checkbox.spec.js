@@ -56,10 +56,14 @@ describe('mdCheckbox', function() {
     var cbElements = element.find('md-checkbox');
 
     expect(cbElements.eq(0).hasClass(CHECKED_CSS)).toEqual(false);
-    expect(cbElements.eq(1).hasClass(CHECKED_CSS)).toEqual(true);
+    expect(cbElements.eq(0).prop('checked')).toEqual(false);
     expect(cbElements.eq(0).attr('aria-checked')).toEqual('false');
-    expect(cbElements.eq(1).attr('aria-checked')).toEqual('true');
     expect(cbElements.eq(0).attr('role')).toEqual('checkbox');
+
+    expect(cbElements.eq(1).hasClass(CHECKED_CSS)).toEqual(true);
+    expect(cbElements.eq(1).prop('checked')).toEqual(true);
+    expect(cbElements.eq(1).attr('aria-checked')).toEqual('true');
+    expect(cbElements.eq(1).attr('role')).toEqual('checkbox');
   }));
 
   it('should be disabled with ngDisabled attr', inject(function($compile, $rootScope) {
@@ -134,10 +138,72 @@ describe('mdCheckbox', function() {
     expect(checkbox[0]).toHaveClass('md-focused');
   }));
 
+  it("should trigger 'change' event when user interacts with the checkbox", inject(function($mdConstant) {
+    var checkbox = buildInstance('<md-checkbox></md-checkbox>');
+
+    var nbChangeEvents = 0;
+    var changeEventTriggered = false;
+    checkbox.on('change', function() {
+      changeEventTriggered = true;
+      nbChangeEvents++;
+    });
+
+    changeEventTriggered = false;
+    checkbox.triggerHandler('click');
+    expect(changeEventTriggered).toBe(true);
+
+    changeEventTriggered = false;
+    checkbox.triggerHandler({
+      type: 'keypress',
+      keyCode: $mdConstant.KEY_CODE.SPACE
+    });
+    expect(changeEventTriggered).toBe(true);
+
+    expect(nbChangeEvents).toEqual(2);
+  }));
+
+  it("should not trigger 'change' event when 'checked' property is changed programmatically", function() {
+    var checkbox = buildInstance('<md-checkbox></md-checkbox>');
+
+    var nbChangeEvents = 0;
+    var changeEventTriggered = false;
+    checkbox.on('change', function() {
+      changeEventTriggered = true;
+      nbChangeEvents++;
+    });
+
+    changeEventTriggered = false;
+    checkbox.prop('checked', true);
+    expect(changeEventTriggered).toBe(false);
+
+    changeEventTriggered = false;
+    checkbox.prop('checked', false);
+    expect(changeEventTriggered).toBe(false);
+
+    expect(nbChangeEvents).toEqual(0);
+  });
+
+  it("should watch 'checked' property", function() {
+    var checkbox = buildInstance('<md-checkbox></md-checkbox>');
+
+    // Initial state
+    // Like standard HTML checkbox, 'checked' property should be false by default
+    expect(checkbox.prop('checked')).toBe(false);
+    expect(checkbox.hasClass(CHECKED_CSS)).toEqual(false);
+
+    checkbox.prop('checked', true);
+    $rootScope.$digest();
+    expect(checkbox.hasClass(CHECKED_CSS)).toEqual(true);
+
+    checkbox.prop('checked', false);
+    $rootScope.$digest();
+    expect(checkbox.hasClass(CHECKED_CSS)).toEqual(false);
+  });
+
   describe('ng core checkbox tests', function() {
 
     function isChecked(cbEl) {
-      return cbEl.hasClass(CHECKED_CSS);
+      return cbEl.hasClass(CHECKED_CSS) && cbEl.prop('checked');
     }
 
     it('should format booleans', function() {
