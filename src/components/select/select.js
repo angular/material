@@ -1021,7 +1021,6 @@ function SelectProvider($$interimElementProvider) {
 
         var dropDown = opts.selectEl;
         var selectCtrl = dropDown.controller('mdSelectMenu') || {};
-        var mouseDownXPosition = null;
 
         element.addClass('md-clickable');
 
@@ -1032,7 +1031,6 @@ function SelectProvider($$interimElementProvider) {
         // Cycling of options, and closing on enter
         dropDown.on('keydown', onMenuKeyDown);
         dropDown.on('mouseup', checkCloseMenu);
-        dropDown.on('mousedown', storeMousePosition);
 
         return function cleanupInteraction() {
           opts.backdrop && opts.backdrop.off('click', onBackdropClick);
@@ -1121,12 +1119,7 @@ function SelectProvider($$interimElementProvider) {
           focusOption('prev');
         }
 
-        function storeMousePosition(ev) {
-          mouseDownXPosition = ev.clientX;
-        }
-
         function checkCloseMenu(ev) {
-          console.log(ev.target)
           if (ev && ( ev.type == 'mouseup') && (ev.currentTarget != dropDown[0])) return;
           if (ev && ev.target && ev.target.tagName == "MD-CONTENT") return;
 
