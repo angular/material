@@ -60,7 +60,7 @@
            * Special internal flag used to optimize
            * noop(s) for the directive postLinks below
            */
-          disablePostLinks : undefined
+          enablePostLinks : undefined
         };
       })
 
@@ -172,7 +172,7 @@
         return {
             restrict : 'A',
             compile: function(element, attr) {
-              if ( postLinkIsDisabled($document[0]) ) return angular.noop;
+              if ( !isPostLinkEnabled($document[0]) ) return angular.noop;
 
               attributeValueToClass(null, element, attr);
 
@@ -253,7 +253,7 @@
         return {
           restrict : 'A',
           compile: function(element, attrs) {
-            if ( postLinkIsDisabled($document[0]) ) return angular.noop;
+            if ( !isPostLinkEnabled($document[0]) ) return angular.noop;
 
             attributeToClass(null, element);
 
@@ -279,6 +279,7 @@
 
     /**
      * Provide console warning that this layout attribute has been deprecated
+     *
      */
     function warnAttrNotSupported(className) {
       var parts = className.split("-");
@@ -306,17 +307,17 @@
      * In these cases, the Layout translators (directives) should be enabled and the
      * `angular-material.[min.]js` must be loaded.
      */
-    function postLinkIsDisabled(document) {
-      var disablePostLinks = $$mdLayout.disablePostLinks;
+    function isPostLinkEnabled(document) {
+      var enablePostLinks = $$mdLayout.enablePostLinks;
 
       // Perform a read-once (1x) check for the `md-css-only` class on the BODY
 
-      if ( angular.isUndefined(disablePostLinks) ) {
+      if ( angular.isUndefined(enablePostLinks) ) {
         var body = document && document.body;
-        if (body) disablePostLinks = body.classList.contains('md-css-only');
+        if (body) enablePostLinks = !body.classList.contains('md-css-only');
       }
 
-      return $$mdLayout.disablePostLinks = disablePostLinks;
+      return $$mdLayout.enablePostLinks = enablePostLinks;
     }
 
 })();

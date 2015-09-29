@@ -32,6 +32,9 @@ module.exports = {
     'src/core/services/layout/layout.scss'
   ],
   scssStandaloneFiles: [
+    'src/core/services/layout/standalone.scss'
+  ],
+  scssTestFiles: [
     'src/core/services/layout/layout.scss'
   ],
   paths: 'src/{components,services}/**',

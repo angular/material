@@ -1,11 +1,6 @@
 describe('layout directives', function() {
   beforeEach(module('material.core', 'material.core.layout'));
 
-  afterEach(inject(function($document, $$mdLayout) {
-    angular.element($document[0].body).removeClass('md-css-only');
-    $$mdLayout.disablePostLinks = undefined;
-  }));
-
   describe('translated to layout classes', function() {
 
     var suffixes = ['sm', 'gt-sm', 'md', 'gt-md', 'lg', 'gt-lg'];
@@ -53,11 +48,18 @@ describe('layout directives', function() {
         expect(element.hasClass(expectedClass)).toBe(true);
       }));
 
-      it('should not add the class ' + expectedClass + ' if the body class has "md-css-only" ' + attribute, inject(function($compile, $rootScope, $document) {
-        angular.element($document[0].body).addClass('md-css-only');
+      it('should not add the class ' + expectedClass + ' if the body class has "md-css-only" ' + attribute, inject(function($$mdLayout, $compile, $rootScope, $document) {
+        $$mdLayout.enablePostLinks = undefined;
+
+        var body = angular.element($document[0].body);
+        body.addClass('md-css-only');
 
         var element = $compile('<div ' + attribute + '>Layout</div>')($rootScope.$new());
         expect(element.hasClass(expectedClass)).toBe(false);
+
+        body.removeClass('md-css-only');
+        $$mdLayout.enablePostLinks = undefined;
+
       }));
     }
 
