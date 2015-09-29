@@ -187,6 +187,26 @@ describe('md-input-container directive', function() {
     });
   });
 
+  it('should not add the md-input-has-placeholder class when the placeholder is transformed into a label', inject(function($rootScope, $compile) {
+    var el = $compile(
+      '<md-input-container><input ng-model="foo" placeholder="some placeholder"></md-input-container>'
+    )($rootScope);
+
+    expect(el.hasClass('md-input-has-placeholder')).toBe(false);
+  }));
+
+
+  it('should add the md-input-has-placeholder class when both the placeholder and label are provided', inject(function($rootScope, $compile) {
+    var el = $compile(
+      '<md-input-container>' +
+      '  <label>Hello</label>' +
+      '  <input ng-model="foo" placeholder="some placeholder" />' +
+      '</md-input-container>'
+    )($rootScope);
+
+    expect(el.hasClass('md-input-has-placeholder')).toBe(true);
+  }));
+
   it('should put placeholder into a label element', function() {
     var el = $compile('<md-input-container><input ng-model="foo" placeholder="some placeholder"></md-input-container>')(pageScope);
     var placeholder = el[0].querySelector('.md-placeholder');
@@ -197,7 +217,7 @@ describe('md-input-container directive', function() {
     expect(label.textContent).toEqual('some placeholder');
   });
 
-  it('should ignore placeholder when a label element is present', function() {
+  it('should ignore placeholder when a label element is present', inject(function($rootScope, $compile) {
     var el = $compile(
       '<md-input-container>' +
       '  <label>Hello</label>' +
@@ -210,7 +230,7 @@ describe('md-input-container directive', function() {
     expect(el.find('input')[0].hasAttribute('placeholder')).toBe(true);
     expect(label).toBeTruthy();
     expect(label.textContent).toEqual('Hello');
-  });
+  }));
 
   it('should put an aria-label on the input when no label is present', function() {
     var el = $compile('<form name="form">' +

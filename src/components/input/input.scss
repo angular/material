@@ -137,7 +137,7 @@ md-input-container {
   .md-input {
     order: 2;
     display: block;
-    margin-top: auto;
+    margin-top: 0;
 
     background: none;
     padding-top: $input-padding-top;
@@ -166,9 +166,9 @@ md-input-container {
   }
 
   .md-char-counter {
-    position: relative;
-    text-align: right;
-    order: 3;
+    position: absolute;
+    right: $input-container-padding;
+    bottom: 7px;
   }
 
   ng-messages, data-ng-messages, x-ng-messages,
@@ -181,6 +181,7 @@ md-input-container {
       position: absolute;
       top: 0;
       right: 0;
+      bottom: auto;
     }
   }
 

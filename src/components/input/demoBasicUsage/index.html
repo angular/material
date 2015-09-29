@@ -16,9 +16,9 @@
 
       <div layout layout-sm="column">
         <md-input-container style="width:70%">
-            <label>Company (Disabled)</label>
-            <input ng-model="user.company" disabled>
-          </md-input-container>
+          <label>Company (Disabled)</label>
+          <input ng-model="user.company" disabled>
+        </md-input-container>
 
         <md-datepicker ng-model="user.submissionDate" md-placeholder="Enter date"></md-datepicker>
       </div>
@@ -47,13 +47,30 @@
           <label>City</label>
           <input ng-model="user.city">
         </md-input-container>
+
         <md-input-container flex>
           <label>State</label>
-          <input ng-model="user.state">
+          <md-select ng-model="user.state">
+            <md-option ng-repeat="state in states" value="{{state.abbrev}}">
+              {{state.abbrev}}
+            </md-option>
+          </md-select>
         </md-input-container>
+
         <md-input-container flex>
           <label>Postal Code</label>
-          <input ng-model="user.postalCode" placeholder="12345">
+          <input name="postalCode" ng-model="user.postalCode" placeholder="12345"
+                 required ng-pattern="/^[0-9]{5}$/" md-maxlength="5">
+
+          <div ng-messages="userForm.postalCode.$error" role="alert" multiple>
+            <div ng-message="required" class="my-message">You must supply a postal code.</div>
+            <div ng-message="pattern" class="my-message">That doesn't look like a valid postal
+              code.
+            </div>
+            <div ng-message="md-maxlength" class="my-message">
+              Don't use the long version silly...we don't need to be that specific...
+            </div>
+          </div>
         </md-input-container>
       </div>
 
