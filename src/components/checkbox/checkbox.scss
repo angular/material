@@ -6,16 +6,23 @@ $checkbox-border-width: 2px !default;
 $checkbox-text-margin: 10px !default;
 $checkbox-top-left: 12px !default;
 
+.md-inline-form {
+  md-checkbox {
+    margin: 19px 0 18px;
+  }
+}
+
 md-checkbox {
   box-sizing: border-box;
-  display: block;
+  display: inline-block;
   margin: $checkbox-margin;
   white-space: nowrap;
   cursor: pointer;
   outline: none;
   user-select: none;
-  @include rtl(padding-left, $checkbox-width, 0);
-  @include rtl(padding-right, 0, $checkbox-width);
+  padding: 2px;
+  @include rtl(padding-left, $checkbox-width, 2px);
+  @include rtl(padding-right, 2px, $checkbox-width);
   position: relative;
   line-height: $checkbox-width + $checkbox-margin;
   min-width: $checkbox-width;
