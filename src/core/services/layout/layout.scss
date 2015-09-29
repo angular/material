@@ -192,7 +192,9 @@
   .#{$flexName},
   [#{$flexName}]               {  flex: 1 1 0%;  }
 
-  .#{$flexName},
+  .#{$flexName}-grow,
+  [#{$flexName}="grow"]        { flex: 1 1 100%;  }
+
   .#{$flexName}-initial,
   [#{$flexName}="initial"]     {  flex: 0 1 auto;  }
 
