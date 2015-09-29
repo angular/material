@@ -1,4 +1,4 @@
-<div ng-controller="DemoCtrl" layout="column" ng-cloak>
+<div ng-controller="DemoCtrl" layout="column" ng-cloak class="md-inline-form">
 
   <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
     <md-input-container>
@@ -15,7 +15,7 @@
     <form name="userForm">
 
       <div layout layout-sm="column">
-        <md-input-container style="width:70%">
+        <md-input-container flex>
           <label>Company (Disabled)</label>
           <input ng-model="user.company" disabled>
         </md-input-container>
@@ -34,11 +34,12 @@
         </md-input-container>
       </div>
 
-      <md-input-container flex>
+      <md-input-container class="md-block">
         <label>Address</label>
         <input ng-model="user.address">
       </md-input-container>
-      <md-input-container md-no-float>
+
+      <md-input-container md-no-float class="md-block">
         <input ng-model="user.address2" placeholder="Address 2">
       </md-input-container>
 
@@ -74,7 +75,7 @@
         </md-input-container>
       </div>
 
-      <md-input-container flex>
+      <md-input-container class="md-block">
         <label>Biography</label>
         <textarea ng-model="user.biography" columns="1" md-maxlength="150"></textarea>
       </md-input-container>

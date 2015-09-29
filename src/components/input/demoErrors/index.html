@@ -1,14 +1,8 @@
 <div ng-controller="AppCtrl" layout="column" ng-cloak>
 
-  <md-toolbar class="md-primary">
-    <h1 class="md-toolbar-tools">
-      Top Secret Project
-    </h1>
-  </md-toolbar>
-
   <md-content layout-padding>
     <form name="projectForm">
-      <md-input-container>
+      <md-input-container class="md-block">
         <label>Description</label>
         <input md-maxlength="30" required name="description" ng-model="project.description">
         <div ng-messages="projectForm.description.$error">
@@ -17,7 +11,7 @@
         </div>
       </md-input-container>
 
-      <md-input-container>
+      <md-input-container class="md-block">
         <label>Client Name</label>
         <input required name="clientName" ng-model="project.clientName">
         <div ng-messages="projectForm.clientName.$error">
@@ -25,7 +19,7 @@
         </div>
       </md-input-container>
 
-      <md-input-container>
+      <md-input-container class="md-block">
         <label>Client Email</label>
         <input required type="email" name="clientEmail" ng-model="project.clientEmail"
                minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
@@ -37,7 +31,7 @@
         </div>
       </md-input-container>
 
-      <md-input-container>
+      <md-input-container class="md-block">
         <label>Hourly Rate (USD)</label>
         <input required type="number" step="any" name="rate" ng-model="project.rate" min="800"
                max="4999" ng-pattern="/^1234$/" md-maxlength="20" />

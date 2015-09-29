@@ -17,16 +17,21 @@ $input-error-height: 24px !default;
 
 $icon-offset : 36px !default;
 
-$icon-float-top: -16px !default;
 $icon-float-focused-top: -8px !default;
 
 md-input-container {
-  display: flex;
+  display: inline-block;
   position: relative;
-  flex-direction: column;
-
   padding: $input-container-padding;
-  padding-bottom: $input-container-padding + $input-error-height;
+  margin: 18px 0;
+
+  &.md-block {
+    display: block;
+  }
+
+  &.md-has-icon {
+    padding-left: $icon-offset;
+  }
 
   // When we have ng-messages, remove the input error height from our bottom padding, since the
   // ng-messages wrapper has a min-height of 1 error (so we don't adjust height as often; see below)
@@ -39,7 +44,6 @@ md-input-container {
     top: 5px;
     left: 2px;
     + input {
-          margin-left: $icon-offset;
     }
   }
 
@@ -80,8 +84,8 @@ md-input-container {
   }
 
   label {
-    position: relative;
-    top: -2px;
+    position: absolute;
+    bottom: 100%;
   }
 
 
@@ -103,9 +107,6 @@ md-input-container {
     opacity: 0;
     transition-property: opacity, transform;
     transform: translate3d(0, $input-placeholder-offset + $baseline-grid * 0.75, 0);
-    &.md-static {
-      position: static;
-    }
   }
   &.md-input-focused .md-placeholder {
     opacity: 1;
@@ -151,7 +152,8 @@ md-input-container {
     border-style: solid; // Firefox fix
 
     // Fix number inputs in Firefox to be full-width
-    width: auto;
+    width: 100%;
+    box-sizing: border-box;
 
     &:focus {
       outline: none;
@@ -272,34 +274,21 @@ md-input-container {
 
 md-input-container.md-icon-float {
 
-  margin-top : $icon-float-top;
   transition : margin-top 0.5s $swift-ease-out-timing-function ;
 
 
   > label  {
       pointer-events:none;
       position:absolute;
-      margin-left: $icon-offset;
   }
 
   > md-icon {
-    top: 26px;
+    top: 2px;
     left: 2px;
-    + input,
-    + textarea {
-          margin-left: $icon-offset;
-    }
-  }
-
-  > input,
-  > textarea {
-    padding-top : $input-line-height - $input-container-padding;
   }
 
   &.md-input-focused,
   &.md-input-has-value {
-
-    margin-top: $icon-float-focused-top;
 
     label {
         transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);

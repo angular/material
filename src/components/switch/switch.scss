@@ -3,16 +3,26 @@ $switch-height: $baseline-grid * 3 !default;
 $switch-bar-height: 14px !default;
 $switch-thumb-size: 20px !default;
 
+.md-inline-form {
+  md-switch {
+    margin-top: 18px;
+    margin-bottom: 19px;
+  }
+}
+
 md-switch {
-
-  display: flex;
-  align-items: center;
-
+  display: inline-block;
   margin: 15px;
   white-space: nowrap;
   cursor: pointer;
   outline: none;
   user-select: none;
+  height: 30px;
+  line-height: 28px;
+
+  &.md-block {
+    display: block;
+  }
 
   .md-container {
     cursor: grab;
@@ -21,6 +31,8 @@ md-switch {
     position: relative;
     user-select: none;
     margin-right: 8px;
+    margin-top: (30 - $switch-height) / 2;
+    float: left;
   }
 
   // If the user moves his mouse off the switch, stil display grabbing cursor
@@ -49,6 +61,7 @@ md-switch {
   .md-label {
     border-color: transparent;
     border-width: 0;
+    float: left;
   }
 
   .md-bar {
