@@ -19,7 +19,7 @@ function run {
   rm -rf code.material.angularjs.org/HEAD
 
   echo "-- Copying docs site to snapshot..."
-  sed -i "s,http://localhost:8080/angular-material,https://gitcdn.xyz/repo/angular/bower-material/v$VERSION/angular-material,g" dist/docs/docs.js
+  sed -i "s,http://localhost:8080/angular-material,https://cdn.gitcdn.xyz/cdn/angular/bower-material/v$VERSION/angular-material,g" dist/docs/docs.js
 
 
   cp -Rf dist/docs code.material.angularjs.org/HEAD
