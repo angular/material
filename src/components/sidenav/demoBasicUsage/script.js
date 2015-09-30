@@ -7,8 +7,8 @@ angular
     /**
      * Supplies a function that will continue to operate until the
      * time is up.
-     */ 
-    function debounce(func, wait) {
+     */
+    function debounce(func, wait, context) {
       var timer;
 
       return function debounced() {
