@@ -192,7 +192,7 @@
   @for $i from 0 through 20 {
     $value : #{$i * 5 + '%'};
 
-    .#{$flexName}-#{$i * 5}                              { flex: 0 0 #{$value}; }
+    .#{$flexName}-#{$i * 5}                              { box-sizing: border-box; flex: 0 0 #{$value}; }
 
     .md-layout-row > .#{$flexName}-#{$i * 5},
     .md-layout#{$name}-row > .#{$flexName}-#{$i * 5}     { flex: 0 0 #{$value};  max-width: #{$value};  max-height: 100%;  }
