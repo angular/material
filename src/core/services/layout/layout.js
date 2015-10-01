@@ -50,10 +50,6 @@
        */
       .factory("$$mdLayout", function() {
         return {
-          /**
-           * Do NOT remove the original layout Attribute selectors
-           * after translation injection; or the media breakpoints will not fire
-           */
           removeAttributes : true
 
         };
@@ -61,21 +57,21 @@
 
       // Attribute directives with optional value(s)
 
-      .directive('layout'              , attributeWithObserve('layout'      , true)  )
-      .directive('layoutSm'            , attributeWithObserve('layout-sm'   , true)  )
-      .directive('layoutGtSm'          , attributeWithObserve('layout-gt-sm', true)  )
-      .directive('layoutMd'            , attributeWithObserve('layout-md'   , true)  )
-      .directive('layoutGtMd'          , attributeWithObserve('layout-gt-md', true)  )
-      .directive('layoutLg'            , attributeWithObserve('layout-lg'   , true)  )
-      .directive('layoutGtLg'          , attributeWithObserve('layout-gt-lg', true)  )
+      .directive('layout'              , attributeWithObserve('layout'      )  )
+      .directive('layoutSm'            , attributeWithObserve('layout-sm'   )  )
+      .directive('layoutGtSm'          , attributeWithObserve('layout-gt-sm')  )
+      .directive('layoutMd'            , attributeWithObserve('layout-md'   )  )
+      .directive('layoutGtMd'          , attributeWithObserve('layout-gt-md')  )
+      .directive('layoutLg'            , attributeWithObserve('layout-lg'   )  )
+      .directive('layoutGtLg'          , attributeWithObserve('layout-gt-lg')  )
 
-      .directive('flex'                , attributeWithObserve('flex'        , true)  )
-      .directive('flexSm'              , attributeWithObserve('flex-sm'     , true)  )
-      .directive('flexGtSm'            , attributeWithObserve('flex-gt-sm'  , true)  )
-      .directive('flexMd'              , attributeWithObserve('flex-md'     , true)  )
-      .directive('flexGtMd'            , attributeWithObserve('flex-gt-md'  , true)  )
-      .directive('flexLg'              , attributeWithObserve('flex-lg'     , true)  )
-      .directive('flexGtLg'            , attributeWithObserve('flex-gt-lg'  , true)  )
+      .directive('flex'                , attributeWithObserve('flex'        )  )
+      .directive('flexSm'              , attributeWithObserve('flex-sm'     )  )
+      .directive('flexGtSm'            , attributeWithObserve('flex-gt-sm'  )  )
+      .directive('flexMd'              , attributeWithObserve('flex-md'     )  )
+      .directive('flexGtMd'            , attributeWithObserve('flex-gt-md'  )  )
+      .directive('flexLg'              , attributeWithObserve('flex-lg'     )  )
+      .directive('flexGtLg'            , attributeWithObserve('flex-gt-lg'  )  )
 
       // Attribute directives with optional value(s) but directiveName is NOT added as a class
 
@@ -155,9 +151,8 @@
      * Creates a directive registration function where a possbile dynamic attribute value will
      * be observed/watched.
      * @param {string} className attribute name; eg `md-layout-gt-md` with value ="row"
-     * @param {boolean=} addDirectiveAsClass
      */
-    function attributeWithObserve(className, addDirectiveAsClass) {
+    function attributeWithObserve(className) {
 
       return ['$mdUtil', '$$mdLayout', '$document', '$parse', '$interpolate', function(_$mdUtil_, _$$mdLayout_, $document, _$parse_, _$interpolate_) {
         $mdUtil = _$mdUtil_;
@@ -204,6 +199,7 @@
             // Add special layout class: either '.md-layout-row' or '.md-layout-column'
             if ( addImmediate ) element.addClass( $mdUtil.supplant('md-layout{0}-{1}',[it,attrValue]) );
             if ( watchValue ) attrs.$observe( normalizedAttr, updateClassFn );
+            if ( $$mdLayout.removeAttributes ) element.removeAttr(className);
 
             injected = true;
           }
@@ -224,10 +220,11 @@
         var watchValue   = needsInterpolation(attrValue);
 
         // Add transformed class selector(s)
-        if (addDirectiveAsClass) element.addClass(className);
 
         if ( addImmediate ) element.addClass(className + "-" + attrValue);
         if ( watchValue ) attrs.$observe( normalizedAttr, updateClassFn );
+        if ( !addImmediate && !watchValue )  element.addClass(className);
+
         if ( $$mdLayout.removeAttributes ) element.removeAttr(className);
       }
 

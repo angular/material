@@ -8,20 +8,32 @@ demo-include {
   opacity: 0.9;
   color: white;
 }
-.colorNested  > div:nth-child(1)
+
+.colorNested-noPad> div  {
+  box-shadow: 0px 2px 5px 0 rgba(0,0,0,0.26);
+  opacity: 0.9;
+  color: white;
+}
+
+.colorNested > div:nth-child(1),
+.colorNested-noPad > div:nth-child(1)
  {
   background-color: #009688;
 }
-.colorNested  > div:nth-child(2) {
+.colorNested> div:nth-child(2),
+.colorNested-noPad> div:nth-child(2) {
   background-color: #3949ab;
 }
-.colorNested  > div:nth-child(3) {
+.colorNested> div:nth-child(3),
+.colorNested-noPad> div:nth-child(3) {
   background-color: #9c27b0;
 }
-.colorNested  > div:nth-child(4) {
+.colorNested > div:nth-child(4),
+.colorNested-noPad > div:nth-child(4) {
   background-color: #8bc34a;
 }
-.colorNested  > div:nth-child(5)  {
+.colorNested  > div:nth-child(5),
+.colorNested-noPad  > div:nth-child(5)  {
   background-color: #deb867;
 }
 
