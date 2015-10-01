@@ -16,6 +16,7 @@ $input-error-height: 24px !default;
     opacity: 0;
   }
 }
+
 @keyframes md-autocomplete-list-in {
   0% {
     opacity: 0;
@@ -31,6 +32,7 @@ $input-error-height: 24px !default;
     height: 40px;
   }
 }
+
 md-autocomplete {
   border-radius: 2px;
   display: block;
@@ -78,26 +80,34 @@ md-autocomplete {
     &.md-menu-showing {
       z-index: $z-index-backdrop + 1;
     }
-    md-progress-linear .md-mode-indeterminate {
+    md-progress-linear {
       position: absolute;
-      top: 20px; left: 0; width: 100%;
-      height: 3px;
-      transition: none;
+      bottom: -2px;
+      left: 0;
 
-      .md-container {
-        transition: none;
+      .md-mode-indeterminate {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
         height: 3px;
-      }
-      &.ng-enter {
-        transition: opacity 0.15s linear;
-        &.ng-enter-active {
-          opacity: 1;
+        transition: none;
+
+        .md-container {
+          transition: none;
+          height: 3px;
         }
-      }
-      &.ng-leave {
-        transition: opacity 0.15s linear;
-        &.ng-leave-active {
-          opacity: 0;
+        &.ng-enter {
+          transition: opacity 0.15s linear;
+          &.ng-enter-active {
+            opacity: 1;
+          }
+        }
+        &.ng-leave {
+          transition: opacity 0.15s linear;
+          &.ng-leave-active {
+            opacity: 0;
+          }
         }
       }
     }
@@ -184,12 +194,12 @@ md-autocomplete {
   max-height: 41px * 5.5;
   z-index: $z-index-tooltip;
 }
+
 .md-autocomplete-suggestions {
   margin: 0;
   list-style: none;
   padding: 0;
   li {
-    cursor: pointer;
     font-size: 14px;
     overflow: hidden;
     padding: 0 15px;
@@ -202,6 +212,10 @@ md-autocomplete {
 
     &:focus {
       outline: none;
+    }
+
+    &:not(.md-not-found-wrapper) {
+      cursor: pointer;
     }
   }
 }

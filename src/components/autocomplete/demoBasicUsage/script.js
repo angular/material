@@ -16,6 +16,12 @@
     self.selectedItemChange = selectedItemChange;
     self.searchTextChange   = searchTextChange;
 
+    self.newState = newState;
+
+    function newState(state) {
+      alert("Sorry! You'll need to create a Constituion for " + state + " first!");
+    }
+
     // ******************************
     // Internal methods
     // ******************************
