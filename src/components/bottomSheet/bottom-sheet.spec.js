@@ -2,6 +2,52 @@ describe('$mdBottomSheet service', function() {
   beforeEach(module('material.components.bottomSheet'));
 
   describe('#build()', function() {
+    it('should not close when `clickOutsideToClose == true`', inject(function($mdBottomSheet, $rootElement, $material) {
+      var parent = angular.element('<div>');
+      $mdBottomSheet.show({
+        template: '<md-bottom-sheet>',
+        parent: parent,
+        clickOutsideToClose: true
+      });
+
+      $material.flushOutstandingAnimations();
+
+      expect(parent.find('md-bottom-sheet').length).toBe(1);
+
+      var backdrop = parent.find('md-backdrop');
+
+      backdrop.triggerHandler({
+        type: 'click',
+        target: backdrop[0]
+      });
+
+      $material.flushInterimElement();
+      expect(parent.find('md-bottom-sheet').length).toBe(0);
+    }));
+
+    it('should not close when `clickOutsideToClose == false`', inject(function($mdBottomSheet, $rootElement, $material) {
+      var parent = angular.element('<div>');
+      $mdBottomSheet.show({
+        template: '<md-bottom-sheet>',
+        parent: parent,
+        clickOutsideToClose: false
+      });
+
+      $material.flushOutstandingAnimations();
+
+      expect(parent.find('md-bottom-sheet').length).toBe(1);
+
+      var backdrop = parent.find('md-backdrop');
+
+      backdrop.triggerHandler({
+        type: 'click',
+        target: backdrop[0]
+      });
+
+      $material.flushInterimElement();
+      expect(parent.find('md-bottom-sheet').length).toBe(1);
+    }));
+
     it('should close when `escapeToClose == true`', inject(function($mdBottomSheet, $rootElement, $material, $mdConstant) {
       var parent = angular.element('<div>');
       $mdBottomSheet.show({

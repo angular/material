@@ -31,6 +31,7 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
     $mdBottomSheet.show({
       templateUrl: 'bottom-sheet-grid-template.html',
       controller: 'GridBottomSheetCtrl',
+      clickOutsideToClose: false,
       targetEvent: $event
     }).then(function(clickedItem) {
       $mdToast.show(
