@@ -156,9 +156,9 @@
 }
 @mixin layout-for-name($name: null) {
   @if $name == null { $name : '';          }
-  @else             { $name : '-#{$name}'; }
+  @if $name != ''   { $name : '-#{$name}'; }
 
-  .layout#{$name}, [layout#{$name}] {
+  .md-layout#{$name}, .md-layout#{$name}-column, .md-layout#{$name}-row, {
     box-sizing: border-box;
     display: -webkit-box;
     display: -webkit-flex;
@@ -166,14 +166,8 @@
     display: -ms-flexbox;
     display: flex;
   }
-  .layout#{$name}-column,
-  [layout#{$name}=column] {
-    flex-direction: column;
-  }
-  .layout#{$name}-row,
-  [layout#{$name}=row] {
-    flex-direction: row;
-  }
+  .md-layout#{$name}-column {  flex-direction: column;  }
+  .md-layout#{$name}-row    {  flex-direction: row;     }
 }
 @mixin flex-properties-for-name($name: null) {
   $flexName: 'flex';
@@ -184,67 +178,32 @@
     $name : '';
   }
 
-  .#{$flexName}, [#{$flexName}] {
+  .#{$flexName} {
     box-sizing: border-box;
   }
 
-  .#{$flexName},
-  [#{$flexName}]               {  flex: 1 1 0%;  }
-
-  .#{$flexName}-grow,
-  [#{$flexName}="grow"]        { flex: 1 1 100%;  }
-
-  .#{$flexName}-initial,
-  [#{$flexName}="initial"]     {  flex: 0 1 auto;  }
-
-  .#{$flexName}-auto,
-  [#{$flexName}="auto"]        { flex: 1 1 auto;  }
-
-  .#{$flexName}-none,
-  [#{$flexName}="none"]        { flex: 0 0 auto;  }
+  .#{$flexName}             { flex: 1 1 0%;  }
+  .#{$flexName}-grow        { flex: 1 1 100%;  }
+  .#{$flexName}-initial     { flex: 0 1 auto;  }
+  .#{$flexName}-auto        { flex: 1 1 auto;  }
+  .#{$flexName}-none        { flex: 0 0 auto;  }
 
   // (1-20) * 5 = 0-100%
   @for $i from 0 through 20 {
-    .#{$flexName}-#{$i * 5},
-    [#{$flexName}="#{$i * 5}"]  { flex: 0 0 #{$i * 5 + '%'}; }
+    $value : #{$i * 5 + '%'};
 
-    .layout#{$name}-row > .#{$flexName}-#{$i * 5} {
-      max-width: #{$i * 5 + '%'};
-      max-height: 100%;
-    }
-    .layout#{$name}-column > .#{$flexName}-#{$i * 5} {
-      max-width: 100%;
-      max-height: #{$i * 5 + '%'};
-    }
-
-    [layout#{$name}= "row"] > [#{$flexName}= "#{$i * 5}"] {
-      max-width: #{$i * 5 + '%'};
-      max-height: 100%;
-    }
-    [layout#{$name}= "column"] > [#{$flexName}= "#{$i * 5}"] {
-      max-width: 100%;
-      max-height: #{$i * 5 + '%'};
-    }
+    .#{$flexName}-#{$i * 5}                              { flex: 0 0 #{$value}; }
+    .md-layout#{$name}-row > .#{$flexName}-#{$i * 5}     { flex: 0 0 #{$value};  max-width: #{$value};  max-height: 100%;  }
+    .md-layout#{$name}-column > .#{$flexName}-#{$i * 5}, { flex: 0 0 #{$value}; max-width: 100%;  max-height: #{$value};  }
   }
 
-
-  .layout#{$name}-row {
-    > .#{$flexName}-33   , > .#{$flexName}-34     {  max-width: 33%;  max-height: 100%; }
-    > .#{$flexName}-66   , > .#{$flexName}-67     {  max-width: 67%;  max-height: 100%; }
+  .md-layout#{$name}-row {
+    > .#{$flexName}-33   , > .#{$flexName}-34     {  flex: 0 0 33%;  max-width: 33%;  max-height: 100%; }
+    > .#{$flexName}-66   , > .#{$flexName}-67     {  flex: 0 0 67%;  max-width: 67%;  max-height: 100%; }
   }
-  .layout#{$name}-column {
-    > .#{$flexName}-33   , > .#{$flexName}-34     {  max-width: 100%;  max-height: 33%; }
-    > .#{$flexName}-66   , > .#{$flexName}-67     {  max-width: 100%;  max-height: 67%; }
-  }
-
-  [layout#{$name}="row"] {
-    > [#{$flexName}="33"], > [#{$flexName}="34"]  {  max-width: 33%;  max-height: 100%; }
-    > [#{$flexName}="66"], > [#{$flexName}="67"]  {  max-width: 67%;  max-height: 100%; }
-  }
-
-  [layout#{$name}="column"] {
-    > [#{$flexName}="33"], > [#{$flexName}="34"], {  max-width: 100%;  max-height: 33%; }
-    > [#{$flexName}="66"], > [#{$flexName}="67"], {  max-width: 100%;  max-height: 67%; }
+  .md-layout#{$name}-column {
+    > .#{$flexName}-33   , > .#{$flexName}-34     {  flex: 0 0 33%;  max-width: 100%;  max-height: 33%; }
+    > .#{$flexName}-66   , > .#{$flexName}-67     {  flex: 0 0 67%;  max-width: 100%;  max-height: 67%; }
   }
 
 }
@@ -368,36 +327,25 @@
 }
 @mixin layout-padding-margin() {
 
-  .layout-padding > .flex-sm,   .layout-padding > .flex-lt-md,
-  [layout-padding] > [flex-sm], [layout-padding] > [flex-lt-md]
-  {
+  .layout-padding > .flex-sm,   .layout-padding > .flex-lt-md {
     padding: $layout-gutter-width / 4;
   }
   .layout-padding,
   .layout-padding > .flex,
   .layout-padding > .flex-gt-sm,
   .layout-padding > .flex-md,
-  .layout-padding > .flex-lt-lg,
-  [layout-padding],
-  [layout-padding] > [flex],
-  [layout-padding] > [flex-gt-sm],
-  [layout-padding] > [flex-md],
-  [layout-padding] > [flex-lt-lg]
+  .layout-padding > .flex-lt-lg
   {
     padding: $layout-gutter-width / 2;
   }
   .layout-padding > .flex-gt-md,
-  .layout-padding > .flex-lg,
-  [layout-padding] > [flex-gt-md],
-  [layout-padding] > [flex-lg]
+  .layout-padding > .flex-lg
   {
     padding: $layout-gutter-width / 1;
   }
 
   .layout-margin > .flex-sm,
-  .layout-margin > .flex-lt-md,
-  [layout-margin] >  [flex-sm],
-  [layout-margin] >  [flex-lt-md]
+  .layout-margin > .flex-lt-md
   {
     margin: $layout-gutter-width / 4;
   }
@@ -406,20 +354,13 @@
   .layout-margin  > .flex,
   .layout-margin  > .flex-gt-sm,
   .layout-margin  > .flex-md,
-  .layout-margin  > .flex-lt-lg,
-  [layout-margin],
-  [layout-margin] >  [flex],
-  [layout-margin] >  [flex-gt-sm],
-  [layout-margin] >  [flex-md],
-  [layout-margin] >  [flex-lt-lg]
+  .layout-margin  > .flex-lt-lg
   {
     margin: $layout-gutter-width / 2;
   }
 
   .layout-margin  > .flex-gt-md,
-  .layout-margin  > .flex-lg,
-  [layout-margin] >  [flex-gt-md],
-  [layout-margin] >  [flex-lg]
+  .layout-margin  > .flex-lg
   {
     margin: $layout-gutter-width / 1;
   }
@@ -473,16 +414,11 @@
  */
 
 
+
 @media (max-width: $layout-breakpoint-sm - 1) {
   // SMALL SCREEN
-  .hide, .hide-sm {
+  .hide-sm, .hide {
     &:not(.show-sm):not(.show) {
-      display: none;
-    }
-  }
-  [hide], [hide-sm]  {
-    &:not([show-sm]):not([show])
-    {
       display: none;
     }
   }
@@ -497,23 +433,14 @@
 
 @media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
   // MEDIUM SCREEN
-  .hide, .hide-gt-sm, {
+  .hide, .hide-gt-sm {
     &:not(.show-gt-sm):not(.show-md):not(.show) {
       display: none;
     }
   }
-  [hide], [hide-gt-sm], {
-    &:not([show-gt-sm]):not([show-md]):not([show]) {
-      display: none;
-    }
-  }
-  .hide-md:not(.show-sm):not(.show-md):not(.show) {
+  .hide-md:not(.show-md):not(.show) {
     display: none;
   }
-  [hide-md]:not([show-sm]):not([show-md]):not([show]) {
-    display: none;
-  }
-
   @include layouts_for_breakpoint(md);
 }
 
@@ -524,43 +451,24 @@
 
 @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
   // LARGE SCREEN
-  .hide, .hide-gt-md {
-    &:not(.show-gt-md):not(.show-lg):not(.show) {
+  .hide, .hide-gt-sm, .hide-gt-md {
+      &:not(.show-gt-sm):not(.show-gt-md):not(.show-lg):not(.show) {
+        display: none;
+      }
+    }
+    .hide-lg:not(.show-lg):not(.show) {
       display: none;
     }
-  }
-  [hide], [hide-gt-sm], [hide-gt-md] {
-    &:not([show-gt-sm]):not([show-gt-md]):not([show-lg]):not([show]) {
-      display: none;
-    }
-  }
-  .hide-lg:not(.show-sm):not(.show-md):not(.show-lg):not(.show) {
-    display: none;
-  }
-  [hide-lg]:not([show-sm]):not([show-md]):not([show-lg]):not([show]) {
-    display: none;
-  }
 
   @include layouts_for_breakpoint(lg);
 }
 
 @media (min-width: $layout-breakpoint-lg) {
   // BIGGER THAN LARGE SCREEN
-  .hide, .hide-gt-sm, .hide-gt-md, .hide-gt-lg {
+  .hide-gt-sm, .hide-gt-md, .hide-gt-lg, .hide {
     &:not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show) {
       display: none;
     }
-  }
-  [hide], [hide-gt-sm], [hide-gt-md], [hide-gt-lg] {
-    &:not([show-gt-sm]):not([show-gt-md]):not([show-gt-lg]):not([show]) {
-      display: none;
-    }
-  }
-  .hide-gt-lg:not(.show-gt-lg):not(.show) {
-    display: none;
-  }
-  [hide-gt-lg]:not([show-gt-lg]):not([show]) {
-    display: none;
   }
 
   @include layouts_for_breakpoint(gt-lg);

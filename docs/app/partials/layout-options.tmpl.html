@@ -1,8 +1,8 @@
-<div ng-controller="LayoutCtrl" class="layout-content layout-options">
+<div ng-controller="LayoutCtrl" class="layout-content layout-options" ng-cloak>
 
   <docs-demo demo-title="Responsive Layout" class="small-demo">
     <demo-file name="index.html">
-      <div layout="row" layout-sm="column">
+      <div layout="row" layout-sm="column" class="colorNested">
         <div flex>
           I'm above on mobile, and to the left on larger devices.
         </div>
@@ -57,7 +57,7 @@
 
   <docs-demo demo-title="Layout Margin, Padding and Fill" class="small-demo">
     <demo-file name="index.html">
-      <div layout="row" layout-margin layout-fill layout-padding>
+      <div layout="row" layout-margin layout-fill layout-padding class="colorNested">
         <div flex>I'm on the left, and there's an empty area around me.</div>
         <div flex>I'm on the right, and there's an empty area around me.</div>
       </div>
@@ -78,10 +78,10 @@
 
   <docs-demo demo-title="Wrap" class="small-demo">
     <demo-file name="index.html">
-      <div layout="row" layout-wrap>
+      <div layout="row" layout-wrap class="colorNested">
         <div flex="33">[flex=33]</div>
-        <div flex="66">[flex=66]</div>
-        <div flex="66">[flex=66]</div>
+        <div flex="66">[flex=67]</div>
+        <div flex="66">[flex=67]</div>
         <div flex="33">[flex=33]</div>
       </div>
     </demo-file>
@@ -97,7 +97,7 @@
 
   <docs-demo demo-title="Responsive Flex & Offset Attributes" class="small-demo">
     <demo-file name="index.html">
-      <div layout="row">
+      <div layout="row" class="colorNested">
         <div flex="66" flex-sm="33">
           I flex to one-third of the space on mobile, and two-thirds on other devices.
         </div>
@@ -148,11 +148,11 @@
 
   <docs-demo demo-title="Hide and Show Attributes" class="small-demo">
     <demo-file name="index.html">
-      <div layout layout-align="center center">
-        <md-subheader hide-sm>
+      <div layout layout-align="center center" class="colorNested">
+        <md-subheader show hide-gt-sm>
           I'm hidden on mobile and shown on larger devices.
         </md-subheader>
-        <md-subheader hide-gt-sm>
+        <md-subheader show-sm hide>
           I'm shown on mobile and hidden on larger devices.
         </md-subheader>
       </div>

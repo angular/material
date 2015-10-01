@@ -20,7 +20,7 @@ describe('layout directives', function() {
       { attribute: 'offset',         suffixes: suffixes, values: offsetValues },
       { attribute: 'hide',           suffixes: suffixes, testStandAlone: true },
       { attribute: 'show',           suffixes: suffixes, testStandAlone: true },
-      { attribute: 'layout',         suffixes: suffixes, values: directionValues, addDirectiveAsClass: true, testStandAlone: true },
+      //{ attribute: 'layout',         suffixes: suffixes, values: directionValues, addDirectiveAsClass: true, testStandAlone: true },
       { attribute: 'layout-align',   suffixes: suffixes, values: alignmentValues },
       { attribute: 'layout-padding', testStandAlone: true },
       { attribute: 'layout-margin',  testStandAlone: true },

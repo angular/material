@@ -1,17 +1,17 @@
-<div ng-controller="LayoutCtrl" class="layout-content">
+<div ng-controller="LayoutCtrl" class="layout-content" ng-cloak>
 
   <p>
     To customize the size and position of elements in a layout, use the
     <code>flex</code>, <code>offset</code>, and <code>flex-order</code> attributes.
   </p>
 
-  <docs-demo demo-title="Flex Attribute" class="small-demo">
+  <docs-demo demo-title="Flex Attribute" class="small-demo" >
     <demo-file name="index.html">
-      <div layout="row">
+      <div layout="row" class="colorNested">
         <div flex>
           [flex]
         </div>
-        <div flex>
+        <div flex style="color:white">
           [flex]
         </div>
         <div flex hide-sm>
@@ -27,11 +27,11 @@
 
   <docs-demo demo-title="Flex Percent Values" class="small-demo">
     <demo-file name="index.html">
-      <div layout="row" layout-wrap>
+      <div layout="row" layout-wrap class="colorNested">
         <div flex="33">
-          [flex="33"]
+          [flex="34"]
         </div>
-        <div flex="55">
+        <div flex="55" style="color:white">
           [flex="55"]
         </div>
         <div flex>
@@ -62,15 +62,17 @@
 
   <docs-demo demo-title="Flex Order Attribute" class="small-demo">
     <demo-file name="index.html">
-      <div layout="row" layout-margin>
-        <div flex flex-order="3">
-          [flex-order="3"]
+      <div layout="row" layout-margin class="colorNested">
+        <div flex flex-order="1" flex-order-gt-md="3" layout-padding>
+          <p show hide-gt-md>[flex-order="1"]</p>
+          <p hide show-gt-md>[flex-order-gt-sm="3"]</p>
         </div>
-        <div flex flex-order="2">
-          [flex-order="2"]
+        <div flex flex-order="2" layout-padding style="color:white">
+          <p>[flex-order="2"]</p>
         </div>
-        <div flex flex-order="1">
-          [flex-order="1"]
+        <div flex flex-order="3" flex-order-gt-md="1" layout-padding>
+          <p show hide-gt-md>[flex-order="3"]</p>
+          <p hide show-gt-md>[flex-order-gt-sm="1"]</p>
         </div>
       </div>
     </demo-file>
@@ -112,11 +114,11 @@
 
   <docs-demo demo-title="Flex Offset Attribute" class="small-demo">
     <demo-file name="index.html">
-      <div layout="row">
+      <div layout="row" class="colorNested">
         <div flex offset="33">
           [flex offset="33"]
         </div>
-        <div flex>
+        <div flex style="color:white">
           [flex]
         </div>
       </div>
