@@ -6,7 +6,7 @@ describe('md-input-container directive', function() {
   beforeEach(inject(function($injector) {
     $compile = $injector.get('$compile');
 
-    var pageScope = $injector.get('$rootScope').$new();
+    pageScope = $injector.get('$rootScope').$new();
   }));
 
   function setup(attrs, isForm) {
