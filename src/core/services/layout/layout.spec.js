@@ -47,20 +47,6 @@ describe('layout directives', function() {
         var element = $compile('<div ' + attribute + '>Layout</div>')($rootScope.$new());
         expect(element.hasClass(expectedClass)).toBe(true);
       }));
-
-      it('should not add the class ' + expectedClass + ' if the body class has "md-css-only" ' + attribute, inject(function($$mdLayout, $compile, $rootScope, $document) {
-        $$mdLayout.enablePostLinks = undefined;
-
-        var body = angular.element($document[0].body);
-        body.addClass('md-css-only');
-
-        var element = $compile('<div ' + attribute + '>Layout</div>')($rootScope.$new());
-        expect(element.hasClass(expectedClass)).toBe(false);
-
-        body.removeClass('md-css-only');
-        $$mdLayout.enablePostLinks = undefined;
-
-      }));
     }
 
     /** Test directives with 'sm', 'gt-sm', 'md', 'gt-md', 'lg', and 'gt-lg' suffixes */
@@ -146,7 +132,6 @@ describe('layout directives', function() {
       expect(element.hasClass('flex-gt-md-32')).toBe(false);
       expect(element.hasClass('flex-gt-md-fishCheeks')).toBe(true);
 
-      expect(element.attr('flex-gt-md')).toBeFalsy();
     }));
 
   })

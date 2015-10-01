@@ -182,7 +182,7 @@
     box-sizing: border-box;
   }
 
-  .#{$flexName}             { flex: 1 1 0%;  }
+  .#{$flexName}             { flex: 1;  }   // === 1 1 0%
   .#{$flexName}-grow        { flex: 1 1 100%;  }
   .#{$flexName}-initial     { flex: 0 1 auto;  }
   .#{$flexName}-auto        { flex: 1 1 auto;  }
