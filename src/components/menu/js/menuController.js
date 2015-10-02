@@ -97,7 +97,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout) {
       nestLevel: self.nestLevel,
       element: menuContainer,
       target: triggerElement,
-      preserveElement: self.isInMenuBar || self.nestedMenus.length > 0,
+      preserveElement: self.isInMenuBar,
       parent: self.isInMenuBar ? $element : 'body'
     });
   };
