@@ -1,6 +1,6 @@
 angular
   .module('sidenavDemo1', ['ngMaterial'])
-  .controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $mdUtil, $log) {
+  .controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log) {
     $scope.toggleLeft = buildToggler('left');
     $scope.toggleRight = buildToggler('right');
 
@@ -12,7 +12,7 @@ angular
       var timer;
 
       return function debounced() {
-        var context = scope,
+        var context = $scope,
             args = Array.prototype.slice.call(arguments);
         $timeout.cancel(timer);
         timer = $timeout(function() {
