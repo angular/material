@@ -102,19 +102,19 @@ function VirtualRepeatContainerController($$rAF, $parse, $scope, $element, $attr
   /** @type {number} Amount to offset the total scroll size by. */
   this.offsetSize = parseInt(this.$attrs.mdOffsetSize, 10) || 0;
 
-  if(this.$attrs.hasOwnProperty('mdTopIndex')) {
-    /** @type {function} An Angular expression that binds to topIndex on the scope */
+  if (this.$attrs.mdTopIndex) {
+    /** @type {function(angular.Scope): number} Binds to topIndex on Angular scope */
     this.bindTopIndex = $parse(this.$attrs.mdTopIndex);
     /** @type {number} The index of the item that is at the top of the scroll container */
     this.topIndex = this.bindTopIndex(this.$scope);
 
-    if(!angular.isDefined(this.topIndex)) {
+    if (!angular.isDefined(this.topIndex)) {
       this.topIndex = 0;
       this.bindTopIndex.assign(this.$scope, 0);
     }
 
     this.$scope.$watch(this.bindTopIndex, angular.bind(this, function(newIndex) {
-      if(newIndex !== this.topIndex) {
+      if (newIndex !== this.topIndex) {
         this.scrollToIndex(newIndex);
       }
     }));
@@ -313,9 +313,9 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
   this.offsetter.style.webkitTransform = transform;
   this.offsetter.style.transform = transform;
 
-  if(this.bindTopIndex) {
+  if (this.bindTopIndex) {
     var topIndex = Math.floor(offset / itemSize);
-    if(topIndex !== this.topIndex && topIndex < this.repeater.itemsLength) {
+    if (topIndex !== this.topIndex && topIndex < this.repeater.itemsLength) {
       this.topIndex = topIndex;
       this.bindTopIndex.assign(this.$scope, topIndex);
       if (!this.$scope.$root.$$phase) this.$scope.$digest();
@@ -602,7 +602,9 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
 
   if (this.isFirstRender) {
     this.isFirstRender = false;
-    var startIndex = this.$attrs.mdStartIndex ? this.$scope.$eval(this.$attrs.mdStartIndex) : this.container.topIndex;
+    var startIndex = this.$attrs.mdStartIndex ?
+      this.$scope.$eval(this.$attrs.mdStartIndex) :
+      this.container.topIndex;
     this.container.scrollToIndex(startIndex);
   }
 
