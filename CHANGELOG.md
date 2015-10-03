@@ -4,7 +4,7 @@
 
 #### Bug Fixes
 
-* **checkbox:** prevent ng-click firing on didabled checkboxes. Fixes ([1cae87c2](https://github.com/angular/material/commit/1cae87c2))
+* **checkbox:** prevent ng-click firing on disabled checkboxes. Fixes ([1cae87c2](https://github.com/angular/material/commit/1cae87c2))
 * **datepicker:** stop calendar going off-screen if body is scrollable.. ([3c876c1b](https://github.com/angular/material/commit/3c876c1b), closes [#4781](https://github.com/angular/material/issues/4781))
 * **layout:**
   * add border-box style to  to all `.flex` variants ([b1974bb0](https://github.com/angular/material/commit/b1974bb0))
