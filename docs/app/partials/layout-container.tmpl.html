@@ -8,30 +8,48 @@
 
   <p>
     The layout system is based upon element attributes rather than CSS classes.
-    Attributes provide an easy way to set a value (eg <code>layout="row"</code>), and additionally
-    helps us separate concerns: attributes define layout, and classes define styling.
+    Attributes provide an easy way to set a value (eg. <code>layout="row"</code>) and
+    help us separate concerns: attributes define layout, and classes define styling.
+  </p>
+  <p>
+    <i>
+      Note: Due to performance problems related to attribute selectors in IE11, our attributes are converted
+      to class selectors at runtime. You should continue to use layout attribute selectors in your code.
+    </i>
   </p>
 
-  <br/>
   <h3>Layout Attribute</h3>
   <p>
     Use the <code>layout</code> attribute on an element to arrange its children
-    horizontally in a row (<code>layout="row"</code>), or vertically in
-    a column (<code>layout="column"</code>). 
+    horizontally in a row (<code>layout="row"</code>) or vertically in a column (<code>layout="column"</code>).
+    Row layout is the default if you specify the <code>layout</code> attribute without a value.
   </p>
 
-  <hljs lang="html">
-    <div layout="row" class="colorNested">
-      <div>I'm left.</div>
-      <div>I'm right.</div>
+  <table>
+    <tr>
+      <td style="font-weight: bold; background-color: #DBEEF5">row</td>
+      <td style="padding-left: 10px;">Items arranged horizontally. <code>max-height = 100%</code> and <code>max-width</code>  is the width of the items in the container.</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold; background-color: #DBEEF5 ">column</td>
+      <td style="padding-left: 10px;">Items arranged vertically. <code>max-width = 100%</code>  and <code>max-height</code> is the height of the items in the container.</td>
+    </tr>
+  </table>
+
+  <docs-demo demo-title="Layout Attribute" class="small-demo colorNested">
+    <demo-file name="index.html">
+    <div layout="row">
+      <div flex>First item in row</div>
+      <div flex>Second item in row</div>
     </div>
-    <div layout="column" class="colorNested">
-      <div>I'm above.</div>
-      <div>I'm below.</div>
+    <div layout="column">
+      <div flex>First item in column</div>
+      <div flex>Second item in column</div>
     </div>
-  </hljs>
+    </demo-file>
+  </docs-demo>
 
   <p>
-    See <a href="#/layout/options">Layout Options</a> for information on responsive layouts and other options.
+    See the <a href="#/layout/options">layout options page</a> for information on responsive layouts and other options.
   </p>
 </div>

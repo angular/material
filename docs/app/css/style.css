@@ -518,7 +518,13 @@ md-tabs.demo-source-tabs .active md-tab-label {
 .demo-content > div[layout-fill] {
   min-height: 448px;
 }
+.demo-content > div.layout-fill {
+  min-height: 448px;
+}
 .small-demo .demo-content > div[layout-fill] {
+  min-height: 224px;
+}
+.small-demo .demo-content > div.layout-fill {
   min-height: 224px;
 }
 .layout-content .small-demo .demo-content > div[layout],
@@ -850,4 +856,16 @@ docs-demo .doc-demo-content {
   -ms-transition:     none !important;
   -o-transition:      none !important;
   transition:         none !important;
+}
+
+table.attributes {
+  padding-left:15px;
+  margin-bottom: 10px;
+}
+table.attributes  tr  td:first-child {
+  font-weight: bold;
+  background-color: #DBEEF5;
+}
+table.attributes  tr  td:last-child {
+  padding-left: 10px;
 }
