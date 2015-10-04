@@ -414,7 +414,7 @@ function MdDialogProvider($$interimElementProvider) {
   function advancedDialogOptions($mdDialog, $mdTheming) {
     return {
       template: [
-        '<md-dialog md-theme="{{ dialog.theme }}" aria-label="{{ dialog.ariaLabel }}" class="{{ dialog.css }}">',
+        '<md-dialog md-theme="{{ dialog.theme }}" aria-label="{{ dialog.ariaLabel }}" ng-class="dialog.css">',
         ' <md-dialog-content role="document" tabIndex="-1">',
         '   <h2 class="md-title">{{ dialog.title }}</h2>',
         '   <div class="md-dialog-content-body" md-template="::dialog.mdContent"></div>',
