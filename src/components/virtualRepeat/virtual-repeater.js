@@ -379,6 +379,12 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document, 
   /** @type {boolean} Whether this is the first time that items are rendered. */
   this.isFirstRender = true;
 
+  /**
+   * @private {boolean} Whether the items in the list are already being updated. Used to prevent
+   *     nested calls to virtualRepeatUpdate_.
+   */
+  this.isVirtualRepeatUpdating_ = false;
+
   /** @type {number} Most recently seen length of items. */
   this.itemsLength = 0;
 
@@ -531,6 +537,11 @@ VirtualRepeatController.prototype.getItemSize = function() {
  * @private
  */
 VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItems) {
+  if (this.isVirtualRepeatUpdating_) {
+    return;
+  }
+
+  this.isVirtualRepeatUpdating_ = true;
   var itemsLength = items ? items.length : 0;
   var lengthChanged = false;
 
@@ -619,6 +630,7 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
 
   this.startIndex = this.newStartIndex;
   this.endIndex = this.newEndIndex;
+  this.isVirtualRepeatUpdating_ = false;
 };
 
 
