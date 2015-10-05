@@ -384,7 +384,7 @@ function mdMaxlengthDirective($animate) {
 
     ngModelCtrl.$formatters.push(renderCharCount);
     ngModelCtrl.$viewChangeListeners.push(renderCharCount);
-    element.on('input keydown', function() {
+    element.on('input keydown keyup', function() {
       renderCharCount(); //make sure it's called with no args
     });
 
