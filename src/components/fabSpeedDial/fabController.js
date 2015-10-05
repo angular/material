@@ -115,20 +115,27 @@
       events.push(latestEvent.type);
 
       // Handle desktop click
-      if (equalsEvents(['mousedown', 'focusout?', 'focusin?', 'mouseup', 'click'])) {
+      if (equalsEvents(['mousedown', 'mouseup'])) {
         handleItemClick(latestEvent);
         resetEvents();
         return;
       }
 
       // Handle mobile click/tap (and keyboard enter)
-      if (equalsEvents(['touchstart?', 'touchend?', 'click'])) {
+      if (equalsEvents(['touchstart', 'touchend'])) {
         handleItemClick(latestEvent);
         resetEvents();
         return;
       }
 
-      // Handle tab keys (focusin)
+        // Handle mobile click/tap (and keyboard enter)
+      if (equalsEvents(['click'])) {
+          handleItemClick(latestEvent);
+          resetEvents();
+          return;
+      }
+
+        // Handle tab keys (focusin)
       if (equalsEvents(['focusin'])) {
         vm.open();
         resetEvents();
