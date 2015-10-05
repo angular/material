@@ -34,6 +34,9 @@ module.exports = {
   scssStandaloneFiles: [
     'src/core/services/layout/layout.scss'
   ],
+  scssTestFiles: [
+    'src/core/services/layout/layout.scss'
+  ],
   paths: 'src/{components,services}/**',
   outputDir: 'dist/',
   demoFolder: 'demo-partials'

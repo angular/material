@@ -9,7 +9,7 @@
   var pkg            = require('./package.json');
   var oldVersion     = pkg.version;
   var abortCmds      = [ 'git reset --hard', 'git checkout staging', 'rm abort push' ];
-  var pushCmds       = [ 'rm abort push'];
+  var pushCmds       = [ 'rm abort push' ];
   var cleanupCmds    = [];
   var defaultOptions = { encoding: 'utf-8' };
   var origin         = 'https://github.com/angular/material.git';
@@ -88,10 +88,10 @@
   function createChangelog () {
     start('Generating changelog from {{oldVersion.cyan}} to {{newVersion.cyan}}...');
     exec([
-      'git fetch --tags',
-      'git checkout v{{lastMajorVer}} -- CHANGELOG.md',
-      'gulp changelog --sha=$(git merge-base v{{lastMajorVer}} HEAD)'
-    ]);
+           'git fetch --tags',
+           'git checkout v{{lastMajorVer}} -- CHANGELOG.md',
+           'gulp changelog --sha=$(git merge-base v{{lastMajorVer}} HEAD)'
+         ]);
     done();
     abortCmds.push('git checkout CHANGELOG.md');
     pushCmds.push('git add CHANGELOG.md');
@@ -107,12 +107,12 @@
     log('The current version is {{oldVersion.cyan}}.');
     log('');
     log('What should the next version be?');
-    for (key in options) { log((+key + 1) + ') ' + options[key].cyan); }
+    for (key in options) { log((+key + 1) + ') ' + options[ key ].cyan); }
     log('');
     write('Please select a new version: ');
     type = prompt();
 
-    if (options[type - 1]) version = options[type - 1];
+    if (options[ type - 1 ]) version = options[ type - 1 ];
     else if (type.match(/^\d+\.\d+\.\d+(-rc\d+)?$/)) version = type;
     else throw new Error('Your entry was invalid.');
 
@@ -124,35 +124,48 @@
     function getVersionOptions (version) {
       return version.match(/-rc\d+$/)
           ? [ increment(version, 'rc'),
-              increment(version, 'minor') ]
+        increment(version, 'minor') ]
           : [ increment(version, 'patch'),
-              increment(version, 'minor'),
-              increment(version, 'major') ].map(addRC);
+        increment(version, 'minor'),
+        increment(version, 'major') ].map(addRC);
 
       function increment (versionString, type) {
         var version = parseVersion(versionString);
         if (version.rc) {
           switch (type) {
-            case 'minor': version.rc = 0; break;
-            case 'rc': version.rc++; break;
+            case 'minor':
+              version.rc = 0;
+              break;
+            case 'rc':
+              version.rc++;
+              break;
           }
         } else {
-          version[type]++;
+          version[ type ]++;
           //-- reset any version numbers lower than the one changed
           switch (type) {
-            case 'major': version.minor = 0;
-            case 'minor': version.patch = 0;
-            case 'patch': version.rc = 0;
+            case 'major':
+              version.minor = 0;
+            case 'minor':
+              version.patch = 0;
+            case 'patch':
+              version.rc = 0;
           }
         }
         return getVersionString(version);
 
         function parseVersion (version) {
           var parts = version.split(/\.|\-rc/g);
-          return { string: version, major: parts[0], minor: parts[1], patch: parts[2], rc: parts[3] || 0 };
+          return {
+            string: version,
+            major:  parts[ 0 ],
+            minor:  parts[ 1 ],
+            patch:  parts[ 2 ],
+            rc:     parts[ 3 ] || 0
+          };
         }
 
-        function getVersionString(version) {
+        function getVersionString (version) {
           var str = version.major + '.' + version.minor + '.' + version.patch;
           if (version.rc) str += '-rc' + version.rc;
           return str;
@@ -188,7 +201,7 @@
     cleanupCmds.push('rm -rf ' + repo);
   }
 
-  function fill(str) {
+  function fill (str) {
     return str.replace(/\{\{[^\}]+\}\}/g, function (match) {
       return eval(match.substr(2, match.length - 4));
     });
@@ -202,8 +215,8 @@
   function updateBowerVersion () {
     start('Updating bower version...');
     var options = { cwd: './bower-material' },
-        bower = require(options.cwd + '/bower.json'),
-        pkg = require(options.cwd + '/package.json');
+        bower   = require(options.cwd + '/bower.json'),
+        pkg     = require(options.cwd + '/package.json');
     //-- update versions in config files
     bower.version = pkg.version = newVersion;
     fs.writeFileSync(options.cwd + '/package.json', JSON.stringify(pkg, null, 2));
@@ -212,21 +225,21 @@
     start('Building bower files...');
     //-- build files for bower
     exec([
-      'rm -rf dist',
-      'gulp build',
-      'gulp build-all-modules --mode=default',
-      'gulp build-all-modules --mode=closure',
-      'rm -rf dist/demos',
-    ]);
+           'rm -rf dist',
+           'gulp build',
+           'gulp build-all-modules --mode=default',
+           'gulp build-all-modules --mode=closure',
+           'rm -rf dist/demos',
+         ]);
     done();
     start('Copy files into bower repo...');
     //-- copy files over to bower repo
     exec([
-      'cp -Rf ../dist/* ./',
-      'git add -A',
-      'git commit -m "release: version {{newVersion}}"',
-      'rm -rf ../dist'
-    ], options);
+           'cp -Rf ../dist/* ./',
+           'git add -A',
+           'git commit -m "release: version {{newVersion}}"',
+           'rm -rf ../dist'
+         ], options);
     done();
     //-- add steps to push script
     pushCmds.push(
@@ -246,32 +259,31 @@
 
   function updateSite () {
     start('Adding new version of the docs site...');
-    var options = { cwd: './code.material.angularjs.org' },
-        config  = require(options.cwd + '/docs.json');
-    config.versions = config.versions.filter(function (version) {
-      return version.indexOf('rc') < 0;
-    });
-    config.versions.unshift(newVersion);
-    //-- only set to default if not a release candidate
-    if (newVersion.indexOf('rc') < 0) config.latest = newVersion;
-    fs.writeFileSync(options.cwd + '/docs.json', JSON.stringify(config, null, 2));
+    var options = { cwd: './code.material.angularjs.org' };
+    writeDocsJson();
+
     //-- build files for bower
     exec([
-      'rm -rf dist',
-      'gulp docs',
-      'sed -i \'\' \'s,http:\\/\\/localhost:8080\\/angular-material,https:\\/\\/gitcdn.xyz/repo/angular/bower-material/v{{newVersion}}/angular-material,g\' dist/docs/docs.js'
-    ]);
+           'rm -rf dist',
+           'gulp docs',
+           'sed -i \'\' \'s,http:\\/\\/localhost:8080\\/angular-material,https:\\/\\/gitcdn.xyz/repo/angular/bower-material/v{{newVersion}}/angular-material,g\' dist/docs/docs.js',
+           'sed -i \'\' \'s,base\ href=\\",base\ href=\\"/{{newVersion}},g\' dist/docs/index.html'
+         ]);
 
     //-- copy files over to site repo
     exec([
-      'rm -rf ./*-rc*',
-      'cp -Rf ../dist/docs {{newVersion}}',
-      ( newVersion.indexOf('rc') < 0 ? 'rm -rf latest && cp -Rf ../dist/docs latest' : '# skipped latest because this is a release candidate' ),
-      'git add -A',
-      'git commit -m "release: version {{newVersion}}"',
-      'rm -rf ../dist'
-    ], options);
+           'rm -rf ./*-rc*',
+           'cp -Rf ../dist/docs {{newVersion}}',
+           ( newVersion.indexOf('rc') < 0 ? 'rm -rf latest && cp -Rf ../dist/docs latest' : '# skipped latest because this is a release candidate' ),
+           'git add -A',
+           'git commit -m "release: version {{newVersion}}"',
+           'rm -rf ../dist'
+         ], options);
+
+    //-- update firebase.json file
+    writeFirebaseJson();
     done();
+
     //-- add steps to push script
     pushCmds.push(
         comment('push the site'),
@@ -280,6 +292,41 @@
         'git push',
         'cd ..'
     );
+
+    function writeFirebaseJson () {
+      fs.writeFileSync(options.cwd + '/firebase.json', getFirebaseJson());
+      function getFirebaseJson () {
+        var json      = require(options.cwd + '/firebase.json');
+        json.rewrites = json.rewrites || [];
+        switch (json.rewrites.length) {
+          case 0:
+            json.rewrites.push(getRewrite('HEAD'));
+          case 1:
+            json.rewrites.push(getRewrite('latest'));
+          default:
+            json.rewrites.push(getRewrite(newVersion));
+        }
+        return JSON.stringify(json, null, 2);
+        function getRewrite (str) {
+          return {
+            source:      '/' + str + '/**/!(*.@(js|html|css|json|svg|png|jpg|jpeg))',
+            destination: '/' + str + '/index.html'
+          };
+        }
+      }
+    }
+
+    function writeDocsJson () {
+      var config      = require(options.cwd + '/docs.json');
+      config.versions = config.versions.filter(function (version) {
+        return version.indexOf('rc') < 0;
+      });
+      config.versions.unshift(newVersion);
+
+      //-- only set to default if not a release candidate
+      if (newVersion.indexOf('rc') < 0) config.latest = newVersion;
+      fs.writeFileSync(options.cwd + '/docs.json', JSON.stringify(config, null, 2));
+    }
   }
 
   function updateMaster () {
@@ -297,11 +344,12 @@
     function buildCommand () {
       require('fs').writeFileSync('package.json', JSON.stringify(getUpdatedJson(), null, 2));
       function getUpdatedJson () {
-        var json = require('./package.json');
+        var json     = require('./package.json');
         json.version = '{{newVersion}}';
         return json;
       }
     }
+
     function stringifyFunction (method) {
       return method
           .toString()
@@ -321,7 +369,7 @@
   }
 
   function center (msg) {
-    msg = ' ' + msg.trim() + ' ';
+    msg        = ' ' + msg.trim() + ' ';
     var length = msg.length;
     var spaces = Math.floor((lineWidth - length) / 2);
     return Array(spaces + 1).join('-') + msg.green + Array(lineWidth - msg.length - spaces + 1).join('-');
@@ -337,7 +385,7 @@
     }
     try {
       var options = Object.create(defaultOptions);
-      for (var key in userOptions) options[key] = userOptions[key];
+      for (var key in userOptions) options[ key ] = userOptions[ key ];
       return child_process.execSync(fill(cmd) + ' 2> /dev/null', options).trim();
     } catch (err) {
       return err;
@@ -351,7 +399,7 @@
   function start (msg) {
     var parsedMsg = fill(msg),
         msgLength = strip(parsedMsg).length,
-        diff = lineWidth - 4 - msgLength;
+        diff      = lineWidth - 4 - msgLength;
     write(parsedMsg + Array(diff + 1).join(' '));
   }
 

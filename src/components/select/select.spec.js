@@ -91,15 +91,6 @@ describe('<md-select>', function() {
     //expect($document[0].activeElement).toBe(select[0]);
   }));
 
-  it('should not convert numbers to strings', inject(function($compile, $rootScope) {
-    $rootScope.value = 1;
-    $compile('<md-select ng-model="value">' +
-      '<md-option ng-repeat="value in [1, 2, 3]" value="{{value}}">{{value}}</md-option>' +
-      '</md-select>')($rootScope);
-    $rootScope.$digest();
-    expect($rootScope.value).toBe(1);
-  }));
-
   describe('input container', function() {
     it('should set has-value class on container for non-ng-model input', inject(function($rootScope, $document) {
       var el = setupSelect('ng-model="$root.model"', [1, 2, 3]);

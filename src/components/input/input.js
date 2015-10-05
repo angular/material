@@ -362,7 +362,25 @@ function mdMaxlengthDirective($animate) {
     // Stop model from trimming. This makes it so whitespace
     // over the maxlength still counts as invalid.
     attr.$set('ngTrim', 'false');
-    input.after(charCountEl);
+
+    var ngMessagesSelectors = [
+      'ng-messages',
+      'data-ng-messages',
+      'x-ng-messages',
+      '[ng-messages]',
+      '[data-ng-messages]',
+      '[x-ng-messages]'
+    ];
+
+    var ngMessages = containerCtrl.element[0].querySelector(ngMessagesSelectors.join(','));
+
+    // If we have an ngMessages container, put the counter at the top; otherwise, put it after the
+    // input so it will be positioned properly in the SCSS
+    if (ngMessages) {
+      angular.element(ngMessages).prepend(charCountEl);
+    } else {
+      input.after(charCountEl);
+    }
 
     ngModelCtrl.$formatters.push(renderCharCount);
     ngModelCtrl.$viewChangeListeners.push(renderCharCount);
@@ -390,7 +408,9 @@ function mdMaxlengthDirective($animate) {
     };
 
     function renderCharCount(value) {
-      charCountEl.text(( element.val() || value || '' ).length + '/' + maxlength);
+      // Force the value into a string since it may be a number,
+      // which does not have a length property.
+      charCountEl.text(String(element.val() || value || '').length + '/' + maxlength);
       return value;
     }
   }

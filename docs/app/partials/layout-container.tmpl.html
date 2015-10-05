@@ -1,4 +1,4 @@
-<div ng-controller="LayoutCtrl" class="layout-content">
+<div ng-controller="LayoutCtrl" class="layout-content" ng-cloak>
 
   <h3>Overview</h3>
   <p>
@@ -21,11 +21,11 @@
   </p>
 
   <hljs lang="html">
-    <div layout="row">
+    <div layout="row" class="colorNested">
       <div>I'm left.</div>
       <div>I'm right.</div>
     </div>
-    <div layout="column">
+    <div layout="column" class="colorNested">
       <div>I'm above.</div>
       <div>I'm below.</div>
     </div>

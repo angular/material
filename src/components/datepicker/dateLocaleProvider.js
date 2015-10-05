@@ -48,7 +48,8 @@
    *
    *     // Example uses moment.js to parse and format dates.
    *     $mdDateLocaleProvider.parseDate = function(dateString) {
-   *       return moment(dateString).toDate();
+   *       var m = moment(dateString, 'L', true);
+   *       return m.isValid() ? m.toDate() : new Date(NaN);
    *     };
    *
    *     $mdDateLocaleProvider.formatDate = function(date) {
