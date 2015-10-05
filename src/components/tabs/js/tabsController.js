@@ -628,17 +628,24 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   function updateHeightFromContent () {
     if (!ctrl.dynamicHeight) return $element.css('height', '');
     if (!ctrl.tabs.length) return queue.push(updateHeightFromContent);
+
     var tabContent    = elements.contents[ ctrl.selectedIndex ],
         contentHeight = tabContent ? tabContent.offsetHeight : 0,
         tabsHeight    = elements.wrapper.offsetHeight,
         newHeight     = contentHeight + tabsHeight,
-        currentHeight = $element.prop('clientHeight');
+        currentHeight = $element.prop('offsetHeight');
+
+    if ($element.attr('md-align-tabs') === 'bottom') {
+      currentHeight -= tabsHeight;
+      newHeight -= tabsHeight;
+    }
+    if ($element.attr('md-border-bottom') !== undefined) ++currentHeight;
     if (currentHeight === newHeight) return;
 
     // Lock during animation so the user can't change tabs
     locked = true;
 
-    var fromHeight = { height: currentHeight + 'px'},
+    var fromHeight = { height: currentHeight + 'px' },
         toHeight = { height: newHeight + 'px' };
 
     // Set the height to the current, specific pixel height to fix a bug on iOS where the height

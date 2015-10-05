@@ -3,15 +3,9 @@ $tabs-tab-width: $baseline-grid * 12 !default;
 $tabs-header-height: 48px !default;
 
 @keyframes md-tab-content-hide {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+  0% { opacity: 1; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 md-tab-data {
@@ -35,12 +29,14 @@ md-tabs {
     min-height: 200 + $tabs-header-height;
   }
   &[md-align-tabs="bottom"] {
+    padding-bottom: $tabs-header-height;
     md-tabs-wrapper {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
       height: $tabs-header-height;
+      z-index: 2;
     }
     md-tabs-content-wrapper {
       top: 0;
