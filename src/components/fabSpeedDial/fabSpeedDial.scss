@@ -3,8 +3,27 @@ md-fab-speed-dial {
   display: flex;
   align-items: center;
 
-  // Include the top/left/bottom/right fab positions
+  // Include the top/left/bottom/right fab positions and set the z-index for absolute positioning
   @include fab-all-positions();
+  z-index: $z-index-fab;
+
+  // Allow users to enable/disable hovering over the entire speed dial (i.e. the empty space where
+  // items will eventually appear)
+  &:not(.md-hover-full) {
+    // Turn off pointer events when closed
+    pointer-events: none;
+
+    md-fab-trigger, .md-fab-action-item {
+      // Always make the trigger and action items always have pointer events (the tooltip looks
+      // for the first parent with pointer-events, so we must set this for tooltips to work)
+      pointer-events: auto;
+    }
+
+    &.md-is-open {
+      // Turn on pointer events when open
+      pointer-events: auto;
+    }
+  }
 
   .md-css-variables {
     z-index: $z-index-fab;
