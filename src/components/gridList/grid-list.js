@@ -724,7 +724,7 @@ function GridTileDirective($mdMedia) {
     scope.$on('$destroy', function() {
       // Mark the tile as destroyed so it is no longer considered in layout,
       // even if the DOM element sticks around (like during a leave animation)
-      element.$$mdDestroyed = true;
+      element[0].$$mdDestroyed = true;
       unwatchAttrs();
       gridCtrl.invalidateLayout();
     });
