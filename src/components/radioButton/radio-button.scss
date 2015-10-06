@@ -112,6 +112,20 @@ md-radio-group {
   }
 }
 
+.md-inline-form {
+  md-radio-group {
+    margin: 18px 0 19px;
+    md-radio-button {
+      display: inline-block;
+      height: 30px;
+      padding: 2px;
+      box-sizing: border-box;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+}
+
 @media screen and (-ms-high-contrast: active) {
   md-radio-button.md-default-theme .md-on {
     background-color: #fff;

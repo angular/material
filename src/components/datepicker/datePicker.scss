@@ -8,8 +8,13 @@ md-datepicker {
   white-space: nowrap;
 }
 
+.md-inline-form {
+  md-datepicker {
+    margin-top: 8px;
+  }
+}
+
 // The calendar icon button used to open the calendar pane.
-// Need absurd specificty to override md-button.md-icon-button.
 .md-datepicker-button {
   display: inline-block;
   box-sizing: border-box;
