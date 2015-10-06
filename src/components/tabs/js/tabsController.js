@@ -534,7 +534,15 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    * Updates whether or not pagination should be displayed.
    */
   function updatePagination () {
+    updatePagingWidth();
+    ctrl.maxTabWidth = getMaxTabWidth();
     ctrl.shouldPaginate = shouldPaginate();
+  }
+
+  function updatePagingWidth() {
+    var width = 1;
+    angular.forEach(elements.dummies, function (element) { width += element.offsetWidth; });
+    angular.element(elements.paging).css('width', width + 'px');
   }
 
   function getMaxTabWidth () {
