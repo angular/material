@@ -89,10 +89,10 @@ md-list-item, md-list-item .md-list-item-inner {
   min-height: $list-item-height;
 
   // Layout for controls in primary or secondary divs, or auto-infered first child
-  & > div.md-primary > md-icon,
-  & > div.md-secondary > md-icon,
-  & > md-icon:first-child, 
-  > md-icon.md-secondary {
+  & > div.md-primary > md-icon:not(.md-avatar-icon),
+  & > div.md-secondary > md-icon:not(.md-avatar-icon),
+  & > md-icon:first-child:not(.md-avatar-icon),
+  > md-icon.md-secondary:not(.md-avatar-icon) {
     width: $list-item-primary-icon-width;
     margin-top: 16px;
     margin-bottom: 12px;
@@ -106,7 +106,7 @@ md-list-item, md-list-item .md-list-item-inner {
     .md-label { display: none; }
   }
 
-  & > md-icon:first-child {
+  & > md-icon:first-child:not(.md-avatar-icon) {
     margin-right: $list-item-primary-width - $list-item-primary-icon-width;
   }
   & > md-checkbox:first-child {
@@ -114,14 +114,19 @@ md-list-item, md-list-item .md-list-item-inner {
     margin-left: 3px;
     margin-right: 29px;
   }
-  & > .md-avatar:first-child {
-    width: $list-item-primary-avatar-width;
-    height: $list-item-primary-avatar-width;
+  & > .md-avatar, .md-avatar-icon {
     margin-top: $baseline-grid;
     margin-bottom: $baseline-grid;
     margin-right: $list-item-primary-width - $list-item-primary-avatar-width;
     border-radius: 50%;
     box-sizing: content-box;
+  }
+  & > .md-avatar {
+    width: $list-item-primary-avatar-width;
+    height: $list-item-primary-avatar-width;
+  }
+  & > .md-avatar-icon {
+    padding: 8px;
   }
 
   md-checkbox.md-secondary,
@@ -213,7 +218,7 @@ md-list-item.md-3-line > .md-no-style {
 md-list-item.md-2-line,
 md-list-item.md-2-line > .md-no-style {
   height: $list-item-two-line-height;
-  > .md-avatar:first-child {
+  > .md-avatar, .md-avatar-icon {
     margin-top: $baseline-grid * 1.5;
   }
   > md-icon:first-child {
@@ -227,8 +232,8 @@ md-list-item.md-2-line > .md-no-style {
 md-list-item.md-3-line,
 md-list-item.md-3-line > .md-no-style {
   height: $list-item-three-line-height;
-  > md-icon:first-child, 
-  > .md-avatar:first-child {
+  > md-icon:first-child,
+  > .md-avatar {
     margin-top: $baseline-grid * 2;
   }
 }
