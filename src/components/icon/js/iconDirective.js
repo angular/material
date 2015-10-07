@@ -100,7 +100,8 @@ angular
  * nor a label on the parent element, a warning will be logged to the console.
  * @param {string=} alt Labels icon for accessibility. If an empty string is provided, icon
  * will be hidden from accessibility layer with `aria-hidden="true"`. If there's no alt on the icon
- * nor a label on the parent element, a warning will be logged to the console. *
+ * nor a label on the parent element, a warning will be logged to the console.
+ *
  * @usage
  * When using SVGs:
  * <hljs lang="html">
@@ -230,25 +231,12 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria ) {
       return false;
     }
 
-    function prepareForFontIcon () {
+    function prepareForFontIcon() {
       if (!scope.svgIcon && !scope.svgSrc) {
-
         if (scope.fontIcon) {
           element.addClass('md-font ' + scope.fontIcon);
         }
-
-        if (scope.fontSet) {
-          element.addClass($mdIcon.fontSet(scope.fontSet));
-        }
-
-        if (shouldUseDefaultFontSet()) {
-          element.addClass($mdIcon.fontSet());
-        }
-
-      }
-
-      function shouldUseDefaultFontSet() {
-        return !scope.fontIcon && !scope.fontSet;
+        element.addClass($mdIcon.fontSet(scope.fontSet));
       }
     }
   }

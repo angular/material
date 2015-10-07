@@ -10,6 +10,14 @@ md-checkbox.md-THEME_NAME-theme {
     background-color: '{{accent-color-0.26}}';
   }
 
+  .md-ink-ripple {
+    color: '{{foreground-2}}';
+  }
+
+  &.md-checked .md-ink-ripple {
+    color: '{{accent-color-0.87}}';
+  }
+
   .md-icon {
     border-color: '{{foreground-2}}';
   }
@@ -28,6 +36,14 @@ md-checkbox.md-THEME_NAME-theme {
       }
       &.md-checked .md-ripple {
         color: '{{background-600}}';
+      }
+
+      .md-ink-ripple {
+        color: '{{foreground-2}}';
+      }
+
+      &.md-checked .md-ink-ripple {
+        color: '{{primary-color-0.87}}';
       }
 
       .md-icon {
@@ -50,6 +66,15 @@ md-checkbox.md-THEME_NAME-theme {
       .md-ripple {
         color: '{{warn-600}}';
       }
+
+      .md-ink-ripple {
+        color: '{{foreground-2}}';
+      }
+
+      &.md-checked .md-ink-ripple {
+        color: '{{warn-color-0.87}}';
+      }
+
       .md-icon {
         border-color: '{{foreground-2}}';
       }

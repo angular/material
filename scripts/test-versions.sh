@@ -57,7 +57,6 @@ for VERSION in "${VERSIONS[@]}"; do
     ZIP_URL="$CDN/snapshot/angular-$ZIP_FILE_SHA.zip"
   else
     LATEST_VERSION=$(node ./scripts/find-max-version.js $VERSION)
-    echo $LATEST_VERSION
     if [ ! $LATEST_VERSION ]; then
       echo "Error: version "$VERSION" of angular does not exist..."
       exit 1

@@ -33,7 +33,7 @@ angular.module('material.components.card', [
  * fit within a single view on a platform, but it can temporarily expand as needed.
  *
  * @usage
- * ###Card with optional footer
+ * ### Card with optional footer
  * <hljs lang="html">
  * <md-card>
  *  <img src="card-image.png" class="md-card-image" alt="image caption">
@@ -47,7 +47,7 @@ angular.module('material.components.card', [
  * </md-card>
  * </hljs>
  *
- * ###Card with actions
+ * ### Card with actions
  * <hljs lang="html">
  * <md-card>
  *  <img src="card-image.png" class="md-card-image" alt="image caption">

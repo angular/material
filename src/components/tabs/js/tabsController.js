@@ -32,7 +32,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   defineBooleanAttribute('swipeContent');
   defineBooleanAttribute('noDisconnect');
   defineBooleanAttribute('autoselect');
-  defineBooleanAttribute('centerTabs', handleCenterTabs);
+  defineBooleanAttribute('centerTabs', handleCenterTabs, false);
   defineBooleanAttribute('enableDisconnect');
 
   // define public properties
@@ -534,7 +534,15 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    * Updates whether or not pagination should be displayed.
    */
   function updatePagination () {
+    if (!shouldStretchTabs()) updatePagingWidth();
+    ctrl.maxTabWidth = getMaxTabWidth();
     ctrl.shouldPaginate = shouldPaginate();
+  }
+
+  function updatePagingWidth() {
+    var width = 1;
+    angular.forEach(elements.dummies, function (element) { width += element.offsetWidth; });
+    angular.element(elements.paging).css('width', width + 'px');
   }
 
   function getMaxTabWidth () {
@@ -628,17 +636,28 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   function updateHeightFromContent () {
     if (!ctrl.dynamicHeight) return $element.css('height', '');
     if (!ctrl.tabs.length) return queue.push(updateHeightFromContent);
+
     var tabContent    = elements.contents[ ctrl.selectedIndex ],
         contentHeight = tabContent ? tabContent.offsetHeight : 0,
         tabsHeight    = elements.wrapper.offsetHeight,
         newHeight     = contentHeight + tabsHeight,
-        currentHeight = $element.prop('clientHeight');
+        currentHeight = $element.prop('offsetHeight');
+
+    // Adjusts calculations for when the buttons are bottom-aligned since this relies on absolute
+    // positioning.  This should probably be cleaned up if a cleaner solution is possible.
+    if ($element.attr('md-align-tabs') === 'bottom') {
+      currentHeight -= tabsHeight;
+      newHeight -= tabsHeight;
+      // Need to include bottom border in these calculations
+      if ($element.attr('md-border-bottom') !== undefined) ++currentHeight;
+    }
+
     if (currentHeight === newHeight) return;
 
     // Lock during animation so the user can't change tabs
     locked = true;
 
-    var fromHeight = { height: currentHeight + 'px'},
+    var fromHeight = { height: currentHeight + 'px' },
         toHeight = { height: newHeight + 'px' };
 
     // Set the height to the current, specific pixel height to fix a bug on iOS where the height

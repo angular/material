@@ -408,6 +408,50 @@ describe('<md-virtual-repeat>', function() {
     expect(getRepeated().length).toBe(numItemRenderers);
   });
 
+  it('should update topIndex when scrolling', function() {
+    container.attr({'md-top-index': 'topIndex'});
+    scope.items = createItems(NUM_ITEMS);
+    createRepeater();
+
+    scope.$apply();
+    expect(scope.topIndex).toBe(0);
+
+    scroller[0].scrollTop = ITEM_SIZE * 50;
+    scroller.triggerHandler('scroll');
+    scope.$apply();
+    expect(scope.topIndex).toBe(50);
+
+    scroller[0].scrollTop = 25 * ITEM_SIZE;
+    scroller.triggerHandler('scroll');
+    scope.$apply();
+    expect(scope.topIndex).toBe(25);
+  });
+
+  it('should start at the given topIndex position', function() {
+    container.attr({'md-top-index': 'topIndex'});
+    repeater.removeAttr('md-start-index');
+    scope.topIndex = 10;
+    scope.items = createItems(200);
+    createRepeater();
+    scope.$apply();
+
+    expect(scroller[0].scrollTop).toBe(10 * ITEM_SIZE);
+  });
+
+  it('should scroll when topIndex is updated', function() {
+    container.attr({'md-top-index': 'topIndex'});
+    scope.items = createItems(200);
+    createRepeater();
+
+    scope.topIndex = 50;
+    scope.$apply();
+    expect(scroller[0].scrollTop).toBe(50 * ITEM_SIZE);
+
+    scope.topIndex = 25;
+    scope.$apply();
+    expect(scroller[0].scrollTop).toBe(25 * ITEM_SIZE);
+  });
+
   /**
    * Facade to access transform properly even when jQuery is used;
    * since jQuery's css function is obtaining the computed style (not wanted)

@@ -8,13 +8,14 @@ describe('md-date-picker', function() {
   var initialDate = new Date(2015, FEB, 15);
 
   var ngElement, element, scope, pageScope, controller;
-  var $timeout, $$rAF, $animate, keyCodes, dateUtil, dateLocale;
+  var $timeout, $$rAF, $animate, $window, keyCodes, dateUtil, dateLocale;
 
   beforeEach(module('material.components.datepicker', 'ngAnimateMock'));
 
   beforeEach(inject(function($compile, $rootScope, $injector) {
     $$rAF = $injector.get('$$rAF');
     $animate = $injector.get('$animate');
+    $window = $injector.get('$window');
     dateUtil = $injector.get('$$mdDateUtil');
     dateLocale = $injector.get('$mdDateLocale');
     $timeout = $injector.get('$timeout');
@@ -37,6 +38,8 @@ describe('md-date-picker', function() {
     scope = ngElement.isolateScope();
     controller = ngElement.controller('mdDatepicker');
     element = ngElement[0];
+
+    controller.closeCalendarPane();
   }));
 
   /**
@@ -194,41 +197,62 @@ describe('md-date-picker', function() {
       document.body.removeChild(element);
     });
 
-    it('should shink the calendar pane when it would otherwise not fit on the screen', function() {
-      // Make the body narrow so that the calendar pane won't fit on-screen.
-      document.body.style.width = '300px';
+    it('should adjust the pane position if it would go off-screen (w/ scrollable)', function() {
+      // Make the body super huge.
+      var superLongElement = document.createElement('div');
+      superLongElement.style.height = '10000px';
+      superLongElement.style.width = '1px';
+      document.body.appendChild(superLongElement);
 
-      // Open the calendar pane.
+      // Absolutely position the picker near (say ~30px) the edge of the viewport.
+      element.style.position = 'absolute';
+      element.style.top = (window.innerHeight - 30) + 'px';
+      element.style.left = '0';
+      document.body.appendChild(element);
+
+      // Open the pane.
       element.querySelector('md-button').click();
       $timeout.flush();
 
+      // Expect that the pane is on-screen.
+      var paneRect = controller.calendarPane.getBoundingClientRect();
+      expect(paneRect.bottom).toBeLessThan(window.innerHeight + 1);
+      document.body.removeChild(superLongElement);
+
+      document.body.removeChild(element);
+    });
+
+    it('should shink the calendar pane when it would otherwise not fit on the screen', function() {
+      // Fake the window being very narrow so that the calendar pane won't fit on-screen.
+      controller.$window = {innerWidth: 200, innherHeight: 800};
+
+      // Open the calendar pane.
+      controller.openCalendarPane({});
+
       // Expect the calendarPane to be scaled by an amount between zero and one.
       expect(controller.calendarPane.style.transform).toMatch(/scale\(0\.\d+\)/);
-
-      // Reset the body width.
-      document.body.style.width = '';
     });
 
     it('should not open the calendar pane if disabled', function() {
-    controller.setDisabled(true);
-    controller.openCalendarPane({
-      target: controller.inputElement
+      controller.setDisabled(true);
+      controller.openCalendarPane({
+        target: controller.inputElement
+      });
+      scope.$apply();
+      expect(controller.isCalendarOpen).toBeFalsy();
+      expect(controller.calendarPane.offsetHeight).toBe(0);
     });
-    scope.$apply();
-    expect(controller.isCalendarOpen).toBeFalsy();
-    expect(controller.calendarPane.offsetHeight).toBe(0);
-  });
 
     it('should close the calendar pane on md-calendar-close', function() {
-    controller.openCalendarPane({
-      target: controller.inputElement
-    });
+      controller.openCalendarPane({
+        target: controller.inputElement
+      });
 
-    scope.$emit('md-calendar-close');
-    scope.$apply();
-    expect(controller.calendarPaneOpenedFrom).toBe(null);
-    expect(controller.isCalendarOpen).toBe(false);
-  });
+      scope.$emit('md-calendar-close');
+      scope.$apply();
+      expect(controller.calendarPaneOpenedFrom).toBe(null);
+      expect(controller.isCalendarOpen).toBe(false);
+    });
   });
 
   describe('md-calendar-change', function() {

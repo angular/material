@@ -23,7 +23,7 @@ $virtual-repeat-scrollbar-width: 16px;
   .md-virtual-repeat-sizer {
     box-sizing: border-box;
     height: 1px;
-    display: inline-block;
+    display: block;
     margin: 0;
     padding: 0;
     width: 1px;
@@ -35,9 +35,7 @@ $virtual-repeat-scrollbar-width: 16px;
     margin: 0;
     padding: 0;
     position: absolute;
-    // Leave room for the scroll bar.
-    // TODO: Will probably need to perform measurements at runtime.
-    right: $virtual-repeat-scrollbar-width;
+    right: 0;
     top: 0;
   }
 }

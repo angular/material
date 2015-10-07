@@ -208,7 +208,7 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
  * @param {string=} ngChange Angular expression to be executed when input changes due to user
  *    interaction with the input element.
  * @param {string} ngValue Angular expression which sets the value to which the expression should
- *    be set when selected.*
+ *    be set when selected.
  * @param {string} value The value to which the expression should be set when selected.
  * @param {string=} name Property name of the form under which the control is published.
  * @param {string=} aria-label Adds label to radio button for accessibility.
