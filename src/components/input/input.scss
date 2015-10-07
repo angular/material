@@ -148,6 +148,7 @@ md-input-container {
     line-height: $input-line-height;
     -ms-flex-preferred-size: $input-line-height; //IE fix
     border-radius: 0;
+    border-style: solid; // Firefox fix
 
     // Fix number inputs in Firefox to be full-width
     width: auto;
