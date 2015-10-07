@@ -354,7 +354,7 @@ describe('$mdDialog', function() {
 
       container = angular.element(parent[0].querySelector('.md-dialog-container'));
       expect(container.length).toBe(0);
-      expect(response).toBe(false);
+      expect(response).toBe(undefined);
     }));
   });
 

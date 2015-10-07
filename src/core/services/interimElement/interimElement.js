@@ -244,7 +244,6 @@ function InterimElementProvider() {
                                  $mdUtil, $mdCompiler, $mdTheming, $log ) {
     return function createInterimElementService() {
       var SHOW_CANCELLED = false;
-      var SHOW_CLOSED = true;
 
       /*
        * @ngdoc service
@@ -318,7 +317,7 @@ function InterimElementProvider() {
        *
        */
       function hide(reason, options) {
-        if ( !stack.length ) return $q.when(reason || SHOW_CLOSED);
+        if ( !stack.length ) return $q.when(reason);
         options = options || {};
 
         if (options.closeAll) {
@@ -334,7 +333,7 @@ function InterimElementProvider() {
 
         function closeElement(interim) {
           interim
-            .remove(reason || SHOW_CLOSED, false, options || { })
+            .remove(reason, false, options || { })
             .catch(function( reason ) {
               //$log.error("InterimElement.hide() error: " + reason );
               return reason;
@@ -357,10 +356,10 @@ function InterimElementProvider() {
        */
       function cancel(reason, options) {
         var interim = stack.shift();
-        if ( !interim ) return $q.when(reason || SHOW_CANCELLED);
+        if ( !interim ) return $q.when(reason);
 
         interim
-          .remove(reason || SHOW_CANCELLED, true, options || { })
+          .remove(reason, true, options || { })
           .catch(function( reason ) {
             //$log.error("InterimElement.cancel() error: " + reason );
             return reason;
