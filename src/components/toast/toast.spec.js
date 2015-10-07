@@ -229,7 +229,7 @@ describe('$mdToast service', function() {
 
         $material.flushInterimElement();
 
-        expect(result).toBe(true);
+        expect(result).toBe(undefined);
         expect(angular.isUndefined(fault)).toBe(true);
 
       }));
@@ -269,7 +269,7 @@ describe('$mdToast service', function() {
 
         $material.flushInterimElement();
 
-        expect(result).toBe(true);
+        expect(result).toBe(undefined);
         expect(angular.isUndefined(fault)).toBe(true);
 
       }));
