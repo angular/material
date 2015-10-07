@@ -74,10 +74,14 @@ md-tabs.md-THEME_NAME-theme {
   .md-tab {
     color: '{{foreground-2}}';
     &[disabled] {
-      color: '{{foreground-3}}';
+      &, & md-icon {
+        color: '{{foreground-3}}';
+      }
     }
     &.md-active, &.md-focused {
-      color: '{{primary-color}}';
+      &, & md-icon {
+        color: '{{primary-color}}';
+      }
     }
     &.md-focused {
       background: '{{primary-color-0.1}}';
