@@ -574,19 +574,19 @@ VirtualRepeatController.prototype.getItemSize = function() {
  * @private
  */
 VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItems) {
-  var itemsLength = items ? items.length : 0;
+  var itemsLength = items && items.length || 0;
   var lengthChanged = false;
-
-  if (itemsLength !== this.itemsLength) {
-    lengthChanged = true;
-    this.itemsLength = itemsLength;
-  }
 
   // If the number of items shrank, scroll up to the top.
   if (this.items && itemsLength < this.items.length && this.container.getScrollOffset() !== 0) {
     this.items = items;
     this.container.resetScroll();
     return;
+  }
+
+  if (itemsLength !== this.itemsLength) {
+    lengthChanged = true;
+    this.itemsLength = itemsLength;
   }
 
   this.items = items;
