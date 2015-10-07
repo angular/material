@@ -408,6 +408,74 @@ describe('<md-virtual-repeat>', function() {
     expect(getRepeated().length).toBe(numItemRenderers);
   });
 
+  it('should resize the scroller correctly when item length changes (vertical)', function() {
+    scope.items = createItems(200);
+    createRepeater();
+    scope.$apply();
+    $$rAF.flush();
+    expect(sizer[0].offsetHeight).toBe(200 * ITEM_SIZE);
+
+    // Scroll down half way
+    scroller[0].scrollTop = 100 * ITEM_SIZE;
+    scroller.triggerHandler('scroll');
+    scope.$apply();
+    $$rAF.flush();
+
+    // Remove some items
+    scope.items = createItems(20);
+    scope.$apply();
+    $$rAF.flush();
+    expect(scroller[0].scrollTop).toBe(0);
+    expect(sizer[0].offsetHeight).toBe(20 * ITEM_SIZE);
+
+    // Scroll down half way
+    scroller[0].scrollTop = 10 * ITEM_SIZE;
+    scroller.triggerHandler('scroll');
+    scope.$apply();
+    $$rAF.flush();
+
+    // Add more items
+    scope.items = createItems(250);
+    scope.$apply();
+    $$rAF.flush();
+    expect(scroller[0].scrollTop).toBe(100);
+    expect(sizer[0].offsetHeight).toBe(250 * ITEM_SIZE);
+  });
+
+  it('should resize the scroller correctly when item length changes (horizontal)', function() {
+    container.attr({'md-orient-horizontal': ''});
+    scope.items = createItems(200);
+    createRepeater();
+    scope.$apply();
+    $$rAF.flush();
+    expect(sizer[0].offsetWidth).toBe(200 * ITEM_SIZE);
+
+    // Scroll right half way
+    scroller[0].scrollLeft = 100 * ITEM_SIZE;
+    scroller.triggerHandler('scroll');
+    scope.$apply();
+    $$rAF.flush();
+
+    // Remove some items
+    scope.items = createItems(20);
+    scope.$apply();
+    $$rAF.flush();
+    expect(scroller[0].scrollLeft).toBe(0);
+    expect(sizer[0].offsetWidth).toBe(20 * ITEM_SIZE);
+
+    // Scroll right half way
+    scroller[0].scrollLeft = 10 * ITEM_SIZE;
+    scroller.triggerHandler('scroll');
+    scope.$apply();
+    $$rAF.flush();
+
+    // Add more items
+    scope.items = createItems(250);
+    scope.$apply();
+    $$rAF.flush();
+    expect(sizer[0].offsetWidth).toBe(250 * ITEM_SIZE);
+  });
+
   it('should update topIndex when scrolling', function() {
     container.attr({'md-top-index': 'topIndex'});
     scope.items = createItems(NUM_ITEMS);
