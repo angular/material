@@ -132,4 +132,15 @@ describe('mdListItem directive', function() {
     expect(listItem.hasClass('md-no-proxy')).toBeFalsy();
   });
 
+  it('should not detect secondary or excluded md-buttons', function() {
+    var listItem = setup(
+      '<md-list-item>' +
+      '  <div>Content Here</div>' +
+      '  <md-button class="md-secondary" ng-click="sayHello()">Hello</md-button>' +
+      '  <md-button class="md-exclude" ng-click="sayHello()">Hello</md-button>' +
+      '</md-list-item>'
+    );
+    expect(listItem.hasClass('md-no-proxy')).toBeTruthy();
+  });
+
 });
