@@ -1,5 +1,11 @@
 md-content.autocomplete {
   min-height: 250px;
+
+  // NOTE: Due to a bug with the virtual repeat sizing, we must manually set the width of
+  // the input so that the autocomplete popup will be properly sized. See issue #4450.
+  input {
+    min-width: 400px;
+  }
 }
 .md-item-text.compact {
   padding-top: 8px;
@@ -15,6 +21,7 @@ md-content.autocomplete {
   }
   .md-list-item-text {
     padding: 14px 0;
+    max-width: 190px;
     h3 {
       margin: 0 !important;
       padding: 0;
