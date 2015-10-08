@@ -214,10 +214,10 @@ function MenuProvider($$interimElementProvider) {
 
         // kick off initial focus in the menu on the first element
         var focusTarget = opts.menuContentEl[0].querySelector('[md-menu-focus-target]');
-        if ( !focusTarget && firstChild ) {
+        if ( !focusTarget ) {
           var firstChild = opts.menuContentEl[0].firstElementChild;
 
-          focusTarget = firstChild.querySelector('[tabindex]') || firstChild.firstElementChild;
+          focusTarget = firstChild && (firstChild.querySelector('.md-button:not([disabled])') || firstChild.firstElementChild);
         }
 
         focusTarget && focusTarget.focus();
@@ -235,10 +235,9 @@ function MenuProvider($$interimElementProvider) {
 
         function onMenuKeyDown(ev) {
           var handled;
-          var keyCodes = $mdConstant.KEY_CODE;
           switch (ev.keyCode) {
             case $mdConstant.KEY_CODE.ESCAPE:
-              opts.mdMenuCtrl.close(true, { closeAll: true });
+              opts.mdMenuCtrl.close(false, { closeAll: true });
               handled = true;
               break;
             case $mdConstant.KEY_CODE.UP_ARROW:
