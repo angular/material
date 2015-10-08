@@ -4,8 +4,12 @@ describe('<md-chips>', function() {
 
   var BASIC_CHIP_TEMPLATE =
     '<md-chips ng-model="items"></md-chips>';
+  var CHIP_TRANSFORM_TEMPLATE =
+    '<md-chips ng-model="items" md-transform-chip="transformChip($chip)"></md-chips>';
   var CHIP_APPEND_TEMPLATE =
     '<md-chips ng-model="items" md-on-append="appendChip($chip)"></md-chips>';
+  var CHIP_ADD_TEMPLATE =
+    '<md-chips ng-model="items" md-on-add="addChip($chip, $index)"></md-chips>';
   var CHIP_REMOVE_TEMPLATE =
     '<md-chips ng-model="items" md-on-remove="removeChip($chip, $index)"></md-chips>';
   var CHIP_SELECT_TEMPLATE =
@@ -109,7 +113,15 @@ describe('<md-chips>', function() {
         expect(chips[1].innerHTML).toContain('Orange');
       });
 
-      it('should call the append method when adding a chip', function() {
+      // TODO: Remove in 1.0 release after deprecation
+      it('should warn of deprecation when using md-on-append', inject(function($log) {
+        spyOn($log, 'warn');
+        buildChips(CHIP_APPEND_TEMPLATE);
+        expect($log.warn).toHaveBeenCalled();
+      }));
+
+      // TODO: Remove in 1.0 release after deprecation
+      it('should retain the deprecated md-on-append functionality until removed', function() {
         var element = buildChips(CHIP_APPEND_TEMPLATE);
         var ctrl = element.controller('mdChips');
 
@@ -128,6 +140,62 @@ describe('<md-chips>', function() {
         expect(scope.items.length).toBe(4);
         expect(scope.items[3]).toBe('GrapeGrape');
       });
+
+      it('should call the transform method when adding a chip', function() {
+        var element = buildChips(CHIP_TRANSFORM_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        var doubleText = function(text) {
+          return "" + text + text;
+        };
+        scope.transformChip = jasmine.createSpy('transformChip').and.callFake(doubleText);
+
+        element.scope().$apply(function() {
+          ctrl.chipBuffer = 'Grape';
+          simulateInputEnterKey(ctrl);
+        });
+
+        expect(scope.transformChip).toHaveBeenCalled();
+        expect(scope.transformChip.calls.mostRecent().args[0]).toBe('Grape');
+        expect(scope.items.length).toBe(4);
+        expect(scope.items[3]).toBe('GrapeGrape');
+      });
+
+      it('should not add the chip if md-transform-chip returns null', function() {
+        var element = buildChips(CHIP_TRANSFORM_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        var nullChip = function(text) {
+          return null;
+        };
+        scope.transformChip = jasmine.createSpy('transformChip').and.callFake(nullChip);
+
+        element.scope().$apply(function() {
+          ctrl.chipBuffer = 'Grape';
+          simulateInputEnterKey(ctrl);
+        });
+
+        expect(scope.transformChip).toHaveBeenCalled();
+        expect(scope.transformChip.calls.mostRecent().args[0]).toBe('Grape');
+        expect(scope.items.length).toBe(3);
+      });
+
+      it('should call the add method when adding a chip', function() {
+        var element = buildChips(CHIP_ADD_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        scope.addChip = jasmine.createSpy('addChip');
+
+        element.scope().$apply(function() {
+          ctrl.chipBuffer = 'Grape';
+          simulateInputEnterKey(ctrl);
+        });
+
+        expect(scope.addChip).toHaveBeenCalled();
+        expect(scope.addChip.calls.mostRecent().args[0]).toBe('Grape'); // Chip
+        expect(scope.addChip.calls.mostRecent().args[1]).toBe(4);       // Index
+      });
+
 
       it('should call the remove method when removing a chip', function() {
         var element = buildChips(CHIP_REMOVE_TEMPLATE);
@@ -326,6 +394,80 @@ describe('<md-chips>', function() {
 
           expect(scope.items.length).toBe(4);
           expect(scope.items[3]).toBe('Kiwi');
+          expect(element.find('input').val()).toBe('');
+        }));
+
+        it('simultaneously allows selecting an existing chip AND adding a new one', inject(function($mdConstant) {
+          // Setup our scope and function
+          setupScopeForAutocomplete();
+          scope.transformChip = jasmine.createSpy('transformChip');
+
+          // Modify the base template to add md-transform-chip
+          var modifiedTemplate = AUTOCOMPLETE_CHIPS_TEMPLATE
+            .replace('<md-chips', '<md-chips md-on-append="transformChip($chip)"');
+
+          var element = buildChips(modifiedTemplate);
+
+          var ctrl = element.controller('mdChips');
+          $timeout.flush(); // mdAutcomplete needs a flush for its init.
+          var autocompleteCtrl = element.find('md-autocomplete').controller('mdAutocomplete');
+
+          element.scope().$apply(function() {
+            autocompleteCtrl.scope.searchText = 'K';
+          });
+          autocompleteCtrl.focus();
+          $timeout.flush();
+
+          /*
+           * Send a down arrow/enter to select the right fruit
+           */
+          var downArrowEvent = {
+            type: 'keydown',
+            keyCode: $mdConstant.KEY_CODE.DOWN_ARROW,
+            which: $mdConstant.KEY_CODE.DOWN_ARROW
+          };
+          var enterEvent = {
+            type: 'keydown',
+            keyCode: $mdConstant.KEY_CODE.ENTER,
+            which: $mdConstant.KEY_CODE.ENTER
+          };
+          element.find('input').triggerHandler(downArrowEvent);
+          element.find('input').triggerHandler(enterEvent);
+          $timeout.flush();
+
+          // Check our transformChip calls
+          expect(scope.transformChip).not.toHaveBeenCalledWith('K');
+          expect(scope.transformChip).toHaveBeenCalledWith('Kiwi');
+          expect(scope.transformChip.calls.count()).toBe(1);
+
+          // Check our output
+          expect(scope.items.length).toBe(4);
+          expect(scope.items[3]).toBe('Kiwi');
+          expect(element.find('input').val()).toBe('');
+
+          // Reset our jasmine spy
+          scope.transformChip.calls.reset();
+
+          /*
+           * Use the "new chip" functionality
+           */
+
+          // Set the search text
+          element.scope().$apply(function() {
+            autocompleteCtrl.scope.searchText = 'Acai Berry';
+          });
+
+          // Fire our event and flush any timeouts
+          element.find('input').triggerHandler(enterEvent);
+          $timeout.flush();
+
+          // Check our transformChip calls
+          expect(scope.transformChip).toHaveBeenCalledWith('Acai Berry');
+          expect(scope.transformChip.calls.count()).toBe(1);
+
+          // Check our output
+          expect(scope.items.length).toBe(5);
+          expect(scope.items[4]).toBe('Acai Berry');
           expect(element.find('input').val()).toBe('');
         }));
       });

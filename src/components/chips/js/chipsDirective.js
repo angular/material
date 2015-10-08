@@ -67,11 +67,18 @@
    *    displayed when there is at least on item in the list
    * @param {boolean=} readonly Disables list manipulation (deleting or adding list items), hiding
    *    the input and delete buttons
-   * @param {expression} md-on-append An expression that when called expects you to return an object
-   *    representation of the chip input string.
+   * @param {expression} md-transform-chip An expression of form `myFunction($chip)` that when called
+   *    expects one of the following return values:
+   *    - an object representing the `$chip` input string
+   *    - `undefined` to simply add the `$chip` input string, or
+   *    - `null` to prevent the chip from being appended
+   * @param {expression=} md-on-add An expression which will be called when a chip has been
+   *    added.
    * @param {expression=} md-on-remove An expression which will be called when a chip has been
    *    removed.
    * @param {expression=} md-on-select An expression which will be called when a chip is selected.
+   * @param {boolean} md-require-match If true, and the chips template contains an autocomplete,
+   *    only allow selection of pre-defined chips (i.e. you cannot add new ones).
    * @param {string=} delete-hint A string read by screen readers instructing users that pressing
    *    the delete key will remove the chip.
    * @param {string=} delete-button-label A label for the delete button. Also hidden and read by
@@ -167,7 +174,9 @@
         readonly: '=readonly',
         placeholder: '@',
         secondaryPlaceholder: '@',
+        transformChip: '&mdTransformChip',
         onAppend: '&mdOnAppend',
+        onAdd: '&mdOnAdd',
         onRemove: '&mdOnRemove',
         onSelect: '&mdOnSelect',
         deleteHint: '@',
@@ -248,9 +257,19 @@
         if (attr.ngModel) {
           mdChipsCtrl.configureNgModel(element.controller('ngModel'));
 
+          // If an `md-transform-chip` attribute was set, tell the controller to use the expression
+          // before appending chips.
+          if (attrs.mdTransformChip) mdChipsCtrl.useTransformChipExpression();
+
           // If an `md-on-append` attribute was set, tell the controller to use the expression
           // when appending chips.
+          //
+          // DEPRECATED: Will remove in official 1.0 release
           if (attrs.mdOnAppend) mdChipsCtrl.useOnAppendExpression();
+
+          // If an `md-on-add` attribute was set, tell the controller to use the expression
+          // when adding chips.
+          if (attrs.mdOnAdd) mdChipsCtrl.useOnAddExpression();
 
           // If an `md-on-remove` attribute was set, tell the controller to use the expression
           // when removing chips.
