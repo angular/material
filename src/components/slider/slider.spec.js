@@ -137,7 +137,7 @@ describe('md-slider', function() {
     expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('50');
   });
 
-  it('should call $log.warn if aria-label isnt provided', function() {
+  it('should call $log.warn if aria-label isn\'t provided', function() {
     spyOn($log, "warn");
     setup('min="100" max="104" step="2" ng-model="model"');
     expect($log.warn).toHaveBeenCalled();
@@ -216,7 +216,30 @@ describe('md-slider', function() {
     });
     expect(slider).not.toHaveClass('md-active');
   });
-  
+
+  it('should add md-min class only when at min value', function() {
+    var slider = setup('ng-model="model" min="0" max="30"');
+    pageScope.$apply('model = 0');
+    expect(slider).toHaveClass('md-min');
+
+    slider.triggerHandler({type: '$md.dragstart', pointer: {x: 0}});
+    slider.triggerHandler({type: '$md.drag', pointer: {x: 10}});
+    $timeout.flush();
+    expect(slider).not.toHaveClass('md-min');
+  });
+
+  it('should add md-max class only when at max value', function() {
+    var slider = setup('ng-model="model" min="0" max="30"');
+    pageScope.$apply('model = 30');
+    expect(slider).toHaveClass('md-max');
+
+    slider.triggerHandler({type: '$md.dragstart', pointer: {x: 30}});
+    slider.triggerHandler({type: '$md.drag', pointer: {x: 10}});
+    $timeout.flush();
+    expect(slider).not.toHaveClass('md-max');
+  });
+
+
   it('should increment at a predictable step', function() {
 
     buildSlider(0.1, 1).drag({x:70});
