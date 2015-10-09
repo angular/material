@@ -51,6 +51,11 @@ if [ ! -e ./tmp/angular.js ]; then
   git clone https://github.com/angular/angular.js ./tmp/angular.js
 fi
 
+# this will gaurantee that we have the latest versions
+# of AngularJS when testing material incase the HEAD
+# of ./tmp/angular.js is outdated.
+git --git-dir ./tmp/angular.js/.git fetch
+
 for VERSION in "${VERSIONS[@]}"; do
   if [ $VERSION == "snapshot" ]; then
     ZIP_FILE_SHA=$(curl "$CDN/snapshot/version.txt")
