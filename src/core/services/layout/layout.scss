@@ -282,7 +282,17 @@
   {
     align-items: center;
     max-width: 100%;
+  }
 
+  // Cross Axis Center IE overflow fix
+  .#{$name}-center-center > *,
+  .#{$name}-start-center > *,
+  .#{$name}-end-center > *,
+  .#{$name}-space-between-center > *,
+  .#{$name}-space-around-center > *,
+  {
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   // Cross Axis End
