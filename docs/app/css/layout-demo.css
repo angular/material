@@ -42,7 +42,8 @@ demo-include {
   margin-top: 16px;
 }
 
-.layout-demo :not(.md-layout) {
+.layout-demo :not(.layout-row),
+.layout-demo :not(.layout-column) {
   border: 1px solid #eee;
   padding: 8px;
 }
