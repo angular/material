@@ -11,7 +11,7 @@
 */
 
 @-moz-document url-prefix() {
-  .layout-fill, [layout-fill] {
+  .layout-fill {
     margin: 0;
     width: 100%;
     min-height: 100%;
@@ -31,7 +31,7 @@
     //  }
     //
 
-    .flex-order, [flex-order] {
+    .flex-order {
      order : 0;
     }
   }
@@ -44,11 +44,7 @@
       @if $s != '' { $suffix : '#{$s}-#{$i}'; }
       @else        { $suffix : '#{$i}';       }
 
-      $order : $order + '.flex-order-#{$suffix}, ';
-    }
-    @each $s in $sizes {
-      @if ( $s != '' ) {  $order : $order + '[flex-order-#{$s}="#{$i}"], '; }
-      @else            {  $order : $order + '[flex-order="#{$i}"], '; }
+      $order : $order + '.flex-order-#{$suffix}';
     }
 
     //   .flex-order-0, [order="0"] {
@@ -91,11 +87,7 @@
       @if $s != '' { $suffix : '#{$s}-#{$i * 5}'; }
       @else        { $suffix : '#{$i * 5}';       }
 
-      $offsets : $offsets + '.offset-#{$suffix}, ';
-    }
-    @each $s in $sizes {
-      @if ( $s != '' ) {  $offsets : $offsets + '[offset-#{$s}="#{$i * 5}"], '; }
-      @else            {  $offsets : $offsets + '[offset="#{$i * 5}"], '; }
+      $offsets : $offsets + '.offset-#{$suffix}';
     }
 
     #{$offsets} {
@@ -111,12 +103,7 @@
       @if $s != '' {  $suffix : '#{$s}-#{$i}';   }
       @else        {  $suffix : '#{$i}';         }
 
-      $offsets : $offsets + '.offset-#{$suffix}, ';
-    }
-
-    // add attribute selectors
-    @each $s in $sizes {
-      $offsets : $offsets + '[offset-#{$s}="#{$i}"], ';
+      $offsets : $offsets + '.offset-#{$suffix}';
     }
   }
 
@@ -136,12 +123,7 @@
       @if $s != '' {  $suffix : '#{$s}-#{$i}';   }
       @else        {  $suffix : '#{$i}';         }
 
-      $offsets : $offsets + '.offset-#{$suffix}, ';
-    }
-
-    // add attribute selectors
-    @each $s in $sizes {
-      $offsets : $offsets + '[offset-#{$s}="#{$i}"], ';
+      $offsets : $offsets + '.offset-#{$suffix}';
     }
   }
 
@@ -158,7 +140,7 @@
   @if $name == null { $name : '';          }
   @if $name != ''   { $name : '-#{$name}'; }
 
-  .md-layout#{$name}, .md-layout#{$name}-column, .md-layout#{$name}-row, {
+  .layout#{$name}, .layout#{$name}-column, .layout#{$name}-row, {
     box-sizing: border-box;
     display: -webkit-box;
     display: -webkit-flex;
@@ -166,8 +148,8 @@
     display: -ms-flexbox;
     display: flex;
   }
-  .md-layout#{$name}-column {  flex-direction: column;  }
-  .md-layout#{$name}-row    {  flex-direction: row;     }
+  .layout#{$name}-column {  flex-direction: column;  }
+  .layout#{$name}-row    {  flex-direction: row;     }
 }
 @mixin flex-properties-for-name($name: null) {
   $flexName: 'flex';
@@ -178,36 +160,51 @@
     $name : '';
   }
 
-  .#{$flexName} {
-    box-sizing: border-box;
-  }
-
-  .#{$flexName}             { flex: 1;  }   // === 1 1 0%
-  .#{$flexName}-grow        { flex: 1 1 100%;  }
-  .#{$flexName}-initial     { flex: 0 1 auto;  }
-  .#{$flexName}-auto        { flex: 1 1 auto;  }
-  .#{$flexName}-none        { flex: 0 0 auto;  }
+  .#{$flexName}             { flex: 1;         box-sizing: border-box; }  // === flex: 1 1 0%;
+  .#{$flexName}-grow        { flex: 1 1 100%;  box-sizing: border-box; }
+  .#{$flexName}-initial     { flex: 0 1 auto;  box-sizing: border-box; }
+  .#{$flexName}-auto        { flex: 1 1 auto;  box-sizing: border-box; }
+  .#{$flexName}-none        { flex: 0 0 auto;  box-sizing: border-box; }
 
   // (1-20) * 5 = 0-100%
   @for $i from 0 through 20 {
     $value : #{$i * 5 + '%'};
 
-    .#{$flexName}-#{$i * 5}                              { box-sizing: border-box; flex: 0 0 #{$value}; }
+    .#{$flexName}-#{$i * 5} {
+      flex: 0 0 #{$value};
+      max-width: #{$value};
+      max-height: 100%;
+      box-sizing: border-box;
+    }
 
-    .md-layout-row > .#{$flexName}-#{$i * 5},
-    .md-layout#{$name}-row > .#{$flexName}-#{$i * 5}     { flex: 0 0 #{$value};  max-width: #{$value};  max-height: 100%;  }
+    .layout-row > .#{$flexName}-#{$i * 5},
+    .layout#{$name}-row > .#{$flexName}-#{$i * 5} {
+      flex: 0 0 #{$value};
+      max-width: #{$value};
+      max-height: 100%;
+      box-sizing: border-box;
+    }
 
-    .md-layout-column > .#{$flexName}-#{$i * 5},
-    .md-layout#{$name}-column > .#{$flexName}-#{$i * 5}  { flex: 0 0 #{$value}; max-width: 100%;  max-height: #{$value};  }
+    .layout-column > .#{$flexName}-#{$i * 5},
+    .layout#{$name}-column > .#{$flexName}-#{$i * 5} {
+      flex: 0 0 #{$value};
+      max-width: 100%;
+      max-height: #{$value};
+      box-sizing: border-box;
+    }
   }
 
-  .md-layout-row, .md-layout#{$name}-row {
-    > .#{$flexName}-33   , > .#{$flexName}-34     {  flex: 0 0 33%;  max-width: 33%;  max-height: 100%; }
-    > .#{$flexName}-66   , > .#{$flexName}-67     {  flex: 0 0 67%;  max-width: 67%;  max-height: 100%; }
+  .layout-row, .layout#{$name}-row {
+    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 0 0 33%;  max-width: 33%;  max-height: 100%; box-sizing: border-box; }
+    > .#{$flexName}-34   , > .#{$flexName}-34     {  flex: 0 0 34%;  max-width: 34%;  max-height: 100%; box-sizing: border-box; }
+    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 0 0 66%;  max-width: 66%;  max-height: 100%; box-sizing: border-box; }
+    > .#{$flexName}-67   , > .#{$flexName}-67     {  flex: 0 0 67%;  max-width: 67%;  max-height: 100%; box-sizing: border-box; }
   }
-  .md-layout-column, .md-layout#{$name}-column {
-    > .#{$flexName}-33   , > .#{$flexName}-34     {  flex: 0 0 33%;  max-width: 100%;  max-height: 33%; }
-    > .#{$flexName}-66   , > .#{$flexName}-67     {  flex: 0 0 67%;  max-width: 100%;  max-height: 67%; }
+  .layout-column, .layout#{$name}-column {
+    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 0 0 33%;  max-width: 100%;  max-height: 33%; box-sizing: border-box; }
+    > .#{$flexName}-34   , > .#{$flexName}-34     {  flex: 0 0 34%;  max-width: 100%;  max-height: 34%; box-sizing: border-box; }
+    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 0 0 66%;  max-width: 100%;  max-height: 66%; box-sizing: border-box; }
+    > .#{$flexName}-67   , > .#{$flexName}-67     {  flex: 0 0 67%;  max-width: 100%;  max-height: 67%; box-sizing: border-box; }
   }
 
 }
@@ -338,15 +335,15 @@
     margin: $layout-gutter-width / 1;
   }
 
-  .layout-wrap, [layout-wrap] {
+  .layout-wrap {
     flex-wrap: wrap;
   }
 
-  .layout-nowrap,  [layout-nowrap] {
+  .layout-nowrap {
       flex-wrap: nowrap;
   }
 
-  .layout-fill, [layout-fill] {
+  .layout-fill {
     margin: 0;
     width: 100%;
     min-height: 100%;
