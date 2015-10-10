@@ -1,8 +1,8 @@
 <div ng-controller="LayoutCtrl" class="layout-content layout-options" ng-cloak>
 
-  <docs-demo demo-title="Responsive Layout" class="small-demo">
+  <docs-demo demo-title="Responsive Layout" class="small-demo colorNested">
     <demo-file name="index.html">
-      <div layout="row" layout-sm="column" class="colorNested">
+      <div layout="row" layout-sm="column">
         <div flex>
           I'm above on mobile, and to the left on larger devices.
         </div>
@@ -14,10 +14,10 @@
   </docs-demo>
 
   <p>
-    See the <a href="#/layout/container">Layout Container</a> page for a basic explanation
+    See the <a href="#/layout/container">Container Elements</a> page for a basic explanation
     of layout attributes.
     <br/>
-    To make your layout change depending upon the device size, there are
+    To make your layout change depending upon the device screen size, there are
     other <code>layout</code> attributes available:
   </p>
 
@@ -55,11 +55,19 @@
 
   <br/>
 
-  <docs-demo demo-title="Layout Margin, Padding and Fill" class="small-demo">
+  <docs-demo demo-title="Layout Margin, Padding, and Fill" class="small-demo colorNested-noPad">
     <demo-file name="index.html">
-      <div layout="row" layout-margin layout-fill layout-padding class="colorNested">
-        <div flex>I'm on the left, and there's an empty area around me.</div>
-        <div flex>I'm on the right, and there's an empty area around me.</div>
+      <div layout="row" layout-margin>
+        <div flex>Parent layout and this element have margins.</div>
+      </div>
+      <div layout="row" layout-padding>
+        <div flex>Parent layout and this element have padding.</div>
+      </div>
+      <div layout="row" layout-fill style="min-height: 224px;">
+        <div flex>Parent layout is set to fill available space.</div>
+      </div>
+      <div layout="row" layout-padding layout-margin layout-fill style="min-height: 224px;">
+        <div flex>I am using all three at once.</div>
       </div>
     </demo-file>
   </docs-demo>
@@ -76,12 +84,15 @@
 
   <br/>
 
-  <docs-demo demo-title="Wrap" class="small-demo">
+  <docs-demo demo-title="Wrap" class="small-demo colorNested-noPad">
     <demo-file name="index.html">
-      <div layout="row" layout-wrap class="colorNested-noPad">
+      <div layout="row" layout-wrap>
         <div flex="33">[flex=33]</div>
         <div flex="67">[flex=67]</div>
         <div flex="67">[flex=67]</div>
+        <div flex="33">[flex=33]</div>
+        <div flex="33">[flex=33]</div>
+        <div flex="34">[flex=34]</div>
         <div flex="33">[flex=33]</div>
       </div>
     </demo-file>
@@ -95,13 +106,13 @@
 
   <br/>
 
-  <docs-demo demo-title="Responsive Flex & Offset Attributes" class="small-demo">
+  <docs-demo demo-title="Responsive Flex Attributes" class="small-demo colorNested-noPad">
     <demo-file name="index.html">
-      <div layout="row" class="colorNested">
-        <div flex="66" flex-sm="34">
+      <div layout="row">
+        <div flex="67" flex-sm="33">
           I flex to one-third of the space on mobile, and two-thirds on other devices.
         </div>
-        <div flex="34" flex-sm="66">
+        <div flex="33" flex-sm="67">
           I flex to two-thirds of the space on mobile, and one-third on other devices.
         </div>
       </div>
@@ -109,7 +120,7 @@
   </docs-demo>
 
   <p>
-    See the <a href="#/layout/grid">Layout Grid</a> page for a basic explanation
+    See the <a href="#/layout/grid">Grid System</a> page for a basic explanation
     of flex and offset attributes.
   </p>
 
@@ -146,15 +157,24 @@
 
   <br/>
 
-  <docs-demo demo-title="Hide and Show Attributes" class="small-demo">
+  <docs-demo demo-title="Hide and Show Attributes" class="small-demo colorNested">
     <demo-file name="index.html">
-      <div layout layout-align="center center" class="colorNested">
-        <md-subheader show hide-gt-sm>
-          I'm hidden on mobile and shown on larger devices.
-        </md-subheader>
-        <md-subheader show-sm hide>
-          I'm shown on mobile and hidden on larger devices.
-        </md-subheader>
+      <div layout="row">
+        <div hide show-gt-sm flex>
+          Hidden on small and shown on larger devices.
+        </div>
+        <div hide-gt-sm flex>
+          Shown on small and hidden on larger devices.
+        </div>
+        <div hide-gt-md flex>
+          Shown on small and medium size devices.
+        </div>
+        <div hide show-md flex>
+          Shown on medium size devices only.
+        </div>
+        <div hide show-gt-lg flex>
+          Shown on devices larger than 1200px wide only.
+        </div>
       </div>
     </demo-file>
   </docs-demo>

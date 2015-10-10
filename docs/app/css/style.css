@@ -518,7 +518,13 @@ md-tabs.demo-source-tabs .active md-tab-label {
 .demo-content > div[layout-fill] {
   min-height: 448px;
 }
+.demo-content > div.layout-fill {
+  min-height: 448px;
+}
 .small-demo .demo-content > div[layout-fill] {
+  min-height: 224px;
+}
+.small-demo .demo-content > div.layout-fill {
   min-height: 224px;
 }
 .layout-content .small-demo .demo-content > div[layout],
