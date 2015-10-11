@@ -4,15 +4,18 @@
     send focus back to the triggering button.
   </p>
 
-  <div class="dialog-demo-content" layout="row" layout-wrap >
-    <md-button class="md-primary md-raised" ng-click="showAlert($event)" flex flex-md="100">
+  <div class="dialog-demo-content" layout="row" layout-wrap layout-margin>
+    <md-button class="md-primary md-raised" ng-click="showAlert($event)" flex-sm="100" flex-md="100" flex-gt-md="auto">
       Alert Dialog
     </md-button>
-    <md-button class="md-primary md-raised" ng-click="showConfirm($event)" flex flex-md="100">
+    <md-button class="md-primary md-raised" ng-click="showConfirm($event)" flex-sm="100" flex-md="100" flex-gt-md="auto">
       Confirm Dialog
     </md-button>
-    <md-button class="md-primary md-raised" ng-click="showAdvanced($event)" flex flex-md="100">
+    <md-button class="md-primary md-raised" ng-click="showAdvanced($event)" flex-sm="100" flex-md="100" flex-gt-md="auto">
       Custom Dialog
+    </md-button>
+    <md-button class="md-primary md-raised" ng-click="showTabDialog($event)" flex-sm="100" flex-md="100" flex-gt-md="auto">
+      Tab Dialog
     </md-button>
   </div>
 
@@ -24,6 +27,5 @@
       {{status}}
     </b>
   </div>
-
 
 </div>
