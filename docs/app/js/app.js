@@ -170,17 +170,17 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         type: 'toggle',
         pages: [{
             name: 'Typography',
-            url: '/CSS/typography',
+            url: 'CSS/typography',
             type: 'link'
           },
           {
             name : 'Button',
-            url: '/CSS/button',
+            url: 'CSS/button',
             type: 'link'
           },
           {
             name : 'Checkbox',
-            url: '/CSS/checkbox',
+            url: 'CSS/checkbox',
             type: 'link'
           }]
       },
@@ -190,22 +190,22 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         pages: [
           {
             name: 'Introduction and Terms',
-            url: '/Theming/01_introduction',
+            url: 'Theming/01_introduction',
             type: 'link'
           },
           {
             name: 'Declarative Syntax',
-            url: '/Theming/02_declarative_syntax',
+            url: 'Theming/02_declarative_syntax',
             type: 'link'
           },
           {
             name: 'Configuring a Theme',
-            url: '/Theming/03_configuring_a_theme',
+            url: 'Theming/03_configuring_a_theme',
             type: 'link'
           },
           {
             name: 'Multiple Themes',
-            url: '/Theming/04_multiple_themes',
+            url: 'Theming/04_multiple_themes',
             type: 'link'
           }
         ]
@@ -245,19 +245,19 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       pages: [{
         name: 'Container Elements',
         id: 'layoutContainers',
-        url: '/layout/container'
+        url: 'layout/container'
       },{
         name: 'Grid System',
         id: 'layoutGrid',
-        url: '/layout/grid'
+        url: 'layout/grid'
       },{
         name: 'Child Alignment',
         id: 'layoutAlign',
-        url: '/layout/alignment'
+        url: 'layout/alignment'
       },{
         name: 'Options',
         id: 'layoutOptions',
-        url: '/layout/options'
+        url: 'layout/options'
       }]
     },
     {
