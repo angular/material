@@ -11,7 +11,10 @@ md-card {
 
   > img,
   > :not(md-card-content) img {
+    display: flex;
+    flex: 0 0 auto;
     width: 100%;
+    height: auto;
   }
 
   md-card-content {
