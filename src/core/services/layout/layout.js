@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  var $mdUtil, $$mdLayout, $interpolate;
+  var $mdUtil, $interpolate;
 
   var SUFFIXES = /(-gt)?-(sm|md|lg)/g;
   var WHITESPACE = /\s+/g;
@@ -22,6 +22,12 @@
      * Enable directive attribute-to-class conversions
      */
     enabled: true,
+
+    /**
+     * After translation to classname equivalents, remove the
+     * original Layout attribute
+     */
+    removeAttributes : true,
 
     /**
      * List of mediaQuery breakpoints and associated suffixes
@@ -74,17 +80,7 @@
    */
   angular.module('material.core.layout', ['ng'])
 
-  /**
-   * Model of flags used by the Layout directives
-   * Allows changes while running tests or runtime app changes
-   */
-    .factory("$$mdLayout", function() {
-      return {
-        removeAttributes: true
-      };
-    })
-
-    // Attribute directives with optional value(s)
+    .directive('mdLayoutCss', disableLayoutDirective )
 
     .directive('layout', attributeWithObserve('layout'))
     .directive('layoutSm', attributeWithObserve('layout-sm'))
@@ -178,11 +174,45 @@
     .directive('showLtLg', warnAttrNotSupported('show-lt-lg'));
 
   /**
-   * These functions create registration functions for ngMaterial Layout attribute directives
-   * This provides easy translation to switch ngMaterial attribute selectors to
-   * CLASS selectors and directives; which has huge performance implications
-   * for IE Browsers
+   * Special directive that will disable ALL Layout conversions of layout
+   * attribute(s) to classname(s).
+   *
+   * <link rel="stylesheet" href="angular-material.min.css">
+   * <link rel="stylesheet" href="angular-material.layout.css">
+   *
+   * <body md-layout-css>
+   *  ...
+   * </body>
+   *
+   * Note: Using md-layout-css directive requires the developer to load the Material
+   * Layout Attribute stylesheet (which only uses attribute selectors):
+   *
+   *       `angular-material.layout.css`
+   *
+   * Another option is to use the LayoutProvider to configure and disable the attribute
+   * conversions; this would obviate the use of the `md-layout-css` directive
+   *
    */
+  function disableLayoutDirective() {
+    return {
+      restrict : 'A',
+      priority : '900',
+      compile  : function(element, attr) {
+        config.enabled = false;
+        return angular.noop;
+      }
+    };
+  }
+
+  // *********************************************************************************
+  //
+  // These functions create registration functions for ngMaterial Layout attribute directives
+  // This provides easy translation to switch ngMaterial attribute selectors to
+  // CLASS selectors and directives; which has huge performance implications
+  // for IE Browsers
+  //
+  // *********************************************************************************
+
 
   /**
    * Creates a directive registration function where a possible dynamic attribute
@@ -191,9 +221,8 @@
    */
   function attributeWithObserve(className) {
 
-    return ['$mdUtil', '$$mdLayout', '$interpolate', function(_$mdUtil_, _$$mdLayout_, _$interpolate_) {
+    return ['$mdUtil', '$interpolate', function(_$mdUtil_, _$interpolate_) {
       $mdUtil = _$mdUtil_;
-      $$mdLayout = _$$mdLayout_;
       $interpolate = _$interpolate_;
 
       return {
@@ -228,7 +257,7 @@
       updateFn(getNormalizedAttrValue(className, attrs, ""));
       scope.$on("$destroy", function() { unwatch() });
 
-      if ($$mdLayout.removeAttributes) element.removeAttr(className);
+      if (config.removeAttributes) element.removeAttr(className);
     }
   }
 
@@ -238,8 +267,7 @@
    * any attribute value
    */
   function attributeWithoutValue(className) {
-    return ['$$mdLayout', '$interpolate', function(_$$mdLayout_, _$interpolate_) {
-      $$mdLayout = _$$mdLayout_;
+    return ['$interpolate', function(_$interpolate_) {
       $interpolate = _$interpolate_;
 
       return {
@@ -272,7 +300,7 @@
     function translateToCssClass(scope, element) {
       element.addClass(className);
 
-      if ($$mdLayout.removeAttributes) {
+      if (config.removeAttributes) {
         // After link-phase, remove deprecated layout attribute selector
         element.removeAttr(className);
       }

@@ -39,7 +39,7 @@ exports.task = function() {
       gulp.src(paths)
           .pipe(util.filterNonCodeFiles())
           .pipe(filter(['**', '!**/*-theme.scss']))
-          .pipe(filter(['**', '!**/standalone.scss']))
+          .pipe(filter(['**', '!**/attributes.scss']))
           .pipe(concat('angular-material.scss'))
           .pipe(sass())
           .pipe(rename({ basename: filename }))
@@ -55,10 +55,13 @@ exports.task = function() {
           .pipe(insert.prepend(baseVars))
           .pipe(sass())
           .pipe(util.autoprefix())
-          .pipe(insert.prepend(config.banner))
           .pipe(rename({ basename: "layouts" }))
-          .pipe(rename({prefix: 'angular-material-'}))
-          .pipe(gulp.dest(path.join(dest, 'modules', 'css')))
+          .pipe(rename({ prefix: 'angular-material.'}))
+          .pipe(insert.prepend(config.banner))
+          .pipe(gulp.dest(dest))
+          .pipe(gulpif(!IS_DEV, minifyCss()))
+          .pipe(rename({extname: '.min.css'}))
+          .pipe(gulp.dest(dest))
   );
 
   return series(streams);

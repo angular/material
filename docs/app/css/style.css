@@ -14,7 +14,7 @@ body {
 }
 
 .md-api-table {
-  margin-bottom: 8px;
+  margin-bottom: 16px;
   max-width: 100%;
   width: 100%;
   border-spacing: 0;
@@ -103,6 +103,7 @@ strong {
   background-color: #4C9EF0;
   color: white;
 }
+
 blockquote {
   border-left: 3px solid rgba(0, 0, 0, 0.12);
   font-style: italic;
@@ -858,9 +859,9 @@ docs-demo .doc-demo-content {
   transition:         none !important;
 }
 
-table.attributes {
+table.attributes, table.md-api-table {
   padding-left:15px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 table.attributes  tr  td:first-child {
   font-weight: bold;
@@ -868,4 +869,8 @@ table.attributes  tr  td:first-child {
 }
 table.attributes  tr  td:last-child {
   padding-left: 10px;
+}
+
+table.md-api-table  tr  td:first-child {
+  font-weight: bold;
 }

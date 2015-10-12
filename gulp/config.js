@@ -32,7 +32,7 @@ module.exports = {
     'src/core/services/layout/layout.scss'
   ],
   scssStandaloneFiles: [
-    'src/core/services/layout/layout.scss'
+    'src/core/services/layout/layout.attributes.scss'
   ],
   scssTestFiles: [
     'src/core/services/layout/layout.scss'
