@@ -46,7 +46,7 @@ md-list-item {
   .md-no-style {
     position: relative;
     padding: $list-item-padding-vertical $list-item-padding-horizontal;
-    flex: 1;
+    flex: 1 1 auto;
     
     &.md-button {
       font-size: inherit;
