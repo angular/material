@@ -234,6 +234,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
           body.setAttribute('style', restoreBodyStyle);
           htmlNode.setAttribute('style', restoreHtmlStyle);
           body.scrollTop = scrollOffset;
+          $document[0].documentElement.scrollTop = scrollOffset;
         };
       }
 
