@@ -2,6 +2,15 @@
 ### 0.11.3 (2015-10-12)
 
 
+#### Bug Fixes
+
+* **theming:** BREAKING: no longer apply md-default-theme class to unnested themable elements ([5eb94a55](https://github.com/angular/material/commit/5eb94a55), closes [#4846](https://github.com/angular/material/issues/4846))
+
+
+<a name"0.11.3"></a>
+### 0.11.3 (2015-10-12)
+
+
 #### Features
 
 * **input:** Add right-side icon to input container ([d49d8dcd](https://github.com/angular/material/commit/d49d8dcd), closes [#4763](https://github.com/angular/material/issues/4763), [#4808](https://github.com/angular/material/issues/4808))
