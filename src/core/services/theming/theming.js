@@ -439,7 +439,7 @@ function parseRules(theme, colorType, rules) {
     // Don't apply a selector rule to the default theme, making it easier to override
     // styles of the base-component
     if (theme.name == 'default') {
-      newRule = newRule.replace(/((\w|-)+)\.md-default-theme((\.|\w|-|:|\(|\)|\[|\]|"|'|=)*)/g, '$&, $1$3');
+      newRule = newRule.replace(/((\w|\.|-)+)\.md-default-theme((\.|\w|-|:|\(|\)|\[|\]|"|'|=)*)/g, '$&, $1$3');
     }
     generatedRules.push(newRule);
   });
