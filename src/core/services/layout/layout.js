@@ -106,20 +106,20 @@
     .directive('flexOrderLg', attributeWithObserve('flex-order-lg'))
     .directive('flexOrderGtLg', attributeWithObserve('flex-order-gt-lg'))
 
-    .directive('offset', attributeWithObserve('layout-offset'))
-    .directive('offsetSm', attributeWithObserve('layout-offset-sm'))
-    .directive('offsetGtSm', attributeWithObserve('layout-offset-gt-sm'))
-    .directive('offsetMd', attributeWithObserve('layout-offset-md'))
-    .directive('offsetGtMd', attributeWithObserve('layout-offset-gt-md'))
-    .directive('offsetLg', attributeWithObserve('layout-offset-lg'))
-    .directive('offsetGtLg', attributeWithObserve('layout-offset-gt-lg'))
-    .directive('layoutOffset', attributeWithObserve('layout-offset'))
-    .directive('layoutOffsetSm', attributeWithObserve('layout-offset-sm'))
-    .directive('layoutOffsetGtSm', attributeWithObserve('layout-offset-gt-sm'))
-    .directive('layoutOffsetMd', attributeWithObserve('layout-offset-md'))
-    .directive('layoutOffsetGtMd', attributeWithObserve('layout-offset-gt-md'))
-    .directive('layoutOffsetLg', attributeWithObserve('layout-offset-lg'))
-    .directive('layoutOffsetGtLg', attributeWithObserve('layout-offset-gt-lg'))
+    .directive('offset', attributeWithObserve('flex-offset'))
+    .directive('offsetSm', attributeWithObserve('flex-offset-sm'))
+    .directive('offsetGtSm', attributeWithObserve('flex-offset-gt-sm'))
+    .directive('offsetMd', attributeWithObserve('flex-offset-md'))
+    .directive('offsetGtMd', attributeWithObserve('flex-offset-gt-md'))
+    .directive('offsetLg', attributeWithObserve('flex-offset-lg'))
+    .directive('offsetGtLg', attributeWithObserve('flex-offset-gt-lg'))
+    .directive('flexOffset', attributeWithObserve('flex-offset'))
+    .directive('flexOffsetSm', attributeWithObserve('flex-offset-sm'))
+    .directive('flexOffsetGtSm', attributeWithObserve('flex-offset-gt-sm'))
+    .directive('flexOffsetMd', attributeWithObserve('flex-offset-md'))
+    .directive('flexOffsetGtMd', attributeWithObserve('flex-offset-gt-md'))
+    .directive('flexOffsetLg', attributeWithObserve('flex-offset-lg'))
+    .directive('flexOffsetGtLg', attributeWithObserve('flex-offset-gt-lg'))
 
     .directive('layoutAlign', attributeWithObserve('layout-align'))
     .directive('layoutAlignSm', attributeWithObserve('layout-align-sm'))
@@ -165,8 +165,8 @@
     .directive('layoutAlignLtLg', warnAttrNotSupported('layout-align-lt-lg'))
     .directive('flexOrderLtMd', warnAttrNotSupported('flex-order-lt-md'))
     .directive('flexOrderLtLg', warnAttrNotSupported('flex-order-lt-lg'))
-    .directive('offsetLtMd', warnAttrNotSupported('layout-offset-lt-md'))
-    .directive('offsetLtLg', warnAttrNotSupported('layout-offset-lt-lg'))
+    .directive('offsetLtMd', warnAttrNotSupported('flex-offset-lt-md'))
+    .directive('offsetLtLg', warnAttrNotSupported('flex-offset-lt-lg'))
 
     .directive('hideLtMd', warnAttrNotSupported('hide-lt-md'))
     .directive('hideLtLg', warnAttrNotSupported('hide-lt-lg'))
@@ -371,7 +371,7 @@
           }
           break;
 
-        case 'layout-offset' :
+        case 'flex-offset' :
         case 'flex-order'    :
           if (!value || isNaN(+value)) {
             value = '0';

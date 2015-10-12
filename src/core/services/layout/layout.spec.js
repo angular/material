@@ -141,7 +141,7 @@ describe('layout directives', function() {
     testAllSuffixesWithValues("flex-order", flexOrderValues);
   });
 
-  describe('using [layout-offset] attributes', function() {
+  describe('using [flex-offset] attributes', function() {
     var offsetValues = [
       5, 10, 15, 20, 25,
       30, 35, 40, 45, 50,
@@ -150,27 +150,27 @@ describe('layout directives', function() {
       33, 34, 66, 67
     ];
 
-    it('should support attribute without value "<div layout-offset>"', function() {
-      var element = $compile('<div layout-offset>Layout</div>')(pageScope);
-      expect(element.hasClass("layout-offset-0")).toBeTruthy();
-      expect(element.hasClass("layout-offset")).toBeFalsy();
+    it('should support attribute without value "<div flex-offset>"', function() {
+      var element = $compile('<div flex-offset>Layout</div>')(pageScope);
+      expect(element.hasClass("flex-offset-0")).toBeTruthy();
+      expect(element.hasClass("flex-offset")).toBeFalsy();
     });
 
-    it('should ignore invalid values non-numericals like layout-offset="humpty"', function() {
-      var element = $compile('<div layout-offset="humpty">Layout</div>')(pageScope);
-      expect(element.hasClass("layout-offset-0")).toBeTruthy();
-      expect(element.hasClass('layout-offset-humpty')).toBeFalsy();
+    it('should ignore invalid values non-numericals like flex-offset="humpty"', function() {
+      var element = $compile('<div flex-offset="humpty">Layout</div>')(pageScope);
+      expect(element.hasClass("flex-offset-0")).toBeTruthy();
+      expect(element.hasClass('flex-offset-humpty')).toBeFalsy();
     });
 
-    it('should support interpolated values layout-offset-gt-sm="{{padding}}"', function() {
+    it('should support interpolated values flex-offset-gt-sm="{{padding}}"', function() {
       var scope = pageScope,
-        element = $compile('<div layout-offset-gt-sm="{{padding}}">Layout</div>')(scope);
+        element = $compile('<div flex-offset-gt-sm="{{padding}}">Layout</div>')(scope);
 
       scope.$apply('padding = 15');
-      expect(element.hasClass('layout-offset-gt-sm-15')).toBeTruthy();
+      expect(element.hasClass('flex-offset-gt-sm-15')).toBeTruthy();
     });
 
-    testAllSuffixesWithValues("layout-offset", offsetValues);
+    testAllSuffixesWithValues("flex-offset", offsetValues);
   });
 
   describe('using [layout-align] attributes', function() {
@@ -267,7 +267,7 @@ describe('layout directives', function() {
   }
 
   /**
-   * Test other Layout directives (e.g. flex, flex-order, layout-offset)
+   * Test other Layout directives (e.g. flex, flex-order, flex-offset)
    */
   function testWithValue(className, value, raw) {
     var title = 'should allow valid values `' + className + '=' + value + '`';

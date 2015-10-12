@@ -56,7 +56,7 @@
       @if $s != '' { $suffix : '-#{$s}="#{$i * 5}"'; }
       @else        { $suffix : '="#{$i * 5}"';       }
 
-      $offsets : $offsets + '[offset#{$suffix}], ';
+      $offsets : $offsets + '[flex-offset#{$suffix}], ';
     }
 
     #{$offsets} {
@@ -72,7 +72,7 @@
       @if $s != '' {  $suffix : '-#{$s}="#{$i}"';   }
       @else        {  $suffix : '="#{$i}"';         }
 
-      $offsets : '[offset#{$suffix}], ';
+      $offsets : '[flex-offset#{$suffix}], ';
     }
 
     #{$offsets} {
@@ -88,7 +88,7 @@
       @if $s != '' {  $suffix : '-#{$s}="#{$i}"';   }
       @else        {  $suffix : '="#{$i}"';         }
 
-      $offsets : '[offset#{$suffix}]';
+      $offsets : '[flex-offset#{$suffix}]';
     }
 
     #{$offsets} {

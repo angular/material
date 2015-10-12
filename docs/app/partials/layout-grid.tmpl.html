@@ -2,7 +2,7 @@
 
   <p>
     To customize the size and position of elements in a layout, use the
-    <code>flex</code>, <code>flex-order</code>, and <code>offset</code> attributes.
+    <code>flex</code>, <code>flex-order</code>, and <code>flex-offset</code> attributes.
   </p>
 
   <docs-demo demo-title="Flex Attribute" class="small-demo colorNested">
@@ -189,7 +189,7 @@
   <docs-demo demo-title="Flex Offset Attribute" class="small-demo colorNested">
     <demo-file name="index.html">
       <div layout="row">
-        <div flex offset="33">
+        <div flex flex-offset="33">
           [flex offset="33"]
         </div>
         <div flex>
@@ -199,37 +199,37 @@
     </demo-file>
   </docs-demo>
   <p>
-    Add the <code>offset</code> attribute to a layout child to set its
+    Add the <code>flex-offset</code> attribute to a layout child to set its
     offset percentage within the layout. Values must be multiples 
     of <code>5</code>, or <code>33</code>, <code>34</code>, <code>66</code>, <code>67</code>.
   </p>
   <table class="md-api-table">
     <tr>
-      <td>offset</td>
+      <td>flex-offset</td>
       <td>Sets element offset.</td>
     </tr>
     <tr>
-      <td>offset-sm</td>
+      <td>flex-offset-sm</td>
       <td>Sets element offset on devices less than 600px wide.</td>
     </tr>
     <tr>
-      <td>offset-gt-sm</td>
+      <td>flex-offset-gt-sm</td>
       <td>Sets element offset on devices greater than 600px wide.</td>
     </tr>
     <tr>
-      <td>offset-md</td>
+      <td>flex-offset-md</td>
       <td>Sets element offset on devices between 600px and 960px wide.</td>
     </tr>
     <tr>
-      <td>offset-gt-md</td>
+      <td>flex-offset-gt-md</td>
       <td>Sets element offset on devices greater than 960px wide.
     </tr>
     <tr>
-      <td>offset-lg</td>
+      <td>flex-offset-lg</td>
       <td>Sets element offset on devices between 960px and 1200px wide.</td>
     </tr>
     <tr>
-      <td>offset-gt-lg</td>
+      <td>flex-offset-gt-lg</td>
       <td>Sets element offset on devices greater than 1200px wide.</td>
     </tr>
   </table>
