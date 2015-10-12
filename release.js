@@ -282,6 +282,7 @@
 
     //-- update firebase.json file
     writeFirebaseJson();
+    exec([ 'git commit --amend --no-edit -a' ]);
     done();
 
     //-- add steps to push script
