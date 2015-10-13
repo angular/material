@@ -336,6 +336,12 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  *   - `targetEvent` - `{DOMClickEvent=}`: A click's event object. When passed in as an option,
  *     the location of the click will be used as the starting point for the opening animation
  *     of the the dialog.
+ *   - `openFrom` - `{string|Element|object}`: The query selector, DOM element or the Rect object
+ *     that is used to determine the bounds (top, left, height, width) from which the Dialog will
+ *     originate.
+ *   - `closeTo` - `{string|Element|object}`: The query selector, DOM element or the Rect object
+ *     that is used to determine the bounds (top, left, height, width) to which the Dialog will
+ *     target.
  *   - `scope` - `{object=}`: the scope to link the template / controller to. If none is specified,
  *     it will create a new isolate scope.
  *     This scope will be destroyed when the dialog is removed unless `preserveScope` is set to true.
@@ -403,7 +409,7 @@ function MdDialogProvider($$interimElementProvider) {
 
   return $$interimElementProvider('$mdDialog')
     .setDefaults({
-      methods: ['disableParentScroll', 'hasBackdrop', 'clickOutsideToClose', 'escapeToClose', 'targetEvent', 'parent'],
+      methods: ['disableParentScroll', 'hasBackdrop', 'clickOutsideToClose', 'escapeToClose', 'targetEvent', 'closeTo', 'openFrom', 'parent'],
       options: dialogDefaultOptions
     })
     .addPreset('alert', {
@@ -459,6 +465,8 @@ function MdDialogProvider($$interimElementProvider) {
       clickOutsideToClose: false,
       escapeToClose: true,
       targetEvent: null,
+      closeTo: null,
+      openFrom: null,
       focusOnOpen: true,
       disableParentScroll: true,
       transformTemplate: function(template) {
@@ -482,7 +490,7 @@ function MdDialogProvider($$interimElementProvider) {
 
       wrapSimpleContent();
 
-      captureSourceAndParent(element, options);
+      captureParentAndFromToElements(options);
       configureAria(element.find('md-dialog'), options);
       showBackdrop(scope, element, options);
 
@@ -572,39 +580,67 @@ function MdDialogProvider($$interimElementProvider) {
     }
 
     /**
-     * Capture originator/trigger element information (if available)
+     * Capture originator/trigger/from/to element information (if available)
      * and the parent container for the dialog; defaults to the $rootElement
      * unless overridden in the options.parent
      */
-    function captureSourceAndParent(element, options) {
+    function captureParentAndFromToElements(options) {
       options.origin = angular.extend({
         element: null,
         bounds: null,
         focus: angular.noop
       }, options.origin || {});
 
-      var source = angular.element((options.targetEvent || {}).target);
-      if (source && source.length) {
-        // Compute and save the target element's bounding rect, so that if the
-        // element is hidden when the dialog closes, we can shrink the dialog
-        // back to the same position it expanded from.
-        options.origin.element = source;
-        options.origin.bounds = source[0].getBoundingClientRect();
-        options.origin.focus = function() {
-          source.focus();
+      // Saving the target element bounding rect
+      var saveBoundingClientRect = function (elem, orig) {
+        var source = angular.element((elem || {}));
+        if (source && source.length) {
+          // Compute and save the target element's bounding rect, so that if the
+          // element is hidden when the dialog closes, we can shrink the dialog
+          // back to the same position it expanded from.
+          //
+          // Checking if the source is a rect object or a DOM element
+          var isDomElem = source[0].getBoundingClientRect;
+          var element = isDomElem ? source : undefined;
+          var defaultBnds = {top:0,left:0,height:0,width:0};
+          var bounds = isDomElem ?
+            source[0].getBoundingClientRect() :
+            angular.extend({}, defaultBnds, source[0]);
+
+          return angular.extend(orig || {}, {
+            element: element,
+            bounds: bounds,
+            focus: function () {
+              source.focus();
+            }
+          });
         }
-      }
+      };
 
-      // If the parent specifier is a simple string selector, then query for
-      // the DOM element.
-      if ( angular.isString(options.parent) ) {
-        var simpleSelector = options.parent,
+      var getDomElement = function (elem, defaultElement) {
+        // If the specifier is a simple string selector, then query for
+        // the DOM element.
+        if (angular.isString(elem)) {
+          var simpleSelector = elem,
             container = $document[0].querySelectorAll(simpleSelector);
-        options.parent = container.length ? container[0] : null;
-      }
-      // If we have a reference to a raw dom element, always wrap it in jqLite
-      options.parent = angular.element(options.parent || $rootElement);
+          elem = container.length ? container[0] : null;
+        }
 
+        // If we have a reference to a raw dom element, always wrap it in jqLite
+        return angular.element(elem || defaultElement);
+      };
+
+      if(options.targetEvent) {
+        options.origin = saveBoundingClientRect(options.targetEvent.target, options.origin);
+      }
+
+      options.parent = getDomElement(options.parent, $rootElement);
+
+      options.closeTo = getDomElement(options.closeTo);
+      options.closeTo = saveBoundingClientRect(options.closeTo);
+
+      options.openFrom = getDomElement(options.openFrom);
+      options.openFrom = saveBoundingClientRect(options.openFrom);
     }
 
     /**
@@ -831,19 +867,26 @@ function MdDialogProvider($$interimElementProvider) {
       var animator = $mdUtil.dom.animator;
       var buildTranslateToOrigin = animator.calculateZoomToOrigin;
       var translateOptions = {transitionInClass: 'md-transition-in', transitionOutClass: 'md-transition-out'};
-      var from = animator.toTransformCss(buildTranslateToOrigin(dialogEl, options.origin));
+      var from = animator.toTransformCss(buildTranslateToOrigin(dialogEl, options.openFrom || options.origin));
       var to = animator.toTransformCss("");  // defaults to center display (or parent or $rootElement)
 
       return animator
         .translate3d(dialogEl, from, to, translateOptions)
         .then(function(animateReversal) {
-
-
-
           // Build a reversal translate function synched to this translation...
           options.reverseAnimate = function() {
-
             delete options.reverseAnimate;
+
+            if (options.closeTo) {
+              // Using the opposite classes to create a close animation to the closeTo element
+              translateOptions = {transitionInClass: 'md-transition-out', transitionOutClass: 'md-transition-in'};
+              from = to;
+              to = animator.toTransformCss(buildTranslateToOrigin(dialogEl, options.closeTo));
+
+              return animator
+                .translate3d(dialogEl, from, to,translateOptions);
+            }
+
             return animateReversal(
               animator.toTransformCss(
                 // in case the origin element has moved or is hidden,
