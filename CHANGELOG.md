@@ -1,10 +1,17 @@
-<a name"0.11.3"></a>
-### 0.11.3 (2015-10-12)
+<a name"0.11.4"></a>
+### 0.11.4 (2015-10-13)
 
 
 #### Bug Fixes
 
-* **theming:** BREAKING: no longer apply md-default-theme class to unnested themable elements ([5eb94a55](https://github.com/angular/material/commit/5eb94a55), closes [#4846](https://github.com/angular/material/issues/4846))
+* **input:** fix border-bottom transparency ([5da3c456](https://github.com/angular/material/commit/5da3c456), closes [#5128](https://github.com/angular/material/issues/5128))
+* **list:** ng-click changes item width in IE ([9b918cbc](https://github.com/angular/material/commit/9b918cbc), closes [#3708](https://github.com/angular/material/issues/3708))
+* **mdCard:** Fix card image height in IE. ([f54275ad](https://github.com/angular/material/commit/f54275ad), closes [#761](https://github.com/angular/material/issues/761))
+* **theming:** no longer apply md-default-theme class to unnested themable elements ([5eb94a55](https://github.com/angular/material/commit/5eb94a55), closes [#4846](https://github.com/angular/material/issues/4846))
+
+#### Breaking Changes
+
+* theming no longer apply md-default-theme class to unnested themable elements
 
 
 <a name"0.11.3"></a>
