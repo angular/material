@@ -141,7 +141,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
 
   var sections = [{
     name: 'Getting Started',
-    url: '/getting-started',
+    url: 'getting-started',
     type: 'link'
   }];
 
