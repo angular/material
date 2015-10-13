@@ -85,6 +85,7 @@ md-datepicker {
 // The calendar portion of the floating pane (vs. the input mask).
 .md-datepicker-calendar {
   opacity: 0;
+  background: white;
   // Use a modified timing function (from swift-ease-out) so that the opacity part of the
   // animation doesn't come in as quickly so that the floating pane doesn't ever seem to
   // cover up the trigger input.
