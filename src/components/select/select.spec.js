@@ -1,4 +1,4 @@
-ddescribe('<md-select>', function() {
+describe('<md-select>', function() {
   var attachedElements = [];
 
   beforeEach(module('material.components.input'));
