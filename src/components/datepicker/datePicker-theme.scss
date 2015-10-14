@@ -2,9 +2,6 @@
 
 md-datepicker.md-THEME_NAME-theme {
   background: '{{background-color}}';
-}
-
-.md-THEME_NAME-theme {
 
   .md-datepicker-input {
     @include input-placeholder-color('{{foreground-3}}');
@@ -24,10 +21,6 @@ md-datepicker.md-THEME_NAME-theme {
     }
   }
 
-  .md-datepicker-calendar-pane {
-    border-color: '{{background-300}}';
-  }
-
   .md-datepicker-triangle-button {
     .md-datepicker-expand-triangle {
       border-top-color: '{{foreground-3}}';
@@ -39,14 +32,19 @@ md-datepicker.md-THEME_NAME-theme {
   }
 
   // Open state for all of the elements of the picker.
-  .md-datepicker-open {
+  &.md-datepicker-open {
     .md-datepicker-calendar-icon {
       fill: '{{primary-500}}';
     }
   }
+}
+
+.md-datepicker-calendar-pane.md-THEME_NAME-theme {
+  border-color: '{{background-300}}';
 
   .md-datepicker-calendar,
   .md-datepicker-input-mask-opaque {
     background: '{{background-color}}';
   }
 }
+
