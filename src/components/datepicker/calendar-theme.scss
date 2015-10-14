@@ -1,13 +1,13 @@
 /** Theme styles for mdCalendar. */
 
-.md-calendar.md-THEME_NAME-theme {
-  color: '{{foreground-1}}';
+md-calendar.md-THEME_NAME-theme {
+  .md-calendar {
+    color: '{{foreground-1}}';
 
-  tr:last-child td {
-    border-bottom-color: '{{background-200}}';
+    tr:last-child td {
+      border-bottom-color: '{{background-200}}';
+    }
   }
-}
-.md-THEME_NAME-theme {
 
   .md-calendar-day-header {
     background: '{{background-hue-1}}';
