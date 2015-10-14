@@ -1,4 +1,4 @@
-describe('<md-select>', function() {
+ddescribe('<md-select>', function() {
   var attachedElements = [];
 
   beforeEach(module('material.components.input'));
@@ -370,6 +370,7 @@ describe('<md-select>', function() {
 
   describe('multiple', function() {
 
+
     describe('model->view', function() {
 
       it('renders initial model value', inject(function($rootScope) {
@@ -525,6 +526,17 @@ describe('<md-select>', function() {
 
         $rootScope.$apply('model = []');
         expect(ngModelCtrl.$valid).toBe(true);
+      }));
+
+      it('does not let an empty array satisfy required', inject(function($rootScope, $compile) {
+          $rootScope.model = [];
+          $rootScope.opts = [1, 2, 3, 4];
+          var form = $compile('<form name="testForm">' +
+            '<md-select ng-model="model", name="multiSelect" required="required" multiple="multiple">' +
+              '<md-option ng-repeat="opt in opts" ng-value="opt"></md-option>' +
+            '</md-select></form>')($rootScope);
+          $rootScope.$digest();
+          expect($rootScope.testForm.$valid).toBe(false);
       }));
 
     });
