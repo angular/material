@@ -27,7 +27,7 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
         }
 
         scope.$on('$destroy', function() {
-          $mdDialog.destroy();
+          $mdDialog.destroy(element);
         });
 
         /**

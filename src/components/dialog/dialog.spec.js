@@ -970,6 +970,65 @@ describe('$mdDialog', function() {
       expect(parent[0].querySelectorAll('md-dialog.two').length).toBe(1);
     }));
 
+    it('should hide dialog', inject(function($mdDialog, $rootScope, $animate) {
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template: '<md-dialog class="one">',
+        parent: parent
+      });
+      runAnimation();
+
+      $mdDialog.hide();
+      runAnimation();
+
+      expect(parent[0].querySelectorAll('md-dialog.one').length).toBe(0);
+    }));
+
+    it('should allow opening new dialog after existing without corruption', inject(function($mdDialog, $rootScope, $animate) {
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template: '<md-dialog class="one">',
+        parent: parent
+      });
+      runAnimation();
+      $mdDialog.hide();
+      runAnimation();
+
+      $mdDialog.show({
+        template: '<md-dialog class="two">',
+        parent: parent
+      });
+      runAnimation();
+      $mdDialog.hide();
+      runAnimation();
+
+      expect(parent[0].querySelectorAll('md-dialog.one').length).toBe(0);
+      expect(parent[0].querySelectorAll('md-dialog.two').length).toBe(0);
+    }));
+
+    it('should allow opening new dialog from existing without corruption', inject(function($mdDialog, $rootScope, $animate) {
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template: '<md-dialog class="one">',
+        parent: parent
+      });
+      runAnimation();
+
+      $mdDialog.show({
+        template: '<md-dialog class="two">',
+        parent: parent
+      });
+      //First run is for the old dialog being hidden.
+      runAnimation();
+      //Second run is for the new dialog being shown.
+      runAnimation();
+      $mdDialog.hide();
+      runAnimation();
+
+      expect(parent[0].querySelectorAll('md-dialog.one').length).toBe(0);
+      expect(parent[0].querySelectorAll('md-dialog.two').length).toBe(0);
+    }));
+
     it('should have the dialog role', inject(function($mdDialog, $rootScope) {
       var template = '<md-dialog>Hello</md-dialog>';
       var parent = angular.element('<div>');
@@ -1141,4 +1200,3 @@ describe('$mdDialog with custom interpolation symbols', function() {
     expect(buttons.eq(1).text()).toBe('OK');
   }));
 });
-
