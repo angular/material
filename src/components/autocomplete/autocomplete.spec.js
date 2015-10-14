@@ -168,6 +168,43 @@ describe('<md-autocomplete>', function() {
 
       element.remove();
     }));
+
+    it('should not close list on ENTER key if nothing is selected', inject(function($timeout, $mdConstant, $material) {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var ul = element.find('ul');
+
+      $material.flushInterimElement();
+
+      // Update the scope
+      element.scope().searchText = 'fo';
+      waitForVirtualRepeat(element);
+
+      // Focus the input
+      ctrl.focus();
+      $timeout.flush();
+
+      expect(ctrl.hidden).toBe(false);
+
+      // Run our key events
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ENTER));
+      $timeout.flush();
+
+      // Check expectations again
+      expect(ctrl.hidden).toBe(false);
+
+      element.remove();
+    }));
   });
 
   describe('basic functionality with template', function() {
