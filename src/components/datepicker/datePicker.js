@@ -213,7 +213,6 @@
     this.calendarPane.id = 'md-date-pane' + $mdUtil.nextUid();
 
     $mdTheming($element);
-    $mdTheming(angular.element(this.calendarPane));
 
     /** Pre-bound click handler is saved so that the event listener can be removed. */
     this.bodyClickHandler = angular.bind(this, this.handleBodyClick);
