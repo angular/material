@@ -118,7 +118,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
      function getNearestContentElement () {
        var current = element.parent()[0];
        // Look for the nearest parent md-content, stopping at the rootElement.
-       while (current && current !== $rootElement[0] && current !== document.body) {
+       while (current && current !== $rootElement[0] && current !== document.body && current.nodeName !== 'MD-CONTENT') {
          current = current.parentNode;
        }
        return current;
