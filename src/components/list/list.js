@@ -175,7 +175,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
 
         var proxies    = [],
             firstChild = $element[0].firstElementChild,
-            hasClick   = firstChild && firstChild.hasAttribute('ng-click');
+            hasClick   = firstChild && hasClickEvent(firstChild);
 
         computeProxies();
         computeClickable();
@@ -199,6 +199,14 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
               });
             });
           });
+        }
+
+        function hasClickEvent (element) {
+          var attr = element.attributes;
+          for (var i = 0; i < attr.length; i++) {
+            if ($attr.$normalize(attr[i].name) === 'ngClick') return true;
+          }
+          return false;
         }
 
         function computeProxies() {
