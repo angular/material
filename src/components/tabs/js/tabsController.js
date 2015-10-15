@@ -533,10 +533,12 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
         .animate(
           $element,
           { height: currentHeight + 'px' },
-          { height: newHeight + 'px'}
+          { height: newHeight + 'px'},
+          '',
+          {easing: 'cubic-bezier(0.35, 0, 0.25, 1)', duration: 0.5}
         )
-        .then(function () {
-          $element.css('height', '');
+        .then(function() {
+          $element.css({transition: 'none', height: ''});
           locked = false;
         });
   }
