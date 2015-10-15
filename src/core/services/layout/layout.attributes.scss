@@ -144,7 +144,7 @@ $layout-breakpoint-lg:     1200px !default;
     $value : #{$i * 5 + '%'};
 
     [#{$flexName}="#{$i * 5}"] {
-      flex: 0 0 #{$value};
+      flex: 1 1 #{$value};
       max-width: #{$value};
       max-height: 100%;
       box-sizing: border-box;
@@ -152,7 +152,7 @@ $layout-breakpoint-lg:     1200px !default;
 
     [layout="row"] > [#{$flexName}="#{$i * 5}"],
     [layout#{$name}="row"] > [#{$flexName}="#{$i * 5}"] {
-      flex: 0 0 #{$value};
+      flex: 1 1 #{$value};
       max-width: #{$value};
       max-height: 100%;
       box-sizing: border-box;
@@ -160,7 +160,7 @@ $layout-breakpoint-lg:     1200px !default;
 
     [layout="column"] > [#{$flexName}="#{$i * 5}"],
     [layout#{$name}="column"] > [#{$flexName}="#{$i * 5}"] {
-      flex: 0 0 #{$value};
+      flex: 1 1 #{$value};
       max-width: 100%;
       max-height: #{$value};
       box-sizing: border-box;
@@ -168,16 +168,16 @@ $layout-breakpoint-lg:     1200px !default;
   }
 
   [layout="row"], [layout#{$name}="row"] {
-    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 0 0 33%;  max-width: 33%;  max-height: 100%; box-sizing: border-box; }
-    > [#{$flexName}="34"]   , > [#{$flexName}="34"]     {  flex: 0 0 34%;  max-width: 34%;  max-height: 100%; box-sizing: border-box; }
-    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 0 0 66%;  max-width: 66%;  max-height: 100%; box-sizing: border-box; }
-    > [#{$flexName}="67"]   , > [#{$flexName}="67"]     {  flex: 0 0 67%;  max-width: 67%;  max-height: 100%; box-sizing: border-box; }
+    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33%;  max-width: 33%;  max-height: 100%; box-sizing: border-box; }
+    > [#{$flexName}="34"]   , > [#{$flexName}="34"]     {  flex: 1 1 34%;  max-width: 34%;  max-height: 100%; box-sizing: border-box; }
+    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66%;  max-width: 66%;  max-height: 100%; box-sizing: border-box; }
+    > [#{$flexName}="67"]   , > [#{$flexName}="67"]     {  flex: 1 1 67%;  max-width: 67%;  max-height: 100%; box-sizing: border-box; }
   }
   [layout="column"], [layout#{$name}="column"] {
-    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 0 0 33%;  max-width: 100%;  max-height: 33%; box-sizing: border-box; }
-    > [#{$flexName}="34"]   , > [#{$flexName}="34"]     {  flex: 0 0 34%;  max-width: 100%;  max-height: 34%; box-sizing: border-box; }
-    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 0 0 66%;  max-width: 100%;  max-height: 66%; box-sizing: border-box; }
-    > [#{$flexName}="67"]   , > [#{$flexName}="67"]     {  flex: 0 0 67%;  max-width: 100%;  max-height: 67%; box-sizing: border-box; }
+    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33%;  max-width: 100%;  max-height: 33%; box-sizing: border-box; }
+    > [#{$flexName}="34"]   , > [#{$flexName}="34"]     {  flex: 1 1 34%;  max-width: 100%;  max-height: 34%; box-sizing: border-box; }
+    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66%;  max-width: 100%;  max-height: 66%; box-sizing: border-box; }
+    > [#{$flexName}="67"]   , > [#{$flexName}="67"]     {  flex: 1 1 67%;  max-width: 100%;  max-height: 67%; box-sizing: border-box; }
   }
 
 }
