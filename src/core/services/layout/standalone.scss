@@ -173,6 +173,14 @@
       max-height: #{$i * 5 + '%'};
     }
   }
+  
+  [#{$flexName}="33"], [#{$flexName}="34"] {
+    flex: 1 1 33%;
+  }
+
+  [#{$flexName}="66"], [#{$flexName}="67"] {
+    flex: 1 1 67%;
+  }
 
   [layout#{$name}="row"] {
     > [#{$flexName}="33"], > [#{$flexName}="34"]  {  max-width: 33%;  max-height: 100%; }
