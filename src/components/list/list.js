@@ -93,7 +93,9 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
 
       tEl[0].setAttribute('role', 'listitem');
 
-      if (!tAttrs.ngClick) {
+      if (tAttrs.ngClick || tAttrs.ngHref || tAttrs.href || tAttrs.uiSref || tAttrs.ngAttrUiSref) {
+        wrapIn('button');
+      } else {
         for (var i = 0, type; type = proxiedTypes[i]; ++i) {
           if (proxyElement = tEl[0].querySelector(type)) {
             hasProxiedElement = true;
@@ -105,8 +107,6 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         } else if (!tEl[0].querySelector('md-button:not(.md-secondary):not(.md-exclude)')) {
           tEl.addClass('md-no-proxy');
         }
-      } else {
-        wrapIn('button');
       }
       setupToggleAria();
 
@@ -134,7 +134,8 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           tEl.addClass('md-proxy-focus');
         } else {
           container = angular.element('<md-button class="md-no-style"><div class="md-list-item-inner"></div></md-button>');
-          var copiedAttrs = ['ng-click', 'aria-label', 'ng-disabled'];
+          var copiedAttrs = ['ng-click', 'aria-label', 'ng-disabled', 
+            'ui-sref', 'href', 'ng-href', 'ng-attr-ui-sref'];
           angular.forEach(copiedAttrs, function(attr) {
             if (tEl[0].hasAttribute(attr)) {
               container[0].setAttribute(attr, tEl[0].getAttribute(attr));

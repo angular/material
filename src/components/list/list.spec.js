@@ -111,6 +111,20 @@ describe('mdListItem directive', function() {
     expect(firstChild.childNodes[0].childNodes[0].nodeName).toBe('P');
   });
 
+  it('creates buttons when used with ui-sref', function() {
+    var listItem = setup('<md-list-item ui-sref="somestate"><p>Hello world</p></md-list-item>');
+    var firstChild = listItem.children()[0];
+    expect(firstChild.nodeName).toBe('MD-BUTTON');
+    expect(firstChild.hasAttribute('ui-sref')).toBeTruthy();
+  });
+
+  it('creates buttons when used with href', function() {
+    var listItem = setup('<md-list-item href="/somewhere"><p>Hello world</p></md-list-item>');
+    var firstChild = listItem.children()[0];
+    expect(firstChild.nodeName).toBe('MD-BUTTON');
+    expect(firstChild.hasAttribute('href')).toBeTruthy();
+  });
+
   it('moves aria-label to primary action', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()" aria-label="Hello"></md-list-item>');
     var listItemChildren = listItem.children();
