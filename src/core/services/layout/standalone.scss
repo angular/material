@@ -15,6 +15,11 @@
 *
 */
 
+$layout-gutter-width: 1em;
+$layout-breakpoint-sm: 30em;
+$layout-breakpoint-md: 50em;
+$layout-breakpoint-lg: 80em;
+
 @-moz-document url-prefix() {
   [layout-fill] {
     margin: 0;
