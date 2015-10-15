@@ -120,7 +120,8 @@ function InterimElementProvider() {
 
         // Special internal method to destroy an interim element without animations
         // used when navigation changes causes a $scope.$destroy() action
-        destroy : destroyInterimElement
+        destroy : destroyInterimElement,
+        destroyInstance : detroyInterimElementInstance
       };
 
 
@@ -222,6 +223,10 @@ function InterimElementProvider() {
           return interimElementService.destroy(opts);
       }
 
+      function detroyInterimElementInstance(opts) {
+        return interimElementService.destroyInstance(opts);
+      }
+
       /**
        * Helper to call $injector.invoke with a local of the factory name for
        * this provider.
@@ -262,7 +267,8 @@ function InterimElementProvider() {
         show: show,
         hide: hide,
         cancel: cancel,
-        destroy : destroy
+        destroy : destroy,
+        destroyInstance: destroyInstance
       };
 
       /*
@@ -378,6 +384,27 @@ function InterimElementProvider() {
                $q.when(SHOW_CANCELLED);
       }
 
+      /*
+       * Special method to quick-remove a specific interim element without animations
+       *
+       * @param element A DOM element, to which the interim element instance we want
+       *                  to destroy is attached.
+       */
+      function destroyInstance(element) {
+
+        if (element) {
+          //Try to find the interim element in the stack which corresponds to the supplied DOM element.
+          //This function might be called when the element already has been removed, in which
+          //case we won't find any matches. That's ok.
+          var filtered = stack.filter(function(entry) { return entry.options.element[0] === element;});
+          if (filtered.length > 0) {
+            var interim = filtered[0];
+            stack.splice(stack.indexOf(interim), 1);
+            return interim.remove(SHOW_CANCELLED, false, {'$destroy':true});
+          }
+        }
+        return $q.when(SHOW_CANCELLED);
+      }
 
       /*
        * Internal Interim Element Object
