@@ -150,29 +150,42 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
          *
          */
         function onContentScroll(e) {
-          var scrollTop = e ? e.target.scrollTop : prevScrollTop;
+          var target = e ? e.target : null;
+          var scrollTop;
+          var maxScrollBottom;
+          var maxScrollTop = 0;
 
-          debouncedUpdateHeight();
+          if (target) {
+            scrollTop = target.scrollTop
+            maxScrollBottom = target.scrollHeight - target.offsetHeight;
+          } else {
+            scrollTop = prevScrollTop
+          }
 
-          y = Math.min(
-            toolbarHeight / shrinkSpeedFactor,
-            Math.max(0, y + scrollTop - prevScrollTop)
-          );
+          if (scrollTop >= maxScrollTop || scrollTop <= maxScrollBottom || !target) {
+            debouncedUpdateHeight();
 
-          element.css($mdConstant.CSS.TRANSFORM, translateY([-y * shrinkSpeedFactor]));
-          contentElement.css($mdConstant.CSS.TRANSFORM, translateY([(toolbarHeight - y) * shrinkSpeedFactor]));
+            y = Math.min(
+              toolbarHeight / shrinkSpeedFactor,
+              Math.max(0, y + scrollTop - prevScrollTop)
+            );
 
-          prevScrollTop = scrollTop;
+            element.css($mdConstant.CSS.TRANSFORM, translateY([-y * shrinkSpeedFactor]));
+            contentElement.css($mdConstant.CSS.TRANSFORM, translateY([(toolbarHeight - y) * shrinkSpeedFactor]));
 
-          $mdUtil.nextTick(function() {
-            var hasWhiteFrame = element.hasClass('md-whiteframe-z1');
+            prevScrollTop = scrollTop;
 
-            if (hasWhiteFrame && !y) {
-              $animate.removeClass(element, 'md-whiteframe-z1');
-            } else if (!hasWhiteFrame && y) {
-              $animate.addClass(element, 'md-whiteframe-z1');
-            }
-          });
+            $mdUtil.nextTick(function() {
+              var hasWhiteFrame = element.hasClass('md-whiteframe-z1');
+
+              if (hasWhiteFrame && !y) {
+                $animate.removeClass(element, 'md-whiteframe-z1');
+              } else if (!hasWhiteFrame && y) {
+                $animate.addClass(element, 'md-whiteframe-z1');
+              }
+            });
+          }
+
 
         }
 
