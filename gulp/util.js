@@ -54,6 +54,7 @@ function buildJs () {
       .pipe(concat('angular-material.js'))
       .pipe(BUILD_MODE.transform())
       .pipe(insert.prepend(config.banner))
+      .pipe(insert.append('window.ngMaterial={version:{full: "' + VERSION +'"}}'))
       .pipe(gulp.dest(config.outputDir))
       .pipe(gulpif(!IS_DEV, uglify({ preserveComments: 'some' })))
       .pipe(rename({ extname: '.min.js' }))
