@@ -1131,7 +1131,7 @@ function SelectProvider($$interimElementProvider) {
 
         function checkCloseMenu(ev) {
           if (ev && ( ev.type == 'mouseup') && (ev.currentTarget != dropDown[0])) return;
-          if ( mouseOnScrollbar() ) return;
+          if (ev && ev.target && ev.target.tagName == "MD-CONTENT") return;
 
           if (!selectCtrl.isMultiple) {
             opts.restoreFocus = true;
@@ -1139,23 +1139,6 @@ function SelectProvider($$interimElementProvider) {
             $mdUtil.nextTick(function() {
               $mdSelect.hide(selectCtrl.ngModel.$viewValue);
             }, true);
-          }
-
-          /**
-           * check if the mouseup event was on a scrollbar
-           */
-          function mouseOnScrollbar() {
-            var clickOnScrollbar = false;
-            if (ev && (ev.currentTarget.children.length > 0)) {
-              var child = ev.currentTarget.children[0];
-              var hasScrollbar = child.scrollHeight > child.clientHeight;
-              if (hasScrollbar && child.children.length > 0) {
-                var relPosX = ev.pageX - ev.currentTarget.getBoundingClientRect().left;
-                if (relPosX > child.querySelector('md-option').offsetWidth)
-                  clickOnScrollbar = true;
-              }
-            }
-            return clickOnScrollbar;
           }
         }
       }
