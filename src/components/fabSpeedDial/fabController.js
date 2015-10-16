@@ -46,7 +46,7 @@
 
     function setupListeners() {
       var eventTypes = [
-        'click', 'focusin', 'focusout'
+        'mousedown', 'mouseup', 'click', 'touchstart', 'touchend', 'focusin', 'focusout'
       ];
 
       // Add our listeners
@@ -111,17 +111,55 @@
       });
     }
 
-    var lastSrc;
     function parseEvents(latestEvent) {
-      if (latestEvent.srcEvent && latestEvent.srcEvent == lastSrc) return;
-      if (latestEvent.type == 'click') {
+      events.push(latestEvent.type);
+
+      // Handle desktop click
+      if (equalsEvents(['mousedown', 'focusout?', 'focusin?', 'mouseup', 'click'])) {
         handleItemClick(latestEvent);
-      } else if (latestEvent.type == 'focusin') {
-        vm.open();
-      } else if (latestEvent.type == 'focusout') {
-        vm.close();
+        resetEvents();
+        return;
       }
-      lastSrc = latestEvent.srcEvent;
+
+      // Handle mobile click/tap (and keyboard enter)
+      if (equalsEvents(['touchstart?', 'touchend?', 'click'])) {
+        handleItemClick(latestEvent);
+        resetEvents();
+        return;
+      }
+
+      // Handle tab keys (focusin)
+      if (equalsEvents(['focusin'])) {
+        vm.open();
+        resetEvents();
+        return;
+      }
+
+      // Handle tab keys (focusout)
+      if (equalsEvents(['focusout'])) {
+        vm.close();
+        resetEvents();
+        return;
+      }
+
+      eventUnhandled();
+    }
+
+    /*
+     * No event was handled, so setup a timeout to clear the events
+     *
+     * TODO: Use $mdUtil.debounce()?
+     */
+    var resetEventsTimeout;
+
+    function eventUnhandled() {
+      if (resetEventsTimeout) {
+        window.clearTimeout(resetEventsTimeout);
+      }
+
+      resetEventsTimeout = window.setTimeout(function() {
+        resetEvents();
+      }, 250);
     }
 
     function resetActionIndex() {
