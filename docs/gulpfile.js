@@ -15,6 +15,7 @@ var utils = require('../scripts/gulp-utils.js');
 var karma = require('karma').server;
 var argv = require('minimist')(process.argv.slice(2));
 var gutil = require('gulp-util');
+var series = require('stream-series');
 
 var config = {
   demoFolder: 'demo-partials'
@@ -116,12 +117,22 @@ gulp.task('docs-js-dependencies', ['build'], function() {
 });
 
 gulp.task('docs-js', ['docs-app', 'docs-html2js', 'demos', 'build', 'docs-js-dependencies'], function() {
-  return gulp.src([
-    'node_modules/angularytics/dist/angularytics.js',
-    'dist/docs/js/**/*.js'
-  ])
-  .pipe(concat('docs.js'))
-  .pipe(gulpif(!argv.dev, uglify()))
+  var preLoadJs = ['docs/app/js/preload.js'];
+  if (process.argv.indexOf('--jquery') != -1) {
+    preLoadJs.push('node_modules/jquery/dist/jquery.js');
+  }
+
+  return series(
+    gulp.src([
+      'node_modules/angularytics/dist/angularytics.js',
+      'dist/docs/js/**/*.js'
+    ])
+      .pipe(concat('docs.js'))
+      .pipe(gulpif(!argv.dev, uglify())),
+    gulp.src(preLoadJs)
+      .pipe(concat('preload.js'))
+      .pipe(gulpif(!argv.dev, uglify()))
+  )
   .pipe(gulp.dest('dist/docs'));
 });
 
