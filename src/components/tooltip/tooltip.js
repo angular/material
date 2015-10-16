@@ -168,13 +168,13 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
           elementFocusedOnWindowBlur = false;
           return;
         }
-        parent.on('blur mouseleave touchend touchcancel', leaveHandler );
+        parent.on('blur mouseleave touchcancel', leaveHandler );
         setVisible(true);
       };
-      var leaveHandler = function () {
+      var leaveHandler = function (e) {
         var autohide = scope.hasOwnProperty('autohide') ? scope.autohide : attr.hasOwnProperty('mdAutohide');
         if (autohide || mouseActive || ($document[0].activeElement !== parent[0]) ) {
-          parent.off('blur mouseleave touchend touchcancel', leaveHandler );
+          parent.off('blur mouseleave touchcancel', leaveHandler );
           parent.triggerHandler("blur");
           setVisible(false);
         }
