@@ -81,16 +81,55 @@
     };
 
     if (self.isHijackingClicks) {
+      var maxClickDistance = 6;
       self.handler('click', {
         options: {
-          maxDistance: 6
+          maxDistance: maxClickDistance
         },
-        onEnd: function (ev, pointer) {
+        onEnd: checkDistanceAndEmit('click')
+      });
+
+      self.handler('focus', {
+        options: {
+          maxDistance: maxClickDistance
+        },
+        onEnd: function(ev, pointer) {
           if (pointer.distance < this.state.options.maxDistance) {
-            this.dispatchEvent(ev, 'click');
+            if (canFocus(ev.target)) {
+              this.dispatchEvent(ev, 'focus', pointer);
+              ev.target.focus();
+            }
+          }
+
+          function canFocus(element) {
+            return element.hasAttribute('href') ||
+              (( element.nodeName == 'INPUT' || element.nodeName == 'BUTTON' || 
+                element.nodeName == 'SELECT' || element.nodeName == 'TEXTAREA' ) && !element.hasAttribute('DISABLED')) ||
+              ( element.hasAttribute('tabindex') && element.getAttribute('tabindex') != '-1' );
           }
         }
       });
+
+      self.handler('mouseup', {
+        options: {
+          maxDistance: maxClickDistance
+        },
+        onEnd: checkDistanceAndEmit('mouseup')
+      });
+
+      self.handler('mousedown', {
+        onStart: function(ev) {
+          this.dispatchEvent(ev, 'mousedown');
+        }
+      });
+    }
+
+    function checkDistanceAndEmit(eventName) {
+      return function(ev, pointer) {
+        if (pointer.distance < this.state.options.maxDistance) {
+          this.dispatchEvent(ev, eventName, pointer);
+        }
+      };
     }
 
     /*
@@ -407,10 +446,10 @@
       eventPointer = eventPointer || pointer;
       var eventObj;
 
-      if (eventType === 'click') {
+      if (eventType === 'click' || eventType == 'mouseup' || eventType == 'mousedown' ) {
         eventObj = document.createEvent('MouseEvents');
         eventObj.initMouseEvent(
-          'click', true, true, window, srcEvent.detail,
+          eventType, true, true, window, srcEvent.detail,
           eventPointer.x, eventPointer.y, eventPointer.x, eventPointer.y,
           srcEvent.ctrlKey, srcEvent.altKey, srcEvent.shiftKey, srcEvent.metaKey,
           srcEvent.button, srcEvent.relatedTarget || null
@@ -464,6 +503,33 @@
           if (ev.target.tagName.toLowerCase() == 'label') {
             lastLabelClickPos = {x: ev.x, y: ev.y};
           }
+        }
+      }, true);
+
+      document.addEventListener('mouseup', function clickHijacker(ev) {
+        var isKeyClick = !ev.clientX && !ev.clientY;
+        if (!isKeyClick && !ev.$material && !ev.isIonicTap
+            && !isInputEventFromLabelClick(ev)) {
+          ev.preventDefault();
+          ev.stopPropagation();
+        }
+      }, true);
+
+      document.addEventListener('mousedown', function clickHijacker(ev) {
+        var isKeyClick = !ev.clientX && !ev.clientY;
+        if (!isKeyClick && !ev.$material && !ev.isIonicTap
+            && !isInputEventFromLabelClick(ev)) {
+          ev.preventDefault();
+          ev.stopPropagation();
+        }
+      }, true);
+
+      document.addEventListener('focus', function clickHijacker(ev) {
+        var isKeyClick = !ev.clientX && !ev.clientY;
+        if (!isKeyClick && !ev.$material && !ev.isIonicTap
+            && !isInputEventFromLabelClick(ev)) {
+          ev.preventDefault();
+          ev.stopPropagation();
         }
       }, true);
       
