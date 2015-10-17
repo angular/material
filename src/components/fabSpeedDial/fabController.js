@@ -115,17 +115,24 @@
       events.push(latestEvent.type);
 
       // Handle desktop click
-      if (equalsEvents(['mousedown', 'focusout?', 'focusin?', 'mouseup', 'click'])) {
+      if (equalsEvents(['mousedown', 'focusin?', 'mouseup', 'click'])) {
         handleItemClick(latestEvent);
         resetEvents();
         return;
       }
 
-      // Handle mobile click/tap (and keyboard enter)
-      if (equalsEvents(['touchstart?', 'touchend?', 'click'])) {
+      // Handle mobile click/tap
+      if (equalsEvents(['touchstart', 'touchend', 'mousedown', 'focusin?', 'mouseup', 'click'])) {
         handleItemClick(latestEvent);
         resetEvents();
         return;
+      }
+
+      // Handle click/tap
+      if (equalsEvents(['click'])) {
+         handleItemClick(latestEvent);
+         resetEvents();
+         return;
       }
 
       // Handle tab keys (focusin)
