@@ -141,7 +141,7 @@ describe('<md-tooltip> directive', function() {
       expect($rootScope.testModel.isVisible).toBe(false);
     });
 
-    it('should set visible on touchstart and touchend', function() {
+    xit('should set visible on touchstart and touchend', function() {
       buildTooltip(
         '<md-button>' +
           'Hello' +

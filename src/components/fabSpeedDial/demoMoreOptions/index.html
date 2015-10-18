@@ -110,7 +110,13 @@
 
   <script type="text/ng-template" id="dialog.html">
     <md-dialog>
-      <md-dialog-content>Hello User! You clicked {{dialog.item.name}}.</md-dialog-content>
+      <md-toolbar>
+        <div class="md-toolbar-tools">Cool Dialog!</div>
+      </md-toolbar>
+
+      <md-dialog-content layout-padding>
+        Hello user! you clicked {{dialog.item.name}}.
+      </md-dialog-content>
 
       <div class="md-actions">
         <md-button aria-label="Close dialog" ng-click="dialog.close()" class="md-primary">
