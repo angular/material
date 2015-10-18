@@ -532,7 +532,7 @@
           ev.stopPropagation();
         }
       }, true);
-      
+
       isInitialized = true;
     }
 

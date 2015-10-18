@@ -4,7 +4,7 @@
   angular.module('material.components.fabShared', ['material.core'])
     .controller('FabController', FabController);
 
-  function FabController($scope, $element, $animate, $mdUtil, $mdConstant) {
+  function FabController($scope, $element, $animate, $mdUtil, $mdConstant, $timeout) {
     var vm = this;
 
     // NOTE: We use async evals below to avoid conflicts with any existing digest loops
@@ -42,11 +42,13 @@
       resetActionIndex();
     }
 
-    var events = [];
-
     function setupListeners() {
       var eventTypes = [
-        'click', 'focusin', 'focusout'
+        '$md.pressdown',
+
+        'click', // Fired via keyboard ENTER
+
+        'focusin', 'focusout'
       ];
 
       // Add our listeners
@@ -59,69 +61,41 @@
         angular.forEach(eventTypes, function(eventType) {
           $element.off(eventType, parseEvents);
         });
+
         // remove any attached keyboard handlers in case element is removed while
         // speed dial is open
         disableKeyboard();
       });
     }
 
-    function resetEvents() {
-      events = [];
-    }
-
-    function equalsEvents(toCheck) {
-      var isEqual, strippedCheck, moreToCheck;
-
-      // Quick check to make sure we don't get stuck in an infinite loop
-      var numTests = 0;
-
-      do {
-        // Strip out the question mark
-        strippedCheck = toCheck.map(function(event) {
-          return event.replace('?', '')
-        });
-
-        // Check if they are equal
-        isEqual = angular.equals(events, strippedCheck);
-
-        // If not, check to see if removing an optional event makes them equal
-        if (!isEqual) {
-          toCheck = removeOptionalEvent(toCheck);
-          moreToCheck = (toCheck.length >= events.length && toCheck.length !== strippedCheck.length);
-        }
+    var recentEvent;
+    function parseEvents(event) {
+      // If we've had a recent press/click event, or material is sending us an additional event,
+      // ignore it
+      if (recentEvent && (isClick(recentEvent) || recentEvent.$material)) {
+        return;
       }
-      while (numTests < 10 && !isEqual && moreToCheck);
 
-      return isEqual;
-    }
+      // Otherwise, handle our events
+      if (isClick(event)) {
+        handleItemClick(event);
 
-    function removeOptionalEvent(events) {
-      var foundOptional = false;
-
-      return events.filter(function(event) {
-        // If we have not found an optional one, keep searching
-        if (!foundOptional && event.indexOf('?') !== -1) {
-          foundOptional = true;
-
-          // If we find an optional one, remove only that one and keep going
-          return false;
-        }
-
-        return true;
-      });
-    }
-
-    var lastSrc;
-    function parseEvents(latestEvent) {
-      if (latestEvent.srcEvent && latestEvent.srcEvent == lastSrc) return;
-      if (latestEvent.type == 'click') {
-        handleItemClick(latestEvent);
-      } else if (latestEvent.type == 'focusin') {
+        // Store our recent click event
+        recentEvent = event;
+      } else if (event.type == 'focusin') {
         vm.open();
-      } else if (latestEvent.type == 'focusout') {
+      } else if (event.type == 'focusout') {
         vm.close();
       }
-      lastSrc = latestEvent.srcEvent;
+
+      // Clear the recent event after all others have fired so we stop ignoring
+      $timeout(function() {
+        recentEvent = null;
+      }, 100, false);
+    }
+
+    function isClick(event) {
+      return event.type == '$md.pressdown' || event.type == 'click';
     }
 
     function resetActionIndex() {
@@ -181,6 +155,9 @@
 
     function enableKeyboard() {
       angular.element(document).on('keydown', keyPressed);
+
+      // TODO: On desktop, we should be able to reset the indexes so you cannot tab through
+      //resetActionTabIndexes();
     }
 
     function disableKeyboard() {
@@ -207,13 +184,7 @@
     }
 
     function focusAction(event, direction) {
-      // Grab all of the actions
-      var actions = getActionsElement()[0].querySelectorAll('.md-fab-action-item');
-
-      // Disable all other actions for tabbing
-      angular.forEach(actions, function(action) {
-        angular.element(angular.element(action).children()[0]).attr('tabindex', -1);
-      });
+      var actions = resetActionTabIndexes();
 
       // Increment/decrement the counter with restrictions
       vm.currentActionIndex = vm.currentActionIndex + direction;
@@ -228,6 +199,18 @@
       // Make sure the event doesn't bubble and cause something else
       event.preventDefault();
       event.stopImmediatePropagation();
+    }
+
+    function resetActionTabIndexes() {
+      // Grab all of the actions
+      var actions = getActionsElement()[0].querySelectorAll('.md-fab-action-item');
+
+      // Disable all other actions for tabbing
+      angular.forEach(actions, function(action) {
+        angular.element(angular.element(action).children()[0]).attr('tabindex', -1);
+      });
+
+      return actions;
     }
 
     function doKeyLeft(event) {
