@@ -1,3 +1,36 @@
+<a name"0.12.0-rc1"></a>
+### 0.12.0-rc1 (2015-10-18)
+
+
+#### Features
+
+* **core:** add ngMaterial global variable with version info. ([275e604c](https://github.com/angular/material/commit/275e604c), closes [#5202](https://github.com/angular/material/issues/5202))
+* **mdDialog:** added openFrom and closeTo properties ([71e23e5b](https://github.com/angular/material/commit/71e23e5b), closes [#4228](https://github.com/angular/material/issues/4228), [#5075](https://github.com/angular/material/issues/5075))
+* **mdGestures:** greatly improve emulated click hijacking ([446df804](https://github.com/angular/material/commit/446df804), closes [#4850](https://github.com/angular/material/issues/4850), [#4757](https://github.com/angular/material/issues/4757))
+
+
+#### Bug Fixes
+
+* **autocomplete:**
+  * adjusts vertical offset of dropdown to account for ngMessages in floating label  ([ae00a7fd](https://github.com/angular/material/commit/ae00a7fd))
+  * fixed integration with dialog ([1df38df7](https://github.com/angular/material/commit/1df38df7), closes [#3979](https://github.com/angular/material/issues/3979), [#5154](https://github.com/angular/material/issues/5154))
+* **datepicker:** fix theme not being applied. ([f20a6354](https://github.com/angular/material/commit/f20a6354), closes [#5141](https://github.com/angular/material/issues/5141))
+* **dialog:** Provide option to not autowrap templates. ([87d62300](https://github.com/angular/material/commit/87d62300), closes [#4898](https://github.com/angular/material/issues/4898), [#5237](https://github.com/angular/material/issues/5237))
+* **divider:** Fix stlying for md-divider inside md-list-item. ([5218c18b](https://github.com/angular/material/commit/5218c18b), closes [#3021](https://github.com/angular/material/issues/3021), [#5058](https://github.com/angular/material/issues/5058))
+* **layout:**
+  * standalone layout css flex-grow and flex-shrink updated ([7b8acac1](https://github.com/angular/material/commit/7b8acac1))
+  * provide missing SCSS variables for standalone Layout css ([f966d0f9](https://github.com/angular/material/commit/f966d0f9))
+  * fix flex-grow and flex-shrink values for flex-xx='xx' markup ([9f704302](https://github.com/angular/material/commit/9f704302))
+* **list:**
+  * restore ui-sref and href support on md-list-item ([f8a8b3c5](https://github.com/angular/material/commit/f8a8b3c5), closes [#2131](https://github.com/angular/material/issues/2131))
+  * adds support for `data-ng-click` in place of `ng-click` for buttons ([2ecbb8f7](https://github.com/angular/material/commit/2ecbb8f7), closes [#3374](https://github.com/angular/material/issues/3374))
+* **md-slider:** set step property relative to min ([441cbf11](https://github.com/angular/material/commit/441cbf11), closes [#4403](https://github.com/angular/material/issues/4403), [#4385](https://github.com/angular/material/issues/4385))
+* **mdCard:** fixes content padding in IE 10. ([57bd0c64](https://github.com/angular/material/commit/57bd0c64), closes [#2974](https://github.com/angular/material/issues/2974), [#5120](https://github.com/angular/material/issues/5120))
+* **select:** do not let empty arrays satisfy required on multiple select ([9f561a56](https://github.com/angular/material/commit/9f561a56), closes [#4604](https://github.com/angular/material/issues/4604))
+* **tabs:** fix tab paging and sizing on IE11 when tabs are in a dialog ([5034a044](https://github.com/angular/material/commit/5034a044), closes [#3953](https://github.com/angular/material/issues/3953), [#5096](https://github.com/angular/material/issues/5096))
+* **tooltip:** corrects md-tooltip positioning when scrolled ([f62f6934](https://github.com/angular/material/commit/f62f6934), closes [#2406](https://github.com/angular/material/issues/2406), [#5161](https://github.com/angular/material/issues/5161))
+
+
 <a name"0.11.4"></a>
 ### 0.11.4 (2015-10-13)
 
