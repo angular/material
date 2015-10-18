@@ -68,6 +68,9 @@ describe('<md-fab-speed-dial> directive', function() {
 
     expect(controller.isOpen).toBe(true);
 
+    // Make sure to flush the timeout that ignores other events
+    $timeout.flush();
+
     // Click to close
     element.triggerHandler(clickEvent);
     pageScope.$digest();
