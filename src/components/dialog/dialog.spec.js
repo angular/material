@@ -545,37 +545,61 @@ describe('$mdDialog', function() {
       nodes.remove();
     }));
 
-    it('should not wrap content with existing md-dialog', inject(function($mdDialog, $rootScope) {
+    describe('when autoWrap parameter is true (default)', function() {
 
-      var template = '<md-dialog><div id="rawContent">Hello</div></md-dialog>';
-      var parent = angular.element('<div>');
+      it('should not wrap content with existing md-dialog', inject(function($mdDialog, $rootScope) {
 
-      $mdDialog.show({
-        template: template,
-        parent: parent
-      });
+        var template = '<md-dialog><div id="rawContent">Hello</div></md-dialog>';
+        var parent = angular.element('<div>');
 
-      $rootScope.$apply();
+        $mdDialog.show({
+          template: template,
+          parent: parent
+        });
 
-      var container = parent[0].querySelectorAll('md-dialog');
-      expect(container.length).toBe(1);
-    }));
+        $rootScope.$apply();
 
-    it('should wrap raw content with md-dialog', inject(function($mdDialog, $rootScope) {
+        var container = parent[0].querySelectorAll('md-dialog');
+        expect(container.length).toBe(1);
+      }));
 
-      var template = '<div id="rawContent">Hello</div>';
-      var parent = angular.element('<div>');
+      it('should wrap raw content with md-dialog', inject(function($mdDialog, $rootScope) {
 
-      $mdDialog.show({
-        template: template,
-        parent: parent
-      });
+        var template = '<div id="rawContent">Hello</div>';
+        var parent = angular.element('<div>');
 
-      $rootScope.$apply();
+        $mdDialog.show({
+          template: template,
+          parent: parent
+        });
 
-      var container = parent[0].querySelectorAll('md-dialog');
-      expect(container.length).toBe(1);
-    }));
+        $rootScope.$apply();
+
+        var container = parent[0].querySelectorAll('md-dialog');
+        expect(container.length).toBe(1);
+      }));
+    });
+
+
+    describe('when autoWrap parameter is false', function() {
+
+      it('should not wrap raw content with md-dialog', inject(function($mdDialog, $rootScope) {
+
+        var template = '<div id="rawContent">Hello</div>';
+        var parent = angular.element('<div>');
+
+        $mdDialog.show({
+          template: template,
+          parent: parent,
+          autoWrap: false
+        });
+
+        $rootScope.$apply();
+
+        var container = parent[0].querySelectorAll('md-dialog');
+        expect(container.length).toBe(0);
+      }));
+    });
 
     it('should append dialog within a md-dialog-container', inject(function($mdDialog, $rootScope) {
 
