@@ -199,6 +199,7 @@
           offsetDelay = index * delay;
 
         styles.opacity = ctrl.isOpen ? 1 : 0;
+         // TODO: change back to scale(0) when #5195 is fixed
         styles.transform = styles.webkitTransform = ctrl.isOpen ? 'scale(1)' : 'scale(0.1)';
         styles.transitionDelay = (ctrl.isOpen ? offsetDelay : (items.length - offsetDelay)) + 'ms';
 

@@ -44,11 +44,8 @@
 
     function setupListeners() {
       var eventTypes = [
-        '$md.pressdown',
-
-        'click', // Fired via keyboard ENTER
-
-        'focusin', 'focusout'
+        'click', // Fired via keyboard ENTER; TODO: Move into gestures?
+        '$md.pressdown', 'focusin', 'focusout'
       ];
 
       // Add our listeners
