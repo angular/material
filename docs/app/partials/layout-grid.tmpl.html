@@ -60,7 +60,7 @@
     <br/><br/>
     Currently, the <code>flex</code> attribute value is restricted to multiples of five and 33, 34, 66, and 67.
     <br/>
-    For example: <code>flex="0", flex="5", flex="20", flex="33", flex="50", flex="67", flex="75", ... flex="100"</code>.
+    For example: <code>flex="5", flex="20", flex="33", flex="50", flex="67", flex="75", ... flex="100"</code>.
   </p>
   <p>
     See the <a href="layout/options">layout options page</a> for more information on responsive flex attributes like
@@ -101,32 +101,24 @@
   </p>
   <table class="md-api-table">
     <tr>
-      <td >flex</td>
-      <td >Will grow and shrink as needed. Starts with a size of 0%.</td>
+      <td>flex</td>
+      <td>Will grow and shrink as needed. Starts with a size of 0%. Same as <code>flex="0"</code>.</td>
     </tr>
     <tr>
-      <td >flex="0"</td>
-      <td >Will not grow or shrink. Size of 0%. I.e. not visible, but still on the page.</td>
+      <td>flex="none"</td>
+      <td>Will not grow or shrink. Sized based on it's <code>width</code> and <code>height</code> values.</td>
     </tr>
     <tr>
-      <td >flex="none"</td>
-      <td >Will not grow or shrink. Sized based on it's <code>width</code> and <code>height</code> values.</td>
+      <td>flex="initial"</td>
+      <td>Will shrink as needed. Starts with a size based on it's <code>width</code> and <code>height</code> values.</td>
     </tr>
     <tr>
-      <td >flex="initial"</td>
-      <td >Will shrink as needed. Starts with a size based on it's <code>width</code> and <code>height</code> values.</td>
+      <td>flex="auto"</td>
+      <td>Will grow and shrink as needed. Starts with a size based on it's <code>width</code> and <code>height</code> values.</td>
     </tr>
     <tr>
-      <td >flex="auto"</td>
-      <td >Will grow and shrink as needed. Starts with a size based on it's <code>width</code> and <code>height</code> values.</td>
-    </tr>
-    <tr>
-      <td >flex="grow"</td>
-      <td >Will grow and shrink as needed. Starts with a size of 100%.</td>
-    </tr>
-    <tr>
-      <td >flex="100"</td>
-      <td >Will not grow or shrink. Size of 100%.</td>
+      <td>flex="grow"</td>
+      <td>Will grow and shrink as needed. Starts with a size of 100%. Same as <code>flex="100"</code>.</td>
     </tr>
   </table>
 
