@@ -70,5 +70,8 @@
     "current-branch": "git rev-parse --abbrev-ref HEAD",
     "merge-base": "git merge-base $(npm run -s current-branch) origin/master",
     "squash": "git rebase -i $(npm run -s merge-base)"
+  },
+  "dependencies": {
+    "jsesc": "^0.5.0"
   }
 }
