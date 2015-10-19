@@ -302,8 +302,6 @@ exports.cssToNgConstant = function(ngModule, factoryName) {
           .replace('%3', output)
       )
     });
-	
-	fs.writeFile(path.join(process.cwd(), 'theme.js'), jsFile.contents, function(err){})
 
     this.push(jsFile);
     next();
