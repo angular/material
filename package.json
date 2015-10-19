@@ -62,7 +62,8 @@
     "prompt-sync": "^1.0.0",
     "q": "^1.0.1",
     "stream-series": "^0.1.1",
-    "through2": "^0.6.3"
+    "through2": "^0.6.3",
+    "jsesc": "^0.5.0"
   },
   "scripts": {
     "watch": "gulp watch site --dev",
@@ -70,8 +71,5 @@
     "current-branch": "git rev-parse --abbrev-ref HEAD",
     "merge-base": "git merge-base $(npm run -s current-branch) origin/master",
     "squash": "git rebase -i $(npm run -s merge-base)"
-  },
-  "dependencies": {
-    "jsesc": "^0.5.0"
   }
 }
