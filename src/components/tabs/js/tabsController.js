@@ -528,19 +528,8 @@ function MdTabsController ($scope, $element, $window, $timeout, $mdConstant, $md
         newHeight     = contentHeight + tabsHeight,
         currentHeight = $element.prop('clientHeight');
     if (currentHeight === newHeight) return;
-    locked = true;
-    $animate
-        .animate(
-          $element,
-          { height: currentHeight + 'px' },
-          { height: newHeight + 'px'},
-          '',
-          {easing: 'cubic-bezier(0.35, 0, 0.25, 1)', duration: 0.5}
-        )
-        .then(function() {
-          $element.css({transition: 'none', height: ''});
-          locked = false;
-        });
+    
+    $element.css('height', newHeight);
   }
 
   /**

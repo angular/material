@@ -3456,14 +3456,6 @@ md-content {
   md-content.autoScroll {
     -webkit-overflow-scrolling: auto; }
 
-md-divider {
-  display: block;
-  border-top-width: 1px;
-  border-top-style: solid;
-  margin: 0; }
-  md-divider[md-inset] {
-    margin-left: 80px; }
-
 .md-dialog-is-showing {
   max-height: 100%; }
 
@@ -3568,6 +3560,14 @@ md-dialog {
 @media screen and (-ms-high-contrast: active) {
   md-dialog {
     border: 1px solid #fff; } }
+
+md-divider {
+  display: block;
+  border-top-width: 1px;
+  border-top-style: solid;
+  margin: 0; }
+  md-divider[md-inset] {
+    margin-left: 80px; }
 
 md-fab-speed-dial {
   position: relative;
@@ -6675,9 +6675,8 @@ md-tabs {
   position: relative;
   -webkit-flex-shrink: 0;
       -ms-flex-negative: 0;
-          flex-shrink: 0; }
-  md-tabs.ng-animate {
-    transition: height 0.5s cubic-bezier(0.35, 0, 0.25, 1); }
+          flex-shrink: 0;
+  transition: height 0.5s cubic-bezier(0.35, 0, 0.25, 1); }
   md-tabs:not(.md-no-tab-content):not(.md-dynamic-height) {
     min-height: 248px; }
   md-tabs[md-align-tabs="bottom"] md-tabs-wrapper {

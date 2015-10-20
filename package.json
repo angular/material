@@ -1,5 +1,5 @@
 {
-  "name": "angular-material-source",
+  "name": "angular-material",
   "version": "0.10.0",
   "repository": {
     "url": "git://github.com/angular/material.git"
@@ -56,6 +56,8 @@
     "prompt-sync": "^1.0.0",
     "q": "^1.0.1",
     "stream-series": "^0.1.1",
-    "through2": "^0.6.3"
-  }
+    "through2": "^0.6.3",
+    "browserify-shim": "^3.8.6"
+  },
+  "browserify-shim": {}
 }
