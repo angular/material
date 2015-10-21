@@ -2,7 +2,6 @@ angular
   .module('radioDemo2', ['ngMaterial'])
   .controller('ContactController', function($scope) {
     var self = this;
-
     self.contacts = [{
       'id': 1,
       'fullName': 'Maria Guadalupe',
