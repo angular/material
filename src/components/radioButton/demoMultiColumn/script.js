@@ -26,6 +26,6 @@ angular
     }];
     self.selectedIndex = 2;
     self.selectedUser = function() {
-      return self.contacts[self.selectedIndex].lastName;
+      return self.contacts[self.selectedIndex-1].lastName;
     }
   });
