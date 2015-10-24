@@ -66,7 +66,7 @@
     }
   }
 
-  @each $i in 33, 34 {
+  @each $i in 33 {
     $offsets : '';
     $suffix : '';
 
@@ -78,11 +78,11 @@
     }
 
     #{$offsets} {
-      margin-left: #{$i+'%'};
+      margin-left: calc(100% / 3);
     }
   }
 
-  @each $i in 66, 67 {
+  @each $i in 66 {
     $offsets : '';
     $suffix : '';
 
@@ -94,7 +94,7 @@
     }
 
     #{$offsets} {
-      margin-left: #{$i+'%'};
+      margin-left: calc(200% / 3);
     }
   }
 }
@@ -159,16 +159,12 @@
   }
 
   .layout-row, .layout#{$name}-row {
-    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 33%;  max-width: 33%;  max-height: 100%; box-sizing: border-box; }
-    > .#{$flexName}-34   , > .#{$flexName}-34     {  flex: 1 1 34%;  max-width: 34%;  max-height: 100%; box-sizing: border-box; }
-    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 66%;  max-width: 66%;  max-height: 100%; box-sizing: border-box; }
-    > .#{$flexName}-67   , > .#{$flexName}-67     {  flex: 1 1 67%;  max-width: 67%;  max-height: 100%; box-sizing: border-box; }
+    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 33%;  max-width: calc(100% / 3);  max-height: 100%; box-sizing: border-box; }
+    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 66%;  max-width: calc(200% / 3);  max-height: 100%; box-sizing: border-box; }
   }
   .layout-column, .layout#{$name}-column {
-    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 33%;  max-width: 100%;  max-height: 33%; box-sizing: border-box; }
-    > .#{$flexName}-34   , > .#{$flexName}-34     {  flex: 1 1 34%;  max-width: 100%;  max-height: 34%; box-sizing: border-box; }
-    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 66%;  max-width: 100%;  max-height: 66%; box-sizing: border-box; }
-    > .#{$flexName}-67   , > .#{$flexName}-67     {  flex: 1 1 67%;  max-width: 100%;  max-height: 67%; box-sizing: border-box; }
+    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 33%;  max-width: 100%;  max-height: calc(100% / 3); box-sizing: border-box; }
+    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 66%;  max-width: 100%;  max-height: calc(200% / 3); box-sizing: border-box; }
   }
 }
 
