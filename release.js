@@ -266,7 +266,7 @@
     exec([
            'rm -rf dist',
            'gulp docs',
-           'sed -i \'\' \'s,http:\\/\\/localhost:8080\\/angular-material,https:\\/\\/gitcdn.xyz/repo/angular/bower-material/v{{newVersion}}/angular-material,g\' dist/docs/docs.js',
+           'sed -i \'\' \'s,http:\\/\\/localhost:8080\\/angular-material,https:\\/\\/cdn.gitcdn.xyz/cdn/angular/bower-material/v{{newVersion}}/angular-material,g\' dist/docs/docs.js',
            'sed -i \'\' \'s,base\ href=\\",base\ href=\\"/{{newVersion}},g\' dist/docs/index.html'
          ]);
 
