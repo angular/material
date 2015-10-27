@@ -67,6 +67,7 @@ function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $timeout) {
     restrict: 'EA',
     replace: true,
     transclude: true,
+    priority: 100,
     template: getTemplate,
     link: postLink
   };
