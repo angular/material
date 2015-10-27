@@ -51,7 +51,7 @@ describe('<md-fab-speed-dial> directive', function() {
 
   it('toggles the menu when the trigger clicked', inject(function() {
     build(
-      '<md-fab-speed-dial>' +
+     '<md-fab-speed-dial>' +
       '  <md-fab-trigger>' +
       '    <md-button></md-button>' +
       '  </md-fab-trigger>' +
@@ -107,55 +107,7 @@ describe('<md-fab-speed-dial> directive', function() {
     expect(controller.isOpen).toBe(false);
   }));
 
-  it('opens the menu when the trigger is focused', inject(function() {
-    build(
-      '<md-fab-speed-dial>' +
-      '  <md-fab-trigger>' +
-      '    <md-button></md-button>' +
-      '  </md-fab-trigger>' +
-      '</md-fab-speed-dial>'
-    );
-
-    var focusEvent = {
-      type: 'focusin',
-      target: element.find('md-fab-trigger').find('md-button')
-    };
-
-    element.triggerHandler(focusEvent);
-    pageScope.$digest();
-    expect(controller.isOpen).toBe(true);
-  }));
-
-  it('closes the menu when the trigger is blurred', inject(function() {
-    build(
-      '<md-fab-speed-dial>' +
-      '  <md-fab-trigger>' +
-      '    <md-button></md-button>' +
-      '  </md-fab-trigger>' +
-      '</md-fab-speed-dial>'
-    );
-
-    var focusInEvent = {
-      type: 'focusin',
-      target: element.find('md-fab-trigger').find('md-button')
-    };
-
-    var focusOutEvent = {
-      type: 'focusout',
-      target: element.find('md-fab-trigger').find('md-button')
-    };
-
-    element.triggerHandler(focusInEvent);
-    pageScope.$digest();
-    expect(controller.isOpen).toBe(true);
-
-    element.triggerHandler(focusOutEvent);
-    pageScope.$digest();
-    expect(controller.isOpen).toBe(false);
-  }));
-
-
-  it('properly finishes the fling animation', inject(function(mdFabSpeedDialFlingAnimation) {
+  it('properly finishes the fling animation', inject(function(mdFabSpeedDialFlingAnimation, $timeout) {
     build(
       '<md-fab-speed-dial md-open="isOpen" class="md-fling">' +
       '  <md-fab-trigger><button></button></md-fab-trigger>' +
@@ -167,9 +119,11 @@ describe('<md-fab-speed-dial> directive', function() {
     var removeDone = jasmine.createSpy('removeDone');
 
     mdFabSpeedDialFlingAnimation.addClass(element, 'md-is-open', addDone);
+    $timeout.flush();
     expect(addDone).toHaveBeenCalled();
 
     mdFabSpeedDialFlingAnimation.removeClass(element, 'md-is-open', removeDone);
+    $timeout.flush();
     expect(removeDone).toHaveBeenCalled();
   }));
 
@@ -185,9 +139,11 @@ describe('<md-fab-speed-dial> directive', function() {
     var removeDone = jasmine.createSpy('removeDone');
 
     mdFabSpeedDialScaleAnimation.addClass(element, 'md-is-open', addDone);
+    $timeout.flush();
     expect(addDone).toHaveBeenCalled();
 
     mdFabSpeedDialScaleAnimation.removeClass(element, 'md-is-open', removeDone);
+    $timeout.flush();
     expect(removeDone).toHaveBeenCalled();
   }));
 
