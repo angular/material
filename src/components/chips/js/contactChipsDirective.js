@@ -113,6 +113,7 @@ function MdContactChips($mdTheming, $mdUtil) {
       contactQuery: '&mdContacts',
       placeholder: '@',
       secondaryPlaceholder: '@',
++     //filterSelected: '@',
       contactName: '@mdContactName',
       contactImage: '@mdContactImage',
       contactEmail: '@mdContactEmail',
