@@ -63,6 +63,15 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
         tooltipParent = angular.element(current || document.body),
         debouncedOnResize = $$rAF.throttle(function () { if (scope.visible) positionTooltip(); });
 
+    // Observing for tooltip direction changes
+    attr.$observe('mdDirection', function (val) {
+      direction = val;
+
+      if (scope.visible) {
+        positionTooltip();
+      }
+    });
+
     // Initialize element
 
     setDefaults();
@@ -70,8 +79,6 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     bindEvents();
     configureWatchers();
     addAriaLabel();
-
-    content.css('transform-origin', getTransformOrigin(direction));
 
     function setDefaults () {
       if (!angular.isDefined(attr.mdDelay)) scope.delay = TOOLTIP_SHOW_DELAY;
@@ -84,6 +91,10 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
         case 'top': return 'center bottom';
         case 'bottom': return 'center top';
       }
+    }
+
+    function setTransformOrigin (direction) {
+      content.css('transform-origin', getTransformOrigin(direction));
     }
 
     function configureWatchers () {
@@ -208,6 +219,8 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       // Insert the element before positioning it, so we can get the position
       // and check if we should display it
       tooltipParent.append(element);
+
+      setTransformOrigin(direction);
 
       // Check if we should display it or not.
       // This handles hide-* and show-* along with any user defined css
