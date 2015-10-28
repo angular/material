@@ -311,6 +311,64 @@ describe('$mdThemingProvider', function() {
 
 });
 
+describe('$mdThemeProvider with on-demand generation', function() {
+  var $mdTheming;
+
+  function getThemeStyleElements() {
+    return document.head.querySelectorAll('style[md-theme-style]');
+  }
+
+  function cleanThemeStyleElements() {
+    angular.forEach(getThemeStyleElements(), function(style) {
+      document.head.removeChild(style);
+    });
+  }
+
+  beforeEach(module('material.core', function($provide, $mdThemingProvider) {
+    // Theming requires that there is at least one element present in the document head.
+    cleanThemeStyleElements();
+
+    // Use a single simple style rule for which we can check presence / absense.
+    $provide.constant('$MD_THEME_CSS',
+        "sparkle.md-THEME_NAME-theme { color: '{{primary-color}}' }");
+
+    $mdThemingProvider.theme('sweden')
+        .primaryPalette('light-blue')
+        .accentPalette('yellow');
+
+    $mdThemingProvider.theme('belarus')
+        .primaryPalette('red')
+        .accentPalette('green');
+
+    $mdThemingProvider.generateThemesOnDemand(true);
+  }));
+
+  beforeEach(inject(function(_$mdTheming_) {
+    $mdTheming = _$mdTheming_;
+  }));
+
+  it('should not add any theme styles automatically', function() {
+    var styles = getThemeStyleElements();
+    expect(styles.length).toBe(0);
+  });
+
+  it('should add themes on-demand', function() {
+    $mdTheming.generateTheme('sweden');
+
+    var styles = getThemeStyleElements();
+    // One style tag for each default hue (default, hue-1, hue-2, hue-3).
+    expect(styles.length).toBe(4);
+    expect(document.head.innerHTML).toMatch(/md-sweden-theme/);
+    expect(document.head.innerHTML).not.toMatch(/md-belarus-theme/);
+
+    $mdTheming.generateTheme('belarus');
+    styles = getThemeStyleElements();
+    expect(styles.length).toBe(8);
+    expect(document.head.innerHTML).toMatch(/md-sweden-theme/);
+    expect(document.head.innerHTML).toMatch(/md-belarus-theme/);
+  });
+});
+
 describe('$mdTheming service', function() {
   var $mdThemingProvider;
   beforeEach(module('material.core', function(_$mdThemingProvider_) {
