@@ -52,7 +52,7 @@ function MdChip($mdTheming, $mdUtil) {
 
       if (ctrl) angular.element(element[0].querySelector('.md-chip-content'))
           .on('blur', function () {
-            ctrl.selectedChip = -1;
+            ctrl.resetSelectedChip();
           });
     };
   }
