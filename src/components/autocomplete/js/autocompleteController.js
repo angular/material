@@ -251,6 +251,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * When the user's mouse leaves the menu, blur events may hide the menu again.
    */
   function onListLeave () {
+    if (!hasFocus) elements.input.focus();
     noBlur = false;
     ctrl.hidden = shouldHide();
   }
@@ -358,8 +359,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * Handles input blur event, determines if the dropdown should hide.
    */
   function blur () {
+    hasFocus = false;
     if (!noBlur) {
-      hasFocus = false;
       ctrl.hidden = shouldHide();
     }
   }
@@ -496,11 +497,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * @returns {boolean}
    */
   function shouldHide () {
-    if ((ctrl.loading && !hasMatches()) || hasSelection() || !hasFocus) {
-      return true;
-    }
-
-    return !shouldShow();
+    return (ctrl.loading && !hasMatches() || hasSelection() || !hasFocus) || !shouldShow();
   }
 
   /**
