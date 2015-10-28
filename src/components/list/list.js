@@ -53,6 +53,8 @@ function mdListDirective($mdTheming) {
  *
  * @description
  * The `<md-list-item>` directive is a container intended for row items in a `<md-list>` container.
+ * The `md-2-line` and `md-3-line` classes can be added to a `<md-list-item>` 
+ * to increase the height with 22px and 40px respectively.
  *
  * ## CSS
  * `.md-avatar` - class for image avatars
