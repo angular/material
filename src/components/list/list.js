@@ -234,7 +234,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
 
         if (!hasClick && !proxies.length) {
           firstChild && firstChild.addEventListener('keypress', function(e) {
-            if (e.target.nodeName != 'INPUT' && e.target.nodeName != 'TEXTAREA') {
+            if (e.target.nodeName != 'INPUT' && e.target.nodeName != 'TEXTAREA' && e.target.getAttribute('contenteditable') != 'true') {
               var keyCode = e.which || e.keyCode;
               if (keyCode == $mdConstant.KEY_CODE.SPACE) {
                 if (firstChild) {
