@@ -8,11 +8,21 @@ describe('md-date-picker', function() {
   var initialDate = new Date(2015, FEB, 15);
 
   var ngElement, element, scope, pageScope, controller;
-  var $timeout, $$rAF, $animate, $window, keyCodes, dateUtil, dateLocale;
+  var $compile, $timeout, $$rAF, $animate, $window, keyCodes, dateUtil, dateLocale;
+
+  var DATEPICKER_TEMPLATE =
+    '<md-datepicker name="birthday" ' +
+         'md-max-date="maxDate" ' +
+         'md-min-date="minDate" ' +
+         'ng-model="myDate" ' +
+         'ng-required="isRequired" ' +
+         'ng-disabled="isDisabled">' +
+    '</md-datepicker>';
 
   beforeEach(module('material.components.datepicker', 'ngAnimateMock'));
 
-  beforeEach(inject(function($compile, $rootScope, $injector) {
+  beforeEach(inject(function($rootScope, $injector) {
+    $compile = $injector.get('$compile');
     $$rAF = $injector.get('$$rAF');
     $animate = $injector.get('$animate');
     $window = $injector.get('$window');
@@ -25,29 +35,33 @@ describe('md-date-picker', function() {
     pageScope.myDate = initialDate;
     pageScope.isDisabled = false;
 
-    var template = '<md-datepicker ' +
-          'md-max-date="maxDate" ' +
-          'md-min-date="minDate" ' +
-          'ng-model="myDate" ' +
-          'ng-required="isRequired" ' +
-          'ng-disabled="isDisabled">' +
-      '</md-datepicker>';
-    ngElement = $compile(template)(pageScope);
-    $rootScope.$apply();
-
-    scope = ngElement.isolateScope();
-    controller = ngElement.controller('mdDatepicker');
-    element = ngElement[0];
-
+    createDatepickerInstance(DATEPICKER_TEMPLATE);
     controller.closeCalendarPane();
   }));
 
   /**
-   * Populates the inputElement with a value and triggers the input events.
+   * Compile and link the given template and store values for element, scope, and controller.
+   * @param {string} template
+   * @returns {angular.JQLite} The root compiled element.
    */
+  function createDatepickerInstance(template) {
+    var outputElement = $compile(template)(pageScope);
+    pageScope.$apply();
+
+    ngElement = outputElement[0].tagName == 'MD-DATEPICKER' ?
+        outputElement : outputElement.find('md-datepicker');
+    element = ngElement[0];
+    scope = ngElement.isolateScope();
+    controller = ngElement.controller('mdDatepicker');
+
+    return outputElement;
+  }
+
+  /** Populates the inputElement with a value and triggers the input events. */
   function populateInputElement(inputString) {
     controller.ngInputElement.val(inputString).triggerHandler('input');
     $timeout.flush();
+    pageScope.$apply();
   }
 
   it('should set initial value from ng-model', function() {
@@ -84,7 +98,6 @@ describe('md-date-picker', function() {
     it('should set the `required` $error flag', function() {
       pageScope.isRequired = true;
       populateInputElement('');
-      pageScope.$apply();
 
       expect(controller.ngModelCtrl.$error['required']).toBe(true);
     });
@@ -92,19 +105,50 @@ describe('md-date-picker', function() {
     it('should set the `mindate` $error flag', function() {
       pageScope.minDate = new Date(2015, JAN, 1);
       populateInputElement('2014-01-01');
-      pageScope.$apply();
       controller.ngModelCtrl.$render();
 
       expect(controller.ngModelCtrl.$error['mindate']).toBe(true);
     });
 
-    it('should set the `mindate` $error flag', function() {
+    it('should set the `maxdate` $error flag', function() {
       pageScope.maxDate = new Date(2015, JAN, 1);
       populateInputElement('2016-01-01');
-      pageScope.$apply();
       controller.ngModelCtrl.$render();
 
       expect(controller.ngModelCtrl.$error['maxdate']).toBe(true);
+    });
+
+    describe('inside of a form element', function() {
+      var formCtrl;
+
+      beforeEach(function() {
+        createDatepickerInstance('<form>' + DATEPICKER_TEMPLATE + '</form>');
+        formCtrl = ngElement.controller('form');
+      });
+
+      it('should set `required` $error flag on the form', function() {
+        pageScope.isRequired = true;
+        populateInputElement('');
+        controller.ngModelCtrl.$render();
+
+        expect(formCtrl.$error['required']).toBeTruthy();
+      });
+
+      it('should set `mindate` $error flag on the form', function() {
+        pageScope.minDate = new Date(2015, JAN, 1);
+        populateInputElement('2014-01-01');
+        controller.ngModelCtrl.$render();
+
+        expect(formCtrl.$error['mindate']).toBeTruthy();
+      });
+
+      it('should set `maxdate` $error flag on the form', function() {
+        pageScope.maxDate = new Date(2015, JAN, 1);
+        populateInputElement('2016-01-01');
+        controller.ngModelCtrl.$render();
+
+        expect(formCtrl.$error['maxdate']).toBeTruthy();
+      });
     });
   });
 
