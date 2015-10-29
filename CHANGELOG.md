@@ -2,15 +2,6 @@
 ### 1.0.0-rc2 (2015-10-29)
 
 
-#### Breaking Changes
-
-* **layout:**
-  * `flex=34` and `flex=67` are no longer supported; use `flex=33` and `flex=66` for 1/3 and 2/3 sizing respectively
-  * `layout-margin` and `layout-padding` styles will apply to all children of `layout=row` and `layout=column`
-* **backdrop:** when backdrop parent is the body, backdrop will use `position: fixed`
-* **input:** form elements will now have an external `display` value of `inline-block`
-
-
 #### Bug Fixes
 
 * **autocomplete:** clicking on the scrollbar will no longer close dropdown ([309cef5d](https://github.com/angular/material/commit/309cef5d), closes [#4785](https://github.com/angular/material/issues/4785), [#4625](https://github.com/angular/material/issues/4625))
