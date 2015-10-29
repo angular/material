@@ -268,40 +268,74 @@
 
 @mixin layout-padding-margin() {
 
-  .layout-padding > .flex-sm,   .layout-padding > .flex-lt-md {
+  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
+  .layout-padding-sm > *,
+  .layout-padding    > .flex-sm
+  {
     padding: $layout-gutter-width / 4;
   }
+
   .layout-padding,
-  .layout-padding > .flex,
-  .layout-padding > .flex-gt-sm,
-  .layout-padding > .flex-md,
-  .layout-padding > .flex-lt-lg
+  .layout-padding-gt-sm,
+  .layout-padding-md,
+
+  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
+  .layout-padding        > *,
+  .layout-padding-gt-sm  > *,
+  .layout-padding-md     > *,
+
+  .layout-padding        > .flex,
+  .layout-padding        > .flex-gt-sm,
+  .layout-padding        > .flex-md,
   {
     padding: $layout-gutter-width / 2;
   }
-  .layout-padding > .flex-gt-md,
-  .layout-padding > .flex-lg
+
+  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
+  .layout-padding-gt-md  > *,
+  .layout-padding-lg     > *,
+  .layout-padding-gt-lg  > *,
+
+  .layout-padding        > .flex-gt-md,
+  .layout-padding        > .flex-lg,
+  .layout-padding        > .flex-lg,
+  .layout-padding        > .flex-gt-lg
   {
     padding: $layout-gutter-width / 1;
   }
 
-  .layout-margin > .flex-sm,
-  .layout-margin > .flex-lt-md
+  // Margin enhancements
+
+  .layout-margin-sm      > *,
+  .layout-margin         > .flex-sm
   {
     margin: $layout-gutter-width / 4;
   }
 
   .layout-margin,
-  .layout-margin  > .flex,
-  .layout-margin  > .flex-gt-sm,
-  .layout-margin  > .flex-md,
-  .layout-margin  > .flex-lt-lg
+  .layout-margin-gt-sm,
+  .layout-margin-md,
+
+  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
+  .layout-margin         > *,
+  .layout-margin-gt-sm   > *,
+  .layout-margin-md      > *,
+
+  .layout-margin         > .flex,
+  .layout-margin         > .flex-gt-sm,
+  .layout-margin         > .flex-md
   {
     margin: $layout-gutter-width / 2;
   }
 
-  .layout-margin  > .flex-gt-md,
-  .layout-margin  > .flex-lg
+  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
+  .layout-margin-gt-md  > *,
+  .layout-margin-lg     > *,
+  .layout-margin-gt-lg  > *,
+
+  .layout-margin        > .flex-gt-md,
+  .layout-margin        > .flex-lg,
+  .layout-margin        > .flex-gt-lg
   {
     margin: $layout-gutter-width / 1;
   }
