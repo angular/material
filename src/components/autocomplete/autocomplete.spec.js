@@ -372,6 +372,39 @@ describe('<md-autocomplete>', function() {
       $timeout.flush();
       element.remove();
     }));
+
+    it('properly sets hasNotFound with multiple autocompletes', inject(function($timeout, $material) {
+      var scope = createScope();
+      var template1 =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder">' +
+        '  <md-item-template>{{item.display}}</md-item-template>' +
+        '  <md-not-found>Sorry, not found...</md-not-found>' +
+        '</md-autocomplete>';
+      var element1 = compile(template1, scope);
+      var ctrl1 = element1.controller('mdAutocomplete');
+
+      var template2 =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder">' +
+        '  <md-item-template>{{item.display}}</md-item-template>' +
+        '</md-autocomplete>';
+      var element2 = compile(template2, scope);
+      var ctrl2 = element2.controller('mdAutocomplete');
+
+      // The first autocomplete has a template, the second one does not
+      expect(ctrl1.hasNotFound).toBe(true);
+      expect(ctrl2.hasNotFound).toBe(false);
+    }));
+
   });
 
   describe('xss prevention', function() {
