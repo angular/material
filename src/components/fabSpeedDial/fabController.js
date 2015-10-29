@@ -7,7 +7,7 @@
   function FabController($scope, $element, $animate, $mdUtil, $mdConstant, $timeout) {
     var vm = this;
 
-    // NOTE: We use async evals below to avoid conflicts with any existing digest loops
+    // NOTE: We use async eval(s) below to avoid conflicts with any existing digest loops
 
     vm.open = function() {
       $scope.$evalAsync("vm.isOpen = true");
@@ -142,8 +142,12 @@
 
     function enableKeyboard() {
       $element.on('keydown', keyPressed);
-      angular.element(document).on('click', checkForOutsideClick);
-      angular.element(document).on('touchend', checkForOutsideClick);
+
+      // On the next tick, setup a check for outside clicks; we do this on the next tick to avoid
+      // clicks/touches that result in the isOpen attribute changing (e.g. a bound radio button)
+      $mdUtil.nextTick(function() {
+        angular.element(document).on('click touchend', checkForOutsideClick);
+      });
 
       // TODO: On desktop, we should be able to reset the indexes so you cannot tab through, but
       // this breaks accessibility, especially on mobile, since you have no arrow keys to press
@@ -152,8 +156,7 @@
 
     function disableKeyboard() {
       $element.off('keydown', keyPressed);
-      angular.element(document).off('click', checkForOutsideClick);
-      angular.element(document).off('touchend', checkForOutsideClick);
+      angular.element(document).off('click touchend', checkForOutsideClick);
     }
 
     function checkForOutsideClick(event) {
