@@ -47,7 +47,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       delay: '=?mdDelay',
       visible: '=?mdVisible',
       autohide: '=?mdAutohide',
-      direction: '=?mdDirection'    // only expect raw or interpolated string value; not expression
+      direction: '@?mdDirection'    // only expect raw or interpolated string value; not expression
     },
     link: postLink
   };

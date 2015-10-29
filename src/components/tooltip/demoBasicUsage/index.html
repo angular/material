@@ -20,7 +20,7 @@
 
     <md-button class="md-fab md-fab-top-left left" aria-label="Insert Drive">
       <md-icon md-svg-src="img/icons/ic_insert_drive_file_24px.svg" style="width: 24px; height: 24px;"></md-icon>
-      <md-tooltip md-visible="demo.showTooltip" md-direction="demo.tipDirection">
+      <md-tooltip md-visible="demo.showTooltip" md-direction="{{demo.tipDirection}}">
         Insert Drive
       </md-tooltip>
     </md-button>
@@ -33,7 +33,10 @@
 
 
     <div style="margin-top: 150px;">
-      <p>Additionally, the Tooltip's <code>md-visible</code> attribute can use data-binding to programmatically show/hide itself. Toggle the checkbox below...</p>
+      <p>
+        Additionally, the Tooltip's <code>md-visible</code> attribute can use data-binding to
+        programmatically show/hide itself. Toggle the checkbox below...
+      </p>
       <div style="padding-left: 37px">
         <md-checkbox ng-model="demo.showTooltip" style="padding-left:30px;">
           Insert Drive

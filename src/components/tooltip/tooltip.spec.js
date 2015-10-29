@@ -16,6 +16,23 @@ describe('<md-tooltip> directive', function() {
     element = undefined;
   });
 
+  it('should support dynamic directions', function() {
+    var error;
+
+    try {
+      buildTooltip(
+        '<md-button>' +
+        'Hello' +
+        '<md-tooltip md-direction="{{direction}}">Tooltip</md-tooltip>' +
+        '</md-button>'
+      );
+    } catch(e) {
+      error = e;
+    }
+
+    expect(error).toBe(undefined);
+  });
+
   it('should preserve parent text', function(){
       buildTooltip(
         '<md-button>' +
