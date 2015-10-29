@@ -1,0 +1,21 @@
+.md-inline-list-icon-label {
+  display: inline-block;
+  padding-left: 10px;
+  padding-right:10px;
+  margin-top: -10px;
+  height: 24px;
+  vertical-align: middle;
+
+}
+
+.md-grid-item-content {
+  height:96px;
+}
+.md-grid-item-content md-icon {
+  height: 48px;
+  width: 48px;
+}
+
+.md-grid-text {
+  padding-side: 5px;
+  }
