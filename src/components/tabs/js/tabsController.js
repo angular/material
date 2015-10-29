@@ -652,8 +652,6 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
       if ($element.attr('md-border-bottom') !== undefined) ++currentHeight;
     }
 
-    if (currentHeight === newHeight) return;
-
     // Lock during animation so the user can't change tabs
     locked = true;
 
