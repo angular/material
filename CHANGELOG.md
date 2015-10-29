@@ -1,3 +1,32 @@
+<a name"1.0.0-rc2"></a>
+### 1.0.0-rc2 (2015-10-29)
+
+
+#### Breaking Changes
+
+* **layout:**
+  * `flex=34` and `flex=67` are no longer supported; use `flex=33` and `flex=66` for 1/3 and 2/3 sizing respectively
+  * `layout-margin` and `layout-padding` styles will apply to all children of `layout=row` and `layout=column`
+* **backdrop:** when backdrop parent is the body, backdrop will use `position: fixed`
+* **input:** form elements will now have an external `display` value of `inline-block`
+
+
+#### Bug Fixes
+
+* **autocomplete:** clicking on the scrollbar will no longer close dropdown ([309cef5d](https://github.com/angular/material/commit/309cef5d), closes [#4785](https://github.com/angular/material/issues/4785), [#4625](https://github.com/angular/material/issues/4625))
+* **backdrop:** use fixed position for global backdrops. ([a8537e63](https://github.com/angular/material/commit/a8537e63), closes [#2831](https://github.com/angular/material/issues/2831))
+* **dialog:** make sure dialog only destroys itself. ([e8cfce2e](https://github.com/angular/material/commit/e8cfce2e), closes [#5157](https://github.com/angular/material/issues/5157))
+* **layout:**
+  * layout-margin and layout-padding fixes for child containers ([4649b93b](https://github.com/angular/material/commit/4649b93b), closes [#5425](https://github.com/angular/material/issues/5425))
+  * fix wrapping and filling layouts to 100% using flex-33 or flex-66 ([a4a4a45b](https://github.com/angular/material/commit/a4a4a45b), closes [#5346](https://github.com/angular/material/issues/5346), [#5348](https://github.com/angular/material/issues/5348))
+* **md-chips:** appendChip disallows identical objects ([03db13d8](https://github.com/angular/material/commit/03db13d8), closes [#4466](https://github.com/angular/material/issues/4466), [#4479](https://github.com/angular/material/issues/4479))
+* **mdChips:** Autocomplete styling is incorrect. ([3bf6eb38](https://github.com/angular/material/commit/3bf6eb38), closes [#4600](https://github.com/angular/material/issues/4600), [#4621](https://github.com/angular/material/issues/4621))
+* **speedDial:**
+  * non-fab clicks no longer close immediately ([14eebf42](https://github.com/angular/material/commit/14eebf42), closes [#5243](https://github.com/angular/material/issues/5243), [#5440](https://github.com/angular/material/issues/5440))
+  * Don't intercept spaces and fix animations. ([32c0fe18](https://github.com/angular/material/commit/32c0fe18), closes [#5085](https://github.com/angular/material/issues/5085), [#4750](https://github.com/angular/material/issues/4750), [#5065](https://github.com/angular/material/issues/5065), [#5396](https://github.com/angular/material/issues/5396))
+* **tabs:** will no longer jump to top when changing tabs with `md-dynamic-height` ([4205be7d](https://github.com/angular/material/commit/4205be7d), closes [#4281](https://github.com/angular/material/issues/4281))
+
+
 <a name"1.0.0-rc1"></a>
 ### 1.0.0-rc1 (2015-10-21)
 
