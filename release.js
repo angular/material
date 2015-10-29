@@ -274,7 +274,7 @@
     exec([
            'rm -rf ./*-rc*',
            'cp -Rf ../dist/docs {{newVersion}}',
-           ( newVersion.indexOf('rc') < 0 ? 'rm -rf latest && cp -Rf ../dist/docs latest' : '# skipped latest because this is a release candidate' ),
+           'rm -rf latest && cp -Rf ../dist/docs latest',
            'git add -A',
            'git commit -m "release: version {{newVersion}}"',
            'rm -rf ../dist'
@@ -325,7 +325,7 @@
       config.versions.unshift(newVersion);
 
       //-- only set to default if not a release candidate
-      if (newVersion.indexOf('rc') < 0) config.latest = newVersion;
+      config.latest = newVersion;
       fs.writeFileSync(options.cwd + '/docs.json', JSON.stringify(config, null, 2));
     }
   }
