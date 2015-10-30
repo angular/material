@@ -147,6 +147,7 @@ md-input-container {
     padding-right: 2px;
     border-width: 0 0 $input-border-width-default 0;
     line-height: $input-line-height;
+    height: $input-line-height + ($input-padding-top * 2);
     -ms-flex-preferred-size: $input-line-height; //IE fix
     border-radius: 0;
     border-style: solid; // Firefox fix
