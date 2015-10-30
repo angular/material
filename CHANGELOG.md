@@ -92,6 +92,13 @@ This is the first release candidate for our 1.0 beta.  We believe that the API i
 
 #### Breaking Changes
 
+* **dialog:** To accommodate components like tabs inside a dialog, `<md-dialog-content>` no longer has padding by default. To maintain existing custom dialog templates, add the `.md-dialog-content` class:
+
+    ```html
+    <md-dialog-content class="md-dialog-content"> ... </md-dialog-content>
+    ```
+
+ ([d2140b15](https://github.com/angular/material/commit/d2140b15), closes [#3963](https://github.com/angular/material/issues/3963))
 * Material Layout attribute `offset` should now be `flex-offset`.
 
     Change your code from this:
