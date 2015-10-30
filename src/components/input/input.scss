@@ -180,6 +180,7 @@ md-input-container {
     position: relative;
     order: 4;
     min-height: $input-error-height;
+    overflow: hidden;
 
     .md-char-counter {
       position: absolute;
@@ -216,24 +217,20 @@ md-input-container {
 
       // Since we're delaying the transition, we speed up the duration a little bit to compensate
       transition-duration: $swift-ease-in-duration / 1.5;
+      opacity: 0;
+      margin-top: -$input-error-line-height - $error-padding-top;
+      &.ng-enter-active {
+        opacity: 1;
+        margin-top: 0;
+      }
     }
     &.ng-leave {
       transition: $swift-ease-out;
-
-      // Speed up the duration (see enter comment above)
       transition-duration: $swift-ease-out-duration / 1.5;
-    }
-    &.ng-enter,
-    &.ng-leave.ng-leave-active {
-      // Move the error upwards off the screen and fade it out
-      margin-top: -$input-error-line-height - $error-padding-top;
-      opacity: 0;
-    }
-    &.ng-leave,
-    &.ng-enter.ng-enter-active {
-      // Move the error down into position and fade it in
-      margin-top: 0;
-      opacity: 1;
+      &.ng-leave-active {
+        margin-top: -$input-error-line-height - $error-padding-top;
+        opacity: 0;
+      }
     }
   }
 
