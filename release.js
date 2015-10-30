@@ -289,7 +289,7 @@
     pushCmds.push(
         comment('push the site'),
         'cd ' + options.cwd,
-        'git pull --rebase',
+        'git pull --rebase --strategy=ours',
         'git push',
         'cd ..'
     );
