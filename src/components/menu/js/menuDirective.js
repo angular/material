@@ -102,6 +102,23 @@
  *   <!-- menu-content -->
  * </md-menu>
  * </hljs>
+
+ * ### Preventing close
+ *
+ * Sometimes you would like to be able to click on a menu item without having the menu
+ * close. To do this, ngMaterial exposes the `md-prevent-menu-close` attribute which
+ * can be added to a button inside a menu to stop the menu from automatically closing.
+ * You can then close the menu programatically by injecting `$mdMenu` and calling 
+ * `$mdMenu.hide()`.
+ *
+ * <hljs lang="html">
+ * <md-menu-item>
+ *   <md-button ng-click="doSomething()" aria-label="Do something" md-prevent-menu-close="md-prevent-menu-close">
+ *     <md-icon md-menu-align-target md-svg-icon="call:phone"></md-icon>
+ *     Do Something
+ *   </md-button>
+ * </md-menu-item>
+ * </hljs>
  *
  * @usage
  * <hljs lang="html">

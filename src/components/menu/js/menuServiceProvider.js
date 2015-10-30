@@ -291,8 +291,8 @@ function MenuProvider($$interimElementProvider) {
           // there is an ng-click and that the ng-click is not disabled
           do {
             if (target == opts.menuContentEl[0]) return;
-            if (hasAnyAttribute(target, ['ng-click', 'ng-href', 'ui-sref']) ||
-                target.nodeName == 'BUTTON' || target.nodeName == 'MD-BUTTON') {
+            if ((hasAnyAttribute(target, ['ng-click', 'ng-href', 'ui-sref']) ||
+                target.nodeName == 'BUTTON' || target.nodeName == 'MD-BUTTON') && !hasAnyAttribute(target, ['md-prevent-menu-close'])) {
               var closestMenu = $mdUtil.getClosest(target, 'MD-MENU');
               if (!target.hasAttribute('disabled') && (!closestMenu || closestMenu == opts.parent[0])) {
                 close();
