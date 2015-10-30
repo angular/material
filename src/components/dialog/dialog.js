@@ -459,7 +459,7 @@ function MdDialogProvider($$interimElementProvider) {
   }
 
   /* @ngInject */
-  function dialogDefaultOptions($mdDialog, $mdAria, $mdUtil, $mdConstant, $animate, $document, $rootElement, $log) {
+  function dialogDefaultOptions($mdDialog, $mdAria, $mdUtil, $mdConstant, $animate, $document, $window, $rootElement, $log) {
     return {
       hasBackdrop: true,
       isolateScope: true,
@@ -505,8 +505,20 @@ function MdDialogProvider($$interimElementProvider) {
         .then(function() {
           activateListeners(element, options);
           lockScreenReader(element, options);
+          warnDeprecatedActions();
           focusOnOpen();
         });
+
+      /**
+       * Check to see if they used the deprecated .md-actions class and log a warning
+       */
+      function warnDeprecatedActions() {
+        var badActions = element[0].querySelectorAll('.md-actions');
+
+        if (badActions.length > 0) {
+          $log.warn('Using a class of md-actions is deprected, please use <md-dialog-actions>.');
+        }
+      }
 
       /**
        * For alerts, focus on content... otherwise focus on
@@ -519,15 +531,15 @@ function MdDialogProvider($$interimElementProvider) {
         }
 
         /**
-         *  If no element with class dialog-close, try to find the last
-         *  button child in md-actions and assume it is a close button
+         * If no element with class dialog-close, try to find the last
+         * button child in md-actions and assume it is a close button.
          *
          * If we find no actions at all, log a warning to the console.
          */
         function findCloseButtonOrWarn() {
           var closeButton = element[0].querySelector('.dialog-close');
           if (!closeButton) {
-            var actionButtons = element[0].querySelectorAll('md-dialog-actions .md-button');
+            var actionButtons = element[0].querySelectorAll('.md-actions button, md-dialog-actions button');
             closeButton = actionButtons[actionButtons.length - 1];
             if (actionButtons.length === 0) {
               $log.warn('At least one action button is required for <md-dialog-actions>.');
@@ -849,7 +861,6 @@ function MdDialogProvider($$interimElementProvider) {
      * Ensure the dialog container fill-stretches to the viewport
      */
     function stretchDialogContainerToViewport(container, options) {
-
       var isFixed = $window.getComputedStyle($document[0].body).position == 'fixed';
       var backdrop = options.backdrop ? $window.getComputedStyle(options.backdrop[0]) : null;
       var height = backdrop ? Math.min($document[0].body.clientHeight, Math.ceil(Math.abs(parseInt(backdrop.height, 10)))) : 0;
@@ -866,7 +877,6 @@ function MdDialogProvider($$interimElementProvider) {
      *  Dialog open and pop-in animation
      */
     function dialogPopIn(container, options) {
-
       // Add the `md-dialog-container` to the DOM
       options.parent.append(container);
       stretchDialogContainerToViewport(container, options);

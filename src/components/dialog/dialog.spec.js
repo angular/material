@@ -283,9 +283,9 @@ describe('$mdDialog', function() {
       $mdDialog.show({
         template: '' +
           '<md-dialog>' +
-            '<md-dialog-actions>' +
-              '<button class="dialog-close">Close</button>' +
-            '</md-dialog-actions>' +
+          '  <md-dialog-actions>' +
+          '    <button class="dialog-close">Close</button>' +
+          '  </md-dialog-actions>' +
           '</md-dialog>',
         parent: parent
       });
@@ -758,10 +758,10 @@ describe('$mdDialog', function() {
         parent: parent,
         template:
           '<md-dialog>' +
-            '<md-dialog-actions>' +
-              '<button id="a">A</md-button>' +
-              '<button id="focus-target">B</md-button>' +
-            '</md-dialog-actions>' +
+          '  <md-dialog-actions>' +
+          '    <button id="a">A</md-button>' +
+          '    <button id="focus-target">B</md-button>' +
+          '  </md-dialog-actions>' +
           '</md-dialog>'
       });
 
@@ -939,10 +939,10 @@ describe('$mdDialog', function() {
       $mdDialog.show({
         template:
           '<md-dialog>' +
-            '<md-dialog-actions>' +
-              '<button id="a">A</md-button>' +
-              '<button id="focus-target">B</md-button>' +
-            '</md-dialog-actions>' +
+          '  <md-dialog-actions>' +
+          '    <button id="a">A</md-button>' +
+          '    <button id="focus-target">B</md-button>' +
+          '  </md-dialog-actions>' +
           '</md-dialog>',
         parent: parent
       });
@@ -952,11 +952,32 @@ describe('$mdDialog', function() {
       expect($document.activeElement).toBe(parent[0].querySelector('#focus-target'));
     }));
 
-    it('should warn if md-dialog-actions does not contain actions', inject(function($mdDialog, $rootScope, $log, $timeout) {
+    it('should warn if the deprecated .md-actions class is used', inject(function($mdDialog, $rootScope, $log, $timeout) {
+       spyOn($log, 'warn');
+
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template:
+          '<md-dialog>' +
+            '<div class="md-actions">' +
+              '<button class="md-button">Ok good</button>' +
+            '</div>' +
+          '</md-dialog>',
+        parent: parent
+      });
+
+      runAnimation();
+
+      expect($log.warn).toHaveBeenCalled();
+    }));
+
+    it('should warn if focusOnOpen == true and md-dialog-actions does not contain actions',
+        inject(function($mdDialog, $rootScope, $log, $timeout) {
       spyOn($log, 'warn');
 
       var parent = angular.element('<div>');
       $mdDialog.show({
+        focusOnOpen: true,
         template:
           '<md-dialog>' +
             '<md-dialog-actions>' +
@@ -966,24 +987,21 @@ describe('$mdDialog', function() {
         parent: parent
       });
 
-      $rootScope.$apply();
-      $timeout.flush();
-
-      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
-
-      container.triggerHandler('transitionend');
-      $rootScope.$apply();
-      parent.find('md-dialog').triggerHandler('transitionend');
-      $rootScope.$apply();
+      runAnimation();
 
       expect($log.warn).toHaveBeenCalled();
     }));
 
-    it('should not warn if md-dialog-actions has actions', inject(function($mdDialog, $rootScope, $log, $timeout) {
+    // This also covers the case of NOT warning when the deprecated .md-actions class is NOT used
+    it('should not warn if focusOnOpen == true and md-dialog-actions has actions',
+        inject(function($mdDialog, $rootScope, $log, $timeout) {
       spyOn($log, 'warn');
 
-      var parent = angular.element('<div>');
+      // Style the parent so <md-backdrop> doesn't fire a warning in Firefox
+      var parent = angular.element('<div style="position: absolute; left:0;right:0;top:0;bottom:0">');
+
       $mdDialog.show({
+        focusOnOpen: true,
         template:
           '<md-dialog>' +
             '<md-dialog-actions>' +
@@ -993,13 +1011,7 @@ describe('$mdDialog', function() {
         parent: parent
       });
 
-      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
-      $rootScope.$apply();
-      $timeout.flush();
-      container.triggerHandler('transitionend');
-      $rootScope.$apply();
-      parent.find('md-dialog').triggerHandler('transitionend');
-      $rootScope.$apply();
+      runAnimation();
 
       expect($log.warn).not.toHaveBeenCalled();
     }));
