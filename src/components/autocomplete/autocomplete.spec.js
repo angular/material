@@ -582,6 +582,38 @@ describe('<md-autocomplete>', function() {
     }));
   });
 
+  describe('when required', function() {
+    it('properly handles md-min-length="0" and undefined searchText', function() {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              md-min-length="0" \
+              required\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+
+      var error;
+
+      try {
+        var element = compile(template, scope);
+
+        scope.searchText = undefined;
+        scope.$digest();
+      } catch (e) {
+        error = e;
+      }
+
+      expect(error).toBe(undefined);
+
+      element.remove();
+    });
+  });
+
   describe('md-highlight-text', function() {
     it('should update when content is modified', inject(function() {
       var template = '<div md-highlight-text="query">{{message}}</div>';
