@@ -10,11 +10,29 @@ angular
   .module('material.core')
   .factory('$mdUtil', UtilFactory);
 
-function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $interpolate, $log) {
+function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $interpolate, $log, $rootElement, $window) {
   // Setup some core variables for the processTemplate method
   var startSymbol = $interpolate.startSymbol(),
     endSymbol = $interpolate.endSymbol(),
     usesStandardSymbols = ((startSymbol === '{{') && (endSymbol === '}}'));
+
+  /**
+   * Checks if the target element has the requested style by key
+   * @param {DOMElement|JQLite} target Target element
+   * @param {string} key Style key
+   * @param {string=} expectedVal Optional expected value
+   * @returns {boolean} Whether the target element has the style or not
+   */
+  var hasComputedStyle = function (target, key, expectedVal) {
+    var hasValue = false;
+
+    if ( target && target.length  ) {
+      var computedStyles = $window.getComputedStyle(target[0]);
+      hasValue = angular.isDefined(computedStyles[key]) && (expectedVal ? computedStyles[key] == expectedVal : true);
+    }
+
+    return hasValue;
+  };
 
   var $mdUtil = {
     dom: {},
@@ -249,7 +267,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     },
     floatingScrollbars: function() {
       if (this.floatingScrollbars.cached === undefined) {
-        var tempNode = angular.element('<div style="width: 100%; z-index: -1; position: absolute; height: 35px; overflow-y: scroll"><div style="height: 60;"></div></div>');
+        var tempNode = angular.element('<div style="width: 100%; z-index: -1; position: absolute; height: 35px; overflow-y: scroll"><div style="height: 60px;"></div></div>');
         $document[0].body.appendChild(tempNode[0]);
         this.floatingScrollbars.cached = (tempNode[0].offsetWidth == tempNode[0].childNodes[0].offsetWidth);
         tempNode.remove();
@@ -633,7 +651,32 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
         if (!template || !angular.isString(template)) return template;
         return template.replace(/\{\{/g, startSymbol).replace(/}}/g, endSymbol);
       }
-    }
+    },
+
+    /**
+     * Scan up dom hierarchy for enabled parent;
+     */
+    getParentWithPointerEvents: function (element) {
+      var parent = element.parent();
+
+      // jqLite might return a non-null, but still empty, parent; so check for parent and length
+      while (hasComputedStyle(parent, 'pointer-events', 'none')) {
+        parent = parent.parent();
+      }
+
+      return parent;
+    },
+
+    getNearestContentElement: function (element) {
+      var current = element.parent()[0];
+      // Look for the nearest parent md-content, stopping at the rootElement.
+      while (current && current !== $rootElement[0] && current !== document.body && current.nodeName !== 'MD-CONTENT') {
+        current = current.parentNode;
+      }
+      return current;
+    },
+
+    hasComputedStyle: hasComputedStyle
   };
 
 // Instantiate other namespace utility methods
