@@ -58,6 +58,7 @@
       scope: {
         minDate: '=mdMinDate',
         maxDate: '=mdMaxDate',
+        isDateEnabled: '=mdDateEnabled',
       },
       require: ['ngModel', 'mdCalendar'],
       controller: CalendarCtrl,
@@ -246,7 +247,7 @@
     this.displayDate = this.selectedDate || this.today;
     this.isInitialized = true;
   };
-
+  
   /**
    * Hides the vertical scrollbar on the calendar scroller by setting the width on the
    * calendar scroller and the `overflow: hidden` wrapper around the scroller, and then setting

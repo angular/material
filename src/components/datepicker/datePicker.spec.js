@@ -14,6 +14,7 @@ describe('md-date-picker', function() {
     '<md-datepicker name="birthday" ' +
          'md-max-date="maxDate" ' +
          'md-min-date="minDate" ' +
+         'md-date-enabled="isDateEnabled"' +
          'ng-model="myDate" ' +
          'ng-required="isRequired" ' +
          'ng-disabled="isDisabled">' +
@@ -38,7 +39,6 @@ describe('md-date-picker', function() {
     createDatepickerInstance(DATEPICKER_TEMPLATE);
     controller.closeCalendarPane();
   }));
-
   /**
    * Compile and link the given template and store values for element, scope, and controller.
    * @param {string} template
@@ -149,6 +149,16 @@ describe('md-date-picker', function() {
 
         expect(formCtrl.$error['maxdate']).toBeTruthy();
       });
+      
+      it('should set `disabled` $error flag on the form', function() {
+        pageScope.isDateEnabled = function(date){
+          return date.getDay() === 1;
+        };
+        populateInputElement('2016-01-03');
+        controller.ngModelCtrl.$render();
+
+        expect(formCtrl.$error['disabled']).toBeTruthy();
+      });
     });
   });
 
@@ -185,6 +195,16 @@ describe('md-date-picker', function() {
 
       populateInputElement('7');
       expect(controller.inputContainer).toHaveClass('md-datepicker-invalid');
+    });
+    
+    it('should not update the model when value is not enabled', function(){
+      pageScope.isDateEnabled = function(date){
+        return date.getDay() === 1;
+      };
+      pageScope.$apply();
+
+      populateInputElement('5/30/2014');
+      expect(controller.ngModelCtrl.$modelValue).toEqual(initialDate);
     });
   });
 

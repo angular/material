@@ -125,7 +125,7 @@
       var cellText = this.dateLocale.dates[opt_date.getDate()];
 
       if (this.dateUtil.isDateWithinRange(opt_date,
-          this.calendarCtrl.minDate, this.calendarCtrl.maxDate)) {
+          this.calendarCtrl.minDate, this.calendarCtrl.maxDate) && (!angular.isFunction(this.calendarCtrl.isDateEnabled) || this.calendarCtrl.isDateEnabled(opt_date))) {
         // Add a indicator for select, hover, and focus states.
         var selectionIndicator = document.createElement('span');
         cell.appendChild(selectionIndicator);

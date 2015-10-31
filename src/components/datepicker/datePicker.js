@@ -24,6 +24,7 @@
    * @param {expression=} ng-change Expression evaluated when the model value changes.
    * @param {Date=} md-min-date Expression representing a min date (inclusive).
    * @param {Date=} md-max-date Expression representing a max date (inclusive).
+   * @param {function=} md-date-enabled Function expecting a date and returning boolean whether it can be selected or not.
    * @param {boolean=} disabled Whether the datepicker is disabled.
    * @param {boolean=} required Whether a value is required for the datepicker.
    *
@@ -75,6 +76,7 @@
             '<div class="md-datepicker-calendar">' +
               '<md-calendar role="dialog" aria-label="{{::ctrl.dateLocale.msgCalendar}}" ' +
                   'md-min-date="ctrl.minDate" md-max-date="ctrl.maxDate"' +
+                  'md-date-enabled="ctrl.isDateEnabled"'+
                   'ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen">' +
               '</md-calendar>' +
             '</div>' +
@@ -83,7 +85,8 @@
       scope: {
         minDate: '=mdMinDate',
         maxDate: '=mdMaxDate',
-        placeholder: '@mdPlaceholder'
+        placeholder: '@mdPlaceholder',
+        isDateEnabled: '=mdDateEnabled'
       },
       controller: DatePickerCtrl,
       controllerAs: 'ctrl',
@@ -344,6 +347,10 @@
       if (this.dateUtil.isValidDate(this.maxDate)) {
         this.ngModelCtrl.$setValidity('maxdate', this.date <= this.maxDate);
       }
+      
+      if(angular.isFunction(this.isDateEnabled)){
+        this.ngModelCtrl.$setValidity('disabled', this.isDateEnabled(this.date));
+      }
     }
   };
 
@@ -366,7 +373,8 @@
       this.inputContainer.classList.remove(INVALID_CLASS);
     } else if (this.dateUtil.isValidDate(parsedDate) &&
         this.dateLocale.isDateComplete(inputString) &&
-        this.dateUtil.isDateWithinRange(parsedDate, this.minDate, this.maxDate)) {
+        this.dateUtil.isDateWithinRange(parsedDate, this.minDate, this.maxDate) &&
+        (!angular.isFunction(this.isDateEnabled) || this.isDateEnabled(parsedDate))) {
       this.ngModelCtrl.$setViewValue(parsedDate);
       this.date = parsedDate;
       this.inputContainer.classList.remove(INVALID_CLASS);
