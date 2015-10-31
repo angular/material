@@ -24,6 +24,7 @@
    * @param {expression=} ng-change Expression evaluated when the model value changes.
    * @param {Date=} md-min-date Expression representing a min date (inclusive).
    * @param {Date=} md-max-date Expression representing a max date (inclusive).
+   * @param {(function(Date): boolean)=} md-date-filter Function expecting a date and returning a boolean whether it can be selected or not.
    * @param {boolean=} disabled Whether the datepicker is disabled.
    * @param {boolean=} required Whether a value is required for the datepicker.
    *
@@ -75,6 +76,7 @@
             '<div class="md-datepicker-calendar">' +
               '<md-calendar role="dialog" aria-label="{{::ctrl.dateLocale.msgCalendar}}" ' +
                   'md-min-date="ctrl.minDate" md-max-date="ctrl.maxDate"' +
+                  'md-date-filter="ctrl.dateFilter"' +
                   'ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen">' +
               '</md-calendar>' +
             '</div>' +
@@ -83,7 +85,8 @@
       scope: {
         minDate: '=mdMinDate',
         maxDate: '=mdMaxDate',
-        placeholder: '@mdPlaceholder'
+        placeholder: '@mdPlaceholder',
+        dateFilter: '=mdDateFilter'
       },
       controller: DatePickerCtrl,
       controllerAs: 'ctrl',
@@ -356,6 +359,10 @@
       if (this.dateUtil.isValidDate(this.maxDate)) {
         this.ngModelCtrl.$setValidity('maxdate', this.date <= this.maxDate);
       }
+      
+      if (angular.isFunction(this.dateFilter)) {
+        this.ngModelCtrl.$setValidity('filtered', this.dateFilter(this.date));
+      }
     }
   };
 
@@ -377,8 +384,8 @@
       this.date = null;
       this.inputContainer.classList.remove(INVALID_CLASS);
     } else if (this.dateUtil.isValidDate(parsedDate) &&
-        this.dateLocale.isDateComplete(inputString) &&
-        this.dateUtil.isDateWithinRange(parsedDate, this.minDate, this.maxDate)) {
+        this.dateLocale.isDateComplete(inputString) && 
+        this.isDateEnabled(parsedDate)) {
       this.ngModelCtrl.$setViewValue(parsedDate);
       this.date = parsedDate;
       this.inputContainer.classList.remove(INVALID_CLASS);
@@ -387,7 +394,17 @@
       this.inputContainer.classList.toggle(INVALID_CLASS, inputString);
     }
   };
-
+  
+  /**
+   * Check whether date is in range and enabled
+   * @param {Date=} opt_date
+   * @return {boolean} Whether the date is enabled.
+   */
+  DatePickerCtrl.prototype.isDateEnabled = function(opt_date) {
+    return this.dateUtil.isDateWithinRange(opt_date, this.minDate, this.maxDate) && 
+          (!angular.isFunction(this.dateFilter) || this.dateFilter(opt_date));
+  }
+  
   /** Position and attach the floating calendar to the document. */
   DatePickerCtrl.prototype.attachCalendarPane = function() {
     var calendarPane = this.calendarPane;
