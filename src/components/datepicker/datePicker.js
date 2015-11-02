@@ -79,7 +79,7 @@
               '</md-calendar>' +
             '</div>' +
           '</div>',
-      require: ['ngModel', 'mdDatepicker'],
+      require: ['ngModel', 'mdDatepicker', '?^mdInputContainer'],
       scope: {
         minDate: '=mdMinDate',
         maxDate: '=mdMaxDate',
@@ -91,6 +91,11 @@
       link: function(scope, element, attr, controllers) {
         var ngModelCtrl = controllers[0];
         var mdDatePickerCtrl = controllers[1];
+
+        var mdInputContainer = controllers[2];
+        if (mdInputContainer) {
+          throw Error('md-datepicker should not be placed inside md-input-container.');
+        }
 
         mdDatePickerCtrl.configureNgModel(ngModelCtrl);
       }
