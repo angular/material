@@ -82,6 +82,26 @@ describe('<md-chips>', function() {
         expect(chips[3].innerHTML).toContain('Grape');
       });
 
+      it('should add a chip by pressing comma', function() {
+        var element = buildChips(BASIC_CHIP_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        element.scope().$apply(function() {
+          ctrl.chipBuffer = 'Grape';
+          simulateInputCommaKey(ctrl);
+        });
+
+        expect(scope.items.length).toBe(4);
+
+        var chips = getChipElements(element);
+        expect(chips.length).toBe(4);
+        expect(chips[0].innerHTML).toContain('Apple');
+        expect(chips[1].innerHTML).toContain('Banana');
+        expect(chips[2].innerHTML).toContain('Orange');
+
+        expect(chips[3].innerHTML).toContain('Grape');
+      });
+
       it('should not add a blank chip', function() {
         var element = buildChips(BASIC_CHIP_TEMPLATE);
         var ctrl = element.controller('mdChips');
@@ -545,6 +565,15 @@ describe('<md-chips>', function() {
     event.preventDefault = jasmine.createSpy('preventDefault');
     inject(function($mdConstant) {
       event.keyCode = $mdConstant.KEY_CODE.ENTER;
+    });
+    ctrl.inputKeydown(event);
+  }
+
+  function simulateInputCommaKey(ctrl) {
+    var event = {};
+    event.preventDefault = jasmine.createSpy('preventDefault');
+    inject(function($mdConstant) {
+      event.keyCode = $mdConstant.KEY_CODE.COMMA;
     });
     ctrl.inputKeydown(event);
   }
