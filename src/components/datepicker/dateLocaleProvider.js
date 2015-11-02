@@ -159,9 +159,9 @@
           return '';
         }
 				
-				if(typeof date === 'string') {
-					date = new Date(date);
-				}
+        if (typeof date === 'string') {
+          date = new Date(date);
+        }
 
         // All of the dates created through ng-material *should* be set to midnight.
         // If we encounter a date where the localeTime shows at 11pm instead of midnight,
