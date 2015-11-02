@@ -251,8 +251,15 @@
 
     var self = this;
     ngModelCtrl.$render = function() {
-      self.date = self.ngModelCtrl.$viewValue;
-      self.inputElement.value = self.dateLocale.formatDate(self.date);
+      var value = self.ngModelCtrl.$viewValue;
+
+      if (value && !(value instanceof Date)) {
+        throw Error('The ng-model for md-datepicker must be a Date instance. ' +
+            'Currently the model is a: ' + (typeof value));
+      }
+
+      self.date = value;
+      self.inputElement.value = self.dateLocale.formatDate(value);
       self.resizeInputElement();
       self.setErrorFlags();
     };

@@ -99,6 +99,25 @@ describe('md-date-picker', function() {
     expect(controller.inputElement.placeholder).toBe('Fancy new placeholder');
   });
 
+  it('should throw an error when the model is not a date', function() {
+    expect(function() {
+      pageScope.myDate = '2015-01-01';
+      pageScope.$apply();
+    }).toThrowError('The ng-model for md-datepicker must be a Date instance. ' +
+        'Currently the model is a: string');
+  });
+
+  it('should support null and undefined values', function() {
+    expect(function() {
+      pageScope.myDate = null;
+      pageScope.$apply();
+
+      pageScope.myDate = undefined;
+      pageScope.$apply();
+
+    }).not.toThrow();
+  });
+
   it('should throw an error when inside of md-input-container', function() {
     var template =
         '<md-input-container>' +
