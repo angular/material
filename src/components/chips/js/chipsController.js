@@ -95,6 +95,7 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
 
   switch (event.keyCode) {
     case this.$mdConstant.KEY_CODE.ENTER:
+    case this.$mdConstant.KEY_CODE.COMMA:
       if ((this.hasAutocomplete && this.requireMatch) || !chipBuffer) break;
       event.preventDefault();
       this.appendChip(chipBuffer);
