@@ -154,7 +154,7 @@ InkRippleCtrl.prototype.handleMousedown = function (event) {
   if (this.options.center) {
     this.createRipple(this.container.prop('clientWidth') / 2, this.container.prop('clientWidth') / 2);
   } else {
-    this.createRipple(event.layerX, event.layerY);
+    this.createRipple(event.offsetX, event.offsetY);
   }
 };
 
