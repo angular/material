@@ -112,7 +112,7 @@ $layout-breakpoint-lg:     1200px !default;
   @if $name == null { $name : '';          }
   @if $name != ''   { $name : '-#{$name}'; }
 
-  [layout#{$name}], [layout#{$name}="column"], [layout#{$name}="row"], {
+  [layout#{$name}], [layout#{$name}="column"], [layout#{$name}="row"] {
     box-sizing: border-box;
     display: -webkit-box;
     display: -webkit-flex;
@@ -198,7 +198,7 @@ $layout-breakpoint-lg:     1200px !default;
   [#{$name}="center"],           //stretch
   [#{$name}="center-center"],
   [#{$name}="center-start"],
-  [#{$name}="center-end"],
+  [#{$name}="center-end"]
   {
     justify-content: center;
   }
@@ -207,7 +207,7 @@ $layout-breakpoint-lg:     1200px !default;
   [#{$name}="end"], //stretch
   [#{$name}="end-center"],
   [#{$name}="end-start"],
-  [#{$name}="end-end"],
+  [#{$name}="end-end"]
   {
     justify-content: flex-end;
   }
@@ -216,7 +216,7 @@ $layout-breakpoint-lg:     1200px !default;
   [#{$name}="space-around"], //stretch
   [#{$name}="space-around-center"],
   [#{$name}="space-around-start"],
-  [#{$name}="space-around-end"],
+  [#{$name}="space-around-end"]
   {
     justify-content: space-around;
   }
@@ -225,7 +225,7 @@ $layout-breakpoint-lg:     1200px !default;
   [#{$name}="space-between"], //stretch
   [#{$name}="space-between-center"],
   [#{$name}="space-between-start"],
-  [#{$name}="space-between-end"],
+  [#{$name}="space-between-end"]
   {
     justify-content: space-between;
   }
@@ -241,7 +241,7 @@ $layout-breakpoint-lg:     1200px !default;
   [#{$name}="start-start"],
   [#{$name}="end-start"],
   [#{$name}="space-between-start"],
-  [#{$name}="space-around-start"],
+  [#{$name}="space-around-start"]
   {
     align-items: flex-start;
   }
@@ -251,7 +251,7 @@ $layout-breakpoint-lg:     1200px !default;
   [#{$name}="start-center"],
   [#{$name}="end-center"],
   [#{$name}="space-between-center"],
-  [#{$name}="space-around-center"],
+  [#{$name}="space-around-center"]
   {
     align-items: center;
     max-width: 100%;
@@ -262,7 +262,7 @@ $layout-breakpoint-lg:     1200px !default;
   [#{$name}="start-center"] > *,
   [#{$name}="end-center"] > *,
   [#{$name}="space-between-center"] > *,
-  [#{$name}="space-around-center"] > *,
+  [#{$name}="space-around-center"] > *
   {
     max-width: 100%;
     box-sizing: border-box;
@@ -273,7 +273,7 @@ $layout-breakpoint-lg:     1200px !default;
   [#{$name}="start-end"],
   [#{$name}="end-end"],
   [#{$name}="space-between-end"],
-  [#{$name}="space-around-end"],
+  [#{$name}="space-around-end"]
   {
     align-items: flex-end;
   }
