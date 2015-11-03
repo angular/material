@@ -323,16 +323,19 @@ describe('util', function() {
     describe('getParentWithPointerEvents', function () {
       describe('with wrapper with pointer events style element', function () {
         it('should find the parent element and return it', inject(function($window, $mdUtil) {
-          spyOn($window, 'getComputedStyle').and.callFake(function(elem) {
-            return angular.element(elem).css('pointer-events') ? { 'pointer-events': 'none' } : {};
+          spyOn($window, 'getComputedStyle').and.callFake(function(target) {
+            return target === wrapper[0] ? { 'pointer-events':'none' } : {};
           });
 
           var elem = angular.element('<span></span>');
-          var wrapper = angular.element('<div style="pointer-events: none;"></div>');
+          var wrapper = angular.element('<div style="pointer-events:none;"></div>');
           var parent = angular.element('<div></div>');
 
           wrapper.append(elem);
           parent.append(wrapper);
+
+          // Scan up the DOM tree to find nearest parent with point-events !== none
+          // This means we should skip the wrapper node.
 
           expect($mdUtil.getParentWithPointerEvents(elem)[0]).toBe(parent[0]);
         }));
