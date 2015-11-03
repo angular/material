@@ -375,7 +375,6 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
      */
     function close(ev) {
       ev.preventDefault();
-      ev.stopPropagation();
 
       return sidenavCtrl.close();
     }
