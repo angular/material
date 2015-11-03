@@ -16,6 +16,7 @@ describe('md-date-picker', function() {
          'md-min-date="minDate" ' +
          'md-date-filter="dateFilter"' +
          'ng-model="myDate" ' +
+         'ng-change="dateChangedHandler()" ' +
          'ng-required="isRequired" ' +
          'ng-disabled="isDisabled">' +
     '</md-datepicker>';
@@ -40,6 +41,7 @@ describe('md-date-picker', function() {
     pageScope = $rootScope.$new();
     pageScope.myDate = initialDate;
     pageScope.isDisabled = false;
+    pageScope.dateChangedHandler = jasmine.createSpy('ng-change handler');
 
     createDatepickerInstance(DATEPICKER_TEMPLATE);
     controller.closeCalendarPane();
@@ -222,6 +224,21 @@ describe('md-date-picker', function() {
 
       populateInputElement('6/2/2014');
       expect(controller.ngModelCtrl.$modelValue).toEqual(new Date(2014, JUN, 2));
+    });
+
+    it('should apply ngMessages errors when the date changes from keyboard input', function() {
+      pageScope.minDate = new Date(2014, JUN, 1);
+      pageScope.$apply();
+
+      populateInputElement('5/30/2012');
+
+      expect(controller.ngModelCtrl.$error['mindate']).toBe(true);
+    });
+
+    it('should evaluate ngChange expression when date changes from keyboard input', function() {
+      populateInputElement('2/14/1976');
+
+      expect(pageScope.dateChangedHandler).toHaveBeenCalled();
     });
 
     it('should add and remove the invalid class', function() {
