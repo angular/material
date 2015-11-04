@@ -67,8 +67,8 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout) {
           self.currentlyOpenMenu.close(true, { closeTo: closeTo });
         } else if (nestedMenu && !nestedMenu.isOpen && nestedMenu.open) {
           self.isAlreadyOpening = true;
-          nestedMenu.open();
         }
+        nestedMenu.open();
       }, nestedMenu ? 100 : 250);
       var focusableTarget = event.currentTarget.querySelector('button:not([disabled])');
       focusableTarget && focusableTarget.focus();
