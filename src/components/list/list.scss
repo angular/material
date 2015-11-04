@@ -135,9 +135,16 @@ md-list-item, md-list-item .md-list-item-inner {
 
   md-checkbox.md-secondary,
   md-switch.md-secondary {
-    margin-right: 0;
     margin-top: 0;
     margin-bottom: 0;
+  }
+
+  md-checkbox.md-secondary {
+    margin-right: 0;
+  }
+
+  md-switch.md-secondary {
+    margin-right: -6px;
   }
 
   button.md-button.md-secondary-container {
@@ -149,6 +156,11 @@ md-list-item, md-list-item .md-list-item-inner {
     .md-ripple,
     .md-ripple-container {
       border-radius: 50%;
+    }
+
+    &.md-icon-button {
+      // Make icon buttons align with checkboxes and other controls
+      margin-right: -12px;
     }
   }
 
