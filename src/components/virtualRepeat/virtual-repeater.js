@@ -126,19 +126,9 @@ function VirtualRepeatContainerController($$rAF, $parse, $window, $scope, $eleme
   this.sizer = this.scroller.getElementsByClassName('md-virtual-repeat-sizer')[0];
   this.offsetter = this.scroller.getElementsByClassName('md-virtual-repeat-offsetter')[0];
 
-  // $$rAF(angular.bind(this, this.updateSize));
-//
-//   // TODO: Come up with a more robust (But hopefully also quick!) way of
-//   // detecting that we're not visible.
-//   if ($attrs.ngHide) {
-//     $scope.$watch($attrs.ngHide, angular.bind(this, function(hidden) {
-//       if (!hidden) {
-//         $$rAF(angular.bind(this, this.updateSize));
-//       }
-//     }));
-//   }
-
+  // TODO: Come up with a more robust (But hopefully also quick!) way of
   var boundUpdateSize = angular.bind(this, this.updateSize);
+
   $$rAF(function() {
     boundUpdateSize();
 
