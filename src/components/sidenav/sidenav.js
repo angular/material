@@ -250,7 +250,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
     });
 
     scope.$on('$destroy', function(){
-      backdrop.remove()
+      backdrop.remove();
     });
 
     scope.$watch(isLocked, updateIsLocked);
