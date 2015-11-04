@@ -27,7 +27,8 @@ function MdConstantFactory($sniffer) {
       DOWN_ARROW : 40,
       TAB : 9,
       BACKSPACE: 8,
-      DELETE: 46
+      DELETE: 46,
+      COMMA: 44
     },
     CSS: {
       /* Constants */
