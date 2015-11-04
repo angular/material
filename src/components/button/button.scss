@@ -141,6 +141,9 @@ button.md-button::-moz-focus-inner {
       height: $button-fab-mini-height;
     }
 
+    &.ng-hide, &.ng-leave {
+      transition: none;
+    }
   }
 
   &:not([disabled]) {
