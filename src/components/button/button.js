@@ -94,7 +94,7 @@ function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $timeout) {
 
     // Append download attribute if boolean is defined
     if (isAnchor(attr) && angular.isDefined(attr.download) ) {
-      element.attr("download", "true");
+      element.attr('download', '');
     }
 
     // For anchor elements, we have to set tabindex manually when the
