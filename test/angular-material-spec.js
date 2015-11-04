@@ -64,7 +64,7 @@
 
           // Prepare auto-restore
           enableAnimations = function() {
-            body.removeClass(DISABLE_ANIMATIONS);
+            if (DISABLE_ANIMATIONS) body.removeClass(DISABLE_ANIMATIONS);
             styleSheet.remove();
           };
         };

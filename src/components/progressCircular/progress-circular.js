@@ -118,11 +118,11 @@ function MdProgressCircularDirective($mdTheming, $mdUtil, $log) {
          case MODE_DETERMINATE:
          case MODE_INDETERMINATE:
            spinnerWrapper.removeClass('ng-hide');
-           spinnerWrapper.removeClass( lastMode );
+           if (lastMode) spinnerWrapper.removeClass(lastMode);
            spinnerWrapper.addClass( lastMode = "md-mode-" + mode );
            break;
          default:
-           spinnerWrapper.removeClass( lastMode );
+           if (lastMode) spinnerWrapper.removeClass( lastMode );
            spinnerWrapper.addClass('ng-hide');
            lastMode = undefined;
            break;
