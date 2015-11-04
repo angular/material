@@ -221,6 +221,13 @@ describe('<md-select>', function() {
         expect(selectedOptions(el).length).toBe(0);
       });
 
+      it('supports circular references', function() {
+        var opts = [{ id: 1 }, { id: 2 }];
+        opts[0].refs = opts[1];
+        opts[1].refs = opts[0];
+        setup('ng-model="$root.model"', opts, { renderValueAs: 'value.id' });
+      });
+
       it('renders model change by selecting new and deselecting old', inject(function($rootScope) {
         $rootScope.$apply('model = "b"');
         var el = setup('ng-model="$root.model"', ['a','b','c']);
@@ -767,10 +774,10 @@ describe('<md-select>', function() {
     return el;
   }
 
-  function setup(attrs, options) {
+  function setup(attrs, options, compileOpts) {
     var el;
     inject(function($compile, $rootScope) {
-      var optionsTpl = optTemplate(options);
+      var optionsTpl = optTemplate(options, compileOpts);
       var fullTpl = '<md-select-menu ' + (attrs || '') + '>' + optionsTpl +
                '</md-select-menu>';
       el = $compile(fullTpl)($rootScope);
@@ -786,12 +793,13 @@ describe('<md-select>', function() {
     return setup(attrs, options);
   }
 
-  function optTemplate(options) {
+  function optTemplate(options, compileOpts) {
     var optionsTpl = '';
     inject(function($rootScope) {
       if (angular.isArray(options)) {
         $rootScope.$$values = options;
-        optionsTpl = '<md-option ng-repeat="value in $$values" ng-value="value">{{value}}</md-option>';
+        var renderValueAs = compileOpts ? compileOpts.renderValueAs || 'value' : 'value';
+        optionsTpl = '<md-option ng-repeat="value in $$values" ng-value="value">{{' + renderValueAs + '}}</md-option>';
       } else if (angular.isString(options)) {
         optionsTpl = options;
       }
