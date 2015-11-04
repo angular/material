@@ -6,7 +6,7 @@ md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) {
     color: '{{primary-contrast}}';
   }
 
-  .md-button {
+  .md-button:not(.md-raised) {
     color: '{{primary-contrast}}';
   }
 
