@@ -264,7 +264,7 @@
       updateFn(getNormalizedAttrValue(className, attrs, ""));
       scope.$on("$destroy", function() { unwatch() });
 
-      if (config.removeAttributes) element.removeAttr(className);
+      if (config.removeAttributes && element.attr(className)) element.removeAttr(className);
     }
   }
 
