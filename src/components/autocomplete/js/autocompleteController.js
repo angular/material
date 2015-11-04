@@ -359,8 +359,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * Handles input blur event, determines if the dropdown should hide.
    */
   function blur () {
-    hasFocus = false;
     if (!noBlur) {
+      hasFocus = false;
       ctrl.hidden = shouldHide();
     }
   }
@@ -370,7 +370,10 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * @param forceBlur
    */
   function doBlur(forceBlur) {
-    if (forceBlur) noBlur = false;
+    if (forceBlur) {
+      noBlur = false;
+      hasFocus = false;
+    }
     elements.input.blur();
   }
 
@@ -408,6 +411,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         updateMessages();
         break;
       case $mdConstant.KEY_CODE.TAB:
+        // If we hit tab, assume that we've left the list so it will close
+        onListLeave();
+
         if (ctrl.hidden || ctrl.loading || ctrl.index < 0 || ctrl.matches.length < 1) return;
         select(ctrl.index);
         break;
