@@ -59,6 +59,19 @@ describe('<md-select>', function() {
     expect(called).toBe(true);
   }));
 
+  it('should set touched only after closing', inject(function($compile, $rootScope) {
+    var form = $compile('<form name="myForm">' +
+                        '<md-select name="select" ng-model="val">' +
+                        '<md-option>1</md-option>' +
+                        '</md-select>' +
+                        '</form>')($rootScope);
+    var select = form.find('md-select');
+    openSelect(select);
+    expect($rootScope.myForm.select.$touched).toBe(false);
+    closeSelect();
+    expect($rootScope.myForm.select.$touched).toBe(true);
+  }));
+
   it('closes the menu during scope.$destroy()', inject(function($document, $rootScope, $timeout) {
     var container = angular.element("<div></div>");
     var scope = $rootScope.$new();
@@ -815,7 +828,15 @@ describe('<md-select>', function() {
     try {
       el.triggerHandler('click');
       waitForSelectOpen();
+      el.triggerHandler('blur');
     } catch(e) { }
+  }
+
+  function closeSelect() {
+    inject(function($document) {
+      $document.find('md-backdrop').triggerHandler('click');
+    });
+    waitForSelectClose();
   }
 
 
