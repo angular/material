@@ -234,7 +234,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
         var scrollOffset = $mdUtil.scrollTop(body);
         var clientWidth = body.clientWidth;
 
-        if (body.scrollHeight > body.clientHeight) {
+        if (body.scrollHeight > body.clientHeight + 1) {
           applyStyles(body, {
             position: 'fixed',
             width: '100%',
