@@ -277,7 +277,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
 
       // UNREGISTER INTERACTION EVENTS
       body.off('keydown', onInput);
-      body.off(_eventType, onInput);
+      body.off(_mouseEvent, onInput);
       body.off('mouseenter', onInput);
       if ('ontouchstart' in document.documentElement) body.off('touchstart', onBufferInput);
     });
