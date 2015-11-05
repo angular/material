@@ -225,9 +225,10 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
   /**
    * Directive Post Link function...
    */
-  function postLink(scope, element, attr, sidenavCtrl) {
+  function postLink(scope, element, attr, sidenavCtrl, $timeout) {
     var lastParentOverFlow;
     var triggeringElement = null;
+    var isKeyboardInteraction;
     var promise = $q.when(true);
 
     var isLockedOpenParsed = $parse(attr.mdIsLockedOpen);
@@ -244,9 +245,41 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
 
     $mdTheming.inherit(backdrop, element);
 
+    // KEY CHECK
+    var body = angular.element(document.body);
+    var _mouseEvent = window.MSPointerEvent ? 'MSPointerEvent' : window.PointerEvent ? 'pointerdown' : 'mousedown';
+
+    body.on('keydown', onInput);
+    body.on(_mouseEvent, onInput);
+    body.on('mouseenter', onInput);
+    if ('ontouchstart' in document.documentElement) body.on('touchstart', onBufferInput);
+
+    var buffer = false, timer;
+
+    function onInput(event) {
+      if (buffer) return;
+      isKeyboardInteraction = event.type === 'keydown';
+    }
+
+    function onBufferInput(event) {
+      $timeout.cancel(timer);
+      onInput(event);
+      buffer = true;
+      timer = $timeout(function() {
+        buffer = false;
+      }, 1000);
+    }
+    // END INTERACTION CHECK
+
     element.on('$destroy', function() {
       backdrop.remove();
       sidenavCtrl.destroy();
+
+      // UNREGISTER INTERACTION EVENTS
+      body.off('keydown', onInput);
+      body.off(_eventType, onInput);
+      body.off('mouseenter', onInput);
+      if ('ontouchstart' in document.documentElement) body.off('touchstart', onBufferInput);
     });
 
     scope.$on('$destroy', function(){
@@ -344,9 +377,9 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
             // When the current `updateIsOpen()` animation finishes
             promise.then(function(result) {
 
-              if ( !scope.isOpen ) {
+              if ( !scope.isOpen && triggeringElement && isKeyboardInteraction) {
                 // reset focus to originating element (if available) upon close
-                triggeringElement && triggeringElement.focus();
+                triggeringElement.focus();
                 triggeringElement = null;
               }
 
