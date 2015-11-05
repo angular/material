@@ -498,7 +498,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    */
   function shouldHide () {
     if (ctrl.loading && !hasMatches()) return true; // Hide while loading initial matches
-    else if (hasSelection()) return true;           // Hide if there is already a selection
+    else if (hasSelection() && !$scope.openOnFocus) return true; // Hide if there is already a selection
     else if (!hasFocus) return true;                // Hide if the input does not have focus
     else return !shouldShow();                      // Defer to standard show logic
   }
@@ -508,6 +508,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * @returns {boolean}
    */
   function shouldShow() {
+    if(hasFocus && $scope.openOnFocus) return true; // If autocomplete has focus and is set to always show on focus
     return (isMinLengthMet() && hasMatches()) || notFoundVisible();
   }
 
