@@ -12,6 +12,9 @@ describe('<md-select>', function() {
 
     var selectMenus = $document.find('md-select-menu');
     selectMenus.remove();
+
+    var backdrops = $document.find('md-backdrop');
+    backdrops.remove();
   }));
 
   it('should preserve tabindex', inject(function($document) {
@@ -40,7 +43,7 @@ describe('<md-select>', function() {
     expect(container.classList.contains('test')).toBe(true);
   }));
 
-  it('closes the menu if the element on backdrop click', inject(function($document, $rootScope) {
+  it('calls md-on-close when the select menu closes', inject(function($document, $rootScope) {
     var called = false;
     $rootScope.onClose = function() {
       called = true;
@@ -49,14 +52,42 @@ describe('<md-select>', function() {
     openSelect(select);
 
     // Simulate click bubble from option to select menu handler
-    select.triggerHandler({
-      type: 'click',
-      target: angular.element($document.find('md-option')[0])
-    });
+    clickOption(0);
 
     waitForSelectClose();
 
     expect(called).toBe(true);
+  }));
+
+  it('closes on backdrop click', inject(function($document) {
+    var select = setupSelect('ng-model="val"', [1, 2, 3]).find('md-select');
+    openSelect(select);
+
+    // Simulate click bubble from option to select menu handler
+    var backdrop = $document.find('md-backdrop');
+    expect(backdrop.length).toBe(1);
+    backdrop.triggerHandler('click');
+
+    waitForSelectClose();
+
+    backdrop = $document.find('md-backdrop');
+    expect(backdrop.length).toBe(0);
+  }));
+
+  it('should not trigger ng-change without a change when using trackBy', inject(function($rootScope) {
+    var changed = false;
+    $rootScope.onChange = function() { changed = true; };
+    $rootScope.val = { id: 1, name: 'Bob' };
+
+    var opts = [ { id: 1, name: 'Bob' }, { id: 2, name: 'Alice' } ];
+    var select = setupSelect('ng-model="$root.val" ng-change="onChange()" ng-model-options="{trackBy: \'$value.id\'}"', opts);
+    expect(changed).toBe(false);
+    
+    openSelect(select);
+    clickOption(1);
+    waitForSelectClose();
+    expect($rootScope.val.id).toBe(2);
+    expect(changed).toBe(true);
   }));
 
   it('should set touched only after closing', inject(function($compile, $rootScope) {
@@ -825,15 +856,20 @@ describe('<md-select>', function() {
   }
 
   function openSelect(el) {
+    if (el[0].nodeName != 'MD-SELECT') {
+      el = el.find('md-select');
+    }
     try {
       el.triggerHandler('click');
       waitForSelectOpen();
       el.triggerHandler('blur');
-    } catch(e) { }
+    } catch (e) { }
   }
 
   function closeSelect() {
     inject(function($document) {
+      var backdrop = $document.find('md-backdrop');
+      if (!backdrop.length) throw Error('Attempted to close select with no backdrop present');
       $document.find('md-backdrop').triggerHandler('click');
     });
     waitForSelectClose();
@@ -856,6 +892,25 @@ describe('<md-select>', function() {
   function waitForSelectClose() {
     inject(function($material) {
       $material.flushInterimElement();
+    });
+  }
+
+  function clickOption(index) {
+    inject(function($rootScope, $document) {
+      var openMenu = $document.find('md-select-menu');
+      var opt = $document.find('md-option')[index];
+
+      if (!openMenu.length) throw Error('No select menu currently open');
+      if (!opt) throw Error('Could not find option at index: ' + index);
+      var target = angular.element(opt);
+      angular.element(openMenu).triggerHandler({
+        type: 'click',
+        target: target
+      });
+      angular.element(openMenu).triggerHandler({
+        type: 'mouseup',
+        currentTarget: openMenu[0]
+      });
     });
   }
 
