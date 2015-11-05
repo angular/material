@@ -67,6 +67,21 @@ function InkRippleCtrl ($scope, $element, rippleOptions, $window, $timeout, $mdU
   this.bindEvents();
 }
 
+
+/**
+ * Either remove or unlock any remaining ripples when the user mouses off of the element (either by
+ * mouseup or mouseleave event)
+ */
+function autoCleanup (self, cleanupFn) {
+
+  if ( self.mousedown || self.lastRipple ) {
+    self.mousedown = false;
+    self.$mdUtil.nextTick( angular.bind(self, cleanupFn), false);
+  }
+
+}
+
+
 /**
  * Returns the color that the ripple should be (either based on CSS or hard-coded)
  * @returns {string}
@@ -160,25 +175,10 @@ InkRippleCtrl.prototype.handleMousedown = function (event) {
 
 /**
  * Either remove or unlock any remaining ripples when the user mouses off of the element (either by
- * mouseup or mouseleave event)
- */
-InkRippleCtrl.prototype._handleRemoval = function (cb) {
-  if ( this.mousedown || this.lastRipple ) {
-    this.mousedown = false;
-    this.$mdUtil.nextTick(function () {
-      cb();
-    }, false);
-  }
-};
-
-/**
- * Either remove or unlock any remaining ripples when the user mouses off of the element (either by
  * mouseup, touchend or mouseleave event)
  */
 InkRippleCtrl.prototype.handleMouseup = function () {
-  var ctrl = this;
-
-  ctrl._handleRemoval(angular.bind(ctrl, ctrl.clearRipples));
+  autoCleanup(this, this.clearRipples);
 };
 
 /**
@@ -186,9 +186,7 @@ InkRippleCtrl.prototype.handleMouseup = function () {
  * touchmove)
  */
 InkRippleCtrl.prototype.handleTouchmove = function () {
-  var ctrl = this;
-
-  ctrl._handleRemoval(angular.bind(ctrl, ctrl.deleteRipples));
+  autoCleanup(this, this.deleteRipples);
 };
 
 /**
@@ -302,7 +300,7 @@ InkRippleCtrl.prototype.setColor = function (color) {
 };
 
 /**
- * Either kicks off the fade-out animation or queues the element for removal on mouseup
+ * After fadeIn finishes, either kicks off the fade-out animation or queues the element for removal on mouseup
  * @param ripple
  */
 InkRippleCtrl.prototype.fadeInComplete = function (ripple) {
