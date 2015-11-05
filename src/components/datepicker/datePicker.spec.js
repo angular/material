@@ -14,7 +14,7 @@ describe('md-date-picker', function() {
     '<md-datepicker name="birthday" ' +
          'md-max-date="maxDate" ' +
          'md-min-date="minDate" ' +
-         'md-date-enabled="isDateEnabled"' +
+         'md-date-filter="dateFilter"' +
          'ng-model="myDate" ' +
          'ng-required="isRequired" ' +
          'ng-disabled="isDisabled">' +
@@ -150,14 +150,14 @@ describe('md-date-picker', function() {
         expect(formCtrl.$error['maxdate']).toBeTruthy();
       });
       
-      it('should set `disabled` $error flag on the form', function() {
-        pageScope.isDateEnabled = function(date){
+      it('should set `filtered` $error flag on the form', function() {
+        pageScope.dateFilter = function(date) {
           return date.getDay() === 1;
         };
         populateInputElement('2016-01-03');
         controller.ngModelCtrl.$render();
 
-        expect(formCtrl.$error['disabled']).toBeTruthy();
+        expect(formCtrl.$error['filtered']).toBeTruthy();
       });
     });
   });
@@ -197,8 +197,8 @@ describe('md-date-picker', function() {
       expect(controller.inputContainer).toHaveClass('md-datepicker-invalid');
     });
     
-    it('should not update the model when value is not enabled', function(){
-      pageScope.isDateEnabled = function(date){
+    it('should not update the model when value is not enabled', function() {
+      pageScope.dateFilter = function(date) {
         return date.getDay() === 1;
       };
       pageScope.$apply();

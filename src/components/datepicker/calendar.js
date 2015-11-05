@@ -58,7 +58,7 @@
       scope: {
         minDate: '=mdMinDate',
         maxDate: '=mdMaxDate',
-        isDateEnabled: '=mdDateEnabled',
+        dateFilter: '=mdDateFilter',
       },
       require: ['ngModel', 'mdCalendar'],
       controller: CalendarCtrl,
