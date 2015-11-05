@@ -302,7 +302,7 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
 
       } else {
         markParentAsChecked(false);
-        if (CHECKED_CSS) element.removeClass(CHECKED_CSS);
+        element.removeClass(CHECKED_CSS);
       }
 
       /**
@@ -310,7 +310,7 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
        */
       function markParentAsChecked(addClass ) {
         if ( element.parent()[0].nodeName != "MD-RADIO-GROUP") {
-          if (CHECKED_CSS) element.parent()[ !!addClass ? 'addClass' : 'removeClass'](CHECKED_CSS);
+          element.parent()[ !!addClass ? 'addClass' : 'removeClass'](CHECKED_CSS);
         }
 
       }
