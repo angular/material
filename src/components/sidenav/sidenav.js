@@ -245,9 +245,8 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
 
     $mdTheming.inherit(backdrop, element);
 
-    // KEY CHECK
     var body = angular.element(document.body);
-    var _mouseEvent = window.MSPointerEvent ? 'MSPointerEvent' : window.PointerEvent ? 'pointerdown' : 'mousedown';
+    var _mouseEvent = window.MSPointerEvent ? 'MSPointerDown' : window.PointerEvent ? 'pointerdown' : 'mousedown';
 
     body.on('keydown', onInput);
     body.on(_mouseEvent, onInput);
@@ -269,13 +268,11 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
         buffer = false;
       }, 1000);
     }
-    // END INTERACTION CHECK
 
     element.on('$destroy', function() {
       backdrop.remove();
       sidenavCtrl.destroy();
 
-      // UNREGISTER INTERACTION EVENTS
       body.off('keydown', onInput);
       body.off(_mouseEvent, onInput);
       body.off('mouseenter', onInput);
