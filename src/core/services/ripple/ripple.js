@@ -85,20 +85,21 @@ function autoCleanup (self, cleanupFn) {
  * @returns {string}
  */
 InkRippleCtrl.prototype.color = function (value) {
+  var self = this;
 
   // If assigning a color value, apply it to background and the ripple color
   if (angular.isDefined(value)) {
-    this._color = this._parseColor(value);
+    self._color = self._parseColor(value);
   }
 
   // If color lookup, use assigned, defined, or inherited
-  return this._color || this._parseColor( this.inkRipple() ) || this._parseColor( getElementColor(this) );
+  return self._color || self._parseColor( self.inkRipple() ) || self._parseColor( getElementColor() );
 
   /**
    * Finds the color element and returns its text color for use as default ripple color
    * @returns {string}
    */
-  function getElementColor (self) {
+  function getElementColor () {
     var items = self.options && self.options.colorElement ? self.options.colorElement : [];
     var elem =  items.length ? items[ 0 ] : self.$element[ 0 ];
 
