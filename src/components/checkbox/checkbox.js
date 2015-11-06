@@ -167,7 +167,7 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
         if(ngModelCtrl.$viewValue) {
           element.addClass(CHECKED_CSS);
         } else {
-          if (CHECKED_CSS) element.removeClass(CHECKED_CSS);
+          element.removeClass(CHECKED_CSS);
         }
       }
     };
