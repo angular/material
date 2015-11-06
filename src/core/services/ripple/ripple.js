@@ -165,7 +165,8 @@ InkRippleCtrl.prototype._parseColor = function parseColor (color, multiplier) {
  */
 InkRippleCtrl.prototype.bindEvents = function () {
   this.$element.on('mousedown', angular.bind(this, this.handleMousedown));
-  this.$element.on('mouseup touchend mouseleave', angular.bind(this, this.handleMouseup));
+  this.$element.on('mouseup touchend', angular.bind(this, this.handleMouseup));
+  this.$element.on('mouseleave', angular.bind(this, this.handleMouseup));
   this.$element.on('touchmove', angular.bind(this, this.handleTouchmove));
 };
 
