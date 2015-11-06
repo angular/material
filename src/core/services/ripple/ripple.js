@@ -55,9 +55,7 @@ function InkRippleCtrl ($scope, $element, rippleOptions, $window, $timeout, $mdU
   this.lastRipple = null;
 
   $mdUtil.valueOnUse(this, 'container', this.createContainer);
-  $mdUtil.valueOnUse(this, 'background', this.getColor, 0.5);
 
-  this.color = this.getColor(1);
   this.$element.addClass('md-ink-ripple');
 
   // attach method for unit tests
@@ -146,8 +144,6 @@ InkRippleCtrl.prototype.bindEvents = function () {
 InkRippleCtrl.prototype.handleMousedown = function (event) {
   if ( this.mousedown ) return;
 
-  this.setColor(window.getComputedStyle(this.$element[0])['color']);
-
   // When jQuery is loaded, we have to get the original event
   if (event.hasOwnProperty('originalEvent')) event = event.originalEvent;
   this.mousedown = true;
@@ -203,7 +199,12 @@ InkRippleCtrl.prototype.isRippleAllowed = function () {
   var element = this.$element[0];
   do {
     if (!element.tagName || element.tagName === 'BODY') break;
-    if (element && element.hasAttribute && element.hasAttribute('disabled')) return false;
+    if (element && element.hasAttribute) {
+      var rippleValue = element.hasAttribute('md-ink-ripple') ? element.attributes['md-ink-ripple'].value : '';
+
+      if (element.hasAttribute('disabled')) return false;
+      if (rippleValue === 'false' || rippleValue === '0') return false;
+    }
   } while (element = element.parentNode);
   return true;
 };
@@ -223,6 +224,8 @@ InkRippleCtrl.prototype.createRipple = function (left, top) {
   var x           = Math.max(Math.abs(width - left), left) * 2;
   var y           = Math.max(Math.abs(height - top), top) * 2;
   var size        = getSize(this.options.fitRipple, x, y);
+
+  this.updateColor();
 
   ripple.css({
     left:            left + 'px',
@@ -269,8 +272,20 @@ InkRippleCtrl.prototype.createRipple = function (left, top) {
   }
 };
 
+/**
+ * Gets a color and apply it to background and the ripple color
+ * @param color
+ */
 InkRippleCtrl.prototype.setColor = function (color) {
   this.color = this._parseColor(color);
+  this.background = this.color;
+};
+
+/**
+ * Updating the ripple colors
+ */
+InkRippleCtrl.prototype.updateColor = function () {
+  this.setColor(this.getColor());
 };
 
 /**
