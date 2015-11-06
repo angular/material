@@ -1,5 +1,90 @@
+<a name"1.0.0-rc3"></a>
+### 1.0.0-rc3 (2015-11-06)
+
+
+#### Features
+
+* **datepicker:** predicate function to allow fine-grained control over pickable dates ([9522148b](https://github.com/angular/material/commit/9522148b), closes [#4538](https://github.com/angular/material/issues/4538), [#5475](https://github.com/angular/material/issues/5475))
+* **ripple:** ink-ripple is now getting an interpolated value ([fbcc3acc](https://github.com/angular/material/commit/fbcc3acc), closes [#5438](https://github.com/angular/material/issues/5438), [#5580](https://github.com/angular/material/issues/5580))
+
+
+#### Breaking Changes
+
+* Buttons with undefined `type` will have type="button" assigned, so forms may not submit as previously expected.
+
+Before:
+```html
+<button class="md-button" ng-transclude>
+```
+
+will become
+```html
+<button type="button" class="md-button" ng-transclude>
+```
+
+Fixes #3127. Closes #5468.
+
+ ([747ef826](https://github.com/angular/material/commit/747ef826))
+* `md-on-append` has been renamed/deprecated in favor of
+`md-transform-chip` or the simple notifier `md-on-add`.
+
+We expect to remove this completely in 1.0, so please update
+your code to use one of the new methods.
+
+Fixes #4666. Fixes #4193. Fixes #4412. Fixes #4863. Closes #5497. Closes #3816.
+
+ ([d69d6d0b](https://github.com/angular/material/commit/d69d6d0b))
+* adding actions to `md-card` is now done through `<md-card-actions>` rather than `<div class=”md-actions”>`
+* adding actions to `md-dialog` is now done through `<md-dialog-actions>` rather than `<div class=”md-actions”>`
+
+
+#### Bug Fixes
+
+* **autocomplete:**
+  * Allow clicks inside md-not-found. ([5ae3d4cd](https://github.com/angular/material/commit/5ae3d4cd), closes [#5424](https://github.com/angular/material/issues/5424))
+  * fix md-not-found bug with multiple autocompletes ([96932048](https://github.com/angular/material/commit/96932048), closes [#5400](https://github.com/angular/material/issues/5400), [#5442](https://github.com/angular/material/issues/5442))
+  * handle undefined searchText ([fbf45fdf](https://github.com/angular/material/commit/fbf45fdf), closes [#5162](https://github.com/angular/material/issues/5162), [#5393](https://github.com/angular/material/issues/5393), [#5445](https://github.com/angular/material/issues/5445))
+* **button:** set color of disabled button to highest css priority. ([ce2f28d0](https://github.com/angular/material/commit/ce2f28d0), closes [#5569](https://github.com/angular/material/issues/5569), [#5574](https://github.com/angular/material/issues/5574))
+* **card:** now md-card-actions ([f8c003c3](https://github.com/angular/material/commit/f8c003c3))
+* **components:** fix issue with removeClass removing previous classes ([bd65bf74](https://github.com/angular/material/commit/bd65bf74), closes [#5538](https://github.com/angular/material/issues/5538))
+* **datepicker:**
+  * apply ngMessages errors when using text input. Fixes ([3c9ba380](https://github.com/angular/material/commit/3c9ba380))
+  * throw error if model is not a Date. For #5266 ([71976be8](https://github.com/angular/material/commit/71976be8))
+  * throw error if inside md-input-container. For #5055 ([5004a2a6](https://github.com/angular/material/commit/5004a2a6))
+  * properly set ngModel validity. ([b4d77330](https://github.com/angular/material/commit/b4d77330), closes [#4926](https://github.com/angular/material/issues/4926))
+* **dialog:** now md-dialog-actions ([bf08e179](https://github.com/angular/material/commit/bf08e179))
+* **fab:** Remove transition for fabs on ng-hide. ([e778cdd4](https://github.com/angular/material/commit/e778cdd4), closes [#5235](https://github.com/angular/material/issues/5235))
+* **input:**
+  * ngMessages will no longer cause layout to change on animation ([faa8b5b7](https://github.com/angular/material/commit/faa8b5b7))
+  * fixes input height in IE11 ([ee98b70f](https://github.com/angular/material/commit/ee98b70f))
+* **layouts:** removeAttr RTE on comment nodes ([6879c6f4](https://github.com/angular/material/commit/6879c6f4))
+* **lists:** Fix alignment of secondary icons/controls. ([3b835ca6](https://github.com/angular/material/commit/3b835ca6), closes [#3699](https://github.com/angular/material/issues/3699), [#5533](https://github.com/angular/material/issues/5533))
+* **mdUtil:** fix disable scroll adding extra scroll-bars on IE ([d59bd5e7](https://github.com/angular/material/commit/d59bd5e7), closes [#5300](https://github.com/angular/material/issues/5300))
+* **menu-bar:** fix sibling nested opening and closing incorrectly ([ead4d022](https://github.com/angular/material/commit/ead4d022), closes [#5119](https://github.com/angular/material/issues/5119))
+* **menubar:** fix RTE with close dialogs invoked from menubar ([5c129be4](https://github.com/angular/material/commit/5c129be4), closes [#5476](https://github.com/angular/material/issues/5476))
+* **progressLinear:** Remove extra semi-colon from SCSS. ([06c60af4](https://github.com/angular/material/commit/06c60af4), closes [#5260](https://github.com/angular/material/issues/5260))
+* **ripple:**
+  * moved mouseleave listener to a separated declaration ([2e2aaa8a](https://github.com/angular/material/commit/2e2aaa8a))
+  * removing ripples on touchmove ([65b2454c](https://github.com/angular/material/commit/65b2454c), closes [#5261](https://github.com/angular/material/issues/5261), [#5532](https://github.com/angular/material/issues/5532))
+  * changed ripple center from layerX/Y to offsetX/Y ([f30dd8cf](https://github.com/angular/material/commit/f30dd8cf), closes [#4807](https://github.com/angular/material/issues/4807), [#5508](https://github.com/angular/material/issues/5508), [#5527](https://github.com/angular/material/issues/5527))
+* **select:**
+  * fix escape closing dialogs when used inside select ([f31d2552](https://github.com/angular/material/commit/f31d2552))
+  * fix ng-change over firing when using trackBy ([41671e2d](https://github.com/angular/material/commit/41671e2d), closes [#4118](https://github.com/angular/material/issues/4118))
+  * ngModel.$touched trigger after menu close ([0917523d](https://github.com/angular/material/commit/0917523d), closes [#5256](https://github.com/angular/material/issues/5256))
+  * allow circular references ([cba5fa72](https://github.com/angular/material/commit/cba5fa72), closes [#5330](https://github.com/angular/material/issues/5330))
+* **sidenav:** Notify other close events like datepicker-close too ([2a76887c](https://github.com/angular/material/commit/2a76887c), closes [#5522](https://github.com/angular/material/issues/5522), [#5528](https://github.com/angular/material/issues/5528))
+* **subheader:** Remove 16px right margin. ([bb839317](https://github.com/angular/material/commit/bb839317), closes [#4389](https://github.com/angular/material/issues/4389), [#708](https://github.com/angular/material/issues/708), [#4419](https://github.com/angular/material/issues/4419))
+* **tabs:**
+  * fix positioning absolute/fixed elements inside md-tab-content ([65e15bf4](https://github.com/angular/material/commit/65e15bf4), closes [#4613](https://github.com/angular/material/issues/4613))
+  * icons in tab labels should match the text color ([fcd199ea](https://github.com/angular/material/commit/fcd199ea), closes [#5465](https://github.com/angular/material/issues/5465))
+* **toolbar button:** Fix color of raised buttons. ([0690e1b6](https://github.com/angular/material/commit/0690e1b6), closes [#4845](https://github.com/angular/material/issues/4845), [#5562](https://github.com/angular/material/issues/5562))
+* **virtual-repeat:** Prevent nested calls to virtualRepeatUpdate_ ([821d1a34](https://github.com/angular/material/commit/821d1a34), closes [#4950](https://github.com/angular/material/issues/4950), [#5009](https://github.com/angular/material/issues/5009))
+* **virtualRepeat:** Add ability for container to resize after creation ([d6d7b084](https://github.com/angular/material/commit/d6d7b084), closes [#5561](https://github.com/angular/material/issues/5561))
+
+
 <a name"1.0.0-rc2"></a>
 ### 1.0.0-rc2 (2015-10-29)
+
 
 #### Breaking Changes
 
@@ -8,6 +93,7 @@
   * `layout-margin` and `layout-padding` styles will apply to all children of `layout=row` and `layout=column`
 * **backdrop:** when backdrop parent is the body, backdrop will use `position: fixed`
 * **input:** form elements will now have an external `display` value of `inline-block`
+
 
 #### Bug Fixes
 
@@ -92,13 +178,6 @@ This is the first release candidate for our 1.0 beta.  We believe that the API i
 
 #### Breaking Changes
 
-* **dialog:** To accommodate components like tabs inside a dialog, `<md-dialog-content>` no longer has padding by default. To maintain existing custom dialog templates, add the `.md-dialog-content` class:
-
-    ```html
-    <md-dialog-content class="md-dialog-content"> ... </md-dialog-content>
-    ```
-
- ([d2140b15](https://github.com/angular/material/commit/d2140b15), closes [#3963](https://github.com/angular/material/issues/3963))
 * Material Layout attribute `offset` should now be `flex-offset`.
 
     Change your code from this:
