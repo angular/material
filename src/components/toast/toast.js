@@ -140,7 +140,7 @@ function MdToastDirective($mdToast) {
   *     active before automatically closing.  Set to 0 or false to have the toast stay open until
   *     closed manually. Default: 3000.
   *   - `position` - `{string=}`: Where to place the toast. Available: any combination
-  *     of 'bottom', 'left', 'top', 'right', 'fit'. Default: 'bottom left'.
+  *     of 'bottom', 'left', 'top', 'right'. Default: 'bottom left'.
   *   - `controller` - `{string=}`: The controller to associate with this toast.
   *     The controller will be injected the local `$mdToast.hide( )`, which is a function
   *     used to hide the toast.
