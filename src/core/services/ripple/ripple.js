@@ -55,14 +55,12 @@ function InkRippleCtrl ($scope, $element, rippleOptions, $window, $timeout, $mdU
   this.lastRipple = null;
 
   $mdUtil.valueOnUse(this, 'container', this.createContainer);
-  $mdUtil.valueOnUse(this, 'background', this.getColor, 0.5);
 
-  this.color = this.getColor(1);
   this.$element.addClass('md-ink-ripple');
 
   // attach method for unit tests
   ($element.controller('mdInkRipple') || {}).createRipple = angular.bind(this, this.createRipple);
-  ($element.controller('mdInkRipple') || {}).setColor = angular.bind(this, this.setColor);
+  ($element.controller('mdInkRipple') || {}).setColor = angular.bind(this, this.color);
 
   this.bindEvents();
 }
@@ -86,20 +84,37 @@ function autoCleanup (self, cleanupFn) {
  * Returns the color that the ripple should be (either based on CSS or hard-coded)
  * @returns {string}
  */
-InkRippleCtrl.prototype.getColor = function () {
-  return this._parseColor(this.$element.attr('md-ink-ripple'))
-      || this._parseColor(getElementColor.call(this));
+InkRippleCtrl.prototype.color = function (value) {
+
+  // If assigning a color value, apply it to background and the ripple color
+  if (angular.isDefined(value)) {
+    this._color = this._parseColor(value);
+  }
+
+  // If color lookup, use assigned, defined, or inherited
+  return this._color || this._parseColor( this.inkRipple() ) || this._parseColor( getElementColor(this) );
 
   /**
    * Finds the color element and returns its text color for use as default ripple color
    * @returns {string}
    */
-  function getElementColor () {
-    var colorElement = this.options.colorElement && this.options.colorElement[ 0 ];
-    colorElement     = colorElement || this.$element[ 0 ];
-    return colorElement ? this.$window.getComputedStyle(colorElement).color : 'rgb(0,0,0)';
+  function getElementColor (self) {
+    var items = self.options && self.options.colorElement ? self.options.colorElement : [];
+    var elem =  items.length ? items[ 0 ] : self.$element[ 0 ];
+
+    return elem ? self.$window.getComputedStyle(elem).color : 'rgb(0,0,0)';
   }
 };
+
+/**
+ * Updating the ripple colors based on the current inkRipple value
+ * or the element's computed style color
+ */
+InkRippleCtrl.prototype.calculateColor = function () {
+  return this.color();
+};
+
+
 /**
  * Takes a string color and converts it to RGBA format
  * @param color {string}
@@ -160,8 +175,6 @@ InkRippleCtrl.prototype.bindEvents = function () {
  */
 InkRippleCtrl.prototype.handleMousedown = function (event) {
   if ( this.mousedown ) return;
-
-  this.setColor(window.getComputedStyle(this.$element[0])['color']);
 
   // When jQuery is loaded, we have to get the original event
   if (event.hasOwnProperty('originalEvent')) event = event.originalEvent;
@@ -229,9 +242,22 @@ InkRippleCtrl.prototype.isRippleAllowed = function () {
   var element = this.$element[0];
   do {
     if (!element.tagName || element.tagName === 'BODY') break;
-    if (element && element.hasAttribute && element.hasAttribute('disabled')) return false;
+
+    if (element && angular.isFunction(element.hasAttribute)) {
+      if (element.hasAttribute('disabled')) return false;
+      if (this.inkRipple() === 'false' || this.inkRipple() === '0') return false;
+    }
+
   } while (element = element.parentNode);
   return true;
+};
+
+/**
+ * The attribute `md-ink-ripple` may be a static or interpolated
+ * color value OR a boolean indicator (used to disable ripples)
+ */
+InkRippleCtrl.prototype.inkRipple = function () {
+  return this.$element.attr('md-ink-ripple');
 };
 
 /**
@@ -249,6 +275,7 @@ InkRippleCtrl.prototype.createRipple = function (left, top) {
   var x           = Math.max(Math.abs(width - left), left) * 2;
   var y           = Math.max(Math.abs(height - top), top) * 2;
   var size        = getSize(this.options.fitRipple, x, y);
+  var color       = this.calculateColor();
 
   ripple.css({
     left:            left + 'px',
@@ -256,8 +283,8 @@ InkRippleCtrl.prototype.createRipple = function (left, top) {
     background:      'black',
     width:           size + 'px',
     height:          size + 'px',
-    backgroundColor: rgbaToRGB(this.color),
-    borderColor:     rgbaToRGB(this.color)
+    backgroundColor: rgbaToRGB(color),
+    borderColor:     rgbaToRGB(color)
   });
   this.lastRipple = ripple;
 
@@ -268,7 +295,7 @@ InkRippleCtrl.prototype.createRipple = function (left, top) {
     if (!ctrl.mousedown) ctrl.fadeInComplete(ripple);
   }, DURATION * 0.35, false);
 
-  if (this.options.dimBackground) this.container.css({ backgroundColor: this.background });
+  if (this.options.dimBackground) this.container.css({ backgroundColor: color });
   this.container.append(ripple);
   this.ripples.push(ripple);
   ripple.addClass('md-ripple-placed');
@@ -295,9 +322,7 @@ InkRippleCtrl.prototype.createRipple = function (left, top) {
   }
 };
 
-InkRippleCtrl.prototype.setColor = function (color) {
-  this.color = this._parseColor(color);
-};
+
 
 /**
  * After fadeIn finishes, either kicks off the fade-out animation or queues the element for removal on mouseup
