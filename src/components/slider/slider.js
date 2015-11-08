@@ -31,7 +31,7 @@
  * @usage
  * <h4>Normal Mode</h4>
  * <hljs lang="html">
- * <md-slider ng-model="myValue" min="5" max="500">
+ * <md-slider ng-model="myValue" min="5" max="500" vertical>
  * </md-slider>
  * </hljs>
  * <h4>Discrete Mode</h4>
@@ -112,6 +112,11 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     var activeTrack = angular.element(element[0].querySelector('.md-track-fill'));
     var tickContainer = angular.element(element[0].querySelector('.md-track-ticks'));
     var throttledRefreshDimensions = $mdUtil.throttle(refreshSliderDimensions, 5000);
+
+    // Check have vertical orientation.
+    if (angular.isDefined(attr.vertical)) {
+      element.addClass('md-slider-vertical');
+    }
 
     // Default values, overridable by attrs
     angular.isDefined(attr.min) ? attr.$observe('min', updateMin) : updateMin(0);
