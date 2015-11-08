@@ -27,11 +27,4 @@ md-list.md-THEME_NAME-theme {
       }
     }
   }
-  md-list-item button {
-    background-color: '{{background-color}}';
-
-    &.md-button:not([disabled]):hover {
-      background-color: '{{background-color}}';
-    }
-  }
 }
