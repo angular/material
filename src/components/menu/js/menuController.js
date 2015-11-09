@@ -68,7 +68,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout) {
         } else if (nestedMenu && !nestedMenu.isOpen && nestedMenu.open) {
           self.isAlreadyOpening = true;
         }
-        nestedMenu.open();
+        nestedMenu && nestedMenu.open();
       }, nestedMenu ? 100 : 250);
       var focusableTarget = event.currentTarget.querySelector('button:not([disabled])');
       focusableTarget && focusableTarget.focus();
