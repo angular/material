@@ -78,7 +78,8 @@ var MAX_ELEMENT_SIZE = 1533917;
 var NUM_EXTRA = 3;
 
 /** @ngInject */
-function VirtualRepeatContainerController($$rAF, $parse, $window, $scope, $element, $attrs) {
+function VirtualRepeatContainerController(
+    $$rAF, $mdUtil, $parse, $window, $scope, $element, $attrs) {
   this.$scope = $scope;
   this.$element = $element;
   this.$attrs = $attrs;
@@ -126,16 +127,19 @@ function VirtualRepeatContainerController($$rAF, $parse, $window, $scope, $eleme
   this.sizer = this.scroller.getElementsByClassName('md-virtual-repeat-sizer')[0];
   this.offsetter = this.scroller.getElementsByClassName('md-virtual-repeat-offsetter')[0];
 
-  // TODO: Come up with a more robust (But hopefully also quick!) way of
+  // After the dom stablizes, measure the initial size of the container and
+  // make a best effort at re-measuring as it changes.
   var boundUpdateSize = angular.bind(this, this.updateSize);
 
   $$rAF(function() {
     boundUpdateSize();
 
+    var debouncedUpdateSize = $mdUtil.debounce(boundUpdateSize, 10, null, false);
     var jWindow = angular.element($window);
-    jWindow.on('resize', boundUpdateSize);
+
+    jWindow.on('resize', debouncedUpdateSize);
     $scope.$on('$destroy', function() {
-      jWindow.off('resize', boundUpdateSize);
+      jWindow.off('resize', debouncedUpdateSize);
     });
 
     $scope.$on('$md-resize', boundUpdateSize);
