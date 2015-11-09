@@ -321,6 +321,54 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('should ensure the parent scope digests along with the current scope', inject(function($timeout, $material) {
+      var scope = createScope(null, {bang: 'boom'});
+      var template =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder">' +
+        ' <md-item-template>' +
+        '   <span class="find-parent-scope">{{bang}}</span>' +
+        '   <span class="find-index">{{$index}}</span>' +
+        '   <span class="find-item">{{item.display}}</span>' +
+        ' </md-item-template>' +
+        '</md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var ul = element.find('ul');
+
+      $material.flushOutstandingAnimations();
+
+      // Focus the input
+      ctrl.focus();
+
+      element.scope().searchText = 'fo';
+
+      // Run our initial flush
+      $timeout.flush();
+      waitForVirtualRepeat(element);
+
+      // Wait for the next tick when the values will be updated
+      $timeout.flush();
+
+      var li = ul.find('li')[0];
+      var parentScope = angular.element(li.querySelector('.find-parent-scope')).scope();
+
+      // When the autocomplete item's scope digests, ensure that the parent
+      // scope does too.
+      parentScope.bang = 'big';
+      scope.$digest();
+
+      expect(li.querySelector('.find-parent-scope').innerHTML).toBe('big');
+
+      // Make sure we wrap up anything and remove the element
+      $timeout.flush();
+      element.remove();
+    }));
+
     it('is hidden when no matches are found without an md-not-found template', inject(function($timeout, $material) {
       var scope = createScope();
       var template =
