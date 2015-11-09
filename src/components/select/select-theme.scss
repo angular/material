@@ -64,7 +64,7 @@ md-select-menu.md-THEME_NAME-theme {
       }
     }
   }
-  md-option:focus:not([selected]) {
+  md-option:focus:not([disabled]):not([selected]) {
     background: '{{background-200}}';
   }
 

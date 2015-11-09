@@ -843,7 +843,7 @@ describe('<md-select>', function() {
       if (angular.isArray(options)) {
         $rootScope.$$values = options;
         var renderValueAs = compileOpts ? compileOpts.renderValueAs || 'value' : 'value';
-        optionsTpl = '<md-option ng-repeat="value in $$values" ng-value="value">{{' + renderValueAs + '}}</md-option>';
+        optionsTpl = '<md-option ng-repeat="value in $$values" ng-value="value"><div class="md-text">{{' + renderValueAs + '}}</div></md-option>';
       } else if (angular.isString(options)) {
         optionsTpl = options;
       }
@@ -898,7 +898,7 @@ describe('<md-select>', function() {
   function clickOption(index) {
     inject(function($rootScope, $document) {
       var openMenu = $document.find('md-select-menu');
-      var opt = $document.find('md-option')[index];
+      var opt = angular.element($document.find('md-option')[index]).find('div')[0];
 
       if (!openMenu.length) throw Error('No select menu currently open');
       if (!opt) throw Error('Could not find option at index: ' + index);
@@ -909,6 +909,7 @@ describe('<md-select>', function() {
       });
       angular.element(openMenu).triggerHandler({
         type: 'mouseup',
+        target: target,
         currentTarget: openMenu[0]
       });
     });
