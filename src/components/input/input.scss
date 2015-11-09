@@ -265,7 +265,8 @@ md-input-container {
       // to create a dotted line under the input.
       background-size: 4px 1px;
       background-repeat: repeat-x;
-      margin-bottom: -1px; // Shift downward so dotted line is positioned the same as other bottom borders
+      padding-bottom: 2px; // Shift downward so dotted line is positioned the same as other bottom borders
+      margin-bottom: -1px; // Shift the following element upward to make up for the extra pixel of padding here
     }
   }
 }
