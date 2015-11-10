@@ -80,6 +80,7 @@ describe('mdProgressCircular', function() {
     var value = Math.round( (37 / DEFAULT_SIZE) * 100 )/100;
 
     expect( getScale(progress) ).toBe(value);
+    expect( getHeight(progress )).toBe('37px');
   });
 
   /**
@@ -103,4 +104,10 @@ describe('mdProgressCircular', function() {
 
     return Math.round(scale * 100)/100;
   }
+
+  function getHeight(element) {
+    var el = angular.element(element)[0];
+    return el.style['height'];
+  }
+
 });
