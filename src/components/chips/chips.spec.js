@@ -344,6 +344,7 @@ describe('<md-chips>', function() {
 
           expect(enterEvent.preventDefault).toHaveBeenCalled();
         }));
+
       });
 
       it('focuses/blurs the component when focusing/blurring the input', inject(function() {
@@ -364,6 +365,50 @@ describe('<md-chips>', function() {
     });
 
     describe('custom inputs', function() {
+
+      describe('separator-keys', function() {
+        var SEPARATOR_KEYS_CHIP_TEMPLATE =
+          '<md-chips ng-model="items" md-separator-keys="keys"></md-chips>';
+
+        it('should create a new chip when a comma is entered', inject(function($mdConstant) {
+          scope.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA];
+          var element = buildChips(SEPARATOR_KEYS_CHIP_TEMPLATE);
+          var ctrl = element.controller('mdChips');
+
+          var commaInput = {
+            type: 'keydown',
+            keyCode: $mdConstant.KEY_CODE.COMMA,
+            which: $mdConstant.KEY_CODE.COMMA,
+            preventDefault: jasmine.createSpy('preventDefault')
+          };
+
+          ctrl.chipBuffer = 'Test';
+          element.find('input').triggerHandler(commaInput);
+
+          expect(commaInput.preventDefault).toHaveBeenCalled();
+        }));
+
+        it('supports custom separator key codes', inject(function($mdConstant) {
+          var semicolon = 186;
+          scope.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA, semicolon];
+
+          var element = buildChips(SEPARATOR_KEYS_CHIP_TEMPLATE);
+          var ctrl = element.controller('mdChips');
+
+          var semicolonInput = {
+            type: 'keydown',
+            keyCode: semicolon,
+            which: semicolon,
+            preventDefault: jasmine.createSpy('preventDefault')
+          };
+
+          ctrl.chipBuffer = 'Test';
+          element.find('input').triggerHandler(semicolonInput);
+
+          expect(semicolonInput.preventDefault).toHaveBeenCalled();
+        }));
+      });
+
       describe('md-autocomplete', function() {
         var AUTOCOMPLETE_CHIPS_TEMPLATE = '\
           <md-chips ng-model="items">\
