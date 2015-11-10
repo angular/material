@@ -10,7 +10,7 @@
 
 #### Breaking Changes
 
-* Buttons with undefined `type` will have type="button" assigned, so forms may not submit as previously expected.
+* Buttons with undefined `type` will have type="button" assigned, so forms may not submit as previously expected. (note: this change to md-button is going to be reverted in the next RC)
 
 Before:
 ```html
