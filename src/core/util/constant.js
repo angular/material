@@ -14,6 +14,7 @@ function MdConstantFactory($sniffer) {
 
   return {
     KEY_CODE: {
+      COMMA: 188,
       ENTER: 13,
       ESCAPE: 27,
       SPACE: 32,
