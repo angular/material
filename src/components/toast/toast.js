@@ -181,6 +181,10 @@ function MdToastDirective($mdToast) {
   * @name $mdToast#cancel
   *
   * @description
+  * `DEPRECATED` - The promise returned from opening a toast is used only to notify about the closing of the toast.
+  * As such, there isn't any reason to also allow that promise to be rejected,
+  * since it's not clear what the difference between resolve and reject would be.
+  *
   * Hide the existing toast and reject the promise returned from
   * `$mdToast.show()`.
   *
