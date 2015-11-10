@@ -230,7 +230,9 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           if (proxies.length || hasClick) {
             $element.addClass('md-clickable');
 
-            ctrl.attachRipple($scope, angular.element($element[0].querySelector('.md-no-style')));
+            if (!hasClick) {
+              ctrl.attachRipple($scope, angular.element($element[0].querySelector('.md-no-style')));
+            }
           }
         }
 
