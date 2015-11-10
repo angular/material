@@ -725,7 +725,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * `md-select-on-match` flag.
    */
   function selectItemOnMatch () {
-    var searchText = $scope.searchText,
+    var searchText = $scope.searchText || '',
         matches    = ctrl.matches,
         item       = matches[ 0 ];
     if (matches.length === 1) getDisplayValue(item).then(function (displayValue) {
