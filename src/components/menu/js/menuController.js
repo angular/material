@@ -50,16 +50,16 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
       }
     }));
     menuItems = angular.element($mdUtil.nodesToArray(menuContainer[0].querySelectorAll('md-menu-item')));
-    menuItems.on('mouseenter', this.handleMenuItemHover);
-    menuItems.on('mouseleave', this.handleMenuItemMouseLeave);
+    menuItems.on('mouseenter', self.handleMenuItemHover);
+    menuItems.on('mouseleave', self.handleMenuItemMouseLeave);
   };
 
   this.disableHoverListener = function() {
     while (deregisterScopeListeners.length) {
       deregisterScopeListeners.shift()();
     }
-    menuItems.off('mouseenter', this.handleMenuItemHover);
-    menuItems.off('mouseleave', this.handleMenuMouseLeave);
+    menuItems.off('mouseenter', self.handleMenuItemHover);
+    menuItems.off('mouseleave', self.handleMenuMouseLeave);
   };
 
   this.handleMenuItemHover = function(event) {
