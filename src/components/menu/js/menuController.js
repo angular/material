@@ -58,8 +58,8 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
     while (deregisterScopeListeners.length) {
       deregisterScopeListeners.shift()();
     }
-    menuItems.off('mouseenter', self.handleMenuItemHover);
-    menuItems.off('mouseleave', self.handleMenuMouseLeave);
+    menuItems && menuItems.off('mouseenter', self.handleMenuItemHover);
+    menuItems && menuItems.off('mouseleave', self.handleMenuMouseLeave);
   };
 
   this.handleMenuItemHover = function(event) {
