@@ -24,6 +24,7 @@ md-input-container {
   position: relative;
   padding: $input-container-padding;
   margin: 18px 0;
+  overflow: hidden;
 
   &.md-block {
     display: block;
@@ -155,6 +156,11 @@ md-input-container {
     // Fix number inputs in Firefox to be full-width
     width: 100%;
     box-sizing: border-box;
+
+    // Hacky fix to force vertical alignment between `input` and `textarea`
+    // Input and textarea do not align by default:
+    // http://jsbin.com/buqomevage/1/edit?html,css,js,output
+    float: left;
 
     &:focus {
       outline: none;
