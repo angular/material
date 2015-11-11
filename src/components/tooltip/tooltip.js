@@ -243,6 +243,8 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       }
 
       function getPosition (dir) {
+        // recalc position every time, as parent and tooltipParent can change
+        parentRect = $mdUtil.offsetRect(parent, tooltipParent);
         return dir === 'left'
           ? { left: parentRect.left - tipRect.width - TOOLTIP_WINDOW_EDGE_SPACE,
               top: parentRect.top + parentRect.height / 2 - tipRect.height / 2 }
