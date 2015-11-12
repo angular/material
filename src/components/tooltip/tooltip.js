@@ -117,6 +117,12 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       element.attr('role', 'tooltip');
     }
 
+    function windowScrollHandler (e) {
+      // in case of scroll, remove the fixed positioned tooltip.
+      setVisible(false)
+    };
+
+
     function bindEvents () {
       var mouseActive = false;
 
@@ -127,10 +133,14 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
         elementFocusedOnWindowBlur = document.activeElement === parent[0];
       };
       var elementFocusedOnWindowBlur = false;
+
       ngWindow.on('blur', windowBlurHandler);
+      ngWindow.on('scroll', windowScrollHandler)
       scope.$on('$destroy', function() {
         ngWindow.off('blur', windowBlurHandler);
+        ngWindow.off('scroll', windowScrollHandler)
       });
+
 
       var enterHandler = function(e) {
         // Prevent the tooltip from showing when the window is receiving focus.
@@ -155,7 +165,10 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       parent.on('mousedown', function() { mouseActive = true; });
       parent.on('focus mouseenter touchstart', enterHandler );
 
-
+      // SanderElias: I noted this line, it is leaking bindings,
+      // and possible memory. Easy fix: move it to above with the
+      //  rest of the ngWindow bindings, and remove it on $destroy
+      //  like the rest of the event listeners
       angular.element($window).on('resize', debouncedOnResize);
     }
 
