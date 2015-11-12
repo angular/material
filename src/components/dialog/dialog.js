@@ -489,6 +489,26 @@ function MdDialogProvider($$interimElementProvider) {
       }
     };
 
+
+    function ariaFocus(ev) {
+      var dialog = document.querySelector('md-dialog');
+
+      if (isHidden(ev.target)) {
+        ev.stopImmediatePropagation();
+        dialog.focus();
+      }
+
+      function isHidden(element) {
+        while (element) {
+          if (element.getAttribute('aria-hidden') === 'true') {
+            return true;
+          }
+          element = element.parentElement;
+        }
+        return false;
+      }
+    }
+
     /**
      * Show method for dialogs
      */
@@ -500,6 +520,8 @@ function MdDialogProvider($$interimElementProvider) {
       captureParentAndFromToElements(options);
       configureAria(element.find('md-dialog'), options);
       showBackdrop(scope, element, options);
+
+      document.addEventListener('focus', ariaFocus, true);
 
       return dialogPopIn(element, options)
         .then(function() {
@@ -578,6 +600,8 @@ function MdDialogProvider($$interimElementProvider) {
       options.deactivateListeners();
       options.unlockScreenReader();
       options.hideBackdrop(options.$destroy);
+
+      document.removeEventListener('focus', ariaFocus, true);
 
       // For navigation $destroy events, do a quick, non-animated removal,
       // but for normal closes (from clicks, etc) animate the removal
