@@ -217,14 +217,13 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
     function positionTooltip() {
       var tipRect = $mdUtil.offsetRect(element, tooltipParent);
-      var parentRect = $mdUtil.offsetRect(parent, tooltipParent);
       var newPosition = getPosition(scope.direction);
 
       // If the user provided a direction, just nudge the tooltip onto the screen
       // Otherwise, recalculate based on 'top' since default is 'bottom'
       if (scope.direction) {
         newPosition = fitInParent(newPosition);
-      } else if (newPosition.top > element.prop('offsetParent').scrollHeight - tipRect.height - TOOLTIP_WINDOW_EDGE_SPACE) {
+      } else if (newPosition.top > tooltipParent.prop('offsetParent').scrollHeight - tipRect.height - TOOLTIP_WINDOW_EDGE_SPACE) {
         newPosition = fitInParent(getPosition('top'));
       }
 
@@ -242,9 +241,16 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
         return newPosition;
       }
 
+      function getbrc(el) {
+        // small helper function to
+        // convert getBoundingClientRect to a normal object
+        var brc = el.getBoundingClientRect();
+        return {left: brc.left, top: brc.top, width: brc.width, height: brc.height};
+      }
+
       function getPosition (dir) {
-        // recalc position every time, as parent and tooltipParent can change
-        parentRect = $mdUtil.offsetRect(parent, tooltipParent);
+        var parentRect = getbrc(parent[0]);
+
         return dir === 'left'
           ? { left: parentRect.left - tipRect.width - TOOLTIP_WINDOW_EDGE_SPACE,
               top: parentRect.top + parentRect.height / 2 - tipRect.height / 2 }
