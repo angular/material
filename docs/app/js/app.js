@@ -263,6 +263,10 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         name: 'Options',
         id: 'layoutOptions',
         url: 'layout/options'
+      },{
+        name: 'Tips & Tricks', // Possibly rename to Troubleshooting
+        id: 'layoutTips',
+        url: 'layout/tips'
       }]
     },
     {
@@ -635,6 +639,24 @@ function($scope, $attrs, $location, $rootScope) {
   $scope.layoutAlign = function() {
     return $scope.layoutDemo.mainAxis +
      ($scope.layoutDemo.crossAxis ? ' ' + $scope.layoutDemo.crossAxis : '')
+  };
+}])
+
+.controller('LayoutTipsCtrl', [
+function() {
+  var self = this;
+
+  /*
+   * Flex Sizing - Odd
+   */
+  self.toggleButtonText = "Hide";
+
+  self.toggleContentSize = function() {
+    var contentEl = angular.element(document.getElementById('toHide'));
+
+    contentEl.toggleClass("ng-hide");
+
+    self.toggleButtonText = contentEl.hasClass("ng-hide") ? "Show" : "Hide";
   };
 }])
 
