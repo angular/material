@@ -171,15 +171,15 @@ md-list-item, md-list-item .md-list-item-inner {
 
   .md-secondary-container,
   .md-secondary {
-    margin-left: $list-item-secondary-left-margin;
     position: absolute;
-    right: $list-item-padding-horizontal;
     top: 50%;
+    right: $list-item-padding-horizontal;
+    margin: 0 0 0 $list-item-secondary-left-margin;
     transform: translate3d(0, -50%, 0);
   }
 
   & > .md-button.md-secondary-container > .md-secondary {
-    margin-left: 0px;
+    margin-left: 0;
     position: static;
   }
 
