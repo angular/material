@@ -175,12 +175,22 @@ md-input-container {
     bottom: 7px;
   }
 
+  &.md-input-invalid {
+    ng-messages, data-ng-messages, x-ng-messages,
+    [ng-messages], [data-ng-messages], [x-ng-messages] {
+      opacity: 1;
+    }
+  }
+
   ng-messages, data-ng-messages, x-ng-messages,
   [ng-messages], [data-ng-messages], [x-ng-messages] {
     position: relative;
     order: 4;
     min-height: $input-error-height;
     overflow: hidden;
+    transition: $swift-ease-out;
+    transition-duration: $swift-ease-out-duration / 1.5;
+    opacity: 0;
 
     .md-char-counter {
       position: absolute;
