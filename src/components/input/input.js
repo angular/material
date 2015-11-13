@@ -322,7 +322,9 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
             node.style.minHeight = null;
           }
 
-          var rows = Math.max(min_rows, Math.round(node.scrollHeight / lineHeight));
+          var rows = Math.min(min_rows, Math.round(node.scrollHeight / lineHeight));
+          node.style.height = lineHeight * rows + "px";
+
           node.setAttribute("rows", rows);
         }
 
