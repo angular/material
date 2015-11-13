@@ -1,3 +1,4 @@
-.card-media {
-  background-color: #999999;
+
+md-card {
+  min-height: 150px;
 }
