@@ -9,7 +9,7 @@ $tooltip-lr-padding-sm: rem(1.6);
 $tooltip-max-width: rem(3.20);
 
 md-tooltip {
-  position: absolute;
+  position: fixed;
   z-index: $z-index-tooltip;
   overflow: hidden;
   pointer-events: none;
