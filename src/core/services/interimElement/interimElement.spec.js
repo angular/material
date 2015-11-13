@@ -375,7 +375,6 @@ describe('$$interimElement service', function() {
         expect(onShowingCalled).toBe(true);
 
         function onShowing(scope, el, options) {
-          expect(arguments.length).toEqual(3);
           onShowingCalled = true;
         }
 

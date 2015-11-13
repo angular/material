@@ -99,6 +99,10 @@ function InterimElementProvider() {
       return provider;
     }
 
+    function addPresetMethod(presetName, methodName, method) {
+      providerConfig.presets[presetName][methodName] = method;
+    }
+
     /**
      * Create a factory that has the given methods & defaults implementing interimElement
      */
@@ -241,7 +245,7 @@ function InterimElementProvider() {
 
   /* @ngInject */
   function InterimElementFactory($document, $q, $$q, $rootScope, $timeout, $rootElement, $animate,
-                                 $mdUtil, $mdCompiler, $mdTheming, $log ) {
+                                 $mdUtil, $mdCompiler, $mdTheming, $injector ) {
     return function createInterimElementService() {
       var SHOW_CANCELLED = false;
 
@@ -262,7 +266,8 @@ function InterimElementProvider() {
         show: show,
         hide: hide,
         cancel: cancel,
-        destroy : destroy
+        destroy : destroy,
+        $injector_: $injector
       };
 
       /*
@@ -617,10 +622,10 @@ function InterimElementProvider() {
           // Trigger onComplete callback when the `show()` finishes
           var notifyComplete = options.onComplete || angular.noop;
 
+          notifyShowing(options.scope, element, options, controller);
+
           return $q(function (resolve, reject) {
             try {
-              notifyShowing(options.scope, element, options);
-
               // Start transitionIn
               $q.when(options.onShow(options.scope, element, options, controller))
                 .then(function () {
