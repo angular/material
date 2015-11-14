@@ -56,7 +56,7 @@ consistency across your application.
         <span flex="25" class="docs-definition" aria-describedby="headings-selectors">
           <code>.md-title</code>
         </span>
-        <h5 aria-describedby="headings-output" class="md-title docs-output">Medium 2.0sp</h5>
+        <h5 aria-describedby="headings-output" class="md-title docs-output">Medium 20px</h5>
       </li>
       <li layout="row" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="headings-selectors">
