@@ -35,7 +35,7 @@ angular.module('material.components.progressCircular', [
  * If `value=""` is also specified, however, then `md-mode="determinate"` would be auto-injected instead.
  * @param {number=} value In determinate mode, this number represents the percentage of the
  *     circular progress. Default: 0
- * @param {number=} md-diameter This specifies the diamter of the circular progress. The value
+ * @param {number=} md-diameter This specifies the diameter of the circular progress. The value
  * may be a percentage (eg '25%') or a pixel-size value (eg '48'). If this attribute is
  * not present then a default value of '48px' is assumed.
  *
