@@ -61,7 +61,7 @@ $subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16) !default;
 
   .md-subheader-content {
     display: block;
-    z-index: 1;
+    z-index: $z-index-subheader;
     position: relative;
   }
 }
