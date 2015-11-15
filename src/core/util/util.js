@@ -43,17 +43,21 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
     clientRect: function(element, offsetParent, isOffsetRect) {
       var node = getNode(element);
-      offsetParent = getNode(offsetParent || node.offsetParent || document.body);
       var nodeRect = node.getBoundingClientRect();
 
       // The user can ask for an offsetRect: a rect relative to the offsetParent,
       // or a clientRect: a rect relative to the page
-      var offsetRect = isOffsetRect ?
-        offsetParent.getBoundingClientRect() :
-      {left: 0, top: 0, width: 0, height: 0};
+      var offsetPosition = {left: 0, top: 0};
+      if(isOffsetRect){
+        offsetParent = getNode(offsetParent || node.offsetParent || document.body);
+        var parentBoundingClientRect = offsetParent.getBoundingClientRect();
+        offsetPosition.left = parentBoundingClientRect.left - offsetParent.scrollLeft;
+        offsetPosition.top = parentBoundingClientRect.top - offsetParent.scrollTop;
+      }
+
       return {
-        left: nodeRect.left - offsetRect.left,
-        top: nodeRect.top - offsetRect.top,
+        left: nodeRect.left - offsetPosition.left,
+        top: nodeRect.top - offsetPosition.top,
         width: nodeRect.width,
         height: nodeRect.height
       };
