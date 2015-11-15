@@ -26,7 +26,7 @@ md-checkbox.md-THEME_NAME-theme {
   }
 
   &.md-checked .md-icon:after {
-    border-color: '{{background-200}}';
+    border-color: '{{accent-contrast-0.87}}';
   }
 
   &:not([disabled]) {
@@ -58,7 +58,7 @@ md-checkbox.md-THEME_NAME-theme {
       }
 
       &.md-checked .md-icon:after {
-        border-color: '{{background-200}}';
+        border-color: '{{primary-contrast-0.87}}';
       }
     }
 
@@ -98,6 +98,10 @@ md-checkbox.md-THEME_NAME-theme {
 
     &.md-checked .md-icon {
       background-color: '{{foreground-3}}';
+    }
+
+    &.md-checked .md-icon:after {
+      border-color: '{{background-200}}';
     }
 
     .md-label {
