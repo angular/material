@@ -671,7 +671,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     getNearestContentElement: function (element) {
       var current = element.parent()[0];
       // Look for the nearest parent md-content, stopping at the rootElement.
-      while (current && current !== $rootElement[0] && current !== document.body && current.nodeName !== 'MD-CONTENT') {
+      while (current && current !== $rootElement[0] && current !== document.body && current.nodeName.toUpperCase() !== 'MD-CONTENT') {
         current = current.parentNode;
       }
       return current;
