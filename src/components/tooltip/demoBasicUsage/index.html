@@ -45,6 +45,27 @@
     </div>
 
     <div style="margin-top: 20px;margin-bottom: -5px">
+      <p>
+        Additionally, the Tooltip's <code>md-delay</code> attribute can use to delay the
+        show animation. The default values is 0 mSecs...
+      </p>
+      <div style="padding-left: 37px">
+        <md-input-container>
+          <label>Tooltip Delay (for Photos)</label>
+          <input ng-model="demo.delayTooltip">
+        </md-input-container>
+
+        <md-button class="md-fab demo-tip" aria-label="Photos with Tooltip Delay">
+          <md-icon md-svg-src="img/icons/ic_photo_24px.svg" style="width: 24px; height: 24px;"></md-icon>
+          <md-tooltip md-delay="demo.delayTooltip" c>
+            Photos with Tooltip Delay {{demo.delayTooltip}} msecs
+          </md-tooltip>
+        </md-button>
+
+      </div>
+    </div>
+
+    <div style="margin-top: 20px;margin-bottom: -5px">
       <p><code>md-direction</code> attribute can used to dynamically change the direction of the tooltip.<br/>
       Note: the direction default value is 'bottom'. </p>
       <div style="padding-left: 30px">
