@@ -404,7 +404,7 @@ function InterimElementProvider() {
        * Used internally to manage the DOM element and related data
        */
       function InterimElement(options) {
-        var self, element, showAction = $q.when(true);
+        var self, element, isRemoved, showAction = $q.when(true);
 
         options = configureScopeAndTransitions(options);
 
@@ -421,9 +421,12 @@ function InterimElementProvider() {
          */
         function createAndTransitionIn() {
           return $q(function(resolve, reject){
-
             compileElement(options)
               .then(function( compiledData ) {
+                if (isRemoved) {
+                  return resolve();
+                }
+
                 element = linkElement( compiledData, options );
 
                 showAction = showElement(element, options, compiledData.controller)
@@ -448,6 +451,7 @@ function InterimElementProvider() {
          * - perform optional clean up scope.
          */
         function transitionOutAndRemove(response, isCancelled, opts) {
+          isRemoved = true;
 
           // abort if the show() and compile failed
           if ( !element ) return $q.when(false);
