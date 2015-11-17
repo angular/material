@@ -2,6 +2,14 @@ describe('$mdToast service', function() {
 
   beforeEach(module('material.components.toast'));
 
+  beforeEach(function () {
+    module(function ($provide) {
+      $provide.value('$mdMedia', function () {
+        return true;
+      });
+    });
+  });
+
   afterEach(inject(function($material) {
     $material.flushOutstandingAnimations();
   }));
@@ -149,7 +157,7 @@ describe('$mdToast service', function() {
         expect(toast.text()).toBe('hello, 1');
       }));
 
-      it('should add position class to tast', inject(function($rootElement, $timeout) {
+      it('should add position class to toast', inject(function($rootElement, $timeout) {
         setup({
           template: '<md-toast>',
           position: 'top left'
@@ -159,6 +167,33 @@ describe('$mdToast service', function() {
         expect(toast.hasClass('md-top')).toBe(true);
         expect(toast.hasClass('md-left')).toBe(true);
       }));
+
+      describe('sm screen', function () {
+        beforeEach(function () {
+          module(function ($provide) {
+            $provide.value('$mdMedia', function () {
+              return false;
+            });
+          });
+        });
+
+        it('should always be on bottom', inject(function($rootElement, $material) {
+          disableAnimations();
+
+          setup({
+            template: '<md-toast>'
+          });
+          expect($rootElement.hasClass('md-toast-open-bottom')).toBe(true);
+
+          $material.flushInterimElement();
+
+          setup({
+            template: '<md-toast>',
+            position: 'top'
+          });
+          expect($rootElement.hasClass('md-toast-open-bottom')).toBe(true);
+        }));
+      });
     });
   });
 
