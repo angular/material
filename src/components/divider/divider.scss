@@ -8,3 +8,11 @@ md-divider {
     margin-left: $baseline-grid * 10;
   }
 }
+
+.layout-row {
+  & > md-divider {
+    border-top-width: 0;
+    border-right-width: 1px;
+    border-right-style: solid;
+  }
+}

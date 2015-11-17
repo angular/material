@@ -296,7 +296,6 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
     /*
      * The swipe handler will dispatch a swipe event if, on the end of a touch,
      * the velocity and distance were high enough.
-     * TODO: add vertical swiping with a `horizontal` option similar to the drag handler.
      */
     .handler('swipe', {
       options: {
@@ -304,9 +303,16 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
         minDistance: 10
       },
       onEnd: function (ev, pointer) {
+        var eventType;
+
         if (Math.abs(pointer.velocityX) > this.state.options.minVelocity &&
           Math.abs(pointer.distanceX) > this.state.options.minDistance) {
-          var eventType = pointer.directionX == 'left' ? '$md.swipeleft' : '$md.swiperight';
+          eventType = pointer.directionX == 'left' ? '$md.swipeleft' : '$md.swiperight';
+          this.dispatchEvent(ev, eventType);
+        }
+        else if (Math.abs(pointer.velocityY) > this.state.options.minVelocity &&
+          Math.abs(pointer.distanceY) > this.state.options.minDistance) {
+          eventType = pointer.directionY == 'up' ? '$md.swipeup' : '$md.swipedown';
           this.dispatchEvent(ev, eventType);
         }
       }
@@ -679,7 +685,7 @@ function updatePointerState(ev, pointer) {
   );
 
   pointer.directionX = pointer.distanceX > 0 ? 'right' : pointer.distanceX < 0 ? 'left' : '';
-  pointer.directionY = pointer.distanceY > 0 ? 'up' : pointer.distanceY < 0 ? 'down' : '';
+  pointer.directionY = pointer.distanceY > 0 ? 'down' : pointer.distanceY < 0 ? 'up' : '';
 
   pointer.duration = +Date.now() - pointer.startTime;
   pointer.velocityX = pointer.distanceX / pointer.duration;

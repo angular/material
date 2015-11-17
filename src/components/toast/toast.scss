@@ -55,23 +55,29 @@ md-toast {
       opacity: 1;
     }
   }
+  /*
+   * When the toast doesn't take up the whole screen,
+   * make it rotate when the user swipes it away
+   */
   &.ng-leave.ng-leave-active {
     opacity: 0;
     transform: translate3d(0, 100%, 0);
+
+    &.md-swipeup {
+      transform: translate3d(0, -50%, 0);
+    }
+    &.md-swipedown {
+      transform: translate3d(0, 50%, 0);
+    }
     &.md-top {
       transform: translate3d(0, -100%, 0);
-    }
-    &.md-swipeleft {
-      transform: translate3d(-100%, 0%, 0);
-    }
-    &.md-swiperight {
-      transform: translate3d(100%, 0%, 0);
     }
   }
 
   .md-action {
     line-height: 19px;
     margin-left: 24px;
+    margin-right: 0;
     cursor: pointer;
     text-transform: uppercase;
     float: right;
@@ -91,9 +97,14 @@ md-toast {
     min-width: 0;
     border-radius: 0;
     bottom: 0;
-    &.md-top {
-      bottom: auto;
-      top: 0;
+
+    &.ng-leave.ng-leave-active {
+      &.md-swipeup {
+        transform: translate3d(0, -50%, 0);
+      }
+      &.md-swipedown {
+        transform: translate3d(0, 50%, 0);
+      }
     }
   }
 }
@@ -114,23 +125,15 @@ md-toast {
     }
 
     /*
-     * When the toast doesn't take up the whole screen,
-     * make it rotate when the user swipes it away
-     */
+   * When the toast doesn't take up the whole screen,
+   * make it rotate when the user swipes it away
+   */
     &.ng-leave.ng-leave-active {
       &.md-swipeleft {
-        transform: translate3d(-100%, 25%, 0) rotateZ(-15deg);
+        transform: translate3d(-50%, 0, 0);
       }
       &.md-swiperight {
-        transform: translate3d(100%, 25%, 0) rotateZ(15deg);
-      }
-      &.md-top {
-        &.md-swipeleft {
-          transform: translate3d(-100%, 0, 0) rotateZ(-15deg);
-        }
-        &.md-swiperight {
-          transform: translate3d(100%, 0, 0) rotateZ(15deg);
-        }
+        transform: translate3d(50%, 0, 0);
       }
     }
   }
