@@ -117,6 +117,12 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       element.attr('role', 'tooltip');
     }
 
+    function windowScrollHandler (e) {
+      // in case of scroll, remove the fixed positioned tooltip.
+      setVisible(false);
+    };
+
+
     function bindEvents () {
       var mouseActive = false;
 
@@ -129,10 +135,11 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       var elementFocusedOnWindowBlur = false;
 
       ngWindow.on('blur', windowBlurHandler);
-      ngWindow.on('resize', debouncedOnResize);
+      ngWindow.on('scroll', windowScrollHandler);
+
       scope.$on('$destroy', function() {
         ngWindow.off('blur', windowBlurHandler);
-        ngWindow.off('resize', debouncedOnResize);
+        ngWindow.off('scroll', windowScrollHandler);
       });
 
       var enterHandler = function(e) {
@@ -158,7 +165,8 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       parent.on('mousedown', function() { mouseActive = true; });
       parent.on('focus mouseenter touchstart', enterHandler );
 
-
+      // SanderElias: I noted this line, it is leaking bindings see #5688
+      angular.element($window).on('resize', debouncedOnResize);
     }
 
     function setVisible (value) {
@@ -219,14 +227,13 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
     function positionTooltip() {
       var tipRect = $mdUtil.offsetRect(element, tooltipParent);
-      var parentRect = $mdUtil.offsetRect(parent, tooltipParent);
       var newPosition = getPosition(scope.direction);
 
       // If the user provided a direction, just nudge the tooltip onto the screen
       // Otherwise, recalculate based on 'top' since default is 'bottom'
       if (scope.direction) {
         newPosition = fitInParent(newPosition);
-      } else if (newPosition.top > element.prop('offsetParent').scrollHeight - tipRect.height - TOOLTIP_WINDOW_EDGE_SPACE) {
+      } else if (newPosition.top > tooltipParent[0].scrollHeight - tipRect.height - TOOLTIP_WINDOW_EDGE_SPACE) {
         newPosition = fitInParent(getPosition('top'));
       }
 
@@ -244,7 +251,16 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
         return newPosition;
       }
 
+      function getbrc(el) {
+        // small helper function to
+        // convert getBoundingClientRect to a normal object
+        var brc = el.getBoundingClientRect();
+        return {left: brc.left, top: brc.top, width: brc.width, height: brc.height};
+      }
+
       function getPosition (dir) {
+        var parentRect = getbrc(parent[0]);
+
         return dir === 'left'
           ? { left: parentRect.left - tipRect.width - TOOLTIP_WINDOW_EDGE_SPACE,
               top: parentRect.top + parentRect.height / 2 - tipRect.height / 2 }
