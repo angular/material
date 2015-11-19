@@ -283,9 +283,11 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         $scope.searchText = val;
         handleSelectedItemChange(selectedItem, previousSelectedItem);
       });
+    } else {
+      if (!hasFocus) {
+        $scope.searchText = '';
+      }
     }
-
-    if (selectedItem !== previousSelectedItem) announceItemChange();
   }
 
   /**
@@ -346,7 +348,10 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     getDisplayValue($scope.selectedItem).then(function (val) {
       // clear selected item if search text no longer matches it
       if (searchText !== val) {
-        $scope.selectedItem = null;
+        if ($scope.selectedItem) {
+          $scope.selectedItem = null;
+          $mdUtil.nextTick(announceItemChange, false, $scope);
+        }
 
         // trigger change event if available
         if (searchText !== previousSearchText) announceTextChange();
@@ -591,6 +596,10 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * @param index
    */
   function select (index) {
+    var selectedItem = (typeof ctrl.matches[ index ] !== 'undefined') ? ctrl.matches[ index ] : null;
+    var hasChanged = selectedItem !== $scope.selectedItem;
+    $scope.selectedItem = selectedItem;
+
     //-- force form to update state for validation
     $mdUtil.nextTick(function () {
       getDisplayValue(ctrl.matches[ index ]).then(function (val) {
@@ -598,7 +607,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         ngModel.$setViewValue(val);
         ngModel.$render();
       }).finally(function () {
-        $scope.selectedItem = ctrl.matches[ index ];
+        if (hasChanged) {
+          announceItemChange();
+        }
         setLoading(false);
       });
     }, false);
