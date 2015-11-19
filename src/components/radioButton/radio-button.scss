@@ -1,32 +1,38 @@
-$radio-width: 16px !default;
+$radio-width: 20px !default;
 $radio-height: $radio-width !default;
 $radio-text-margin: 10px !default;
-$radio-top-left: -15px !default;
+$radio-top-left: 12px !default;
+$radio-margin: 16px;
 
-md-radio-button,
-.md-switch-thumb { // Used in switch
+md-radio-button {
   box-sizing: border-box;
   display: block;
-  margin: 15px;
+  margin-bottom: $radio-margin;
   white-space: nowrap;
   cursor: pointer;
+  position: relative;
 
   .md-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     box-sizing: border-box;
-    position: relative;
-    top: 4px;
     display: inline-block;
     width: $radio-width;
     height: $radio-width;
     cursor: pointer;
+    @include rtl(left, 0, auto);
+    @include rtl(right, auto, 0);
 
     .md-ripple-container {
       position: absolute;
       display: block;
-      width: $radio-width * 3;
-      height: $radio-width * 3;
-      left: -$radio-width;
-      top: -$radio-width;
+      width: auto;
+      height: auto;
+      left: -15px;
+      top: -15px;
+      right: -15px;
+      bottom: -15px;
     }
 
     &:before {
@@ -84,8 +90,8 @@ md-radio-button,
     position: relative;
     display: inline-block;
 
-    @include rtl(margin-left, $radio-text-margin, 0);
-    @include rtl(margin-right, 0, $radio-text-margin);
+    @include rtl(margin-left, $radio-text-margin + $radio-width, 0);
+    @include rtl(margin-right, 0, $radio-text-margin + $radio-width);
 
     vertical-align: middle;
     white-space: normal;
@@ -98,7 +104,13 @@ md-radio-button,
   }
 
 }
+
 md-radio-group {
+  md-radio-button {
+    &:not(:first-child) {
+      margin-top: $radio-margin;
+    }
+  }
   &:focus {
     outline: none;
   }
