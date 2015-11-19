@@ -53,6 +53,17 @@ angular.module('listDemo2', ['ngMaterial'])
     );
   };
 
+  $scope.doPrimaryAction = function(event) {
+    $mdDialog.show(
+      $mdDialog.alert()
+        .title('Primary Action')
+        .content('Primary actions can be used for one click actions')
+        .ariaLabel('Primary click demo')
+        .ok('Awesome!')
+        .targetEvent(event)
+    );
+  };
+
   $scope.doSecondaryAction = function(event) {
     $mdDialog.show(
       $mdDialog.alert()
