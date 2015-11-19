@@ -492,7 +492,7 @@ describe('<md-autocomplete>', function() {
               md-selected-item="selectedItem"\
               md-search-text="searchText"\
               md-items="item in match(searchText)"\
-              md-selected-item-change="itemChanged(selectedItem)"\
+              md-selected-item-change="itemChanged(item)"\
               md-item-text="item.display"\
               placeholder="placeholder">\
             <span md-highlight-text="searchText">{{item.display}}</span>\
@@ -520,11 +520,12 @@ describe('<md-autocomplete>', function() {
       ctrl.unregisterSelectedItemWatcher(registeredWatcher);
 
       ctrl.clear();
+      $timeout.flush();
       element.scope().$apply();
 
       expect(registeredWatcher.calls.count()).toBe(1);
       expect(scope.itemChanged.calls.count()).toBe(2);
-      expect(scope.itemChanged.calls.mostRecent().args[0]).toBeNull();
+      expect(scope.itemChanged.calls.mostRecent().args[0]).toBeUndefined();
       expect(scope.selectedItem).toBeNull();
 
       element.remove();
