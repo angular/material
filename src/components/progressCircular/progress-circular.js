@@ -135,8 +135,10 @@ function MdProgressCircularDirective($mdTheming, $mdUtil, $log) {
      * Watch the "value" and "md-mode" attributes
      */
     function updateScale() {
+      var diameterRatio = getDiameterRatio();
       circle.css(toVendorCSS({
-        transform : $mdUtil.supplant('scale( {0} )',[getDiameterRatio()])
+        transform : $mdUtil.supplant('scale( {0} )',[diameterRatio]),
+        height: DEFAULT_PROGRESS_SIZE * diameterRatio
       }));
     }
 
