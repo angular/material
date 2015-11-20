@@ -107,7 +107,6 @@ md-select {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    max-width: calc(100% - 2*#{$baseline-grid});
     transform: translate3d(0, 2px, 0);
   }
 
