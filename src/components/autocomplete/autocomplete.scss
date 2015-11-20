@@ -201,6 +201,10 @@ md-autocomplete {
   z-index: $z-index-tooltip;
 }
 
+.md-virtual-repeat-container.md-not-found {
+  height: 48px;
+}
+
 .md-autocomplete-suggestions {
   margin: 0;
   list-style: none;
