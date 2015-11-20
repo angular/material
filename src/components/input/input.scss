@@ -14,8 +14,10 @@ $input-padding-top: 2px !default;
 
 $input-error-font-size: 12px !default;
 $input-error-height: 24px !default;
+$input-error-line-height: $input-error-font-size + 2px;
+$error-padding-top: ($input-error-height - $input-error-line-height) / 2;
 
-$icon-offset : 36px !default;
+$icon-offset: 36px !default;
 
 $icon-float-focused-top: -8px !default;
 
@@ -31,10 +33,19 @@ md-input-container {
     display: block;
   }
 
-  // When we have ng-messages, remove the input error height from our bottom padding, since the
-  // ng-messages wrapper has a min-height of 1 error (so we don't adjust height as often; see below)
-  &.md-input-has-messages {
-    padding-bottom: $input-container-padding;
+  // Setup a spacer that is always there as a placeholder for any messages so we don't change
+  // height with only 1 message
+  .md-errors-spacer {
+    @include rtl(float, right, left);
+    min-height: $input-error-height;
+
+    // Ensure the element always takes up space, even if empty
+    min-width: 1px;
+  }
+
+  // Move the element after the spacer (likely an ng-messages container), on top of the spacer
+  .md-errors-spacer + * {
+    margin-top: -$input-error-height;
   }
 
   > md-icon {
@@ -138,7 +149,7 @@ md-input-container {
   &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-week-field,
   &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-year-field,
   &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-text {
-      color: transparent;
+    color: transparent;
   }
 
   /*
@@ -184,36 +195,30 @@ md-input-container {
   }
 
   .md-char-counter {
-    position: absolute;
-    @include rtl(right, $input-container-padding, auto);
-    @include rtl(left, auto, $input-container-padding);
-    bottom: 7px;
+    @include rtl(text-align, right, left);
+    @include rtl(padding-right, $input-container-padding, 0);
+    @include rtl(padding-left, 0, $input-container-padding);
   }
 
-  &.md-input-invalid {
-    ng-messages, data-ng-messages, x-ng-messages,
-    [ng-messages], [data-ng-messages], [x-ng-messages] {
-      opacity: 1;
-    }
-  }
-
+  //
+  // ngMessage base styles - animations moved to input.js
+  //
   ng-messages, data-ng-messages, x-ng-messages,
   [ng-messages], [data-ng-messages], [x-ng-messages] {
     position: relative;
     order: 4;
-    min-height: $input-error-height;
     overflow: hidden;
-    transition: $swift-ease-out;
-    transition-duration: $swift-ease-out-duration / 1.5;
-    opacity: 0;
+    min-height: $input-error-height;
     @include rtl(clear, left, right);
 
-    .md-char-counter {
-      position: absolute;
-      top: 0;
-      @include rtl(right, 0, auto);
-      @include rtl(left, auto, 0);
-      bottom: auto;
+    &.ng-enter {
+      // Upon entering the DOM, messages should be hidden
+      ng-message, data-ng-message, x-ng-message,
+      [ng-message], [data-ng-message], [x-ng-message],
+      [ng-message-exp], [data-ng-message-exp], [x-ng-message-exp] {
+        opacity: 0;
+        margin-top: -100px;
+      }
     }
   }
 
@@ -221,44 +226,40 @@ md-input-container {
   [ng-message], [data-ng-message], [x-ng-message],
   [ng-message-exp], [data-ng-message-exp], [x-ng-message-exp],
   .md-char-counter {
-    $input-error-line-height: $input-error-font-size + 2px;
-    //-webkit-font-smoothing: antialiased;
     font-size: $input-error-font-size;
     line-height: $input-error-line-height;
     overflow: hidden;
 
+    transition: $swift-ease-in;
+
+    // Default state for messages is to be visible
+    opacity: 1;
+    margin-top: 0;
+
     // Add some top padding which is equal to half the difference between the expected height
     // and the actual height
-    $error-padding-top: ($input-error-height - $input-error-line-height) / 2;
     padding-top: $error-padding-top;
 
     &:not(.md-char-counter) {
-      @include rtl(padding-right, rem(5), 0);
-      @include rtl(padding-left, 0, rem(5));
+      // Add some padding so that the messages don't touch the character counter
+      @include rtl(padding-right, rem(0.5), 0);
+      @include rtl(padding-left, 0, rem(0.5));
     }
+  }
 
-    &.ng-enter {
-      transition: $swift-ease-in;
-
-      // Delay the enter transition so it happens after the leave
-      transition-delay: $swift-ease-in-duration / 1.5;
-
-      // Since we're delaying the transition, we speed up the duration a little bit to compensate
-      transition-duration: $swift-ease-in-duration / 1.5;
-      opacity: 0;
-      margin-top: -$input-error-line-height - $error-padding-top;
-      &.ng-enter-active {
-        opacity: 1;
-        margin-top: 0;
-      }
-    }
-    &.ng-leave {
-      transition: $swift-ease-out;
-      transition-duration: $swift-ease-out-duration / 1.5;
-      &.ng-leave-active {
-        margin-top: -$input-error-line-height - $error-padding-top;
+  &:not(.md-input-invalid) {
+    .md-auto-hide {
+      .md-input-message-animation {
         opacity: 0;
+        margin-top: -100px;
       }
+    }
+  }
+
+  .md-input-message-animation {
+    &.ng-enter, &:not(.ng-animate) {
+      opacity: 0;
+      margin-top: -100px;
     }
   }
 
@@ -266,7 +267,7 @@ md-input-container {
   &.md-input-has-placeholder,
   &.md-input-has-value {
     label:not(.md-no-float) {
-      transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);
+      transform: translate3d(0, $input-label-float-offset, 0) scale($input-label-float-scale);
     }
   }
 
@@ -300,12 +301,11 @@ md-input-container {
 
 md-input-container.md-icon-float {
 
-  transition : margin-top 0.5s $swift-ease-out-timing-function ;
+  transition: margin-top 0.5s $swift-ease-out-timing-function;
 
-
-  > label  {
-      pointer-events:none;
-      position:absolute;
+  > label {
+    pointer-events: none;
+    position: absolute;
   }
 
   > md-icon {
@@ -318,21 +318,20 @@ md-input-container.md-icon-float {
   &.md-input-has-value {
 
     label {
-        transform: translate3d(0,$input-label-float-offset,0) scale($input-label-float-scale);
-        transition: transform $swift-ease-out-timing-function 0.5s;
-      }
+      transform: translate3d(0, $input-label-float-offset, 0) scale($input-label-float-scale);
+      transition: transform $swift-ease-out-timing-function 0.5s;
+    }
   }
 
 }
 
 md-input-container.md-icon-right {
-  input {
-    @include rtl(margin-right, $icon-offset, 0);
-    @include rtl(margin-left, 0, $icon-offset);
+  @include rtl(padding-right, $icon-offset, $icon-offset);
+  @include rtl(padding-left, $icon-offset, $icon-offset);
+
+  .md-errors-spacer {
     + md-icon {
-      top: 26px;
-      margin-right: 0;
-      margin-left: 0;
+      margin: 0;
 
       @include rtl(right, 2px, auto);
       @include rtl(left, auto, 2px);

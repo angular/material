@@ -34,6 +34,15 @@ describe('md-input-container directive', function() {
     return container;
   }
 
+  function compile(template) {
+    var container;
+
+    container = $compile(template)(pageScope);
+
+    pageScope.$apply();
+    return container;
+  }
+
   it('should by default show error on $touched and $invalid', function() {
     var el = setup('ng-model="foo"');
 
@@ -152,6 +161,10 @@ describe('md-input-container directive', function() {
           '</form>')(pageScope);
 
       pageScope.$apply();
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
       expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
       expect(getCharCounter(el).text()).toBe('0/5');
 
@@ -178,6 +191,10 @@ describe('md-input-container directive', function() {
       var element = $compile(template)(pageScope);
       pageScope.$apply();
 
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
       pageScope.item = {numberValue: 456};
       pageScope.$apply();
 
@@ -192,6 +209,10 @@ describe('md-input-container directive', function() {
         '</form>')(pageScope);
 
       pageScope.$apply();
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
       expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
       expect(getCharCounter(el).length).toBe(0);
 
@@ -279,6 +300,54 @@ describe('md-input-container directive', function() {
 
     expect(element.hasClass('md-input-has-value')).toBe(true);
   });
+
+  it('adds the md-auto-hide class to messages without a visiblity directive', inject(function() {
+    var el = compile(
+      '<md-input-container><input ng-model="foo">' +
+      '  <div ng-messages></div>' +
+      '</md-input-container>'
+    );
+
+    expect(el[0].querySelector("[ng-messages]").classList.contains('md-auto-hide')).toBe(true);
+  }));
+
+  it('does not add the md-auto-hide class with md-auto-hide="false" on the messages', inject(function() {
+    var el = compile(
+      '<md-input-container><input ng-model="foo">' +
+      '  <div ng-messages md-auto-hide="false">Test Message</div>' +
+      '</md-input-container>'
+    );
+
+    expect(el[0].querySelector("[ng-messages]").classList.contains('md-auto-hide')).toBe(false);
+  }));
+
+  var visibilityDirectives = ['ng-if', 'ng-show', 'ng-hide'];
+  visibilityDirectives.forEach(function(vdir) {
+    it('does not add the md-auto-hide class with ' + vdir + ' on the messages', inject(function() {
+      var el = compile(
+        '<md-input-container><input ng-model="foo">' +
+        '  <div ng-messages ' + vdir + '="true">Test Message</div>' +
+        '</md-input-container>'
+      );
+
+      expect(el[0].querySelector("[ng-messages]").classList.contains('md-auto-hide')).toBe(false);
+    }));
+  });
+
+  it('does not add the md-auto-hide class with ngSwitch on the messages', inject(function() {
+    pageScope.switchVal = 1;
+
+    var el = compile(
+      '<md-input-container ng-switch="switchVal">' +
+      '  <input ng-model="foo">' +
+      '  <div ng-messages ng-switch-when="1">1</div>' +
+      '  <div ng-messages ng-switch-when="2">2</div>' +
+      '  <div ng-messages ng-switch-default>Other</div>' +
+      '</md-input-container>'
+    );
+
+    expect(el[0].querySelector("[ng-messages]").classList.contains('md-auto-hide')).toBe(false);
+  }));
 
   describe('Textarea auto-sizing', function() {
     var ngElement, element, ngTextarea, textarea, scope, parentElement;
