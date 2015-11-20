@@ -2,6 +2,7 @@
 
   <md-content layout-padding>
     <form name="projectForm">
+
       <md-input-container class="md-block">
         <label>Description</label>
         <input md-maxlength="30" required name="description" ng-model="project.description">
@@ -36,7 +37,7 @@
         <input required type="number" step="any" name="rate" ng-model="project.rate" min="800"
                max="4999" ng-pattern="/^1234$/" md-maxlength="20" />
 
-        <div ng-messages="projectForm.rate.$error" multiple>
+        <div ng-messages="projectForm.rate.$error" multiple md-auto-hide="false">
           <div ng-message="required">
             You've got to charge something! You can't just <b>give away</b> a Missile Defense
             System.
