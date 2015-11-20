@@ -44,6 +44,8 @@ md-tabs {
     }
   }
   &.md-dynamic-height {
+    will-change: height;
+
     md-tabs-content-wrapper {
       min-height: 0;
       position: relative;
@@ -186,7 +188,11 @@ md-tab-content {
   right: 0;
   bottom: 0;
   transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+  will-change: transform;
   overflow: auto;
+  & > * {
+    will-change: visibility;
+  }
   &.md-no-scroll {
     bottom: auto;
     overflow: hidden;
@@ -194,11 +200,14 @@ md-tab-content {
   &.ng-leave, &.md-no-transition {
     transition: none;
   }
+  &.md-left, &.md-right {
+    will-change: opacity;
+  }
   &.md-left {
     transform: translateX(-100%);
     animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
     opacity: 0;
-    * {
+    & > * {
       transition: visibility 0s linear;
       transition-delay: $swift-ease-in-out-duration;
       visibility: hidden;
@@ -208,7 +217,7 @@ md-tab-content {
     transform: translateX(100%);
     animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
     opacity: 0;
-    * {
+    & > * {
       transition: visibility 0s linear;
       transition-delay: $swift-ease-in-out-duration;
       visibility: hidden;
