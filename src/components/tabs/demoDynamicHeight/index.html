@@ -1,6 +1,6 @@
-<div ng-cloak>
-  <md-content>
-    <md-tabs md-dynamic-height md-border-bottom>
+<div ng-controller="AppCtrl" ng-cloak>
+  <md-content class="md-padding">
+    <md-tabs md-dynamic-height md-dynamic-height-animation="{{animate}}" md-border-bottom>
       <md-tab label="one">
         <md-content class="md-padding">
           <h1 class="md-display-2">Tab One</h1>
@@ -22,5 +22,9 @@
         </md-content>
       </md-tab>
     </md-tabs>
+  </md-content>
+
+  <md-content class="md-padding">
+    <md-checkbox ng-model="animate" aria-label="Animate height">Animate height</md-checkbox>
   </md-content>
 </div>
