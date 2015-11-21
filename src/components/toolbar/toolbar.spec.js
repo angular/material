@@ -118,6 +118,110 @@ describe('<md-toolbar>', function() {
     expect(element.find('md-toolbar').length).toBe(0);
   }));
 
+  it('works with ng-show', inject(function($$rAF) {
+    var template =
+      '<div layout="column" style="height: 600px;">' +
+      '  <md-toolbar md-scroll-shrink="true" ng-show="shouldShowToolbar">test</md-toolbar>' +
+      '  <md-content flex><div style="height: 5000px;"></div></md-content>' +
+      '</div>';
+
+    // Build/append the element
+    build(template);
+    document.body.appendChild(element[0]);
+
+    // Flushing to get the actual height of toolbar
+    $$rAF.flush();
+
+    //
+    // Initial tests
+    //
+
+    var toolbarStyles = getComputedStyle(element.find('md-toolbar')[0]);
+    var contentStyles = getComputedStyle(element.find('md-content')[0]);
+
+    // Should start out hidden because we have not set shouldShowToolbar
+    expect(toolbarStyles.display).toBeTruthy();
+    expect(toolbarStyles.display).toEqual('none');
+
+    // Expect the content to have a zero margin top
+    expect(contentStyles.marginTop).toBeTruthy();
+    expect(contentStyles.marginTop).toEqual('0px');
+
+    //
+    // After showing toolbar tests
+    //
+
+    // Show the toolbar and ensure it is visible
+    pageScope.$apply('shouldShowToolbar = true');
+    pageScope.$digest();
+
+    toolbarStyles = getComputedStyle(element.find('md-toolbar')[0]);
+    contentStyles = getComputedStyle(element.find('md-content')[0]);
+
+    // Expect the toolbar to be visible
+    expect(toolbarStyles.display).toBeTruthy();
+    expect(toolbarStyles.display).not.toEqual('none');
+
+    // Expect the content to have a non-zero margin top (because updateToolbarHeight() was called)
+    expect(contentStyles.marginTop).toBeTruthy();
+    expect(contentStyles.marginTop).not.toEqual('0px');
+
+    // Remove the element
+    document.body.removeChild(element[0]);
+  }));
+
+  it('works with ng-hide', inject(function($$rAF) {
+    var template =
+      '<div layout="column" style="height: 600px;">' +
+      '  <md-toolbar md-scroll-shrink="true" ng-hide="shouldNotShowToolbar">test</md-toolbar>' +
+      '  <md-content flex><div style="height: 5000px;"></div></md-content>' +
+      '</div>';
+
+    // Build/append the element
+    build(template);
+    document.body.appendChild(element[0]);
+
+    // Flushing to get the actual height of toolbar
+    $$rAF.flush();
+
+    //
+    // Initial tests
+    //
+
+    var toolbarStyles = getComputedStyle(element.find('md-toolbar')[0]);
+    var contentStyles = getComputedStyle(element.find('md-content')[0]);
+
+    // Should start out visible because we have not set shouldNotShowToolbar
+    expect(toolbarStyles.display).toBeTruthy();
+    expect(toolbarStyles.display).not.toEqual('none');
+
+    // Expect the content to have a non-zero margin top
+    expect(contentStyles.marginTop).toBeTruthy();
+    expect(contentStyles.marginTop).not.toEqual('0px');
+
+    //
+    // After showing toolbar tests
+    //
+
+    // Show the toolbar and ensure it is hidden
+    pageScope.$apply('shouldNotShowToolbar = true');
+    pageScope.$digest();
+
+    toolbarStyles = getComputedStyle(element.find('md-toolbar')[0]);
+    contentStyles = getComputedStyle(element.find('md-content')[0]);
+
+    // Expect the toolbar to be hidden
+    expect(toolbarStyles.display).toBeTruthy();
+    expect(toolbarStyles.display).toEqual('none');
+
+    // Expect the content to have a zero margin top (because updateToolbarHeight() was called)
+    expect(contentStyles.marginTop).toBeTruthy();
+    expect(contentStyles.marginTop).toEqual('0px');
+
+    // Remove the element
+    document.body.removeChild(element[0]);
+  }));
+
   // The toolbar is like a container component, so we want to make sure it works with ng-controller
   it('works with ng-controller', inject(function($exceptionHandler) {
     build(
