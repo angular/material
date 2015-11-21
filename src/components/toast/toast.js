@@ -53,7 +53,7 @@ function MdToastDirective($mdToast) {
   * var app = angular.module('app', ['ngMaterial']);
   * app.controller('MyController', function($scope, $mdToast) {
   *   $scope.openToast = function($event) {
-  *     $mdToast.show($mdToast.simple().content('Hello!'));
+  *     $mdToast.show($mdToast.simple().textContent('Hello!'));
   *     // Could also do $mdToast.showSimple('Hello');
   *   };
   * });
@@ -84,7 +84,7 @@ function MdToastDirective($mdToast) {
   * _**Note:** These configuration methods are provided in addition to the methods provided by
   *   the `build()` and `show()` methods below._
   *
-  * - `.content(string)` - Sets the toast content to the specified string.
+  * - `.textContent(string)` - Sets the toast content to the specified string.
   *
   * - `.action(string)` - Adds an action button. If clicked, the promise (returned from `show()`)
   * will resolve with the value `'ok'`; otherwise, it is resolved with `true` after a `hideDelay`
@@ -102,7 +102,7 @@ function MdToastDirective($mdToast) {
 
 /**
   * @ngdoc method
-  * @name $mdToast#updateContent
+  * @name $mdToast#updateTextContent
   *
   * @description
   * Updates the content of an existing toast. Useful for updating things like counts, etc.
@@ -206,8 +206,8 @@ function MdToastProvider($$interimElementProvider) {
       options: toastDefaultOptions
     })
     .addPreset('simple', {
-      argOption: 'content',
-      methods: ['content', 'action', 'highlightAction', 'theme', 'parent'],
+      argOption: 'textContent',
+      methods: ['textContent', 'content', 'action', 'highlightAction', 'theme', 'parent'],
       options: /* @ngInject */ function($mdToast, $mdTheming) {
         var opts = {
           template: [
@@ -234,9 +234,12 @@ function MdToastProvider($$interimElementProvider) {
         return opts;
       }
     })
-    .addMethod('updateContent', function(newContent) {
+    .addMethod('updateTextContent', updateTextContent)
+    .addMethod('updateContent', updateTextContent);
+
+    function updateTextContent(newContent) {
       activeToastContent = newContent;
-    });
+    }
 
     return $mdToast;
 
@@ -252,7 +255,7 @@ function MdToastProvider($$interimElementProvider) {
     };
 
     function onShow(scope, element, options) {
-      activeToastContent = options.content;
+      activeToastContent = options.textContent || options.content; // support deprecated #content method
 
       element = $mdUtil.extractElementByName(element, 'md-toast', true);
       options.onSwipe = function(ev, gesture) {

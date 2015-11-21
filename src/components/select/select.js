@@ -5,14 +5,6 @@
 
 /***************************************************
 
- ### TODO ###
- **DOCUMENTATION AND DEMOS**
-
- - [ ] ng-model with child mdOptions (basic)
- - [ ] ng-model="foo" ng-model-options="{ trackBy: '$value.id' }" for objects
- - [ ] mdOption with value
- - [ ] Usage with input inside
-
  ### TODO - POST RC1 ###
  - [ ] Abstract placement logic in $mdSelect service to $mdMenu service
 
@@ -257,7 +249,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         var tmpPlaceholder = attr.placeholder || (containerCtrl && containerCtrl.label ? containerCtrl.label.text() : '');
         text = text || tmpPlaceholder || '';
         var target = valueEl.children().eq(0);
-        target.text(text);
+        target.html(text);
       };
 
       mdSelectCtrl.setIsPlaceholder = function(isPlaceholder) {
@@ -305,6 +297,8 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         }
         $mdAria.expect(element, 'aria-label', labelText);
       }
+
+      scope.$watch(selectMenuCtrl.selectedLabels, syncLabelText);
 
       function syncLabelText() {
         if (selectContainer) {
@@ -636,7 +630,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
       var selectedOptionEls = $mdUtil.nodesToArray($element[0].querySelectorAll('md-option[selected]'));
       if (selectedOptionEls.length) {
         return selectedOptionEls.map(function(el) {
-          return el.textContent;
+          return el.innerHTML;
         }).join(', ');
       } else {
         return '';
@@ -1317,6 +1311,8 @@ function SelectProvider($$interimElementProvider) {
 
       if (contentNode.offsetWidth > maxWidth) {
         contentNode.style['max-width'] = maxWidth + 'px';
+      } else {
+        contentNode.style.maxWidth = null;
       }
       if (shouldOpenAroundTarget) {
         contentNode.style['min-width'] = targetRect.width + 'px';
@@ -1379,7 +1375,7 @@ function SelectProvider($$interimElementProvider) {
         transformOrigin = (centeredRect.left + targetRect.width / 2) + 'px ' +
           (centeredRect.top + centeredRect.height / 2 - contentNode.scrollTop) + 'px 0px';
 
-        minWidth = targetRect.width + centeredRect.paddingLeft + centeredRect.paddingRight;
+        minWidth = Math.min(targetRect.width + centeredRect.paddingLeft + centeredRect.paddingRight, maxWidth);
       }
 
       // Keep left and top within the window

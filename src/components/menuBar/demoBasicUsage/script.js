@@ -35,7 +35,7 @@ angular
     this.sampleAction = function(name, ev) {
       $mdDialog.show($mdDialog.alert()
         .title(name)
-        .content('You triggered the "' + name + '" action')
+        .textContent('You triggered the "' + name + '" action')
         .ok('Great')
         .targetEvent(ev)
       );

@@ -17,6 +17,7 @@ md-progress-circular {
   margin-bottom: 0 !important;
 
   transform: scale(0.5);
+  z-index: $z-index-progress-circular; // Used to fix a Chrome bug with spinner animation
 
   .md-spinner-wrapper {
     display:block;
