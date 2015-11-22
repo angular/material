@@ -277,6 +277,8 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     function minMaxValidator(value) {
       if (angular.isNumber(value)) {
         return Math.max(min, Math.min(max, value));
+      } else if (angular.isString(value) && !isNaN(value)) {
+        return minMaxValidator(parseInt(value));
       }
     }
     function stepValidator(value) {
@@ -284,6 +286,8 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
         var formattedValue = (Math.round((value - min) / step) * step + min);
         // Format to 3 digits after the decimal point - fixes #2015.
         return (Math.round(formattedValue * 1000) / 1000);
+      } else if (angular.isString(value) && !isNaN(value)) {
+        return stepValidator(parseInt(value));
       }
     }
 
