@@ -286,6 +286,9 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
       parent[isOpen ? 'on' : 'off']('keydown', onKeyDown);
       backdrop[isOpen ? 'on' : 'off']('click', close);
 
+      // Scroll the parent element to top, to prevent animate delay
+      parent[0].scrollTop = 0;
+
       if ( isOpen ) {
         // Capture upon opening..
         triggeringElement = $document[0].activeElement;
