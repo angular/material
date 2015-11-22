@@ -141,7 +141,7 @@ a.md-button.md-THEME_NAME-theme,
   &.md-fab[disabled],
   &.md-accent[disabled],
   &.md-warn[disabled] {
-    color: '{{foreground-3}}' !important;
+    color: '{{foreground-3}}';
     cursor: default;
 
     md-icon {
