@@ -300,6 +300,9 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  *     module to be loaded. HTML is not run through Angular's compiler.
  * - $mdDialogPreset#ok(string) - Sets the alert "Okay" button text.
  * - $mdDialogPreset#theme(string) - Sets the theme of the alert dialog.
+ * - $mdDialogPreset#targetEvent(DOMClickEvent=) - A click's event object. When passed in as an option,
+ *     the location of the click will be used as the starting point for the opening animation
+ *     of the the dialog.
  *
  */
 
@@ -322,6 +325,9 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  * - $mdDialogPreset#ok(string) - Sets the confirm "Okay" button text.
  * - $mdDialogPreset#cancel(string) - Sets the confirm "Cancel" button text.
  * - $mdDialogPreset#theme(string) - Sets the theme of the confirm dialog.
+ * - $mdDialogPreset#targetEvent(DOMClickEvent=) - A click's event object. When passed in as an option,
+ *     the location of the click will be used as the starting point for the opening animation
+ *     of the the dialog.
  *
  */
 
