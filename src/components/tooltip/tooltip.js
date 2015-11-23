@@ -95,7 +95,6 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       scope.$on('$destroy', function() {
         scope.visible = false;
         element.remove();
-        angular.element($window).off('resize', debouncedOnResize);
       });
 
       scope.$watch('visible', function (isVisible) {
