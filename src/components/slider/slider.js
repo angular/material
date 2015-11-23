@@ -44,7 +44,7 @@
  * @param {number=} step The distance between values the user is allowed to pick. Default 1.
  * @param {number=} min The minimum value the user is allowed to pick. Default 0.
  * @param {number=} max The maximum value the user is allowed to pick. Default 100.
- * @param {boolean=} md-disable-ticks Whether to enable ticks (only used in discrete mode).
+ * @param {boolean=} md-disable-ticks Whether to disable ticks (only used in discrete mode).
  */
 function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdTheming, $mdGesture, $parse, $log) {
   return {
