@@ -70,7 +70,9 @@ describe('mdProgressCircular', function() {
 
   it('should set scaling using percentage values',function() {
     var progress = buildIndicator('<md-progress-circular md-diameter="25%"></md-progress-circular>');
-    expect( getScale(progress) ).toBe(0.25);
+    expect( getScale(progress[0].children[0]) ).toBe(0.25);
+    expect(progress.css('width')).toBe('25px');
+    expect(progress.css('height')).toBe('25px');
   });
 
   it('should set scaling using pixel values', function() {
@@ -79,7 +81,7 @@ describe('mdProgressCircular', function() {
     var progress = buildIndicator('<md-progress-circular md-diameter="37px"></md-progress-circular>');
     var value = Math.round( (37 / DEFAULT_SIZE) * 100 )/100;
 
-    expect( getScale(progress) ).toBe(value);
+    expect( getScale(progress[0].children[0]) ).toBe(value);
   });
 
   /**

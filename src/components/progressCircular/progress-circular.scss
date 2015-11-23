@@ -16,13 +16,14 @@ md-progress-circular {
   padding-top: 0 !important;
   margin-bottom: 0 !important;
 
-  transform: scale(0.5);
   z-index: $z-index-progress-circular; // Used to fix a Chrome bug with spinner animation
 
   .md-spinner-wrapper {
     display:block;
-    position: relative;
+    position: absolute;
     overflow: hidden;
+    top: 50%;
+    left: 50%;
 
     .md-inner {
        width: $progress-circular-size;
@@ -74,7 +75,7 @@ md-progress-circular {
   }
 
 
-  .md-spinner-wrapper.md-mode-indeterminate  {
+  .md-mode-indeterminate .md-spinner-wrapper {
     animation: outer-rotate $progress-circular-outer-duration linear infinite;
     .md-inner {
       animation: sporadic-rotate $progress-circular-sporadic-duration $progress-circular-ease-in-out infinite;
@@ -141,24 +142,25 @@ md-progress-circular {
 // Keyframe animation for the Indeterminate Progress
 //
 @keyframes outer-rotate {
- 100%     { transform: rotate(360deg); }
+  0%       { transform: rotate(0deg) scale(0.5); }
+  100%     { transform: rotate(360deg) scale(0.5); }
 }
 @keyframes left-wobble {
- 0%, 100% { transform: rotate(130deg); }
- 50%      { transform: rotate( -5deg); }
+  0%, 100% { transform: rotate(130deg); }
+  50%      { transform: rotate( -5deg); }
 }
 @keyframes right-wobble {
- 0%, 100% { transform: rotate(-130deg); }
- 50%      { transform: rotate(   5deg); }
+  0%, 100% { transform: rotate(-130deg); }
+  50%      { transform: rotate(   5deg); }
 }
 @keyframes sporadic-rotate {
- 12.5%    { transform: rotate( 135deg); }
- 25%      { transform: rotate( 270deg); }
- 37.5%    { transform: rotate( 405deg); }
- 50%      { transform: rotate( 540deg); }
- 62.5%    { transform: rotate( 675deg); }
- 75%      { transform: rotate( 810deg); }
- 87.5%    { transform: rotate( 945deg); }
- 100%     { transform: rotate(1080deg); }
+  12.5%    { transform: rotate( 135deg); }
+  25%      { transform: rotate( 270deg); }
+  37.5%    { transform: rotate( 405deg); }
+  50%      { transform: rotate( 540deg); }
+  62.5%    { transform: rotate( 675deg); }
+  75%      { transform: rotate( 810deg); }
+  87.5%    { transform: rotate( 945deg); }
+  100%     { transform: rotate(1080deg); }
 }
 
