@@ -103,11 +103,10 @@ md-select {
   flex-grow: 1;
 
   *:first-child {
-    flex: 1;
+    flex: 1 0 auto;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    max-width: calc(100% - 2*#{$baseline-grid});
     transform: translate3d(0, 2px, 0);
   }
 

@@ -207,6 +207,11 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
             name: 'Multiple Themes',
             url: 'Theming/04_multiple_themes',
             type: 'link'
+          },
+          {
+            name: 'Under the Hood',
+            url: 'Theming/05_under_the_hood',
+            type: 'link'
           }
         ]
       }
