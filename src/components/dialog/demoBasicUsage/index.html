@@ -18,7 +18,9 @@
       Tab Dialog
     </md-button>
   </div>
-
+  <div hide-gt-sm layout="row" layout-align="center center">
+    <md-checkbox ng-model="customFullscreen" aria-label="Fullscreen Custom Dialog">Custom Dialog Fullscreen</md-checkbox>
+  </div>
   <p class="footer">Note: The <b>Confirm</b> dialog does not use <code>$mdDialog.clickOutsideToClose(true)</code>.</p>
 
   <div ng-if="status">
