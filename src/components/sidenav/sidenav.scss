@@ -1,4 +1,5 @@
-$sidenav-default-width: 304px !default;
+$sidenav-mobile-width: 320px !default;
+$sidenav-desktop-width: 400px !default;
 $sidenav-min-space: 56px !default;
 
 md-sidenav {
@@ -7,9 +8,8 @@ md-sidenav {
   flex-direction: column;
   z-index: $z-index-sidenav;
 
-  width: $sidenav-default-width;
-  min-width: $sidenav-default-width;
-  max-width: $sidenav-default-width;
+  width: $sidenav-mobile-width;
+  max-width: $sidenav-mobile-width;
   bottom: 0;
   overflow: auto;
 
@@ -37,11 +37,6 @@ md-sidenav {
     display: flex;
     transform: translate3d(0, 0, 0);
   }
-  &.md-locked-open {
-    width: $sidenav-default-width;
-    min-width: $sidenav-default-width;
-    max-width: $sidenav-default-width;
-  }
 
   &.md-locked-open,
   &.md-locked-open.md-closed,
@@ -68,8 +63,8 @@ md-sidenav {
   &.md-closed.md-locked-open-add-active {
     transition: width $swift-ease-in-duration $swift-ease-in-timing-function,
                 min-width $swift-ease-in-duration $swift-ease-in-timing-function;
-    width: $sidenav-default-width;
-    min-width: $sidenav-default-width;
+    width: $sidenav-mobile-width;
+    min-width: $sidenav-mobile-width;
     transform: translate3d(0%, 0, 0);
   }
 
@@ -97,9 +92,17 @@ md-sidenav {
   }
 }
 
-@media (max-width: $sidenav-default-width + $sidenav-min-space) {
+@media screen and (min-width: $layout-breakpoint-sm) {
   md-sidenav {
-    width: 85%;
+    max-width: $sidenav-desktop-width;
+  }
+}
+
+@media screen and (max-width: $sidenav-desktop-width + $sidenav-min-space) {
+  md-sidenav {
+    width: calc(100% - #{$sidenav-min-space});
+    min-width: calc(100% - #{$sidenav-min-space});
+    max-width: calc(100% - #{$sidenav-min-space});
   }
 }
 
