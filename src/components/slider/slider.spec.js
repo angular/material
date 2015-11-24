@@ -285,4 +285,14 @@ describe('md-slider', function() {
 
   });
 
+  it('should set a default tabindex', function() {
+    var slider = setup();
+    expect(slider.attr('tabindex')).toBe('0');
+  });
+
+  it('should not overwrite tabindex attribute', function() {
+    var slider = setup('tabindex="2"');
+    expect(slider.attr('tabindex')).toBe('2');
+  });
+
 });
