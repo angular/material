@@ -74,10 +74,8 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
   // **********************************************************
 
   function compile (tElement, tAttrs) {
-    tElement.attr({
-      tabIndex: 0,
-      role: 'slider'
-    });
+    if (!tAttrs.tabindex) tElement.attr('tabindex', 0);
+    tElement.attr('role', 'slider');
 
     $mdAria.expect(tElement, 'aria-label');
 
