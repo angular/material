@@ -253,6 +253,8 @@ VirtualRepeatContainerController.prototype.autoShrink_ = function(size) {
       this.setSize_(this.originalSize);
       this.originalSize = null;
     }
+
+    this.repeater.containerUpdated();
   }
 };
 
