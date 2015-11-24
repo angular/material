@@ -6,6 +6,12 @@
  */
 var nextUniqueId = 0;
 
+/**
+ * @ngdoc module
+ * @name material.core.util
+ * @description
+ * Util
+ */
 angular
   .module('material.core')
   .factory('$mdUtil', UtilFactory);
@@ -89,13 +95,19 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     },
 
     /**
-     * `findFocusTarget()` provides an optional way to identify the focused element when a dialog, bottomsheet, sideNav
+     * @ngdoc directive
+     * @name mdAutofocus
+     * @module material.core.util
+     *
+
+     *
+     * @description
+     * `$mdUtil.findFocusTarget()` provides an optional way to identify the focused element when a dialog, bottomsheet, sideNav
      * or other element opens. This is optional attribute finds a nested element with the mdAutoFocus attribute and optional
      * expression. An expression may be specified as the directive value; to enable conditional activation of the autoFocus.
      *
-     * NOTE: It is up to the component logic to use the '$mdUtil.findFocusTarget()'
-     *
      * @usage
+     * ### Dialog
      * <hljs lang="html">
      * <md-dialog>
      *   <form>
@@ -107,7 +119,8 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * </md-dialog>
      * </hljs>
      *
-     *<hljs lang="html">
+     * ### Bottomsheet
+     * <hljs lang="html">
      * <md-bottom-sheet class="md-list md-has-header">
      *  <md-subheader>Comment Actions</md-subheader>
      *  <md-list>
@@ -121,7 +134,47 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      *    </md-list-item>
      *  </md-list>
      * </md-bottom-sheet>
-     *</hljs>
+     * </hljs>
+     *
+     * ### Autocomplete
+     * <hljs lang="html">
+     *   <md-autocomplete
+     *       md-autofocus
+     *       md-selected-item="selectedItem"
+     *       md-search-text="searchText"
+     *       md-items="item in getMatches(searchText)"
+     *       md-item-text="item.display">
+     *     <span md-highlight-text="searchText">{{item.display}}</span>
+     *   </md-autocomplete>
+     * </hljs>
+     *
+     * ### Sidenav
+     * <hljs lang="html">
+     * <div layout="row" ng-controller="MyController">
+     *   <md-sidenav md-component-id="left" class="md-sidenav-left">
+     *     Left Nav!
+     *   </md-sidenav>
+     *
+     *   <md-content>
+     *     Center Content
+     *     <md-button ng-click="openLeftMenu()">
+     *       Open Left Menu
+     *     </md-button>
+     *   </md-content>
+     *
+     *   <md-sidenav md-component-id="right"
+     *     md-is-locked-open="$mdMedia('min-width: 333px')"
+     *     class="md-sidenav-right">
+     *     <form>
+     *       <md-input-container>
+     *         <label for="testInput">Test input</label>
+     *         <input id="testInput" type="text"
+     *                ng-model="data" md-autofocus>
+     *       </md-input-container>
+     *     </form>
+     *   </md-sidenav>
+     * </div>
+     * </hljs>
      **/
     findFocusTarget: function(containerEl, attributeVal) {
       var AUTO_FOCUS = '[md-autofocus]';
