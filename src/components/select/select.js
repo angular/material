@@ -39,6 +39,7 @@ angular.module('material.components.select', [
  * explicit label is present.
  * @param {string=} md-container-class Class list to get applied to the `.md-select-menu-container`
  * element (for custom styling).
+ * @param {boolean=} md-open-around Whether the select menu should open under the label
  *
  * @usage
  * With a placeholder (label and aria-label are added dynamically)
@@ -1263,13 +1264,14 @@ function SelectProvider($$interimElementProvider) {
     function calculateMenuPositions(scope, element, opts) {
       var optionNodes,
         containerNode = element[0],
-        targetNode = opts.target[0].firstElementChild, // target the label
+        targetNode = opts.target[0],
+        labelNode = targetNode.firstElementChild,
         parentNode = opts.parent[0],
         selectNode = opts.selectEl[0],
         contentNode = opts.contentEl[0],
         parentRect = parentNode.getBoundingClientRect(),
-        targetRect = targetNode.getBoundingClientRect(),
-        shouldOpenAroundTarget = false,
+        targetRect = labelNode.getBoundingClientRect(),
+        shouldOpenAroundTarget = targetNode.hasAttribute('md-open-around'),
         bounds = {
           left: parentRect.left + SELECT_EDGE_MARGIN,
           top: SELECT_EDGE_MARGIN,
