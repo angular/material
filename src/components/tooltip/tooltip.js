@@ -128,18 +128,22 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
       var ngWindow = angular.element($window);
 
+      // add an mutationObserver when there is support for it
+      // and the need for it in the form of viable host(parent[0])
       if (parent[0] && 'MutationObserver' in $window) {
         // use an mutationObserver to tackle #2602
-        var observer = new MutationObserver(function(mutations) {
+        var attributeObserver = new MutationObserver(function(mutations) {
           mutations
-            .filter(function (m) { return m.attributeName === 'disabled'; })
-            .map(function (m) { if (parent[0].disabled) { setVisible(false); } });
+            .forEach(function (mutation) {
+              if (mutation.attributeName === 'disabled' && parent[0].disabled) {
+                setVisible(false);
+                scope.$digest(); // make sure the elements gets updated
+              }
+            });
         });
 
-        observer.observe(parent[0], { attributes: true});
+        attributeObserver.observe(parent[0], { attributes: true});
       };
-
-      //------------------------------------------
 
       // Store whether the element was focused when the window loses focus.
       var windowBlurHandler = function() {
@@ -153,8 +157,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       scope.$on('$destroy', function() {
         ngWindow.off('blur', windowBlurHandler);
         ngWindow.off('scroll', windowScrollHandler);
-        // remove the observer if its there
-        observer && observer.disconnect();
+        attributeObserver && attributeObserver.disconnect();
       });
 
       var enterHandler = function(e) {
