@@ -187,7 +187,7 @@ describe('layout directives', function() {
       var markup = $mdUtil.supplant('<div {0}>Layout</div>', [attrName]);
       var element = $compile(markup)(pageScope);
 
-      expect(element.hasClass(attrName + "-stretch-stretch")).toBeTruthy();
+      expect(element.hasClass(attrName + "-start-stretch")).toBeTruthy();
       expect(element.hasClass(attrName)).toBeFalsy();
     });
 
@@ -195,7 +195,7 @@ describe('layout directives', function() {
       var markup = $mdUtil.supplant('<div {0}="humpty">Layout</div>', [attrName]);
       var element = $compile(markup)(pageScope);
 
-      expect(element.hasClass(attrName + "-stretch-stretch")).toBeTruthy();
+      expect(element.hasClass(attrName + "-start-stretch")).toBeTruthy();
       expect(element.hasClass(attrName + '-humpty')).toBeFalsy();
     });
 

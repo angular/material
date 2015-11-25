@@ -429,7 +429,7 @@
 
   function extractAlignAxis(value) {
     var axis = {
-      main : "stretch",
+      main : "start",
       cross: "stretch"
     };
 
@@ -441,7 +441,7 @@
     if ( values.length > 0 ) axis.main  = values[0] || axis.main;
     if ( values.length > 1 ) axis.cross = values[1] || axis.cross;
 
-    if ( ALIGNMENT_MAIN_AXIS.indexOf(axis.main) < 0 )   axis.main = "stretch";
+    if ( ALIGNMENT_MAIN_AXIS.indexOf(axis.main) < 0 )   axis.main = "start";
     if ( ALIGNMENT_CROSS_AXIS.indexOf(axis.cross) < 0 ) axis.cross = "stretch";
 
     return axis;
