@@ -502,8 +502,6 @@
     if (!this.isCalendarOpen && !this.isDisabled) {
       this.isCalendarOpen = true;
       this.calendarPaneOpenedFrom = event.target;
-      this.attachCalendarPane();
-      this.focusCalendar();
 
       // Because the calendar pane is attached directly to the body, it is possible that the
       // rest of the component (input, etc) is in a different scrolling container, such as
@@ -512,11 +510,14 @@
       // also matches the native behavior for things like `<select>` on Mac and Windows.
       this.$mdUtil.disableScrollAround(this.calendarPane);
 
+      this.attachCalendarPane();
+      this.focusCalendar();
+
       // Attach click listener inside of a timeout because, if this open call was triggered by a
       // click, we don't want it to be immediately propogated up to the body and handled.
       var self = this;
       this.$mdUtil.nextTick(function() {
-        document.body.addEventListener('click', self.bodyClickHandler);
+        document.documentElement.addEventListener('click', self.bodyClickHandler);
       }, false);
 
       window.addEventListener('resize', this.windowResizeHandler);
@@ -532,7 +533,7 @@
       this.calendarPaneOpenedFrom = null;
       this.$mdUtil.enableScrolling();
 
-      document.body.removeEventListener('click', this.bodyClickHandler);
+      document.documentElement.removeEventListener('click', this.bodyClickHandler);
       window.removeEventListener('resize', this.windowResizeHandler);
     }
   };
