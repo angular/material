@@ -2,6 +2,7 @@ $switch-width: 36px !default;
 $switch-height: $baseline-grid * 3 !default;
 $switch-bar-height: 14px !default;
 $switch-thumb-size: 20px !default;
+$switch-margin: 16px !default;
 
 .md-inline-form {
   md-switch {
@@ -11,17 +12,22 @@ $switch-thumb-size: 20px !default;
 }
 
 md-switch {
-  display: inline-block;
-  margin: 16px 0;
+  margin: $switch-margin 0;
   white-space: nowrap;
   cursor: pointer;
   outline: none;
   user-select: none;
   height: 30px;
   line-height: 28px;
+  align-items: center;
+  display: flex;
 
-  &.md-block {
-    display: block;
+  @include rtl(margin-left, inherit, $switch-margin);
+  @include rtl(margin-right, $switch-margin, inherit);
+
+  &:last-of-type {
+    @include rtl(margin-left, inherit, 0);
+    @include rtl(margin-right, 0, inherit);
   }
 
   .md-container {
@@ -31,7 +37,6 @@ md-switch {
     position: relative;
     user-select: none;
     margin-right: 8px;
-    margin-top: (30 - $switch-height) / 2;
     float: left;
   }
 

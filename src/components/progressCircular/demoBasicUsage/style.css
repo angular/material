@@ -18,11 +18,12 @@ md-progress-circular {
 }
 
 #loaders > h5 {
-    padding-top: 8px;
+  margin-top: 0;
 }
 
 #loaders > p {
-    margin-right: 20px;
+  margin-right: 20px;
+  margin-bottom: 24px;
 }
 
 

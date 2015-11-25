@@ -18,12 +18,12 @@ md-progress-linear {
 }
 
 #loaders > h5 {
-  padding-top: 4px;
+  margin-top: 0;
 }
 
 #loaders > p {
   margin-right: 20px;
-  font-size: 0.90em;
+  margin-bottom: 24px;
 }
 
 p.small {
