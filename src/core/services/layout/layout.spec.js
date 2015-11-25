@@ -176,18 +176,18 @@ describe('layout directives', function() {
   describe('using [layout-align] attributes', function() {
     var attrName = "layout-align";
     var alignmentValues = [
-      "center", "center center", "center start", "center end",
-      "end", "end center", "end start", "end end",
-      "space-around", "space-around center", "space-around start", "space-around end",
-      "space-between", "space-between center", "space-between start", "space-between end",
-      "start center", "start start", "start end"
+      "start start", "start center", "start end",
+      "center stretch", "center start", "center center", "center end",
+      "end stretch", "end center", "end start", "end end",
+      "space-around stretch", "space-around start", "space-around center", "space-around end",
+      "space-between stretch", "space-between start", "space-between center", "space-between end"
     ];
 
     it('should support attribute without value "<div layout-align>"', function() {
       var markup = $mdUtil.supplant('<div {0}>Layout</div>', [attrName]);
       var element = $compile(markup)(pageScope);
 
-      expect(element.hasClass(attrName + "-start-start")).toBeTruthy();
+      expect(element.hasClass(attrName + "-stretch-stretch")).toBeTruthy();
       expect(element.hasClass(attrName)).toBeFalsy();
     });
 
@@ -195,7 +195,7 @@ describe('layout directives', function() {
       var markup = $mdUtil.supplant('<div {0}="humpty">Layout</div>', [attrName]);
       var element = $compile(markup)(pageScope);
 
-      expect(element.hasClass(attrName + "-start-start")).toBeTruthy();
+      expect(element.hasClass(attrName + "-stretch-stretch")).toBeTruthy();
       expect(element.hasClass(attrName + '-humpty')).toBeFalsy();
     });
 
@@ -278,7 +278,9 @@ describe('layout directives', function() {
       var markup = $mdUtil.supplant('<div {0}="{1}">Layout</div>', [className, value]);
 
       var element = $compile(markup)(pageScope);
-      expect(element.hasClass(expected)).toBeTruthy();
+      if ( !element.hasClass(expected) ) {
+        expect(expected).toBe(element[0].classList[1]);
+      }
 
       if (raw) {
         // Is the raw value also present?

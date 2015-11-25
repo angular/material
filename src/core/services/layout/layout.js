@@ -368,14 +368,8 @@
           break;
 
         case 'layout-align'  :
-          var axis = value.split(" ");
-          var main = axis.length ? axis[0] : "stretch";
-          var cross = axis.length > 1 ? axis[1] : "stretch";
-
-          if ( ALIGNMENT_MAIN_AXIS.indexOf(main) < 0 ) main = "stretch";
-          if ( ALIGNMENT_CROSS_AXIS.indexOf(cross) < 0 ) cross = "stretch";
-
-          value = main + " " + cross;
+          var axis = extractAlignAxis(value);
+          value = $mdUtil.supplant("{main}-{cross}",axis);
           break;
 
         case 'layout-padding' :
@@ -431,6 +425,26 @@
       });
     }
     return found;
+  }
+
+  function extractAlignAxis(value) {
+    var axis = {
+      main : "stretch",
+      cross: "stretch"
+    };
+
+    var values = (value || "").replace(WHITESPACE, "-").split("-");
+    if ( values.length == 3 ) {
+      values = [ values[0]+"-"+values[1],values[2] ];
+    }
+
+    if ( values.length > 0 ) axis.main  = values[0] || axis.main;
+    if ( values.length > 1 ) axis.cross = values[1] || axis.cross;
+
+    if ( ALIGNMENT_MAIN_AXIS.indexOf(axis.main) < 0 )   axis.main = "stretch";
+    if ( ALIGNMENT_CROSS_AXIS.indexOf(axis.cross) < 0 ) axis.cross = "stretch";
+
+    return axis;
   }
 
 })();
