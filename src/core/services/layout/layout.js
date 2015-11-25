@@ -8,13 +8,8 @@
 
   var FLEX_OPTIONS = ['grow', 'initial', 'auto', 'none'];
   var LAYOUT_OPTIONS = ['row', 'column'];
-  var ALIGNMENT_OPTIONS = [
-        "start start", "start center", "start end",
-        "center", "center center", "center start", "center end",
-        "end", "end center", "end start", "end end",
-        "space-around", "space-around center", "space-around start", "space-around end",
-        "space-between", "space-between center", "space-between start", "space-between end"
-      ];
+  var ALIGNMENT_MAIN_AXIS= [ "", "start", "center", "end", "stretch", "space-around", "space-between" ];
+  var ALIGNMENT_CROSS_AXIS= [ "", "start", "center", "end", "stretch" ];
 
 
   var config = {
@@ -373,9 +368,14 @@
           break;
 
         case 'layout-align'  :
-          if (!findIn(value, ALIGNMENT_OPTIONS, "-")) {
-            value = ALIGNMENT_OPTIONS[0];   // 'start-start';
-          }
+          var axis = value.split(" ");
+          var main = axis.length ? axis[0] : "stretch";
+          var cross = axis.length > 1 ? axis[1] : "stretch";
+
+          if ( ALIGNMENT_MAIN_AXIS.indexOf(main) < 0 ) main = "stretch";
+          if ( ALIGNMENT_CROSS_AXIS.indexOf(cross) < 0 ) cross = "stretch";
+
+          value = main + " " + cross;
           break;
 
         case 'layout-padding' :

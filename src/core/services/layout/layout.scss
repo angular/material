@@ -181,10 +181,27 @@
     $name: 'layout-align-#{$suffix}';
   }
 
+  .#{$name},
+  .#{$name}-stretch-stretch // defaults
+  {
+    justify-content : stretch;
+    align-content : stretch;
+    align-items: stretch;
+  }
+
+  // Main Axis Center
+  .#{$name}-start,
+  .#{$name}-start-start,
+  .#{$name}-start-center,
+  .#{$name}-start-end
+  {
+    justify-content: start;
+  }
+
   // Main Axis Center
   .#{$name}-center,           //stretch
-  .#{$name}-center-center,
   .#{$name}-center-start,
+  .#{$name}-center-center,
   .#{$name}-center-end
   {
     justify-content: center;
@@ -192,11 +209,20 @@
 
   // Main Axis End
   .#{$name}-end, //stretch
-  .#{$name}-end-center,
   .#{$name}-end-start,
+  .#{$name}-end-center,
   .#{$name}-end-end
   {
     justify-content: flex-end;
+  }
+
+  // Main Axis Center
+  .#{$name}-stretch,
+  .#{$name}-stretch-center,
+  .#{$name}-stretch-start,
+  .#{$name}-stretch-end
+  {
+    justify-content: stretch;
   }
 
   // Main Axis Space Around
@@ -231,6 +257,7 @@
   .#{$name}-space-around-start
   {
     align-items: flex-start;
+    align-content: flex-start;
   }
 
   // Cross Axis Center
@@ -241,6 +268,7 @@
   .#{$name}-space-around-center
   {
     align-items: center;
+    align-content: center;
     max-width: 100%;
   }
 
@@ -263,6 +291,18 @@
   .#{$name}-space-around-end
   {
     align-items: flex-end;
+    align-content: flex-end;
+  }
+
+  // Cross Axis Start
+  .#{$name}-center-stretch,
+  .#{$name}-start-stretch,
+  .#{$name}-end-stretch,
+  .#{$name}-space-between-stretch,
+  .#{$name}-space-around-stretch
+  {
+    align-items: stretch;
+    align-content: stretch;
   }
 }
 
