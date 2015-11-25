@@ -111,6 +111,20 @@ md-radio-group {
       margin-top: $radio-margin;
     }
   }
+
+  &.layout-row {
+    md-radio-button {
+      margin-top: 0;
+      margin-bottom: 0;
+      @include rtl(margin-left, inherit, $checkbox-margin);
+      @include rtl(margin-right, $checkbox-margin, inherit);
+
+      &:last-of-type {
+        @include rtl(margin-left, inherit, 0);
+        @include rtl(margin-right, 0, inherit);
+      }
+    }
+  }
   &:focus {
     outline: none;
   }

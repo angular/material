@@ -1,25 +1,25 @@
 <div class="inset" ng-controller="SwitchDemoCtrl" ng-cloak>
-  <md-switch ng-model="data.cb1" aria-label="Switch 1" class="md-block">
+  <md-switch ng-model="data.cb1" aria-label="Switch 1">
     Switch 1: {{ data.cb1 }}
   </md-switch>
 
-  <md-switch ng-model="data.cb2" aria-label="Switch 2" ng-true-value="'yup'" ng-false-value="'nope'" class="md-warn md-block">
+  <md-switch ng-model="data.cb2" aria-label="Switch 2" ng-true-value="'yup'" ng-false-value="'nope'" class="md-warn">
     Switch 2 (md-warn): {{ data.cb2 }}
   </md-switch>
 
-  <md-switch ng-disabled="true" aria-label="Disabled switch" ng-model="disabledModel" class="md-block">
+  <md-switch ng-disabled="true" aria-label="Disabled switch" ng-model="disabledModel">
     Switch (Disabled)
   </md-switch>
 
-  <md-switch ng-disabled="true" aria-label="Disabled active switch" ng-model="data.cb4" class="md-block">
+  <md-switch ng-disabled="true" aria-label="Disabled active switch" ng-model="data.cb4">
     Switch (Disabled, Active)
   </md-switch>
 
-  <md-switch class="md-primary md-block" md-no-ink aria-label="Switch No Ink" ng-model="data.cb5">
+  <md-switch class="md-primary" md-no-ink aria-label="Switch No Ink" ng-model="data.cb5">
     Switch (md-primary): No Ink
   </md-switch>
 
-  <md-switch ng-model="data.cb6" aria-label="Switch 6" ng-change="onChange(data.cb6)" class="md-block">
+  <md-switch ng-model="data.cb6" aria-label="Switch 6" ng-change="onChange(data.cb6)">
     Switch 6 message: {{ message }}
   </md-switch>
 </div>

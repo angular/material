@@ -4,7 +4,7 @@ $checkbox-margin: 16px !default;
 $checkbox-border-radius: 2px !default;
 $checkbox-border-width: 2px !default;
 $checkbox-text-margin: 10px !default;
-$checkbox-top-left: 12px !default;
+$checkbox-top: 12px !default;
 
 .md-inline-form {
   md-checkbox {
@@ -23,6 +23,13 @@ md-checkbox {
   position: relative;
   min-width: $checkbox-width;
   min-height: $checkbox-width;
+  @include rtl(margin-left, inherit, $checkbox-margin);
+  @include rtl(margin-right, $checkbox-margin, inherit);
+
+  &:last-of-type {
+    @include rtl(margin-left, inherit, 0);
+    @include rtl(margin-right, 0, inherit);
+  }
 
   &.md-focused:not([disabled]) {
     .md-container:before {
@@ -91,7 +98,7 @@ md-checkbox {
   }
 
   &.md-align-top-left > div.md-container {
-    top: $checkbox-top-left;
+    top: $checkbox-top;
   }
 
   // unchecked
