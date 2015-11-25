@@ -32,6 +32,9 @@ md-input-container {
 
   &.md-has-icon {
     padding-left: $icon-offset;
+    > label {
+      left: $icon-offset;
+    }
   }
 
   // When we have ng-messages, remove the input error height from our bottom padding, since the
@@ -87,6 +90,7 @@ md-input-container {
   label {
     position: absolute;
     bottom: 100%;
+    left: 0;
   }
 
 
