@@ -137,7 +137,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         } else {
           container = angular.element('<md-button class="md-no-style"><div class="md-list-item-inner"></div></md-button>');
           var copiedAttrs = ['ng-click', 'aria-label', 'ng-disabled', 
-            'ui-sref', 'href', 'ng-href', 'ng-attr-ui-sref'];
+            'ui-sref', 'href', 'ng-href', 'target', 'ng-attr-ui-sref'];
           angular.forEach(copiedAttrs, function(attr) {
             if (tEl[0].hasAttribute(attr)) {
               container[0].setAttribute(attr, tEl[0].getAttribute(attr));
