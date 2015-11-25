@@ -303,21 +303,25 @@ describe('<md-virtual-repeat>', function() {
     $$rAF.flush();
 
     expect(container[0].offsetHeight).toBe(100);
+    expect(offsetter.children().length).toBe(13);
 
     // With 5 items...
     scope.items = createItems(5);
     scope.$apply();
     expect(container[0].offsetHeight).toBe(5 * ITEM_SIZE);
+    expect(offsetter.children().length).toBe(5);
 
     // With 0 items...
     scope.items = [];
     scope.$apply();
     expect(container[0].offsetHeight).toBe(0);
+    expect(offsetter.children().length).toBe(0);
 
     // With lots of items again...
     scope.items = createItems(NUM_ITEMS);
     scope.$apply();
     expect(container[0].offsetHeight).toBe(100);
+    expect(offsetter.children().length).toBe(13);
   });
 
   it('should shrink the container when the number of items goes down (horizontal)', function() {
@@ -331,21 +335,25 @@ describe('<md-virtual-repeat>', function() {
     $$rAF.flush();
 
     expect(container[0].offsetWidth).toBe(150);
+    expect(offsetter.children().length).toBe(18);
 
     // With 5 items...
     scope.items = createItems(5);
     scope.$apply();
     expect(container[0].offsetWidth).toBe(5 * ITEM_SIZE);
+    expect(offsetter.children().length).toBe(5);
 
     // With 0 items...
     scope.items = [];
     scope.$apply();
     expect(container[0].offsetWidth).toBe(0);
+    expect(offsetter.children().length).toBe(0);
 
     // With lots of items again...
     scope.items = createItems(NUM_ITEMS);
     scope.$apply();
     expect(container[0].offsetWidth).toBe(150);
+    expect(offsetter.children().length).toBe(18);
   });
 
   it('should not shrink below the specified md-auto-shrink-min (vertical)', function() {

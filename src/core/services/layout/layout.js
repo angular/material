@@ -24,12 +24,6 @@
     enabled: true,
 
     /**
-     * After translation to classname equivalents, remove the
-     * original Layout attribute
-     */
-    removeAttributes : true,
-
-    /**
      * List of mediaQuery breakpoints and associated suffixes
      *
      *   [
@@ -263,11 +257,6 @@
 
       updateFn(getNormalizedAttrValue(className, attrs, ""));
       scope.$on("$destroy", function() { unwatch() });
-
-
-      if (config.removeAttributes && (element[0].nodeName != "#comment")) {
-        element.removeAttr(className);
-      }
     }
   }
 
@@ -309,11 +298,6 @@
      */
     function translateToCssClass(scope, element) {
       element.addClass(className);
-
-      if (config.removeAttributes) {
-        // After link-phase, remove deprecated layout attribute selector
-        element.removeAttr(className);
-      }
     }
   }
 

@@ -1,6 +1,6 @@
-$checkbox-width: 18px !default;
+$checkbox-width: 20px !default;
 $checkbox-height: $checkbox-width !default;
-$checkbox-margin: 8px !default;
+$checkbox-margin: 16px !default;
 $checkbox-border-radius: 2px !default;
 $checkbox-border-width: 2px !default;
 $checkbox-text-margin: 10px !default;
@@ -15,16 +15,12 @@ $checkbox-top-left: 12px !default;
 md-checkbox {
   box-sizing: border-box;
   display: inline-block;
-  margin: $checkbox-margin;
+  margin-bottom: $checkbox-margin;
   white-space: nowrap;
   cursor: pointer;
   outline: none;
   user-select: none;
-  padding: 2px;
-  @include rtl(padding-left, $checkbox-width, 2px);
-  @include rtl(padding-right, 2px, $checkbox-width);
   position: relative;
-  line-height: $checkbox-width + $checkbox-margin;
   min-width: $checkbox-width;
   min-height: $checkbox-width;
 
@@ -146,8 +142,8 @@ md-checkbox {
     white-space: normal;
     user-select: text;
 
-    @include rtl(margin-left, $checkbox-text-margin, 0);
-    @include rtl(margin-right, 0, $checkbox-text-margin);
+    @include rtl(margin-left, $checkbox-text-margin + $checkbox-width, 0);
+    @include rtl(margin-right, 0, $checkbox-text-margin + $checkbox-width);
 
   }
 }

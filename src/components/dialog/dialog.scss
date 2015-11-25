@@ -119,3 +119,11 @@ md-dialog {
     border: 1px solid #fff;
   }
 }
+
+@media (max-width: $layout-breakpoint-sm) {
+  md-dialog.md-dialog-fullscreen {
+    min-height: 100%;
+    min-width: 100%;
+    border-radius: 0;
+  }
+}

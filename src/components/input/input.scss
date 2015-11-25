@@ -20,6 +20,7 @@ $icon-offset : 36px !default;
 $icon-float-focused-top: -8px !default;
 
 md-input-container {
+  @include pie-clearfix();
   display: inline-block;
   position: relative;
   padding: $input-container-padding;
@@ -156,6 +157,11 @@ md-input-container {
     width: 100%;
     box-sizing: border-box;
 
+    // Hacky fix to force vertical alignment between `input` and `textarea`
+    // Input and textarea do not align by default:
+    // http://jsbin.com/buqomevage/1/edit?html,css,js,output
+    float: left;
+
     &:focus {
       outline: none;
     }
@@ -191,6 +197,7 @@ md-input-container {
     transition: $swift-ease-out;
     transition-duration: $swift-ease-out-duration / 1.5;
     opacity: 0;
+    clear: left;
 
     .md-char-counter {
       position: absolute;

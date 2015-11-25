@@ -157,4 +157,56 @@ describe('mdListItem directive', function() {
     expect(listItem.hasClass('md-no-proxy')).toBeTruthy();
   });
 
+  describe('with a clickable item', function() {
+
+    it('should wrap secondary icons in a md-button', function() {
+      var listItem = setup(
+        '<md-list-item ng-click="something()">' +
+        '  <p>Content Here</p>' +
+        '  <md-icon class="md-secondary" ng-click="heart()">heart</md-icon>' +
+        '</md-list-item>'
+      );
+
+      var buttons = listItem.find('md-button');
+
+      // Check that we wrapped the icon
+      expect(listItem[0].querySelector('md-button > md-icon')).toBeTruthy();
+
+      // Check the button actions
+      expect(buttons[0].attributes['ng-click'].value).toBe("something()");
+      expect(buttons[1].attributes['ng-click'].value).toBe("heart()");
+    });
+
+    it('should not wrap secondary buttons in a md-button', function() {
+      var listItem = setup(
+        '<md-list-item ng-click="something()">' +
+        '  <p>Content Here</p>' +
+        '  <button class="md-secondary" ng-click="like()">Like</button>' +
+        '</md-list-item>'
+      );
+
+      // There should only be 1 md-button (the wrapper) and one button (the unwrapped one)
+      expect(listItem.find('md-button').length).toBe(1);
+      expect(listItem.find('button').length).toBe(1);
+
+      // Check that we didn't wrap the button in an md-button
+      expect(listItem[0].querySelector('md-button button')).toBeFalsy();
+    });
+
+    it('should not wrap secondary md-buttons in a md-button', function() {
+      var listItem = setup(
+        '<md-list-item ng-click="something()">' +
+        '  <p>Content Here</p>' +
+        '  <md-button class="md-secondary" ng-click="like()">Like</md-button>' +
+        '</md-list-item>'
+      );
+
+      // There should be 2 md-buttons that are siblings
+      expect(listItem.find('md-button').length).toBe(2);
+
+      // Check that we didn't wrap the md-button in an md-button
+      expect(listItem[0].querySelector('md-button md-button')).toBeFalsy();
+    });
+  });
+
 });

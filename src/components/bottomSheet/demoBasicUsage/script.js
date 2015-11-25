@@ -36,7 +36,7 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
     }).then(function(clickedItem) {
       $mdToast.show(
             $mdToast.simple()
-              .content(clickedItem['name'] + ' clicked!')
+              .textContent(clickedItem['name'] + ' clicked!')
               .position('top right')
               .hideDelay(1500)
           );

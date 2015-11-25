@@ -43,7 +43,7 @@ angular.module('toastDemo1', ['ngMaterial'])
   $scope.showSimpleToast = function() {
     $mdToast.show(
       $mdToast.simple()
-        .content('Simple Toast!')
+        .textContent('Simple Toast!')
         .position($scope.getToastPosition())
         .hideDelay(3000)
     );
@@ -51,7 +51,7 @@ angular.module('toastDemo1', ['ngMaterial'])
 
   $scope.showActionToast = function() {
     var toast = $mdToast.simple()
-          .content('Action Toast!')
+          .textContent('Action Toast!')
           .action('OK')
           .highlightAction(false)
           .position($scope.getToastPosition());
