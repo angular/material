@@ -333,14 +333,14 @@ describe('md-date-picker', function() {
       // Expect that the pane is on-screen.
       var paneRect = controller.calendarPane.getBoundingClientRect();
       expect(paneRect.bottom).toBeLessThan(window.innerHeight + 1);
-      document.body.removeChild(superLongElement);
 
       document.body.removeChild(element);
+      document.body.removeChild(superLongElement);
     });
 
     it('should adjust the pane position if it would go off-screen if body is not scrollable',
         function() {
-      // Make the body super huge and scroll halfway down.
+      // Make the body super huge and scroll down a bunch.
       var body = document.body;
       var superLongElement = document.createElement('div');
       superLongElement.style.height = '10000px';
@@ -365,11 +365,41 @@ describe('md-date-picker', function() {
       // Expect that the pane is on-screen.
       var paneRect = controller.calendarPane.getBoundingClientRect();
       expect(paneRect.bottom).toBeLessThan(window.innerHeight + 1);
-      body.removeChild(superLongElement);
 
       // Restore body to pre-test state.
       body.removeChild(element);
+      body.removeChild(superLongElement);
       body.style.overflow = previousBodyOverflow;
+    });
+
+    it('should keep the calendar pane in the right place with body scrolling disabled', function() {
+      // Make the body super huge and scroll down a bunch.
+      var body = document.body;
+      var superLongElement = document.createElement('div');
+      superLongElement.style.height = '10000px';
+      superLongElement.style.width = '1px';
+      body.appendChild(superLongElement);
+      body.scrollTop = 700;
+
+      // Absolutely position the picker such that the pane position doesn't need to be adjusted.
+      // (1/10 of the way down the screen).
+      element.style.position = 'absolute';
+      element.style.top = (document.body.scrollTop + (window.innerHeight * 0.10)) + 'px';
+      element.style.left = '0';
+      body.appendChild(element);
+
+      // Open the pane.
+      element.querySelector('md-button').click();
+      $timeout.flush();
+
+      // Expect that the calendar pane is in the same position as the inline datepicker.
+      var paneRect = controller.calendarPane.getBoundingClientRect();
+      var triggerRect = controller.inputContainer.getBoundingClientRect();
+      expect(paneRect.top).toBe(triggerRect.top);
+
+      // Restore body to pre-test state.
+      body.removeChild(superLongElement);
+      body.removeChild(element);
     });
 
     it('should shink the calendar pane when it would otherwise not fit on the screen', function() {
