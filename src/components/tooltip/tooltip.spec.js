@@ -225,15 +225,14 @@ describe('<md-tooltip> directive', function() {
       expect($rootScope.testModel.isVisible).toBe(false);
     }));
 
-    ddescribe('<md-tooltip> attributeObserver', function() {
+    describe('<md-tooltip> attributeObserver', function() {
       if (window.MutationObserver === undefined) {
         // PhantomJS doesn't support mo
-        it(' does not work without support for mutationObservers', function () {
+        return it(' does not work without support for mutationObservers', function () {
           expect(true).toBe(true);
-        })
-        return ;
+        });
       }
-      var obs
+      var obs;
       beforeEach(function (mutationDone){
         obs =  new MutationObserver(function(mutations) {
           mutations
