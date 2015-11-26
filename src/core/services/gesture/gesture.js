@@ -110,7 +110,7 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
           return (element.getAttribute('tabindex') != '-1') &&
               !element.hasAttribute('DISABLED') &&
               (element.hasAttribute('tabindex') || element.hasAttribute('href') ||
-              (focusableElements.indexOf(element.nodeName) != -1));
+              (focusableElements.indexOf(element.nodeName) != -1|| element.isContentEditable));
         }
       }
     });
