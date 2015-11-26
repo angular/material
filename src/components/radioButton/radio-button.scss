@@ -116,8 +116,8 @@ md-radio-group {
     md-radio-button {
       margin-top: 0;
       margin-bottom: 0;
-      @include rtl(margin-left, inherit, $checkbox-margin);
-      @include rtl(margin-right, $checkbox-margin, inherit);
+      @include rtl(margin-left, inherit, $radio-margin);
+      @include rtl(margin-right, $radio-margin, inherit);
 
       &:last-of-type {
         @include rtl(margin-left, inherit, 0);
