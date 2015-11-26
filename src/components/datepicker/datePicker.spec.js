@@ -245,7 +245,7 @@ describe('md-date-picker', function() {
       populateInputElement('6/1/2015');
       expect(controller.inputContainer).not.toHaveClass('md-datepicker-invalid');
 
-      populateInputElement('7');
+      populateInputElement('cheese');
       expect(controller.inputContainer).toHaveClass('md-datepicker-invalid');
     });
     
@@ -257,6 +257,14 @@ describe('md-date-picker', function() {
 
       populateInputElement('5/30/2014');
       expect(controller.ngModelCtrl.$modelValue).toEqual(initialDate);
+    });
+
+    it('should not update the input string is not "complete"', function() {
+      var date = new Date(2015, DEC, 1);
+      pageScope.myDate = date;
+
+      populateInputElement('7');
+      expect(pageScope.myDate).toEqual(date);
     });
   });
 
@@ -452,12 +460,13 @@ describe('md-date-picker', function() {
     });
 
     it('should remove the invalid state if present', function() {
-      populateInputElement('7');
+      populateInputElement('cheese');
       expect(controller.inputContainer).toHaveClass('md-datepicker-invalid');
 
       controller.openCalendarPane({
         target: controller.inputElement
       });
+
       scope.$emit('md-calendar-change', new Date());
       expect(controller.inputContainer).not.toHaveClass('md-datepicker-invalid');
     });
