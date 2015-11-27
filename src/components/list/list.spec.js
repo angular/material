@@ -134,11 +134,29 @@ describe('mdListItem directive', function() {
 
   it('moves md-secondary items outside of the button', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()"><p>Hello World</p><md-icon class="md-secondary" ng-click="goWild()"></md-icon></md-list-item>');
-    var firstChild = listItem.children()[0];
-    expect(firstChild.nodeName).toBe('MD-BUTTON');
-    expect(firstChild.childNodes.length).toBe(1);
-    var secondChild = listItem.children()[1];
-    expect(secondChild.nodeName).toBe('MD-BUTTON');
+    var firstChild = listItem.children().eq(0);
+    expect(firstChild[0].nodeName).toBe('MD-BUTTON');
+    expect(firstChild.children().length).toBe(1);
+    var secondChild = listItem.children().eq(1);
+    expect(secondChild[0].nodeName).toBe('MD-BUTTON');
+    expect(secondChild.hasClass('md-secondary-container')).toBeTruthy();
+  });
+
+  it('moves multiple md-secondary items outside of the button', function() {
+    var listItem = setup('<md-list-item ng-click="sayHello()"><p>Hello World</p><md-icon class="md-secondary" ng-click="goWild()"><md-icon class="md-secondary" ng-click="goWild2()"></md-icon></md-list-item>');
+    var firstChild = listItem.children().eq(0);
+    expect(firstChild[0].nodeName).toBe('MD-BUTTON');
+    expect(firstChild.children().length).toBe(1);
+    var secondChild = listItem.children().eq(1);
+    expect(secondChild[0].nodeName).toBe('DIV');
+    expect(secondChild.hasClass('md-secondary-container')).toBeTruthy();
+    expect(secondChild.children().length).toBe(2);
+    var secondaryBtnOne = secondChild.children().eq(0);
+    expect(secondaryBtnOne[0].nodeName).toBe('MD-BUTTON');
+    expect(secondaryBtnOne.hasClass('md-secondary-container')).toBeFalsy();
+    var secondaryBtnTwo = secondChild.children().eq(1);
+    expect(secondaryBtnTwo[0].nodeName).toBe('MD-BUTTON');
+    expect(secondaryBtnTwo.hasClass('md-secondary-container')).toBeFalsy();
   });
 
   it('should detect non-compiled md-buttons', function() {
