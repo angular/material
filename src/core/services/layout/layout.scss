@@ -182,9 +182,9 @@
   }
 
   .#{$name},
-  .#{$name}-stretch-stretch // defaults
+  .#{$name}-start-stretch // defaults
   {
-    justify-content : stretch;
+    justify-content : start;
     align-content : stretch;
     align-items: stretch;
   }
@@ -193,7 +193,8 @@
   .#{$name}-start,
   .#{$name}-start-start,
   .#{$name}-start-center,
-  .#{$name}-start-end
+  .#{$name}-start-end,
+  .#{$name}-start-stretch
   {
     justify-content: start;
   }
@@ -202,7 +203,8 @@
   .#{$name}-center,           //stretch
   .#{$name}-center-start,
   .#{$name}-center-center,
-  .#{$name}-center-end
+  .#{$name}-center-end,
+  .#{$name}-center-stretch
   {
     justify-content: center;
   }
@@ -211,25 +213,18 @@
   .#{$name}-end, //stretch
   .#{$name}-end-start,
   .#{$name}-end-center,
-  .#{$name}-end-end
+  .#{$name}-end-end,
+  .#{$name}-end-stretch
   {
     justify-content: flex-end;
-  }
-
-  // Main Axis Center
-  .#{$name}-stretch,
-  .#{$name}-stretch-center,
-  .#{$name}-stretch-start,
-  .#{$name}-stretch-end
-  {
-    justify-content: stretch;
   }
 
   // Main Axis Space Around
   .#{$name}-space-around, //stretch
   .#{$name}-space-around-center,
   .#{$name}-space-around-start,
-  .#{$name}-space-around-end
+  .#{$name}-space-around-end,
+  .#{$name}-space-around-stretch
   {
     justify-content: space-around;
   }
@@ -238,7 +233,8 @@
   .#{$name}-space-between, //stretch
   .#{$name}-space-between-center,
   .#{$name}-space-between-start,
-  .#{$name}-space-between-end
+  .#{$name}-space-between-end,
+  .#{$name}-space-between-stretch
   {
     justify-content: space-between;
   }
@@ -250,8 +246,8 @@
   // ------------------------------
 
   // Cross Axis Start
-  .#{$name}-center-start,
   .#{$name}-start-start,
+  .#{$name}-center-start,
   .#{$name}-end-start,
   .#{$name}-space-between-start,
   .#{$name}-space-around-start
@@ -261,8 +257,8 @@
   }
 
   // Cross Axis Center
-  .#{$name}-center-center,
   .#{$name}-start-center,
+  .#{$name}-center-center,
   .#{$name}-end-center,
   .#{$name}-space-between-center,
   .#{$name}-space-around-center
@@ -273,8 +269,8 @@
   }
 
   // Cross Axis Center IE overflow fix
-  .#{$name}-center-center > *,
   .#{$name}-start-center > *,
+  .#{$name}-center-center > *,
   .#{$name}-end-center > *,
   .#{$name}-space-between-center > *,
   .#{$name}-space-around-center > *
@@ -284,8 +280,8 @@
   }
 
   // Cross Axis End
-  .#{$name}-center-end,
   .#{$name}-start-end,
+  .#{$name}-center-end,
   .#{$name}-end-end,
   .#{$name}-space-between-end,
   .#{$name}-space-around-end
@@ -295,8 +291,8 @@
   }
 
   // Cross Axis Start
-  .#{$name}-center-stretch,
   .#{$name}-start-stretch,
+  .#{$name}-center-stretch,
   .#{$name}-end-stretch,
   .#{$name}-space-between-stretch,
   .#{$name}-space-around-stretch
@@ -423,14 +419,30 @@
  *
  *  hide means hide everywhere
  *  Sizes:
- *         0    <= size < 600  Phone
- *         600  <= size < 960  Tablet
- *         960  <= size < 1200 Tablet-Landscape
+ *         $layout-breakpoint-xs:     600px !default;
+ *         $layout-breakpoint-sm:     960px !default;
+ *         $layout-breakpoint-md:     1280px !default;
+ *         $layout-breakpoint-lg:     1920px !default;
  */
 
 
+@media (max-width: $layout-breakpoint-xs - 1) {
+  // Xtra-SMALL  SCREEN
+  .hide-xs, .hide {
+    &:not(.show-xs):not(.show) {
+      display: none;
+    }
+  }
+  @include layouts_for_breakpoint(xs);
+}
 
-@media (max-width: $layout-breakpoint-sm - 1) {
+@media (min-width: $layout-breakpoint-xs) {
+  // BIGGER THAN Xtra-SMALL SCREEN
+  @include layouts_for_breakpoint(gt-xs);
+
+}
+
+@media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
   // SMALL SCREEN
   .hide-sm, .hide {
     &:not(.show-sm):not(.show) {
@@ -481,10 +493,17 @@
 @media (min-width: $layout-breakpoint-lg) {
   // BIGGER THAN LARGE SCREEN
   .hide-gt-sm, .hide-gt-md, .hide-gt-lg, .hide {
-    &:not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show) {
+    &:not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show-xl):not(.show) {
       display: none;
     }
   }
+  .hide-xl:not(.show-xl):not(.show) {
+    display: none;
+  }
 
+
+  // BIGGER THAN LARGE SCREEN
   @include layouts_for_breakpoint(gt-lg);
+  @include layouts_for_breakpoint(xl);
 }
+

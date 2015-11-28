@@ -5,8 +5,9 @@
 *  References:
 *  1) https://scotch.io/tutorials/a-visual-guide-to-css3-flexbox-properties#flex
 *  2) https://css-tricks.com/almanac/properties/f/flex/
-*  3) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
-*  4) http://godban.com.ua/projects/flexgrid
+*  3) https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+*  4) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
+*  5) http://godban.com.ua/projects/flexgrid
 *
 */
 
@@ -16,10 +17,10 @@
 $baseline-grid:            8px !default;
 $layout-gutter-width:      ($baseline-grid * 2) !default;
 
-$layout-breakpoint-sm:     600px !default;
-$layout-breakpoint-md:     960px !default;
-$layout-breakpoint-lg:     1200px !default;
-
+$layout-breakpoint-xs:     600px !default;
+$layout-breakpoint-sm:     960px !default;
+$layout-breakpoint-md:     1280px !default;
+$layout-breakpoint-lg:     1920px !default;
 
 @-moz-document url-prefix() {
   [layout-fill] {
@@ -75,7 +76,7 @@ $layout-breakpoint-lg:     1200px !default;
     }
   }
 
-  @each $i in 33, 34 {
+  @each $i in 33 {
     $offsets : '';
     $suffix : '';
 
@@ -87,11 +88,11 @@ $layout-breakpoint-lg:     1200px !default;
     }
 
     #{$offsets} {
-      margin-left: #{$i+'%'};
+      margin-left: calc(100% / 3);
     }
   }
 
-  @each $i in 66, 67 {
+  @each $i in 66  {
     $offsets : '';
     $suffix : '';
 
@@ -103,7 +104,7 @@ $layout-breakpoint-lg:     1200px !default;
     }
 
     #{$offsets} {
-      margin-left: #{$i+'%'};
+      margin-left: calc(200% / 3);
     }
   }
 }
@@ -168,15 +169,15 @@ $layout-breakpoint-lg:     1200px !default;
   }
 
   [layout="row"], [layout#{$name}="row"] {
-    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33%;  max-width: 33%;  max-height: 100%; box-sizing: border-box; }
+    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33%;  max-width: calc(100% / 3);  max-height: 100%; box-sizing: border-box; }
     > [#{$flexName}="34"]   , > [#{$flexName}="34"]     {  flex: 1 1 34%;  max-width: 34%;  max-height: 100%; box-sizing: border-box; }
-    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66%;  max-width: 66%;  max-height: 100%; box-sizing: border-box; }
+    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66%;  max-width: calc(200% / 3);  max-height: 100%; box-sizing: border-box; }
     > [#{$flexName}="67"]   , > [#{$flexName}="67"]     {  flex: 1 1 67%;  max-width: 67%;  max-height: 100%; box-sizing: border-box; }
   }
   [layout="column"], [layout#{$name}="column"] {
-    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33%;  max-width: 100%;  max-height: 33%; box-sizing: border-box; }
+    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33%;  max-width: 100%;  max-height: calc(100% / 3); box-sizing: border-box; }
     > [#{$flexName}="34"]   , > [#{$flexName}="34"]     {  flex: 1 1 34%;  max-width: 100%;  max-height: 34%; box-sizing: border-box; }
-    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66%;  max-width: 100%;  max-height: 66%; box-sizing: border-box; }
+    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66%;  max-width: 100%;  max-height: calc(200% / 3); box-sizing: border-box; }
     > [#{$flexName}="67"]   , > [#{$flexName}="67"]     {  flex: 1 1 67%;  max-width: 100%;  max-height: 67%; box-sizing: border-box; }
   }
 
@@ -193,39 +194,60 @@ $layout-breakpoint-lg:     1200px !default;
   @if $suffix != null {
     $name: 'layout-align-#{$suffix}';
   }
+  
+  [#{$name}],
+  [#{$name}="start stretch"] // defaults
+  {
+    justify-content : start;
+    align-content : stretch;
+    align-items: stretch;
+  }
+  // Main Axis Center
+  [#{$name}="start"],
+  [#{$name}="start start"],
+  [#{$name}="start center"],
+  [#{$name}="start end"],
+  [#{$name}="start stretch"]
+  {
+    justify-content: start;
+  }
 
   // Main Axis Center
-  [#{$name}="center"],           //stretch
-  [#{$name}="center-center"],
-  [#{$name}="center-start"],
-  [#{$name}="center-end"]
+  [#{$name}="center"],
+  [#{$name}="center start"],
+  [#{$name}="center center"],
+  [#{$name}="center end"],
+  [#{$name}="center stretch"]
   {
     justify-content: center;
   }
 
   // Main Axis End
   [#{$name}="end"], //stretch
-  [#{$name}="end-center"],
-  [#{$name}="end-start"],
-  [#{$name}="end-end"]
+  [#{$name}="end center"],
+  [#{$name}="end start"],
+  [#{$name}="end end"],
+  [#{$name}="end stretch"]
   {
     justify-content: flex-end;
   }
 
   // Main Axis Space Around
   [#{$name}="space-around"], //stretch
-  [#{$name}="space-around-center"],
-  [#{$name}="space-around-start"],
-  [#{$name}="space-around-end"]
+  [#{$name}="space-around center"],
+  [#{$name}="space-around start"],
+  [#{$name}="space-around end"],
+    [#{$name}="space-around stretch"]
   {
     justify-content: space-around;
   }
 
   // Main Axis Space Between
   [#{$name}="space-between"], //stretch
-  [#{$name}="space-between-center"],
-  [#{$name}="space-between-start"],
-  [#{$name}="space-between-end"]
+  [#{$name}="space-between center"],
+  [#{$name}="space-between start"],
+  [#{$name}="space-between end"],
+    [#{$name}="space-between stretch"]
   {
     justify-content: space-between;
   }
@@ -237,45 +259,59 @@ $layout-breakpoint-lg:     1200px !default;
   // ------------------------------
 
   // Cross Axis Start
-  [#{$name}="center-start"],
-  [#{$name}="start-start"],
-  [#{$name}="end-start"],
-  [#{$name}="space-between-start"],
-  [#{$name}="space-around-start"]
+  [#{$name}="start start"],
+  [#{$name}="center start"],
+  [#{$name}="end start"],
+  [#{$name}="space-between start"],
+  [#{$name}="space-around start"]
   {
     align-items: flex-start;
+    align-content: flex-start;
   }
 
   // Cross Axis Center
-  [#{$name}="center-center"],
-  [#{$name}="start-center"],
-  [#{$name}="end-center"],
-  [#{$name}="space-between-center"],
-  [#{$name}="space-around-center"]
+  [#{$name}="start center"],
+  [#{$name}="center center"],
+  [#{$name}="end center"],
+  [#{$name}="space-between center"],
+  [#{$name}="space-around center"]
   {
     align-items: center;
+    align-content: center;
     max-width: 100%;
   }
 
   // Cross Axis Center IE overflow fix
-  [#{$name}="center-center"] > *,
-  [#{$name}="start-center"] > *,
-  [#{$name}="end-center"] > *,
-  [#{$name}="space-between-center"] > *,
-  [#{$name}="space-around-center"] > *
+  [#{$name}="start center"] > *,
+  [#{$name}="center center"] > *,
+  [#{$name}="end center"] > *,
+  [#{$name}="space-between center"] > *,
+  [#{$name}="space-around center"] > *
   {
     max-width: 100%;
     box-sizing: border-box;
   }
 
   // Cross Axis End
-  [#{$name}="center-end"],
-  [#{$name}="start-end"],
-  [#{$name}="end-end"],
-  [#{$name}="space-between-end"],
-  [#{$name}="space-around-end"]
+  [#{$name}="start end"],
+  [#{$name}="center end"],
+  [#{$name}="end end"],
+  [#{$name}="space-between end"],
+  [#{$name}="space-around end"]
   {
     align-items: flex-end;
+    align-content: flex-end;
+  }
+
+  // Cross Axis  stretch
+  [#{$name}="start stretch"],
+  [#{$name}="center stretch"],
+  [#{$name}="end stretch"],
+  [#{$name}="space-between stretch"],
+  [#{$name}="space-around stretch"]
+  {
+    align-items: stretch;
+    align-content: stretch;
   }
 }
 @mixin layout-padding-margin() {
@@ -353,7 +389,6 @@ $layout-breakpoint-lg:     1200px !default;
 @include layout-padding-margin();
 
 
-
 /**
  * `hide-gt-sm show-gt-lg` should hide from 600px to 1200px
  * `show-md hide-gt-sm` should show from 0px to 960px and hide at >960px
@@ -361,14 +396,30 @@ $layout-breakpoint-lg:     1200px !default;
  *
  *  hide means hide everywhere
  *  Sizes:
- *         0    <= size < 600  Phone
- *         600  <= size < 960  Tablet
- *         960  <= size < 1200 Tablet-Landscape
+ *         $layout-breakpoint-xs:     600px !default;
+ *         $layout-breakpoint-sm:     960px !default;
+ *         $layout-breakpoint-md:     1280px !default;
+ *         $layout-breakpoint-lg:     1920px !default;
  */
 
 
+@media (max-width: $layout-breakpoint-xs - 1) {
+  // Xtra-SMALL  SCREEN
+  [hide-xs], [hide] {
+    &:not([show-xs]):not([show]) {
+      display: none;
+    }
+  }
+  @include layouts_for_breakpoint(xs);
+}
 
-@media (max-width: $layout-breakpoint-sm - 1) {
+@media (min-width: $layout-breakpoint-xs) {
+  // BIGGER THAN Xtra-SMALL SCREEN
+  @include layouts_for_breakpoint(gt-xs);
+
+}
+
+@media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
   // SMALL SCREEN
   [hide-sm], [hide] {
     &:not([show-sm]):not([show]) {
@@ -419,10 +470,17 @@ $layout-breakpoint-lg:     1200px !default;
 @media (min-width: $layout-breakpoint-lg) {
   // BIGGER THAN LARGE SCREEN
   [hide-gt-sm], [hide-gt-md], [hide-gt-lg], [hide] {
-    &:not([show-gt-sm]):not([show-gt-md]):not([show-gt-lg]):not([show]) {
+    &:not([show-gt-sm]):not([show-gt-md]):not([show-gt-lg]):not([show-xl]):not([show]) {
       display: none;
     }
   }
+  [hide-xl]:not([show-xl]):not([show]) {
+    display: none;
+  }
 
+
+  // BIGGER THAN LARGE SCREEN
   @include layouts_for_breakpoint(gt-lg);
+  @include layouts_for_breakpoint(xl);
 }
+
