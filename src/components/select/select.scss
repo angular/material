@@ -181,6 +181,10 @@ md-option {
   align-items: center;
   width: auto;
 
+  &[disabled] {
+    cursor: default;
+  }
+
   &:focus {
     outline: none;
   }
