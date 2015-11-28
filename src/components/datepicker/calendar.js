@@ -43,6 +43,11 @@
   function calendarDirective() {
     return {
       template:
+          '<div class="md-calendar-month-selector">' +
+            '<md-button class="md-icon-button" ng-click="ctrl.decreaseMonth()">&#60;</md-button>' +
+            '<span>{{ ctrl.getFormatedScrollMonth() }}</span>' +
+            '<md-button class="md-icon-button" ng-click="ctrl.increaseMonth()">&#62;</md-button>' +
+          '</div>' +
           '<table aria-hidden="true" class="md-calendar-day-header"><thead></thead></table>' +
           '<div class="md-calendar-scroll-mask">' +
           '<md-virtual-repeat-container class="md-calendar-scroll-container" ' +
@@ -216,6 +221,13 @@
         });
       }
     };
+
+    /**
+     * Fire watchers of scope on scrolling to refresh the current month label
+     */
+    this.calendarScroller.addEventListener('scroll', function() {
+      $scope.$digest();
+    });
 
     this.attachCalendarEventListeners();
   }
@@ -514,6 +526,45 @@
     }
 
     this.$element.find('thead').append(row);
+  };
+
+  /**
+   * Get the current visible month distance of the view
+   * @returns {number}
+   */
+  CalendarCtrl.prototype.getScrollDistanceMonth = function() {
+    var monthDistance = this.calendarScroller.scrollTop / TBODY_HEIGHT;
+    return Math.round(monthDistance);
+  };
+
+  /**
+   * Get the current visible month of the view
+   * @returns {Date}
+   */
+  CalendarCtrl.prototype.getScrollMonth = function() {
+    return this.dateUtil.incrementMonths(this.firstRenderableDate, this.getScrollDistanceMonth());
+  };
+
+  /**
+   * Gets the formated month, which is visible on the scroller
+   * @returns {string}
+   */
+  CalendarCtrl.prototype.getFormatedScrollMonth = function() {
+    return this.dateLocale.months[this.getScrollMonth().getMonth()] + " " + this.getScrollMonth().getFullYear();
+  };
+
+  /**
+   * Increases and scrolls the current visible Month
+   */
+  CalendarCtrl.prototype.increaseMonth = function() {
+    this.calendarScroller.scrollTop = (this.getScrollDistanceMonth() + 1) * TBODY_HEIGHT;
+  };
+
+  /**
+   * Decreases and scrolls the current visible Month
+   */
+  CalendarCtrl.prototype.decreaseMonth = function() {
+    this.calendarScroller.scrollTop = (this.getScrollDistanceMonth() - 1) * TBODY_HEIGHT;
   };
 
     /**
