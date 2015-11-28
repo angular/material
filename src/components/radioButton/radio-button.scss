@@ -12,6 +12,15 @@ md-radio-button {
   cursor: pointer;
   position: relative;
 
+  // disabled
+  &[disabled] {
+    cursor: default;
+
+    .md-container {
+      cursor: default;
+    }
+  }
+
   .md-container {
     position: absolute;
     top: 50%;
