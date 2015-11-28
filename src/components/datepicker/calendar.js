@@ -40,9 +40,26 @@
    */
   var TBODY_SINGLE_ROW_HEIGHT = 45;
 
+  var CHEVRON_RIGHT =
+    '<svg fill="#757575" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">\
+      <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>\
+      <path d="M0 0h24v24H0z" fill="none"/>\
+    </svg>';
+
+  var CHEVRON_LEFT =
+    '<svg fill="#757575" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">\
+      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>\
+      <path d="M0 0h24v24H0z" fill="none"/>\
+    </svg>';
+
   function calendarDirective() {
     return {
       template:
+          '<div class="md-calendar-month-selector">' +
+            '<md-button class="md-icon-button" ng-click="ctrl.decreaseMonth()"><md-icon>' + CHEVRON_LEFT + '</md-icon></md-button>' +
+            '<span>{{ ctrl.getFormatedScrollMonth() }}</span>' +
+            '<md-button class="md-icon-button" ng-click="ctrl.increaseMonth()"><md-icon>' + CHEVRON_RIGHT +'</md-icon></md-button>' +
+          '</div>' +
           '<table aria-hidden="true" class="md-calendar-day-header"><thead></thead></table>' +
           '<div class="md-calendar-scroll-mask">' +
           '<md-virtual-repeat-container class="md-calendar-scroll-container" ' +
@@ -216,6 +233,13 @@
         });
       }
     };
+
+    /**
+     * Fire watchers of scope on scrolling to refresh the current month label
+     */
+    this.calendarScroller.addEventListener('scroll', function() {
+      $scope.$digest();
+    });
 
     this.attachCalendarEventListeners();
   }
@@ -514,6 +538,45 @@
     }
 
     this.$element.find('thead').append(row);
+  };
+
+  /**
+   * Get the current visible month distance of the view
+   * @returns {number}
+   */
+  CalendarCtrl.prototype.getScrollDistanceMonth = function() {
+    var monthDistance = this.calendarScroller.scrollTop / TBODY_HEIGHT;
+    return Math.round(monthDistance);
+  };
+
+  /**
+   * Get the current visible month of the view
+   * @returns {Date}
+   */
+  CalendarCtrl.prototype.getScrollMonth = function() {
+    return this.dateUtil.incrementMonths(this.firstRenderableDate, this.getScrollDistanceMonth());
+  };
+
+  /**
+   * Gets the formated month, which is visible on the scroller
+   * @returns {string}
+   */
+  CalendarCtrl.prototype.getFormatedScrollMonth = function() {
+    return this.dateLocale.months[this.getScrollMonth().getMonth()] + " " + this.getScrollMonth().getFullYear();
+  };
+
+  /**
+   * Increases and scrolls the current visible Month
+   */
+  CalendarCtrl.prototype.increaseMonth = function() {
+    this.calendarScroller.scrollTop = (this.getScrollDistanceMonth() + 1) * TBODY_HEIGHT;
+  };
+
+  /**
+   * Decreases and scrolls the current visible Month
+   */
+  CalendarCtrl.prototype.decreaseMonth = function() {
+    this.calendarScroller.scrollTop = (this.getScrollDistanceMonth() - 1) * TBODY_HEIGHT;
   };
 
     /**

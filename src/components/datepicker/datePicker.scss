@@ -54,34 +54,44 @@ md-datepicker {
 
 
 // Floating pane that contains the calendar at the bottom of the input.
-.md-datepicker-calendar-pane {
+md-datepicker-pane {
   position: absolute;
   top: 0;
   left: 0;
   z-index: $z-index-menu;
 
-  border-width: 1px;
-  border-style: solid;
   background: transparent;
+
+  overflow: hidden;
 
   transform: scale(0);
   transform-origin: 0 0;
   transition: transform $md-datepicker-open-animation-duration $swift-ease-out-timing-function;
+
+  border-radius: 3px;
 
   &.md-pane-open {
     transform: scale(1);
   }
 }
 
-// Portion of the floating panel that sits, invisibly, on top of the input.
-.md-datepicker-input-mask {
-  height: 40px;
-  width: $md-calendar-width;
-  position: relative;
+.md-datepicker-header {
+  box-sizing: border-box;
+  height: 90px;
 
-  background: transparent;
+  padding: 12px 18px;
+
   pointer-events: none;
   cursor: text;
+
+  span:first-child {
+    font-size: 15px;
+  }
+
+  span:last-child {
+    font-size: 32px;
+    display: block;
+  }
 }
 
 .md-datepicker-input-mask-opaque {
@@ -183,7 +193,7 @@ md-datepicker[disabled] {
 
 // Animate the calendar inside of the floating calendar pane such that it appears to "scroll" into
 // view while the pane is opening. This is done as a cue to users that the calendar is scrollable.
-.md-datepicker-calendar-pane {
+md-datepicker-pane {
   .md-calendar {
     transform: translateY(-85px);
     transition: transform 0.65s $swift-ease-out-timing-function;

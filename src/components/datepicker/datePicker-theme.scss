@@ -6,6 +6,11 @@ md-datepicker.md-THEME_NAME-theme {
 
 .md-THEME_NAME-theme {
 
+  .md-datepicker-header {
+    background: '{{primary-500}}';
+    color: '{{primary-500-contrast}}';
+  }
+
   .md-datepicker-input {
     @include input-placeholder-color('{{foreground-3}}');
     color: '{{background-contrast}}';
@@ -22,10 +27,6 @@ md-datepicker.md-THEME_NAME-theme {
     &.md-datepicker-invalid {
       border-bottom-color: '{{warn-500}}';
     }
-  }
-
-  .md-datepicker-calendar-pane {
-    border-color: '{{background-300}}';
   }
 
   .md-datepicker-triangle-button {
