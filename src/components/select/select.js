@@ -185,7 +185,11 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
     return function postLink(scope, element, attr, ctrls) {
       var isDisabled;
 
-      var firstOpen = true;
+      // Remove event ngModel's blur listener for touched and untouched
+      // we will do it ourself.
+      $mdUtil.nextTick(function() {
+        element.off('blur');
+      });
 
       var containerCtrl = ctrls[0];
       var mdSelectCtrl = ctrls[1];
@@ -432,10 +436,6 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
 
       function openSelect() {
         selectScope.isOpen = true;
-        if (firstOpen) {
-          element.on('blur', setUntouched);
-          firstOpen = false;
-        }
 
         $mdSelect.show({
           scope: selectScope,
@@ -452,7 +452,6 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
 
         function setUntouched() {
           ngModelCtrl.$setUntouched();
-          element.off('blur', setUntouched);
         }
       }
     };
