@@ -442,17 +442,15 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
           preserveScope: true,
           skipCompile: true,
           element: selectContainer,
+          preserveElement: true,
           target: element[0],
           hasBackdrop: true,
+          parent: element,
           loadingAsync: attr.mdOnOpen ? scope.$eval(attr.mdOnOpen) || true : false
         }).finally(function() {
           selectScope.isOpen = false;
           ngModelCtrl.$setTouched();
         });
-
-        function setUntouched() {
-          ngModelCtrl.$setUntouched();
-        }
       }
     };
   }
