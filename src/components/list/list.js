@@ -236,7 +236,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           }
         }
         function computeClickable() {
-          if (proxies.length || hasClick) {
+          if (proxies.length == 1 || hasClick) {
             $element.addClass('md-clickable');
 
             if (!hasClick) {
@@ -263,7 +263,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         $element.off('click');
         $element.off('keypress');
 
-        if (proxies.length && firstChild) {
+        if (proxies.length == 1 && firstChild) {
           $element.children().eq(0).on('click', function(e) {
             var parentButton = $mdUtil.getClosest(e.target, 'BUTTON');
             if (!parentButton && firstChild.contains(e.target)) {
