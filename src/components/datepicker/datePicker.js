@@ -487,11 +487,19 @@
     this.calendarPane.classList.remove('md-pane-open');
     this.calendarPane.classList.remove('md-datepicker-pos-adjusted');
 
-    if (this.calendarPane.parentNode) {
+    if (!this.calendarPane.parentNode) return;
+
+    // Remove the Calendar Pane after the close transition is done
+    var calendarPane = angular.element(this.calendarPane);
+    var transitionEvents = 'transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd';
+    calendarPane.on(transitionEvents, function() {
+
       // Use native DOM removal because we do not want any of the angular state of this element
       // to be disposed.
-      this.calendarPane.parentNode.removeChild(this.calendarPane);
-    }
+      calendarPane[0].parentNode.removeChild(calendarPane[0]);
+
+      calendarPane.off(transitionEvents);
+    });
   };
 
   /**

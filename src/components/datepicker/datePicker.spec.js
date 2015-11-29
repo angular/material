@@ -273,6 +273,10 @@ describe('md-date-picker', function() {
 
       // Click off of the calendar.
       document.body.click();
+
+      // Skip the close transition delay
+      angular.element(controller.calendarPane).triggerHandler('transitionend');
+
       expect(controller.calendarPane.offsetHeight).toBe(0);
     });
 
