@@ -3,7 +3,7 @@ $md-calendar-cell-size: 44px !default;
 $md-calendar-header-height: 40px;
 $md-calendar-cell-emphasis-size: 40px !default;
 $md-calendar-side-padding: 16px !default;
-$md-calendar-weeks-to-show: 7 !default;
+$md-calendar-weeks-to-show: 6 !default;
 
 $md-calendar-month-label-padding: 8px !default;
 $md-calendar-month-label-font-size: 14px !default;
@@ -52,6 +52,21 @@ md-calendar {
   user-select: none;
 }
 
+// Allow the User to scroll to a specific month
+.md-calendar-month-selector {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  & > span {
+    flex-grow: 2;
+
+    text-align: center;
+    font-size: 14.5px;
+    font-weight: bold;
+  }
+}
+
 // Wrap the scroll with overflow: hidden in order to hide the scrollbar.
 // The inner .md-calendar-scroll-container will using a padding-right to push the
 // scrollbar into the hidden area (done with javascript).
@@ -81,11 +96,6 @@ md-calendar {
 
 // Contains the scrolling element (this is the md-virtual-repeat-container).
 .md-calendar-scroll-container {
-  // Add an inset shadow to help cue users that the calendar is scrollable. Use a negative x
-  // offset to push the vertical edge shadow off to the right so that it's cut off by the edge
-  // of the calendar container.
-  box-shadow: inset -3px 3px $md-calendar-scroll-cue-shadow-radius rgba(black, 0.2);
-
   display: inline-block;
   height: $md-calendar-weeks-to-show * $md-calendar-cell-size;
 
@@ -118,21 +128,13 @@ md-calendar {
   }
 }
 
-// The label above each month (containing the month name and the year, e.g. "Jun 2014").
-.md-calendar-month-label {
-  height: $md-calendar-cell-size;
-  font-size: $md-calendar-month-label-font-size;
-  font-weight: 500; // Roboto Medium
-  padding: 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding;
-}
-
 // Table containing the day-of-the-week header.
 .md-calendar-day-header {
   @include md-calendar-table();
 
   th {
     @include md-calendar-cell();
-    font-weight: normal;
+    font-weight: bold;
     height: $md-calendar-header-height;
   }
 }

@@ -59,22 +59,12 @@ describe('md-calendar', function() {
 
     for (var i = 0; i < months.length; i++) {
       month = months[i];
-      if (month.querySelector('tr:first-child td:first-child').textContent === monthHeader) {
+      if (month.querySelector('tr:first-child').getAttribute('data-month') === monthHeader) {
         return month;
       }
     }
     return null;
   }
-
-  /**
-   * Gets the month label for a given date cell.
-   * @param {HTMLElement|DocumentView} cell
-   * @returns {string}
-   */
-  function getMonthLabelForDateCell(cell) {
-    return $mdUtil.getClosest(cell, 'tbody').querySelector('.md-calendar-month-label').textContent;
-  }
-
 
   /** Creates and compiles an md-calendar element. */
   function createElement(parentScope) {
@@ -170,7 +160,6 @@ describe('md-calendar', function() {
 
       var selectedDate = element.querySelector('.md-calendar-selected-date');
 
-      expect(getMonthLabelForDateCell(selectedDate)).toBe('May 2014');
       expect(selectedDate.textContent).toBe('30');
     });
   });
@@ -228,12 +217,12 @@ describe('md-calendar', function() {
         });
 
         var expectedDates = [
-          ['May 2014', '', '', '1', '2', '3'],
+          ['', '', '', '', '1', '2', '3'],
           ['4', '5', '6', '7', '8', '9', '10'],
           ['11', '12', '13', '14', '15', '16', '17'],
           ['18', '19', '20', '21', '22', '23', '24'],
           ['25', '26', '27', '28', '29', '30', '31'],
-          ['', '', '', '', '', '', ''],
+          ['', '', '', '', '', '', '']
         ];
         expect(calendarDates).toEqual(expectedDates);
       });
@@ -251,35 +240,15 @@ describe('md-calendar', function() {
         });
 
         var expectedDates = [
-          ['May 2014', '', '1', '2', '3', '4'],
+          ['', '', '', '1', '2', '3', '4'],
           ['5', '6', '7', '8', '9', '10', '11'],
           ['12', '13', '14', '15', '16', '17', '18'],
           ['19', '20', '21', '22', '23', '24', '25'],
           ['26', '27', '28', '29', '30', '31', ''],
-          ['', '', '', '', '', '', ''],
+          ['', '', '', '', '', '', '']
         ];
         expect(calendarDates).toEqual(expectedDates);
         dateLocale.firstDayOfWeek = 0;
-      });
-
-      it('should show the month on its own row if the first day is before Tuesday', function() {
-        var date = new Date(2014, JUN, 30); // 1st on Sunday
-        var monthElement = monthCtrl.buildCalendarForMonth(date);
-
-        var firstRow = monthElement.querySelector('tr');
-        expect(extractRowText(firstRow)).toEqual(['Jun 2014']);
-      });
-
-      it('should apply the locale-specific month header formatter', function() {
-        var date = new Date(2014, JUN, 30);
-        spyOn(dateLocale, 'monthHeaderFormatter').and.callFake(function(expectedDateArg) {
-          expect(expectedDateArg).toBeSameDayAs(date);
-          return 'Junz 2014';
-        });
-        var monthElement = monthCtrl.buildCalendarForMonth(date);
-
-        var monthHeader = monthElement.querySelector('tr');
-        expect(monthHeader.textContent).toEqual('Junz 2014');
       });
 
       it('should update the model on cell click', function() {
@@ -366,47 +335,36 @@ describe('md-calendar', function() {
 
       dispatchKeyEvent(keyCodes.LEFT_ARROW);
       expect(getFocusedDateElement().textContent).toBe('10');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.UP_ARROW);
       expect(getFocusedDateElement().textContent).toBe('3');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.RIGHT_ARROW);
       expect(getFocusedDateElement().textContent).toBe('4');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.DOWN_ARROW);
       expect(getFocusedDateElement().textContent).toBe('11');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.HOME);
       expect(getFocusedDateElement().textContent).toBe('1');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.END);
       expect(getFocusedDateElement().textContent).toBe('28');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.RIGHT_ARROW);
       expect(getFocusedDateElement().textContent).toBe('1');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Mar 2014');
 
       dispatchKeyEvent(keyCodes.PAGE_UP);
       expect(getFocusedDateElement().textContent).toBe('1');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.PAGE_DOWN);
       expect(getFocusedDateElement().textContent).toBe('1');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Mar 2014');
 
       dispatchKeyEvent(keyCodes.UP_ARROW, {meta: true});
       expect(getFocusedDateElement().textContent).toBe('1');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.DOWN_ARROW, {meta: true});
       expect(getFocusedDateElement().textContent).toBe('1');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Mar 2014');
 
       dispatchKeyEvent(keyCodes.ENTER);
       applyDateChange();
@@ -424,27 +382,21 @@ describe('md-calendar', function() {
 
       dispatchKeyEvent(keyCodes.UP_ARROW);
       expect(getFocusedDateElement().textContent).toBe('5');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.LEFT_ARROW);
       expect(getFocusedDateElement().textContent).toBe('5');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.DOWN_ARROW);
       expect(getFocusedDateElement().textContent).toBe('10');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.RIGHT_ARROW);
       expect(getFocusedDateElement().textContent).toBe('10');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.UP_ARROW, {meta: true});
       expect(getFocusedDateElement().textContent).toBe('5');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
       dispatchKeyEvent(keyCodes.DOWN_ARROW, {meta: true});
       expect(getFocusedDateElement().textContent).toBe('10');
-      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
     });
 
@@ -505,8 +457,6 @@ describe('md-calendar', function() {
     // First date of May 2014 on Thursday (i.e. has 3 dates on the first row).
     var nextMonth = findMonthElement(new Date(2014, MAY, 1));
     expect(nextMonth).not.toBeNull();
-    expect(nextMonth.querySelector('.md-calendar-month-label')).toHaveClass(
-        'md-calendar-month-label-disabled');
     expect(nextMonth.querySelectorAll('tr').length).toBe(1);
 
     var dates = nextMonth.querySelectorAll('.md-calendar-date');
@@ -516,5 +466,43 @@ describe('md-calendar', function() {
         expect(date).toHaveClass('md-calendar-date-disabled');
       }
     }
+  });
+
+  describe('month-selector functions', function() {
+
+    it('should increase the current month scroll distance', function() {
+      var lastScrollDistance = controller.getScrollDistanceMonth();
+
+      // One Month Row is 265 Pixels height, so we should scroll more than the half of that (265 / 2 = 132.5)
+      // Because we round the scrollTop, so we should add one half pixel
+      controller.calendarScroller.scrollTop += 133;
+
+      expect(controller.getScrollDistanceMonth()).toBeGreaterThan(lastScrollDistance);
+    });
+
+    it('should increase the scroll month on executing increaseMonth', function() {
+      var lastScrollMonth = controller.getScrollMonth().getMonth();
+
+      controller.increaseMonth();
+
+      expect(controller.getScrollMonth().getMonth()).toBeGreaterThan(lastScrollMonth);
+    });
+
+    it('should decrease the scroll month on executing decreaseMonth', function() {
+      var lastScrollMonth = controller.getScrollMonth().getMonth();
+
+      controller.decreaseMonth();
+
+      expect(controller.getScrollMonth().getMonth()).toBeLessThan(lastScrollMonth);
+    });
+
+    it('should change the month selector label on scrolling', function() {
+      var lastLabel = controller.getFormatedScrollMonth();
+
+      controller.calendarScroller.scrollTop += 133;
+      angular.element(controller.calendarScroller).triggerHandler('scroll');
+
+      expect(lastLabel).not.toBe(controller.getFormatedScrollMonth());
+    });
   });
 });
