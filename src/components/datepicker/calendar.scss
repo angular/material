@@ -52,6 +52,24 @@ md-calendar {
   user-select: none;
 }
 
+// Allow the User to scroll to a specific month
+.md-calendar-month-selector {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .md-button {
+    font-weight: bold;
+  }
+
+  span {
+    flex-grow: 2;
+
+    text-align: center;
+    font-size: 15px;
+  }
+}
+
 // Wrap the scroll with overflow: hidden in order to hide the scrollbar.
 // The inner .md-calendar-scroll-container will using a padding-right to push the
 // scrollbar into the hidden area (done with javascript).

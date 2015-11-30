@@ -517,4 +517,42 @@ describe('md-calendar', function() {
       }
     }
   });
+
+  describe('month-selector functions', function() {
+
+    it('should increase the current month scroll distance', function() {
+      var lastScrollDistance = controller.getScrollDistanceMonth();
+
+      // One Month Row is 265 Pixels height, so we should scroll more than the half of that (265 / 2 = 132.5)
+      // Because we round the scrollTop, so we should add one half pixel
+      controller.calendarScroller.scrollTop += 133;
+
+      expect(controller.getScrollDistanceMonth()).toBeGreaterThan(lastScrollDistance);
+    });
+
+    it('should increase the scroll month on executing increaseMonth', function() {
+      var lastScrollMonth = controller.getScrollMonth().getMonth();
+
+      controller.increaseMonth();
+
+      expect(controller.getScrollMonth().getMonth()).toBeGreaterThan(lastScrollMonth);
+    });
+
+    it('should decrease the scroll month on executing decreaseMonth', function() {
+      var lastScrollMonth = controller.getScrollMonth().getMonth();
+
+      controller.decreaseMonth();
+
+      expect(controller.getScrollMonth().getMonth()).toBeLessThan(lastScrollMonth);
+    });
+
+    it('should change the month selector label on scrolling', function() {
+      var lastLabel = controller.getFormatedScrollMonth();
+
+      controller.calendarScroller.scrollTop += 133;
+      angular.element(controller.calendarScroller).triggerHandler('scroll');
+
+      expect(lastLabel).not.toBe(controller.getFormatedScrollMonth());
+    });
+  });
 });

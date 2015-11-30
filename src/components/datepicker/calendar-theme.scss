@@ -9,6 +9,11 @@
 }
 .md-THEME_NAME-theme {
 
+  .md-calendar-month-selector {
+    background: '{{primary-500}}'; // blue-500
+    color: '{{primary-500-contrast}}'; // white
+  }
+
   .md-calendar-day-header {
     background: '{{background-hue-1}}';
     color: '{{foreground-1}}';
