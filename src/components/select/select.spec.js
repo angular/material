@@ -30,6 +30,7 @@ describe('<md-select>', function() {
   it('supports disabled state', inject(function($document) {
     var select = setupSelect('disabled="disabled", ng-model="val"').find('md-select');
     openSelect(select);
+    expectSelectClosed(select);
     expect($document.find('md-select-menu').length).toBe(0);
     expect(select.attr('aria-disabled')).toBe('true');
   }));
@@ -38,7 +39,7 @@ describe('<md-select>', function() {
     var select = setupSelect('ng-model="val", md-container-class="test"').find('md-select');
     openSelect(select);
 
-    var container = $document[0].querySelector('.md-select-menu-container');
+    var container = select[0].querySelector('.md-select-menu-container');
     expect(container).toBeTruthy();
     expect(container.classList.contains('test')).toBe(true);
   }));
@@ -50,11 +51,12 @@ describe('<md-select>', function() {
     };
     var select = setupSelect('ng-model="val", md-on-close="onClose()"', [1, 2, 3]).find('md-select');
     openSelect(select);
+    expectSelectOpen(select);
 
-    // Simulate click bubble from option to select menu handler
-    clickOption(0);
+    clickOption(select, 0);
 
     waitForSelectClose();
+    expectSelectClosed(select);
 
     expect(called).toBe(true);
   }));
@@ -84,7 +86,7 @@ describe('<md-select>', function() {
     expect(changed).toBe(false);
     
     openSelect(select);
-    clickOption(1);
+    clickOption(select, 1);
     waitForSelectClose();
     expect($rootScope.val.id).toBe(2);
     expect(changed).toBe(true);
@@ -101,23 +103,6 @@ describe('<md-select>', function() {
     expect($rootScope.myForm.select.$touched).toBe(false);
     closeSelect();
     expect($rootScope.myForm.select.$touched).toBe(true);
-  }));
-
-  it('closes the menu during scope.$destroy()', inject(function($document, $rootScope, $timeout) {
-    var container = angular.element("<div></div>");
-    var scope = $rootScope.$new();
-    var select = setupSelect(' ng-model="val" ', [1, 2, 3], false, scope).find('md-select');
-
-    $document[0].body.appendChild(container[0]);
-    container.append(select);
-
-    openSelect(select);
-
-    scope.$destroy();
-    $rootScope.$digest();
-    $timeout.flush();
-
-    expect($document[0].querySelector("md-select-menu")).toBe(null);
   }));
 
 
@@ -142,7 +127,7 @@ describe('<md-select>', function() {
 
       openSelect(select);
 
-     $document.find('md-option')[0].click();
+      clickOption(select, 0);
 
       waitForSelectClose();
 
@@ -735,7 +720,7 @@ describe('<md-select>', function() {
       openSelect(el);
       expect(el.attr('aria-expanded')).toBe('true');
 
-      var selectMenu = $document.find('md-select-menu');
+      var selectMenu = el.find('md-select-menu');
       pressKey(selectMenu, 27);
       waitForSelectClose();
 
@@ -743,7 +728,7 @@ describe('<md-select>', function() {
     }));
     it('sets up the aria-multiselectable attribute', inject(function($document, $rootScope) {
       $rootScope.model = [1,3];
-      var el = setupMultiple('ng-model="$root.model"', [1,2,3]);
+      var el = setupSelectMultiple('ng-model="$root.model"', [1,2,3]).find('md-select');
 
       expect(el.attr('aria-multiselectable')).toBe('true');
     }));
@@ -772,32 +757,28 @@ describe('<md-select>', function() {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
         pressKey(el, 32);
         waitForSelectOpen();
-        var selectMenu = angular.element($document.find('md-select-menu'));
-        expect(selectMenu.length).toBe(1);
+        expectSelectOpen(el);
       }));
 
       it('can be opened with an enter key', inject(function($document) {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
         pressKey(el, 13);
         waitForSelectOpen();
-        var selectMenu = angular.element($document.find('md-select-menu'));
-        expect(selectMenu.length).toBe(1);
+        expectSelectOpen(el);
       }));
 
       it('can be opened with the up key', inject(function($document) {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
         pressKey(el, 38);
         waitForSelectOpen();
-        var selectMenu = angular.element($document.find('md-select-menu'));
-        expect(selectMenu.length).toBe(1);
+        expectSelectOpen(el);
       }));
 
       it('can be opened with the down key', inject(function($document) {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
         pressKey(el, 40);
         waitForSelectOpen();
-        var selectMenu = angular.element($document.find('md-select-menu'));
-        expect(selectMenu.length).toBe(1);
+        expectSelectOpen(el);
       }));
 
       it('supports typing an option name', inject(function($document, $rootScope) {
@@ -811,11 +792,12 @@ describe('<md-select>', function() {
       it('can be closed with escape', inject(function($document) {
         var el = setupSelect('ng-model="someVal"', [1, 2, 3]).find('md-select');
         openSelect(el);
-        var selectMenu = angular.element($document.find('md-select-menu'));
+        expectSelectOpen(el);
+        var selectMenu = angular.element(el.find('md-select-menu'));
         expect(selectMenu.length).toBe(1);
         pressKey(selectMenu, 27);
         waitForSelectClose();
-        expect($document.find('md-select-menu').length).toBe(0);
+        expectSelectClosed(el);
       }));
     });
   });
@@ -838,6 +820,11 @@ describe('<md-select>', function() {
     return el;
   }
 
+  function setupSelectMultiple(attrs, options, skipLabel, scope) {
+    attrs = (attrs || '') + ' multiple';
+    return setupSelect(attrs, options, skipLabel, scope);
+  }
+
   function setup(attrs, options, compileOpts) {
     var el;
     inject(function($compile, $rootScope) {
@@ -856,6 +843,7 @@ describe('<md-select>', function() {
     attrs = (attrs || '') + ' multiple';
     return setup(attrs, options);
   }
+
 
   function optTemplate(options, compileOpts) {
     var optionsTpl = '';
@@ -915,12 +903,12 @@ describe('<md-select>', function() {
     });
   }
 
-  function clickOption(index) {
+  function clickOption(select, index) {
     inject(function($rootScope, $document) {
-      var openMenu = $document.find('md-select-menu');
-      var opt = angular.element($document.find('md-option')[index]).find('div')[0];
+      expectSelectOpen(select);
+      var openMenu = select.find('md-select-menu');
+      var opt = angular.element(select.find('md-option')[index]).find('div')[0];
 
-      if (!openMenu.length) throw Error('No select menu currently open');
       if (!opt) throw Error('Could not find option at index: ' + index);
       var target = angular.element(opt);
       angular.element(openMenu).triggerHandler({
@@ -928,11 +916,25 @@ describe('<md-select>', function() {
         target: target
       });
       angular.element(openMenu).triggerHandler({
-        type: 'mouseup',
+        type: 'click',
         target: target,
         currentTarget: openMenu[0]
       });
     });
+  }
+
+  function expectSelectClosed(element) {
+    element = angular.element(element);
+    var menu = angular.element(element[0].querySelector('.md-select-menu-container'));
+    expect(menu.hasClass('md-active')).toBe(false);
+    expect(menu.attr('aria-hidden')).toBe('true');
+  }
+
+  function expectSelectOpen(element) {
+    element = angular.element(element);
+    var menu = angular.element(element[0].querySelector('.md-select-menu-container'));
+    expect(menu.hasClass('md-active')).toBe(true);
+    expect(menu.attr('aria-hidden')).toBe('false');
   }
 
 });

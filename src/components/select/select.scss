@@ -11,6 +11,7 @@ $select-max-visible-options: 5;
   top: 0;
   z-index: $z-index-select;
   opacity: 0;
+  display: none;
 
   // Don't let the user select a new choice while it's animating
   &:not(.md-clickable) {
@@ -25,6 +26,7 @@ $select-max-visible-options: 5;
 
   // enter: md-select scales in, then options fade in.
   &.md-active {
+    display: block;
     opacity: 1;
     md-select-menu {
       transition: $swift-ease-out;

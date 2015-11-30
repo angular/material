@@ -87,14 +87,14 @@ md-input-container {
     -ms-flex-preferred-size: auto; //IE fix
   }
 
-  label {
+  label:not(.md-container-ignore) {
     position: absolute;
     bottom: 100%;
     left: 0;
   }
 
 
-  label:not(.md-no-float),
+  label:not(.md-no-float):not(.md-container-ignore),
   .md-placeholder {
     order: 1;
     pointer-events: none;
