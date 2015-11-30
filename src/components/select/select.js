@@ -33,6 +33,8 @@ angular.module('material.components.select', [
  *
  * @param {expression} ng-model The model!
  * @param {boolean=} multiple Whether it's multiple.
+ * @param {boolean=} allow-keyboard-change Whether key up and key down change
+ * the selected value without opening the select dialog. Only applicable when `multiple` is not set.
  * @param {expression=} md-on-close Expression to be evaluated when the select is closed.
  * @param {string=} placeholder Placeholder hint text.
  * @param {string=} aria-label Optional label for accessibility. Only necessary if no placeholder or
@@ -172,13 +174,17 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
     }
 
     // Use everything that's left inside element.contents() as the contents of the menu
-    var multiple = angular.isDefined(attr.multiple) ? 'multiple' : '';
+    var selectOpts = angular.isDefined(attr.multiple) ? 'multiple' : '';
+    if (angular.isDefined(attr.allowKeyboardChange))
+      selectOpts += ' allow-keyboard-change';
+    if (angular.isDefined(attr.ngModel))
+      selectOpts += ' ng-model="' + attr.ngModel + '"';
     var selectTemplate = '' +
       '<div class="md-select-menu-container" aria-hidden="true">' +
       '<md-select-menu {0}>{1}</md-select-menu>' +
       '</div>';
 
-    selectTemplate = $mdUtil.supplant(selectTemplate, [multiple, element.html()]);
+    selectTemplate = $mdUtil.supplant(selectTemplate, [selectOpts, element.html()]);
     element.empty().append(valueEl);
     element.append(selectTemplate);
 
@@ -430,11 +436,17 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
       }
 
       function handleKeypress(e) {
-        var allowedCodes = [32, 13, 38, 40];
+        var allowedCodes = [13, 32, 38, 40],
+            keyboardChange = (!selectMenuCtrl.isMultiple && selectMenuCtrl.allowKeyboardChange);
+
         if (allowedCodes.indexOf(e.keyCode) != -1) {
-          // prevent page scrolling on interaction
           e.preventDefault();
-          openSelect(e);
+          if (13 === e.keyCode || 32 === e.keyCode || !keyboardChange)
+            openSelect(e);
+          else if (38 === e.keyCode)
+            selectPrevious();
+          else if (40 === e.keyCode)
+            selectNext();
         } else {
           if (e.keyCode <= 90 && e.keyCode >= 31) {
             e.preventDefault();
@@ -447,6 +459,28 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
             selectMenuCtrl.select(optionCtrl.hashKey, optionCtrl.value);
             selectMenuCtrl.refreshViewValue();
           }
+        }
+      }
+
+      function selectPrevious() {
+        handleKeypressChange(-1);
+      }
+
+      function selectNext() {
+        handleKeypressChange(1);
+      }
+
+      function handleKeypressChange(direction) {
+        var curr = Object.keys(selectMenuCtrl.selected)[0],
+            opts = Object.keys(selectMenuCtrl.options),
+            index = angular.isDefined(curr) ? opts.indexOf(curr) + direction : 0,
+            update;
+
+        if (angular.isDefined(opts[index])) {
+          update = selectMenuCtrl.options[opts[index]];
+          selectMenuCtrl.deselect(curr);
+          selectMenuCtrl.select(update.hashKey, update.value);
+          selectMenuCtrl.refreshViewValue();
         }
       }
 
@@ -532,6 +566,8 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
   function SelectMenuController($scope, $attrs, $element) {
     var self = this;
     self.isMultiple = angular.isDefined($attrs.multiple);
+    self.allowKeyboardChange = angular.isDefined($attrs.allowKeyboardChange);
+
     // selected is an object with keys matching all of the selected options' hashed values
     self.selected = {};
     // options is an object with keys matching every option's hash value,
