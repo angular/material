@@ -21,7 +21,7 @@ md-input-container.md-THEME_NAME-theme {
   [ng-message], [data-ng-message], [x-ng-message],
   [ng-message-exp], [data-ng-message-exp], [x-ng-message-exp] {
     :not(.md-char-counter) {
-      color: '{{warn-500}}';
+      color: '{{warn-A700}}';
     }
   }
 
@@ -51,26 +51,26 @@ md-input-container.md-THEME_NAME-theme {
       }
       &.md-warn {
         .md-input {
-          border-color: '{{warn-500}}';
+          border-color: '{{warn-A700}}';
         }
         label {
-          color: '{{warn-500}}';
+          color: '{{warn-A700}}';
         }
       }
     }
   }
   &.md-input-invalid {
     .md-input {
-      border-color: '{{warn-500}}';
+      border-color: '{{warn-A700}}';
     }
     &.md-input-focused label {
-      color: '{{warn-500}}';
+      color: '{{warn-A700}}';
     }
     ng-message, data-ng-message, x-ng-message,
     [ng-message], [data-ng-message], [x-ng-message],
     [ng-message-exp], [data-ng-message-exp], [x-ng-message-exp],
     .md-char-counter {
-      color: '{{warn-500}}';
+      color: '{{warn-A700}}';
     }
   }
   .md-input {

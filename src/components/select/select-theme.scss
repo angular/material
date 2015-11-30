@@ -12,8 +12,8 @@ md-select.md-THEME_NAME-theme {
   }
   &.ng-invalid.ng-dirty {
     .md-select-value {
-      color: '{{warn-500}}' !important;
-      border-bottom-color: '{{warn-500}}' !important;
+      color: '{{warn-A700}}' !important;
+      border-bottom-color: '{{warn-A700}}' !important;
     }
   }
   &:not([disabled]):focus {
