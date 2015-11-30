@@ -119,7 +119,7 @@ function MdTabs () {
             '<md-icon md-svg-icon="md-tabs-arrow"></md-icon> ' +
           '</md-next-button> ' +
           '<md-tabs-canvas ' +
-              'tabindex="0" ' +
+              'tabindex="{{ $mdTabsCtrl.hasFocus ? -1 : 0 }}" ' +
               'aria-activedescendant="tab-item-{{$mdTabsCtrl.tabs[$mdTabsCtrl.focusIndex].id}}" ' +
               'ng-focus="$mdTabsCtrl.redirectFocus()" ' +
               'ng-class="{ ' +
