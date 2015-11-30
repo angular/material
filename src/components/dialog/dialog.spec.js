@@ -256,6 +256,26 @@ describe('$mdDialog', function() {
       expect(content.text()).toBe('Choose');
     }));
 
+    it('should support the deprecated `content` method as text', inject(function($mdDialog) {
+      var parent = angular.element('<div>');
+
+      $mdDialog.show(
+        $mdDialog.confirm({
+          parent: parent,
+          ok: 'Next',
+          cancel: 'Back',
+          title: 'Which Way ',
+          content: '<div class="mine">Choose</div>'
+        })
+      );
+
+      runAnimation();
+
+      var contentBody = parent[0].querySelector('.md-dialog-content-body');
+
+      expect(contentBody.textContent).toBe('<div class="mine">Choose</div>');
+    }));
+
     it('should NOT allow custom elements in confirm htmlContent', inject(function($mdDialog) {
       var parent = angular.element('<div>');
 
