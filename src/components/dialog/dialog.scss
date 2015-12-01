@@ -49,6 +49,7 @@ md-dialog {
 
   .md-dialog-content {
     padding: $dialog-padding;
+    display: inline-block;
   }
 
   md-dialog-content {
