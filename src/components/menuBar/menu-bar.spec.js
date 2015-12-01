@@ -19,7 +19,7 @@ describe('material.components.menuBar', function() {
       });
 
       describe('ARIA', function() {
-        it('sets aria-role="menubar" on the menubar', function() {
+        it('sets role="menubar" on the menubar', function() {
           var menuBar = setup();
           var ariaRole = menuBar[0].getAttribute('role');
           expect(ariaRole).toBe('menubar');
@@ -207,7 +207,7 @@ describe('material.components.menuBar', function() {
         expect(children[1].nodeName).toBe('MD-BUTTON');
       });
       it('sets aria role', function() {
-        var menuItem = setup()[0];
+        var menuItem = setup()[0].querySelector('md-button');
         expect(menuItem.getAttribute('role')).toBe('menuitemcheckbox');
       });
       it('toggles on click', function() {
@@ -259,7 +259,7 @@ describe('material.components.menuBar', function() {
         expect(children[1].nodeName).toBe('MD-BUTTON');
       });
       it('sets aria role', function() {
-        var menuItem = setup()[0];
+        var menuItem = setup()[0].querySelector('md-button');
         expect(menuItem.getAttribute('role')).toBe('menuitemradio');
       });
       it('toggles on click', function() {
