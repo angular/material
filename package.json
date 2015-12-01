@@ -64,7 +64,11 @@
     "prompt-sync": "^1.0.0",
     "q": "^1.0.1",
     "stream-series": "^0.1.1",
-    "through2": "^0.6.3"
+    "through2": "^0.6.3",
+    "benchpress": "^2.0.0-alpha.25",
+    "http-server": "^0.7.5",
+    "protractor": "^3.0.0",
+    "reflect-metadata": "^0.1.0"
   },
   "scripts": {
     "watch": "gulp watch site --dev",
