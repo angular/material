@@ -433,8 +433,8 @@
       cross: "stretch"
     };
 
-    var values = (value || "").replace(WHITESPACE, "-").split("-");
-    if ( values.length == 3 ) {
+    var values = (value || "").toLowerCase().replace(WHITESPACE, "-").split("-");
+    if ( values[0] === "space" ) {
       values = [ values[0]+"-"+values[1],values[2] ];
     }
 
