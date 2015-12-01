@@ -1,16 +1,18 @@
 md-toast.md-THEME_NAME-theme {
-  background-color: #323232;
-  color: '{{background-50}}';
-
-  .md-button {
+  .md-toast-content {
+    background-color: #323232;
     color: '{{background-50}}';
-    &.md-highlight {
-      color: '{{primary-A200}}';
-      &.md-accent {
-        color: '{{accent-A200}}';
-      }
-      &.md-warn {
-        color: '{{warn-A200}}';
+
+    .md-button {
+      color: '{{background-50}}';
+      &.md-highlight {
+        color: '{{primary-A200}}';
+        &.md-accent {
+          color: '{{accent-A200}}';
+        }
+        &.md-warn {
+          color: '{{warn-A200}}';
+        }
       }
     }
   }

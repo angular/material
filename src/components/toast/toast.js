@@ -62,19 +62,6 @@ function MdToastDirective($mdToast) {
   * </div>
   * </hljs>
   *
-  * Additionally, during animation, we will add the `md-toast-animating` class to the parent
-  * container. This defines a simple rule of `overflow: hidden !important;` to ensure that
-  * scrollbars are not visible on the parent during animation if you use a different overflow style.
-  *
-  * If you need to override this, you can use the following CSS, but be aware that it may cause
-  * scrollbars to intermittently appear.
-  *
-  * <hljs lang="css">
-  *   .md-toast-animating {
-  *     overflow: auto !important;
-  *   }
-  * </hljs>
-  *
   * @usage
   * <hljs lang="html">
   * <div ng-controller="MyController">
@@ -246,16 +233,17 @@ function MdToastProvider($$interimElementProvider) {
       methods: ['textContent', 'content', 'action', 'highlightAction', 'theme', 'parent'],
       options: /* @ngInject */ function($mdToast, $mdTheming) {
         var opts = {
-          template: [
-            '<md-toast md-theme="{{ toast.theme }}" ng-class="{\'md-capsule\': toast.capsule}">',
-              '<span flex role="alert" aria-relevant="all" aria-atomic="true">' +
-                '{{ toast.content }}' +
-              '</span>',
-              '<md-button class="md-action" ng-if="toast.action" ng-click="toast.resolve()" ng-class="{\'md-highlight\': toast.highlightAction}">',
-                '{{ toast.action }}',
-              '</md-button>',
-            '</md-toast>'
-          ].join(''),
+          template:
+            '<md-toast md-theme="{{ toast.theme }}" ng-class="{\'md-capsule\': toast.capsule}">' +
+            '  <div class="md-toast-content">' +
+            '    <span flex role="alert" aria-relevant="all" aria-atomic="true">' +
+            '      {{ toast.content }}' +
+            '    </span>' +
+            '    <md-button class="md-action" ng-if="toast.action" ng-click="toast.resolve()" ng-class="{\'md-highlight\': toast.highlightAction}">' +
+            '      {{ toast.action }}' +
+            '    </md-button>' +
+            '  </div>' +
+            '</md-toast>',
           controller: /* @ngInject */ function mdToastCtrl($scope) {
             var self = this;
             $scope.$watch(function() { return activeToastContent; }, function() {
