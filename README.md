@@ -160,3 +160,9 @@ pull directly from the distribution GitHub
   </body>
 ```
 
+Once you have all the necessary assets installed, add `ngMaterial` as a dependency for your app:
+
+```javascript
+angular.module('myApp', ['ngMaterial']);
+```
+
