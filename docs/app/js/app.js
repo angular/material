@@ -252,7 +252,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         id: 'layoutContainers',
         url: 'layout/container'
       },{
-        name: 'Grid System',
+        name: 'Layout System',
         id: 'layoutGrid',
         url: 'layout/grid'
       },{
