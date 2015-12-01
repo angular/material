@@ -30,13 +30,6 @@ md-input-container {
     display: block;
   }
 
-  &.md-has-icon {
-    padding-left: $icon-offset;
-    > label {
-      left: $icon-offset;
-    }
-  }
-
   // When we have ng-messages, remove the input error height from our bottom padding, since the
   // ng-messages wrapper has a min-height of 1 error (so we don't adjust height as often; see below)
   &.md-input-has-messages {
@@ -93,6 +86,13 @@ md-input-container {
     left: 0;
   }
 
+  // icon offset should have higher priority as normal label
+  &.md-has-icon {
+    padding-left: $icon-offset;
+    > label {
+      left: $icon-offset;
+    }
+  }
 
   label:not(.md-no-float):not(.md-container-ignore),
   .md-placeholder {
