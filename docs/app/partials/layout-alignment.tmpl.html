@@ -69,7 +69,8 @@
     <div>
       <md-subheader>Alignment in Layout Direction ({{layoutDemo.direction == 'row' ? 'horizontal' : 'vertical'}})</md-subheader>
       <md-radio-group ng-model="layoutDemo.mainAxis">
-        <md-radio-button value="start">start</md-radio-button>
+        <md-radio-button value="">none</md-radio-button>
+        <md-radio-button value="start">start (default)</md-radio-button>
         <md-radio-button value="center">center</md-radio-button>
         <md-radio-button value="end">end</md-radio-button>
         <md-radio-button value="space-around">space-around</md-radio-button>
@@ -79,10 +80,11 @@
     <div>
       <md-subheader>Alignment in Perpendicular Direction ({{layoutDemo.direction == 'column' ? 'horizontal' : 'vertical'}})</md-subheader>
       <md-radio-group ng-model="layoutDemo.crossAxis">
+        <md-radio-button value="none"><em>none</em></md-radio-button>
         <md-radio-button value="start">start</md-radio-button>
         <md-radio-button value="center">center</md-radio-button>
         <md-radio-button value="end">end</md-radio-button>
-        <md-radio-button value="stretch">stretch</md-radio-button>
+        <md-radio-button value="stretch">stretch (default)</md-radio-button>
       </md-radio-group>
     </div>
 
