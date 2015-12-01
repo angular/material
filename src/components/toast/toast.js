@@ -40,6 +40,41 @@ function MdToastDirective($mdToast) {
   * - For a toast action, use element with class `md-action`.
   * - Add the class `md-capsule` for curved corners.
   *
+  * ## Parent container notes
+  *
+  * The toast is positioned using absolute positioning relative to it's first non-static parent
+  * container. Thus, if the requested parent container uses static positioning, we will temporarily
+  * set it's positioning to `relative` while the toast is visible and reset it when the toast is
+  * hidden.
+  *
+  * Because of this, it is usually best to ensure that the parent container has a fixed height and
+  * prevents scrolling by setting the `overflow: hidden;` style. Since the position is based off of
+  * the parent's height, the toast may be mispositioned if you allow the parent to scroll.
+  *
+  * You can, however, have a scrollable element inside of the container; just make sure the
+  * container itself does not scroll.
+  *
+  * <hljs lang="html">
+  * <div layout-fill id="toast-container">
+  *   <md-content>
+  *     I can have lots of content and scroll!
+  *   </md-content>
+  * </div>
+  * </hljs>
+  *
+  * Additionally, during animation, we will add the `md-toast-animating` class to the parent
+  * container. This defines a simple rule of `overflow: hidden !important;` to ensure that
+  * scrollbars are not visible on the parent during animation if you use a different overflow style.
+  *
+  * If you need to override this, you can use the following CSS, but be aware that it may cause
+  * scrollbars to intermittently appear.
+  *
+  * <hljs lang="css">
+  *   .md-toast-animating {
+  *     overflow: auto !important;
+  *   }
+  * </hljs>
+  *
   * @usage
   * <hljs lang="html">
   * <div ng-controller="MyController">
@@ -298,15 +333,20 @@ function MdToastProvider($$interimElementProvider) {
         return 'md-' + pos;
       }).join(' '));
 
-      return $animate.enter(element, options.parent);
+      if (options.parent) options.parent.addClass('md-toast-animating');
+      return $animate.enter(element, options.parent).then(function() {
+        if (options.parent) options.parent.removeClass('md-toast-animating');
+      });
     }
 
     function onRemove(scope, element, options) {
       element.off(SWIPE_EVENTS, options.onSwipe);
+      if (options.parent) options.parent.addClass('md-toast-animating');
       if (options.openClass) options.parent.removeClass(options.openClass);
 
       return ((options.$destroy == true) ? element.remove() : $animate.leave(element))
         .then(function () {
+          if (options.parent) options.parent.removeClass('md-toast-animating');
           if ($mdUtil.hasComputedStyle(options.parent, 'position', 'static')) {
             options.parent.css('position', '');
           }

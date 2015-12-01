@@ -152,3 +152,9 @@ md-toast {
     border: 1px solid #fff;
   }
 }
+
+
+// While animating, set the toast parent's overflow to hidden so scrollbars do not appear
+.md-toast-animating {
+  overflow: hidden !important;
+}
