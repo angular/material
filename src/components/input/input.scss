@@ -25,6 +25,7 @@ md-input-container {
   position: relative;
   padding: $input-container-padding;
   margin: 18px 0;
+  vertical-align: middle;
 
   &.md-block {
     display: block;
