@@ -18,6 +18,7 @@
     "angular-mocks": "^1.4.7",
     "angular-route": "^1.4.7",
     "angular-sanitize": "^1.4.7",
+    "angular-touch": "^1.4.8",
     "angularytics": "^0.3.0",
     "canonical-path": "0.0.2",
     "cli-color": "^1.0.0",

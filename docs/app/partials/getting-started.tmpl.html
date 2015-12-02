@@ -18,6 +18,17 @@
       <li><a href="https://github.com/angular/material#cdn">Using a CDN</a> (example below)</li>
     </ul>
 
+    <iframe height='412' scrolling='no'
+            src='//codepen.io/team/AngularMaterial/embed/JYvaxJ/?height=412&theme-id=20485&default-tab=result'
+            frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>
+      See the Pen <a href='http://codepen.io/team/AngularMaterial/pen/JYvaxJ/'>Angular Material Basic App</a>
+      by Angular Material (<a href='http://codepen.io/AngularMaterial'>@AngularMaterial</a>) on
+      <a href='http://codepen.io'>CodePen</a>.
+    </iframe>
+    <br/>
+    <br/>
+
+
     <h3>Include Optional Dependencies</h3>
     <p>
       Angular Material integrates with some additional libraries which you may optionally include:
@@ -27,6 +38,10 @@
         <a href="https://docs.angularjs.org/api/ngMessages">ngMessages</a>
         - Provides a consistent mechanism for displaying form errors and other messages.
       </li>
+      <li>
+        <a href="https://docs.angularjs.org/api/ngSanitize">ngSanitize</a>
+        - The ngSanitize module provides functionality to sanitize HTML content in Material components.
+      </li>
 
       <li>
         <a href="https://docs.angularjs.org/api/ngRoute">ngRoute</a>
@@ -34,14 +49,22 @@
       </li>
     </ul>
 
+    <h3>Unsupported Integrations</h3>
+    <p>
+      Angular Material v1.0 has a few known integration issues with the following libraries:
+    </p>
+    <ul style="margin-bottom: 2em;">
+      <li>
+        <a href="https://docs.angularjs.org/api/ngTouch">ngTouchs</a>
+        - This module interferes with ngMaterial's click, tap, and swipe support for touch-enabled devices.
+      </li>
 
-    <iframe height='412' scrolling='no'
-            src='//codepen.io/team/AngularMaterial/embed/JYvaxJ/?height=412&theme-id=20485&default-tab=result'
-            frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>
-      See the Pen <a href='http://codepen.io/team/AngularMaterial/pen/JYvaxJ/'>Angular Material Basic App</a>
-      by Angular Material (<a href='http://codepen.io/AngularMaterial'>@AngularMaterial</a>) on
-      <a href='http://codepen.io'>CodePen</a>.
-    </iframe>
+      <li>
+        <a href="http://ionicframework.com/">Ionic</a>
+        - Open-source SDK for developing hybrid mobile apps with Web technologies has touch support
+        that interferes with ngMaterial's mobile gesture features.
+      </li>
+    </ul>
 
     <br/>
     <h2>Contributing to Angular Material</h2>
