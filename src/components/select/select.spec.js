@@ -1,8 +1,21 @@
 describe('<md-select>', function() {
-  var attachedElements = [];
+  var attachedElements = [],
+      body;
 
   beforeEach(module('material.components.input'));
   beforeEach(module('material.components.select'));
+
+  beforeEach(inject(function($document) {
+    body = $document[0].body;
+  }));
+
+  afterEach(inject(function ($document) {
+    var body = $document[0].body;
+    var children = body.querySelectorAll('.md-select-menu-container');
+    for (var i = 0; i < children.length; i++) {
+      angular.element(children[i]).remove();
+    }
+  }));
 
   afterEach(inject(function($document) {
     attachedElements.forEach(function(element) {
@@ -39,7 +52,7 @@ describe('<md-select>', function() {
     var select = setupSelect('ng-model="val", md-container-class="test"').find('md-select');
     openSelect(select);
 
-    var container = select[0].querySelector('.md-select-menu-container');
+    var container = body.querySelector('.md-select-menu-container');
     expect(container).toBeTruthy();
     expect(container.classList.contains('test')).toBe(true);
   }));
@@ -720,7 +733,7 @@ describe('<md-select>', function() {
       openSelect(el);
       expect(el.attr('aria-expanded')).toBe('true');
 
-      var selectMenu = el.find('md-select-menu');
+      var selectMenu = $document.find('md-select-menu');
       pressKey(selectMenu, 27);
       waitForSelectClose();
 
@@ -793,7 +806,7 @@ describe('<md-select>', function() {
         var el = setupSelect('ng-model="someVal"', [1, 2, 3]).find('md-select');
         openSelect(el);
         expectSelectOpen(el);
-        var selectMenu = angular.element(el.find('md-select-menu'));
+        var selectMenu = $document.find('md-select-menu');
         expect(selectMenu.length).toBe(1);
         pressKey(selectMenu, 27);
         waitForSelectClose();
@@ -906,8 +919,8 @@ describe('<md-select>', function() {
   function clickOption(select, index) {
     inject(function($rootScope, $document) {
       expectSelectOpen(select);
-      var openMenu = select.find('md-select-menu');
-      var opt = angular.element(select.find('md-option')[index]).find('div')[0];
+      var openMenu = $document.find('md-select-menu');
+      var opt = angular.element(openMenu.find('md-option')[index]).find('div')[0];
 
       if (!opt) throw Error('Could not find option at index: ' + index);
       var target = angular.element(opt);
@@ -925,14 +938,16 @@ describe('<md-select>', function() {
 
   function expectSelectClosed(element) {
     element = angular.element(element);
-    var menu = angular.element(element[0].querySelector('.md-select-menu-container'));
-    expect(menu.hasClass('md-active')).toBe(false);
-    expect(menu.attr('aria-hidden')).toBe('true');
+    var menu = angular.element(body.querySelector('.md-select-menu-container'));
+    if (menu.length) {
+      expect(menu.hasClass('md-active')).toBe(false);
+      expect(menu.attr('aria-hidden')).toBe('true');
+    }
   }
 
   function expectSelectOpen(element) {
     element = angular.element(element);
-    var menu = angular.element(element[0].querySelector('.md-select-menu-container'));
+    var menu = angular.element(body.querySelector('.md-select-menu-container'));
     expect(menu.hasClass('md-active')).toBe(true);
     expect(menu.attr('aria-hidden')).toBe('false');
   }
