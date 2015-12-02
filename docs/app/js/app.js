@@ -633,7 +633,8 @@ function($scope, $attrs, $location, $rootScope) {
     direction: 'row'
   };
   $scope.layoutAlign = function() {
-    return $scope.layoutDemo.mainAxis + ' ' + $scope.layoutDemo.crossAxis;
+    return $scope.layoutDemo.mainAxis +
+     ($scope.layoutDemo.crossAxis ? ' ' + $scope.layoutDemo.crossAxis : '')
   };
 }])
 
