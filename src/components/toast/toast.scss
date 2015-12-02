@@ -3,7 +3,7 @@
 
 md-toast {
   display: flex;
-  position:absolute;
+  position: fixed;
   z-index: $z-index-toast;
 
   box-sizing: border-box;
