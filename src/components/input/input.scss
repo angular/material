@@ -40,9 +40,8 @@ md-input-container {
   > md-icon {
     position: absolute;
     top: 5px;
-    left: 2px;
-    + input {
-    }
+    @include rtl(left, 2px, auto);
+    @include rtl(right, auto, 2px);
   }
 
   textarea,
@@ -84,14 +83,17 @@ md-input-container {
   label:not(.md-container-ignore) {
     position: absolute;
     bottom: 100%;
-    left: 0;
+    @include rtl(left, 0, auto);
+    @include rtl(right, auto, 0);
   }
 
   // icon offset should have higher priority as normal label
   &.md-has-icon {
-    padding-left: $icon-offset;
+    @include rtl(padding-left, $icon-offset, 0);
+    @include rtl(padding-right, 0, $icon-offset);
     > label {
-      left: $icon-offset;
+      @include rtl(left, $icon-offset, auto);
+      @include rtl(right, auto, $icon-offset);
     }
   }
 
@@ -100,7 +102,8 @@ md-input-container {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
-    padding-left: $input-container-padding;
+    @include rtl(padding-left, $input-container-padding, 0);
+    @include rtl(padding-right, 0, $input-container-padding);
     z-index: 1;
     transform: translate3d(0, $input-label-default-offset + 4, 0) scale($input-label-default-scale);
     transition: transform $swift-ease-out-timing-function 0.25s;
@@ -165,7 +168,7 @@ md-input-container {
     // Hacky fix to force vertical alignment between `input` and `textarea`
     // Input and textarea do not align by default:
     // http://jsbin.com/buqomevage/1/edit?html,css,js,output
-    float: left;
+    @include rtl(float, left, right);
 
     &:focus {
       outline: none;
@@ -182,7 +185,8 @@ md-input-container {
 
   .md-char-counter {
     position: absolute;
-    right: $input-container-padding;
+    @include rtl(right, $input-container-padding, auto);
+    @include rtl(left, auto, $input-container-padding);
     bottom: 7px;
   }
 
@@ -202,12 +206,13 @@ md-input-container {
     transition: $swift-ease-out;
     transition-duration: $swift-ease-out-duration / 1.5;
     opacity: 0;
-    clear: left;
+    @include rtl(clear, left, right);
 
     .md-char-counter {
       position: absolute;
       top: 0;
-      right: 0;
+      @include rtl(right, 0, auto);
+      @include rtl(left, auto, 0);
       bottom: auto;
     }
   }
@@ -228,7 +233,8 @@ md-input-container {
     padding-top: $error-padding-top;
 
     &:not(.md-char-counter) {
-      padding-right: rem(5);
+      @include rtl(padding-right, rem(5), 0);
+      @include rtl(padding-left, 0, rem(5));
     }
 
     &.ng-enter {
@@ -304,7 +310,8 @@ md-input-container.md-icon-float {
 
   > md-icon {
     top: 2px;
-    left: 2px;
+    @include rtl(left, 2px, auto);
+    @include rtl(right, auto, 2px);
   }
 
   &.md-input-focused,
@@ -320,11 +327,15 @@ md-input-container.md-icon-float {
 
 md-input-container.md-icon-right {
   input {
-    margin-right: $icon-offset;
+    @include rtl(margin-right, $icon-offset, 0);
+    @include rtl(margin-left, 0, $icon-offset);
     + md-icon {
       top: 26px;
-      right: 2px;
       margin-right: 0;
+      margin-left: 0;
+
+      @include rtl(right, 2px, auto);
+      @include rtl(left, auto, 2px);
     }
   }
 }
