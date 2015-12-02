@@ -13,8 +13,8 @@ describe('<md-virtual-repeat>', function() {
       '     style="height: 10px; width: 10px; box-sizing: border-box;">' +
       '       {{i}} {{$index}}' +
       '</div>';
-  var container, repeater, component, $$rAF, $compile, $document, $mdUtil, $window, scope,
-      scroller, sizer, offsetter;
+  var container, repeater, component, $$rAF, $compile, $document, $mdUtil, $window, $rootScope,
+      scope, scroller, sizer, offsetter;
 
   var NUM_ITEMS = 110,
       VERTICAL_PX = 100,
@@ -22,7 +22,7 @@ describe('<md-virtual-repeat>', function() {
       ITEM_SIZE = 10;
 
   beforeEach(inject(function(
-      _$$rAF_, _$compile_, _$document_, _$mdUtil_, $rootScope, _$window_, _$material_) {
+      _$$rAF_, _$compile_, _$document_, _$mdUtil_, _$rootScope_, _$window_, _$material_) {
     repeater = angular.element(REPEATER_HTML);
     container = angular.element(CONTAINER_HTML).append(repeater);
     component = null;
@@ -32,6 +32,7 @@ describe('<md-virtual-repeat>', function() {
     $compile = _$compile_;
     $document = _$document_;
     $window = _$window_;
+    $rootScope = _$rootScope_;
     scope = $rootScope.$new();
     scope.startIndex = 0;
     scroller = null;
@@ -550,12 +551,45 @@ describe('<md-virtual-repeat>', function() {
     createRepeater();
     // Expect 13 children (10 + 3 extra).
     expect(offsetter.children().length).toBe(13);
-    
+
     container.css('height', '400px');
     scope.$parent.$broadcast('$md-resize');
 
     // Expect 43 children (40 + 3 extra).
     expect(offsetter.children().length).toBe(43);
+  });
+
+  it('should calculate the correct size for long items', function() {
+    container.attr('md-auto-shrink', '')
+    var child = container.children().eq(0)
+    child.css('height', null);
+    child.attr('md-item-size', null);
+
+    createRepeater();
+    scope.items = ['Lorem ipsum'];
+    scope.$apply();
+    $$rAF.flush();
+
+    var shortHeight = sizer[0].offsetHeight;
+
+    container.remove();
+    component && component.remove();
+    scope.$destroy();
+
+    container = angular.element(CONTAINER_HTML).append(repeater);
+
+    container.attr('md-auto-shrink', '');
+    var child = container.children().eq(0);
+    child.css('height', null);
+    child.attr('md-item-size', null);
+
+    scope = $rootScope.$new();
+    createRepeater();
+    scope.items = ['Lorem ipsum dolor sit amet'];
+    scope.$apply();
+    $$rAF.flush();
+
+    expect(sizer[0].offsetHeight > shortHeight).toBeTruthy();
   });
 
   /**

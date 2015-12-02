@@ -401,8 +401,9 @@ function VirtualRepeatDirective($parse) {
 
 
 /** @ngInject */
-function VirtualRepeatController($scope, $element, $attrs, $browser, $document, $$rAF) {
+function VirtualRepeatController($scope, $element, $attrs, $browser, $document, $$rAF, $rootScope) {
   this.$scope = $scope;
+  this.$rootScope = $rootScope;
   this.$element = $element;
   this.$attrs = $attrs;
   this.$browser = $browser;
@@ -497,7 +498,14 @@ VirtualRepeatController.prototype.readItemSize_ = function() {
 
   this.items = this.repeatListExpression(this.$scope);
   this.parentNode = this.$element[0].parentNode;
+
   var block = this.getBlock_(0);
+
+  // Make sure the block is fully constructed
+  if (!this.$rootScope.$$phase) {
+    this.$rootScope.$apply();
+  }
+
   if (!block.element[0].parentNode) {
     this.parentNode.appendChild(block.element[0]);
   }
