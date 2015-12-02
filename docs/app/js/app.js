@@ -660,6 +660,24 @@ function() {
   };
 }])
 
+.controller('LayoutTipsCtrl', [
+function() {
+  var self = this;
+
+  /*
+   * Flex Sizing - Odd
+   */
+  self.toggleButtonText = "Hide";
+
+  self.toggleContentSize = function() {
+    var contentEl = angular.element(document.getElementById('toHide'));
+
+    contentEl.toggleClass("ng-hide");
+
+    self.toggleButtonText = contentEl.hasClass("ng-hide") ? "Show" : "Hide";
+  };
+}])
+
 .controller('ComponentDocCtrl', [
   '$scope',
   'doc',
