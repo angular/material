@@ -229,7 +229,9 @@
           element.addClass(className);
 
           return function( scope, element ) {
-            // Wait while layout injectors configure, then uncload
+            // Wait while layout injectors configure, then uncloak
+            // NOTE: $rAF does not delay enough... and this is a 1x-only event,
+            //       $timeout is acceptable.
             $timeout( function(){
               element.removeClass(className);
             }, 10, false);
