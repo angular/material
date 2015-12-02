@@ -1,9 +1,13 @@
 describe('$mdDialog', function() {
+  var $mdDialog, $rootScope;
   var runAnimation;
 
   beforeEach(module('material.components.dialog', 'ngSanitize'));
-  beforeEach(inject(function spyOnMdEffects($$q, $animate) {
+  beforeEach(inject(function($$q, $animate, $injector) {
+    $mdDialog = $injector.get('$mdDialog');
+    $rootScope = $injector.get('$rootScope');
 
+    // Spy on animation effects.
     spyOn($animate, 'leave').and.callFake(function(element) {
       element.remove();
       return $$q.when();
@@ -1172,6 +1176,49 @@ describe('$mdDialog', function() {
       var sibling = angular.element(parent[0].querySelector('.sibling'));
       expect(sibling.attr('aria-hidden')).toBe('true');
     }));
+
+    it('should trap focus inside of the dialog', function() {
+      var template = '<md-dialog>Hello <input></md-dialog>';
+      var parent = document.createElement('div');
+
+      // Append the parent to the DOM so that we can test focus behavior.
+      document.body.appendChild(parent);
+
+      $mdDialog.show({template: template, parent: parent});
+      $rootScope.$apply();
+
+      // It should add two focus traps to the document around the dialog content.
+      var focusTraps = parent.querySelectorAll('.md-dialog-focus-trap');
+      expect(focusTraps.length).toBe(2);
+
+      var topTrap = focusTraps[0];
+      var bottomTrap = focusTraps[1];
+
+      var dialog = parent.querySelector('md-dialog');
+      var isDialogFocused = false;
+      dialog.addEventListener('focus', function() {
+        isDialogFocused = true;
+      });
+
+      // Both of the focus traps should be in the normal tab order.
+      expect(topTrap.tabIndex).toBe(0);
+      expect(bottomTrap.tabIndex).toBe(0);
+
+      // TODO(jelbourn): Find a way to test that focusing the traps redirects focus to the
+      // md-dialog element. Firefox is problematic here, as calling element.focus() inside of
+      // a focus event listener seems not to immediately update the document.activeElement.
+      // This is a behavior better captured by an e2e test.
+
+      $mdDialog.hide();
+      runAnimation();
+
+      // All of the focus traps should be removed when the dialog is closed.
+      focusTraps = document.querySelectorAll('.md-dialog-focus-trap');
+      expect(focusTraps.length).toBe(0);
+
+      // Clean up our modifications to the DOM.
+      document.body.removeChild(parent);
+    });
   });
 
   function hasConfigurationMethods(preset, methods) {
