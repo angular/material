@@ -404,6 +404,11 @@ function SidenavController($scope, $element, $attrs, $mdComponentRegistry, $q) {
   self.close  = function() { return self.$toggleOpen( false ); };
   self.toggle = function() { return self.$toggleOpen( !$scope.isOpen );  };
   self.$toggleOpen = function(value) { return $q.when($scope.isOpen = value); };
+  self.destroy = angular.noop;
 
-  self.destroy = $mdComponentRegistry.register(self, $attrs.mdComponentId);
+  $attrs.$observe('mdComponentId', function(id){
+    self.destroy();
+
+    self.destroy = $mdComponentRegistry.register(self, id);
+  });
 }
