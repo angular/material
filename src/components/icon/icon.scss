@@ -13,7 +13,7 @@ md-icon {
   }
 
   &[md-font-icon] {
-    line-height: 1;
+    line-height: $icon-size;
     width: auto;
   }
 }
