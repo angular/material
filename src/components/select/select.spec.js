@@ -487,7 +487,7 @@ describe('<md-select>', function() {
       }));
 
 
-      it('removing a valid value from the model deselects its option', inject(function($rootScope) {
+      iit('removing a valid value from the model deselects its option', inject(function($rootScope) {
         $rootScope.model = [2,3];
         var el = setupMultiple('ng-model="$root.model"', [1,2,3,4]);
 

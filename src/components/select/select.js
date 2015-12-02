@@ -173,12 +173,13 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
 
     // Use everything that's left inside element.contents() as the contents of the menu
     var multiple = angular.isDefined(attr.multiple) ? 'multiple' : '';
+    var modelBinding = angular.isDefined(attr.ngModel) ? 'ng-model="' + attr.ngModel + '"' : '';
     var selectTemplate = '' +
       '<div class="md-select-menu-container" aria-hidden="true">' +
-      '<md-select-menu {0}>{1}</md-select-menu>' +
+      '<md-select-menu {0} {1}>{2}</md-select-menu>' +
       '</div>';
 
-    selectTemplate = $mdUtil.supplant(selectTemplate, [multiple, element.html()]);
+    selectTemplate = $mdUtil.supplant(selectTemplate, [multiple, modelBinding, element.html()]);
     element.empty().append(valueEl);
     element.append(selectTemplate);
 
