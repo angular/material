@@ -1,3 +1,45 @@
+<a name"1.0.0-rc6"></a>
+### 1.0.0-rc6 (2015-12-02)
+
+Added accessibility support to `select`, `menu`, and `toast`.
+Added a `tips` documents section for layout issues and added some layout warnings for IE.
+Detect `ng-touch` usages and provide integration warnings regarding interference of `ng-touch` with `$mdGestures`
+
+
+#### Breaking Changes
+
+* Added breakpoints: `xs`, `gt-xs`, `xl` per Material Design spec.  Breakpoints `sm` and `gt-sm` have changed.
+
+
+#### Bug Fixes
+
+* **core:** detect incompatible ngTouch usages
+* **chips:** Fix readonly padding issue. ([5d34eff3](https://github.com/angular/material/commit/5d34eff3), closes [#2829](https://github.com/angular/material/issues/2829))
+* **datepicker:**
+  * fix not closing on body-click on iOS Safari. Fixes ([5a56a881](https://github.com/angular/material/commit/5a56a881))
+  * improve error state updating. ([d5b72dfe](https://github.com/angular/material/commit/d5b72dfe), closes [#5315](https://github.com/angular/material/issues/5315))
+* **dialog:** trap focus within dialog.. ([fbb1192a](https://github.com/angular/material/commit/fbb1192a), closes [#4105](https://github.com/angular/material/issues/4105))
+* **input:**
+  * fixes alignment between datepicker and other input elements ([08b5af5b](https://github.com/angular/material/commit/08b5af5b), closes [#5936](https://github.com/angular/material/issues/5936))
+  * has-icon overwriting should have higher css priority as normal label without an  ([6cac7daa](https://github.com/angular/material/commit/6cac7daa), closes [#6005](https://github.com/angular/material/issues/6005), [#6013](https://github.com/angular/material/issues/6013))
+* **layout:** allow layout-align without cross-axis or main-axis value ([6b1d7586](https://github.com/angular/material/commit/6b1d7586), closes [#5996](https://github.com/angular/material/issues/5996), [#6003](https://github.com/angular/material/issues/6003))
+* **layouts:** register Layout directives for xs, gt-xs, xl ([2a1de83b](https://github.com/angular/material/commit/2a1de83b), closes [#5995](https://github.com/angular/material/issues/5995), [#5983](https://github.com/angular/material/issues/5983), [#6037](https://github.com/angular/material/issues/6037))
+* **list:**
+  * wrapping secondary if it has ng-click ([358fd98e](https://github.com/angular/material/commit/358fd98e), closes [#3928](https://github.com/angular/material/issues/3928), [#5993](https://github.com/angular/material/issues/5993))
+  * secondary button wasn't coping ngIf attribute ([19a32d0b](https://github.com/angular/material/commit/19a32d0b), closes [#5297](https://github.com/angular/material/issues/5297), [#5991](https://github.com/angular/material/issues/5991))
+  * no longer proxy clicks to multiple elements ([db458cbb](https://github.com/angular/material/commit/db458cbb), closes [#2594](https://github.com/angular/material/issues/2594))
+* **menu:** improve aria compliance ([097b799d](https://github.com/angular/material/commit/097b799d), closes [#4415](https://github.com/angular/material/issues/4415))
+* **radioButton:** fixes focus color for md-primary and md-warn ([16934336](https://github.com/angular/material/commit/16934336), closes [#4487](https://github.com/angular/material/issues/4487))
+* **select:**
+  * fixes positioning of select menu and sets it to append to the body again ([b3177f2f](https://github.com/angular/material/commit/b3177f2f), closes [#6044](https://github.com/angular/material/issues/6044))
+  * make aria compliant, read value in screen readers ([f73e5033](https://github.com/angular/material/commit/f73e5033), closes [#3891](https://github.com/angular/material/issues/3891), [#4914](https://github.com/angular/material/issues/4914), [#4977](https://github.com/angular/material/issues/4977), [#6000](https://github.com/angular/material/issues/6000), [#3859](https://github.com/angular/material/issues/3859))
+  * fix touched status flicker ([c633ad85](https://github.com/angular/material/commit/c633ad85), closes [#5879](https://github.com/angular/material/issues/5879))
+* **tabs:** shift+tab will now work properly when focus is on tabs ([86edea49](https://github.com/angular/material/commit/86edea49), closes [#4696](https://github.com/angular/material/issues/4696))
+* **toast:**
+  * Hide scrollbars during animation. ([d641433f](https://github.com/angular/material/commit/d641433f), closes [#2936](https://github.com/angular/material/issues/2936), [#6017](https://github.com/angular/material/issues/6017))
+  * add missing a11y context. See #349 ([037e3768](https://github.com/angular/material/commit/037e3768))
+
+
 <a name"1.0.0-rc5"></a>
 ### 1.0.0-rc5 (2015-11-25)
 
