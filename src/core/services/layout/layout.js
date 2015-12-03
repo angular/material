@@ -459,14 +459,15 @@
   }
 
   function extractAlignAxis(config) {
-    config = (config || "");
-
     var axis = {
       main : "start",
       cross: "stretch"
     }, values;
 
-    values = (config || "").toLowerCase().trim().replace(WHITESPACE, "-").split("-");
+    config = (config || "");
+    if ( config.indexOf("-") == 0 ) config = "none" + config;
+
+    values = config.toLowerCase().trim().replace(WHITESPACE, "-").split("-");
     if ( values[0] === "space" ) {
       values = [ values[0]+"-"+values[1],values[2] ];
     }
