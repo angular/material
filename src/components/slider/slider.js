@@ -114,7 +114,8 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     var throttledRefreshDimensions = $mdUtil.throttle(refreshSliderDimensions, 5000);
 
     // Check have vertical orientation.
-    if (angular.isDefined(attr.vertical)) {
+    var isVertical = angular.isDefined(attr.vertical);
+    if (isVertical) {
       element.addClass('md-slider-vertical');
     }
 
@@ -236,7 +237,8 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     }
 
     /**
-     * left/right arrow listener
+     * left/right arrow listener for horizontal slider
+     * down/up arrow listener for vertical slider
      */
     function keydownListener(ev) {
       if(element[0].hasAttribute('disabled')) {
@@ -244,11 +246,18 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       }
 
       var changeAmount;
-      if (ev.keyCode === $mdConstant.KEY_CODE.LEFT_ARROW) {
-        changeAmount = -step;
-      } else if (ev.keyCode === $mdConstant.KEY_CODE.RIGHT_ARROW) {
-        changeAmount = step;
+
+      switch (ev.keyCode) {
+        case $mdConstant.KEY_CODE.LEFT_ARROW:
+        case $mdConstant.KEY_CODE.DOWN_ARROW & isVertical:
+          changeAmount = -step;
+          break;
+        case $mdConstant.KEY_CODE.RIGHT_ARROW:
+        case $mdConstant.KEY_CODE.UP_ARROW & isVertical:
+          changeAmount = step;
+          break;
       }
+
       if (changeAmount) {
         if (ev.metaKey || ev.ctrlKey || ev.altKey) {
           changeAmount *= 4;
