@@ -248,11 +248,11 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       var changeAmount;
 
       switch (ev.keyCode) {
-        case $mdConstant.KEY_CODE.LEFT_ARROW:
+        case $mdConstant.KEY_CODE.LEFT_ARROW & !isVertical:
         case $mdConstant.KEY_CODE.DOWN_ARROW & isVertical:
           changeAmount = -step;
           break;
-        case $mdConstant.KEY_CODE.RIGHT_ARROW:
+        case $mdConstant.KEY_CODE.RIGHT_ARROW & !isVertical:
         case $mdConstant.KEY_CODE.UP_ARROW & isVertical:
           changeAmount = step;
           break;
