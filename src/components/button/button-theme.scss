@@ -70,7 +70,7 @@ a.md-button.md-THEME_NAME-theme,
   }
 
   &.md-raised {
-    color: '{{background-contrast}}';
+    color: '{{background-900}}';
     background-color: '{{background-50}}';
     &:not([disabled]) {
       .md-icon {
@@ -142,7 +142,7 @@ a.md-button.md-THEME_NAME-theme,
   &.md-accent[disabled],
   &.md-warn[disabled] {
     color: '{{foreground-3}}' !important;
-    cursor: not-allowed;
+    cursor: default;
 
     md-icon {
       color: '{{foreground-3}}';

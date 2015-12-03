@@ -207,6 +207,11 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
             name: 'Multiple Themes',
             url: 'Theming/04_multiple_themes',
             type: 'link'
+          },
+          {
+            name: 'Under the Hood',
+            url: 'Theming/05_under_the_hood',
+            type: 'link'
           }
         ]
       }
@@ -247,7 +252,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         id: 'layoutContainers',
         url: 'layout/container'
       },{
-        name: 'Grid System',
+        name: 'Layout System',
         id: 'layoutGrid',
         url: 'layout/grid'
       },{
@@ -258,6 +263,10 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         name: 'Options',
         id: 'layoutOptions',
         url: 'layout/options'
+      },{
+        name: 'Tips & Tricks', // Possibly rename to Troubleshooting
+        id: 'layoutTips',
+        url: 'layout/tips'
       }]
     },
     {
@@ -628,7 +637,26 @@ function($scope, $attrs, $location, $rootScope) {
     direction: 'row'
   };
   $scope.layoutAlign = function() {
-    return $scope.layoutDemo.mainAxis + ' ' + $scope.layoutDemo.crossAxis;
+    return $scope.layoutDemo.mainAxis +
+     ($scope.layoutDemo.crossAxis ? ' ' + $scope.layoutDemo.crossAxis : '')
+  };
+}])
+
+.controller('LayoutTipsCtrl', [
+function() {
+  var self = this;
+
+  /*
+   * Flex Sizing - Odd
+   */
+  self.toggleButtonText = "Hide";
+
+  self.toggleContentSize = function() {
+    var contentEl = angular.element(document.getElementById('toHide'));
+
+    contentEl.toggleClass("ng-hide");
+
+    self.toggleButtonText = contentEl.hasClass("ng-hide") ? "Show" : "Hide";
   };
 }])
 

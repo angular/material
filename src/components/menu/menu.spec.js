@@ -28,12 +28,6 @@ describe('material.components.menu', function() {
       expect(buildBadMenu).toThrow();
     }));
 
-    it('removes everything but the first element', function() {
-      var menu = setup()[0];
-      expect(menu.children.length).toBe(1);
-      expect(menu.firstElementChild.nodeName).toBe('BUTTON');
-    });
-
     it('specifies button type', inject(function($compile, $rootScope) {
       var menu = setup()[0];
       expect(menu.firstElementChild.getAttribute('type')).toBe('button');
@@ -42,35 +36,35 @@ describe('material.components.menu', function() {
     it('opens on click', function () {
       var menu = setup();
       openMenu(menu);
-      expect(getOpenMenuContainer().length).toBe(1);
+      expect(getOpenMenuContainer(menu).length).toBe(1);
       closeMenu(menu);
-      expect(getOpenMenuContainer().length).toBe(0);
+      expect(getOpenMenuContainer(menu).length).toBe(0);
     });
 
     it('opens on click without $event', function() {
       var noEvent = true;
       var menu = setup('ng-click', noEvent);
       openMenu(menu);
-      expect(getOpenMenuContainer().length).toBe(1);
+      expect(getOpenMenuContainer(menu).length).toBe(1);
       closeMenu(menu);
-      expect(getOpenMenuContainer().length).toBe(0);
+      expect(getOpenMenuContainer(menu).length).toBe(0);
     });
 
     it('opens on mouseEnter', function() {
         var menu = setup('ng-mouseenter');
         openMenu(menu, 'mouseenter');
-        expect(getOpenMenuContainer().length).toBe(1);
+        expect(getOpenMenuContainer(menu).length).toBe(1);
         closeMenu(menu);
-        expect(getOpenMenuContainer().length).toBe(0);
+        expect(getOpenMenuContainer(menu).length).toBe(0);
       });
 
     it('opens on mouseEnter without $event', function() {
         var noEvent = true;
         var menu = setup('ng-mouseenter', noEvent);
         openMenu(menu, 'mouseenter');
-        expect(getOpenMenuContainer().length).toBe(1);
+        expect(getOpenMenuContainer(menu).length).toBe(1);
         closeMenu(menu);
-        expect(getOpenMenuContainer().length).toBe(0);
+        expect(getOpenMenuContainer(menu).length).toBe(0);
       });
 
     it('should not propagate the click event', function() {
@@ -87,56 +81,49 @@ describe('material.components.menu', function() {
 
     it('closes on backdrop click', inject(function($document) {
 
-      openMenu(setup());
+      var menu = setup();
+      openMenu(menu);
 
-      expect(getOpenMenuContainer().length).toBe(1);
+      expect(getOpenMenuContainer(menu).length).toBe(1);
 
       $document.find('md-backdrop').triggerHandler('click');
       waitForMenuClose();
 
-      expect(getOpenMenuContainer().length).toBe(0);
+      expect(getOpenMenuContainer(menu).length).toBe(0);
     }));
 
 
     it('closes on escape', inject(function($document, $mdConstant) {
-      openMenu(setup());
-      expect(getOpenMenuContainer().length).toBe(1);
+      var menu = setup();
+      openMenu(menu);
+      expect(getOpenMenuContainer(menu).length).toBe(1);
 
-      var openMenuEl = $document[0].querySelector('md-menu-content');
+      var openMenuEl = menu[0].querySelector('md-menu-content');
 
       pressKey(openMenuEl, $mdConstant.KEY_CODE.ESCAPE);
       waitForMenuClose();
 
-      expect(getOpenMenuContainer().length).toBe(0);
-    }));
-
-    it('closes on $destroy', inject(function($document, $rootScope) {
-      var scope = $rootScope.$new();
-      openMenu( setup(null,false,scope) );
-
-      expect(getOpenMenuContainer().length).toBe(1);
-      scope.$destroy();
-
-      expect(getOpenMenuContainer().length).toBe(0);
+      expect(getOpenMenuContainer(menu).length).toBe(0);
     }));
 
     describe('closes with -', function() {
       it('closes on normal option click', function() {
-        expect(getOpenMenuContainer().length).toBe(0);
 
-        openMenu(setup());
+        var menu = setup();
+        expect(getOpenMenuContainer(menu).length).toBe(0);
+        openMenu(menu);
 
         expect(menuActionPerformed).toBeFalsy();
-        expect(getOpenMenuContainer().length).toBe(1);
+        expect(getOpenMenuContainer(menu).length).toBe(1);
 
-        var btn = getOpenMenuContainer()[0].querySelector('md-button');
+        var btn = getOpenMenuContainer(menu)[0].querySelector('md-button');
         btn.click();
 
         waitForMenuClose();
 
         expect(menuActionPerformed).toBeTruthy();
 
-        expect(getOpenMenuContainer().length).toBe(0);
+        expect(getOpenMenuContainer(menu).length).toBe(0);
       });
 
       itClosesWithAttributes([
@@ -151,7 +138,7 @@ describe('material.components.menu', function() {
         }
 
         function testAttribute(attr) {
-          return inject(function($rootScope, $compile, $timeout, $browser, $animate) {
+          return inject(function($rootScope, $compile, $timeout, $browser) {
             var template = '' +
               '<md-menu>' +
               ' <button ng-click="$mdOpenMenu($event)">Hello World</button>' +
@@ -163,17 +150,18 @@ describe('material.components.menu', function() {
               '</md-menu>';
 
 
-            openMenu($compile(template)($rootScope));
+            var menu = $compile(template)($rootScope);
+            openMenu(menu);
 
-            expect(getOpenMenuContainer().length).toBe(1);
+            expect(getOpenMenuContainer(menu).length).toBe(1);
 
             $timeout.flush();
-            var btn = getOpenMenuContainer()[0].querySelector('md-button');
+            var btn = getOpenMenuContainer(menu)[0].querySelector('md-button');
             btn.click();
 
             waitForMenuClose();
 
-            expect(getOpenMenuContainer().length).toBe(0);
+            expect(getOpenMenuContainer(menu).length).toBe(0);
           });
         }
       }
@@ -208,21 +196,27 @@ describe('material.components.menu', function() {
   // Internal methods
   // ********************************************
 
-  function getOpenMenuContainer() {
-    var res;
-    inject(function($document) {
-      res = angular.element($document[0].querySelector('.md-open-menu-container'));
-    });
-    return res;
+  function getOpenMenuContainer(el) {
+    el = (el instanceof angular.element) ? el[0] : el;
+    var container = el.querySelector('.md-open-menu-container');
+    if (container.style.display == 'none') {
+      return angular.element([]);
+    } else {
+      return angular.element(container);
+    }
   }
 
   function openMenu(el, triggerType) {
-    el.children().eq(0).triggerHandler(triggerType || 'click');
-    waitForMenuOpen();
+    inject(function($document) {
+      el.children().eq(0).triggerHandler(triggerType || 'click');
+      $document[0].body.appendChild(el[0]);
+      waitForMenuOpen();
+    });
   }
 
   function closeMenu() {
     inject(function($document) {
+      $document.find('md-backdrop');
       $document.find('md-backdrop').triggerHandler('click');
       waitForMenuClose();
     });

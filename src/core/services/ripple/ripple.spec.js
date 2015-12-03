@@ -131,7 +131,7 @@ describe('mdInkRipple directive', function() {
 
       ripple = container.children('.md-ripple');
       expect(ripple.length).toBe(1);
-      expect(ripple.css('backgroundColor')).toBe('rgb(255, 0, 0)');
+      expect(ripple[0].style.backgroundColor).toBe('rgb(255, 0, 0)');
     }));
   });
 });

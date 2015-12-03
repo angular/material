@@ -245,7 +245,7 @@ describe('md-date-picker', function() {
       populateInputElement('6/1/2015');
       expect(controller.inputContainer).not.toHaveClass('md-datepicker-invalid');
 
-      populateInputElement('7');
+      populateInputElement('cheese');
       expect(controller.inputContainer).toHaveClass('md-datepicker-invalid');
     });
     
@@ -257,6 +257,14 @@ describe('md-date-picker', function() {
 
       populateInputElement('5/30/2014');
       expect(controller.ngModelCtrl.$modelValue).toEqual(initialDate);
+    });
+
+    it('should not update the input string is not "complete"', function() {
+      var date = new Date(2015, DEC, 1);
+      pageScope.myDate = date;
+
+      populateInputElement('7');
+      expect(pageScope.myDate).toEqual(date);
     });
   });
 
@@ -333,9 +341,73 @@ describe('md-date-picker', function() {
       // Expect that the pane is on-screen.
       var paneRect = controller.calendarPane.getBoundingClientRect();
       expect(paneRect.bottom).toBeLessThan(window.innerHeight + 1);
-      document.body.removeChild(superLongElement);
 
       document.body.removeChild(element);
+      document.body.removeChild(superLongElement);
+    });
+
+    it('should adjust the pane position if it would go off-screen if body is not scrollable',
+        function() {
+      // Make the body super huge and scroll down a bunch.
+      var body = document.body;
+      var superLongElement = document.createElement('div');
+      superLongElement.style.height = '10000px';
+      superLongElement.style.width = '1px';
+      body.appendChild(superLongElement);
+      body.scrollTop = 700;
+
+      // Absolutely position the picker near (say ~30px) the edge of the viewport.
+      element.style.position = 'absolute';
+      element.style.top = (document.body.scrollTop + window.innerHeight - 30) + 'px';
+      element.style.left = '0';
+      body.appendChild(element);
+
+      // Make the body non-scrollable.
+      var previousBodyOverflow = body.style.overflow;
+      body.style.overflow = 'hidden';
+
+      // Open the pane.
+      element.querySelector('md-button').click();
+      $timeout.flush();
+
+      // Expect that the pane is on-screen.
+      var paneRect = controller.calendarPane.getBoundingClientRect();
+      expect(paneRect.bottom).toBeLessThan(window.innerHeight + 1);
+
+      // Restore body to pre-test state.
+      body.removeChild(element);
+      body.removeChild(superLongElement);
+      body.style.overflow = previousBodyOverflow;
+    });
+
+    it('should keep the calendar pane in the right place with body scrolling disabled', function() {
+      // Make the body super huge and scroll down a bunch.
+      var body = document.body;
+      var superLongElement = document.createElement('div');
+      superLongElement.style.height = '10000px';
+      superLongElement.style.width = '1px';
+      body.appendChild(superLongElement);
+      body.scrollTop = 700;
+
+      // Absolutely position the picker such that the pane position doesn't need to be adjusted.
+      // (1/10 of the way down the screen).
+      element.style.position = 'absolute';
+      element.style.top = (document.body.scrollTop + (window.innerHeight * 0.10)) + 'px';
+      element.style.left = '0';
+      body.appendChild(element);
+
+      // Open the pane.
+      element.querySelector('md-button').click();
+      $timeout.flush();
+
+      // Expect that the calendar pane is in the same position as the inline datepicker.
+      var paneRect = controller.calendarPane.getBoundingClientRect();
+      var triggerRect = controller.inputContainer.getBoundingClientRect();
+      expect(paneRect.top).toBe(triggerRect.top);
+
+      // Restore body to pre-test state.
+      body.removeChild(superLongElement);
+      body.removeChild(element);
     });
 
     it('should shink the calendar pane when it would otherwise not fit on the screen', function() {
@@ -388,12 +460,13 @@ describe('md-date-picker', function() {
     });
 
     it('should remove the invalid state if present', function() {
-      populateInputElement('7');
+      populateInputElement('cheese');
       expect(controller.inputContainer).toHaveClass('md-datepicker-invalid');
 
       controller.openCalendarPane({
         target: controller.inputElement
       });
+
       scope.$emit('md-calendar-change', new Date());
       expect(controller.inputContainer).not.toHaveClass('md-datepicker-invalid');
     });

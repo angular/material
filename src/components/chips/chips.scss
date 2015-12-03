@@ -65,6 +65,10 @@ $contact-chip-name-width: rem(12) !default;
 
     .md-chip:not(.md-readonly) {
       padding-right: $chip-remove-padding-right;
+
+      .md-chip-content {
+        padding-right:rem(0.4);
+      }
     }
   }
 
@@ -83,7 +87,6 @@ $contact-chip-name-width: rem(12) !default;
 
     .md-chip-content {
       display: block;
-      padding-right:rem(0.4);
       float: left;
       white-space: nowrap;
       max-width: 100%;

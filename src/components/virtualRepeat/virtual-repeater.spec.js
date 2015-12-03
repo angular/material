@@ -13,7 +13,7 @@ describe('<md-virtual-repeat>', function() {
       '     style="height: 10px; width: 10px; box-sizing: border-box;">' +
       '       {{i}} {{$index}}' +
       '</div>';
-  var container, repeater, component, $$rAF, $compile, $document, $window, scope,
+  var container, repeater, component, $$rAF, $compile, $document, $mdUtil, $window, scope,
       scroller, sizer, offsetter;
 
   var NUM_ITEMS = 110,
@@ -21,12 +21,14 @@ describe('<md-virtual-repeat>', function() {
       HORIZONTAL_PX = 150,
       ITEM_SIZE = 10;
 
-  beforeEach(inject(function(_$$rAF_, _$compile_, _$document_, $rootScope, _$window_, _$material_) {
+  beforeEach(inject(function(
+      _$$rAF_, _$compile_, _$document_, _$mdUtil_, $rootScope, _$window_, _$material_) {
     repeater = angular.element(REPEATER_HTML);
     container = angular.element(CONTAINER_HTML).append(repeater);
     component = null;
     $$rAF = _$$rAF_;
     $material = _$material_;
+    $mdUtil = _$mdUtil_;
     $compile = _$compile_;
     $document = _$document_;
     $window = _$window_;
@@ -301,21 +303,25 @@ describe('<md-virtual-repeat>', function() {
     $$rAF.flush();
 
     expect(container[0].offsetHeight).toBe(100);
+    expect(offsetter.children().length).toBe(13);
 
     // With 5 items...
     scope.items = createItems(5);
     scope.$apply();
     expect(container[0].offsetHeight).toBe(5 * ITEM_SIZE);
+    expect(offsetter.children().length).toBe(5);
 
     // With 0 items...
     scope.items = [];
     scope.$apply();
     expect(container[0].offsetHeight).toBe(0);
+    expect(offsetter.children().length).toBe(0);
 
     // With lots of items again...
     scope.items = createItems(NUM_ITEMS);
     scope.$apply();
     expect(container[0].offsetHeight).toBe(100);
+    expect(offsetter.children().length).toBe(13);
   });
 
   it('should shrink the container when the number of items goes down (horizontal)', function() {
@@ -329,21 +335,25 @@ describe('<md-virtual-repeat>', function() {
     $$rAF.flush();
 
     expect(container[0].offsetWidth).toBe(150);
+    expect(offsetter.children().length).toBe(18);
 
     // With 5 items...
     scope.items = createItems(5);
     scope.$apply();
     expect(container[0].offsetWidth).toBe(5 * ITEM_SIZE);
+    expect(offsetter.children().length).toBe(5);
 
     // With 0 items...
     scope.items = [];
     scope.$apply();
     expect(container[0].offsetWidth).toBe(0);
+    expect(offsetter.children().length).toBe(0);
 
     // With lots of items again...
     scope.items = createItems(NUM_ITEMS);
     scope.$apply();
     expect(container[0].offsetWidth).toBe(150);
+    expect(offsetter.children().length).toBe(18);
   });
 
   it('should not shrink below the specified md-auto-shrink-min (vertical)', function() {
@@ -522,11 +532,12 @@ describe('<md-virtual-repeat>', function() {
   });
 
   it('should recheck container size on window resize', function() {
+    spyOn($mdUtil, 'debounce').and.callFake(angular.identity);
     scope.items = createItems(100);
     createRepeater();
     // Expect 13 children (10 + 3 extra).
     expect(offsetter.children().length).toBe(13);
-    
+
     container.css('height', '400px');
     angular.element($window).triggerHandler('resize');
 

@@ -1,0 +1,19 @@
+<div ng-controller="CustomSeparatorCtrl as ctrl" layout="column" ng-cloak>
+  <md-content class="md-padding" layout="column">
+
+    <h2 class="md-title">Use <code>md-separator-keys</code> to customize the key codes which trigger chip creation.</h2>
+    <p>Common key codes found in <code>$mdConstant.KEY_CODE</code> can be used alongside your own.</p>
+    <md-chips
+      ng-model="ctrl.tags"
+      md-separator-keys="ctrl.keys"
+      placeholder="Enter a tag"
+      secondary-placeholder="Comma separated tags"></md-chips>
+    <br/>
+
+    <h2 class="md-title">Add custom separator key codes such as semicolon for e-mails.</h2>
+    <md-chips
+      ng-model="ctrl.contacts"
+      md-separator-keys="ctrl.customKeys"></md-chips>
+
+  </md-content>
+</div>

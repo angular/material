@@ -215,9 +215,9 @@ code:not(.highlight) {
 .site-sidenav,
 .site-sidenav.md-locked-open-add-active,
 .site-sidenav.md-locked-open {
-  width: 256px;
-  min-width: 256px;
-  max-width: 256px;
+  width:     272px;
+  min-width: 272px;
+  max-width: 272px;
 }
 .site-sidenav > * {
   min-width: 218px;

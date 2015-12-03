@@ -1,7 +1,8 @@
 angular.module('dialogDemo1', ['ngMaterial'])
 
-.controller('AppCtrl', function($scope, $mdDialog) {
+.controller('AppCtrl', function($scope, $mdDialog, $mdMedia) {
   $scope.status = '  ';
+  $scope.customFullscreen = $mdMedia('sm');
 
   $scope.showAlert = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app
@@ -12,7 +13,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
         .parent(angular.element(document.querySelector('#popupContainer')))
         .clickOutsideToClose(true)
         .title('This is an alert title')
-        .content('You can specify some description text in here.')
+        .textContent('You can specify some description text in here.')
         .ariaLabel('Alert Dialog Demo')
         .ok('Got it!')
         .targetEvent(ev)
@@ -23,7 +24,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
           .title('Would you like to delete your debt?')
-          .content('All of the banks have agreed to <span class="debt-be-gone">forgive</span> you your debts.')
+          .textContent('All of the banks have agreed to forgive you your debts.')
           .ariaLabel('Lucky day')
           .targetEvent(ev)
           .ok('Please do it!')
@@ -42,13 +43,23 @@ angular.module('dialogDemo1', ['ngMaterial'])
       templateUrl: 'dialog1.tmpl.html',
       parent: angular.element(document.body),
       targetEvent: ev,
-      clickOutsideToClose:true
+      clickOutsideToClose:true,
+      fullscreen: $mdMedia('sm') && $scope.customFullscreen
     })
     .then(function(answer) {
       $scope.status = 'You said the information was "' + answer + '".';
     }, function() {
       $scope.status = 'You cancelled the dialog.';
     });
+
+
+
+    $scope.$watch(function() {
+      return $mdMedia('sm');
+    }, function(sm) {
+      $scope.customFullscreen = (sm === true);
+    });
+
   };
 
   $scope.showTabDialog = function(ev) {

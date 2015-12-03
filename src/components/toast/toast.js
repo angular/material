@@ -40,6 +40,41 @@ function MdToastDirective($mdToast) {
   * - For a toast action, use element with class `md-action`.
   * - Add the class `md-capsule` for curved corners.
   *
+  * ## Parent container notes
+  *
+  * The toast is positioned using absolute positioning relative to it's first non-static parent
+  * container. Thus, if the requested parent container uses static positioning, we will temporarily
+  * set it's positioning to `relative` while the toast is visible and reset it when the toast is
+  * hidden.
+  *
+  * Because of this, it is usually best to ensure that the parent container has a fixed height and
+  * prevents scrolling by setting the `overflow: hidden;` style. Since the position is based off of
+  * the parent's height, the toast may be mispositioned if you allow the parent to scroll.
+  *
+  * You can, however, have a scrollable element inside of the container; just make sure the
+  * container itself does not scroll.
+  *
+  * <hljs lang="html">
+  * <div layout-fill id="toast-container">
+  *   <md-content>
+  *     I can have lots of content and scroll!
+  *   </md-content>
+  * </div>
+  * </hljs>
+  *
+  * Additionally, during animation, we will add the `md-toast-animating` class to the parent
+  * container. This defines a simple rule of `overflow: hidden !important;` to ensure that
+  * scrollbars are not visible on the parent during animation if you use a different overflow style.
+  *
+  * If you need to override this, you can use the following CSS, but be aware that it may cause
+  * scrollbars to intermittently appear.
+  *
+  * <hljs lang="css">
+  *   .md-toast-animating {
+  *     overflow: auto !important;
+  *   }
+  * </hljs>
+  *
   * @usage
   * <hljs lang="html">
   * <div ng-controller="MyController">
@@ -53,7 +88,7 @@ function MdToastDirective($mdToast) {
   * var app = angular.module('app', ['ngMaterial']);
   * app.controller('MyController', function($scope, $mdToast) {
   *   $scope.openToast = function($event) {
-  *     $mdToast.show($mdToast.simple().content('Hello!'));
+  *     $mdToast.show($mdToast.simple().textContent('Hello!'));
   *     // Could also do $mdToast.showSimple('Hello');
   *   };
   * });
@@ -61,16 +96,17 @@ function MdToastDirective($mdToast) {
   */
 
 /**
-  * @ngdoc method
-  * @name $mdToast#showSimple
-  *
-  * @description
-  * Convenience method which builds and shows a simple toast.
-  *
-  * @returns {promise} A promise that can be resolved with `$mdToast.hide()` or
-  * rejected with `$mdToast.cancel()`.
-  *
-  */
+ * @ngdoc method
+ * @name $mdToast#showSimple
+ * 
+ * @param {string} message The message to display inside the toast
+ * @description
+ * Convenience method which builds and shows a simple toast.
+ *
+ * @returns {promise} A promise that can be resolved with `$mdToast.hide()` or
+ * rejected with `$mdToast.cancel()`.
+ *
+ */
 
  /**
   * @ngdoc method
@@ -84,7 +120,7 @@ function MdToastDirective($mdToast) {
   * _**Note:** These configuration methods are provided in addition to the methods provided by
   *   the `build()` and `show()` methods below._
   *
-  * - `.content(string)` - Sets the toast content to the specified string.
+  * - `.textContent(string)` - Sets the toast content to the specified string.
   *
   * - `.action(string)` - Adds an action button. If clicked, the promise (returned from `show()`)
   * will resolve with the value `'ok'`; otherwise, it is resolved with `true` after a `hideDelay`
@@ -102,7 +138,7 @@ function MdToastDirective($mdToast) {
 
 /**
   * @ngdoc method
-  * @name $mdToast#updateContent
+  * @name $mdToast#updateTextContent
   *
   * @description
   * Updates the content of an existing toast. Useful for updating things like counts, etc.
@@ -181,6 +217,10 @@ function MdToastDirective($mdToast) {
   * @name $mdToast#cancel
   *
   * @description
+  * `DEPRECATED` - The promise returned from opening a toast is used only to notify about the closing of the toast.
+  * As such, there isn't any reason to also allow that promise to be rejected,
+  * since it's not clear what the difference between resolve and reject would be.
+  *
   * Hide the existing toast and reject the promise returned from
   * `$mdToast.show()`.
   *
@@ -202,13 +242,15 @@ function MdToastProvider($$interimElementProvider) {
       options: toastDefaultOptions
     })
     .addPreset('simple', {
-      argOption: 'content',
-      methods: ['content', 'action', 'highlightAction', 'theme', 'parent'],
+      argOption: 'textContent',
+      methods: ['textContent', 'content', 'action', 'highlightAction', 'theme', 'parent'],
       options: /* @ngInject */ function($mdToast, $mdTheming) {
         var opts = {
           template: [
             '<md-toast md-theme="{{ toast.theme }}" ng-class="{\'md-capsule\': toast.capsule}">',
-              '<span flex>{{ toast.content }}</span>',
+              '<span flex role="alert" aria-relevant="all" aria-atomic="true">' +
+                '{{ toast.content }}' +
+              '</span>',
               '<md-button class="md-action" ng-if="toast.action" ng-click="toast.resolve()" ng-class="{\'md-highlight\': toast.highlightAction}">',
                 '{{ toast.action }}',
               '</md-button>',
@@ -230,15 +272,18 @@ function MdToastProvider($$interimElementProvider) {
         return opts;
       }
     })
-    .addMethod('updateContent', function(newContent) {
+    .addMethod('updateTextContent', updateTextContent)
+    .addMethod('updateContent', updateTextContent);
+
+    function updateTextContent(newContent) {
       activeToastContent = newContent;
-    });
+    }
 
     return $mdToast;
 
   /* @ngInject */
-  function toastDefaultOptions($animate, $mdToast, $mdUtil) {
-    var SWIPE_EVENTS = '$md.swipeleft $md.swiperight';
+  function toastDefaultOptions($animate, $mdToast, $mdUtil, $mdMedia) {
+    var SWIPE_EVENTS = '$md.swipeleft $md.swiperight $md.swipeup $md.swipedown';
     return {
       onShow: onShow,
       onRemove: onRemove,
@@ -248,12 +293,28 @@ function MdToastProvider($$interimElementProvider) {
     };
 
     function onShow(scope, element, options) {
-      activeToastContent = options.content;
+      activeToastContent = options.textContent || options.content; // support deprecated #content method
+
+      var isSmScreen = !$mdMedia('gt-sm');
 
       element = $mdUtil.extractElementByName(element, 'md-toast', true);
       options.onSwipe = function(ev, gesture) {
-        //Add swipeleft/swiperight class to element so it can animate correctly
-        element.addClass('md-' + ev.type.replace('$md.',''));
+        //Add the relevant swipe class to the element so it can animate correctly
+        var swipe = ev.type.replace('$md.','');
+        var direction = swipe.replace('swipe', '');
+
+        // If the swipe direction is down/up but the toast came from top/bottom don't fade away
+        // Unless the screen is small, then the toast always on bottom
+        if ((direction === 'down' && options.position.indexOf('top') != -1 && !isSmScreen) ||
+            (direction === 'up' && (options.position.indexOf('bottom') != -1 || isSmScreen))) {
+          return;
+        }
+
+        if ((direction === 'left' || direction === 'right') && isSmScreen) {
+          return;
+        }
+
+        element.addClass('md-' + swipe);
         $mdUtil.nextTick($mdToast.cancel);
       };
       options.openClass = toastOpenClass(options.position);
@@ -261,22 +322,42 @@ function MdToastProvider($$interimElementProvider) {
 
       // 'top left' -> 'md-top md-left'
       options.parent.addClass(options.openClass);
+
+      // static is the default position
+      if ($mdUtil.hasComputedStyle(options.parent, 'position', 'static')) {
+        options.parent.css('position', 'relative');
+      }
+
       element.on(SWIPE_EVENTS, options.onSwipe);
-      element.addClass(options.position.split(' ').map(function(pos) {
+      element.addClass(isSmScreen ? 'md-bottom' : options.position.split(' ').map(function(pos) {
         return 'md-' + pos;
       }).join(' '));
 
-      return $animate.enter(element, options.parent);
+      if (options.parent) options.parent.addClass('md-toast-animating');
+      return $animate.enter(element, options.parent).then(function() {
+        if (options.parent) options.parent.removeClass('md-toast-animating');
+      });
     }
 
     function onRemove(scope, element, options) {
       element.off(SWIPE_EVENTS, options.onSwipe);
+      if (options.parent) options.parent.addClass('md-toast-animating');
       if (options.openClass) options.parent.removeClass(options.openClass);
 
-      return (options.$destroy == true) ? element.remove() : $animate.leave(element);
+      return ((options.$destroy == true) ? element.remove() : $animate.leave(element))
+        .then(function () {
+          if (options.parent) options.parent.removeClass('md-toast-animating');
+          if ($mdUtil.hasComputedStyle(options.parent, 'position', 'static')) {
+            options.parent.css('position', '');
+          }
+        });
     }
 
     function toastOpenClass(position) {
+      if (!$mdMedia('gt-sm')) {
+        return 'md-toast-open-bottom';
+      }
+
       return 'md-toast-open-' +
         (position.indexOf('top') > -1 ? 'top' : 'bottom');
     }

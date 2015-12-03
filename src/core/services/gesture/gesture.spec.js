@@ -441,53 +441,63 @@ describe('$mdGesture', function() {
   });
 
   describe('swipe', function() {
+    var now;
+    var leftSpy;
+    var rightSpy;
+    var upSpy;
+    var downSpy;
+    var el;
 
-    it('should swipeleft if velocity > minVelocity and distance > maxDistance', inject(function($mdGesture, $document) {
-      var now = 0;
+    beforeEach(function () {
+      now = 0;
+
       spyOn(Date, 'now').and.callFake(function() { return now; });
 
-      var leftSpy = jasmine.createSpy('left');
-      var rightSpy = jasmine.createSpy('right');
-      var el = angular.element('<div>');
+      leftSpy = jasmine.createSpy('left');
+      rightSpy = jasmine.createSpy('right');
+      upSpy = jasmine.createSpy('up');
+      downSpy = jasmine.createSpy('down');
+      el = angular.element('<div>');
 
       el.on('$md.swipeleft', leftSpy)
-        .on('$md.swiperight', rightSpy);
+        .on('$md.swiperight', rightSpy)
+        .on('$md.swipeup', upSpy)
+        .on('$md.swipedown', downSpy);
 
+    });
+
+    it('should swipeleft if velocityX > minVelocity and distanceX > maxDistance', inject(function($mdGesture, $document) {
       $document.triggerHandler({
         type: 'touchstart', target: el[0], pageX: 0, pageY: 0
       });
       expect(leftSpy).not.toHaveBeenCalled();
       expect(rightSpy).not.toHaveBeenCalled();
+      expect(upSpy).not.toHaveBeenCalled();
+      expect(downSpy).not.toHaveBeenCalled();
 
       now = 1;
       $document.triggerHandler({
         type: 'touchend', target: el[0], pageX: -100, pageY: 0
       });
       expect(leftSpy).toHaveBeenCalled();
-      expect(leftSpy.calls.mostRecent().args[0].pointer).toHaveFields({
-        velocityX: -100,
-        distanceX: -100
-      });
       expect(rightSpy).not.toHaveBeenCalled();
+      expect(upSpy).not.toHaveBeenCalled();
+      expect(downSpy).not.toHaveBeenCalled();
+
+      var pointer = leftSpy.calls.mostRecent().args[0].pointer;
+      expect(pointer.velocityX).toBe(-100);
+      expect(pointer.distanceX).toBe(-100);
     }));
 
-    it('should swiperight if velocity > minVelocity and distance > maxDistance', inject(function($mdGesture, $document) {
-      var now = 0;
-      spyOn(Date, 'now').and.callFake(function() { return now; });
-
-      var leftSpy = jasmine.createSpy('left');
-      var rightSpy = jasmine.createSpy('right');
-      var el = angular.element('<div>');
-
-      el.on('$md.swipeleft', leftSpy)
-        .on('$md.swiperight', rightSpy);
-
+    it('should swiperight if velocityX > minVelocity and distanceX > maxDistance', inject(function($mdGesture, $document) {
       $document.triggerHandler('$$mdGestureReset');
       $document.triggerHandler({
         type: 'touchstart', target: el[0], pageX: 0, pageY: 0
       });
       expect(leftSpy).not.toHaveBeenCalled();
       expect(rightSpy).not.toHaveBeenCalled();
+      expect(upSpy).not.toHaveBeenCalled();
+      expect(downSpy).not.toHaveBeenCalled();
 
       now = 1;
       $document.triggerHandler({
@@ -495,6 +505,8 @@ describe('$mdGesture', function() {
       });
       expect(leftSpy).not.toHaveBeenCalled();
       expect(rightSpy).toHaveBeenCalled();
+      expect(upSpy).not.toHaveBeenCalled();
+      expect(downSpy).not.toHaveBeenCalled();
 
       var pointer = rightSpy.calls.mostRecent().args[0].pointer;
       expect(pointer.velocityX).toBe(100);
@@ -502,17 +514,56 @@ describe('$mdGesture', function() {
 
     }));
 
-    it('should not swipeleft is velocity is too low', inject(function($document) {
-      var now = 0;
-      spyOn(Date, 'now').and.callFake(function() { return now; });
+    it('should swipeup if velocityY > minVelocity and distanceY > maxDistance', inject(function($mdGesture, $document) {
+      $document.triggerHandler('$$mdGestureReset');
+      $document.triggerHandler({
+        type: 'touchstart', target: el[0], pageX: 0, pageY: 0
+      });
+      expect(leftSpy).not.toHaveBeenCalled();
+      expect(rightSpy).not.toHaveBeenCalled();
+      expect(upSpy).not.toHaveBeenCalled();
+      expect(downSpy).not.toHaveBeenCalled();
 
-      var leftSpy = jasmine.createSpy('left');
-      var rightSpy = jasmine.createSpy('right');
-      var el = angular.element('<div>');
+      now = 1;
+      $document.triggerHandler({
+        type: 'touchend', target: el[0], pageX: 0, pageY: -100
+      });
+      expect(upSpy).toHaveBeenCalled();
+      expect(leftSpy).not.toHaveBeenCalled();
+      expect(rightSpy).not.toHaveBeenCalled();
+      expect(downSpy).not.toHaveBeenCalled();
 
-      el.on('$md.swipeleft', leftSpy)
-        .on('$md.swiperight', rightSpy);
+      var pointer = upSpy.calls.mostRecent().args[0].pointer;
+      expect(pointer.velocityY).toBe(-100);
+      expect(pointer.distanceY).toBe(-100);
+    }));
 
+    it('should swipedown if velocityY > minVelocity and distanceY > maxDistance', inject(function($mdGesture, $document) {
+      $document.triggerHandler('$$mdGestureReset');
+      $document.triggerHandler({
+        type: 'touchstart', target: el[0], pageX: 0, pageY: 0
+      });
+      expect(leftSpy).not.toHaveBeenCalled();
+      expect(rightSpy).not.toHaveBeenCalled();
+      expect(upSpy).not.toHaveBeenCalled();
+      expect(downSpy).not.toHaveBeenCalled();
+
+      now = 1;
+      $document.triggerHandler({
+        type: 'touchend', target: el[0], pageX: 0, pageY: 100
+      });
+      expect(leftSpy).not.toHaveBeenCalled();
+      expect(rightSpy).not.toHaveBeenCalled();
+      expect(upSpy).not.toHaveBeenCalled();
+      expect(downSpy).toHaveBeenCalled();
+
+      var pointer = downSpy.calls.mostRecent().args[0].pointer;
+      expect(pointer.velocityY).toBe(100);
+      expect(pointer.distanceY).toBe(100);
+
+    }));
+
+    it('should not swipeleft when velocity is too low', inject(function($document) {
       $document.triggerHandler({
         type: 'touchstart', target: el[0], pageX: 0, pageY: 0
       });
@@ -523,6 +574,8 @@ describe('$mdGesture', function() {
       });
       expect(leftSpy).not.toHaveBeenCalled();
       expect(rightSpy).not.toHaveBeenCalled();
+      expect(upSpy).not.toHaveBeenCalled();
+      expect(downSpy).not.toHaveBeenCalled();
 
       $document.triggerHandler({
         type: 'touchstart', target: el[0], pageX: 0, pageY: 0
@@ -534,19 +587,11 @@ describe('$mdGesture', function() {
       });
       expect(leftSpy).toHaveBeenCalled();
       expect(rightSpy).not.toHaveBeenCalled();
+      expect(upSpy).not.toHaveBeenCalled();
+      expect(downSpy).not.toHaveBeenCalled();
     }));
 
-    it('should not swiperight is distance is too low', inject(function($document) {
-      var now = 0;
-      spyOn(Date, 'now').and.callFake(function() { return now; });
-
-      var leftSpy = jasmine.createSpy('left');
-      var rightSpy = jasmine.createSpy('right');
-      var el = angular.element('<div>');
-
-      el.on('$md.swipeleft', leftSpy)
-        .on('$md.swiperight', rightSpy);
-
+    it('should not swiperight when distance is too low', inject(function($document) {
       $document.triggerHandler({
         type: 'touchstart', target: el[0], pageX: 0, pageY: 0
       });
@@ -557,6 +602,8 @@ describe('$mdGesture', function() {
       });
       expect(leftSpy).not.toHaveBeenCalled();
       expect(rightSpy).not.toHaveBeenCalled();
+      expect(upSpy).not.toHaveBeenCalled();
+      expect(downSpy).not.toHaveBeenCalled();
 
       $document.triggerHandler({
         type: 'touchstart', target: el[0], pageX: 0, pageY: 0
@@ -567,6 +614,66 @@ describe('$mdGesture', function() {
       });
       expect(leftSpy).not.toHaveBeenCalled();
       expect(rightSpy).toHaveBeenCalled();
+      expect(upSpy).not.toHaveBeenCalled();
+      expect(downSpy).not.toHaveBeenCalled();
+    }));
+
+    it('should not swipeup when velocity is too low', inject(function($document) {
+      $document.triggerHandler('$$mdGestureReset');
+      $document.triggerHandler({
+        type: 'touchstart', target: el[0], pageX: 0, pageY: 0
+      });
+      // 100ms and 50 distance = velocity of 0.5, below the boundary. no swipe.
+      now = 100;
+      $document.triggerHandler({
+        type: 'touchend', target: el[0], pageX: 0, pageY: -50
+      });
+      expect(leftSpy).not.toHaveBeenCalled();
+      expect(rightSpy).not.toHaveBeenCalled();
+      expect(upSpy).not.toHaveBeenCalled();
+      expect(downSpy).not.toHaveBeenCalled();
+
+      $document.triggerHandler({
+        type: 'touchstart', target: el[0], pageX: 0, pageY: 0
+      });
+      // 101ms and 100 distance = velocity of 1.0001, just fast enough for a swipe.
+      now = 101;
+      $document.triggerHandler({
+        type: 'touchend', target: el[0], pageX: 0, pageY: -100
+      });
+      expect(leftSpy).not.toHaveBeenCalled();
+      expect(rightSpy).not.toHaveBeenCalled();
+      expect(upSpy).toHaveBeenCalled();
+      expect(downSpy).not.toHaveBeenCalled();
+    }));
+
+    it('should not swipedown when velocity is too low', inject(function($document) {
+      $document.triggerHandler('$$mdGestureReset');
+      $document.triggerHandler({
+        type: 'touchstart', target: el[0], pageX: 0, pageY: 0
+      });
+      // 100ms and 50 distance = velocity of 0.5, below the boundary. no swipe.
+      now = 100;
+      $document.triggerHandler({
+        type: 'touchend', target: el[0], pageX: 0, pageY: 50
+      });
+      expect(leftSpy).not.toHaveBeenCalled();
+      expect(rightSpy).not.toHaveBeenCalled();
+      expect(upSpy).not.toHaveBeenCalled();
+      expect(downSpy).not.toHaveBeenCalled();
+
+      $document.triggerHandler({
+        type: 'touchstart', target: el[0], pageX: 0, pageY: 0
+      });
+      // 101ms and 100 distance = velocity of 1.0001, just fast enough for a swipe.
+      now = 101;
+      $document.triggerHandler({
+        type: 'touchend', target: el[0], pageX: 0, pageY: 100
+      });
+      expect(leftSpy).not.toHaveBeenCalled();
+      expect(rightSpy).not.toHaveBeenCalled();
+      expect(upSpy).not.toHaveBeenCalled();
+      expect(downSpy).toHaveBeenCalled();
     }));
 
   });

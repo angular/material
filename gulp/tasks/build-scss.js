@@ -30,7 +30,6 @@ exports.task = function() {
     gulp.src(paths)
       .pipe(util.filterNonCodeFiles())
       .pipe(filter(['**', '!**/*-theme.scss']))
-      .pipe(filter(['**', '!**/standalone.scss']))
       .pipe(concat('angular-material.scss'))
       .pipe(gulp.dest(dest))
   );

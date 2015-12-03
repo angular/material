@@ -9,7 +9,7 @@ material design specification for use in Angular single-page applications (SPAs)
 
 This project is in early pre-release. Angular Material is both a reference implementation of
 Material Design and a complementary effort to the [Polymer](https://www.polymer-project.org/)
-project's [Paper Elements](https://www.polymer-project.org/docs/elements/paper-elements.html)
+project's [Paper Elements](https://elements.polymer-project.org/)
 collection.
 
 Quick Links:
@@ -158,5 +158,11 @@ pull directly from the distribution GitHub
     <script src="https://gitcdn.xyz/repo/angular/bower-material/master/angular-material.js"></script>
 
   </body>
+```
+
+Once you have all the necessary assets installed, add `ngMaterial` as a dependency for your app:
+
+```javascript
+angular.module('myApp', ['ngMaterial']);
 ```
 

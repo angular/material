@@ -60,6 +60,11 @@ md-list-item {
       white-space: normal;
       flex-direction: inherit;
       align-items: inherit;
+      border-radius: 0;
+
+      & > .md-ripple-container {
+        border-radius: 0;
+      }
     }
     &:focus {
       outline: none
@@ -104,7 +109,7 @@ md-list-item, md-list-item .md-list-item-inner {
   }
   & > div.md-primary > md-checkbox,
   & > div.md-secondary > md-checkbox,
-  & > md-checkbox:first-child,
+  & > md-checkbox,
   md-checkbox.md-secondary {
     align-self: center;
     .md-label { display: none; }
@@ -113,23 +118,24 @@ md-list-item, md-list-item .md-list-item-inner {
   & > md-icon:first-child:not(.md-avatar-icon) {
     margin-right: $list-item-primary-width - $list-item-primary-icon-width;
   }
-  & > md-checkbox:first-child {
+  & > md-checkbox {
     width: 3 * $baseline-grid;
     margin-left: 3px;
     margin-right: 29px;
+    margin-top: 16px;
   }
-  & > .md-avatar, .md-avatar-icon {
+  & .md-avatar, .md-avatar-icon {
     margin-top: $baseline-grid;
     margin-bottom: $baseline-grid;
     margin-right: $list-item-primary-width - $list-item-primary-avatar-width;
     border-radius: 50%;
     box-sizing: content-box;
   }
-  & > .md-avatar {
+  & .md-avatar {
     width: $list-item-primary-avatar-width;
     height: $list-item-primary-avatar-width;
   }
-  & > .md-avatar-icon {
+  & .md-avatar-icon {
     padding: 8px;
   }
 
@@ -166,15 +172,15 @@ md-list-item, md-list-item .md-list-item-inner {
 
   .md-secondary-container,
   .md-secondary {
-    margin-left: $list-item-secondary-left-margin;
     position: absolute;
-    right: $list-item-padding-horizontal;
     top: 50%;
+    right: $list-item-padding-horizontal;
+    margin: 0 0 0 $list-item-secondary-left-margin;
     transform: translate3d(0, -50%, 0);
   }
 
   & > .md-button.md-secondary-container > .md-secondary {
-    margin-left: 0px;
+    margin-left: 0;
     position: static;
   }
 
