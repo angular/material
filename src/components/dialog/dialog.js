@@ -147,7 +147,7 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  *     function showAlert() {
  *       alert = $mdDialog.alert({
  *         title: 'Attention',
- *         content: 'This is an example of how easy dialogs can be!',
+ *         textContent: 'This is an example of how easy dialogs can be!',
  *         ok: 'Close'
  *       });
  *
