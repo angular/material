@@ -224,6 +224,7 @@ button.md-button::-moz-focus-inner {
     border-radius: 0px 2px 2px 0px;
   }
 }
+// IE only
 @media screen and (-ms-high-contrast: active) {
   .md-button.md-raised,
   .md-button.md-fab {
