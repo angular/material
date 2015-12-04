@@ -273,7 +273,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         url: 'layout/options'
       }
       ,{
-        name: 'Troubleshooting', // Possibly rename to Troubleshooting
+        name: 'Troubleshooting',
         id: 'layoutTips',
         url: 'layout/tips'
       }]

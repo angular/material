@@ -2,16 +2,16 @@
 
   <h3>Overview</h3>
   <p>
-    Angular Material's Layout features are purposed as syntactic HTML/CSS sugar to allow developers
-    to easily and intuitively create responsive HTML layouts... built using modern
-    <a href="http://www.w3.org/TR/css3-flexbox/">flexbox</a> specifications and features. For developers, this
-    Layout API is simply a list of HTML attributes (aka directives) that can be used on HTML containers and elements.
+    Angular Material's Layout features provide sugar to enable developers to more easily create modern,
+    responsive layouts on top of CSS3 <a href="http://www.w3.org/TR/css3-flexbox/">flexbox</a>.
+    The layout API consists of a set of Angular directives that can
+    be applied to any of your application's HTML content.
   </p>
 
 
   <p>
-    Using <b> HTML Attributes</b> as the API provides an easy way to set a value (eg. <code>layout="row"</code>) and
-    helps with separation of concerns: Attributes define layout while and CSS classes assign styling.
+    Using <b> HTML Directives</b> as the API provides an easy way to set a value (eg. <code>layout="row"</code>) and
+    helps with separation of concerns: Attributes define layout while CSS classes assign styling.
   </p>
 
 
@@ -231,12 +231,12 @@
   <br/>
 
   <p>
-  This Layout API means that developers no longer have to worry about the details of FlexBox styling.
+  This Layout API means it is much easier to set up and maintain flexbox layouts vs. defining everything via CSS.
   The developer uses the Layout HTML API to specify <b><i>intention</i></b> and the Layout engine handles all the issues of CSS flexbox styling.
   </p>
 
   <p class="layout_note">
-    The Layout engine will even report console warnings for Layout conflicts and issues that are not automatically resolved.
+    The Layout engine will even report The Layout engine will log console warnings when it encounters conflicts or known issues.
   </p>
 
 
@@ -247,18 +247,27 @@
   <h3>Under-the-Hood</h3>
 
   <p>
-    Due to performance problems when using Attribute Selectors with <b>IE10</b> and <b>IE11</b> browsers, our attributes are
-    dynamically converted to class selectors at runtime. And the Layout CSS classNames and styles have been each been
+    Due to performance problems when using Attribute Selectors with <b>Internet Explore</b> browsers; see the following for more details:
+  </p>
+
+  <ul>
+    <li><a href="https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers" target="_blank">FlexBugs</a></li>
+    <li><a href="http://philipwalton.com/articles/normalizing-cross-browser-flexbox-bugs/" target="_blank">Normalizing Cross-browser Flexbox Bugs</a></li>
+    <li><a href="http://caniuse.com/#search=flex" target="_blank">Can I Use <code>flex</code>: see the <code>Known Issues</code> tab.</a></li>
+  </ul>
+
+  <p>
+    Layout directives dynamically generate class selectors at runtime. And the Layout CSS classNames and styles have each been
     predefined in the <code>angular-material.css</code> stylesheet.
   </p>
 
   <p class="layout_note">
-    This means the HTML design-time markup is not affected. Developers should continue to use Layout attribute selectors in the HTML
-    markup. Yet it also worthwhile see how this transformation works under-the-hood:
+    Developers should continue to use Layout directives in the HTML
+    markup as the classes may change between releases. Nevertheless, it is worthwhile see how this directive-to-className transformation works:
   </p>
 
   <p>
-    Consider the simply use of the <code>layout</code> and <code>flex</code> attributes (API):
+    Consider the simply use of the <code>layout</code> and <code>flex</code> directives (API):
   </p>
 
   <hljs lang="html">
@@ -282,7 +291,7 @@
 
 
   <p>
-    At runtime, these attributes are transformed to CSS classnames.
+    At runtime, these attributes are transformed to CSS classes.
   </p>
 
   <hljs lang="html">

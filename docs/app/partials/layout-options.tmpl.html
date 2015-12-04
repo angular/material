@@ -15,10 +15,10 @@
 
   <p>
     See the <a href="layout/container">Container Elements</a> page for a basic explanation
-    of layout attributes.
+    of layout directives.
     <br/>
     To make your layout change depending upon the device screen size, there are
-    other <code>layout</code> attributes available:
+    other <code>layout</code> directives available:
   </p>
 
   <table class="md-api-table">
@@ -62,7 +62,7 @@
     </tr>
     <tr>
       <td>layout-gt-lg</td>
-      <td>width &gt;= <b>1920/b>px</td>
+      <td>width &gt;= <b>1920</b>px</td>
     </tr>
     <tr>
       <td>layout-xl</td>
@@ -137,9 +137,11 @@
 
     <h3>Show &amp; Hide </h3>
 
-  <p>Use the <code>show</code> <code>hide</code> APIs to responsively show or hide elements</p>
+  <p>Use the <code>show</code> <code>hide</code> APIs to responsively show or hide elements. While these work similar
+  to <code>ng-show</code> and <code>ng-hide</code>, these Layout directives are mediaQuery-aware.
+  </p>
 
-  <docs-demo demo-title="Hide and Show Attributes" class="small-demo colorNested">
+  <docs-demo demo-title="Hide and Show Directives" class="small-demo colorNested">
     <demo-file name="index.html">
       <div layout="row">
         <div hide show-gt-sm flex>
