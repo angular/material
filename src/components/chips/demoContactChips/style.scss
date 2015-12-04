@@ -33,7 +33,8 @@ md-content.autocomplete {
       overflow: hidden;
     }
   }
-  @media (min-width: 900px) {
+
+  @media screen and (min-width: 960px) {
     float: left;
     width: 33%;
   }

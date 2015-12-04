@@ -181,6 +181,7 @@ md-autocomplete {
       }
     }
   }
+  // IE Only
   @media screen and (-ms-high-contrast: active) {
     $border-color: #fff;
 
@@ -230,6 +231,7 @@ md-autocomplete {
   }
 }
 
+// IE Only
 @media screen and (-ms-high-contrast: active) {
   md-autocomplete,
   .md-autocomplete-suggestions {

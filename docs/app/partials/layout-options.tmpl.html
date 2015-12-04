@@ -15,45 +15,69 @@
 
   <p>
     See the <a href="layout/container">Container Elements</a> page for a basic explanation
-    of layout attributes.
+    of layout directives.
     <br/>
     To make your layout change depending upon the device screen size, there are
-    other <code>layout</code> attributes available:
+    other <code>layout</code> directives available:
   </p>
 
   <table class="md-api-table">
+    <thead>
+    <tr>
+      <th>API</th>
+      <th>Activates when device</th>
+    </tr>
+    </thead>
     <tr>
       <td>layout</td>
-      <td>Sets the default layout on all devices.</td>
+      <td>Sets default layout direction unless overridden by another breakpoint.</td>
+    </tr>
+    <tr>
+      <td>layout-xs</td>
+      <td>width &lt; <b>600</b>px</td>
+    </tr>
+    <tr>
+      <td>layout-gt-xs</td>
+      <td>width &gt;= <b>600</b>px</td>
     </tr>
     <tr>
       <td>layout-sm</td>
-      <td>Sets the layout on devices less than 600px wide (phones).</td>
+      <td><b>600</b>px &lt;= width &lt; <b>960</b>px</td>
     </tr>
     <tr>
       <td>layout-gt-sm</td>
-      <td>Sets the layout on devices greater than 600px wide (bigger than phones).</td>
+      <td>width &gt;= <b>960</b>px</td>
     </tr>
     <tr>
       <td>layout-md</td>
-      <td>Sets the layout on devices between 600px and 960px wide (tablets in portrait).</td>
+      <td><b>960</b>px &lt;= width &lt; <b>1280</b>px</td>
     </tr>
     <tr>
       <td>layout-gt-md</td>
-      <td>Sets the layout on devices greater than 960px wide (bigger than tablets in portrait).</td>
+      <td>width &gt;= <b>1280</b>px</td>
     </tr>
     <tr>
       <td>layout-lg</td>
-      <td>Sets the layout on devices between 960 and 1200px wide (tablets in landscape).</td>
+      <td><b>1280</b>px &lt;= width &lt; <b>1920</b>px</td>
     </tr>
     <tr>
       <td>layout-gt-lg</td>
-      <td>Sets the layout on devices greater than 1200px wide (computers and large screens).</td>
+      <td>width &gt;= <b>1920</b>px</td>
+    </tr>
+    <tr>
+      <td>layout-xl</td>
+      <td>width &gt;= <b>1920</b>px</td>
     </tr>
   </table>
   <br/>
 
   <br/>
+  <hr>
+  <br/>
+
+  <h3>Layout Margin, Padding, Wrap and Fill</h3>
+  <br/>
+
 
   <docs-demo demo-title="Layout Margin, Padding, and Fill" class="small-demo colorNested-noPad">
     <demo-file name="index.html">
@@ -73,16 +97,17 @@
   </docs-demo>
 
   <p>
-    <code>layout-margin</code> adds margin around each <code>flex</code> child. It also adds a margin to the layout container itself.
+    <code>layout-margin</code> adds margin around each <code>flex</code> child. It also adds a margin to the layout
+    container itself.
     <br/>
-    <code>layout-padding</code> adds padding inside each <code>flex</code> child. It also adds padding to the layout container itself.
+    <code>layout-padding</code> adds padding inside each <code>flex</code> child. It also adds padding to the layout
+    container itself.
     <br/>
     <code>layout-fill</code> forces the layout element to fill its parent container.
   </p>
 
-  <br/>
 
-  <br/>
+  <p>Here is a non-trivial group of <code>flex</code> elements using <code>layout-wrap</code></p>
 
   <docs-demo demo-title="Wrap" class="small-demo colorNested-noPad">
     <demo-file name="index.html">
@@ -97,77 +122,38 @@
       </div>
     </demo-file>
   </docs-demo>
+
   <p>
-    <code>layout-wrap</code> allows <code>flex</code> children to wrap within the container if the elements use more than 100%.
+    <code>layout-wrap</code> allows <code>flex</code> children to wrap within the container if the elements use more
+    than 100%.
     <br/>
   </p>
 
   <br/>
 
   <br/>
+    <hr>
+    <br/>
 
-  <docs-demo demo-title="Responsive Flex Attributes" class="small-demo colorNested-noPad">
-    <demo-file name="index.html">
-      <div layout="row">
-        <div flex="66" flex-sm="33">
-          I flex to one-third of the space on mobile, and two-thirds on other devices.
-        </div>
-        <div flex="33" flex-sm="66">
-          I flex to two-thirds of the space on mobile, and one-third on other devices.
-        </div>
-      </div>
-    </demo-file>
-  </docs-demo>
+    <h3>Show &amp; Hide </h3>
 
-  <p>
-    See the <a href="layout/grid">Layout System</a> page for a basic explanation
-    of flex and offset attributes.
+  <p>Use the <code>show</code> <code>hide</code> APIs to responsively show or hide elements. While these work similar
+  to <code>ng-show</code> and <code>ng-hide</code>, these Angular Material Layout directives are mediaQuery-aware.
   </p>
 
-  <table class="md-api-table">
-    <tr>
-      <td>flex</td>
-      <td>Sets flex.</td>
-    </tr>
-    <tr>
-      <td>flex-sm</td>
-      <td>Sets flex on devices less than 600px wide.</td>
-    </tr>
-    <tr>
-      <td>flex-gt-sm</td>
-      <td>Sets flex on devices greater than 600px wide.</td>
-    </tr>
-    <tr>
-      <td>flex-md</td>
-      <td>Sets flex on devices between 600px and 960px wide..</td>
-    </tr>
-    <tr>
-      <td>flex-gt-md</td>
-      <td>Sets flex on devices greater than 960px wide.
-    </tr>
-    <tr>
-      <td>flex-lg</td>
-      <td>Sets flex on devices between 960px and 1200px.</td>
-    </tr>
-    <tr>
-      <td>flex-gt-lg</td>
-      <td>Sets flex on devices greater than 1200px wide.</td>
-    </tr>
-  </table>
-
-  <br/>
-
-  <docs-demo demo-title="Hide and Show Attributes" class="small-demo colorNested">
+  <docs-demo demo-title="Hide and Show Directives" class="small-demo colorNested">
     <demo-file name="index.html">
       <div layout="row">
         <div hide show-gt-sm flex>
-          Hidden on small and shown on larger devices.
+          Only show on gt-sm devices.
         </div>
         <div hide-gt-sm flex>
-          Shown on small and hidden on larger devices.
+          Shown on small and medium.<br/>
+          Hidden on gt-sm devices.
         </div>
-        <div hide-gt-md flex>
-          Shown on small and medium size devices.
+        <div show hide-gt-md flex>
+          Shown on small and medium size devices.<br/>
+          Hidden on gt-md devices.
         </div>
         <div hide show-md flex>
           Shown on medium size devices only.
@@ -180,62 +166,59 @@
   </docs-demo>
   <br/>
   <table class="md-api-table">
+    <thead>
+      <tr>
+        <th>hide (display: none)</th>
+        <th>show (negates hide)</th>
+        <th>Activates when:</th>
+      </tr>
+    </thead>
     <tr>
-      <td>hide</td>
-      <td><code>display: none</code></td>
+      <td>hide-xs</td>
+      <td>show-xs</td>
+      <td>width &lt; <b>600</b>px</td>
+    </tr>
+    <tr>
+      <td>hide-gt-xs</td>
+      <td>show-gt-xs</td>
+      <td>width &gt;= <b>600</b>px</td>
     </tr>
     <tr>
       <td>hide-sm</td>
-      <td><code>display: none</code> on devices less than 600px wide.</td>
+      <td>show-sm</td>
+      <td><b>600</b>px &lt;= width &lt; <b>960</b>px</td>
     </tr>
     <tr>
       <td>hide-gt-sm</td>
-      <td><code>display: none</code> on devices greater than 600px wide.</td>
+      <td>hide-gt-sm</td>
+      <td>width &gt;= <b>960</b>px</td>
     </tr>
     <tr>
       <td>hide-md</td>
-      <td><code>display: none</code> on devices between 600px and 960px wide.</td>
+      <td>show-md</td>
+      <td><b>960</b>px &lt;= width &lt; <b>1280</b>px</td>
     </tr>
     <tr>
       <td>hide-gt-md</td>
-      <td><code>display: none</code> on devices greater than 960px wide.
+      <td>show-gt-md</td>
+      <td>width &gt;= <b>1280</b>px</td>
     </tr>
     <tr>
       <td>hide-lg</td>
-      <td><code>display: none</code> on devices between 960px and 1200px.</td>
+      <td>show-lg</td>
+      <td><b>1280</b>px &lt;= width &lt; <b>1920</b>px</td>
     </tr>
     <tr>
       <td>hide-gt-lg</td>
-      <td><code>display: none</code> on devices greater than 1200px wide.</td>
-    </tr>
-    <tr>
-      <td>show</td>
-      <td>Negates hide.</td>
-    </tr>
-    <tr>
-      <td>show-sm</td>
-      <td>Negates hide on devices less than 600px wide.</td>
-    </tr>
-    <tr>
-      <td>show-gt-sm</td>
-      <td>Negates hide on devices greater than 600px wide.</td>
-    </tr>
-    <tr>
-      <td>show-md</td>
-      <td>Negates hide on devices between 600px and 960px wide..</td>
-    </tr>
-    <tr>
-      <td>show-gt-md</td>
-      <td>Negates hide on devices greater than 960px wide.
-    </tr>
-    <tr>
-      <td>show-lg</td>
-      <td>Negates hide on devices between 960px and 1200px.</td>
-    </tr>
-    <tr>
       <td>show-gt-lg</td>
-      <td>Negates hide on devices greater than 1200px wide.</td>
+      <td>width &gt;= <b>1920/b>px</td>
+    </tr>
+    <tr>
+      <td>hide-xl</td>
+      <td>show-xl</td>
+      <td>width &gt;= <b>1920</b>px</td>
     </tr>
   </table>
+
 
 </div>
