@@ -29,7 +29,10 @@ describe('mdIcon directive', function() {
         el = make( '<md-icon md-font-icon="android"></md-icon>');
 
         expect(el.html()).toEqual('');
-        expect( clean(el.attr('class')) ).toEqual("md-font android material-icons");
+        var classes = clean(el.attr('class'));
+        expect(classes).toContain("md-font");
+        expect(classes).toContain("android");
+        expect(classes).toContain("material-icons");
 
       });
 
@@ -69,6 +72,22 @@ describe('mdIcon directive', function() {
         expect(el.attr('role')).toBe('img');
       });
 
+      it('should remove old icon class and apply the new when icon changed.',function() {
+        $scope.font = 'icon-home';
+
+        el = make('<md-icon md-font-icon="{{ font }}" ></md-icon>');
+
+        expect(el.attr('md-font-icon')).toBe($scope.font);
+        expect(el.hasClass('icon-home')).toBeTruthy();
+
+        $scope.font = 'android';
+        $scope.$apply();
+
+        expect(el.hasClass('icon-home')).toBeFalsy();
+        expect(el.attr('md-font-icon')).toBe($scope.font);
+        expect(el.hasClass('android')).toBeTruthy();
+      });
+
     });
 
     describe('using font-icons with ligatures: md-font-set=""', function() {
@@ -90,11 +109,27 @@ describe('mdIcon directive', function() {
         expect( clean(el.attr('class')) ).toEqual("fontawesome");
       });
 
+      it('should remove old font set class and apply the new when set changed', function() {
+        $scope.set = 'fontawesome';
+
+        el = make( '<md-icon md-font-set="{{ set }}">email</md-icon>');
+
+        expect(el.text()).toEqual('email');
+        expect( clean(el.attr('class')) ).toEqual("fontawesome");
+
+        $scope.set = 'material-icons';
+        $scope.$apply();
+
+        expect( clean(el.attr('class')) ).toEqual("material-icons");
+      });
 
       it('should render correctly using a md-font-set alias', function() {
         el = make( '<md-icon md-font-set="fa" md-font-icon="fa-info"></md-icon>');
 
-        expect( clean(el.attr('class')) ).toEqual("md-font fa-info fa");
+        var classes = clean(el.attr('class'));
+        expect(classes).toContain("md-font");
+        expect(classes).toContain("fa-info");
+        expect(classes).toContain("fa");
       });
 
 
@@ -146,7 +181,11 @@ describe('mdIcon directive', function() {
 
         el = make( '<md-icon md-font-icon="fa-apple">apple</md-icon>');
         expect(el.text()).toEqual('apple');
-        expect( clean(el.attr('class')) ).toEqual("md-font fa-apple fa");
+
+        var classes = clean(el.attr('class'));
+        expect(classes).toContain("md-font");
+        expect(classes).toContain("fa-apple");
+        expect(classes).toContain("fa");
 
       });
 
