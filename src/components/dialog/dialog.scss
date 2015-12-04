@@ -120,7 +120,7 @@ md-dialog {
   }
 }
 
-@media (max-width: $layout-breakpoint-sm) {
+@media (max-width: $layout-breakpoint-sm - 1) {
   md-dialog.md-dialog-fullscreen {
     min-height: 100%;
     min-width: 100%;
