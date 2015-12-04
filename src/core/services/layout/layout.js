@@ -277,8 +277,6 @@
           if (config.enabled) {
             // immediately replace static (non-interpolated) invalid values...
 
-            validateAttributeUsage(className, attr, element, $log);
-
             validateAttributeValue( className,
               getNormalizedAttrValue(className, attr, ""),
               buildUpdateFn(element, className, attr)
