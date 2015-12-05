@@ -59,8 +59,9 @@ md-card {
     }
   }
 
-  > img,
+  md-card img,
   > :not(md-card-content) img {
+    box-sizing: border-box;
     display: flex;
     flex: 0 0 auto;
     width: 100%;
