@@ -268,7 +268,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         url: 'layout/alignment'
       }
       ,{
-        name: 'Options',
+        name: 'Extra Options',
         id: 'layoutOptions',
         url: 'layout/options'
       }
