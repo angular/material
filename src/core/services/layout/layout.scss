@@ -130,6 +130,7 @@
   .#{$flexName}-initial     { flex: 0 1 auto;  box-sizing: border-box; }
   .#{$flexName}-auto        { flex: 1 1 auto;  box-sizing: border-box; }
   .#{$flexName}-none        { flex: 0 0 auto;  box-sizing: border-box; }
+  .#{$flexName}-noshrink    { flex: 1 0 auto;  box-sizing: border-box; }
 
   // (1-20) * 5 = 0-100%
   @for $i from 0 through 20 {
