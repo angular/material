@@ -19,10 +19,11 @@
     custom HTML, CSS and Javascript to achieve your desired results.
   </p>
 
-  <p>
-    Below, you will find solutions to some of the more common scenarios and problems that may arise
-    when using Material's Layout system.
-  </p>
+
+  <br/>
+  <hr/>
+
+  <h3>Resources</h3>
 
   <p>
     If you are experiencing an issue in a particular browser, we highly recommend using the
@@ -30,20 +31,29 @@
   </p>
 
   <ul>
-    <li>
-      <a href="https://github.com/philipwalton/flexbugs">Flexbox Bugs</a>
-    </li>
-
+    <li><a href="https://github.com/philipwalton/flexbugs#flexbugs" target="_blank">FlexBugs</a></li>
+    <li><a href="http://philipwalton.com/articles/normalizing-cross-browser-flexbox-bugs/" target="_blank">Normalizing Cross-browser Flexbox Bugs</a></li>
+    <li><a href="http://caniuse.com/#search=flex" target="_blank">Can I Use <code>flex</code>: see the <code>Known Issues</code> tab.</a></li>
+    <li><a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/">Guide to Flexbox</a></li>
     <li>
       <a href="https://groups.google.com/forum/#!forum/ngmaterial">Angular Material Forum</a>
     </li>
   </ul>
 
-  <h3>General</h3>
+
+  <br/>
+  <hr/>
+
+  <h3>General Tips</h3>
 
   <p>
-    The following are some general guidelines and tips when using the flex and Layout attributes
-    within your own applications.
+    Below, you will find solutions to some of the more common scenarios and problems that may arise
+    when using Material's Layout system.
+  </p>
+
+  <p>
+    The following are offer general guidelines and tips when using the <code>flex</code> and
+    <code>layout</code> directives within your own applications.
   </p>
 
   <ul class="spaced">
@@ -63,7 +73,7 @@
     </li>
 
     <li>
-      Some Flexbox properties such as <code>flex-direction</code> can not be animated.
+      Some Flexbox properties such as <code>flex-direction</code> <u>cannot</u> be animated.
     </li>
 
     <li>
@@ -72,7 +82,10 @@
     </li>
   </ul>
 
-  <h3>Chrome Flex Height</h3>
+  <br/>
+  <hr/>
+
+  <h3>Layout Container Heights</h3>
 
   <p>
     In Flexbox, some browsers will determine size of the flex containers based on the size of their
@@ -80,7 +93,7 @@
     two flex items in a column layout.
   </p>
 
-  <docs-demo demo-title="Chrome Flex Height - Odd" class="small-demo colorNested">
+  <docs-demo demo-title="Flex Height - Odd (Chrome )" class="small-demo colorNested">
     <demo-file name="index.html">
       <div layout="column" style="height: 450px !important;">
         <div style="height: 50px;">Toolbar</div>
@@ -164,7 +177,10 @@
   </docs-demo>
 
 
-  <h3>Firefox <code>md-content</code> Height Calculation</h3>
+  <br/>
+  <hr/>
+
+  <h3>Flex Element Heights</h3>
 
   <p>
     Firefox currently has an issue calculating the proper height of flex containers whose children
@@ -172,7 +188,7 @@
   </p>
 
   <p>
-    This is particularly problematic if the flex children are <code>md-content</code> components as
+    This is particularly problematic if the <code>flex</code> children are <code>md-content</code> components as
     it will prevent the content from scrolling correctly, instead scrolling the entire body.
   </p>
 
