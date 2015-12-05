@@ -299,8 +299,9 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
               ])
               .then(function() {
                 // Perform focus when animations are ALL done...
-                if (scope.isOpen) {
-                  focusEl && focusEl.focus();
+                if (scope.isOpen && focusEl) {
+                  focusEl.focus();
+                  focusEl.triggerHandler('focus');
                 }
               });
     }
