@@ -68,7 +68,7 @@
   </p>
 
   <section class="layout-panel-parent">
-    <div ng-panel="layoutDemo">
+    <div >
       <docs-demo demo-title='layout="{{layoutDemo.direction}}" &nbsp; &nbsp; &nbsp; layout-align="{{layoutAlign()}}"'
                  class="small-demo colorNested" interpolate-code="true">
         <demo-file name="index.html">
@@ -94,7 +94,7 @@
     <div>
       <md-subheader>Alignment in Layout Direction ({{layoutDemo.direction == 'row' ? 'horizontal' : 'vertical'}})</md-subheader>
       <md-radio-group ng-model="layoutDemo.mainAxis">
-        <md-radio-button value="none">none</md-radio-button>
+        <md-radio-button value="">none</md-radio-button>
         <md-radio-button value="start">start (default)</md-radio-button>
         <md-radio-button value="center">center</md-radio-button>
         <md-radio-button value="end">end</md-radio-button>
