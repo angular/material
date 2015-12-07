@@ -245,6 +245,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         syncLabelText();
         syncAriaLabel();
         inputCheckValue();
+        inputCheckFocus();
       };
 
       attr.$observe('placeholder', ngModelCtrl.$render);
@@ -344,6 +345,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
               syncLabelText();
               syncAriaLabel();
               inputCheckValue();
+              inputCheckFocus();
             };
             ngModelCtrl.$render();
           }
@@ -406,6 +408,11 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         // The select counts as having a value if one or more options are selected,
         // or if the input's validity state says it has bad input (eg string in a number input)
         containerCtrl && containerCtrl.setHasValue(selectMenuCtrl.selectedLabels().length > 0 || (element[0].validity || {}).badInput);
+      }
+
+      function inputCheckFocus() {
+        // We should set the focus to false if the model is undefined or if the model was added without focus
+        containerCtrl && containerCtrl.setFocused(!!ngModelCtrl.$modelValue && containerCtrl.element.hasClass('md-input-focused'));
       }
 
       function findSelectContainer() {
