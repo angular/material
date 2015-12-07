@@ -55,6 +55,7 @@ var MD_CONTACT_CHIPS_TEMPLATE = '\
       <md-chips class="md-contact-chips"\
           ng-model="$mdContactChipsCtrl.contacts"\
           md-require-match="$mdContactChipsCtrl.requireMatch"\
+          md-separator-keys="$mdContactChipsCtrl.separatorKeys"\
           md-autocomplete-snap>\
           <md-autocomplete\
               md-menu-class="md-contact-chips-suggestions"\
@@ -64,6 +65,7 @@ var MD_CONTACT_CHIPS_TEMPLATE = '\
               md-item-text="$mdContactChipsCtrl.itemName(item)"\
               md-no-cache="true"\
               md-autoselect\
+              ng-keydown="$mdContactChipsCtrl.inputKeydown($event)"\
               placeholder="{{$mdContactChipsCtrl.contacts.length == 0 ?\
                   $mdContactChipsCtrl.placeholder : $mdContactChipsCtrl.secondaryPlaceholder}}">\
             <div class="md-contact-suggestion">\
@@ -118,6 +120,7 @@ function MdContactChips($mdTheming, $mdUtil) {
       contactEmail: '@mdContactEmail',
       contacts: '=ngModel',
       requireMatch: '=?mdRequireMatch',
+      separatorKeys: '=?mdSeparatorKeys',
       highlightFlags: '@?mdHighlightFlags'
     }
   };
