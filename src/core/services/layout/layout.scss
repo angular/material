@@ -450,7 +450,7 @@
       display: none;
     }
   }
-  .hide-sm:not(.show-sm):not(.show) {
+  .hide-sm:not(.show-gt-xs):not(.show-sm):not(.show) {
     display: none;
   }
 
@@ -470,7 +470,7 @@
       display: none;
     }
   }
-  .hide-md:not(.show-md):not(.show) {
+  .hide-md:not(.show-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
     display: none;
   }
   @include layouts_for_breakpoint(md);
@@ -488,7 +488,7 @@
       display: none;
     }
   }
-  .hide-lg:not(.show-lg):not(.show) {
+  .hide-lg:not(.show-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
     display: none;
   }
 
@@ -505,7 +505,7 @@
       display: none;
     }
   }
-  .hide-xl:not(.show-xl):not(.show-gt-lg):not(.show) {
+  .hide-xl:not(.show-xl):not(.show-gt-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
     display: none;
   }
 
