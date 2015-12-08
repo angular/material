@@ -48,6 +48,7 @@ md-tooltip {
     &.md-show, &.md-show-add-active {
       transform: scale(1);
       opacity: 1;
+      transform-origin: center top;
     }
     &.md-show-remove {
       transition: $swift-ease-out;
