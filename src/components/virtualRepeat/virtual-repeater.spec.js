@@ -73,6 +73,17 @@ describe('<md-virtual-repeat>', function() {
     return component[0].querySelectorAll('[md-virtual-repeat]');
   }
 
+  it('should $emit $md-resize-enable at startup', function() {
+    var emitted = false;
+    scope.$on('$md-resize-enable', function() {
+      emitted = true;
+    });
+
+    createRepeater();
+
+    expect(emitted).toBe(true);
+  });
+
   it('should render only enough items to fill the viewport + 3 (vertical)', function() {
     createRepeater();
     scope.items = createItems(NUM_ITEMS);
