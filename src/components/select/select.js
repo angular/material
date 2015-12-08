@@ -218,7 +218,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         scope.$watch(isErrorGetter, containerCtrl.setInvalid);
       }
 
-      var selectContainer, selectScope, selectMenuCtrl;
+      var selectContainer, selectMenuCtrl;
 
       findSelectContainer();
       $mdTheming(element);
@@ -412,7 +412,6 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         selectContainer = angular.element(
           element[0].querySelector('.md-select-menu-container')
         );
-        selectScope = selectContainer.scope();
         if (element.attr('md-container-class')) {
           var value = selectContainer[0].getAttribute('class') + ' ' + element.attr('md-container-class');
           selectContainer[0].setAttribute('class', value);
@@ -443,11 +442,10 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
       }
 
       function openSelect(e) {
-        selectScope.isOpen = true;
         element.attr('aria-expanded', 'true');
 
         $mdSelect.show({
-          scope: selectScope,
+          scope: scope,
           preserveScope: true,
           skipCompile: true,
           element: selectContainer,
@@ -457,7 +455,6 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
           hasBackdrop: true,
           loadingAsync: attr.mdOnOpen ? scope.$eval(attr.mdOnOpen) || true : false
         }).finally(function() {
-          selectScope.isOpen = false;
           element.attr('aria-expanded', 'false');
           ngModelCtrl.$setTouched();
         });
