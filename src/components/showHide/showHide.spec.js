@@ -22,6 +22,7 @@ describe('showHide', function() {
     it('should notify when the node unhides', function() {
       scope.hide = true;
       var element = $compile('<div ng-hide="hide"></div>')(scope);
+      scope.$broadcast('$md-resize-enable');
       scope.$apply();
       expect(spy).not.toHaveBeenCalled();
 
@@ -41,10 +42,28 @@ describe('showHide', function() {
     it('should not notify on hide', function() {
       scope.hide = true;
       var element = $compile('<div ng-hide="hide"></div>')(scope);
+      scope.$broadcast('$md-resize-enable');
       scope.$apply();
 
       // Expect no $broadcasts when hiding.
       expect(spy).not.toHaveBeenCalled();
+      defered.resolve();
+      scope.$apply();
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should not notify when not activated', function() {
+      scope.hide = true;
+      var element = $compile('<div ng-hide="hide"></div>')(scope);
+      scope.$apply();
+      expect(spy).not.toHaveBeenCalled();
+
+      scope.hide = false;
+      scope.$apply();
+      $timeout.flush();
+      expect(spy).not.toHaveBeenCalled();
+
+      spy.calls.reset();
       defered.resolve();
       scope.$apply();
       expect(spy).not.toHaveBeenCalled();
@@ -55,6 +74,7 @@ describe('showHide', function() {
     it('should notify when the node unhides', function() {
       scope.show = false;
       var element = $compile('<div ng-show="show"></div>')(scope);
+      scope.$broadcast('$md-resize-enable');
       scope.$apply();
       expect(spy).not.toHaveBeenCalled();
 
@@ -74,10 +94,28 @@ describe('showHide', function() {
     it('should not notify on hide', function() {
       scope.show = false;
       var element = $compile('<div ng-show="show"></div>')(scope);
+      scope.$broadcast('$md-resize-enable');
       scope.$apply();
 
       // Expect no $broadcasts when hiding.
       expect(spy).not.toHaveBeenCalled();
+      defered.resolve();
+      scope.$apply();
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should not notify when not activated', function() {
+      scope.show = false;
+      var element = $compile('<div ng-show="show"></div>')(scope);
+      scope.$apply();
+      expect(spy).not.toHaveBeenCalled();
+
+      scope.show = true;
+      scope.$apply();
+      $timeout.flush();
+      expect(spy).not.toHaveBeenCalled();
+
+      spy.calls.reset();
       defered.resolve();
       scope.$apply();
       expect(spy).not.toHaveBeenCalled();

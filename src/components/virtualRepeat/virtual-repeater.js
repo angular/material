@@ -143,6 +143,7 @@ function VirtualRepeatContainerController(
       jWindow.off('resize', debouncedUpdateSize);
     });
 
+    $scope.$emit('$md-resize-enable');
     $scope.$on('$md-resize', boundUpdateSize);
   });
 }
