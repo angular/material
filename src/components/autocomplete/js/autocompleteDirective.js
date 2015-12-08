@@ -175,7 +175,6 @@ function MdAutocomplete () {
               md-auto-shrink-min="1"\
               ng-mouseenter="$mdAutocompleteCtrl.listEnter()"\
               ng-mouseleave="$mdAutocompleteCtrl.listLeave()"\
-              ng-mouseup="$mdAutocompleteCtrl.mouseUp()"\
               ng-hide="$mdAutocompleteCtrl.hidden"\
               class="md-autocomplete-suggestions-container md-whiteframe-z1"\
               ng-class="{ \'md-not-found\': $mdAutocompleteCtrl.notFoundVisible() }"\
