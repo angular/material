@@ -50,7 +50,7 @@ md-list-item {
     position: relative;
     padding: $list-item-padding-vertical $list-item-padding-horizontal;
     flex: 1 1 auto;
-    
+
     &.md-button {
       font-size: inherit;
       height: inherit;
@@ -134,6 +134,7 @@ md-list-item, md-list-item .md-list-item-inner {
   & .md-avatar {
     width: $list-item-primary-avatar-width;
     height: $list-item-primary-avatar-width;
+    font-size: $list-item-primary-avatar-width;
   }
   & .md-avatar-icon {
     padding: 8px;
