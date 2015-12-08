@@ -50,6 +50,21 @@ describe('md-input-container directive', function() {
     expect(el).not.toHaveClass('md-input-invalid');
   });
 
+  it('should show error on $submitted and $invalid', function() {
+    var el = setup('ng-model="foo"', true);
+
+    expect(el.find('md-input-container')).not.toHaveClass('md-input-invalid');
+
+    var model = el.find('input').controller('ngModel');
+    model.$invalid = true;
+
+    var form = el.controller('form');
+    form.$submitted = true;
+    pageScope.$apply();
+
+    expect(el.find('md-input-container')).toHaveClass('md-input-invalid');
+  });
+
   it('should show error with given md-is-error expression', function() {
     var el = $compile(
         '<md-input-container md-is-error="isError">' +
