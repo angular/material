@@ -22,7 +22,7 @@ describe('<md-virtual-repeat>', function() {
       ITEM_SIZE = 10;
 
   beforeEach(inject(function(
-      _$$rAF_, _$compile_, _$document_, _$mdUtil_, $rootScope, _$timeout_, _$window_, _$material_) {
+      _$$rAF_, _$compile_, _$document_, _$mdUtil_, $rootScope, _$window_, _$material_) {
     repeater = angular.element(REPEATER_HTML);
     container = angular.element(CONTAINER_HTML).append(repeater);
     component = null;
@@ -31,7 +31,6 @@ describe('<md-virtual-repeat>', function() {
     $mdUtil = _$mdUtil_;
     $compile = _$compile_;
     $document = _$document_;
-    $timeout = _$timeout_;
     $window = _$window_;
     scope = $rootScope.$new();
     scope.startIndex = 0;
@@ -583,24 +582,20 @@ describe('<md-virtual-repeat>', function() {
     expect(offsetter.children().length).toBe(43);
   });
 
-  it('makes a second attempt to measure the size if it starts out at 0',
-      function() {
-    // Create the repeater before appending it to the body.
-    scope.items = createItems(100);
-    component = $compile(container)(scope);
-    $material.flushOutstandingAnimations();
-    angular.element($document[0].body).append(container);
-    offsetter = angular.element(component[0].querySelector('.md-virtual-repeat-offsetter'));
+  it('should shrink when initial results require shrinking', inject(function() {
+    scope.items = [
+      { value: 'alabama', display: 'Alabama' },
+      { value: 'alaska', display: 'Alaska' },
+      { value: 'arizona', display: 'Arizona' }
+    ];
+    createRepeater();
+    var controller = component.controller('mdVirtualRepeatContainer');
+    controller.autoShrink = true;
+    controller.autoShrink_(200);
 
-    // Expect 3 children (0 + 3 extra).
+    expect(component[0].getBoundingClientRect().height).toBe(200);
     expect(offsetter.children().length).toBe(3);
-
-    // Expect it to remeasure using debounce.
-    $timeout.flush();
-
-    // Expect 13 children (10 + 3 extra).
-    expect(offsetter.children().length).toBe(13);
-  });
+  }));
 
   /**
    * Facade to access transform properly even when jQuery is used;
