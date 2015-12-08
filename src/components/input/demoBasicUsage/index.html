@@ -1,10 +1,11 @@
 <div ng-controller="DemoCtrl" layout="column" ng-cloak class="md-inline-form">
 
-  <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+  <md-content md-theme="docs-dark" layout-padding layout-gt-sm="row">
     <md-input-container>
       <label>Title</label>
       <input ng-model="user.title">
     </md-input-container>
+
     <md-input-container>
       <label>Email</label>
       <input ng-model="user.email" type="email">
@@ -14,8 +15,8 @@
   <md-content layout-padding>
     <form name="userForm">
 
-      <div layout layout-sm="column">
-        <md-input-container flex>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
           <label>Company (Disabled)</label>
           <input ng-model="user.company" disabled>
         </md-input-container>
@@ -23,12 +24,13 @@
         <md-datepicker ng-model="user.submissionDate" md-placeholder="Enter date"></md-datepicker>
       </div>
 
-      <div layout layout-sm="column">
-        <md-input-container flex>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
           <label>First name</label>
           <input ng-model="user.firstName">
         </md-input-container>
-        <md-input-container flex>
+
+        <md-input-container class="md-block" flex-gt-sm>
           <label>Last Name</label>
           <input ng-model="theMax">
         </md-input-container>
@@ -43,13 +45,13 @@
         <input ng-model="user.address2" placeholder="Address 2">
       </md-input-container>
 
-      <div layout layout-sm="column">
-        <md-input-container flex>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
           <label>City</label>
           <input ng-model="user.city">
         </md-input-container>
 
-        <md-input-container flex>
+        <md-input-container class="md-block" flex-gt-sm>
           <label>State</label>
           <md-select ng-model="user.state">
             <md-option ng-repeat="state in states" value="{{state.abbrev}}">
@@ -58,7 +60,7 @@
           </md-select>
         </md-input-container>
 
-        <md-input-container flex>
+        <md-input-container class="md-block" flex-gt-sm>
           <label>Postal Code</label>
           <input name="postalCode" ng-model="user.postalCode" placeholder="12345"
                  required ng-pattern="/^[0-9]{5}$/" md-maxlength="5">
