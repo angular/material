@@ -104,6 +104,10 @@ md-select {
   min-height: 26px;
   flex-grow: 1;
 
+  .md-text {
+    display: inline;
+  }
+
   *:first-child {
     flex: 1 0 auto;
     text-overflow: ellipsis;
