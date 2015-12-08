@@ -22,7 +22,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
       }
     })
     .when('/layout/', {
-      redirectTo:  '/layout/container'
+      redirectTo:  '/layout/introduction'
     })
     .when('/demo/', {
       redirectTo: DEMOS[0].url
@@ -248,23 +248,32 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       name: 'Layout',
       type: 'toggle',
       pages: [{
-        name: 'Container Elements',
+        name: 'Introduction',
+        id: 'layoutIntro',
+        url: 'layout/introduction'
+      }
+        ,{
+        name: 'Layout Containers',
         id: 'layoutContainers',
         url: 'layout/container'
-      },{
-        name: 'Layout System',
+        }
+      ,{
+        name: 'Layout Children',
         id: 'layoutGrid',
-        url: 'layout/grid'
-      },{
+        url: 'layout/children'
+      }
+      ,{
         name: 'Child Alignment',
         id: 'layoutAlign',
         url: 'layout/alignment'
-      },{
-        name: 'Options',
+      }
+      ,{
+        name: 'Extra Options',
         id: 'layoutOptions',
         url: 'layout/options'
-      },{
-        name: 'Tips & Tricks', // Possibly rename to Troubleshooting
+      }
+      ,{
+        name: 'Troubleshooting',
         id: 'layoutTips',
         url: 'layout/tips'
       }]

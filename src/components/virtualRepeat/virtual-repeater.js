@@ -3,7 +3,8 @@
  * @name material.components.virtualRepeat
  */
 angular.module('material.components.virtualRepeat', [
-  'material.core'
+  'material.core',
+  'material.components.showHide'
 ])
 .directive('mdVirtualRepeatContainer', VirtualRepeatContainerDirective)
 .directive('mdVirtualRepeat', VirtualRepeatDirective);
@@ -205,14 +206,15 @@ VirtualRepeatContainerController.prototype.sizeScroller_ = function(size) {
   var dimension =  this.isHorizontal() ? 'width' : 'height';
   var crossDimension = this.isHorizontal() ? 'height' : 'width';
 
+  // Clear any existing dimensions.
+  this.sizer.innerHTML = '';
+
   // If the size falls within the browser's maximum explicit size for a single element, we can
   // set the size and be done. Otherwise, we have to create children that add up the the desired
   // size.
   if (size < MAX_ELEMENT_SIZE) {
     this.sizer.style[dimension] = size + 'px';
   } else {
-    // Clear any existing dimensions.
-    this.sizer.innerHTML = '';
     this.sizer.style[dimension] = 'auto';
     this.sizer.style[crossDimension] = 'auto';
 

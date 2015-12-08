@@ -64,6 +64,8 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
   var translateY = angular.bind(null, $mdUtil.supplant, 'translate3d(0,{0}px,0)');
 
   return {
+    template: '',
+
     restrict: 'E',
 
     link: function(scope, element, attr) {

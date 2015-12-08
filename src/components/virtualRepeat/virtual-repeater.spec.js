@@ -285,6 +285,30 @@ describe('<md-virtual-repeat>', function() {
     }
   });
 
+  it('should clear scroller if large set of items is filtered to much smaller set', function() {
+    // Create a much larger number of items than will fit in one maximum element size.
+    var numItems = 2000000;
+    createRepeater();
+    scope.items = createItems(numItems);
+    scope.$apply();
+    $$rAF.flush();
+
+    // Expect that the sizer as a whole is still exactly the height it should be.
+    expect(sizer[0].offsetHeight).toBe(numItems * ITEM_SIZE);
+
+    // Now that the sizer is really big, change the the number of items to be very small.
+    numItems = 2;
+    scope.items = createItems(numItems);
+    scope.$apply();
+    $$rAF.flush();
+
+    // Expect that the sizer as a whole is still exactly the height it should be.
+    expect(sizer[0].offsetHeight).toBe(numItems * ITEM_SIZE);
+
+    // Expect that the sizer has no children, as all of items fit comfortably in a single element.
+    expect(sizer[0].children.length).toBe(0);
+  });
+
   it('should start at the given scroll position', function() {
     scope.startIndex = 10;
     scope.items = createItems(200);

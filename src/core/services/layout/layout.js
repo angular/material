@@ -6,7 +6,7 @@
   var SUFFIXES = /(-gt)?-(sm|md|lg)/g;
   var WHITESPACE = /\s+/g;
 
-  var FLEX_OPTIONS = ['grow', 'initial', 'auto', 'none'];
+  var FLEX_OPTIONS = ['grow', 'initial', 'auto', 'none', 'noshrink'];
   var LAYOUT_OPTIONS = ['row', 'column'];
   var ALIGNMENT_MAIN_AXIS= [ "", "start", "center", "end", "stretch", "space-around", "space-between" ];
   var ALIGNMENT_CROSS_AXIS= [ "", "start", "center", "end", "stretch" ];
@@ -265,7 +265,8 @@
    * any attribute value
    */
   function attributeWithoutValue(className) {
-    return ['$interpolate', function(_$interpolate_, _$log_) {
+    return ['$mdUtil', '$interpolate', "$log", function(_$mdUtil_, _$interpolate_, _$log_) {
+      $mdUtil = _$mdUtil_;
       $interpolate = _$interpolate_;
       $log = _$log_;
 
@@ -275,8 +276,6 @@
           var linkFn;
           if (config.enabled) {
             // immediately replace static (non-interpolated) invalid values...
-
-            validateAttributeUsage(className, attr, element, $log);
 
             validateAttributeValue( className,
               getNormalizedAttrValue(className, attr, ""),
@@ -458,17 +457,22 @@
     return found;
   }
 
-  function extractAlignAxis(config) {
+  function extractAlignAxis(attrValue) {
     var axis = {
       main : "start",
       cross: "stretch"
     }, values;
 
-    config = (config || "");
-    if ( config.indexOf("-") == 0 ) config = "none" + config;
+    attrValue = (attrValue || "");
 
-    values = config.toLowerCase().trim().replace(WHITESPACE, "-").split("-");
-    if ( values[0] === "space" ) {
+    if ( attrValue.indexOf("-") == 0 || attrValue.indexOf(" ") == 0) {
+      // For missing main-axis values
+      attrValue = "none" + attrValue;
+    }
+
+    values = attrValue.toLowerCase().trim().replace(WHITESPACE, "-").split("-");
+    if ( values.length && (values[0] === "space") ) {
+      // for main-axis values of "space-around" or "space-between"
       values = [ values[0]+"-"+values[1],values[2] ];
     }
 
