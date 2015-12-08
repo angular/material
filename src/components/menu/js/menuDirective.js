@@ -204,6 +204,10 @@ function MenuDirective($mdUtil) {
     }
     menuContainer.append(menuContents);
 
+    element.on('$destroy', function() {
+      menuContainer.remove();
+    });
+
     element.append(menuContainer);
     menuContainer[0].style.display = 'none';
     mdMenuCtrl.init(menuContainer, { isInMenuBar: isInMenuBar });

@@ -7,7 +7,7 @@ describe('material.components.menu', function() {
     $mdUtil = _$mdUtil_;
     $mdMenu = _$mdMenu_;
     $timeout = _$timeout_;
-    var abandonedMenus = $document[0].querySelectorAll('.md-menu-container');
+    var abandonedMenus = $document[0].querySelectorAll('.md-open-menu-container');
     angular.element(abandonedMenus).remove();
   }));
   afterEach(function() {
@@ -39,6 +39,23 @@ describe('material.components.menu', function() {
       expect(getOpenMenuContainer(menu).length).toBe(1);
       closeMenu(menu);
       expect(getOpenMenuContainer(menu).length).toBe(0);
+    });
+
+    it('cleans up an open menu when the element leaves the DOM', function() {
+      var menu = setup();
+      openMenu(menu);
+      menu.remove();
+      expect(getOpenMenuContainer(menu).length).toBe(0);
+    });
+
+    it('sets up proper aria-owns and aria-haspopup relations between the button and the container', function() {
+      var menu = setup();
+      var button = menu[0].querySelector('button');
+      expect(button.hasAttribute('aria-haspopup')).toBe(true);
+      expect(button.hasAttribute('aria-owns')).toBe(true);
+      var ownsId = button.getAttribute('aria-owns');
+      openMenu(menu);
+      expect(getOpenMenuContainer(menu).attr('id')).toBe(ownsId);
     });
 
     it('opens on click without $event', function() {
@@ -98,7 +115,7 @@ describe('material.components.menu', function() {
       openMenu(menu);
       expect(getOpenMenuContainer(menu).length).toBe(1);
 
-      var openMenuEl = menu[0].querySelector('md-menu-content');
+      var openMenuEl = $document[0].querySelector('md-menu-content');
 
       pressKey(openMenuEl, $mdConstant.KEY_CODE.ESCAPE);
       waitForMenuClose();
@@ -197,21 +214,22 @@ describe('material.components.menu', function() {
   // ********************************************
 
   function getOpenMenuContainer(el) {
+    var res;
     el = (el instanceof angular.element) ? el[0] : el;
-    var container = el.querySelector('.md-open-menu-container');
-    if (container.style.display == 'none') {
-      return angular.element([]);
-    } else {
-      return angular.element(container);
-    }
+    inject(function($document) {
+      var container = $document[0].querySelector('.md-open-menu-container');
+      if (container && container.style.display == 'none') {
+        res = [];
+      } else {
+        res = angular.element(container);
+      }
+    });
+    return res;
   }
 
   function openMenu(el, triggerType) {
-    inject(function($document) {
-      el.children().eq(0).triggerHandler(triggerType || 'click');
-      $document[0].body.appendChild(el[0]);
-      waitForMenuOpen();
-    });
+    el.children().eq(0).triggerHandler(triggerType || 'click');
+    waitForMenuOpen();
   }
 
   function closeMenu() {
