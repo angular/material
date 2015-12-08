@@ -1,4 +1,4 @@
-ddescribe('material.components.menu', function() {
+describe('material.components.menu', function() {
   var attachedElements = [];
   var $mdMenu, $timeout, menuActionPerformed, $mdUtil;
 
