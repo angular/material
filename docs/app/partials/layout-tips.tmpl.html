@@ -81,7 +81,28 @@
   <br/>
   <hr/>
 
-  <h3>Layout Container Heights</h3>
+  <h3>Layout Column</h3>
+
+  <p>
+    In some scenarios <code>layout="column"</code> and breakpoints (xs, gt-xs, xs, gt-sm, etc.) may not work
+    as expected due to CSS specificity rules.
+  </p>
+
+  <div class="md-whiteframe-3dp">
+    <iframe height='459' scrolling='no'
+            src='//codepen.io/team/AngularMaterial/embed/obgapg/?height=459&theme-id=21180&default-tab=result'
+            frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a
+        href='http://codepen.io/team/AngularMaterial/pen/obgapg/'>Card Layouts (corrected)</a> by Angular Material (<a
+        href='http://codepen.io/AngularMaterial'>@AngularMaterial</a>) on <a href='http://codepen.io'>CodePen</a>.
+    </iframe>
+  </div>
+
+    <p>This is easily fixed simply by inverting the layout logic so that the default is <code>layout='row'</code> </p>
+
+  <br/>
+  <hr/>
+
+  <h3>Layout Column and Container Heights</h3>
 
   <p>
     In Flexbox, some browsers will determine size of the flex containers based on the size of their
