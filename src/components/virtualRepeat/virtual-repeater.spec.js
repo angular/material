@@ -574,7 +574,7 @@ describe('<md-virtual-repeat>', function() {
     createRepeater();
     // Expect 13 children (10 + 3 extra).
     expect(offsetter.children().length).toBe(13);
-    
+
     container.css('height', '400px');
     scope.$parent.$broadcast('$md-resize');
 
@@ -591,9 +591,9 @@ describe('<md-virtual-repeat>', function() {
     createRepeater();
     var controller = component.controller('mdVirtualRepeatContainer');
     controller.autoShrink = true;
-    controller.autoShrink_(200);
+    controller.autoShrink_(50);
 
-    expect(component[0].getBoundingClientRect().height).toBe(200);
+    expect(component[0].clientHeight).toBe(50);
     expect(offsetter.children().length).toBe(3);
   }));
 
