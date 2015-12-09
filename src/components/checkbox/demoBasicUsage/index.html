@@ -1,45 +1,50 @@
 
 <div ng-controller="AppCtrl" class="md-padding" ng-cloak>
-  <fieldset class="standard">
-    <legend>Using <code>ng-model</code></legend>
-    <div layout="row" layout-wrap>
-      <div flex="50">
-        <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
-          Checkbox 1: {{ data.cb1 }}
-        </md-checkbox>
+  <div>
+    <fieldset class="standard">
+      <legend>Using <code>ng-model</code></legend>
+      <div layout="column" layout-wrap layout-gt-sm="row" >
+        <div flex-xs flex="50">
+          <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+            Checkbox 1: {{ data.cb1 }}
+          </md-checkbox>
+        </div>
+        <div flex-xs flex="50">
+          <div layout-xs="column" flex-xs="100">
+            <md-checkbox
+              ng-model="data.cb2"
+              aria-label="Checkbox 2"
+              ng-true-value="'yup'"
+              ng-false-value="'nope'"
+              class="md-warn md-align-top-left" flex>
+            Checkbox 2 (md-warn)  <br/>
+            <span class="ipsum">
+              Duis placerat lectus et justo mollis, nec sodales orci congue. Vestibulum semper non urna ac suscipit.
+              Vestibulum tempor, ligula id laoreet hendrerit, massa augue iaculis magna,
+              sit amet dapibus tortor ligula non nibh.
+            </span>
+            <br/>
+            {{ data.cb2 }}
+          </md-checkbox>
+          </div>
+        </div>
+        <div flex-xs flex="50">
+          <md-checkbox ng-disabled="true" aria-label="Disabled checkbox" ng-model="data.cb3">
+            Checkbox: Disabled
+          </md-checkbox>
+        </div>
+        <div flex-xs flex="50">
+          <md-checkbox ng-disabled="true" aria-label="Disabled checked checkbox" ng-model="data.cb4" ng-init="data.cb4=true">
+            Checkbox: Disabled, Checked
+          </md-checkbox>
+        </div>
+        <div flex-xs flex="50">
+          <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary">
+            Checkbox (md-primary): No Ink
+          </md-checkbox>
+        </div>
       </div>
-      <div flex="50">
-        <md-checkbox
-            ng-model="data.cb2"
-            aria-label="Checkbox 2"
-            ng-true-value="'yup'"
-            ng-false-value="'nope'"
-            class="md-warn md-align-top-left">
-          Checkbox 2 (md-warn)  <br/>
-          <span class="ipsum">
-            Duis placerat lectus et justo mollis, nec sodales orci congue. Vestibulum semper non urna ac suscipit.
-            Vestibulum tempor, ligula id laoreet hendrerit, massa augue iaculis magna,
-            sit amet dapibus tortor ligula non nibh.
-          </span>
-          <br/>
-          {{ data.cb2 }}
-        </md-checkbox>
-      </div>
-      <div flex="50">
-        <md-checkbox ng-disabled="true" aria-label="Disabled checkbox" ng-model="data.cb3">
-          Checkbox: Disabled
-        </md-checkbox>
-      </div>
-      <div flex="50">
-        <md-checkbox ng-disabled="true" aria-label="Disabled checked checkbox" ng-model="data.cb4" ng-init="data.cb4=true">
-          Checkbox: Disabled, Checked
-        </md-checkbox>
-      </div>
-      <div flex="50">
-        <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary">
-          Checkbox (md-primary): No Ink
-        </md-checkbox>
-      </div>
-    </div>
-  </fieldset>
+    </fieldset>
+
+  </div>
 </div>

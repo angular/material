@@ -112,8 +112,8 @@
     display: -ms-flexbox;
     display: flex;
   }
-  .layout#{$name}-column {  flex-direction: column;  }
-  .layout#{$name}-row    {  flex-direction: row;     }
+  .layout#{$name}-column {  flex-direction: column;     }
+  .layout#{$name}-row    {  flex-direction: row;        }
 }
 
 @mixin flex-properties-for-name($name: null) {
@@ -126,11 +126,25 @@
   }
 
   .#{$flexName}             { flex: 1;         box-sizing: border-box; }  // === flex: 1 1 0%;
+
+  // IE mediaQuery hack for 8,9,10 to set the flex-basis properly for 'flex' values
+  // Details:
+  // Do not use unitless flex-basis values in the flex shorthand because IE 10-11 will error.
+  // Also use 0% instead of 0px since minifiers will often convert 0px to 0 (which is unitless and will have the same problem).
+  // Safari, however, fails with flex-basis : 0% and requires flex-basis : 0px
+  @media screen\0 {
+      .#{$flexName} {
+        flex: 1 1 0%;
+      }
+  }
+
+
   .#{$flexName}-grow        { flex: 1 1 100%;  box-sizing: border-box; }
   .#{$flexName}-initial     { flex: 0 1 auto;  box-sizing: border-box; }
   .#{$flexName}-auto        { flex: 1 1 auto;  box-sizing: border-box; }
   .#{$flexName}-none        { flex: 0 0 auto;  box-sizing: border-box; }
   .#{$flexName}-noshrink    { flex: 1 0 auto;  box-sizing: border-box; }
+  .#{$flexName}-nogrow      { flex: 0 1 auto;  box-sizing: border-box; }
 
   // (1-20) * 5 = 0-100%
   @for $i from 0 through 20 {
@@ -510,3 +524,4 @@
   }
 
 }
+
