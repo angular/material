@@ -1,3 +1,46 @@
+<a name"1.0.0-rc7"></a>
+### 1.0.0-rc7 (2015-12-08)
+
+The Getting Started and the Layout documentation have been improved with more CodePen
+samples.  RTL support has been improved for the Input components.
+
+
+#### Features
+
+* **layout:** add flex noshrink attribute to prevent shrinking ([3d32c2e6](https://github.com/angular/material/commit/3d32c2e6), closes [#6067](https://github.com/angular/material/issues/6067), [#6100](https://github.com/angular/material/issues/6100))
+
+
+#### Bug Fixes
+
+* **autocomplete:**
+  * gets rid of uncompiled content flicker. Works around issues cased by the scope d ([88ba1fdd](https://github.com/angular/material/commit/88ba1fdd), closes [#5637](https://github.com/angular/material/issues/5637))
+  * always set tabindex to allow receiving focus. ([d3c0acb2](https://github.com/angular/material/commit/d3c0acb2), closes [#6101](https://github.com/angular/material/issues/6101), [#5665](https://github.com/angular/material/issues/5665), [#6135](https://github.com/angular/material/issues/6135))
+* **cards:** applying zero margin only on first and last p elements ([aa6a0588](https://github.com/angular/material/commit/aa6a0588), closes [#6060](https://github.com/angular/material/issues/6060))
+* **dialog:** update code example from `content` to `textContent`. Fixes ([19389455](https://github.com/angular/material/commit/19389455))
+* **input:**
+  * ngMessages jump with ngShow, ngIf, etc ([cf7f21aa](https://github.com/angular/material/commit/cf7f21aa), closes [#5298](https://github.com/angular/material/issues/5298), [#6164](https://github.com/angular/material/issues/6164))
+  * input error messages visible on form submit ([871512d0](https://github.com/angular/material/commit/871512d0), closes [#5752](https://github.com/angular/material/issues/5752), [#6091](https://github.com/angular/material/issues/6091))
+* **layout:** hide and show directives with breakpoint suffixes now work properly ([a2ec6607](https://github.com/angular/material/commit/a2ec6607))
+* **list:** don't turn list-items with ngIf into a button. ([ef05ea36](https://github.com/angular/material/commit/ef05ea36))
+* **menu:** fix menus inside toolbars and dialogs ([378248a5](https://github.com/angular/material/commit/378248a5), closes [#6131](https://github.com/angular/material/issues/6131), [#6109](https://github.com/angular/material/issues/6109), [#6049](https://github.com/angular/material/issues/6049), [#6073](https://github.com/angular/material/issues/6073), [#6089](https://github.com/angular/material/issues/6089), [#6116](https://github.com/angular/material/issues/6116))
+* **menubar:**
+  * fix broken menubar accessability with checkbox and radio menuitems ([eb1695a0](https://github.com/angular/material/commit/eb1695a0), closes [#6151](https://github.com/angular/material/issues/6151))
+  * fix keyboard controls ([0fa917d5](https://github.com/angular/material/commit/0fa917d5))
+  * fix menus overflow hiding behind menubar ([b339baa9](https://github.com/angular/material/commit/b339baa9))
+* **ripple:** calculate relative coordinates from ripple target. ([36b03f2f](https://github.com/angular/material/commit/36b03f2f), closes [#5917](https://github.com/angular/material/issues/5917), [#6092](https://github.com/angular/material/issues/6092))
+* **select:** fix bugs introduced by keeping md-select-menu in DOM. Fix tests ([7edda118](https://github.com/angular/material/commit/7edda118), closes [#6071](https://github.com/angular/material/issues/6071))
+* **toast:** Hide scrollbars during animation. ([cae51a65](https://github.com/angular/material/commit/cae51a65), closes [#2936](https://github.com/angular/material/issues/2936), [#6029](https://github.com/angular/material/issues/6029))
+* **toolbar:** solves NgUpgrade interop issue. ([c668ba40](https://github.com/angular/material/commit/c668ba40), closes [#6069](https://github.com/angular/material/issues/6069), [#6081](https://github.com/angular/material/issues/6081))
+* **tooltip:**
+  * always append to body and disappear on scroll ([9d726593](https://github.com/angular/material/commit/9d726593), closes [#6140](https://github.com/angular/material/issues/6140))
+  * guard against missing offsetParent. ([d0b7bacf](https://github.com/angular/material/commit/d0b7bacf))
+* **virtualRepeat:**
+  * sets initial size for virtual repeat when the first results require shrinking ([6acd1c3a](https://github.com/angular/material/commit/6acd1c3a), closes [#5826](https://github.com/angular/material/issues/5826), [#6139](https://github.com/angular/material/issues/6139))
+  * Broken demos relating to size computation ([10134231](https://github.com/angular/material/commit/10134231), closes [#6167](https://github.com/angular/material/issues/6167))
+  * fix sizer not shrinking when items reduce in number. ([1771b29f](https://github.com/angular/material/commit/1771b29f), closes [#4435](https://github.com/angular/material/issues/4435))
+  * update deps to include showHide.. ([b4ef3024](https://github.com/angular/material/commit/b4ef3024), closes [#4435](https://github.com/angular/material/issues/4435))
+
+
 <a name"1.0.0-rc6"></a>
 ### 1.0.0-rc6 (2015-12-02)
 
