@@ -125,7 +125,7 @@
     $name : '';
   }
 
-  .#{$flexName}             { flex: 1 1 0%;    box-sizing: border-box; }  // === flex: 1 1 0%;
+  .#{$flexName}             { flex: 1;         box-sizing: border-box; }  // === flex: 1 1 0%;
   .#{$flexName}-grow        { flex: 1 1 100%;  box-sizing: border-box; }
   .#{$flexName}-initial     { flex: 0 1 auto;  box-sizing: border-box; }
   .#{$flexName}-auto        { flex: 1 1 auto;  box-sizing: border-box; }
@@ -510,4 +510,11 @@
     display: none;
   }
 
+}
+
+// IE mediaQuery hack for 8,9,10 to set the flex-basis properly for 'flex' values
+@media screen\0 {
+    .flex, .flex-xs, .flex-gt-xs, .flex-sm, .flex-gt-sm, .flex-md, .flex-gt-md, .flex-lg, .flex-gt-lg, .flex-xl {
+      flex: 1 1 0%;
+    }
 }
