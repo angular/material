@@ -1,4 +1,4 @@
-describe('<md-select>', function() {
+fdescribe('<md-select>', function() {
   var attachedElements = [],
       body;
 
@@ -148,6 +148,23 @@ describe('<md-select>', function() {
 
     // FIXME- does not work with minified, jquery
     //expect($document[0].activeElement).toBe(select[0]);
+  }));
+
+  it('should remove the input-container focus state', inject(function($rootScope) {
+    $rootScope.val = 0;
+    var element = setupSelect('ng-model="val"', [1, 2, 3]);
+    var select = element.find('md-select');
+    var controller = element.controller('mdInputContainer');
+    controller.setHasValue(true);
+
+    select.triggerHandler('focus');
+
+    expect(element.hasClass('md-input-focused')).toBe(true);
+
+    select.triggerHandler('blur');
+
+    expect(element.hasClass('md-input-focused')).toBe(false);
+
   }));
 
   describe('input container', function() {

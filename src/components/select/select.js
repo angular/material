@@ -187,12 +187,6 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
     return function postLink(scope, element, attr, ctrls) {
       var isDisabled, ariaLabelBase;
 
-      // Remove event ngModel's blur listener for touched and untouched
-      // we will do it ourself.
-      $mdUtil.nextTick(function() {
-        element.off('blur');
-      });
-
       var containerCtrl = ctrls[0];
       var mdSelectCtrl = ctrls[1];
       var ngModelCtrl = ctrls[2];
@@ -283,7 +277,8 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
               containerCtrl.setFocused(true);
             }
           })
-          .on('blur', function(ev) {
+          .on('blur', function() {
+            if (selectScope.isOpen) return;
             containerCtrl && containerCtrl.setFocused(false);
             inputCheckValue();
           });
@@ -466,6 +461,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
           loadingAsync: attr.mdOnOpen ? scope.$eval(attr.mdOnOpen) || true : false
         }).finally(function() {
           selectScope.isOpen = false;
+          element.focus();
           element.attr('aria-expanded', 'false');
           ngModelCtrl.$setTouched();
         });
