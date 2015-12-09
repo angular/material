@@ -2,7 +2,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope, $mdDialog, $mdMedia) {
   $scope.status = '  ';
-  $scope.customFullscreen = $mdMedia('sm');
+  $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 
   $scope.showAlert = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app
@@ -38,13 +38,15 @@ angular.module('dialogDemo1', ['ngMaterial'])
   };
 
   $scope.showAdvanced = function(ev) {
+    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+
     $mdDialog.show({
       controller: DialogController,
       templateUrl: 'dialog1.tmpl.html',
       parent: angular.element(document.body),
       targetEvent: ev,
       clickOutsideToClose:true,
-      fullscreen: $mdMedia('sm') && $scope.customFullscreen
+      fullscreen: useFullScreen
     })
     .then(function(answer) {
       $scope.status = 'You said the information was "' + answer + '".';
@@ -55,9 +57,9 @@ angular.module('dialogDemo1', ['ngMaterial'])
 
 
     $scope.$watch(function() {
-      return $mdMedia('sm');
-    }, function(sm) {
-      $scope.customFullscreen = (sm === true);
+      return $mdMedia('xs') || $mdMedia('sm');
+    }, function(wantsFullScreen) {
+      $scope.customFullscreen = (wantsFullScreen === true);
     });
 
   };
