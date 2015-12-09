@@ -45,7 +45,6 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   ctrl.select                        = select;
   ctrl.listEnter                     = onListEnter;
   ctrl.listLeave                     = onListLeave;
-  ctrl.mouseUp                       = onMouseup;
   ctrl.getCurrentDisplayValue        = getCurrentDisplayValue;
   ctrl.registerSelectedItemWatcher   = registerSelectedItemWatcher;
   ctrl.unregisterSelectedItemWatcher = unregisterSelectedItemWatcher;
@@ -260,16 +259,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * When the user's mouse leaves the menu, blur events may hide the menu again.
    */
   function onListLeave () {
-    if (!hasFocus) elements.input.focus();
     noBlur = false;
     ctrl.hidden = shouldHide();
-  }
-
-  /**
-   * When the mouse button is released, send focus back to the input field.
-   */
-  function onMouseup () {
-    elements.input.focus();
   }
 
   /**
