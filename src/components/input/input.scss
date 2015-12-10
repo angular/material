@@ -43,11 +43,6 @@ md-input-container {
     min-width: 1px;
   }
 
-  // Move the element after the spacer (likely an ng-messages container), on top of the spacer
-  .md-errors-spacer + * {
-    margin-top: -$input-error-height;
-  }
-
   > md-icon {
     position: absolute;
     top: 5px;
@@ -113,8 +108,8 @@ md-input-container {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
-    @include rtl(padding-left, $input-container-padding, 0);
-    @include rtl(padding-right, 0, $input-container-padding);
+    @include rtl(padding-left, $input-container-padding + 1px, 0);
+    @include rtl(padding-right, 0, $input-container-padding + 1px);
     z-index: 1;
     transform: translate3d(0, $input-label-default-offset + 4, 0) scale($input-label-default-scale);
     transition: transform $swift-ease-out-timing-function 0.25s;
@@ -208,7 +203,6 @@ md-input-container {
     position: relative;
     order: 4;
     overflow: hidden;
-    min-height: $input-error-height;
     @include rtl(clear, left, right);
 
     &.ng-enter {
