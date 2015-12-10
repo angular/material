@@ -6,8 +6,13 @@ $switch-margin: 16px !default;
 
 .md-inline-form {
   md-switch {
-    margin-top: 18px;
-    margin-bottom: 19px;
+    display: inline-block;
+    margin-top: 4px;
+    margin-bottom: 0;
+
+    .md-container {
+      margin-top: 1px;
+    }
   }
 }
 

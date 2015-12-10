@@ -4,6 +4,25 @@ $radio-text-margin: 10px !default;
 $radio-top-left: 12px !default;
 $radio-margin: 16px;
 
+.md-inline-form {
+  md-radio-group {
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 0;
+
+    md-radio-button {
+      display: inline-block;
+      margin-top: 0;
+      margin-bottom: 2px;
+
+      &:not(:first-child) {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
 md-radio-button {
   box-sizing: border-box;
   display: block;
@@ -143,20 +162,6 @@ md-radio-group {
       top: -8px;
       right: -8px;
       bottom: -8px;
-    }
-  }
-}
-
-.md-inline-form {
-  md-radio-group {
-    margin: 18px 0 19px;
-    md-radio-button {
-      display: inline-block;
-      height: 30px;
-      padding: 2px;
-      box-sizing: border-box;
-      margin-top: 0;
-      margin-bottom: 0;
     }
   }
 }
