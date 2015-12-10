@@ -643,7 +643,9 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
         contentHeight = tabContent ? tabContent.offsetHeight : 0,
         tabsHeight    = elements.wrapper.offsetHeight,
         newHeight     = contentHeight + tabsHeight,
-        currentHeight = $element.prop('offsetHeight');
+        currentHeight = $element.prop('clientHeight');
+
+    if (currentHeight === newHeight) return;
 
     // Adjusts calculations for when the buttons are bottom-aligned since this relies on absolute
     // positioning.  This should probably be cleaned up if a cleaner solution is possible.
