@@ -434,8 +434,9 @@ MdChipsCtrl.prototype.configureNgModel = function(ngModelCtrl) {
 };
 
 MdChipsCtrl.prototype.onFocus = function () {
-  var input = this.$element[0].querySelector('input');
-  input && input.focus();
+  // Focus last input
+  var inputs = this.$element[0].querySelectorAll('input');
+  inputs.length > 0 && inputs[inputs.length - 1].focus();
   this.resetSelectedChip();
 };
 
