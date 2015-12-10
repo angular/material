@@ -1,6 +1,7 @@
 describe('layout directives', function() {
-  var suffixes = ['xs', 'gt-xs', 'sm', 'gt-sm', 'md', 'gt-md', 'lg', 'gt-lg', 'xl'],
-    $mdUtil, $compile, pageScope;
+  //var suffixes = ['xs', 'gt-xs', 'sm', 'gt-sm', 'md', 'gt-md', 'lg', 'gt-lg', 'xl'];
+  var suffixes = [ 'sm', 'gt-sm', 'md', 'gt-md', 'lg' ];
+  var  $mdUtil, $compile, pageScope;
 
   beforeEach(module('material.core', 'material.core.layout'));
 
