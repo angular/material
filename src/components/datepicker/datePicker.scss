@@ -4,7 +4,16 @@ $md-datepicker-border-bottom-gap: 5px;  // Space between input and the grey unde
 $md-datepicker-open-animation-duration: 0.2s;
 $md-datepicker-triangle-button-width: 36px;
 
+.md-inline-form {
+  md-datepicker {
+    margin-top: 16px;
+  }
+}
+
 md-datepicker {
+  display: inline-block;
+  margin-top: 12px;
+
   // Don't let linebreaks happen between the open icon-button and the input.
   white-space: nowrap;
   overflow: hidden;
@@ -14,12 +23,6 @@ md-datepicker {
   margin-right: -$md-datepicker-triangle-button-width / 2;
 
   vertical-align: middle;
-}
-
-.md-inline-form {
-  md-datepicker {
-    margin-top: 12px;
-  }
 }
 
 // The calendar icon button used to open the calendar pane.

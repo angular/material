@@ -1,0 +1,44 @@
+<div ng-controller="DemoCtrl" layout-padding="" ng-cloak="">
+  <md-content class="md-inline-form">
+
+    <md-datepicker ng-model="user.birthday" md-placeholder="Birthday"></md-datepicker>
+
+    <md-input-container>
+      <label>Favorite Food</label>
+      <md-select ng-model="user.food">
+        <md-option ng-repeat="food in user.foods" value="{{food}}">
+          {{food}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+
+    <md-input-container>
+      <label>Name jane</label>
+      <input ng-model="user.name" type="text">
+    </md-input-container>
+
+    <md-input-container>
+      <md-radio-group ng-model="user.color">
+        <md-radio-button value="Red">Red</md-radio-button>
+        <md-radio-button value="Blue">Blue</md-radio-button>
+      </md-radio-group>
+    </md-input-container>
+
+    <md-input-container>
+      <md-button class="md-raised">View License Terms</md-button>
+    </md-input-container>
+
+    <md-input-container>
+      <md-checkbox ng-model="user.accept">Accept</md-checkbox>
+    </md-input-container>
+
+    <md-input-container>
+      <md-switch ng-model="user.theme">Use theme</md-switch>
+    </md-input-container>
+
+    <md-input-container>
+      <label>Description</label>
+      <textarea ng-model="user.description"></textarea>
+    </md-input-container>
+  </md-content>
+</div>

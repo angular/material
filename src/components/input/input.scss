@@ -21,31 +21,51 @@ $icon-offset: 36px !default;
 
 $icon-float-focused-top: -8px !default;
 
+// For md-block and md-error-spacing classes, setup a spacer that is always visible as
+// placeholder for any messages so we don't change height with only 1 message
+@mixin errors-spacing() {
+  .md-errors-spacer {
+    // Ensure the element always takes up space, even if empty
+    min-height: $input-error-height;
+    min-width: 1px;
+  }
+}
+
+.md-error-spacing {
+  md-input-container {
+    @include errors-spacing();
+  }
+}
+
+.md-block-form {
+  md-input-container {
+    display: block;
+
+    @include errors-spacing();
+  }
+}
+
 md-input-container {
   @include pie-clearfix();
   display: inline-block;
   position: relative;
   padding: $input-container-padding;
-  margin: 18px 0;
   vertical-align: middle;
+
+  &:not([md-no-float]) {
+    margin-top: 18px;
+  }
 
   &.md-block {
     display: block;
   }
 
-  // Setup a spacer that is always there as a placeholder for any messages so we don't change
-  // height with only 1 message
   .md-errors-spacer {
     @include rtl(float, right, left);
-    min-height: $input-error-height;
-
-    // Ensure the element always takes up space, even if empty
-    min-width: 1px;
   }
 
-  // Move the element after the spacer (likely an ng-messages container), on top of the spacer
-  .md-errors-spacer + * {
-    margin-top: -$input-error-height;
+  &.md-block, &.md-error-spacing {
+    @include errors-spacing();
   }
 
   > md-icon {
@@ -93,7 +113,7 @@ md-input-container {
 
   label:not(.md-container-ignore) {
     position: absolute;
-    bottom: 100%;
+    bottom: calc(100% + 2px);
     @include rtl(left, 0, auto);
     @include rtl(right, auto, 0);
   }
@@ -113,8 +133,8 @@ md-input-container {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
-    @include rtl(padding-left, $input-container-padding, 0);
-    @include rtl(padding-right, 0, $input-container-padding);
+    @include rtl(padding-left, $input-container-padding + 1px, 0);
+    @include rtl(padding-right, 0, $input-container-padding + 1px);
     z-index: 1;
     transform: translate3d(0, $input-label-default-offset + 4, 0) scale($input-label-default-scale);
     transition: transform $swift-ease-out-timing-function 0.25s;
@@ -163,8 +183,6 @@ md-input-container {
     background: none;
     padding-top: $input-padding-top;
     padding-bottom: $input-border-width-focused - $input-border-width-default;
-    padding-left: 2px;
-    padding-right: 2px;
     border-width: 0 0 $input-border-width-default 0;
     line-height: $input-line-height;
     height: $input-line-height + ($input-padding-top * 2);
@@ -208,7 +226,6 @@ md-input-container {
     position: relative;
     order: 4;
     overflow: hidden;
-    min-height: $input-error-height;
     @include rtl(clear, left, right);
 
     &.ng-enter {

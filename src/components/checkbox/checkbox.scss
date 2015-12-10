@@ -8,7 +8,9 @@ $checkbox-top: 12px !default;
 
 .md-inline-form {
   md-checkbox {
-    margin: 19px 0 18px;
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 4px;
   }
 }
 
