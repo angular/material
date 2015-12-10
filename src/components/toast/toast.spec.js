@@ -168,6 +168,21 @@ describe('$mdToast service', function() {
         expect(toast.hasClass('md-left')).toBe(true);
       }));
 
+      it('should wrap toast content with .md-toast-content', inject(function($rootElement, $timeout) {
+        setup({
+          template: '<md-toast><p>Charmander</p></md-toast>',
+          position: 'top left'
+        });
+        var toast = $rootElement.find('md-toast')[0];
+        $timeout.flush();
+
+        expect(toast.children.length).toBe(1);
+        expect(toast.children[0].classList.contains('md-toast-content'));
+        expect(toast.children[0].textContent).toMatch('Charmander');
+      }));
+
+
+
       describe('sm screen', function () {
         beforeEach(function () {
           module(function ($provide) {
