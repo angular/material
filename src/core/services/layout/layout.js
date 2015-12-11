@@ -425,7 +425,9 @@
   function buildUpdateFn(element, className, attrs) {
     return function updateAttrValue(fallback) {
       if (!needsInterpolation(fallback)) {
-        element.attr(className, fallback);
+        // Do not modify the element's attribute value; so
+        // uses '<ui-layout layout="/api/sidebar.html" />' will not
+        // be affected. Just update the attrs value.
         attrs[attrs.$normalize(className)] = fallback;
       }
     };
