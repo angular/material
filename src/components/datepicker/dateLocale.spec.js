@@ -25,12 +25,14 @@ describe('$mdDateLocale', function() {
     }));
 
     it('should expose default days, months, and dates', function() {
+      var expected = [undefined, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+                15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
+
       expect(dateLocale.months).toEqual($localeFake.DATETIME_FORMATS.MONTH);
       expect(dateLocale.shortMonths).toEqual($localeFake.DATETIME_FORMATS.SHORTMONTH);
       expect(dateLocale.days).toEqual($localeFake.DATETIME_FORMATS.DAY);
       expect(dateLocale.shortDays).toEqual(['S', 'M', 'T', 'W', 'T', 'F', 'S']);
-      expect(dateLocale.dates).toEqual([undefined, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
-          15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]);
+      expect(dateLocale.dates.length).toEqual(expected.length);
     });
 
     it('should have a default date formatter', function() {
