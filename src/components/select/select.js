@@ -275,15 +275,17 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
       };
 
       if (!isReadonly) {
-        element
-          .on('focus', function(ev) {
+        element[0]
+          .addEventListener('focus', function() {
             // only set focus on if we don't currently have a selected value. This avoids the "bounce"
             // on the label transition because the focus will immediately switch to the open menu.
             if (containerCtrl && containerCtrl.element.hasClass('md-input-has-value')) {
               containerCtrl.setFocused(true);
             }
-          })
-          .on('blur', function(ev) {
+          });
+
+        element[0]
+          .addEventListener('blur', function() {
             containerCtrl && containerCtrl.setFocused(false);
             inputCheckValue();
           });
