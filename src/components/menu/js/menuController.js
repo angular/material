@@ -81,7 +81,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
         nestedMenu = angular.element(nestedMenu).controller('mdMenu');
       }
 
-      if (self.currentlyOpenMenu && self.currentlyOpenMenu != nestedMenu) {
+      if (self.currentlyOpenMenu && nestedMenu && self.currentlyOpenMenu != nestedMenu) {
         var closeTo = self.nestLevel + 1;
         self.currentlyOpenMenu.close(true, { closeTo: closeTo });
       } else if (nestedMenu && !nestedMenu.isOpen && nestedMenu.open) {
