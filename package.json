@@ -5,6 +5,7 @@
   "keywords": "client-side, browser, material, material-design, design, angular, css, components, google",
   "homepage": "https://material.angularjs.org",
   "bugs": "https://github.com/angular/material/issues",
+  "license": "MIT",
   "licenses": [
     {
       "type": "MIT",
@@ -16,13 +17,13 @@
     "url": "git://github.com/angular/material.git"
   },
   "devDependencies": {
-    "angular": "^1.4.7",
-    "angular-animate": "^1.4.7",
-    "angular-aria": "^1.4.7",
-    "angular-messages": "^1.4.7",
-    "angular-mocks": "^1.4.7",
-    "angular-route": "^1.4.7",
-    "angular-sanitize": "^1.4.7",
+    "angular": "^1.4.8",
+    "angular-animate": "^1.4.8",
+    "angular-aria": "^1.4.8",
+    "angular-messages": "^1.4.8",
+    "angular-mocks": "^1.4.8",
+    "angular-route": "^1.4.8",
+    "angular-sanitize": "^1.4.8",
     "angular-touch": "^1.4.8",
     "angularytics": "^0.3.0",
     "canonical-path": "0.0.2",

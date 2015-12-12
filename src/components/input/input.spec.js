@@ -74,6 +74,45 @@ describe('md-input-container directive', function() {
     expect(el.find('md-input-container')).toHaveClass('md-input-invalid');
   });
 
+  it('should show error on $submitted and $invalid with nested forms', function() {
+    var template =
+      '<form>' +
+      '<div ng-form>' +
+      '<md-input-container>' +
+      '<input ng-model="foo">' +
+      '<label></label>' +
+      '</md-input-container>' +
+      '</div>' +
+      '</form>';
+
+    var parentForm = $compile(template)(pageScope);
+    pageScope.$apply();
+
+    expect(parentForm.find('md-input-container')).not.toHaveClass('md-input-invalid');
+
+    var model = parentForm.find('input').controller('ngModel');
+    model.$invalid = true;
+
+    var form = parentForm.controller('form');
+    form.$submitted = true;
+    pageScope.$apply();
+
+    expect(parentForm.find('md-input-container')).toHaveClass('md-input-invalid');
+  });
+
+  it('should not show error on $invalid and not $submitted', function() {
+    var el = setup('ng-model="foo"', true);
+
+    expect(el.find('md-input-container')).not.toHaveClass('md-input-invalid');
+
+    var model = el.find('input').controller('ngModel');
+    model.$invalid = true;
+
+    pageScope.$apply();
+
+    expect(el.find('md-input-container')).not.toHaveClass('md-input-invalid');
+  });
+
   it('should show error with given md-is-error expression', function() {
     var el = $compile(
         '<md-input-container md-is-error="isError">' +
