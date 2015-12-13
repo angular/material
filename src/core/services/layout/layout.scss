@@ -442,23 +442,23 @@
  */
 
 
-@media (max-width: $layout-breakpoint-xs - 1) {
-  // Xtra-SMALL  SCREEN
-  .hide-xs, .hide {
-    &:not(.show-xs):not(.show) {
-      display: none;
-    }
-  }
-  @include layouts_for_breakpoint(xs);
-}
+//@media (max-width: $layout-breakpoint-xs - 1) {
+//  // Xtra-SMALL  SCREEN
+//  .hide-xs, .hide {
+//    &:not(.show-xs):not(.show) {
+//      display: none;
+//    }
+//  }
+//  @include layouts_for_breakpoint(xs);
+//}
+//
+//@media (min-width: $layout-breakpoint-xs) {
+//  // BIGGER THAN Xtra-SMALL SCREEN
+//  @include layouts_for_breakpoint(gt-xs);
+//
+//}
 
-@media (min-width: $layout-breakpoint-xs) {
-  // BIGGER THAN Xtra-SMALL SCREEN
-  @include layouts_for_breakpoint(gt-xs);
-
-}
-
-@media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
+@media (max-width: $layout-breakpoint-sm - 1) {
   .hide, .hide-gt-xs {
     &:not(.show-gt-xs):not(.show-sm):not(.show) {
       display: none;
@@ -509,19 +509,19 @@
   @include layouts_for_breakpoint(lg);
 }
 
-@media (min-width: $layout-breakpoint-lg) {
-  @include layouts_for_breakpoint(gt-lg);
-  @include layouts_for_breakpoint(xl);
-
-  // BIGGER THAN LARGE SCREEN
-  .hide, .hide-gt-xs, .hide-gt-sm, .hide-gt-md, .hide-gt-lg {
-    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show-xl):not(.show) {
-      display: none;
-    }
-  }
-  .hide-xl:not(.show-xl):not(.show-gt-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
-    display: none;
-  }
-
-}
+//@media (min-width: $layout-breakpoint-lg) {
+//  @include layouts_for_breakpoint(gt-lg);
+//  @include layouts_for_breakpoint(xl);
+//
+//  // BIGGER THAN LARGE SCREEN
+//  .hide, .hide-gt-xs, .hide-gt-sm, .hide-gt-md, .hide-gt-lg {
+//    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show-xl):not(.show) {
+//      display: none;
+//    }
+//  }
+//  .hide-xl:not(.show-xl):not(.show-gt-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
+//    display: none;
+//  }
+//
+//}
 
