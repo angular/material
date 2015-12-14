@@ -185,6 +185,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
     attr.tabindex = attr.tabindex || '0';
 
     return function postLink(scope, element, attr, ctrls) {
+      var untouched = true;
       var isDisabled, ariaLabelBase;
 
       var containerCtrl = ctrls[0];
@@ -276,12 +277,22 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
             if (containerCtrl && containerCtrl.element.hasClass('md-input-has-value')) {
               containerCtrl.setFocused(true);
             }
-          })
-          .on('blur', function() {
+          });
+
+        // Wait until postDigest so that we attach after ngModel's 
+        // blur listener so we can set untouched.
+        $mdUtil.nextTick(function () {
+          element.on('blur', function() {
+            if (untouched) {
+              untouched = false;
+              ngModelCtrl.$setUntouched();
+            }
+
             if (selectScope.isOpen) return;
             containerCtrl && containerCtrl.setFocused(false);
             inputCheckValue();
           });
+        });
       }
 
       mdSelectCtrl.triggerClose = function() {
@@ -397,6 +408,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
               containerCtrl.setHasValue(false);
               containerCtrl.input = null;
             }
+            ngModelCtrl.$setTouched();
           });
       });
 
