@@ -250,8 +250,18 @@ md-input-container {
     }
   }
 
+  // Note: This is a workaround to fix an ng-enter flicker bug
+  .md-auto-hide {
+    .md-input-message-animation {
+      &:not(.ng-animate) {
+        opacity: 0;
+        margin-top: -100px;
+      }
+    }
+  }
+
   .md-input-message-animation {
-    &.ng-enter, &:not(.ng-animate) {
+    &.ng-enter {
       opacity: 0;
       margin-top: -100px;
     }
