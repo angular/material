@@ -158,8 +158,13 @@
     // module needs to match so that the $templateCache is populated with the necessary
     // assets.
     function replaceDemoModuleWithCodepenModule(file) {
-      var matchAngularModule =  /\.module\(('[^']*'|"[^"]*")\s*,(?:\s*\[([^\]]*)\])?/g;
-      return file.replace(matchAngularModule, ".module('MyApp'");
+      var matchAngularModule =  /\.module\(('[^']*'|"[^"]*")\s*,(\s*\[([^\]]*)\]\s*\))/ig;
+
+      // Include 'ngMessages' since the 'assets-cache.js' has the same dependencies
+      // angular.module('MyApp', ['ngMaterial', 'ngMessages'])
+      // See scripts.js for list of external Angular libraries used for the demos
+
+      return file.replace(matchAngularModule, ".module('MyApp',['ngMaterial', 'ngMessages'])");
     }
   }
 })();
