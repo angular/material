@@ -164,7 +164,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   function configureWatchers () {
     var wait = parseInt($scope.delay, 10) || 0;
     $attrs.$observe('disabled', function (value) { ctrl.isDisabled = !!value; });
-    $attrs.$observe('required', function (value) { ctrl.isRequired = !!value; });
+    $attrs.$observe('required', function (value) { ctrl.isRequired = value !== "false"; });
     $scope.$watch('searchText', wait ? $mdUtil.debounce(handleSearchText, wait) : handleSearchText);
     $scope.$watch('selectedItem', selectedItemChange);
     angular.element($window).on('resize', positionDropdown);
