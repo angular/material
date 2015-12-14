@@ -445,13 +445,16 @@ describe('util', function() {
   });
 
   describe('with $interpolate.start/endSymbol override', function() {
-    beforeEach(module(function($interpolateProvider) {
-      $interpolateProvider.startSymbol('[[').endSymbol(']]');
-
-      module('material.core');
-    }));
 
     describe('processTemplate', function() {
+      beforeEach(function() {
+        module(function($interpolateProvider) {
+            $interpolateProvider.startSymbol('[[');
+            $interpolateProvider.endSymbol(']]');
+        });
+        module('material.core');
+      });
+
       it('should replace the start/end symbols', inject(function($mdUtil) {
         var output = $mdUtil.processTemplate('<some-tag>{{some-var}}</some-tag>');
 
