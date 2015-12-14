@@ -267,7 +267,10 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
     }
 
     var isErrorGetter = containerCtrl.isErrorGetter || function() {
-      return ngModelCtrl.$invalid && (ngModelCtrl.$touched || ngModelCtrl.$$parentForm.$submitted);
+      return ngModelCtrl.$invalid && (
+        ngModelCtrl.$touched ||
+        (ngModelCtrl.$$parentForm && ngModelCtrl.$$parentForm.$submitted)
+      );
     };
 
     scope.$watch(isErrorGetter, containerCtrl.setInvalid);
