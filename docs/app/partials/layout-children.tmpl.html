@@ -99,26 +99,29 @@
   <docs-demo demo-title="Other Flex Values" class="small-demo colorNested-noPad">
     <demo-file name="index.html">
       <div layout="row" layout-wrap>
-        <div flex="0">
-          [flex="0"]
-        </div>
         <div flex="none">
           [flex="none"]
         </div>
         <div flex>
           [flex]
         </div>
+        <div flex="nogrow">
+          [flex="nogrow"]
+        </div>
         <div flex="grow">
           [flex="grow"]
         </div>
-        <div flex="auto">
-          [flex="auto"]
-        </div>
-        <div flex="auto">
-          [flex="auto"]
-        </div>
         <div flex="initial">
           [flex="initial"]
+        </div>
+        <div flex="auto">
+          [flex="auto"]
+        </div>
+        <div flex="noshrink">
+          [flex="noshrink"]
+        </div>
+        <div flex="0">
+          [flex="0"]
         </div>
       </div>
     </demo-file>
@@ -145,6 +148,10 @@
     <tr>
       <td>flex="grow"</td>
       <td>Will grow and shrink as needed. Starts with a size of 100%. Same as <code>flex="100"</code>.</td>
+    </tr>
+    <tr>
+      <td>flex="nogrow"</td>
+      <td>Will shrink as needed, but won't grow. Starts with a size based on it's <code>width</code> and <code>height</code> values.</td>
     </tr>
     <tr>
       <td>flex="noshrink"</td>
