@@ -613,7 +613,6 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
 
     // Reset our variables
     ctrl.index = 0;
-    ctrl.matches = [];
     $scope.searchText = '';
 
     // Tell the select to fire and select nothing
