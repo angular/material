@@ -1,0 +1,15 @@
+.md-table.md-THEME_NAME-theme {
+
+  tr {
+    border-top-color: '{{foreground-4}}' !important;
+  }
+
+  th {
+    color: '{{foreground-2}}';
+  }
+
+  td {
+    color: '{{foreground-1}}';
+  }
+
+}

@@ -1,0 +1,74 @@
+<div class="inset" ng-controller="TableDemoController" ng-cloak>
+
+  <p>A responsive table component</p>
+
+  <div>
+    <table class="md-whiteframe-1dp" data-md-table>
+      <thead>
+        <tr>
+          <th>
+            <md-checkbox></md-checkbox>
+          </th>
+          <th>Dessert (100g) serving)</th>
+          <th>Calories</th>
+          <th>Fat (g)</th>
+          <th>Carbs (g)</th>
+          <th>Protein (g)</th>
+          <th>Sodium (mg)</th>
+          <th>Calcium (%)</th>
+          <th>Iron (%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamic usage of a table -->
+        <tr ng-repeat="item in items">
+          <td><md-checkbox></md-checkbox></td>
+          <td>{{ item.name }}</td>
+          <td class="numeric">{{ item.calories }}</td>
+          <td class="numeric">{{ item.fat | number: 1 }}</td>
+          <td class="numeric">{{ item.carbs }}</td>
+          <td class="numeric">{{ item.protein | number: 1 }}</td>
+          <td class="numeric">{{ item.sodium }}</td>
+          <td class="numeric">{{ item.calcium }}%</td>
+          <td class="numeric">{{ item.iron }}%</td>
+        </tr>
+        <!-- Normal usage of a table -->
+        <tr>
+          <td><md-checkbox></md-checkbox></td>
+          <td>Cupcake</td>
+          <td>305</td>
+          <td>3.7</td>
+          <td>67</td>
+          <td>4.3</td>
+          <td>413</td>
+          <td>3%</td>
+          <td>8%</td>
+        </tr>
+        <tr>
+          <td><md-checkbox></md-checkbox></td>
+          <td>Gingerbread</td>
+          <td>356</td>
+          <td>16.0</td>
+          <td>49</td>
+          <td>3.9</td>
+          <td>327</td>
+          <td>7%</td>
+          <td>16%</td>
+        </tr>
+        <tr>
+          <td><md-checkbox></md-checkbox></td>
+          <td>Jelly bean</td>
+          <td>375</td>
+          <td>0.0</td>
+          <td>94</td>
+          <td>0.0</td>
+          <td>50</td>
+          <td>0%</td>
+          <td>0%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+</div>

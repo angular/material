@@ -1,0 +1,48 @@
+$table-header-font-size: 12px;
+$table-body-font-size: 13px;
+$table-row-height: 48px;
+
+.md-table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+
+  th:first-child, td:first-child {
+    padding: 0 24px;
+  }
+
+  th, td {
+    padding-right: 28px;
+
+    md-checkbox {
+      margin: 0;
+    }
+
+    &.numeric {
+      text-align: right;
+    }
+  }
+
+  tr {
+    height: $table-row-height;
+  }
+
+  th {
+    text-align: left;
+    font-size: $table-header-font-size;
+  }
+
+  td {
+    font-size: $table-body-font-size;
+  }
+
+  tbody tr {
+    border: 0;
+    border-top: 1px solid;
+
+    &:hover {
+      background-color: #eee;
+    }
+  }
+
+}
