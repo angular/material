@@ -1,0 +1,156 @@
+/** Styles for mdCalendar. */
+$md-calendar-cell-size: 44px !default;
+$md-calendar-header-height: 40px;
+$md-calendar-cell-emphasis-size: 40px !default;
+$md-calendar-side-padding: 16px !default;
+$md-calendar-weeks-to-show: 7 !default;
+
+$md-calendar-month-label-padding: 8px !default;
+$md-calendar-month-label-font-size: 14px !default;
+
+$md-calendar-scroll-cue-shadow-radius: 6px;
+
+$md-calendar-width: (7 * $md-calendar-cell-size) + (2 * $md-calendar-side-padding);
+$md-calendar-height:
+    ($md-calendar-weeks-to-show * $md-calendar-cell-size) + $md-calendar-header-height;
+
+// Styles for date cells, including day-of-the-week header cells.
+@mixin md-calendar-cell() {
+  height: $md-calendar-cell-size;
+  width: $md-calendar-cell-size;
+
+  text-align: center;
+
+  // Remove all padding and borders so we can completely
+  // control the size of the table cells.
+  padding: 0;
+  border: none;
+
+  // The left / right padding is applied to the cells instead of the wrapper
+  // because we want the header background and the month dividing border to
+  // extend the entire width of the calendar.
+  &:first-child {
+    padding-left: $md-calendar-side-padding;
+  }
+
+  &:last-child {
+    padding-right: $md-calendar-side-padding;
+  }
+}
+
+// Styles for tables used in mdCalendar (the day-of-the-week header and the table of dates itself).
+@mixin md-calendar-table() {
+  // Fixed table layout makes IE faster.
+  // https://msdn.microsoft.com/en-us/library/ms533020(VS.85).aspx
+  table-layout: fixed;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+md-calendar {
+  font-size: 13px;
+  user-select: none;
+}
+
+// Wrap the scroll with overflow: hidden in order to hide the scrollbar.
+// The inner .md-calendar-scroll-container will using a padding-right to push the
+// scrollbar into the hidden area (done with javascript).
+.md-calendar-scroll-mask {
+  display: inline-block;
+  overflow: hidden;
+  height: $md-calendar-weeks-to-show * $md-calendar-cell-size;
+
+  // The actual scrolling element.
+  .md-virtual-repeat-scroller {
+    // These two properties are needed to get touch momentum to work.
+    // See https://css-tricks.com/snippets/css/momentum-scrolling-on-ios-overflow-elements
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  // Offsetter is the element that is translateY'ed into view of the user and contains the
+  // calendar content.
+  .md-virtual-repeat-offsetter {
+    width: 100%;
+  }
+}
+
+// Contains the scrolling element (this is the md-virtual-repeat-container).
+.md-calendar-scroll-container {
+  // Add an inset shadow to help cue users that the calendar is scrollable. Use a negative x
+  // offset to push the vertical edge shadow off to the right so that it's cut off by the edge
+  // of the calendar container.
+  box-shadow: inset -3px 3px $md-calendar-scroll-cue-shadow-radius rgba(black, 0.2);
+
+  display: inline-block;
+  height: $md-calendar-weeks-to-show * $md-calendar-cell-size;
+
+  // Add the shadow radius to the width so that the shadow os pushed off to the side and cut off.
+  width: $md-calendar-width + $md-calendar-scroll-cue-shadow-radius;
+}
+
+// A single date cell in the calendar table.
+.md-calendar-date {
+  @include md-calendar-cell();
+
+  &.md-calendar-date-disabled {
+    cursor: default;
+  }
+}
+
+// Circle element inside of every date cell used to indicate selection or focus.
+.md-calendar-date-selection-indicator {
+  transition: background-color, color $swift-ease-out-duration $swift-ease-out-timing-function;
+
+  border-radius: 50%;
+  display: inline-block;
+
+  width: $md-calendar-cell-emphasis-size;
+  height: $md-calendar-cell-emphasis-size;
+  line-height: $md-calendar-cell-emphasis-size;
+
+  .md-calendar-date:not(.md-disabled) & {
+    cursor: pointer;
+  }
+}
+
+// The label above each month (containing the month name and the year, e.g. "Jun 2014").
+.md-calendar-month-label {
+  height: $md-calendar-cell-size;
+  font-size: $md-calendar-month-label-font-size;
+  font-weight: 500; // Roboto Medium
+  padding: 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding;
+}
+
+// Table containing the day-of-the-week header.
+.md-calendar-day-header {
+  @include md-calendar-table();
+
+  th {
+    @include md-calendar-cell();
+    font-weight: normal;
+    height: $md-calendar-header-height;
+  }
+}
+
+// Primary table containing all date cells. Each month is a tbody in this table.
+.md-calendar {
+  @include md-calendar-table();
+
+  // Divider between months.
+  tr:last-child td {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+  }
+
+  // The divider between months doesn't actually change the height of the tbody in which the
+  // border appear; it changes the height of the following tbody. The causes the first-child to be
+  // 1px shorter than the other months. We fix this by adding an invisible border-top.
+  &:first-child {
+    border-top: 1px solid transparent;
+  }
+}

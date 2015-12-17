@@ -1,0 +1,23 @@
+.page-container {
+  background-color: #f1f1f1;
+  padding: 32px;
+}
+
+.page {
+  margin: 0 auto;
+  background-color: white;
+  padding: 24px;
+  max-width: 680px;
+  box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.25);
+}
+
+.page h1 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-top: 0;
+  font-weight: normal;
+}
+
+.page p {
+  line-height: 1.6rem;
+}

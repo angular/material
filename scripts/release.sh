@@ -14,13 +14,12 @@ function run {
     exit 1
   fi
 
-  ./scripts/bower-release.sh --version=$VERSION
+  ./scripts/bower-material-release.sh --version=$VERSION
 
-  replaceJsonProp "bower.json" "version" "$VERSION"
   replaceJsonProp "package.json" "version" "$VERSION"
 
   echo "-- Committing, tagging and pushing bower.json and package.json..."
-  git commit bower.json package.json -m "release: version $VERSION"
+  git commit package.json -m "release: version $VERSION"
   git tag -f v$VERSION
   git push -q origin master
   git push -q origin v$VERSION

@@ -3,14 +3,14 @@
 {% block content %}
 
 {% block header %}
-<header class="api-profile-header">
-    {% block related_components %}{% endblock %}
+<header class="api-profile-header" >
+  <h2 class="md-display-1" >{{currentDoc.name}} API Documentation</h2>
+  {% block related_components %}{% endblock %}
 </header>
 
 {% endblock %}
 
-<div layout="row" class="api-options-bar with-icon">
-</div>
+<div layout="row" class="api-options-bar with-icon"></div>
 
 {% block description %}
 <div class="api-profile-description">
@@ -21,10 +21,10 @@
 <div>
   {% block dependencies %}
   {%- if doc.requires %}
-  <h2 id="dependencies">Dependencies</h2>
-  <ul>
-    {% for require in doc.requires %}<li>{$ require | link $}</li>{% endfor %}
-  </ul>
+  <section class="api-section">
+    <h2 id="dependencies">Dependencies</h2>
+    <ul>{% for require in doc.requires %}<li>{$ require | link $}</li>{% endfor %}</ul>
+  </section>
   {% endif -%}
   {% endblock %}
 
@@ -33,11 +33,13 @@
 
   {% block examples %}
   {%- if doc.examples %}
-  <h2 id="example">Example</h2>
-  {%- for example in doc.examples -%}
+  <section class="api-section">
+    <h2 id="example">Example</h2>
+    {%- for example in doc.examples -%}
     {$ example | marked $}
-  {%- endfor -%}
-  {% endif -%}  
+    {%- endfor -%}
+  </section>
+  {% endif -%}
   {% endblock %}
 </div>
 

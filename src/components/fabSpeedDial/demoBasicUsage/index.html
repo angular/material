@@ -1,0 +1,63 @@
+<div ng-controller="DemoCtrl as demo" layout="column" ng-cloak>
+  <md-content class="md-padding" layout="column">
+    <p>
+      You may supply a direction of <code>left</code>, <code>up</code>, <code>down</code>, or
+      <code>right</code> through the <code>md-direction</code> attribute.
+    </p>
+
+    <div class="lock-size" layout="row" layout-align="center center">
+      <md-fab-speed-dial md-open="demo.isOpen" md-direction="{{demo.selectedDirection}}"
+                         ng-class="demo.selectedMode">
+        <md-fab-trigger>
+          <md-button aria-label="menu" class="md-fab md-warn">
+            <md-icon md-svg-src="img/icons/menu.svg"></md-icon>
+          </md-button>
+        </md-fab-trigger>
+
+        <md-fab-actions>
+          <md-button aria-label="Twitter" class="md-fab md-raised md-mini">
+            <md-icon md-svg-src="img/icons/twitter.svg" aria-label="Twitter"></md-icon>
+          </md-button>
+          <md-button aria-label="Facebook" class="md-fab md-raised md-mini">
+            <md-icon md-svg-src="img/icons/facebook.svg" aria-label="Facebook"></md-icon>
+          </md-button>
+          <md-button aria-label="Google Hangout" class="md-fab md-raised md-mini">
+            <md-icon md-svg-src="img/icons/hangout.svg" aria-label="Google Hangout"></md-icon>
+          </md-button>
+        </md-fab-actions>
+      </md-fab-speed-dial>
+    </div>
+
+    <div layout="row" layout-align="space-around">
+      <div layout="column" layout-align="start center">
+        <b>Direction</b>
+
+        <md-radio-group ng-model="demo.selectedDirection">
+          <md-radio-button ng-repeat="direction in demo.availableDirections"
+                           ng-value="direction" class="text-capitalize">
+            {{direction}}
+          </md-radio-button>
+        </md-radio-group>
+      </div>
+
+      <div layout="column" layout-align="start center">
+        <b>Open/Closed</b>
+
+        <md-checkbox ng-model="demo.isOpen">
+          Open
+        </md-checkbox>
+      </div>
+
+      <div layout="column" layout-align="start center">
+        <b>Animation Modes</b>
+
+        <md-radio-group ng-model="demo.selectedMode">
+          <md-radio-button ng-repeat="mode in demo.availableModes" ng-value="mode">
+            {{mode}}
+          </md-radio-button>
+        </md-radio-group>
+      </div>
+    </div>
+
+  </md-content>
+</div>

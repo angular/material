@@ -31,6 +31,13 @@ describe('$mdCompiler service', function() {
       expect(data.element.html()).toBe(tpl);
     });
 
+    it('should support a custom element', function() {
+      var data = compile({
+        element: angular.element('<h1>Hello world</h1>')
+      });
+      expect(data.element.html()).toBe('Hello world');
+    });
+
     it('element should use template with whitespace', function() {
       var tpl = '  \nhello\n\t  ';
       var data = compile({
@@ -47,27 +54,50 @@ describe('$mdCompiler service', function() {
       expect(data.element.html()).toBe('hello world');
     });
 
-    it('resolve and locals should work', function() {
-      module(function($provide) {
-        $provide.constant('StrawberryColor', 'red');
+    it('transformTemplate receives the options', function() {
+      var data = compile({
+        template: 'world',
+        someArg: 'foo',
+        transformTemplate: function(tpl, options) { return 'hello ' + tpl + ': ' + options.someArg; }
+      });
+      expect(data.element.html()).toBe('hello world: foo');
+    });
+
+    describe('with resolve and locals options', function() {
+      var options;
+
+      beforeEach(function() {
+        module(function($provide) {
+          $provide.constant('StrawberryColor', 'red');
+        });
+
+        options = {
+          resolve: {
+            //Resolve a factory inline
+            fruit: function($q) {
+              return $q.when('apple');
+            },
+            //Resolve a DI token's value
+            color: 'StrawberryColor'
+          },
+          locals: {
+            vegetable: 'carrot'
+          }
+        };
       });
 
-      var data = compile({
-        resolve: {
-          //Resolve a factory inline
-          fruit: function($q) {
-            return $q.when('apple');
-          },
-          //Resolve a DI token's value
-          color: 'StrawberryColor'
-        },
-        locals: {
-          vegetable: 'carrot'
-        }
+      it('should work', function() {
+        var data = compile(options);
+        expect(data.locals.fruit).toBe('apple');
+        expect(data.locals.vegetable).toBe('carrot');
+        expect(data.locals.color).toBe('red');
       });
-      expect(data.locals.fruit).toBe('apple');
-      expect(data.locals.vegetable).toBe('carrot');
-      expect(data.locals.color).toBe('red');
+
+      it('should not overwrite the original values', function() {
+        var clone = angular.copy(options);
+        compile(options);
+        expect(options).toEqual(clone);
+      });
     });
 
     describe('after link()', function() {
@@ -109,9 +139,14 @@ describe('$mdCompiler service', function() {
       }));
 
       it('should work with bindToController', inject(function($rootScope) {
+        var called = false;
         var data = compile({
           template: 'hello',
-          controller: function() { },
+          controller: function($scope) {
+            expect(this.name).toBe('Bob');
+            expect($scope.$apply).toBeTruthy(); // test DI working properly
+            called = true;
+          },
           controllerAs: 'ctrl',
           bindToController: true,
           locals: { name: 'Bob' }
@@ -119,6 +154,7 @@ describe('$mdCompiler service', function() {
         var scope = $rootScope.$new();
         data.link(scope);
         expect(scope.ctrl.name).toBe('Bob');
+        expect(called).toBe(true);
       }));
     });
   });

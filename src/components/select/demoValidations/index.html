@@ -1,0 +1,19 @@
+<div ng-controller="AppCtrl" layout="column" layout-align="center center" style="min-height: 300px;" ng-cloak>
+  <form name="myForm">
+    <p>Note that invalid styling only applies if invalid and dirty</p>
+    <md-input-container class="md-block">
+      <label>Favorite Number</label>
+      <md-select name="myModel" ng-model="myModel" required>
+        <md-option value="1">One</md-option>
+        <md-option value="2">Two</md-option>
+      </md-select>
+      <div class="errors" ng-messages="myForm.myModel.$error" ng-if="myForm.$dirty">
+        <div ng-message="required">Required</div>
+      </div>
+    </md-input-container>
+    <div layout="row">
+      <md-button ng-click="clearValue()" ng-disabled="!myModel" style="margin-right: 20px;">Clear</md-button>
+      <md-button ng-click="save()" ng-disabled="myForm.$invalid" class="md-primary" layout layout-align="center end">Save</md-button>
+    </div>
+  </form>
+</div>

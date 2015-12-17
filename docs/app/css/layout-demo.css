@@ -1,31 +1,59 @@
+demo-include {
+  display: block;
+}
 
-.layout-content demo-include [layout] > div {
+.colorNested .demo-content > div div  {
   padding: 8px;
   box-shadow: 0px 2px 5px 0 rgba(0,0,0,0.26);
+  opacity: 0.9;
+  color: white;
+  text-align: center;
 }
-.layout-content demo-include [layout] > div:nth-child(1) {
+
+.colorNested-noPad .demo-content > div div  {
+  box-shadow: 0px 2px 5px 0 rgba(0,0,0,0.26);
+  opacity: 0.9;
+  color: white;
+  text-align: center;
+}
+
+.colorNested .demo-content > div div:nth-child(1),
+.colorNested-noPad .demo-content > div div:nth-child(1) {
   background-color: #009688;
-  opacity: 0.9;
-  color: white;
 }
-.layout-content demo-include [layout] > div:nth-child(2) {
+.colorNested .demo-content > div div:nth-child(2),
+.colorNested-noPad .demo-content > div div:nth-child(2) {
   background-color: #3949ab;
-  opacity: 0.9;
-  color: white;
 }
-.layout-content demo-include [layout] > div:nth-child(3) {
+.colorNested .demo-content > div div:nth-child(3),
+.colorNested-noPad .demo-content > div div:nth-child(3) {
   background-color: #9c27b0;
-  opacity: 0.9;
-  color: white;
 }
+.colorNested .demo-content > div div:nth-child(4),
+.colorNested-noPad .demo-content > div div:nth-child(4) {
+  background-color: #8bc34a;
+}
+.colorNested .demo-content > div div:nth-child(5),
+.colorNested-noPad .demo-content > div div:nth-child(5)  {
+  background-color: #deb867;
+}
+.colorNested .demo-content > div div:nth-child(6),
+.colorNested-noPad .demo-content > div div:nth-child(6) {
+  background-color: #FF5722;
+}
+.colorNested .demo-content > div div:nth-child(7),
+.colorNested-noPad .demo-content > div div:nth-child(7)  {
+  background-color: #03A9F4;
+}
+
 .layout-content md-divider {
   margin-top: 16px;
 }
 
-.layout-demo :not([layout]) {
+.layout-demo :not(.layout-row),
+.layout-demo :not(.layout-column) {
   border: 1px solid #eee;
   padding: 8px;
-  font-size: 16px;
 }
 
 .layout-content .demo-box {
@@ -37,6 +65,7 @@
   height: 200px;
   width: 100%;
   position: relative;
+  z-index: 2;
 }
 [ng-panel] {
   transition: 0.45s cubic-bezier(0.35, 0, 0.25, 1);
@@ -63,4 +92,9 @@
 }
 [ng-panel] .demo-content {
   background: white;
+}
+@media screen and (-ms-high-contrast: active) {
+  .colorNested  > div {
+    border: 1px solid #fff !important;
+  }
 }

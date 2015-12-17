@@ -1,0 +1,1 @@
+node --harmony release.js

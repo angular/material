@@ -1,5 +1,4 @@
-$content-background-color: $background-color-base !default;
-
-md-content.md-#{$theme-name}-theme {
-  background-color: $content-background-color;
+md-content.md-THEME_NAME-theme {
+  color: '{{foreground-1}}';
+  background-color: '{{background-color}}';
 }

@@ -1,0 +1,50 @@
+<div ng-controller="BasicDemoCtrl as ctrl" layout="column" ng-cloak>
+
+  <md-content class="md-padding" layout="column">
+    <h2 class="md-title">Use a custom chip template.</h2>
+
+    <md-chips ng-model="ctrl.roFruitNames" readonly="ctrl.readonly">
+      <md-chip-template>
+        <strong>{{$chip}}</strong>
+        <em>(fruit)</em>
+      </md-chip-template>
+    </md-chips>
+
+    <br/>
+    <h2 class="md-title">Use the default chip template.</h2>
+
+    <md-chips ng-model="ctrl.fruitNames" readonly="ctrl.readonly"></md-chips>
+
+    <br/>
+    <h2 class="md-title">Use Placeholders and override hint texts.</h2>
+
+    <md-chips
+        ng-model="ctrl.tags"
+        readonly="ctrl.readonly"
+        placeholder="Enter a tag"
+        delete-button-label="Remove Tag"
+        delete-hint="Press delete to remove tag"
+        secondary-placeholder="+Tag"></md-chips>
+
+    <br/>
+    <h2 class="md-title">Display an ordered set of objects as chips (with custom template).</h2>
+    <p>Note: the variables <code>$chip</code> and <code>$index</code> are available in custom chip templates.</p>
+
+    <md-chips class="custom-chips" ng-model="ctrl.vegObjs" readonly="ctrl.readonly"
+        md-transform-chip="ctrl.newVeg($chip)">
+      <md-chip-template>
+        <span>
+          <strong>[{{$index}}] {{$chip.name}}</strong>
+          <em>({{$chip.type}})</em>
+        </span>
+      </md-chip-template>
+      <button md-chip-remove class="md-primary vegetablechip">
+        <md-icon md-svg-icon="md-close"></md-icon>
+      </button>
+    </md-chips>
+
+    <br/>
+    <md-checkbox ng-model="ctrl.readonly">Readonly</md-checkbox>
+
+  </md-content>
+</div>

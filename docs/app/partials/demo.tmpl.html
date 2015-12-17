@@ -1,6 +1,10 @@
-<docs-demo ng-repeat="demo in demos" 
-  demo-id="{{demo.id}}" demo-title="{{demo.label}}" demo-module="{{demo.ngModule.module}}">
-  <demo-file ng-repeat="file in demo.$files"
-             name="{{file.name}}" contents="file.httpPromise">
-  </demo-file>
+<docs-demo
+    ng-repeat="demo in demos"
+    demo-id="{{demo.id}}"
+    demo-title="{{demo.label}}"
+    demo-module="{{demo.ngModule.module}}">
+  <demo-file
+      ng-repeat="file in demo.$files"
+      name="{{file.name}}"
+      contents="file.httpPromise"></demo-file>
 </docs-demo>

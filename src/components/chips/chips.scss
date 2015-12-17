@@ -1,0 +1,196 @@
+$chip-font-size: rem(1.6) !default;
+$chip-height: rem(3.2) !default;
+$chip-padding: 0 rem(1.2) 0 rem(1.2) !default;
+$chip-input-padding: 0 !default;
+$chip-remove-padding-right: rem(2.2) !default;
+$chip-remove-line-height: rem(2.2) !default;
+$chip-margin: rem(0.8) rem(0.8) 0 0 !default;
+$chip-wrap-padding: 0 0 rem(0.8) rem(0.3) !default;
+$chip-delete-icon-size: rem(1.8) !default;
+$contact-chip-padding: 0 rem(2.5) 0 0 !default;
+$contact-chip-suggestion-image-height: rem(4.0) !default;
+$contact-chip-suggestion-margin: rem(0.8) !default;
+$contact-chip-name-width: rem(12) !default;
+
+.md-contact-chips {
+  .md-chips {
+    .md-chip {
+      padding: $contact-chip-padding;
+      .md-contact-avatar {
+        float: left;
+        img {
+          height: $chip-height;
+          border-radius: $chip-height / 2;
+        }
+      }
+      .md-contact-name {
+        display: inline-block;
+        height: $chip-height;
+        margin-left: rem(0.8);
+      }
+    }
+  }
+}
+.md-contact-suggestion {
+  height: ($contact-chip-suggestion-margin * 2) + $contact-chip-suggestion-image-height;
+  img {
+    height: $contact-chip-suggestion-image-height;
+    border-radius: $contact-chip-suggestion-image-height / 2;
+    margin-top: $contact-chip-suggestion-margin;
+  }
+  .md-contact-name {
+    margin-left: $contact-chip-suggestion-margin;
+    width: $contact-chip-name-width;
+  }
+  .md-contact-name, .md-contact-email {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+.md-contact-chips-suggestions li {
+  height: 100%;
+}
+.md-chips {
+  @include pie-clearfix();
+
+  display: block;
+  font-family: $font-family;
+  font-size: $chip-font-size;
+  padding: $chip-wrap-padding;
+  vertical-align: middle;
+
+  &:not(.md-readonly) {
+    cursor: text;
+
+    .md-chip:not(.md-readonly) {
+      padding-right: $chip-remove-padding-right;
+
+      .md-chip-content {
+        padding-right:rem(0.4);
+      }
+    }
+  }
+
+  .md-chip {
+    cursor: default;
+    border-radius: $chip-height / 2;
+    display: block;
+    height: $chip-height;
+    line-height: $chip-height;
+    margin: $chip-margin;
+    padding: $chip-padding;
+    float: left;
+    box-sizing: border-box;
+    max-width: 100%;
+    position: relative;
+
+    .md-chip-content {
+      display: block;
+      float: left;
+      white-space: nowrap;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      &:focus {
+        outline: none;
+      }
+    }
+    .md-chip-remove-container {
+      position: absolute;
+      right: 0;
+      line-height: $chip-remove-line-height;
+    }
+    .md-chip-remove {
+      text-align: center;
+      width: $chip-height;
+      height: $chip-height;
+      min-width: 0;
+      padding: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      margin: 0;
+      position: relative;
+      md-icon {
+        height: $chip-delete-icon-size;
+        width: $chip-delete-icon-size;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0);
+      }
+    }
+  }
+  .md-chip-input-container {
+    display: block;
+    line-height: $chip-height;
+    margin: $chip-margin;
+    padding: $chip-input-padding;
+    float: left;
+    input {
+      &:not([type]),&[type="email"],&[type="number"],&[type="tel"],&[type="url"],&[type="text"] {
+        border: 0;
+        height: $chip-height;
+        line-height: $chip-height;
+        padding: 0;
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+    md-autocomplete, md-autocomplete-wrap {
+      background: transparent;
+      height: $chip-height;
+    }
+    md-autocomplete {
+      md-autocomplete-wrap {
+        box-shadow: none;
+      }
+      input {
+        position: relative;
+      }
+    }
+    input {
+      border:0;
+      height: $chip-height;
+      line-height: $chip-height;
+      padding: 0;
+      &:focus {
+        outline:none;
+      }
+    }
+    md-autocomplete, md-autocomplete-wrap {
+      height: $chip-height;
+    }
+    md-autocomplete {
+      box-shadow: none;
+      input {
+        position: relative;
+      }
+    }
+    &:not(:first-child) {
+      margin: $chip-margin;
+    }
+    input {
+      background:transparent;
+      border-width: 0;
+    }
+  }
+  md-autocomplete {
+    button {
+      display: none;
+    }
+  }
+}
+// IE only
+@media screen and (-ms-high-contrast: active) {
+  .md-chip-input-container,
+  md-chip {
+    border: 1px solid #fff;
+  }
+  .md-chip-input-container md-autocomplete {
+    border: none;
+  }
+}
+

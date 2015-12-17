@@ -1,0 +1,166 @@
+$progress-circular-ease-in-out : cubic-bezier(0.35, 0, 0.25, 1) !default;
+$progress-circular-duration : 5.25s !default;
+$progress-circular-circle-duration : $progress-circular-duration * 0.25 !default;
+$progress-circular-outer-duration : $progress-circular-duration * (5 / 9) !default;
+$progress-circular-sporadic-duration : $progress-circular-duration !default;
+$progress-border-width : 10px;
+$progress-circular-size : 10 * $progress-border-width !default;
+
+md-progress-circular {
+  display: block;
+  position: relative;
+
+  width: $progress-circular-size;
+  height: $progress-circular-size;
+
+  padding-top: 0 !important;
+  margin-bottom: 0 !important;
+
+  z-index: $z-index-progress-circular; // Used to fix a Chrome bug with spinner animation
+
+  .md-spinner-wrapper {
+    display:block;
+    position: absolute;
+    overflow: hidden;
+    top: 50%;
+    left: 50%;
+
+    .md-inner {
+       width: $progress-circular-size;
+       height: $progress-circular-size;
+       position: relative;
+       .md-gap {
+         position: absolute;
+         left: $progress-circular-size * 0.5 - 1;
+         right: $progress-circular-size * 0.5 - 1;
+         top: 0;
+         bottom: 0;
+         border-top-width: $progress-border-width;
+         border-top-style: solid;
+         box-sizing: border-box;
+       }
+       .md-left, .md-right {
+         position: absolute;
+         top: 0;
+         height: $progress-circular-size;
+         width: $progress-circular-size * 0.50;
+         overflow: hidden;
+         .md-half-circle {
+           position: absolute;
+           top: 0;
+           width: $progress-circular-size;
+           height: $progress-circular-size;
+           box-sizing: border-box;
+           border-width: $progress-border-width;
+           border-style: solid;
+           border-bottom-color: transparent;
+           border-radius: 50%;
+         }
+       }
+       .md-left {
+         left: 0;
+         .md-half-circle {
+           left: 0;
+           border-right-color: transparent;
+         }
+       }
+       .md-right {
+         right: 0;
+         .md-half-circle {
+           right: 0;
+           border-left-color: transparent;
+         }
+       }
+     }
+  }
+
+
+  .md-mode-indeterminate .md-spinner-wrapper {
+    animation: outer-rotate $progress-circular-outer-duration linear infinite;
+    .md-inner {
+      animation: sporadic-rotate $progress-circular-sporadic-duration $progress-circular-ease-in-out infinite;
+      .md-left, .md-right {
+        .md-half-circle {
+          animation-iteration-count: infinite;
+          animation-duration: ($progress-circular-duration * 0.25);
+          animation-timing-function: $progress-circular-ease-in-out;
+        }
+      }
+      .md-left {
+        .md-half-circle {
+          animation-name: left-wobble;
+        }
+      }
+      .md-right {
+        .md-half-circle {
+          animation-name: right-wobble;
+        }
+      }
+    }
+  }
+
+  md-progress-circular.ng-hide {
+    .md-spinner-wrapper  {
+      animation: none;
+      .md-inner {
+        animation: none;
+        .md-left {
+          .md-half-circle {
+            animation-name: none;
+          }
+        }
+        .md-right {
+          .md-half-circle {
+            animation-name: none;
+          }
+        }
+      }
+    }
+  }
+
+  .md-spinner-wrapper.ng-hide {
+    animation: none;
+    .md-inner {
+      animation: none;
+      .md-left {
+        .md-half-circle {
+          animation-name: none;
+        }
+      }
+      .md-right {
+        .md-half-circle {
+          animation-name: none;
+        }
+      }
+    }
+  }
+
+}
+
+
+//
+// Keyframe animation for the Indeterminate Progress
+//
+@keyframes outer-rotate {
+  0%       { transform: rotate(0deg) scale(0.5); }
+  100%     { transform: rotate(360deg) scale(0.5); }
+}
+@keyframes left-wobble {
+  0%, 100% { transform: rotate(130deg); }
+  50%      { transform: rotate( -5deg); }
+}
+@keyframes right-wobble {
+  0%, 100% { transform: rotate(-130deg); }
+  50%      { transform: rotate(   5deg); }
+}
+@keyframes sporadic-rotate {
+  12.5%    { transform: rotate( 135deg); }
+  25%      { transform: rotate( 270deg); }
+  37.5%    { transform: rotate( 405deg); }
+  50%      { transform: rotate( 540deg); }
+  62.5%    { transform: rotate( 675deg); }
+  75%      { transform: rotate( 810deg); }
+  87.5%    { transform: rotate( 945deg); }
+  100%     { transform: rotate(1080deg); }
+}
+

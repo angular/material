@@ -1,0 +1,59 @@
+<div ng-controller="AppCtrl" ng-cloak>
+  <md-content class="md-padding">
+    <p>
+      You can use the fabToolbar with a trigger and regular toolbar.
+    </p>
+
+    <p>
+      You may use the <code>md-open</code> attribute to programmatically control whether or not the
+      control is open, and you may set the direction that the toolbar appears using the
+      <code>md-direction</code> attribute. This component currently supports the <code>left</code>
+      and <code>right</code> options.
+    </p>
+  </md-content>
+
+  <md-fab-toolbar md-open="demo.isOpen" count="demo.count"
+                  md-direction="{{demo.selectedDirection}}">
+    <md-fab-trigger class="align-with-text">
+      <md-button aria-label="menu" class="md-fab md-primary">
+        <md-icon md-svg-src="img/icons/menu.svg"></md-icon>
+      </md-button>
+    </md-fab-trigger>
+
+    <md-toolbar>
+      <md-fab-actions class="md-toolbar-tools">
+        <md-button aria-label="comment" class="md-icon-button">
+          <md-icon md-svg-src="img/icons/ic_comment_24px.svg"></md-icon>
+        </md-button>
+        <md-button aria-label="label" class="md-icon-button">
+          <md-icon md-svg-src="img/icons/ic_label_24px.svg"></md-icon>
+        </md-button>
+        <md-button aria-label="photo" class="md-icon-button">
+          <md-icon md-svg-src="img/icons/ic_photo_24px.svg"></md-icon>
+        </md-button>
+      </md-fab-actions>
+    </md-toolbar>
+  </md-fab-toolbar>
+
+  <md-content class="md-padding" layout="column">
+    <div layout="row" layout-align="space-around">
+      <div layout="column">
+        <b>Open/Closed</b>
+
+        <md-radio-group ng-model="demo.isOpen">
+          <md-radio-button ng-value="true">Open</md-radio-button>
+          <md-radio-button ng-value="false">Closed</md-radio-button>
+        </md-radio-group>
+      </div>
+
+      <div layout="column">
+        <b>Direction</b>
+
+        <md-radio-group ng-model="demo.selectedDirection">
+          <md-radio-button ng-value="'left'">Left</md-radio-button>
+          <md-radio-button ng-value="'right'">Right</md-radio-button>
+        </md-radio-group>
+      </div>
+    </div>
+  </md-content>
+</div>

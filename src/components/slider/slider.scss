@@ -1,26 +1,26 @@
-$slider-background-color:  rgb(200, 200, 200);
-$slider-height:  48px;
+$slider-background-color:  rgb(200, 200, 200) !default;
+$slider-height:  48px !default;
 
-$slider-track-height:  2px;
-$slider-thumb-width:  32px;
-$slider-thumb-height:  $slider-thumb-width;
+$slider-track-height:  2px !default;
+$slider-thumb-width:  32px !default;
+$slider-thumb-height:  $slider-thumb-width !default;
 
-$slider-thumb-default-scale: 0.5;
-$slider-thumb-hover-scale: 0.6;
-$slider-thumb-focus-scale: 0.85;
-$slider-thumb-disabled-scale: 0.35;
-$slider-thumb-disabled-border: 6px;
+$slider-thumb-default-scale: 0.5 !default;
+$slider-thumb-hover-scale: 0.6 !default;
+$slider-thumb-focus-scale: 0.85 !default;
+$slider-thumb-disabled-scale: 0.35 !default;
+$slider-thumb-disabled-border: 6px !default;
 
-$slider-focus-thumb-width:  48px;
-$slider-focus-thumb-height: $slider-focus-thumb-width;
-$slider-focus-ring-border-width: 3px;
+$slider-focus-thumb-width:  48px !default;
+$slider-focus-thumb-height: $slider-focus-thumb-width !default;
+$slider-focus-ring-border-width: 3px !default;
 
-$slider-arrow-height: 16px;
-$slider-arrow-width: 28px;
+$slider-arrow-height: 16px !default;
+$slider-arrow-width: 28px !default;
 
-$slider-sign-height: 28px;
-$slider-sign-width: 28px;
-$slider-sign-top: ($slider-height / 2) - ($slider-thumb-default-scale * $slider-thumb-height / 2) - ($slider-sign-height) - ($slider-arrow-height) + 8px;
+$slider-sign-height: 28px !default;
+$slider-sign-width: 28px !default;
+$slider-sign-top: ($slider-height / 2) - ($slider-thumb-default-scale * $slider-thumb-height / 2) - ($slider-sign-height) - ($slider-arrow-height) + 8px !default;
 
 @keyframes sliderFocusThumb {
   0% {
@@ -52,6 +52,15 @@ md-slider {
   display: block;
   margin-left: 4px;
   margin-right: 4px;
+  padding: 0;
+
+  *, *:after {
+    box-sizing: border-box;
+  }
+
+  .md-slider-wrapper {
+    position: relative;
+  }
 
   /**
    * Track
@@ -77,6 +86,12 @@ md-slider {
     right: 0;
     height: 100%;
   }
+  .md-track-ticks canvas {
+    // Restrict the width of the canvas so that ticks are rendered correctly
+    // when parent elements are resized. Else, the position of the ticks might
+    // be incorrect as we only update the canvas width attribute on window resize.
+    width: 100%;
+  }
 
   /**
    * Slider thumb
@@ -84,9 +99,9 @@ md-slider {
   .md-thumb-container {
     position: absolute;
     left: 0;
-    top: 0;
-    transform: translate3d(0,0,0);
-    transition: transform 0.1s linear;
+    top: 50%;
+    transform: translate3d(-50%,-50%,0);
+    transition: left 0.1s linear;
   }
   .md-thumb {
     z-index: 1;
@@ -106,7 +121,8 @@ md-slider {
       width: $slider-thumb-width;
       height: $slider-thumb-height;
       border-radius: max($slider-thumb-width, $slider-thumb-height);
-      border: 3px solid;
+      border-width: 3px;
+      border-style: solid;
     }
 
     transform: scale($slider-thumb-default-scale);
@@ -140,7 +156,8 @@ md-slider {
       top: 19px;
       border-left: $slider-arrow-width / 2 solid transparent;
       border-right: $slider-arrow-width / 2 solid transparent;
-      border-top: $slider-arrow-height solid;
+      border-top-width: $slider-arrow-height;
+      border-top-style: solid;
 
       opacity: 0;
       transform: translate3d(0,-8px,0);
@@ -166,10 +183,9 @@ md-slider {
   }
   .md-focus-ring {
     @include slider-thumb-position($slider-focus-thumb-width, $slider-focus-thumb-height);
-    border: 2px solid #D6D6D6;
-    background-color: transparent;
     transform: scale(0);
     transition: all 0.2s linear;
+    opacity: 0.26;
   }
   .md-disabled-thumb {
     @include slider-thumb-position(
@@ -177,7 +193,8 @@ md-slider {
       $slider-thumb-height + $slider-thumb-disabled-border * 2
     );
     transform: scale($slider-thumb-disabled-scale);
-    border: $slider-thumb-disabled-border solid;
+    border-width: $slider-thumb-disabled-border;
+    border-style: solid;
     display: none;
   }
 
@@ -197,7 +214,7 @@ md-slider {
   }
 
   /* Don't animate left/right while panning */
-  &.panning {
+  &.md-dragging {
     .md-thumb-container,
     .md-track-fill {
       transition: none;
@@ -219,7 +236,7 @@ md-slider {
       }
 
       &:focus,
-      &.active {
+      &.md-active {
         .md-focus-thumb {
           display: block;
         }
@@ -242,7 +259,7 @@ md-slider {
 
     &:not([disabled]) {
       &:focus,
-      &.active {
+      &.md-active {
         .md-sign,
         .md-sign:after {
           opacity: 1;
@@ -267,3 +284,10 @@ md-slider {
     }
   }
 }
+
+@media screen and (-ms-high-contrast: active) {
+  md-slider.md-default-theme .md-track {
+    border-bottom: 1px solid #fff;
+  }
+}
+

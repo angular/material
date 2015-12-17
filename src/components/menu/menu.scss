@@ -1,0 +1,153 @@
+$menu-border-radius: 2px;
+$max-visible-items: 6;
+$menu-item-height: 6 * $baseline-grid;
+$dense-menu-item-height: 4 * $baseline-grid;
+$max-menu-height: 2 * $baseline-grid + $max-visible-items * $menu-item-height;
+$max-dense-menu-height: 2 * $baseline-grid + $max-visible-items * $dense-menu-item-height;
+
+.md-open-menu-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: $z-index-menu;
+  opacity: 0;
+  border-radius: $menu-border-radius;
+
+  md-menu-divider {
+    margin-top: $baseline-grid / 2;
+    margin-bottom: $baseline-grid / 2;
+    height: 1px;
+    min-height: 1px;
+    max-height: 1px;
+    width: 100%;
+  }
+
+  md-menu-content > * {
+    opacity: 0;
+  }
+
+  // Don't let the user click something until it's animated
+  &:not(.md-clickable) {
+    pointer-events: none;
+  }
+
+  // enter: menu scales in, then list fade in.
+  &.md-active {
+    opacity: 1;
+    transition: $swift-ease-out;
+    transition-duration: 200ms;
+    > md-menu-content > * {
+      opacity: 1;
+      transition: $swift-ease-in;
+      transition-duration: 200ms;
+      transition-delay: 100ms;
+    }
+  }
+  // leave: the container fades out
+  &.md-leave {
+    opacity: 0;
+    transition: $swift-ease-in;
+    transition-duration: 250ms;
+  }
+}
+
+md-menu-content {
+  display: flex;
+  flex-direction: column;
+  padding: $baseline-grid 0;
+  max-height: $max-menu-height;
+  overflow-y: auto;
+  &.md-dense {
+    max-height: $max-dense-menu-height;
+    md-menu-item {
+      height: $dense-menu-item-height;
+      min-height: 0px;
+    }
+  }
+}
+
+md-menu-item {
+  display: flex;
+  flex-direction: row;
+  min-height: $menu-item-height;
+  height: $menu-item-height;
+  align-content: center;
+  justify-content: flex-start;
+
+  > * {
+    width: 100%;
+    margin: auto 0;
+    padding-left: 2*$baseline-grid;
+    padding-right: 2*$baseline-grid;
+  }
+
+  > a.md-button {
+    display: flex;
+  }
+
+  > .md-button {
+    border-radius: 0;
+    margin: auto 0;
+    font-size: (2*$baseline-grid) - 1;
+    text-transform: none;
+    font-weight: 400;
+    text-align: left;
+    text-align: start;
+    height: 100%;
+    padding-left: 2*$baseline-grid;
+    padding-right: 2*$baseline-grid;
+    display: inline-block;
+    align-items: baseline;
+    align-content: flex-start;
+    width:100%;
+    md-icon {
+      margin: auto 2*$baseline-grid auto 0;
+    }
+    p {
+      display:inline-block;
+      margin: auto;
+    }
+    span {
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+    .md-ripple-container {
+      border-radius: inherit;
+    }
+  }
+}
+
+.md-menu {
+  padding: $baseline-grid 0;
+}
+
+md-toolbar {
+  .md-menu {
+    height: auto;
+    margin: auto;
+    padding: 0;
+  }
+}
+
+@media (max-width: $layout-breakpoint-sm - 1) {
+  md-menu-content {
+    min-width: 112px;
+  }
+  @for $i from 3 through 7 {
+    md-menu-content[width="#{$i}"] {
+      min-width: $i * 56px;
+    }
+  }
+}
+
+@media (min-width: $layout-breakpoint-sm) {
+  md-menu-content {
+    min-width: 96px;
+  }
+  @for $i from 3 through 7 {
+    md-menu-content[width="#{$i}"] {
+      min-width: $i * 64px;
+    }
+  }
+}
+

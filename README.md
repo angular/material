@@ -5,12 +5,9 @@ unified system of visual, motion, and interaction design that adapts across diff
 goal is to deliver a lean, lightweight set of AngularJS-native UI elements that implement the
 material design specification for use in Angular single-page applications (SPAs).
 
-![venn](https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png)
+![venn diagram](https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png)
 
-This project is in early pre-release. Angular Material is both a reference implementation of
-Material Design and a complementary effort to the [Polymer](https://www.polymer-project.org/)
-project's [Paper Elements](https://www.polymer-project.org/docs/elements/paper-elements.html)
-collection.
+For developers using AngularJS, Angular Material is the reference implementation of Google's Material Design Specification. This project implements version 1.x of Angular Material and includes a rich set of reusable, well-tested, and accessible UI components.
 
 Quick Links:
 
@@ -25,7 +22,9 @@ Material is targeted for all browsers with versions n-1; where n is the current 
 
 ## <a name="demos"></a> Online Documentation (and Demos)
 
-![angularmaterial](https://cloud.githubusercontent.com/assets/210413/5148790/fb9ecf52-7187-11e4-9adc-fc5ef263b4ce.png)
+<div style="border: 1px solid #ccc">
+  <img src="https://cloud.githubusercontent.com/assets/11819543/10056006/4aee3b68-6207-11e5-8497-a0656f85902a.PNG" alt="Angular Material docs website" style="display:block;">
+</div>
 
 - Visit [Material.AngularJS.org](https://material.angularjs.org/) online to review the API, see the
   components in action with live Demos, and study the Layout system.
@@ -83,7 +82,7 @@ debugging) developers should read the [Build Instructions](docs/guides/BUILD.md)
 
 ## <a name="installing"></a> Installing Build (Distribution Files)
 
-#### Bower 
+#### Bower
 
 For developers not interested in building the Angular Material library... use **bower** to install
 and use the Angular Material distribution files.
@@ -105,7 +104,7 @@ project.
 #### CDN
 
 CDN versions of Angular Material are now available at
-[Google Hosted Libraries](https://developers.google.com/speed/libraries/devguide#angularmaterial). 
+[Google Hosted Libraries](https://developers.google.com/speed/libraries/#angular-material).
 
 With the Google CDN, you will not need to download local copies of the distribution files. Instead
 simply reference the CDN urls to easily use those remote library files. This is especially useful
@@ -115,50 +114,52 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://p
 ```html
   <head>
 
-    <!-- Angulars Material CSS now available via Google CDN; version 0.6 used here -->
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.6.1/angular-material.min.css">
+    <!-- Angular Material CSS now available via Google CDN; version 0.11.2 used here -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.2/angular-material.min.css">
 
   </head>
   <body>
-  
+
     <!-- Angular Material Dependencies -->
-    <script src="//cdn.jsdelivr.net/hammerjs/2.0.4/hammer.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.min.js"></script>
-    
-    <!-- Angular Material Javascript now available via Google CDN; version 0.6 used here -->
-    <script src="//ajax.googleapis.com/ajax/libs/angular_material/0.6.1/angular-material.min.js"></script>
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
+
+
+    <!-- Angular Material Javascript now available via Google CDN; version 0.11.2 used here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.2/angular-material.min.js"></script>
   </body>
 ```
 
-> Note that the above sample references the 0.6.1 CDN release. Your version will change based on the latest stable release version.
+> Note that the above sample references the 0.10.0 CDN release. Your version will change based on the latest stable release version.
 
-Developers seeking the latest, most-current build versions can use [RawGit.com](//rawgit.com) to
+Developers seeking the latest, most-current build versions can use [GitCDN.xyz](//gitcdn.xyz) to
 pull directly from the distribution GitHub
 [Bower-Material](https://github.com/angular/bower-material) repository:
 
 ```html
   <head>
 
-    <!-- Angulars Material CSS using RawGit to load directly from `bower-material/master` -->
-    <link rel="stylesheet" href="//rawgit.com/angular/bower-material/master/angular-material.css">
+    <!-- Angular Material CSS using GitCDN to load directly from `bower-material/master` -->
+    <link rel="stylesheet" href="https://gitcdn.xyz/repo/angular/bower-material/master/angular-material.css">
 
   </head>
   <body>
 
     <!-- Angular Material Dependencies -->
-    <script src="//cdn.jsdelivr.net/hammerjs/2.0.4/hammer.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.js"></script>
 
-    <!-- Angular Material Javascript using RawGit to load directly from `bower-material/master` -->
-    <script src="//rawgit.com/angular/bower-material/master/angular-material.js"></script>
+    <!-- Angular Material Javascript using GitCDN to load directly from `bower-material/master` -->
+    <script src="https://gitcdn.xyz/repo/angular/bower-material/master/angular-material.js"></script>
 
   </body>
 ```
 
-> Please note that the above RawGit access is intended **ONLY** for development purposes or sharing
-  low-traffic, temporary examples or demos with small numbers of people.
+Once you have all the necessary assets installed, add `ngMaterial` as a dependency for your app:
+
+```javascript
+angular.module('myApp', ['ngMaterial']);
+```
+

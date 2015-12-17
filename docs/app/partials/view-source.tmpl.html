@@ -8,18 +8,18 @@
     </md-tab>
   </md-tabs>
 
-  <div class="md-content" md-scroll-y flex>
+  <md-dialog-content md-scroll-y flex>
     <div ng-repeat="file in files">
       <hljs code="file.content"
         lang="{{file.fileType}}"
         ng-show="file === data.selectedFile" >
       </hljs>
     </div>
-  </div>
+  </md-dialog-content>
 
-  <div class="md-actions" layout="horizontal">
-    <md-button class="md-button-light" ng-click="$hideDialog()">
+  <md-dialog-actions layout="horizontal">
+    <md-button class="md-primary" ng-click="$hideDialog()">
       Done
     </md-button>
-  </div>
+  </md-dialog-actions>
 </md-dialog>

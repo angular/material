@@ -5,6 +5,7 @@
  - [Question or Problem?](#question)
  - [Issues and Bugs](#bug)
  - [Feature Requests](#feature)
+ - [Guidelines for Developer Commits and Authorizations](#pr_forks)
  - [Submission Guidelines](#submit)
 
 ## <a name="coc"></a> Code of Conduct
@@ -197,12 +198,16 @@ refactor(content): prefix mdContent scroll- attributes
 ```
 
 <br/>
+## <a name="pr_forks"></a> Guidelines for Developer Commit Authorizations
+
+Please review the [Commit Level and Authorization Guidelines](https://github.com/angular/material/blob/master/docs/guides/COMMIT_LEVELS.md) for details on how to implement and submit your fixes, changes, or enchancements to Angular Material. This guideline provides details on creating a repository Fork of the Angular Material repository and how to submit Pull Requests.
+
+
+
+<br/>
 ## <a name="cla"></a> Signing the CLA
 
 Please sign our Contributor License Agreement (CLA) before sending pull requests. For any code
 changes to be accepted, the CLA must be signed. It's a quick process, we promise!
 
-* For individuals we have a
-  [simple click-through form](https://cla.developers.google.com/about/google-individual?csw=1).
-* For corporations we'll need you to
-  [print, sign and one of scan+email, fax or mail the form](https://developers.google.com/open-source/cla/corporate?csw=1).
+To learn more and sign the CLA, visit [cla.developers.google.com](http://cla.developers.google.com).

@@ -1,21 +1,76 @@
-<div ng-controller="LayoutCtrl" layout="column" layout-fill class="layout-content">
+<div ng-controller="LayoutCtrl" class="layout-content" ng-cloak>
 
   <p>
-    The <code>layout-align</code> attribute takes two words.
-    The first word says how the children will be aligned in the layout's direction, and the second word says how the children will be aligned perpindicular to the layout's direction.
-    <br/>
-    Only one word is required for the attribute. For example, <code>layout="row" layout-align="center"</code> would make the elements center horizontally and use the default behavior vertically.
-    <br/>
-    <code>layout="column" layout-align="center end"</code> would make
-    children align along the center vertically and along the end (right) horizontally.
-  </p>
+    The <code>layout-align</code> directive takes two words.
+    The first word says how the children will be aligned in the lay3ut's direction, and the second word says how the children will be aligned perpendicular to the layout's direction.</p>
+
+    <p>Only one value is required for this directive.
+    For example, <code>layout="row" layout-align="center"</code> would make the elements
+    center horizontally and use the default behavior vertically.</p>
+
+    <p><code>layout="column" layout-align="center end"</code> would make
+    children align along the center vertically and along the end (right) horizontally. </p>
+  
+  
+  <table class="md-api-table">
+         <thead>
+           <tr>
+             <th>API</th>
+             <th>Sets child alignments within the layout container</th>
+           </tr>
+         </thead>
+          <tr>
+            <td>layout-align</td>
+            <td>Sets default alignment unless overridden by another breakpoint.</td>
+          </tr>
+    <tr>
+           <td>layout-align-xs</td>
+           <td>width &lt; <b>600</b>px</td>
+         </tr>
+         <tr>
+           <td>layout-align-gt-xs</td>
+           <td>width &gt;= <b>600</b>px</td>
+         </tr>
+         <tr>
+           <td>layout-align-sm</td>
+           <td><b>600</b>px &lt;= width &lt; <b>960</b>px</td>
+         </tr>
+         <tr>
+           <td>layout-align-gt-sm</td>
+           <td>width &gt;= <b>960</b>px</td>
+         </tr>
+         <tr>
+           <td>layout-align-md</td>
+           <td><b>960</b>px &lt;= width &lt; <b>1280</b>px</td>
+         </tr>
+         <tr>
+           <td>layout-align-gt-md</td>
+           <td>width &gt;= <b>1280</b>px</td>
+         </tr>
+         <tr>
+           <td>layout-align-lg</td>
+           <td><b>1280</b>px &lt;= width &lt; <b>1920</b>px</td>
+         </tr>
+         <tr>
+           <td>layout-align-gt-lg</td>
+           <td>width &gt;= <b>1920</b>px</td>
+         </tr>
+         <tr>
+           <td>layout-align-xl</td>
+           <td>width &gt;= <b>1920</b>px</td>
+         </tr>
+        </table>
+
+  <br/>
+
   <p>
-   See below for more examples:
+   Below is an interactive demo that lets you explore the visual results of the different settings:
   </p>
 
   <section class="layout-panel-parent">
-    <div ng-panel="layoutDemo">
-      <docs-demo demo-title='layout="{{layoutDemo.direction}}" layout-align="{{layoutAlign()}}"' class="small-demo" interpolate-code="true">
+    <div >
+      <docs-demo demo-title='layout="{{layoutDemo.direction}}" &nbsp; &nbsp; &nbsp; layout-align="{{layoutAlign()}}"'
+                 class="small-demo colorNested" interpolate-code="true">
         <demo-file name="index.html">
           <div layout="{{layoutDemo.direction}}" layout-align="{{layoutAlign()}}">
             <div>one</div>
@@ -39,7 +94,8 @@
     <div>
       <md-subheader>Alignment in Layout Direction ({{layoutDemo.direction == 'row' ? 'horizontal' : 'vertical'}})</md-subheader>
       <md-radio-group ng-model="layoutDemo.mainAxis">
-        <md-radio-button value="start">start</md-radio-button>
+        <md-radio-button value="">none</md-radio-button>
+        <md-radio-button value="start">start (default)</md-radio-button>
         <md-radio-button value="center">center</md-radio-button>
         <md-radio-button value="end">end</md-radio-button>
         <md-radio-button value="space-around">space-around</md-radio-button>
@@ -47,11 +103,13 @@
       </md-radio-group>
     </div>
     <div>
-      <md-subheader>Alignment in Perpindicular Direction ({{layoutDemo.direction == 'column' ? 'horizontal' : 'vertical'}})</md-subheader>
+      <md-subheader>Alignment in Perpendicular Direction ({{layoutDemo.direction == 'column' ? 'horizontal' : 'vertical'}})</md-subheader>
       <md-radio-group ng-model="layoutDemo.crossAxis">
+        <md-radio-button value="none"><em>none</em></md-radio-button>
         <md-radio-button value="start">start</md-radio-button>
         <md-radio-button value="center">center</md-radio-button>
         <md-radio-button value="end">end</md-radio-button>
+        <md-radio-button value="stretch">stretch (default)</md-radio-button>
       </md-radio-group>
     </div>
 

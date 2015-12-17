@@ -1,0 +1,27 @@
+
+md-progress-circular {
+    margin-bottom:20px;
+}
+
+md-icon {
+    margin: 20px;
+    margin-top: 0;
+    width: 24px;
+    height: 24px;
+}
+
+.demo-content {
+    min-height: 210px;
+}
+
+.appUsingTemplateCache {
+    padding:25px;
+}
+
+.note {
+    font-size: 12px;
+    display: block;
+    margin-top: -2px;
+    padding-left: 25px;
+    color: rgb(127, 126, 126);
+}

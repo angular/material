@@ -1,6 +1,9 @@
-$backdrop-color: rgba(0,0,0,0.3);
+md-backdrop {
 
-md-backdrop.md-opaque.md-#{$theme-name}-theme {
-  background-color: $backdrop-color;
-  position:absolute
+  background-color: '{{background-900-0.0}}';
+
+  &.md-opaque.md-THEME_NAME-theme {
+    background-color: '{{background-900-1.0}}';
+  }
+
 }

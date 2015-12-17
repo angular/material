@@ -1,0 +1,133 @@
+<div layout="column" ng-controller="DemoCtrl as demo" ng-cloak>
+  <md-content class="md-padding" layout="column">
+
+    <p class="intro">
+      The speed dial supports many advanced usage scenarios. This demo shows many of them mixed
+      together... and even includes a Toolbar - SpeedDial combination.
+    </p>
+
+    <md-toolbar>
+      <h3>
+        <md-button>Test</md-button>
+        <md-button>Test</md-button>
+        <md-button hide-sm>Test</md-button>
+        <md-button hide-sm>Test</md-button>
+        <md-button hide-sm>Test</md-button>
+        <md-button hide-sm>Test</md-button>
+        <md-button hide-sm>Test</md-button>
+      </h3>
+    </md-toolbar>
+
+    <md-fab-speed-dial ng-hide="demo.hidden" md-direction="left" md-open="demo.isOpen"
+                       class="md-scale md-fab-top-right" ng-class="{ 'md-hover-full': demo.hover }"
+                       ng-mouseenter="demo.isOpen=true" ng-mouseleave="demo.isOpen=false">
+      <md-fab-trigger>
+        <md-button aria-label="menu" class="md-fab md-warn">
+          <md-tooltip md-direction="top" md-visible="tooltipVisible">Menu</md-tooltip>
+          <md-icon md-svg-src="img/icons/menu.svg" aria-label="menu"></md-icon>
+        </md-button>
+      </md-fab-trigger>
+
+      <md-fab-actions>
+        <div ng-repeat="item in demo.items">
+          <md-button aria-label="{{item.name}}" class="md-fab md-raised md-mini"
+                     ng-click="demo.openDialog($event, item)">
+            <md-tooltip md-direction="{{item.direction}}" md-visible="tooltipVisible"
+                        md-autohide="false">
+              {{item.name}}
+            </md-tooltip>
+
+            <md-icon md-svg-src="{{item.icon}}" aria-label="{{item.name}}"></md-icon>
+          </md-button>
+        </div>
+      </md-fab-actions>
+    </md-fab-speed-dial>
+  </md-content>
+
+  <md-content class="md-padding" layout="row" layout-sm="column" layout-align="space-around">
+    <div flex-gt-sm="45">
+      <h3>Tooltips</h3>
+
+      <p>
+        Each action item supports a tooltip using the standard approach as can be seen above.
+      </p>
+
+      <h3>ngHide</h3>
+
+      <p>
+        The speed dial also supports hiding using the standard <code>ng-hide</code> attribute. View
+        the source to see how to apply the animation effect.
+
+        <md-checkbox ng-model="demo.hidden">
+          Hide the speed dial.
+        </md-checkbox>
+      </p>
+
+      <h3>ngRepeat</h3>
+
+      <p>
+        You can easily use <code>ng-repeat</code> with the speed dial, but it requires a slightly
+        different HTML structure in order to support the necessary DOM changes/styling.
+      </p>
+
+      <p>
+        Simply ensure that your <code>ng-repeat</code> is on a <code>div</code> (or any other tag)
+        that wraps your items.
+      </p>
+    </div>
+
+    <div flex-gt-sm="45">
+      <h3>Hovering</h3>
+
+      <p>
+        You can also easily setup the speed dial to open on hover using the
+        <code>ng-mouseenter</code> and <code>ng-mouseleave</code> attributes.
+      </p>
+
+      <p>
+        If you want the user to be able to hover over the empty area where the
+        actions will eventually appear, you must also add the
+        <code>md-hover-full</code> class to the speed dial element.
+
+        <md-checkbox ng-model="demo.hover">
+          Enable "full hover" mode.
+        </md-checkbox>
+      </p>
+
+      <p>
+        Notice that in "full hover" mode, you cannot click on the last "Test" buttons on the toolbar
+        as they are hidden by the speed dial. See the example code and docs for more information.
+      </p>
+
+      <h3>$mdDialog</h3>
+
+      <p>
+        You can also use the buttons to open a dialog. When clicked, the buttons above will open a
+        dialog showing a message which item was clicked.
+      </p>
+    </div>
+  </md-content>
+
+  <script type="text/ng-template" id="dialog.html">
+    <md-dialog>
+      <md-toolbar>
+        <div class="md-toolbar-tools">Cool Dialog!</div>
+      </md-toolbar>
+
+      <md-dialog-content layout-padding>
+        Hello user! you clicked {{dialog.item.name}}.
+      </md-dialog-content>
+
+      <div class="md-actions">
+        <md-button aria-label="Close dialog" ng-click="dialog.close()" class="md-primary">
+          Close Greeting
+        </md-button>
+
+        <md-button aria-label="Submit dialog" ng-click="dialog.submit()" class="md-primary">
+          Submit
+        </md-button>
+      </div>
+    </md-dialog>
+  </script>
+
+</div>

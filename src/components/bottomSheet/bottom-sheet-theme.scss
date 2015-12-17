@@ -1,0 +1,19 @@
+
+md-bottom-sheet.md-THEME_NAME-theme {
+  background-color: '{{background-50}}';
+  border-top-color: '{{background-300}}';
+
+  &.md-list {
+    md-list-item {
+      color: '{{foreground-1}}';
+    }
+  }
+
+  .md-subheader {
+    background-color: '{{background-50}}';
+  }
+
+  .md-subheader {
+    color: '{{foreground-1}}';
+  }
+}

@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 ARG_DEFS=(
   "--sha=(.*)"
@@ -21,7 +21,8 @@ function run {
 
   NEW_VERSION="$(readJsonProp "package.json" "version")-master-$(echo $SHA | head -c 7)"
 
-  ./scripts/bower-release.sh --version=$NEW_VERSION
+  ./scripts/bower-material-release.sh --version=$NEW_VERSION
+  ./scripts/snapshot-docs-site.sh --version=$NEW_VERSION
 }
 
 source $(dirname $0)/utils.inc

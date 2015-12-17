@@ -1,33 +1,43 @@
 describe('<md-switch>', function() {
   var CHECKED_CSS = 'md-checked';
+  var $compile, parentScope;
 
-  beforeEach(TestUtil.mockRaf);
   beforeEach(module('ngAria', 'material.components.switch'));
 
-  it('should set checked css class and aria-checked attributes', inject(function($compile, $rootScope) {
-    var element = $compile('<div>' +
-                             '<md-switch ng-model="blue">' +
-                             '</md-switch>' +
-                             '<md-switch ng-model="green">' +
-                             '</md-switch>' +
-                           '</div>')($rootScope);
+  beforeEach(inject(function($injector) {
+    var $rootScope = $injector.get('$rootScope');
+    parentScope = $rootScope.$new();
 
-    $rootScope.$apply(function(){
-      $rootScope.blue = false;
-      $rootScope.green = true;
+    $compile = $injector.get('$compile');
+  }));
+
+  it('should set checked css class and aria-checked attributes', function() {
+    var template =
+        '<div>' +
+          '<md-switch ng-model="blue"></md-switch>' +
+          '<md-switch ng-model="green"></md-switch>' +
+        '</div>';
+
+    var element = $compile(template)(parentScope);
+
+    parentScope.$apply(function(){
+      parentScope.blue = false;
+      parentScope.green = true;
     });
 
     var switches = angular.element(element[0].querySelectorAll('md-switch'));
 
     expect(switches.eq(0).hasClass(CHECKED_CSS)).toEqual(false);
-    expect(switches.eq(1).hasClass(CHECKED_CSS)).toEqual(true);
     expect(switches.eq(0).attr('aria-checked')).toEqual('false');
-    expect(switches.eq(1).attr('aria-checked')).toEqual('true');
     expect(switches.eq(0).attr('role')).toEqual('checkbox');
 
-    $rootScope.$apply(function(){
-      $rootScope.blue = true;
-      $rootScope.green = false;
+    expect(switches.eq(1).hasClass(CHECKED_CSS)).toEqual(true);
+    expect(switches.eq(1).attr('aria-checked')).toEqual('true');
+    expect(switches.eq(1).attr('role')).toEqual('checkbox');
+
+    parentScope.$apply(function(){
+      parentScope.blue = true;
+      parentScope.green = false;
     });
 
     expect(switches.eq(1).hasClass(CHECKED_CSS)).toEqual(false);
@@ -35,67 +45,24 @@ describe('<md-switch>', function() {
     expect(switches.eq(1).attr('aria-checked')).toEqual('false');
     expect(switches.eq(0).attr('aria-checked')).toEqual('true');
     expect(switches.eq(1).attr('role')).toEqual('checkbox');
-  }));
+  });
 
-  it('should change on panstart/panend if no movement happened', inject(function($compile, $rootScope) {
-    var element = $compile('<md-switch ng-model="banana"></md-switch>')($rootScope);
-    var switchContainer = angular.element(element[0].querySelector('.md-container'));
+  it('should have tabindex -1 while disabled', function() {
+    parentScope.value = false;
+    var el = $compile('<md-switch ng-disabled="value">')(parentScope);
 
-    $rootScope.$apply('banana = false');
+    parentScope.$apply();
+    expect(el.attr('tabindex')).not.toEqual('-1');
 
-    expect($rootScope.banana).toBe(false);
-    expect(element.hasClass(CHECKED_CSS)).toBe(false);
+    parentScope.$apply('value = true');
+    expect(el.attr('tabindex')).toEqual('-1');
+  });
 
-    switchContainer.triggerHandler('$md.dragstart', {});
-    switchContainer.triggerHandler('$md.dragend', {distance: 1});
+  it('should disable via `disabled` attribute', function() {
+    parentScope.value = false;
+    var element = $compile('<md-switch disabled>')(parentScope);
 
-    expect($rootScope.banana).toBe(true);
-    expect(element.hasClass(CHECKED_CSS)).toBe(true);
-
-    switchContainer.triggerHandler('$md.dragstart', {});
-    switchContainer.triggerHandler('$md.dragend', {distance: 5});
-
-    expect($rootScope.banana).toBe(true);
-    expect(element.hasClass(CHECKED_CSS)).toBe(true);
-
-    switchContainer.triggerHandler('$md.dragstart', {});
-    switchContainer.triggerHandler('$md.dragend', {distance: -1});
-
-    expect($rootScope.banana).toBe(false);
-    expect(element.hasClass(CHECKED_CSS)).toBe(false);
-  }));
-
-  it('should check on panend if translate > 50%', inject(function($compile, $rootScope) {
-    var element = $compile('<md-switch ng-model="banana"></md-switch>')($rootScope);
-    var switchContainer = angular.element(element[0].querySelector('.md-container'));
-    var drag;
-
-    drag = { distance: -55 };
-    switchContainer.triggerHandler('$md.dragstart', {});
-    drag.width = 100;
-    switchContainer.triggerHandler('$md.drag', drag);
-    switchContainer.triggerHandler('$md.dragend', drag);
-
-    expect($rootScope.banana).toBe(true);
-    expect(element.hasClass(CHECKED_CSS)).toBe(true);
-
-    drag = { distance: 45 };
-    switchContainer.triggerHandler('$md.dragstart', {});
-    drag.width = 100;
-    switchContainer.triggerHandler('$md.drag', drag);
-    switchContainer.triggerHandler('$md.dragend', drag);
-
-    expect($rootScope.banana).toBe(true);
-    expect(element.hasClass(CHECKED_CSS)).toBe(true);
-
-    drag = { distance: 85 };
-    switchContainer.triggerHandler('$md.dragstart', {});
-    drag.width = 100;
-    switchContainer.triggerHandler('$md.drag', drag);
-    switchContainer.triggerHandler('$md.dragend', drag);
-
-    expect($rootScope.banana).toBe(false);
-    expect(element.hasClass(CHECKED_CSS)).toBe(false);
-  }));
-
+    parentScope.$apply();
+    expect(element.attr('tabindex')).toEqual('-1');
+  });
 });
