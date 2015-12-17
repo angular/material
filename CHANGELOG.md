@@ -2704,10 +2704,10 @@ This release resolves many issues and include the following notable changes:
   * Add support for to observe and interpolate Layout Attribute values
   * Allow flex-order to be negative
   * apply flexbox workarounds per [Flexbox Workarounds](https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items): use flex longhand notations with workarounds
-  *  add support for flex="1", flex="auto", and flex
-  *  add references to online specs/resources
-  *  fix flex-33 and flex-67 max-width and max-heights
-  *  fix layout-align to use max-width
+    * add support for flex="1", flex="auto", and flex
+    * add references to online specs/resources
+    * fix flex-33 and flex-67 max-width and max-heights
+    * fix layout-align to use max-width
 * A consistent API is now provided for flushing animation states during testing.
 * CI testing now performs sandbox testing for Angular 1.3.x, 1.4.x, and 1.5.x.
 
