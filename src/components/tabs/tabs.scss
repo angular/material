@@ -194,7 +194,7 @@ md-tab-content {
   &.ng-leave, &.md-no-transition {
     transition: none;
   }
-  &.md-left {
+  &.md-left:not(.md-active) {
     transform: translateX(-100%);
     animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
     opacity: 0;
@@ -204,7 +204,7 @@ md-tab-content {
       visibility: hidden;
     }
   }
-  &.md-right {
+  &.md-right:not(.md-active) {
     transform: translateX(100%);
     animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
     opacity: 0;
