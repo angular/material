@@ -1,20 +1,20 @@
 // Polyfill angular < 1.4 (provide $animateCss)
 angular
   .module('material.core')
-  .factory('$$mdAnimate', function($q, $timeout, $mdConstant, $animateCss){
+  .factory('$$mdAnimate', function($q, $timeout, $mdConstant, $animateCss, $rootScope){
 
      // Since $$mdAnimate is injected into $mdUtil... use a wrapper function
      // to subsequently inject $mdUtil as an argument to the AnimateDomUtils
 
      return function($mdUtil) {
-       return AnimateDomUtils( $mdUtil, $q, $timeout, $mdConstant, $animateCss);
+       return AnimateDomUtils( $mdUtil, $q, $timeout, $mdConstant, $animateCss, $rootScope);
      };
    });
 
 /**
  * Factory function that requires special injections
  */
-function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
+function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss, $rootScope) {
   var self;
   return self = {
     /**
@@ -55,7 +55,7 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
         return $q(function(resolve, reject){
           opts = opts || { };
 
-          var timer = $timeout(finished, opts.timeout || TIMEOUT);
+          var timer = $timeout(finished, opts.timeout || TIMEOUT, false);
           element.on($mdConstant.CSS.TRANSITIONEND, finished);
 
           /**
@@ -70,7 +70,7 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
 
             // Never reject since ngAnimate may cause timeouts due missed transitionEnd events
             resolve();
-
+            $rootScope.$applyAsync();
           }
 
         });
