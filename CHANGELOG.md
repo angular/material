@@ -1,3 +1,13 @@
+<a name"1.0.1"></a>
+### 1.0.1 (2015-12-17)
+
+
+#### Bug Fixes
+
+* **select:** Position incorrect if selection scrolled. ([de5237f1](https://github.com/angular/material/commit/de5237f1), closes [#6190](https://github.com/angular/material/issues/6190), [#6354](https://github.com/angular/material/issues/6354))
+* **tabs:** workaround for ngAnimate issue with ngClass ([19c11fdd](https://github.com/angular/material/commit/19c11fdd))
+
+
 <a name"1.0.0"></a>
 ## 1.0.0 (2015-12-14)
 
