@@ -200,26 +200,13 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
         scrollMask.on('wheel', preventDefault);
         scrollMask.on('touchmove', preventDefault);
-        $document.on('keydown', disableKeyNav);
 
         return function restoreScroll() {
           scrollMask.off('wheel');
           scrollMask.off('touchmove');
           scrollMask[0].parentNode.removeChild(scrollMask[0]);
-          $document.off('keydown', disableKeyNav);
           delete $mdUtil.disableScrollAround._enableScrolling;
         };
-
-        // Prevent keypresses from elements inside the body
-        // used to stop the keypresses that could cause the page to scroll
-        // (arrow keys, spacebar, tab, etc).
-        function disableKeyNav(e) {
-          //-- temporarily removed this logic, will possibly re-add at a later date
-          //if (!element[0].contains(e.target)) {
-          //  e.preventDefault();
-          //  e.stopImmediatePropagation();
-          //}
-        }
 
         function preventDefault(e) {
           e.preventDefault();
