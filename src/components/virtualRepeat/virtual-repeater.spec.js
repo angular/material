@@ -580,17 +580,25 @@ describe('<md-virtual-repeat>', function() {
     expect(offsetter.children().length).toBe(43);
   });
 
-  it('should recheck container size on $md-resize scope event', function() {
+  it('should recheck container size and scroll position on $md-resize scope ' +
+      'event', function() {
     scope.items = createItems(100);
     createRepeater();
     // Expect 13 children (10 + 3 extra).
     expect(offsetter.children().length).toBe(13);
 
-    container.css('height', '400px');
+    container.css('height', '300px');
     scope.$parent.$broadcast('$md-resize');
 
-    // Expect 43 children (40 + 3 extra).
-    expect(offsetter.children().length).toBe(43);
+    // Expect 33 children (30 + 3 extra).
+    expect(offsetter.children().length).toBe(33);
+
+    container.css('height', '400px');
+    scroller[0].scrollTop = 20;
+    scope.$parent.$broadcast('$md-resize');
+
+    // Expect 43 children (40 + 5 extra).
+    expect(offsetter.children().length).toBe(45);
   });
 
   it('should shrink when initial results require shrinking', inject(function() {

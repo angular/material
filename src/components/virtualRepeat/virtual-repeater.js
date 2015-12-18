@@ -104,6 +104,8 @@ function VirtualRepeatContainerController(
   this.originalSize = null;
   /** @type {number} Amount to offset the total scroll size by. */
   this.offsetSize = parseInt(this.$attrs.mdOffsetSize, 10) || 0;
+  /** @type {?string} height or width element style on the container prior to auto-shrinking. */
+  this.oldElementSize = null;
 
   if (this.$attrs.mdTopIndex) {
     /** @type {function(angular.Scope): number} Binds to topIndex on Angular scope */
@@ -184,8 +186,16 @@ VirtualRepeatContainerController.prototype.getSize = function() {
  * @param {number} The new size to set.
  */
 VirtualRepeatContainerController.prototype.setSize_ = function(size) {
+  var dimension = this.getDimensionName_();
+
   this.size = size;
-  this.$element[0].style[this.isHorizontal() ? 'width' : 'height'] = size + 'px';
+  this.$element[0].style[dimension] = size + 'px';
+};
+
+
+VirtualRepeatContainerController.prototype.unsetSize_ = function() {
+  this.$element[0].style[this.getDimensionName_()] = this.oldElementSize;
+  this.oldElementSize = null;
 };
 
 
@@ -197,6 +207,11 @@ VirtualRepeatContainerController.prototype.updateSize = function() {
       ? this.$element[0].clientWidth
       : this.$element[0].clientHeight;
 
+  // Recheck the scroll position after updating the size. This resolves
+  // problems that can result if the scroll position was measured while the
+  // element was display: none or detached from the document.
+  this.handleScroll_();
+
   this.repeater && this.repeater.containerUpdated();
 };
 
@@ -207,13 +222,18 @@ VirtualRepeatContainerController.prototype.getScrollSize = function() {
 };
 
 
+VirtualRepeatContainerController.prototype.getDimensionName_ = function() {
+  return this.isHorizontal() ? 'width' : 'height';
+};
+
+
 /**
  * Sets the scroller element to the specified size.
  * @private
  * @param {number} size The new size.
  */
 VirtualRepeatContainerController.prototype.sizeScroller_ = function(size) {
-  var dimension =  this.isHorizontal() ? 'width' : 'height';
+  var dimension =  this.getDimensionName_();
   var crossDimension = this.isHorizontal() ? 'height' : 'width';
 
   // Clear any existing dimensions.
@@ -255,6 +275,10 @@ VirtualRepeatContainerController.prototype.sizeScroller_ = function(size) {
 VirtualRepeatContainerController.prototype.autoShrink_ = function(size) {
   var shrinkSize = Math.max(size, this.autoShrinkMin * this.repeater.getItemSize());
   if (this.autoShrink && shrinkSize !== this.size) {
+    if (this.oldElementSize === null) {
+      this.oldElementSize = this.$element[0].style[this.getDimensionName_()];
+    }
+
     var currentSize = this.originalSize || this.size;
     if (!currentSize || shrinkSize < currentSize) {
       if (!this.originalSize) {
@@ -262,9 +286,10 @@ VirtualRepeatContainerController.prototype.autoShrink_ = function(size) {
       }
 
       this.setSize_(shrinkSize);
-    } else if (this.originalSize) {
-      this.setSize_(this.originalSize);
+    } else if (this.originalSize !== null) {
+      this.unsetSize_();
       this.originalSize = null;
+      this.updateSize();
     }
 
     this.repeater.containerUpdated();
