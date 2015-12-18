@@ -841,6 +841,64 @@ describe('<md-select>', function() {
     });
   });
 
+  describe('positioning', function() {
+    var el, menu;
+    var options = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+
+    beforeEach(inject(function($document) {
+      // Add our custom jasmine matcher for nice output
+      jasmine.addMatchers({ toBeVerticallyBetween: toBeVerticallyBetween });
+
+      // Setup our select
+      el = setupSelect('ng-model="someVal"', options).find('md-select');
+
+      // Use 'block' display to fix PhantomJS issue with flex positioning
+      el[0].style.display = 'block';
+
+      // Position the select further down on the page, and set a known width so we can properly test
+      el[0].style.position = 'relative';
+      el[0].style.top = '450px';
+      el[0].style.left = '50px';
+      el[0].style.width = '300px';
+
+      // Append our select to the DOM and find our menu container
+      $document.find('body').append(el);
+      menu = $document[0].querySelector('.md-select-menu-container');
+    }));
+
+    afterEach(inject(function($document) {
+      el.remove();
+    }));
+
+    it('opens at the correct position with the first item selected', function() {
+      // Open the select, click the first option and then reopen to check position
+      openSelect(el);
+      waitForSelectOpen();
+      clickOption(el, 0);
+      waitForSelectClose();
+
+      // Check that it's open and properly positioned
+      openSelect(el);
+      waitForSelectOpen(el);
+      expectSelectOpen(el);
+      expect(el[0]).toBeVerticallyBetween(menu);
+    });
+
+    it('opens at the correct position with the last item in a long list selected', function() {
+      // Open the select, click the first option and then reopen to check position
+      openSelect(el);
+      waitForSelectOpen();
+      clickOption(el, 20);
+      waitForSelectClose();
+
+      // Check that it's open and properly positioned
+      openSelect(el);
+      waitForSelectOpen(el);
+      expectSelectOpen(el);
+      expect(el[0]).toBeVerticallyBetween(menu);
+    });
+  });
+
   function setupSelect(attrs, options, skipLabel, scope, optCompileOpts) {
     var el;
 
@@ -964,6 +1022,45 @@ describe('<md-select>', function() {
         throw Error('Expected select to be open');
       }
     });
+  }
+
+  function toBeVerticallyBetween(util, customEqualityTesters) {
+    return {
+      // TODO: Rename select/menu to something more generic?
+      compare: function(selectEl, menuEl) {
+        var selectTop = selectEl.offsetTop,
+          selectBottom = selectTop + selectEl.offsetHeight,
+          menuTop = menuEl.offsetTop,
+          menuBottom = menuTop + menuEl.offsetHeight,
+          distance;
+
+        // Ensure bottom of menu is not above the top of the select
+        if (selectTop > menuBottom) {
+          return {
+            message: function() {
+              distance = selectTop - menuBottom;
+              return ('Expected menu to be closer to select; was ' + distance + 'px above.');
+            },
+
+            pass: false
+          }
+        }
+
+        // Ensure top of menu is not below the bottom of the select
+        if (selectBottom < menuTop) {
+          return {
+            message: function() {
+              distance = menuTop - selectBottom;
+              return ('Expected menu to be closer to select; was ' + distance + 'px below.');
+            },
+
+            pass: false
+          };
+        }
+
+        return { pass: true };
+      }
+    };
   }
 
 });
