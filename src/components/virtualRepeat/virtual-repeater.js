@@ -197,6 +197,11 @@ VirtualRepeatContainerController.prototype.updateSize = function() {
       ? this.$element[0].clientWidth
       : this.$element[0].clientHeight;
 
+  // Recheck the scroll position after updating the size. This resolves
+  // problems that can result if the scroll position was measured while the
+  // element was display: none or detached from the document.
+  this.handleScroll_();
+
   this.repeater && this.repeater.containerUpdated();
 };
 
