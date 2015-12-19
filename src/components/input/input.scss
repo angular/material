@@ -305,7 +305,7 @@ md-input-container {
 
 md-input-container.md-icon-float {
 
-  transition: margin-top 0.5s $swift-ease-out-timing-function;
+  transition: margin-top 0.25s $swift-ease-out-timing-function;
 
   > label {
     pointer-events: none;
@@ -323,7 +323,7 @@ md-input-container.md-icon-float {
 
     label {
       transform: translate3d(0, $input-label-float-offset, 0) scale($input-label-float-scale);
-      transition: transform $swift-ease-out-timing-function 0.5s;
+      transition: transform $swift-ease-out-timing-function 0.25s;
     }
   }
 
