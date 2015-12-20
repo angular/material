@@ -200,7 +200,7 @@
   .#{$name},
   .#{$name}-start-stretch // defaults
   {
-    justify-content : start;
+    justify-content : flex-start;
     align-content : stretch;
     align-items: stretch;
   }
@@ -212,7 +212,7 @@
   .#{$name}-start-end,
   .#{$name}-start-stretch
   {
-    justify-content: start;
+    justify-content: flex-start;
   }
 
   // Main Axis Center
