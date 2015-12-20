@@ -11,7 +11,9 @@ angular
     'material.core'
   ])
   .directive('mdTable', MdTableDirective)
-  .directive('td', TableCellDirective);
+  .directive('td', TableCellDirective)
+  .directive('tr', TableRowDirective)
+  .directive('th', TableHeaderCellDirective);
 
 /**
  * @ngdoc directive
@@ -43,9 +45,39 @@ function TableCellDirective() {
   };
 
   function postLink(scope, element, attrs, tableCtrl) {
-    if (tableCtrl) {
-      // strip percentage to validate numeric
-      if (!isNaN(element[0].innerHTML.replace('%', ''))) element.addClass('numeric');
-    }
+    if (!tableCtrl) return;
+
+    // strip percentage to validate numeric
+    if (!isNaN(element[0].innerHTML.replace('%', ''))) element.addClass('numeric');
+
+    element.attr('role', 'gridcell');
+  }
+}
+
+function TableRowDirective() {
+  return {
+    restrict: 'E',
+    require: '^?mdTable',
+    link: postLink
+  };
+
+  function postLink(scope, element, attrs, tableCtrl) {
+    if (!tableCtrl) return;
+
+    element.attr('role', 'row');
+  }
+}
+
+function TableHeaderCellDirective() {
+  return {
+    restrict: 'E',
+    require: '^?mdTable',
+    link: postLink
+  };
+
+  function postLink(scope, element, attrs, tableCtrl) {
+    if (!tableCtrl) return;
+
+    element.attr('role', 'columnheader');
   }
 }
