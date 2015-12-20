@@ -6,6 +6,23 @@
 
   th {
     color: '{{foreground-2}}';
+
+    &[md-sortable=""] {
+
+      &:hover {
+        color: '{{foreground-1}}';
+      }
+
+      &.md-is-sorting {
+        color: '{{foreground-1}}';
+
+        md-icon {
+          color: '{{foreground-1}}';
+        }
+      }
+    }
+
+
   }
 
   td {

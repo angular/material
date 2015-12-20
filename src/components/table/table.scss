@@ -30,6 +30,26 @@ $table-row-height: 48px;
   th {
     text-align: left;
     font-size: $table-header-font-size;
+
+    &[md-sortable=""] {
+      cursor: pointer;
+
+      md-icon {
+        opacity: 0;
+        height: 18px;
+        width: 18px;
+        transform-origin: center center;
+        transition: transform $swift-ease-out-timing-function 0.25s;
+
+        &.md-sort-normal {
+          transform: rotate(180deg);
+        }
+      }
+
+      &.md-is-sorting md-icon, &:hover md-icon {
+        opacity: 1;
+      }
+    }
   }
 
   td {
@@ -41,7 +61,7 @@ $table-row-height: 48px;
     border-top: 1px solid;
 
     &:hover {
-      background-color: #eee;
+      background-color: #EEEEEE;
     }
   }
 
