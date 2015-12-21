@@ -26,7 +26,7 @@ angular
  *     do the following:
  *
  * - Make sure that your template is wrapped in `md-item-template`
- * - Add your `ng-messages` code inside of `md-autocomplete`
+ * - Add your `ng-messages` code inside of `md-autocomplete` within `md-error-template` element
  * - Add your validation properties to `md-autocomplete` (ie. `required`)
  * - Add a `name` to `md-autocomplete` (to be used on the generated `input`)
  *
@@ -106,14 +106,16 @@ angular
  *     <md-item-template>
  *       <span md-highlight-text="searchText">{{item.display}}</span>
  *     </md-item-template>
- *     <div ng-messages="autocompleteForm.autocomplete.$error">
- *       <div ng-message="required">This field is required</div>
- *     </div>
+ *     <md-error-template>
+ *       <div ng-messages="autocompleteForm.autocomplete.$error">
+ *         <div ng-message="required">This field is required</div>
+ *       </div>
+ *     </md-error-template>
  *   </md-autocomplete>
  * </form>
  * </hljs>
  *
- * In this example, our code utilizes `md-item-template` and `md-not-found` to specify the
+ * In this example, our code utilizes `md-item-template`, `md-error-template` and `md-not-found` to specify the
  *     different parts that make up our component.
  */
 
@@ -150,7 +152,6 @@ function MdAutocomplete () {
     template:     function (element, attr) {
       var noItemsTemplate = getNoItemsTemplate(),
           itemTemplate    = getItemTemplate(),
-          leftover        = element.html(),
           tabindex        = attr.tabindex;
 
       // Set our variable for the link function above which runs later
@@ -200,7 +201,6 @@ function MdAutocomplete () {
       function getItemTemplate() {
         var templateTag = element.find('md-item-template').detach(),
             html = templateTag.length ? templateTag.html() : element.html();
-        if (!templateTag.length) element.empty();
         return '<md-autocomplete-parent-scope md-autocomplete-replace>' + html + '</md-autocomplete-parent-scope>';
       }
 
@@ -215,7 +215,10 @@ function MdAutocomplete () {
       }
 
       function getInputElement () {
-        if (attr.mdFloatingLabel) {
+          var templateTag = element.find('md-error-template').detach(),
+              html = templateTag.length ? templateTag.html() : element.html();
+
+          if (attr.mdFloatingLabel) {
           return '\
             <md-input-container flex ng-if="floatingLabel">\
               <label>{{floatingLabel}}</label>\
@@ -237,39 +240,41 @@ function MdAutocomplete () {
                   aria-autocomplete="list"\
                   aria-haspopup="true"\
                   aria-activedescendant=""\
-                  aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>\
-              <div md-autocomplete-parent-scope md-autocomplete-replace>' + leftover + '</div>\
-            </md-input-container>';
+                  aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>'
+                  + html +
+            '</md-input-container>';
         } else {
           return '\
-            <input flex type="search"\
-                ' + (tabindex != null ? 'tabindex="' + tabindex + '"' : '') + '\
-                id="{{ inputId || \'input-\' + $mdAutocompleteCtrl.id }}"\
-                name="{{inputName}}"\
-                ng-if="!floatingLabel"\
-                autocomplete="off"\
-                ng-required="$mdAutocompleteCtrl.isRequired"\
-                ng-disabled="$mdAutocompleteCtrl.isDisabled"\
-                ng-model="$mdAutocompleteCtrl.scope.searchText"\
-                ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
-                ng-blur="$mdAutocompleteCtrl.blur()"\
-                ng-focus="$mdAutocompleteCtrl.focus()"\
-                placeholder="{{placeholder}}"\
-                aria-owns="ul-{{$mdAutocompleteCtrl.id}}"\
-                aria-label="{{placeholder}}"\
-                aria-autocomplete="list"\
-                aria-haspopup="true"\
-                aria-activedescendant=""\
-                aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>\
-            <button\
-                type="button"\
-                tabindex="-1"\
-                ng-if="$mdAutocompleteCtrl.scope.searchText && !$mdAutocompleteCtrl.isDisabled"\
-                ng-click="$mdAutocompleteCtrl.clear()">\
-              <md-icon md-svg-icon="md-close"></md-icon>\
-              <span class="md-visually-hidden">Clear</span>\
-            </button>\
-                ';
+              <md-input-container>\
+                <input flex type="search"\
+                    ' + (tabindex != null ? 'tabindex="' + tabindex + '"' : '') + '\
+                    id="{{ inputId || \'input-\' + $mdAutocompleteCtrl.id }}"\
+                    name="{{inputName}}"\
+                    ng-if="!floatingLabel"\
+                    autocomplete="off"\
+                    ng-required="$mdAutocompleteCtrl.isRequired"\
+                    ng-disabled="$mdAutocompleteCtrl.isDisabled"\
+                    ng-model="$mdAutocompleteCtrl.scope.searchText"\
+                    ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
+                    ng-blur="$mdAutocompleteCtrl.blur()"\
+                    ng-focus="$mdAutocompleteCtrl.focus()"\
+                    placeholder="{{placeholder}}"\
+                    aria-owns="ul-{{$mdAutocompleteCtrl.id}}"\
+                    aria-label="{{placeholder}}"\
+                    aria-autocomplete="list"\
+                    aria-haspopup="true"\
+                    aria-activedescendant=""\
+                    aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>'
+                    + html +
+                '<button\
+                    type="button"\
+                    tabindex="-1"\
+                    ng-if="$mdAutocompleteCtrl.scope.searchText && !$mdAutocompleteCtrl.isDisabled"\
+                    ng-click="$mdAutocompleteCtrl.clear()">\
+                  <md-icon md-svg-icon="md-close"></md-icon>\
+                  <span class="md-visually-hidden">Clear</span>\
+                </button>\
+              </md-input-container>';
         }
       }
     }
