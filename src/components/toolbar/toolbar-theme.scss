@@ -6,10 +6,6 @@ md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) {
     color: '{{primary-contrast}}';
   }
 
-  .md-button:not(.md-raised) {
-    color: '{{primary-contrast}}';
-  }
-
   &.md-accent {
     background-color: '{{accent-color}}';
     color: '{{accent-contrast}}';
