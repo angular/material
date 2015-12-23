@@ -64,6 +64,20 @@ describe('mdCheckbox', function() {
     expect(blueCheckbox.attr('role')).toEqual('checkbox');
   });
 
+  it('should format numeric boolean to booleans', function() {
+    var element = compileAndLink('<md-checkbox ng-model="blue"></md-checkbox>');
+
+    pageScope.blue = 0;
+    pageScope.$apply();
+
+    expect(element.hasClass(CHECKED_CSS)).toEqual(false);
+
+    pageScope.blue = 1;
+    pageScope.$apply();
+
+    expect(element.hasClass(CHECKED_CSS)).toEqual(true);
+  });
+
   it('should be disabled with ngDisabled attr', function() {
     var element = compileAndLink(
         '<div>' +

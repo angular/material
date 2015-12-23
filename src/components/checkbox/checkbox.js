@@ -127,6 +127,11 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
 
       ngModelCtrl.$render = render;
 
+      ngModelCtrl.$formatters.push(function(modelValue) {
+        if (modelValue == '1' || modelValue == '0') return !!modelValue;
+        return modelValue;
+      });
+
       function $$watchExpr(expr, htmlAttr, valueOpts) {
         if (attr[expr]) {
           scope.$watch(attr[expr], function(val) {
