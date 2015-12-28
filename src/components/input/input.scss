@@ -112,7 +112,7 @@ md-input-container {
     @include rtl(padding-right, 0, $input-container-padding + 1px);
     z-index: 1;
     transform: translate3d(0, $input-label-default-offset + 4, 0) scale($input-label-default-scale);
-    transition: transform $swift-ease-out-timing-function 0.25s;
+    transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
 
     @include rtl(transform-origin, left top, right top);
   }
@@ -305,7 +305,7 @@ md-input-container {
 
 md-input-container.md-icon-float {
 
-  transition: margin-top 0.25s $swift-ease-out-timing-function;
+  transition: margin-top $swift-ease-out-duration $swift-ease-out-timing-function;
 
   > label {
     pointer-events: none;
@@ -323,7 +323,7 @@ md-input-container.md-icon-float {
 
     label {
       transform: translate3d(0, $input-label-float-offset, 0) scale($input-label-float-scale);
-      transition: transform $swift-ease-out-timing-function 0.25s;
+      transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
     }
   }
 
