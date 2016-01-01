@@ -26,14 +26,19 @@ describe('$mdPanel', function() {
     expect(panelRef.open).toBeDefined();
     expect(panelRef.close).toBeDefined();
     expect(panelRef.config).toEqual(config);
+    expect(panelRef.isOpen).toEqual(false);
 
     panelRef.open().then(function() {
       resolved = true;
     });
+    $rootScope.$apply();
+
+    expect(panelRef.isOpen).toEqual(true);
 
     panelRef.close();
     $rootScope.$apply();
 
     expect(resolved).toBe(true);
+    expect(panelRef.isOpen).toEqual(false);
   });
 });
