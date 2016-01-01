@@ -33,7 +33,7 @@ angular
  *
  *   var panelRef;
  *
- *   function showPanel($event) { *
+ *   function showPanel($event) {
  *     var panelPosition = $mdPanelPosition
  *         .absolute()
  *         .top('50%')
@@ -227,7 +227,7 @@ angular
  * @name $mdPanelPosition#relativeTo
  * @description
  * Positions the panel relative to a specific element.
- * @param {angular.JQLite} element Element to position the panel with respect to.
+ * @param {!angular.JQLite} element Element to position the panel with respect to.
  * @returns {$mdPanelPosition}
  */
 
@@ -315,11 +315,7 @@ function MdPanelService($rootElement, $injector) {
  */
 MdPanelService.prototype.create = function(opt_config) {
   var configSettings = opt_config || {};
-  angular.forEach(configSettings, function(value, key) {
-    if (configSettings.hasOwnProperty(key)) {
-      this.config_[key] = value;
-    }
-  }, this);
+  angular.extend(this.config_, configSettings);
 
   return new MdPanelRef(this.$injector_, this.config_);
 };
@@ -334,12 +330,16 @@ MdPanelService.prototype.create = function(opt_config) {
  * @final @constructor
  */
 function MdPanelRef($injector, config) {
+  // Injected variables.
   this.$mdUtil_ = $injector.get('$mdUtil');
   this.$q_ = $injector.get('$q');
 
+  // Public variables.
   this.config = config;
   this.id = 'panel_' + this.$mdUtil_.nextUid();
+  this.isOpen = false;
 
+  // Private variables.
   this.openPromise_;
 }
 
@@ -352,6 +352,7 @@ function MdPanelRef($injector, config) {
  */
 MdPanelRef.prototype.open = function() {
   this.openPromise_ = this.$q_.defer();
+  this.isOpen = true;
   return this.openPromise_.promise;
 };
 
@@ -360,6 +361,8 @@ MdPanelRef.prototype.open = function() {
  * Closes the panel.
  */
 MdPanelRef.prototype.close = function() {
-  this.openPromise_.resolve(true);
+  if (this.isOpen) {
+    this.isOpen = false;
+    this.openPromise_.resolve(true);
+  }
 };
-
