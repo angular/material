@@ -362,6 +362,48 @@ describe('<md-chips>', function() {
         expect(element.find('md-chips-wrap').hasClass('md-focused')).toBe(false);
       }));
 
+      describe('placeholder', function() {
+
+        it('should put placeholder text in the input element when chips exist but there is no secondary-placeholder text', inject(function() {
+          var template =
+            '<md-chips ng-model="items" placeholder="placeholder text"></md-chips>';
+          var element = buildChips(template);
+          var ctrl = element.controller('mdChips');
+          var input = element.find('input')[0];
+
+          expect(scope.items.length).toBeGreaterThan(0);
+          expect(input.placeholder).toBe('placeholder text');
+        }));
+
+        it('should put placeholder text in the input element when there are no chips', inject(function() {
+          var ctrl, element, input, template;
+
+          scope.items = [];
+          template =
+            '<md-chips ng-model="items" placeholder="placeholder text" ' +
+            'secondary-placeholder="secondary-placeholder text"></md-chips>';
+          element = buildChips(template);
+          ctrl = element.controller('mdChips');
+          input = element.find('input')[0];
+
+          expect(scope.items.length).toBe(0);
+          expect(input.placeholder).toBe('placeholder text');
+        }));
+
+        it('should put secondary-placeholder text in the input element when there is at least one chip', inject(function() {
+          var template =
+            '<md-chips ng-model="items" placeholder="placeholder text" ' +
+            'secondary-placeholder="secondary-placeholder text"></md-chips>';
+          var element = buildChips(template);
+          var ctrl = element.controller('mdChips');
+          var input = element.find('input')[0];
+
+          expect(scope.items.length).toBeGreaterThan(0);
+          expect(input.placeholder).toBe('secondary-placeholder text');
+        }));
+
+      });
+
     });
 
     describe('custom inputs', function() {
