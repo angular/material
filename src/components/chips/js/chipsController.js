@@ -187,7 +187,7 @@ MdChipsCtrl.prototype.getPlaceholder = function() {
   // Allow `secondary-placeholder` to be blank.
   var useSecondary = (this.items.length &&
       (this.secondaryPlaceholder == '' || this.secondaryPlaceholder));
-  return useSecondary ? this.placeholder : this.secondaryPlaceholder;
+  return useSecondary ? this.secondaryPlaceholder : this.placeholder;
 };
 
 /**
