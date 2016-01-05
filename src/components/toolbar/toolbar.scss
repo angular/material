@@ -30,6 +30,9 @@ md-toolbar {
   min-height: $baseline-grid * 8;
   width: 100%;
 
+  transition: $swift-ease-in-out;
+  transition-property: background-color, fill, color;
+
   &.md-whiteframe-z1-add, &.md-whiteframe-z1-remove {
     transition: box-shadow $swift-ease-in-out-duration linear;
   }
@@ -111,6 +114,11 @@ md-toolbar {
   .md-button {
     margin-top: 0;
     margin-bottom: 0;
+
+    &, &.md-icon-button md-icon {
+      transition: $swift-ease-in-out;
+      transition-property: background-color, fill, color;
+    }
   }
   &> .md-button:first-child {
     margin-left: $icon-button-margin-offset;

@@ -4,6 +4,7 @@ md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) {
 
   md-icon {
     color: '{{primary-contrast}}';
+    fill: '{{primary-contrast}}';
   }
 
   .md-button:not(.md-raised) {
@@ -13,7 +14,17 @@ md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) {
   &.md-accent {
     background-color: '{{accent-color}}';
     color: '{{accent-contrast}}';
+
+    .md-ink-ripple {
+      color: '{{accent-contrast}}';
+    }
+
+    md-icon {
+      color: '{{accent-contrast}}';
+      fill: '{{accent-contrast}}';
+    }
   }
+
   &.md-warn {
     background-color: '{{warn-color}}';
     color: '{{warn-contrast}}';
