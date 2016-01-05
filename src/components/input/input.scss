@@ -20,6 +20,8 @@ $error-padding-top: ($input-error-height - $input-error-line-height) / 2;
 
 $icon-offset: 36px !default;
 
+$icon-top-offset: ($icon-offset - $input-padding-top - $input-border-width-focused) / 4;
+
 $icon-float-focused-top: -8px !default;
 
 md-input-container {
@@ -46,7 +48,7 @@ md-input-container {
 
   > md-icon {
     position: absolute;
-    top: 5px;
+    top: $icon-top-offset;
     @include rtl(left, 2px, auto);
     @include rtl(right, auto, 2px);
   }
@@ -316,7 +318,7 @@ md-input-container {
     }
 
     > md-icon {
-      top: 2px;
+      top: $icon-top-offset;
       @include rtl(left, 2px, auto);
       @include rtl(right, auto, 2px);
     }
