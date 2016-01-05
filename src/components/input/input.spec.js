@@ -160,6 +160,20 @@ describe('md-input-container directive', function() {
     expect(el).not.toHaveClass('md-input-focused');
   });
 
+  it('should skip a hidden input', function() {
+    var container = setup('type="hidden"');
+    var controller = container.controller('mdInputContainer');
+    var textInput = angular.element('<input type="text">');
+
+    expect(controller.input).toBeUndefined();
+
+    container.append(textInput);
+    $compile(textInput)(pageScope);
+
+    expect(controller.input[0]).toBe(textInput[0]);
+  });
+
+
   it('should set has-value class on container for non-ng-model input', function() {
     var el = setup();
     expect(el).not.toHaveClass('md-input-has-value');
