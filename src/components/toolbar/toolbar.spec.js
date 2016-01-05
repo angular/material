@@ -118,7 +118,7 @@ describe('<md-toolbar>', function() {
     expect(element.find('md-toolbar').length).toBe(0);
   }));
 
-  it('works with ng-show', inject(function($$rAF) {
+  it('works with ng-show', inject(function($$rAF, $timeout) {
     var template =
       '<div layout="column" style="height: 600px;">' +
       '  <md-toolbar md-scroll-shrink="true" ng-show="shouldShowToolbar">test</md-toolbar>' +
@@ -154,6 +154,7 @@ describe('<md-toolbar>', function() {
     // Show the toolbar and ensure it is visible
     pageScope.$apply('shouldShowToolbar = true');
     pageScope.$digest();
+    $timeout.flush();
 
     toolbarStyles = getComputedStyle(element.find('md-toolbar')[0]);
     contentStyles = getComputedStyle(element.find('md-content')[0]);
@@ -170,7 +171,7 @@ describe('<md-toolbar>', function() {
     document.body.removeChild(element[0]);
   }));
 
-  it('works with ng-hide', inject(function($$rAF) {
+  it('works with ng-hide', inject(function($$rAF, $timeout) {
     var template =
       '<div layout="column" style="height: 600px;">' +
       '  <md-toolbar md-scroll-shrink="true" ng-hide="shouldNotShowToolbar">test</md-toolbar>' +
@@ -206,6 +207,7 @@ describe('<md-toolbar>', function() {
     // Show the toolbar and ensure it is hidden
     pageScope.$apply('shouldNotShowToolbar = true');
     pageScope.$digest();
+    $timeout.flush();
 
     toolbarStyles = getComputedStyle(element.find('md-toolbar')[0]);
     contentStyles = getComputedStyle(element.find('md-content')[0]);
