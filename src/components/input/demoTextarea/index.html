@@ -1,0 +1,28 @@
+<div layout="column" ng-cloak class="md-inline-form" ng-init="textBind = 'Input is binded to a Model'">
+
+  <md-content layout-padding>
+
+    <div class="demoTextarea">
+      <md-input-container class="md-block">
+        <label>Fixed Rows</label>
+        <textarea rows="5" ng-model="textBind">This is an example Content</textarea>
+      </md-input-container>
+    </div>
+
+    <div class="demoTextarea">
+      <md-input-container class="md-block">
+        <label>Minimum Rows</label>
+        <textarea min-rows="5" ng-model="textBind"></textarea>
+      </md-input-container>
+     </div>
+
+    <div class="demoTextarea">
+      <md-input-container class="md-block">
+        <label>Dynamic Rows</label>
+        <textarea>This is an example Content</textarea>
+      </md-input-container>
+    </div>
+
+  </md-content>
+
+</div>
