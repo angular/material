@@ -17,7 +17,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#d50000',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200 300 A100',
-    'contrastStrongLightColors': '400 500 600 700 A200 A400 A700'
+    'contrastStrongLightColors': 'A200'
   },
   'pink': {
     '50': '#fce4ec',
@@ -36,7 +36,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#c51162',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200 A100',
-    'contrastStrongLightColors': '500 600 A200 A400 A700'
+    'contrastStrongLightColors': '300 A200'
   },
   'purple': {
     '50': '#f3e5f5',
@@ -55,7 +55,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#aa00ff',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200 A100',
-    'contrastStrongLightColors': '300 400 A200 A400 A700'
+    'contrastStrongLightColors': '300 400 A200'
   },
   'deep-purple': {
     '50': '#ede7f6',
@@ -74,7 +74,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#6200ea',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200 A100',
-    'contrastStrongLightColors': '300 400 A200'
+    'contrastStrongLightColors': 'A200'
   },
   'indigo': {
     '50': '#e8eaf6',
@@ -92,8 +92,7 @@ angular.module('material.core.theming.palette', [])
     'A400': '#3d5afe',
     'A700': '#304ffe',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 A100',
-    'contrastStrongLightColors': '300 400 A200 A400'
+    'contrastDarkColors': '50 100 200 A100'
   },
   'blue': {
     '50': '#e3f2fd',
@@ -112,7 +111,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#2962ff',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200 300 400 A100',
-    'contrastStrongLightColors': '500 600 700 A200 A400 A700'
+    'contrastStrongLightColors': '500 A200'
   },
   'light-blue': {
     '50': '#e1f5fe',
@@ -130,8 +129,8 @@ angular.module('material.core.theming.palette', [])
     'A400': '#00b0ff',
     'A700': '#0091ea',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '600 700 800 900 A700',
-    'contrastStrongLightColors': '600 700 800 A700'
+    'contrastLightColors': '700 800 900',
+    'contrastStrongLightColors': '600 A700'
   },
   'cyan': {
     '50': '#e0f7fa',
@@ -149,8 +148,7 @@ angular.module('material.core.theming.palette', [])
     'A400': '#00e5ff',
     'A700': '#00b8d4',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '700 800 900',
-    'contrastStrongLightColors': '700 800 900'
+    'contrastLightColors': '700 800 900'
   },
   'teal': {
     '50': '#e0f2f1',
@@ -168,7 +166,7 @@ angular.module('material.core.theming.palette', [])
     'A400': '#1de9b6',
     'A700': '#00bfa5',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '500 600 700 800 900',
+    'contrastLightColors': '800 900',
     'contrastStrongLightColors': '500 600 700'
   },
   'green': {
@@ -187,8 +185,8 @@ angular.module('material.core.theming.palette', [])
     'A400': '#00e676',
     'A700': '#00c853',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '600 700 800 900',
-    'contrastStrongLightColors': '600 700'
+    'contrastLightColors': '700 800 900',
+    'contrastStrongLightColors': '600'
   },
   'light-green': {
     '50': '#f1f8e9',
@@ -206,8 +204,8 @@ angular.module('material.core.theming.palette', [])
     'A400': '#76ff03',
     'A700': '#64dd17',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '700 800 900',
-    'contrastStrongLightColors': '700 800 900'
+    'contrastLightColors': '800 900',
+    'contrastStrongLightColors': '700'
   },
   'lime': {
     '50': '#f9fbe7',
@@ -225,8 +223,7 @@ angular.module('material.core.theming.palette', [])
     'A400': '#c6ff00',
     'A700': '#aeea00',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '900',
-    'contrastStrongLightColors': '900'
+    'contrastLightColors': '900'
   },
   'yellow': {
     '50': '#fffde7',
@@ -278,8 +275,8 @@ angular.module('material.core.theming.palette', [])
     'A400': '#ff9100',
     'A700': '#ff6d00',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '800 900',
-    'contrastStrongLightColors': '800 900'
+    'contrastLightColors': '900',
+    'contrastStrongLightColors': '800'
   },
   'deep-orange': {
     '50': '#fbe9e7',
@@ -298,7 +295,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#dd2c00',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200 300 400 A100 A200',
-    'contrastStrongLightColors': '500 600 700 800 900 A400 A700'
+    'contrastStrongLightColors': '500'
   },
   'brown': {
     '50': '#efebe9',
@@ -317,7 +314,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#5d4037',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200',
-    'contrastStrongLightColors': '300 400'
+    'contrastStrongLightColors': '300'
   },
   'grey': {
     '50': '#fafafa',
@@ -330,7 +327,6 @@ angular.module('material.core.theming.palette', [])
     '700': '#616161',
     '800': '#424242',
     '900': '#212121',
-    '1000': '#000000',
     'A100': '#ffffff',
     'A200': '#eeeeee',
     'A400': '#bdbdbd',
@@ -355,6 +351,6 @@ angular.module('material.core.theming.palette', [])
     'A700': '#455a64',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200 300',
-    'contrastStrongLightColors': '400 500'
+    'contrastStrongLightColors': '400'
   }
 });
