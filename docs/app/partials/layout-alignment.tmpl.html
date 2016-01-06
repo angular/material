@@ -23,7 +23,7 @@
             <td>layout-align</td>
             <td>Sets default alignment unless overridden by another breakpoint.</td>
           </tr>
-    <tr>
+          <tr>
            <td>layout-align-xs</td>
            <td>width &lt; <b>600</b>px</td>
          </tr>
@@ -67,20 +67,18 @@
    Below is an interactive demo that lets you explore the visual results of the different settings:
   </p>
 
-  <section class="layout-panel-parent">
-    <div >
-      <docs-demo demo-title='layout="{{layoutDemo.direction}}" &nbsp; &nbsp; &nbsp; layout-align="{{layoutAlign()}}"'
-                 class="small-demo colorNested" interpolate-code="true">
-        <demo-file name="index.html">
-          <div layout="{{layoutDemo.direction}}" layout-align="{{layoutAlign()}}">
-            <div>one</div>
-            <div>two</div>
-            <div>three</div>
-          </div>
-        </demo-file>
-      </docs-demo>
-    </div>
-  </section>
+  <div>
+    <docs-demo demo-title='layout="{{layoutDemo.direction}}" &nbsp; &nbsp; &nbsp; layout-align="{{layoutAlign()}}"'
+               class="small-demo colorNested" interpolate-code="true">
+      <demo-file name="index.html">
+        <div layout="{{layoutDemo.direction}}" layout-align="{{layoutAlign()}}">
+          <div>one</div>
+          <div>two</div>
+          <div>three</div>
+        </div>
+      </demo-file>
+    </docs-demo>
+  </div>
 
   <div layout="column" layout-gt-sm="row" layout-align="space-around">
 
