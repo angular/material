@@ -333,18 +333,22 @@ function MdToastProvider($$interimElementProvider) {
           // Root element of template will be <md-toast>. We need to wrap all of its content inside of
           // of <div class="md-toast-content">. All templates provided here should be static, developer-controlled
           // content (meaning we're not attempting to guard against XSS).
-          var parsedTemplate = angular.element(template);
-          var wrappedContent = '<div class="md-toast-content">' + parsedTemplate.html() + '</div>';
+          var templateRoot = document.createElement('md-template');
+          templateRoot.innerHTML = template;
 
-          parsedTemplate.empty().append(wrappedContent);
+          for (var i = 0; i < templateRoot.children.length; i++) {
+            if (templateRoot.children[i].nodeName === 'MD-TOAST') {
+              var wrapper = angular.element('<div class="md-toast-content">');
+              wrapper.append(templateRoot.children[i].children);
+              templateRoot.children[i].appendChild(wrapper[0]);
+            }
+          }
 
-          // Underlying interimElement expects a template string.
-          return parsedTemplate[0].outerHTML;
+
+          return templateRoot.outerHTML;
         }
 
-        return shouldAddWrapper ?
-            '<div class="md-toast-content">' + template + '</div>' :
-            template || '';
+        return template || '';
       }
     };
 
@@ -354,6 +358,8 @@ function MdToastProvider($$interimElementProvider) {
       var isSmScreen = !$mdMedia('gt-sm');
 
       element = $mdUtil.extractElementByName(element, 'md-toast', true);
+      options.element = element;
+
       options.onSwipe = function(ev, gesture) {
         //Add the relevant swipe class to the element so it can animate correctly
         var swipe = ev.type.replace('$md.','');

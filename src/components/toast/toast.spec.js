@@ -180,6 +180,19 @@ describe('$mdToast service', function() {
         expect(toast.text().trim()).toBe('hello, 1');
       }));
 
+      it('should not throw an error if template starts with comment', inject(function($timeout, $rootScope, $rootElement) {
+        var parent = angular.element('<div>');
+        setup({
+          template: '<!-- COMMENT --><md-toast>{{1}}234</md-toast>',
+          appendTo: parent
+        });
+
+        var toast = $rootElement.find('md-toast');
+        $timeout.flush();
+
+        expect(toast.length).not.toBe(0);
+      }));
+
       it('should add position class to toast', inject(function($rootElement, $timeout) {
         setup({
           template: '<md-toast>',
