@@ -41,6 +41,9 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
     });
 
     $scope.$on('$destroy', this.disableHoverListener);
+    menuContainer.on('$destroy', function() {
+      $mdMenu.destroy();
+    });
   };
 
   var openMenuTimeout, menuItems, deregisterScopeListeners = [];

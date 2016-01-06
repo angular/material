@@ -69,7 +69,7 @@ function MenuProvider($$interimElementProvider) {
     }
 
     /**
-     * Removing the menu element from the DOM and remove all associated evetn listeners
+     * Removing the menu element from the DOM and remove all associated event listeners
      * and backdrop
      */
     function onRemove(scope, element, opts) {
