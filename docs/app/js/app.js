@@ -485,8 +485,9 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
           },
           function (open) {
             var $ul = $element.find('ul');
-            var targetHeight = open ? getTargetHeight() : 0;
+
             $timeout(function () {
+              var targetHeight = open ? getTargetHeight() : 0;
               $ul.css({ height: targetHeight + 'px' });
             }, 0, false);
 
