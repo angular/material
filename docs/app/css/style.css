@@ -22,6 +22,22 @@ body {
   overflow: hidden;
 }
 
+/* Center the doc tool icons at the top */
+.docs-tools .md-button.md-icon-button {
+  min-height: 0;
+  height: auto;
+}
+
+#license-footer {
+  align-self: flex-end;
+  padding: 16px 32px;
+  width: 100%;
+
+  text-align: left;
+  font-size: small;
+  border-top: 1px solid #ddd;
+}
+
 /***************
  * TYPE DEFAULTS
  ***************/
@@ -330,8 +346,11 @@ code:not(.highlight) {
   font-weight: 500;
 }
 
-ul#docs-menu-Directives {
+.parent-list-item:last-child {
   margin-bottom: 20px;
+
+  /* Prevent the hidden License link from causing a double bottom-border */
+  border-bottom: none;
 }
 .md-button-toggle .md-toggle-icon {
   display: block;
