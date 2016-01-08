@@ -72,8 +72,8 @@
         html: processHtml(demo),
         head: LINK_FONTS_ROBOTO,
 
-        js: processJs(files.js),
-        css: mergeFiles( files.css ).join(' '),
+        js: appendLicense(processJs(files.js), 'js'),
+        css: appendLicense(mergeFiles( files.css ).join(' '), 'css'),
 
         js_external: externalScripts.concat([CORE_JS, ASSET_CACHE_JS]).join(';'),
         css_external: [CORE_CSS, DOC_CSS].join(';')
@@ -96,16 +96,27 @@
         allContent = processor(allContent, demo);
       });
 
-      return allContent + buildLicenseHTML();
+      return appendLicense(allContent, 'html');
     }
 
-    function buildLicenseHTML() {
-      return '\n\n'+
-        '<!--\n'+
+    /**
+     * Append MIT License information to all CodePen source samples(HTML, JS, CSS)
+     */
+    function appendLicense(content, lang) {
+      var commentStart = '', commentEnd = '';
+
+      switch(lang) {
+        case 'html' : commentStart = '<!--'; commentEnd = '-->'; break;
+        case 'js'   : commentStart = '/**';  commentEnd = '**/'; break;
+        case 'css'  : commentStart = '/*';   commentEnd = '*/';  break;
+      }
+
+      return content + '\n\n'+
+        commentStart + '\n'+
         'Copyright 2016 Google Inc. All Rights Reserved. \n'+
         'Use of this source code is governed by an MIT-style license that can be in found'+
         'in the LICENSE file at http://material.angularjs.org/license.\n'+
-        '-->';
+        commentEnd;
     }
 
     // Applies modifications the javascript prior to sending to codepen.
