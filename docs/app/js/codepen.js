@@ -83,7 +83,8 @@
     // Modifies index.html with necessary changes in order to display correctly in codepen
     // See each processor to determine how each modifies the html
     function processHtml(demo) {
-      var index = demo.files.index.contents;
+
+      var allContent = demo.files.index.contents;
 
       var processors = [
         applyAngularAttributesToParentElement,
@@ -92,10 +93,19 @@
       ];
 
       processors.forEach(function(processor) {
-        index = processor(index, demo);
+        allContent = processor(allContent, demo);
       });
 
-      return index;
+      return allContent + buildLicenseHTML();
+    }
+
+    function buildLicenseHTML() {
+      return '\n\n'+
+        '<!--\n'+
+        'Copyright 2016 Google Inc. All Rights Reserved. \n'+
+        'Use of this source code is governed by an MIT-style license that can be in '+
+        'the LICENSE file at http://material.angularjs.org/license.\n'+
+        '-->';
     }
 
     // Applies modifications the javascript prior to sending to codepen.
