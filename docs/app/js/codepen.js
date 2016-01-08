@@ -67,17 +67,17 @@
     function translate(demo, externalScripts) {
       var files = demo.files;
 
-      return {
+      return appendLicenses({
         title: demo.title,
         html: processHtml(demo),
         head: LINK_FONTS_ROBOTO,
 
-        js: appendLicense(processJs(files.js), 'js'),
-        css: appendLicense(mergeFiles( files.css ).join(' '), 'css'),
+        js: processJs(files.js),
+        css: mergeFiles( files.css ).join(' '),
 
         js_external: externalScripts.concat([CORE_JS, ASSET_CACHE_JS]).join(';'),
         css_external: [CORE_CSS, DOC_CSS].join(';')
-      };
+      });
     }
 
     // Modifies index.html with necessary changes in order to display correctly in codepen
@@ -96,28 +96,38 @@
         allContent = processor(allContent, demo);
       });
 
-      return appendLicense(allContent, 'html');
+      return allContent;
     }
 
     /**
      * Append MIT License information to all CodePen source samples(HTML, JS, CSS)
      */
-    function appendLicense(content, lang) {
-      var commentStart = '', commentEnd = '';
+    function appendLicenses(data) {
 
-      switch(lang) {
-        case 'html' : commentStart = '<!--'; commentEnd = '-->'; break;
-        case 'js'   : commentStart = '/**';  commentEnd = '**/'; break;
-        case 'css'  : commentStart = '/*';   commentEnd = '*/';  break;
+      data.html = appendLicenseFor(data.html, 'html');
+      data.js   = appendLicenseFor(data.js, 'js');
+      data.css  = appendLicenseFor(data.css, 'css');
+
+      function appendLicenseFor(content, lang) {
+            var commentStart = '', commentEnd = '';
+
+        switch(lang) {
+          case 'html' : commentStart = '<!--'; commentEnd = '-->'; break;
+          case 'js'   : commentStart = '/**';  commentEnd = '**/'; break;
+          case 'css'  : commentStart = '/*';   commentEnd = '*/';  break;
+        }
+
+        return content + '\n\n'+
+          commentStart + '\n'+
+          'Copyright 2016 Google Inc. All Rights Reserved. \n'+
+          'Use of this source code is governed by an MIT-style license that can be in found'+
+          'in the LICENSE file at http://material.angularjs.org/license.\n'+
+          commentEnd;
       }
 
-      return content + '\n\n'+
-        commentStart + '\n'+
-        'Copyright 2016 Google Inc. All Rights Reserved. \n'+
-        'Use of this source code is governed by an MIT-style license that can be in found'+
-        'in the LICENSE file at http://material.angularjs.org/license.\n'+
-        commentEnd;
+      return data;
     }
+
 
     // Applies modifications the javascript prior to sending to codepen.
     // Currently merges js files and replaces the module with the Codepen

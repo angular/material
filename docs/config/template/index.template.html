@@ -37,9 +37,9 @@
           <h2 class="menu-heading md-subhead" ng-if="section.type === 'heading'" id="heading_{{ section.name | nospace }}">
             {{section.name}}
           </h2>
-          <menu-link section="section" ng-if="section.type === 'link'"></menu-link>
+          <menu-link section="section" ng-if="section.type === 'link' && !section.hidden"></menu-link>
 
-          <menu-toggle section="section" ng-if="section.type === 'toggle'"></menu-toggle>
+          <menu-toggle section="section" ng-if="section.type === 'toggle' && !section.hidden"></menu-toggle>
 
           <ul ng-if="section.children" class="menu-nested-list">
             <li ng-repeat="child in section.children" ng-class="{'childActive' : isSectionSelected(child)}">
@@ -153,7 +153,18 @@
 
     </md-toolbar>
 
-    <md-content ng-view md-scroll-y flex layout-padding></md-content>
+    <md-content md-scroll-y layout="column" flex>
+      <div ng-view layout-padding flex="noshrink"></div>
+
+      <div layout="row" flex="noshrink">
+        <div id="license-footer">
+          Powered by Google &copy;2014&#8211;{{thisYear}}.
+          Code licensed under the <a href="/license">MIT License</a>.
+          Documentation licensed under
+          <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>.
+        </div>
+      </div>
+    </md-content>
 
   </div>
 
