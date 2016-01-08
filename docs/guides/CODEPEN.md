@@ -51,11 +51,7 @@ and serve the cached content.
 ### <a name="build_cache"></a> How do I populate the cache?
 
 * Make all changes necessary to add or update any svg images
-* run `./scripts/build-asset-cache.sh | pbcopy` to add an object
-  literal to your paste buffer.
-* paste object literal as `var assetMap = { ... }` in the
-  [asset-cache.js](../app/asset-cache.js)
-* [update](#update_cdn) the CDN with the new script
+* run `gulp docs-assets` to update the [asset-cache.js](../app/asset-cache.js)
 * commit asset-cache.js
 
 ### <a name="update_cdn"></a> Update Codepen Asset Cache

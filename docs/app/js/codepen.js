@@ -67,6 +67,8 @@
     function translate(demo, externalScripts) {
       var files = demo.files;
 
+      externalScripts.unshift(ASSET_CACHE_JS);
+
       return {
         title: demo.title,
         html: processHtml(demo),
@@ -75,7 +77,7 @@
         js: processJs(files.js),
         css: mergeFiles( files.css ).join(' '),
 
-        js_external: externalScripts.concat([CORE_JS, ASSET_CACHE_JS]).join(';'),
+        js_external: externalScripts.concat([CORE_JS]).join(';'),
         css_external: [CORE_CSS, DOC_CSS].join(';')
       };
     }
