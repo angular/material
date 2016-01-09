@@ -32,6 +32,9 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
     })
     .when('/getting-started', {
       templateUrl: 'partials/getting-started.tmpl.html'
+    })
+    .when('/license', {
+      templateUrl: 'partials/license.tmpl.html'
     });
   $mdThemingProvider.definePalette('docs-blue', $mdThemingProvider.extendPalette('blue', {
     '50': '#DCEFFF',
@@ -289,6 +292,15 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
     }]
   });
 
+  sections.push({
+    name: 'License',
+    url:  'license',
+    type: 'link',
+
+    // Add a hidden section so that the title in the toolbar is properly set
+    hidden: true
+  });
+
   function sortByName(a,b) {
     return a.name < b.name ? -1 : 1;
   }
@@ -522,6 +534,9 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   $scope.openMenu = openMenu;
   $scope.closeMenu = closeMenu;
   $scope.isSectionSelected = isSectionSelected;
+
+  // Grab the current year so we don't have to update the license every year
+  $scope.thisYear = (new Date()).getFullYear();
 
   $rootScope.$on('$locationChangeSuccess', openPage);
   $scope.focusMainContent = focusMainContent;
