@@ -5,7 +5,12 @@
   "keywords": "client-side, browser, material, material-design, design, angular, css, components, google",
   "homepage": "https://material.angularjs.org",
   "bugs": "https://github.com/angular/material/issues",
-  "license": "MIT",
+  "licenses": [
+      {
+        "type": "MIT",
+        "url": "https://github.com/angular/material/blob/master/LICENSE"
+      }
+    ],
   "repository": {
     "type": "git",
     "url": "git://github.com/angular/material.git"
