@@ -114,8 +114,7 @@ input {
 
 .md-ripple {
   position: absolute;
-  transform: translate(-50%, -50%) scale(0);
-  transform-origin: 50% 50%;
+  transform: scale(0);
   opacity: 0;
   border-radius: 50%;
   &.md-ripple-placed {
@@ -128,7 +127,7 @@ input {
                 transform $sizeDuration $swift-ease-out-timing-function;
   }
   &.md-ripple-scaled {
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
   }
   &.md-ripple-active, &.md-ripple-full, &.md-ripple-visible {
     opacity: 0.20;

@@ -365,8 +365,8 @@ InkRippleCtrl.prototype.createRipple = function (left, top) {
   var color       = this.calculateColor();
 
   ripple.css({
-    left:            left + 'px',
-    top:             top + 'px',
+    left:            (left - size / 2) + 'px',
+    top:             (top - size / 2) + 'px',
     background:      'black',
     width:           size + 'px',
     height:          size + 'px',
