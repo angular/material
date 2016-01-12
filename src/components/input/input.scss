@@ -91,6 +91,12 @@ md-input-container {
     bottom: 100%;
     @include rtl(left, 0, auto);
     @include rtl(right, auto, 0);
+
+    &.md-required:after {
+      content: ' *';
+      font-size: 13px;
+      vertical-align: top;
+    }
   }
 
   label:not(.md-no-float):not(.md-container-ignore),
