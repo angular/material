@@ -28,6 +28,7 @@
    * @param {String=} md-placeholder The date input placeholder value.
    * @param {boolean=} ng-disabled Whether the datepicker is disabled.
    * @param {boolean=} ng-required Whether a value is required for the datepicker.
+   * @param {boolean=} md-input-disabled Whether true disabled the input.
    *
    * @description
    * `<md-datepicker>` is a component used to select a single date.
@@ -39,6 +40,7 @@
    * * `required`: whether a required date is not set.
    * * `mindate`: whether the selected date is before the minimum allowed date.
    * * `maxdate`: whether the selected date is after the maximum allowed date.
+   * * `inputDisable`: whether true disable the input.
    *
    * @usage
    * <hljs lang="html">
@@ -256,10 +258,6 @@
     });
   }
 
-  DatePickerCtrl.prototype.validInputDate = function(dateInput) {
-      return (this.date !== undefined && this.date !== null && this.date !== '') ?  this.dateLocale.formatDate(dateInput) : '';
-  };
-
   /**
    * Sets up the controller's reference to ngModelController.
    * @param {!angular.NgModelController} ngModelCtrl
@@ -385,7 +383,7 @@
       if (this.dateUtil.isValidDate(this.maxDate)) {
         this.ngModelCtrl.$setValidity('maxdate', date <= this.maxDate);
       }
-      
+
       if (angular.isFunction(this.dateFilter)) {
         this.ngModelCtrl.$setValidity('filtered', this.dateFilter(date));
       }
@@ -441,17 +439,17 @@
 
     this.updateErrorState(parsedDate);
   };
-  
+
   /**
    * Check whether date is in range and enabled
    * @param {Date=} opt_date
    * @return {boolean} Whether the date is enabled.
    */
   DatePickerCtrl.prototype.isDateEnabled = function(opt_date) {
-    return this.dateUtil.isDateWithinRange(opt_date, this.minDate, this.maxDate) && 
+    return this.dateUtil.isDateWithinRange(opt_date, this.minDate, this.maxDate) &&
           (!angular.isFunction(this.dateFilter) || this.dateFilter(opt_date));
   };
-  
+
   /** Position and attach the floating calendar to the document. */
   DatePickerCtrl.prototype.attachCalendarPane = function() {
     var calendarPane = this.calendarPane;
@@ -565,6 +563,15 @@
 
       window.addEventListener('resize', this.windowResizeHandler);
     }
+  };
+
+  /**
+   * Validate if the date is a valid date to start the component.
+   * if not the input will display the placeholder.
+   * @param {string} dateInput
+   */
+  DatePickerCtrl.prototype.validInputDate = function(dateInput) {
+      return (this.date !== undefined && this.date !== null && this.date !== '') ?  this.dateLocale.formatDate(dateInput) : '';
   };
 
   /** Close the floating calendar pane. */
