@@ -274,7 +274,7 @@
       }
 
       self.date = value;
-      self.inputElement.value = self.validInputDate(self.date);
+      self.inputElement.value = this.dateLocale.formatDate(self.date);
       self.resizeInputElement();
       self.updateErrorState();
     };
@@ -291,7 +291,7 @@
     self.$scope.$on('md-calendar-change', function(event, date) {
       self.ngModelCtrl.$setViewValue(date);
       self.date = date;
-      self.inputElement.value = self.validInputDate(self.date);
+      self.inputElement.value = this.dateLocale.formatDate(self.date);
       self.closeCalendarPane();
       self.resizeInputElement();
       self.updateErrorState();
@@ -562,15 +562,6 @@
 
       window.addEventListener('resize', this.windowResizeHandler);
     }
-  };
-
-  /**
-   * Validate if the date is a valid date to start the component.
-   * if not the input will display the placeholder.
-   * @param {string} dateInput
-   */
-  DatePickerCtrl.prototype.validInputDate = function(dateInput) {
-      return (this.date !== undefined && this.date !== null && this.date !== '') ?  this.dateLocale.formatDate(dateInput) : '';
   };
 
   /** Close the floating calendar pane. */
