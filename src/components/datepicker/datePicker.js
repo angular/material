@@ -11,7 +11,6 @@
   // TODO(jelbourn): UTC mode
   // TODO(jelbourn): RTL
 
-
   angular.module('material.components.datepicker')
       .directive('mdDatepicker', datePickerDirective);
 
