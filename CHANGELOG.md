@@ -1,3 +1,16 @@
+<a name"1.0.2"></a>
+### 1.0.2 (2016-01-14)
+
+
+#### Bug Fixes
+
+* **datepicker:** temporarily disable test that only passes on FF. ([656694f4](https://github.com/angular/material/commit/656694f4))
+* **dialog:** fix focus trap sometimes not working. ([0a7ded9e](https://github.com/angular/material/commit/0a7ded9e), closes [#6590](https://github.com/angular/material/issues/6590))
+* **doc:** update CodePen community url ([985ec605](https://github.com/angular/material/commit/985ec605), closes [#6652](https://github.com/angular/material/issues/6652))
+* **layout:** use flex-start instead of start ([c0f5aea7](https://github.com/angular/material/commit/c0f5aea7), closes [#6402](https://github.com/angular/material/issues/6402), [#6403](https://github.com/angular/material/issues/6403))
+* **virtualRepeat:** Recover from scroll events that occur when hidden. ([bbca34f4](https://github.com/angular/material/commit/bbca34f4), closes [#5448](https://github.com/angular/material/issues/5448), [#5448](https://github.com/angular/material/issues/5448), [#6389](https://github.com/angular/material/issues/6389))
+
+
 <a name"1.0.1"></a>
 ### 1.0.1 (2015-12-17)
 
