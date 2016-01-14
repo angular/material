@@ -60,7 +60,7 @@
           '<div class="md-datepicker-input-container" ' +
               'ng-class="{\'md-datepicker-focused\': ctrl.isFocused}">' +
             '<input class="md-datepicker-input" aria-haspopup="true" ' +
-                'ng-focus="ctrl.setFocused(true)" ng-blur="ctrl.setFocused(false)">' +
+                'ng-focus="ctrl.setFocused(true)" ng-blur="ctrl.setFocused(false)" ng-disabled="ctrl.inputDisabled">' +
             '<md-button type="button" md-no-ink ' +
                 'class="md-datepicker-triangle-button md-icon-button" ' +
                 'ng-click="ctrl.openCalendarPane($event)" ' +
@@ -87,7 +87,8 @@
         minDate: '=mdMinDate',
         maxDate: '=mdMaxDate',
         placeholder: '@mdPlaceholder',
-        dateFilter: '=mdDateFilter'
+        dateFilter: '=mdDateFilter',
+        inputDisabled: '@mdInputDisabled'
       },
       controller: DatePickerCtrl,
       controllerAs: 'ctrl',
@@ -255,6 +256,10 @@
     });
   }
 
+  DatePickerCtrl.prototype.validInputDate = function(dateInput) {
+      return (this.date !== undefined && this.date !== null && this.date !== '') ?  this.dateLocale.formatDate(dateInput) : '';
+  };
+
   /**
    * Sets up the controller's reference to ngModelController.
    * @param {!angular.NgModelController} ngModelCtrl
@@ -272,7 +277,7 @@
       }
 
       self.date = value;
-      self.inputElement.value = self.dateLocale.formatDate(value);
+      self.inputElement.value = self.validInputDate(self.date);
       self.resizeInputElement();
       self.updateErrorState();
     };
@@ -289,7 +294,7 @@
     self.$scope.$on('md-calendar-change', function(event, date) {
       self.ngModelCtrl.$setViewValue(date);
       self.date = date;
-      self.inputElement.value = self.dateLocale.formatDate(date);
+      self.inputElement.value = self.validInputDate(self.date);
       self.closeCalendarPane();
       self.resizeInputElement();
       self.updateErrorState();
