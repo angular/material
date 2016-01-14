@@ -11,6 +11,7 @@
   // TODO(jelbourn): UTC mode
   // TODO(jelbourn): RTL
 
+
   angular.module('material.components.datepicker')
       .directive('mdDatepicker', datePickerDirective);
 
@@ -39,7 +40,6 @@
    * * `required`: whether a required date is not set.
    * * `mindate`: whether the selected date is before the minimum allowed date.
    * * `maxdate`: whether the selected date is after the maximum allowed date.
-   * * `inputDisable`: whether true disable the input.
    *
    * @usage
    * <hljs lang="html">
@@ -61,7 +61,8 @@
           '<div class="md-datepicker-input-container" ' +
               'ng-class="{\'md-datepicker-focused\': ctrl.isFocused}">' +
             '<input class="md-datepicker-input" aria-haspopup="true" ' +
-                'ng-focus="ctrl.setFocused(true)" ng-blur="ctrl.setFocused(false)" ng-disabled="ctrl.inputDisabled">' +
+                'ng-focus="ctrl.setFocused(true)" ng-blur="ctrl.setFocused(false)" '+
+                'ng-disabled="crtl.inputDisabled">' +
             '<md-button type="button" md-no-ink ' +
                 'class="md-datepicker-triangle-button md-icon-button" ' +
                 'ng-click="ctrl.openCalendarPane($event)" ' +
@@ -274,7 +275,7 @@
       }
 
       self.date = value;
-      self.inputElement.value = this.dateLocale.formatDate(self.date);
+      self.inputElement.value = self.dateLocale.formatDate(value);
       self.resizeInputElement();
       self.updateErrorState();
     };
@@ -291,7 +292,7 @@
     self.$scope.$on('md-calendar-change', function(event, date) {
       self.ngModelCtrl.$setViewValue(date);
       self.date = date;
-      self.inputElement.value = this.dateLocale.formatDate(self.date);
+      self.inputElement.value = self.dateLocale.formatDate(date);
       self.closeCalendarPane();
       self.resizeInputElement();
       self.updateErrorState();
