@@ -155,6 +155,40 @@ describe('md-date-picker', function() {
       expect(controller.ngModelCtrl.$error['maxdate']).toBe(true);
     });
 
+    it('should ignore the time portion when comparing max-date', function() {
+      // Given that selected date is the same day as maxdate but at a later time.
+      pageScope.maxDate = new Date(2015, JAN, 1, 5, 30);
+      pageScope.myDate = new Date(2015, JAN, 1, 7, 30);
+      pageScope.$apply();
+
+      expect(controller.ngModelCtrl.$error['maxdate']).toBeFalsy();
+    });
+
+    it('should ignore the time portion when comparing min-date', function() {
+      // Given that selected date is the same day as mindate but at an earlier time.
+      pageScope.minDate = new Date(2015, JAN, 1, 5, 30);
+      pageScope.myDate = new Date(2015, JAN, 1);
+      pageScope.$apply();
+
+      expect(controller.ngModelCtrl.$error['mindate']).toBeFalsy();
+    });
+
+    it('should allow selecting a date exactly equal to the max-date', function() {
+      pageScope.maxDate = new Date(2015, JAN, 1);
+      pageScope.myDate = new Date(2015, JAN, 1);
+      pageScope.$apply();
+
+      expect(controller.ngModelCtrl.$error['maxdate']).toBeFalsy();
+    });
+
+    it('should allow selecting a date exactly equal to the min-date', function() {
+      pageScope.minDate = new Date(2015, JAN, 1);
+      pageScope.myDate = new Date(2015, JAN, 1);
+      pageScope.$apply();
+
+      expect(controller.ngModelCtrl.$error['mindate']).toBeFalsy();
+    });
+
     describe('inside of a form element', function() {
       var formCtrl;
 
