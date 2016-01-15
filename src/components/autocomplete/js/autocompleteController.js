@@ -434,13 +434,13 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         select(ctrl.index);
         break;
       case $mdConstant.KEY_CODE.ESCAPE:
+        if (ctrl.hidden && !ctrl.loading) //fixes escape event not being sent up
+            return;
         event.stopPropagation();
         event.preventDefault();
-        clearValue();
-
-        // Force the component to blur if they hit escape
-        doBlur(true);
-
+        ctrl.matches = [];
+        ctrl.hidden  = true;
+        ctrl.index   = getDefaultIndex();
         break;
       default:
     }
