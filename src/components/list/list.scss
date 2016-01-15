@@ -42,11 +42,11 @@ md-list-item {
   // Ensure nested dividers are properly positioned
   position: relative;
 
-  &.md-proxy-focus.md-focused .md-no-style {
+  &._md-proxy-focus.md-focused ._md-no-style {
     transition: background-color 0.15s linear;
   }
 
-  &.md-button-wrap {
+  &._md-button-wrap {
     position: relative;
 
     > .md-button:first-child {
@@ -67,9 +67,7 @@ md-list-item {
         height: 100%;
       }
 
-      .md-list-item-inner {
-        width: 100%;
-        height: 100%;
+      ._md-list-item-inner {
         padding: 0 16px;
       }
 
@@ -77,8 +75,8 @@ md-list-item {
 
   }
 
-  &.md-no-proxy,
-  .md-no-style {
+  &._md-no-proxy,
+  ._md-no-style {
     position: relative;
     padding: $list-item-padding-vertical $list-item-padding-horizontal;
     flex: 1 1 auto;
@@ -123,7 +121,7 @@ md-list-item {
   }
 }
 
-md-list-item, md-list-item .md-list-item-inner {
+md-list-item, md-list-item ._md-list-item-inner {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -186,7 +184,7 @@ md-list-item, md-list-item .md-list-item-inner {
     margin-right: -6px;
   }
 
-  button.md-button.md-secondary-container {
+  button.md-button._md-secondary-container {
     background-color: transparent;
     align-self: center;
     border-radius: 50%;
@@ -203,7 +201,7 @@ md-list-item, md-list-item .md-list-item-inner {
     }
   }
 
-  .md-secondary-container,
+  ._md-secondary-container,
   .md-secondary {
     position: absolute;
     top: 50%;
@@ -212,12 +210,12 @@ md-list-item, md-list-item .md-list-item-inner {
     transform: translate3d(0, -50%, 0);
   }
 
-  & > .md-button.md-secondary-container > .md-secondary {
+  & > .md-button._md-secondary-container > .md-secondary {
     margin-left: 0;
     position: static;
   }
 
-  & > p, & > .md-list-item-inner > p {
+  & > p, & > ._md-list-item-inner > p {
     flex: 1;
     margin: 0;
   }
@@ -225,9 +223,9 @@ md-list-item, md-list-item .md-list-item-inner {
 
 
 md-list-item.md-2-line,
-md-list-item.md-2-line > .md-no-style,
+md-list-item.md-2-line > ._md-no-style,
 md-list-item.md-3-line,
-md-list-item.md-3-line > .md-no-style {
+md-list-item.md-3-line > ._md-no-style {
   align-items: flex-start;
   justify-content: center;
 
@@ -272,7 +270,7 @@ md-list-item.md-3-line > .md-no-style {
 }
 
 md-list-item.md-2-line,
-md-list-item.md-2-line > .md-no-style {
+md-list-item.md-2-line > ._md-no-style {
   height:auto;
   min-height: $list-item-two-line-height;
   &.md-long-text {
@@ -291,7 +289,7 @@ md-list-item.md-2-line > .md-no-style {
 }
 
 md-list-item.md-3-line,
-md-list-item.md-3-line > .md-no-style {
+md-list-item.md-3-line > ._md-no-style {
   height:auto;
   min-height: $list-item-three-line-height;
 

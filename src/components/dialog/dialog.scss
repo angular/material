@@ -3,7 +3,7 @@ $dialog-padding: $baseline-grid * 3;
 .md-dialog-is-showing {
   max-height: 100%;
 }
-.md-dialog-container {
+._md-dialog-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,12 +18,12 @@ $dialog-padding: $baseline-grid * 3;
 
 md-dialog {
 
-  &.md-transition-in {
+  &._md-transition-in {
     opacity: 1;
     transition: $swift-ease-out;
     transform: translate(0,0) scale(1.0);
   }
-  &.md-transition-out {
+  &._md-transition-out {
     opacity: 0;
     transition: $swift-ease-out;
     transform: translate(0,100%) scale(0.2);
@@ -67,21 +67,9 @@ md-dialog {
 
     .md-subheader {
       margin: 0;
-
-      &.sticky-clone {
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
-      }
-    }
-    &.sticky-container {
-      padding: 0;
-
-      &> div {
-        padding: $dialog-padding;
-        padding-top: 0;
-      }
     }
 
-    .md-dialog-content-body {
+    ._md-dialog-content-body {
       width:100%;
     }
 

@@ -58,35 +58,35 @@ md-slider {
     box-sizing: border-box;
   }
 
-  .md-slider-wrapper {
+  ._md-slider-wrapper {
     position: relative;
   }
 
   /**
    * Track
    */
-  .md-track-container {
+  ._md-track-container {
     width: 100%;
     position: absolute;
     top: ($slider-height / 2) - ($slider-track-height) / 2;
     height: $slider-track-height;
   }
-  .md-track {
+  ._md-track {
     position: absolute;
     left: 0;
     right: 0;
     height: 100%;
   }
-  .md-track-fill {
+  ._md-track-fill {
     transition: width 0.05s linear;
   }
-  .md-track-ticks {
+  ._md-track-ticks {
     position: absolute;
     left: 0;
     right: 0;
     height: 100%;
   }
-  .md-track-ticks canvas {
+  ._md-track-ticks canvas {
     // Restrict the width of the canvas so that ticks are rendered correctly
     // when parent elements are resized. Else, the position of the ticks might
     // be incorrect as we only update the canvas width attribute on window resize.
@@ -96,14 +96,14 @@ md-slider {
   /**
    * Slider thumb
    */
-  .md-thumb-container {
+  ._md-thumb-container {
     position: absolute;
     left: 0;
     top: 50%;
     transform: translate3d(-50%,-50%,0);
     transition: left 0.1s linear;
   }
-  .md-thumb {
+  ._md-thumb {
     z-index: 1;
 
     // Positioning the outer area of the thumb 6px bigger than it needs to be keeps
@@ -130,7 +130,7 @@ md-slider {
   }
 
   /* The sign that's focused in discrete mode */
-  .md-sign {
+  ._md-sign {
 
     /* Center the children (slider-thumb-text) */
     display: flex;
@@ -164,7 +164,7 @@ md-slider {
       transition: all 0.2s ease-in-out;
     }
 
-    .md-thumb-text {
+    ._md-thumb-text {
       z-index: 1;
       font-size: 12px;
       font-weight: bold;
@@ -174,20 +174,20 @@ md-slider {
   /**
    * The border/background that comes in when focused in non-discrete mode
    */
-  .md-focus-thumb {
+  ._md-focus-thumb {
     @include slider-thumb-position($slider-focus-thumb-width, $slider-focus-thumb-height);
     display: none;
     opacity: 0;
     background-color: #C0C0C0;
     animation: sliderFocusThumb 0.4s linear;
   }
-  .md-focus-ring {
+  ._md-focus-ring {
     @include slider-thumb-position($slider-focus-thumb-width, $slider-focus-thumb-height);
     transform: scale(0);
     transition: all 0.2s linear;
     opacity: 0.26;
   }
-  .md-disabled-thumb {
+  ._md-disabled-thumb {
     @include slider-thumb-position(
       $slider-thumb-width + $slider-thumb-disabled-border * 2,
       $slider-thumb-height + $slider-thumb-disabled-border * 2
@@ -198,13 +198,13 @@ md-slider {
     display: none;
   }
 
-  &.md-min {
-    .md-thumb {
+  &._md-min {
+    ._md-thumb {
       &:after {
         background-color: white;
       }
     }
-    .md-sign {
+    ._md-sign {
       opacity: 0;
     }
   }
@@ -214,36 +214,36 @@ md-slider {
   }
 
   /* Don't animate left/right while panning */
-  &.md-dragging {
-    .md-thumb-container,
-    .md-track-fill {
+  &._md-dragging {
+    ._md-thumb-container,
+    ._md-track-fill {
       transition: none;
     }
   }
 
   &:not([md-discrete]) {
     /* Hide the sign and ticks in non-discrete mode */
-    .md-track-ticks,
-    .md-sign {
+    ._md-track-ticks,
+    ._md-sign {
       display: none;
     }
 
     &:not([disabled]) {
       &:hover {
-        .md-thumb {
+        ._md-thumb {
           transform: scale($slider-thumb-hover-scale);
         }
       }
 
       &:focus,
-      &.md-active {
-        .md-focus-thumb {
+      &._md-active {
+        ._md-focus-thumb {
           display: block;
         }
-        .md-focus-ring {
+        ._md-focus-ring {
           transform: scale(1);
         }
-        .md-thumb {
+        ._md-thumb {
           transform: scale($slider-thumb-focus-scale);
         }
       }
@@ -252,16 +252,16 @@ md-slider {
 
   &[md-discrete] {
     /* Hide the focus thumb in discrete mode */
-    .md-focus-thumb,
-    .md-focus-ring {
+    ._md-focus-thumb,
+    ._md-focus-ring {
       display: none;
     }
 
     &:not([disabled]) {
       &:focus,
-      &.md-active {
-        .md-sign,
-        .md-sign:after {
+      &._md-active {
+        ._md-sign,
+        ._md-sign:after {
           opacity: 1;
           transform: translate3d(0,0,0) scale(1.0);
         }
@@ -270,23 +270,23 @@ md-slider {
   }
 
   &[disabled] {
-    .md-track-fill {
+    ._md-track-fill {
       display: none;
     }
-    .md-sign {
+    ._md-sign {
       display: none;
     }
-    .md-thumb {
+    ._md-thumb {
       transform: scale($slider-thumb-disabled-scale);
     }
-    .md-disabled-thumb {
+    ._md-disabled-thumb {
       display: block;
     }
   }
 }
 
 @media screen and (-ms-high-contrast: active) {
-  md-slider.md-default-theme .md-track {
+  md-slider.md-default-theme ._md-track {
     border-bottom: 1px solid #fff;
   }
 }
