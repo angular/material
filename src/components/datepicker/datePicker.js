@@ -378,9 +378,10 @@
       }
 
       if (this.dateUtil.isValidDate(this.maxDate)) {
-        this.ngModelCtrl.$setValidity('maxdate', date <= this.maxDate);
+        var isBeforeMaxDate = date < this.dateUtil.incrementDays(this.maxDate, 1);
+        this.ngModelCtrl.$setValidity('maxdate', isBeforeMaxDate);
       }
-      
+
       if (angular.isFunction(this.dateFilter)) {
         this.ngModelCtrl.$setValidity('filtered', this.dateFilter(date));
       }
