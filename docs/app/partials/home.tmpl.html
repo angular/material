@@ -1,9 +1,13 @@
 <div ng-controller="HomeCtrl" class="doc-content">
   <md-content>
     <h2 class="md-headline" style="margin-top: 0;">What is Angular Material?</h2>
-    <p>For developers using AngularJS, Angular Material is the reference implementation of Google's Material Design Specification. This project provides a set of reusable, well-tested, and accessible UI components based on Material Design.</p>
+    <p>
+      For developers using AngularJS, Angular Material is the reference implementation of Google's
+      Material Design Specification. This project provides a set of reusable, well-tested, and
+      accessible UI components based on Material Design.
+    </p>
     <ul class="buckets" layout layout-align="center center" layout-wrap>
-      <li flex="25" flex-md="50" flex-sm="50" ng-repeat="(index, link) in [
+      <li flex="50" flex-gt-md="25" ng-repeat="(index, link) in [
         { href: './getting-started', icon: 'school', text: 'Getting Started' },
         { href: './demo', icon: 'play_circle_fill', text: 'Demos' },
         { href: './CSS/typography', icon: 'build', text: 'Customization' },
@@ -22,14 +26,13 @@
     <br/>
     <h2 class="md-headline">What is Material Design?</h2>
     <p>
-      Material Design is a specification for a
-      unified system of visual, motion, and interaction design that adapts across different devices and different
-      screen sizes.
+      Material Design is a specification for a unified system of visual, motion, and interaction
+      design that adapts across different devices and different screen sizes.
     </p>
     <ul class="buckets" layout layout-align="center center" layout-wrap>
-      <li flex="50" flex-md="100" flex-sm="100" ng-repeat="(index, link) in [
-        { href: 'https://www.youtube.com/watch?v=Q8TXgCzxEnw', icon: 'ondemand_video', text: 'Watch a video about Material Design' },
-        { href: 'http://www.google.com/design/spec/material-design/', icon: 'launch', text: 'Learn more about Material Design' }
+      <li flex="100" flex-gt-xs="50" ng-repeat="(index, link) in [
+        { href: 'https://www.youtube.com/watch?v=Q8TXgCzxEnw', icon: 'ondemand_video', text: 'Watch a video' },
+        { href: 'http://www.google.com/design/spec/material-design/', icon: 'launch', text: 'Learn More' }
       ]">
         <md-button
             class="md-primary md-raised"
@@ -43,10 +46,37 @@
     </ul>
 
     <br/>
+    <h2 class="md-headline">What is the current project status?</h2>
+    <p>
+      Angular Material recently released Version 1 which we consider to be stable and ready for
+      production use. Efforts are currently being focused on fixing bugs and other minor
+      improvements.
+    </p>
+     <ul class="buckets" layout layout-align="center center" layout-wrap>
+      <li flex="100" flex-gt-xs="50" ng-repeat="(index, link) in [
+        {
+          href: 'https://github.com/angular/material/blob/master/CHANGELOG.md',
+          icon: 'access_time',
+          text: 'Changelog'
+        }
+      ]">
+        <md-button
+            class="md-primary md-raised"
+            ng-href="{{link.href}}"
+            aria-label="{{link.text}}">
+          <md-icon class="block" md-svg-src="img/icons/ic_{{link.icon}}_24px.svg"></md-icon>
+          {{link.text}}
+        </md-button>
+      </li>
+    </ul>
+
+
+    <br/>
     <md-divider></md-divider>
     <p class="md-caption" style="text-align: center; margin-bottom: 0;">
       These docs were generated from
-      (<a ng-href="{{BUILDCONFIG.repository}}/{{menu.version.current.github}}" target="_blank">v{{BUILDCONFIG.version}} - SHA {{BUILDCONFIG.commit.substring(0,7)}}</a>)
+      (<a ng-href="{{BUILDCONFIG.repository}}/{{menu.version.current.github}}" target="_blank">
+      v{{BUILDCONFIG.version}} - SHA {{BUILDCONFIG.commit.substring(0,7)}}</a>)
       on (<strong>{{BUILDCONFIG.date}}</strong>) GMT.
     </p>
   </md-content>
