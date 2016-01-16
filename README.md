@@ -35,8 +35,8 @@ Material is targeted for all browsers with versions n-1; where n is the current 
 
 Developers interested in contributing should read the following guidelines:
 
-- [Issue Guidelines](docs/guides/CONTRIBUTING.md#submit)
-- [Contributing Guidelines](docs/guides/CONTRIBUTING.md)
+- [Issue Guidelines](CONTRIBUTING.md#submit)
+- [Contributing Guidelines](CONTRIBUTING.md)
 - [Coding Guidelines](docs/guides/CODING.md)
 - [ChangeLog](CHANGELOG.md)
 
