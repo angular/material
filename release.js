@@ -57,6 +57,7 @@
 
   //-- utility methods
 
+  /** confirms that you will be able to perform the release before attempting */
   function validate () {
     if (exec('npm whoami') !== 'angularcore') {
       err('You must be authenticated with npm as "angularcore" to perform a release.');
@@ -71,11 +72,13 @@
     }
   }
 
+  /** creates the version branch and adds abort steps */
   function checkoutVersionBranch () {
     exec('git checkout -q -b release/{{newVersion}}');
     abortCmds.push('git branch -D release/{{newVersion}}');
   }
 
+  /** writes the new version to package.json */
   function updateVersion () {
     start('Updating {{"package.json".cyan}} version from {{oldVersion.cyan}} to {{newVersion.cyan}}...');
     pkg.version = newVersion;
@@ -85,6 +88,7 @@
     pushCmds.push('git add package.json');
   }
 
+  /** generates the changelog from the commits since the last release */
   function createChangelog () {
     start('Generating changelog from {{oldVersion.cyan}} to {{newVersion.cyan}}...');
     exec([
@@ -97,10 +101,12 @@
     pushCmds.push('git add CHANGELOG.md');
   }
 
+  /** utility method for clearing the terminal */
   function clear () {
     write("\u001b[2J\u001b[0;0H");
   }
 
+  /** prompts the user for the new version */
   function getNewVersion () {
     header();
     var options = getVersionOptions(oldVersion), key, type, version;
@@ -123,11 +129,8 @@
 
     function getVersionOptions (version) {
       return version.match(/-rc\d+$/)
-          ? [ increment(version, 'rc'),
-        increment(version, 'minor') ]
-          : [ increment(version, 'patch'),
-        increment(version, 'minor'),
-        increment(version, 'major') ].map(addRC);
+          ? [ increment(version, 'rc'), increment(version, 'minor') ]
+          : [ increment(version, 'patch'), addRC(increment(version, 'minor')) ];
 
       function increment (versionString, type) {
         var version = parseVersion(versionString);
@@ -144,8 +147,6 @@
           version[ type ]++;
           //-- reset any version numbers lower than the one changed
           switch (type) {
-            case 'major':
-              version.minor = 0;
             case 'minor':
               version.patch = 0;
             case 'patch':
@@ -178,6 +179,7 @@
     }
   }
 
+  /** adds git tag for release and pushes to github */
   function tagRelease () {
     pushCmds.push(
         'git tag v{{newVersion}}',
@@ -186,6 +188,7 @@
     );
   }
 
+  /** amends the commit to include local changes (ie. changelog) */
   function commitChanges () {
     start('Committing changes...');
     exec('git commit -am "release: version {{newVersion}}"');
@@ -193,6 +196,7 @@
     pushCmds.push('git commit --amend --no-edit');
   }
 
+  /** utility method for cloning github repos */
   function cloneRepo (repo) {
     start('Cloning ' + repo.cyan + ' from Github...');
     exec('rm -rf ' + repo);
@@ -201,17 +205,21 @@
     cleanupCmds.push('rm -rf ' + repo);
   }
 
+  // TODO: Remove this method and use template strings instead
+  /** utility method for inserting variables into a string */
   function fill (str) {
     return str.replace(/\{\{[^\}]+\}\}/g, function (match) {
       return eval(match.substr(2, match.length - 4));
     });
   }
 
+  /** writes an array of commands to a bash script */
   function writeScript (name, cmds) {
     fs.writeFileSync(name, '#!/usr/bin/env bash\n\n' + fill(cmds.join('\n')));
     exec('chmod +x ' + name);
   }
 
+  /** updates the version for bower-material in package.json and bower.json */
   function updateBowerVersion () {
     start('Updating bower version...');
     var options = { cwd: './bower-material' },
@@ -257,6 +265,7 @@
     );
   }
 
+  /** builds the website for the new version */
   function updateSite () {
     start('Adding new version of the docs site...');
     var options = { cwd: './code.material.angularjs.org' };
@@ -264,26 +273,26 @@
 
     //-- build files for bower
     exec([
-           'rm -rf dist',
-           'gulp docs',
-           'sed -i \'\' \'s,http:\\/\\/localhost:8080\\/angular-material,https:\\/\\/cdn.gitcdn.xyz/cdn/angular/bower-material/v{{newVersion}}/angular-material,g\' dist/docs/docs.js',
-           'sed -i \'\' \'s,http:\\/\\/localhost:8080\\/docs\\.css,https:\\/\\/material.angularjs.org/{{newVersion}}/docs.css,g\' dist/docs/docs.js',
-           'sed -i \'\' \'s,base\ href=\\",base\ href=\\"/{{newVersion}},g\' dist/docs/index.html'
-         ]);
+        'rm -rf dist',
+        'gulp docs'
+    ]);
+    replaceFilePaths();
 
     //-- copy files over to site repo
     exec([
-           'rm -rf ./*-rc*',
-           'cp -Rf ../dist/docs {{newVersion}}',
-           'rm -rf latest && cp -Rf ../dist/docs latest',
-           'git add -A',
-           'git commit -m "release: version {{newVersion}}"',
-           'rm -rf ../dist'
-         ], options);
+        'rm -rf ./*-rc*',
+        'cp -Rf ../dist/docs {{newVersion}}',
+        'rm -rf latest && cp -Rf ../dist/docs latest',
+        'git add -A',
+        'git commit -m "release: version {{newVersion}}"',
+        'rm -rf ../dist'
+    ], options);
+    replaceBaseHref(newVersion);
+    replaceBaseHref('latest');
 
     //-- update firebase.json file
     writeFirebaseJson();
-    exec([ 'git commit --amend --no-edit -a' ]);
+    exec([ 'git commit --amend --no-edit -a' ], options);
     done();
 
     //-- add steps to push script
@@ -331,6 +340,28 @@
     }
   }
 
+  /** replaces localhost file paths with public URLs */
+  function replaceFilePaths () {
+    //-- handle docs.js
+    var path = __dirname + '/dist/docs/docs.js';
+    var file = fs.readFileSync(path);
+    var contents = file.toString()
+        .replace(/http:\/\/localhost:8080\/angular-material/g, 'https://cdn.gitcdn.xyz/cdn/angular/bower-material/v{{newVersion}}/angular-material')
+        .replace(/http:\/\/localhost:8080\/docs.css/g, 'https://material.angularjs.org/{{newVersion}}/docs.css');
+    fs.writeFileSync(path, contents);
+
+  }
+
+  /** replaces base href in index.html for new version as well as latest */
+  function replaceBaseHref (folder) {
+    //-- handle index.html
+    var path = __dirname + '/code.material.angularjs.org/' + folder + '/index.html';
+    var file = fs.readFileSync(path);
+    var contents = file.toString().replace(/base href="\//g, 'base href="/' + folder + '/');
+    fs.writeFileSync(path, contents);
+  }
+
+  /** copies the changelog back over to master branch */
   function updateMaster () {
     pushCmds.push(
         comment('update package.json in master'),
@@ -363,6 +394,7 @@
     }
   }
 
+  /** utility method to output header */
   function header () {
     clear();
     line();
@@ -370,6 +402,7 @@
     line();
   }
 
+  /** outputs a centered message in the terminal */
   function center (msg) {
     msg        = ' ' + msg.trim() + ' ';
     var length = msg.length;
@@ -377,10 +410,12 @@
     return Array(spaces + 1).join('-') + msg.green + Array(lineWidth - msg.length - spaces + 1).join('-');
   }
 
+  /** outputs done text when a task is completed */
   function done () {
     log('done'.green);
   }
 
+  /** utility method for executing terminal commands */
   function exec (cmd, userOptions) {
     if (cmd instanceof Array) {
       return cmd.map(function (cmd) { return exec(cmd, userOptions); });
@@ -388,16 +423,18 @@
     try {
       var options = Object.create(defaultOptions);
       for (var key in userOptions) options[ key ] = userOptions[ key ];
-      return child_process.execSync(fill(cmd) + ' 2> /dev/null', options).trim();
+      return child_process.execSync(fill(cmd) + ' 2> /dev/null', options).toString().trim();
     } catch (err) {
       return err;
     }
   }
 
+  /** returns a commented message for use in bash scripts */
   function comment (msg) {
     return '\n# ' + msg + '\n';
   }
 
+  /** prints the left side of a task while it is being performed */
   function start (msg) {
     var parsedMsg = fill(msg),
         msgLength = strip(parsedMsg).length,
@@ -405,15 +442,18 @@
     write(parsedMsg + Array(diff + 1).join(' '));
   }
 
+  /** outputs to the terminal with string variable replacement */
   function log (msg) {
     msg = msg || '';
     console.log(fill(msg));
   }
 
+  /** writes a message without a newline */
   function write (msg) {
     process.stdout.write(fill(msg));
   }
 
+  /** prints a horizontal line to the terminal */
   function line () {
     log(Array(lineWidth + 1).join('-'));
   }
