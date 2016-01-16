@@ -1,5 +1,5 @@
 describe('radioButton', function() {
-  var CHECKED_CSS = 'md-checked';
+  var CHECKED_CSS = '_md-checked';
 
   beforeEach(module('material.components.radioButton'));
 
@@ -121,7 +121,7 @@ describe('radioButton', function() {
                           '</md-radio-group>')($rootScope);
     $rootScope.$apply();
     element.triggerHandler('mousedown');
-    expect(element[0]).not.toHaveClass('md-focused');
+    expect(element[0]).not.toHaveClass('_md-focused');
   }));
 
   it('should set focus state on focus and remove on blur', inject(function($compile, $rootScope) {
@@ -131,9 +131,9 @@ describe('radioButton', function() {
                           '</md-radio-group>')($rootScope);
     $rootScope.$apply();
     element.triggerHandler('focus');
-    expect(element[0]).toHaveClass('md-focused');
+    expect(element[0]).toHaveClass('_md-focused');
     element.triggerHandler('blur');
-    expect(element[0]).not.toHaveClass('md-focused');
+    expect(element[0]).not.toHaveClass('_md-focused');
   }));
 
   it('should set focus state on keyboard interaction after clicking', inject(function($compile, $rootScope, $mdConstant) {
@@ -149,7 +149,7 @@ describe('radioButton', function() {
       currentTarget: element[0],
       target: element[0]
     });
-    expect(element[0]).toHaveClass('md-focused');
+    expect(element[0]).toHaveClass('_md-focused');
   }));
 
   describe('ng core radio button tests', function() {

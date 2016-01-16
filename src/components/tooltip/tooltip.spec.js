@@ -117,7 +117,7 @@ describe('<md-tooltip> directive', function() {
       showTooltip(true);
 
       expect(findTooltip().length).toBe(1);
-      expect(findTooltip().hasClass('md-show')).toBe(true);
+      expect(findTooltip().hasClass('_md-show')).toBe(true);
 
       showTooltip(false);
 

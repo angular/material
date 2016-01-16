@@ -54,7 +54,7 @@ describe('mdProgressLinear', function() {
     });
 
     var progress = element.find('md-progress-linear'),
-      bar2 = angular.element(progress[0].querySelectorAll('.md-bar2'))[0];
+      bar2 = angular.element(progress[0].querySelectorAll('._md-bar2'))[0];
 
     expect(bar2.style[$mdConstant.CSS.TRANSFORM]).toEqual('');
   }));
@@ -70,7 +70,7 @@ describe('mdProgressLinear', function() {
     });
 
     var progress = element.find('md-progress-linear'),
-      bar2 = angular.element(progress[0].querySelectorAll('.md-bar2'))[0];
+      bar2 = angular.element(progress[0].querySelectorAll('._md-bar2'))[0];
 
     expect(bar2.style[$mdConstant.CSS.TRANSFORM]).toEqual('translateX(-25%) scale(0.5, 1)');
   }));
@@ -102,7 +102,7 @@ describe('mdProgressLinear', function() {
     });
 
     var progress = element.find('md-progress-linear'),
-        bar1 = angular.element(progress[0].querySelectorAll('.md-bar1'))[0];
+        bar1 = angular.element(progress[0].querySelectorAll('._md-bar1'))[0];
 
     expect(bar1.style[$mdConstant.CSS.TRANSFORM]).toEqual('translateX(-12.5%) scale(0.75, 1)');
   }));
@@ -118,7 +118,7 @@ describe('mdProgressLinear', function() {
     });
 
     var progress = element.find('md-progress-linear'),
-      bar2 = angular.element(progress[0].querySelectorAll('.md-bar2'))[0];
+      bar2 = angular.element(progress[0].querySelectorAll('._md-bar2'))[0];
 
     expect(bar2.style[$mdConstant.CSS.TRANSFORM]).toBeFalsy();
   }));

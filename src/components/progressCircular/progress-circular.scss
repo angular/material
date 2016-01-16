@@ -18,18 +18,18 @@ md-progress-circular {
 
   z-index: $z-index-progress-circular; // Used to fix a Chrome bug with spinner animation
 
-  .md-spinner-wrapper {
+  ._md-spinner-wrapper {
     display:block;
     position: absolute;
     overflow: hidden;
     top: 50%;
     left: 50%;
 
-    .md-inner {
+    ._md-inner {
        width: $progress-circular-size;
        height: $progress-circular-size;
        position: relative;
-       .md-gap {
+       ._md-gap {
          position: absolute;
          left: $progress-circular-size * 0.5 - 1;
          right: $progress-circular-size * 0.5 - 1;
@@ -39,13 +39,13 @@ md-progress-circular {
          border-top-style: solid;
          box-sizing: border-box;
        }
-       .md-left, .md-right {
+       ._md-left, ._md-right {
          position: absolute;
          top: 0;
          height: $progress-circular-size;
          width: $progress-circular-size * 0.50;
          overflow: hidden;
-         .md-half-circle {
+         ._md-half-circle {
            position: absolute;
            top: 0;
            width: $progress-circular-size;
@@ -57,16 +57,16 @@ md-progress-circular {
            border-radius: 50%;
          }
        }
-       .md-left {
+       ._md-left {
          left: 0;
-         .md-half-circle {
+         ._md-half-circle {
            left: 0;
            border-right-color: transparent;
          }
        }
-       .md-right {
+       ._md-right {
          right: 0;
-         .md-half-circle {
+         ._md-half-circle {
            right: 0;
            border-left-color: transparent;
          }
@@ -75,42 +75,42 @@ md-progress-circular {
   }
 
 
-  .md-mode-indeterminate .md-spinner-wrapper {
+  ._md-mode-indeterminate ._md-spinner-wrapper {
     animation: outer-rotate $progress-circular-outer-duration linear infinite;
-    .md-inner {
+    ._md-inner {
       animation: sporadic-rotate $progress-circular-sporadic-duration $progress-circular-ease-in-out infinite;
-      .md-left, .md-right {
-        .md-half-circle {
+      ._md-left, ._md-right {
+        ._md-half-circle {
           animation-iteration-count: infinite;
           animation-duration: ($progress-circular-duration * 0.25);
           animation-timing-function: $progress-circular-ease-in-out;
         }
       }
-      .md-left {
-        .md-half-circle {
+      ._md-left {
+        ._md-half-circle {
           animation-name: left-wobble;
         }
       }
-      .md-right {
-        .md-half-circle {
+      ._md-right {
+        ._md-half-circle {
           animation-name: right-wobble;
         }
       }
     }
   }
 
-  md-progress-circular.ng-hide {
-    .md-spinner-wrapper  {
+  &.ng-hide {
+    ._md-spinner-wrapper  {
       animation: none;
-      .md-inner {
+      ._md-inner {
         animation: none;
-        .md-left {
-          .md-half-circle {
+        ._md-left {
+          ._md-half-circle {
             animation-name: none;
           }
         }
-        .md-right {
-          .md-half-circle {
+        ._md-right {
+          ._md-half-circle {
             animation-name: none;
           }
         }
@@ -118,17 +118,17 @@ md-progress-circular {
     }
   }
 
-  .md-spinner-wrapper.ng-hide {
+  ._md-spinner-wrapper.ng-hide {
     animation: none;
-    .md-inner {
+    ._md-inner {
       animation: none;
-      .md-left {
-        .md-half-circle {
+      ._md-left {
+        ._md-half-circle {
           animation-name: none;
         }
       }
-      .md-right {
-        .md-half-circle {
+      ._md-right {
+        ._md-half-circle {
           animation-name: none;
         }
       }
