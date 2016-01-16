@@ -62,10 +62,10 @@ md-toast {
   }
 
   /* Transition differently when swiping */
-  &.md-swipeleft,
-  &.md-swiperight,
-  &.md-swipeup,
-  &.md-swipedown {
+  &._md-swipeleft,
+  &._md-swiperight,
+  &._md-swipeup,
+  &._md-swipedown {
     .md-toast-content {
       transition: $swift-ease-out;
     }
@@ -76,7 +76,7 @@ md-toast {
     .md-toast-content {
       transform: translate3d(0, 100%, 0);
     }
-    &.md-top {
+    &._md-top {
       .md-toast-content {
         transform: translate3d(0, -100%, 0);
       }
@@ -98,17 +98,17 @@ md-toast {
       transform: translate3d(0, 100%, 0);
     }
 
-    &.md-swipeup {
+    &._md-swipeup {
       .md-toast-content {
         transform: translate3d(0, -50%, 0);
       }
     }
-    &.md-swipedown {
+    &._md-swipedown {
       .md-toast-content {
         transform: translate3d(0, 50%, 0);
       }
     }
-    &.md-top {
+    &._md-top {
       .md-toast-content {
         transform: translate3d(0, -100%, 0);
       }
@@ -143,12 +143,12 @@ md-toast {
     padding: 0;
 
     &.ng-leave.ng-leave-active {
-      &.md-swipeup {
+      &._md-swipeup {
         .md-toast-content {
           transform: translate3d(0, -50%, 0);
         }
       }
-      &.md-swipedown {
+      &._md-swipedown {
         .md-toast-content {
           transform: translate3d(0, 50%, 0);
         }
@@ -160,16 +160,16 @@ md-toast {
 @media (min-width: $layout-breakpoint-sm) {
   md-toast {
     min-width: 288px + $toast-margin * 2;
-    &.md-bottom {
+    &._md-bottom {
       bottom: 0;
     }
-    &.md-left {
+    &._md-left {
       left: 0;
     }
-    &.md-right {
+    &._md-right {
       right: 0;
     }
-    &.md-top {
+    &._md-top {
       top: 0;
     }
 
@@ -178,12 +178,12 @@ md-toast {
    * make it rotate when the user swipes it away
    */
     &.ng-leave.ng-leave-active {
-      &.md-swipeleft {
+      &._md-swipeleft {
         .md-toast-content {
           transform: translate3d(-50%, 0, 0);
         }
       }
-      &.md-swiperight {
+      &._md-swiperight {
         .md-toast-content {
           transform: translate3d(50%, 0, 0);
         }
@@ -208,6 +208,6 @@ md-toast {
 
 
 // While animating, set the toast parent's overflow to hidden so scrollbars do not appear
-.md-toast-animating {
+._md-toast-animating {
   overflow: hidden !important;
 }

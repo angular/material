@@ -3,10 +3,10 @@ md-checkbox.md-THEME_NAME-theme {
   .md-ripple {
     color: '{{accent-600}}';
   }
-  &.md-checked .md-ripple {
+  &._md-checked .md-ripple {
     color: '{{background-600}}';
   }
-  &.md-checked.md-focused .md-container:before {
+  &._md-checked._md-focused ._md-container:before {
     background-color: '{{accent-color-0.26}}';
   }
 
@@ -14,18 +14,18 @@ md-checkbox.md-THEME_NAME-theme {
     color: '{{foreground-2}}';
   }
 
-  &.md-checked .md-ink-ripple {
+  &._md-checked .md-ink-ripple {
     color: '{{accent-color-0.87}}';
   }
 
-  .md-icon {
+  ._md-icon {
     border-color: '{{foreground-2}}';
   }
-  &.md-checked .md-icon {
+  &._md-checked ._md-icon {
     background-color: '{{accent-color-0.87}}';
   }
 
-  &.md-checked .md-icon:after {
+  &._md-checked ._md-icon:after {
     border-color: '{{accent-contrast-0.87}}';
   }
 
@@ -34,7 +34,7 @@ md-checkbox.md-THEME_NAME-theme {
       .md-ripple {
         color: '{{primary-600}}';
       }
-      &.md-checked .md-ripple {
+      &._md-checked .md-ripple {
         color: '{{background-600}}';
       }
 
@@ -42,22 +42,22 @@ md-checkbox.md-THEME_NAME-theme {
         color: '{{foreground-2}}';
       }
 
-      &.md-checked .md-ink-ripple {
+      &._md-checked .md-ink-ripple {
         color: '{{primary-color-0.87}}';
       }
 
-      .md-icon {
+      ._md-icon {
         border-color: '{{foreground-2}}';
       }
-      &.md-checked .md-icon {
+      &._md-checked ._md-icon {
         background-color: '{{primary-color-0.87}}';
       }
 
-      &.md-checked.md-focused .md-container:before {
+      &._md-checked._md-focused ._md-container:before {
         background-color: '{{primary-color-0.26}}';
       }
 
-      &.md-checked .md-icon:after {
+      &._md-checked ._md-icon:after {
         border-color: '{{primary-contrast-0.87}}';
       }
     }
@@ -71,20 +71,20 @@ md-checkbox.md-THEME_NAME-theme {
         color: '{{foreground-2}}';
       }
 
-      &.md-checked .md-ink-ripple {
+      &._md-checked .md-ink-ripple {
         color: '{{warn-color-0.87}}';
       }
 
-      .md-icon {
+      ._md-icon {
         border-color: '{{foreground-2}}';
       }
-      &.md-checked .md-icon {
+      &._md-checked ._md-icon {
         background-color: '{{warn-color-0.87}}';
       }
-      &.md-checked.md-focused:not([disabled]) .md-container:before {
+      &._md-checked._md-focused:not([disabled]) ._md-container:before {
         background-color: '{{warn-color-0.26}}';
       }
-      &.md-checked .md-icon:after {
+      &._md-checked ._md-icon:after {
         border-color: '{{background-200}}';
       }
     }
@@ -92,15 +92,15 @@ md-checkbox.md-THEME_NAME-theme {
 
   &[disabled] {
 
-    .md-icon {
+    ._md-icon {
       border-color: '{{foreground-3}}';
     }
 
-    &.md-checked .md-icon {
+    &._md-checked ._md-icon {
       background-color: '{{foreground-3}}';
     }
 
-    &.md-checked .md-icon:after {
+    &._md-checked ._md-icon:after {
       border-color: '{{background-200}}';
     }
 

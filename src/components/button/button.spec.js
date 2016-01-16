@@ -63,16 +63,16 @@ describe('md-button', function() {
     var button = $compile('<md-button>')($rootScope.$new());
     $rootScope.$apply();
     button.triggerHandler('mousedown');
-    expect(button[0]).not.toHaveClass('md-focused');
+    expect(button[0]).not.toHaveClass('_md-focused');
   }));
 
   it('should set focus state on focus and remove on blur', inject(function ($compile, $rootScope){
     var button = $compile('<md-button>')($rootScope.$new());
     $rootScope.$apply();
     button.triggerHandler('focus');
-    expect(button[0]).toHaveClass('md-focused');
+    expect(button[0]).toHaveClass('_md-focused');
     button.triggerHandler('blur');
-    expect(button[0]).not.toHaveClass('md-focused');
+    expect(button[0]).not.toHaveClass('_md-focused');
   }));
 
   describe('with href or ng-href', function() {

@@ -48,7 +48,7 @@ angular
  */
 function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $mdUtil, $timeout) {
   inputDirective = inputDirective[0];
-  var CHECKED_CSS = 'md-checked';
+  var CHECKED_CSS = '_md-checked';
 
   return {
     restrict: 'E',
@@ -56,10 +56,10 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
     require: '?ngModel',
     priority: 210, // Run before ngAria
     template: 
-      '<div class="md-container" md-ink-ripple md-ink-ripple-checkbox>' +
-        '<div class="md-icon"></div>' +
+      '<div class="_md-container" md-ink-ripple md-ink-ripple-checkbox>' +
+        '<div class="_md-icon"></div>' +
       '</div>' +
-      '<div ng-transclude class="md-label"></div>',
+      '<div ng-transclude class="_md-label"></div>',
     compile: compile
   };
 
@@ -118,11 +118,11 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
         })
         .on('focus', function() {
           if (scope.mouseActive === false) {
-            element.addClass('md-focused');
+            element.addClass('_md-focused');
           }
         })
         .on('blur', function() {
-          element.removeClass('md-focused');
+          element.removeClass('_md-focused');
         });
 
       ngModelCtrl.$render = render;
@@ -142,8 +142,8 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
         if (keyCode === $mdConstant.KEY_CODE.SPACE || keyCode === $mdConstant.KEY_CODE.ENTER) {
           ev.preventDefault();
 
-          if (!element.hasClass('md-focused')) {
-            element.addClass('md-focused');
+          if (!element.hasClass('_md-focused')) {
+            element.addClass('_md-focused');
           }
 
           listener(ev);

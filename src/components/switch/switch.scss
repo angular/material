@@ -33,12 +33,12 @@ md-switch {
   &[disabled] {
     cursor: default;
 
-    .md-container {
+    ._md-container {
       cursor: default;
     }
   }
 
-  .md-container {
+  ._md-container {
     cursor: grab;
     width: $switch-width;
     height: $switch-height;
@@ -50,34 +50,34 @@ md-switch {
 
   // If the user moves his mouse off the switch, stil display grabbing cursor
   &:not([disabled]) {
-    .md-dragging,
-    &.md-dragging .md-container {
+    ._md-dragging,
+    &._md-dragging ._md-container {
       cursor: grabbing;
     }
   }
 
-  &.md-focused:not([disabled]) {
-    .md-thumb:before {
+  &._md-focused:not([disabled]) {
+    ._md-thumb:before {
       left: -8px;
       top: -8px;
       right: -8px;
       bottom: -8px;
     }
 
-    &:not(.md-checked) {
-      .md-thumb:before {
+    &:not(._md-checked) {
+      ._md-thumb:before {
         background-color: rgba(0, 0, 0, 0.12);
       }
     }
   }
 
-  .md-label {
+  ._md-label {
     border-color: transparent;
     border-width: 0;
     float: left;
   }
 
-  .md-bar {
+  ._md-bar {
     left: 1px;
     width: $switch-width - 2px;
     top: $switch-height / 2 - $switch-bar-height / 2;
@@ -86,7 +86,7 @@ md-switch {
     position: absolute;
   }
 
-  .md-thumb-container {
+  ._md-thumb-container {
     top: $switch-height / 2 - $switch-thumb-size / 2;
     left: 0;
     width: $switch-width - $switch-thumb-size;
@@ -94,11 +94,11 @@ md-switch {
     transform: translate3d(0,0,0);
     z-index: 1;
   }
-  &.md-checked .md-thumb-container {
+  &._md-checked ._md-thumb-container {
     transform: translate3d(100%,0,0);
   }
 
-  .md-thumb {
+  ._md-thumb {
     position: absolute;
     margin: 0;
     left: 0;
@@ -136,15 +136,15 @@ md-switch {
     }
   }
 
-  &:not(.md-dragging) {
-    .md-bar,
-    .md-thumb-container,
-    .md-thumb {
+  &:not(._md-dragging) {
+    ._md-bar,
+    ._md-thumb-container,
+    ._md-thumb {
       transition: $swift-linear;
       transition-property: transform, background-color;
     }
-    .md-bar,
-    .md-thumb {
+    ._md-bar,
+    ._md-thumb {
       transition-delay: 0.05s;
     }
   }
@@ -152,13 +152,13 @@ md-switch {
 }
 
 @media screen and (-ms-high-contrast: active) {
-  md-switch.md-default-theme .md-bar {
+  md-switch.md-default-theme ._md-bar {
     background-color: #666;
   }
-  md-switch.md-default-theme.md-checked .md-bar {
+  md-switch.md-default-theme._md-checked ._md-bar {
     background-color: #9E9E9E;
   }
-  md-switch.md-default-theme .md-thumb {
+  md-switch.md-default-theme ._md-thumb {
     background-color: #fff;
   }
 }
