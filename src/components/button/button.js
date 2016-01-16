@@ -120,11 +120,11 @@ function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $timeout) {
       })
       .on('focus', function() {
         if (scope.mouseActive === false) {
-          element.addClass('md-focused');
+          element.addClass('_md-focused');
         }
       })
       .on('blur', function(ev) {
-        element.removeClass('md-focused');
+        element.removeClass('_md-focused');
       });
     }
   }
