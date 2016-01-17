@@ -8,7 +8,7 @@ var ITEM_HEIGHT   = 41,
     INPUT_PADDING = 2; // Padding provided by `md-input-container`
 
 function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming, $window,
-                             $animate, $rootElement, $attrs, $q) {
+                             $animate, $rootElement, $attrs, $q, $timeout) {
   //-- private variables
   var ctrl                 = this,
       itemParts            = $scope.itemsExpr.split(/ in /i),
@@ -19,7 +19,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       selectedItemWatchers = [],
       hasFocus             = false,
       lastCount            = 0,
-      promiseFetch         = false;
+      promiseFetch         = false,
+      lifetimeQueue        = [];
 
   //-- public variables with handlers
   defineProperty('hidden', handleHiddenChange, true);
@@ -651,6 +652,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     }
     function handleResults (matches) {
       cache[ term ] = matches;
+      removeAfterLifetime(term);
       if ((searchText || '') !== ($scope.searchText || '')) return; //-- just cache the results if old request
       ctrl.matches = matches;
       ctrl.hidden  = shouldHide();
@@ -683,6 +685,20 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         return 'There is 1 match available.';
       default:
         return 'There are ' + ctrl.matches.length + ' matches available.';
+    }
+  }
+
+  /**
+   * Removes the given term after the specified cache lifetime
+   * @param term
+   */
+  function removeAfterLifetime(term) {
+    if ($scope.cacheLifetime && lifetimeQueue.indexOf(term) === -1) {
+      lifetimeQueue.push(term);
+      $timeout(function() {
+        cache[term] = null;
+        lifetimeQueue.splice(lifetimeQueue.indexOf(term), 1);
+      }, $scope.cacheLifetime, false);
     }
   }
 

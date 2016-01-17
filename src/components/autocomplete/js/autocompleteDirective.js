@@ -44,6 +44,7 @@ angular
  * @param {expression=} md-item-text An expression that will convert your object to a single string.
  * @param {string=} placeholder Placeholder text that will be forwarded to the input.
  * @param {boolean=} md-no-cache Disables the internal caching that happens in autocomplete
+ * @param {number=} md-cache-lifetime The time in milliseconds how long a cached query will persist.
  * @param {boolean=} ng-disabled Determines whether or not to disable the input field
  * @param {number=} md-min-length Specifies the minimum length of text before autocomplete will
  *     make suggestions
@@ -133,6 +134,7 @@ function MdAutocomplete () {
       itemText:       '&mdItemText',
       placeholder:    '@placeholder',
       noCache:        '=?mdNoCache',
+      cacheLifetime:  '@mdCacheLifetime',
       selectOnMatch:  '=?mdSelectOnMatch',
       itemChange:     '&?mdSelectedItemChange',
       textChange:     '&?mdSearchTextChange',
