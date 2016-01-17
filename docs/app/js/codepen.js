@@ -56,7 +56,8 @@
 
     var LINK_FONTS_ROBOTO = '<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">';
 
-    var ASSET_CACHE_JS = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/assets-cache.js';
+    var ASSET_CACHE_JS = 'http://ngmaterial.assets.s3.amazonaws.com/svg-assets-cache.js';
+
 
     return {
       translate: translate
@@ -75,7 +76,7 @@
         js: processJs(files.js),
         css: mergeFiles( files.css ).join(' '),
 
-        js_external: externalScripts.concat([CORE_JS, ASSET_CACHE_JS]).join(';'),
+        js_external: externalScripts.concat([ASSET_CACHE_JS, CORE_JS]).join(';'),
         css_external: [CORE_CSS, DOC_CSS].join(';')
       });
     }
@@ -184,18 +185,18 @@
         .replace(/&/g, "&amp;");
     }
 
-    // Required to make codepen work. Demos define their own module when running on the
-    // docs site.  In order to ensure the codepen example can use the asset-cache, the
+    // Required to make codePen work. Demos define their own module when running on the
+    // docs site.  In order to ensure the codepen example can use the svg-asset-cache.js, the
     // module needs to match so that the $templateCache is populated with the necessary
     // assets.
+
     function replaceDemoModuleWithCodepenModule(file) {
       var matchAngularModule =  /\.module\(('[^']*'|"[^"]*")\s*,(\s*\[([^\]]*)\]\s*\))/ig;
+      var modules = "['ngMaterial', 'ngMessages', 'material.svgAssetsCache']";
 
-      // Include 'ngMessages' since the 'assets-cache.js' has the same dependencies
-      // angular.module('MyApp', ['ngMaterial', 'ngMessages'])
       // See scripts.js for list of external Angular libraries used for the demos
 
-      return file.replace(matchAngularModule, ".module('MyApp',['ngMaterial', 'ngMessages'])");
+      return file.replace(matchAngularModule, ".module('MyApp',"+ modules + ")");
     }
   }
 })();
