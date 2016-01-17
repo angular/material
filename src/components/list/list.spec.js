@@ -178,7 +178,7 @@ describe('mdListItem directive', function() {
       '  <md-button class="md-exclude" ng-click="sayHello()">Hello</md-button>' +
       '</md-list-item>'
     );
-    expect(listItem.hasClass('md-no-proxy')).toBeTruthy();
+    expect(listItem.hasClass('_md-no-proxy')).toBeTruthy();
   });
 
   it('should copy md-icon.md-secondary attributes to the button', function() {
