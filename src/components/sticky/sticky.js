@@ -84,7 +84,7 @@ function MdSticky($document, $mdConstant, $$rAF, $mdUtil) {
      ***************/
     // Add an element and its sticky clone to this content's sticky collection
     function add(element, stickyClone) {
-      stickyClone.addClass('md-sticky-clone');
+      stickyClone.addClass('_md-sticky-clone');
 
       var item = {
         element: element,
