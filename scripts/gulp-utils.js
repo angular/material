@@ -219,7 +219,8 @@ exports.addClosurePrefixes = function() {
     if (module) {
       var closureModuleName = moduleNameToClosureName(module.name);
       var requires = (module.dependencies || []).sort().map(function(dep) {
-        return dep.indexOf(module.name) === 0 ? '' : 'goog.require(\'' + moduleNameToClosureName(dep) + '\');';
+        if (dep.indexOf(module.name) === 0 || /material\..+/g.test(dep) == false) return '';
+        return 'goog.require(\'' + moduleNameToClosureName(dep) + '\');';
       }).join('\n');
 
       file.contents = new Buffer([
