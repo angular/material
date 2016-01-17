@@ -21,12 +21,12 @@ md-dialog {
   &.md-transition-in {
     opacity: 1;
     transition: $swift-ease-out;
-    transform: translate3d(0,0,0) scale(1.0);
+    transform: translate(0,0) scale(1.0);
   }
   &.md-transition-out {
     opacity: 0;
     transition: $swift-ease-out;
-    transform: translate3d(0,100%,0) scale(0.2);
+    transform: translate(0,100%) scale(0.2);
   }
 
   opacity: 0;
