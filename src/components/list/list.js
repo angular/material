@@ -107,7 +107,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         if (hasProxiedElement) {
           wrapIn('div');
         } else if (!tEl[0].querySelector('md-button:not(.md-secondary):not(.md-exclude)')) {
-          tEl.addClass('md-no-proxy');
+          tEl.addClass('_md-no-proxy');
         }
       }
       wrapSecondary();
@@ -132,11 +132,11 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
       function wrapIn(type) {
         var container;
         if (type == 'div') {
-          container = angular.element('<div class="md-no-style md-list-item-inner">');
+          container = angular.element('<div class="_md-no-style _md-list-item-inner">');
           container.append(tEl.contents());
-          tEl.addClass('md-proxy-focus');
+          tEl.addClass('_md-proxy-focus');
         } else {
-          container = angular.element('<md-button class="md-no-style"><div class="md-list-item-inner"></div></md-button>');
+          container = angular.element('<md-button class="_md-no-style"><div class="_md-list-item-inner"></div></md-button>');
           copyAttributes(tEl[0], container[0]);
           container.children().eq(0).append(tEl.contents());
         }
@@ -148,7 +148,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
       function wrapSecondary() {
         if (secondaryItem && !isButton(secondaryItem) && secondaryItem.hasAttribute('ng-click')) {
           $mdAria.expect(secondaryItem, 'aria-label');
-          var buttonWrapper = angular.element('<md-button class="md-secondary-container md-icon-button">');
+          var buttonWrapper = angular.element('<md-button class="_md-secondary-container md-icon-button">');
           copyAttributes(secondaryItem, buttonWrapper[0]);
           secondaryItem.setAttribute('tabindex', '-1');
           secondaryItem.classList.remove('md-secondary');
@@ -199,7 +199,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         computeProxies();
         computeClickable();
 
-        if ($element.hasClass('md-proxy-focus') && proxies.length) {
+        if ($element.hasClass('_md-proxy-focus') && proxies.length) {
           angular.forEach(proxies, function(proxy) {
             proxy = angular.element(proxy);
 
@@ -211,9 +211,9 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
               }, 100);
             })
             .on('focus', function() {
-              if ($scope.mouseActive === false) { $element.addClass('md-focused'); }
+              if ($scope.mouseActive === false) { $element.addClass('_md-focused'); }
               proxy.on('blur', function proxyOnBlur() {
-                $element.removeClass('md-focused');
+                $element.removeClass('_md-focused');
                 proxy.off('blur', proxyOnBlur);
               });
             });
@@ -243,7 +243,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
             $element.addClass('md-clickable');
 
             if (!hasClick) {
-              ctrl.attachRipple($scope, angular.element($element[0].querySelector('.md-no-style')));
+              ctrl.attachRipple($scope, angular.element($element[0].querySelector('._md-no-style')));
             }
           }
         }
