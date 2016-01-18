@@ -89,7 +89,7 @@ md-input-container {
     -ms-flex-preferred-size: auto; //IE fix
   }
 
-  label:not(.md-container-ignore) {
+  label:not(._md-container-ignore) {
     position: absolute;
     bottom: 100%;
     @include rtl(left, 0, auto);
@@ -102,8 +102,8 @@ md-input-container {
     }
   }
 
-  label:not(.md-no-float):not(.md-container-ignore),
-  .md-placeholder {
+  label:not(.md-no-float):not(._md-container-ignore),
+  ._md-placeholder {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -119,19 +119,19 @@ md-input-container {
 
     @include rtl(transform-origin, left top, right top);
   }
-  .md-placeholder {
+  ._md-placeholder {
     position: absolute;
     top: 0;
     opacity: 0;
     transition-property: opacity, transform;
     transform: translate3d(0, $input-placeholder-offset + $baseline-grid * 0.75, 0);
   }
-  &.md-input-focused .md-placeholder {
+  &.md-input-focused ._md-placeholder {
     opacity: 1;
     transform: translate3d(0, $input-placeholder-offset, 0);
   }
   // Placeholder should immediately disappear when the user starts typing
-  &.md-input-has-value .md-placeholder {
+  &.md-input-has-value ._md-placeholder {
     transition: none;
     opacity: 0;
   }

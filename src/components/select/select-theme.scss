@@ -1,40 +1,40 @@
 md-select.md-THEME_NAME-theme {
-  &[disabled] .md-select-value {
+  &[disabled] ._md-select-value {
     border-bottom-color: transparent;
     background-image: linear-gradient(to right, '{{foreground-3}}' 0%, '{{foreground-3}}' 33%, transparent 0%);
     background-image: -ms-linear-gradient(left, transparent 0%, '{{foreground-3}}' 100%);
   }
-  .md-select-value {
-    &.md-select-placeholder {
+  ._md-select-value {
+    &._md-select-placeholder {
       color: '{{foreground-3}}';
     }
     border-bottom-color: '{{foreground-4}}';
   }
   &.ng-invalid.ng-dirty {
-    .md-select-value {
+    ._md-select-value {
       color: '{{warn-A700}}' !important;
       border-bottom-color: '{{warn-A700}}' !important;
     }
   }
   &:not([disabled]):focus {
-    .md-select-value {
+    ._md-select-value {
       border-bottom-color: '{{primary-color}}';
       color: '{{ foreground-1 }}';
-      &.md-select-placeholder {
+      &._md-select-placeholder {
         color: '{{ foreground-1 }}';
       }
     }
-    &.md-accent .md-select-value {
+    &.md-accent ._md-select-value {
       border-bottom-color: '{{accent-color}}';
     }
-    &.md-warn .md-select-value {
+    &.md-warn ._md-select-value {
       border-bottom-color: '{{warn-color}}';
     }
   }
   &[disabled] {
-    .md-select-value {
+    ._md-select-value {
       color: '{{foreground-3}}';
-      &.md-select-placeholder {
+      &._md-select-placeholder {
         color: '{{foreground-3}}';
       }
     }
