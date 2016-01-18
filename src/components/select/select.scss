@@ -1,3 +1,4 @@
+$select-label-height: 26px;
 $select-option-height: 48px;
 $select-option-padding: 16px;
 $select-container-padding: 16px;
@@ -101,7 +102,7 @@ md-select {
   position: relative;
   box-sizing: content-box;
   min-width: 8 * $baseline-grid;
-  min-height: 26px;
+  min-height: $select-label-height + 2px;
   flex-grow: 1;
 
   .md-text {
@@ -114,6 +115,7 @@ md-select {
     white-space: nowrap;
     overflow: hidden;
     transform: translate3d(0, 2px, 0);
+    height: $select-label-height;
   }
 
   .md-select-icon {
@@ -129,7 +131,7 @@ md-select {
     display: block;
     content: '\25BC';
     position: relative;
-    top: 2px;
+    top: -1px;
     speak: none;
     transform: scaleY(0.6) scaleX(1);
   }
