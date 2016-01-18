@@ -5,7 +5,7 @@ $select-container-transition-duration: 350ms;
 
 $select-max-visible-options: 5;
 
-.md-select-menu-container {
+._md-select-menu-container {
   position: fixed;
   left: 0;
   top: 0;
@@ -14,7 +14,7 @@ $select-max-visible-options: 5;
   display: none;
 
   // Don't let the user select a new choice while it's animating
-  &:not(.md-clickable) {
+  &:not(._md-clickable) {
     pointer-events: none;
   }
 
@@ -25,7 +25,7 @@ $select-max-visible-options: 5;
 
 
   // enter: md-select scales in, then options fade in.
-  &.md-active {
+  &._md-active {
     display: block;
     opacity: 1;
     md-select-menu {
@@ -41,7 +41,7 @@ $select-max-visible-options: 5;
   }
 
   // leave: the container fades out
-  &.md-leave {
+  &._md-leave {
     opacity: 0;
     transition: $swift-ease-in;
     transition-duration: 250ms;
@@ -56,7 +56,7 @@ md-input-container > md-select {
 md-select {
   display: flex;
   margin: 2.5*$baseline-grid 0 3*$baseline-grid + 2 0;
-  &[disabled] .md-select-value {
+  &[disabled] ._md-select-value {
     background-position: 0 bottom;
     // This background-size is coordinated with a linear-gradient set in select-theme.scss
     // to create a dotted line under the input.
@@ -75,13 +75,13 @@ md-select {
       cursor: pointer
     }
     &.ng-invalid.ng-dirty {
-      .md-select-value {
+      ._md-select-value {
         border-bottom: 2px solid;
         padding-bottom: 0;
       }
     }
     &:focus {
-      .md-select-value {
+      ._md-select-value {
         border-bottom-width: 2px;
         border-bottom-style: solid;
         padding-bottom: 0;
@@ -91,7 +91,7 @@ md-select {
 }
 
 
-.md-select-value {
+._md-select-value {
   display: flex;
   align-items: center;
   padding: 2px 2px 1px;
@@ -104,7 +104,7 @@ md-select {
   min-height: 26px;
   flex-grow: 1;
 
-  .md-text {
+  ._md-text {
     display: inline;
   }
 
@@ -116,7 +116,7 @@ md-select {
     transform: translate3d(0, 2px, 0);
   }
 
-  .md-select-icon {
+  ._md-select-icon {
     display: block;
     align-items: flex-end;
     text-align: end;
@@ -125,7 +125,7 @@ md-select {
     transform: translate3d(0, 1px, 0);
   }
 
-  .md-select-icon:after {
+  ._md-select-icon:after {
     display: block;
     content: '\25BC';
     position: relative;
@@ -134,7 +134,7 @@ md-select {
     transform: scaleY(0.6) scaleX(1);
   }
 
-  &.md-select-placeholder {
+  &._md-select-placeholder {
     display: flex;
     order: 1;
     pointer-events: none;
@@ -151,7 +151,7 @@ md-select-menu {
     flex-direction: column-reverse;
   }
 
-  &:not(.md-overflow) {
+  &:not(._md-overflow) {
     md-content {
       padding-top: $baseline-grid;
       padding-bottom: $baseline-grid;
@@ -193,7 +193,7 @@ md-option {
     outline: none;
   }
 
-  .md-text {
+  ._md-text {
     @include not-selectable();
     width: auto;
     white-space: nowrap;

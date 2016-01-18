@@ -75,13 +75,13 @@ function mdInputContainerDirective($mdTheming, $parse) {
     };
     self.element = $element;
     self.setFocused = function(isFocused) {
-      $element.toggleClass('md-input-focused', !!isFocused);
+      $element.toggleClass('_md-input-focused', !!isFocused);
     };
     self.setHasValue = function(hasValue) {
-      $element.toggleClass('md-input-has-value', !!hasValue);
+      $element.toggleClass('_md-input-has-value', !!hasValue);
     };
     self.setHasPlaceholder = function(hasPlaceholder) {
-      $element.toggleClass('md-input-has-placeholder', !!hasPlaceholder);
+      $element.toggleClass('_md-input-has-placeholder', !!hasPlaceholder);
     };
     self.setInvalid = function(isInvalid) {
       if (isInvalid) {
@@ -105,7 +105,7 @@ function labelDirective() {
     restrict: 'E',
     require: '^?mdInputContainer',
     link: function(scope, element, attr, containerCtrl) {
-      if (!containerCtrl || attr.mdNoFloat || element.hasClass('md-container-ignore')) return;
+      if (!containerCtrl || attr.mdNoFloat || element.hasClass('_md-container-ignore')) return;
 
       containerCtrl.label = element;
       scope.$on('$destroy', function() {
