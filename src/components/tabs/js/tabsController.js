@@ -542,9 +542,9 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   function updatePagingWidth() {
     var width = 1;
     angular.forEach(getElements().dummies, function (element) {
-      width += Math.ceil(element.offsetWidth);
+      width += element.getBoundingClientRect().width;
     });
-    angular.element(elements.paging).css('width', width + 'px');
+    angular.element(elements.paging).css('width', Math.ceil(width) + 'px');
   }
 
   function getMaxTabWidth () {
