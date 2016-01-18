@@ -90,10 +90,8 @@ function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $timeout) {
     $mdTheming(element);
     $mdButtonInkRipple.attach(scope, element);
 
-    var elementHasText = node.textContent.trim();
-    if (!elementHasText) {
-      $mdAria.expect(element, 'aria-label');
-    }
+    var elementTextContent = node.textContent.trim();
+    $mdAria.expect(element, 'aria-label', elementTextContent);
 
     // For anchor elements, we have to set tabindex manually when the
     // element is disabled

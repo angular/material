@@ -29,6 +29,20 @@ describe('md-button', function() {
     expect($log.warn).not.toHaveBeenCalled();
   }));
 
+  it('should properly set the aria-label attribute from the text content', inject(function($compile, $rootScope) {
+    var button = $compile('<md-button>Text Content</md-button>')($rootScope);
+    $rootScope.$apply();
+
+    expect(button.attr('aria-label')).toBe('Text Content');
+  }));
+
+  it('should keep the specified aria-label attribute', inject(function($compile, $rootScope) {
+    var button = $compile('<md-button aria-label="Test Button">Text Content</md-button>')($rootScope);
+    $rootScope.$apply();
+
+    expect(button.attr('aria-label')).toBe('Test Button');
+  }));
+
   it('should allow attribute directive syntax', inject(function($compile, $rootScope) {
     var button = $compile('<a md-button href="https://google.com">google</a>')($rootScope.$new());
     expect(button.hasClass('md-button')).toBe(true);
