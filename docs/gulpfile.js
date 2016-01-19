@@ -155,6 +155,31 @@ gulp.task('docs-css', ['docs-app', 'build', 'docs-css-dependencies'], function()
   .pipe(gulp.dest('dist/docs'));
 });
 
+gulp.task('docs-assets', function() {
+  var items = [];
+
+  var template = fs.readFileSync(
+    'docs/config/template/svg-assets-cache.template.js', 'utf8'
+  ).toString();
+
+  return gulp.src(['docs/app/img/icons/**/*.svg', 'docs/app/icons/**/*.svg'])
+    .pipe(through2.obj(function(file, enc, next) {
+      var svgContent = file.contents.toString();
+      var url = path.relative('docs/app/', file.path).replace(/\\/g, '/');
+
+      items.push({
+        url: url,
+        content: svgContent.replace(/(\r\n|\n|\r)/gm,"")
+      });
+
+      next();
+    }, function(done) {
+      var result = _.template(template)({ items: items });
+      fs.writeFileSync('docs/app/svg-assets-cache.js', result);
+      done();
+    }));
+});
+
 gulp.task('docs-html2js', function() {
   return gulp.src('docs/app/**/*.tmpl.html')
     .pipe(ngHtml2js({
