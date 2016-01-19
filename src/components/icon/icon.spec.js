@@ -478,13 +478,6 @@ describe('mdIcon service', function() {
       svg.setAttribute(attr, val);
     }, this);
 
-    angular.forEach({
-      'pointer-events' : 'none',
-      'display' : 'block'
-    }, function(val, style) {
-      svg.style[style] = val;
-    }, this);
-
     return svg.outerHTML;
   }
 
