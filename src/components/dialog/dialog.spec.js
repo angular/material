@@ -486,6 +486,119 @@ describe('$mdDialog', function() {
     }));
   });
 
+  describe('#prompt()', function() {
+    hasConfigurationMethods('prompt', ['title', 'htmlContent', 'textContent',
+      'content', 'placeholder', 'ariaLabel', 'ok', 'cancel', 'theme', 'css'
+    ]);
+
+    it('shows a basic prompt dialog', inject(function($animate, $rootScope, $mdDialog) {
+      var parent = angular.element('<div>');
+      var resolved = false;
+      var promptAnswer;
+
+      $mdDialog.show(
+        $mdDialog
+          .prompt()
+          .parent(parent)
+          .title('Title')
+          .textContent('Hello world')
+          .placeholder('placeholder text')
+          .theme('some-theme')
+          .css('someClass anotherClass')
+          .ok('Next')
+          .cancel('Cancel')
+      ).then(function(answer) {
+          resolved = true;
+          promptAnswer = answer;
+        });
+
+      $rootScope.$apply();
+      runAnimation();
+
+      var mdContainer = angular.element(parent[0].querySelector('.md-dialog-container'));
+      var mdDialog = mdContainer.find('md-dialog');
+      var mdContent = mdDialog.find('md-dialog-content');
+      var title = mdContent.find('h2');
+      var contentBody = mdContent[0].querySelector('.md-dialog-content-body');
+      var inputElement = mdContent.find('input');
+      var buttons = parent.find('md-button');
+      var theme = mdDialog.attr('md-theme');
+      var css = mdDialog.attr('class').split(' ');
+
+      expect(title.text()).toBe('Title');
+      expect(contentBody.textContent).toBe('Hello world');
+      expect(inputElement[0].placeholder).toBe('placeholder text')
+      expect(buttons.length).toBe(2);
+      expect(buttons.eq(0).text()).toBe('Next');
+      expect(theme).toBe('some-theme');
+      expect(css).toContain('someClass');
+      expect(css).toContain('anotherClass');
+      expect(mdDialog.attr('role')).toBe('dialog');
+
+      inputElement.eq(0).text('responsetext');
+      inputElement.scope().$apply("dialog.result = 'responsetext'")
+
+      buttons.eq(0).triggerHandler('click');
+
+      $rootScope.$apply();
+      runAnimation();
+
+      expect(resolved).toBe(true);
+      expect(promptAnswer).toBe('responsetext');
+    }));
+
+    it('should focus the input element on open', inject(function($mdDialog, $rootScope, $document) {
+      jasmine.mockElementFocus(this);
+
+      var parent = angular.element('<div>');
+
+      $mdDialog.show(
+        $mdDialog
+          .prompt()
+          .parent(parent)
+          .textContent('Hello world')
+          .placeholder('placeholder text')
+      )
+
+      runAnimation(parent.find('md-dialog'));
+
+      expect($document.activeElement).toBe(parent[0].querySelector('input'));
+    }));
+
+    it('should submit after ENTER key', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
+      jasmine.mockElementFocus(this);
+      var parent = angular.element('<div>');
+      var response;
+
+      $mdDialog.show(
+        $mdDialog
+          .prompt()
+          .parent(parent)
+          .textContent('Hello world')
+          .placeholder('placeholder text')
+      ).then(function(answer) {
+          response = answer;
+        });
+      runAnimation();
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      var mdDialog = container.find('md-dialog');
+      var mdContent = mdDialog.find('md-dialog-content');
+      var inputElement = mdContent.find('input');
+
+      inputElement.scope().$apply("dialog.result = 'responsetext'")
+
+      inputElement.eq(0).triggerHandler({
+        type: 'keypress',
+        keyCode: $mdConstant.KEY_CODE.ENTER
+      });
+      runAnimation();
+      runAnimation();
+
+      expect(response).toBe('responsetext');
+    }));
+  });
+
   describe('#build()', function() {
     it('should support onShowing callbacks before `show()` starts', inject(function($mdDialog, $rootScope) {
 
