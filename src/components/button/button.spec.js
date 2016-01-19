@@ -1,4 +1,4 @@
-describe('md-button', function() {
+fdescribe('md-button', function() {
 
   beforeEach(module('material.components.button'));
 
@@ -28,6 +28,28 @@ describe('md-button', function() {
     $rootScope.$apply();
     expect($log.warn).not.toHaveBeenCalled();
   }));
+
+  it('should expect an aria-label if element has text content', inject(function($compile, $rootScope, $log) {
+    spyOn($log, 'warn');
+
+    var button = $compile('<md-button>Hello</md-button>')($rootScope);
+    expect(button.attr('aria-label')).toBe("Hello");
+    expect($log.warn).not.toHaveBeenCalled();
+  }));
+
+  it('should set an aria-label if the text content using bindings', inject(function($$rAF, $compile, $rootScope, $log) {
+    spyOn($log, 'warn');
+
+    var scope = angular.extend($rootScope.$new(),{greetings : "Welcome"});
+    var button = $compile('<md-button>{{greetings}}</md-button>')(scope);
+
+    $rootScope.$apply();
+    $$rAF.flush();    // needed for $mdAria.expectAsync()
+
+    expect(button.attr('aria-label')).toBe("Welcome");
+    expect($log.warn).not.toHaveBeenCalled();
+  }));
+
 
   it('should allow attribute directive syntax', inject(function($compile, $rootScope) {
     var button = $compile('<a md-button href="https://google.com">google</a>')($rootScope.$new());
