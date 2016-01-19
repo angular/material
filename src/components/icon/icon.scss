@@ -9,6 +9,7 @@ md-icon {
 
   svg {
     pointer-events: none;
+    display: block;
   }
 
   &[md-font-icon] {

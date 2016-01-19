@@ -245,9 +245,10 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
         element = angular.element(element || body)[0];
         var zIndex = 50;
         var scrollMask = angular.element(
-          '<div class="md-scroll-mask" style="z-index: ' + zIndex + '">' +
+          '<div class="md-scroll-mask">' +
           '  <div class="md-scroll-mask-bar"></div>' +
           '</div>');
+        scrollMask.css('z-index', zIndex);
         element.appendChild(scrollMask[0]);
 
         scrollMask.on('wheel', preventDefault);
@@ -282,8 +283,8 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       // position
       function disableBodyScroll() {
         var htmlNode = body.parentNode;
-        var restoreHtmlStyle = htmlNode.getAttribute('style') || '';
-        var restoreBodyStyle = body.getAttribute('style') || '';
+        var restoreHtmlStyle = htmlNode.style.cssText || '';
+        var restoreBodyStyle = body.style.cssText || '';
         var scrollOffset = $mdUtil.scrollTop(body);
         var clientWidth = body.clientWidth;
 
@@ -302,8 +303,8 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
         if (body.clientWidth < clientWidth) applyStyles(body, {overflow: 'hidden'});
 
         return function restoreScroll() {
-          body.setAttribute('style', restoreBodyStyle);
-          htmlNode.setAttribute('style', restoreHtmlStyle);
+          body.style.cssText = restoreBodyStyle;
+          htmlNode.style.cssText = restoreHtmlStyle;
           body.scrollTop = scrollOffset;
           htmlNode.scrollTop = scrollOffset;
         };
@@ -321,7 +322,14 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     },
     floatingScrollbars: function() {
       if (this.floatingScrollbars.cached === undefined) {
-        var tempNode = angular.element('<div style="width: 100%; z-index: -1; position: absolute; height: 35px; overflow-y: scroll"><div style="height: 60px;"></div></div>');
+        var tempNode = angular.element('<div><div></div></div>');
+        tempNode.css('width', '100%');
+        tempNode.css('z-index', -1);
+        tempNode.css('position', 'absolute');
+        tempNode.css('height', '35px');
+        tempNode.css('overflow-y', 'scroll');
+        tempNode.children().css('height', '60px');
+
         $document[0].body.appendChild(tempNode[0]);
         this.floatingScrollbars.cached = (tempNode[0].offsetWidth == tempNode[0].childNodes[0].offsetWidth);
         tempNode.remove();

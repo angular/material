@@ -108,7 +108,7 @@ MenuBarController.prototype.disableOpenOnHover = function() {
   this.openOnHoverEnabled = false;
   var parentToolbar;
   if (parentToolbar = this.parentToolbar) {
-    parentToolbar.setAttribute('style', parentToolbar.dataset.mdRestoreStyle || '');
+    parentToolbar.style.cssText = parentToolbar.dataset.mdRestoreStyle || '';
   }
   angular
     .element(this.getMenus())
