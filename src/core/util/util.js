@@ -247,8 +247,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
         var scrollMask = angular.element(
           '<div class="md-scroll-mask">' +
           '  <div class="md-scroll-mask-bar"></div>' +
-          '</div>');
-        scrollMask.css('z-index', zIndex);
+          '</div>').css('z-index', zIndex);
         element.appendChild(scrollMask[0]);
 
         scrollMask.on('wheel', preventDefault);
@@ -322,12 +321,13 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     },
     floatingScrollbars: function() {
       if (this.floatingScrollbars.cached === undefined) {
-        var tempNode = angular.element('<div><div></div></div>');
-        tempNode.css('width', '100%');
-        tempNode.css('z-index', -1);
-        tempNode.css('position', 'absolute');
-        tempNode.css('height', '35px');
-        tempNode.css('overflow-y', 'scroll');
+        var tempNode = angular.element('<div><div></div></div>').css({
+          width: '100%',
+          'z-index': -1,
+          position: 'absolute',
+          height: '35px',
+          'overflow-y': 'scroll'
+        });
         tempNode.children().css('height', '60px');
 
         $document[0].body.appendChild(tempNode[0]);
