@@ -91,8 +91,15 @@
     function createFilterFor(query) {
       var lowercaseQuery = angular.lowercase(query);
 
-      return function filterFn(item) {
-        return (item.value.indexOf(lowercaseQuery) === 0);
+      return function filterFn(item) {        
+        /**
+         * Searches state to find a partial match for string
+         */
+        return state.value.match(lowercaseQuery); 
+        /**
+         * Searches state to find a complete match for string
+         */
+        return (state.value.indexOf(lowercaseQuery) === 0);
       };
 
     }
