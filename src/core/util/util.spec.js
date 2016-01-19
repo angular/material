@@ -1,39 +1,5 @@
 describe('util', function() {
 
-  describe('validateScope',function() {
-
-    it("should not find a valid scope when debug is disabled", function() {
-      module(function($compileProvider) {
-        $compileProvider.debugInfoEnabled(false);
-      });
-
-      inject(function($compile, $rootScope, $mdUtil) {
-        var widget = angular.element($compile('<div><button><img></button></div>')($rootScope));
-        var button = angular.element(widget.children()[0]);
-
-        $rootScope.$apply();
-        expect(button.scope()).toBe(undefined);
-        expect($mdUtil.validateScope(button)).toBe(false);
-
-      });
-    });
-
-    it("should find a valid scope when debug is enabled", function() {
-      module(function($compileProvider) {
-        $compileProvider.debugInfoEnabled(true);
-      });
-
-      inject(function($compile, $rootScope, $mdUtil) {
-        var widget = angular.element($compile('<div><button><img></button></div>')($rootScope));
-        var button = angular.element(widget.children()[0]);
-
-        $rootScope.$apply();
-        expect(button.scope()).toBeDefined();
-        expect($mdUtil.validateScope(button)).toBe(true);
-      });
-    });
-  });
-
   describe('with no overrides', function() {
     beforeEach(module('material.core'));
 
