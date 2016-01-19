@@ -84,6 +84,11 @@ md-dialog {
     .md-dialog-content-body {
       width:100%;
     }
+
+    .md-prompt-input-container {
+      width: 100%;
+      box-sizing: border-box;
+    }
   }
 
   .md-actions, md-dialog-actions {
