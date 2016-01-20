@@ -134,7 +134,7 @@ md-fab-speed-dial {
 
   &.md-scale {
     .md-fab-action-item {
-      transform: scale(0.1);
+      transform: scale(0);
       transition: $swift-ease-in;
 
       // Make the scale animation a bit faster since we are delaying each item
