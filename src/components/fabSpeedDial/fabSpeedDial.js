@@ -65,6 +65,14 @@
    * space where the actions will appear, you must also add the `md-hover-full` class to the speed
    * dial element. Without this, the hover effect will only occur on top of the trigger.
    *
+   * See the demos for more information.
+   *
+   * ## Troubleshooting
+   *
+   * If your speed dial shows the closing animation upon launch, you may need to use `ng-cloak` on
+   * the parent container to ensure that it is only visible once ready. We have plans to remove this
+   * necessity in the future.
+   *
    * @usage
    * <hljs lang="html">
    * <md-fab-speed-dial md-direction="up" class="md-fling">
