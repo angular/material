@@ -272,8 +272,9 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
 
     var isParentFormSubmitted = function () {
       var parent = $mdUtil.getClosest(element, 'form');
+      var form = parent ? angular.element(parent).controller('form') : null;
 
-      return parent ? angular.element(parent).controller('form').$submitted : false;
+      return form ? form.$submitted : false;
     };
 
     scope.$watch(isErrorGetter, containerCtrl.setInvalid);
