@@ -221,7 +221,7 @@ $layout-breakpoint-lg:     1920px !default;
   [#{$name}="start end"],
   [#{$name}="start stretch"]
   {
-    justify-content: start;
+    justify-content: flex-start;
   }
 
   // Main Axis Center
