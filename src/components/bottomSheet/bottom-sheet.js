@@ -127,6 +127,7 @@ function MdBottomSheetDirective($mdBottomSheet) {
 function MdBottomSheetProvider($$interimElementProvider) {
   // how fast we need to flick down to close the sheet, pixels/ms
   var CLOSING_VELOCITY = 0.5;
+  var SWIFT_EASE_OUT_DURATION = 400; // same as constants css
   var PADDING = 80; // same as css
 
   return $$interimElementProvider('$mdBottomSheet')
@@ -136,7 +137,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
     });
 
   /* @ngInject */
-  function bottomSheetDefaults($animate, $mdConstant, $mdUtil, $mdTheming, $mdBottomSheet, $rootElement, $mdGesture) {
+  function bottomSheetDefaults($animate, $mdConstant, $mdUtil, $mdTheming, $mdBottomSheet, $rootElement, $mdGesture, $timeout, $q) {
     var backdrop;
 
     return {
@@ -158,7 +159,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
 
       if (options.clickOutsideToClose) {
         backdrop.on('click', function() {
-          $mdUtil.nextTick($mdBottomSheet.cancel,true);
+          $mdUtil.nextTick($mdBottomSheet.cancel, true);
         });
       }
 
@@ -175,30 +176,48 @@ function MdBottomSheetProvider($$interimElementProvider) {
         options.restoreScroll = $mdUtil.disableScrollAround(bottomSheet.element, options.parent);
       }
 
-      return $animate.enter(bottomSheet.element, options.parent)
-        .then(function() {
-          var focusable = $mdUtil.findFocusTarget(element) || angular.element(
-            element[0].querySelector('button') ||
-            element[0].querySelector('a') ||
-            element[0].querySelector('[ng-click]')
-          );
-          focusable.focus();
+      element.addClass('md-prepare-enter');
+      options.parent.append(element);
 
-          if (options.escapeToClose) {
-            options.rootElementKeyupCallback = function(e) {
-              if (e.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
-                $mdUtil.nextTick($mdBottomSheet.cancel,true);
+      // Wait for element rendering below bottom
+      return $q(function(resolve) {
+        $timeout(function() {
+
+          // manually trigger the animation
+          $timeout(function() {
+            element.removeClass('md-prepare-enter');
+          }, SWIFT_EASE_OUT_DURATION, false);
+
+          $animate.enter(bottomSheet.element, options.parent)
+            .then(function() {
+              resolve();
+
+              var focusable = $mdUtil.findFocusTarget(element) || angular.element(
+                  element[0].querySelector('button') ||
+                  element[0].querySelector('a') ||
+                  element[0].querySelector('[ng-click]')
+                );
+              focusable.focus();
+
+              if (options.escapeToClose) {
+                options.rootElementKeyupCallback = function(e) {
+                  if (e.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
+                    $mdUtil.nextTick($mdBottomSheet.cancel,true);
+                  }
+                };
+                $rootElement.on('keyup', options.rootElementKeyupCallback);
               }
-            };
-            $rootElement.on('keyup', options.rootElementKeyupCallback);
-          }
-        });
-
+            });
+        }, 50);
+      });
     }
 
     function onRemove(scope, element, options) {
 
       var bottomSheet = options.bottomSheet;
+
+      // Force remove class if remove is running in same tick
+      element.removeClass('md-prepare-enter');
 
       $animate.leave(backdrop);
       return $animate.leave(bottomSheet.element).then(function() {
