@@ -93,16 +93,6 @@ md-input-container {
     @include rtl(right, auto, 0);
   }
 
-  // icon offset should have higher priority as normal label
-  &.md-has-icon {
-    @include rtl(padding-left, $icon-offset, 0);
-    @include rtl(padding-right, 0, $icon-offset);
-    > label {
-      @include rtl(left, $icon-offset, auto);
-      @include rtl(right, auto, $icon-offset);
-    }
-  }
-
   label:not(.md-no-float):not(.md-container-ignore),
   .md-placeholder {
     order: 1;
@@ -301,45 +291,58 @@ md-input-container {
       margin-bottom: -1px; // Shift downward so dotted line is positioned the same as other bottom borders
     }
   }
-}
 
-md-input-container.md-icon-float {
+  &.md-icon-float {
 
-  transition: margin-top 0.5s $swift-ease-out-timing-function;
+    transition: margin-top 0.5s $swift-ease-out-timing-function;
 
-  > label {
-    pointer-events: none;
-    position: absolute;
+    > label {
+      pointer-events: none;
+      position: absolute;
+    }
+
+    > md-icon {
+      top: 2px;
+      @include rtl(left, 2px, auto);
+      @include rtl(right, auto, 2px);
+    }
+
+    &.md-input-focused,
+    &.md-input-has-value {
+
+      label {
+        transform: translate3d(0, $input-label-float-offset, 0) scale($input-label-float-scale);
+        transition: transform $swift-ease-out-timing-function 0.5s;
+      }
+    }
+
   }
 
-  > md-icon {
-    top: 2px;
-    @include rtl(left, 2px, auto);
-    @include rtl(right, auto, 2px);
-  }
-
-  &.md-input-focused,
-  &.md-input-has-value {
-
-    label {
-      transform: translate3d(0, $input-label-float-offset, 0) scale($input-label-float-scale);
-      transition: transform $swift-ease-out-timing-function 0.5s;
+  // icon offset should have higher priority as normal label
+  &.md-icon-left {
+    @include rtl(padding-left, $icon-offset, 0);
+    @include rtl(padding-right, 0, $icon-offset);
+    > label {
+      @include rtl(left, $icon-offset, auto);
+      @include rtl(right, auto, $icon-offset);
     }
   }
 
-}
+  &.md-icon-right {
+    @include rtl(padding-left, 0, $icon-offset);
+    @include rtl(padding-right, $icon-offset, 0);
 
-md-input-container.md-icon-right {
-  @include rtl(padding-right, $icon-offset, $icon-offset);
-  @include rtl(padding-left, $icon-offset, $icon-offset);
-
-  .md-errors-spacer {
-    + md-icon {
+    > md-icon:last-of-type {
       margin: 0;
 
       @include rtl(right, 2px, auto);
       @include rtl(left, auto, 2px);
     }
+  }
+
+  &.md-icon-left.md-icon-right {
+    padding-left: $icon-offset;
+    padding-right: $icon-offset;
   }
 }
 

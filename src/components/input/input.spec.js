@@ -458,4 +458,72 @@ describe('md-input-container directive', function() {
       expect(textarea.offsetHeight).toBeGreaterThan(oldHeight);
     });
   });
+
+  describe('icons', function () {
+    it('should add md-icon-left class when md-icon is before the input', function () {
+      var el = compile(
+        '<md-input-container>' +
+        '  <md-icon></md-icon>' +
+        '  <input ng-model="foo">' +
+        '</md-input-container>'
+      );
+
+      expect(el.hasClass('md-icon-left')).toBeTruthy();
+
+    });
+
+    it('should add md-icon-left class when .md-icon is before the input', function () {
+      var el = compile(
+        '<md-input-container>' +
+        '  <i class="md-icon"></i>' +
+        '  <input ng-model="foo">' +
+        '</md-input-container>'
+      );
+      expect(el.hasClass('md-icon-left')).toBeTruthy();
+    });
+
+    it('should add md-icon-right class when md-icon is after the input', function () {
+      var el = compile(
+        '<md-input-container>' +
+        '  <input ng-model="foo">' +
+        '  <md-icon></md-icon>' +
+        '</md-input-container>'
+      );
+
+      expect(el.hasClass('md-icon-right')).toBeTruthy();
+
+    });
+
+    it('should add md-icon-right class when .md-icon is after the input', function () {
+      var el = compile(
+        '<md-input-container>' +
+        '  <input ng-model="foo">' +
+        '  <i class="md-icon"></i>' +
+        '</md-input-container>'
+      );
+      expect(el.hasClass('md-icon-right')).toBeTruthy();
+    });
+
+    it('should add md-icon-left and md-icon-right classes when md-icons are before and after the input', function () {
+      var el = compile(
+        '<md-input-container>' +
+        '  <md-icon></md-icon>' +
+        '  <input ng-model="foo">' +
+        '  <md-icon></md-icon>' +
+        '</md-input-container>'
+      );
+      expect(el.hasClass('md-icon-left md-icon-right')).toBeTruthy();
+    });
+
+    it('should add md-icon-left and md-icon-right classes when .md-icons are before and after the input', function () {
+      var el = compile(
+        '<md-input-container>' +
+        '  <i class="md-icon"></i>' +
+        '  <input ng-model="foo">' +
+        '  <i class="md-icon"></i>' +
+        '</md-input-container>'
+      );
+      expect(el.hasClass('md-icon-left md-icon-right')).toBeTruthy();
+    });
+  });
 });
