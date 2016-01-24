@@ -115,13 +115,23 @@ md-radio-button {
 }
 
 md-radio-group {
-  md-radio-button {
-    &:not(:first-child) {
-      margin-top: $radio-margin;
+  &.layout-column,
+  &.layout-xs-column, &.layout-gt-xs-column,
+  &.layout-sm-column, &.layout-gt-sm-column,
+  &.layout-md-column, &.layout-gt-md-column,
+  &.layout-lg-column, &.layout-gt-lg-column,
+  &.layout-xl-column {
+    md-radio-button {
+      margin-bottom: $radio-margin;
     }
   }
 
-  &.layout-row {
+  &.layout-row,
+  &.layout-xs-row, &.layout-gt-xs-row,
+  &.layout-sm-row, &.layout-gt-sm-row,
+  &.layout-md-row, &.layout-gt-md-row,
+  &.layout-lg-row, &.layout-gt-lg-row,
+  &.layout-xl-row {
     md-radio-button {
       margin-top: 0;
       margin-bottom: 0;
