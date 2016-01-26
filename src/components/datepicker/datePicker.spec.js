@@ -189,6 +189,24 @@ describe('md-date-picker', function() {
       expect(controller.ngModelCtrl.$error['mindate']).toBeFalsy();
     });
 
+    it('should not enforce `required` when a min-date is set', function() {
+      pageScope.isRequired = false;
+      pageScope.minDate = new Date(2015, JAN, 1);
+      pageScope.myDate = null;
+      pageScope.$apply();
+
+      expect(controller.ngModelCtrl.$error['mindate']).toBeFalsy();
+    });
+
+    it('should not enforce `required` when a max-date is set', function() {
+      pageScope.isRequired = false;
+      pageScope.maxDate = new Date(2015, JAN, 1);
+      pageScope.myDate = null;
+      pageScope.$apply();
+
+      expect(controller.ngModelCtrl.$error['mindate']).toBeFalsy();
+    });
+
     describe('inside of a form element', function() {
       var formCtrl;
 
