@@ -3,18 +3,20 @@ var karma = require('karma').server;
 var util = require('../util');
 var ROOT = require('../const').ROOT;
 var args = util.args;
+var Server = require('karma').Server;
+var karmaConfig = {
+  logLevel: 'warn',
+  singleRun: true,
+  autoWatch: false,
+  configFile: ROOT + '/config/karma.conf.js'
+};
+var karma;    // karma server instance using `new Server()`
 
 // Make full build of JS and CSS
 exports.dependencies = ['build'];
 
 exports.task = function (done) {
   var errorCount = 0;
-  var karmaConfig = {
-    logLevel: 'warn',
-    singleRun: true,
-    autoWatch: false,
-    configFile: ROOT + '/config/karma.conf.js'
-  };
 
   /**
    * For each version of testings (unminified, minified, minified w/ jQuery)
@@ -46,19 +48,24 @@ exports.task = function (done) {
   }
 
   gutil.log('Running unit tests on unminified source.');
-  karma.start(karmaConfig, captureError(testMinified,clearEnv));
+  karma = new Server( karmaConfig, captureError(testMinified,clearEnv));
+  karma.start();
 
   function testMinified() {
     gutil.log('Running unit tests on minified source.');
     process.env.KARMA_TEST_COMPRESSED = true;
-    karma.start(karmaConfig, captureError(testMinifiedJquery,clearEnv));
+
+    karma = new Server(karmaConfig, captureError(testMinifiedJquery,clearEnv));
+    karma.start();
   }
 
   function testMinifiedJquery() {
     gutil.log('Running unit tests on minified source w/ jquery.');
     process.env.KARMA_TEST_COMPRESSED = true;
     process.env.KARMA_TEST_JQUERY = true;
-    karma.start(karmaConfig, clearEnv);
+
+    karma = new Server(karmaConfig, clearEnv);
+    karma.start();
   }
 
   function clearEnv() {

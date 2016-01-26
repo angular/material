@@ -31,7 +31,7 @@
     }
   }
 
-  @for $i from 0 through 19 {
+  @for $i from -20 through 20 {
     $order : '';
     $suffix : '';
 
@@ -47,6 +47,7 @@
     }
   }
 }
+
 @mixin offset-for-name($sizes:null) {
   @if $sizes == null { $sizes : ''; }
 
@@ -111,8 +112,8 @@
     display: -ms-flexbox;
     display: flex;
   }
-  .layout#{$name}-column {  flex-direction: column;  }
-  .layout#{$name}-row    {  flex-direction: row;     }
+  .layout#{$name}-column {  flex-direction: column;     }
+  .layout#{$name}-row    {  flex-direction: row;        }
 }
 
 @mixin flex-properties-for-name($name: null) {
@@ -125,10 +126,25 @@
   }
 
   .#{$flexName}             { flex: 1;         box-sizing: border-box; }  // === flex: 1 1 0%;
+
+  // IE mediaQuery hack for 8,9,10 to set the flex-basis properly for 'flex' values
+  // Details:
+  // Do not use unitless flex-basis values in the flex shorthand because IE 10-11 will error.
+  // Also use 0% instead of 0px since minifiers will often convert 0px to 0 (which is unitless and will have the same problem).
+  // Safari, however, fails with flex-basis : 0% and requires flex-basis : 0px
+  @media screen\0 {
+      .#{$flexName} {
+        flex: 1 1 0%;
+      }
+  }
+
+
   .#{$flexName}-grow        { flex: 1 1 100%;  box-sizing: border-box; }
   .#{$flexName}-initial     { flex: 0 1 auto;  box-sizing: border-box; }
   .#{$flexName}-auto        { flex: 1 1 auto;  box-sizing: border-box; }
   .#{$flexName}-none        { flex: 0 0 auto;  box-sizing: border-box; }
+  .#{$flexName}-noshrink    { flex: 1 0 auto;  box-sizing: border-box; }
+  .#{$flexName}-nogrow      { flex: 0 1 auto;  box-sizing: border-box; }
 
   // (1-20) * 5 = 0-100%
   @for $i from 0 through 20 {
@@ -147,6 +163,9 @@
       max-width: #{$value};
       max-height: 100%;
       box-sizing: border-box;
+
+      // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+      @if $i == 0 {  min-width: 0;  }
     }
 
     .layout-column > .#{$flexName}-#{$i * 5},
@@ -155,17 +174,29 @@
       max-width: 100%;
       max-height: #{$value};
       box-sizing: border-box;
+
+      // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+      @if $i == 0 {  min-height: 0;  }
     }
+
+
   }
 
   .layout-row, .layout#{$name}-row {
-    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 33%;  max-width: calc(100% / 3);  max-height: 100%; box-sizing: border-box; }
-    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 66%;  max-width: calc(200% / 3);  max-height: 100%; box-sizing: border-box; }
+    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 calc(100% / 3);  max-width: calc(100% / 3);  max-height: 100%; box-sizing: border-box; }
+    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 calc(200% / 3);  max-width: calc(200% / 3);  max-height: 100%; box-sizing: border-box; }
+
+    // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+    > .flex                                       { min-width: 0;   }
   }
   .layout-column, .layout#{$name}-column {
-    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 33%;  max-width: 100%;  max-height: calc(100% / 3); box-sizing: border-box; }
-    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 66%;  max-width: 100%;  max-height: calc(200% / 3); box-sizing: border-box; }
+    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 calc(100% / 3);  max-width: 100%;  max-height: calc(100% / 3); box-sizing: border-box; }
+    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 calc(200% / 3);  max-width: 100%;  max-height: calc(200% / 3); box-sizing: border-box; }
+
+    // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+    > .flex                                       { min-height: 0;  }
   }
+
 }
 
 @mixin layout-align-for-name($suffix: null) {
@@ -184,7 +215,7 @@
   .#{$name},
   .#{$name}-start-stretch // defaults
   {
-    justify-content : start;
+    justify-content : flex-start;
     align-content : stretch;
     align-items: stretch;
   }
@@ -196,7 +227,7 @@
   .#{$name}-start-end,
   .#{$name}-start-stretch
   {
-    justify-content: start;
+    justify-content: flex-start;
   }
 
   // Main Axis Center
@@ -443,12 +474,15 @@
 }
 
 @media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
-  // SMALL SCREEN
-  .hide-sm, .hide {
-    &:not(.show-sm):not(.show) {
+  .hide, .hide-gt-xs {
+    &:not(.show-gt-xs):not(.show-sm):not(.show) {
       display: none;
     }
   }
+  .hide-sm:not(.show-gt-xs):not(.show-sm):not(.show) {
+    display: none;
+  }
+
   @include layouts_for_breakpoint(sm);
 }
 
@@ -460,12 +494,12 @@
 
 @media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
   // MEDIUM SCREEN
-  .hide, .hide-gt-sm {
-    &:not(.show-gt-sm):not(.show-md):not(.show) {
+  .hide, .hide-gt-xs, .hide-gt-sm {
+    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-md):not(.show) {
       display: none;
     }
   }
-  .hide-md:not(.show-md):not(.show) {
+  .hide-md:not(.show-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
     display: none;
   }
   @include layouts_for_breakpoint(md);
@@ -478,32 +512,31 @@
 
 @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
   // LARGE SCREEN
-  .hide, .hide-gt-sm, .hide-gt-md {
-      &:not(.show-gt-sm):not(.show-gt-md):not(.show-lg):not(.show) {
-        display: none;
-      }
-    }
-    .hide-lg:not(.show-lg):not(.show) {
+  .hide,.hide-gt-xs, .hide-gt-sm, .hide-gt-md {
+    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-lg):not(.show) {
       display: none;
     }
+  }
+  .hide-lg:not(.show-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
+    display: none;
+  }
 
   @include layouts_for_breakpoint(lg);
 }
 
 @media (min-width: $layout-breakpoint-lg) {
+  @include layouts_for_breakpoint(gt-lg);
+  @include layouts_for_breakpoint(xl);
+
   // BIGGER THAN LARGE SCREEN
-  .hide-gt-sm, .hide-gt-md, .hide-gt-lg, .hide {
-    &:not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show-xl):not(.show) {
+  .hide, .hide-gt-xs, .hide-gt-sm, .hide-gt-md, .hide-gt-lg {
+    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show-xl):not(.show) {
       display: none;
     }
   }
-  .hide-xl:not(.show-xl):not(.show) {
+  .hide-xl:not(.show-xl):not(.show-gt-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
     display: none;
   }
 
-
-  // BIGGER THAN LARGE SCREEN
-  @include layouts_for_breakpoint(gt-lg);
-  @include layouts_for_breakpoint(xl);
 }
 

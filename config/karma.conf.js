@@ -59,6 +59,9 @@ module.exports = function(config) {
     singleRun: true,
     autoWatch: false,
 
+    // Only launch one browser at a time since doing multiple can cause disconnects/issues
+    concurrency: 1,
+
     // Start these browsers, currently available:
     // - Chrome
     // - ChromeCanary

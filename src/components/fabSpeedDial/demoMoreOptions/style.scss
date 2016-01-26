@@ -41,10 +41,12 @@ md-fab-speed-dial {
 
   // Note: you MUST use an existing CSS class for the animation to fire properly
   &.md-scale, &.md-fling {
-    &.ng-hide {
+    &.ng-hide-add.ng-hide-add-active {
       // Use !important to override ng-hide's `display: none !important`
       display: flex !important;
+    }
 
+    &.ng-hide {
       md-fab-trigger {
         transform: scale(0);
       }

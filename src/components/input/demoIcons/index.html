@@ -1,7 +1,7 @@
-<div ng-controller="DemoCtrl" layout="column" ng-cloak>
+<div ng-controller="DemoCtrl" layout="column" layout-padding ng-cloak>
 
   <br/>
-  <md-content layout-padding class="autoScroll">
+  <md-content class="autoScroll">
     <md-input-container class="md-icon-float md-block">
       <!-- Use floating label instead of placeholder -->
       <label>Name</label>
@@ -28,10 +28,8 @@
     <md-input-container class="md-icon-float md-icon-right md-block">
       <label>Donation Amount</label>
       <md-icon md-svg-src="img/icons/ic_card_giftcard_24px.svg"></md-icon>
-      <div layout="row">
-        <input ng-model="user.donation" type="number" step="0.01" flex>
-        <md-icon md-svg-src="img/icons/ic_euro_24px.svg" style="position: absolute; top: 4px;"></md-icon>
-      </div>
+      <input ng-model="user.donation" type="number" step="0.01">
+      <md-icon md-svg-src="img/icons/ic_euro_24px.svg"></md-icon>
     </md-input-container>
 
   </md-content>

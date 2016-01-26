@@ -9,25 +9,50 @@ describe('md-button', function() {
     expect(button[0]).toHaveClass('hide-sm');
   }));
 
-  it('should only have one ripple container when a custom ripple color is set', inject(function ($compile, $rootScope, $timeout) {
-    var button = $compile('<md-button md-ink-ripple="#f00">button</md-button>')($rootScope);
+  describe('with ARIA support', function() {
 
-    button.triggerHandler({ type: '$md.pressdown', pointer: { x: 0, y: 0 } });
-    expect(button[0].getElementsByClassName('md-ripple-container').length).toBe(0);
-  }));
+    it('should only have one ripple container when a custom ripple color is set', inject(function ($compile, $rootScope) {
+      var button = $compile('<md-button md-ink-ripple="#f00">button</md-button>')($rootScope);
+
+      button.triggerHandler({ type: '$md.pressdown', pointer: { x: 0, y: 0 } });
+      expect(button[0].getElementsByClassName('md-ripple-container').length).toBe(0);
+    }));
 
 
-  it('should expect an aria-label if element has no text', inject(function($compile, $rootScope, $log) {
-    spyOn($log, 'warn');
-    var button = $compile('<md-button><md-icon></md-icon></md-button>')($rootScope);
-    $rootScope.$apply();
-    expect($log.warn).toHaveBeenCalled();
+    it('should expect an aria-label if element has no text', inject(function($compile, $rootScope, $log) {
+      spyOn($log, 'warn');
+      var button = $compile('<md-button><md-icon></md-icon></md-button>')($rootScope);
+      $rootScope.$apply();
+      expect($log.warn).toHaveBeenCalled();
 
-    $log.warn.calls.reset();
-    button = $compile('<md-button aria-label="something"><md-icon></md-icon></md-button>')($rootScope);
-    $rootScope.$apply();
-    expect($log.warn).not.toHaveBeenCalled();
-  }));
+      $log.warn.calls.reset();
+      button = $compile('<md-button aria-label="something"><md-icon></md-icon></md-button>')($rootScope);
+      $rootScope.$apply();
+      expect($log.warn).not.toHaveBeenCalled();
+    }));
+
+    it('should expect an aria-label if element has text content', inject(function($compile, $rootScope, $log) {
+      spyOn($log, 'warn');
+
+      var button = $compile('<md-button>Hello</md-button>')($rootScope);
+      expect(button.attr('aria-label')).toBe("Hello");
+      expect($log.warn).not.toHaveBeenCalled();
+    }));
+
+    it('should set an aria-label if the text content using bindings', inject(function($$rAF, $compile, $rootScope, $log, $timeout) {
+      spyOn($log, 'warn');
+
+      var scope = angular.extend($rootScope.$new(),{greetings : "Welcome"});
+      var button = $compile('<md-button>{{greetings}}</md-button>')(scope);
+
+      $rootScope.$apply();
+      $$rAF.flush();    // needed for $mdAria.expectAsync()
+
+      expect(button.attr('aria-label')).toBe("Welcome");
+      expect($log.warn).not.toHaveBeenCalled();
+    }));
+
+  });
 
   it('should allow attribute directive syntax', inject(function($compile, $rootScope) {
     var button = $compile('<a md-button href="https://google.com">google</a>')($rootScope.$new());

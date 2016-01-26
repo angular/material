@@ -86,14 +86,11 @@ function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $timeout) {
   }
 
   function postLink(scope, element, attr) {
-    var node = element[0];
     $mdTheming(element);
     $mdButtonInkRipple.attach(scope, element);
 
-    var elementHasText = node.textContent.trim();
-    if (!elementHasText) {
-      $mdAria.expect(element, 'aria-label');
-    }
+    // Use async expect to support possible bindings in the button label
+    $mdAria.expectWithText(element, 'aria-label');
 
     // For anchor elements, we have to set tabindex manually when the
     // element is disabled

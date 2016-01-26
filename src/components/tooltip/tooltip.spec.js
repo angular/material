@@ -41,7 +41,7 @@ describe('<md-tooltip> directive', function() {
         '</md-button>'
       );
 
-      expect(element.attr('aria-label')).toBeUndefined();
+      expect(element.attr('aria-label')).toBe("Hello");
   });
 
   it('should label parent', function(){

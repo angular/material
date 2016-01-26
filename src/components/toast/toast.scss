@@ -1,39 +1,54 @@
 // See height set globally, depended on by buttons
 
-
 md-toast {
-  display: flex;
-  position:absolute;
+  position: absolute;
   z-index: $z-index-toast;
 
   box-sizing: border-box;
-  align-items: center;
-
-  min-height: 48px;
-  padding-left: 24px;
-  padding-right: 24px;
-
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-  border-radius: 2px;
-  font-size: 14px;
   cursor: default;
+  overflow: hidden;
 
-  height: 0px;
-  max-height: 7*$toast-height;
-  max-width: 100%;
+  // Add some padding to the outer toast container so that the wrapper's box shadow is visible
+  padding: $toast-margin;
 
-  overflow:hidden;
+  // Setup opacity transition on whole toast
+  opacity: 1;
+  transition: $swift-ease-out;
+
+  .md-toast-content {
+    display: flex;
+    align-items: center;
+
+    height: 0;
+    max-height: 7 * $toast-height;
+    max-width: 100%;
+    min-height: 48px;
+    padding-left: 24px;
+    padding-right: 24px;
+
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    border-radius: 2px;
+    font-size: 14px;
+
+    overflow: hidden;
+
+    // Setup for transform transitions on inner content
+    transform: translate3d(0, 0, 0) rotateZ(0deg);
+    transition: $swift-ease-out;
+  }
 
   &.md-capsule {
     border-radius: 24px;
+
+    .md-toast-content {
+      border-radius: 24px;
+    }
   }
 
-  opacity: 1;
-  transform: translate3d(0,0,0) rotateZ(0deg);
-  transition: $swift-ease-out;
-
   &.ng-leave-active {
-    transition: $swift-ease-in;
+    .md-toast-content {
+      transition: $swift-ease-in;
+    }
   }
 
   /* Transition differently when swiping */
@@ -41,18 +56,26 @@ md-toast {
   &.md-swiperight,
   &.md-swipeup,
   &.md-swipedown {
-    transition: $swift-ease-out;
+    .md-toast-content {
+      transition: $swift-ease-out;
+    }
   }
 
   &.ng-enter {
-    transform: translate3d(0, 100%, 0);
-    &.md-top {
-      transform: translate3d(0, -100%, 0);
-    }
     opacity: 0;
+    .md-toast-content {
+      transform: translate3d(0, 100%, 0);
+    }
+    &.md-top {
+      .md-toast-content {
+        transform: translate3d(0, -100%, 0);
+      }
+    }
     &.ng-enter-active {
-      transform: translate3d(0, 0, 0);
       opacity: 1;
+      .md-toast-content {
+        transform: translate3d(0, 0, 0);
+      }
     }
   }
   /*
@@ -60,17 +83,25 @@ md-toast {
    * make it rotate when the user swipes it away
    */
   &.ng-leave.ng-leave-active {
-    opacity: 0;
-    transform: translate3d(0, 100%, 0);
+    .md-toast-content {
+      opacity: 0;
+      transform: translate3d(0, 100%, 0);
+    }
 
     &.md-swipeup {
-      transform: translate3d(0, -50%, 0);
+      .md-toast-content {
+        transform: translate3d(0, -50%, 0);
+      }
     }
     &.md-swipedown {
-      transform: translate3d(0, 50%, 0);
+      .md-toast-content {
+        transform: translate3d(0, 50%, 0);
+      }
     }
     &.md-top {
-      transform: translate3d(0, -100%, 0);
+      .md-toast-content {
+        transform: translate3d(0, -100%, 0);
+      }
     }
   }
 
@@ -88,7 +119,7 @@ md-toast {
   }
 }
 
-@media (max-width: $layout-breakpoint-sm) {
+@media (max-width: $layout-breakpoint-sm - 1) {
   md-toast {
     left: 0;
     right: 0;
@@ -100,28 +131,33 @@ md-toast {
 
     &.ng-leave.ng-leave-active {
       &.md-swipeup {
-        transform: translate3d(0, -50%, 0);
+        .md-toast-content {
+          transform: translate3d(0, -50%, 0);
+        }
       }
       &.md-swipedown {
-        transform: translate3d(0, 50%, 0);
+        .md-toast-content {
+          transform: translate3d(0, 50%, 0);
+        }
       }
     }
   }
 }
+
 @media (min-width: $layout-breakpoint-sm) {
   md-toast {
-    min-width: 288px;
+    min-width: 288px + $toast-margin * 2;
     &.md-bottom {
-      bottom: $toast-margin;
+      bottom: 0;
     }
     &.md-left {
-      left: $toast-margin;
+      left: 0;
     }
     &.md-right {
-      right: $toast-margin;
+      right: 0;
     }
     &.md-top {
-      top: $toast-margin;
+      top: 0;
     }
 
     /*
@@ -130,10 +166,14 @@ md-toast {
    */
     &.ng-leave.ng-leave-active {
       &.md-swipeleft {
-        transform: translate3d(-50%, 0, 0);
+        .md-toast-content {
+          transform: translate3d(-50%, 0, 0);
+        }
       }
       &.md-swiperight {
-        transform: translate3d(50%, 0, 0);
+        .md-toast-content {
+          transform: translate3d(50%, 0, 0);
+        }
       }
     }
   }
@@ -141,11 +181,11 @@ md-toast {
 
 @media (min-width: $layout-breakpoint-lg) {
   md-toast {
-    max-width: $baseline-grid * 71;
+    .md-toast-content {
+      max-width: $baseline-grid * 71;
+    }
   }
 }
-
-
 
 @media screen and (-ms-high-contrast: active) {
   md-toast {

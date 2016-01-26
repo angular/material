@@ -36,6 +36,8 @@ ANGULAR_FILES=(
   angular-aria
   angular-messages
   angular-mocks
+  angular-sanitize
+  angular-touch
 )
 
 if [ ${#VERSIONS[@]} == 0 ]; then

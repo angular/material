@@ -1,12 +1,12 @@
 (function() {
   'use strict';
 
-  var $mdUtil, $interpolate;
+  var $mdUtil, $interpolate, $log;
 
   var SUFFIXES = /(-gt)?-(sm|md|lg)/g;
   var WHITESPACE = /\s+/g;
 
-  var FLEX_OPTIONS = ['grow', 'initial', 'auto', 'none'];
+  var FLEX_OPTIONS = ['grow', 'initial', 'auto', 'none', 'noshrink', 'nogrow' ];
   var LAYOUT_OPTIONS = ['row', 'column'];
   var ALIGNMENT_MAIN_AXIS= [ "", "start", "center", "end", "stretch", "space-around", "space-between" ];
   var ALIGNMENT_CROSS_AXIS= [ "", "start", "center", "end", "stretch" ];
@@ -218,9 +218,10 @@
    */
   function attributeWithObserve(className) {
 
-    return ['$mdUtil', '$interpolate', function(_$mdUtil_, _$interpolate_) {
+    return ['$mdUtil', '$interpolate', "$log", function(_$mdUtil_, _$interpolate_, _$log_) {
       $mdUtil = _$mdUtil_;
       $interpolate = _$interpolate_;
+      $log = _$log_;
 
       return {
         restrict: 'A',
@@ -228,6 +229,8 @@
           var linkFn;
           if (config.enabled) {
             // immediately replace static (non-interpolated) invalid values...
+
+            validateAttributeUsage(className, attr, element, $log);
 
             validateAttributeValue( className,
               getNormalizedAttrValue(className, attr, ""),
@@ -262,8 +265,10 @@
    * any attribute value
    */
   function attributeWithoutValue(className) {
-    return ['$interpolate', function(_$interpolate_) {
+    return ['$mdUtil', '$interpolate', "$log", function(_$mdUtil_, _$interpolate_, _$log_) {
+      $mdUtil = _$mdUtil_;
       $interpolate = _$interpolate_;
+      $log = _$log_;
 
       return {
         restrict: 'A',
@@ -339,6 +344,30 @@
   }
 
   /**
+   * Centralize warnings for known flexbox issues (especially IE-related issues)
+   */
+  function validateAttributeUsage(className, attr, element, $log){
+    var message, usage, url;
+    var nodeName = element[0].nodeName.toLowerCase();
+
+    switch(className.replace(SUFFIXES,"")) {
+      case "flex":
+        if ((nodeName == "md-button") || (nodeName == "fieldset")){
+          // @see https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers
+          // Use <div flex> wrapper inside (preferred) or outside
+
+          usage = "<" + nodeName + " " + className + "></" + nodeName + ">";
+          url = "https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers";
+          message = "Markup '{0}' may not work as expected in IE Browsers. Consult '{1}' for details.";
+
+          $log.warn( $mdUtil.supplant(message, [usage, url]) );
+        }
+    }
+
+  }
+
+
+  /**
    * For the Layout attribute value, validate or replace with default
    * fallback value
    */
@@ -396,7 +425,9 @@
   function buildUpdateFn(element, className, attrs) {
     return function updateAttrValue(fallback) {
       if (!needsInterpolation(fallback)) {
-        element.attr(className, fallback);
+        // Do not modify the element's attribute value; so
+        // uses '<ui-layout layout="/api/sidebar.html" />' will not
+        // be affected. Just update the attrs value.
         attrs[attrs.$normalize(className)] = fallback;
       }
     };
@@ -428,16 +459,22 @@
     return found;
   }
 
-  function extractAlignAxis(config) {
-    config = (config || "");
-
+  function extractAlignAxis(attrValue) {
     var axis = {
       main : "start",
       cross: "stretch"
     }, values;
 
-    values = (config || "").toLowerCase().trim().replace(WHITESPACE, "-").split("-");
-    if ( values[0] === "space" ) {
+    attrValue = (attrValue || "");
+
+    if ( attrValue.indexOf("-") == 0 || attrValue.indexOf(" ") == 0) {
+      // For missing main-axis values
+      attrValue = "none" + attrValue;
+    }
+
+    values = attrValue.toLowerCase().trim().replace(WHITESPACE, "-").split("-");
+    if ( values.length && (values[0] === "space") ) {
+      // for main-axis values of "space-around" or "space-between"
       values = [ values[0]+"-"+values[1],values[2] ];
     }
 

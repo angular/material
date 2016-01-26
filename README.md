@@ -7,10 +7,7 @@ material design specification for use in Angular single-page applications (SPAs)
 
 ![venn diagram](https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png)
 
-This project is in early pre-release. Angular Material is both a reference implementation of
-Material Design and a complementary effort to the [Polymer](https://www.polymer-project.org/)
-project's [Paper Elements](https://elements.polymer-project.org/)
-collection.
+For developers using AngularJS, Angular Material is the reference implementation of Google's Material Design Specification. This project implements version 1.x of Angular Material and includes a rich set of reusable, well-tested, and accessible UI components.
 
 Quick Links:
 
@@ -38,8 +35,8 @@ Material is targeted for all browsers with versions n-1; where n is the current 
 
 Developers interested in contributing should read the following guidelines:
 
-- [Issue Guidelines](docs/guides/CONTRIBUTING.md#submit)
-- [Contributing Guidelines](docs/guides/CONTRIBUTING.md)
+- [Issue Guidelines](CONTRIBUTING.md#submit)
+- [Contributing Guidelines](CONTRIBUTING.md)
 - [Coding Guidelines](docs/guides/CODING.md)
 - [ChangeLog](CHANGELOG.md)
 

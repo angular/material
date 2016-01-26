@@ -228,12 +228,13 @@ describe('material.components.menuBar', function() {
       });
       it('reflects the ng-model value', inject(function($rootScope) {
         var menuItem = setup('ng-model="test"')[0];
-        expect(menuItem.getAttribute('aria-checked')).toBe('false');
+        var button = menuItem.querySelector('md-button');
+        expect(button.getAttribute('aria-checked')).toBe('false');
         expect(menuItem.children[0].style.display).toBe('none');
         $rootScope.test = true;
         $rootScope.$digest();
         expect(menuItem.children[0].style.display).toBe('');
-        expect(menuItem.getAttribute('aria-checked')).toBe('true');
+        expect(button.getAttribute('aria-checked')).toBe('true');
       }));
 
       function setup(attrs) {
@@ -283,12 +284,13 @@ describe('material.components.menuBar', function() {
       it('reflects the ng-model value', inject(function($rootScope) {
         $rootScope.test = 'apple';
         var menuItem = setup('ng-model="test" value="hello"')[0];
-        expect(menuItem.getAttribute('aria-checked')).toBe('false');
+        var button = menuItem.querySelector('md-button');
+        expect(button.getAttribute('aria-checked')).toBe('false');
         expect(menuItem.children[0].style.display).toBe('none');
         $rootScope.test = 'hello';
         $rootScope.$digest();
         expect(menuItem.children[0].style.display).toBeFalsy();
-        expect(menuItem.getAttribute('aria-checked')).toBe('true');
+        expect(button.getAttribute('aria-checked')).toBe('true');
       }));
 
       function setup(attrs) {

@@ -1,3 +1,7 @@
+div.flex-xs {
+  min-height:40px;
+
+}
 .checkboxDemo1 div {
   clear: both;
 }

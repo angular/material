@@ -369,6 +369,68 @@ describe('$mdThemeProvider with on-demand generation', function() {
   });
 });
 
+describe('$mdThemeProvider with nonce', function() {
+  beforeEach(function() {
+
+    module('material.core', function($provide) {
+      /**
+       *  material-mocks.js clears the $MD_THEME_CSS for Karma testing performance
+       *  performance optimizations. Here inject some length into our theme_css so that
+       *  palettes are parsed/generated
+       */
+      $provide.constant('$MD_THEME_CSS', '/**/');
+    });
+  });
+
+  describe('and auto-generated themes', function() {
+    beforeEach(function() {
+      module('material.core', function($mdThemingProvider) {
+        $mdThemingProvider.generateThemesOnDemand(false);
+
+        $mdThemingProvider.theme('auto-nonce')
+            .primaryPalette('light-blue')
+            .accentPalette('yellow');
+
+        $mdThemingProvider.setNonce('1');
+      });
+      inject();
+    });
+
+    it('should add a nonce', function() {
+      var styles = document.head.querySelectorAll('style[nonce="1"]');
+      expect(styles.length).toBe(4);
+    });
+  });
+
+  describe('and on-demand generated themes', function() {
+    var $mdTheming;
+
+    beforeEach(function() {
+      module('material.core', function($mdThemingProvider) {
+        $mdThemingProvider.generateThemesOnDemand(true);
+
+        $mdThemingProvider.theme('nonce')
+            .primaryPalette('light-blue')
+            .accentPalette('yellow');
+
+        $mdThemingProvider.setNonce('2');
+      });
+      inject(function(_$mdTheming_) {
+        $mdTheming = _$mdTheming_;
+      });
+    });
+
+    it('should add a nonce', function() {
+      var styles = document.head.querySelectorAll('style[nonce="2"]');
+      expect(styles.length).toBe(0);
+
+      $mdTheming.generateTheme('nonce');
+      styles = document.head.querySelectorAll('style[nonce="2"]');
+      expect(styles.length).toBe(4);
+    });
+  });
+});
+
 describe('$mdTheming service', function() {
   var $mdThemingProvider;
   beforeEach(module('material.core', function(_$mdThemingProvider_) {

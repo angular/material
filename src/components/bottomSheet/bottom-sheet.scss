@@ -125,11 +125,11 @@ md-bottom-sheet {
         @include grid-items-per-row(3, true);
       }
 
-      @media screen and (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md) {
+      @media screen and (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
         @include grid-items-per-row(4);
       }
 
-      @media screen and (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg) {
+      @media screen and (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
         @include grid-items-per-row(6);
       }
 
@@ -178,6 +178,7 @@ md-bottom-sheet {
   }
 }
 
+// IE only
 @media screen and (-ms-high-contrast: active) {
   md-bottom-sheet {
     border: 1px solid #fff;

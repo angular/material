@@ -4,7 +4,7 @@ Before you submit your pull request consider the following guidelines:
 * Search [GitHub](https://github.com/angular/material/pulls) for an open or closed Pull Request
   that relates to your submission. You don't want to duplicate effort.
 
-* Please sign our [Contributor License Agreement (CLA)](CONTRIBUTING.md#cla) before sending pull
+* Please sign our [Contributor License Agreement (CLA)](../../CONTRIBUTING.md#cla) before sending pull
   requests. We cannot accept code without this.
 
 * Make your changes in a new git branch:
@@ -23,7 +23,7 @@ Before you submit your pull request consider the following guidelines:
   and ensure that all tests pass.
 
 * Commit your changes using a descriptive commit message that follows our
-  [commit message conventions](CONTRIBUTING.md#commit-message-format). Adherence to the [commit message conventions](CONTRIBUTING.md#commit-message-format) is required
+  [commit message conventions](../../CONTRIBUTING.md#commit-message-format). Adherence to the [commit message conventions](../../CONTRIBUTING.md#commit-message-format) is required
   because release notes are automatically generated from these messages.
 
      ```shell

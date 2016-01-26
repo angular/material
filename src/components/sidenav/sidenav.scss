@@ -92,7 +92,7 @@ md-sidenav {
   }
 }
 
-@media screen and (min-width: $layout-breakpoint-sm) {
+@media screen and (min-width: $layout-breakpoint-xs) {
   md-sidenav {
     max-width: $sidenav-desktop-width;
   }
@@ -106,6 +106,7 @@ md-sidenav {
   }
 }
 
+// IE Only
 @media screen and (-ms-high-contrast: active) {
   .md-sidenav-left {
     border-right: 1px solid #fff;

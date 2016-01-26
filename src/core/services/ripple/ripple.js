@@ -19,9 +19,9 @@ var DURATION = 450;
  * @module material.core.ripple
  *
  * @description
- * The `md-ripple-ink` directive allows you to specify the ripple color or id a ripple is allowed.
+ * The `md-ink-ripple` directive allows you to specify the ripple color or id a ripple is allowed.
  *
- * @param {string|boolean} md-ripple-ink A color string `#FF0000` or boolean (`false` or `0`) for preventing ripple
+ * @param {string|boolean} md-ink-ripple A color string `#FF0000` or boolean (`false` or `0`) for preventing ripple
  *
  * @usage
  * ### String values
@@ -259,7 +259,17 @@ InkRippleCtrl.prototype.handleMousedown = function (event) {
   if (this.options.center) {
     this.createRipple(this.container.prop('clientWidth') / 2, this.container.prop('clientWidth') / 2);
   } else {
-    this.createRipple(event.offsetX, event.offsetY);
+
+    // We need to calculate the relative coordinates if the target is a sublayer of the ripple element
+    if (event.srcElement !== this.$element[0]) {
+      var layerRect = this.$element[0].getBoundingClientRect();
+      var layerX = event.clientX - layerRect.left;
+      var layerY = event.clientY - layerRect.top;
+
+      this.createRipple(layerX, layerY);
+    } else {
+      this.createRipple(event.offsetX, event.offsetY);
+    }
   }
 };
 

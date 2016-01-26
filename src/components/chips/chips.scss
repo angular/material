@@ -183,6 +183,7 @@ $contact-chip-name-width: rem(12) !default;
     }
   }
 }
+// IE only
 @media screen and (-ms-high-contrast: active) {
   .md-chip-input-container,
   md-chip {

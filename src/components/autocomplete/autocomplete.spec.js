@@ -98,6 +98,30 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    // @TODO - re-enable test
+    xit('should allow receiving focus on the autocomplete', function() {
+      var scope = createScope(null, {inputId: 'custom-input-id'});
+      var template = '<md-autocomplete ' +
+            'md-input-id="{{inputId}}" ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+            'placeholder="placeholder">' +
+          '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var element = compile(template, scope);
+      var focusSpy = jasmine.createSpy('focus');
+
+      document.body.appendChild(element[0]);
+
+      element.on('focus', focusSpy);
+
+      element.focus();
+
+      expect(focusSpy).toHaveBeenCalled();
+    });
+
     it('should allow you to set an input id without floating label', inject(function() {
       var scope = createScope(null, {inputId: 'custom-input-id'});
       var template = '\
@@ -292,6 +316,54 @@ describe('<md-autocomplete>', function() {
       expect(li.querySelector('.find-parent-scope').innerHTML).toBe('boom');
       expect(li.querySelector('.find-index').innerHTML).toBe('0');
       expect(li.querySelector('.find-item').innerHTML).toBe('foo');
+
+      // Make sure we wrap up anything and remove the element
+      $timeout.flush();
+      element.remove();
+    }));
+
+    it('should ensure the parent scope digests along with the current scope', inject(function($timeout, $material) {
+      var scope = createScope(null, {bang: 'boom'});
+      var template =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder">' +
+        ' <md-item-template>' +
+        '   <span class="find-parent-scope">{{bang}}</span>' +
+        '   <span class="find-index">{{$index}}</span>' +
+        '   <span class="find-item">{{item.display}}</span>' +
+        ' </md-item-template>' +
+        '</md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var ul = element.find('ul');
+
+      $material.flushOutstandingAnimations();
+
+      // Focus the input
+      ctrl.focus();
+
+      element.scope().searchText = 'fo';
+
+      // Run our initial flush
+      $timeout.flush();
+      waitForVirtualRepeat(element);
+
+      // Wait for the next tick when the values will be updated
+      $timeout.flush();
+
+      var li = ul.find('li')[0];
+      var parentScope = angular.element(li.querySelector('.find-parent-scope')).scope();
+
+      // When the autocomplete item's scope digests, ensure that the parent
+      // scope does too.
+      parentScope.bang = 'big';
+      scope.$digest();
+
+      expect(li.querySelector('.find-parent-scope').innerHTML).toBe('big');
 
       // Make sure we wrap up anything and remove the element
       $timeout.flush();

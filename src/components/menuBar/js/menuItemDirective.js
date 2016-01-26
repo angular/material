@@ -10,6 +10,7 @@ angular
 function MenuItemDirective() {
   return {
     require: ['mdMenuItem', '?ngModel'],
+    priority: 210, // ensure that our post link runs after ngAria
     compile: function(templateEl, templateAttrs) {
       if (templateAttrs.type == 'checkbox' || templateAttrs.type == 'radio') {
         var text = templateEl[0].textContent;

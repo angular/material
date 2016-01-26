@@ -61,6 +61,7 @@ md-card {
 
   > img,
   > :not(md-card-content) img {
+    box-sizing: border-box;
     display: flex;
     flex: 0 0 auto;
     width: 100%;
@@ -117,7 +118,13 @@ md-card {
     padding: $card-padding;
 
     & > p {
-      margin: 0;
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
     .md-media-xl {
