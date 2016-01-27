@@ -746,17 +746,23 @@ function MdDialogProvider($$interimElementProvider) {
         // Add keydown listeners
         element.on('keydown', keyHandlerFn);
         target.on('keydown', keyHandlerFn);
-        window.on('resize', onWindowResize);
 
         // Queue remove listeners function
         removeListeners.push(function() {
 
           element.off('keydown', keyHandlerFn);
           target.off('keydown', keyHandlerFn);
-          window.off('resize', onWindowResize);
 
         });
       }
+
+      // Register listener to update dialog on window resize
+      window.on('resize', onWindowResize);
+
+      removeListeners.push(function() {
+        window.off('resize', onWindowResize);
+      });
+
       if (options.clickOutsideToClose) {
         var target = element;
         var sourceElem;
