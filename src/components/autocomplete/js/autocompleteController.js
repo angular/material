@@ -639,9 +639,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     } else if (items) {
       setLoading(true);
       $mdUtil.nextTick(function () {
-        if (items.success) items.success(handleResults);
-        if (items.then)    items.then(handleResults);
-        if (items.finally) items.finally(function () {
+        if (items.success)   items.success(handleResults);
+        else if (items.then) items.then(handleResults);
+        if (items.finally)   items.finally(function () {
           setLoading(false);
         });
       },true, $scope);
