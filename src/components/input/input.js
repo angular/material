@@ -615,6 +615,8 @@ function mdInputInvalidMessagesAnimation($q, $animateCss) {
 
       if (className == "md-input-invalid" && messages.hasClass('md-auto-hide')) {
         showInputMessages(element, $animateCss, $q).finally(done);
+      } else {
+        done();
       }
     }
 
