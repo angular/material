@@ -1,0 +1,39 @@
+describe('$mdPanel', function() {
+  var $mdPanel, $rootScope;
+
+  /**
+   * @param {!angular.$injector} $injector
+   * @ngInject
+   */
+  var injectLocals = function($injector) {
+    $mdPanel = $injector.get('$mdPanel');
+    $rootScope = $injector.get('$rootScope');
+  };
+
+  beforeEach(function() {
+    module('material.components.panel', 'ngSanitize');
+
+    inject(injectLocals);
+  });
+
+  it('creates a basic panel', function() {
+    var resolved = false;
+    var config = {parent: 'hello'};
+
+    var panelRef = $mdPanel.create(config);
+
+    expect(panelRef.id).toBeDefined();
+    expect(panelRef.open).toBeDefined();
+    expect(panelRef.close).toBeDefined();
+    expect(panelRef.config).toEqual(config);
+
+    panelRef.open().then(function() {
+      resolved = true;
+    });
+
+    panelRef.close();
+    $rootScope.$apply();
+
+    expect(resolved).toBe(true);
+  });
+});
