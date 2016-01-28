@@ -574,6 +574,8 @@
       this.calendarPaneOpenedFrom = null;
       this.$mdUtil.enableScrolling();
 
+      this.ngModelCtrl.$setTouched();
+
       this.documentElement.off('click touchstart', this.bodyClickHandler);
       window.removeEventListener('resize', this.windowResizeHandler);
     }
@@ -598,6 +600,9 @@
    * @param {boolean} isFocused
    */
   DatePickerCtrl.prototype.setFocused = function(isFocused) {
+    if (!isFocused) {
+      this.ngModelCtrl.$setTouched();
+    }
     this.isFocused = isFocused;
   };
 
