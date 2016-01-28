@@ -263,7 +263,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
       mdSelectCtrl.setIsPlaceholder = function(isPlaceholder) {
         if (isPlaceholder) {
           valueEl.addClass('md-select-placeholder');
-          if (containerCtrl && containerCtrl.label) {
+          if (containerCtrl && containerCtrl.label && !attr.placeholder) {
             containerCtrl.label.addClass('md-placeholder');
           }
         } else {
