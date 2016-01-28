@@ -514,7 +514,6 @@
 @media (min-width: $layout-breakpoint-lg) {
   @include layouts_for_breakpoint(gt-lg);
   @include layouts_for_breakpoint(xl);
-  @include layouts_for_breakpoint(print);
 
   // BIGGER THAN LARGE SCREEN
   .hide, .hide-gt-xs, .hide-gt-sm, .hide-gt-md, .hide-gt-lg {
