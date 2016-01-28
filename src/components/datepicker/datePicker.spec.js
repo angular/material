@@ -311,6 +311,28 @@ describe('md-date-picker', function() {
       expect(controller.ngModelCtrl.$modelValue).toEqual(initialDate);
     });
 
+    it('shoud become touched from bluring closing the pane', function() {
+      populateInputElement('17/1/2015');
+
+      controller.openCalendarPane({
+        target: controller.inputElement
+      });
+      controller.closeCalendarPane();
+
+      expect(controller.ngModelCtrl.$touched).toBe(true);
+    });
+
+    it('should become touch from bluring the input', function() {
+      populateInputElement('17/1/2015');
+
+      var input = angular.element(controller.inputElement);
+
+      input.triggerHandler('focus');
+      input.triggerHandler('blur');
+
+      expect(controller.ngModelCtrl.$touched).toBe(true);
+    });
+
     it('should not update the input string is not "complete"', function() {
       var date = new Date(2015, DEC, 1);
       pageScope.myDate = date;
