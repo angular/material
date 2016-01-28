@@ -592,13 +592,15 @@ function ngMessageDirective($mdUtil) {
   }
 }
 
+var isShowAnimating = false;
+
 function mdInputInvalidMessagesAnimation($q, $animateCss) {
   return {
     addClass: function(element, className, done) {
       var messages = getMessagesElement(element);
 
       if (className == "md-input-invalid" && messages.hasClass('md-auto-hide')) {
-        showInputMessages(element, $animateCss, $q).finally(done);
+        showInputMessages(element, $animateCss, $q, isShowAnimating).finally(done);
       }
     }
 
@@ -613,12 +615,12 @@ function ngMessagesAnimation($q, $animateCss) {
     },
 
     leave: function(element, done) {
-      hideInputMessages(element, $animateCss, $q).finally(done);
+      hideInputMessages(element, $animateCss, $q, isShowAnimating).finally(done);
     },
 
     addClass: function(element, className, done) {
       if (className == "ng-hide") {
-        hideInputMessages(element, $animateCss, $q).finally(done);
+        hideInputMessages(element, $animateCss, $q, isShowAnimating).finally(done);
       } else {
         done();
       }
@@ -649,30 +651,33 @@ function ngMessageAnimation($animateCss) {
     },
 
     leave: function(element, done) {
-      return hideMessage(element, $animateCss);
+      return hideMessage(element, $animateCss, isShowAnimating);
     }
   }
 }
 
-function showInputMessages(element, $animateCss, $q) {
+function showInputMessages(element, $animateCss, $q, force) {
+  if (!force) isShowAnimating = true;
   var animators = [], animator;
   var messages = getMessagesElement(element);
 
   angular.forEach(messages.children(), function(child) {
-    animator = showMessage(angular.element(child), $animateCss);
+    animator = showMessage(angular.element(child), $animateCss, !!force);
 
     animators.push(animator.start());
   });
 
-  return $q.all(animators);
+  return $q.all(animators).then(function() {
+    if (!force) isShowAnimating = false;
+  });
 }
 
-function hideInputMessages(element, $animateCss, $q) {
+function hideInputMessages(element, $animateCss, $q, force) {
   var animators = [], animator;
   var messages = getMessagesElement(element);
 
   angular.forEach(messages.children(), function(child) {
-    animator = hideMessage(angular.element(child), $animateCss);
+    animator = hideMessage(angular.element(child), $animateCss, !!force);
 
     animators.push(animator.start());
   });
@@ -692,7 +697,7 @@ function showMessage(element, $animateCss) {
   });
 }
 
-function hideMessage(element, $animateCss) {
+function hideMessage(element, $animateCss, force) {
   var height = element[0].offsetHeight;
   var styles = window.getComputedStyle(element[0]);
 
@@ -707,7 +712,7 @@ function hideMessage(element, $animateCss) {
     structural: true,
     from: {"opacity": 1, "margin-top": 0},
     to: {"opacity": 0, "margin-top": -height + "px"},
-    duration: 0.3
+    duration: force ? 0 : 0.3
   });
 }
 
