@@ -477,6 +477,75 @@ describe('<md-autocomplete>', function() {
       expect(ctrl2.hasNotFound).toBe(false);
     }));
 
+    it('should even show the md-not-found template if we have lost focus', inject(function($timeout) {
+      var scope = createScope();
+      var template =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder">' +
+        '  <md-item-template>{{item.display}}</md-item-template>' +
+        '  <md-not-found>Sorry, not found...</md-not-found>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var controller = element.controller('mdAutocomplete');
+
+      controller.focus();
+
+      scope.searchText = 'somethingthatdoesnotexist';
+
+      $timeout.flush();
+
+      controller.listEnter();
+      expect(controller.notFoundVisible()).toBe(true);
+
+      controller.blur();
+      expect(controller.notFoundVisible()).toBe(true);
+
+      controller.listLeave();
+      expect(controller.notFoundVisible()).toBe(false);
+
+      $timeout.flush();
+      element.remove();
+
+    }));
+
+    it('should not show the md-not-found template if we lost focus and left the list', inject(function($timeout) {
+      var scope = createScope();
+      var template =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder">' +
+        '  <md-item-template>{{item.display}}</md-item-template>' +
+        '  <md-not-found>Sorry, not found...</md-not-found>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var controller = element.controller('mdAutocomplete');
+
+      controller.focus();
+
+      scope.searchText = 'somethingthatdoesnotexist';
+
+      $timeout.flush();
+
+      controller.listEnter();
+      expect(controller.notFoundVisible()).toBe(true);
+
+      controller.listLeave();
+      controller.blur();
+      expect(controller.notFoundVisible()).toBe(false);
+
+      $timeout.flush();
+      element.remove();
+    }));
+
   });
 
   describe('xss prevention', function() {
