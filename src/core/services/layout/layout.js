@@ -408,7 +408,7 @@
         case 'layout-fill'    :
         case 'layout-wrap'    :
         case 'layout-nowrap'  :
-        case 'layout-nowrap' :
+        case 'layout-no-wrap' :
           value = '';
           break;
       }
