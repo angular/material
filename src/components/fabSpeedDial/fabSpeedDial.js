@@ -106,7 +106,7 @@
       },
 
       bindToController: true,
-      controller: 'FabController',
+      controller: 'MdFabController',
       controllerAs: 'vm',
 
       link: FabSpeedDialLink

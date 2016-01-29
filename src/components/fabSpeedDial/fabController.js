@@ -2,9 +2,9 @@
   'use strict';
 
   angular.module('material.components.fabShared', ['material.core'])
-    .controller('FabController', FabController);
+    .controller('MdFabController', MdFabController);
 
-  function FabController($scope, $element, $animate, $mdUtil, $mdConstant, $timeout) {
+  function MdFabController($scope, $element, $animate, $mdUtil, $mdConstant, $timeout) {
     var vm = this;
 
     // NOTE: We use async eval(s) below to avoid conflicts with any existing digest loops
