@@ -3,7 +3,7 @@ md-whiteframe {
   margin: 30px;
   height: 100px;
 }
-@media screen and (max-width: 599px) {
+@media (max-width: 599px) {
   md-whiteframe {
     margin: 7px;
     height: 50px;
@@ -13,7 +13,7 @@ md-whiteframe {
     font-size: 0.4em;
   }
 }
-@media screen and (min-width: 600px ) and (max-width: 959px) {
+@media (min-width: 600px ) and (max-width: 959px) {
   md-whiteframe {
     margin: 20px;
     height: 75px;
@@ -22,7 +22,7 @@ md-whiteframe {
     font-size: 0.6em;
   }
 }
-@media screen and (min-width: 960px ) and (max-width: 1199px) {
+@media (min-width: 960px ) and (max-width: 1199px) {
   md-whiteframe {
     margin: 20px;
     height: 90px;
@@ -33,7 +33,7 @@ md-whiteframe {
   }
 }
 
-@media screen  and (min-width: 1200px) {
+@media (min-width: 1200px) {
   md-whiteframe {
     margin: 25px;
     height: 100px;

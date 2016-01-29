@@ -121,19 +121,19 @@ md-bottom-sheet {
         }
       }
       
-      @media screen and (max-width: $layout-breakpoint-sm) {
+      @media (max-width: $layout-breakpoint-sm) {
         @include grid-items-per-row(3, true);
       }
 
-      @media screen and (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
+      @media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
         @include grid-items-per-row(4);
       }
 
-      @media screen and (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
+      @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
         @include grid-items-per-row(6);
       }
 
-      @media screen and (min-width: $layout-breakpoint-lg) {
+      @media (min-width: $layout-breakpoint-lg) {
         @include grid-items-per-row(7);
       }
 

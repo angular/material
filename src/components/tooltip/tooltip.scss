@@ -17,7 +17,7 @@ md-tooltip {
 
   font-weight: 500;
   font-size: $tooltip-fontsize-sm;
-  @media screen and (min-width: $layout-breakpoint-sm) {
+  @media (min-width: $layout-breakpoint-sm) {
     font-size: $tooltip-fontsize-lg;
   }
 
@@ -33,7 +33,7 @@ md-tooltip {
     line-height: $tooltip-height-sm;
     padding-left: $tooltip-lr-padding-sm;
     padding-right: $tooltip-lr-padding-sm;
-    @media screen and (min-width: $layout-breakpoint-sm) {
+    @media (min-width: $layout-breakpoint-sm) {
       height: $tooltip-height-lg;
       line-height: $tooltip-height-lg;
       padding-left: $tooltip-lr-padding-lg;

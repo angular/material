@@ -30,31 +30,28 @@ exports.task = function() {
     gulp.src(paths)
       .pipe(util.filterNonCodeFiles())
       .pipe(filter(['**', '!**/*-theme.scss']))
+      .pipe(filter(['**', '!**/*.attributes.scss']))    // no layout attribute selectors
+      .pipe(filter(['**', '!**/*.print.scss']))         // no print styles
       .pipe(concat('angular-material.scss'))
-      .pipe(gulp.dest(dest))
+      .pipe(gulp.dest(dest))                            // raw uncompiled SCSSS
   );
   
   streams.push(
-      gulp.src(paths)
-          .pipe(util.filterNonCodeFiles())
-          .pipe(filter(['**', '!**/*-theme.scss']))
-          .pipe(filter(['**', '!**/attributes.scss']))
-          .pipe(concat('angular-material.scss'))
+      gulp.src(dest)
           .pipe(sass())
           .pipe(rename({ basename: filename }))
           .pipe(util.autoprefix())
           .pipe(insert.prepend(config.banner))
-          .pipe(gulp.dest(dest))
+          .pipe(gulp.dest(dest))                        // unminified
           .pipe(gulpif(!IS_DEV, minifyCss()))
           .pipe(rename({extname: '.min.css'}))
-          .pipe(gulp.dest(dest))
+          .pipe(gulp.dest(dest))                        // minified
   );
   streams.push(
-      gulp.src(config.scssStandaloneFiles)
-          .pipe(insert.prepend(baseVars))
+      gulp.src(config.scssPrintFiles.slice())           // Layout API for Printing
           .pipe(sass())
           .pipe(util.autoprefix())
-          .pipe(rename({ basename: "layouts" }))
+          .pipe(rename({ basename: "print" }))
           .pipe(rename({ prefix: 'angular-material.'}))
           .pipe(insert.prepend(config.banner))
           .pipe(gulp.dest(dest))

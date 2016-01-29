@@ -29,14 +29,13 @@ module.exports = {
     'src/core/style/mixins.scss',
     'src/core/style/structure.scss',
     'src/core/style/typography.scss',
+    'src/core/style/layout.scss',
     'src/core/services/layout/layout.scss'
   ],
-  scssStandaloneFiles: [
-    'src/core/services/layout/layout.attributes.scss'
-  ],
-  scssTestFiles: [
-    'src/core/services/layout/layout.scss'
-  ],
+  scssPrintFiles: [
+      'src/core/style/layout.scss',
+      'src/core/services/layout/layout.print.scss'
+    ],
   paths: 'src/{components,services}/**',
   outputDir: 'dist/',
   demoFolder: 'demo-partials'

@@ -92,13 +92,13 @@ md-sidenav {
   }
 }
 
-@media screen and (min-width: $layout-breakpoint-xs) {
+@media (min-width: $layout-breakpoint-xs) {
   md-sidenav {
     max-width: $sidenav-desktop-width;
   }
 }
 
-@media screen and (max-width: $sidenav-desktop-width + $sidenav-min-space) {
+@media (max-width: $sidenav-desktop-width + $sidenav-min-space) {
   md-sidenav {
     width: calc(100% - #{$sidenav-min-space});
     min-width: calc(100% - #{$sidenav-min-space});
