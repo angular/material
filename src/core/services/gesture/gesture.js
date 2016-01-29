@@ -254,16 +254,17 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
         // want to listen to anymore touch events. It will start scrolling and stop sending
         // touchmove events.
         ev.preventDefault();
-
         if (!this.state.dragPointer) {
           if (this.state.options.horizontal) {
+            console.log("noes horizontal1");
             shouldStartDrag = Math.abs(pointer.distanceX) > this.state.options.minDistance;
             shouldCancel = Math.abs(pointer.distanceY) > this.state.options.minDistance * this.state.options.cancelMultiplier;
           } else {
+            console.log("noes horizontal");
             shouldStartDrag = Math.abs(pointer.distanceY) > this.state.options.minDistance;
             shouldCancel = Math.abs(pointer.distanceX) > this.state.options.minDistance * this.state.options.cancelMultiplier;
           }
-
+          console.log("aca", shouldStartDrag);
           if (shouldStartDrag) {
             // Create a new pointer representing this drag, starting at this point where the drag started.
             this.state.dragPointer = makeStartPointer(ev);
