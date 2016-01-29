@@ -18,7 +18,7 @@ describe('$mdPanel', function() {
 
   it('creates a basic panel', function() {
     var resolved = false;
-    var config = {parent: 'hello'};
+    var config = {attachTo: 'hello'};
 
     var panelRef = $mdPanel.create(config);
 
