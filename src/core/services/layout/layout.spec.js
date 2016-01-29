@@ -220,7 +220,8 @@ describe('layout directives', function() {
       "layout-margin",
       "layout-fill",
       "layout-wrap",
-      "layout-no-wrap"
+      "layout-no-wrap",
+      "layout-nowrap"
     ];
 
     angular.forEach(allowedAttrsNoValues, function(name) {
