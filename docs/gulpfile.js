@@ -139,7 +139,8 @@ gulp.task('docs-js', ['docs-app', 'docs-html2js', 'demos', 'build', 'docs-js-dep
 gulp.task('docs-css-dependencies', ['build'], function() {
   return gulp.src([
     'dist/angular-material.css',
-    'dist/angular-material.min.css'
+    'dist/angular-material.min.css',
+    'dist/angular-material.print.min.css'
   ])
   .pipe(gulp.dest('dist/docs'));
 });

@@ -16,43 +16,67 @@ var args = util.args;
 var IS_DEV = require('../const').IS_DEV;
 
 exports.task = function() {
+  var streams = [];
   var modules   = args['modules'],
       overrides = args['override'],
       dest      = args['output-dir'] || config.outputDir,
       filename  = args['filename'] || 'angular-material',
-      paths     = getPaths();
-  var streams = [];
-  var baseVars = fs.readFileSync('src/core/style/variables.scss', 'utf8').toString();
+      baseFiles = config.scssBaseFiles,
+      scssPipe  = undefined;
+
   gutil.log("Building css files...");
-  
+
   // create SCSS file for distribution
   streams.push(
-    gulp.src(paths)
+    scssPipe = gulp.src(getPaths())
       .pipe(util.filterNonCodeFiles())
       .pipe(filter(['**', '!**/*-theme.scss']))
-      .pipe(filter(['**', '!**/*.attributes.scss']))    // no layout attribute selectors
-      .pipe(filter(['**', '!**/*.print.scss']))         // no print styles
+      .pipe(filter(['**', '!**/*-print.scss']))
+      .pipe(filter(['**', '!**/*-attributes.scss']))
       .pipe(concat('angular-material.scss'))
       .pipe(gulp.dest(dest))                            // raw uncompiled SCSSS
   );
-  
+
   streams.push(
-      gulp.src(dest)
+    scssPipe
           .pipe(sass())
+          .pipe(rename({extname: '.css'}))              // unminified
           .pipe(rename({ basename: filename }))
           .pipe(util.autoprefix())
           .pipe(insert.prepend(config.banner))
-          .pipe(gulp.dest(dest))                        // unminified
+          .pipe(gulp.dest(dest))
           .pipe(gulpif(!IS_DEV, minifyCss()))
           .pipe(rename({extname: '.min.css'}))
           .pipe(gulp.dest(dest))                        // minified
   );
+
+  // Layout API for Printing
+
   streams.push(
-      gulp.src(config.scssPrintFiles.slice())           // Layout API for Printing
+      gulp.src(config.scssLayoutPrintFiles)
+          .pipe(concat('angular-material.print.scss'))
           .pipe(sass())
           .pipe(util.autoprefix())
           .pipe(rename({ basename: "print" }))
-          .pipe(rename({ prefix: 'angular-material.'}))
+          .pipe(rename({ extname : '.css'}))
+          .pipe(rename({ prefix  : 'angular-material.'}))
+          .pipe(insert.prepend(config.banner))
+          .pipe(gulp.dest(dest))
+          .pipe(gulpif(!IS_DEV, minifyCss()))
+          .pipe(rename({extname: '.min.css'}))
+          .pipe(gulp.dest(dest))
+  );
+
+  // Layout API using Attribute Selectors
+  // TO BE Deprecated...
+
+  streams.push(
+      gulp.src(config.scssLayoutAttributeFiles)
+          .pipe(concat('layouts.scss'))
+          .pipe(sass())
+          .pipe(util.autoprefix())
+          .pipe(rename({ extname : '.css'}))
+          .pipe(rename({ prefix  : 'angular-material.'}))
           .pipe(insert.prepend(config.banner))
           .pipe(gulp.dest(dest))
           .pipe(gulpif(!IS_DEV, minifyCss()))
@@ -70,7 +94,8 @@ exports.task = function() {
         return 'src/components/' + module + '/*.scss';
       }));
     } else {
-      paths.push(path.join(config.paths, '*.scss'));
+      paths.push('src/components/**/*.scss');
+      paths.push('src/core/services/layout/**/*.scss');
     }
     overrides && paths.unshift(overrides);
     return paths;
