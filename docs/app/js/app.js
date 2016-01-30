@@ -486,15 +486,11 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
           function (open) {
             var $ul = $element.find('ul');
 
-            $timeout(function () {
-              updateHeight(open ? getTargetHeight() : 0);
-            }, 0, false);
-
-            function updateHeight(targetHeight) {
+            $timeout(function updateHeight() {
               $timeout(function () {
-                $ul.css({ height: targetHeight + 'px' });
+                $ul.css({ height: (open ? getTargetHeight() : 0) + 'px' });
               }, 0, false);
-            }
+            }, 0, false);
 
             function getTargetHeight () {
               var targetHeight;
