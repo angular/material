@@ -50,23 +50,6 @@ exports.task = function() {
           .pipe(gulp.dest(dest))                        // minified
   );
 
-  // Layout API for Printing
-
-  streams.push(
-      gulp.src(config.scssLayoutPrintFiles)
-          .pipe(concat('angular-material.print.scss'))
-          .pipe(sass())
-          .pipe(util.autoprefix())
-          .pipe(rename({ basename: "print" }))
-          .pipe(rename({ extname : '.css'}))
-          .pipe(rename({ prefix  : 'angular-material.'}))
-          .pipe(insert.prepend(config.banner))
-          .pipe(gulp.dest(dest))
-          .pipe(gulpif(!IS_DEV, minifyCss()))
-          .pipe(rename({extname: '.min.css'}))
-          .pipe(gulp.dest(dest))
-  );
-
   // Layout API using Attribute Selectors
   // TO BE Deprecated...
 

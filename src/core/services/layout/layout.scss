@@ -130,16 +130,8 @@
 
 }
 
-// General printing Rules resets to default Layout API
+// General printing Rules
 @media print {
-
-  // Override layout API settings to use defaults when printing.
-
-  @include layouts_for_breakpoint();
-  @include layout-padding-margin();
-
-  // NOTE: the PRINT layouts will be the same as the default (no-aliase) layouts
-  // @include layouts_for_breakpoint(print);
 
   .hide-print:not(.show-print):not(.show) {
     display: none !important;
