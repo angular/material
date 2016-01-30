@@ -105,7 +105,7 @@
       .directive('ngCloak'      ,  buildCloakInterceptor('ng-cloak'))
 
       .directive('layoutWrap'   , attributeWithoutValue('layout-wrap'))
-      .directive('layoutNoWrap' , attributeWithoutValue('layout-no-wrap'))
+      .directive('layoutNowrap' , attributeWithoutValue('layout-nowrap'))
       .directive('layoutFill'   , attributeWithoutValue('layout-fill'))
 
       // !! Deprecated attributes: use the `-lt` (aka less-than) notations
@@ -406,7 +406,7 @@
         case 'layout-margin'  :
         case 'layout-fill'    :
         case 'layout-wrap'    :
-        case 'layout-no-wrap' :
+        case 'layout-nowrap' :
           value = '';
           break;
       }
