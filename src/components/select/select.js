@@ -228,9 +228,12 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         });
       }
 
-      if (formCtrl) {
+      if (formCtrl && angular.isDefined(attr.multiple)) {
         $mdUtil.nextTick(function() {
-          formCtrl.$setPristine();
+          var hasModelValue = ngModelCtrl.$modelValue || ngModelCtrl.$viewValue;
+          if (hasModelValue) {
+            formCtrl.$setPristine();
+          }
         });
       }
 
