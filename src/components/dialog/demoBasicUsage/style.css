@@ -12,3 +12,10 @@
     margin-top:50px;
 }
 
+button {
+    width: 200px;
+}
+
+div#status {
+    color: #c60008;
+}
