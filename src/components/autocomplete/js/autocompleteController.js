@@ -428,7 +428,14 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         select(ctrl.index);
         break;
       case $mdConstant.KEY_CODE.ENTER:
-        if (ctrl.hidden || ctrl.loading || ctrl.index < 0 || ctrl.matches.length < 1) return;
+        if (ctrl.hidden || ctrl.loading || ctrl.matches.length < 1) return;
+
+        if ($scope.selectIncompleteOnMatch && ctrl.matches && ctrl.matches.length === 1){
+          select(0);
+          return;
+        }
+        if (ctrl.index < 0) return;
+
         if (hasSelection()) return;
         event.stopPropagation();
         event.preventDefault();
@@ -741,7 +748,10 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         matches    = ctrl.matches,
         item       = matches[ 0 ];
     if (matches.length === 1) getDisplayValue(item).then(function (displayValue) {
-      if (searchText == displayValue) select(0);
+        var isEqual = $scope.caseInsensitiveMatching? searchText.toUpperCase() === displayValue.toUpperCase() : searchText === displayValue;
+        if (isEqual) {
+          select(0);
+      }
     });
   }
 
