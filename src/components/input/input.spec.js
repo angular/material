@@ -20,8 +20,8 @@ describe('md-input-container directive', function() {
 
     var template =
         '<md-input-container>' +
-          '<input ' + (attrs || '') + '>' +
           '<label></label>' +
+          '<input ' + (attrs || '') + '>' +
         '</md-input-container>';
 
     if (isForm) {
@@ -172,6 +172,20 @@ describe('md-input-container directive', function() {
 
     pageScope.$apply('value = null');
     expect(el).not.toHaveClass('md-input-has-value');
+  });
+
+  it('should append an asterisk to the required label', function() {
+    var el = setup('required');
+    var label = el.find('label');
+
+    expect(label).toHaveClass('md-required');
+  });
+
+  it('should not show asterisk on required label if disabled', function() {
+    var el = setup('md-no-asterisk');
+    var ctrl = el.controller('mdInputContainer');
+
+    expect(ctrl.label).not.toHaveClass('md-required');
   });
 
   it('should match label to given input id', function() {
