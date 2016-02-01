@@ -641,9 +641,15 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       $mdUtil.nextTick(function () {
         if (items.success) items.success(handleResults);
         if (items.then)    items.then(handleResults);
-        if (items.finally) items.finally(function () {
-          setLoading(false);
-        });
+        if (items.finally) {
+          items.finally(function () {
+            setLoading(false);
+          });
+        } else if (items.then) {
+          items.then(function () {
+            setLoading(false);
+          });
+        }
       },true, $scope);
     }
     function handleResults (matches) {
