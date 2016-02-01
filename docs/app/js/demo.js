@@ -1,9 +1,7 @@
 DocsApp
 .directive('layoutAlign', function() { return angular.noop; })
 .directive('layout', function() { return angular.noop; })
-.directive('docsDemo', [
-  '$mdUtil',
-function() {
+.directive('docsDemo', [function() {
   return {
     restrict: 'E',
     scope: true,
@@ -14,10 +12,12 @@ function() {
     bindToController: true
   };
 
-  function DocsDemoCtrl($scope, $element, $attrs, codepen) {
+  function DocsDemoCtrl($scope, $element, $attrs, $interpolate, codepen) {
     var self = this;
 
     self.interpolateCode = angular.isDefined($attrs.interpolateCode);
+
+    self.demoModule = $interpolate($attrs.demoModule || '')($scope.$parent);
 
     $attrs.$observe('demoTitle', function(value) {
       self.demoTitle = value;
