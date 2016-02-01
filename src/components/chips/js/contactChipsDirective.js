@@ -1,6 +1,6 @@
 angular
-  .module('material.components.chips')
-  .directive('mdContactChips', MdContactChips);
+    .module('material.components.chips')
+    .directive('mdContactChips', MdContactChips);
 
 /**
  * @ngdoc directive
@@ -28,6 +28,10 @@ angular
  *    contact's email address.
  * @param {string} md-contact-image The field name of the contact object representing the
  *    contact's image.
+ * @param {boolean=} readonly Disables list manipulation (deleting or adding list items), hiding the input and delete buttons
+ * @param {expression=} md-on-add An expression which will be called when a contact chip is selected.
+ * @param {expression=} md-on-remove An expression which will be called when a contact chip is removed
+ * @param {expression=} md-on-select An expression which will be called when a contact chip is selected.
  *
  *
  * // The following attribute has been removed but may come back.
@@ -55,6 +59,10 @@ var MD_CONTACT_CHIPS_TEMPLATE = '\
       <md-chips class="md-contact-chips"\
           ng-model="$mdContactChipsCtrl.contacts"\
           md-require-match="$mdContactChipsCtrl.requireMatch"\
+          readonly="$mdContactChipsCtrl.readonly"\
+          md-on-add="$mdContactChipsCtrl.onAdd($chip)"\
+          md-on-remove="$mdContactChipsCtrl.onRemove($chip)"\
+          md-on-select="$mdContactChipsCtrl.onSelect($chip)"\
           md-autocomplete-snap>\
           <md-autocomplete\
               md-menu-class="md-contact-chips-suggestions"\
@@ -100,35 +108,39 @@ var MD_CONTACT_CHIPS_TEMPLATE = '\
  * @ngInject
  */
 function MdContactChips($mdTheming, $mdUtil) {
-  return {
-    template: function(element, attrs) {
-      return MD_CONTACT_CHIPS_TEMPLATE;
-    },
-    restrict: 'E',
-    controller: 'MdContactChipsCtrl',
-    controllerAs: '$mdContactChipsCtrl',
-    bindToController: true,
-    compile: compile,
-    scope: {
-      contactQuery: '&mdContacts',
-      placeholder: '@',
-      secondaryPlaceholder: '@',
-      contactName: '@mdContactName',
-      contactImage: '@mdContactImage',
-      contactEmail: '@mdContactEmail',
-      contacts: '=ngModel',
-      requireMatch: '=?mdRequireMatch',
-      highlightFlags: '@?mdHighlightFlags'
-    }
-  };
-
-  function compile(element, attr) {
-    return function postLink(scope, element, attrs, controllers) {
-
-      $mdUtil.initOptionalProperties(scope, attr);
-      $mdTheming(element);
-
-      element.attr('tabindex', '-1');
+    return {
+        template: function(element, attrs) {
+            return MD_CONTACT_CHIPS_TEMPLATE;
+        },
+        restrict: 'E',
+        controller: 'MdContactChipsCtrl',
+        controllerAs: '$mdContactChipsCtrl',
+        bindToController: true,
+        compile: compile,
+        scope: {
+            contactQuery: '&mdContacts',
+            placeholder: '@',
+            secondaryPlaceholder: '@',
+            contactName: '@mdContactName',
+            contactImage: '@mdContactImage',
+            contactEmail: '@mdContactEmail',
+            contacts: '=ngModel',
+            readonly: '=readonly',
+            onAdd: '&mdOnAdd',
+            onRemove: '&mdOnRemove',
+            onSelect: '&mdOnSelect',
+            requireMatch: '=?mdRequireMatch',
+            highlightFlags: '@?mdHighlightFlags'
+        }
     };
-  }
+
+    function compile(element, attr) {
+        return function postLink(scope, element, attrs, controllers) {
+
+            $mdUtil.initOptionalProperties(scope, attr);
+            $mdTheming(element);
+
+            element.attr('tabindex', '-1');
+        };
+    }
 }
