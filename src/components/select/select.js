@@ -41,6 +41,8 @@ angular.module('material.components.select', [
  * explicit label is present.
  * @param {string=} md-container-class Class list to get applied to the `.md-select-menu-container`
  * element (for custom styling).
+ * @param {string} md-offset An offset to apply to the dropdown after positioning
+ * `x`, `y`. Default value is `0`,`0`.
  *
  * @usage
  * With a placeholder (label and aria-label are added dynamically)
@@ -462,6 +464,23 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         }
       }
 
+      function getOffsetsModifiers() {
+        var position = (attr.mdOffset || '0 0').split(' ').map(parseFloat);
+        if (position.length == 2) {
+          return {
+            left: position[0],
+            top: position[1]
+          };
+        } else if (position.length == 1) {
+          return {
+            top: position[0],
+            left: position[0]
+          };
+        } else {
+          throw Error('Invalid offsets specified. Please follow format <x, y> or <n>');
+        }
+      }
+
       function openSelect() {
         selectScope.isOpen = true;
         element.attr('aria-expanded', 'true');
@@ -475,6 +494,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
           selectCtrl: mdSelectCtrl,
           preserveElement: true,
           hasBackdrop: true,
+          offset: getOffsetsModifiers(),
           loadingAsync: attr.mdOnOpen ? scope.$eval(attr.mdOnOpen) || true : false
         }).finally(function() {
           selectScope.isOpen = false;
@@ -1361,7 +1381,7 @@ function SelectProvider($$interimElementProvider) {
       // Get the selectMenuRect *after* max-width is possibly set above
       containerNode.style.display = 'block';
       var selectMenuRect = selectNode.getBoundingClientRect();
-      var centeredRect = getOffsetRect(centeredNode);
+      var centeredRect = getOffsetRect(centeredNode, opts.offset);
 
       if (centeredNode) {
         var centeredStyle = $window.getComputedStyle(centeredNode);
@@ -1441,13 +1461,18 @@ function SelectProvider($$interimElementProvider) {
     return Math.max(min, Math.min(n, max));
   }
 
-  function getOffsetRect(node) {
+  function getOffsetRect(node, offsetModifiers) {
     return node ? {
-      left: node.offsetLeft,
-      top: node.offsetTop,
+      left: node.offsetLeft + offsetModifiers.left,
+      top: node.offsetTop + offsetModifiers.top,
       width: node.offsetWidth,
       height: node.offsetHeight
-    } : {left: 0, top: 0, width: 0, height: 0};
+    } : {
+      left: 0 + offsetModifiers.left,
+      top: 0 + offsetModifiers.top,
+      width: 0,
+      height: 0
+    };
   }
 
   function calculateScrollable(element, contentNode) {
