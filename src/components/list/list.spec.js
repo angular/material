@@ -104,23 +104,24 @@ describe('mdListItem directive', function() {
 
   it('creates buttons when used with ng-click', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()" ng-disabled="true"><p>Hello world</p></md-list-item>');
-    var firstChild = listItem.children()[0];
-    expect(firstChild.nodeName).toBe('MD-BUTTON');
-    expect(firstChild.hasAttribute('ng-disabled')).toBeTruthy();
-    expect(firstChild.childNodes[0].nodeName).toBe('DIV');
-    expect(firstChild.childNodes[0].childNodes[0].nodeName).toBe('P');
+    var buttonChild = listItem.children().children()[0];
+    var innerChild = listItem.children().children()[1];
+    expect(buttonChild.nodeName).toBe('MD-BUTTON');
+    expect(buttonChild.hasAttribute('ng-disabled')).toBeTruthy();
+    expect(innerChild.nodeName).toBe('DIV');
+    expect(innerChild.childNodes[0].nodeName).toBe('P');
   });
 
   it('creates buttons when used with ui-sref', function() {
     var listItem = setup('<md-list-item ui-sref="somestate"><p>Hello world</p></md-list-item>');
-    var firstChild = listItem.children()[0];
+    var firstChild = listItem.children().children()[0];
     expect(firstChild.nodeName).toBe('MD-BUTTON');
     expect(firstChild.hasAttribute('ui-sref')).toBeTruthy();
   });
 
   it('creates buttons when used with href', function() {
     var listItem = setup('<md-list-item href="/somewhere"><p>Hello world</p></md-list-item>');
-    var firstChild = listItem.children()[0];
+    var firstChild = listItem.children().children()[0];
     expect(firstChild.nodeName).toBe('MD-BUTTON');
     expect(firstChild.hasAttribute('href')).toBeTruthy();
   });
@@ -128,15 +129,18 @@ describe('mdListItem directive', function() {
   it('moves aria-label to primary action', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()" aria-label="Hello"></md-list-item>');
     var listItemChildren = listItem.children();
-    expect(listItemChildren[0].nodeName).toBe('MD-BUTTON');
-    expect(listItemChildren.attr('aria-label')).toBe('Hello');
+    expect(listItemChildren[0].nodeName).toBe('DIV');
+    expect(listItemChildren).toHaveClass('md-button');
+    expect(listItemChildren.children()[0].getAttribute('aria-label')).toBe('Hello');
   });
 
   it('moves md-secondary items outside of the button', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()"><p>Hello World</p><md-icon class="md-secondary" ng-click="goWild()"></md-icon></md-list-item>');
+    // First child is our button and content holder
     var firstChild = listItem.children().eq(0);
-    expect(firstChild[0].nodeName).toBe('MD-BUTTON');
-    expect(firstChild.children().length).toBe(1);
+    expect(firstChild[0].nodeName).toBe('DIV');
+    // It should contain two elements, the button overlay and the actual content
+    expect(firstChild.children().length).toBe(2);
     var secondChild = listItem.children().eq(1);
     expect(secondChild[0].nodeName).toBe('MD-BUTTON');
     expect(secondChild.hasClass('md-secondary-container')).toBeTruthy();
@@ -144,9 +148,11 @@ describe('mdListItem directive', function() {
 
   it('moves multiple md-secondary items outside of the button', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()"><p>Hello World</p><md-icon class="md-secondary" ng-click="goWild()"><md-icon class="md-secondary" ng-click="goWild2()"></md-icon></md-list-item>');
+    // First child is our button and content holder
     var firstChild = listItem.children().eq(0);
-    expect(firstChild[0].nodeName).toBe('MD-BUTTON');
-    expect(firstChild.children().length).toBe(1);
+    expect(firstChild[0].nodeName).toBe('DIV');
+    // It should contain two elements, the button overlay and the actual content
+    expect(firstChild.children().length).toBe(2);
     var secondChild = listItem.children().eq(1);
     expect(secondChild[0].nodeName).toBe('DIV');
     expect(secondChild.hasClass('md-secondary-container')).toBeTruthy();
