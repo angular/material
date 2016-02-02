@@ -202,6 +202,55 @@
         };
       },
 
+      /**
+       * Asserts that a given selector matches#006b75 one or more items.
+       * Accepts any of:
+       *   {string} - A CSS selector.
+       *   {angular.JQLite} - The result of a jQuery query.
+       *   {Element} - A DOM element.
+       */
+      toExist: function() {
+        return {
+          compare: function(actual) {
+            var el = getElement(actual);
+            var pass = el.length > 0;
+            var not = pass ? 'not ' : '';
+
+            return {
+              pass: pass,
+              message: 'Expected "' + actual +
+              '" ' + not + 'to match element(s), ' +
+              'but found ' + el.length +
+              ' items in the DOM'
+            };
+          }
+        };
+      },
+
+      /**
+       * Asserts that a given element contains a given substring in
+       * its innerHTML property.
+       * Accepts any of:
+       *   {string} - A CSS selector.
+       *   {angular.JQLite} - The result of a jQuery query.
+       *   {Element} - A DOM element.
+       */
+      toContainHtml: function() {
+        return {
+          compare: function(actual, expected) {
+            var el = getElement(actual);
+            var html = el.html();
+            var pass = html.indexOf(expected) !== -1;
+            var not = pass ? 'not ' : '';
+
+            return {
+              pass: pass,
+              message: 'Expected element ' + not + 'to contain the html ' +
+              '[' + expected + '] in [' + html + ']'
+            };
+          }
+        };
+      }
     });
 
     /**
