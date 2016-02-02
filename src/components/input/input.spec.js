@@ -539,5 +539,49 @@ describe('md-input-container directive', function() {
       );
       expect(el.hasClass('md-icon-left md-icon-right')).toBeTruthy();
     });
+
+    it('should add md-icon-left class when md-icon is before select', function() {
+      var el = compile(
+        '<md-input-container>' +
+          '<md-icon></md-icon>' +
+          '<md-select ng-model="foo"></md-select>' +
+        '</md-input-container>'
+      );
+
+      expect(el.hasClass('md-icon-left')).toBeTruthy();
+    });
+
+    it('should add md-icon-right class when md-icon is before select', function() {
+      var el = compile(
+        '<md-input-container>' +
+          '<md-select ng-model="foo"></md-select>' +
+          '<md-icon></md-icon>' +
+        '</md-input-container>'
+      );
+
+      expect(el.hasClass('md-icon-right')).toBeTruthy();
+    });
+
+    it('should add md-icon-left class when md-icon is before textarea', function() {
+      var el = compile(
+        '<md-input-container>' +
+          '<md-icon></md-icon>' +
+          '<textarea ng-model="foo"></textarea>' +
+        '</md-input-container>'
+      );
+
+      expect(el.hasClass('md-icon-left')).toBeTruthy();
+    });
+
+    it('should add md-icon-right class when md-icon is before textarea', function() {
+      var el = compile(
+        '<md-input-container>' +
+          '<textarea ng-model="foo"></textarea>' +
+          '<md-icon></md-icon>' +
+        '</md-input-container>'
+      );
+
+      expect(el.hasClass('md-icon-right')).toBeTruthy();
+    });
   });
 });
