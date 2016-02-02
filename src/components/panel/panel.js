@@ -389,6 +389,11 @@ MdPanelReference.prototype.close = function() {
 
       // Animate and close the instance
       // ....
+
+      this._closePromise.finally(function() {
+        // Clear for next open/close pairing...
+        this._closePromise = undefined;
+      })
     }
 
   }
