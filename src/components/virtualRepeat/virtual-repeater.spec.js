@@ -616,6 +616,21 @@ describe('<md-virtual-repeat>', function() {
     expect(offsetter.children().length).toBe(3);
   }));
 
+  it('should not scroll past the bottom', function() {
+    scope.items = createItems(101);
+    createRepeater();
+
+    scroller[0].scrollTop = ITEM_SIZE * 91;
+    scroller.triggerHandler('scroll');
+
+    expect(getTransform(offsetter)).toBe('translateY(880px)');
+
+    scroller[0].scrollTop++;
+    scroller.triggerHandler('scroll');
+
+    expect(getTransform(offsetter)).toBe('translateY(880px)');
+  });
+
   /**
    * Facade to access transform properly even when jQuery is used;
    * since jQuery's css function is obtaining the computed style (not wanted)
