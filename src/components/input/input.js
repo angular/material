@@ -15,6 +15,7 @@ angular.module('material.components.input', [
   .directive('ngMessages', ngMessagesDirective)
   .directive('ngMessage', ngMessageDirective)
   .directive('ngMessageExp', ngMessageDirective)
+  .directive('mdSelectOnFocus', mdSelectOnFocusDirective)
 
   .animation('.md-input-invalid', mdInputInvalidMessagesAnimation)
   .animation('.md-input-messages-animation', ngMessagesAnimation)
@@ -568,6 +569,29 @@ function placeholderDirective($log) {
 
       inputContainer.element.addClass('md-icon-float');
       inputContainer.element.prepend(placeholder);
+    }
+  }
+}
+
+function mdSelectOnFocusDirective() {
+
+  return {
+    restrict: 'A',
+    link: postLink
+  };
+
+  function postLink(scope, element, attr) {
+    if (element[0].nodeName !== 'INPUT' && element[0].nodeName !== "TEXTAREA") return;
+
+    element.on('focus', onFocus);
+
+    scope.$on('$destroy', function() {
+      element.off('focus', onFocus);
+    });
+
+    function onFocus() {
+      // Use HTMLInputElement#select to fix firefox select issues
+      element[0].select();
     }
   }
 }
