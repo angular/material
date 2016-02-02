@@ -344,10 +344,10 @@ MdPanelService.prototype.create = function(opt_config) {
  */
 function MdPanelRef(config, $injector) {
   // Injected variables.
-  /** @private @const {!angular.$q} */
+  /** @private {!angular.$q} @const */
   this._$q = $injector.get('$q');
 
-  /** @private @const {!angular.$mdCompiler} */
+  /** @private {!angular.$mdCompiler} @const */
   this._$mdCompiler = $injector.get('$mdCompiler');
 
 
