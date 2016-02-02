@@ -63,11 +63,11 @@ angular
  *         });
  *   }
  *
- *   function DialogController($MdPanelReference, toppings) {
+ *   function DialogController(MdPanelRef, toppings) {
  *     var toppings;
  *
  *     function closeDialog() {
- *       $MdPanelReference.close();
+ *       MdPanelRef.close();
  *     }
  *   }
  * })(angular);
@@ -129,7 +129,7 @@ angular
  *     Only disable if focusing some other way, as focus management is required for
  *     panels to be accessible. Defaults to true.
  *
- * @returns {$MdPanelReference} panelRef
+ * @returns {MdPanelRef} panelRef
  */
 
 /**
@@ -144,13 +144,13 @@ angular
 
 
 /***************************************************************************************
- *                                   $MdPanelReference                                       *
+ *                                       MdPanelRef                                    *
  ***************************************************************************************/
 
 
 /**
  * @ngdoc object
- * @name $MdPanelReference
+ * @name MdPanelRef
  * @description
  * A reference to a created panel. This reference contains a unique id for the panel,
  * along with the following properties:
@@ -174,7 +174,7 @@ angular
 
 /**
  * @ngdoc method
- * @name $MdPanelReference#open
+ * @name MdPanelRef#open
  * @description
  * If the panel is not visible, opens an already created and configured panel.
  *
@@ -183,10 +183,10 @@ angular
 
 /**
  * @ngdoc method
- * @name $MdPanelReference#close
+ * @name MdPanelRef#close
  * @description
  * If the panel is visible, closes the panel, resolving the promise that is returned
- * from `$MdPanelReference#open`. This method destroys the reference to the panel. In order
+ * from `MdPanelRef#open`. This method destroys the reference to the panel. In order
  * to open the panel again, a new one must be created.
  */
 
@@ -294,16 +294,25 @@ angular
 /**
  * A service that is used for controlling/displaying panels on the screen.
  * @param {!angular.JQLite} $rootElement
+ * @param {!angular.Scope} $rootScope
  * @param {!angular.$injector} $injector
  * @final @constructor @ngInject
  */
-function MdPanelService($rootElement, $injector) {
-  // Default config options for the panel.
+function MdPanelService($rootElement, $rootScope, $injector) {
+  /**
+   * Default config options for the panel.
+   * @private {!Object}
+   */
   this._defaultConfigOptions = {
-    attachTo: $rootElement
+    attachTo: $rootElement,
+    scope: $rootScope.$new(true),
+    bindToController: true
   };
 
+  /** @private {!Object} */
   this._config = this._defaultConfigOptions;
+
+  /** @private {!angular.$injector} */
   this._$injector = $injector;
 }
 
@@ -311,96 +320,138 @@ function MdPanelService($rootElement, $injector) {
 /**
  * Creates a panel with the specified options.
  * @param {!Object=} opt_config Configuration object for the panel.
- * @returns {!$MdPanelReference}
+ * @returns {!MdPanelRef}
  */
 MdPanelService.prototype.create = function(opt_config) {
   var configSettings = opt_config || {};
 
   angular.extend(this._config, configSettings);
 
-  var instanceID     = $injector.get('$mdUtil').nextUid();
-  var instanceConfig = angular.extend({ }, this._config, {id : instanceID } );
+  var instanceId = 'panel_' + this._$injector.get('$mdUtil').nextUid();
+  var instanceConfig = angular.extend({id : instanceId }, this._config);
 
-  return new MdPanelReference(instanceConfig, $injector.get('$q'));
+  return new MdPanelRef(instanceConfig, this._$injector);
 };
 
 
 /**
- * A reference to a created panel. This reference contains a unique id for the panel,
- * along with properties/functions used to control the panel.
+ * A reference to a created panel. This reference contains a unique id for the
+ * panel, along with properties/functions used to control the panel.
  *
- * @param {!angular.$injector} $injector
  * @param {!Object} config
+ * @param {!angular.$injector} $injector
  * @final @constructor
  */
-function MdPanelReference(config,$q) {
+function MdPanelRef(config, $injector) {
   // Injected variables.
-  this._$q = $q;
+  /** @private @const {!angular.$q} */
+  this._$q = $injector.get('$q');
+
+  /** @private @const {!angular.$mdCompiler} */
+  this._$mdCompiler = $injector.get('$mdCompiler');
+
 
   // Public variables.
-  this.config = config;
-  this.id     = 'panel_' + this.id;
+  /**
+   * Unique id for the panelRef.
+   * @type {string}
+   */
+  this.id = config.id;
+
+  /**
+   * Whether the panel is opened. This is synchronous. When open is called,
+   * isOpen is set to true. When close is called, isOpen is set to false.
+   * @type {boolean}
+   */
   this.isOpen = false;
 
+
   // Private variables.
+  /** @private {!Object} */
+  this._config = config;
+
+  /** @private {!angular.$q.promise|undefined} */
   this._openPromise;
+
+  /** @private {function(*)|undefined} */
+  this._openReject;
+
+  /** @private {!angular.$q.promise|undefined} */
+  this._closePromise;
+
+  /** @private {!angular.JQLite|undefined} */
+  this._panelEl;
 }
 
 
 /**
- * Opens an already created and configured panel. If the panel is already visible,
- * does nothing.
+ * Opens an already created and configured panel. If the panel is already
+ * visible, does nothing.
  *
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel is opened and animations finish.
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel
+ * is opened and animations finish.
  */
-MdPanelReference.prototype.open = function() {
-  if ( !this.isOpen ) {
-
-    // @Todo - is the state `isOpen` synchronous/instant or asynch.
-
+MdPanelRef.prototype.open = function() {
+  if (!this.isOpen) {
     this.isOpen = true;
+
+    var self = this;
     this._openPromise = this._$q(function(resolve, reject) {
-      // Open an instance and animation the instance
-      // ...
-
-
+      self._openReject = reject;
+      self._createPanel();
+      resolve(self);
     });
-
   }
 
-  return this._openPromise.promise;
+  // If the panel is already open, re-use the (already resolved) promise from
+  // when it was opened.
+  return this._openPromise;
 };
 
 
 /**
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel is closed and animations finish.
+ * Closes the panel.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * closed and animations finish.
  */
-MdPanelReference.prototype.close = function() {
-  if ( this.isOpen ) {
+MdPanelRef.prototype.close = function() {
+  if (this.isOpen) {
     this.isOpen = false;
-    this._openPromise.reject("closing");
 
-    // @Todo - how to cancel an `opening` in-progress
+    // TODO(ErinCoughlan) - Cancel any in-progress `opening`.
 
-    return this._openPromise;
-
-  } else {
-
-    if ( !this._closePromise ) {
+    if (!this._closePromise) {
+      var self = this;
       this._closePromise = this._$q(function(resolve, reject) {
-
-        // Animate and close the instance
-        // ....
-
+        // TODO(ErinCoughlan): Start the close animation.
+        self._panelEl.remove();
+        resolve(self);
       });
 
       this._closePromise.finally(function() {
-        // Clear for next open/close pairing...
-        this._closePromise = undefined;
+        // Clear for next open/close pairing.
+        self._closePromise = undefined;
       });
     }
-
   }
 
-  return this._closePromise.promise;
+  // If the panel is already closed, re-use the (already resolved) promise from
+  // when it was closed.
+  return this._closePromise;
+};
+
+
+/**
+ * Creates a panel and adds it to the dom.
+ * @private
+ */
+MdPanelRef.prototype._createPanel = function() {
+  var self = this;
+  this._$mdCompiler.compile(this._config)
+      .then(function(compileData) {
+        self._panelEl = compileData.link(self._config.scope);
+        // TODO(ErinCoughlan): Start the open animation.
+        angular.element(self._config.attachTo).append(self._panelEl);
+      });
 };
