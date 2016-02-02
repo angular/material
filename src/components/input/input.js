@@ -63,6 +63,9 @@ angular.module('material.components.input', [
  * </hljs>
  */
 function mdInputContainerDirective($mdTheming, $parse) {
+
+  var INPUT_TAGS = ['INPUT', 'TEXTAREA', 'MD-SELECT'];
+
   return {
     restrict: 'E',
     link: postLink,
@@ -80,8 +83,8 @@ function mdInputContainerDirective($mdTheming, $parse) {
       var next = icons[0].nextElementSibling;
       var previous = icons[0].previousElementSibling;
 
-      element.addClass(next && next.tagName === 'INPUT' ? 'md-icon-left' :
-                       previous && previous.tagName === 'INPUT' ? 'md-icon-right' : '');
+      element.addClass(next && INPUT_TAGS.indexOf(next.tagName) != -1 ? 'md-icon-left' :
+                       previous &&  INPUT_TAGS.indexOf(previous.tagName) != -1 ? 'md-icon-right' : '');
     }
     // In case there are two icons we apply both icon classes
     else if (icons.length == 2) {
