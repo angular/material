@@ -202,6 +202,31 @@
         };
       },
 
+      /**
+       * Asserts that a given selector matches one or more items.
+       * Accepts either:
+       *   {string} - A query selector.
+       *   {angular.JQLite} - The result of a jQuery query.
+       */
+      toExist: function() {
+        return {
+          'compare': function(actual) {
+            var el = typeof actual == 'string' ?
+                document.querySelector(actual) : actual;
+            var queryResult = angular.element(el);
+            var pass = queryResult.length > 0;
+            var not = pass ? 'not ' : '';
+
+            return {
+              'pass': pass,
+              'message': 'Expected "' + actual +
+              '" ' + not + 'to match element(s), ' +
+              'but found ' + queryResult.length +
+              ' items in the DOM'
+            };
+          }
+        };
+      }
     });
 
     /**
