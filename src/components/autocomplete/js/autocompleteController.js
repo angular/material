@@ -67,7 +67,11 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     $mdUtil.nextTick(function () {
       gatherElements();
       moveDropdown();
-      focusElement();
+
+      // Only auto focus if not compiling in dialog
+      var parentDialogs = $mdUtil.getClosest($element, "md-dialog");
+      if (parentDialogs == null) focusElement();
+
       $element.on('focus', focusElement);
     });
   }

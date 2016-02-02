@@ -810,4 +810,48 @@ describe('<md-autocomplete>', function() {
     }));
   });
 
+  describe('$mdDialog compatibility', function() {
+
+    beforeEach(module('material.components.dialog', 'material.components.autocomplete'));
+
+    it('should only focus the autocomplete after opening the dialog', inject(function($rootScope, $timeout, $material, $mdDialog) {
+      var parent = angular.element('<div>');
+
+      $mdDialog.show({
+        template: '<md-autocomplete\
+            md-floating-label="Some Label"\
+            md-selected-item="selectedItem"\
+            md-search-text="searchText"\
+            md-items="item in match(searchText)"\
+            md-item-text="item.display"\
+            md-autofocus="true"\
+            placeholder="placeholder">\
+              <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>',
+        parent: parent
+      });
+      document.body.appendChild(parent[0]);
+
+      $rootScope.$apply();
+
+      var autocomplete = parent.find('md-autocomplete');
+      var focusSpy = jasmine.createSpy('focus');
+      autocomplete.on('focus', focusSpy);
+
+      $timeout.flush();
+
+      expect(focusSpy).not.toHaveBeenCalled();
+
+      $material.flushInterimElement();
+
+      autocomplete.focus();
+
+      expect(focusSpy).toHaveBeenCalled();
+
+      $mdDialog.hide();
+      document.body.removeChild(parent[0]);
+    }));
+
+  });
+
 });
