@@ -359,10 +359,12 @@ MdPanelReference.prototype.open = function() {
     // @Todo - is the state `isOpen` synchronous/instant or asynch.
 
     this.isOpen = true;
-    this._openPromise = this._$q.defer();
+    this._openPromise = this._$q(function(resolve, reject) {
+      // Open an instance and animation the instance
+      // ...
 
-    // Open an instance and animation the instance
-    // ...
+
+    });
 
   }
 
@@ -385,15 +387,17 @@ MdPanelReference.prototype.close = function() {
   } else {
 
     if ( !this._closePromise ) {
-      this._closePromise = this._$q.defer();
+      this._closePromise = this._$q(function(resolve, reject) {
 
-      // Animate and close the instance
-      // ....
+        // Animate and close the instance
+        // ....
+
+      });
 
       this._closePromise.finally(function() {
         // Clear for next open/close pairing...
         this._closePromise = undefined;
-      })
+      });
     }
 
   }
