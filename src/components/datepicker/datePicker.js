@@ -330,7 +330,7 @@
     if (this.$attrs['ngDisabled']) {
       // The expression is to be evaluated against the directive element's scope and not
       // the directive's isolate scope.
-      var scope = this.$mdUtil.validateScope(this.$element) ? this.$element.scope() : null;
+      var scope = this.$scope.$parent;
 
       if (scope) {
         scope.$watch(this.$attrs['ngDisabled'], function(isDisabled) {
@@ -367,13 +367,15 @@
    * @param {Date=} opt_date Date to check. If not given, defaults to the datepicker's model value.
    */
   DatePickerCtrl.prototype.updateErrorState = function(opt_date) {
-    // Force all dates to midnight in order to ignore the time portion.
-    var date = this.dateUtil.createDateAtMidnight(opt_date || this.date);
+    var date = opt_date || this.date;
 
     // Clear any existing errors to get rid of anything that's no longer relevant.
     this.clearErrorState();
 
     if (this.dateUtil.isValidDate(date)) {
+      // Force all dates to midnight in order to ignore the time portion.
+      date = this.dateUtil.createDateAtMidnight(date);
+
       if (this.dateUtil.isValidDate(this.minDate)) {
         var minDate = this.dateUtil.createDateAtMidnight(this.minDate);
         this.ngModelCtrl.$setValidity('mindate', date >= minDate);
@@ -574,6 +576,8 @@
       this.calendarPaneOpenedFrom = null;
       this.$mdUtil.enableScrolling();
 
+      this.ngModelCtrl.$setTouched();
+
       this.documentElement.off('click touchstart', this.bodyClickHandler);
       window.removeEventListener('resize', this.windowResizeHandler);
     }
@@ -598,6 +602,9 @@
    * @param {boolean} isFocused
    */
   DatePickerCtrl.prototype.setFocused = function(isFocused) {
+    if (!isFocused) {
+      this.ngModelCtrl.$setTouched();
+    }
     this.isFocused = isFocused;
   };
 

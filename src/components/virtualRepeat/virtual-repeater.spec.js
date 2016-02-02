@@ -210,7 +210,7 @@ describe('<md-virtual-repeat>', function() {
 
     // Scroll past the fourth item.
     // Expect that one new item is created.
-    scroller[0].scrollLeft = ITEM_SIZE * (VirtualRepeatController.NUM_EXTRA + 1);;
+    scroller[0].scrollLeft = ITEM_SIZE * (VirtualRepeatController.NUM_EXTRA + 1);
     scroller.triggerHandler('scroll');
     expect(getTransform(offsetter)).toBe('translateX(10px)');
     repeated = getRepeated();
@@ -597,7 +597,7 @@ describe('<md-virtual-repeat>', function() {
     scroller[0].scrollTop = 20;
     scope.$parent.$broadcast('$md-resize');
 
-    // Expect 43 children (40 + 5 extra).
+    // Expect 45 children (40 + 5 extra).
     expect(offsetter.children().length).toBe(45);
   });
 

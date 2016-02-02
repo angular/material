@@ -60,9 +60,24 @@ function mdInputContainerDirective($mdTheming, $parse) {
     controller: ContainerCtrl
   };
 
-  function postLink(scope, element, attr) {
+  function postLink(scope, element) {
     $mdTheming(element);
-    if (element.find('md-icon').length) element.addClass('md-has-icon');
+
+    var iconElements = element.find('md-icon');
+    var icons = iconElements.length ? iconElements : element[0].getElementsByClassName('md-icon');
+
+    // Incase there's one icon we want to identify where the icon is (right or left) and apply the related class
+    if (icons.length == 1) {
+      var next = icons[0].nextElementSibling;
+      var previous = icons[0].previousElementSibling;
+
+      element.addClass(next && next.tagName === 'INPUT' ? 'md-icon-left' :
+                       previous && previous.tagName === 'INPUT' ? 'md-icon-right' : '');
+    }
+    // In case there are two icons we apply both icon classes
+    else if (icons.length == 2) {
+      element.addClass('md-icon-left md-icon-right');
+    }
   }
 
   function ContainerCtrl($scope, $element, $attrs, $animate) {
@@ -135,6 +150,7 @@ function labelDirective() {
  * @param {string=} placeholder An alternative approach to using aria-label when the label is not
  *   PRESENT. The placeholder text is copied to the aria-label attribute.
  * @param md-no-autogrow {boolean=} When present, textareas will not grow automatically.
+ * @param md-no-asterisk {boolean=} When present, asterisk will not be appended to required inputs label
  * @param md-detect-hidden {boolean=} When present, textareas will be sized properly when they are
  *   revealed after being hidden. This is off by default for performance reasons because it
  *   guarantees a reflow every digest cycle.
@@ -235,6 +251,9 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
     var hasNgModel = !!ctrls[1];
     var ngModelCtrl = ctrls[1] || $mdUtil.fakeNgModel();
     var isReadonly = angular.isDefined(attr.readonly);
+    var isRequired = angular.isDefined(attr.required);
+    var mdNoAsterisk = angular.isDefined(attr.mdNoAsterisk);
+
 
     if (!containerCtrl) return;
     if (containerCtrl.input) {
@@ -244,10 +263,13 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
 
     // Add an error spacer div after our input to provide space for the char counter and any ng-messages
     var errorsSpacer = angular.element('<div class="md-errors-spacer">');
-    element.after(errorsSpacer);
+    // element.after appending the div before the icon (if exist) which cause a problem with calculating which class to apply
+    element.parent().append(errorsSpacer);
 
     if (!containerCtrl.label) {
       $mdAria.expect(element, 'aria-label', element.attr('placeholder'));
+    } else if (isRequired && !mdNoAsterisk) {
+      containerCtrl.label.addClass('md-required');
     }
 
     element.addClass('md-input');
@@ -599,6 +621,8 @@ function mdInputInvalidMessagesAnimation($q, $animateCss) {
 
       if (className == "md-input-invalid" && messages.hasClass('md-auto-hide')) {
         showInputMessages(element, $animateCss, $q).finally(done);
+      } else {
+        done();
       }
     }
 

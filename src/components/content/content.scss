@@ -22,6 +22,10 @@ md-content {
   &.autoScroll {
     -webkit-overflow-scrolling: auto;
   }
+
+  @media print {
+    overflow: visible !important;
+  }
 }
 
 

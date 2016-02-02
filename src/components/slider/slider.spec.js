@@ -30,6 +30,18 @@ describe('md-slider', function() {
     return slider;
   }
 
+  it('should not set model below the min', function() {
+    var slider = setup('ng-model="value" min="0" max="100"');
+    pageScope.$apply('value = -50');
+    expect(slider.attr('aria-valuenow')).toEqual('0');
+  });
+
+  it('should not set model above the max', function() {
+    var slider = setup('ng-model="value" min="0" max="100"');
+    pageScope.$apply('value = 150');
+    expect(slider.attr('aria-valuenow')).toEqual('100');
+  });
+
   it('should set model on press', function() {
     var slider = setup('ng-model="value" min="0" max="100"');
     pageScope.$apply('value = 50');
@@ -238,7 +250,6 @@ describe('md-slider', function() {
     $timeout.flush();
     expect(slider).not.toHaveClass('md-max');
   });
-
 
   it('should increment at a predictable step', function() {
 

@@ -95,87 +95,12 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     },
 
     /**
-     * @ngdoc directive
-     * @name mdAutofocus
-     * @module material.core.util
+     * Finds the proper focus target by searching the DOM.
      *
-
-     *
-     * @description
-     * `$mdUtil.findFocusTarget()` provides an optional way to identify the focused element when a dialog, bottomsheet, sideNav
-     * or other element opens. This is optional attribute finds a nested element with the mdAutoFocus attribute and optional
-     * expression. An expression may be specified as the directive value; to enable conditional activation of the autoFocus.
-     *
-     * @usage
-     * ### Dialog
-     * <hljs lang="html">
-     * <md-dialog>
-     *   <form>
-     *     <md-input-container>
-     *       <label for="testInput">Label</label>
-     *       <input id="testInput" type="text" md-autofocus>
-     *     </md-input-container>
-     *   </form>
-     * </md-dialog>
-     * </hljs>
-     *
-     * ### Bottomsheet
-     * <hljs lang="html">
-     * <md-bottom-sheet class="md-list md-has-header">
-     *  <md-subheader>Comment Actions</md-subheader>
-     *  <md-list>
-     *    <md-list-item ng-repeat="item in items">
-     *
-     *      <md-button md-autofocus="$index == 2">
-     *        <md-icon md-svg-src="{{item.icon}}"></md-icon>
-     *        <span class="md-inline-list-icon-label">{{ item.name }}</span>
-     *      </md-button>
-     *
-     *    </md-list-item>
-     *  </md-list>
-     * </md-bottom-sheet>
-     * </hljs>
-     *
-     * ### Autocomplete
-     * <hljs lang="html">
-     *   <md-autocomplete
-     *       md-autofocus
-     *       md-selected-item="selectedItem"
-     *       md-search-text="searchText"
-     *       md-items="item in getMatches(searchText)"
-     *       md-item-text="item.display">
-     *     <span md-highlight-text="searchText">{{item.display}}</span>
-     *   </md-autocomplete>
-     * </hljs>
-     *
-     * ### Sidenav
-     * <hljs lang="html">
-     * <div layout="row" ng-controller="MyController">
-     *   <md-sidenav md-component-id="left" class="md-sidenav-left">
-     *     Left Nav!
-     *   </md-sidenav>
-     *
-     *   <md-content>
-     *     Center Content
-     *     <md-button ng-click="openLeftMenu()">
-     *       Open Left Menu
-     *     </md-button>
-     *   </md-content>
-     *
-     *   <md-sidenav md-component-id="right"
-     *     md-is-locked-open="$mdMedia('min-width: 333px')"
-     *     class="md-sidenav-right">
-     *     <form>
-     *       <md-input-container>
-     *         <label for="testInput">Test input</label>
-     *         <input id="testInput" type="text"
-     *                ng-model="data" md-autofocus>
-     *       </md-input-container>
-     *     </form>
-     *   </md-sidenav>
-     * </div>
-     * </hljs>
-     **/
+     * @param containerEl
+     * @param attributeVal
+     * @returns {*}
+     */
     findFocusTarget: function(containerEl, attributeVal) {
       var AUTO_FOCUS = '[md-autofocus]';
       var elToFocus;
@@ -203,18 +128,12 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
         // Find the last child element with the focus attribute
         if ( items && items.length ){
-          var EXP_ATTR = /\s*\[?([\-a-z]*)\]?\s*/i;
-          var matches = EXP_ATTR.exec(selector);
-          var attribute = matches ? matches[1] : null;
-
           items.length && angular.forEach(items, function(it) {
             it = angular.element(it);
 
-            // If the expression evaluates to FALSE, then it is not focusable target
-            var focusExpression = it[0].getAttribute(attribute);
-            var isFocusable = !focusExpression || !$mdUtil.validateScope(it) ? true :
-                              (it.scope().$eval(focusExpression) !== false );
-
+            // Check the element for the _md-autofocus class to ensure any associated expression
+            // evaluated to true.
+            var isFocusable = it.hasClass('_md-autofocus');
             if (isFocusable) elFound = it;
           });
         }
@@ -483,22 +402,6 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      */
     nextUid: function() {
       return '' + nextUniqueId++;
-    },
-
-    /**
-     * By default AngularJS attaches information about binding and scopes to DOM nodes,
-     * and adds CSS classes to data-bound elements. But this information is NOT available
-     * when `$compileProvider.debugInfoEnabled(false);`
-     *
-     * @see https://docs.angularjs.org/guide/production
-     */
-    validateScope : function(element) {
-      var hasScope = element && angular.isDefined(element.scope());
-      if ( !hasScope ) {
-        $log.warn("element.scope() is not available when 'debug mode' == false. @see https://docs.angularjs.org/guide/production!");
-      }
-
-      return hasScope;
     },
 
     // Stop watchers and events from firing on a scope without destroying it,

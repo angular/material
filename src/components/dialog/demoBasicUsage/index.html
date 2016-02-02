@@ -4,27 +4,29 @@
     send focus back to the triggering button.
   </p>
 
-  <div class="dialog-demo-content" layout="row" layout-wrap layout-margin>
-    <md-button class="md-primary md-raised" ng-click="showAlert($event)"   flex="100"  flex-gt-md="auto">
+  <div class="dialog-demo-content" layout="row" layout-wrap layout-margin layout-align="center">
+    <md-button class="md-primary md-raised" ng-click="showAlert($event)"   >
       Alert Dialog
     </md-button>
-    <md-button class="md-primary md-raised" ng-click="showConfirm($event)"  flex="100"  flex-gt-md="auto">
+    <md-button class="md-primary md-raised" ng-click="showConfirm($event)" >
       Confirm Dialog
     </md-button>
-    <md-button class="md-primary md-raised" ng-click="showAdvanced($event)" flex="100" flex-gt-md="auto">
+    <md-button class="md-primary md-raised" ng-click="showPrompt($event)"  >
+      Prompt Dialog
+    </md-button>
+    <md-button class="md-primary md-raised" ng-click="showAdvanced($event)">
       Custom Dialog
     </md-button>
-    <div hide-gt-sm layout="row" layout-align="center center" flex="100">
-        <md-checkbox ng-model="customFullscreen" aria-label="Fullscreen Custom Dialog">Custom Dialog Fullscreen</md-checkbox>
-      </div>
-    <md-button class="md-primary md-raised" ng-click="showTabDialog($event)" flex="100"  flex-gt-md="auto">
+    <md-button class="md-primary md-raised" ng-click="showTabDialog($event)" >
       Tab Dialog
     </md-button>
   </div>
   <p class="footer">Note: The <b>Confirm</b> dialog does not use <code>$mdDialog.clickOutsideToClose(true)</code>.</p>
+  <div hide-gt-sm layout="row" layout-align="center center" flex>
+      <md-checkbox ng-model="customFullscreen" aria-label="Fullscreen Custom Dialog">Force Custom Dialog Fullscreen</md-checkbox>
+    </div>
 
-  <div ng-if="status">
-    <br/>
+  <div ng-if="status" id="status">
     <b layout="row" layout-align="center center" class="md-padding">
       {{status}}
     </b>
