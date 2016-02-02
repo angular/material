@@ -12,6 +12,9 @@
           md-items="item in ctrl.querySearch(ctrl.searchText)"
           md-item-text="item.display"
           md-min-length="0"
+          md-case-insensitive-matching="true"
+          md-select-incomplete-on-match="true"
+          md-select-on-match="true"
           placeholder="What is your favorite US state?">
         <md-item-template>
           <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>

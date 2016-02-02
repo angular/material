@@ -59,8 +59,11 @@ angular
  * @param {string=} md-input-id An ID to be added to the input element
  * @param {number=} md-input-minlength The minimum length for the input's value for validation
  * @param {number=} md-input-maxlength The maximum length for the input's value for validation
- * @param {boolean=} md-select-on-match When set, autocomplete will automatically select exact
+ * @param {boolean=} md-select-on-match When set, autocomplete will automatically select
  *     the item if the search text is an exact match
+ * @param {boolean=} md-case-insensitive-matching if true, then select on match will instead select the item if it is a case-insensitive match; false by default.
+ * @param {boolean=} md-select-incomplete-on-match When set, if the field gets narrowed down to one match, then pressing return will add the lone selected item.  False by default
+ *                   this can be set to true even if md-select-on-match is false/not set
  *
  * @usage
  * ### Basic Example
@@ -133,6 +136,8 @@ function MdAutocomplete () {
       placeholder:    '@placeholder',
       noCache:        '=?mdNoCache',
       selectOnMatch:  '=?mdSelectOnMatch',
+      selectIncompleteOnMatch: '=?mdSelectIncompleteOnMatch',
+      caseInsensitiveMatching: '=?mdCaseInsensitiveMatching',
       itemChange:     '&?mdSelectedItemChange',
       textChange:     '&?mdSearchTextChange',
       minLength:      '=?mdMinLength',
