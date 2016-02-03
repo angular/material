@@ -57,6 +57,24 @@ describe('<md-select>', function() {
     expect(container.classList.contains('test')).toBe(true);
   }));
 
+  it('supports passing classes to the container using `data-` attribute prefix', inject(function($document) {
+    var select = setupSelect('ng-model="val", data-md-container-class="test"').find('md-select');
+    openSelect(select);
+
+    var container = $document[0].querySelector('.md-select-menu-container');
+    expect(container).toBeTruthy();
+    expect(container.classList.contains('test')).toBe(true);
+  }));
+
+  it('supports passing classes to the container using `x-` attribute prefix', inject(function($document) {
+    var select = setupSelect('ng-model="val", x-md-container-class="test"').find('md-select');
+    openSelect(select);
+
+    var container = $document[0].querySelector('.md-select-menu-container');
+    expect(container).toBeTruthy();
+    expect(container.classList.contains('test')).toBe(true);
+  }));
+
   it('sets aria-owns between the select and the container', function() {
     var select = setupSelect('ng-model="val"').find('md-select');
     var ownsId = select.attr('aria-owns'); 
