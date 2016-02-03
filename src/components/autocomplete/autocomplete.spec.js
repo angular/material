@@ -163,6 +163,49 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('should forward the tabindex to the input', inject(function() {
+      var scope = createScope(null, {inputId: 'custom-input-id'});
+      var template =
+        '<md-autocomplete ' +
+            'md-input-id="{{inputId}}" ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+            'tabindex="3"' +
+            'placeholder="placeholder">' +
+          '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      expect(input.attr('tabindex')).toBe('3');
+
+      element.remove();
+    }));
+
+    it('should always set the tabindex of the autcomplete to `-1`', inject(function() {
+      var scope = createScope(null, {inputId: 'custom-input-id'});
+      var template =
+        '<md-autocomplete ' +
+            'md-input-id="{{inputId}}" ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+            'tabindex="3"' +
+            'placeholder="placeholder">' +
+          '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+
+      expect(element.attr('tabindex')).toBe('-1');
+
+      element.remove();
+    }));
+
     it('should clear value when hitting escape', inject(function($mdConstant, $timeout) {
       var scope = createScope();
       var template = '\
