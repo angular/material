@@ -163,7 +163,9 @@ function MdAutocomplete () {
       // removing the element is hidden while retrieving the template. For example when using ngIf.
       if (noItemsTemplate) element.attr('md-has-not-found', true);
 
-      if (!attr.hasOwnProperty('tabindex')) element.attr('tabindex', '-1');
+      // Always set our tabindex of the autocomplete directive to -1, because our input
+      // will hold the actual tabindex.
+      element.attr('tabindex', '-1');
 
       return '\
         <md-autocomplete-wrap\
