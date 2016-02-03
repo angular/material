@@ -156,7 +156,9 @@ function MdAutocomplete () {
       // Set our variable for the link function above which runs later
       element.hasNotFoundTemplate = !!noItemsTemplate;
 
-      if (!attr.hasOwnProperty('tabindex')) element.attr('tabindex', '-1');
+      // Always set our tabindex of the autocomplete directive to -1, because our input
+      // will hold the actual tabindex.
+      element.attr('tabindex', '-1');
 
       return '\
         <md-autocomplete-wrap\
