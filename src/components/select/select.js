@@ -221,7 +221,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
       $mdTheming(element);
 
       if (attr.name && formCtrl) {
-        var selectEl = element.parent()[0].querySelector('select[name=".' + attr.name + '"]');
+        var selectEl = element.parent()[0].querySelector('select[name="' + attr.name + '"]');
         $mdUtil.nextTick(function() {
           var controller = angular.element(selectEl).controller('ngModel');
           if (controller) {
