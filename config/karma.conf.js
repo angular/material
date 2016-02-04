@@ -70,13 +70,22 @@ module.exports = function(config) {
     // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
     // - PhantomJS
     // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    browsers: ['Firefox', 'PhantomJS'],
+    browsers: ['Firefox', 'PhantomJS_sized'],
 
     // you can define custom flags
     customLaunchers: {
       Chrome_without_security: {
         base: 'Chrome',
         flags: ['--disable-web-security']
+      },
+      PhantomJS_sized: {
+        base: 'PhantomJS',
+        options: {
+          viewportSize: {
+            width: 1400,
+            height: 900
+          }
+        }
       },
       PhantomJS_without_security: {
         base: 'PhantomJS',
