@@ -274,6 +274,41 @@ describe('util', function() {
       }));
     });
 
+    describe('isHidden', function() {
+
+      it('should return true if hidden through style', inject(function($mdUtil) {
+        var element = angular.element('<span>isHidden</span>');
+        element.css('display', 'none');
+        document.body.appendChild(element[0]);
+
+        expect($mdUtil.isHidden(element, true, false)).toBe(true);
+
+        element.remove();
+      }));
+
+      it('should return true if removed from DOM', inject(function($mdUtil) {
+        var element = angular.element('<span>isHidden</span>');
+
+        expect($mdUtil.isHidden(element, false, true)).toBe(true);
+      }));
+
+      it('should return true if both states are checked', inject(function($mdUtil) {
+        var element = angular.element('<span>isHidden</span>');
+
+        expect($mdUtil.isHidden(element, true, true)).toBe(true);
+      }));
+
+      it('should return false if element is not hidden', inject(function($mdUtil) {
+        var element = angular.element('<span>isHidden</span>');
+        document.body.appendChild(element[0]);
+
+        expect($mdUtil.isHidden(element, true, true)).toBe(false);
+
+        element.remove();
+      }));
+
+    });
+
     describe('hasComputedStyle', function () {
       describe('with expected value', function () {
         it('should return true for existing and matching value', inject(function($window, $mdUtil) {

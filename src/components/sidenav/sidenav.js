@@ -208,7 +208,7 @@ function SidenavFocusDirective() {
  *   - `<md-sidenav md-is-locked-open="$mdMedia('min-width: 1000px')"></md-sidenav>`
  *   - `<md-sidenav md-is-locked-open="$mdMedia('sm')"></md-sidenav>` (locks open on small screens)
  */
-function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, $compile, $parse, $log, $q, $document) {
+function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, $compile, $parse, $log, $q, $document, $$rAF, $window) {
   return {
     restrict: 'E',
     scope: {
@@ -229,6 +229,9 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
     var lastParentOverFlow;
     var triggeringElement = null;
     var promise = $q.when(true);
+    var skipSidenav = false;
+    var skipNextUpdate = false;
+    var windowElement = angular.element($window);
 
     var isLockedOpenParsed = $parse(attr.mdIsLockedOpen);
     var isLocked = function() {
@@ -244,12 +247,18 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
 
     $mdTheming.inherit(backdrop, element);
 
+    var throttleResize = $$rAF.throttle(revalidateVisibility);
+    windowElement.on('resize', throttleResize);
+    revalidateVisibility();
+
     element.on('$destroy', function() {
       backdrop.remove();
       sidenavCtrl.destroy();
+      windowElement.off('resize', throttleResize);
     });
 
     scope.$on('$destroy', function(){
+      windowElement.off('resize', throttleResize);
       backdrop.remove()
     });
 
@@ -257,8 +266,28 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
     scope.$watch('isOpen', updateIsOpen);
 
 
+
     // Publish special accessor for the Controller instance
     sidenavCtrl.$toggleOpen = toggleOpen;
+
+    function revalidateVisibility() {
+      var lastValue = scope.isOpen;
+      if (attr.mdIsLockedOpen) return;
+
+      if ($mdUtil.isHidden(element, true, true) && scope.isOpen) {
+        scope.isOpen = false;
+      } else if (!$mdUtil.isHidden(element, true, true) && !scope.isOpen) {
+        scope.isOpen = true;
+      }
+
+      // If the revalidated isOpen Value got changed,
+      // we should apply it to the view without running the updateOpen watcher
+      if (lastValue != scope.isOpen) {
+        skipSidenav = true;
+        if (!scope.$$phase) scope.$apply();
+        skipSidenav = false;
+      }
+    }
 
     /**
      * Toggle the DOM classes to indicate `locked`
@@ -278,31 +307,56 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
      * Toggle the SideNav view and attach/detach listeners
      * @param isOpen
      */
-    function updateIsOpen(isOpen) {
+    function updateIsOpen(isOpen, oldValue) {
+      if (skipNextUpdate) {
+        skipNextUpdate = false;
+        return;
+      }
+
       // Support deprecated md-sidenav-focus attribute as fallback
       var focusEl = $mdUtil.findFocusTarget(element) || $mdUtil.findFocusTarget(element,'[md-sidenav-focus]') || element;
       var parent = element.parent();
 
+      // Temporary remove md-closed class (won't affect the view, because it's outside of the viewport).
+      // And then check the visbility due hide attributes. So if the isOpen variable changes
+      // and a hide attribute is active we should revert the digest change
+      if (!skipSidenav) {
+        var wasClosed = element.hasClass('md-closed');
+
+        element.removeClass('md-closed');
+        var isHidden = $mdUtil.isHidden(element, true, false);
+        element.toggleClass('md-closed', wasClosed);
+
+        if (isHidden && !skipSidenav) {
+          element.toggleClass('md-closed', wasClosed);
+          skipNextUpdate = true;
+          scope.isOpen = !!oldValue;
+          return;
+        }
+      }
+
       parent[isOpen ? 'on' : 'off']('keydown', onKeyDown);
       backdrop[isOpen ? 'on' : 'off']('click', close);
 
-      if ( isOpen ) {
+      if ( isOpen && !skipSidenav) {
         // Capture upon opening..
         triggeringElement = $document[0].activeElement;
       }
 
       disableParentScroll(isOpen);
 
-      return promise = $q.all([
-                isOpen ? $animate.enter(backdrop, parent) : $animate.leave(backdrop),
-                $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed')
-              ])
-              .then(function() {
-                // Perform focus when animations are ALL done...
-                if (scope.isOpen) {
-                  focusEl && focusEl.focus();
-                }
-              });
+      var actions = [isOpen ? $animate.enter(backdrop, parent) : $animate.leave(backdrop)];
+      if (!skipSidenav) {
+        actions.push(isOpen ? $animate.removeClass(element, 'md-closed') : $animate.addClass(element, 'md-closed'));
+      }
+
+      return promise = $q.all(actions)
+        .then(function() {
+          // Perform focus when animations are ALL done...
+          if (scope.isOpen) {
+            focusEl && focusEl.focus();
+          }
+        });
     }
 
     /**
