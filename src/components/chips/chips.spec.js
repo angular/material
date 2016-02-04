@@ -409,6 +409,71 @@ describe('<md-chips>', function() {
         }));
       });
 
+      describe('md-max-chips', function() {
+
+        beforeEach(function() {
+          // Clear default items to test the max chips functionality
+          scope.items = [];
+        });
+
+        it('should not add a new chip if the max-chips limit is reached', function() {
+          var element = buildChips('<md-chips ng-model="items" md-max-chips="1"></md-chips>');
+          var ctrl = element.controller('mdChips');
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(scope.items.length).toBe(1);
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test 2';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(scope.items.length).not.toBe(2);
+        });
+
+        it('should update the md-max-chips model validator for forms', function() {
+          var template =
+            '<form name="form">' +
+            '<md-chips name="chips" ng-model="items" md-max-chips="1"></md-chips>' +
+            '</form>';
+
+          var element = buildChips(template);
+          var ctrl = element.find('md-chips').controller('mdChips');
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(scope.form.chips.$error['md-max-chips']).toBe(true);
+        });
+
+        it('should not reset the buffer if the maximum is reached', function() {
+          var element = buildChips('<md-chips ng-model="items" md-max-chips="1"></md-chips>');
+          var ctrl = element.controller('mdChips');
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(scope.items.length).toBe(1);
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test 2';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(ctrl.chipBuffer).toBe('Test 2');
+          expect(scope.items.length).not.toBe(2);
+        });
+
+      });
+
       describe('md-autocomplete', function() {
         var AUTOCOMPLETE_CHIPS_TEMPLATE = '\
           <md-chips ng-model="items">\
