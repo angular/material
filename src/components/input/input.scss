@@ -115,7 +115,7 @@ md-input-container {
     @include rtl(padding-right, 0, $input-container-padding + 1px);
     z-index: 1;
     transform: translate3d(0, $input-label-default-offset + 4, 0) scale($input-label-default-scale);
-    transition: transform $swift-ease-out-timing-function 0.25s;
+    transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
 
     @include rtl(transform-origin, left top, right top);
   }
@@ -275,8 +275,8 @@ md-input-container {
   &.md-input-has-value {
     label:not(.md-no-float) {
       transform: translate3d(0, $input-label-float-offset, 0) scale($input-label-float-scale);
-      transition: transform $swift-ease-out-timing-function 0.5s,
-                  width $swift-ease-out-timing-function 0.5s;
+      transition: transform $swift-ease-out-timing-function $swift-ease-out-duration,
+                  width $swift-ease-out-timing-function $swift-ease-out-duration;
       width: calc((100% - #{$input-label-float-width}) / #{$input-label-float-scale});
     }
   }
@@ -310,7 +310,7 @@ md-input-container {
 
   &.md-icon-float {
 
-    transition: margin-top 0.5s $swift-ease-out-timing-function;
+    transition: margin-top $swift-ease-out-duration $swift-ease-out-timing-function;
 
     > label {
       pointer-events: none;
