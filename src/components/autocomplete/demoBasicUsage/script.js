@@ -9,6 +9,7 @@
 
     self.simulateQuery = false;
     self.isDisabled    = false;
+    self.selectOnMatch = false;
 
     // list of `state` value/display objects
     self.states        = loadAll();
