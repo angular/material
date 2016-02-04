@@ -346,8 +346,8 @@
     var path = __dirname + '/dist/docs/docs.js';
     var file = fs.readFileSync(path);
     var contents = file.toString()
-        .replace(/http:\/\/localhost:8080\/angular-material/g, 'https://cdn.gitcdn.xyz/cdn/angular/bower-material/v{{newVersion}}/angular-material')
-        .replace(/http:\/\/localhost:8080\/docs.css/g, 'https://material.angularjs.org/{{newVersion}}/docs.css');
+        .replace(/http:\/\/localhost:8080\/angular-material/g, 'https://cdn.gitcdn.link/cdn/angular/bower-material/v' + newVersion + '/angular-material')
+        .replace(/http:\/\/localhost:8080\/docs.css/g, 'https://material.angularjs.org/' + newVersion + '/docs.css');
     fs.writeFileSync(path, contents);
 
   }
