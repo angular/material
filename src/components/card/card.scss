@@ -65,7 +65,7 @@ md-card {
     display: flex;
     flex: 0 0 auto;
     width: 100%;
-    height: auto;
+    height: 100% !important;
   }
 
   md-card-title {
