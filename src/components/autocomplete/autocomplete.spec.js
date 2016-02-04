@@ -11,7 +11,7 @@ describe('<md-autocomplete>', function() {
     return container;
   }
 
-  function createScope(items, obj) {
+  function createScope(items, obj, matchLowercase) {
     var scope;
     items = items || ['foo', 'bar', 'baz'].map(function(item) {
         return {display: item};
@@ -20,7 +20,7 @@ describe('<md-autocomplete>', function() {
       scope = $rootScope.$new();
       scope.match = function(term) {
         return items.filter(function(item) {
-          return item.display.indexOf(term) === 0;
+          return item.display.indexOf(matchLowercase ? term.toLowerCase() : term) === 0;
         });
       };
       scope.searchText = '';
@@ -794,6 +794,85 @@ describe('<md-autocomplete>', function() {
       $timeout.flush();
 
       expect(scope.selectedItem).toBe(null);
+
+      element.remove();
+    }));
+
+    it('should ignore case when matching by default', inject(function($timeout) {
+      var scope = createScope(null, null, true);
+      var template =
+        '<md-autocomplete ' +
+            'md-select-on-match ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+            'placeholder="placeholder">' +
+          '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var element = compile(template, scope);
+
+      expect(scope.searchText).toBe('');
+      expect(scope.selectedItem).toBe(null);
+
+      element.scope().searchText = 'FoO';
+      $timeout.flush();
+
+      expect(scope.selectedItem).not.toBe(null);
+      expect(scope.selectedItem.display).toBe('foo');
+
+      element.remove();
+    }));
+
+    it('should not select matching item when not ignoring case', inject(function($timeout) {
+      var scope = createScope(null, null, true);
+      var template =
+        '<md-autocomplete ' +
+            'md-select-on-match ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+            'placeholder="placeholder" ' +
+            'md-match-case="true">' +
+          '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var element = compile(template, scope);
+
+      expect(scope.searchText).toBe('');
+      expect(scope.selectedItem).toBe(null);
+
+      element.scope().searchText = 'FoO';
+      $timeout.flush();
+
+      expect(scope.selectedItem).toBe(null);
+
+      element.remove();
+    }));
+
+    it('should select matching item when ignoring case', inject(function($timeout) {
+      var scope = createScope(null, null, true);
+      var template =
+        '<md-autocomplete ' +
+        'md-select-on-match ' +
+        'md-selected-item="selectedItem" ' +
+        'md-search-text="searchText" ' +
+        'md-items="item in match(searchText)" ' +
+        'md-item-text="item.display" ' +
+        'placeholder="placeholder" ' +
+        'md-match-case="false">' +
+        '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var element = compile(template, scope);
+
+      expect(scope.searchText).toBe('');
+      expect(scope.selectedItem).toBe(null);
+
+      element.scope().searchText = 'FoO';
+      $timeout.flush();
+
+      expect(scope.selectedItem).not.toBe(null);
+      expect(scope.selectedItem.display).toBe('foo');
 
       element.remove();
     }));
