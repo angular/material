@@ -57,6 +57,23 @@ describe('$mdPanel', function() {
     expect(panelRef.isOpen).toEqual(false);
   });
 
+  it('should create and open a basic panel', function() {
+    var template = '<div id="panel">Hello World!</div>';
+    var config = { template: template };
+
+    var panelRef = $mdPanel.open(config);
+    $rootScope.$apply();
+
+    expect('#panel').toExist();
+    expect(panelRef.isOpen).toEqual(true);
+
+    panelRef.close();
+    $rootScope.$apply();
+
+    expect('#panel').not.toExist();
+    expect(panelRef.isOpen).toEqual(false);
+  });
+
   it('should add and remove a panel from the DOM', function() {
     var template = '<div id="panel">Hello World!</div>';
     var config = { template: template };
