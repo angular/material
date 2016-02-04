@@ -132,6 +132,24 @@ angular
  * @returns {MdPanelRef} panelRef
  */
 
+
+/**
+ * @ngdoc method
+ * @name $mdPanel#open
+ * @description
+ * Calls the create method above, then opens the panel. This is a shortcut for
+ * creating and then calling open manually. If custom methods need to be
+ * called when the panel is added to the DOM or opened, do not use this method.
+ * Instead create the panel, chain promises on the domAdded and openComplete
+ * methods, and call open from the returned panelRef.
+ *
+ * @param {Object=} opt_config Specific configuration object that may contain
+ * the properties defined in `$mdPanel.create`.
+ *
+ * @returns {MdPanelRef} panelRef
+ */
+
+
 /**
  * @ngdoc method
  * @name $mdPanel#setGroupMaxOpen
@@ -328,9 +346,21 @@ MdPanelService.prototype.create = function(opt_config) {
   angular.extend(this._config, configSettings);
 
   var instanceId = 'panel_' + this._$injector.get('$mdUtil').nextUid();
-  var instanceConfig = angular.extend({id : instanceId }, this._config);
+  var instanceConfig = angular.extend({id : instanceId}, this._config);
 
   return new MdPanelRef(instanceConfig, this._$injector);
+};
+
+
+/**
+ * Creates and opens a panel with the specified options.
+ * @param {!Object=} opt_config Configuration object for the panel.
+ * @returns {!MdPanelRef} The panel created from create.
+ */
+MdPanelService.prototype.open = function(opt_config) {
+  var panelRef = this.create(opt_config);
+  panelRef.open();
+  return panelRef;
 };
 
 
@@ -344,10 +374,10 @@ MdPanelService.prototype.create = function(opt_config) {
  */
 function MdPanelRef(config, $injector) {
   // Injected variables.
-  /** @private {!angular.$q} @const */
+  /** @private @const {!angular.$q} */
   this._$q = $injector.get('$q');
 
-  /** @private {!angular.$mdCompiler} @const */
+  /** @private @const {!angular.$mdCompiler} */
   this._$mdCompiler = $injector.get('$mdCompiler');
 
 
