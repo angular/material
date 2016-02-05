@@ -531,6 +531,33 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('properly sets hasNotFound when element is hidden through ng-if', inject(function() {
+      var scope = createScope();
+      var template1 =
+        '<div>' +
+          '<md-autocomplete ' +
+              'md-selected-item="selectedItem" ' +
+              'md-search-text="searchText" ' +
+              'md-items="item in match(searchText)" ' +
+              'md-item-text="item.display" ' +
+              'placeholder="placeholder" ' +
+              'ng-if="showAutocomplete">' +
+            '<md-item-template>{{item.display}}</md-item-template>' +
+            '<md-not-found>Sorry, not found...</md-not-found>' +
+          '</md-autocomplete>' +
+        '</div>';
+      var element = compile(template1, scope);
+      var ctrl = element.children().controller('mdAutocomplete');
+
+      expect(ctrl).toBeUndefined();
+
+      scope.$apply('showAutocomplete = true');
+
+      ctrl = element.children().controller('mdAutocomplete');
+
+      expect(ctrl.hasNotFound).toBe(true);
+    }));
+
     it('properly sets hasNotFound with multiple autocompletes', inject(function($timeout, $material) {
       var scope = createScope();
       var template1 =
