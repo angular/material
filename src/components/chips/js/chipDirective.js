@@ -47,7 +47,6 @@ function MdChip($mdTheming, $mdUtil) {
     element.append($mdUtil.processTemplate(hintTemplate));
 
     return function postLink(scope, element, attr, ctrl) {
-      element.addClass('md-chip');
       $mdTheming(element);
 
       if (ctrl) angular.element(element[0].querySelector('._md-chip-content'))

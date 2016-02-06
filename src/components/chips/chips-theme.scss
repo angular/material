@@ -5,7 +5,7 @@ md-chips.md-THEME_NAME-theme {
       box-shadow: 0 2px '{{primary-color}}';
     }
   }
-  .md-chip {
+  md-chip {
     background: '{{background-300}}';
     color: '{{background-800}}';
     &.md-focused {
