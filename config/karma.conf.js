@@ -34,6 +34,8 @@ module.exports = function(config) {
         'node_modules/angular/angular.js',
         'node_modules/angular-animate/angular-animate.js',
         'node_modules/angular-aria/angular-aria.js',
+        'node_modules/angular-sanitize/angular-sanitize.js',
+        'node_modules/angular-touch/angular-touch.js',
         'node_modules/angular-mocks/angular-mocks.js',
         'test/angular-material-mocks.js',
         'test/angular-material-spec.js'
@@ -56,6 +58,9 @@ module.exports = function(config) {
     // enable / disable watching file and executing tests whenever any file changes
     singleRun: true,
     autoWatch: false,
+
+    // Only launch one browser at a time since doing multiple can cause disconnects/issues
+    concurrency: 1,
 
     // Start these browsers, currently available:
     // - Chrome

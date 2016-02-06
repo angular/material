@@ -13,7 +13,7 @@ describe('<md-virtual-repeat>', function() {
       '     style="height: 10px; width: 10px; box-sizing: border-box;">' +
       '       {{i}} {{$index}}' +
       '</div>';
-  var container, repeater, component, $$rAF, $compile, $document, scope,
+  var container, repeater, component, $$rAF, $compile, $document, $mdUtil, $window, scope,
       scroller, sizer, offsetter;
 
   var NUM_ITEMS = 110,
@@ -21,14 +21,17 @@ describe('<md-virtual-repeat>', function() {
       HORIZONTAL_PX = 150,
       ITEM_SIZE = 10;
 
-  beforeEach(inject(function(_$$rAF_, _$compile_, _$document_, $rootScope, _$material_) {
+  beforeEach(inject(function(
+      _$$rAF_, _$compile_, _$document_, _$mdUtil_, $rootScope, _$window_, _$material_) {
     repeater = angular.element(REPEATER_HTML);
     container = angular.element(CONTAINER_HTML).append(repeater);
     component = null;
     $$rAF = _$$rAF_;
     $material = _$material_;
+    $mdUtil = _$mdUtil_;
     $compile = _$compile_;
     $document = _$document_;
+    $window = _$window_;
     scope = $rootScope.$new();
     scope.startIndex = 0;
     scroller = null;
@@ -69,6 +72,17 @@ describe('<md-virtual-repeat>', function() {
   function getRepeated() {
     return component[0].querySelectorAll('[md-virtual-repeat]');
   }
+
+  it('should $emit $md-resize-enable at startup', function() {
+    var emitted = false;
+    scope.$on('$md-resize-enable', function() {
+      emitted = true;
+    });
+
+    createRepeater();
+
+    expect(emitted).toBe(true);
+  });
 
   it('should render only enough items to fill the viewport + 3 (vertical)', function() {
     createRepeater();
@@ -196,7 +210,7 @@ describe('<md-virtual-repeat>', function() {
 
     // Scroll past the fourth item.
     // Expect that one new item is created.
-    scroller[0].scrollLeft = ITEM_SIZE * (VirtualRepeatController.NUM_EXTRA + 1);;
+    scroller[0].scrollLeft = ITEM_SIZE * (VirtualRepeatController.NUM_EXTRA + 1);
     scroller.triggerHandler('scroll');
     expect(getTransform(offsetter)).toBe('translateX(10px)');
     repeated = getRepeated();
@@ -282,6 +296,30 @@ describe('<md-virtual-repeat>', function() {
     }
   });
 
+  it('should clear scroller if large set of items is filtered to much smaller set', function() {
+    // Create a much larger number of items than will fit in one maximum element size.
+    var numItems = 2000000;
+    createRepeater();
+    scope.items = createItems(numItems);
+    scope.$apply();
+    $$rAF.flush();
+
+    // Expect that the sizer as a whole is still exactly the height it should be.
+    expect(sizer[0].offsetHeight).toBe(numItems * ITEM_SIZE);
+
+    // Now that the sizer is really big, change the the number of items to be very small.
+    numItems = 2;
+    scope.items = createItems(numItems);
+    scope.$apply();
+    $$rAF.flush();
+
+    // Expect that the sizer as a whole is still exactly the height it should be.
+    expect(sizer[0].offsetHeight).toBe(numItems * ITEM_SIZE);
+
+    // Expect that the sizer has no children, as all of items fit comfortably in a single element.
+    expect(sizer[0].children.length).toBe(0);
+  });
+
   it('should start at the given scroll position', function() {
     scope.startIndex = 10;
     scope.items = createItems(200);
@@ -300,21 +338,25 @@ describe('<md-virtual-repeat>', function() {
     $$rAF.flush();
 
     expect(container[0].offsetHeight).toBe(100);
+    expect(offsetter.children().length).toBe(13);
 
     // With 5 items...
     scope.items = createItems(5);
     scope.$apply();
     expect(container[0].offsetHeight).toBe(5 * ITEM_SIZE);
+    expect(offsetter.children().length).toBe(5);
 
     // With 0 items...
     scope.items = [];
     scope.$apply();
     expect(container[0].offsetHeight).toBe(0);
+    expect(offsetter.children().length).toBe(0);
 
     // With lots of items again...
     scope.items = createItems(NUM_ITEMS);
     scope.$apply();
     expect(container[0].offsetHeight).toBe(100);
+    expect(offsetter.children().length).toBe(13);
   });
 
   it('should shrink the container when the number of items goes down (horizontal)', function() {
@@ -328,21 +370,25 @@ describe('<md-virtual-repeat>', function() {
     $$rAF.flush();
 
     expect(container[0].offsetWidth).toBe(150);
+    expect(offsetter.children().length).toBe(18);
 
     // With 5 items...
     scope.items = createItems(5);
     scope.$apply();
     expect(container[0].offsetWidth).toBe(5 * ITEM_SIZE);
+    expect(offsetter.children().length).toBe(5);
 
     // With 0 items...
     scope.items = [];
     scope.$apply();
     expect(container[0].offsetWidth).toBe(0);
+    expect(offsetter.children().length).toBe(0);
 
     // With lots of items again...
     scope.items = createItems(NUM_ITEMS);
     scope.$apply();
     expect(container[0].offsetWidth).toBe(150);
+    expect(offsetter.children().length).toBe(18);
   });
 
   it('should not shrink below the specified md-auto-shrink-min (vertical)', function() {
@@ -408,6 +454,74 @@ describe('<md-virtual-repeat>', function() {
     expect(getRepeated().length).toBe(numItemRenderers);
   });
 
+  it('should resize the scroller correctly when item length changes (vertical)', function() {
+    scope.items = createItems(200);
+    createRepeater();
+    scope.$apply();
+    $$rAF.flush();
+    expect(sizer[0].offsetHeight).toBe(200 * ITEM_SIZE);
+
+    // Scroll down half way
+    scroller[0].scrollTop = 100 * ITEM_SIZE;
+    scroller.triggerHandler('scroll');
+    scope.$apply();
+    $$rAF.flush();
+
+    // Remove some items
+    scope.items = createItems(20);
+    scope.$apply();
+    $$rAF.flush();
+    expect(scroller[0].scrollTop).toBe(0);
+    expect(sizer[0].offsetHeight).toBe(20 * ITEM_SIZE);
+
+    // Scroll down half way
+    scroller[0].scrollTop = 10 * ITEM_SIZE;
+    scroller.triggerHandler('scroll');
+    scope.$apply();
+    $$rAF.flush();
+
+    // Add more items
+    scope.items = createItems(250);
+    scope.$apply();
+    $$rAF.flush();
+    expect(scroller[0].scrollTop).toBe(100);
+    expect(sizer[0].offsetHeight).toBe(250 * ITEM_SIZE);
+  });
+
+  it('should resize the scroller correctly when item length changes (horizontal)', function() {
+    container.attr({'md-orient-horizontal': ''});
+    scope.items = createItems(200);
+    createRepeater();
+    scope.$apply();
+    $$rAF.flush();
+    expect(sizer[0].offsetWidth).toBe(200 * ITEM_SIZE);
+
+    // Scroll right half way
+    scroller[0].scrollLeft = 100 * ITEM_SIZE;
+    scroller.triggerHandler('scroll');
+    scope.$apply();
+    $$rAF.flush();
+
+    // Remove some items
+    scope.items = createItems(20);
+    scope.$apply();
+    $$rAF.flush();
+    expect(scroller[0].scrollLeft).toBe(0);
+    expect(sizer[0].offsetWidth).toBe(20 * ITEM_SIZE);
+
+    // Scroll right half way
+    scroller[0].scrollLeft = 10 * ITEM_SIZE;
+    scroller.triggerHandler('scroll');
+    scope.$apply();
+    $$rAF.flush();
+
+    // Add more items
+    scope.items = createItems(250);
+    scope.$apply();
+    $$rAF.flush();
+    expect(sizer[0].offsetWidth).toBe(250 * ITEM_SIZE);
+  });
+
   it('should update topIndex when scrolling', function() {
     container.attr({'md-top-index': 'topIndex'});
     scope.items = createItems(NUM_ITEMS);
@@ -452,6 +566,71 @@ describe('<md-virtual-repeat>', function() {
     expect(scroller[0].scrollTop).toBe(25 * ITEM_SIZE);
   });
 
+  it('should recheck container size on window resize', function() {
+    spyOn($mdUtil, 'debounce').and.callFake(angular.identity);
+    scope.items = createItems(100);
+    createRepeater();
+    // Expect 13 children (10 + 3 extra).
+    expect(offsetter.children().length).toBe(13);
+
+    container.css('height', '400px');
+    angular.element($window).triggerHandler('resize');
+
+    // Expect 43 children (40 + 3 extra).
+    expect(offsetter.children().length).toBe(43);
+  });
+
+  it('should recheck container size and scroll position on $md-resize scope ' +
+      'event', function() {
+    scope.items = createItems(100);
+    createRepeater();
+    // Expect 13 children (10 + 3 extra).
+    expect(offsetter.children().length).toBe(13);
+
+    container.css('height', '300px');
+    scope.$parent.$broadcast('$md-resize');
+
+    // Expect 33 children (30 + 3 extra).
+    expect(offsetter.children().length).toBe(33);
+
+    container.css('height', '400px');
+    scroller[0].scrollTop = 20;
+    scope.$parent.$broadcast('$md-resize');
+
+    // Expect 45 children (40 + 5 extra).
+    expect(offsetter.children().length).toBe(45);
+  });
+
+  it('should shrink when initial results require shrinking', inject(function() {
+    scope.items = [
+      { value: 'alabama', display: 'Alabama' },
+      { value: 'alaska', display: 'Alaska' },
+      { value: 'arizona', display: 'Arizona' }
+    ];
+    createRepeater();
+    var controller = component.controller('mdVirtualRepeatContainer');
+    controller.autoShrink = true;
+    controller.autoShrink_(50);
+
+    expect(component[0].clientHeight).toBe(50);
+    expect(offsetter.children().length).toBe(3);
+  }));
+
+  it('should not scroll past the bottom', function() {
+    scope.items = createItems(101);
+    createRepeater();
+
+    scroller[0].scrollTop = ITEM_SIZE * 91;
+    scroller.triggerHandler('scroll');
+
+    expect(getTransform(offsetter)).toBe('translateY(880px)');
+
+    scroller[0].scrollTop++;
+    scroller.triggerHandler('scroll');
+
+    expect(getTransform(offsetter)).toBe('translateY(880px)');
+  });
+
   /**
    * Facade to access transform properly even when jQuery is used;
    * since jQuery's css function is obtaining the computed style (not wanted)
@@ -459,6 +638,4 @@ describe('<md-virtual-repeat>', function() {
   function getTransform(target) {
     return target[0].style.webkitTransform || target.css('transform');
   }
-
-
 });

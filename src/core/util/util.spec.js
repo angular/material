@@ -1,39 +1,5 @@
 describe('util', function() {
 
-  describe('validateScope',function() {
-
-    it("should not find a valid scope when debug is disabled", function() {
-      module(function($compileProvider) {
-        $compileProvider.debugInfoEnabled(false);
-      });
-
-      inject(function($compile, $rootScope, $mdUtil) {
-        var widget = angular.element($compile('<div><button><img></button></div>')($rootScope));
-        var button = angular.element(widget.children()[0]);
-
-        $rootScope.$apply();
-        expect(button.scope()).toBe(undefined);
-        expect($mdUtil.validateScope(button)).toBe(false);
-
-      });
-    });
-
-    it("should find a valid scope when debug is enabled", function() {
-      module(function($compileProvider) {
-        $compileProvider.debugInfoEnabled(true);
-      });
-
-      inject(function($compile, $rootScope, $mdUtil) {
-        var widget = angular.element($compile('<div><button><img></button></div>')($rootScope));
-        var button = angular.element(widget.children()[0]);
-
-        $rootScope.$apply();
-        expect(button.scope()).toBeDefined();
-        expect($mdUtil.validateScope(button)).toBe(true);
-      });
-    });
-  });
-
   describe('with no overrides', function() {
     beforeEach(module('material.core'));
 
@@ -274,6 +240,142 @@ describe('util', function() {
       }));
     });
 
+    describe('hasComputedStyle', function () {
+      describe('with expected value', function () {
+        it('should return true for existing and matching value', inject(function($window, $mdUtil) {
+          spyOn($window, 'getComputedStyle').and.callFake(function() {
+            return { 'color': 'red' };
+          });
+
+          var elem = angular.element('<span style="color: red"></span>');
+
+          expect($mdUtil.hasComputedStyle(elem, 'color', 'red')).toBe(true);
+        }));
+
+        it('should return false for existing and not matching value', inject(function($window, $mdUtil) {
+          spyOn($window, 'getComputedStyle').and.callFake(function() {
+            return { 'color': 'red' };
+          });
+
+          var elem = angular.element('<span style="color: red"></span>');
+
+          expect($mdUtil.hasComputedStyle(elem, 'color', 'blue')).toBe(false);
+        }));
+      });
+
+      describe('without expected value', function () {
+        it('should return true for existing key', inject(function($window, $mdUtil) {
+          spyOn($window, 'getComputedStyle').and.callFake(function() {
+            return { 'color': 'red' };
+          });
+
+          var elem = angular.element('<span style="color: red"></span>');
+
+          expect($mdUtil.hasComputedStyle(elem, 'color')).toBe(true);
+        }));
+
+        it('should return false for not existing key', inject(function($window, $mdUtil) {
+          spyOn($window, 'getComputedStyle').and.callFake(function() {
+            return { 'color': 'red' };
+          });
+
+          var elem = angular.element('<span style="color: red"></span>');
+
+          expect($mdUtil.hasComputedStyle(elem, 'height')).toBe(false);
+        }));
+      });
+    });
+
+    describe('getParentWithPointerEvents', function () {
+      describe('with wrapper with pointer events style element', function () {
+        it('should find the parent element and return it', inject(function($window, $mdUtil) {
+          spyOn($window, 'getComputedStyle').and.callFake(function(target) {
+            return target === wrapper[0] ? { 'pointer-events':'none' } : {};
+          });
+
+          var elem = angular.element('<span></span>');
+          var wrapper = angular.element('<div style="pointer-events:none;"></div>');
+          var parent = angular.element('<div></div>');
+
+          wrapper.append(elem);
+          parent.append(wrapper);
+
+          // Scan up the DOM tree to find nearest parent with point-events !== none
+          // This means we should skip the wrapper node.
+
+          expect($mdUtil.getParentWithPointerEvents(elem)[0]).toBe(parent[0]);
+        }));
+      });
+
+      describe('with wrapper without pointer events style element', function () {
+        it('should find the wrapper element and return it', inject(function($window, $mdUtil) {
+          spyOn($window, 'getComputedStyle').and.callFake(function(elem) {
+            return {};
+          });
+
+          var elem = angular.element('<span></span>');
+          var wrapper = angular.element('<div id="wrapper"></div>');
+          var parent = angular.element('<div></div>');
+
+          wrapper.append(elem);
+          parent.append(wrapper);
+
+          expect($mdUtil.getParentWithPointerEvents(elem)[0]).toBe(wrapper[0]);
+        }));
+      });
+    });
+
+    describe('getNearestContentElement', function () {
+      describe('with rootElement as parent', function () {
+        it('should find stop at the rootElement and return it', inject(function($rootElement, $mdUtil) {
+          var elem = angular.element('<span></span>');
+          var wrapper = angular.element('<div></div>');
+
+          wrapper.append(elem);
+          $rootElement.append(wrapper);
+
+          expect($mdUtil.getNearestContentElement(elem)).toBe($rootElement[0]);
+        }));
+      });
+
+      describe('with document body as parent', function () {
+        it('should find stop at the document body and return it', inject(function($mdUtil) {
+          var elem = angular.element('<span></span>');
+          var wrapper = angular.element('<div></div>');
+          var body = angular.element(document.body);
+
+          wrapper.append(elem);
+          body.append(wrapper);
+
+          expect($mdUtil.getNearestContentElement(elem)).toBe(body[0]);
+        }));
+      });
+
+      describe('with md-content as parent', function () {
+        it('should find stop at md-content element and return it', inject(function($mdUtil) {
+          var elem = angular.element('<span></span>');
+          var wrapper = angular.element('<div></div>');
+          var content = angular.element('<md-content></md-content>');
+
+          wrapper.append(elem);
+          content.append(wrapper);
+
+          expect($mdUtil.getNearestContentElement(elem)).toBe(content[0]);
+        }));
+      });
+
+      describe('with no rootElement, body or md-content as parent', function () {
+        it('should return null', inject(function($mdUtil) {
+          var elem = angular.element('<span></span>');
+          var wrapper = angular.element('<div></div>');
+
+          wrapper.append(elem);
+
+          expect($mdUtil.getNearestContentElement(elem)).toBe(null);
+        }));
+      });
+    });
+
     it('should use scope argument and `scope.$$destroyed` to skip the callback', inject(function($mdUtil) {
       var callBackUsed, callback = function(){ callBackUsed = true; };
       var scope = $rootScope.$new(true);
@@ -309,13 +411,16 @@ describe('util', function() {
   });
 
   describe('with $interpolate.start/endSymbol override', function() {
-    beforeEach(module(function($interpolateProvider) {
-      $interpolateProvider.startSymbol('[[').endSymbol(']]');
-
-      module('material.core');
-    }));
 
     describe('processTemplate', function() {
+      beforeEach(function() {
+        module(function($interpolateProvider) {
+            $interpolateProvider.startSymbol('[[');
+            $interpolateProvider.endSymbol(']]');
+        });
+        module('material.core');
+      });
+
       it('should replace the start/end symbols', inject(function($mdUtil) {
         var output = $mdUtil.processTemplate('<some-tag>{{some-var}}</some-tag>');
 

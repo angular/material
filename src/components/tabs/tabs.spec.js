@@ -336,4 +336,25 @@ describe('<md-tabs>', function () {
       expect(element.find('md-tabs-content-wrapper').hasClass('ng-hide')).toBe(true);
     }));
   });
+
+  describe('nested tabs', function () {
+    it('should properly nest tabs', inject(function () {
+      var template = '' +
+          '<md-tabs>' +
+          ' <md-tab label="one">' +
+          '   <md-tabs>' +
+          '     <md-tab><md-tab-label>a</md-tab-label></md-tab>' +
+          '     <md-tab><md-tab-label>b</md-tab-label></md-tab>' +
+          '     <md-tab><md-tab-label>c</md-tab-label></md-tab>' +
+          '   </md-tabs>' +
+          ' </md-tab>' +
+          ' <md-tab label="two">two</md-tab>' +
+          '</md-tabs>';
+      var element = setup(template);
+      // first item should be 'one'
+      expect(element.find('md-tab-item').eq(0).text()).toBe('one');
+      // first item in nested tabs should be 'a'
+      expect(element.find('md-tabs').find('md-tab-item').eq(0).text()).toBe('a');
+    }));
+  });
 });

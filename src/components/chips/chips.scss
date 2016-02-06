@@ -1,6 +1,7 @@
 $chip-font-size: rem(1.6) !default;
 $chip-height: rem(3.2) !default;
 $chip-padding: 0 rem(1.2) 0 rem(1.2) !default;
+$chip-input-padding: 0 !default;
 $chip-remove-padding-right: rem(2.2) !default;
 $chip-remove-line-height: rem(2.2) !default;
 $chip-margin: rem(0.8) rem(0.8) 0 0 !default;
@@ -62,8 +63,12 @@ $contact-chip-name-width: rem(12) !default;
   &:not(.md-readonly) {
     cursor: text;
 
-    .md-chip {
+    .md-chip:not(.md-readonly) {
       padding-right: $chip-remove-padding-right;
+
+      .md-chip-content {
+        padding-right:rem(0.4);
+      }
     }
   }
 
@@ -82,7 +87,6 @@ $contact-chip-name-width: rem(12) !default;
 
     .md-chip-content {
       display: block;
-      padding-right:rem(0.4);
       float: left;
       white-space: nowrap;
       max-width: 100%;
@@ -122,7 +126,7 @@ $contact-chip-name-width: rem(12) !default;
     display: block;
     line-height: $chip-height;
     margin: $chip-margin;
-    padding: $chip-padding;
+    padding: $chip-input-padding;
     float: left;
     input {
       &:not([type]),&[type="email"],&[type="number"],&[type="tel"],&[type="url"],&[type="text"] {
@@ -179,6 +183,7 @@ $contact-chip-name-width: rem(12) !default;
     }
   }
 }
+// IE only
 @media screen and (-ms-high-contrast: active) {
   .md-chip-input-container,
   md-chip {

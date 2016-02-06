@@ -1,9 +1,8 @@
 $subheader-line-height: 1em !default;
 $subheader-font-size: rem(1.4) !default;
-$subheader-padding: ($baseline-grid * 2) 0px ($baseline-grid * 2) ($baseline-grid * 2) !default;
+$subheader-padding: ($baseline-grid * 2) !default;
 $subheader-font-weight: 500 !default;
 $subheader-margin: 0 0 0 0 !default;
-$subheader-margin-right: 16px !default;
 $subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16) !default;
 
 @keyframes subheaderStickyHoverIn {
@@ -53,7 +52,6 @@ $subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16) !default;
   font-weight: $subheader-font-weight;
   line-height: $subheader-line-height;
   margin: $subheader-margin;
-  margin-right: $subheader-margin-right;
   position: relative;
 
   .md-subheader-inner {

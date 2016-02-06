@@ -324,4 +324,53 @@ describe('$$mdDateUtil', function() {
 
     expect(dateUtil.isValidDate(new Date())).toBe(true);
   });
+
+  it('should return true when a date is in range', function() {
+    var date = new Date('2015-05-02');
+    var minDate = new Date('2015-05-01');
+    var maxDate = new Date('2015-05-03');
+    expect(dateUtil.isDateWithinRange(date, minDate, maxDate)).toBeTruthy();
+  });
+
+  it('should return false when a date is before the range', function() {
+    var date = new Date('2015-04-29');
+    var minDate = new Date('2015-05-01');
+    var maxDate = new Date('2015-05-03');
+    expect(dateUtil.isDateWithinRange(date, minDate, maxDate)).toBeFalsy();
+  });
+
+  it('should return false when a date is after the range', function() {
+    var date = new Date('2015-05-05');
+    var minDate = new Date('2015-05-01');
+    var maxDate = new Date('2015-05-03');
+    expect(dateUtil.isDateWithinRange(date, minDate, maxDate)).toBeFalsy();
+  });
+
+  it('should set the time to midnight before checking the min date', function() {
+    var date = new Date('2015-05-01T11:00:00');
+    var minDate = new Date('2015-05-01T12:00:00');
+    var maxDate = new Date('2015-05-03');
+    expect(dateUtil.isDateWithinRange(date, minDate, maxDate)).toBeTruthy();
+  });
+
+  it('should set the time to midnight before checking the max date', function() {
+    var date = new Date('2015-05-03T13:00:00');
+    var minDate = new Date('2015-05-01');
+    var maxDate = new Date('2015-05-03T12:00:00');
+    expect(dateUtil.isDateWithinRange(date, minDate, maxDate)).toBeTruthy();
+  });
+
+  it('should ignore an invalid minDate when checking if the date is in range', function() {
+    var date = new Date('2015-05-02');
+    var minDate = null;
+    var maxDate = new Date('2015-05-03');
+    expect(dateUtil.isDateWithinRange(date, minDate, maxDate)).toBeTruthy();
+  });
+
+  it('should ignore an invalid maxDate when checking if the date is in range', function() {
+    var date = new Date('2015-05-02');
+    var minDate = new Date('2015-05-01');
+    var maxDate = null;
+    expect(dateUtil.isDateWithinRange(date, minDate, maxDate)).toBeTruthy();
+  });
 });

@@ -6,8 +6,12 @@ var DocsApp = angular.module('docsApp', [ 'angularytics', 'ngRoute', 'ngMessages
   'DEMOS',
   'PAGES',
   '$routeProvider',
+  '$locationProvider',
   '$mdThemingProvider',
-function(SERVICES, COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider) {
+function(SERVICES, COMPONENTS, DEMOS, PAGES,
+    $routeProvider, $locationProvider, $mdThemingProvider) {
+  $locationProvider.html5Mode(true);
+
   $routeProvider
     .when('/', {
       templateUrl: 'partials/home.tmpl.html'
@@ -18,37 +22,34 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider)
       }
     })
     .when('/layout/', {
-      redirectTo: function() {
-        return "/layout/container";
-      }
+      redirectTo:  '/layout/introduction'
     })
     .when('/demo/', {
-      redirectTo: function() {
-        return DEMOS[0].url;
-      }
+      redirectTo: DEMOS[0].url
     })
     .when('/api/', {
-      redirectTo: function() {
-        return COMPONENTS[0].docs[0].url;
-      }
+      redirectTo: COMPONENTS[0].docs[0].url
     })
     .when('/getting-started', {
       templateUrl: 'partials/getting-started.tmpl.html'
+    })
+    .when('/license', {
+      templateUrl: 'partials/license.tmpl.html'
     });
   $mdThemingProvider.definePalette('docs-blue', $mdThemingProvider.extendPalette('blue', {
-      '50':   '#DCEFFF',
-      '100':  '#AAD1F9',
-      '200':  '#7BB8F5',
-      '300':  '#4C9EF1',
-      '400':  '#1C85ED',
-      '500':  '#106CC8',
-      '600':  '#0159A2',
-      '700':  '#025EE9',
-      '800':  '#014AB6',
-      '900':  '#013583',
-      'contrastDefaultColor': 'light',
-      'contrastDarkColors': '50 100 200 A100',
-      'contrastStrongLightColors': '300 400 A200 A400'
+    '50': '#DCEFFF',
+    '100': '#AAD1F9',
+    '200': '#7BB8F5',
+    '300': '#4C9EF1',
+    '400': '#1C85ED',
+    '500': '#106CC8',
+    '600': '#0159A2',
+    '700': '#025EE9',
+    '800': '#014AB6',
+    '900': '#013583',
+    'contrastDefaultColor': 'light',
+    'contrastDarkColors': '50 100 200 A100',
+    'contrastStrongLightColors': '300 400 A200 A400'
   }));
   $mdThemingProvider.definePalette('docs-red', $mdThemingProvider.extendPalette('red', {
     'A100': '#DE3641'
@@ -74,8 +75,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider)
 
   angular.forEach(COMPONENTS, function(component) {
     angular.forEach(component.docs, function(doc) {
-      doc.url = '/' + doc.url;
-      $routeProvider.when(doc.url, {
+      $routeProvider.when('/' + doc.url, {
         templateUrl: doc.outputPath,
         resolve: {
           component: function() { return component; },
@@ -87,11 +87,10 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider)
   });
 
   angular.forEach(SERVICES, function(service) {
-    service.url = '/' + service.url;
-    $routeProvider.when(service.url, {
+    $routeProvider.when('/' + service.url, {
       templateUrl: service.outputPath,
       resolve: {
-        component: function() { return undefined; },
+        component: angular.noop,
         doc: function() { return service; }
       },
       controller: 'ComponentDocCtrl'
@@ -100,13 +99,16 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider)
 
   angular.forEach(DEMOS, function(componentDemos) {
     var demoComponent;
-    angular.forEach(COMPONENTS, function(component) {
-      if (componentDemos.name === component.name) {
+
+    COMPONENTS.forEach(function(component) {
+      if (componentDemos.moduleName === component.name) {
         demoComponent = component;
+        component.demoUrl = componentDemos.url;
       }
     });
+
     demoComponent = demoComponent || angular.extend({}, componentDemos);
-    $routeProvider.when(componentDemos.url, {
+    $routeProvider.when('/' + componentDemos.url, {
       templateUrl: 'partials/demo.tmpl.html',
       controller: 'DemoCtrl',
       resolve: {
@@ -123,11 +125,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider)
    AngularyticsProvider.setEventHandlers(['Console', 'GoogleUniversal']);
 }])
 
-.run([
-   'Angularytics',
-   '$rootScope',
-    '$timeout',
-function(Angularytics, $rootScope,$timeout) {
+.run(['Angularytics', function(Angularytics) {
   Angularytics.init();
 }])
 
@@ -146,7 +144,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
 
   var sections = [{
     name: 'Getting Started',
-    url: '/getting-started',
+    url: 'getting-started',
     type: 'link'
   }];
 
@@ -175,17 +173,17 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         type: 'toggle',
         pages: [{
             name: 'Typography',
-            url: '/CSS/typography',
+            url: 'CSS/typography',
             type: 'link'
           },
           {
             name : 'Button',
-            url: '/CSS/button',
+            url: 'CSS/button',
             type: 'link'
           },
           {
             name : 'Checkbox',
-            url: '/CSS/checkbox',
+            url: 'CSS/checkbox',
             type: 'link'
           }]
       },
@@ -195,22 +193,27 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         pages: [
           {
             name: 'Introduction and Terms',
-            url: '/Theming/01_introduction',
+            url: 'Theming/01_introduction',
             type: 'link'
           },
           {
             name: 'Declarative Syntax',
-            url: '/Theming/02_declarative_syntax',
+            url: 'Theming/02_declarative_syntax',
             type: 'link'
           },
           {
             name: 'Configuring a Theme',
-            url: '/Theming/03_configuring_a_theme',
+            url: 'Theming/03_configuring_a_theme',
             type: 'link'
           },
           {
             name: 'Multiple Themes',
-            url: '/Theming/04_multiple_themes',
+            url: 'Theming/04_multiple_themes',
+            type: 'link'
+          },
+          {
+            name: 'Under the Hood',
+            url: 'Theming/05_under_the_hood',
             type: 'link'
           }
         ]
@@ -248,21 +251,34 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       name: 'Layout',
       type: 'toggle',
       pages: [{
-        name: 'Container Elements',
+        name: 'Introduction',
+        id: 'layoutIntro',
+        url: 'layout/introduction'
+      }
+        ,{
+        name: 'Layout Containers',
         id: 'layoutContainers',
-        url: '/layout/container'
-      },{
-        name: 'Grid System',
+        url: 'layout/container'
+        }
+      ,{
+        name: 'Layout Children',
         id: 'layoutGrid',
-        url: '/layout/grid'
-      },{
+        url: 'layout/children'
+      }
+      ,{
         name: 'Child Alignment',
         id: 'layoutAlign',
-        url: '/layout/alignment'
-      },{
-        name: 'Options',
+        url: 'layout/alignment'
+      }
+      ,{
+        name: 'Extra Options',
         id: 'layoutOptions',
-        url: '/layout/options'
+        url: 'layout/options'
+      }
+      ,{
+        name: 'Troubleshooting',
+        id: 'layoutTips',
+        url: 'layout/tips'
       }]
     },
     {
@@ -274,6 +290,15 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       pages: apiDocs.directive.sort(sortByName),
       type: 'toggle'
     }]
+  });
+
+  sections.push({
+    name: 'License',
+    url:  'license',
+    type: 'link',
+
+    // Add a hidden section so that the title in the toolbar is properly set
+    hidden: true
   });
 
   function sortByName(a,b) {
@@ -291,7 +316,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         var commonVersions = versionId === 'head' ? [] : [ head ];
         var knownVersions = getAllVersions();
         var listVersions = knownVersions.filter(removeCurrentVersion);
-        var currentVersion = getCurrentVersion();
+        var currentVersion = getCurrentVersion() || {name: 'local'};
         version.current = currentVersion;
         sections.unshift({
           name: 'Documentation Version',
@@ -311,17 +336,21 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
           }
         }
         function getAllVersions () {
-          return response.versions.map(function(version) {
-            var latest = response.latest === version;
-            return {
-              type: 'version',
-              url: '/' + version,
-              name: getVersionFullString({ id: version, latest: latest }),
-              id: version,
-              latest: latest,
-              github: 'tree/v' + version
-            };
-          });
+          if (response && response.versions && response.versions.length) {
+            return response.versions.map(function(version) {
+              var latest = response.latest === version;
+              return {
+                type: 'version',
+                url: '/' + version,
+                name: getVersionFullString({ id: version, latest: latest }),
+                id: version,
+                latest: latest,
+                github: 'tree/v' + version
+              };
+            });
+          }
+
+          return [];
         }
         function getVersionFullString (version) {
           return version.latest
@@ -367,11 +396,6 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
     }
   };
 
-  function sortByHumanName(a,b) {
-    return (a.humanName < b.humanName) ? -1 :
-      (a.humanName > b.humanName) ? 1 : 0;
-  }
-
   function onLocationChange() {
     var path = $location.path();
     var introLink = {
@@ -387,14 +411,14 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
     }
 
     var matchPage = function(section, page) {
-      if (path === page.url) {
+      if (path.indexOf(page.url) !== -1) {
         self.selectSection(section);
         self.selectPage(section, page);
       }
     };
 
     sections.forEach(function(section) {
-      if(section.children) {
+      if (section.children) {
         // matches nested section toggles, such as API or Customization
         section.children.forEach(function(childSection){
           if(childSection.pages){
@@ -404,7 +428,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
           }
         });
       }
-      else if(section.pages) {
+      else if (section.pages) {
         // matches top-level section toggles, such as Demos
         section.pages.forEach(function(page) {
           matchPage(section, page);
@@ -440,7 +464,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   };
 })
 
-.directive('menuToggle', [ '$timeout', function($timeout) {
+.directive('menuToggle', [ '$timeout', '$mdUtil', function($timeout, $mdUtil) {
   return {
     scope: {
       section: '='
@@ -448,8 +472,6 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
     templateUrl: 'partials/menu-toggle.tmpl.html',
     link: function($scope, $element) {
       var controller = $element.parent().controller();
-      var $ul = $element.find('ul');
-      var originalHeight;
 
       $scope.isOpen = function() {
         return controller.isOpen($scope.section);
@@ -457,18 +479,21 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       $scope.toggle = function() {
         controller.toggleOpen($scope.section);
       };
-      $scope.$watch(
+
+      $mdUtil.nextTick(function() {
+        $scope.$watch(
           function () {
             return controller.isOpen($scope.section);
           },
           function (open) {
             var $ul = $element.find('ul');
+
             var targetHeight = open ? getTargetHeight() : 0;
             $timeout(function () {
-              $ul.css({ height: targetHeight + 'px' });
+              $ul.css({height: targetHeight + 'px'});
             }, 0, false);
 
-            function getTargetHeight () {
+            function getTargetHeight() {
               var targetHeight;
               $ul.addClass('no-transition');
               $ul.css('height', '');
@@ -478,8 +503,8 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
               return targetHeight;
             }
           }
-      );
-
+        );
+      });
 
       var parentNode = $element[0].parentNode.parentNode.parentNode;
       if(parentNode.classList.contains('parent-list-item')) {
@@ -500,9 +525,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   'menu',
   '$location',
   '$rootScope',
-  '$window',
-  '$log',
-function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope, $window, $log) {
+function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope) {
   var self = this;
 
   $scope.COMPONENTS = COMPONENTS;
@@ -515,6 +538,9 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   $scope.closeMenu = closeMenu;
   $scope.isSectionSelected = isSectionSelected;
 
+  // Grab the current year so we don't have to update the license every year
+  $scope.thisYear = (new Date()).getFullYear();
+
   $rootScope.$on('$locationChangeSuccess', openPage);
   $scope.focusMainContent = focusMainContent;
 
@@ -525,8 +551,9 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
     enumerable: true,
     configurable: true
   });
-  $rootScope.redirectToUrl = function (url) {
-    $window.location.hash = url;
+
+  $rootScope.redirectToUrl = function(url) {
+    $location.path(url);
     $timeout(function () { $rootScope.relatedPage = null; }, 100);
   };
 
@@ -637,7 +664,26 @@ function($scope, $attrs, $location, $rootScope) {
     direction: 'row'
   };
   $scope.layoutAlign = function() {
-    return $scope.layoutDemo.mainAxis + ' ' + $scope.layoutDemo.crossAxis;
+    return $scope.layoutDemo.mainAxis +
+     ($scope.layoutDemo.crossAxis ? ' ' + $scope.layoutDemo.crossAxis : '')
+  };
+}])
+
+.controller('LayoutTipsCtrl', [
+function() {
+  var self = this;
+
+  /*
+   * Flex Sizing - Odd
+   */
+  self.toggleButtonText = "Hide";
+
+  self.toggleContentSize = function() {
+    var contentEl = angular.element(document.getElementById('toHide'));
+
+    contentEl.toggleClass("ng-hide");
+
+    self.toggleButtonText = contentEl.hasClass("ng-hide") ? "Show" : "Hide";
   };
 }])
 
@@ -646,10 +692,7 @@ function($scope, $attrs, $location, $rootScope) {
   'doc',
   'component',
   '$rootScope',
-  '$templateCache',
-  '$http',
-  '$q',
-function($scope, doc, component, $rootScope, $templateCache, $http, $q) {
+function($scope, doc, component, $rootScope) {
   $rootScope.currentComponent = component;
   $rootScope.currentDoc = doc;
 }])
@@ -661,8 +704,7 @@ function($scope, doc, component, $rootScope, $templateCache, $http, $q) {
   'demos',
   '$http',
   '$templateCache',
-  '$q',
-function($rootScope, $scope, component, demos, $http, $templateCache, $q) {
+function($rootScope, $scope, component, demos, $http, $templateCache) {
   $rootScope.currentComponent = component;
   $rootScope.currentDoc = null;
 

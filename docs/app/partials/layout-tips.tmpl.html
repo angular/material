@@ -1,0 +1,234 @@
+<style>
+  ul.spaced li {
+    margin-bottom: 15px;
+  }
+</style>
+<div ng-controller="LayoutTipsCtrl as tips" class="layout-content">
+  <h3>Overview</h3>
+
+  <p>
+    The Angular Material Layout system uses the current
+    <a href="http://www.w3.org/TR/css3-flexbox/">Flexbox</a> feature set. More importantly, it also
+    adds syntactic sugar to allow developers to easily and quickly add Responsive features to HTML
+    containers and elements.
+  </p>
+
+  <p>
+    As you use the Layout features, you may encounter scenarios where the layouts do not render as
+    expected; especially with IE 10 and 11 browsers. There may also be cases where you need to add
+    custom HTML, CSS and Javascript to achieve your desired results.
+  </p>
+
+
+  <br/>
+  <hr/>
+
+  <h3>Resources</h3>
+
+  <p>
+    If you are experiencing an issue in a particular browser, we highly recommend using the
+    following resources for known issues and workarounds.
+  </p>
+
+  <ul>
+    <li><a href="https://github.com/philipwalton/flexbugs#flexbugs" target="_blank">FlexBugs</a></li>
+    <li><a href="https://philipwalton.github.io/solved-by-flexbox/" target="_blank">Solved by FlexBugs</a></li>
+    <li><a href="http://philipwalton.com/articles/normalizing-cross-browser-flexbox-bugs/" target="_blank">Normalizing Cross-browser Flexbox Bugs</a></li>
+    <li style="margin-bottom: 20px;"><a href="http://caniuse.com/#search=flex" target="_blank">Can I use flexbox...? ( see the <code>Known Issues</code> tab)</a></li>
+    <li><a href="https://groups.google.com/forum/#!forum/ngmaterial">Angular Material Forum</a></li>
+    <li style="margin-top: 20px;"><a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/" target="_blank">A Complete Guide to Flexbox</a></li>
+    <li style="margin-bottom: 20px;"><a href="https://scotch.io/tutorials/a-visual-guide-to-css3-flexbox-properties" target="_blank">A Visual Guide to CSS3 Flexbox Properties</a></li>
+  </ul>
+
+
+  <br/>
+  <hr/>
+
+  <h3>General Tips</h3>
+
+  <p>
+    Below, you will find solutions to some of the more common scenarios and problems that may arise
+    when using Material's Layout system. The following sections offer general guidelines and tips when using the <code>flex</code> and
+        <code>layout</code> directives within your own applications.
+  </p>
+
+  <ul class="spaced">
+    <li>
+      When building your application's Layout, it is usually best to start with a mobile version
+      that looks and works correctly, and then apply styling for larger devices using the
+      <code>flex-gt-*</code> or <code>hide-gt-*</code> attributes. This approach typically leads
+      to less frustration than starting big and attempting to fix issues on smaller devices.
+    </li>
+
+    <li>
+      Some elements like <code>&lt;fieldset&gt;</code> and <code>&lt;button&gt;</code> do not always
+      work correctly with flex. Additionally, some of the Angular Material components provide their
+      own styles. If you are having difficulty with a specific element/component, but not
+      others, try applying the flex attributes to a parent or child <code>&lt;div&gt;</code> of the
+      element instead.
+    </li>
+
+    <li>
+      Some Flexbox properties such as <code>flex-direction</code> <u>cannot</u> be animated.
+    </li>
+
+    <li>
+      Flexbox can behave differently on different browsers. You should test as many as possible on
+      a regular basis so that you can catch and fix layout issues more quickly.
+    </li>
+  </ul>
+
+  <br/>
+  <hr/>
+
+  <h3>Layout Column</h3>
+
+  <p>
+    In some scenarios <code>layout="column"</code> and breakpoints (xs, gt-xs, xs, gt-sm, etc.) may not work
+    as expected due to CSS specificity rules.
+  </p>
+
+  <div class="md-whiteframe-3dp">
+
+    <iframe height='700' scrolling='no'
+            src='//codepen.io/team/AngularMaterial/embed/obgapg/?height=700&theme-id=21180&default-tab=result'
+            frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a
+        href='http://codepen.io/team/AngularMaterial/pen/obgapg/'>Card Layouts (corrected)</a> by Angular Material (<a
+        href='http://codepen.io/AngularMaterial'>@AngularMaterial</a>) on <a href='http://codepen.io'>CodePen</a>.
+    </iframe>
+
+  </div>
+
+    <p>
+      This is easily fixed simply by inverting the layout logic so that the default is <code>layout='row'</code>.
+      To see how the layout changes, shrink the browser window its width is <600px;
+    </p>
+
+
+  <br/>
+  <hr/>
+
+  <h3>Layout Column and Container Heights</h3>
+
+  <p>
+    In Flexbox, some browsers will determine size of the flex containers based on the size of their
+    content. This is particularly noticable if you have a non-flex item (say a toolbar), followed by
+    two flex items in a column layout.
+  </p>
+
+  <docs-demo demo-title="Flex Height - Odd (Chrome )" class="small-demo colorNested">
+    <demo-file name="index.html">
+      <div layout="column" style="height: 450px !important;">
+        <div style="height: 50px;">Toolbar</div>
+
+        <div flex layout="column" style="overflow: auto;">
+          <md-content flex layout-margin>
+            <p>Flex with smaller content...</p>
+
+            <p ng-repeat="i in [0,1,2,3,4]">Line {{i}}</p>
+          </md-content>
+
+          <md-content flex layout-margin>
+            <p>
+              Flex with larger content...
+            </p>
+
+            <p ng-repeat="i in [0,1,2,3,4]">Line {{i}}</p>
+
+            <div id="toHide">
+              <p ng-repeat="i in [5,6,7,8,9]">Line {{i}}</p>
+            </div>
+          </md-content>
+        </div>
+      </div>
+    </demo-file>
+  </docs-demo>
+
+  <p>
+    Notice how in Chrome the second scrollable area is nearly twice as tall as the first. This is
+    because we are using nested flex items and the contents of the second
+    <code>&lt;md-content&gt;</code> are twice as large as the first. Try clicking the button below
+    to toggle the light blue box; this will make the containers the same size.
+  </p>
+
+  <p layout="row" layout-align="center center">
+    <md-button class="md-raised" ng-click="tips.toggleContentSize()">
+      {{tips.toggleButtonText}} Blue Box
+    </md-button>
+  </p>
+
+  <p>
+    In order to fix this, we must specify the height of the outer flex item. The easiest way to
+    achieve this is to simply set the height to <code>100%</code>. When paired with the
+    <code>flex</code> attribute, this achieves the desired result.
+  </p>
+
+  <p>
+    <em>
+      <strong>Note:</strong> When <code>height: 100%</code> is used without the <code>flex</code>
+      attribute, the container will take up as much space as available and squish the toolbar which
+      has been set to a height of <code>50px</code>.
+    </em>
+  </p>
+
+  <docs-demo demo-title="Chrome Flex Height - Fixed" class="small-demo colorNested">
+    <demo-file name="index.html">
+      <div layout="column" style="height: 450px !important;">
+        <div style="height: 50px;">Toolbar</div>
+
+        <div flex layout="column" style="overflow: auto; height: 100%;">
+          <md-content flex layout-margin>
+            <p>Flex with smaller content...</p>
+
+            <p ng-repeat="i in [0,1,2,3,4]">Line {{i}}</p>
+          </md-content>
+
+          <md-content flex layout-margin>
+            <p>
+              Flex with larger content...
+            </p>
+
+            <p ng-repeat="i in [0,1,2,3,4]">Line {{i}}</p>
+
+            <div>
+              <p ng-repeat="i in [5,6,7,8,9]">Line {{i}}</p>
+            </div>
+          </md-content>
+        </div>
+      </div>
+    </demo-file>
+  </docs-demo>
+
+
+  <br/>
+  <hr/>
+
+  <h3>Flex Element Heights</h3>
+
+  <p>
+    Firefox currently has an issue calculating the proper height of flex containers whose children
+    are flex, but have more content than can properly fit within the container.
+  </p>
+
+  <p>
+    This is particularly problematic if the <code>flex</code> children are <code>md-content</code> components as
+    it will prevent the content from scrolling correctly, instead scrolling the entire body.
+  </p>
+
+  <div class="md-whiteframe-3dp">
+    <iframe height='376' scrolling='no'
+            src='//codepen.io/team/AngularMaterial/embed/NxKBwW/?height=376&theme-id=0&default-tab=result'
+            frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>
+      See the Pen <a href='http://codepen.io/team/AngularMaterial/pen/NxKBwW/'>Angular Material Basic App</a>
+      by Angular Material (<a href='http://codepen.io/AngularMaterial'>@AngularMaterial</a>)
+      on <a href='http://codepen.io'>CodePen</a>.
+    </iframe>
+  </div>
+
+  <p>
+    Notice in the above Codepen how we must set <code>overflow: auto</code> on the div with the
+    <code>change-my-css</code> class in order for Firefox to properly calculate the height and
+    shrink to the available space.
+  </p>
+
+</div>

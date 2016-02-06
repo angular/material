@@ -31,7 +31,6 @@ md-fab-speed-dial {
 
   &.md-is-open {
     .md-fab-action-item {
-      visibility: visible;
       align-items: center;
     }
   }
@@ -43,7 +42,6 @@ md-fab-speed-dial {
     height: auto;
 
     .md-fab-action-item {
-      visibility: hidden;
       transition: $swift-ease-in;
     }
   }
@@ -109,11 +107,33 @@ md-fab-speed-dial {
   }
 
   /*
+   * Hide some graphics glitches if switching animation types
+   */
+  &.md-fling-remove, &.md-scale-remove {
+    .md-fab-action-item > * {
+      visibility: hidden;
+    }
+  }
+
+  /*
    * Handle the animations
    */
-  &.md-scale {
+  &.md-fling {
+    .md-fab-action-item {
+      opacity: 1;
+    }
+  }
+
+  // For the initial animation, set the duration to be instant
+  &.md-fling.md-animations-waiting {
     .md-fab-action-item {
       opacity: 0;
+      transition-duration: 0s;
+    }
+  }
+
+  &.md-scale {
+    .md-fab-action-item {
       transform: scale(0);
       transition: $swift-ease-in;
 

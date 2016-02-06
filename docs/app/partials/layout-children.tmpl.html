@@ -1,0 +1,332 @@
+<div ng-controller="LayoutCtrl" class="layout-content" ng-cloak>
+
+  <h3>Children within a Layout Container</h3>
+
+  <p>
+    To customize the size and position of elements in a layout <b>container</b>, use the
+    <code>flex</code>, <code>flex-order</code>, and <code>flex-offset</code> attributes on the container's <u>child</u> elements:
+  </p>
+
+  <docs-demo demo-title="Flex Directive" class="small-demo colorNested">
+    <demo-file name="index.html">
+      <div layout="row">
+        <div flex="20">
+          [flex="20"]
+        </div>
+        <div flex="70">
+          [flex="70"]
+        </div>
+        <div flex hide-sm hide-xs>
+          [flex]
+        </div>
+      </div>
+    </demo-file>
+  </docs-demo>
+
+  <p>
+    Add the <code>flex</code> directive to a layout's child element and the element will flex (grow or shrink) to fit
+    the area unused by other elements. <code>flex</code> defines how the element will adjust its size with respect to its
+    <u>parent</u> container and the other elements within the container.
+  </p>
+
+  <docs-demo demo-title="Flex Percent Values" class="small-demo colorNested-noPad">
+    <demo-file name="index.html">
+      <div layout="row" layout-wrap>
+        <div flex="30">
+          [flex="30"]
+        </div>
+        <div flex="45">
+          [flex="45"]
+        </div>
+        <div flex="25">
+          [flex="25"]
+        </div>
+        <div flex="33">
+          [flex="33"]
+        </div>
+        <div flex="66">
+          [flex="66"]
+        </div>
+        <div flex="50">
+          [flex="50"]
+        </div>
+        <div flex>
+          [flex]
+        </div>
+      </div>
+    </demo-file>
+  </docs-demo>
+
+
+  <p>
+    A layout child's <code>flex</code> directrive can be given an integer value from 0-100.
+    The element will stretch to the percentage of available space matching the value. Currently, the <code>flex</code>
+    directive value is restricted to multiples of five, 33 or 66.
+  </p>
+
+  <p> For example: <code>flex="5", flex="20", flex="33", flex="50", flex="66", flex="75", ... flex="100"</code>.</p>
+
+  <docs-demo demo-title="Responsive Flex Directives" class="small-demo colorNested-noPad">
+    <demo-file name="index.html">
+      <div layout="row">
+        <div flex-gt-sm="66" flex="33">
+          flex 33% on mobile, <br/>and 66% on gt-sm devices.
+        </div>
+        <div flex-gt-sm="33" flex="66">
+          flex 66%  on mobile, <br/>and 33% on gt-sm devices.
+        </div>
+      </div>
+    </demo-file>
+  </docs-demo>
+
+
+  <p>
+    See the <a href="layout/options">layout options page</a> for more information on responsive flex directives like
+    <code>hide-sm</code> and <code>layout-wrap</code> used in the above examples.
+  </p>
+
+  <br/>
+  <hr>
+  <br/>
+
+  <h3>Additional Flex Values</h3>
+
+  <p>
+    There are additional flex values provided by Angular Material to improve flexibility and to make the API
+    easier to understand.
+  </p>
+
+  <docs-demo demo-title="Other Flex Values" class="small-demo colorNested-noPad">
+    <demo-file name="index.html">
+      <div layout="row" layout-wrap>
+        <div flex="none">
+          [flex="none"]
+        </div>
+        <div flex>
+          [flex]
+        </div>
+        <div flex="nogrow">
+          [flex="nogrow"]
+        </div>
+        <div flex="grow">
+          [flex="grow"]
+        </div>
+        <div flex="initial">
+          [flex="initial"]
+        </div>
+        <div flex="auto">
+          [flex="auto"]
+        </div>
+        <div flex="noshrink">
+          [flex="noshrink"]
+        </div>
+        <div flex="0">
+          [flex="0"]
+        </div>
+      </div>
+    </demo-file>
+  </docs-demo>
+
+
+  <table class="md-api-table">
+    <tr>
+      <td>flex</td>
+      <td>Will grow and shrink as needed. Starts with a size of 0%. Same as <code>flex="0"</code>.</td>
+    </tr>
+    <tr>
+      <td>flex="none"</td>
+      <td>Will not grow or shrink. Sized based on its <code>width</code> and <code>height</code> values.</td>
+    </tr>
+    <tr>
+      <td>flex="initial"</td>
+      <td>Will shrink as needed. Starts with a size based on its <code>width</code> and <code>height</code> values.</td>
+    </tr>
+    <tr>
+      <td>flex="auto"</td>
+      <td>Will grow and shrink as needed. Starts with a size based on its <code>width</code> and <code>height</code> values.</td>
+    </tr>
+    <tr>
+      <td>flex="grow"</td>
+      <td>Will grow and shrink as needed. Starts with a size of 100%. Same as <code>flex="100"</code>.</td>
+    </tr>
+    <tr>
+      <td>flex="nogrow"</td>
+      <td>Will shrink as needed, but won't grow. Starts with a size based on its <code>width</code> and <code>height</code> values.</td>
+    </tr>
+    <tr>
+      <td>flex="noshrink"</td>
+      <td>Will grow as needed, but won't shrink. Starts with a size based on its <code>width</code> and <code>height</code> values.</td>
+    </tr>
+  </table>
+
+
+  <br/>
+  <hr>
+  <br/>
+
+  <h3>Ordering HTML Elements</h3>
+
+  <p>
+    Add the <code>flex-order</code> directive to a layout child to set its
+    order position within the layout container. Any integer value from -20 to 20 is accepted.
+  </p>
+
+  <docs-demo demo-title="Flex-Order Directive" class="small-demo colorNested">
+    <demo-file name="index.html">
+      <div layout="row">
+        <div flex flex-order="-1">
+          <p>[flex-order="-1"]</p>
+        </div>
+        <div flex flex-order="1" flex-order-gt-md="3">
+          <p hide-gt-md>[flex-order="1"]</p>
+          <p hide show-gt-md>[flex-order-gt-md="3"]</p>
+        </div>
+        <div flex flex-order="2">
+          <p>[flex-order="2"]</p>
+        </div>
+        <div flex flex-order="3" flex-order-gt-md="1">
+          <p hide-gt-md>[flex-order="3"]</p>
+          <p hide show-gt-md>[flex-order-gt-md="1"]</p>
+        </div>
+      </div>
+    </demo-file>
+  </docs-demo>
+
+  <table class="md-api-table">
+      <thead>
+        <tr>
+          <th>API</th>
+          <th>Device <b>width</b> when breakpoint overrides default</th>
+        </tr>
+      </thead>
+       <tr>
+         <td>flex-order</td>
+         <td>Sets default layout order unless overridden by another breakpoint.</td>
+       </tr>
+    <tr>
+        <td>flex-order-xs</td>
+           <td>width &lt; <b>600</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-order-gt-xs</td>
+           <td>width &gt;= <b>600</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-order-sm</td>
+           <td><b>600</b>px &lt;= width &lt; <b>960</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-order-gt-sm</td>
+           <td>width &gt;= <b>960</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-order-md</td>
+           <td><b>960</b>px &lt;= width &lt; <b>1280</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-order-gt-md</td>
+           <td>width &gt;= <b>1280</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-order-lg</td>
+           <td><b>1280</b>px &lt;= width &lt; <b>1920</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-order-gt-lg</td>
+           <td>width &gt;= <b>1920</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-order-xl</td>
+           <td>width &gt;= <b>1920</b>px</td>
+         </tr>
+     </table>
+
+
+  <p>
+    See the <a href="layout/options">layout options page</a> for more information on directives like
+    <code>hide</code>, <code>hide-gt-md</code>, and <code>show-gt-md</code> used in the above examples.
+  </p>
+
+  <br/>
+  <hr>
+  <br/>
+
+  <h3>Add Offsets to the Preceding HTML Elements</h3>
+
+  <p>
+    Add the <code>flex-offset</code> directive to a layout child to set its
+    offset percentage within the layout container. Values must be multiples
+    of <code>5</code> or <code>33</code> / <code>66</code>. These offsets establish a <code>margin-left</code>
+    with respect to the preceding element or the containers left boundary.
+  </p>
+
+  <p>
+      When using <code>flex-offset</code> the margin-left offset is applied... regardless of your choice of <code>flex-order</code>.
+      or if you use a <code>flex-direction: reverse</code>.
+    </p>
+
+  <docs-demo demo-title="Flex-Offset Directive" class="small-demo colorNested">
+    <demo-file name="index.html">
+      <div layout="row">
+        <div flex="66" flex-offset="15">
+          [flex-offset="15"]
+          [flex="66"]
+        </div>
+        <div flex>
+          [flex]
+        </div>
+      </div>
+    </demo-file>
+  </docs-demo>
+
+  <table class="md-api-table">
+        <thead>
+          <tr>
+            <th>API</th>
+            <th>Device width when breakpoint overrides default</th>
+          </tr>
+        </thead>
+         <tr>
+           <td>flex-offset</td>
+           <td>Sets default margin-left offset (<b>%-based</b>) unless overridden by another breakpoint.</td>
+         </tr>
+    <tr>
+           <td>flex-offset-xs</td>
+           <td>width &lt; <b>600</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-offset-gt-xs</td>
+           <td>width &gt;= <b>600</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-offset-sm</td>
+           <td><b>600</b>px &lt;= width &lt; <b>960</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-offset-gt-sm</td>
+           <td>width &gt;= <b>960</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-offset-md</td>
+           <td><b>960</b>px &lt;= width &lt; <b>1280</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-offset-gt-md</td>
+           <td>width &gt;= <b>1280</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-offset-lg</td>
+           <td><b>1280</b>px &lt;= width &lt; <b>1920</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-offset-gt-lg</td>
+           <td>width &gt;= <b>1920</b>px</td>
+         </tr>
+         <tr>
+           <td>flex-offset-xl</td>
+           <td>width &gt;= <b>1920</b>px</td>
+         </tr>
+       </table>
+
+
+</div>

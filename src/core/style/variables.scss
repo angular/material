@@ -25,11 +25,15 @@ $caption-font-size-base:   rem(1.200) !default;
 // ------------------------------
 
 $baseline-grid:            8px !default;
-$layout-breakpoint-sm:     600px !default;
-$layout-breakpoint-md:     960px !default;
-$layout-breakpoint-lg:     1200px !default;
 $layout-gutter-width:      ($baseline-grid * 2) !default;
 
+$layout-breakpoint-xs:     600px !default;
+$layout-breakpoint-sm:     960px !default;
+$layout-breakpoint-md:     1280px !default;
+$layout-breakpoint-lg:     1920px !default;
+
+// Icon
+$icon-size: rem(2.400) !default;
 
 // App bar variables
 $app-bar-height: 64px;
@@ -73,16 +77,17 @@ $whiteframe-shadow-24dp: 0px 11px 15px -7px rgba(0, 0, 0, $shadow-key-umbra-opac
 // Z-indexes
 //--------------------------------------------
 
+$z-index-toast: 105 !default;
 $z-index-tooltip: 100 !default;
-$z-index-menu: 99 !default;
-$z-index-select: 99 !default;
+$z-index-menu: 100 !default;
+$z-index-select: 90 !default;
 $z-index-dialog: 80 !default;
-$z-index-toast: 90 !default;
 $z-index-bottom-sheet: 70 !default;
 $z-index-scroll-mask: 65 !default;
 $z-index-sidenav: 60 !default;
 $z-index-backdrop: 50 !default;
 $z-index-fab: 20 !default;
+$z-index-progress-circular: 2 !default; // Used to fix animation bug in Chrome
 
 // Easing Curves
 //--------------------------------------------

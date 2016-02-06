@@ -1,25 +1,35 @@
-$checkbox-width: 18px !default;
+$checkbox-width: 20px !default;
 $checkbox-height: $checkbox-width !default;
-$checkbox-margin: 8px !default;
+$checkbox-margin: 16px !default;
 $checkbox-border-radius: 2px !default;
 $checkbox-border-width: 2px !default;
 $checkbox-text-margin: 10px !default;
-$checkbox-top-left: 12px !default;
+$checkbox-top: 12px !default;
+
+.md-inline-form {
+  md-checkbox {
+    margin: 19px 0 18px;
+  }
+}
 
 md-checkbox {
   box-sizing: border-box;
-  display: block;
-  margin: $checkbox-margin;
+  display: inline-block;
+  margin-bottom: $checkbox-margin;
   white-space: nowrap;
   cursor: pointer;
   outline: none;
   user-select: none;
-  @include rtl(padding-left, $checkbox-width, 0);
-  @include rtl(padding-right, 0, $checkbox-width);
   position: relative;
-  line-height: $checkbox-width + $checkbox-margin;
   min-width: $checkbox-width;
   min-height: $checkbox-width;
+  @include rtl(margin-left, inherit, $checkbox-margin);
+  @include rtl(margin-right, $checkbox-margin, inherit);
+
+  &:last-of-type {
+    @include rtl(margin-left, inherit, 0);
+    @include rtl(margin-right, 0, inherit);
+  }
 
   &.md-focused:not([disabled]) {
     .md-container:before {
@@ -88,7 +98,7 @@ md-checkbox {
   }
 
   &.md-align-top-left > div.md-container {
-    top: $checkbox-top-left;
+    top: $checkbox-top;
   }
 
   // unchecked
@@ -111,7 +121,7 @@ md-checkbox {
 
   // disabled
   &[disabled] {
-    cursor: no-drop;
+    cursor: default;
   }
 
 
@@ -139,8 +149,8 @@ md-checkbox {
     white-space: normal;
     user-select: text;
 
-    @include rtl(margin-left, $checkbox-text-margin, 0);
-    @include rtl(margin-right, 0, $checkbox-text-margin);
+    @include rtl(margin-left, $checkbox-text-margin + $checkbox-width, 0);
+    @include rtl(margin-right, 0, $checkbox-text-margin + $checkbox-width);
 
   }
 }

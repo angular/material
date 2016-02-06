@@ -375,7 +375,6 @@ describe('$$interimElement service', function() {
         expect(onShowingCalled).toBe(true);
 
         function onShowing(scope, el, options) {
-          expect(arguments.length).toEqual(3);
           onShowingCalled = true;
         }
 
@@ -534,7 +533,7 @@ describe('$$interimElement service', function() {
         }
       }));
 
-      it('resolves the show promise', inject(function( ) {
+      it('resolves the show promise with string', inject(function( ) {
         var resolved = false;
 
         Service.show().then(function(arg) {
@@ -543,6 +542,32 @@ describe('$$interimElement service', function() {
         });
 
         Service.hide('test');
+
+        expect(resolved).toBe(true);
+      }));
+
+      it('resolves the show promise with false', inject(function( ) {
+        var resolved = false;
+
+        Service.show().then(function(arg) {
+          expect(arg).toBe(false);
+          resolved = true;
+        });
+
+        Service.hide(false);
+
+        expect(resolved).toBe(true);
+      }));
+
+      it('resolves the show promise with undefined', inject(function( ) {
+        var resolved = false;
+
+        Service.show().then(function(arg) {
+          expect(arg).toBe(undefined);
+          resolved = true;
+        });
+
+        Service.hide();
 
         expect(resolved).toBe(true);
       }));

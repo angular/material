@@ -2,6 +2,14 @@ var gutil = require('gulp-util');
 var karma = require('karma').server;
 var util = require('../util');
 var ROOT = require('../const').ROOT;
+var Server = require('karma').Server;
+var karmaConfig = {
+  logLevel: 'warn',
+  singleRun: true,
+  autoWatch: false,
+  configFile: ROOT + '/config/karma.conf.js'
+};
+
 var args = util.args;
 
 // NOTE: `karma-fast` does NOT pre-make a full build of JS and CSS
@@ -9,12 +17,6 @@ var args = util.args;
 
 exports.task = function (done) {
   var errorCount = 0;
-  var karmaConfig = {
-    logLevel: 'warn',
-    singleRun: true,
-    autoWatch: false,
-    configFile: ROOT + '/config/karma.conf.js'
-  };
 
   if ( args.browsers ) {
     karmaConfig.browsers = args.browsers.trim().split(',');
@@ -27,7 +29,9 @@ exports.task = function (done) {
 
 
   gutil.log('Running unit tests on unminified source.');
-  karma.start(karmaConfig, captureError(clearEnv,clearEnv));
+
+  karma = new Server(karmaConfig, captureError(clearEnv,clearEnv));
+  karma.start();
 
 
   function clearEnv() {

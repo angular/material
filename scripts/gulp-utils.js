@@ -63,7 +63,7 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
         css:[], html:[], js:[]
       };
 
-      gulp.src(demoFolder.path + '**/*', { base: path.dirname(demoFolder.path) })
+      gulp.src(demoFolder.path + '/**/*', { base: path.dirname(demoFolder.path) })
         .pipe(fileTasks(demoId))
         .pipe(through2.obj(function(file, enc, cb) {
           if (/index.html$/.test(file.path)) {
@@ -290,7 +290,7 @@ exports.cssToNgConstant = function(ngModule, factoryName) {
   return through2.obj(function(file, enc, next) {
 
     var template = '(function(){ \nangular.module("%1").constant("%2", "%3"); \n})();\n\n';
-    var output = file.contents.toString().replace(/\n/g, '').replace(/\"/,'\\"');
+    var output = file.contents.toString().replace(/\n/g, '').replace(/\"/g,'\\"');
 
     var jsFile = new gutil.File({
       base: file.base,

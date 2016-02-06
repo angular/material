@@ -14,12 +14,28 @@ body {
 }
 
 .md-api-table {
-  margin-bottom: 8px;
+  margin-bottom: 16px;
   max-width: 100%;
   width: 100%;
   border-spacing: 0;
   border-radius: 2px;
   overflow: hidden;
+}
+
+/* Center the doc tool icons at the top */
+.docs-tools .md-button.md-icon-button {
+  min-height: 0;
+  height: auto;
+}
+
+#license-footer {
+  align-self: flex-end;
+  padding: 16px 32px;
+  width: 100%;
+
+  text-align: left;
+  font-size: small;
+  border-top: 1px solid #ddd;
 }
 
 /***************
@@ -103,6 +119,7 @@ strong {
   background-color: #4C9EF0;
   color: white;
 }
+
 blockquote {
   border-left: 3px solid rgba(0, 0, 0, 0.12);
   font-style: italic;
@@ -214,9 +231,9 @@ code:not(.highlight) {
 .site-sidenav,
 .site-sidenav.md-locked-open-add-active,
 .site-sidenav.md-locked-open {
-  width: 256px;
-  min-width: 256px;
-  max-width: 256px;
+  width:     272px;
+  min-width: 272px;
+  max-width: 272px;
 }
 .site-sidenav > * {
   min-width: 218px;
@@ -329,8 +346,11 @@ code:not(.highlight) {
   font-weight: 500;
 }
 
-ul#docs-menu-Directives {
+.parent-list-item:last-child {
   margin-bottom: 20px;
+
+  /* Prevent the hidden License link from causing a double bottom-border */
+  border-bottom: none;
 }
 .md-button-toggle .md-toggle-icon {
   display: block;
@@ -518,7 +538,13 @@ md-tabs.demo-source-tabs .active md-tab-label {
 .demo-content > div[layout-fill] {
   min-height: 448px;
 }
+.demo-content > div.layout-fill {
+  min-height: 448px;
+}
 .small-demo .demo-content > div[layout-fill] {
+  min-height: 224px;
+}
+.small-demo .demo-content > div.layout-fill {
   min-height: 224px;
 }
 .layout-content .small-demo .demo-content > div[layout],
@@ -850,4 +876,29 @@ docs-demo .doc-demo-content {
   -ms-transition:     none !important;
   -o-transition:      none !important;
   transition:         none !important;
+}
+
+table.attributes, table.md-api-table {
+  padding-left:15px;
+  margin-bottom: 20px;
+}
+table.attributes  tr  td:first-child {
+  font-weight: bold;
+  background-color: #DBEEF5;
+}
+table.attributes  tr  td:last-child {
+  padding-left: 10px;
+}
+
+table.md-api-table  tr  td:first-child {
+  font-weight: bold;
+}
+
+
+.layout_note {
+  font-size: 0.9em;
+    margin: -5px 40px 0px 20px;
+    color: rgb(1, 57, 114);
+    background-color: rgba(156, 204, 101,0.4);
+    padding: 20px;
 }

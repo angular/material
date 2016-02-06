@@ -10,6 +10,7 @@ angular.module('listDemo1', ['ngMaterial'])
     $scope.phones = [
       { type: 'Home', number: '(555) 251-1234' },
       { type: 'Cell', number: '(555) 786-9841' },
+      { type: 'Office', number: '(555) 314-1592' }
     ];
     $scope.todos = [
       {

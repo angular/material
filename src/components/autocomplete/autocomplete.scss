@@ -42,7 +42,7 @@ md-autocomplete {
   min-width: 190px;
   &[disabled] {
     input {
-      cursor: not-allowed;
+      cursor: default;
     }
   }
   &[md-floating-label] {
@@ -84,7 +84,13 @@ md-autocomplete {
       position: absolute;
       bottom: -2px;
       left: 0;
-
+      // When `md-inline` is present, we adjust the offset to go over the `ng-message` space
+      &.md-inline {
+        bottom: 40px;
+        right: 2px;
+        left: 2px;
+        width: auto;
+      }
       .md-mode-indeterminate {
         position: absolute;
         top: 0;
@@ -175,6 +181,7 @@ md-autocomplete {
       }
     }
   }
+  // IE Only
   @media screen and (-ms-high-contrast: active) {
     $border-color: #fff;
 
@@ -193,6 +200,10 @@ md-autocomplete {
   height: 41px * 5.5;
   max-height: 41px * 5.5;
   z-index: $z-index-tooltip;
+}
+
+.md-virtual-repeat-container.md-not-found {
+  height: 48px;
 }
 
 .md-autocomplete-suggestions {
@@ -220,6 +231,7 @@ md-autocomplete {
   }
 }
 
+// IE Only
 @media screen and (-ms-high-contrast: active) {
   md-autocomplete,
   .md-autocomplete-suggestions {

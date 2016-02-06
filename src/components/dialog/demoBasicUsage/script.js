@@ -1,7 +1,8 @@
 angular.module('dialogDemo1', ['ngMaterial'])
 
-.controller('AppCtrl', function($scope, $mdDialog) {
+.controller('AppCtrl', function($scope, $mdDialog, $mdMedia) {
   $scope.status = '  ';
+  $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 
   $scope.showAlert = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app
@@ -12,7 +13,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
         .parent(angular.element(document.querySelector('#popupContainer')))
         .clickOutsideToClose(true)
         .title('This is an alert title')
-        .content('You can specify some description text in here.')
+        .textContent('You can specify some description text in here.')
         .ariaLabel('Alert Dialog Demo')
         .ok('Got it!')
         .targetEvent(ev)
@@ -23,7 +24,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
           .title('Would you like to delete your debt?')
-          .content('All of the banks have agreed to <span class="debt-be-gone">forgive</span> you your debts.')
+          .textContent('All of the banks have agreed to forgive you your debts.')
           .ariaLabel('Lucky day')
           .targetEvent(ev)
           .ok('Please do it!')
@@ -36,19 +37,64 @@ angular.module('dialogDemo1', ['ngMaterial'])
     });
   };
 
+  $scope.showPrompt = function(ev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.prompt()
+          .title('What would you name your dog?')
+          .textContent('Bowser is a common name.')
+          .placeholder('dog name')
+          .ariaLabel('Dog name')
+          .targetEvent(ev)
+          .ok('Okay!')
+          .cancel('I\'m a cat person');
+
+    $mdDialog.show(confirm).then(function(result) {
+      $scope.status = 'You decided to name your dog ' + result + '.';
+    }, function() {
+      $scope.status = 'You didn\'t name your dog.';
+    });
+  };
+
   $scope.showAdvanced = function(ev) {
+    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+
     $mdDialog.show({
       controller: DialogController,
       templateUrl: 'dialog1.tmpl.html',
       parent: angular.element(document.body),
       targetEvent: ev,
-      clickOutsideToClose:true
+      clickOutsideToClose:true,
+      fullscreen: useFullScreen
     })
     .then(function(answer) {
       $scope.status = 'You said the information was "' + answer + '".';
     }, function() {
       $scope.status = 'You cancelled the dialog.';
     });
+
+
+
+    $scope.$watch(function() {
+      return $mdMedia('xs') || $mdMedia('sm');
+    }, function(wantsFullScreen) {
+      $scope.customFullscreen = (wantsFullScreen === true);
+    });
+
+  };
+
+  $scope.showTabDialog = function(ev) {
+    $mdDialog.show({
+      controller: DialogController,
+      templateUrl: 'tabDialog.tmpl.html',
+      parent: angular.element(document.body),
+      targetEvent: ev,
+      clickOutsideToClose:true
+    })
+        .then(function(answer) {
+          $scope.status = 'You said the information was "' + answer + '".';
+        }, function() {
+          $scope.status = 'You cancelled the dialog.';
+        });
   };
 });
 

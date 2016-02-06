@@ -1,23 +1,18 @@
 <div ng-controller="AppCtrl" layout="column" ng-cloak>
 
-  <md-toolbar class="md-primary">
-    <h1 class="md-toolbar-tools">
-      Top Secret Project
-    </h1>
-  </md-toolbar>
-
   <md-content layout-padding>
     <form name="projectForm">
-      <md-input-container>
+
+      <md-input-container class="md-block">
         <label>Description</label>
-        <input md-maxlength="30" required name="description" ng-model="project.description">
+        <input md-maxlength="30" required md-no-asterisk name="description" ng-model="project.description">
         <div ng-messages="projectForm.description.$error">
           <div ng-message="required">This is required.</div>
           <div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>
         </div>
       </md-input-container>
 
-      <md-input-container>
+      <md-input-container class="md-block">
         <label>Client Name</label>
         <input required name="clientName" ng-model="project.clientName">
         <div ng-messages="projectForm.clientName.$error">
@@ -25,7 +20,7 @@
         </div>
       </md-input-container>
 
-      <md-input-container>
+      <md-input-container class="md-block">
         <label>Client Email</label>
         <input required type="email" name="clientEmail" ng-model="project.clientEmail"
                minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
@@ -37,12 +32,12 @@
         </div>
       </md-input-container>
 
-      <md-input-container>
+      <md-input-container class="md-block">
         <label>Hourly Rate (USD)</label>
         <input required type="number" step="any" name="rate" ng-model="project.rate" min="800"
-               max="4999" ng-pattern="/^1234$/" md-maxlength="20" />
+               max="4999" ng-pattern="/^1234$/" />
 
-        <div ng-messages="projectForm.rate.$error" multiple>
+        <div ng-messages="projectForm.rate.$error" multiple md-auto-hide="false">
           <div ng-message="required">
             You've got to charge something! You can't just <b>give away</b> a Missile Defense
             System.
@@ -62,6 +57,9 @@
             doubt event Bill Clinton could afford that.
           </div>
         </div>
+        <p>
+          Make sure to include <a href="https://docs.angularjs.org/api/ngMessages" target="_blank">ngMessages</a> module when using ng-message markup.
+        </p>
       </md-input-container>
     </form>
   </md-content>

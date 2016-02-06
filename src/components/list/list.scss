@@ -39,14 +39,44 @@ md-list {
 }
 
 md-list-item {
+  // Ensure nested dividers are properly positioned
+  position: relative;
+
   &.md-proxy-focus.md-focused .md-no-style {
     transition: background-color 0.15s linear;
   }
+
+  &.md-button-wrap {
+    position: relative;
+
+    > .md-button:first-child {
+      padding: 0;
+      margin: 0;
+      font-weight: 400;
+      background-color: inherit;
+      text-align: left;
+      border: medium none;
+
+      > .md-button:first-child {
+        height: 100%;
+        position: absolute;
+        margin: 0;
+        padding: 0;
+      }
+
+      .md-list-item-inner {
+        padding: 0 16px;
+      }
+
+    }
+
+  }
+
   &.md-no-proxy,
   .md-no-style {
     position: relative;
     padding: $list-item-padding-vertical $list-item-padding-horizontal;
-    flex: 1;
+    flex: 1 1 auto;
     
     &.md-button {
       font-size: inherit;
@@ -57,6 +87,11 @@ md-list-item {
       white-space: normal;
       flex-direction: inherit;
       align-items: inherit;
+      border-radius: 0;
+
+      & > .md-ripple-container {
+        border-radius: 0;
+      }
     }
     &:focus {
       outline: none
@@ -87,12 +122,13 @@ md-list-item, md-list-item .md-list-item-inner {
   justify-content: flex-start;
   align-items: center;
   min-height: $list-item-height;
+  height:auto;
 
   // Layout for controls in primary or secondary divs, or auto-infered first child
-  & > div.md-primary > md-icon,
-  & > div.md-secondary > md-icon,
-  & > md-icon:first-child, 
-  > md-icon.md-secondary {
+  & > div.md-primary > md-icon:not(.md-avatar-icon),
+  & > div.md-secondary > md-icon:not(.md-avatar-icon),
+  & > md-icon:first-child:not(.md-avatar-icon),
+  > md-icon.md-secondary:not(.md-avatar-icon) {
     width: $list-item-primary-icon-width;
     margin-top: 16px;
     margin-bottom: 12px;
@@ -100,35 +136,48 @@ md-list-item, md-list-item .md-list-item-inner {
   }
   & > div.md-primary > md-checkbox,
   & > div.md-secondary > md-checkbox,
-  & > md-checkbox:first-child,
+  & > md-checkbox,
   md-checkbox.md-secondary {
     align-self: center;
     .md-label { display: none; }
   }
 
-  & > md-icon:first-child {
+  & > md-icon:first-child:not(.md-avatar-icon) {
     margin-right: $list-item-primary-width - $list-item-primary-icon-width;
   }
-  & > md-checkbox:first-child {
+  & > md-checkbox {
     width: 3 * $baseline-grid;
     margin-left: 3px;
     margin-right: 29px;
+    margin-top: 16px;
   }
-  & > .md-avatar:first-child {
-    width: $list-item-primary-avatar-width;
-    height: $list-item-primary-avatar-width;
+  & .md-avatar, .md-avatar-icon {
     margin-top: $baseline-grid;
     margin-bottom: $baseline-grid;
     margin-right: $list-item-primary-width - $list-item-primary-avatar-width;
     border-radius: 50%;
     box-sizing: content-box;
   }
+  & .md-avatar {
+    width: $list-item-primary-avatar-width;
+    height: $list-item-primary-avatar-width;
+  }
+  & .md-avatar-icon {
+    padding: 8px;
+  }
 
   md-checkbox.md-secondary,
   md-switch.md-secondary {
-    margin-right: 0;
     margin-top: 0;
     margin-bottom: 0;
+  }
+
+  md-checkbox.md-secondary {
+    margin-right: 0;
+  }
+
+  md-switch.md-secondary {
+    margin-right: -6px;
   }
 
   button.md-button.md-secondary-container {
@@ -141,19 +190,24 @@ md-list-item, md-list-item .md-list-item-inner {
     .md-ripple-container {
       border-radius: 50%;
     }
+
+    &.md-icon-button {
+      // Make icon buttons align with checkboxes and other controls
+      margin-right: -12px;
+    }
   }
 
   .md-secondary-container,
   .md-secondary {
-    margin-left: $list-item-secondary-left-margin;
     position: absolute;
-    right: $list-item-padding-horizontal;
     top: 50%;
+    right: $list-item-padding-horizontal;
+    margin: 0 0 0 $list-item-secondary-left-margin;
     transform: translate3d(0, -50%, 0);
   }
 
   & > .md-button.md-secondary-container > .md-secondary {
-    margin-left: 0px;
+    margin-left: 0;
     position: static;
   }
 
@@ -212,8 +266,13 @@ md-list-item.md-3-line > .md-no-style {
 
 md-list-item.md-2-line,
 md-list-item.md-2-line > .md-no-style {
-  height: $list-item-two-line-height;
-  > .md-avatar:first-child {
+  height:auto;
+  min-height: $list-item-two-line-height;
+  &.md-long-text {
+      margin:1.6em;
+    }
+
+  > .md-avatar, .md-avatar-icon {
     margin-top: $baseline-grid * 1.5;
   }
   > md-icon:first-child {
@@ -226,9 +285,15 @@ md-list-item.md-2-line > .md-no-style {
 
 md-list-item.md-3-line,
 md-list-item.md-3-line > .md-no-style {
-  height: $list-item-three-line-height;
-  > md-icon:first-child, 
-  > .md-avatar:first-child {
+  height:auto;
+  min-height: $list-item-three-line-height;
+
+  &.md-long-text {
+    margin:1.6em;
+  }
+
+  > md-icon:first-child,
+  > .md-avatar {
     margin-top: $baseline-grid * 2;
   }
 }

@@ -54,6 +54,15 @@ describe('$mdCompiler service', function() {
       expect(data.element.html()).toBe('hello world');
     });
 
+    it('transformTemplate receives the options', function() {
+      var data = compile({
+        template: 'world',
+        someArg: 'foo',
+        transformTemplate: function(tpl, options) { return 'hello ' + tpl + ': ' + options.someArg; }
+      });
+      expect(data.element.html()).toBe('hello world: foo');
+    });
+
     describe('with resolve and locals options', function() {
       var options;
 

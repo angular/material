@@ -15,8 +15,8 @@ $button-fab-mini-line-height: rem(4.00) !default;
 
 $button-fab-toast-offset: $button-fab-height * 0.75 !default;
 
-$icon-button-height: rem(4.800) !default;
-$icon-button-width: rem(4.800) !default;
+$icon-button-height: rem(4.000) !default;
+$icon-button-width: rem(4.000) !default;
 $icon-button-margin: rem(0.600) !default;
 
 // Fix issue causing buttons in Firefox to be 2px bigger than they should
@@ -93,9 +93,8 @@ button.md-button::-moz-focus-inner {
     margin: 0 $icon-button-margin;
     height: $icon-button-height;
     min-width: 0;
-    line-height: $icon-button-height;
-    padding-left: 0;
-    padding-right: 0;
+    line-height: $icon-size;
+    padding: $baseline-grid;
     width: $icon-button-width;
     border-radius: $button-icon-border-radius;
     .md-ripple-container {
@@ -114,7 +113,6 @@ button.md-button::-moz-focus-inner {
 
     z-index: $z-index-fab;
 
-    line-height: $button-fab-line-height;
     min-width: 0;
     width: $button-fab-width;
     height: $button-fab-height;
@@ -125,8 +123,8 @@ button.md-button::-moz-focus-inner {
     background-clip: padding-box;
     overflow: hidden;
 
-    transition: 0.2s linear;
-    transition-property: background-color, box-shadow;
+    transition: $swift-ease-in;
+    transition-property: background-color, box-shadow, transform;
     .md-ripple-container {
       border-radius: $button-fab-border-radius;
       background-clip: padding-box;
@@ -141,6 +139,9 @@ button.md-button::-moz-focus-inner {
       height: $button-fab-mini-height;
     }
 
+    &.ng-hide, &.ng-leave {
+      transition: none;
+    }
   }
 
   &:not([disabled]) {
@@ -167,6 +168,7 @@ button.md-button::-moz-focus-inner {
 .md-toast-open-top {
   .md-button.md-fab-top-left,
   .md-button.md-fab-top-right {
+    transition: $swift-ease-out;
     transform: translate3d(0, $button-fab-toast-offset, 0);
     &:not([disabled]) {
       &.md-focused,
@@ -180,6 +182,7 @@ button.md-button::-moz-focus-inner {
 .md-toast-open-bottom {
   .md-button.md-fab-bottom-left,
   .md-button.md-fab-bottom-right {
+    transition: $swift-ease-out;
     transform: translate3d(0, -$button-fab-toast-offset, 0);
     &:not([disabled]) {
       &.md-focused,
@@ -220,6 +223,7 @@ button.md-button::-moz-focus-inner {
     border-radius: 0px 2px 2px 0px;
   }
 }
+// IE only
 @media screen and (-ms-high-contrast: active) {
   .md-button.md-raised,
   .md-button.md-fab {

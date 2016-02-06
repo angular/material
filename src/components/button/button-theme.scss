@@ -70,11 +70,11 @@ a.md-button.md-THEME_NAME-theme,
   }
 
   &.md-raised {
-    color: '{{background-contrast}}';
+    color: '{{background-900}}';
     background-color: '{{background-50}}';
     &:not([disabled]) {
-      .md-icon {
-        color: '{{background-contrast}}';
+      md-icon {
+        color: '{{background-900}}';
       }
       &:hover {
         background-color: '{{background-50}}';
@@ -141,8 +141,8 @@ a.md-button.md-THEME_NAME-theme,
   &.md-fab[disabled],
   &.md-accent[disabled],
   &.md-warn[disabled] {
-    color: '{{foreground-3}}';
-    cursor: not-allowed;
+    color: '{{foreground-3}}' !important;
+    cursor: default;
 
     md-icon {
       color: '{{foreground-3}}';

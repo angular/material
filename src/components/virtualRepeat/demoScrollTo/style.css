@@ -29,6 +29,6 @@ md-virtual-repeat-container {
   border: solid 1px grey;
 }
 
-.md-virtual-repeat-container .md-virtual-repeat-offsetter {
+.md-virtual-repeat-container .md-virtual-repeat-offsetter div:not(.header) {
   padding-left: 16px;
 }

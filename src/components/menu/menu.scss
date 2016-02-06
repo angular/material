@@ -17,6 +17,8 @@ $max-dense-menu-height: 2 * $baseline-grid + $max-visible-items * $dense-menu-it
     margin-top: $baseline-grid / 2;
     margin-bottom: $baseline-grid / 2;
     height: 1px;
+    min-height: 1px;
+    max-height: 1px;
     width: 100%;
   }
 
@@ -89,13 +91,14 @@ md-menu-item {
     font-size: (2*$baseline-grid) - 1;
     text-transform: none;
     font-weight: 400;
+    text-align: left;
     text-align: start;
     height: 100%;
     padding-left: 2*$baseline-grid;
     padding-right: 2*$baseline-grid;
     display: inline-block;
     align-items: baseline;
-    align-content: left;
+    align-content: flex-start;
     width:100%;
     md-icon {
       margin: auto 2*$baseline-grid auto 0;
@@ -122,6 +125,7 @@ md-toolbar {
   .md-menu {
     height: auto;
     margin: auto;
+    padding: 0;
   }
 }
 
@@ -135,6 +139,7 @@ md-toolbar {
     }
   }
 }
+
 @media (min-width: $layout-breakpoint-sm) {
   md-menu-content {
     min-width: 96px;
@@ -145,3 +150,4 @@ md-toolbar {
     }
   }
 }
+

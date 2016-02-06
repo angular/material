@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   angular
-      .module('chipsDemo', ['ngMaterial'])
+      .module('chipsDemo', ['ngMaterial', 'ngMessages'])
       .controller('BasicDemoCtrl', DemoCtrl);
 
   function DemoCtrl ($timeout, $q) {

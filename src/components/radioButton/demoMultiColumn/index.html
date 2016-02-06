@@ -1,0 +1,30 @@
+<div ng-controller='ContactController as cc' class="radioDemo2">
+  <h2>Contact List</h2>
+    <md-divider></md-divider>
+
+    <md-radio-group ng-model="cc.selectedIndex" >
+      <div ng-repeat='person in cc.contacts' class="row">
+        <div flex layout='row' layout-padding layout-align="start center" >
+
+          <div flex style="max-width:200px;">
+            {{person.title}}
+          </div>
+          <md-radio-button flex
+              ng-value="person.id"
+              class="md-primary" >
+
+            {{person.fullName}}
+
+          </md-radio-button>
+
+        </div>
+      </div>
+    </md-radio-group>
+
+    <md-divider></md-divider>
+    <div class="summary" flex layout="row" layout-align="space-between center">
+      <div flex-initial>
+        <span class="title">Selected User</span>: <span class="md-checked">{{cc.selectedUser()}}</span>
+      </div>
+    </div>
+</div>

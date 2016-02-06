@@ -21,12 +21,12 @@ md-dialog {
   &.md-transition-in {
     opacity: 1;
     transition: $swift-ease-out;
-    transform: translate3d(0,0,0) scale(1.0);
+    transform: translate(0,0) scale(1.0);
   }
   &.md-transition-out {
     opacity: 0;
     transition: $swift-ease-out;
-    transform: translate3d(0,100%,0) scale(0.2);
+    transform: translate(0,100%) scale(0.2);
   }
 
   opacity: 0;
@@ -46,10 +46,14 @@ md-dialog {
     flex-direction: column;
     overflow: auto;
   }
+
+  .md-dialog-content {
+    padding: $dialog-padding;
+  }
+
   md-dialog-content {
     order: 1;
     flex-direction: column;
-    padding: $dialog-padding;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 
@@ -80,9 +84,14 @@ md-dialog {
     .md-dialog-content-body {
       width:100%;
     }
+
+    .md-prompt-input-container {
+      width: 100%;
+      box-sizing: border-box;
+    }
   }
 
-  .md-actions {
+  .md-actions, md-dialog-actions {
     display: flex;
     order: 2;
     box-sizing: border-box;
@@ -101,9 +110,11 @@ md-dialog {
       margin-top: $baseline-grid;
     }
   }
-  &.md-content-overflow .md-actions {
-    border-top-width: 1px;
-    border-top-style: solid;
+  &.md-content-overflow {
+    .md-actions, md-dialog-actions {
+      border-top-width: 1px;
+      border-top-style: solid;
+    }
   }
 
 }
@@ -111,5 +122,13 @@ md-dialog {
 @media screen and (-ms-high-contrast: active) {
   md-dialog {
     border: 1px solid #fff;
+  }
+}
+
+@media (max-width: $layout-breakpoint-sm - 1) {
+  md-dialog.md-dialog-fullscreen {
+    min-height: 100%;
+    min-width: 100%;
+    border-radius: 0;
   }
 }

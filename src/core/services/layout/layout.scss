@@ -5,13 +5,15 @@
 *  References:
 *  1) https://scotch.io/tutorials/a-visual-guide-to-css3-flexbox-properties#flex
 *  2) https://css-tricks.com/almanac/properties/f/flex/
-*  3) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
-*  4) http://godban.com.ua/projects/flexgrid
+*  3) https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+*  4) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
+*  5) http://godban.com.ua/projects/flexgrid
+*
 *
 */
 
 @-moz-document url-prefix() {
-  .layout-fill, [layout-fill] {
+  .layout-fill {
     margin: 0;
     width: 100%;
     min-height: 100%;
@@ -19,349 +21,6 @@
   }
 }
 
-
-@mixin flex-order-for-name($sizes:null) {
-
-
-  @if $sizes == null {
-    $sizes : '';
-
-    //  .flex-order {
-    //    order: 0;
-    //  }
-    //
-
-    .flex-order, [flex-order] {
-     order : 0;
-    }
-  }
-
-  @for $i from 0 through 19 {
-    $order : '';
-    $suffix : '';
-
-    @each $s in $sizes {
-      @if $s != '' { $suffix : '#{$s}-#{$i}'; }
-      @else        { $suffix : '#{$i}';       }
-
-      $order : $order + '.flex-order-#{$suffix}, ';
-    }
-    @each $s in $sizes {
-      @if ( $s != '' ) {  $order : $order + '[flex-order-#{$s}="#{$i}"], '; }
-      @else            {  $order : $order + '[flex-order="#{$i}"], '; }
-    }
-
-    //   .flex-order-0, [order="0"] {
-    //   order: 0;
-    //   }
-    //
-    //   .flex-order-1, [order="1"] {
-    //     order: 1;
-    //   }
-    //
-    //  .flex-order-sm-0, [order-sm="0"] {
-    //    order: 0;
-    //  }
-    //
-    //  .flex-order-sm-1, [order-sm="1"] {
-    //    order: 1;
-    //  }
-    //
-    #{$order} {
-      order: #{$i};
-    }
-  }
-}
-@mixin offset-for-name($sizes:null) {
-
-  //  .offset-sm-0, [offset-sm="0"] {
-  //    margin-left: 0%;
-  //  }
-  //
-  //  .offset-sm-5, [offset-sm="5"] {
-  //    margin-left: 5%;
-  //  }
-  @if $sizes == null { $sizes : ''; }
-
-  @for $i from 0 through 19 {
-    $offsets : '';
-    $suffix : '';
-
-    @each $s in $sizes {
-      @if $s != '' { $suffix : '#{$s}-#{$i * 5}'; }
-      @else        { $suffix : '#{$i * 5}';       }
-
-      $offsets : $offsets + '.offset-#{$suffix}, ';
-    }
-    @each $s in $sizes {
-      @if ( $s != '' ) {  $offsets : $offsets + '[offset-#{$s}="#{$i * 5}"], '; }
-      @else            {  $offsets : $offsets + '[offset="#{$i * 5}"], '; }
-    }
-
-    #{$offsets} {
-      margin-left: #{$i * 5 + '%'};
-    }
-  }
-
-  $offsets : '';
-  @each $i in 33, 34 {
-    $suffix : '';
-
-    @each $s in $sizes {
-      @if $s != '' {  $suffix : '#{$s}-#{$i}';   }
-      @else        {  $suffix : '#{$i}';         }
-
-      $offsets : $offsets + '.offset-#{$suffix}, ';
-    }
-
-    // add attribute selectors
-    @each $s in $sizes {
-      $offsets : $offsets + '[offset-#{$s}="#{$i}"], ';
-    }
-  }
-
-  //  .offset-sm-33, [offset-sm="33"], .offset-sm-34, [offset-sm="34"] {
-  //    margin-left: 33%;
-  //  }
-  //
-  #{$offsets} {
-    margin-left: 33%;
-  }
-
-  $offsets : '';
-  @each $i in 66, 67 {
-    $suffix : '';
-
-    @each $s in $sizes {
-      @if $s != '' {  $suffix : '#{$s}-#{$i}';   }
-      @else        {  $suffix : '#{$i}';         }
-
-      $offsets : $offsets + '.offset-#{$suffix}, ';
-    }
-
-    // add attribute selectors
-    @each $s in $sizes {
-      $offsets : $offsets + '[offset-#{$s}="#{$i}"], ';
-    }
-  }
-
-  //  .offset-sm-66, [offset-sm="66"], .offset-sm-67, [offset-sm="67"] {
-  //    margin-left: 67%;
-  //  }
-  //
-  #{$offsets} {
-    margin-left: 67%;
-  }
-
-}
-@mixin layout-for-name($name: null) {
-  @if $name == null { $name : '';          }
-  @if $name != ''   { $name : '-#{$name}'; }
-
-  .md-layout#{$name}, .md-layout#{$name}-column, .md-layout#{$name}-row, {
-    box-sizing: border-box;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: flex;
-  }
-  .md-layout#{$name}-column {  flex-direction: column;  }
-  .md-layout#{$name}-row    {  flex-direction: row;     }
-}
-@mixin flex-properties-for-name($name: null) {
-  $flexName: 'flex';
-  @if $name != null {
-    $flexName: 'flex-#{$name}';
-    $name : '-#{$name}';
-  } @else {
-    $name : '';
-  }
-
-  .#{$flexName} {
-    box-sizing: border-box;
-  }
-
-  .#{$flexName}             { flex: 1;  }   // === 1 1 0%
-  .#{$flexName}-grow        { flex: 1 1 100%;  }
-  .#{$flexName}-initial     { flex: 0 1 auto;  }
-  .#{$flexName}-auto        { flex: 1 1 auto;  }
-  .#{$flexName}-none        { flex: 0 0 auto;  }
-
-  // (1-20) * 5 = 0-100%
-  @for $i from 0 through 20 {
-    $value : #{$i * 5 + '%'};
-
-    .#{$flexName}-#{$i * 5}                              { box-sizing: border-box; flex: 0 0 #{$value}; }
-
-    .md-layout-row > .#{$flexName}-#{$i * 5},
-    .md-layout#{$name}-row > .#{$flexName}-#{$i * 5}     { flex: 0 0 #{$value};  max-width: #{$value};  max-height: 100%;  }
-
-    .md-layout-column > .#{$flexName}-#{$i * 5},
-    .md-layout#{$name}-column > .#{$flexName}-#{$i * 5}  { flex: 0 0 #{$value}; max-width: 100%;  max-height: #{$value};  }
-  }
-
-  .md-layout-row, .md-layout#{$name}-row {
-    > .#{$flexName}-33   , > .#{$flexName}-34     {  flex: 0 0 33%;  max-width: 33%;  max-height: 100%; }
-    > .#{$flexName}-66   , > .#{$flexName}-67     {  flex: 0 0 67%;  max-width: 67%;  max-height: 100%; }
-  }
-  .md-layout-column, .md-layout#{$name}-column {
-    > .#{$flexName}-33   , > .#{$flexName}-34     {  flex: 0 0 33%;  max-width: 100%;  max-height: 33%; }
-    > .#{$flexName}-66   , > .#{$flexName}-67     {  flex: 0 0 67%;  max-width: 100%;  max-height: 67%; }
-  }
-
-}
-@mixin layout-align-for-name($suffix: null) {
-
-  // Alignment attributes for layout containers' children
-  // Arrange on the Main Axis
-  // center, start, end, space-between, space-around
-  // flex-start is the default for justify-content
-  // ------------------------------
-
-  $name: 'layout-align';
-  @if $suffix != null {
-    $name: 'layout-align-#{$suffix}';
-  }
-
-  // Main Axis Center
-  .#{$name}-center,           //stretch
-  .#{$name}-center-center,
-  .#{$name}-center-start,
-  .#{$name}-center-end,
-  {
-    justify-content: center;
-  }
-
-  // Main Axis End
-  .#{$name}-end, //stretch
-  .#{$name}-end-center,
-  .#{$name}-end-start,
-  .#{$name}-end-end,
-  {
-    justify-content: flex-end;
-  }
-
-  // Main Axis Space Around
-  .#{$name}-space-around, //stretch
-  .#{$name}-space-around-center,
-  .#{$name}-space-around-start,
-  .#{$name}-space-around-end,
-  {
-    justify-content: space-around;
-  }
-
-  // Main Axis Space Between
-  .#{$name}-space-between, //stretch
-  .#{$name}-space-between-center,
-  .#{$name}-space-between-start,
-  .#{$name}-space-between-end,
-  {
-    justify-content: space-between;
-  }
-
-
-  // Arrange on the Cross Axis
-  // center, start, end
-  // stretch is the default for align-items
-  // ------------------------------
-
-  // Cross Axis Start
-  .#{$name}-center-start,
-  .#{$name}-start-start,
-  .#{$name}-end-start,
-  .#{$name}-space-between-start,
-  .#{$name}-space-around-start,
-  {
-    align-items: flex-start;
-  }
-
-  // Cross Axis Center
-  .#{$name}-center-center,
-  .#{$name}-start-center,
-  .#{$name}-end-center,
-  .#{$name}-space-between-center,
-  .#{$name}-space-around-center,
-  {
-    align-items: center;
-    max-width: 100%;
-
-  }
-
-  // Cross Axis End
-  .#{$name}-center-end,
-  .#{$name}-start-end,
-  .#{$name}-end-end,
-  .#{$name}-space-between-end,
-  .#{$name}-space-around-end,
-  {
-    align-items: flex-end;
-  }
-}
-@mixin layout-padding-margin() {
-
-  .layout-padding > .flex-sm,   .layout-padding > .flex-lt-md {
-    padding: $layout-gutter-width / 4;
-  }
-  .layout-padding,
-  .layout-padding > .flex,
-  .layout-padding > .flex-gt-sm,
-  .layout-padding > .flex-md,
-  .layout-padding > .flex-lt-lg
-  {
-    padding: $layout-gutter-width / 2;
-  }
-  .layout-padding > .flex-gt-md,
-  .layout-padding > .flex-lg
-  {
-    padding: $layout-gutter-width / 1;
-  }
-
-  .layout-margin > .flex-sm,
-  .layout-margin > .flex-lt-md
-  {
-    margin: $layout-gutter-width / 4;
-  }
-
-  .layout-margin,
-  .layout-margin  > .flex,
-  .layout-margin  > .flex-gt-sm,
-  .layout-margin  > .flex-md,
-  .layout-margin  > .flex-lt-lg
-  {
-    margin: $layout-gutter-width / 2;
-  }
-
-  .layout-margin  > .flex-gt-md,
-  .layout-margin  > .flex-lg
-  {
-    margin: $layout-gutter-width / 1;
-  }
-
-  .layout-wrap, [layout-wrap] {
-    flex-wrap: wrap;
-  }
-
-  .layout-nowrap,  [layout-nowrap] {
-      flex-wrap: nowrap;
-  }
-
-  .layout-fill, [layout-fill] {
-    margin: 0;
-    width: 100%;
-    min-height: 100%;
-    height: 100%;
-  }
-}
-
-@mixin layouts_for_breakpoint($name:null) {
-    @include flex-order-for-name($name);
-    @include offset-for-name($name);
-    @include layout-align-for-name($name);
-
-    @include flex-properties-for-name($name);
-    @include layout-for-name($name);
-}
 
 /*
  *  Apply Mixins to create Layout/Flexbox styles
@@ -381,20 +40,39 @@
  *
  *  hide means hide everywhere
  *  Sizes:
- *         0    <= size < 600  Phone
- *         600  <= size < 960  Tablet
- *         960  <= size < 1200 Tablet-Landscape
+ *         $layout-breakpoint-xs:     600px !default;
+ *         $layout-breakpoint-sm:     960px !default;
+ *         $layout-breakpoint-md:     1280px !default;
+ *         $layout-breakpoint-lg:     1920px !default;
  */
 
 
-
-@media (max-width: $layout-breakpoint-sm - 1) {
-  // SMALL SCREEN
-  .hide-sm, .hide {
-    &:not(.show-sm):not(.show) {
+@media (max-width: $layout-breakpoint-xs - 1) {
+  // Xtra-SMALL  SCREEN
+  .hide-xs, .hide {
+    &:not(.show-xs):not(.show) {
       display: none;
     }
   }
+  @include layouts_for_breakpoint(xs);
+}
+
+@media (min-width: $layout-breakpoint-xs) {
+  // BIGGER THAN Xtra-SMALL SCREEN
+  @include layouts_for_breakpoint(gt-xs);
+
+}
+
+@media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
+  .hide, .hide-gt-xs {
+    &:not(.show-gt-xs):not(.show-sm):not(.show) {
+      display: none;
+    }
+  }
+  .hide-sm:not(.show-gt-xs):not(.show-sm):not(.show) {
+    display: none;
+  }
+
   @include layouts_for_breakpoint(sm);
 }
 
@@ -406,12 +84,12 @@
 
 @media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
   // MEDIUM SCREEN
-  .hide, .hide-gt-sm {
-    &:not(.show-gt-sm):not(.show-md):not(.show) {
+  .hide, .hide-gt-xs, .hide-gt-sm {
+    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-md):not(.show) {
       display: none;
     }
   }
-  .hide-md:not(.show-md):not(.show) {
+  .hide-md:not(.show-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
     display: none;
   }
   @include layouts_for_breakpoint(md);
@@ -424,25 +102,38 @@
 
 @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
   // LARGE SCREEN
-  .hide, .hide-gt-sm, .hide-gt-md {
-      &:not(.show-gt-sm):not(.show-gt-md):not(.show-lg):not(.show) {
-        display: none;
-      }
-    }
-    .hide-lg:not(.show-lg):not(.show) {
+  .hide,.hide-gt-xs, .hide-gt-sm, .hide-gt-md {
+    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-lg):not(.show) {
       display: none;
     }
+  }
+  .hide-lg:not(.show-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
+    display: none;
+  }
 
   @include layouts_for_breakpoint(lg);
 }
 
 @media (min-width: $layout-breakpoint-lg) {
+  @include layouts_for_breakpoint(gt-lg);
+  @include layouts_for_breakpoint(xl);
+
   // BIGGER THAN LARGE SCREEN
-  .hide-gt-sm, .hide-gt-md, .hide-gt-lg, .hide {
-    &:not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show) {
+  .hide, .hide-gt-xs, .hide-gt-sm, .hide-gt-md, .hide-gt-lg {
+    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show-xl):not(.show) {
       display: none;
     }
   }
+  .hide-xl:not(.show-xl):not(.show-gt-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
+    display: none;
+  }
 
-  @include layouts_for_breakpoint(gt-lg);
+}
+
+// General printing Rules
+@media print {
+
+  .hide-print:not(.show-print):not(.show) {
+    display: none !important;
+  }
 }

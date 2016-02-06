@@ -30,6 +30,18 @@ describe('md-slider', function() {
     return slider;
   }
 
+  it('should not set model below the min', function() {
+    var slider = setup('ng-model="value" min="0" max="100"');
+    pageScope.$apply('value = -50');
+    expect(slider.attr('aria-valuenow')).toEqual('0');
+  });
+
+  it('should not set model above the max', function() {
+    var slider = setup('ng-model="value" min="0" max="100"');
+    pageScope.$apply('value = 150');
+    expect(slider.attr('aria-valuenow')).toEqual('100');
+  });
+
   it('should set model on press', function() {
     var slider = setup('ng-model="value" min="0" max="100"');
     pageScope.$apply('value = 50');
@@ -137,7 +149,7 @@ describe('md-slider', function() {
     expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('50');
   });
 
-  it('should call $log.warn if aria-label isnt provided', function() {
+  it('should call $log.warn if aria-label isn\'t provided', function() {
     spyOn($log, "warn");
     setup('min="100" max="104" step="2" ng-model="model"');
     expect($log.warn).toHaveBeenCalled();
@@ -189,7 +201,7 @@ describe('md-slider', function() {
 
   it('should disable via the `disabled` attribute', function() {
     var slider = setup('disabled');
-    
+
     // Check for disabled state by triggering the pressdown handler and asserting that
     // the slider is not active.
     slider.triggerHandler({
@@ -216,23 +228,48 @@ describe('md-slider', function() {
     });
     expect(slider).not.toHaveClass('md-active');
   });
-  
+
+  it('should add md-min class only when at min value', function() {
+    var slider = setup('ng-model="model" min="0" max="30"');
+    pageScope.$apply('model = 0');
+    expect(slider).toHaveClass('md-min');
+
+    slider.triggerHandler({type: '$md.dragstart', pointer: {x: 0}});
+    slider.triggerHandler({type: '$md.drag', pointer: {x: 10}});
+    $timeout.flush();
+    expect(slider).not.toHaveClass('md-min');
+  });
+
+  it('should add md-max class only when at max value', function() {
+    var slider = setup('ng-model="model" min="0" max="30"');
+    pageScope.$apply('model = 30');
+    expect(slider).toHaveClass('md-max');
+
+    slider.triggerHandler({type: '$md.dragstart', pointer: {x: 30}});
+    slider.triggerHandler({type: '$md.drag', pointer: {x: 10}});
+    $timeout.flush();
+    expect(slider).not.toHaveClass('md-max');
+  });
+
   it('should increment at a predictable step', function() {
 
-    buildSlider(0.1, 1).drag({x:70});
+    buildSlider(0.1, 0, 1).drag({x:70});
     expect(pageScope.value).toBe(0.7);
 
-    buildSlider(0.25, 1).drag({x:45});
+    buildSlider(0.25, 0, 1).drag({x:45});
     expect(pageScope.value).toBe(0.5);
 
-    buildSlider(0.25, 1).drag({x:35});
+    buildSlider(0.25, 0, 1).drag({x:35});
     expect(pageScope.value).toBe(0.25);
 
-    buildSlider(1, 100).drag({x:90});
+    buildSlider(1, 0, 100).drag({x:90});
     expect(pageScope.value).toBe(90);
 
-    function buildSlider(step, max) {
-      var slider = setup('ng-model="value" min="0" max="' + max + '" step="' + step + '"');
+    buildSlider(20, 5, 45).drag({x:50});
+    expect(pageScope.value).toBe(25);
+
+    function buildSlider(step, min, max) {
+      var slider = setup('ng-model="value" min="' + min + '" max="' + max + '" step="' + step + '"');
           pageScope.$apply('value = 0.5');
 
       return {
@@ -246,6 +283,16 @@ describe('md-slider', function() {
       };
     }
 
+  });
+
+  it('should set a default tabindex', function() {
+    var slider = setup();
+    expect(slider.attr('tabindex')).toBe('0');
+  });
+
+  it('should not overwrite tabindex attribute', function() {
+    var slider = setup('tabindex="2"');
+    expect(slider.attr('tabindex')).toBe('2');
   });
 
 });
