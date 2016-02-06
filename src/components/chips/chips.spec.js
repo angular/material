@@ -501,7 +501,7 @@ describe('<md-chips>', function() {
           scope.items = [];
         });
 
-        it('should not add a new chip if the max-chips limit is reached', function() {
+        it('should not add a new chip if the max-chips limit is reached', function () {
           var element = buildChips('<md-chips ng-model="items" md-max-chips="1"></md-chips>');
           var ctrl = element.controller('mdChips');
 
@@ -555,6 +555,58 @@ describe('<md-chips>', function() {
 
           expect(ctrl.chipBuffer).toBe('Test 2');
           expect(scope.items.length).not.toBe(2);
+        });
+      });
+
+      describe('focus functionality', function() {
+        var element, ctrl;
+
+        beforeEach(function() {
+          element = buildChips(CHIP_SELECT_TEMPLATE);
+          ctrl = element.controller('mdChips');
+          document.body.appendChild(element[0]);
+        });
+
+        afterEach(function() {
+          element.remove();
+          element = ctrl = null;
+        });
+
+        it('should focus the chip when clicking / touching on the chip', function() {
+          ctrl.focusChip = jasmine.createSpy('focusChipSpy');
+
+          var chips = getChipElements(element);
+          expect(chips.length).toBe(3);
+
+          chips.children().eq(0).triggerHandler('click');
+
+          expect(ctrl.focusChip).toHaveBeenCalledTimes(1);
+        });
+
+        it('should focus the chip through normal content focus', function() {
+          scope.selectChip = jasmine.createSpy('focusChipSpy');
+          var chips = getChipElements(element);
+          expect(chips.length).toBe(3);
+
+          chips.children().eq(0).triggerHandler('focus');
+
+          expect(scope.selectChip).toHaveBeenCalledTimes(1);
+        });
+
+        it('should blur the chip correctly', function() {
+          var chips = getChipElements(element);
+          expect(chips.length).toBe(3);
+
+          var chipContent = chips.children().eq(0);
+          chipContent.triggerHandler('focus');
+
+          expect(ctrl.selectedChip).toBe(0);
+
+          chipContent.eq(0).triggerHandler('blur');
+
+          scope.$digest();
+
+          expect(ctrl.selectedChip).toBe(-1);
         });
 
       });
