@@ -34,8 +34,6 @@ Material is targeted for all browsers with versions n-1; where n is the current 
 
 ## <a name="builds_process"></a> Our Release Processes
 
-### Angular Material - Release Processes
-
 Angular Material has revised/improved its build processes. To preserve stability with applications currently using Angular Material, we will have three (3) types of releases:
 
 *  `major` :  this type of release will be the Angular 2.x efforts maintained in a separate repository called [Material2](https://github.com/angular/material2). This type of release will not be used within Angular Material 1.x.
