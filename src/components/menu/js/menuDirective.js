@@ -160,8 +160,8 @@ function MenuDirective($mdUtil) {
   function compile(templateElement) {
     templateElement.addClass('md-menu');
     var triggerElement = templateElement.children()[0];
-    if (!triggerElement.hasAttribute('ng-click')) {
-      triggerElement = triggerElement.querySelector('[ng-click],[ng-mouseenter]') || triggerElement;
+    if (!triggerElement.hasAttribute('ng-click') || !triggerElement.hasAttribute('data-ng-click')) {
+      triggerElement = triggerElement.querySelector('[ng-click], [data-ng-click], [ng-mouseenter], [data-ng-mouseenter]') || triggerElement;
     }
     if (triggerElement && (
       triggerElement.nodeName == 'MD-BUTTON' ||
