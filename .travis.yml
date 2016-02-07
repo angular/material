@@ -9,6 +9,7 @@ env:
 branches:
   only:
     - master
+    - patch
 
 before_script:
   - export DISPLAY=:99.0 # firefox virtual screen
