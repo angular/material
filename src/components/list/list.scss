@@ -58,13 +58,18 @@ md-list-item {
       border: medium none;
 
       > .md-button:first-child {
-        height: 100%;
         position: absolute;
+        top: 0;
+        left: 0;
+
         margin: 0;
         padding: 0;
+        height: 100%;
       }
 
       .md-list-item-inner {
+        width: 100%;
+        height: 100%;
         padding: 0 16px;
       }
 
