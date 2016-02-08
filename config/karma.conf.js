@@ -31,10 +31,11 @@ module.exports = function(config) {
 
   var dependencies = process.env.KARMA_TEST_JQUERY ? ['node_modules/jquery/dist/jquery.js'] : [];
       dependencies = dependencies.concat([
+        'node_modules/phantomjs-polyfill/bind-polyfill.js',
         'node_modules/angular/angular.js',
         'node_modules/angular-animate/angular-animate.js',
         'node_modules/angular-aria/angular-aria.js',
-        'node_modules/angular-mocks/angular-messages.js',
+        'node_modules/angular-messages/angular-messages.js',
         'node_modules/angular-sanitize/angular-sanitize.js',
         'node_modules/angular-touch/angular-touch.js',
         'node_modules/angular-mocks/angular-mocks.js',

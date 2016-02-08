@@ -74,5 +74,6 @@ exports.task = function (done) {
 
     if (errorCount > 0) { process.exit(errorCount); }
     done();
+    done = function() { };
   }
 };
