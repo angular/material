@@ -1,11 +1,10 @@
-<div ng-controller="AppCtrl" layout-fill layout="column" class="inset" ng-cloak>
+<div ng-controller="AppCtrl" layout-fill layout="column" class="inset" ng-cloak paddi>
     <p>
     Toast can be dismissed with a swipe, a timer, or a button.<br/>
-      <span style="font-size:0.8em">Notice the 'Show Custom' toast will not nudge the FABs positions since a custom parent was specified.</span>
     </p>
 
 
-    <div layout="row" layout-sm="column" layout-align="space-around">
+    <div layout="row" layout-align="space-around">
       <div style="width:50px"></div>
       <md-button ng-click="showSimpleToast()">
         Show Simple
@@ -13,18 +12,13 @@
       <md-button class="md-raised" ng-click="showActionToast()">
         Show With Action
       </md-button>
-      <md-button ng-click="showCustomToast()">
-        Show Custom
-      </md-button>
       <div style="width:50px"></div>
     </div>
 
     <div layout="row" id="toastBounds">
 
       <div>
-        <br/>
-        <b>Toast Position: "{{getToastPosition()}}"</b>
-        <br/>
+        <p><b>Toast Position: "{{getToastPosition()}}"</b></p>
         <md-checkbox ng-repeat="(name, isSelected) in toastPosition"
           ng-model="toastPosition[name]">
           {{name}}

@@ -3,9 +3,10 @@ $button-fab-border-radius: 50% !default;
 $button-icon-border-radius: $button-fab-border-radius;
 
 $button-line-height: rem(3.60) !default;
-$button-padding: 0 rem(0.600) !default;
 $button-margin: rem(0.600) rem(0.800) !default;
 $button-min-width: rem(8.800) !default;
+$button-padding: 0 $button-left-right-padding !default;
+
 
 // Fab buttons
 $button-fab-line-height: rem(5.600) !default;
