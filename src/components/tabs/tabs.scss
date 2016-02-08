@@ -75,6 +75,8 @@ md-tabs {
 md-tabs-wrapper {
   display: block;
   position: relative;
+  // transform is needed for iOS Safari to prevent content from disappearing on scroll
+  transform: translate3d(0, 0, 0);
   md-prev-button, md-next-button {
     height: 100%;
     width: $tabs-paginator-width;
@@ -187,6 +189,8 @@ md-tab-content {
   bottom: 0;
   transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
   overflow: auto;
+  // transform is needed for iOS Safari to prevent content from disappearing on scroll
+  transform: translate3d(0, 0, 0);
   &.md-no-scroll {
     bottom: auto;
     overflow: hidden;
