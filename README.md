@@ -32,7 +32,7 @@ Material is targeted for all browsers with versions n-1; where n is the current 
   [Build Docs & Demos](https://github.com/angular/material/tree/master/docs/README.md) for details.
 
 
-## <a name="builds_process"></a> Our Release Processes
+## <a name="releasing"></a> Our Release Processes
 
 Angular Material has revised/improved its build processes. To preserve stability with applications currently using Angular Material, we will have three (3) types of releases:
 
