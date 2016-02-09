@@ -47,6 +47,10 @@ exports.task = function (done) {
     karmaConfig.reporters = args.reporters.trim().split(',');
   }
 
+  if ( args.config ) {
+    karmaConfig.configFile = ROOT + '/' + args.config.trim();
+  }
+
   gutil.log('Running unit tests on unminified source.');
   karma = new Server( karmaConfig, captureError(testMinified,clearEnv));
   karma.start();
