@@ -842,19 +842,35 @@ describe('<md-select>', function() {
         expectSelectOpen(el);
       });
 
-      it('can be opened with an enter key', function() {
+      it('can be opened with a space key using allow-keyboard-change', inject(function($document) {
+        var el = setupSelect('ng-model="someModel" allow-keyboard-change', [1, 2, 3]).find('md-select');
+        pressKey(el, 32);
+        waitForSelectOpen();
+        var selectMenu = angular.element($document.find('md-select-menu'));
+        expect(selectMenu.length).toBe(1);
+      }));
+
+      it('can be opened with an enter key', inject(function($document) {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
         pressKey(el, 13);
         waitForSelectOpen();
         expectSelectOpen(el);
-      });
+      }));
 
-      it('can be opened with the up key', function() {
+      it('can be opened with an enter key using allow-keyboard-change', inject(function($document) {
+        var el = setupSelect('ng-model="someModel" allow-keyboard-change', [1, 2, 3]).find('md-select');
+        pressKey(el, 13);
+        waitForSelectOpen();
+        var selectMenu = angular.element($document.find('md-select-menu'));
+        expect(selectMenu.length).toBe(1);
+      }));
+
+      it('can be opened with the up key', inject(function($document) {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
         pressKey(el, 38);
         waitForSelectOpen();
         expectSelectOpen(el);
-      });
+      }));
 
       it('can be opened with the down key', function() {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
@@ -867,6 +883,46 @@ describe('<md-select>', function() {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
         pressKey(el, 50);
         expect($rootScope.someModel).toBe(2);
+      }));
+
+      it('can have value changed with the up key', inject(function($document, $rootScope) {
+        var el, selectMenu;
+
+        $rootScope.someModel = 2;
+        el = setupSelect('ng-model="someModel" allow-keyboard-change', [1, 2, 3]).find('md-select');
+        pressKey(el, 38);
+        selectMenu = angular.element($document.find('md-select-menu'));
+        expect($rootScope.someModel).toBe(1);
+      }));
+
+      it('can have value changed with the down key', inject(function($document, $rootScope) {
+        var el, selectMenu;
+
+        $rootScope.someModel = 1;
+        el = setupSelect('ng-model="someModel" allow-keyboard-change', [1, 2, 3]).find('md-select');
+        pressKey(el, 40);
+        selectMenu = angular.element($document.find('md-select-menu'));
+        expect($rootScope.someModel).toBe(2);
+      }));
+
+      it('cannot have value changed with the up key when type is multiple', inject(function($document, $rootScope) {
+        var el, selectMenu;
+
+        el = setupSelect('ng-model="someModel" multiple allow-keyboard-change', [1, 2, 3]).find('md-select');
+        pressKey(el, 38);
+        waitForSelectOpen();
+        selectMenu = angular.element($document.find('md-select-menu'));
+        expect(selectMenu.length).toBe(1);
+      }));
+
+      it('cannot have value changed with the down key when type is multiple', inject(function($document, $rootScope) {
+        var el, selectMenu;
+
+        el = setupSelect('ng-model="someModel" multiple allow-keyboard-change', [1, 2, 3]).find('md-select');
+        pressKey(el, 40);
+        waitForSelectOpen();
+        selectMenu = angular.element($document.find('md-select-menu'));
+        expect(selectMenu.length).toBe(1);
       }));
     });
 
