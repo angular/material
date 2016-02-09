@@ -1,0 +1,19 @@
+.md-panel-outer-wrapper {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: $z-index-dialog; // TODO(ErinCoughlan): Set z-index in config.
+}
+
+
+.md-panel {
+  overflow: auto;
+  position: relative; // TODO(ErinCoughlan): Set position from config values.
+}
+
