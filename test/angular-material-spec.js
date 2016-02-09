@@ -226,6 +226,28 @@
             };
           }
         };
+      },
+
+      /**
+       * Asserts that a given element contains a given substring in
+       * its innerHTML property.
+       */
+      toContainHtml: function() {
+        return {
+          'compare': function(actual, expected) {
+            var el = typeof actual == 'string' ?
+                document.querySelector(actual) : actual;
+            var html = angular.element(el).html();
+            var pass = html.indexOf(expected) !== -1;
+            var not = pass ? 'not ' : '';
+
+            return {
+              'pass': pass,
+              'message': 'Expected element ' + not + 'to contain the html ' +
+              '[' + expected + '] in [' + html + ']'
+            };
+          }
+        };
       }
     });
 
