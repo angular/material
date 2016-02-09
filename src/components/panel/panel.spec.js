@@ -2,6 +2,7 @@ describe('$mdPanel', function() {
   var $mdPanel, $rootScope, $rootEl, $templateCache, $q;
   var panelRef;
   var attachedElements = [];
+  var PANEL_EL = '.md-panel-outer-wrapper';
 
   /**
    * @param {!angular.$injector} $injector
@@ -63,93 +64,86 @@ describe('$mdPanel', function() {
   });
 
   it('should create and open a basic panel', function() {
-    var template = '<div id="panel">Hello World!</div>';
+    var template = '<div>Hello World!</div>';
     var config = { template: template };
 
-    panelRef = $mdPanel.open(config);
-    $rootScope.$apply();
+    openPanel(config);
 
-    expect('#panel').toExist();
+    expect(PANEL_EL).toExist();
     expect(panelRef.isOpen).toEqual(true);
 
-    panelRef.close();
-    $rootScope.$apply();
+    closePanel();
 
-    expect('#panel').not.toExist();
+    expect(PANEL_EL).not.toExist();
     expect(panelRef.isOpen).toEqual(false);
   });
 
   it('should add and remove a panel from the DOM', function() {
-    var template = '<div id="panel">Hello World!</div>';
+    var template = '<div>Hello World!</div>';
     var config = { template: template };
 
     panelRef = $mdPanel.create(config);
 
-    expect('#panel').not.toExist();
+    expect(PANEL_EL).not.toExist();
 
-    panelRef.open();
-    $rootScope.$apply();
+    openPanel();
 
-    expect('#panel').toExist();
+    expect(PANEL_EL).toExist();
 
-    panelRef.close();
-    $rootScope.$apply();
+    closePanel();
 
-    expect('#panel').not.toExist();
+    expect(PANEL_EL).not.toExist();
   });
 
-  it('should attach panel to a specific element', function() {
-    var parentEl = document.createElement('div');
-    parentEl.id = 'parent';
-    attachToBody(parentEl);
+  describe('config options:', function() {
+    it('should attach panel to a specific element', function() {
+      var parentEl = document.createElement('div');
+      parentEl.id = 'parent';
+      attachToBody(parentEl);
 
-    var template = '<div id="panel">Hello World!</div>';
-    var config = {
-      attachTo: angular.element(parentEl),
-      template: template
-    };
+      var template = '<div>Hello World!</div>';
+      var config = {
+        attachTo: angular.element(parentEl),
+        template: template
+      };
 
-    panelRef = $mdPanel.create(config);
-    panelRef.open();
-    $rootScope.$apply();
+      openPanel(config);
 
-    var panelEl = document.querySelector('#panel');
-    expect(panelEl.parentElement).toBe(parentEl);
+      var panelEl = document.querySelector(PANEL_EL);
+      expect(panelEl.parentElement).toBe(parentEl);
 
-    panelRef.close();
-    $rootScope.$apply();
+      closePanel();
 
-    expect(parentEl.childElementCount).toEqual(0);
+      expect(parentEl.childElementCount).toEqual(0);
+    });
   });
 
   describe('component logic: ', function() {
     it('should allow templateUrl to specify content', function() {
       var htmlContent = 'Puppies and Unicorns';
-      var template = '<div id="panel">' + htmlContent + '</div>';
+      var template = '<div>' + htmlContent + '</div>';
       $templateCache.put('template.html', template);
 
       var config = { templateUrl: 'template.html' };
 
-      panelRef = $mdPanel.open(config);
-      $rootScope.$apply();
+      openPanel(config);
 
-      expect('#panel').toContainHtml(htmlContent);
+      expect(PANEL_EL).toContainHtml(htmlContent);
     });
 
     it('should allow template to specify content', function() {
       var htmlContent = 'Ice cream';
-      var template = '<div id="panel">' + htmlContent + '</div>';
+      var template = '<div>' + htmlContent + '</div>';
       var config = { template: template };
 
-      panelRef = $mdPanel.open(config);
-      $rootScope.$apply();
+      openPanel(config);
 
-      expect('#panel').toContainHtml(htmlContent);
+      expect(PANEL_EL).toContainHtml(htmlContent);
     });
 
     it('should allow a controller to be specified', function() {
       var htmlContent = 'Cotton candy';
-      var template = '<div id="panel">{{ content }}</div>';
+      var template = '<div>{{ content }}</div>';
 
       var config = {
         template: template,
@@ -158,15 +152,14 @@ describe('$mdPanel', function() {
         }
       };
 
-      panelRef = $mdPanel.open(config);
-      $rootScope.$apply();
+      openPanel(config);
 
-      expect('#panel').toContainHtml(htmlContent);
+      expect(PANEL_EL).toContainHtml(htmlContent);
     });
 
     it('should allow controllerAs syntax', function() {
       var htmlContent = 'Cupcakes';
-      var template = '<div id="panel">{{ ctrl.content }}</div>';
+      var template = '<div>{{ ctrl.content }}</div>';
 
       var config = {
         template: template,
@@ -176,15 +169,14 @@ describe('$mdPanel', function() {
         controllerAs: 'ctrl'
       };
 
-      panelRef = $mdPanel.open(config);
-      $rootScope.$apply();
+      openPanel(config);
 
-      expect('#panel').toContainHtml(htmlContent);
+      expect(PANEL_EL).toContainHtml(htmlContent);
     });
 
     it('should wait for resolve before creating the panel', function() {
       var htmlContent = 'Cheesecake';
-      var template = '<div id="panel">{{ ctrl.content }}</div>';
+      var template = '<div>{{ ctrl.content }}</div>';
 
       var deferred = $q.defer();
 
@@ -203,21 +195,20 @@ describe('$mdPanel', function() {
         }
       };
 
-      panelRef = $mdPanel.open(config);
-      $rootScope.$apply();
+      openPanel(config);
 
-      expect('#panel').not.toExist();
+      expect(PANEL_EL).not.toExist();
 
       deferred.resolve(htmlContent);
       $rootScope.$apply();
 
-      expect('#panel').toExist();
-      expect('#panel').toContainHtml(htmlContent);
+      expect(PANEL_EL).toExist();
+      expect(PANEL_EL).toContainHtml(htmlContent);
     });
 
     it('should bind resolve to the controller', function() {
       var htmlContent = 'Gummy bears';
-      var template = '<div id="panel">{{ ctrl.content }}</div>';
+      var template = '<div>{{ ctrl.content }}</div>';
 
       var config = {
         template: template,
@@ -232,15 +223,14 @@ describe('$mdPanel', function() {
         }
       };
 
-      panelRef = $mdPanel.open(config);
-      $rootScope.$apply();
+      openPanel(config);
 
-      expect('#panel').toContainHtml(htmlContent);
+      expect(PANEL_EL).toContainHtml(htmlContent);
     });
 
     it('should allow locals to be injected in the controller', function() {
       var htmlContent = 'Tiramisu';
-      var template = '<div id="panel">{{ ctrl.content }}</div>';
+      var template = '<div>{{ ctrl.content }}</div>';
 
       var config = {
         template: template,
@@ -252,15 +242,14 @@ describe('$mdPanel', function() {
         bindToController: false,
       };
 
-      panelRef = $mdPanel.open(config);
-      $rootScope.$apply();
+      openPanel(config);
 
-      expect('#panel').toContainHtml(htmlContent);
+      expect(PANEL_EL).toContainHtml(htmlContent);
     });
 
     it('should bind locals to the controller', function() {
       var htmlContent = 'Apple Pie';
-      var template = '<div id="panel">{{ ctrl.content }}</div>';
+      var template = '<div>{{ ctrl.content }}</div>';
 
       var config = {
         template: template,
@@ -271,10 +260,9 @@ describe('$mdPanel', function() {
         locals: { content: htmlContent }
       };
 
-      panelRef = $mdPanel.open(config);
-      $rootScope.$apply();
+      openPanel(config);
 
-      expect('#panel').toContainHtml(htmlContent);
+      expect(PANEL_EL).toContainHtml(htmlContent);
     });
   });
 
@@ -287,5 +275,28 @@ describe('$mdPanel', function() {
     var element = angular.element(el);
     angular.element(document.body).append(element);
     attachedElements.push(element);
+  }
+
+  /**
+   * Opens the panel. If a config value is passed, creates a new panelRef
+   * using $mdPanel.open(config); Otherwise, called open on the panelRef,
+   * assuming one has already been created.
+   * @param {!Object=} opt_config
+   */
+  function openPanel(opt_config) {
+    if (opt_config) {
+      panelRef = $mdPanel.open(opt_config);
+    } else {
+      panelRef && panelRef.open();
+    }
+    $rootScope.$apply();
+  }
+
+  /**
+   * Closes the panel using an already created panelRef.
+   */
+  function closePanel() {
+    panelRef && panelRef.close();
+    $rootScope.$apply();
   }
 });
