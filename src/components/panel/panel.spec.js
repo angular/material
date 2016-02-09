@@ -1,5 +1,6 @@
 describe('$mdPanel', function() {
-  var $mdPanel, $rootScope, $rootEl;
+  var $mdPanel, $rootScope, $rootEl, $templateCache, $q;
+  var panelRef;
   var attachedElements = [];
 
   /**
@@ -10,6 +11,8 @@ describe('$mdPanel', function() {
     $mdPanel = $injector.get('$mdPanel');
     $rootScope = $injector.get('$rootScope');
     $rootEl = $injector.get('$rootElement');
+    $templateCache = $injector.get('$templateCache');
+    $q = $injector.get('$q');
   };
 
   beforeEach(function() {
@@ -26,6 +29,8 @@ describe('$mdPanel', function() {
       el.remove();
     });
     attachedElements = [];
+
+    panelRef && panelRef.close();
   });
 
   it('should create a basic panel', function() {
@@ -33,7 +38,7 @@ describe('$mdPanel', function() {
     var closeResolved = false;
     var config = {};
 
-    var panelRef = $mdPanel.create(config);
+    panelRef = $mdPanel.create(config);
 
     expect(panelRef.id).toBeDefined();
     expect(panelRef.open).toBeOfType('function');
@@ -61,7 +66,7 @@ describe('$mdPanel', function() {
     var template = '<div id="panel">Hello World!</div>';
     var config = { template: template };
 
-    var panelRef = $mdPanel.open(config);
+    panelRef = $mdPanel.open(config);
     $rootScope.$apply();
 
     expect('#panel').toExist();
@@ -78,7 +83,7 @@ describe('$mdPanel', function() {
     var template = '<div id="panel">Hello World!</div>';
     var config = { template: template };
 
-    var panelRef = $mdPanel.create(config);
+    panelRef = $mdPanel.create(config);
 
     expect('#panel').not.toExist();
 
@@ -104,7 +109,7 @@ describe('$mdPanel', function() {
       template: template
     };
 
-    var panelRef = $mdPanel.create(config);
+    panelRef = $mdPanel.create(config);
     panelRef.open();
     $rootScope.$apply();
 
@@ -115,6 +120,162 @@ describe('$mdPanel', function() {
     $rootScope.$apply();
 
     expect(parentEl.childElementCount).toEqual(0);
+  });
+
+  describe('component logic: ', function() {
+    it('should allow templateUrl to specify content', function() {
+      var htmlContent = 'Puppies and Unicorns';
+      var template = '<div id="panel">' + htmlContent + '</div>';
+      $templateCache.put('template.html', template);
+
+      var config = { templateUrl: 'template.html' };
+
+      panelRef = $mdPanel.open(config);
+      $rootScope.$apply();
+
+      expect('#panel').toContainHtml(htmlContent);
+    });
+
+    it('should allow template to specify content', function() {
+      var htmlContent = 'Ice cream';
+      var template = '<div id="panel">' + htmlContent + '</div>';
+      var config = { template: template };
+
+      panelRef = $mdPanel.open(config);
+      $rootScope.$apply();
+
+      expect('#panel').toContainHtml(htmlContent);
+    });
+
+    it('should allow a controller to be specified', function() {
+      var htmlContent = 'Cotton candy';
+      var template = '<div id="panel">{{ content }}</div>';
+
+      var config = {
+        template: template,
+        controller: function Ctrl($scope) {
+          $scope['content'] = htmlContent;
+        }
+      };
+
+      panelRef = $mdPanel.open(config);
+      $rootScope.$apply();
+
+      expect('#panel').toContainHtml(htmlContent);
+    });
+
+    it('should allow controllerAs syntax', function() {
+      var htmlContent = 'Cupcakes';
+      var template = '<div id="panel">{{ ctrl.content }}</div>';
+
+      var config = {
+        template: template,
+        controller: function Ctrl() {
+          this.content = htmlContent;
+        },
+        controllerAs: 'ctrl'
+      };
+
+      panelRef = $mdPanel.open(config);
+      $rootScope.$apply();
+
+      expect('#panel').toContainHtml(htmlContent);
+    });
+
+    it('should wait for resolve before creating the panel', function() {
+      var htmlContent = 'Cheesecake';
+      var template = '<div id="panel">{{ ctrl.content }}</div>';
+
+      var deferred = $q.defer();
+
+      var config = {
+        template: template,
+        controller: function Ctrl(content) {
+          this.content = content;
+        },
+        controllerAs: 'ctrl',
+        resolve: {
+          content: function() {
+            return deferred.promise.then(function(content) {
+              return content;
+            });
+          }
+        }
+      };
+
+      panelRef = $mdPanel.open(config);
+      $rootScope.$apply();
+
+      expect('#panel').not.toExist();
+
+      deferred.resolve(htmlContent);
+      $rootScope.$apply();
+
+      expect('#panel').toExist();
+      expect('#panel').toContainHtml(htmlContent);
+    });
+
+    it('should bind resolve to the controller', function() {
+      var htmlContent = 'Gummy bears';
+      var template = '<div id="panel">{{ ctrl.content }}</div>';
+
+      var config = {
+        template: template,
+        controller: function Ctrl() {
+          this.content; // Populated via bindToController.
+        },
+        controllerAs: 'ctrl',
+        resolve: {
+          content: function($q) {
+            return $q.when(htmlContent);
+          }
+        }
+      };
+
+      panelRef = $mdPanel.open(config);
+      $rootScope.$apply();
+
+      expect('#panel').toContainHtml(htmlContent);
+    });
+
+    it('should allow locals to be injected in the controller', function() {
+      var htmlContent = 'Tiramisu';
+      var template = '<div id="panel">{{ ctrl.content }}</div>';
+
+      var config = {
+        template: template,
+        controller: function Ctrl(content) {
+          this.content = content;
+        },
+        controllerAs: 'ctrl',
+        locals: { content: htmlContent },
+        bindToController: false,
+      };
+
+      panelRef = $mdPanel.open(config);
+      $rootScope.$apply();
+
+      expect('#panel').toContainHtml(htmlContent);
+    });
+
+    it('should bind locals to the controller', function() {
+      var htmlContent = 'Apple Pie';
+      var template = '<div id="panel">{{ ctrl.content }}</div>';
+
+      var config = {
+        template: template,
+        controller: function Ctrl() {
+          this.content; // Populated via bindToController.
+        },
+        controllerAs: 'ctrl',
+        locals: { content: htmlContent }
+      };
+
+      panelRef = $mdPanel.open(config);
+      $rootScope.$apply();
+
+      expect('#panel').toContainHtml(htmlContent);
+    });
   });
 
   /**
