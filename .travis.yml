@@ -1,5 +1,6 @@
 sudo: false
 language: node_js
+dist: trusty
 node_js:
   - '4.2.3'
 env:
