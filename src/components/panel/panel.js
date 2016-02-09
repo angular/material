@@ -9,9 +9,9 @@ angular
     .service('$mdPanel', MdPanelService);
 
 
-/***************************************************************************************
- *                              PUBLIC DOCUMENTATION                                   *
- ***************************************************************************************/
+/*****************************************************************************
+ *                            PUBLIC DOCUMENTATION                           *
+ *****************************************************************************/
 
 /**
  * @ngdoc service
@@ -109,7 +109,6 @@ angular
  *     used for configuring the number of open panels and identifying specific
  *     behaviors for groups. For instance, all tooltips will be identified
  *     using the same groupName.
- *
  *   - `position` - `{$mdPanelPosition=}`: An $mdPanelPosition object that
  *     specifies the alignment of the panel. For more information, see
  *     `$mdPanelPosition`.
@@ -168,9 +167,9 @@ angular
  */
 
 
-/***************************************************************************************
- *                                       MdPanelRef                                    *
- ***************************************************************************************/
+/*****************************************************************************
+ *                                 MdPanelRef                                *
+ *****************************************************************************/
 
 
 /**
@@ -218,9 +217,9 @@ angular
  */
 
 
-/***************************************************************************************
- *                                 $mdPanelPosition                                    *
- ***************************************************************************************/
+/*****************************************************************************
+ *                               $mdPanelPosition                            *
+ *****************************************************************************/
 
 
 /**
@@ -243,9 +242,9 @@ angular
  * @ngdoc method
  * @name $mdPanelPosition#absolute
  * @description
- * Positions the panel absolutely relative to the parent element. If the parent is
- * document.body, this is equivalent to positioning the panel absolutely within the
- * viewport.
+ * Positions the panel absolutely relative to the parent element. If the parent
+ * is document.body, this is equivalent to positioning the panel absolutely
+ * within the viewport.
  * @returns {$mdPanelPosition}
  */
 
@@ -254,7 +253,8 @@ angular
  * @name $mdPanelPosition#relativeTo
  * @description
  * Positions the panel relative to a specific element.
- * @param {!angular.JQLite} element Element to position the panel with respect to.
+ * @param {!angular.JQLite} element Element to position the panel with
+ *     respect to.
  * @returns {$mdPanelPosition}
  */
 
@@ -313,9 +313,9 @@ angular
  */
 
 
-/***************************************************************************************
- *                                   IMPLEMENTATION                                    *
- ***************************************************************************************/
+/*****************************************************************************
+ *                                 IMPLEMENTATION                            *
+ *****************************************************************************/
 
 
 /**
@@ -332,8 +332,9 @@ function MdPanelService($rootElement, $rootScope, $injector) {
    */
   this._defaultConfigOptions = {
     attachTo: $rootElement,
+    bindToController: true,
     scope: $rootScope.$new(true),
-    bindToController: true
+    transformTemplate: angular.bind(this, this.wrapTemplate_)
   };
 
   /** @private {!Object} */
@@ -370,6 +371,27 @@ MdPanelService.prototype.open = function(opt_config) {
   var panelRef = this.create(opt_config);
   panelRef.open();
   return panelRef;
+};
+
+
+/**
+ * Wraps the users template in two elements, md-panel-container, which covers
+ * the entire attachTo element, and md-panel, which contains only the
+ * template. This allows the panel control over positioning, animations,
+ * and similar properties.
+ *
+ * @param {string} origTemplate The original template.
+ * @returns {string} The wrapped template.
+ * @private
+ */
+MdPanelService.prototype.wrapTemplate_ = function(origTemplate) {
+  var template = origTemplate || '';
+
+  return '<div class="md-panel-outer-wrapper">' +
+            '<div class="md-panel">' +
+              template +
+            '</div>' +
+         '</div>';
 };
 
 
