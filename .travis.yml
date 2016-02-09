@@ -15,14 +15,13 @@ before_install:
   - mkdir travis-phantomjs
   - wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2
   - tar -xvf $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C $PWD/travis-phantomjs
-  - export PATH=$PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin:$PATH
+  - export PHANTOMJS_BIN=$PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs
 
 before_script:
   - export DISPLAY=:99.0 # firefox virtual screen
   - sh -e /etc/init.d/xvfb start # firefox virtual screen
   - git config --global user.email "ngmaterial@googlegroups.com"
   - git config --global user.name "ngMaterial Bot"
-  - mv $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs  /home/travis/build/angular/material/node_modules/karma-phantomjs2-launcher/node_modules/phantomjs2-ext/lib/phantom/bin/phantomjs
 
 script:
   # Fail builds which use iit/ddescribe, but run the tests anyways
