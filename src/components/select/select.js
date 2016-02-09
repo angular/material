@@ -33,6 +33,7 @@ angular.module('material.components.select', [
  *
  * @param {expression} ng-model The model!
  * @param {boolean=} multiple Whether it's multiple.
+ * @param {boolean=} md-permanent-label Show the label permanently
  * @param {expression=} md-on-close Expression to be evaluated when the select is closed.
  * @param {expression=} md-on-open Expression to be evaluated when opening the select.
  * Will hide the select options and show a spinner until the evaluated promise resolves.
@@ -134,6 +135,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
       element.append(angular.element('<md-content>').append(element.contents()));
     }
 
+    var hasPermantentLabel = !!attr.mdPermanentLabel;
 
     // Add progress spinner for md-options-loading
     if (attr.mdOnOpen) {
@@ -212,6 +214,10 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
           $mdAria.expect(element, 'aria-label', element.attr('placeholder'));
         }
 
+        if (hasPermantentLabel) {
+          containerCtrl.setHasValue(true);
+        }
+
         scope.$watch(isErrorGetter, containerCtrl.setInvalid);
       }
 
@@ -261,7 +267,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
       };
 
       mdSelectCtrl.setIsPlaceholder = function(isPlaceholder) {
-        if (isPlaceholder) {
+        if (isPlaceholder && !hasPermantentLabel) {
           valueEl.addClass('md-select-placeholder');
           if (containerCtrl && containerCtrl.label) {
             containerCtrl.label.addClass('md-placeholder');
@@ -410,7 +416,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
           .finally(function() {
             if (containerCtrl) {
               containerCtrl.setFocused(false);
-              containerCtrl.setHasValue(false);
+              if (!hasPermantentLabel) containerCtrl.setHasValue(false);
               containerCtrl.input = null;
             }
             ngModelCtrl.$setTouched();
@@ -422,7 +428,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
       function inputCheckValue() {
         // The select counts as having a value if one or more options are selected,
         // or if the input's validity state says it has bad input (eg string in a number input)
-        containerCtrl && containerCtrl.setHasValue(selectMenuCtrl.selectedLabels().length > 0 || (element[0].validity || {}).badInput);
+        containerCtrl && !hasPermantentLabel && containerCtrl.setHasValue(selectMenuCtrl.selectedLabels().length > 0 || (element[0].validity || {}).badInput);
       }
 
       function findSelectContainer() {
