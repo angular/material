@@ -8,6 +8,7 @@ var filter = require('gulp-filter');
 var concat = require('gulp-concat');
 var series = require('stream-series');
 var util = require('../util');
+var sassUtils = require('../../scripts/gulp-utils');
 var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var insert = require('gulp-insert');
@@ -56,6 +57,7 @@ exports.task = function() {
   streams.push(
       gulp.src(config.scssLayoutAttributeFiles)
           .pipe(concat('layouts.scss'))
+          .pipe(sassUtils.hoistScssVariables())
           .pipe(sass())
           .pipe(util.autoprefix())
           .pipe(rename({ extname : '.css'}))
