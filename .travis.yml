@@ -50,9 +50,7 @@ before_script:
 - "./scripts/sauce/start-tunnel.sh"
 
 script:
-- gulp ddescribe-iit
-- gulp build
-- gulp karma --config=config/karma-sauce.conf.js --browsers=$BROWSER --reporters='dots'
+- ./scripts/travis-run-script.sh
 
 after_script:
 - "./scripts/sauce/stop-tunnel.sh"
