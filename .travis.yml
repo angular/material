@@ -22,6 +22,7 @@ before_script:
   - sh -e /etc/init.d/xvfb start # firefox virtual screen
   - git config --global user.email "ngmaterial@googlegroups.com"
   - git config --global user.name "ngMaterial Bot"
+  - mv $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs  /home/travis/build/angular/material/node_modules/karma-phantomjs2-launcher/node_modules/phantomjs2-ext/lib/phantom/bin/phantomjs
 
 script:
   # Fail builds which use iit/ddescribe, but run the tests anyways
