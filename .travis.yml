@@ -19,6 +19,7 @@ env:
 #  - BROWSER=SL_FIREFOX
 #  - BROWSER=SL_IE11
   - MODE=NORMAL
+  - MODE=PROTRACTOR
 
 # matrix:
 #  fast_finish: true
@@ -48,6 +49,7 @@ before_script:
 - mkdir -p $LOGS_DIR
 - git config --global user.email "ngmaterial@googlegroups.com"
 - git config --global user.name "ngMaterial Bot"
+- 'node_modules/protractor/bin/webdriver-manager update --standalone --chrome'
 
 script:
 - ./scripts/travis-run-script.sh
