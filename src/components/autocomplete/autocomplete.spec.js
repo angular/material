@@ -261,6 +261,36 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('should not show a loading progress when the items object is invalid', inject(function() {
+      var scope = createScope(null, {
+        match: function() {
+          // Return an invalid object, which is not an array, neither a promise.
+          return {}
+        }
+      });
+
+      var template =
+        '<md-autocomplete ' +
+        'md-input-id="{{inputId}}" ' +
+        'md-selected-item="selectedItem" ' +
+        'md-search-text="searchText" ' +
+        'md-items="item in match(searchText)" ' +
+        'md-item-text="item.display" ' +
+        'tabindex="3"' +
+        'placeholder="placeholder">' +
+        '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+
+      scope.$apply('searchText = "test"');
+
+      expect(ctrl.loading).toBe(false);
+
+      element.remove();
+    }));
+
     it('should clear value when hitting escape', inject(function($mdConstant, $timeout) {
       var scope = createScope();
       var template = '\

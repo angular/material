@@ -640,10 +640,11 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   function fetchResults (searchText) {
     var items = $scope.$parent.$eval(itemExpr),
         term  = searchText.toLowerCase(),
-        isList = angular.isArray(items);
+        isList = angular.isArray(items),
+        isPromise = !!items.then; // Every promise should contain a `then` property
 
-    if ( isList ) handleResults(items);
-    else          handleAsyncResults(items);
+    if (isList) handleResults(items);
+    else if (isPromise) handleAsyncResults(items);
 
     function handleAsyncResults(items) {
       if ( !items ) return;
