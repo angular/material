@@ -80,54 +80,60 @@ angular
  * @description
  * Creates a panel with the specified options.
  *
- * @param opt_config {Object=} Specific configuration object that may contain the
- * following properties:
+ * @param opt_config {Object=} Specific configuration object that may contain
+ * the following properties:
  *
- *   N/A
- *
- * TODO(ErinCoughlan): Add the following config options.
- *   - `groupName` - `{string=}`: Name of panel groups. This group name is used for
- *     configuring the number of open panels and identifying specific behaviors for
- *     groups. For instance, all tooltips will be identified using the same groupName.
- *   - `template` - `{string=}`: HTML template to show in the dialog. This **must** be
- *     trusted HTML with respect to Angular’s
+ *   - `template` - `{string=}`: HTML template to show in the dialog. This
+ *     **must** be trusted HTML with respect to Angular’s
  *     [$sce service](https://docs.angularjs.org/api/ng/service/$sce).
  *   - `templateUrl` - `{string=}`: The URL that will be used as the content of
  *     the panel.
- *   - `controller` - `{(function|string)=}`: The controller to associate with the
- *     panel. The controller can inject a reference to the returned
- *     panelRef, which allows the panel to be closed, hidden, and shown.
- *     Any fields passed in through locals or resolve will be bound to the controller.
- *   - `controllerAs` - `{string=}`: An alias to assign the controller to on the
- *     scope.
- *   - `locals` - `{Object=}`: An object containing key/value pairs. The keys will be
- *     used as names of values to inject into the controller. For example,
- *     `locals: {three: 3}` would inject `three` into the controller, with the value
- *     3.
+ *   - `controller` - `{(function|string)=}`: The controller to associate with
+ *     the panel. The controller can inject a reference to the returned
+ *     panelRef, which allows the panel to be closed, hidden, and shown. Any
+ *     fields passed in through locals or resolve will be bound to the
+ *     controller.
+ *   - `controllerAs` - `{string=}`: An alias to assign the controller to on
+ *     the scope.
+ *   - `locals` - `{Object=}`: An object containing key/value pairs. The keys
+ *     will be used as names of values to inject into the controller. For
+ *     example, `locals: {three: 3}` would inject `three` into the controller,
+ *     with the value 3.
  *   - `resolve` - `{Object=}`: Similar to locals, except it takes promises as
  *     values. The panel will not open until all of the promises resolve.
- *   - `attachTo` - `{Element=}`: The element to attach the panel to. Defaults to
- *     appending to the root element of the application.
- *   - `position` - `{$mdPanelPosition=}`: An $mdPanelPosition object that specifies
- *     the alignment of the panel. For more information, see $mdPanelPosition.
- *   - `animation` - `{$mdPanelAnimation=}`: An $mdPanelAnimation object that specifies
- *     the animation of the panel. For more information, see $mdPanelAnimation.
- *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop behind
- *     the panel. Defaults to false.
- *   - `escapeToClose` - `{boolean=}`: Whether the user can press escape to close the
- *     panel. Defaults to false.
- *   - `clickOutsideToClose` - `{boolean=}`: Whether the user can click outside the
- *     panel to close it. Defaults to false.
- *   - `disableParentScroll` - `{boolean=}`: Whether the user can scroll the page
+ *   - `attachTo` - `{Element=}`: The element to attach the panel to. Defaults
+ *     to appending to the root element of the application.
+ *
+ * TODO(ErinCoughlan): Add the following config options.
+ *   - `groupName` - `{string=}`: Name of panel groups. This group name is
+ *     used for configuring the number of open panels and identifying specific
+ *     behaviors for groups. For instance, all tooltips will be identified
+ *     using the same groupName.
+ *
+ *   - `position` - `{$mdPanelPosition=}`: An $mdPanelPosition object that
+ *     specifies the alignment of the panel. For more information, see
+ *     `$mdPanelPosition`.
+ *   - `animation` - `{$mdPanelAnimation=}`: An $mdPanelAnimation object that
+ *     specifies the animation of the panel. For more information, see
+ *     `$mdPanelAnimation`.
+ *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop
  *     behind the panel. Defaults to false.
- *   - `fullScreen` - `{boolean=}`: Whether the panel should be full screen. Applies
- *     the class `.md-panel-fullscreen` to the panel on open. Defaults to false.
- *   - `trapFocus` - `{boolean=}`: Whether focus should be trapped within the panel.
- *     If `trapFocus` is true, the user will not be able to interact with the rest of
- *     the page until the panel is dismissed. Defaults to false.
- *   - `focusOnOpen` - `{boolean=}`: An option to override focus behavior on open.
- *     Only disable if focusing some other way, as focus management is required for
- *     panels to be accessible. Defaults to true.
+ *   - `escapeToClose` - `{boolean=}`: Whether the user can press escape to
+ *     close the panel. Defaults to false.
+ *   - `clickOutsideToClose` - `{boolean=}`: Whether the user can click
+ *     outside the panel to close it. Defaults to false.
+ *   - `disableParentScroll` - `{boolean=}`: Whether the user can scroll the
+ *     page behind the panel. Defaults to false.
+ *   - `fullScreen` - `{boolean=}`: Whether the panel should be full screen.
+ *     Applies the class `.md-panel-fullscreen` to the panel on open. Defaults
+ *     to false.
+ *   - `trapFocus` - `{boolean=}`: Whether focus should be trapped within the
+ *     panel. If `trapFocus` is true, the user will not be able to interact
+ *     with the rest of the page until the panel is dismissed. Defaults to
+ *     false.
+ *   - `focusOnOpen` - `{boolean=}`: An option to override focus behavior on
+ *     open. Only disable if focusing some other way, as focus management is
+ *     required for panels to be accessible. Defaults to true.
  *
  * @returns {MdPanelRef} panelRef
  */
@@ -154,7 +160,8 @@ angular
  * @ngdoc method
  * @name $mdPanel#setGroupMaxOpen
  * @description
- * Sets the maximum number of panels in a group that can be opened at a given time.
+ * Sets the maximum number of panels in a group that can be opened at a given
+ * time.
  *
  * @param groupName {string} The name of the group to configure.
  * @param maxOpen {number} The max number of panels that can be opened.
@@ -170,21 +177,22 @@ angular
  * @ngdoc object
  * @name MdPanelRef
  * @description
- * A reference to a created panel. This reference contains a unique id for the panel,
- * along with the following properties:
- *   - `id` - `{string}: The unique id for the panel. This id is used to track when
- *     a panel was interacted with.
- *   - `config` - `{Object=}`: The entire config object that was used in create.
+ * A reference to a created panel. This reference contains a unique id for the
+ * panel, along with the following properties:
+ *   - `id` - `{string}: The unique id for the panel. This id is used to track
+ *     when a panel was interacted with.
+ *   - `config` - `{Object=}`: The entire config object that was used in
+ *     create.
+ *   - `isOpen` - `{boolean}`: Whether the panel is attached to the DOM.
+ *     Visibility to the user does not factor into isOpen.
  *
  * TODO(ErinCoughlan): Add the following properties.
- *   - `isOpen` - `{boolean}`: Whether the panel is attached to the DOM. Visibility
- *     to the user does not factor into isOpen.
- *   - `isHidden` - `{boolean}`: Whether the panel is attached to the DOM, but not
- *     visible to the user.
- *   - `onDomAdded` - `{function=}`: Callback function used to announce when the
- *     panel is added to the DOM.
- *   - `onOpenComplete` - `{function=}`: Callback function used to announce when the
- *     open() action is finished.
+ *   - `isHidden` - `{boolean}`: Whether the panel is attached to the DOM, but
+ *     not visible to the user.
+ *   - `onDomAdded` - `{function=}`: Callback function used to announce when
+ *     the panel is added to the DOM.
+ *   - `onOpenComplete` - `{function=}`: Callback function used to announce
+ *     when the open() action is finished.
  *   - `onRemoving` - `{function=}`: Callback function used to announce the
  *     close/hide() action is starting. This allows developers to run custom
  *     animations in parallel the close animations.
@@ -196,16 +204,17 @@ angular
  * @description
  * If the panel is not visible, opens an already created and configured panel.
  *
- * @returns {angular.$q.Promise} A promise that is resolved when the panel is closed.
+ * @returns {angular.$q.Promise} A promise that is resolved when the panel is
+ * closed.
  */
 
 /**
  * @ngdoc method
  * @name MdPanelRef#close
  * @description
- * If the panel is visible, closes the panel, resolving the promise that is returned
- * from `MdPanelRef#open`. This method destroys the reference to the panel. In order
- * to open the panel again, a new one must be created.
+ * If the panel is visible, closes the panel, resolving the promise that is
+ * returned from `MdPanelRef#open`. This method destroys the reference to the
+ * panel. In order to open the panel again, a new one must be created.
  */
 
 
