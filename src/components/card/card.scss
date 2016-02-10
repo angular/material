@@ -71,7 +71,7 @@ md-card {
   md-card-title {
     padding: 3 * $card-padding / 2 $card-padding $card-padding;
     display: flex;
-    flex: 1;
+    flex: 1 1 auto;
     flex-direction: row;
 
     & + md-card-content {
