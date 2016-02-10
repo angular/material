@@ -1061,6 +1061,25 @@ describe('<md-autocomplete>', function() {
       expect(ctrl.isRequired).toBe(true);
     });
 
+    it('should forward the md-no-asterisk attribute', function() {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              md-min-length="0" \
+              required\
+              md-no-asterisk="true"\
+              md-floating-label="Asterisk Label">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      expect(input.attr('md-no-asterisk')).toBe('true');
+    });
   });
 
   describe('md-highlight-text', function() {
