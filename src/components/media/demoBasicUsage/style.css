@@ -1,0 +1,17 @@
+.box {
+    width: 100%;
+    max-width: 350px;
+    height: 150px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.red {
+    background-color: rgba(255, 0, 0, 0.55);
+    color: black;
+}
+
+.blue {
+    background-color: rgba(0, 0, 255, 0.6);
+    color: white;
+}
