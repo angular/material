@@ -116,6 +116,21 @@ describe('$mdPanel', function() {
 
       expect(parentEl.childElementCount).toEqual(0);
     });
+
+    it('should apply a custom css class to the panel', function() {
+      var template = '<div>Hello World!</div>';
+      var customClass = 'custom-class';
+
+      var config = {
+        panelClass: customClass,
+        template: template
+      };
+
+      openPanel(config);
+
+      expect('.custom-class').toExist();
+      expect('.md-panel').toHaveClass(customClass);
+    });
   });
 
   describe('component logic: ', function() {
