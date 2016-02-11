@@ -103,6 +103,8 @@ angular
  *     values. The panel will not open until all of the promises resolve.
  *   - `attachTo` - `{Element=}`: The element to attach the panel to. Defaults
  *     to appending to the root element of the application.
+ *   - `panelClass` - `{string=}`: A css class to apply to the panel element.
+ *     This class should define any borders, box-shadow, etc. for the panel.
  *
  * TODO(ErinCoughlan): Add the following config options.
  *   - `groupName` - `{string=}`: Name of panel groups. This group name is
@@ -441,6 +443,9 @@ function MdPanelRef(config, $injector) {
   this._closePromise;
 
   /** @private {!angular.JQLite|undefined} */
+  this._panelContainer;
+
+  /** @private {!angular.JQLite|undefined} */
   this._panelEl;
 }
 
@@ -486,7 +491,7 @@ MdPanelRef.prototype.close = function() {
       var self = this;
       this._closePromise = this._$q(function(resolve, reject) {
         // TODO(ErinCoughlan): Start the close animation.
-        self._panelEl.remove();
+        self._panelContainer.remove();
         resolve(self);
       });
 
@@ -511,8 +516,16 @@ MdPanelRef.prototype._createPanel = function() {
   var self = this;
   this._$mdCompiler.compile(this._config)
       .then(function(compileData) {
-        self._panelEl = compileData.link(self._config.scope);
+        self._panelContainer = compileData.link(self._config.scope);
         // TODO(ErinCoughlan): Start the open animation.
-        angular.element(self._config.attachTo).append(self._panelEl);
+        angular.element(self._config.attachTo).append(self._panelContainer);
+
+        self._panelEl = angular.element(
+            self._panelContainer[0].querySelector('.md-panel'));
+
+        // Add a custom CSS class.
+        if (self._config['panelClass']) {
+          self._panelEl.addClass(self._config['panelClass']);
+        }
       });
 };
