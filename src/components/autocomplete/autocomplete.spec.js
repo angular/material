@@ -163,6 +163,29 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('should forward the `md-select-on-focus` attribute to the input', inject(function() {
+      var scope = createScope(null, {inputId: 'custom-input-id'});
+      var template =
+        '<md-autocomplete ' +
+            'md-input-id="{{inputId}}" ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+            'md-select-on-focus="" ' +
+            'tabindex="3"' +
+            'placeholder="placeholder">' +
+          '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      expect(input.attr('md-select-on-focus')).toBe("");
+
+      element.remove();
+    }));
+
     it('should forward the tabindex to the input', inject(function() {
       var scope = createScope(null, {inputId: 'custom-input-id'});
       var template =
