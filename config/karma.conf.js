@@ -34,6 +34,7 @@ module.exports = function(config) {
         'node_modules/angular/angular.js',
         'node_modules/angular-animate/angular-animate.js',
         'node_modules/angular-aria/angular-aria.js',
+        'node_modules/angular-messages/angular-messages.js',
         'node_modules/angular-sanitize/angular-sanitize.js',
         'node_modules/angular-touch/angular-touch.js',
         'node_modules/angular-mocks/angular-mocks.js',
@@ -49,6 +50,8 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
     files: dependencies.concat(testSrc),
 
+    browserDisconnectTimeout:500,
+
     logLevel: config.LOG_DEBUG,
     port: 9876,
     reporters: ['progress'],
@@ -59,9 +62,6 @@ module.exports = function(config) {
     singleRun: true,
     autoWatch: false,
 
-    // Only launch one browser at a time since doing multiple can cause disconnects/issues
-    concurrency: 1,
-
     // Start these browsers, currently available:
     // - Chrome
     // - ChromeCanary
@@ -70,35 +70,7 @@ module.exports = function(config) {
     // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
     // - PhantomJS
     // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    browsers: ['Firefox', 'PhantomJS'],
-
-    // you can define custom flags
-    customLaunchers: {
-      Chrome_without_security: {
-        base: 'Chrome',
-        flags: ['--disable-web-security']
-      },
-      PhantomJS_without_security: {
-        base: 'PhantomJS',
-        options : {
-          onResourceRequested : function (request) {
-              console.log('Request ' + JSON.stringify(request, undefined, 4));
-          },
-          onError : function (msg, trace) {
-              console.log(msg);
-              trace.forEach(function(item) {
-                  console.log('  ', item.file, ':', item.line);
-              });
-          }
-        },
-        flags: [
-          '--web-security=no',
-          '--proxy-type=none',
-          '--remote-debugger-port=9000',
-          '--remote-debugger-autorun=yes'
-        ]
-      }
-    }
+    browsers: ['Chrome', 'PhantomJS2']
   });
 
 };
