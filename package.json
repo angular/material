@@ -67,7 +67,6 @@
     "merge-stream": "^0.1.6",
     "minimist": "^1.1.0",
     "mkdirp": "^0.5.0",
-    "phantomjs-polyfill": "0.0.1",
     "prompt-sync": "^1.0.0",
     "q": "^1.0.1",
     "stream-series": "^0.1.1",

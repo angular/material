@@ -13,11 +13,24 @@ module.exports = function(config) {
     // Only launch one browser at a time since doing multiple can cause disconnects/issues
     concurrency: 1,
 
-    browsers: ['Chrome', 'PhantomJS2', 'Firefox'],
+    browsers: ['PhantomJS2', 'Firefox'],
 
     client: {
       // Do not clear the context as this can cause reload failures with Jasmine
       clearContext:false
+    },
+
+    // This is the new content for your travis-ci configuration test
+    //  Custom launcher for Travis-CI
+    customLaunchers: {
+        Chrome_travis_ci: {
+            base: 'Chrome',
+            flags: ['--no-sandbox']
+        }
     }
   });
+
+  var chromeBrowser = [ process.env.TRAVIS ? 'Chrome_travis_ci' : 'Chrome'];
+  config.browsers = chromeBrowser.concat(config.browsers);
+
 };

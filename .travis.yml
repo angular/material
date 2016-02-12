@@ -18,6 +18,7 @@ before_install:
   - export PHANTOMJS_BIN=$PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs
 
 before_script:
+  - export CHROME_BIN=chromium-browser
   - export DISPLAY=:99.0 # firefox virtual screen
   - sh -e /etc/init.d/xvfb start # firefox virtual screen
   - git config --global user.email "ngmaterial@googlegroups.com"
