@@ -24,7 +24,7 @@ branches:
   only:
     - master
     - patch
-    - wip/test_karma
+    - minor
 
 before_install:
   # configure latest google-chrome version
