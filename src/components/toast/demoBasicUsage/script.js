@@ -30,16 +30,6 @@ angular.module('toastDemo1', ['ngMaterial'])
     last = angular.extend({},current);
   }
 
-  $scope.showCustomToast = function() {
-    $mdToast.show({
-      controller: 'ToastCtrl',
-      templateUrl: 'toast-template.html',
-      parent : $document[0].querySelector('#toastBounds'),
-      hideDelay: 6000,
-      position: $scope.getToastPosition()
-    });
-  };
-
   $scope.showSimpleToast = function() {
     $mdToast.show(
       $mdToast.simple()

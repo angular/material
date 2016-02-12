@@ -44,6 +44,7 @@ describe('$mdToast service', function() {
       $material.flushOutstandingAnimations();
 
       expect(parent.find('span').text().trim()).toBe('Do something');
+      expect(parent.find('span')).toHaveClass('md-toast-text');
       expect(parent.find('md-toast')).toHaveClass('md-capsule');
       expect(parent.find('md-toast').attr('md-theme')).toBe('some-theme');
 
@@ -177,8 +178,11 @@ describe('$mdToast service', function() {
         $timeout.flush();
 
         expect(toast.children.length).toBe(1);
-        expect(toast.children[0].classList.contains('md-toast-content'));
-        expect(toast.children[0].textContent).toMatch('Charmander');
+        var toastContent = toast.children[0];
+        var contentSpan = toastContent.children[0];
+        expect(toastContent.classList.contains('md-toast-content'));
+        expect(toastContent.textContent).toMatch('Charmander');
+        expect(contentSpan).not.toHaveClass('md-toast-text');
       }));
 
 
