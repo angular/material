@@ -1,6 +1,6 @@
 
 describe('mdCheckbox', function() {
-  var CHECKED_CSS = 'md-checked';
+  var CHECKED_CSS = '_md-checked';
   var $compile, $log, pageScope, $mdConstant;
 
   beforeEach(module('ngAria', 'material.components.checkbox'));
@@ -123,17 +123,17 @@ describe('mdCheckbox', function() {
         '<md-checkbox ng-model="blue"></md-checkbox>');
 
     checkbox.triggerHandler('mousedown');
-    expect(checkbox[0]).not.toHaveClass('md-focused');
+    expect(checkbox[0]).not.toHaveClass('_md-focused');
   });
 
   it('should set focus state on focus and remove on blur', function() {
     var checkbox = compileAndLink('<md-checkbox ng-model="blue"></md-checkbox>');
 
     checkbox.triggerHandler('focus');
-    expect(checkbox[0]).toHaveClass('md-focused');
+    expect(checkbox[0]).toHaveClass('_md-focused');
 
     checkbox.triggerHandler('blur');
-    expect(checkbox[0]).not.toHaveClass('md-focused');
+    expect(checkbox[0]).not.toHaveClass('_md-focused');
   });
 
   it('should set focus state on keyboard interaction after clicking', function() {
@@ -144,7 +144,7 @@ describe('mdCheckbox', function() {
       type: 'keypress',
       keyCode: $mdConstant.KEY_CODE.SPACE
     });
-    expect(checkbox[0]).toHaveClass('md-focused');
+    expect(checkbox[0]).toHaveClass('_md-focused');
   });
 
   describe('ng core checkbox tests', function() {

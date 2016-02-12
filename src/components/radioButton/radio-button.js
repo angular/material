@@ -79,15 +79,15 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
               }, 100);
             })
             .on('focus', function() {
-              if(scope.mouseActive === false) { rgCtrl.$element.addClass('md-focused'); }
+              if(scope.mouseActive === false) { rgCtrl.$element.addClass('_md-focused'); }
             })
-            .on('blur', function() { rgCtrl.$element.removeClass('md-focused'); });
+            .on('blur', function() { rgCtrl.$element.removeClass('_md-focused'); });
 
     /**
      *
      */
     function setFocus() {
-      if (!element.hasClass('md-focused')) { element.addClass('md-focused'); }
+      if (!element.hasClass('_md-focused')) { element.addClass('_md-focused'); }
     }
 
     /**
@@ -189,7 +189,7 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
         return !angular.element(button).attr("disabled");
       };
 
-      var selected = parent[0].querySelector('md-radio-button.md-checked');
+      var selected = parent[0].querySelector('md-radio-button._md-checked');
       var target = buttons[increment < 0 ? 'previous' : 'next'](selected, validate) || buttons.first();
 
       // Activate radioButton's click listener (triggerHandler won't create a real click event)
@@ -241,17 +241,17 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
  */
 function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
 
-  var CHECKED_CSS = 'md-checked';
+  var CHECKED_CSS = '_md-checked';
 
   return {
     restrict: 'E',
     require: '^mdRadioGroup',
     transclude: true,
-    template: '<div class="md-container" md-ink-ripple md-ink-ripple-checkbox>' +
-                '<div class="md-off"></div>' +
-                '<div class="md-on"></div>' +
+    template: '<div class="_md-container" md-ink-ripple md-ink-ripple-checkbox>' +
+                '<div class="_md-off"></div>' +
+                '<div class="_md-on"></div>' +
               '</div>' +
-              '<div ng-transclude class="md-label"></div>',
+              '<div ng-transclude class="_md-label"></div>',
     link: link
   };
 
@@ -293,7 +293,7 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
     }
 
     /**
-     *  Add or remove the `.md-checked` class from the RadioButton (and conditionally its parent).
+     *  Add or remove the `._md-checked` class from the RadioButton (and conditionally its parent).
      *  Update the `aria-activedescendant` attribute.
      */
     function render() {

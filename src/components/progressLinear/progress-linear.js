@@ -64,10 +64,10 @@ function MdProgressLinearDirective($mdTheming, $mdUtil, $log) {
 
   return {
     restrict: 'E',
-    template: '<div class="md-container">' +
-      '<div class="md-dashed"></div>' +
-      '<div class="md-bar md-bar1"></div>' +
-      '<div class="md-bar md-bar2"></div>' +
+    template: '<div class="_md-container">' +
+      '<div class="_md-dashed"></div>' +
+      '<div class="_md-bar _md-bar1"></div>' +
+      '<div class="_md-bar _md-bar2"></div>' +
       '</div>',
     compile: compile
   };
@@ -83,9 +83,9 @@ function MdProgressLinearDirective($mdTheming, $mdUtil, $log) {
     $mdTheming(element);
 
     var lastMode, toVendorCSS = $mdUtil.dom.animator.toCss;
-    var bar1 = angular.element(element[0].querySelector('.md-bar1')),
-        bar2 = angular.element(element[0].querySelector('.md-bar2')),
-        container = angular.element(element[0].querySelector('.md-container'));
+    var bar1 = angular.element(element[0].querySelector('._md-bar1')),
+        bar2 = angular.element(element[0].querySelector('._md-bar2')),
+        container = angular.element(element[0].querySelector('._md-container'));
 
     element.attr('md-mode', mode());
 
@@ -114,7 +114,7 @@ function MdProgressLinearDirective($mdTheming, $mdUtil, $log) {
           case MODE_DETERMINATE:
           case MODE_INDETERMINATE:
             container.removeClass( 'ng-hide' + ' ' + lastMode );
-            container.addClass( lastMode = "md-mode-" + mode );
+            container.addClass( lastMode = "_md-mode-" + mode );
             break;
           default:
             if (lastMode) container.removeClass( lastMode );
