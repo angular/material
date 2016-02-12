@@ -30,7 +30,7 @@ module.exports = function(config) {
     }
   });
 
-  var chromeBrowser = [ process.env.TRAVIS ? 'Chrome_travis_ci' : 'Chrome'];
-  config.browsers = chromeBrowser.concat(config.browsers);
+  var browsers = process.env.TRAVIS ? ['Chrome_travis_ci'] : [];
+  config.browsers = browsers.concat(config.browsers);
 
 };
