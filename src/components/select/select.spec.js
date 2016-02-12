@@ -751,6 +751,16 @@ describe('<md-select>', function() {
         expect($rootScope.model).toEqual([1,3]);
       }));
 
+      it('should not be multiple if attr.multiple == `false`', inject(function($document) {
+        var el = setupSelect('multiple="false" ng-model="$root.model"').find('md-select');
+        openSelect(el);
+        expectSelectOpen(el);
+
+        var selectMenu = $document.find('md-select-menu')[0];
+
+        expect(selectMenu.hasAttribute('multiple')).toBe(false);
+      }));
+
     });
   });
 

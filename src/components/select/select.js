@@ -173,14 +173,16 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
       element.parent().append(autofillClone);
     }
 
+    var isMultiple = $mdUtil.parseAttributeBoolean(attr.multiple);
+
     // Use everything that's left inside element.contents() as the contents of the menu
-    var multiple = angular.isDefined(attr.multiple) ? 'multiple' : '';
+    var multipleContent = isMultiple ? 'multiple' : '';
     var selectTemplate = '' +
       '<div class="md-select-menu-container" aria-hidden="true">' +
       '<md-select-menu {0}>{1}</md-select-menu>' +
       '</div>';
 
-    selectTemplate = $mdUtil.supplant(selectTemplate, [multiple, element.html()]);
+    selectTemplate = $mdUtil.supplant(selectTemplate, [multipleContent, element.html()]);
     element.empty().append(valueEl);
     element.append(selectTemplate);
 
@@ -392,7 +394,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
       var ariaAttrs = {
         role: 'listbox',
         'aria-expanded': 'false',
-        'aria-multiselectable': attr.multiple !== undefined && !attr.ngMultiple ? 'true' : 'false'
+        'aria-multiselectable': isMultiple && !attr.ngMultiple ? 'true' : 'false'
       };
 
       if (!element[0].hasAttribute('id')) {
