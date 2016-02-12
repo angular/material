@@ -949,6 +949,55 @@ describe('<md-autocomplete>', function() {
 
       element.remove();
     });
+
+    it('should validate an empty `required` as true', function() {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              md-min-length="0" \
+              required\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+
+      expect(ctrl.isRequired).toBe(true);
+    });
+
+    it('should correctly validate an interpolated `ng-required` value', function() {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              md-min-length="0" \
+              ng-required="interpolateRequired"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+
+      expect(ctrl.isRequired).toBe(false);
+
+      scope.interpolateRequired = false;
+      scope.$apply();
+
+      expect(ctrl.isRequired).toBe(false);
+
+      scope.interpolateRequired = true;
+      scope.$apply();
+
+      expect(ctrl.isRequired).toBe(true);
+    });
+
   });
 
   describe('md-highlight-text', function() {
