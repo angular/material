@@ -175,8 +175,9 @@ angular
 
 
 /**
- * @ngdoc object
+ * @ngdoc type
  * @name MdPanelRef
+ * @module material.components.panel
  * @description
  * A reference to a created panel. This reference contains a unique id for the
  * panel, along with the following properties:
