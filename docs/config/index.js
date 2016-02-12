@@ -69,7 +69,7 @@ module.exports = new Package('angular-md', [
   // The module name is rather unnecessary, so we override with the shorter
   // "api/directive/mdAutocomplete".
   computePathsProcessor.pathTemplates.push({
-    docTypes: ['directive', 'service'],
+    docTypes: ['directive', 'service', 'type'],
     getPath: function(doc) {
       return path.join(doc.area, doc.docType, doc.name);
     }

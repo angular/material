@@ -286,6 +286,10 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       pages: apiDocs.service.sort(sortByName),
       type: 'toggle'
     },{
+      name: 'Types',
+      pages: apiDocs.type.sort(sortByName),
+      type: 'toggle'
+    },{
       name: 'Directives',
       pages: apiDocs.directive.sort(sortByName),
       type: 'toggle'
