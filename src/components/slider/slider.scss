@@ -170,7 +170,7 @@ md-slider {
     &:after {
       position: absolute;
       content: '';
-      left: -($slider-sign-width / 2 - $slider-arrow-width / 2);
+      left: 50%;
       border-radius: $slider-arrow-height;
       bottom: -8px;
       border-left: $slider-arrow-width / 2 solid transparent;
@@ -179,7 +179,7 @@ md-slider {
       border-top-style: solid;
 
       opacity: 0;
-      transform: translate3d(0,-8px,0);
+      transform: translate3d(-50%,-8px,0);
       transition: all 0.2s ease-in-out;
     }
 
@@ -303,7 +303,7 @@ md-slider {
         }
         .md-sign:after {
           opacity: 1;
-          transform: translate3d(0,0,0) scale(1);
+          transform: translate3d(-50%,0,0) scale(1);
         }
         .md-thumb-text {
           opacity: 1;
@@ -316,6 +316,14 @@ md-slider {
       }
     }
 
+    &.md-min {
+      .md-sign {
+        background: rgb(176, 176, 176);
+      }
+      .md-sign:after {
+        border-top-color: rgb(176, 176, 176);
+      }
+    }
     &.md-min:not(.md-active):not(:focus) {
       .md-sign {
         background: #323232;

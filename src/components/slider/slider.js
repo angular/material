@@ -143,8 +143,8 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
 
     // Wait for the slider dimensions to exist
     var widthInterval = setInterval(function () {
-      var dim = trackContainer[0].offsetWidth;
-      if (dim) {
+      var width = trackContainer[0].offsetWidth;
+      if (width > 0) {
         updateAll();
         clearInterval(widthInterval);
       }
