@@ -20,6 +20,45 @@ angular
  * @description
  * The `$mdSticky`service provides a mixin to make elements sticky.
  *
+ * By default the `$mdSticky` service compiles the cloned element in the same scope as the actual element lives.
+ *
+ * <h3>Notes</h3>
+ * When using an element which is containing a compiled directive, which changed its DOM structure during compilation,
+ * you should compile the clone yourself using the plain template.<br/><br/>
+ * See the right usage below:
+ * <hljs lang="js">
+ *   angular.module('myModule')
+ *     .directive('stickySelect', function($mdSticky, $compile) {
+ *       var SELECT_TEMPLATE =
+ *         '<md-select ng-model="selected">' +
+ *           '<md-option>Option 1</md-option>' +
+ *         '</md-select>';
+ *
+ *       return {
+ *         restrict: 'E',
+ *         replace: true,
+ *         template: SELECT_TEMPLATE,
+ *         link: function(scope,element) {
+ *           $mdSticky(scope, element, $compile(SELECT_TEMPLATE)(scope));
+ *         }
+ *       };
+ *     });
+ * </hljs>
+ *
+ * @usage
+ * <hljs lang="js">
+ *   angular.module('myModule')
+ *     .directive('stickyText', function($mdSticky, $compile) {
+ *       return {
+ *         restrict: 'E',
+ *         template: '<span>Sticky Text</span>',
+ *         link: function(scope,element) {
+ *           $mdSticky(scope, element);
+ *         }
+ *       };
+ *     });
+ * </hljs>
+ *
  * @returns A `$mdSticky` function that takes three arguments:
  *   - `scope`
  *   - `element`: The element that will be 'sticky'
@@ -27,7 +66,7 @@ angular
  *     when the user starts scrolling past the original element.
  *     If not provided, it will use the result of `element.clone()`.
  */
-function MdSticky($document, $mdConstant, $$rAF, $mdUtil) {
+function MdSticky($document, $mdConstant, $$rAF, $mdUtil, $compile) {
 
   var browserStickySupport = checkStickySupport();
 
@@ -51,7 +90,11 @@ function MdSticky($document, $mdConstant, $$rAF, $mdUtil) {
         contentCtrl.$element.data('$$sticky', $$sticky);
       }
 
-      var deregister = $$sticky.add(element, stickyClone || element.clone());
+      // Compile our clone element in the given scope if the stickyClone has no scope predefined.
+      var cloneElement = stickyClone && stickyClone.scope && stickyClone.scope() ?
+          stickyClone : $compile(stickyClone || element.clone())(scope);
+
+      var deregister = $$sticky.add(element, cloneElement);
       scope.$on('$destroy', deregister);
     }
   };
