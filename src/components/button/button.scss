@@ -114,6 +114,8 @@ button.md-button::-moz-focus-inner {
 
     z-index: $z-index-fab;
 
+    line-height: $button-fab-line-height;
+
     min-width: 0;
     width: $button-fab-width;
     height: $button-fab-height;
