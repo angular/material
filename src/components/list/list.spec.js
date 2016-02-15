@@ -88,6 +88,30 @@ describe('mdListItem directive', function() {
     expect($rootScope.modelVal).toBeFalsy();
   }));
 
+  it('should not convert spacebar keypress for editable elements', inject(function($mdConstant) {
+    var listItem = setup('<md-list-item><div contenteditable="true"></div></md-list-item>');
+    var editableEl = listItem.find('div');
+    var onClickSpy = jasmine.createSpy('onClickSpy');
+
+    // We need to append our element to the DOM because the browser won't detect `contentEditable` when the element
+    // is hidden in the DOM. See the related issue for chromium:
+    // https://code.google.com/p/chromium/issues/detail?id=313082
+    document.body.appendChild(listItem[0]);
+
+    editableEl.on('click', onClickSpy);
+
+    // We need to dispatch the keypress natively, because otherwise the `keypress` won't be triggered in the list.
+    var event = document.createEvent('Event');
+    event.keyCode = $mdConstant.KEY_CODE.SPACE;
+    event.initEvent('keypress', true, true);
+
+    editableEl[0].dispatchEvent(event);
+
+    expect(onClickSpy).not.toHaveBeenCalled();
+
+    document.body.removeChild(listItem[0]);
+  }));
+
   xit('should not convert spacebar keypress for text inputs', inject(function($mdConstant) {
 
     var listItem = setup('<md-list-item><input ng-keypress="pressed = true" type="text"></md-list-item>');
