@@ -113,7 +113,7 @@ md-slider {
     left: 0;
     top: 50%;
     transform: translate3d(-50%,-50%,0);
-    transition: left 0.1s linear;
+    transition: transform 0.1s linear;
   }
   .md-thumb {
     z-index: 1;
@@ -242,7 +242,7 @@ md-slider {
     outline: none;
   }
 
-  /* Don't animate left/right while panning */
+  /* Don't animate while panning */
   &.md-dragging {
     .md-thumb-container,
     .md-track-fill {

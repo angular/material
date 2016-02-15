@@ -148,7 +148,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
         updateAll();
         clearInterval(widthInterval);
       }
-    }, 250);
+    }, 120);
 
     var debouncedUpdateAll = $$rAF.throttle(updateAll);
     angular.element($window).on('resize', debouncedUpdateAll);
