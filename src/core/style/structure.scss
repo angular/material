@@ -62,6 +62,9 @@ input {
       -webkit-appearance: none;
     }
   }
+  &:-webkit-autofill {
+    text-shadow: none;
+  }
 }
 
 .md-visually-hidden {
