@@ -1,6 +1,6 @@
 /** Styles for mdDatepicker. */
 $md-datepicker-button-gap: 12px;  // Space between the text input and the calendar-icon button.
-$md-datepicker-border-bottom-gap: 5px;  // Space between input and the grey underline.
+$md-datepicker-border-bottom-gap: 2px;  // Space between input and the grey underline.
 $md-datepicker-open-animation-duration: 0.2s;
 $md-datepicker-triangle-button-width: 36px;
 
@@ -11,7 +11,7 @@ md-datepicker {
 
   // Leave room for the down-triangle button to "overflow" it's parent without modifying scrollLeft
   padding-right: $md-datepicker-triangle-button-width / 2;
-  margin-right: -$md-datepicker-triangle-button-width / 2;
+  margin: 18px (-$md-datepicker-triangle-button-width / 2) 18px 0;
 
   vertical-align: middle;
 }
