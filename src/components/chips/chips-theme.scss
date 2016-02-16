@@ -1,0 +1,34 @@
+md-chips.md-THEME_NAME-theme {
+  .md-chips {
+    box-shadow: 0 1px '{{background-300}}';
+    &.md-focused {
+      box-shadow: 0 2px '{{primary-color}}';
+    }
+  }
+  .md-chip {
+    background: '{{background-300}}';
+    color: '{{background-800}}';
+    &.md-focused {
+      background: '{{primary-color}}';
+      color: '{{primary-contrast}}';
+      md-icon {
+        color: '{{primary-contrast}}';
+      }
+    }
+  }
+  md-chip-remove {
+    .md-button {
+      md-icon {
+        path {
+          fill: '{{background-500}}';
+        }
+      }
+    }
+  }
+}
+
+.md-contact-suggestion {
+  span.md-contact-email {
+    color: '{{background-400}}';
+  }
+}

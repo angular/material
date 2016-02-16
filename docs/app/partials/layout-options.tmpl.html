@@ -1,111 +1,222 @@
-<div ng-controller="LayoutCtrl" layout="vertical" layout-fill class="layout-content">
+<div ng-controller="LayoutCtrl" class="layout-content layout-options" ng-cloak>
 
-
-  <h3 class="layout-title">Responsive Layout</h3>
+  <docs-demo demo-title="Responsive Layout" class="small-demo colorNested">
+    <demo-file name="index.html">
+      <div layout="row" layout-sm="column">
+        <div flex>
+          I'm above on mobile, and to the left on larger devices.
+        </div>
+        <div flex>
+          I'm below on mobile, and to the right on larger devices.
+        </div>
+      </div>
+    </demo-file>
+  </docs-demo>
 
   <p>
-    From the ground up the layout system is built around being responsive to viewport size.
-    Out of the box it comes with useful and customizable breakpoints, which can be easily reused.
-    The <code>layout</code> attribute used with "horizontal" or "vertical" values define arrangement on all device sizes.
-    If you wish to define a layout depending upon the device size, there are
-    other <code>layout</code> attributes available:
+    See the <a href="layout/container">Container Elements</a> page for a basic explanation
+    of layout directives.
+    <br/>
+    To make your layout change depending upon the device screen size, there are
+    other <code>layout</code> directives available:
   </p>
 
-  <ul>
-    <li>
-      <code>layout</code> sets the default layout on all devices.
-    </li>
-    <li>
-      <code>layout-sm</code> sets the layout on device >=600px wide.
-    </li>
-    <li>
-      <code>layout-md</code> sets the layout on devices >=960px wide.
-    </li>
-    <li>
-      <code>layout-lg</code> sets the layout on devices >=1200px wide.
-    </li>
-  </ul>
+  <table class="md-api-table">
+    <thead>
+    <tr>
+      <th>API</th>
+      <th>Activates when device</th>
+    </tr>
+    </thead>
+    <tr>
+      <td>layout</td>
+      <td>Sets default layout direction unless overridden by another breakpoint.</td>
+    </tr>
+    <tr>
+      <td>layout-xs</td>
+      <td>width &lt; <b>600</b>px</td>
+    </tr>
+    <tr>
+      <td>layout-gt-xs</td>
+      <td>width &gt;= <b>600</b>px</td>
+    </tr>
+    <tr>
+      <td>layout-sm</td>
+      <td><b>600</b>px &lt;= width &lt; <b>960</b>px</td>
+    </tr>
+    <tr>
+      <td>layout-gt-sm</td>
+      <td>width &gt;= <b>960</b>px</td>
+    </tr>
+    <tr>
+      <td>layout-md</td>
+      <td><b>960</b>px &lt;= width &lt; <b>1280</b>px</td>
+    </tr>
+    <tr>
+      <td>layout-gt-md</td>
+      <td>width &gt;= <b>1280</b>px</td>
+    </tr>
+    <tr>
+      <td>layout-lg</td>
+      <td><b>1280</b>px &lt;= width &lt; <b>1920</b>px</td>
+    </tr>
+    <tr>
+      <td>layout-gt-lg</td>
+      <td>width &gt;= <b>1920</b>px</td>
+    </tr>
+    <tr>
+      <td>layout-xl</td>
+      <td>width &gt;= <b>1920</b>px</td>
+    </tr>
+  </table>
+  <br/>
 
-  <br/><br/>
+  <br/>
+  <hr>
+  <br/>
 
-  <h3 class="layout-title">Layout Options</h3>
+  <h3>Layout Margin, Padding, Wrap and Fill</h3>
+  <br/>
+
+
+  <docs-demo demo-title="Layout Margin, Padding, and Fill" class="small-demo colorNested-noPad">
+    <demo-file name="index.html">
+      <div layout="row" layout-margin>
+        <div flex>Parent layout and this element have margins.</div>
+      </div>
+      <div layout="row" layout-padding>
+        <div flex>Parent layout and this element have padding.</div>
+      </div>
+      <div layout="row" layout-fill style="min-height: 224px;">
+        <div flex>Parent layout is set to fill available space.</div>
+      </div>
+      <div layout="row" layout-padding layout-margin layout-fill style="min-height: 224px;">
+        <div flex>I am using all three at once.</div>
+      </div>
+    </demo-file>
+  </docs-demo>
 
   <p>
-    <code>layout-padding</code> adds padding between this layout's children with
-    the <code>flex</code> attribute.
-  </p>
-
-  <hljs lang="html">
-<div layout="horizontal" layout-padding>
-  <div flex>I'm on the left, and there's an empty area between.</div>
-  <div flex>I'm on the right, and there's an empty area between.</div>
-</div>
-  </hljs>
-
-
-  <p>
+    <code>layout-margin</code> adds margin around each <code>flex</code> child. It also adds a margin to the layout
+    container itself.
+    <br/>
+    <code>layout-padding</code> adds padding inside each <code>flex</code> child. It also adds padding to the layout
+    container itself.
+    <br/>
     <code>layout-fill</code> forces the layout element to fill its parent container.
   </p>
-  <hljs lang="html">
-<div layout="vertical" layout-fill>
-  This layout fills up 100% of its parent's width and height.
-</div>
-  </hljs>
 
-  <br/><br/>
 
-  <md-divider></md-divider>
+  <p>Here is a non-trivial group of <code>flex</code> elements using <code>layout-wrap</code></p>
 
-  <h3 class="layout-title">Utility Attributes</h3>
+  <docs-demo demo-title="Wrap" class="small-demo colorNested-noPad">
+    <demo-file name="index.html">
+      <div layout="row" layout-wrap>
+        <div flex="33">[flex=33]</div>
+        <div flex="66">[flex=66]</div>
+        <div flex="66">[flex=66]</div>
+        <div flex="33">[flex=33]</div>
+        <div flex="33">[flex=33]</div>
+        <div flex="33">[flex=33]</div>
+        <div flex="33">[flex=33]</div>
+      </div>
+    </demo-file>
+  </docs-demo>
 
-  <table>
+  <p>
+    <code>layout-wrap</code> allows <code>flex</code> children to wrap within the container if the elements use more
+    than 100%.
+    <br/>
+  </p>
+
+  <br/>
+
+  <br/>
+    <hr>
+    <br/>
+
+    <h3>Show &amp; Hide </h3>
+
+  <p>Use the <code>show</code> <code>hide</code> APIs to responsively show or hide elements. While these work similar
+  to <code>ng-show</code> and <code>ng-hide</code>, these Angular Material Layout directives are mediaQuery-aware.
+  </p>
+
+  <docs-demo demo-title="Hide and Show Directives" class="small-demo colorNested">
+    <demo-file name="index.html">
+      <div layout="row">
+        <div hide show-gt-sm flex>
+          Only show on gt-sm devices.
+        </div>
+        <div hide-gt-sm flex>
+          Shown on small and medium.<br/>
+          Hidden on gt-sm devices.
+        </div>
+        <div show hide-gt-md flex>
+          Shown on small and medium size devices.<br/>
+          Hidden on gt-md devices.
+        </div>
+        <div hide show-md flex>
+          Shown on medium size devices only.
+        </div>
+        <div hide show-gt-lg flex>
+          Shown on devices larger than 1200px wide only.
+        </div>
+      </div>
+    </demo-file>
+  </docs-demo>
+  <br/>
+  <table class="md-api-table">
+    <thead>
+      <tr>
+        <th>hide (display: none)</th>
+        <th>show (negates hide)</th>
+        <th>Activates when:</th>
+      </tr>
+    </thead>
     <tr>
-      <td>block</td>
-      <td><code>display: block</code></td>
+      <td>hide-xs</td>
+      <td>show-xs</td>
+      <td>width &lt; <b>600</b>px</td>
     </tr>
     <tr>
-      <td>block-sm</td>
-      <td><code>display: block</code> when the small media query is active.</td>
-    </tr>
-    <tr>
-      <td>block-md</td>
-      <td><code>display: block</code> when the medium media query is active.</td>
-    </tr>
-    <tr>
-      <td>block-lg</td>
-      <td><code>display: block</code> when the large media query is active.</td>
-    </tr>
-    <tr>
-      <td>inline-block</td>
-      <td><code>display: inline-block</code></td>
-    </tr>
-    <tr>
-      <td>inline-block-sm</td>
-      <td><code>display: inline-block</code> when the small media query is active.</td>
-    </tr>
-    <tr>
-      <td>inline-block-md</td>
-      <td><code>display: inline-block</code> when the medium media query is active.</td>
-    </tr>
-    <tr>
-      <td>inline-block-lg</td>
-      <td><code>display: inline-block</code> when the large media query is active.</td>
-    </tr>
-    <tr>
-      <td>hide</td>
-      <td><code>display: none</code></td>
+      <td>hide-gt-xs</td>
+      <td>show-gt-xs</td>
+      <td>width &gt;= <b>600</b>px</td>
     </tr>
     <tr>
       <td>hide-sm</td>
-      <td><code>display: none</code> when the small media query is active.</td>
+      <td>show-sm</td>
+      <td><b>600</b>px &lt;= width &lt; <b>960</b>px</td>
+    </tr>
+    <tr>
+      <td>hide-gt-sm</td>
+      <td>show-gt-sm</td>
+      <td>width &gt;= <b>960</b>px</td>
     </tr>
     <tr>
       <td>hide-md</td>
-      <td><code>display: none</code> when the medium media query is active.</td>
+      <td>show-md</td>
+      <td><b>960</b>px &lt;= width &lt; <b>1280</b>px</td>
+    </tr>
+    <tr>
+      <td>hide-gt-md</td>
+      <td>show-gt-md</td>
+      <td>width &gt;= <b>1280</b>px</td>
     </tr>
     <tr>
       <td>hide-lg</td>
-      <td><code>display: none</code> when the large media query is active.</td>
+      <td>show-lg</td>
+      <td><b>1280</b>px &lt;= width &lt; <b>1920</b>px</td>
+    </tr>
+    <tr>
+      <td>hide-gt-lg</td>
+      <td>show-gt-lg</td>
+      <td>width &gt;= <b>1920</b>px</td>
+    </tr>
+    <tr>
+      <td>hide-xl</td>
+      <td>show-xl</td>
+      <td>width &gt;= <b>1920</b>px</td>
     </tr>
   </table>
 

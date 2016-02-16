@@ -1,0 +1,30 @@
+md-list.md-THEME_NAME-theme {
+  md-list-item.md-2-line .md-list-item-text,
+  md-list-item.md-3-line .md-list-item-text {
+    h3, h4 {
+      color: '{{foreground-1}}';
+    }
+    p {
+      color: '{{foreground-2}}';
+    }
+  }
+  .md-proxy-focus.md-focused div.md-no-style {
+    background-color: '{{background-100}}';
+  }
+
+  md-list-item .md-avatar-icon {
+    background-color: '{{foreground-3}}';
+    color: '{{background-color}}';
+  }
+
+  md-list-item > md-icon {
+    color: '{{foreground-2}}';
+
+    &.md-highlight {
+      color: '{{primary-color}}';
+      &.md-accent {
+        color: '{{accent-color}}';
+      }
+    }
+  }
+}

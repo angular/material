@@ -1,0 +1,53 @@
+div.radioDemo2 {
+    margin-bottom: 20px;
+}
+
+
+h2 {
+  margin-left : 15px;
+}
+p {
+  width:400px;
+  margin-top:10px;
+  margin-left : 10px;
+  padding-top:10px;
+  border-top: 2px solid #ddd;
+}
+
+.md-checked {
+  background-color : #ECFAFB;
+  border-radius: 2px;
+}
+
+md-button.md-raised, button.md-raised {
+  width: 200px;
+}
+
+.row {
+    border-bottom: 1px dashed #ddd;
+}
+
+div.row:last-child {
+  border-bottom: 0px dashed #ddd;
+}
+
+
+
+.summary {
+  width: 100%;
+  padding-top:10px;
+  margin-left: 25px;
+  margin-top: 20px;
+  margin-bottom:-5px
+}
+
+
+.title {
+  font-weight: bolder;
+}
+
+.selectedUser .md-checked {
+  padding : 8px;
+  width: 100px;
+  
+}

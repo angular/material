@@ -1,0 +1,367 @@
+<div ng-controller="LayoutCtrl" class="layout-content" ng-cloak>
+
+  <h3>Overview</h3>
+  <p>
+    Angular Material's Layout features provide sugar to enable developers to more easily create modern,
+    responsive layouts on top of CSS3 <a href="http://www.w3.org/TR/css3-flexbox/">flexbox</a>.
+    The layout API consists of a set of Angular directives that can
+    be applied to any of your application's HTML content.
+  </p>
+
+
+  <p>
+    Using <b> HTML Directives</b> as the API provides an easy way to set a value (eg. <code>layout="row"</code>) and
+    helps with separation of concerns: Attributes define layout while CSS classes assign styling.
+  </p>
+
+
+  <table class="md-api-table">
+    <thead>
+    <tr>
+      <th>HTML Markup API</th>
+      <th>Allowed values (raw or interpolated)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>layout</td>
+      <td><code>row | column</code></td>
+    </tr>
+    <tr>
+      <td>flex</td>
+      <td> integer (increments of 5 for 0%->100%)</td>
+    </tr>
+    <tr>
+      <td>flex-order</td>
+      <td>integer values from -20 to 20</td>
+    </tr>
+    <tr>
+      <td>flex-offset</td>
+      <td>integer (increments of 5 for 0%->100%, 100%/3, 200%/3)</td>
+    </tr>
+    <tr>
+      <td>layout-align</td>
+      <td><code>start|center|end|space-around|space-between</code> <code>start|center|end|stretch</code></td>
+    </tr>
+    <tr>
+      <td>layout-fill</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>layout-wrap</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>layout-nowrap</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>layout-margin</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>layout-padding</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>show</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>hide</td>
+      <td></td>
+    </tr>
+    </tbody>
+  </table>
+
+
+  <p>And if we use Breakpoints as specified in Material Design:</p>
+  <p><a
+      href="https://camo.githubusercontent.com/ad81ae92f8b4285747ce4e48007bf3f104dd5630/687474703a2f2f6d6174657269616c2d64657369676e2e73746f726167652e676f6f676c65617069732e636f6d2f7075626c6973682f6d6174657269616c5f765f342f6d6174657269616c5f6578745f7075626c6973682f3042386f6c5631354a3761625053474678656d46695156527462316b2f6c61796f75745f61646170746976655f627265616b706f696e74735f30312e706e67"
+      target="_blank"><img
+      src="https://camo.githubusercontent.com/ad81ae92f8b4285747ce4e48007bf3f104dd5630/687474703a2f2f6d6174657269616c2d64657369676e2e73746f726167652e676f6f676c65617069732e636f6d2f7075626c6973682f6d6174657269616c5f765f342f6d6174657269616c5f6578745f7075626c6973682f3042386f6c5631354a3761625053474678656d46695156527462316b2f6c61796f75745f61646170746976655f627265616b706f696e74735f30312e706e67"
+      alt=""
+      style="max-width:100%;"></a>
+  </p>
+
+
+  <p>We can associate breakpoints with mediaQuery definitions using breakpoint <strong>alias(es)</strong>:</p>
+
+  <table class="md-api-table">
+    <thead>
+    <tr>
+      <th>Breakpoint</th>
+      <th>MediaQuery (pixel range)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>xs</td>
+      <td>'(max-width: <b>599</b>px)'</td>
+    </tr>
+    <tr>
+      <td>gt-xs</td>
+      <td>'(min-width: <b>600</b>px)'</td>
+    </tr>
+    <tr>
+      <td>sm</td>
+      <td>'(min-width: <b>600</b>px) and (max-width: <b>959</b>px)'</td>
+    </tr>
+    <tr>
+      <td>gt-sm</td>
+      <td>'(min-width: <b>960</b>px)'</td>
+    </tr>
+    <tr>
+      <td>md</td>
+      <td>'(min-width: <b>960</b>px) and (max-width: <b>1279</b>px)'</td>
+    </tr>
+    <tr>
+      <td>gt-md</td>
+      <td>'(min-width: <b>1280</b>px)'</td>
+    </tr>
+    <tr>
+      <td>lg</td>
+      <td>'(min-width: <b>1280</b>px) and (max-width: <b>1919</b>px)'</td>
+    </tr>
+    <tr>
+      <td>gt-lg</td>
+      <td>'(min-width: <b>1920</b>px)'</td>
+    </tr>
+    <tr>
+      <td>xl</td>
+      <td>'(min-width: <b>1920</b>px)'</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <br/>
+  <hr>
+  <h3>
+    API with Responsive Breakpoints
+  </h3>
+
+  <p>Now we can combine the breakpoint <code>alias</code> with the Layout API to easily support Responsive breakpoints
+    with our simple Layout markup convention. The <code>alias</code> is simply used as <b>suffix</b> extensions to the Layout
+    API keyword.
+    <br/>e.g.
+  </p>
+
+  <p>
+    This notation results in, for example, the following table for the <code>layout</code> and <code>flex</code> APIs:
+  </p>
+
+  <table class="md-api-table">
+      <thead>
+      <tr>
+        <th>layout API</th>
+        <th>flex API</th>
+        <th>Activates when device</th>
+      </tr>
+      </thead>
+      <tr>
+        <td>layout</td>
+        <td>flex</td>
+        <td>Sets default layout direction &amp; flex unless overridden by another breakpoint.</td>
+      </tr>
+      <tr>
+        <td>layout-xs</td>
+        <td>flex-xs</td>
+        <td>width &lt; <b>600</b>px</td>
+      </tr>
+      <tr>
+        <td>layout-gt-xs</td>
+        <td>flex-gt-xs</td>
+        <td>width &gt;= <b>600</b>px</td>
+      </tr>
+      <tr>
+        <td>layout-sm</td>
+        <td>flex-sm</td>
+        <td><b>600</b>px &lt;= width &lt; <b>960</b>px</td>
+      </tr>
+      <tr>
+        <td>layout-gt-sm</td>
+        <td>flex-gt-sm</td>
+        <td>width &gt;= <b>960</b>px</td>
+      </tr>
+      <tr>
+        <td>layout-md</td>
+        <td>flex-md</td>
+        <td><b>960</b>px &lt;= width &lt; <b>1280</b>px</td>
+      </tr>
+      <tr>
+        <td>layout-gt-md</td>
+        <td>flex-gt-md</td>
+        <td>width &gt;= <b>1280</b>px</td>
+      </tr>
+      <tr>
+        <td>layout-lg</td>
+        <td>flex-lg</td>
+        <td><b>1280</b>px &lt;= width &lt; <b>1920</b>px</td>
+      </tr>
+      <tr>
+        <td>layout-gt-lg</td>
+        <td>flex-gt-lg</td>
+        <td>width &gt;= <b>1920/b>px</td>
+      </tr>
+      <tr>
+        <td>layout-xl</td>
+        <td>flex-xl</td>
+        <td>width &gt;= <b>1920</b>px</td>
+      </tr>
+    </table>
+
+  <p>Below is an example usage of the Responsive Layout API:</p>
+
+  <hljs lang="html">
+    <div layout='column' class="zero">
+
+      <div flex="33" flex-md="{{ vm.box1Width }}" class="one"></div>
+      <div flex="33" layout="{{ vm.direction }}" layout-md="row" class="two">
+
+        <div flex="22" flex-md="10" hide-lg class="two_one"></div>
+        <div flex="30px" show hide-md="{{ vm.hideBox }}" flex-md="25" class="two_two"></div>
+        <div flex="20" flex-md="65" class="two_three"></div>
+
+      </div>
+      <div flex class="three"></div>
+
+    </div>
+  </hljs>
+
+  <br/>
+
+  <p>
+  This Layout API means it is much easier to set up and maintain flexbox layouts vs. defining everything via CSS.
+  The developer uses the Layout HTML API to specify <b><i>intention</i></b> and the Layout engine handles all the issues of CSS flexbox styling.
+  </p>
+
+  <p class="layout_note">
+    The Layout engine will log console warnings when it encounters conflicts or known issues.
+  </p>
+
+
+  <br/><br/>
+  <hr>
+  <br/>
+
+  <h3>Under-the-Hood</h3>
+
+  <p>
+    Due to performance problems when using Attribute Selectors with <b>Internet Explorer</b> browsers; see the following for more details:
+  </p>
+
+  <p>
+    Layout directives dynamically generate class selectors at runtime. And the Layout CSS classNames and styles have each been
+    predefined in the <code>angular-material.css</code> stylesheet.
+  </p>
+
+  <p class="layout_note">
+    Developers should continue to use Layout directives in the HTML
+    markup as the classes may change between releases.
+  </p>
+
+  <p>
+    Let's see how this directive-to-className transformation works. Consider the simple use of the <code>layout</code> and <code>flex</code> directives (API):
+  </p>
+
+  <hljs lang="html">
+    <div>
+
+      <div layout="row">
+
+        <div flex>First item in row</div>
+        <div flex="20">Second item in row</div>
+
+      </div>
+      <div layout="column">
+
+        <div flex="66">First item in column</div>
+        <div flex="33">Second item in column</div>
+
+      </div>
+
+    </div>
+  </hljs>
+
+
+  <p>
+    At runtime, these attributes are transformed to CSS classes.
+  </p>
+
+  <hljs lang="html">
+    <div>
+
+      <div class="ng-scope layout-row">
+
+        <div class="flex">First item in row</div>
+        <div class="flex-20">Second item in row</div>
+
+      </div>
+      <div class="ng-scope layout-column">
+
+        <div class="flex-33">First item in column</div>
+        <div class="flex-66">Second item in column</div>
+
+      </div>
+
+    </div>
+  </hljs>
+
+  <p>
+    Using the style classes above defined in <code>angular-material.css</code>
+  </p>
+
+  <hljs lang="css">
+
+    .flex {
+      -webkit-flex: 1 1 0%;
+          -ms-flex: 1 1 0%;
+              flex: 1 1 0%;
+      box-sizing: border-box;
+    }
+    .flex-20 {
+      -webkit-flex: 1 1 20%;
+          -ms-flex: 1 1 20%;
+              flex: 1 1 20%;
+      max-width: 20%;
+      max-height: 100%;
+      box-sizing: border-box;
+    }
+
+    .layout-row .flex-33 {
+      -webkit-flex: 1 1 calc(100% / 3);
+          -ms-flex: 1 1 calc(100% / 3);
+              flex: 1 1 calc(100% / 3);
+      box-sizing: border-box;
+    }
+
+    .layout-row  .flex-66 {
+      -webkit-flex: 1 1 calc(200% / 3);
+          -ms-flex: 1 1 calc(200% / 3);
+              flex: 1 1 calc(200% / 3);
+      box-sizing: border-box;
+    }
+
+
+    .layout-row .flex-33 {
+      max-width: calc(100% / 3);
+      max-height: 100%;
+    }
+
+    .layout-row  .flex-66 {
+      max-width: calc(200% / 3);
+      max-height: 100%;
+    }
+
+    .layout-column .flex-33 {
+      max-width: 100%;
+      max-height: calc(100% / 3);
+    }
+
+    .layout-column  .flex-66 {
+      max-width: 100%;
+      max-height: calc(200% / 3);
+    }
+  </hljs>
+
+</div>

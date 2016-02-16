@@ -1,0 +1,399 @@
+$input-container-padding: 2px !default;
+
+$input-label-default-offset: 24px !default;
+$input-label-default-scale: 1.0 !default;
+$input-label-float-offset: 6px !default;
+$input-label-float-scale: 0.75 !default;
+$input-label-float-width: $input-container-padding + 16px;
+
+$input-placeholder-offset: $input-label-default-offset !default;
+
+$input-border-width-default: 1px !default;
+$input-border-width-focused: 2px !default;
+$input-line-height: 26px !default;
+$input-padding-top: 2px !default;
+
+$input-error-font-size: 12px !default;
+$input-error-height: 24px !default;
+$input-error-line-height: $input-error-font-size + 2px;
+$error-padding-top: ($input-error-height - $input-error-line-height) / 2;
+
+$icon-offset: 36px !default;
+
+$icon-top-offset: ($icon-offset - $input-padding-top - $input-border-width-focused) / 4;
+
+$icon-float-focused-top: -8px !default;
+
+md-input-container {
+  @include pie-clearfix();
+  display: inline-block;
+  position: relative;
+  padding: $input-container-padding;
+  margin: 18px 0;
+  vertical-align: middle;
+
+  &.md-block {
+    display: block;
+  }
+
+  // Setup a spacer that is always there as a placeholder for any messages so we don't change
+  // height with only 1 message
+  .md-errors-spacer {
+    @include rtl(float, right, left);
+    min-height: $input-error-height;
+
+    // Ensure the element always takes up space, even if empty
+    min-width: 1px;
+  }
+
+  > md-icon {
+    position: absolute;
+    top: $icon-top-offset;
+    @include rtl(left, 2px, auto);
+    @include rtl(right, auto, 2px);
+  }
+
+  textarea,
+  input[type="text"],
+  input[type="password"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="date"],
+  input[type="month"],
+  input[type="time"],
+  input[type="week"],
+  input[type="number"],
+  input[type="email"],
+  input[type="url"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="color"] {
+    /* remove default appearance from all input/textarea */
+    -moz-appearance: none;
+    -webkit-appearance: none;
+  }
+  input[type="date"],
+  input[type="datetime-local"],
+  input[type="month"],
+  input[type="time"],
+  input[type="week"] {
+    min-height: $input-line-height;
+  }
+  textarea {
+    resize: none;
+    overflow: hidden;
+  }
+
+  textarea.md-input {
+    min-height: $input-line-height;
+    -ms-flex-preferred-size: auto; //IE fix
+  }
+
+  label:not(.md-container-ignore) {
+    position: absolute;
+    bottom: 100%;
+    @include rtl(left, 0, auto);
+    @include rtl(right, auto, 0);
+
+    &.md-required:after {
+      content: ' *';
+      font-size: 13px;
+      vertical-align: top;
+    }
+  }
+
+  label:not(.md-no-float):not(.md-container-ignore),
+  .md-placeholder {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    order: 1;
+    pointer-events: none;
+    -webkit-font-smoothing: antialiased;
+    @include rtl(padding-left, $input-container-padding + 1px, 0);
+    @include rtl(padding-right, 0, $input-container-padding + 1px);
+    z-index: 1;
+    transform: translate3d(0, $input-label-default-offset + 4, 0) scale($input-label-default-scale);
+    transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
+
+    @include rtl(transform-origin, left top, right top);
+  }
+  .md-placeholder {
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    transition-property: opacity, transform;
+    transform: translate3d(0, $input-placeholder-offset + $baseline-grid * 0.75, 0);
+  }
+  &.md-input-focused .md-placeholder {
+    opacity: 1;
+    transform: translate3d(0, $input-placeholder-offset, 0);
+  }
+  // Placeholder should immediately disappear when the user starts typing
+  &.md-input-has-value .md-placeholder {
+    transition: none;
+    opacity: 0;
+  }
+
+  &:not( .md-input-has-value ) input:not( :focus ),
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-ampm-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-day-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-hour-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-millisecond-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-minute-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-month-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-second-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-week-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-year-field,
+  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-text {
+    color: transparent;
+  }
+
+  /*
+   * The .md-input class is added to the input/textarea
+   */
+  .md-input {
+    order: 2;
+    display: block;
+    margin-top: 0;
+
+    background: none;
+    padding-top: $input-padding-top;
+    padding-bottom: $input-border-width-focused - $input-border-width-default;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-width: 0 0 $input-border-width-default 0;
+    line-height: $input-line-height;
+    height: $input-line-height + ($input-padding-top * 2);
+    -ms-flex-preferred-size: $input-line-height; //IE fix
+    border-radius: 0;
+    border-style: solid; // Firefox fix
+
+    // Fix number inputs in Firefox to be full-width
+    width: 100%;
+    box-sizing: border-box;
+
+    // Hacky fix to force vertical alignment between `input` and `textarea`
+    // Input and textarea do not align by default:
+    // http://jsbin.com/buqomevage/1/edit?html,css,js,output
+    @include rtl(float, left, right);
+
+    &:focus {
+      outline: none;
+    }
+    &:invalid {
+      outline: none;
+      box-shadow: none;
+    }
+
+    &.md-no-flex {
+      flex: none !important;
+    }
+  }
+
+  .md-char-counter {
+    @include rtl(text-align, right, left);
+    @include rtl(padding-right, $input-container-padding, 0);
+    @include rtl(padding-left, 0, $input-container-padding);
+  }
+
+  //
+  // ngMessage base styles - animations moved to input.js
+  //
+  ng-messages, data-ng-messages, x-ng-messages,
+  [ng-messages], [data-ng-messages], [x-ng-messages] {
+    position: relative;
+    order: 4;
+    overflow: hidden;
+    @include rtl(clear, left, right);
+
+    &.ng-enter {
+      // Upon entering the DOM, messages should be hidden
+      ng-message, data-ng-message, x-ng-message,
+      [ng-message], [data-ng-message], [x-ng-message],
+      [ng-message-exp], [data-ng-message-exp], [x-ng-message-exp] {
+        opacity: 0;
+        margin-top: -100px;
+      }
+    }
+  }
+
+  ng-message, data-ng-message, x-ng-message,
+  [ng-message], [data-ng-message], [x-ng-message],
+  [ng-message-exp], [data-ng-message-exp], [x-ng-message-exp],
+  .md-char-counter {
+    font-size: $input-error-font-size;
+    line-height: $input-error-line-height;
+    overflow: hidden;
+
+    transition: $swift-ease-in;
+
+    // Default state for messages is to be visible
+    opacity: 1;
+    margin-top: 0;
+
+    // Add some top padding which is equal to half the difference between the expected height
+    // and the actual height
+    padding-top: $error-padding-top;
+
+    &:not(.md-char-counter) {
+      // Add some padding so that the messages don't touch the character counter
+      @include rtl(padding-right, rem(0.5), 0);
+      @include rtl(padding-left, 0, rem(0.5));
+    }
+  }
+
+  &:not(.md-input-invalid) {
+    .md-auto-hide {
+      .md-input-message-animation {
+        opacity: 0;
+        margin-top: -100px;
+      }
+    }
+  }
+
+  // Note: This is a workaround to fix an ng-enter flicker bug
+  .md-auto-hide {
+    .md-input-message-animation {
+      &:not(.ng-animate) {
+        opacity: 0;
+        margin-top: -100px;
+      }
+    }
+  }
+
+  .md-input-message-animation {
+    &.ng-enter {
+      opacity: 0;
+      margin-top: -100px;
+    }
+  }
+
+  &.md-input-focused,
+  &.md-input-has-placeholder,
+  &.md-input-has-value {
+    label:not(.md-no-float) {
+      transform: translate3d(0, $input-label-float-offset, 0) scale($input-label-float-scale);
+      transition: transform $swift-ease-out-timing-function $swift-ease-out-duration,
+                  width $swift-ease-out-timing-function $swift-ease-out-duration;
+      width: calc((100% - #{$input-label-float-width}) / #{$input-label-float-scale});
+    }
+  }
+
+  // If we have an existing value; don't animate the transform as it happens on page load and
+  // causes erratic/unnecessary animation
+  &.md-input-has-value {
+    label {
+      transition: none;
+    }
+  }
+
+  // Use wide border in error state or in focused state
+  &.md-input-focused .md-input,
+  .md-input.ng-invalid.ng-dirty {
+    padding-bottom: 0; // Increase border width by 1px, decrease padding by 1
+    border-width: 0 0 $input-border-width-focused 0;
+  }
+
+  .md-input {
+    &[disabled],
+    [disabled] & {
+      background-position: 0 bottom;
+      // This background-size is coordinated with a linear-gradient set in input-theme.scss
+      // to create a dotted line under the input.
+      background-size: 4px 1px;
+      background-repeat: repeat-x;
+      margin-bottom: -1px; // Shift downward so dotted line is positioned the same as other bottom borders
+    }
+  }
+
+  &.md-icon-float {
+
+    transition: margin-top $swift-ease-out-duration $swift-ease-out-timing-function;
+
+    > label {
+      pointer-events: none;
+      position: absolute;
+    }
+
+    > md-icon {
+      top: $icon-top-offset;
+      @include rtl(left, 2px, auto);
+      @include rtl(right, auto, 2px);
+    }
+
+  }
+
+  &.md-icon-left,
+  &.md-icon-right {
+    > label {
+      &:not(.md-no-float):not(.md-container-ignore),
+      .md-placeholder {
+        width: calc(100% - #{$icon-offset} - #{$input-label-float-width});
+      }
+    }
+
+    &.md-input-focused,
+    &.md-input-has-placeholder,
+    &.md-input-has-value {
+      > label {
+        &:not(.md-no-float):not(.md-container-ignore),
+        .md-placeholder {
+          width: calc((100% - #{$icon-offset} - #{$input-label-float-width}) / #{$input-label-float-scale});
+        }
+      }
+    }
+  }
+
+  // icon offset should have higher priority as normal label
+  &.md-icon-left {
+    @include rtl(padding-left, $icon-offset, 0);
+    @include rtl(padding-right, 0, $icon-offset);
+    > label {
+      @include rtl(left, $icon-offset, auto);
+      @include rtl(right, auto, $icon-offset);
+    }
+  }
+
+  &.md-icon-right {
+    @include rtl(padding-left, 0, $icon-offset);
+    @include rtl(padding-right, $icon-offset, 0);
+
+    > md-icon:last-of-type {
+      margin: 0;
+
+      @include rtl(right, 2px, auto);
+      @include rtl(left, auto, 2px);
+    }
+  }
+
+  &.md-icon-left.md-icon-right {
+    padding-left: $icon-offset;
+    padding-right: $icon-offset;
+
+    > label {
+      &:not(.md-no-float):not(.md-container-ignore),
+      .md-placeholder {
+        width: calc(100% - (#{$icon-offset} * 2));
+      }
+    }
+
+    &.md-input-focused,
+    &.md-input-has-placeholder,
+    &.md-input-has-value {
+      > label {
+        &:not(.md-no-float):not(.md-container-ignore),
+        .md-placeholder {
+          width: calc((100% - (#{$icon-offset} * 2)) / #{$input-label-float-scale});
+        }
+      }
+    }
+  }
+}
+
+@media screen and (-ms-high-contrast: active) {
+  md-input-container.md-default-theme > md-icon {
+    fill: #fff;
+  }
+}

@@ -1,0 +1,71 @@
+md-select.md-THEME_NAME-theme {
+  &[disabled] .md-select-value {
+    border-bottom-color: transparent;
+    background-image: linear-gradient(to right, '{{foreground-3}}' 0%, '{{foreground-3}}' 33%, transparent 0%);
+    background-image: -ms-linear-gradient(left, transparent 0%, '{{foreground-3}}' 100%);
+  }
+  .md-select-value {
+    &.md-select-placeholder {
+      color: '{{foreground-3}}';
+    }
+    border-bottom-color: '{{foreground-4}}';
+  }
+  &.ng-invalid.ng-dirty {
+    .md-select-value {
+      color: '{{warn-A700}}' !important;
+      border-bottom-color: '{{warn-A700}}' !important;
+    }
+  }
+  &:not([disabled]):focus {
+    .md-select-value {
+      border-bottom-color: '{{primary-color}}';
+      color: '{{ foreground-1 }}';
+      &.md-select-placeholder {
+        color: '{{ foreground-1 }}';
+      }
+    }
+    &.md-accent .md-select-value {
+      border-bottom-color: '{{accent-color}}';
+    }
+    &.md-warn .md-select-value {
+      border-bottom-color: '{{warn-color}}';
+    }
+  }
+  &[disabled] {
+    .md-select-value {
+      color: '{{foreground-3}}';
+      &.md-select-placeholder {
+        color: '{{foreground-3}}';
+      }
+    }
+  }
+}
+
+md-select-menu.md-THEME_NAME-theme {
+  md-option[disabled] {
+    color: '{{foreground-3}}';
+  }
+
+  md-optgroup {
+    color: '{{foreground-2}}';
+    md-option {
+      color: '{{foreground-1}}';
+    }
+  }
+  md-option[selected] {
+    color: '{{primary-500}}';
+    &:focus {
+      color: '{{primary-600}}';
+    }
+    &.md-accent {
+      color: '{{accent-500}}';
+      &:focus {
+        color: '{{accent-600}}';
+      }
+    }
+  }
+  md-option:focus:not([disabled]):not([selected]) {
+    background: '{{background-200}}';
+  }
+
+}

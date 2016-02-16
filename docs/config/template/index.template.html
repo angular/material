@@ -1,106 +1,185 @@
 <!doctype html>
-<html ng-app="docsApp" ng-controller="DocsCtrl" lang="en">
+<html ng-app="docsApp" ng-controller="DocsCtrl" lang="en" ng-strict-di>
 <head>
-<title ng-bind="(menu.currentSection.name || 'Material Design') + (menu.currentPage ? (' > ' + (menu.currentPage | humanizeDoc)) : '')">Material Design</title>
-<meta name="viewport" content="initial-scale=1, maximum-scale=1" />
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-animate.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-route.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-aria.min.js"></script>
-
-<script src="docs.js"></script>
-<script src="docs-demo-scripts.js"></script>
+<base href="/">
+<title ng-bind="'Angular Material - ' + menu.currentSection.name +
+    (menu.currentSection === menu.currentPage ? '' : ' > ' + menu.currentPage.name)">
+  Angular Material
+</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+<meta name="viewport" content="initial-scale=1" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+<link rel="stylesheet" href="angular-material.min.css">
 <link rel="stylesheet" href="docs.css">
 </head>
-<body layout="horizontal">
+<body layout="row" ng-cloak>
 
-  <md-sidenav layout="vertical"
-    class="md-sidenav-left md-whiteframe-z2"
-    component-id="left"
-    is-locked-open="$media('md')">
+  <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2"
+              md-component-id="left" hide-print
+              md-is-locked-open="$mdMedia('gt-sm')">
 
-    <md-toolbar class="md-medium-tall">
-      <h1 class="md-toolbar-tools" style="padding-top:25px;">
-        <a href="" ng-click="goHome()">Angular<br/>Material Design</a>
-      </h1>
+    <header class="nav-header">
+      <a ng-href="/" class="docs-logo">
+        <img src="img/icons/angular-logo.svg" alt="" />
+        <h1 class="docs-logotype md-heading">Angular Material</h1>
+      </a>
+    </header>
+
+    <ul class="skip-links">
+      <li class="md-whiteframe-z2">
+        <md-button ng-click="focusMainContent($event)" href="#">Skip to content</md-button>
+      </li>
+    </ul>
+
+    <md-content flex role="navigation">
+      <ul class="docs-menu">
+        <li ng-repeat="section in menu.sections" class="parent-list-item {{section.className || ''}}" ng-class="{'parentActive' : isSectionSelected(section)}">
+          <h2 class="menu-heading md-subhead" ng-if="section.type === 'heading'" id="heading_{{ section.name | nospace }}">
+            {{section.name}}
+          </h2>
+          <menu-link section="section" ng-if="section.type === 'link' && !section.hidden"></menu-link>
+
+          <menu-toggle section="section" ng-if="section.type === 'toggle' && !section.hidden"></menu-toggle>
+
+          <ul ng-if="section.children" class="menu-nested-list">
+            <li ng-repeat="child in section.children" ng-class="{'childActive' : isSectionSelected(child)}">
+              <menu-link section="child" ng-if="child.type === 'link'"></menu-link>
+
+              <menu-toggle section="child" ng-if="child.type === 'toggle'"></menu-toggle>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </md-content>
+  </md-sidenav>
+
+  <div layout="column" tabIndex="-1" role="main" flex>
+    <md-toolbar class="md-whiteframe-glow-z1 site-content-toolbar">
+
+      <div class="md-toolbar-tools docs-toolbar-tools" tabIndex="-1">
+        <md-button class="md-icon-button" ng-click="openMenu()" hide-gt-sm aria-label="Toggle Menu">
+          <md-icon md-svg-src="img/icons/ic_menu_24px.svg"></md-icon>
+        </md-button>
+        <div layout="row" flex class="fill-height">
+          <h2 class="md-toolbar-item md-breadcrumb md-headline">
+            <span ng-if="menu.currentPage.name !== menu.currentSection.name">
+              <span hide-sm hide-md>{{menu.currentSection.name}}</span>
+              <span class="docs-menu-separator-icon" hide-sm hide-md style="transform: translate3d(0, 1px, 0)">
+                <span class="md-visually-hidden">-</span>
+                <md-icon
+                    aria-hidden="true"
+                    md-svg-src="img/icons/ic_chevron_right_24px.svg"
+                    style="margin-top: -2px"></md-icon>
+              </span>
+            </span>
+            <span class="md-breadcrumb-page">{{menu.currentPage | humanizeDoc}}</span>
+          </h2>
+
+          <span flex></span> <!-- use up the empty space -->
+
+          <div class="md-toolbar-item docs-tools" layout="row">
+            <md-button class="md-icon-button"
+                       aria-label="Install with Bower"
+                       ng-if="!currentComponent.docs.length"
+                       target="_blank"
+                       ng-href="https://github.com/angular/bower-material">
+              <md-tooltip md-autohide>Install with Bower</md-tooltip>
+              <md-icon md-svg-src="img/icons/bower-logo.svg"></md-icon>
+            </md-button>
+            <md-button class="md-icon-button"
+                       aria-label="Install with NPM"
+                       ng-if="!currentComponent.docs.length"
+                       target="_blank"
+                       ng-href="https://www.npmjs.com/package/angular-material">
+              <md-tooltip md-autohide>Install with NPM</md-tooltip>
+              <md-icon md-svg-src="img/icons/npm-logo.svg" style="transform: scale(1.3)"></md-icon>
+            </md-button>
+            <md-button class="md-icon-button"
+                       aria-label="View Source on Github"
+                       ng-if="!currentComponent.docs.length"
+                       target="_blank"
+                       ng-href="{{BUILDCONFIG.repository}}/{{menu.version.current.github}}">
+              <md-tooltip md-autohide>View Source on Github</md-tooltip>
+              <md-icon md-svg-src="img/icons/github.svg" style="color: rgba(255,255,255,0.97);"></md-icon>
+            </md-button>
+
+            <md-select
+                ng-if="currentComponent.docs.length"
+                ng-class="{ hide: path().indexOf('demo') == -1 }"
+                ng-model="relatedPage"
+                placeholder="API Reference"
+                class="md-body-1">
+              <md-optgroup label="Directives" ng-if="(currentComponent.docs | filter: { type: 'directive' }).length">
+                <md-option
+                    ng-repeat="doc in currentComponent.docs | filter: { type: 'directive' }"
+                    ng-value="doc.url"
+                    ng-click="redirectToUrl(doc.url)"
+                    aria-label="{{ doc | humanizeDoc }}">
+                  {{doc | humanizeDoc | directiveBrackets}}
+                </md-option>
+              </md-optgroup>
+              <md-optgroup label="Services" ng-if="(currentComponent.docs | filter: { type: 'service' }).length">
+                <md-option
+                    ng-repeat="doc in currentComponent.docs | filter: { type: 'service' }"
+                    ng-value="doc.url"
+                    ng-click="redirectToUrl(doc.url)"
+                    aria-label="{{ doc | humanizeDoc }}">
+                  {{doc | humanizeDoc | directiveBrackets}}
+                </md-option>
+              </md-optgroup>
+            </md-select>
+
+            <md-button
+              class="md-icon-button"
+              aria-label="View Demo"
+              ng-class="{hide: !currentDoc || !currentDoc.hasDemo}"
+              ng-href="{{currentComponent.demoUrl}}">
+              <md-icon md-svg-src="img/icons/ic_play_circle_fill_24px.svg" style="fill:green"></md-icon>
+              <md-tooltip>View Demo</md-tooltip>
+            </md-button>
+
+            <md-button
+              aria-label="View Source on Github"
+              class="md-icon-button"
+              ng-class="{hide: !currentDoc}"
+              ng-href="{{currentDoc.githubUrl}}"
+              hide-sm hide-md>
+              <md-icon md-svg-src="img/icons/github.svg" style="color: rgba(255,255,255,0.97);"></md-icon>
+              <md-tooltip>View Source on Github</md-tooltip>
+            </md-button>
+          </div>
+        </div>
+      </div>
+
     </md-toolbar>
 
-    <md-content flex>
-      <div ng-repeat="section in menu.sections">
+    <md-content md-scroll-y layout="column" flex>
+      <div ng-view layout-padding flex="noshrink"></div>
 
-        <button class="menu-item menu-title"
-          ng-class="{active: menu.isSectionSelected(section)}"
-          ng-click="menu.toggleSelectSection(section)"
-          ink-ripple>
-          {{section.name}}
-        </button>
-
-        <a class="menu-item menu-sub-item"
-          ng-show="menu.isSectionSelected(section)"
-          ng-repeat="page in section.pages"
-          ng-class="{active: menu.isPageSelected(section, page)}"
-          ng-href="#{{page.url}}"
-          ink-ripple>
-          <span ng-bind="page | humanizeDoc"></span>
-        </a>
-
+      <div layout="row" flex="noshrink">
+        <div id="license-footer">
+          Powered by Google &copy;2014&#8211;{{thisYear}}.
+          Code licensed under the <a href="./license">MIT License</a>.
+          Documentation licensed under
+          <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>.
+        </div>
       </div>
     </md-content>
 
-  </md-sidenav>
-
-  <div layout="vertical" layout-fill tabIndex="-1" role="main">
-    <md-toolbar md-theme="indigo" class="md-medium-tall app-toolbar">
-
-      <div class="md-toolbar-tools" ng-click="openMenu()">
-        <button class="menu-icon" hide-md aria-label="Toggle Menu">
-          <md-icon icon="img/icons/ic_menu_24px.svg">
-          </md-icon>
-        </button>
-        <p hide show-sm ng-if="menu.currentSection.name">
-          {{menu.currentSection.name}}
-        </p>
-        <span layout="vertical" layout-align="center center" class="menu-separator-icon"
-          ng-if="menu.currentPage">
-          <img style="height: 16px;" src="img/docArrow.png" alt="" aria-hidden="true" hide block-sm>
-        </span>
-        <h2 ng-bind="(menu.currentPage | humanizeDoc) || 'Angular Material'" flex>
-        </h2>
-      </div>
-
-      <div class="md-toolbar-tools api-options-bar"
-        ng-if="path().indexOf('demo') > -1">
-        <span flex></span>
-        <md-button ng-repeat="doc in currentComponent.docs"
-          ng-href="#{{doc.url}}" aria-label="{{ doc | humanizeDoc }}">
-          <span ng-bind="doc | humanizeDoc | directiveBrackets"></span>
-        </md-button>
-      </div>
-
-      <div class="md-toolbar-tools api-options-bar with-icon"
-        ng-if="currentDoc">
-        <span flex></span>
-        <md-button ng-href="#/demo/{{currentComponent.name}}">
-          <md-icon icon="/img/icons/ic_play_arrow_24px.svg"></md-icon>
-          <span>View Demo</span>
-        </md-button>
-        <md-button ng-href="{{currentDoc.githubUrl}}">
-          <md-icon icon="/img/icons/ic_launch_24px.svg"></md-icon>
-          <span hide block-sm>View on Github</span>
-          <span hide-sm>Source</span>
-        </md-button>
-        <md-button ng-href="{{currentDoc.githubEditUrl}}" hide show-sm>
-          <md-icon icon="/img/icons/ic_launch_24px.svg"></md-icon>
-          <span>Improve This Doc</span>
-        </md-button>
-      </div>
-
-    </md-toolbar>
-
-    <md-content ng-view scroll-y flex class="md-padding"></md-content>
-
   </div>
 
+
+  <!-- Preload is (currently) only used for testing jQuery -->
+  <script src="preload.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-animate.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-route.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-aria.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-messages.min.js"></script>
+
+  <script src="angular-material.min.js"></script>
+  <script src="docs.js"></script>
+  <script src="docs-demo-scripts.js"></script>
 
   <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

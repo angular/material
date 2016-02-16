@@ -1,0 +1,26 @@
+<!doctype html>
+<html ng-app="<%= ngModule && ngModule.module || 'ngMaterial' %>">
+<head>
+    <title><%= name %></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+
+    <script src="/node_modules/angular/angular.js"></script>
+    <script src="/node_modules/angular-animate/angular-animate.js"></script>
+    <script src="/node_modules/angular-aria/angular-aria.js"></script>
+    <script src="/node_modules/angular-messages/angular-messages.js"></script>
+    <script src="/dist/angular-material.js"></script>
+
+    <link rel="stylesheet" href="/dist/angular-material.css">
+
+    <% js.forEach(function(file) { %>
+    <script src="<%= file.name %>"></script>
+    <% }); %>
+    <% css.forEach(function(file) { %>
+    <link rel="stylesheet" href="<%= file.name %>">
+    <% }); %>
+</head>
+
+<body>
+<%= index.contents %>
+</body>
+</html>

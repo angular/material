@@ -1,20 +1,35 @@
-<div ng-controller="AppCtrl" class="full" layout="vertical" layout-padding>
+<div ng-controller="AppCtrl" class="md-padding" id="popupContainer" ng-cloak>
   <p class="inset">
-    Open a dialog over the app's content. Press escape or click outside to close the dialog.
+    Open a dialog over the app's content. Press escape or click outside to close the dialog and
+    send focus back to the triggering button.
   </p>
 
-  <div layout="vertical" layout-sm="horizontal" layout-align="center" >
-    <md-button class="md-primary" ng-click="dialogBasic($event)">
-      Simple Dialog
+  <div class="dialog-demo-content" layout="row" layout-wrap layout-margin layout-align="center">
+    <md-button class="md-primary md-raised" ng-click="showAlert($event)"   >
+      Alert Dialog
     </md-button>
-    <div class="gap"></div>
-    <md-button class="md-primary" ng-click="dialogAdvanced($event)">
-      Complex Dialog
+    <md-button class="md-primary md-raised" ng-click="showConfirm($event)" >
+      Confirm Dialog
+    </md-button>
+    <md-button class="md-primary md-raised" ng-click="showPrompt($event)"  >
+      Prompt Dialog
+    </md-button>
+    <md-button class="md-primary md-raised" ng-click="showAdvanced($event)">
+      Custom Dialog
+    </md-button>
+    <md-button class="md-primary md-raised" ng-click="showTabDialog($event)" >
+      Tab Dialog
     </md-button>
   </div>
-  
-  <br/>
-  <b layout="horizontal" layout-align="center center" layout-padding>
-    {{alert}}
-  </b>
+  <p class="footer">Note: The <b>Confirm</b> dialog does not use <code>$mdDialog.clickOutsideToClose(true)</code>.</p>
+  <div hide-gt-sm layout="row" layout-align="center center" flex>
+      <md-checkbox ng-model="customFullscreen" aria-label="Fullscreen Custom Dialog">Force Custom Dialog Fullscreen</md-checkbox>
+    </div>
+
+  <div ng-if="status" id="status">
+    <b layout="row" layout-align="center center" class="md-padding">
+      {{status}}
+    </b>
+  </div>
+
 </div>

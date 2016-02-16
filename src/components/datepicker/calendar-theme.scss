@@ -1,0 +1,54 @@
+/** Theme styles for mdCalendar. */
+
+.md-calendar.md-THEME_NAME-theme {
+  color: '{{foreground-1}}';
+
+  tr:last-child td {
+    border-bottom-color: '{{background-200}}';
+  }
+}
+.md-THEME_NAME-theme {
+
+  .md-calendar-day-header {
+    background: '{{background-hue-1}}';
+    color: '{{foreground-1}}';
+  }
+
+  .md-calendar-date.md-calendar-date-today {
+
+    .md-calendar-date-selection-indicator {
+      border: 1px solid '{{primary-500}}'; // blue-500
+    }
+
+    &.md-calendar-date-disabled {
+      color: '{{primary-500-0.6}}';
+    }
+  }
+
+  // The CSS class `md-focus` is used instead of real browser focus for accessibility reasons
+  // (the root md-calendar holds browser focus).
+  .md-calendar-date.md-focus {
+    .md-calendar-date-selection-indicator {
+      background: '{{background-hue-1}}';
+    }
+  }
+
+  .md-calendar-date-selection-indicator:hover {
+    background: '{{background-hue-1}}';
+  }
+
+  // Selected style goes after hover and focus so that it takes priority.
+  .md-calendar-date.md-calendar-selected-date,
+  .md-calendar-date.md-focus.md-calendar-selected-date {
+    .md-calendar-date-selection-indicator {
+      background: '{{primary-500}}'; // blue-500
+      color: '{{primary-500-contrast}}'; // white
+      border-color: transparent;
+    }
+  }
+
+  .md-calendar-date-disabled,
+  .md-calendar-month-label-disabled {
+    color: '{{foreground-3}}';
+  }
+}

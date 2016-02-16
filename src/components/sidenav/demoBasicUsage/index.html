@@ -1,18 +1,18 @@
 
-<div ng-controller="AppCtrl" layout="vertical" layout-fill>
+<div ng-controller="AppCtrl" layout="column" style="height:500px;" ng-cloak>
 
-  <section layout="horizontal" flex>
+  <section layout="row" flex>
 
-    <md-sidenav class="md-sidenav-left md-whiteframe-z2" component-id="left" is-locked-open="$media('md')">
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
 
       <md-toolbar class="md-theme-indigo">
         <h1 class="md-toolbar-tools">Sidenav Left</h1>
       </md-toolbar>
-      <md-content class="md-padding" ng-controller="LeftCtrl">
-        <md-button ng-click="close()" class="md-primary" hide-md>
+      <md-content layout-padding ng-controller="LeftCtrl">
+        <md-button ng-click="close()" class="md-primary" hide-gt-md>
           Close Sidenav Left
         </md-button>
-        <p hide show-md>
+        <p hide-md show-gt-md>
           This sidenav is locked open on your device. To go back to the default behavior,
           narrow your display.
         </p>
@@ -20,36 +20,49 @@
 
     </md-sidenav>
 
-    <md-content flex class="md-padding">
+    <md-content flex layout-padding>
 
-      <div layout="vertical" layout-fill layout-align="center center">
+      <div layout="column" layout-fill layout-align="top center">
         <p>
         The left sidenav will 'lock open' on a medium (>=960px wide) device.
+        </p>
+        <p>
+        The right sidenav will focus on a specific child element.
         </p>
 
         <div>
           <md-button ng-click="toggleLeft()"
-            class="md-primary" hide-md>
+            class="md-primary" hide-gt-md>
             Toggle left
           </md-button>
         </div>
 
         <div>
           <md-button ng-click="toggleRight()"
+            ng-hide="isOpenRight()"
             class="md-primary">
             Toggle right
           </md-button>
         </div>
       </div>
 
+      <div flex></div>
+
     </md-content>
 
-    <md-sidenav class="md-sidenav-right md-whiteframe-z2" component-id="right">
+    <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">
 
       <md-toolbar class="md-theme-light">
         <h1 class="md-toolbar-tools">Sidenav Right</h1>
       </md-toolbar>
-      <md-content ng-controller="RightCtrl" class="md-padding">
+      <md-content ng-controller="RightCtrl" layout-padding>
+        <form>
+          <md-input-container>
+            <label for="testInput">Test input</label>
+            <input type="text" id="testInput"
+                   ng-model="data" md-autofocus>
+          </md-input-container>
+        </form>
         <md-button ng-click="close()" class="md-primary">
           Close Sidenav Right
         </md-button>

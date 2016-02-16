@@ -1,0 +1,25 @@
+<div ng-controller="SelectOptGroupController" class="md-padding" ng-cloak>
+  <div>
+    <h1 class="md-title">Pick your pizza below</h1>
+    <div layout="row">
+      <md-input-container style="margin-right: 10px;">
+        <label>Size</label>
+        <md-select ng-model="size">
+          <md-option ng-repeat="size in sizes" value="{{size}}">{{size}}</md-option>
+        </md-select>
+      </md-input-container>
+      <md-input-container>
+        <label>Topping</label>
+        <md-select ng-model="topping">
+          <md-optgroup label="Meats">
+            <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'meat' }">{{topping.name}}</md-option>
+          </md-optgroup>
+          <md-optgroup label="Veggies">
+            <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'veg' }">{{topping.name}}</md-option>
+          </md-optgroup>
+        </md-select>
+      </md-input-container>
+    </div>
+    <p ng-if="topping">You ordered a {{size.toLowerCase()}} pizza with {{topping.toLowerCase()}}.</p>
+  </div>
+</div>

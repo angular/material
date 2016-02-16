@@ -1,0 +1,24 @@
+
+md-progress-circular {
+    margin-bottom:20px;
+}
+
+md-icon {
+    margin: 20px;
+    margin-top: 0;
+    width: 24px;
+    height: 24px;
+}
+
+.demo-content {
+    min-height: 210px;
+}
+
+.appSvgIconSets {
+    padding:25px;
+}
+
+.s48 {
+    width:48px;
+    height:48px;
+}

@@ -27,3 +27,16 @@ p:last-child {
   padding:5px;
 
 }
+
+md-icon {
+    margin: 20px;
+    margin-top: 0;
+    width: 128px;
+    height: 128px;
+}
+
+
+.ipsum {
+  color: saddlebrown;
+  font-size: 0.9em;
+}

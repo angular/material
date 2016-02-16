@@ -1,0 +1,50 @@
+<div class="md-menu-demo" ng-controller="WidthDemoCtrl as ctrl" style="min-height:350px" ng-cloak>
+  <div class="menu-demo-container" layout-align="start center" layout="column">
+    <div layout-align="start center" layout="column" style="min-height:70px;" >
+    <h2 class="md-title">Different Widths</h2>
+    <p><code>md-menu-content</code> may specify a <code>width</code> attribute which will follow the <a href="http://www.google.com/design/spec/components/menus.html#menus-specs">official spec</a>.</p>
+    </div>
+    <div class="menus" layout-wrap layout="row" layout-fill layout-align="space-between center" style="min-height:100px;">
+      <div layout="column" flex="33" flex-sm="100" layout-align="center center">
+        <p>Wide menu (<code>width=6</code>)</p>
+        <md-menu md-offset="0 -7">
+          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+            <md-icon md-menu-origin md-svg-icon="call:phone"></md-icon>
+          </md-button>
+          <md-menu-content width="6">
+            <md-menu-item ng-repeat="item in [1, 2, 3]">
+              <md-button ng-click="ctrl.announceClick($index)"> <span md-menu-align-target>Option</span> {{item}} </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </div>
+      <div layout="column" flex-sm="100" flex="33" layout-align="center center">
+        <p>Medium menu (<code>width=4</code>)</p>
+        <md-menu md-offset="0 -7">
+          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+            <md-icon md-menu-origin md-svg-icon="call:email"></md-icon>
+          </md-button>
+          <md-menu-content width="4">
+            <md-menu-item ng-repeat="item in [1, 2, 3]">
+              <md-button ng-click="ctrl.announceClick($index)"> <span md-menu-align-target>Option</span> {{item}} </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </div>
+      <div layout="column" flex="33" flex-sm="100" layout-align="center center">
+        <p>Small menu (<code>width=2</code>)</p>
+        <md-menu md-offset="0 -7">
+          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+            <md-icon md-menu-origin md-svg-icon="call:chat"></md-icon>
+          </md-button>
+          <md-menu-content width="2">
+            <md-menu-item ng-repeat="item in [1, 2, 3]">
+              <md-button ng-click="ctrl.announceClick($index)"> <span md-menu-align-target>Option</span> {{item}} </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>

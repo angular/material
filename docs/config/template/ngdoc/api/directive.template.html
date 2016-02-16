@@ -4,8 +4,8 @@
 {% block additional %}
 
   {% block usage %}
-  <div class="usage">
-    <h3 id="Usage">Usage</h3>
+  <section class="api-section">
+    <h2 id="Usage">Usage</h2>
   {% if doc.usage %}
     {$ doc.usage | marked $}
   {% else %}
@@ -47,9 +47,9 @@
         {% endcode %}
       </li>
     {% endif -%}
-    
+
   {%- endif %}
-  </div>
+  </section>
   {% endblock -%}
 
   {%- if doc.animations %}

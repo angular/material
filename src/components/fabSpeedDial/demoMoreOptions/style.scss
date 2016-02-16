@@ -1,0 +1,59 @@
+// Line the fab up properly on different screen sizes/layouts
+.md-fab-top-right {
+  top: 16px;
+}
+
+@media (max-device-width: 600px) {
+  .md-fab-top-right {
+    top: 9px;
+    right: 9px;
+  }
+}
+
+.md-fab.demo-fab.trigger-fab, .md-fab.demo-fab.action-fab {
+  &:hover, &.md-focused {
+    background-color: #333;
+  }
+}
+
+.md-fab.demo-fab.action-fab {
+  background-color: #aaa;
+}
+
+
+md-content div {
+  &[flex="50"] {
+    padding: 15px;
+  }
+}
+
+
+md-fab-speed-dial {
+
+  // Offset to align with toolbar area
+  margin-top: 89px;
+
+  // Add a simple scale transition to the trigger when hiding/showing the speed dial
+  md-fab-trigger {
+    transition: all 0.3s ease-in-out;
+    transform: scale(1);
+  }
+
+  // Note: you MUST use an existing CSS class for the animation to fire properly
+  &.md-scale, &.md-fling {
+    &.ng-hide-add.ng-hide-add-active {
+      // Use !important to override ng-hide's `display: none !important`
+      display: flex !important;
+    }
+
+    &.ng-hide {
+      md-fab-trigger {
+        transform: scale(0);
+      }
+    }
+  }
+}
+
+.intro {
+  padding-left:5px;
+}

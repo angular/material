@@ -1,0 +1,9 @@
+<div ng-controller="SelectAsyncController" layout="column" layout-align="center center" style="padding:40px" ng-cloak>
+  <p>Select can call an arbitrary function on show. If this function returns a promise, it will display a loading indicator while it is being resolved:</p>
+  <div layout="column" layout-align="center center" style="height: 100px;">
+    <md-select placeholder="Assign to user" ng-model="user" md-on-open="loadUsers()" style="min-width: 200px;">
+      <md-option ng-value="user" ng-repeat="user in users">{{user.name}}</md-option>
+    </md-select>
+    <p class="md-caption">You have assigned the task to: {{ user ? user.name : 'No one yet' }}</p>
+  </div>
+</div>

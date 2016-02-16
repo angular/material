@@ -1,55 +1,85 @@
 
-<div ng-controller="AppCtrl">
-  <md-content >
+<div ng-controller="AppCtrl" ng-cloak>
+  <md-content>
 
-    <section layout="vertical" layout-sm="horizontal" layout-align="center center">
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
       <md-button>{{title1}}</md-button>
-      <md-button noink class="md-primary">Primary (noink)</md-button>
-      <md-button ng-disabled="isDisabled" class="md-primary">Disabled</md-button>
-      <md-button class="md-warn" ng-click="isDisabled = !isDisabled">{{title4}}</md-button>
-      <div class="label">flat</div>
+      <md-button md-no-ink class="md-primary">Primary (md-noink)</md-button>
+      <md-button ng-disabled="true" class="md-primary">Disabled</md-button>
+      <md-button class="md-warn">{{title4}}</md-button>
+      <div class="label">Flat</div>
     </section>
 
-    <section layout="vertical" layout-sm="horizontal" layout-align="center center">
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
       <md-button class="md-raised">Button</md-button>
       <md-button class="md-raised md-primary">Primary</md-button>
-      <md-button disabled class="md-raised md-primary">Disabled</md-button>
+      <md-button ng-disabled="true" class="md-raised md-primary">Disabled</md-button>
       <md-button class="md-raised md-warn">Warn</md-button>
-      <div class="label">raised</div>
+      <div class="label">Raised</div>
     </section>
 
-    <section layout="vertical" layout-sm="horizontal" layout-align="center center">
-        <md-button class="md-fab" aria-label="Time">
-            <md-icon icon="/img/icons/ic_access_time_24px.svg" style="width: 24px; height: 24px;"></md-icon>
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+        <md-button class="md-fab" aria-label="Eat cake">
+            <md-icon md-svg-src="img/icons/cake.svg"></md-icon>
         </md-button>
 
-      <md-button class="md-fab" aria-label="New document">
-        <md-icon icon="/img/icons/ic_insert_drive_file_24px.svg" style="width: 24px; height: 24px;"></md-icon>
-      </md-button>
-
-        <md-button class="md-fab" disabled aria-label="Comment">
-            <md-icon icon="/img/icons/ic_comment_24px.svg" style="width: 24px; height: 24px;"></md-icon>
+        <md-button class="md-fab md-primary" aria-label="Use Android">
+          <md-icon md-svg-src="img/icons/android.svg"></md-icon>
         </md-button>
 
-        <md-button class="md-fab md-primary" md-theme="cyan" aria-label="Profile">
-            <md-icon icon="/img/icons/ic_people_24px.svg" style="width: 24px; height: 24px;"></md-icon>
+        <md-button class="md-fab" ng-disabled="true" aria-label="Comment">
+            <md-icon md-svg-src="img/icons/ic_comment_24px.svg"></md-icon>
+        </md-button>
+
+        <md-button class="md-fab md-primary md-hue-2" aria-label="Profile">
+            <md-icon md-svg-src="img/icons/ic_people_24px.svg"></md-icon>
+        </md-button>
+
+        <md-button class="md-fab md-mini" aria-label="Eat cake">
+            <md-icon md-svg-src="img/icons/cake.svg"></md-icon>
+        </md-button>
+
+        <md-button class="md-fab md-mini md-primary" aria-label="Use Android">
+          <md-icon md-svg-src="img/icons/android.svg" style="color: greenyellow;"></md-icon>
         </md-button>
       <div class="label">FAB</div>
     </section>
 
-    <section layout="vertical" layout-sm="horizontal" layout-align="center center">
-        <md-button ng-href="{{googleUrl}}" target="_blank">Go to Google</md-button>
-        <md-button>RSVP</md-button>
-      <div class="label">Button Group</div>
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+        <md-button ng-href="{{googleUrl}}" target="_blank">Default Link</md-button>
+        <md-button class="md-primary" ng-href="{{googleUrl}}" target="_blank">Primary Link</md-button>
+
+        <md-button>Default Button</md-button>
+      <div class="label">Link vs. Button</div>
     </section>
 
-    <section layout="vertical" layout-sm="horizontal" layout-align="center center">
-      <md-button class="md-primary" md-theme="green">Button</md-button>
-      <md-button class="md-primary md-raised" md-theme="indigo">Button</md-button>
-      <md-button class="md-primary md-raised" md-theme="orange">Button</md-button>
-      <md-button class="md-primary" md-theme="cyan">Button</md-button>
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+      <md-button class="md-primary md-hue-1">Primary Hue 1</md-button>
+      <md-button class="md-warn md-raised md-hue-2">Warn Hue 2</md-button>
+      <md-button class="md-accent">Accent</md-button>
+      <md-button class="md-accent md-raised md-hue-1">Accent Hue 1</md-button>
       <div class="label">Themed</div>
     </section>
 
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+      <md-button class="md-icon-button md-primary" aria-label="Settings">
+        <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+      </md-button>
+      <md-button class="md-icon-button md-accent" aria-label="Favorite">
+        <md-icon md-svg-icon="img/icons/favorite.svg"></md-icon>
+      </md-button>
+      <md-button class="md-icon-button" aria-label="More">
+        <md-icon md-svg-icon="img/icons/more_vert.svg"></md-icon>
+      </md-button>
+      <md-button href="http://google.com"
+                 title="Launch Google.com in new window"
+                 target="_blank"
+                 ng-disabled="true"
+                 aria-label="Google.com"
+                 class="md-icon-button launch" >
+        <md-icon md-svg-icon="img/icons/launch.svg"></md-icon>
+      </md-button>
+      <div class="label">Icon Button</div>
+    </section>
   </md-content>
 </div>

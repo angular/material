@@ -1,0 +1,52 @@
+/** Theme styles for mdDatepicker. */
+
+md-datepicker.md-THEME_NAME-theme {
+  background: '{{background-color}}';
+}
+
+.md-THEME_NAME-theme {
+
+  .md-datepicker-input {
+    @include input-placeholder-color('{{foreground-3}}');
+    color: '{{background-contrast}}';
+    background: '{{background-color}}';
+  }
+
+  .md-datepicker-input-container {
+    border-bottom-color: '{{background-300}}';
+
+    &.md-datepicker-focused {
+      border-bottom-color: '{{primary-500}}'
+    }
+
+    &.md-datepicker-invalid {
+      border-bottom-color: '{{warn-A700}}';
+    }
+  }
+
+  .md-datepicker-calendar-pane {
+    border-color: '{{background-300}}';
+  }
+
+  .md-datepicker-triangle-button {
+    .md-datepicker-expand-triangle {
+      border-top-color: '{{foreground-3}}';
+    }
+
+    &:hover .md-datepicker-expand-triangle {
+      border-top-color: '{{foreground-2}}';
+    }
+  }
+
+  // Open state for all of the elements of the picker.
+  .md-datepicker-open {
+    .md-datepicker-calendar-icon {
+      fill: '{{primary-500}}';
+    }
+  }
+
+  .md-datepicker-calendar,
+  .md-datepicker-input-mask-opaque {
+    background: '{{background-color}}';
+  }
+}

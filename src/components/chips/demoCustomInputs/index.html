@@ -1,0 +1,55 @@
+<div ng-controller="CustomInputDemoCtrl as ctrl" layout="column" ng-cloak>
+
+  <md-content class="md-padding" layout="column">
+    <h2 class="md-title">Use an <code>input</code> element with no model to build an ordered set of chips.</h2>
+    <md-chips ng-model="ctrl.numberChips">
+      <input type="number" placeholder="Enter a number">
+    </md-chips>
+
+    <br/>
+    <h2 class="md-title">Use an <code>input</code>  element to build an ordered set of chips.</h2>
+    <md-chips ng-model="ctrl.numberChips2">
+      <input type="number" ng-model="ctrl.numberBuffer" placeholder="Enter a number">
+    </md-chips>
+
+    <br/>
+    <h2 class="md-title">Use <code>md-autocomplete</code>  to build an ordered set of chips.</h2>
+
+    <md-chips ng-model="ctrl.selectedVegetables" md-autocomplete-snap
+              md-transform-chip="ctrl.transformChip($chip)"
+              md-require-match="ctrl.autocompleteDemoRequireMatch">
+      <md-autocomplete
+          md-selected-item="ctrl.selectedItem"
+          md-search-text="ctrl.searchText"
+          md-items="item in ctrl.querySearch(ctrl.searchText)"
+          md-item-text="item.name"
+          placeholder="Search for a vegetable">
+        <span md-highlight-text="ctrl.searchText">{{item.name}} :: {{item.type}}</span>
+      </md-autocomplete>
+      <md-chip-template>
+        <span>
+          <strong>{{$chip.name}}</strong>
+          <em>({{$chip.type}})</em>
+        </span>
+      </md-chip-template>
+    </md-chips>
+
+    <md-checkbox ng-model="ctrl.autocompleteDemoRequireMatch">
+      Tell the autocomplete to require a match (when enabled you cannot create new chips)
+    </md-checkbox>
+
+    <br />
+    <h2 class="md-title">Vegetable Options</h2>
+
+    <md-list>
+      <md-list-item class="md-2-line veggie-option" ng-repeat="veg in ctrl.vegetables" layout="row"
+          layout-wrap>
+        <div class="md-item-text md-whiteframe-z1" flex>
+          <h3>{{veg.name}}</h3>
+          <p>{{veg.type}}</p>
+        </div>
+      </md-list-item>
+    </md-list>
+
+  </md-content>
+</div>

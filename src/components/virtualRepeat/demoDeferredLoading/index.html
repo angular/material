@@ -1,0 +1,22 @@
+<div ng-controller="AppCtrl as ctrl" ng-cloak>
+  <md-content layout="column">
+    <p>
+       Display a list of 50,000 items that load on demand in a viewport of only 7 rows (height=40px).
+       <br/><br/>
+       This demo shows scroll and rendering performance gains when using <code>md-virtual-repeat</code>;
+       achieved with the dynamic reuse of rows visible in the viewport area. Developers are required to
+       explicitly use <code>md-virtual-repeat-container</code> as a wrapping parent container.
+       <br/><br/>
+       To enable load-on-demand behavior, developers must pass in a custom instance of
+       mdVirtualRepeatModel (see the example's source for more info).
+    </p>
+
+    <md-virtual-repeat-container id="vertical-container">
+      <div md-virtual-repeat="item in ctrl.dynamicItems" md-on-demand
+          class="repeated-item" flex>
+        {{item}}
+      </div>
+    </md-virtual-repeat-container>
+  </md-content>
+
+</div>

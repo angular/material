@@ -1,3 +1,5 @@
 {% if doc.returns -%}
-{$ returnTable(doc.returns) $}
+<div class="api-param-table">
+  {$ returnTable(doc.returns) $}
+</div>
 {%- endif %}

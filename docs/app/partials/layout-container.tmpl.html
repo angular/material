@@ -1,79 +1,145 @@
-<div ng-controller="LayoutCtrl" layout="vertical" layout-fill class="layout-content">
+<div ng-controller="LayoutCtrl" class="layout-content" ng-cloak>
 
-  <h3 class="layout-title">Overview</h3>
-  <p>
-    Angular Md uses a responsive CSS layout based on
-    <a href="http://www.w3.org/TR/css3-flexbox/">flexbox</a>, rather than
-    using CSS floats. Traditionally, floats proved to be the best solution for CSS
-    layouts, but with flexbox now available in a <a href="http://caniuse.com/#feat=flexbox">majority of browsers</a>,
-    we're moving onto a new era with improved layout capabilities and features.
-  </p>
+  <h3>Layout and Containers</h3>
 
   <p>
-    The layout system uses element attributes, rather than CSS classes.
-    By doing so we're able to simplify creating layouts and make it easier to quickly generate
-    the structure required at various viewport sizes. The attribute system allows
-    assigning values following standard HTML conventions, which makes it easier to read and
-    understand compared to long strung together CSS classes. Additionally, the layout attributes
-    help to separate custom app styles from the core structure, which further simplifies code.
+    Use the <code>layout</code> directive on a container element to specify the layout direction for its children:
+    horizontally in a row (<code>layout="row"</code>) or vertically in a column (<code>layout="column"</code>).
+    Note that <code>row</code> is the default layout direction if you specify the <code>layout</code> directive without a value.
   </p>
 
-  <md-divider></md-divider>
-  <h3 class="layout-title">Layout Attribute</h3>
+  <table>
+    <tr>
+      <td style="font-weight: bold; background-color: #DBEEF5">row</td>
+      <td style="padding-left: 10px;">Items arranged horizontally. <code>max-height = 100%</code> and <code>max-width</code>  is the width of the items in the container.</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold; background-color: #DBEEF5 ">column</td>
+      <td style="padding-left: 10px;">Items arranged vertically. <code>max-width = 100%</code>  and <code>max-height</code> is the height of the items in the container.</td>
+    </tr>
+  </table>
+
+  <br/>
+
+  <docs-demo demo-title="Layout Directive" class="small-demo colorNested">
+    <demo-file name="index.html">
+    <div layout="row">
+      <div flex>First item in row</div>
+      <div flex>Second item in row</div>
+    </div>
+    <div layout="column">
+      <div flex>First item in column</div>
+      <div flex>Second item in column</div>
+    </div>
+    </demo-file>
+  </docs-demo>
+
   <p>
-    Use the <code>layout</code> attribute on an element to arrange its children
-    horizontally in a row (<code>layout="horizontal"</code>), or vertically in
-    a column (<code>layout="vertical"</code>). The layout attribute's value
-    describes what the "main axis" is for its children.
-  </p>
+      Note that <code>layout</code> only affects the flow direction for that container's <b>immediate</b> children.
+    </p>
 
-  <hljs lang="html">
-<div layout="horizontal">
-  <div>I'm left.</div>
-  <div>I'm right.</div>
-</div>
+  <hr>
 
-<div layout="vertical">
-  <div>I'm above.</div>
-  <div>I'm below.</div>
-</div>
-  </hljs>
-
-  <md-divider></md-divider>
-  <h3 class="layout-title">Responsive Layout</h3>
+  <br/>
+  <h3>Layouts and Responsive Breakpoints</h3>
 
   <p>
-    From the ground up the layout system is built around being responsive to viewport size.
-    Out of the box it comes with useful and customizable breakpoints, which can be easily reused.
-    The <code>layout</code> attribute used with "horizontal" or "vertical" values define arrangement on all device sizes.
-    If you wish to define a layout depending upon the device size, there are
-    other <code>layout</code> attributes available:
+    As discussed in the <a href="layout/introduction">Layout Introduction page</a> you can
+    make your layout change depending upon the device view size by using <b>breakpoint alias</b> suffixes.
+   </p>
+
+  <p>
+    To make your layout automatically change depending upon the device screen size, use one to the following <code>layout</code>
+    APIs to set the layout direction for devices with view widths:
   </p>
 
-  <ul>
-    <li>
-      <code>layout</code> sets the default layout on all devices.
-    </li>
-    <li>
-      <code>layout-sm</code> sets the layout on device >=600px wide.
-    </li>
-    <li>
-      <code>layout-md</code> sets the layout on devices >=960px wide.
-    </li>
-    <li>
-      <code>layout-lg</code> sets the layout on devices >=1200px wide.
-    </li>
-  </ul>
+   <table class="md-api-table">
+    <thead>
+      <tr>
+        <th>API</th>
+        <th>Device width when breakpoint overrides default</th>
+      </tr>
+    </thead>
+     <tr>
+       <td>layout</td>
+       <td>Sets default layout direction unless overridden by another breakpoint.</td>
+     </tr>
+     <tr>
+       <td>layout-xs</td>
+       <td>width &lt; <b>600</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-gt-xs</td>
+       <td>width &gt;= <b>600</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-sm</td>
+       <td><b>600</b>px &lt;= width &lt; <b>960</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-gt-sm</td>
+       <td>width &gt;= <b>960</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-md</td>
+       <td><b>960</b>px &lt;= width &lt; <b>1280</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-gt-md</td>
+       <td>width &gt;= <b>1280</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-lg</td>
+       <td><b>1280</b>px &lt;= width &lt; <b>1920</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-gt-lg</td>
+       <td>width &gt;= <b>1920</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-xl</td>
+       <td>width &gt;= <b>1920</b>px</td>
+     </tr>
+   </table>
+   <br/>
 
-  <hljs lang="html">
-<div layout="vertical" layout-sm="horizontal">
-  <div>
-    I'm above on tiny devices, and to the left on devices wider than 600px.
-  </div>
-  <div>
-    I'm below on tiny devices, and to the right on devices wider than 600px.
-  </div>
-</div>
-  </hljs>
+  <p><a
+      href="https://camo.githubusercontent.com/ad81ae92f8b4285747ce4e48007bf3f104dd5630/687474703a2f2f6d6174657269616c2d64657369676e2e73746f726167652e676f6f676c65617069732e636f6d2f7075626c6973682f6d6174657269616c5f765f342f6d6174657269616c5f6578745f7075626c6973682f3042386f6c5631354a3761625053474678656d46695156527462316b2f6c61796f75745f61646170746976655f627265616b706f696e74735f30312e706e67"
+      target="_blank" style="text-decoration: none;border: 0 none;">
+      <img
+      src="https://camo.githubusercontent.com/ad81ae92f8b4285747ce4e48007bf3f104dd5630/687474703a2f2f6d6174657269616c2d64657369676e2e73746f726167652e676f6f676c65617069732e636f6d2f7075626c6973682f6d6174657269616c5f765f342f6d6174657269616c5f6578745f7075626c6973682f3042386f6c5631354a3761625053474678656d46695156527462316b2f6c61796f75745f61646170746976655f627265616b706f696e74735f30312e706e67"
+      alt=""
+      style="max-width:100%;text-decoration: none;border: 0 none;"></a>
+  </p>
 
-</div>
+
+  <p>
+    For the demo below, as you shrink your browser window width notice the flow direction changes to <code>column</code>
+    for mobile devices (<code>xs</code>). And as you expand it will reset to <code>row</code>
+    for <code>gt-sm</code> view sizes.
+
+  </p>
+
+  <docs-demo demo-title="Responsive Layouts" class="small-demo colorNested">
+    <demo-file name="index.html">
+      <div layout="row" layout-xs="column">
+        <div flex>
+          I'm above on mobile, and to the left on larger devices.
+        </div>
+        <div flex>
+          I'm below on mobile, and to the right on larger devices.
+        </div>
+      </div>
+    </demo-file>
+  </docs-demo>
+
+
+
+  <p>
+    See the <a href="layout/options">Layout Options page</a> for more options such as padding, alignments, etc.
+  </p>
+
+
+
+ </div>
+

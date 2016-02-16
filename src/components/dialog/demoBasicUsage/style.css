@@ -1,34 +1,21 @@
-.full {
-  width: 100%;
-  height: 100%;
+#popupContainer {
+    position:relative;
 }
 
-.gap {
-  width:50px;
+.footer {
+    width:100%;
+    text-align: center;
+    margin-left:20px;
+}
+ .footer, .footer > code {
+    font-size: 0.8em;
+    margin-top:50px;
 }
 
-
-.md-subheader {
-    background-color: #dcedc8;
-    margin: 0px;
+button {
+    width: 200px;
 }
 
-h2.md-subheader {
-    margin: 0px;
-    margin-left: -24px;
-    margin-right: -24px;
-    margin-top: -24px;
+div#status {
+    color: #c60008;
 }
-
-h2.md-subheader.md-sticky-clone {
-    margin-right:0px;
-    margin-top:0px;
-
-    box-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16);
-}
-
-h2 .md-subheader-content {
-    padding-left: 10px;
-}
-
-

@@ -1,50 +1,68 @@
 describe('<md-switch>', function() {
   var CHECKED_CSS = 'md-checked';
+  var $compile, parentScope;
 
-  beforeEach(TestUtil.mockRaf);
-  beforeEach(module('ngAria'));
-  beforeEach(module('material.components.switch'));
+  beforeEach(module('ngAria', 'material.components.switch'));
 
-  it('should set checked css class and aria-checked attributes', inject(function($compile, $rootScope) {
-    var element = $compile('<div>' +
-                             '<md-switch ng-model="blue">' +
-                             '</md-switch>' +
-                             '<md-switch ng-model="green">' +
-                             '</md-switch>' +
-                           '</div>')($rootScope);
+  beforeEach(inject(function($injector) {
+    var $rootScope = $injector.get('$rootScope');
+    parentScope = $rootScope.$new();
 
-    $rootScope.$apply(function(){
-      $rootScope.blue = false;
-      $rootScope.green = true;
+    $compile = $injector.get('$compile');
+  }));
+
+  it('should set checked css class and aria-checked attributes', function() {
+    var template =
+        '<div>' +
+          '<md-switch ng-model="blue"></md-switch>' +
+          '<md-switch ng-model="green"></md-switch>' +
+        '</div>';
+
+    var element = $compile(template)(parentScope);
+
+    parentScope.$apply(function(){
+      parentScope.blue = false;
+      parentScope.green = true;
     });
 
-    var cbElements = angular.element(element[0].querySelectorAll('.md-switch-thumb'));
+    var switches = angular.element(element[0].querySelectorAll('md-switch'));
 
-    expect(cbElements.eq(0).hasClass(CHECKED_CSS)).toEqual(false);
-    expect(cbElements.eq(1).hasClass(CHECKED_CSS)).toEqual(true);
-    // expect(cbElements.eq(0).attr('aria-checked')).toEqual('false');
-    // expect(cbElements.eq(1).attr('aria-checked')).toEqual('true');
-    expect(cbElements.eq(0).attr('role')).toEqual('checkbox');
-  }));
+    expect(switches.eq(0).hasClass(CHECKED_CSS)).toEqual(false);
+    expect(switches.eq(0).attr('aria-checked')).toEqual('false');
+    expect(switches.eq(0).attr('role')).toEqual('checkbox');
 
-  it('should be disabled with disabled attr', inject(function($compile, $rootScope) {
-    var element = $compile('<div>' +
-                             '<md-switch ng-model="blue">' +
-                             '</md-switch>' +
-                           '</div>')($rootScope);
+    expect(switches.eq(1).hasClass(CHECKED_CSS)).toEqual(true);
+    expect(switches.eq(1).attr('aria-checked')).toEqual('true');
+    expect(switches.eq(1).attr('role')).toEqual('checkbox');
 
-    var switchThumb = angular.element(element[0].querySelectorAll('.md-switch-thumb'));
+    parentScope.$apply(function(){
+      parentScope.blue = true;
+      parentScope.green = false;
+    });
 
-    $rootScope.$apply('blue = false');
-    switchThumb.attr('disabled', 'true');
+    expect(switches.eq(1).hasClass(CHECKED_CSS)).toEqual(false);
+    expect(switches.eq(0).hasClass(CHECKED_CSS)).toEqual(true);
+    expect(switches.eq(1).attr('aria-checked')).toEqual('false');
+    expect(switches.eq(0).attr('aria-checked')).toEqual('true');
+    expect(switches.eq(1).attr('role')).toEqual('checkbox');
+  });
 
-    switchThumb.triggerHandler('click');
-    expect($rootScope.blue).toBe(false);
+  it('should have tabindex -1 while disabled', function() {
+    parentScope.value = false;
+    var el = $compile('<md-switch ng-disabled="value">')(parentScope);
 
-    switchThumb.removeAttr('disabled');
+    parentScope.$apply();
+    expect(el.attr('tabindex')).not.toEqual('-1');
 
-    switchThumb.triggerHandler('click');
-    expect($rootScope.blue).toBe(true);
-  }));
+    parentScope.$apply('value = true');
+    expect(el.attr('tabindex')).toEqual('-1');
+  });
 
+  it('should disable via `disabled` attribute', function() {
+    parentScope.value = false;
+    var element = $compile('<md-switch disabled>')(parentScope);
+
+    parentScope.$apply();
+    expect(element.attr('tabindex')).toEqual('-1');
+  });
 });

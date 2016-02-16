@@ -1,113 +1,35 @@
-$h1-font-size-base: 2em !default;
-$h1-margin-base: 0.67em 0 !default;
-
-$h2-font-size-base: 1.5em !default;
-$h2-margin-base: 0.83em 0 !default;
-
-$h3-font-size-base: 1.17em !default;
-$h3-margin-base: 1em 0 !default;
-
-$h4-font-size-base: 1em !default;
-$h4-margin-base: 1.33em 0 !default;
-
-$h5-font-size-base: 0.83em !default;
-$h5-margin-base: 1.67em 0 !default;
-
-$h6-font-size-base: 0.75em !default;
-$h6-margin-base: 2.33em 0 !default;
-
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-}
-
-:focus {
-  outline: none;
-}
-
 html, body {
   height: 100%;
-  color: $foreground-primary-color;
-  background: $background-color-base;
-
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-  -webkit-touch-callout: none;
-  -webkit-text-size-adjust: 100%;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-
-  p {
-    line-height: 1.846;
-  }
-
-  h3 {
-    display: block;
-    @include margin-selectors();
-    font-size: 1.17em;
-    font-weight: bold;
-  }
-}
-
-button,
-select,
-html,
-textarea,
-input {
-  font-family: $font-family;
+  color: rgba(0,0,0,0.87);
+  background: white;
+  position: relative;
 }
 
 body {
   margin: 0;
   padding: 0;
-  outline: none;
 }
 
+[tabindex='-1']:focus {
+  outline: none;
+}
 .inset {
   padding: 10px;
 }
 
-button {
-  font-family: $font-family;
-}
-
-a {
-  background: transparent;
-  outline: none;
-}
-
-h1 {
-  font-size: $h1-font-size-base;
-  margin: $h1-margin-base;
-}
-h2 {
-  font-size: $h2-font-size-base;
-  margin: $h2-margin-base;
-}
-h3 {
-  font-size: $h3-font-size-base;
-  margin: $h3-margin-base;
-}
-h4 {
-  font-size: $h4-font-size-base;
-  margin: $h4-margin-base;
-}
-h5 {
-  font-size: $h5-font-size-base;
-  margin: $h5-margin-base;
-}
-h6 {
-  font-size: $h6-font-size-base;
-  margin: $h6-margin-base;
+button.md-no-style {
+  font-weight: normal;
+  background-color: inherit;
+  text-align: left;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
 select,
 button,
 textarea,
 input {
-  margin: 0;
-  font-size: 100%;
-  font-family: inherit;
   vertical-align: baseline;
 }
 
@@ -130,12 +52,6 @@ textarea {
 }
 
 input {
-  &[type="radio"],
-  &[type="checkbox"] {
-    padding: 0;
-    box-sizing: border-box;
-  }
-
   &[type="search"] {
     -webkit-appearance: textfield;
     box-sizing: content-box;
@@ -148,53 +64,16 @@ input {
   }
 }
 
-@font-face {
-  font-family: 'RobotoDraft';
-  font-style: normal;
-  font-weight: 100;
-  src: local('RobotoDraft Thin'), local('RobotoDraft-Thin'), url(//fonts.gstatic.com/s/robotodraft/v1/hope9NW9iJ5hh8P5PM_EAyeJLMOzE6CCkidNEpZOseY.woff) format('woff');
-}
-@font-face {
-  font-family: 'RobotoDraft';
-  font-style: normal;
-  font-weight: 300;
-  src: local('RobotoDraft Light'), local('RobotoDraft-Light'), url(//fonts.gstatic.com/s/robotodraft/v1/u0_CMoUf3y3-4Ss4ci-VwR_xHqYgAV9Bl_ZQbYUxnQU.woff) format('woff');
-}
-@font-face {
-  font-family: 'RobotoDraft';
-  font-style: normal;
-  font-weight: 400;
-  src: local('RobotoDraft'), local('RobotoDraft-Regular'), url(//fonts.gstatic.com/s/robotodraft/v1/0xES5Sl_v6oyT7dAKuoni4bN6UDyHWBl620a-IRfuBk.woff) format('woff');
-}
-@font-face {
-  font-family: 'RobotoDraft';
-  font-style: normal;
-  font-weight: 500;
-  src: local('RobotoDraft Medium'), local('RobotoDraft-Medium'), url(//fonts.gstatic.com/s/robotodraft/v1/u0_CMoUf3y3-4Ss4ci-VwSqHEX2q--o2so14pIEl08w.woff) format('woff');
-}
-@font-face {
-  font-family: 'RobotoDraft';
-  font-style: normal;
-  font-weight: 700;
-  src: local('RobotoDraft Bold'), local('RobotoDraft-Bold'), url(//fonts.gstatic.com/s/robotodraft/v1/u0_CMoUf3y3-4Ss4ci-VwTqR_3kx9_hJXbbyU8S6IN0.woff) format('woff');
-}
-@font-face {
-  font-family: 'RobotoDraft';
-  font-style: normal;
-  font-weight: 900;
-  src: local('RobotoDraft Black'), local('RobotoDraft-Black'), url(//fonts.gstatic.com/s/robotodraft/v1/u0_CMoUf3y3-4Ss4ci-VwUExzZ44ka2Lr5i-x5aWr0E.woff) format('woff');
-}
-@font-face {
-  font-family: 'RobotoDraft';
-  font-style: italic;
-  font-weight: 400;
-  src: local('RobotoDraft Italic'), local('RobotoDraft-Italic'), url(//fonts.gstatic.com/s/robotodraft/v1/er-TIW55l9KWsTS1x9bTftkZXW4sYc4BjuAIFc1SXII.woff) format('woff');
-}
-@font-face {
-  font-family: 'RobotoDraft';
-  font-style: italic;
-  font-weight: 700;
-  src: local('RobotoDraft Bold Italic'), local('RobotoDraft-BoldItalic'), url(//fonts.gstatic.com/s/robotodraft/v1/5SAvdU0uYYlH8OURAykt5wRV2F9RPTaqyJ4QibDfkzM.woff) format('woff');
+.md-visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  text-transform: none;
+  width: 1px;
 }
 
 .md-shadow {
@@ -208,12 +87,83 @@ input {
 }
 
 .md-shadow-bottom-z-1 {
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  @include md-shadow-bottom-z-1();
 }
 .md-shadow-bottom-z-2 {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+  @include md-shadow-bottom-z-2();
 }
 
 .md-shadow-animated.md-shadow {
   transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/*
+ * A container inside of a rippling element (eg a button),
+ * which contains all of the individual ripples
+ */
+.md-ripple-container {
+  pointer-events: none;
+  position: absolute;
+  overflow: hidden;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transition: all 0.55s $swift-ease-out-timing-function;
+}
+
+.md-ripple {
+  position: absolute;
+  transform: translate(-50%, -50%) scale(0);
+  transform-origin: 50% 50%;
+  opacity: 0;
+  border-radius: 50%;
+  &.md-ripple-placed {
+    $sizeDuration: 0.45s * 2;
+    transition: margin $sizeDuration $swift-ease-out-timing-function,
+                border $sizeDuration $swift-ease-out-timing-function,
+                width $sizeDuration $swift-ease-out-timing-function,
+                height $sizeDuration $swift-ease-out-timing-function,
+                opacity $sizeDuration $swift-ease-out-timing-function,
+                transform $sizeDuration $swift-ease-out-timing-function;
+  }
+  &.md-ripple-scaled {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  &.md-ripple-active, &.md-ripple-full, &.md-ripple-visible {
+    opacity: 0.20;
+  }
+}
+
+.md-padding {
+  padding: 8px;
+}
+
+.md-margin {
+  margin: 8px;
+}
+
+.md-scroll-mask {
+  position: absolute;
+  background-color: transparent;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  > .md-scroll-mask-bar {
+    display: block;
+    position: absolute;
+    background-color: #fafafa;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: $z-index-scroll-mask;
+    box-shadow: inset 0px 0px 1px rgba(0, 0, 0, 0.3)
+  }
+}
+
+@media (min-width: $layout-breakpoint-sm) {
+  .md-padding {
+    padding: 16px;
+  }
 }

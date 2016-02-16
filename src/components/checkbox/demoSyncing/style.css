@@ -1,0 +1,31 @@
+.checkboxDemo1 div {
+  clear: both;
+}
+.checkboxDemo1 md-checkbox {
+  float: left;
+}
+legend {
+  color: #3F51B5;
+}
+legend code {
+  color: #3F51B5;
+  font-weight: normal;
+}
+p {
+  padding-left: 8px;
+}
+
+.info {
+  padding-left: 13px;
+}
+
+div.standard {
+  padding: 8px;
+  padding-left: 15px;
+}
+
+fieldset.standard {
+  border-style: solid;
+  border-width: 1px;
+  height: 100%;
+}

@@ -1,0 +1,51 @@
+<div class="doc-demo-content doc-content">
+  <div flex layout="column" style="z-index:1">
+
+    <div class="doc-description" ng-bind-html="demoCtrl.demoDescription.contents | toHtml"></div>
+
+    <div ng-transclude></div>
+
+    <section class="demo-container md-whiteframe-z1"
+      ng-class="{'show-source': demoCtrl.$showSource}" >
+
+      <md-toolbar class="demo-toolbar md-primary">
+        <div class="md-toolbar-tools">
+          <h3>{{demoCtrl.demoTitle}}</h3>
+          <span flex></span>
+          <md-button
+            class="md-icon-button"
+            aria-label="View Source"
+            ng-class="{ active: demoCtrl.$showSource }"
+            ng-click="demoCtrl.$showSource = !demoCtrl.$showSource">
+              <md-tooltip md-autohide>View Source</md-tooltip>
+              <md-icon md-svg-src="img/icons/ic_code_24px.svg"></md-icon>
+          </md-button>
+          <md-button
+              ng-hide="{{exampleNotEditable}}"
+              hide-sm
+              ng-click="demoCtrl.editOnCodepen()"
+              aria-label="Edit on CodePen"
+              class="md-icon-button">
+            <md-tooltip md-autohide>Edit on CodePen</md-tooltip>
+            <md-icon md-svg-src="img/icons/codepen-logo.svg"></md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+
+      <!-- Source views -->
+      <md-tabs class="demo-source-tabs md-primary" ng-show="demoCtrl.$showSource" style="min-height: 0;">
+        <md-tab ng-repeat="file in demoCtrl.orderedFiles" label="{{file.name}}">
+          <md-content md-scroll-y class="demo-source-container">
+            <hljs class="no-header" code="file.contentsPromise" lang="{{file.fileType}}" should-interpolate="demoCtrl.interpolateCode">
+            </hljs>
+          </md-content>
+        </md-tab>
+      </md-tabs>
+
+      <!-- Live Demos -->
+      <demo-include files="demoCtrl.files" module="demoCtrl.demoModule" class="{{demoCtrl.demoId}}">
+      </demo-include>
+    </section>
+
+  </div>
+</div>

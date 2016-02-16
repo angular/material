@@ -1,0 +1,22 @@
+#horizontal-container {
+  height: 100px;
+  width: 830px;
+}
+
+.repeated-item {
+  border-right: 1px solid #ddd;
+  box-sizing: border-box;
+  display: inline-block;
+  height: 84px;
+  padding-top: 35px;
+  text-align: center;
+  width: 50px;
+}
+
+md-content {
+  margin: 16px;
+}
+
+md-virtual-repeat-container {
+  border: solid 1px grey;
+}

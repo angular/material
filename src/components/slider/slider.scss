@@ -1,0 +1,293 @@
+$slider-background-color:  rgb(200, 200, 200) !default;
+$slider-height:  48px !default;
+
+$slider-track-height:  2px !default;
+$slider-thumb-width:  32px !default;
+$slider-thumb-height:  $slider-thumb-width !default;
+
+$slider-thumb-default-scale: 0.5 !default;
+$slider-thumb-hover-scale: 0.6 !default;
+$slider-thumb-focus-scale: 0.85 !default;
+$slider-thumb-disabled-scale: 0.35 !default;
+$slider-thumb-disabled-border: 6px !default;
+
+$slider-focus-thumb-width:  48px !default;
+$slider-focus-thumb-height: $slider-focus-thumb-width !default;
+$slider-focus-ring-border-width: 3px !default;
+
+$slider-arrow-height: 16px !default;
+$slider-arrow-width: 28px !default;
+
+$slider-sign-height: 28px !default;
+$slider-sign-width: 28px !default;
+$slider-sign-top: ($slider-height / 2) - ($slider-thumb-default-scale * $slider-thumb-height / 2) - ($slider-sign-height) - ($slider-arrow-height) + 8px !default;
+
+@keyframes sliderFocusThumb {
+  0% {
+    opacity: 0;
+    transform: scale(0.0);
+  }
+  50% {
+    transform: scale(1.0);
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@mixin slider-thumb-position($width: $slider-thumb-width, $height: $slider-thumb-height) {
+  position: absolute;
+  left: -$width / 2;
+  top: ($slider-height / 2) - ($height / 2);
+  width: $width;
+  height: $height;
+  border-radius: max($width, $height);
+}
+
+md-slider {
+
+  height: $slider-height;
+  position: relative;
+  display: block;
+  margin-left: 4px;
+  margin-right: 4px;
+  padding: 0;
+
+  *, *:after {
+    box-sizing: border-box;
+  }
+
+  .md-slider-wrapper {
+    position: relative;
+  }
+
+  /**
+   * Track
+   */
+  .md-track-container {
+    width: 100%;
+    position: absolute;
+    top: ($slider-height / 2) - ($slider-track-height) / 2;
+    height: $slider-track-height;
+  }
+  .md-track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 100%;
+  }
+  .md-track-fill {
+    transition: width 0.05s linear;
+  }
+  .md-track-ticks {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 100%;
+  }
+  .md-track-ticks canvas {
+    // Restrict the width of the canvas so that ticks are rendered correctly
+    // when parent elements are resized. Else, the position of the ticks might
+    // be incorrect as we only update the canvas width attribute on window resize.
+    width: 100%;
+  }
+
+  /**
+   * Slider thumb
+   */
+  .md-thumb-container {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate3d(-50%,-50%,0);
+    transition: left 0.1s linear;
+  }
+  .md-thumb {
+    z-index: 1;
+
+    // Positioning the outer area of the thumb 6px bigger than it needs to be keeps
+    // the :after area being clipped by the background of the focus-thumb animation.
+    @include slider-thumb-position($slider-thumb-width + 6, $slider-thumb-height + 6);
+
+    // We render thumb in an :after selector to fix an obscure problem with the
+    // thumb being clipped by the focus-ring and focus-thumb while running the focus
+    // animation.
+    &:after {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: $slider-thumb-width;
+      height: $slider-thumb-height;
+      border-radius: max($slider-thumb-width, $slider-thumb-height);
+      border-width: 3px;
+      border-style: solid;
+    }
+
+    transform: scale($slider-thumb-default-scale);
+    transition: all 0.1s linear;
+  }
+
+  /* The sign that's focused in discrete mode */
+  .md-sign {
+
+    /* Center the children (slider-thumb-text) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    left: -($slider-sign-height / 2);
+    top: $slider-sign-top;
+    width: $slider-sign-width;
+    height: $slider-sign-height;
+    border-radius: max($slider-sign-height, $slider-sign-width);
+
+    transform: scale(0.4) translate3d(0,(-$slider-sign-top + 8) / 0.4,0);
+    transition: all 0.2s ease-in-out;
+
+    /* The arrow pointing down under the sign */
+    &:after {
+      position: absolute;
+      content: '';
+      left: -($slider-sign-width / 2 - $slider-arrow-width / 2);
+      border-radius: $slider-arrow-height;
+      top: 19px;
+      border-left: $slider-arrow-width / 2 solid transparent;
+      border-right: $slider-arrow-width / 2 solid transparent;
+      border-top-width: $slider-arrow-height;
+      border-top-style: solid;
+
+      opacity: 0;
+      transform: translate3d(0,-8px,0);
+      transition: all 0.2s ease-in-out;
+    }
+
+    .md-thumb-text {
+      z-index: 1;
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+
+  /**
+   * The border/background that comes in when focused in non-discrete mode
+   */
+  .md-focus-thumb {
+    @include slider-thumb-position($slider-focus-thumb-width, $slider-focus-thumb-height);
+    display: none;
+    opacity: 0;
+    background-color: #C0C0C0;
+    animation: sliderFocusThumb 0.4s linear;
+  }
+  .md-focus-ring {
+    @include slider-thumb-position($slider-focus-thumb-width, $slider-focus-thumb-height);
+    transform: scale(0);
+    transition: all 0.2s linear;
+    opacity: 0.26;
+  }
+  .md-disabled-thumb {
+    @include slider-thumb-position(
+      $slider-thumb-width + $slider-thumb-disabled-border * 2,
+      $slider-thumb-height + $slider-thumb-disabled-border * 2
+    );
+    transform: scale($slider-thumb-disabled-scale);
+    border-width: $slider-thumb-disabled-border;
+    border-style: solid;
+    display: none;
+  }
+
+  &.md-min {
+    .md-thumb {
+      &:after {
+        background-color: white;
+      }
+    }
+    .md-sign {
+      opacity: 0;
+    }
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  /* Don't animate left/right while panning */
+  &.md-dragging {
+    .md-thumb-container,
+    .md-track-fill {
+      transition: none;
+    }
+  }
+
+  &:not([md-discrete]) {
+    /* Hide the sign and ticks in non-discrete mode */
+    .md-track-ticks,
+    .md-sign {
+      display: none;
+    }
+
+    &:not([disabled]) {
+      &:hover {
+        .md-thumb {
+          transform: scale($slider-thumb-hover-scale);
+        }
+      }
+
+      &:focus,
+      &.md-active {
+        .md-focus-thumb {
+          display: block;
+        }
+        .md-focus-ring {
+          transform: scale(1);
+        }
+        .md-thumb {
+          transform: scale($slider-thumb-focus-scale);
+        }
+      }
+    }
+  }
+
+  &[md-discrete] {
+    /* Hide the focus thumb in discrete mode */
+    .md-focus-thumb,
+    .md-focus-ring {
+      display: none;
+    }
+
+    &:not([disabled]) {
+      &:focus,
+      &.md-active {
+        .md-sign,
+        .md-sign:after {
+          opacity: 1;
+          transform: translate3d(0,0,0) scale(1.0);
+        }
+      }
+    }
+  }
+
+  &[disabled] {
+    .md-track-fill {
+      display: none;
+    }
+    .md-sign {
+      display: none;
+    }
+    .md-thumb {
+      transform: scale($slider-thumb-disabled-scale);
+    }
+    .md-disabled-thumb {
+      display: block;
+    }
+  }
+}
+
+@media screen and (-ms-high-contrast: active) {
+  md-slider.md-default-theme .md-track {
+    border-bottom: 1px solid #fff;
+  }
+}
+

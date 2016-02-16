@@ -1,0 +1,17 @@
+<div ng-controller="AppCtrl as appCtrl" ng-cloak>
+  <md-content layout-padding>
+    <md-grid-list
+        md-cols-gt-md="12" md-cols="3" md-cols-md="8"
+        md-row-height-gt-md="1:1" md-row-height="4:3"
+        md-gutter-gt-md="16px" md-gutter-md="8px" md-gutter="4px">
+      <md-grid-tile
+          ng-repeat="tile in appCtrl.colorTiles"
+          ng-style="{
+            'background': tile.color
+          }"
+          md-colspan-gt-sm="{{tile.colspan}}"
+          md-rowspan-gt-sm="{{tile.rowspan}}">
+      </md-grid-tile>
+    </md-grid-list>
+  </md-content>
+</div>
