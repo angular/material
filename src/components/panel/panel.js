@@ -340,7 +340,8 @@ function MdPanelService($rootElement, $rootScope, $injector) {
     attachTo: $rootElement,
     bindToController: true,
     scope: $rootScope.$new(true),
-    transformTemplate: angular.bind(this, this.wrapTemplate_)
+    transformTemplate: angular.bind(this, this.wrapTemplate_),
+    zIndex: defaultZIndex
   };
 
   /** @private {!Object} */
@@ -542,5 +543,5 @@ MdPanelRef.prototype._createPanel = function() {
  * @private
  */
 MdPanelRef.prototype._addStyles = function() {
-  this._panelContainer.css('z-index', this._config['zIndex'] || defaultZIndex);
+  this._panelContainer.css('z-index', this._config['zIndex']);
 };
