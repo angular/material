@@ -2,7 +2,8 @@ describe('$mdPanel', function() {
   var $mdPanel, $rootScope, $rootEl, $templateCache, $q;
   var panelRef;
   var attachedElements = [];
-  var PANEL_EL = '.md-panel-outer-wrapper';
+  var PANEL_WRAPPER_CLASS = '.md-panel-outer-wrapper';
+  var PANEL_EL = '.md-panel';
 
   /**
    * @param {!angular.$injector} $injector
@@ -114,8 +115,8 @@ describe('$mdPanel', function() {
 
       openPanel(config);
 
-      var panelEl = document.querySelector(PANEL_EL);
-      expect(panelEl.parentElement).toBe(parentEl);
+      var panelWrapperEl = document.querySelector(PANEL_WRAPPER_CLASS);
+      expect(panelWrapperEl.parentElement).toBe(parentEl);
 
       closePanel();
 
@@ -133,7 +134,7 @@ describe('$mdPanel', function() {
       openPanel(config);
 
       expect('.custom-class').toExist();
-      expect('.md-panel').toHaveClass(customClass);
+      expect(PANEL_EL).toHaveClass(customClass);
     });
 
     it('should set the z-index on the panel-container', function() {
@@ -146,7 +147,8 @@ describe('$mdPanel', function() {
 
       openPanel(config);
 
-      expect(document.querySelector(PANEL_EL).style.zIndex).toEqual(zIndex);
+      expect(document.querySelector(PANEL_WRAPPER_CLASS).style.zIndex)
+          .toEqual(zIndex);
     });
 
     it('should set z-index to 0', function() {
@@ -159,7 +161,8 @@ describe('$mdPanel', function() {
 
       openPanel(config);
 
-      expect(document.querySelector(PANEL_EL).style.zIndex).toEqual(zIndex);
+      expect(document.querySelector(PANEL_WRAPPER_CLASS).style.zIndex)
+          .toEqual(zIndex);
     });
   });
 
@@ -308,6 +311,113 @@ describe('$mdPanel', function() {
       openPanel(config);
 
       expect(PANEL_EL).toContainHtml(htmlContent);
+    });
+  });
+
+  describe('positioning logic', function() {
+    var config;
+    var mdPanelPosition;
+
+    beforeEach(function() {
+      config = {
+        template: '<div>Hello World!</div>'
+      };
+
+      mdPanelPosition = $mdPanel.newPanelPosition();
+    });
+
+    describe('should absolutely position the panel at', function() {
+      it('top', function () {
+        var top = '50px';
+        var position = mdPanelPosition.absolute().top(top);
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.top).toEqual(top);
+      });
+
+      it('top with default 0', function () {
+        var position = mdPanelPosition.absolute().top();
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.top).toEqual('0px');
+      });
+
+      it('bottom', function () {
+        var bottom = '50px';
+        var position = mdPanelPosition.absolute().bottom(bottom);
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.bottom).toEqual(bottom);
+      });
+
+      it('bottom with default 0', function () {
+        var position = mdPanelPosition.absolute().bottom();
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.bottom).toEqual('0px');
+      });
+
+      it('left', function () {
+        var left = '50px';
+        var position = mdPanelPosition.absolute().left(left);
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.left).toEqual(left);
+      });
+
+      it('left with default 0', function () {
+        var position = mdPanelPosition.absolute().left();
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.left).toEqual('0px');
+      });
+
+      it('right', function () {
+        var right = '50px';
+        var position = mdPanelPosition.absolute().right(right);
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.right).toEqual(right);
+      });
+
+      it('right with default 0', function () {
+        var position = mdPanelPosition.absolute().right();
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.right).toEqual('0px');
+      });
     });
   });
 
