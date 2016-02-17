@@ -162,14 +162,22 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   /**
    * Sets up any watchers used by autocomplete
    */
+  var wait = parseInt($scope.delay, 10) || 0;
   function configureWatchers () {
-    var wait = parseInt($scope.delay, 10) || 0;
     $attrs.$observe('disabled', function (value) { ctrl.isDisabled = !!value; });
     $attrs.$observe('required', function (value) { ctrl.isRequired = !!value; });
     $scope.$watch('searchText', wait ? $mdUtil.debounce(handleSearchText, wait) : handleSearchText);
     $scope.$watch('selectedItem', selectedItemChange);
+    $scope.$watch('delay', refreshWait);
     angular.element($window).on('resize', positionDropdown);
     $scope.$on('$destroy', cleanup);
+  }
+  
+  /**
+   * Refreshs the wait var when is changed in the external scope
+   */
+  function refreshWait(){
+      wait = parseInt($scope.delay, 10) || 0;
   }
 
   /**
