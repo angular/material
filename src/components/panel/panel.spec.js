@@ -131,6 +131,20 @@ describe('$mdPanel', function() {
       expect('.custom-class').toExist();
       expect('.md-panel').toHaveClass(customClass);
     });
+
+    it('should set the z-index on the panel-container', function() {
+      var template = '<div>Hello World!</div>';
+      var zIndex = '150';
+
+      var config = {
+        template: template,
+        zIndex: zIndex
+      };
+
+      openPanel(config);
+
+      expect(document.querySelector(PANEL_EL).style.zIndex).toEqual(zIndex);
+    });
   });
 
   describe('component logic: ', function() {

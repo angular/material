@@ -320,6 +320,10 @@ angular
  *****************************************************************************/
 
 
+// Default z-index for the panel.
+var defaultZIndex = 80;
+
+
 /**
  * A service that is used for controlling/displaying panels on the screen.
  * @param {!angular.JQLite} $rootElement
@@ -527,5 +531,16 @@ MdPanelRef.prototype._createPanel = function() {
         if (self._config['panelClass']) {
           self._panelEl.addClass(self._config['panelClass']);
         }
+
+        self._addStyles();
       });
+};
+
+
+/**
+ * Adds the styles for the panel, such as positioning and z-index.
+ * @private
+ */
+MdPanelRef.prototype._addStyles = function() {
+  this._panelContainer.css('z-index', this._config['zIndex'] || defaultZIndex);
 };
