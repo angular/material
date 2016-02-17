@@ -105,18 +105,18 @@ angular
  *     to appending to the root element of the application.
  *   - `panelClass` - `{string=}`: A css class to apply to the panel element.
  *     This class should define any borders, box-shadow, etc. for the panel.
+ *   - `position` - `{MdPanelPosition=}`: An MdPanelPosition object that
+ *     specifies the alignment of the panel. For more information, see
+ *     `MdPanelPosition`.
  *
  * TODO(ErinCoughlan): Add the following config options.
  *   - `groupName` - `{string=}`: Name of panel groups. This group name is
  *     used for configuring the number of open panels and identifying specific
  *     behaviors for groups. For instance, all tooltips will be identified
  *     using the same groupName.
- *   - `position` - `{$mdPanelPosition=}`: An $mdPanelPosition object that
- *     specifies the alignment of the panel. For more information, see
- *     `$mdPanelPosition`.
- *   - `animation` - `{$mdPanelAnimation=}`: An $mdPanelAnimation object that
+ *   - `animation` - `{MdPanelAnimation=}`: An MdPanelAnimation object that
  *     specifies the animation of the panel. For more information, see
- *     `$mdPanelAnimation`.
+ *     `MdPanelAnimation`.
  *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop
  *     behind the panel. Defaults to false.
  *   - `escapeToClose` - `{boolean=}`: Whether the user can press escape to
@@ -166,6 +166,17 @@ angular
  *
  * @param groupName {string} The name of the group to configure.
  * @param maxOpen {number} The max number of panels that can be opened.
+ */
+
+
+/**
+ * @ngdoc method
+ * @name $mdPanel#newPanelPosition
+ * @description
+ * Returns a new instance of the MdPanelPosition object. Use this to create
+ * the position config object.
+ *
+ * @returns {MdPanelPosition} panelPosition
  */
 
 
@@ -221,103 +232,159 @@ angular
 
 
 /*****************************************************************************
- *                               $mdPanelPosition                            *
+ *                               MdPanelPosition                            *
  *****************************************************************************/
 
 
 /**
  * @ngdoc object
- * @name $mdPanelPosition
+ * @name MdPanelPosition
  * @description
  * Object for configuring the position of the panel. Examples:
  *
  * Centering the panel:
- * `$mdPanelPosition.absolute().top(‘50%’).left(‘50%’);`
+ * `new MdPanelPosition().absolute().center();`
  *
  * Overlapping the panel with an element:
- * `$mdPanelPosition.relativeTo(someElement).top(‘0’).left(‘0’);`
+ * `new MdPanelPosition()
+ *     .relativeTo(someElement)
+ *     .withPanelXPosition('align-left')
+ *     .withPanelYPosition('align-tops');`
  *
  * Aligning the panel with the bottom of an element:
- * `$mdPanelPosition.relativeTo(someElement);`
+ * `new MdPanelPosition()
+ *     .relativeTo(someElement)
+ *     .withPanelXPosition('center')
+ *     .withPanelYPosition('below');`
  */
 
 /**
  * @ngdoc method
- * @name $mdPanelPosition#absolute
+ * @name MdPanelPosition#absolute
  * @description
  * Positions the panel absolutely relative to the parent element. If the parent
  * is document.body, this is equivalent to positioning the panel absolutely
  * within the viewport.
- * @returns {$mdPanelPosition}
+ * @returns {MdPanelPosition}
  */
 
 /**
  * @ngdoc method
- * @name $mdPanelPosition#relativeTo
+ * @name MdPanelPosition#relativeTo
  * @description
  * Positions the panel relative to a specific element.
  * @param {!angular.JQLite} element Element to position the panel with
  *     respect to.
- * @returns {$mdPanelPosition}
+ * @returns {MdPanelPosition}
  */
 
 /**
  * @ngdoc method
- * @name $mdPanelPosition#top
+ * @name MdPanelPosition#top
  * @description
  * Sets the value of `top` for the panel.
- * @param {string} top Value of `top`.
- * @returns {$mdPanelPosition}
+ * @param {string=} opt_top Value of `top`. Defaults to '0'.
+ * @returns {MdPanelPosition}
  */
 
 /**
  * @ngdoc method
- * @name $mdPanelPosition#bottom
+ * @name MdPanelPosition#bottom
  * @description
  * Sets the value of `bottom` for the panel.
- * @param {string} top Value of `bottom`.
- * @returns {$mdPanelPosition}
+ * @param {string=} opt_bottom Value of `bottom`. Defaults to '0'.
+ * @returns {MdPanelPosition}
  */
 
 /**
  * @ngdoc method
- * @name $mdPanelPosition#left
+ * @name MdPanelPosition#left
  * @description
  * Sets the value of `left` for the panel.
- * @param {string} top Value of `left`.
- * @returns {$mdPanelPosition}
+ * @param {string=} opt_left Value of `left`. Defaults to '0'.
+ * @returns {MdPanelPosition}
  */
 
 /**
  * @ngdoc method
- * @name $mdPanelPosition#right
+ * @name MdPanelPosition#right
  * @description
  * Sets the value of `right` for the panel.
- * @param {string} top Value of `right`.
- * @returns {$mdPanelPosition}
+ * @param {string=} opt_right Value of `right`. Defaults to '0'.
+ * @returns {MdPanelPosition}
  */
 
 /**
  * @ngdoc method
- * @name $mdPanelPosition#offsetX
+ * @name MdPanelPosition#withPanelXPosition
+ * @param {string} xPosition
+ * @description
+ * Sets the x position for the panel relative to another element.
+ * xPosition must be one of the following values:
+ *
+ * center | align-left | align-right | align-start | align-end |
+ * offset-left | offset-right | offset-start | offset-end
+ *
+ *    *************
+ *    *           *
+ *    *   PANEL   *
+ *    *           *
+ *    *************
+ *   A B    C    D E
+ *
+ * A: offset-right, offset-start (for LTR displays)
+ * B: align-left, align-start (for LTR displays)
+ * C: center
+ * D: align-right, align-end (for LTR displays)
+ * E: offset-left, offset-end (for LTR displays)
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelPosition#withPanelYPosition
+ * @param {string} yPosition
+ * @description
+ * Sets the y position for the panel relative to another element.
+ * yPosition must be one of the following values:
+ *
+ * center | align-tops | align-bottoms | above | below
+ *
+ *   F
+ *   G *************
+ *     *           *
+ *   H *   PANEL   *
+ *     *           *
+ *   I *************
+ *   J
+ *
+ * F: below
+ * G: align-tops
+ * H: center
+ * I: align-bottoms
+ * J: above
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelPosition#withOffsetX
  * @description
  * Sets the value of the offset in the x-direction.
  * @param {string} offsetX
- * @returns {$mdPanelPosition}
+ * @returns {MdPanelPosition}
  */
 
 /**
  * @ngdoc method
- * @name $mdPanelPosition#offsetY
+ * @name MdPanelPosition#withOffsetY
  * @description
  * Sets the value of the offset in the y-direction.
  * @param {string} offsetY
- * @returns {$mdPanelPosition}
+ * @returns {MdPanelPosition}
  */
 
 
 /*****************************************************************************
- *                                 IMPLEMENTATION                            *
+ *                                IMPLEMENTATION                             *
  *****************************************************************************/
 
 
@@ -401,6 +468,22 @@ MdPanelService.prototype.wrapTemplate_ = function(origTemplate) {
             '</div>' +
          '</div>';
 };
+
+
+/**
+ * Returns a new instance of the MdPanelPosition. Use this to create the
+ * positioning object.
+ *
+ * @returns {MdPanelPosition}
+ */
+MdPanelService.prototype.newPanelPosition = function() {
+  return new MdPanelPosition();
+};
+
+
+/*****************************************************************************
+ *                                 MdPanelRef                                *
+ *****************************************************************************/
 
 
 /**
@@ -545,4 +628,158 @@ MdPanelRef.prototype._createPanel = function() {
  */
 MdPanelRef.prototype._addStyles = function() {
   this._panelContainer.css('z-index', this._config['zIndex']);
+
+  var positionConfig = this._config['position'];
+
+  if (!positionConfig) { return; }
+
+  var isAbsolute = positionConfig.getAbsolute();
+  var panelPosition = isAbsolute ? 'fixed' : 'relative';
+  this._panelEl.css('position', panelPosition);
+
+  if (isAbsolute) {
+    this._panelEl.css('top', positionConfig.getTop());
+    this._panelEl.css('bottom', positionConfig.getBottom());
+    this._panelEl.css('left', positionConfig.getLeft());
+    this._panelEl.css('right', positionConfig.getRight());
+  }
+};
+
+
+/*****************************************************************************
+ *                               MdPanelPosition                             *
+ *****************************************************************************/
+
+
+/**
+ * Position configuration object. To use, create an MdPanelPosition with the
+ * desired properties, then pass the object as part of $mdPanel creation.
+ *
+ * Example:
+ *
+ * var panelPosition = new MdPanelPosition()
+ *     .relativeTo(myButtonEl)
+ *     .withPanelXPosition('center')
+ *     .withPanelYPosition('align-tops');
+ *
+ * $mdPanel.create({
+ *   position: panelPosition
+ * });
+ *
+ * @final @constructor
+ */
+function MdPanelPosition() {
+  /** @private {boolean} */
+  this._absolute = false;
+
+  /** @private {string} */
+  this._top = '';
+
+  /** @private {string} */
+  this._bottom = '';
+
+  /** @private {string} */
+  this._left = '';
+
+  /** @private {string} */
+  this._right = '';
+}
+
+
+/**
+ * Sets absolute positioning for the panel.
+ * @return {!MdPanelPosition}
+ */
+MdPanelPosition.prototype.absolute = function() {
+  this._absolute = true;
+  return this;
+};
+
+
+/**
+ * Returns whether the panel should be absolutely positioned.
+ * @returns {boolean}
+ */
+MdPanelPosition.prototype.getAbsolute = function() {
+  return this._absolute;
+};
+
+
+/**
+ * Sets the value of `top` for the panel.
+ * @param {string=} opt_top Value of `top`. Defaults to '0'.
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.top = function(opt_top) {
+  this._top = opt_top || '0';
+  return this;
+};
+
+
+/**
+ * Gets the value of `top` for the panel.
+ * @returns {string}
+ */
+MdPanelPosition.prototype.getTop = function() {
+  return this._top;
+};
+
+
+/**
+ * Sets the value of `bottom` for the panel.
+ * @param {string=} opt_bottom Value of `bottom`. Defaults to '0'.
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.bottom = function(opt_bottom) {
+  this._bottom = opt_bottom || '0';
+  return this;
+};
+
+
+/**
+ * Gets the value of `bottom` for the panel.
+ * @returns {string}
+ */
+MdPanelPosition.prototype.getBottom = function() {
+  return this._bottom;
+};
+
+
+/**
+ * Sets the value of `left` for the panel.
+ * @param {string=} opt_left Value of `left`. Defaults to '0'.
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.left = function(opt_left) {
+  this._left = opt_left || '0';
+  return this;
+};
+
+
+/**
+ * Gets the value of `left` for the panel.
+ * @returns {string}
+ */
+MdPanelPosition.prototype.getLeft = function() {
+  return this._left;
+};
+
+
+/**
+ * Sets the value of `right` for the panel.
+ * @param {string=} opt_right Value of `right`. Defaults to '0'.
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.right = function(opt_right) {
+  this._right = opt_right || '0';
+  return this;
+};
+
+
+/**
+ * Gets the value of `right` for the panel.
+ * @returns {string}
+ */
+MdPanelPosition.prototype.getRight = function() {
+  return this._right;
 };
