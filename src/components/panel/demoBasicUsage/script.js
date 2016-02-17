@@ -17,7 +17,8 @@ BasicDemoCtrl.prototype.showDialog = function() {
     locals: {
       closeFn: angular.bind(this, this.closeDialog)
     },
-    panelClass: 'demo-dialog-example'
+    panelClass: 'demo-dialog-example',
+    zIndex: 150
   };
 
   this._panelRef = this._mdPanel.open(config);
