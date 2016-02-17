@@ -9,6 +9,10 @@ function BasicDemoCtrl($mdPanel) {
 
 
 BasicDemoCtrl.prototype.showDialog = function() {
+  var position = this._mdPanel.newPanelPosition()
+      .absolute()
+      .top();
+
   var config = {
     attachTo: angular.element(document.querySelector('.demo-md-panel')),
     controller: DialogCtrl,
@@ -18,6 +22,7 @@ BasicDemoCtrl.prototype.showDialog = function() {
       closeFn: angular.bind(this, this.closeDialog)
     },
     panelClass: 'demo-dialog-example',
+    position: position,
     zIndex: 150
   };
 
