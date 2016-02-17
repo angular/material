@@ -96,12 +96,17 @@ describe('$mdPanel', function() {
   });
 
   describe('config options:', function() {
+    var template;
+
+    beforeEach(function() {
+      template = '<div>Hello World!</div>';
+    });
+
     it('should attach panel to a specific element', function() {
       var parentEl = document.createElement('div');
       parentEl.id = 'parent';
       attachToBody(parentEl);
 
-      var template = '<div>Hello World!</div>';
       var config = {
         attachTo: angular.element(parentEl),
         template: template
@@ -118,7 +123,6 @@ describe('$mdPanel', function() {
     });
 
     it('should apply a custom css class to the panel', function() {
-      var template = '<div>Hello World!</div>';
       var customClass = 'custom-class';
 
       var config = {
@@ -130,6 +134,32 @@ describe('$mdPanel', function() {
 
       expect('.custom-class').toExist();
       expect('.md-panel').toHaveClass(customClass);
+    });
+
+    it('should set the z-index on the panel-container', function() {
+      var zIndex = '150';
+
+      var config = {
+        template: template,
+        zIndex: zIndex
+      };
+
+      openPanel(config);
+
+      expect(document.querySelector(PANEL_EL).style.zIndex).toEqual(zIndex);
+    });
+
+    it('should set z-index to 0', function() {
+      var zIndex = '0';
+
+      var config = {
+        template: template,
+        zIndex: zIndex
+      };
+
+      openPanel(config);
+
+      expect(document.querySelector(PANEL_EL).style.zIndex).toEqual(zIndex);
     });
   });
 
