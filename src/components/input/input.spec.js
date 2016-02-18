@@ -134,9 +134,18 @@ describe('md-input-container directive', function() {
     expect(el).not.toHaveClass('md-input-focused');
 
     el.find('input').triggerHandler('focus');
+
+    // Expect a slight delay (via $mdUtil.nextTick()) which fixes a tabbing issue in Safari, see
+    // https://github.com/angular/material/issues/4203 for more info.
+    expect(el).not.toHaveClass('md-input-focused');
+    $timeout.flush();
     expect(el).toHaveClass('md-input-focused');
 
     el.find('input').triggerHandler('blur');
+
+    // Again, expect the change to not be immediate
+    expect(el).toHaveClass('md-input-focused');
+    $timeout.flush();
     expect(el).not.toHaveClass('md-input-focused');
   });
 
