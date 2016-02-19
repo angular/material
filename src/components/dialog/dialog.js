@@ -630,7 +630,7 @@ function MdDialogProvider($$interimElementProvider) {
         var badActions = element[0].querySelectorAll('.md-actions');
 
         if (badActions.length > 0) {
-          $log.warn('Using a class of md-actions is deprected, please use <md-dialog-actions>.');
+          $log.warn('Using a class of md-actions is deprecated, please use <md-dialog-actions>.');
         }
       }
 
