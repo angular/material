@@ -20,8 +20,8 @@ describe('md-input-container directive', function() {
 
     var template =
         '<md-input-container>' +
-          '<input ' + (attrs || '') + '>' +
           '<label></label>' +
+          '<input ' + (attrs || '') + '>' +
         '</md-input-container>';
 
     if (isForm) {
@@ -172,6 +172,20 @@ describe('md-input-container directive', function() {
 
     pageScope.$apply('value = null');
     expect(el).not.toHaveClass('md-input-has-value');
+  });
+
+  it('should append an asterisk to the required label', function() {
+    var el = setup('required');
+    var label = el.find('label');
+
+    expect(label).toHaveClass('md-required');
+  });
+
+  it('should not show asterisk on required label if disabled', function() {
+    var el = setup('md-no-asterisk');
+    var ctrl = el.controller('mdInputContainer');
+
+    expect(ctrl.label).not.toHaveClass('md-required');
   });
 
   it('should match label to given input id', function() {
@@ -388,6 +402,26 @@ describe('md-input-container directive', function() {
     expect(el[0].querySelector("[ng-messages]").classList.contains('md-auto-hide')).toBe(false);
   }));
 
+  it('should select the input value on focus', inject(function() {
+    var container = setup('md-select-on-focus');
+    var input = container.find('input');
+    input.val('Auto Text Select');
+
+    document.body.appendChild(container[0]);
+
+    expect(isTextSelected(input[0])).toBe(false);
+
+    input.triggerHandler('focus');
+
+    expect(isTextSelected(input[0])).toBe(true);
+
+    document.body.removeChild(container[0]);
+
+    function isTextSelected(input) {
+      return input.selectionStart == 0 && input.selectionEnd == input.value.length
+    }
+  }));
+
   describe('Textarea auto-sizing', function() {
     var ngElement, element, ngTextarea, textarea, scope, parentElement;
 
@@ -524,6 +558,50 @@ describe('md-input-container directive', function() {
         '</md-input-container>'
       );
       expect(el.hasClass('md-icon-left md-icon-right')).toBeTruthy();
+    });
+
+    it('should add md-icon-left class when md-icon is before select', function() {
+      var el = compile(
+        '<md-input-container>' +
+          '<md-icon></md-icon>' +
+          '<md-select ng-model="foo"></md-select>' +
+        '</md-input-container>'
+      );
+
+      expect(el.hasClass('md-icon-left')).toBeTruthy();
+    });
+
+    it('should add md-icon-right class when md-icon is before select', function() {
+      var el = compile(
+        '<md-input-container>' +
+          '<md-select ng-model="foo"></md-select>' +
+          '<md-icon></md-icon>' +
+        '</md-input-container>'
+      );
+
+      expect(el.hasClass('md-icon-right')).toBeTruthy();
+    });
+
+    it('should add md-icon-left class when md-icon is before textarea', function() {
+      var el = compile(
+        '<md-input-container>' +
+          '<md-icon></md-icon>' +
+          '<textarea ng-model="foo"></textarea>' +
+        '</md-input-container>'
+      );
+
+      expect(el.hasClass('md-icon-left')).toBeTruthy();
+    });
+
+    it('should add md-icon-right class when md-icon is before textarea', function() {
+      var el = compile(
+        '<md-input-container>' +
+          '<textarea ng-model="foo"></textarea>' +
+          '<md-icon></md-icon>' +
+        '</md-input-container>'
+      );
+
+      expect(el.hasClass('md-icon-right')).toBeTruthy();
     });
   });
 });

@@ -57,6 +57,24 @@ describe('<md-select>', function() {
     expect(container.classList.contains('test')).toBe(true);
   }));
 
+  it('supports passing classes to the container using `data-` attribute prefix', inject(function($document) {
+    var select = setupSelect('ng-model="val", data-md-container-class="test"').find('md-select');
+    openSelect(select);
+
+    var container = $document[0].querySelector('.md-select-menu-container');
+    expect(container).toBeTruthy();
+    expect(container.classList.contains('test')).toBe(true);
+  }));
+
+  it('supports passing classes to the container using `x-` attribute prefix', inject(function($document) {
+    var select = setupSelect('ng-model="val", x-md-container-class="test"').find('md-select');
+    openSelect(select);
+
+    var container = $document[0].querySelector('.md-select-menu-container');
+    expect(container).toBeTruthy();
+    expect(container.classList.contains('test')).toBe(true);
+  }));
+
   it('sets aria-owns between the select and the container', function() {
     var select = setupSelect('ng-model="val"').find('md-select');
     var ownsId = select.attr('aria-owns'); 
@@ -387,6 +405,19 @@ describe('<md-select>', function() {
         expect(selectedOptions(el).length).toBe(0);
       }));
 
+      it('should keep the form pristine when model is predefined', inject(function($rootScope, $timeout, $compile) {
+        $rootScope.model = 2;
+        $rootScope.opts = [1, 2, 3, 4];
+        $compile('<form name="testForm">' +
+          '<md-select ng-model="model" name="multiSelect">' +
+            '<md-option ng-repeat="opt in opts" ng-value="opt"></md-option>' +
+          '</md-select></form>')($rootScope);
+        $rootScope.$digest();
+        $timeout.flush();
+
+        expect($rootScope.testForm.$pristine).toBe(true);
+      }));
+
     });
 
     describe('view->model', function() {
@@ -637,13 +668,25 @@ describe('<md-select>', function() {
           $rootScope.model = [];
           $rootScope.opts = [1, 2, 3, 4];
           $compile('<form name="testForm">' +
-            '<md-select ng-model="model", name="multiSelect" required="required" multiple="multiple">' +
+            '<md-select ng-model="model" name="multiSelect" required="required" multiple="multiple">' +
               '<md-option ng-repeat="opt in opts" ng-value="opt"></md-option>' +
             '</md-select></form>')($rootScope);
           $rootScope.$digest();
           expect($rootScope.testForm.$valid).toBe(false);
       }));
 
+      it('should keep the form pristine when model is predefined', inject(function($rootScope, $timeout, $compile) {
+        $rootScope.model = [1, 2];
+        $rootScope.opts = [1, 2, 3, 4];
+        $compile('<form name="testForm">' +
+          '<md-select ng-model="model" name="multiSelect" multiple="multiple">' +
+            '<md-option ng-repeat="opt in opts" ng-value="opt"></md-option>' +
+          '</md-select></form>')($rootScope);
+        $rootScope.$digest();
+        $timeout.flush();
+
+        expect($rootScope.testForm.$pristine).toBe(true);
+      }));
     });
 
     describe('view->model', function() {

@@ -12,7 +12,7 @@ md-list.md-THEME_NAME-theme {
     background-color: '{{background-100}}';
   }
 
-  md-list-item > .md-avatar-icon {
+  md-list-item .md-avatar-icon {
     background-color: '{{foreground-3}}';
     color: '{{background-color}}';
   }

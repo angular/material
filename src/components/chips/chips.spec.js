@@ -362,6 +362,48 @@ describe('<md-chips>', function() {
         expect(element.find('md-chips-wrap').hasClass('md-focused')).toBe(false);
       }));
 
+      describe('placeholder', function() {
+
+        it('should put placeholder text in the input element when chips exist but there is no secondary-placeholder text', inject(function() {
+          var template =
+            '<md-chips ng-model="items" placeholder="placeholder text"></md-chips>';
+          var element = buildChips(template);
+          var ctrl = element.controller('mdChips');
+          var input = element.find('input')[0];
+
+          expect(scope.items.length).toBeGreaterThan(0);
+          expect(input.placeholder).toBe('placeholder text');
+        }));
+
+        it('should put placeholder text in the input element when there are no chips', inject(function() {
+          var ctrl, element, input, template;
+
+          scope.items = [];
+          template =
+            '<md-chips ng-model="items" placeholder="placeholder text" ' +
+            'secondary-placeholder="secondary-placeholder text"></md-chips>';
+          element = buildChips(template);
+          ctrl = element.controller('mdChips');
+          input = element.find('input')[0];
+
+          expect(scope.items.length).toBe(0);
+          expect(input.placeholder).toBe('placeholder text');
+        }));
+
+        it('should put secondary-placeholder text in the input element when there is at least one chip', inject(function() {
+          var template =
+            '<md-chips ng-model="items" placeholder="placeholder text" ' +
+            'secondary-placeholder="secondary-placeholder text"></md-chips>';
+          var element = buildChips(template);
+          var ctrl = element.controller('mdChips');
+          var input = element.find('input')[0];
+
+          expect(scope.items.length).toBeGreaterThan(0);
+          expect(input.placeholder).toBe('secondary-placeholder text');
+        }));
+
+      });
+
     });
 
     describe('custom inputs', function() {
@@ -407,6 +449,71 @@ describe('<md-chips>', function() {
 
           expect(semicolonInput.preventDefault).toHaveBeenCalled();
         }));
+      });
+
+      describe('md-max-chips', function() {
+
+        beforeEach(function() {
+          // Clear default items to test the max chips functionality
+          scope.items = [];
+        });
+
+        it('should not add a new chip if the max-chips limit is reached', function() {
+          var element = buildChips('<md-chips ng-model="items" md-max-chips="1"></md-chips>');
+          var ctrl = element.controller('mdChips');
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(scope.items.length).toBe(1);
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test 2';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(scope.items.length).not.toBe(2);
+        });
+
+        it('should update the md-max-chips model validator for forms', function() {
+          var template =
+            '<form name="form">' +
+            '<md-chips name="chips" ng-model="items" md-max-chips="1"></md-chips>' +
+            '</form>';
+
+          var element = buildChips(template);
+          var ctrl = element.find('md-chips').controller('mdChips');
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(scope.form.chips.$error['md-max-chips']).toBe(true);
+        });
+
+        it('should not reset the buffer if the maximum is reached', function() {
+          var element = buildChips('<md-chips ng-model="items" md-max-chips="1"></md-chips>');
+          var ctrl = element.controller('mdChips');
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(scope.items.length).toBe(1);
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test 2';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(ctrl.chipBuffer).toBe('Test 2');
+          expect(scope.items.length).not.toBe(2);
+        });
+
       });
 
       describe('md-autocomplete', function() {

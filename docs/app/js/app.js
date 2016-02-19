@@ -464,7 +464,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   };
 })
 
-.directive('menuToggle', [ '$timeout', function($timeout) {
+.directive('menuToggle', [ '$timeout', '$mdUtil', function($timeout, $mdUtil) {
   return {
     scope: {
       section: '='
@@ -479,24 +479,21 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       $scope.toggle = function() {
         controller.toggleOpen($scope.section);
       };
-      $scope.$watch(
+
+      $mdUtil.nextTick(function() {
+        $scope.$watch(
           function () {
             return controller.isOpen($scope.section);
           },
           function (open) {
             var $ul = $element.find('ul');
 
+            var targetHeight = open ? getTargetHeight() : 0;
             $timeout(function () {
-              updateHeight(open ? getTargetHeight() : 0);
+              $ul.css({height: targetHeight + 'px'});
             }, 0, false);
 
-            function updateHeight(targetHeight) {
-              $timeout(function () {
-                $ul.css({ height: targetHeight + 'px' });
-              }, 0, false);
-            }
-
-            function getTargetHeight () {
+            function getTargetHeight() {
               var targetHeight;
               $ul.addClass('no-transition');
               $ul.css('height', '');
@@ -506,8 +503,8 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
               return targetHeight;
             }
           }
-      );
-
+        );
+      });
 
       var parentNode = $element[0].parentNode.parentNode.parentNode;
       if(parentNode.classList.contains('parent-list-item')) {

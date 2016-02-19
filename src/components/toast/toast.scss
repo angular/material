@@ -1,5 +1,14 @@
 // See height set globally, depended on by buttons
 
+$md-toast-content-padding: 3 * $baseline-grid - $button-left-right-padding;
+$md-toast-button-left-margin: 3 * $baseline-grid - 2 * $button-left-right-padding;
+$md-toast-text-padding: $button-left-right-padding;
+
+
+.md-toast-text {
+  padding: 0 $md-toast-text-padding;
+}
+
 md-toast {
   position: absolute;
   z-index: $z-index-toast;
@@ -23,8 +32,7 @@ md-toast {
     max-height: 7 * $toast-height;
     max-width: 100%;
     min-height: 48px;
-    padding-left: 24px;
-    padding-right: 24px;
+    padding: 0 $md-toast-content-padding;
 
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
     border-radius: 2px;
@@ -35,6 +43,8 @@ md-toast {
     // Setup for transform transitions on inner content
     transform: translate3d(0, 0, 0) rotateZ(0deg);
     transition: $swift-ease-out;
+
+    @include rtl(justify-content, flex-start, flex-end);
   }
 
   &.md-capsule {
@@ -112,10 +122,12 @@ md-toast {
     cursor: pointer;
     text-transform: uppercase;
     float: right;
+  }
 
-    &.md-button {
-      min-width: 0;
-    }
+  .md-button {
+    min-width: 0;
+    @include rtl(margin-right, 0, $md-toast-button-left-margin);
+    @include rtl(margin-left, $md-toast-button-left-margin, 0);
   }
 }
 
@@ -128,6 +140,7 @@ md-toast {
     min-width: 0;
     border-radius: 0;
     bottom: 0;
+    padding: 0;
 
     &.ng-leave.ng-leave-active {
       &.md-swipeup {

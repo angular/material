@@ -17,3 +17,8 @@ md-list-item .md-list-item-inner > .md-list-item-inner > p {
 .secondary-button-padding p {
     padding-right: 100px;
 }
+
+
+.noright .md-secondary-container {
+    right: 0 !important;
+}

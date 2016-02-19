@@ -5,7 +5,7 @@ md-whiteframe, div.padded {
 }
 
 /* For breakpoint `-xs` */
-@media screen and (max-width: 599px) {
+@media (max-width: 599px) {
   md-whiteframe, div.padded {
     margin: 7px;
     height: 50px;
@@ -17,7 +17,7 @@ md-whiteframe, div.padded {
 }
 
 /* For breakpoint `-sm` */
-@media screen and (min-width: 600px ) and (max-width: 959px) {
+@media (min-width: 600px ) and (max-width: 959px) {
   md-whiteframe, div.padded {
     margin: 20px;
     height: 75px;
@@ -28,7 +28,7 @@ md-whiteframe, div.padded {
 }
 
 /* For breakpoint `-md` */
-@media screen and (min-width: 960px ) and (max-width: 1279px) {
+@media (min-width: 960px ) and (max-width: 1279px) {
   md-whiteframe, div.padded {
     margin: 20px;
     height: 90px;
@@ -40,7 +40,7 @@ md-whiteframe, div.padded {
 }
 
 /* For breakpoint `-gt-md` */
-@media screen and (min-width: 1280px) {
+@media (min-width: 1280px) {
   md-whiteframe, div.padded {
     margin: 25px;
     height: 100px;

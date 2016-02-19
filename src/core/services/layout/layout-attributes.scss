@@ -141,10 +141,12 @@ $layout-breakpoint-lg:     1920px !default;
   // Do not use unitless flex-basis values in the flex shorthand because IE 10-11 will error.
   // Also use 0% instead of 0px since minifiers will often convert 0px to 0 (which is unitless and will have the same problem).
   // Safari, however, fails with flex-basis : 0% and requires flex-basis : 0px
-  @media screen\0 {
-      [#{$flexName}] {
-        flex: 1 1 0%;
-      }
+  @if $name != '-print' { 
+    @media screen\0 {
+        [#{$flexName}] {
+          flex: 1 1 0%;
+        }
+    }
   }
 
   [#{$flexName}-grow]        { flex: 1 1 100%;  box-sizing: border-box; }
@@ -499,6 +501,15 @@ $layout-breakpoint-lg:     1920px !default;
     }
   }
   [hide-xl]:not([show-xl]):not([show-gt-lg]):not([show]) {
+    display: none;
+  }
+}
+
+@media print {
+  // PRINT
+  @include layouts_for_breakpoint(print);
+  
+  [hide-print]:not([show-print]):not([show]) {
     display: none;
   }
 }
