@@ -65,7 +65,11 @@
    * @param {string=} placeholder Placeholder text that will be forwarded to the input.
    * @param {string=} secondary-placeholder Placeholder text that will be forwarded to the input,
    *    displayed when there is at least on item in the list
+<<<<<<< HEAD
    * @param {string=} md-enable-chip-edit Set this to "true" to enable editing of chip contents. The user can
+=======
+   * @param {string=} enable-chip-edit Set this to "true" to enable editing of chip contents. The user can
+>>>>>>> feat(chips): Make chips editable on demand.
    *    go into edit mode with pressing "space", "enter", or double clicking on the chip. Chip edit is only
    *    supported for chips with basic template.
    * @param {boolean=} readonly Disables list manipulation (deleting or adding list items), hiding
