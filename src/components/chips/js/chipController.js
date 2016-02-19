@@ -125,12 +125,10 @@ MdChipCtrl.prototype.goInEditMode = function() {
         this.value = this.value;
     });
 
-    this.getEditInput().on('keydown', function(){
-        this.$timeout(function(){
-            this.adjustEditInputWidth();
-        }.bind(this));
+    this.getEditInput().on('input', function(){
+        this.adjustEditInputWidth();
     }.bind(this));
-    
+
     this.adjustEditInputWidth();
     this.getEditInput()[0].focus();
 };
