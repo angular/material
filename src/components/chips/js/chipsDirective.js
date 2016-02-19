@@ -194,6 +194,7 @@
       scope: {
         readonly: '=readonly',
         placeholder: '@',
+        enableChipEdit: '@',
         secondaryPlaceholder: '@',
         maxChips: '@mdMaxChips',
         transformChip: '&mdTransformChip',

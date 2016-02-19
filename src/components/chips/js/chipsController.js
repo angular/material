@@ -11,9 +11,11 @@ angular
  * @param $mdConstant
  * @param $log
  * @param $element
+ * @param $timeout
+ * @param $attrs
  * @constructor
  */
-function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout) {
+function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout, $attrs) {
   /** @type {$timeout} **/
   this.$timeout = $timeout;
 
@@ -49,6 +51,9 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout) {
 
   /** @type {boolean} */
   this.hasAutocomplete = false;
+
+  /** @type {string} */
+  this.$scope.enableChipEdit = $attrs['enableChipEdit'] || '';
 
 
   /**
@@ -105,6 +110,7 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout) {
    */
   this.useOnSelect = false;
 }
+
 
 /**
  * Handles the keydown event on the input element: by default <enter> appends
