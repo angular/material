@@ -75,6 +75,7 @@ MdChipCtrl.prototype.getEditInput = function() {
  */
 MdChipCtrl.prototype.goOutOfEditMode = function() {
   this.isEditting = false;
+  this.$element.removeClass('md-chip-editing');
   var currentText = this.getEditInput().val();
   this.getContentElement().text(currentText);
   this.getEditInput().remove();
@@ -126,6 +127,7 @@ MdChipCtrl.prototype.adjustEditInputWidth = function() {
  */
 MdChipCtrl.prototype.goInEditMode = function() {
   this.isEditting = true;
+  this.$element.addClass('md-chip-editing');
   var currentText = this.getContentElement().text();
   this.getContentElement().addClass('ng-hide');
   this.getChipContent().append('<input type="text" value="'+currentText+'" />');

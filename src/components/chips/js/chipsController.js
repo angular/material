@@ -159,6 +159,8 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
  */
 MdChipsCtrl.prototype.chipKeydown = function (event) {
   if (this.getChipBuffer()) return;
+  if (this.$element[0].getElementsByClassName('md-chip-editing').length) return;
+
   switch (event.keyCode) {
     case this.$mdConstant.KEY_CODE.BACKSPACE:
     case this.$mdConstant.KEY_CODE.DELETE:
