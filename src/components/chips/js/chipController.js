@@ -1,6 +1,6 @@
 angular
-    .module('material.components.chips')
-    .controller('MdChipCtrl', MdChipCtrl);
+  .module('material.components.chips')
+  .controller('MdChipCtrl', MdChipCtrl);
 
 /**
  * Controller for the MdChip component. Responsible for handling keyboard
@@ -13,35 +13,35 @@ angular
  * @constructor
  */
 function MdChipCtrl ($scope, $element, $mdConstant, $attrs, $timeout) {
-    /**
-     * @type {$element}
-     */
-    this.$element = $element;
+  /**
+   * @type {$element}
+   */
+  this.$element = $element;
 
-    /**
-     * @type {$mdConstant}
-     */
-    this.$mdConstant = $mdConstant;
+  /**
+   * @type {$mdConstant}
+   */
+  this.$mdConstant = $mdConstant;
 
-    /**
-     * @type {$timeout}
-     */
-    this.$timeout = $timeout;
+  /**
+   * @type {$timeout}
+   */
+  this.$timeout = $timeout;
 
-    /**
-     * @type {boolean}
-     */
-    this.isEditting = false;
+  /**
+   * @type {boolean}
+   */
+  this.isEditting = false;
 
-    /**
-     * @type {boolean}
-     */
-    this.enableChipEdit = $scope.$parent && $scope.$parent.enableChipEdit == 'true';
+  /**
+   * @type {boolean}
+   */
+  this.enableChipEdit = $scope.$parent && $scope.$parent.enableChipEdit == 'true';
 
-    if(this.enableChipEdit) {
-        this.$element.on('keydown', this.chipKeyDown.bind(this));
-        this.$element.on('dblclick', this.doubleClicked.bind(this));
-    }
+  if(this.enableChipEdit) {
+    this.$element.on('keydown', this.chipKeyDown.bind(this));
+    this.$element.on('dblclick', this.doubleClicked.bind(this));
+  }
 }
 
 
@@ -49,8 +49,8 @@ function MdChipCtrl ($scope, $element, $mdConstant, $attrs, $timeout) {
  * @return {angular.JQLite}
  */
 MdChipCtrl.prototype.getChipContent = function() {
-    var chipContents = this.$element[0].getElementsByClassName('md-chip-content')
-    return angular.element(chipContents[0]);
+  var chipContents = this.$element[0].getElementsByClassName('md-chip-content')
+  return angular.element(chipContents[0]);
 };
 
 
@@ -58,7 +58,7 @@ MdChipCtrl.prototype.getChipContent = function() {
  * @return {angular.JQLite}
  */
 MdChipCtrl.prototype.getContentElement = function() {
-    return angular.element(this.getChipContent().children()[0]);
+  return angular.element(this.getChipContent().children()[0]);
 };
 
 
@@ -66,7 +66,7 @@ MdChipCtrl.prototype.getContentElement = function() {
  * @return {angular.JQLite}
  */
 MdChipCtrl.prototype.getEditInput = function() {
-    return angular.element(this.getChipContent().find('input')[0]);
+  return angular.element(this.getChipContent().find('input')[0]);
 };
 
 
@@ -74,11 +74,11 @@ MdChipCtrl.prototype.getEditInput = function() {
  * Presents an input element to edit the contents of the chip.
  */
 MdChipCtrl.prototype.goOutOfEditMode = function() {
-    this.isEditting = false;
-    var currentText = this.getEditInput().val();
-    this.getContentElement().text(currentText);
-    this.getEditInput().remove();
-    this.getContentElement().removeClass('ng-hide');
+  this.isEditting = false;
+  var currentText = this.getEditInput().val();
+  this.getContentElement().text(currentText);
+  this.getEditInput().remove();
+  this.getContentElement().removeClass('ng-hide');
 };
 
 
@@ -96,14 +96,28 @@ MdChipCtrl.prototype.getTextWidth = function(text, font) {
     return metrics.width;
 };
 
+/**
+ * Get's the computed style of element for given CSS property.
+ * @param element
+ * @param property
+ */
+MdChipCtrl.prototype.getComputedStyle = function(element, property) {
+    if(typeof window.getComputedStyle !== 'function') {
+        return undefined;
+    }
+
+    return window.getComputedStyle( element, null ).getPropertyValue( property );
+};
 
 /**
  * Adjusts the input width to match its contents
  */
 MdChipCtrl.prototype.adjustEditInputWidth = function() {
-    var currentText = this.getEditInput().val();
-    var width = this.getTextWidth(currentText, '16px Roboto');
-    this.getEditInput().css('width', width + 'px');
+  var currentText = this.getEditInput().val();
+  var fontSize = this.getComputedStyle(this.getEditInput()[0], 'font-size') || '16px';
+  var fontFamily = this.getComputedStyle(this.getEditInput()[0], 'font-family') || 'Roboto';
+  var width = this.getTextWidth(currentText, fontSize + ' ' + fontFamily);
+  this.getEditInput().css('width', width + 'px');
 };
 
 
@@ -111,26 +125,26 @@ MdChipCtrl.prototype.adjustEditInputWidth = function() {
  * Presents an input element to edit the contents of the chip.
  */
 MdChipCtrl.prototype.goInEditMode = function() {
-    this.isEditting = true;
-    var currentText = this.getContentElement().text();
-    this.getContentElement().addClass('ng-hide');
-    this.getChipContent().append('<input type="text" value="'+currentText+'" />');
+  this.isEditting = true;
+  var currentText = this.getContentElement().text();
+  this.getContentElement().addClass('ng-hide');
+  this.getChipContent().append('<input type="text" value="'+currentText+'" />');
 
-    this.getEditInput().on('blur', function(){
-        this.goOutOfEditMode();
-    }.bind(this));
+  this.getEditInput().on('blur', function(){
+    this.goOutOfEditMode();
+  }.bind(this));
 
-    this.getEditInput().on('focus', function(){
-        // This weird hack sets the cursor to the end of the  text..
-        this.value = this.value;
-    });
+  this.getEditInput().on('focus', function(){
+    // This weird hack sets the cursor to the end of the  text..
+    this.value = this.value;
+  });
 
-    this.getEditInput().on('input', function(){
-        this.adjustEditInputWidth();
-    }.bind(this));
-
+  this.getEditInput().on('input', function(){
     this.adjustEditInputWidth();
-    this.getEditInput()[0].focus();
+  }.bind(this));
+
+  this.adjustEditInputWidth();
+  this.getEditInput()[0].focus();
 };
 
 
@@ -141,14 +155,14 @@ MdChipCtrl.prototype.goInEditMode = function() {
  * @param event
  */
 MdChipCtrl.prototype.chipKeyDown = function(event) {
-    if (!this.isEditting &&
-        (event.keyCode === this.$mdConstant.KEY_CODE.ENTER ||
-        event.keyCode === this.$mdConstant.KEY_CODE.SPACE)) {
-        this.goInEditMode();
-    } else if (this.isEditting &&
-        event.keyCode === this.$mdConstant.KEY_CODE.ENTER) {
-        this.goOutOfEditMode();
-    }
+  if (!this.isEditting &&
+    (event.keyCode === this.$mdConstant.KEY_CODE.ENTER ||
+    event.keyCode === this.$mdConstant.KEY_CODE.SPACE)) {
+    this.goInEditMode();
+  } else if (this.isEditting &&
+    event.keyCode === this.$mdConstant.KEY_CODE.ENTER) {
+    this.goOutOfEditMode();
+  }
 };
 
 
@@ -157,9 +171,9 @@ MdChipCtrl.prototype.chipKeyDown = function(event) {
  * @param event
  */
 MdChipCtrl.prototype.doubleClicked = function(event) {
-    if(this.enableChipEdit && !this.isEditting) {
-        this.goInEditMode();
-    }
+  if(this.enableChipEdit && !this.isEditting) {
+    this.goInEditMode();
+  }
 };
 
 
