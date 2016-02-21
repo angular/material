@@ -431,10 +431,6 @@ a.docs-logo {
   margin: 0 24px;
   width: auto;
 }
-.docs-tools .md-button {
-  padding: 0;
-  margin: 0 0 0 8px;
-}
 .docs-tools .md-button,
 .docs-tools .md-button md-icon {
   color: #666 !important;
