@@ -563,11 +563,11 @@ describe('$mdDialog', function() {
       $rootScope.$apply();
       runAnimation();
 
-      var mdContainer = angular.element(parent[0].querySelector('.md-dialog-container'));
+      var mdContainer = angular.element(parent[0].querySelector('._md-dialog-container'));
       var mdDialog = mdContainer.find('md-dialog');
       var mdContent = mdDialog.find('md-dialog-content');
       var title = mdContent.find('h2');
-      var contentBody = mdContent[0].querySelector('.md-dialog-content-body');
+      var contentBody = mdContent[0].querySelector('._md-dialog-content-body');
       var inputElement = mdContent.find('input');
       var buttons = parent.find('md-button');
       var theme = mdDialog.attr('md-theme');
@@ -575,7 +575,7 @@ describe('$mdDialog', function() {
 
       expect(title.text()).toBe('Title');
       expect(contentBody.textContent).toBe('Hello world');
-      expect(inputElement[0].placeholder).toBe('placeholder text')
+      expect(inputElement[0].placeholder).toBe('placeholder text');
       expect(buttons.length).toBe(2);
       expect(buttons.eq(0).text()).toBe('Next');
       expect(theme).toBe('some-theme');
@@ -584,7 +584,7 @@ describe('$mdDialog', function() {
       expect(mdDialog.attr('role')).toBe('dialog');
 
       inputElement.eq(0).text('responsetext');
-      inputElement.scope().$apply("dialog.result = 'responsetext'")
+      inputElement.scope().$apply("dialog.result = 'responsetext'");
 
       buttons.eq(0).triggerHandler('click');
 
@@ -629,12 +629,12 @@ describe('$mdDialog', function() {
         });
       runAnimation();
 
-      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      var container = angular.element(parent[0].querySelector('._md-dialog-container'));
       var mdDialog = container.find('md-dialog');
       var mdContent = mdDialog.find('md-dialog-content');
       var inputElement = mdContent.find('input');
 
-      inputElement.scope().$apply("dialog.result = 'responsetext'")
+      inputElement.scope().$apply("dialog.result = 'responsetext'");
 
       inputElement.eq(0).triggerHandler({
         type: 'keypress',

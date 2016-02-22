@@ -61,7 +61,7 @@ describe('<md-select>', function() {
     var select = setupSelect('ng-model="val", data-md-container-class="test"').find('md-select');
     openSelect(select);
 
-    var container = $document[0].querySelector('.md-select-menu-container');
+    var container = $document[0].querySelector('._md-select-menu-container');
     expect(container).toBeTruthy();
     expect(container.classList.contains('test')).toBe(true);
   }));
@@ -70,7 +70,7 @@ describe('<md-select>', function() {
     var select = setupSelect('ng-model="val", x-md-container-class="test"').find('md-select');
     openSelect(select);
 
-    var container = $document[0].querySelector('.md-select-menu-container');
+    var container = $document[0].querySelector('._md-select-menu-container');
     expect(container).toBeTruthy();
     expect(container.classList.contains('test')).toBe(true);
   }));
