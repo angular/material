@@ -143,7 +143,7 @@ describe('mdListItem directive', function() {
     expect(firstChild.children().length).toBe(2);
     var secondChild = listItem.children().eq(1);
     expect(secondChild[0].nodeName).toBe('MD-BUTTON');
-    expect(secondChild.hasClass('md-secondary-container')).toBeTruthy();
+    expect(secondChild.hasClass('_md-secondary-container')).toBeTruthy();
   });
 
   it('moves multiple md-secondary items outside of the button', function() {
