@@ -74,7 +74,7 @@ MdChipCtrl.prototype.getContentElement = function() {
 MdChipCtrl.prototype.goOutOfEditMode = function() {
   this.isEditting = false;
   this.$element.removeClass('md-chip-editing');
-  this.getChipContent()[0].contentEditable = "false";
+  this.getChipContent()[0].contentEditable = 'false';
   this.$scope.$parent.updateChipContents(
     parseInt(this.$element.attr('index')),
     this.getContentElement().text()
@@ -108,7 +108,7 @@ MdChipCtrl.prototype.selectNodeContents = function(node) {
 MdChipCtrl.prototype.goInEditMode = function() {
   this.isEditting = true;
   this.$element.addClass('md-chip-editing');
-  this.getChipContent()[0].contentEditable = "true";
+  this.getChipContent()[0].contentEditable = 'true';
   this.getChipContent().on('blur', function() {
     this.goOutOfEditMode();
   }.bind(this));
