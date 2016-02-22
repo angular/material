@@ -1,5 +1,5 @@
 describe('<md-switch>', function() {
-  var CHECKED_CSS = 'md-checked';
+  var CHECKED_CSS = '_md-checked';
   var $compile, parentScope;
 
   beforeEach(module('ngAria', 'material.components.switch'));

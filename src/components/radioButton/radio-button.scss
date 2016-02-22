@@ -16,12 +16,12 @@ md-radio-button {
   &[disabled] {
     cursor: default;
 
-    .md-container {
+    ._md-container {
       cursor: default;
     }
   }
 
-  .md-container {
+  ._md-container {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -61,11 +61,11 @@ md-radio-button {
     }
   }
 
-  &.md-align-top-left > div.md-container {
+  &.md-align-top-left > div._md-container {
      top: $radio-top-left;
    }
 
-  .md-off {
+  ._md-off {
     box-sizing: border-box;
     position: absolute;
     top: 0;
@@ -78,7 +78,7 @@ md-radio-button {
     transition: border-color ease 0.28s;
   }
 
-  .md-on {
+  ._md-on {
     box-sizing: border-box;
     position: absolute;
     top: 0;
@@ -90,11 +90,11 @@ md-radio-button {
     transform: scale(0);
   }
 
-  &.md-checked .md-on {
+  &._md-checked ._md-on {
     transform: scale(0.50);
   }
 
-  .md-label {
+  ._md-label {
     box-sizing: border-box;
     position: relative;
     display: inline-block;
@@ -107,11 +107,6 @@ md-radio-button {
     pointer-events: none;
     width: auto;
   }
-
-  .circle {
-    border-radius: 50%;
-  }
-
 }
 
 md-radio-group {
@@ -147,8 +142,8 @@ md-radio-group {
   &:focus {
     outline: none;
   }
-  &.md-focused {
-    .md-checked .md-container:before {
+  &._md-focused {
+    ._md-checked ._md-container:before {
       left: -8px;
       top: -8px;
       right: -8px;
@@ -172,7 +167,7 @@ md-radio-group {
 }
 
 @media screen and (-ms-high-contrast: active) {
-  md-radio-button.md-default-theme .md-on {
+  md-radio-button.md-default-theme ._md-on {
     background-color: #fff;
   }
 }
