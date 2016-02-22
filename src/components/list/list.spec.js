@@ -143,7 +143,7 @@ describe('mdListItem directive', function() {
     expect(firstChild.children().length).toBe(2);
     var secondChild = listItem.children().eq(1);
     expect(secondChild[0].nodeName).toBe('MD-BUTTON');
-    expect(secondChild.hasClass('md-secondary-container')).toBeTruthy();
+    expect(secondChild.hasClass('_md-secondary-container')).toBeTruthy();
   });
 
   it('moves multiple md-secondary items outside of the button', function() {
@@ -178,7 +178,7 @@ describe('mdListItem directive', function() {
       '  <md-button class="md-exclude" ng-click="sayHello()">Hello</md-button>' +
       '</md-list-item>'
     );
-    expect(listItem.hasClass('md-no-proxy')).toBeTruthy();
+    expect(listItem.hasClass('_md-no-proxy')).toBeTruthy();
   });
 
   it('should copy md-icon.md-secondary attributes to the button', function() {

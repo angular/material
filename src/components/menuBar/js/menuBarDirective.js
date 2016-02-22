@@ -114,7 +114,7 @@ function MenuBarDirective($mdUtil, $mdTheming) {
           }
           var contentEls = $mdUtil.nodesToArray(menuEl.querySelectorAll('md-menu-content'));
           angular.forEach(contentEls, function(contentEl) {
-            contentEl.classList.add('md-menu-bar-menu');
+            contentEl.classList.add('_md-menu-bar-menu');
             contentEl.classList.add('md-dense');
             if (!contentEl.hasAttribute('width')) {
               contentEl.setAttribute('width', 5);

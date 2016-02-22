@@ -131,13 +131,13 @@ describe('md-input-container directive', function() {
 
   it('should set focus class on container', function() {
     var el = setup();
-    expect(el).not.toHaveClass('md-input-focused');
+    expect(el).not.toHaveClass('_md-input-focused');
 
     el.find('input').triggerHandler('focus');
-    expect(el).toHaveClass('md-input-focused');
+    expect(el).toHaveClass('_md-input-focused');
 
     el.find('input').triggerHandler('blur');
-    expect(el).not.toHaveClass('md-input-focused');
+    expect(el).not.toHaveClass('_md-input-focused');
   });
 
   it('not should set focus class on container if readonly', function() {
@@ -153,25 +153,25 @@ describe('md-input-container directive', function() {
 
   it('should set has-value class on container for non-ng-model input', function() {
     var el = setup();
-    expect(el).not.toHaveClass('md-input-has-value');
+    expect(el).not.toHaveClass('_md-input-has-value');
 
     el.find('input').val('123').triggerHandler('input');
-    expect(el).toHaveClass('md-input-has-value');
+    expect(el).toHaveClass('_md-input-has-value');
 
     el.find('input').val('').triggerHandler('input');
-    expect(el).not.toHaveClass('md-input-has-value');
+    expect(el).not.toHaveClass('_md-input-has-value');
   });
 
   it('should set has-value class on container for ng-model input', function() {
     pageScope.value = 'test';
     var el = setup('ng-model="value"');
-    expect(el).toHaveClass('md-input-has-value');
+    expect(el).toHaveClass('_md-input-has-value');
 
     pageScope.$apply('value = "3"');
-    expect(el).toHaveClass('md-input-has-value');
+    expect(el).toHaveClass('_md-input-has-value');
 
     pageScope.$apply('value = null');
-    expect(el).not.toHaveClass('md-input-has-value');
+    expect(el).not.toHaveClass('_md-input-has-value');
   });
 
   it('should append an asterisk to the required label', function() {
@@ -299,7 +299,7 @@ describe('md-input-container directive', function() {
       '</md-input-container>'
     )($rootScope);
 
-    expect(el.hasClass('md-input-has-placeholder')).toBe(true);
+    expect(el.hasClass('_md-input-has-placeholder')).toBe(true);
   }));
 
   it('should put placeholder into a label element', function() {
@@ -351,7 +351,7 @@ describe('md-input-container directive', function() {
     var element = $compile(template)(scope);
     scope.$apply();
 
-    expect(element.hasClass('md-input-has-value')).toBe(true);
+    expect(element.hasClass('_md-input-has-value')).toBe(true);
   });
 
   it('adds the md-auto-hide class to messages without a visiblity directive', inject(function() {

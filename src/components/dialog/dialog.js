@@ -515,9 +515,9 @@ function MdDialogProvider($$interimElementProvider) {
         '<md-dialog md-theme="{{ dialog.theme }}" aria-label="{{ dialog.ariaLabel }}" ng-class="dialog.css">',
         '  <md-dialog-content class="md-dialog-content" role="document" tabIndex="-1">',
         '    <h2 class="md-title">{{ dialog.title }}</h2>',
-        '    <div ng-if="::dialog.mdHtmlContent" class="md-dialog-content-body" ',
+        '    <div ng-if="::dialog.mdHtmlContent" class="_md-dialog-content-body" ',
         '        ng-bind-html="::dialog.mdHtmlContent"></div>',
-        '    <div ng-if="::!dialog.mdHtmlContent" class="md-dialog-content-body">',
+        '    <div ng-if="::!dialog.mdHtmlContent" class="_md-dialog-content-body">',
         '      <p>{{::dialog.mdTextContent}}</p>',
         '    </div>',
         '    <md-input-container md-no-float ng-if="::dialog.$type == \'prompt\'" class="md-prompt-input-container">',
@@ -572,7 +572,7 @@ function MdDialogProvider($$interimElementProvider) {
       autoWrap: true,
       fullscreen: false,
       transformTemplate: function(template, options) {
-        return '<div class="md-dialog-container">' + validatedTemplate(template) + '</div>';
+        return '<div class="_md-dialog-container">' + validatedTemplate(template) + '</div>';
 
         /**
          * The specified template should contain a <md-dialog> wrapper element....
@@ -918,7 +918,7 @@ function MdDialogProvider($$interimElementProvider) {
       // Set up elements before and after the dialog content to capture focus and
       // redirect back into the dialog.
       topFocusTrap = document.createElement('div');
-      topFocusTrap.classList.add('md-dialog-focus-trap');
+      topFocusTrap.classList.add('_md-dialog-focus-trap');
       topFocusTrap.tabIndex = 0;
 
       bottomFocusTrap = topFocusTrap.cloneNode(false);
@@ -1005,7 +1005,7 @@ function MdDialogProvider($$interimElementProvider) {
       var dialogEl = container.find('md-dialog');
       var animator = $mdUtil.dom.animator;
       var buildTranslateToOrigin = animator.calculateZoomToOrigin;
-      var translateOptions = {transitionInClass: 'md-transition-in', transitionOutClass: 'md-transition-out'};
+      var translateOptions = {transitionInClass: '_md-transition-in', transitionOutClass: '_md-transition-out'};
       var from = animator.toTransformCss(buildTranslateToOrigin(dialogEl, options.openFrom || options.origin));
       var to = animator.toTransformCss("");  // defaults to center display (or parent or $rootElement)
 
@@ -1022,7 +1022,7 @@ function MdDialogProvider($$interimElementProvider) {
 
             if (options.closeTo) {
               // Using the opposite classes to create a close animation to the closeTo element
-              translateOptions = {transitionInClass: 'md-transition-out', transitionOutClass: 'md-transition-in'};
+              translateOptions = {transitionInClass: '_md-transition-out', transitionOutClass: '_md-transition-in'};
               from = to;
               to = animator.toTransformCss(buildTranslateToOrigin(dialogEl, options.closeTo));
 
