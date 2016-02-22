@@ -53,7 +53,15 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout, $attrs) {
   this.hasAutocomplete = false;
 
   /** @type {string} */
-  this.$scope.enableChipEdit = $attrs['enableChipEdit'] || '';
+  this.$scope.enableChipEdit = $attrs['mdEnableChipEdit'] || '';
+
+  /** @type {function} */
+  this.$scope.updateChipContents = function(chipIndex, chipContents){
+    if(chipIndex >= 0 && chipIndex < this.items.length) {
+      this.items[chipIndex] = chipContents;
+      this.ngModelCtrl.$setDirty();
+    }
+  }.bind(this);
 
 
   /**

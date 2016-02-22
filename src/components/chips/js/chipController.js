@@ -14,6 +14,11 @@ angular
  */
 function MdChipCtrl ($scope, $element, $mdConstant, $attrs, $timeout) {
   /**
+   * @type {$scope}
+   */
+  this.$scope = $scope;
+
+  /**
    * @type {$element}
    */
   this.$element = $element;
@@ -36,11 +41,12 @@ function MdChipCtrl ($scope, $element, $mdConstant, $attrs, $timeout) {
   /**
    * @type {boolean}
    */
-  this.enableChipEdit = $scope.$parent && $scope.$parent.enableChipEdit == 'true';
+  this.enableChipEdit = this.$scope.$parent && this.$scope.$parent.enableChipEdit == 'true';
 
   if(this.enableChipEdit) {
     this.$element.on('keydown', this.chipKeyDown.bind(this));
     this.$element.on('dblclick', this.doubleClicked.bind(this));
+    this.getChipContent().addClass('_md-chip-content-edit-is-enabled');
   }
 }
 
@@ -63,62 +69,36 @@ MdChipCtrl.prototype.getContentElement = function() {
 
 
 /**
- * @return {angular.JQLite}
- */
-MdChipCtrl.prototype.getEditInput = function() {
-  return angular.element(this.getChipContent().find('input')[0]);
-};
-
-
-/**
  * Presents an input element to edit the contents of the chip.
  */
 MdChipCtrl.prototype.goOutOfEditMode = function() {
   this.isEditting = false;
   this.$element.removeClass('md-chip-editing');
-  var currentText = this.getEditInput().val();
-  this.getContentElement().text(currentText);
-  this.getEditInput().remove();
-  this.getContentElement().removeClass('ng-hide');
+  this.getChipContent().removeAttr('contenteditable');
+  this.$scope.$parent.updateChipContents(
+    parseInt(this.$element.attr('index')),
+    this.getContentElement().text()
+  );
 };
 
 
 /**
- * Measures the width of a text in given font.
- * @param text
- * @param font
+ * Given an HTML element. Selects contents of it.
+ * @param node
  */
-MdChipCtrl.prototype.getTextWidth = function(text, font) {
-    // re-use canvas object for better performance
-    var canvas = document.createElement("canvas");
-    var context = canvas.getContext("2d");
-    context.font = font;
-    var metrics = context.measureText(text);
-    return metrics.width;
-};
-
-/**
- * Get's the computed style of element for given CSS property.
- * @param element
- * @param property
- */
-MdChipCtrl.prototype.getComputedStyle = function(element, property) {
-    if(typeof window.getComputedStyle !== 'function') {
-        return undefined;
-    }
-
-    return window.getComputedStyle( element, null ).getPropertyValue( property );
-};
-
-/**
- * Adjusts the input width to match its contents
- */
-MdChipCtrl.prototype.adjustEditInputWidth = function() {
-  var currentText = this.getEditInput().val();
-  var fontSize = this.getComputedStyle(this.getEditInput()[0], 'font-size') || '16px';
-  var fontFamily = this.getComputedStyle(this.getEditInput()[0], 'font-family') || 'Roboto';
-  var width = this.getTextWidth(currentText, fontSize + ' ' + fontFamily);
-  this.getEditInput().css('width', width + 'px');
+MdChipCtrl.prototype.selectNodeContents = function(node) {
+  var range, selection;
+  if (document.body.createTextRange) {
+    range = document.body.createTextRange();
+    range.moveToElementText(node);
+    range.select();
+  } else if (window.getSelection) {
+    selection = window.getSelection();
+    range = document.createRange();
+    range.selectNodeContents(node);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
 };
 
 
@@ -128,25 +108,12 @@ MdChipCtrl.prototype.adjustEditInputWidth = function() {
 MdChipCtrl.prototype.goInEditMode = function() {
   this.isEditting = true;
   this.$element.addClass('md-chip-editing');
-  var currentText = this.getContentElement().text();
-  this.getContentElement().addClass('ng-hide');
-  this.getChipContent().append('<input type="text" value="'+currentText+'" />');
-
-  this.getEditInput().on('blur', function(){
+  this.getChipContent().attr('contenteditable', 'true');
+  this.getChipContent().on('blur', function() {
     this.goOutOfEditMode();
   }.bind(this));
 
-  this.getEditInput().on('focus', function(){
-    // This weird hack sets the cursor to the end of the  text..
-    this.value = this.value;
-  });
-
-  this.getEditInput().on('input', function(){
-    this.adjustEditInputWidth();
-  }.bind(this));
-
-  this.adjustEditInputWidth();
-  this.getEditInput()[0].focus();
+  this.selectNodeContents(this.getChipContent()[0]);
 };
 
 
@@ -160,9 +127,11 @@ MdChipCtrl.prototype.chipKeyDown = function(event) {
   if (!this.isEditting &&
     (event.keyCode === this.$mdConstant.KEY_CODE.ENTER ||
     event.keyCode === this.$mdConstant.KEY_CODE.SPACE)) {
+    event.preventDefault();
     this.goInEditMode();
   } else if (this.isEditting &&
     event.keyCode === this.$mdConstant.KEY_CODE.ENTER) {
+    event.preventDefault();
     this.goOutOfEditMode();
   }
 };
@@ -177,5 +146,4 @@ MdChipCtrl.prototype.doubleClicked = function(event) {
     this.goInEditMode();
   }
 };
-
 
