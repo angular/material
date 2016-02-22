@@ -19,6 +19,11 @@ function MdChipCtrl ($scope, $element, $mdConstant, $attrs, $timeout) {
   this.$scope = $scope;
 
   /**
+   * @type {$scope}
+   */
+  this.$scope = $scope;
+
+  /**
    * @type {$element}
    */
   this.$element = $element;
