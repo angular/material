@@ -8,8 +8,10 @@
     var self = this;
 
     self.querySearch = querySearch;
+    self.delayedQuerySearch = delayedQuerySearch;
     self.allContacts = loadContacts();
     self.contacts = [self.allContacts[0]];
+    self.asyncContacts = [];
     self.filterSelected = true;
 
     /**
@@ -19,6 +21,15 @@
       var results = query ?
           self.allContacts.filter(createFilterFor(query)) : [];
       return results;
+    }
+
+    /**
+     * Search for contacts after a random delay.
+     */
+    function delayedQuerySearch(query) {
+      return $timeout(function() {
+        return self.querySearch(query);
+      }, Math.random() * 1000, false);
     }
 
     /**
