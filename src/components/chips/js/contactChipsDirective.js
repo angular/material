@@ -30,9 +30,8 @@ angular
  *    contact's image.
  *
  *
- * // The following attribute has been removed but may come back.
  * @param {expression=} filter-selected Whether to filter selected contacts from the list of
- *    suggestions shown in the autocomplete.
+ *    suggestions shown in the autocomplete. This attribute has been removed but may come back.
  *
  *
  *
