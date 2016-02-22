@@ -63,6 +63,10 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout, $attrs) {
     }
   }.bind(this);
 
+  /** @type {function} */
+  this.$scope.removeChipAtIndex = function(chipIndex){
+    this.removeChip(chipIndex);
+  }.bind(this);
 
   /**
    * Hidden hint text for how to delete a chip. Used to give context to screen readers.

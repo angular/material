@@ -75,10 +75,17 @@ MdChipCtrl.prototype.goOutOfEditMode = function() {
   this.isEditting = false;
   this.$element.removeClass('md-chip-editing');
   this.getChipContent()[0].contentEditable = 'false';
-  this.$scope.$parent.updateChipContents(
-    parseInt(this.$element.attr('index')),
-    this.getContentElement().text()
-  );
+  var chipIndex = parseInt(this.$element.attr('index'));
+
+  var content = this.getContentElement().text();
+  if (content === "") {
+    this.$scope.$parent.removeChipAtIndex(chipIndex);
+  } else {
+    this.$scope.$parent.updateChipContents(
+        chipIndex,
+      this.getContentElement().text()
+    );
+  }
 };
 
 
