@@ -101,7 +101,7 @@ md-menu-item {
     align-content: flex-start;
     width:100%;
     md-icon {
-      margin: auto 2*$baseline-grid auto 0;
+      @include rtl(margin, auto 2*$baseline-grid auto 0,  auto 0 auto 2*$baseline-grid);
     }
     p {
       display:inline-block;

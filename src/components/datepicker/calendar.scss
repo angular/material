@@ -30,11 +30,11 @@ $md-calendar-height:
   // because we want the header background and the month dividing border to
   // extend the entire width of the calendar.
   &:first-child {
-    padding-left: $md-calendar-side-padding;
+    @include rtl-prop(padding-left, padding-right, $md-calendar-side-padding);
   }
 
   &:last-child {
-    padding-right: $md-calendar-side-padding;
+    @include rtl-prop(padding-right, padding-left, $md-calendar-side-padding);
   }
 }
 
@@ -123,7 +123,7 @@ md-calendar {
   height: $md-calendar-cell-size;
   font-size: $md-calendar-month-label-font-size;
   font-weight: 500; // Roboto Medium
-  padding: 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding;
+  @include rtl(padding, 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding, rtl-value( 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding));
 }
 
 // Table containing the day-of-the-week header.
