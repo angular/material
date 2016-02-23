@@ -50,7 +50,7 @@ $virtual-repeat-scrollbar-width: 16px;
     // Leave room for the scroll bar.
     // TODO: Will probably need to perform measurements at runtime.
     bottom: $virtual-repeat-scrollbar-width;
-    right: auto;
+    @include rtl-prop(right, left, auto);
     white-space: nowrap;
   }
 }

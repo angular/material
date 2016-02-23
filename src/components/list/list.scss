@@ -54,7 +54,7 @@ md-list-item {
       margin: 0;
       font-weight: 400;
       background-color: inherit;
-      text-align: left;
+      @include rtl(text-align, left, right);
       border: medium none;
 
       > .md-button:first-child {
@@ -84,7 +84,7 @@ md-list-item {
     &.md-button {
       font-size: inherit;
       height: inherit;
-      text-align: left;
+      @include rtl(text-align, left, right);
       text-transform: none;
       width: 100%;
       white-space: normal;
@@ -111,10 +111,10 @@ md-list-item {
   md-divider {
     position: absolute;
     bottom: 0;
-    left: 0;
+    @include rtl-prop(left, right, 0);
     width: 100%;
     &[md-inset] {
-      left: $list-item-inset-divider-offset;
+      @include rtl-prop(left, right, $list-item-inset-divider-offset);
       width: calc(100% - #{$list-item-inset-divider-offset});
       margin: 0;
     }
@@ -147,18 +147,18 @@ md-list-item, md-list-item ._md-list-item-inner {
   }
 
   & > md-icon:first-child:not(.md-avatar-icon) {
-    margin-right: $list-item-primary-width - $list-item-primary-icon-width;
+    @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-primary-icon-width);
   }
   & > md-checkbox {
     width: 3 * $baseline-grid;
-    margin-left: 3px;
-    margin-right: 29px;
+    @include rtl(margin-left, 3px, 29px);
+    @include rtl(margin-right, 29px,3px);
     margin-top: 16px;
   }
   & .md-avatar, .md-avatar-icon {
     margin-top: $baseline-grid;
     margin-bottom: $baseline-grid;
-    margin-right: $list-item-primary-width - $list-item-primary-avatar-width;
+    @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-primary-avatar-width);
     border-radius: 50%;
     box-sizing: content-box;
   }
@@ -177,11 +177,11 @@ md-list-item, md-list-item ._md-list-item-inner {
   }
 
   md-checkbox.md-secondary {
-    margin-right: 0;
+    @include rtl-prop(margin-right, margin-left, 0);
   }
 
   md-switch.md-secondary {
-    margin-right: -6px;
+    @include rtl-prop(margin-right, margin-left, -6px);
   }
 
   button.md-button._md-secondary-container {
@@ -197,7 +197,7 @@ md-list-item, md-list-item ._md-list-item-inner {
 
     &.md-icon-button {
       // Make icon buttons align with checkboxes and other controls
-      margin-right: -12px;
+      @include rtl-prop(margin-right, margin-left, -12px);
     }
   }
 
@@ -205,13 +205,13 @@ md-list-item, md-list-item ._md-list-item-inner {
   .md-secondary {
     position: absolute;
     top: 50%;
-    right: $list-item-padding-horizontal;
-    margin: 0 0 0 $list-item-secondary-left-margin;
+    @include rtl-prop(right, left, $list-item-padding-horizontal);
+    @include rtl(margin, 0 0 0 $list-item-secondary-left-margin, 0 $list-item-secondary-left-margin 0 0);
     transform: translate3d(0, -50%, 0);
   }
 
   & > .md-button._md-secondary-container > .md-secondary {
-    margin-left: 0;
+    @include rtl-prop(margin-left, margin-right, 0);
     position: static;
   }
 
@@ -236,7 +236,7 @@ md-list-item.md-3-line > ._md-no-style {
     overflow: hidden;
 
     &.md-offset {
-      margin-left: $list-item-primary-width;
+      @include rtl-prop(margin-left, margin-right, $list-item-primary-width);
     }
 
     h3 {

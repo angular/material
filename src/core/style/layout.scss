@@ -53,7 +53,7 @@
     }
 
     #{$offsets} {
-      margin-left: #{$i * 5 + '%'};
+      @include rtl-prop(margin-left, margin-right, #{$i * 5 + '%'});
     }
   }
 
@@ -85,7 +85,7 @@
     }
 
     #{$offsets} {
-      margin-left: calc(200% / 3);
+      @include rtl-prop(margin-left, margin-right, calc(200% / 3));
     }
   }
 }

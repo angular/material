@@ -86,15 +86,15 @@ md-dialog {
     align-items: center;
     justify-content: flex-end;
     margin-bottom: 0;
-    padding-right: $baseline-grid;
-    padding-left: $baseline-grid * 2;
+    @include rtl(padding-right, $baseline-grid, $baseline-grid * 2);
+    @include rtl(padding-left, $baseline-grid * 2, $baseline-grid);
     min-height: $baseline-grid * 6.5;
     overflow: hidden;
 
     .md-button {
       margin-bottom: $baseline-grid;
-      margin-left: $baseline-grid;
-      margin-right: 0;
+      @include rtl(margin-left, $baseline-grid, 0);
+      @include rtl(margin-right, 0, $baseline-grid);
       margin-top: $baseline-grid;
     }
   }

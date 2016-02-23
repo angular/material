@@ -66,7 +66,7 @@ md-toolbar {
   }
 
   > .md-indent {
-    margin-left: $toolbar-indent-margin;
+    @include rtl-prop(margin-left, margin-right, $toolbar-indent-margin);
   }
 
   ~ md-content {
@@ -121,16 +121,16 @@ md-toolbar {
     }
   }
   &> .md-button:first-child {
-    margin-left: $icon-button-margin-offset;
+    @include rtl-prop(margin-left, margin-right, $icon-button-margin-offset);
   }
   &> .md-button:last-child {
-    margin-right: $icon-button-margin-offset;
+    @include rtl-prop(margin-right, margin-left, $icon-button-margin-offset);
   }
 
   &> md-menu:last-child {
-    margin-right: $icon-button-margin-offset;
+    @include rtl-prop(margin-right, margin-left, $icon-button-margin-offset);
     & > .md-button {
-      margin-right: 0;
+      @include rtl-prop(margin-right, margin-left, 0);
     }
   }
 
