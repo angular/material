@@ -45,7 +45,7 @@ function MdChipCtrl ($scope, $element, $mdConstant, $attrs, $timeout) {
 
   if(this.enableChipEdit) {
     this.$element.on('keydown', this.chipKeyDown.bind(this));
-    this.$element.on('dblclick', this.doubleClicked.bind(this));
+    this.$element.on('mousedown', this.chipMouseDown.bind(this));
     this.getChipContent().addClass('_md-chip-content-edit-is-enabled');
   }
 }
@@ -69,13 +69,21 @@ MdChipCtrl.prototype.getContentElement = function() {
 
 
 /**
+ * @return {number}
+ */
+MdChipCtrl.prototype.getChipIndex = function() {
+    return parseInt(this.$element.attr('index'));
+};
+
+
+/**
  * Presents an input element to edit the contents of the chip.
  */
 MdChipCtrl.prototype.goOutOfEditMode = function() {
   this.isEditting = false;
   this.$element.removeClass('md-chip-editing');
   this.getChipContent()[0].contentEditable = 'false';
-  var chipIndex = parseInt(this.$element.attr('index'));
+  var chipIndex = this.getChipIndex();
 
   var content = this.getContentElement().text();
   if (content === "") {
@@ -148,8 +156,10 @@ MdChipCtrl.prototype.chipKeyDown = function(event) {
  * Handles the double click event
  * @param event
  */
-MdChipCtrl.prototype.doubleClicked = function(event) {
-  if(this.enableChipEdit && !this.isEditting) {
+MdChipCtrl.prototype.chipMouseDown = function(event) {
+  if(this.getChipIndex() == this.$scope.getSelectedChipIndex() &&
+     this.enableChipEdit &&
+     !this.isEditting) {
     this.goInEditMode();
   }
 };
