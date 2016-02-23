@@ -32,7 +32,7 @@ angular
         if ( (j < 5) && !self.modes[j] && self.activated ) {
           self.modes[j] = 'indeterminate';
         }
-        if ( counter++ % 4 == 0 ) j++;
+        if ( counter++ % 4 === 0 ) j++;
 
       }, 100, 0, true);
     }
