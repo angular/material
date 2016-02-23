@@ -70,7 +70,12 @@ module.exports = function(config) {
     // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
     // - PhantomJS
     // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    browsers: ['Firefox', 'PhantomJS2']
+    browsers: ['Firefox', 'PhantomJS2'],
+
+    client: {
+      // Do not clear the context as this can cause reload failures with Jasmine
+      clearContext:false
+    }
   });
 
 };
