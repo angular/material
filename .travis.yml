@@ -12,11 +12,6 @@ env:
     - BROWSER_STACK_USERNAME=angularteam1
     - BROWSER_STACK_ACCESS_KEY=BWCd4SynLzdDcv8xtzsB
 
-matrix:
-  allow_failures:
-  - env: "MODE=saucelabs_optional"
-  - env: "MODE=browserstack_optional"
-
 cache:
   directories:
     - node_modules
@@ -32,9 +27,6 @@ before_install:
   - wget http://ngmaterial.assets.s3.amazonaws.com/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O $PWD/node_modules/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2
   - tar -xvf $PWD/node_modules/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C $PWD/node_modules/travis-phantomjs
   - export PHANTOMJS_BIN=$PWD/node_modules/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs
-
-install:
-  - npm install
 
 before_script:
   # Necessary to run test on Travis CI that require a graphical interface.
