@@ -1,51 +1,40 @@
 language: node_js
 sudo: false
 node_js:
-  - '4.2.3'
-
+- 4.2.3
 env:
   global:
-    - LOGS_DIR=/tmp/angular-material1-build/logs
-    - SAUCE_USERNAME=angular-ci
-    - SAUCE_ACCESS_KEY=9b988f434ff8-fbca-8aa4-4ae3-35442987
-    - BROWSER_STACK_USERNAME=angularteam1
-    - BROWSER_STACK_ACCESS_KEY=BWCd4SynLzdDcv8xtzsB
-    - secure: TWmpBzRG68b9e5wbJ7I6ox8TrZTnU/XpOkBvggJyuMgvUz27accp92Y9U7DWUPiXYXcWnoc7pqVAvEbwd1/ykHKCqezmyEXsrzZo6POg2lNFXkI9vSuDukL8A4Ct9zANVmr+5Y+kEBtQ/viyO5Rxc5H9bZskSeMaegqR60ZT2E8=
-
+  - LOGS_DIR=/tmp/angular-material1-build/logs
+  - SAUCE_USERNAME=angular-ci
+  - SAUCE_ACCESS_KEY=9b988f434ff8-fbca-8aa4-4ae3-35442987
+  - BROWSER_STACK_USERNAME=angularteam1
+  - BROWSER_STACK_ACCESS_KEY=BWCd4SynLzdDcv8xtzsB
+  - secure: X7CNmOMemAJ9Jqrsmv6MXyeh8n8TIL5CKzE9LYsZUbsyKo0l5CyyysJq0y/AbpQS6awsSv2qP/cZ/kand6r6z0wMFbUcxa4HjMZEfRwv3sGtwj1OKJko/GvjcZQzD54FtHy1NU7wR0mYhAlE5IwH7f8bMa/nUiijgD/TOCTtKH8=
 cache:
   directories:
-    - node_modules
-    - $HOME/.pub-cache
-
+  - node_modules
+  - "$HOME/.pub-cache"
 branches:
   only:
-    - master
-
+  - master
 before_install:
-  # configure phantomjs2
-  - mkdir travis-phantomjs
-  - wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2
-  - tar -xvf $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C $PWD/travis-phantomjs
-  - export PHANTOMJS_BIN=$PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs
-
+- mkdir travis-phantomjs
+- wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+  -O $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2
+- tar -xvf $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C $PWD/travis-phantomjs
+- export PHANTOMJS_BIN=$PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs
 install:
-  - npm install
-
+- npm install
 before_script:
-  # Necessary to run test on Travis CI that require a graphical interface.
-  # See https://docs.travis-ci.com/user/gui-and-headless-browsers
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - mkdir -p $LOGS_DIR
-  - git config --global user.email "ngmaterial@googlegroups.com"
-  - git config --global user.name "ngMaterial Bot"
-
+# Necessary to run test on Travis CI that require a graphical interface.
+# See https://docs.travis-ci.com/user/gui-and-headless-browsers
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- mkdir -p $LOGS_DIR
+- git config --global user.email "ngmaterial@googlegroups.com"
+- git config --global user.name "ngMaterial Bot"
 script:
-  # Fail builds which use iit/ddescribe, but run the tests anyways
-  - gulp ddescribe-iit
-  - gulp karma --reporters='dots'
-
+- gulp ddescribe-iit
+- gulp karma --reporters='dots'
 after_success:
-  - ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT
-
-
+- "./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT"
