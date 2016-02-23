@@ -44,14 +44,15 @@ angular.module('toastDemo1', ['ngMaterial'])
   $scope.showActionToast = function() {
     var pinTo = $scope.getToastPosition();
     var toast = $mdToast.simple()
-          .textContent('Action Toast!')
-          .action('OK')
-          .highlightAction(false)
-          .position(pinTo);
+      .textContent('Marked as read')
+      .action('UNDO')
+      .highlightAction(true)
+      .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
+      .position(pinTo);
 
     $mdToast.show(toast).then(function(response) {
       if ( response == 'ok' ) {
-        alert('You clicked \'OK\'.');
+        alert('You clicked the \'UNDO\' action.');
       }
     });
   };

@@ -83,6 +83,28 @@ describe('$mdToast service', function() {
       expect(resolved).toBe(true);
     }));
 
+    it('should apply the highlight class when using highlightAction', inject(function($mdToast, $rootScope, $material) {
+      var parent = angular.element('<div>');
+
+      $mdToast.show(
+        $mdToast.simple({
+            content: 'Marked as read',
+            parent: parent
+          })
+          .action('UNDO')
+          .highlightAction(true)
+          .highlightClass('md-warn')
+      );
+
+      $material.flushOutstandingAnimations();
+
+      var button = parent.find('button');
+
+      expect(button.text().trim()).toBe('UNDO');
+      expect(button).toHaveClass('md-highlight');
+      expect(button).toHaveClass('md-warn');
+    }));
+
     describe('when using custom interpolation symbols', function() {
       beforeEach(module(function($interpolateProvider) {
         $interpolateProvider.startSymbol('[[').endSymbol(']]');
