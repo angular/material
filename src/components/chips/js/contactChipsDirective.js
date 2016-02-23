@@ -22,7 +22,7 @@ angular
  *    displayed when there is at least on item in the list
  * @param {expression} md-contacts An expression expected to return contacts matching the search
  *    test, `$query`. If this expression involves a promise, a loading bar is displayed while
- *    for it to resolve.
+ *    waiting for it to resolve.
  * @param {string} md-contact-name The field name of the contact object representing the
  *    contact's name.
  * @param {string} md-contact-email The field name of the contact object representing the
