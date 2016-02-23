@@ -4,13 +4,13 @@ node_js:
   - '4.2.3'
 
 env:
-  secure: TWmpBzRG68b9e5wbJ7I6ox8TrZTnU/XpOkBvggJyuMgvUz27accp92Y9U7DWUPiXYXcWnoc7pqVAvEbwd1/ykHKCqezmyEXsrzZo6POg2lNFXkI9vSuDukL8A4Ct9zANVmr+5Y+kEBtQ/viyO5Rxc5H9bZskSeMaegqR60ZT2E8=
   global:
     - LOGS_DIR=/tmp/angular-material1-build/logs
     - SAUCE_USERNAME=angular-ci
     - SAUCE_ACCESS_KEY=9b988f434ff8-fbca-8aa4-4ae3-35442987
     - BROWSER_STACK_USERNAME=angularteam1
     - BROWSER_STACK_ACCESS_KEY=BWCd4SynLzdDcv8xtzsB
+    - secure: TWmpBzRG68b9e5wbJ7I6ox8TrZTnU/XpOkBvggJyuMgvUz27accp92Y9U7DWUPiXYXcWnoc7pqVAvEbwd1/ykHKCqezmyEXsrzZo6POg2lNFXkI9vSuDukL8A4Ct9zANVmr+5Y+kEBtQ/viyO5Rxc5H9bZskSeMaegqR60ZT2E8=
 
 cache:
   directories:
