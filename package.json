@@ -35,6 +35,7 @@
     "esprima": "^1.2.2",
     "glob": "~4.0.2",
     "gulp": "^3.9.0",
+    "gulp-add-src": "^0.2.0",
     "gulp-autoprefixer": "^1.0.1",
     "gulp-concat": "^2.2.0",
     "gulp-connect": "^2.2.0",
@@ -80,4 +81,3 @@
     "squash": "git rebase -i $(npm run -s merge-base)"
   }
 }
-
