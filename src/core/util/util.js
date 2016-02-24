@@ -642,6 +642,17 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       return current;
     },
 
+    /**
+     * Checks a elements for its hidden state.
+     * Using computed style or checking for existing in the visible DOM.
+     * @param computedStyle Check Computed Style
+     * @param offsetParent Check Offset Parent
+     */
+    isHidden: function(element, computedStyle, offsetParent) {
+      return computedStyle && window.getComputedStyle(element[0]).display === 'none' ||
+        offsetParent && element[0].offsetParent == null;
+    },
+
     hasComputedStyle: hasComputedStyle
   };
 
