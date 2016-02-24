@@ -17,9 +17,12 @@ function MenuItemDirective() {
         var buttonEl = angular.element('<md-button type="button"></md-button>');
             buttonEl.html(text);
             buttonEl.attr('tabindex', '0');
-
         templateEl.html('');
-        templateEl.append(angular.element('<md-icon md-svg-icon="check"></md-icon>'));
+        if(templateAttrs.icontype=="svg"){
+          var iconElement = angular.element('<md-icon md-svg-icon="check"></md-icon>');
+        }
+        var iconElement = angular.element('<md-icon>check</md-icon>');
+        templateEl.append(iconElement);
         templateEl.append(buttonEl);
         templateEl[0].classList.add('md-indent');
 
