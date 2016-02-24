@@ -230,6 +230,7 @@ md-list-item.md-3-line > .md-no-style {
     flex: 1;
     margin: auto;
     text-overflow: ellipsis;
+    overflow: hidden;
 
     &.md-offset {
       margin-left: $list-item-primary-width;
