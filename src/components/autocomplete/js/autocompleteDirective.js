@@ -237,8 +237,9 @@ function MdAutocomplete () {
                   ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                   ng-blur="$mdAutocompleteCtrl.blur()"\
                   ng-focus="$mdAutocompleteCtrl.focus()"\
+                  ' + (attr.placeholder != null ? 'placeholder="{{placeholder}}"' : '') + '\
                   aria-owns="ul-{{$mdAutocompleteCtrl.id}}"\
-                  aria-label="{{floatingLabel}}"\
+                  ' + (attr.placeholder != null ? 'aria-label="{{placeholder}}"' : 'aria-label="{{floatingLabel}}"') + '\
                   aria-autocomplete="list"\
                   aria-haspopup="true"\
                   aria-activedescendant=""\
