@@ -25,6 +25,7 @@ before_install:
 - export PHANTOMJS_BIN=$PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs
 install:
 - npm install
+- npm rebuild node-sass
 before_script:
 # Necessary to run test on Travis CI that require a graphical interface.
 # See https://docs.travis-ci.com/user/gui-and-headless-browsers
