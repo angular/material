@@ -16,6 +16,8 @@
     "type": "git",
     "url": "git://github.com/angular/material.git"
   },
+  "style": "./dist/angular-material.css",
+  "scss": "./dist/angular-material.scss",
   "devDependencies": {
     "angular": "^1.4.8",
     "angular-animate": "^1.4.8",
