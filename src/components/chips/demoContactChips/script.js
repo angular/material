@@ -4,13 +4,14 @@
       .module('contactChipsDemo', ['ngMaterial'])
       .controller('ContactChipDemoCtrl', DemoCtrl);
 
-  function DemoCtrl ($timeout, $q) {
+  function DemoCtrl ($timeout, $q, $mdConstant) {
     var self = this;
 
     self.querySearch = querySearch;
     self.allContacts = loadContacts();
     self.contacts = [self.allContacts[0]];
     self.filterSelected = true;
+    self.keys = [$mdConstant.KEY_CODE.COMMA];
 
     /**
      * Search for contacts.
