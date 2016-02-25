@@ -109,12 +109,13 @@ for VERSION in "${VERSIONS[@]}"; do
   done
 
   echo "\n"
-  node ./node_modules/gulp/bin/gulp.js karma --reporters='dots' --browsers=$BROWSERS
+  pwd
+  node ./node_modules/gulp/bin/gulp.js karma --config=config/karma-ci.conf.js --reporters='dots' --browsers=$BROWSERS
   LAST_EXIT_CODE=$?
 
   echo "\n\n--- Finished Testing AngularMaterial against AngularJS (${VERSION}) ---"
 
-  if [ $LAST_EXIT_CODE == "1" ]; then
+  if [ $LAST_EXIT_CODE != "0" ]; then
     echo "STATUS: FAILED"
     FAILED=true
   else
