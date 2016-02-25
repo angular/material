@@ -42,7 +42,7 @@ md-list-item {
   // Ensure nested dividers are properly positioned
   position: relative;
 
-  &._md-proxy-focus._md-focused ._md-no-style {
+  &._md-proxy-focus.md-focused ._md-no-style {
     transition: background-color 0.15s linear;
   }
 
@@ -64,7 +64,7 @@ md-list-item {
         padding: 0;
       }
 
-      .md-list-item-inner {
+      ._md-list-item-inner {
         padding: 0 16px;
       }
 

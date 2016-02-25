@@ -178,11 +178,11 @@ describe('<md-select>', function() {
 
     select.triggerHandler('focus');
 
-    expect(element.hasClass('_md-input-focused')).toBe(true);
+    expect(element.hasClass('md-input-focused')).toBe(true);
 
     select.triggerHandler('blur');
 
-    expect(element.hasClass('_md-input-focused')).toBe(false);
+    expect(element.hasClass('md-input-focused')).toBe(false);
 
   }));
 
@@ -197,16 +197,16 @@ describe('<md-select>', function() {
 
       waitForSelectClose();
 
-      expect(el).toHaveClass('_md-input-has-value');
+      expect(el).toHaveClass('md-input-has-value');
     }));
 
     it('should set has-value class on container for ng-model input', inject(function($rootScope) {
       $rootScope.value = 'test';
       var el = setupSelect('ng-model="$root.value"', ['test', 'no-test']);
-      expect(el).toHaveClass('_md-input-has-value');
+      expect(el).toHaveClass('md-input-has-value');
 
       $rootScope.$apply('value = null');
-      expect(el).not.toHaveClass('_md-input-has-value');
+      expect(el).not.toHaveClass('md-input-has-value');
     }));
 
     it('should match label to given input id', function() {

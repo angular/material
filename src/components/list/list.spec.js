@@ -155,14 +155,14 @@ describe('mdListItem directive', function() {
     expect(firstChild.children().length).toBe(2);
     var secondChild = listItem.children().eq(1);
     expect(secondChild[0].nodeName).toBe('DIV');
-    expect(secondChild.hasClass('md-secondary-container')).toBeTruthy();
+    expect(secondChild.hasClass('_md-secondary-container')).toBeTruthy();
     expect(secondChild.children().length).toBe(2);
     var secondaryBtnOne = secondChild.children().eq(0);
     expect(secondaryBtnOne[0].nodeName).toBe('MD-BUTTON');
-    expect(secondaryBtnOne.hasClass('md-secondary-container')).toBeFalsy();
+    expect(secondaryBtnOne.hasClass('_md-secondary-container')).toBeFalsy();
     var secondaryBtnTwo = secondChild.children().eq(1);
     expect(secondaryBtnTwo[0].nodeName).toBe('MD-BUTTON');
-    expect(secondaryBtnTwo.hasClass('md-secondary-container')).toBeFalsy();
+    expect(secondaryBtnTwo.hasClass('_md-secondary-container')).toBeFalsy();
   });
 
   it('should detect non-compiled md-buttons', function() {

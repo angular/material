@@ -19,6 +19,6 @@ md-list-item ._md-list-item-inner > ._md-list-item-inner > p {
 }
 
 
-.noright .md-secondary-container {
+.noright ._md-secondary-container {
     right: 0 !important;
 }

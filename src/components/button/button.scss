@@ -150,7 +150,7 @@ button.md-button::-moz-focus-inner {
   &:not([disabled]) {
     &.md-raised,
     &.md-fab {
-      &._md-focused {
+      &.md-focused {
         @include md-shadow-bottom-z-1();
       }
       &:active {
@@ -174,7 +174,7 @@ button.md-button::-moz-focus-inner {
     transition: $swift-ease-out;
     transform: translate3d(0, $button-fab-toast-offset, 0);
     &:not([disabled]) {
-      &._md-focused,
+      &.md-focused,
       &:hover {
         transform: translate3d(0, $button-fab-toast-offset - 1, 0);
       }
@@ -188,7 +188,7 @@ button.md-button::-moz-focus-inner {
     transition: $swift-ease-out;
     transform: translate3d(0, -$button-fab-toast-offset, 0);
     &:not([disabled]) {
-      &._md-focused,
+      &.md-focused,
       &:hover {
         transform: translate3d(0, -$button-fab-toast-offset - 1, 0);
       }

@@ -103,13 +103,13 @@ function mdInputContainerDirective($mdTheming, $parse) {
     };
     self.element = $element;
     self.setFocused = function(isFocused) {
-      $element.toggleClass('_md-input-focused', !!isFocused);
+      $element.toggleClass('md-input-focused', !!isFocused);
     };
     self.setHasValue = function(hasValue) {
-      $element.toggleClass('_md-input-has-value', !!hasValue);
+      $element.toggleClass('md-input-has-value', !!hasValue);
     };
     self.setHasPlaceholder = function(hasPlaceholder) {
-      $element.toggleClass('_md-input-has-placeholder', !!hasPlaceholder);
+      $element.toggleClass('md-input-has-placeholder', !!hasPlaceholder);
     };
     self.setInvalid = function(isInvalid) {
       if (isInvalid) {

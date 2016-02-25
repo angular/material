@@ -7,10 +7,10 @@ md-radio-button.md-THEME_NAME-theme {
   ._md-on {
     background-color: '{{accent-color-0.87}}';
   }
-  &._md-checked ._md-off {
+  &.md-checked ._md-off {
     border-color: '{{accent-color-0.87}}';
   }
-  &._md-checked .md-ink-ripple {
+  &.md-checked .md-ink-ripple {
     color: '{{accent-color-0.87}}';
   }
   ._md-container .md-ripple {
@@ -27,14 +27,14 @@ md-radio-button.md-THEME_NAME-theme {
       ._md-on {
         background-color: '{{primary-color-0.87}}';
       }
-      ._md-checked,
-      &._md-checked {
+      .md-checked,
+      &.md-checked {
         ._md-off {
           border-color: '{{primary-color-0.87}}';
         }
       }
-      ._md-checked,
-      &._md-checked {
+      .md-checked,
+      &.md-checked {
         .md-ink-ripple {
           color: '{{primary-color-0.87}}';
         }
@@ -49,14 +49,14 @@ md-radio-button.md-THEME_NAME-theme {
       ._md-on {
         background-color: '{{warn-color-0.87}}';
       }
-      ._md-checked,
-      &._md-checked {
+      .md-checked,
+      &.md-checked {
         ._md-off {
           border-color: '{{warn-color-0.87}}';
         }
       }
-      ._md-checked,
-      &._md-checked {
+      .md-checked,
+      &.md-checked {
         .md-ink-ripple {
           color: '{{warn-color-0.87}}';
         }
@@ -81,27 +81,27 @@ md-radio-button.md-THEME_NAME-theme {
 
 }
 md-radio-group.md-THEME_NAME-theme {
-  ._md-checked .md-ink-ripple {
+  .md-checked .md-ink-ripple {
     color: '{{accent-color-0.26}}';
   }
-  &.md-primary ._md-checked:not([disabled]) .md-ink-ripple, ._md-checked:not([disabled]).md-primary .md-ink-ripple {
+  &.md-primary .md-checked:not([disabled]) .md-ink-ripple, .md-checked:not([disabled]).md-primary .md-ink-ripple {
     color: '{{primary-color-0.26}}';
   }
-  ._md-checked.md-primary .md-ink-ripple {
+  .md-checked.md-primary .md-ink-ripple {
     color: '{{warn-color-0.26}}';
   }
 }
 
 md-radio-group.md-THEME_NAME-theme.md-focused:not(:empty) {
-  ._md-checked ._md-container:before {
+  .md-checked ._md-container:before {
     background-color: '{{accent-color-0.26}}';
   }
-  &.md-primary ._md-checked ._md-container:before,
-  ._md-checked.md-primary ._md-container:before {
+  &.md-primary .md-checked ._md-container:before,
+  .md-checked.md-primary ._md-container:before {
     background-color: '{{primary-color-0.26}}';
   }
-  &.md-warn ._md-checked ._md-container:before,
-  ._md-checked.md-warn ._md-container:before {
+  &.md-warn .md-checked ._md-container:before,
+  .md-checked.md-warn ._md-container:before {
     background-color: '{{warn-color-0.26}}';
   }
 }

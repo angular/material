@@ -137,7 +137,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           tEl.addClass('_md-proxy-focus');
         } else {
           // Element which holds the default list-item content.
-          container = angular.element('<div class="md-button _md-no-style"><div class="md-list-item-inner"></div></div>');
+          container = angular.element('<div class="md-button _md-no-style"><div class="_md-list-item-inner"></div></div>');
 
           // Button which shows ripple and executes primary action.
           var buttonWrap = angular.element('<md-button class="_md-no-style" md-no-focus-style></md-button>');
@@ -159,7 +159,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         if (secondaryItems.length === 1) {
           wrapSecondaryItem(secondaryItems[0], tEl);
         } else if (secondaryItems.length > 1) {
-          var secondaryItemsWrapper = angular.element('<div class="md-secondary-container">');
+          var secondaryItemsWrapper = angular.element('<div class="_md-secondary-container">');
           angular.forEach(secondaryItems, function(secondaryItem) {
             wrapSecondaryItem(secondaryItem, secondaryItemsWrapper, true);
           });
@@ -243,9 +243,9 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
               }, 100);
             })
             .on('focus', function() {
-              if ($scope.mouseActive === false) { $element.addClass('_md-focused'); }
+              if ($scope.mouseActive === false) { $element.addClass('md-focused'); }
               proxy.on('blur', function proxyOnBlur() {
-                $element.removeClass('_md-focused');
+                $element.removeClass('md-focused');
                 proxy.off('blur', proxyOnBlur);
               });
             });

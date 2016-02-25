@@ -31,7 +31,7 @@ md-checkbox {
     @include rtl(margin-right, 0, inherit);
   }
 
-  &._md-focused:not([disabled]) {
+  &.md-focused:not([disabled]) {
     ._md-container:before {
       left: -8px;
       top: -8px;
@@ -39,7 +39,7 @@ md-checkbox {
       bottom: -8px;
     }
 
-    &:not(._md-checked) {
+    &:not(.md-checked) {
       ._md-container:before {
         background-color: rgba(0, 0, 0, 0.12);
       }
@@ -115,7 +115,7 @@ md-checkbox {
     border-radius: $checkbox-border-radius;
   }
 
-  &._md-checked ._md-icon {
+  &.md-checked ._md-icon {
     border: none;
   }
 
@@ -125,7 +125,7 @@ md-checkbox {
   }
 
 
-  &._md-checked ._md-icon:after {
+  &.md-checked ._md-icon:after {
     box-sizing: border-box;
     transform: rotate(45deg);
     position: absolute;

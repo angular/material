@@ -19,7 +19,7 @@ md-switch.md-THEME_NAME-theme {
     ._md-bar {
       background-color: '{{accent-color-0.5}}';
     }
-    &._md-focused ._md-thumb:before {
+    &.md-focused ._md-thumb:before {
       background-color: '{{accent-color-0.26}}';
     }
 
@@ -33,7 +33,7 @@ md-switch.md-THEME_NAME-theme {
       ._md-bar {
         background-color: '{{primary-color-0.5}}';
       }
-      &._md-focused ._md-thumb:before {
+      &.md-focused ._md-thumb:before {
         background-color: '{{primary-color-0.26}}';
       }
     }
@@ -48,7 +48,7 @@ md-switch.md-THEME_NAME-theme {
       ._md-bar {
         background-color: '{{warn-color-0.5}}';
       }
-      &._md-focused ._md-thumb:before {
+      &.md-focused ._md-thumb:before {
         background-color: '{{warn-color-0.26}}';
       }
     }

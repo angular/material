@@ -90,7 +90,7 @@ md-radio-button {
     transform: scale(0);
   }
 
-  &._md-checked ._md-on {
+  &.md-checked ._md-on {
     transform: scale(0.50);
   }
 
@@ -142,8 +142,8 @@ md-radio-group {
   &:focus {
     outline: none;
   }
-  &._md-focused {
-    ._md-checked ._md-container:before {
+  &.md-focused {
+    .md-checked ._md-container:before {
       left: -8px;
       top: -8px;
       right: -8px;

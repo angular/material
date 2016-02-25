@@ -48,7 +48,7 @@ angular
  */
 function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $mdUtil, $timeout) {
   inputDirective = inputDirective[0];
-  var CHECKED_CSS = '_md-checked';
+  var CHECKED_CSS = 'md-checked';
 
   return {
     restrict: 'E',
@@ -118,11 +118,11 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
         })
         .on('focus', function() {
           if (scope.mouseActive === false) {
-            element.addClass('_md-focused');
+            element.addClass('md-focused');
           }
         })
         .on('blur', function() {
-          element.removeClass('_md-focused');
+          element.removeClass('md-focused');
         });
 
       ngModelCtrl.$render = render;
@@ -142,8 +142,8 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
         if (keyCode === $mdConstant.KEY_CODE.SPACE || keyCode === $mdConstant.KEY_CODE.ENTER) {
           ev.preventDefault();
 
-          if (!element.hasClass('_md-focused')) {
-            element.addClass('_md-focused');
+          if (!element.hasClass('md-focused')) {
+            element.addClass('md-focused');
           }
 
           listener(ev);
