@@ -183,6 +183,8 @@ describe('md-slider', function() {
     pageScope.isDisabled = true;
     var slider = setup('ng-disabled="isDisabled"');
 
+    pageScope.$digest();
+
     // Doesn't add active class on pressdown when disabled
     slider.triggerHandler({
       type: '$md.pressdown',
@@ -201,6 +203,8 @@ describe('md-slider', function() {
 
   it('should disable via the `disabled` attribute', function() {
     var slider = setup('disabled');
+
+    pageScope.$digest();
 
     // Check for disabled state by triggering the pressdown handler and asserting that
     // the slider is not active.
