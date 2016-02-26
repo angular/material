@@ -272,6 +272,7 @@ md-list-item.md-3-line > .md-no-style {
 }
 
 md-list-item.md-2-line,
+md-list-item.md-3-line .md-list-item-inner,
 md-list-item.md-2-line > .md-no-style {
   height:auto;
   min-height: $list-item-two-line-height;
@@ -291,6 +292,7 @@ md-list-item.md-2-line > .md-no-style {
 }
 
 md-list-item.md-3-line,
+md-list-item.md-3-line .md-list-item-inner,
 md-list-item.md-3-line > .md-no-style {
   height:auto;
   min-height: $list-item-three-line-height;
