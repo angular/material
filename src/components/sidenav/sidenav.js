@@ -241,6 +241,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
       });
     };
     var backdrop = $mdUtil.createBackdrop(scope, "md-sidenav-backdrop md-opaque ng-enter");
+    var backdropCtrl = backdrop.controller('mdBackdrop');
 
     $mdTheming.inherit(backdrop, element);
 
@@ -298,6 +299,13 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
                 $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed')
               ])
               .then(function() {
+                // Fill the backdrop with the parents height, only if the backdrop is added to the DOM.
+                // This is needed, because we don't disable body scrolling so we need to trigger the `parent fill`
+                // manually. As the backdrop is added dynamically to the DOM we need to fill it from our directive.
+                if (backdrop.parent().length && backdropCtrl) {
+                  backdropCtrl.fillParentHeight();
+                }
+
                 // Perform focus when animations are ALL done...
                 if (scope.isOpen) {
                   focusEl && focusEl.focus();
