@@ -1,7 +1,7 @@
 
 angular.module('toastDemo1', ['ngMaterial'])
 
-.controller('AppCtrl', function($scope, $mdToast) {
+.controller('AppCtrl', function($scope, $mdToast, $document) {
   var last = {
       bottom: false,
       top: true,
@@ -46,7 +46,7 @@ angular.module('toastDemo1', ['ngMaterial'])
     var toast = $mdToast.simple()
           .textContent('Action Toast!')
           .action('OK')
-          .highlightAction(false)
+          .highlightAction(true)
           .position(pinTo);
 
     $mdToast.show(toast).then(function(response) {
