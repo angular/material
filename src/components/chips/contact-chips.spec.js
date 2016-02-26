@@ -83,7 +83,7 @@ describe('<md-contact-chips>', function() {
     });
 
     describe('filtering selected items', function() {
-      it('should filter', inject(function() {
+      it('should filter by default', inject(function() {
         scope.querySearch = jasmine.createSpy('querySearch').and.callFake(function(q) {
           return scope.allContacts;
         });
@@ -101,29 +101,34 @@ describe('<md-contact-chips>', function() {
         });
 
         var matches = autocompleteCtrl.matches;
-        expect(matches.length).toBe(3);
+        expect(matches.length).toBe(2);
       }));
 
-      /* it('should not filter when disabled', inject(function($timeout) {
-       scope.querySearch = jasmine.createSpy('querySearch').and.callFake(function(q) {
-       return scope.allContacts;
-       });
-       scope.contacts.push(scope.allContacts[2]);
-       scope.filterSelected = false;
-       var element = buildChips(CONTACT_CHIPS_TEMPLATE);
-       var ctrl = element.controller('mdContactChips');
-       $timeout.flush();
+      it('should not filter when disabled', inject(function($timeout) {
+        scope.querySearch = jasmine.createSpy('querySearch').and.callFake(function(q) {
+          return scope.allContacts;
+        });
+        scope.contacts.push(scope.allContacts[2]);
 
-       var autocompleteElement = element.find('md-autocomplete');
-       var autocompleteCtrl = autocompleteElement.controller('mdAutocomplete');
-       element.scope().$apply(function() {
-       autocompleteCtrl.scope.searchText = 'NAME';
-       autocompleteCtrl.keydown({});
-       });
+        var template = CONTACT_CHIPS_TEMPLATE.replace(
+          '<md-contact-chips',
+          '<md-contact-chips filter-selected="false"'
+        );
+        var element = buildChips(template);
+        var ctrl = element.controller('mdContactChips');
+        $timeout.flush();
 
-       var matches = autocompleteCtrl.matches;
-       expect(matches.length).toBe(3);
-       }));*/
+        var autocompleteElement = element.find('md-autocomplete');
+        var autocompleteCtrl = autocompleteElement.controller('mdAutocomplete');
+
+        element.scope().$apply(function() {
+          autocompleteCtrl.scope.searchText = 'NAME';
+          autocompleteCtrl.keydown({});
+        });
+
+        var matches = autocompleteCtrl.matches;
+        expect(matches.length).toBe(3);
+      }));
     });
 
   });
