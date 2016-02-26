@@ -10,8 +10,8 @@ md-datepicker {
   overflow: hidden;
 
   // Leave room for the down-triangle button to "overflow" it's parent without modifying scrollLeft
-  padding-right: $md-datepicker-triangle-button-width / 2;
-  margin-right: -$md-datepicker-triangle-button-width / 2;
+  @include rtl-prop(padding-right, padding-left, $md-datepicker-triangle-button-width / 2);
+  @include rtl-prop(margin-right, margin-left, -$md-datepicker-triangle-button-width / 2);
 
   vertical-align: middle;
 }
@@ -47,7 +47,7 @@ md-datepicker {
 
   display: inline-block;
   width: auto;
-  margin-left: $md-datepicker-button-gap;
+  @include rtl-prop(margin-left, margin-right, $md-datepicker-button-gap);
 
   &.md-datepicker-focused {
     border-bottom-width: 2px;
@@ -133,7 +133,7 @@ $md-date-arrow-size: 5px;
 // Button containing the down "disclosure" triangle/arrow.
 .md-datepicker-triangle-button {
   position: absolute;
-  right: 0;
+  @include rtl-prop(right, left, 0);
   top: 0;
 
   // TODO(jelbourn): This position isn't great on all platforms.
@@ -162,12 +162,12 @@ md-datepicker[disabled] {
 // Open state for all of the elements of the picker.
 .md-datepicker-open {
   .md-datepicker-input-container {
-    margin-left: -$md-datepicker-button-gap;
+    @include rtl-prop(margin-left, margin-right, -$md-datepicker-button-gap);
     border: none;
   }
 
   .md-datepicker-input {
-    margin-left: 24px;
+    @include rtl-prop(margin-left, margin-right, 24px);
     height: 40px;
   }
 
