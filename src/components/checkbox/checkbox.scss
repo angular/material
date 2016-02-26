@@ -32,7 +32,7 @@ md-checkbox {
   }
 
   &.md-focused:not([disabled]) {
-    .md-container:before {
+    ._md-container:before {
       left: -8px;
       top: -8px;
       right: -8px;
@@ -40,13 +40,13 @@ md-checkbox {
     }
 
     &:not(.md-checked) {
-      .md-container:before {
+      ._md-container:before {
         background-color: rgba(0, 0, 0, 0.12);
       }
     }
   }
 
-  .md-container {
+  ._md-container {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -97,12 +97,12 @@ md-checkbox {
     }
   }
 
-  &.md-align-top-left > div.md-container {
+  &.md-align-top-left > div._md-container {
     top: $checkbox-top;
   }
 
   // unchecked
-  .md-icon {
+  ._md-icon {
     box-sizing: border-box;
     transition: 240ms;
     position: absolute;
@@ -115,7 +115,7 @@ md-checkbox {
     border-radius: $checkbox-border-radius;
   }
 
-  &.md-checked .md-icon {
+  &.md-checked ._md-icon {
     border: none;
   }
 
@@ -125,7 +125,7 @@ md-checkbox {
   }
 
 
-  &.md-checked .md-icon:after {
+  &.md-checked ._md-icon:after {
     box-sizing: border-box;
     transform: rotate(45deg);
     position: absolute;
@@ -141,7 +141,7 @@ md-checkbox {
     content: '';
   }
 
-  .md-label {
+  ._md-label {
     box-sizing: border-box;
     position: relative;
     display: inline-block;

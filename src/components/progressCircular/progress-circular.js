@@ -64,15 +64,15 @@ function MdProgressCircularDirective($mdTheming, $mdUtil, $log) {
     template:
         // The progress 'circle' is composed of two half-circles: the left side and the right
         // side. Each side has CSS applied to 'fill-in' the half-circle to the appropriate progress.
-        '<div class="md-scale-wrapper">' +
-          '<div class="md-spinner-wrapper">' +
-            '<div class="md-inner">' +
-              '<div class="md-gap"></div>' +
-              '<div class="md-left">' +
-                '<div class="md-half-circle"></div>' +
+        '<div class="_md-scale-wrapper">' +
+          '<div class="_md-spinner-wrapper">' +
+            '<div class="_md-inner">' +
+              '<div class="_md-gap"></div>' +
+              '<div class="_md-left">' +
+                '<div class="_md-half-circle"></div>' +
               '</div>' +
-              '<div class="md-right">' +
-                '<div class="md-half-circle"></div>' +
+              '<div class="_md-right">' +
+                '<div class="_md-half-circle"></div>' +
               '</div>' +
             '</div>' +
           '</div>' +
@@ -121,7 +121,7 @@ function MdProgressCircularDirective($mdTheming, $mdUtil, $log) {
          case MODE_INDETERMINATE:
            spinnerWrapper.removeClass('ng-hide');
            if (lastMode) spinnerWrapper.removeClass(lastMode);
-           spinnerWrapper.addClass( lastMode = "md-mode-" + mode );
+           spinnerWrapper.addClass( lastMode = "_md-mode-" + mode );
            break;
          default:
            if (lastMode) spinnerWrapper.removeClass( lastMode );
@@ -177,9 +177,9 @@ function MdProgressCircularDirective($mdTheming, $mdUtil, $log) {
     function animateIndicator(value) {
       if ( !mode() ) return;
 
-      leftC  = leftC  || angular.element(element[0].querySelector('.md-left > .md-half-circle'));
-      rightC = rightC || angular.element(element[0].querySelector('.md-right > .md-half-circle'));
-      gap    = gap    || angular.element(element[0].querySelector('.md-gap'));
+      leftC  = leftC  || angular.element(element[0].querySelector('._md-left > ._md-half-circle'));
+      rightC = rightC || angular.element(element[0].querySelector('._md-right > ._md-half-circle'));
+      gap    = gap    || angular.element(element[0].querySelector('._md-gap'));
 
       var gapStyles = removeEmptyValues({
           borderBottomColor: (value <= 50) ? "transparent !important" : "",
