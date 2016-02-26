@@ -210,6 +210,11 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         }
 
         containerCtrl.input = element;
+
+        // Add an error spacer div after our input to provide space for the char counter and any ng-messages
+        var errorsSpacer = angular.element('<div class="md-errors-spacer">');
+        element.after(errorsSpacer);
+
         if (!containerCtrl.label) {
           $mdAria.expect(element, 'aria-label', element.attr('placeholder'));
         }
@@ -265,7 +270,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
       mdSelectCtrl.setIsPlaceholder = function(isPlaceholder) {
         if (isPlaceholder) {
           valueEl.addClass('md-select-placeholder');
-          if (containerCtrl && containerCtrl.label) {
+          if (containerCtrl && containerCtrl.label && !attr.placeholder) {
             containerCtrl.label.addClass('md-placeholder');
           }
         } else {
