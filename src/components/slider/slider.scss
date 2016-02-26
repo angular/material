@@ -1,8 +1,8 @@
-$slider-background-color:  rgb(200, 200, 200) !default;
+$slider-background-color:  rgba(0, 0, 0, .26) !default;
 $slider-height:  48px !default;
 
 $slider-track-height:  2px !default;
-$slider-thumb-width:  32px !default;
+$slider-thumb-width:  24px !default;
 $slider-thumb-height:  $slider-thumb-width !default;
 
 $slider-thumb-default-scale: 0.5 !default;
@@ -11,24 +11,24 @@ $slider-thumb-focus-scale: 0.85 !default;
 $slider-thumb-disabled-scale: 0.35 !default;
 $slider-thumb-disabled-border: 6px !default;
 
-$slider-focus-thumb-width:  48px !default;
+$slider-focus-thumb-width:  32px !default;
 $slider-focus-thumb-height: $slider-focus-thumb-width !default;
 $slider-focus-ring-border-width: 3px !default;
 
 $slider-arrow-height: 16px !default;
-$slider-arrow-width: 28px !default;
+$slider-arrow-width: 26px !default;
 
-$slider-sign-height: 28px !default;
-$slider-sign-width: 28px !default;
+$slider-sign-height: 26px !default;
+$slider-sign-width: 26px !default;
 $slider-sign-top: ($slider-height / 2) - ($slider-thumb-default-scale * $slider-thumb-height / 2) - ($slider-sign-height) - ($slider-arrow-height) + 8px !default;
 
 @keyframes sliderFocusThumb {
   0% {
     opacity: 0;
-    transform: scale(0.0);
+    transform: translate(-50%, -50%) scale(0.0);
   }
   50% {
-    transform: scale(1.0);
+    transform: translate(-50%, -50%) scale(1.0);
     opacity: 1;
   }
   100% {
@@ -38,11 +38,12 @@ $slider-sign-top: ($slider-height / 2) - ($slider-thumb-default-scale * $slider-
 
 @mixin slider-thumb-position($width: $slider-thumb-width, $height: $slider-thumb-height) {
   position: absolute;
-  left: -$width / 2;
-  top: ($slider-height / 2) - ($height / 2);
+  left: 0;
+  top: 0;
   width: $width;
   height: $height;
-  border-radius: max($width, $height);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
 }
 
 md-slider {
@@ -60,6 +61,12 @@ md-slider {
 
   .md-slider-wrapper {
     position: relative;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
   }
 
   /**
@@ -67,9 +74,12 @@ md-slider {
    */
   .md-track-container {
     width: 100%;
-    position: absolute;
-    top: ($slider-height / 2) - ($slider-track-height) / 2;
     height: $slider-track-height;
+    position: relative;
+    // width: 100%;
+    // position: absolute;
+    // top: ($slider-height / 2) - ($slider-track-height) / 2;
+    // height: $slider-track-height;
   }
   .md-track {
     position: absolute;
@@ -85,6 +95,8 @@ md-slider {
     left: 0;
     right: 0;
     height: 100%;
+    opacity: 0;
+    transition: opacity .2s;
   }
   .md-track-ticks canvas {
     // Restrict the width of the canvas so that ticks are rendered correctly
@@ -101,14 +113,15 @@ md-slider {
     left: 0;
     top: 50%;
     transform: translate3d(-50%,-50%,0);
-    transition: left 0.1s linear;
+    transition: transform 0.1s linear;
   }
   .md-thumb {
     z-index: 1;
+    cursor: pointer;
 
     // Positioning the outer area of the thumb 6px bigger than it needs to be keeps
     // the :after area being clipped by the background of the focus-thumb animation.
-    @include slider-thumb-position($slider-thumb-width + 6, $slider-thumb-height + 6);
+    // @include slider-thumb-position($slider-thumb-width + 6, $slider-thumb-height + 6);
 
     // We render thumb in an :after selector to fix an obscure problem with the
     // thumb being clipped by the focus-ring and focus-thumb while running the focus
@@ -116,11 +129,14 @@ md-slider {
     &:after {
       content: '';
       position: absolute;
-      left: 3px;
-      top: 3px;
+      // left: 3px;
+      // top: 3px;
       width: $slider-thumb-width;
       height: $slider-thumb-height;
       border-radius: max($slider-thumb-width, $slider-thumb-height);
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
       border-width: 3px;
       border-style: solid;
     }
@@ -136,38 +152,42 @@ md-slider {
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 
     position: absolute;
-    left: -($slider-sign-height / 2);
-    top: $slider-sign-top;
+    top: 50%;
+    left: 50%;
+    // left: -($slider-sign-height / 2);
+    // top: $slider-sign-top;
     width: $slider-sign-width;
     height: $slider-sign-height;
     border-radius: max($slider-sign-height, $slider-sign-width);
 
-    transform: scale(0.4) translate3d(0,(-$slider-sign-top + 8) / 0.4,0);
+    transform: translate(-50%, -50%) scale(0.45);
     transition: all 0.2s ease-in-out;
 
     /* The arrow pointing down under the sign */
     &:after {
       position: absolute;
       content: '';
-      left: -($slider-sign-width / 2 - $slider-arrow-width / 2);
+      left: 50%;
       border-radius: $slider-arrow-height;
-      top: 19px;
+      bottom: -8px;
       border-left: $slider-arrow-width / 2 solid transparent;
       border-right: $slider-arrow-width / 2 solid transparent;
       border-top-width: $slider-arrow-height;
       border-top-style: solid;
 
       opacity: 0;
-      transform: translate3d(0,-8px,0);
+      transform: translate3d(-50%,-8px,0);
       transition: all 0.2s ease-in-out;
     }
 
     .md-thumb-text {
       z-index: 1;
       font-size: 12px;
-      font-weight: bold;
+      font-weight: normal;
+      opacity: 0;
     }
   }
 
@@ -183,7 +203,7 @@ md-slider {
   }
   .md-focus-ring {
     @include slider-thumb-position($slider-focus-thumb-width, $slider-focus-thumb-height);
-    transform: scale(0);
+    transform: translate(-50%, -50%) scale(0);
     transition: all 0.2s linear;
     opacity: 0.26;
   }
@@ -192,9 +212,10 @@ md-slider {
       $slider-thumb-width + $slider-thumb-disabled-border * 2,
       $slider-thumb-height + $slider-thumb-disabled-border * 2
     );
-    transform: scale($slider-thumb-disabled-scale);
+    transform: translate(-50%, -50%) scale($slider-thumb-disabled-scale);
     border-width: $slider-thumb-disabled-border;
     border-style: solid;
+    background: rgb(176, 176, 176);
     display: none;
   }
 
@@ -202,10 +223,18 @@ md-slider {
     .md-thumb {
       &:after {
         background-color: white;
+        border-color: $slider-background-color;
       }
     }
-    .md-sign {
+    .md-focus-ring {
       opacity: 0;
+    }
+    &:not([md-discrete]) {
+      .md-disabled-thumb {
+        background-color: white;
+        border-color: $slider-background-color;
+        transform: translate(-50%, -50%) scale(0.22);
+      }
     }
   }
 
@@ -213,7 +242,7 @@ md-slider {
     outline: none;
   }
 
-  /* Don't animate left/right while panning */
+  /* Don't animate while panning */
   &.md-dragging {
     .md-thumb-container,
     .md-track-fill {
@@ -231,20 +260,27 @@ md-slider {
     &:not([disabled]) {
       &:hover {
         .md-thumb {
-          transform: scale($slider-thumb-hover-scale);
+          transform: translate(-50%, -50%) scale($slider-thumb-hover-scale);
         }
       }
 
-      &:focus,
-      &.md-active {
+      &:focus:not(.md-active) {
         .md-focus-thumb {
           display: block;
         }
         .md-focus-ring {
-          transform: scale(1);
+          transform: translate(-50%, -50%) scale(1);
         }
+      }
+      &.md-active {
         .md-thumb {
-          transform: scale($slider-thumb-focus-scale);
+          transform: translate(-50%, -50%) scale($slider-thumb-focus-scale);
+        }
+      }
+      &:focus,
+      &.md-active {
+        .md-track:not(.md-track-fill) {
+          background-color: rgba(0,0,0,0.34);
         }
       }
     }
@@ -252,6 +288,7 @@ md-slider {
 
   &[md-discrete] {
     /* Hide the focus thumb in discrete mode */
+    .md-thumb,
     .md-focus-thumb,
     .md-focus-ring {
       display: none;
@@ -260,11 +297,36 @@ md-slider {
     &:not([disabled]) {
       &:focus,
       &.md-active {
-        .md-sign,
+        .md-sign {
+          opacity: 1;
+          transform: translate(-50%, -100%) translateY(-15px) scale(1);
+        }
         .md-sign:after {
           opacity: 1;
-          transform: translate3d(0,0,0) scale(1.0);
+          transform: translate3d(-50%,0,0) scale(1);
         }
+        .md-thumb-text {
+          opacity: 1;
+        }
+      }
+      &.md-active {
+        .md-track-ticks {
+          opacity: 1;
+        }
+      }
+    }
+
+    &.md-min {
+      .md-sign {
+        background: rgb(176, 176, 176);
+      }
+      .md-sign:after {
+        border-top-color: rgb(176, 176, 176);
+      }
+    }
+    &.md-min:not(.md-active):not(:focus) {
+      .md-sign {
+        background: #323232;
       }
     }
   }

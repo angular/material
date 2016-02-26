@@ -140,7 +140,15 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       ngModelRender();
       redrawTicks();
     }
-    setTimeout(updateAll, 0);
+
+    // Wait for the slider dimensions to exist
+    var widthInterval = setInterval(function () {
+      var width = trackContainer[0].offsetWidth;
+      if (width > 0) {
+        updateAll();
+        clearInterval(widthInterval);
+      }
+    }, 120);
 
     var debouncedUpdateAll = $$rAF.throttle(updateAll);
     angular.element($window).on('resize', debouncedUpdateAll);
@@ -295,7 +303,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
         var percentStr = (percent * 100) + '%';
 
         activeTrack.css('width', percentStr);
-        thumbContainer.css('left',percentStr);
+        thumbContainer.css('transform', 'translateX(' + percent * getSliderDimensions().width + 'px)');
 
         element.toggleClass('md-min', percent === 0);
         element.toggleClass('md-max', percent === 1);
@@ -319,7 +327,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       var closestVal = minMaxValidator( stepValidator(exactVal) );
       scope.$apply(function() {
         setModelValue( closestVal );
-        setSliderPercent( valueToPercent(closestVal));
+        setSliderPercent(valueToPercent(closestVal));
       });
     }
     function onPressUp(ev) {
@@ -377,7 +385,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     function adjustThumbPosition( x ) {
       var exactVal = percentToValue( positionToPercent( x ));
       var closestVal = minMaxValidator( stepValidator(exactVal) );
-      setSliderPercent( positionToPercent(x) );
+      setSliderPercent(positionToPercent(x));
       thumbText.text( closestVal );
     }
 
