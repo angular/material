@@ -173,6 +173,15 @@ md-toast {
       top: 0;
     }
 
+    // Support for RTL alignment
+    &._md-start {
+      @include rtl-prop(left, right, 0);
+    }
+
+    &._md-end {
+      @include rtl-prop(right, left, 0);
+    }
+
     /*
    * When the toast doesn't take up the whole screen,
    * make it rotate when the user swipes it away
