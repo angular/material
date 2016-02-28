@@ -43,9 +43,9 @@
 
 angular
   .module('material.components.progressCircular')
-  .directive('mdProgressCircular', ['$window', '$$rAF', '$mdProgressCircular', MdProgressCircularDirective]);
+  .directive('mdProgressCircular', ['$$rAF', '$window', '$mdProgressCircular', MdProgressCircularDirective]);
 
-function MdProgressCircularDirective($window, $$rAF, $mdProgressCircular) {
+function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular) {
   var DEGREE_IN_RADIANS = $window.Math.PI / 180;
 
   return {
@@ -125,36 +125,26 @@ function MdProgressCircularDirective($window, $$rAF, $mdProgressCircular) {
    * @param {number} current Current value between 0 and 100.
    * @param {number} diameter Diameter of the container.
    * @param {number} pathDiameter Diameter of the path element.
-   * @param {number=0} startAtPercentage The point at which the semicircle should start rendering.
+   * @param {number=0} rotation The point at which the semicircle should start rendering.
    * Used for doing the indeterminate animation.
    *
    * @returns {string} String representation of an SVG arc.
    */
-  function getSvgArc(current, diameter, pathDiameter, startAtPercentage) {
+  function getSvgArc(current, diameter, pathDiameter, rotation) {
     // The angle can't be exactly 360, because the arc becomes hidden.
-    var largeArcFlag = current <= 50 ? 0 : 1;
     var maximumAngle = 359.99 / 100;
+    var startPoint = rotation || 0;
     var radius = diameter / 2;
     var pathRadius = pathDiameter / 2;
-    var currentInDegrees;
-    var arcSweep;
-    var startAt;
 
-    if (startAtPercentage) {
-      startAt = startAtPercentage * maximumAngle;
-      currentInDegrees = startAt - (current * maximumAngle);
-      arcSweep = 0;
-    } else {
-      startAt = 0;
-      currentInDegrees = current * maximumAngle;
-      arcSweep = 1;
-    }
-
-    var start = polarToCartesian(radius, pathRadius, startAt);
-    var end = polarToCartesian(radius, pathRadius, currentInDegrees);
+    var startAngle = startPoint * maximumAngle;
+    var endAngle = current * maximumAngle;
+    var start = polarToCartesian(radius, pathRadius, startAngle);
+    var end = polarToCartesian(radius, pathRadius, endAngle + startAngle);
+    var largeArcFlag = endAngle <= 180 ? 0 : 1;
 
     return 'M' + start + 'A' + pathRadius + ',' + pathRadius +
-      ' 0 ' + largeArcFlag + ',' + arcSweep + ' ' + end;
+      ' 0 ' + largeArcFlag + ',1' + ' ' + end;
   }
 
   /**
