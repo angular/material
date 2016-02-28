@@ -197,18 +197,10 @@ function MdSticky($document, $mdConstant, $$rAF, $mdUtil, $compile) {
         current = current.offsetParent;
       }
       item.height = item.element.prop('offsetHeight');
-      var ltr = !($document[0].dir == 'rtl' || $document[0].body.dir == 'rtl');
-      if(ltr) {
-        item.clone.css('margin-left', item.left + 'px');
-        if ($mdUtil.floatingScrollbars()) {
-          item.clone.css('margin-right', '0');
-        }
-      } else {
-        item.clone.css('margin-right', item.right + 'px');
-        if ($mdUtil.floatingScrollbars()) {
-          item.clone.css('margin-left', '0');
-        }
-      }
+
+      var defaultVal = $mdUtil.floatingScrollbars() ? '0' : undefined;
+      $mdUtil.bidi(item.clone, 'margin-left', item.left, defaultVal);
+      $mdUtil.bidi(item.clone, 'margin-right', defaultVal, item.right);
     }
 
     // As we scroll, push in and select the correct sticky element.
@@ -314,18 +306,11 @@ function MdSticky($document, $mdConstant, $$rAF, $mdUtil, $compile) {
         }
       } else {
         item.translateY = amount;
-        var ltr = !($document[0].dir == 'rtl' || $document[0].body.dir == 'rtl');
-        if(ltr) {
-          item.clone.css(
-              $mdConstant.CSS.TRANSFORM,
-              'translate3d(' + item.left + 'px,' + amount + 'px,0)'
-          );
-        } else {
-          item.clone.css(
-              $mdConstant.CSS.TRANSFORM,
-              'translateY(' + amount + 'px)'
-          );
-        }
+
+        $mdUtil.bidi( item.clone, $mdConstant.CSS.TRANSFORM,
+          'translate3d(' + item.left + 'px,' + amount + 'px,0)',
+          'translateY(' + amount + 'px)'
+        );
       }
     }
   }

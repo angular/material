@@ -441,7 +441,8 @@ function MenuProvider($$interimElementProvider) {
           throw new Error('Invalid target mode "' + positionMode.top + '" specified for md-menu on Y axis.');
       }
 
-      var rtl = $document[0].dir == 'rtl' || $document[0].body.dir == 'rtl';
+      var rtl = ($mdUtil.bidi() == 'rtl');
+      
       switch (positionMode.left) {
         case 'target':
           position.left = existingOffsets.left + originNodeRect.left - alignTargetRect.left;
