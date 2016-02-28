@@ -99,19 +99,24 @@ function MdProgressCircularDirective($window, $$rAF, $mdProgressCircular) {
       // all attribute names.
       svg[0].setAttribute('viewBox', '0 0 ' + diameter + ' ' + diameter);
 
-      (function animation() {
-        var currentTime = $window.Math.min(new $window.Date() - startTime, animationDuration);
+      // No need to animate it if the values are the same
+      if(animateTo === animateFrom){
+        path.attr('d', getSvgArc(animateTo, diameter, pathDiameter));
+      }else{
+        (function animation() {
+          var currentTime = $window.Math.min(new $window.Date() - startTime, animationDuration);
 
-        path.attr('d', getSvgArc(
-          $mdProgressCircular.easeFn(currentTime, animateFrom, changeInValue, animationDuration),
-          diameter,
-          pathDiameter
-        ));
+          path.attr('d', getSvgArc(
+            $mdProgressCircular.easeFn(currentTime, animateFrom, changeInValue, animationDuration),
+            diameter,
+            pathDiameter
+          ));
 
-        if (id === lastAnimationId && currentTime < animationDuration) {
-          $$rAF(animation);
-        }
-      })();
+          if (id === lastAnimationId && currentTime < animationDuration) {
+            $$rAF(animation);
+          }
+        })();
+      }
     });
   }
 
