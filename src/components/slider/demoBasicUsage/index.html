@@ -62,6 +62,22 @@
       </md-slider>
     </div>
 
+    <h3>Ticks</h3>
+    <div layout>
+      <div flex="10" layout layout-align="center center">
+        <span class="md-body-1">enabled</span>
+      </div>
+      <md-slider flex md-discrete ng-model="tick1" step="1" min="0" max="100" aria-label="ticks enabled">
+      </md-slider>
+    </div>
+    <div layout>
+      <div flex="10" layout layout-align="center center">
+        <span class="md-body-1">disabled</span>
+      </div>
+      <md-slider flex md-discrete ng-model="tick2" step="1" min="0" max="100" aria-label="ticks disabled" md-disable-ticks>
+      </md-slider>
+    </div>
+
     <h3>Disabled</h3>
     <md-slider ng-model="disabled1" ng-disabled="true" aria-label="Disabled 1"></md-slider>
     <md-slider ng-model="disabled2" ng-disabled="true" aria-label="Disabled 2"></md-slider>

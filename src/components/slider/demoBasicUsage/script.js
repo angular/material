@@ -16,4 +16,7 @@ angular.module('sliderDemo1', ['ngMaterial'])
   $scope.disabled1 = 0;
   $scope.disabled2 = 70;
 
+  $scope.tick1 = 25;
+  $scope.tick2 = 75;
+
 });
