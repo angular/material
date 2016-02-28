@@ -5,7 +5,7 @@ $dense-menu-item-height: 4 * $baseline-grid;
 $max-menu-height: 2 * $baseline-grid + $max-visible-items * $menu-item-height;
 $max-dense-menu-height: 2 * $baseline-grid + $max-visible-items * $dense-menu-item-height;
 
-.md-open-menu-container {
+._md-open-menu-container {
   position: fixed;
   left: 0;
   top: 0;
@@ -27,12 +27,12 @@ $max-dense-menu-height: 2 * $baseline-grid + $max-visible-items * $dense-menu-it
   }
 
   // Don't let the user click something until it's animated
-  &:not(.md-clickable) {
+  &:not(._md-clickable) {
     pointer-events: none;
   }
 
   // enter: menu scales in, then list fade in.
-  &.md-active {
+  &._md-active {
     opacity: 1;
     transition: $swift-ease-out;
     transition-duration: 200ms;
@@ -44,7 +44,7 @@ $max-dense-menu-height: 2 * $baseline-grid + $max-visible-items * $dense-menu-it
     }
   }
   // leave: the container fades out
-  &.md-leave {
+  &._md-leave {
     opacity: 0;
     transition: $swift-ease-in;
     transition-duration: 250ms;
@@ -101,7 +101,7 @@ md-menu-item {
     align-content: flex-start;
     width:100%;
     md-icon {
-      margin: auto 2*$baseline-grid auto 0;
+      @include rtl(margin, auto 2*$baseline-grid auto 0,  auto 0 auto 2*$baseline-grid);
     }
     p {
       display:inline-block;

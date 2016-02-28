@@ -15,9 +15,9 @@ $contact-chip-name-width: rem(12) !default;
 .md-contact-chips {
   .md-chips {
     .md-chip {
-      padding: $contact-chip-padding;
+      @include rtl(padding, $contact-chip-padding, rtl-value($contact-chip-padding));
       .md-contact-avatar {
-        float: left;
+        @include rtl(float, left, right);
         img {
           height: $chip-height;
           border-radius: $chip-height / 2;
@@ -26,7 +26,7 @@ $contact-chip-name-width: rem(12) !default;
       .md-contact-name {
         display: inline-block;
         height: $chip-height;
-        margin-left: rem(0.8);
+        @include rtl-prop(margin-left, margin-right, rem(0.8));
       }
     }
   }
@@ -39,7 +39,7 @@ $contact-chip-name-width: rem(12) !default;
     margin-top: $contact-chip-suggestion-margin;
   }
   .md-contact-name {
-    margin-left: $contact-chip-suggestion-margin;
+    @include rtl-prop(margin-left, margin-right, $contact-chip-suggestion-margin);
     width: $contact-chip-name-width;
   }
   .md-contact-name, .md-contact-email {
@@ -57,17 +57,17 @@ $contact-chip-name-width: rem(12) !default;
   display: block;
   font-family: $font-family;
   font-size: $chip-font-size;
-  padding: $chip-wrap-padding;
+  @include rtl(padding, $chip-wrap-padding, rtl-value($chip-wrap-padding));
   vertical-align: middle;
 
   &:not(.md-readonly) {
     cursor: text;
 
     .md-chip:not(.md-readonly) {
-      padding-right: $chip-remove-padding-right;
+      @include rtl-prop(padding-right, padding-left, $chip-remove-padding-right);
 
-      .md-chip-content {
-        padding-right:rem(0.4);
+      ._md-chip-content {
+        @include rtl-prop(padding-right, padding-left, rem(0.4));
       }
     }
   }
@@ -78,16 +78,16 @@ $contact-chip-name-width: rem(12) !default;
     display: block;
     height: $chip-height;
     line-height: $chip-height;
-    margin: $chip-margin;
+    @include rtl(margin, $chip-margin, rtl-value($chip-margin));
     padding: $chip-padding;
-    float: left;
+    @include rtl(float, left, right);
     box-sizing: border-box;
     max-width: 100%;
     position: relative;
 
-    .md-chip-content {
+    ._md-chip-content {
       display: block;
-      float: left;
+      @include rtl(float, left, right);
       white-space: nowrap;
       max-width: 100%;
       overflow: hidden;
@@ -96,12 +96,12 @@ $contact-chip-name-width: rem(12) !default;
         outline: none;
       }
     }
-    .md-chip-remove-container {
+    ._md-chip-remove-container {
       position: absolute;
-      right: 0;
+      @include rtl-prop(right, left, 0);
       line-height: $chip-remove-line-height;
     }
-    .md-chip-remove {
+    ._md-chip-remove {
       text-align: center;
       width: $chip-height;
       height: $chip-height;
@@ -122,12 +122,12 @@ $contact-chip-name-width: rem(12) !default;
       }
     }
   }
-  .md-chip-input-container {
+  ._md-chip-input-container {
     display: block;
     line-height: $chip-height;
-    margin: $chip-margin;
+    @include rtl(margin, $chip-margin, rtl-value($chip-margin));
     padding: $chip-input-padding;
-    float: left;
+    @include rtl(float, left, right);
     input {
       &:not([type]),&[type="email"],&[type="number"],&[type="tel"],&[type="url"],&[type="text"] {
         border: 0;
@@ -170,7 +170,7 @@ $contact-chip-name-width: rem(12) !default;
       }
     }
     &:not(:first-child) {
-      margin: $chip-margin;
+      @include rtl(margin, $chip-margin, rtl-value($chip-margin));
     }
     input {
       background:transparent;
@@ -185,11 +185,11 @@ $contact-chip-name-width: rem(12) !default;
 }
 // IE only
 @media screen and (-ms-high-contrast: active) {
-  .md-chip-input-container,
+  ._md-chip-input-container,
   md-chip {
     border: 1px solid #fff;
   }
-  .md-chip-input-container md-autocomplete {
+  ._md-chip-input-container md-autocomplete {
     border: none;
   }
 }

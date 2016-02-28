@@ -17,7 +17,7 @@ body {
   padding: 10px;
 }
 
-button.md-no-style {
+button._md-no-style {
   font-weight: normal;
   background-color: inherit;
   text-align: left;
@@ -62,9 +62,12 @@ input {
       -webkit-appearance: none;
     }
   }
+  &:-webkit-autofill {
+    text-shadow: none;
+  }
 }
 
-.md-visually-hidden {
+._md-visually-hidden {
   border: 0;
   clip: rect(0 0 0 0);
   height: 1px;

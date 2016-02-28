@@ -40,6 +40,7 @@ module.exports = {
     'src/components/**/*.scss',
     'src/core/services/**/*.scss'
   ],
+  cssIEPaths : 'src/**/ie_fixes.css',
   paths: 'src/{components, services}/**',
   outputDir: 'dist/',
   demoFolder: 'demo-partials'

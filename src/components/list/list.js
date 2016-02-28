@@ -107,7 +107,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         if (hasProxiedElement) {
           wrapIn('div');
         } else if (!tEl[0].querySelector('md-button:not(.md-secondary):not(.md-exclude)')) {
-          tEl.addClass('md-no-proxy');
+          tEl.addClass('_md-no-proxy');
         }
       }
       wrapSecondaryItems();
@@ -132,15 +132,22 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
       function wrapIn(type) {
         var container;
         if (type == 'div') {
-          container = angular.element('<div class="md-no-style md-list-item-inner">');
+          container = angular.element('<div class="_md-no-style _md-list-item-inner">');
           container.append(tEl.contents());
-          tEl.addClass('md-proxy-focus');
+          tEl.addClass('_md-proxy-focus');
         } else {
           // Element which holds the default list-item content.
-          container = angular.element('<div class="md-button md-no-style"><div class="md-list-item-inner"></div></div>');
+          container = angular.element(
+            '<button class="md-button _md-no-style">'+
+            '   <div class="_md-list-item-inner"></div>'+
+            '</button>'
+          );
 
           // Button which shows ripple and executes primary action.
-          var buttonWrap = angular.element('<md-button class="md-no-style" md-no-focus-style></md-button>');
+          var buttonWrap = angular.element(
+            '<md-button class="_md-no-style" md-no-focus-style></md-button>'
+          );
+
           buttonWrap[0].setAttribute('aria-label', tEl[0].textContent);
           copyAttributes(tEl[0], buttonWrap[0]);
 
@@ -148,7 +155,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           container.prepend(buttonWrap);
           container.children().eq(1).append(tEl.contents());
           
-          tEl.addClass('md-button-wrap');
+          tEl.addClass('_md-button-wrap');
         }
 
         tEl[0].setAttribute('tabindex', '-1');
@@ -159,7 +166,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         if (secondaryItems.length === 1) {
           wrapSecondaryItem(secondaryItems[0], tEl);
         } else if (secondaryItems.length > 1) {
-          var secondaryItemsWrapper = angular.element('<div class="md-secondary-container">');
+          var secondaryItemsWrapper = angular.element('<div class="_md-secondary-container">');
           angular.forEach(secondaryItems, function(secondaryItem) {
             wrapSecondaryItem(secondaryItem, secondaryItemsWrapper, true);
           });
@@ -174,7 +181,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           if (hasSecondaryItemsWrapper) {
             buttonWrapper = angular.element('<md-button class="md-icon-button">');
           } else {
-            buttonWrapper = angular.element('<md-button class="md-secondary-container md-icon-button">');
+            buttonWrapper = angular.element('<md-button class="_md-secondary-container md-icon-button">');
           }
           copyAttributes(secondaryItem, buttonWrapper[0]);
           secondaryItem.setAttribute('tabindex', '-1');
@@ -226,12 +233,13 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
 
         var proxies    = [],
             firstChild = $element[0].firstElementChild,
-            hasClick   = firstChild && hasClickEvent(firstChild);
+            hasClick   = firstChild && firstChild.firstElementChild &&
+                         hasClickEvent(firstChild.firstElementChild);
 
         computeProxies();
         computeClickable();
 
-        if ($element.hasClass('md-proxy-focus') && proxies.length) {
+        if ($element.hasClass('_md-proxy-focus') && proxies.length) {
           angular.forEach(proxies, function(proxy) {
             proxy = angular.element(proxy);
 
@@ -275,14 +283,14 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
             $element.addClass('md-clickable');
 
             if (!hasClick) {
-              ctrl.attachRipple($scope, angular.element($element[0].querySelector('.md-no-style')));
+              ctrl.attachRipple($scope, angular.element($element[0].querySelector('._md-no-style')));
             }
           }
         }
 
         if (!hasClick && !proxies.length) {
           firstChild && firstChild.addEventListener('keypress', function(e) {
-            if (e.target.nodeName != 'INPUT' && e.target.nodeName != 'TEXTAREA') {
+            if (e.target.nodeName != 'INPUT' && e.target.nodeName != 'TEXTAREA' && !e.target.isContentEditable) {
               var keyCode = e.which || e.keyCode;
               if (keyCode == $mdConstant.KEY_CODE.SPACE) {
                 if (firstChild) {

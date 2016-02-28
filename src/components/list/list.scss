@@ -42,11 +42,11 @@ md-list-item {
   // Ensure nested dividers are properly positioned
   position: relative;
 
-  &.md-proxy-focus.md-focused .md-no-style {
+  &._md-proxy-focus.md-focused ._md-no-style {
     transition: background-color 0.15s linear;
   }
 
-  &.md-button-wrap {
+  &._md-button-wrap {
     position: relative;
 
     > .md-button:first-child {
@@ -54,17 +54,20 @@ md-list-item {
       margin: 0;
       font-weight: 400;
       background-color: inherit;
-      text-align: left;
+      @include rtl(text-align, left, right);
       border: medium none;
 
       > .md-button:first-child {
-        height: 100%;
         position: absolute;
+        top: 0;
+        left: 0;
+
         margin: 0;
         padding: 0;
+        height: 100%;
       }
 
-      .md-list-item-inner {
+      ._md-list-item-inner {
         padding: 0 16px;
       }
 
@@ -72,8 +75,8 @@ md-list-item {
 
   }
 
-  &.md-no-proxy,
-  .md-no-style {
+  &._md-no-proxy,
+  ._md-no-style {
     position: relative;
     padding: $list-item-padding-vertical $list-item-padding-horizontal;
     flex: 1 1 auto;
@@ -81,13 +84,14 @@ md-list-item {
     &.md-button {
       font-size: inherit;
       height: inherit;
-      text-align: left;
+      @include rtl(text-align, left, right);
       text-transform: none;
       width: 100%;
       white-space: normal;
       flex-direction: inherit;
       align-items: inherit;
       border-radius: 0;
+      margin: 0;
 
       & > .md-ripple-container {
         border-radius: 0;
@@ -107,17 +111,17 @@ md-list-item {
   md-divider {
     position: absolute;
     bottom: 0;
-    left: 0;
+    @include rtl-prop(left, right, 0);
     width: 100%;
     &[md-inset] {
-      left: $list-item-inset-divider-offset;
+      @include rtl-prop(left, right, $list-item-inset-divider-offset);
       width: calc(100% - #{$list-item-inset-divider-offset});
       margin: 0;
     }
   }
 }
 
-md-list-item, md-list-item .md-list-item-inner {
+md-list-item, md-list-item ._md-list-item-inner {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -143,18 +147,18 @@ md-list-item, md-list-item .md-list-item-inner {
   }
 
   & > md-icon:first-child:not(.md-avatar-icon) {
-    margin-right: $list-item-primary-width - $list-item-primary-icon-width;
+    @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-primary-icon-width);
   }
   & > md-checkbox {
     width: 3 * $baseline-grid;
-    margin-left: 3px;
-    margin-right: 29px;
+    @include rtl(margin-left, 3px, 29px);
+    @include rtl(margin-right, 29px,3px);
     margin-top: 16px;
   }
   & .md-avatar, .md-avatar-icon {
     margin-top: $baseline-grid;
     margin-bottom: $baseline-grid;
-    margin-right: $list-item-primary-width - $list-item-primary-avatar-width;
+    @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-primary-avatar-width);
     border-radius: 50%;
     box-sizing: content-box;
   }
@@ -173,14 +177,14 @@ md-list-item, md-list-item .md-list-item-inner {
   }
 
   md-checkbox.md-secondary {
-    margin-right: 0;
+    @include rtl-prop(margin-right, margin-left, 0);
   }
 
   md-switch.md-secondary {
-    margin-right: -6px;
+    @include rtl-prop(margin-right, margin-left, -6px);
   }
 
-  button.md-button.md-secondary-container {
+  button.md-button._md-secondary-container {
     background-color: transparent;
     align-self: center;
     border-radius: 50%;
@@ -193,25 +197,25 @@ md-list-item, md-list-item .md-list-item-inner {
 
     &.md-icon-button {
       // Make icon buttons align with checkboxes and other controls
-      margin-right: -12px;
+      @include rtl-prop(margin-right, margin-left, -12px);
     }
   }
 
-  .md-secondary-container,
+  ._md-secondary-container,
   .md-secondary {
     position: absolute;
     top: 50%;
-    right: $list-item-padding-horizontal;
-    margin: 0 0 0 $list-item-secondary-left-margin;
+    @include rtl-prop(right, left, $list-item-padding-horizontal);
+    @include rtl(margin, 0 0 0 $list-item-secondary-left-margin, 0 $list-item-secondary-left-margin 0 0);
     transform: translate3d(0, -50%, 0);
   }
 
-  & > .md-button.md-secondary-container > .md-secondary {
-    margin-left: 0;
+  & > .md-button._md-secondary-container > .md-secondary {
+    @include rtl-prop(margin-left, margin-right, 0);
     position: static;
   }
 
-  & > p, & > .md-list-item-inner > p {
+  & > p, & > ._md-list-item-inner > p {
     flex: 1;
     margin: 0;
   }
@@ -219,9 +223,9 @@ md-list-item, md-list-item .md-list-item-inner {
 
 
 md-list-item.md-2-line,
-md-list-item.md-2-line > .md-no-style,
+md-list-item.md-2-line > ._md-no-style,
 md-list-item.md-3-line,
-md-list-item.md-3-line > .md-no-style {
+md-list-item.md-3-line > ._md-no-style {
   align-items: flex-start;
   justify-content: center;
 
@@ -229,9 +233,10 @@ md-list-item.md-3-line > .md-no-style {
     flex: 1;
     margin: auto;
     text-overflow: ellipsis;
+    overflow: hidden;
 
     &.md-offset {
-      margin-left: $list-item-primary-width;
+      @include rtl-prop(margin-left, margin-right, $list-item-primary-width);
     }
 
     h3 {
@@ -265,7 +270,7 @@ md-list-item.md-3-line > .md-no-style {
 }
 
 md-list-item.md-2-line,
-md-list-item.md-2-line > .md-no-style {
+md-list-item.md-2-line > ._md-no-style {
   height:auto;
   min-height: $list-item-two-line-height;
   &.md-long-text {
@@ -284,7 +289,7 @@ md-list-item.md-2-line > .md-no-style {
 }
 
 md-list-item.md-3-line,
-md-list-item.md-3-line > .md-no-style {
+md-list-item.md-3-line > ._md-no-style {
   height:auto;
   min-height: $list-item-three-line-height;
 

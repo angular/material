@@ -16,13 +16,13 @@ md-card {
 
     &:first-child {
       md-card-avatar {
-        margin-right: 12px;
+       @include rtl-prop(margin-right, margin-left, 12px);
       }
     }
 
     &:last-child {
       md-card-avatar {
-        margin-left: 12px;
+        @include rtl-prop(margin-left, margin-right, 12px);
       }
     }
 
@@ -169,11 +169,11 @@ md-card {
         margin: 0 $baseline-grid * .5;
 
         &:first-of-type {
-          margin-left: 0;
+          @include rtl-prop(margin-left, margin-right, 0);
         }
 
         &:last-of-type {
-          margin-right: 0;
+          @include rtl-prop(margin-right, margin-left, 0);
         }
       }
 
@@ -182,11 +182,11 @@ md-card {
         margin-right: 3 * $baseline-grid / 4;
 
         &:first-of-type {
-          margin-left: 3 * $baseline-grid / 2;
+          @include rtl-prop(margin-left, margin-right, 3 * $baseline-grid / 2);
         }
 
         &:last-of-type {
-          margin-right: 3 * $baseline-grid / 2;
+          @include rtl-prop(margin-right, margin-left, 3 * $baseline-grid / 2);
         }
       }
 
