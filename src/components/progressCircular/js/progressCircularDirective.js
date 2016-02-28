@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * @ngdoc directive
  * @name mdProgressCircular
@@ -100,9 +98,9 @@ function MdProgressCircularDirective($window, $$rAF, $mdProgressCircular) {
       svg[0].setAttribute('viewBox', '0 0 ' + diameter + ' ' + diameter);
 
       // No need to animate it if the values are the same
-      if(animateTo === animateFrom){
+      if (animateTo === animateFrom) {
         path.attr('d', getSvgArc(animateTo, diameter, pathDiameter));
-      }else{
+      } else {
         (function animation() {
           var currentTime = $window.Math.min(new $window.Date() - startTime, animationDuration);
 
@@ -142,13 +140,13 @@ function MdProgressCircularDirective($window, $$rAF, $mdProgressCircular) {
     var arcSweep;
     var startAt;
 
-    if(startAtPercentage){
-      startAt = startAtPercentage*maximumAngle;
-      currentInDegrees = startAt - (current*maximumAngle);
+    if (startAtPercentage) {
+      startAt = startAtPercentage * maximumAngle;
+      currentInDegrees = startAt - (current * maximumAngle);
       arcSweep = 0;
-    }else{
+    } else {
       startAt = 0;
-      currentInDegrees = current*maximumAngle;
+      currentInDegrees = current * maximumAngle;
       arcSweep = 1;
     }
 

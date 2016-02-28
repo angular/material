@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * @ngdoc service
  * @name $mdProgressCircular
@@ -48,19 +46,22 @@ function MdProgressCircularProvider() {
   };
 
   return {
-    configure : function(options){
+    configure: function(options) {
       progressConfig = angular.extend(progressConfig, options || {});
       return progressConfig;
     },
-    $get : function() { return progressConfig; }
+    $get: function() { return progressConfig; }
   };
 
-  function linearEase(t, b, c, d) { return c * t / d + b; }
+  function linearEase(t, b, c, d) {
+    return c * t / d + b;
+  }
+
   function materialEase(t, b, c, d) {
     // via http://www.timotheegroleau.com/Flash/experiments/easing_function_generator.htm
     // with settings of [0, 0, 1, 1]
-    var ts=(t/=d)*t;
-    var tc=ts*t;
-    return b+c*(6*tc*ts + -15*ts*ts + 10*tc);
+    var ts = (t /= d) * t;
+    var tc = ts * t;
+    return b + c * (6 * tc * ts + -15 * ts * ts + 10 * tc);
   }
 }
