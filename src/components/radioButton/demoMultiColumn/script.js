@@ -2,7 +2,6 @@ angular
   .module('radioDemo2', ['ngMaterial'])
   .controller('ContactController', function($scope) {
     var self = this;
-
     self.contacts = [{
       'id': 1,
       'fullName': 'Maria Guadalupe',
@@ -26,6 +25,6 @@ angular
     }];
     self.selectedIndex = 2;
     self.selectedUser = function() {
-      return self.contacts[self.selectedIndex].lastName;
+      return self.contacts[self.selectedIndex-1].lastName;
     }
   });
