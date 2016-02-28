@@ -8,7 +8,7 @@ $progress-circular-indeterminate-duration: 2.9s;
   100%     { transform: rotate(360deg); }
 }
 
-md-progress-circular.md-mode-indeterminate {
+md-progress-circular._md-mode-indeterminate {
   svg {
     animation: indeterminate-rotate $progress-circular-indeterminate-duration linear infinite;
   }
