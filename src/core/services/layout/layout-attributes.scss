@@ -165,7 +165,20 @@ $layout-breakpoint-lg:     1920px !default;
       box-sizing: border-box;
     }
 
-    [layout="row"] > [#{$flexName}="#{$i * 5}"],
+    [layout="row"] > [#{$flexName}="#{$i * 5}"] {
+      flex: 1 1 #{$value};
+      max-width: #{$value};
+      max-height: 100%;
+      box-sizing: border-box;
+    }
+
+    [layout="column"] > [#{$flexName}="#{$i * 5}"] {
+      flex: 1 1 #{$value};
+      max-width: 100%;
+      max-height: #{$value};
+      box-sizing: border-box;
+    }
+
     [layout#{$name}="row"] > [#{$flexName}="#{$i * 5}"] {
       flex: 1 1 #{$value};
       max-width: #{$value};
@@ -173,7 +186,6 @@ $layout-breakpoint-lg:     1920px !default;
       box-sizing: border-box;
     }
 
-    [layout="column"] > [#{$flexName}="#{$i * 5}"],
     [layout#{$name}="column"] > [#{$flexName}="#{$i * 5}"] {
       flex: 1 1 #{$value};
       max-width: 100%;
