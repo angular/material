@@ -141,9 +141,6 @@
       max-width: #{$value};
       max-height: 100%;
       box-sizing: border-box;
-
-      // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
-      @if $i == 0 {  min-width: 0;  }
     }
 
     .layout-column > .#{$flexName}-#{$i * 5},
