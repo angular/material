@@ -7,10 +7,17 @@
  * Allows the user to specify the default options for the `progressCircular` directive.
  *
  * @property {number} progressSize Diameter of the progress circle in pixels.
- * @property {number} strokeWidth Width of the circle's stroke in pixels.
- * @property {number} animationDuration Length of the circle animation in milliseconds.
+ * @property {number} strokeWidth Width of the circle's stroke as a percentage of the circle's size.
+ * @property {number} duration Length of the circle animation in milliseconds.
  * @property {function} easeFn Default easing animation function.
  * @property {object} easingPresets Collection of pre-defined easing functions.
+ *
+ * @property {number} durationIndeterminate Duration of the indeterminate animation.
+ * @property {number} startIndeterminate Indeterminate animation start point.
+ * @param {number} endIndeterminate Indeterminate animation end point.
+ * @param {function} easeFnIndeterminate Easing function to be used when animating
+ * between the indeterminate values.
+ *
  * @property {(function(object): object)} configure Used to modify the default options.
  *
  * @usage
@@ -21,7 +28,7 @@
  *     $mdProgressCircular.configure({
  *       progressSize: 100,
  *       strokeWidth: 20,
- *       animationDuration: 800
+ *       duration: 800
  *     });
  * });
  * </hljs>
@@ -35,10 +42,15 @@ angular
 function MdProgressCircularProvider() {
   var progressConfig = {
     progressSize: 50,
-    strokeWidth: 5,
-    animationDuration: 100,
-
+    strokeWidth: 10,
+    duration: 100,
     easeFn: linearEase,
+
+    durationIndeterminate: 600,
+    startIndeterminate: 2.5,
+    endIndeterminate: 80,
+    easeFnIndeterminate: materialEase,
+
     easingPresets: {
       linearEase: linearEase,
       materialEase: materialEase
