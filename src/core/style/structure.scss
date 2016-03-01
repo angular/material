@@ -170,3 +170,14 @@ input {
     padding: 16px;
   }
 }
+
+// Bi-directional support
+
+bdo[dir=rtl] {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+}
+bdo[dir=ltr] {
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}

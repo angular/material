@@ -278,6 +278,13 @@ code:not(.highlight) {
   white-space: normal;
   width: 100%;
 }
+
+[dir=rtl] .docs-menu .md-button {
+  unicode-bidi: embed;
+  text-align: right;
+}
+
+
 .docs-menu .md-button:hover,
 .docs-menu .md-button:focus {
   background: #267ED5 !important;
@@ -324,6 +331,14 @@ code:not(.highlight) {
   width: 100%;
   color: rgba(255, 255, 255, 0.54)
 }
+
+
+[dir=rtl] .menu-heading {
+  unicode-bidi: embed;
+  text-align: right;
+}
+
+
 .docs-menu li.parentActive,
 .docs-menu li.parentActive .menu-toggle-list {
   /*background-color: #2C80D2 !important;*/
