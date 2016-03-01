@@ -8,8 +8,15 @@ $progress-circular-indeterminate-duration: 2.9s;
   100%     { transform: rotate(360deg); }
 }
 
-md-progress-circular._md-mode-indeterminate {
+md-progress-circular {
   svg {
-    animation: indeterminate-rotate $progress-circular-indeterminate-duration linear infinite;
+    // Ensures that the parent has the same dimensions as the circle.
+    display: block;
+  }
+
+  &._md-mode-indeterminate {
+    svg {
+      animation: indeterminate-rotate $progress-circular-indeterminate-duration linear infinite;
+    }
   }
 }
