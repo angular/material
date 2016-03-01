@@ -1,10 +1,11 @@
 describe('mdProgressCircular', function() {
-  var $compile, $rootScope, element;
+  var $compile, $rootScope, config, element;
 
   beforeEach(module('material.components.progressCircular'));
-  beforeEach(inject(function(_$compile_, _$rootScope_) {
+  beforeEach(inject(function(_$compile_, _$rootScope_, _$mdProgressCircular_) {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
+    config = _$mdProgressCircular_;
   }));
 
   afterEach(function() {
@@ -68,20 +69,19 @@ describe('mdProgressCircular', function() {
     expect(progress.eq(0).attr('aria-valuenow')).toEqual('50');
   }));
 
-  it('should set scaling using percentage values',function() {
-    var progress = buildIndicator('<md-progress-circular md-diameter="25%"></md-progress-circular>');
-    expect( getScale(progress[0].children[0]) ).toBe(0.25);
-    expect(progress.css('width')).toBe('25px');
-    expect(progress.css('height')).toBe('25px');
+  it('should set the size using percentage values',function() {
+    var progress = buildIndicator('<md-progress-circular md-diameter="50%"></md-progress-circular>');
+    var expectedSize = config.progressSize/2 + 'px';
+
+    expect(progress.css('width')).toBe(expectedSize);
+    expect(progress.css('height')).toBe(expectedSize);
   });
 
   it('should set scaling using pixel values', function() {
-    var DEFAULT_SIZE = 100;
-
     var progress = buildIndicator('<md-progress-circular md-diameter="37px"></md-progress-circular>');
-    var value = Math.round( (37 / DEFAULT_SIZE) * 100 )/100;
 
-    expect( getScale(progress[0].children[0]) ).toBe(value);
+    expect(progress.css('width')).toBe('37px');
+    expect(progress.css('height')).toBe('37px');
   });
 
   /**
@@ -91,18 +91,7 @@ describe('mdProgressCircular', function() {
     element = $compile('<div>' + template + '</div>')($rootScope);
         $rootScope.$digest();
 
-    return element.find('md-progress-circular');
+    return element.find('svg');
   }
 
-  /**
-   * Lookup the scale value assigned; based on the md-diameter attribute value
-   */
-  function getScale(element) {
-    var el = angular.element(element)[0];
-    var transform = el.style['transform'] || el.style['-webkit-transform'];
-    var matches = /scale\(([0-9\.]+)\)/.exec(transform);
-    var scale = parseFloat(matches[1]);
-
-    return Math.round(scale * 100)/100;
-  }
 });
