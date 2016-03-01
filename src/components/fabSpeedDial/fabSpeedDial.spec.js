@@ -129,7 +129,7 @@ describe('<md-fab-speed-dial> directive', function() {
 
   it('properly finishes the scale animation', inject(function(mdFabSpeedDialScaleAnimation) {
     build(
-      '<md-fab-speed-dial md-open="isOpen" class="md-fling">' +
+      '<md-fab-speed-dial md-open="isOpen" class="md-scale">' +
       '  <md-fab-trigger><button></button></md-fab-trigger>' +
       '  <md-fab-actions><button></button></md-fab-actions>' +
       '</md-fab-speed-dial>'

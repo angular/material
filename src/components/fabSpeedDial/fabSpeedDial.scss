@@ -49,11 +49,11 @@ md-fab-speed-dial {
   &.md-down {
     flex-direction: column;
 
-    md-fab-trigger {
+    & > md-fab-trigger {
       order: 1;
     }
 
-    md-fab-actions {
+    & > md-fab-actions {
       flex-direction: column;
       order: 2;
     }
@@ -62,11 +62,11 @@ md-fab-speed-dial {
   &.md-up {
     flex-direction: column;
 
-    md-fab-trigger {
+    & > md-fab-trigger {
       order: 2;
     }
 
-    md-fab-actions {
+    & > md-fab-actions {
       flex-direction: column-reverse;
       order: 1;
     }
@@ -75,11 +75,11 @@ md-fab-speed-dial {
   &.md-left {
     flex-direction: row;
 
-    md-fab-trigger {
+    & > md-fab-trigger {
       order: 2;
     }
 
-    md-fab-actions {
+    & > md-fab-actions {
       flex-direction: row-reverse;
       order: 1;
 
@@ -92,11 +92,11 @@ md-fab-speed-dial {
   &.md-right {
     flex-direction: row;
 
-    md-fab-trigger {
+    & > md-fab-trigger {
       order: 1;
     }
 
-    md-fab-actions {
+    & > md-fab-actions {
       flex-direction: row;
       order: 2;
 
@@ -119,21 +119,21 @@ md-fab-speed-dial {
    * Handle the animations
    */
   &.md-fling {
-    .md-fab-action-item {
+    & > md-fab-actions > .md-fab-action-item {
       opacity: 1;
     }
   }
 
   // For the initial animation, set the duration to be instant
   &.md-fling._md-animations-waiting {
-    .md-fab-action-item {
+    & > md-fab-actions > .md-fab-action-item {
       opacity: 0;
       transition-duration: 0s;
     }
   }
 
   &.md-scale {
-    .md-fab-action-item {
+    & > md-fab-actions > .md-fab-action-item {
       transform: scale(0);
       transition: $swift-ease-in;
 
