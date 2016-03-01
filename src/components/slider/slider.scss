@@ -63,6 +63,13 @@ md-slider {
   }
 
   /**
+  * Vertical Orientation
+  **/
+  .md-slider-vertical {
+    transform: rotate(90deg);
+  }
+
+  /**
    * Track
    */
   ._md-track-container {

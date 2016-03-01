@@ -31,7 +31,7 @@
  * @usage
  * <h4>Normal Mode</h4>
  * <hljs lang="html">
- * <md-slider ng-model="myValue" min="5" max="500">
+ * <md-slider ng-model="myValue" min="5" max="500" vertical>
  * </md-slider>
  * </hljs>
  * <h4>Discrete Mode</h4>
@@ -110,6 +110,12 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     var activeTrack = angular.element(element[0].querySelector('._md-track-fill'));
     var tickContainer = angular.element(element[0].querySelector('._md-track-ticks'));
     var throttledRefreshDimensions = $mdUtil.throttle(refreshSliderDimensions, 5000);
+
+    // Check have vertical orientation.
+    var isVertical = angular.isDefined(attr.vertical);
+    if (isVertical) {
+      element.addClass('md-slider-vertical');
+    }
 
     // Default values, overridable by attrs
     angular.isDefined(attr.min) ? attr.$observe('min', updateMin) : updateMin(0);
@@ -220,17 +226,25 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     }
 
     /**
-     * left/right arrow listener
+     * left/right arrow listener for horizontal slider
+     * down/up arrow listener for vertical slider
      */
     function keydownListener(ev) {
       if (isDisabled) return;
 
       var changeAmount;
-      if (ev.keyCode === $mdConstant.KEY_CODE.LEFT_ARROW) {
-        changeAmount = -step;
-      } else if (ev.keyCode === $mdConstant.KEY_CODE.RIGHT_ARROW) {
-        changeAmount = step;
+
+      switch (ev.keyCode) {
+        case $mdConstant.KEY_CODE.LEFT_ARROW & !isVertical:
+        case $mdConstant.KEY_CODE.DOWN_ARROW & isVertical:
+          changeAmount = -step;
+          break;
+        case $mdConstant.KEY_CODE.RIGHT_ARROW & !isVertical:
+        case $mdConstant.KEY_CODE.UP_ARROW & isVertical:
+          changeAmount = step;
+          break;
       }
+
       if (changeAmount) {
         if (ev.metaKey || ev.ctrlKey || ev.altKey) {
           changeAmount *= 4;
