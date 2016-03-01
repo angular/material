@@ -615,16 +615,15 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * Clears the searchText value and selected item.
    */
   function clearValue () {
-    // Set the loading to true so we don't see flashes of content
+    // Set the loading to true so we don't see flashes of content.
+    // The flashing will only occour when an async request is running.
+    // So the loading process will stop when the results had been retrieved.
     setLoading(true);
 
     // Reset our variables
     ctrl.index = 0;
     ctrl.matches = [];
     $scope.searchText = '';
-
-    // Tell the select to fire and select nothing
-    select(-1);
 
     // Per http://www.w3schools.com/jsref/event_oninput.asp
     var eventObj = document.createEvent('CustomEvent');
@@ -667,9 +666,16 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     function handleResults (matches) {
       cache[ term ] = matches;
       if ((searchText || '') !== ($scope.searchText || '')) return; //-- just cache the results if old request
+
       ctrl.matches = matches;
       ctrl.hidden  = shouldHide();
+
+      // If loading is in progress, then we'll end the progress. This is needed for example,
+      // when the `clear` button was clicked, because there we always show the loading process, to prevent flashing.
+      if (ctrl.loading) setLoading(false);
+
       if ($scope.selectOnMatch) selectItemOnMatch();
+
       updateMessages();
       positionDropdown();
     }

@@ -16,12 +16,17 @@ describe('<md-autocomplete>', function() {
     items = items || ['foo', 'bar', 'baz'].map(function(item) {
         return {display: item};
       });
-    inject(function($rootScope) {
+    inject(function($rootScope, $timeout) {
       scope = $rootScope.$new();
       scope.match = function(term) {
         return items.filter(function(item) {
           return item.display.indexOf(matchLowercase ? term.toLowerCase() : term) === 0;
         });
+      };
+      scope.asyncMatch = function(term) {
+        return $timeout(function() {
+          return scope.match(term)
+        }, 1000);
       };
       scope.searchText = '';
       scope.selectedItem = null;
@@ -748,6 +753,37 @@ describe('<md-autocomplete>', function() {
 
       element.remove();
     }));
+  });
+
+  describe('Async matching', function() {
+
+    it('should probably stop the loading indicator when clearing', inject(function($timeout, $material) {
+      var scope = createScope();
+      var template =
+        '<md-autocomplete ' +
+        '    md-search-text="searchText"' +
+        '    md-items="item in asyncMatch(searchText)" ' +
+        '    md-item-text="item.display" ' +
+        '    placeholder="placeholder">' +
+        '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var element = compile(template, scope);
+      var input = element.find('input');
+      var ctrl = element.controller('mdAutocomplete');
+
+      $material.flushInterimElement();
+
+      scope.$apply('searchText = "test"');
+
+      ctrl.clear();
+
+      expect(ctrl.loading).toBe(true);
+
+      $timeout.flush();
+
+      expect(ctrl.loading).toBe(false);
+    }));
+
   });
 
   describe('API access', function() {
