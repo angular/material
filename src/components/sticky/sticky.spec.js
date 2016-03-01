@@ -1,3 +1,87 @@
+describe('$mdSticky service', function() {
+
+  beforeEach(module('material.components.sticky'));
+
+  it('should compile our cloned element in the same scope', function(done) {
+    inject(function($compile, $rootScope, $mdSticky, $timeout) {
+      var scope = $rootScope.$new();
+      var contentEl = $compile(angular.element(
+        '<md-content>' +
+        '<sticky-directive>Sticky Element</sticky-directive>' +
+        '</md-content>'
+      ))(scope);
+
+      document.body.appendChild(contentEl[0]);
+
+      var stickyEl = contentEl.children().eq(0);
+      $mdSticky(scope, stickyEl);
+
+      // Flush the `$$sticky.add()` timeout.
+      $timeout.flush();
+
+      // When the current browser, which executes that spec, supports the sticky position, then we will always succeed
+      // the test, because otherwise our test will fail.
+      if (stickyEl.css('position')) {
+        expect(true).toBe(true);
+      } else {
+        expect(contentEl.children().length).toBe(2);
+
+        var stickyClone = contentEl[0].getElementsByClassName('_md-sticky-clone')[0];
+        expect(stickyClone).toBeTruthy();
+
+        expect(angular.element(stickyClone).scope()).toBe(scope);
+      }
+
+      contentEl.remove();
+
+      done();
+    });
+  });
+
+  it('should not compile our self specified clone in the given scope', function(done) {
+    inject(function($compile, $rootScope, $mdSticky, $timeout) {
+      var scope = $rootScope.$new();
+      var cloneScope = $rootScope.$new();
+
+      var contentEl = $compile(angular.element(
+        '<md-content>' +
+          '<sticky-directive>Sticky Element</sticky-directive>' +
+        '</md-content>'
+      ))(scope);
+
+      var cloneEl = $compile(angular.element(
+        '<sticky-directive>Self-cloned Element</sticky-directive>'
+      ))(cloneScope);
+
+      document.body.appendChild(contentEl[0]);
+
+      var stickyEl = contentEl.children().eq(0);
+      $mdSticky(scope, stickyEl, cloneEl);
+
+      // Flush the `$$sticky.add()` timeout.
+      $timeout.flush();
+
+      // When the current browser, which executes that spec, supports the sticky position, then we will always succeed
+      // the test, because otherwise our test will fail.
+      if (stickyEl.css('position')) {
+        expect(true).toBe(true);
+      } else {
+        expect(contentEl.children().length).toBe(2);
+
+        var stickyClone = contentEl[0].getElementsByClassName('_md-sticky-clone')[0];
+        expect(stickyClone).toBeTruthy();
+
+        expect(angular.element(stickyClone).scope()).toBe(cloneScope);
+      }
+
+      contentEl.remove();
+
+      done();
+    });
+  });
+
+});
+
 /*
  * TODO: adjust to work properly with refactors of original code
  */

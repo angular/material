@@ -39,7 +39,7 @@ describe('<md-tabs>', function () {
   function setup (template, scope) {
     var el;
     inject(function ($compile, $rootScope) {
-      newScope = $rootScope.$new();
+      var newScope = $rootScope.$new();
       for (var key in scope || {}) newScope[key] = scope[key];
       el = $compile(template)(newScope);
       newScope.$apply();
@@ -355,6 +355,36 @@ describe('<md-tabs>', function () {
       expect(element.find('md-tab-item').eq(0).text()).toBe('one');
       // first item in nested tabs should be 'a'
       expect(element.find('md-tabs').find('md-tab-item').eq(0).text()).toBe('a');
+    }));
+  });
+
+  describe('md-pagination-wrapper', function () {
+    var template =  '<md-tabs md-stretch-tabs="{{stretch}}">' +
+                    '  <md-tab label="label!">content!</md-tab>' +
+                    '</md-tabs>';
+
+    it('should have inline width if md-stretch-tabs="never"',
+      inject(function ($timeout, $document) {
+      var scope = { 'stretch': 'never' };
+      var element = setup(template, scope);
+      // Appending to body is required for style checks
+      angular.element($document.body).append(element);
+      // $timeout.flush required to run nextTick inside init();
+      $timeout.flush();
+      expect(element.find('md-pagination-wrapper').attr('style').indexOf('width')).toBeGreaterThan(-1);
+      element.remove();
+    }));
+
+    it('should not have inline width if md-stretch-tabs="always"',
+      inject(function ($timeout, $document) {
+      var scope = { 'stretch': 'always' };
+      var element = setup(template, scope);
+      // Appending to body is required for style checks
+      angular.element($document.body).append(element);
+      // $timeout.flush required to run nextTick inside init();
+      $timeout.flush();
+      expect(element.find('md-pagination-wrapper').attr('style').indexOf('width')).toBe(-1);
+      element.remove();
     }));
   });
 });

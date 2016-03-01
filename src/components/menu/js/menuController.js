@@ -92,7 +92,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
         nestedMenu.open();
       }
     }, nestedMenu ? 100 : 250);
-    var focusableTarget = event.currentTarget.querySelector('button:not([disabled])');
+    var focusableTarget = event.currentTarget.querySelector('.md-button:not([disabled])');
     focusableTarget && focusableTarget.focus();
   };
 
@@ -136,13 +136,13 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
   $scope.$watch(function() { return self.isOpen; }, function(isOpen) {
     if (isOpen) {
       menuContainer.attr('aria-hidden', 'false');
-      $element[0].classList.add('md-open');
+      $element[0].classList.add('_md-open');
       angular.forEach(self.nestedMenus, function(el) {
-        el.classList.remove('md-open');
+        el.classList.remove('_md-open');
       });
     } else {
       menuContainer.attr('aria-hidden', 'true');
-      $element[0].classList.remove('md-open');
+      $element[0].classList.remove('_md-open');
     }
     $scope.$mdMenuIsOpen = self.isOpen;
   });

@@ -104,8 +104,15 @@
 // mixin definition ; sets LTR and RTL within the same style call
 // @see https://css-tricks.com/almanac/properties/d/direction/
 
-@mixin rtl($prop, $value, $rtl-value) {
-  #{$prop}: $value;
+@mixin rtl($prop, $ltr-value, $rtl-value) {
+  html[dir=ltr] & {
+    #{$prop}: $ltr-value;
+    unicode-bidi: embed;
+  }
+  body[dir=ltr] & {
+    #{$prop}: $ltr-value;
+    unicode-bidi: embed;
+  }
 
   html[dir=rtl] & {
     #{$prop}: $rtl-value;
@@ -113,6 +120,11 @@
   }
   body[dir=rtl] & {
     #{$prop}: $rtl-value;
+    unicode-bidi: embed;
+  }
+
+  html:not([dir]) body:not([dir]) & {
+    #{$prop}: $ltr-value;
     unicode-bidi: embed;
   }
 
@@ -126,6 +138,53 @@
   }
 
 
+}
+
+@mixin rtl-prop($ltr-prop, $rtl-prop, $value) {
+  html[dir=ltr] & {
+    #{$ltr-prop}: $value;
+    unicode-bidi: embed;
+  }
+  body[dir=ltr] & {
+    #{$ltr-prop}: $value;
+    unicode-bidi: embed;
+  }
+
+  html[dir=rtl] & {
+    #{$rtl-prop}: $value;
+    unicode-bidi: embed;
+  }
+  body[dir=rtl] & {
+    #{$rtl-prop}: $value;
+    unicode-bidi: embed;
+  }
+
+  html:not([dir]) body:not([dir]) & {
+    #{$ltr-prop}: $value;
+    unicode-bidi: embed;
+  }
+
+  bdo[dir=rtl] {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+  }
+  bdo[dir=ltr] {
+    direction: ltr;
+    unicode-bidi: bidi-override;
+  }
+
+
+}
+
+// To reverse padding (top left bottom right) -> (top right bottom left)
+@function rtl-value($list) {
+  @if length($list) == 4 {
+    @return nth($list, 1) nth($list, 4) nth($list, 3) nth($list, 2)
+  }
+  @if length($list) == 5 {
+    @return nth($list, 1) nth($list, 4) nth($list, 3) nth($list, 2) nth($list, 5)
+  }
+  @return $list;
 }
 
 // Position a FAB button.

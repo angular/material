@@ -163,6 +163,29 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('should forward the `md-select-on-focus` attribute to the input', inject(function() {
+      var scope = createScope(null, {inputId: 'custom-input-id'});
+      var template =
+        '<md-autocomplete ' +
+            'md-input-id="{{inputId}}" ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+            'md-select-on-focus="" ' +
+            'tabindex="3"' +
+            'placeholder="placeholder">' +
+          '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      expect(input.attr('md-select-on-focus')).toBe("");
+
+      element.remove();
+    }));
+
     it('should forward the tabindex to the input', inject(function() {
       var scope = createScope(null, {inputId: 'custom-input-id'});
       var template =
@@ -365,6 +388,49 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('should remove the md-scroll-mask on cleanup', inject(function($mdUtil, $timeout, $material) {
+      spyOn($mdUtil, 'enableScrolling');
+
+      var scope = createScope();
+      var template =
+          '<md-autocomplete' +
+          '   md-selected-item="selectedItem"' +
+          '   md-search-text="searchText"' +
+          '   md-items="item in match(searchText)"' +
+          '   md-item-text="item.display"' +
+          '   placeholder="placeholder">' +
+          '  <md-item-template>{{item.display}}</md-item-template>' +
+          '  <md-not-found>Sorry, not found...</md-not-found>' +
+          '</md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+
+      $material.flushOutstandingAnimations();
+
+      // Focus our input
+      ctrl.focus();
+
+      // Set our search text to a value that we know doesn't exist
+      scope.searchText = 'somethingthatdoesnotexist';
+
+      // Run our initial flush
+      $timeout.flush();
+      waitForVirtualRepeat(element);
+
+      // Wait for the next tick when the values will be updated
+      $timeout.flush();
+
+      expect(ctrl.hidden).toBeFalsy();
+
+      // Make sure we wrap up anything and remove the element
+      $timeout.flush();
+      element.remove();
+      scope.$destroy();
+
+      // Should be hidden on once the scope is destroyed to ensure proper cleanup (like md-scroll-mask is removed from the DOM)
+      expect($mdUtil.enableScrolling).toHaveBeenCalled();
+    }));
+
     it('should ensure the parent scope digests along with the current scope', inject(function($timeout, $material) {
       var scope = createScope(null, {bang: 'boom'});
       var template =
@@ -486,6 +552,33 @@ describe('<md-autocomplete>', function() {
       // Make sure we wrap up anything and remove the element
       $timeout.flush();
       element.remove();
+    }));
+
+    it('properly sets hasNotFound when element is hidden through ng-if', inject(function() {
+      var scope = createScope();
+      var template1 =
+        '<div>' +
+          '<md-autocomplete ' +
+              'md-selected-item="selectedItem" ' +
+              'md-search-text="searchText" ' +
+              'md-items="item in match(searchText)" ' +
+              'md-item-text="item.display" ' +
+              'placeholder="placeholder" ' +
+              'ng-if="showAutocomplete">' +
+            '<md-item-template>{{item.display}}</md-item-template>' +
+            '<md-not-found>Sorry, not found...</md-not-found>' +
+          '</md-autocomplete>' +
+        '</div>';
+      var element = compile(template1, scope);
+      var ctrl = element.children().controller('mdAutocomplete');
+
+      expect(ctrl).toBeUndefined();
+
+      scope.$apply('showAutocomplete = true');
+
+      ctrl = element.children().controller('mdAutocomplete');
+
+      expect(ctrl.hasNotFound).toBe(true);
     }));
 
     it('properly sets hasNotFound with multiple autocompletes', inject(function($timeout, $material) {
@@ -856,6 +949,55 @@ describe('<md-autocomplete>', function() {
 
       element.remove();
     });
+
+    it('should validate an empty `required` as true', function() {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              md-min-length="0" \
+              required\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+
+      expect(ctrl.isRequired).toBe(true);
+    });
+
+    it('should correctly validate an interpolated `ng-required` value', function() {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              md-min-length="0" \
+              ng-required="interpolateRequired"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+
+      expect(ctrl.isRequired).toBe(false);
+
+      scope.interpolateRequired = false;
+      scope.$apply();
+
+      expect(ctrl.isRequired).toBe(false);
+
+      scope.interpolateRequired = true;
+      scope.$apply();
+
+      expect(ctrl.isRequired).toBe(true);
+    });
+
   });
 
   describe('md-highlight-text', function() {

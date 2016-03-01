@@ -65,7 +65,15 @@ angular.module('material.components.input', [
  */
 function mdInputContainerDirective($mdTheming, $parse) {
 
-  var INPUT_TAGS = ['INPUT', 'TEXTAREA', 'MD-SELECT'];
+  var INPUT_TAGS = ['INPUT', 'TEXTAREA', 'SELECT', 'MD-SELECT'];
+
+  var LEFT_SELECTORS = INPUT_TAGS.reduce(function(selectors, isel) {
+    return selectors.concat(['md-icon ~ ' + isel, '.md-icon ~ ' + isel]);
+  }, []).join(",");
+
+  var RIGHT_SELECTORS = INPUT_TAGS.reduce(function(selectors, isel) {
+    return selectors.concat([isel + ' ~ md-icon', isel + ' ~ .md-icon']);
+  }, []).join(",");
 
   return {
     restrict: 'E',
@@ -76,21 +84,12 @@ function mdInputContainerDirective($mdTheming, $parse) {
   function postLink(scope, element) {
     $mdTheming(element);
 
-    var iconElements = element.find('md-icon');
-    var icons = iconElements.length ? iconElements : element[0].getElementsByClassName('md-icon');
+    // Check for both a left & right icon
+    var leftIcon = element[0].querySelector(LEFT_SELECTORS);
+    var rightIcon = element[0].querySelector(RIGHT_SELECTORS);
 
-    // Incase there's one icon we want to identify where the icon is (right or left) and apply the related class
-    if (icons.length == 1) {
-      var next = icons[0].nextElementSibling;
-      var previous = icons[0].previousElementSibling;
-
-      element.addClass(next && INPUT_TAGS.indexOf(next.tagName) != -1 ? 'md-icon-left' :
-                       previous &&  INPUT_TAGS.indexOf(previous.tagName) != -1 ? 'md-icon-right' : '');
-    }
-    // In case there are two icons we apply both icon classes
-    else if (icons.length == 2) {
-      element.addClass('md-icon-left md-icon-right');
-    }
+    if (leftIcon) { element.addClass('md-icon-left'); }
+    if (rightIcon) { element.addClass('md-icon-right'); }
   }
 
   function ContainerCtrl($scope, $element, $attrs, $animate) {
@@ -133,7 +132,7 @@ function labelDirective() {
     restrict: 'E',
     require: '^?mdInputContainer',
     link: function(scope, element, attr, containerCtrl) {
-      if (!containerCtrl || attr.mdNoFloat || element.hasClass('md-container-ignore')) return;
+      if (!containerCtrl || attr.mdNoFloat || element.hasClass('_md-container-ignore')) return;
 
       containerCtrl.label = element;
       scope.$on('$destroy', function() {
@@ -264,8 +263,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
     var hasNgModel = !!ctrls[1];
     var ngModelCtrl = ctrls[1] || $mdUtil.fakeNgModel();
     var isReadonly = angular.isDefined(attr.readonly);
-    var isRequired = angular.isDefined(attr.required);
-    var mdNoAsterisk = angular.isDefined(attr.mdNoAsterisk);
+    var mdNoAsterisk = $mdUtil.parseAttributeBoolean(attr.mdNoAsterisk);
 
 
     if (!containerCtrl) return;
@@ -274,15 +272,14 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
     }
     containerCtrl.input = element;
 
+    setupAttributeWatchers();
+
     // Add an error spacer div after our input to provide space for the char counter and any ng-messages
     var errorsSpacer = angular.element('<div class="md-errors-spacer">');
-    // element.after appending the div before the icon (if exist) which cause a problem with calculating which class to apply
-    element.parent().append(errorsSpacer);
+    element.after(errorsSpacer);
 
     if (!containerCtrl.label) {
       $mdAria.expect(element, 'aria-label', element.attr('placeholder'));
-    } else if (isRequired && !mdNoAsterisk) {
-      containerCtrl.label.addClass('md-required');
     }
 
     element.addClass('md-input');
@@ -322,13 +319,16 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
     if (!isReadonly) {
       element
         .on('focus', function(ev) {
-          containerCtrl.setFocused(true);
+          $mdUtil.nextTick(function() {
+            containerCtrl.setFocused(true);
+          });
         })
         .on('blur', function(ev) {
-          containerCtrl.setFocused(false);
-          inputCheckValue();
+          $mdUtil.nextTick(function() {
+            containerCtrl.setFocused(false);
+            inputCheckValue();
+          });
         });
-
     }
 
     //ngModelCtrl.$setTouched();
@@ -346,6 +346,16 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
     function ngModelPipelineCheckValue(arg) {
       containerCtrl.setHasValue(!ngModelCtrl.$isEmpty(arg));
       return arg;
+    }
+
+    function setupAttributeWatchers() {
+      if (containerCtrl.label) {
+        attr.$observe('required', function (value) {
+          // We don't need to parse the required value, it's always a boolean because of angular's
+          // required directive.
+          containerCtrl.label.toggleClass('md-required', value && !mdNoAsterisk);
+        });
+      }
     }
 
     function inputCheckValue() {
@@ -573,6 +583,39 @@ function placeholderDirective($log) {
   }
 }
 
+/**
+ * @ngdoc directive
+ * @name mdSelectOnFocus
+ * @module material.components.input
+ *
+ * @restrict A
+ *
+ * @description
+ * The `md-select-on-focus` directive allows you to automatically select the element's input text on focus.
+ *
+ * <h3>Notes</h3>
+ * - The use of `md-select-on-focus` is restricted to `<input>` and `<textarea>` elements.
+ *
+ * @usage
+ * <h3>Using with an Input</h3>
+ * <hljs lang="html">
+ *
+ * <md-input-container>
+ *   <label>Auto Select</label>
+ *   <input type="text" md-select-on-focus>
+ * </md-input-container>
+ * </hljs>
+ *
+ * <h3>Using with a Textarea</h3>
+ * <hljs lang="html">
+ *
+ * <md-input-container>
+ *   <label>Auto Select</label>
+ *   <textarea md-select-on-focus>This text will be selected on focus.</textarea>
+ * </md-input-container>
+ *
+ * </hljs>
+ */
 function mdSelectOnFocusDirective() {
 
   return {

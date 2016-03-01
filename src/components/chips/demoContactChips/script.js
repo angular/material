@@ -4,21 +4,65 @@
       .module('contactChipsDemo', ['ngMaterial'])
       .controller('ContactChipDemoCtrl', DemoCtrl);
 
-  function DemoCtrl ($timeout, $q) {
+  function DemoCtrl ($q, $timeout) {
     var self = this;
+    var pendingSearch, cancelSearch = angular.noop;
+    var cachedQuery, lastSearch;
 
-    self.querySearch = querySearch;
     self.allContacts = loadContacts();
     self.contacts = [self.allContacts[0]];
+    self.asyncContacts = [];
     self.filterSelected = true;
 
+    self.querySearch = querySearch;
+    self.delayedQuerySearch = delayedQuerySearch;
+
     /**
-     * Search for contacts.
+     * Search for contacts; use a random delay to simulate a remote call
      */
-    function querySearch (query) {
-      var results = query ?
-          self.allContacts.filter(createFilterFor(query)) : [];
-      return results;
+    function querySearch (criteria) {
+      cachedQuery = cachedQuery || criteria;
+      return cachedQuery ? self.allContacts.filter(createFilterFor(cachedQuery)) : [];
+    }
+
+    /**
+     * Async search for contacts
+     * Also debounce the queries; since the md-contact-chips does not support this
+     */
+    function delayedQuerySearch(criteria) {
+      cachedQuery = criteria;
+      if ( !pendingSearch || !debounceSearch() )  {
+        cancelSearch();
+
+        return pendingSearch = $q(function(resolve, reject) {
+          // Simulate async search... (after debouncing)
+          cancelSearch = reject;
+          $timeout(function() {
+
+            resolve( self.querySearch() );
+
+            refreshDebounce();
+          }, Math.random() * 500, true)
+        });
+      }
+
+      return pendingSearch;
+    }
+
+    function refreshDebounce() {
+      lastSearch = 0;
+      pendingSearch = null;
+      cancelSearch = angular.noop;
+    }
+
+    /**
+     * Debounce if querying faster than 300ms
+     */
+    function debounceSearch() {
+      var now = new Date().getMilliseconds();
+      lastSearch = lastSearch || now;
+
+      return ((now - lastSearch) < 300);
     }
 
     /**

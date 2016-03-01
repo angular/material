@@ -31,7 +31,6 @@ module.exports = function(config) {
 
   var dependencies = process.env.KARMA_TEST_JQUERY ? ['node_modules/jquery/dist/jquery.js'] : [];
       dependencies = dependencies.concat([
-        'node_modules/phantomjs-polyfill/bind-polyfill.js',
         'node_modules/angular/angular.js',
         'node_modules/angular-animate/angular-animate.js',
         'node_modules/angular-aria/angular-aria.js',
@@ -51,6 +50,8 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
     files: dependencies.concat(testSrc),
 
+    browserDisconnectTimeout:500,
+
     logLevel: config.LOG_DEBUG,
     port: 9876,
     reporters: ['progress'],
@@ -60,9 +61,6 @@ module.exports = function(config) {
     // enable / disable watching file and executing tests whenever any file changes
     singleRun: true,
     autoWatch: false,
-
-    // Only launch one browser at a time since doing multiple can cause disconnects/issues
-    concurrency: 1,
 
     // Start these browsers, currently available:
     // - Chrome
@@ -74,32 +72,9 @@ module.exports = function(config) {
     // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
     browsers: ['Firefox', 'PhantomJS2'],
 
-    // you can define custom flags
-    customLaunchers: {
-      Chrome_without_security: {
-        base: 'Chrome',
-        flags: ['--disable-web-security']
-      },
-      PhantomJS_without_security: {
-        base: 'PhantomJS',
-        options : {
-          onResourceRequested : function (request) {
-              console.log('Request ' + JSON.stringify(request, undefined, 4));
-          },
-          onError : function (msg, trace) {
-              console.log(msg);
-              trace.forEach(function(item) {
-                  console.log('  ', item.file, ':', item.line);
-              });
-          }
-        },
-        flags: [
-          '--web-security=no',
-          '--proxy-type=none',
-          '--remote-debugger-port=9000',
-          '--remote-debugger-autorun=yes'
-        ]
-      }
+    client: {
+      // Do not clear the context as this can cause reload failures with Jasmine
+      clearContext:false
     }
   });
 

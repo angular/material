@@ -286,6 +286,45 @@ describe('util', function() {
       });
     });
 
+    describe('parseAttributeBoolean', function() {
+
+      it('should validate `1` string to be true', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean('1')).toBe(true);
+      }));
+
+      it('should validate an empty value to be true', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean('')).toBe(true);
+      }));
+
+      it('should validate `false` text to be false', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean('false')).toBe(false);
+      }));
+
+      it('should validate `true` text to be true', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean('true')).toBe(true);
+      }));
+
+      it('should validate a random text to be true', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean('random-string')).toBe(true);
+      }));
+
+      it('should validate `0` text to be false', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean('0')).toBe(false);
+      }));
+
+      it('should validate true boolean to be true', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean(true)).toBe(true);
+      }));
+
+      it('should validate false boolean to be false', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean(false)).toBe(false);
+      }));
+
+      it('should validate `false` text to be true when ignoring negative values', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean('false', false)).toBe(true);
+      }));
+    });
+
     describe('getParentWithPointerEvents', function () {
       describe('with wrapper with pointer events style element', function () {
         it('should find the parent element and return it', inject(function($window, $mdUtil) {

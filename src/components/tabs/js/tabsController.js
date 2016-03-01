@@ -537,19 +537,37 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    * Updates whether or not pagination should be displayed.
    */
   function updatePagination () {
-    if (!shouldStretchTabs()) updatePagingWidth();
+    updatePagingWidth();
     ctrl.maxTabWidth = getMaxTabWidth();
     ctrl.shouldPaginate = shouldPaginate();
   }
 
+  /**
+   * Sets or clears fixed width for md-pagination-wrapper depending on if tabs should stretch.
+   */
   function updatePagingWidth() {
+    if (shouldStretchTabs()) {
+      angular.element(elements.paging).css('width', '');
+    } else {
+      angular.element(elements.paging).css('width', calcPagingWidth() + 'px');
+    }
+  }
+
+  /**
+   * @returns {number}
+   */
+  function calcPagingWidth () {
     var width = 1;
+
     angular.forEach(getElements().dummies, function (element) {
-      // uses `getBoundingClientRect().width` rather than `offsetWidth` to include decimal values
-      // when calculating the total width
-      width += Math.ceil(element.getBoundingClientRect().width);
+      //-- Uses the larger value between `getBoundingClientRect().width` and `offsetWidth`.  This
+      //   prevents `offsetWidth` value from being rounded down and causing wrapping issues, but
+      //   also handles scenarios where `getBoundingClientRect()` is inaccurate (ie. tabs inside
+      //   of a dialog)
+      width += Math.max(element.offsetWidth, element.getBoundingClientRect().width);
     });
-    angular.element(elements.paging).css('width', width + 'px');
+
+    return Math.ceil(width);
   }
 
   function getMaxTabWidth () {

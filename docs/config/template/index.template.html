@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="angular-material.min.css">
 <link rel="stylesheet" href="docs.css">
 </head>
-<body layout="row" ng-cloak>
+<body class="docs-body" layout="row" ng-cloak>
 
   <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2"
               md-component-id="left" hide-print
@@ -65,7 +65,7 @@
             <span ng-if="menu.currentPage.name !== menu.currentSection.name">
               <span hide-sm hide-md>{{menu.currentSection.name}}</span>
               <span class="docs-menu-separator-icon" hide-sm hide-md style="transform: translate3d(0, 1px, 0)">
-                <span class="md-visually-hidden">-</span>
+                <span class="_md-visually-hidden">-</span>
                 <md-icon
                     aria-hidden="true"
                     md-svg-src="img/icons/ic_chevron_right_24px.svg"
