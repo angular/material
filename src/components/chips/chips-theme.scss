@@ -15,6 +15,11 @@ md-chips.md-THEME_NAME-theme {
         color: '{{primary-contrast}}';
       }
     }
+
+    &.md-chip-editing {
+      background:transparent;
+      color: '{{background-800}}';
+    }
   }
   md-chip-remove {
     .md-button {
