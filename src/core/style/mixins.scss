@@ -105,75 +105,21 @@
 // @see https://css-tricks.com/almanac/properties/d/direction/
 
 @mixin rtl($prop, $ltr-value, $rtl-value) {
-  html[dir=ltr] & {
-    #{$prop}: $ltr-value;
-    unicode-bidi: embed;
-  }
-  body[dir=ltr] & {
-    #{$prop}: $ltr-value;
-    unicode-bidi: embed;
-  }
+  unicode-bidi: embed;
 
-  html[dir=rtl] & {
+  #{$prop}: $ltr-value;
+  [dir=rtl] & {
     #{$prop}: $rtl-value;
-    unicode-bidi: embed;
   }
-  body[dir=rtl] & {
-    #{$prop}: $rtl-value;
-    unicode-bidi: embed;
-  }
-
-  html:not([dir]) body:not([dir]) & {
-    #{$prop}: $ltr-value;
-    unicode-bidi: embed;
-  }
-
-  bdo[dir=rtl] {
-    direction: rtl;
-    unicode-bidi: bidi-override;
-  }
-  bdo[dir=ltr] {
-    direction: ltr;
-    unicode-bidi: bidi-override;
-  }
-
-
 }
 
 @mixin rtl-prop($ltr-prop, $rtl-prop, $value) {
-  html[dir=ltr] & {
-    #{$ltr-prop}: $value;
-    unicode-bidi: embed;
-  }
-  body[dir=ltr] & {
-    #{$ltr-prop}: $value;
-    unicode-bidi: embed;
-  }
+  unicode-bidi: embed;
 
-  html[dir=rtl] & {
+  #{$ltr-prop}: $value;
+  [dir=rtl] & {
     #{$rtl-prop}: $value;
-    unicode-bidi: embed;
   }
-  body[dir=rtl] & {
-    #{$rtl-prop}: $value;
-    unicode-bidi: embed;
-  }
-
-  html:not([dir]) body:not([dir]) & {
-    #{$ltr-prop}: $value;
-    unicode-bidi: embed;
-  }
-
-  bdo[dir=rtl] {
-    direction: rtl;
-    unicode-bidi: bidi-override;
-  }
-  bdo[dir=ltr] {
-    direction: ltr;
-    unicode-bidi: bidi-override;
-  }
-
-
 }
 
 // To reverse padding (top left bottom right) -> (top right bottom left)

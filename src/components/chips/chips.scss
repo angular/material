@@ -14,7 +14,7 @@ $contact-chip-name-width: rem(12) !default;
 
 .md-contact-chips {
   .md-chips {
-    .md-chip {
+    md-chip {
       @include rtl(padding, $contact-chip-padding, rtl-value($contact-chip-padding));
       .md-contact-avatar {
         @include rtl(float, left, right);
@@ -63,7 +63,7 @@ $contact-chip-name-width: rem(12) !default;
   &:not(.md-readonly) {
     cursor: text;
 
-    .md-chip:not(.md-readonly) {
+    md-chip:not(.md-readonly) {
       @include rtl-prop(padding-right, padding-left, $chip-remove-padding-right);
 
       ._md-chip-content {
@@ -72,7 +72,7 @@ $contact-chip-name-width: rem(12) !default;
     }
   }
 
-  .md-chip {
+  md-chip {
     cursor: default;
     border-radius: $chip-height / 2;
     display: block;

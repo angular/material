@@ -8,7 +8,7 @@
           @see https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers
         -->
         <fieldset class="standard" >
-          <legend>Using <code>md-checkbox</code> with <code>ng-checked</code></legend>
+          <legend>Using &lt;md-checkbox&gt; with &lt;ng-checked&gt; </legend>
           <div layout="row" layout-wrap flex>
             <div flex="50" ng-repeat="item in items">
               <md-checkbox ng-checked="exists(item, selected)" ng-click="toggle(item, selected)">
@@ -23,7 +23,7 @@
     <div flex="100" flex-gt-sm="50" layout="column">
       <div >
         <fieldset class="standard">
-          <legend>Using <code>&lt;input type="checkbox"&gt;</code></legend>
+          <legend>Using &lt;input type="checkbox"&gt;</legend>
           <div layout="row" layout-wrap flex>
             <div ng-repeat="item in items" class="standard" flex="50">
               <label>

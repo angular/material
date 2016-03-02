@@ -153,4 +153,11 @@ md-calendar {
   &:first-child {
     border-top: 1px solid transparent;
   }
+
+  // Explicitly set vertical-align to avoid conflicting with popular CSS resets. When
+  // vertical-align:baseline is set, month headers are misaligned.
+  // http://meyerweb.com/eric/tools/css/reset/
+  tbody, td, tr {
+    vertical-align: middle;
+  }
 }
