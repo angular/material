@@ -53,7 +53,7 @@ function MdChipCtrl ($scope, $element, $mdConstant, $timeout) {
 /**
  * @param {MdChipsCtrl} controller
  */
-MdChipCtrl.prototype.setParentController = function(controller) {
+MdChipCtrl.prototype.init = function(controller) {
   this.parentController = controller;
   this.enableChipEdit = this.parentController.enableChipEdit;
 

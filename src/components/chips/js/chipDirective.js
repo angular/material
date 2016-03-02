@@ -53,7 +53,7 @@ function MdChip($mdTheming, $mdUtil) {
       $mdTheming(element);
 
       if (chipsController) {
-        chipController.setParentController(chipsController);
+        chipController.init(chipsController);
         angular.element(element[0].querySelector('._md-chip-content'))
             .on('blur', function () {
               chipsController.selectedChip = -1;
