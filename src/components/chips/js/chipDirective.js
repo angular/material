@@ -39,7 +39,8 @@ function MdChip($mdTheming, $mdUtil) {
   return {
     restrict: 'E',
     require: '^?mdChips',
-    compile:  compile
+    compile:  compile,
+    controller: 'MdChipCtrl'
   };
 
   function compile(element, attr) {

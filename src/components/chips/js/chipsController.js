@@ -11,9 +11,10 @@ angular
  * @param $mdConstant
  * @param $log
  * @param $element
+ * @param $attrs
  * @constructor
  */
-function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout) {
+function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout, $attrs) {
   /** @type {$timeout} **/
   this.$timeout = $timeout;
 
@@ -50,6 +51,26 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout) {
   /** @type {boolean} */
   this.hasAutocomplete = false;
 
+  /** @type {string} */
+  this.$scope.enableChipEdit = $attrs['mdEnableChipEdit'] || '';
+
+  /** @type {function} */
+  this.$scope.updateChipContents = function(chipIndex, chipContents){
+    if(chipIndex >= 0 && chipIndex < this.items.length) {
+      this.items[chipIndex] = chipContents;
+      this.ngModelCtrl.$setDirty();
+    }
+  }.bind(this);
+
+  /** @type {function} */
+  this.$scope.removeChipAtIndex = function(chipIndex){
+    this.removeChip(chipIndex);
+  }.bind(this);
+
+  /** @type {function} */
+  this.$scope.getSelectedChipIndex = function(){
+    return this.selectedChip;
+  }.bind(this);
 
   /**
    * Hidden hint text for how to delete a chip. Used to give context to screen readers.
