@@ -19,11 +19,11 @@
   var dryRun;
 
   header();
-  write('Is this a dry-run? {{"[yes/no]".cyan}} ');
+  write(`Is this a dry-run? ${"[yes/no]".cyan} `);
   dryRun = prompt() !== 'no';
 
   if (dryRun) {
-    write('What would you like the old version to be? (default: {{oldVersion.cyan}}) ');
+    write(`What would you like the old version to be? (default: ${oldVersion.cyan}) `);
     oldVersion = prompt() || oldVersion;
     build();
   } else if (validate()) {
@@ -50,8 +50,8 @@
 
     line();
     log('Your repo is ready to be pushed.');
-    log('Please look over {{"CHANGELOG.md".cyan}} and make any changes.');
-    log('When you are ready, please run "{{"./push".cyan}}" to finish the process.');
+    log(`Please look over ${"CHANGELOG.md".cyan} and make any changes.`);
+    log(`When you are ready, please run "${"./push".cyan}" to finish the process.`);
     log('If you would like to cancel this release, please run "./abort"');
   }
 
@@ -74,13 +74,14 @@
 
   /** creates the version branch and adds abort steps */
   function checkoutVersionBranch () {
-    exec('git checkout -q -b release/{{newVersion}}');
-    abortCmds.push('git branch -D release/{{newVersion}}');
+    exec(`git branch -q -D release/${newVersion}`);
+    exec(`git checkout -q -b release/${newVersion}`);
+    abortCmds.push(`git branch -D release/${newVersion}`);
   }
 
   /** writes the new version to package.json */
   function updateVersion () {
-    start('Updating {{"package.json".cyan}} version from {{oldVersion.cyan}} to {{newVersion.cyan}}...');
+    start(`Updating ${"package.json".cyan} version from ${oldVersion.cyan} to ${newVersion.cyan}...`);
     pkg.version = newVersion;
     fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
     done();
@@ -90,13 +91,14 @@
 
   /** generates the changelog from the commits since the last release */
   function createChangelog () {
-    start('Generating changelog from {{oldVersion.cyan}} to {{newVersion.cyan}}...');
-    exec([
-           'git fetch --tags',
-           'git checkout v{{lastMajorVer}} -- CHANGELOG.md',
-           'gulp changelog --sha=$(git merge-base v{{lastMajorVer}} HEAD)'
-         ]);
+    start(`Generating changelog from ${oldVersion.cyan} to ${newVersion.cyan}...`);
+
+    exec('git fetch --tags');
+    exec(`git checkout v${lastMajorVer} -- CHANGELOG.md`);
+    exec(`gulp changelog --sha=$(git merge-base v${lastMajorVer} HEAD)`);
+
     done();
+
     abortCmds.push('git checkout CHANGELOG.md');
     pushCmds.push('git add CHANGELOG.md');
   }
@@ -110,7 +112,7 @@
   function getNewVersion () {
     header();
     var options = getVersionOptions(oldVersion), key, type, version;
-    log('The current version is {{oldVersion.cyan}}.');
+    log(`The current version is ${oldVersion.cyan}.`);
     log('');
     log('What should the next version be?');
     for (key in options) { log((+key + 1) + ') ' + options[ key ].cyan); }
@@ -124,7 +126,7 @@
 
     log('');
     log('The new version will be ' + version.cyan + '.');
-    write('Is this correct? {{"[yes/no]".cyan}} ');
+    write(`Is this correct? ${"[yes/no]".cyan} `);
     return prompt() === 'yes' ? version : getNewVersion();
 
     function getVersionOptions (version) {
@@ -136,21 +138,15 @@
         var version = parseVersion(versionString);
         if (version.rc) {
           switch (type) {
-            case 'minor':
-              version.rc = 0;
-              break;
-            case 'rc':
-              version.rc++;
-              break;
+            case 'minor': version.rc = 0; break;
+            case 'rc': version.rc++; break;
           }
         } else {
           version[ type ]++;
           //-- reset any version numbers lower than the one changed
           switch (type) {
-            case 'minor':
-              version.patch = 0;
-            case 'patch':
-              version.rc = 0;
+            case 'minor': version.patch = 0;
+            case 'patch': version.rc = 0;
           }
         }
         return getVersionString(version);
@@ -182,8 +178,8 @@
   /** adds git tag for release and pushes to github */
   function tagRelease () {
     pushCmds.push(
-        'git tag v{{newVersion}}',
-        'git push {{origin}} HEAD',
+        `git tag v${newVersion} -f`,
+        `git push ${origin} HEAD`,
         'git push --tags'
     );
   }
@@ -191,31 +187,23 @@
   /** amends the commit to include local changes (ie. changelog) */
   function commitChanges () {
     start('Committing changes...');
-    exec('git commit -am "release: version {{newVersion}}"');
+    exec(`git commit -am "release: version ${newVersion}"`);
     done();
     pushCmds.push('git commit --amend --no-edit');
   }
 
   /** utility method for cloning github repos */
   function cloneRepo (repo) {
-    start('Cloning ' + repo.cyan + ' from Github...');
-    exec('rm -rf ' + repo);
-    exec('git clone https://github.com/angular/' + repo + '.git --depth=1');
+    start(`Cloning ${repo.cyan} from Github...`);
+    exec(`rm -rf ${repo}`);
+    exec(`git clone https://github.com/angular/${repo}.git --depth=1`);
     done();
-    cleanupCmds.push('rm -rf ' + repo);
-  }
-
-  // TODO: Remove this method and use template strings instead
-  /** utility method for inserting variables into a string */
-  function fill (str) {
-    return str.replace(/\{\{[^\}]+\}\}/g, function (match) {
-      return eval(match.substr(2, match.length - 4));
-    });
+    cleanupCmds.push(`rm -rf ${repo}`);
   }
 
   /** writes an array of commands to a bash script */
   function writeScript (name, cmds) {
-    fs.writeFileSync(name, '#!/usr/bin/env bash\n\n' + fill(cmds.join('\n')));
+    fs.writeFileSync(name, '#!/usr/bin/env bash\n\n' + cmds.join('\n'));
     exec('chmod +x ' + name);
   }
 
@@ -233,35 +221,35 @@
     start('Building bower files...');
     //-- build files for bower
     exec([
-           'rm -rf dist',
-           'gulp build',
-           'gulp build-all-modules --mode=default',
-           'gulp build-all-modules --mode=closure',
-           'rm -rf dist/demos',
-         ]);
+      'rm -rf dist',
+      'gulp build',
+      'gulp build-all-modules --mode=default',
+      'gulp build-all-modules --mode=closure',
+      'rm -rf dist/demos',
+     ]);
     done();
     start('Copy files into bower repo...');
     //-- copy files over to bower repo
     exec([
            'cp -Rf ../dist/* ./',
            'git add -A',
-           'git commit -m "release: version {{newVersion}}"',
+           `git commit -m "release: version ${newVersion}"`,
            'rm -rf ../dist'
          ], options);
     done();
     //-- add steps to push script
     pushCmds.push(
-        comment('push to bower (master and tag) and publish to npm'),
-        'cd ' + options.cwd,
-        'cp ../CHANGELOG.md .',
-        'git add CHANGELOG.md',
-        'git commit --amend --no-edit',
-        'git tag -f v{{newVersion}}',
-        'git pull --rebase',
-        'git push',
-        'git push --tags',
-        ( newVersion.indexOf('rc') < 0 ? 'npm publish' : '# skipped npm publish due to RC version' ),
-        'cd ..'
+      comment('push to bower (master and tag) and publish to npm'),
+      'cd ' + options.cwd,
+      'cp ../CHANGELOG.md .',
+      'git add CHANGELOG.md',
+      'git commit --amend --no-edit',
+      `git tag -f v${newVersion}`,
+      'git pull --rebase --strategy=ours',
+      'git push',
+      'git push --tags',
+      ( newVersion.indexOf('rc') < 0 ? 'npm publish' : '# skipped npm publish due to RC version' ),
+      'cd ..'
     );
   }
 
@@ -281,10 +269,10 @@
     //-- copy files over to site repo
     exec([
         'rm -rf ./*-rc*',
-        'cp -Rf ../dist/docs {{newVersion}}',
+        `cp -Rf ../dist/docs ${newVersion}`,
         'rm -rf latest && cp -Rf ../dist/docs latest',
         'git add -A',
-        'git commit -m "release: version {{newVersion}}"',
+        `git commit -m "release: version ${newVersion}"`,
         'rm -rf ../dist'
     ], options);
     replaceBaseHref(newVersion);
@@ -365,20 +353,21 @@
   function updateMaster () {
     pushCmds.push(
         comment('update package.json in master'),
-        'git co master',
-        'git pull --rebase {{origin}} master',
-        'git checkout release/{{newVersion}} -- CHANGELOG.md',
-        'node -e "' + stringifyFunction(buildCommand) + '"',
+        'git checkout master',
+        `git pull --rebase ${origin} master --strategy=theirs`,
+        `git checkout release/${newVersion} -- CHANGELOG.md`,
+        `node -e "${stringifyFunction(buildCommand)}"`,
         'git add CHANGELOG.md',
         'git add package.json',
-        'git commit -m "update version number in package.json to {{newVersion}}"',
+        `git commit -m "update version number in package.json to ${newVersion}"`,
         'git push'
     );
+
     function buildCommand () {
       require('fs').writeFileSync('package.json', JSON.stringify(getUpdatedJson(), null, 2));
       function getUpdatedJson () {
-        var json     = require('./package.json');
-        json.version = '{{newVersion}}';
+        var json = require('./package.json');
+        json.version = newVersion;
         return json;
       }
     }
@@ -423,7 +412,7 @@
     try {
       var options = Object.create(defaultOptions);
       for (var key in userOptions) options[ key ] = userOptions[ key ];
-      return child_process.execSync(fill(cmd) + ' 2> /dev/null', options).toString().trim();
+      return child_process.execSync(cmd + ' 2> /dev/null', options).toString().trim();
     } catch (err) {
       return err;
     }
@@ -436,21 +425,20 @@
 
   /** prints the left side of a task while it is being performed */
   function start (msg) {
-    var parsedMsg = fill(msg),
-        msgLength = strip(parsedMsg).length,
+    var msgLength = strip(msg).length,
         diff      = lineWidth - 4 - msgLength;
-    write(parsedMsg + Array(diff + 1).join(' '));
+    write(msg + Array(diff + 1).join(' '));
   }
 
   /** outputs to the terminal with string variable replacement */
   function log (msg) {
     msg = msg || '';
-    console.log(fill(msg));
+    console.log(msg);
   }
 
   /** writes a message without a newline */
   function write (msg) {
-    process.stdout.write(fill(msg));
+    process.stdout.write(msg);
   }
 
   /** prints a horizontal line to the terminal */
