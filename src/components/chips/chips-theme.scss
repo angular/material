@@ -16,8 +16,8 @@ md-chips.md-THEME_NAME-theme {
       }
     }
 
-    &.md-chip-editing {
-      background:transparent;
+    &._md-chip-editing {
+      background: transparent;
       color: '{{background-800}}';
     }
   }

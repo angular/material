@@ -19,16 +19,6 @@ function MdChipCtrl ($scope, $element, $mdConstant, $timeout) {
   this.$scope = $scope;
 
   /**
-   * @type {$scope}
-   */
-  this.$scope = $scope;
-
-  /**
-   * @type {$scope}
-   */
-  this.$scope = $scope;
-
-  /**
    * @type {$element}
    */
   this.$element = $element;
@@ -49,16 +39,39 @@ function MdChipCtrl ($scope, $element, $mdConstant, $timeout) {
   this.isEditting = false;
 
   /**
+   * @type {MdChipsCtrl}
+   */
+  this.parentController = undefined;
+
+  /**
    * @type {boolean}
    */
-  this.enableChipEdit = this.$scope.$parent && this.$scope.$parent.enableChipEdit == 'true';
+  this.enableChipEdit = false;
+}
 
-  if(this.enableChipEdit) {
+
+/**
+ * @param {MdChipsCtrl} controller
+ */
+MdChipCtrl.prototype.setParentController = function(controller) {
+  this.parentController = controller;
+  this.enableChipEdit = this.parentController.enableChipEdit;
+
+  if (this.enableChipEdit) {
     this.$element.on('keydown', this.chipKeyDown.bind(this));
     this.$element.on('mousedown', this.chipMouseDown.bind(this));
     this.getChipContent().addClass('_md-chip-content-edit-is-enabled');
   }
-}
+};
+
+
+/**
+ * @return {Object}
+ */
+MdChipCtrl.prototype.getChipContent = function() {
+  var chipContents = this.$element[0].getElementsByClassName('_md-chip-content');
+  return angular.element(chipContents[0]);
+};
 
 
 /**
@@ -91,18 +104,18 @@ MdChipCtrl.prototype.getChipIndex = function() {
  */
 MdChipCtrl.prototype.goOutOfEditMode = function() {
   this.isEditting = false;
-  this.$element.removeClass('md-chip-editing');
+  this.$element.removeClass('_md-chip-editing');
   this.getChipContent()[0].contentEditable = 'false';
   var chipIndex = this.getChipIndex();
 
   var content = this.getContentElement().text();
-  if (content === "") {
-    this.$scope.$parent.removeChipAtIndex(chipIndex);
-  } else {
-    this.$scope.$parent.updateChipContents(
-      chipIndex,
-      this.getContentElement().text()
+  if (content) {
+    this.parentController.updateChipContents(
+        chipIndex,
+        this.getContentElement().text()
     );
+  } else {
+    this.parentController.removeChip(chipIndex);
   }
 };
 
@@ -132,7 +145,7 @@ MdChipCtrl.prototype.selectNodeContents = function(node) {
  */
 MdChipCtrl.prototype.goInEditMode = function() {
   this.isEditting = true;
-  this.$element.addClass('md-chip-editing');
+  this.$element.addClass('_md-chip-editing');
   this.getChipContent()[0].contentEditable = 'true';
   this.getChipContent().on('blur', function() {
     this.goOutOfEditMode();
@@ -166,7 +179,7 @@ MdChipCtrl.prototype.chipKeyDown = function(event) {
  * Handles the double click event
  */
 MdChipCtrl.prototype.chipMouseDown = function() {
-  if(this.getChipIndex() == this.$scope.getSelectedChipIndex() &&
+  if(this.getChipIndex() == this.parentController.selectedChip &&
     this.enableChipEdit &&
     !this.isEditting) {
     this.goInEditMode();
