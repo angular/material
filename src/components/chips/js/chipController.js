@@ -103,6 +103,8 @@ MdChipCtrl.prototype.getChipIndex = function() {
  * Presents an input element to edit the contents of the chip.
  */
 MdChipCtrl.prototype.goOutOfEditMode = function() {
+  if (!this.isEditting) return;
+
   this.isEditting = false;
   this.$element.removeClass('_md-chip-editing');
   this.getChipContent()[0].contentEditable = 'false';
@@ -115,7 +117,7 @@ MdChipCtrl.prototype.goOutOfEditMode = function() {
         this.getContentElement().text()
     );
   } else {
-    this.parentController.removeChip(chipIndex);
+    this.parentController.removeChipAndFocusInput(chipIndex);
   }
 };
 
