@@ -60,7 +60,10 @@ angular
           }
         }
 
-        $mdTheming.inherit(element, element.parent());
+        // Only inherit the parent if the backdrop has a parent.
+        if (element.parent().length) {
+          $mdTheming.inherit(element, element.parent());
+        }
       });
 
     }
