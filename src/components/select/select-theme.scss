@@ -70,18 +70,24 @@ md-select-menu.md-THEME_NAME-theme {
 
 }
 
-md-select-menu[multiple] md-option[selected] .md-text:before {
-   box-sizing: border-box;
-    -webkit-transform: rotate(45deg);
-    transform: rotate(45deg);
-    position: absolute;
-    left: 14px;
-    display: table;
-    width: 6.67px;
-    height: 13.33px;
-    border-width: 2px;
-    border-style: solid;
-    border-top: 0;
-    border-left: 0;
-    content: '';
+
+md-select-menu[multiple] md-option[selected] .md-text {
+    padding-left:32px;padding-right: 32px;
+    :before {
+        box-sizing: border-box;
+         -webkit-transform: rotate(45deg);
+         transform: rotate(45deg);
+         position: absolute;
+         left: 14px;
+         display: table;
+         width: 6.67px;
+         height: 13.33px;
+         border-width: 2px;
+         border-style: solid;
+         border-top: 0;
+         border-left: 0;
+         content: '';
+     }
 }
+
+md-select-menu[mulitple] md-optgroup md-option .md-text {padding-left:0;padding-right:0}
