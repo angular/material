@@ -105,8 +105,6 @@
 // @see https://css-tricks.com/almanac/properties/d/direction/
 
 @mixin rtl($prop, $ltr-value, $rtl-value) {
-  unicode-bidi: embed;
-
   #{$prop}: $ltr-value;
   [dir=rtl] & {
     #{$prop}: $rtl-value;
@@ -114,8 +112,6 @@
 }
 
 @mixin rtl-prop($ltr-prop, $rtl-prop, $value) {
-  unicode-bidi: embed;
-
   #{$ltr-prop}: $value;
   [dir=rtl] & {
     #{$rtl-prop}: $value;

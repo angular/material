@@ -173,6 +173,12 @@ input {
 
 // Bi-directional support
 
+html, body {
+  &[dir=rtl], &[dir=ltr] {
+     unicode-bidi: embed
+  }
+}
+
 bdo[dir=rtl] {
   direction: rtl;
   unicode-bidi: bidi-override;
@@ -181,3 +187,4 @@ bdo[dir=ltr] {
   direction: ltr;
   unicode-bidi: bidi-override;
 }
+
