@@ -195,6 +195,7 @@ function SidenavFocusDirective() {
  * </hljs>
  *
  * @param {expression=} md-is-open A model bound to whether the sidenav is opened.
+ * @param {boolean=} md-disable-backdrop When set to true, the sidenav will not show a backdrop.
  * @param {string=} md-component-id componentId to use with $mdSidenav service.
  * @param {expression=} md-is-locked-open When this expression evalutes to true,
  * the sidenav 'locks open': it falls into the content's flow instead
@@ -229,6 +230,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
     var lastParentOverFlow;
     var triggeringElement = null;
     var promise = $q.when(true);
+    var isBackdropDisabled = $mdUtil.parseAttributeBoolean(attr.mdDisableBackdrop);
 
     var isLockedOpenParsed = $parse(attr.mdIsLockedOpen);
     var isLocked = function() {
@@ -275,7 +277,9 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
       } else {
         $animate[isLocked ? 'addClass' : 'removeClass'](element, '_md-locked-open');
       }
-      backdrop.toggleClass('_md-locked-open', !!isLocked);
+      if (!isBackdropDisabled) {
+        backdrop.toggleClass('_md-locked-open', !!isLocked);
+      }
     }
 
     /**
@@ -288,7 +292,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
       var parent = element.parent();
 
       parent[isOpen ? 'on' : 'off']('keydown', onKeyDown);
-      backdrop[isOpen ? 'on' : 'off']('click', close);
+      if (!isBackdropDisabled) backdrop[isOpen ? 'on' : 'off']('click', close);
 
       if ( isOpen ) {
         // Capture upon opening..
@@ -298,7 +302,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
       disableParentScroll(isOpen);
 
       return promise = $q.all([
-                isOpen ? $animate.enter(backdrop, parent) : $animate.leave(backdrop),
+                isOpen && !isBackdropDisabled ? $animate.enter(backdrop, parent) : $animate.leave(backdrop),
                 $animate[isOpen ? 'removeClass' : 'addClass'](element, '_md-closed')
               ])
               .then(function() {
