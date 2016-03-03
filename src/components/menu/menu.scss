@@ -81,22 +81,17 @@ md-menu-item {
     padding-right: 2*$baseline-grid;
   }
 
-  > a.md-button {
-    display: flex;
-  }
-
   > .md-button {
     border-radius: 0;
     margin: auto 0;
     font-size: (2*$baseline-grid) - 1;
     text-transform: none;
     font-weight: 400;
-    text-align: left;
-    text-align: start;
     height: 100%;
     padding-left: 2*$baseline-grid;
     padding-right: 2*$baseline-grid;
-    display: inline-block;
+    @include rtl(text-align, left, right);
+    display: flex;
     align-items: baseline;
     align-content: flex-start;
     width:100%;
