@@ -10,9 +10,10 @@ angular
  * @param $element
  * @param $mdConstant
  * @param $timeout
+ * @param $mdUtil
  * @constructor
  */
-function MdChipCtrl ($scope, $element, $mdConstant, $timeout) {
+function MdChipCtrl ($scope, $element, $mdConstant, $timeout, $mdUtil) {
   /**
    * @type {$scope}
    */
@@ -32,6 +33,11 @@ function MdChipCtrl ($scope, $element, $mdConstant, $timeout) {
    * @type {$timeout}
    */
   this.$timeout = $timeout;
+
+  /**
+   * @type {$mdUtil}
+   */
+  this.$mdUtil = $mdUtil;
 
   /**
    * @type {boolean}
@@ -77,15 +83,6 @@ MdChipCtrl.prototype.getChipContent = function() {
 /**
  * @return {Object}
  */
-MdChipCtrl.prototype.getChipContent = function() {
-  var chipContents = this.$element[0].getElementsByClassName('_md-chip-content');
-  return angular.element(chipContents[0]);
-};
-
-
-/**
- * @return {Object}
- */
 MdChipCtrl.prototype.getContentElement = function() {
   return angular.element(this.getChipContent().children()[0]);
 };
@@ -116,6 +113,12 @@ MdChipCtrl.prototype.goOutOfEditMode = function() {
         chipIndex,
         this.getContentElement().text()
     );
+
+    this.$mdUtil.nextTick(function() {
+      if (this.parentController.selectedChip === chipIndex) {
+        this.parentController.focusChip(chipIndex);
+      }
+    }.bind(this));
   } else {
     this.parentController.removeChipAndFocusInput(chipIndex);
   }
