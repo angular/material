@@ -57,7 +57,6 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $inter
   var DEGREE_IN_RADIANS = $window.Math.PI / 180;
   var MODE_DETERMINATE = 'determinate';
   var MODE_INDETERMINATE = 'indeterminate';
-  var INDETERMINATE_CLASS = '_md-mode-indeterminate';
 
   return {
     restrict: 'E',
@@ -67,7 +66,7 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $inter
       mdMode: '@'
     },
     template:
-      '<svg xmlns="http://www.w3.org/2000/svg">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" overflow="visible">' +
         '<path fill="none"/>' +
       '</svg>',
     compile: function(element, attrs){
@@ -105,26 +104,15 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $inter
       var mode = newValues[1];
 
       if (mode !== MODE_DETERMINATE && mode !== MODE_INDETERMINATE) {
-        cleanupIndeterminate();
+        cleanupIndeterminateAnimation();
         element.addClass('ng-hide');
       } else {
         element.removeClass('ng-hide');
 
-        if (mode === MODE_INDETERMINATE){
-          if (!interval) {
-            interval = $interval(
-              animateIndeterminate,
-              $mdProgressCircular.durationIndeterminate + 50,
-              0,
-              false
-            );
-
-            element.addClass(INDETERMINATE_CLASS);
-            animateIndeterminate();
-          }
-
+        if (mode === MODE_INDETERMINATE) {
+          startIndeterminateAnimation();
         } else {
-          cleanupIndeterminate();
+          cleanupIndeterminateAnimation();
           renderCircle(clamp(oldValues[0]), clamp(newValues[0]));
         }
       }
@@ -158,7 +146,7 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $inter
       if (animateTo === animateFrom) {
         path.attr('d', getSvgArc(animateTo, diameter, pathDiameter, rotation));
       } else {
-        (function animation() {
+        $$rAF(function animation() {
           var currentTime = $window.Math.min(new $window.Date() - startTime, animationDuration);
 
           path.attr('d', getSvgArc(
@@ -171,7 +159,7 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $inter
           if (id === lastAnimationId && currentTime < animationDuration) {
             $$rAF(animation);
           }
-        })();
+        });
       }
     }
 
@@ -193,11 +181,51 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $inter
       endIndeterminate = -temp;
     }
 
-    function cleanupIndeterminate() {
+    function startIndeterminateAnimation() {
+      if (!interval) {
+        var startTime = new $window.Date();
+        var animationDuration = $mdProgressCircular.rotationDurationIndeterminate;
+        var radius = getSize(scope.mdDiameter)/2;
+
+        // Spares us at least a little bit of string concatenation.
+        radius = ' ' + radius + ', ' + radius;
+
+        // This animates the indeterminate rotation. This can be achieved much easier
+        // with CSS keyframes, however IE11 seems to have problems centering the rotation
+        // which causes a wobble in the indeterminate animation.
+        $$rAF(function animation() {
+          var currentTime = $window.Math.min(new $window.Date() - startTime, animationDuration);
+          var rotation = $mdProgressCircular.easingPresets.linearEase(currentTime, 0, 360, animationDuration);
+
+          path.attr('transform', 'rotate(' + rotation + radius + ')');
+
+          if (interval) {
+            $$rAF(animation);
+          } else {
+            path.removeAttr('transform');
+          }
+
+          // Reset the animation
+          if (currentTime >= animationDuration) {
+            startTime = new $window.Date();
+          }
+        });
+
+        interval = $interval(
+          animateIndeterminate,
+          $mdProgressCircular.durationIndeterminate + 50,
+          0,
+          false
+        );
+
+        animateIndeterminate();
+      }
+    }
+
+    function cleanupIndeterminateAnimation() {
       if (interval) {
         $interval.cancel(interval);
         interval = null;
-        element.removeClass(INDETERMINATE_CLASS);
       }
     }
   }
