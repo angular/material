@@ -682,7 +682,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      */
     parseAttributeBoolean: function(value, negatedCheck) {
       return value === '' || !!value && (negatedCheck === false || value !== 'false' && value !== '0');
-},
+    },
 
     hasComputedStyle: hasComputedStyle
   };
