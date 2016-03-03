@@ -91,7 +91,7 @@ describe('mdProgressCircular', function() {
     element = $compile('<div>' + template + '</div>')($rootScope);
         $rootScope.$digest();
 
-    return element.find('svg');
+    return element.find('md-progress-circular');
   }
 
 });
