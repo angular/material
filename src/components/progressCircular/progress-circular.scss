@@ -1,0 +1,11 @@
+// Used to avoid unnecessary layout
+md-progress-circular {
+    position: relative;
+
+    svg {
+        position: absolute;
+        overflow: visible;
+        top: 0;
+        left: 0;
+    }
+}
