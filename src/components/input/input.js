@@ -4,12 +4,13 @@
  */
 
 angular.module('material.components.input', [
-    'material.core'
-  ])
+  'material.core'
+])
   .directive('mdInputContainer', mdInputContainerDirective)
   .directive('label', labelDirective)
   .directive('input', inputTextareaDirective)
   .directive('textarea', inputTextareaDirective)
+  .directive('div', inputTextareaDirective)
   .directive('mdMaxlength', mdMaxlengthDirective)
   .directive('placeholder', placeholderDirective)
   .directive('ngMessages', ngMessagesDirective)
@@ -266,7 +267,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
     var mdNoAsterisk = $mdUtil.parseAttributeBoolean(attr.mdNoAsterisk);
 
 
-    if (!containerCtrl) return;
+    if (!containerCtrl || (element[0].tagName.toLowerCase() === 'div' && attr.contenteditable != 'true')) return;
     if (containerCtrl.input) {
       throw new Error("<md-input-container> can only have *one* <input>, <textarea> or <md-select> child element!");
     }
@@ -287,7 +288,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
       element.attr('id', 'input_' + $mdUtil.nextUid());
     }
 
-    if (element[0].tagName.toLowerCase() === 'textarea') {
+    if (element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'div') {
       setupTextarea();
     }
 
@@ -361,7 +362,11 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
     function inputCheckValue() {
       // An input's value counts if its length > 0,
       // or if the input's validity state says it has bad input (eg string in a number input)
-      containerCtrl.setHasValue(element.val().length > 0 || (element[0].validity || {}).badInput);
+      if (element[0].tagName.toLowerCase() !== 'div') {
+        containerCtrl.setHasValue(element.val().length > 0 || (element[0].validity || {}).badInput);
+      } else {
+        containerCtrl.setHasValue(element[0].innerHTML.length > 0);
+      }
     }
 
     function setupTextarea() {
