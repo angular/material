@@ -17,17 +17,22 @@ md-bottom-sheet {
   border-top-width: 1px;
   border-top-style: solid;
 
-  transform: translate3d(0, $bottom-sheet-hidden-bottom-padding, 0);
-  transition: $swift-ease-out;
-  transition-property: transform;
+  transform: translate3d(0, 100%, 0);
+
+  &:not(.md-prepare-enter) {
+    transform: translate3d(0, $bottom-sheet-hidden-bottom-padding, 0);
+    transition: $swift-ease-out;
+    transition-property: transform;
+  }
 
   &.md-has-header {
     padding-top: 0;
   }
 
   &.ng-enter {
+    transition: $swift-ease-out;
+    transition-property: transform;
     opacity: 0;
-    transform: translate3d(0, 100%, 0);
   }
 
   &.ng-enter-active {
@@ -36,10 +41,13 @@ md-bottom-sheet {
     transform: translate3d(0, $bottom-sheet-hidden-bottom-padding, 0) !important;
   }
 
+  &.ng-leave {
+    transition: $swift-ease-in;
+    transition-property: transform;
+  }
 
   &.ng-leave-active {
     transform: translate3d(0, 100%, 0) !important;
-    transition: $swift-ease-in;
   }
 
   .md-subheader {

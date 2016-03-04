@@ -10,8 +10,8 @@ describe('$mdBottomSheet service', function () {
           parent: parent,
           clickOutsideToClose: true
         });
-
-        $material.flushOutstandingAnimations();
+        
+        $material.flushInterimElement();
 
         expect(parent.find('md-bottom-sheet').length).toBe(1);
 
@@ -35,7 +35,7 @@ describe('$mdBottomSheet service', function () {
           clickOutsideToClose: false
         });
 
-        $material.flushOutstandingAnimations();
+        $material.flushInterimElement();
 
         expect(parent.find('md-bottom-sheet').length).toBe(1);
 
@@ -59,7 +59,7 @@ describe('$mdBottomSheet service', function () {
           escapeToClose: true
         });
 
-        $material.flushOutstandingAnimations();
+        $material.flushInterimElement();
 
         expect(parent.find('md-bottom-sheet').length).toBe(1);
 
@@ -99,7 +99,7 @@ describe('$mdBottomSheet service', function () {
         });
 
         $rootScope.$apply();
-        $material.flushOutstandingAnimations();
+        $material.flushInterimElement();
 
         expect(parent.find('md-bottom-sheet').length).toBe(1);
 
