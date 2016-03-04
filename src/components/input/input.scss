@@ -201,8 +201,7 @@ md-input-container {
   //
   // ngMessage base styles - animations moved to input.js
   //
-  ng-messages, data-ng-messages, x-ng-messages,
-  [ng-messages], [data-ng-messages], [x-ng-messages] {
+  .md-input-messages-animation {
     position: relative;
     order: 4;
     overflow: hidden;
@@ -210,19 +209,14 @@ md-input-container {
 
     &.ng-enter {
       // Upon entering the DOM, messages should be hidden
-      ng-message, data-ng-message, x-ng-message,
-      [ng-message], [data-ng-message], [x-ng-message],
-      [ng-message-exp], [data-ng-message-exp], [x-ng-message-exp] {
+      .md-input-message-animation {
         opacity: 0;
         margin-top: -100px;
       }
     }
   }
 
-  ng-message, data-ng-message, x-ng-message,
-  [ng-message], [data-ng-message], [x-ng-message],
-  [ng-message-exp], [data-ng-message-exp], [x-ng-message-exp],
-  .md-char-counter {
+  .md-input-message-animation, .md-char-counter {
     font-size: $input-error-font-size;
     line-height: $input-error-line-height;
     overflow: hidden;

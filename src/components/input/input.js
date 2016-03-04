@@ -822,8 +822,6 @@ function getInputElement(element) {
 
 function getMessagesElement(element) {
   var input = getInputElement(element);
-  var selector = 'ng-messages,data-ng-messages,x-ng-messages,' +
-    '[ng-messages],[data-ng-messages],[x-ng-messages]';
 
-  return angular.element(input[0].querySelector(selector));
+  return angular.element(input[0].querySelector('.md-input-messages-animation'));
 }
