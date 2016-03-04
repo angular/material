@@ -175,7 +175,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
         options.restoreScroll = $mdUtil.disableScrollAround(bottomSheet.element, options.parent);
       }
 
-      return $animate.enter(bottomSheet.element, options.parent)
+      return $animate.enter(bottomSheet.element, options.parent, backdrop)
         .then(function() {
           var focusable = $mdUtil.findFocusTarget(element) || angular.element(
             element[0].querySelector('button') ||
@@ -190,7 +190,13 @@ function MdBottomSheetProvider($$interimElementProvider) {
                 $mdUtil.nextTick($mdBottomSheet.cancel,true);
               }
             };
+
             $rootElement.on('keyup', options.rootElementKeyupCallback);
+
+            // Make backdrop focusable, because otherwise the focus will be always redirected to
+            // an element outside of the $rootElement, and this will prevent the keyup event to
+            // be triggered.
+            backdrop[0].tabIndex = -1;
           }
         });
 
