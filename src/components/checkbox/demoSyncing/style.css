@@ -1,9 +1,6 @@
 .checkboxDemo1 div {
   clear: both;
 }
-.checkboxDemo1 md-checkbox {
-  float: left;
-}
 legend {
   color: #3F51B5;
 }

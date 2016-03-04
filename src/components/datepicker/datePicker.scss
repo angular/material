@@ -137,7 +137,7 @@ $md-date-arrow-size: 5px;
   top: 0;
 
   // TODO(jelbourn): This position isn't great on all platforms.
-  transform: translateY(-25%) translateX(45%);
+  @include rtl(transform, translateY(-25%) translateX(45%), translateY(-25%) translateX(-45%));
 }
 
 // Need crazy specificity to override .md-button.md-icon-button.

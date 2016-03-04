@@ -114,6 +114,7 @@
 @mixin rtl-prop($ltr-prop, $rtl-prop, $value) {
   #{$ltr-prop}: $value;
   [dir=rtl] & {
+    #{$ltr-prop}: auto;
     #{$rtl-prop}: $value;
   }
 }
