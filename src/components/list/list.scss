@@ -201,7 +201,7 @@ md-list-item {
     &[md-inset] {
       @include rtl-prop(left, right, $list-item-inset-divider-offset);
       width: calc(100% - #{$list-item-inset-divider-offset});
-      margin: 0;
+      margin: 0 !important;
     }
   }
 
