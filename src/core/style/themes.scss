@@ -1,0 +1,8 @@
+/*  Only used with Theme processes */
+
+html, body {
+  &.md-THEME_NAME-theme {
+    color: '{{primary-color}}';
+    background-color: '{{background-50}}';
+  }
+}

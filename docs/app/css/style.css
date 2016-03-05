@@ -544,11 +544,6 @@ md-tabs.demo-source-tabs .active md-tab-label {
   flex: 1 1 0%;
 }
 
-md-content.md-default-theme, md-content {
-  background-color: white;
-}
-
-
 .demo-content > div[layout-fill] {
   min-height: 448px;
 }
