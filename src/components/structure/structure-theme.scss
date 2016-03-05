@@ -1,0 +1,6 @@
+html, body {
+  &.md-THEME_NAME-theme {
+    color: '{{foreground-color}}';
+    background-color: '{{background-color}}';
+  }
+}
