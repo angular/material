@@ -192,7 +192,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
 
         // Check for a secondary item and move it outside
         if ( secondaryItem && (
-                secondaryItem.hasAttribute('ng-click') ||
+                (secondaryItem.hasAttribute('ng-click') || secondaryItem.hasAttribute('ui-sref')) ||
                 ( tAttrs.ngClick &&
                 isProxiedElement(secondaryItem) )
             )) {
