@@ -3,7 +3,6 @@ md-input-container.md-THEME_NAME-theme {
     @include input-placeholder-color('{{foreground-3}}');
     color: '{{foreground-1}}';
     border-color: '{{foreground-4}}';
-    text-shadow: '{{foreground-shadow}}';
   }
 
   > md-icon {
@@ -12,7 +11,6 @@ md-input-container.md-THEME_NAME-theme {
 
   label,
   ._md-placeholder {
-    text-shadow: '{{foreground-shadow}}';
     color: '{{foreground-3}}';
   }
 
