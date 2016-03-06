@@ -1,4 +1,4 @@
-describe('$mdCompiler service', function() {
+fdescribe('$mdCompiler service', function() {
   beforeEach(module('material.core'));
 
   function compile(options) {
@@ -15,12 +15,13 @@ describe('$mdCompiler service', function() {
   describe('setup', function() {
 
     it('element should use templateUrl', inject(function($templateCache) {
-      var tpl = 'hola';
+      var tpl = '<span>hola</span>';
       $templateCache.put('template.html', tpl);
       var data = compile({
         templateUrl: 'template.html'
       });
-      expect(data.element.html()).toBe(tpl);
+
+      expect(data.element.html()).toBe('hola');
     }));
 
     it('element should use template', function() {
@@ -28,7 +29,11 @@ describe('$mdCompiler service', function() {
       var data = compile({
         template: tpl
       });
-      expect(data.element.html()).toBe(tpl);
+      
+      // .html() returns the “inner” HTML
+      // but  inner HTML of "hello" is `undefined`
+      // so use .text()
+      expect(data.element.text()).toBe(tpl);
     });
 
     it('should support a custom element', function() {
@@ -43,7 +48,7 @@ describe('$mdCompiler service', function() {
       var data = compile({
         template: tpl
       });
-      expect(data.element.html()).toBe('hello');
+      expect(data.element.text()).toBe('hello');
     });
 
     it('transformTemplate should work with template', function() {
@@ -51,7 +56,7 @@ describe('$mdCompiler service', function() {
         template: 'world',
         transformTemplate: function(tpl) { return 'hello ' + tpl; }
       });
-      expect(data.element.html()).toBe('hello world');
+      expect(data.element.text()).toBe('hello world');
     });
 
     it('transformTemplate receives the options', function() {
@@ -60,7 +65,7 @@ describe('$mdCompiler service', function() {
         someArg: 'foo',
         transformTemplate: function(tpl, options) { return 'hello ' + tpl + ': ' + options.someArg; }
       });
-      expect(data.element.html()).toBe('hello world: foo');
+      expect(data.element.text()).toBe('hello world: foo');
     });
 
     describe('with resolve and locals options', function() {
