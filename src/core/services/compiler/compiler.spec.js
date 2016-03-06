@@ -1,4 +1,4 @@
-fdescribe('$mdCompiler service', function() {
+describe('$mdCompiler service', function() {
   beforeEach(module('material.core'));
 
   function compile(options) {
