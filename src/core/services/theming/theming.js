@@ -473,7 +473,7 @@ function parseRules(theme, colorType, rules) {
 var rulesByType = {};
 
 // Generate our themes at run time given the state of THEMES and PALETTES
-function generateAllThemes($injector) {
+function generateAllThemes($injector, $mdTheming) {
   var head = document.head;
   var firstChild = head ? head.firstElementChild : null;
   var themeCss = $injector.has('$MD_THEME_CSS') ? $injector.get('$MD_THEME_CSS') : '';
@@ -528,7 +528,7 @@ function generateAllThemes($injector) {
   if (generateOnDemand) return;
 
   angular.forEach(THEMES, function(theme) {
-    if (!GENERATED[theme.name]) {
+    if (!GENERATED[theme.name] && !(theme.name !== $mdTheming.defaultTheme() && theme.name === 'default')) {
       generateTheme(theme.name, nonce);
     }
   });
