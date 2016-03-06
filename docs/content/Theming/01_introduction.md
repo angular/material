@@ -68,5 +68,6 @@ Valid color intentions in Angular Material include:
 
 ### Themes
 
-A theme is a configuration of palettes used for specific color intentions. A
-theme also specifies a background color palette to be used for the application.
+A theme is a configuration of palettes used for specific color intentions. 
+Themes also specify a background color palette, which can be used for the application.
+The background palette will be always applied to the `md-content` directive.
