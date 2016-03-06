@@ -8,7 +8,7 @@ var ITEM_HEIGHT   = 41,
     INPUT_PADDING = 2; // Padding provided by `md-input-container`
 
 function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming, $window,
-                             $animate, $rootElement, $attrs, $q) {
+                             $animate, $rootElement, $attrs, $q, $mdComponentRegistry) {
   //-- private variables
   var ctrl                 = this,
       itemParts            = $scope.itemsExpr.split(/ in /i),
@@ -17,6 +17,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       cache                = {},
       noBlur               = false,
       selectedItemWatchers = [],
+      removeFromRegistry   = null,
       hasFocus             = false,
       lastCount            = 0,
       promiseFetch         = false;
@@ -64,6 +65,17 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     $mdUtil.initOptionalProperties($scope, $attrs, { searchText: null, selectedItem: null });
     $mdTheming($element);
     configureWatchers();
+
+    if ($scope.componentId) {
+      removeFromRegistry = $mdComponentRegistry.register({
+        // Restricted API interface for the component registry.
+        // We don't want to provide the whole controller as API.
+        clearCache: function() {
+          cache = [];
+        }
+      }, $scope.componentId);
+    }
+
     $mdUtil.nextTick(function () {
       gatherElements();
       moveDropdown();
@@ -179,6 +191,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     if(!ctrl.hidden) {
       $mdUtil.enableScrolling();
     }
+
+    // Unregister the instance from the $mdComponentRegistry.
+    removeFromRegistry && removeFromRegistry();
 
     angular.element($window).off('resize', positionDropdown);
     if ( elements ){

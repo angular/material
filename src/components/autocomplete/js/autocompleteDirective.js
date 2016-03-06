@@ -35,6 +35,7 @@ angular
  *
  * @param {expression} md-items An expression in the format of `item in items` to iterate over
  *     matches for your search.
+ * @param {string=} md-component-id componentId to use with $mdAutocomplete service.
  * @param {expression=} md-selected-item-change An expression to be run each time a new item is
  *     selected
  * @param {expression=} md-search-text-change An expression to be run each time the search text
@@ -133,6 +134,7 @@ function MdAutocomplete () {
       inputMinlength:   '@mdInputMinlength',
       inputMaxlength:   '@mdInputMaxlength',
       searchText:       '=?mdSearchText',
+      componentId:      '@?mdComponentId',
       selectedItem:     '=?mdSelectedItem',
       itemsExpr:        '@mdItems',
       itemText:         '&mdItemText',
