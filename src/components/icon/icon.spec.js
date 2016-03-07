@@ -464,8 +464,14 @@ describe('mdIcon service', function() {
     });
   });
 
+
   function updateDefaults(svg) {
     svg = angular.element(svg)[0];
+
+    svg.removeAttribute('id');
+    angular.forEach(svg.querySelectorAll('[id]'), function(item) {
+      item.removeAttribute('id');
+    });
 
     angular.forEach({
       'xmlns' : 'http://www.w3.org/2000/svg',

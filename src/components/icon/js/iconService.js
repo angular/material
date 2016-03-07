@@ -429,15 +429,9 @@
        var elem = icon.element;
        elem.removeAttribute('id');
 
-       var children = elem.childNodes;
-
-       for (var i=0; i<children.length;i++) {
-         var child = children[i];
-         if(child.nodeName==='path') {
-           child.removeAttribute('id');
-         }
-
-       }
+       angular.forEach(elem.querySelectorAll('[id]'), function(item) {
+         item.removeAttribute('id');
+       });
 
        iconCache[id] = icon;
 
