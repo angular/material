@@ -29,7 +29,7 @@ describe('$mdCompiler service', function() {
       var data = compile({
         template: tpl
       });
-      
+
       // .html() returns the “inner” HTML
       // but  inner HTML of "hello" is `undefined`
       // so use .text()
@@ -109,7 +109,7 @@ describe('$mdCompiler service', function() {
 
       it('should compile with scope', inject(function($rootScope) {
         var data = compile({
-          template: 'hello'
+          template: '<span>hello</span>'
         });
         var scope = $rootScope.$new();
         data.link(scope);
@@ -118,7 +118,7 @@ describe('$mdCompiler service', function() {
 
       it('should compile with controller & locals', inject(function($rootScope) {
         var data = compile({
-          template: 'hello',
+          template: '<span>hello</span>',
           locals: {
             one: 1
           },
@@ -134,7 +134,7 @@ describe('$mdCompiler service', function() {
 
       it('should compile with controllerAs', inject(function($rootScope) {
         var data = compile({
-          template: 'hello',
+          template: '<span>hello</span>',
           controller: function Ctrl() {},
           controllerAs: 'myControllerAs'
         });
