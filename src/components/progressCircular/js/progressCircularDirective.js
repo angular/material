@@ -91,7 +91,7 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdUti
     }
   };
 
-  function MdProgressCircularLink(scope, element) {
+  function MdProgressCircularLink(scope, element, attrs) {
     var svg = angular.element(element[0].querySelector('svg'));
     var path = angular.element(element[0].querySelector('path'));
     var startIndeterminate = $mdProgressCircular.startIndeterminate;
@@ -104,21 +104,20 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdUti
       var mode = newValues[1];
 
       if (mode !== MODE_DETERMINATE && mode !== MODE_INDETERMINATE) {
-        cleanupIndeterminateAnimation();
-        element.addClass('ng-hide');
-      } else {
-        element.removeClass('ng-hide');
-
-        if (mode === MODE_INDETERMINATE) {
-          startIndeterminateAnimation();
-        } else {
-          var newValue = clamp(newValues[0]);
-
-          cleanupIndeterminateAnimation();
-          element.attr('aria-valuenow', newValue);
-          renderCircle(clamp(oldValues[0]), newValue);
-        }
+        mode = MODE_INDETERMINATE;
+        attrs.$set('mdMode', mode);
       }
+
+      if (mode === MODE_INDETERMINATE) {
+        startIndeterminateAnimation();
+      } else {
+        var newValue = clamp(newValues[0]);
+
+        cleanupIndeterminateAnimation();
+        element.attr('aria-valuenow', newValue);
+        renderCircle(clamp(oldValues[0]), newValue);
+      }
+
     });
 
     // This is in a separate watch in order to avoid layout, unless
