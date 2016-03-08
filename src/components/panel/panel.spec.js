@@ -1,9 +1,10 @@
-describe('$mdPanel', function() {
+fdescribe('$mdPanel', function() {
   var $mdPanel, $rootScope, $rootEl, $templateCache, $q;
   var panelRef;
   var attachedElements = [];
   var PANEL_WRAPPER_CLASS = '.md-panel-outer-wrapper';
   var PANEL_EL = '.md-panel';
+  var HIDDEN_CLASS = '_md-panel-hidden';
 
   /**
    * @param {!angular.$injector} $injector
@@ -35,35 +36,6 @@ describe('$mdPanel', function() {
     panelRef && panelRef.close();
   });
 
-  it('should create a basic panel', function() {
-    var openResolved = false;
-    var closeResolved = false;
-    var config = {};
-
-    panelRef = $mdPanel.create(config);
-
-    expect(panelRef.id).toBeDefined();
-    expect(panelRef.open).toBeOfType('function');
-    expect(panelRef.close).toBeOfType('function');
-    expect(panelRef.isOpen).toEqual(false);
-
-    panelRef.open().then(function() {
-      openResolved = true;
-    });
-    $rootScope.$apply();
-
-    expect(openResolved).toBe(true);
-    expect(panelRef.isOpen).toEqual(true);
-
-    panelRef.close().then(function() {
-      closeResolved = true;
-    });
-    $rootScope.$apply();
-
-    expect(closeResolved).toBe(true);
-    expect(panelRef.isOpen).toEqual(false);
-  });
-
   it('should create and open a basic panel', function() {
     var template = '<div>Hello World!</div>';
     var config = { template: template };
@@ -71,12 +43,12 @@ describe('$mdPanel', function() {
     openPanel(config);
 
     expect(PANEL_EL).toExist();
-    expect(panelRef.isOpen).toEqual(true);
+    expect(panelRef.isAttached).toEqual(true);
 
     closePanel();
 
     expect(PANEL_EL).not.toExist();
-    expect(panelRef.isOpen).toEqual(false);
+    expect(panelRef.isAttached).toEqual(false);
   });
 
   it('should add and remove a panel from the DOM', function() {
@@ -94,6 +66,155 @@ describe('$mdPanel', function() {
     closePanel();
 
     expect(PANEL_EL).not.toExist();
+  });
+
+  it('should hide and show a panel in the DOM', function() {
+    var template = '<div>Hello World!</div>';
+    var config = { template: template };
+
+    openPanel(config);
+
+    expect(PANEL_EL).toExist();
+    expect(PANEL_WRAPPER_CLASS).not.toHaveClass(HIDDEN_CLASS);
+
+    hidePanel();
+
+    expect(PANEL_EL).toExist();
+    expect(PANEL_WRAPPER_CLASS).toHaveClass(HIDDEN_CLASS);
+
+    showPanel();
+
+    expect(PANEL_EL).toExist();
+    expect(PANEL_WRAPPER_CLASS).not.toHaveClass(HIDDEN_CLASS);
+  });
+
+  describe('promises logic:', function() {
+    var config;
+
+    beforeEach(function() {
+      config = {};
+
+      panelRef = $mdPanel.create(config);
+      expect(panelRef.isAttached).toEqual(false);
+    });
+
+    it('should resolve when opening/closing', function () {
+      var openResolved = false;
+      var closeResolved = false;
+
+      expect(panelRef.id).toBeDefined();
+      expect(panelRef.open).toBeOfType('function');
+      expect(panelRef.close).toBeOfType('function');
+
+      panelRef.open().then(function () {
+        openResolved = true;
+      });
+      $rootScope.$apply();
+
+      expect(openResolved).toBe(true);
+      expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
+      expect(panelRef.isAttached).toEqual(true);
+
+      panelRef.close().then(function () {
+        closeResolved = true;
+      });
+      $rootScope.$apply();
+
+      expect(closeResolved).toBe(true);
+      expect(panelRef.isAttached).toEqual(false);
+    });
+
+    it('should reject on create when opening', function () {
+      var openRejected = false;
+
+      panelRef._createPanel = function() {
+        return panelRef._$q.reject();
+      };
+
+      panelRef.open().then(function() {}, function () {
+        openRejected = true;
+      });
+      $rootScope.$apply();
+
+      expect(openRejected).toBe(true);
+      expect(panelRef.isAttached).toEqual(false);
+    });
+
+    it('should reject on attachOnly when opening', function () {
+      var openRejected = false;
+
+      panelRef.attachOnly = function() {
+        return panelRef._$q.reject();
+      };
+
+      panelRef.open().then(function() {}, function () {
+        openRejected = true;
+      });
+      $rootScope.$apply();
+
+      expect(openRejected).toBe(true);
+      expect(panelRef.isAttached).toEqual(false);
+    });
+
+    it('should reject on setVisibility when opening', function () {
+      var openRejected = false;
+
+      panelRef.setVisibility = function() {
+        return panelRef._$q.reject();
+      };
+
+      panelRef.open().then(function() {}, function () {
+        openRejected = true;
+      });
+      $rootScope.$apply();
+
+      expect(openRejected).toBe(true);
+      expect(panelRef.isAttached).toEqual(true);
+    });
+
+    it('should reject on hide when closing', function () {
+      var closeRejected = false;
+
+      panelRef.open();
+      $rootScope.$apply();
+
+      expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
+      expect(panelRef.isAttached).toEqual(true);
+
+      panelRef.setVisibility = function() {
+        return panelRef._$q.reject();
+      };
+
+      panelRef.close().then(function() {}, function () {
+        closeRejected = true;
+      });
+      $rootScope.$apply();
+
+      expect(closeRejected).toBe(true);
+      expect(panelRef.isAttached).toEqual(true);
+    });
+
+    it('should reject on detach when closing', function () {
+      var closeRejected = false;
+
+      panelRef.open();
+      $rootScope.$apply();
+
+      expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
+      expect(panelRef.isAttached).toEqual(true);
+
+      panelRef.detach = function() {
+        return panelRef._$q.reject();
+      };
+
+      panelRef.close().then(function() {}, function () {
+        closeRejected = true;
+      });
+      $rootScope.$apply();
+
+      expect(closeRejected).toBe(true);
+      expect(panelRef.isAttached).toEqual(true);
+    });
   });
 
   describe('config options:', function() {
@@ -452,6 +573,16 @@ describe('$mdPanel', function() {
    */
   function closePanel() {
     panelRef && panelRef.close();
+    $rootScope.$apply();
+  }
+
+  function showPanel() {
+    panelRef && panelRef.setVisibility(true);
+    $rootScope.$apply();
+  }
+
+  function hidePanel() {
+    panelRef && panelRef.setVisibility(false);
     $rootScope.$apply();
   }
 });
