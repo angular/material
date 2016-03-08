@@ -144,7 +144,7 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdUti
 
     function renderCircle(animateFrom, animateTo, easing, duration, rotation) {
       var id = ++lastAnimationId;
-      var startTime = getTimestamp();
+      var startTime = $mdUtil.now();
       var changeInValue = animateTo - animateFrom;
       var diameter = getSize(scope.mdDiameter);
       var pathDiameter = diameter - getStroke(diameter);
@@ -156,7 +156,7 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdUti
         path.attr('d', getSvgArc(animateTo, diameter, pathDiameter, rotation));
       } else {
         $$rAF(function animation(now) {
-          var currentTime = (now || getTimestamp()) - startTime;
+          var currentTime = $window.Math.min((now || $mdUtil.now()) - startTime, animationDuration);
 
           path.attr('d', getSvgArc(
             ease(currentTime, animateFrom, changeInValue, animationDuration),
@@ -192,7 +192,7 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdUti
 
     function startIndeterminateAnimation() {
       if (!interval) {
-        var startTime = getTimestamp();
+        var startTime = $mdUtil.now();
         var animationDuration = $mdProgressCircular.rotationDurationIndeterminate;
         var radius = getSize(scope.mdDiameter) / 2;
 
@@ -203,7 +203,7 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdUti
         // with CSS keyframes, however IE11 seems to have problems centering the rotation
         // which causes a wobble in the indeterminate animation.
         $$rAF(function animation(now) {
-          var timestamp = now || getTimestamp();
+          var timestamp = now || $mdUtil.now();
           var currentTime = timestamp - startTime;
           var rotation = $mdProgressCircular.easingPresets.linearEase(currentTime, 0, 360, animationDuration);
 
@@ -327,13 +327,5 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdUti
    */
   function getStroke(diameter) {
     return $mdProgressCircular.strokeWidth / 100 * diameter;
-  }
-
-  /**
-   * Retrieves a timestamp for timing animations.
-   */
-  function getTimestamp() {
-    var perf = $window.performance;
-    return perf && perf.now && perf.now() || +new $window.Date();
   }
 }
