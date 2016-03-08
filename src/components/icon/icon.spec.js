@@ -478,6 +478,41 @@ describe('mdIcon service', function() {
       });
     });
 
+    describe('icon is cached', function() {
+
+      it('should prevent duplicate ids', function() {
+        var firstId;
+
+        $mdIcon('android.svg').then(function(el) {
+          // First child is in our case always the node with an id.
+          firstId = el.firstChild.id;
+        });
+
+        $scope.$digest();
+
+        $mdIcon('android.svg').then(function(el) {
+          expect(el.firstChild.id).not.toBe(firstId);
+        });
+
+        $scope.$digest();
+
+      });
+
+      it('should suffix duplicated ids', function() {
+        // Just request the icon to be stored in the cache.
+        $mdIcon('android.svg');
+
+        $scope.$digest();
+
+        $mdIcon('android.svg').then(function(el) {
+          expect(el.firstChild.id).toMatch(/.+_cache[0-9]+/g);
+        });
+
+        $scope.$digest();
+      });
+
+    });
+
     describe('icon group is not found', function() {
       it('should log Error', function() {
         var msg;
@@ -508,11 +543,6 @@ describe('mdIcon service', function() {
 
   function updateDefaults(svg) {
     svg = angular.element(svg)[0];
-
-    svg.removeAttribute('id');
-    angular.forEach(svg.querySelectorAll('[id]'), function(item) {
-      item.removeAttribute('id');
-    });
 
     angular.forEach({
       'xmlns' : 'http://www.w3.org/2000/svg',

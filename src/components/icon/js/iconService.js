@@ -316,9 +316,9 @@
 
    },
 
-   $get : ['$http', '$q', '$log', '$templateCache', function($http, $q, $log, $templateCache) {
+   $get : ['$http', '$q', '$log', '$templateCache', '$mdUtil', function($http, $q, $log, $templateCache, $mdUtil) {
      this.preloadIcons($templateCache);
-     return MdIconService(config, $http, $q, $log, $templateCache);
+     return MdIconService(config, $http, $q, $log, $templateCache, $mdUtil);
    }]
  };
 
@@ -373,7 +373,7 @@
   */
 
   /* @ngInject */
- function MdIconService(config, $http, $q, $log, $templateCache) {
+ function MdIconService(config, $http, $q, $log, $templateCache, $mdUtil) {
    var iconCache = {};
    var urlRegex = /[-\w@:%\+.~#?&//=]{2,}\.[a-z]{2,4}\b(\/[-\w@:%\+.~#?&//=]*)?/i;
    var dataUrlRegex = /^data:image\/svg\+xml[\s*;\w\-\=]*?(base64)?,(.*)$/i;
@@ -393,7 +393,7 @@
      // If already loaded and cached, use a clone of the cached icon.
      // Otherwise either load by URL, or lookup in the registry and then load by URL, and cache.
 
-     if ( iconCache[id] ) return $q.when( iconCache[id].clone() );
+     if ( iconCache[id] ) return $q.when( transformClone(iconCache[id]) );
      if ( urlRegex.test(id) || dataUrlRegex.test(id) ) return loadByURL(id).then( cacheIcon(id) );
      if ( id.indexOf(':') == -1 ) id = '$default:' + id;
 
@@ -418,24 +418,28 @@
       return result;
    }
 
+   function transformClone(cacheElement) {
+     var clone = cacheElement.clone();
+     var cacheSuffix = '_cache' + $mdUtil.nextUid();
+
+     // We need to modify for each cached icon the id attributes.
+     // This is needed because SVG id's are treated as normal DOM ids
+     // and should not have a duplicated id.
+     if (clone.id) clone.id += cacheSuffix;
+     angular.forEach(clone.querySelectorAll('[id]'), function (item) {
+       item.id += cacheSuffix;
+     });
+
+     return clone;
+   }
+
    /**
     * Prepare and cache the loaded icon for the specified `id`
     */
    function cacheIcon( id ) {
 
-     return function updateCache( _icon ) {
-       var icon = isIcon(_icon) ? _icon : new Icon(_icon, config[id]);
-
-       //clear id attributes to prevent aria issues
-       var elem = icon.element;
-       elem.removeAttribute('id');
-
-       angular.forEach(elem.querySelectorAll('[id]'), function(item) {
-         item.removeAttribute('id');
-       });
-
-       iconCache[id] = icon;
-
+     return function updateCache( icon ) {
+       iconCache[id] = isIcon(icon) ? icon : new Icon(icon, config[id]);
 
        return iconCache[id].clone();
      };
