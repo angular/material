@@ -429,6 +429,7 @@ a.docs-logo {
 }
 .md-breadcrumb md-icon {
   color: #666 !important;
+  fill: #666 !important;
 }
 .md-breadcrumb-page {
   display: inline-block;
@@ -542,6 +543,12 @@ md-tabs.demo-source-tabs .active md-tab-label {
   -ms-flex: 1 1 0%;
   flex: 1 1 0%;
 }
+
+md-content.md-default-theme, md-content {
+  background-color: white;
+}
+
+
 .demo-content > div[layout-fill] {
   min-height: 448px;
 }
