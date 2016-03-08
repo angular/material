@@ -34,6 +34,9 @@ describe('$mdPanel', function() {
     attachedElements = [];
 
     panelRef && panelRef.close();
+
+    // TODO(ErinCoughlan) - Remove when close destroys.
+    panelRef = null;
   });
 
   it('should create and open a basic panel', function() {
@@ -269,6 +272,78 @@ describe('$mdPanel', function() {
       expect(document.querySelector(PANEL_WRAPPER_CLASS).style.zIndex)
           .toEqual(zIndex);
     });
+
+    it('should not close when clickOutsideToClose set to false', function() {
+      openPanel();
+
+      var container = panelRef._panelContainer;
+      container.triggerHandler({
+        type: 'mousedown',
+        target: container[0]
+      });
+      container.triggerHandler({
+        type: 'mouseup',
+        target: container[0]
+      });
+      $rootScope.$apply();
+
+      expect(PANEL_EL).toExist();
+    });
+
+    it('should close when clickOutsideToClose set to true', function() {
+      var config = {
+        clickOutsideToClose: true
+      };
+
+      openPanel(config);
+
+      var container = panelRef._panelContainer;
+      container.triggerHandler({
+        type: 'mousedown',
+        target: container[0]
+      });
+      container.triggerHandler({
+        type: 'mouseup',
+        target: container[0]
+      });
+      $rootScope.$apply();
+
+      // TODO(ErinCoughlan) - Add this when destroy is added.
+      // expect(panelRef).toBeUndefined();
+      expect(PANEL_EL).not.toExist();
+    });
+
+    it('should not close when escapeToClose set to false', inject(function($mdConstant) {
+      openPanel();
+
+      var container = panelRef._panelContainer;
+      container.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.ESCAPE
+      });
+      $rootScope.$apply();
+
+      expect(PANEL_EL).toExist();
+    }));
+
+    it('should close when escapeToClose set to true', inject(function($mdConstant) {
+      var config = {
+        escapeToClose: true
+      };
+
+      openPanel(config);
+
+      var container = panelRef._panelContainer;
+      container.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.ESCAPE
+      });
+      $rootScope.$apply();
+
+      // TODO(ErinCoughlan) - Add this when destroy is added.
+      // expect(panelRef).toBeUndefined();
+      expect(PANEL_EL).not.toExist();
+    }));
   });
 
   describe('component logic: ', function() {
@@ -546,8 +621,10 @@ describe('$mdPanel', function() {
   function openPanel(opt_config) {
     if (opt_config) {
       panelRef = $mdPanel.open(opt_config);
+    } else if (panelRef) {
+      panelRef.open();
     } else {
-      panelRef && panelRef.open();
+      panelRef = $mdPanel.open();
     }
     $rootScope.$apply();
   }
