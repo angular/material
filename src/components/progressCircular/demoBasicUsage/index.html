@@ -27,11 +27,11 @@
   </p>
 
   <div layout="row" layout-sm="column" layout-align="space-around">
-    <md-progress-circular class="md-hue-2" md-mode="{{vm.modes[0]}}" md-diameter="20px"></md-progress-circular>
-    <md-progress-circular class="md-accent" md-mode="{{vm.modes[1]}}" md-diameter="40"></md-progress-circular>
-    <md-progress-circular class="md-accent md-hue-1" md-mode="{{vm.modes[2]}}" md-diameter="60"></md-progress-circular>
-    <md-progress-circular class="md-warn md-hue-3" md-mode="{{vm.modes[3]}}" md-diameter="70"></md-progress-circular>
-    <md-progress-circular md-mode="{{vm.modes[4]}}" md-diameter="96"></md-progress-circular>
+    <md-progress-circular class="md-hue-2" ng-show="vm.showList[0]" md-diameter="20px"></md-progress-circular>
+    <md-progress-circular class="md-accent" ng-show="vm.showList[1]" md-diameter="40"></md-progress-circular>
+    <md-progress-circular class="md-accent md-hue-1" ng-show="vm.showList[2]" md-diameter="60"></md-progress-circular>
+    <md-progress-circular class="md-warn md-hue-3" ng-show="vm.showList[3]" md-diameter="70"></md-progress-circular>
+    <md-progress-circular ng-show="vm.showList[4]" md-diameter="96"></md-progress-circular>
   </div>
 
   <hr ng-class="{'visible' : vm.activated}">
@@ -47,11 +47,5 @@
       <h5>On</h5>
     </md-switch>
   </div>
-
-  <p class="small">
-    Note: With above switch -- that simply clears the md-mode in each <code>&lt;md-progress-linear md-mode=""&gt;</code>
-    element --
-    developers can easily disable the animations and hide their progress indicators.
-  </p>
 
 </div>

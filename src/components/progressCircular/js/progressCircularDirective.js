@@ -18,8 +18,8 @@
  *
  * @param {string} md-mode Select from one of two modes: **'determinate'** and **'indeterminate'**.
  *
- * Note: if the `md-mode` value is set as undefined or specified as not 1 of the two (2) valid modes, then `.ng-hide`
- * will be auto-applied as a style to the component.
+ * Note: if the `md-mode` value is set as undefined or specified as not 1 of the two (2) valid modes, then **'indeterminate'**
+ * will be auto-applied as the mode.
  *
  * Note: if not configured, the `md-mode="indeterminate"` will be auto injected as an attribute.
  * If `value=""` is also specified, however, then `md-mode="determinate"` would be auto-injected instead.
