@@ -108,26 +108,10 @@ angular
  *   - `position` - `{MdPanelPosition=}`: An MdPanelPosition object that
  *     specifies the alignment of the panel. For more information, see
  *     `MdPanelPosition`.
- *
- * TODO(ErinCoughlan): Add the following config options.
- *   - `groupName` - `{string=}`: Name of panel groups. This group name is
- *     used for configuring the number of open panels and identifying specific
- *     behaviors for groups. For instance, all tooltips will be identified
- *     using the same groupName.
- *   - `animation` - `{MdPanelAnimation=}`: An MdPanelAnimation object that
- *     specifies the animation of the panel. For more information, see
- *     `MdPanelAnimation`.
- *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop
- *     behind the panel. Defaults to false.
- *   - `escapeToClose` - `{boolean=}`: Whether the user can press escape to
- *     close the panel. Defaults to false.
  *   - `clickOutsideToClose` - `{boolean=}`: Whether the user can click
  *     outside the panel to close it. Defaults to false.
- *   - `disableParentScroll` - `{boolean=}`: Whether the user can scroll the
- *     page behind the panel. Defaults to false.
- *   - `fullScreen` - `{boolean=}`: Whether the panel should be full screen.
- *     Applies the class `.md-panel-fullscreen` to the panel on open. Defaults
- *     to false.
+ *   - `escapeToClose` - `{boolean=}`: Whether the user can press escape to
+ *     close the panel. Defaults to false.
  *   - `trapFocus` - `{boolean=}`: Whether focus should be trapped within the
  *     panel. If `trapFocus` is true, the user will not be able to interact
  *     with the rest of the page until the panel is dismissed. Defaults to
@@ -135,6 +119,22 @@ angular
  *   - `focusOnOpen` - `{boolean=}`: An option to override focus behavior on
  *     open. Only disable if focusing some other way, as focus management is
  *     required for panels to be accessible. Defaults to true.
+ *   - `fullscreen` - `{boolean=}`: Whether the panel should be full screen.
+ *     Applies the class `._md-panel-fullscreen` to the panel on open. Defaults
+ *     to false.
+ *   - `animation` - `{MdPanelAnimation=}`: An MdPanelAnimation object that
+ *     specifies the animation of the panel. For more information, see
+ *     `MdPanelAnimation`.
+ *
+ * TODO(ErinCoughlan): Add the following config options.
+ *   - `groupName` - `{string=}`: Name of panel groups. This group name is
+ *     used for configuring the number of open panels and identifying specific
+ *     behaviors for groups. For instance, all tooltips will be identified
+ *     using the same groupName.
+ *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop
+ *     behind the panel. Defaults to false.
+ *   - `disableParentScroll` - `{boolean=}`: Whether the user can scroll the
+ *     page behind the panel. Defaults to false.
  *
  * @returns {MdPanelRef} panelRef
  */
@@ -180,6 +180,17 @@ angular
  */
 
 
+/**
+ * @ngdoc method
+ * @name $mdPanel#newPanelAnimation
+ * @description
+ * Returns a new instance of the MdPanelAnimation object. Use this to create
+ * the animation config object.
+ *
+ * @returns {MdPanelAnimation} panelAnimation
+ */
+
+
 /*****************************************************************************
  *                                 MdPanelRef                                *
  *****************************************************************************/
@@ -196,12 +207,10 @@ angular
  *     when a panel was interacted with.
  *   - `config` - `{Object=}`: The entire config object that was used in
  *     create.
- *   - `isOpen` - `{boolean}`: Whether the panel is attached to the DOM.
- *     Visibility to the user does not factor into isOpen.
+ *   - `isAttached` - `{boolean}`: Whether the panel is attached to the DOM.
+ *     Visibility to the user does not factor into isAttached.
  *
  * TODO(ErinCoughlan): Add the following properties.
- *   - `isHidden` - `{boolean}`: Whether the panel is attached to the DOM, but
- *     not visible to the user.
  *   - `onDomAdded` - `{function=}`: Callback function used to announce when
  *     the panel is added to the DOM.
  *   - `onOpenComplete` - `{function=}`: Callback function used to announce
@@ -215,19 +224,96 @@ angular
  * @ngdoc method
  * @name MdPanelRef#open
  * @description
- * If the panel is not visible, opens an already created and configured panel.
+ * Attaches and shows the panel.
  *
- * @returns {angular.$q.Promise} A promise that is resolved when the panel is
- * closed.
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * opened.
  */
 
 /**
  * @ngdoc method
  * @name MdPanelRef#close
  * @description
- * If the panel is visible, closes the panel, resolving the promise that is
- * returned from `MdPanelRef#open`. This method destroys the reference to the
- * panel. In order to open the panel again, a new one must be created.
+ * Hides and detaches the panel. This method destroys the reference to the panel.
+ * In order to open the panel again, a new one must be created.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * closed.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#attachOnly
+ * @description
+ * Create the panel elements and attach them to the DOM. The panel will be
+ * hidden by default.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * attached.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#detach
+ * @description
+ * Removes the panel from the DOM. This will hide the panel before removing it.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * detached.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#show
+ * @description
+ * Shows the panel.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * shown and animations are completed.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#hide
+ * @description
+ * Hides the panel.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * hidden and animations are completed.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#addClass
+ * @description
+ * Adds a class to the panel. DO NOT use this to hide/show the panel.
+ *
+ * @param {string} newClass Class to be added.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#removeClass
+ * @description
+ * Removes a class from the panel. DO NOT use this to hide/show the panel.
+ *
+ * @param {string} oldClass Class to be removed.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#toggleClass
+ * @description
+ * Toggles a class on the panel. DO NOT use this to hide/show the panel.
+ *
+ * @param {string} toggleClass Class to be toggled.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#focusOnOpen
+ * @description
+ * Focuses the panel content if the focusOnOpen config value is true.
  */
 
 
@@ -384,12 +470,66 @@ angular
 
 
 /*****************************************************************************
+ *                               MdPanelAnimation                            *
+ *****************************************************************************/
+
+
+/**
+ * @ngdoc object
+ * @name MdPanelAnimation
+ * @description
+ * Animation configuration object. To use, create an MdPanelAnimation with the
+ * desired properties, then pass the object as part of $mdPanel creation.
+ *
+ * Example:
+ *
+ * var panelAnimation = new MdPanelAnimation()
+ *     .openFrom(myButtonEl)
+ *     .closeTo('.my-button')
+ *     .withAnimation('');
+ *
+ * $mdPanel.create({
+ *   animation: panelAnimation
+ * });
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelAnimation#openFrom
+ * @description
+ * Specifies where to start the open animation. `openFrom` accepts a
+ * click event object, query selector, DOM element, or a Rect object that
+ * is used to determine the bounds. When passed a click event, the location
+ * of the click will be used as the position to start the animation.
+ *
+ * @param {string|!Element|!Event|!{top: number, left: number}}
+ * @returns {MdPanelAnimation}
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelAnimation#closeTo
+ * @description
+ * Specifies where to animate the dialog close. `closeTo` accepts a
+ * query selector, DOM element, or a Rect object that is used to determine
+ * the bounds.
+ *
+ * @param {string|!Element|!{top: number, left: number}}
+ * @returns {MdPanelAnimation}
+ */
+
+
+/*****************************************************************************
  *                                IMPLEMENTATION                             *
  *****************************************************************************/
 
 
 // Default z-index for the panel.
 var defaultZIndex = 80;
+var MD_PANEL_HIDDEN = '_md-panel-hidden';
+
+var FOCUS_TRAP_TEMPLATE = angular.element(
+    '<div class="_md-panel-focus-trap" tabindex="0"></div>');
 
 
 /**
@@ -407,8 +547,13 @@ function MdPanelService($rootElement, $rootScope, $injector) {
   this._defaultConfigOptions = {
     attachTo: $rootElement,
     bindToController: true,
+    clickOutsideToClose: false,
+    escapeToClose: false,
+    focusOnOpen: true,
+    fullscreen: false,
     scope: $rootScope.$new(true),
     transformTemplate: angular.bind(this, this.wrapTemplate_),
+    trapFocus: false,
     zIndex: defaultZIndex
   };
 
@@ -481,6 +626,17 @@ MdPanelService.prototype.newPanelPosition = function() {
 };
 
 
+/**
+ * Returns a new instance of the MdPanelAnimation. Use this to create the
+ * animation object.
+ *
+ * @returns {MdPanelAnimation}
+ */
+MdPanelService.prototype.newPanelAnimation = function() {
+  return new MdPanelAnimation();
+};
+
+
 /*****************************************************************************
  *                                 MdPanelRef                                *
  *****************************************************************************/
@@ -502,6 +658,15 @@ function MdPanelRef(config, $injector) {
   /** @private @const {!angular.$mdCompiler} */
   this._$mdCompiler = $injector.get('$mdCompiler');
 
+  /** @private @const */
+  this._$mdConstant = $injector.get('$mdConstant');
+
+  /** @private @const {!angular.$mdUtil} */
+  this._$mdUtil = $injector.get('$mdUtil');
+
+  /** @private @const {!angular.Scope} */
+  this._$rootScope = $injector.get('$rootScope');
+
 
   // Public variables.
   /**
@@ -511,31 +676,47 @@ function MdPanelRef(config, $injector) {
   this.id = config.id;
 
   /**
-   * Whether the panel is opened. This is synchronous. When open is called,
-   * isOpen is set to true. When close is called, isOpen is set to false.
+   * Whether the panel is attached. This is synchronous. When attach is called,
+   * isAttached is set to true. When detach is called, isAttached is set to
+   * false.
    * @type {boolean}
    */
-  this.isOpen = false;
+  this.isAttached = false;
 
 
   // Private variables.
   /** @private {!Object} */
   this._config = config;
 
-  /** @private {!angular.$q.promise|undefined} */
+  /** @private {!angular.$q.Promise|undefined} */
   this._openPromise;
 
-  /** @private {function(*)|undefined} */
-  this._openReject;
+  /** @private {!angular.$q.Promise|undefined} */
+  this._attachPromise;
 
-  /** @private {!angular.$q.promise|undefined} */
-  this._closePromise;
+  /** @private {!angular.$q.Promise|undefined} */
+  this._detachPromise;
+
+  /** @private {!angular.$q.Promise|undefined} */
+  this._showPromise;
+
+  /** @private {!angular.$q.Promise|undefined} */
+  this._hidePromise;
 
   /** @private {!angular.JQLite|undefined} */
   this._panelContainer;
 
   /** @private {!angular.JQLite|undefined} */
   this._panelEl;
+
+  /** @private {Array<function()>} */
+  this._removeListeners = [];
+  
+  /** @private {!angular.JQLite|undefined} */
+  this._topFocusTrap;
+
+  /** @private {!angular.JQLite|undefined} */
+  this._bottomFocusTrap;
 }
 
 
@@ -547,19 +728,23 @@ function MdPanelRef(config, $injector) {
  * is opened and animations finish.
  */
 MdPanelRef.prototype.open = function() {
-  if (!this.isOpen) {
-    this.isOpen = true;
-
-    var self = this;
-    this._openPromise = this._$q(function(resolve, reject) {
-      self._openReject = reject;
-      self._createPanel();
-      resolve(self);
-    });
+  if (this._openPromise) {
+    // Panel is already shown so re-use (already resolved) promise from when
+    // it was shown.
+    return this._openPromise;
   }
 
-  // If the panel is already open, re-use the (already resolved) promise from
-  // when it was opened.
+  // TODO(ErinCoughlan) - Cancel any in-progress actions.
+
+  var self = this;
+  this._openPromise = this._$q(function(resolve, reject) {
+    self.attachOnly().then(function() {
+      self.show().then(function() {
+        resolve(self);
+      }, reject);
+    }, reject);
+  });
+
   return this._openPromise;
 };
 
@@ -571,54 +756,244 @@ MdPanelRef.prototype.open = function() {
  * closed and animations finish.
  */
 MdPanelRef.prototype.close = function() {
-  if (this.isOpen) {
-    this.isOpen = false;
+  // TODO(ErinCoughlan) - Cancel any in-progress actions.
 
-    // TODO(ErinCoughlan) - Cancel any in-progress `opening`.
-
-    if (!this._closePromise) {
-      var self = this;
-      this._closePromise = this._$q(function(resolve, reject) {
-        // TODO(ErinCoughlan): Start the close animation.
-        self._panelContainer.remove();
+  var self = this;
+  return this._$q(function(resolve, reject) {
+    self.hide().then(function () {
+      self.detach().then(function() {
+        // TODO(ErinCoughlan) - Add destroy. This will make the code here different
+        // than just calling this.detach().
         resolve(self);
-      });
+      }, reject);
+    }, reject);
+  });
+};
 
-      this._closePromise.finally(function() {
-        // Clear for next open/close pairing.
-        self._closePromise = undefined;
-      });
-    }
+
+/**
+ * Attaches the panel. The panel will be hidden afterwards.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * attached.
+ */
+MdPanelRef.prototype.attachOnly = function() {
+  if (this.isAttached) {
+    return this._attachPromise;
   }
 
-  // If the panel is already closed, re-use the (already resolved) promise from
-  // when it was closed.
-  return this._closePromise;
+  // TODO(ErinCoughlan) - Cancel any in-progress actions.
+
+  var self = this;
+  this._attachPromise = this._$q(function(resolve, reject) {
+    self._createPanel().then(function() {
+      self.isAttached = true;
+      self._addEventListeners();
+      resolve(self);
+    }, reject);
+  });
+
+  return this._attachPromise;
+};
+
+
+/**
+ * Detaches the panel. Will hide the panel first if visible.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * detached.
+ */
+MdPanelRef.prototype.detach = function() {
+  if (!this.isAttached) {
+    this._detachPromise;
+  }
+
+  // TODO(ErinCoughlan) - Cancel any in-progress actions.
+
+  var self = this;
+  this._detachPromise = this._$q(function(resolve, reject) {
+    self.hide().then(function() {
+      self._removeEventListener();
+
+      // Remove the focus traps that we added earlier for keeping focus within the panel.
+      if (self._topFocusTrap && self._topFocusTrap.parentNode) {
+        self._topFocusTrap.parentNode.removeChild(self._topFocusTrap);
+      }
+
+      if (self._bottomFocusTrap && self._bottomFocusTrap.parentNode) {
+        self._bottomFocusTrap.parentNode.removeChild(self._bottomFocusTrap);
+      }
+
+      self._panelContainer.remove();
+      self.isAttached = false;
+      resolve(self);
+    }, reject);
+  });
+
+  return this._detachPromise;
+};
+
+
+/**
+ * Shows the panel.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * shown and animations finish.
+ */
+MdPanelRef.prototype.show = function() {
+  if (!this._panelContainer) {
+    return this._$q.reject(
+        'Panel does not exist yet. Call open() or attach().');
+  }
+
+  if (!this._panelContainer.hasClass(MD_PANEL_HIDDEN) && this._showPromise) {
+    return this._showPromise;
+  }
+
+  // TODO(ErinCoughlan) - Cancel any in-progress actions.
+
+  var self = this;
+  this._showPromise = this._$q(function(resolve, reject) {
+    try {
+      // TODO(KarenParker): Add show animation.
+      self.removeClass(MD_PANEL_HIDDEN);
+      // TODO(KarenParker): Chain this with animation when available.
+      self.focusOnOpen();
+      resolve(self);
+    } catch (e) {
+      reject(e.message);
+    }
+  });
+
+  return this._showPromise;
+};
+
+
+/**
+ * Hides the panel.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * hidden and animations finish.
+ */
+MdPanelRef.prototype.hide = function() {
+  if (!this._panelContainer) {
+    return this._$q.reject(
+        'Panel does not exist yet. Call open() or attach().');
+  }
+
+  if (this._panelContainer.hasClass(MD_PANEL_HIDDEN) && this._hidePromise) {
+    return this._hidePromise;
+  }
+
+  // TODO(ErinCoughlan) - Cancel any in-progress actions.
+
+  var self = this;
+  this._hidePromise = this._$q(function(resolve, reject) {
+    try {
+      // TODO(KarenParker): Add hide animation.
+      self.addClass(MD_PANEL_HIDDEN);
+      // TODO(KarenParker): Chain this with animation when available.
+      resolve(self);
+    } catch (e) {
+      reject(e.message);
+    }
+  });
+
+  return this._hidePromise;
+};
+
+
+/**
+ * Add a class to the panel. DO NOT use this to hide/show the panel.
+ *
+ * @param {string} newClass Class to be added.
+ */
+MdPanelRef.prototype.addClass = function(newClass) {
+  if (!this._panelContainer) {
+    throw new Error('Panel does not exist yet. Call open() or attach().');
+  }
+
+  if (!this._panelContainer.hasClass(newClass)) {
+    this._panelContainer.addClass(newClass);
+  }
+};
+
+
+/**
+ * Remove a class from the panel. DO NOT use this to hide/show the panel.
+ *
+ * @param {string} oldClass Class to be removed.
+ */
+MdPanelRef.prototype.removeClass = function(oldClass) {
+  if (!this._panelContainer) {
+    throw new Error('Panel does not exist yet. Call open() or attach().');
+  }
+
+  if (this._panelContainer.hasClass(oldClass)) {
+    this._panelContainer.removeClass(oldClass);
+  }
+};
+
+
+/**
+ * Toggle a class on the panel. DO NOT use this to hide/show the panel.
+ *
+ * @param {string} toggleClass The class to toggle.
+ */
+MdPanelRef.prototype.toggleClass = function(toggleClass) {
+  if (!this._panelContainer) {
+    throw new Error('Panel does not exist yet. Call open() or attach().');
+  }
+
+  this._panelContainer.toggleClass(toggleClass);
+};
+
+
+/**
+ * Focuses on the panel or the first focus target.
+ */
+MdPanelRef.prototype.focusOnOpen = function() {
+  if (this._config.focusOnOpen) {
+    // Wait a digest to guarantee md-autofocus has finished adding the class
+    // _md-autofocus, otherwise the focusable element isn't available to focus.
+    var self = this;
+    this._$rootScope.$applyAsync(function() {
+      var target = self._$mdUtil.findFocusTarget(self._panelEl) ||
+          self._panelEl;
+      target.focus();
+    });
+  }
 };
 
 
 /**
  * Creates a panel and adds it to the dom.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * created.
  * @private
  */
 MdPanelRef.prototype._createPanel = function() {
   var self = this;
-  this._$mdCompiler.compile(this._config)
-      .then(function(compileData) {
-        self._panelContainer = compileData.link(self._config.scope);
-        // TODO(ErinCoughlan): Start the open animation.
-        angular.element(self._config.attachTo).append(self._panelContainer);
+  return this._$q(function(resolve, reject) {
+    self._$mdCompiler.compile(self._config)
+        .then(function(compileData) {
+          self._panelContainer = compileData.link(self._config.scope);
+          angular.element(self._config.attachTo).append(self._panelContainer);
 
-        self._panelEl = angular.element(
-            self._panelContainer[0].querySelector('.md-panel'));
+          self._panelEl = angular.element(
+              self._panelContainer[0].querySelector('.md-panel'));
 
-        // Add a custom CSS class.
-        if (self._config['panelClass']) {
-          self._panelEl.addClass(self._config['panelClass']);
-        }
+          // Add a custom CSS class.
+          if (self._config['panelClass']) {
+            self._panelEl.addClass(self._config['panelClass']);
+          }
 
-        self._addStyles();
-      });
+          self._addStyles();
+          self._configureTrapFocus();
+          resolve(self);
+        }, reject);
+  });
 };
 
 
@@ -628,7 +1003,14 @@ MdPanelRef.prototype._createPanel = function() {
  */
 MdPanelRef.prototype._addStyles = function() {
   this._panelContainer.css('z-index', this._config['zIndex']);
+  this._panelContainer.addClass(MD_PANEL_HIDDEN);
 
+  if (this._config['fullscreen']) {
+    this._panelEl.addClass('_md-panel-fullscreen');
+    return; // Don't setup positioning.
+  }
+
+  /** POSITIONING STYLES **/
   var positionConfig = this._config['position'];
 
   if (!positionConfig) { return; }
@@ -642,6 +1024,134 @@ MdPanelRef.prototype._addStyles = function() {
     this._panelEl.css('bottom', positionConfig.getBottom());
     this._panelEl.css('left', positionConfig.getLeft());
     this._panelEl.css('right', positionConfig.getRight());
+  }
+};
+
+
+/**
+ * Listen for escape keys and outside clicks to auto close.
+ * @private
+ */
+MdPanelRef.prototype._addEventListeners = function() {
+  this._configureEscapeToClose();
+  this._configureClickOutsideToClose();
+};
+
+
+/**
+ * Remove event listeners added in _addEventListeners.
+ * @private
+ */
+MdPanelRef.prototype._removeEventListener = function() {
+  this._removeListeners.forEach(function(removeFn) {
+    removeFn();
+  });
+  this._removeListeners = null;
+}
+
+
+/**
+ * Setup the escapeToClose event listeners.
+ * @private
+ */
+MdPanelRef.prototype._configureEscapeToClose = function() {
+  if (this._config.escapeToClose) {
+    var parentTarget = this._config.attachTo;
+    var self = this;
+
+    var keyHandlerFn = function (ev) {
+      if (ev.keyCode === self._$mdConstant.KEY_CODE.ESCAPE) {
+        ev.stopPropagation();
+        ev.preventDefault();
+
+        self.close();
+      }
+    };
+
+    // Add keydown listeners
+    this._panelContainer.on('keydown', keyHandlerFn);
+    parentTarget.on('keydown', keyHandlerFn);
+
+    // Queue remove listeners function
+    this._removeListeners.push(function () {
+      self._panelContainer.off('keydown', keyHandlerFn);
+      parentTarget.off('keydown', keyHandlerFn);
+    });
+  }
+};
+
+
+/**
+ * Setup the clickOutsideToClose event listeners.
+ * @private
+ */
+MdPanelRef.prototype._configureClickOutsideToClose = function() {
+  if (this._config.clickOutsideToClose) {
+    var target = this._panelContainer;
+    var sourceElem;
+
+    // Keep track of the element on which the mouse originally went down
+    // so that we can only close the backdrop when the 'click' started on it.
+    // A simple 'click' handler does not work,
+    // it sets the target object as the element the mouse went down on.
+    var mousedownHandler = function (ev) {
+      sourceElem = ev.target;
+    };
+
+    // We check if our original element and the target is the backdrop
+    // because if the original was the backdrop and the target was inside the
+    // dialog we don't want to dialog to close.
+    var self = this;
+    var mouseupHandler = function (ev) {
+      if (sourceElem === target[0] && ev.target === target[0]) {
+        ev.stopPropagation();
+        ev.preventDefault();
+
+        self.close();
+      }
+    };
+
+    // Add listeners
+    target.on('mousedown', mousedownHandler);
+    target.on('mouseup', mouseupHandler);
+
+    // Queue remove listeners function
+    this._removeListeners.push(function () {
+      target.off('mousedown', mousedownHandler);
+      target.off('mouseup', mouseupHandler);
+    });
+  }
+};
+
+
+/**
+ * Setup the focus traps. These traps will wrap focus when tabbing past the
+ * panel. When shift-tabbing, the focus will stick in place.
+ * @private
+ */
+MdPanelRef.prototype._configureTrapFocus = function() {
+  // Focus doesn't remain instead of the panel without this.
+  this._panelEl.attr('tabIndex', '-1');
+  if (this._config.trapFocus) {
+    var element = this._panelEl;
+    // Set up elements before and after the panel to capture focus and
+    // redirect back into the panel.
+    this._topFocusTrap = FOCUS_TRAP_TEMPLATE.clone()[0];
+    this._bottomFocusTrap = FOCUS_TRAP_TEMPLATE.clone()[0];
+
+    // When focus is about to move out of the panel, we want to intercept it
+    // and redirect it back to the panel element.
+    var focusHandler = function () {
+      element.focus();
+    };
+    this._topFocusTrap.addEventListener('focus', focusHandler);
+    this._bottomFocusTrap.addEventListener('focus', focusHandler);
+
+    // The top focus trap inserted immediately before the md-panel element (as
+    // a sibling). The bottom focus trap inserted immediately after the
+    // md-panel element (as a sibling).
+    element[0].parentNode.insertBefore(this._topFocusTrap, element[0]);
+    element.after(this._bottomFocusTrap);
   }
 };
 
@@ -782,4 +1292,143 @@ MdPanelPosition.prototype.right = function(opt_right) {
  */
 MdPanelPosition.prototype.getRight = function() {
   return this._right;
+};
+
+
+
+/*****************************************************************************
+ *                               MdPanelAnimation                            *
+ *****************************************************************************/
+
+
+/**
+ * Animation configuration object. To use, create an MdPanelAnimation with the
+ * desired properties, then pass the object as part of $mdPanel creation.
+ *
+ * Example:
+ *
+ * var panelAnimation = new MdPanelAnimation()
+ *     .openFrom(myButtonEl)
+ *     .closeTo('.my-button')
+ *     .withAnimation('');
+ *
+ * $mdPanel.create({
+ *   animation: panelAnimation
+ * });
+ *
+ * @final @constructor
+ */
+function MdPanelAnimation() {
+  /** @private {!{element: !angular.JQLite|undefined, bounds: !DOMRect}} */
+  this._openFrom = {};
+
+  /** @private {!{element: !angular.JQLite|undefined, bounds: !DOMRect}} */
+  this._closeTo = {};
+}
+
+
+/**
+ * Gets the boundingClientRect for the opening animation.
+ * @returns {!{element: !angular.JQLite|undefined, bounds: !DOMRect}}
+ */
+MdPanelAnimation.prototype.getOpenFrom = function() {
+  return this._openFrom;
+};
+
+
+/**
+ * Gets the boundingClientRect for the closing animation.
+ * @returns {!{element: !angular.JQLite|undefined, bounds: !DOMRect}}
+ */
+MdPanelAnimation.prototype.getCloseTo = function() {
+  return this._closeTo;
+};
+
+
+/**
+ * Specifies where to start the open animation. `openFrom` accepts a
+ * click event object, query selector, DOM element, or a Rect object that
+ * is used to determine the bounds. When passed a click event, the location
+ * of the click will be used as the position to start the animation.
+ *
+ * @param {string|!Element|!Event|{top: number, left: number}} openFrom
+ * @returns {MdPanelAnimation}
+ */
+MdPanelAnimation.prototype.openFrom = function(openFrom) {
+  // Check if 'openFrom' is an Event.
+  openFrom = openFrom.target ? openFrom.target : openFrom;
+
+  this._openFrom = this.getPanelAnimationTarget(openFrom);
+
+  if (!this._closeTo) {
+    this._closeTo = this._openFrom;
+  }
+  return this;
+};
+
+
+/**
+ * Specifies where to animate the dialog close. `closeTo` accepts a
+ * query selector, DOM element, or a Rect object that is used to determine
+ * the bounds.
+ *
+ * @param {string|!Element|{top: number, left: number}} closeTo
+ * @returns {MdPanelAnimation}
+ */
+MdPanelAnimation.prototype.closeTo = function(closeTo) {
+  this._closeTo = this.getPanelAnimationTarget(closeTo);
+  return this;
+};
+
+
+/**
+ * Returns the element and bounds for the animation target.
+ * @param {string|!Element|{top: number, left: number}} location
+ * @returns {!{element: !angular.JQLite|undefined, bounds: !DOMRect}}
+ */
+MdPanelAnimation.prototype.getPanelAnimationTarget = function(location) {
+  if (angular.isDefined(location.top) || angular.isDefined(location.left)) {
+    return {
+      element: undefined,
+      bounds: {
+        top: location.top || 0,
+        left: location.left || 0,
+        height: 1,
+        width: 1
+      }
+    };
+  } else {
+    return this._getBoundingClientRect(this._getElement(location));
+  }
+}
+
+
+/**
+ * TODO(KarenParker): Switch and update the shared version of this method that
+ * others are currently building.
+ * Gets the element from the string|element.
+ * @param {string|!Element} el
+ * @returns {!angular.JQLite}
+ * @private
+ */
+MdPanelAnimation.prototype._getElement = function(el) {
+  var queryResult = angular.isString(el) ?
+      document.querySelector(el) : el;
+  return angular.element(queryResult);
+};
+
+
+/**
+ * Identify the bounding RECT for the target element.
+ * @param {!angular.JQLite} element
+ * @returns {!{element: !angular.JQLite|undefined, bounds: !DOMRect}}
+ * @private
+ */
+MdPanelAnimation.prototype._getBoundingClientRect = function(element) {
+  if (element instanceof angular.element) {
+    return {
+      element: element,
+      bounds: element[0].getBoundingClientRect()
+    };
+  }
 };

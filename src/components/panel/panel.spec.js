@@ -4,6 +4,11 @@ describe('$mdPanel', function() {
   var attachedElements = [];
   var PANEL_WRAPPER_CLASS = '.md-panel-outer-wrapper';
   var PANEL_EL = '.md-panel';
+  var HIDDEN_CLASS = '_md-panel-hidden';
+  var FOCUS_TRAPS_CLASS = '._md-panel-focus-trap';
+  var FULLSCREEN_CLASS = '_md-panel-fullscreen';
+  var DEFAULT_TEMPLATE = '<div>Hello World!</div>';
+  var DEFAULT_CONFIG = { template: DEFAULT_TEMPLATE };
 
   /**
    * @param {!angular.$injector} $injector
@@ -33,57 +38,25 @@ describe('$mdPanel', function() {
     attachedElements = [];
 
     panelRef && panelRef.close();
-  });
 
-  it('should create a basic panel', function() {
-    var openResolved = false;
-    var closeResolved = false;
-    var config = {};
-
-    panelRef = $mdPanel.create(config);
-
-    expect(panelRef.id).toBeDefined();
-    expect(panelRef.open).toBeOfType('function');
-    expect(panelRef.close).toBeOfType('function');
-    expect(panelRef.isOpen).toEqual(false);
-
-    panelRef.open().then(function() {
-      openResolved = true;
-    });
-    $rootScope.$apply();
-
-    expect(openResolved).toBe(true);
-    expect(panelRef.isOpen).toEqual(true);
-
-    panelRef.close().then(function() {
-      closeResolved = true;
-    });
-    $rootScope.$apply();
-
-    expect(closeResolved).toBe(true);
-    expect(panelRef.isOpen).toEqual(false);
+    // TODO(ErinCoughlan) - Remove when close destroys.
+    panelRef = null;
   });
 
   it('should create and open a basic panel', function() {
-    var template = '<div>Hello World!</div>';
-    var config = { template: template };
-
-    openPanel(config);
+    openPanel(DEFAULT_CONFIG);
 
     expect(PANEL_EL).toExist();
-    expect(panelRef.isOpen).toEqual(true);
+    expect(panelRef.isAttached).toEqual(true);
 
     closePanel();
 
     expect(PANEL_EL).not.toExist();
-    expect(panelRef.isOpen).toEqual(false);
+    expect(panelRef.isAttached).toEqual(false);
   });
 
   it('should add and remove a panel from the DOM', function() {
-    var template = '<div>Hello World!</div>';
-    var config = { template: template };
-
-    panelRef = $mdPanel.create(config);
+    panelRef = $mdPanel.create(DEFAULT_CONFIG);
 
     expect(PANEL_EL).not.toExist();
 
@@ -96,13 +69,137 @@ describe('$mdPanel', function() {
     expect(PANEL_EL).not.toExist();
   });
 
-  describe('config options:', function() {
-    var template;
+  it('should hide and show a panel in the DOM', function() {
+    openPanel(DEFAULT_CONFIG);
+
+    expect(PANEL_EL).toExist();
+    expect(PANEL_WRAPPER_CLASS).not.toHaveClass(HIDDEN_CLASS);
+
+    hidePanel();
+
+    expect(PANEL_EL).toExist();
+    expect(PANEL_WRAPPER_CLASS).toHaveClass(HIDDEN_CLASS);
+
+    showPanel();
+
+    expect(PANEL_EL).toExist();
+    expect(PANEL_WRAPPER_CLASS).not.toHaveClass(HIDDEN_CLASS);
+  });
+
+  describe('promises logic:', function() {
+    var config;
 
     beforeEach(function() {
-      template = '<div>Hello World!</div>';
+      config = {};
+
+      panelRef = $mdPanel.create(config);
+      expect(panelRef.isAttached).toEqual(false);
     });
 
+    it('should resolve when opening/closing', function () {
+      var openResolved = false;
+      var closeResolved = false;
+
+      expect(panelRef.id).toBeDefined();
+      expect(panelRef.open).toBeOfType('function');
+      expect(panelRef.close).toBeOfType('function');
+
+      panelRef.open().then(function () {
+        openResolved = true;
+      });
+      $rootScope.$apply();
+
+      expect(openResolved).toBe(true);
+      expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
+      expect(panelRef.isAttached).toEqual(true);
+
+      panelRef.close().then(function () {
+        closeResolved = true;
+      });
+      $rootScope.$apply();
+
+      expect(closeResolved).toBe(true);
+      expect(panelRef.isAttached).toEqual(false);
+    });
+
+    it('should reject on create when opening', function () {
+      var openRejected = false;
+
+      panelRef._createPanel = function() {
+        return panelRef._$q.reject();
+      };
+
+      panelRef.open().then(function() {}, function () {
+        openRejected = true;
+      });
+      $rootScope.$apply();
+
+      expect(openRejected).toBe(true);
+      expect(panelRef.isAttached).toEqual(false);
+    });
+
+    it('should reject on attach when opening', function () {
+      var openRejected = false;
+
+      panelRef.attachOnly = function() {
+        return panelRef._$q.reject();
+      };
+
+      panelRef.open().then(function() {}, function () {
+        openRejected = true;
+      });
+      $rootScope.$apply();
+
+      expect(openRejected).toBe(true);
+      expect(panelRef.isAttached).toEqual(false);
+    });
+
+    it('should reject on hide when closing', function () {
+      var closeRejected = false;
+
+      panelRef.open();
+      $rootScope.$apply();
+
+      expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
+      expect(panelRef.isAttached).toEqual(true);
+
+      panelRef.hide = function() {
+        return panelRef._$q.reject();
+      };
+
+      panelRef.close().then(function() {}, function () {
+        closeRejected = true;
+      });
+      $rootScope.$apply();
+
+      expect(closeRejected).toBe(true);
+      expect(panelRef.isAttached).toEqual(true);
+    });
+
+    it('should reject on detach when closing', function () {
+      var closeRejected = false;
+
+      panelRef.open();
+      $rootScope.$apply();
+
+      expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
+      expect(panelRef.isAttached).toEqual(true);
+
+      panelRef.detach = function() {
+        return panelRef._$q.reject();
+      };
+
+      panelRef.close().then(function() {}, function () {
+        closeRejected = true;
+      });
+      $rootScope.$apply();
+
+      expect(closeRejected).toBe(true);
+      expect(panelRef.isAttached).toEqual(true);
+    });
+  });
+
+  describe('config options:', function() {
     it('should attach panel to a specific element', function() {
       var parentEl = document.createElement('div');
       parentEl.id = 'parent';
@@ -110,7 +207,7 @@ describe('$mdPanel', function() {
 
       var config = {
         attachTo: angular.element(parentEl),
-        template: template
+        template: DEFAULT_TEMPLATE
       };
 
       openPanel(config);
@@ -128,7 +225,7 @@ describe('$mdPanel', function() {
 
       var config = {
         panelClass: customClass,
-        template: template
+        template: DEFAULT_TEMPLATE
       };
 
       openPanel(config);
@@ -141,7 +238,7 @@ describe('$mdPanel', function() {
       var zIndex = '150';
 
       var config = {
-        template: template,
+        template: DEFAULT_TEMPLATE,
         zIndex: zIndex
       };
 
@@ -155,7 +252,7 @@ describe('$mdPanel', function() {
       var zIndex = '0';
 
       var config = {
-        template: template,
+        template: DEFAULT_TEMPLATE,
         zIndex: zIndex
       };
 
@@ -163,6 +260,154 @@ describe('$mdPanel', function() {
 
       expect(document.querySelector(PANEL_WRAPPER_CLASS).style.zIndex)
           .toEqual(zIndex);
+    });
+
+    it('should not close when clickOutsideToClose set to false', function() {
+      openPanel();
+
+      var container = panelRef._panelContainer;
+      container.triggerHandler({
+        type: 'mousedown',
+        target: container[0]
+      });
+      container.triggerHandler({
+        type: 'mouseup',
+        target: container[0]
+      });
+      $rootScope.$apply();
+
+      expect(PANEL_EL).toExist();
+    });
+
+    it('should close when clickOutsideToClose set to true', function() {
+      var config = {
+        clickOutsideToClose: true
+      };
+
+      openPanel(config);
+
+      var container = panelRef._panelContainer;
+      container.triggerHandler({
+        type: 'mousedown',
+        target: container[0]
+      });
+      container.triggerHandler({
+        type: 'mouseup',
+        target: container[0]
+      });
+      $rootScope.$apply();
+
+      // TODO(ErinCoughlan) - Add this when destroy is added.
+      // expect(panelRef).toBeUndefined();
+      expect(PANEL_EL).not.toExist();
+    });
+
+    it('should not close when escapeToClose set to false', inject(function($mdConstant) {
+      openPanel();
+
+      var container = panelRef._panelContainer;
+      container.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.ESCAPE
+      });
+      $rootScope.$apply();
+
+      expect(PANEL_EL).toExist();
+    }));
+
+    it('should close when escapeToClose set to true', inject(function($mdConstant) {
+      var config = {
+        escapeToClose: true
+      };
+
+      openPanel(config);
+
+      var container = panelRef._panelContainer;
+      container.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.ESCAPE
+      });
+      $rootScope.$apply();
+
+      // TODO(ErinCoughlan) - Add this when destroy is added.
+      // expect(panelRef).toBeUndefined();
+      expect(PANEL_EL).not.toExist();
+    }));
+
+    it('should create and cleanup focus traps', function() {
+      var config = { template: DEFAULT_TEMPLATE, trapFocus: true };
+
+      openPanel(config);
+
+      // It should add two focus traps to the document around the panel content.
+      var focusTraps = document.querySelectorAll(FOCUS_TRAPS_CLASS);
+      expect(focusTraps.length).toBe(2);
+
+      var topTrap = focusTraps[0];
+      var bottomTrap = focusTraps[1];
+
+      var panel = panelRef._panelEl;
+      var isPanelFocused = false;
+      panel[0].addEventListener('focus', function() {
+        isPanelFocused = true;
+      });
+
+      // Both of the focus traps should be in the normal tab order.
+      expect(topTrap.tabIndex).toBe(0);
+      expect(bottomTrap.tabIndex).toBe(0);
+
+      // TODO(KarenParker): Find a way to test that focusing the traps redirects focus to the
+      // md-dialog element. Firefox is problematic here, as calling element.focus() inside of
+      // a focus event listener seems not to immediately update the document.activeElement.
+      // This is a behavior better captured by an e2e test.
+
+      closePanel();
+
+      // All of the focus traps should be removed when the dialog is closed.
+      focusTraps = document.querySelectorAll(FOCUS_TRAPS_CLASS);
+      expect(focusTraps.length).toBe(0);
+    });
+
+    it('should not create focus traps when trapFocus=false', function() {
+      openPanel(DEFAULT_CONFIG);
+
+      // It should add two focus traps to the document around the panel content.
+      var focusTraps = document.querySelectorAll(FOCUS_TRAPS_CLASS);
+      expect(focusTraps.length).toBe(0);
+    });
+
+    it('should focus on open', function() {
+      var template = '<button  id="donuts" md-autofocus>Donuts</button>';
+      var config = { template: template };
+
+      openPanel(config);
+
+      expect(angular.element(document.activeElement).attr('id')).toBe('donuts');
+    });
+
+    it('should not focus on open focusOnOpen=false', function() {
+      var template = '<button id="donuts" md-autofocus>Donuts</button>';
+      var config = {
+        focusOnOpen: false,
+        template: template
+      };
+
+      openPanel(config);
+
+      expect(angular.element(document.activeElement).attr('id')).not.toBe('donuts');
+    });
+
+    it('should not be fullscreen by default', function() {
+      openPanel();
+      expect(PANEL_EL).not.toHaveClass(FULLSCREEN_CLASS);
+    });
+
+    it('should be fullscreen when fullscreen=true', function() {
+      var config = { fullscreen: true };
+
+      openPanel(config);
+      expect(PANEL_EL).toHaveClass(FULLSCREEN_CLASS);
+
     });
   });
 
@@ -319,9 +564,7 @@ describe('$mdPanel', function() {
     var mdPanelPosition;
 
     beforeEach(function() {
-      config = {
-        template: '<div>Hello World!</div>'
-      };
+      config = DEFAULT_CONFIG;
 
       mdPanelPosition = $mdPanel.newPanelPosition();
     });
@@ -421,6 +664,78 @@ describe('$mdPanel', function() {
     });
   });
 
+  describe('animation logic', function() {
+    var mdPanelAnimation;
+    var myButton;
+
+    beforeEach(function() {
+      mdPanelAnimation = $mdPanel.newPanelAnimation();
+
+      myButton = '<button>myButton</button>';
+      attachToBody(myButton);
+      myButton = angular.element(document.querySelector('button'));
+    });
+
+    describe('should determine openFrom when', function() {
+      it('provided a selector', function() {
+        var animation = mdPanelAnimation.openFrom('button');
+
+        expect(animation.getOpenFrom().element[0]).toEqual(myButton[0]);
+        expect(animation.getOpenFrom().bounds).toEqual(myButton[0].getBoundingClientRect());
+      });
+
+      it('provided an element', function() {
+        var animation = mdPanelAnimation.openFrom(myButton[0]);
+
+        expect(animation.getOpenFrom().element[0]).toEqual(myButton[0]);
+        expect(animation.getOpenFrom().bounds).toEqual(myButton[0].getBoundingClientRect());
+      });
+
+      it('provided an event', function() {
+        var myEvent = { type: 'click', target: myButton};
+        var animation = mdPanelAnimation.openFrom(myEvent);
+
+        expect(animation.getOpenFrom().element[0]).toEqual(myButton[0]);
+        expect(animation.getOpenFrom().bounds).toEqual(myButton[0].getBoundingClientRect());
+      });
+
+
+      it('provided a bounding rect', function() {
+        var rect = myButton[0].getBoundingClientRect();
+        var inputRect = {top: rect.top, left: rect.left};
+        var animation = mdPanelAnimation.openFrom(inputRect);
+
+        expect(animation.getOpenFrom().element).toBeUndefined();
+        expect(animation.getOpenFrom().bounds).toEqual(angular.extend(inputRect, {height: 1, width: 1}));
+      });
+    });
+
+    describe('should determine closeTo when', function() {
+      it('provided a selector', function() {
+        var animation = mdPanelAnimation.closeTo('button');
+
+        expect(animation.getCloseTo().element).toEqual(myButton);
+        expect(animation.getCloseTo().bounds).toEqual(myButton[0].getBoundingClientRect());
+      });
+
+      it('provided an element', function() {
+        var animation = mdPanelAnimation.closeTo(myButton[0]);
+
+        expect(animation.getCloseTo().element).toEqual(myButton);
+        expect(animation.getCloseTo().bounds).toEqual(myButton[0].getBoundingClientRect());
+      });
+
+      it('provided a bounding rect', function() {
+        var rect = myButton[0].getBoundingClientRect();
+        var inputRect = {top: rect.top, left: rect.left};
+        var animation = mdPanelAnimation.closeTo(inputRect);
+
+        expect(animation.getCloseTo().element).toBeUndefined();
+        expect(animation.getCloseTo().bounds).toEqual(angular.extend(inputRect, {height: 1, width: 1}));
+      });
+    });
+  });
+
   /**
    * Attached an element to document.body. Keeps track of attached elements
    * so that they can be removed in an afterEach.
@@ -441,9 +756,15 @@ describe('$mdPanel', function() {
   function openPanel(opt_config) {
     if (opt_config) {
       panelRef = $mdPanel.open(opt_config);
+    } else if (panelRef) {
+      panelRef.open();
     } else {
-      panelRef && panelRef.open();
+      panelRef = $mdPanel.open();
     }
+    $rootScope.$apply();
+    // Second $apply needed to account for the $applyAsync in attach. This
+    // isn't always necessary, but is better to have here twice than sprinkled
+    // through the tests.
     $rootScope.$apply();
   }
 
@@ -452,6 +773,16 @@ describe('$mdPanel', function() {
    */
   function closePanel() {
     panelRef && panelRef.close();
+    $rootScope.$apply();
+  }
+
+  function showPanel() {
+    panelRef && panelRef.show(HIDDEN_CLASS);
+    $rootScope.$apply();
+  }
+
+  function hidePanel() {
+    panelRef && panelRef.hide(HIDDEN_CLASS);
     $rootScope.$apply();
   }
 });

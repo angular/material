@@ -17,12 +17,14 @@ BasicDemoCtrl.prototype.showDialog = function() {
     attachTo: angular.element(document.querySelector('.demo-md-panel')),
     controller: DialogCtrl,
     controllerAs: 'ctrl',
+    fullscreen: true,
     templateUrl: 'panel.tmpl.html',
     locals: {
       closeFn: angular.bind(this, this.closeDialog)
     },
     panelClass: 'demo-dialog-example',
     position: position,
+    trapFocus: true,
     zIndex: 150
   };
 
