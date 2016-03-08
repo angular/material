@@ -108,6 +108,10 @@ angular
  *   - `position` - `{MdPanelPosition=}`: An MdPanelPosition object that
  *     specifies the alignment of the panel. For more information, see
  *     `MdPanelPosition`.
+ *   - `clickOutsideToClose` - `{boolean=}`: Whether the user can click
+ *     outside the panel to close it. Defaults to false.
+ *   - `escapeToClose` - `{boolean=}`: Whether the user can press escape to
+ *     close the panel. Defaults to false.
  *
  * TODO(ErinCoughlan): Add the following config options.
  *   - `groupName` - `{string=}`: Name of panel groups. This group name is
@@ -119,10 +123,6 @@ angular
  *     `MdPanelAnimation`.
  *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop
  *     behind the panel. Defaults to false.
- *   - `escapeToClose` - `{boolean=}`: Whether the user can press escape to
- *     close the panel. Defaults to false.
- *   - `clickOutsideToClose` - `{boolean=}`: Whether the user can click
- *     outside the panel to close it. Defaults to false.
  *   - `disableParentScroll` - `{boolean=}`: Whether the user can scroll the
  *     page behind the panel. Defaults to false.
  *   - `fullScreen` - `{boolean=}`: Whether the panel should be full screen.
@@ -461,6 +461,8 @@ function MdPanelService($rootElement, $rootScope, $injector) {
   this._defaultConfigOptions = {
     attachTo: $rootElement,
     bindToController: true,
+    clickOutsideToClose: false,
+    escapeToClose: false,
     scope: $rootScope.$new(true),
     transformTemplate: angular.bind(this, this.wrapTemplate_),
     zIndex: defaultZIndex
@@ -555,6 +557,9 @@ function MdPanelRef(config, $injector) {
 
   /** @private @const {!angular.$mdCompiler} */
   this._$mdCompiler = $injector.get('$mdCompiler');
+
+  /** @private */
+  this._$mdConstant = $injector.get('$mdConstant')
 
 
   // Public variables.
@@ -662,6 +667,7 @@ MdPanelRef.prototype.attach = function() {
   this._attachPromise = this._$q(function(resolve, reject) {
     self._createPanel().then(function() {
       self.isAttached = true;
+      self._activeListeners();
       resolve(self);
     }, reject);
   });
@@ -830,6 +836,82 @@ MdPanelRef.prototype._addStyles = function() {
     this._panelEl.css('right', positionConfig.getRight());
   }
 };
+
+
+/**
+ * Listen for escape keys and outside clicks to auto close.
+ * @private
+ */
+MdPanelRef.prototype._activeListeners = function() {
+  var removeListeners = [];
+  var self = this;
+
+  if (this._config.escapeToClose) {
+    var parentTarget = this._config.attachTo;
+    var keyHandlerFn = function(ev) {
+      if (ev.keyCode === self._$mdConstant.KEY_CODE.ESCAPE) {
+        ev.stopPropagation();
+        ev.preventDefault();
+
+        self.close();
+      }
+    };
+
+    // Add keydown listeners
+    this._panelContainer.on('keydown', keyHandlerFn);
+    parentTarget.on('keydown', keyHandlerFn);
+
+    // Queue remove listeners function
+    removeListeners.push(function() {
+      self._panelContainer.off('keydown', keyHandlerFn);
+      parentTarget.off('keydown', keyHandlerFn);
+    });
+  }
+
+  if (this._config.clickOutsideToClose) {
+    var target = this._panelContainer;
+    var sourceElem;
+
+    // Keep track of the element on which the mouse originally went down
+    // so that we can only close the backdrop when the 'click' started on it.
+    // A simple 'click' handler does not work,
+    // it sets the target object as the element the mouse went down on.
+    var mousedownHandler = function(ev) {
+      sourceElem = ev.target;
+    };
+
+    // We check if our original element and the target is the backdrop
+    // because if the original was the backdrop and the target was inside the dialog
+    // we don't want to dialog to close.
+    var mouseupHandler = function(ev) {
+      if (sourceElem === target[0] && ev.target === target[0]) {
+        ev.stopPropagation();
+        ev.preventDefault();
+
+        self.close();
+      }
+    };
+
+    // Add listeners
+    target.on('mousedown', mousedownHandler);
+    target.on('mouseup', mouseupHandler);
+
+    // Queue remove listeners function
+    removeListeners.push(function() {
+      target.off('mousedown', mousedownHandler);
+      target.off('mouseup', mouseupHandler);
+    });
+  }
+
+  // Attach specific `remove` listener handler
+  this._deactivateListeners = function() {
+    removeListeners.forEach(function(removeFn) {
+      removeFn();
+    });
+    self._deactivateListeners.deactivateListeners = null;
+  };
+};
+
 
 
 /*****************************************************************************
