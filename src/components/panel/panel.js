@@ -196,12 +196,10 @@ angular
  *     when a panel was interacted with.
  *   - `config` - `{Object=}`: The entire config object that was used in
  *     create.
- *   - `isOpen` - `{boolean}`: Whether the panel is attached to the DOM.
- *     Visibility to the user does not factor into isOpen.
+ *   - `isAttached` - `{boolean}`: Whether the panel is attached to the DOM.
+ *     Visibility to the user does not factor into isAttached.
  *
  * TODO(ErinCoughlan): Add the following properties.
- *   - `isHidden` - `{boolean}`: Whether the panel is attached to the DOM, but
- *     not visible to the user.
  *   - `onDomAdded` - `{function=}`: Callback function used to announce when
  *     the panel is added to the DOM.
  *   - `onOpenComplete` - `{function=}`: Callback function used to announce
@@ -215,19 +213,66 @@ angular
  * @ngdoc method
  * @name MdPanelRef#open
  * @description
- * If the panel is not visible, opens an already created and configured panel.
+ * Attaches and shows the panel.
  *
- * @returns {angular.$q.Promise} A promise that is resolved when the panel is
- * closed.
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * opened.
  */
 
 /**
  * @ngdoc method
  * @name MdPanelRef#close
  * @description
- * If the panel is visible, closes the panel, resolving the promise that is
- * returned from `MdPanelRef#open`. This method destroys the reference to the
- * panel. In order to open the panel again, a new one must be created.
+ * Hides and detaches the panel. This method destroys the reference to the panel.
+ * In order to open the panel again, a new one must be created.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * closed.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#attachOnly
+ * @description
+ * Create the panel elements and attach them to the DOM. The panel will be
+ * hidden by default. Call toggleVisibility() or setVisible(true) to make the
+ * panel visible.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * attached.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#detach
+ * @description
+ * Removes the panel from the DOM. If the panel is visible, hide the panel,
+ * then detach.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * detached.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#setVisibililty
+ * @description
+ * Sets the visibility of the panel. On creation, the panel is hidden. Visible=false
+ * is equivalent to adding "display: none".
+ *
+ * @param {boolean} visible Whether the panel should be visible or hidden.
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel's
+ * visibility is updated and animations are completed.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#toggleVisibility
+ * @description
+ * Toggles the visibility of the panel. On creation, the panel is hidden.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel's
+ * visibility is updated and animations are completed.
  */
 
 
@@ -511,25 +556,29 @@ function MdPanelRef(config, $injector) {
   this.id = config.id;
 
   /**
-   * Whether the panel is opened. This is synchronous. When open is called,
-   * isOpen is set to true. When close is called, isOpen is set to false.
+   * Whether the panel is attached. This is synchronous. When attach is called,
+   * isAttached is set to true. When detach is called, isAttached is set to
+   * false.
    * @type {boolean}
    */
-  this.isOpen = false;
+  this.isAttached = false;
 
 
   // Private variables.
   /** @private {!Object} */
   this._config = config;
 
-  /** @private {!angular.$q.promise|undefined} */
+  /** @private {!angular.$q.Promise|undefined} */
   this._openPromise;
 
-  /** @private {function(*)|undefined} */
-  this._openReject;
+  /** @private {!angular.$q.Promise|undefined} */
+  this._attachPromise;
 
-  /** @private {!angular.$q.promise|undefined} */
-  this._closePromise;
+  /** @private {!angular.$q.Promise|undefined} */
+  this._detachPromise;
+
+  /** @private {!angular.$q.Promise|undefined} */
+  this._visibilityPromise;
 
   /** @private {!angular.JQLite|undefined} */
   this._panelContainer;
@@ -547,19 +596,21 @@ function MdPanelRef(config, $injector) {
  * is opened and animations finish.
  */
 MdPanelRef.prototype.open = function() {
-  if (!this.isOpen) {
-    this.isOpen = true;
-
-    var self = this;
-    this._openPromise = this._$q(function(resolve, reject) {
-      self._openReject = reject;
-      self._createPanel();
-      resolve(self);
-    });
+  if (this._openPromise) {
+    // Panel is already shown so re-use (already resolved) promise from when
+    // it was shown.
+    return this._openPromise;
   }
 
-  // If the panel is already open, re-use the (already resolved) promise from
-  // when it was opened.
+  // TODO(ErinCoughlan) - Cancel any in-progress actions.
+
+  var self = this;
+  this._openPromise = this._$q(function(resolve, reject) {
+    self.attachOnly().then(function () {
+      self.setVisibility(true).then(function() { resolve(self); }, reject);
+    }, reject);
+  });
+
   return this._openPromise;
 };
 
@@ -571,54 +622,139 @@ MdPanelRef.prototype.open = function() {
  * closed and animations finish.
  */
 MdPanelRef.prototype.close = function() {
-  if (this.isOpen) {
-    this.isOpen = false;
+  // TODO(ErinCoughlan) - Cancel any in-progress actions.
 
-    // TODO(ErinCoughlan) - Cancel any in-progress `opening`.
+  var self = this;
+  return this._$q(function(resolve, reject) {
+    self.detach().then(function() {
+      // TODO(ErinCoughlan) - Add destroy. This will make the code here different
+      // than just calling this.detach().
+      resolve(self);
+    }, reject);
+  });
+};
 
-    if (!this._closePromise) {
-      var self = this;
-      this._closePromise = this._$q(function(resolve, reject) {
-        // TODO(ErinCoughlan): Start the close animation.
-        self._panelContainer.remove();
-        resolve(self);
-      });
 
-      this._closePromise.finally(function() {
-        // Clear for next open/close pairing.
-        self._closePromise = undefined;
-      });
-    }
+/**
+ * Attaches the panel.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * attached.
+ */
+MdPanelRef.prototype.attachOnly = function() {
+  if (this.isAttached) {
+    return this._attachPromise;
   }
 
-  // If the panel is already closed, re-use the (already resolved) promise from
-  // when it was closed.
-  return this._closePromise;
+  // TODO(ErinCoughlan) - Cancel any in-progress actions.
+
+  var self = this;
+  this._attachPromise = this._$q(function(resolve, reject) {
+    self._createPanel().then(function() {
+      self.isAttached = true;
+      resolve(self);
+    }, reject);
+  });
+
+  return this._attachPromise;
+};
+
+
+/**
+ * Detaches the panel. Hides the panel first if visible.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * attached.
+ */
+MdPanelRef.prototype.detach = function() {
+  if (!this.isAttached) {
+    this._detachPromise;
+  }
+
+  // TODO(ErinCoughlan) - Cancel any in-progress actions.
+
+  var self = this;
+  this._detachPromise = this._$q(function(resolve, reject) {
+    self.setVisibility(false).then(function () {
+      self._panelContainer.remove();
+      self.isAttached = false;
+      resolve(self);
+    }, reject);
+  });
+
+  return this._detachPromise;
+};
+
+
+/**
+ * Sets the visibility of the panel.
+ *
+ * @param {boolean} visible Whether the panel should be visible or hidden.
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * shown/hidden and animations finish.
+ */
+MdPanelRef.prototype.setVisibility = function(visible) {
+  if (!this._panelContainer) {
+    return this._$q.reject('Panel does not exist yet. Call open() or attach().');
+  }
+
+  var self = this;
+  this._visibilityPromise = this._$q(function(resolve, reject) {
+    try {
+      // TODO(KarenParker): Add show/hide animation.
+      if (visible) {
+        self._panelContainer.removeClass('_md-panel-hidden');
+      } else {
+        self._panelContainer.addClass('_md-panel-hidden');
+      }
+      resolve(self);
+    } catch (e) {
+      reject(e.message);
+    }
+  });
+
+  return this._visibilityPromise;
+};
+
+
+/**
+ * Toggle the visibility of the panel.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * shown/hidden and animations finish.
+ */
+MdPanelRef.prototype.toggleVisibility = function() {
+  return this.setVisibility(this._panelContainer.hasClass('_md-panel-hidden'));
 };
 
 
 /**
  * Creates a panel and adds it to the dom.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * created.
  * @private
  */
 MdPanelRef.prototype._createPanel = function() {
   var self = this;
-  this._$mdCompiler.compile(this._config)
-      .then(function(compileData) {
-        self._panelContainer = compileData.link(self._config.scope);
-        // TODO(ErinCoughlan): Start the open animation.
-        angular.element(self._config.attachTo).append(self._panelContainer);
+  return this._$q(function(resolve, reject) {
+    self._$mdCompiler.compile(self._config)
+        .then(function(compileData) {
+          self._panelContainer = compileData.link(self._config.scope);
+          angular.element(self._config.attachTo).append(self._panelContainer);
 
-        self._panelEl = angular.element(
-            self._panelContainer[0].querySelector('.md-panel'));
+          self._panelEl = angular.element(
+              self._panelContainer[0].querySelector('.md-panel'));
 
-        // Add a custom CSS class.
-        if (self._config['panelClass']) {
-          self._panelEl.addClass(self._config['panelClass']);
-        }
+          // Add a custom CSS class.
+          if (self._config['panelClass']) {
+            self._panelEl.addClass(self._config['panelClass']);
+          }
 
-        self._addStyles();
-      });
+          self._addStyles();
+          resolve(self);
+        }, reject);
+  });
 };
 
 
@@ -627,6 +763,7 @@ MdPanelRef.prototype._createPanel = function() {
  * @private
  */
 MdPanelRef.prototype._addStyles = function() {
+  this._panelContainer.addClass('_md-panel-hidden');
   this._panelContainer.css('z-index', this._config['zIndex']);
 
   var positionConfig = this._config['position'];
