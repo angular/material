@@ -25,6 +25,17 @@ describe('mdProgressCircular', function() {
     expect(progress.attr('md-mode')).toEqual('indeterminate');
   });
 
+  it('should auto-set the md-mode to "indeterminate" if specified not as "indeterminate" or "determinate"', function() {
+    var progress = buildIndicator('<md-progress-circular md-mode="test"></md-progress-circular>');
+
+    $rootScope.$apply(function() {
+      $rootScope.progress = 50;
+      $rootScope.mode = "";
+    });
+
+    expect(progress.attr('md-mode')).toEqual('indeterminate');
+  });
+
   it('should trim the md-mode value', function() {
     var progress = buildIndicator('<md-progress-circular md-mode=" indeterminate"></md-progress-circular>');
 
