@@ -14,6 +14,8 @@ describe('<md-chips>', function() {
     '<md-chips ng-model="items" md-on-remove="removeChip($chip, $index)"></md-chips>';
   var CHIP_SELECT_TEMPLATE =
     '<md-chips ng-model="items" md-on-select="selectChip($chip)"></md-chips>';
+  var CHIP_READONLY_TEMPLATE =
+    '<md-chips ng-model="items" readonly="isReadonly"></md-chips>';
   var CHIP_READONLY_AUTOCOMPLETE_TEMPLATE =
     '<md-chips ng-model="items" readonly="true">' +
     '  <md-autocomplete md-items="item in [\'hi\', \'ho\', \'he\']"></md-autocomplete>' +
@@ -254,12 +256,53 @@ describe('<md-chips>', function() {
         expect(scope.items[3].uppername).toBe('GRAPE');
       });
 
-      it('should not throw an error when using readonly with an autocomplete', function() {
-        var element = buildChips(CHIP_READONLY_AUTOCOMPLETE_TEMPLATE);
+      describe('when readonly', function() {
+        var element, ctrl;
 
-        $timeout.flush();
+        it("properly toggles the controller's readonly property", function() {
+          element = buildChips(CHIP_READONLY_TEMPLATE);
+          ctrl = element.controller('mdChips');
 
-        expect($exceptionHandler.errors).toEqual([]);
+          expect(ctrl.readonly).toBeFalsy();
+
+          scope.$apply('isReadonly = true');
+
+          expect(ctrl.readonly).toBeTruthy();
+        });
+
+        it("properly toggles the wrapper's .md-readonly class", function() {
+          element = buildChips(CHIP_READONLY_TEMPLATE);
+          ctrl = element.controller('mdChips');
+
+          expect(element.find('md-chips-wrap')).not.toHaveClass('md-readonly');
+
+          scope.$apply('isReadonly = true');
+
+          expect(element.find('md-chips-wrap')).toHaveClass('md-readonly');
+        });
+
+        it('is false with empty items should not hide the chips wrapper', function() {
+          scope.isReadonly = false;
+          scope.items = [];
+          element = buildChips(CHIP_READONLY_TEMPLATE);
+
+          expect(element.find('md-chips-wrap').length).toBe(1);
+        });
+
+        it('is true with empty items should not hide the chips wrapper', function() {
+          scope.isReadonly = true;
+          scope.items = [];
+          element = buildChips(CHIP_READONLY_TEMPLATE);
+
+          expect(element.find('md-chips-wrap').length).toBe(1);
+        });
+
+        it('is true should not throw an error when used with an autocomplete', function() {
+          element = buildChips(CHIP_READONLY_AUTOCOMPLETE_TEMPLATE);
+          $timeout.flush();
+
+          expect($exceptionHandler.errors).toEqual([]);
+        });
       });
 
       it('should disallow duplicate object chips', function() {
