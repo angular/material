@@ -181,8 +181,8 @@ describe('$mdDialog', function() {
 
       var dialog = parent.find('md-dialog');
       var content = parent[0].querySelector('md-dialog-content');
-
-      expect(content.id).toMatch(/dialogContent_.*/g);
+      
+      expect(content.id).toMatch(/dialogContent_[0-9]+/g);
     }));
 
     it('should remove `md-dialog-container` on mousedown mouseup and remove', inject(function($mdDialog, $rootScope, $timeout) {

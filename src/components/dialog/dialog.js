@@ -894,7 +894,7 @@ function MdDialogProvider($$interimElementProvider) {
 
       var role = (options.$type === 'alert') ? 'alertdialog' : 'dialog';
       var dialogContent = element.find('md-dialog-content');
-      var dialogContentId = ('dialogContent_' + element.attr('id')) || ('dialogContent_' + $mdUtil.nextUid());
+      var dialogContentId = 'dialogContent_' + (element.attr('id') || $mdUtil.nextUid());
 
       element.attr({
         'role': role,
