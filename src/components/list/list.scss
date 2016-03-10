@@ -132,14 +132,21 @@ md-list-item {
   &._md-button-wrap {
     position: relative;
 
-    > .md-button:first-child {
+    > div.md-button:first-child {
+      // Vertically align the item content.
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
       padding: 0;
       margin: 0;
+
       font-weight: 400;
       background-color: inherit;
       @include rtl(text-align, left, right);
       border: medium none;
 
+      // The button executor should fill the whole list item.
       > .md-button:first-child {
         position: absolute;
         top: 0;
@@ -151,8 +158,8 @@ md-list-item {
       }
 
       ._md-list-item-inner {
-        width: 100%;
-        height: 100%;
+        // The list item content should fill the complete width.
+        flex: 1 1 auto;
         padding: 0 16px;
       }
 
@@ -327,7 +334,7 @@ md-list-item {
         flex: 1;
         margin: auto;
         text-overflow: ellipsis;
-    overflow: hidden;
+        overflow: hidden;
 
         &.md-offset {
         @include rtl-prop(margin-left, margin-right, $list-item-primary-width);
