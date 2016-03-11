@@ -22,7 +22,7 @@
   // won't be set on the most browsers.
   @each $pseudo in $pseudos {
     &#{$pseudo} {
-      color: $color;
+      color: unquote($color);
     }
   }
 }
