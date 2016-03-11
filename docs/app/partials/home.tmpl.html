@@ -2,7 +2,7 @@
   <md-content>
     <h2 class="md-headline" style="margin-top: 0;">What is Angular Material?</h2>
     <p>
-      For developers using AngularJS, Angular Material is the reference implementation of Google's
+      For developers using AngularJS, Angular Material is both a UI Component framework and a reference implementation of Google's
       Material Design Specification. This project provides a set of reusable, well-tested, and
       accessible UI components based on Material Design.
     </p>
@@ -19,6 +19,27 @@
             aria-label="{{link.text}}">
           <md-icon class="block" md-svg-src="img/icons/ic_{{link.icon}}_24px.svg"></md-icon>
           {{link.text}}
+        </md-button>
+      </li>
+    </ul>
+
+    <br/>
+    <h2 class="md-headline">Angular Material Training Videos?</h2>
+    <p>
+      Here are some free video courses that will help jump start your development with Angular Material.
+    </p>
+    <ul class="buckets" layout layout-align="center center" layout-wrap>
+      <li flex="100" flex-gt-xs="50" ng-repeat="(index, link) in [
+        { href: 'https://egghead.io/series/angular-material-introduction', icon: 'ondemand_video', text: 'Introduction to Angular Material', site : 'EggHead'},
+        { href: 'https://app.pluralsight.com/player?author=ajden-towfeek&name=angular-material-fundamentals-m0&mode=live&clip=0&course=angular-material-fundamentals', icon: 'ondemand_video', text: 'Angular Material Fundamentals', site : 'Pluralsight'},
+      ]">
+        <md-button
+            class="md-primary md-raised"
+            target="_blank"
+            aria-label="{{link.text}}"
+            ng-href="{{link.href}}">
+          <md-icon class="block" md-svg-src="img/icons/ic_{{link.icon}}_24px.svg"></md-icon>
+          {{link.site}} | <span style="color: rgb(255,82,82); text-transform: none;">{{link.text}}</span>
         </md-button>
       </li>
     </ul>
@@ -46,11 +67,17 @@
     </ul>
 
     <br/>
-    <h2 class="md-headline">What is the current project status?</h2>
+    <h2 class="md-headline">What about Angular 2?</h2>
     <p>
       Angular Material recently released Version 1 which we consider to be stable and ready for
-      production use. Efforts are currently being focused on fixing bugs and other minor
-      improvements.
+      production use. Developers should note that Angular Material v1 works only with Angular 1.x.
+    </p>
+    <ul>
+      <li>Current Angular Material v1.x development efforts are focused on bug fixes and minor improvements.</li>
+      <li>Angular Material v2 development is also in-progress at the <a href="https://github.com/angular/material2">angular/material2</a> GitHub repository.</li>
+    </ul>
+    <p>
+      Please refer to our changelog for up-to-date listings of all v1.x improvements and breaking changes.
     </p>
      <ul class="buckets" layout layout-align="center center" layout-wrap>
       <li flex="100" flex-gt-xs="50" ng-repeat="(index, link) in [
@@ -65,7 +92,8 @@
             ng-href="{{link.href}}"
             aria-label="{{link.text}}">
           <md-icon class="block" md-svg-src="img/icons/ic_{{link.icon}}_24px.svg"></md-icon>
-          {{link.text}}
+          {{link.text}}<br/>
+          <div style="text-transform: none;margin-top:-15px;font-size:1.0em;">Angular Material v1.x </div>
         </md-button>
       </li>
     </ul>
