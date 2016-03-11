@@ -9,7 +9,7 @@ md-chips.md-THEME_NAME-theme {
 
     ._md-chip-input-container {
       input {
-        @include input-placeholder-color('{{foreground-3}}');
+        @include input-placeholder-color('\'{{foreground-3}}\'');
         color: '{{foreground-1}}';
       }
     }
