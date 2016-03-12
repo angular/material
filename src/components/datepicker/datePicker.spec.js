@@ -515,6 +515,35 @@ describe('md-date-picker', function() {
       expect(controller.calendarPaneOpenedFrom).toBe(null);
       expect(controller.isCalendarOpen).toBe(false);
     });
+
+    it('should re-enable scrolling probably', function() {
+      var maskLength = getMaskLength();
+
+      controller.openCalendarPane({
+        target: controller.inputElement
+      });
+
+      expect(getMaskLength()).toBe(maskLength + 1);
+
+      controller.closeCalendarPane();
+
+      expect(getMaskLength()).toBe(maskLength);
+
+      controller.openCalendarPane({
+        target: controller.inputElement
+      });
+
+      expect(getMaskLength()).toBe(maskLength + 1);
+
+      // Trigger a scope destruction, like when a route changes.
+      scope.$destroy();
+
+      expect(getMaskLength()).toBe(maskLength);
+
+      function getMaskLength() {
+        return document.body.querySelectorAll('.md-scroll-mask').length;
+      }
+    });
   });
 
   describe('md-calendar-change', function() {
