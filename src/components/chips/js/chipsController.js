@@ -139,7 +139,7 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
     event.preventDefault();
 
     // Only append the chip and reset the chip buffer if the max chips limit isn't reached.
-    if (this.items.length >= this.maxChips) return;
+    if (this.hasMaxChipsReached()) return;
 
     this.appendChip(chipBuffer);
     this.resetChipBuffer();
@@ -358,7 +358,7 @@ MdChipsCtrl.prototype.resetChipBuffer = function() {
   }
 };
 
-MdChipsCtrl.prototype.hasMaxChips = function() {
+MdChipsCtrl.prototype.hasMaxChipsReached = function() {
   if (angular.isString(this.maxChips)) this.maxChips = parseInt(this.maxChips, 10) || 0;
 
   return this.maxChips > 0 && this.items.length >= this.maxChips;
@@ -368,7 +368,7 @@ MdChipsCtrl.prototype.hasMaxChips = function() {
  * Updates the validity properties for the ngModel.
  */
 MdChipsCtrl.prototype.validateModel = function() {
-  this.ngModelCtrl.$setValidity('md-max-chips', !this.hasMaxChips());
+  this.ngModelCtrl.$setValidity('md-max-chips', !this.hasMaxChipsReached());
 };
 
 /**
@@ -504,10 +504,14 @@ MdChipsCtrl.prototype.configureUserInput = function(inputElement) {
 };
 
 MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {
-  if ( ctrl ){
+  if ( ctrl ) {
     this.hasAutocomplete = true;
+
     ctrl.registerSelectedItemWatcher(angular.bind(this, function (item) {
       if (item) {
+        // Only append the chip and reset the chip buffer if the max chips limit isn't reached.
+        if (this.hasMaxChipsReached()) return;
+
         this.appendChip(item);
         this.resetChipBuffer();
       }

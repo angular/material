@@ -556,6 +556,56 @@ describe('<md-chips>', function() {
           expect(ctrl.chipBuffer).toBe('Test 2');
           expect(scope.items.length).not.toBe(2);
         });
+
+        it('should not append the chip when maximum is reached and using an autocomplete', function() {
+          var template =
+            '<md-chips ng-model="items" md-max-chips="1">' +
+              '<md-autocomplete ' +
+                'md-selected-item="selectedItem" ' +
+                'md-search-text="searchText" ' +
+                'md-items="item in querySearch(searchText)" ' +
+                'md-item-text="item">' +
+             '<span md-highlight-text="searchText">{{itemtype}}</span>' +
+            '</md-autocomplete>' +
+          '</md-chips>';
+
+          setupScopeForAutocomplete();
+          var element = buildChips(template);
+          var ctrl = element.controller('mdChips');
+
+          // Flush the autocompletes init timeout.
+          $timeout.flush();
+
+          var autocompleteCtrl = element.find('md-autocomplete').controller('mdAutocomplete');
+
+          element.scope().$apply(function() {
+            autocompleteCtrl.scope.searchText = 'K';
+          });
+
+          element.scope().$apply(function() {
+            autocompleteCtrl.select(0);
+          });
+
+          $timeout.flush();
+
+          expect(scope.items.length).toBe(1);
+          expect(scope.items[0]).toBe('Kiwi');
+          expect(element.find('input').val()).toBe('');
+
+          element.scope().$apply(function() {
+            autocompleteCtrl.scope.searchText = 'O';
+          });
+
+          element.scope().$apply(function() {
+            autocompleteCtrl.select(0);
+          });
+
+          $timeout.flush();
+
+          expect(scope.items.length).toBe(1);
+          expect(element.find('input').val()).toBe('Orange');
+        });
+
       });
 
       describe('focus functionality', function() {
