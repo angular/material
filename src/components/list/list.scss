@@ -138,11 +138,13 @@ md-list-item {
       align-items: center;
       justify-content: flex-start;
 
-      padding: 0;
+      padding: 0 16px;
       margin: 0;
 
+      // The button should not inherit the parents background color.
+      background-color: initial;
+
       font-weight: 400;
-      background-color: inherit;
       @include rtl(text-align, left, right);
       border: medium none;
 
@@ -151,16 +153,16 @@ md-list-item {
         position: absolute;
         top: 0;
         left: 0;
+        height: 100%;
 
         margin: 0;
         padding: 0;
-        height: 100%;
       }
 
       ._md-list-item-inner {
         // The list item content should fill the complete width.
-        flex: 1 1 auto;
-        padding: 0 16px;
+        width: 100%;
+        height: 100%;
       }
 
     }
