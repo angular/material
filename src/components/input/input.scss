@@ -82,11 +82,21 @@ md-input-container {
   textarea {
     resize: none;
     overflow: hidden;
-  }
 
-  textarea.md-input {
-    min-height: $input-line-height;
-    -ms-flex-preferred-size: auto; //IE fix
+    &.md-input {
+      min-height: $input-line-height;
+      -ms-flex-preferred-size: auto; //IE fix
+    }
+
+    &._md-textarea-scrollable,
+    &[md-no-autogrow] {
+      overflow: auto;
+    }
+
+    // The height usually gets set to 1 line by `.md-input`.
+    &[md-no-autogrow] {
+      height: auto;
+    }
   }
 
   label:not(._md-container-ignore) {
