@@ -112,20 +112,6 @@ describe('mdListItem directive', function() {
     document.body.removeChild(listItem[0]);
   }));
 
-  xit('should not convert spacebar keypress for text inputs', inject(function($mdConstant) {
-
-    var listItem = setup('<md-list-item><input ng-keypress="pressed = true" type="text"></md-list-item>');
-    var inputEl = angular.element(listItem[0].querySelector('input')[0]);
-
-    expect($rootScope.pressed).toBeFalsy();
-    inputEl.triggerHandler({
-      type: 'keypress',
-      keyCode: $mdConstant.KEY_CODE.SPACE
-    });
-    expect($rootScope.pressed).toBe(true);
-  }));
-
-
   it('creates buttons when used with ng-click', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()" ng-disabled="true"><p>Hello world</p></md-list-item>');
     var buttonChild = listItem.children().children()[0];

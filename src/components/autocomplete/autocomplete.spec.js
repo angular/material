@@ -97,30 +97,7 @@ describe('<md-autocomplete>', function() {
 
       element.remove();
     }));
-
-    // @TODO - re-enable test
-    xit('should allow receiving focus on the autocomplete', function() {
-      var scope = createScope(null, {inputId: 'custom-input-id'});
-      var template = '<md-autocomplete ' +
-            'md-input-id="{{inputId}}" ' +
-            'md-selected-item="selectedItem" ' +
-            'md-search-text="searchText" ' +
-            'md-items="item in match(searchText)" ' +
-            'md-item-text="item.display" ' +
-            'placeholder="placeholder">' +
-          '<span md-highlight-text="searchText">{{item.display}}</span>' +
-        '</md-autocomplete>';
-      var element = compile(template, scope);
-      var focusSpy = jasmine.createSpy('focus');
-
-      document.body.appendChild(element[0]);
-
-      element.on('focus', focusSpy);
-
-      element.focus();
-
-      expect(focusSpy).toHaveBeenCalled();
-    });
+    
 
     it('should allow you to set an input id without floating label', inject(function() {
       var scope = createScope(null, {inputId: 'custom-input-id'});
