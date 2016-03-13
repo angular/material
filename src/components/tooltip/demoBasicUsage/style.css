@@ -6,20 +6,3 @@ md-toolbar .md-toolbar-tools .md-button:hover {
   transform: none;
   -webkit-transform: none;
 }
-
-
-.left {
-  top:70px !important;
-  left:56px !important;
-}
-
-.right {
-  top:70px !important;
-  right:56px !important;
-}
-
-
-.demo-tip {
-  margin-top: -24px;
-    margin-left: 20px;
-}

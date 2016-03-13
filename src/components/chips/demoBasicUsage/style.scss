@@ -5,9 +5,9 @@
 }
 
 .custom-chips {
-  .md-chip {
+  md-chip {
     position: relative;
-    .md-chip-remove-container {
+    ._md-chip-remove-container {
       position: absolute;
       right: 4px;
       top: 4px;

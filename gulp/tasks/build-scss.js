@@ -8,9 +8,11 @@ var filter = require('gulp-filter');
 var concat = require('gulp-concat');
 var series = require('stream-series');
 var util = require('../util');
+var sassUtils = require('../../scripts/gulp-utils');
 var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var insert = require('gulp-insert');
+var addsrc = require('gulp-add-src');
 var gulpif = require('gulp-if');
 var args = util.args;
 var IS_DEV = require('../const').IS_DEV;
@@ -30,6 +32,7 @@ exports.task = function() {
   streams.push(
     scssPipe = gulp.src(getPaths())
       .pipe(util.filterNonCodeFiles())
+      .pipe(filter(['**', '!**/*.css']))
       .pipe(filter(['**', '!**/*-theme.scss']))
       .pipe(filter(['**', '!**/*-print.scss']))
       .pipe(filter(['**', '!**/*-attributes.scss']))
@@ -40,11 +43,11 @@ exports.task = function() {
   streams.push(
     scssPipe
           .pipe(sass())
-          .pipe(rename({extname: '.css'}))              // unminified
-          .pipe(rename({ basename: filename }))
           .pipe(util.autoprefix())
           .pipe(insert.prepend(config.banner))
-          .pipe(gulp.dest(dest))
+          .pipe(addsrc.append(config.cssIEPaths))       // append raw CSS for IE Fixes
+          .pipe(concat('angular-material.css'))
+          .pipe(gulp.dest(dest))                        // unminified
           .pipe(gulpif(!IS_DEV, minifyCss()))
           .pipe(rename({extname: '.min.css'}))
           .pipe(gulp.dest(dest))                        // minified
@@ -56,6 +59,7 @@ exports.task = function() {
   streams.push(
       gulp.src(config.scssLayoutAttributeFiles)
           .pipe(concat('layouts.scss'))
+          .pipe(sassUtils.hoistScssVariables())
           .pipe(sass())
           .pipe(util.autoprefix())
           .pipe(rename({ extname : '.css'}))

@@ -134,9 +134,18 @@ describe('md-input-container directive', function() {
     expect(el).not.toHaveClass('md-input-focused');
 
     el.find('input').triggerHandler('focus');
+
+    // Expect a slight delay (via $mdUtil.nextTick()) which fixes a tabbing issue in Safari, see
+    // https://github.com/angular/material/issues/4203 for more info.
+    expect(el).not.toHaveClass('md-input-focused');
+    $timeout.flush();
     expect(el).toHaveClass('md-input-focused');
 
     el.find('input').triggerHandler('blur');
+
+    // Again, expect the change to not be immediate
+    expect(el).toHaveClass('md-input-focused');
+    $timeout.flush();
     expect(el).not.toHaveClass('md-input-focused');
   });
 
@@ -174,20 +183,6 @@ describe('md-input-container directive', function() {
     expect(el).not.toHaveClass('md-input-has-value');
   });
 
-  it('should append an asterisk to the required label', function() {
-    var el = setup('required');
-    var label = el.find('label');
-
-    expect(label).toHaveClass('md-required');
-  });
-
-  it('should not show asterisk on required label if disabled', function() {
-    var el = setup('md-no-asterisk');
-    var ctrl = el.controller('mdInputContainer');
-
-    expect(ctrl.label).not.toHaveClass('md-required');
-  });
-
   it('should match label to given input id', function() {
     var el = setup('id="foo"');
     expect(el.find('label').attr('for')).toBe('foo');
@@ -198,6 +193,31 @@ describe('md-input-container directive', function() {
     var el = setup();
     expect(el.find('input').attr('id')).toBeTruthy();
     expect(el.find('label').attr('for')).toBe(el.find('input').attr('id'));
+  });
+
+  describe('md-no-asterisk', function() {
+
+    it('should not show asterisk on required label if disabled', function() {
+      var el = setup('md-no-asterisk required');
+      var ctrl = el.controller('mdInputContainer');
+
+      expect(ctrl.label).not.toHaveClass('md-required');
+    });
+
+    it('should not show an asterisk when attribute value is `true`', function() {
+      var el = setup('md-no-asterisk="true" required');
+      var ctrl = el.controller('mdInputContainer');
+
+      expect(ctrl.label).not.toHaveClass('md-required');
+    });
+
+    it('should show an asterisk when attribute value is `false`', function() {
+      var el = setup('md-no-asterisk="false" required');
+      var ctrl = el.controller('mdInputContainer');
+
+      expect(ctrl.label).toHaveClass('md-required');
+    });
+
   });
 
   describe('md-maxlength', function() {

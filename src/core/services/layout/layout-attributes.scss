@@ -171,8 +171,6 @@ $layout-breakpoint-lg:     1920px !default;
       max-width: #{$value};
       max-height: 100%;
       box-sizing: border-box;
-
-      @if $i == 0 {  min-width: 0;  }
     }
 
     [layout="column"] > [#{$flexName}="#{$i * 5}"],
@@ -181,26 +179,19 @@ $layout-breakpoint-lg:     1920px !default;
       max-width: 100%;
       max-height: #{$value};
       box-sizing: border-box;
-
-      @if $i == 0 {  min-height: 0;  }
     }
   }
 
   [layout="row"], [layout#{$name}="row"] {
     > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33.33%;  max-width: 33.33%;  max-height: 100%; box-sizing: border-box; }
     > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66.66%;  max-width: 66.66%;  max-height: 100%; box-sizing: border-box; }
-
-    > .flex { min-width: 0;   }
   }
   [layout="column"], [layout#{$name}="column"] {
     > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33.33%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
     > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66.66%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
-
-    > .flex { min-height: 0;  }
   }
 
 }
-
 @mixin layout-align-for-name($suffix: null) {
 
   // Alignment attributes for layout containers' children

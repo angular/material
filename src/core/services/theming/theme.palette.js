@@ -333,7 +333,7 @@ angular.module('material.core.theming.palette', [])
     '1000': '#000000',
     'A100': '#ffffff',
     'A200': '#eeeeee',
-    'A400': '#bdbdbd',
+    'A400': '#303030',
     'A700': '#616161',
     'contrastDefaultColor': 'dark',
     'contrastLightColors': '600 700 800 900'

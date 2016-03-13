@@ -1,17 +1,17 @@
 /** Theme styles for mdCalendar. */
 
 .md-calendar.md-THEME_NAME-theme {
-  color: '{{foreground-1}}';
+  background: '{{background-A100}}';
+  color: '{{background-1000-0.87}}';
 
   tr:last-child td {
     border-bottom-color: '{{background-200}}';
   }
 }
 .md-THEME_NAME-theme {
-
   .md-calendar-day-header {
-    background: '{{background-hue-1}}';
-    color: '{{foreground-1}}';
+    background: '{{background-300}}';
+    color: '{{background-1000-0.87}}';
   }
 
   .md-calendar-date.md-calendar-date-today {
@@ -34,7 +34,7 @@
   }
 
   .md-calendar-date-selection-indicator:hover {
-    background: '{{background-hue-1}}';
+    background: '{{background-300}}';
   }
 
   // Selected style goes after hover and focus so that it takes priority.
