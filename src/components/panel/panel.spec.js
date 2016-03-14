@@ -1,4 +1,4 @@
-fdescribe('$mdPanel', function() {
+describe('$mdPanel', function() {
   var $mdPanel, $rootScope, $rootEl, $templateCache, $q;
   var panelRef;
   var attachedElements = [];
@@ -140,10 +140,10 @@ fdescribe('$mdPanel', function() {
       expect(panelRef.isAttached).toEqual(false);
     });
 
-    it('should reject on attachOnly when opening', function () {
+    it('should reject on attach when opening', function () {
       var openRejected = false;
 
-      panelRef.attachOnly = function() {
+      panelRef.attach = function() {
         return panelRef._$q.reject();
       };
 
@@ -156,22 +156,6 @@ fdescribe('$mdPanel', function() {
       expect(panelRef.isAttached).toEqual(false);
     });
 
-    it('should reject on setVisibility when opening', function () {
-      var openRejected = false;
-
-      panelRef.setVisibility = function() {
-        return panelRef._$q.reject();
-      };
-
-      panelRef.open().then(function() {}, function () {
-        openRejected = true;
-      });
-      $rootScope.$apply();
-
-      expect(openRejected).toBe(true);
-      expect(panelRef.isAttached).toEqual(true);
-    });
-
     it('should reject on hide when closing', function () {
       var closeRejected = false;
 
@@ -181,7 +165,7 @@ fdescribe('$mdPanel', function() {
       expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
       expect(panelRef.isAttached).toEqual(true);
 
-      panelRef.setVisibility = function() {
+      panelRef.addClass = function() {
         return panelRef._$q.reject();
       };
 
@@ -203,7 +187,7 @@ fdescribe('$mdPanel', function() {
       expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
       expect(panelRef.isAttached).toEqual(true);
 
-      panelRef.detach = function() {
+      panelRef.detachOnly = function() {
         return panelRef._$q.reject();
       };
 
@@ -577,12 +561,12 @@ fdescribe('$mdPanel', function() {
   }
 
   function showPanel() {
-    panelRef && panelRef.setVisibility(true);
+    panelRef && panelRef.removeClass(HIDDEN_CLASS);
     $rootScope.$apply();
   }
 
   function hidePanel() {
-    panelRef && panelRef.setVisibility(false);
+    panelRef && panelRef.addClass(HIDDEN_CLASS);
     $rootScope.$apply();
   }
 });
