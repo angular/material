@@ -79,7 +79,10 @@ AnimationCtrl.prototype.showDialog = function() {
     panelClass: 'demo-dialog-example',
     position: position,
     trapFocus: true,
-    zIndex: 150
+    zIndex: 150,
+    clickOutsideToClose: true,
+    clickEscapeToClose: true,
+    hasBackdrop: true,
   };
 
   this._panelRef = this._mdPanel.open(config);
