@@ -7,6 +7,7 @@ describe('$mdPanel', function() {
   var HIDDEN_CLASS = '_md-panel-hidden';
   var FOCUS_TRAPS_CLASS = '._md-panel-focus-trap';
   var FULLSCREEN_CLASS = '_md-panel-fullscreen';
+  var BACKDROP_CLASS = '._md-panel-backdrop';
   var DEFAULT_TEMPLATE = '<div>Hello World!</div>';
   var DEFAULT_CONFIG = { template: DEFAULT_TEMPLATE };
   var PANEL_ID_PREFIX = 'panel_';
@@ -145,6 +146,7 @@ describe('$mdPanel', function() {
       $rootScope.$apply();
 
       expect(openResolved).toBe(true);
+      expect(PANEL_WRAPPER_CLASS).toExist();
       expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
       expect(panelRef.isAttached).toEqual(true);
 
@@ -155,6 +157,7 @@ describe('$mdPanel', function() {
 
       expect(closeResolved).toBe(true);
       expect(panelRef.isAttached).toEqual(false);
+      expect(PANEL_WRAPPER_CLASS).not.toExist();
     });
 
     it('should reject on create when opening', function () {
@@ -189,6 +192,40 @@ describe('$mdPanel', function() {
       expect(panelRef.isAttached).toEqual(false);
     });
 
+    it('should resolve on animate failure when opening', function () {
+      var openResolved = false;
+
+      panelRef._animateOpen = function() {
+        return panelRef._$q.reject();
+      };
+
+      panelRef.open().then(function() {
+        openResolved = true;
+      }, function () {});
+      $rootScope.$apply();
+
+      expect(openResolved).toBe(true);
+      expect(panelRef.isAttached).toEqual(true);
+      expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
+    });
+
+    it('should reject on show when opening', function () {
+      var openRejected = false;
+
+      panelRef.show = function() {
+        return panelRef._$q.reject();
+      };
+
+      panelRef.open().then(function() {}, function () {
+        openRejected = true;
+      });
+      $rootScope.$apply();
+
+      expect(openRejected).toBe(true);
+      expect(panelRef.isAttached).toEqual(true);
+      expect(panelRef._panelContainer).toHaveClass(HIDDEN_CLASS);
+    });
+
     it('should reject on hide when closing', function () {
       var closeRejected = false;
 
@@ -209,6 +246,29 @@ describe('$mdPanel', function() {
 
       expect(closeRejected).toBe(true);
       expect(panelRef.isAttached).toEqual(true);
+    });
+
+    it('should resolve on animate failure when closing', function () {
+      var closeResolved = false;
+
+      panelRef.open();
+      $rootScope.$apply();
+
+      expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
+      expect(panelRef.isAttached).toEqual(true);
+
+      panelRef._animateClose = function() {
+        return panelRef._$q.reject();
+      };
+
+      panelRef.close().then(function() {
+        closeResolved = true;
+      }, function () {});
+      $rootScope.$apply();
+
+      expect(closeResolved).toBe(true);
+      expect(panelRef.isAttached).toEqual(false);
+      expect(panelRef._panelContainer).toHaveClass(HIDDEN_CLASS);
     });
 
     it('should reject on detach when closing', function () {
@@ -477,7 +537,7 @@ describe('$mdPanel', function() {
       expect(angular.element(document.activeElement).attr('id')).toBe('donuts');
     });
 
-    it('should not focus on open focusOnOpen=false', function() {
+    it('should not focus on open when focusOnOpen=false', function() {
       var template = '<button id="donuts" md-autofocus>Donuts</button>';
       var config = {
         focusOnOpen: false,
@@ -499,8 +559,57 @@ describe('$mdPanel', function() {
 
       openPanel(config);
       expect(PANEL_EL).toHaveClass(FULLSCREEN_CLASS);
-
     });
+
+    it('should default backdrop to false', function() {
+      openPanel(DEFAULT_CONFIG);
+      expect(BACKDROP_CLASS).not.toExist();
+    });
+
+    it('should show backdrop when hasBackdrop=true', function() {
+      var config = { template: DEFAULT_TEMPLATE, hasBackdrop: true };
+
+      openPanel(config);
+      expect(BACKDROP_CLASS).toExist();
+
+      closePanel().then(function() {
+        expect(BACKDROP_CLASS).not.toExist();
+      }, closeFailFn)
+    });
+
+    it('should close when clickOutsideToClose and hasBackdrop are set to true',
+        function() {
+          var config = {
+            template: DEFAULT_TEMPLATE,
+            clickOutsideToClose: true,
+            hasBackdrop: true
+          };
+
+          openPanel(config);
+
+          expect(PANEL_EL).toExist();
+          expect(BACKDROP_CLASS).toExist();
+
+          // Can't access the closePromise so mock it out.
+          var closeCalled = false;
+          panelRef.close = function() {
+            closeCalled = true;
+            return panelRef._$q.resolve(self);
+          };
+
+          var container = panelRef._panelContainer;
+          container.triggerHandler({
+            type: 'mousedown',
+            target: container[0]
+          });
+          container.triggerHandler({
+            type: 'mouseup',
+            target: container[0]
+          });
+          $rootScope.$apply();
+
+          expect(closeCalled).toBe(true);
+        });
   });
 
   describe('component logic: ', function() {
@@ -788,7 +897,6 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         var panelCss = document.querySelector(PANEL_EL).style;
-        expect(panelCss.position).toEqual('fixed');
         expect(panelCss.top).toEqual(top);
       });
 
@@ -799,7 +907,6 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         var panelCss = document.querySelector(PANEL_EL).style;
-        expect(panelCss.position).toEqual('fixed');
         expect(panelCss.top).toEqual('0px');
       });
 
@@ -810,7 +917,6 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         var panelCss = document.querySelector(PANEL_EL).style;
-        expect(panelCss.position).toEqual('fixed');
         expect(panelCss.bottom).toEqual('')
         expect(panelCss.top).toEqual('0px');
       });
@@ -823,7 +929,6 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         var panelCss = document.querySelector(PANEL_EL).style;
-        expect(panelCss.position).toEqual('fixed');
         expect(panelCss.bottom).toEqual(bottom);
       });
 
@@ -834,7 +939,6 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         var panelCss = document.querySelector(PANEL_EL).style;
-        expect(panelCss.position).toEqual('fixed');
         expect(panelCss.bottom).toEqual('0px');
       });
 
@@ -845,7 +949,6 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         var panelCss = document.querySelector(PANEL_EL).style;
-        expect(panelCss.position).toEqual('fixed');
         expect(panelCss.top).toEqual('');
         expect(panelCss.bottom).toEqual('0px');
       });
@@ -858,7 +961,6 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         var panelCss = document.querySelector(PANEL_EL).style;
-        expect(panelCss.position).toEqual('fixed');
         expect(panelCss.left).toEqual(left);
       });
 
@@ -869,7 +971,6 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         var panelCss = document.querySelector(PANEL_EL).style;
-        expect(panelCss.position).toEqual('fixed');
         expect(panelCss.left).toEqual('0px');
       });
 
@@ -880,7 +981,6 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         var panelCss = document.querySelector(PANEL_EL).style;
-        expect(panelCss.position).toEqual('fixed');
         expect(panelCss.right).toEqual('');
         expect(panelCss.left).toEqual('0px');
       });
@@ -893,7 +993,6 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         var panelCss = document.querySelector(PANEL_EL).style;
-        expect(panelCss.position).toEqual('fixed');
         expect(panelCss.right).toEqual(right);
       });
 
@@ -904,7 +1003,6 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         var panelCss = document.querySelector(PANEL_EL).style;
-        expect(panelCss.position).toEqual('fixed');
         expect(panelCss.right).toEqual('0px');
       });
 
@@ -915,7 +1013,6 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         var panelCss = document.querySelector(PANEL_EL).style;
-        expect(panelCss.position).toEqual('fixed');
         expect(panelCss.left).toEqual('');
         expect(panelCss.right).toEqual('0px');
       });
@@ -997,7 +1094,6 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         var panelCss = document.querySelector(PANEL_EL).style;
-        expect(panelCss.position).toEqual('fixed');
         expect(panelCss.left).toBeApproximately(myButtonRect.left);
         expect(panelCss.top).toBeApproximately(myButtonRect.top);
       });
@@ -1013,7 +1109,6 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         var panelCss = document.querySelector(PANEL_EL).style;
-        expect(panelCss.position).toEqual('fixed');
         expect(panelCss.left).toBeApproximately(myButtonRect.left);
         expect(panelCss.top).toBeApproximately(myButtonRect.top);
       });
@@ -1029,7 +1124,6 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         var panelCss = document.querySelector(PANEL_EL).style;
-        expect(panelCss.position).toEqual('fixed');
         expect(panelCss.left).toBeApproximately(myButtonRect.left);
         expect(panelCss.top).toBeApproximately(myButtonRect.top);
       });
@@ -1351,20 +1445,27 @@ describe('$mdPanel', function() {
    * Closes the panel using an already created panelRef.
    */
   function closePanel() {
-    panelRef && panelRef.close();
+    var closePromise = panelRef && panelRef.close();
     $rootScope.$apply();
     $material.flushOutstandingAnimations();
+    return closePromise;
   }
 
   function showPanel() {
-    panelRef && panelRef.show(HIDDEN_CLASS);
+    var showPromise = panelRef && panelRef.show(HIDDEN_CLASS);
     $rootScope.$apply();
     $material.flushOutstandingAnimations();
+    return showPromise;
   }
 
   function hidePanel() {
-    panelRef && panelRef.hide(HIDDEN_CLASS);
+    var hidePromise = panelRef && panelRef.hide(HIDDEN_CLASS);
     $rootScope.$apply();
     $material.flushOutstandingAnimations();
+    return hidePromise;
+  }
+
+  function closeFailFn() {
+    fail('Panel did not close properly.');
   }
 });
