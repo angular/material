@@ -1280,7 +1280,7 @@ function SelectProvider($$interimElementProvider) {
       var mdSelect = opts.selectCtrl;
       if (mdSelect) {
         var menuController = opts.selectEl.controller('mdSelectMenu');
-        mdSelect.setLabelText(menuController.selectedLabels());
+        mdSelect.setLabelText(menuController ? menuController.selectedLabels() : '');
         mdSelect.triggerClose();
       }
     }
