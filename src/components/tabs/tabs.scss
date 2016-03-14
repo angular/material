@@ -227,18 +227,14 @@ md-ink-bar {
   $duration: $swift-ease-in-out-duration * 0.5;
   $multiplier: 0.5;
   position: absolute;
-  left: auto;
-  right: auto;
+  left: 0;
   bottom: 0;
   height: 2px;
-  &.md-left {
-    transition: left ($duration * $multiplier) $swift-ease-in-out-timing-function,
-        right $duration $swift-ease-in-out-timing-function;
-  }
-  &.md-right {
-    transition: left $duration $swift-ease-in-out-timing-function,
-        right ($duration * $multiplier) $swift-ease-in-out-timing-function;
-  }
+  width: 100px;
+  transform: translate3d(0, 0, 0) scaleX(0);
+
+  transition: transform $duration $swift-ease-in-out-timing-function;
+  transform-origin: top left;
 }
 
 md-tab {
