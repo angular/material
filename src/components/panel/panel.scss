@@ -28,41 +28,42 @@
 .md-panel {
   opacity: 0;
   overflow: auto;
+  position: fixed;
 
   &._md-panel-shown {
     // Only used when custom animations are present.
     // Overridden by the default animations.
     opacity: 1;
     transition: none;
-
-    &._md-panel-animate-slide-in {
-      opacity: 1;
-      transition: $swift-ease-out, opacity 1ms;
-    }
-
-    &._md-panel-animate-scale-in {
-      opacity: 1;
-      transition: $swift-ease-out;
-    }
-
-    &._md-panel-animate-fade-in {
-      opacity: 1;
-      transition: all 0.4s linear;
-    }
   }
 
-  &._md-panel-animate-slide-out {
+  &._md-panel-animate-enter {
     opacity: 1;
-    transition: $swift-ease-out, opacity 1ms;
+    transition: $material-enter;
   }
 
-  &._md-panel-animate-scale-out {
-    opacity: 0;
-    transition: $swift-ease-out;
+  &._md-panel-animate-leave {
+    opacity: 1;
+    transition: $material-leave;
   }
 
+  &._md-panel-animate-scale-out,
   &._md-panel-animate-fade-out {
     opacity: 0;
-    transition: all 0.4s linear;
+  }
+
+  &._md-panel-backdrop {
+    height: 100%;
+    position: absolute;
+    width: 100%;
+  }
+
+  &._md-opaque-enter {
+    opacity: .48;
+    transition: opacity $material-enter-duration $material-enter-timing-function;
+  }
+
+  &._md-opaque-leave {
+    transition: opacity $material-leave-duration $material-leave-timing-function;
   }
 }

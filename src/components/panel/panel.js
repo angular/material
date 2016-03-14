@@ -4,7 +4,8 @@
  */
 angular
     .module('material.components.panel', [
-      'material.core'
+      'material.core',
+      'material.components.backdrop'
     ])
     .service('$mdPanel', MdPanelService);
 
@@ -126,14 +127,14 @@ angular
  *   - `animation` - `{MdPanelAnimation=}`: An MdPanelAnimation object that
  *     specifies the animation of the panel. For more information, see
  *     `MdPanelAnimation`.
+ *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop
+ *     behind the panel. Defaults to false.
  *
  * TODO(ErinCoughlan): Add the following config options.
  *   - `groupName` - `{string=}`: Name of panel groups. This group name is
  *     used for configuring the number of open panels and identifying specific
  *     behaviors for groups. For instance, all tooltips will be identified
  *     using the same groupName.
- *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop
- *     behind the panel. Defaults to false.
  *   - `disableParentScroll` - `{boolean=}`: Whether the user can scroll the
  *     page behind the panel. Defaults to false.
  *
@@ -610,6 +611,7 @@ function MdPanelService($rootElement, $rootScope, $injector) {
     escapeToClose: false,
     focusOnOpen: true,
     fullscreen: false,
+    hasBackdrop: false,
     transformTemplate: angular.bind(this, this.wrapTemplate_),
     trapFocus: false,
     zIndex: defaultZIndex
@@ -761,6 +763,11 @@ function MdPanelRef(config, $injector) {
   /** @private @const {!angular.$animate} */
   this._$animate = $injector.get('$animate');
 
+  /** @private @const {!MdPanelRef} */
+  this._$mdPanel = $injector.get('$mdPanel');
+
+  /** @private @const {!angular.$log} */
+  this._$log = $injector.get('$log');
 
   // Public variables.
   /**
@@ -811,6 +818,9 @@ function MdPanelRef(config, $injector) {
 
   /** @private {!angular.JQLite|undefined} */
   this._bottomFocusTrap;
+
+  /** @private {!$mdPanel|undefined} */
+  this._backdropRef;
 }
 
 
@@ -831,13 +841,10 @@ MdPanelRef.prototype.open = function() {
   // TODO(ErinCoughlan) - Cancel any in-progress actions.
 
   var self = this;
-  this._openPromise = this._$q(function(resolve, reject) {
-    self.attachOnly().then(function() {
-      self.show().then(function() {
-        resolve(self);
-      }, reject);
-    }, reject);
-  });
+  this._openPromise = this.attachOnly()
+      .then(function() {
+        return self.show();
+      }, this._$q.reject);
 
   return this._openPromise;
 };
@@ -853,15 +860,17 @@ MdPanelRef.prototype.close = function() {
   // TODO(ErinCoughlan) - Cancel any in-progress actions.
 
   var self = this;
-  return this._$q(function(resolve, reject) {
-    self.hide().then(function () {
-      self.detach().then(function() {
+  var closePromise = this.hide()
+      .then(function() {
+        return self.detach();
+      }, this._$q.reject)
+      .then(function() {
         // TODO(ErinCoughlan) - Add destroy. This will make the code here
         // different than just calling this.detach().
-        resolve(self);
-      }, reject);
-    }, reject);
-  });
+        return self._$q.resolve(self);
+      }, this._$q.reject);
+
+  return closePromise;
 };
 
 
@@ -879,13 +888,15 @@ MdPanelRef.prototype.attachOnly = function() {
   // TODO(ErinCoughlan) - Cancel any in-progress actions.
 
   var self = this;
-  this._attachPromise = this._$q(function(resolve, reject) {
-    self._createPanel().then(function() {
+
+  this._attachPromise = this._$q.all([
+    this._createBackdrop(),
+    this._createPanel().then(function() {
       self.isAttached = true;
       self._addEventListeners();
-      resolve(self);
-    }, reject);
-  });
+      return self._$q.resolve(self);
+    }, this._$q.reject)
+  ]);
 
   return this._attachPromise;
 };
@@ -899,31 +910,37 @@ MdPanelRef.prototype.attachOnly = function() {
  */
 MdPanelRef.prototype.detach = function() {
   if (!this.isAttached) {
-    this._detachPromise;
+    return this._detachPromise;
   }
 
   // TODO(ErinCoughlan) - Cancel any in-progress actions.
 
   var self = this;
-  this._detachPromise = this._$q(function(resolve, reject) {
-    self.hide().then(function() {
-      self._removeEventListener();
 
-      // Remove the focus traps that we added earlier for keeping focus within
-      // the panel.
-      if (self._topFocusTrap && self._topFocusTrap.parentNode) {
-        self._topFocusTrap.parentNode.removeChild(self._topFocusTrap);
-      }
+  var detachFn = function() {
+    self._removeEventListener();
 
-      if (self._bottomFocusTrap && self._bottomFocusTrap.parentNode) {
-        self._bottomFocusTrap.parentNode.removeChild(self._bottomFocusTrap);
-      }
+    // Remove the focus traps that we added earlier for keeping focus within
+    // the panel.
+    if (self._topFocusTrap && self._topFocusTrap.parentNode) {
+      self._topFocusTrap.parentNode.removeChild(self._topFocusTrap);
+    }
 
-      self._panelContainer.remove();
-      self.isAttached = false;
-      resolve(self);
-    }, reject);
-  });
+    if (self._bottomFocusTrap && self._bottomFocusTrap.parentNode) {
+      self._bottomFocusTrap.parentNode.removeChild(self._bottomFocusTrap);
+    }
+
+    self._panelContainer.remove();
+    self.isAttached = false;
+    return self._$q.resolve(self);
+  };
+
+  this._detachPromise = this.hide().then(function () {
+    return self._$q.all([
+      detachFn(),
+      self._backdropRef ? self._backdropRef.detach() : self._$q.resolve(self)
+    ]);
+  }, this._$q.reject);
 
   return this._detachPromise;
 };
@@ -948,13 +965,24 @@ MdPanelRef.prototype.show = function() {
   // TODO(ErinCoughlan) - Cancel any in-progress actions.
 
   var self = this;
-  this._showPromise = this._$q(function(resolve, reject) {
+
+  var animatePromise = function() {
     self.removeClass(MD_PANEL_HIDDEN);
-    self._animateOpen().then(function() {
-      self._focusOnOpen();
-      resolve(self);
-    }, reject);
-  });
+    return self._animateOpen();
+  }
+
+  this._showPromise = this._$q.all([
+      this._backdropRef ? this._backdropRef.show() : this._$q.resolve(self),
+      animatePromise().then(function() {
+        return self._$q.resolve(self);
+      }, function() {
+        self._$log.warn('MdPanel Animations failed. Showing panel without animating.');
+        return self._$q.resolve(self);
+      }).then(function() {
+        self._focusOnOpen();
+        return self._$q.resolve(self);
+      }, self._$q.reject)
+  ]);
 
   return this._showPromise;
 };
@@ -979,12 +1007,18 @@ MdPanelRef.prototype.hide = function() {
   // TODO(ErinCoughlan) - Cancel any in-progress actions.
 
   var self = this;
-  this._hidePromise = this._$q(function(resolve, reject) {
-    self._animateClose().then(function() {
+  this._hidePromise = this._$q.all([
+    this._backdropRef ? this._backdropRef.hide() : this._$q.resolve(self),
+    this._animateClose().then(function() {
+      return self._$q.resolve(self);
+    }, function() {
+      self._$log.warn('MdPanel Animations failed. Hiding panel without animating.');
+      return self._$q.resolve(self);
+    }).then(function() {
       self.addClass(MD_PANEL_HIDDEN);
-      resolve(self);
-    }, reject);
-  });
+      return self._$q.resolve(self);
+    }, self._$q.reject)
+  ]);
 
   return this._hidePromise;
 };
@@ -1037,24 +1071,6 @@ MdPanelRef.prototype.toggleClass = function(toggleClass) {
 
 
 /**
- * Focuses on the panel or the first focus target.
- * @private
- */
-MdPanelRef.prototype._focusOnOpen = function() {
-  if (this._config['focusOnOpen']) {
-    // Wait a digest to guarantee md-autofocus has finished adding the class
-    // _md-autofocus, otherwise the focusable element isn't available to focus.
-    var self = this;
-    this._$rootScope.$applyAsync(function() {
-      var target = self._$mdUtil.findFocusTarget(self._panelEl) ||
-          self._panelEl;
-      target.focus();
-    });
-  }
-};
-
-
-/**
  * Creates a panel and adds it to the dom.
  *
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
@@ -1090,7 +1106,7 @@ MdPanelRef.prototype._createPanel = function() {
 
           self._addStyles();
           self._configureTrapFocus();
-          resolve(self);
+          return resolve(self);
         }, reject);
   });
 };
@@ -1127,7 +1143,6 @@ MdPanelRef.prototype._configurePosition = function() {
 
   if (!positionConfig) { return; }
 
-  this._panelEl.css('position', 'fixed');
   this._panelEl.css('top', positionConfig.getTop(this._panelEl));
   this._panelEl.css('bottom', positionConfig.getBottom(this._panelEl));
   this._panelEl.css('left', positionConfig.getLeft(this._panelEl));
@@ -1136,6 +1151,53 @@ MdPanelRef.prototype._configurePosition = function() {
   // Use the vendor prefixed version of transform.
   var prefixedTransform = this._$mdConstant.CSS.TRANSFORM;
   this._panelEl.css(prefixedTransform, positionConfig.getTransform());
+};
+
+
+/**
+ * Focuses on the panel or the first focus target.
+ * @private
+ */
+MdPanelRef.prototype._focusOnOpen = function() {
+  if (this._config['focusOnOpen']) {
+    // Wait a digest to guarantee md-autofocus has finished adding the class
+    // _md-autofocus, otherwise the focusable element isn't available to focus.
+    var self = this;
+    // TODO(KarenParker): Use $$postDigest here.
+    this._$rootScope.$applyAsync(function() {
+      var target = self._$mdUtil.findFocusTarget(self._panelEl) ||
+        self._panelEl;
+      target.focus();
+    });
+  }
+};
+
+
+/**
+ * Shows the backdrop.
+ * @returns {!angular.$q.Promise} A promise that is resolved when the backdrop
+ * is created and attached.
+ * @private
+ */
+MdPanelRef.prototype._createBackdrop = function() {
+  if (this._config.hasBackdrop) {
+    var backdropAnimation = this._$mdPanel.newPanelAnimation()
+      .openFrom(this._config.attachTo)
+      .withAnimation({
+        open: '_md-opaque-enter',
+        close: '_md-opaque-leave'
+      });
+    var backdropConfig = {
+      animation: backdropAnimation,
+      attachTo: this._config.attachTo,
+      focusOnOpen: false,
+      panelClass: '_md-panel-backdrop',
+      zIndex: this._config.zIndex - 1
+    }
+    this._backdropRef = this._$mdPanel.create(backdropConfig);
+    return this._backdropRef.attachOnly();
+  }
+  return this._$q.resolve();
 };
 
 
@@ -1302,7 +1364,7 @@ MdPanelRef.prototype._animateClose = function() {
   return this._$q(function(resolve, reject) {
     animationConfig.animateClose(self._$q).then(function(){
       self.removeClass('md-panel-is-showing');
-      resolve(self);
+      return resolve(self);
     }, reject);
   });
 };
@@ -1882,13 +1944,14 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl, animator) {
 
   switch (this._animationClass) {
     case MdPanelAnimation.animation.SLIDE:
+      // Slide should start with opacity: 1.
+      panelEl.css('opacity', '1');
+
       animationOptions = {
-        transitionInClass: '_md-panel-animate-slide-in _md-panel-shown',
-        transitionOutClass: '_md-panel-animate-slide-out'
+        transitionInClass: '_md-panel-animate-enter'
       };
       reverseAnimationOptions = {
-        transitionOutClass: '_md-panel-animate-slide-in _md-panel-shown',
-        transitionInClass: '_md-panel-animate-slide-out'
+        transitionInClass: '_md-panel-animate-leave'
       };
       openFrom = animator.toTransformCss(animator.calculateSlideToOrigin(
           panelEl, this._openFrom) || "");
@@ -1897,12 +1960,10 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl, animator) {
       break;
     case MdPanelAnimation.animation.SCALE:
       animationOptions = {
-        transitionInClass: '_md-panel-animate-scale-in _md-panel-shown',
-        transitionOutClass: '_md-panel-animate-scale-out'
+        transitionInClass: '_md-panel-animate-enter'
       };
       reverseAnimationOptions = {
-        transitionOutClass: '_md-panel-animate-scale-in _md-panel-shown',
-        transitionInClass: '_md-panel-animate-scale-out'
+        transitionInClass: '_md-panel-animate-scale-out _md-panel-animate-leave'
       };
       openFrom = animator.toTransformCss(animator.calculateZoomToOrigin(
           panelEl, this._openFrom) || "");
@@ -1911,25 +1972,28 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl, animator) {
       break;
     case MdPanelAnimation.animation.FADE:
       animationOptions = {
-        transitionInClass: '_md-panel-animate-fade-in _md-panel-shown',
-        transitionOutClass: '_md-panel-animate-fade-out'
+        transitionInClass: '_md-panel-animate-enter'
       };
       reverseAnimationOptions = {
-        transitionOutClass: '_md-panel-animate-fade-in _md-panel-shown',
-        transitionInClass: '_md-panel-animate-fade-out'
+        transitionInClass: '_md-panel-animate-fade-out _md-panel-animate-leave'
       };
       break;
     default:
       if (angular.isString(this._animationClass)) {
         animationOptions = {
-          transitionInClass: this._animationClass + ' _md-panel-shown'
+          transitionInClass: this._animationClass
+        };
+        reverseAnimationOptions = {
+          transitionOutClass: this._animationClass
         };
       } else {
         animationOptions = {
-          transitionInClass: this._animationClass['open'] + ' _md-panel-shown'
+          transitionInClass: this._animationClass['open'],
+          transitionOutClass: this._animationClass['close'],
         };
         reverseAnimationOptions = {
-          transitionInClass: this._animationClass['close']
+          transitionInClass: this._animationClass['close'],
+          transitionOutClass: this._animationClass['open']
         };
       }
   }
