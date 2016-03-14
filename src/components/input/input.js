@@ -372,22 +372,27 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
       var node = element[0];
       var container = containerCtrl.element[0];
 
-      var min_rows = NaN;
+      var rows = NaN;
+      var minRows = NaN;
       var lineHeight = null;
       // can't check if height was or not explicity set,
       // so rows attribute will take precedence if present
       if (node.hasAttribute('rows')) {
-        min_rows = parseInt(node.getAttribute('rows'));
+        rows = parseInt(node.getAttribute('rows'));
+      } else if (node.hasAttribute('min-rows')) {
+        minRows = parseInt(node.getAttribute('min-rows'));
       }
 
-      var onChangeTextarea = $mdUtil.debounce(growTextarea, 1);
+      var onChangeTextarea = $mdUtil.debounce(function() {
+        $mdUtil.nextTick(growTextarea);
+      }, 1);
 
       function pipelineListener(value) {
         onChangeTextarea();
         return value;
       }
 
-      if (ngModelCtrl) {
+      if (hasNgModel) {
         ngModelCtrl.$formatters.push(pipelineListener);
         ngModelCtrl.$viewChangeListeners.push(pipelineListener);
       } else {
@@ -395,8 +400,8 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
       }
       element.on('keydown input', onChangeTextarea);
 
-      if (isNaN(min_rows)) {
-        element.attr('rows', '1');
+      if (isNaN(rows)) {
+        element.attr('rows', isNaN(minRows) ? '1' : minRows);
 
         element.on('scroll', onScroll);
       }
@@ -414,12 +419,13 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
         // temporarily disables element's flex so its height 'runs free'
         element.addClass('md-no-flex');
 
-        if (isNaN(min_rows)) {
+        var contentHeight;
+        if (isNaN(rows) || !isNaN(minRows)) {
           node.style.height = "auto";
           node.scrollTop = 0;
-          var height = getHeight();
-          if (height) node.style.height = height + 'px';
-        } else {
+          contentHeight = getHeight();
+        }
+        if (!isNaN(rows) || !isNaN(minRows)) {
           node.setAttribute("rows", 1);
 
           if (!lineHeight) {
@@ -430,8 +436,22 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
             node.style.minHeight = null;
           }
 
-          var rows = Math.min(min_rows, Math.round(node.scrollHeight / lineHeight));
           node.setAttribute("rows", rows);
+        }
+
+        if (isNaN(rows)) {
+          if (!isNaN(minRows) && contentHeight) {
+            var calcHeight;
+            var minHeight = lineHeight * minRows;
+
+            if (contentHeight <= minHeight) calcHeight = minHeight;
+            else calcHeight = minHeight + (contentHeight - minHeight);
+
+            node.style.height = calcHeight + "px";
+          } else if (contentHeight) {
+            node.style.height = contentHeight + 'px';
+          }
+        } else {
           node.style.height = lineHeight * rows + "px";
         }
 

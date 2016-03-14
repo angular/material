@@ -511,6 +511,90 @@ describe('md-input-container directive', function() {
       var newHeight = textarea.offsetHeight;
       expect(textarea.offsetHeight).toBeGreaterThan(oldHeight);
     });
+
+    it('should not grow or shrink the textarea with rows attribute', function() {
+      var rows = 5;
+      createAndAppendElement('rows="' + rows +'"');
+
+      textarea.style.minHeight = '0';
+      var lineHeight = ngTextarea.prop('clientHeight');
+      textarea.style.minHeight = null;
+
+      ngTextarea.val('Multiple\nlines\nof\ntext');
+      ngTextarea.triggerHandler('input');
+
+      scope.$apply();
+      $timeout.flush();
+
+      expect(textarea.style.height).toBe(rows * lineHeight + "px");
+    });
+
+    it('should grow and shrink the textarea without any attribute', function() {
+      createAndAppendElement();
+      var lastHeight;
+
+      ngTextarea.val('Multiple\nlines\nof\ntext\nwhich\ncontains\neight\nlines');
+      ngTextarea.triggerHandler('input');
+
+      scope.$apply();
+      $timeout.flush();
+
+      lastHeight = textarea.scrollHeight;
+      expect(textarea.style.height).toBe(lastHeight + "px");
+
+      ngTextarea.val('Multiple\nlines\nof\ntext');
+      ngTextarea.triggerHandler('input');
+
+      scope.$apply();
+      $timeout.flush();
+
+      expect(textarea.style.height).toBeLessThan(lastHeight + "px");
+      lastHeight = textarea.scrollHeight;
+
+      ngTextarea.val('Multiple\nlines\nof\ntext\nwhich\ncontains\neight\nlines\nplus\nmore');
+      ngTextarea.triggerHandler('input');
+
+      scope.$apply();
+      $timeout.flush();
+
+      expect(textarea.style.height).toBeGreaterThan(lastHeight + "px");
+    });
+
+    it("should grow the textarea with min-rows attribute", function() {
+      var rows = 3;
+      var lastHeight;
+      createAndAppendElement('min-rows="' + rows +'"');
+
+      textarea.style.minHeight = '0';
+      var lineHeight = ngTextarea.prop('clientHeight');
+      textarea.style.minHeight = null;
+
+      ngTextarea.val('Multiple\nlines');
+      ngTextarea.triggerHandler('input');
+
+      scope.$apply();
+      $timeout.flush();
+
+      var minHeight = lastHeight = rows * lineHeight;
+      expect(textarea.style.height).toBe(lastHeight + "px");
+
+      ngTextarea.val('Multiple\nlines\nof\ntext\nwhich\ngot\nincreased');
+      ngTextarea.triggerHandler('input');
+
+      scope.$apply();
+      $timeout.flush();
+
+      expect(parseInt(textarea.style.height)).toBeGreaterThan(lastHeight);
+
+      ngTextarea.val('Multiple\nlines');
+      ngTextarea.triggerHandler('input');
+
+      scope.$apply();
+      $timeout.flush();
+
+      expect(textarea.style.height).not.toBeLessThan(minHeight);
+    });
+
   });
 
   describe('icons', function () {
