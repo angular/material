@@ -374,6 +374,27 @@ describe('$mdPanel', function() {
       var focusTraps = document.querySelectorAll(FOCUS_TRAPS_CLASS);
       expect(focusTraps.length).toBe(0);
     });
+
+    it('should focus on open', function() {
+      var template = '<button  id="donuts" md-autofocus>Donuts</button>';
+      var config = { template: template };
+
+      openPanel(config);
+
+      expect(angular.element(document.activeElement).attr('id')).toBe('donuts');
+    });
+
+    it('should not focus on open focusOnOpen=false', function() {
+      var template = '<button id="donuts" md-autofocus>Donuts</button>';
+      var config = {
+        focusOnOpen: false,
+        template: template
+      };
+
+      openPanel(config);
+
+      expect(angular.element(document.activeElement).attr('id')).not.toBe('donuts');
+    });
   });
 
   describe('component logic: ', function() {
@@ -654,6 +675,10 @@ describe('$mdPanel', function() {
     } else {
       panelRef = $mdPanel.open();
     }
+    $rootScope.$apply();
+    // Second $apply needed to account for the $applyAsync in attach. This
+    // isn't always necessary, but is better to have here twice than sprinkled
+    // through the tests.
     $rootScope.$apply();
   }
 

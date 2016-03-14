@@ -116,6 +116,9 @@ angular
  *     panel. If `trapFocus` is true, the user will not be able to interact
  *     with the rest of the page until the panel is dismissed. Defaults to
  *     false.
+ *   - `focusOnOpen` - `{boolean=}`: An option to override focus behavior on
+ *     open. Only disable if focusing some other way, as focus management is
+ *     required for panels to be accessible. Defaults to true.
  *
  * TODO(ErinCoughlan): Add the following config options.
  *   - `groupName` - `{string=}`: Name of panel groups. This group name is
@@ -132,9 +135,6 @@ angular
  *   - `fullScreen` - `{boolean=}`: Whether the panel should be full screen.
  *     Applies the class `.md-panel-fullscreen` to the panel on open. Defaults
  *     to false.
- *   - `focusOnOpen` - `{boolean=}`: An option to override focus behavior on
- *     open. Only disable if focusing some other way, as focus management is
- *     required for panels to be accessible. Defaults to true.
  *
  * @returns {MdPanelRef} panelRef
  */
@@ -282,6 +282,13 @@ angular
  *
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
  * toggled the class and animations are completed.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#focusOnOpen
+ * @description
+ * Focuses the panel content if the focusOnOpen config value is true.
  */
 
 
@@ -465,6 +472,7 @@ function MdPanelService($rootElement, $rootScope, $injector) {
     bindToController: true,
     clickOutsideToClose: false,
     escapeToClose: false,
+    focusOnOpen: true,
     scope: $rootScope.$new(true),
     transformTemplate: angular.bind(this, this.wrapTemplate_),
     trapFocus: false,
@@ -561,8 +569,14 @@ function MdPanelRef(config, $injector) {
   /** @private @const {!angular.$mdCompiler} */
   this._$mdCompiler = $injector.get('$mdCompiler');
 
-  /** @private */
-  this._$mdConstant = $injector.get('$mdConstant')
+  /** @private @const */
+  this._$mdConstant = $injector.get('$mdConstant');
+
+  /** @private @const {!angular.$mdUtil} */
+  this._$mdUtil = $injector.get('$mdUtil');
+
+  /** @private @const {!angular.Scope} */
+  this._$rootScope = $injector.get('$rootScope');
 
 
   // Public variables.
@@ -633,7 +647,6 @@ MdPanelRef.prototype.open = function() {
 
   // TODO(ErinCoughlan) - Cancel any in-progress actions.
 
-  var self = this;
   this._openPromise = this.attach();
 
   return this._openPromise;
@@ -678,6 +691,7 @@ MdPanelRef.prototype.attach = function() {
   var self = this;
   this._attachPromise = this._$q(function(resolve, reject) {
     self._createPanel().then(function() {
+      self.focusOnOpen();
       self.isAttached = true;
       self._addEventListeners();
       resolve(self);
@@ -747,6 +761,8 @@ MdPanelRef.prototype.addClass = function(newClass) {
     try {
       // TODO(KarenParker): Add show/hide animation.
       self._panelContainer.addClass(newClass);
+      // TODO(KarenParker): Chain this with animation when available.
+      self.focusOnOpen();
       resolve(self);
     } catch (e) {
       reject(e.message);
@@ -781,6 +797,8 @@ MdPanelRef.prototype.removeClass = function(oldClass) {
     try {
       // TODO(KarenParker): Add show/hide animation.
       self._panelContainer.removeClass(oldClass);
+      // TODO(KarenParker): Chain this with animation when available.
+      self.focusOnOpen();
       resolve(self);
     } catch (e) {
       reject(e.message);
@@ -803,6 +821,22 @@ MdPanelRef.prototype.toggleClass = function(toggleClass) {
     return this.removeClass(toggleClass);
   } else {
     return this.addClass(toggleClass);
+  }
+};
+
+
+/**
+ * Focuses on the panel or the first focus target.
+ */
+MdPanelRef.prototype.focusOnOpen = function() {
+  if (this._config.focusOnOpen) {
+    // Wait a digest to guarantee md-autofocus has finished adding the class
+    // _md-autofocus, otherwise the focusable element isn't available to focus.
+    var self = this;
+    this._$rootScope.$applyAsync(function() {
+      var target = self._$mdUtil.findFocusTarget(self._panelEl) || self._panelEl;
+      target.focus();
+    });
   }
 };
 
