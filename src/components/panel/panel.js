@@ -232,11 +232,10 @@ angular
 
 /**
  * @ngdoc method
- * @name MdPanelRef#attachOnly
+ * @name MdPanelRef#attach
  * @description
  * Create the panel elements and attach them to the DOM. The panel will be
- * hidden by default. Call toggleVisibility() or setVisible(true) to make the
- * panel visible.
+ * shown by default.
  *
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
  * attached.
@@ -244,10 +243,10 @@ angular
 
 /**
  * @ngdoc method
- * @name MdPanelRef#detach
+ * @name MdPanelRef#detachOnly
  * @description
- * Removes the panel from the DOM. If the panel is visible, hide the panel,
- * then detach.
+ * Removes the panel from the DOM. This will not hide the panel before removing it.
+ * Consider calling addClass/removeClass/toggleClass to hide the panel first.
  *
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
  * detached.
@@ -255,24 +254,34 @@ angular
 
 /**
  * @ngdoc method
- * @name MdPanelRef#setVisibililty
+ * @name MdPanelRef#addClass
  * @description
- * Sets the visibility of the panel. On creation, the panel is hidden. Visible=false
- * is equivalent to adding "display: none".
+ * Adds a class to the panel. This can be used to hide/show the panel.
  *
- * @param {boolean} visible Whether the panel should be visible or hidden.
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel's
- * visibility is updated and animations are completed.
+ * @param {string} newClass Class to be added.
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * the new class and animations are completed.
  */
 
 /**
  * @ngdoc method
- * @name MdPanelRef#toggleVisibility
+ * @name MdPanelRef#removeClass
  * @description
- * Toggles the visibility of the panel. On creation, the panel is hidden.
+ * Removes a class from the panel. This can be used to hide/show the panel.
  *
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel's
- * visibility is updated and animations are completed.
+ * @param {string} oldClass Class to be removed.
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * removed the old class and animations are completed.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#toggleClass
+ * @description
+ * Toggles a class on the panel. This can be used to hide/show the panel.
+ *
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * toggled the class and animations are completed.
  */
 
 
@@ -578,7 +587,10 @@ function MdPanelRef(config, $injector) {
   this._detachPromise;
 
   /** @private {!angular.$q.Promise|undefined} */
-  this._visibilityPromise;
+  this._addClassPromise;
+
+  /** @private {!angular.$q.Promise|undefined} */
+  this._removeClassPromise;
 
   /** @private {!angular.JQLite|undefined} */
   this._panelContainer;
@@ -605,11 +617,7 @@ MdPanelRef.prototype.open = function() {
   // TODO(ErinCoughlan) - Cancel any in-progress actions.
 
   var self = this;
-  this._openPromise = this._$q(function(resolve, reject) {
-    self.attachOnly().then(function () {
-      self.setVisibility(true).then(function() { resolve(self); }, reject);
-    }, reject);
-  });
+  this._openPromise = this.attach();
 
   return this._openPromise;
 };
@@ -626,22 +634,24 @@ MdPanelRef.prototype.close = function() {
 
   var self = this;
   return this._$q(function(resolve, reject) {
-    self.detach().then(function() {
-      // TODO(ErinCoughlan) - Add destroy. This will make the code here different
-      // than just calling this.detach().
-      resolve(self);
+    self.addClass('_md-panel-hidden').then(function () {
+      self.detachOnly().then(function() {
+        // TODO(ErinCoughlan) - Add destroy. This will make the code here different
+        // than just calling this.detach().
+        resolve(self);
+      }, reject);
     }, reject);
   });
 };
 
 
 /**
- * Attaches the panel.
+ * Attaches the panel. The panel will be visible afterwards.
  *
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
  * attached.
  */
-MdPanelRef.prototype.attachOnly = function() {
+MdPanelRef.prototype.attach = function() {
   if (this.isAttached) {
     return this._attachPromise;
   }
@@ -661,12 +671,12 @@ MdPanelRef.prototype.attachOnly = function() {
 
 
 /**
- * Detaches the panel. Hides the panel first if visible.
+ * Detaches the panel. Will not hide the panel first if visible.
  *
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
  * attached.
  */
-MdPanelRef.prototype.detach = function() {
+MdPanelRef.prototype.detachOnly = function() {
   if (!this.isAttached) {
     this._detachPromise;
   }
@@ -674,12 +684,10 @@ MdPanelRef.prototype.detach = function() {
   // TODO(ErinCoughlan) - Cancel any in-progress actions.
 
   var self = this;
-  this._detachPromise = this._$q(function(resolve, reject) {
-    self.setVisibility(false).then(function () {
-      self._panelContainer.remove();
-      self.isAttached = false;
-      resolve(self);
-    }, reject);
+  this._detachPromise = this._$q(function(resolve) {
+    self._panelContainer.remove();
+    self.isAttached = false;
+    resolve(self);
   });
 
   return this._detachPromise;
@@ -687,44 +695,86 @@ MdPanelRef.prototype.detach = function() {
 
 
 /**
- * Sets the visibility of the panel.
+ * Add a class to the panel. This can control the panel's visibility.
  *
- * @param {boolean} visible Whether the panel should be visible or hidden.
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
- * shown/hidden and animations finish.
+ * @param {string} newClass Class to be added.
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * the new class and animations finish.
  */
-MdPanelRef.prototype.setVisibility = function(visible) {
+MdPanelRef.prototype.addClass = function(newClass) {
   if (!this._panelContainer) {
-    return this._$q.reject('Panel does not exist yet. Call open() or attach().');
+    return this._$q.reject(
+        'Panel does not exist yet. Call open() or attach().');
   }
 
+  if (this._panelContainer.hasClass(newClass) && this._addClassPromise) {
+    return this._addClassPromise;
+  }
+
+  // TODO(ErinCoughlan) - Cancel any in-progress actions.
+
   var self = this;
-  this._visibilityPromise = this._$q(function(resolve, reject) {
+  this._addClassPromise = this._$q(function(resolve, reject) {
     try {
       // TODO(KarenParker): Add show/hide animation.
-      if (visible) {
-        self._panelContainer.removeClass('_md-panel-hidden');
-      } else {
-        self._panelContainer.addClass('_md-panel-hidden');
-      }
+      self._panelContainer.addClass(newClass);
       resolve(self);
     } catch (e) {
       reject(e.message);
     }
   });
 
-  return this._visibilityPromise;
+  return this._addClassPromise;
 };
 
 
 /**
- * Toggle the visibility of the panel.
+ * Remove a class from the panel. This can control the panel's visibility.
  *
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
- * shown/hidden and animations finish.
+ * @param {string} oldClass Class to be removed.
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * the new class and animations finish.
  */
-MdPanelRef.prototype.toggleVisibility = function() {
-  return this.setVisibility(this._panelContainer.hasClass('_md-panel-hidden'));
+MdPanelRef.prototype.removeClass = function(oldClass) {
+  if (!this._panelContainer) {
+    return this._$q.reject(
+        'Panel does not exist yet. Call open() or attach().');
+  }
+
+  if (!this._panelContainer.hasClass(oldClass) && this._removeClassPromise) {
+    return this._removeClassPromise;
+  }
+
+  // TODO(ErinCoughlan) - Cancel any in-progress actions.
+
+  var self = this;
+  this._removeClassPromise = this._$q(function(resolve, reject) {
+    try {
+      // TODO(KarenParker): Add show/hide animation.
+      self._panelContainer.removeClass(oldClass);
+      resolve(self);
+    } catch (e) {
+      reject(e.message);
+    }
+  });
+
+  return this._removeClassPromise;
+};
+
+
+/**
+ * Toggle a class on the panel. This can control the panel's visibility.
+ *
+ * @param {string} toggleClass The class to toggle.
+ * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * toggled the class and animations finish.
+ */
+MdPanelRef.prototype.toggleClass = function(toggleClass) {
+  if (this._panelContainer.hasClass(newClass)) {
+    return this.removeClass(toggleClass);
+  } else {
+    return this.addClass(toggleClass);
+  }
 };
 
 
@@ -763,7 +813,6 @@ MdPanelRef.prototype._createPanel = function() {
  * @private
  */
 MdPanelRef.prototype._addStyles = function() {
-  this._panelContainer.addClass('_md-panel-hidden');
   this._panelContainer.css('z-index', this._config['zIndex']);
 
   var positionConfig = this._config['position'];
