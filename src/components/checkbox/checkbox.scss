@@ -6,47 +6,16 @@ $checkbox-border-width: 2px !default;
 $checkbox-text-margin: 10px !default;
 $checkbox-top: 12px !default;
 
-.md-inline-form {
-  md-checkbox {
-    margin: 19px 0 18px;
-  }
-}
-
-md-checkbox {
-  box-sizing: border-box;
-  display: inline-block;
-  margin-bottom: $checkbox-margin;
-  white-space: nowrap;
-  cursor: pointer;
-  outline: none;
-  user-select: none;
-  position: relative;
-  min-width: $checkbox-width;
-  min-height: $checkbox-width;
-  @include rtl(margin-left, inherit, $checkbox-margin);
-  @include rtl(margin-right, $checkbox-margin, inherit);
-
-  &:last-of-type {
-    @include rtl(margin-left, inherit, 0);
-    @include rtl(margin-right, 0, inherit);
-  }
-
-  &.md-focused:not([disabled]) {
-    .md-container:before {
-      left: -8px;
-      top: -8px;
-      right: -8px;
-      bottom: -8px;
-    }
-
-    &:not(.md-checked) {
-      .md-container:before {
-        background-color: rgba(0, 0, 0, 0.12);
-      }
-    }
-  }
-
-  .md-container {
+// This mixin allows a user to use the md-checkbox css outside of the
+// md-checkbox directive.
+// See src/components/select/select.scss for an example.
+@mixin checkbox-container(
+  $checkedSelector: '.md-checked',
+  $width: $checkbox-width,
+  $height: $checkbox-height,
+  $border-width: $checkbox-border-width,
+  $border-radius: $checkbox-border-radius) {
+  ._md-container {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -54,11 +23,11 @@ md-checkbox {
     box-sizing: border-box;
     display: inline-block;
 
-    width: $checkbox-width;
-    height: $checkbox-height;
+    width: $width;
+    height: $height;
     @include rtl(left, 0, auto);
     @include rtl(right, auto, 0);
-    
+
     &:before {
       box-sizing: border-box;
       background-color: transparent;
@@ -97,26 +66,38 @@ md-checkbox {
     }
   }
 
-  &.md-align-top-left > div.md-container {
-    top: $checkbox-top;
-  }
-
   // unchecked
-  .md-icon {
+  ._md-icon {
     box-sizing: border-box;
     transition: 240ms;
     position: absolute;
     top: 0;
     left: 0;
-    width: $checkbox-width;
-    height: $checkbox-height;
-    border-width: $checkbox-border-width;
+    width: $width;
+    height: $height;
+    border-width: $border-width;
     border-style: solid;
-    border-radius: $checkbox-border-radius;
+    border-radius: $border-radius;
   }
 
-  &.md-checked .md-icon {
+  &#{$checkedSelector} ._md-icon {
     border: none;
+
+    &:after {
+      box-sizing: border-box;
+      transform: rotate(45deg);
+      position: absolute;
+      left: $width / 3;
+      top: $width / 9;
+      display: table;
+      width: $width / 3;
+      height: $width * 2 / 3;
+      border-width: $border-width;
+      border-style: solid;
+      border-top: 0;
+      border-left: 0;
+      content: '';
+    }
   }
 
   // disabled
@@ -124,24 +105,55 @@ md-checkbox {
     cursor: default;
   }
 
+}
 
-  &.md-checked .md-icon:after {
-    box-sizing: border-box;
-    transform: rotate(45deg);
-    position: absolute;
-    left: $checkbox-width / 3;
-    top: $checkbox-width / 9;
-    display: table;
-    width: $checkbox-width / 3;
-    height: $checkbox-width * 2 / 3;
-    border-width: $checkbox-border-width;
-    border-style: solid;
-    border-top: 0;
-    border-left: 0;
-    content: '';
+.md-inline-form {
+  md-checkbox {
+    margin: 19px 0 18px;
+  }
+}
+
+md-checkbox {
+  box-sizing: border-box;
+  display: inline-block;
+  margin-bottom: $checkbox-margin;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  position: relative;
+  min-width: $checkbox-width;
+  min-height: $checkbox-width;
+  @include rtl(margin-left, 0, $checkbox-margin);
+  @include rtl(margin-right, $checkbox-margin, 0);
+
+  &:last-of-type {
+    margin-left: 0;
+    margin-right: 0;
   }
 
-  .md-label {
+  &.md-focused:not([disabled]) {
+    ._md-container:before {
+      left: -8px;
+      top: -8px;
+      right: -8px;
+      bottom: -8px;
+    }
+
+    &:not(.md-checked) {
+      ._md-container:before {
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+    }
+  }
+
+  &.md-align-top-left > div._md-container {
+    top: $checkbox-top;
+  }
+
+  @include checkbox-container;
+
+  ._md-label {
     box-sizing: border-box;
     position: relative;
     display: inline-block;
