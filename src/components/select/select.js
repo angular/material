@@ -12,6 +12,8 @@
 
 var SELECT_EDGE_MARGIN = 8;
 var selectNextId = 0;
+var CHECKBOX_SELECTION_INDICATOR =
+  angular.element('<div class="_md-container"><div class="_md-icon"></div></div>');
 
 angular.module('material.components.select', [
     'material.core',
@@ -775,6 +777,11 @@ function OptionDirective($mdButtonInkRipple, $mdUtil) {
   function postLink(scope, element, attr, ctrls) {
     var optionCtrl = ctrls[0];
     var selectCtrl = ctrls[1];
+
+    if (selectCtrl.isMultiple) {
+      element.attr('md-checkbox-enabled', '');
+      element.prepend(CHECKBOX_SELECTION_INDICATOR.clone());
+    }
 
     if (angular.isDefined(attr.ngValue)) {
       scope.$watch(attr.ngValue, setOptionValue);

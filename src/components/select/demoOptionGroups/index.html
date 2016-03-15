@@ -10,7 +10,7 @@
       </md-input-container>
       <md-input-container>
         <label>Topping</label>
-        <md-select ng-model="topping">
+        <md-select ng-model="selectedToppings" multiple>
           <md-optgroup label="Meats">
             <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'meat' }">{{topping.name}}</md-option>
           </md-optgroup>
@@ -20,6 +20,7 @@
         </md-select>
       </md-input-container>
     </div>
-    <p ng-if="topping">You ordered a {{size.toLowerCase()}} pizza with {{topping.toLowerCase()}}.</p>
+    <p ng-if="selectedToppings">You ordered a {{size.toLowerCase()}} pizza with
+    {{printSelectedToppings()}}.</p>
   </div>
 </div>
