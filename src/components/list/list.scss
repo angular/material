@@ -37,6 +37,20 @@ $list-item-dense-header-font-size: 1.3rem !default;
 $list-item-dense-font-size: 1.2rem !default;
 $list-item-dense-line-height: 1.25rem !default;
 
+// This is a mixin, which fixes IE11's vertical alignment issue, when using `min-height`.
+// This mixin isn't that much generic to be used in other cases.
+// It can be only used for the list-item's button container.
+// See https://connect.microsoft.com/IE/feedback/details/816293/
+@mixin ie11-min-height-flexbug($min-height) {
+  div.md-button:first-child {
+    &::before {
+      content: '';
+      min-height: $min-height;
+      visibility: hidden;
+    }
+  }
+}
+
 md-list {
   display: block;
   padding: $list-padding-top $list-padding-right $list-padding-bottom $list-padding-left;
@@ -101,6 +115,8 @@ md-list {
         &, & > ._md-no-style {
           min-height: $list-item-dense-two-line-height;
 
+          @include ie11-min-height-flexbug($list-item-dense-two-line-height);
+
           > .md-avatar, .md-avatar-icon {
             margin-top: $baseline-grid * 1.5;
           }
@@ -110,6 +126,8 @@ md-list {
       &.md-3-line {
         &, & > ._md-no-style {
           min-height: $list-item-dense-three-line-height;
+
+          @include ie11-min-height-flexbug($list-item-dense-three-line-height);
 
           > md-icon:first-child,
           > .md-avatar {
@@ -378,6 +396,8 @@ md-list-item {
       height: auto;
       min-height: $list-item-two-line-height;
 
+      @include ie11-min-height-flexbug($list-item-two-line-height);
+
       > .md-avatar, .md-avatar-icon {
         margin-top: $baseline-grid * 1.5;
       }
@@ -394,6 +414,8 @@ md-list-item {
     &, & > ._md-no-style {
       height: auto;
       min-height: $list-item-three-line-height;
+
+      @include ie11-min-height-flexbug($list-item-three-line-height);
 
       > md-icon:first-child,
       > .md-avatar {
