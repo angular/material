@@ -723,16 +723,18 @@ function ngMessageDirective($mdUtil) {
 function mdInputInvalidMessagesAnimation($q, $animateCss) {
   return {
     addClass: function(element, className, done) {
-      var messages = getMessagesElement(element);
+      if (className == 'md-input-invalid') {
 
-      if (className == "md-input-invalid" && messages.hasClass('md-auto-hide')) {
-        showInputMessages(element, $animateCss, $q).finally(done);
-      } else {
-        done();
+        if (isAutoHide(element)) {
+          showInputMessages(element, $animateCss, $q).finally(done);
+          return;
+        }
       }
+
+      done();
     }
 
-    // NOTE: We do not need the removeClass method, because the message ng-leave animation will fire
+    // NOTE: We do not need the removeClass method, because the message ng-leave animation will fire.
   };
 }
 
@@ -767,10 +769,9 @@ function ngMessagesAnimation($q, $animateCss) {
 function ngMessageAnimation($animateCss) {
   return {
     enter: function(element, done) {
-      var messages = getMessagesElement(element);
-
-      // If we have the md-auto-hide class, the md-input-invalid animation will fire, so we can skip
-      if (messages.hasClass('md-auto-hide')) {
+      // When md-auto-hide is enabled, then the animation will be only added through the input-container.
+      // For example, the ng-message won't appear, without touching the actual input.
+      if (isAutoHide(element) && !getInputContainerElement(element).hasClass('md-input-invalid')) {
         done();
         return;
       }
@@ -841,14 +842,19 @@ function hideMessage(element, $animateCss) {
   });
 }
 
-function getInputElement(element) {
+function getInputContainerElement(element) {
   var inputContainer = element.controller('mdInputContainer');
 
   return inputContainer.element;
 }
 
 function getMessagesElement(element) {
-  var input = getInputElement(element);
+  var input = getInputContainerElement(element);
 
   return angular.element(input[0].querySelector('.md-input-messages-animation'));
+}
+
+function isAutoHide(element) {
+  var messages = getMessagesElement(element);
+  return messages.hasClass('md-auto-hide');
 }
