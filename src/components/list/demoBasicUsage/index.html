@@ -10,8 +10,8 @@
 
     <md-content>
       <md-list flex>
-        <md-subheader class="md-no-sticky">3 line item</md-subheader>
-        <md-list-item class="md-3-line" ng-repeat="item in todos">
+        <md-subheader class="md-no-sticky">3 line item (with hover)</md-subheader>
+        <md-list-item class="md-3-line" ng-repeat="item in todos" ng-click="null">
           <img ng-src="{{item.face}}?{{$index}}" class="md-avatar" alt="{{item.who}}" />
           <div class="md-list-item-text" layout="column">
             <h3>{{ item.who }}</h3>
@@ -83,7 +83,7 @@
     <md-content>
 
       <md-list class="md-dense" flex>
-        <md-subheader class="md-no-sticky">3 line item</md-subheader>
+        <md-subheader class="md-no-sticky">3 line item (dense)</md-subheader>
         <md-list-item class="md-3-line" ng-repeat="item in todos">
           <img ng-src="{{item.face}}?{{$index}}" class="md-avatar" alt="{{item.who}}" />
           <div class="md-list-item-text" layout="column">
