@@ -15,12 +15,16 @@
 }
 
 @mixin input-placeholder-color($color) {
-  &::-webkit-input-placeholder,
-    &::-moz-placeholder,
-    &:-moz-placeholder,
-    &:-ms-input-placeholder {
-      color: $color;
+  $pseudos: '::-webkit-input-placeholder', ':-moz-placeholder', '::-moz-placeholder',
+            ':-ms-input-placeholder',  '::-webkit-input-placeholder';
+
+  // It is important to export every pseudo within its own block, because otherwise the placeholder
+  // won't be set on the most browsers.
+  @each $pseudo in $pseudos {
+    &#{$pseudo} {
+      color: unquote($color);
     }
+  }
 }
 
 @mixin pie-clearfix {
@@ -114,6 +118,7 @@
 @mixin rtl-prop($ltr-prop, $rtl-prop, $value) {
   #{$ltr-prop}: $value;
   [dir=rtl] & {
+    #{$ltr-prop}: auto;
     #{$rtl-prop}: $value;
   }
 }

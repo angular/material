@@ -78,7 +78,6 @@ describe('material.components.menuBar', function() {
         }
 
         function getOpenSubMenu() {
-          debugger;
           var containers = document.body.querySelectorAll('._md-open-menu-container._md-active');
           var lastContainer = containers.item(containers.length - 1);
 

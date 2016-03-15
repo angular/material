@@ -1,22 +1,11 @@
-$progress-circular-indeterminate-duration: 2.9s;
-
-//
-// Keyframe animation for the Indeterminate Progress
-//
-@keyframes indeterminate-rotate {
-  0%       { transform: rotate(0deg); }
-  100%     { transform: rotate(360deg); }
-}
-
+// Used to avoid unnecessary layout
 md-progress-circular {
-  svg {
-    // Ensures that the parent has the same dimensions as the circle.
-    display: block;
-  }
+    position: relative;
 
-  &._md-mode-indeterminate {
     svg {
-      animation: indeterminate-rotate $progress-circular-indeterminate-duration linear infinite;
+        position: absolute;
+        overflow: visible;
+        top: 0;
+        left: 0;
     }
-  }
 }

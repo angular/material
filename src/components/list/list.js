@@ -138,9 +138,9 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         } else {
           // Element which holds the default list-item content.
           container = angular.element(
-            '<button class="md-button _md-no-style">'+
+            '<div class="md-button _md-no-style">'+
             '   <div class="_md-list-item-inner"></div>'+
-            '</button>'
+            '</div>'
           );
 
           // Button which shows ripple and executes primary action.

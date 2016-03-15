@@ -104,16 +104,18 @@ md-select {
   min-height: 26px;
   flex-grow: 1;
 
-  ._md-text {
-    display: inline;
-  }
 
-  *:first-child {
-    flex: 1 0 auto;
+  > span:not(._md-select-icon) {
+    max-width: 100%;
+    flex: 1 1 auto;
+    transform: translate3d(0, 2px, 0);
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    transform: translate3d(0, 2px, 0);
+
+    ._md-text {
+      display: inline;
+    }
   }
 
   ._md-select-icon {

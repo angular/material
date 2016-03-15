@@ -3,7 +3,8 @@ $dialog-padding: $baseline-grid * 3;
 .md-dialog-is-showing {
   max-height: 100%;
 }
-._md-dialog-container {
+
+.md-dialog-container {
   display: flex;
   justify-content: center;
   align-items: center;

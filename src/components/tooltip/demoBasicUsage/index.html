@@ -19,18 +19,20 @@
         The tooltip is visible when the button is hovered, focused, or touched.
       </p>
 
-      <md-button class="md-fab" aria-label="Insert Drive">
-        <md-icon md-svg-src="img/icons/ic_insert_drive_file_24px.svg"></md-icon>
-        <md-tooltip md-visible="demo.showTooltip" md-direction="{{demo.tipDirection}}">
-          Insert Drive
-        </md-tooltip>
-      </md-button>
-      <md-button class="md-fab md-fab-top-right right" aria-label="Photos">
-        <md-tooltip>
-          Photos
-        </md-tooltip>
-        <md-icon md-svg-src="img/icons/ic_photo_24px.svg" style="width: 24px; height: 24px;"></md-icon>
-      </md-button>
+      <div layout="row" layout-align="space-between">
+        <md-button class="md-fab" aria-label="Insert Drive">
+          <md-icon md-svg-src="img/icons/ic_insert_drive_file_24px.svg"></md-icon>
+          <md-tooltip md-visible="demo.showTooltip" md-direction="{{demo.tipDirection}}">
+            Insert Drive
+          </md-tooltip>
+        </md-button>
+        <md-button class="md-fab" aria-label="Photos">
+          <md-tooltip>
+            Photos
+          </md-tooltip>
+          <md-icon md-svg-src="img/icons/ic_photo_24px.svg" style="width: 24px; height: 24px;"></md-icon>
+        </md-button>
+      </div>
 
 
       <div style="margin-top: 40px;margin-bottom: -5px">

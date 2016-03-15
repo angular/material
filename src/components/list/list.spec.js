@@ -112,20 +112,6 @@ describe('mdListItem directive', function() {
     document.body.removeChild(listItem[0]);
   }));
 
-  xit('should not convert spacebar keypress for text inputs', inject(function($mdConstant) {
-
-    var listItem = setup('<md-list-item><input ng-keypress="pressed = true" type="text"></md-list-item>');
-    var inputEl = angular.element(listItem[0].querySelector('input')[0]);
-
-    expect($rootScope.pressed).toBeFalsy();
-    inputEl.triggerHandler({
-      type: 'keypress',
-      keyCode: $mdConstant.KEY_CODE.SPACE
-    });
-    expect($rootScope.pressed).toBe(true);
-  }));
-
-
   it('creates buttons when used with ng-click', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()" ng-disabled="true"><p>Hello world</p></md-list-item>');
     var buttonChild = listItem.children().children()[0];
@@ -165,7 +151,7 @@ describe('mdListItem directive', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()"><p>Hello World</p><md-icon class="md-secondary" ng-click="goWild()"></md-icon></md-list-item>');
     // First child is our button and content holder
     var firstChild = listItem.children().eq(0);
-    expect(firstChild[0].nodeName).toBe('BUTTON');
+    expect(firstChild[0].nodeName).toBe('DIV');
     // It should contain two elements, the button overlay and the actual content
     expect(firstChild.children().length).toBe(2);
     var secondChild = listItem.children().eq(1);
@@ -177,7 +163,7 @@ describe('mdListItem directive', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()"><p>Hello World</p><md-icon class="md-secondary" ng-click="goWild()"><md-icon class="md-secondary" ng-click="goWild2()"></md-icon></md-list-item>');
     // First child is our button and content holder
     var firstChild = listItem.children().eq(0);
-    expect(firstChild[0].nodeName).toBe('BUTTON');
+    expect(firstChild[0].nodeName).toBe('DIV');
     // It should contain two elements, the button overlay and the actual content
     expect(firstChild.children().length).toBe(2);
     var secondChild = listItem.children().eq(1);
@@ -253,8 +239,7 @@ describe('mdListItem directive', function() {
 
       // There should only be 1 md-button (the wrapper) and one button (the unwrapped one)
       expect(listItem.find('md-button').length).toBe(1);
-      // There will be two buttons, because of the button.md-no-style.md-button wrapper.
-      expect(listItem.find('button').length).toBe(2);
+      expect(listItem.find('button').length).toBe(1);
 
       // Check that we didn't wrap the button in an md-button
       expect(listItem[0].querySelector('md-button button.md-secondary')).toBeFalsy();

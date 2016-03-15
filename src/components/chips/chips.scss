@@ -60,6 +60,10 @@ $contact-chip-name-width: rem(12) !default;
   @include rtl(padding, $chip-wrap-padding, rtl-value($chip-wrap-padding));
   vertical-align: middle;
 
+  &.md-readonly ._md-chip-input-container {
+    min-height: $chip-height;
+  }
+
   &:not(.md-readonly) {
     cursor: text;
 

@@ -158,25 +158,6 @@ describe('<md-tooltip> directive', function() {
       expect($rootScope.testModel.isVisible).toBe(false);
     });
 
-    xit('should set visible on touchstart and touchend', function() {
-      buildTooltip(
-        '<md-button>' +
-          'Hello' +
-          '<md-tooltip md-visible="testModel.isVisible">' +
-            'Tooltip' +
-          '</md-tooltip>' +
-        '</md-button>'
-      );
-
-
-      triggerEvent('touchstart');
-      expect($rootScope.testModel.isVisible).toBe(true);
-
-      triggerEvent('touchend');
-      expect($rootScope.testModel.isVisible).toBe(false);
-
-    });
-
     it('should not be visible on mousedown and then mouseleave', inject(function($document) {
       buildTooltip(
         '<md-button>' +
@@ -224,58 +205,6 @@ describe('<md-tooltip> directive', function() {
       triggerEvent('focus');
       expect($rootScope.testModel.isVisible).toBe(false);
     }));
-
-    xdescribe('<md-tooltip> attributeObserver', function() {
-      if (window.MutationObserver === undefined) {
-        // PhantomJS doesn't support mo
-        return it(' does not work without support for mutationObservers', function () {
-          expect(true).toBe(true);
-        });
-      }
-      var obs;
-      beforeEach(function (mutationDone){
-        obs =  new MutationObserver(function(mutations) {
-          mutations
-            .forEach(function (mutation) {
-              if (mutation.attributeName === 'disabled' && mutation.target.disabled) {
-                // allow a little time for the observer on the tooltip to finish
-                setTimeout(function() {
-                  $timeout.flush();
-                  $material.flushOutstandingAnimations();
-                  mutationDone();
-                },50);
-              }
-            })
-          });
-
-        var el = buildTooltip(
-          '<md-button>' +
-            'Hello' +
-            '<md-tooltip md-visible="testModel.isVisible">' +
-              'Tooltip' +
-            '</md-tooltip>' +
-          '</md-button>'
-        );
-
-        showTooltip(true);
-        // attach the observer
-        // trigger the mutationObserver(s).
-        obs.observe(el[0], { attributes: true});
-        el.attr('disabled',true)
-      });
-
-      afterEach(function () {
-        // remove observer from dom.
-        obs && obs.disconnect();
-        obs = null;
-      })
-
-      it('should be hidden after element gets disabled',  function() {
-        expect($rootScope.testModel.isVisible).toBe(false)
-        expect(findTooltip().length).toBe(0);
-      })
-    });
-
 
   });
 

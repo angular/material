@@ -58,10 +58,6 @@ md-checkbox {
     height: $checkbox-height;
     @include rtl(left, 0, auto);
     @include rtl(right, auto, 0);
-
-    // Disable pointer events, because IE11 is always focusing the child elements instead of the
-    // md-checkbox element.
-    pointer-events: none;
     
     &:before {
       box-sizing: border-box;

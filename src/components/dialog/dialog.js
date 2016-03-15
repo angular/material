@@ -572,7 +572,11 @@ function MdDialogProvider($$interimElementProvider) {
       autoWrap: true,
       fullscreen: false,
       transformTemplate: function(template, options) {
-        return '<div class="_md-dialog-container">' + validatedTemplate(template) + '</div>';
+        // Make the dialog container focusable, because otherwise the focus will be always redirected to
+        // an element outside of the container, and the focus trap won't work probably..
+        // Also the tabindex is needed for the `escapeToClose` functionality, because
+        // the keyDown event can't be triggered when the focus is outside of the container.
+        return '<div class="md-dialog-container" tabindex="-1">' + validatedTemplate(template) + '</div>';
 
         /**
          * The specified template should contain a <md-dialog> wrapper element....
@@ -890,7 +894,7 @@ function MdDialogProvider($$interimElementProvider) {
 
       var role = (options.$type === 'alert') ? 'alertdialog' : 'dialog';
       var dialogContent = element.find('md-dialog-content');
-      var dialogContentId = ('dialogContent_' + element.attr('id')) || ('dialogContent_' + $mdUtil.nextUid());
+      var dialogContentId = 'dialogContent_' + (element.attr('id') || $mdUtil.nextUid());
 
       element.attr({
         'role': role,
@@ -934,7 +938,7 @@ function MdDialogProvider($$interimElementProvider) {
       // The top focus trap inserted immeidately before the md-dialog element (as a sibling).
       // The bottom focus trap is inserted at the very end of the md-dialog element (as a child).
       element[0].parentNode.insertBefore(topFocusTrap, element[0]);
-      element.append(bottomFocusTrap);
+      element.after(bottomFocusTrap);
     }
 
     /**

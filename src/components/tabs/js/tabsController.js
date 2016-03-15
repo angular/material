@@ -32,6 +32,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   defineBooleanAttribute('swipeContent');
   defineBooleanAttribute('noDisconnect');
   defineBooleanAttribute('autoselect');
+  defineBooleanAttribute('noSelectClick');
   defineBooleanAttribute('centerTabs', handleCenterTabs, false);
   defineBooleanAttribute('enableDisconnect');
 
@@ -284,13 +285,16 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   }
 
   /**
-   * Update the selected index and trigger a click event on the original `md-tab` element in order
-   * to fire user-added click events.
+   * Update the selected index. Triggers a click event on the original `md-tab` element in order
+   * to fire user-added click events if canSkipClick or `md-no-select-click` are false.
    * @param index
+   * @param canSkipClick Optionally allow not firing the click event if `md-no-select-click` is also true.
    */
-  function select (index) {
+  function select (index, canSkipClick) {
     if (!locked) ctrl.focusIndex = ctrl.selectedIndex = index;
     ctrl.lastClick = true;
+    // skip the click event if noSelectClick is enabled
+    if (canSkipClick && ctrl.noSelectClick) return;
     // nextTick is required to prevent errors in user-defined click events
     $mdUtil.nextTick(function () {
       ctrl.tabs[ index ].element.triggerHandler('click');

@@ -53,7 +53,8 @@
     }
 
     #{$offsets} {
-      @include rtl-prop(margin-left, margin-right, #{$i * 5 + '%'});
+      @if $i != 0 { @include rtl-prop(margin-left, margin-right, #{$i * 5 + '%'}); }
+      @else { @include rtl-prop(margin-left, margin-right, 0); }
     }
   }
 

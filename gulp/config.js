@@ -21,7 +21,8 @@ module.exports = {
   ],
   themeBaseFiles: [
     'src/core/style/variables.scss',
-    'src/core/style/mixins.scss'
+    'src/core/style/mixins.scss',
+    'src/core/style/themes.scss'
   ],
   scssBaseFiles: [
     'src/core/style/color-palette.scss',

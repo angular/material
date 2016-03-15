@@ -420,40 +420,6 @@ describe('md-date-picker', function() {
       document.body.removeChild(superLongElement);
     });
 
-    xit('should adjust the pane position if it would go off-screen if body is not scrollable',
-        function() {
-      // Make the body super huge and scroll down a bunch.
-      var body = document.body;
-      var superLongElement = document.createElement('div');
-      superLongElement.style.height = '10000px';
-      superLongElement.style.width = '1px';
-      body.appendChild(superLongElement);
-      body.scrollTop = 700;
-
-      // Absolutely position the picker near (say ~30px) the edge of the viewport.
-      element.style.position = 'absolute';
-      element.style.top = (document.body.scrollTop + window.innerHeight - 30) + 'px';
-      element.style.left = '0';
-      body.appendChild(element);
-
-      // Make the body non-scrollable.
-      var previousBodyOverflow = body.style.overflow;
-      body.style.overflow = 'hidden';
-
-      // Open the pane.
-      element.querySelector('md-button').click();
-      $timeout.flush();
-
-      // Expect that the pane is on-screen.
-      var paneRect = controller.calendarPane.getBoundingClientRect();
-      expect(paneRect.bottom).toBeLessThan(window.innerHeight + 1);
-
-      // Restore body to pre-test state.
-      body.removeChild(element);
-      body.removeChild(superLongElement);
-      body.style.overflow = previousBodyOverflow;
-    });
-
     it('should keep the calendar pane in the right place with body scrolling disabled', function() {
       // Make the body super huge and scroll down a bunch.
       var body = document.body;
@@ -514,6 +480,35 @@ describe('md-date-picker', function() {
       scope.$apply();
       expect(controller.calendarPaneOpenedFrom).toBe(null);
       expect(controller.isCalendarOpen).toBe(false);
+    });
+
+    it('should re-enable scrolling probably', function() {
+      var maskLength = getMaskLength();
+
+      controller.openCalendarPane({
+        target: controller.inputElement
+      });
+
+      expect(getMaskLength()).toBe(maskLength + 1);
+
+      controller.closeCalendarPane();
+
+      expect(getMaskLength()).toBe(maskLength);
+
+      controller.openCalendarPane({
+        target: controller.inputElement
+      });
+
+      expect(getMaskLength()).toBe(maskLength + 1);
+
+      // Trigger a scope destruction, like when a route changes.
+      scope.$destroy();
+
+      expect(getMaskLength()).toBe(maskLength);
+
+      function getMaskLength() {
+        return document.body.querySelectorAll('.md-scroll-mask').length;
+      }
     });
   });
 

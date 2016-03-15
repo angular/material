@@ -3,7 +3,12 @@
 
   <section layout="row" flex>
 
-    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+    <md-sidenav
+        class="md-sidenav-left"
+        md-component-id="left"
+        md-is-locked-open="$mdMedia('gt-md')"
+        md-disable-backdrop
+        md-whiteframe="4">
 
       <md-toolbar class="md-theme-indigo">
         <h1 class="md-toolbar-tools">Sidenav Left</h1>
@@ -50,7 +55,7 @@
 
     </md-content>
 
-    <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">
+    <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="right">
 
       <md-toolbar class="md-theme-light">
         <h1 class="md-toolbar-tools">Sidenav Right</h1>
