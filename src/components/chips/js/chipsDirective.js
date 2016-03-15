@@ -68,7 +68,7 @@
    * @param {boolean=} readonly Disables list manipulation (deleting or adding list items), hiding
    *    the input and delete buttons. If no `ng-model` is provided, the chips will automatically be
    *    marked as readonly.
-   * @param {string=} md-enable-chip-edit Set this to "true" to enable editing of chip contents. The user can
+   * @param {string=} md-enable-chip-edit Set this to "true" to enable editing of chip contents. The user can 
    *    go into edit mode with pressing "space", "enter", or double clicking on the chip. Chip edit is only
    *    supported for chips with basic template.
    * @param {number=} md-max-chips The maximum number of chips allowed to add through user input.
