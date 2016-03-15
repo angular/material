@@ -43,17 +43,12 @@
 
 angular
   .module('material.components.progressCircular')
-  .directive('mdProgressCircular', [
-    '$$rAF',
-    '$window',
-    '$mdProgressCircular',
-    '$mdUtil',
-    '$interval',
-    '$log',
-    MdProgressCircularDirective
-  ]);
+  .directive('mdProgressCircular', MdProgressCircularDirective);
 
-function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdUtil, $interval, $log) {
+/* @ngInject */
+function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdTheming,
+                                     $mdUtil, $interval, $log) {
+
   var DEGREE_IN_RADIANS = $window.Math.PI / 180;
   var MODE_DETERMINATE = 'determinate';
   var MODE_INDETERMINATE = 'indeterminate';
@@ -99,6 +94,8 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdUti
     var rotationIndeterminate = 0;
     var lastAnimationId = 0;
     var interval;
+
+    $mdTheming(element);
 
     scope.$watchGroup(['value', 'mdMode'], function(newValues, oldValues) {
       var mode = newValues[1];
