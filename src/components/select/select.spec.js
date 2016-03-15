@@ -241,10 +241,21 @@ describe('<md-select>', function() {
                               '</md-select>' +
                             '</md-input-container>')($rootScope).find('md-select');
       var label = select.find('md-select-value');
+      var options = select.find('md-option');
+
       $rootScope.$digest();
 
       expect(label.text()).toBe('Two');
       expect(label.hasClass('md-select-placeholder')).toBe(false);
+
+
+      // Ensure every md-option element does not have a checkbox prepended to it.
+      for (var i = 0; i < options.length; i++) {
+        var checkBoxContainer = options[i].querySelector('._md-container');
+        var checkBoxIcon = options[i].querySelector('._md-icon');
+        expect(checkBoxContainer).toBe(null);
+        expect(checkBoxIcon).toBe(null);
+      }
     }));
 
     it('supports rendering multiple', inject(function($rootScope, $compile) {
@@ -258,11 +269,24 @@ describe('<md-select>', function() {
                               '</md-select>' +
                             '</md-input-container>')($rootScope).find('md-select');
       var label = select.find('md-select-value');
+      var options = select.find('md-option');
+      var container;
+      var icon;
+
       $rootScope.$digest();
       $rootScope.$digest();
 
       expect(label.text()).toBe('One, Three');
       expect(label.hasClass('md-select-placeholder')).toBe(false);
+
+      // Ensure every md-option element has a checkbox prepended to it.
+      for (var i = 0; i < options.length; i++) {
+        var checkBoxContainer = options[i].querySelector('._md-container');
+        var checkBoxIcon = options[i].querySelector('._md-icon');
+        expect(checkBoxContainer).not.toBe(null);
+        expect(checkBoxIcon).not.toBe(null);
+      }
+
     }));
 
     it('supports raw html', inject(function($rootScope, $compile, $sce) {
