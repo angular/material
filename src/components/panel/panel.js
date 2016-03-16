@@ -112,6 +112,10 @@ angular
  *     outside the panel to close it. Defaults to false.
  *   - `escapeToClose` - `{boolean=}`: Whether the user can press escape to
  *     close the panel. Defaults to false.
+ *   - `trapFocus` - `{boolean=}`: Whether focus should be trapped within the
+ *     panel. If `trapFocus` is true, the user will not be able to interact
+ *     with the rest of the page until the panel is dismissed. Defaults to
+ *     false.
  *
  * TODO(ErinCoughlan): Add the following config options.
  *   - `groupName` - `{string=}`: Name of panel groups. This group name is
@@ -128,10 +132,6 @@ angular
  *   - `fullScreen` - `{boolean=}`: Whether the panel should be full screen.
  *     Applies the class `.md-panel-fullscreen` to the panel on open. Defaults
  *     to false.
- *   - `trapFocus` - `{boolean=}`: Whether focus should be trapped within the
- *     panel. If `trapFocus` is true, the user will not be able to interact
- *     with the rest of the page until the panel is dismissed. Defaults to
- *     false.
  *   - `focusOnOpen` - `{boolean=}`: An option to override focus behavior on
  *     open. Only disable if focusing some other way, as focus management is
  *     required for panels to be accessible. Defaults to true.
@@ -445,6 +445,8 @@ angular
 // Default z-index for the panel.
 var defaultZIndex = 80;
 
+var FOCUS_TRAP_TEMPLATE = angular.element('<div class="_md-panel-focus-trap" tabindex="0"></div>');
+
 
 /**
  * A service that is used for controlling/displaying panels on the screen.
@@ -465,6 +467,7 @@ function MdPanelService($rootElement, $rootScope, $injector) {
     escapeToClose: false,
     scope: $rootScope.$new(true),
     transformTemplate: angular.bind(this, this.wrapTemplate_),
+    trapFocus: false,
     zIndex: defaultZIndex
   };
 
@@ -605,6 +608,12 @@ function MdPanelRef(config, $injector) {
 
   /** @private {Array<function()>} */
   this._removeListeners = [];
+  
+  /** @private {!angular.JQLite|undefined} */
+  this._topFocusTrap;
+
+  /** @private {!angular.JQLite|undefined} */
+  this._bottomFocusTrap;
 }
 
 
@@ -695,6 +704,16 @@ MdPanelRef.prototype.detachOnly = function() {
   var self = this;
   this._detachPromise = this._$q(function(resolve) {
     self._removeEventListener();
+
+    // Remove the focus traps that we added earlier for keeping focus within the panel.
+    if (self._topFocusTrap && self._topFocusTrap.parentNode) {
+      self._topFocusTrap.parentNode.removeChild(self._topFocusTrap);
+    }
+
+    if (self._bottomFocusTrap && self._bottomFocusTrap.parentNode) {
+      self._bottomFocusTrap.parentNode.removeChild(self._bottomFocusTrap);
+    }
+
     self._panelContainer.remove();
     self.isAttached = false;
     resolve(self);
@@ -812,6 +831,7 @@ MdPanelRef.prototype._createPanel = function() {
           }
 
           self._addStyles();
+          self._configureTrapFocus();
           resolve(self);
         }, reject);
   });
@@ -937,6 +957,36 @@ MdPanelRef.prototype._configureClickOutsideToClose = function() {
   }
 };
 
+
+/**
+ * Setup the focus traps. These traps will wrap focus when tabbing past the
+ * panel. When shift-tabbing, the focus will stick in place.
+ * @private
+ */
+MdPanelRef.prototype._configureTrapFocus = function() {
+  // Focus doesn't remain instead of the panel without this.
+  this._panelEl.attr('tabIndex', '-1');
+  if (this._config.trapFocus) {
+    var element = this._panelEl;
+    // Set up elements before and after the panel to capture focus and
+    // redirect back into the panel.
+    this._topFocusTrap = FOCUS_TRAP_TEMPLATE.clone()[0];
+    this._bottomFocusTrap = FOCUS_TRAP_TEMPLATE.clone()[0];
+
+    // When focus is about to move out of the panel, we want to intercept it and redirect it
+    // back to the panel element.
+    var focusHandler = function () {
+      element.focus();
+    };
+    this._topFocusTrap.addEventListener('focus', focusHandler);
+    this._bottomFocusTrap.addEventListener('focus', focusHandler);
+
+    // The top focus trap inserted immediately before the md-panel element (as a sibling).
+    // The bottom focus trap inserted immediately after the md-panel element (as a sibling).
+    element[0].parentNode.insertBefore(this._topFocusTrap, element[0]);
+    element.after(this._bottomFocusTrap);
+  }
+};
 
 
 /*****************************************************************************
