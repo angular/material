@@ -51,13 +51,13 @@ md-sidenav {
   &._md-locked-open-remove-active {
     transition: width $swift-ease-in-duration $swift-ease-in-timing-function,
                 min-width $swift-ease-in-duration $swift-ease-in-timing-function;
-    width: 0;
-    min-width: 0;
+    width: 0 !important;
+    min-width: 0 !important;
   }
 
   &._md-closed._md-locked-open-add {
-    width: 0;
-    min-width: 0;
+    width: 0 !important;
+    min-width: 0 !important;
     transform: translate3d(0%, 0, 0);
   }
 
