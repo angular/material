@@ -97,6 +97,12 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdThe
 
     $mdTheming(element);
 
+    // If the mode is indeterminate, it doesn't need to
+    // wait for the next digest. It can start right away.
+    if(scope.mdMode === MODE_INDETERMINATE){
+      startIndeterminateAnimation();
+    }
+
     scope.$watchGroup(['value', 'mdMode'], function(newValues, oldValues) {
       var mode = newValues[1];
 
