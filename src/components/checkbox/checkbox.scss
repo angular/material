@@ -12,6 +12,12 @@ $checkbox-top: 12px !default;
   }
 }
 
+// Needed for check to display correctly in IE11
+table md-checkbox {
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
 md-checkbox {
   box-sizing: border-box;
   display: inline-block;
