@@ -91,6 +91,52 @@ describe('$mdPanel', function() {
     expect(PANEL_WRAPPER_CLASS).not.toHaveClass(HIDDEN_CLASS);
   });
 
+  it('should trap focus inside of the panel with trapFocus=true', function() {
+    var template = '<div>Hello World!</div>';
+    var config = { template: template, trapFocus: true };
+
+    openPanel(config);
+
+    // It should add two focus traps to the document around the panel content.
+    var focusTraps = document.querySelectorAll('._md-panel-focus-trap');
+    expect(focusTraps.length).toBe(2);
+
+    var topTrap = focusTraps[0];
+    var bottomTrap = focusTraps[1];
+
+    var panel = panelRef._panelEl;
+    var isPanelFocused = false;
+    panel[0].addEventListener('focus', function() {
+      isPanelFocused = true;
+    });
+
+    // Both of the focus traps should be in the normal tab order.
+    expect(topTrap.tabIndex).toBe(0);
+    expect(bottomTrap.tabIndex).toBe(0);
+
+    // TODO(jelbourn): Find a way to test that focusing the traps redirects focus to the
+    // md-dialog element. Firefox is problematic here, as calling element.focus() inside of
+    // a focus event listener seems not to immediately update the document.activeElement.
+    // This is a behavior better captured by an e2e test.
+
+    closePanel();
+
+    // All of the focus traps should be removed when the dialog is closed.
+    focusTraps = document.querySelectorAll('._md-panel-focus-trap');
+    expect(focusTraps.length).toBe(0);
+  })
+
+  it('should not trap focus inside of the panel with trapFocus=false', function() {
+    var template = '<div>Hello World!</div>';
+    var config = { template: template };
+
+    openPanel(config);
+
+    // It should add two focus traps to the document around the panel content.
+    var focusTraps = document.querySelectorAll('._md-panel-focus-trap');
+    expect(focusTraps.length).toBe(0);
+  })
+
   describe('promises logic:', function() {
     var config;
 
