@@ -23,6 +23,7 @@ BasicDemoCtrl.prototype.showDialog = function() {
     },
     panelClass: 'demo-dialog-example',
     position: position,
+    trapFocus: true,
     zIndex: 150
   };
 
