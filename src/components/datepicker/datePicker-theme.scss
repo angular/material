@@ -1,15 +1,10 @@
 /** Theme styles for mdDatepicker. */
 
-md-datepicker.md-THEME_NAME-theme {
-  background: '{{background-hue-1}}';
-}
-
 .md-THEME_NAME-theme {
 
   .md-datepicker-input {
     @include input-placeholder-color('\'{{foreground-3}}\'');
     color: '{{foreground-1}}';
-    background: '{{background-color}}';
   }
 
   .md-datepicker-input-container {
@@ -45,11 +40,12 @@ md-datepicker.md-THEME_NAME-theme {
     }
   }
 
-  .md-datepicker-calendar {
-    background: '{{background-A100}}';
+  .md-datepicker-open .md-datepicker-input-container,
+  .md-datepicker-input-mask-opaque {
+    background: '{{background-hue-1}}';
   }
 
-  .md-datepicker-input-mask-opaque {
-    background: '{{background-color}}';
+  .md-datepicker-calendar {
+    background: '{{background-A100}}';
   }
 }
