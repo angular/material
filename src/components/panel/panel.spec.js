@@ -5,6 +5,9 @@ describe('$mdPanel', function() {
   var PANEL_WRAPPER_CLASS = '.md-panel-outer-wrapper';
   var PANEL_EL = '.md-panel';
   var HIDDEN_CLASS = '_md-panel-hidden';
+  var FOCUS_TRAPS_CLASS = '._md-panel-focus-trap';
+  var DEFAULT_TEMPLATE = '<div>Hello World!</div>';
+  var DEFAULT_CONFIG = { template: DEFAULT_TEMPLATE };
 
   /**
    * @param {!angular.$injector} $injector
@@ -40,10 +43,7 @@ describe('$mdPanel', function() {
   });
 
   it('should create and open a basic panel', function() {
-    var template = '<div>Hello World!</div>';
-    var config = { template: template };
-
-    openPanel(config);
+    openPanel(DEFAULT_CONFIG);
 
     expect(PANEL_EL).toExist();
     expect(panelRef.isAttached).toEqual(true);
@@ -55,10 +55,7 @@ describe('$mdPanel', function() {
   });
 
   it('should add and remove a panel from the DOM', function() {
-    var template = '<div>Hello World!</div>';
-    var config = { template: template };
-
-    panelRef = $mdPanel.create(config);
+    panelRef = $mdPanel.create(DEFAULT_CONFIG);
 
     expect(PANEL_EL).not.toExist();
 
@@ -72,10 +69,7 @@ describe('$mdPanel', function() {
   });
 
   it('should hide and show a panel in the DOM', function() {
-    var template = '<div>Hello World!</div>';
-    var config = { template: template };
-
-    openPanel(config);
+    openPanel(DEFAULT_CONFIG);
 
     expect(PANEL_EL).toExist();
     expect(PANEL_WRAPPER_CLASS).not.toHaveClass(HIDDEN_CLASS);
@@ -205,12 +199,6 @@ describe('$mdPanel', function() {
   });
 
   describe('config options:', function() {
-    var template;
-
-    beforeEach(function() {
-      template = '<div>Hello World!</div>';
-    });
-
     it('should attach panel to a specific element', function() {
       var parentEl = document.createElement('div');
       parentEl.id = 'parent';
@@ -218,7 +206,7 @@ describe('$mdPanel', function() {
 
       var config = {
         attachTo: angular.element(parentEl),
-        template: template
+        template: DEFAULT_TEMPLATE
       };
 
       openPanel(config);
@@ -236,7 +224,7 @@ describe('$mdPanel', function() {
 
       var config = {
         panelClass: customClass,
-        template: template
+        template: DEFAULT_TEMPLATE
       };
 
       openPanel(config);
@@ -249,7 +237,7 @@ describe('$mdPanel', function() {
       var zIndex = '150';
 
       var config = {
-        template: template,
+        template: DEFAULT_TEMPLATE,
         zIndex: zIndex
       };
 
@@ -263,7 +251,7 @@ describe('$mdPanel', function() {
       var zIndex = '0';
 
       var config = {
-        template: template,
+        template: DEFAULT_TEMPLATE,
         zIndex: zIndex
       };
 
@@ -344,6 +332,48 @@ describe('$mdPanel', function() {
       // expect(panelRef).toBeUndefined();
       expect(PANEL_EL).not.toExist();
     }));
+
+    it('should create and cleanup focus traps', function() {
+      var config = { template: DEFAULT_TEMPLATE, trapFocus: true };
+
+      openPanel(config);
+
+      // It should add two focus traps to the document around the panel content.
+      var focusTraps = document.querySelectorAll(FOCUS_TRAPS_CLASS);
+      expect(focusTraps.length).toBe(2);
+
+      var topTrap = focusTraps[0];
+      var bottomTrap = focusTraps[1];
+
+      var panel = panelRef._panelEl;
+      var isPanelFocused = false;
+      panel[0].addEventListener('focus', function() {
+        isPanelFocused = true;
+      });
+
+      // Both of the focus traps should be in the normal tab order.
+      expect(topTrap.tabIndex).toBe(0);
+      expect(bottomTrap.tabIndex).toBe(0);
+
+      // TODO(KarenParker): Find a way to test that focusing the traps redirects focus to the
+      // md-dialog element. Firefox is problematic here, as calling element.focus() inside of
+      // a focus event listener seems not to immediately update the document.activeElement.
+      // This is a behavior better captured by an e2e test.
+
+      closePanel();
+
+      // All of the focus traps should be removed when the dialog is closed.
+      focusTraps = document.querySelectorAll(FOCUS_TRAPS_CLASS);
+      expect(focusTraps.length).toBe(0);
+    });
+
+    it('should not create focus traps when trapFocus=false', function() {
+      openPanel(DEFAULT_CONFIG);
+
+      // It should add two focus traps to the document around the panel content.
+      var focusTraps = document.querySelectorAll(FOCUS_TRAPS_CLASS);
+      expect(focusTraps.length).toBe(0);
+    });
   });
 
   describe('component logic: ', function() {
@@ -499,9 +529,7 @@ describe('$mdPanel', function() {
     var mdPanelPosition;
 
     beforeEach(function() {
-      config = {
-        template: '<div>Hello World!</div>'
-      };
+      config = DEFAULT_CONFIG;
 
       mdPanelPosition = $mdPanel.newPanelPosition();
     });
