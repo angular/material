@@ -90,8 +90,12 @@ md-datepicker {
   position: absolute;
   right: 0;
   left: 120px;
-
   height: 100%;
+
+  // The margin pulls it an extra pixel to the left, which gives it a slight overlap
+  // with the input container. This ensures that there are no gaps between the two
+  // elements.
+  margin-left: -1px;
 }
 
 // The calendar portion of the floating pane (vs. the input mask).
@@ -163,6 +167,10 @@ md-datepicker[disabled] {
 .md-datepicker-open {
   .md-datepicker-input-container {
     @include rtl-prop(margin-left, margin-right, -$md-datepicker-button-gap);
+
+    // The negative bottom margin prevents the content around the datepicker
+    // from jumping when it gets opened.
+    margin-bottom: -$md-datepicker-border-bottom-gap;
     border: none;
   }
 
