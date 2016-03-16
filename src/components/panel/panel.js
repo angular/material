@@ -602,6 +602,9 @@ function MdPanelRef(config, $injector) {
 
   /** @private {!angular.JQLite|undefined} */
   this._panelEl;
+
+  /** @private {Array<function()>} */
+  this._removeListeners = [];
 }
 
 
@@ -667,7 +670,7 @@ MdPanelRef.prototype.attach = function() {
   this._attachPromise = this._$q(function(resolve, reject) {
     self._createPanel().then(function() {
       self.isAttached = true;
-      self._activeListeners();
+      self._addEventListeners();
       resolve(self);
     }, reject);
   });
@@ -691,6 +694,7 @@ MdPanelRef.prototype.detachOnly = function() {
 
   var self = this;
   this._detachPromise = this._$q(function(resolve) {
+    self._removeEventListener();
     self._panelContainer.remove();
     self.isAttached = false;
     resolve(self);
@@ -842,13 +846,34 @@ MdPanelRef.prototype._addStyles = function() {
  * Listen for escape keys and outside clicks to auto close.
  * @private
  */
-MdPanelRef.prototype._activeListeners = function() {
-  var removeListeners = [];
-  var self = this;
+MdPanelRef.prototype._addEventListeners = function() {
+  this._configureEscapeToClose();
+  this._configureClickOutsideToClose();
+};
 
+
+/**
+ * Remove event listeners added in _addEventListeners.
+ * @private
+ */
+MdPanelRef.prototype._removeEventListener = function() {
+  this._removeListeners.forEach(function(removeFn) {
+    removeFn();
+  });
+  this._removeListeners = null;
+}
+
+
+/**
+ * Setup the escapeToClose event listeners.
+ * @private
+ */
+MdPanelRef.prototype._configureEscapeToClose = function() {
   if (this._config.escapeToClose) {
     var parentTarget = this._config.attachTo;
-    var keyHandlerFn = function(ev) {
+    var self = this;
+
+    var keyHandlerFn = function (ev) {
       if (ev.keyCode === self._$mdConstant.KEY_CODE.ESCAPE) {
         ev.stopPropagation();
         ev.preventDefault();
@@ -862,12 +887,19 @@ MdPanelRef.prototype._activeListeners = function() {
     parentTarget.on('keydown', keyHandlerFn);
 
     // Queue remove listeners function
-    removeListeners.push(function() {
+    this._removeListeners.push(function () {
       self._panelContainer.off('keydown', keyHandlerFn);
       parentTarget.off('keydown', keyHandlerFn);
     });
   }
+};
 
+
+/**
+ * Setup the clickOutsideToClose event listeners.
+ * @private
+ */
+MdPanelRef.prototype._configureClickOutsideToClose = function() {
   if (this._config.clickOutsideToClose) {
     var target = this._panelContainer;
     var sourceElem;
@@ -876,14 +908,15 @@ MdPanelRef.prototype._activeListeners = function() {
     // so that we can only close the backdrop when the 'click' started on it.
     // A simple 'click' handler does not work,
     // it sets the target object as the element the mouse went down on.
-    var mousedownHandler = function(ev) {
+    var mousedownHandler = function (ev) {
       sourceElem = ev.target;
     };
 
     // We check if our original element and the target is the backdrop
     // because if the original was the backdrop and the target was inside the dialog
     // we don't want to dialog to close.
-    var mouseupHandler = function(ev) {
+    var self = this;
+    var mouseupHandler = function (ev) {
       if (sourceElem === target[0] && ev.target === target[0]) {
         ev.stopPropagation();
         ev.preventDefault();
@@ -897,19 +930,11 @@ MdPanelRef.prototype._activeListeners = function() {
     target.on('mouseup', mouseupHandler);
 
     // Queue remove listeners function
-    removeListeners.push(function() {
+    this._removeListeners.push(function () {
       target.off('mousedown', mousedownHandler);
       target.off('mouseup', mouseupHandler);
     });
   }
-
-  // Attach specific `remove` listener handler
-  this._deactivateListeners = function() {
-    removeListeners.forEach(function(removeFn) {
-      removeFn();
-    });
-    self._deactivateListeners.deactivateListeners = null;
-  };
 };
 
 
