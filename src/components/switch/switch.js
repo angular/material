@@ -1,5 +1,4 @@
 /**
- * @private
  * @ngdoc module
  * @name material.components.switch
  */

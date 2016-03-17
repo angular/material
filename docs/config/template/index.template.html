@@ -115,7 +115,7 @@
                     ng-value="doc.url"
                     ng-click="redirectToUrl(doc.url)"
                     aria-label="{{ doc | humanizeDoc }}">
-                  {{doc | humanizeDoc | directiveBrackets}}
+                  {{doc | humanizeDoc | directiveBrackets:doc.restrict}}
                 </md-option>
               </md-optgroup>
               <md-optgroup label="Services" ng-if="(currentComponent.docs | filter: { type: 'service' }).length">
