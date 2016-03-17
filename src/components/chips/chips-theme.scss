@@ -1,5 +1,9 @@
 md-chips.md-THEME_NAME-theme {
 
+  &.md-static .md-chips {
+    box-shadow: none;
+  }
+
   .md-chips {
     box-shadow: 0 1px '{{foreground-4}}';
 
