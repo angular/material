@@ -393,6 +393,10 @@ md-input-container {
         }
       }
     }
+    
+    .md-input-focused:not(.md-input-has-value) label.md-placeholder {
+      opacity: 0;
+    }
   }
 }
 
