@@ -21,7 +21,7 @@ md-tooltip {
     font-size: $tooltip-fontsize-lg;
   }
 
-  .md-content {
+  ._md-content {
     position: relative;
     white-space: nowrap;
     overflow: hidden;
@@ -39,32 +39,32 @@ md-tooltip {
       padding-left: $tooltip-lr-padding-lg;
       padding-right: $tooltip-lr-padding-lg;
     }
-    &.md-show-add {
+    &._md-show-add {
       transition: $swift-ease-out;
       transition-duration: .2s;
       transform: scale(0);
       opacity: 0;
     }
-    &.md-show, &.md-show-add-active {
+    &._md-show, &._md-show-add-active {
       transform: scale(1);
       opacity: 1;
       transform-origin: center top;
     }
-    &.md-show-remove {
+    &._md-show-remove {
       transition: $swift-ease-out;
       transition-duration: .2s;
-      &.md-show-remove-active {
+      &._md-show-remove-active {
         transform: scale(0);
         opacity: 0;
       }
     }
   }
 
-  &.md-hide {
+  &._md-hide {
     transition: $swift-ease-in;
   }
 
-  &.md-show {
+  &._md-show {
     transition: $swift-ease-out;
     pointer-events: auto;
     will-change: opacity, height, width;

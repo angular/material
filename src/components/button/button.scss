@@ -3,9 +3,10 @@ $button-fab-border-radius: 50% !default;
 $button-icon-border-radius: $button-fab-border-radius;
 
 $button-line-height: rem(3.60) !default;
-$button-padding: 0 rem(0.600) !default;
 $button-margin: rem(0.600) rem(0.800) !default;
 $button-min-width: rem(8.800) !default;
+$button-padding: 0 $button-left-right-padding !default;
+
 
 // Fab buttons
 $button-fab-line-height: rem(5.600) !default;
@@ -114,6 +115,7 @@ button.md-button::-moz-focus-inner {
     z-index: $z-index-fab;
 
     line-height: $button-fab-line-height;
+
     min-width: 0;
     width: $button-fab-width;
     height: $button-fab-height;
@@ -166,7 +168,7 @@ button.md-button::-moz-focus-inner {
   }
 }
 
-.md-toast-open-top {
+._md-toast-open-top {
   .md-button.md-fab-top-left,
   .md-button.md-fab-top-right {
     transition: $swift-ease-out;
@@ -180,7 +182,7 @@ button.md-button::-moz-focus-inner {
   }
 }
 
-.md-toast-open-bottom {
+._md-toast-open-bottom {
   .md-button.md-fab-bottom-left,
   .md-button.md-fab-bottom-right {
     transition: $swift-ease-out;
@@ -198,30 +200,30 @@ button.md-button::-moz-focus-inner {
   display: flex;
   flex: 1;
   width: 100%;
-}
 
-.md-button-group > .md-button {
-  flex: 1;
+  & > .md-button {
+    flex: 1;
 
-  display: block;
+    display: block;
 
-  overflow: hidden;
+    overflow: hidden;
 
-  width: 0;
+    width: 0;
 
-  border-width: 1px 0px 1px 1px;
-  border-radius: 0;
+    border-width: 1px 0px 1px 1px;
+    border-radius: 0;
 
-  text-align: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
-  &:first-child {
-    border-radius: 2px 0px 0px 2px;
-  }
-  &:last-child {
-    border-right-width: 1px;
-    border-radius: 0px 2px 2px 0px;
+    &:first-child {
+      border-radius: 2px 0px 0px 2px;
+    }
+    &:last-child {
+      border-right-width: 1px;
+      border-radius: 0px 2px 2px 0px;
+    }
   }
 }
 // IE only

@@ -32,6 +32,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   defineBooleanAttribute('swipeContent');
   defineBooleanAttribute('noDisconnect');
   defineBooleanAttribute('autoselect');
+  defineBooleanAttribute('noSelectClick');
   defineBooleanAttribute('centerTabs', handleCenterTabs, false);
   defineBooleanAttribute('enableDisconnect');
 
@@ -284,13 +285,16 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   }
 
   /**
-   * Update the selected index and trigger a click event on the original `md-tab` element in order
-   * to fire user-added click events.
+   * Update the selected index. Triggers a click event on the original `md-tab` element in order
+   * to fire user-added click events if canSkipClick or `md-no-select-click` are false.
    * @param index
+   * @param canSkipClick Optionally allow not firing the click event if `md-no-select-click` is also true.
    */
-  function select (index) {
+  function select (index, canSkipClick) {
     if (!locked) ctrl.focusIndex = ctrl.selectedIndex = index;
     ctrl.lastClick = true;
+    // skip the click event if noSelectClick is enabled
+    if (canSkipClick && ctrl.noSelectClick) return;
     // nextTick is required to prevent errors in user-defined click events
     $mdUtil.nextTick(function () {
       ctrl.tabs[ index ].element.triggerHandler('click');
@@ -537,17 +541,37 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    * Updates whether or not pagination should be displayed.
    */
   function updatePagination () {
-    if (!shouldStretchTabs()) updatePagingWidth();
+    updatePagingWidth();
     ctrl.maxTabWidth = getMaxTabWidth();
     ctrl.shouldPaginate = shouldPaginate();
   }
 
+  /**
+   * Sets or clears fixed width for md-pagination-wrapper depending on if tabs should stretch.
+   */
   function updatePagingWidth() {
+    if (shouldStretchTabs()) {
+      angular.element(elements.paging).css('width', '');
+    } else {
+      angular.element(elements.paging).css('width', calcPagingWidth() + 'px');
+    }
+  }
+
+  /**
+   * @returns {number}
+   */
+  function calcPagingWidth () {
     var width = 1;
+
     angular.forEach(getElements().dummies, function (element) {
-      width += Math.ceil(element.offsetWidth);
+      //-- Uses the larger value between `getBoundingClientRect().width` and `offsetWidth`.  This
+      //   prevents `offsetWidth` value from being rounded down and causing wrapping issues, but
+      //   also handles scenarios where `getBoundingClientRect()` is inaccurate (ie. tabs inside
+      //   of a dialog)
+      width += Math.max(element.offsetWidth, element.getBoundingClientRect().width);
     });
-    angular.element(elements.paging).css('width', width + 'px');
+
+    return Math.ceil(width);
   }
 
   function getMaxTabWidth () {

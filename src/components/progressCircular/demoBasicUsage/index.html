@@ -18,42 +18,46 @@
     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
   </div>
 
-  <h4>Theming </h4>
+  <h4>Theming</h4>
 
   <p>
     Your current theme colors can be used to easily colorize your progress indicator with `md-warn` or `md-accent`
     colors.
-    To easily hide a <b>&lt;md-progress-circular&gt;</b> component, simply set the <b>md-mode</b> to "" or null.
   </p>
 
-  <div layout="row" layout-sm="column" layout-align="space-around">
-    <md-progress-circular class="md-hue-2" md-mode="{{vm.modes[0]}}" md-diameter="20px"></md-progress-circular>
-    <md-progress-circular class="md-accent" md-mode="{{vm.modes[1]}}" md-diameter="40"></md-progress-circular>
-    <md-progress-circular class="md-accent md-hue-1" md-mode="{{vm.modes[2]}}" md-diameter="60"></md-progress-circular>
-    <md-progress-circular class="md-warn md-hue-3" md-mode="{{vm.modes[3]}}" md-diameter="70"></md-progress-circular>
-    <md-progress-circular md-mode="{{vm.modes[4]}}" md-diameter="96"></md-progress-circular>
+  <div ng-show="vm.activated" layout="row" layout-sm="column" layout-align="space-around">
+    <md-progress-circular class="md-hue-2" md-diameter="20px"></md-progress-circular>
+    <md-progress-circular class="md-accent" md-diameter="40"></md-progress-circular>
+    <md-progress-circular class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
+    <md-progress-circular class="md-warn md-hue-3" md-diameter="70"></md-progress-circular>
+    <md-progress-circular md-diameter="96"></md-progress-circular>
   </div>
 
+  <h4>Dark theme</h4>
+
+  <p>
+    This is an example of the <b>&lt;md-progress-circular&gt;</b> component, with a dark theme.
+  </p>
+
+  <div ng-show="vm.activated" md-theme="docs-dark" layout="row" layout-sm="column" layout-align="space-around">
+    <md-progress-circular class="md-hue-2" md-diameter="20px"></md-progress-circular>
+    <md-progress-circular class="md-accent" md-diameter="40"></md-progress-circular>
+    <md-progress-circular class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
+    <md-progress-circular class="md-warn md-hue-3" md-diameter="70"></md-progress-circular>
+    <md-progress-circular md-diameter="96"></md-progress-circular>
+  </div>
 
   <hr ng-class="{'visible' : vm.activated}">
 
   <div id="loaders" layout="row" layout-align="start center">
-
     <p>Progress Circular Indicators: </p>
 
     <h5>Off</h5>
     <md-switch
         ng-model="vm.activated"
-        ng-change="vm.toggleActivation()"
         aria-label="Toggle Progress Circular Indicators">
       <h5>On</h5>
     </md-switch>
   </div>
-
-  <p class="small">
-    Note: With above switch -- that simply clears the md-mode in each <code>&lt;md-progress-linear md-mode=""&gt;</code>
-    element --
-    developers can easily disable the animations and hide their progress indicators.
-  </p>
 
 </div>

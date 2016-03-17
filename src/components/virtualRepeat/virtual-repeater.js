@@ -345,16 +345,24 @@ VirtualRepeatContainerController.prototype.resetScroll = function() {
 
 
 VirtualRepeatContainerController.prototype.handleScroll_ = function() {
-  var offset = this.isHorizontal() ? this.scroller.scrollLeft : this.scroller.scrollTop;
-  if (offset === this.scrollOffset) return;
+  var doc = angular.element(document)[0];
+  var ltr = doc.dir != 'rtl' && doc.body.dir != 'rtl';
+  if(!ltr && !this.maxSize) {
+    this.scroller.scrollLeft = this.scrollSize;
+    this.maxSize = this.scroller.scrollLeft;
+  }
+  var offset = this.isHorizontal() ?
+      (ltr?this.scroller.scrollLeft : this.maxSize - this.scroller.scrollLeft)
+      : this.scroller.scrollTop;
+  if (offset === this.scrollOffset || offset > this.scrollSize - this.size) return;
 
   var itemSize = this.repeater.getItemSize();
   if (!itemSize) return;
 
   var numItems = Math.max(0, Math.floor(offset / itemSize) - NUM_EXTRA);
 
-  var transform = this.isHorizontal() ? 'translateX(' : 'translateY(';
-      transform +=  (numItems * itemSize) + 'px)';
+  var transform = (this.isHorizontal() ? 'translateX(' : 'translateY(') +
+      (!this.isHorizontal() || ltr ? (numItems * itemSize) : - (numItems * itemSize))  + 'px)';
 
   this.scrollOffset = offset;
   this.offsetter.style.webkitTransform = transform;
@@ -362,7 +370,7 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
 
   if (this.bindTopIndex) {
     var topIndex = Math.floor(offset / itemSize);
-    if (topIndex !== this.topIndex && topIndex < this.repeater.itemsLength) {
+    if (topIndex !== this.topIndex && topIndex < this.repeater.getItemCount()) {
       this.topIndex = topIndex;
       this.bindTopIndex.assign(this.$scope, topIndex);
       if (!this.$rootScope.$$phase) this.$scope.$digest();
@@ -440,7 +448,7 @@ function VirtualRepeatDirective($parse) {
 
 /** @ngInject */
 function VirtualRepeatController($scope, $element, $attrs, $browser, $document, $rootScope,
-    $$rAF) {
+    $$rAF, $mdUtil) {
   this.$scope = $scope;
   this.$element = $element;
   this.$attrs = $attrs;
@@ -450,7 +458,7 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document, 
   this.$$rAF = $$rAF;
 
   /** @type {boolean} Whether we are in on-demand mode. */
-  this.onDemand = $attrs.hasOwnProperty('mdOnDemand');
+  this.onDemand = $mdUtil.parseAttributeBoolean($attrs.mdOnDemand);
   /** @type {!Function} Backup reference to $browser.$$checkUrlChange */
   this.browserCheckUrlChange = $browser.$$checkUrlChange;
   /** @type {number} Most recent starting repeat index (based on scroll offset) */
@@ -624,6 +632,15 @@ VirtualRepeatController.prototype.containerUpdated = function() {
  */
 VirtualRepeatController.prototype.getItemSize = function() {
   return this.itemSize;
+};
+
+
+/**
+ * Called by the container. Returns the size of a single repeated item.
+ * @return {?number} Size of a repeated item.
+ */
+VirtualRepeatController.prototype.getItemCount = function() {
+  return this.itemsLength;
 };
 
 

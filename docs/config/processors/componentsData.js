@@ -5,7 +5,17 @@ var buildConfig = require('../../../config/build.config.js');
 // add many kilobytes of loading overhead.
 function publicDocData(doc, extraData) {
   var options = _.assign(extraData || {}, { hasDemo: (doc.docType === 'directive') });
-  return buildDocData(doc, options, 'components');
+
+  // This RegEx always retrieves the last source descriptor.
+  // For example it retrieves from `/opt/material/src/core/services/ripple/ripple.js` the following
+  // source descriptor: `src/core/`.
+  // This is needed because components are not only located in `src/components`.
+  var descriptor = doc.fileInfo.filePath.toString().match(/src\/.*?\//g).pop();
+  if (descriptor) {
+    descriptor = descriptor.substring(descriptor.indexOf('/') + 1, descriptor.lastIndexOf('/'));
+  }
+
+  return buildDocData(doc, options, descriptor || 'components');
 }
 
 function coreServiceData(doc, extraData) {
@@ -14,6 +24,7 @@ function coreServiceData(doc, extraData) {
 }
 
 function buildDocData(doc, extraData, descriptor) {
+
   var module = 'material.' + descriptor;
   var githubBaseUrl = buildConfig.repository + '/blob/master/src/' + descriptor + '/';
   var jsName = doc.module.split(module + '.').pop();

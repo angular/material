@@ -141,7 +141,7 @@ a.md-button.md-THEME_NAME-theme,
   &.md-fab[disabled],
   &.md-accent[disabled],
   &.md-warn[disabled] {
-    color: '{{foreground-3}}' !important;
+    color: '{{foreground-3}}';
     cursor: default;
 
     md-icon {
@@ -154,5 +154,29 @@ a.md-button.md-THEME_NAME-theme,
   }
   &[disabled] {
     background-color: transparent;
+  }
+}
+
+a.md-THEME_NAME-theme:not(.md-button) {
+  color: '{{accent-color}}';
+
+  &:hover {
+    color: '{{accent-700}}';
+  }
+
+  &.md-primary {
+    color: '{{primary-color}}';
+
+    &:hover {
+      color: '{{primary-700}}';
+    }
+  }
+
+  &.md-warn {
+    color: '{{warn-color}}';
+
+    &:hover {
+      color: '{{warn-700}}';
+    }
   }
 }

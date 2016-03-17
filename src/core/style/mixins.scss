@@ -15,12 +15,16 @@
 }
 
 @mixin input-placeholder-color($color) {
-  &::-webkit-input-placeholder,
-    &::-moz-placeholder,
-    &:-moz-placeholder,
-    &:-ms-input-placeholder {
-      color: $color;
+  $pseudos: '::-webkit-input-placeholder', ':-moz-placeholder', '::-moz-placeholder',
+            ':-ms-input-placeholder',  '::-webkit-input-placeholder';
+
+  // It is important to export every pseudo within its own block, because otherwise the placeholder
+  // won't be set on the most browsers.
+  @each $pseudo in $pseudos {
+    &#{$pseudo} {
+      color: unquote($color);
     }
+  }
 }
 
 @mixin pie-clearfix {
@@ -104,28 +108,30 @@
 // mixin definition ; sets LTR and RTL within the same style call
 // @see https://css-tricks.com/almanac/properties/d/direction/
 
-@mixin rtl($prop, $value, $rtl-value) {
-  #{$prop}: $value;
-
-  html[dir=rtl] & {
+@mixin rtl($prop, $ltr-value, $rtl-value) {
+  #{$prop}: $ltr-value;
+  [dir=rtl] & {
     #{$prop}: $rtl-value;
-    unicode-bidi: embed;
   }
-  body[dir=rtl] & {
-    #{$prop}: $rtl-value;
-    unicode-bidi: embed;
-  }
+}
 
-  bdo[dir=rtl] {
-    direction: rtl;
-    unicode-bidi: bidi-override;
+@mixin rtl-prop($ltr-prop, $rtl-prop, $value) {
+  #{$ltr-prop}: $value;
+  [dir=rtl] & {
+    #{$ltr-prop}: auto;
+    #{$rtl-prop}: $value;
   }
-  bdo[dir=ltr] {
-    direction: ltr;
-    unicode-bidi: bidi-override;
+}
+
+// To reverse padding (top left bottom right) -> (top right bottom left)
+@function rtl-value($list) {
+  @if length($list) == 4 {
+    @return nth($list, 1) nth($list, 4) nth($list, 3) nth($list, 2)
   }
-
-
+  @if length($list) == 5 {
+    @return nth($list, 1) nth($list, 4) nth($list, 3) nth($list, 2) nth($list, 5)
+  }
+  @return $list;
 }
 
 // Position a FAB button.

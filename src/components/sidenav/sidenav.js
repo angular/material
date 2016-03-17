@@ -195,12 +195,13 @@ function SidenavFocusDirective() {
  * </hljs>
  *
  * @param {expression=} md-is-open A model bound to whether the sidenav is opened.
+ * @param {boolean=} md-disable-backdrop When present in the markup, the sidenav will not show a backdrop.
  * @param {string=} md-component-id componentId to use with $mdSidenav service.
  * @param {expression=} md-is-locked-open When this expression evalutes to true,
  * the sidenav 'locks open': it falls into the content's flow instead
  * of appearing over it. This overrides the `md-is-open` attribute.
  *
- * The $mdMedia() service is exposed to the is-locked-open attribute, which
+* The $mdMedia() servic  e is exposed to the is-locked-open attribute, which
  * can be given a media query or one of the `sm`, `gt-sm`, `md`, `gt-md`, `lg` or `gt-lg` presets.
  * Examples:
  *
@@ -216,7 +217,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
     },
     controller: '$mdSidenavController',
     compile: function(element) {
-      element.addClass('md-closed');
+      element.addClass('_md-closed');
       element.attr('tabIndex', '-1');
       return postLink;
     }
@@ -229,7 +230,6 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
     var lastParentOverFlow;
     var triggeringElement = null;
     var promise = $q.when(true);
-
     var isLockedOpenParsed = $parse(attr.mdIsLockedOpen);
     var isLocked = function() {
       return isLockedOpenParsed(scope.$parent, {
@@ -240,17 +240,21 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
         $mdMedia: $mdMedia
       });
     };
-    var backdrop = $mdUtil.createBackdrop(scope, "md-sidenav-backdrop md-opaque ng-enter");
+    var backdrop = !angular.isDefined(attr.mdDisableBackdrop) ? $mdUtil.createBackdrop(scope, "_md-sidenav-backdrop md-opaque ng-enter") : undefined;
 
-    $mdTheming.inherit(backdrop, element);
+    $mdTheming(element);
+
+    // The backdrop should inherit the sidenavs theme,
+    // because the backdrop will take its parent theme by default.
+    if ( backdrop ) $mdTheming.inherit(backdrop, element);
 
     element.on('$destroy', function() {
-      backdrop.remove();
+      backdrop && backdrop.remove();
       sidenavCtrl.destroy();
     });
 
     scope.$on('$destroy', function(){
-      backdrop.remove()
+      backdrop && backdrop.remove()
     });
 
     scope.$watch(isLocked, updateIsLocked);
@@ -267,11 +271,13 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
     function updateIsLocked(isLocked, oldValue) {
       scope.isLockedOpen = isLocked;
       if (isLocked === oldValue) {
-        element.toggleClass('md-locked-open', !!isLocked);
+        element.toggleClass('_md-locked-open', !!isLocked);
       } else {
-        $animate[isLocked ? 'addClass' : 'removeClass'](element, 'md-locked-open');
+        $animate[isLocked ? 'addClass' : 'removeClass'](element, '_md-locked-open');
       }
-      backdrop.toggleClass('md-locked-open', !!isLocked);
+      if (backdrop) {
+        backdrop.toggleClass('_md-locked-open', !!isLocked);
+      }
     }
 
     /**
@@ -284,7 +290,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
       var parent = element.parent();
 
       parent[isOpen ? 'on' : 'off']('keydown', onKeyDown);
-      backdrop[isOpen ? 'on' : 'off']('click', close);
+      if (backdrop) backdrop[isOpen ? 'on' : 'off']('click', close);
 
       if ( isOpen ) {
         // Capture upon opening..
@@ -294,8 +300,9 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
       disableParentScroll(isOpen);
 
       return promise = $q.all([
-                isOpen ? $animate.enter(backdrop, parent) : $animate.leave(backdrop),
-                $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed')
+                isOpen && backdrop ? $animate.enter(backdrop, parent) :
+                backdrop ? $animate.leave(backdrop) : $q.when(true),
+                $animate[isOpen ? 'removeClass' : 'addClass'](element, '_md-closed')
               ])
               .then(function() {
                 // Perform focus when animations are ALL done...

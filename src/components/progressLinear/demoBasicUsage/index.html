@@ -24,8 +24,9 @@
     For operations where the user wants to indicate some activity or loading from the server,
     use the <b>buffer</b> indicator:
   </p>
-  <md-progress-linear class="md-warn" md-mode="{{vm.modes[0]}}" value="{{vm.determinateValue}}"
-                      md-buffer-value="{{vm.determinateValue2}}"></md-progress-linear>
+  <md-progress-linear class="md-warn" md-mode="buffer" value="{{vm.determinateValue}}"
+                      md-buffer-value="{{vm.determinateValue2}}"
+                      ng-show="vm.showList[0]"></md-progress-linear>
 
   <h4 class="md-title">Query</h4>
 
@@ -35,7 +36,7 @@
   </p>
 
   <div class="container" ng-class="{'visible' : !vm.activated}">
-    <md-progress-linear md-mode="{{vm.modes[1]}}"></md-progress-linear>
+    <md-progress-linear md-mode="query" ng-show="vm.showList[1]"></md-progress-linear>
     <div class="bottom-block">
       <span>Loading application libraries...</span>
     </div>
@@ -55,10 +56,4 @@
       <h5>On</h5>
     </md-switch>
   </div>
-
-  <p class="small">
-    Note: With the above switch -- which simply clears the md-mode in each <code>&lt;md-progress-linear
-    md-mode=""&gt;</code> element --
-    developers now easily disable the animations and hide their progress indicators.</p>
-
 </div>

@@ -88,57 +88,94 @@ describe('mdListItem directive', function() {
     expect($rootScope.modelVal).toBeFalsy();
   }));
 
-  xit('should not convert spacebar keypress for text inputs', inject(function($mdConstant) {
+  it('should not convert spacebar keypress for editable elements', inject(function($mdConstant) {
+    var listItem = setup('<md-list-item><div contenteditable="true"></div></md-list-item>');
+    var editableEl = listItem.find('div');
+    var onClickSpy = jasmine.createSpy('onClickSpy');
 
-    var listItem = setup('<md-list-item><input ng-keypress="pressed = true" type="text"></md-list-item>');
-    var inputEl = angular.element(listItem[0].querySelector('input')[0]);
+    // We need to append our element to the DOM because the browser won't detect `contentEditable` when the element
+    // is hidden in the DOM. See the related issue for chromium:
+    // https://code.google.com/p/chromium/issues/detail?id=313082
+    document.body.appendChild(listItem[0]);
 
-    expect($rootScope.pressed).toBeFalsy();
-    inputEl.triggerHandler({
-      type: 'keypress',
-      keyCode: $mdConstant.KEY_CODE.SPACE
-    });
-    expect($rootScope.pressed).toBe(true);
+    editableEl.on('click', onClickSpy);
+
+    // We need to dispatch the keypress natively, because otherwise the `keypress` won't be triggered in the list.
+    var event = document.createEvent('Event');
+    event.keyCode = $mdConstant.KEY_CODE.SPACE;
+    event.initEvent('keypress', true, true);
+
+    editableEl[0].dispatchEvent(event);
+
+    expect(onClickSpy).not.toHaveBeenCalled();
+
+    document.body.removeChild(listItem[0]);
   }));
-
 
   it('creates buttons when used with ng-click', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()" ng-disabled="true"><p>Hello world</p></md-list-item>');
-    var firstChild = listItem.children()[0];
-    expect(firstChild.nodeName).toBe('MD-BUTTON');
-    expect(firstChild.hasAttribute('ng-disabled')).toBeTruthy();
-    expect(firstChild.childNodes[0].nodeName).toBe('DIV');
-    expect(firstChild.childNodes[0].childNodes[0].nodeName).toBe('P');
+    var buttonChild = listItem.children().children()[0];
+    var innerChild = listItem.children().children()[1];
+    expect(buttonChild.nodeName).toBe('MD-BUTTON');
+    expect(buttonChild.hasAttribute('ng-disabled')).toBeTruthy();
+    expect(innerChild.nodeName).toBe('DIV');
+    expect(innerChild.childNodes[0].nodeName).toBe('P');
   });
 
   it('creates buttons when used with ui-sref', function() {
     var listItem = setup('<md-list-item ui-sref="somestate"><p>Hello world</p></md-list-item>');
-    var firstChild = listItem.children()[0];
+    var firstChild = listItem.children().children()[0];
     expect(firstChild.nodeName).toBe('MD-BUTTON');
     expect(firstChild.hasAttribute('ui-sref')).toBeTruthy();
   });
 
   it('creates buttons when used with href', function() {
     var listItem = setup('<md-list-item href="/somewhere"><p>Hello world</p></md-list-item>');
-    var firstChild = listItem.children()[0];
+    var firstChild = listItem.children().children()[0];
     expect(firstChild.nodeName).toBe('MD-BUTTON');
     expect(firstChild.hasAttribute('href')).toBeTruthy();
   });
 
   it('moves aria-label to primary action', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()" aria-label="Hello"></md-list-item>');
-    var listItemChildren = listItem.children();
-    expect(listItemChildren[0].nodeName).toBe('MD-BUTTON');
-    expect(listItemChildren.attr('aria-label')).toBe('Hello');
+    var listButtonWrap = listItem.children();
+    // The actual click button will be a child of the button.md-no-style wrapper.
+    var listItemButton = listButtonWrap.children();
+
+    expect(listButtonWrap).toHaveClass('md-button');
+    expect(listItemButton[0].nodeName).toBe('MD-BUTTON');
+    expect(listItemButton[0].getAttribute('aria-label')).toBe('Hello');
   });
 
   it('moves md-secondary items outside of the button', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()"><p>Hello World</p><md-icon class="md-secondary" ng-click="goWild()"></md-icon></md-list-item>');
-    var firstChild = listItem.children()[0];
-    expect(firstChild.nodeName).toBe('MD-BUTTON');
-    expect(firstChild.childNodes.length).toBe(1);
-    var secondChild = listItem.children()[1];
-    expect(secondChild.nodeName).toBe('MD-BUTTON');
+    // First child is our button and content holder
+    var firstChild = listItem.children().eq(0);
+    expect(firstChild[0].nodeName).toBe('DIV');
+    // It should contain two elements, the button overlay and the actual content
+    expect(firstChild.children().length).toBe(2);
+    var secondChild = listItem.children().eq(1);
+    expect(secondChild[0].nodeName).toBe('MD-BUTTON');
+    expect(secondChild.hasClass('_md-secondary-container')).toBeTruthy();
+  });
+
+  it('moves multiple md-secondary items outside of the button', function() {
+    var listItem = setup('<md-list-item ng-click="sayHello()"><p>Hello World</p><md-icon class="md-secondary" ng-click="goWild()"><md-icon class="md-secondary" ng-click="goWild2()"></md-icon></md-list-item>');
+    // First child is our button and content holder
+    var firstChild = listItem.children().eq(0);
+    expect(firstChild[0].nodeName).toBe('DIV');
+    // It should contain two elements, the button overlay and the actual content
+    expect(firstChild.children().length).toBe(2);
+    var secondChild = listItem.children().eq(1);
+    expect(secondChild[0].nodeName).toBe('DIV');
+    expect(secondChild.hasClass('_md-secondary-container')).toBeTruthy();
+    expect(secondChild.children().length).toBe(2);
+    var secondaryBtnOne = secondChild.children().eq(0);
+    expect(secondaryBtnOne[0].nodeName).toBe('MD-BUTTON');
+    expect(secondaryBtnOne.hasClass('_md-secondary-container')).toBeFalsy();
+    var secondaryBtnTwo = secondChild.children().eq(1);
+    expect(secondaryBtnTwo[0].nodeName).toBe('MD-BUTTON');
+    expect(secondaryBtnTwo.hasClass('_md-secondary-container')).toBeFalsy();
   });
 
   it('should detect non-compiled md-buttons', function() {
@@ -154,7 +191,7 @@ describe('mdListItem directive', function() {
       '  <md-button class="md-exclude" ng-click="sayHello()">Hello</md-button>' +
       '</md-list-item>'
     );
-    expect(listItem.hasClass('md-no-proxy')).toBeTruthy();
+    expect(listItem.hasClass('_md-no-proxy')).toBeTruthy();
   });
 
   it('should copy md-icon.md-secondary attributes to the button', function() {
@@ -205,7 +242,7 @@ describe('mdListItem directive', function() {
       expect(listItem.find('button').length).toBe(1);
 
       // Check that we didn't wrap the button in an md-button
-      expect(listItem[0].querySelector('md-button button')).toBeFalsy();
+      expect(listItem[0].querySelector('md-button button.md-secondary')).toBeFalsy();
     });
 
     it('should not wrap secondary md-buttons in a md-button', function() {
@@ -220,7 +257,7 @@ describe('mdListItem directive', function() {
       expect(listItem.find('md-button').length).toBe(2);
 
       // Check that we didn't wrap the md-button in an md-button
-      expect(listItem[0].querySelector('md-button md-button')).toBeFalsy();
+      expect(listItem[0].querySelector('md-button md-button.md-secondary')).toBeFalsy();
     });
   });
 

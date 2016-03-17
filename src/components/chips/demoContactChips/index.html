@@ -32,5 +32,18 @@
       </md-list-item>
     </md-list>
 
+    <br>
+    <h2 class="md-title">Searching asynchronously.</h2>
+    <md-contact-chips
+        ng-model="ctrl.asyncContacts"
+        md-contacts="ctrl.delayedQuerySearch($query)"
+        md-contact-name="name"
+        md-contact-image="image"
+        md-contact-email="email"
+        md-require-match="true"
+        md-highlight-flags="i"
+        filter-selected="ctrl.filterSelected"
+        placeholder="To">
+    </md-contact-chips>
   </md-content>
 </div>

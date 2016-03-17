@@ -56,10 +56,10 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
     require: '?ngModel',
     priority: 210, // Run before ngAria
     template: 
-      '<div class="md-container" md-ink-ripple md-ink-ripple-checkbox>' +
-        '<div class="md-icon"></div>' +
+      '<div class="_md-container" md-ink-ripple md-ink-ripple-checkbox>' +
+        '<div class="_md-icon"></div>' +
       '</div>' +
-      '<div ng-transclude class="md-label"></div>',
+      '<div ng-transclude class="_md-label"></div>',
     compile: compile
   };
 
@@ -68,6 +68,7 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
   // **********************************************************
 
   function compile (tElement, tAttrs) {
+    var container = tElement.children();
 
     tAttrs.type = 'checkbox';
     tAttrs.tabindex = tAttrs.tabindex || '0';
@@ -79,6 +80,12 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
       if (this.hasAttribute('disabled')) {
         event.stopImmediatePropagation();
       }
+    });
+
+    // Redirect focus events to the root element, because IE11 is always focusing the container element instead
+    // of the md-checkbox element. This causes issues when using ngModelOptions: `updateOnBlur`
+    container.on('focus', function() {
+      tElement.focus();
     });
 
     return function postLink(scope, element, attr, ngModelCtrl) {

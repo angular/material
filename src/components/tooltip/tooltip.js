@@ -28,7 +28,7 @@ angular
  * </hljs>
  *
  * @param {expression=} md-visible Boolean bound to whether the tooltip is currently visible.
- * @param {number=} md-delay How many milliseconds to wait to show the tooltip after the user focuses, hovers, or touches the parent. Defaults to 300ms.
+ * @param {number=} md-delay How many milliseconds to wait to show the tooltip after the user focuses, hovers, or touches the parent. Defaults to 0ms.
  * @param {boolean=} md-autohide If present or provided with a boolean value, the tooltip will hide on mouse leave, regardless of focus
  * @param {string=} md-direction Which direction would you like the tooltip to go?  Supports left, right, top, and bottom.  Defaults to bottom.
  */
@@ -42,7 +42,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     restrict: 'E',
     transclude: true,
     priority:210, // Before ngAria
-    template: '<div class="md-content" ng-transclude></div>',
+    template: '<div class="_md-content" ng-transclude></div>',
     scope: {
       delay: '=?mdDelay',
       visible: '=?mdVisible',
@@ -57,7 +57,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     $mdTheming(element);
 
     var parent        = $mdUtil.getParentWithPointerEvents(element),
-        content       = angular.element(element[0].getElementsByClassName('md-content')[0]),
+        content       = angular.element(element[0].getElementsByClassName('_md-content')[0]),
         tooltipParent = angular.element(document.body),
         debouncedOnResize = $$rAF.throttle(function () { updatePosition(); });
 
@@ -78,7 +78,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
 
     function setDefaults () {
-      if (!angular.isDefined(attr.mdDelay)) scope.delay = TOOLTIP_SHOW_DELAY;
+      scope.delay = scope.delay || TOOLTIP_SHOW_DELAY;
     }
 
     function updateContentOrigin() {
@@ -217,15 +217,15 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       updatePosition();
 
       angular.forEach([element, content], function (element) {
-        $animate.addClass(element, 'md-show');
+        $animate.addClass(element, '_md-show');
       });
     }
 
     function hideTooltip() {
         var promises = [];
         angular.forEach([element, content], function (it) {
-          if (it.parent() && it.hasClass('md-show')) {
-            promises.push($animate.removeClass(it, 'md-show'));
+          if (it.parent() && it.hasClass('_md-show')) {
+            promises.push($animate.removeClass(it, '_md-show'));
           }
         });
 

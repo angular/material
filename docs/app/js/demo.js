@@ -1,9 +1,7 @@
 DocsApp
 .directive('layoutAlign', function() { return angular.noop; })
 .directive('layout', function() { return angular.noop; })
-.directive('docsDemo', [
-  '$mdUtil',
-function() {
+.directive('docsDemo', ['$mdUtil', function($mdUtil) {
   return {
     restrict: 'E',
     scope: true,
@@ -14,22 +12,17 @@ function() {
     bindToController: true
   };
 
-  function DocsDemoCtrl($scope, $element, $attrs, codepen) {
+  function DocsDemoCtrl($scope, $element, $attrs, $interpolate, codepen) {
     var self = this;
 
     self.interpolateCode = angular.isDefined($attrs.interpolateCode);
+    self.demoId = $interpolate($attrs.demoId || '')($scope.$parent);
+    self.demoTitle = $interpolate($attrs.demoTitle || '')($scope.$parent);
+    self.demoModule = $interpolate($attrs.demoModule || '')($scope.$parent);
 
-    $attrs.$observe('demoTitle', function(value) {
-      self.demoTitle = value;
-    });
-
-    $attrs.$observe('demoId', function(value) {
-      self.demoId = value;
-    });
-
-    $attrs.$observe('demoModule', function(value) {
-      self.demoModule = value;
-    });
+    $attrs.$observe('demoTitle',  function(value) { self.demoTitle  = value || self.demoTitle; });
+    $attrs.$observe('demoId',     function(value) { self.demoId     = value || self.demoId; });
+    $attrs.$observe('demoModule', function(value) { self.demoModule = value || self.demoModule;  });
 
     self.files = {
       css: [], js: [], html: []

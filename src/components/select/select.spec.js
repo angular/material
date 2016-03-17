@@ -11,7 +11,7 @@ describe('<md-select>', function() {
 
   afterEach(inject(function ($document) {
     var body = $document[0].body;
-    var children = body.querySelectorAll('.md-select-menu-container');
+    var children = body.querySelectorAll('._md-select-menu-container');
     for (var i = 0; i < children.length; i++) {
       angular.element(children[i]).remove();
     }
@@ -52,7 +52,25 @@ describe('<md-select>', function() {
     var select = setupSelect('ng-model="val", md-container-class="test"').find('md-select');
     openSelect(select);
 
-    var container = $document[0].querySelector('.md-select-menu-container');
+    var container = $document[0].querySelector('._md-select-menu-container');
+    expect(container).toBeTruthy();
+    expect(container.classList.contains('test')).toBe(true);
+  }));
+
+  it('supports passing classes to the container using `data-` attribute prefix', inject(function($document) {
+    var select = setupSelect('ng-model="val", data-md-container-class="test"').find('md-select');
+    openSelect(select);
+
+    var container = $document[0].querySelector('._md-select-menu-container');
+    expect(container).toBeTruthy();
+    expect(container.classList.contains('test')).toBe(true);
+  }));
+
+  it('supports passing classes to the container using `x-` attribute prefix', inject(function($document) {
+    var select = setupSelect('ng-model="val", x-md-container-class="test"').find('md-select');
+    openSelect(select);
+
+    var container = $document[0].querySelector('._md-select-menu-container');
     expect(container).toBeTruthy();
     expect(container.classList.contains('test')).toBe(true);
   }));
@@ -61,7 +79,7 @@ describe('<md-select>', function() {
     var select = setupSelect('ng-model="val"').find('md-select');
     var ownsId = select.attr('aria-owns'); 
     expect(ownsId).toBeTruthy();
-    var containerId = select[0].querySelector('.md-select-menu-container').getAttribute('id');
+    var containerId = select[0].querySelector('._md-select-menu-container').getAttribute('id');
     expect(ownsId).toBe(containerId);
   });
 
@@ -209,7 +227,7 @@ describe('<md-select>', function() {
       var select = setupSelect('ng-model="someVal", placeholder="Hello world"', null, true).find('md-select');
       var label = select.find('md-select-value');
       expect(label.text()).toBe('Hello world');
-      expect(label.hasClass('md-select-placeholder')).toBe(true);
+      expect(label.hasClass('_md-select-placeholder')).toBe(true);
     });
 
     it('sets itself to the selected option\'s label', inject(function($rootScope, $compile) {
@@ -223,10 +241,21 @@ describe('<md-select>', function() {
                               '</md-select>' +
                             '</md-input-container>')($rootScope).find('md-select');
       var label = select.find('md-select-value');
+      var options = select.find('md-option');
+
       $rootScope.$digest();
 
       expect(label.text()).toBe('Two');
       expect(label.hasClass('md-select-placeholder')).toBe(false);
+
+
+      // Ensure every md-option element does not have a checkbox prepended to it.
+      for (var i = 0; i < options.length; i++) {
+        var checkBoxContainer = options[i].querySelector('._md-container');
+        var checkBoxIcon = options[i].querySelector('._md-icon');
+        expect(checkBoxContainer).toBe(null);
+        expect(checkBoxIcon).toBe(null);
+      }
     }));
 
     it('supports rendering multiple', inject(function($rootScope, $compile) {
@@ -240,11 +269,24 @@ describe('<md-select>', function() {
                               '</md-select>' +
                             '</md-input-container>')($rootScope).find('md-select');
       var label = select.find('md-select-value');
+      var options = select.find('md-option');
+      var container;
+      var icon;
+
       $rootScope.$digest();
       $rootScope.$digest();
 
       expect(label.text()).toBe('One, Three');
       expect(label.hasClass('md-select-placeholder')).toBe(false);
+
+      // Ensure every md-option element has a checkbox prepended to it.
+      for (var i = 0; i < options.length; i++) {
+        var checkBoxContainer = options[i].querySelector('._md-container');
+        var checkBoxIcon = options[i].querySelector('._md-icon');
+        expect(checkBoxContainer).not.toBe(null);
+        expect(checkBoxIcon).not.toBe(null);
+      }
+
     }));
 
     it('supports raw html', inject(function($rootScope, $compile, $sce) {
@@ -733,6 +775,16 @@ describe('<md-select>', function() {
         expect($rootScope.model).toEqual([1,3]);
       }));
 
+      it('should not be multiple if attr.multiple == `false`', inject(function($document) {
+        var el = setupSelect('multiple="false" ng-model="$root.model"').find('md-select');
+        openSelect(el);
+        expectSelectOpen(el);
+
+        var selectMenu = $document.find('md-select-menu')[0];
+
+        expect(selectMenu.hasAttribute('multiple')).toBe(false);
+      }));
+
     });
   });
 
@@ -973,9 +1025,9 @@ describe('<md-select>', function() {
 
   function expectSelectClosed(element) {
     inject(function($document) {
-      var menu = angular.element($document[0].querySelector('.md-select-menu-container'));
+      var menu = angular.element($document[0].querySelector('._md-select-menu-container'));
       if (menu.length) {
-        if (menu.hasClass('md-active') || menu.attr('aria-hidden') == 'false') {
+        if (menu.hasClass('_md-active') || menu.attr('aria-hidden') == 'false') {
           throw Error('Expected select to be closed');
         }
       }
@@ -984,8 +1036,8 @@ describe('<md-select>', function() {
 
   function expectSelectOpen(element) {
     inject(function($document) {
-      var menu = angular.element($document[0].querySelector('.md-select-menu-container'));
-      if (!(menu.hasClass('md-active') && menu.attr('aria-hidden') == 'false')) {
+      var menu = angular.element($document[0].querySelector('._md-select-menu-container'));
+      if (!(menu.hasClass('_md-active') && menu.attr('aria-hidden') == 'false')) {
         throw Error('Expected select to be open');
       }
     });

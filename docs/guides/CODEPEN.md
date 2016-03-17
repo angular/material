@@ -23,12 +23,12 @@ additional script is appended to the example to initialize the
 
 * [SVG images are served from a cache](#asset_cache)
 * [Adding a new SVG requires a change to the asset cache](#build_cache)
-* Anytime a new dependency is added to an example, the [asset-cache.js](../app/asset-cache.js)
+* Anytime a new dependency is added to an example, the [svg-assets-cache.js](../app/svg-assets-cache.js)
   will need to be updated with the new dependency and [uploaded to the
   CDN](#update_cdn)
 * Images used in demos must use full paths
 * Code examples are modified prior to sending to codepen with the same
-  module defined in the [asset-cache.js](../app/asset-cache.js)
+  module defined in the [svg-assets-cache.js](../app/svg-assets-cache.js)
 * Additional HTML template files located in the demo directory are appended to your index file using `ng-template`. [See docs](https://docs.angularjs.org/api/ng/directive/script)
 
 ## <a name="asset_cache"></a> Asset Cache
@@ -54,9 +54,9 @@ and serve the cached content.
 * run `./scripts/build-asset-cache.sh | pbcopy` to add an object
   literal to your paste buffer.
 * paste object literal as `var assetMap = { ... }` in the
-  [asset-cache.js](../app/asset-cache.js)
+  [svg-assets-cache.js](../app/svg-assets-cache.js)
 * [update](#update_cdn) the CDN with the new script
-* commit asset-cache.js
+* commit svg-assets-cache.js
 
 ### <a name="update_cdn"></a> Update Codepen Asset Cache
 
@@ -67,7 +67,7 @@ CDN is located on the Codepen PRO account.
 
 ## Deployment Considerations
 
-The step to generate and deploy the asset-cache.js is currently a
+The step to generate and deploy the svg-assets-cache.js is currently a
 manual process.  Keep in mind that if changes are made to
-asset-cache.js then you will need to follow the [steps](#update_cdn)
+svg-assets-cache.js then you will need to follow the [steps](#update_cdn)
 to update the cache on the CDN.

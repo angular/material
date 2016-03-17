@@ -8,11 +8,11 @@ md-list.md-THEME_NAME-theme {
       color: '{{foreground-2}}';
     }
   }
-  .md-proxy-focus.md-focused div.md-no-style {
+  ._md-proxy-focus.md-focused div._md-no-style {
     background-color: '{{background-100}}';
   }
 
-  md-list-item > .md-avatar-icon {
+  md-list-item .md-avatar-icon {
     background-color: '{{foreground-3}}';
     color: '{{background-color}}';
   }

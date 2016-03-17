@@ -56,9 +56,6 @@ understandable, concise, and DRY fashion.
 Below is a sample code that demonstrates some of our rules and conventions:
 
 ```js
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.slider
@@ -110,7 +107,6 @@ function SliderDirective($mdTheming) {
   //...
 }
 
-})();
 ```
 
 *  With the exceptions listed in this document, follow the rules contained in
@@ -149,7 +145,7 @@ function SliderDirective($mdTheming) {
 
 #### Patterns
 
-* All components should be wrapped in an anonymous closure using the Module Pattern.
+* All source files will be automatically wrapped inside an anonymous closure using the Module Pattern.
 * Use the **Revealing Pattern** as a coding style.
 * Do **not** use the global variable namespace, export our API explicitly via Angular DI.
 * Instead of complex inheritance hierarchies, use **simple** objects.

@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   angular
-      .module('chipsDemo', ['ngMaterial'])
+      .module('chipsDemo', ['ngMaterial', 'ngMessages'])
       .controller('BasicDemoCtrl', DemoCtrl);
 
   function DemoCtrl ($timeout, $q) {
@@ -12,6 +12,8 @@
     // Lists of fruit names and Vegetable objects
     self.fruitNames = ['Apple', 'Banana', 'Orange'];
     self.roFruitNames = angular.copy(self.fruitNames);
+    self.editableFruitNames = angular.copy(self.fruitNames);
+
     self.tags = [];
     self.vegObjs = [
       {
