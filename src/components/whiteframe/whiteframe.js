@@ -10,7 +10,6 @@ angular
  * @ngdoc directive
  * @module material.components.whiteframe
  * @name mdWhiteframe
- * @restrict A
  *
  * @description
  * The md-whiteframe directive allows you to apply an elevation shadow to an element.
@@ -34,7 +33,6 @@ function MdWhiteframeDirective($log) {
   var DEFAULT_DP = 4;
 
   return {
-    restrict: 'A',
     link: postLink
   };
 

@@ -34,7 +34,7 @@
     "colors": "^1.1.0",
     "conventional-changelog": "git://github.com/robertmesserle/conventional-changelog.git",
     "dgeni": "^0.4.1",
-    "dgeni-packages": "^0.10.3",
+    "dgeni-packages": "^0.13.0",
     "esprima": "^1.2.2",
     "github-contributors-list": "^1.2.1",
     "glob": "~4.0.2",

@@ -33,10 +33,11 @@ function buildDocData(doc, extraData, descriptor) {
   var filePath = doc.fileInfo.filePath;
   var indexOfBasePath = filePath.indexOf(basePathFromProjectRoot);
   var path = filePath.substr(indexOfBasePath + basePathFromProjectRoot.length, filePath.length);
-
+  
   return _.assign({
     name: doc.name,
     type: doc.docType,
+    restrict: doc.restrict,
     outputPath: doc.outputPath,
     url: doc.path,
     label: doc.label || doc.name,
