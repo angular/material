@@ -725,6 +725,33 @@ describe('$mdDialog', function() {
       expect(closing).toBe(true);
     }));
 
+    it('should support a self provided element', inject(function($mdDialog, $rootScope) {
+      var dialogTemplate =
+        '<div class="md-dialog-container" tabindex="-1">' +
+          '<md-dialog>' +
+            'My Custom Node' +
+          '</md-dialog>' +
+        '</div>';
+
+      var parent = angular.element('<div>');
+      var dialogNode = angular.element(dialogTemplate);
+
+      $mdDialog.show({
+        skipCompile: true,
+        element: dialogNode,
+        parent: parent
+      });
+
+      $rootScope.$apply();
+
+      runAnimation();
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      expect(container.length).toBe(1);
+
+      expect(container[0]).toBe(dialogNode[0]);
+    }));
+
     it('should support specifying a parent using a string selector', inject(function($mdDialog, $rootScope, $document) {
       var body = angular.element($document[0].querySelector("body"));
       var nodes = angular.element(''+

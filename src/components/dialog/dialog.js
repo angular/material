@@ -891,6 +891,11 @@ function MdDialogProvider($$interimElementProvider) {
      * Inject ARIA-specific attributes appropriate for Dialogs
      */
     function configureAria(element, options) {
+      // If the element is undefined, then there was no <md-dialog> element present.
+      // This can be caused by using the options.skipCompile and options.element properties.
+      // In this case, the template processing and compilation will be skipped and wont
+      // add the <md-dialog> automatically.
+      if (!element.length) return;
 
       var role = (options.$type === 'alert') ? 'alertdialog' : 'dialog';
       var dialogContent = element.find('md-dialog-content');
