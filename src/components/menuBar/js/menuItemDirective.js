@@ -3,10 +3,7 @@ angular
   .module('material.components.menuBar')
   .directive('mdMenuItem', MenuItemDirective);
 
- /**
-  *
-  * @ngInjdect
-  */
+ /* @ngInject */
 function MenuItemDirective() {
   return {
     require: ['mdMenuItem', '?ngModel'],
