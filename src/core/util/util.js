@@ -16,6 +16,9 @@ angular
   .module('material.core')
   .factory('$mdUtil', UtilFactory);
 
+/**
+ * @ngInject
+ */
 function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $interpolate, $log, $rootElement, $window) {
   // Setup some core variables for the processTemplate method
   var startSymbol = $interpolate.startSymbol(),
