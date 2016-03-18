@@ -431,12 +431,12 @@ $layout-breakpoint-lg:     1920px !default;
 
 @media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
   // SMALL SCREEN
-  [hide-sm], [hide-gt-xs] {
+  [hide], [hide-gt-xs] {
     &:not([show-gt-xs]):not([show-sm]):not([show]) {
       display: none;
     }
   }
-  [hide-sm]:not([show-sm]):not([show]) {
+  [hide-sm]:not([show-gt-xs]):not([show-sm]):not([show]) {
     display: none;
   }
   @include layouts_for_breakpoint(sm);
