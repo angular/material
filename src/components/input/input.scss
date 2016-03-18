@@ -127,6 +127,10 @@ md-input-container {
     transform: translate3d(0, $input-label-default-offset + 4, 0) scale($input-label-default-scale);
     transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
 
+    // The max-width is necessary, because in some browsers, using this together with
+    // a calc might cause it to overflow the parent. See #7403
+    max-width: 100%;
+
     @include rtl(transform-origin, left top, right top);
   }
   ._md-placeholder {
