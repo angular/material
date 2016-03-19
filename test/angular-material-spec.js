@@ -8,8 +8,8 @@
 (function() {
 
 
-  // Patch since PhantomJS does not implement click() on HTMLElement. In some 
-  // cases we need to execute the native click on an element. However, jQuery's 
+  // Patch since PhantomJS does not implement click() on HTMLElement. In some
+  // cases we need to execute the native click on an element. However, jQuery's
   // $.fn.click() does not dispatch to the native function on <a> elements, so we
   // can't use it in our implementations: $el[0].click() to correctly dispatch.
   // Borrowed from https://stackoverflow.com/questions/15739263/phantomjs-click-an-element
@@ -119,11 +119,17 @@
     };
 
     /**
-     * Add special matchers used in the Angular-Material specs
-     *
+     * Add special matchers used in the Angular-Material spec.
      */
     jasmine.addMatchers({
 
+      /**
+       * Asserts that an element has a given class name.
+       * Accepts any of:
+       *   {string} - A CSS selector.
+       *   {angular.JQLite} - The result of a jQuery query.
+       *   {Element} - A DOM element.
+       */
       toHaveClass: function() {
         return {
           compare: function(actual, expected) {
@@ -131,7 +137,7 @@
             var classes = expected.trim().split(/\s+/);
 
             for (var i = 0; i < classes.length; ++i) {
-              if (!angular.element(actual).hasClass(classes[i])) {
+              if (!getElement(actual).hasClass(classes[i])) {
                 results.pass = false;
               }
             }
@@ -141,7 +147,7 @@
             results.message = "";
             results.message += "Expected '";
             results.message += angular.mock.dump(actual);
-            results.message += negation + "to have class '" + expected + "'.";
+            results.message += "'" + negation + "to have class '" + expected + "'.";
 
             return results;
           }
@@ -194,9 +200,20 @@
             return results;
           }
         };
-      }
+      },
 
     });
+
+    /**
+     * Returns the angular element associated with a css selector or element.
+     * @param el {string|!angular.JQLite|!Element}
+     * @returns {!angular.JQLite}
+     */
+    function getElement(el) {
+      var queryResult = angular.isString(el) ?
+          document.querySelector(el) : el;
+      return angular.element(queryResult);
+    }
 
   });
 
