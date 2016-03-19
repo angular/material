@@ -7,10 +7,12 @@ describe('$animateCss', function() {
   var element, ss, doneSpy;
   var triggerAnimationStartFrame, moveAnimationClock;
 
-  beforeEach(module('material.animate'));
+  beforeEach(module('material.core.animate'));
 
   beforeEach(module(function() {
-    return function($window, $document, $$rAF, $timeout, $rootElement) {
+    return function($window, $document, $$rAF, $timeout, $rootElement, $animate, $injector, $rootScope) {
+      $animate.enabled(true);
+
       ss = createMockStyleSheet($document, $window);
       element = jqLite('<div></div>');
       $rootElement.append(element);
@@ -19,8 +21,18 @@ describe('$animateCss', function() {
       ss.addRule('.to-add', 'transition:0.5s linear all; font-size:100px;');
       ss.addRule('.to-remove', 'transition:0.5s linear all; border:10px solid black;');
 
+      var asyncRun = angular.noop;
+      if ($injector.has('$$animateAsyncRun')) {
+        var asyncFlush = $injector.get('$$animateAsyncRun');
+        asyncRun = function() {
+          asyncFlush.flush();
+        };
+      }
+
       triggerAnimationStartFrame = function() {
         $$rAF.flush();
+        asyncRun();
+        $rootScope.$digest();
       };
 
       doneSpy = jasmine.createSpy();
@@ -30,6 +42,8 @@ describe('$animateCss', function() {
       moveAnimationClock = function(duration, delay) {
         var time = (delay || 0) + duration * 1.5;
         $timeout.flush(time * 1000);
+        asyncRun();
+        $$rAF.flush();
       }
     };
   }));
@@ -79,7 +93,7 @@ describe('$animateCss', function() {
     it('should trigger an animation if a keyframe is detected on the class that is being added',
       inject(function($animateCss) {
 
-      ss.addRule('.something-spinny', 'animation: 0.5s rotate linear; animation: 0.5s rotate linear;');
+      ss.addRule('.something-spinny', '-webkit-animation: 0.5s rotate linear; animation: 0.5s rotate linear;');
 
       $animateCss(element, { addClass: 'something-spinny' }).start().done(doneSpy);
       triggerAnimationStartFrame();
@@ -93,7 +107,7 @@ describe('$animateCss', function() {
       inject(function($animateCss) {
 
       ss.addRule('.something-shiny', 'transition:1.5s linear all; background-color: gold;');
-      ss.addRule('.something-spinny', 'webkit-animation: 0.5s rotate linear; animation: 0.5s rotate linear;');
+      ss.addRule('.something-spinny', '-webkit-animation: 0.5s rotate linear; animation: 0.5s rotate linear;');
 
       $animateCss(element, { addClass: 'something-spinny something-shiny' }).start().done(doneSpy);
       triggerAnimationStartFrame();
@@ -153,7 +167,7 @@ describe('$animateCss', function() {
     it('should trigger an animation if the element contains a keyframe already when the class is removed',
       inject(function($animateCss) {
 
-      ss.addRule('.something-that-spins', 'webkit-animation: 0.5s rotate linear; animation: 0.5s rotate linear;');
+      ss.addRule('.something-that-spins', '-webkit-animation: 0.5s rotate linear; animation: 0.5s rotate linear;');
 
       element.addClass('something-that-spins');
       element.addClass('something-to-remove');

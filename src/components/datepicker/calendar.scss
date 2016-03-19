@@ -6,12 +6,13 @@ $md-calendar-side-padding: 16px !default;
 $md-calendar-weeks-to-show: 7 !default;
 
 $md-calendar-month-label-padding: 8px !default;
-$md-calendar-month-label-font-size: 13px !default;
+$md-calendar-month-label-font-size: 14px !default;
+
+$md-calendar-scroll-cue-shadow-radius: 6px;
 
 $md-calendar-width: (7 * $md-calendar-cell-size) + (2 * $md-calendar-side-padding);
 $md-calendar-height:
     ($md-calendar-weeks-to-show * $md-calendar-cell-size) + $md-calendar-header-height;
-
 
 // Styles for date cells, including day-of-the-week header cells.
 @mixin md-calendar-cell() {
@@ -29,11 +30,11 @@ $md-calendar-height:
   // because we want the header background and the month dividing border to
   // extend the entire width of the calendar.
   &:first-child {
-    padding-left: $md-calendar-side-padding;
+    @include rtl-prop(padding-left, padding-right, $md-calendar-side-padding);
   }
 
   &:last-child {
-    padding-right: $md-calendar-side-padding;
+    @include rtl-prop(padding-right, padding-left, $md-calendar-side-padding);
   }
 }
 
@@ -80,14 +81,25 @@ md-calendar {
 
 // Contains the scrolling element (this is the md-virtual-repeat-container).
 .md-calendar-scroll-container {
+  // Add an inset shadow to help cue users that the calendar is scrollable. Use a negative x
+  // offset to push the vertical edge shadow off to the right so that it's cut off by the edge
+  // of the calendar container.
+  box-shadow: inset -3px 3px $md-calendar-scroll-cue-shadow-radius rgba(black, 0.2);
+
   display: inline-block;
   height: $md-calendar-weeks-to-show * $md-calendar-cell-size;
-  width: $md-calendar-width;
+
+  // Add the shadow radius to the width so that the shadow os pushed off to the side and cut off.
+  width: $md-calendar-width + $md-calendar-scroll-cue-shadow-radius;
 }
 
 // A single date cell in the calendar table.
 .md-calendar-date {
   @include md-calendar-cell();
+
+  &.md-calendar-date-disabled {
+    cursor: default;
+  }
 }
 
 // Circle element inside of every date cell used to indicate selection or focus.
@@ -97,18 +109,21 @@ md-calendar {
   border-radius: 50%;
   display: inline-block;
 
-  cursor: pointer;
-
   width: $md-calendar-cell-emphasis-size;
   height: $md-calendar-cell-emphasis-size;
   line-height: $md-calendar-cell-emphasis-size;
+
+  .md-calendar-date:not(.md-disabled) & {
+    cursor: pointer;
+  }
 }
 
 // The label above each month (containing the month name and the year, e.g. "Jun 2014").
 .md-calendar-month-label {
   height: $md-calendar-cell-size;
   font-size: $md-calendar-month-label-font-size;
-  padding: 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding;
+  font-weight: 500; // Roboto Medium
+  @include rtl(padding, 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding, rtl-value( 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding));
 }
 
 // Table containing the day-of-the-week header.
@@ -137,5 +152,12 @@ md-calendar {
   // 1px shorter than the other months. We fix this by adding an invisible border-top.
   &:first-child {
     border-top: 1px solid transparent;
+  }
+
+  // Explicitly set vertical-align to avoid conflicting with popular CSS resets. When
+  // vertical-align:baseline is set, month headers are misaligned.
+  // http://meyerweb.com/eric/tools/css/reset/
+  tbody, td, tr {
+    vertical-align: middle;
   }
 }

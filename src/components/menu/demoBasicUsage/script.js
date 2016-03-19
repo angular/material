@@ -25,7 +25,7 @@ angular
           .clickOutsideToClose(true)
           .parent('body')
           .title('Suddenly, a redial')
-          .content('You just called a friend; who told you the most amazing story. Have a cookie!')
+          .textContent('You just called a friend; who told you the most amazing story. Have a cookie!')
           .ok('That was easy')
       );
 

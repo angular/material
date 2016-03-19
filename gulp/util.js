@@ -54,6 +54,7 @@ function buildJs () {
       .pipe(concat('angular-material.js'))
       .pipe(BUILD_MODE.transform())
       .pipe(insert.prepend(config.banner))
+      .pipe(insert.append(';window.ngMaterial={version:{full: "' + VERSION +'"}};'))
       .pipe(gulp.dest(config.outputDir))
       .pipe(gulpif(!IS_DEV, uglify({ preserveComments: 'some' })))
       .pipe(rename({ extname: '.min.js' }))
@@ -179,7 +180,7 @@ function readModuleArg() {
 
 function filterNonCodeFiles() {
   return filter(function(file) {
-    return !/demo|module\.json|\.spec.js|README/.test(file.path);
+    return !/demo|module\.json|script\.js|\.spec.js|README/.test(file.path);
   });
 }
 

@@ -1,0 +1,45 @@
+md-menu-bar.md-THEME_NAME-theme {
+  & > button.md-button {
+    color: '{{foreground-2}}';
+    border-radius: 2px;
+  }
+
+  md-menu._md-open > button, md-menu > button:focus {
+    outline: none;
+    background: '{{background-200}}';
+  }
+
+  &._md-open:not(._md-keyboard-mode) md-menu:hover > button {
+    background-color: '{{ background-500-0.2}}';
+  }
+
+  &:not(._md-keyboard-mode):not(._md-open) {
+    md-menu button:hover,
+    md-menu button:focus {
+      background: transparent;
+    }
+  }
+}
+
+md-menu-content.md-THEME_NAME-theme {
+  .md-menu > .md-button:after {
+    color: '{{background-1000-0.54}}';
+  }
+
+  .md-menu._md-open > .md-button {
+    background-color: '{{ background-500-0.2}}';
+  }
+}
+
+md-toolbar.md-THEME_NAME-theme.md-menu-toolbar {
+  background-color: '{{background-A100}}';
+  color: '{{background-1000}}';
+  md-toolbar-filler {
+    background-color: '{{primary-color}}';
+    color: '{{background-A100-0.87}}';
+    md-icon {
+      color: '{{background-A100-0.87}}';
+    }
+  }
+
+}

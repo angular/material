@@ -1,0 +1,48 @@
+md-progress-linear.md-THEME_NAME-theme {
+  ._md-container {
+    background-color: '{{primary-100}}';
+  }
+
+  ._md-bar {
+    background-color: '{{primary-color}}';
+  }
+
+  &.md-warn {
+    ._md-container {
+      background-color: '{{warn-100}}';
+    }
+
+    ._md-bar {
+      background-color: '{{warn-color}}';
+    }
+  }
+
+  &.md-accent {
+    ._md-container {
+      background-color: '{{accent-100}}';
+    }
+
+    ._md-bar {
+      background-color: '{{accent-color}}';
+    }
+  }
+
+  &[md-mode=buffer] {
+    &.md-warn {
+      ._md-bar1 {
+        background-color: '{{warn-100}}';
+      }
+      ._md-dashed:before {
+        background: radial-gradient('{{warn-100}}' 0%, '{{warn-100}}' 16%, transparent 42%);
+      }
+    }
+    &.md-accent {
+      ._md-bar1 {
+        background-color: '{{accent-100}}';
+      }
+      ._md-dashed:before {
+        background: radial-gradient('{{accent-100}}' 0%, '{{accent-100}}' 16%, transparent 42%);
+      }
+    }
+  }
+}

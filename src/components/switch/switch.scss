@@ -2,37 +2,62 @@ $switch-width: 36px !default;
 $switch-height: $baseline-grid * 3 !default;
 $switch-bar-height: 14px !default;
 $switch-thumb-size: 20px !default;
+$switch-margin: 16px !default;
+
+.md-inline-form {
+  md-switch {
+    margin-top: 18px;
+    margin-bottom: 19px;
+  }
+}
 
 md-switch {
-
-  display: flex;
-  align-items: center;
-
-  margin: 15px;
+  margin: $switch-margin 0;
   white-space: nowrap;
   cursor: pointer;
   outline: none;
   user-select: none;
+  height: 30px;
+  line-height: 28px;
+  align-items: center;
+  display: flex;
 
-  .md-container {
+  @include rtl(margin-left, inherit, $switch-margin);
+  @include rtl(margin-right, $switch-margin, inherit);
+
+  &:last-of-type {
+    @include rtl(margin-left, inherit, 0);
+    @include rtl(margin-right, 0, inherit);
+  }
+  
+  &[disabled] {
+    cursor: default;
+
+    ._md-container {
+      cursor: default;
+    }
+  }
+
+  ._md-container {
     cursor: grab;
     width: $switch-width;
     height: $switch-height;
     position: relative;
     user-select: none;
-    margin-right: 8px;
+    @include rtl-prop(margin-right, margin-left, 8px);
+    float: left;
   }
 
   // If the user moves his mouse off the switch, stil display grabbing cursor
   &:not([disabled]) {
-    .md-dragging,
-    &.md-dragging .md-container {
+    ._md-dragging,
+    &._md-dragging ._md-container {
       cursor: grabbing;
     }
   }
 
   &.md-focused:not([disabled]) {
-    .md-thumb:before {
+    ._md-thumb:before {
       left: -8px;
       top: -8px;
       right: -8px;
@@ -40,18 +65,19 @@ md-switch {
     }
 
     &:not(.md-checked) {
-      .md-thumb:before {
+      ._md-thumb:before {
         background-color: rgba(0, 0, 0, 0.12);
       }
     }
   }
 
-  .md-label {
+  ._md-label {
     border-color: transparent;
     border-width: 0;
+    float: left;
   }
 
-  .md-bar {
+  ._md-bar {
     left: 1px;
     width: $switch-width - 2px;
     top: $switch-height / 2 - $switch-bar-height / 2;
@@ -60,7 +86,7 @@ md-switch {
     position: absolute;
   }
 
-  .md-thumb-container {
+  ._md-thumb-container {
     top: $switch-height / 2 - $switch-thumb-size / 2;
     left: 0;
     width: $switch-width - $switch-thumb-size;
@@ -68,11 +94,11 @@ md-switch {
     transform: translate3d(0,0,0);
     z-index: 1;
   }
-  &.md-checked .md-thumb-container {
+  &.md-checked ._md-thumb-container {
     transform: translate3d(100%,0,0);
   }
 
-  .md-thumb {
+  ._md-thumb {
     position: absolute;
     margin: 0;
     left: 0;
@@ -81,7 +107,7 @@ md-switch {
     height: $switch-thumb-size;
     width: $switch-thumb-size;
     border-radius: 50%;
-    box-shadow: $whiteframe-shadow-z1;
+    box-shadow: $whiteframe-shadow-1dp;
 
     &:before {
       background-color: transparent;
@@ -110,15 +136,15 @@ md-switch {
     }
   }
 
-  &:not(.md-dragging) {
-    .md-bar,
-    .md-thumb-container,
-    .md-thumb {
-      transition: $swift-ease-in-out;
+  &:not(._md-dragging) {
+    ._md-bar,
+    ._md-thumb-container,
+    ._md-thumb {
+      transition: $swift-linear;
       transition-property: transform, background-color;
     }
-    .md-bar,
-    .md-thumb {
+    ._md-bar,
+    ._md-thumb {
       transition-delay: 0.05s;
     }
   }
@@ -126,13 +152,13 @@ md-switch {
 }
 
 @media screen and (-ms-high-contrast: active) {
-  md-switch.md-default-theme .md-bar {
+  md-switch.md-default-theme ._md-bar {
     background-color: #666;
   }
-  md-switch.md-default-theme.md-checked .md-bar {
+  md-switch.md-default-theme.md-checked ._md-bar {
     background-color: #9E9E9E;
   }
-  md-switch.md-default-theme .md-thumb {
+  md-switch.md-default-theme ._md-thumb {
     background-color: #fff;
   }
 }

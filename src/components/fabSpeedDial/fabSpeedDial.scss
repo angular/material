@@ -3,16 +3,34 @@ md-fab-speed-dial {
   display: flex;
   align-items: center;
 
-  // Include the top/left/bottom/right fab positions
+  // Include the top/left/bottom/right fab positions and set the z-index for absolute positioning
   @include fab-all-positions();
+  z-index: $z-index-fab;
 
-  .md-css-variables {
+  // Allow users to enable/disable hovering over the entire speed dial (i.e. the empty space where
+  // items will eventually appear)
+  &:not(.md-hover-full) {
+    // Turn off pointer events when closed
+    pointer-events: none;
+
+    md-fab-trigger, .md-fab-action-item {
+      // Always make the trigger and action items always have pointer events (the tooltip looks
+      // for the first parent with pointer-events, so we must set this for tooltips to work)
+      pointer-events: auto;
+    }
+
+    &.md-is-open {
+      // Turn on pointer events when open
+      pointer-events: auto;
+    }
+  }
+
+  ._md-css-variables {
     z-index: $z-index-fab;
   }
 
   &.md-is-open {
     .md-fab-action-item {
-      visibility: visible;
       align-items: center;
     }
   }
@@ -24,7 +42,6 @@ md-fab-speed-dial {
     height: auto;
 
     .md-fab-action-item {
-      visibility: hidden;
       transition: $swift-ease-in;
     }
   }
@@ -90,11 +107,33 @@ md-fab-speed-dial {
   }
 
   /*
+   * Hide some graphics glitches if switching animation types
+   */
+  &.md-fling-remove, &.md-scale-remove {
+    .md-fab-action-item > * {
+      visibility: hidden;
+    }
+  }
+
+  /*
    * Handle the animations
    */
-  &.md-scale {
+  &.md-fling {
+    .md-fab-action-item {
+      opacity: 1;
+    }
+  }
+
+  // For the initial animation, set the duration to be instant
+  &.md-fling._md-animations-waiting {
     .md-fab-action-item {
       opacity: 0;
+      transition-duration: 0s;
+    }
+  }
+
+  &.md-scale {
+    .md-fab-action-item {
       transform: scale(0);
       transition: $swift-ease-in;
 

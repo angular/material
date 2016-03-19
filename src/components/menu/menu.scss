@@ -5,19 +5,20 @@ $dense-menu-item-height: 4 * $baseline-grid;
 $max-menu-height: 2 * $baseline-grid + $max-visible-items * $menu-item-height;
 $max-dense-menu-height: 2 * $baseline-grid + $max-visible-items * $dense-menu-item-height;
 
-.md-open-menu-container {
+._md-open-menu-container {
   position: fixed;
   left: 0;
   top: 0;
   z-index: $z-index-menu;
   opacity: 0;
   border-radius: $menu-border-radius;
-  overflow: hidden;
 
   md-menu-divider {
     margin-top: $baseline-grid / 2;
     margin-bottom: $baseline-grid / 2;
     height: 1px;
+    min-height: 1px;
+    max-height: 1px;
     width: 100%;
   }
 
@@ -26,12 +27,12 @@ $max-dense-menu-height: 2 * $baseline-grid + $max-visible-items * $dense-menu-it
   }
 
   // Don't let the user click something until it's animated
-  &:not(.md-clickable) {
+  &:not(._md-clickable) {
     pointer-events: none;
   }
 
   // enter: menu scales in, then list fade in.
-  &.md-active {
+  &._md-active {
     opacity: 1;
     transition: $swift-ease-out;
     transition-duration: 200ms;
@@ -43,7 +44,7 @@ $max-dense-menu-height: 2 * $baseline-grid + $max-visible-items * $dense-menu-it
     }
   }
   // leave: the container fades out
-  &.md-leave {
+  &._md-leave {
     opacity: 0;
     transition: $swift-ease-in;
     transition-duration: 250ms;
@@ -60,6 +61,7 @@ md-menu-content {
     max-height: $max-dense-menu-height;
     md-menu-item {
       height: $dense-menu-item-height;
+      min-height: 0px;
     }
   }
 }
@@ -85,16 +87,16 @@ md-menu-item {
     font-size: (2*$baseline-grid) - 1;
     text-transform: none;
     font-weight: 400;
-    text-align: start;
     height: 100%;
     padding-left: 2*$baseline-grid;
     padding-right: 2*$baseline-grid;
-    display: inline-block;
+    @include rtl(text-align, left, right);
+    display: flex;
     align-items: baseline;
-    align-content: left;
+    align-content: flex-start;
     width:100%;
     md-icon {
-      margin: auto 2*$baseline-grid auto 0;
+      @include rtl(margin, auto 2*$baseline-grid auto 0,  auto 0 auto 2*$baseline-grid);
     }
     p {
       display:inline-block;
@@ -103,6 +105,9 @@ md-menu-item {
     span {
       margin-top: auto;
       margin-bottom: auto;
+    }
+    .md-ripple-container {
+      border-radius: inherit;
     }
   }
 }
@@ -115,6 +120,7 @@ md-toolbar {
   .md-menu {
     height: auto;
     margin: auto;
+    padding: 0;
   }
 }
 
@@ -128,6 +134,7 @@ md-toolbar {
     }
   }
 }
+
 @media (min-width: $layout-breakpoint-sm) {
   md-menu-content {
     min-width: 96px;
@@ -138,3 +145,4 @@ md-toolbar {
     }
   }
 }
+

@@ -152,7 +152,7 @@ For example:
 > ```
 
 For more examples of how to format commit messages, see
-[the guidelines in CONTRIBUTING.md](CONTRIBUTING.md#-git-commit-guidelines).
+[the guidelines in CONTRIBUTING.md](../../CONTRIBUTING.md#-git-commit-guidelines).
 
 ```sh
 git push origin master

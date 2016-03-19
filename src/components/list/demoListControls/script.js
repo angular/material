@@ -35,7 +35,7 @@ angular.module('listDemo2', ['ngMaterial'])
     $mdDialog.show(
       $mdDialog.alert()
         .title('Navigating')
-        .content('Inspect ' + person)
+        .textContent('Inspect ' + person)
         .ariaLabel('Person inspect demo')
         .ok('Neat!')
         .targetEvent(event)
@@ -46,9 +46,20 @@ angular.module('listDemo2', ['ngMaterial'])
     $mdDialog.show(
       $mdDialog.alert()
         .title('Navigating')
-        .content('Imagine being taken to ' + to)
+        .textContent('Imagine being taken to ' + to)
         .ariaLabel('Navigation demo')
         .ok('Neat!')
+        .targetEvent(event)
+    );
+  };
+
+  $scope.doPrimaryAction = function(event) {
+    $mdDialog.show(
+      $mdDialog.alert()
+        .title('Primary Action')
+        .textContent('Primary actions can be used for one click actions')
+        .ariaLabel('Primary click demo')
+        .ok('Awesome!')
         .targetEvent(event)
     );
   };
@@ -57,7 +68,7 @@ angular.module('listDemo2', ['ngMaterial'])
     $mdDialog.show(
       $mdDialog.alert()
         .title('Secondary Action')
-        .content('Secondary actions can be used for one click actions')
+        .textContent('Secondary actions can be used for one click actions')
         .ariaLabel('Secondary click demo')
         .ok('Neat!')
         .targetEvent(event)

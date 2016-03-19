@@ -19,8 +19,12 @@ md-content {
   // For iOS allow disabling of momentum scrolling
   // @see issue #2640.
 
-  &.autoScroll {
+  &.md-no-momentum {
     -webkit-overflow-scrolling: auto;
+  }
+
+  @media print {
+    overflow: visible !important;
   }
 }
 

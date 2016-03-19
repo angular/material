@@ -1,7 +1,7 @@
-<div ng-controller="DemoCtrl as ctrl" layout="column">
+<div ng-controller="DemoCtrl as ctrl" layout="column" ng-cloak>
   <md-content class="md-padding">
     <form ng-submit="$event.preventDefault()">
-      <p>Use  <code>md-autocomplete</code> to search for matches from local or remote data sources.</p>
+      <p>Use <code>md-autocomplete</code> to search for matches from local or remote data sources.</p>
       <md-autocomplete
           ng-disabled="ctrl.isDisabled"
           md-no-cache="ctrl.noCache"
@@ -17,7 +17,8 @@
           <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
         </md-item-template>
         <md-not-found>
-          No matches found for "{{ctrl.searchText}}".
+          No states matching "{{ctrl.searchText}}" were found.
+          <a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>
         </md-not-found>
       </md-autocomplete>
       <br/>

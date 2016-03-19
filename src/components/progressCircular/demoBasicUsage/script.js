@@ -1,14 +1,21 @@
-angular.module('progressCircularDemo1', ['ngMaterial'])
-  .controller('AppCtrl', ['$scope', '$interval',
-    function($scope, $interval) {
-      $scope.mode = 'query';
-      $scope.determinateValue = 30;
+angular
+  .module('progressCircularDemo1', ['ngMaterial'])
+  .controller('AppCtrl', ['$interval',
+    function($interval) {
+      var self = this;
 
+      self.activated = true;
+      self.determinateValue = 30;
+
+      // Iterate every 100ms, non-stop and increment
+      // the Determinate loader.
       $interval(function() {
-        $scope.determinateValue += 1;
-        if ($scope.determinateValue > 100) {
-          $scope.determinateValue = 30;
+
+        self.determinateValue += 1;
+        if (self.determinateValue > 100) {
+          self.determinateValue = 30;
         }
-      }, 100, 0, true);
+
+      }, 100);
     }
   ]);

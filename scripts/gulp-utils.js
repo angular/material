@@ -7,8 +7,7 @@ var Buffer = require('buffer').Buffer;
 var fs = require('fs');
 
 var path = require('path');
-
-var getModuleInfo = require('../config/ngModuleData.js');
+var findModule = require('../config/ngModuleData.js');
 
 exports.humanizeCamelCase = function(str) {
   switch (str) {
@@ -64,7 +63,7 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
         css:[], html:[], js:[]
       };
 
-      gulp.src(demoFolder.path + '**/*', { base: path.dirname(demoFolder.path) })
+      gulp.src(demoFolder.path + '/**/*', { base: path.dirname(demoFolder.path) })
         .pipe(fileTasks(demoId))
         .pipe(through2.obj(function(file, enc, cb) {
           if (/index.html$/.test(file.path)) {
@@ -77,7 +76,7 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
           } else {
             var fileType = path.extname(file.path).substring(1);
             if (fileType == 'js') {
-              demo.ngModule = demo.ngModule || getModuleInfo(file.contents.toString());
+              demo.ngModule = demo.ngModule || findModule.any(file.contents.toString());
             }
             demo[fileType] && demo[fileType].push(toDemoObject(file));
           }
@@ -106,8 +105,8 @@ exports.pathsForModule = function(name) {
   function lookupPath() {
     gulp.src('src/{services,components,core}/**/*')
           .pipe(through2.obj(function(file, enc, next) {
-            var modName = getModuleInfo(file.contents).module;
-            if (modName == name) {
+            var module = findModule.any(file.contents);
+            if (module && module.name == name) {
               var modulePath = file.path.split(path.sep).slice(0, -1).join(path.sep);
               pathsForModules[name] = modulePath + '/**';
             }
@@ -123,8 +122,8 @@ exports.filesForModule = function(name) {
   } else {
     return gulp.src('src/{services,components,core}/**/*')
       .pipe(through2.obj(function(file, enc, next) {
-        var modName = getModuleInfo(file.contents).module;
-        if (modName == name) {
+        var module = findModule.any(file.contents);
+        if (module && (module.name == name)) {
           var modulePath = file.path.split(path.sep).slice(0, -1).join(path.sep);
           pathsForModules[name] = modulePath + '/**';
           var self = this;
@@ -165,29 +164,33 @@ exports.appendToFile = function(filePath) {
 };
 
 exports.buildNgMaterialDefinition = function() {
-  var buffer = [];
+  var srcBuffer = [];
   var modulesSeen = [];
+  var count = 0;
   return through2.obj(function(file, enc, next) {
-    var moduleName;
-    if (moduleName = getModuleInfo(file.contents).module) {
-      modulesSeen.push(moduleName);
-    }
-    buffer.push(file);
+    var module = findModule.material(file.contents);
+    if (module) modulesSeen.push(module.name);
+    srcBuffer.push(file);
     next();
   }, function(done) {
-    var EXPLICIT_DEPS = ['ng', 'ngAnimate', 'ngAria'];
-    var angularFileContents = "angular.module('ngMaterial', " + JSON.stringify(EXPLICIT_DEPS.concat(modulesSeen)) + ');';
+    var self = this;
+    var requiredLibs = ['ng', 'ngAnimate', 'ngAria'];
+    var dependencies = JSON.stringify(requiredLibs.concat(modulesSeen));
+    var ngMaterialModule = "angular.module('ngMaterial', " + dependencies + ');';
     var angularFile = new gutil.File({
       base: process.cwd(),
       path: process.cwd() + '/ngMaterial.js',
-      contents: new Buffer(angularFileContents)
+      contents: new Buffer(ngMaterialModule)
     });
-    this.push(angularFile);
-    var self = this;
-    buffer.forEach(function(file) {
+
+    // Elevate ngMaterial module registration to first in queue
+    self.push(angularFile);
+
+    srcBuffer.forEach(function(file) {
       self.push(file);
     });
-    buffer = [];
+
+    srcBuffer = [];
     done();
   });
 };
@@ -197,8 +200,8 @@ function moduleNameToClosureName(name) {
 }
 exports.addJsWrapper = function(enforce) {
   return through2.obj(function(file, enc, next) {
-    var moduleInfo = getModuleInfo(file.contents);
-    if (!!enforce || moduleInfo.module) {
+    var module = findModule.any(file.contents);
+    if (!!enforce || module) {
       file.contents = new Buffer([
           !!enforce ? '(function(){' : '(function( window, angular, undefined ){',
           '"use strict";\n',
@@ -212,18 +215,18 @@ exports.addJsWrapper = function(enforce) {
 };
 exports.addClosurePrefixes = function() {
   return through2.obj(function(file, enc, next) {
-    var moduleInfo = getModuleInfo(file.contents);
-    if (moduleInfo.module) {
-      var closureModuleName = moduleNameToClosureName(moduleInfo.module);
-      var requires = (moduleInfo.dependencies || []).sort().map(function(dep) {
-        return dep.indexOf(moduleInfo.module) === 0 ? '' : 'goog.require(\'' + moduleNameToClosureName(dep) + '\');';
+    var module = findModule.any(file.contents);
+    if (module) {
+      var closureModuleName = moduleNameToClosureName(module.name);
+      var requires = (module.dependencies || []).sort().map(function(dep) {
+        return dep.indexOf(module.name) === 0 ? '' : 'goog.require(\'' + moduleNameToClosureName(dep) + '\');';
       }).join('\n');
 
       file.contents = new Buffer([
           'goog.provide(\'' + closureModuleName + '\');',
           requires,
           file.contents.toString(),
-          closureModuleName + ' = angular.module("' + moduleInfo.module + '");'
+          closureModuleName + ' = angular.module("' + module.name + '");'
       ].join('\n'));
     }
     this.push(file);
@@ -234,10 +237,10 @@ exports.addClosurePrefixes = function() {
 exports.buildModuleBower = function(name, version) {
   return through2.obj(function(file, enc, next) {
     this.push(file);
-    var moduleInfo = getModuleInfo(file.contents);
-    if (moduleInfo.module) {
+    var module = findModule.any(file.contents);
+    if (module) {
       var bowerDeps = {};
-      (moduleInfo.dependencies || []).forEach(function(dep) {
+      (module.dependencies || []).forEach(function(dep) {
         var convertedName = 'angular-material-' + dep.split('.').pop();
         bowerDeps[convertedName] = version;
       });
@@ -287,7 +290,7 @@ exports.cssToNgConstant = function(ngModule, factoryName) {
   return through2.obj(function(file, enc, next) {
 
     var template = '(function(){ \nangular.module("%1").constant("%2", "%3"); \n})();\n\n';
-    var output = file.contents.toString().replace(/\n/g, '').replace(/\"/,'\\"');
+    var output = file.contents.toString().replace(/\n/g, '').replace(/\"/g,'\\"');
 
     var jsFile = new gutil.File({
       base: file.base,

@@ -10,7 +10,7 @@
    * The `$mdDateLocaleProvider` is the provider that creates the `$mdDateLocale` service.
    * This provider that allows the user to specify messages, formatters, and parsers for date
    * internationalization. The `$mdDateLocale` service itself is consumed by Angular Material
-   * components that that deal with dates.
+   * components that deal with dates.
    *
    * @property {(Array<string>)=} months Array of month names (in order).
    * @property {(Array<string>)=} shortMonths Array of abbreviated month names.
@@ -18,6 +18,8 @@
    * @property {(Array<string>)=} shortDays Array of abbreviated dayes of the week.
    * @property {(Array<string>)=} dates Array of dates of the month. Only necessary for locales
    *     using a numeral system other than [1, 2, 3...].
+   * @property {(Array<string>)=} firstDayOfWeek The first day of the week. Sunday = 0, Monday = 1,
+   *    etc.
    * @property {(function(string): Date)=} parseDate Function to parse a date object from a string.
    * @property {(function(Date): string)=} formatDate Function to format a date object to a string.
    * @property {(function(Date): string)=} monthHeaderFormatter Function that returns the label for
@@ -38,12 +40,16 @@
    *     $mdDateLocaleProvider.days = ['dimanche', 'lundi', 'mardi', ...];
    *     $mdDateLocaleProvider.shortDays = ['Di', 'Lu', 'Ma', ...];
    *
+   *     // Can change week display to start on Monday.
+   *     $mdDateLocaleProvider.firstDayOfWeek = 1;
+   *
    *     // Optional.
    *     $mdDateLocaleProvider.dates = [1, 2, 3, 4, 5, 6, ...];
    *
    *     // Example uses moment.js to parse and format dates.
    *     $mdDateLocaleProvider.parseDate = function(dateString) {
-   *       return moment(dateString).toDate();
+   *       var m = moment(dateString, 'L', true);
+   *       return m.isValid() ? m.toDate() : new Date(NaN);
    *     };
    *
    *     $mdDateLocaleProvider.formatDate = function(date) {
@@ -51,7 +57,7 @@
    *     };
    *
    *     $mdDateLocaleProvider.monthHeaderFormatter = function(date) {
-   *       myShortMonths[date.getMonth()] + ' ' + date.getFullYear();
+   *       return myShortMonths[date.getMonth()] + ' ' + date.getFullYear();
    *     };
    *
    *     // In addition to date display, date components also need localized messages
@@ -88,6 +94,9 @@
 
       /** Array of dates of a month (1 - 31). Characters might be different in some locales. */
       this.dates = null;
+
+      /** Index of the first day of the week. 0 = Sunday, 1 = Monday, etc. */
+      this.firstDayOfWeek = 0;
 
       /**
        * Function that converts the date portion of a Date to a string.
@@ -146,7 +155,23 @@
        * @returns {string}
        */
       function defaultFormatDate(date) {
-        return date ? date.toLocaleDateString() : '';
+        if (!date) {
+          return '';
+        }
+
+        // All of the dates created through ng-material *should* be set to midnight.
+        // If we encounter a date where the localeTime shows at 11pm instead of midnight,
+        // we have run into an issue with DST where we need to increment the hour by one:
+        // var d = new Date(1992, 9, 8, 0, 0, 0);
+        // d.toLocaleString(); // == "10/7/1992, 11:00:00 PM"
+        var localeTime = date.toLocaleTimeString();
+        var formatDate = date;
+        if (date.getHours() == 0 &&
+            (localeTime.indexOf('11:') !== -1 || localeTime.indexOf('23:') !== -1)) {
+          formatDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 1, 0, 0);
+        }
+
+        return formatDate.toLocaleDateString();
       }
 
       /**
@@ -231,6 +256,7 @@
         days: this.days || $locale.DATETIME_FORMATS.DAY,
         shortDays: this.shortDays || defaultShortDays,
         dates: this.dates || defaultDates,
+        firstDayOfWeek: this.firstDayOfWeek || 0,
         formatDate: this.formatDate || defaultFormatDate,
         parseDate: this.parseDate || defaultParseDate,
         isDateComplete: this.isDateComplete || defaultIsDateComplete,

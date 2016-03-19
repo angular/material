@@ -1,10 +1,10 @@
-<div ng-controller="AppCtrl">
+<div ng-controller="AppCtrl" ng-cloak>
 
   <md-toolbar class="md-accent">
     <h2 class="md-toolbar-tools">
       <span flex>Awesome Md App</span>
-      <md-button class="md-fab md-accent" aria-label="refresh">
-        <md-tooltip>
+      <md-button class="md-icon-button" aria-label="refresh">
+        <md-tooltip md-direction="left">
           Refresh
         </md-tooltip>
         <md-icon md-svg-src="img/icons/ic_refresh_24px.svg" style="width: 24px; height: 24px;">
@@ -12,34 +12,76 @@
       </md-button>
     </h2>
   </md-toolbar>
-  <md-content layout-padding>
+  <md-content layout-padding style="margin-left: 20px; margin-right: 20px">
+    <div>
 
-    <p>
-      The tooltip is visible when the button is hovered, focused, or touched.
-    </p>
+      <p>
+        The tooltip is visible when the button is hovered, focused, or touched.
+      </p>
 
-    <md-button class="md-fab md-fab-top-left left" aria-label="Insert Drive">
-      <md-icon md-svg-src="img/icons/ic_insert_drive_file_24px.svg" style="width: 24px; height: 24px;"></md-icon>
-      <md-tooltip md-visible="demo.showTooltip">
-        Insert Drive
-      </md-tooltip>
-    </md-button>
-    <md-button class="md-fab md-fab-top-right right" aria-label="Photos">
-      <md-icon md-svg-src="img/icons/ic_photo_24px.svg" style="width: 24px; height: 24px;"></md-icon>
-      <md-tooltip>
-        Photos
-      </md-tooltip>
-    </md-button>
+      <div layout="row" layout-align="space-between">
+        <md-button class="md-fab" aria-label="Insert Drive">
+          <md-icon md-svg-src="img/icons/ic_insert_drive_file_24px.svg"></md-icon>
+          <md-tooltip md-visible="demo.showTooltip" md-direction="{{demo.tipDirection}}">
+            Insert Drive
+          </md-tooltip>
+        </md-button>
+        <md-button class="md-fab" aria-label="Photos">
+          <md-tooltip>
+            Photos
+          </md-tooltip>
+          <md-icon md-svg-src="img/icons/ic_photo_24px.svg" style="width: 24px; height: 24px;"></md-icon>
+        </md-button>
+      </div>
 
 
-    <div style="margin-top: 150px;">
-      <p>Additionally, the Tooltip's `md-visible` attribute can use data-binding to programmatically show/hide itself. Toggle the checkbox below...</p>
+      <div style="margin-top: 40px;margin-bottom: -5px">
+        <p><code>md-direction</code> attribute can used to dynamically change the direction of the tooltip.<br/>
+        Note: the direction default value is 'bottom'. </p>
+        <div style="padding-left: 30px">
+        <md-radio-group ng-model="demo.tipDirection" >
+           <md-radio-button value="left"> Left </md-radio-button>
+           <md-radio-button value="top">Top</md-radio-button>
+           <md-radio-button value="bottom"  class="md-primary">Bottom</md-radio-button>
+           <md-radio-button value="right">Right</md-radio-button>
+         </md-radio-group>
+        </div>
+      </div>
+
+
+      <div style="margin-top: 20px;">
+        <p>
+          Additionally, the Tooltip's <code>md-visible</code> attribute can use data-binding to
+          programmatically show/hide itself. Toggle the checkbox below...
+        </p>
+        <div style="padding-left: 37px">
+          <md-checkbox ng-model="demo.showTooltip" style="padding-left:30px;">
+            Insert Drive
+          </md-checkbox>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px;margin-bottom: -5px">
+        <p>
+          Additionally, the Tooltip's <code>md-delay</code> attribute can use to delay the
+          show animation. The default values is 0 mSecs...
+        </p>
+        <div style="padding-left: 37px">
+          <md-input-container>
+            <label>Tooltip Delay (for Photos)</label>
+            <input ng-model="demo.delayTooltip">
+          </md-input-container>
+
+          <md-button class="md-fab" aria-label="Photos with Tooltip Delay" style="margin-top: -24px;">
+            <md-icon md-svg-src="img/icons/ic_photo_24px.svg" style="width: 24px; height: 24px; "></md-icon>
+            <md-tooltip md-delay="demo.delayTooltip">
+              Photos with Tooltip Delay {{demo.delayTooltip}} msecs
+            </md-tooltip>
+          </md-button>
+
+        </div>
+      </div>
+
     </div>
-
-
-    <md-checkbox ng-model="demo.showTooltip">
-      Insert Drive
-    </md-checkbox>
-
   </md-content>
 </div>

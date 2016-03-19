@@ -1,52 +1,64 @@
 md-switch.md-THEME_NAME-theme {
-  .md-thumb {
+  .md-ink-ripple {
+    color: '{{background-500}}';
+  }
+  ._md-thumb {
     background-color: '{{background-50}}';
   }
-  .md-bar {
+  ._md-bar {
     background-color: '{{background-500}}';
   }
 
   &.md-checked {
-    .md-thumb {
+    .md-ink-ripple {
+      color: '{{accent-color}}';
+    }
+    ._md-thumb {
       background-color: '{{accent-color}}';
     }
-    .md-bar {
+    ._md-bar {
       background-color: '{{accent-color-0.5}}';
     }
-    &.md-focused .md-thumb:before {
+    &.md-focused ._md-thumb:before {
       background-color: '{{accent-color-0.26}}';
     }
 
     &.md-primary {
-      .md-thumb {
+      .md-ink-ripple {
+        color: '{{primary-color}}';
+      }
+      ._md-thumb {
         background-color: '{{primary-color}}';
       }
-      .md-bar {
+      ._md-bar {
         background-color: '{{primary-color-0.5}}';
       }
-      &.md-focused .md-thumb:before {
+      &.md-focused ._md-thumb:before {
         background-color: '{{primary-color-0.26}}';
       }
     }
 
     &.md-warn {
-      .md-thumb {
+      .md-ink-ripple {
+        color: '{{warn-color}}';
+      }
+      ._md-thumb {
         background-color: '{{warn-color}}';
       }
-      .md-bar {
+      ._md-bar {
         background-color: '{{warn-color-0.5}}';
       }
-      &.md-focused .md-thumb:before {
+      &.md-focused ._md-thumb:before {
         background-color: '{{warn-color-0.26}}';
       }
     }
   }
 
   &[disabled] {
-    .md-thumb {
+    ._md-thumb {
       background-color: '{{background-400}}';
     }
-    .md-bar {
+    ._md-bar {
       background-color: '{{foreground-4}}';
     }
   }

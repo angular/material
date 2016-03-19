@@ -1,3 +1,6 @@
+$select-checkbox-border-radius: 2px !default;
+$select-checkbox-border-width: 2px !default;
+$select-checkbox-width: rem(1.4) !default;
 $select-option-height: 48px;
 $select-option-padding: 16px;
 $select-container-padding: 16px;
@@ -5,15 +8,16 @@ $select-container-transition-duration: 350ms;
 
 $select-max-visible-options: 5;
 
-.md-select-menu-container {
+._md-select-menu-container {
   position: fixed;
   left: 0;
   top: 0;
   z-index: $z-index-select;
   opacity: 0;
+  display: none;
 
   // Don't let the user select a new choice while it's animating
-  &:not(.md-clickable) {
+  &:not(._md-clickable) {
     pointer-events: none;
   }
 
@@ -24,7 +28,8 @@ $select-max-visible-options: 5;
 
 
   // enter: md-select scales in, then options fade in.
-  &.md-active {
+  &._md-active {
+    display: block;
     opacity: 1;
     md-select-menu {
       transition: $swift-ease-out;
@@ -39,7 +44,7 @@ $select-max-visible-options: 5;
   }
 
   // leave: the container fades out
-  &.md-leave {
+  &._md-leave {
     opacity: 0;
     transition: $swift-ease-in;
     transition-duration: 250ms;
@@ -47,13 +52,21 @@ $select-max-visible-options: 5;
 }
 
 md-input-container > md-select {
-  margin: auto 0 0 0;
+  margin: 0;
   order: 2;
 }
 
 md-select {
   display: flex;
   margin: 2.5*$baseline-grid 0 3*$baseline-grid + 2 0;
+  &[disabled] ._md-select-value {
+    background-position: 0 bottom;
+    // This background-size is coordinated with a linear-gradient set in select-theme.scss
+    // to create a dotted line under the input.
+    background-size: 4px 1px;
+    background-repeat: repeat-x;
+    margin-bottom: -1px; // Shift downward so dotted line is positioned the same as other bottom borders
+  }
   &:focus {
     outline: none;
   }
@@ -65,13 +78,13 @@ md-select {
       cursor: pointer
     }
     &.ng-invalid.ng-dirty {
-      .md-select-value {
+      ._md-select-value {
         border-bottom: 2px solid;
         padding-bottom: 0;
       }
     }
     &:focus {
-      .md-select-value {
+      ._md-select-value {
         border-bottom-width: 2px;
         border-bottom-style: solid;
         padding-bottom: 0;
@@ -81,7 +94,7 @@ md-select {
 }
 
 
-.md-select-value {
+._md-select-value {
   display: flex;
   align-items: center;
   padding: 2px 2px 1px;
@@ -94,16 +107,21 @@ md-select {
   min-height: 26px;
   flex-grow: 1;
 
-  *:first-child {
-    flex: 1;
+
+  > span:not(._md-select-icon) {
+    max-width: 100%;
+    flex: 1 1 auto;
+    transform: translate3d(0, 2px, 0);
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    max-width: calc(100% - 2*#{$baseline-grid});
-    transform: translate3d(0, 2px, 0);
+
+    ._md-text {
+      display: inline;
+    }
   }
 
-  .md-select-icon {
+  ._md-select-icon {
     display: block;
     align-items: flex-end;
     text-align: end;
@@ -112,7 +130,7 @@ md-select {
     transform: translate3d(0, 1px, 0);
   }
 
-  .md-select-icon:after {
+  ._md-select-icon:after {
     display: block;
     content: '\25BC';
     position: relative;
@@ -121,7 +139,7 @@ md-select {
     transform: scaleY(0.6) scaleX(1);
   }
 
-  &.md-select-placeholder {
+  &._md-select-placeholder {
     display: flex;
     order: 1;
     pointer-events: none;
@@ -138,14 +156,14 @@ md-select-menu {
     flex-direction: column-reverse;
   }
 
-  &:not(.md-overflow) {
+  &:not(._md-overflow) {
     md-content {
       padding-top: $baseline-grid;
       padding-bottom: $baseline-grid;
     }
   }
 
-  box-shadow: $whiteframe-shadow-z1;
+  box-shadow: $whiteframe-shadow-1dp;
   max-height: ($select-option-height * $select-max-visible-options) + 2 * $baseline-grid;
   min-height: $select-option-height;
   overflow-y: hidden;
@@ -172,11 +190,15 @@ md-option {
   align-items: center;
   width: auto;
 
+  &[disabled] {
+    cursor: default;
+  }
+
   &:focus {
     outline: none;
   }
 
-  .md-text {
+  ._md-text {
     @include not-selectable();
     width: auto;
     white-space: nowrap;
@@ -204,10 +226,24 @@ md-optgroup {
 }
 
 @media screen and (-ms-high-contrast: active) {
-  .md-select-backdrop {
+  ._md-select-backdrop {
     background-color: transparent;
   }
   md-select-menu {
     border: 1px solid #fff;
+  }
+}
+
+md-select-menu[multiple] {
+  md-option[md-checkbox-enabled] {
+    @include rtl(padding-left, $select-option-padding * 2.5, $select-option-padding);
+    @include rtl(padding-right, $select-option-padding, $select-option-padding * 2.5);
+
+    @include checkbox-container('[selected]');
+
+    ._md-container {
+      @include rtl(margin-left, $select-option-padding * (2 / 3), auto);
+      @include rtl(margin-right, auto, $select-option-padding * (2 / 3));
+    }
   }
 }

@@ -46,6 +46,7 @@ module.exports = new Package('angular-md', [
     getAliases: function(doc) { return [doc.id]; }
   });
 
+  // Build custom paths and outputPaths for "content" pages (theming and CSS).
   computePathsProcessor.pathTemplates.push({
     docTypes: ['content'],
     getPath: function(doc) {
@@ -60,6 +61,17 @@ module.exports = new Package('angular-md', [
         'partials',
         path.dirname(doc.fileInfo.relativePath),
         doc.fileInfo.baseName) + '.html';
+    }
+  });
+
+  // The default dgeni path for directives and services is something like
+  // "api/material.components.autocomplete/directive/mdAutocomplete".
+  // The module name is rather unnecessary, so we override with the shorter
+  // "api/directive/mdAutocomplete".
+  computePathsProcessor.pathTemplates.push({
+    docTypes: ['directive', 'service'],
+    getPath: function(doc) {
+      return path.join(doc.area, doc.docType, doc.name);
     }
   });
 })

@@ -7,6 +7,68 @@ h4 {
 }
 
 md-progress-linear {
-  padding-top:10px;
-  margin-bottom:20px;
+  padding-top: 10px;
+  margin-bottom: 20px;
+}
+
+#loaders > md-switch {
+  margin: 0;
+  margin-left: 10px;
+  margin-top: -10px;
+}
+
+#loaders > h5 {
+  margin-top: 0;
+}
+
+#loaders > p {
+  margin-right: 20px;
+  margin-bottom: 24px;
+}
+
+p.small {
+  font-size: 0.8em;
+  margin-top: -18px;
+}
+
+hr {
+  width: 100%;
+  margin-top: 20px;
+  border-color: rgba(221, 221, 177, 0.1);
+}
+
+
+p.small > code {
+    font-size: 0.8em;
+}
+
+.visible  {
+    opacity: 0;
+    border: 2px solid white !important;
+}
+
+
+.container {
+  display: block;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border: 2px solid rgb(170,209,249);
+  transition: opacity  0.1s linear;
+  border-top: 0px;
+}
+
+.bottom-block {
+  display: block;
+  position: relative;
+  background-color: rgba(255, 235, 169, 0.25);
+  height: 85px;
+  width: 100%;
+}
+
+.bottom-block > span {
+  display: inline-block;
+  margin-top:10px;
+  padding:25px;
+  font-size: 0.9em;
 }

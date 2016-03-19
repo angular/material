@@ -1,5 +1,5 @@
 
-angular.module('checkboxDemo1', ['ngMaterial'])
+angular.module('checkboxDemo2', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope) {
 

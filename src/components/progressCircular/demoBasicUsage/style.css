@@ -9,3 +9,41 @@ h4 {
 md-progress-circular {
     margin-bottom:20px;
 }
+
+
+#loaders > md-switch {
+    margin:0;
+    margin-left: 10px;
+    margin-top: -10px;
+}
+
+#loaders > h5 {
+  margin-top: 0;
+}
+
+#loaders > p {
+  margin-right: 20px;
+  margin-bottom: 24px;
+}
+
+
+p.small {
+  font-size: 0.8em;
+  margin-top: -18px;
+}
+
+
+hr {
+  width: 100%;
+  margin-top: 20px;
+  border-color: rgba(221, 221, 177, 0.1);
+}
+
+p.small > code {
+    font-size: 0.8em;
+}
+
+
+.visible  {
+    border-color: rgba(221, 221, 177, 0);
+}

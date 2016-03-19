@@ -3,6 +3,7 @@ $dialog-padding: $baseline-grid * 3;
 .md-dialog-is-showing {
   max-height: 100%;
 }
+
 .md-dialog-container {
   display: flex;
   justify-content: center;
@@ -18,15 +19,15 @@ $dialog-padding: $baseline-grid * 3;
 
 md-dialog {
 
-  &.md-transition-in {
+  &._md-transition-in {
     opacity: 1;
     transition: $swift-ease-out;
-    transform: translate3d(0,0,0) scale(1.0);
+    transform: translate(0,0) scale(1.0);
   }
-  &.md-transition-out {
+  &._md-transition-out {
     opacity: 0;
     transition: $swift-ease-out;
-    transform: translate3d(0,100%,0) scale(0.2);
+    transform: translate(0,100%) scale(0.2);
   }
 
   opacity: 0;
@@ -36,7 +37,7 @@ md-dialog {
   position: relative;
   overflow: auto; // stop content from leaking out of dialog parent and fix IE
 
-  box-shadow: $whiteframe-shadow-z5;
+  box-shadow: $whiteframe-shadow-13dp;
 
   display: flex;
   flex-direction: column;
@@ -46,10 +47,14 @@ md-dialog {
     flex-direction: column;
     overflow: auto;
   }
+
+  .md-dialog-content {
+    padding: $dialog-padding;
+  }
+
   md-dialog-content {
     order: 1;
     flex-direction: column;
-    padding: $dialog-padding;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 
@@ -63,47 +68,42 @@ md-dialog {
 
     .md-subheader {
       margin: 0;
-
-      &.sticky-clone {
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
-      }
-    }
-    &.sticky-container {
-      padding: 0;
-
-      &> div {
-        padding: $dialog-padding;
-        padding-top: 0;
-      }
     }
 
-    .md-dialog-content-body {
+    ._md-dialog-content-body {
       width:100%;
+    }
+
+    .md-prompt-input-container {
+      width: 100%;
+      box-sizing: border-box;
     }
   }
 
-  .md-actions {
+  .md-actions, md-dialog-actions {
     display: flex;
     order: 2;
     box-sizing: border-box;
     align-items: center;
     justify-content: flex-end;
     margin-bottom: 0;
-    padding-right: $baseline-grid;
-    padding-left: $baseline-grid * 2;
+    @include rtl(padding-right, $baseline-grid, $baseline-grid * 2);
+    @include rtl(padding-left, $baseline-grid * 2, $baseline-grid);
     min-height: $baseline-grid * 6.5;
     overflow: hidden;
 
     .md-button {
       margin-bottom: $baseline-grid;
-      margin-left: $baseline-grid;
-      margin-right: 0;
+      @include rtl(margin-left, $baseline-grid, 0);
+      @include rtl(margin-right, 0, $baseline-grid);
       margin-top: $baseline-grid;
     }
   }
-  &.md-content-overflow .md-actions {
-    border-top-width: 1px;
-    border-top-style: solid;
+  &.md-content-overflow {
+    .md-actions, md-dialog-actions {
+      border-top-width: 1px;
+      border-top-style: solid;
+    }
   }
 
 }
@@ -111,5 +111,13 @@ md-dialog {
 @media screen and (-ms-high-contrast: active) {
   md-dialog {
     border: 1px solid #fff;
+  }
+}
+
+@media (max-width: $layout-breakpoint-sm - 1) {
+  md-dialog.md-dialog-fullscreen {
+    min-height: 100%;
+    min-width: 100%;
+    border-radius: 0;
   }
 }

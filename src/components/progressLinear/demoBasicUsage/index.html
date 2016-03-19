@@ -1,10 +1,59 @@
-<div ng-controller="AppCtrl" layout="column" layout-margin style="padding:25px;">
+<div ng-controller="AppCtrl as vm" layout="column" layout-margin style="padding:25px;" ng-cloak>
 
+  <h2 class="md-title">Determinate</h2>
+
+  <p>
+    For operations where the percentage of the operation completed can be determined, use a <b>determinate</b>
+    indicator.
+    They give users a quick sense of how long an operation will take.
+  </p>
+  <md-progress-linear md-mode="determinate" value="{{vm.determinateValue}}"></md-progress-linear>
+
+  <h4 class="md-title">Indeterminate</h4>
+
+  <p>
+    For operations where the user is asked to wait a moment while something finishes up, and it's not
+    necessary to expose what's happening behind the scenes and how long it will take, use an
+    <b>indeterminate</b> indicator:
+  </p>
   <md-progress-linear md-mode="indeterminate"></md-progress-linear>
 
-  <md-progress-linear class="md-warn" md-mode="buffer" value="{{determinateValue}}" md-buffer-value="{{determinateValue2}}">
-  </md-progress-linear>
+  <h4 class="md-title">Buffer</h4>
 
-  <md-progress-linear class="md-accent" md-mode="{{mode}}" value="{{determinateValue}}"></md-progress-linear>
+  <p>
+    For operations where the user wants to indicate some activity or loading from the server,
+    use the <b>buffer</b> indicator:
+  </p>
+  <md-progress-linear class="md-warn" md-mode="buffer" value="{{vm.determinateValue}}"
+                      md-buffer-value="{{vm.determinateValue2}}"
+                      ng-show="vm.showList[0]"></md-progress-linear>
 
+  <h4 class="md-title">Query</h4>
+
+  <p>
+    For situations where the user wants to indicate pre-loading (until the loading can actually be made),
+    use the <b>query</b> indicator:
+  </p>
+
+  <div class="container" ng-class="{'visible' : !vm.activated}">
+    <md-progress-linear md-mode="query" ng-show="vm.showList[1]"></md-progress-linear>
+    <div class="bottom-block">
+      <span>Loading application libraries...</span>
+    </div>
+  </div>
+
+  <hr ng-class="{'visible' : vm.activated}">
+
+  <div id="loaders" layout="row" layout-align="start center">
+
+    <p>Query and Buffer progress linear indicators: </p>
+
+    <h5>Off</h5>
+    <md-switch
+        ng-model="vm.activated"
+        ng-change="vm.toggleActivation()"
+        aria-label="Enable Indicators">
+      <h5>On</h5>
+    </md-switch>
+  </div>
 </div>

@@ -17,73 +17,56 @@ md-tooltip {
 
   font-weight: 500;
   font-size: $tooltip-fontsize-sm;
-  @media screen and (min-width: $layout-breakpoint-sm) {
+  @media (min-width: $layout-breakpoint-sm) {
     font-size: $tooltip-fontsize-lg;
   }
 
-  .md-background {
-    position: absolute;
-    border-radius: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 1;
-    &.md-show-add {
-      transition: $swift-ease-out;
-      transform: translate(-50%, -50%) scale(0);
-      opacity: 0;
-    }
-    &.md-show, &.md-show-add-active {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-    }
-    &.md-show-remove {
-      transition: $swift-ease-in;
-      &.md-show-remove-active {
-        transform: translate(-50%, -50%) scale(0);
-        opacity: 0;
-      }
-    }
-  }
-  .md-content {
+  ._md-content {
     position: relative;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
-    background: transparent;
+    transform-origin: center top;
+    transform: scale(0);
     opacity: 0;
-
     height: $tooltip-height-sm;
     line-height: $tooltip-height-sm;
     padding-left: $tooltip-lr-padding-sm;
     padding-right: $tooltip-lr-padding-sm;
-    @media screen and (min-width: $layout-breakpoint-sm) {
+    @media (min-width: $layout-breakpoint-sm) {
       height: $tooltip-height-lg;
       line-height: $tooltip-height-lg;
       padding-left: $tooltip-lr-padding-lg;
       padding-right: $tooltip-lr-padding-lg;
     }
-    &.md-show-add {
+    &._md-show-add {
       transition: $swift-ease-out;
+      transition-duration: .2s;
+      transform: scale(0);
       opacity: 0;
     }
-    &.md-show, &.md-show-add-active {
+    &._md-show, &._md-show-add-active {
+      transform: scale(1);
       opacity: 1;
+      transform-origin: center top;
     }
-    &.md-show-remove {
-      transition: $swift-ease-in;
-      &.md-show-remove-active {
+    &._md-show-remove {
+      transition: $swift-ease-out;
+      transition-duration: .2s;
+      &._md-show-remove-active {
+        transform: scale(0);
         opacity: 0;
       }
     }
   }
 
-  &.md-hide {
+  &._md-hide {
     transition: $swift-ease-in;
   }
 
-  &.md-show {
+  &._md-show {
     transition: $swift-ease-out;
     pointer-events: auto;
-    transform: translate3d(0,0,0);
+    will-change: opacity, height, width;
   }
 }

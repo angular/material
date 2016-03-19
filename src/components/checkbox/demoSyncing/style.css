@@ -1,9 +1,6 @@
 .checkboxDemo1 div {
   clear: both;
 }
-.checkboxDemo1 md-checkbox {
-  float: left;
-}
 legend {
   color: #3F51B5;
 }
@@ -27,4 +24,5 @@ div.standard {
 fieldset.standard {
   border-style: solid;
   border-width: 1px;
+  height: 100%;
 }

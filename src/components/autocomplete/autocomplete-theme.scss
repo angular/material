@@ -1,5 +1,5 @@
 md-autocomplete.md-THEME_NAME-theme {
-  background: '{{background-50}}';
+  background: '{{background-A100}}';
   &[disabled] {
     background: '{{background-100}}';
   }
@@ -14,8 +14,8 @@ md-autocomplete.md-THEME_NAME-theme {
     }
   }
 }
-.md-autocomplete-suggestions.md-THEME_NAME-theme {
-  background: '{{background-50}}';
+.md-autocomplete-suggestions-container.md-THEME_NAME-theme {
+  background: '{{background-A100}}';
   li {
     color: '{{background-900}}';
     .highlight {

@@ -1,0 +1,139 @@
+/*
+*
+*  Responsive attributes
+*
+*  References:
+*  1) https://scotch.io/tutorials/a-visual-guide-to-css3-flexbox-properties#flex
+*  2) https://css-tricks.com/almanac/properties/f/flex/
+*  3) https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+*  4) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
+*  5) http://godban.com.ua/projects/flexgrid
+*
+*
+*/
+
+@-moz-document url-prefix() {
+  .layout-fill {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+  }
+}
+
+
+/*
+ *  Apply Mixins to create Layout/Flexbox styles
+ *
+ */
+
+
+@include layouts_for_breakpoint();
+@include layout-padding-margin();
+
+
+
+/**
+ * `hide-gt-sm show-gt-lg` should hide from 600px to 1200px
+ * `show-md hide-gt-sm` should show from 0px to 960px and hide at >960px
+ * `hide-gt-md show-gt-sm` should show everywhere (show overrides hide)`
+ *
+ *  hide means hide everywhere
+ *  Sizes:
+ *         $layout-breakpoint-xs:     600px !default;
+ *         $layout-breakpoint-sm:     960px !default;
+ *         $layout-breakpoint-md:     1280px !default;
+ *         $layout-breakpoint-lg:     1920px !default;
+ */
+
+
+@media (max-width: $layout-breakpoint-xs - 1) {
+  // Xtra-SMALL  SCREEN
+  .hide-xs, .hide {
+    &:not(.show-xs):not(.show) {
+      display: none;
+    }
+  }
+  @include layouts_for_breakpoint(xs);
+}
+
+@media (min-width: $layout-breakpoint-xs) {
+  // BIGGER THAN Xtra-SMALL SCREEN
+  @include layouts_for_breakpoint(gt-xs);
+
+}
+
+@media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
+  .hide, .hide-gt-xs {
+    &:not(.show-gt-xs):not(.show-sm):not(.show) {
+      display: none;
+    }
+  }
+  .hide-sm:not(.show-gt-xs):not(.show-sm):not(.show) {
+    display: none;
+  }
+
+  @include layouts_for_breakpoint(sm);
+}
+
+@media (min-width: $layout-breakpoint-sm) {
+  // BIGGER THAN SMALL SCREEN
+  @include layouts_for_breakpoint(gt-sm);
+
+}
+
+@media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
+  // MEDIUM SCREEN
+  .hide, .hide-gt-xs, .hide-gt-sm {
+    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-md):not(.show) {
+      display: none;
+    }
+  }
+  .hide-md:not(.show-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
+    display: none;
+  }
+  @include layouts_for_breakpoint(md);
+}
+
+@media (min-width: $layout-breakpoint-md) {
+  // BIGGER THAN MEDIUM SCREEN
+  @include layouts_for_breakpoint(gt-md);
+}
+
+@media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
+  // LARGE SCREEN
+  .hide,.hide-gt-xs, .hide-gt-sm, .hide-gt-md {
+    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-lg):not(.show) {
+      display: none;
+    }
+  }
+  .hide-lg:not(.show-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
+    display: none;
+  }
+
+  @include layouts_for_breakpoint(lg);
+}
+
+@media (min-width: $layout-breakpoint-lg) {
+  @include layouts_for_breakpoint(gt-lg);
+  @include layouts_for_breakpoint(xl);
+
+  // BIGGER THAN LARGE SCREEN
+  .hide, .hide-gt-xs, .hide-gt-sm, .hide-gt-md, .hide-gt-lg {
+    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show-xl):not(.show) {
+      display: none;
+    }
+  }
+  .hide-xl:not(.show-xl):not(.show-gt-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
+    display: none;
+  }
+
+}
+
+// General printing Rules
+@media print {
+
+  .hide-print:not(.show-print):not(.show) {
+    display: none !important;
+  }
+}

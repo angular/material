@@ -1,7 +1,13 @@
+.errors {
+  font-size: 12px;
+  color: rgb(221,44,0);
+  margin-top: 10px;
+}
+
 .custom-chips {
-  .md-chip {
+  md-chip {
     position: relative;
-    .md-chip-remove-container {
+    ._md-chip-remove-container {
       position: absolute;
       right: 4px;
       top: 4px;
@@ -36,7 +42,7 @@
     }
     &:not(.md-readonly) {
       md-chip-template {
-        padding-right: 20px;
+        padding-right: 5px;
       }
     }
   }

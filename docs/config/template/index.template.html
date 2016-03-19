@@ -1,6 +1,7 @@
 <!doctype html>
-<html ng-app="docsApp" ng-controller="DocsCtrl" lang="en" ng-strict-di>
+<html ng-app="docsApp" ng-controller="DocsCtrl" lang="en" ng-strict-di >
 <head>
+<base href="/">
 <title ng-bind="'Angular Material - ' + menu.currentSection.name +
     (menu.currentSection === menu.currentPage ? '' : ' > ' + menu.currentPage.name)">
   Angular Material
@@ -11,14 +12,14 @@
 <link rel="stylesheet" href="angular-material.min.css">
 <link rel="stylesheet" href="docs.css">
 </head>
-<body layout="row" ng-cloak>
+<body class="docs-body" layout="row" ng-cloak>
 
   <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2"
-              md-component-id="left"
+              md-component-id="left" hide-print
               md-is-locked-open="$mdMedia('gt-sm')">
 
     <header class="nav-header">
-      <a ng-href="#/" class="docs-logo">
+      <a ng-href="/" class="docs-logo">
         <img src="img/icons/angular-logo.svg" alt="" />
         <h1 class="docs-logotype md-heading">Angular Material</h1>
       </a>
@@ -36,9 +37,9 @@
           <h2 class="menu-heading md-subhead" ng-if="section.type === 'heading'" id="heading_{{ section.name | nospace }}">
             {{section.name}}
           </h2>
-          <menu-link section="section" ng-if="section.type === 'link'"></menu-link>
+          <menu-link section="section" ng-if="section.type === 'link' && !section.hidden"></menu-link>
 
-          <menu-toggle section="section" ng-if="section.type === 'toggle'"></menu-toggle>
+          <menu-toggle section="section" ng-if="section.type === 'toggle' && !section.hidden"></menu-toggle>
 
           <ul ng-if="section.children" class="menu-nested-list">
             <li ng-repeat="child in section.children" ng-class="{'childActive' : isSectionSelected(child)}">
@@ -55,8 +56,8 @@
   <div layout="column" tabIndex="-1" role="main" flex>
     <md-toolbar class="md-whiteframe-glow-z1 site-content-toolbar">
 
-      <div class="md-toolbar-tools docs-toolbar-tools" ng-click="openMenu()" tabIndex="-1">
-        <md-button class="md-icon-button" hide-gt-sm aria-label="Toggle Menu">
+      <div class="md-toolbar-tools docs-toolbar-tools" tabIndex="-1">
+        <md-button class="md-icon-button" ng-click="openMenu()" hide-gt-sm aria-label="Toggle Menu">
           <md-icon md-svg-src="img/icons/ic_menu_24px.svg"></md-icon>
         </md-button>
         <div layout="row" flex class="fill-height">
@@ -64,11 +65,11 @@
             <span ng-if="menu.currentPage.name !== menu.currentSection.name">
               <span hide-sm hide-md>{{menu.currentSection.name}}</span>
               <span class="docs-menu-separator-icon" hide-sm hide-md style="transform: translate3d(0, 1px, 0)">
-                <span class="md-visually-hidden">-</span>
+                <span class="_md-visually-hidden">-</span>
                 <md-icon
                     aria-hidden="true"
                     md-svg-src="img/icons/ic_chevron_right_24px.svg"
-                    style="transform:translateY(-2px)"></md-icon>
+                    style="margin-top: -2px"></md-icon>
               </span>
             </span>
             <span class="md-breadcrumb-page">{{menu.currentPage | humanizeDoc}}</span>
@@ -132,7 +133,7 @@
               class="md-icon-button"
               aria-label="View Demo"
               ng-class="{hide: !currentDoc || !currentDoc.hasDemo}"
-              ng-href="#/demo/{{currentComponent.name}}">
+              ng-href="{{currentComponent.demoUrl}}">
               <md-icon md-svg-src="img/icons/ic_play_circle_fill_24px.svg" style="fill:green"></md-icon>
               <md-tooltip>View Demo</md-tooltip>
             </md-button>
@@ -152,11 +153,24 @@
 
     </md-toolbar>
 
-    <md-content ng-view md-scroll-y flex layout-padding></md-content>
+    <md-content md-scroll-y layout="column" flex>
+      <div ng-view layout-padding flex="noshrink"></div>
+
+      <div layout="row" flex="noshrink">
+        <div id="license-footer">
+          Powered by Google &copy;2014&#8211;{{thisYear}}.
+          Code licensed under the <a href="./license">MIT License</a>.
+          Documentation licensed under
+          <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>.
+        </div>
+      </div>
+    </md-content>
 
   </div>
 
 
+  <!-- Preload is (currently) only used for testing jQuery -->
+  <script src="preload.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-animate.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/{$ doc.buildConfig.ngVersion $}/angular-route.min.js"></script>

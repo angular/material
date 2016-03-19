@@ -22,7 +22,9 @@
       isSameDay: isSameDay,
       getMonthDistance: getMonthDistance,
       isValidDate: isValidDate,
-      createDateAtMidnight: createDateAtMidnight
+      setDateTimeToMidnight: setDateTimeToMidnight,
+      createDateAtMidnight: createDateAtMidnight,
+      isDateWithinRange: isDateWithinRange
     };
 
     /**
@@ -189,11 +191,22 @@
     }
 
     /**
+     * Sets a date's time to midnight.
+     * @param {Date} date
+     */
+    function setDateTimeToMidnight(date) {
+      if (isValidDate(date)) {
+        date.setHours(0, 0, 0, 0);
+      }
+    }
+
+    /**
      * Creates a date with the time set to midnight.
      * Drop-in replacement for two forms of the Date constructor:
      * 1. No argument for Date representing now.
-     * 2. Single-argument value representing number of seconds since Unix Epoch.
-     * @param {number=} opt_value
+     * 2. Single-argument value representing number of seconds since Unix Epoch
+     * or a Date object.
+     * @param {number|Date=} opt_value
      * @return {Date} New date with time set to midnight.
      */
     function createDateAtMidnight(opt_value) {
@@ -203,8 +216,23 @@
       } else {
         date = new Date(opt_value);
       }
-      date.setHours(0, 0, 0, 0);
+      setDateTimeToMidnight(date);
       return date;
     }
+
+     /**
+      * Checks if a date is within a min and max range, ignoring the time component.
+      * If minDate or maxDate are not dates, they are ignored.
+      * @param {Date} date
+      * @param {Date} minDate
+      * @param {Date} maxDate
+      */
+     function isDateWithinRange(date, minDate, maxDate) {
+       var dateAtMidnight = createDateAtMidnight(date);
+       var minDateAtMidnight = isValidDate(minDate) ? createDateAtMidnight(minDate) : null;
+       var maxDateAtMidnight = isValidDate(maxDate) ? createDateAtMidnight(maxDate) : null;
+       return (!minDateAtMidnight || minDateAtMidnight <= dateAtMidnight) &&
+           (!maxDateAtMidnight || maxDateAtMidnight >= dateAtMidnight);
+     }
   });
 })();

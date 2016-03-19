@@ -187,8 +187,8 @@ angular.module('material.core.theming.palette', [])
     'A400': '#00e676',
     'A700': '#00c853',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '600 700 800 900',
-    'contrastStrongLightColors': '600 700'
+    'contrastLightColors': '500 600 700 800 900',
+    'contrastStrongLightColors': '500 600 700'
   },
   'light-green': {
     '50': '#f1f8e9',
@@ -333,7 +333,7 @@ angular.module('material.core.theming.palette', [])
     '1000': '#000000',
     'A100': '#ffffff',
     'A200': '#eeeeee',
-    'A400': '#bdbdbd',
+    'A400': '#303030',
     'A700': '#616161',
     'contrastDefaultColor': 'dark',
     'contrastLightColors': '600 700 800 900'
@@ -354,7 +354,7 @@ angular.module('material.core.theming.palette', [])
     'A400': '#78909c',
     'A700': '#455a64',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 300',
-    'contrastStrongLightColors': '400 500'
+    'contrastDarkColors': '50 100 200 300 700',
+    'contrastStrongLightColors': '400 500 700'
   }
 });

@@ -1,19 +1,19 @@
 
 md-radio-button.md-THEME_NAME-theme {
-  .md-off {
+  ._md-off {
     border-color: '{{foreground-2}}';
   }
 
-  .md-on {
+  ._md-on {
     background-color: '{{accent-color-0.87}}';
   }
-  &.md-checked .md-off {
+  &.md-checked ._md-off {
     border-color: '{{accent-color-0.87}}';
   }
   &.md-checked .md-ink-ripple {
     color: '{{accent-color-0.87}}';
   }
-  .md-container .md-ripple {
+  ._md-container .md-ripple {
     color: '{{accent-600}}';
   }
 }
@@ -24,12 +24,12 @@ md-radio-button.md-THEME_NAME-theme {
   &:not([disabled]) {
     .md-primary,
     &.md-primary {
-      .md-on {
+      ._md-on {
         background-color: '{{primary-color-0.87}}';
       }
       .md-checked,
       &.md-checked {
-        .md-off {
+        ._md-off {
           border-color: '{{primary-color-0.87}}';
         }
       }
@@ -39,19 +39,19 @@ md-radio-button.md-THEME_NAME-theme {
           color: '{{primary-color-0.87}}';
         }
       }
-      .md-container .md-ripple {
+      ._md-container .md-ripple {
         color: '{{primary-600}}';
       }
     }
 
     .md-warn,
     &.md-warn {
-      .md-on {
+      ._md-on {
         background-color: '{{warn-color-0.87}}';
       }
       .md-checked,
       &.md-checked {
-        .md-off {
+        ._md-off {
           border-color: '{{warn-color-0.87}}';
         }
       }
@@ -61,7 +61,7 @@ md-radio-button.md-THEME_NAME-theme {
           color: '{{warn-color-0.87}}';
         }
       }
-      .md-container .md-ripple {
+      ._md-container .md-ripple {
         color: '{{warn-600}}';
       }
     }
@@ -71,25 +71,37 @@ md-radio-button.md-THEME_NAME-theme {
   &[disabled] {
     color: '{{foreground-3}}';
 
-    .md-container .md-off {
+    ._md-container ._md-off {
       border-color: '{{foreground-3}}';
     }
-    .md-container .md-on {
+    ._md-container ._md-on {
       border-color: '{{foreground-3}}';
     }
   }
 
 }
-
+md-radio-group.md-THEME_NAME-theme {
+  .md-checked .md-ink-ripple {
+    color: '{{accent-color-0.26}}';
+  }
+  &.md-primary .md-checked:not([disabled]) .md-ink-ripple, .md-checked:not([disabled]).md-primary .md-ink-ripple {
+    color: '{{primary-color-0.26}}';
+  }
+  .md-checked.md-primary .md-ink-ripple {
+    color: '{{warn-color-0.26}}';
+  }
+}
 
 md-radio-group.md-THEME_NAME-theme.md-focused:not(:empty) {
-  .md-checked .md-container:before {
+  .md-checked ._md-container:before {
     background-color: '{{accent-color-0.26}}';
   }
-  .md-checked:not([disabled]).md-primary .md-container:before {
+  &.md-primary .md-checked ._md-container:before,
+  .md-checked.md-primary ._md-container:before {
     background-color: '{{primary-color-0.26}}';
   }
-  .md-checked.md-primary .md-container:before {
+  &.md-warn .md-checked ._md-container:before,
+  .md-checked.md-warn ._md-container:before {
     background-color: '{{warn-color-0.26}}';
   }
 }

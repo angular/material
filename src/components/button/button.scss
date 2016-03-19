@@ -3,9 +3,10 @@ $button-fab-border-radius: 50% !default;
 $button-icon-border-radius: $button-fab-border-radius;
 
 $button-line-height: rem(3.60) !default;
-$button-padding: 0 rem(0.600) !default;
 $button-margin: rem(0.600) rem(0.800) !default;
 $button-min-width: rem(8.800) !default;
+$button-padding: 0 $button-left-right-padding !default;
+
 
 // Fab buttons
 $button-fab-line-height: rem(5.600) !default;
@@ -15,9 +16,14 @@ $button-fab-mini-line-height: rem(4.00) !default;
 
 $button-fab-toast-offset: $button-fab-height * 0.75 !default;
 
-$icon-button-height: rem(4.800) !default;
-$icon-button-width: rem(4.800) !default;
+$icon-button-height: rem(4.000) !default;
+$icon-button-width: rem(4.000) !default;
 $icon-button-margin: rem(0.600) !default;
+
+// Fix issue causing buttons in Firefox to be 2px bigger than they should
+button.md-button::-moz-focus-inner {
+  border: 0;
+}
 
 .md-button {
   border-radius: $button-border-radius;
@@ -88,9 +94,8 @@ $icon-button-margin: rem(0.600) !default;
     margin: 0 $icon-button-margin;
     height: $icon-button-height;
     min-width: 0;
-    line-height: $icon-button-height;
-    padding-left: 0;
-    padding-right: 0;
+    line-height: $icon-size;
+    padding: $baseline-grid;
     width: $icon-button-width;
     border-radius: $button-icon-border-radius;
     .md-ripple-container {
@@ -110,6 +115,7 @@ $icon-button-margin: rem(0.600) !default;
     z-index: $z-index-fab;
 
     line-height: $button-fab-line-height;
+
     min-width: 0;
     width: $button-fab-width;
     height: $button-fab-height;
@@ -120,8 +126,8 @@ $icon-button-margin: rem(0.600) !default;
     background-clip: padding-box;
     overflow: hidden;
 
-    transition: 0.2s linear;
-    transition-property: background-color, box-shadow;
+    transition: $swift-ease-in;
+    transition-property: background-color, box-shadow, transform;
     .md-ripple-container {
       border-radius: $button-fab-border-radius;
       background-clip: padding-box;
@@ -136,6 +142,9 @@ $icon-button-margin: rem(0.600) !default;
       height: $button-fab-mini-height;
     }
 
+    &.ng-hide, &.ng-leave {
+      transition: none;
+    }
   }
 
   &:not([disabled]) {
@@ -159,9 +168,10 @@ $icon-button-margin: rem(0.600) !default;
   }
 }
 
-.md-toast-open-top {
+._md-toast-open-top {
   .md-button.md-fab-top-left,
   .md-button.md-fab-top-right {
+    transition: $swift-ease-out;
     transform: translate3d(0, $button-fab-toast-offset, 0);
     &:not([disabled]) {
       &.md-focused,
@@ -172,9 +182,10 @@ $icon-button-margin: rem(0.600) !default;
   }
 }
 
-.md-toast-open-bottom {
+._md-toast-open-bottom {
   .md-button.md-fab-bottom-left,
   .md-button.md-fab-bottom-right {
+    transition: $swift-ease-out;
     transform: translate3d(0, -$button-fab-toast-offset, 0);
     &:not([disabled]) {
       &.md-focused,
@@ -189,32 +200,33 @@ $icon-button-margin: rem(0.600) !default;
   display: flex;
   flex: 1;
   width: 100%;
-}
 
-.md-button-group > .md-button {
-  flex: 1;
+  & > .md-button {
+    flex: 1;
 
-  display: block;
+    display: block;
 
-  overflow: hidden;
+    overflow: hidden;
 
-  width: 0;
+    width: 0;
 
-  border-width: 1px 0px 1px 1px;
-  border-radius: 0;
+    border-width: 1px 0px 1px 1px;
+    border-radius: 0;
 
-  text-align: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
-  &:first-child {
-    border-radius: 2px 0px 0px 2px;
+    &:first-child {
+      border-radius: 2px 0px 0px 2px;
+    }
+    &:last-child {
+      border-right-width: 1px;
+      border-radius: 0px 2px 2px 0px;
+    }
   }
-  &:last-child {
-    border-right-width: 1px;
-    border-radius: 0px 2px 2px 0px;
-  }
 }
+// IE only
 @media screen and (-ms-high-contrast: active) {
   .md-button.md-raised,
   .md-button.md-fab {

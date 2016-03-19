@@ -8,8 +8,13 @@ md-list.md-THEME_NAME-theme {
       color: '{{foreground-2}}';
     }
   }
-  .md-proxy-focus.md-focused div.md-no-style {
+  ._md-proxy-focus.md-focused div._md-no-style {
     background-color: '{{background-100}}';
+  }
+
+  md-list-item .md-avatar-icon {
+    background-color: '{{foreground-3}}';
+    color: '{{background-color}}';
   }
 
   md-list-item > md-icon {
@@ -20,13 +25,6 @@ md-list.md-THEME_NAME-theme {
       &.md-accent {
         color: '{{accent-color}}';
       }
-    }
-  }
-  md-list-item button {
-    background-color: '{{background-color}}';
-
-    &.md-button:not([disabled]):hover {
-      background-color: '{{background-color}}';
     }
   }
 }

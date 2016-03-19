@@ -1,13 +1,13 @@
 "use strict";
 
 if (angular.version.minor >= 4) {
-  angular.module('material.animate', []);
+  angular.module('material.core.animate', []);
 } else {
 (function() {
 
   var forEach = angular.forEach;
 
-  var WEBKIT = window.ontransitionend === undefined && window.onwebkittransitionend !== undefined;
+  var WEBKIT = angular.isDefined(document.documentElement.style.WebkitAppearance);
   var TRANSITION_PROP = WEBKIT ? 'WebkitTransition' : 'transition';
   var ANIMATION_PROP = WEBKIT ? 'WebkitAnimation' : 'animation';
   var PREFIX = WEBKIT ? '-webkit-' : '';
@@ -136,7 +136,7 @@ if (angular.version.minor >= 4) {
   }];
 
   angular
-    .module('material.animate', [])
+    .module('material.core.animate', [])
     .factory('$$forceReflow', $$ForceReflowFactory)
     .factory('$$AnimateRunner', $$AnimateRunnerFactory)
     .factory('$$rAFMutex', $$rAFMutexFactory)
@@ -176,7 +176,7 @@ if (angular.version.minor >= 4) {
         var events, eventFn;
 
         return {
-          close: close,
+          close: $window.close,
           start: function() {
             var runner = new $$AnimateRunner();
             waitUntilQuiet(function() {
@@ -315,7 +315,7 @@ if (angular.version.minor >= 4) {
 
       function parseMaxTime(str) {
         var maxValue = 0;
-        var values = str.split(/\s*,\s*/);
+        var values = (str || "").split(/\s*,\s*/);
         forEach(values, function(value) {
           // it's always safe to consider only second values and omit `ms` values since
           // getComputedStyle will always handle the conversion for us

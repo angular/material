@@ -13,7 +13,7 @@ function DemoCtrl($mdDialog) {
     $mdDialog.show(
       $mdDialog.alert()
         .title('You clicked!')
-        .content('You clicked the menu item at index ' + index)
+        .textContent('You clicked the menu item at index ' + index)
         .ok('Nice')
     );
   };

@@ -1,28 +1,8 @@
+// !!Important - Theme-based Background-color can be configured in backdrop-theme.scss
+//             - Animate background-color opacityy only for `.md-opaque` styles
+
 md-backdrop {
-  z-index: $z-index-backdrop;
-  &.md-menu-backdrop {
-    z-index: $z-index-menu - 1;
-  }
-  &.md-select-backdrop {
-    z-index: $z-index-dialog + 1;
-    transition-duration: 0;
-  }
-  &.md-dialog-backdrop {
-    z-index: $z-index-dialog - 1;
-  }
-  &.md-bottom-sheet-backdrop {
-    z-index: $z-index-bottom-sheet - 1;
-  }
-  &.md-sidenav-backdrop {
-    z-index: $z-index-sidenav - 1;
-  }
-
-  opacity: 1;
-
-  // - Animate background-color alpha only for `.md-opaque` stylings
-  // !!Important - Theme-based Background-color and animations can be enabled in backdrop-theme.scss
-
-  transition: background-color 450ms $swift-ease-in-timing-function;
+  transition: opacity 450ms;
 
   position: absolute;
   top:0;
@@ -30,12 +10,48 @@ md-backdrop {
   left: 0;
   right: 0;
 
-  &.md-click-catcher {
+  z-index: $z-index-backdrop;
+
+  &._md-menu-backdrop {
+    position: fixed !important;
+    z-index: $z-index-menu - 1;
+  }
+  &._md-select-backdrop {
+    z-index: $z-index-dialog + 1;
+    transition-duration: 0;
+  }
+  &._md-dialog-backdrop {
+    z-index: $z-index-dialog - 1;
+  }
+  &._md-bottom-sheet-backdrop {
+    z-index: $z-index-bottom-sheet - 1;
+  }
+  &._md-sidenav-backdrop {
+    z-index: $z-index-sidenav - 1;
+  }
+
+
+  &._md-click-catcher {
     position: absolute;
   }
 
-  &.md-opaque.ng-leave {
-    transition: background-color 400ms linear;
+  &.md-opaque {
+
+    opacity: .48;
+
+    &.ng-enter {
+      opacity: 0;
+    }
+    &.ng-enter.md-opaque.ng-enter-active {
+      opacity: .48;
+    }
+    &.ng-leave {
+      opacity: .48;
+      transition: opacity 400ms;
+    }
+    &.ng-leave.md-opaque.ng-leave-active {
+      opacity: 0;
+    }
   }
 
 }

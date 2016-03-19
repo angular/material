@@ -1,4 +1,22 @@
 md-divider {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+md-list {
+    padding-top:0;
+}
+md-list-item > p,
+md-list-item > ._md-list-item-inner > p,
+md-list-item ._md-list-item-inner > p,
+md-list-item ._md-list-item-inner > ._md-list-item-inner > p {
+    -webkit-user-select: none; /* Chrome all / Safari all */
+    -moz-user-select: none; /* Firefox all */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none; /* Likely future */
+}
+
+/* Add some right padding so that the text doesn't overlap the buttons */
+.secondary-button-padding p {
+    padding-right: 100px;
 }

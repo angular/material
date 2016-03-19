@@ -1,37 +1,145 @@
-<div ng-controller="LayoutCtrl" class="layout-content">
+<div ng-controller="LayoutCtrl" class="layout-content" ng-cloak>
 
-  <h3>Overview</h3>
-  <p>
-    Angular Material's responsive CSS layout is built on
-    <a href="http://www.w3.org/TR/css3-flexbox/">flexbox</a>.
-  </p>
+  <h3>Layout and Containers</h3>
 
   <p>
-    The layout system is based upon element attributes rather than CSS classes.
-    Attributes provide an easy way to set a value (eg <code>layout="row"</code>), and additionally
-    helps us separate concerns: attributes define layout, and classes define styling.
+    Use the <code>layout</code> directive on a container element to specify the layout direction for its children:
+    horizontally in a row (<code>layout="row"</code>) or vertically in a column (<code>layout="column"</code>).
+    Note that <code>row</code> is the default layout direction if you specify the <code>layout</code> directive without a value.
   </p>
+
+  <table>
+    <tr>
+      <td style="font-weight: bold; background-color: #DBEEF5">row</td>
+      <td style="padding-left: 10px;">Items arranged horizontally. <code>max-height = 100%</code> and <code>max-width</code>  is the width of the items in the container.</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold; background-color: #DBEEF5 ">column</td>
+      <td style="padding-left: 10px;">Items arranged vertically. <code>max-width = 100%</code>  and <code>max-height</code> is the height of the items in the container.</td>
+    </tr>
+  </table>
 
   <br/>
-  <h3>Layout Attribute</h3>
-  <p>
-    Use the <code>layout</code> attribute on an element to arrange its children
-    horizontally in a row (<code>layout="row"</code>), or vertically in
-    a column (<code>layout="column"</code>). 
-  </p>
 
-  <hljs lang="html">
+  <docs-demo demo-title="Layout Directive" class="small-demo colorNested">
+    <demo-file name="index.html">
     <div layout="row">
-      <div>I'm left.</div>
-      <div>I'm right.</div>
+      <div flex>First item in row</div>
+      <div flex>Second item in row</div>
     </div>
     <div layout="column">
-      <div>I'm above.</div>
-      <div>I'm below.</div>
+      <div flex>First item in column</div>
+      <div flex>Second item in column</div>
     </div>
-  </hljs>
+    </demo-file>
+  </docs-demo>
 
   <p>
-    See <a href="#/layout/options">Layout Options</a> for information on responsive layouts and other options.
+      Note that <code>layout</code> only affects the flow direction for that container's <b>immediate</b> children.
+    </p>
+
+  <hr>
+
+  <br/>
+  <h3>Layouts and Responsive Breakpoints</h3>
+
+  <p>
+    As discussed in the <a href="layout/introduction">Layout Introduction page</a> you can
+    make your layout change depending upon the device view size by using <b>breakpoint alias</b> suffixes.
+   </p>
+
+  <p>
+    To make your layout automatically change depending upon the device screen size, use one to the following <code>layout</code>
+    APIs to set the layout direction for devices with view widths:
   </p>
-</div>
+
+   <table class="md-api-table">
+    <thead>
+      <tr>
+        <th>API</th>
+        <th>Device width when breakpoint overrides default</th>
+      </tr>
+    </thead>
+     <tr>
+       <td>layout</td>
+       <td>Sets default layout direction unless overridden by another breakpoint.</td>
+     </tr>
+     <tr>
+       <td>layout-xs</td>
+       <td>width &lt; <b>600</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-gt-xs</td>
+       <td>width &gt;= <b>600</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-sm</td>
+       <td><b>600</b>px &lt;= width &lt; <b>960</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-gt-sm</td>
+       <td>width &gt;= <b>960</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-md</td>
+       <td><b>960</b>px &lt;= width &lt; <b>1280</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-gt-md</td>
+       <td>width &gt;= <b>1280</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-lg</td>
+       <td><b>1280</b>px &lt;= width &lt; <b>1920</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-gt-lg</td>
+       <td>width &gt;= <b>1920</b>px</td>
+     </tr>
+     <tr>
+       <td>layout-xl</td>
+       <td>width &gt;= <b>1920</b>px</td>
+     </tr>
+   </table>
+   <br/>
+
+  <p><a
+      href="https://camo.githubusercontent.com/ad81ae92f8b4285747ce4e48007bf3f104dd5630/687474703a2f2f6d6174657269616c2d64657369676e2e73746f726167652e676f6f676c65617069732e636f6d2f7075626c6973682f6d6174657269616c5f765f342f6d6174657269616c5f6578745f7075626c6973682f3042386f6c5631354a3761625053474678656d46695156527462316b2f6c61796f75745f61646170746976655f627265616b706f696e74735f30312e706e67"
+      target="_blank" style="text-decoration: none;border: 0 none;">
+      <img
+      src="https://camo.githubusercontent.com/ad81ae92f8b4285747ce4e48007bf3f104dd5630/687474703a2f2f6d6174657269616c2d64657369676e2e73746f726167652e676f6f676c65617069732e636f6d2f7075626c6973682f6d6174657269616c5f765f342f6d6174657269616c5f6578745f7075626c6973682f3042386f6c5631354a3761625053474678656d46695156527462316b2f6c61796f75745f61646170746976655f627265616b706f696e74735f30312e706e67"
+      alt=""
+      style="max-width:100%;text-decoration: none;border: 0 none;"></a>
+  </p>
+
+
+  <p>
+    For the demo below, as you shrink your browser window width notice the flow direction changes to <code>column</code>
+    for mobile devices (<code>xs</code>). And as you expand it will reset to <code>row</code>
+    for <code>gt-sm</code> view sizes.
+
+  </p>
+
+  <docs-demo demo-title="Responsive Layouts" class="small-demo colorNested">
+    <demo-file name="index.html">
+      <div layout="row" layout-xs="column">
+        <div flex>
+          I'm above on mobile, and to the left on larger devices.
+        </div>
+        <div flex>
+          I'm below on mobile, and to the right on larger devices.
+        </div>
+      </div>
+    </demo-file>
+  </docs-demo>
+
+
+
+  <p>
+    See the <a href="layout/options">Layout Options page</a> for more options such as padding, alignments, etc.
+  </p>
+
+
+
+ </div>
+

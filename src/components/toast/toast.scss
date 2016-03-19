@@ -1,88 +1,137 @@
 // See height set globally, depended on by buttons
 
+$md-toast-content-padding: 3 * $baseline-grid - $button-left-right-padding;
+$md-toast-button-left-margin: 3 * $baseline-grid - 2 * $button-left-right-padding;
+$md-toast-text-padding: $button-left-right-padding;
+
+
+.md-toast-text {
+  padding: 0 $md-toast-text-padding;
+}
 
 md-toast {
-  display: flex;
-  position:absolute;
+  position: absolute;
   z-index: $z-index-toast;
 
   box-sizing: border-box;
-  align-items: center;
-
-  min-height: 48px;
-  padding-left: 24px;
-  padding-right: 24px;
-
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-  border-radius: 2px;
-  font-size: 14px;
   cursor: default;
+  overflow: hidden;
 
-  height:auto;
-  max-height: 7*$toast-height;
-  max-width: 100%;
+  // Add some padding to the outer toast container so that the wrapper's box shadow is visible
+  padding: $toast-margin;
 
-  overflow:hidden;
+  // Setup opacity transition on whole toast
+  opacity: 1;
+  transition: $swift-ease-out;
+
+  .md-toast-content {
+    display: flex;
+    align-items: center;
+
+    height: 0;
+    max-height: 7 * $toast-height;
+    max-width: 100%;
+    min-height: 48px;
+    padding: 0 $md-toast-content-padding;
+
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    border-radius: 2px;
+    font-size: 14px;
+
+    overflow: hidden;
+
+    // Setup for transform transitions on inner content
+    transform: translate3d(0, 0, 0) rotateZ(0deg);
+    transition: $swift-ease-out;
+
+    @include rtl(justify-content, flex-start, flex-end);
+  }
 
   &.md-capsule {
     border-radius: 24px;
+
+    .md-toast-content {
+      border-radius: 24px;
+    }
   }
 
-  opacity: 1;
-  transform: translate3d(0,0,0) rotateZ(0deg);
-  transition: $swift-ease-out;
-
   &.ng-leave-active {
-    transition: $swift-ease-in;
+    .md-toast-content {
+      transition: $swift-ease-in;
+    }
   }
 
   /* Transition differently when swiping */
-  &.md-swipeleft,
-  &.md-swiperight,
-  &.md-swipeup,
-  &.md-swipedown {
-    transition: $swift-ease-out;
+  &._md-swipeleft,
+  &._md-swiperight,
+  &._md-swipeup,
+  &._md-swipedown {
+    .md-toast-content {
+      transition: $swift-ease-out;
+    }
   }
 
   &.ng-enter {
-    transform: translate3d(0, 100%, 0);
-    &.md-top {
-      transform: translate3d(0, -100%, 0);
-    }
     opacity: 0;
+    .md-toast-content {
+      transform: translate3d(0, 100%, 0);
+    }
+    &._md-top {
+      .md-toast-content {
+        transform: translate3d(0, -100%, 0);
+      }
+    }
     &.ng-enter-active {
-      transform: translate3d(0, 0, 0);
       opacity: 1;
+      .md-toast-content {
+        transform: translate3d(0, 0, 0);
+      }
     }
   }
+  /*
+   * When the toast doesn't take up the whole screen,
+   * make it rotate when the user swipes it away
+   */
   &.ng-leave.ng-leave-active {
-    opacity: 0;
-    transform: translate3d(0, 100%, 0);
-    &.md-top {
-      transform: translate3d(0, -100%, 0);
+    .md-toast-content {
+      opacity: 0;
+      transform: translate3d(0, 100%, 0);
     }
-    &.md-swipeleft {
-      transform: translate3d(-100%, 0%, 0);
+
+    &._md-swipeup {
+      .md-toast-content {
+        transform: translate3d(0, -50%, 0);
+      }
     }
-    &.md-swiperight {
-      transform: translate3d(100%, 0%, 0);
+    &._md-swipedown {
+      .md-toast-content {
+        transform: translate3d(0, 50%, 0);
+      }
+    }
+    &._md-top {
+      .md-toast-content {
+        transform: translate3d(0, -100%, 0);
+      }
     }
   }
 
   .md-action {
     line-height: 19px;
     margin-left: 24px;
+    margin-right: 0;
     cursor: pointer;
     text-transform: uppercase;
     float: right;
+  }
 
-    &.md-button {
-      min-width: 0;
-    }
+  .md-button {
+    min-width: 0;
+    @include rtl(margin-right, 0, $md-toast-button-left-margin);
+    @include rtl(margin-left, $md-toast-button-left-margin, 0);
   }
 }
 
-@media (max-width: $layout-breakpoint-sm) {
+@media (max-width: $layout-breakpoint-sm - 1) {
   md-toast {
     left: 0;
     right: 0;
@@ -91,45 +140,52 @@ md-toast {
     min-width: 0;
     border-radius: 0;
     bottom: 0;
-    &.md-top {
-      bottom: auto;
-      top: 0;
+    padding: 0;
+
+    &.ng-leave.ng-leave-active {
+      &._md-swipeup {
+        .md-toast-content {
+          transform: translate3d(0, -50%, 0);
+        }
+      }
+      &._md-swipedown {
+        .md-toast-content {
+          transform: translate3d(0, 50%, 0);
+        }
+      }
     }
   }
 }
+
 @media (min-width: $layout-breakpoint-sm) {
   md-toast {
-    min-width: 288px;
-    &.md-bottom {
-      bottom: $toast-margin;
+    min-width: 288px + $toast-margin * 2;
+    &._md-bottom {
+      bottom: 0;
     }
-    &.md-left {
-      left: $toast-margin;
+    &._md-left {
+      left: 0;
     }
-    &.md-right {
-      right: $toast-margin;
+    &._md-right {
+      right: 0;
     }
-    &.md-top {
-      top: $toast-margin;
+    &._md-top {
+      top: 0;
     }
 
     /*
-     * When the toast doesn't take up the whole screen,
-     * make it rotate when the user swipes it away
-     */
+   * When the toast doesn't take up the whole screen,
+   * make it rotate when the user swipes it away
+   */
     &.ng-leave.ng-leave-active {
-      &.md-swipeleft {
-        transform: translate3d(-100%, 25%, 0) rotateZ(-15deg);
-      }
-      &.md-swiperight {
-        transform: translate3d(100%, 25%, 0) rotateZ(15deg);
-      }
-      &.md-top {
-        &.md-swipeleft {
-          transform: translate3d(-100%, 0, 0) rotateZ(-15deg);
+      &._md-swipeleft {
+        .md-toast-content {
+          transform: translate3d(-50%, 0, 0);
         }
-        &.md-swiperight {
-          transform: translate3d(100%, 0, 0) rotateZ(15deg);
+      }
+      &._md-swiperight {
+        .md-toast-content {
+          transform: translate3d(50%, 0, 0);
         }
       }
     }
@@ -138,14 +194,20 @@ md-toast {
 
 @media (min-width: $layout-breakpoint-lg) {
   md-toast {
-    max-width: $baseline-grid * 71;
+    .md-toast-content {
+      max-width: $baseline-grid * 71;
+    }
   }
 }
-
-
 
 @media screen and (-ms-high-contrast: active) {
   md-toast {
     border: 1px solid #fff;
   }
+}
+
+
+// While animating, set the toast parent's overflow to hidden so scrollbars do not appear
+._md-toast-animating {
+  overflow: hidden !important;
 }

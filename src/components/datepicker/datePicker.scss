@@ -1,15 +1,28 @@
 /** Styles for mdDatepicker. */
-$md-datepicker-button-gap: 12px;  // Space between the text input and the calendar-icon button.
-$md-datepicker-border-bottom-gap: 5px;  // Space between input and the grey underline.
-$md-datepicker-open-animation-duration: 0.2s;
+$md-datepicker-button-gap: 12px !default;  // Space between the text input and the calendar-icon button.
+$md-datepicker-border-bottom-gap: 5px !default;  // Space between input and the grey underline.
+$md-datepicker-open-animation-duration: 0.2s !default;
+$md-datepicker-triangle-button-width: 36px !default;
 
 md-datepicker {
   // Don't let linebreaks happen between the open icon-button and the input.
   white-space: nowrap;
+  overflow: hidden;
+
+  // Leave room for the down-triangle button to "overflow" it's parent without modifying scrollLeft
+  @include rtl-prop(padding-right, padding-left, $md-datepicker-triangle-button-width / 2);
+  @include rtl-prop(margin-right, margin-left, -$md-datepicker-triangle-button-width / 2);
+
+  vertical-align: middle;
+}
+
+.md-inline-form {
+  md-datepicker {
+    margin-top: 12px;
+  }
 }
 
 // The calendar icon button used to open the calendar pane.
-// Need absurd specificty to override md-button.md-icon-button.
 .md-datepicker-button {
   display: inline-block;
   box-sizing: border-box;
@@ -34,7 +47,7 @@ md-datepicker {
 
   display: inline-block;
   width: auto;
-  margin-left: $md-datepicker-button-gap;
+  @include rtl-prop(margin-left, margin-right, $md-datepicker-button-gap);
 
   &.md-datepicker-focused {
     border-bottom-width: 2px;
@@ -77,7 +90,6 @@ md-datepicker {
   position: absolute;
   right: 0;
   left: 120px;
-  background: white;
 
   height: 100%;
 }
@@ -115,24 +127,24 @@ $md-date-arrow-size: 5px;
   height: 0;
   border-left: $md-date-arrow-size solid transparent;
   border-right: $md-date-arrow-size solid transparent;
-  border-top: $md-date-arrow-size solid rgba(black, 0.20);
+  border-top: $md-date-arrow-size solid;
 }
 
 // Button containing the down "disclosure" triangle/arrow.
 .md-datepicker-triangle-button {
   position: absolute;
-  right: 0;
+  @include rtl-prop(right, left, 0);
   top: 0;
 
   // TODO(jelbourn): This position isn't great on all platforms.
-  transform: translateY(-25%) translateX(45%);
+  @include rtl(transform, translateY(-25%) translateX(45%), translateY(-25%) translateX(-45%));
 }
 
 // Need crazy specificity to override .md-button.md-icon-button.
 // Only apply this high specifiy to the property we need to override.
 .md-datepicker-triangle-button.md-button.md-icon-button {
   height: 100%;
-  width: 36px;
+  width: $md-datepicker-triangle-button-width;
   position: absolute;
 }
 
@@ -150,16 +162,37 @@ md-datepicker[disabled] {
 // Open state for all of the elements of the picker.
 .md-datepicker-open {
   .md-datepicker-input-container {
-    margin-left: -$md-datepicker-button-gap;
+    @include rtl-prop(margin-left, margin-right, -$md-datepicker-button-gap);
     border: none;
   }
 
   .md-datepicker-input {
-    margin-left: 24px;
+    @include rtl-prop(margin-left, margin-right, 24px);
     height: 40px;
   }
 
   .md-datepicker-triangle-button {
     display: none;
+  }
+}
+
+// When the position of the floating calendar pane is adjusted to remain inside
+// of the viewport, hide the inputput mask, as the text input will no longer be
+// directly underneath it.
+.md-datepicker-pos-adjusted .md-datepicker-input-mask {
+  display: none;
+}
+
+// Animate the calendar inside of the floating calendar pane such that it appears to "scroll" into
+// view while the pane is opening. This is done as a cue to users that the calendar is scrollable.
+.md-datepicker-calendar-pane {
+  .md-calendar {
+    transform: translateY(-85px);
+    transition: transform 0.65s $swift-ease-out-timing-function;
+    transition-delay: 0.125s;
+  }
+
+  &.md-pane-open .md-calendar {
+    transform: translateY(0);
   }
 }

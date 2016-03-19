@@ -1,0 +1,19 @@
+md-progress-circular.md-THEME_NAME-theme {
+
+  path {
+    stroke: '{{primary-color}}';
+  }
+
+  &.md-warn {
+    path {
+      stroke: '{{warn-color}}';
+    }
+  }
+
+  &.md-accent {
+    path {
+      stroke: '{{accent-color}}';
+    }
+  }
+
+}

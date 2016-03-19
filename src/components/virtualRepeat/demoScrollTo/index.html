@@ -1,0 +1,24 @@
+<div ng-controller="AppCtrl as ctrl">
+  <md-content layout="column" class="md-padding">
+    <p>
+      Use the <code>md-top-index</code> attribute to watch which item is at the top of the scroll
+      container, and also to jump to a specific item.
+    </p>
+
+    <div class="wrapper">
+      <md-input-container>
+        <md-select ng-model="ctrl.selectedYear" aria-label="Select a Year">
+          <md-option ng-value="$index" ng-repeat="year in ctrl.years">{{ year }}</md-option>
+        </md-select>
+      </md-input-container>
+
+      <md-virtual-repeat-container id="vertical-container" md-top-index="ctrl.topIndex">
+        <div md-virtual-repeat="item in ctrl.items"
+            class="repeated-item" ng-class="{header: item.header}" flex>
+          {{item.text}}
+        </div>
+      </md-virtual-repeat-container>
+    </div>
+
+  </md-content>
+</div>

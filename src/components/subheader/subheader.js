@@ -16,10 +16,11 @@
  *  > To improve the visual grouping of content, use the system color for your subheaders.
  *
  */
-angular.module('material.components.subheader', [
-  'material.core',
-  'material.components.sticky'
-])
+angular
+  .module('material.components.subheader', [
+    'material.core',
+    'material.components.sticky'
+  ])
   .directive('mdSubheader', MdSubheaderDirective);
 
 /**
@@ -46,18 +47,18 @@ function MdSubheaderDirective($mdSticky, $compile, $mdTheming, $mdUtil) {
     replace: true,
     transclude: true,
     template: (
-    '<h2 class="md-subheader">' +
-    '  <div class="md-subheader-inner">' +
-    '    <span class="md-subheader-content"></span>' +
+    '<div class="md-subheader">' +
+    '  <div class="_md-subheader-inner">' +
+    '    <span class="_md-subheader-content"></span>' +
     '  </div>' +
-    '</h2>'
+    '</div>'
     ),
     link: function postLink(scope, element, attr, controllers, transclude) {
       $mdTheming(element);
       var outerHTML = element[0].outerHTML;
 
       function getContent(el) {
-        return angular.element(el[0].querySelector('.md-subheader-content'));
+        return angular.element(el[0].querySelector('._md-subheader-content'));
       }
 
       // Transclude the user-given contents of the subheader
@@ -74,7 +75,7 @@ function MdSubheaderDirective($mdSticky, $compile, $mdTheming, $mdUtil) {
           // compiled clone below will only be a comment tag (since they replace their elements with
           // a comment) which cannot be properly passed to the $mdSticky; so we wrap it in our own
           // DIV to ensure we have something $mdSticky can use
-          var wrapperHtml = '<div class="md-subheader-wrapper">' + outerHTML + '</div>';
+          var wrapperHtml = '<div class="_md-subheader-wrapper">' + outerHTML + '</div>';
           var stickyClone = $compile(wrapperHtml)(scope);
 
           // Append the sticky

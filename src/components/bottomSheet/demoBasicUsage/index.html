@@ -1,12 +1,12 @@
-<div ng-controller="BottomSheetExample" class="md-padding">
+<div ng-controller="BottomSheetExample" class="md-padding" ng-cloak>
   <h2 class="md-title">Usage</h2>
   <p>Bottom sheets can be displayed by clicking one of the buttons below.  Once shown, it can be
   dismissed by either swiping down or clicking in the shaded area.</p>
   <h2 class="md-title">Actions</h2>
   <p>Use one of the following buttons to display a bottom sheet.</p>
-  <div class="bottom-sheet-demo inset" layout="row" layout-sm="column" layout-align="center">
-    <md-button flex="50" class="md-primary md-raised" ng-click="showListBottomSheet($event)">Show as List</md-button>
-    <md-button flex="50" class="md-primary md-raised" ng-click="showGridBottomSheet($event)">Show as Grid</md-button>
+  <div class="bottom-sheet-demo inset" layout="row" layout-sm="column" layout-align="center" >
+    <md-button flex="50" class="md-primary md-raised" ng-click="showListBottomSheet()">Show as List</md-button>
+    <md-button flex="50" class="md-primary md-raised" ng-click="showGridBottomSheet()">Show as Grid</md-button>
   </div>
 
   <div ng-if="alert">

@@ -11,8 +11,64 @@ angular.module('material.core')
  * current device's screen / window size. The media query will be re-evaluated on resize, allowing
  * you to register a watch.
  *
- * `$mdMedia` also has pre-programmed support for media queries that match the layout breakpoints.
- *  (`sm`, `gt-sm`, `md`, `gt-md`, `lg`, `gt-lg`).
+ * `$mdMedia` also has pre-programmed support for media queries that match the layout breakpoints:
+ *
+ *  <table class="md-api-table">
+ *    <thead>
+ *    <tr>
+ *      <th>Breakpoint</th>
+ *      <th>mediaQuery</th>
+ *    </tr>
+ *    </thead>
+ *    <tbody>
+ *    <tr>
+ *      <td>xs</td>
+ *      <td>(max-width: 599px)</td>
+ *    </tr>
+ *    <tr>
+ *      <td>gt-xs</td>
+ *      <td>(min-width: 600px)</td>
+ *    </tr>
+ *    <tr>
+ *      <td>sm</td>
+ *      <td>(min-width: 600px) and (max-width: 959px)</td>
+ *    </tr>
+ *    <tr>
+ *      <td>gt-sm</td>
+ *      <td>(min-width: 960px)</td>
+ *    </tr>
+ *    <tr>
+ *      <td>md</td>
+ *      <td>(min-width: 960px) and (max-width: 1279px)</td>
+ *    </tr>
+ *    <tr>
+ *      <td>gt-md</td>
+ *      <td>(min-width: 1280px)</td>
+ *    </tr>
+ *    <tr>
+ *      <td>lg</td>
+ *      <td>(min-width: 1280px) and (max-width: 1919px)</td>
+ *    </tr>
+ *    <tr>
+ *      <td>gt-lg</td>
+ *      <td>(min-width: 1920px)</td>
+ *    </tr>
+ *    <tr>
+ *      <td>xl</td>
+ *      <td>(min-width: 1920px)</td>
+ *    </tr>
+ *    <tr>
+ *      <td>print</td>
+ *      <td>print</td>
+ *    </tr>
+ *    </tbody>
+ *  </table>
+ *
+ *  See Material Design's <a href="https://www.google.com/design/spec/layout/adaptive-ui.html">Layout - Adaptive UI</a> for more details.
+ *
+ *  <a href="https://www.google.com/design/spec/layout/adaptive-ui.html">
+ *  <img src="https://material-design.storage.googleapis.com/publish/material_v_4/material_ext_publish/0B8olV15J7abPSGFxemFiQVRtb1k/layout_adaptive_breakpoints_01.png" width="100%" height="100%"></img>
+ *  </a>
  *
  * @returns {boolean} a boolean representing whether or not the given media query is true or false.
  *
@@ -28,6 +84,7 @@ angular.module('material.core')
  *   $scope.anotherCustom = $mdMedia('max-width: 300px');
  * });
  * </hljs>
+ * @ngInject
  */
 
 function mdMediaFactory($mdConstant, $rootScope, $window) {
@@ -62,7 +119,11 @@ function mdMediaFactory($mdConstant, $rootScope, $window) {
   }
 
   function add(query) {
-    var result = mqls[query] = $window.matchMedia(query);
+    var result = mqls[query];
+    if ( !result ) {
+      result = mqls[query] = $window.matchMedia(query);
+    }
+
     result.addListener(onQueryChange);
     return (results[result.media] = !!result.matches);
   }
@@ -98,18 +159,17 @@ function mdMediaFactory($mdConstant, $rootScope, $window) {
     var unwatchFns = [];
     attrNames.forEach(function(attrName) {
       var normalizedName = getNormalizedName(attrs, attrName);
-      if (attrs[normalizedName]) {
+      if (angular.isDefined(attrs[normalizedName])) {
         unwatchFns.push(
             attrs.$observe(normalizedName, angular.bind(void 0, watchFn, null)));
       }
 
       for (var mediaName in $mdConstant.MEDIA) {
         normalizedName = getNormalizedName(attrs, attrName + '-' + mediaName);
-        if (!attrs[normalizedName]) {
-          return;
+        if (angular.isDefined(attrs[normalizedName])) {
+          unwatchFns.push(
+              attrs.$observe(normalizedName, angular.bind(void 0, watchFn, mediaName)));
         }
-
-        unwatchFns.push(attrs.$observe(normalizedName, angular.bind(void 0, watchFn, mediaName)));
       }
     });
 

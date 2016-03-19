@@ -33,7 +33,7 @@ exports.task = function() {
       .pipe(through2.obj(function(demo, enc, next) {
         fs.writeFileSync(
             path.resolve(BUILD_MODE.outputDir, name, demo.name, 'index.html'),
-            _.template(demoIndexTemplate, demo)
+            _.template(demoIndexTemplate)(demo)
         );
         next();
       }));
