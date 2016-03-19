@@ -1,6 +1,7 @@
 
 describe('mdCheckbox', function() {
   var CHECKED_CSS = 'md-checked';
+  var INDETERMINATE_CSS = 'md-indeterminate';
   var $compile, $log, pageScope, $mdConstant;
 
   beforeEach(module('ngAria', 'material.components.checkbox'));
@@ -245,6 +246,56 @@ describe('mdCheckbox', function() {
       checkbox.triggerHandler('click');
       expect(isChecked(checkbox)).toBe(false);
       expect(checkbox.hasClass('ng-invalid')).toBe(true);
+    });
+
+    describe('with the md-indeterminate attribute', function() {
+
+      it('should set md-indeterminate attr to true by default', function() {
+        var checkbox = compileAndLink('<md-checkbox md-indeterminate></md-checkbox>');
+
+        expect(checkbox).toHaveClass(INDETERMINATE_CSS);
+      });
+
+      it('should be set "md-indeterminate" class according to a passed in function', function() {
+        pageScope.isIndeterminate = function() { return true; };
+
+        var checkbox = compileAndLink('<md-checkbox md-indeterminate="isIndeterminate()"></md-checkbox>');
+
+        expect(checkbox).toHaveClass(INDETERMINATE_CSS);
+      });
+
+      it('should set aria-checked attr to "mixed"', function() {
+        var checkbox = compileAndLink('<md-checkbox md-indeterminate></md-checkbox>');
+
+        expect(checkbox.attr('aria-checked')).toEqual('mixed');
+      });
+
+      it('should never have both the "md-indeterminate" and "md-checked" classes at the same time', function() {
+        pageScope.isChecked = function() { return true; };
+
+        var checkbox = compileAndLink('<md-checkbox md-indeterminate ng-checked="isChecked()"></md-checkbox>');
+
+        expect(checkbox).toHaveClass(INDETERMINATE_CSS);
+        expect(checkbox).not.toHaveClass(CHECKED_CSS);
+      });
+
+      it('should change from the indeterminate to checked state correctly', function() {
+        var checked = false;
+        pageScope.isChecked = function() { return checked; };
+        pageScope.isIndet = function() { return !checked; };
+
+        var checkbox = compileAndLink('<md-checkbox md-indeterminate="isIndet()" ng-checked="isChecked()"></md-checkbox>');
+
+        expect(checkbox).toHaveClass(INDETERMINATE_CSS);
+        expect(checkbox).not.toHaveClass(CHECKED_CSS);
+
+        checked = true;
+        pageScope.$apply();
+
+        expect(checkbox).not.toHaveClass(INDETERMINATE_CSS);
+        expect(checkbox).toHaveClass(CHECKED_CSS);
+      });
+
     });
   });
 });
