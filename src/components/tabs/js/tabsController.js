@@ -320,7 +320,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
         i, tab;
     for (i = 0; i < elements.tabs.length; i++) {
       tab = elements.tabs[ i ];
-      if (tab.offsetLeft + tab.offsetWidth > totalWidth) break;
+      if (tab.offsetLeft > ctrl.offsetLeft && tab.offsetLeft + tab.offsetWidth > totalWidth) break;
     }
     ctrl.offsetLeft = fixOffset(tab.offsetLeft);
   }
@@ -329,12 +329,20 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    * Slides the tabs over approximately one page backward.
    */
   function previousPage () {
-    var i, tab;
+    var i, tab, newOffset;
     for (i = 0; i < elements.tabs.length; i++) {
       tab = elements.tabs[ i ];
       if (tab.offsetLeft + tab.offsetWidth >= ctrl.offsetLeft) break;
     }
-    ctrl.offsetLeft = fixOffset(tab.offsetLeft + tab.offsetWidth - elements.canvas.clientWidth);
+
+    // if the first tab to show is bigger than the client width, move viewport canvas to the start of the tab
+    if(tab.offsetWidth > elements.canvas.clientWidth) {
+      newOffset = tab.offsetLeft;
+    } else {
+      newOffset = tab.offsetLeft + tab.offsetWidth - elements.canvas.clientWidth;
+    }
+
+    ctrl.offsetLeft = fixOffset(newOffset);
   }
 
   /**
