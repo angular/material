@@ -768,9 +768,12 @@ function ngMessageAnimation($animateCss) {
   return {
     enter: function(element, done) {
       var messages = getMessagesElement(element);
+      var input = getInputElement(element);
 
-      // If we have the md-auto-hide class, the md-input-invalid animation will fire, so we can skip
-      if (messages.hasClass('md-auto-hide')) {
+      // If we have the md-auto-hide class and input is not invalid, we have to skip animation.
+      // Otherwise, we have to fire animation to show message, because md-input-invalid animation does not fire
+      // when the input remains invalid during the change of message.
+      if (messages.hasClass('md-auto-hide') && !input.hasClass('md-input-invalid')) {
         done();
         return;
       }
