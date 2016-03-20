@@ -33,9 +33,9 @@ $list-item-dense-two-line-height: 15 * $dense-baseline-grid !default;
 $list-item-dense-three-line-height: 19 * $dense-baseline-grid !default;
 $list-item-dense-primary-icon-width: $dense-baseline-grid * 5 !default;
 $list-item-dense-primary-avatar-width: $dense-baseline-grid * 9 !default;
-$list-item-dense-header-font-size: 1.3rem !default;
-$list-item-dense-font-size: 1.2rem !default;
-$list-item-dense-line-height: 1.25rem !default;
+$list-item-dense-header-font-size: round($subhead-font-size-base * 0.8) !default;
+$list-item-dense-font-size: round($body-font-size-base * 0.85) !default;
+$list-item-dense-line-height: 1.05 !default;
 
 // This is a mixin, which fixes IE11's vertical alignment issue, when using `min-height`.
 // This mixin isn't that much generic to be used in other cases.
@@ -95,17 +95,15 @@ md-list {
               @include rtl-prop(margin-left, margin-right, $list-item-primary-width);
             }
 
+            h3,
+            h4,
+            p {
+              line-height: $list-item-dense-line-height;
+              font-size: $list-item-dense-font-size;
+            }
+
             h3 {
               font-size: $list-item-dense-header-font-size;
-              line-height: $list-item-dense-header-font-size;
-            }
-            h4 {
-              font-size: $list-item-dense-font-size;
-              line-height: $list-item-dense-font-size;
-            }
-            p {
-              font-size: $list-item-dense-font-size;
-              line-height: $list-item-dense-line-height;
             }
           }
         }
