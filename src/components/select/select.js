@@ -118,7 +118,9 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
     restrict: 'E',
     require: ['^?mdInputContainer', 'mdSelect', 'ngModel', '?^form'],
     compile: compile,
-    controller: function() {
+    controller: function($scope) {
+      $scope.checkAll=false; // Select all binding
+      $scope.checkClass='';  // toggle class for the check box     
     } // empty placeholder controller to be initialized in link
   };
 
@@ -155,6 +157,19 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         .find('md-option')
         .attr('ng-show', '$$loadingAsyncDone');
     }
+
+   // add the select all option
+
+    var showCheckAll = angular.isDefined(attr.selectAll)?true:false;
+
+    if(showCheckAll){
+      element.find('md-content')
+      .prepend(angular.element('<div class="ng-scope md-ink-ripple" tabindex="0" aria-selected="false" id="chk_all" style="border-bottom: solid 1px lightgrey;" ng-click="checkAll = !checkAll">'+
+        '<div class="md-text ng-binding" style="text-align:right;margin-top:15px;margin-right:0px;cursor:pointer">Check All  <md-checkbox ng-class="checkClass" class="md-primary" ng-model="checkall" aria-label="check all"></md-checkbox></div></div>'))
+      ;
+    }
+
+    // end of adding the select all
 
     if (attr.name) {
       var autofillClone = angular.element('<select class="_md-visually-hidden">');
@@ -555,6 +570,37 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
     // and values matching every option's controller.
     self.options = {};
 
+    // Watching the checkAll binding 
+    var isSelectAll = $element.parent().parent()[0].attributes['select-all']?true:false;
+
+    if(isSelectAll){
+      $element[0].setAttribute('select-all','');
+    }
+
+    $scope.$watch('checkAll',function(nv,ov){
+        var values = [];
+        if(nv){
+          angular.forEach(self.options,function(key,value){
+            key && key.setSelected(true);
+            self.selected[key] = value;
+            values.push(value);
+          });
+          $scope.checkClass='md-checked';
+        }else{
+          angular.forEach(self.options,function(key,value){
+            key && key.setSelected(false);
+            delete self.selected[key];
+          });
+          values=[];
+          $scope.checkClass='';
+        }
+
+        self.ngModel.$setViewValue(values);
+        self.ngModel.$render();
+    });
+
+    //--
+
     $scope.$watchCollection(function() {
       return self.options;
     }, function() {
@@ -660,7 +706,12 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
           // Map the given element to its innerHTML string. If the element has a child ripple
           // container remove it from the HTML string, before returning the string.
           mapFn = function(el) {
-            var html = el.innerHTML;
+            // check if its the select all kind if so then just get only
+            // the text 
+            if(isSelectAll)
+              var html = angular.element(el).text();
+            else
+              var html = el.innerHTML;
             // Remove the ripple container from the selected option, copying it would cause a CSP violation.
             var rippleContainer = el.querySelector('.md-ripple-container');
             return rippleContainer ? html.replace(rippleContainer.outerHTML, '') : html;
@@ -668,7 +719,13 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
         } else if (mode == 'aria') {
           mapFn = function(el) { return el.hasAttribute('aria-label') ? el.getAttribute('aria-label') : el.textContent; };
         }
-        return selectedOptionEls.map(mapFn).join(', ');
+        // check if the selected length is greater than 1
+        // wrap to show + n more. 
+        if (selectedOptionEls.map(mapFn).length > 1 && isSelectAll){
+          return selectedOptionEls.map(mapFn)[0]+" [+ "+(selectedOptionEls.map(mapFn).length-1)+" more ]";
+        }
+        else        
+          return selectedOptionEls.map(mapFn).join(', ');
       } else {
         return '';
       }
@@ -768,7 +825,11 @@ function OptionDirective($mdButtonInkRipple, $mdUtil) {
 
   function compile(element, attr) {
     // Manual transclusion to avoid the extra inner <span> that ng-transclude generates
-    element.append(angular.element('<div class="_md-text">').append(element.contents()));
+    // Adding the check box to all the md options. This would not be visible if the md options
+    // does not have the select-all attribute. it would then look normal options. 
+    var showCheckBox = angular.isDefined(attr.selectAll)?true:false;
+    var cbox = '<md-checkbox aria-label="check" class="md-primary" style="position:absolute;right:0;" ng-model="isChecked"></md-checkbox>';
+    element.append(angular.element('<div class="md-text">').append(element.contents()).append(showCheckBox?cbox:''));
 
     element.attr('tabindex', attr.tabindex || '0');
     return postLink;
