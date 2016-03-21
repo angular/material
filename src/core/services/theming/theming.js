@@ -109,7 +109,7 @@ var DARK_DEFAULT_HUES = {
     'default': 'A400',
     'hue-1': '800',
     'hue-2': '900',
-    'hue-3': '1000'
+    'hue-3': 'A200'
   }
 };
 THEME_COLOR_TYPES.forEach(function(colorType) {

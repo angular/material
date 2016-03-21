@@ -2,23 +2,23 @@ md-menu-content.md-THEME_NAME-theme {
   background-color: '{{background-A100}}';
 
   md-menu-item {
-    color: '{{background-1000-0.87}}';
+    color: '{{background-A200-0.87}}';
 
     md-icon {
-      color: '{{background-1000-0.54}}';
+      color: '{{background-A200-0.54}}';
     }
 
     .md-button[disabled] {
-      color: '{{background-1000-0.25}}';
+      color: '{{background-A200-0.25}}';
 
       md-icon {
-        color: '{{background-1000-0.25}}';
+        color: '{{background-A200-0.25}}';
       }
     }
 
   }
 
   md-menu-divider {
-    background-color: '{{background-1000-0.11}}';
+    background-color: '{{background-A200-0.11}}';
   }
 }

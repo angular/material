@@ -23,7 +23,7 @@ md-menu-bar.md-THEME_NAME-theme {
 
 md-menu-content.md-THEME_NAME-theme {
   .md-menu > .md-button:after {
-    color: '{{background-1000-0.54}}';
+    color: '{{background-A200-0.54}}';
   }
 
   .md-menu._md-open > .md-button {
@@ -33,7 +33,7 @@ md-menu-content.md-THEME_NAME-theme {
 
 md-toolbar.md-THEME_NAME-theme.md-menu-toolbar {
   background-color: '{{background-A100}}';
-  color: '{{background-1000}}';
+  color: '{{background-A200}}';
   md-toolbar-filler {
     background-color: '{{primary-color}}';
     color: '{{background-A100-0.87}}';
