@@ -119,7 +119,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
     require: ['^?mdInputContainer', 'mdSelect', 'ngModel', '?^form'],
     compile: compile,
     controller: function($scope) {
-      $scope.checkAll=false; // Select all binding
+      $scope.checkAll = false; // Select all binding
       $scope.checkClass='';  // toggle class for the check box     
     } // empty placeholder controller to be initialized in link
   };
