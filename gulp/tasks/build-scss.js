@@ -24,6 +24,7 @@ exports.task = function() {
       dest      = args['output-dir'] || config.outputDir,
       filename  = args['filename'] || 'angular-material',
       baseFiles = config.scssBaseFiles,
+      layoutDest= dest + 'layouts/',
       scssPipe  = undefined;
 
   gutil.log("Building css files...");
@@ -34,41 +35,60 @@ exports.task = function() {
       .pipe(util.filterNonCodeFiles())
       .pipe(filter(['**', '!**/*.css']))
       .pipe(filter(['**', '!**/*-theme.scss']))
-      .pipe(filter(['**', '!**/*-print.scss']))
       .pipe(filter(['**', '!**/*-attributes.scss']))
       .pipe(concat('angular-material.scss'))
-      .pipe(gulp.dest(dest))                            // raw uncompiled SCSSS
+      .pipe(gulp.dest(dest))            // raw uncompiled SCSS
+      .pipe(sass())
+      .pipe(util.autoprefix())
+      .pipe(insert.prepend(config.banner))
+      .pipe(addsrc.append(config.cssIEPaths))       // append raw CSS for IE Fixes
+      .pipe(gulp.dest(dest))                        // unminified
+      .pipe(gulpif(!IS_DEV, minifyCss()))
+      .pipe(rename({extname: '.min.css'}))
+      .pipe(gulp.dest(dest))                        // minified
   );
+
+  // Generate standalone SCSS (and CSS) file for Layouts API
+  // The use of these classnames is automated but requires
+  // the Javascript module module `material.core.layout`
+  //  > (see src/core/services/layout.js)
+  // NOTE: this generated css is ALSO appended to the published
+  //       angular-material.css file
 
   streams.push(
-    scssPipe
-          .pipe(sass())
-          .pipe(util.autoprefix())
-          .pipe(insert.prepend(config.banner))
-          .pipe(addsrc.append(config.cssIEPaths))       // append raw CSS for IE Fixes
-          .pipe(concat('angular-material.css'))
-          .pipe(gulp.dest(dest))                        // unminified
-          .pipe(gulpif(!IS_DEV, minifyCss()))
-          .pipe(rename({extname: '.min.css'}))
-          .pipe(gulp.dest(dest))                        // minified
+    gulp.src(config.scssLayoutFiles)
+        .pipe(concat('angular-material.layouts.scss'))
+        .pipe(sassUtils.hoistScssVariables())
+        .pipe(insert.prepend(config.banner))
+        .pipe(gulp.dest(layoutDest))      // raw uncompiled SCSS
+        .pipe(sass())
+        .pipe(util.autoprefix())
+        .pipe(rename({ extname : '.css'}))
+        .pipe(gulp.dest(layoutDest))
+        .pipe(gulpif(!IS_DEV, minifyCss()))
+        .pipe(rename({extname: '.min.css'}))
+        .pipe(gulp.dest(layoutDest))
   );
 
-  // Layout API using Attribute Selectors
-  // TO BE Deprecated...
+  // Generate the Layout-Attributes SCSS and CSS files
+  // These are intended to allow usages of the Layout styles
+  // without:
+  //  * use of the Layout directives and classnames, and
+  //  * Layout module `material.core.layout
 
   streams.push(
       gulp.src(config.scssLayoutAttributeFiles)
-          .pipe(concat('layouts.scss'))
+          .pipe(concat('angular-material.layout-attributes.scss'))
           .pipe(sassUtils.hoistScssVariables())
+          .pipe(gulp.dest(layoutDest))     // raw uncompiled SCSS
           .pipe(sass())
           .pipe(util.autoprefix())
           .pipe(rename({ extname : '.css'}))
-          .pipe(rename({ prefix  : 'angular-material.'}))
           .pipe(insert.prepend(config.banner))
-          .pipe(gulp.dest(dest))
+          .pipe(gulp.dest(layoutDest))
           .pipe(gulpif(!IS_DEV, minifyCss()))
           .pipe(rename({extname: '.min.css'}))
-          .pipe(gulp.dest(dest))
+          .pipe(gulp.dest(layoutDest))
   );
 
   return series(streams);
