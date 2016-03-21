@@ -31,6 +31,12 @@ module.exports = {
     'src/core/style/typography.scss',
     'src/core/style/layout.scss'
   ],
+  scssLayoutFiles: [
+    'src/core/style/variables.scss',
+    'src/core/style/mixins.scss',
+    'src/core/style/layout.scss',
+    'src/core/services/layout/layout.scss'
+  ],
   scssLayoutAttributeFiles: [
       'src/core/style/variables.scss',
       'src/core/style/mixins.scss',
