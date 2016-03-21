@@ -6,35 +6,51 @@ md-datepicker.md-THEME_NAME-theme {
 
 .md-THEME_NAME-theme {
 
-  .md-datepicker-input {
-    @include input-placeholder-color('\'{{foreground-3}}\'');
-    color: '{{foreground-1}}';
-    background: '{{background-color}}';
-  }
-
-  .md-datepicker-input-container {
-    border-bottom-color: '{{background-300}}';
-
-    &.md-datepicker-focused {
-      border-bottom-color: '{{primary-500}}'
+//  .md-datepicker-input {
+//    @include input-placeholder-color('\'{{foreground-3}}\'');
+//    color: '{{foreground-1}}';
+//    background: '{{background-color}}';
+//  }
+//
+//  .md-datepicker-input-container {
+//    border-bottom-color: '{{background-300}}';
+//
+//    &.md-datepicker-focused {
+//      border-bottom-color: '{{primary-500}}'
+//    }
+//
+//    &.md-datepicker-invalid {
+//      border-bottom-color: '{{warn-A700}}';
+//    }
+//  }
+  md-datepicker {
+    md-input-container {
+      &.md-datepicker-invalid {
+        .md-input {
+          border-bottom-color: '{{warn-A700}}';
+        }
+      }
     }
-
-    &.md-datepicker-invalid {
-      border-bottom-color: '{{warn-A700}}';
-    }
   }
-
   .md-datepicker-calendar-pane {
     border-color: '{{background-hue-1}}';
   }
 
-  .md-datepicker-triangle-button {
-    .md-datepicker-expand-triangle {
-      border-top-color: '{{foreground-3}}';
-    }
-
-    &:hover .md-datepicker-expand-triangle {
-      border-top-color: '{{foreground-2}}';
+//  .md-datepicker-triangle-button {
+//    .md-datepicker-expand-triangle {
+//      border-top-color: '{{foreground-3}}';
+//    }
+//
+//    &:hover .md-datepicker-expand-triangle {
+//      border-top-color: '{{foreground-2}}';
+//    }
+//  }
+  span {
+    &.md-datepicker-triangle {
+      color: '{{ foreground-3 }}';
+      &::after {
+        color: '{{ foreground-3 }}';
+      }
     }
   }
 
