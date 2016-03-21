@@ -257,7 +257,7 @@ function InterimElementProvider() {
        * A service used to control inserting and removing an element into the DOM.
        *
        */
-      var service, stack = [];
+      var service, stack = [], hideQueue = 0;
 
       // Publish instance $$interimElement service;
       // ... used as $mdDialog, $mdToast, $mdMenu, and $mdSelect
@@ -291,6 +291,10 @@ function InterimElementProvider() {
         // This hide()s only the current interim element before showing the next, new one
         // NOTE: this is not reversible (e.g. interim elements are not stackable)
 
+        if (!hideExisting) {
+          return $q.reject('Too many interim elements in queue!');
+        }
+
         hideExisting.finally(function() {
 
           stack.push(interimElement);
@@ -323,28 +327,41 @@ function InterimElementProvider() {
        */
       function hide(reason, options) {
         if ( !stack.length ) return $q.when(reason);
+        if (stack.length - 1 - hideQueue < 0) return;
         options = options || {};
 
         if (options.closeAll) {
-          var promise = $q.all(stack.reverse().map(closeElement));
-          stack = [];
-          return promise;
-        } else if (options.closeTo !== undefined) {
-          return $q.all(stack.splice(options.closeTo).map(closeElement));
-        } else {
-          var interim = stack.pop();
-          return closeElement(interim);
+          return $q.all(stack.reverse().map(closeElement));
         }
 
+        if (options.closeTo) {
+          return $q.all(stack.slice(options.closeTo).map(closeElement));
+        }
+
+        // Poll the first added interim element, which isn't currently hiding.
+        return closeElement(stack[stack.length - 1 - hideQueue]);
+
         function closeElement(interim) {
+          hideQueue++;
           interim
             .remove(reason, false, options || { })
             .catch(function( reason ) {
               //$log.error("InterimElement.hide() error: " + reason );
               return reason;
+            })
+            .finally(function() {
+              handleElementHide(interim);
             });
           return interim.deferred.promise;
         }
+      }
+
+      function handleElementHide(element) {
+        var index = stack.indexOf(element);
+        if (index != -1) {
+          stack.splice(index, 1);
+        }
+        hideQueue--;
       }
 
       /*
@@ -363,11 +380,15 @@ function InterimElementProvider() {
         var interim = stack.pop();
         if ( !interim ) return $q.when(reason);
 
+        hideQueue++;
         interim
           .remove(reason, true, options || { })
           .catch(function( reason ) {
             //$log.error("InterimElement.cancel() error: " + reason );
             return reason;
+          })
+          .finally(function() {
+            hideQueue--;
           });
 
         return interim.deferred.promise;
@@ -378,7 +399,7 @@ function InterimElementProvider() {
        * Note: interim elements are in "interim containers"
        */
       function destroy(target) {
-        var interim = !target ? stack.shift() : null;
+        var interim = !target ? stack.splice(hideQueue, 1)[0] : null;
         var cntr = angular.element(target).length ? angular.element(target)[0].parentNode : null;
 
         if (cntr) {
