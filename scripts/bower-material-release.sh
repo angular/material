@@ -24,8 +24,9 @@ function run {
   cp -Rf dist/* bower-material/
 
   cd bower-material
-  del ./angular-material.layouts.css
-  del ./angular-material.layouts.min.css
+  # remove stale layout files; newer ones are in `dist/layouts/`
+  rm ./angular-material.layouts.css
+  rm ./angular-material.layouts.min.css
 
 
   echo "-- Committing and tagging..."
