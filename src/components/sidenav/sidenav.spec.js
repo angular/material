@@ -42,6 +42,24 @@ describe('mdSidenav', function() {
       expect($rootScope.show).toBe(false);
     }));
 
+    it('should not close on escape when escapeToClose is disabled',
+      inject(function($rootScope, $material, $mdConstant, $timeout) {
+        var el = setup('md-is-open="show" md-escape-to-close="false"');
+        $rootScope.$apply('show = true');
+
+        $material.flushOutstandingAnimations();
+
+        el.parent().triggerHandler({
+          type: 'keydown',
+          keyCode: $mdConstant.KEY_CODE.ESCAPE
+        });
+
+        $timeout.flush();
+
+        expect($rootScope.show).toBe(true);
+      })
+    );
+
     it('should close on backdrop click', inject(function($rootScope, $material, $timeout) {
       var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
@@ -52,18 +70,18 @@ describe('mdSidenav', function() {
       expect($rootScope.show).toBe(false);
     }));
 
-    it('should show no backdrop if disabled', inject(function($rootScope, $material, $timeout) {
-      var el = setup('md-disable-backdrop="true"');
+    it('should show backdrop if md-disable-backdrop="false"', inject(function($rootScope, $material) {
+      var el = setup('md-is-open="show" md-disable-backdrop="false"');
       $rootScope.$apply('show = true');
 
       $material.flushOutstandingAnimations();
 
       var backdrop = el.parent().find('md-backdrop');
-      expect(backdrop.length).toBe(0);
+      expect(backdrop.length).toBe(1);
     }));
 
-    it('should show no backdrop if disabled', inject(function($rootScope, $material, $timeout) {
-      var el = setup('md-disable-backdrop');
+    it('should not show a backdrop if md-disable-backdrop is set', inject(function($rootScope, $material) {
+      var el = setup('md-is-open="show" md-disable-backdrop');
       $rootScope.$apply('show = true');
 
       $material.flushOutstandingAnimations();
