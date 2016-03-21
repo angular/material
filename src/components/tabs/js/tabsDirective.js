@@ -191,7 +191,7 @@ function MdTabs () {
                 'md-tabs-template="::tab.template" ' +
                 'md-connected-if="tab.isActive()" ' +
                 'md-scope="::tab.parent" ' +
-                'ng-if="$mdTabsCtrl.enableDisconnect || tab.shouldRender()"></div> ' +
+                'ng-if="!$mdTabsCtrl.enableDisconnect || tab.shouldRender()"></div> ' +
           '</md-tab-content> ' +
         '</md-tabs-content-wrapper>';
     },
