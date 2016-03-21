@@ -2,7 +2,7 @@
 
 .md-calendar.md-THEME_NAME-theme {
   background: '{{background-A100}}';
-  color: '{{background-1000-0.87}}';
+  color: '{{background-A200-0.87}}';
 
   tr:last-child td {
     border-bottom-color: '{{background-200}}';
@@ -11,7 +11,7 @@
 .md-THEME_NAME-theme {
   .md-calendar-day-header {
     background: '{{background-300}}';
-    color: '{{background-1000-0.87}}';
+    color: '{{background-A200-0.87}}';
   }
 
   .md-calendar-date.md-calendar-date-today {
