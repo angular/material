@@ -20,9 +20,13 @@ function run {
     bower-material --depth=2
 
   echo "-- Copying in build files..."
+
   cp -Rf dist/* bower-material/
 
   cd bower-material
+  del ./angular-material.layouts.css
+  del ./angular-material.layouts.min.css
+
 
   echo "-- Committing and tagging..."
   replaceJsonProp "bower.json" "version" "$VERSION"
