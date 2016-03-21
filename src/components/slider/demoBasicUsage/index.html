@@ -72,5 +72,28 @@
     <md-slider ng-model="disabled2" ng-disabled="true" step="3" md-discrete min="0" max="10" aria-label="Disabled discrete 2"></md-slider>
     <md-slider ng-model="disabled3" ng-disabled="true" step="10" md-discrete aria-label="Disabled discrete 3" ng-readonly="readonly"></md-slider>
     <md-checkbox ng-model="readonly">Read only</md-checkbox>
+
+    <h3>Invert</h3>
+    <md-slider-container>
+      <div flex="10" layout layout-align="center center">
+        <span class="md-body-1">Regular</span>
+      </div>
+      <md-slider ng-model="invert" min="0" max="100" aria-label="regular slider"></md-slider>
+
+      <md-input-container>
+        <input flex type="number" ng-model="invert" aria-label="regular-slider">
+      </md-input-container>
+    </md-slider-container>
+    <md-slider-container>
+      <div flex="10" layout layout-align="center center">
+        <span class="md-body-1">Invert</span>
+      </div>
+      <md-slider md-invert ng-model="invert" min="0" max="100" aria-label="invertd slider"></md-slider>
+
+      <md-input-container>
+        <input flex type="number" ng-model="invert" aria-label="invert-slider">
+      </md-input-container>
+    </md-slider-container>
+
   </md-content>
 </div>

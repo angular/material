@@ -20,5 +20,7 @@ angular.module('sliderDemo1', ['ngMaterial'])
   $scope.disabled2 = 0;
   $scope.disabled3 = 70;
 
+  $scope.invert = Math.floor(Math.random() * 100);
+
   $scope.isDisabled = true;
 });

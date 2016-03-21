@@ -425,6 +425,18 @@ md-slider {
       }
     }
   }
+  &[md-invert] {
+    &:not([md-vertical]) ._md-track-fill {
+      left: auto;
+      right: 0;
+    }
+    &[md-vertical] {
+      ._md-track-fill {
+        bottom: auto;
+        top: 0;
+      }
+    }
+  }
 }
 
 md-slider-container {
