@@ -33,6 +33,8 @@
       </md-input-container>
     </md-slider-container>
 
+    <div style="margin-top: 50px;"></div>
+
     <h3>Rating: {{rating}}/5 - demo of theming classes</h3>
     <div layout>
       <div flex="10" layout layout-align="center center">
@@ -56,6 +58,8 @@
       </md-slider>
     </div>
 
+    <div style="margin-top: 50px;"></div>
+
     <h3>Disabled</h3>
     <md-slider-container ng-disabled="isDisabled">
       <md-icon md-svg-icon="device:brightness-low"></md-icon>
@@ -68,9 +72,35 @@
     <md-checkbox ng-model="isDisabled">Is disabled</md-checkbox>
     <md-slider ng-model="disabled2" ng-disabled="true" aria-label="Disabled 2"></md-slider>
 
+    <div style="margin-top: 50px;"></div>
+
     <h3>Disabled, Discrete, Read Only</h3>
     <md-slider ng-model="disabled2" ng-disabled="true" step="3" md-discrete min="0" max="10" aria-label="Disabled discrete 2"></md-slider>
     <md-slider ng-model="disabled3" ng-disabled="true" step="10" md-discrete aria-label="Disabled discrete 3" ng-readonly="readonly"></md-slider>
     <md-checkbox ng-model="readonly">Read only</md-checkbox>
+
+    <div style="margin-top: 50px;"></div>
+    <h3>Invert</h3>
+    <md-slider-container>
+      <div flex="10" layout layout-align="center center">
+        <span class="md-body-1">Regular</span>
+      </div>
+      <md-slider ng-model="invert" min="0" max="100" aria-label="regular slider"></md-slider>
+
+      <md-input-container>
+        <input flex type="number" ng-model="invert" aria-label="regular-slider">
+      </md-input-container>
+    </md-slider-container>
+    <md-slider-container>
+      <div flex="10" layout layout-align="center center">
+        <span class="md-body-1">Invert</span>
+      </div>
+      <md-slider md-invert ng-model="invert" min="0" max="100" aria-label="invertd slider"></md-slider>
+
+      <md-input-container>
+        <input flex type="number" ng-model="invert" aria-label="invert-slider">
+      </md-input-container>
+    </md-slider-container>
+
   </md-content>
 </div>

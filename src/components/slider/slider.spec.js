@@ -553,6 +553,232 @@ describe('md-slider', function() {
     }));
 
   });
+
+  describe('invert', function () {
+    it('should set model on press', function() {
+      var slider = setup('md-vertical md-invert ng-model="value" min="0" max="100"');
+      pageScope.$apply('value = 50');
+
+      var wrapper = getWrapper(slider);
+
+      wrapper.triggerHandler({type: '$md.pressdown', pointer: { y: 70 }});
+      wrapper.triggerHandler({type: '$md.dragstart', pointer: { y: 70 }});
+      $timeout.flush();
+      expect(pageScope.value).toBe(70);
+
+      // When going past max, it should clamp to max.
+      wrapper.triggerHandler({type: '$md.drag', pointer: { y: 0 }});
+      $timeout.flush();
+      expect(pageScope.value).toBe(0);
+
+      wrapper.triggerHandler({type: '$md.drag', pointer: { y: 50 }});
+      $timeout.flush();
+      expect(pageScope.value).toBe(50);
+    });
+
+    it('should decrement model on up arrow', function() {
+      var slider = setup('md-vertical md-invert min="100" max="104" step="2" ng-model="model"');
+      pageScope.$apply('model = 104');
+
+      var wrapper = getWrapper(slider);
+
+      wrapper.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.UP_ARROW
+      });
+      $timeout.flush();
+      expect(pageScope.model).toBe(102);
+
+      wrapper.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.UP_ARROW
+      });
+      $timeout.flush();
+      expect(pageScope.model).toBe(100);
+
+      // Stays at min.
+      wrapper.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.UP_ARROW
+      });
+      $timeout.flush();
+      expect(pageScope.model).toBe(100);
+
+    });
+
+    it('should increment model on down arrow', function() {
+      var slider = setup('md-vertical md-invert min="100" max="104" step="2" ng-model="model"');
+      pageScope.$apply('model = 100');
+
+      var wrapper = getWrapper(slider);
+
+      wrapper.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
+      });
+      $timeout.flush();
+      expect(pageScope.model).toBe(102);
+
+      wrapper.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
+      });
+      $timeout.flush();
+      expect(pageScope.model).toBe(104);
+
+      // Stays at max.
+      wrapper.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
+      });
+      $timeout.flush();
+      expect(pageScope.model).toBe(104);
+    });
+
+    it('should update the thumb text', function() {
+      var slider = setup('md-vertical md-invert ng-model="value" md-discrete min="0" max="100" step="1"');
+      var wrapper = getWrapper(slider);
+
+      pageScope.$apply('value = 30');
+      expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('30');
+
+      wrapper.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
+      });
+      $timeout.flush();
+      expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('31');
+
+      wrapper.triggerHandler({type: '$md.pressdown', pointer: { y: 70 }});
+      expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('70');
+
+      wrapper.triggerHandler({type: '$md.dragstart', pointer: { y: 93 }});
+      wrapper.triggerHandler({type: '$md.drag', pointer: { y: 93 }});
+      expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('93');
+    });
+
+    it('should add _md-min class only when at min value', function() {
+      var slider = setup('md-vertical md-invert ng-model="model" min="0" max="30"');
+      var wrapper = getWrapper(slider);
+
+      pageScope.$apply('model = 0');
+      expect(slider).toHaveClass('_md-min');
+
+      wrapper.triggerHandler({type: '$md.dragstart', pointer: {y: 0}});
+      wrapper.triggerHandler({type: '$md.drag', pointer: {y: 10}});
+      $timeout.flush();
+      expect(slider).not.toHaveClass('_md-min');
+    });
+
+    it('should add _md-max class only when at max value', function() {
+      var slider = setup('md-vertical md-invert ng-model="model" min="0" max="30"');
+      var wrapper = getWrapper(slider);
+
+      pageScope.$apply('model = 30');
+      expect(slider).toHaveClass('_md-max');
+
+      wrapper.triggerHandler({type: '$md.dragstart', pointer: {y: 30}});
+      wrapper.triggerHandler({type: '$md.drag', pointer: {y: 10}});
+      $timeout.flush();
+      expect(slider).not.toHaveClass('_md-max');
+    });
+
+    it('should increment at a predictable step', function() {
+
+      buildSlider(0.1, 0, 1).drag({y:30});
+      expect(pageScope.value).toBe(0.3);
+
+      buildSlider(0.25, 0, 1).drag({y:45});
+      expect(pageScope.value).toBe(0.5);
+
+      buildSlider(0.25, 0, 1).drag({y:75});
+      expect(pageScope.value).toBe(0.75);
+
+      buildSlider(1, 0, 100).drag({y:10});
+      expect(pageScope.value).toBe(10);
+
+      buildSlider(20, 5, 45).drag({y:50});
+      expect(pageScope.value).toBe(25);
+
+      function buildSlider(step, min, max) {
+        var slider = setup('md-vertical md-invert ng-model="value" min="' + min + '" max="' + max + '" step="' + step + '"');
+        pageScope.$apply('value = 0.5');
+
+        var wrapper = getWrapper(slider);
+
+        return {
+          drag : function simulateDrag(drag) {
+
+            wrapper.triggerHandler({type: '$md.pressdown', pointer: drag });
+            wrapper.triggerHandler({type: '$md.dragstart', pointer: drag });
+
+            $timeout.flush();
+          }
+        };
+      }
+
+    });
+
+    it('should increment model on left arrow', function() {
+      var slider = setup('md-invert min="100" max="104" step="2" ng-model="model"');
+      pageScope.$apply('model = 100');
+
+      var wrapper = getWrapper(slider);
+
+      wrapper.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
+      });
+      $timeout.flush();
+      expect(pageScope.model).toBe(102);
+
+      wrapper.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
+      });
+      $timeout.flush();
+      expect(pageScope.model).toBe(104);
+
+      // Stays at max.
+      wrapper.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
+      });
+      $timeout.flush();
+      expect(pageScope.model).toBe(104);
+    });
+
+    it('should decrement model on right arrow', function() {
+      var slider = setup('md-invert min="100" max="104" step="2" ng-model="model"');
+      pageScope.$apply('model = 104');
+
+      var wrapper = getWrapper(slider);
+
+      wrapper.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
+      });
+      $timeout.flush();
+      expect(pageScope.model).toBe(102);
+
+      wrapper.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
+      });
+      $timeout.flush();
+      expect(pageScope.model).toBe(100);
+
+      // Stays at min.
+      wrapper.triggerHandler({
+        type: 'keydown',
+        keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
+      });
+      $timeout.flush();
+      expect(pageScope.model).toBe(100);
+    });
+
+  });
+
   
   it('should set a default tabindex', function() {
     var slider = setup();
