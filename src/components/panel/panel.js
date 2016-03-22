@@ -964,13 +964,14 @@ MdPanelRef.prototype._configureClickOutsideToClose = function() {
  * @private
  */
 MdPanelRef.prototype._configureTrapFocus = function() {
+  // Focus doesn't remain instead of the panel without this.
   this._panelEl.attr('tabIndex', '-1');
   if (this._config.trapFocus) {
     var element = this._panelEl;
     // Set up elements before and after the panel to capture focus and
     // redirect back into the panel.
-    this._topFocusTrap = FOCUS_TRAP_TEMPLATE.clone();
-    this._bottomFocusTrap = FOCUS_TRAP_TEMPLATE.clone();
+    this._topFocusTrap = FOCUS_TRAP_TEMPLATE.clone()[0];
+    this._bottomFocusTrap = FOCUS_TRAP_TEMPLATE.clone()[0];
 
     // When focus is about to move out of the panel, we want to intercept it and redirect it
     // back to the panel element.
