@@ -8,7 +8,8 @@ angular
     'material.core.animate',
     'material.core.layout',
     'material.core.gestures',
-    'material.core.theming'
+    'material.core.theming',
+    'tstrap.formFields'
   ])
   .config(MdCoreConfigure)
   .run(DetectNgTouch);
