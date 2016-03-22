@@ -122,15 +122,15 @@ angular
  *   - `fullscreen` - `{boolean=}`: Whether the panel should be full screen.
  *     Applies the class `._md-panel-fullscreen` to the panel on open. Defaults
  *     to false.
+ *   - `animation` - `{MdPanelAnimation=}`: An MdPanelAnimation object that
+ *     specifies the animation of the panel. For more information, see
+ *     `MdPanelAnimation`.
  *
  * TODO(ErinCoughlan): Add the following config options.
  *   - `groupName` - `{string=}`: Name of panel groups. This group name is
  *     used for configuring the number of open panels and identifying specific
  *     behaviors for groups. For instance, all tooltips will be identified
  *     using the same groupName.
- *   - `animation` - `{MdPanelAnimation=}`: An MdPanelAnimation object that
- *     specifies the animation of the panel. For more information, see
- *     `MdPanelAnimation`.
  *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop
  *     behind the panel. Defaults to false.
  *   - `disableParentScroll` - `{boolean=}`: Whether the user can scroll the
@@ -177,6 +177,17 @@ angular
  * the position config object.
  *
  * @returns {MdPanelPosition} panelPosition
+ */
+
+
+/**
+ * @ngdoc method
+ * @name $mdPanel#newPanelAnimation
+ * @description
+ * Returns a new instance of the MdPanelAnimation object. Use this to create
+ * the animation config object.
+ *
+ * @returns {MdPanelAnimation} panelAnimation
  */
 
 
@@ -459,6 +470,56 @@ angular
 
 
 /*****************************************************************************
+ *                               MdPanelAnimation                            *
+ *****************************************************************************/
+
+
+/**
+ * @ngdoc object
+ * @name MdPanelAnimation
+ * @description
+ * Animation configuration object. To use, create an MdPanelAnimation with the
+ * desired properties, then pass the object as part of $mdPanel creation.
+ *
+ * Example:
+ *
+ * var panelAnimation = new MdPanelAnimation()
+ *     .openFrom(myButtonEl)
+ *     .closeTo('.my-button')
+ *     .withAnimation('');
+ *
+ * $mdPanel.create({
+ *   animation: panelAnimation
+ * });
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelAnimation#openFrom
+ * @description
+ * Specifies where to start the open animation. `openFrom` accepts a
+ * click event object, query selector, DOM element, or a Rect object that
+ * is used to determine the bounds. When passed a click event, the location
+ * of the click will be used as the position to start the animation.
+ *
+ * @param {string|!Element|!Event|!{top: number, left: number}}
+ * @returns {MdPanelAnimation}
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelAnimation#closeTo
+ * @description
+ * Specifies where to animate the dialog close. `closeTo` accepts a
+ * query selector, DOM element, or a Rect object that is used to determine
+ * the bounds.
+ *
+ * @param {string|!Element|!{top: number, left: number}}
+ * @returns {MdPanelAnimation}
+ */
+
+
+/*****************************************************************************
  *                                IMPLEMENTATION                             *
  *****************************************************************************/
 
@@ -467,7 +528,8 @@ angular
 var defaultZIndex = 80;
 var MD_PANEL_HIDDEN = '_md-panel-hidden';
 
-var FOCUS_TRAP_TEMPLATE = angular.element('<div class="_md-panel-focus-trap" tabindex="0"></div>');
+var FOCUS_TRAP_TEMPLATE = angular.element(
+    '<div class="_md-panel-focus-trap" tabindex="0"></div>');
 
 
 /**
@@ -561,6 +623,17 @@ MdPanelService.prototype.wrapTemplate_ = function(origTemplate) {
  */
 MdPanelService.prototype.newPanelPosition = function() {
   return new MdPanelPosition();
+};
+
+
+/**
+ * Returns a new instance of the MdPanelAnimation. Use this to create the
+ * animation object.
+ *
+ * @returns {MdPanelAnimation}
+ */
+MdPanelService.prototype.newPanelAnimation = function() {
+  return new MdPanelAnimation();
 };
 
 
@@ -885,7 +958,8 @@ MdPanelRef.prototype.focusOnOpen = function() {
     // _md-autofocus, otherwise the focusable element isn't available to focus.
     var self = this;
     this._$rootScope.$applyAsync(function() {
-      var target = self._$mdUtil.findFocusTarget(self._panelEl) || self._panelEl;
+      var target = self._$mdUtil.findFocusTarget(self._panelEl) ||
+          self._panelEl;
       target.focus();
     });
   }
@@ -1025,8 +1099,8 @@ MdPanelRef.prototype._configureClickOutsideToClose = function() {
     };
 
     // We check if our original element and the target is the backdrop
-    // because if the original was the backdrop and the target was inside the dialog
-    // we don't want to dialog to close.
+    // because if the original was the backdrop and the target was inside the
+    // dialog we don't want to dialog to close.
     var self = this;
     var mouseupHandler = function (ev) {
       if (sourceElem === target[0] && ev.target === target[0]) {
@@ -1065,16 +1139,17 @@ MdPanelRef.prototype._configureTrapFocus = function() {
     this._topFocusTrap = FOCUS_TRAP_TEMPLATE.clone()[0];
     this._bottomFocusTrap = FOCUS_TRAP_TEMPLATE.clone()[0];
 
-    // When focus is about to move out of the panel, we want to intercept it and redirect it
-    // back to the panel element.
+    // When focus is about to move out of the panel, we want to intercept it
+    // and redirect it back to the panel element.
     var focusHandler = function () {
       element.focus();
     };
     this._topFocusTrap.addEventListener('focus', focusHandler);
     this._bottomFocusTrap.addEventListener('focus', focusHandler);
 
-    // The top focus trap inserted immediately before the md-panel element (as a sibling).
-    // The bottom focus trap inserted immediately after the md-panel element (as a sibling).
+    // The top focus trap inserted immediately before the md-panel element (as
+    // a sibling). The bottom focus trap inserted immediately after the
+    // md-panel element (as a sibling).
     element[0].parentNode.insertBefore(this._topFocusTrap, element[0]);
     element.after(this._bottomFocusTrap);
   }
@@ -1217,4 +1292,143 @@ MdPanelPosition.prototype.right = function(opt_right) {
  */
 MdPanelPosition.prototype.getRight = function() {
   return this._right;
+};
+
+
+
+/*****************************************************************************
+ *                               MdPanelAnimation                            *
+ *****************************************************************************/
+
+
+/**
+ * Animation configuration object. To use, create an MdPanelAnimation with the
+ * desired properties, then pass the object as part of $mdPanel creation.
+ *
+ * Example:
+ *
+ * var panelAnimation = new MdPanelAnimation()
+ *     .openFrom(myButtonEl)
+ *     .closeTo('.my-button')
+ *     .withAnimation('');
+ *
+ * $mdPanel.create({
+ *   animation: panelAnimation
+ * });
+ *
+ * @final @constructor
+ */
+function MdPanelAnimation() {
+  /** @private {!{element: !angular.JQLite|undefined, bounds: !DOMRect}} */
+  this._openFrom = {};
+
+  /** @private {!{element: !angular.JQLite|undefined, bounds: !DOMRect}} */
+  this._closeTo = {};
+}
+
+
+/**
+ * Gets the boundingClientRect for the opening animation.
+ * @returns {!{element: !angular.JQLite|undefined, bounds: !DOMRect}}
+ */
+MdPanelAnimation.prototype.getOpenFrom = function() {
+  return this._openFrom;
+};
+
+
+/**
+ * Gets the boundingClientRect for the closing animation.
+ * @returns {!{element: !angular.JQLite|undefined, bounds: !DOMRect}}
+ */
+MdPanelAnimation.prototype.getCloseTo = function() {
+  return this._closeTo;
+};
+
+
+/**
+ * Specifies where to start the open animation. `openFrom` accepts a
+ * click event object, query selector, DOM element, or a Rect object that
+ * is used to determine the bounds. When passed a click event, the location
+ * of the click will be used as the position to start the animation.
+ *
+ * @param {string|!Element|!Event|{top: number, left: number}} openFrom
+ * @returns {MdPanelAnimation}
+ */
+MdPanelAnimation.prototype.openFrom = function(openFrom) {
+  // Check if 'openFrom' is an Event.
+  openFrom = openFrom.target ? openFrom.target : openFrom;
+
+  this._openFrom = this.getPanelAnimationTarget(openFrom);
+
+  if (!this._closeTo) {
+    this._closeTo = this._openFrom;
+  }
+  return this;
+};
+
+
+/**
+ * Specifies where to animate the dialog close. `closeTo` accepts a
+ * query selector, DOM element, or a Rect object that is used to determine
+ * the bounds.
+ *
+ * @param {string|!Element|{top: number, left: number}} closeTo
+ * @returns {MdPanelAnimation}
+ */
+MdPanelAnimation.prototype.closeTo = function(closeTo) {
+  this._closeTo = this.getPanelAnimationTarget(closeTo);
+  return this;
+};
+
+
+/**
+ * Returns the element and bounds for the animation target.
+ * @param {string|!Element|{top: number, left: number}} location
+ * @returns {!{element: !angular.JQLite|undefined, bounds: !DOMRect}}
+ */
+MdPanelAnimation.prototype.getPanelAnimationTarget = function(location) {
+  if (angular.isDefined(location.top) || angular.isDefined(location.left)) {
+    return {
+      element: undefined,
+      bounds: {
+        top: location.top || 0,
+        left: location.left || 0,
+        height: 1,
+        width: 1
+      }
+    };
+  } else {
+    return this._getBoundingClientRect(this._getElement(location));
+  }
+}
+
+
+/**
+ * TODO(KarenParker): Switch and update the shared version of this method that
+ * others are currently building.
+ * Gets the element from the string|element.
+ * @param {string|!Element} el
+ * @returns {!angular.JQLite}
+ * @private
+ */
+MdPanelAnimation.prototype._getElement = function(el) {
+  var queryResult = angular.isString(el) ?
+      document.querySelector(el) : el;
+  return angular.element(queryResult);
+};
+
+
+/**
+ * Identify the bounding RECT for the target element.
+ * @param {!angular.JQLite} element
+ * @returns {!{element: !angular.JQLite|undefined, bounds: !DOMRect}}
+ * @private
+ */
+MdPanelAnimation.prototype._getBoundingClientRect = function(element) {
+  if (element instanceof angular.element) {
+    return {
+      element: element,
+      bounds: element[0].getBoundingClientRect()
+    };
+  }
 };
