@@ -294,7 +294,9 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
           element.on('blur', function() {
             if (untouched) {
               untouched = false;
-              ngModelCtrl.$setUntouched();
+              if (selectScope.isOpen) {
+                ngModelCtrl.$setUntouched();
+              }
             }
 
             if (selectScope.isOpen) return;
