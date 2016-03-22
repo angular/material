@@ -88,10 +88,12 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
     restrict: 'E',
     controller: 'MdListController',
     compile: function(tEl, tAttrs) {
+
       // Check for proxy controls (no ng-click on parent, and a control inside)
       var secondaryItems = tEl[0].querySelectorAll('.md-secondary');
       var hasProxiedElement;
       var proxyElement;
+      var itemContainer = tEl;
 
       tEl[0].setAttribute('role', 'listitem');
 
@@ -130,14 +132,13 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
       }
 
       function wrapIn(type) {
-        var container;
         if (type == 'div') {
-          container = angular.element('<div class="_md-no-style _md-list-item-inner">');
-          container.append(tEl.contents());
+          itemContainer = angular.element('<div class="_md-no-style _md-list-item-inner">');
+          itemContainer.append(tEl.contents());
           tEl.addClass('_md-proxy-focus');
         } else {
           // Element which holds the default list-item content.
-          container = angular.element(
+          itemContainer = angular.element(
             '<div class="md-button _md-no-style">'+
             '   <div class="_md-list-item-inner"></div>'+
             '</div>'
@@ -152,58 +153,48 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           copyAttributes(tEl[0], buttonWrap[0]);
 
           // Append the button wrap before our list-item content, because it will overlay in relative.
-          container.prepend(buttonWrap);
-          container.children().eq(1).append(tEl.contents());
+          itemContainer.prepend(buttonWrap);
+          itemContainer.children().eq(1).append(tEl.contents());
           
           tEl.addClass('_md-button-wrap');
         }
 
         tEl[0].setAttribute('tabindex', '-1');
-        tEl.append(container);
+        tEl.append(itemContainer);
       }
 
       function wrapSecondaryItems() {
-        if (secondaryItems.length === 1) {
-          wrapSecondaryItem(secondaryItems[0], tEl);
-        } else if (secondaryItems.length > 1) {
-          var secondaryItemsWrapper = angular.element('<div class="_md-secondary-container">');
-          angular.forEach(secondaryItems, function(secondaryItem) {
-            wrapSecondaryItem(secondaryItem, secondaryItemsWrapper, true);
-          });
-          tEl.append(secondaryItemsWrapper);
-        }
+        var secondaryItemsWrapper = angular.element('<div class="_md-secondary-container">');
+
+        angular.forEach(secondaryItems, function(secondaryItem) {
+          wrapSecondaryItem(secondaryItem, secondaryItemsWrapper);
+        });
+
+        // Since the secondary item container is static we need to fill the remaing space.
+        var spaceFiller = angular.element('<div class="flex"></div>');
+        itemContainer.append(spaceFiller);
+
+        itemContainer.append(secondaryItemsWrapper);
       }
 
-      function wrapSecondaryItem(secondaryItem, container, hasSecondaryItemsWrapper) {
+      function wrapSecondaryItem(secondaryItem, container) {
         if (secondaryItem && !isButton(secondaryItem) && secondaryItem.hasAttribute('ng-click')) {
           $mdAria.expect(secondaryItem, 'aria-label');
-          var buttonWrapper;
-          if (hasSecondaryItemsWrapper) {
-            buttonWrapper = angular.element('<md-button class="md-icon-button">');
-          } else {
-            buttonWrapper = angular.element('<md-button class="_md-secondary-container md-icon-button">');
-          }
+          var buttonWrapper = angular.element('<md-button class="md-secondary md-icon-button">');
           copyAttributes(secondaryItem, buttonWrapper[0]);
           secondaryItem.setAttribute('tabindex', '-1');
-          secondaryItem.classList.remove('md-secondary');
           buttonWrapper.append(secondaryItem);
           secondaryItem = buttonWrapper[0];
         }
 
-        // Check for a secondary item and move it outside
-        if ( secondaryItem && (
-                secondaryItem.hasAttribute('ng-click') ||
-                ( tAttrs.ngClick &&
-                isProxiedElement(secondaryItem) )
-            )) {
-          // When using multiple secondary items we need to remove their secondary class to be
-          // orderd correctly in the list-item
-          if (hasSecondaryItemsWrapper) {
-            secondaryItem.classList.remove('md-secondary');
-          }
-          tEl.addClass('md-with-secondary');
-          container.append(secondaryItem);
+        if (secondaryItem && (!hasClickEvent(secondaryItem) || (!tAttrs.ngClick && isProxiedElement(secondaryItem)))) {
+          // In this case we remove the secondary class, so we can identify it later, when we searching for the
+          // proxy items.
+          angular.element(secondaryItem).removeClass('md-secondary');
         }
+
+        tEl.addClass('md-with-secondary');
+        container.append(secondaryItem);
       }
 
       function copyAttributes(item, wrapper) {
@@ -228,14 +219,23 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         return nodeName == "MD-BUTTON" || nodeName == "BUTTON";
       }
 
+      function hasClickEvent (element) {
+        var attr = element.attributes;
+        for (var i = 0; i < attr.length; i++) {
+          if (tAttrs.$normalize(attr[i].name) === 'ngClick') return true;
+        }
+        return false;
+      }
+
       return postLink;
 
       function postLink($scope, $element, $attr, ctrl) {
 
-        var proxies    = [],
-            firstChild = $element[0].firstElementChild,
-            hasClick   = firstChild && firstChild.firstElementChild &&
-                         hasClickEvent(firstChild.firstElementChild);
+        var proxies       = [],
+            firstElement  = $element[0].firstElementChild,
+            isButtonWrap  = $element.hasClass('_md-button-wrap'),
+            clickChild    = isButtonWrap ? firstElement.firstElementChild : firstElement,
+            hasClick      = clickChild && hasClickEvent(clickChild);
 
         computeProxies();
         computeClickable();
@@ -261,22 +261,19 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           });
         }
 
-        function hasClickEvent (element) {
-          var attr = element.attributes;
-          for (var i = 0; i < attr.length; i++) {
-            if ($attr.$normalize(attr[i].name) === 'ngClick') return true;
-          }
-          return false;
-        }
 
         function computeProxies() {
-          var children = $element.children();
-          if (children.length && !children[0].hasAttribute('ng-click')) {
+          if (firstElement && firstElement.children && !hasClick) {
+
             angular.forEach(proxiedTypes, function(type) {
-              angular.forEach(firstChild.querySelectorAll(type), function(child) {
+
+              // All elements which are not capable for being used a proxy have the .md-secondary class
+              // applied. These items had been sorted out in the secondary wrap function.
+              angular.forEach(firstElement.querySelectorAll(type + ':not(.md-secondary)'), function(child) {
                 proxies.push(child);
               });
             });
+
           }
         }
         function computeClickable() {
@@ -289,12 +286,12 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           }
         }
 
-        var firstChildKeypressListener = function(e) {
+        var clickChildKeypressListener = function(e) {
           if (e.target.nodeName != 'INPUT' && e.target.nodeName != 'TEXTAREA' && !e.target.isContentEditable) {
             var keyCode = e.which || e.keyCode;
             if (keyCode == $mdConstant.KEY_CODE.SPACE) {
-              if (firstChild) {
-                firstChild.click();
+              if (clickChild) {
+                clickChild.click();
                 e.preventDefault();
                 e.stopPropagation();
               }
@@ -303,16 +300,16 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         };
 
         if (!hasClick && !proxies.length) {
-          firstChild && firstChild.addEventListener('keypress', firstChildKeypressListener);
+          clickChild && clickChild.addEventListener('keypress', clickChildKeypressListener);
         }
 
         $element.off('click');
         $element.off('keypress');
 
-        if (proxies.length == 1 && firstChild) {
+        if (proxies.length == 1 && clickChild) {
           $element.children().eq(0).on('click', function(e) {
             var parentButton = $mdUtil.getClosest(e.target, 'BUTTON');
-            if (!parentButton && firstChild.contains(e.target)) {
+            if (!parentButton && clickChild.contains(e.target)) {
               angular.forEach(proxies, function(proxy) {
                 if (e.target !== proxy && !proxy.contains(e.target)) {
                   angular.element(proxy).triggerHandler('click');
@@ -323,7 +320,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         }
 
         $scope.$on('$destroy', function () {
-          firstChild && firstChild.removeEventListener('keypress', firstChildKeypressListener);
+          clickChild && clickChild.removeEventListener('keypress', clickChildKeypressListener);
         });
       }
     }

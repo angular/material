@@ -213,9 +213,6 @@ md-list-item {
       outline: none
     }
   }
-  &.md-with-secondary {
-    position: relative;
-  }
   &.md-clickable:hover {
     cursor: pointer;
   }
@@ -263,12 +260,7 @@ md-list-item {
     & > md-icon:first-child:not(.md-avatar-icon) {
       @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-primary-icon-width);
     }
-    & > md-checkbox {
-      width: 3 * $baseline-grid;
-      @include rtl(margin-left, 3px, 29px);
-      @include rtl(margin-right, 29px,3px);
-      margin-top: 16px;
-    }
+
     & .md-avatar, .md-avatar-icon {
       margin-top: $baseline-grid;
       margin-bottom: $baseline-grid;
@@ -284,57 +276,47 @@ md-list-item {
       padding: 8px;
     }
 
-    md-checkbox.md-secondary,
-    md-switch.md-secondary {
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-
-    md-checkbox.md-secondary {
-      @include rtl-prop(margin-right, margin-left, 0);
-    }
-
-    md-switch.md-secondary {
-      @include rtl-prop(margin-right, margin-left, -6px);
-    }
-
-    button.md-button._md-secondary-container {
-      background-color: transparent;
-      align-self: center;
-      border-radius: 50%;
-      margin: 0px;
-      min-width: 0px;
-
-      .md-ripple,
-      .md-ripple-container {
-        border-radius: 50%;
-      }
+    & > md-checkbox {
+      width: 3 * $baseline-grid;
+      @include rtl(margin-left, 3px, 29px);
+      @include rtl(margin-right, 29px, 3px);
+      margin-top: 16px;
     }
 
     ._md-secondary-container {
-      @include rtl-prop(margin-right, margin-left, -12px);
+      display: flex;
+      align-items: center;
 
-      &.md-icon-button {
+      height: 100%;
+      margin: auto;
+
+      .md-button, .md-icon-button {
+        &:last-of-type {
+          // Reset 6px margin for the button.
+          @include rtl-prop(margin-right, margin-left, 0px);
+        }
+      }
+
+      md-checkbox {
+        margin-top: 0;
+        margin-bottom: 0;
+
+        &:last-child {
+          width: 3 * $baseline-grid;
+          @include rtl-prop(margin-right, margin-left, 0);
+        }
+      }
+
+      md-switch {
+        margin-top: 0;
+        margin-bottom: 0;
+
         @include rtl-prop(margin-right, margin-left, -6px);
       }
     }
 
-    ._md-secondary-container,
-    .md-secondary {
-      position: absolute;
-      top: 50%;
-      margin: 0;
-      @include rtl-prop(right, left, $list-item-padding-horizontal);
-      transform: translate3d(0, -50%, 0);
-    }
-
-    & > .md-button._md-secondary-container > .md-secondary {
-      @include rtl-prop(margin-left, margin-right, 0);
-      position: static;
-    }
-
     & > p, & > ._md-list-item-inner > p {
-      flex: 1;
+      flex: 1 1 auto;
       margin: 0;
     }
   }
@@ -351,7 +333,7 @@ md-list-item {
       }
 
       .md-list-item-text {
-        flex: 1;
+        flex: 1 1 auto;
         margin: auto;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -405,7 +387,7 @@ md-list-item {
         align-self: flex-start;
       }
       .md-list-item-text {
-        flex: 1;
+        flex: 1 1 auto;
       }
     }
   }
