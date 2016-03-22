@@ -158,6 +158,23 @@ describe('<md-select>', function() {
     expect($rootScope.myForm.select.$touched).toBe(true);
   }));
 
+  it('should remain untouched during opening', inject(function($compile, $rootScope) {
+    var form = $compile('<form name="myForm">' +
+                        '<md-select name="select" ng-model="val">' +
+                        '<md-option>1</md-option>' +
+                        '</md-select>' +
+                        '</form>')($rootScope);
+    var unwatch = $rootScope.$watch('myForm.select.$touched',
+      function(touched) {
+        expect(touched).toBe(false);
+      });
+    var select = form.find('md-select');
+    openSelect(select);
+    unwatch();
+    closeSelect();
+    expect($rootScope.myForm.select.$touched).toBe(true);
+  }));
+
   it('restores focus to select when the menu is closed', inject(function($document) {
     var select = setupSelect('ng-model="val"').find('md-select');
     openSelect(select);
