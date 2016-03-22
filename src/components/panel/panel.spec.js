@@ -664,6 +664,83 @@ describe('$mdPanel', function() {
     });
   });
 
+  describe('animation logic', function() {
+    var config;
+    var mdPanelAnimation;
+    var myButton;
+
+    beforeEach(function() {
+      config = {
+        template: '<div>Hello World!</div>'
+      };
+
+      mdPanelAnimation = $mdPanel.newPanelAnimation();
+
+      myButton = '<button>myButton</button>';
+      attachToBody(myButton);
+      myButton = angular.element(document.querySelector('button'));
+    });
+
+    describe('should openFrom', function() {
+      it('provided a selector', function() {
+        var animation = mdPanelAnimation.openFrom('button');
+
+        expect(animation.getOpenFrom().element).toEqual(myButton);
+        expect(animation.getOpenFrom().bounds).toEqual(myButton[0].getBoundingClientRect());
+      });
+
+      it('provided an element', function() {
+        var animation = mdPanelAnimation.openFrom(myButton[0]);
+
+        expect(animation.getOpenFrom().element).toEqual(myButton);
+        expect(animation.getOpenFrom().bounds).toEqual(myButton[0].getBoundingClientRect());
+      });
+
+      it('provided an event', function() {
+        var myEvent = { type: 'click', target: myButton};
+        var animation = mdPanelAnimation.openFrom(myEvent);
+
+        expect(animation.getOpenFrom().element).toEqual(myButton);
+        expect(animation.getOpenFrom().bounds).toEqual(myButton[0].getBoundingClientRect());
+      });
+
+
+      it('provided a bounding rect', function() {
+        var rect = myButton[0].getBoundingClientRect();
+        var inputRect = {top: rect.top, left: rect.left, height: rect.height, width: rect.width};
+        var animation = mdPanelAnimation.openFrom(inputRect);
+
+        expect(animation.getOpenFrom().element).toBeUndefined();
+        expect(animation.getOpenFrom().bounds).toEqual(inputRect);
+      });
+    });
+
+    describe('should closeTo', function() {
+      it('provided a selector', function() {
+        var animation = mdPanelAnimation.closeTo('button');
+
+        expect(animation.getCloseTo().element).toEqual(myButton);
+        expect(animation.getCloseTo().bounds).toEqual(myButton[0].getBoundingClientRect());
+      });
+
+      it('provided an element', function() {
+        var animation = mdPanelAnimation.closeTo(myButton[0]);
+
+        expect(animation.getCloseTo().element).toEqual(myButton);
+        expect(animation.getCloseTo().bounds).toEqual(myButton[0].getBoundingClientRect());
+      });
+
+      it('provided a bounding rect', function() {
+        var rect = myButton[0].getBoundingClientRect();
+        var inputRect = {top: rect.top, left: rect.left, height: rect.height, width: rect.width};
+        var animation = mdPanelAnimation.closeTo(inputRect);
+
+        expect(animation.getCloseTo().element).toBeUndefined();
+        expect(animation.getCloseTo().bounds).toEqual(inputRect);
+      });
+    });
+  });
+
   /**
    * Attached an element to document.body. Keeps track of attached elements
    * so that they can be removed in an afterEach.

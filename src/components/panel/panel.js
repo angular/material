@@ -122,15 +122,15 @@ angular
  *   - `fullscreen` - `{boolean=}`: Whether the panel should be full screen.
  *     Applies the class `._md-panel-fullscreen` to the panel on open. Defaults
  *     to false.
+ *   - `animation` - `{MdPanelAnimation=}`: An MdPanelAnimation object that
+ *     specifies the animation of the panel. For more information, see
+ *     `MdPanelAnimation`.
  *
  * TODO(ErinCoughlan): Add the following config options.
  *   - `groupName` - `{string=}`: Name of panel groups. This group name is
  *     used for configuring the number of open panels and identifying specific
  *     behaviors for groups. For instance, all tooltips will be identified
  *     using the same groupName.
- *   - `animation` - `{MdPanelAnimation=}`: An MdPanelAnimation object that
- *     specifies the animation of the panel. For more information, see
- *     `MdPanelAnimation`.
  *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop
  *     behind the panel. Defaults to false.
  *   - `disableParentScroll` - `{boolean=}`: Whether the user can scroll the
@@ -177,6 +177,17 @@ angular
  * the position config object.
  *
  * @returns {MdPanelPosition} panelPosition
+ */
+
+
+/**
+ * @ngdoc method
+ * @name $mdPanel#newPanelAnimation
+ * @description
+ * Returns a new instance of the MdPanelAnimation object. Use this to create
+ * the animation config object.
+ *
+ * @returns {MdPanelAnimation} panelAnimation
  */
 
 
@@ -459,6 +470,46 @@ angular
 
 
 /*****************************************************************************
+ *                               MdPanelAnimation                            *
+ *****************************************************************************/
+
+
+/**
+ * @ngdoc object
+ * @name MdPanelAnimation
+ * @description
+ * Object for configuring panel animations.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelAnimation#openFrom
+ * @description
+ * Specifies where to start the open animation. `openFrom` accepts a
+ * click event object, query selector, DOM element, or a Rect object that
+ * is used to determine the bounds. When passed a click event, the location
+ * of the click will be used as the position to start the animation.
+ *
+ * @param {string|!Element|!jQuery.Event|
+ *     {top: string, left: string, height: string, width: string}}
+ * @returns {MdPanelAnimation}
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelAnimation#closeTo
+ * @description
+ * Specifies where to animate the dialog close. `closeTo` accepts a
+ * query selector, DOM element, or a Rect object that is used to determine
+ * the bounds.
+ *
+ * @param {string|!Element|
+ *     {top: string, left: string, height: string, width: string}}
+ * @returns {MdPanelAnimation}
+ */
+
+
+/*****************************************************************************
  *                                IMPLEMENTATION                             *
  *****************************************************************************/
 
@@ -561,6 +612,17 @@ MdPanelService.prototype.wrapTemplate_ = function(origTemplate) {
  */
 MdPanelService.prototype.newPanelPosition = function() {
   return new MdPanelPosition();
+};
+
+
+/**
+ * Returns a new instance of the MdPanelAnimation. Use this to create the
+ * animation object.
+ *
+ * @returns {MdPanelAnimation}
+ */
+MdPanelService.prototype.newPanelAnimation = function() {
+  return new MdPanelAnimation();
 };
 
 
@@ -1217,4 +1279,130 @@ MdPanelPosition.prototype.right = function(opt_right) {
  */
 MdPanelPosition.prototype.getRight = function() {
   return this._right;
+};
+
+
+
+/*****************************************************************************
+ *                               MdPanelAnimation                            *
+ *****************************************************************************/
+
+
+/**
+ * Animation configuration object. To use, create an MdPanelAnimation with the
+ * desired properties, then pass the object as part of $mdPanel creation.
+ *
+ * Example:
+ *
+ * var panelAnimation = new MdPanelAnimation()
+ *     .openFrom(myButtonEl)
+ *     .closeTo('.my-button')
+ *     .withAnimation('');
+ *
+ * $mdPanel.create({
+ *   animation: panelAnimation
+ * });
+ *
+ * @final @constructor
+ */
+function MdPanelAnimation() {
+  /** @private {!Object} */
+  this._openFrom = {};
+
+  /** @private {!Object} */
+  this._closeTo = {};
+}
+
+
+/**
+ * Gets the boundingClientRect for the opening animation.
+ * @returns {!Object}
+ */
+MdPanelAnimation.prototype.getOpenFrom = function() {
+  return this._openFrom;
+};
+
+
+/**
+ * Gets the boundingClientRect for the closing animation.
+ * @returns {!Object}
+ */
+MdPanelAnimation.prototype.getCloseTo = function() {
+  return this._closeTo;
+};
+
+
+/**
+ * Specifies where to start the open animation. `openFrom` accepts a
+ * click event object, query selector, DOM element, or a Rect object that
+ * is used to determine the bounds. When passed a click event, the location
+ * of the click will be used as the position to start the animation.
+ *
+ * @param {string|!Element|!jQuery.Event|
+ *     {top: string, left: string, height: string, width: string}} openFrom
+ * @returns {MdPanelAnimation}
+ */
+MdPanelAnimation.prototype.openFrom = function(openFrom) {
+  // Check if 'openFrom' is a jQuery.Event.
+  openFrom = openFrom.target ? openFrom.target : openFrom;
+
+  this._openFrom = this._getBoundingClientRect(this._getElement(openFrom));
+  return this;
+};
+
+
+/**
+ * Specifies where to animate the dialog close. `closeTo` accepts a
+ * query selector, DOM element, or a Rect object that is used to determine
+ * the bounds.
+ *
+ * @param {string|!Element|
+ *     {top: string, left: string, height: string, width: string}} closeTo
+ * @returns {MdPanelAnimation}
+ */
+MdPanelAnimation.prototype.closeTo = function(closeTo) {
+  this._closeTo = this._getBoundingClientRect(this._getElement(closeTo));
+  return this;
+};
+
+
+/**
+ * TODO(KarenParker): Switch and update the shared version of this method that
+ * others are currently building.
+ * Gets the element from the string|element|event.
+ * @param {string|!Element|
+ *     {top: string, left: string, height: string, width: string}} el
+ * @returns {!angular.JQLite}
+ * @private
+ */
+MdPanelAnimation.prototype._getElement = function(el) {
+  var queryResult = angular.isString(el) ?
+      document.querySelector(el) : el;
+  return angular.element(queryResult);
+};
+
+
+/**
+ * Identify the bounding RECT for the target element.
+ * @param {!angular.JQLite} element
+ * @returns {!Object}
+ * @private
+ */
+MdPanelAnimation.prototype._getBoundingClientRect = function(element) {
+  var source = angular.element((element || {}));
+  if (source && source.length) {
+    // Compute and save the target element's bounding rect, so that if the
+    // element is hidden when the dialog closes, we can shrink the dialog
+    // back to the same position it expanded from.
+    //
+    // Checking if the source is a rect object or a DOM element
+    var bounds = { top:0, left:0, height:0, width:0 };
+    var hasFn = angular.isFunction(source[0].getBoundingClientRect);
+
+    return {
+      element : hasFn ? source : undefined,
+      bounds  : hasFn ? source[0].getBoundingClientRect() : angular.extend({}, bounds, source[0]),
+      focus   : angular.bind(source, source.focus),
+    };
+  }
 };
