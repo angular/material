@@ -551,7 +551,7 @@ function generateAllThemes($injector) {
 
   // The user specifies a 'default' contrast color as either light or dark,
   // then explicitly lists which hues are the opposite contrast (eg. A100 has dark, A200 has light)
-  function sanitizePalette(palette) {
+  function sanitizePalette(palette, name) {
     var defaultContrast = palette.contrastDefaultColor;
     var lightColors = palette.contrastLightColors || [];
     var strongLightColors = palette.contrastStrongLightColors || [];
