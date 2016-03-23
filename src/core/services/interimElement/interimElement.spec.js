@@ -263,9 +263,9 @@ describe('$$interimElement service', function() {
 
         Service = $$interimElement();
 
-        Service.show = tailHook(Service.show, flush);
-        Service.hide = tailHook(Service.hide, flush);
-        Service.cancel = tailHook(Service.cancel, flush);
+        Service.show = tailHook(Service.showInterim, flush);
+        Service.hide = tailHook(Service.hideInterim, flush);
+        Service.cancel = tailHook(Service.cancelInterim, flush);
       });
 
     });
