@@ -16,7 +16,7 @@
       <md-input-container>
         <label>State</label>
         <md-select ng-model="ctrl.userState">
-          <md-option ng-repeat="state in ctrl.states" value="{{state.abbrev}}">
+          <md-option ng-repeat="state in ctrl.states" value="{{state.abbrev}}" ng-disabled="$index === 1">
             {{state.abbrev}}
           </md-option>
         </md-select>

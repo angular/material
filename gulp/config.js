@@ -21,7 +21,8 @@ module.exports = {
   ],
   themeBaseFiles: [
     'src/core/style/variables.scss',
-    'src/core/style/mixins.scss'
+    'src/core/style/mixins.scss',
+    'src/core/style/themes.scss'
   ],
   scssBaseFiles: [
     'src/core/style/color-palette.scss',
@@ -30,6 +31,12 @@ module.exports = {
     'src/core/style/structure.scss',
     'src/core/style/typography.scss',
     'src/core/style/layout.scss'
+  ],
+  scssLayoutFiles: [
+    'src/core/style/variables.scss',
+    'src/core/style/mixins.scss',
+    'src/core/style/layout.scss',
+    'src/core/services/layout/layout.scss'
   ],
   scssLayoutAttributeFiles: [
       'src/core/style/variables.scss',

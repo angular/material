@@ -43,21 +43,13 @@ body.docs-body {
  * TYPE DEFAULTS
  ***************/
 a {
-  color: #106CC8;
   text-decoration: none;
   font-weight: 400;
-  border-bottom: 1px solid rgba(64, 84, 178, 0.25);
   -webkit-transition: border-bottom 0.35s;
   -moz-transition: border-bottom 0.35s;
   -ms-transition: border-bottom 0.35s;
   -o-transition: border-bottom 0.35s;
   transition: border-bottom 0.35s;
-}
-a:hover, a:focus {
-  border-bottom: 1px solid #4054B2;
-}
-a.md-button {
-  border-bottom: none;
 }
 h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
@@ -278,6 +270,14 @@ code:not(.highlight) {
   white-space: normal;
   width: 100%;
 }
+
+html[dir=rtl] .docs-menu .md-button,
+body[dir=rtl] .docs-menu .md-button {
+  unicode-bidi: embed;
+  text-align: right;
+}
+
+
 .docs-menu .md-button:hover,
 .docs-menu .md-button:focus {
   background: #267ED5 !important;
@@ -324,6 +324,15 @@ code:not(.highlight) {
   width: 100%;
   color: rgba(255, 255, 255, 0.54)
 }
+
+
+html[dir=rtl] .menu-heading,
+body[dir=rtl] .menu-heading {
+  unicode-bidi: embed;
+  text-align: right;
+}
+
+
 .docs-menu li.parentActive,
 .docs-menu li.parentActive .menu-toggle-list {
   /*background-color: #2C80D2 !important;*/
@@ -420,6 +429,7 @@ a.docs-logo {
 }
 .md-breadcrumb md-icon {
   color: #666 !important;
+  fill: #666 !important;
 }
 .md-breadcrumb-page {
   display: inline-block;
@@ -437,6 +447,7 @@ a.docs-logo {
 }
 .docs-toolbar-tools .md-button md-icon {
   color: #666 !important;
+  fill: #666 !important;
 }
 @media (max-width: 400px) {
   .docs-tools {
@@ -532,6 +543,7 @@ md-tabs.demo-source-tabs .active md-tab-label {
   -ms-flex: 1 1 0%;
   flex: 1 1 0%;
 }
+
 .demo-content > div[layout-fill] {
   min-height: 448px;
 }

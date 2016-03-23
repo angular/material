@@ -116,3 +116,10 @@ $swift-linear: all $swift-linear-duration $swift-linear-timing-function !default
 $button-fab-width: rem(5.600) !default;
 $button-fab-height: rem(5.600) !default;
 $button-fab-padding: rem(1.60) !default;
+
+
+// Shared Checkbox variables
+$checkbox-width: 20px !default;
+$checkbox-height: $checkbox-width !default;
+$checkbox-border-radius: 2px !default;
+$checkbox-border-width: 2px !default;

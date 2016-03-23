@@ -4,19 +4,48 @@ md-slider.md-THEME_NAME-theme {
     background-color: '{{foreground-3}}';
   }
   ._md-track-ticks {
-    background-color: '{{foreground-4}}';
-  }
-  ._md-focus-thumb {
-    background-color: '{{foreground-2}}';
+    color: '{{background-contrast}}';
   }
   ._md-focus-ring {
-    background-color: '{{accent-color}}';
+    background-color: '{{accent-200-0.38}}';
   }
   ._md-disabled-thumb {
     border-color: '{{background-color}}';
-  }
-  &._md-min ._md-thumb:after {
     background-color: '{{background-color}}';
+  }
+
+  &._md-min {
+    ._md-thumb:after {
+      background-color: '{{background-color}}';
+      border-color: '{{foreground-3}}';
+    }
+
+    ._md-focus-ring {
+      background-color: '{{foreground-3-0.38}}';
+    }
+
+    &[md-discrete] {
+      ._md-thumb {
+        &:after {
+          background-color: '{{background-contrast}}';
+          border-color: transparent;
+        }
+      }
+
+      ._md-sign {
+        background-color: '{{background-400}}';
+        &:after {
+          border-top-color: '{{background-400}}';
+        }
+      }
+
+      &[md-vertical] {
+        ._md-sign:after {
+          border-top-color: transparent;
+          border-left-color: '{{background-400}}';
+        }
+      }
+    }
   }
 
   ._md-track._md-track-fill {
@@ -32,13 +61,21 @@ md-slider.md-THEME_NAME-theme {
       border-top-color: '{{accent-color}}';
     }
   }
+
+  &[md-vertical] {
+    ._md-sign:after {
+      border-top-color: transparent;
+      border-left-color: '{{accent-color}}';
+    }
+  }
+
   ._md-thumb-text {
     color: '{{accent-contrast}}';
   }
 
   &.md-warn {
     ._md-focus-ring {
-      background-color: '{{warn-color}}';
+      background-color: '{{warn-200-0.38}}';
     }
     ._md-track._md-track-fill {
       background-color: '{{warn-color}}';
@@ -54,6 +91,14 @@ md-slider.md-THEME_NAME-theme {
         border-top-color: '{{warn-color}}';
       }
     }
+
+    &[md-vertical] {
+      ._md-sign:after {
+        border-top-color: transparent;
+        border-left-color: '{{warn-color}}';
+      }
+    }
+
     ._md-thumb-text {
       color: '{{warn-contrast}}';
     }
@@ -61,7 +106,7 @@ md-slider.md-THEME_NAME-theme {
 
   &.md-primary {
     ._md-focus-ring {
-      background-color: '{{primary-color}}';
+      background-color: '{{primary-200-0.38}}';
     }
     ._md-track._md-track-fill {
       background-color: '{{primary-color}}';
@@ -77,6 +122,14 @@ md-slider.md-THEME_NAME-theme {
         border-top-color: '{{primary-color}}';
       }
     }
+
+    &[md-vertical] {
+      ._md-sign:after {
+        border-top-color: transparent;
+        border-left-color: '{{primary-color}}';
+      }
+    }
+
     ._md-thumb-text {
       color: '{{primary-contrast}}';
     }
@@ -84,10 +137,45 @@ md-slider.md-THEME_NAME-theme {
 
   &[disabled] {
     ._md-thumb:after {
-      border-color: '{{foreground-3}}';
+      border-color: transparent;
     }
-    &:not(._md-min) ._md-thumb:after {
-      background-color: '{{foreground-3}}';
+    &:not(._md-min), &[md-discrete] {
+      ._md-thumb:after {
+        background-color: '{{foreground-3}}';
+        border-color: transparent;
+      }
+    }
+  }
+
+  &[disabled][readonly] {
+    ._md-sign {
+      background-color: '{{background-400}}';
+      &:after {
+        border-top-color: '{{background-400}}';
+      }
+    }
+
+    &[md-vertical] {
+      ._md-sign:after {
+        border-top-color: transparent;
+        border-left-color: '{{background-400}}';
+      }
+    }
+
+    ._md-disabled-thumb {
+      border-color: transparent;
+      background-color: transparent;
+    }
+  }
+}
+
+md-slider-container {
+  &[disabled] {
+    & > *:first-child,
+    & > *:last-child {
+      &:not(md-slider){
+        color: '{{foreground-3}}';
+      }
     }
   }
 }

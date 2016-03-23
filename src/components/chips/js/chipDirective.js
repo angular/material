@@ -30,7 +30,7 @@ var DELETE_HINT_TEMPLATE = '\
  * MDChip Directive Definition
  *
  * @param $mdTheming
- * @param $mdInkRipple
+ * @param $mdUtil
  * @ngInject
  */
 function MdChip($mdTheming, $mdUtil) {
@@ -38,21 +38,29 @@ function MdChip($mdTheming, $mdUtil) {
 
   return {
     restrict: 'E',
-    require: '^?mdChips',
-    compile:  compile
+    require: ['^?mdChips', 'mdChip'],
+    compile:  compile,
+    controller: 'MdChipCtrl'
   };
 
   function compile(element, attr) {
     // Append the delete template
     element.append($mdUtil.processTemplate(hintTemplate));
 
-    return function postLink(scope, element, attr, ctrl) {
+    return function postLink(scope, element, attr, ctrls) {
+      var chipsController = ctrls.shift();
+      var chipController  = ctrls.shift();
       $mdTheming(element);
 
-      if (ctrl) angular.element(element[0].querySelector('._md-chip-content'))
-          .on('blur', function () {
-            ctrl.selectedChip = -1;
-          });
+      if (chipsController) {
+        chipController.init(chipsController);
+
+        angular.element(element[0].querySelector('._md-chip-content'))
+            .on('blur', function () {
+              chipsController.selectedChip = -1;
+              chipsController.$scope.$applyAsync();
+            });
+      }
     };
   }
 }

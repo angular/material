@@ -138,9 +138,9 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         } else {
           // Element which holds the default list-item content.
           container = angular.element(
-            '<button class="md-button _md-no-style">'+
+            '<div class="md-button _md-no-style">'+
             '   <div class="_md-list-item-inner"></div>'+
-            '</button>'
+            '</div>'
           );
 
           // Button which shows ripple and executes primary action.
@@ -208,7 +208,8 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
 
       function copyAttributes(item, wrapper) {
         var copiedAttrs = ['ng-if', 'ng-click', 'aria-label', 'ng-disabled',
-          'ui-sref', 'href', 'ng-href', 'ng-attr-ui-sref'];
+          'ui-sref', 'href', 'ng-href', 'ng-attr-ui-sref', 'ui-sref-opts'];
+
         angular.forEach(copiedAttrs, function(attr) {
           if (item.hasAttribute(attr)) {
             wrapper.setAttribute(attr, item.getAttribute(attr));

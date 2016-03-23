@@ -1,71 +1,19 @@
-
 md-progress-circular.md-THEME_NAME-theme {
-  background-color: transparent;
-  ._md-inner {
-    ._md-gap {
-      border-top-color: '{{primary-color}}';
-      border-bottom-color: '{{primary-color}}';
-    }
-    ._md-left, ._md-right {
-      ._md-half-circle {
-        border-top-color: '{{primary-color}}';
-      }
-    }
-    ._md-right {
-      ._md-half-circle {
-        border-right-color: '{{primary-color}}';
-      }
-    }
-    ._md-left {
-      ._md-half-circle {
-        border-left-color: '{{primary-color}}';
-      }
-    }
+
+  path {
+    stroke: '{{primary-color}}';
   }
+
   &.md-warn {
-    ._md-inner {
-      ._md-gap {
-        border-top-color: '{{warn-color}}';
-        border-bottom-color: '{{warn-color}}';
-      }
-      ._md-left, ._md-right {
-        ._md-half-circle {
-          border-top-color: '{{warn-color}}';
-        }
-      }
-      ._md-right {
-        ._md-half-circle {
-          border-right-color: '{{warn-color}}';
-        }
-      }
-      ._md-left {
-        ._md-half-circle {
-          border-left-color: '{{warn-color}}';
-        }
-      }
+    path {
+      stroke: '{{warn-color}}';
     }
   }
+
   &.md-accent {
-    ._md-inner {
-      ._md-gap {
-        border-top-color: '{{accent-color}}';
-        border-bottom-color: '{{accent-color}}';
-      }
-      ._md-left, ._md-right {
-        ._md-half-circle {
-          border-top-color: '{{accent-color}}';
-        }
-      }
-      ._md-right {
-        ._md-half-circle {
-          border-right-color: '{{accent-color}}';
-        }
-      }
-      ._md-left {
-        ._md-half-circle {
-          border-left-color: '{{accent-color}}';
-        }
-      }
+    path {
+      stroke: '{{accent-color}}';
     }
   }
+
 }

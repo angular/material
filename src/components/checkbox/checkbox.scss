@@ -1,10 +1,14 @@
-$checkbox-width: 20px !default;
-$checkbox-height: $checkbox-width !default;
+//$checkbox-width: 20px !default;
+//$checkbox-height: $checkbox-width !default;
+//$checkbox-border-radius: 2px !default;
+//$checkbox-border-width: 2px !default;
+//
+// ^^ defined in variables.scss
+//
 $checkbox-margin: 16px !default;
-$checkbox-border-radius: 2px !default;
-$checkbox-border-width: 2px !default;
 $checkbox-text-margin: 10px !default;
 $checkbox-top: 12px !default;
+
 
 .md-inline-form {
   md-checkbox {
@@ -46,104 +50,11 @@ md-checkbox {
     }
   }
 
-  ._md-container {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-
-    box-sizing: border-box;
-    display: inline-block;
-
-    width: $checkbox-width;
-    height: $checkbox-height;
-    @include rtl(left, 0, auto);
-    @include rtl(right, auto, 0);
-
-    // Disable pointer events, because IE11 is always focusing the child elements instead of the
-    // md-checkbox element.
-    pointer-events: none;
-    
-    &:before {
-      box-sizing: border-box;
-      background-color: transparent;
-      border-radius: 50%;
-      content: '';
-      position: absolute;
-      display: block;
-      height: auto;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      transition: all 0.5s;
-      width: auto;
-    }
-
-    &:after {
-      box-sizing: border-box;
-      content: '';
-      position: absolute;
-      top: -10px;
-      right: -10px;
-      bottom: -10px;
-      left: -10px;
-    }
-
-    .md-ripple-container {
-      position: absolute;
-      display: block;
-      width: auto;
-      height: auto;
-      left: -15px;
-      top: -15px;
-      right: -15px;
-      bottom: -15px;
-    }
-  }
-
   &.md-align-top-left > div._md-container {
     top: $checkbox-top;
   }
 
-  // unchecked
-  ._md-icon {
-    box-sizing: border-box;
-    transition: 240ms;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: $checkbox-width;
-    height: $checkbox-height;
-    border-width: $checkbox-border-width;
-    border-style: solid;
-    border-radius: $checkbox-border-radius;
-  }
-
-  &.md-checked ._md-icon {
-    border: none;
-  }
-
-  // disabled
-  &[disabled] {
-    cursor: default;
-  }
-
-
-  &.md-checked ._md-icon:after {
-    box-sizing: border-box;
-    transform: rotate(45deg);
-    position: absolute;
-    left: $checkbox-width / 3;
-    top: $checkbox-width / 9;
-    display: table;
-    width: $checkbox-width / 3;
-    height: $checkbox-width * 2 / 3;
-    border-width: $checkbox-border-width;
-    border-style: solid;
-    border-top: 0;
-    border-left: 0;
-    content: '';
-  }
+  @include checkbox-container;
 
   ._md-label {
     box-sizing: border-box;

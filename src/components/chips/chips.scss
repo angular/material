@@ -60,6 +60,10 @@ $contact-chip-name-width: rem(12) !default;
   @include rtl(padding, $chip-wrap-padding, rtl-value($chip-wrap-padding));
   vertical-align: middle;
 
+  &.md-readonly ._md-chip-input-container {
+    min-height: $chip-height;
+  }
+
   &:not(.md-readonly) {
     cursor: text;
 
@@ -95,6 +99,12 @@ $contact-chip-name-width: rem(12) !default;
       &:focus {
         outline: none;
       }
+    }
+    &._md-chip-content-edit-is-enabled {
+      -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+      -moz-user-select: none; /* mozilla browsers */
+      -khtml-user-select: none; /* webkit (konqueror) browsers */
+      -ms-user-select: none; /* IE10+ */
     }
     ._md-chip-remove-container {
       position: absolute;

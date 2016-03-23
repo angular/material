@@ -15,6 +15,7 @@ describe('material.components.menuBar', function() {
       it('sets md-position-mode to "bottom left" on nested menus', function() {
         var menuBar = setup();
         var nestedMenu = menuBar[0].querySelector('md-menu');
+
         expect(nestedMenu.getAttribute('md-position-mode')).toBe('left bottom');
       });
 
@@ -24,6 +25,91 @@ describe('material.components.menuBar', function() {
           var ariaRole = menuBar[0].getAttribute('role');
           expect(ariaRole).toBe('menubar');
         });
+      });
+
+      describe('nested menus', function() {
+        var menuBar, menus, subMenuOpen, ctrl;
+
+        it('opens consecutive nested menus', function() {
+          menuBar = setup();
+          ctrl = menuBar.controller('mdMenuBar');
+          menus = menuBar[0].querySelectorAll('md-menu md-menu');
+
+          angular.element(document.body).append(menuBar);
+
+          // Open the menu-bar menu
+          ctrl.focusMenu(1);
+          ctrl.openFocusedMenu();
+          waitForMenuOpen();
+
+          // Open the first nested menu
+          openSubMenu(0);
+          waitForMenuOpen();
+          expect(getOpenSubMenu().text().trim()).toBe('Sub 1 - Content');
+
+          // Open the second nested menu, the first menu should close
+          openSubMenu(1);
+          waitForMenuClose();
+
+          // Then the second menu should become visible
+          waitForMenuOpen();
+          expect(getOpenSubMenu().text().trim()).toBe('Sub 2 - Content');
+
+          menuBar.remove();
+        });
+
+        function openSubMenu(index) {
+          // If a menu is already open, trigger the mouse leave to close it
+          if (subMenuOpen) {
+            subMenuOpen.triggerHandler({
+              type: 'mouseleave',
+              target: subMenuOpen[0],
+              currentTarget: subMenuOpen[0]
+            });
+          }
+
+          // Set the currently open sub-menu and trigger the mouse enter
+          subMenuOpen = angular.element(menus[index]);
+          subMenuOpen.triggerHandler({
+            type: 'mouseenter',
+            target: subMenuOpen[0],
+            currentTarget: subMenuOpen[0]
+          });
+        }
+
+        function getOpenSubMenu() {
+          var containers = document.body.querySelectorAll('._md-open-menu-container._md-active');
+          var lastContainer = containers.item(containers.length - 1);
+
+          return angular.element(lastContainer.querySelector('md-menu-content'));
+        }
+
+        function setup(){
+          var el;
+          inject(function($compile, $rootScope) {
+            el = $compile([
+              '<md-menu-bar>',
+              '  <md-menu>',
+              '    <md-menu-item>',
+              '      <button ng-click="clicked=true">Button {{i}}</button>',
+              '    </md-menu-item>',
+              '    <md-menu-content class="test-submenu">',
+              '      <md-menu ng-repeat="i in [1, 2]">',
+              '        <md-menu-item>',
+              '          <button ng-click="subclicked=true">Sub Button{{i}}</button>',
+              '        </md-menu-item>',
+              '        <md-menu-content>Sub {{i}} - Content</md-menu-content>',
+              '      </md-menu>',
+              '    </md-menu-content>',
+              '  </md-menu>',
+              '</md-menu-bar>'
+            ].join(''))($rootScope);
+            $rootScope.$digest();
+          });
+          attachedMenuElements.push(el);
+
+          return el;
+        }
       });
     });
 
@@ -64,6 +150,13 @@ describe('material.components.menuBar', function() {
       describe('#focusMenu', function() {
         var focused;
         beforeEach(function() { focused = false; });
+        it('focuses the first menu if none is focused', function() {
+          var menus = mockButtonAtIndex(0);
+          spyOn(ctrl, 'getFocusedMenuIndex').and.returnValue(-1);
+          spyOn(ctrl, 'getMenus').and.returnValue(menus);
+          ctrl.focusMenu(1);
+          expect(focused).toBe(true);
+        });
         it('focuses the next menu', function() {
           var menus = mockButtonAtIndex(1);
           spyOn(ctrl, 'getFocusedMenuIndex').and.returnValue(0);
@@ -100,13 +193,16 @@ describe('material.components.menuBar', function() {
           var mockButton = {
             querySelector: function() { return {
               focus: function() { focused = true; }
-            }; }
+            }; },
+
+            // TODO: This may need to become more complex if more of the tests use it
+            classList: { contains: function() { return false; } }
           };
           for (var i = 0; i < 3; ++i) {
             if (i == index) {
               result.push(mockButton);
             } else {
-              result.push({});
+              result.push({ classList: mockButton.classList });
             }
           }
           return result;
@@ -307,5 +403,17 @@ describe('material.components.menuBar', function() {
       }
     });
   });
+
+  function waitForMenuOpen() {
+    inject(function($material) {
+      $material.flushInterimElement();
+    });
+  }
+
+  function waitForMenuClose() {
+    inject(function($material) {
+      $material.flushInterimElement();
+    });
+  }
 });
 

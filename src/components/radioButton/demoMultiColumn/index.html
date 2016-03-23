@@ -1,8 +1,8 @@
-<div ng-controller='ContactController as cc' class="radioDemo2">
+<div ng-controller='ContactController as cc' class="radioDemo2 bidi">
   <h2>Contact List</h2>
     <md-divider></md-divider>
 
-    <md-radio-group ng-model="cc.selectedIndex" >
+    <md-radio-group ng-model="cc.selectedId" >
       <div ng-repeat='person in cc.contacts' class="row">
         <div flex layout='row' layout-padding layout-align="start center" >
 
@@ -28,3 +28,13 @@
       </div>
     </div>
 </div>
+
+<style>
+
+  html[dir="rtl"] .bidi {
+    padding-right: 20px;
+    padding-left:0;
+  }
+
+</style>
+

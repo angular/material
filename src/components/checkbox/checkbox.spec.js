@@ -136,6 +136,25 @@ describe('mdCheckbox', function() {
     expect(checkbox[0]).not.toHaveClass('md-focused');
   });
 
+  it('should redirect focus of container to the checkbox element', function() {
+    var checkbox = compileAndLink('<md-checkbox ng-model="blue"></md-checkbox>');
+
+    document.body.appendChild(checkbox[0]);
+
+    var container = checkbox.children().eq(0);
+    expect(container[0]).toHaveClass('_md-container');
+
+    // We simulate IE11's focus bug, which always focuses an unfocusable div
+    // https://connect.microsoft.com/IE/feedback/details/1028411/
+    container[0].tabIndex = -1;
+
+    container.triggerHandler('focus');
+
+    expect(document.activeElement).toBe(checkbox[0]);
+
+    checkbox.remove();
+  });
+
   it('should set focus state on keyboard interaction after clicking', function() {
     var checkbox = compileAndLink('<md-checkbox ng-model="blue"></md-checkbox>');
 

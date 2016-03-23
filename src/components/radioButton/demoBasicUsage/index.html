@@ -1,5 +1,5 @@
 <div>
-  <form ng-submit="submit()" ng-controller="AppCtrl" ng-cloak>
+  <form ng-submit="submit()" ng-controller="AppCtrl" class="bidi" ng-cloak>
     <p>Selected Value: <span class="radioValue">{{ data.group1 }}</span> </p>
 
     <md-radio-group ng-model="data.group1">
@@ -51,3 +51,12 @@
     </md-radio-group>
   </form>
 </div>
+
+<style>
+
+  html[dir="rtl"] .bidi {
+    padding-right: 20px;
+    padding-left:0;
+  }
+
+</style>

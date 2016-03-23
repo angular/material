@@ -42,30 +42,45 @@ md-select.md-THEME_NAME-theme {
 }
 
 md-select-menu.md-THEME_NAME-theme {
-  md-option[disabled] {
-    color: '{{foreground-3}}';
-  }
+  md-content {
+    background: '{{background-A100}}';
 
-  md-optgroup {
-    color: '{{foreground-2}}';
+    md-optgroup {
+      color: '{{background-600-0.87}}';
+    }
+
     md-option {
-      color: '{{foreground-1}}';
-    }
-  }
-  md-option[selected] {
-    color: '{{primary-500}}';
-    &:focus {
-      color: '{{primary-600}}';
-    }
-    &.md-accent {
-      color: '{{accent-500}}';
-      &:focus {
-        color: '{{accent-600}}';
+      color: '{{background-900-0.87}}';
+
+      &[disabled] {
+        color: '{{background-400-0.87}}';
+      }
+
+      &:focus:not([disabled]) {
+        background: '{{background-200}}';
+      }
+
+      &[selected] {
+        color: '{{primary-500}}';
+        &:focus {
+          color: '{{primary-600}}';
+        }
+        &.md-accent {
+          color: '{{accent-500}}';
+          &:focus {
+            color: '{{accent-600}}';
+          }
+        }
       }
     }
   }
-  md-option:focus:not([disabled]):not([selected]) {
-    background: '{{background-200}}';
-  }
+}
 
+
+[md-checkbox-enabled].md-THEME_NAME-theme {
+  @include checkbox-primary('[selected]');
+
+  md-option ._md-text {
+    color: '{{background-900-0.87}}';
+  }
 }

@@ -12,6 +12,8 @@
 
 var SELECT_EDGE_MARGIN = 8;
 var selectNextId = 0;
+var CHECKBOX_SELECTION_INDICATOR =
+  angular.element('<div class="_md-container"><div class="_md-icon"></div></div>');
 
 angular.module('material.components.select', [
     'material.core',
@@ -87,9 +89,9 @@ angular.module('material.components.select', [
  * </hljs>
  *
  * At first one might expect that the select should be populated with "Bob" as the selected user. However,
- * this is not true. To determine whether something is selected, 
+ * this is not true. To determine whether something is selected,
  * `ngModelController` is looking at whether `$scope.selectedUser == (any user in $scope.users);`;
- * 
+ *
  * Javascript's `==` operator does not check for deep equality (ie. that all properties
  * on the object are the same), but instead whether the objects are *the same object in memory*.
  * In this case, we have two instances of identical objects, but they exist in memory as unique
@@ -98,7 +100,7 @@ angular.module('material.components.select', [
  * To get around this, `ngModelController` provides a `track by` option that allows us to specify a different
  * expression which will be used for the equality operator. As such, we can update our `html` to
  * make use of this by specifying the `ng-model-options="{trackBy: '$value.id'}"` on the `md-select`
- * element. This converts our equality expression to be 
+ * element. This converts our equality expression to be
  * `$scope.selectedUser.id == (any id in $scope.users.map(function(u) { return u.id; }));`
  * which results in Bob being selected as desired.
  *
@@ -144,7 +146,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         .find('md-content')
         .prepend(angular.element(
           '<div>' +
-          ' <md-progress-circular md-mode="{{progressMode}}" ng-hide="$$loadingAsyncDone"></md-progress-circular>' +
+          ' <md-progress-circular md-mode="{{progressMode}}" ng-hide="$$loadingAsyncDone" md-diameter="25px"></md-progress-circular>' +
           '</div>'
         ));
 
@@ -286,7 +288,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
             }
           });
 
-        // Wait until postDigest so that we attach after ngModel's 
+        // Wait until postDigest so that we attach after ngModel's
         // blur listener so we can set untouched.
         $mdUtil.nextTick(function () {
           element.on('blur', function() {
@@ -775,6 +777,11 @@ function OptionDirective($mdButtonInkRipple, $mdUtil) {
   function postLink(scope, element, attr, ctrls) {
     var optionCtrl = ctrls[0];
     var selectCtrl = ctrls[1];
+
+    if (selectCtrl.isMultiple) {
+      element.attr('md-checkbox-enabled', '');
+      element.prepend(CHECKBOX_SELECTION_INDICATOR.clone());
+    }
 
     if (angular.isDefined(attr.ngValue)) {
       scope.$watch(attr.ngValue, setOptionValue);
@@ -1280,7 +1287,7 @@ function SelectProvider($$interimElementProvider) {
       var mdSelect = opts.selectCtrl;
       if (mdSelect) {
         var menuController = opts.selectEl.controller('mdSelectMenu');
-        mdSelect.setLabelText(menuController.selectedLabels());
+        mdSelect.setLabelText(menuController ? menuController.selectedLabels() : '');
         mdSelect.triggerClose();
       }
     }

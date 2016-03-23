@@ -15,12 +15,16 @@
 }
 
 @mixin input-placeholder-color($color) {
-  &::-webkit-input-placeholder,
-    &::-moz-placeholder,
-    &:-moz-placeholder,
-    &:-ms-input-placeholder {
-      color: $color;
+  $pseudos: '::-webkit-input-placeholder', ':-moz-placeholder', '::-moz-placeholder',
+            ':-ms-input-placeholder',  '::-webkit-input-placeholder';
+
+  // It is important to export every pseudo within its own block, because otherwise the placeholder
+  // won't be set on the most browsers.
+  @each $pseudo in $pseudos {
+    &#{$pseudo} {
+      color: unquote($color);
     }
+  }
 }
 
 @mixin pie-clearfix {
@@ -105,75 +109,18 @@
 // @see https://css-tricks.com/almanac/properties/d/direction/
 
 @mixin rtl($prop, $ltr-value, $rtl-value) {
-  html[dir=ltr] & {
-    #{$prop}: $ltr-value;
-    unicode-bidi: embed;
-  }
-  body[dir=ltr] & {
-    #{$prop}: $ltr-value;
-    unicode-bidi: embed;
-  }
-
-  html[dir=rtl] & {
+  #{$prop}: $ltr-value;
+  [dir=rtl] & {
     #{$prop}: $rtl-value;
-    unicode-bidi: embed;
   }
-  body[dir=rtl] & {
-    #{$prop}: $rtl-value;
-    unicode-bidi: embed;
-  }
-
-  html:not([dir]) body:not([dir]) & {
-    #{$prop}: $ltr-value;
-    unicode-bidi: embed;
-  }
-
-  bdo[dir=rtl] {
-    direction: rtl;
-    unicode-bidi: bidi-override;
-  }
-  bdo[dir=ltr] {
-    direction: ltr;
-    unicode-bidi: bidi-override;
-  }
-
-
 }
 
 @mixin rtl-prop($ltr-prop, $rtl-prop, $value) {
-  html[dir=ltr] & {
-    #{$ltr-prop}: $value;
-    unicode-bidi: embed;
-  }
-  body[dir=ltr] & {
-    #{$ltr-prop}: $value;
-    unicode-bidi: embed;
-  }
-
-  html[dir=rtl] & {
+  #{$ltr-prop}: $value;
+  [dir=rtl] & {
+    #{$ltr-prop}: auto;
     #{$rtl-prop}: $value;
-    unicode-bidi: embed;
   }
-  body[dir=rtl] & {
-    #{$rtl-prop}: $value;
-    unicode-bidi: embed;
-  }
-
-  html:not([dir]) body:not([dir]) & {
-    #{$ltr-prop}: $value;
-    unicode-bidi: embed;
-  }
-
-  bdo[dir=rtl] {
-    direction: rtl;
-    unicode-bidi: bidi-override;
-  }
-  bdo[dir=ltr] {
-    direction: ltr;
-    unicode-bidi: bidi-override;
-  }
-
-
 }
 
 // To reverse padding (top left bottom right) -> (top right bottom left)
@@ -203,4 +150,105 @@
   @include fab-position(bottom-left, auto, auto, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2);
   @include fab-position(top-right, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2, auto, auto);
   @include fab-position(top-left, ($button-fab-height - $button-fab-padding)/2, auto, auto, ($button-fab-width - $button-fab-padding)/2);
+}
+
+// This mixin allows a user to use the md-checkbox css outside of the
+// md-checkbox directive.
+// See src/components/select/select.scss for an example.
+@mixin checkbox-container(
+  $checkedSelector: '.md-checked',
+  $width: $checkbox-width,
+  $height: $checkbox-height,
+  $border-width: $checkbox-border-width,
+  $border-radius: $checkbox-border-radius) {
+  ._md-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    box-sizing: border-box;
+    display: inline-block;
+
+    width: $width;
+    height: $height;
+    @include rtl(left, 0, auto);
+    @include rtl(right, auto, 0);
+
+    &:before {
+      box-sizing: border-box;
+      background-color: transparent;
+      border-radius: 50%;
+      content: '';
+      position: absolute;
+      display: block;
+      height: auto;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      transition: all 0.5s;
+      width: auto;
+    }
+
+    &:after {
+      box-sizing: border-box;
+      content: '';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      bottom: -10px;
+      left: -10px;
+    }
+
+    .md-ripple-container {
+      position: absolute;
+      display: block;
+      width: auto;
+      height: auto;
+      left: -15px;
+      top: -15px;
+      right: -15px;
+      bottom: -15px;
+    }
+  }
+
+  // unchecked
+  ._md-icon {
+    box-sizing: border-box;
+    transition: 240ms;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: $width;
+    height: $height;
+    border-width: $border-width;
+    border-style: solid;
+    border-radius: $border-radius;
+  }
+
+  &#{$checkedSelector} ._md-icon {
+    border: none;
+
+    &:after {
+      box-sizing: border-box;
+      transform: rotate(45deg);
+      position: absolute;
+      left: $width / 3;
+      top: $width / 9;
+      display: table;
+      width: $width / 3;
+      height: $width * 2 / 3;
+      border-width: $border-width;
+      border-style: solid;
+      border-top: 0;
+      border-left: 0;
+      content: '';
+    }
+  }
+
+  // disabled
+  &[disabled] {
+    cursor: default;
+  }
+
 }

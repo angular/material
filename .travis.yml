@@ -14,15 +14,12 @@ cache:
   directories:
   - node_modules
   - "$HOME/.pub-cache"
+  - "$HOME/travis-phantomjs"
 branches:
   only:
   - master
 before_install:
-- mkdir travis-phantomjs
-- wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
-  -O $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2
-- tar -xvf $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C $PWD/travis-phantomjs
-- export PHANTOMJS_BIN=$PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs
+- "source ./scripts/travis-install-phantomjs2.sh"
 install:
 - npm install
 - npm rebuild node-sass

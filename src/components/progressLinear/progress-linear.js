@@ -35,8 +35,8 @@ angular.module('material.components.progressLinear', [
  *
  * @param {string} md-mode Select from one of four modes: determinate, indeterminate, buffer or query.
  *
- * Note: if the `md-mode` value is set as undefined or specified as 1 of the four (4) valid modes, then `.ng-hide`
- * will be auto-applied as a style to the component.
+ * Note: if the `md-mode` value is set as undefined or specified as 1 of the four (4) valid modes, then `indeterminate`
+ * will be auto-applied as the mode.
  *
  * Note: if not configured, the `md-mode="indeterminate"` will be auto injected as an attribute. If `value=""` is also specified, however,
  * then `md-mode="determinate"` would be auto-injected instead.
@@ -108,18 +108,17 @@ function MdProgressLinearDirective($mdTheming, $mdUtil, $log) {
       });
 
       attr.$observe('mdMode',function(mode){
+        if (lastMode) container.removeClass( lastMode );
+
         switch( mode ) {
           case MODE_QUERY:
           case MODE_BUFFER:
           case MODE_DETERMINATE:
           case MODE_INDETERMINATE:
-            container.removeClass( 'ng-hide' + ' ' + lastMode );
             container.addClass( lastMode = "_md-mode-" + mode );
             break;
           default:
-            if (lastMode) container.removeClass( lastMode );
-            container.addClass('ng-hide');
-            lastMode = undefined;
+            container.addClass( lastMode = "_md-mode-" + MODE_INDETERMINATE );
             break;
         }
       });
@@ -154,7 +153,7 @@ function MdProgressLinearDirective($mdTheming, $mdUtil, $log) {
           case MODE_QUERY:
             break;
           default:
-            value = undefined;
+            value = MODE_INDETERMINATE;
             break;
         }
       }

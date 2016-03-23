@@ -20,9 +20,14 @@ function run {
     bower-material --depth=2
 
   echo "-- Copying in build files..."
+
   cp -Rf dist/* bower-material/
 
   cd bower-material
+  # remove stale layout files; newer ones are in `dist/layouts/`
+  rm ./angular-material.layouts.css
+  rm ./angular-material.layouts.min.css
+
 
   echo "-- Committing and tagging..."
   replaceJsonProp "bower.json" "version" "$VERSION"

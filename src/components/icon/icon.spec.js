@@ -177,11 +177,20 @@ describe('mdIcon directive', function() {
           return {
             then: function(fn) {
               switch(id) {
-                case 'android'      : fn('<svg><g id="android"></g></svg>');
-                case 'cake'         : fn('<svg><g id="cake"></g></svg>');
-                case 'android.svg'  : fn('<svg><g id="android"></g></svg>');
-                case 'cake.svg'     : fn('<svg><g id="cake"></g></svg>');
-                case 'image:android': fn('');
+                case 'android'          : fn('<svg><g id="android"></g></svg>');
+                  break;
+                case 'cake'             : fn('<svg><g id="cake"></g></svg>');
+                  break;
+                case 'android.svg'      : fn('<svg><g id="android"></g></svg>');
+                  break;
+                case 'cake.svg'         : fn('<svg><g id="cake"></g></svg>');
+                  break;
+                case 'image:android'    : fn('');
+                  break;
+                default                 :
+                  if (/^data:/.test(id)) {
+                    fn(window.atob(id.split(',')[1]));
+                  }
               }
             }
           }
@@ -240,6 +249,17 @@ describe('mdIcon directive', function() {
         expect(el.html()).toEqual('');
       }));
 
+      describe('with a data URL', function() {
+        it('should set mdSvgSrc from a function expression', inject(function() {
+          var svgData = '<svg><g><circle r="50" cx="100" cy="100"></circle></g></svg>';
+          $scope.getData = function() {
+            return 'data:image/svg+xml;base64,' + window.btoa(svgData);
+          }
+          el = make('<md-icon md-svg-src="{{ getData() }}"></md-icon>');
+          $scope.$digest();
+          expect(el[0].innerHTML).toEqual(svgData);
+        }));
+      })
     });
 
     describe('with ARIA support', function() {
@@ -419,6 +439,29 @@ describe('mdIcon service', function() {
         $scope.$digest();
       });
 
+      describe('and the URL is a data URL', function() {
+        var svgData = '<svg><g><circle r="50" cx="100" cy="100"></circle></g></svg>';
+
+        describe('and the data is base64 encoded', function() {
+          it('should return correct SVG markup', function() {
+            var data = 'data:image/svg+xml;base64,' + btoa(svgData);
+            $mdIcon(data).then(function(el) {
+              expect(el.outerHTML).toEqual( updateDefaults(svgData) );
+            })
+            $scope.$digest();
+          });
+        });
+
+        describe('and the data is un-encoded', function() {
+          it('should return correct SVG markup', function() {
+            var data = 'data:image/svg+xml,' + svgData;
+            $mdIcon(data).then(function(el) {
+              expect(el.outerHTML).toEqual( updateDefaults(svgData) );
+            })
+            $scope.$digest();
+          });
+        });
+      });
     });
 
     describe('icon set URL is not found', function() {
@@ -464,8 +507,14 @@ describe('mdIcon service', function() {
     });
   });
 
+
   function updateDefaults(svg) {
     svg = angular.element(svg)[0];
+
+    svg.removeAttribute('id');
+    angular.forEach(svg.querySelectorAll('[id]'), function(item) {
+      item.removeAttribute('id');
+    });
 
     angular.forEach({
       'xmlns' : 'http://www.w3.org/2000/svg',

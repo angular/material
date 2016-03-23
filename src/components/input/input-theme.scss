@@ -1,9 +1,8 @@
 md-input-container.md-THEME_NAME-theme {
   .md-input {
-    @include input-placeholder-color('{{foreground-3}}');
+    @include input-placeholder-color('\'{{foreground-3}}\'');
     color: '{{foreground-1}}';
     border-color: '{{foreground-4}}';
-    text-shadow: '{{foreground-shadow}}';
   }
 
   > md-icon {
@@ -12,7 +11,6 @@ md-input-container.md-THEME_NAME-theme {
 
   label,
   ._md-placeholder {
-    text-shadow: '{{foreground-shadow}}';
     color: '{{foreground-3}}';
   }
 
@@ -24,10 +22,7 @@ md-input-container.md-THEME_NAME-theme {
     color: '{{foreground-2}}';
   }
 
-  ng-messages, [ng-messages],
-  ng-message, data-ng-message, x-ng-message,
-  [ng-message], [data-ng-message], [x-ng-message],
-  [ng-message-exp], [data-ng-message-exp], [x-ng-message-exp] {
+  .md-input-messages-animation, .md-input-message-animation {
     color: '{{warn-A700}}';
     .md-char-counter {
       color: '{{foreground-1}}';
@@ -75,10 +70,7 @@ md-input-container.md-THEME_NAME-theme {
     label {
       color: '{{warn-A700}}';
     }
-    ng-message, data-ng-message, x-ng-message,
-    [ng-message], [data-ng-message], [x-ng-message],
-    [ng-message-exp], [data-ng-message-exp], [x-ng-message-exp],
-    .md-char-counter {
+    .md-input-message-animation, .md-char-counter {
       color: '{{warn-A700}}';
     }
   }

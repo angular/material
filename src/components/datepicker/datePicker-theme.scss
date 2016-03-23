@@ -1,14 +1,14 @@
 /** Theme styles for mdDatepicker. */
 
 md-datepicker.md-THEME_NAME-theme {
-  background: '{{background-color}}';
+  background: '{{background-hue-1}}';
 }
 
 .md-THEME_NAME-theme {
 
   .md-datepicker-input {
-    @include input-placeholder-color('{{foreground-3}}');
-    color: '{{background-contrast}}';
+    @include input-placeholder-color('\'{{foreground-3}}\'');
+    color: '{{foreground-1}}';
     background: '{{background-color}}';
   }
 
@@ -25,7 +25,7 @@ md-datepicker.md-THEME_NAME-theme {
   }
 
   .md-datepicker-calendar-pane {
-    border-color: '{{background-300}}';
+    border-color: '{{background-hue-1}}';
   }
 
   .md-datepicker-triangle-button {
@@ -45,7 +45,10 @@ md-datepicker.md-THEME_NAME-theme {
     }
   }
 
-  .md-datepicker-calendar,
+  .md-datepicker-calendar {
+    background: '{{background-A100}}';
+  }
+
   .md-datepicker-input-mask-opaque {
     background: '{{background-color}}';
   }
