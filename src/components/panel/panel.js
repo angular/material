@@ -478,7 +478,19 @@ angular
  * @ngdoc object
  * @name MdPanelAnimation
  * @description
- * Object for configuring panel animations.
+ * Animation configuration object. To use, create an MdPanelAnimation with the
+ * desired properties, then pass the object as part of $mdPanel creation.
+ *
+ * Example:
+ *
+ * var panelAnimation = new MdPanelAnimation()
+ *     .openFrom(myButtonEl)
+ *     .closeTo('.my-button')
+ *     .withAnimation('');
+ *
+ * $mdPanel.create({
+ *   animation: panelAnimation
+ * });
  */
 
 /**
@@ -1347,6 +1359,10 @@ MdPanelAnimation.prototype.openFrom = function(openFrom) {
   openFrom = openFrom.target ? openFrom.target : openFrom;
 
   this._openFrom = this._getBoundingClientRect(this._getElement(openFrom));
+
+  if (angular.isUndefined(this._closeTo)) {
+    this._closeTo = angular.copy(this._openFrom);
+  }
   return this;
 };
 
@@ -1389,20 +1405,15 @@ MdPanelAnimation.prototype._getElement = function(el) {
  * @private
  */
 MdPanelAnimation.prototype._getBoundingClientRect = function(element) {
-  var source = angular.element((element || {}));
-  if (source && source.length) {
-    // Compute and save the target element's bounding rect, so that if the
-    // element is hidden when the dialog closes, we can shrink the dialog
-    // back to the same position it expanded from.
-    //
-    // Checking if the source is a rect object or a DOM element
+  if (element && element.length) {
     var bounds = { top:0, left:0, height:0, width:0 };
-    var hasFn = angular.isFunction(source[0].getBoundingClientRect);
+    // "element" may just be a JQLite wrapper around the object with top/left/height/width.
+    var hasFn = angular.isFunction(element[0].getBoundingClientRect);
 
     return {
-      element : hasFn ? source : undefined,
-      bounds  : hasFn ? source[0].getBoundingClientRect() : angular.extend({}, bounds, source[0]),
-      focus   : angular.bind(source, source.focus),
+      element : hasFn ? element : undefined,
+      bounds  : hasFn ? element[0].getBoundingClientRect() : angular.extend({}, bounds, element[0]),
+      focus   : angular.bind(element, element.focus),
     };
   }
 };

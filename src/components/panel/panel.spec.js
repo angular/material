@@ -665,15 +665,10 @@ describe('$mdPanel', function() {
   });
 
   describe('animation logic', function() {
-    var config;
     var mdPanelAnimation;
     var myButton;
 
     beforeEach(function() {
-      config = {
-        template: '<div>Hello World!</div>'
-      };
-
       mdPanelAnimation = $mdPanel.newPanelAnimation();
 
       myButton = '<button>myButton</button>';
@@ -681,7 +676,7 @@ describe('$mdPanel', function() {
       myButton = angular.element(document.querySelector('button'));
     });
 
-    describe('should openFrom', function() {
+    describe('should determine openFrom when', function() {
       it('provided a selector', function() {
         var animation = mdPanelAnimation.openFrom('button');
 
@@ -715,7 +710,7 @@ describe('$mdPanel', function() {
       });
     });
 
-    describe('should closeTo', function() {
+    describe('should determine closeTo when', function() {
       it('provided a selector', function() {
         var animation = mdPanelAnimation.closeTo('button');
 
