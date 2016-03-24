@@ -323,8 +323,9 @@ angular
 
 
 /**
- * @ngdoc object
+ * @ngdoc type
  * @name MdPanelPosition
+ * @module material.components.panel
  * @description
  * Object for configuring the position of the panel. Examples:
  *
@@ -359,8 +360,8 @@ angular
  * @name MdPanelPosition#relativeTo
  * @description
  * Positions the panel relative to a specific element.
- * @param {!angular.JQLite} element Element to position the panel with
- *     respect to.
+ * @param {string|!Element|!angular.JQLite} element Query selector,
+ *     DOM element, or angular element to position the panel with respect to.
  * @returns {MdPanelPosition}
  */
 
@@ -408,8 +409,7 @@ angular
  * Sets the x position for the panel relative to another element.
  * xPosition must be one of the following values:
  *
- * center | align-left | align-right | align-start | align-end |
- * offset-left | offset-right | offset-start | offset-end
+ * center | align-start | align-end | offset-start | offset-end
  *
  *    *************
  *    *           *
@@ -418,11 +418,11 @@ angular
  *    *************
  *   A B    C    D E
  *
- * A: offset-right, offset-start (for LTR displays)
- * B: align-left, align-start (for LTR displays)
+ * A: offset-start (for LTR displays)
+ * B: align-start (for LTR displays)
  * C: center
- * D: align-right, align-end (for LTR displays)
- * E: offset-left, offset-end (for LTR displays)
+ * D: align-end (for LTR displays)
+ * E: offset-end (for LTR displays)
  */
 
 /**
@@ -1015,16 +1015,11 @@ MdPanelRef.prototype._addStyles = function() {
 
   if (!positionConfig) { return; }
 
-  var isAbsolute = positionConfig.getAbsolute();
-  var panelPosition = isAbsolute ? 'fixed' : 'relative';
-  this._panelEl.css('position', panelPosition);
-
-  if (isAbsolute) {
-    this._panelEl.css('top', positionConfig.getTop());
-    this._panelEl.css('bottom', positionConfig.getBottom());
-    this._panelEl.css('left', positionConfig.getLeft());
-    this._panelEl.css('right', positionConfig.getRight());
-  }
+  this._panelEl.css('position', 'fixed');
+  this._panelEl.css('top', positionConfig.getTop(this._panelEl));
+  this._panelEl.css('bottom', positionConfig.getBottom(this._panelEl));
+  this._panelEl.css('left', positionConfig.getLeft(this._panelEl));
+  this._panelEl.css('right', positionConfig.getRight(this._panelEl));
 };
 
 
@@ -1182,6 +1177,12 @@ function MdPanelPosition() {
   /** @private {boolean} */
   this._absolute = false;
 
+  /** @private {!DOMRect} */
+  this._relativeToRect;
+
+  /** @private {boolean} */
+  this._panelPositionCalculated = false;
+
   /** @private {string} */
   this._top = '';
 
@@ -1193,7 +1194,39 @@ function MdPanelPosition() {
 
   /** @private {string} */
   this._right = '';
+
+  /** @private {string} */
+  this._xPosition = '';
+
+  /** @private {string} */
+  this._yPosition = '';
 }
+
+
+/**
+ * Possible values of xPosition.
+ * @enum {string}
+ */
+MdPanelPosition.xPosition = {
+  CENTER: 'center',
+  ALIGN_START: 'align-start',
+  ALIGN_END: 'align-end',
+  OFFSET_START: 'offset-start',
+  OFFSET_END: 'offset-end'
+};
+
+
+/**
+ * Possible values of yPosition.
+ * @enum {string}
+ */
+MdPanelPosition.yPosition = {
+  CENTER: 'center',
+  ALIGN_TOPS: 'align-tops',
+  ALIGN_BOTTOMS: 'align-bottoms',
+  ABOVE: 'above',
+  BELOW: 'below'
+};
 
 
 /**
@@ -1203,15 +1236,6 @@ function MdPanelPosition() {
 MdPanelPosition.prototype.absolute = function() {
   this._absolute = true;
   return this;
-};
-
-
-/**
- * Returns whether the panel should be absolutely positioned.
- * @returns {boolean}
- */
-MdPanelPosition.prototype.getAbsolute = function() {
-  return this._absolute;
 };
 
 
@@ -1227,15 +1251,6 @@ MdPanelPosition.prototype.top = function(opt_top) {
 
 
 /**
- * Gets the value of `top` for the panel.
- * @returns {string}
- */
-MdPanelPosition.prototype.getTop = function() {
-  return this._top;
-};
-
-
-/**
  * Sets the value of `bottom` for the panel.
  * @param {string=} opt_bottom Value of `bottom`. Defaults to '0'.
  * @returns {MdPanelPosition}
@@ -1243,15 +1258,6 @@ MdPanelPosition.prototype.getTop = function() {
 MdPanelPosition.prototype.bottom = function(opt_bottom) {
   this._bottom = opt_bottom || '0';
   return this;
-};
-
-
-/**
- * Gets the value of `bottom` for the panel.
- * @returns {string}
- */
-MdPanelPosition.prototype.getBottom = function() {
-  return this._bottom;
 };
 
 
@@ -1267,15 +1273,6 @@ MdPanelPosition.prototype.left = function(opt_left) {
 
 
 /**
- * Gets the value of `left` for the panel.
- * @returns {string}
- */
-MdPanelPosition.prototype.getLeft = function() {
-  return this._left;
-};
-
-
-/**
  * Sets the value of `right` for the panel.
  * @param {string=} opt_right Value of `right`. Defaults to '0'.
  * @returns {MdPanelPosition}
@@ -1287,11 +1284,192 @@ MdPanelPosition.prototype.right = function(opt_right) {
 
 
 /**
- * Gets the value of `right` for the panel.
+ * Sets element for relative positioning.
+ * @param {string|!Element|!angular.JQLite} element Query selector,
+ *     DOM element, or angular element to set the panel relative to.
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.relativeTo = function(element) {
+  this._absolute = false;
+  this._relativeToRect = getElement(element)[0].getBoundingClientRect();
+  return this;
+};
+
+
+/**
+ * Sets the x position for the panel relative to another element.
+ * xPosition must be one of the MdPanelPosition.xPosition values.
+ *
+ * @param {string} xPosition
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.withPanelXPosition = function(xPosition) {
+  if (!this._relativeToRect) {
+    throw new Error('withPanelXPosition can only be used with relative' +
+        'positioning. Set relativeTo first.');
+  }
+
+  var positionKeys = Object.keys(MdPanelPosition.xPosition);
+  var positionValues = [];
+  for (var key, i = 0; key = positionKeys[i]; i++) {
+    var position = MdPanelPosition.xPosition[key];
+    positionValues.push(position);
+    if (position === xPosition) {
+      this._xPosition = xPosition;
+      return this;
+    }
+  }
+
+  throw new Error('withPanelXPosition only accepts the following values:\n' +
+      positionValues.join(' | '));
+};
+
+
+/**
+ * Sets the y position for the panel relative to another element.
+ * yPosition must be one of the MdPanelPosition.yPosition values.
+ *
+ * @param {string} yPosition
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.withPanelYPosition = function(yPosition) {
+  if (!this._relativeToRect) {
+    throw new Error('withPanelYPosition can only be used with relative ' +
+        'positioning. Set relativeTo first.');
+  }
+
+  var positionKeys = Object.keys(MdPanelPosition.yPosition);
+  var positionValues = [];
+  for (var key, i = 0; key = positionKeys[i]; i++) {
+    var position = MdPanelPosition.yPosition[key];
+    positionValues.push(position);
+    if (position === yPosition) {
+      this._yPosition = yPosition;
+      return this;
+    }
+  }
+
+  throw new Error('withPanelYPosition only accepts the following values:\n' +
+      positionValues.join(' | '));
+};
+
+
+/**
+ * Gets the value of `top` for the panel.
+ * @param {!angular.JQLite} panelEl
  * @returns {string}
  */
-MdPanelPosition.prototype.getRight = function() {
+MdPanelPosition.prototype.getTop = function(panelEl) {
+  this._calculatePanelPosition(panelEl);
+  return this._top;
+};
+
+
+/**
+ * Gets the value of `bottom` for the panel.
+ * @param {!angular.JQLite} panelEl
+ * @returns {string}
+ */
+MdPanelPosition.prototype.getBottom = function(panelEl) {
+  this._calculatePanelPosition(panelEl);
+  return this._bottom;
+};
+
+
+/**
+ * Gets the value of `left` for the panel.
+ * @param {!angular.JQLite} panelEl
+ * @returns {string}
+ */
+MdPanelPosition.prototype.getLeft = function(panelEl) {
+  this._calculatePanelPosition(panelEl);
+  return this._left;
+};
+
+
+/**
+ * Gets the value of `right` for the panel.
+ * @param {!angular.JQLite} panelEl
+ * @returns {string}
+ */
+MdPanelPosition.prototype.getRight = function(panelEl) {
+  this._calculatePanelPosition(panelEl);
   return this._right;
+};
+
+
+/**
+ * Calculates the panel position for relative based on the created
+ * panel element.
+ * @param {!angular.JQLite} panelEl
+ */
+MdPanelPosition.prototype._calculatePanelPosition = function(panelEl) {
+  // Only calculate the position if necessary.
+  if (this._absolute || this._panelPositionCalculated) {
+    return;
+  }
+
+  // TODO(ErinCoughlan): Update position on scroll.
+  // TODO(ErinCoughlan): Position panel intelligently to keep it on screen.
+
+  // Indicate that the position is calculated so it can be skipped next time.
+  this._panelPositionCalculated = true;
+
+  var panelBounds = panelEl[0].getBoundingClientRect();
+  var panelWidth = panelBounds.width;
+  var panelHeight = panelBounds.height;
+
+  var targetBounds = this._relativeToRect;
+
+  var targetLeft = targetBounds.left;
+  var targetRight = targetBounds.right;
+  var targetWidth = targetBounds.width;
+
+  switch (this._xPosition) {
+    case MdPanelPosition.xPosition.OFFSET_START:
+      // TODO(ErinCoughlan): Change OFFSET_START for rtl vs ltr.
+      this._right = targetLeft + 'px';
+      break;
+    case MdPanelPosition.xPosition.ALIGN_END:
+      // TODO(ErinCoughlan): Change ALIGN_END for rtl vs ltr.
+      this._right = targetRight + 'px';
+      break;
+    case MdPanelPosition.xPosition.CENTER:
+      var left = targetLeft + (0.5 * targetWidth) - (0.5 * panelWidth)
+      this._left = left + 'px';
+      break;
+    case MdPanelPosition.xPosition.ALIGN_START:
+      // TODO(ErinCoughlan): Change ALIGN_START for rtl vs ltr.
+      this._left = targetLeft + 'px';
+      break;
+    case MdPanelPosition.xPosition.OFFSET_END:
+      // TODO(ErinCoughlan): Change OFFSET_END for rtl vs ltr.
+      this._left = targetRight + 'px';
+      break;
+  }
+
+  var targetTop = targetBounds.top;
+  var targetBottom = targetBounds.bottom;
+  var targetHeight = targetBounds.height;
+
+  switch (this._yPosition) {
+    case MdPanelPosition.yPosition.ABOVE:
+      this._bottom = targetTop + 'px';
+      break;
+    case MdPanelPosition.yPosition.ALIGN_BOTTOMS:
+      this._bottom = targetBottom + 'px';
+      break;
+    case MdPanelPosition.yPosition.CENTER:
+      var top = targetTop + (0.5 * targetHeight) - (0.5 * panelHeight)
+      this._top = top + 'px';
+      break;
+    case MdPanelPosition.yPosition.ALIGN_TOPS:
+      this._top = targetTop + 'px';
+      break;
+    case MdPanelPosition.yPosition.BELOW:
+      this._top = targetBottom + 'px';
+      break;
+  }
 };
 
 
@@ -1432,3 +1610,19 @@ MdPanelAnimation.prototype._getBoundingClientRect = function(element) {
     };
   }
 };
+
+
+/*****************************************************************************
+ *                                Util Methods                               *
+ *****************************************************************************/
+
+/**
+ * Returns the angular element associated with a css selector or element.
+ * @param el {string|!angular.JQLite|!Element}
+ * @returns {!angular.JQLite}
+ */
+function getElement(el) {
+  var queryResult = angular.isString(el) ?
+      document.querySelector(el) : el;
+  return angular.element(queryResult);
+}
