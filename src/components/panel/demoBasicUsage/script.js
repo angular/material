@@ -16,6 +16,7 @@ function BasicDemoCtrl($mdPanel) {
   ];
 
   this.selected = {favoriteDessert: 'Donut'};
+  this.disableParentScroll = false;
 }
 
 
@@ -28,6 +29,7 @@ BasicDemoCtrl.prototype.showDialog = function() {
     attachTo: '.demo-md-panel',
     controller: PanelDialogCtrl,
     controllerAs: 'ctrl',
+    disableParentScroll: this.disableParentScroll,
     templateUrl: 'panel.tmpl.html',
     hasBackdrop: true,
     panelClass: 'demo-dialog-example',
