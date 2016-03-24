@@ -77,7 +77,7 @@ describe('<md-select>', function() {
 
   it('sets aria-owns between the select and the container', function() {
     var select = setupSelect('ng-model="val"').find('md-select');
-    var ownsId = select.attr('aria-owns'); 
+    var ownsId = select.attr('aria-owns');
     expect(ownsId).toBeTruthy();
     var containerId = select[0].querySelector('._md-select-menu-container').getAttribute('id');
     expect(ownsId).toBe(containerId);
@@ -132,7 +132,7 @@ describe('<md-select>', function() {
     var opts = [ { id: 1, name: 'Bob' }, { id: 2, name: 'Alice' } ];
     var select = setupSelect('ng-model="$root.val" ng-change="onChange()" ng-model-options="{trackBy: \'$value.id\'}"', opts);
     expect(changed).toBe(false);
-    
+
     openSelect(select);
     clickOption(select, 1);
     waitForSelectClose();
@@ -256,6 +256,24 @@ describe('<md-select>', function() {
         expect(checkBoxContainer).toBe(null);
         expect(checkBoxIcon).toBe(null);
       }
+    }));
+
+    it('displays md-selected-text when specified', inject(function($rootScope) {
+      $rootScope.selectedText = 'Hello World';
+
+      var select = setupSelect('ng-model="someVal", md-selected-text="selectedText"', null, true).find('md-select');
+      var label = select.find('md-select-value');
+
+      expect(label.text()).toBe($rootScope.selectedText);
+
+      $rootScope.selectedText = 'Goodbye world';
+
+      // The label update function is not called until some user action occurs.
+      openSelect(select);
+      closeSelect(select);
+      waitForSelectClose();
+
+      expect(label.text()).toBe($rootScope.selectedText);
     }));
 
     it('supports rendering multiple', inject(function($rootScope, $compile) {
