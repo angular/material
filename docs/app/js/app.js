@@ -8,8 +8,9 @@ var DocsApp = angular.module('docsApp', [ 'angularytics', 'ngRoute', 'ngMessages
   '$routeProvider',
   '$locationProvider',
   '$mdThemingProvider',
+  '$mdIconProvider',
 function(SERVICES, COMPONENTS, DEMOS, PAGES,
-    $routeProvider, $locationProvider, $mdThemingProvider) {
+    $routeProvider, $locationProvider, $mdThemingProvider, $mdIconProvider) {
   $locationProvider.html5Mode(true);
 
   $routeProvider
@@ -61,6 +62,8 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
   $mdThemingProvider.theme('docs-dark', 'default')
     .primaryPalette('yellow')
     .dark();
+
+  $mdIconProvider.icon('md-toggle-arrow', 'img/icons/toggle-arrow.svg', 48);
 
   $mdThemingProvider.theme('default')
       .primaryPalette('docs-blue')
