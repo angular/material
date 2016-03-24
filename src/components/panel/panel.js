@@ -370,7 +370,8 @@ angular
  * @ngdoc method
  * @name MdPanelPosition#top
  * @description
- * Sets the value of `top` for the panel.
+ * Sets the value of `top` for the panel. Clears any previously set
+ * vertical position.
  * @param {string=} opt_top Value of `top`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
@@ -379,7 +380,8 @@ angular
  * @ngdoc method
  * @name MdPanelPosition#bottom
  * @description
- * Sets the value of `bottom` for the panel.
+ * Sets the value of `bottom` for the panel. Clears any previously set
+ * vertical position.
  * @param {string=} opt_bottom Value of `bottom`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
@@ -388,7 +390,8 @@ angular
  * @ngdoc method
  * @name MdPanelPosition#left
  * @description
- * Sets the value of `left` for the panel.
+ * Sets the value of `left` for the panel. Clears any previously set
+ * horizontal position.
  * @param {string=} opt_left Value of `left`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
@@ -397,7 +400,8 @@ angular
  * @ngdoc method
  * @name MdPanelPosition#right
  * @description
- * Sets the value of `right` for the panel.
+ * Sets the value of `right` for the panel. Clears any previously set
+ * horizontal position.
  * @param {string=} opt_right Value of `right`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
@@ -406,7 +410,8 @@ angular
  * @ngdoc method
  * @name MdPanelPosition#centerHorizontally
  * @description
- * Centers the panel horizontally in the viewport.
+ * Centers the panel horizontally in the viewport. Clears any previously set
+ * horizontal position.
  * @returns {MdPanelPosition}
  */
 
@@ -414,7 +419,8 @@ angular
  * @ngdoc method
  * @name MdPanelPosition#centerVertically
  * @description
- * Centers the panel vertically in the viewport.
+ * Centers the panel vertically in the viewport. Clears any previously set
+ * vertical position.
  * @returns {MdPanelPosition}
  */
 
@@ -424,6 +430,7 @@ angular
  * @description
  * Centers the panel horizontally and vertically in the viewport. This is
  * equivalent to calling both `centerHorizontally` and `centerVertically`.
+ * Clears any previously set horizontal and vertical positions.
  * @returns {MdPanelPosition}
  */
 
@@ -514,7 +521,7 @@ angular
  * var panelAnimation = new MdPanelAnimation()
  *     .openFrom(myButtonEl)
  *     .closeTo('.my-button')
- *     .withAnimation(MdPanelPosition.animation.SCALE);
+ *     .withAnimation($mdPanel.animation.SCALE);
  *
  * $mdPanel.create({
  *   animation: panelAnimation
@@ -553,7 +560,7 @@ angular
  * Specifies the animation class.
  *
  * There are several default animations that can be used:
- * (MdPanelPosition.animation)
+ * ($mdPanel.animation)
  *   SLIDE: The panel slides in and out from the specified
  *       elements. It will not fade in or out.
  *   SCALE: The panel scales in and out. Slide and fade are
@@ -566,7 +573,6 @@ angular
  * @param {string|{open: string, close: string}} cssClass
  * @returns {MdPanelAnimation}
  */
-
 
 
 /*****************************************************************************
@@ -1524,6 +1530,30 @@ MdPanelPosition.prototype.withPanelYPosition = function(yPosition) {
 
   throw new Error('withPanelYPosition only accepts the following values:\n' +
       positionValues.join(' | '));
+};
+
+
+/**
+ * Sets the value of the offset in the x-direction. This will add
+ * to any previously set offsets.
+ * @param {string} offsetX
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.withOffsetX = function(offsetX) {
+  this._translateX.push(offsetX);
+  return this;
+};
+
+
+/**
+ * Sets the value of the offset in the y-direction. This will add
+ * to any previously set offsets.
+ * @param {string} offsetY
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.withOffsetY = function(offsetY) {
+  this._translateY.push(offsetY);
+  return this;
 };
 
 

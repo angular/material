@@ -676,6 +676,92 @@ describe('$mdPanel', function() {
       mdPanelPosition = $mdPanel.newPanelPosition();
     });
 
+    describe('should offset the panel', function() {
+      it('horizontally', function() {
+        var left = '50px';
+        var offset = '-15px';
+
+        var position = mdPanelPosition
+            .absolute()
+            .left(left)
+            .withOffsetX(offset);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+
+        expect(panelRect.left)
+            .toBeApproximately(parseInt(left) + parseInt(offset));
+      });
+
+      it('horizontally with centering', function() {
+        var offset = '15px';
+
+        var position = mdPanelPosition
+            .absolute()
+            .centerHorizontally()
+            .withOffsetX(offset);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var middleOfPage = 0.5 * window.innerWidth;
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+        var middleOfPanel = panelRect.left + 0.5 * panelRect.width;
+
+        expect(middleOfPanel)
+            .toBeApproximately(middleOfPage + parseInt(offset));
+      });
+
+      it('vertically', function() {
+        var top = '50px';
+        var offset = '-15px';
+
+        var position = mdPanelPosition
+            .absolute()
+            .top(top)
+            .withOffsetY(offset);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+
+        expect(panelRect.top)
+            .toBeApproximately(parseInt(top) + parseInt(offset));
+      });
+
+      it('vertically with centering', function() {
+        var offset = '15px';
+
+        var position = mdPanelPosition
+            .absolute()
+            .centerVertically()
+            .withOffsetY(offset);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var middleOfPage = 0.5 * window.innerHeight;
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+        var middleOfPanel = panelRect.top + 0.5 * panelRect.height;
+
+        expect(middleOfPanel)
+            .toBeApproximately(middleOfPage + parseInt(offset));
+      });
+    });
+
     describe('should absolutely position the panel at', function() {
       it('top', function () {
         var top = '50px';
