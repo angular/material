@@ -772,32 +772,27 @@ function MdDialogProvider($$interimElementProvider) {
 
       var removeListeners = [];
       var smartClose = function(optionParam) {
-        return function() {
-          // Only 'confirm' dialogs have a cancel button... escape/clickOutside will
-          // cancel or fallback to hide.
-          var closeFn, tickFn;
-          if( options.$type == 'alert' ) {
-            closeFn = $mdDialog.hide;
-          }
-          else {
-            closeFn = $mdDialog.cancel;
-          }
-
-          if( options[optionParam] !== true ) {
-            tickFn = function() {
-              return closeFn(options[optionParam])
-            };
-          }
-          else {
-            tickFn = closeFn;
-          }
-
-          $mdUtil.nextTick(tickFn, true);
+        // Only 'confirm' dialogs have a cancel button... escape/clickOutside will
+        // cancel or fallback to hide.
+        var closeFn, tickFn;
+        if( options.$type == 'alert' ) {
+          closeFn = $mdDialog.hide;
         }
-      };
+        else {
+          closeFn = $mdDialog.cancel;
+        }
 
-      var smartCloseEscape = smartClose('escapeToClose');
-      var smartCloseOutside = smartClose('clickOutsideToClose');
+        if( options[optionParam] !== true ) {
+          tickFn = function() {
+            return closeFn(options[optionParam])
+          };
+        }
+        else {
+          tickFn = closeFn;
+        }
+
+        $mdUtil.nextTick(tickFn, true);
+      };
 
       if (options.escapeToClose) {
         var parentTarget = options.parent;
@@ -806,7 +801,7 @@ function MdDialogProvider($$interimElementProvider) {
             ev.stopPropagation();
             ev.preventDefault();
 
-            smartCloseEscape();
+            smartClose('escapeToClose');
           }
         };
 
@@ -850,7 +845,7 @@ function MdDialogProvider($$interimElementProvider) {
             ev.stopPropagation();
             ev.preventDefault();
 
-            smartCloseOutside();
+            smartClose('clickOutsideToClose')
           }
         };
 
