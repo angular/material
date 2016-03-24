@@ -273,6 +273,33 @@ angular
 
 /**
  * @ngdoc method
+ * @name MdPanelRef#addClass
+ * @description
+ * Adds a class to the panel. DO NOT use this to hide/show the panel.
+ *
+ * @param {string} newClass Class to be added.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#removeClass
+ * @description
+ * Removes a class from the panel. DO NOT use this to hide/show the panel.
+ *
+ * @param {string} oldClass Class to be removed.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#toggleClass
+ * @description
+ * Toggles a class on the panel. DO NOT use this to hide/show the panel.
+ *
+ * @param {string} toggleClass Class to be toggled.
+ */
+
+/**
+ * @ngdoc method
  * @name MdPanelRef#focusOnOpen
  * @description
  * Focuses the panel content if the focusOnOpen config value is true.
@@ -755,7 +782,7 @@ MdPanelRef.prototype.show = function() {
   this._showPromise = this._$q(function(resolve, reject) {
     try {
       // TODO(KarenParker): Add show animation.
-      self._panelContainer.removeClass(MD_PANEL_HIDDEN);
+      self.removeClass(MD_PANEL_HIDDEN);
       // TODO(KarenParker): Chain this with animation when available.
       self.focusOnOpen();
       resolve(self);
@@ -790,7 +817,7 @@ MdPanelRef.prototype.hide = function() {
   this._hidePromise = this._$q(function(resolve, reject) {
     try {
       // TODO(KarenParker): Add hide animation.
-      self._panelContainer.addClass(MD_PANEL_HIDDEN);
+      self.addClass(MD_PANEL_HIDDEN);
       // TODO(KarenParker): Chain this with animation when available.
       resolve(self);
     } catch (e) {
@@ -799,6 +826,52 @@ MdPanelRef.prototype.hide = function() {
   });
 
   return this._hidePromise;
+};
+
+
+/**
+ * Add a class to the panel. DO NOT use this to hide/show the panel.
+ *
+ * @param {string} newClass Class to be added.
+ */
+MdPanelRef.prototype.addClass = function(newClass) {
+  if (!this._panelContainer) {
+    throw new Error('Panel does not exist yet. Call open() or attach().');
+  }
+
+  if (!this._panelContainer.hasClass(newClass)) {
+    this._panelContainer.addClass(newClass);
+  }
+};
+
+
+/**
+ * Remove a class from the panel. DO NOT use this to hide/show the panel.
+ *
+ * @param {string} oldClass Class to be removed.
+ */
+MdPanelRef.prototype.removeClass = function(oldClass) {
+  if (!this._panelContainer) {
+    throw new Error('Panel does not exist yet. Call open() or attach().');
+  }
+
+  if (this._panelContainer.hasClass(oldClass)) {
+    this._panelContainer.removeClass(oldClass);
+  }
+};
+
+
+/**
+ * Toggle a class on the panel. DO NOT use this to hide/show the panel.
+ *
+ * @param {string} toggleClass The class to toggle.
+ */
+MdPanelRef.prototype.toggleClass = function(toggleClass) {
+  if (!this._panelContainer) {
+    throw new Error('Panel does not exist yet. Call open() or attach().');
+  }
+
+  this._panelContainer.toggleClass(toggleClass);
 };
 
 
