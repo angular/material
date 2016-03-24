@@ -1,7 +1,7 @@
-//$checkbox-width: 20px !default;
-//$checkbox-height: $checkbox-width !default;
-//$checkbox-border-radius: 2px !default;
-//$checkbox-border-width: 2px !default;
+$checkbox-width: 20px !default;
+$checkbox-height: $checkbox-width !default;
+$checkbox-border-radius: 2px !default;
+$checkbox-border-width: 2px !default;
 //
 // ^^ defined in variables.scss
 //
@@ -16,10 +16,105 @@ $checkbox-top: 12px !default;
   }
 }
 
+// don´t want touch the checkbox-container in mixins.scss
+@mixin checkbox-container-override(
+  $checkedSelector: '.md-checked',
+  $width: $checkbox-width,
+  $height: $checkbox-height,
+  $border-width: $checkbox-border-width,
+  $border-radius: $checkbox-border-radius) {
+  ._md-container {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-block;
+    width: $width;
+    height: $height;
+    @include rtl-prop(margin-right, margin-left, 8px);
+    min-width: $width;
+
+    &:before {
+      box-sizing: border-box;
+      background-color: transparent;
+      border-radius: 50%;
+      content: '';
+      position: absolute;
+      display: block;
+      height: auto;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      transition: all 0.5s;
+      width: auto;
+    }
+
+    &:after {
+      box-sizing: border-box;
+      content: '';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      bottom: -10px;
+      left: -10px;
+    }
+
+    .md-ripple-container {
+      position: absolute;
+      display: block;
+      width: auto;
+      height: auto;
+      left: -15px;
+      top: -15px;
+      right: -15px;
+      bottom: -15px;
+    }
+  }
+
+  // unchecked
+  ._md-icon {
+    box-sizing: border-box;
+    transition: 240ms;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: $width;
+    height: $height;
+    border-width: $border-width;
+    border-style: solid;
+    border-radius: $border-radius;
+  }
+
+  &#{$checkedSelector} ._md-icon {
+    border: none;
+
+    &:after {
+      box-sizing: border-box;
+      transform: rotate(45deg);
+      position: absolute;
+      left: $width / 3;
+      top: $width / 9;
+      display: table;
+      width: $width / 3;
+      height: $width * 2 / 3;
+      border-width: $border-width;
+      border-style: solid;
+      border-top: 0;
+      border-left: 0;
+      content: '';
+    }
+  }
+
+  // disabled
+  &[disabled] {
+    cursor: default;
+  }
+
+}
+
 md-checkbox {
   box-sizing: border-box;
-  display: inline-block;
-  margin-bottom: $checkbox-margin;
+  display: inline-flex;
+  margin-bottom: $checkbox-margin; //should maybe removed!
   white-space: nowrap;
   cursor: pointer;
   outline: none;
@@ -29,6 +124,24 @@ md-checkbox {
   min-height: $checkbox-width;
   @include rtl(margin-left, 0, $checkbox-margin);
   @include rtl(margin-right, $checkbox-margin, 0);
+
+  line-height: inherit;
+  align-items: center;
+  justify-content: flex-start;
+
+  &::before {
+    content: '&nbsp;';
+    height: auto;
+    visibility: hidden;
+    width: 0;
+    max-width: 0;
+    flex: 0 0 0;
+  }
+
+
+
+
+
 
   &:last-of-type {
     margin-left: 0;
@@ -50,22 +163,43 @@ md-checkbox {
     }
   }
 
-  &.md-align-top-left > div._md-container {
-    top: $checkbox-top;
+  &.md-align-top > div._md-container {
+    align-self: flex-start;
   }
 
-  @include checkbox-container;
+  @include checkbox-container-override;
 
   ._md-label {
     box-sizing: border-box;
     position: relative;
-    display: inline-block;
-    vertical-align: middle;
+    flex-grow: 1;
+
     white-space: normal;
     user-select: text;
 
-    @include rtl(margin-left, $checkbox-text-margin + $checkbox-width, 0);
-    @include rtl(margin-right, 0, $checkbox-text-margin + $checkbox-width);
+
+
+
+  }
+
+  &.md-full {
+    display: flex;
+  }
+  &.md-full:not(.md-right) {
+    > ._md-label {
+      @include rtl(text-align, right, left);
+    }
+  }
+
+  &.md-right {
+    flex-direction: row-reverse;
+    > ._md-label {
+      text-align: justify;
+    }
+    > ._md-container {
+      @include rtl-prop(margin-left, margin-right, $checkbox-text-margin);
+      @include rtl-prop(margin-right, margin-left, 0);
+    }
 
   }
 }
