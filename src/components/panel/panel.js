@@ -502,7 +502,7 @@ angular
  * is used to determine the bounds. When passed a click event, the location
  * of the click will be used as the position to start the animation.
  *
- * @param {string|!Element|!jQuery.Event|
+ * @param {string|!Element|!Event|
  *     {top: string, left: string, height: string, width: string}}
  * @returns {MdPanelAnimation}
  */
@@ -530,7 +530,8 @@ angular
 var defaultZIndex = 80;
 var MD_PANEL_HIDDEN = '_md-panel-hidden';
 
-var FOCUS_TRAP_TEMPLATE = angular.element('<div class="_md-panel-focus-trap" tabindex="0"></div>');
+var FOCUS_TRAP_TEMPLATE = angular.element(
+    '<div class="_md-panel-focus-trap" tabindex="0"></div>');
 
 
 /**
@@ -959,7 +960,8 @@ MdPanelRef.prototype.focusOnOpen = function() {
     // _md-autofocus, otherwise the focusable element isn't available to focus.
     var self = this;
     this._$rootScope.$applyAsync(function() {
-      var target = self._$mdUtil.findFocusTarget(self._panelEl) || self._panelEl;
+      var target = self._$mdUtil.findFocusTarget(self._panelEl) ||
+          self._panelEl;
       target.focus();
     });
   }
@@ -1099,8 +1101,8 @@ MdPanelRef.prototype._configureClickOutsideToClose = function() {
     };
 
     // We check if our original element and the target is the backdrop
-    // because if the original was the backdrop and the target was inside the dialog
-    // we don't want to dialog to close.
+    // because if the original was the backdrop and the target was inside the
+    // dialog we don't want to dialog to close.
     var self = this;
     var mouseupHandler = function (ev) {
       if (sourceElem === target[0] && ev.target === target[0]) {
@@ -1139,16 +1141,17 @@ MdPanelRef.prototype._configureTrapFocus = function() {
     this._topFocusTrap = FOCUS_TRAP_TEMPLATE.clone()[0];
     this._bottomFocusTrap = FOCUS_TRAP_TEMPLATE.clone()[0];
 
-    // When focus is about to move out of the panel, we want to intercept it and redirect it
-    // back to the panel element.
+    // When focus is about to move out of the panel, we want to intercept it
+    // and redirect it back to the panel element.
     var focusHandler = function () {
       element.focus();
     };
     this._topFocusTrap.addEventListener('focus', focusHandler);
     this._bottomFocusTrap.addEventListener('focus', focusHandler);
 
-    // The top focus trap inserted immediately before the md-panel element (as a sibling).
-    // The bottom focus trap inserted immediately after the md-panel element (as a sibling).
+    // The top focus trap inserted immediately before the md-panel element (as
+    // a sibling). The bottom focus trap inserted immediately after the
+    // md-panel element (as a sibling).
     element[0].parentNode.insertBefore(this._topFocusTrap, element[0]);
     element.after(this._bottomFocusTrap);
   }
@@ -1318,17 +1321,17 @@ MdPanelPosition.prototype.getRight = function() {
  * @final @constructor
  */
 function MdPanelAnimation() {
-  /** @private {!Object} */
+  /** @private {!{top: string, left: string, height: string, width: string}} */
   this._openFrom = {};
 
-  /** @private {!Object} */
+  /** @private {!{top: string, left: string, height: string, width: string}} */
   this._closeTo = {};
 }
 
 
 /**
  * Gets the boundingClientRect for the opening animation.
- * @returns {!Object}
+ * @returns {!{top: string, left: string, height: string, width: string}}
  */
 MdPanelAnimation.prototype.getOpenFrom = function() {
   return this._openFrom;
@@ -1337,7 +1340,7 @@ MdPanelAnimation.prototype.getOpenFrom = function() {
 
 /**
  * Gets the boundingClientRect for the closing animation.
- * @returns {!Object}
+ * @returns {!{top: string, left: string, height: string, width: string}}
  */
 MdPanelAnimation.prototype.getCloseTo = function() {
   return this._closeTo;
@@ -1350,18 +1353,26 @@ MdPanelAnimation.prototype.getCloseTo = function() {
  * is used to determine the bounds. When passed a click event, the location
  * of the click will be used as the position to start the animation.
  *
- * @param {string|!Element|!jQuery.Event|
+ * @param {string|!Element|!Event|
  *     {top: string, left: string, height: string, width: string}} openFrom
  * @returns {MdPanelAnimation}
  */
 MdPanelAnimation.prototype.openFrom = function(openFrom) {
-  // Check if 'openFrom' is a jQuery.Event.
+  // Check if 'openFrom' is an Event.
   openFrom = openFrom.target ? openFrom.target : openFrom;
 
-  this._openFrom = this._getBoundingClientRect(this._getElement(openFrom));
+  if (!!openFrom.top || !!openFrom.left || !!openFrom.height || !!openFrom.width) {
+    this._openFrom = {
+      element: undefined,
+      bounds: angular.extend({top: 0, left: 0, height: 0, width: 0}, openFrom),
+      focus: undefined
+    };
+  } else {
+    this._openFrom = this._getBoundingClientRect(this._getElement(openFrom));
+  }
 
   if (angular.isUndefined(this._closeTo)) {
-    this._closeTo = angular.copy(this._openFrom);
+    this._closeTo = this._openFrom;
   }
   return this;
 };
@@ -1373,11 +1384,19 @@ MdPanelAnimation.prototype.openFrom = function(openFrom) {
  * the bounds.
  *
  * @param {string|!Element|
- *     {top: string, left: string, height: string, width: string}} closeTo
+ *     !{top: string, left: string, height: string, width: string}} closeTo
  * @returns {MdPanelAnimation}
  */
 MdPanelAnimation.prototype.closeTo = function(closeTo) {
-  this._closeTo = this._getBoundingClientRect(this._getElement(closeTo));
+  if (!!closeTo.top || !!closeTo.left || !!closeTo.height || !!closeTo.width) {
+    this._closeTo = {
+      element: undefined,
+      bounds: angular.extend({top: 0, left: 0, height: 0, width: 0}, closeTo),
+      focus: undefined
+    };
+  } else {
+    this._closeTo = this._getBoundingClientRect(this._getElement(closeTo));
+  }
   return this;
 };
 
@@ -1385,9 +1404,8 @@ MdPanelAnimation.prototype.closeTo = function(closeTo) {
 /**
  * TODO(KarenParker): Switch and update the shared version of this method that
  * others are currently building.
- * Gets the element from the string|element|event.
- * @param {string|!Element|
- *     {top: string, left: string, height: string, width: string}} el
+ * Gets the element from the string|element.
+ * @param {string|!Element} el
  * @returns {!angular.JQLite}
  * @private
  */
@@ -1405,15 +1423,11 @@ MdPanelAnimation.prototype._getElement = function(el) {
  * @private
  */
 MdPanelAnimation.prototype._getBoundingClientRect = function(element) {
-  if (element && element.length) {
-    var bounds = { top:0, left:0, height:0, width:0 };
-    // "element" may just be a JQLite wrapper around the object with top/left/height/width.
-    var hasFn = angular.isFunction(element[0].getBoundingClientRect);
-
+  if (element instanceof angular.element) {
     return {
-      element : hasFn ? element : undefined,
-      bounds  : hasFn ? element[0].getBoundingClientRect() : angular.extend({}, bounds, element[0]),
-      focus   : angular.bind(element, element.focus),
+      element: element,
+      bounds: element[0].getBoundingClientRect(),
+      focus: angular.bind(element, element.focus)
     };
   }
 };
