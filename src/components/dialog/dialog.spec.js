@@ -1246,6 +1246,79 @@ describe('$mdDialog', function() {
     });
   });
 
+  it('should reject the show promise with a custom cancel value after mousedown mouseup and remove', inject(function($mdDialog, $timeout) {
+    jasmine.mockElementFocus(this);
+    var container, parent = angular.element('<div>');
+    var rejectCorrect = false;
+
+    $mdDialog.show(
+      $mdDialog.confirm({
+        template: '<md-dialog>' +
+        '<md-dialog-content tabIndex="0">' +
+        '<p>Muppets are the best</p>' +
+        '</md-dialog-content>' +
+        '</md-dialog>',
+        parent: parent,
+        clickOutsideToClose: 'test'
+      })
+    ).catch(function(rejectVal){
+        if(rejectVal === 'test') {
+          rejectCorrect = true;
+        }
+      });
+
+    runAnimation();
+
+    container = angular.element(parent[0].querySelector('.md-dialog-container'));
+    container.triggerHandler({
+      type: 'mousedown',
+      target: container[0]
+    });
+    container.triggerHandler({
+      type: 'mouseup',
+      target: container[0]
+    });
+
+    $timeout.flush();
+    runAnimation();
+
+    expect(rejectCorrect).toBe(true);
+  }));
+
+  it('should reject the show promise with a custom cancel value after ESCAPE key', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
+    jasmine.mockElementFocus(this);
+    var container, parent = angular.element('<div>');
+    var response;
+
+    $mdDialog.show(
+      $mdDialog.confirm({
+        template: '<md-dialog>' +
+        '<md-dialog-content tabIndex="0">' +
+        '<p>Muppets are the best</p>' +
+        '</md-dialog-content>' +
+        '</md-dialog>',
+        parent: parent,
+        clickOutsideToClose: 'outside',
+        escapeToClose: 'escape',
+        ok: 'OK',
+        cancel: 'CANCEL'
+      })
+    ).catch(function(reason) {
+        response = reason;
+      });
+    runAnimation();
+
+    parent.triggerHandler({
+      type: 'keydown',
+      keyCode: $mdConstant.KEY_CODE.ESCAPE
+    });
+    runAnimation();
+    runAnimation();
+
+
+    expect(response).toBe('escape');
+  }));
+
   function hasConfigurationMethods(preset, methods) {
     angular.forEach(methods, function(method) {
       return it('supports config method #' + method, inject(function($mdDialog) {

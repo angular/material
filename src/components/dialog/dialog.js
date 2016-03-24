@@ -771,12 +771,33 @@ function MdDialogProvider($$interimElementProvider) {
       }, 60);
 
       var removeListeners = [];
-      var smartClose = function() {
-        // Only 'confirm' dialogs have a cancel button... escape/clickOutside will
-        // cancel or fallback to hide.
-        var closeFn = ( options.$type == 'alert' ) ? $mdDialog.hide : $mdDialog.cancel;
-        $mdUtil.nextTick(closeFn, true);
+      var smartClose = function(optionParam) {
+        return function() {
+          // Only 'confirm' dialogs have a cancel button... escape/clickOutside will
+          // cancel or fallback to hide.
+          var closeFn, tickFn;
+          if( options.$type == 'alert' ) {
+            closeFn = $mdDialog.hide;
+          }
+          else {
+            closeFn = $mdDialog.cancel;
+          }
+
+          if( options[optionParam] !== true ) {
+            tickFn = function() {
+              return closeFn(options[optionParam])
+            };
+          }
+          else {
+            tickFn = closeFn;
+          }
+
+          $mdUtil.nextTick(tickFn, true);
+        }
       };
+
+      var smartCloseEscape = smartClose('escapeToClose');
+      var smartCloseOutside = smartClose('clickOutsideToClose');
 
       if (options.escapeToClose) {
         var parentTarget = options.parent;
@@ -785,7 +806,7 @@ function MdDialogProvider($$interimElementProvider) {
             ev.stopPropagation();
             ev.preventDefault();
 
-            smartClose();
+            smartCloseEscape();
           }
         };
 
@@ -829,7 +850,7 @@ function MdDialogProvider($$interimElementProvider) {
             ev.stopPropagation();
             ev.preventDefault();
 
-            smartClose();
+            smartCloseOutside();
           }
         };
 
