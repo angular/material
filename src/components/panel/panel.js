@@ -1689,7 +1689,11 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl, animator) {
   var closeTo = animator.toTransformCss("");
 
   switch (this._animationClass) {
+<<<<<<< 268079b85185013f1683932a5814d9207a0d0fd2
     case 'md-panel-animate-slide':
+=======
+    case MdPanelAnimation.animation.SLIDE:
+>>>>>>> feat(panel): Add default animations and withAnimation API method.
       animationOptions = {
         transitionInClass: '_md-panel-animate-slide-in _md-panel-shown',
         transitionOutClass: '_md-panel-animate-slide-out'
@@ -1703,7 +1707,11 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl, animator) {
       closeTo = animator.toTransformCss(animator.calculateSlideToOrigin(
           panelEl, this._closeTo));
       break;
+<<<<<<< 268079b85185013f1683932a5814d9207a0d0fd2
     case 'md-panel-animate-scale':
+=======
+    case MdPanelAnimation.animation.SCALE:
+>>>>>>> feat(panel): Add default animations and withAnimation API method.
       animationOptions = {
         transitionInClass: '_md-panel-animate-scale-in _md-panel-shown',
         transitionOutClass: '_md-panel-animate-scale-out'
@@ -1717,7 +1725,11 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl, animator) {
       closeTo = animator.toTransformCss(animator.calculateZoomToOrigin(
           panelEl, this._closeTo));
       break;
+<<<<<<< 268079b85185013f1683932a5814d9207a0d0fd2
     case 'md-panel-animate-fade':
+=======
+    case MdPanelAnimation.animation.FADE:
+>>>>>>> feat(panel): Add default animations and withAnimation API method.
       animationOptions = {
         transitionInClass: '_md-panel-animate-fade-in _md-panel-shown',
         transitionOutClass: '_md-panel-animate-fade-out'
