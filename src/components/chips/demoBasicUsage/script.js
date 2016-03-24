@@ -2,6 +2,9 @@
   'use strict';
   angular
       .module('chipsDemo', ['ngMaterial', 'ngMessages'])
+      .config(['$mdIconProvider', function($mdIconProvider) {
+        $mdIconProvider.icon('md-close', 'img/icons/ic_close_24px.svg', 24);
+      }])
       .controller('BasicDemoCtrl', DemoCtrl);
 
   function DemoCtrl ($timeout, $q) {
