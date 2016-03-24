@@ -1,5 +1,5 @@
 describe('$mdPanel', function() {
-  var $mdPanel, $rootScope, $rootEl, $templateCache, $q;
+  var $mdPanel, $rootScope, $rootEl, $templateCache, $q, $material;
   var panelRef;
   var attachedElements = [];
   var PANEL_WRAPPER_CLASS = '.md-panel-outer-wrapper';
@@ -20,6 +20,7 @@ describe('$mdPanel', function() {
     $rootEl = $injector.get('$rootElement');
     $templateCache = $injector.get('$templateCache');
     $q = $injector.get('$q');
+    $material = $injector.get('$material');
   };
 
   beforeEach(function() {
@@ -937,27 +938,55 @@ describe('$mdPanel', function() {
       myButton = angular.element(document.querySelector('button'));
     });
 
+    it('should animate with default slide', function() {
+      var config = DEFAULT_CONFIG;
+      config['animation'] = mdPanelAnimation.openFrom('button')
+          .withAnimation('md-panel-animate-slide');
+
+      openPanel();
+      // If animation dies, panel doesn't unhide.
+      expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
+
+      closePanel();
+      // If animation dies, panel doesn't hide.
+      expect(panelRef._panelContainer).toHaveClass(HIDDEN_CLASS);
+    });
+
+    it('should animate with custom class', function() {
+      var config = DEFAULT_CONFIG;
+      config['animation'] = mdPanelAnimation.openFrom('button')
+          .withAnimation('myClass');
+
+      openPanel();
+      // If animation dies, panel doesn't unhide.
+      expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
+
+      closePanel();
+      // If animation dies, panel doesn't hide.
+      expect(panelRef._panelContainer).toHaveClass(HIDDEN_CLASS);
+    });
+
     describe('should determine openFrom when', function() {
       it('provided a selector', function() {
         var animation = mdPanelAnimation.openFrom('button');
 
-        expect(animation.getOpenFrom().element[0]).toEqual(myButton[0]);
-        expect(animation.getOpenFrom().bounds).toEqual(myButton[0].getBoundingClientRect());
+        expect(animation._openFrom.element[0]).toEqual(myButton[0]);
+        expect(animation._openFrom.bounds).toEqual(myButton[0].getBoundingClientRect());
       });
 
       it('provided an element', function() {
         var animation = mdPanelAnimation.openFrom(myButton[0]);
 
-        expect(animation.getOpenFrom().element[0]).toEqual(myButton[0]);
-        expect(animation.getOpenFrom().bounds).toEqual(myButton[0].getBoundingClientRect());
+        expect(animation._openFrom.element[0]).toEqual(myButton[0]);
+        expect(animation._openFrom.bounds).toEqual(myButton[0].getBoundingClientRect());
       });
 
       it('provided an event', function() {
         var myEvent = { type: 'click', target: myButton};
         var animation = mdPanelAnimation.openFrom(myEvent);
 
-        expect(animation.getOpenFrom().element[0]).toEqual(myButton[0]);
-        expect(animation.getOpenFrom().bounds).toEqual(myButton[0].getBoundingClientRect());
+        expect(animation._openFrom.element[0]).toEqual(myButton[0]);
+        expect(animation._openFrom.bounds).toEqual(myButton[0].getBoundingClientRect());
       });
 
 
@@ -966,8 +995,8 @@ describe('$mdPanel', function() {
         var inputRect = {top: rect.top, left: rect.left};
         var animation = mdPanelAnimation.openFrom(inputRect);
 
-        expect(animation.getOpenFrom().element).toBeUndefined();
-        expect(animation.getOpenFrom().bounds).toEqual(angular.extend(inputRect, {height: 1, width: 1}));
+        expect(animation._openFrom.element).toBeUndefined();
+        expect(animation._openFrom.bounds).toEqual(inputRect);
       });
     });
 
@@ -975,15 +1004,15 @@ describe('$mdPanel', function() {
       it('provided a selector', function() {
         var animation = mdPanelAnimation.closeTo('button');
 
-        expect(animation.getCloseTo().element).toEqual(myButton);
-        expect(animation.getCloseTo().bounds).toEqual(myButton[0].getBoundingClientRect());
+        expect(animation._closeTo.element).toEqual(myButton);
+        expect(animation._closeTo.bounds).toEqual(myButton[0].getBoundingClientRect());
       });
 
       it('provided an element', function() {
         var animation = mdPanelAnimation.closeTo(myButton[0]);
 
-        expect(animation.getCloseTo().element).toEqual(myButton);
-        expect(animation.getCloseTo().bounds).toEqual(myButton[0].getBoundingClientRect());
+        expect(animation._closeTo.element).toEqual(myButton);
+        expect(animation._closeTo.bounds).toEqual(myButton[0].getBoundingClientRect());
       });
 
       it('provided a bounding rect', function() {
@@ -991,8 +1020,8 @@ describe('$mdPanel', function() {
         var inputRect = {top: rect.top, left: rect.left};
         var animation = mdPanelAnimation.closeTo(inputRect);
 
-        expect(animation.getCloseTo().element).toBeUndefined();
-        expect(animation.getCloseTo().bounds).toEqual(angular.extend(inputRect, {height: 1, width: 1}));
+        expect(animation._closeTo.element).toBeUndefined();
+        expect(animation._closeTo.bounds).toEqual(inputRect);
       });
     });
   });
@@ -1027,6 +1056,7 @@ describe('$mdPanel', function() {
     // isn't always necessary, but is better to have here twice than sprinkled
     // through the tests.
     $rootScope.$apply();
+    $material.flushOutstandingAnimations();
   }
 
   /**
@@ -1035,15 +1065,18 @@ describe('$mdPanel', function() {
   function closePanel() {
     panelRef && panelRef.close();
     $rootScope.$apply();
+    $material.flushOutstandingAnimations();
   }
 
   function showPanel() {
     panelRef && panelRef.show(HIDDEN_CLASS);
     $rootScope.$apply();
+    $material.flushOutstandingAnimations();
   }
 
   function hidePanel() {
     panelRef && panelRef.hide(HIDDEN_CLASS);
     $rootScope.$apply();
+    $material.flushOutstandingAnimations();
   }
 });
