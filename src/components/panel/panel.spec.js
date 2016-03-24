@@ -6,6 +6,7 @@ describe('$mdPanel', function() {
   var PANEL_EL = '.md-panel';
   var HIDDEN_CLASS = '_md-panel-hidden';
   var FOCUS_TRAPS_CLASS = '._md-panel-focus-trap';
+  var FULLSCREEN_CLASS = '_md-panel-fullscreen';
   var DEFAULT_TEMPLATE = '<div>Hello World!</div>';
   var DEFAULT_CONFIG = { template: DEFAULT_TEMPLATE };
 
@@ -394,6 +395,19 @@ describe('$mdPanel', function() {
       openPanel(config);
 
       expect(angular.element(document.activeElement).attr('id')).not.toBe('donuts');
+    });
+
+    it('should not be fullscreen by default', function() {
+      openPanel();
+      expect(PANEL_EL).not.toHaveClass(FULLSCREEN_CLASS);
+    });
+
+    it('should be fullscreen when fullscreen=true', function() {
+      var config = { fullscreen: true };
+
+      openPanel(config);
+      expect(PANEL_EL).toHaveClass(FULLSCREEN_CLASS);
+
     });
   });
 

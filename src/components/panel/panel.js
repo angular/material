@@ -119,6 +119,9 @@ angular
  *   - `focusOnOpen` - `{boolean=}`: An option to override focus behavior on
  *     open. Only disable if focusing some other way, as focus management is
  *     required for panels to be accessible. Defaults to true.
+ *   - `fullscreen` - `{boolean=}`: Whether the panel should be full screen.
+ *     Applies the class `._md-panel-fullscreen` to the panel on open. Defaults
+ *     to false.
  *
  * TODO(ErinCoughlan): Add the following config options.
  *   - `groupName` - `{string=}`: Name of panel groups. This group name is
@@ -132,9 +135,6 @@ angular
  *     behind the panel. Defaults to false.
  *   - `disableParentScroll` - `{boolean=}`: Whether the user can scroll the
  *     page behind the panel. Defaults to false.
- *   - `fullScreen` - `{boolean=}`: Whether the panel should be full screen.
- *     Applies the class `.md-panel-fullscreen` to the panel on open. Defaults
- *     to false.
  *
  * @returns {MdPanelRef} panelRef
  */
@@ -473,6 +473,7 @@ function MdPanelService($rootElement, $rootScope, $injector) {
     clickOutsideToClose: false,
     escapeToClose: false,
     focusOnOpen: true,
+    fullscreen: false,
     scope: $rootScope.$new(true),
     transformTemplate: angular.bind(this, this.wrapTemplate_),
     trapFocus: false,
@@ -879,6 +880,12 @@ MdPanelRef.prototype._createPanel = function() {
 MdPanelRef.prototype._addStyles = function() {
   this._panelContainer.css('z-index', this._config['zIndex']);
 
+  if (this._config['fullscreen']) {
+    this._panelEl.addClass('_md-panel-fullscreen');
+    return; // Don't setup positioning.
+  }
+
+  /** POSITIONING STYLES **/
   var positionConfig = this._config['position'];
 
   if (!positionConfig) { return; }
