@@ -129,14 +129,14 @@ angular
  *     `MdPanelAnimation`.
  *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop
  *     behind the panel. Defaults to false.
+ *   - `disableParentScroll` - `{boolean=}`: Whether the user can scroll the
+ *     page behind the panel. Defaults to false.
  *
  * TODO(ErinCoughlan): Add the following config options.
  *   - `groupName` - `{string=}`: Name of panel groups. This group name is
  *     used for configuring the number of open panels and identifying specific
  *     behaviors for groups. For instance, all tooltips will be identified
  *     using the same groupName.
- *   - `disableParentScroll` - `{boolean=}`: Whether the user can scroll the
- *     page behind the panel. Defaults to false.
  *
  * @returns {MdPanelRef} panelRef
  */
@@ -609,6 +609,7 @@ function MdPanelService($rootElement, $rootScope, $injector) {
   this._defaultConfigOptions = {
     bindToController: true,
     clickOutsideToClose: false,
+    disableParentScroll: false,
     escapeToClose: false,
     focusOnOpen: true,
     fullscreen: false,
@@ -809,7 +810,7 @@ function MdPanelRef(config, $injector) {
 
   /** @private {Array<function()>} */
   this._removeListeners = [];
-  
+
   /** @private {!angular.JQLite|undefined} */
   this._topFocusTrap;
 
@@ -818,6 +819,9 @@ function MdPanelRef(config, $injector) {
 
   /** @private {!$mdPanel|undefined} */
   this._backdropRef;
+
+  /** @private {Function?} */
+  this._restoreScroll = null;
 }
 
 
@@ -934,6 +938,11 @@ MdPanelRef.prototype.detach = function() {
     self.isAttached = false;
     return self._$q.resolve(self);
   };
+
+  if (this._restoreScroll) {
+    this._restoreScroll();
+    this._restoreScroll = null;
+  }
 
   this._detachPromise = self._$q.all([
     detachFn(),
@@ -1086,6 +1095,11 @@ MdPanelRef.prototype._createPanel = function() {
         .then(function(compileData) {
           self._panelContainer = compileData.link(self._config['scope']);
           getElement(self._config['attachTo']).append(self._panelContainer);
+
+          if (self._config['disableParentScroll']) {
+            self._restoreScroll = self._$mdUtil.disableScrollAround(
+                null, self._panelContainer);
+          }
 
           self._panelEl = angular.element(
               self._panelContainer[0].querySelector('.md-panel'));
