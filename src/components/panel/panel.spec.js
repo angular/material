@@ -565,7 +565,6 @@ describe('$mdPanel', function() {
 
     beforeEach(function() {
       config = DEFAULT_CONFIG;
-
       mdPanelPosition = $mdPanel.newPanelPosition();
     });
 
@@ -661,6 +660,236 @@ describe('$mdPanel', function() {
         expect(panelCss.position).toEqual('fixed');
         expect(panelCss.right).toEqual('0px');
       });
+    });
+
+    describe('should relatively position the panel', function() {
+      var myButton;
+      var myButtonRect;
+
+      beforeEach(function() {
+        myButton = '<button>myButton</button>';
+        attachToBody(myButton);
+        myButton = angular.element(document.querySelector('button'));
+        myButtonRect = myButton[0].getBoundingClientRect();
+      });
+
+      it('with respect to an element', function() {
+        var position = mdPanelPosition
+            .relativeTo(myButton[0])
+            .withPanelXPosition('align-start')
+            .withPanelYPosition('align-tops');
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(parseFloat(panelCss.left)).toBeCloseTo(myButtonRect.left);
+        expect(parseFloat(panelCss.top)).toBeCloseTo(myButtonRect.top);
+      });
+
+      it('with respect to a query selector', function() {
+        var position = mdPanelPosition
+            .relativeTo('button')
+            .withPanelXPosition('align-start')
+            .withPanelYPosition('align-tops');
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(parseFloat(panelCss.left)).toBeCloseTo(myButtonRect.left);
+        expect(parseFloat(panelCss.top)).toBeCloseTo(myButtonRect.top);
+      });
+
+      it('with respect to a JQLite object', function() {
+        var position = mdPanelPosition
+            .relativeTo(myButton)
+            .withPanelXPosition('align-start')
+            .withPanelYPosition('align-tops');
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(parseFloat(panelCss.left)).toBeCloseTo(myButtonRect.left);
+        expect(parseFloat(panelCss.top)).toBeCloseTo(myButtonRect.top);
+      });
+
+      describe('vertically', function() {
+        it('above an element', function() {
+          var position = mdPanelPosition
+              .relativeTo(myButton)
+              .withPanelYPosition('above');
+
+          config['position'] = position;
+
+          openPanel(config);
+
+          var panelCss = document.querySelector(PANEL_EL).style;
+          expect(parseFloat(panelCss.bottom)).toBeCloseTo(myButtonRect.top);
+        });
+
+        it('top aligned with an element', function() {
+          var position = mdPanelPosition
+              .relativeTo(myButton)
+              .withPanelYPosition('align-tops');
+
+          config['position'] = position;
+
+          openPanel(config);
+
+          var panelCss = document.querySelector(PANEL_EL).style;
+          expect(parseFloat(panelCss.top)).toBeCloseTo(myButtonRect.top);
+        });
+
+        it('centered with an element', function() {
+          var position = mdPanelPosition
+              .relativeTo(myButton)
+              .withPanelYPosition('center');
+
+          config['position'] = position;
+
+          openPanel(config);
+
+          var middleOfButton = myButtonRect.top + 0.5 * myButtonRect.height;
+          var panelRect = document.querySelector(PANEL_EL)
+              .getBoundingClientRect();
+          var middleOfPanel = panelRect.top + 0.5 * panelRect.height;
+
+          expect(middleOfPanel).toBeCloseTo(middleOfButton);
+        });
+
+        it('bottom aligned with an element', function() {
+          var position = mdPanelPosition
+              .relativeTo(myButton)
+              .withPanelYPosition('align-bottoms');
+
+          config['position'] = position;
+
+          openPanel(config);
+
+          var panelCss = document.querySelector(PANEL_EL).style;
+          expect(parseFloat(panelCss.bottom)).toBeCloseTo(myButtonRect.bottom);
+        });
+
+        it('below an element', function() {
+          var position = mdPanelPosition
+              .relativeTo(myButton)
+              .withPanelYPosition('below');
+
+          config['position'] = position;
+
+          openPanel(config);
+
+          var panelCss = document.querySelector(PANEL_EL).style;
+          expect(parseFloat(panelCss.top)).toBeCloseTo(myButtonRect.bottom);
+        });
+      });
+
+      describe('horizontally', function() {
+        it('offset to the left of an element', function() {
+          var position = mdPanelPosition
+              .relativeTo(myButton)
+              .withPanelXPosition('offset-start');
+
+          config['position'] = position;
+
+          openPanel(config);
+
+          var panelCss = document.querySelector(PANEL_EL).style;
+          expect(parseFloat(panelCss.right)).toBeCloseTo(myButtonRect.left);
+        });
+
+        it('right aligned with an element', function() {
+          var position = mdPanelPosition
+              .relativeTo(myButton)
+              .withPanelXPosition('align-end');
+
+          config['position'] = position;
+
+          openPanel(config);
+
+          var panelCss = document.querySelector(PANEL_EL).style;
+          expect(parseFloat(panelCss.right)).toBeCloseTo(myButtonRect.right);
+        });
+
+        it('centered with an element', function() {
+          var position = mdPanelPosition
+              .relativeTo(myButton)
+              .withPanelXPosition('center');
+
+          config['position'] = position;
+
+          openPanel(config);
+
+          var middleOfButton = myButtonRect.left + 0.5 * myButtonRect.width;
+          var panelRect = document.querySelector(PANEL_EL)
+              .getBoundingClientRect();
+          var middleOfPanel = panelRect.left + 0.5 * panelRect.width;
+
+          expect(middleOfPanel).toBeCloseTo(middleOfButton);
+        });
+
+        it('left aligned with an element', function() {
+          var position = mdPanelPosition
+              .relativeTo(myButton)
+              .withPanelXPosition('align-start');
+
+          config['position'] = position;
+
+          openPanel(config);
+
+          var panelCss = document.querySelector(PANEL_EL).style;
+          expect(parseFloat(panelCss.left)).toBeCloseTo(myButtonRect.left);
+        });
+
+        it('offset to the right of an element', function() {
+          var position = mdPanelPosition
+              .relativeTo(myButton)
+              .withPanelXPosition('offset-end');
+
+          config['position'] = position;
+
+          openPanel(config);
+
+          var panelCss = document.querySelector(PANEL_EL).style;
+          expect(parseFloat(panelCss.left)).toBeCloseTo(myButtonRect.right);
+        });
+      });
+    });
+
+    it('should throw if xPosition is not valid', function() {
+      var myButton = '<button>myButton</button>';
+      attachToBody(myButton);
+      myButton = angular.element(document.querySelector('button'));
+
+      var expression = function() {
+        mdPanelPosition
+            .relativeTo(myButton)
+            .withPanelXPosition('fake-x-position');
+      };
+
+      expect(expression).toThrow();
+    });
+
+    it('should throw if yPosition is not valid', function() {
+      var myButton = '<button>myButton</button>';
+      attachToBody(myButton);
+      myButton = angular.element(document.querySelector('button'));
+
+      var expression = function() {
+        mdPanelPosition
+            .relativeTo(myButton)
+            .withPanelYPosition('fake-y-position');
+      }
+
+      expect(expression).toThrow();
     });
   });
 
