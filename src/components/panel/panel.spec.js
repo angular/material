@@ -1,5 +1,6 @@
 describe('$mdPanel', function() {
-  var $mdPanel, $rootScope, $rootEl, $templateCache, $q, $material, $mdConstant;
+  var $mdPanel, $rootScope, $rootEl, $templateCache, $q, $material, $mdConstant,
+      $mdUtil;
   var panelRef;
   var attachedElements = [];
   var PANEL_WRAPPER_CLASS = '.md-panel-outer-wrapper';
@@ -11,6 +12,7 @@ describe('$mdPanel', function() {
   var DEFAULT_TEMPLATE = '<div>Hello World!</div>';
   var DEFAULT_CONFIG = { template: DEFAULT_TEMPLATE };
   var PANEL_ID_PREFIX = 'panel_';
+  var SCROLL_MASK_CLASS = '.md-scroll-mask';
 
   /**
    * @param {!angular.$injector} $injector
@@ -24,6 +26,7 @@ describe('$mdPanel', function() {
     $q = $injector.get('$q');
     $material = $injector.get('$material');
     $mdConstant = $injector.get('$mdConstant');
+    $mdUtil = $injector.get('$mdUtil');
   };
 
   beforeEach(function() {
@@ -609,6 +612,25 @@ describe('$mdPanel', function() {
 
           expect(closeCalled).toBe(true);
         });
+  });
+
+  it('should disable scrolling when disableParentScroll is true', function() {
+    var config = {
+      template: DEFAULT_TEMPLATE,
+      disableParentScroll: true,
+    };
+    spyOn($mdUtil, 'disableScrollAround').and.callThrough();
+
+    openPanel(config);
+
+    expect(PANEL_EL).toExist();
+    expect(SCROLL_MASK_CLASS).toExist();
+
+    closePanel();
+
+    var scrollMaskEl = $rootEl[0].querySelector(SCROLL_MASK_CLASS);
+    expect(scrollMaskEl).not.toExist();
+    expect($mdUtil.disableScrollAround).toHaveBeenCalled();
   });
 
   describe('component logic: ', function() {
