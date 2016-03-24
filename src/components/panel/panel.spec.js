@@ -140,7 +140,7 @@ describe('$mdPanel', function() {
     it('should reject on attach when opening', function () {
       var openRejected = false;
 
-      panelRef.attach = function() {
+      panelRef.attachOnly = function() {
         return panelRef._$q.reject();
       };
 
@@ -162,7 +162,7 @@ describe('$mdPanel', function() {
       expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
       expect(panelRef.isAttached).toEqual(true);
 
-      panelRef.addClass = function() {
+      panelRef.hide = function() {
         return panelRef._$q.reject();
       };
 
@@ -184,7 +184,7 @@ describe('$mdPanel', function() {
       expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
       expect(panelRef.isAttached).toEqual(true);
 
-      panelRef.detachOnly = function() {
+      panelRef.detach = function() {
         return panelRef._$q.reject();
       };
 
@@ -691,12 +691,12 @@ describe('$mdPanel', function() {
   }
 
   function showPanel() {
-    panelRef && panelRef.removeClass(HIDDEN_CLASS);
+    panelRef && panelRef.show(HIDDEN_CLASS);
     $rootScope.$apply();
   }
 
   function hidePanel() {
-    panelRef && panelRef.addClass(HIDDEN_CLASS);
+    panelRef && panelRef.hide(HIDDEN_CLASS);
     $rootScope.$apply();
   }
 });
