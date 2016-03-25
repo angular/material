@@ -1,6 +1,7 @@
 #horizontal-container {
   height: 100px;
-  width: 830px;
+  width: 100%;
+  max-width: 830px;
 }
 
 .repeated-item {
