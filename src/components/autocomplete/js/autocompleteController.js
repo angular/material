@@ -268,16 +268,16 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     inputModelCtrl = elements.$.input.controller('ngModel');
   }
 
-	/**
-	 * Finds the correct element that will determine the width
-	 * @returns {*}
-	 */
-	function getWrapTarget() {
+  /**
+   * Find the target for the wrap element which determines menu width
+   * @returns {*}
+   */
+  function getWrapTarget() {
     for (var element = $element; element.length; element = element.parent()) {
       if (angular.isDefined(element.attr('md-autocomplete-wrap-override'))) return element[ 0 ];
     }
     return $element.find('md-autocomplete-wrap')[0];
-	}
+  }
 
   /**
    * Finds the element that the menu will base its position on
