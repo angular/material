@@ -402,6 +402,7 @@ function ThemingProvider($mdColorPalette) {
   }
 }
 
+/* @ngInject */
 function ThemingDirective($mdTheming, $interpolate, $log) {
   return {
     priority: 100,
@@ -423,6 +424,7 @@ function ThemingDirective($mdTheming, $interpolate, $log) {
   };
 }
 
+/* @ngInject */
 function ThemableDirective($mdTheming) {
   return $mdTheming;
 }
@@ -484,6 +486,7 @@ function parseRules(theme, colorType, rules) {
 var rulesByType = {};
 
 // Generate our themes at run time given the state of THEMES and PALETTES
+/* @ngInject */
 function generateAllThemes($injector) {
   var head = document.head;
   var firstChild = head ? head.firstElementChild : null;

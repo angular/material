@@ -31,6 +31,7 @@ angular
  * </hljs>
  */
 
+/* @ngInject */
 function MdHighlight ($interpolate, $parse) {
   return {
     terminal: true,

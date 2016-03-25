@@ -46,6 +46,8 @@ angular
  * </hljs>
  *
  */
+
+/* @ngInject */
 function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $mdUtil, $timeout) {
   inputDirective = inputDirective[0];
   var CHECKED_CSS = 'md-checked';
@@ -55,7 +57,7 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
     transclude: true,
     require: '?ngModel',
     priority: 210, // Run before ngAria
-    template: 
+    template:
       '<div class="_md-container" md-ink-ripple md-ink-ripple-checkbox>' +
         '<div class="_md-icon"></div>' +
       '</div>' +

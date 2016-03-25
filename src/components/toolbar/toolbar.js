@@ -60,6 +60,7 @@ angular.module('material.components.toolbar', [
  * at one fourth the rate at which the user scrolls down. Default 0.5.
  */
 
+/* @ngInject */
 function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
   var translateY = angular.bind(null, $mdUtil.supplant, 'translate3d(0,{0}px,0)');
 

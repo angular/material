@@ -31,8 +31,9 @@ var DELETE_HINT_TEMPLATE = '\
  *
  * @param $mdTheming
  * @param $mdUtil
- * @ngInject
  */
+
+/* @ngInject */
 function MdChip($mdTheming, $mdUtil) {
   var hintTemplate = $mdUtil.processTemplate(DELETE_HINT_TEMPLATE);
 

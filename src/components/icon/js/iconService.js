@@ -316,10 +316,11 @@
 
    },
 
-   $get : ['$http', '$q', '$log', '$templateCache', function($http, $q, $log, $templateCache) {
+   /* @ngInject */
+   $get : function($http, $q, $log, $templateCache) {
      this.preloadIcons($templateCache);
      return MdIconService(config, $http, $q, $log, $templateCache);
-   }]
+   }
  };
 
    /**

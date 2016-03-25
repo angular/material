@@ -125,6 +125,7 @@ function MdBottomSheetDirective($mdBottomSheet) {
  *
  */
 
+/* @ngInject */
 function MdBottomSheetProvider($$interimElementProvider) {
   // how fast we need to flick down to close the sheet, pixels/ms
   var CLOSING_VELOCITY = 0.5;
@@ -165,7 +166,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
         // Prevent mouse focus on backdrop; ONLY programatic focus allowed.
         // This allows clicks on backdrop to propogate to the $rootElement and
         // ESC key events to be detected properly.
-        
+
         backdrop[0].tabIndex = -1;
 
         if (options.clickOutsideToClose) {

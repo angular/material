@@ -1,5 +1,7 @@
   angular
     .module('material.core')
+
+    /* @ngInject */
     .config( function($provide){
        $provide.decorator('$mdUtil', ['$delegate', function ($delegate){
            /**

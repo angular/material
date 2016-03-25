@@ -62,6 +62,8 @@ angular
  *  </md-button>
  * </hljs>
  */
+
+/* @ngInject */
 function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $timeout) {
 
   return {

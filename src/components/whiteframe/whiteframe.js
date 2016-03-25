@@ -29,6 +29,8 @@ angular
  * </div>
  * </hljs>
  */
+
+/* @ngInject */
 function MdWhiteframeDirective($log) {
   var MIN_DP = 1;
   var MAX_DP = 24;

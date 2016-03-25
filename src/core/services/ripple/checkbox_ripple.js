@@ -17,6 +17,7 @@
   angular.module('material.core')
     .factory('$mdCheckboxInkRipple', MdCheckboxInkRipple);
 
+  /* @ngInject */
   function MdCheckboxInkRipple($mdInkRipple) {
     return {
       attach: attach

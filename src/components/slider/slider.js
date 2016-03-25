@@ -123,6 +123,8 @@ function SliderContainerDirective() {
  * @param {number=} max The maximum value the user is allowed to pick. Default 100.
  * @param {number=} round The amount of numbers after the decimal point, maximum is 6 to prevent scientific notation. Default 3.
  */
+
+/* @ngInject */
 function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdTheming, $mdGesture, $parse, $log, $timeout) {
   return {
     scope: {},

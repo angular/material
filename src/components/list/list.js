@@ -35,6 +35,7 @@ angular.module('material.components.list', [
  * </hljs>
  */
 
+/* @ngInject */
 function mdListDirective($mdTheming) {
   return {
     restrict: 'E',
@@ -82,6 +83,8 @@ function mdListDirective($mdTheming) {
  * and you can include a class of `class="md-exclude"` if you need to use a non-secondary button
  * that is inside the list, but does not wrap the contents._
  */
+
+/* @ngInject */
 function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
   var proxiedTypes = ['md-checkbox', 'md-switch'];
   return {
@@ -154,7 +157,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           // Append the button wrap before our list-item content, because it will overlay in relative.
           container.prepend(buttonWrap);
           container.children().eq(1).append(tEl.contents());
-          
+
           tEl.addClass('_md-button-wrap');
         }
 
@@ -337,6 +340,8 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
  * @module material.components.list
  *
  */
+
+/* @ngInject */
 function MdListController($scope, $element, $mdListInkRipple) {
   var ctrl = this;
   ctrl.attachRipple = attachRipple;

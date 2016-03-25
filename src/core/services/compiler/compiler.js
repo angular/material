@@ -2,6 +2,7 @@ angular
   .module('material.core')
   .service('$mdCompiler', mdCompilerService);
 
+/* @ngInject */
 function mdCompilerService($q, $http, $injector, $compile, $controller, $templateCache) {
   /* jshint validthis: true */
 

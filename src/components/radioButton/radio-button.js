@@ -49,6 +49,8 @@ angular.module('material.components.radioButton', [
  * </hljs>
  *
  */
+
+/* @ngInject */
 function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
   RadioGroupController.prototype = createRadioGroupControllerProto();
 
@@ -239,6 +241,8 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
  * </hljs>
  *
  */
+
+/* @ngInject */
 function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
 
   var CHECKED_CSS = 'md-checked';

@@ -97,8 +97,9 @@ var MD_CONTACT_CHIPS_TEMPLATE = '\
  *
  * @param $mdTheming
  * @returns {*}
- * @ngInject
  */
+
+/* @ngInject */
 function MdContactChips($mdTheming, $mdUtil) {
   return {
     template: function(element, attrs) {

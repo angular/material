@@ -75,6 +75,7 @@
    *
    */
 
+  /* @ngInject */
   angular.module('material.components.datepicker').config(function($provide) {
     // TODO(jelbourn): Assert provided values are correctly formatted. Need assertions.
 

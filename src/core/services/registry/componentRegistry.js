@@ -16,6 +16,8 @@
    * @module material.core.componentRegistry
    *
    */
+
+  /* @ngInject */
   function ComponentRegistry($log, $q) {
 
     var self;

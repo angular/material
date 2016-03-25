@@ -44,6 +44,7 @@ angular.module('material.components.content', [
  *
  */
 
+/* @ngInject */
 function mdContentDirective($mdTheming) {
   return {
     restrict: 'E',

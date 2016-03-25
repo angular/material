@@ -56,6 +56,8 @@ angular.module('material.components.progressLinear', [
  * <md-progress-linear md-mode="query"></md-progress-linear>
  * </hljs>
  */
+
+/* @ngInject */
 function MdProgressLinearDirective($mdTheming, $mdUtil, $log) {
   var MODE_DETERMINATE = "determinate",
       MODE_INDETERMINATE = "indeterminate",
@@ -71,7 +73,7 @@ function MdProgressLinearDirective($mdTheming, $mdUtil, $log) {
       '</div>',
     compile: compile
   };
-  
+
   function compile(tElement, tAttrs, transclude) {
     tElement.attr('aria-valuemin', 0);
     tElement.attr('aria-valuemax', 100);

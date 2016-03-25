@@ -63,6 +63,8 @@ angular.module('material.components.input', [
  *
  * </hljs>
  */
+
+/* @ngInject */
 function mdInputContainerDirective($mdTheming, $parse) {
 
   var INPUT_TAGS = ['INPUT', 'TEXTAREA', 'SELECT', 'MD-SELECT'];
@@ -250,6 +252,7 @@ function labelDirective() {
  *
  */
 
+/* @ngInject */
 function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout) {
   return {
     restrict: 'E',
@@ -483,6 +486,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout) {
   }
 }
 
+/* @ngInject */
 function mdMaxlengthDirective($animate, $mdUtil) {
   return {
     restrict: 'A',
@@ -549,6 +553,7 @@ function mdMaxlengthDirective($animate, $mdUtil) {
   }
 }
 
+/* @ngInject */
 function placeholderDirective($log) {
   return {
     restrict: 'A',
@@ -618,6 +623,8 @@ function placeholderDirective($log) {
  *
  * </hljs>
  */
+
+/* @ngInject */
 function mdSelectOnFocusDirective($timeout) {
 
   return {
@@ -700,6 +707,7 @@ function ngMessagesDirective() {
   }
 }
 
+/* @ngInject */
 function ngMessageDirective($mdUtil) {
   return {
     restrict: 'EA',
@@ -720,6 +728,7 @@ function ngMessageDirective($mdUtil) {
   }
 }
 
+/* @ngInject */
 function mdInputInvalidMessagesAnimation($q, $animateCss) {
   return {
     addClass: function(element, className, done) {
@@ -736,6 +745,7 @@ function mdInputInvalidMessagesAnimation($q, $animateCss) {
   };
 }
 
+/* @ngInject */
 function ngMessagesAnimation($q, $animateCss) {
   return {
     enter: function(element, done) {
@@ -764,6 +774,7 @@ function ngMessagesAnimation($q, $animateCss) {
   }
 }
 
+/* @ngInject */
 function ngMessageAnimation($animateCss) {
   return {
     enter: function(element, done) {
@@ -784,6 +795,7 @@ function ngMessageAnimation($animateCss) {
   }
 }
 
+/* @ngInject */
 function showInputMessages(element, $animateCss, $q) {
   var animators = [], animator;
   var messages = getMessagesElement(element);
@@ -797,6 +809,7 @@ function showInputMessages(element, $animateCss, $q) {
   return $q.all(animators);
 }
 
+/* @ngInject */
 function hideInputMessages(element, $animateCss, $q) {
   var animators = [], animator;
   var messages = getMessagesElement(element);
@@ -810,6 +823,7 @@ function hideInputMessages(element, $animateCss, $q) {
   return $q.all(animators);
 }
 
+/* @ngInject */
 function showMessage(element, $animateCss) {
   var height = element[0].offsetHeight;
 
@@ -822,6 +836,7 @@ function showMessage(element, $animateCss) {
   });
 }
 
+/* @ngInject */
 function hideMessage(element, $animateCss) {
   var height = element[0].offsetHeight;
   var styles = window.getComputedStyle(element[0]);

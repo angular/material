@@ -46,6 +46,8 @@ var DURATION = 450;
  *   </ANY>
  * </hljs>
  */
+
+/* @ngInject */
 function InkRippleDirective ($mdButtonInkRipple, $mdCheckboxInkRipple) {
   return {
     controller: angular.noop,
@@ -101,6 +103,8 @@ function InkRippleDirective ($mdButtonInkRipple, $mdCheckboxInkRipple) {
  * * `colorElement` - The element the ripple should take its color from, defined by css property `color`
  * * `fitRipple` - Whether the ripple should fill the element
  */
+
+/* @ngInject */
 function InkRippleService ($injector) {
   return { attach: attach };
   function attach (scope, element, options) {
@@ -115,8 +119,9 @@ function InkRippleService ($injector) {
 
 /**
  * Controller used by the ripple service in order to apply ripples
- * @ngInject
  */
+
+/* @ngInject */
 function InkRippleCtrl ($scope, $element, rippleOptions, $window, $timeout, $mdUtil) {
   this.$window    = $window;
   this.$timeout   = $timeout;

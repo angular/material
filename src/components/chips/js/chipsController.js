@@ -14,6 +14,8 @@ angular
  * @param $mdUtil
  * @constructor
  */
+
+/* @ngInject */
 function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout, $mdUtil) {
   /** @type {$timeout} **/
   this.$timeout = $timeout;
@@ -180,7 +182,7 @@ MdChipsCtrl.prototype.isEditingChip = function(){
 MdChipsCtrl.prototype.chipKeydown = function (event) {
   if (this.getChipBuffer()) return;
   if (this.isEditingChip()) return;
-  
+
   switch (event.keyCode) {
     case this.$mdConstant.KEY_CODE.BACKSPACE:
     case this.$mdConstant.KEY_CODE.DELETE:

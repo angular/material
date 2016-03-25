@@ -482,6 +482,7 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  * @returns {promise} A promise that is resolved when the dialog has been closed.
  */
 
+/* @ngInject */
 function MdDialogProvider($$interimElementProvider) {
   // Elements to capture and redirect focus when the user presses tab at the dialog boundary.
   var topFocusTrap, bottomFocusTrap;

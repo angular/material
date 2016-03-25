@@ -13,6 +13,8 @@ angular
  * @param $mdUtil
  * @constructor
  */
+
+/* @ngInject */
 function MdChipCtrl ($scope, $element, $mdConstant, $timeout, $mdUtil) {
   /**
    * @type {$scope}

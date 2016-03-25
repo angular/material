@@ -41,6 +41,7 @@ angular
  * </hljs>
  */
 
+/* @ngInject */
 function MdSubheaderDirective($mdSticky, $compile, $mdTheming, $mdUtil) {
   return {
     restrict: 'E',
