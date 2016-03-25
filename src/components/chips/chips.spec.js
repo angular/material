@@ -388,7 +388,58 @@ describe('<md-chips>', function() {
           expect(enterEvent.preventDefault).toHaveBeenCalled();
         }));
 
+        it('should trim the buffer when a chip will be added', inject(function($mdConstant) {
+          var element = buildChips(BASIC_CHIP_TEMPLATE);
+          var ctrl = element.controller('mdChips');
+          var input = element.find('input');
+
+          // This string contains a lot of spaces, which should be trimmed.
+          input.val('    Test    ');
+          input.triggerHandler('input');
+
+          expect(ctrl.chipBuffer).toBeTruthy();
+
+          var enterEvent = {
+            type: 'keydown',
+            keyCode: $mdConstant.KEY_CODE.ENTER,
+            which: $mdConstant.KEY_CODE.ENTER
+          };
+
+          input.triggerHandler(enterEvent);
+
+          expect(scope.items).toEqual(['Apple', 'Banana', 'Orange', 'Test']);
+        }));
+
+        it('should not trim the input text of the input', inject(function($mdConstant) {
+          var element = buildChips(BASIC_CHIP_TEMPLATE);
+          var ctrl = element.controller('mdChips');
+          var input = element.find('input');
+
+          input.val('    ');
+          input.triggerHandler('input');
+
+          expect(ctrl.chipBuffer).toBeTruthy();
+
+          var enterEvent = {
+            type: 'keydown',
+            keyCode: $mdConstant.KEY_CODE.BACKSPACE,
+            which: $mdConstant.KEY_CODE.BACKSPACE,
+            preventDefault: jasmine.createSpy('preventDefault')
+          };
+
+          input.triggerHandler(enterEvent);
+
+          expect(enterEvent.preventDefault).not.toHaveBeenCalled();
+
+          input.val('');
+          input.triggerHandler('input');
+
+          input.triggerHandler(enterEvent);
+
+          expect(enterEvent.preventDefault).toHaveBeenCalledTimes(1);
+        }));
       });
+
 
       it('focuses/blurs the component when focusing/blurring the input', inject(function() {
         var element = buildChips(BASIC_CHIP_TEMPLATE);
