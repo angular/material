@@ -144,7 +144,7 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
     // Only append the chip and reset the chip buffer if the max chips limit isn't reached.
     if (this.hasMaxChipsReached()) return;
 
-    this.appendChip(chipBuffer);
+    this.appendChip(chipBuffer.trim());
     this.resetChipBuffer();
   }
 };
