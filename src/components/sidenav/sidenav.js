@@ -57,58 +57,41 @@ angular
  * $mdSidenav(componentId).isLockedOpen();
  * </hljs>
  */
-function SidenavService($mdComponentRegistry, $q) {
-  return function(handle) {
+function SidenavService($$mdAPI, $q) {
 
-    // Lookup the controller instance for the specified sidNav instance
-    var self;
-    var errorMsg = "SideNav '" + handle + "' is not available!";
-    var instance = $mdComponentRegistry.get(handle);
+  return $$mdAPI()
+    .onError(onError)
+    .addMethod('isOpen', isOpen)
+    .addMethod('isLockedOpen', isLockedOpen)
+    .addMethod('toggle', toggle)
+    .addMethod('open', open)
+    .addMethod('close', close)
+    .create();
 
-    if(!instance) {
-      $mdComponentRegistry.notFoundError(handle);
-    }
+  function onError(registryName) {
+    return $q.reject("SideNav '" + registryName + "' is not available!");
+  }
 
-    return self = {
-      // -----------------
-      // Sync methods
-      // -----------------
-      isOpen: function() {
-        return instance && instance.isOpen();
-      },
-      isLockedOpen: function() {
-        return instance && instance.isLockedOpen();
-      },
-      // -----------------
-      // Async methods
-      // -----------------
-      toggle: function() {
-        return instance ? instance.toggle() : $q.reject(errorMsg);
-      },
-      open: function() {
-        return instance ? instance.open() : $q.reject(errorMsg);
-      },
-      close: function() {
-        return instance ? instance.close() : $q.reject(errorMsg);
-      },
-      then : function( callbackFn ) {
-        var promise = instance ? $q.when(instance) : waitForInstance();
-        return promise.then( callbackFn || angular.noop );
-      }
-    };
+  function isOpen() {
+   return this.instance.isOpen();
+  }
 
-    /**
-     * Deferred lookup of component instance using $component registry
-     */
-    function waitForInstance() {
-      return $mdComponentRegistry
-                .when(handle)
-                .then(function( it ){
-                  instance = it;
-                  return it;
-                });
-    }
-  };
+  function isLockedOpen() {
+    return this.instance.isLockedOpen();
+  }
+
+  function toggle() {
+    return this.instance.toggle();
+  }
+
+  function open() {
+    return this.instance.open();
+  }
+
+  function close() {
+    return this.instance.close();
+  }
+
 }
 /**
  * @ngdoc directive
@@ -396,7 +379,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
  * @module material.components.sidenav
  *
  */
-function SidenavController($scope, $element, $attrs, $mdComponentRegistry, $q) {
+function SidenavController($scope, $attrs, $$mdAPI, $q) {
 
   var self = this;
 
@@ -412,5 +395,5 @@ function SidenavController($scope, $element, $attrs, $mdComponentRegistry, $q) {
   self.toggle = function() { return self.$toggleOpen( !$scope.isOpen );  };
   self.$toggleOpen = function(value) { return $q.when($scope.isOpen = value); };
 
-  self.destroy = $mdComponentRegistry.register(self, $attrs.mdComponentId);
+  self.destroy = $$mdAPI.register(self, $attrs.mdComponentId);
 }

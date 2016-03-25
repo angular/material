@@ -4,7 +4,7 @@
    *
    * @description
    * A component instance registration service.
-   * Note: currently this as a private service in the SideNav component.
+   * Note: This is currently used by the $$mdAPI factory, which provides public interfaces like `$mdSidenav`.
    */
   angular.module('material.core')
     .factory('$mdComponentRegistry', ComponentRegistry);
