@@ -57,40 +57,11 @@ angular
  * $mdSidenav(componentId).isLockedOpen();
  * </hljs>
  */
-function SidenavService($$mdAPI, $q) {
+function SidenavService($$mdAPI) {
 
   return $$mdAPI()
-    .onError(onError)
-    .addMethod('isOpen', isOpen)
-    .addMethod('isLockedOpen', isLockedOpen)
-    .addMethod('toggle', toggle)
-    .addMethod('open', open)
-    .addMethod('close', close)
+    .load()
     .create();
-
-  function onError(registryName) {
-    return $q.reject("SideNav '" + registryName + "' is not available!");
-  }
-
-  function isOpen() {
-   return this.instance.isOpen();
-  }
-
-  function isLockedOpen() {
-    return this.instance.isLockedOpen();
-  }
-
-  function toggle() {
-    return this.instance.toggle();
-  }
-
-  function open() {
-    return this.instance.open();
-  }
-
-  function close() {
-    return this.instance.close();
-  }
 
 }
 /**
@@ -243,7 +214,6 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
     scope.$watch(isLocked, updateIsLocked);
     scope.$watch('isOpen', updateIsOpen);
 
-
     // Publish special accessor for the Controller instance
     sidenavCtrl.$toggleOpen = toggleOpen;
 
@@ -383,17 +353,42 @@ function SidenavController($scope, $attrs, $$mdAPI, $q) {
 
   var self = this;
 
-  // Use Default internal method until overridden by directive postLink
+  self.isOpen = function() {
+    return !!$scope.isOpen;
+  };
 
-  // Synchronous getters
-  self.isOpen = function() { return !!$scope.isOpen; };
-  self.isLockedOpen = function() { return !!$scope.isLockedOpen; };
+  self.isLockedOpen = function() {
+    return !!$scope.isLockedOpen;
+  };
 
-  // Async actions
-  self.open   = function() { return self.$toggleOpen( true );  };
-  self.close  = function() { return self.$toggleOpen( false ); };
-  self.toggle = function() { return self.$toggleOpen( !$scope.isOpen );  };
-  self.$toggleOpen = function(value) { return $q.when($scope.isOpen = value); };
+  self.open   = function() {
+    return self.$toggleOpen(true);
+  };
 
-  self.destroy = $$mdAPI.register(self, $attrs.mdComponentId);
+  self.close  = function() {
+    return self.$toggleOpen(false);
+  };
+
+  self.toggle = function() {
+    return self.$toggleOpen(!$scope.isOpen);
+  };
+
+  self.$toggleOpen = function(value) {
+    return $q.when($scope.isOpen = value);
+  };
+
+  function onError(registryName) {
+    return $q.reject("SideNav '" + registryName + "' is not available!");
+  }
+
+  // This registers our public API.
+  self.destroy = $$mdAPI()
+    .onError(onError)
+    .addMethod('isOpen', self.isOpen)
+    .addMethod('isLockedOpen', self.isLockedOpen)
+    .addMethod('toggle', self.toggle)
+    .addMethod('open', self.open)
+    .addMethod('close', self.close)
+    .store($attrs.mdComponentId);
+
 }
