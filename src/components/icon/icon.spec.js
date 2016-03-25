@@ -54,13 +54,13 @@ describe('mdIcon directive', function() {
           size: 48
         };
 
-        el = make('\
-          <md-icon \
-              md-font-icon="{{ font.name }}" \
-              aria-label="{{ font.name + font.size }}" \
-              class="step" > \
-          </md-icon> \
-        ');
+        el = make(
+          '<md-icon ' +
+              'md-font-icon="{{ font.name }}" ' +
+              'aria-label="{{ font.name + font.size }}" ' +
+              'class="step">' +
+          '</md-icon>'
+        );
 
         expect(el.attr('md-font-icon')).toBe($scope.font.name);
         expect(el.hasClass('step')).toBe(true);
@@ -193,7 +193,7 @@ describe('mdIcon directive', function() {
                   }
               }
             }
-          }
+          };
         };
         $mdIconMock.fontSet = function() {
           return 'material-icons';
@@ -214,11 +214,10 @@ describe('mdIcon directive', function() {
       it('should update mdSvgIcon when attribute value changes', function() {
         $scope.iconName = 'android';
         el = make('<md-icon md-svg-icon="{{ iconName }}"></md-icon>');
-        var iScope = el.isolateScope();
-        expect(iScope.svgIcon).toEqual('android');
+        expect(el.attr('md-svg-icon')).toEqual('android');
         $scope.iconName = 'cake';
         $scope.$digest();
-        expect(iScope.svgIcon).toEqual('cake');
+        expect(el.attr('md-svg-icon')).toEqual('cake');
       });
 
       it('should not include a ng-transclude when using mdSvgIcon', function() {
@@ -235,11 +234,10 @@ describe('mdIcon directive', function() {
       it('should update mdSvgSrc when attribute value changes', function() {
         $scope.url = 'android.svg';
         el = make('<md-icon md-svg-src="{{ url }}"></md-icon>');
-        var iScope = el.isolateScope();
-        expect(iScope.svgSrc).toEqual('android.svg');
+        expect(el.attr('md-svg-src')).toEqual('android.svg');
         $scope.url = 'cake.svg';
         $scope.$digest();
-        expect(iScope.svgSrc).toEqual('cake.svg');
+        expect(el.attr('md-svg-src')).toEqual('cake.svg');
       });
 
       it('should not include a ng-transclude when using mdSvgSrc', inject(function($templateCache) {
@@ -254,12 +252,12 @@ describe('mdIcon directive', function() {
           var svgData = '<svg><g><circle r="50" cx="100" cy="100"></circle></g></svg>';
           $scope.getData = function() {
             return 'data:image/svg+xml;base64,' + window.btoa(svgData);
-          }
+          };
           el = make('<md-icon md-svg-src="{{ getData() }}"></md-icon>');
           $scope.$digest();
           expect(el[0].innerHTML).toEqual(svgData);
         }));
-      })
+      });
     });
 
     describe('with ARIA support', function() {
@@ -435,7 +433,7 @@ describe('mdIcon service', function() {
       it('should return correct SVG markup', function() {
         $mdIcon('android.svg').then(function(el) {
           expect(el.outerHTML).toEqual( updateDefaults('<svg><g id="android"></g></svg>') );
-        })
+        });
         $scope.$digest();
       });
 
@@ -447,7 +445,7 @@ describe('mdIcon service', function() {
             var data = 'data:image/svg+xml;base64,' + btoa(svgData);
             $mdIcon(data).then(function(el) {
               expect(el.outerHTML).toEqual( updateDefaults(svgData) );
-            })
+            });
             $scope.$digest();
           });
         });
@@ -457,7 +455,7 @@ describe('mdIcon service', function() {
             var data = 'data:image/svg+xml,' + svgData;
             $mdIcon(data).then(function(el) {
               expect(el.outerHTML).toEqual( updateDefaults(svgData) );
-            })
+            });
             $scope.$digest();
           });
         });
