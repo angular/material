@@ -12,6 +12,7 @@ md-sidenav {
   max-width: $sidenav-mobile-width;
   bottom: 0;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 
   ul {
     list-style: none;
