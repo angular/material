@@ -6,14 +6,20 @@ angular
  * @ngInject
  */
 function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipple,
-                           $mdUtil, $animateCss, $attrs, $compile, $mdTheming) {
+                           $mdUtil, $animateCss, $attrs, $compile, $mdTheming, $timeout, $$rAF) {
   // define private properties
   var ctrl      = this,
       locked    = false,
       elements  = getElements(),
       queue     = [],
       destroyed = false,
-      loaded    = false;
+      loaded    = false,
+      currentBindIndex,
+      toolbarController,
+      ZCLASS = 'md-whiteframe-z1',
+      tabElements = [];
+
+  var translateY = angular.bind(null, $mdUtil.supplant, 'translate3d(0,{0}px,0)');
 
   // define one-way bindings
   defineOneWayBinding('stretchTabs', handleStretchTabs);
@@ -35,6 +41,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   defineBooleanAttribute('noSelectClick');
   defineBooleanAttribute('centerTabs', handleCenterTabs, false);
   defineBooleanAttribute('enableDisconnect');
+  defineBooleanAttribute('shrinkToolbar', handleShrinkToolbar);
 
   // define public properties
   ctrl.scope             = $scope;
@@ -76,6 +83,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     bindEvents();
     $mdTheming($element);
     $mdUtil.nextTick(function () {
+      waitForTabElements();
       updateHeightFromContent();
       adjustOffset();
       updateInkBarStyles();
@@ -83,6 +91,36 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
       loaded = true;
       updatePagination();
     });
+  }
+
+  function waitForTabElements () {
+    var tabLength = ctrl.tabs.length;
+    var unregisterWatcher = $scope.$watch(function () {
+      return $element.find('md-tab-content').length;
+    }, function (newLength) {
+      if (newLength === tabLength) {
+        unregisterWatcher();
+        loadTabElements();
+        getToolbar();
+      }
+    });
+  }
+
+  function getToolbar () {
+    var toolbar = angular.element($element.parent()[0].querySelector('md-toolbar'));
+
+    if (!toolbar.length) return;
+
+    elements.toolbar = toolbar;
+
+    if (!toolbarController) {
+      toolbarController = elements.toolbar.controller('mdToolbar');
+
+      if (toolbarController.isScrollShrinkReady) {
+        toolbarController.overrideScrollHook(updateTabsHeader);
+        toolbarController.registerContentElement($element);
+      }
+    }
   }
 
   /**
@@ -95,6 +133,42 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     element.html(template);
     $compile(element.contents())(ctrl.parent);
     delete $attrs.$mdTabsTemplate;
+  }
+
+
+  function loadTabElements () {
+    tabElements = $element.find('md-tab-content');
+  }
+
+  function bindScrollListener (newIndex, oldIndex) {
+    if (!toolbarController || !toolbarController.isScrollShrinkReady) return;
+
+    currentBindIndex = newIndex || 0;
+    toolbarController.setScrollShrinkTarget(tabElements[currentBindIndex]);
+
+    resetScrollPosition(oldIndex);
+  }
+
+  function resetScrollPosition (index) {
+    if (tabElements[index]) {
+      tabElements[index].scrollTop = 0;
+    }
+  }
+
+  function updateTabsHeader (y, contentScroll, margin, toolbarHeight, shrinkSpeedFactor) {
+    // Avoid the ugly looking white strike by removing 1px
+    var contentScrollModified = Math.max(contentScroll === margin ? contentScroll : contentScroll - 1, -margin);
+
+    $element.css($mdConstant.CSS.TRANSFORM, translateY([contentScrollModified]));
+
+    $element.css({
+      'margin-top': -margin + 'px',
+      'margin-bottom': ((toolbarHeight - y) * shrinkSpeedFactor) + 'px'
+    });
+
+    $mdUtil.nextTick(function () {
+      angular.element(elements.wrapper).toggleClass(ZCLASS, contentScroll >= toolbarHeight - y);
+    });
   }
 
   /**
@@ -219,15 +293,20 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    */
   function handleSelectedIndexChange (newValue, oldValue) {
     if (newValue === oldValue) return;
-    
+
     ctrl.selectedIndex     = getNearestSafeIndex(newValue);
     ctrl.lastSelectedIndex = oldValue;
     ctrl.updateInkBarStyles();
     updateHeightFromContent();
     adjustOffset(newValue);
+    bindScrollListener(newValue, oldValue);
     $scope.$broadcast('$mdTabsChanged');
     ctrl.tabs[ oldValue ] && ctrl.tabs[ oldValue ].scope.deselect();
     ctrl.tabs[ newValue ] && ctrl.tabs[ newValue ].scope.select();
+  }
+
+  function scrollTop (index) {
+    document.getElementById('tab-content-' + ctrl.tabs[index].id).scrollTop = 0;
   }
 
   function getTabElementIndex(tabEl){
@@ -351,6 +430,10 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
 
   function handleInkBar (hide) {
     angular.element(elements.inkBar).toggleClass('ng-hide', hide);
+  }
+
+  function handleShrinkToolbar (value) {
+    $element.toggleClass('md-shrink-toolbar', value);
   }
 
   /**
@@ -493,7 +576,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    */
   function shouldPaginate () {
     if (ctrl.noPagination || !loaded) return false;
-    var canvasWidth = $element.prop('clientWidth');
+    var canvasWidth = angular.element(elements.canvas).prop('clientWidth');
     angular.forEach(getElements().dummies, function (tab) { canvasWidth -= tab.offsetWidth; });
     return canvasWidth < 0;
   }
@@ -541,6 +624,8 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    * Updates whether or not pagination should be displayed.
    */
   function updatePagination () {
+    loadTabElements();
+    bindScrollListener(ctrl.selectedIndex);
     updatePagingWidth();
     ctrl.maxTabWidth = getMaxTabWidth();
     ctrl.shouldPaginate = shouldPaginate();

@@ -15,74 +15,74 @@ describe('<md-toolbar>', function() {
 
   it('with scrollShrink, it should shrink scrollbar when going to bottom', inject(function($compile, $rootScope, $mdConstant, mdToolbarDirective, $$rAF) {
 
-    var parent = angular.element('<div>');
-    var toolbar = angular.element('<md-toolbar>');
-    var contentEl = angular.element('<div>');
-    // Make content and toolbar siblings
-    parent.append(toolbar).append(contentEl);
+    function getTransform (st) {
+      return st.getPropertyValue("-webkit-transform") ||
+             st.getPropertyValue("-moz-transform") ||
+             st.getPropertyValue("-ms-transform") ||
+             st.getPropertyValue("-o-transform") ||
+             st.getPropertyValue("transform") ||
+             'none';
+    }
 
-    //Prop will be used for offsetHeight, give a fake offsetHeight
-    spyOn(toolbar, 'prop').and.callFake(function() {
-      return 100;
-    });
+    build(
+      '<div layout="column" style="height: 600px;">' +
+      '  <md-toolbar md-scroll-shrink>test</md-toolbar>' +
+      '  <md-content flex><div style="height: 5000px;"></div></md-content>' +
+      '</div>'
+    );
 
-    // Fake the css function so we can read css values properly,
-    // no matter which browser the tests are being run on.
-    // (IE, firefox, chrome all give different results when reading element.style)
-    var toolbarCss = {};
-    spyOn(toolbar, 'css').and.callFake(function(k, v) {
-      toolbarCss[k] = v;
-    });
-    var contentCss = {};
-    spyOn(contentEl, 'css').and.callFake(function(properties, value) {
-      if (angular.isObject(properties)) {
-        for (k in properties) {
-          if (properties.hasOwnProperty(k)) {
-            contentCss[k] = properties[k];
-          }
-        }
-      } else {
-        contentCss[properties] = value;
+    document.body.appendChild(element[0]);
+
+    $$rAF.flush();
+
+    var toolbarStyles = getComputedStyle(element.find('md-toolbar')[0]);
+    var contentStyles = getComputedStyle(element.find('md-content')[0]);
+    var toolbarHeight = element.find('md-toolbar').prop('offsetHeight');
+    var transformToolbar = getTransform(toolbarStyles);
+    var transformContent = getTransform(contentStyles);
+
+    expect(transformToolbar).toEqual('matrix(1, 0, 0, 1, 0, 0)');
+    expect(contentStyles.marginTop).toEqual('-' + (toolbarHeight / 2) + 'px');
+    expect(contentStyles.marginBottom).toEqual((toolbarHeight / 2) + 'px');
+    expect(transformContent).toEqual('matrix(1, 0, 0, 1, 0, ' + (toolbarHeight / 2) + ')');
+
+    element.find('md-content').triggerHandler({
+      type: 'scroll',
+      target: {
+        scrollTop: 500
       }
     });
-
-    // Manually link so we can give our own elements with spies on them
-    mdToolbarDirective[0].link($rootScope, toolbar, {
-      mdScrollShrink: true,
-      mdShrinkSpeedFactor: 1,
-      $observe: function() {}
-    });
-
-    $rootScope.$apply();
-    $rootScope.$broadcast('$mdContentLoaded', contentEl);
     $$rAF.flush();
 
+    toolbarStyles = getComputedStyle(element.find('md-toolbar')[0]);
+    contentStyles = getComputedStyle(element.find('md-content')[0]);
+    transformToolbar = getTransform(toolbarStyles);
+    transformContent = getTransform(contentStyles);
 
-    //Expect everything to be in its proper initial state.
-    expect(toolbarCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,0px,0)');
-    expect(contentCss['margin-top']).toEqual('-100px');
-    expect(contentCss['margin-bottom']).toEqual('-100px');
-    expect(contentCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,100px,0)');
+    expect(transformToolbar).toEqual('matrix(1, 0, 0, 1, 0, -' + toolbarHeight + ')');
+    expect(contentStyles.marginTop).toEqual('-' + (toolbarHeight / 2) + 'px');
+    expect(contentStyles.marginBottom).toEqual('-' + (toolbarHeight / 2) + 'px');
+    expect(transformContent).toEqual('matrix(1, 0, 0, 1, 0, -' + (toolbarHeight / 2) + ')');
 
-    // Fake scroll to the bottom
-    contentEl.triggerHandler({
+    element.find('md-content').triggerHandler({
       type: 'scroll',
-      target: {scrollTop: 500}
+      target: {
+        scrollTop: 0
+      }
     });
     $$rAF.flush();
 
-    expect(toolbarCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,-100px,0)');
-    expect(contentCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,0px,0)');
+    toolbarStyles = getComputedStyle(element.find('md-toolbar')[0]);
+    contentStyles = getComputedStyle(element.find('md-content')[0]);
+    transformToolbar = getTransform(toolbarStyles);
+    transformContent = getTransform(contentStyles);
 
-    // Fake scroll back to the top
-    contentEl.triggerHandler({
-      type: 'scroll',
-      target: {scrollTop: 0}
-    });
-    $$rAF.flush();
+    expect(transformToolbar).toEqual('matrix(1, 0, 0, 1, 0, 0)');
+    expect(contentStyles.marginTop).toEqual('-' + (toolbarHeight / 2) + 'px');
+    expect(contentStyles.marginBottom).toEqual((toolbarHeight / 2) + 'px');
+    expect(transformContent).toEqual('matrix(1, 0, 0, 1, 0, ' + (toolbarHeight / 2) + ')');
 
-    expect(toolbarCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,0px,0)');
-    expect(contentCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,100px,0)');
+    document.body.removeChild(element[0]);
 
   }));
 
@@ -155,6 +155,7 @@ describe('<md-toolbar>', function() {
     pageScope.$apply('shouldShowToolbar = true');
     pageScope.$digest();
     $timeout.flush();
+    $$rAF.flush();
 
     toolbarStyles = getComputedStyle(element.find('md-toolbar')[0]);
     contentStyles = getComputedStyle(element.find('md-content')[0]);
@@ -163,7 +164,7 @@ describe('<md-toolbar>', function() {
     expect(toolbarStyles.display).toBeTruthy();
     expect(toolbarStyles.display).not.toEqual('none');
 
-    // Expect the content to have a non-zero margin top (because updateToolbarHeight() was called)
+    // Expect the content to have a non-zero margin top (because determineToolbarHeight() was called)
     expect(contentStyles.marginTop).toBeTruthy();
     expect(contentStyles.marginTop).not.toEqual('0px');
 
@@ -291,7 +292,7 @@ describe('<md-toolbar>', function() {
       }
 
       element = $compile(template)(pageScope);
-      controller = element.controller('mdToolbar');
+      controller = element.find('md-toolbar').controller('mdToolbar');
 
       pageScope.$apply();
       $timeout.flush();

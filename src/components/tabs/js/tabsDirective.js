@@ -64,6 +64,7 @@
  * @param {boolean=} md-enable-disconnect When enabled, scopes will be disconnected for tabs that are not being displayed.  This provides a performance boost, but may also cause unexpected issues and is not recommended for most users.
  * @param {boolean=} md-autoselect When present, any tabs added after the initial load will be automatically selected
  * @param {boolean=} md-no-select-click When enabled, click events will not be fired when selecting tabs
+ * @param {boolean=} md-button-offset When present, add an offset to the tabs to align the first tab with the toolbar title (when using a icon button before the title)
  *
  * @usage
  * <hljs lang="html">

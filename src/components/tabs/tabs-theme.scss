@@ -16,6 +16,12 @@
         }
       }
     }
+    > md-prev-button,
+    > md-next-button {
+      md-icon {
+        color: '{{primary-contrast}}'
+      }
+    }
   }
 }
 @mixin md-tab-warn {
@@ -34,6 +40,12 @@
             background: '{{warn-contrast-0.1}}';
           }
         }
+      }
+    }
+    > md-prev-button,
+    > md-next-button {
+      md-icon {
+        color: '{{warn-contrast}}'
       }
     }
   }
@@ -58,6 +70,12 @@
           color: '{{primary-600-1}}';
           background: '{{primary-600-1}}';
         }
+      }
+    }
+    > md-prev-button,
+    > md-next-button {
+      md-icon {
+        color: '{{accent-contrast}}'
       }
     }
   }
