@@ -209,6 +209,12 @@ describe('md-input-container directive', function() {
     expect(el.find('label').attr('for')).toBe(el.find('input').attr('id'));
   });
 
+  it('should set the "step" attribute to "any" if "min" and "max" are specified', function() {
+    // check #7349 for more info
+    var el = setup('type="number" min="1" max="999"');
+    expect(el.find('input').attr('step')).toBe('any');
+  });
+
   describe('md-no-asterisk', function() {
 
     it('should not show asterisk on required label if disabled', function() {
