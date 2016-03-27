@@ -189,6 +189,7 @@ md-option {
   display: flex;
   align-items: center;
   width: auto;
+  transition: background 0.15s linear;
 
   &[disabled] {
     cursor: default;
