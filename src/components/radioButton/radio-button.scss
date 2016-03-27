@@ -130,12 +130,12 @@ md-radio-group {
     md-radio-button {
       margin-top: 0;
       margin-bottom: 0;
-      @include rtl(margin-left, inherit, $radio-margin);
-      @include rtl(margin-right, $radio-margin, inherit);
+      @include rtl(margin-left, 0, $radio-margin);
+      @include rtl(margin-right, $radio-margin, 0);
 
       &:last-of-type {
-        @include rtl(margin-left, inherit, 0);
-        @include rtl(margin-right, 0, inherit);
+        margin-left: 0;
+        margin-right: 0;
       }
     }
   }
