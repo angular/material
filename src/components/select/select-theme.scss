@@ -53,11 +53,16 @@ md-select-menu.md-THEME_NAME-theme {
       color: '{{background-900-0.87}}';
 
       &[disabled] {
-        color: '{{background-400-0.87}}';
+        ._md-text {
+          color: '{{background-400-0.87}}';
+        }
       }
 
-      &:focus:not([disabled]) {
-        background: '{{background-200}}';
+      &:not([disabled]) {
+        &:focus,
+        &:hover {
+          background: '{{background-200}}'
+        }
       }
 
       &[selected] {
@@ -75,7 +80,6 @@ md-select-menu.md-THEME_NAME-theme {
     }
   }
 }
-
 
 [md-checkbox-enabled].md-THEME_NAME-theme {
   @include checkbox-primary('[selected]');
