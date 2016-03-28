@@ -190,7 +190,9 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
     element.empty().append(valueEl);
     element.append(selectTemplate);
 
-    attr.tabindex = attr.tabindex || '0';
+    if(!attr.tabindex){
+      attr.$set('tabindex', 0);
+    }
 
     return function postLink(scope, element, attr, ctrls) {
       var untouched = true;
@@ -385,22 +387,24 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         }
         isDisabled = disabled;
         if (disabled) {
-          element.attr({'tabindex': -1, 'aria-disabled': 'true'});
-          element.off('click', openSelect);
-          element.off('keydown', handleKeypress);
+          element
+            .attr({'aria-disabled': 'true'})
+            .removeAttr('tabindex')
+            .off('click', openSelect)
+            .off('keydown', handleKeypress);
         } else {
-          element.attr({'tabindex': attr.tabindex, 'aria-disabled': 'false'});
-          element.on('click', openSelect);
-          element.on('keydown', handleKeypress);
+          element
+            .attr({'tabindex': attr.tabindex, 'aria-disabled': 'false'})
+            .on('click', openSelect)
+            .on('keydown', handleKeypress);
         }
       });
 
-      if (!attr.disabled && !attr.ngDisabled) {
-        element.attr({'tabindex': attr.tabindex, 'aria-disabled': 'false'});
+      if (!attr.hasOwnProperty('disabled') && !attr.hasOwnProperty('ngDisabled')) {
+        element.attr({'aria-disabled': 'false'});
         element.on('click', openSelect);
         element.on('keydown', handleKeypress);
       }
-
 
       var ariaAttrs = {
         role: 'listbox',
@@ -1238,7 +1242,7 @@ function SelectProvider($$interimElementProvider) {
             }
             newOption = optionsArray[index];
             if (newOption.hasAttribute('disabled')) newOption = undefined;
-          } while (!newOption && index < optionsArray.length - 1 && index > 0)
+          } while (!newOption && index < optionsArray.length - 1 && index > 0);
           newOption && newOption.focus();
           opts.focusedNode = newOption;
         }
