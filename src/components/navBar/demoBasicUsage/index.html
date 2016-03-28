@@ -1,0 +1,11 @@
+<div ng-controller="AppCtrl" ng-cloak>
+  <md-content class="md-padding">
+    <md-nav-bar selected-link-name="currentLink" nav-bar-aria-label="navigation links">
+      <md-nav-link nav-click="goto('page1')" link-name="page1">Page One</md-nav-link>
+      <md-nav-link nav-click="goto('page2')" link-name="page2">Page Two</md-nav-link>
+      <md-nav-link nav-click="goto('page3')" link-name="page3">Page Three</md-nav-link>
+      <!-- these require actual routing with ui-router or ng-route, so they won't work in the demo -->
+      <md-nav-link nav-sref="app.page4" link-name="page4">Page Four</md-nav-link>
+      <md-nav-link nav-href="#page5" link-name="page5">Page Five</md-nav-link>
+    </md-nav-bar>
+  </md-content>
