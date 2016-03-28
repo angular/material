@@ -502,8 +502,7 @@ angular
  * is used to determine the bounds. When passed a click event, the location
  * of the click will be used as the position to start the animation.
  *
- * @param {string|!Element|!Event|
- *     {top: string, left: string, height: string, width: string}}
+ * @param {string|!Element|!Event|!{top: number, left: number}}
  * @returns {MdPanelAnimation}
  */
 
@@ -515,8 +514,7 @@ angular
  * query selector, DOM element, or a Rect object that is used to determine
  * the bounds.
  *
- * @param {string|!Element|
- *     {top: string, left: string, height: string, width: string}}
+ * @param {string|!Element|!{top: number, left: number}}
  * @returns {MdPanelAnimation}
  */
 
@@ -1321,17 +1319,17 @@ MdPanelPosition.prototype.getRight = function() {
  * @final @constructor
  */
 function MdPanelAnimation() {
-  /** @private {!{top: string, left: string, height: string, width: string}} */
+  /** @private {!{element: !angular.JQLite|undefined, bounds: !DOMRect}} */
   this._openFrom = {};
 
-  /** @private {!{top: string, left: string, height: string, width: string}} */
+  /** @private {!{element: !angular.JQLite|undefined, bounds: !DOMRect}} */
   this._closeTo = {};
 }
 
 
 /**
  * Gets the boundingClientRect for the opening animation.
- * @returns {!{top: string, left: string, height: string, width: string}}
+ * @returns {!{element: !angular.JQLite|undefined, bounds: !DOMRect}}
  */
 MdPanelAnimation.prototype.getOpenFrom = function() {
   return this._openFrom;
@@ -1340,7 +1338,7 @@ MdPanelAnimation.prototype.getOpenFrom = function() {
 
 /**
  * Gets the boundingClientRect for the closing animation.
- * @returns {!{top: string, left: string, height: string, width: string}}
+ * @returns {!{element: !angular.JQLite|undefined, bounds: !DOMRect}}
  */
 MdPanelAnimation.prototype.getCloseTo = function() {
   return this._closeTo;
@@ -1353,25 +1351,16 @@ MdPanelAnimation.prototype.getCloseTo = function() {
  * is used to determine the bounds. When passed a click event, the location
  * of the click will be used as the position to start the animation.
  *
- * @param {string|!Element|!Event|
- *     {top: string, left: string, height: string, width: string}} openFrom
+ * @param {string|!Element|!Event|{top: number, left: number}} openFrom
  * @returns {MdPanelAnimation}
  */
 MdPanelAnimation.prototype.openFrom = function(openFrom) {
   // Check if 'openFrom' is an Event.
   openFrom = openFrom.target ? openFrom.target : openFrom;
 
-  if (!!openFrom.top || !!openFrom.left || !!openFrom.height || !!openFrom.width) {
-    this._openFrom = {
-      element: undefined,
-      bounds: angular.extend({top: 0, left: 0, height: 0, width: 0}, openFrom),
-      focus: undefined
-    };
-  } else {
-    this._openFrom = this._getBoundingClientRect(this._getElement(openFrom));
-  }
+  this._openFrom = this.getPanelAnimationTarget(openFrom);
 
-  if (angular.isUndefined(this._closeTo)) {
+  if (!this._closeTo) {
     this._closeTo = this._openFrom;
   }
   return this;
@@ -1383,22 +1372,35 @@ MdPanelAnimation.prototype.openFrom = function(openFrom) {
  * query selector, DOM element, or a Rect object that is used to determine
  * the bounds.
  *
- * @param {string|!Element|
- *     !{top: string, left: string, height: string, width: string}} closeTo
+ * @param {string|!Element|{top: number, left: number}} closeTo
  * @returns {MdPanelAnimation}
  */
 MdPanelAnimation.prototype.closeTo = function(closeTo) {
-  if (!!closeTo.top || !!closeTo.left || !!closeTo.height || !!closeTo.width) {
-    this._closeTo = {
-      element: undefined,
-      bounds: angular.extend({top: 0, left: 0, height: 0, width: 0}, closeTo),
-      focus: undefined
-    };
-  } else {
-    this._closeTo = this._getBoundingClientRect(this._getElement(closeTo));
-  }
+  this._closeTo = this.getPanelAnimationTarget(closeTo);
   return this;
 };
+
+
+/**
+ * Returns the element and bounds for the animation target.
+ * @param {string|!Element|{top: number, left: number}} location
+ * @returns {!{element: !angular.JQLite|undefined, bounds: !DOMRect}}
+ */
+MdPanelAnimation.prototype.getPanelAnimationTarget = function(location) {
+  if (angular.isDefined(location.top) || angular.isDefined(location.left)) {
+    return {
+      element: undefined,
+      bounds: {
+        top: location.top || 0,
+        left: location.left || 0,
+        height: 1,
+        width: 1
+      }
+    };
+  } else {
+    return this._getBoundingClientRect(this._getElement(location));
+  }
+}
 
 
 /**
@@ -1419,15 +1421,14 @@ MdPanelAnimation.prototype._getElement = function(el) {
 /**
  * Identify the bounding RECT for the target element.
  * @param {!angular.JQLite} element
- * @returns {!Object}
+ * @returns {!{element: !angular.JQLite|undefined, bounds: !DOMRect}}
  * @private
  */
 MdPanelAnimation.prototype._getBoundingClientRect = function(element) {
   if (element instanceof angular.element) {
     return {
       element: element,
-      bounds: element[0].getBoundingClientRect(),
-      focus: angular.bind(element, element.focus)
+      bounds: element[0].getBoundingClientRect()
     };
   }
 };

@@ -702,11 +702,11 @@ describe('$mdPanel', function() {
 
       it('provided a bounding rect', function() {
         var rect = myButton[0].getBoundingClientRect();
-        var inputRect = {top: rect.top, left: rect.left, height: rect.height, width: rect.width};
+        var inputRect = {top: rect.top, left: rect.left};
         var animation = mdPanelAnimation.openFrom(inputRect);
 
         expect(animation.getOpenFrom().element).toBeUndefined();
-        expect(animation.getOpenFrom().bounds).toEqual(inputRect);
+        expect(animation.getOpenFrom().bounds).toEqual(angular.extend(inputRect, {height: 1, width: 1}));
       });
     });
 
@@ -727,11 +727,11 @@ describe('$mdPanel', function() {
 
       it('provided a bounding rect', function() {
         var rect = myButton[0].getBoundingClientRect();
-        var inputRect = {top: rect.top, left: rect.left, height: rect.height, width: rect.width};
+        var inputRect = {top: rect.top, left: rect.left};
         var animation = mdPanelAnimation.closeTo(inputRect);
 
         expect(animation.getCloseTo().element).toBeUndefined();
-        expect(animation.getCloseTo().bounds).toEqual(inputRect);
+        expect(animation.getCloseTo().bounds).toEqual(angular.extend(inputRect, {height: 1, width: 1}));
       });
     });
   });
