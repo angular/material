@@ -19,6 +19,22 @@
     * the `$mdIcon` service searches its registry for the associated source URL;
     * that URL is used to on-demand load and parse the SVG dynamically.
     *
+    * **Notice:** Most font-icons libraries do not support ligatures (for example `fontawesome`).<br/>
+    *  In such cases you are not able to use the icon's ligature name - Like so:
+    *
+    *  <hljs lang="html">
+    *    <md-icon md-font-set="fa">fa-bell</md-icon>
+    *  </hljs>
+    *
+    * You should instead use the given unicode, instead of the ligature name.
+    *
+    * <p ng-hide="true"> ##// Notice we can't use a hljs element here, because the characters will be escaped.</p>
+    *  ```html
+    *    <md-icon md-font-set="fa">&#xf0f3</md-icon>
+    *  ```
+    *
+    * All unicode ligatures are prefixed with the `&#x` string.
+    *
     * @usage
     * <hljs lang="js">
     *   app.config(function($mdIconProvider) {
@@ -26,7 +42,7 @@
     *     // Configure URLs for icons specified by [set:]id.
     *
     *     $mdIconProvider
-    *          .defaultFontSet( 'fontawesome' )
+    *          .defaultFontSet( 'fa' )                   // This sets our default fontset className.
     *          .defaultIconSet('my/app/icons.svg')       // Register a default set of SVG icons
     *          .iconSet('social', 'my/app/social.svg')   // Register a named icon set of SVGs
     *          .icon('android', 'my/app/android.svg')    // Register a specific icon (by name)
@@ -178,7 +194,29 @@
    * @usage
    * <hljs lang="js">
    *   app.config(function($mdIconProvider) {
-   *     $mdIconProvider.defaultFontSet( 'fontawesome' );
+   *     $mdIconProvider.defaultFontSet( 'fa' );
+   *   });
+   * </hljs>
+   *
+   */
+
+  /**
+   * @ngdoc method
+   * @name $mdIconProvider#fontSet
+   *
+   * @description
+   * When using a font set for `<md-icon>` you must specify the correct font classname in the `md-font-set`
+   * attribute. If the fonset className is really long, your markup may become cluttered... an easy
+   * solution is to define an `alias` for your fontset:
+   *
+   * @param {string} alias of the specified fontset.
+   * @param {string} className of the fontset.
+   *
+   * @usage
+   * <hljs lang="js">
+   *   app.config(function($mdIconProvider) {
+   *     // In this case, we set an alias for the `material-icons` fontset.
+   *     $mdIconProvider.fontSet('md', 'material-icons');
    *   });
    * </hljs>
    *
