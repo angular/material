@@ -21,14 +21,14 @@
    * @module material.components.datepicker
    *
    * @param {Date} ng-model The component's model. Expects a JavaScript Date object.
-   * @param {Date} md-begin-date The begin date of a date range. Expects a JavaScript Date object.
+   * @param {Date} md-start-date The start date of a date range. Expects a JavaScript Date object.
    * @param {Date} md-end-date The end date of a date range. Expects a JavaScript Date object.
    * @param {expression=} ng-change Expression evaluated when the model value changes.
    * @param {Date=} md-min-date Expression representing a min date (inclusive).
    * @param {Date=} md-max-date Expression representing a max date (inclusive).
    * @param {(function(Date): boolean)=} md-date-filter Function expecting a date and returning a boolean whether it can be selected or not.
    * @param {String=} md-placeholder The date input placeholder value.
-   * @param {String=} md-placeholder-begin The begin date input placeholder value.
+   * @param {String=} md-placeholder-start The start date input placeholder value.
    * @param {String=} md-placeholder-end The end date input placeholder value.
    * @param {boolean=} ng-disabled Whether the datepicker is disabled.
    * @param {boolean=} ng-required Whether a value is required for the datepicker.
@@ -48,7 +48,7 @@
    * <hljs lang="html">
    *   <md-datepicker ng-model="birthday"></md-datepicker>
    *   or
-   *   <md-datepicker md-begin-date="someBeginDate" md-end-date="endDate"></md-datepicker>
+   *   <md-datepicker md-start-date="someStartDate" md-end-date="endDate"></md-datepicker>
    * </hljs>
    *
    */
@@ -65,10 +65,11 @@
           '</md-button>' +
           '<div class="md-datepicker-input-container" ' +
               'ng-class="{\'md-datepicker-focused\': ctrl.isFocused}">' +
-            '<input class="md-datepicker-input begin" aria-haspopup="true" ' +
-                'ng-focus="ctrl.setFocused(true, true)" ng-blur="ctrl.setFocused(false, true)">' +
-            '<input ng-show="ctrl.beginDate && ctrl.endDate" class="md-datepicker-input end" aria-haspopup="true" ' +
-                'ng-focus="ctrl.setFocused(true, false)" ng-blur="ctrl.setFocused(false, false)">' +
+            '<input class="md-datepicker-input md-datepicker-start-date" aria-haspopup="true" ' +
+                'ng-focus="ctrl.setStartDateFocused(true)" ng-blur="ctrl.setStartDateFocused(false)">' +
+            '<input ng-show="ctrl.startDate && ctrl.endDate" class="md-datepicker-input md-datepicker-end-date" ' +
+                'aria-haspopup="true" ng-focus="ctrl.setEndDateFocused(true)" ' +
+                'ng-blur="ctrl.setEndDateFocused(false)">' +
             '<md-button type="button" md-no-ink ' +
                 'class="md-datepicker-triangle-button md-icon-button" ' +
                 'ng-click="ctrl.openCalendarPane($event)" ' +
@@ -94,10 +95,10 @@
       scope: {
         minDate: '=mdMinDate',
         maxDate: '=mdMaxDate',
-        begin: '=mdBeginDate',
+        start: '=mdStartDate',
         end: '=mdEndDate',
         placeholder: '@mdPlaceholder',
-        placeholderBegin: '@mdPlaceholderBegin',
+        placeholderStart: '@mdPlaceholderStart',
         placeholderEnd: '@mdPlaceholderEnd',
         dateFilter: '=mdDateFilter'
       },
@@ -115,15 +116,6 @@
           }
 
           mdDatePickerCtrl.configureNgModel(ngModelCtrl, scope);
-        } else {
-          var mdDatePickerCtrl = controllers[0];
-
-          var mdInputContainer = controllers[1];
-          if (mdInputContainer) {
-            throw Error('md-datepicker should not be placed inside md-input-container.');
-          }
-
-          mdDatePickerCtrl.configureNgModel(null);
         }
       }
     };
@@ -202,19 +194,19 @@
     this.ngModelCtrl = null;
 
     /** @type {HTMLInputElement} */
-    this.inputElement = $element[0].querySelector('input.begin');
+    this.inputElement = $element[0].querySelector('.md-datepicker-start-date');
 
     /** @final {!angular.JQLite} */
     this.ngInputElement = angular.element(this.inputElement);
 
     /** @type {HTMLInputElement} */
-    this.beginInputElement = $element[0].querySelector('input.begin');
+    this.startInputElement = $element[0].querySelector('.md-datepicker-start-date');
 
     /** @final {!angular.JQLite} */
-    this.ngBeginInputElement = angular.element(this.beginInputElement);
+    this.ngStartInputElement = angular.element(this.startInputElement);
 
     /** @type {HTMLInputElement} */
-    this.endInputElement = $element[0].querySelector('input.end');
+    this.endInputElement = $element[0].querySelector('.md-datepicker-end-date');
 
     /** @final {!angular.JQLite} */
     this.ngEndInputElement = angular.element(this.endInputElement);
@@ -246,27 +238,55 @@
     /** @type {Date} */
     this.date = null;
 
-    /** @type {Date} */
-    this.beginDate = null;
+    /**
+     * This variable is used within the date-range-picker context and serves as an intermediate start date value
+     * holder for value validation, filtering, etc. between the md-datepicker and the md-calendar directives.
+     * @type {Date}
+     */
+    this.startDate = null;
 
-    /** @type {Date} */
+    /**
+     * This variable is used within the date-range-picker context and serves as an intermediate end date value
+     * holder for value validation, filtering, etc. between the md-datepicker and the md-calendar directives.
+     * @type {Date}
+     */
     this.endDate = null;
 
-    /** @type {string} */
-    this.beginDateViewValue = null;
+    /**
+     * This variable serves a similar purpose within the date-range-picker context, as ngModel.$viewValue does within
+     * the date-picker context: it represents the string value of the start date.
+     * @type {string}
+     */
+    this.startDateViewValue = null;
 
-    /** @type {string} */
+    /**
+     * This variable serves a similar purpose within the date-range-picker context, as ngModel.$viewValue does within
+     * the date-picker context: it represents the string value of the end date.
+     * @type {string}
+     */
     this.endDateViewValue = null;
 
-    /** @type {Object} */
+    /**
+     * This variable serves a similar purpose within the date-range-picker context, as ngModel.$valid does within
+     * the date-picker context: it represents the validity of the start and end dates within a date range.
+     * @type {Object}
+     */
     this.dateRangeValidity = {
       valid: true
     };
 
-    /** @type {boolean} */
+    /**
+     * This variable serves a similar purpose within the date-range-picker context, as ngModel.$valid does within
+     * the date-picker context: it serves as a dirty flag for the start date within the date range.
+     * @type {boolean}
+     */
     this.isBeginDateTouched = false;
 
-    /** @type {boolean} */
+    /**
+     * This variable serves a similar purpose within the date-range-picker context, as ngModel.$valid does within
+     * the date-picker context: it serves as a dirty flag for the end date within the date range.
+     * @type {boolean}
+     */
     this.isEndDateTouched = false;
 
     /** @type {boolean} */
@@ -276,11 +296,17 @@
     this.isDisabled;
     this.setDisabled($element[0].disabled || angular.isString($attrs['disabled']));
 
-    /** @type {boolean} Whether the date-picker's calendar pane is open. */
+    /**
+     * Whether the date-picker's calendar pane is open.
+     * @type {boolean}
+     */
     this.isCalendarOpen = false;
 
-    /** @type {boolean} Whether or not the datepicker is being used as a date-range picker. */
-    this.isDateRangePicker = null;
+    /**
+     * Whether or not the datepicker is being used as a date-range picker.
+     * @type {boolean}
+     */
+    this.isDateRange = $element[0].hasAttribute('md-end-date');
 
     /**
      * Element from which the calendar pane was opened. Keep track of this so that we can return
@@ -317,65 +343,104 @@
   }
 
   /**
-   * Sets up the controller's reference to ngModelController.
+   * Sets up the controller's references depending on the directive's context.
    * @param {!angular.NgModelController} ngModelCtrl
    */
   DatePickerCtrl.prototype.configureNgModel = function(ngModelCtrl) {
     var self = this;
+    var datePickerContext = ngModelCtrl != null && self.start == undefined && self.end == undefined;
+    var dateRangePickerContext = ngModelCtrl == null && self.start != undefined && self.end != undefined;
 
-    if (ngModelCtrl == null && self.begin != undefined && self.end != undefined) {
-      self.isDateRangePicker = true;
-    } else if (ngModelCtrl != null && self.begin == undefined && self.end == undefined) {
-      self.isDateRangePicker = false;
-    } else {
-      throw Error('Either the ng-model must be specified (for datepicker behavior) OR both the md-begin-date and ' +
+    if (!datePickerContext && !dateRangePickerContext) {
+      throw Error('Either the ng-model must be specified (for datepicker behavior) OR both the md-start-date and ' +
         'md-end-date must be specified (for date-range behavior).');
     }
 
-    if (!self.isDateRangePicker) {
-      self.ngModelCtrl = ngModelCtrl;
-      ngModelCtrl.$render = function() {
-        var value = self.ngModelCtrl.$viewValue;
-
-        if (value && !(value instanceof Date)) {
-          throw Error('The ng-model for md-datepicker must be a Date instance. ' +
-            'Currently the model is a: ' + (typeof value));
-        }
-
-        self.date = value;
-        self.inputElement.value = self.dateLocale.formatDate(value);
-        self.resizeInputElement();
-        self.updateErrorState();
-      };
+    if (!self.isDateRange) {
+      self.configureNgModelForDatePicker(ngModelCtrl)
     } else {
-      var beginDateValue, endDateValue;
+      self.configureNgModelForDateRangePicker();
+    }
+  };
 
-      self.$scope.$watchGroup(['ctrl.begin', 'ctrl.end'], function(newValues, oldValues, s) {
-        self.beginDate = newValues[0];
-        self.endDate = newValues[1];
+  /**
+   * Sets up the controller's reference to ngModelController for the date picker context.
+   * @param {!angular.NgModelController} ngModelCtrl
+   */
+  DatePickerCtrl.prototype.configureNgModelForDatePicker = function(ngModelCtrl) {
+    var self = this;
 
-        self.setBeginDateViewValue(newValues[0]);
-        self.setEndDateViewValue(newValues[1]);
+    self.ngModelCtrl = ngModelCtrl;
+    ngModelCtrl.$render = function() {
+      var value = self.ngModelCtrl.$viewValue;
 
-        self.setDateRangeValidity('', true);
+      if (value && !(value instanceof Date)) {
+        throw Error('The ng-model for md-datepicker must be a Date instance. ' +
+            'Currently the model is a: ' + (typeof value));
+      }
 
-        beginDateValue = self.beginDate;
-        endDateValue = self.endDate;
+      self.date = value;
+      self.inputElement.value = self.dateLocale.formatDate(value);
 
-        if (!(beginDateValue instanceof Date) || !(endDateValue instanceof Date)) {
-          throw Error('For date-range picker behavior, a Date instance for both ' +
-            'the md-begin-date and the md-end-date must be specified. Currently md-begin-date value is ' +
-            beginDateValue + 'and the md-end-date value is ' + endDateValue);
-        }
+      self.configurePicker();
+    };
+  };
 
-        self.beginDate = beginDateValue;
-        self.endDate = endDateValue;
-        self.beginInputElement.value = self.dateLocale.formatDate(beginDateValue);
-        self.endInputElement.value = self.dateLocale.formatDate(endDateValue);
+  /**
+   * Sets up the controller's reference to the date range start/end date models date range picker context.
+   */
+  DatePickerCtrl.prototype.configureNgModelForDateRangePicker = function() {
+    var self = this;
 
-        self.resizeInputElement();
-        self.updateErrorState();
-      });
+    var startDateValue, endDateValue;
+
+    self.$scope.$watchGroup(['ctrl.start', 'ctrl.end'], function(newValues, oldValues, s) {
+      self.startDate = newValues[0];
+      self.endDate = newValues[1];
+
+      self.setBeginDateViewValue(newValues[0]);
+      self.setEndDateViewValue(newValues[1]);
+
+      self.setDateRangeValidity('', true);
+
+      startDateValue = self.startDate;
+      endDateValue = self.endDate;
+
+      if (!(startDateValue instanceof Date) || !(endDateValue instanceof Date)) {
+        throw Error('For date-range picker behavior, a Date instance for both ' +
+            'the md-start-date and the md-end-date must be specified. Currently md-start-date value is ' +
+            startDateValue + 'and the md-end-date value is ' + endDateValue);
+      }
+
+      self.startDate = startDateValue;
+      self.endDate = endDateValue;
+      self.startInputElement.value = self.dateLocale.formatDate(startDateValue);
+      self.endInputElement.value = self.dateLocale.formatDate(endDateValue);
+
+      self.configurePicker();
+    });
+  };
+
+  /**
+   * Configures the Input Element(s) for the picker.
+   */
+  DatePickerCtrl.prototype.configurePicker = function() {
+    var self = this;
+
+    self.resizeInputElement();
+    self.updateErrorState();
+  };
+
+  /**
+   * Configure event listeners depending on the directive's context.
+   */
+  DatePickerCtrl.prototype.attachChangeListeners = function() {
+    var self = this;
+
+    if (!self.isDateRange) {
+      self.attachDatePickerChangeListeners();
+    } else {
+      self.attachDateRangePickerChangeListeners();
     }
   };
 
@@ -384,58 +449,62 @@
    * Events are used instead of ng-model so that updates don't infinitely update the other
    * on a change. This should also be more performant than using a $watch.
    */
-  DatePickerCtrl.prototype.attachChangeListeners = function() {
+  DatePickerCtrl.prototype.attachDatePickerChangeListeners = function() {
     var self = this;
 
-    // Cannot use isDateRangePicker flag here as this even listener is wired up before the flag gets assigned a value.
-    if (self.$scope.ctrl.begin == undefined && self.$scope.ctrl.end == undefined) {
-      self.$scope.$on('md-calendar-change', function(event, date) {
-        self.ngModelCtrl.$setViewValue(date);
-        self.date = date;
-        self.inputElement.value = self.dateLocale.formatDate(date);
-        self.closeCalendarPane();
-        self.resizeInputElement();
-        self.updateErrorState();
-      });
+    self.$scope.$on('md-calendar-change', function(event, date) {
+      self.ngModelCtrl.$setViewValue(date);
+      self.date = date;
+      self.inputElement.value = self.dateLocale.formatDate(date);
+      self.closeCalendarPane();
+      self.resizeInputElement();
+      self.updateErrorState();
+    });
 
-      self.ngInputElement.on('input', angular.bind(self, self.resizeInputElement));
-      // TODO(chenmike): Add ability for users to specify this interval.
-      self.ngInputElement.on('input', self.$mdUtil.debounce(self.handleInputEvent,
+    self.ngInputElement.on('input', angular.bind(self, self.resizeInputElement));
+    // TODO(chenmike): Add ability for users to specify this interval.
+    self.ngInputElement.on('input', self.$mdUtil.debounce(self.handleInputEvent,
         DEFAULT_DEBOUNCE_INTERVAL, self));
-    } else {
-      //TODO(sueinh): Update the md-calendar directive controller to emit the md-calendar-range-change event when a date range change occurs
-      self.$scope.$on('md-calendar-change', function(event, date, type) {
-        // TODO(sueinh): Adding hard coded flag temporarily to prevent errors. Remove this hard coded flag once the md-calendar emit change has been made.
-        type = 'begin';
-        if (type) {
-          if (type == 'begin') {
-            self.setBeginDateViewValue(date);
-            self.beginDate = date;
-            self.beginInputElement.value = self.dateLocale.formatDate(date);
-            self.closeCalendarPane();
-            self.resizeInputElement();
-            self.updateErrorState();
+  };
 
-            self.ngBeginInputElement.on('input', angular.bind(self, self.resizeInputElement));
-            // TODO(chenmike): Add ability for users to specify this interval.
-            self.ngBeginInputElement.on('input', self.$mdUtil.debounce(self.handleInputEvent,
-              DEFAULT_DEBOUNCE_INTERVAL, self));
-          } else {
-            self.setEndDateViewValue(date);
-            self.endDate = date;
-            self.endInputElement.value = self.dateLocale.formatDate(date);
-            self.closeCalendarPane();
-            self.resizeInputElement();
-            self.updateErrorState();
+  /**
+   * Setup event listener for both of the start/end date text inputs and the md-calendar.
+   */
+  DatePickerCtrl.prototype.attachDateRangePickerChangeListeners = function() {
+    var self = this;
 
-            self.ngEndInputElement.on('input', angular.bind(self, self.resizeInputElement));
-            // TODO(chenmike): Add ability for users to specify this interval.
-            self.ngEndInputElement.on('input', self.$mdUtil.debounce(self.handleInputEvent,
+    //TODO(sueinh): Update the md-calendar directive controller to emit the md-calendar-range-change event when a date range change occurs
+    self.$scope.$on('md-calendar-change', function(event, date, type) {
+      // TODO(sueinh): Adding hard coded flag temporarily to prevent errors. Remove this hard coded flag once the md-calendar emit change has been made.
+      type = 'start';
+      if (type) {
+        if (type == 'start') {
+          self.setBeginDateViewValue(date);
+          self.startDate = date;
+          self.startInputElement.value = self.dateLocale.formatDate(date);
+          self.closeCalendarPane();
+          self.resizeInputElement();
+          self.updateErrorState();
+
+          self.ngStartInputElement.on('input', angular.bind(self, self.resizeInputElement));
+          // TODO(chenmike): Add ability for users to specify this interval.
+          self.ngStartInputElement.on('input', self.$mdUtil.debounce(self.handleInputEvent,
               DEFAULT_DEBOUNCE_INTERVAL, self));
-          }
+        } else {
+          self.setEndDateViewValue(date);
+          self.endDate = date;
+          self.endInputElement.value = self.dateLocale.formatDate(date);
+          self.closeCalendarPane();
+          self.resizeInputElement();
+          self.updateErrorState();
+
+          self.ngEndInputElement.on('input', angular.bind(self, self.resizeInputElement));
+          // TODO(chenmike): Add ability for users to specify this interval.
+          self.ngEndInputElement.on('input', self.$mdUtil.debounce(self.handleInputEvent,
+              DEFAULT_DEBOUNCE_INTERVAL, self));
         }
-      });
-    }
+      }
+    });
   };
 
   /** Attach event listeners for user interaction. */
@@ -443,30 +512,21 @@
     var self = this;
     var $scope = this.$scope;
     var keyCodes = this.$mdConstant.KEY_CODE;
+    var keyDownEventHandler = function(event) {
+      if (event.altKey && event.keyCode == keyCodes.DOWN_ARROW) {
+        self.openCalendarPane(event);
+        $scope.$digest();
+      }
+    };
 
-    if (!self.isDateRangePicker) {
+    if (!self.isDateRange) {
       // Add event listener through angular so that we can triggerHandler in unit tests.
-      self.ngInputElement.on('keydown', function(event) {
-        if (event.altKey && event.keyCode == keyCodes.DOWN_ARROW) {
-          self.openCalendarPane(event);
-          $scope.$digest();
-        }
-      });
+      self.ngInputElement.on('keydown', keyDownEventHandler);
     } else {
       // Add event listeners through angular so that we can triggerHandler in unit tests.
-      self.ngBeginInputElement.on('keydown', function(event) {
-        if (event.altKey && event.keyCode == keyCodes.DOWN_ARROW) {
-          self.openCalendarPane(event);
-          $scope.$digest();
-        }
-      });
+      self.ngStartInputElement.on('keydown', keyDownEventHandler);
 
-      self.ngEndInputElement.on('keydown', function(event) {
-        if (event.altKey && event.keyCode == keyCodes.DOWN_ARROW) {
-          self.openCalendarPane(event);
-          $scope.$digest();
-        }
-      });
+      self.ngEndInputElement.on('keydown', keyDownEventHandler);
     }
 
     $scope.$on('md-calendar-close', function() {
@@ -493,15 +553,15 @@
       }
     }
 
-    if (!self.isDateRangePicker) {
+    if (!self.isDateRange) {
       Object.defineProperty(this, 'placeholder', {
         get: function() { return self.inputElement.placeholder; },
         set: function(value) { self.inputElement.placeholder = value || ''; }
       });
     } else {
       Object.defineProperty(this, 'placeholderBegin', {
-        get: function() { return self.beginInputElement.placeholder; },
-        set: function(value) { self.beginInputElement.placeholder = value || ''; }
+        get: function() { return self.startInputElement.placeholder; },
+        set: function(value) { self.startInputElement.placeholder = value || ''; }
       });
       Object.defineProperty(this, 'placeholderEnd', {
         get: function() { return self.endInputElement.placeholder; },
@@ -516,10 +576,10 @@
    */
   DatePickerCtrl.prototype.setDisabled = function(isDisabled) {
     this.isDisabled = isDisabled;
-    if (!this.isDateRangePicker) {
+    if (!this.isDateRange) {
       this.inputElement.disabled = isDisabled;
     } else {
-      this.beginInputElement.disabled = isDisabled;
+      this.startInputElement.disabled = isDisabled;
       this.endInputElement.disabled = isDisabled;
     }
     this.calendarButton.disabled = isDisabled;
@@ -535,11 +595,11 @@
    * The 'required' flag is handled automatically by ngModel.
    *
    * @param {Date=} opt_date Date to check. If not given, defaults to the datepicker's model value.
-   * @param {Date=} opt_begin_date Date to check. If not given, defaults to the datepicker's begin date value.
+   * @param {Date=} opt_start_date Date to check. If not given, defaults to the datepicker's start date value.
    * @param {Date=} opt_end_date Date to check. If not given, defaults to the datepicker's end date value.
    */
-  DatePickerCtrl.prototype.updateErrorState = function(opt_date, opt_begin_date, opt_end_date) {
-    if (!this.isDateRangePicker) {
+  DatePickerCtrl.prototype.updateErrorState = function(opt_date, opt_start_date, opt_end_date) {
+    if (!this.isDateRange) {
       var date = opt_date || this.date;
 
       // Clear any existing errors to get rid of anything that's no longer relevant.
@@ -575,20 +635,20 @@
         this.inputContainer.classList.add(INVALID_CLASS);
       }
     } else {
-      var beginDate = opt_begin_date || this.beginDate;
+      var startDate = opt_start_date || this.startDate;
       var endDate = opt_end_date || this.endDate;
 
       // Clear any existing errors to get rid of anything that's no longer relevant.
       this.clearErrorState();
 
-      if (this.dateUtil.isValidDate(beginDate) && this.dateUtil.isValidDate(endDate)) {
+      if (this.dateUtil.isValidDate(startDate) && this.dateUtil.isValidDate(endDate)) {
         // Force all dates to midnight in order to ignore the time portion.
-        beginDate = this.dateUtil.createDateAtMidnight(beginDate);
+        startDate = this.dateUtil.createDateAtMidnight(startDate);
         endDate = this.dateUtil.createDateAtMidnight(endDate);
 
         if (this.dateUtil.isValidDate(this.minDate)) {
           var minDate = this.dateUtil.createDateAtMidnight(this.minDate);
-          this.setDateRangeValidity('mindate', beginDate >= minDate);
+          this.setDateRangeValidity('mindate', startDate >= minDate);
         }
 
         if (this.dateUtil.isValidDate(this.maxDate)) {
@@ -597,7 +657,7 @@
         }
 
         if (angular.isFunction(this.dateFilter)) {
-          if (this.dateFilter(beginDate) && this.dateFilter(endDate)) {
+          if (this.dateFilter(startDate) && this.dateFilter(endDate)) {
             this.setDateRangeValidity('filtered', true);
           } else {
             this.setDateRangeValidity('filtered', false);
@@ -606,7 +666,7 @@
       } else {
         // The date range is seen as "not a valid date range" if there is *something* set
         // (i.e.., not null or undefined), but that something isn't a valid date range.
-        this.setDateRangeValidity('valid', beginDate == null && endDate == null);
+        this.setDateRangeValidity('valid', startDate == null && endDate == null);
       }
 
       if (!this.getDateRangeValidity().valid) {
@@ -617,13 +677,14 @@
 
   /** Clears any error flags set by `updateErrorState`. */
   DatePickerCtrl.prototype.clearErrorState = function() {
+    var errorStates = ['mindate', 'maxdate', 'filtered', 'valid'];
     this.inputContainer.classList.remove(INVALID_CLASS);
-    if (!this.isDateRangePicker) {
-      ['mindate', 'maxdate', 'filtered', 'valid'].forEach(function(field) {
+    if (!this.isDateRange) {
+      errorStates.forEach(function(field) {
         this.ngModelCtrl.$setValidity(field, true);
       }, this);
     } else {
-      ['mindate', 'maxdate', 'filtered', 'valid'].forEach(function(field) {
+      errorStates.forEach(function(field) {
         this.setDateRangeValidity(field, true);
       }, this);
     }
@@ -631,10 +692,10 @@
 
   /** Resizes the input element based on the size of its content. */
   DatePickerCtrl.prototype.resizeInputElement = function() {
-    if (!this.isDateRangePicker) {
+    if (!this.isDateRange) {
       this.inputElement.size = this.inputElement.value.length + EXTRA_INPUT_SIZE;
     } else {
-      this.beginInputElement.size = this.beginInputElement.value.length + EXTRA_INPUT_SIZE / 2;
+      this.startInputElement.size = this.startInputElement.value.length + EXTRA_INPUT_SIZE / 2;
       this.endInputElement.size = this.endInputElement.value.length + EXTRA_INPUT_SIZE / 2;
     }
   };
@@ -644,7 +705,7 @@
    * Adds an invalid class to the input element if not.
    */
   DatePickerCtrl.prototype.handleInputEvent = function() {
-    if (!this.isDateRangePicker) {
+    if (!this.isDateRange) {
       var inputString = this.inputElement.value;
       var parsedDate = inputString ? this.dateLocale.parseDate(inputString) : null;
       this.dateUtil.setDateTimeToMidnight(parsedDate);
@@ -665,37 +726,37 @@
 
       this.updateErrorState(parsedDate);
     } else {
-      var beginInputString = this.beginInputElement.value;
+      var startInputString = this.startInputElement.value;
       var endInputString = this.endInputElement.value;
-      var beginParsedDate = beginInputString ? this.dateLocale.parseDate(beginInputString) : null;
+      var startParsedDate = startInputString ? this.dateLocale.parseDate(startInputString) : null;
       var endParsedDate = endInputString ? this.dateLocale.parseDate(endInputString) : null;
-      this.dateUtil.setDateTimeToMidnight(beginParsedDate);
+      this.dateUtil.setDateTimeToMidnight(startParsedDate);
       this.dateUtil.setDateTimeToMidnight(endParsedDate);
 
       // The input strings are valid if the are either empty (representing no date range)
       // or if they parses to a valid date range that the user is allowed to select.
-      var isBeginValidInput = beginInputString == '' || (
-          this.dateUtil.isValidDate(beginParsedDate) &&
-          this.dateLocale.isDateComplete(beginInputString) &&
-          this.isDateEnabled(beginParsedDate)
+      var isBeginValidInput = startInputString == '' || (
+          this.dateUtil.isValidDate(startParsedDate) &&
+          this.dateLocale.isDateComplete(startInputString) &&
+          this.isDateEnabled(startParsedDate)
         );
 
       var isEndValidInput = endInputString == '' || (
           this.dateUtil.isValidDate(endParsedDate) &&
-          this.dateLocale.isDateComplete(beginInputString) &&
+          this.dateLocale.isDateComplete(startInputString) &&
           this.isDateEnabled(endParsedDate)
         );
 
       var isValidInput = isBeginValidInput && isEndValidInput;
 
       if (isValidInput) {
-        this.setBeginDateViewValue(beginParsedDate);
+        this.setBeginDateViewValue(startParsedDate);
         this.setEndDateViewValue(endParsedDate);
-        this.beginDate = beginParsedDate;
+        this.startDate = startParsedDate;
         this.endDate = endParsedDate;
       }
 
-      this.updateErrorState(null, beginParsedDate, endParsedDate);
+      this.updateErrorState(null, startParsedDate, endParsedDate);
     }
   };
 
@@ -836,7 +897,7 @@
       this.calendarPaneOpenedFrom.focus();
       this.calendarPaneOpenedFrom = null;
 
-      if (!this.isDateRangePicker) {
+      if (!this.isDateRange) {
         this.ngModelCtrl.$setTouched();
       } else {
         this.isBeginDateTouched = true;
@@ -849,9 +910,9 @@
   };
 
   //TODO(sueinh): Investigate where these functions should be used within the md-datepicker or md-calendar template.
-  /** Returns the view state of the begin date. */
+  /** Returns the view state of the start date. */
   DatePickerCtrl.prototype.getBeginDateViewValue = function() {
-    return this.beginDateViewValue;
+    return this.startDateViewValue;
   };
 
   /** Returns the view state of the end date. */
@@ -865,11 +926,11 @@
   };
 
   /**
-   * Sets the view state of the begin date.
+   * Sets the view state of the start date.
    * @param {Date} date
    */
   DatePickerCtrl.prototype.setBeginDateViewValue = function(date) {
-    this.beginDateViewValue = date;
+    this.startDateViewValue = date;
   };
 
   /**
@@ -911,24 +972,36 @@
   };
 
   /**
-   * Sets whether the input is currently focused.
+   * Sets whether the start date input is currently focused.
    * @param {boolean} isFocused
-   * @param {boolean} isBeginDate
    */
-  DatePickerCtrl.prototype.setFocused = function(isFocused, isBeginDate) {
-    if (!this.isDateRangePicker) {
+  DatePickerCtrl.prototype.setStartDateFocused = function(isFocused) {
+    if (!this.isDateRange) {
       if (!isFocused) {
         this.ngModelCtrl.$setTouched();
       }
     } else {
       if (!isFocused) {
-        if (isBeginDate) {
-          this.isBeginDateTouched = true;
-          this.isEndDateTouched = false;
-        } else {
-          this.isBeginDateTouched = false;
-          this.isEndDateTouched = true;
-        }
+        this.isBeginDateTouched = true;
+        this.isEndDateTouched = false;
+      }
+    }
+    this.isFocused = isFocused;
+  };
+
+  /**
+   * Sets whether the end date input is currently focused.
+   * @param {boolean} isFocused
+   */
+  DatePickerCtrl.prototype.setEndDateFocused = function(isFocused) {
+    if (!this.isDateRange) {
+      if (!isFocused) {
+        this.ngModelCtrl.$setTouched();
+      }
+    } else {
+      if (!isFocused) {
+        this.isBeginDateTouched = false;
+        this.isEndDateTouched = true;
       }
     }
     this.isFocused = isFocused;
