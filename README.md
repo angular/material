@@ -15,6 +15,7 @@ Quick Links:
 *  [Contributing](#contributing)
 *  [Building](#building)
 *  [Installing](#installing)
+*  [TST Customizations](#tstcustom)
 
 
 Please note that using Angular Material requires the use of **Angular 1.3.x** or higher. Angular
@@ -188,4 +189,14 @@ Once you have all the necessary assets installed, add `ngMaterial` as a dependen
 ```javascript
 angular.module('myApp', ['ngMaterial']);
 ```
+## <a name="tstcustom"></a> TST Customizations to Material Files
 
+*  `README.md`: added this section, badges
+*  `package.json`: change package name, description, repo
+*  `docs/app/js/app.js`: added css route for color palettes
+*  `src/core/core.js`: added tstrap dependencies, customized default theme with palettes
+*  `scripts/gulp-utils.js`: modified code for the TST and FAB prefixes
+*  `src/core/style/themes.scss`: modified the color referance for text
+*  `src/core/style/variables.scss`: added line to include TST variables file
+*  `docs/config/template/index.template.html`: change title
+*  `docs/app/img/icons/angular-logo.svg`: remove A

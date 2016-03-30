@@ -3,6 +3,6 @@
  * @name tstrap.formFields
  */
 /*
- * @see js folder for autocomplete implementation
+ * @see js folder for form fields implementation
  */
 angular.module('tstrap.formFields', []);

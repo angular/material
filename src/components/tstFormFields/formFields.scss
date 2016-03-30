@@ -1,0 +1,240 @@
+$PRIMARY: #4d91db;
+$SECONDARY: #183a5c;
+$LINK: #4d91db;
+
+$NOTIFY: #4d91db; /* Blue */
+$ERROR: #cb191c; /* Red */
+$SUCCESS: #00a45f; /* Green */
+$WARNING: #e7b81c; /* Yellow */
+
+$TEXT: #333839;
+$TEXT-HEADING: #000000;
+$TEXT-ALT: #ffffff;
+$TEXT-SECONDARY: #6d7070;
+
+$DISABLED: #cccccc;
+
+$BG: #ffffff;
+$BG-ALT: #eeeeee;
+$BG-DARK: #333839;
+
+$SEPARATOR: #e8e8e8;
+
+$baseInputHeight: 50px;
+
+@mixin clearfix {
+	&:after {
+		content: '';
+		display: table;
+		clear: both;
+	}
+}
+
+@mixin clearAppearance() {
+	border: 0;
+	box-shadow: none;
+	outline: none;
+
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	-o-appearance: none;
+	appearance: none;
+}
+
+@mixin clearBackground() {
+	background: transparent none no-repeat left top;
+}
+
+@mixin ellipsis() {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+@mixin singlePropertyTransition($property, $duration) {
+	-webkit-transition: $property $duration;
+	transition: $property $duration;
+}
+
+@mixin placeholder {
+	&::-webkit-input-placeholder {
+		@content
+	}
+	&:-moz-placeholder {
+		@content
+	}
+	&::-moz-placeholder {
+		@content
+	}
+	&:-ms-input-placeholder {
+		@content
+	}
+}
+
+@mixin standardizedFormFields() {
+	@include clearAppearance();
+	@include clearBackground();
+
+	border: 0;
+	width: 100%;
+	outline: none;
+	display: block;
+	border-radius: 0;
+	color: $TEXT;
+}
+
+@mixin fieldContainer() {
+	@include clearBackground();
+	@include singlePropertyTransition(border-color, 0.2s);
+
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	display: block;
+	border-radius: 0;
+	position: relative;
+	height: $baseInputHeight;
+	border-style: solid;
+	border-width: 1px;
+
+	&.ng-invalid.ng-touched:not(.focus), :hover {
+		border-color: $ERROR;
+	}
+
+	&.invalid, :hover {
+		border-color: $ERROR;
+	}
+
+	&:hover {
+		border-color: darken($STROKE, 15%);
+		color: $TEXT;
+	}
+
+	&.focus, :hover {
+		border-color: $LINK;
+	}
+}
+
+@mixin label() {
+	& > label {
+		@include ellipsis();
+		@include singlePropertyTransition(top, 0.2s);
+
+		margin: 0;
+		top: 12px;
+		left: 14px;
+		z-index: 100;
+		padding: 6px;
+		line-height: 1;
+		text-align: left;
+		position: absolute;
+		text-transform: uppercase;
+		pointer-events: none;
+		background-color: $BG;
+
+		&.focus {
+			top: -13px;
+		}
+	}
+}
+
+@mixin siblingField() {
+	& + ts-input,
+	& + ts-select,
+	& + ts-credit-card {
+		margin-top: 20px;
+	}
+}
+
+@mixin optional() {
+	& > .optional {
+		@include singlePropertyTransition(opacity, 0.2s);
+
+		top: -13px;
+		left: 14px;
+		opacity: 1;
+		z-index: 100;
+		padding: 6px;
+		line-height: 1;
+		letter-spacing: normal;
+		color: $DISABLED;
+		position: absolute;
+		pointer-events: none;
+		background-color: $BG;
+
+		&.focus {
+			opacity: 0;
+		}
+	}
+}
+
+ts-input {
+	@include label();
+	@include clearfix();
+	@include optional();
+	@include siblingField();
+	@include fieldContainer();
+
+	display: block;
+
+	& > input {
+		@include standardizedFormFields();
+
+		box-sizing: border-box;
+		height: $baseInputHeight;
+		padding: 20px 0;
+
+		&::-webkit-input-placeholder {
+			@include singlePropertyTransition(color, 0.3s);
+
+			color: transparent;
+		}
+		&:focus::-webkit-input-placeholder {
+			color: $DISABLED;
+		}
+
+		&:-moz-placeholder {
+			@include singlePropertyTransition(color, 0.3s);
+
+			color: transparent;
+		}
+		&:focus:-moz-placeholder {
+			color: $DISABLED;
+		}
+
+		&::-moz-placeholder {
+			@include singlePropertyTransition(color, 0.3s);
+
+			color: transparent;
+		}
+		&:focus::-moz-placeholder {
+			color: $DISABLED;
+		}
+
+		&:-ms-input-placeholder {
+			@include singlePropertyTransition(color, 0.3s);
+
+			color: transparent;
+		}
+		&:focus:-ms-input-placeholder {
+			color: $DISABLED;
+		}
+	}
+
+	& > input:focus ~ i.clear {
+		opacity: 1;
+	}
+
+	& > .clear {
+		@include singlePropertyTransition(opacity, 0.2s);
+
+		top: 15px;
+		opacity: 0;
+		right: 15px;
+		font-size: 18px;
+		cursor: pointer;
+		color: $TEXT-SECONDARY;
+		position: absolute;
+	}
+}

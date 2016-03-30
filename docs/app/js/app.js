@@ -185,6 +185,11 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
             name : 'Checkbox',
             url: 'CSS/checkbox',
             type: 'link'
+          },
+          {
+            name : 'TST Color Palette',
+            url: 'CSS/colorPalette',
+            type: 'link'
           }]
       },
       {
