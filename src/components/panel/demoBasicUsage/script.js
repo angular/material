@@ -11,13 +11,13 @@ function BasicDemoCtrl($mdPanel) {
 BasicDemoCtrl.prototype.showDialog = function() {
   var position = this._mdPanel.newPanelPosition()
       .absolute()
+      .left()
       .top();
 
   var config = {
     attachTo: angular.element(document.querySelector('.demo-md-panel')),
     controller: DialogCtrl,
     controllerAs: 'ctrl',
-    fullscreen: true,
     templateUrl: 'panel.tmpl.html',
     locals: {
       closeFn: angular.bind(this, this.closeDialog)
