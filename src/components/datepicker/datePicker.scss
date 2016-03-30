@@ -4,55 +4,85 @@ $md-datepicker-border-bottom-gap: 5px !default;  // Space between input and the 
 $md-datepicker-open-animation-duration: 0.2s !default;
 $md-datepicker-triangle-button-width: 36px !default;
 
+$input-container-padding: 2px !default;
+$input-label-float-offset: 6px !default;
+$input-label-float-scale: 0.75 !default;
+$input-label-float-width: $input-container-padding + 16px;
+
 md-datepicker {
   // Don't let linebreaks happen between the open icon-button and the input.
   white-space: nowrap;
   overflow: hidden;
 
   // Leave room for the down-triangle button to "overflow" it's parent without modifying scrollLeft
-  @include rtl-prop(padding-right, padding-left, $md-datepicker-triangle-button-width / 2);
-  @include rtl-prop(margin-right, margin-left, -$md-datepicker-triangle-button-width / 2);
+//  @include rtl-prop(padding-right, padding-left, $md-datepicker-triangle-button-width / 2);
+//  @include rtl-prop(margin-right, margin-left, -$md-datepicker-triangle-button-width / 2);
 
   vertical-align: middle;
-}
-
-.md-inline-form {
-  md-datepicker {
-    margin-top: 12px;
+  
+  input {
+    min-width: 120px;
+  }
+  input[readonly] {
+    min-width: 120px;
+    cursor: pointer;
+  }
+  input[disabled] {
+    cursor: auto;
+  }
+  &.ng-not-empty {
+    md-input-container {
+      label {
+        transition: none !important;
+        transform: translate3d(0, $input-label-float-offset, 0) scale($input-label-float-scale) !important;
+        transition: transform $swift-ease-out-timing-function $swift-ease-out-duration,
+                    width $swift-ease-out-timing-function $swift-ease-out-duration !important;
+        width: calc((100% - #{$input-label-float-width}) / #{$input-label-float-scale}) !important;
+      }
+    }
   }
 }
+
+//.md-inline-form {
+//  md-datepicker {
+//    margin-top: 12px;
+//  }
+//}
 
 // The calendar icon button used to open the calendar pane.
 .md-datepicker-button {
   display: inline-block;
   box-sizing: border-box;
   background: none;
+  md-icon {
+    vertical-align: baseline;
+  }
 }
 
 // The input into which the user can type the date.
-.md-datepicker-input {
-  @include md-flat-input();
-  min-width: 120px;
-  max-width: $md-calendar-width - $md-datepicker-button-gap;
-}
+//.md-datepicker-input {
+//  @include md-flat-input();
+//  min-width: 120px;
+//  max-width: $md-calendar-width - $md-datepicker-button-gap;
+//}
 
 // Container for the datepicker input.
-.md-datepicker-input-container {
-  // Position relative in order to absolutely position the down-triangle button within.
-  position: relative;
-
-  padding-bottom: $md-datepicker-border-bottom-gap;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-
-  display: inline-block;
-  width: auto;
-  @include rtl-prop(margin-left, margin-right, $md-datepicker-button-gap);
-
-  &.md-datepicker-focused {
-    border-bottom-width: 2px;
-  }
-}
+//.md-datepicker-input-container {
+//  // Position relative in order to absolutely position the down-triangle button within.
+//  position: relative;
+//
+//  padding-bottom: $md-datepicker-border-bottom-gap;
+//  border-bottom-width: 1px;
+//  border-bottom-style: solid;
+//
+//  display: inline-block;
+//  width: auto;
+//  @include rtl-prop(margin-left, margin-right, $md-datepicker-button-gap);
+//
+//  &.md-datepicker-focused {
+//    border-bottom-width: 2px;
+//  }
+//}
 
 
 // Floating pane that contains the calendar at the bottom of the input.
@@ -130,50 +160,88 @@ $md-date-arrow-size: 5px;
   border-top: $md-date-arrow-size solid;
 }
 
-// Button containing the down "disclosure" triangle/arrow.
-.md-datepicker-triangle-button {
-  position: absolute;
-  @include rtl-prop(right, left, 0);
-  top: 0;
-
-  // TODO(jelbourn): This position isn't great on all platforms.
-  @include rtl(transform, translateY(-25%) translateX(45%), translateY(-25%) translateX(-45%));
+span {
+  &.md-datepicker-triangle {
+    display: block;
+    align-items: flex-end;
+    text-align: end;
+    width: 3 * $baseline-grid;
+    margin: 0 .5 * $baseline-grid;
+    transform: translate3d(0, 1px, 0);
+    position: absolute;
+    right: 4px;
+    top: 7px;
+    &::after {
+      cursor: pointer;
+      display: block;
+      content: '\25BC';
+      position: relative;
+      top: 2px;
+      speak: none;
+      transform: scaleY(0.6) scaleX(1);
+    }
+  }
 }
+input[disabled] + div + span {
+  &.md-datepicker-triangle {
+    &::after {
+      cursor: auto;
+    }
+  }
+}
+// Button containing the down "disclosure" triangle/arrow.
+//.md-datepicker-triangle-button {
+//  position: absolute;
+//  @include rtl-prop(right, left, 0);
+//  top: 0;
+//
+//  // TODO(jelbourn): This position isn't great on all platforms.
+//  @include rtl(transform, translateY(-25%) translateX(45%), translateY(-25%) translateX(-45%));
+//}
 
 // Need crazy specificity to override .md-button.md-icon-button.
 // Only apply this high specifiy to the property we need to override.
-.md-datepicker-triangle-button.md-button.md-icon-button {
-  height: 100%;
-  width: $md-datepicker-triangle-button-width;
-  position: absolute;
-}
+//.md-datepicker-triangle-button.md-button.md-icon-button {
+//  height: 100%;
+//  width: $md-datepicker-triangle-button-width;
+//  position: absolute;
+//}
 
 // Disabled state for all elements of the picker.
-md-datepicker[disabled] {
-  .md-datepicker-input-container {
-    border-bottom-color: transparent;
-  }
-
-  .md-datepicker-triangle-button {
-    display: none;
-  }
-}
+//md-datepicker[disabled] {
+//  .md-datepicker-input-container {
+//    border-bottom-color: transparent;
+//  }
+//
+//  .md-datepicker-triangle-button {
+//    display: none;
+//  }
+//}
 
 // Open state for all of the elements of the picker.
 .md-datepicker-open {
-  .md-datepicker-input-container {
-    @include rtl-prop(margin-left, margin-right, -$md-datepicker-button-gap);
+  .md-input {
     border: none;
   }
-
-  .md-datepicker-input {
-    @include rtl-prop(margin-left, margin-right, 24px);
-    height: 40px;
-  }
-
-  .md-datepicker-triangle-button {
+  .md-datepicker-triangle {
     display: none;
+    &::after {
+      content: '';
+    }
   }
+  //.md-datepicker-input-container {
+  //  @include rtl-prop(margin-left, margin-right, -$md-datepicker-button-gap);
+  //  border: none;
+  //}
+  //
+  //.md-datepicker-input {
+  //  @include rtl-prop(margin-left, margin-right, 24px);
+  //  height: 40px;
+  //}
+  //
+  //.md-datepicker-triangle-button {
+  //  display: none;
+  //}
 }
 
 // When the position of the floating calendar pane is adjusted to remain inside

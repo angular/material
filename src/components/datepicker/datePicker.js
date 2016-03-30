@@ -28,7 +28,10 @@
    * @param {String=} md-placeholder The date input placeholder value.
    * @param {boolean=} ng-disabled Whether the datepicker is disabled.
    * @param {boolean=} ng-required Whether a value is required for the datepicker.
-   *
+   * @param {boolean=} md-hide-button Whether to hide the datepicker button or not.
+   * @param {boolean=} md-readonly Whether the datepicker is readonly (The datapicker will be opened on focus automatically).
+   * @param {String=} md-floating-label This will add a floating label to datepicker and wrap it in
+   *     `md-input-container`
    * @description
    * `<md-datepicker>` is a component used to select a single date.
    * For information on how to configure internationalization for the date picker,
@@ -48,27 +51,33 @@
    */
   function datePickerDirective() {
     return {
-      template:
+      template: function(element, attr) {
           // Buttons are not in the tab order because users can open the calendar via keyboard
           // interaction on the text input, and multiple tab stops for one component (picker)
           // may be confusing.
-          '<md-button class="md-datepicker-button md-icon-button" type="button" ' +
+        return  '\
+          <md-button class="md-datepicker-button md-icon-button" type="button" ' +
               'tabindex="-1" aria-hidden="true" ' +
-              'ng-click="ctrl.openCalendarPane($event)">' +
+              'ng-click="ctrl.openCalendarPane($event)" ' +
+              'ng-hide="ctrl.hideButton" ' + 
+              'aria-label="{{::ctrl.dateLocale.msgOpenCalendar}}">' +
             '<md-icon class="md-datepicker-calendar-icon" md-svg-icon="md-calendar"></md-icon>' +
           '</md-button>' +
-          '<div class="md-datepicker-input-container" ' +
+          '<md-input-container class="md-datepicker-input-container" ' +
               'ng-class="{\'md-datepicker-focused\': ctrl.isFocused}">' +
-            '<input class="md-datepicker-input" aria-haspopup="true" ' +
+            ((attr.mdFloatingLabel) ?
+            '<label>{{ctrl.floatingLabel}}</label>' :
+            '') +
+            ((!attr.mdReadonly) ?
+            '<input class="md-input md-datepicker-input" aria-haspopup="true" ' :
+            '<input class="md-input md-datepicker-input" aria-haspopup="true" readonly="true" ' +
+                'ng-click="ctrl.openCalendarPane($event)" ') +
+                'aria-label="{{::ctrl.dateLocale.msgOpenCalendar}}" ' +
                 'ng-focus="ctrl.setFocused(true)" ng-blur="ctrl.setFocused(false)">' +
-            '<md-button type="button" md-no-ink ' +
-                'class="md-datepicker-triangle-button md-icon-button" ' +
-                'ng-click="ctrl.openCalendarPane($event)" ' +
-                'aria-label="{{::ctrl.dateLocale.msgOpenCalendar}}">' +
-              '<div class="md-datepicker-expand-triangle"></div>' +
-            '</md-button>' +
-          '</div>' +
-
+            '<span class="md-datepicker-triangle" aria-hidden="true"' + 
+                'ng-click="ctrl.openCalendarPane($event)"></span>' +
+          '</md-input-container>' +
+          
           // This pane will be detached from here and re-attached to the document body.
           '<div class="md-datepicker-calendar-pane md-whiteframe-z1">' +
             '<div class="md-datepicker-input-mask">' +
@@ -81,13 +90,17 @@
                   'ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen">' +
               '</md-calendar>' +
             '</div>' +
-          '</div>',
+          '</div>';
+      },
       require: ['ngModel', 'mdDatepicker', '?^mdInputContainer'],
       scope: {
         minDate: '=mdMinDate',
         maxDate: '=mdMaxDate',
         placeholder: '@mdPlaceholder',
-        dateFilter: '=mdDateFilter'
+        dateFilter: '=mdDateFilter',
+        hideButton: '=mdHideButton',
+        readonly: '=mdReadonly',
+        floatingLabel: '@mdFloatingLabel'
       },
       controller: DatePickerCtrl,
       controllerAs: 'ctrl',
@@ -186,13 +199,12 @@
 
     /** @type {HTMLElement} */
     this.inputContainer = $element[0].querySelector('.md-datepicker-input-container');
-
+  
     /** @type {HTMLElement} Floating calendar pane. */
     this.calendarPane = $element[0].querySelector('.md-datepicker-calendar-pane');
 
     /** @type {HTMLElement} Calendar icon button. */
     this.calendarButton = $element[0].querySelector('.md-datepicker-button');
-
     /**
      * Element covering everything but the input in the top of the floating calendar pane.
      * @type {HTMLElement}
@@ -338,10 +350,19 @@
         });
       }
     }
-
+  
     Object.defineProperty(this, 'placeholder', {
-      get: function() { return self.inputElement.placeholder; },
-      set: function(value) { self.inputElement.placeholder = value || ''; }
+      get: function() {
+        if (self.$attrs['mdFloatingLabel']) {
+          return '';
+        }
+        return self.inputElement.placeholder;
+      },
+      set: function(value) {
+        if (!self.$attrs['mdFloatingLabel']) {
+          self.inputElement.placeholder = value || ''; 
+        }
+      }
     });
   };
 
