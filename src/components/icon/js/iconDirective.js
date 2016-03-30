@@ -145,8 +145,10 @@ angular
  * <hljs lang="html">
  *  <!-- For Material Design Icons -->
  *  <!-- The class '.material-icons' is auto-added if a style has NOT been specified -->
+ *  <!-- That's because, `material-icons` is the default fontset.
  *  <md-icon> face </md-icon>
  *  <md-icon md-font-set="material-icons"> face </md-icon>
+ *  <!-- If the fontset is not supporting ligature names, then we need to use the ligature unicode.-->
  *  <md-icon> &#xE87C; </md-icon>
  *  <!-- The class '.material-icons' must be manually added if other styles are also specified-->
  *  <md-icon class="material-icons md-light md-48"> face </md-icon>
@@ -157,12 +159,12 @@ angular
  * <hljs lang="js">
  *  // Specify a font-icon style alias
  *  angular.config(function($mdIconProvider) {
- *    $mdIconProvider.fontSet('fa', 'fontawesome');
+ *    $mdIconProvider.fontSet('md', 'material-icons');
  *  });
  * </hljs>
  *
  * <hljs lang="html">
- *  <md-icon md-font-set="fa">email</md-icon>
+ *  <md-icon md-font-set="md">favorite</md-icon>
  * </hljs>
  *
  */
