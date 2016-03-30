@@ -409,8 +409,7 @@ angular
  * Sets the x position for the panel relative to another element.
  * xPosition must be one of the following values:
  *
- * center | align-left | align-right | align-start | align-end |
- * offset-left | offset-right | offset-start | offset-end
+ * center | align-start | align-end | offset-start | offset-end
  *
  *    *************
  *    *           *
@@ -419,11 +418,11 @@ angular
  *    *************
  *   A B    C    D E
  *
- * A: offset-right, offset-start (for LTR displays)
- * B: align-left, align-start (for LTR displays)
+ * A: offset-start (for LTR displays)
+ * B: align-start (for LTR displays)
  * C: center
- * D: align-right, align-end (for LTR displays)
- * E: offset-left, offset-end (for LTR displays)
+ * D: align-end (for LTR displays)
+ * E: offset-end (for LTR displays)
  */
 
 /**
