@@ -94,7 +94,7 @@ button.md-button::-moz-focus-inner {
     margin: 0 $icon-button-margin;
     height: $icon-button-height;
     min-width: 0;
-    line-height: $icon-size;
+    line-height: 100%;
     padding: $baseline-grid;
     width: $icon-button-width;
     border-radius: $button-icon-border-radius;

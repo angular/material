@@ -7,7 +7,7 @@ div.flex-xs {
 }
 
 p {
-  padding-left: 8px;
+  /*//padding-left: 8px;*/
 }
 fieldset.standard {
   border-style: solid;
@@ -23,4 +23,10 @@ legend code {
 
 .ipsum {
   color: saddlebrown;
+}
+
+
+md-checkbox span{
+  direction: ltr;
+  unicode-bidi: embed;
 }
