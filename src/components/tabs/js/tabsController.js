@@ -2,9 +2,7 @@ angular
     .module('material.components.tabs')
     .controller('MdTabsController', MdTabsController);
 
-/**
- * @ngInject
- */
+/* @ngInject */
 function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipple,
                            $mdUtil, $animateCss, $attrs, $compile, $mdTheming) {
   // define private properties
@@ -219,7 +217,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    */
   function handleSelectedIndexChange (newValue, oldValue) {
     if (newValue === oldValue) return;
-    
+
     ctrl.selectedIndex     = getNearestSafeIndex(newValue);
     ctrl.lastSelectedIndex = oldValue;
     ctrl.updateInkBarStyles();

@@ -4,9 +4,7 @@ angular
     .module('material.components.menu')
     .controller('mdMenuCtrl', MenuController);
 
-/**
- * @ngInject
- */
+/* @ngInject */
 function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $rootScope, $q) {
 
   var menuContainer;

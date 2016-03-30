@@ -2,6 +2,7 @@ angular
     .module('material.components.tabs')
     .directive('mdTabsTemplate', MdTabsTemplate);
 
+/* @ngInject */
 function MdTabsTemplate ($compile, $mdUtil) {
   return {
     restrict: 'A',

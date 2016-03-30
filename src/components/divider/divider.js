@@ -26,6 +26,8 @@ angular.module('material.components.divider', [
  * </hljs>
  *
  */
+
+/* @ngInject */
 function MdDividerDirective($mdTheming) {
   return {
     restrict: 'E',

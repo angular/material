@@ -57,6 +57,8 @@ angular
  * $mdSidenav(componentId).isLockedOpen();
  * </hljs>
  */
+
+/* @ngInject */
 function SidenavService($mdComponentRegistry, $q) {
   return function(handle) {
 
@@ -209,6 +211,8 @@ function SidenavFocusDirective() {
  *   - `<md-sidenav md-is-locked-open="$mdMedia('min-width: 1000px')"></md-sidenav>`
  *   - `<md-sidenav md-is-locked-open="$mdMedia('sm')"></md-sidenav>` (locks open on small screens)
  */
+
+/* @ngInject */
 function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, $compile, $parse, $log, $q, $document) {
   return {
     restrict: 'E',
@@ -396,6 +400,8 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
  * @module material.components.sidenav
  *
  */
+
+/* @ngInject */
 function SidenavController($scope, $element, $attrs, $mdComponentRegistry, $q) {
 
   var self = this;

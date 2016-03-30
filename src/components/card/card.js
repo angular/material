@@ -119,6 +119,8 @@ angular.module('material.components.card', [
  * </md-card>
  * </hljs>
  */
+
+/* @ngInject */
 function mdCardDirective($mdTheming) {
   return {
     restrict: 'E',

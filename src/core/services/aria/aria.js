@@ -2,9 +2,7 @@
 angular.module('material.core')
   .service('$mdAria', AriaService);
 
-/*
- * @ngInject
- */
+/* @ngInject */
 function AriaService($$rAF, $log, $window, $interpolate) {
 
   return {

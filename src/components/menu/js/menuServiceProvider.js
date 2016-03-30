@@ -12,6 +12,7 @@ angular
  *
  */
 
+/* @ngInject */
 function MenuProvider($$interimElementProvider) {
   var MENU_EDGE_MARGIN = 8;
 
@@ -442,7 +443,7 @@ function MenuProvider($$interimElementProvider) {
       }
 
       var rtl = ($mdUtil.bidi() == 'rtl');
-      
+
       switch (positionMode.left) {
         case 'target':
           position.left = existingOffsets.left + originNodeRect.left - alignTargetRect.left;

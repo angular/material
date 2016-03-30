@@ -17,6 +17,7 @@
   angular.module('material.core')
     .factory('$mdListInkRipple', MdListInkRipple);
 
+  /* @ngInject */
   function MdListInkRipple($mdInkRipple) {
     return {
       attach: attach

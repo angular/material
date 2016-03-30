@@ -19,6 +19,8 @@
 
 angular
   .module('material.components.backdrop', ['material.core'])
+
+  /* @ngInject */
   .directive('mdBackdrop', function BackdropDirective($mdTheming, $animate, $rootElement, $window, $log, $$rAF, $document) {
     var ERROR_CSS_POSITION = "<md-backdrop> may not work properly in a scrolled, static-positioned parent container.";
 

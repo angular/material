@@ -17,6 +17,7 @@
   angular.module('material.core')
     .factory('$mdButtonInkRipple', MdButtonInkRipple);
 
+  /* @ngInject */
   function MdButtonInkRipple($mdInkRipple) {
     return {
       attach: function attachRipple(scope, element, options) {

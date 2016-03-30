@@ -12,7 +12,7 @@ angular.module('material.components.showHide', [
   .directive('ngShow', createDirective('ngShow', true))
   .directive('ngHide', createDirective('ngHide', false));
 
-
+/* @ngInject */
 function createDirective(name, targetValue) {
   return ['$mdUtil', function($mdUtil) {
     return {

@@ -4,9 +4,7 @@ angular
   .controller('MenuItemController', MenuItemController);
 
 
-/**
- * @ngInject
- */
+/* @ngInject */
 function MenuItemController($scope, $element, $attrs) {
   this.$element = $element;
   this.$attrs = $attrs;

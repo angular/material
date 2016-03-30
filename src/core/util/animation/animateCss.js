@@ -15,13 +15,15 @@ if (angular.version.minor >= 4) {
   var TRANSITION_EVENTS = (WEBKIT ? 'webkitTransitionEnd ' : '') + 'transitionend';
   var ANIMATION_EVENTS = (WEBKIT ? 'webkitAnimationEnd ' : '') + 'animationend';
 
-  var $$ForceReflowFactory = ['$document', function($document) {
+  /* @ngInject */
+  var $$ForceReflowFactory = function($document) {
     return function() {
       return $document[0].body.clientWidth + 1;
     }
-  }];
+  };
 
-  var $$rAFMutexFactory = ['$$rAF', function($$rAF) {
+  /* @ngInject */
+  var $$rAFMutexFactory = function($$rAF) {
     return function() {
       var passed = false;
       $$rAF(function() {
@@ -31,9 +33,10 @@ if (angular.version.minor >= 4) {
         passed ? fn() : $$rAF(fn);
       };
     };
-  }];
+  };
 
-  var $$AnimateRunnerFactory = ['$q', '$$rAFMutex', function($q, $$rAFMutex) {
+  /* @ngInject */
+  var $$AnimateRunnerFactory = function($q, $$rAFMutex) {
     var INITIAL_STATE = 0;
     var DONE_PENDING_STATE = 1;
     var DONE_COMPLETE_STATE = 2;
@@ -133,15 +136,16 @@ if (angular.version.minor >= 4) {
     };
 
     return AnimateRunner;
-  }];
+  };
 
   angular
     .module('material.core.animate', [])
     .factory('$$forceReflow', $$ForceReflowFactory)
     .factory('$$AnimateRunner', $$AnimateRunnerFactory)
     .factory('$$rAFMutex', $$rAFMutexFactory)
-    .factory('$animateCss', ['$window', '$$rAF', '$$AnimateRunner', '$$forceReflow', '$$jqLite', '$timeout',
-                     function($window,   $$rAF,   $$AnimateRunner,   $$forceReflow,   $$jqLite,   $timeout) {
+
+    /* @ngInject */
+    .factory('$animateCss', function($window, $$rAF, $$AnimateRunner, $$forceReflow, $$jqLite, $timeout) {
 
       function init(element, options) {
 
@@ -383,7 +387,7 @@ if (angular.version.minor >= 4) {
       }
 
       return init;
-    }]);
+    });
 
   /**
    * Older browsers [FF31] expect camelCase

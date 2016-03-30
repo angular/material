@@ -2,6 +2,7 @@ angular
     .module('material.components.autocomplete')
     .controller('MdHighlightCtrl', MdHighlightCtrl);
 
+/* @ngInject */
 function MdHighlightCtrl ($scope, $element, $attrs) {
   this.init = init;
 

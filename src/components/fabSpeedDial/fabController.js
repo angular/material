@@ -4,6 +4,7 @@
   angular.module('material.components.fabShared', ['material.core'])
     .controller('MdFabController', MdFabController);
 
+  /* @ngInject */
   function MdFabController($scope, $element, $animate, $mdUtil, $mdConstant, $timeout) {
     var vm = this;
 

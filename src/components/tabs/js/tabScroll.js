@@ -1,6 +1,7 @@
 angular.module('material.components.tabs')
     .directive('mdTabScroll', MdTabScroll);
 
+/* @ngInject */
 function MdTabScroll ($parse) {
   return {
     restrict: 'A',

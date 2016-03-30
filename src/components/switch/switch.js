@@ -48,6 +48,8 @@ angular.module('material.components.switch', [
  *
  * </hljs>
  */
+
+/* @ngInject */
 function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdGesture) {
   var checkboxDirective = mdCheckboxDirective[0];
 

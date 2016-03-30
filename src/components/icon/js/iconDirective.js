@@ -166,6 +166,8 @@ angular
  * </hljs>
  *
  */
+
+/* @ngInject */
 function mdIconDirective($mdIcon, $mdTheming, $mdAria ) {
 
   return {

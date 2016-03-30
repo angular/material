@@ -113,6 +113,8 @@ angular.module('material.components.select', [
  * </div>
  * </hljs>
  */
+
+/* @ngInject */
 function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $parse) {
   return {
     restrict: 'E',
@@ -491,6 +493,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
   }
 }
 
+/* @ngInject */
 function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
 
   return {
@@ -546,6 +549,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
     }
   }
 
+  /* @ngInject */
   function SelectMenuController($scope, $attrs, $element) {
     var self = this;
     self.isMultiple = angular.isDefined($attrs.multiple);
@@ -757,6 +761,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
 
 }
 
+/* @ngInject */
 function OptionDirective($mdButtonInkRipple, $mdUtil) {
 
   return {
@@ -890,6 +895,7 @@ function OptgroupDirective() {
   }
 }
 
+/* @ngInject */
 function SelectProvider($$interimElementProvider) {
   return $$interimElementProvider('$mdSelect')
     .setDefaults({

@@ -118,6 +118,7 @@
     }
   }
 
+  /* @ngInject */
   function MdFabSpeedDialFlingAnimation($timeout) {
     function delayDone(done) { $timeout(done, cssAnimationDuration, false); }
 
@@ -209,6 +210,7 @@
     }
   }
 
+  /* @ngInject */
   function MdFabSpeedDialScaleAnimation($timeout) {
     function delayDone(done) { $timeout(done, cssAnimationDuration, false); }
 

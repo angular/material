@@ -78,7 +78,7 @@ var MAX_ELEMENT_SIZE = 1533917;
  */
 var NUM_EXTRA = 3;
 
-/** @ngInject */
+/* @ngInject */
 function VirtualRepeatContainerController(
     $$rAF, $mdUtil, $parse, $rootScope, $window, $scope, $element, $attrs) {
   this.$rootScope = $rootScope;
@@ -423,6 +423,8 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
  *     Otherwise, return a higher number than the currently loaded items to produce an
  *     infinite-scroll behavior.
  */
+
+/* @ngInject */
 function VirtualRepeatDirective($parse) {
   return {
     controller: VirtualRepeatController,
@@ -446,7 +448,7 @@ function VirtualRepeatDirective($parse) {
 }
 
 
-/** @ngInject */
+/* @ngInject */
 function VirtualRepeatController($scope, $element, $attrs, $browser, $document, $rootScope,
     $$rAF, $mdUtil) {
   this.$scope = $scope;

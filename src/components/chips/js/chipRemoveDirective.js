@@ -21,12 +21,14 @@ angular
 
 /**
  * MdChipRemove Directive Definition.
- * 
+ *
  * @param $compile
  * @param $timeout
  * @returns {{restrict: string, require: string[], link: Function, scope: boolean}}
  * @constructor
  */
+
+/* @ngInject */
 function MdChipRemove ($timeout) {
   return {
     restrict: 'A',

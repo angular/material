@@ -108,7 +108,7 @@
  * Sometimes you would like to be able to click on a menu item without having the menu
  * close. To do this, ngMaterial exposes the `md-prevent-menu-close` attribute which
  * can be added to a button inside a menu to stop the menu from automatically closing.
- * You can then close the menu programatically by injecting `$mdMenu` and calling 
+ * You can then close the menu programatically by injecting `$mdMenu` and calling
  * `$mdMenu.hide()`.
  *
  * <hljs lang="html">
@@ -144,9 +144,7 @@ angular
     .module('material.components.menu')
     .directive('mdMenu', MenuDirective);
 
-/**
- * @ngInject
- */
+/* @ngInject */
 function MenuDirective($mdUtil) {
   var INVALID_PREFIX = 'Invalid HTML for md-menu: ';
   return {

@@ -93,6 +93,8 @@ angular.module('material.components.gridList', ['material.core'])
  * </md-grid-list>
  * </hljs>
  */
+
+/* @ngInject */
 function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia) {
   return {
     restrict: 'E',
@@ -705,6 +707,8 @@ function GridLayoutFactory($mdUtil) {
  * </md-grid-tile>
  * </hljs>
  */
+
+/* @ngInject */
 function GridTileDirective($mdMedia) {
   return {
     restrict: 'E',

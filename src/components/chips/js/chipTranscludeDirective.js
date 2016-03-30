@@ -2,6 +2,7 @@ angular
     .module('material.components.chips')
     .directive('mdChipTransclude', MdChipTransclude);
 
+/* @ngInject */
 function MdChipTransclude ($compile) {
   return {
     restrict: 'EA',
