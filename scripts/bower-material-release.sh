@@ -25,8 +25,8 @@ function run {
 
   cd bower-material
   # remove stale layout files; newer ones are in `dist/layouts/`
-  rm ./angular-material.layouts.css
-  rm ./angular-material.layouts.min.css
+  rm -f ./angular-material.layouts.css
+  rm -f ./angular-material.layouts.min.css
 
 
   echo "-- Committing and tagging..."
