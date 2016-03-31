@@ -45,17 +45,29 @@ AnimationCtrl.prototype.showDialog = function() {
         left: document.documentElement.clientWidth / 2 - 250
       });
   }
-  if (this.animationType === 'custom') {
-    animation.withAnimation({
-      open: 'demo-dialog-custom-animation-open',
-      close: 'demo-dialog-custom-animation-close'
-    });
-  } else {
-    animation.withAnimation(this.animationType);
+  switch(this.animationType) {
+    case 'custom':
+      animation.withAnimation({
+        open: 'demo-dialog-custom-animation-open',
+        close: 'demo-dialog-custom-animation-close'
+      });
+      break;
+    case 'slide':
+      animation.withAnimation(MdPanelAnimation.animation.SLIDE);
+      break;
+    case 'scale':
+      animation.withAnimation(MdPanelAnimation.animation.SCALE);
+      break;
+    case 'fade':
+      animation.withAnimation(MdPanelAnimation.animation.FADE);
+      break;
+    case 'none':
+      animation = undefined;
+      break;
   }
 
   var config = {
-    animation: this.animationType !== 'none' ? animation : undefined,
+    animation: animation,
     attachTo: angular.element(document.querySelector('.demo-md-panel-animation')),
     controller: DialogCtrl,
     controllerAs: 'ctrl',

@@ -486,7 +486,7 @@ angular
  * var panelAnimation = new MdPanelAnimation()
  *     .openFrom(myButtonEl)
  *     .closeTo('.my-button')
- *     .withAnimation('md-panel-animate-slide');
+ *     .withAnimation(MdPanelPosition.animation.SCALE);
  *
  * $mdPanel.create({
  *   animation: panelAnimation
@@ -502,7 +502,7 @@ angular
  * is used to determine the bounds. When passed a click event, the location
  * of the click will be used as the position to start the animation.
  *
- * @param {string|!Element|!Event|!{top: number, left: number}}
+ * @param {string|!Element|!Event|{top: number, left: number}}
  * @returns {MdPanelAnimation}
  */
 
@@ -514,7 +514,7 @@ angular
  * query selector, DOM element, or a Rect object that is used to determine
  * the bounds.
  *
- * @param {string|!Element|!{top: number, left: number}}
+ * @param {string|!Element|{top: number, left: number}}
  * @returns {MdPanelAnimation}
  */
 
@@ -525,16 +525,17 @@ angular
  * Specifies the animation class.
  *
  * There are several default animations that can be used:
- *   `md-panel-animate-slide`: The panel slides in and out from the specified
+ * (MdPanelPosition.animation)
+ *   SLIDE: The panel slides in and out from the specified
  *       elements. It will not fade in or out.
- *   `md-panel-animate-scale`: The panel scales in and out. Slide and fade are
+ *   SCALE: The panel scales in and out. Slide and fade are
  *       included in this animation.
- *   `md-panel-animate-fade`: The panel fades in and out.
+ *   FADE: The panel fades in and out.
  *
  * Custom classes will by default fade in and out unless
  * "transition: opacity 1ms" is added to the to custom class.
  *
- * @param {string|!{open: string, close: string}} cssClass
+ * @param {string|{open: string, close: string}} cssClass
  * @returns {MdPanelAnimation}
  */
 
@@ -1555,7 +1556,7 @@ MdPanelPosition.prototype._calculatePanelPosition = function(panelEl) {
  * var panelAnimation = new MdPanelAnimation()
  *     .openFrom(myButtonEl)
  *     .closeTo('.my-button')
- *     .withAnimation('md-panel-animate-scale');
+ *     .withAnimation(MdPanelPosition.animation.SCALE);
  *
  * $mdPanel.create({
  *   animation: panelAnimation
@@ -1565,23 +1566,34 @@ MdPanelPosition.prototype._calculatePanelPosition = function(panelEl) {
  */
 function MdPanelAnimation() {
   /**
-   * @private {!{element: !angular.JQLite|undefined, bounds: !DOMRect}|
+   * @private {{element: !angular.JQLite|undefined, bounds: !DOMRect}|
    *    undefined}
    */
   this._openFrom;
 
   /**
-   * @private {!{element: !angular.JQLite|undefined, bounds: !DOMRect}|
+   * @private {{element: !angular.JQLite|undefined, bounds: !DOMRect}|
    *    undefined}
    */
   this._closeTo;
 
-  /** @private {string|!{open: string, close: string} */
+  /** @private {string|{open: string, close: string} */
   this._animationClass = '';
 
   /** @private {!angular.$q.Promise|undefined} **/
   this._reverseAnimation;
 }
+
+
+/**
+ * Possible default animations.
+ * @enum {string}
+ */
+MdPanelPosition.animation = {
+  SLIDE: 'md-panel-animate-slide',
+  SCALE: 'md-panel-animate-scale',
+  FADE: 'md-panel-animate-fade'
+};
 
 
 /**
@@ -1623,7 +1635,7 @@ MdPanelAnimation.prototype.closeTo = function(closeTo) {
 /**
  * Returns the element and bounds for the animation target.
  * @param {string|!Element|{top: number, left: number}} location
- * @returns {!{element: !angular.JQLite|undefined, bounds: !DOMRect}}
+ * @returns {{element: !angular.JQLite|undefined, bounds: !DOMRect}}
  * @private
  */
 MdPanelAnimation.prototype._getPanelAnimationTarget = function(location) {
@@ -1636,7 +1648,7 @@ MdPanelAnimation.prototype._getPanelAnimationTarget = function(location) {
       }
     };
   } else {
-    return this._getBoundingClientRect(this._getElement(location));
+    return this._getBoundingClientRect(getElement(location));
   }
 };
 
@@ -1645,12 +1657,13 @@ MdPanelAnimation.prototype._getPanelAnimationTarget = function(location) {
  * Specifies the animation class.
  *
  * There are several default animations that can be used:
- *   `md-panel-animate-slide`: The panel slides in and out from the specified
+ * (MdPanelAnimation.animation)
+ *   SLIDE: The panel slides in and out from the specified
  *        elements.
- *   `md-panel-animate-scale`: The panel scales in and out.
- *   `md-panel-animate-fade`: The panel fades in and out.
+ *   SCALE: The panel scales in and out.
+ *   FADE: The panel fades in and out.
  *
- * @param {string|!{open: string, close: string}} cssClass
+ * @param {string|{open: string, close: string}} cssClass
  * @returns {MdPanelAnimation}
  */
 
@@ -1766,40 +1779,25 @@ MdPanelAnimation.prototype._fixBounds = function(panelEl) {
   var panelWidth = panelEl[0].offsetWidth;
   var panelHeight = panelEl[0].offsetHeight;
 
-  if (angular.isUndefined(this._openFrom.bounds.height)) {
+  if (this._openFrom.bounds.height == null) {
     this._openFrom.bounds.height = panelHeight;
   }
-  if (angular.isUndefined(this._openFrom.bounds.width)) {
+  if (this._openFrom.bounds.width == null) {
     this._openFrom.bounds.width = panelWidth;
   }
-  if (angular.isUndefined(this._closeTo.bounds.height)) {
+  if (this._closeTo.bounds.height == null) {
     this._closeTo.bounds.height = panelHeight;
   }
-  if (angular.isUndefined(this._closeTo.bounds.width)) {
+  if (this._closeTo.bounds.width == null) {
     this._closeTo.bounds.width = panelWidth;
   }
 };
 
 
 /**
- * TODO(KarenParker): Switch and update the shared version of this method that
- * others are currently building.
- * Gets the element from the string|element.
- * @param {string|!Element} el
- * @returns {!angular.JQLite}
- * @private
- */
-MdPanelAnimation.prototype._getElement = function(el) {
-  var queryResult = angular.isString(el) ?
-      document.querySelector(el) : el;
-  return angular.element(queryResult);
-};
-
-
-/**
  * Identify the bounding RECT for the target element.
  * @param {!angular.JQLite} element
- * @returns {!{element: !angular.JQLite|undefined, bounds: !DOMRect}}
+ * @returns {{element: !angular.JQLite|undefined, bounds: !DOMRect}}
  * @private
  */
 MdPanelAnimation.prototype._getBoundingClientRect = function(element) {

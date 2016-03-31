@@ -1,4 +1,4 @@
-fdescribe('$mdPanel', function() {
+describe('$mdPanel', function() {
   var $mdPanel, $rootScope, $rootEl, $templateCache, $q, $material;
   var panelRef;
   var attachedElements = [];
