@@ -45,6 +45,7 @@ AnimationCtrl.prototype.showDialog = function() {
         left: document.documentElement.clientWidth / 2 - 250
       });
   }
+
   switch(this.animationType) {
     case 'custom':
       animation.withAnimation({

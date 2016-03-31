@@ -336,14 +336,14 @@ angular
  * Overlapping the panel with an element:
  * `new MdPanelPosition()
  *     .relativeTo(someElement)
- *     .withPanelXPosition('align-left')
- *     .withPanelYPosition('align-tops');`
+ *     .withPanelXPosition($mdPanel.xPosition.ALIGN_START)
+ *     .withPanelYPosition($mdPanel.yPosition.ALIGN_TOPS);`
  *
  * Aligning the panel with the bottom of an element:
  * `new MdPanelPosition()
  *     .relativeTo(someElement)
- *     .withPanelXPosition('center')
- *     .withPanelYPosition('below');`
+ *     .withPanelXPosition($mdPanel.xPosition.CENTER)
+ *     .withPanelYPosition($mdPanel.yPosition.BELOW);`
  */
 
 /**
@@ -370,7 +370,8 @@ angular
  * @ngdoc method
  * @name MdPanelPosition#top
  * @description
- * Sets the value of `top` for the panel.
+ * Sets the value of `top` for the panel. Clears any previously set
+ * vertical position.
  * @param {string=} opt_top Value of `top`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
@@ -379,7 +380,8 @@ angular
  * @ngdoc method
  * @name MdPanelPosition#bottom
  * @description
- * Sets the value of `bottom` for the panel.
+ * Sets the value of `bottom` for the panel. Clears any previously set
+ * vertical position.
  * @param {string=} opt_bottom Value of `bottom`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
@@ -388,7 +390,8 @@ angular
  * @ngdoc method
  * @name MdPanelPosition#left
  * @description
- * Sets the value of `left` for the panel.
+ * Sets the value of `left` for the panel. Clears any previously set
+ * horizontal position.
  * @param {string=} opt_left Value of `left`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
@@ -397,8 +400,37 @@ angular
  * @ngdoc method
  * @name MdPanelPosition#right
  * @description
- * Sets the value of `right` for the panel.
+ * Sets the value of `right` for the panel. Clears any previously set
+ * horizontal position.
  * @param {string=} opt_right Value of `right`. Defaults to '0'.
+ * @returns {MdPanelPosition}
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelPosition#centerHorizontally
+ * @description
+ * Centers the panel horizontally in the viewport. Clears any previously set
+ * horizontal position.
+ * @returns {MdPanelPosition}
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelPosition#centerVertically
+ * @description
+ * Centers the panel vertically in the viewport. Clears any previously set
+ * vertical position.
+ * @returns {MdPanelPosition}
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelPosition#center
+ * @description
+ * Centers the panel horizontally and vertically in the viewport. This is
+ * equivalent to calling both `centerHorizontally` and `centerVertically`.
+ * Clears any previously set horizontal and vertical positions.
  * @returns {MdPanelPosition}
  */
 
@@ -408,9 +440,10 @@ angular
  * @param {string} xPosition
  * @description
  * Sets the x position for the panel relative to another element.
- * xPosition must be one of the following values:
+ * xPosition must be one of the following values available on
+ * $mdPanel.xPosition:
  *
- * center | align-start | align-end | offset-start | offset-end
+ * CENTER | ALIGN_START | ALIGN_END | OFFSET_START | OFFSET_END
  *
  *    *************
  *    *           *
@@ -419,11 +452,11 @@ angular
  *    *************
  *   A B    C    D E
  *
- * A: offset-start (for LTR displays)
- * B: align-start (for LTR displays)
- * C: center
- * D: align-end (for LTR displays)
- * E: offset-end (for LTR displays)
+ * A: OFFSET_START (for LTR displays)
+ * B: ALIGN_START (for LTR displays)
+ * C: CENTER
+ * D: ALIGN_END (for LTR displays)
+ * E: OFFSET_END (for LTR displays)
  */
 
 /**
@@ -432,9 +465,10 @@ angular
  * @param {string} yPosition
  * @description
  * Sets the y position for the panel relative to another element.
- * yPosition must be one of the following values:
+ * yPosition must be one of the following values available on
+ * $mdPanel.yPosition:
  *
- * center | align-tops | align-bottoms | above | below
+ * CENTER | ALIGN_TOPS | ALIGN_BOTTOMS | ABOVE | BELOW
  *
  *   F
  *   G *************
@@ -444,11 +478,11 @@ angular
  *   I *************
  *   J
  *
- * F: below
- * G: align-tops
- * H: center
- * I: align-bottoms
- * J: above
+ * F: BELOW
+ * G: ALIGN_TOPS
+ * H: CENTER
+ * I: ALIGN_BOTTOMS
+ * J: ABOVE
  */
 
 /**
@@ -487,7 +521,7 @@ angular
  * var panelAnimation = new MdPanelAnimation()
  *     .openFrom(myButtonEl)
  *     .closeTo('.my-button')
- *     .withAnimation(MdPanelPosition.animation.SCALE);
+ *     .withAnimation($mdPanel.animation.SCALE);
  *
  * $mdPanel.create({
  *   animation: panelAnimation
@@ -526,7 +560,7 @@ angular
  * Specifies the animation class.
  *
  * There are several default animations that can be used:
- * (MdPanelPosition.animation)
+ * ($mdPanel.animation)
  *   SLIDE: The panel slides in and out from the specified
  *       elements. It will not fade in or out.
  *   SCALE: The panel scales in and out. Slide and fade are
@@ -539,7 +573,6 @@ angular
  * @param {string|{open: string, close: string}} cssClass
  * @returns {MdPanelAnimation}
  */
-
 
 
 /*****************************************************************************
@@ -586,8 +619,25 @@ function MdPanelService($rootElement, $rootScope, $injector) {
   /** @private {!angular.$injector} */
   this._$injector = $injector;
 
-  /** @type {enum} */
+  /**
+   * Default animations that can be used within the panel.
+   * @type {enum}
+   */
   this.animation = MdPanelAnimation.animation;
+
+  /**
+   * Possible values of xPosition for positioning the panel relative to
+   * another element.
+   * @type {enum}
+   */
+  this.xPosition = MdPanelPosition.xPosition;
+
+  /**
+   * Possible values of yPosition for positioning the panel relative to
+   * another element.
+   * @type {enum}
+   */
+  this.yPosition = MdPanelPosition.yPosition;
 }
 
 
@@ -1029,14 +1079,16 @@ MdPanelRef.prototype._createPanel = function() {
  */
 MdPanelRef.prototype._addStyles = function() {
   this._panelContainer.css('z-index', this._config['zIndex']);
-  this._panelContainer.addClass(MD_PANEL_HIDDEN);
+  this._panelEl.css('z-index', this._config['zIndex'] + 1);
+
 
   if (this._config['fullscreen']) {
     this._panelEl.addClass('_md-panel-fullscreen');
     return; // Don't setup positioning.
   }
 
-  this._$rootScope.$applyAsync(angular.bind(this, this._configurePosition));
+  this._configurePosition();
+  this._panelContainer.addClass(MD_PANEL_HIDDEN);
 };
 
 
@@ -1045,7 +1097,6 @@ MdPanelRef.prototype._addStyles = function() {
  * @private
  */
 MdPanelRef.prototype._configurePosition = function() {
-  /** POSITIONING STYLES **/
   var positionConfig = this._config['position'];
 
   if (!positionConfig) { return; }
@@ -1055,6 +1106,10 @@ MdPanelRef.prototype._configurePosition = function() {
   this._panelEl.css('bottom', positionConfig.getBottom(this._panelEl));
   this._panelEl.css('left', positionConfig.getLeft(this._panelEl));
   this._panelEl.css('right', positionConfig.getRight(this._panelEl));
+
+  // Use the vendor prefixed version of transform.
+  var prefixedTransform = this._$mdConstant.CSS.TRANSFORM;
+  this._panelEl.css(prefixedTransform, positionConfig.getTransform());
 };
 
 
@@ -1077,7 +1132,7 @@ MdPanelRef.prototype._removeEventListener = function() {
     removeFn();
   });
   this._removeListeners = null;
-}
+};
 
 
 /**
@@ -1239,8 +1294,8 @@ MdPanelRef.prototype._animateClose = function() {
  *
  * var panelPosition = new MdPanelPosition()
  *     .relativeTo(myButtonEl)
- *     .withPanelXPosition('center')
- *     .withPanelYPosition('align-tops');
+ *     .withPanelXPosition($mdPanel.xPosition.CENTER)
+ *     .withPanelYPosition($mdPanel.yPosition.ALIGN_TOPS);
  *
  * $mdPanel.create({
  *   position: panelPosition
@@ -1269,6 +1324,12 @@ function MdPanelPosition() {
 
   /** @private {string} */
   this._right = '';
+
+  /** @private {!Array<string>} */
+  this._translateX = [];
+
+  /** @private {!Array<string>} */
+  this._translateY = [];
 
   /** @private {string} */
   this._xPosition = '';
@@ -1315,46 +1376,91 @@ MdPanelPosition.prototype.absolute = function() {
 
 
 /**
- * Sets the value of `top` for the panel.
+ * Sets the value of `top` for the panel. Clears any previously set vertical
+ * position.
  * @param {string=} opt_top Value of `top`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 MdPanelPosition.prototype.top = function(opt_top) {
+  this._bottom = '';
   this._top = opt_top || '0';
   return this;
 };
 
 
 /**
- * Sets the value of `bottom` for the panel.
+ * Sets the value of `bottom` for the panel. Clears any previously set vertical
+ * position.
  * @param {string=} opt_bottom Value of `bottom`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 MdPanelPosition.prototype.bottom = function(opt_bottom) {
+  this._top = '';
   this._bottom = opt_bottom || '0';
   return this;
 };
 
 
 /**
- * Sets the value of `left` for the panel.
+ * Sets the value of `left` for the panel. Clears any previously set
+ * horizontal position.
  * @param {string=} opt_left Value of `left`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 MdPanelPosition.prototype.left = function(opt_left) {
+  this._right = '';
   this._left = opt_left || '0';
   return this;
 };
 
 
 /**
- * Sets the value of `right` for the panel.
+ * Sets the value of `right` for the panel. Clears any previously set
+ * horizontal position.
  * @param {string=} opt_right Value of `right`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 MdPanelPosition.prototype.right = function(opt_right) {
+  this._left = '';
   this._right = opt_right || '0';
   return this;
+};
+
+
+/**
+ * Centers the panel horizontally in the viewport. Clears any previously set
+ * horizontal position.
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.centerHorizontally = function() {
+  this._left = '50%';
+  this._right = '';
+  this._translateX = ['-50%'];
+  return this;
+};
+
+
+/**
+ * Centers the panel vertically in the viewport. Clears any previously set
+ * vertical position.
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.centerVertically = function() {
+  this._top = '50%';
+  this._bottom = '';
+  this._translateY = ['-50%'];
+  return this;
+};
+
+
+/**
+ * Centers the panel horizontally and vertically in the viewport. This is
+ * equivalent to calling both `centerHorizontally` and `centerVertically`.
+ * Clears any previously set horizontal and vertical positions.
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.center = function() {
+  return this.centerHorizontally().centerVertically();
 };
 
 
@@ -1430,6 +1536,30 @@ MdPanelPosition.prototype.withPanelYPosition = function(yPosition) {
 
 
 /**
+ * Sets the value of the offset in the x-direction. This will add
+ * to any previously set offsets.
+ * @param {string} offsetX
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.withOffsetX = function(offsetX) {
+  this._translateX.push(offsetX);
+  return this;
+};
+
+
+/**
+ * Sets the value of the offset in the y-direction. This will add
+ * to any previously set offsets.
+ * @param {string} offsetY
+ * @returns {MdPanelPosition}
+ */
+MdPanelPosition.prototype.withOffsetY = function(offsetY) {
+  this._translateY.push(offsetY);
+  return this;
+};
+
+
+/**
  * Gets the value of `top` for the panel.
  * @param {!angular.JQLite} panelEl
  * @returns {string}
@@ -1474,9 +1604,40 @@ MdPanelPosition.prototype.getRight = function(panelEl) {
 
 
 /**
- * Calculates the panel position for relative based on the created
- * panel element.
+ * Gets the value of `transform` for the panel.
+ * @returns {string}
+ */
+MdPanelPosition.prototype.getTransform = function() {
+  var translateX = this._reduceTranslateValues('translateX', this._translateX);
+  var translateY = this._reduceTranslateValues('translateY', this._translateY);
+
+  // It's important to trim the result, because the browser will ignore the set
+  // operation if the string contains only whitespace.
+  return (translateX + translateY).trim();
+};
+
+
+/**
+ * Reduces a list of translate values to a string that can be used within
+ * transform.
+ * @param {string} translateFn
+ * @param {!Array<string>} values
+ * @returns {string}
+ * @private
+ */
+MdPanelPosition.prototype._reduceTranslateValues =
+    function(translateFn, values) {
+      return values.map(function(translation) {
+        return translateFn + '(' + translation + ')';
+      }).join(' ');
+    };
+
+
+
+/**
+ * Calculates the panel position based on the created panel element.
  * @param {!angular.JQLite} panelEl
+ * @private
  */
 MdPanelPosition.prototype._calculatePanelPosition = function(panelEl) {
   // Only calculate the position if necessary.
@@ -1510,7 +1671,7 @@ MdPanelPosition.prototype._calculatePanelPosition = function(panelEl) {
       this._right = targetRight + 'px';
       break;
     case MdPanelPosition.xPosition.CENTER:
-      var left = targetLeft + (0.5 * targetWidth) - (0.5 * panelWidth)
+      var left = targetLeft + (0.5 * targetWidth) - (0.5 * panelWidth);
       this._left = left + 'px';
       break;
     case MdPanelPosition.xPosition.ALIGN_START:
@@ -1535,7 +1696,7 @@ MdPanelPosition.prototype._calculatePanelPosition = function(panelEl) {
       this._bottom = targetBottom + 'px';
       break;
     case MdPanelPosition.yPosition.CENTER:
-      var top = targetTop + (0.5 * targetHeight) - (0.5 * panelHeight)
+      var top = targetTop + (0.5 * targetHeight) - (0.5 * panelHeight);
       this._top = top + 'px';
       break;
     case MdPanelPosition.yPosition.ALIGN_TOPS:
@@ -1546,7 +1707,6 @@ MdPanelPosition.prototype._calculatePanelPosition = function(panelEl) {
       break;
   }
 };
-
 
 
 /*****************************************************************************

@@ -11,8 +11,7 @@ function BasicDemoCtrl($mdPanel) {
 BasicDemoCtrl.prototype.showDialog = function() {
   var position = this._mdPanel.newPanelPosition()
       .absolute()
-      .left()
-      .top();
+      .center();
 
   var config = {
     attachTo: angular.element(document.querySelector('.demo-md-panel')),

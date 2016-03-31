@@ -57,7 +57,7 @@ describe('$mdPanel', function() {
 
             return {
               pass: pass,
-              message: 'Expected ' + expected + not + 'to be within ' +
+              message: 'Expected ' + expected + not + ' to be within ' +
                   epsilon + ' of ' + actual
             }
           }
@@ -676,6 +676,92 @@ describe('$mdPanel', function() {
       mdPanelPosition = $mdPanel.newPanelPosition();
     });
 
+    describe('should offset the panel', function() {
+      it('horizontally', function() {
+        var left = '50px';
+        var offset = '-15px';
+
+        var position = mdPanelPosition
+            .absolute()
+            .left(left)
+            .withOffsetX(offset);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+
+        expect(panelRect.left)
+            .toBeApproximately(parseInt(left) + parseInt(offset));
+      });
+
+      it('horizontally with centering', function() {
+        var offset = '15px';
+
+        var position = mdPanelPosition
+            .absolute()
+            .centerHorizontally()
+            .withOffsetX(offset);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var middleOfPage = 0.5 * window.innerWidth;
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+        var middleOfPanel = panelRect.left + 0.5 * panelRect.width;
+
+        expect(middleOfPanel)
+            .toBeApproximately(middleOfPage + parseInt(offset));
+      });
+
+      it('vertically', function() {
+        var top = '50px';
+        var offset = '-15px';
+
+        var position = mdPanelPosition
+            .absolute()
+            .top(top)
+            .withOffsetY(offset);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+
+        expect(panelRect.top)
+            .toBeApproximately(parseInt(top) + parseInt(offset));
+      });
+
+      it('vertically with centering', function() {
+        var offset = '15px';
+
+        var position = mdPanelPosition
+            .absolute()
+            .centerVertically()
+            .withOffsetY(offset);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var middleOfPage = 0.5 * window.innerHeight;
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+        var middleOfPanel = panelRect.top + 0.5 * panelRect.height;
+
+        expect(middleOfPanel)
+            .toBeApproximately(middleOfPage + parseInt(offset));
+      });
+    });
+
     describe('should absolutely position the panel at', function() {
       it('top', function () {
         var top = '50px';
@@ -697,6 +783,18 @@ describe('$mdPanel', function() {
 
         var panelCss = document.querySelector(PANEL_EL).style;
         expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.top).toEqual('0px');
+      });
+
+      it('top with clearing previous vertical positioning', function() {
+        var position = mdPanelPosition.absolute().bottom().top();
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.bottom).toEqual('')
         expect(panelCss.top).toEqual('0px');
       });
 
@@ -723,6 +821,18 @@ describe('$mdPanel', function() {
         expect(panelCss.bottom).toEqual('0px');
       });
 
+      it('bottom with clearing previous vertical positioning', function() {
+        var position = mdPanelPosition.absolute().top().bottom();
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.top).toEqual('');
+        expect(panelCss.bottom).toEqual('0px');
+      });
+
       it('left', function () {
         var left = '50px';
         var position = mdPanelPosition.absolute().left(left);
@@ -743,6 +853,18 @@ describe('$mdPanel', function() {
 
         var panelCss = document.querySelector(PANEL_EL).style;
         expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.left).toEqual('0px');
+      });
+
+      it('left with clearing previous horizontal positioning', function() {
+        var position = mdPanelPosition.absolute().right().left();
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.right).toEqual('');
         expect(panelCss.left).toEqual('0px');
       });
 
@@ -768,24 +890,90 @@ describe('$mdPanel', function() {
         expect(panelCss.position).toEqual('fixed');
         expect(panelCss.right).toEqual('0px');
       });
+
+      it('right with clearing previous horizontal positioning', function() {
+        var position = mdPanelPosition.absolute().left().right();
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.left).toEqual('');
+        expect(panelCss.right).toEqual('0px');
+      });
+
+      it('center horizontally', function () {
+        var position = mdPanelPosition.absolute().centerHorizontally();
+        config['position'] = position;
+
+        openPanel(config);
+
+        var middleOfPage = 0.5 * window.innerWidth;
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+        var middleOfPanel = panelRect.left + 0.5 * panelRect.width;
+
+        expect(middleOfPanel).toBeApproximately(middleOfPage);
+      });
+
+      it('center vertically', function() {
+        var position = mdPanelPosition.absolute().centerVertically();
+        config['position'] = position;
+
+        openPanel(config);
+
+        var middleOfPage = 0.5 * window.innerHeight;
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+        var middleOfPanel = panelRect.top + 0.5 * panelRect.height;
+
+        expect(middleOfPanel).toBeApproximately(middleOfPage);
+      });
+
+      it('center horizontally and vertically', function() {
+        var position = mdPanelPosition.absolute().center();
+        config['position'] = position;
+
+        openPanel(config);
+
+        var middleOfPageX = 0.5 * window.innerWidth;
+        var middleOfPageY = 0.5 * window.innerHeight;
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+        var middleOfPanelX = panelRect.left + 0.5 * panelRect.width;
+        var middleOfPanelY = panelRect.top + 0.5 * panelRect.height;
+
+        expect(middleOfPanelX).toBeApproximately(middleOfPageX);
+        expect(middleOfPanelY).toBeApproximately(middleOfPageY);
+      });
     });
 
     describe('should relatively position the panel', function() {
       var myButton;
       var myButtonRect;
+      var xPosition;
+      var yPosition;
 
       beforeEach(function() {
         myButton = '<button>myButton</button>';
         attachToBody(myButton);
         myButton = angular.element(document.querySelector('button'));
         myButtonRect = myButton[0].getBoundingClientRect();
+
+
+        xPosition = $mdPanel.xPosition;
+        yPosition = $mdPanel.yPosition;
       });
 
       it('with respect to an element', function() {
         var position = mdPanelPosition
             .relativeTo(myButton[0])
-            .withPanelXPosition('align-start')
-            .withPanelYPosition('align-tops');
+            .withPanelXPosition(xPosition.ALIGN_START)
+            .withPanelYPosition(yPosition.ALIGN_TOPS);
 
         config['position'] = position;
 
@@ -800,8 +988,8 @@ describe('$mdPanel', function() {
       it('with respect to a query selector', function() {
         var position = mdPanelPosition
             .relativeTo('button')
-            .withPanelXPosition('align-start')
-            .withPanelYPosition('align-tops');
+            .withPanelXPosition(xPosition.ALIGN_START)
+            .withPanelYPosition(yPosition.ALIGN_TOPS);
 
         config['position'] = position;
 
@@ -816,8 +1004,8 @@ describe('$mdPanel', function() {
       it('with respect to a JQLite object', function() {
         var position = mdPanelPosition
             .relativeTo(myButton)
-            .withPanelXPosition('align-start')
-            .withPanelYPosition('align-tops');
+            .withPanelXPosition(xPosition.ALIGN_START)
+            .withPanelYPosition(yPosition.ALIGN_TOPS);
 
         config['position'] = position;
 
@@ -833,7 +1021,7 @@ describe('$mdPanel', function() {
         it('above an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelYPosition('above');
+              .withPanelYPosition(yPosition.ABOVE);
 
           config['position'] = position;
 
@@ -846,7 +1034,7 @@ describe('$mdPanel', function() {
         it('top aligned with an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelYPosition('align-tops');
+              .withPanelYPosition(yPosition.ALIGN_TOPS);
 
           config['position'] = position;
 
@@ -859,7 +1047,7 @@ describe('$mdPanel', function() {
         it('centered with an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelYPosition('center');
+              .withPanelYPosition(yPosition.CENTER);
 
           config['position'] = position;
 
@@ -876,7 +1064,7 @@ describe('$mdPanel', function() {
         it('bottom aligned with an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelYPosition('align-bottoms');
+              .withPanelYPosition(yPosition.ALIGN_BOTTOMS);
 
           config['position'] = position;
 
@@ -889,7 +1077,7 @@ describe('$mdPanel', function() {
         it('below an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelYPosition('below');
+              .withPanelYPosition(yPosition.BELOW);
 
           config['position'] = position;
 
@@ -904,7 +1092,7 @@ describe('$mdPanel', function() {
         it('offset to the left of an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelXPosition('offset-start');
+              .withPanelXPosition(xPosition.OFFSET_START);
 
           config['position'] = position;
 
@@ -917,7 +1105,7 @@ describe('$mdPanel', function() {
         it('right aligned with an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelXPosition('align-end');
+              .withPanelXPosition(xPosition.ALIGN_END);
 
           config['position'] = position;
 
@@ -930,7 +1118,7 @@ describe('$mdPanel', function() {
         it('centered with an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelXPosition('center');
+              .withPanelXPosition(xPosition.CENTER);
 
           config['position'] = position;
 
@@ -947,7 +1135,7 @@ describe('$mdPanel', function() {
         it('left aligned with an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelXPosition('align-start');
+              .withPanelXPosition(xPosition.ALIGN_START);
 
           config['position'] = position;
 
@@ -960,7 +1148,7 @@ describe('$mdPanel', function() {
         it('offset to the right of an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelXPosition('offset-end');
+              .withPanelXPosition(xPosition.OFFSET_END);
 
           config['position'] = position;
 
