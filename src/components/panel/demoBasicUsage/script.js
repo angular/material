@@ -11,7 +11,7 @@ function BasicDemoCtrl($mdPanel) {
 BasicDemoCtrl.prototype.showDialog = function() {
   var position = this._mdPanel.newPanelPosition()
       .absolute()
-      .left()
+      .centerHorizontally()
       .top();
 
   var config = {
