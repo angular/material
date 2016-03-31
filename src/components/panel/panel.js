@@ -1010,6 +1010,15 @@ MdPanelRef.prototype._addStyles = function() {
     return; // Don't setup positioning.
   }
 
+  this._$rootScope.$applyAsync(angular.bind(this, this._configurePosition));
+};
+
+
+/**
+ * Configure the position of the panel.
+ * @private
+ */
+MdPanelRef.prototype._configurePosition = function() {
   /** POSITIONING STYLES **/
   var positionConfig = this._config['position'];
 
