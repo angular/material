@@ -31,6 +31,38 @@ describe('$mdPanel', function() {
     attachToBody($rootEl);
   });
 
+  beforeEach(function() {
+    jasmine.addMatchers({
+      /**
+       * Asserts that two values are within a range of each other. This is
+       * used for testing relative positioning. If no range is set, defaults
+       * to 1.
+       *
+       * Example Use:
+       * expect(panelTop).toBeApproximately(buttonTop, 1);
+       */
+      toBeApproximately: function() {
+        return {
+          compare: function(actual, expected, opt_epsilon) {
+            var epsilon = opt_epsilon || 1;
+
+            var actualNumber = parseFloat(actual);
+            var expectedNumber = parseFloat(expected);
+
+            var pass = Math.abs(expectedNumber - actualNumber) < epsilon;
+            var not = pass ? 'not ' : '';
+
+            return {
+              pass: pass,
+              message: 'Expected ' + expected + not + 'to be within ' +
+                  epsilon + ' of ' + actual
+            }
+          }
+        }
+      }
+    });
+  });
+
   afterEach(function() {
     attachedElements.forEach(function(el) {
       el.remove();
@@ -685,8 +717,8 @@ describe('$mdPanel', function() {
 
         var panelCss = document.querySelector(PANEL_EL).style;
         expect(panelCss.position).toEqual('fixed');
-        expect(parseFloat(panelCss.left)).toBeCloseTo(myButtonRect.left);
-        expect(parseFloat(panelCss.top)).toBeCloseTo(myButtonRect.top);
+        expect(panelCss.left).toBeApproximately(myButtonRect.left);
+        expect(panelCss.top).toBeApproximately(myButtonRect.top);
       });
 
       it('with respect to a query selector', function() {
@@ -701,8 +733,8 @@ describe('$mdPanel', function() {
 
         var panelCss = document.querySelector(PANEL_EL).style;
         expect(panelCss.position).toEqual('fixed');
-        expect(parseFloat(panelCss.left)).toBeCloseTo(myButtonRect.left);
-        expect(parseFloat(panelCss.top)).toBeCloseTo(myButtonRect.top);
+        expect(panelCss.left).toBeApproximately(myButtonRect.left);
+        expect(panelCss.top).toBeApproximately(myButtonRect.top);
       });
 
       it('with respect to a JQLite object', function() {
@@ -717,8 +749,8 @@ describe('$mdPanel', function() {
 
         var panelCss = document.querySelector(PANEL_EL).style;
         expect(panelCss.position).toEqual('fixed');
-        expect(parseFloat(panelCss.left)).toBeCloseTo(myButtonRect.left);
-        expect(parseFloat(panelCss.top)).toBeCloseTo(myButtonRect.top);
+        expect(panelCss.left).toBeApproximately(myButtonRect.left);
+        expect(panelCss.top).toBeApproximately(myButtonRect.top);
       });
 
       describe('vertically', function() {
@@ -732,7 +764,7 @@ describe('$mdPanel', function() {
           openPanel(config);
 
           var panelCss = document.querySelector(PANEL_EL).style;
-          expect(parseFloat(panelCss.bottom)).toBeCloseTo(myButtonRect.top);
+          expect(panelCss.bottom).toBeApproximately(myButtonRect.top);
         });
 
         it('top aligned with an element', function() {
@@ -745,7 +777,7 @@ describe('$mdPanel', function() {
           openPanel(config);
 
           var panelCss = document.querySelector(PANEL_EL).style;
-          expect(parseFloat(panelCss.top)).toBeCloseTo(myButtonRect.top);
+          expect(panelCss.top).toBeApproximately(myButtonRect.top);
         });
 
         it('centered with an element', function() {
@@ -762,7 +794,7 @@ describe('$mdPanel', function() {
               .getBoundingClientRect();
           var middleOfPanel = panelRect.top + 0.5 * panelRect.height;
 
-          expect(middleOfPanel).toBeCloseTo(middleOfButton);
+          expect(middleOfPanel).toBeApproximately(middleOfButton);
         });
 
         it('bottom aligned with an element', function() {
@@ -775,7 +807,7 @@ describe('$mdPanel', function() {
           openPanel(config);
 
           var panelCss = document.querySelector(PANEL_EL).style;
-          expect(parseFloat(panelCss.bottom)).toBeCloseTo(myButtonRect.bottom);
+          expect(panelCss.bottom).toBeApproximately(myButtonRect.bottom);
         });
 
         it('below an element', function() {
@@ -788,7 +820,7 @@ describe('$mdPanel', function() {
           openPanel(config);
 
           var panelCss = document.querySelector(PANEL_EL).style;
-          expect(parseFloat(panelCss.top)).toBeCloseTo(myButtonRect.bottom);
+          expect(panelCss.top).toBeApproximately(myButtonRect.bottom);
         });
       });
 
@@ -803,7 +835,7 @@ describe('$mdPanel', function() {
           openPanel(config);
 
           var panelCss = document.querySelector(PANEL_EL).style;
-          expect(parseFloat(panelCss.right)).toBeCloseTo(myButtonRect.left);
+          expect(panelCss.right).toBeApproximately(myButtonRect.left);
         });
 
         it('right aligned with an element', function() {
@@ -816,7 +848,7 @@ describe('$mdPanel', function() {
           openPanel(config);
 
           var panelCss = document.querySelector(PANEL_EL).style;
-          expect(parseFloat(panelCss.right)).toBeCloseTo(myButtonRect.right);
+          expect(panelCss.right).toBeApproximately(myButtonRect.right);
         });
 
         it('centered with an element', function() {
@@ -833,7 +865,7 @@ describe('$mdPanel', function() {
               .getBoundingClientRect();
           var middleOfPanel = panelRect.left + 0.5 * panelRect.width;
 
-          expect(middleOfPanel).toBeCloseTo(middleOfButton);
+          expect(middleOfPanel).toBeApproximately(middleOfButton);
         });
 
         it('left aligned with an element', function() {
@@ -846,7 +878,7 @@ describe('$mdPanel', function() {
           openPanel(config);
 
           var panelCss = document.querySelector(PANEL_EL).style;
-          expect(parseFloat(panelCss.left)).toBeCloseTo(myButtonRect.left);
+          expect(panelCss.left).toBeApproximately(myButtonRect.left);
         });
 
         it('offset to the right of an element', function() {
@@ -859,7 +891,7 @@ describe('$mdPanel', function() {
           openPanel(config);
 
           var panelCss = document.querySelector(PANEL_EL).style;
-          expect(parseFloat(panelCss.left)).toBeCloseTo(myButtonRect.right);
+          expect(panelCss.left).toBeApproximately(myButtonRect.right);
         });
       });
     });
