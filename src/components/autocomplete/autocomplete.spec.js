@@ -320,6 +320,67 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    describe('md-escape-options checks', function() {
+      var scope, ctrl, element;
+      var template = '\
+              <md-autocomplete\
+                  md-escape-options="{{escapeOptions}}"\
+                  md-search-text="searchText"\
+                  md-items="item in match(searchText)"\
+                  md-item-text="item.display"\
+                  placeholder="placeholder">\
+                <span md-highlight-text="searchText">{{item.display}}</span>\
+              </md-autocomplete>';
+      beforeEach( inject(function($timeout) {
+        scope = createScope();
+        element = compile(template, scope);
+        ctrl = element.controller('mdAutocomplete');
+
+        // Focus the input
+        ctrl.focus();
+        $timeout.flush();
+        expect(scope.searchText).toBe('');
+
+        scope.$apply('searchText = "test"');
+
+        expect(scope.searchText).toBe('test');
+
+        $timeout.flush();
+      }));
+
+      afterEach(function() { element.remove() });
+      it('does not clear the value nor blur when hitting escape', inject(function($mdConstant, $document) {
+        scope.$apply('escapeOptions = "none"');
+        scope.$apply(function() {
+          ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE));
+        });
+
+        expect(scope.searchText).toBe('test');
+        expect($document.activeElement).toBe(ctrl[0]);
+      }));
+
+      it('does not clear the value but does blur when hitting escape', inject(function($mdConstant, $document) {
+        scope.$apply('escapeOptions = "blur"');
+        scope.$apply(function() {
+          ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE));
+        });
+
+        expect(scope.searchText).toBe('test');
+        expect($document.activeElement).toBe(undefined);
+      }));
+
+      it('clear the value but does not blur when hitting escape', inject(function($mdConstant, $document) {
+        scope.$apply('escapeOptions = "clear"');
+        scope.$apply(function() {
+          ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE));
+        });
+
+        expect(scope.searchText).toBe('');
+        expect($document.activeElement).toBe(ctrl[0]);
+      }));
+
+    });
+
     it('should not show the progressbar when hitting escape on an empty input', inject(function($mdConstant, $timeout) {
       var scope = createScope();
       var template = '\
