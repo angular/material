@@ -24,10 +24,19 @@ function run {
   cp -Rf dist/* bower-material/
 
   cd bower-material
-  # remove stale layout files; newer ones are in `dist/layouts/`
+
+  # Remove stale files from older builds
   rm -f ./angular-material.layouts.css
   rm -f ./angular-material.layouts.min.css
+  rm -rf ./demos
 
+  # Restructure release files
+  mkdir -p ./modules/css ./modules/scss
+
+  cp ./core/services/layout/*.css ./modules/css
+  cp ./angular-material.scss ./modules/scss
+  cp ./layouts/*.css ./modules/css
+  cp ./layouts/*.scss ./modules/scss
 
   echo "-- Committing and tagging..."
   replaceJsonProp "bower.json" "version" "$VERSION"
