@@ -53,13 +53,13 @@ AnimationCtrl.prototype.showDialog = function() {
       });
       break;
     case 'slide':
-      animation.withAnimation(MdPanelAnimation.animation.SLIDE);
+      animation.withAnimation(this._mdPanel.animation.SLIDE);
       break;
     case 'scale':
-      animation.withAnimation(MdPanelAnimation.animation.SCALE);
+      animation.withAnimation(this._mdPanel.animation.SCALE);
       break;
     case 'fade':
-      animation.withAnimation(MdPanelAnimation.animation.FADE);
+      animation.withAnimation(this._mdPanel.animation.FADE);
       break;
     case 'none':
       animation = undefined;
