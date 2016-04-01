@@ -101,8 +101,9 @@ angular
  *     with the value 3.
  *   - `resolve` - `{Object=}`: Similar to locals, except it takes promises as
  *     values. The panel will not open until all of the promises resolve.
- *   - `attachTo` - `{Element=}`: The element to attach the panel to. Defaults
- *     to appending to the root element of the application.
+ *   - `attachTo` - `{(string|!angular.JQLite|!Element)=}`: The element to
+ *     attach the panel to. Defaults to appending to the root element of the
+ *     application.
  *   - `panelClass` - `{string=}`: A css class to apply to the panel element.
  *     This class should define any borders, box-shadow, etc. for the panel.
  *   - `position` - `{MdPanelPosition=}`: An MdPanelPosition object that
@@ -1000,8 +1001,7 @@ MdPanelRef.prototype._createPanel = function() {
     self._$mdCompiler.compile(self._config)
         .then(function(compileData) {
           self._panelContainer = compileData.link(self._config['scope']);
-          angular.element(self._config['attachTo']).append(
-              self._panelContainer);
+          getElement(self._config['attachTo']).append(self._panelContainer);
 
           self._panelEl = angular.element(
               self._panelContainer[0].querySelector('.md-panel'));
@@ -1082,7 +1082,7 @@ MdPanelRef.prototype._removeEventListener = function() {
  */
 MdPanelRef.prototype._configureEscapeToClose = function() {
   if (this._config['escapeToClose']) {
-    var parentTarget = this._config['attachTo'];
+    var parentTarget = getElement(this._config['attachTo']);
     var self = this;
 
     var keyHandlerFn = function (ev) {
