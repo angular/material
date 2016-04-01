@@ -256,55 +256,6 @@ describe('<md-chips>', function() {
         expect(scope.items[3].uppername).toBe('GRAPE');
       });
 
-      describe('when readonly', function() {
-        var element, ctrl;
-
-        it("properly toggles the controller's readonly property", function() {
-          element = buildChips(CHIP_READONLY_TEMPLATE);
-          ctrl = element.controller('mdChips');
-
-          expect(ctrl.readonly).toBeFalsy();
-
-          scope.$apply('isReadonly = true');
-
-          expect(ctrl.readonly).toBeTruthy();
-        });
-
-        it("properly toggles the wrapper's .md-readonly class", function() {
-          element = buildChips(CHIP_READONLY_TEMPLATE);
-          ctrl = element.controller('mdChips');
-
-          expect(element.find('md-chips-wrap')).not.toHaveClass('md-readonly');
-
-          scope.$apply('isReadonly = true');
-
-          expect(element.find('md-chips-wrap')).toHaveClass('md-readonly');
-        });
-
-        it('is false with empty items should not hide the chips wrapper', function() {
-          scope.isReadonly = false;
-          scope.items = [];
-          element = buildChips(CHIP_READONLY_TEMPLATE);
-
-          expect(element.find('md-chips-wrap').length).toBe(1);
-        });
-
-        it('is true with empty items should not hide the chips wrapper', function() {
-          scope.isReadonly = true;
-          scope.items = [];
-          element = buildChips(CHIP_READONLY_TEMPLATE);
-
-          expect(element.find('md-chips-wrap').length).toBe(1);
-        });
-
-        it('is true should not throw an error when used with an autocomplete', function() {
-          element = buildChips(CHIP_READONLY_AUTOCOMPLETE_TEMPLATE);
-          $timeout.flush();
-
-          expect($exceptionHandler.errors).toEqual([]);
-        });
-      });
-
       it('should disallow duplicate object chips', function() {
         var element = buildChips(CHIP_APPEND_TEMPLATE);
         var ctrl = element.controller('mdChips');
