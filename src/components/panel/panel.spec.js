@@ -1,5 +1,5 @@
 describe('$mdPanel', function() {
-  var $mdPanel, $rootScope, $rootEl, $templateCache, $q, $material;
+  var $mdPanel, $rootScope, $rootEl, $templateCache, $q, $material, $mdConstant;
   var panelRef;
   var attachedElements = [];
   var PANEL_WRAPPER_CLASS = '.md-panel-outer-wrapper';
@@ -21,6 +21,7 @@ describe('$mdPanel', function() {
     $templateCache = $injector.get('$templateCache');
     $q = $injector.get('$q');
     $material = $injector.get('$material');
+    $mdConstant = $injector.get('$mdConstant');
   };
 
   beforeEach(function() {
@@ -233,24 +234,64 @@ describe('$mdPanel', function() {
   });
 
   describe('config options:', function() {
-    it('should attach panel to a specific element', function() {
-      var parentEl = document.createElement('div');
-      parentEl.id = 'parent';
-      attachToBody(parentEl);
+    describe('should attach panel to a specific element', function() {
+      var parentEl;
 
-      var config = {
-        attachTo: angular.element(parentEl),
-        template: DEFAULT_TEMPLATE
-      };
+      beforeEach(function() {
+        parentEl = document.createElement('div');
+        parentEl.id = 'parent';
+        attachToBody(parentEl);
+      });
 
-      openPanel(config);
+      it('using an Element', function() {
+        var config = {
+          attachTo: parentEl,
+          template: DEFAULT_TEMPLATE
+        };
 
-      var panelWrapperEl = document.querySelector(PANEL_WRAPPER_CLASS);
-      expect(panelWrapperEl.parentElement).toBe(parentEl);
+        openPanel(config);
 
-      closePanel();
+        var panelWrapperEl = document.querySelector(PANEL_WRAPPER_CLASS);
+        expect(panelWrapperEl.parentElement).toBe(parentEl);
 
-      expect(parentEl.childElementCount).toEqual(0);
+        closePanel();
+
+        expect(parentEl.childElementCount).toEqual(0);
+      });
+
+
+      it('using an JQLite Object', function() {
+        var config = {
+          attachTo: angular.element(parentEl),
+          template: DEFAULT_TEMPLATE
+        };
+
+        openPanel(config);
+
+        var panelWrapperEl = document.querySelector(PANEL_WRAPPER_CLASS);
+        expect(panelWrapperEl.parentElement).toBe(parentEl);
+
+        closePanel();
+
+        expect(parentEl.childElementCount).toEqual(0);
+      });
+
+
+      it('using a query selector', function() {
+        var config = {
+          attachTo: '#parent',
+          template: DEFAULT_TEMPLATE
+        };
+
+        openPanel(config);
+
+        var panelWrapperEl = document.querySelector(PANEL_WRAPPER_CLASS);
+        expect(panelWrapperEl.parentElement).toBe(parentEl);
+
+        closePanel();
+
+        expect(parentEl.childElementCount).toEqual(0);
+      });
     });
 
     it('should apply a custom css class to the panel', function() {
@@ -335,7 +376,7 @@ describe('$mdPanel', function() {
       expect(PANEL_EL).not.toExist();
     });
 
-    it('should not close when escapeToClose set to false', inject(function($mdConstant) {
+    it('should not close when escapeToClose set to false', function() {
       openPanel();
 
       var container = panelRef._panelContainer;
@@ -346,9 +387,9 @@ describe('$mdPanel', function() {
       $rootScope.$apply();
 
       expect(PANEL_EL).toExist();
-    }));
+    });
 
-    it('should close when escapeToClose set to true', inject(function($mdConstant) {
+    it('should close when escapeToClose set to true', function() {
       var config = {
         escapeToClose: true
       };
@@ -365,7 +406,7 @@ describe('$mdPanel', function() {
       // TODO(ErinCoughlan) - Add this when destroy is added.
       // expect(panelRef).toBeUndefined();
       expect(PANEL_EL).not.toExist();
-    }));
+    });
 
     it('should create and cleanup focus traps', function() {
       var config = { template: DEFAULT_TEMPLATE, trapFocus: true };
