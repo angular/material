@@ -111,7 +111,7 @@ before investing significant effort in a planned Pull Request submission; it's l
 working on a related PR.
 
 * All contributions must be consistent with the Angular Material coding conventions. See the
-  [Coding Guidelines](dpcs/guides/CODING.md)
+  [Coding Guidelines](docs/guides/CODING.md)
 * Submit proposed changes or additions as GitHub pull requests. See the
   [Pull Request Guidelines](docs/guides/PULL_REQUESTS.md)
 
