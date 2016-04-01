@@ -93,7 +93,7 @@
   function createChangelog () {
     start(`Generating changelog from ${oldVersion.cyan} to ${newVersion.cyan}...`);
 
-    exec('git fetch --tags');
+    exec(`git fetch --tags ${origin}`);
     exec(`git checkout v${lastMajorVer} -- CHANGELOG.md`);
     exec(`gulp changelog --sha=$(git merge-base v${lastMajorVer} HEAD)`);
 
@@ -180,7 +180,7 @@
     pushCmds.push(
         `git tag v${newVersion} -f`,
         `git push ${origin} HEAD`,
-        'git push --tags'
+        `git push --tags ${origin}`
     );
   }
 
@@ -360,7 +360,7 @@
         'git add CHANGELOG.md',
         'git add package.json',
         `git commit -m "update version number in package.json to ${newVersion}"`,
-        'git push'
+        `git push ${origin} master`
     );
 
     function buildCommand () {
