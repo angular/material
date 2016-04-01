@@ -1,6 +1,6 @@
 md-autocomplete.md-THEME_NAME-theme {
   background: '{{background-A100}}';
-  &[disabled] {
+  &[disabled]:not([md-floating-label]) {
     background: '{{background-100}}';
   }
   button {
