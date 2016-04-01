@@ -234,24 +234,64 @@ describe('$mdPanel', function() {
   });
 
   describe('config options:', function() {
-    it('should attach panel to a specific element', function() {
-      var parentEl = document.createElement('div');
-      parentEl.id = 'parent';
-      attachToBody(parentEl);
+    describe('should attach panel to a specific element', function() {
+      var parentEl;
 
-      var config = {
-        attachTo: angular.element(parentEl),
-        template: DEFAULT_TEMPLATE
-      };
+      beforeEach(function() {
+        parentEl = document.createElement('div');
+        parentEl.id = 'parent';
+        attachToBody(parentEl);
+      });
 
-      openPanel(config);
+      it('using an Element', function() {
+        var config = {
+          attachTo: parentEl,
+          template: DEFAULT_TEMPLATE
+        };
 
-      var panelWrapperEl = document.querySelector(PANEL_WRAPPER_CLASS);
-      expect(panelWrapperEl.parentElement).toBe(parentEl);
+        openPanel(config);
 
-      closePanel();
+        var panelWrapperEl = document.querySelector(PANEL_WRAPPER_CLASS);
+        expect(panelWrapperEl.parentElement).toBe(parentEl);
 
-      expect(parentEl.childElementCount).toEqual(0);
+        closePanel();
+
+        expect(parentEl.childElementCount).toEqual(0);
+      });
+
+
+      it('using an JQLite Object', function() {
+        var config = {
+          attachTo: angular.element(parentEl),
+          template: DEFAULT_TEMPLATE
+        };
+
+        openPanel(config);
+
+        var panelWrapperEl = document.querySelector(PANEL_WRAPPER_CLASS);
+        expect(panelWrapperEl.parentElement).toBe(parentEl);
+
+        closePanel();
+
+        expect(parentEl.childElementCount).toEqual(0);
+      });
+
+
+      it('using a query selector', function() {
+        var config = {
+          attachTo: '#parent',
+          template: DEFAULT_TEMPLATE
+        };
+
+        openPanel(config);
+
+        var panelWrapperEl = document.querySelector(PANEL_WRAPPER_CLASS);
+        expect(panelWrapperEl.parentElement).toBe(parentEl);
+
+        closePanel();
+
+        expect(parentEl.childElementCount).toEqual(0);
+      });
     });
 
     it('should apply a custom css class to the panel', function() {
