@@ -1,0 +1,73 @@
+
+<div ng-controller="AppCtrl" layout="column" style="height:500px;" ng-cloak>
+
+  <section layout="row" flex>
+
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+
+      <md-toolbar class="md-theme-light">
+        <h1 class="md-toolbar-tools">Drag Enabled</h1>
+      </md-toolbar>
+      <md-content ng-controller="LeftCtrl" layout-padding>
+        <p>
+          This sidenav is able to be dragged. Through the drag gesture, it's possible to close the sidenav.
+        </p>
+        <md-button ng-click="close()" class="md-primary">
+          Close Sidenav Left
+        </md-button>
+      </md-content>
+
+    </md-sidenav>
+
+    <md-content flex layout-padding>
+
+      <div layout="column" layout-fill layout-align="top center">
+        <p>
+          You can simply close a sidenav by using a gesture. Simply drag the sidenav to close it.
+        </p>
+        <p>
+          The right sidenav allows dragging.
+        </p>
+        <p>
+          The left sidenav is disabled for dragging.
+        </p>
+
+        <div>
+          <md-button ng-click="toggleLeft()"
+            class="md-primary">
+            Toggle left
+          </md-button>
+        </div>
+
+        <div>
+          <md-button ng-click="toggleRight()"
+            ng-hide="isOpenRight()"
+            class="md-primary">
+            Toggle right
+          </md-button>
+        </div>
+      </div>
+
+      <div flex></div>
+
+    </md-content>
+
+    <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right" md-disable-drag="true">
+
+      <md-toolbar class="md-theme-indigo">
+        <h1 class="md-toolbar-tools">Drag Disabled</h1>
+      </md-toolbar>
+      <md-content layout-padding ng-controller="RightCtrl">
+        <md-button ng-click="close()" class="md-primary">
+          Close Sidenav Right
+        </md-button>
+        <p>
+          This sidenav disables the dragging gesture. It can be closed through the buttons.
+        </p>
+      </md-content>
+
+    </md-sidenav>
+
+  </section>
+
+</div>
