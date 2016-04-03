@@ -14,6 +14,11 @@ angular.module('material.core.theming', ['material.core.theming.palette'])
 
 /**
  * @ngdoc method
+ * @name $mdThemingProvider#registerStyles
+ * @param {string} styles The styles to be appended after angular material's built in theme css.
+ */
+/**
+ * @ngdoc method
  * @name $mdThemingProvider#setNonce
  * @param {string} nonceValue The nonce to be added as an attribute to the theme style tags.
  * Setting a value allows the use CSP policy without using the unsafe-inline directive.
@@ -135,6 +140,9 @@ var generateOnDemand = false;
 // Nonce to be added as an attribute to the generated themes style tags.
 var nonce = null;
 
+// Custom styles registered to be used in the theming of custom components.
+var registeredStyles = [];
+
 function ThemingProvider($mdColorPalette) {
   PALETTES = { };
   THEMES = { };
@@ -153,6 +161,9 @@ function ThemingProvider($mdColorPalette) {
     extendPalette: extendPalette,
     theme: registerTheme,
 
+    registerStyles: function(styles) {
+      registeredStyles.push(styles);
+    },
     setNonce: function(nonceValue) {
       nonce = nonceValue;
     },
@@ -488,6 +499,7 @@ function generateAllThemes($injector) {
   var head = document.head;
   var firstChild = head ? head.firstElementChild : null;
   var themeCss = $injector.has('$MD_THEME_CSS') ? $injector.get('$MD_THEME_CSS') : '';
+  themeCss += registeredStyles.join('');
 
   if ( !firstChild ) return;
   if (themeCss.length === 0) return; // no rules, so no point in running this expensive task
