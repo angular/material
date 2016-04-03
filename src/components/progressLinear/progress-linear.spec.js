@@ -136,4 +136,15 @@ describe('mdProgressLinear', function() {
 
     expect(bar2.style[$mdConstant.CSS.TRANSFORM]).toBeFalsy();
   }));
+
+  it('should hide the element if it is disabled', inject(function($compile, $rootScope) {
+    var element = $compile('<div>' +
+      '<md-progress-linear value="25" disabled>' +
+      '</md-progress-linear>' +
+      '</div>')($rootScope);
+
+    var progress = element.find('md-progress-linear').eq(0);
+
+    expect(progress.hasClass('_md-progress-linear-disabled')).toBe(true);
+  }));
 });
