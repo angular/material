@@ -1,12 +1,12 @@
 $select-checkbox-border-radius: 2px !default;
 $select-checkbox-border-width: 2px !default;
 $select-checkbox-width: rem(1.4) !default;
-$select-option-height: 48px;
-$select-option-padding: 16px;
-$select-container-padding: 16px;
-$select-container-transition-duration: 350ms;
+$select-option-height: 48px !default;
+$select-option-padding: 16px !default;
+$select-container-padding: 16px !default;
+$select-container-transition-duration: 350ms !default;
 
-$select-max-visible-options: 5;
+$select-max-visible-options: 5 !default;
 
 ._md-select-menu-container {
   position: fixed;

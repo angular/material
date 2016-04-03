@@ -118,7 +118,7 @@ md-datepicker {
 // Down triangle/arrow indicating that the datepicker can be opened.
 // We can do this entirely with CSS without needing to load an icon.
 // See https://css-tricks.com/snippets/css/css-triangle/
-$md-date-arrow-size: 5px;
+$md-date-arrow-size: 5px !default;
 .md-datepicker-expand-triangle {
   // Center the triangle inside of the button so that the
   // ink ripple origin looks correct.
