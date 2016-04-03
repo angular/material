@@ -1,12 +1,12 @@
-$tooltip-fontsize-lg: rem(1);
-$tooltip-fontsize-sm: rem(1.4);
-$tooltip-height-lg: rem(2.2);
-$tooltip-height-sm: rem(3.2);
-$tooltip-top-margin-lg: rem(1.4);
-$tooltip-top-margin-sm: rem(2.4);
-$tooltip-lr-padding-lg: rem(0.8);
-$tooltip-lr-padding-sm: rem(1.6);
-$tooltip-max-width: rem(3.20);
+$tooltip-fontsize-lg: rem(1) !default;
+$tooltip-fontsize-sm: rem(1.4) !default;
+$tooltip-height-lg: rem(2.2) !default;
+$tooltip-height-sm: rem(3.2) !default;
+$tooltip-top-margin-lg: rem(1.4) !default;
+$tooltip-top-margin-sm: rem(2.4) !default;
+$tooltip-lr-padding-lg: rem(0.8) !default;
+$tooltip-lr-padding-sm: rem(1.6) !default;
+$tooltip-max-width: rem(3.20) !default;
 
 md-tooltip {
   position: absolute;
