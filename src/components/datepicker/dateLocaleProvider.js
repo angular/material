@@ -54,7 +54,7 @@
    *
    *     $mdDateLocaleProvider.formatDate = function(date) {
    *       var m = moment(date);
-   *       return m.isValid() ? m.format('L') : date;
+   *       return m.isValid() ? m.format('L') : '';
    *     };
    *
    *     $mdDateLocaleProvider.monthHeaderFormatter = function(date) {
