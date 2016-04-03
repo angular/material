@@ -26,12 +26,12 @@
       colors.
     </p>
 
-    <div ng-show="vm.activated" layout="row" layout-sm="column" layout-align="space-around">
-      <md-progress-circular class="md-hue-2" md-diameter="20px"></md-progress-circular>
-      <md-progress-circular class="md-accent" md-diameter="40"></md-progress-circular>
-      <md-progress-circular class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
-      <md-progress-circular class="md-warn md-hue-3" md-diameter="70"></md-progress-circular>
-      <md-progress-circular md-diameter="96"></md-progress-circular>
+    <div layout="row" layout-sm="column" layout-align="space-around">
+      <md-progress-circular ng-disabled="!vm.activated" class="md-hue-2" md-diameter="20px"></md-progress-circular>
+      <md-progress-circular ng-disabled="!vm.activated" class="md-accent" md-diameter="40"></md-progress-circular>
+      <md-progress-circular ng-disabled="!vm.activated" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
+      <md-progress-circular ng-disabled="!vm.activated" class="md-warn md-hue-3" md-diameter="70"></md-progress-circular>
+      <md-progress-circular ng-disabled="!vm.activated" md-diameter="96"></md-progress-circular>
     </div>
   </md-content>
 
@@ -42,12 +42,12 @@
       This is an example of the <b>&lt;md-progress-circular&gt;</b> component, with a dark theme.
     </p>
 
-    <div ng-show="vm.activated" layout="row" layout-sm="column" layout-align="space-around">
-      <md-progress-circular class="md-hue-2" md-diameter="20px"></md-progress-circular>
-      <md-progress-circular class="md-accent" md-diameter="40"></md-progress-circular>
-      <md-progress-circular class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
-      <md-progress-circular class="md-warn md-hue-3" md-diameter="70"></md-progress-circular>
-      <md-progress-circular md-diameter="96"></md-progress-circular>
+    <div layout="row" layout-sm="column" layout-align="space-around">
+      <md-progress-circular ng-disabled="!vm.activated" class="md-hue-2" md-diameter="20px"></md-progress-circular>
+      <md-progress-circular ng-disabled="!vm.activated" class="md-accent" md-diameter="40"></md-progress-circular>
+      <md-progress-circular ng-disabled="!vm.activated" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
+      <md-progress-circular ng-disabled="!vm.activated" class="md-warn md-hue-3" md-diameter="70"></md-progress-circular>
+      <md-progress-circular ng-disabled="!vm.activated" md-diameter="96"></md-progress-circular>
     </div>
   </md-content>
 

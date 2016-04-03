@@ -26,7 +26,7 @@
   </p>
   <md-progress-linear class="md-warn" md-mode="buffer" value="{{vm.determinateValue}}"
                       md-buffer-value="{{vm.determinateValue2}}"
-                      ng-show="vm.showList[0]"></md-progress-linear>
+                      ng-disabled="!vm.showList[0]"></md-progress-linear>
 
   <h4 class="md-title">Query</h4>
 
@@ -36,7 +36,7 @@
   </p>
 
   <div class="container" ng-class="{'visible' : !vm.activated}">
-    <md-progress-linear md-mode="query" ng-show="vm.showList[1]"></md-progress-linear>
+    <md-progress-linear md-mode="query" ng-disabled="!vm.showList[1]"></md-progress-linear>
     <div class="bottom-block">
       <span>Loading application libraries...</span>
     </div>
