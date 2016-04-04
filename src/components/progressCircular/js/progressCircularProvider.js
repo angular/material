@@ -44,7 +44,7 @@ function MdProgressCircularProvider() {
   var progressConfig = {
     progressSize: 50,
     strokeWidth: 10,
-    duration: 1000,
+    duration: 100,
     easeFn: linearEase,
 
     durationIndeterminate: 500,
