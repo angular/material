@@ -108,6 +108,8 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdThe
       startIndeterminateAnimation();
     }
 
+    scope.$on('$destroy', cleanupIndeterminateAnimation);
+
     scope.$watchGroup(['value', 'mdMode', function() {
       var isDisabled = node.disabled;
 
@@ -219,6 +221,8 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdThe
       endIndeterminate = -temp;
     }
 
+    var r;
+
     function startIndeterminateAnimation() {
       if (!interval) {
         var startTime = $mdUtil.now();
@@ -231,7 +235,7 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdThe
         // This animates the indeterminate rotation. This can be achieved much easier
         // with CSS keyframes, however IE11 seems to have problems centering the rotation
         // which causes a wobble in the indeterminate animation.
-        $$rAF(function animation(now) {
+        r = $$rAF(function animation(now) {
           var timestamp = now || $mdUtil.now();
           var currentTime = timestamp - startTime;
           var rotation = $mdProgressCircular.easingPresets.linearEase(currentTime, 0, 360, animationDuration);
@@ -239,7 +243,11 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdThe
           path.attr('transform', 'rotate(' + rotation + radius + ')');
 
           if (interval) {
-            $$rAF(animation);
+            if(r){
+              r();
+            }
+
+            r = $$rAF(animation);
           } else {
             path.removeAttr('transform');
           }
