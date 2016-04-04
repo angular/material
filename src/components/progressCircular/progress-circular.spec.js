@@ -106,6 +106,11 @@ describe('mdProgressCircular', function() {
     expect(element.hasClass('_md-progress-circular-disabled')).toBe(true);
   });
 
+  it('should not throw the browser in an infinite loop when flushing the animations', inject(function($animate) {
+    var progress = buildIndicator('<md-progress-circular md-mode="indeterminate"></md-progress-circular>');
+    $animate.flush();
+  }));
+
   /**
    * Build a progressCircular
    */

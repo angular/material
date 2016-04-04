@@ -79,7 +79,7 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdThe
         var mode = hasValue ? MODE_DETERMINATE : MODE_INDETERMINATE;
         var info = "Auto-adding the missing md-mode='{0}' to the ProgressCircular element";
 
-          // $log.debug( $mdUtil.supplant(info, [mode]) );
+        $log.debug( $mdUtil.supplant(info, [mode]) );
         attrs.$set('mdMode', mode);
       } else {
         attrs.$set('mdMode', attrs.mdMode.trim());
@@ -97,6 +97,8 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdThe
     var endIndeterminate = $mdProgressCircular.endIndeterminate;
     var rotationIndeterminate = 0;
     var lastAnimationId = 0;
+    var lastDrawFrame;
+    var lastRotationFrame;
     var interval;
 
     $mdTheming(element);
@@ -107,6 +109,12 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdThe
     if(scope.mdMode === MODE_INDETERMINATE){
       startIndeterminateAnimation();
     }
+
+    scope.$on('$destroy', function() {
+      cleanupIndeterminateAnimation();
+      lastDrawFrame && lastDrawFrame();
+      lastRotationFrame && lastRotationFrame();
+    });
 
     scope.$watchGroup(['value', 'mdMode', function() {
       var isDisabled = node.disabled;
@@ -184,7 +192,7 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdThe
       if (animateTo === animateFrom) {
         path.attr('d', getSvgArc(animateTo, diameter, pathDiameter, rotation));
       } else {
-        $$rAF(function animation(now) {
+        lastDrawFrame = $$rAF(function animation(now) {
           var currentTime = $window.Math.max(0, $window.Math.min((now || $mdUtil.now()) - startTime, animationDuration));
 
           path.attr('d', getSvgArc(
@@ -194,8 +202,10 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdThe
             rotation
           ));
 
+          lastDrawFrame && lastDrawFrame();
+
           if (id === lastAnimationId && currentTime < animationDuration) {
-            $$rAF(animation);
+            lastDrawFrame = $$rAF(animation);
           }
         });
       }
@@ -231,7 +241,7 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdThe
         // This animates the indeterminate rotation. This can be achieved much easier
         // with CSS keyframes, however IE11 seems to have problems centering the rotation
         // which causes a wobble in the indeterminate animation.
-        $$rAF(function animation(now) {
+        lastRotationFrame = $$rAF(function animation(now) {
           var timestamp = now || $mdUtil.now();
           var currentTime = timestamp - startTime;
           var rotation = $mdProgressCircular.easingPresets.linearEase(currentTime, 0, 360, animationDuration);
@@ -239,7 +249,8 @@ function MdProgressCircularDirective($$rAF, $window, $mdProgressCircular, $mdThe
           path.attr('transform', 'rotate(' + rotation + radius + ')');
 
           if (interval) {
-            $$rAF(animation);
+            lastRotationFrame && lastRotationFrame();
+            lastRotationFrame = $$rAF(animation);
           } else {
             path.removeAttr('transform');
           }
