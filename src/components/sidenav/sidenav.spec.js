@@ -341,13 +341,20 @@ describe('mdSidenav', function() {
           var instance;
 
           // Lookup deferred (not existing) instance
-          $mdSidenav('left').then( function(inst) { instance = inst; });
+          $mdSidenav('left').then(function(inst) {
+            // The instance will be not the controller, because we are creating our public API with
+            // the stored configuration approach. That means that the instance is actually the set of
+            // the registered methods of the configuration.
+            instance = inst;
+          });
+
           expect(instance).toBeUndefined();
 
           // Instantiate `left` sidenav component
           var el = setup('md-component-id="left"');
 
           $timeout.flush();
+
           expect(instance).toBeTruthy();
           expect(instance.isOpen()).toBeFalsy();
 
