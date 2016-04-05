@@ -85,19 +85,33 @@ function buildModule(module, opts) {
   var name = module.split('.').pop();
   utils.copyDemoAssets(name, 'src/components/', 'dist/demos/');
 
-  var stream = utils.filesForModule(module)
-      .pipe(filterNonCodeFiles())
-      .pipe(gulpif('*.scss', buildModuleStyles(name)))
-      .pipe(gulpif('*.js', buildModuleJs(name)));
+  var stream = utils.filesForModule(module);
+
   if (module === 'material.core') {
+    stream = stream.pipe(filter(function(x) {
+      // We are not injecting the layout-attributes selectors into the core module css,
+      // otherwise we would have the layout-classes and layout-attributes in there.
+      return !/.*layout-attributes\.scss/g.test(x.path);
+    }));
+    stream = baseStream(stream);
     stream = splitStream(stream);
+  } else {
+    stream = baseStream(stream);
   }
+
   return stream
       .pipe(BUILD_MODE.transform())
       .pipe(insert.prepend(config.banner))
       .pipe(gulpif(opts.minify, buildMin()))
       .pipe(gulpif(opts.useBower, buildBower()))
       .pipe(gulp.dest(BUILD_MODE.outputDir + name));
+
+  function baseStream(stream) {
+    return stream
+      .pipe(filterNonCodeFiles())
+      .pipe(gulpif('*.scss', buildModuleStyles(name)))
+      .pipe(gulpif('*.js', buildModuleJs(name)));
+  }
 
   function splitStream (stream) {
     var js = series(stream, themeBuildStream())
@@ -157,8 +171,8 @@ function buildModule(module, opts) {
     return lazypipe()
         .pipe(insert.prepend, baseStyles)
         .pipe(gulpif, /theme.scss/,
-        rename(name + '-default-theme.scss'), concat(name + '.scss')
-    )
+          rename(name + '-default-theme.scss'), concat(name + '.scss')
+        )
         .pipe(sass)
         .pipe(autoprefix)
     (); // invoke the returning fn to create our pipe
