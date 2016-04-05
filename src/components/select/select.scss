@@ -236,7 +236,7 @@ md-optgroup {
 }
 
 md-select-menu[multiple] {
-  md-option[md-checkbox-enabled] {
+  md-option._md-checkbox-enabled {
     @include rtl(padding-left, $select-option-padding * 2.5, $select-option-padding);
     @include rtl(padding-right, $select-option-padding, $select-option-padding * 2.5);
 
