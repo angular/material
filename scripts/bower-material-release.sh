@@ -21,6 +21,9 @@ function run {
 
   echo "-- Copying in build files..."
 
+  rm -rf bower-material/core
+  rm -rf bower-material/modules/css
+
   cp -Rf dist/* bower-material/
 
   cd bower-material
@@ -38,7 +41,7 @@ function run {
   cp ./layouts/*.scss        ./modules/scss
 
   # Clone the layout CSS
-  cp ./layouts/*.css         ./modules/css
+  cp ./layouts/*.css         ./modules/layouts
 
   # Cleanup
   rm -f ./angular-material.scss
