@@ -71,10 +71,10 @@ md-select-menu.md-THEME_NAME-theme {
 }
 
 
-[md-checkbox-enabled].md-THEME_NAME-theme {
+.md-checkbox-enabled.md-THEME_NAME-theme {
   @include checkbox-primary('[selected]');
 
-  md-option ._md-text {
+  md-option .md-text {
     color: '{{background-900-0.87}}';
   }
 }
