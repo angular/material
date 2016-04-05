@@ -81,7 +81,7 @@ md-select-menu.md-THEME_NAME-theme {
   }
 }
 
-[md-checkbox-enabled].md-THEME_NAME-theme {
+._md-checkbox-enabled.md-THEME_NAME-theme {
   @include checkbox-primary('[selected]');
 
   md-option ._md-text {
