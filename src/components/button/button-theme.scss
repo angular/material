@@ -181,6 +181,14 @@ a.md-THEME_NAME-theme:not(.md-button) {
     }
   }
 
+  &.md-accent {
+    color: '{{accent-color}}';
+
+    &:hover {
+      color: '{{accent-A700}}';
+    }
+  }
+
   &.md-warn {
     color: '{{warn-color}}';
 
