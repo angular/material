@@ -23,6 +23,7 @@ function run {
 
   rm -rf bower-material/core
   rm -rf bower-material/modules/css
+  rm -rf bower-material/modules/scss
 
   cp -Rf dist/* bower-material/
 
@@ -32,16 +33,15 @@ function run {
   rm -f ./angular-material.layouts.css
   rm -f ./angular-material.layouts.min.css
   rm -rf ./demos
+  rm -rf ./core
 
   # Restructure release files
   mkdir -p ./modules/css ./modules/scss
 
-  # Repackage the raw SCSS
-  cp ./angular-material.scss ./modules/scss
-  cp ./layouts/*.scss        ./modules/scss
-
-  # Clone the layout CSS
-  cp ./layouts/*.css         ./modules/layouts
+  # Repackage the raw SCSS & Clone the layout CSS
+  cp ./angular-material.scss ./modules/scss/
+  cp ./layouts/*.scss ./modules/scss/
+  cp ./layouts/*.css ./modules/layouts/
 
   # Cleanup
   rm -f ./angular-material.scss
