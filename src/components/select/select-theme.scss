@@ -71,9 +71,9 @@ md-select-menu.md-THEME_NAME-theme {
           color: '{{primary-600}}';
         }
         &.md-accent {
-          color: '{{accent-500}}';
+          color: '{{accent-color}}';
           &:focus {
-            color: '{{accent-600}}';
+            color: '{{accent-A700}}';
           }
         }
       }

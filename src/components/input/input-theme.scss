@@ -37,20 +37,20 @@ md-input-container.md-THEME_NAME-theme {
     }
     &.md-input-focused {
       .md-input {
-        border-color: '{{primary-500}}';
+        border-color: '{{primary-color}}';
       }
       label {
-        color: '{{primary-500}}';
+        color: '{{primary-color}}';
       }
       md-icon {
-        color: '{{primary-500}}';
+        color: '{{primary-color}}';
       }
       &.md-accent {
         .md-input {
-          border-color: '{{accent-500}}';
+          border-color: '{{accent-color}}';
         }
         label {
-          color: '{{accent-500}}';
+          color: '{{accent-color}}';
         }
       }
       &.md-warn {
