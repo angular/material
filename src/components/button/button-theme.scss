@@ -164,6 +164,14 @@ a.md-THEME_NAME-theme:not(.md-button) {
       color: '{{primary-700}}';
     }
   }
+  
+  &.md-accent {
+    color: '{{accent-color}}';
+
+    &:hover {
+      color: '{{accent-700}}';
+    }
+  }
 
   &.md-accent {
     color: '{{accent-color}}';
