@@ -24,6 +24,7 @@ function run {
   rm -rf bower-material/core
   rm -rf bower-material/modules/css
   rm -rf bower-material/modules/scss
+  rm -rf bower-material/layouts
 
   cp -Rf dist/* bower-material/
 
@@ -36,16 +37,17 @@ function run {
   rm -rf ./core
 
   # Restructure release files
-  mkdir -p ./modules/css ./modules/scss
+  mkdir -p ./modules/layouts ./modules/scss
 
   # Repackage the raw SCSS & Clone the layout CSS
   cp ./angular-material.scss ./modules/scss/
   cp ./layouts/*.scss ./modules/scss/
+
   cp ./layouts/*.css ./modules/layouts/
 
   # Cleanup
   rm -f ./angular-material.scss
-  rm -f ./layouts/*.scss
+  rm -rf ./layouts/
 
 
   echo "-- Committing and tagging..."
