@@ -998,6 +998,10 @@ MdPanelRef.prototype.focusOnOpen = function() {
 MdPanelRef.prototype._createPanel = function() {
   var self = this;
   return this._$q(function(resolve, reject) {
+    if (!self._config.locals) {
+      self._config.locals = {};
+    }
+    self._config.locals.mdPanelRef = self;
     self._$mdCompiler.compile(self._config)
         .then(function(compileData) {
           self._panelContainer = compileData.link(self._config['scope']);
