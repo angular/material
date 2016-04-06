@@ -307,12 +307,13 @@ md-input-container {
   .md-input {
     &[disabled],
     [disabled] & {
-      background-position: 0 bottom;
+      // The negative border width offsets the dotted "border" so
+      // it's placed in the same place as the solid one before it.
+      background-position: bottom $input-border-width-default * -1 left 0;
       // This background-size is coordinated with a linear-gradient set in input-theme.scss
       // to create a dotted line under the input.
       background-size: 4px 1px;
       background-repeat: repeat-x;
-      margin-bottom: -1px; // Shift downward so dotted line is positioned the same as other bottom borders
     }
   }
 

@@ -76,7 +76,7 @@ md-input-container.md-THEME_NAME-theme {
   }
   .md-input {
     &[disabled],
-    [disabled] {
+    [disabled] & {
       border-bottom-color: transparent;
       color: '{{foreground-3}}';
       background-image: linear-gradient(to right, '{{foreground-3}}' 0%, '{{foreground-3}}' 33%, transparent 0%);
