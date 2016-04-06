@@ -743,6 +743,9 @@ function MdPanelRef(config, $injector) {
   /** @private @const {!angular.Scope} */
   this._$rootScope = $injector.get('$rootScope');
 
+  /** @private @const {!angular.$animate} */
+  this._$animate = $injector.get('$animate');
+
 
   // Public variables.
   /**
@@ -1063,6 +1066,12 @@ MdPanelRef.prototype._createPanel = function() {
           // Add a custom CSS class.
           if (self._config['panelClass']) {
             self._panelEl.addClass(self._config['panelClass']);
+          }
+
+          // Panel may be outside the $rootElement, tell ngAnimate to animate
+          // regardless.
+          if (self._$animate.pin) {
+            self._$animate.pin(self._panelContainer, self._config['attachTo']);
           }
 
           self._addStyles();
