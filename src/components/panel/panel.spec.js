@@ -9,6 +9,7 @@ describe('$mdPanel', function() {
   var FULLSCREEN_CLASS = '_md-panel-fullscreen';
   var DEFAULT_TEMPLATE = '<div>Hello World!</div>';
   var DEFAULT_CONFIG = { template: DEFAULT_TEMPLATE };
+  var PANEL_ID_PREFIX = 'panel_';
 
   /**
    * @param {!angular.$injector} $injector
@@ -597,12 +598,13 @@ describe('$mdPanel', function() {
 
     it('should allow locals to be injected in the controller', function() {
       var htmlContent = 'Tiramisu';
-      var template = '<div>{{ ctrl.content }}</div>';
+      var template = '<div>{{ ctrl.content }} {{ ctrl.myPanel.id }}</div>';
 
       var config = {
         template: template,
-        controller: function Ctrl(content) {
+        controller: function Ctrl(content, mdPanelRef) {
           this.content = content;
+          this.myPanel = mdPanelRef;
         },
         controllerAs: 'ctrl',
         locals: { content: htmlContent },
@@ -612,16 +614,18 @@ describe('$mdPanel', function() {
       openPanel(config);
 
       expect(PANEL_EL).toContainHtml(htmlContent);
+      expect(PANEL_EL).toContainHtml(PANEL_ID_PREFIX);
     });
 
     it('should bind locals to the controller', function() {
       var htmlContent = 'Apple Pie';
-      var template = '<div>{{ ctrl.content }}</div>';
+      var template = '<div>{{ ctrl.content }} {{ ctrl.mdPanelRef.id }}</div>';
 
       var config = {
         template: template,
         controller: function Ctrl() {
           this.content; // Populated via bindToController.
+          this.mdPanelRef;
         },
         controllerAs: 'ctrl',
         locals: { content: htmlContent }
@@ -630,6 +634,36 @@ describe('$mdPanel', function() {
       openPanel(config);
 
       expect(PANEL_EL).toContainHtml(htmlContent);
+      expect(PANEL_EL).toContainHtml(PANEL_ID_PREFIX);
+    });
+
+    it('should inject mdPanelRef to the controller', function() {
+      var htmlContent = 'Cupcake';
+      var template =
+          '<button ng-click="ctrl.closeSelf()">{{ ctrl.content }}</button>';
+
+      function Ctrl() {
+        this.content; // Populated via bindToController.
+        this.mdPanelRef;
+      }
+
+      Ctrl.prototype.closeSelf = function() {
+        this.mdPanelRef.close();
+      };
+
+      var config = {
+        template: template,
+        controller: Ctrl,
+        controllerAs: 'ctrl',
+        locals: { content: htmlContent }
+      };
+
+      openPanel(config);
+
+      expect(PANEL_EL).toContainHtml(htmlContent);
+
+      document.querySelector(PANEL_EL + ' button').click();
+      expect(PANEL_EL).not.toExist();
     });
   });
 
