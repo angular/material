@@ -743,6 +743,9 @@ function MdPanelRef(config, $injector) {
   /** @private @const {!angular.Scope} */
   this._$rootScope = $injector.get('$rootScope');
 
+  /** @private @const {!angular.$animate} */
+  this._$animate = $injector.get('$animate');
+
 
   // Public variables.
   /**
@@ -1063,6 +1066,13 @@ MdPanelRef.prototype._createPanel = function() {
           // Add a custom CSS class.
           if (self._config['panelClass']) {
             self._panelEl.addClass(self._config['panelClass']);
+          }
+
+          // Panel may be outside the $rootElement, tell ngAnimate to animate
+          // regardless.
+          if (self._$animate.pin) {
+            self._$animate.pin(self._panelContainer,
+                getElement(self._config['attachTo']));
           }
 
           self._addStyles();
@@ -1613,7 +1623,7 @@ MdPanelPosition.prototype.getTransform = function() {
 
   // It's important to trim the result, because the browser will ignore the set
   // operation if the string contains only whitespace.
-  return (translateX + translateY).trim();
+  return (translateX + ' ' + translateY).trim();
 };
 
 
@@ -1631,7 +1641,6 @@ MdPanelPosition.prototype._reduceTranslateValues =
         return translateFn + '(' + translation + ')';
       }).join(' ');
     };
-
 
 
 /**
