@@ -1,6 +1,6 @@
 angular.module('panelDemo', ['ngMaterial'])
     .controller('BasicDemoCtrl', BasicDemoCtrl)
-    .controller('DialogCtrl', DialogCtrl);
+    .controller('PanelDialogCtrl', PanelDialogCtrl);
 
 
 function BasicDemoCtrl($mdPanel) {
@@ -16,12 +16,9 @@ BasicDemoCtrl.prototype.showDialog = function() {
 
   var config = {
     attachTo: angular.element(document.querySelector('.demo-md-panel')),
-    controller: DialogCtrl,
+    controller: PanelDialogCtrl,
     controllerAs: 'ctrl',
     templateUrl: 'panel.tmpl.html',
-    locals: {
-      closeFn: angular.bind(this, this.closeDialog)
-    },
     panelClass: 'demo-dialog-example',
     position: position,
     trapFocus: true,
@@ -32,10 +29,12 @@ BasicDemoCtrl.prototype.showDialog = function() {
 };
 
 
-BasicDemoCtrl.prototype.closeDialog = function() {
-  this._panelRef && this._panelRef.close();
-};
-
-
 // Necessary to pass locals to the dialog template.
-function DialogCtrl() { }
+function PanelDialogCtrl(mdPanelRef) {
+  this._mdPanelRef = mdPanelRef;
+}
+
+
+PanelDialogCtrl.prototype.closeDialog = function() {
+  this._mdPanelRef && this._mdPanelRef.close();
+};
