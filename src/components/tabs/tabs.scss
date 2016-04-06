@@ -70,11 +70,17 @@ md-tabs {
       }
     }
   }
+  &[md-button-offset] {
+    md-tabs-canvas {
+      margin: 0 $tabs-paginator-width;
+    }
+  }
 }
 
 md-tabs-wrapper {
   display: block;
   position: relative;
+  z-index: $z-index-tabs;
   // transform is needed for iOS Safari to prevent content from disappearing on scroll
   transform: translate3d(0, 0, 0);
   md-prev-button, md-next-button {
@@ -178,6 +184,7 @@ md-tabs-content-wrapper {
   right: 0;
   bottom: 0;
   overflow: hidden;
+  z-index: $z-index-tabs-content;
 }
 
 md-tab-content {
