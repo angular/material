@@ -1,67 +1,21 @@
-@mixin md-tab-primary {
+@mixin md-tab-theme($theme) {
   > md-tabs-wrapper {
-    background-color: '{{primary-color}}';
+    background-color: '{{#{$theme}-color}}';
     > md-tabs-canvas {
       > md-pagination-wrapper {
         > md-tab-item:not([disabled]) {
-          color: '{{primary-100}}';
           &.md-active, &.md-focused {
             &, md-icon {
-              color: '{{primary-contrast}}';
+              color: '{{#{$theme}-contrast}}';
             }
           }
           &.md-focused {
-            background: '{{primary-contrast-0.1}}';
+            background: '{{#{$theme}-contrast-0.1}}';
           }
         }
       }
     }
   }
-}
-@mixin md-tab-warn {
-  > md-tabs-wrapper {
-    background-color: '{{warn-color}}';
-    > md-tabs-canvas {
-      > md-pagination-wrapper {
-        > md-tab-item:not([disabled]) {
-          color: '{{warn-100}}';
-          &.md-active, &.md-focused {
-            &, md-icon {
-              color: '{{warn-contrast}}';
-            }
-          }
-          &.md-focused {
-            background: '{{warn-contrast-0.1}}';
-          }
-        }
-      }
-    }
-  }
-}
-@mixin md-tab-accent {
-  > md-tabs-wrapper {
-    background-color: '{{accent-color}}';
-    > md-tabs-canvas {
-      > md-pagination-wrapper {
-        > md-tab-item:not([disabled]) {
-          color: '{{accent-A100}}';
-          &.md-active, &.md-focused {
-            &, md-icon {
-              color: '{{accent-contrast}}';
-            }
-          }
-          &.md-focused {
-            background: '{{accent-contrast-0.1}}';
-          }
-        }
-        > md-ink-bar {
-          color: '{{primary-600-1}}';
-          background: '{{primary-600-1}}';
-        }
-      }
-    }
-  }
-
 }
 md-tabs.md-THEME_NAME-theme {
   md-tabs-wrapper {
@@ -97,25 +51,37 @@ md-tabs.md-THEME_NAME-theme {
     }
   }
 
+  &.md-accent, &.md-primary, &.md-warn{
+    > md-tabs-wrapper {
+      > md-tabs-canvas {
+        > md-pagination-wrapper {
+          > md-tab-item:not([disabled]) {
+            color: rgba(255, 255, 255, 0.7);
+          }
+        }
+      }
+    }
+  }
+
   &.md-accent {
-    @include md-tab-accent();
+    @include md-tab-theme('accent');
   }
 
   &.md-primary {
-    @include md-tab-primary();
+    @include md-tab-theme('primary');
   }
 
   &.md-warn {
-    @include md-tab-warn();
+    @include md-tab-theme('warn');
   }
 }
 
 md-toolbar > md-tabs.md-THEME_NAME-theme {
-  @include md-tab-primary();
+  @include md-tab-theme('primary');
 }
 md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme {
-  @include md-tab-accent();
+  @include md-tab-theme('accent');
 }
 md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme {
-  @include md-tab-warn();
+  @include md-tab-theme('warn');
 }
