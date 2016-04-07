@@ -118,6 +118,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
     triggerElement = triggerElement || (ev ? ev.target : $element[0]);
     triggerElement.setAttribute('aria-expanded', 'true');
     $scope.$emit('$mdMenuOpen', $element);
+    var hasBackdrop = getAttr('useBackdrop', true);
     $mdMenu.show({
       scope: $scope,
       mdMenuCtrl: self,
@@ -125,7 +126,9 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
       element: menuContainer,
       target: triggerElement,
       preserveElement: true,
-      parent: 'body'
+      parent: 'body',
+      hasBackdrop: hasBackdrop,
+      disableParentScroll: hasBackdrop
     }).finally(function() {
       triggerElement.setAttribute('aria-expanded', 'false');
       self.disableHoverListener();
@@ -222,4 +225,44 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
       throw Error('Invalid offsets specified. Please follow format <x, y> or <n>');
     }
   };
+
+  /**
+   * Get value from attributes
+   *
+   * @param {String} attrKey
+   * @param {object} defaultValue Value will be converted to default value type
+   * @returns {object}
+   */
+  function getAttr(attrKey, defaultValue) {
+    var result = defaultValue;
+    if(angular.isDefined($attrs[attrKey]))
+      result = parseTypeOf(typeof defaultValue, $attrs[attrKey]);
+
+    return result;
+  }
+
+  /**
+   * Convert value to type
+   *
+   * @param {String} type
+   * @param {object} value
+   * @returns {*}
+   */
+  function parseTypeOf(type, value) {
+    switch (type) {
+      case typeof true: {
+        if(['no', 'false', '0'].indexOf(value.toLowerCase()) != -1)
+          return false;
+        return !!value;
+      }
+      case typeof '':
+        return value + '';
+      case typeof 1:
+        return parseInt(value, 10);
+      default:
+        return value;
+    }
+  }
+
+
 }
