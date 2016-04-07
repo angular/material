@@ -1368,51 +1368,60 @@ MdPanelPosition.prototype.absolute = function() {
 
 
 /**
- * Sets the value of `top` for the panel.
+ * Sets the value of `top` for the panel. Clears any previously set vertical
+ * position.
  * @param {string=} opt_top Value of `top`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 MdPanelPosition.prototype.top = function(opt_top) {
+  this._bottom = '';
   this._top = opt_top || '0';
   return this;
 };
 
 
 /**
- * Sets the value of `bottom` for the panel.
+ * Sets the value of `bottom` for the panel. Clears any previously set vertical
+ * position.
  * @param {string=} opt_bottom Value of `bottom`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 MdPanelPosition.prototype.bottom = function(opt_bottom) {
+  this._top = '';
   this._bottom = opt_bottom || '0';
   return this;
 };
 
 
 /**
- * Sets the value of `left` for the panel.
+ * Sets the value of `left` for the panel. Clears any previously set
+ * horizontal position.
  * @param {string=} opt_left Value of `left`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 MdPanelPosition.prototype.left = function(opt_left) {
+  this._right = '';
   this._left = opt_left || '0';
   return this;
 };
 
 
 /**
- * Sets the value of `right` for the panel.
+ * Sets the value of `right` for the panel. Clears any previously set
+ * horizontal position.
  * @param {string=} opt_right Value of `right`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 MdPanelPosition.prototype.right = function(opt_right) {
+  this._left = '';
   this._right = opt_right || '0';
   return this;
 };
 
 
 /**
- * Centers the panel horizontally in the viewport.
+ * Centers the panel horizontally in the viewport. Clears any previously set
+ * horizontal position.
  * @returns {MdPanelPosition}
  */
 MdPanelPosition.prototype.centerHorizontally = function() {
@@ -1424,7 +1433,8 @@ MdPanelPosition.prototype.centerHorizontally = function() {
 
 
 /**
- * Centers the panel vertically in the viewport.
+ * Centers the panel vertically in the viewport. Clears any previously set
+ * vertical position.
  * @returns {MdPanelPosition}
  */
 MdPanelPosition.prototype.centerVertically = function() {
@@ -1438,6 +1448,7 @@ MdPanelPosition.prototype.centerVertically = function() {
 /**
  * Centers the panel horizontally and vertically in the viewport. This is
  * equivalent to calling both `centerHorizontally` and `centerVertically`.
+ * Clears any previously set horizontal and vertical positions.
  * @returns {MdPanelPosition}
  */
 MdPanelPosition.prototype.center = function() {
