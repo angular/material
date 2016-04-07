@@ -12,4 +12,10 @@ describe('mdCard directive', function() {
     $compile('<md-card></md-card>')($rootScope.$new());
     expect($mdThemingMock.called).toBe(true);
   }));
+
+  it('should have `._md` class indicator', inject(function($compile, $rootScope) {
+    var element = $compile('<md-card></md-card>')($rootScope.$new());
+    expect(element.hasClass('_md')).toBe(true);
+  }));
+  
 });

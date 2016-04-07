@@ -26,6 +26,13 @@ describe('mdListItem directive', function() {
     return el;
   }
 
+  describe('md-list-item', function() {
+    it('should have `._md` class indicator', inject(function($compile, $rootScope) {
+      var element = $compile('<md-list><md-list-item></md-list-item></md-list>')($rootScope.$new());
+      expect(element.find('md-list-item').hasClass('_md')).toBe(true);
+    }));
+  });
+
   it('forwards click events for md-checkbox', function() {
     var listItem = setup(
       '<md-list-item>' +

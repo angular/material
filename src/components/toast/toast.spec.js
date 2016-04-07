@@ -25,7 +25,23 @@ describe('$mdToast service', function() {
   }
 
   describe('simple()', function() {
+
     hasConfigMethods(['content', 'action', 'capsule', 'highlightAction', 'theme']);
+
+    it('should have `._md` class indicator', inject(function($mdToast, $material) {
+      var parent = angular.element('<div>');
+
+      $mdToast.show(
+        $mdToast.simple({
+          parent: parent,
+          content: 'Do something',
+          theme: 'some-theme',
+          capsule: true
+      }));
+      $material.flushOutstandingAnimations();
+
+      expect(parent.find('md-toast').hasClass('_md')).toBe(true);
+    }));
 
     it('supports a basic toast', inject(function($mdToast, $rootScope, $timeout, $material, $browser) {
       var openAndclosed = false;

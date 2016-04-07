@@ -30,6 +30,12 @@ describe('<md-select>', function() {
     backdrops.remove();
   }));
 
+
+  it('should have `._md` class indicator', function() {
+    var element = setupSelect('ng-model="val"').find('md-select-menu');
+    expect(element.hasClass('_md')).toBe(true);
+  });
+
   it('should preserve tabindex', function() {
     var select = setupSelect('tabindex="2" ng-model="val"').find('md-select');
     expect(select.attr('tabindex')).toBe('2');

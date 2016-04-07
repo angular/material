@@ -18,6 +18,16 @@ describe('mdSubheader', function() {
     $exceptionHandler = _$exceptionHandler_;
   }));
 
+
+  it('should have `._md` class indicator', inject(function() {
+    build('<div><md-subheader>Hello {{ to }}!</md-subheader></div>');
+    pageScope.to = 'world';
+    pageScope.$digest();
+
+    expect(element.children().hasClass('_md')).toBe(true);
+  }));
+
+
   it('preserves content', function() {
     build('<div><md-subheader>Hello {{ to }}!</md-subheader></div>');
     pageScope.to = 'world';

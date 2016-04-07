@@ -20,6 +20,11 @@ describe('material.components.menu', function() {
 
   describe('md-menu directive', function() {
 
+    it('should have `._md` class indicator', function() {
+      var element = setup();
+      expect(element.hasClass('_md')).toBe(true);
+    });
+
     it('errors on invalid markup', inject(function($compile, $rootScope) {
       function buildBadMenu() {
         $compile('<md-menu></md-menu>')($rootScope);
