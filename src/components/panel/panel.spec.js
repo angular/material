@@ -700,6 +700,18 @@ describe('$mdPanel', function() {
         expect(panelCss.top).toEqual('0px');
       });
 
+      it('top with clearing previous vertical positioning', function() {
+        var position = mdPanelPosition.absolute().bottom().top();
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.bottom).toEqual('')
+        expect(panelCss.top).toEqual('0px');
+      });
+
       it('bottom', function () {
         var bottom = '50px';
         var position = mdPanelPosition.absolute().bottom(bottom);
@@ -720,6 +732,18 @@ describe('$mdPanel', function() {
 
         var panelCss = document.querySelector(PANEL_EL).style;
         expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.bottom).toEqual('0px');
+      });
+
+      it('bottom with clearing previous vertical positioning', function() {
+        var position = mdPanelPosition.absolute().top().bottom();
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.top).toEqual('');
         expect(panelCss.bottom).toEqual('0px');
       });
 
@@ -746,6 +770,18 @@ describe('$mdPanel', function() {
         expect(panelCss.left).toEqual('0px');
       });
 
+      it('left with clearing previous horizontal positioning', function() {
+        var position = mdPanelPosition.absolute().right().left();
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.right).toEqual('');
+        expect(panelCss.left).toEqual('0px');
+      });
+
       it('right', function () {
         var right = '50px';
         var position = mdPanelPosition.absolute().right(right);
@@ -766,6 +802,18 @@ describe('$mdPanel', function() {
 
         var panelCss = document.querySelector(PANEL_EL).style;
         expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.right).toEqual('0px');
+      });
+
+      it('right with clearing previous horizontal positioning', function() {
+        var position = mdPanelPosition.absolute().left().right();
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.position).toEqual('fixed');
+        expect(panelCss.left).toEqual('');
         expect(panelCss.right).toEqual('0px');
       });
 
