@@ -102,7 +102,7 @@ describe('<md-autocomplete>', function() {
 
       element.remove();
     }));
-    
+
 
     it('should allow you to set an input id without floating label', inject(function() {
       var scope = createScope(null, {inputId: 'custom-input-id'});
@@ -317,6 +317,26 @@ describe('<md-autocomplete>', function() {
       });
 
       expect(scope.searchText).toBe('');
+
+      element.remove();
+    }));
+
+    it('should not show the progressbar when hitting escape on an empty input', inject(function($mdConstant, $timeout) {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)">\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+
+      $timeout.flush();
+      scope.$apply(function() {
+        ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE));
+      });
+
+      expect(element.find('md-progress-linear').length).toBe(0);
 
       element.remove();
     }));
