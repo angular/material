@@ -24,6 +24,13 @@ describe('$mdDialog', function() {
     };
   }));
 
+  describe('md-dialog', function() {
+    it('should have `._md` class indicator', inject(function($compile, $rootScope) {
+      var element = $compile('<md-dialog></md-dialog>')($rootScope.$new());
+      expect(element.hasClass('_md')).toBe(true);
+    }));
+  });
+
   describe('#alert()', function() {
     hasConfigurationMethods('alert', [
       'title', 'htmlContent', 'textContent', 'ariaLabel',

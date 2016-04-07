@@ -65,11 +65,11 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
 
   return {
     template: '',
-
     restrict: 'E',
 
     link: function(scope, element, attr) {
 
+      element.addClass('_md');     // private md component indicator for styling
       $mdTheming(element);
 
       if (angular.isDefined(attr.mdScrollShrink)) {

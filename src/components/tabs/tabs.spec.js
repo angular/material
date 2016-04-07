@@ -57,11 +57,24 @@ describe('<md-tabs>', function () {
 
   describe('activating tabs', function () {
 
+    it('should have `._md` class indicator', inject(function() {
+      var tabs = setup(
+        '<md-tabs> ' +
+        '   <md-tab label="a">a</md-tab>' +
+        '   <md-tab label="b">b</md-tab>' +
+        '</md-tabs>'
+      );
+
+      expect(tabs.find('md-tabs-content-wrapper').hasClass('_md')).toBe(true);
+    }));
+
     it('should select first tab by default', function () {
-      var tabs = setup('<md-tabs>\
-            <md-tab label="a">a</md-tab>\
-            <md-tab label="b">b</md-tab>\
-          </md-tabs>');
+      var tabs = setup(
+              '<md-tabs> ' +
+              '   <md-tab label="a">a</md-tab>' +
+              '   <md-tab label="b">b</md-tab>' +
+              '</md-tabs>'
+          );
       expect(tabs.find('md-tab-item').eq(0)).toBeActiveTab();
     });
 

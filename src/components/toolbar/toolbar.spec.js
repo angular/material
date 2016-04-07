@@ -237,6 +237,17 @@ describe('<md-toolbar>', function() {
     expect($exceptionHandler.errors).toEqual([]);
   }));
 
+  it('should have `._md` class indicator', inject(function() {
+    build(
+      '<div>' +
+      '  <md-toolbar></md-toolbar>' +
+      '  <md-content></md-content>' +
+      '</div>'
+    );
+
+    expect(element.find('md-toolbar').hasClass('_md')).toBe(true);
+  }));
+
   it('disables scroll shrink when the attribute is not provided', inject(function() {
     build(
       '<div>' +

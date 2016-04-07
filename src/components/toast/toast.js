@@ -15,7 +15,9 @@ angular.module('material.components.toast', [
 function MdToastDirective($mdToast) {
   return {
     restrict: 'E',
-    link: function postLink(scope, element, attr) {
+    link: function postLink(scope, element) {
+      element.addClass('_md');     // private md component indicator for styling
+      
       // When navigation force destroys an interimElement, then
       // listen and $destroy() that interim instance...
       scope.$on('$destroy', function() {

@@ -47,7 +47,7 @@ function MdSubheaderDirective($mdSticky, $compile, $mdTheming, $mdUtil) {
     replace: true,
     transclude: true,
     template: (
-    '<div class="md-subheader">' +
+    '<div class="md-subheader _md">' +
     '  <div class="_md-subheader-inner">' +
     '    <span class="_md-subheader-content"></span>' +
     '  </div>' +
@@ -55,6 +55,8 @@ function MdSubheaderDirective($mdSticky, $compile, $mdTheming, $mdUtil) {
     ),
     link: function postLink(scope, element, attr, controllers, transclude) {
       $mdTheming(element);
+      element.addClass('_md');
+      
       var outerHTML = element[0].outerHTML;
 
       function getContent(el) {

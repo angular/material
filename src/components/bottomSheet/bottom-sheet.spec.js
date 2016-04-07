@@ -2,6 +2,19 @@ describe('$mdBottomSheet service', function () {
   beforeEach(module('material.components.bottomSheet'));
 
   describe('#build()', function () {
+    it('should have `._md` class indicator',
+      inject(function ($mdBottomSheet, $rootElement, $material) {
+        var parent = angular.element('<div>');
+        $mdBottomSheet.show({
+          template: '<md-bottom-sheet>',
+          parent: parent
+        });
+        $material.flushOutstandingAnimations();
+
+        var sheet = parent.find('md-bottom-sheet');
+        expect(sheet.hasClass('_md')).toBe(true);
+    }));
+
     it('should not close when `clickOutsideToClose == true`',
       inject(function ($mdBottomSheet, $rootElement, $material) {
         var parent = angular.element('<div>');

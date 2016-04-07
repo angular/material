@@ -15,6 +15,13 @@ describe('mdSidenav', function() {
 
   describe('directive', function() {
 
+    it('should have `._md` class indicator', inject(function($rootScope) {
+      var element = setup('md-is-open="show"');
+
+      $rootScope.$apply('show = true');
+      expect(element.hasClass('_md')).toBe(true);
+    }));
+
     it('should bind isOpen attribute', inject(function($rootScope, $material) {
       var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');

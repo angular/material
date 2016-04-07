@@ -230,7 +230,8 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
       return postLink;
 
       function postLink($scope, $element, $attr, ctrl) {
-
+        $element.addClass('_md');     // private md component indicator for styling
+        
         var proxies       = [],
             firstElement  = $element[0].firstElementChild,
             isButtonWrap  = $element.hasClass('_md-button-wrap'),

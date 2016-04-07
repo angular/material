@@ -521,6 +521,8 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
   function preLink(scope, element, attr, ctrls) {
     var selectCtrl = ctrls[0];
 
+    element.addClass('_md');     // private md component indicator for styling
+    
     $mdTheming(element);
     element.on('click', clickListener);
     element.on('keypress', keyListener);

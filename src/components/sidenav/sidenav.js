@@ -246,7 +246,8 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
     if (!angular.isDefined(attr.mdDisableBackdrop)) {
       backdrop = $mdUtil.createBackdrop(scope, "_md-sidenav-backdrop md-opaque ng-enter");
     }
-
+    
+    element.addClass('_md');     // private md component indicator for styling
     $mdTheming(element);
 
     // The backdrop should inherit the sidenavs theme,

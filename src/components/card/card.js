@@ -122,7 +122,8 @@ angular.module('material.components.card', [
 function mdCardDirective($mdTheming) {
   return {
     restrict: 'E',
-    link: function ($scope, $element) {
+    link: function ($scope, $element, attr) {
+      $element.addClass('_md');     // private md component indicator for styling
       $mdTheming($element);
     }
   };

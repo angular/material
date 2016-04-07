@@ -12,6 +12,12 @@ describe('material.components.menuBar', function() {
 
   describe('MenuBar', function() {
     describe('MenuBar Directive', function() {
+
+      it('should have `._md` class indicator', function() {
+        var element = setup();
+        expect(element.hasClass('_md')).toBe(true);
+      });
+
       it('sets md-position-mode to "bottom left" on nested menus', function() {
         var menuBar = setup();
         var nestedMenu = menuBar[0].querySelector('md-menu');
