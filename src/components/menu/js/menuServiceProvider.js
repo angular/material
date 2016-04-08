@@ -412,9 +412,8 @@ function MenuProvider($$interimElementProvider) {
       if (positionMode.top == 'target' || positionMode.left == 'target' || positionMode.left == 'target-right') {
         alignTarget = firstVisibleChild();
         if ( alignTarget ) {
-          // TODO: Allow centering on an arbitrary node, for now center on first menu-item's child
           alignTarget = alignTarget.firstElementChild || alignTarget;
-          alignTarget = alignTarget.querySelector('[md-menu-align-target]') || alignTarget;
+          alignTarget = containerNode.querySelector('[md-menu-align-target]') || alignTarget;
           alignTargetRect = alignTarget.getBoundingClientRect();
 
           existingOffsets = {
