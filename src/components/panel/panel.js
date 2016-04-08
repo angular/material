@@ -1079,14 +1079,16 @@ MdPanelRef.prototype._createPanel = function() {
  */
 MdPanelRef.prototype._addStyles = function() {
   this._panelContainer.css('z-index', this._config['zIndex']);
-  this._panelContainer.addClass(MD_PANEL_HIDDEN);
+  this._panelEl.css('z-index', this._config['zIndex'] + 1);
+
 
   if (this._config['fullscreen']) {
     this._panelEl.addClass('_md-panel-fullscreen');
     return; // Don't setup positioning.
   }
 
-  this._$rootScope.$applyAsync(angular.bind(this, this._configurePosition));
+  this._configurePosition();
+  this._panelContainer.addClass(MD_PANEL_HIDDEN);
 };
 
 
@@ -1669,7 +1671,7 @@ MdPanelPosition.prototype._calculatePanelPosition = function(panelEl) {
       this._right = targetRight + 'px';
       break;
     case MdPanelPosition.xPosition.CENTER:
-      var left = targetLeft + (0.5 * targetWidth) - (0.5 * panelWidth)
+      var left = targetLeft + (0.5 * targetWidth) - (0.5 * panelWidth);
       this._left = left + 'px';
       break;
     case MdPanelPosition.xPosition.ALIGN_START:
@@ -1694,7 +1696,7 @@ MdPanelPosition.prototype._calculatePanelPosition = function(panelEl) {
       this._bottom = targetBottom + 'px';
       break;
     case MdPanelPosition.yPosition.CENTER:
-      var top = targetTop + (0.5 * targetHeight) - (0.5 * panelHeight)
+      var top = targetTop + (0.5 * targetHeight) - (0.5 * panelHeight);
       this._top = top + 'px';
       break;
     case MdPanelPosition.yPosition.ALIGN_TOPS:
