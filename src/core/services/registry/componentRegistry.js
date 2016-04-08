@@ -26,8 +26,8 @@
       /**
        * Used to print an error when an instance for a handle isn't found.
        */
-      notFoundError: function(handle) {
-        $log.error('No instance found for handle', handle);
+      notFoundError: function(handle, msgContext) {
+        $log.error( (msgContext || "") + 'No instance found for handle', handle);
       },
       /**
        * Return all registered instances as an array.

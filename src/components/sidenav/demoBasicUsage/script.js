@@ -4,7 +4,8 @@ angular
     $scope.toggleLeft = buildDelayedToggler('left');
     $scope.toggleRight = buildToggler('right');
     $scope.isOpenRight = function(){
-      return $mdSidenav('right').isOpen();
+      var right = $mdSidenav('right');
+      return right && right.isOpen();
     };
 
     /**
@@ -31,6 +32,7 @@ angular
      */
     function buildDelayedToggler(navID) {
       return debounce(function() {
+        // Component lookup should always be available since we are not using `ng-if`
         $mdSidenav(navID)
           .toggle()
           .then(function () {
@@ -41,6 +43,7 @@ angular
 
     function buildToggler(navID) {
       return function() {
+        // Component lookup should always be available since we are not using `ng-if`
         $mdSidenav(navID)
           .toggle()
           .then(function () {
@@ -51,6 +54,7 @@ angular
   })
   .controller('LeftCtrl', function ($scope, $timeout, $mdSidenav, $log) {
     $scope.close = function () {
+      // Component lookup should always be available since we are not using `ng-if`
       $mdSidenav('left').close()
         .then(function () {
           $log.debug("close LEFT is done");
@@ -60,6 +64,7 @@ angular
   })
   .controller('RightCtrl', function ($scope, $timeout, $mdSidenav, $log) {
     $scope.close = function () {
+      // Component lookup should always be available since we are not using `ng-if`
       $mdSidenav('right').close()
         .then(function () {
           $log.debug("close RIGHT is done");
