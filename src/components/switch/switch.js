@@ -50,6 +50,7 @@ angular.module('material.components.switch', [
  */
 function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdGesture) {
   var checkboxDirective = mdCheckboxDirective[0];
+  var notDisabled = function() { return false; };
 
   return {
     restrict: 'E',
@@ -75,12 +76,9 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
     return function (scope, element, attr, ngModel) {
       ngModel = ngModel || $mdUtil.fakeNgModel();
 
-      var disabledGetter = null;
-      if (attr.disabled != null) {
-        disabledGetter = function() { return true; };
-      } else if (attr.ngDisabled) {
-        disabledGetter = $parse(attr.ngDisabled);
-      }
+      var disabledGetter = notDisabled;
+      if (attr.disabled != null) disabledGetter = function() { return true; };
+      if (attr.ngDisabled)       disabledGetter = $parse(attr.ngDisabled);
 
       var thumbContainer = angular.element(element[0].querySelector('._md-thumb-container'));
       var switchContainer = angular.element(element[0].querySelector('._md-container'));
@@ -90,9 +88,17 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
         element.removeClass('_md-dragging');
       });
 
+      element.on('click', function(event) {
+          // Don't go if the switch is disabled.
+          if (disabledGetter(scope)) return;
+
+          if (event.currentTarget !== element[0] ) {
+            event.stopImmediatePropagation();
+          }
+      });
       checkboxLink(scope, element, attr, ngModel);
 
-      if (disabledGetter) {
+      if (disabledGetter !== notDisabled ) {
         scope.$watch(disabledGetter, function(isDisabled) {
           element.attr('tabindex', isDisabled ? -1 : 0);
         });
@@ -106,21 +112,21 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
         .on('$md.dragend', onDragEnd);
 
       var drag;
-      function onDragStart(ev) {
+      function onDragStart(event) {
         // Don't go if the switch is disabled.
-        if (disabledGetter && disabledGetter(scope)) return;
-        ev.stopPropagation();
+        if (disabledGetter(scope)) return;
+        event.stopPropagation();
 
         element.addClass('_md-dragging');
         drag = {width: thumbContainer.prop('offsetWidth')};
       }
 
-      function onDrag(ev) {
+      function onDrag(event) {
         if (!drag) return;
-        ev.stopPropagation();
-        ev.srcEvent && ev.srcEvent.preventDefault();
+        event.stopPropagation();
+        event.srcEvent && event.srcEvent.preventDefault();
 
-        var percent = ev.pointer.distanceX / drag.width;
+        var percent = event.pointer.distanceX / drag.width;
 
         //if checked, start from right. else, start from left
         var translate = ngModel.$viewValue ?  1 + percent : percent;
@@ -131,9 +137,9 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
         drag.translate = translate;
       }
 
-      function onDragEnd(ev) {
+      function onDragEnd(event) {
         if (!drag) return;
-        ev.stopPropagation();
+        event.stopPropagation();
 
         element.removeClass('_md-dragging');
         thumbContainer.css($mdConstant.CSS.TRANSFORM, '');
