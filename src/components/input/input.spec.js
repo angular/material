@@ -346,6 +346,49 @@ describe('md-input-container directive', function() {
     expect(label.textContent).toEqual('some placeholder');
   });
 
+  it('should not create a floating label from a placeholder if md-no-float is empty', function () {
+    var el = compile(
+      '<md-input-container md-no-float>' +
+      '  <input placeholder="Foo" ng-model="foo">' +
+      '</md-input-container>'
+    );
+
+    expect(el.find('label').length).toBe(0);
+  });
+
+  it('should not create a floating label from a placeholder if md-no-float is truthy', function () {
+    pageScope.inputs = [{
+      placeholder: 'Name',
+      model: ''
+    }, {
+      placeholder: 'Email',
+      model: ''
+    }];
+
+    var el = compile(
+      '<div>' +
+      '  <md-input-container ng-repeat="input in inputs" md-no-float="$index !== 0">' +
+      '    <input placeholder="{{input.placeholder}}" ng-model="input.model">' +
+      '  </md-input-container>' +
+      '</div>'
+    );
+
+    var labels = el.find('label');
+
+    expect(labels.length).toBe(1);
+    expect(labels[0].textContent).toEqual('Name');
+  });
+
+  it('should create a floating label from a placeholder if md-no-float is falsey', function () {
+    var el = compile(
+      '<md-input-container md-no-float="false">' +
+      '  <input placeholder="Foo" ng-model="foo">' +
+      '</md-input-container>'
+    );
+
+    expect(el.find('label').length).toBe(1);
+  });
+
   it('should ignore placeholder when a label element is present', inject(function($rootScope, $compile) {
     var el = $compile(
       '<md-input-container>' +
