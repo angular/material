@@ -199,6 +199,84 @@ describe('mdSidenav', function() {
 
   });
 
+  describe("focus", function() {
+
+    var $material, $mdInteraction, $mdConstant;
+
+    beforeEach( inject(function(_$material_, _$mdInteraction_, _$mdConstant_) {
+      $material = _$material_;
+      $mdInteraction = _$mdInteraction_;
+      $mdConstant = _$mdConstant_
+    }));
+
+    function flush() {
+      $material.flushInterimElement();
+    }
+
+    function setupTrigger() {
+      var el;
+      inject(function($compile, $rootScope) {
+        var parent = angular.element(document.body);
+        el = angular.element('<button>Toggle</button>');
+        parent.append(el);
+        $compile(parent)($rootScope);
+        $rootScope.$apply();
+      });
+      return el;
+    }
+
+    it("should restore after sidenav triggered by keyboard", function(done) {
+      var sidenavElement = setup('');
+      var triggerElement = setupTrigger();
+      var controller = sidenavElement.controller('mdSidenav');
+
+      triggerElement.focus();
+
+      var keyboardEvent = document.createEvent("KeyboardEvent");
+      keyboardEvent.initEvent("keydown", true, true, window, 0, 0, 0, 0, $mdConstant.KEY_CODE.ENTER,  $mdConstant.KEY_CODE.ENTER);
+      triggerElement[0].dispatchEvent(keyboardEvent);
+
+      controller.$toggleOpen(true);
+      flush();
+
+      triggerElement.blur();
+
+      controller.$toggleOpen(false);
+      flush();
+
+      expect($mdInteraction.getLastInteractionType()).toBe("keyboard");
+      expect(document.activeElement).toBe(triggerElement[0]);
+      done();
+    });
+
+    it("should not restore after sidenav triggered by mouse", function(done) {
+      var sidenavElement = setup('');
+      var triggerElement = setupTrigger();
+      var controller = sidenavElement.controller('mdSidenav');
+
+      triggerElement.focus();
+
+      var mouseEvent = document.createEvent("MouseEvent");
+      mouseEvent.initMouseEvent("mousedown", true, true, window, null, 0, 0, 0, 0, false, false, false, false, 0, null);
+      triggerElement[0].dispatchEvent(mouseEvent);
+
+      controller.$toggleOpen(true);
+      flush();
+
+      expect(document.activeElement).toBe(triggerElement[0]);
+
+      triggerElement.blur();
+
+      controller.$toggleOpen(false);
+      flush();
+
+      expect($mdInteraction.getLastInteractionType()).toBe("mouse");
+      expect(document.activeElement).not.toBe(triggerElement[0]);
+      done();
+    });
+
+  });
+
   describe("controller Promise API", function() {
     var $material, $rootScope;
 
