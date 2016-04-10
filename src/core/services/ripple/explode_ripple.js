@@ -12,7 +12,7 @@ angular.module('material.core')
  * element that this directive is on is clicked. This can be used for transitions to another state.
  *
  * @param {string} md-ink-explode A DOM selector for the container to be passed to QuerySelector()
- * @param {number} md-ink-explode-dur The duration of the explode from start to finish
+ * @param {number} md-ink-explode-duration The duration of the explode from start to finish
  * @param {string} md-ink-explode-color A hex, rgb or rgba color string
  *
  * @usage
@@ -45,20 +45,18 @@ angular.module('material.core')
  *     Ripples if 'canRipple' function return value is not 'false' or '0'
  *   </ANY>
  * </hljs>
- *  Note: The container and duration will not observe changes to the Interpolated values via
- *  `md-ink-explode={{ContainerSelector}}` The initial values will be the final values.
  */
-function InkExplodeRippleDirective($mdInkRipple) {
-    return{
-        controller: angular.noop,
-        link: function(scope,element,attr){
-            $mdInkRipple.attach(scope, angular.element(element), {
-                center: false,
-                dimBackground: false,
-                fitRipple: false,
-                duration: parseInt(attr.mdInkExplodeDur) || 1000,
-                inkExplode: true
-            });
-        }
+function InkExplodeRippleDirective ($mdInkRipple) {
+  return {
+    controller: angular.noop,
+    link:       function (scope, element, attr) {
+      $mdInkRipple.attach(scope, angular.element(element), {
+        center:        false,
+        dimBackground: false,
+        fitRipple:     false,
+        duration:      parseInt(attr.mdInkExplodeDuration) || 1000,
+        inkExplode:    true
+      });
     }
+  }
 }

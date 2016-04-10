@@ -136,7 +136,7 @@ input {
     opacity: 0.20;
   }
 }
-.md-ripple-explode{
+.md-ripple-explode {
   &.md-ripple-placed {
     $sizeDuration: 0.45s * 2;
     transition: margin $sizeDuration $swift-ease-out-timing-function,
