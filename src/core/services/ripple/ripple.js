@@ -127,7 +127,7 @@ function InkRippleCtrl ($scope, $element, rippleOptions, $window, $document, $ti
   this.explode         = rippleOptions.inkExplode || false;
   this.$element        = $element;
   this.containerParent = null;
-  this.updateContainer(); //initialize containerParent
+  this.updateContainerParent(); //initialize containerParent
   this.mousedown  = false;
   this.ripples    = [];
   this.timeout    = null; // Stores a reference to the most-recent ripple timeout
@@ -189,7 +189,7 @@ InkRippleCtrl.prototype.color = function (value) {
    */
   function getElementColor () {
     var items = self.options && self.options.colorElement ? self.options.colorElement : [];
-    var elem  = items.length ? items[ 0 ] : self.containerParent[0];
+    var elem  = items.length ? items[ 0 ] : self.containerParent[ 0 ];
 
     return elem ? self.$window.getComputedStyle(elem).color : 'rgb(0,0,0)';
   }
@@ -282,7 +282,7 @@ InkRippleCtrl.prototype.handleMouseup = function (event) {
     this.mousedown = false;
     // When jQuery is loaded, we have to get the original event
     createRippleFromEvent(this, event);
-  }else {
+  } else {
     autoCleanup(this, this.clearRipples);
   }
 };
@@ -293,14 +293,14 @@ InkRippleCtrl.prototype.handleMouseup = function (event) {
  */
 function createRippleFromEvent (self, event) {
   if (event.hasOwnProperty('originalEvent')) event = event.originalEvent;
-  self.updateContainer();
+  self.updateContainerParent();
   self.updateDuration();
   if (self.options.center) {
     self.createRipple(self.container.prop('clientWidth') / 2, self.container.prop('clientWidth') / 2);
   } else {
     // We need to calculate the relative coordinates if the target is a sublayer of the ripple element
-    if (event.srcElement !== self.containerParent[0]) {
-      var layerRect = self.containerParent[0].getBoundingClientRect();
+    if (event.srcElement !== self.containerParent[ 0 ]) {
+      var layerRect = self.containerParent[ 0 ].getBoundingClientRect();
       var layerX    = event.clientX - layerRect.left;
       var layerY    = event.clientY - layerRect.top;
 
@@ -372,7 +372,7 @@ InkRippleCtrl.prototype.createContainer = function () {
  */
 InkRippleCtrl.prototype.getContainer = function () {
   //Check the attribute for modification
-  this.updateContainer();
+  this.updateContainerParent();
   var container;
   if ( !this.containerParent ) return;
   var children = this.containerParent.children();
@@ -388,7 +388,7 @@ InkRippleCtrl.prototype.getContainer = function () {
  * Check the md-ink-explode attribute for modification and update the container element
  * @returns {*}
  */
-InkRippleCtrl.prototype.updateContainer = function () {
+InkRippleCtrl.prototype.updateContainerParent = function() {
   var selector = this.inkExplode();
   if (!selector && !this._lastExplodeSelector) {
     this.containerParent = this.$element;
