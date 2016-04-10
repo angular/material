@@ -311,6 +311,61 @@ describe('$mdThemingProvider', function() {
 
 });
 
+describe('$mdThemeProvider with custom styles', function() {
+  function getThemeStyleElements() {
+    return document.head.querySelectorAll('style[md-theme-style]');
+  }
+
+  function verifyCustomStyles(expectedStyle) {
+    inject();
+
+    var themes = getThemeStyleElements();
+
+    expect(themes.length).toBe(4);
+    angular.forEach(themes, function(value) {
+      expect(value.textContent).toBe(expectedStyle);
+    });
+  }
+
+  beforeEach(function() {
+    angular.forEach(getThemeStyleElements(), function(style) {
+      document.head.removeChild(style);
+    });
+  });
+
+  it('generates themed style tags when $MD_THEME_CSS is empty', function() {
+    module('material.core', function($provide, $mdThemingProvider) {
+      $provide.constant('$MD_THEME_CSS', '');
+      $mdThemingProvider.registerStyles('/*custom-style*/');
+      $mdThemingProvider.theme('empty-theme-css');
+    });
+
+    verifyCustomStyles('/*custom-style*/}');
+  });
+
+  it('appends the custom styles to the end of the $MD_THEME_CSS string', function() {
+    module('material.core', function($provide, $mdThemingProvider) {
+      $provide.constant('$MD_THEME_CSS', '/**/');
+      $mdThemingProvider.registerStyles('/*custom-style*/');
+      $mdThemingProvider.theme('append-custom-styles');
+    });
+
+    verifyCustomStyles('/**//*custom-style*/}');
+  });
+
+  it('should append multiple custom styles', function() {
+    module('material.core', function($provide, $mdThemingProvider) {
+      $provide.constant('$MD_THEME_CSS', '/**/');
+      $mdThemingProvider.registerStyles('/*custom-style1*/');
+      $mdThemingProvider.registerStyles('/*custom-style2*/');
+      $mdThemingProvider.registerStyles('/*custom-style3*/');
+      $mdThemingProvider.theme('append-multiple-styles');
+    });
+
+    verifyCustomStyles('/**//*custom-style1*//*custom-style2*//*custom-style3*/}');
+  });
+});
+
 describe('$mdThemeProvider with on-demand generation', function() {
   var $mdTheming;
 
