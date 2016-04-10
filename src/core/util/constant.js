@@ -14,6 +14,9 @@ function MdConstantFactory($sniffer) {
 
   return {
     KEY_CODE: {
+      LEFT_CLICK: 1,
+      MIDDLE_CLICK: 2,
+      RIGHT_CLICK: 3,
       COMMA: 188,
       SEMICOLON : 186,
       ENTER: 13,
