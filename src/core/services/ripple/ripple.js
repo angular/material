@@ -117,11 +117,12 @@ function InkRippleService ($injector) {
  * Controller used by the ripple service in order to apply ripples
  * @ngInject
  */
-function InkRippleCtrl ($scope, $element, rippleOptions, $window, $document, $timeout, $mdUtil) {
+function InkRippleCtrl ($scope, $element, rippleOptions, $window, $document, $timeout, $mdUtil, $mdConstant) {
   this.$window         = $window;
   this.$document       = $document;
   this.$timeout        = $timeout;
   this.$mdUtil         = $mdUtil;
+  this.$mdConstant     = $mdConstant;
   this.$scope          = $scope;
   this.options         = rippleOptions;
   this.explode         = rippleOptions.inkExplode || false;
@@ -278,7 +279,7 @@ InkRippleCtrl.prototype.handleMousedown = function (event) {
  */
 InkRippleCtrl.prototype.handleMouseup = function (event) {
   //If this is an explode ripple and it is not a right click create the ripple
-  if (this.explode && event.which !== 3) {
+  if (this.explode && event.which !== this.$mdConstant.KEY_CODE.RIGHT_CLICK) {
     this.mousedown = false;
     // When jQuery is loaded, we have to get the original event
     createRippleFromEvent(this, event);
