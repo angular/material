@@ -323,7 +323,7 @@ describe('$mdThemeProvider with custom styles', function() {
 
     expect(themes.length).toBe(4);
     angular.forEach(themes, function(value) {
-      expect(value.innerText).toBe(expectedStyle);
+      expect(value.textContent).toBe(expectedStyle);
     });
   }
 
