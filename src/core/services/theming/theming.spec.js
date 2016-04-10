@@ -312,18 +312,57 @@ describe('$mdThemingProvider', function() {
 });
 
 describe('$mdThemeProvider with custom styles', function() {
-  it('appends the custom styles to the end of the $MD_THEME_CSS string', function() {
-    module('material.core', function($mdThemingProvider) {
-      $mdThemingProvider.registerStyles('/*test*/');
-      $mdThemingProvider.theme('register-custom-styles');
+  function getThemeStyleElements() {
+    return document.head.querySelectorAll('style[md-theme-style]');
+  }
+
+  function verifyCustomStyles(expectedStyle) {
+    inject();
+
+    var themes = getThemeStyleElements();
+
+    expect(themes.length).toBe(4);
+    angular.forEach(themes, function(value) {
+      expect(value.innerText).toBe(expectedStyle);
     });
-    
-    // Verify that $MD_THEME_CSS is still set to '/**/' in the test environment.
-    // Check angular-material-mocks.js for $MD_THEME_CSS latest value if this test starts to fail. 
-    inject(function($MD_THEME_CSS) { expect($MD_THEME_CSS).toBe('/**/'); });
-    
-    // Find the string '/**//*test*/' in the head tag.
-    expect(document.head.innerHTML).toMatch(/\/\*\*\/\/\*test\*\//);
+  }
+
+  beforeEach(function() {
+    angular.forEach(getThemeStyleElements(), function(style) {
+      document.head.removeChild(style);
+    });
+  });
+
+  it('generates themed style tags when $MD_THEME_CSS is empty', function() {
+    module('material.core', function($provide, $mdThemingProvider) {
+      $provide.constant('$MD_THEME_CSS', '');
+      $mdThemingProvider.registerStyles('/*custom-style*/');
+      $mdThemingProvider.theme('empty-theme-css');
+    });
+
+    verifyCustomStyles('/*custom-style*/}');
+  });
+
+  it('appends the custom styles to the end of the $MD_THEME_CSS string', function() {
+    module('material.core', function($provide, $mdThemingProvider) {
+      $provide.constant('$MD_THEME_CSS', '/**/');
+      $mdThemingProvider.registerStyles('/*custom-style*/');
+      $mdThemingProvider.theme('append-custom-styles');
+    });
+
+    verifyCustomStyles('/**//*custom-style*/}');
+  });
+
+  it('should append multiple custom styles', function() {
+    module('material.core', function($provide, $mdThemingProvider) {
+      $provide.constant('$MD_THEME_CSS', '/**/');
+      $mdThemingProvider.registerStyles('/*custom-style1*/');
+      $mdThemingProvider.registerStyles('/*custom-style2*/');
+      $mdThemingProvider.registerStyles('/*custom-style3*/');
+      $mdThemingProvider.theme('append-multiple-styles');
+    });
+
+    verifyCustomStyles('/**//*custom-style1*//*custom-style2*//*custom-style3*/}');
   });
 });
 

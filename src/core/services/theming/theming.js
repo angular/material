@@ -141,11 +141,12 @@ var generateOnDemand = false;
 var nonce = null;
 
 // Custom styles registered to be used in the theming of custom components.
-var registeredStyles = [];
+var registeredStyles;
 
 function ThemingProvider($mdColorPalette) {
   PALETTES = { };
   THEMES = { };
+  registeredStyles = [];
 
   var themingProvider;
   var defaultTheme = 'default';
