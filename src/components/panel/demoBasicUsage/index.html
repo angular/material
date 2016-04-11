@@ -1,11 +1,18 @@
 <div class="demo-md-panel md-padding" ng-controller="BasicDemoCtrl as ctrl">
   <p>
-    Open a panel over the app's content.
+    A panel can be used to create dialogs, menus, and other overlays.
   </p>
 
   <div class="demo-md-panel-content">
-    <md-button class="md-primary md-raised" ng-click="ctrl.showDialog($event)">
+    <md-button class="md-primary md-raised demo-dialog-open-button"
+               ng-click="ctrl.showDialog($event)">
       Dialog
     </md-button>
+    <md-button class="md-primary md-raised demo-menu-open-button"
+               ng-click="ctrl.showMenu($event)">
+      Select Menu
+    </md-button>
+
+    <p>Your favorite dessert is: {{ ctrl.selected.favoriteDessert }}</p>
   </div>
 </div>
