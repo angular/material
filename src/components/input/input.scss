@@ -24,6 +24,8 @@ $icon-top-offset: ($icon-offset - $input-padding-top - $input-border-width-focus
 
 $icon-float-focused-top: -8px !default;
 
+$input-resize-handle-height: 10px !default;
+
 md-input-container {
   @include pie-clearfix();
   display: inline-block;
@@ -44,6 +46,16 @@ md-input-container {
 
     // Ensure the element always takes up space, even if empty
     min-width: 1px;
+  }
+
+  .md-resize-handle {
+    position: absolute;
+    bottom: $input-error-height - $input-border-width-default * 2;
+    left: 0;
+    height: $input-resize-handle-height;
+    background: transparent;
+    width: 100%;
+    cursor: ns-resize;
   }
 
   > md-icon {
@@ -88,14 +100,10 @@ md-input-container {
       -ms-flex-preferred-size: auto; //IE fix
     }
 
-    &._md-textarea-scrollable,
-    &[md-no-autogrow] {
-      overflow: auto;
-    }
-
     // The height usually gets set to 1 line by `.md-input`.
     &[md-no-autogrow] {
       height: auto;
+      overflow: auto;
     }
   }
 
@@ -299,7 +307,8 @@ md-input-container {
 
   // Use wide border in error state or in focused state
   &.md-input-focused .md-input,
-  .md-input.ng-invalid.ng-dirty {
+  .md-input.ng-invalid.ng-dirty,
+  &.md-input-resized .md-input {
     padding-bottom: 0; // Increase border width by 1px, decrease padding by 1
     border-width: 0 0 $input-border-width-focused 0;
   }
