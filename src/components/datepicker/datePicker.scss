@@ -36,6 +36,21 @@ md-datepicker {
   max-width: $md-calendar-width - $md-datepicker-button-gap;
 }
 
+// The input into which the user can type the start date within a date range.
+.md-date-range-picker-start-input {
+  min-width: 70px;
+}
+
+// The input into which the user can type the start date within a date range.
+.md-date-range-picker-end-input {
+  min-width: 100px;
+}
+
+// The input into which the user can type the start date within a date range.
+.md-date-range-picker-input-separator {
+  margin-right: 10px;
+}
+
 // Container for the datepicker input.
 .md-datepicker-input-container {
   // Position relative in order to absolutely position the down-triangle button within.

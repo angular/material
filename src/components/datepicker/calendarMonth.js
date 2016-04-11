@@ -116,10 +116,18 @@
         cell.classList.add(TODAY_CLASS);
       }
 
-      if (this.dateUtil.isValidDate(calendarCtrl.selectedDate) &&
-          this.dateUtil.isSameDay(opt_date, calendarCtrl.selectedDate)) {
-        cell.classList.add(SELECTED_DATE_CLASS);
-        cell.setAttribute('aria-selected', 'true');
+      if (!calendarCtrl.isDateRange) {
+        if (this.dateUtil.isValidDate(calendarCtrl.selectedDate) &&
+            this.dateUtil.isSameDay(opt_date, calendarCtrl.selectedDate)) {
+          cell.classList.add(SELECTED_DATE_CLASS);
+          cell.setAttribute('aria-selected', 'true');
+        }
+      } else {
+        if (this.dateUtil.isValidDate(calendarCtrl.selectedStartDate) &&
+            this.dateUtil.isSameDay(opt_date, calendarCtrl.selectedStartDate)) {
+          cell.classList.add(SELECTED_DATE_CLASS);
+          cell.setAttribute('aria-selected', 'true');
+        }
       }
 
       var cellText = this.dateLocale.dates[opt_date.getDate()];

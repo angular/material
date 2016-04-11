@@ -59,8 +59,10 @@
         minDate: '=mdMinDate',
         maxDate: '=mdMaxDate',
         dateFilter: '=mdDateFilter',
+        start: '=mdStartDate',
+        end: '=mdEndDate',
       },
-      require: ['ngModel', 'mdCalendar'],
+      require: ['?ngModel', 'mdCalendar'],
       controller: CalendarCtrl,
       controllerAs: 'ctrl',
       bindToController: true,
@@ -163,6 +165,12 @@
     /** @type {!angular.NgModelController} */
     this.ngModelCtrl = null;
 
+    /** @type {Date} */
+    this.startDate = null;
+
+    /** @type {Date} */
+    this.endDate = null;
+
     /**
      * The selected date. Keep track of this separately from the ng-model value so that we
      * can know, when the ng-model value changes, what the previous value was before it's updated
@@ -173,6 +181,24 @@
     this.selectedDate = null;
 
     /**
+     * The selected start date. Keep track of this separately from the startDate value so that we
+     * can know, when the startDate value changes, what the previous value was before it's updated
+     * in the component's UI.
+     *
+     * @type {Date}
+     */
+    this.selectedStartDate = null;
+
+    /**
+     * The selected end date. Keep track of this separately from the endDate value so that we
+     * can know, when the endDate value changes, what the previous value was before it's updated
+     * in the component's UI.
+     *
+     * @type {Date}
+     */
+    this.selectedEndDate = null;
+
+    /**
      * The date that is currently focused or showing in the calendar. This will initially be set
      * to the ng-model value if set, otherwise to today. It will be updated as the user navigates
      * to other months. The cell corresponding to the displayDate does not necesarily always have
@@ -180,6 +206,15 @@
      * @type {Date}
      */
     this.displayDate = null;
+
+    /**
+     * The start date which is currently focused or showing in the calendar. This will initially be set
+     * to the startDate value. It will be updated as the user navigates to other months.
+     * The cell corresponding to the displayStartDate does not necessarily always have
+     * focus in the document (such as for cases when the user is scrolling the calendar).
+     * @type {Date}
+     */
+    this.displayStartDate = null;
 
     /**
      * The date that has or should have focus.
@@ -193,6 +228,32 @@
     /** @type {boolean} */
     this.isMonthTransitionInProgress = false;
 
+    /**
+     * Whether or not the datepicker is being used as a date-range picker.
+     * @type {boolean}
+     */
+    this.isDateRange = null;
+
+    /**
+     * This variable serves a similar purpose within the date-range-picker context, as ngModel.$viewValue does within
+     * the date-picker context: it represents the string value of the start date.
+     * @type {string}
+     */
+    this.startDateViewValue = null;
+
+    /**
+     * This variable serves a similar purpose within the date-range-picker context, as ngModel.$viewValue does within
+     * the date-picker context: it represents the string value of the end date.
+     * @type {string}
+     */
+    this.endDateViewValue = null;
+
+    /**
+     * The date within the range which was just set.
+     * @type {string}
+     */
+    this.mode = 'start';
+    
     // Unless the user specifies so, the calendar should not be a tab stop.
     // This is necessary because ngAria might add a tabindex to anything with an ng-model
     // (based on whether or not the user has turned that particular feature on/off).
@@ -228,12 +289,22 @@
    * @param {!angular.NgModelController} ngModelCtrl
    */
   CalendarCtrl.prototype.configureNgModel = function(ngModelCtrl) {
-    this.ngModelCtrl = ngModelCtrl;
-
     var self = this;
-    ngModelCtrl.$render = function() {
-      self.changeSelectedDate(self.ngModelCtrl.$viewValue);
-    };
+
+    self.isDateRange = self.$scope.ctrl.start != null;
+
+    if (!self.isDateRange) {
+      this.ngModelCtrl = ngModelCtrl;
+      ngModelCtrl.$render = function() {
+        self.changeSelectedDate(self.ngModelCtrl.$viewValue);
+      };
+    } else {
+      this.startDate = this.$scope.ctrl.start;
+      this.endDate = this.$scope.ctrl.end;
+      this.startDateViewValue = this.startDate;
+      this.endDateViewValue = this.endDate;
+      this.changeSelectedStartDate(this.startDateViewValue);
+    }
   };
 
   /**
@@ -244,8 +315,13 @@
     this.buildWeekHeader();
     this.hideVerticalScrollbar();
 
-    this.displayDate = this.selectedDate || this.today;
-    this.isInitialized = true;
+    if (!this.isDateRange) {
+      this.displayDate = this.selectedDate || this.today;
+      this.isInitialized = true;
+    } else {
+      this.displayStartDate = this.selectedStartDate;
+      this.isInitialized = true;
+    }
   };
 
   /**
@@ -377,9 +453,21 @@
    * @param {Date} date
    */
   CalendarCtrl.prototype.setNgModelValue = function(date) {
-    this.$scope.$emit('md-calendar-change', date);
-    this.ngModelCtrl.$setViewValue(date);
-    this.ngModelCtrl.$render();
+    if (!this.isDateRange) {
+      this.$scope.$emit('md-calendar-change', date);
+      this.ngModelCtrl.$setViewValue(date);
+      this.ngModelCtrl.$render();
+    } else {
+      this.$scope.$emit('md-calendar-change', date, this.mode);
+
+      if (this.mode == 'start') {
+        this.startDateViewValue = date;
+        this.changeSelectedStartDate(this.startDateViewValue);
+      } else {
+        this.endDateViewValue = date;
+        this.changeSelectedStartDate(this.endDateViewValue);
+      }
+    }
   };
 
   /**
@@ -456,6 +544,38 @@
 
 
   /**
+   * Change the selected start date in the calendar.
+   * @param {Date} date
+   */
+  CalendarCtrl.prototype.changeSelectedStartDate = function(date) {
+    var self = this;
+    var previousSelectedStartDate = this.selectedStartDate;
+    this.selectedStartDate = date;
+    this.changeDisplayStartDate(date).then(function() {
+
+      // Remove the selected class from the previously selected date, if any.
+      if (previousSelectedStartDate) {
+        var prevDateCell =
+            document.getElementById(self.getDateId(previousSelectedStartDate));
+        if (prevDateCell) {
+          prevDateCell.classList.remove(SELECTED_DATE_CLASS);
+          prevDateCell.setAttribute('aria-selected', 'false');
+        }
+      }
+
+      // Apply the select class to the new selected date if it is set.
+      if (date) {
+        var dateCell = document.getElementById(self.getDateId(date));
+        if (dateCell) {
+          dateCell.classList.add(SELECTED_DATE_CLASS);
+          dateCell.setAttribute('aria-selected', 'true');
+        }
+      }
+    });
+  };
+
+
+  /**
    * Change the date that is being shown in the calendar. If the given date is in a different
    * month, the displayed month will be transitioned.
    * @param {Date} date
@@ -485,6 +605,37 @@
 
     return animationPromise;
   };
+
+
+  /**
+   * Change the date which is being shown in the calendar. If the given date is in a different
+   * month, the displayed month will be transitioned.
+   * @param {Date} date
+   */
+  CalendarCtrl.prototype.changeDisplayStartDate = function(date) {
+    if (!this.isInitialized) {
+      this.buildInitialCalendarDisplay();
+      return this.$q.when();
+    }
+
+    // If trying to show an invalid date or a transition is in progress, do nothing.
+    if (!this.dateUtil.isValidDate(date) || this.isMonthTransitionInProgress) {
+      return this.$q.when();
+    }
+
+    this.isMonthTransitionInProgress = true;
+    var animationPromise = this.animateDateChange(date);
+
+    this.displayStartDate = date;
+
+    var self = this;
+    animationPromise.then(function() {
+      self.isMonthTransitionInProgress = false;
+    });
+
+    return animationPromise;
+  };
+
 
   /**
    * Animates the transition from the calendar's current month to the given month.
