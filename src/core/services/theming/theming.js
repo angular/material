@@ -63,6 +63,8 @@ var GENERATED = { };
 var PALETTES;
 var THEMES;
 
+// Text Colors on light and dakr backgrounds
+// @see https://www.google.com/design/spec/style/color.html#color-text-background-colors
 var DARK_FOREGROUND = {
   name: 'dark',
   '1': 'rgba(0,0,0,0.87)',
