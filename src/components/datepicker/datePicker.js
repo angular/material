@@ -478,11 +478,9 @@
     var self = this;
 
     //TODO(sueinh): Update the md-calendar directive controller to emit the md-calendar-range-change event when a date range change occurs
-    self.$scope.$on('md-calendar-change', function(event, date, type) {
-      // TODO(sueinh): Adding hard coded flag temporarily to prevent errors. Remove this hard coded flag once the md-calendar emit change has been made.
-      type = 'start';
-      if (type) {
-        if (type == 'start') {
+    self.$scope.$on('md-calendar-change', function(event, date, mode) {
+      if (mode) {
+        if (mode == 'start') {
           self.setStartDateViewValue(date);
           self.startDate = date;
           self.startInputElement.value = self.dateLocale.formatDate(date);

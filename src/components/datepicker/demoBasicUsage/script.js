@@ -4,8 +4,8 @@ angular.module('datepickerBasicUsage',
   $scope.startDate = new Date();
   $scope.endDate = new Date(
       $scope.startDate.getFullYear(),
-      $scope.startDate.getMonth() + 2,
-      $scope.startDate.getDate()
+      $scope.startDate.getMonth(),
+      $scope.startDate.getDate() + 4
   );
 
   $scope.myDate = new Date();

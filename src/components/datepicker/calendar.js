@@ -77,6 +77,12 @@
   /** Class applied to the selected date cell/. */
   var SELECTED_DATE_CLASS = 'md-calendar-selected-date';
 
+  /** Class applied to the selected start date cell/. */
+  var SELECTED_START_DATE_CLASS = 'md-calendar-selected-start-date';
+
+  /** Class applied to the selected end date cell/. */
+  var SELECTED_END_DATE_CLASS = 'md-calendar-selected-end-date';
+
   /** Class applied to the focused date cell/. */
   var FOCUSED_DATE_CLASS = 'md-focus';
 
@@ -304,6 +310,7 @@
       this.startDateViewValue = this.startDate;
       this.endDateViewValue = this.endDate;
       this.changeSelectedStartDate(this.startDateViewValue);
+      this.changeSelectedEndDate(this.endDateViewValue);
     }
   };
 
@@ -320,6 +327,7 @@
       this.isInitialized = true;
     } else {
       this.displayStartDate = this.selectedStartDate;
+      this.displayEndDate = this.selectedEndDate;
       this.isInitialized = true;
     }
   };
@@ -558,7 +566,7 @@
         var prevDateCell =
             document.getElementById(self.getDateId(previousSelectedStartDate));
         if (prevDateCell) {
-          prevDateCell.classList.remove(SELECTED_DATE_CLASS);
+          prevDateCell.classList.remove(SELECTED_START_DATE_CLASS);
           prevDateCell.setAttribute('aria-selected', 'false');
         }
       }
@@ -567,7 +575,39 @@
       if (date) {
         var dateCell = document.getElementById(self.getDateId(date));
         if (dateCell) {
-          dateCell.classList.add(SELECTED_DATE_CLASS);
+          dateCell.classList.add(SELECTED_START_DATE_CLASS);
+          dateCell.setAttribute('aria-selected', 'true');
+        }
+      }
+    });
+  };
+
+
+  /**
+   * Change the selected end date in the calendar.
+   * @param {Date} date
+   */
+  CalendarCtrl.prototype.changeSelectedEndDate = function(date) {
+    var self = this;
+    var previousSelectedEndDate = this.selectedEndDate;
+    this.selectedEndDate = date;
+    this.changeDisplayEndDate(date).then(function() {
+
+      // Remove the selected class from the previously selected date, if any.
+      if (previousSelectedEndDate) {
+        var prevDateCell =
+            document.getElementById(self.getDateId(previousSelectedEndDate));
+        if (prevDateCell) {
+          prevDateCell.classList.remove(SELECTED_END_DATE_CLASS);
+          prevDateCell.setAttribute('aria-selected', 'false');
+        }
+      }
+
+      // Apply the select class to the new selected date if it is set.
+      if (date) {
+        var dateCell = document.getElementById(self.getDateId(date));
+        if (dateCell) {
+          dateCell.classList.add(SELECTED_END_DATE_CLASS);
           dateCell.setAttribute('aria-selected', 'true');
         }
       }
@@ -608,7 +648,7 @@
 
 
   /**
-   * Change the date which is being shown in the calendar. If the given date is in a different
+   * Change the start date which is being shown in the calendar. If the given start date is in a different
    * month, the displayed month will be transitioned.
    * @param {Date} date
    */
@@ -627,6 +667,36 @@
     var animationPromise = this.animateDateChange(date);
 
     this.displayStartDate = date;
+
+    var self = this;
+    animationPromise.then(function() {
+      self.isMonthTransitionInProgress = false;
+    });
+
+    return animationPromise;
+  };
+
+
+  /**
+   * Change the end date which is being shown in the calendar. If the given end date is in a different
+   * month, the displayed month will be transitioned.
+   * @param {Date} date
+   */
+  CalendarCtrl.prototype.changeDisplayEndDate = function(date) {
+    if (!this.isInitialized) {
+      this.buildInitialCalendarDisplay();
+      return this.$q.when();
+    }
+
+    // If trying to show an invalid date or a transition is in progress, do nothing.
+    if (!this.dateUtil.isValidDate(date) || this.isMonthTransitionInProgress) {
+      return this.$q.when();
+    }
+
+    this.isMonthTransitionInProgress = true;
+    var animationPromise = this.animateDateChange(date);
+
+    this.displayEndDate = date;
 
     var self = this;
     animationPromise.then(function() {
