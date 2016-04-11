@@ -1044,8 +1044,9 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelCss = document.querySelector(PANEL_EL).style;
-          expect(panelCss.bottom).toBeApproximately(myButtonRect.top);
+          var panelRect = document.querySelector(PANEL_EL)
+              .getBoundingClientRect();
+          expect(panelRect.bottom).toBeApproximately(myButtonRect.top);
         });
 
         it('top aligned with an element', function() {
@@ -1057,8 +1058,9 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelCss = document.querySelector(PANEL_EL).style;
-          expect(panelCss.top).toBeApproximately(myButtonRect.top);
+          var panelRect = document.querySelector(PANEL_EL)
+              .getBoundingClientRect();
+          expect(panelRect.top).toBeApproximately(myButtonRect.top);
         });
 
         it('centered with an element', function() {
@@ -1087,8 +1089,9 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelCss = document.querySelector(PANEL_EL).style;
-          expect(panelCss.bottom).toBeApproximately(myButtonRect.bottom);
+          var panelRect = document.querySelector(PANEL_EL)
+              .getBoundingClientRect();
+          expect(panelRect.bottom).toBeApproximately(myButtonRect.bottom);
         });
 
         it('below an element', function() {
@@ -1100,8 +1103,9 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelCss = document.querySelector(PANEL_EL).style;
-          expect(panelCss.top).toBeApproximately(myButtonRect.bottom);
+          var panelRect = document.querySelector(PANEL_EL)
+              .getBoundingClientRect();
+          expect(panelRect.top).toBeApproximately(myButtonRect.bottom);
         });
       });
 
@@ -1115,8 +1119,9 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelCss = document.querySelector(PANEL_EL).style;
-          expect(panelCss.right).toBeApproximately(myButtonRect.left);
+          var panelRect = document.querySelector(PANEL_EL)
+              .getBoundingClientRect();
+          expect(panelRect.right).toBeApproximately(myButtonRect.left);
         });
 
         it('right aligned with an element', function() {
@@ -1128,8 +1133,9 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelCss = document.querySelector(PANEL_EL).style;
-          expect(panelCss.right).toBeApproximately(myButtonRect.right);
+          var panelRect = document.querySelector(PANEL_EL)
+              .getBoundingClientRect();
+          expect(panelRect.right).toBeApproximately(myButtonRect.right);
         });
 
         it('centered with an element', function() {
@@ -1158,8 +1164,9 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelCss = document.querySelector(PANEL_EL).style;
-          expect(panelCss.left).toBeApproximately(myButtonRect.left);
+          var panelRect = document.querySelector(PANEL_EL)
+              .getBoundingClientRect();
+          expect(panelRect.left).toBeApproximately(myButtonRect.left);
         });
 
         it('offset to the right of an element', function() {
@@ -1171,8 +1178,9 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelCss = document.querySelector(PANEL_EL).style;
-          expect(panelCss.left).toBeApproximately(myButtonRect.right);
+          var panelRect = document.querySelector(PANEL_EL)
+              .getBoundingClientRect();
+          expect(panelRect.left).toBeApproximately(myButtonRect.right);
         });
       });
     });
