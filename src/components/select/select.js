@@ -685,6 +685,11 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
       self.ngModel = ngModel;
       self.modelBinding = binding;
 
+      // Setup a more robust version of isEmpty to ensure value is a valid option
+      self.ngModel.$isEmpty = function($viewValue) {
+        return !self.options[$viewValue];
+      };
+
       // Allow users to provide `ng-model="foo" ng-model-options="{trackBy: 'foo.id'}"` so
       // that we can properly compare objects set on the model to the available options
       if (ngModel.$options && ngModel.$options.trackBy) {
