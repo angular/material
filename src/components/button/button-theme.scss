@@ -156,8 +156,8 @@
   }
 }
 
-a.md-THEME_NAME-theme:not(.md-button),
-._md a:not(.md-button) {
+
+._md a.md-THEME_NAME-theme:not(.md-button) {
   &.md-primary {
     color: '{{primary-color}}';
 
