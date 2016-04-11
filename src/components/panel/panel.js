@@ -615,6 +615,9 @@ function MdPanelService($rootElement, $rootScope, $injector) {
     zIndex: defaultZIndex
   };
 
+  /** @private {!angular.Scope} */
+  this._$rootScope = $rootScope;
+
   /** @private {!Object} */
   this._config = {};
 
@@ -1107,7 +1110,10 @@ MdPanelRef.prototype._addStyles = function() {
     return; // Don't setup positioning.
   }
 
-  this._configurePosition();
+  // Wait for angular to finish processing the template, then position it
+  // correctly. This is necessary so that the panel will have a defined height
+  // and width.
+  this._$rootScope['$$postDigest'](angular.bind(this, this._configurePosition));
   this._panelContainer.addClass(MD_PANEL_HIDDEN);
 };
 
@@ -1683,11 +1689,11 @@ MdPanelPosition.prototype._calculatePanelPosition = function(panelEl) {
   switch (this._xPosition) {
     case MdPanelPosition.xPosition.OFFSET_START:
       // TODO(ErinCoughlan): Change OFFSET_START for rtl vs ltr.
-      this._right = targetLeft + 'px';
+      this._left = targetLeft - panelWidth + 'px';
       break;
     case MdPanelPosition.xPosition.ALIGN_END:
       // TODO(ErinCoughlan): Change ALIGN_END for rtl vs ltr.
-      this._right = targetRight + 'px';
+      this._left = targetRight - panelWidth + 'px';
       break;
     case MdPanelPosition.xPosition.CENTER:
       var left = targetLeft + (0.5 * targetWidth) - (0.5 * panelWidth);
@@ -1709,10 +1715,10 @@ MdPanelPosition.prototype._calculatePanelPosition = function(panelEl) {
 
   switch (this._yPosition) {
     case MdPanelPosition.yPosition.ABOVE:
-      this._bottom = targetTop + 'px';
+      this._top = targetTop - panelHeight + 'px';
       break;
     case MdPanelPosition.yPosition.ALIGN_BOTTOMS:
-      this._bottom = targetBottom + 'px';
+      this._top = targetBottom - panelHeight + 'px';
       break;
     case MdPanelPosition.yPosition.CENTER:
       var top = targetTop + (0.5 * targetHeight) - (0.5 * panelHeight);
