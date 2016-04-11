@@ -542,10 +542,27 @@ describe('md-input-container directive', function() {
       var oldHeight = textarea.offsetHeight;
       ngTextarea.val('Multiple\nlines\nof\ntext');
       ngTextarea.triggerHandler('input');
-      scope.$apply();
+      expect(textarea.offsetHeight).toBeGreaterThan(oldHeight);
+    });
+
+    it('should auto-size the textarea in response to an outside ngModel change', function() {
+      createAndAppendElement('ng-model="model"');
+      var oldHeight = textarea.offsetHeight;
+      scope.model = '1\n2\n3\n';
       $timeout.flush();
-      var newHeight = textarea.offsetHeight;
-      expect(newHeight).toBeGreaterThan(oldHeight);
+      expect(textarea.offsetHeight).toBeGreaterThan(oldHeight);
+    });
+
+    it('should allow the textarea to shrink if text is being deleted', function() {
+      createAndAppendElement();
+      ngTextarea.val('Multiple\nlines\nof\ntext');
+      ngTextarea.triggerHandler('input');
+      var oldHeight = textarea.offsetHeight;
+
+      ngTextarea.val('One line of text');
+      ngTextarea.triggerHandler('input');
+
+      expect(textarea.offsetHeight).toBeLessThan(oldHeight);
     });
 
     it('should not auto-size if md-no-autogrow is present', function() {
@@ -553,8 +570,6 @@ describe('md-input-container directive', function() {
       var oldHeight = textarea.offsetHeight;
       ngTextarea.val('Multiple\nlines\nof\ntext');
       ngTextarea.triggerHandler('input');
-      scope.$apply();
-      $timeout.flush();
       var newHeight = textarea.offsetHeight;
       expect(newHeight).toEqual(oldHeight);
     });
@@ -568,7 +583,6 @@ describe('md-input-container directive', function() {
       ngTextarea.val('Multiple\nlines\nof\ntext');
       ngTextarea.triggerHandler('input');
       scope.$apply();
-      $timeout.flush();
 
       // Textarea should still be hidden.
       expect(textarea.offsetHeight).toBe(0);
@@ -576,25 +590,66 @@ describe('md-input-container directive', function() {
       scope.parentHidden = false;
       scope.$apply();
 
-      $timeout.flush();
       var newHeight = textarea.offsetHeight;
       expect(textarea.offsetHeight).toBeGreaterThan(oldHeight);
     });
 
-    it('should make the textarea scrollable once it has reached the row limit', function() {
-      var scrollableClass = '_md-textarea-scrollable';
+    it('should set the rows attribute as the user types', function() {
+      createAndAppendElement();
+      expect(textarea.rows).toBe(1);
 
-      createAndAppendElement('rows="2"');
-
-      ngTextarea.val('Single line of text');
+      ngTextarea.val('1\n2\n3');
       ngTextarea.triggerHandler('input');
+      expect(textarea.rows).toBe(3);
+    });
 
-      expect(ngTextarea.hasClass(scrollableClass)).toBe(false);
-
-      ngTextarea.val('Multiple\nlines\nof\ntext');
+    it('should not allow the textarea rows to be less than the minimum number of rows', function() {
+      createAndAppendElement('rows="5"');
+      ngTextarea.val('1\n2\n3\n4\n5\n6\n7');
       ngTextarea.triggerHandler('input');
+      expect(textarea.rows).toBe(7);
 
-      expect(ngTextarea.hasClass(scrollableClass)).toBe(true);
+      ngTextarea.val('');
+      ngTextarea.triggerHandler('input');
+      expect(textarea.rows).toBe(5);
+    });
+
+    it('should not let a textarea grow past its maximum number of rows', function() {
+      createAndAppendElement('max-rows="5"');
+      ngTextarea.val('1\n2\n3');
+      ngTextarea.triggerHandler('input');
+      expect(textarea.rows).toBe(3);
+      expect(ngTextarea.attr('md-no-autogrow')).toBeUndefined();
+
+      ngTextarea.val('1\n2\n3\n4\n5\n6\n7\n8\n9');
+      ngTextarea.triggerHandler('input');
+      expect(textarea.rows).toBe(5);
+      expect(ngTextarea.attr('md-no-autogrow')).toBeDefined();
+    });
+
+    it('should add a handle for resizing the textarea', function() {
+      createAndAppendElement();
+      expect(element.querySelector('.md-resize-handle')).toBeTruthy();
+    });
+
+    it('should disable auto-sizing if the handle gets dragged', function() {
+      createAndAppendElement();
+      var handle = angular.element(element.querySelector('.md-resize-handle'));
+
+      ngTextarea.val('1\n2\n3');
+      ngTextarea.triggerHandler('input');
+      var oldHeight = textarea.offsetHeight;
+
+      handle.triggerHandler('mousedown');
+      ngElement.triggerHandler('$md.dragstart');
+      ngTextarea.val('1\n2\n3\n4\n5\n6');
+      ngTextarea.triggerHandler('input');
+      expect(textarea.offsetHeight).toBe(oldHeight);
+    });
+
+    it('should not add the handle if md-no-resize is present', function() {
+      createAndAppendElement('md-no-resize');
+      expect(element.querySelector('.md-resize-handle')).toBeFalsy();
     });
   });
 

@@ -35,10 +35,14 @@ md-input-container.md-THEME_NAME-theme {
         color: '{{foreground-2}}';
       }
     }
-    &.md-input-focused {
+    &.md-input-focused,
+    &.md-input-resized {
       .md-input {
         border-color: '{{primary-color}}';
       }
+    }
+
+    &.md-input-focused {
       label {
         color: '{{primary-color}}';
       }
