@@ -598,26 +598,34 @@ var FOCUS_TRAP_TEMPLATE = angular.element(
 function MdPanelService($rootElement, $rootScope, $injector) {
   /**
    * Default config options for the panel.
+   * Anything angular related needs to be done later. Therefore
+   *     scope: $rootScope.$new(true),
+   *     attachTo: $rootElement,
+   * are added later.
    * @private {!Object}
    */
   this._defaultConfigOptions = {
-    attachTo: $rootElement,
     bindToController: true,
     clickOutsideToClose: false,
     escapeToClose: false,
     focusOnOpen: true,
     fullscreen: false,
-    scope: $rootScope.$new(true),
     transformTemplate: angular.bind(this, this.wrapTemplate_),
     trapFocus: false,
     zIndex: defaultZIndex
   };
 
   /** @private {!Object} */
-  this._config = this._defaultConfigOptions;
+  this._config = {};
 
   /** @private {!angular.$injector} */
   this._$injector = $injector;
+
+  /** @private {!angular.$injector} */
+  this._$rootScope = $rootScope;
+
+  /** @private {!angular.JQLite} */
+  this._$rootElement = $rootElement;
 
   /**
    * Default animations that can be used within the panel.
@@ -649,7 +657,11 @@ function MdPanelService($rootElement, $rootScope, $injector) {
 MdPanelService.prototype.create = function(opt_config) {
   var configSettings = opt_config || {};
 
-  angular.extend(this._config, configSettings);
+  this._config = {
+    scope: this._$rootScope.$new(true),
+    attachTo: this._$rootElement
+  };
+  angular.extend(this._config, this._defaultConfigOptions, configSettings);
 
   var instanceId = 'panel_' + this._$injector.get('$mdUtil').nextUid();
   var instanceConfig = angular.extend({id : instanceId}, this._config);
@@ -796,9 +808,6 @@ function MdPanelRef(config, $injector) {
 
   /** @private {!angular.JQLite|undefined} */
   this._bottomFocusTrap;
-
-  /** @private {!angular.$q.Promise|undefined} */
-  this._reverseAnimation;
 }
 
 
@@ -939,7 +948,7 @@ MdPanelRef.prototype.show = function() {
   this._showPromise = this._$q(function(resolve, reject) {
     self.removeClass(MD_PANEL_HIDDEN);
     self._animateOpen().then(function() {
-      self.focusOnOpen();
+      self._focusOnOpen();
       resolve(self);
     }, reject);
   });
@@ -1026,8 +1035,9 @@ MdPanelRef.prototype.toggleClass = function(toggleClass) {
 
 /**
  * Focuses on the panel or the first focus target.
+ * @private
  */
-MdPanelRef.prototype.focusOnOpen = function() {
+MdPanelRef.prototype._focusOnOpen = function() {
   if (this._config['focusOnOpen']) {
     // Wait a digest to guarantee md-autofocus has finished adding the class
     // _md-autofocus, otherwise the focusable element isn't available to focus.
