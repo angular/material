@@ -235,6 +235,23 @@ describe('$mdPanel', function() {
   });
 
   describe('config options:', function() {
+
+    it('should allow multiple panels', function() {
+      var customClass = 'custom-class';
+
+      var config1 = {
+        panelClass: customClass,
+        template: DEFAULT_TEMPLATE
+      };
+
+      openPanel(config1);
+      openPanel(DEFAULT_CONFIG);
+
+      var panels = document.querySelectorAll(PANEL_EL);
+      expect(panels[0]).toHaveClass(customClass);
+      expect(panels[1]).not.toHaveClass(customClass);
+    });
+
     describe('should attach panel to a specific element', function() {
       var parentEl;
 
