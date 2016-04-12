@@ -1,0 +1,18 @@
+<div layout="column" ng-cloak ng-controller="ThemeDemoCtrl" class="md-padding">
+  <p>
+    <code>md-colors</code> directive will automatically watch for changes if it recognizes an interpolation or a function<br/>
+    This can be prevented using <code>md-colors-watch</code> attribute
+  </p>
+  <div layout="row" layout-wrap layout-align="center center">
+    <md-button ng-repeat="color in colors" flex-gt-md="15" flex="30"
+               md-colors="{background: '{{color}}'}" md-colors-watch="false"
+               ng-disabled="primary === color && !isPrimary" ng-click="selectTheme(color)">
+      {{color}}
+    </md-button>
+  </div>
+  <div layout="row" class="section" layout-align="center center">
+    <div layout="column" flex="50">
+      <theme-preview primary="primary" accent="accent"></theme-preview>
+    </div>
+  </div>
+</div>
