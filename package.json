@@ -16,6 +16,7 @@
     "type": "git",
     "url": "git://github.com/angular/material.git"
   },
+  "private": true,
   "style": "./dist/angular-material.css",
   "scss": "./dist/angular-material.scss",
   "devDependencies": {
