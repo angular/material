@@ -1,0 +1,29 @@
+<h2>{{primary}} - {{accent}}</h2>
+<div layout="column">
+  <div layout="column" layout-align="space-between"
+       md-colors="{background: '{{primary}}-500'}" class="primary line">
+    <span>Primary - {{primary}}</span>
+    <div layout="row" layout-align="space-between">
+      <span>500</span>
+      <span>{{getColor(primary + '-500')}}</span>
+    </div>
+  </div>
+  <div layout="row" layout-align="space-between" class="line"
+       md-colors="{background: '{{primary}}-700'}">
+    <span>700</span>
+    <span>{{getColor(primary + '-700')}}</span>
+  </div>
+  <div layout="row" layout-align="space-between" class="line"
+       md-colors="{background: '{{primary}}-800'}">
+    <span>800</span>
+    <span>{{getColor(primary + '-800')}}</span>
+  </div>
+  <div layout="column" layout-align="space-between"
+       md-colors="{background: '{{accent}}-A200'}" class="accent line">
+    <span>Accent - {{accent}}</span>
+    <div layout="row" layout-align="space-between">
+      <span>A200</span>
+      <span>{{getColor(accent + '-A200')}}</span>
+    </div>
+  </div>
+</div>
