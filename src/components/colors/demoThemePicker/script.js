@@ -1,8 +1,9 @@
 angular
   .module('colorsThemePickerDemo', ['ngMaterial'])
   .controller('ThemeDemoCtrl', function ($scope, $mdColorPalette) {
-    $scope.colors = Object.keys($mdColorPalette);
-    
+    $scope.colors = Object.keys($mdColorPalette); 
+
+    $scope.mdURL = 'https://www.google.com/design/spec/style/color.html#color-color-palette';
     $scope.primary = 'purple';
     $scope.accent = 'green';
 
