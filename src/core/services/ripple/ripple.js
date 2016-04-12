@@ -117,25 +117,35 @@ function InkRippleService ($injector) {
  * Controller used by the ripple service in order to apply ripples
  * @ngInject
  */
-function InkRippleCtrl ($scope, $element, rippleOptions, $window, $timeout, $mdUtil) {
-  this.$window    = $window;
-  this.$timeout   = $timeout;
-  this.$mdUtil    = $mdUtil;
-  this.$scope     = $scope;
-  this.$element   = $element;
-  this.options    = rippleOptions;
+function InkRippleCtrl ($scope, $element, rippleOptions, $window, $document, $timeout, $mdUtil, $mdConstant) {
+  this.$window         = $window;
+  this.$document       = $document;
+  this.$timeout        = $timeout;
+  this.$mdUtil         = $mdUtil;
+  this.$mdConstant     = $mdConstant;
+  this.$scope          = $scope;
+  this.options         = rippleOptions;
+  this.explode         = rippleOptions.inkExplode || false;
+  this.$element        = $element;
+  this.containerParent = null;
+  this.updateContainerParent(); //initialize containerParent
   this.mousedown  = false;
   this.ripples    = [];
   this.timeout    = null; // Stores a reference to the most-recent ripple timeout
   this.lastRipple = null;
+  this.duration   = null;
+  this.updateDuration(); //initialize duration
+
 
   $mdUtil.valueOnUse(this, 'container', this.createContainer);
 
   this.$element.addClass('md-ink-ripple');
 
   // attach method for unit tests
-  ($element.controller('mdInkRipple') || {}).createRipple = angular.bind(this, this.createRipple);
-  ($element.controller('mdInkRipple') || {}).setColor = angular.bind(this, this.color);
+  var ctrl                   = this.$element.controller('mdInkRipple') || this.$element.controller('mdInkExplode') || {};
+  ctrl.createRipple          = angular.bind(this, this.createRipple);
+  ctrl.setColor              = angular.bind(this, this.color);
+  ctrl.createRippleFromEvent = angular.bind(this, createRippleFromEvent, this);
 
   this.bindEvents();
 }
@@ -167,6 +177,10 @@ InkRippleCtrl.prototype.color = function (value) {
     self._color = self._parseColor(value);
   }
 
+  if (self.explode) {
+    return self._color || self._parseColor( this.$element.attr('md-ink-explode-color') )
+           || self._parseColor( self.inkRipple() ) || self._parseColor( getElementColor() );
+  }
   // If color lookup, use assigned, defined, or inherited
   return self._color || self._parseColor( self.inkRipple() ) || self._parseColor( getElementColor() );
 
@@ -176,7 +190,7 @@ InkRippleCtrl.prototype.color = function (value) {
    */
   function getElementColor () {
     var items = self.options && self.options.colorElement ? self.options.colorElement : [];
-    var elem =  items.length ? items[ 0 ] : self.$element[ 0 ];
+    var elem  = items.length ? items[ 0 ] : self.containerParent[ 0 ];
 
     return elem ? self.$window.getComputedStyle(elem).color : 'rgb(0,0,0)';
   }
@@ -242,7 +256,7 @@ InkRippleCtrl.prototype._parseColor = function parseColor (color, multiplier) {
 InkRippleCtrl.prototype.bindEvents = function () {
   this.$element.on('mousedown', angular.bind(this, this.handleMousedown));
   this.$element.on('mouseup touchend', angular.bind(this, this.handleMouseup));
-  this.$element.on('mouseleave', angular.bind(this, this.handleMouseup));
+  this.$element.on('mouseleave', angular.bind(this, this.handleMouseleave));
   this.$element.on('touchmove', angular.bind(this, this.handleTouchmove));
 };
 
@@ -252,32 +266,57 @@ InkRippleCtrl.prototype.bindEvents = function () {
  */
 InkRippleCtrl.prototype.handleMousedown = function (event) {
   if ( this.mousedown ) return;
-
-  // When jQuery is loaded, we have to get the original event
-  if (event.hasOwnProperty('originalEvent')) event = event.originalEvent;
   this.mousedown = true;
-  if (this.options.center) {
-    this.createRipple(this.container.prop('clientWidth') / 2, this.container.prop('clientWidth') / 2);
+  //Return and wait until mouseup if this is an explode ripple
+  if (this.explode) return;
+  createRippleFromEvent(this, event);
+};
+
+/**
+ * If this instance is an explode create the ripple, otherwise,
+ * Either remove or unlock any remaining ripples when the user mouses off of the element (either by
+ * mouseup, touchend or mouseleave event)
+ */
+InkRippleCtrl.prototype.handleMouseup = function (event) {
+  //If this is an explode ripple and it is not a right click create the ripple
+  if (this.explode && event.which !== this.$mdConstant.KEY_CODE.RIGHT_CLICK) {
+    this.mousedown = false;
+    // When jQuery is loaded, we have to get the original event
+    createRippleFromEvent(this, event);
   } else {
-
-    // We need to calculate the relative coordinates if the target is a sublayer of the ripple element
-    if (event.srcElement !== this.$element[0]) {
-      var layerRect = this.$element[0].getBoundingClientRect();
-      var layerX = event.clientX - layerRect.left;
-      var layerY = event.clientY - layerRect.top;
-
-      this.createRipple(layerX, layerY);
-    } else {
-      this.createRipple(event.offsetX, event.offsetY);
-    }
+    autoCleanup(this, this.clearRipples);
   }
 };
 
 /**
- * Either remove or unlock any remaining ripples when the user mouses off of the element (either by
- * mouseup, touchend or mouseleave event)
+ * Take an event and create the ripple from it.
+ * @param event
  */
-InkRippleCtrl.prototype.handleMouseup = function () {
+function createRippleFromEvent (self, event) {
+  if (event.hasOwnProperty('originalEvent')) event = event.originalEvent;
+  self.updateContainerParent();
+  self.updateDuration();
+  if (self.options.center) {
+    self.createRipple(self.container.prop('clientWidth') / 2, self.container.prop('clientWidth') / 2);
+  } else {
+    // We need to calculate the relative coordinates if the target is a sublayer of the ripple element
+    if (event.srcElement !== self.containerParent[ 0 ]) {
+      var layerRect = self.containerParent[ 0 ].getBoundingClientRect();
+      var layerX    = event.clientX - layerRect.left;
+      var layerY    = event.clientY - layerRect.top;
+
+      self.createRipple(layerX, layerY);
+    } else {
+      self.createRipple(event.offsetX, event.offsetY);
+    }
+  }
+}
+
+/**
+ * Either remove or unlock any remaining ripples when the user mouses off of the element (by
+ * mouseleave)
+ */
+InkRippleCtrl.prototype.handleMouseleave = function () {
   autoCleanup(this, this.clearRipples);
 };
 
@@ -307,17 +346,70 @@ InkRippleCtrl.prototype.clearRipples = function () {
     this.fadeInComplete(this.ripples[ i ]);
   }
 };
-
+/**
+ * Check the md-ink-explode-dur attribute for modification and update the duration
+ * @returns {*}
+ */
+InkRippleCtrl.prototype.updateDuration = function () {
+  this.duration = parseInt(this.$element.attr('md-ink-explode-duration')) || DURATION;
+  return this.duration;
+};
 /**
  * Creates the ripple container element
  * @returns {*}
  */
 InkRippleCtrl.prototype.createContainer = function () {
-  var container = angular.element('<div class="md-ripple-container"></div>');
-  this.$element.append(container);
+  var container = this.getContainer();
+  if (!container) {
+    container = angular.element('<div class="md-ripple-container"></div>');
+    this.containerParent.append(container);
+  }
   return container;
 };
 
+/**
+ * Look for an existing container in the containerParent
+ * @returns {*}
+ */
+InkRippleCtrl.prototype.getContainer = function () {
+  //Check the attribute for modification
+  this.updateContainerParent();
+  var container;
+  if ( !this.containerParent ) return;
+  var children = this.containerParent.children();
+  angular.forEach(children, function (child) {
+    if ( angular.element(child).hasClass('md-ripple-container') ) {
+      container = angular.element(child);
+    }
+  });
+  return container;
+};
+
+/**
+ * Check the md-ink-explode attribute for modification and update the container element
+ * @returns {*}
+ */
+InkRippleCtrl.prototype.updateContainerParent = function() {
+  var selector = this.inkExplode();
+  if (!selector && !this._lastExplodeSelector) {
+    this.containerParent = this.$element;
+    return this.containerParent;
+  }
+  if (selector !== this._lastExplodeSelector) {
+    this._lastExplodeSelector = selector;
+    //Remove the old container
+    var oldContainer = this.getContainer();
+    if (oldContainer) {
+      oldContainer.remove();
+    }
+    if (selector && selector !== '') {
+      this.containerParent = angular.isElement(selector) ? selector : this.$document[0].querySelector(selector);
+      this.containerParent = angular.element(this.containerParent);
+    }
+    this.createContainer();
+  }
+  return this.containerParent;
+};
 InkRippleCtrl.prototype.clearTimeout = function () {
   if (this.timeout) {
     this.$timeout.cancel(this.timeout);
@@ -332,7 +424,8 @@ InkRippleCtrl.prototype.isRippleAllowed = function () {
 
     if (element && angular.isFunction(element.hasAttribute)) {
       if (element.hasAttribute('disabled')) return false;
-      if (this.inkRipple() === 'false' || this.inkRipple() === '0') return false;
+      if (this.inkRipple() === 'false' || this.inkRipple() === '0' ||
+          this.inkExplode() === 'false' || this.inkExplode() === '0' ) return false;
     }
 
   } while (element = element.parentNode);
@@ -346,6 +439,13 @@ InkRippleCtrl.prototype.isRippleAllowed = function () {
 InkRippleCtrl.prototype.inkRipple = function () {
   return this.$element.attr('md-ink-ripple');
 };
+/**
+ * The attribute `md-ink-explode` may be a static or interpolated
+ * color value OR a boolean indicator (used to disable ripples)
+ */
+InkRippleCtrl.prototype.inkExplode = function () {
+  return this.$element.attr('md-ink-explode');
+};
 
 /**
  * Creates a new ripple and adds it to the container.  Also tracks ripple in `this.ripples`.
@@ -355,14 +455,15 @@ InkRippleCtrl.prototype.inkRipple = function () {
 InkRippleCtrl.prototype.createRipple = function (left, top) {
   if (!this.isRippleAllowed()) return;
 
-  var ctrl        = this;
-  var ripple      = angular.element('<div class="md-ripple"></div>');
-  var width       = this.$element.prop('clientWidth');
-  var height      = this.$element.prop('clientHeight');
-  var x           = Math.max(Math.abs(width - left), left) * 2;
-  var y           = Math.max(Math.abs(height - top), top) * 2;
-  var size        = getSize(this.options.fitRipple, x, y);
-  var color       = this.calculateColor();
+  var ctrl   = this;
+  var ripple = angular.element('<div class="md-ripple"></div>');
+  var width  = this.containerParent.prop('clientWidth');
+  var height = this.containerParent.prop('clientHeight');
+  var x      = Math.max(Math.abs(width - left), left) * 2;
+  var y      = Math.max(Math.abs(height - top), top) * 2;
+  var size   = getSize(this.options.fitRipple, x, y);
+  var color  = this.calculateColor();
+  this.explode && ripple.addClass('md-ripple-explode');
 
   ripple.css({
     left:            left + 'px',
@@ -377,10 +478,10 @@ InkRippleCtrl.prototype.createRipple = function (left, top) {
 
   // we only want one timeout to be running at a time
   this.clearTimeout();
-  this.timeout    = this.$timeout(function () {
+  this.timeout = this.$timeout(function () {
     ctrl.clearTimeout();
-    if (!ctrl.mousedown) ctrl.fadeInComplete(ripple);
-  }, DURATION * 0.35, false);
+    if (!ctrl.mousedown && !ctrl.explode) ctrl.fadeInComplete(ripple);
+  }, ctrl.duration * .35, false);
 
   if (this.options.dimBackground) this.container.css({ backgroundColor: color });
   this.container.append(ripple);
@@ -392,7 +493,7 @@ InkRippleCtrl.prototype.createRipple = function (left, top) {
     ripple.addClass('md-ripple-scaled md-ripple-active');
     ctrl.$timeout(function () {
       ctrl.clearRipples();
-    }, DURATION, false);
+    }, ctrl.duration, false);
 
   }, false);
 
@@ -440,7 +541,7 @@ InkRippleCtrl.prototype.removeRipple = function (ripple) {
   // we don't actually care how long the animation takes
   this.$timeout(function () {
     ctrl.fadeOutComplete(ripple);
-  }, DURATION, false);
+  }, ctrl.duration, false);
 };
 
 /**
@@ -449,7 +550,9 @@ InkRippleCtrl.prototype.removeRipple = function (ripple) {
  */
 InkRippleCtrl.prototype.fadeOutComplete = function (ripple) {
   ripple.remove();
-  this.lastRipple = null;
+  if (this.lastRipple === ripple) {
+    this.lastRipple = null;
+  }
 };
 
 /**

@@ -114,7 +114,7 @@ input {
   transition: all 0.55s $swift-ease-out-timing-function;
 }
 
-.md-ripple {
+.md-ripple, .md-ripple-explode {
   position: absolute;
   transform: translate(-50%, -50%) scale(0);
   transform-origin: 50% 50%;
@@ -134,6 +134,20 @@ input {
   }
   &.md-ripple-active, &.md-ripple-full, &.md-ripple-visible {
     opacity: 0.20;
+  }
+}
+.md-ripple-explode {
+  &.md-ripple-placed {
+    $sizeDuration: 0.45s * 2;
+    transition: margin $sizeDuration $swift-ease-out-timing-function,
+    border $sizeDuration $swift-ease-out-timing-function,
+    width $sizeDuration $swift-ease-out-timing-function,
+    height $sizeDuration $swift-ease-out-timing-function,
+    opacity 0s $swift-ease-out-timing-function,
+    transform $sizeDuration $swift-ease-out-timing-function;
+  }
+  &.md-ripple-active, &.md-ripple-full, &.md-ripple-visible {
+    opacity: 1;
   }
 }
 
