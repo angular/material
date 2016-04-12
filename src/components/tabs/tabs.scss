@@ -286,3 +286,30 @@ md-toolbar + md-tabs {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+md-tabs[md-rtl] {
+  .md-tab {
+    float: right;
+  }
+  md-tab-content {
+    &.md-left:not(.md-active) {
+      -webkit-transform: translateX(100%);
+      transform: translateX(100%);
+    }
+    &.md-right:not(.md-active) {
+      -webkit-transform: translateX(-100%);
+      transform: translateX(-100%);
+    }
+  }
+  md-tabs-canvas {
+    .md-dummy-wrapper {
+      left: auto;
+      right: 0;
+    }
+
+    md-pagination-wrapper {
+      left: auto;
+      right: 0;
+    }
+  }
+}
