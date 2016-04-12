@@ -1,4 +1,4 @@
-md-chips.md-THEME_NAME-theme {
+md-chips.md-THEME_NAME-theme, data-md-chips.md-THEME_NAME-theme {
 
   .md-chips {
     box-shadow: 0 1px '{{foreground-4}}';
@@ -15,11 +15,11 @@ md-chips.md-THEME_NAME-theme {
     }
   }
 
-  md-chip {
+  md-chip, data-md-chip {
     background: '{{background-300}}';
     color: '{{background-800}}';
 
-    md-icon {
+    md-icon, data-md-icon {
       color: '{{background-700}}';
     }
 
@@ -27,7 +27,7 @@ md-chips.md-THEME_NAME-theme {
       background: '{{primary-color}}';
       color: '{{primary-contrast}}';
 
-      md-icon {
+      md-icon, data-md-icon {
         color: '{{primary-contrast}}';
       }
     }
@@ -37,9 +37,9 @@ md-chips.md-THEME_NAME-theme {
       color: '{{background-800}}';
     }
   }
-  md-chip-remove {
+  md-chip-remove, data-md-chip-remove {
     .md-button {
-      md-icon {
+      md-icon, data-md-icon {
         path {
           fill: '{{background-500}}';
         }
