@@ -1,10 +1,12 @@
 /** Demo styles for mdCalendar. */
 md-content {
+  padding: 8px 16px;
   padding-bottom: 200px;
 }
 
 .validation-messages {
   font-size: 12px;
   color: #dd2c00;
-  margin-left: 15px;
+  margin-left: 36px;
+  margin-top: -8px;
 }

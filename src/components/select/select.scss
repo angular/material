@@ -5,21 +5,38 @@ $select-option-height: 48px !default;
 $select-option-padding: 16px !default;
 $select-container-padding: 16px !default;
 $select-container-transition-duration: 350ms !default;
-
+$select-value-padding-top: 6px;
+$select-value-padding-bottom: 4px;
 $select-max-visible-options: 5 !default;
+
+// from input.scss
+$input-label-default-offset: 24px !default;
+$default-bottom-margin: 11px !default;
+
+$md-inline-alignment: $input-label-default-offset;
 
 // Fixes the animations with the floating label when select is inside an input container
 md-input-container {
   &:not([md-no-float]) {
     .md-select-placeholder span:first-child {
-      transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
-      @include rtl(transform-origin, left top, right top);
+      transform: translate3d(0, 0, 0);
+      transition: transform $swift-ease-out-timing-function $swift-ease-out-duration,
+                  font-size $swift-ease-out-duration $swift-ease-out-timing-function;
+      font-size: inherit;
     }
   }
   &.md-input-focused {
     &:not([md-no-float]) {
       .md-select-placeholder span:first-child {
-        transform: translateY(-22px) translateX(-2px) scale(0.75);
+        transform: translateY(-24px) translate(-1px);
+        transition: transform $swift-ease-out-timing-function $swift-ease-out-duration,
+                    font-size $swift-ease-out-duration $swift-ease-out-timing-function;
+        font-size: 12px;
+      }
+      &:not(.md-input-has-value) {
+        .md-select-label:not(.md-no-float) {
+          opacity: 0;
+        }
       }
     }
   }
@@ -71,11 +88,15 @@ md-input-container {
   }
 }
 
-md-input-container > md-select {
-  margin: 0;
-  order: 2;
+
+md-input-container.md-input-has-label > md-select {
+  padding-top: $input-label-default-offset;
+  margin-bottom: $default-bottom-margin;
 }
 
+md-input-container.md-input-has-messages > md-select {
+  margin-bottom: 4px;
+}
 
 // Show the asterisk on the placeholder if the element is required
 //
@@ -91,18 +112,8 @@ md-input-container:not(.md-input-has-value) {
   }
 }
 
-md-input-container.md-input-invalid {
-  md-select {
-    .md-select-value {
-      border-bottom-style: solid;
-      padding-bottom: 1px;
-    }
-  }
-}
-
 md-select {
   display: flex;
-  margin: 2.5*$baseline-grid 0 3*$baseline-grid + 2 0;
 
   &[required], &.ng-required {
     &.ng-invalid {
@@ -120,7 +131,12 @@ md-select {
     // to create a dotted line under the input.
     background-size: 4px 1px;
     background-repeat: repeat-x;
-    margin-bottom: -1px; // Shift downward so dotted line is positioned the same as other bottom borders
+    // Add to padding-bottom to keep dotted line aligned with other bottom borders
+    // Sub from padding-top to keep height consistent
+    // Translate text 1px up to keep in alignment
+    padding-bottom: $select-value-padding-bottom + 1;
+    padding-top: $select-value-padding-top - 1;
+    transform: translate3d(0, 1px, 0);
   }
 
   &:focus {
@@ -133,45 +149,35 @@ md-select {
     &:hover {
       cursor: pointer
     }
-    &.ng-invalid.ng-touched {
+    &.ng-invalid.ng-touched:not(:focus) {
       .md-select-value {
-        border-bottom-style: solid;
-        padding-bottom: 1px;
+        border-bottom: 1px solid;
       }
     }
     &:focus {
       .md-select-value {
         border-bottom-width: 2px;
         border-bottom-style: solid;
-        padding-bottom: 0;
-      }
-      &.ng-invalid.ng-touched {
-        .md-select-value {
-          padding-bottom: 0;
-        }
+        padding-bottom: $select-value-padding-bottom - 1;
       }
     }
-  }
-}
-
-// Fix value by 1px to align with standard text inputs (and spec)
-md-input-container.md-input-has-value .md-select-value {
-  > span:not(.md-select-icon) {
-    transform: translate3d(0, 1px, 0);
   }
 }
 
 .md-select-value {
   display: flex;
   align-items: center;
-  padding: 2px 2px 1px;
+  padding-top: $select-value-padding-top;
+  padding-bottom: $select-value-padding-bottom;
   border-bottom-width: 1px;
   border-bottom-style: solid;
   background-color: rgba(0,0,0,0);
   position: relative;
   box-sizing: content-box;
-  min-width: 8 * $baseline-grid;
+  min-width: 11 * $baseline-grid;
   min-height: 26px;
+  margin-bottom: auto;
+  -ms-flex-item-align: start; // workaround for margin-bottom: auto
   flex-grow: 1;
 
 
@@ -192,7 +198,6 @@ md-input-container.md-input-has-value .md-select-value {
     align-items: flex-end;
     text-align: end;
     width: 3 * $baseline-grid;
-    margin: 0 .5 * $baseline-grid;
     transform: translate3d(0, -2px, 0);
     font-size: 1.2rem;
   }
@@ -202,9 +207,11 @@ md-input-container.md-input-has-value .md-select-value {
     content: '\25BC';
     position: relative;
     top: 2px;
+    @include rtl(right, -4px, auto);
+    @include rtl(left, auto, -4px);
     speak: none;
     font-size: 16px;
-    transform: scaleY(0.6) scaleX(1);
+    transform: scaleY(0.5);
   }
 
   &.md-select-placeholder {
@@ -212,7 +219,6 @@ md-input-container.md-input-has-value .md-select-value {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
-    padding-left: 2px;
     z-index: 1;
   }
 }
@@ -313,5 +319,49 @@ md-select-menu[multiple] {
       @include rtl(margin-left, $select-option-padding * (2 / 3), auto);
       @include rtl(margin-right, auto, $select-option-padding * (2 / 3));
     }
+  }
+}
+
+.md-dense md-input-container,
+md-input-container.md-dense {
+  .md-select-value {
+    padding-top: 0px;
+    padding-bottom: 4px;
+    font-size: 13px;
+  }
+
+  md-select:not([disabled]).ng-invalid.ng-dirty,
+  md-select:not([disabled]):focus {
+    .md-select-value {
+      padding-bottom: 3px;
+    }
+  }
+
+}
+
+md-input-container.md-input-invalid {
+  md-select:not(:focus) {
+    .md-select-value {
+      border-bottom: 1px solid;
+      padding-bottom: $select-value-padding-bottom;
+    }
+  }
+}
+
+.layout-row,
+.layout-xs-row, .layout-gt-xs-row,
+.layout-sm-row, .layout-gt-sm-row,
+.layout-md-row, .layout-gt-md-row,
+.layout-lg-row, .layout-gt-lg-row,
+.layout-xl-row {
+  & > md-select:not(:last-child), {
+    @include rtl(margin-left, 0, $select-container-padding);
+    @include rtl(margin-right, $select-container-padding, 0);
+  }
+
+  &.md-inline-form > md-select,
+  .md-inline-form & > md-select {
+    margin-top: $md-inline-alignment;
+    margin-bottom: auto;
   }
 }

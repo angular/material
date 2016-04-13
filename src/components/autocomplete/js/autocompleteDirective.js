@@ -180,10 +180,6 @@ function MdAutocomplete ($$mdSvgRegistry) {
             layout="row"\
             ng-class="{ \'md-whiteframe-z1\': !floatingLabel, \'md-menu-showing\': !$mdAutocompleteCtrl.hidden }">\
           ' + getInputElement() + '\
-          <md-progress-linear\
-              class="' + (attr.mdFloatingLabel ? 'md-inline' : '') + '"\
-              ng-if="$mdAutocompleteCtrl.loadingIsVisible()"\
-              md-mode="indeterminate"></md-progress-linear>\
           <md-virtual-repeat-container\
               md-auto-shrink\
               md-auto-shrink-min="1"\
@@ -233,7 +229,9 @@ function MdAutocomplete ($$mdSvgRegistry) {
       function getInputElement () {
         if (attr.mdFloatingLabel) {
           return '\
-            <md-input-container flex ng-if="floatingLabel">\
+            <md-input-container\
+                class="' + (element.hasClass('md-dense') ? 'md-dense' : '') + '"\
+                flex ng-if="floatingLabel">\
               <label>{{floatingLabel}}</label>\
               <input type="search"\
                   ' + (tabindex != null ? 'tabindex="' + tabindex + '"' : '') + '\
@@ -259,6 +257,10 @@ function MdAutocomplete ($$mdSvgRegistry) {
                   aria-haspopup="true"\
                   aria-activedescendant=""\
                   aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>\
+              <md-progress-linear\
+                  class="' + (attr.mdFloatingLabel ? 'md-inline' : '') + '"\
+                  ng-if="$mdAutocompleteCtrl.loadingIsVisible()"\
+                  md-mode="indeterminate"></md-progress-linear>\
               <div md-autocomplete-parent-scope md-autocomplete-replace>' + leftover + '</div>\
             </md-input-container>';
         } else {
@@ -285,6 +287,10 @@ function MdAutocomplete ($$mdSvgRegistry) {
                 aria-haspopup="true"\
                 aria-activedescendant=""\
                 aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>\
+            <md-progress-linear\
+                class="' + (attr.mdFloatingLabel ? 'md-inline' : '') + '"\
+                ng-if="$mdAutocompleteCtrl.loadingIsVisible()"\
+                md-mode="indeterminate"></md-progress-linear>\
             <button\
                 type="button"\
                 tabindex="-1"\
