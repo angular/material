@@ -56,6 +56,11 @@ md-input-container > md-select {
   order: 2;
 }
 
+md-input-container.md-input-has-label > md-select {
+  padding-top: 24px;
+  padding-bottom: 11px;
+}
+
 md-select {
   display: flex;
   margin: 2.5*$baseline-grid 0 3*$baseline-grid + 2 0;
@@ -80,14 +85,14 @@ md-select {
     &.ng-invalid.ng-dirty {
       ._md-select-value {
         border-bottom: 2px solid;
-        padding-bottom: 0;
+        padding-bottom: 5px;
       }
     }
     &:focus {
       ._md-select-value {
         border-bottom-width: 2px;
         border-bottom-style: solid;
-        padding-bottom: 0;
+        padding-bottom: 5px;
       }
     }
   }
@@ -97,13 +102,13 @@ md-select {
 ._md-select-value {
   display: flex;
   align-items: center;
-  padding: 2px 2px 1px;
+  padding: 4px 0px 6px 0px;
   border-bottom-width: 1px;
   border-bottom-style: solid;
   background-color: rgba(0,0,0,0);
   position: relative;
   box-sizing: content-box;
-  min-width: 8 * $baseline-grid;
+  min-width: 11 * $baseline-grid;
   min-height: 26px;
   flex-grow: 1;
 
@@ -134,9 +139,11 @@ md-select {
     display: block;
     content: '\25BC';
     position: relative;
-    top: 2px;
+    right: -7px;
+    font-size: 16px;
+    top: 1px;
     speak: none;
-    transform: scaleY(0.6) scaleX(1);
+    transform: scaleY(0.5);
   }
 
   &._md-select-placeholder {
@@ -144,7 +151,6 @@ md-select {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
-    padding-left: 2px;
     z-index: 1;
   }
 }
@@ -205,7 +211,6 @@ md-option {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: rem(1.6);
   }
   padding: 0 $select-option-padding 0 $select-option-padding;
   height: $select-option-height;

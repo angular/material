@@ -5,8 +5,10 @@
 //
 // ^^ defined in variables.scss
 //
-$checkbox-margin: 16px !default;
-$checkbox-text-margin: 10px !default;
+$checkbox-margin: 3px !default;
+$checkbox-margin-end: 16px !default;
+
+$checkbox-text-margin: 56px !default;
 $checkbox-top: 12px !default;
 
 .md-inline-form {
@@ -18,20 +20,20 @@ $checkbox-top: 12px !default;
 md-checkbox {
   box-sizing: border-box;
   display: inline-block;
-  margin-bottom: $checkbox-margin;
+  margin: $checkbox-margin;
   white-space: nowrap;
   cursor: pointer;
   outline: none;
   user-select: none;
   position: relative;
   min-width: $checkbox-width;
-  min-height: $checkbox-width;
-  @include rtl(margin-left, 0, $checkbox-margin);
-  @include rtl(margin-right, $checkbox-margin, 0);
+  min-height: $checkbox-width * 2;
+  @include rtl(margin-left, $checkbox-margin, $checkbox-margin-end);
+  @include rtl(margin-right, $checkbox-margin-end, $checkbox-margin);
 
   &:last-of-type {
-    margin-left: 0;
-    margin-right: 0;
+    @include rtl(margin-left, $checkbox-margin, 0);
+    @include rtl(margin-right, 0, $checkbox-margin);
   }
 
   &.md-focused:not([disabled]) {
@@ -62,9 +64,15 @@ md-checkbox {
     vertical-align: middle;
     white-space: normal;
     user-select: text;
+    margin-top: 6px;
+    margin-bottom: 6px;
 
-    @include rtl(margin-left, $checkbox-text-margin + $checkbox-width, 0);
-    @include rtl(margin-right, 0, $checkbox-text-margin + $checkbox-width);
+    @include rtl(margin-left, $checkbox-text-margin - $checkbox-margin, 0);
+    @include rtl(margin-right, 0, $checkbox-text-margin - $checkbox-margin);
+
+    &:empty {
+      display: none;
+    }
 
   }
 }

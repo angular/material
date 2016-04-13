@@ -1,9 +1,8 @@
 .hint {
     /* Position the hint */
-    position: absolute;
-    left: 2px;
-    right: auto;
-    bottom: 7px;
+    display: inline-block;
+    padding-top: 2px;
+    margin-bottom: -1px;
 
     /* Copy styles from ng-messages */
     font-size: 12px;
@@ -20,12 +19,10 @@
 .hint.ng-hide,
 .hint.ng-enter,
 .hint.ng-leave.ng-leave-active {
-    bottom: 26px;
     opacity: 0;
 }
 
 .hint.ng-leave,
 .hint.ng-enter.ng-enter-active {
-    bottom: 7px;
     opacity: 1;
 }

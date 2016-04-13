@@ -168,7 +168,7 @@
   $border-radius: $checkbox-border-radius) {
   ._md-container {
     position: absolute;
-    top: 50%;
+    top: $checkbox-height;
     transform: translateY(-50%);
 
     box-sizing: border-box;
