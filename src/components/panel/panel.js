@@ -131,6 +131,17 @@ angular
  *     behind the panel. Defaults to false.
  *   - `disableParentScroll` - `{boolean=}`: Whether the user can scroll the
  *     page behind the panel. Defaults to false.
+ *   - `onDomAdded` - `{function=}`: Callback function used to announce when
+ *     the panel is added to the DOM.
+ *   - `onOpenComplete` - `{function=}`: Callback function used to announce
+ *     when the open() action is finished.
+ *   - `onRemoving` - `{function=}`: Callback function used to announce the
+ *     close/hide() action is starting.
+ *   - `onDomRemoved` - `{function=}`: Callback function used to announce when the
+ *     panel is removed from the DOM.
+ *   - `origin` - `{(string|!angular.JQLite|!Element)=}`: The element to
+ *     focus on when the panel closes. This is commonly the element which triggered
+ *     the opening of the panel.
  *
  * TODO(ErinCoughlan): Add the following config options.
  *   - `groupName` - `{string=}`: Name of panel groups. This group name is
@@ -212,15 +223,6 @@ angular
  *     create.
  *   - `isAttached` - `{boolean}`: Whether the panel is attached to the DOM.
  *     Visibility to the user does not factor into isAttached.
- *
- * TODO(ErinCoughlan): Add the following properties.
- *   - `onDomAdded` - `{function=}`: Callback function used to announce when
- *     the panel is added to the DOM.
- *   - `onOpenComplete` - `{function=}`: Callback function used to announce
- *     when the open() action is finished.
- *   - `onRemoving` - `{function=}`: Callback function used to announce the
- *     close/hide() action is starting. This allows developers to run custom
- *     animations in parallel the close animations.
  */
 
 /**
@@ -237,8 +239,7 @@ angular
  * @ngdoc method
  * @name MdPanelRef#close
  * @description
- * Hides and detaches the panel. This method destroys the reference to the panel.
- * In order to open the panel again, a new one must be created.
+ * Hides and detaches the panel.
  *
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
  * closed.
@@ -725,6 +726,7 @@ MdPanelService.prototype._wrapTemplate = function(origTemplate) {
       '</div>';
 };
 
+
 /*****************************************************************************
  *                                 MdPanelRef                                *
  *****************************************************************************/
@@ -779,7 +781,6 @@ function MdPanelRef(config, $injector) {
    */
   this.isAttached = false;
 
-
   // Private variables.
   /** @private {!Object} */
   this._config = config;
@@ -821,8 +822,9 @@ MdPanelRef.prototype.open = function() {
     var show = self._simpleBind(self.show, self);
 
     self.attach()
-        .then(show, reject)
-        .then(done, reject);
+        .then(show)
+        .then(done)
+        .catch(reject);
   });
 };
 
@@ -835,13 +837,15 @@ MdPanelRef.prototype.open = function() {
  */
 MdPanelRef.prototype.close = function() {
   var self = this;
+
   return this._$q(function(resolve, reject) {
     var done = self._done(resolve, self);
     var detach = self._simpleBind(self.detach, self);
 
     self.hide()
-        .then(detach, reject)
-        .then(done, reject);
+        .then(detach)
+        .then(done)
+        .catch(reject);
   });
 };
 
@@ -860,14 +864,21 @@ MdPanelRef.prototype.attach = function() {
   var self = this;
   return this._$q(function(resolve, reject) {
     var done = self._done(resolve, self);
-
-    self._$q.all([
-      self._createBackdrop(),
-      self._createPanel().then(function() {
+    var onDomAdded = self._config['onDomAdded'] || angular.noop;
+    var addListeners = function(response) {
         self.isAttached = true;
         self._addEventListeners();
-      }, reject)
-    ]).then(done, reject);
+        return response;
+    };
+
+    self._$q.all([
+        self._createBackdrop(),
+        self._createPanel()
+            .then(addListeners)
+            .catch(reject)
+    ]).then(onDomAdded)
+      .then(done)
+      .catch(reject);
   });
 };
 
@@ -884,8 +895,10 @@ MdPanelRef.prototype.detach = function() {
   }
 
   var self = this;
+  var onDomRemoved = self._config['onDomRemoved'] || angular.noop;
+
   var detachFn = function() {
-    self._removeEventListener();
+    self._removeEventListeners();
 
     // Remove the focus traps that we added earlier for keeping focus within
     // the panel.
@@ -913,8 +926,18 @@ MdPanelRef.prototype.detach = function() {
     self._$q.all([
       detachFn(),
       self._backdropRef ? self._backdropRef.detach() : true
-    ]).then(done, reject);
+    ]).then(onDomRemoved)
+      .then(done)
+      .catch(reject);
   });
+};
+
+
+/**
+ * Destroys the panel. The Panel cannot be opened again after this.
+ */
+MdPanelRef.prototype.destroy = function() {
+  this._config.locals = null;
 };
 
 
@@ -943,11 +966,14 @@ MdPanelRef.prototype.show = function() {
 
   return this._$q(function(resolve, reject) {
     var done = self._done(resolve, self);
+    var onOpenComplete = self._config['onOpenComplete'] || angular.noop;
 
     self._$q.all([
       self._backdropRef ? self._backdropRef.show() : self,
       animatePromise().then(function() { self._focusOnOpen(); }, reject)
-    ]).then(done, reject);
+    ]).then(onOpenComplete)
+      .then(done)
+      .catch(reject);
   });
 };
 
@@ -970,13 +996,29 @@ MdPanelRef.prototype.hide = function() {
   }
 
   var self = this;
+
   return this._$q(function(resolve, reject) {
     var done = self._done(resolve, self);
+    var onRemoving = self._config['onRemoving'] || angular.noop;
+
+    var focusOnOrigin = function() {
+      var origin = self._config['origin'];
+      if (origin) {
+        getElement(origin).focus();
+      }
+    };
+
+    var hidePanel = function() {
+      self.addClass(MD_PANEL_HIDDEN);
+    };
 
     self._$q.all([
       self._backdropRef ? self._backdropRef.hide() : self,
-      self._animateClose().then(function() { self.addClass(MD_PANEL_HIDDEN); },
-          reject)
+      self._animateClose()
+          .then(onRemoving)
+          .then(hidePanel)
+          .then(focusOnOrigin)
+          .catch(reject)
     ]).then(done, reject);
   });
 };
@@ -1037,10 +1079,12 @@ MdPanelRef.prototype.toggleClass = function(toggleClass) {
  */
 MdPanelRef.prototype._createPanel = function() {
   var self = this;
+
   return this._$q(function(resolve, reject) {
     if (!self._config.locals) {
       self._config.locals = {};
     }
+
     self._config.locals.mdPanelRef = self;
     self._$mdCompiler.compile(self._config)
         .then(function(compileData) {
@@ -1184,7 +1228,7 @@ MdPanelRef.prototype._addEventListeners = function() {
  * Remove event listeners added in _addEventListeners.
  * @private
  */
-MdPanelRef.prototype._removeEventListener = function() {
+MdPanelRef.prototype._removeEventListeners = function() {
   this._removeListeners && this._removeListeners.forEach(function(removeFn) {
     removeFn();
   });
@@ -1288,6 +1332,12 @@ MdPanelRef.prototype._configureTrapFocus = function() {
     };
     this._topFocusTrap.addEventListener('focus', focusHandler);
     this._bottomFocusTrap.addEventListener('focus', focusHandler);
+
+    // Queue remove listeners function
+    this._removeListeners.push(this._simpleBind(function() {
+      this._topFocusTrap.removeEventListener('focus', focusHandler);
+      this._bottomFocusTrap.removeEventListener('focus', focusHandler);
+    }, this));
 
     // The top focus trap inserted immediately before the md-panel element (as
     // a sibling). The bottom focus trap inserted immediately after the

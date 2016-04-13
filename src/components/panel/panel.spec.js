@@ -66,9 +66,9 @@ describe('$mdPanel', function() {
               pass: pass,
               message: 'Expected ' + expected + not + ' to be within ' +
               epsilon + ' of ' + actual
-            }
+            };
           }
-        }
+        };
       }
     });
   });
@@ -127,6 +127,16 @@ describe('$mdPanel', function() {
 
     expect(PANEL_EL).toExist();
     expect(PANEL_WRAPPER_CLASS).not.toHaveClass(HIDDEN_CLASS);
+  });
+
+  it('destroy should clear the config locals on the panelRef', function () {
+    openPanel(DEFAULT_CONFIG);
+
+    expect(panelRef._config.locals).not.toEqual(null);
+
+    panelRef.destroy();
+
+    expect(panelRef._config.locals).toEqual(null);
   });
 
   describe('promises logic:', function() {
@@ -432,16 +442,7 @@ describe('$mdPanel', function() {
     it('should not close when clickOutsideToClose set to false', function() {
       openPanel();
 
-      var container = panelRef._panelContainer;
-      container.triggerHandler({
-        type: 'mousedown',
-        target: container[0]
-      });
-      container.triggerHandler({
-        type: 'mouseup',
-        target: container[0]
-      });
-      flushPanel();
+      clickPanelContainer();
 
       expect(PANEL_EL).toExist();
     });
@@ -453,16 +454,7 @@ describe('$mdPanel', function() {
 
       openPanel(config);
 
-      var container = panelRef._panelContainer;
-      container.triggerHandler({
-        type: 'mousedown',
-        target: container[0]
-      });
-      container.triggerHandler({
-        type: 'mouseup',
-        target: container[0]
-      });
-      flushPanel();
+      clickPanelContainer();
 
       // TODO(ErinCoughlan) - Add this when destroy is added.
       // expect(panelRef).toBeUndefined();
@@ -472,12 +464,7 @@ describe('$mdPanel', function() {
     it('should not close when escapeToClose set to false', function() {
       openPanel();
 
-      var container = panelRef._panelContainer;
-      container.triggerHandler({
-        type: 'keydown',
-        keyCode: $mdConstant.KEY_CODE.ESCAPE
-      });
-      flushPanel();
+      pressEscape();
 
       expect(PANEL_EL).toExist();
     });
@@ -489,12 +476,7 @@ describe('$mdPanel', function() {
 
       openPanel(config);
 
-      var container = panelRef._panelContainer;
-      container.triggerHandler({
-        type: 'keydown',
-        keyCode: $mdConstant.KEY_CODE.ESCAPE
-      });
-      flushPanel();
+      pressEscape();
 
       // TODO(ErinCoughlan) - Add this when destroy is added.
       // expect(panelRef).toBeUndefined();
@@ -611,16 +593,7 @@ describe('$mdPanel', function() {
             return panelRef._$q.resolve(self);
           };
 
-          var container = panelRef._panelContainer;
-          container.triggerHandler({
-            type: 'mousedown',
-            target: container[0]
-          });
-          container.triggerHandler({
-            type: 'mouseup',
-            target: container[0]
-          });
-          flushPanel();
+          clickPanelContainer();
 
           expect(closeCalled).toBe(true);
         });
@@ -642,6 +615,297 @@ describe('$mdPanel', function() {
       var scrollMaskEl = $rootEl[0].querySelector(SCROLL_MASK_CLASS);
       expect(scrollMaskEl).not.toExist();
       expect($mdUtil.disableScrollAround).toHaveBeenCalled();
+    });
+
+    describe('animation hooks: ', function() {
+      it('should call onDomAdded if provided when adding the panel to the DOM',
+          function() {
+            var onDomAddedCalled = false;
+            var onDomAdded = function() {
+              onDomAddedCalled = true;
+              return $q.when(this);
+            };
+            var config = angular.extend(
+                {'onDomAdded': onDomAdded}, DEFAULT_CONFIG);
+
+            panelRef = $mdPanel.create(config);
+            panelRef.attach();
+            flushPanel();
+
+            expect(onDomAddedCalled).toBe(true);
+            expect(PANEL_EL).toExist();
+            expect(PANEL_WRAPPER_CLASS).toHaveClass(HIDDEN_CLASS);
+          });
+
+      it('should continue resolving when onDomAdded resolves', function() {
+        var attachResolved = false;
+        var onDomAddedCalled = false;
+        var onDomAdded = function() {
+          onDomAddedCalled = true;
+          return $q.when(this);
+        };
+        var config = angular.extend(
+            {'onDomAdded': onDomAdded}, DEFAULT_CONFIG);
+
+        expect(PANEL_EL).not.toExist();
+
+        panelRef = $mdPanel.create(config);
+        panelRef.open().then(function() {
+          attachResolved = true;
+        });
+        flushPanel();
+
+        expect(onDomAddedCalled).toBe(true);
+        expect(PANEL_EL).toExist();
+        expect(attachResolved).toBe(true);
+        expect(panelRef.isAttached).toEqual(true);
+        expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
+      });
+
+      it('should reject open when onDomAdded rejects', function() {
+        var openRejected = false;
+        var onDomAddedCalled = false;
+        var onDomAdded = function() {
+          onDomAddedCalled = true;
+          return $q.reject();
+        };
+        var config = angular.extend(
+            {'onDomAdded': onDomAdded}, DEFAULT_CONFIG);
+
+        panelRef = $mdPanel.create(config);
+        panelRef.open().catch(function() {
+          openRejected = true;
+        });
+        flushPanel();
+
+        expect(onDomAddedCalled).toBe(true);
+        expect(openRejected).toBe(true);
+        expect(panelRef.isAttached).toEqual(true);
+        expect(panelRef._panelContainer).toHaveClass(HIDDEN_CLASS);
+      });
+
+      it('should call onOpenComplete if provided after adding the panel to the ' +
+          'DOM and animating', function() {
+            var onOpenCompleteCalled = false;
+            var onOpenComplete = function() {
+              onOpenCompleteCalled = true;
+              return $q.when(this);
+            };
+            var config = angular.extend(
+                {'onOpenComplete': onOpenComplete}, DEFAULT_CONFIG);
+
+            openPanel(config);
+
+            expect(onOpenCompleteCalled).toBe(true);
+            expect(PANEL_EL).toExist();
+            expect(PANEL_WRAPPER_CLASS).not.toHaveClass(HIDDEN_CLASS);
+          });
+
+      it('should call onRemoving if provided after hiding the panel but before ' +
+          'the panel is removed', function() {
+            var onRemovingCalled = false;
+            var onDomRemovedCalled = false;
+            var onRemoving = function() {
+              onRemovingCalled = true;
+              return $q.when(this);
+            };
+            var onDomRemoved = function() {
+              onDomRemovedCalled = true;
+              return $q.when(this);
+            };
+            var config = angular.extend({'onRemoving': onRemoving,
+              'onDomRemoved': onDomRemoved}, DEFAULT_CONFIG);
+
+            openPanel(config);
+            hidePanel();
+
+            expect(onRemovingCalled).toBe(true);
+            expect(onDomRemovedCalled).toBe(false);
+            expect(PANEL_EL).toExist();
+          });
+
+      it('should continue resolving when onRemoving resolves', function() {
+        var hideResolved = false;
+        var onRemovingCalled = false;
+        var onRemoving = function() {
+          onRemovingCalled = true;
+          return $q.when(this);
+        };
+        var config = angular.extend({'onRemoving': onRemoving},
+            DEFAULT_CONFIG);
+
+        openPanel(config);
+        panelRef.hide().then(function() {
+          hideResolved = true;
+        });
+        flushPanel();
+
+        expect(onRemovingCalled).toBe(true);
+        expect(PANEL_EL).toExist();
+        expect(hideResolved).toBe(true);
+        expect(PANEL_WRAPPER_CLASS).toHaveClass(HIDDEN_CLASS);
+      });
+
+      it('should reject hide when onRemoving rejects', function() {
+        var hideRejected = false;
+        var onRemoving = function() {
+          return $q.reject();
+        };
+        var config = angular.extend(
+            {'onRemoving': onRemoving}, DEFAULT_CONFIG);
+
+        openPanel(config);
+        panelRef.hide().catch(function() {
+          hideRejected = true;
+        });
+        flushPanel();
+
+        expect(hideRejected).toBe(true);
+        expect(PANEL_EL).toExist();
+        expect(PANEL_WRAPPER_CLASS).not.toHaveClass(HIDDEN_CLASS);
+      });
+
+      it('should call onRemoving on escapeToClose', function() {
+        var onRemovingCalled = false;
+        var onRemoving = function() {
+          onRemovingCalled = true;
+          return $q.when(this);
+        };
+        var config = angular.extend({
+          'onRemoving': onRemoving, escapeToClose: true},
+          DEFAULT_CONFIG);
+
+        openPanel(config);
+        pressEscape();
+
+        expect(PANEL_EL).not.toExist();
+        expect(onRemovingCalled).toBe(true);
+      });
+
+      it('should call onRemoving on clickOutsideToClose', function() {
+        var onRemovingCalled = false;
+        var onRemoving = function() {
+          onRemovingCalled = true;
+          return $q.when(this);
+        };
+        var config = angular.extend({
+          'onRemoving': onRemoving, clickOutsideToClose: true},
+          DEFAULT_CONFIG);
+
+        openPanel(config);
+        clickPanelContainer();
+
+        expect(PANEL_EL).not.toExist();
+        expect(onRemovingCalled).toBe(true);
+      });
+
+
+      it('should call onDomRemoved if provided when removing the panel from ' +
+          'the DOM', function() {
+            var onDomRemovedCalled = false;
+            var onDomRemoved = function() {
+              onDomRemovedCalled = true;
+              return $q.when(this);
+            };
+            var config = angular.extend(
+                {'onDomRemoved': onDomRemoved}, DEFAULT_CONFIG);
+
+            openPanel(config);
+            closePanel();
+
+            expect(onDomRemovedCalled).toBe(true);
+            expect(PANEL_EL).not.toExist();
+          });
+
+      it('should call onDomRemoved on escapeToClose', function() {
+        var onDomRemovedCalled = false;
+        var onDomRemoved = function() {
+          onDomRemovedCalled = true;
+          return $q.when(this);
+        };
+        var config = angular.extend({
+          'onDomRemoved': onDomRemoved, escapeToClose: true},
+          DEFAULT_CONFIG);
+
+        openPanel(config);
+        pressEscape();
+
+        expect(PANEL_EL).not.toExist();
+        expect(onDomRemovedCalled).toBe(true);
+      });
+
+      it('should call onDomRemoved on clickOutsideToClose', function() {
+        var onDomRemovedCalled = false;
+        var onDomRemoved = function() {
+          onDomRemovedCalled = true;
+          return $q.when(this);
+        };
+        var config = angular.extend({
+          'onDomRemoved': onDomRemoved, clickOutsideToClose: true},
+          DEFAULT_CONFIG);
+
+        openPanel(config);
+        clickPanelContainer();
+
+        expect(PANEL_EL).not.toExist();
+        expect(onDomRemovedCalled).toBe(true);
+      });
+    });
+
+    describe('should focus on the origin element on', function() {
+      var myButton;
+      var detachFocusConfig;
+      beforeEach(function() {
+        attachToBody('<button id="donuts">Donuts</button>');
+
+        myButton = angular.element(document.querySelector('#donuts'));
+
+        detachFocusConfig = angular.extend({ origin: '#donuts' }, DEFAULT_CONFIG);
+      });
+
+      it('hide when provided', function () {
+        openPanel(detachFocusConfig);
+
+        expect(myButton).not.toBeFocused();
+
+        hidePanel();
+
+        expect(myButton).toBeFocused();
+      });
+
+      it('close when provided', function () {
+        openPanel(detachFocusConfig);
+
+        expect(myButton).not.toBeFocused();
+
+        closePanel();
+
+        expect(myButton).toBeFocused();
+      });
+
+      it('clickOutsideToClose', function() {
+        detachFocusConfig.clickOutsideToClose = true;
+
+        openPanel(detachFocusConfig);
+
+        expect(myButton).not.toBeFocused();
+
+        clickPanelContainer();
+
+        expect(myButton).toBeFocused();
+      });
+
+      it('escapeToClose', function() {
+        detachFocusConfig.escapeToClose = true;
+
+        openPanel(detachFocusConfig);
+
+        expect(myButton).not.toBeFocused();
+
+        pressEscape();
+
+        expect(myButton).toBeFocused();
+      });
     });
   });
 
@@ -1467,6 +1731,41 @@ describe('$mdPanel', function() {
     attachedElements.push(element);
   }
 
+  function clickPanelContainer() {
+    if (!panelRef) {
+      return;
+    }
+
+    var container = panelRef._panelContainer;
+
+    container.triggerHandler({
+      type: 'mousedown',
+      target: container[0]
+    });
+
+    container.triggerHandler({
+      type: 'mouseup',
+      target: container[0]
+    });
+
+    flushPanel();
+  }
+
+  function pressEscape() {
+    if (!panelRef) {
+      return;
+    }
+
+    var container = panelRef._panelContainer;
+
+    container.triggerHandler({
+      type: 'keydown',
+      keyCode: $mdConstant.KEY_CODE.ESCAPE
+    });
+
+    flushPanel();
+  }
+
   /**
    * Opens the panel. If a config value is passed, creates a new panelRef
    * using $mdPanel.open(config); Otherwise, called open on the panelRef,
@@ -1500,12 +1799,12 @@ describe('$mdPanel', function() {
   }
 
   function showPanel() {
-    panelRef && panelRef.show(HIDDEN_CLASS);
+    panelRef && panelRef.show();
     flushPanel();
   }
 
   function hidePanel() {
-    panelRef && panelRef.hide(HIDDEN_CLASS);
+    panelRef && panelRef.hide();
     flushPanel();
   }
 
