@@ -251,43 +251,51 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * Gathers all of the elements needed for this controller
    */
   function gatherElements () {
+
+    var snapWrap = gatherSnapWrap();
+
     elements = {
       main:  $element[0],
       scrollContainer: $element[0].querySelector('.md-virtual-repeat-container'),
       scroller: $element[0].querySelector('.md-virtual-repeat-scroller'),
       ul:    $element.find('ul')[0],
       input: $element.find('input')[0],
-      wrap:  getWrapTarget(),
+      wrap:  snapWrap.wrap,
+      snap:  snapWrap.snap,
       root:  document.body
     };
 
     elements.li   = elements.ul.getElementsByTagName('li');
-    elements.snap = getSnapTarget();
     elements.$    = getAngularElements(elements);
 
     inputModelCtrl = elements.$.input.controller('ngModel');
   }
 
   /**
-   * Find the target for the wrap element which determines menu width
-   * @returns {*}
+   * Gathers the snap and wrap elements
+   *
    */
-  function getWrapTarget() {
-    for (var element = $element; element.length; element = element.parent()) {
-      if (angular.isDefined(element.attr('md-autocomplete-wrap-override'))) return element[ 0 ];
+  function gatherSnapWrap() {
+    var element;
+    var value;
+    for (element = $element; element.length; element = element.parent()) {
+      value = element.attr('md-autocomplete-snap');
+      if (angular.isDefined(value)) break;
     }
-    return $element.find('md-autocomplete-wrap')[0];
-  }
 
-  /**
-   * Finds the element that the menu will base its position on
-   * @returns {*}
-   */
-  function getSnapTarget () {
-    for (var element = $element; element.length; element = element.parent()) {
-      if (angular.isDefined(element.attr('md-autocomplete-snap'))) return element[ 0 ];
+    if (element.length) {
+      var snapWidth = value.toLowerCase() === 'width';
+      return {
+        snap: element[0],
+        wrap: snapWidth ? element[0] : $element.find('md-autocomplete-wrap')[0]
+      };
     }
-    return elements.wrap;
+
+    var wrap = $element.find('md-autocomplete-wrap')[0];
+    return {
+      snap: wrap,
+      wrap: wrap
+    };
   }
 
   /**
