@@ -21,12 +21,7 @@ describe('md-date-picker', function() {
          'ng-disabled="isDisabled">' +
     '</md-datepicker>';
 
-  var fakeInputModule = angular.module('fakeInputModule', [])
-      .directive('mdInputContainer', function() {
-        return {controller: angular.noop};
-      });
-
-  beforeEach(module('material.components.datepicker', 'ngAnimateMock', 'fakeInputModule'));
+  beforeEach(module('material.components.datepicker', 'ngAnimateMock'));
 
   beforeEach(inject(function($rootScope, $injector) {
     $compile = $injector.get('$compile');
@@ -120,7 +115,7 @@ describe('md-date-picker', function() {
     }).not.toThrow();
   });
 
-  it('should throw an error when inside of md-input-container', function() {
+  it('should work inside of md-input-container', function() {
     var template =
         '<md-input-container>' +
           '<md-datepicker ng-model="myDate"></md-datepicker>' +
@@ -128,7 +123,7 @@ describe('md-date-picker', function() {
 
     expect(function() {
       $compile(template)(pageScope);
-    }).toThrowError('md-datepicker should not be placed inside md-input-container.');
+    }).not.toThrow();
   });
 
   describe('ngMessages suport', function() {

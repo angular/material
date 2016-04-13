@@ -39,5 +39,21 @@
       </div>
     </form>
 
+    <h4>Inside a md-input-container</h4>
+    <form name="myOtherForm">
+      <md-input-container>
+        <label>Enter date</label>
+
+        <md-datepicker ng-model="myDate" name="dateField" md-min-date="minDate"
+          md-max-date="maxDate"></md-datepicker>
+
+        <div class="validation-messages" ng-messages="myOtherForm.dateField.$error">
+          <div ng-message="valid">The entered value is not a date!</div>
+          <div ng-message="required">This date is required!</div>
+          <div ng-message="mindate">Date is too early!</div>
+          <div ng-message="maxdate">Date is too late!</div>
+        </div>
+      </md-input-container>
+    </form>
   </md-content>
 </div>

@@ -24,8 +24,10 @@
             <input ng-model="user.company" disabled>
           </md-input-container>
 
-          <md-datepicker ng-model="user.submissionDate" md-placeholder="Enter date">
-          </md-datepicker>
+          <md-input-container>
+            <label>Enter date</label>
+            <md-datepicker ng-model="user.submissionDate"></md-datepicker>
+          </md-input-container>
         </div>
 
         <div layout-gt-sm="row">
