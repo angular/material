@@ -154,8 +154,9 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
           if (mutations.some(function (mutation) {
               return (mutation.attributeName === 'disabled' && parent[0].disabled);
             })) {
-            setVisible(false);
-            scope.$digest(); // make sure the elements gets updated
+              $mdUtil.nextTick(function() {
+                setVisible(false);
+              });
           }
         });
 
