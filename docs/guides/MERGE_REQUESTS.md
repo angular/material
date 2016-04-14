@@ -19,7 +19,7 @@ Then run the following to bring all of the commits from that pull request
 in on top of your branch's local history:
 
 ```sh
-curl https://github.com/angular/material/pull/143.patch | git am -3
+curl -L https://github.com/angular/material/pull/143.patch | git am -3
 ```
 
 If there are any conflicts, go to the [Dealing with conflicts](#conflicts) section below.
