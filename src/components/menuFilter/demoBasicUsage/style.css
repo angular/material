@@ -1,0 +1,42 @@
+/* Please note: All these selectors are only applied to children of elements with the 'menuFilterdemoBasicUsage' class */
+
+.demo-header-searchbox {
+  input {
+    border: none;
+    outline: none;
+    height: 100%;
+    width: 150px;
+    padding: 0;
+    border: 0;
+    padding-right: 35px;
+  }
+}
+
+.demo-select-header {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.1), 0px 0px 0px 0px rgba(0, 0, 0,
+  0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12);
+  padding-left: 10.667px;
+  height: 48px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+md-optgroup {
+  width: 225px;
+}
+
+md-select-header.demo-select-header {
+  position: fixed;
+  background-color: white;
+  z-index: 1;
+  top: 0;
+}
+
+md-content._md {
+  overflow-x: hidden;
+  margin-top: 48px;
+  max-height: 192px;
+}

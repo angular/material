@@ -1,0 +1,26 @@
+<div ng-controller="menuFilterController as ctrl" class="md-padding" ng-cloak>
+  <div>
+    <h1 class="md-title">Pick a drink below</h1>
+    <div layout="row">
+      <md-input-container>
+        <label>Drinks</label>
+        <md-select ng-model="ctrl.selectedDrinks" multiple
+                   md-on-close="ctrl.clearSearch()"
+                   data-md-container-class="menuFilterdemoBasicUsage">
+          <md-select-header class="demo-select-header">
+            <md-menu-filter items="ctrl.drinks"
+                            placeholder="Select a drink.."
+                            filtered-items="ctrl.filteredDrinks"
+                            ng-model="ctrl.searchTerm"
+                            tabindex="1"
+                            class="demo-header-searchbox">
+            </md-menu-filter>
+          </md-select-header>
+          <md-optgroup label="drinks">
+            <md-option ng-value="drink" ng-repeat="drink in ctrl.filteredDrinks">{{drink}}</md-option>
+          </md-optgroup>
+        </md-select>
+      </md-input-container>
+    </div>
+ </div>
+</div>
