@@ -8,19 +8,19 @@ $md-nav-bar-height: 48px;
   position: relative;
 }
 
-.md-nav-bar-list {
+._md-nav-bar-list {
   outline: none;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.md-nav-link:first-of-type {
+.md-nav-item:first-of-type {
   margin-left: 8px;
 }
 
 // override button styles to look more like tabs
-.md-button.md-nav-button {
+.md-button._md-nav-button {
   line-height: 24px;
   margin: 0 4px;
   padding: 12px 16px;
@@ -45,11 +45,11 @@ md-nav-ink-bar {
   right: auto;
   background-color: black;
 
-  &.md-left {
+  &._md-left {
     transition: left ($duration * $multiplier) $swift-ease-in-out-timing-function,
         right $duration $swift-ease-in-out-timing-function;
   }
-  &.md-right {
+  &._md-right {
     transition: left $duration $swift-ease-in-out-timing-function,
         right ($duration * $multiplier) $swift-ease-in-out-timing-function;
   }

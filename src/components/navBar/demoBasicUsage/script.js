@@ -5,7 +5,6 @@
       .controller('AppCtrl', AppCtrl);
 
   function AppCtrl($scope) {
-    $scope.currentLink = 'page1';
-    $scope.goto = function(hash) { $scope.currentLink = hash; };
+    $scope.currentNavItem = 'page1';
   }
 })();

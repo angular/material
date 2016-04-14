@@ -26,23 +26,23 @@ describe('mdNavBar', function() {
     angular.element(document.body).append(el);
     $scope.$apply();
     ctrl = el.controller('mdNavBar');
-    tabContainer = angular.element(el[0].querySelector('.md-nav-bar-list'));
+    tabContainer = angular.element(el[0].querySelector('._md-nav-bar-list'));
     $timeout.flush();
     $material.flushOutstandingAnimations();
   }
 
   function createTabs() {
     create(
-        '<md-nav-bar selected-link-name="selectedTabRoute" nav-bar-aria-label="{{ariaLabel}}">' +
-        '  <md-nav-link nav-href="#1" link-name="tab1">' +
+        '<md-nav-bar md-selected-nav-item="selectedTabRoute" nav-bar-aria-label="{{ariaLabel}}">' +
+        '  <md-nav-item md-nav-href="#1" name="tab1">' +
         '    tab1' +
-        '  </md-nav-link>' +
-        '  <md-nav-link nav-href="#2" link-name="tab2">' +
+        '  </md-nav-item>' +
+        '  <md-nav-item md-nav-href="#2" name="tab2">' +
         '    tab2' +
-        '  </md-nav-link>' +
-        '  <md-nav-link nav-href="#3" link-name="tab3">' +
+        '  </md-nav-item>' +
+        '  <md-nav-item md-nav-href="#3" name="tab3">' +
         '    tab3' +
-        '  </md-nav-link>' +
+        '  </md-nav-item>' +
         '</md-nav-bar>');
   }
 
@@ -79,15 +79,15 @@ describe('mdNavBar', function() {
 
     it('requires navigation attribute to be present', function() {
       expect(function() {
-        create('<md-nav-link link-name="fooo">footab</md-nav-link>');
+        create('<md-nav-item name="fooo">footab</md-nav-item>');
       }).toThrow();
     });
 
     it('does not allow multiple navigation attributes', function() {
       expect(function() {
         create(
-            '<md-nav-link nav-href="a" nav-sref="b" link-name="fooo">' +
-            'footab</md-nav-link>');
+            '<md-nav-item md-nav-href="a" md-nav-sref="b" name="fooo">' +
+            'footab</md-nav-item>');
       }).toThrow();
     });
 
@@ -95,9 +95,38 @@ describe('mdNavBar', function() {
       // be permissive; this helps with test writing
       expect(function() {
         create(
-            '<md-nav-link nav-href="" link-name="fooo">' +
-            'footab</md-nav-link>');
+          '<md-nav-bar>' +
+            '<md-nav-item md-nav-href="" name="fooo">' + 'footab</md-nav-item>' +
+          '<md-nav-bar>');
       }).not.toThrow();
+    });
+
+    it('uses nav item text for name if no name supplied', function() {
+      create(
+        '<md-nav-bar md-selected-nav-item="selectedTabRoute" nav-bar-aria-label="{{ariaLabel}}">' +
+        '  <md-nav-item md-nav-href="#1">' +
+        '    footab ' +
+        '  </md-nav-item>' +
+        '  <md-nav-item md-nav-href="#2" name="tab2">' +
+        '    tab2' +
+        '  </md-nav-item>' +
+        '  <md-nav-item md-nav-href="#3" name="tab3">' +
+        '    tab3' +
+        '  </md-nav-item>' +
+        '</md-nav-bar>');
+
+      expect(getTab('footab').length).toBe(1);
+    });
+
+    it('updates md-selected-nav-item on tab change', function() {
+      $scope.selectedTabRoute = 'tab1';
+      createTabs();
+
+      var tab2Ctrl = getTabCtrl('tab2');
+      tab2Ctrl.getButtonEl().click();
+      $scope.$apply();
+
+      expect($scope.selectedTabRoute).toBe('tab2');
     });
   });
 
@@ -226,13 +255,11 @@ describe('mdNavBar', function() {
   });
 
   function getTab(tabName) {
-    return angular.element(
-        el[0].querySelector('.md-nav-bar [link-name="' + tabName + '"]' +
-        ' .md-nav-button'));
+    return angular.element(getTabCtrl(tabName).getButtonEl());
   }
 
   function getTabCtrl(tabName) {
-    return getTab(tabName).controller('mdNavLink');
+    return ctrl._getTabByName(tabName);
   }
 
   function getInkbarEl() {

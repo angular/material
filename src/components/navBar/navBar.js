@@ -7,8 +7,8 @@
 angular.module('material.components.navBar', ['material.core'])
     .controller('MdNavBarController', MdNavBarController)
     .directive('mdNavBar', MdNavBar)
-    .controller('MdNavLinkController', MdNavLinkController)
-    .directive('mdNavLink', MdNavLink);
+    .controller('MdNavItemController', MdNavItemController)
+    .directive('mdNavItem', MdNavItem);
 
 
 /*****************************************************************************
@@ -24,25 +24,26 @@ angular.module('material.components.navBar', ['material.core'])
  * @description
  * The `<md-nav-bar>` directive renders a list of material tabs that can be used
  * for top-level page navigation. Unlike `<md-tabs>`, it has no concept of a tab
- * body.
+ * body and no bar pagination.
  *
  * Because it deals with page navigation, certain routing concepts are built-in.
  * Route changes via via ng-href, ui-sref, or ng-click events are supported.
+ * Alternatively, the user could simply watch currentNavItem for changes.
  *
  * Accessibility functionality is implemented as a site navigator with a
  * listbox, according to
  * https://www.w3.org/TR/wai-aria-practices/#Site_Navigator_Tabbed_Style
  *
- * @param {string=} selectedLinkName The name of the current tab; this must
- * match the link-name attribute of `<md-nav-link>`
+ * @param {string=} mdSelectedNavItem The name of the current tab; this must
+ * match the name attribute of `<md-nav-item>`
  * @param {string=} navBarAriaLabel An aria-label for the nav-bar
  *
  * @usage
  * <hljs lang="html">
- *  <md-nav-bar selected-link-name="currentLink">
- *    <md-nav-link nav-click="goto('page1')" link-name="page1">Page One</md-nav-link>
- *    <md-nav-link nav-sref="app.page2" link-name="page2">Page Two</md-nav-link>
- *    <md-nav-link nav-href="#page3" link-name="page3">Page Three</md-nav-link>
+ *  <md-nav-bar md-selected-nav-item="currentNavItem">
+ *    <md-nav-item md-nav-click="goto('page1')" name="page1">Page One</md-nav-item>
+ *    <md-nav-item md-nav-sref="app.page2" name="page2">Page Two</md-nav-item>
+ *    <md-nav-item md-nav-href="#page3" name="page3">Page Three</md-nav-item>
  *  </md-nav-bar>
  *</hljs>
  * <hljs lang="js">
@@ -57,29 +58,29 @@ angular.module('material.components.navBar', ['material.core'])
  */
 
 /*****************************************************************************
- *                            mdNavLink                                      *
+ *                            mdNavItem
  *****************************************************************************/
 /**
  * @ngdoc directive
- * @name mdNavLink
+ * @name mdNavItem
  * @module material.components.navBar
  *
  * @restrict E
  *
  * @description
- * `<md-nav-link>` describes a page navigation link within the `<md-nav-bar>`
+ * `<md-nav-item>` describes a page navigation link within the `<md-nav-bar>`
  * component. It renders an md-button as the actual link.
  *
- * Exactly one of the navClick, navHref, navSref attributes are required to be
+ * Exactly one of the mdNavClick, mdNavHref, mdNavSref attributes are required to be
  * specified.
  *
- * @param {Function=} navClick Function which will be called when the
+ * @param {Function=} mdNavClick Function which will be called when the
  * link is clicked to change the page. Renders as an `ng-click`.
- * @param {string=} navHref url to transition to when this link is clicked.
+ * @param {string=} mdNavHref url to transition to when this link is clicked.
  * Renders as an `ng-href`.
- * @param {string=} navSref Ui-router state to transition to when this link is
+ * @param {string=} mdNavSref Ui-router state to transition to when this link is
  * clicked. Renders as a `ui-sref`.
- * @param {string=} linkName The name of this link. Used by the nav bar to know
+ * @param {string=} name The name of this link. Used by the nav bar to know
  * which link is currently selected.
  *
  * @usage
@@ -99,13 +100,13 @@ function MdNavBar($mdAria) {
     controllerAs: 'ctrl',
     bindToController: true,
     scope: {
-      'selectedLinkName': '=?',
+      'mdSelectedNavItem': '=?',
       'navBarAriaLabel': '@?',
     },
     template:
       '<div class="md-nav-bar">' +
         '<nav role="navigation">' +
-          '<ul class="md-nav-bar-list" layout="row" ng-transclude role="listbox"' +
+          '<ul class="_md-nav-bar-list" layout="row" ng-transclude role="listbox"' +
             'tabindex="0"' +
             'ng-focus="ctrl.onFocus()"' +
             'ng-blur="ctrl.onBlur()"' +
@@ -119,7 +120,7 @@ function MdNavBar($mdAria) {
       if (!ctrl.navBarAriaLabel) {
         $mdAria.expectAsync(element, 'aria-label', angular.noop);
       }
-    }
+    },
   };
 }
 
@@ -150,7 +151,7 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant) {
 
   // Data-bound variables.
   /** @type {string} */
-  this.selectedLinkName;
+  this.mdSelectedNavItem;
 
   /** @type {string} */
   this.navBarAriaLabel;
@@ -166,7 +167,7 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant) {
   var self = this;
   // need to wait for transcluded content to be available
   var deregisterTabWatch = this._$scope.$watch(function() {
-    return self._navBarEl.querySelectorAll('.md-nav-button').length;
+    return self._navBarEl.querySelectorAll('._md-nav-button').length;
   },
   function(newLength) {
     if (newLength > 0) {
@@ -187,10 +188,10 @@ MdNavBarController.prototype._initTabs = function() {
 
   var self = this;
   this._$timeout(function() {
-    self._updateTabs(self.selectedLinkName, undefined);
+    self._updateTabs(self.mdSelectedNavItem, undefined);
   });
 
-  this._$scope.$watch('ctrl.selectedLinkName', function(newValue, oldValue) {
+  this._$scope.$watch('ctrl.mdSelectedNavItem', function(newValue, oldValue) {
     // Wait a digest before update tabs for products doing
     // anything dynamic in the template.
     self._$timeout(function() {
@@ -238,28 +239,28 @@ MdNavBarController.prototype._updateInkBarStyles = function(tab, newIndex, oldIn
   var tabEl = tab.getButtonEl();
   var left = tabEl.offsetLeft;
 
-  this._inkbar.toggleClass('md-left', newIndex < oldIndex)
-      .toggleClass('md-right', newIndex > oldIndex);
+  this._inkbar.toggleClass('_md-left', newIndex < oldIndex)
+      .toggleClass('_md-right', newIndex > oldIndex);
   this._inkbar.css({left: left + 'px', width: tabEl.offsetWidth + 'px'});
 };
 
 /**
  * Returns an array of the current tabs.
- * @return {!Array<!NavLinkController>}
+ * @return {!Array<!NavItemController>}
  * @private
  */
 MdNavBarController.prototype._getTabs = function() {
   var linkArray = Array.prototype.slice.call(
-      this._navBarEl.querySelectorAll('.md-nav-link'));
+      this._navBarEl.querySelectorAll('.md-nav-item'));
   return linkArray.map(function(el) {
-    return angular.element(el).controller('mdNavLink')
+    return angular.element(el).controller('mdNavItem')
   });
 };
 
 /**
  * Returns the tab with the specified name.
- * @param {string} name The name of the tab, found in its link-name attribute.
- * @return {!NavLinkController|undefined}
+ * @param {string} name The name of the tab, found in its name attribute.
+ * @return {!NavItemController|undefined}
  * @private
  */
 MdNavBarController.prototype._getTabByName = function(name) {
@@ -270,7 +271,7 @@ MdNavBarController.prototype._getTabByName = function(name) {
 
 /**
  * Returns the selected tab.
- * @return {!NavLinkController|undefined}
+ * @return {!NavItemController|undefined}
  * @private
  */
 MdNavBarController.prototype._getSelectedTab = function() {
@@ -281,7 +282,7 @@ MdNavBarController.prototype._getSelectedTab = function() {
 
 /**
  * Returns the focused tab.
- * @return {!NavLinkController|undefined}
+ * @return {!NavItemController|undefined}
  */
 MdNavBarController.prototype.getFocusedTab = function() {
   return this._findTab(function(tab) {
@@ -326,8 +327,8 @@ MdNavBarController.prototype.onBlur = function() {
 
 /**
  * Move focus from oldTab to newTab.
- * @param {!NavLinkController} oldTab
- * @param {!NavLinkController} newTab
+ * @param {!NavItemController} oldTab
+ * @param {!NavItemController} newTab
  * @private
  */
 MdNavBarController.prototype._moveFocus = function(oldTab, newTab) {
@@ -371,64 +372,87 @@ MdNavBarController.prototype.onKeydown = function(e) {
   }
 };
 
-function MdNavLink() {
+/**
+ * @ngInject
+ */
+function MdNavItem($$rAF) {
   return {
     restrict: 'E',
-    require: '^MdNavBar',
-    controller: MdNavLinkController,
+    require: ['mdNavItem', '^mdNavBar'],
+    controller: MdNavItemController,
     bindToController: true,
     controllerAs: 'ctrl',
     replace: true,
     transclude: true,
     template:
-      '<li class="md-nav-link" role="option" aria-selected="{{ctrl.isSelected()}}">' +
-        '<md-button ng-if="ctrl.navSref" class="md-nav-button md-accent"' +
+      '<li class="md-nav-item" role="option" aria-selected="{{ctrl.isSelected()}}">' +
+        '<md-button ng-if="ctrl.mdNavSref" class="_md-nav-button md-accent"' +
           'ng-class="ctrl.getNgClassMap()"' +
           'tabindex="-1"' +
-          'ui-sref="{{ctrl.navSref}}">' +
-          '<span ng-transclude></span>' +
+          'ui-sref="{{ctrl.mdNavSref}}">' +
+          '<span ng-transclude class="_md-nav-button-text"></span>' +
         '</md-button>' +
-        '<md-button ng-if="ctrl.navHref" class="md-nav-button md-accent"' +
+        '<md-button ng-if="ctrl.mdNavHref" class="_md-nav-button md-accent"' +
           'ng-class="ctrl.getNgClassMap()"' +
           'tabindex="-1"' +
-          'ng-href="{{ctrl.navHref}}">' +
-          '<span ng-transclude></span>' +
+          'ng-href="{{ctrl.mdNavHref}}">' +
+          '<span ng-transclude class="_md-nav-button-text"></span>' +
         '</md-button>' +
-        '<md-button ng-if="ctrl.navClick" class="md-nav-button md-accent"' +
+        '<md-button ng-if="ctrl.mdNavClick" class="_md-nav-button md-accent"' +
           'ng-class="ctrl.getNgClassMap()"' +
           'tabindex="-1"' +
-          'ng-click="ctrl.navClick()">' +
-          '<span ng-transclude></span>' +
+          'ng-click="ctrl.mdNavClick()">' +
+          '<span ng-transclude class="_md-nav-button-text"></span>' +
         '</md-button>' +
       '</li>',
     scope: {
-      'navClick': '&?',
-      'navHref': '@?',
-      'navSref': '@?',
-      'linkName': '@',
+      'mdNavClick': '&?',
+      'mdNavHref': '@?',
+      'mdNavSref': '@?',
+      'name': '@',
+    },
+    link: function(scope, element, attrs, controllers) {
+      var mdNavItem = controllers[0];
+      var mdNavBar = controllers[1];
+
+      // When accessing the element's contents synchronously, they
+      // may not be defined yet because of transclusion. There is a higher chance
+      // that it will be accessible if we wait one frame.
+      $$rAF(function() {
+        if (!mdNavItem.name) {
+          mdNavItem.name = angular.element(element[0].querySelector('._md-nav-button-text'))
+            .text().trim();
+        }
+
+        var navButton = angular.element(element[0].querySelector('._md-nav-button'));
+        navButton.on('click', function() {
+          mdNavBar.mdSelectedNavItem = mdNavItem.name;
+          scope.$apply();
+        });
+      });
     }
   };
 }
 
 /**
- * Controller for the nav-link component.
+ * Controller for the nav-item component.
  * @param {!angular.JQLite} $element
  * @constructor
  * @final
  * @ngInject
  */
-function MdNavLinkController($element) {
+function MdNavItemController($element) {
 
   /** @private @const {!angular.JQLite} */
   this._$element = $element;
 
   // Data-bound variables
   /** @const {?Function} */
-  this.navClick;
+  this.mdNavClick;
   /** @const {?string} */
-  this.navHref;
+  this.mdNavHref;
   /** @const {?string} */
-  this.navSref;
+  this.name;
 
   // State variables
   /** @private {boolean} */
@@ -437,15 +461,15 @@ function MdNavLinkController($element) {
   /** @private {boolean} */
   this._focused = false;
 
+  var hasNavClick = this.mdNavClick != null;
+  var hasNavHref = this.mdNavHref != null;
+  var hasNavSref = this.mdNavSref != null;
 
-  var hasNavClick = this.navClick != null;
-  var hasNavHref = this.navHref != null;
-  var hasNavSref = this.navSref != null;
-
-  if ((hasNavClick ? 1:0) + (hasNavHref ? 1:0) + (hasNavSref ? 1:0) != 1) {
+  // Cannot specify more than one nav attribute
+  if ((hasNavClick ? 1:0) + (hasNavHref ? 1:0) + (hasNavSref ? 1:0) > 1) {
     throw Error(
-        'Must specify exactly one of nav-click, nav-href, ' +
-        'nav-sref for nav-link directive');
+        'Must specify exactly one of md-nav-click, md-nav-href, ' +
+        'md-nav-sref for nav-item directive');
   }
 }
 
@@ -453,7 +477,7 @@ function MdNavLinkController($element) {
  * Returns a map of class names and values for use by ng-class.
  * @return {!Object<string,boolean>}
  */
-MdNavLinkController.prototype.getNgClassMap = function() {
+MdNavItemController.prototype.getNgClassMap = function() {
   return {
     'md-active': this._selected,
     'md-primary': this._selected,
@@ -463,33 +487,33 @@ MdNavLinkController.prototype.getNgClassMap = function() {
 };
 
 /**
- * Get the link-name attribute of the tab.
+ * Get the name attribute of the tab.
  * @return {string}
  */
-MdNavLinkController.prototype.getName = function() {
-  return this.linkName;
+MdNavItemController.prototype.getName = function() {
+  return this.name;
 };
 
 /**
  * Get the button element associated with the tab.
  * @return {!Element}
  */
-MdNavLinkController.prototype.getButtonEl = function() {
-  return this._$element[0].querySelector('.md-nav-button');
+MdNavItemController.prototype.getButtonEl = function() {
+  return this._$element[0].querySelector('._md-nav-button');
 };
 
 /**
  * Set the selected state of the tab.
  * @param {boolean} isSelected
  */
-MdNavLinkController.prototype.setSelected = function(isSelected) {
+MdNavItemController.prototype.setSelected = function(isSelected) {
   this._selected = isSelected;
 };
 
 /**
  * @return {boolean}
  */
-MdNavLinkController.prototype.isSelected = function() {
+MdNavItemController.prototype.isSelected = function() {
   return this._selected;
 };
 
@@ -497,13 +521,13 @@ MdNavLinkController.prototype.isSelected = function() {
  * Set the focused state of the tab.
  * @param {boolean} isFocused
  */
-MdNavLinkController.prototype.setFocused = function(isFocused) {
+MdNavItemController.prototype.setFocused = function(isFocused) {
   this._focused = isFocused;
 };
 
 /**
  * @return {boolean}
  */
-MdNavLinkController.prototype.hasFocus = function() {
+MdNavItemController.prototype.hasFocus = function() {
   return this._focused;
 };
