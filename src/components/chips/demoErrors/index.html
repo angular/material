@@ -1,0 +1,27 @@
+<div ng-controller="ChipsErrorsCtrl as ctrl" layout="column" ng-cloak>
+  <md-content class="md-padding" layout="column">
+    <h2 class="md-title">Required</h2>
+    <form name="fruitForm">
+      <md-chips name="fruit"
+                ng-model="ctrl.selectedFruit"
+                required
+                placeholder="Add a fruit">
+      </md-chips>
+      <div ng-messages="fruitForm.fruit.$error">
+        <div ng-message="required">At least one fruit is required</div>
+      </div>
+    </form>
+
+    <h2 class="md-title">Max Chips</h2>
+    <form name="vegetableForm">
+      <md-chips name="vegetables"
+          ng-model="ctrl.selectedVegetables"
+          placeholder="Add a vegetable"
+          md-max-chips="5">
+      </md-chips>
+      <div ng-messages="vegetableForm.vegetables.$error">
+        <div ng-message="md-max-chips">You reached the maximum number of vegetables</div>
+      </div>
+    </form>
+  </md-content>
+</div>
