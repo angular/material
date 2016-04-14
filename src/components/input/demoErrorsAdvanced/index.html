@@ -1,0 +1,106 @@
+<div ng-controller="AppCtrl" layout="column" ng-cloak>
+
+  <md-content layout-padding>
+    <form name="userForm">
+      <div layout="row" layout-xs="column" layout-sm="column" layout-align="space-between center">
+        <div flex-gt-sm="80">
+          <p>
+            The <code>md-input-container</code> gives you the flexibility to display your messages
+            using many standard angular directives.
+          </p>
+
+          <p>
+            For instance, toggle the switch
+
+            <span hide-xs hide-sm>to the right</span>
+            <span hide-gt-sm>below</span>
+
+            to see the messages switch between some custom hints, and the actual error messages.
+            Note that some of the <code>ng-messages</code> containers use <code>ngIf</code> while
+            others use <code>ng-show</code> or <code>ng-hide</code>.
+          </p>
+        </div>
+
+        <md-input-container>
+          <md-switch ng-model="showHints">Showing {{showHints ? "Hints" : "Errors"}}</md-switch>
+        </md-input-container>
+      </div>
+
+      <div layout-gt-sm="row">
+
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>Name</label>
+          <input md-maxlength="30" required name="name" ng-model="user.name" />
+
+          <div class="hint" ng-if="showHints">Tell us what we should call you!</div>
+
+          <div ng-messages="userForm.name.$error" ng-if="!showHints">
+            <div ng-message="required">Name is required.</div>
+            <div ng-message="md-maxlength">The name has to be less than 30 characters long.</div>
+          </div>
+        </md-input-container>
+
+        <div flex="5" hide-xs hide-sm>
+          <!-- Spacer //-->
+        </div>
+
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>Social Security Number</label>
+          <input name="social" ng-model="user.social" ng-pattern="/^[0-9]{3}-[0-9]{2}-[0-9]{4}$/" />
+
+          <div class="hint" ng-if="showHints">###-##-####</div>
+
+          <div ng-messages="userForm.social.$error" ng-if="!showHints">
+            <div ng-message="pattern">###-##-#### - Please enter a valid SSN.</div>
+          </div>
+        </md-input-container>
+
+      </div>
+
+      <div layout-gt-sm="row">
+
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>Email</label>
+          <input name="email" ng-model="user.email"
+                 required minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+
+          <div class="hint" ng-show="showHints">How can we reach you?</div>
+
+          <div ng-messages="userForm.email.$error" ng-hide="showHints">
+            <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+              Your email must be between 10 and 100 characters long and look like an e-mail address.
+            </div>
+          </div>
+        </md-input-container>
+
+        <div flex="5" hide-xs hide-sm>
+          <!-- Spacer //-->
+        </div>
+
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>Phone Number</label>
+          <input name="phone" ng-model="user.phone" ng-pattern="/^([0-9]{3}) [0-9]{3}-[0-9]{4}$/" />
+
+          <div class="hint" ng-show="showHints">(###) ###-####</div>
+
+          <div ng-messages="userForm.phone.$error" ng-hide="showHints">
+            <div ng-message="pattern">(###) ###-#### - Please enter a valid phone number.</div>
+          </div>
+        </md-input-container>
+
+        <style>
+          /*
+           * The Material demos system does not currently allow targeting the body element, so this
+           * must go here in the HTML.
+           */
+          body[dir=rtl] .hint {
+            right: 2px;
+            left: auto;
+          }
+        </style>
+      </div>
+
+    </form>
+  </md-content>
+
+</div>

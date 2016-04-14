@@ -202,6 +202,40 @@ describe('$mdThemingProvider', function() {
       ).join('')).toContain('.md-test-theme {}');
     });
 
+    describe('background palette', function() {
+
+      function getRgbaBackgroundHue(hue) {
+        return themingProvider._rgba(themingProvider._PALETTES.testPalette[hue].value);
+      }
+
+      it('should parse for a light theme probably', function() {
+        testTheme.dark(false);
+
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('50') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-1}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('A100') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-2}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('100') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-3}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('300') + ';');
+      });
+
+      it('should parse for a dark theme probably', function() {
+        testTheme.dark(true);
+
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('A400') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-1}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('800') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-2}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('900') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-3}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('A200') + ';');
+      });
+
+    });
+
     describe('parses foreground text and shadow', function() {
       it('for a light theme', function() {
         testTheme.dark(false);
@@ -210,7 +244,7 @@ describe('$mdThemingProvider', function() {
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
           .toEqual('color: rgba(0,0,0,0.54);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
-          .toEqual('color: rgba(0,0,0,0.26);');
+          .toEqual('color: rgba(0,0,0,0.38);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-4}}"; }')[0].content)
           .toEqual('color: rgba(0,0,0,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
@@ -223,7 +257,7 @@ describe('$mdThemingProvider', function() {
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
           .toEqual('color: rgba(255,255,255,0.7);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
-          .toEqual('color: rgba(255,255,255,0.3);');
+          .toEqual('color: rgba(255,255,255,0.5);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-4}}"; }')[0].content)
           .toEqual('color: rgba(255,255,255,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
@@ -366,6 +400,68 @@ describe('$mdThemeProvider with on-demand generation', function() {
     expect(styles.length).toBe(8);
     expect(document.head.innerHTML).toMatch(/md-sweden-theme/);
     expect(document.head.innerHTML).toMatch(/md-belarus-theme/);
+  });
+});
+
+describe('$mdThemeProvider with nonce', function() {
+  beforeEach(function() {
+
+    module('material.core', function($provide) {
+      /**
+       *  material-mocks.js clears the $MD_THEME_CSS for Karma testing performance
+       *  performance optimizations. Here inject some length into our theme_css so that
+       *  palettes are parsed/generated
+       */
+      $provide.constant('$MD_THEME_CSS', '/**/');
+    });
+  });
+
+  describe('and auto-generated themes', function() {
+    beforeEach(function() {
+      module('material.core', function($mdThemingProvider) {
+        $mdThemingProvider.generateThemesOnDemand(false);
+
+        $mdThemingProvider.theme('auto-nonce')
+            .primaryPalette('light-blue')
+            .accentPalette('yellow');
+
+        $mdThemingProvider.setNonce('1');
+      });
+      inject();
+    });
+
+    it('should add a nonce', function() {
+      var styles = document.head.querySelectorAll('style[nonce="1"]');
+      expect(styles.length).toBe(4);
+    });
+  });
+
+  describe('and on-demand generated themes', function() {
+    var $mdTheming;
+
+    beforeEach(function() {
+      module('material.core', function($mdThemingProvider) {
+        $mdThemingProvider.generateThemesOnDemand(true);
+
+        $mdThemingProvider.theme('nonce')
+            .primaryPalette('light-blue')
+            .accentPalette('yellow');
+
+        $mdThemingProvider.setNonce('2');
+      });
+      inject(function(_$mdTheming_) {
+        $mdTheming = _$mdTheming_;
+      });
+    });
+
+    it('should add a nonce', function() {
+      var styles = document.head.querySelectorAll('style[nonce="2"]');
+      expect(styles.length).toBe(0);
+
+      $mdTheming.generateTheme('nonce');
+      styles = document.head.querySelectorAll('style[nonce="2"]');
+      expect(styles.length).toBe(4);
+    });
   });
 });
 

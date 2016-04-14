@@ -19,11 +19,11 @@
   var dryRun;
 
   header();
-  write('Is this a dry-run? {{"[yes/no]".cyan}} ');
+  write(`Is this a dry-run? ${"[yes/no]".cyan} `);
   dryRun = prompt() !== 'no';
 
   if (dryRun) {
-    write('What would you like the old version to be? (default: {{oldVersion.cyan}}) ');
+    write(`What would you like the old version to be? (default: ${oldVersion.cyan}) `);
     oldVersion = prompt() || oldVersion;
     build();
   } else if (validate()) {
@@ -50,13 +50,14 @@
 
     line();
     log('Your repo is ready to be pushed.');
-    log('Please look over {{"CHANGELOG.md".cyan}} and make any changes.');
-    log('When you are ready, please run "{{"./push".cyan}}" to finish the process.');
+    log(`Please look over ${"CHANGELOG.md".cyan} and make any changes.`);
+    log(`When you are ready, please run "${"./push".cyan}" to finish the process.`);
     log('If you would like to cancel this release, please run "./abort"');
   }
 
   //-- utility methods
 
+  /** confirms that you will be able to perform the release before attempting */
   function validate () {
     if (exec('npm whoami') !== 'angularcore') {
       err('You must be authenticated with npm as "angularcore" to perform a release.');
@@ -71,13 +72,16 @@
     }
   }
 
+  /** creates the version branch and adds abort steps */
   function checkoutVersionBranch () {
-    exec('git checkout -q -b release/{{newVersion}}');
-    abortCmds.push('git branch -D release/{{newVersion}}');
+    exec(`git branch -q -D release/${newVersion}`);
+    exec(`git checkout -q -b release/${newVersion}`);
+    abortCmds.push(`git branch -D release/${newVersion}`);
   }
 
+  /** writes the new version to package.json */
   function updateVersion () {
-    start('Updating {{"package.json".cyan}} version from {{oldVersion.cyan}} to {{newVersion.cyan}}...');
+    start(`Updating ${"package.json".cyan} version from ${oldVersion.cyan} to ${newVersion.cyan}...`);
     pkg.version = newVersion;
     fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
     done();
@@ -85,26 +89,30 @@
     pushCmds.push('git add package.json');
   }
 
+  /** generates the changelog from the commits since the last release */
   function createChangelog () {
-    start('Generating changelog from {{oldVersion.cyan}} to {{newVersion.cyan}}...');
-    exec([
-           'git fetch --tags',
-           'git checkout v{{lastMajorVer}} -- CHANGELOG.md',
-           'gulp changelog --sha=$(git merge-base v{{lastMajorVer}} HEAD)'
-         ]);
+    start(`Generating changelog from ${oldVersion.cyan} to ${newVersion.cyan}...`);
+
+    exec(`git fetch --tags ${origin}`);
+    exec(`git checkout v${lastMajorVer} -- CHANGELOG.md`);
+    exec(`gulp changelog --sha=$(git merge-base v${lastMajorVer} HEAD)`);
+
     done();
+
     abortCmds.push('git checkout CHANGELOG.md');
     pushCmds.push('git add CHANGELOG.md');
   }
 
+  /** utility method for clearing the terminal */
   function clear () {
     write("\u001b[2J\u001b[0;0H");
   }
 
+  /** prompts the user for the new version */
   function getNewVersion () {
     header();
     var options = getVersionOptions(oldVersion), key, type, version;
-    log('The current version is {{oldVersion.cyan}}.');
+    log(`The current version is ${oldVersion.cyan}.`);
     log('');
     log('What should the next version be?');
     for (key in options) { log((+key + 1) + ') ' + options[ key ].cyan); }
@@ -118,38 +126,27 @@
 
     log('');
     log('The new version will be ' + version.cyan + '.');
-    write('Is this correct? {{"[yes/no]".cyan}} ');
+    write(`Is this correct? ${"[yes/no]".cyan} `);
     return prompt() === 'yes' ? version : getNewVersion();
 
     function getVersionOptions (version) {
       return version.match(/-rc\d+$/)
-          ? [ increment(version, 'rc'),
-        increment(version, 'minor') ]
-          : [ increment(version, 'patch'),
-        increment(version, 'minor'),
-        increment(version, 'major') ].map(addRC);
+          ? [ increment(version, 'rc'), increment(version, 'minor') ]
+          : [ increment(version, 'patch'), addRC(increment(version, 'minor')) ];
 
       function increment (versionString, type) {
         var version = parseVersion(versionString);
         if (version.rc) {
           switch (type) {
-            case 'minor':
-              version.rc = 0;
-              break;
-            case 'rc':
-              version.rc++;
-              break;
+            case 'minor': version.rc = 0; break;
+            case 'rc': version.rc++; break;
           }
         } else {
           version[ type ]++;
           //-- reset any version numbers lower than the one changed
           switch (type) {
-            case 'major':
-              version.minor = 0;
-            case 'minor':
-              version.patch = 0;
-            case 'patch':
-              version.rc = 0;
+            case 'minor': version.patch = 0;
+            case 'patch': version.rc = 0;
           }
         }
         return getVersionString(version);
@@ -178,40 +175,39 @@
     }
   }
 
+  /** adds git tag for release and pushes to github */
   function tagRelease () {
     pushCmds.push(
-        'git tag v{{newVersion}}',
-        'git push {{origin}} HEAD',
-        'git push --tags'
+        `git tag v${newVersion} -f`,
+        `git push ${origin} HEAD`,
+        `git push --tags ${origin}`
     );
   }
 
+  /** amends the commit to include local changes (ie. changelog) */
   function commitChanges () {
     start('Committing changes...');
-    exec('git commit -am "release: version {{newVersion}}"');
+    exec(`git commit -am "release: version ${newVersion}"`);
     done();
     pushCmds.push('git commit --amend --no-edit');
   }
 
+  /** utility method for cloning github repos */
   function cloneRepo (repo) {
-    start('Cloning ' + repo.cyan + ' from Github...');
-    exec('rm -rf ' + repo);
-    exec('git clone https://github.com/angular/' + repo + '.git --depth=1');
+    start(`Cloning ${repo.cyan} from Github...`);
+    exec(`rm -rf ${repo}`);
+    exec(`git clone https://github.com/angular/${repo}.git --depth=1`);
     done();
-    cleanupCmds.push('rm -rf ' + repo);
+    cleanupCmds.push(`rm -rf ${repo}`);
   }
 
-  function fill (str) {
-    return str.replace(/\{\{[^\}]+\}\}/g, function (match) {
-      return eval(match.substr(2, match.length - 4));
-    });
-  }
-
+  /** writes an array of commands to a bash script */
   function writeScript (name, cmds) {
-    fs.writeFileSync(name, '#!/usr/bin/env bash\n\n' + fill(cmds.join('\n')));
+    fs.writeFileSync(name, '#!/usr/bin/env bash\n\n' + cmds.join('\n'));
     exec('chmod +x ' + name);
   }
 
+  /** updates the version for bower-material in package.json and bower.json */
   function updateBowerVersion () {
     start('Updating bower version...');
     var options = { cwd: './bower-material' },
@@ -225,38 +221,39 @@
     start('Building bower files...');
     //-- build files for bower
     exec([
-           'rm -rf dist',
-           'gulp build',
-           'gulp build-all-modules --mode=default',
-           'gulp build-all-modules --mode=closure',
-           'rm -rf dist/demos',
-         ]);
+      'rm -rf dist',
+      'gulp build',
+      'gulp build-all-modules --mode=default',
+      'gulp build-all-modules --mode=closure',
+      'rm -rf dist/demos',
+     ]);
     done();
     start('Copy files into bower repo...');
     //-- copy files over to bower repo
     exec([
            'cp -Rf ../dist/* ./',
            'git add -A',
-           'git commit -m "release: version {{newVersion}}"',
+           `git commit -m "release: version ${newVersion}"`,
            'rm -rf ../dist'
          ], options);
     done();
     //-- add steps to push script
     pushCmds.push(
-        comment('push to bower (master and tag) and publish to npm'),
-        'cd ' + options.cwd,
-        'cp ../CHANGELOG.md .',
-        'git add CHANGELOG.md',
-        'git commit --amend --no-edit',
-        'git tag -f v{{newVersion}}',
-        'git pull --rebase',
-        'git push',
-        'git push --tags',
-        ( newVersion.indexOf('rc') < 0 ? 'npm publish' : '# skipped npm publish due to RC version' ),
-        'cd ..'
+      comment('push to bower (master and tag) and publish to npm'),
+      'cd ' + options.cwd,
+      'cp ../CHANGELOG.md .',
+      'git add CHANGELOG.md',
+      'git commit --amend --no-edit',
+      `git tag -f v${newVersion}`,
+      'git pull --rebase --strategy=ours',
+      'git push',
+      'git push --tags',
+      ( newVersion.indexOf('rc') < 0 ? 'npm publish' : '# skipped npm publish due to RC version' ),
+      'cd ..'
     );
   }
 
+  /** builds the website for the new version */
   function updateSite () {
     start('Adding new version of the docs site...');
     var options = { cwd: './code.material.angularjs.org' };
@@ -264,25 +261,26 @@
 
     //-- build files for bower
     exec([
-           'rm -rf dist',
-           'gulp docs',
-           'sed -i \'\' \'s,http:\\/\\/localhost:8080\\/angular-material,https:\\/\\/cdn.gitcdn.xyz/cdn/angular/bower-material/v{{newVersion}}/angular-material,g\' dist/docs/docs.js',
-           'sed -i \'\' \'s,base\ href=\\",base\ href=\\"/{{newVersion}},g\' dist/docs/index.html'
-         ]);
+        'rm -rf dist',
+        'gulp docs'
+    ]);
+    replaceFilePaths();
 
     //-- copy files over to site repo
     exec([
-           'rm -rf ./*-rc*',
-           'cp -Rf ../dist/docs {{newVersion}}',
-           'rm -rf latest && cp -Rf ../dist/docs latest',
-           'git add -A',
-           'git commit -m "release: version {{newVersion}}"',
-           'rm -rf ../dist'
-         ], options);
+        'rm -rf ./*-rc*',
+        `cp -Rf ../dist/docs ${newVersion}`,
+        'rm -rf latest && cp -Rf ../dist/docs latest',
+        'git add -A',
+        `git commit -m "release: version ${newVersion}"`,
+        'rm -rf ../dist'
+    ], options);
+    replaceBaseHref(newVersion);
+    replaceBaseHref('latest');
 
     //-- update firebase.json file
     writeFirebaseJson();
-    exec([ 'git commit --amend --no-edit -a' ]);
+    exec([ 'git commit --amend --no-edit -a' ], options);
     done();
 
     //-- add steps to push script
@@ -330,23 +328,46 @@
     }
   }
 
+  /** replaces localhost file paths with public URLs */
+  function replaceFilePaths () {
+    //-- handle docs.js
+    var path = __dirname + '/dist/docs/docs.js';
+    var file = fs.readFileSync(path);
+    var contents = file.toString()
+        .replace(/http:\/\/localhost:8080\/angular-material/g, 'https://cdn.gitcdn.link/cdn/angular/bower-material/v' + newVersion + '/angular-material')
+        .replace(/http:\/\/localhost:8080\/docs.css/g, 'https://material.angularjs.org/' + newVersion + '/docs.css');
+    fs.writeFileSync(path, contents);
+
+  }
+
+  /** replaces base href in index.html for new version as well as latest */
+  function replaceBaseHref (folder) {
+    //-- handle index.html
+    var path = __dirname + '/code.material.angularjs.org/' + folder + '/index.html';
+    var file = fs.readFileSync(path);
+    var contents = file.toString().replace(/base href="\//g, 'base href="/' + folder + '/');
+    fs.writeFileSync(path, contents);
+  }
+
+  /** copies the changelog back over to master branch */
   function updateMaster () {
     pushCmds.push(
         comment('update package.json in master'),
-        'git co master',
-        'git pull --rebase {{origin}} master',
-        'git checkout release/{{newVersion}} -- CHANGELOG.md',
-        'node -e "' + stringifyFunction(buildCommand) + '"',
+        'git checkout master',
+        `git pull --rebase ${origin} master --strategy=theirs`,
+        `git checkout release/${newVersion} -- CHANGELOG.md`,
+        `node -e "var newVersion = '${newVersion}'; ${stringifyFunction(buildCommand)}"`,
         'git add CHANGELOG.md',
         'git add package.json',
-        'git commit -m "update version number in package.json to {{newVersion}}"',
-        'git push'
+        `git commit -m "update version number in package.json to ${newVersion}"`,
+        `git push ${origin} master`
     );
+
     function buildCommand () {
       require('fs').writeFileSync('package.json', JSON.stringify(getUpdatedJson(), null, 2));
       function getUpdatedJson () {
-        var json     = require('./package.json');
-        json.version = '{{newVersion}}';
+        var json = require('./package.json');
+        json.version = newVersion;
         return json;
       }
     }
@@ -362,6 +383,7 @@
     }
   }
 
+  /** utility method to output header */
   function header () {
     clear();
     line();
@@ -369,6 +391,7 @@
     line();
   }
 
+  /** outputs a centered message in the terminal */
   function center (msg) {
     msg        = ' ' + msg.trim() + ' ';
     var length = msg.length;
@@ -376,10 +399,12 @@
     return Array(spaces + 1).join('-') + msg.green + Array(lineWidth - msg.length - spaces + 1).join('-');
   }
 
+  /** outputs done text when a task is completed */
   function done () {
     log('done'.green);
   }
 
+  /** utility method for executing terminal commands */
   function exec (cmd, userOptions) {
     if (cmd instanceof Array) {
       return cmd.map(function (cmd) { return exec(cmd, userOptions); });
@@ -387,32 +412,36 @@
     try {
       var options = Object.create(defaultOptions);
       for (var key in userOptions) options[ key ] = userOptions[ key ];
-      return child_process.execSync(fill(cmd) + ' 2> /dev/null', options).trim();
+      return child_process.execSync(cmd + ' 2> /dev/null', options).toString().trim();
     } catch (err) {
       return err;
     }
   }
 
+  /** returns a commented message for use in bash scripts */
   function comment (msg) {
     return '\n# ' + msg + '\n';
   }
 
+  /** prints the left side of a task while it is being performed */
   function start (msg) {
-    var parsedMsg = fill(msg),
-        msgLength = strip(parsedMsg).length,
+    var msgLength = strip(msg).length,
         diff      = lineWidth - 4 - msgLength;
-    write(parsedMsg + Array(diff + 1).join(' '));
+    write(msg + Array(diff + 1).join(' '));
   }
 
+  /** outputs to the terminal with string variable replacement */
   function log (msg) {
     msg = msg || '';
-    console.log(fill(msg));
+    console.log(msg);
   }
 
+  /** writes a message without a newline */
   function write (msg) {
-    process.stdout.write(fill(msg));
+    process.stdout.write(msg);
   }
 
+  /** prints a horizontal line to the terminal */
   function line () {
     log(Array(lineWidth + 1).join('-'));
   }

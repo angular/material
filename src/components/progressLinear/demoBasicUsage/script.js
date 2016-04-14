@@ -9,13 +9,13 @@ angular.module('progressLinearDemo1', ['ngMaterial'])
     self.determinateValue = 30;
     self.determinateValue2 = 30;
 
-    self.modes = [ ];
+    self.showList = [ ];
 
     /**
      * Turn off or on the 5 themed loaders
      */
     self.toggleActivation = function() {
-        if ( !self.activated ) self.modes = [ ];
+        if ( !self.activated ) self.showList = [ ];
         if (  self.activated ) {
           j = counter = 0;
           self.determinateValue = 30;
@@ -33,8 +33,8 @@ angular.module('progressLinearDemo1', ['ngMaterial'])
         // Incrementally start animation the five (5) Indeterminate,
         // themed progress circular bars
 
-        if ( (j < 2) && !self.modes[j] && self.activated ) {
-          self.modes[j] = (j==0) ? 'buffer' : 'query';
+        if ( (j < 2) && !self.showList[j] && self.activated ) {
+          self.showList[j] = true;
         }
         if ( counter++ % 4 == 0 ) j++;
 

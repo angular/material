@@ -1,6 +1,6 @@
 /** Styles for mdCalendar. */
 $md-calendar-cell-size: 44px !default;
-$md-calendar-header-height: 40px;
+$md-calendar-header-height: 40px !default;
 $md-calendar-cell-emphasis-size: 40px !default;
 $md-calendar-side-padding: 16px !default;
 $md-calendar-weeks-to-show: 7 !default;
@@ -8,11 +8,11 @@ $md-calendar-weeks-to-show: 7 !default;
 $md-calendar-month-label-padding: 8px !default;
 $md-calendar-month-label-font-size: 14px !default;
 
-$md-calendar-scroll-cue-shadow-radius: 6px;
+$md-calendar-scroll-cue-shadow-radius: 6px !default;
 
-$md-calendar-width: (7 * $md-calendar-cell-size) + (2 * $md-calendar-side-padding);
+$md-calendar-width: (7 * $md-calendar-cell-size) + (2 * $md-calendar-side-padding) !default;
 $md-calendar-height:
-    ($md-calendar-weeks-to-show * $md-calendar-cell-size) + $md-calendar-header-height;
+    ($md-calendar-weeks-to-show * $md-calendar-cell-size) + $md-calendar-header-height !default;
 
 // Styles for date cells, including day-of-the-week header cells.
 @mixin md-calendar-cell() {
@@ -30,11 +30,11 @@ $md-calendar-height:
   // because we want the header background and the month dividing border to
   // extend the entire width of the calendar.
   &:first-child {
-    padding-left: $md-calendar-side-padding;
+    @include rtl-prop(padding-left, padding-right, $md-calendar-side-padding);
   }
 
   &:last-child {
-    padding-right: $md-calendar-side-padding;
+    @include rtl-prop(padding-right, padding-left, $md-calendar-side-padding);
   }
 }
 
@@ -123,7 +123,7 @@ md-calendar {
   height: $md-calendar-cell-size;
   font-size: $md-calendar-month-label-font-size;
   font-weight: 500; // Roboto Medium
-  padding: 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding;
+  @include rtl(padding, 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding, rtl-value( 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding));
 }
 
 // Table containing the day-of-the-week header.
@@ -152,5 +152,12 @@ md-calendar {
   // 1px shorter than the other months. We fix this by adding an invisible border-top.
   &:first-child {
     border-top: 1px solid transparent;
+  }
+
+  // Explicitly set vertical-align to avoid conflicting with popular CSS resets. When
+  // vertical-align:baseline is set, month headers are misaligned.
+  // http://meyerweb.com/eric/tools/css/reset/
+  tbody, td, tr {
+    vertical-align: middle;
   }
 }

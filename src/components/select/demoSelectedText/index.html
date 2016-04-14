@@ -1,0 +1,15 @@
+<div ng-controller="SelectedTextController" class="md-padding" ng-cloak>
+  <div>
+    <h1 class="md-title">Pick an item below</h1>
+    <div layout="row">
+      <md-input-container>
+        <label>Items</label>
+        <md-select ng-model="selectedItem" md-selected-text="getSelectedText()">
+          <md-optgroup label="items">
+            <md-option ng-value="item" ng-repeat="item in items">Item {{item}}</md-option>
+          </md-optgroup>
+        </md-select>
+      </md-input-container>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 
-angular.module('checkboxDemo1', ['ngMaterial'])
+angular.module('checkboxDemo2', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope) {
 
@@ -8,8 +8,12 @@ angular.module('checkboxDemo1', ['ngMaterial'])
 
       $scope.toggle = function (item, list) {
         var idx = list.indexOf(item);
-        if (idx > -1) list.splice(idx, 1);
-        else list.push(item);
+        if (idx > -1) {
+          list.splice(idx, 1);
+        }
+        else {
+          list.push(item);
+        }
       };
 
       $scope.exists = function (item, list) {

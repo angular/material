@@ -54,13 +54,13 @@ describe('mdIcon directive', function() {
           size: 48
         };
 
-        el = make('\
-          <md-icon \
-              md-font-icon="{{ font.name }}" \
-              aria-label="{{ font.name + font.size }}" \
-              class="step" > \
-          </md-icon> \
-        ');
+        el = make(
+          '<md-icon ' +
+              'md-font-icon="{{ font.name }}" ' +
+              'aria-label="{{ font.name + font.size }}" ' +
+              'class="step">' +
+          '</md-icon>'
+        );
 
         expect(el.attr('md-font-icon')).toBe($scope.font.name);
         expect(el.hasClass('step')).toBe(true);
@@ -177,14 +177,23 @@ describe('mdIcon directive', function() {
           return {
             then: function(fn) {
               switch(id) {
-                case 'android'      : fn('<svg><g id="android"></g></svg>');
-                case 'cake'         : fn('<svg><g id="cake"></g></svg>');
-                case 'android.svg'  : fn('<svg><g id="android"></g></svg>');
-                case 'cake.svg'     : fn('<svg><g id="cake"></g></svg>');
-                case 'image:android': fn('');
+                case 'android'          : fn('<svg><g id="android"></g></svg>');
+                  break;
+                case 'cake'             : fn('<svg><g id="cake"></g></svg>');
+                  break;
+                case 'android.svg'      : fn('<svg><g id="android"></g></svg>');
+                  break;
+                case 'cake.svg'         : fn('<svg><g id="cake"></g></svg>');
+                  break;
+                case 'image:android'    : fn('');
+                  break;
+                default                 :
+                  if (/^data:/.test(id)) {
+                    fn(window.atob(id.split(',')[1]));
+                  }
               }
             }
-          }
+          };
         };
         $mdIconMock.fontSet = function() {
           return 'material-icons';
@@ -205,11 +214,10 @@ describe('mdIcon directive', function() {
       it('should update mdSvgIcon when attribute value changes', function() {
         $scope.iconName = 'android';
         el = make('<md-icon md-svg-icon="{{ iconName }}"></md-icon>');
-        var iScope = el.isolateScope();
-        expect(iScope.svgIcon).toEqual('android');
+        expect(el.attr('md-svg-icon')).toEqual('android');
         $scope.iconName = 'cake';
         $scope.$digest();
-        expect(iScope.svgIcon).toEqual('cake');
+        expect(el.attr('md-svg-icon')).toEqual('cake');
       });
 
       it('should not include a ng-transclude when using mdSvgIcon', function() {
@@ -226,11 +234,10 @@ describe('mdIcon directive', function() {
       it('should update mdSvgSrc when attribute value changes', function() {
         $scope.url = 'android.svg';
         el = make('<md-icon md-svg-src="{{ url }}"></md-icon>');
-        var iScope = el.isolateScope();
-        expect(iScope.svgSrc).toEqual('android.svg');
+        expect(el.attr('md-svg-src')).toEqual('android.svg');
         $scope.url = 'cake.svg';
         $scope.$digest();
-        expect(iScope.svgSrc).toEqual('cake.svg');
+        expect(el.attr('md-svg-src')).toEqual('cake.svg');
       });
 
       it('should not include a ng-transclude when using mdSvgSrc', inject(function($templateCache) {
@@ -240,6 +247,17 @@ describe('mdIcon directive', function() {
         expect(el.html()).toEqual('');
       }));
 
+      describe('with a data URL', function() {
+        it('should set mdSvgSrc from a function expression', inject(function() {
+          var svgData = '<svg><g><circle r="50" cx="100" cy="100"></circle></g></svg>';
+          $scope.getData = function() {
+            return 'data:image/svg+xml;base64,' + window.btoa(svgData);
+          };
+          el = make('<md-icon md-svg-src="{{ getData() }}"></md-icon>');
+          $scope.$digest();
+          expect(el[0].innerHTML).toEqual(svgData);
+        }));
+      });
     });
 
     describe('with ARIA support', function() {
@@ -415,10 +433,33 @@ describe('mdIcon service', function() {
       it('should return correct SVG markup', function() {
         $mdIcon('android.svg').then(function(el) {
           expect(el.outerHTML).toEqual( updateDefaults('<svg><g id="android"></g></svg>') );
-        })
+        });
         $scope.$digest();
       });
 
+      describe('and the URL is a data URL', function() {
+        var svgData = '<svg><g><circle r="50" cx="100" cy="100"></circle></g></svg>';
+
+        describe('and the data is base64 encoded', function() {
+          it('should return correct SVG markup', function() {
+            var data = 'data:image/svg+xml;base64,' + btoa(svgData);
+            $mdIcon(data).then(function(el) {
+              expect(el.outerHTML).toEqual( updateDefaults(svgData) );
+            });
+            $scope.$digest();
+          });
+        });
+
+        describe('and the data is un-encoded', function() {
+          it('should return correct SVG markup', function() {
+            var data = 'data:image/svg+xml,' + svgData;
+            $mdIcon(data).then(function(el) {
+              expect(el.outerHTML).toEqual( updateDefaults(svgData) );
+            });
+            $scope.$digest();
+          });
+        });
+      });
     });
 
     describe('icon set URL is not found', function() {
@@ -435,6 +476,41 @@ describe('mdIcon service', function() {
           expect(msg).toEqual('icon $default:notconfigured not found');
         }
       });
+    });
+
+    describe('icon is cached', function() {
+
+      it('should prevent duplicate ids', function() {
+        var firstId;
+
+        $mdIcon('android.svg').then(function(el) {
+          // First child is in our case always the node with an id.
+          firstId = el.firstChild.id;
+        });
+
+        $scope.$digest();
+
+        $mdIcon('android.svg').then(function(el) {
+          expect(el.firstChild.id).not.toBe(firstId);
+        });
+
+        $scope.$digest();
+
+      });
+
+      it('should suffix duplicated ids', function() {
+        // Just request the icon to be stored in the cache.
+        $mdIcon('android.svg');
+
+        $scope.$digest();
+
+        $mdIcon('android.svg').then(function(el) {
+          expect(el.firstChild.id).toMatch(/.+_cache[0-9]+/g);
+        });
+
+        $scope.$digest();
+      });
+
     });
 
     describe('icon group is not found', function() {
@@ -464,6 +540,7 @@ describe('mdIcon service', function() {
     });
   });
 
+
   function updateDefaults(svg) {
     svg = angular.element(svg)[0];
 
@@ -473,16 +550,10 @@ describe('mdIcon service', function() {
       'height': '100%',
       'width' : '100%',
       'preserveAspectRatio': 'xMidYMid meet',
-      'viewBox' : svg.getAttribute('viewBox') || '0 0 24 24'
+      'viewBox' : svg.getAttribute('viewBox') || '0 0 24 24',
+      'focusable': false
     }, function(val, attr) {
       svg.setAttribute(attr, val);
-    }, this);
-
-    angular.forEach({
-      'pointer-events' : 'none',
-      'display' : 'block'
-    }, function(val, style) {
-      svg.style[style] = val;
     }, this);
 
     return svg.outerHTML;

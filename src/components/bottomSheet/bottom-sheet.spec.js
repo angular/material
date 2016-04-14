@@ -2,6 +2,19 @@ describe('$mdBottomSheet service', function () {
   beforeEach(module('material.components.bottomSheet'));
 
   describe('#build()', function () {
+    it('should have `._md` class indicator',
+      inject(function ($mdBottomSheet, $rootElement, $material) {
+        var parent = angular.element('<div>');
+        $mdBottomSheet.show({
+          template: '<md-bottom-sheet>',
+          parent: parent
+        });
+        $material.flushOutstandingAnimations();
+
+        var sheet = parent.find('md-bottom-sheet');
+        expect(sheet.hasClass('_md')).toBe(true);
+    }));
+
     it('should not close when `clickOutsideToClose == true`',
       inject(function ($mdBottomSheet, $rootElement, $material) {
         var parent = angular.element('<div>');
@@ -48,6 +61,39 @@ describe('$mdBottomSheet service', function () {
 
         $material.flushInterimElement();
         expect(parent.find('md-bottom-sheet').length).toBe(1);
+      }));
+
+    it('should not append any backdrop when `disableBackdrop === true`',
+      inject(function($mdBottomSheet, $rootElement, $material) {
+        var parent = angular.element('<div>');
+        $mdBottomSheet.show({
+          template: '<md-bottom-sheet>',
+          parent: parent,
+          disableBackdrop: true
+        });
+
+        $material.flushOutstandingAnimations();
+
+        expect(parent.find('md-bottom-sheet').length).toBe(1);
+
+        var backdrop = parent.find('md-backdrop');
+        expect(backdrop.length).toBe(0);
+      }));
+
+    it('should append a backdrop by default to the bottomsheet',
+      inject(function($mdBottomSheet, $rootElement, $material) {
+        var parent = angular.element('<div>');
+        $mdBottomSheet.show({
+          template: '<md-bottom-sheet>',
+          parent: parent
+        });
+
+        $material.flushOutstandingAnimations();
+
+        expect(parent.find('md-bottom-sheet').length).toBe(1);
+
+        var backdrop = parent.find('md-backdrop');
+        expect(backdrop.length).toBe(1);
       }));
 
     it('should close when `escapeToClose == true`',

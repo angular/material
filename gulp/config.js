@@ -21,7 +21,8 @@ module.exports = {
   ],
   themeBaseFiles: [
     'src/core/style/variables.scss',
-    'src/core/style/mixins.scss'
+    'src/core/style/mixins.scss',
+    'src/core/style/themes.scss'
   ],
   scssBaseFiles: [
     'src/core/style/color-palette.scss',
@@ -29,15 +30,25 @@ module.exports = {
     'src/core/style/mixins.scss',
     'src/core/style/structure.scss',
     'src/core/style/typography.scss',
+    'src/core/style/layout.scss'
+  ],
+  scssLayoutFiles: [
+    'src/core/style/variables.scss',
+    'src/core/style/mixins.scss',
+    'src/core/style/layout.scss',
     'src/core/services/layout/layout.scss'
   ],
-  scssStandaloneFiles: [
-    'src/core/services/layout/layout.attributes.scss'
+  scssLayoutAttributeFiles: [
+      'src/core/style/variables.scss',
+      'src/core/style/mixins.scss',
+      'src/core/services/layout/layout-attributes.scss'
+    ],
+  scssPaths : [
+    'src/components/**/*.scss',
+    'src/core/services/**/*.scss'
   ],
-  scssTestFiles: [
-    'src/core/services/layout/layout.scss'
-  ],
-  paths: 'src/{components,services}/**',
+  cssIEPaths : ['src/**/ie_fixes.css'],
+  paths: 'src/{components, services}/**',
   outputDir: 'dist/',
   demoFolder: 'demo-partials'
 };

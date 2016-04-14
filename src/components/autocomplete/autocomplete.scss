@@ -1,6 +1,4 @@
-$autocomplete-option-height: 48px;
-$input-container-padding: 2px !default;
-$input-error-height: 24px !default;
+$autocomplete-option-height: 48px !default;
 
 @keyframes md-autocomplete-list-out {
   0% {
@@ -42,7 +40,7 @@ md-autocomplete {
   min-width: 190px;
   &[disabled] {
     input {
-      cursor: not-allowed;
+      cursor: default;
     }
   }
   &[md-floating-label] {
@@ -51,14 +49,7 @@ md-autocomplete {
     height: auto;
 
     md-input-container {
-      padding-bottom: $input-container-padding + $input-error-height;
-
-      // When we have ng-messages, remove the input error height from our bottom padding, since the
-      // ng-messages wrapper has a min-height of 1 error (so we don't adjust height as often; see
-      // input.scss file)
-      &.md-input-has-messages {
-        padding-bottom: $input-container-padding;
-      }
+      padding-bottom: 0px;
     }
     md-autocomplete-wrap {
       height: auto;
@@ -91,7 +82,7 @@ md-autocomplete {
         left: 2px;
         width: auto;
       }
-      .md-mode-indeterminate {
+      ._md-mode-indeterminate {
         position: absolute;
         top: 0;
         left: 0;
@@ -181,6 +172,7 @@ md-autocomplete {
       }
     }
   }
+  // IE Only
   @media screen and (-ms-high-contrast: active) {
     $border-color: #fff;
 
@@ -230,6 +222,7 @@ md-autocomplete {
   }
 }
 
+// IE Only
 @media screen and (-ms-high-contrast: active) {
   md-autocomplete,
   .md-autocomplete-suggestions {

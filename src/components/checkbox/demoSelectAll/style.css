@@ -1,0 +1,15 @@
+.demo {
+  &-legend {
+    color: #3F51B5;
+  }
+
+  &-fieldset {
+    border-style: solid;
+    border-width: 1px;
+    height: 100%;
+  }
+
+  &-select-all-checkboxes {
+    padding-left: 30px;
+  }
+}

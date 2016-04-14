@@ -7,7 +7,8 @@ body {
   font-size: 1.6rem;
 }
 
-body {
+/* This styling should be not applied to codepen demos, so we need to add a unique identifier. */
+body.docs-body {
   overflow: hidden;
   max-width: 100%;
   max-height: 100%;
@@ -22,25 +23,47 @@ body {
   overflow: hidden;
 }
 
+/* Center the doc tool icons at the top */
+.docs-tools .md-button.md-icon-button {
+  min-height: 0;
+  height: auto;
+}
+
+#license-footer {
+  align-self: flex-end;
+  padding: 16px 32px;
+  width: 100%;
+
+  text-align: center;
+  font-size: small;
+  border-top: 1px solid #ddd;
+}
+
+
+.training_link {
+  color: rgb(255,82,82);
+  text-transform: none;
+}
+
+.training_site {
+  text-transform: none;
+}
+
+.training_info {
+  opacity:0.4;
+  text-transform: none;
+}
 /***************
  * TYPE DEFAULTS
  ***************/
 a {
-  color: #106CC8;
   text-decoration: none;
   font-weight: 400;
-  border-bottom: 1px solid rgba(64, 84, 178, 0.25);
   -webkit-transition: border-bottom 0.35s;
   -moz-transition: border-bottom 0.35s;
   -ms-transition: border-bottom 0.35s;
   -o-transition: border-bottom 0.35s;
   transition: border-bottom 0.35s;
-}
-a:hover, a:focus {
-  border-bottom: 1px solid #4054B2;
-}
-a.md-button {
-  border-bottom: none;
 }
 h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
@@ -261,6 +284,14 @@ code:not(.highlight) {
   white-space: normal;
   width: 100%;
 }
+
+html[dir=rtl] .docs-menu .md-button,
+body[dir=rtl] .docs-menu .md-button {
+  unicode-bidi: embed;
+  text-align: right;
+}
+
+
 .docs-menu .md-button:hover,
 .docs-menu .md-button:focus {
   background: #267ED5 !important;
@@ -307,6 +338,15 @@ code:not(.highlight) {
   width: 100%;
   color: rgba(255, 255, 255, 0.54)
 }
+
+
+html[dir=rtl] .menu-heading,
+body[dir=rtl] .menu-heading {
+  unicode-bidi: embed;
+  text-align: right;
+}
+
+
 .docs-menu li.parentActive,
 .docs-menu li.parentActive .menu-toggle-list {
   /*background-color: #2C80D2 !important;*/
@@ -330,8 +370,11 @@ code:not(.highlight) {
   font-weight: 500;
 }
 
-ul#docs-menu-Directives {
+.parent-list-item:last-child {
   margin-bottom: 20px;
+
+  /* Prevent the hidden License link from causing a double bottom-border */
+  border-bottom: none;
 }
 .md-button-toggle .md-toggle-icon {
   display: block;
@@ -400,6 +443,7 @@ a.docs-logo {
 }
 .md-breadcrumb md-icon {
   color: #666 !important;
+  fill: #666 !important;
 }
 .md-breadcrumb-page {
   display: inline-block;
@@ -411,16 +455,13 @@ a.docs-logo {
   margin: 0 24px;
   width: auto;
 }
-.docs-tools .md-button {
-  padding: 0;
-  margin: 0 0 0 8px;
-}
 .docs-tools .md-button,
 .docs-tools .md-button md-icon {
   color: #666 !important;
 }
 .docs-toolbar-tools .md-button md-icon {
   color: #666 !important;
+  fill: #666 !important;
 }
 @media (max-width: 400px) {
   .docs-tools {
@@ -516,6 +557,7 @@ md-tabs.demo-source-tabs .active md-tab-label {
   -ms-flex: 1 1 0%;
   flex: 1 1 0%;
 }
+
 .demo-content > div[layout-fill] {
   min-height: 448px;
 }
@@ -873,4 +915,13 @@ table.attributes  tr  td:last-child {
 
 table.md-api-table  tr  td:first-child {
   font-weight: bold;
+}
+
+
+.layout_note {
+  font-size: 0.9em;
+    margin: -5px 40px 0px 20px;
+    color: rgb(1, 57, 114);
+    background-color: rgba(156, 204, 101,0.4);
+    padding: 20px;
 }

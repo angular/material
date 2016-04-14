@@ -87,11 +87,14 @@ function buildModule(module, opts) {
 
   var stream = utils.filesForModule(module)
       .pipe(filterNonCodeFiles())
+      .pipe(filterLayoutAttrFiles())
       .pipe(gulpif('*.scss', buildModuleStyles(name)))
       .pipe(gulpif('*.js', buildModuleJs(name)));
+
   if (module === 'material.core') {
     stream = splitStream(stream);
   }
+
   return stream
       .pipe(BUILD_MODE.transform())
       .pipe(insert.prepend(config.banner))
@@ -157,8 +160,8 @@ function buildModule(module, opts) {
     return lazypipe()
         .pipe(insert.prepend, baseStyles)
         .pipe(gulpif, /theme.scss/,
-        rename(name + '-default-theme.scss'), concat(name + '.scss')
-    )
+          rename(name + '-default-theme.scss'), concat(name + '.scss')
+        )
         .pipe(sass)
         .pipe(autoprefix)
     (); // invoke the returning fn to create our pipe
@@ -176,6 +179,16 @@ function readModuleArg() {
     process.exit(1);
   }
   return module;
+}
+
+/**
+ * We are not injecting the layout-attributes selectors into the core module css,
+ * otherwise we would have the layout-classes and layout-attributes in there.
+ */
+function filterLayoutAttrFiles() {
+  return filter(function(file) {
+    return !/.*layout-attributes\.scss/g.test(file.path);
+  });
 }
 
 function filterNonCodeFiles() {

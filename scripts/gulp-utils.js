@@ -63,7 +63,7 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
         css:[], html:[], js:[]
       };
 
-      gulp.src(demoFolder.path + '**/*', { base: path.dirname(demoFolder.path) })
+      gulp.src(demoFolder.path + '/**/*', { base: path.dirname(demoFolder.path) })
         .pipe(fileTasks(demoId))
         .pipe(through2.obj(function(file, enc, cb) {
           if (/index.html$/.test(file.path)) {

@@ -41,7 +41,7 @@ $layout-breakpoint-lg:     1920px !default;
     }
   }
 
-  @for $i from 0 through 19 {
+  @for $i from -20 through 20 {
     $order : '';
     $suffix : '';
 
@@ -135,6 +135,20 @@ $layout-breakpoint-lg:     1920px !default;
   }
 
   [#{$flexName}]             { flex: 1;         box-sizing: border-box; }  // === flex: 1 1 0%;
+
+  // IE mediaQuery hack for 8,9,10 to set the flex-basis properly for 'flex' values
+  // Details:
+  // Do not use unitless flex-basis values in the flex shorthand because IE 10-11 will error.
+  // Also use 0% instead of 0px since minifiers will often convert 0px to 0 (which is unitless and will have the same problem).
+  // Safari, however, fails with flex-basis : 0% and requires flex-basis : 0px
+  @if $name != '-print' { 
+    @media screen\0 {
+        [#{$flexName}] {
+          flex: 1 1 0%;
+        }
+    }
+  }
+
   [#{$flexName}-grow]        { flex: 1 1 100%;  box-sizing: border-box; }
   [#{$flexName}-initial]     { flex: 0 1 auto;  box-sizing: border-box; }
   [#{$flexName}-auto]        { flex: 1 1 auto;  box-sizing: border-box; }
@@ -169,16 +183,12 @@ $layout-breakpoint-lg:     1920px !default;
   }
 
   [layout="row"], [layout#{$name}="row"] {
-    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33%;  max-width: calc(100% / 3);  max-height: 100%; box-sizing: border-box; }
-    > [#{$flexName}="34"]   , > [#{$flexName}="34"]     {  flex: 1 1 34%;  max-width: 34%;  max-height: 100%; box-sizing: border-box; }
-    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66%;  max-width: calc(200% / 3);  max-height: 100%; box-sizing: border-box; }
-    > [#{$flexName}="67"]   , > [#{$flexName}="67"]     {  flex: 1 1 67%;  max-width: 67%;  max-height: 100%; box-sizing: border-box; }
+    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33.33%;  max-width: 33.33%;  max-height: 100%; box-sizing: border-box; }
+    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66.66%;  max-width: 66.66%;  max-height: 100%; box-sizing: border-box; }
   }
   [layout="column"], [layout#{$name}="column"] {
-    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33%;  max-width: 100%;  max-height: calc(100% / 3); box-sizing: border-box; }
-    > [#{$flexName}="34"]   , > [#{$flexName}="34"]     {  flex: 1 1 34%;  max-width: 100%;  max-height: 34%; box-sizing: border-box; }
-    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66%;  max-width: 100%;  max-height: calc(200% / 3); box-sizing: border-box; }
-    > [#{$flexName}="67"]   , > [#{$flexName}="67"]     {  flex: 1 1 67%;  max-width: 100%;  max-height: 67%; box-sizing: border-box; }
+    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33.33%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
+    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66.66%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
   }
 
 }
@@ -198,7 +208,7 @@ $layout-breakpoint-lg:     1920px !default;
   [#{$name}],
   [#{$name}="start stretch"] // defaults
   {
-    justify-content : start;
+    justify-content :flex-start;
     align-content : stretch;
     align-items: stretch;
   }
@@ -209,7 +219,7 @@ $layout-breakpoint-lg:     1920px !default;
   [#{$name}="start end"],
   [#{$name}="start stretch"]
   {
-    justify-content: start;
+    justify-content: flex-start;
   }
 
   // Main Axis Center
@@ -421,10 +431,13 @@ $layout-breakpoint-lg:     1920px !default;
 
 @media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
   // SMALL SCREEN
-  [hide-sm], [hide] {
-    &:not([show-sm]):not([show]) {
+  [hide], [hide-gt-xs] {
+    &:not([show-gt-xs]):not([show-sm]):not([show]) {
       display: none;
     }
+  }
+  [hide-sm]:not([show-gt-xs]):not([show-sm]):not([show]) {
+    display: none;
   }
   @include layouts_for_breakpoint(sm);
 }
@@ -437,14 +450,14 @@ $layout-breakpoint-lg:     1920px !default;
 
 @media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
   // MEDIUM SCREEN
-  [hide], [hide-gt-sm] {
-    &:not([show-gt-sm]):not([show-md]):not([show]) {
+  [hide], [hide-gt-xs], [hide-gt-sm] {
+      &:not([show-gt-xs]):not([show-gt-sm]):not([show-md]):not([show]) {
+        display: none;
+      }
+    }
+    [hide-md]:not([show-md]):not([show]) {
       display: none;
     }
-  }
-  [hide-md]:not([show-md]):not([show]) {
-    display: none;
-  }
   @include layouts_for_breakpoint(md);
 }
 
@@ -455,8 +468,8 @@ $layout-breakpoint-lg:     1920px !default;
 
 @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
   // LARGE SCREEN
-  [hide], [hide-gt-sm], [hide-gt-md] {
-      &:not([show-gt-sm]):not([show-gt-md]):not([show-lg]):not([show]) {
+  [hide],[hide-gt-xs], [hide-gt-sm], [hide-gt-md] {
+      &:not([show-gt-xs]):not([show-gt-sm]):not([show-gt-md]):not([show-lg]):not([show]) {
         display: none;
       }
     }
@@ -469,18 +482,27 @@ $layout-breakpoint-lg:     1920px !default;
 
 @media (min-width: $layout-breakpoint-lg) {
   // BIGGER THAN LARGE SCREEN
-  [hide-gt-sm], [hide-gt-md], [hide-gt-lg], [hide] {
-    &:not([show-gt-sm]):not([show-gt-md]):not([show-gt-lg]):not([show-xl]):not([show]) {
+  @include layouts_for_breakpoint(gt-lg);
+  @include layouts_for_breakpoint(xl);
+
+  // BIGGER THAN LARGE SCREEN
+  [hide], [hide-gt-xs], [hide-gt-sm], [hide-gt-md], [hide-gt-lg] {
+    &:not([show-gt-xs]):not([show-gt-sm]):not([show-gt-md]):not([show-gt-lg]):not([show-xl]):not([show]) {
       display: none;
     }
   }
-  [hide-xl]:not([show-xl]):not([show]) {
+  [hide-xl]:not([show-xl]):not([show-gt-lg]):not([show]) {
     display: none;
   }
-
-
-  // BIGGER THAN LARGE SCREEN
-  @include layouts_for_breakpoint(gt-lg);
-  @include layouts_for_breakpoint(xl);
 }
+
+@media print {
+  // PRINT
+  @include layouts_for_breakpoint(print);
+  
+  [hide-print]:not([show-print]):not([show]) {
+    display: none;
+  }
+}
+
 

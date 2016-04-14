@@ -22,7 +22,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
       }
     })
     .when('/layout/', {
-      redirectTo:  '/layout/container'
+      redirectTo:  '/layout/introduction'
     })
     .when('/demo/', {
       redirectTo: DEMOS[0].url
@@ -32,6 +32,9 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
     })
     .when('/getting-started', {
       templateUrl: 'partials/getting-started.tmpl.html'
+    })
+    .when('/license', {
+      templateUrl: 'partials/license.tmpl.html'
     });
   $mdThemingProvider.definePalette('docs-blue', $mdThemingProvider.extendPalette('blue', {
     '50': '#DCEFFF',
@@ -248,21 +251,34 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       name: 'Layout',
       type: 'toggle',
       pages: [{
-        name: 'Container Elements',
+        name: 'Introduction',
+        id: 'layoutIntro',
+        url: 'layout/introduction'
+      }
+        ,{
+        name: 'Layout Containers',
         id: 'layoutContainers',
         url: 'layout/container'
-      },{
-        name: 'Layout System',
+        }
+      ,{
+        name: 'Layout Children',
         id: 'layoutGrid',
-        url: 'layout/grid'
-      },{
+        url: 'layout/children'
+      }
+      ,{
         name: 'Child Alignment',
         id: 'layoutAlign',
         url: 'layout/alignment'
-      },{
-        name: 'Options',
+      }
+      ,{
+        name: 'Extra Options',
         id: 'layoutOptions',
         url: 'layout/options'
+      }
+      ,{
+        name: 'Troubleshooting',
+        id: 'layoutTips',
+        url: 'layout/tips'
       }]
     },
     {
@@ -274,6 +290,15 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       pages: apiDocs.directive.sort(sortByName),
       type: 'toggle'
     }]
+  });
+
+  sections.push({
+    name: 'License',
+    url:  'license',
+    type: 'link',
+
+    // Add a hidden section so that the title in the toolbar is properly set
+    hidden: true
   });
 
   function sortByName(a,b) {
@@ -439,7 +464,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   };
 })
 
-.directive('menuToggle', [ '$timeout', function($timeout) {
+.directive('menuToggle', [ '$timeout', '$mdUtil', function($timeout, $mdUtil) {
   return {
     scope: {
       section: '='
@@ -454,18 +479,21 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       $scope.toggle = function() {
         controller.toggleOpen($scope.section);
       };
-      $scope.$watch(
+
+      $mdUtil.nextTick(function() {
+        $scope.$watch(
           function () {
             return controller.isOpen($scope.section);
           },
           function (open) {
             var $ul = $element.find('ul');
+
             var targetHeight = open ? getTargetHeight() : 0;
             $timeout(function () {
-              $ul.css({ height: targetHeight + 'px' });
+              $ul.css({height: targetHeight + 'px'});
             }, 0, false);
 
-            function getTargetHeight () {
+            function getTargetHeight() {
               var targetHeight;
               $ul.addClass('no-transition');
               $ul.css('height', '');
@@ -475,8 +503,8 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
               return targetHeight;
             }
           }
-      );
-
+        );
+      });
 
       var parentNode = $element[0].parentNode.parentNode.parentNode;
       if(parentNode.classList.contains('parent-list-item')) {
@@ -509,6 +537,9 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   $scope.openMenu = openMenu;
   $scope.closeMenu = closeMenu;
   $scope.isSectionSelected = isSectionSelected;
+
+  // Grab the current year so we don't have to update the license every year
+  $scope.thisYear = (new Date()).getFullYear();
 
   $rootScope.$on('$locationChangeSuccess', openPage);
   $scope.focusMainContent = focusMainContent;
@@ -633,7 +664,26 @@ function($scope, $attrs, $location, $rootScope) {
     direction: 'row'
   };
   $scope.layoutAlign = function() {
-    return $scope.layoutDemo.mainAxis + ' ' + $scope.layoutDemo.crossAxis;
+    return $scope.layoutDemo.mainAxis +
+     ($scope.layoutDemo.crossAxis ? ' ' + $scope.layoutDemo.crossAxis : '')
+  };
+}])
+
+.controller('LayoutTipsCtrl', [
+function() {
+  var self = this;
+
+  /*
+   * Flex Sizing - Odd
+   */
+  self.toggleButtonText = "Hide";
+
+  self.toggleContentSize = function() {
+    var contentEl = angular.element(document.getElementById('toHide'));
+
+    contentEl.toggleClass("ng-hide");
+
+    self.toggleButtonText = contentEl.hasClass("ng-hide") ? "Show" : "Hide";
   };
 }])
 

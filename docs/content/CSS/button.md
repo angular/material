@@ -232,8 +232,8 @@ Here is another example of a button with font icons:
 Using the customization approaches documented above, we can easily create a mdButtonGroup:
 
 <hljs lang="html">
-<section layout="row" layout-sm="column" 
-         layout-align="center center" >
+<section layout="row"
+         layout-align="center center">
   <md-button class="groupX left">Apple</md-button>
   <md-button class="groupX middle">Samsung</md-button>
   <md-button class="groupX middle">Sony</md-button>

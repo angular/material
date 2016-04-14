@@ -1,7 +1,5 @@
 html, body {
   height: 100%;
-  color: rgba(0,0,0,0.87);
-  background: white;
   position: relative;
 }
 
@@ -17,7 +15,8 @@ body {
   padding: 10px;
 }
 
-button.md-no-style {
+a._md-no-style,
+button._md-no-style {
   font-weight: normal;
   background-color: inherit;
   text-align: left;
@@ -62,9 +61,12 @@ input {
       -webkit-appearance: none;
     }
   }
+  &:-webkit-autofill {
+    text-shadow: none;
+  }
 }
 
-.md-visually-hidden {
+._md-visually-hidden {
   border: 0;
   clip: rect(0 0 0 0);
   height: 1px;
@@ -167,3 +169,21 @@ input {
     padding: 16px;
   }
 }
+
+// Bi-directional support
+
+html, body {
+  &[dir=rtl], &[dir=ltr] {
+     unicode-bidi: embed
+  }
+}
+
+bdo[dir=rtl] {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+}
+bdo[dir=ltr] {
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+

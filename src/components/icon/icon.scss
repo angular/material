@@ -7,12 +7,17 @@ md-icon {
   height: $icon-size;
   width: $icon-size;
 
+  // The icons should not shrink on smaller viewports.
+  min-height: $icon-size;
+  min-width: $icon-size;
+
   svg {
     pointer-events: none;
+    display: block;
   }
 
   &[md-font-icon] {
-    line-height: 1;
+    line-height: $icon-size;
     width: auto;
   }
 }

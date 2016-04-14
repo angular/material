@@ -4,16 +4,33 @@ md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) {
 
   md-icon {
     color: '{{primary-contrast}}';
+    fill: '{{primary-contrast}}';
   }
 
-  .md-button:not(.md-raised) {
-    color: '{{primary-contrast}}';
+  .md-button[disabled] md-icon {
+    color: '{{primary-contrast-0.26}}';
+    fill: '{{primary-contrast-0.26}}';
   }
 
   &.md-accent {
     background-color: '{{accent-color}}';
     color: '{{accent-contrast}}';
+
+    .md-ink-ripple {
+      color: '{{accent-contrast}}';
+    }
+
+    md-icon {
+      color: '{{accent-contrast}}';
+      fill: '{{accent-contrast}}';
+    }
+
+    .md-button[disabled] md-icon {
+      color: '{{accent-contrast-0.26}}';
+      fill: '{{accent-contrast-0.26}}';
+    }
   }
+
   &.md-warn {
     background-color: '{{warn-color}}';
     color: '{{warn-contrast}}';

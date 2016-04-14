@@ -2,7 +2,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope, $mdDialog, $mdMedia) {
   $scope.status = '  ';
-  $scope.customFullscreen = $mdMedia('sm');
+  $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 
   $scope.showAlert = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app
@@ -37,14 +37,34 @@ angular.module('dialogDemo1', ['ngMaterial'])
     });
   };
 
+  $scope.showPrompt = function(ev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.prompt()
+          .title('What would you name your dog?')
+          .textContent('Bowser is a common name.')
+          .placeholder('dog name')
+          .ariaLabel('Dog name')
+          .targetEvent(ev)
+          .ok('Okay!')
+          .cancel('I\'m a cat person');
+
+    $mdDialog.show(confirm).then(function(result) {
+      $scope.status = 'You decided to name your dog ' + result + '.';
+    }, function() {
+      $scope.status = 'You didn\'t name your dog.';
+    });
+  };
+
   $scope.showAdvanced = function(ev) {
+    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+
     $mdDialog.show({
       controller: DialogController,
       templateUrl: 'dialog1.tmpl.html',
       parent: angular.element(document.body),
       targetEvent: ev,
       clickOutsideToClose:true,
-      fullscreen: $mdMedia('sm') && $scope.customFullscreen
+      fullscreen: useFullScreen
     })
     .then(function(answer) {
       $scope.status = 'You said the information was "' + answer + '".';
@@ -55,9 +75,9 @@ angular.module('dialogDemo1', ['ngMaterial'])
 
 
     $scope.$watch(function() {
-      return $mdMedia('sm');
-    }, function(sm) {
-      $scope.customFullscreen = (sm === true);
+      return $mdMedia('xs') || $mdMedia('sm');
+    }, function(wantsFullScreen) {
+      $scope.customFullscreen = (wantsFullScreen === true);
     });
 
   };

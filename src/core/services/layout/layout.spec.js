@@ -1,5 +1,5 @@
 describe('layout directives', function() {
-  var suffixes = ['sm', 'gt-sm', 'md', 'gt-md', 'lg', 'gt-lg'],
+  var suffixes = ['xs', 'gt-xs', 'sm', 'gt-sm', 'md', 'gt-md', 'lg', 'gt-lg', 'xl', 'print'],
     $mdUtil, $compile, pageScope;
 
   beforeEach(module('material.core', 'material.core.layout'));
@@ -20,8 +20,10 @@ describe('layout directives', function() {
 
     it('should ignore invalid values', function() {
       var element = $compile('<div layout="humpty">Layout</div>')(pageScope);
-      expect(element.hasClass("layout-row")).toBeTruthy();
+
+      expect( element.attr('layout') ).toBe('humpty');        // original attribute value unmodified
       expect(element.hasClass('layout-humpty')).toBeFalsy();
+      expect(element.hasClass("layout-row")).toBeTruthy();    // injected className based on fallback value
     });
 
     it('should support interpolated values layout-gt-sm="{{direction}}"', function() {
@@ -36,6 +38,7 @@ describe('layout directives', function() {
       pageScope.$apply('direction = "column"');
       expect(element.hasClass('layout-gt-sm-column')).toBeTruthy();
     });
+
 
     /**
      * For all breakpoints,
@@ -217,7 +220,8 @@ describe('layout directives', function() {
       "layout-margin",
       "layout-fill",
       "layout-wrap",
-      "layout-no-wrap"
+      "layout-no-wrap",
+      "layout-nowrap"
     ];
 
     angular.forEach(allowedAttrsNoValues, function(name) {

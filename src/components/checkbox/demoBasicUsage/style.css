@@ -1,9 +1,11 @@
+div.flex-xs {
+  min-height:40px;
+
+}
 .checkboxDemo1 div {
   clear: both;
 }
-.checkboxDemo1 md-checkbox {
-  float: left;
-}
+
 p {
   padding-left: 8px;
 }

@@ -107,13 +107,13 @@ Here are two examples of well-defined issues:
 unsolicited PRs to Angular Material.
 
 Please check with us via [the discussion forum](https://groups.google.com/forum/#!forum/ngmaterial)
-before investing significant effort in any pre-1.0 PR contribution; it's likely that we are already
+before investing significant effort in a planned Pull Request submission; it's likely that we are already
 working on a related PR.
 
 * All contributions must be consistent with the Angular Material coding conventions. See the
-  [Coding Guidelines](CODING.md)
+  [Coding Guidelines](docs/guides/CODING.md)
 * Submit proposed changes or additions as GitHub pull requests. See the
-  [Pull Request Guidelines](PULL_REQUESTS.md)
+  [Pull Request Guidelines](docs/guides/PULL_REQUESTS.md)
 
 <br/>
 ## <a name="commit"></a> Git Commit Guidelines
