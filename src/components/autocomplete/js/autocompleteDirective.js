@@ -34,7 +34,15 @@ angular
  *
  * There is an example below of how this should look.
  *
+ * ### Snapping Drop-Down
+ *
+ * You can cause the autocomplete drop-down to snap to an ancestor element by applying the
+ *     `md-autocomplete-snap` attribute to that element. You can also snap to the width of
+ *     the `md-autocomplete-snap` element by setting the attribute's value to `width`
+ *     (ie. `md-autocomplete-snap="width"`).
+ *
  * ### Notes
+ *
  * **Autocomplete Dropdown Items Rendering**
  *
  * The `md-autocomplete` uses the the <a ng-href="api/directive/mdVirtualRepeatContainer">VirtualRepeat</a>
