@@ -155,7 +155,8 @@ angular
  * @param {Object=} opt_config Specific configuration object that may contain
  * the properties defined in `$mdPanel.create`.
  *
- * @returns {MdPanelRef} panelRef
+ * @returns {angular.$q.Promise<MdPanelRef>} panelRef A promise that resolves
+ * to an instance of the panel.
  */
 
 
@@ -245,7 +246,7 @@ angular
 
 /**
  * @ngdoc method
- * @name MdPanelRef#attachOnly
+ * @name MdPanelRef#attach
  * @description
  * Create the panel elements and attach them to the DOM. The panel will be
  * hidden by default.
@@ -258,7 +259,7 @@ angular
  * @ngdoc method
  * @name MdPanelRef#detach
  * @description
- * Removes the panel from the DOM. This will hide the panel before removing it.
+ * Removes the panel from the DOM. This will NOT hide the panel before removing it.
  *
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
  * detached.
@@ -612,25 +613,22 @@ function MdPanelService($rootElement, $rootScope, $injector) {
     focusOnOpen: true,
     fullscreen: false,
     hasBackdrop: false,
-    transformTemplate: angular.bind(this, this.wrapTemplate_),
+    transformTemplate: angular.bind(this, this._wrapTemplate),
     trapFocus: false,
     zIndex: defaultZIndex
   };
 
-  /** @private {!angular.Scope} */
-  this._$rootScope = $rootScope;
-
   /** @private {!Object} */
   this._config = {};
 
-  /** @private {!angular.$injector} */
-  this._$injector = $injector;
-
-  /** @private {!angular.$injector} */
+  /** @private @const */
   this._$rootScope = $rootScope;
 
-  /** @private {!angular.JQLite} */
+  /** @private @const */
   this._$rootElement = $rootElement;
+
+  /** @private @const */
+  this._$injector = $injector;
 
   /**
    * Default animations that can be used within the panel.
@@ -678,33 +676,13 @@ MdPanelService.prototype.create = function(opt_config) {
 /**
  * Creates and opens a panel with the specified options.
  * @param {!Object=} opt_config Configuration object for the panel.
- * @returns {!MdPanelRef} The panel created from create.
+ * @returns {!angular.$q.Promise<MdPanelRef>} The panel created from create.
  */
 MdPanelService.prototype.open = function(opt_config) {
   var panelRef = this.create(opt_config);
-  panelRef.open();
-  return panelRef;
-};
-
-
-/**
- * Wraps the users template in two elements, md-panel-container, which covers
- * the entire attachTo element, and md-panel, which contains only the
- * template. This allows the panel control over positioning, animations,
- * and similar properties.
- *
- * @param {string} origTemplate The original template.
- * @returns {string} The wrapped template.
- * @private
- */
-MdPanelService.prototype.wrapTemplate_ = function(origTemplate) {
-  var template = origTemplate || '';
-
-  return '<div class="md-panel-outer-wrapper">' +
-            '<div class="md-panel">' +
-              template +
-            '</div>' +
-         '</div>';
+  return panelRef.open().then(function() {
+    return panelRef;
+  });
 };
 
 
@@ -729,6 +707,25 @@ MdPanelService.prototype.newPanelAnimation = function() {
   return new MdPanelAnimation();
 };
 
+
+/**
+ * Wraps the users template in two elements, md-panel-outer-wrapper, which
+ * covers the entire attachTo element, and md-panel, which contains only the
+ * template. This allows the panel control over positioning, animations,
+ * and similar properties.
+ *
+ * @param {string} origTemplate The original template.
+ * @returns {string} The wrapped template.
+ * @private
+ */
+MdPanelService.prototype._wrapTemplate = function(origTemplate) {
+  var template = origTemplate || '';
+
+  return '' +
+      '<div class="md-panel-outer-wrapper">' +
+      '  <div class="md-panel">' + template + '</div>' +
+      '</div>';
+};
 
 /*****************************************************************************
  *                                 MdPanelRef                                *
@@ -828,8 +825,8 @@ function MdPanelRef(config, $injector) {
  * Opens an already created and configured panel. If the panel is already
  * visible, does nothing.
  *
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel
- * is opened and animations finish.
+ * @returns {!angular.$q.Promise<MdPanelRef>} A promise that is resolved when
+ * the panel is opened and animations finish.
  */
 MdPanelRef.prototype.open = function() {
   if (this._openPromise) {
@@ -841,9 +838,12 @@ MdPanelRef.prototype.open = function() {
   // TODO(ErinCoughlan) - Cancel any in-progress actions.
 
   var self = this;
-  this._openPromise = this.attachOnly()
+  this._openPromise = this.attach()
       .then(function() {
         return self.show();
+      }, this._$q.reject)
+      .then(function() {
+        return self; // Return a reference to the MdPanelRef.
       }, this._$q.reject);
 
   return this._openPromise;
@@ -877,10 +877,10 @@ MdPanelRef.prototype.close = function() {
 /**
  * Attaches the panel. The panel will be hidden afterwards.
  *
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
- * attached.
+ * @returns {!angular.$q.Promise<MdPanelRef>} A promise that is resolved when
+ * the panel is attached.
  */
-MdPanelRef.prototype.attachOnly = function() {
+MdPanelRef.prototype.attach = function() {
   if (this.isAttached) {
     return this._attachPromise;
   }
@@ -903,7 +903,7 @@ MdPanelRef.prototype.attachOnly = function() {
 
 
 /**
- * Detaches the panel. Will hide the panel first if visible.
+ * Only detaches the panel. Will NOT hide the panel first.
  *
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
  * detached.
@@ -935,12 +935,10 @@ MdPanelRef.prototype.detach = function() {
     return self._$q.resolve(self);
   };
 
-  this._detachPromise = this.hide().then(function () {
-    return self._$q.all([
-      detachFn(),
-      self._backdropRef ? self._backdropRef.detach() : self._$q.resolve(self)
-    ]);
-  }, this._$q.reject);
+  this._detachPromise = self._$q.all([
+    detachFn(),
+    self._backdropRef ? self._backdropRef.detach() : self._$q.resolve(self)
+  ]);
 
   return this._detachPromise;
 };
@@ -969,7 +967,7 @@ MdPanelRef.prototype.show = function() {
   var animatePromise = function() {
     self.removeClass(MD_PANEL_HIDDEN);
     return self._animateOpen();
-  }
+  };
 
   this._showPromise = this._$q.all([
       this._backdropRef ? this._backdropRef.show() : this._$q.resolve(self),
@@ -1084,7 +1082,7 @@ MdPanelRef.prototype._createPanel = function() {
       self._config.locals = {};
     }
     self._config.locals.mdPanelRef = self;
-    self._$mdCompiler.compile(self._config)
+    return self._$mdCompiler.compile(self._config)
         .then(function(compileData) {
           self._panelContainer = compileData.link(self._config['scope']);
           getElement(self._config['attachTo']).append(self._panelContainer);
@@ -1104,9 +1102,11 @@ MdPanelRef.prototype._createPanel = function() {
                 getElement(self._config['attachTo']));
           }
 
-          self._addStyles();
           self._configureTrapFocus();
-          return resolve(self);
+          return self._addStyles().then(function() {
+            self._panelContainer.addClass(MD_PANEL_HIDDEN);
+            resolve(self);
+          }, reject);
         }, reject);
   });
 };
@@ -1114,6 +1114,7 @@ MdPanelRef.prototype._createPanel = function() {
 
 /**
  * Adds the styles for the panel, such as positioning and z-index.
+ * @return {!angular.$q.Promise}
  * @private
  */
 MdPanelRef.prototype._addStyles = function() {
@@ -1123,34 +1124,42 @@ MdPanelRef.prototype._addStyles = function() {
 
   if (this._config['fullscreen']) {
     this._panelEl.addClass('_md-panel-fullscreen');
-    return; // Don't setup positioning.
+    return this._$q.resolve(this); // Don't setup positioning.
   }
 
-  // Wait for angular to finish processing the template, then position it
-  // correctly. This is necessary so that the panel will have a defined height
-  // and width.
-  this._$rootScope['$$postDigest'](angular.bind(this, this._configurePosition));
-  this._panelContainer.addClass(MD_PANEL_HIDDEN);
+  return this._configurePosition();
 };
 
 
 /**
  * Configure the position of the panel.
+ * @return {!angular.$q.Promise}
  * @private
  */
 MdPanelRef.prototype._configurePosition = function() {
   var positionConfig = this._config['position'];
+  if (!positionConfig) {
+    return this._$q.resolve(this);
+  }
 
-  if (!positionConfig) { return; }
+  var self = this;
+  return this._$q(function(resolve) {
+    // Wait for angular to finish processing the template, then position it
+    // correctly. This is necessary so that the panel will have a defined
+    // height and width.
+    return self._$rootScope['$$postDigest'](function () {
+      self._panelEl.css('top', positionConfig.getTop(self._panelEl));
+      self._panelEl.css('bottom', positionConfig.getBottom(self._panelEl));
+      self._panelEl.css('left', positionConfig.getLeft(self._panelEl));
+      self._panelEl.css('right', positionConfig.getRight(self._panelEl));
 
-  this._panelEl.css('top', positionConfig.getTop(this._panelEl));
-  this._panelEl.css('bottom', positionConfig.getBottom(this._panelEl));
-  this._panelEl.css('left', positionConfig.getLeft(this._panelEl));
-  this._panelEl.css('right', positionConfig.getRight(this._panelEl));
+      // Use the vendor prefixed version of transform.
+      var prefixedTransform = self._$mdConstant.CSS.TRANSFORM;
+      self._panelEl.css(prefixedTransform, positionConfig.getTransform());
 
-  // Use the vendor prefixed version of transform.
-  var prefixedTransform = this._$mdConstant.CSS.TRANSFORM;
-  this._panelEl.css(prefixedTransform, positionConfig.getTransform());
+      return resolve(self);
+    });
+  });
 };
 
 
@@ -1195,7 +1204,7 @@ MdPanelRef.prototype._createBackdrop = function() {
       zIndex: this._config.zIndex - 1
     }
     this._backdropRef = this._$mdPanel.create(backdropConfig);
-    return this._backdropRef.attachOnly();
+    return this._backdropRef.attach();
   }
   return this._$q.resolve();
 };
@@ -1362,7 +1371,7 @@ MdPanelRef.prototype._animateClose = function() {
 
   var self = this;
   return this._$q(function(resolve, reject) {
-    animationConfig.animateClose(self._$q).then(function(){
+    animationConfig.animateClose(self._$q).then(function() {
       self.removeClass('md-panel-is-showing');
       return resolve(self);
     }, reject);
@@ -2014,7 +2023,7 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl, animator) {
 
 /**
  * Animate the panel close.
- * @param $q
+ * @param {!angular.$q} $q
  * @returns {!angular.$q.Promise}
  */
 MdPanelAnimation.prototype.animateClose = function($q) {
