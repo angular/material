@@ -23,7 +23,7 @@
   /**
    * @ngdoc service
    * @name $mdColors
-   * @module material.core.theming.colors
+   * @module material.components.colors
    *
    * @description
    * With only defining themes, one couldn't get non ngMaterial elements colored with Material colors,
@@ -31,17 +31,16 @@
    * those values to element as CSS property values.
    *
    *  @usage
-   *  <hljs lang="html">
-   *    <div md-colors="{background: 'myTheme-accent-900-0.43'}">
-   *      <div md-colors="{color: 'red-A100', border-color: 'primary-600'}">
-   *        <span>Color demo</span>
-   *      </div>
-   *    </div>
+   *  <hljs lang="js">
+   *    angular.controller('myCtrl', function ($mdColors) {
+   *      var color = $mdColors.getThemeColor('myTheme-red-200-0.5');
+   *      ...
+   *    });
    *  </hljs>
    *
    */
-  function MdColorsService($mdTheming, $mdColorPalette, $mdUtil, $parse) {
-    colorPalettes = colorPalettes || Object.keys($mdColorPalette);
+  function MdColorsService($mdTheming, $mdUtil, $parse, $log) {
+    colorPalettes = colorPalettes || Object.keys($mdTheming.PALETTES);
 
     // Publish service instance
     return {
@@ -54,21 +53,65 @@
     // ********************************************
 
     /**
+     * @ngdoc method
+     * @name $mdColors#applyThemeColors
+     *
+     * @description
      * Convert the color expression into an object with scope-interpolated values
      * Then calculate the rgba() values based on the theme color parts
+     *
+     * @param {DOMElement} element the element to apply the styles on.
+     * @param {scope} scope a scope is needed in case there are interpolated values in the expression.
+     * @param {string|object} colorExpression json object, keys are css properties and values are string of the wanted color,
+     * for example: `{color: 'red-A200-0.3'}`. Note that the color keys must be upperCamelCase instead of snake-case.
+     * e.g. `{background-color: 'grey-300'}` --> `{backgroundColor: 'grey-300'}`
+     *
+     * @usage
+     * <hljs lang="js">
+     *   app.directive('myDirective', function($mdColors) {
+     *     return {
+     *       ...
+     *       link: function (scope, elem) {
+     *         $mdColors.applyThemeColors(elem, scope, {color: 'red'});
+     *       }
+     *    }
+     *   });
+     * </hljs>
      */
     function applyThemeColors(element, scope, colorExpression) {
-      // Json.parse() does not work because the keys are not quoted;
-      // use $parse to convert to a hash map
-      var themeColors = $parse(colorExpression)(scope);
+      try {
+        // Json.parse() does not work because the keys are not quoted;
+        // use $parse to convert to a hash map
+        // NOTE: keys cannot be snake-case, upperCamelCase are required
+        //        e.g.   {background-color: 'grey-300'} --> {backgroundColor: 'grey-300'}
+        var themeColors = $parse(colorExpression)(scope);
 
-      // Assign the calculate RGBA color values directly as inline CSS
-      element.css(interpolateColors(themeColors));
+        // Assign the calculate RGBA color values directly as inline CSS
+        element.css(interpolateColors(themeColors));
+      } catch( e ) {
+        $log.error(e.message);
+      }
+
     }
 
     /**
-     * Public api to get parsed color from expression
+     * @ngdoc method
+     * @name $mdColors#getThemeColor
      *
+     * @description
+     * Get parsed color from expression
+     *
+     * @param {string} expression string of a color expression (for instance `'red-700-0.8'`)
+     *
+     * @returns {string} a css color expression (for instance `rgba(211, 47, 47, 0.8)`)
+     *
+     * @usage
+     *  <hljs lang="js">
+     *    angular.controller('myCtrl', function ($mdColors) {
+     *      var color = $mdColors.getThemeColor('myTheme-red-200-0.5');
+     *      ...
+     *    });
+     *  </hljs>
      */
     function getThemeColor(expression) {
       var color = extractColorOptions(expression);
@@ -84,7 +127,7 @@
      */
     function parseColor(color, contrast) {
       contrast = contrast || false;
-      var rgbValues = $mdColorPalette[color.palette][color.hue];
+      var rgbValues = $mdTheming.PALETTES[color.palette][color.hue];
 
       rgbValues = contrast ? rgbValues.contrast : rgbValues.value;
 
@@ -108,10 +151,10 @@
 
       angular.forEach(themeColors, function (value, key) {
         var color = extractColorOptions(value);
+        var hasBackground = key.indexOf('background') > -1;
 
         rgbColors[key] = parseColor(color);
-
-        if (key === 'background' && !hasColorProperty) {
+        if (hasBackground && !hasColorProperty) {
           rgbColors['color'] = parseColor(color, true);
         }
       });
@@ -123,9 +166,9 @@
      * For the evaluated expression, extract the color parts into a hash map
      */
     function extractColorOptions(expression) {
-      var parts = expression.split('-'),
-        hasTheme = angular.isDefined($mdTheming.THEMES[parts[0]]),
-        theme = hasTheme ? parts.splice(0, 1)[0] : 'default';
+      var parts = expression.split('-');
+      var hasTheme = angular.isDefined($mdTheming.THEMES[parts[0]]);
+      var theme = hasTheme ? parts.splice(0, 1)[0] : $mdTheming.defaultTheme();
 
       var defaultHue = parts[0] !== 'accent' ? 500 : 'A200';
 
@@ -175,7 +218,7 @@
    *   The format will be similar to our color defining in the scss files:
    *
    *   ## `[?theme]-[palette]-[?hue]-[?opacity]`
-   *   - [theme]    - default value is the `default` theme
+   *   - [theme]    - default value is the default theme
    *   - [palette]  - can be either palette name or primary/accent/warn/background
    *   - [hue]      - default is 500
    *   - [opacity]  - default is 1

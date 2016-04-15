@@ -73,7 +73,7 @@ describe('md-colors', function () {
       });
 
       /**
-       * <div md-colors="{background: 'blue-grey-200-0.8'}" >
+       * <div md-colors="{background: 'blueGrey-200-0.8'}" >
        */
       it('should accept palette formatted as camelCase', function () {
         var element = createElement(scope, { palette: 'blueGrey',  hue: '200',  opacity: '0.8' });
@@ -327,6 +327,14 @@ describe('md-colors', function () {
 
       $mdColors.applyThemeColors(element, scope, '{background: \'red-200\'}');
       expect(element[0].style.background).toContain( expectedRGB );
-    }))
+    }));
+
+    it('should return the parsed color', inject(function ($mdColors) {
+      var color = $mdColorPalette['red']['200'].value;
+      var expectedRGB = supplant('rgba( {0}, {1}, {2}, {3} )', [color[0], color[1], color[2], 1]);
+
+      var themeColor = $mdColors.getThemeColor('red-200');
+      expect(themeColor).toBe( expectedRGB );
+    }));
   })
 });
