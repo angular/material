@@ -501,6 +501,12 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document, 
   this.blocks = {};
   /** @type {Array<!VirtualRepeatController.Block>} A pool of presently unused blocks. */
   this.pooledBlocks = [];
+
+  $scope.$on('$destroy', angular.bind(this, function cleanup() {
+    angular.forEach(this.blocks, removeBlock);
+    angular.forEach(this.pooledBlocks, removeBlock);
+  }));
+  function removeBlock(block) { block.element.remove(); }
 }
 
 
