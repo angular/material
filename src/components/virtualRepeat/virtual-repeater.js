@@ -493,6 +493,8 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document, 
   this.blocks = {};
   /** @type {Array<!VirtualRepeatController.Block>} A pool of presently unused blocks. */
   this.pooledBlocks = [];
+
+  $scope.$on('$destroy', angular.bind(this, this.cleanupBlocks_));
 }
 
 
@@ -525,6 +527,14 @@ VirtualRepeatController.prototype.link_ =
   this.repeatListExpression = angular.bind(this, this.repeatListExpression_);
 
   this.container.register(this);
+};
+
+
+/** @private Cleans up unused blocks. */
+VirtualRepeatController.prototype.cleanupBlocks_ = function() {
+  angular.forEach(this.pooledBlocks, function cleanupBlock(block) {
+    block.element.remove();
+  });
 };
 
 
