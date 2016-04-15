@@ -1,10 +1,25 @@
+<a name"1.1.0-rc4"></a>
+### 1.1.0-rc4 (2016-04-15)
+
+
+#### Features
+
+* **select:** Adding md-select-header directive to md-select. ([62754242](https://github.com/angular/material/commit/62754242), closes [#7782](https://github.com/angular/material/issues/7782))
+
+
+#### Bug Fixes
+
+* **colors:**
+  * using default palette and defined palettes from $mdTheming ([61b742ef](https://github.com/angular/material/commit/61b742ef), closes [#8036](https://github.com/angular/material/issues/8036), [#8061](https://github.com/angular/material/issues/8061))
+  * coverts COLOR_PALETTES to colorPalettes ([246ae54b](https://github.com/angular/material/commit/246ae54b), closes [#8051](https://github.com/angular/material/issues/8051))
+* **list:** Correct avatar/icon size/spacing. ([05b8c1e9](https://github.com/angular/material/commit/05b8c1e9), closes [#8053](https://github.com/angular/material/issues/8053))
+* **menu:** Typo in hover deregistration. ([9f663524](https://github.com/angular/material/commit/9f663524), closes [#7947](https://github.com/angular/material/issues/7947), [#8045](https://github.com/angular/material/issues/8045))
+* **sidenav:** add support for  legacy API ([fbf17dbf](https://github.com/angular/material/commit/fbf17dbf))
+* **subheader:** transform span to div to allow custom styling. ([01952ec5](https://github.com/angular/material/commit/01952ec5), closes [#8063](https://github.com/angular/material/issues/8063), [#8069](https://github.com/angular/material/issues/8069))
+
+
 <a name"1.1.0-rc3"></a>
 ### 1.1.0-rc3 (2016-04-13)
-
-This RC3 provides several fixes to Theme foreground and background colors. Also included is a **Colors** demo *Theme ColorPicker* that will be useful for developers interested using Theme colors and the new `md-colors` directive within their own custom components.
-
-![theme_colorpicker](https://cloud.githubusercontent.com/assets/210413/14511803/b8905722-019f-11e6-90ff-8e724d6ce3b5.png)
-
 
 #### Features
 
@@ -21,10 +36,10 @@ This RC3 provides several fixes to Theme foreground and background colors. Also 
 * Subheader: `background-color: '{{background-default}}'`
 * Button: use accent palette A700 for hover and focused
 * Checkbox: ripple use accent palette A700
-* Input: use `primary-color` instead of `primary-500`
-* LinearProgress: `background-color: '{{accent-A100}}'`
-* RadioButton: container uses `color: '{{accent-A700}}';`
-* Select: accent uses color: `'{{accent-color}}';`
+* Input: use primary-color instead of primary-500
+* LinearProgress: background-color: '{{accent-A100}}'
+* RadioButton: container uses  color: '{{accent-A700}}';
+* Select: accent uses color: '{{accent-color}}';
 * Slider: focus reing uses  `background-color: '{{accent-A200-0.2}}';`
 * Toast: uses `color: '{{accent-color}}';` instead of `color: '{{accent-A200}}';` 
 
@@ -63,24 +78,6 @@ This RC3 provides several fixes to Theme foreground and background colors. Also 
   * anchor should inherit theme to support colors ([81b44a47](https://github.com/angular/material/commit/81b44a47))
   * anchor theme colors are scoped to _md components ([901c3fc6](https://github.com/angular/material/commit/901c3fc6))
 * **theming:** theming should probably parse background hue names. ([79eba382](https://github.com/angular/material/commit/79eba382), closes [#7510](https://github.com/angular/material/issues/7510), [#8022](https://github.com/angular/material/issues/8022))
-
-#### Contributors
-
-Thanks to the great contributors who helped with this release:
-
-[<img alt="ThomasBurleson" src="https://avatars.githubusercontent.com/u/210413?v=3&s=117" width="117">](https://github.com/ThomasBurleson) |[<img alt="robertmesserle" src="https://avatars.githubusercontent.com/u/571363?v=3&s=117" width="117">](https://github.com/robertmesserle) |[<img alt="DevVersion" src="https://avatars.githubusercontent.com/u/4987015?v=3&s=117" width="117">](https://github.com/DevVersion) |[<img alt="EladBezalel" src="https://avatars.githubusercontent.com/u/6004537?v=3&s=117" width="117">](https://github.com/EladBezalel) |[<img alt="crisbeto" src="https://avatars.githubusercontent.com/u/4450522?v=3&s=117" width="117">](https://github.com/crisbeto) |[<img alt="Splaktar" src="https://avatars.githubusercontent.com/u/3506071?v=3&s=117" width="117">](https://github.com/Splaktar) |
-:---: |:---: |:---: |:---: |:---: |:---: |
-[ThomasBurleson](https://github.com/ThomasBurleson) |[robertmesserle](https://github.com/robertmesserle) |[DevVersion](https://github.com/DevVersion) |[EladBezalel](https://github.com/EladBezalel) |[crisbeto](https://github.com/crisbeto) |[Splaktar](https://github.com/Splaktar) |
-
-[<img alt="clshortfuse" src="https://avatars.githubusercontent.com/u/9271155?v=3&s=117" width="117">](https://github.com/clshortfuse) |[<img alt="DerekLouie" src="https://avatars.githubusercontent.com/u/709204?v=3&s=117" width="117">](https://github.com/DerekLouie) |[<img alt="jadjoubran" src="https://avatars.githubusercontent.com/u/2265232?v=3&s=117" width="117">](https://github.com/jadjoubran) |[<img alt="code-tree" src="https://avatars.githubusercontent.com/u/11289719?v=3&s=117" width="117">](https://github.com/code-tree) |[<img alt="trainerbill" src="https://avatars.githubusercontent.com/u/3578259?v=3&s=117" width="117">](https://github.com/trainerbill) |[<img alt="dentych" src="https://avatars.githubusercontent.com/u/2256372?v=3&s=117" width="117">](https://github.com/dentych) |
-:---: |:---: |:---: |:---: |:---: |:---: |
-[clshortfuse](https://github.com/clshortfuse) |[DerekLouie](https://github.com/DerekLouie) |[jadjoubran](https://github.com/jadjoubran) |[code-tree](https://github.com/code-tree) |[trainerbill](https://github.com/trainerbill) |[dentych](https://github.com/dentych) |
-
-[<img alt="ilovett" src="https://avatars.githubusercontent.com/u/1776100?v=3&s=117" width="117">](https://github.com/ilovett) |[<img alt="Djulia" src="https://avatars.githubusercontent.com/u/3987507?v=3&s=117" width="117">](https://github.com/Djulia) |[<img alt="kwypchlo" src="https://avatars.githubusercontent.com/u/3755029?v=3&s=117" width="117">](https://github.com/kwypchlo) |
-:---: |:---: |:---: |
-[ilovett](https://github.com/ilovett) |[Djulia](https://github.com/Djulia) |[kwypchlo](https://github.com/kwypchlo) |
-
-
 
 
 <a name"1.1.0-rc2"></a>
