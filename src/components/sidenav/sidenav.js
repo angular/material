@@ -67,7 +67,7 @@ function SidenavService($mdComponentRegistry, $mdUtil, $q, $log) {
   /**
    * Service API that supports three (3) usages:
    *   $mdSidenav().find("left")                       // sync (must already exist) or returns undefined
-   *   $mdSidenav("left").toggle();                    // sync (must already exist) or returns undefined; deprecated
+   *   $mdSidenav("left").toggle();                    // sync (must already exist) or returns reject promise;
    *   $mdSidenav("left",true).then( function(left){   // async returns instance when available
    *    left.toggle();
    *   });
@@ -76,9 +76,32 @@ function SidenavService($mdComponentRegistry, $mdUtil, $q, $log) {
     if ( angular.isUndefined(handle) ) return service;
 
     var instance = service.find(handle);
-    return  !instance && (enableWait === true) ? service.waitFor(handle) : instance;
+    return  !instance && (enableWait === true) ? service.waitFor(handle) :
+            !instance && angular.isUndefined(enableWait) ? addLegacyAPI(service, handle) : instance;
   };
 
+  /**
+   * For failed instance/handle lookups, older-clients expect an response object with noops
+   * that include `rejected promise APIs`
+   */
+  function addLegacyAPI(service, handle) {
+      var falseFn  = function() { return false; };
+      var rejectFn = function() {
+            return $q.when($mdUtil.supplant(errorMsg, [handle || ""]));
+          };
+
+      return angular.extend({
+        isLockedOpen : falseFn,
+        isOpen       : falseFn,
+        toggle       : rejectFn,
+        open         : rejectFn,
+        close        : rejectFn,
+        then : function(callback) {
+          return waitForInstance(handle)
+            .then(callback || angular.noop);
+        }
+       }, service);
+    }
     /**
      * Synchronously lookup the controller instance for the specified sidNav instance which has been
      * registered with the markup `md-component-id`

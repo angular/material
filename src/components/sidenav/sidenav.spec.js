@@ -200,7 +200,7 @@ describe('mdSidenav', function() {
   });
 
   describe("controller Promise API", function() {
-    var $material, $rootScope;
+    var $material, $rootScope, $timeout;
 
     function flush() {
       $material.flushInterimElement();
@@ -350,83 +350,96 @@ describe('mdSidenav', function() {
 
   });
 
-  it('should find an instantiation using `$mdSidenav(id)`', inject(function($mdSidenav) {
-    var el = setup('md-component-id="left"');
-    $timeout.flush();
+  describe('$mdSidenav lookups', function() {
+    var $rootScope, $timeout;
 
-    // Lookup instance still available in the component registry
-    var instance = $mdSidenav('left');
-    expect(instance).toBeTruthy();
-  }));
+    beforeEach(inject(function(_$rootScope_, _$timeout_) {
+      $rootScope = _$rootScope_;
+      $timeout = _$timeout_;
+    }));
 
-  it('should find a deferred instantiation using `$mdSidenav(id, true)`', inject(function($mdSidenav) {
-    var instance;
+    it('should find an instantiation using `$mdSidenav(id)`', inject(function($mdSidenav) {
+      var el = setup('md-component-id="left"');
+      $timeout.flush();
 
-    // Lookup deferred (not existing) instance
-    $mdSidenav('left', true).then(function(inst) {
-      instance = inst;
-    });
-    expect(instance).toBeUndefined();
+      // Lookup instance still available in the component registry
+      var instance = $mdSidenav('left');
+      expect(instance).toBeTruthy();
+    }));
 
-    // Instantiate `left` sidenav component
-    var el = setup('md-component-id="left"');
-    $timeout.flush();
+    it('should find a deferred instantiation using `$mdSidenav(id, true)`', inject(function($mdSidenav) {
+      var instance;
 
-    expect(instance).toBeDefined();
-    expect(instance.isOpen()).toBeFalsy();
+      // Lookup deferred (not existing) instance
+      $mdSidenav('left', true).then(function(inst) {
+        instance = inst;
+      });
+      expect(instance).toBeUndefined();
 
-    // Lookup instance still available in the component registry
-    instance = $mdSidenav('left', true);
-    expect(instance).toBeTruthy();
-  }));
+      // Instantiate `left` sidenav component
+      var el = setup('md-component-id="left"');
+      $timeout.flush();
 
-  it('should find a deferred instantiation using `$mdSidenav().waitFor(id)` ', inject(function($mdSidenav) {
-    var instance;
+      expect(instance).toBeDefined();
+      expect(instance.isOpen()).toBeFalsy();
 
-    // Lookup deferred (not existing) instance
-    $mdSidenav().waitFor('left').then(function(inst) {
-      instance = inst;
-    });
-    expect(instance).toBeUndefined();
+      // Lookup instance still available in the component registry
+      instance = $mdSidenav('left', true);
+      expect(instance).toBeTruthy();
+    }));
 
-    // Instantiate `left` sidenav component
-    var el = setup('md-component-id="left"');
-    $timeout.flush();
+    it('should find a deferred instantiation using `$mdSidenav().waitFor(id)` ', inject(function($mdSidenav) {
+      var instance;
 
-    expect(instance).toBeDefined();
-    expect(instance.isOpen()).toBeFalsy();
+      // Lookup deferred (not existing) instance
+      $mdSidenav().waitFor('left').then(function(inst) {
+        instance = inst;
+      });
+      expect(instance).toBeUndefined();
 
-    // Lookup instance still available in the component registry
-    instance = undefined;
-    instance = $mdSidenav('left');
+      // Instantiate `left` sidenav component
+      var el = setup('md-component-id="left"');
+      $timeout.flush();
 
-    expect(instance).toBeTruthy();
-  }));
+      expect(instance).toBeDefined();
+      expect(instance.isOpen()).toBeFalsy();
 
-  it('should not find a lazy instantiation without waiting `$mdSidenav(id)`', inject(function($mdSidenav) {
-    var instance = $mdSidenav('left');
-    expect(instance).toBeUndefined();
+      // Lookup instance still available in the component registry
+      instance = undefined;
+      instance = $mdSidenav('left');
 
-    // Instantiate `left` sidenav component
-    var el = setup('md-component-id="left"');
-    $timeout.flush();
+      expect(instance).toBeTruthy();
+    }));
 
-    instance = $mdSidenav('left');
-    expect(instance).toBeDefined();
-    expect(instance.isOpen()).toBeFalsy();
-  }));
+    it('should not find a lazy instantiation without waiting `$mdSidenav(id)`', inject(function($mdSidenav) {
+      var instance = $mdSidenav('left');
+      expect(instance.isOpen).toBeDefined();    // returns legacy API with noops
 
-  it('should not find a lazy instantiation without waiting `$mdSidenav().find(id)`', inject(function($mdSidenav) {
-    var instance = $mdSidenav().find('left');
-    expect(instance).toBeUndefined();
+      instance = $mdSidenav('left', false);     // since enableWait == false, return false
+      expect(instance).toBeFalsy();
 
-    // Instantiate `left` sidenav component
-    var el = setup('md-component-id="left"');
-    $timeout.flush();
+      // Instantiate `left` sidenav component
+      var el = setup('md-component-id="left"');
+      $timeout.flush();
 
-    instance = $mdSidenav().find('left');
-    expect(instance).toBeDefined();
-    expect(instance.isOpen()).toBeFalsy();
-  }));
+      instance = $mdSidenav('left');            // returns instance
+      expect(instance).toBeDefined();
+      expect(instance.isOpen()).toBeFalsy();
+    }));
+
+    it('should not find a lazy instantiation without waiting `$mdSidenav().find(id)`', inject(function($mdSidenav) {
+      var instance = $mdSidenav().find('left');
+      expect(instance).toBeUndefined();
+
+      // Instantiate `left` sidenav component
+      var el = setup('md-component-id="left"');
+      $timeout.flush();
+
+      instance = $mdSidenav().find('left');
+      expect(instance).toBeDefined();
+      expect(instance.isOpen()).toBeFalsy();
+    }));
+  });
+
 
 });
