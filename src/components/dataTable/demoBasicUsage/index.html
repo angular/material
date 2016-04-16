@@ -11,20 +11,20 @@
   <md-content>
 
     <md-table md-row-select="{{ctrl.options.rowSelection}}" md-selected="ctrl.selected" multiple="{{ctrl.options.multiple}}">
-      <md-head>
+      <md-head md-order="ctrl.order">
         <md-row>
-          <md-cell>Name</md-cell>
-          <md-cell md-numeric>Calories</md-cell>
-          <md-cell md-numeric>Fat (g)</md-cell>
-          <md-cell md-numeric>Carbs (g)</md-cell>
-          <md-cell md-numeric>Protein (g)</md-cell>
-          <md-cell md-numeric>Sodium (mg)</md-cell>
-          <md-cell md-numeric>Calcium (%)</md-cell>
-          <md-cell md-numeric>Iron (%)</md-cell>
+          <md-cell md-order-by="name">Name</md-cell>
+          <md-cell md-numeric md-order-by="calories">Calories</md-cell>
+          <md-cell md-numeric md-order-by="fat">Fat (g)</md-cell>
+          <md-cell md-numeric md-order-by="carbs">Carbs (g)</md-cell>
+          <md-cell md-numeric md-order-by="protein">Protein (g)</md-cell>
+          <md-cell md-numeric md-order-by="sodium">Sodium (mg)</md-cell>
+          <md-cell md-numeric md-order-by="calcium">Calcium (%)</md-cell>
+          <md-cell md-numeric md-order-by="iron">Iron (%)</md-cell>
         </md-row>
       </md-head>
       <md-body>
-        <md-row md-select="dessert" md-auto-select="{{ctrl.options.auto}}" ng-repeat="dessert in ctrl.desserts">
+        <md-row md-select="dessert" md-auto-select="{{ctrl.options.auto}}" ng-repeat="dessert in ctrl.desserts | orderBy: ctrl.order">
           <md-cell>{{dessert.name}}</md-cell>
           <md-cell>{{dessert.calories}}</md-cell>
           <md-cell>{{dessert.fat}}</md-cell>

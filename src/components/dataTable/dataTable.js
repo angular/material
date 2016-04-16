@@ -9,4 +9,4 @@
  *
  * @see {@link http://www.google.com/design/spec/components/data-tables.html} Data Tables
  */
-angular.module('material.components.table', ['material.core']);
+angular.module('material.components.table', ['material.core', 'material.components.icon']);
