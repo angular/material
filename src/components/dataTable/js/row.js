@@ -1,6 +1,6 @@
 angular.module('material.components.table').directive('mdRow', mdRow);
 
-const CHECKBOX_CELL = '<md-cell class="md-checkbox-cell"></md-cell>';
+var CHECKBOX_CELL = '<md-cell class="md-checkbox-cell"></md-cell>';
 
 function RowController() {
 
