@@ -1,6 +1,6 @@
 angular.module('material.components.table').directive('mdCell', mdCell);
 
-const SORT_ICON = '<md-icon class="md-sort-icon" ng-class="$mdCell.getDirection()" md-svg-icon="md-arrow-up"></md-icon>';
+var SORT_ICON = '<md-icon class="md-sort-icon" ng-class="$mdCell.getDirection()" md-svg-icon="md-arrow-up"></md-icon>';
 
 function CellController() {
 
@@ -80,7 +80,7 @@ function mdCell($compile, $mdUtil) {
     }
 
     function disableSorting() {
-      let icon = getSortIcon();
+      var icon = getSortIcon();
 
       if(icon) {
         element[0].removeChild(icon);
@@ -121,7 +121,7 @@ function mdCell($compile, $mdUtil) {
       toggleClass('md-numeric', self.numeric);
 
       if(attrs.mdOrderBy) {
-        let icon = getSortIcon();
+        var icon = getSortIcon();
 
         if(icon) {
           if(self.numeric) {

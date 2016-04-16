@@ -1,6 +1,6 @@
 angular.module('material.components.table').directive('mdHead', mdHead);
 
-const CHECKBOX = '<md-checkbox aria-label="Select All" ng-click="$mdHead.toggleAll()" ng-checked="$mdHead.allSelected()" ng-disabled="$mdHead.disabled"></md-checkbox>';
+var CHECKBOX = '<md-checkbox aria-label="Select All" ng-click="$mdHead.toggleAll()" ng-checked="$mdHead.allSelected()" ng-disabled="$mdHead.disabled"></md-checkbox>';
 
 function HeadController() {
 
