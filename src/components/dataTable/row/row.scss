@@ -1,0 +1,18 @@
+$table-row-hover-background: #eee;
+$table-row-select-background: #f5f5f5;
+
+md-row {
+  display: table-row;
+
+  &.md-selected {
+    background-color: $table-row-select-background;
+  }
+}
+
+md-head md-row {
+  height: 56px;
+}
+
+md-body md-row {
+  height: 48px;
+}
