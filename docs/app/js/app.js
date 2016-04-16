@@ -33,6 +33,9 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
     .when('/getting-started', {
       templateUrl: 'partials/getting-started.tmpl.html'
     })
+    .when('/contributors', {
+      templateUrl: 'partials/contributors.tmpl.html'
+    })
     .when('/license', {
       templateUrl: 'partials/license.tmpl.html'
     });
@@ -292,6 +295,12 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
     }]
   });
 
+  sections.push( {
+        name: 'Contributors',
+        url: 'contributors',
+        type: 'link'
+      } );
+      
   sections.push({
     name: 'License',
     url:  'license',

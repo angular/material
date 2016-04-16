@@ -925,3 +925,7 @@ table.md-api-table  tr  td:first-child {
     background-color: rgba(156, 204, 101,0.4);
     padding: 20px;
 }
+
+.contributor_tables {
+  padding-left: 25px;
+}
