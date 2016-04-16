@@ -660,7 +660,7 @@ describe('<md-virtual-repeat>', function() {
 
   describe('when container scope is destroyed', function() {
 
-    it('clean up used blocks', function() {
+    it('should clean up used blocks', function() {
       createRepeater();
       var containerCtrl = component.controller('mdVirtualRepeatContainer');
       scope.items = createItems(NUM_ITEMS);
