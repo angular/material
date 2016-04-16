@@ -1,5 +1,7 @@
 angular.module('material.components.table').directive('mdCell', mdCell);
 
+const SORT_ICON = '<md-icon class="md-sort-icon" ng-class="$mdCell.getDirection()" md-svg-icon="md-arrow-up"></md-icon>';
+
 function CellController() {
 
 }
@@ -7,12 +9,13 @@ function CellController() {
 /*
  * @ngInject
  */
-function mdCell($mdUtil) {
+function mdCell($compile, $mdUtil) {
 
   function postLink(scope, element, attrs, ctrls) {
     var self = ctrls.shift();
     var head = ctrls.shift();
     var table = ctrls.shift();
+    var watchListener;
 
     function getIndex() {
       return Array.prototype.indexOf.call(element.parent().children(), element[0]);
@@ -26,38 +29,117 @@ function mdCell($mdUtil) {
       return add ? element.addClass(name) : element.removeClass(name);
     }
 
-    function observeAttributes() {
-      attrs.$observe('mdNumeric', function (numeric) {
-        self.numeric = $mdUtil.parseAttributeBoolean(numeric);
-      });
-    }
-
-    function watchIndex() {
-      scope.$watch(getIndex, function (index) {
-        table.columns[index] = {
-          numeric: self.numeric
-        };
-      });
-    }
-
-    function watchColumn() {
-      scope.$watch(getColumn, function (column) {
+    if(!head) {
+      return scope.$watch(getColumn, function (column) {
         toggleClass('md-numeric', column && column.numeric);
       });
     }
 
-    if(head) {
-      watchIndex();
-      observeAttributes();
-    } else {
-      watchColumn();
+    function isActive() {
+      return self.orderRegex.test(head.order);
     }
+
+    function setOrder() {
+      scope.$applyAsync(function () {
+        if(isActive()) {
+          head.order = head.order.charAt(0) === '-' ? attrs.mdOrderBy : '-' + attrs.mdOrderBy;
+        } else {
+          head.order = $mdUtil.parseAttributeBoolean(attrs.mdDesc) ? '-' + attrs.mdOrderBy : attrs.mdOrderBy;
+        }
+      });
+    }
+
+    function getSortIcon() {
+      return table.find(element.find('md-icon'), function (icon) {
+        return icon.classList.contains('md-sort-icon');
+      });
+    }
+
+    function enableSorting() {
+      element.addClass('md-sort').on('click', setOrder);
+
+      if(!element.children().length) {
+        element.contents().wrap('<span>');
+      }
+
+      if(self.numeric) {
+        element.prepend($compile(SORT_ICON)(scope));
+      } else {
+        element.append($compile(SORT_ICON)(scope));
+      }
+
+      self.orderRegex = new RegExp('^-?' + attrs.mdOrderBy + '$');
+
+      watchListener = scope.$watch(isActive, function (active) {
+        if(active) {
+          element.addClass('md-active');
+        } else {
+          element.removeClass('md-active');
+        }
+      });
+    }
+
+    function disableSorting() {
+      let icon = getSortIcon();
+
+      if(icon) {
+        element[0].removeChild(icon);
+      }
+
+      if(angular.isFunction(watchListener)) {
+        watchListener();
+      }
+
+      element.removeClass('md-sort').off('click', setOrder);
+    }
+
+    self.getDirection = function () {
+      if(isActive()) {
+        return head.order.charAt(0) === '-' ? 'md-desc' : 'md-asc';
+      }
+
+      return $mdUtil.parseAttributeBoolean(attrs.mdDesc) ? 'md-desc' : 'md-asc';
+    };
+
+    attrs.$observe('mdNumeric', function (numeric) {
+      self.numeric = $mdUtil.parseAttributeBoolean(numeric);
+    });
+
+    attrs.$observe('mdOrderBy', function (orderBy) {
+      if(orderBy) {
+        enableSorting();
+      } else {
+        disableSorting();
+      }
+    });
+
+    scope.$watch(getIndex, function (index) {
+      table.columns[index] = {
+        numeric: self.numeric
+      };
+
+      toggleClass('md-numeric', self.numeric);
+
+      if(attrs.mdOrderBy) {
+        let icon = getSortIcon();
+
+        if(icon) {
+          if(self.numeric) {
+            element.prepend(icon);
+          } else {
+            element.append(icon);
+          }
+        }
+      }
+    });
   }
 
   return {
     controller: CellController,
+    controllerAs: '$mdCell',
     link: postLink,
     require: ['mdCell', '?^^mdHead', '^^mdTable'],
-    restrict: 'E'
+    restrict: 'E',
+    scope: {}
   };
 }

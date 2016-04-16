@@ -102,6 +102,9 @@ function mdHead($compile) {
     controller: HeadController,
     controllerAs: '$mdHead',
     link: postLink,
-    require: ['mdHead', '^^mdTable']
+    require: ['mdHead', '^^mdTable'],
+    scope: {
+      order: '=?mdOrder'
+    }
   };
 }

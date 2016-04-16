@@ -3,6 +3,7 @@ $table-head-font-size: 12px;
 $table-body-font-size: 13px;
 $table-head-text-color: rgba(0, 0, 0, 0.54);
 $table-body-text-color: rgba(0, 0, 0, 0.87);
+$table-sort-active-color: rgba(0, 0, 0, 0.87);
 
 md-cell {
   display: table-cell;
@@ -41,7 +42,16 @@ md-table.md-select md-cell {
 md-head {
   md-cell {
     color: $table-head-text-color;
-    font-size: $table-body-font-size;
+    font-size: $table-head-font-size;
+    line-height: $table-head-font-size;
+
+    &.md-sort {
+      cursor: pointer;
+    }
+
+    &.md-active {
+      color: $table-sort-active-color;
+    }
   }
 
   &:not(:last-of-type) md-cell {
@@ -52,5 +62,6 @@ md-head {
 md-body md-cell {
   color: $table-body-text-color;
   font-size: $table-body-font-size;
+  line-height: $table-body-font-size;
   border-top: 1px $table-border-color solid;
 }

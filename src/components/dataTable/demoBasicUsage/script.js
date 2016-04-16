@@ -13,6 +13,8 @@ function Demo($http) {
     rowSelection: true
   };
 
+  this.order = '-name';
+
   this.desserts = [{
     'name': 'Frozen yogurt',
     'type': 'Ice cream',
@@ -106,6 +108,6 @@ function Demo($http) {
   }];
 
   this.log = function (foo) {
-    console.log(this.selected);
+    console.log(foo);
   };
 }
