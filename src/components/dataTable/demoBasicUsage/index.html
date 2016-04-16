@@ -1,0 +1,42 @@
+<div class="container" layout="column" ng-controller="Demo as ctrl">
+
+  <div layout="row" layout-wrap class="options">
+    <md-checkbox ng-model="ctrl.options.rowSelection">Row Selection</md-checkbox>
+    <md-checkbox ng-model="ctrl.options.multiple">Multiple Selection</md-checkbox>
+    <md-checkbox ng-model="ctrl.options.auto">Auto Selection</md-checkbox>
+  </div>
+
+  <md-divider></md-divider>
+
+  <md-content>
+
+    <md-table md-row-select="{{ctrl.options.rowSelection}}" md-selected="ctrl.selected" multiple="{{ctrl.options.multiple}}">
+      <md-head>
+        <md-row>
+          <md-cell>Name</md-cell>
+          <md-cell md-numeric>Calories</md-cell>
+          <md-cell md-numeric>Fat (g)</md-cell>
+          <md-cell md-numeric>Carbs (g)</md-cell>
+          <md-cell md-numeric>Protein (g)</md-cell>
+          <md-cell md-numeric>Sodium (mg)</md-cell>
+          <md-cell md-numeric>Calcium (%)</md-cell>
+          <md-cell md-numeric>Iron (%)</md-cell>
+        </md-row>
+      </md-head>
+      <md-body>
+        <md-row md-select="dessert" md-auto-select="{{ctrl.options.auto}}" ng-repeat="dessert in ctrl.desserts">
+          <md-cell>{{dessert.name}}</md-cell>
+          <md-cell>{{dessert.calories}}</md-cell>
+          <md-cell>{{dessert.fat}}</md-cell>
+          <md-cell>{{dessert.carbs}}</md-cell>
+          <md-cell>{{dessert.protein}}</md-cell>
+          <md-cell>{{dessert.sodium}}</md-cell>
+          <md-cell>{{dessert.calcium}}</md-cell>
+          <md-cell>{{dessert.iron}}</md-cell>
+        </md-row>
+      </md-body>
+    </md-table>
+
+  </md-content>
+
+</div>

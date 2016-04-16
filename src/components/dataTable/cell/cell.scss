@@ -1,0 +1,56 @@
+$table-border-color: rgba(0, 0, 0, 0.12);
+$table-head-font-size: 12px;
+$table-body-font-size: 13px;
+$table-head-text-color: rgba(0, 0, 0, 0.54);
+$table-body-text-color: rgba(0, 0, 0, 0.87);
+
+md-cell {
+  display: table-cell;
+  text-align: left;
+  white-space: nowrap;
+  vertical-align: middle;
+
+  &:first-child {
+    padding: 0 24px;
+  }
+
+  &:nth-child(n+2):nth-last-child(n+2) {
+    padding: 0 56px 0 0;
+  }
+
+  &:last-child {
+    padding: 0 24px 0 0;
+  }
+
+  &.md-numeric {
+    text-align: right;
+  }
+}
+
+md-table.md-select md-cell {
+  &:first-child {
+    width: 20px;
+    padding: 0 0 0 24px;
+  }
+
+  &:nth-child(2) {
+    padding: 0 24px;
+  }
+}
+
+md-head {
+  md-cell {
+    color: $table-head-text-color;
+    font-size: $table-body-font-size;
+  }
+
+  &:not(:last-of-type) md-cell {
+    border-bottom: 1px $table-border-color solid;
+  }
+}
+
+md-body md-cell {
+  color: $table-body-text-color;
+  font-size: $table-body-font-size;
+  border-top: 1px $table-border-color solid;
+}

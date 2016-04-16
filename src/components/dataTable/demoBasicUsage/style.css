@@ -1,0 +1,18 @@
+.container {
+  max-width: 100%;
+
+  > md-content {
+    border-radius: 0 0 4px 4px;
+  }
+
+  .options {
+    padding: 8px 8px 8px 24px;
+
+    > md-checkbox {
+      margin: 0;
+      padding: 16px;
+      min-width: 300px;
+      flex: 0 0 auto;
+    }
+  }
+}
