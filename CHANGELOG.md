@@ -1,6 +1,10 @@
 <a name"1.1.0-rc4"></a>
 ### 1.1.0-rc4 (2016-04-15)
 
+This release we added a new feature `md-select-header` which supports custom content in the header of the `md-select` component:
+
+![selectwithinputheader](https://cloud.githubusercontent.com/assets/210413/14587401/f46c7c8c-0477-11e6-9cfc-79cecebec121.png)
+
 
 #### Features
 
