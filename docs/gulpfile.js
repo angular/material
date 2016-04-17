@@ -112,7 +112,7 @@ gulp.task('docs-demo-scripts', ['demos'], function() {
 });
 
 gulp.task('docs-js-dependencies', ['build'], function() {
-  return gulp.src(['dist/angular-material.js', 'dist/angular-material.min.js'])
+  return gulp.src(['dist/angular-material.js', 'dist/angular-material.min.js', 'docs/app/contributors.json'])
     .pipe(gulp.dest('dist/docs'));
 });
 

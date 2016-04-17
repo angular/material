@@ -77,7 +77,7 @@
     "through2": "^0.6.3"
   },
   "scripts": {
-    "contributors": "rm -f .dist/docs/partial/contributors.json; githubcontrib --owner=angular --repository=material --cols=6 --format=json --showlogin=true --sortBy=login --sha=master > ./dist/docs/partials/contributors.json",
+    "contributors": "rm -f ./docs/app/contributors.json; githubcontrib --owner=angular --repository=material --cols=6 --format=json --showlogin=true --sortBy=login --sha=master > ./docs/app/contributors.json",
     "watch": "gulp watch site --dev",
     "prom": "git pull --rebase origin master",
     "current-branch": "git rev-parse --abbrev-ref HEAD",
