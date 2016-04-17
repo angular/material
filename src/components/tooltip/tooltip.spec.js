@@ -165,6 +165,33 @@ describe('<md-tooltip> directive', function() {
       expect($rootScope.testModel.isVisible).toBe(false);
     });
 
+    it('should not show when the text is empty',  function() {
+
+      expect(findTooltip().length).toBe(0);
+
+      buildTooltip(
+        '<md-button>' +
+          'Hello' +
+          '<md-tooltip md-visible="testModel.isVisible">{{ textContent }} </md-tooltip>' +
+        '</md-button>'
+      );
+
+      showTooltip(true);
+
+      expect(findTooltip().length).toBe(0);
+
+      $rootScope.textContent = 'Tooltip';
+      $rootScope.$apply();
+
+      // Trigger a change on the model, otherwise the tooltip component can't detect the
+      // change.
+      showTooltip(false);
+      showTooltip(true);
+
+      expect(findTooltip().length).toBe(1);
+      expect(findTooltip().hasClass('_md-show')).toBe(true);
+    });
+
     it('should set visible on focus and blur', function() {
       buildTooltip(
         '<md-button>' +

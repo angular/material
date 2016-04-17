@@ -274,6 +274,9 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     }
 
     function showTooltip() {
+      //  Do not show the tooltip if the text is empty.
+      if (!element[0].textContent.trim()) return;
+
       // Insert the element and position at top left, so we can get the position
       // and check if we should display it
       element.css({top: 0, left: 0});
