@@ -929,3 +929,8 @@ table.md-api-table  tr  td:first-child {
 .contributor_tables {
   padding-left: 25px;
 }
+
+.contributor_tables > table {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}

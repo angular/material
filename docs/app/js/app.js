@@ -653,9 +653,16 @@ function($scope, $rootScope) {
 
 
 .controller('GuideCtrl', [
-  '$rootScope',
-function($rootScope) {
+  '$rootScope', '$http',
+function($rootScope, $http) {
   $rootScope.currentComponent = $rootScope.currentDoc = null;
+  if ( !$rootScope.contributors ) {
+    $http
+      .get('./contributors.json')
+      .then(function(response) {
+        $rootScope.github = response.data;
+      })
+  }
 }])
 
 .controller('LayoutCtrl', [
