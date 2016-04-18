@@ -435,9 +435,12 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout) {
 
           var newRows = Math.round( Math.round(getHeight() / lineHeight) );
           var rowsToSet = Math.min(newRows, minRows);
-          
+          var newHeight = lineHeight * rowsToSet;
+          if (newHeight)
+            newHeight += paddingSize;
+
           element
-            .css('height', lineHeight * rowsToSet + paddingSize + 'px')
+            .css('height', newHeight + 'px')
             .attr('rows', rowsToSet)
             .toggleClass('_md-textarea-scrollable', newRows >= minRows);
 

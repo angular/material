@@ -444,7 +444,7 @@ md-input-container {
       @include rtl(left, auto, 2px);
     }
     
-    &:last-of-type {
+    &:last-child {
       @include rtl(padding-left, 0, $icon-offset);
       @include rtl(padding-right, $icon-offset, 0);
     }
