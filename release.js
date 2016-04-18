@@ -76,6 +76,7 @@
   function checkoutVersionBranch () {
     exec(`git branch -q -D release/${newVersion}`);
     exec(`git checkout -q -b release/${newVersion}`);
+    abortCmds.push('git co master');
     abortCmds.push(`git branch -D release/${newVersion}`);
   }
 
@@ -223,9 +224,10 @@
     exec([
       'rm -rf dist',
       'gulp build',
+      'gulp contributors',
       'gulp build-all-modules --mode=default',
       'gulp build-all-modules --mode=closure',
-      'rm -rf dist/demos',
+      'rm -rf dist/demos'
      ]);
     done();
     start('Copy files into bower repo...');

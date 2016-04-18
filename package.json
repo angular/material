@@ -36,6 +36,7 @@
     "dgeni": "^0.4.1",
     "dgeni-packages": "^0.10.3",
     "esprima": "^1.2.2",
+    "github-contributors-list": "^1.2.1",
     "glob": "~4.0.2",
     "gulp": "^3.9.0",
     "gulp-add-src": "^0.2.0",
