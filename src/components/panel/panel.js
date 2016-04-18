@@ -139,6 +139,9 @@ angular
  *     close/hide() action is starting.
  *   - `onDomRemoved` - `{function=}`: Callback function used to announce when the
  *     panel is removed from the DOM.
+ *   - `origin` - `{(string|!angular.JQLite|!Element)=}`: The element to
+ *     focus on when the panel closes. This is commonly the element which triggered
+ *     the opening of the panel.
  *
  * TODO(ErinCoughlan): Add the following config options.
  *   - `groupName` - `{string=}`: Name of panel groups. This group name is
@@ -236,8 +239,7 @@ angular
  * @ngdoc method
  * @name MdPanelRef#close
  * @description
- * Hides and detaches the panel. This method destroys the reference to the panel.
- * In order to open the panel again, a new one must be created.
+ * Hides and detaches the panel.
  *
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
  * closed.
@@ -724,6 +726,7 @@ MdPanelService.prototype._wrapTemplate = function(origTemplate) {
       '</div>';
 };
 
+
 /*****************************************************************************
  *                                 MdPanelRef                                *
  *****************************************************************************/
@@ -777,7 +780,6 @@ function MdPanelRef(config, $injector) {
    * @type {boolean}
    */
   this.isAttached = false;
-
 
   // Private variables.
   /** @private {!Object} */
@@ -896,7 +898,7 @@ MdPanelRef.prototype.detach = function() {
   var onDomRemoved = self._config['onDomRemoved'] || angular.noop;
 
   var detachFn = function() {
-    self._removeEventListener();
+    self._removeEventListeners();
 
     // Remove the focus traps that we added earlier for keeping focus within
     // the panel.
@@ -928,6 +930,14 @@ MdPanelRef.prototype.detach = function() {
       .then(done)
       .catch(reject);
   });
+};
+
+
+/**
+ * Destroys the panel. The Panel cannot be opened again after this.
+ */
+MdPanelRef.prototype.destroy = function() {
+  this._config.locals = null;
 };
 
 
@@ -986,16 +996,28 @@ MdPanelRef.prototype.hide = function() {
   }
 
   var self = this;
+
   return this._$q(function(resolve, reject) {
     var done = self._done(resolve, self);
     var onRemoving = self._config['onRemoving'] || angular.noop;
 
+    var focusOnOrigin = function() {
+      var origin = self._config['origin'];
+      if (origin) {
+        getElement(origin).focus();
+      }
+    };
+
+    var hidePanel = function() {
+      self.addClass(MD_PANEL_HIDDEN);
+    };
 
     self._$q.all([
       self._backdropRef ? self._backdropRef.hide() : self,
       self._animateClose()
           .then(onRemoving)
-          .then(function() { self.addClass(MD_PANEL_HIDDEN); })
+          .then(hidePanel)
+          .then(focusOnOrigin)
           .catch(reject)
     ]).then(done, reject);
   });
@@ -1062,6 +1084,7 @@ MdPanelRef.prototype._createPanel = function() {
     if (!self._config.locals) {
       self._config.locals = {};
     }
+
     self._config.locals.mdPanelRef = self;
     self._$mdCompiler.compile(self._config)
         .then(function(compileData) {
@@ -1205,7 +1228,7 @@ MdPanelRef.prototype._addEventListeners = function() {
  * Remove event listeners added in _addEventListeners.
  * @private
  */
-MdPanelRef.prototype._removeEventListener = function() {
+MdPanelRef.prototype._removeEventListeners = function() {
   this._removeListeners && this._removeListeners.forEach(function(removeFn) {
     removeFn();
   });
@@ -1309,6 +1332,12 @@ MdPanelRef.prototype._configureTrapFocus = function() {
     };
     this._topFocusTrap.addEventListener('focus', focusHandler);
     this._bottomFocusTrap.addEventListener('focus', focusHandler);
+
+    // Queue remove listeners function
+    this._removeListeners.push(this._simpleBind(function() {
+      this._topFocusTrap.removeEventListener('focus', focusHandler);
+      this._bottomFocusTrap.removeEventListener('focus', focusHandler);
+    }, this));
 
     // The top focus trap inserted immediately before the md-panel element (as
     // a sibling). The bottom focus trap inserted immediately after the
