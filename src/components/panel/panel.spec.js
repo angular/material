@@ -129,6 +129,16 @@ describe('$mdPanel', function() {
     expect(PANEL_WRAPPER_CLASS).not.toHaveClass(HIDDEN_CLASS);
   });
 
+  it('destroy should clear the config locals on the panelRef', function () {
+    openPanel(DEFAULT_CONFIG);
+
+    expect(panelRef._config.locals).not.toEqual(null);
+
+    panelRef.destroy();
+
+    expect(panelRef._config.locals).toEqual(null);
+  });
+
   describe('promises logic:', function() {
     var config;
 
@@ -628,29 +638,29 @@ describe('$mdPanel', function() {
           });
 
       it('should continue resolving when onDomAdded resolves', function() {
-            var attachResolved = false;
-            var onDomAddedCalled = false;
-            var onDomAdded = function() {
-              onDomAddedCalled = true;
-              return $q.when(this);
-            };
-            var config = angular.extend(
-                {'onDomAdded': onDomAdded}, DEFAULT_CONFIG);
+        var attachResolved = false;
+        var onDomAddedCalled = false;
+        var onDomAdded = function() {
+          onDomAddedCalled = true;
+          return $q.when(this);
+        };
+        var config = angular.extend(
+            {'onDomAdded': onDomAdded}, DEFAULT_CONFIG);
 
-            expect(PANEL_EL).not.toExist();
+        expect(PANEL_EL).not.toExist();
 
-            panelRef = $mdPanel.create(config);
-            panelRef.open().then(function() {
-              attachResolved = true;
-            });
-            flushPanel();
+        panelRef = $mdPanel.create(config);
+        panelRef.open().then(function() {
+          attachResolved = true;
+        });
+        flushPanel();
 
-            expect(onDomAddedCalled).toBe(true);
-            expect(PANEL_EL).toExist();
-            expect(attachResolved).toBe(true);
-            expect(panelRef.isAttached).toEqual(true);
-            expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
-          });
+        expect(onDomAddedCalled).toBe(true);
+        expect(PANEL_EL).toExist();
+        expect(attachResolved).toBe(true);
+        expect(panelRef.isAttached).toEqual(true);
+        expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
+      });
 
       it('should reject open when onDomAdded rejects', function() {
         var openRejected = false;
@@ -715,26 +725,26 @@ describe('$mdPanel', function() {
           });
 
       it('should continue resolving when onRemoving resolves', function() {
-            var hideResolved = false;
-            var onRemovingCalled = false;
-            var onRemoving = function() {
-              onRemovingCalled = true;
-              return $q.when(this);
-            };
-            var config = angular.extend({'onRemoving': onRemoving},
-                DEFAULT_CONFIG);
+        var hideResolved = false;
+        var onRemovingCalled = false;
+        var onRemoving = function() {
+          onRemovingCalled = true;
+          return $q.when(this);
+        };
+        var config = angular.extend({'onRemoving': onRemoving},
+            DEFAULT_CONFIG);
 
-            openPanel(config);
-            panelRef.hide().then(function() {
-              hideResolved = true;
-            });
-            flushPanel();
+        openPanel(config);
+        panelRef.hide().then(function() {
+          hideResolved = true;
+        });
+        flushPanel();
 
-            expect(onRemovingCalled).toBe(true);
-            expect(PANEL_EL).toExist();
-            expect(hideResolved).toBe(true);
-            expect(PANEL_WRAPPER_CLASS).toHaveClass(HIDDEN_CLASS);
-          });
+        expect(onRemovingCalled).toBe(true);
+        expect(PANEL_EL).toExist();
+        expect(hideResolved).toBe(true);
+        expect(PANEL_WRAPPER_CLASS).toHaveClass(HIDDEN_CLASS);
+      });
 
       it('should reject hide when onRemoving rejects', function() {
         var hideRejected = false;
@@ -839,6 +849,62 @@ describe('$mdPanel', function() {
 
         expect(PANEL_EL).not.toExist();
         expect(onDomRemovedCalled).toBe(true);
+      });
+    });
+
+    describe('should focus on the origin element on', function() {
+      var myButton;
+      var detachFocusConfig;
+      beforeEach(function() {
+        attachToBody('<button id="donuts">Donuts</button>');
+
+        myButton = angular.element(document.querySelector('#donuts'));
+
+        detachFocusConfig = angular.extend({ origin: '#donuts' }, DEFAULT_CONFIG);
+      });
+
+      it('hide when provided', function () {
+        openPanel(detachFocusConfig);
+
+        expect(myButton).not.toBeFocused();
+
+        hidePanel();
+
+        expect(myButton).toBeFocused();
+      });
+
+      it('close when provided', function () {
+        openPanel(detachFocusConfig);
+
+        expect(myButton).not.toBeFocused();
+
+        closePanel();
+
+        expect(myButton).toBeFocused();
+      });
+
+      it('clickOutsideToClose', function() {
+        detachFocusConfig.clickOutsideToClose = true;
+
+        openPanel(detachFocusConfig);
+
+        expect(myButton).not.toBeFocused();
+
+        clickPanelContainer();
+
+        expect(myButton).toBeFocused();
+      });
+
+      it('escapeToClose', function() {
+        detachFocusConfig.escapeToClose = true;
+
+        openPanel(detachFocusConfig);
+
+        expect(myButton).not.toBeFocused();
+
+        pressEscape();
+
+        expect(myButton).toBeFocused();
       });
     });
   });

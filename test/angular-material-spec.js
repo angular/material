@@ -203,7 +203,27 @@
       },
 
       /**
-       * Asserts that a given selector matches#006b75 one or more items.
+       * Asserts that an element has keyboard focus in the DOM.
+       * Accepts any of:
+       *   {string} - A CSS selector.
+       *   {angular.JQLite} - The result of a jQuery query.
+       *   {Element} - A DOM element.
+       */
+      toBeFocused: function() {
+        return {
+          'compare': function(actual) {
+            var pass =  getElement(actual)[0] === document.activeElement;
+            var not = pass ? 'not ' : '';
+            return {
+              'pass': pass,
+              'message': 'Expected element ' + not + 'to have focus.'
+            };
+          }
+        };
+      },
+
+      /**
+       * Asserts that a given selector matches one or more items.
        * Accepts any of:
        *   {string} - A CSS selector.
        *   {angular.JQLite} - The result of a jQuery query.
