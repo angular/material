@@ -31,9 +31,9 @@ md-checkbox {
   @include rtl(margin-left, $checkbox-margin, $checkbox-margin-end);
   @include rtl(margin-right, $checkbox-margin-end, $checkbox-margin);
 
-  &:last-of-type {
-    @include rtl(margin-left, $checkbox-margin, 0);
-    @include rtl(margin-right, 0, $checkbox-margin);
+  &:last-child {
+    @include rtl(margin-left, $checkbox-margin, $checkbox-margin);
+    @include rtl(margin-right, $checkbox-margin, $checkbox-margin);
   }
 
   &.md-focused:not([disabled]) {
