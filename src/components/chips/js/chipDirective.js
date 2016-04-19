@@ -55,12 +55,13 @@ function MdChip($mdTheming, $mdUtil) {
       if (chipsController) {
         chipController.init(chipsController);
 
-        angular.element(element[0].querySelector('._md-chip-content'))
-            .on('blur', function () {
-              chipsController.$scope.$applyAsync(
-                angular.bind(chipsController, chipsController.resetSelectedChip)
-              );
-            });
+        angular
+          .element(element[0]
+          .querySelector('._md-chip-content'))
+          .on('blur', function () {
+            chipsController.resetSelectedChip();
+            chipsController.$scope.$applyAsync();
+          });
       }
     };
   }
