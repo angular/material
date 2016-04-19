@@ -66,14 +66,18 @@ $contact-chip-name-width: rem(12) !default;
 
   &:not(.md-readonly) {
     cursor: text;
+  }
 
-    md-chip:not(.md-readonly) {
+  &.md-removable {
+
+    md-chip {
       @include rtl-prop(padding-right, padding-left, $chip-remove-padding-right);
 
       ._md-chip-content {
         @include rtl-prop(padding-right, padding-left, rem(0.4));
       }
     }
+
   }
 
   md-chip {
