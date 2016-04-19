@@ -622,7 +622,6 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
 
     // Reset our variables
     ctrl.index = 0;
-    ctrl.matches = [];
     $scope.searchText = '';
 
     // Per http://www.w3schools.com/jsref/event_oninput.asp
