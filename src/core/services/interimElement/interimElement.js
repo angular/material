@@ -8,7 +8,7 @@ angular.module('material.core')
  *
  * @description
  *
- * Factory that contructs `$$interimElement.$service` services.
+ * Factory that constructs `$$interimElement.$service` services.
  * Used internally in material design for elements that appear on screen temporarily.
  * The service provides a promise-like API for interacting with the temporary
  * elements.
@@ -286,7 +286,10 @@ function InterimElementProvider() {
       function show(options) {
         options = options || {};
         var interimElement = new InterimElement(options || {});
-        var hideExisting = !options.skipHide && stack.length ? service.hide() : $q.when(true);
+        // In many case, the old interim element is unexpectedly closed by the
+        // new one, so it should make more sense to call cancel(to reject the
+        // promise) instead of hide(to resolve the promise)
+        var hideExisting = !options.skipHide && stack.length ? service.cancel() : $q.when(true);
 
         // This hide()s only the current interim element before showing the next, new one
         // NOTE: this is not reversible (e.g. interim elements are not stackable)
