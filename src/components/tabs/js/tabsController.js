@@ -219,7 +219,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    */
   function handleSelectedIndexChange (newValue, oldValue) {
     if (newValue === oldValue) return;
-    
+
     ctrl.selectedIndex     = getNearestSafeIndex(newValue);
     ctrl.lastSelectedIndex = oldValue;
     ctrl.updateInkBarStyles();
@@ -725,40 +725,31 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    */
   function updateInkBarStyles () {
     if (!elements.tabs[ ctrl.selectedIndex ]) {
-      angular.element(elements.inkBar).css({ left: 'auto', right: 'auto' });
+      angular.element(elements.inkBar).css({ tranform: 'translateX(0) scaleX(0)'});
       return;
     }
     if (!ctrl.tabs.length) return queue.push(ctrl.updateInkBarStyles);
     // if the element is not visible, we will not be able to calculate sizes until it is
     // we should treat that as a resize event rather than just updating the ink bar
     if (!$element.prop('offsetParent')) return handleResizeWhenVisible();
+
     var index      = ctrl.selectedIndex,
         totalWidth = elements.paging.offsetWidth,
         tab        = elements.tabs[ index ],
         left       = tab.offsetLeft,
-        right      = totalWidth - left - tab.offsetWidth,
-        tabWidth;
+        tabWidth   = tab.offsetWidth,
+        tabsWidth;
+
     if (ctrl.shouldCenterTabs) {
-      tabWidth = Array.prototype.slice.call(elements.tabs).reduce(function (value, element) {
+      tabsWidth = Array.prototype.slice.call(elements.tabs).reduce(function (value, element) {
         return value + element.offsetWidth;
       }, 0);
-      if (totalWidth > tabWidth) $mdUtil.nextTick(updateInkBarStyles, false);
+      if (totalWidth > tabsWidth) $mdUtil.nextTick(updateInkBarStyles, false);
     }
-    updateInkBarClassName();
-    angular.element(elements.inkBar).css({ left: left + 'px', right: right + 'px' });
-  }
 
-  /**
-   * Adds left/right classes so that the ink bar will animate properly.
-   */
-  function updateInkBarClassName () {
-    var newIndex = ctrl.selectedIndex,
-        oldIndex = ctrl.lastSelectedIndex,
-        ink      = angular.element(elements.inkBar);
-    if (!angular.isNumber(oldIndex)) return;
-    ink
-        .toggleClass('md-left', newIndex < oldIndex)
-        .toggleClass('md-right', newIndex > oldIndex);
+    angular.element(elements.inkBar).css({
+      transform: 'translateX(' + left + 'px) scaleX(' + tabWidth / 100 + ')'
+    });
   }
 
   /**
