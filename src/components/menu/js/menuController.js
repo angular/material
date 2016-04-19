@@ -13,7 +13,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
   var self = this;
   var triggerElement;
 
-  this.nestLevel = parseInt($attrs.mdNestLevel, 10) || 0;
+  this.nestLevel = getAttr('mdNestLevel', 0);
 
   /**
    * Called by our linking fn to provide access to the menu-content
@@ -121,6 +121,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
     triggerElement = triggerElement || (ev ? ev.target : $element[0]);
     triggerElement.setAttribute('aria-expanded', 'true');
     $scope.$emit('$mdMenuOpen', $element);
+    var hasBackdrop = getAttr('useBackdrop', true);
     $mdMenu.show({
       scope: $scope,
       mdMenuCtrl: self,
@@ -128,7 +129,9 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
       element: menuContainer,
       target: triggerElement,
       preserveElement: true,
-      parent: 'body'
+      parent: 'body',
+      hasBackdrop: hasBackdrop,
+      disableParentScroll: hasBackdrop
     }).finally(function() {
       triggerElement.setAttribute('aria-expanded', 'false');
       self.disableHoverListener();
@@ -192,7 +195,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
    * target mode for left and top positioning
    */
   this.positionMode = function positionMode() {
-    var attachment = ($attrs.mdPositionMode || 'target').split(' ');
+    var attachment = getAttr('mdPositionMode', 'target').split(' ');
 
     // If attachment is a single item, duplicate it for our second value.
     // ie. 'target' -> 'target target'
@@ -211,7 +214,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
    * the offset of top and left in pixels.
    */
   this.offsets = function offsets() {
-    var position = ($attrs.mdOffset || '0 0').split(' ').map(parseFloat);
+    var position = getAttr('mdOffset', '0 0').split(' ').map(parseFloat);
     if (position.length == 2) {
       return {
         left: position[0],
@@ -226,4 +229,42 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
       throw Error('Invalid offsets specified. Please follow format <x, y> or <n>');
     }
   };
+  
+  /**
+   * Get value from element attributes
+   *
+   * @param {String} attrKey Attribute key
+   * @param {object} defaultValue If vaalue is presented, it will be converted to default value type
+   * @returns {object} defaultValue or attribute value converted to defaultValue type
+   */
+  function getAttr(attrKey, defaultValue) {
+    var result = defaultValue;
+    if(angular.isDefined($attrs[attrKey]))
+      result = parseTypeOf(typeof defaultValue, $attrs[attrKey]);
+
+    return result;
+  }
+
+  /**
+   * Convert value to type
+   *
+   * @param {String} type Object type
+   * @param {object} value Value to be converted
+   * @returns {*} Converted value to type
+   */
+  function parseTypeOf(type, value) {
+    switch (type) {
+      case typeof true: {
+        if(['no', 'false', '0'].indexOf(value.toLowerCase()) != -1)
+          return false;
+        return !!value;
+      }
+      case typeof '':
+        return value + '';
+      case typeof 1:
+        return parseInt(value, 10);
+      default:
+        return value;
+    }
+  }
 }
