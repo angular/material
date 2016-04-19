@@ -224,7 +224,6 @@
     exec([
       'rm -rf dist',
       'gulp build',
-      'gulp contributors',
       'gulp build-all-modules --mode=default',
       'gulp build-all-modules --mode=closure',
       'rm -rf dist/demos'
