@@ -28,6 +28,7 @@
    * @param {String=} md-placeholder The date input placeholder value.
    * @param {boolean=} ng-disabled Whether the datepicker is disabled.
    * @param {boolean=} ng-required Whether a value is required for the datepicker.
+   * @param {boolean=} md-input-disabled Whether true disabled the input.
    *
    * @description
    * `<md-datepicker>` is a component used to select a single date.
@@ -60,7 +61,8 @@
           '<div class="md-datepicker-input-container" ' +
               'ng-class="{\'md-datepicker-focused\': ctrl.isFocused}">' +
             '<input class="md-datepicker-input" aria-haspopup="true" ' +
-                'ng-focus="ctrl.setFocused(true)" ng-blur="ctrl.setFocused(false)">' +
+                'ng-focus="ctrl.setFocused(true)" ng-blur="ctrl.setFocused(false)" '+
+                'ng-disabled="crtl.inputDisabled">' +
             '<md-button type="button" md-no-ink ' +
                 'class="md-datepicker-triangle-button md-icon-button" ' +
                 'ng-click="ctrl.openCalendarPane($event)" ' +
@@ -87,7 +89,8 @@
         minDate: '=mdMinDate',
         maxDate: '=mdMaxDate',
         placeholder: '@mdPlaceholder',
-        dateFilter: '=mdDateFilter'
+        dateFilter: '=mdDateFilter',
+        inputDisabled: '@mdInputDisabled'
       },
       controller: DatePickerCtrl,
       controllerAs: 'ctrl',
@@ -385,7 +388,7 @@
         var maxDate = this.dateUtil.createDateAtMidnight(this.maxDate);
         this.ngModelCtrl.$setValidity('maxdate', date <= maxDate);
       }
-      
+
       if (angular.isFunction(this.dateFilter)) {
         this.ngModelCtrl.$setValidity('filtered', this.dateFilter(date));
       }
@@ -441,17 +444,17 @@
 
     this.updateErrorState(parsedDate);
   };
-  
+
   /**
    * Check whether date is in range and enabled
    * @param {Date=} opt_date
    * @return {boolean} Whether the date is enabled.
    */
   DatePickerCtrl.prototype.isDateEnabled = function(opt_date) {
-    return this.dateUtil.isDateWithinRange(opt_date, this.minDate, this.maxDate) && 
+    return this.dateUtil.isDateWithinRange(opt_date, this.minDate, this.maxDate) &&
           (!angular.isFunction(this.dateFilter) || this.dateFilter(opt_date));
   };
-  
+
   /** Position and attach the floating calendar to the document. */
   DatePickerCtrl.prototype.attachCalendarPane = function() {
     var calendarPane = this.calendarPane;
