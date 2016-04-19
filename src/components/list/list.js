@@ -202,7 +202,10 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           'ui-sref', 'href', 'ng-href', 'target', 'ng-attr-ui-sref', 'ui-sref-opts'];
 
         angular.forEach(copiedAttrs, function(attr) {
-          if (item.hasAttribute(attr)) {
+          if (item.hasAttribute(attr) || item.hasAttribute('data-' + attr) || item.hasAttribute('x-' + attr)) {
+            if (!item.hasAttribute(attr)) {
+              attr = item.hasAttribute('data-' + attr) ? 'data-' + attr : 'x-' + attr;
+            }
             wrapper.setAttribute(attr, item.getAttribute(attr));
             item.removeAttribute(attr);
           }
