@@ -57,8 +57,9 @@ function MdChip($mdTheming, $mdUtil) {
 
         angular.element(element[0].querySelector('._md-chip-content'))
             .on('blur', function () {
-              chipsController.selectedChip = -1;
-              chipsController.$scope.$applyAsync();
+              chipsController.$scope.$applyAsync(
+                angular.bind(chipsController, chipsController.resetSelectedChip)
+              );
             });
       }
     };
