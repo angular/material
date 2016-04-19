@@ -12,13 +12,8 @@ angular
 
 
 /**
- * @ngdoc directive
- * @name a
- * @module material.components.button
+ * @private
  *
- * @restrict E
- *
- * @description
  * `a` is a anchnor directive used to inherit theme so stand-alone anchors.
  * This allows standalone `a` tags to support theme colors for md-primary, md-accent, etc.
  *
