@@ -129,13 +129,13 @@
 
       var el = element[0];
       var ctrl = element.controller('mdFabSpeedDial');
-      var items = el.querySelectorAll('.md-fab-action-item');
+      var items = findDirectChildren(findDirectChild(el, 'md-fab-actions'), '.md-fab-action-item');
 
       // Grab our trigger element
-      var triggerElement = el.querySelector('md-fab-trigger');
+      var triggerElement = findDirectChild(el, 'md-fab-trigger');
 
       // Grab our element which stores CSS variables
-      var variablesElement = el.querySelector('._md-css-variables');
+      var variablesElement = findDirectChild(el, '._md-css-variables');
 
       // Setup JS variables based on our CSS variables
       var startZIndex = parseInt(window.getComputedStyle(variablesElement).zIndex);
@@ -217,10 +217,10 @@
     function runAnimation(element) {
       var el = element[0];
       var ctrl = element.controller('mdFabSpeedDial');
-      var items = el.querySelectorAll('.md-fab-action-item');
+      var items = findDirectChildren(findDirectChild(el, 'md-fab-actions'), '.md-fab-action-item');
 
       // Grab our element which stores CSS variables
-      var variablesElement = el.querySelector('._md-css-variables');
+      var variablesElement = findDirectChild(el, '._md-css-variables');
 
       // Setup JS variables based on our CSS variables
       var startZIndex = parseInt(window.getComputedStyle(variablesElement).zIndex);
@@ -250,5 +250,20 @@
         delayDone(done);
       }
     }
+  }
+
+  function findDirectChild(element, selector) {
+    var nodesList = element.childNodes;
+
+    for (var i = 0; i < nodesList.length; ++i) {
+      if (nodesList[i].nodeType === nodesList[i].ELEMENT_NODE && nodesList[i].matches(selector))
+        return nodesList[i];
+    }
+  }
+
+  function findDirectChildren(element, selector) {
+    return [].filter.call(element.childNodes, function (node) {
+      return node.nodeType === node.ELEMENT_NODE && node.matches(selector);
+    });
   }
 })();
