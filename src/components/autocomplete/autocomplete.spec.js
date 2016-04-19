@@ -218,6 +218,57 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('should cache the queries probably', inject(function($timeout) {
+      var scope = createScope();
+      spyOn(scope, 'match').and.callThrough();
+
+      var template =
+        '<md-autocomplete ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+            'placeholder="placeholder">' +
+          '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+
+      // Run the initial flush
+      $timeout.flush();
+
+      scope.$apply('searchText = "fo"');
+      $timeout.flush();
+
+      expect(scope.match).toHaveBeenCalledTimes(1);
+      expect(scope.match).toHaveBeenCalledWith('fo');
+
+      ctrl.clear();
+      // Flush the timeout of the clear method.
+      $timeout.flush();
+
+      expect(scope.searchText).toBe(undefined);
+
+      scope.$apply('searchText = "fo"');
+      $timeout.flush();
+
+      // The second search text should not revalidate the query, because it is stored in cache.
+      expect(scope.match).toHaveBeenCalledTimes(1);
+
+      // Clear the search text to be able to revalidate the query.
+      ctrl.clear();
+      $timeout.flush();
+
+      expect(scope.searchText).toBe(undefined);
+
+      scope.$apply('searchText = "foe"');
+      $timeout.flush();
+
+      expect(scope.match).toHaveBeenCalledTimes(2);
+
+    }));
+
     it('should forward the tabindex to the input', inject(function() {
       var scope = createScope(null, {inputId: 'custom-input-id'});
       var template =
@@ -869,6 +920,81 @@ describe('<md-autocomplete>', function() {
       expect(scope.selectedItem).toBe(null);
 
       element.remove();
+    }));
+
+    it('should correctly register the instance in the component registry', inject(function($timeout, $mdAutocomplete) {
+      var scope = createScope();
+
+      var template =
+        '<md-autocomplete ' +
+            'md-component-id="myAutocompleteId" ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+            'placeholder="placeholder">' +
+          '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var instance = $mdAutocomplete('myAutocompleteId');
+
+      expect(instance).toBeTruthy();
+    }));
+
+    it('should clear the cache probably', inject(function($timeout, $mdAutocomplete) {
+      var scope = createScope();
+      spyOn(scope, 'match').and.callThrough();
+
+      var template =
+        '<md-autocomplete ' +
+            'md-component-id="myAutocompleteId" ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+          'placeholder="placeholder">' +
+        '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var instance = $mdAutocomplete('myAutocompleteId');
+
+      // Run the initial flush
+      $timeout.flush();
+
+      scope.$apply('searchText = "fo"');
+      $timeout.flush();
+
+      expect(scope.match).toHaveBeenCalledTimes(1);
+      expect(scope.match).toHaveBeenCalledWith('fo');
+
+      ctrl.clear();
+      // Flush the timeout of the clear method.
+      $timeout.flush();
+
+      expect(scope.searchText).toBe(undefined);
+
+      scope.$apply('searchText = "fo"');
+      $timeout.flush();
+
+      // The second search text should not revalidate the query, because it is stored in cache.
+      expect(scope.match).toHaveBeenCalledTimes(1);
+
+      // Clear the search text to be able to revalidate the query.
+      ctrl.clear();
+      $timeout.flush();
+
+      expect(scope.searchText).toBe(undefined);
+
+      instance.clearCache();
+
+      scope.$apply('searchText = "foe"');
+      $timeout.flush();
+
+      expect(scope.match).toHaveBeenCalledTimes(2);
+
     }));
 
     it('should notify selected item watchers', inject(function($timeout) {
