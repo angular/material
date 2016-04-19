@@ -315,6 +315,11 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
       parent[isOpen ? 'on' : 'off']('keydown', onKeyDown);
       if (backdrop) backdrop[isOpen ? 'on' : 'off']('click', close);
 
+      // Align the sidenav at the current scroll position
+      var topAttribute = parent[0].scrollTop + "px";
+      element.css("top", topAttribute);
+      backdrop.css("top", topAttribute);
+
       if ( isOpen ) {
         // Capture upon opening..
         triggeringElement = $document[0].activeElement;
