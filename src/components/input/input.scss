@@ -285,7 +285,6 @@ md-input-container {
       transform: translate3d(0, $input-label-float-offset, 0) scale($input-label-float-scale);
       transition: transform $swift-ease-out-timing-function $swift-ease-out-duration,
                   width $swift-ease-out-timing-function $swift-ease-out-duration;
-      width: calc((100% - #{$input-label-float-width}) / #{$input-label-float-scale});
     }
   }
 
@@ -342,17 +341,6 @@ md-input-container {
         width: calc(100% - #{$icon-offset} - #{$input-label-float-width});
       }
     }
-
-    &.md-input-focused,
-    &.md-input-has-placeholder,
-    &.md-input-has-value {
-      > label {
-        &:not(.md-no-float):not(._md-container-ignore),
-        .md-placeholder {
-          width: calc((100% - #{$icon-offset} - #{$input-label-float-width}) / #{$input-label-float-scale});
-        }
-      }
-    }
   }
 
   // icon offset should have higher priority as normal label
@@ -385,17 +373,6 @@ md-input-container {
       &:not(.md-no-float):not(._md-container-ignore),
       .md-placeholder {
         width: calc(100% - (#{$icon-offset} * 2));
-      }
-    }
-
-    &.md-input-focused,
-    &.md-input-has-placeholder,
-    &.md-input-has-value {
-      > label {
-        &:not(.md-no-float):not(._md-container-ignore),
-        .md-placeholder {
-          width: calc((100% - (#{$icon-offset} * 2)) / #{$input-label-float-scale});
-        }
       }
     }
   }
