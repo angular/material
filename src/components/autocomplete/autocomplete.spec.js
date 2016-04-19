@@ -1204,6 +1204,40 @@ describe('<md-autocomplete>', function() {
 
       element.remove();
     }));
+
+    it('should properly apply highlight flags', inject(function() {
+      var template = '<div md-highlight-text="query" md-highlight-flags="{{flags}}">{{message}}</div>';
+      var scope = createScope(null, {message: 'Some text', query: 'some', flags: '^i'});
+      var element = compile(template, scope);
+
+      expect(element.html()).toBe('<span class="highlight">Some</span> text');
+
+      scope.query = 'text';
+      scope.$apply();
+
+      expect(element.html()).toBe('Some text');
+
+      scope.message = 'Some text, some flags';
+      scope.query = 'some';
+      scope.flags = 'ig';
+      element = compile(template, scope);
+
+      expect(element.html()).toBe('<span class="highlight">Some</span> text, <span class="highlight">some</span> flags');
+
+      scope.query = 'some';
+      scope.flags = '^i';
+      element = compile(template, scope);
+
+      expect(element.html()).toBe('<span class="highlight">Some</span> text, some flags');
+
+      scope.query = 's';
+      scope.flags = '$i';
+      element = compile(template, scope);
+
+      expect(element.html()).toBe('Some text, some flag<span class="highlight">s</span>');
+
+      element.remove();
+    }));
   });
 
 });
