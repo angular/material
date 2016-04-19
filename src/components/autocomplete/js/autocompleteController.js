@@ -284,10 +284,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     }
 
     if (element.length) {
-      var snapWidth = value.toLowerCase() === 'width';
       return {
         snap: element[0],
-        wrap: snapWidth ? element[0] : $element.find('md-autocomplete-wrap')[0]
+        wrap: (value.toLowerCase() === 'width') ? element[0] : $element.find('md-autocomplete-wrap')[0]
       };
     }
 
