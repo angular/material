@@ -23,7 +23,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
     opts = opts || {};
     menuContainer = setMenuContainer;
     // Default element for ARIA attributes has the ngClick or ngMouseenter expression
-    triggerElement = $element[0].querySelector('[ng-click],[ng-mouseenter]');
+    triggerElement = $element[0].querySelector('[ng-click], [data-ng-click], [ng-mouseenter], [data-ng-mouseenter]');
     triggerElement.setAttribute('aria-expanded', 'false');
 
     this.isInMenuBar = opts.isInMenuBar;
