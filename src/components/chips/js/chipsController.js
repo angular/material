@@ -102,11 +102,32 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout, $mdUtil) {
   this.useOnRemove = false;
 
   /**
-   * Whether to use the onSelect expression to notify the component's user
-   * after selecting a chip from the list.
-   * @type {boolean}
+   * Watch for select changes if expressions are present
    */
-  this.useOnSelect = false;
+  if (this.onChipSelect || this.onChipDeselect) {
+    var self = this;
+    var _selectedChip = this.selectedChip;
+
+    // Overwrite the `selectedChip` property with a setter and getter to boost the performance
+    // rapidly.
+    Object.defineProperty(this, 'selectedChip', {
+      get: function() { return _selectedChip },
+      set: function(newIndex) {
+        self.onChipDeselect && self.onChipDeselect({
+          $index: _selectedChip,
+          $chip: _selectedChip
+        });
+
+        self.onChipSelect && self.onChipSelect({
+          $index: newIndex,
+          $chip: _selectedChip
+        });
+
+        _selectedChip = newIndex;
+      }
+    });
+  }
+
 }
 
 /**
@@ -345,17 +366,6 @@ MdChipsCtrl.prototype.useOnRemoveExpression = function() {
   this.useOnRemove = true;
 };
 
-/*
- * Sets whether to use the md-on-select expression. This expression is
- * bound to scope and controller in {@code MdChipsDirective} as
- * {@code onSelect}. Due to the nature of directive scope bindings, the
- * controller cannot know on its own/from the scope whether an expression was
- * actually provided.
- */
-MdChipsCtrl.prototype.useOnSelectExpression = function() {
-  this.useOnSelect = true;
-};
-
 /**
  * Gets the input buffer. The input buffer can be the model bound to the
  * default input item {@code this.chipBuffer}, the {@code selectedItem}
@@ -443,11 +453,6 @@ MdChipsCtrl.prototype.selectAndFocusChipSafe = function(index) {
 MdChipsCtrl.prototype.selectChip = function(index) {
   if (index >= -1 && index <= this.items.length) {
     this.selectedChip = index;
-
-    // Fire the onSelect if provided
-    if (this.useOnSelect && this.onSelect) {
-      this.onSelect({'$chip': this.items[this.selectedChip] });
-    }
   } else {
     this.$log.warn('Selected Chip index out of bounds; ignoring.');
   }
