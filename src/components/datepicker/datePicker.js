@@ -339,6 +339,10 @@
       }
     }
 
+    if (this.$attrs['name']) {
+      self.inputElement.name = this.$attrs['name'];
+    }
+
     Object.defineProperty(this, 'placeholder', {
       get: function() { return self.inputElement.placeholder; },
       set: function(value) { self.inputElement.placeholder = value || ''; }
