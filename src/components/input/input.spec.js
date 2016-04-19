@@ -314,6 +314,25 @@ describe('md-input-container directive', function() {
       expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
       expect(getCharCounter(el).length).toBe(0);
     });
+
+    it('should not show an error on inputs with type="number" and a valid number value', function() {
+      var el = $compile('<form name="form">' +
+        ' <md-input-container>' +
+        '   <input type="number" md-maxlength="5" ng-model="foo" name="foo">' +
+        ' </md-input-container>' +
+        '</form>')(pageScope);
+
+      pageScope.$apply();
+      el.find('input').val('123').triggerHandler('input');
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).length).toBe(1);
+      expect(getCharCounter(el).text()).toBe('3/5');
+
+      el.find('input').val('123456').triggerHandler('input');
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeTruthy();
+      expect(getCharCounter(el).length).toBe(1);
+      expect(getCharCounter(el).text()).toBe('6/5');
+    });
   });
 
   it('should not add the md-input-has-placeholder class when the placeholder is transformed into a label', inject(function($rootScope, $compile) {

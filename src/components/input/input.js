@@ -541,7 +541,7 @@ function mdMaxlengthDirective($animate, $mdUtil) {
         if (!angular.isNumber(maxlength) || maxlength < 0) {
           return true;
         }
-        return ( modelValue || element.val() || viewValue || '' ).length <= maxlength;
+        return ( element.val() || viewValue || '' ).length <= maxlength;
       };
     });
 
