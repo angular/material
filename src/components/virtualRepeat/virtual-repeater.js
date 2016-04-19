@@ -538,14 +538,11 @@ VirtualRepeatController.prototype.link_ =
 };
 
 
-/** @private Cleans up all created blocks (used and unused). */
+/** @private Cleans up unused blocks. */
 VirtualRepeatController.prototype.cleanupBlocks_ = function() {
-  function cleanupBlock(block) {
+  angular.forEach(this.pooledBlocks, function cleanupBlock(block) {
     block.element.remove();
-  }
-
-  angular.forEach(this.blocks, cleanupBlock);
-  angular.forEach(this.pooledBlocks, cleanupBlock);
+  });
 };
 
 

@@ -660,21 +660,6 @@ describe('<md-virtual-repeat>', function() {
 
   describe('when container scope is destroyed', function() {
 
-    it('should clean up used blocks', function() {
-      createRepeater();
-      var containerCtrl = component.controller('mdVirtualRepeatContainer');
-      scope.items = createItems(NUM_ITEMS);
-      scope.$apply();
-
-      scope.$destroy();
-
-      var dataCount = 0;
-      angular.forEach(containerCtrl.repeater.blocks, function(block) {
-        dataCount += Object.keys(block.element.data()).length;
-      });
-      expect(dataCount).toBe(0);
-    });
-
     it('should clean up unused blocks', function() {
       createRepeater();
       var containerCtrl = component.controller('mdVirtualRepeatContainer');
