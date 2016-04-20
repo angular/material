@@ -9,11 +9,11 @@
    * Note 'githubcontrib' may require a application-scoped access token: GITHUB_API_TOKEN
    */
   exports.task = function () {
-    var appPath = `dist/docs`;
+    var appPath = 'dist/docs';
 
     exec([
-      `rm -f ${appPath}/contributors.json`,
-      `githubcontrib --owner=angular --repository=material --cols=6 --format=json --showlogin=true --sortBy=login --sha=master > ${appPath}/contributors.json`
+      'rm -f '+ appPath + '/contributors.json',
+      'githubcontrib --owner=angular --repository=material --cols=6 --format=json --showlogin=true --sortBy=login --sha=master > ' + appPath + '/contributors.json'
       ]);
   };
   exports.dependencies = ['docs-js'];
