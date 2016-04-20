@@ -414,6 +414,35 @@ describe('<md-select>', function() {
       expect(keydownEvent.stopPropagation).toHaveBeenCalled();
     }));
 
+    it('allows keydown events with Ctrl to propagate from inside the md-select-menu', inject(function($rootScope, $compile) {
+      $rootScope.val = [1];
+      var select = $compile(
+          '<md-input-container>' +
+          '  <label>Label</label>' +
+          '  <md-select multiple ng-model="val" placeholder="Hello World">' +
+          '    <md-option value="1">One</md-option>' +
+          '    <md-option value="2">Two</md-option>' +
+          '    <md-option value="3">Three</md-option>' +
+          '  </md-select>' +
+          '</md-input-container>')($rootScope);
+
+      var mdOption = select.find('md-option');
+      var selectMenu = select.find('md-select-menu');
+      var keydownEvent = {
+        type: 'keydown',
+        ctrlKey: true,
+        target: mdOption[0],
+        preventDefault: jasmine.createSpy(),
+        stopPropagation: jasmine.createSpy()
+      };
+
+      openSelect(select);
+      angular.element(selectMenu).triggerHandler(keydownEvent);
+
+      expect(keydownEvent.preventDefault).not.toHaveBeenCalled();
+      expect(keydownEvent.stopPropagation).not.toHaveBeenCalled();
+    }));
+
     it('supports raw html', inject(function($rootScope, $compile, $sce) {
       $rootScope.val = 0;
       $rootScope.opts = [
