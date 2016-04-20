@@ -16,7 +16,7 @@ describe('<md-contact-chips>', function() {
 
   beforeEach(module('material.components.chips'));
 
-  beforeEach(inject(function($rootScope) {
+  beforeEach(inject(function($rootScope, $mdConstant) {
     scope = $rootScope.$new(false);
     var img = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
     scope.allContacts = [
@@ -35,6 +35,7 @@ describe('<md-contact-chips>', function() {
       }
     ];
     scope.contacts = [];
+    scope.keys = [$mdConstant.KEY_CODE.COMMA]
 
     scope.highlightFlags = 'i';
   }));
@@ -144,6 +145,7 @@ describe('<md-contact-chips>', function() {
 
         element.scope().$apply(function() {
           autocompleteCtrl.scope.searchText = 'NAME';
+          autocompleteCtrl.focus();
           autocompleteCtrl.keydown({});
         });
 
@@ -173,6 +175,46 @@ describe('<md-contact-chips>', function() {
        }));*/
     });
 
+    describe('custom separator keys', function() {
+      var CONTACT_CHIPS_TEMPLATE_SEPARATOR = '\
+          <md-contact-chips\
+              ng-model="contacts"\
+              md-contacts="querySearch($query)"\
+              md-contact-name="name"\
+              md-contact-image="image"\
+              md-contact-email="email"\
+              md-highlight-flags="i"\
+              md-separator-keys="keys"\
+              placeholder="To">\
+          </md-contact-chips>';
+
+      it('should add a chip when a separator key is pressed', inject(function($mdConstant, $timeout) {
+        scope.querySearch = jasmine.createSpy('querySearch').and.callFake(function(q) {
+          return scope.allContacts;
+        });
+
+        var element = buildChips(CONTACT_CHIPS_TEMPLATE_SEPARATOR);
+        var ctrl = element.controller('mdContactChips');
+        var chipsCtrl = angular.element(element[0].querySelector('md-chips')).controller('mdChips');
+
+        var autocompleteElement = element.find('md-autocomplete');
+        var autocompleteCtrl = autocompleteElement.controller('mdAutocomplete');
+
+        element.scope().$apply(function() {
+          autocompleteCtrl.scope.searchText = 'NAME';
+          autocompleteCtrl.keydown({});
+        });
+
+        autocompleteCtrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+        ctrl.inputKeydown(keydownEvent($mdConstant.KEY_CODE.COMMA, autocompleteElement));
+        $timeout.flush();
+
+        var chips = angular.element(element[0].querySelectorAll('md-chip'));
+        expect(chips.length).toBe(1);
+        expect(chips[0].innerHTML).toContain('NAME2');
+      }));
+    });
+
   });
 
   // *******************************
@@ -200,5 +242,14 @@ describe('<md-contact-chips>', function() {
       event.keyCode = $mdConstant.KEY_CODE.ENTER;
     });
     ctrl.inputKeydown(event);
+  }
+
+  function keydownEvent(keyCode, target) {
+    return {
+      keyCode: keyCode,
+      stopPropagation: angular.noop,
+      preventDefault: angular.noop,
+      target: target
+    };
   }
 });
