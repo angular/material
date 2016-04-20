@@ -4,11 +4,11 @@
   var colors         = require('colors');
   var child_process  = require('child_process');
 
+
   /**
    * Note 'githubcontrib' may require a application-scoped access token: GITHUB_API_TOKEN
    */
   exports.task = function () {
-    var taskPath = __dirname;
     var appPath = `dist/docs`;
 
     exec([
@@ -16,7 +16,7 @@
       `githubcontrib --owner=angular --repository=material --cols=6 --format=json --showlogin=true --sortBy=login --sha=master > ${appPath}/contributors.json`
       ]);
   };
-  exports.dependencies = [];
+  exports.dependencies = ['docs-js'];
 
   /** utility method for executing terminal commands */
   function exec (cmd, userOptions) {
