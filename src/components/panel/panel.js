@@ -1128,40 +1128,29 @@ MdPanelRef.prototype._createPanel = function() {
 
 /**
  * Adds the styles for the panel, such as positioning and z-index.
- * @return {!angular.$q.Promise}
+ * @return {!angular.$q.Promise<MdPanelRef>}
  * @private
  */
 MdPanelRef.prototype._addStyles = function() {
-  this._panelContainer.css('z-index', this._config['zIndex']);
-  this._panelEl.css('z-index', this._config['zIndex'] + 1);
-
-
-  if (this._config['fullscreen']) {
-    this._panelEl.addClass('_md-panel-fullscreen');
-    return this._$q.resolve(this); // Don't setup positioning.
-  }
-
-  return this._configurePosition();
-};
-
-
-/**
- * Configure the position of the panel.
- * @return {!angular.$q.Promise}
- * @private
- */
-MdPanelRef.prototype._configurePosition = function() {
-  var positionConfig = this._config['position'];
-  if (!positionConfig) {
-    return this._$q.resolve(this);
-  }
-
   var self = this;
   return this._$q(function(resolve) {
+    self._panelContainer.css('z-index', self._config['zIndex']);
+    self._panelEl.css('z-index', self._config['zIndex'] + 1);
+    
+    if (self._config['fullscreen']) {
+      self._panelEl.addClass('_md-panel-fullscreen');
+      return resolve(self); // Don't setup positioning.
+    }
+
+    var positionConfig = self._config['position'];
+    if (!positionConfig) {
+      return resolve(self); // Don't setup positioning.
+    }
+
     // Wait for angular to finish processing the template, then position it
-    // correctly. This is necessary so that the panel will have a defined
-    // height and width.
-    return self._$rootScope['$$postDigest'](function () {
+    // correctly. This is necessary so that the panel will have a defined height
+    // and width.
+    self._$rootScope['$$postDigest'](function() {
       self._panelEl.css('top', positionConfig.getTop(self._panelEl));
       self._panelEl.css('bottom', positionConfig.getBottom(self._panelEl));
       self._panelEl.css('left', positionConfig.getLeft(self._panelEl));
@@ -1171,7 +1160,7 @@ MdPanelRef.prototype._configurePosition = function() {
       var prefixedTransform = self._$mdConstant.CSS.TRANSFORM;
       self._panelEl.css(prefixedTransform, positionConfig.getTransform());
 
-      return resolve(self);
+      resolve(self);
     });
   });
 };
@@ -1960,10 +1949,14 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl, animator) {
   this._fixBounds(panelEl);
   var animationOptions = {};
   var reverseAnimationOptions = {};
-  var openFrom = animator.toTransformCss("");
-  var openTo = animator.toTransformCss("");
-  var closeFrom = animator.toTransformCss("");
-  var closeTo = animator.toTransformCss("");
+
+  // Include the panel transformations when calculating the animations.
+  var panelTransform = panelEl[0].style.transform || '';
+
+  var openFrom = animator.toTransformCss(panelTransform);
+  var openTo = animator.toTransformCss(panelTransform);
+  var closeFrom = animator.toTransformCss(panelTransform);
+  var closeTo = animator.toTransformCss(panelTransform);
 
   switch (this._animationClass) {
     case MdPanelAnimation.animation.SLIDE:
@@ -1976,11 +1969,16 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl, animator) {
       reverseAnimationOptions = {
         transitionInClass: '_md-panel-animate-leave'
       };
-      openFrom = animator.toTransformCss(animator.calculateSlideToOrigin(
-          panelEl, this._openFrom) || "");
-      closeTo = animator.toTransformCss(animator.calculateSlideToOrigin(
-          panelEl, this._closeTo));
+
+      var openSlide = animator.calculateSlideToOrigin(
+          panelEl, this._openFrom) || '';
+      openFrom = animator.toTransformCss(openSlide + ' ' + panelTransform);
+
+      var closeSlide = animator.calculateSlideToOrigin(
+          panelEl, this._closeTo) || '';
+      closeTo = animator.toTransformCss(closeSlide + ' ' + panelTransform);
       break;
+
     case MdPanelAnimation.animation.SCALE:
       animationOptions = {
         transitionInClass: '_md-panel-animate-enter'
@@ -1988,11 +1986,16 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl, animator) {
       reverseAnimationOptions = {
         transitionInClass: '_md-panel-animate-scale-out _md-panel-animate-leave'
       };
-      openFrom = animator.toTransformCss(animator.calculateZoomToOrigin(
-          panelEl, this._openFrom) || "");
-      closeTo = animator.toTransformCss(animator.calculateZoomToOrigin(
-          panelEl, this._closeTo));
+
+      var openScale = animator.calculateZoomToOrigin(
+          panelEl, this._openFrom) || '';
+      openFrom = animator.toTransformCss(openScale + ' ' + panelTransform);
+
+      var closeScale = animator.calculateZoomToOrigin(
+          panelEl, this._closeTo) || '';
+      closeTo = animator.toTransformCss(closeScale + ' ' + panelTransform);
       break;
+
     case MdPanelAnimation.animation.FADE:
       animationOptions = {
         transitionInClass: '_md-panel-animate-enter'
@@ -2001,6 +2004,7 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl, animator) {
         transitionInClass: '_md-panel-animate-fade-out _md-panel-animate-leave'
       };
       break;
+
     default:
       if (angular.isString(this._animationClass)) {
         animationOptions = {
@@ -2019,6 +2023,9 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl, animator) {
           transitionOutClass: this._animationClass['open']
         };
       }
+
+      // TODO(ErinCoughlan): Combine the user's custom transforms with the
+      // panel transform.
   }
 
   var self = this;
