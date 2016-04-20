@@ -209,6 +209,20 @@ describe('$mdToast service', function() {
         expect(toast.length).not.toBe(0);
       }));
 
+      it('should correctly wrap the custom template', inject(function($timeout, $rootScope, $rootElement) {
+        var parent = angular.element('<div>');
+
+        setup({
+          template: '<md-toast>Message</md-toast>',
+          appendTo: parent
+        });
+
+        var toast = $rootElement.find('md-toast');
+        $timeout.flush();
+
+        expect(toast[0].querySelector('.md-toast-content').textContent).toBe('Message');
+      }));
+
       it('should add position class to toast', inject(function($rootElement, $timeout) {
         setup({
           template: '<md-toast>',
