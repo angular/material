@@ -9,7 +9,7 @@
    */
   exports.task = function () {
     var taskPath = __dirname;
-    var appPath = `${taskPath}/../../dist/docs`;
+    var appPath = `dist/docs`;
 
     exec([
       `rm -f ${appPath}/contributors.json`,
