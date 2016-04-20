@@ -253,21 +253,21 @@ describe('md-input-container directive', function() {
       $timeout.flush();
 
       expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
-      expect(getCharCounter(el).text()).toBe('0/5');
+      expect(getCharCounter(el).text()).toBe('0 / 5');
 
       pageScope.$apply('foo = "abcde"');
       expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
-      expect(getCharCounter(el).text()).toBe('5/5');
+      expect(getCharCounter(el).text()).toBe('5 / 5');
 
       pageScope.$apply('foo = "abcdef"');
       el.find('input').triggerHandler('input');
       expect(pageScope.form.foo.$error['md-maxlength']).toBe(true);
-      expect(getCharCounter(el).text()).toBe('6/5');
+      expect(getCharCounter(el).text()).toBe('6 / 5');
 
       pageScope.$apply('foo = "abc"');
       el.find('input').triggerHandler('input');
       expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
-      expect(getCharCounter(el).text()).toBe('3/5');
+      expect(getCharCounter(el).text()).toBe('3 / 5');
     });
 
     it('should render correct character count when value is a number', function() {
@@ -285,7 +285,7 @@ describe('md-input-container directive', function() {
       pageScope.item = {numberValue: 456};
       pageScope.$apply();
 
-      expect(getCharCounter(element).text()).toBe('3/6');
+      expect(getCharCounter(element).text()).toBe('3 / 6');
     });
 
     it('should add and remove maxlength element & error with expression', function() {
@@ -307,7 +307,7 @@ describe('md-input-container directive', function() {
       pageScope.$apply('foo = "abcdef"');
       expect(pageScope.form.foo.$error['md-maxlength']).toBeTruthy();
       expect(getCharCounter(el).length).toBe(1);
-      expect(getCharCounter(el).text()).toBe('6/5');
+      expect(getCharCounter(el).text()).toBe('6 / 5');
 
       pageScope.$apply('max = -1');
       pageScope.$apply('foo = "abcdefg"');

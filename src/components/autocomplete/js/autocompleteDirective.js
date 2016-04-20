@@ -176,10 +176,6 @@ function MdAutocomplete () {
             layout="row"\
             ng-class="{ \'md-whiteframe-z1\': !floatingLabel, \'md-menu-showing\': !$mdAutocompleteCtrl.hidden }">\
           ' + getInputElement() + '\
-          <md-progress-linear\
-              class="' + (attr.mdFloatingLabel ? 'md-inline' : '') + '"\
-              ng-if="$mdAutocompleteCtrl.loadingIsVisible()"\
-              md-mode="indeterminate"></md-progress-linear>\
           <md-virtual-repeat-container\
               md-auto-shrink\
               md-auto-shrink-min="1"\
@@ -254,6 +250,10 @@ function MdAutocomplete () {
                   aria-haspopup="true"\
                   aria-activedescendant=""\
                   aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>\
+              <md-progress-linear\
+                  class="' + (attr.mdFloatingLabel ? 'md-inline' : '') + '"\
+                  ng-if="$mdAutocompleteCtrl.loadingIsVisible()"\
+                  md-mode="indeterminate"></md-progress-linear>\
               <div md-autocomplete-parent-scope md-autocomplete-replace>' + leftover + '</div>\
             </md-input-container>';
         } else {
@@ -280,6 +280,10 @@ function MdAutocomplete () {
                 aria-haspopup="true"\
                 aria-activedescendant=""\
                 aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>\
+            <md-progress-linear\
+                class="' + (attr.mdFloatingLabel ? 'md-inline' : '') + '"\
+                ng-if="$mdAutocompleteCtrl.loadingIsVisible()"\
+                md-mode="indeterminate"></md-progress-linear>\
             <button\
                 type="button"\
                 tabindex="-1"\

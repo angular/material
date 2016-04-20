@@ -46,6 +46,7 @@ angular.module('material.components.select', [
  * explicit label is present.
  * @param {string=} md-container-class Class list to get applied to the `._md-select-menu-container`
  * element (for custom styling).
+ * @param {boolean=} md-no-border When present bottom border will not be visible
  *
  * @usage
  * With a placeholder (label and aria-label are added dynamically)
@@ -1457,7 +1458,7 @@ function SelectProvider($$interimElementProvider) {
         }
       }
 
-      var left, top, transformOrigin, minWidth;
+      var left, top, transformOrigin, minWidth, fontSize;
       if (shouldOpenAroundTarget) {
         left = targetRect.left;
         top = targetRect.top + targetRect.height;
@@ -1467,14 +1468,16 @@ function SelectProvider($$interimElementProvider) {
           transformOrigin = '50% 100%';
         }
       } else {
-        left = (targetRect.left + centeredRect.left - centeredRect.paddingLeft) + 2;
+        left = (targetRect.left + centeredRect.left - centeredRect.paddingLeft);
         top = Math.floor(targetRect.top + targetRect.height / 2 - centeredRect.height / 2 -
-            centeredRect.top + contentNode.scrollTop) + 2;
+            centeredRect.top + contentNode.scrollTop) + 1;
 
         transformOrigin = (centeredRect.left + targetRect.width / 2) + 'px ' +
           (centeredRect.top + centeredRect.height / 2 - contentNode.scrollTop) + 'px 0px';
 
         minWidth = Math.min(targetRect.width + centeredRect.paddingLeft + centeredRect.paddingRight, maxWidth);
+
+        fontSize = window.getComputedStyle(targetNode)['font-size'];
       }
 
       // Keep left and top within the window
@@ -1488,7 +1491,8 @@ function SelectProvider($$interimElementProvider) {
           styles: {
             left: Math.floor(clamp(bounds.left, left, bounds.right - containerRect.width)),
             top: Math.floor(clamp(bounds.top, top, bounds.bottom - containerRect.height)),
-            'min-width': minWidth
+            'min-width': minWidth,
+            'font-size': fontSize
           }
         },
         dropDown: {

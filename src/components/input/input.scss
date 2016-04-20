@@ -1,26 +1,43 @@
-$input-container-padding: 2px !default;
+$input-container-padding-right: 16px !default;
+$input-container-margin: 0 !default;
+$input-container-min-height: 48px !default;
 
+
+$default-padding-left: 1px !default;
+$default-top-margin: 10px !default;
+
+$input-label-font-size: 12px !default;
+$input-label-min-height: 24px !default;
+$input-label-margin-top: $default-top-margin !default;
+$input-label-padding-left: $default-padding-left !default;
 $input-label-default-offset: 24px !default;
-$input-label-default-scale: 1.0 !default;
-$input-label-float-offset: 6px !default;
-$input-label-float-scale: 0.75 !default;
-$input-label-float-width: $input-container-padding + 16px !default;
+$input-label-float-offset: 0 !default;
+$input-label-float-width: 16px !default;
+$input-label-float-scale: 1.0 !default;
 
 $input-placeholder-offset: $input-label-default-offset !default;
 
+$input-margin-top: $default-top-margin !default;
+$input-margin-bottom: 11px !default;
+$input-padding-top: 0px !default;
+$input-padding-left: $default-padding-left !default;
+$input-padding-bottom: 8px !default;
 $input-border-width-default: 1px !default;
 $input-border-width-focused: 2px !default;
-$input-line-height: 26px !default;
-$input-padding-top: 2px !default;
+$input-line-height: normal !default;
+$input-box-sizing: content-box !default;
+
+$textarea-padding-bottom: 4px;
 
 $input-error-font-size: 12px !default;
 $input-error-height: 24px !default;
 $input-error-line-height: $input-error-font-size + 2px !default;
 $error-padding-top: ($input-error-height - $input-error-line-height) / 2 !default;
 
-$icon-offset: 36px !default;
+$icon-offset: 56px !default;
+$icon-height: 24px !default;
 
-$icon-top-offset: ($icon-offset - $input-padding-top - $input-border-width-focused) / 4 !default;
+$icon-top-offset: ($icon-offset - $input-border-width-focused) / 4 !default;
 
 $icon-float-focused-top: -8px !default;
 
@@ -28,8 +45,9 @@ md-input-container {
   @include pie-clearfix();
   display: inline-block;
   position: relative;
-  padding: $input-container-padding;
-  margin: 18px 0;
+  padding-right: $input-container-padding-right;
+  min-height: $input-container-min-height;
+  margin: $input-container-margin;
   vertical-align: middle;
 
   &.md-block {
@@ -40,17 +58,30 @@ md-input-container {
   // height with only 1 message
   .md-errors-spacer {
     @include rtl(float, right, left);
-    min-height: $input-error-height;
+	margin-top: -3px;
+	margin-bottom: 5px;
+	
+    &:empty {
+    	display: none;
+    }
+  }
+  
+  &.md-input-has-messages .md-errors-spacer {
+     display: block;
+     min-height:8px;
+     min-width: 1px;
+     margin-top: 4px;
 
-    // Ensure the element always takes up space, even if empty
-    min-width: 1px;
+    &:empty {
+      display: none;
+    }
   }
 
   > md-icon {
     position: absolute;
-    top: $icon-top-offset;
-    @include rtl(left, 2px, auto);
-    @include rtl(right, auto, 2px);
+    left: 0;
+    top: 50%;
+    margin-top: $icon-height / -2;
   }
 
   textarea,
@@ -72,19 +103,22 @@ md-input-container {
     -moz-appearance: none;
     -webkit-appearance: none;
   }
-  input[type="date"],
-  input[type="datetime-local"],
-  input[type="month"],
-  input[type="time"],
-  input[type="week"] {
-    min-height: $input-line-height;
+  
+  input[type="password"] {
+    letter-spacing: 2px;
   }
+  
   textarea {
     resize: none;
     overflow: hidden;
-
+	padding-left: 0;
+	padding-right: 0;
+	
     &.md-input {
-      min-height: $input-line-height;
+      //min-height: $input-line-height;
+      padding-bottom: 2px;
+      margin-bottom: 9px;
+      box-sizing: content-box;
       -ms-flex-preferred-size: auto; //IE fix
     }
 
@@ -101,7 +135,7 @@ md-input-container {
 
   label:not(._md-container-ignore) {
     position: absolute;
-    bottom: 100%;
+    font-size: 12px;
     @include rtl(left, 0, auto);
     @include rtl(right, auto, 0);
 
@@ -121,11 +155,15 @@ md-input-container {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
-    @include rtl(padding-left, $input-container-padding + 1px, 0);
-    @include rtl(padding-right, 0, $input-container-padding + 1px);
+    margin-top: $input-label-margin-top;
+    @include rtl(padding-left, $input-label-padding-left, 0);
+    @include rtl(padding-right, 0, $input-label-padding-left);
+    line-height: normal;
+    font-size: inherit;
     z-index: 1;
-    transform: translate3d(0, $input-label-default-offset + 4, 0) scale($input-label-default-scale);
-    transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
+    transform: translate3d(0, 21px, 0);
+    transition: transform $swift-ease-out-duration $swift-ease-out-timing-function,
+	            font-size $swift-ease-out-duration $swift-ease-out-timing-function	;
 
     // The max-width is necessary, because in some browsers, using this together with
     // a calc might cause it to overflow the parent. See #7403
@@ -137,12 +175,12 @@ md-input-container {
     position: absolute;
     top: 0;
     opacity: 0;
-    transition-property: opacity, transform;
-    transform: translate3d(0, $input-placeholder-offset + $baseline-grid * 0.75, 0);
+    transition-property: opacity, transform, font-size;
+    transform: translate3d(0, 21px, 0);
   }
   &.md-input-focused ._md-placeholder {
     opacity: 1;
-    transform: translate3d(0, $input-placeholder-offset, 0);
+    transform: translate3d(0, 0, 0);
   }
   // Placeholder should immediately disappear when the user starts typing
   &.md-input-has-value ._md-placeholder {
@@ -170,17 +208,15 @@ md-input-container {
   .md-input {
     order: 2;
     display: block;
-    margin-top: 0;
-
+    margin-top: $input-margin-top;
+    margin-bottom: $input-margin-bottom;
     background: none;
     padding-top: $input-padding-top;
-    padding-bottom: $input-border-width-focused - $input-border-width-default;
-    padding-left: 2px;
-    padding-right: 2px;
+    padding-bottom: $input-padding-bottom - $input-border-width-default;
     border-width: 0 0 $input-border-width-default 0;
-    line-height: $input-line-height;
-    height: $input-line-height + ($input-padding-top * 2);
-    -ms-flex-preferred-size: $input-line-height; //IE fix
+    line-height: normal;
+    height: auto;
+    -ms-flex-preferred-size: auto; //IE fix
     border-radius: 0;
     border-style: solid; // Firefox fix
 
@@ -207,22 +243,28 @@ md-input-container {
   }
 
   .md-char-counter {
-    @include rtl(text-align, right, left);
-    @include rtl(padding-right, $input-container-padding, 0);
-    @include rtl(padding-left, 0, $input-container-padding);
+  	
+    //@include rtl(text-align, right, left);
+    //@include rtl(padding-right, $input-container-padding, 0);
+    //@include rtl(padding-left, 0, $input-container-padding);
   }
 
   //
   // ngMessage base styles - animations moved to input.js
   //
+  [ng-messages],
   .md-input-messages-animation {
     position: relative;
+    min-height: 14px;
+    padding-top: 2px;
+    margin-bottom: -1px;
     order: 4;
     overflow: hidden;
     @include rtl(clear, left, right);
 
     &.ng-enter {
       // Upon entering the DOM, messages should be hidden
+      [ng-message],
       .md-input-message-animation {
         opacity: 0;
         margin-top: -100px;
@@ -230,12 +272,13 @@ md-input-container {
     }
   }
 
-  .md-input-message-animation, .md-char-counter {
+  [ng-message],
+  .md-char-counter {
     font-size: $input-error-font-size;
     line-height: $input-error-line-height;
     overflow: hidden;
 
-    transition: $swift-ease-in;
+    
 
     // Default state for messages is to be visible
     opacity: 1;
@@ -243,7 +286,7 @@ md-input-container {
 
     // Add some top padding which is equal to half the difference between the expected height
     // and the actual height
-    padding-top: $error-padding-top;
+    //padding-top: $error-padding-top;
 
     &:not(.md-char-counter) {
       // Add some padding so that the messages don't touch the character counter
@@ -251,9 +294,15 @@ md-input-container {
       @include rtl(padding-left, 0, rem(0.5));
     }
   }
+  
+  .md-input-message-animation,
+  .md-char-counter {
+  	transition: $swift-ease-in;
+  }
 
   &:not(.md-input-invalid) {
     .md-auto-hide {
+      [ng-message],
       .md-input-message-animation {
         opacity: 0;
         margin-top: -100px;
@@ -263,6 +312,7 @@ md-input-container {
 
   // Note: This is a workaround to fix an ng-enter flicker bug
   .md-auto-hide {
+    [ng-message],
     .md-input-message-animation {
       &:not(.ng-animate) {
         opacity: 0;
@@ -271,6 +321,7 @@ md-input-container {
     }
   }
 
+  [ng-message],
   .md-input-message-animation {
     &.ng-enter {
       opacity: 0;
@@ -282,10 +333,12 @@ md-input-container {
   &.md-input-has-placeholder,
   &.md-input-has-value {
     label:not(.md-no-float) {
-      transform: translate3d(0, $input-label-float-offset, 0) scale($input-label-float-scale);
+      transform: translate3d(0, $input-label-float-offset, 0);
       transition: transform $swift-ease-out-timing-function $swift-ease-out-duration,
-                  width $swift-ease-out-timing-function $swift-ease-out-duration;
+                  width $swift-ease-out-timing-function $swift-ease-out-duration,
+                  font-size $swift-ease-out-duration $swift-ease-out-timing-function;
       width: calc((100% - #{$input-label-float-width}) / #{$input-label-float-scale});
+      font-size: 12px;
     }
   }
 
@@ -300,8 +353,13 @@ md-input-container {
   // Use wide border in error state or in focused state
   &.md-input-focused .md-input,
   .md-input.ng-invalid.ng-dirty {
-    padding-bottom: 0; // Increase border width by 1px, decrease padding by 1
+    padding-bottom: $input-padding-bottom - $input-border-width-focused;
     border-width: 0 0 $input-border-width-focused 0;
+  }
+  
+  &.md-input-focused textarea.md-input,
+  textarea.md-input.ng-invalid.ng-dirty {
+    padding-bottom: 2px;
   }
 
   .md-input {
@@ -327,9 +385,9 @@ md-input-container {
     }
 
     > md-icon {
-      top: $icon-top-offset;
-      @include rtl(left, 2px, auto);
-      @include rtl(right, auto, 2px);
+      //top: $icon-top-offset;
+      //@include rtl(left, 2px, auto);
+      //@include rtl(right, auto, 2px);
     }
 
   }
@@ -354,26 +412,41 @@ md-input-container {
       }
     }
   }
+  
+  &:last-of-type {
+    @include rtl(padding-left, 0, 0);
+    @include rtl(padding-right, 0, 0);
+  }
 
   // icon offset should have higher priority as normal label
   &.md-icon-left {
-    @include rtl(padding-left, $icon-offset, 0);
-    @include rtl(padding-right, 0, $icon-offset);
+    @include rtl(padding-left, $icon-offset, $input-container-padding-right);
+    @include rtl(padding-right, $input-container-padding-right, $icon-offset);
     > label {
       @include rtl(left, $icon-offset, auto);
       @include rtl(right, auto, $icon-offset);
     }
+
+    &:last-of-type {
+      @include rtl(padding-left, $icon-offset, 0);
+      @include rtl(padding-right, 0, $icon-offset);
+    }
   }
 
   &.md-icon-right {
-    @include rtl(padding-left, 0, $icon-offset);
-    @include rtl(padding-right, $icon-offset, 0);
+    @include rtl(padding-left, $input-container-padding-right, $icon-offset);
+    @include rtl(padding-right, $icon-offset, $input-container-padding-right);
 
     > md-icon:last-of-type {
       margin: 0;
 
       @include rtl(right, 2px, auto);
       @include rtl(left, auto, 2px);
+    }
+    
+    &:last-child {
+      @include rtl(padding-left, 0, $icon-offset);
+      @include rtl(padding-right, $icon-offset, 0);
     }
   }
 
@@ -399,6 +472,59 @@ md-input-container {
       }
     }
   }
+  
+  &.md-input-has-messages {
+    label:not(.md-no-float):not(._md-container-ignore),
+    ._md-placeholder {
+      margin-top: 14px;
+    }
+
+    .md-input{
+      margin-bottom: 4px;
+    }
+    
+
+  }
+
+  &.md-input-has-label {
+    .md-input{
+      margin-top: 34px;
+    }
+
+    &.md-input-focused,
+    .md-input.ng-invalid.ng-dirty {
+      input[type="date"].md-input,
+      input[type="datetime-local"].md-input,
+      input[type="month"].md-input,
+      input[type="time"].md-input,
+      input[type="week"].md-input {
+        padding-bottom: 4px;
+      }
+
+      textarea.md-input {
+        padding-bottom: 9px;
+      }
+    }
+
+    input[type="date"].md-input,
+    input[type="datetime-local"].md-input,
+    input[type="month"].md-input,
+    input[type="time"].md-input,
+    input[type="week"].md-input {
+      margin-top: 31px;
+      padding-bottom: 5px;
+    }
+
+    textarea.md-input {
+      //has label preceding md-input
+      margin-top: 32px;
+      padding-bottom: 9px;
+      box-sizing: border-box;
+      @include rtl(padding-right, 8px, 0);
+      @include rtl(padding-left, 0, 8px);
+    }
+  }
+
 }
 
 @media screen and (-ms-high-contrast: active) {
