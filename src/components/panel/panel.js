@@ -709,8 +709,8 @@ MdPanelService.prototype.newPanelAnimation = function() {
 
 
 /**
- * Wraps the users template in two elements, md-panel-container, which covers
- * the entire attachTo element, and md-panel, which contains only the
+ * Wraps the users template in two elements, md-panel-outer-wrapper, which
+ * covers the entire attachTo element, and md-panel, which contains only the
  * template. This allows the panel control over positioning, animations,
  * and similar properties.
  *
