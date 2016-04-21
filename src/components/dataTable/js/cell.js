@@ -42,9 +42,9 @@ function mdCell($compile, $mdUtil) {
     function setOrder() {
       scope.$applyAsync(function () {
         if(isActive()) {
-          head.order = head.order.charAt(0) === '-' ? attrs.mdOrderBy : '-' + attrs.mdOrderBy;
+          head.setOrder(head.order.charAt(0) === '-' ? attrs.mdOrderBy : '-' + attrs.mdOrderBy);
         } else {
-          head.order = $mdUtil.parseAttributeBoolean(attrs.mdDesc) ? '-' + attrs.mdOrderBy : attrs.mdOrderBy;
+          head.setOrder($mdUtil.parseAttributeBoolean(attrs.mdDesc) ? '-' + attrs.mdOrderBy : attrs.mdOrderBy);
         }
       });
     }

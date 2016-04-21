@@ -7,6 +7,10 @@ md-row {
   &.md-selected {
     background-color: $table-row-select-background;
   }
+  &.md-auto-select:not([disabled]):hover {
+    transition: background-color 0.2s;
+    background-color: $table-row-hover-background;
+  }
 }
 
 md-head md-row {
