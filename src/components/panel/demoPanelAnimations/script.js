@@ -73,9 +73,6 @@ AnimationCtrl.prototype.showDialog = function() {
     controller: DialogCtrl,
     controllerAs: 'ctrl',
     templateUrl: 'panel.tmpl.html',
-    locals: {
-      closeFn: angular.bind(this, this.closeDialog)
-    },
     panelClass: 'demo-dialog-example',
     position: position,
     trapFocus: true,
@@ -89,10 +86,11 @@ AnimationCtrl.prototype.showDialog = function() {
 };
 
 
-AnimationCtrl.prototype.closeDialog = function() {
-  this._panelRef && this._panelRef.close();
-};
-
-
 // Necessary to pass locals to the dialog template.
-function DialogCtrl() { }
+function DialogCtrl(mdPanelRef) {
+  this._mdPanelRef = mdPanelRef;
+}
+
+DialogCtrl.prototype.closeDialog = function() {
+  this._mdPanelRef && this._mdPanelRef.close();
+};
