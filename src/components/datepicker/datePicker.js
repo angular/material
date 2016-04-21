@@ -265,6 +265,23 @@
     var self = this;
     ngModelCtrl.$render = function() {
       var value = self.ngModelCtrl.$viewValue;
+      
+      // Parse dateString into a Date instance
+      if (typeof value === 'string') {
+        var parsedDate = value ? this.dateLocale.parseDate(value) : null;
+        // An input string is valid if it is either empty (representing no date)
+        // or if it parses to a valid date that the user is allowed to select.
+        var isValidInput = value == '' || (
+          this.dateUtil.isValidDate(parsedDate) &&
+          this.dateLocale.isDateComplete(value) &&
+          this.isDateEnabled(parsedDate)
+        );
+        
+        // Set date object if valid.
+        if (isValidInput) {
+          value = parsedDate;
+        }
+      }
 
       if (value && !(value instanceof Date)) {
         throw Error('The ng-model for md-datepicker must be a Date instance. ' +
