@@ -523,7 +523,7 @@ describe('md-date-picker', function() {
       expect(pageScope.myDate).toEqual(date);
       expect(controller.ngModelCtrl.$modelValue).toEqual(date);
 
-      expect(controller.inputElement.value).toEqual(date.toLocaleDateString());
+      expect(controller.inputElement.value).toEqual('6/1/2015');
       expect(controller.calendarPaneOpenedFrom).toBe(null);
       expect(controller.isCalendarOpen).toBe(false);
     });
