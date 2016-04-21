@@ -22,7 +22,7 @@ fdescribe('mdTable', function () {
     });
   }));
 
-  it('should enabled row selection', inject(function ($compile, $rootScope) {
+  it('should enabled row selection', inject(function ($compile) {
     var tables = [
       $compile('<md-table md-row-select>')($scope.$new()),
       $compile('<md-table md-row-select="{{foo}}">')($scope.$new({foo: true})),

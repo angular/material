@@ -13,7 +13,7 @@ function Demo($http) {
     rowSelection: true
   };
 
-  this.order = '-name';
+  this.order = 'name';
 
   this.desserts = [{
     'name': 'Frozen yogurt',
@@ -107,7 +107,21 @@ function Demo($http) {
     'iron': 6.0
   }];
 
+  this.selected = angular.copy(this.desserts[3]);
+
   this.log = function (foo) {
     console.log(foo);
+  };
+
+  this.onDeselect = function (dessert) {
+    this.log('Deselected ' + dessert.name);
+  };
+
+  this.onSelect = function (dessert) {
+    this.log('Selected ' + dessert.name);
+  };
+
+  this.trackBy = function (dessert) {
+    return dessert.name;
   };
 }

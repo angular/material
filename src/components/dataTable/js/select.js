@@ -1,7 +1,5 @@
 angular.module('material.components.table').directive('mdSelect', mdSelect);
 
-var CHECKBOX = '<md-checkbox aria-label="Select Row" ng-click="$mdSelect.toggle($event, true)" ng-checked="$mdSelect.isSelected()" ng-disabled="$mdSelect.disabled"></md-checkbox>';
-
 function SelectController() {
 
 }
@@ -9,57 +7,91 @@ function SelectController() {
 /**
  * @ngInject
  */
-function mdSelect($compile, $mdUtil) {
+function mdSelect($compile, $mdUtil, $parse) {
+  var CHECKBOX = '<md-checkbox aria-label="Select Row" ng-click="$mdSelect.toggle($event, true)" ng-checked="$mdSelect.isSelected" ng-disabled="$mdSelect.disabled"></md-checkbox>';
 
   function postLink(scope, element, attrs, ctrls) {
-    var self = ctrls.shift();
-    var row = ctrls.shift();
-    var table = ctrls.shift();
-    var watchListener = {};
+    var match = attrs.mdSelect.match(/^\s*(\S+)(?:\s+as\s+(\S+))?\s*$/);
+
+    if(!match) {
+      throw 'invalid expression: ' + 'md-select="' + attrs.mdSelect + '"';
+    }
+
+    var self          = ctrls.shift(),
+        row           = ctrls.shift(),
+        table         = ctrls.shift(),
+        selectExp     = match[1],
+        alias         = match[2],
+        identifier    = alias || selectExp,
+        trackById     = parseTrackByExpression(attrs.mdTrackBy),
+        watchers      = {
+          modelChange: function () {
+            self.isSelected = isSelected();
+          }
+        };
+
+    function parseTrackByExpression(trackByEx) {
+      var locals = {};
+      var trackByFn = $parse(trackByEx);
+
+      return function (item) {
+        locals[identifier] = item;
+        return trackByFn(scope, locals);
+      };
+    }
+
+    function isEqual(item) {
+      return self.id ? trackById(item) === self.id : self.item === item;
+    }
+
+    function isSelected() {
+      return table.multiple ? table.selected.some(isEqual) : isEqual(table.selected);
+    }
 
     function toggleAutoSelect(autoSelect) {
       self.autoSelect = $mdUtil.parseAttributeBoolean(autoSelect);
 
       if(self.autoSelect) {
-        element.on('click', self.toggle);
+        element.addClass('md-auto-select').on('click', self.toggle);
       } else {
-        element.off('click', self.toggle);
+        element.removeClass('md-auto-select').off('click', self.toggle);
+      }
+    }
+
+    function onSelectionChange(isSelected, wasSelected) {
+      if(isSelected) {
+        element.addClass('md-selected');
+
+        if(!wasSelected) {
+          scope.$eval(self.onSelect);
+        }
+      } else {
+        element.removeClass('md-selected');
+
+        if(wasSelected) {
+          scope.$eval(self.onDeselect);
+        }
       }
     }
 
     self.enable = function () {
       row.cells().eq(0).append($compile(CHECKBOX)(scope));
-      toggleAutoSelect($mdUtil.parseAttributeBoolean(attrs.mdAutoSelect));
-
-      watchListener.autoSelect = attrs.$observe('mdAutoSelect', toggleAutoSelect);
-      watchListener.isSelected = scope.$watch(self.isSelected, function (selected) {
-        if(selected) {
-          element.addClass('md-selected');
-        } else {
-          element.removeClass('md-selected');
-        }
-      });
+      toggleAutoSelect(attrs.mdAutoSelect);
+      table.registerModelChangeListener(watchers.modelChange);
+      self.isSelected = isSelected();
+      watchers.autoSelect = attrs.$observe('mdAutoSelect', toggleAutoSelect);
+      watchers.isSelected = scope.$watch('$mdSelect.isSelected', onSelectionChange);
     };
 
     self.disable = function () {
-      watchListener.autoSelect();
-      watchListener.isSelected();
-
-      if(element.hasClass('md-selected')) {
-        element.removeClass('md-selected');
-      }
+      watchers.autoSelect();
+      watchers.isSelected();
+      table.removeModelChangeListener(watchers.modelChange);
+      element.removeClass('md-selected');
 
       if(self.autoSelect) {
-        element.off('click', self.toggle);
+        element.removeClass('md-auto-select').off('click', self.toggle);
       }
-    };
-
-    self.isSelected = function () {
-      if(table.multiple) {
-        return table.selected.indexOf(self.item) !== -1;
-      }
-
-      return table.selected === self.item;
     };
 
     self.select = function () {
@@ -76,12 +108,12 @@ function mdSelect($compile, $mdUtil) {
 
     self.deselect = function () {
       if(table.multiple) {
-        var index = table.selected.indexOf(self.item);
+        return table.selected.some(function (item, index, selected) {
+          return isEqual(item) && selected.splice(index, 1);
+        });
+      }
 
-        if(index !== -1) {
-          table.selected.splice(index, 1);
-        }
-      } else if (table.selected === self.item) {
+      if(isEqual(table.selected)) {
         table.selected = undefined;
       }
     };
@@ -92,14 +124,29 @@ function mdSelect($compile, $mdUtil) {
       }
 
       if(sync) {
-        return self.isSelected() ? self.deselect() : self.select();
+        return self.isSelected ? self.deselect() : self.select();
       }
 
-      scope.$applyAsync(self.isSelected() ? self.deselect() : self.select());
+      scope.$applyAsync(self.isSelected ? self.deselect() : self.select());
     };
 
     attrs.$observe('disabled', function (disabled) {
       self.disabled = $mdUtil.parseAttributeBoolean(disabled);
+    });
+
+    scope.$parent.$watch(selectExp, function (item) {
+      self.id = trackById(item);
+      self.item = item;
+
+      if(alias) {
+        scope.$parent[alias] = item;
+      }
+
+      self.isSelected = isSelected();
+    });
+
+    scope.$on('$destroy', function () {
+      table.removeModelChangeListener(watchers.modelChange);
     });
   }
 
@@ -111,7 +158,8 @@ function mdSelect($compile, $mdUtil) {
     require: ['mdSelect', 'mdRow', '^^mdTable'],
     restrict: 'A',
     scope: {
-      item: '=?mdSelect'
+      onSelect: '&?mdOnSelect',
+      onDeselect: '&?mdOnDeselect'
     }
   };
 }

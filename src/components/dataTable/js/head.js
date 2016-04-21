@@ -1,6 +1,6 @@
 angular.module('material.components.table').directive('mdHead', mdHead);
 
-var CHECKBOX = '<md-checkbox aria-label="Select All" ng-click="$mdHead.toggleAll()" ng-checked="$mdHead.allSelected()" ng-disabled="$mdHead.disabled"></md-checkbox>';
+var CHECKBOX = '<md-checkbox aria-label="Select All" ng-click="$mdHead.toggleAll()" ng-checked="$mdHead.allSelected()" ng-disabled="!$mdHead.getSelectableRows().length"></md-checkbox>';
 
 function HeadController() {
 
@@ -9,7 +9,7 @@ function HeadController() {
 /*
  * @ngInject
  */
-function mdHead($compile) {
+function mdHead($compile, $mdUtil) {
 
   function postLink(scope, element, attrs, ctrls) {
     var self = ctrls.shift();
@@ -42,11 +42,19 @@ function mdHead($compile) {
       return angular.element(row).controller('mdSelect');
     }
 
+    self.setOrder = function (order) {
+      self.order = order;
+
+      $mdUtil.nextTick(function () {
+        scope.$eval(self.onReorder);
+      });
+    };
+
     self.allSelected = function () {
       var rows = self.getSelectableRows();
 
       return rows.length && rows.every(function (row) {
-        return row.isSelected();
+        return row.isSelected;
       });
     };
 
@@ -58,7 +66,7 @@ function mdHead($compile) {
 
     self.selectAll = function () {
       self.getSelectableRows().forEach(function (row) {
-        if(!row.isSelected()) {
+        if(!row.isSelected) {
           row.select();
         }
       });
@@ -104,7 +112,8 @@ function mdHead($compile) {
     link: postLink,
     require: ['mdHead', '^^mdTable'],
     scope: {
-      order: '=?mdOrder'
+      order: '=?mdOrder',
+      onReorder: '&?mdOnReorder'
     }
   };
 }

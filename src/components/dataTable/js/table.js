@@ -11,9 +11,8 @@ function find(set, callback) {
 /**
  * @ngInject
  */
-function TableController($attrs, $element, Hashmap, $scope, $mdUtil) {
+function TableController($attrs, $element, $scope, $mdUtil) {
   var self = this;
-  var hash = new Hashmap();
   var watchListener;
   var modelChangeListeners = [];
 
@@ -25,7 +24,7 @@ function TableController($attrs, $element, Hashmap, $scope, $mdUtil) {
   };
 
   self.registerModelChangeListener = function (listener) {
-    modelChangeListeners.push(listener);
+    return modelChangeListeners.push(listener) && listener;
   };
 
   self.removeModelChangeListener = function (listener) {
