@@ -3,11 +3,9 @@
     <div layout-align="start center" layout="column" style="min-height:150px;" >
       <h2 class="md-title">Position Mode Demos</h2>
       <p>The <code>md-position-mode</code> attribute can be used to specify the positioning along the <code>x</code> and <code>y</code> axis.</p>
-      <hr/>
-      <h3 class="md-subhead">Target-Based Position Modes</h3>
     </div>
     <div class="menus"  layout-wrap layout="row" layout-fill layout-align="space-between center" style="min-height:200px;">
-      <div layout="column" flex="33" flex-sm="100" layout-align="center center">
+      <div layout="column" flex-xs="100" flex-sm="100" flex="33" layout-align="center center">
         <p>Target Mode Positioning (default)</p>
         <md-menu>
           <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
@@ -23,7 +21,7 @@
           </md-menu-content>
         </md-menu>
       </div>
-      <div layout="column" flex-sm="100" flex="33" layout-align="center center">
+      <div layout="column" flex-xs="100" flex-sm="100" flex="33" layout-align="center center">
         <p>Target mode with <code>md-offset</code></p>
         <md-menu md-offset="0 -5">
           <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="ctrl.openMenu($mdOpenMenu, $event)">
@@ -36,7 +34,7 @@
           </md-menu-content>
         </md-menu>
       </div>
-      <div layout="column" flex-sm="100" flex="33" layout-align="center center">
+      <div layout="column" flex-xs="100" flex-sm="100" flex="33" layout-align="center center">
         <p><code>md-position-mode="target-right target"</code></p>
         <md-menu md-position-mode="target-right target" >
           <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
