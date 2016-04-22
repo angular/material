@@ -13,7 +13,7 @@ module.exports = function(config) {
     // Only launch one browser at a time since doing multiple can cause disconnects/issues
     concurrency: 1,
 
-    browsers: ['PhantomJS2', 'Firefox'],
+    browsers: ['PhantomJS', 'Firefox'],
 
     client: {
       // Do not clear the context as this can cause reload failures with Jasmine
