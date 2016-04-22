@@ -330,7 +330,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           // Append the button wrap before our list-item content, because it will overlay in relative.
           itemContainer.prepend(buttonWrap);
           itemContainer.children().eq(1).append(tEl.contents());
-          
+
           tEl.addClass('_md-button-wrap');
         }
 
@@ -425,7 +425,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
 
       function postLink($scope, $element, $attr, ctrl) {
         $element.addClass('_md');     // private md component indicator for styling
-        
+
         var proxies       = [],
             firstElement  = $element[0].firstElementChild,
             isButtonWrap  = $element.hasClass('_md-button-wrap'),
@@ -482,6 +482,25 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           }
         }
 
+        function isEventFromControl(event) {
+          var forbiddenControls = ['md-slider'];
+
+          // If there is no path property in the event, then we can assume that the event was not bubbled.
+          if (!event.path) {
+            return forbiddenControls.indexOf(event.target.tagName.toLowerCase()) !== -1;
+          }
+
+          // We iterate the event path up and check for a possible component.
+          // Our maximum index to search, is the list item root.
+          var maxPath = event.path.indexOf($element.children()[0]);
+
+          for (var i = 0; i < maxPath; i++) {
+            if (forbiddenControls.indexOf(event.path[i].tagName.toLowerCase()) !== -1) {
+              return true;
+            }
+          }
+        }
+
         var clickChildKeypressListener = function(e) {
           if (e.target.nodeName != 'INPUT' && e.target.nodeName != 'TEXTAREA' && !e.target.isContentEditable) {
             var keyCode = e.which || e.keyCode;
@@ -504,6 +523,10 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
 
         if (proxies.length == 1 && clickChild) {
           $element.children().eq(0).on('click', function(e) {
+            // When the event is coming from an control and it should not trigger the proxied element
+            // then we are skipping.
+            if (isEventFromControl(e)) return;
+
             var parentButton = $mdUtil.getClosest(e.target, 'BUTTON');
             if (!parentButton && clickChild.contains(e.target)) {
               angular.forEach(proxies, function(proxy) {
