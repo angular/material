@@ -67,6 +67,36 @@ describe('<md-tooltip> directive', function() {
       expect(element.attr('aria-label')).toEqual('Tooltip');
   });
 
+  it('should interpolate the aria-label', function(){
+      buildTooltip(
+        '<md-button>' +
+         '<md-tooltip>{{ "hello" | uppercase }}</md-tooltip>' +
+        '</md-button>'
+      );
+
+      expect(element.attr('aria-label')).toBe('HELLO');
+  });
+
+  it('should update the aria-label when the interpolated value changes', function(){
+      buildTooltip(
+        '<md-button>' +
+         '<md-tooltip>{{ testModel.ariaTest }}</md-tooltip>' +
+        '</md-button>'
+      );
+
+      $rootScope.$apply(function() {
+        $rootScope.testModel.ariaTest = 'test 1';
+      });
+
+      expect(element.attr('aria-label')).toBe('test 1');
+
+      $rootScope.$apply(function() {
+        $rootScope.testModel.ariaTest = 'test 2';
+      });
+
+      expect(element.attr('aria-label')).toBe('test 2');
+  });
+
   it('should not set parent to items with no pointer events', inject(function($window){
     spyOn($window, 'getComputedStyle').and.callFake(function(el) {
         return { 'pointer-events': el ? 'none' : '' };
