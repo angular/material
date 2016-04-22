@@ -3,20 +3,22 @@ describe('material.components.menu', function() {
   var $mdMenu, $timeout, menuActionPerformed, $mdUtil;
 
   beforeEach(module('material.components.menu'));
-  beforeEach(inject(function(_$mdUtil_, _$mdMenu_, _$timeout_, $document) {
+  beforeEach(inject(function(_$mdUtil_, _$mdMenu_, _$timeout_) {
     $mdUtil = _$mdUtil_;
     $mdMenu = _$mdMenu_;
     $timeout = _$timeout_;
-    var abandonedMenus = $document[0].querySelectorAll('._md-open-menu-container');
-    angular.element(abandonedMenus).remove();
   }));
-  afterEach(function() {
+
+  afterEach(inject(function($document) {
     menuActionPerformed = false;
     attachedElements.forEach(function(element) {
       element.remove();
     });
     attachedElements = [];
-  });
+
+    var abandonedMenus = $document[0].querySelectorAll('._md-open-menu-container');
+    angular.element(abandonedMenus).remove();
+  }));
 
   describe('md-menu directive', function() {
 
