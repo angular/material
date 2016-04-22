@@ -64,6 +64,20 @@ describe('mdListItem directive', function() {
     expect($rootScope.modelVal).toBe(false);
   });
 
+  it('should not trigger the proxy element, when clicking on a slider', function() {
+    var listItem = setup(
+      '<md-list-item>' +
+        '<md-slider></md-slider>' +
+        '<md-switch ng-model="modelVal"></md-switch>' +
+      '</md-list-item>');
+
+    var slider = listItem.find('md-slider')[0];
+
+    slider.click();
+
+    expect($rootScope.modelVal).toBeFalsy();
+  });
+
   it('should convert spacebar keypress events as clicks', inject(function($mdConstant) {
     var listItem = setup(
       '<md-list-item>' +
