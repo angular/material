@@ -230,7 +230,8 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
   return {
     restrict: 'E',
     scope: {
-      isOpen: '=?mdIsOpen'
+      isOpen: '=?mdIsOpen',
+      mdPreventRefocus: '=?'
     },
     controller: '$mdSidenavController',
     compile: function(element) {
@@ -282,7 +283,6 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
 
     scope.$watch(isLocked, updateIsLocked);
     scope.$watch('isOpen', updateIsOpen);
-
 
     // Publish special accessor for the Controller instance
     sidenavCtrl.$toggleOpen = toggleOpen;
@@ -374,8 +374,9 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
             // When the current `updateIsOpen()` animation finishes
             promise.then(function(result) {
 
-              if ( !scope.isOpen ) {
+              if ( !scope.isOpen && !scope.mdPreventRefocus ) {
                 // reset focus to originating element (if available) upon close
+                // this can now be disabled by using mdPreventRefocus
                 triggeringElement && triggeringElement.focus();
                 triggeringElement = null;
               }
