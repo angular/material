@@ -211,3 +211,10 @@ md-card {
   }
 }
 
+.md-image-no-fill {
+  > img {
+    width: auto;
+    height: auto;
+  }
+}
+
