@@ -145,6 +145,11 @@ button.md-button::-moz-focus-inner {
     &.ng-hide, &.ng-leave {
       transition: none;
     }
+
+    md-icon {
+      // Fixes icon vertical alignment.
+      display: block;
+    }
   }
 
   &:not([disabled]) {
