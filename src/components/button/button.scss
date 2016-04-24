@@ -171,6 +171,15 @@ button.md-button::-moz-focus-inner {
   }
 }
 
+// Using `display:block;` is required for correct vertical alignment
+// because '.md-button' uses `display:inline-block;`.
+.md-button.md-icon-button,
+button.md-button.md-fab {
+  md-icon {
+    display: block;
+  }
+}
+
 ._md-toast-open-top {
   .md-button.md-fab-top-left,
   .md-button.md-fab-top-right {
