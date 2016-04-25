@@ -145,12 +145,6 @@ button.md-button::-moz-focus-inner {
     &.ng-hide, &.ng-leave {
       transition: none;
     }
-
-    md-icon {
-      // Using `display:block;` is required for correct vertical alignment
-      // because `.md-button` is using `display: inline-block;`.
-      display: block;
-    }
   }
 
   &:not([disabled]) {
@@ -171,6 +165,15 @@ button.md-button::-moz-focus-inner {
     overflow: hidden;
     // The following hack causes Safari/Chrome to respect overflow hidden for ripples
     -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
+  }
+}
+
+// Using `display:block;` is required for correct vertical alignment
+// because '.md-button' uses `display:inline-block;`.
+.md-button.md-icon-button,
+button.md-button.md-fab {
+  md-icon {
+    display: block;
   }
 }
 
