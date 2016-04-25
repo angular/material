@@ -338,14 +338,12 @@ angular
  * Overlapping the panel with an element:
  * `new MdPanelPosition()
  *     .relativeTo(someElement)
- *     .withPanelXPosition($mdPanel.xPosition.ALIGN_START)
- *     .withPanelYPosition($mdPanel.yPosition.ALIGN_TOPS);`
+ *     .addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.ALIGN_TOPS);`
  *
  * Aligning the panel with the bottom of an element:
  * `new MdPanelPosition()
  *     .relativeTo(someElement)
- *     .withPanelXPosition($mdPanel.xPosition.CENTER)
- *     .withPanelYPosition($mdPanel.yPosition.BELOW);`
+ *     .addPanelPosition($mdPanel.xPosition.CENTER, $mdPanel.yPosition.BELOW);
  */
 
 /**
@@ -438,10 +436,15 @@ angular
 
 /**
  * @ngdoc method
- * @name MdPanelPosition#withPanelXPosition
+ * @name MdPanelPosition#addPanelPosition
  * @param {string} xPosition
+ * @param {string} yPosition
  * @description
- * Sets the x position for the panel relative to another element.
+ * Sets the x and y position for the panel relative to another element. Can be
+ * called multiple times to specify an ordered list of panel positions. The
+ * first position which allows the panel to be completely on-screen will be
+ * chosen; the last position will be chose whether it is on-screen or not.
+ *
  * xPosition must be one of the following values available on
  * $mdPanel.xPosition:
  *
@@ -459,14 +462,7 @@ angular
  * C: CENTER
  * D: ALIGN_END (for LTR displays)
  * E: OFFSET_END (for LTR displays)
- */
-
-/**
- * @ngdoc method
- * @name MdPanelPosition#withPanelYPosition
- * @param {string} yPosition
- * @description
- * Sets the y position for the panel relative to another element.
+ *
  * yPosition must be one of the following values available on
  * $mdPanel.yPosition:
  *
@@ -485,6 +481,7 @@ angular
  * H: CENTER
  * I: ALIGN_BOTTOMS
  * J: ABOVE
+ * @returns {MdPanelPosition}
  */
 
 /**
@@ -1090,7 +1087,7 @@ MdPanelRef.prototype._addStyles = function() {
   return this._$q(function(resolve) {
     self._panelContainer.css('z-index', self._config['zIndex']);
     self._panelEl.css('z-index', self._config['zIndex'] + 1);
-    
+
     if (self._config['fullscreen']) {
       self._panelEl.addClass('_md-panel-fullscreen');
       resolve(self);
@@ -1436,11 +1433,8 @@ function MdPanelPosition() {
   /** @private {!Array<string>} */
   this._translateY = [];
 
-  /** @private {string} */
-  this._xPosition = '';
-
-  /** @private {string} */
-  this._yPosition = '';
+  /** @private {!Array<{x:string, y:string}>} */
+  this._positions = [];
 }
 
 
@@ -1583,16 +1577,62 @@ MdPanelPosition.prototype.relativeTo = function(element) {
 
 
 /**
- * Sets the x position for the panel relative to another element.
- * xPosition must be one of the MdPanelPosition.xPosition values.
- *
- * @param {string} xPosition
+ * Sets the x and y positions for the panel relative to another element.
+ * @param {string} xPosition must be one of the MdPanelPosition.xPosition values.
+ * @param {string} yPosition must be one of the MdPanelPosition.yPosition values.
  * @returns {MdPanelPosition}
  */
-MdPanelPosition.prototype.withPanelXPosition = function(xPosition) {
+MdPanelPosition.prototype.addPanelPosition = function(xPosition, yPosition) {
   if (!this._relativeToRect) {
-    throw new Error('withPanelXPosition can only be used with relative' +
+    throw new Error('addPanelPosition can only be used with relative ' +
         'positioning. Set relativeTo first.');
+  }
+
+  this._validateXPosition(xPosition);
+  this._validateYPosition(yPosition);
+
+  this._positions.push({
+      x: xPosition,
+      y: yPosition,
+  });
+  return this;
+};
+
+
+/**
+ * Ensure that yPosition is a valid position name. Throw an exception if not.
+ * @param {string} yPosition
+ */
+MdPanelPosition.prototype._validateYPosition = function(yPosition) {
+  // empty is ok
+  if (yPosition == null) {
+      return;
+  }
+
+  var positionKeys = Object.keys(MdPanelPosition.yPosition);
+  var positionValues = [];
+  for (var key, i = 0; key = positionKeys[i]; i++) {
+    var position = MdPanelPosition.yPosition[key];
+    positionValues.push(position);
+
+    if (position === yPosition) {
+      return;
+    }
+  }
+
+  throw new Error('Panel y position only accepts the following values:\n' +
+    positionValues.join(' | '));
+};
+
+
+/**
+ * Ensure that xPosition is a valid position name. Throw an exception if not.
+ * @param {string} xPosition
+ */
+MdPanelPosition.prototype._validateXPosition = function(xPosition) {
+  // empty is ok
+  if (xPosition == null) {
+      return;
   }
 
   var positionKeys = Object.keys(MdPanelPosition.xPosition);
@@ -1601,42 +1641,13 @@ MdPanelPosition.prototype.withPanelXPosition = function(xPosition) {
     var position = MdPanelPosition.xPosition[key];
     positionValues.push(position);
     if (position === xPosition) {
-      this._xPosition = xPosition;
-      return this;
+      return;
     }
   }
 
-  throw new Error('withPanelXPosition only accepts the following values:\n' +
+  throw new Error('Panel x Position only accepts the following values:\n' +
       positionValues.join(' | '));
-};
 
-
-/**
- * Sets the y position for the panel relative to another element.
- * yPosition must be one of the MdPanelPosition.yPosition values.
- *
- * @param {string} yPosition
- * @returns {MdPanelPosition}
- */
-MdPanelPosition.prototype.withPanelYPosition = function(yPosition) {
-  if (!this._relativeToRect) {
-    throw new Error('withPanelYPosition can only be used with relative ' +
-        'positioning. Set relativeTo first.');
-  }
-
-  var positionKeys = Object.keys(MdPanelPosition.yPosition);
-  var positionValues = [];
-  for (var key, i = 0; key = positionKeys[i]; i++) {
-    var position = MdPanelPosition.yPosition[key];
-    positionValues.push(position);
-    if (position === yPosition) {
-      this._yPosition = yPosition;
-      return this;
-    }
-  }
-
-  throw new Error('withPanelYPosition only accepts the following values:\n' +
-      positionValues.join(' | '));
 };
 
 
@@ -1723,6 +1734,16 @@ MdPanelPosition.prototype.getTransform = function() {
 
 
 /**
+ * Gets the first x/y position that can fit on-screen.
+ * @returns {string}
+ */
+MdPanelPosition.prototype.getActualPosition = function() {
+  // TODO(gmoothart): intelligently pick the first on-screen position.
+  return this._positions[0] || {};
+};
+
+
+/**
  * Reduces a list of translate values to a string that can be used within
  * transform.
  * @param {string} translateFn
@@ -1765,7 +1786,9 @@ MdPanelPosition.prototype._calculatePanelPosition = function(panelEl) {
   var targetRight = targetBounds.right;
   var targetWidth = targetBounds.width;
 
-  switch (this._xPosition) {
+  var pos = this.getActualPosition();
+
+  switch (pos.x) {
     case MdPanelPosition.xPosition.OFFSET_START:
       // TODO(ErinCoughlan): Change OFFSET_START for rtl vs ltr.
       this._left = targetLeft - panelWidth + 'px';
@@ -1792,7 +1815,7 @@ MdPanelPosition.prototype._calculatePanelPosition = function(panelEl) {
   var targetBottom = targetBounds.bottom;
   var targetHeight = targetBounds.height;
 
-  switch (this._yPosition) {
+  switch (pos.y) {
     case MdPanelPosition.yPosition.ABOVE:
       this._top = targetTop - panelHeight + 'px';
       break;
