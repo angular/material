@@ -209,6 +209,24 @@ describe('util', function() {
       });
     });
 
+    describe('disableScrollAround', function() {
+      it('should prevent scrolling of the passed element', inject(function($mdUtil) {
+        var element = angular.element('<div style="height: 2000px">');
+        document.body.appendChild(element[0]);
+
+        var enableScrolling = $mdUtil.disableScrollAround(element);
+
+        window.scrollTo(0, 1000);
+
+        expect(window.pageYOffset).toBe(0);
+
+        // Restore the scrolling.
+        enableScrolling();
+        window.scrollTo(0, 0);
+        document.body.removeChild(element[0]);
+      }));
+    });
+
     describe('nextTick', function() {
       it('should combine multiple calls into a single digest', inject(function($mdUtil, $rootScope, $timeout) {
         var digestWatchFn = jasmine.createSpy('watchFn');
