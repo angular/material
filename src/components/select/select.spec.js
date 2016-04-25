@@ -277,8 +277,8 @@ describe('<md-select>', function() {
 
       // Ensure every md-option element does not have a checkbox prepended to it.
       for (var i = 0; i < options.length; i++) {
-        var checkBoxContainer = options[i].querySelector('._md-container');
-        var checkBoxIcon = options[i].querySelector('._md-icon');
+        var checkBoxContainer = options[i].querySelector('.md-container');
+        var checkBoxIcon = options[i].querySelector('.md-icon');
         expect(checkBoxContainer).toBe(null);
         expect(checkBoxIcon).toBe(null);
       }
@@ -325,8 +325,8 @@ describe('<md-select>', function() {
 
       // Ensure every md-option element has a checkbox prepended to it.
       for (var i = 0; i < options.length; i++) {
-        var checkBoxContainer = options[i].querySelector('._md-container');
-        var checkBoxIcon = options[i].querySelector('._md-icon');
+        var checkBoxContainer = options[i].querySelector('.md-container');
+        var checkBoxIcon = options[i].querySelector('.md-icon');
         expect(checkBoxContainer).not.toBe(null);
         expect(checkBoxIcon).not.toBe(null);
       }
@@ -374,7 +374,7 @@ describe('<md-select>', function() {
             '  </md-select>' +
             '</md-input-container>')($rootScope);
 
-        var optgroupLabel = select[0].querySelector('._md-container-ignore');
+        var optgroupLabel = select[0].querySelector('.md-container-ignore');
 
         expect(optgroupLabel).toBe(null);
       }));

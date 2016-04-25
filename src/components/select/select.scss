@@ -233,13 +233,13 @@ md-optgroup {
 }
 
 md-select-menu[multiple] {
-  md-option._md-checkbox-enabled {
+  md-option.md-checkbox-enabled {
     @include rtl(padding-left, $select-option-padding * 2.5, $select-option-padding);
     @include rtl(padding-right, $select-option-padding, $select-option-padding * 2.5);
 
     @include checkbox-container('[selected]');
 
-    ._md-container {
+    .md-container {
       @include rtl(margin-left, $select-option-padding * (2 / 3), auto);
       @include rtl(margin-right, auto, $select-option-padding * (2 / 3));
     }
