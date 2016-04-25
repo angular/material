@@ -1118,8 +1118,7 @@ describe('$mdPanel', function() {
       it('with respect to an element', function() {
         var position = mdPanelPosition
             .relativeTo(myButton[0])
-            .withPanelXPosition(xPosition.ALIGN_START)
-            .withPanelYPosition(yPosition.ALIGN_TOPS);
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS);
 
         config['position'] = position;
 
@@ -1133,8 +1132,7 @@ describe('$mdPanel', function() {
       it('with respect to a query selector', function() {
         var position = mdPanelPosition
             .relativeTo('button')
-            .withPanelXPosition(xPosition.ALIGN_START)
-            .withPanelYPosition(yPosition.ALIGN_TOPS);
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS);
 
         config['position'] = position;
 
@@ -1148,8 +1146,7 @@ describe('$mdPanel', function() {
       it('with respect to a JQLite object', function() {
         var position = mdPanelPosition
             .relativeTo(myButton)
-            .withPanelXPosition(xPosition.ALIGN_START)
-            .withPanelYPosition(yPosition.ALIGN_TOPS);
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS);
 
         config['position'] = position;
 
@@ -1160,11 +1157,31 @@ describe('$mdPanel', function() {
         expect(panelCss.top).toBeApproximately(myButtonRect.top);
       });
 
+      it('chooses first on-screen position from a list of positions', function() {
+        var position = mdPanelPosition
+            .relativeTo(myButton)
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS)
+            .addPanelPosition(xPosition.ALIGN_END, yPosition.ALIGN_BOTTOMS)
+            .addPanelPosition(xPosition.ALIGN_OFFSET_END, yPosition.BELOW);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        expect(position.getActualPosition()).toEqual({
+          x: xPosition.ALIGN_START,
+          y: yPosition.ALIGN_TOPS,
+        });
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.left).toBeApproximately(myButtonRect.left);
+        expect(panelCss.top).toBeApproximately(myButtonRect.top);
+      });
+
       describe('vertically', function() {
         it('above an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelYPosition(yPosition.ABOVE);
+              .addPanelPosition(null, yPosition.ABOVE);
 
           config['position'] = position;
 
@@ -1178,7 +1195,7 @@ describe('$mdPanel', function() {
         it('top aligned with an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelYPosition(yPosition.ALIGN_TOPS);
+              .addPanelPosition(null, yPosition.ALIGN_TOPS);
 
           config['position'] = position;
 
@@ -1192,7 +1209,7 @@ describe('$mdPanel', function() {
         it('centered with an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelYPosition(yPosition.CENTER);
+              .addPanelPosition(null, yPosition.CENTER);
 
           config['position'] = position;
 
@@ -1209,7 +1226,7 @@ describe('$mdPanel', function() {
         it('bottom aligned with an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelYPosition(yPosition.ALIGN_BOTTOMS);
+              .addPanelPosition(null, yPosition.ALIGN_BOTTOMS);
 
           config['position'] = position;
 
@@ -1223,7 +1240,7 @@ describe('$mdPanel', function() {
         it('below an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelYPosition(yPosition.BELOW);
+              .addPanelPosition(null, yPosition.BELOW);
 
           config['position'] = position;
 
@@ -1239,7 +1256,7 @@ describe('$mdPanel', function() {
         it('offset to the left of an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelXPosition(xPosition.OFFSET_START);
+              .addPanelPosition(xPosition.OFFSET_START, null);
 
           config['position'] = position;
 
@@ -1253,7 +1270,7 @@ describe('$mdPanel', function() {
         it('right aligned with an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelXPosition(xPosition.ALIGN_END);
+              .addPanelPosition(xPosition.ALIGN_END, null);
 
           config['position'] = position;
 
@@ -1267,7 +1284,7 @@ describe('$mdPanel', function() {
         it('centered with an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelXPosition(xPosition.CENTER);
+              .addPanelPosition(xPosition.CENTER, null);
 
           config['position'] = position;
 
@@ -1284,7 +1301,7 @@ describe('$mdPanel', function() {
         it('left aligned with an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelXPosition(xPosition.ALIGN_START);
+              .addPanelPosition(xPosition.ALIGN_START, null);
 
           config['position'] = position;
 
@@ -1298,7 +1315,7 @@ describe('$mdPanel', function() {
         it('offset to the right of an element', function() {
           var position = mdPanelPosition
               .relativeTo(myButton)
-              .withPanelXPosition(xPosition.OFFSET_END);
+              .addPanelPosition(xPosition.OFFSET_END, null);
 
           config['position'] = position;
 
@@ -1319,7 +1336,7 @@ describe('$mdPanel', function() {
       var expression = function() {
         mdPanelPosition
             .relativeTo(myButton)
-            .withPanelXPosition('fake-x-position');
+            .addPanelPosition('fake-x-position', null);
       };
 
       expect(expression).toThrow();

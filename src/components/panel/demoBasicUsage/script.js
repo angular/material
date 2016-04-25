@@ -48,8 +48,7 @@ BasicDemoCtrl.prototype.showDialog = function() {
 BasicDemoCtrl.prototype.showMenu = function(ev) {
   var position = this._mdPanel.newPanelPosition()
       .relativeTo('.demo-menu-open-button')
-      .withPanelXPosition(this._mdPanel.xPosition.ALIGN_START)
-      .withPanelYPosition(this._mdPanel.yPosition.BELOW);
+      .addPanelPosition(this._mdPanel.xPosition.ALIGN_START, this._mdPanel.yPosition.BELOW);
 
   var config = {
     attachTo: '.demo-md-panel',
