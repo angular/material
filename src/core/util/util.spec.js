@@ -214,13 +214,14 @@ describe('util', function() {
         var element = angular.element('<div style="height: 2000px">');
         document.body.appendChild(element[0]);
 
-        $mdUtil.disableScrollAround(element);
+        var enableScrolling = $mdUtil.disableScrollAround(element);
 
         window.scrollTo(0, 1000);
 
         expect(window.pageYOffset).toBe(0);
 
-        // Revert scroll
+        // Restore the scrolling.
+        enableScrolling();
         window.scrollTo(0, 0);
         document.body.removeChild(element[0]);
       }));
