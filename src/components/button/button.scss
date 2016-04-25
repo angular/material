@@ -147,7 +147,8 @@ button.md-button::-moz-focus-inner {
     }
 
     md-icon {
-      // Fixes icon vertical alignment.
+      // Using `display:block;` is required for correct vertical alignment
+      // because `.md-button` is using `display: inline-block;`.
       display: block;
     }
   }
