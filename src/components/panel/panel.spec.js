@@ -1423,12 +1423,11 @@ describe('$mdPanel', function() {
         expect(panelCss.top).toBeApproximately(myButtonRect.top);
       });
 
-      it('chooses first on-screen position from a list of positions', function() {
+      it('rejects offscreen position left of target element', function() {
         var position = mdPanelPosition
             .relativeTo(myButton)
-            .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS)
-            .addPanelPosition(xPosition.ALIGN_END, yPosition.ALIGN_BOTTOMS)
-            .addPanelPosition(xPosition.OFFSET_END, yPosition.BELOW);
+            .addPanelPosition(xPosition.OFFSET_START, yPosition.ALIGN_TOPS)
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS);
 
         config['position'] = position;
 
@@ -1441,6 +1440,84 @@ describe('$mdPanel', function() {
         var panelCss = document.querySelector(PANEL_EL).style;
         expect(panelCss.left).toBeApproximately(myButtonRect.left);
         expect(panelCss.top).toBeApproximately(myButtonRect.top);
+      });
+
+      it('rejects offscreen position above target element', function() {
+        var position = mdPanelPosition
+            .relativeTo(myButton)
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.ABOVE)
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        expect(position.getActualPosition()).toEqual({
+          x: xPosition.ALIGN_START,
+          y: yPosition.ALIGN_TOPS,
+        });
+      });
+
+      it('rejects offscreen position below target element', function() {
+        // reposition button at the bottom of the screen
+        $rootEl[0].style.height = "100%";
+        myButton[0].style.position = 'absolute';
+        myButton[0].style.bottom = '0px';
+        myButtonRect = myButton[0].getBoundingClientRect();
+
+        var position = mdPanelPosition
+            .relativeTo(myButton)
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.BELOW)
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        expect(position.getActualPosition()).toEqual({
+          x: xPosition.ALIGN_START,
+          y: yPosition.ALIGN_TOPS,
+        });
+      });
+
+      it('rejects offscreen position right of target element', function() {
+        // reposition button at the bottom of the screen
+        $rootEl[0].style.width = "100%";
+        myButton[0].style.position = 'absolute';
+        myButton[0].style.right = '0px';
+        myButtonRect = myButton[0].getBoundingClientRect();
+
+        var position = mdPanelPosition
+            .relativeTo(myButton)
+            .addPanelPosition(xPosition.OFFSET_END, yPosition.ALIGN_TOPS)
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        expect(position.getActualPosition()).toEqual({
+          x: xPosition.ALIGN_START,
+          y: yPosition.ALIGN_TOPS,
+        });
+      });
+
+      it('should choose last position if none are on-screen', function() {
+        var position = mdPanelPosition
+            .relativeTo(myButton)
+            // off-screen to the left
+            .addPanelPosition(xPosition.OFFSET_START, yPosition.ALIGN_TOPS)
+            // off-screen at the top
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        expect(position.getActualPosition()).toEqual({
+          x: xPosition.ALIGN_START,
+          y: yPosition.ALIGN_TOPS,
+        });
       });
 
       describe('vertically', function() {
