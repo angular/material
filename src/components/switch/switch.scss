@@ -3,6 +3,7 @@ $switch-height: $baseline-grid * 3 !default;
 $switch-bar-height: 14px !default;
 $switch-thumb-size: 20px !default;
 $switch-margin: 16px !default;
+$switch-text-margin: 8px !default;
 
 .md-inline-form {
   md-switch {
@@ -17,13 +18,21 @@ md-switch {
   cursor: pointer;
   outline: none;
   user-select: none;
-  height: 30px;
-  line-height: 28px;
+  height: auto;
+  line-height: inherit;
   align-items: center;
-  display: flex;
+  display: inline-flex;
+  justify-content: flex-start;
 
-  @include rtl(margin-left, inherit, $switch-margin);
-  @include rtl(margin-right, $switch-margin, inherit);
+  &::before {
+    content: '&nbsp;';
+    height: auto;
+    visibility: hidden;
+    width: 0;
+    max-width: 0;
+    flex: 0 0 0;
+    order:0;
+  }
 
   &:last-of-type {
     @include rtl(margin-left, inherit, 0);
@@ -44,8 +53,8 @@ md-switch {
     height: $switch-height;
     position: relative;
     user-select: none;
-    @include rtl-prop(margin-right, margin-left, 8px);
-    float: left;
+    min-width: $switch-width;
+    order:1;
   }
 
   // If the user moves his mouse off the switch, stil display grabbing cursor
@@ -69,12 +78,6 @@ md-switch {
         background-color: rgba(0, 0, 0, 0.12);
       }
     }
-  }
-
-  ._md-label {
-    border-color: transparent;
-    border-width: 0;
-    float: left;
   }
 
   ._md-bar {
@@ -149,6 +152,44 @@ md-switch {
     }
   }
 
+  &.md-align-top > div._md-container {
+    align-self: flex-start;
+  }
+
+  ._md-label {
+    box-sizing: border-box;
+    position: relative;
+    white-space: normal;
+    user-select: text;
+    text-align: justify;
+    @include rtl(margin-left, $switch-text-margin, 0);
+    @include rtl(margin-right, 0 ,$switch-text-margin);
+    order:2;
+    &:empty {
+      display: none;
+    }
+  }
+
+  &.md-full-width {
+    display: flex;
+    > ._md-label {
+      flex:1 1 auto;
+    }
+  }
+
+  &.md-full-width:not(.md-invert) {
+    > ._md-label {
+      @include rtl(direction, rtl, ltr);
+    }
+  }
+
+  &.md-invert {
+    > ._md-label {
+      @include rtl(margin-right, $switch-text-margin, 0);
+      @include rtl(margin-left, 0 ,$switch-text-margin);
+      order: -1;
+    }
+  }
 }
 
 @media screen and (-ms-high-contrast: active) {
