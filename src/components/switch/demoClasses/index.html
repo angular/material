@@ -1,0 +1,51 @@
+<div ng-controller="AppCtrl" class="md-padding" ng-cloak>
+  <div>
+    <fieldset class="standard">
+      <legend>Using &lt;ng-model&gt;</legend>
+      <div layout="column" layout-wrap>
+        <md-switch
+            ng-model="data.cb1"
+            aria-label="Switch 1"
+            ng-true-value="'yup'"
+            ng-false-value="'nope'"
+            class="md-align-top">
+          <span> Switch 1  (md-align-top) </span> <br/>
+            <span class="ipsum">
+              Duis placerat lectus et justo mollis, nec sodales orci congue. Vestibulum semper non urna ac suscipit.
+              Vestibulum tempor, ligula id laoreet hendrerit, massa augue iaculis magna,
+              sit amet dapibus tortor ligula non nibh.
+            </span>
+          <br/>
+          <span>{{ data.cb1 }}</span>
+        </md-switch>
+        <md-switch aria-label="Switch full width" ng-model="data.cb2" class="md-full-width">
+          <span>Switch 2 (md-full-width):</span>
+        </md-switch>
+        <md-switch
+            ng-model="data.cb3"
+            aria-label="Switch 3"
+            ng-true-value="'yup'"
+            ng-false-value="'nope'"
+            class="md-invert md-align-top">
+          <span>Switch 3 (md-invert md-align-top)</span> <br/>
+            <span class="ipsum">
+              Duis placerat lectus et justo mollis, nec sodales orci congue. Vestibulum semper non urna ac suscipit.
+              Vestibulum tempor, ligula id laoreet hendrerit, massa augue iaculis magna,
+              sit amet dapibus tortor ligula non nibh.
+            </span>
+          <br/>
+          <span>{{ data.cb3 }}</span>
+        </md-switch>
+        <md-switch aria-label="Switch right and full width" ng-model="data.cb" class="md-full-width md-invert">
+          <span>Switch 4 (md-full-width & md-invert)</span>
+        </md-switch>
+        <p>Switch with floating text
+          <md-switch aria-label="Switch" ng-model="data.cb5" class="floating-text">
+            <span>(Click me)</span>
+          </md-switch>
+          to demonstrate the correct alignment.
+        </p>
+      </div>
+    </fieldset>
+  </div>
+</div>
