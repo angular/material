@@ -19,6 +19,7 @@ branches:
   only:
   - master
   - patch
+  - feat/panel
 before_install:
 - "source ./scripts/travis-install-phantomjs2.sh"
 install:
