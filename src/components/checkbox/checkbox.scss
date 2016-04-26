@@ -12,7 +12,7 @@ $checkbox-top: 12px !default;
   }
 }
 
-// Needed for check to display correctly in IE11
+// Needed for IE11. Checkbox does not show in tables with border collapse and border spacing.
 table md-checkbox {
 	border-collapse: separate;
 	border-spacing: 0;
