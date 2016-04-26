@@ -82,7 +82,7 @@ AnimationCtrl.prototype.showDialog = function() {
     hasBackdrop: true,
   };
 
-  this._panelRef = this._mdPanel.open(config);
+  this._mdPanel.open(config);
 };
 
 
