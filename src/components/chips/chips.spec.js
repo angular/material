@@ -66,6 +66,20 @@ describe('<md-chips>', function() {
         expect(chip[0].querySelector('div.mychiptemplate')).not.toBeNull();
       });
 
+      it('should focus the main input when a user-provided chip template has an input', function() {
+        var template =
+          '<md-chips ng-model="items">' +
+          '  <md-chip-template><input type="text" /></md-chip-template>' +
+          '  <input type="text" id="mainInput" />' +
+          '</md-chips>';
+        var element = buildChips(template);
+        var input = element[0].querySelector('input#mainInput');
+        spyOn(input,'focus');
+        element.triggerHandler('focus');
+        $timeout.flush();
+        expect(input.focus).toHaveBeenCalled();
+      });
+
       it('should add a chip', function() {
         var element = buildChips(BASIC_CHIP_TEMPLATE);
         var ctrl = element.controller('mdChips');
