@@ -325,7 +325,7 @@ describe('md-colors', function () {
       var color = $mdColorPalette['red']['200'].value;
       var expectedRGB = supplant('rgb({0}, {1}, {2})', [color[0], color[1], color[2]]);
 
-      $mdColors.applyThemeColors(element, scope, '{background: \'red-200\'}');
+      $mdColors.applyThemeColors(element, { background: 'red-200' });
       expect(element[0].style.background).toContain( expectedRGB );
     }));
 

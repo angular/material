@@ -39,7 +39,7 @@
    *  </hljs>
    *
    */
-  function MdColorsService($mdTheming, $mdUtil, $parse, $log) {
+  function MdColorsService($mdTheming, $mdUtil, $log) {
     colorPalettes = colorPalettes || Object.keys($mdTheming.PALETTES);
 
     // Publish service instance
@@ -61,10 +61,8 @@
      * Then calculate the rgba() values based on the theme color parts
      *
      * @param {DOMElement} element the element to apply the styles on.
-     * @param {scope} scope a scope is needed in case there are interpolated values in the expression.
-     * @param {string|object} colorExpression json object, keys are css properties and values are string of the wanted color,
-     * for example: `{color: 'red-A200-0.3'}`. Note that the color keys must be upperCamelCase instead of snake-case.
-     * e.g. `{background-color: 'grey-300'}` --> `{backgroundColor: 'grey-300'}`
+     * @param {object} colorExpression json object, keys are css properties and values are string of the wanted color,
+     * for example: `{color: 'red-A200-0.3'}`.
      *
      * @usage
      * <hljs lang="js">
@@ -78,16 +76,10 @@
      *   });
      * </hljs>
      */
-    function applyThemeColors(element, scope, colorExpression) {
+    function applyThemeColors(element, colorExpression) {
       try {
-        // Json.parse() does not work because the keys are not quoted;
-        // use $parse to convert to a hash map
-        // NOTE: keys cannot be snake-case, upperCamelCase are required
-        //        e.g.   {background-color: 'grey-300'} --> {backgroundColor: 'grey-300'}
-        var themeColors = $parse(colorExpression)(scope);
-
         // Assign the calculate RGBA color values directly as inline CSS
-        element.css(interpolateColors(themeColors));
+        element.css(interpolateColors(colorExpression));
       } catch( e ) {
         $log.error(e.message);
       }
@@ -243,7 +235,7 @@
    * </hljs>
    *
    */
-  function MdColorsDirective($mdColors, $mdUtil, $log) {
+  function MdColorsDirective($mdColors, $mdUtil, $log, $parse) {
     return {
       restrict: 'A',
       compile: function (tElem, tAttrs) {
@@ -251,17 +243,19 @@
 
         return function (scope, element, attrs) {
           var colorExpression = function () {
-            return attrs.mdColors;
+            // Json.parse() does not work because the keys are not quoted;
+            // use $parse to convert to a hash map
+            return $parse(attrs.mdColors)(scope);
           };
 
           try {
             if (shouldWatch) {
               scope.$watch(colorExpression, angular.bind(this,
-                $mdColors.applyThemeColors, element, scope
-              ));
+                $mdColors.applyThemeColors, element
+              ), true);
             }
             else {
-              $mdColors.applyThemeColors(element, scope, colorExpression());
+              $mdColors.applyThemeColors(element, colorExpression());
             }
 
           }
