@@ -26,11 +26,27 @@ describe('material.components.menuBar', function() {
       });
 
       describe('ARIA', function() {
+        
         it('sets role="menubar" on the menubar', function() {
           var menuBar = setup();
           var ariaRole = menuBar[0].getAttribute('role');
           expect(ariaRole).toBe('menubar');
         });
+        
+        it('should set the role on the menu trigger correctly', inject(function($compile, $rootScope) {
+          var el = $compile(
+            '<md-menu-bar>' +
+              '<md-menu ng-repeat="i in [1, 2, 3]">' +
+                '<md-button id="triggerButton" ng-click="lastClicked = $index"></md-button>' +
+                '<md-menu-content></md-menu-content>' +
+              '</md-menu>' +
+            '</md-menu-bar>'
+          )($rootScope);
+
+          $rootScope.$digest();
+
+          expect(el[0].querySelector('#triggerButton').getAttribute('role')).toBe('menuitem');
+        }));
       });
 
       describe('nested menus', function() {
