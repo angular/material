@@ -1,6 +1,6 @@
 describe('$mdPanel', function() {
   var $mdPanel, $rootScope, $rootEl, $templateCache, $q, $material, $mdConstant,
-      $mdUtil, $animate;
+      $mdUtil, $animate, $$rAF, $window;
   var panelRef;
   var attachedElements = [];
   var PANEL_WRAPPER_CLASS = '.md-panel-outer-wrapper';
@@ -28,6 +28,8 @@ describe('$mdPanel', function() {
     $mdConstant = $injector.get('$mdConstant');
     $mdUtil = $injector.get('$mdUtil');
     $animate = $injector.get('$animate');
+    $window = $injector.get('$window');
+    $$rAF = $injector.get('$$rAF');
   };
 
   beforeEach(function() {
@@ -1426,7 +1428,7 @@ describe('$mdPanel', function() {
             .relativeTo(myButton)
             .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS)
             .addPanelPosition(xPosition.ALIGN_END, yPosition.ALIGN_BOTTOMS)
-            .addPanelPosition(xPosition.ALIGN_OFFSET_END, yPosition.BELOW);
+            .addPanelPosition(xPosition.OFFSET_END, yPosition.BELOW);
 
         config['position'] = position;
 
@@ -1590,34 +1592,26 @@ describe('$mdPanel', function() {
           expect(panelRect.left).toBeApproximately(myButtonRect.right);
         });
       });
-    });
 
-    it('should throw if xPosition is not valid', function() {
-      var myButton = '<button>myButton</button>';
-      attachToBody(myButton);
-      myButton = angular.element(document.querySelector('button'));
+      it('should throw if xPosition is not valid', function() {
+        var expression = function() {
+          mdPanelPosition
+              .relativeTo(myButton)
+              .addPanelPosition('fake-x-position', null);
+        };
 
-      var expression = function() {
-        mdPanelPosition
-            .relativeTo(myButton)
-            .addPanelPosition('fake-x-position', null);
-      };
+        expect(expression).toThrow();
+      });
 
-      expect(expression).toThrow();
-    });
+      it('should throw if yPosition is not valid', function() {
+        var expression = function() {
+          mdPanelPosition
+              .relativeTo(myButton)
+              .addPanelPosition(null, 'fake-y-position');
+        };
 
-    it('should throw if yPosition is not valid', function() {
-      var myButton = '<button>myButton</button>';
-      attachToBody(myButton);
-      myButton = angular.element(document.querySelector('button'));
-
-      var expression = function() {
-        mdPanelPosition
-            .relativeTo(myButton)
-            .withPanelYPosition('fake-y-position');
-      };
-
-      expect(expression).toThrow();
+        expect(expression).toThrow();
+      });
     });
   });
 
