@@ -12,7 +12,8 @@ describe('<md-tooltip> directive', function() {
   }));
   afterEach(function() {
     // Make sure to remove/cleanup after each test
-    element && element.scope().$destroy();
+    var scope = element && element.scope();
+    scope && scope.$destroy();
     element = undefined;
   });
 
@@ -235,6 +236,83 @@ describe('<md-tooltip> directive', function() {
       $document[0].body.removeChild(element[0]);
     }));
 
+  });
+
+  describe('cleanup', function() {
+    it('should clean up the scope if the parent was removed from the DOM', function() {
+      buildTooltip(
+        '<md-button>' +
+         '<md-tooltip md-visible="true">Tooltip</md-tooltip>' +
+        '</md-button>'
+      );
+      var tooltip = findTooltip();
+
+      expect(tooltip.length).toBe(1);
+      expect(tooltip.scope()).toBeTruthy();
+
+      element.remove();
+      expect(tooltip.scope()).toBeUndefined();
+      expect(findTooltip().length).toBe(0);
+    });
+
+    it('should clean up if the parent scope was destroyed', function() {
+      buildTooltip(
+        '<md-button>' +
+         '<md-tooltip md-visible="true">Tooltip</md-tooltip>' +
+        '</md-button>'
+      );
+      var tooltip = findTooltip();
+
+      expect(tooltip.length).toBe(1);
+      expect(tooltip.scope()).toBeTruthy();
+
+      element.scope().$destroy();
+      expect(tooltip.scope()).toBeUndefined();
+      expect(findTooltip().length).toBe(0);
+    });
+
+    it('should remove the tooltip when its own scope is destroyed', function() {
+      buildTooltip(
+        '<md-button>' +
+         '<md-tooltip md-visible="true">Tooltip</md-tooltip>' +
+        '</md-button>'
+      );
+      var tooltip = findTooltip();
+
+      expect(tooltip.length).toBe(1);
+      tooltip.scope().$destroy();
+      expect(findTooltip().length).toBe(0);
+    });
+
+    it('should not re-appear if it was outside the DOM when the parent was removed', function() {
+      buildTooltip(
+        '<md-button>' +
+         '<md-tooltip md-visible="testModel.isVisible">Tooltip</md-tooltip>' +
+        '</md-button>'
+      );
+
+      showTooltip(false);
+      expect(findTooltip().length).toBe(0);
+
+      element.remove();
+      showTooltip(true);
+      expect(findTooltip().length).toBe(0);
+    });
+
+    it('should unbind the parent listeners when it gets destroyed', function() {
+      buildTooltip(
+        '<md-button>' +
+           '<md-tooltip md-visible="testModel.isVisible">Tooltip</md-tooltip>' +
+        '</md-button>'
+      );
+
+      triggerEvent('focus');
+      expect($rootScope.testModel.isVisible).toBe(true);
+
+      element.remove();
+      triggerEvent('blur mouseleave touchend touchcancel');
+      expect($rootScope.testModel.isVisible).toBe(true);
+    });
   });
 
   // ******************************************************

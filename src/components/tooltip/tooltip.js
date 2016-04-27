@@ -99,16 +99,10 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     }
 
     function configureWatchers () {
-      scope.$on('$destroy', function() {
-        scope.visible = false;
-        element.remove();
-        angular.element($window).off('resize', debouncedOnResize);
-      });
-
       if (element[0] && 'MutationObserver' in $window) {
         var attributeObserver = new MutationObserver(function(mutations) {
           mutations
-            .forEach(function (mutation) {              
+            .forEach(function (mutation) {
               if (mutation.attributeName === 'md-visible') {
                 if (!scope.visibleWatcher)
                   scope.visibleWatcher = scope.$watch('visible', onVisibleChanged );
@@ -119,16 +113,37 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
             });
         });
 
-        attributeObserver.observe(element[0], { attributes: true});
+        attributeObserver.observe(element[0], { attributes: true });
 
-        if (attr.hasOwnProperty('mdVisible')) // build watcher only if mdVisible is being used
+        // build watcher only if mdVisible is being used
+        if (attr.hasOwnProperty('mdVisible')) {
           scope.visibleWatcher = scope.$watch('visible', onVisibleChanged );
-
-      }
-      else { // MutationObserver not supported
+        }
+      } else { // MutationObserver not supported
         scope.visibleWatcher = scope.$watch('visible', onVisibleChanged );
         scope.$watch('direction', updatePosition );
       }
+
+      var onElementDestroy = function() {
+        scope.$destroy();
+      };
+
+      // Clean up if the element or parent was removed via jqLite's .remove.
+      // A couple of notes:
+      // - In these cases the scope might not have been destroyed, which is why we
+      // destroy it manually. An example of this can be having `md-visible="false"` and
+      // adding tooltips while they're invisible. If `md-visible` becomes true, at some
+      // point, you'd usually get a lot of inputs.
+      // - We use `.one`, not `.on`, because this only needs to fire once. If we were
+      // using `.on`, it would get thrown into an infinite loop.
+      // - This kicks off the scope's `$destroy` event which finishes the cleanup.
+      element.one('$destroy', onElementDestroy);
+      parent.one('$destroy', onElementDestroy);
+      scope.$on('$destroy', function() {
+        setVisible(false);
+        element.remove();
+        attributeObserver && attributeObserver.disconnect();
+      });
     }
 
     function addAriaLabel () {
@@ -144,8 +159,6 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
     function bindEvents () {
       var mouseActive = false;
-
-      var ngWindow = angular.element($window);
 
       // add an mutationObserver when there is support for it
       // and the need for it in the form of viable host(parent[0])
@@ -173,13 +186,24 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       function windowScrollHandler() {
         setVisible(false);
       }
-      
-      ngWindow.on('blur', windowBlurHandler);
-      ngWindow.on('resize', debouncedOnResize);
+
+      angular.element($window)
+        .on('blur', windowBlurHandler)
+        .on('resize', debouncedOnResize);
+
       document.addEventListener('scroll', windowScrollHandler, true);
       scope.$on('$destroy', function() {
-        ngWindow.off('blur', windowBlurHandler);
-        ngWindow.off('resize', debouncedOnResize);
+        angular.element($window)
+          .off('blur', windowBlurHandler)
+          .off('resize', debouncedOnResize);
+
+        parent
+          .off('focus mouseenter touchstart', enterHandler)
+          .off('blur mouseleave touchend touchcancel', leaveHandler)
+          .off('mousedown', mousedownHandler);
+
+        // Trigger the handler in case any the tooltip was still visible.
+        leaveHandler();
         document.removeEventListener('scroll', windowScrollHandler, true);
         attributeObserver && attributeObserver.disconnect();
       });
@@ -212,18 +236,19 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
         }
         mouseActive = false;
       };
+      var mousedownHandler = function() {
+        mouseActive = true;
+      };
 
       // to avoid `synthetic clicks` we listen to mousedown instead of `click`
-      parent.on('mousedown', function() { mouseActive = true; });
+      parent.on('mousedown', mousedownHandler);
       parent.on('focus mouseenter touchstart', enterHandler );
-
-
     }
 
     function setVisible (value) {
       // break if passed value is already in queue or there is no queue and passed value is current in the scope
       if (setVisible.queued && setVisible.visible === !!value || scope.visible === !!value) return;
-      
+
       setVisible.value = !!value;
 
       if (!setVisible.queued) {
@@ -239,8 +264,8 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
             }
           }, scope.delay);
         } else {
-          $mdUtil.nextTick(function() { 
-            scope.visible = false; 
+          $mdUtil.nextTick(function() {
+            scope.visible = false;
             if (!scope.visibleWatcher)
               onVisibleChanged(false);
           });
