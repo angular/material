@@ -766,6 +766,12 @@ function MdPanelRef(config, $injector) {
   /** @private @const {!angular.$log} */
   this._$log = $injector.get('$log');
 
+  /** @private @const {!angular.$window} */
+  this._$window = $injector.get('$window');
+
+  /** @private @const {!Function} */
+  this._$$rAF = $injector.get('$$rAF');
+
   // Public variables.
   /**
    * Unique id for the panelRef.
@@ -1148,19 +1154,29 @@ MdPanelRef.prototype._addStyles = function() {
     // correctly. This is necessary so that the panel will have a defined height
     // and width.
     self._$rootScope['$$postDigest'](function() {
-      positionConfig._calculatePanelPosition(self._panelEl);
-      self._panelEl.css('top', positionConfig.getTop());
-      self._panelEl.css('bottom', positionConfig.getBottom());
-      self._panelEl.css('left', positionConfig.getLeft());
-      self._panelEl.css('right', positionConfig.getRight());
-
-      // Use the vendor prefixed version of transform.
-      var prefixedTransform = self._$mdConstant.CSS.TRANSFORM;
-      self._panelEl.css(prefixedTransform, positionConfig.getTransform());
-
+      self._updatePosition();
       resolve(self);
     });
   });
+};
+
+
+/**
+ * Calculates and updates the position of the panel.
+ * @private
+ */
+MdPanelRef.prototype._updatePosition = function() {
+  var positionConfig = this._config['position'];
+
+  positionConfig._calculatePanelPosition(this._panelEl);
+  this._panelEl.css('top', positionConfig.getTop());
+  this._panelEl.css('bottom', positionConfig.getBottom());
+  this._panelEl.css('left', positionConfig.getLeft());
+  this._panelEl.css('right', positionConfig.getRight());
+
+  // Use the vendor prefixed version of transform.
+  var prefixedTransform = this._$mdConstant.CSS.TRANSFORM;
+  this._panelEl.css(prefixedTransform, positionConfig.getTransform());
 };
 
 
@@ -1221,6 +1237,7 @@ MdPanelRef.prototype._createBackdrop = function() {
 MdPanelRef.prototype._addEventListeners = function() {
   this._configureEscapeToClose();
   this._configureClickOutsideToClose();
+  this._configureScrollListener();
 };
 
 
@@ -1307,6 +1324,31 @@ MdPanelRef.prototype._configureClickOutsideToClose = function() {
       target.off('mouseup', mouseupHandler);
     });
   }
+};
+
+
+/**
+ * Configures the listeners for updating the panel position on scroll.
+ * @private
+*/
+MdPanelRef.prototype._configureScrollListener = function() {
+  var updatePosition = angular.bind(this, this._updatePosition);
+  var debouncedUpdatePosition = this._$$rAF.throttle(updatePosition);
+  var self = this;
+
+  var onScroll = function() {
+    if (!self._config['disableParentScroll']) {
+      debouncedUpdatePosition();
+    }
+  };
+
+  // Add listeners.
+  this._$window.addEventListener('scroll', onScroll, true);
+
+  // Queue remove listeners function.
+  this._removeListeners.push(function() {
+    self._$window.removeEventListener('scroll', onScroll, true);
+  });
 };
 
 
@@ -1460,8 +1502,8 @@ function MdPanelPosition() {
   /** @private {boolean} */
   this._absolute = false;
 
-  /** @private {!DOMRect} */
-  this._relativeToRect;
+  /** @private {!angular.JQLite} */
+  this._relativeToEl;
 
   /** @private {string} */
   this._top = '';
@@ -1619,7 +1661,7 @@ MdPanelPosition.prototype.center = function() {
  */
 MdPanelPosition.prototype.relativeTo = function(element) {
   this._absolute = false;
-  this._relativeToRect = getElement(element)[0].getBoundingClientRect();
+  this._relativeToEl = getElement(element);
   return this;
 };
 
@@ -1631,7 +1673,7 @@ MdPanelPosition.prototype.relativeTo = function(element) {
  * @returns {MdPanelPosition}
  */
 MdPanelPosition.prototype.addPanelPosition = function(xPosition, yPosition) {
-  if (!this._relativeToRect) {
+  if (!this._relativeToEl) {
     throw new Error('addPanelPosition can only be used with relative ' +
         'positioning. Set relativeTo first.');
   }
@@ -1810,14 +1852,13 @@ MdPanelPosition.prototype._calculatePanelPosition = function(panelEl) {
     return;
   }
 
-  // TODO(ErinCoughlan): Update position on scroll.
   // TODO(ErinCoughlan): Position panel intelligently to keep it on screen.
 
   var panelBounds = panelEl[0].getBoundingClientRect();
   var panelWidth = panelBounds.width;
   var panelHeight = panelBounds.height;
 
-  var targetBounds = this._relativeToRect;
+  var targetBounds = this._relativeToEl[0].getBoundingClientRect();
 
   var targetLeft = targetBounds.left;
   var targetRight = targetBounds.right;
