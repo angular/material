@@ -161,6 +161,27 @@ describe('$mdDialog', function() {
       expect(content.id).toBe('dialogContent_' + dialog[0].id);
     }));
 
+    it('should not clobber the id from `md-dialog` when there is no content', inject(function ($mdDialog, $rootScope, $document) {
+      jasmine.mockElementFocus(this);
+
+      var parent = angular.element('<div>');
+
+      $mdDialog.show(
+        $mdDialog.alert({
+          template: '<md-dialog id="demoid">' +
+          '<p>Muppets are the best</p>' +
+          '</md-dialog>',
+          parent: parent
+        })
+      );
+
+      runAnimation();
+
+      var dialog = parent.find('md-dialog');
+
+      expect(dialog[0].id).toBe('demoid');
+    }));
+
     it('should apply a prefixed id for `md-dialog-content`', inject(function ($mdDialog, $rootScope, $document) {
       jasmine.mockElementFocus(this);
 
