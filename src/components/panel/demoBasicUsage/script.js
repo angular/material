@@ -78,7 +78,8 @@ BasicDemoCtrl.prototype.showMenu = function(ev) {
     openFrom: ev,
     clickOutsideToClose: true,
     escapeToClose: true,
-    focusOnOpen: false
+    focusOnOpen: false,
+    zIndex: 2
   };
 
   this._mdPanel.open(config);
