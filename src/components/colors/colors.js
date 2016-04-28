@@ -170,12 +170,10 @@
       var hasTheme = angular.isDefined($mdTheming.THEMES[parts[0]]);
       var theme = hasTheme ? parts.splice(0, 1)[0] : $mdTheming.defaultTheme();
 
-      var defaultHue = parts[0] !== 'accent' ? 500 : 'A200';
-
       return {
         theme: theme,
         palette: extractPalette(parts, theme),
-        hue: parts[1] || defaultHue,
+        hue: extractHue(parts, theme),
         opacity: parts[2] || 1
       };
     }
@@ -203,6 +201,32 @@
 
       return palette;
     }
+
+    function extractHue(parts, theme) {
+      var themeColors = $mdTheming.THEMES[theme].colors;
+
+      if (parts[1] === 'hue') {
+        var hueNumber = Number.parseInt(parts.splice(2, 1)[0]);
+
+        if (hueNumber < 1 || hueNumber > 3) {
+          throw new Error($mdUtil.supplant('mdColors: \'hue-{hueNumber}\' is not a valid hue, can be only \'hue-1\', \'hue-2\' and \'hue-3\'', {hueNumber: hueNumber}));
+        }
+
+        parts[1] = 'hue-' + hueNumber;
+
+
+        if (!(parts[0] in themeColors)) {
+          throw new Error($mdUtil.supplant('mdColors: \'hue-x\' can only be used with [{availableThemes}], but was used with \'{usedTheme}\'', {
+            availableThemes: Object.keys(themeColors).join(', '),
+            usedTheme: parts[0]
+          }));
+        }
+
+        return themeColors[parts[0]].hues[parts[1]];
+      }
+
+      return parts[1] || themeColors[parts[0] in themeColors ? parts[0] : 'primary'].hues['default'];
+    }
   }
 
   /**
@@ -220,7 +244,7 @@
    *   ## `[?theme]-[palette]-[?hue]-[?opacity]`
    *   - [theme]    - default value is the default theme
    *   - [palette]  - can be either palette name or primary/accent/warn/background
-   *   - [hue]      - default is 500
+   *   - [hue]      - default is 500 (hue-x can be used with primary/accent/warn/background)
    *   - [opacity]  - default is 1
    *
    *   > `?` indicates optional parameter
