@@ -369,6 +369,11 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     if (destroyed) return;
     var selectedIndex = ctrl.selectedIndex,
         tab           = ctrl.tabs.splice(tabData.getIndex(), 1)[ 0 ];
+    angular.forEach(ctrl.tabs, function(remainingTab) {
+      if(remainingTab.index > tab.index) {
+        remainingTab.index -= 1;
+      }
+    });
     refreshIndex();
     // when removing a tab, if the selected index did not change, we have to manually trigger the
     //   tab select/deselect events
@@ -404,6 +409,11 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
         },
         tab       = angular.extend(proto, tabData);
     if (angular.isDefined(index)) {
+      angular.forEach(ctrl.tabs, function(existingTab) {
+        if(existingTab.index >= index) {
+          existingTab.index += 1;
+        }
+      });
       ctrl.tabs.splice(index, 0, tab);
     } else {
       ctrl.tabs.push(tab);
