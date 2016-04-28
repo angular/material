@@ -774,9 +774,9 @@ function MdDialogProvider($$interimElementProvider) {
       var smartClose = function(key) {
         // Only 'confirm' dialogs have a cancel button... escape/clickOutside will
         // cancel or fallback to hide.
-        var closeFn = (options.$type == 'alert') ? $mdDialog.hide : $mdDialog.cancel;
+        var closeFn = options.$type == 'alert' ? $mdDialog.hide : $mdDialog.cancel;
         var curriedCloseFn = angular.bind(this, closeFn, options[key]);
-        var tickFn  = (angular.isDefined(options[key]) && options[key]!== true) ?  curriedCloseFn : closeFn;
+        var tickFn = angular.isDefined(options[key]) && options[key] !== true ? curriedCloseFn : closeFn;
 
         $mdUtil.nextTick(tickFn, true);
       };
