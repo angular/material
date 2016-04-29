@@ -67,6 +67,5 @@ md-tooltip {
   &._md-show {
     transition: $swift-ease-out;
     pointer-events: auto;
-    will-change: opacity, height, width;
   }
 }
