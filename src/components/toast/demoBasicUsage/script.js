@@ -2,33 +2,12 @@
 angular.module('toastDemo1', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope, $mdToast) {
-  var last = {
-      bottom: false,
-      top: true,
-      left: false,
-      right: true
-    };
-
-  $scope.toastPosition = angular.extend({},last);
+  $scope.verticalPosition = 'top';
+  $scope.horizontalPosition = 'right';
 
   $scope.getToastPosition = function() {
-    sanitizePosition();
-
-    return Object.keys($scope.toastPosition)
-      .filter(function(pos) { return $scope.toastPosition[pos]; })
-      .join(' ');
+    return $scope.verticalPosition + ' ' + $scope.horizontalPosition;
   };
-
-  function sanitizePosition() {
-    var current = $scope.toastPosition;
-
-    if ( current.bottom && last.top ) current.top = false;
-    if ( current.top && last.bottom ) current.bottom = false;
-    if ( current.right && last.left ) current.left = false;
-    if ( current.left && last.right ) current.right = false;
-
-    last = angular.extend({},current);
-  }
 
   $scope.showSimpleToast = function() {
     var pinTo = $scope.getToastPosition();

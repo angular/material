@@ -169,6 +169,10 @@ md-toast {
     &._md-right {
       right: 0;
     }
+    &._md-center {
+      left: 50%;
+      transform: translate3d(-50%, 0, 0);
+    }
     &._md-top {
       top: 0;
     }
