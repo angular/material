@@ -96,6 +96,9 @@ angular
  *     controller.
  *   - `controllerAs` - `{string=}`: An alias to assign the controller to on
  *     the scope.
+ *   - `bindToController` - `{boolean=}`: Binds locals to the controller
+ *     instead of passing them in. Defaults to true, as this is a best
+ *     practice.
  *   - `locals` - `{Object=}`: An object containing key/value pairs. The keys
  *     will be used as names of values to inject into the controller. For
  *     example, `locals: {three: 3}` would inject `three` into the controller,
@@ -107,6 +110,8 @@ angular
  *     application.
  *   - `panelClass` - `{string=}`: A css class to apply to the panel element.
  *     This class should define any borders, box-shadow, etc. for the panel.
+ *   - `zIndex` - `{number=}`: The z-index to place the panel at.
+ *     Defaults to 80.
  *   - `position` - `{MdPanelPosition=}`: An MdPanelPosition object that
  *     specifies the alignment of the panel. For more information, see
  *     `MdPanelPosition`.
@@ -141,7 +146,8 @@ angular
  *     panel is removed from the DOM.
  *   - `origin` - `{(string|!angular.JQLite|!Element)=}`: The element to
  *     focus on when the panel closes. This is commonly the element which triggered
- *     the opening of the panel.
+ *     the opening of the panel. If you do not use `origin`, you need to control
+ *     the focus manually.
  *
  * TODO(ErinCoughlan): Add the following config options.
  *   - `groupName` - `{string=}`: Name of panel groups. This group name is
@@ -284,6 +290,13 @@ angular
  *
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
  * hidden and animations are completed.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#destroy
+ * @description
+ * Destroys the panel. The panel cannot be opened again after this is called.
  */
 
 /**
@@ -622,16 +635,16 @@ function MdPanelService($rootElement, $rootScope, $injector, $window) {
   this._config = {};
 
   /** @private @const */
-  this._$rootScope = $rootScope;
+  this._$rootElement = $rootElement;
 
   /** @private @const */
-  this._$rootElement = $rootElement;
+  this._$rootScope = $rootScope;
 
   /** @private @const */
   this._$injector = $injector;
 
-  /** @private @const {!angular.$window} */
-  this._$window = $injector.get('$window');
+  /** @private @const */
+  this._$window = $window;
 
 
   /**
@@ -1173,15 +1186,17 @@ MdPanelRef.prototype._addStyles = function() {
 MdPanelRef.prototype._updatePosition = function() {
   var positionConfig = this._config['position'];
 
-  positionConfig._setPanelPosition(this._panelEl);
-  this._panelEl.css('top', positionConfig.getTop());
-  this._panelEl.css('bottom', positionConfig.getBottom());
-  this._panelEl.css('left', positionConfig.getLeft());
-  this._panelEl.css('right', positionConfig.getRight());
+  if (positionConfig) {
+    positionConfig._setPanelPosition(this._panelEl);
+    this._panelEl.css('top', positionConfig.getTop());
+    this._panelEl.css('bottom', positionConfig.getBottom());
+    this._panelEl.css('left', positionConfig.getLeft());
+    this._panelEl.css('right', positionConfig.getRight());
 
-  // Use the vendor prefixed version of transform.
-  var prefixedTransform = this._$mdConstant.CSS.TRANSFORM;
-  this._panelEl.css(prefixedTransform, positionConfig.getTransform());
+    // Use the vendor prefixed version of transform.
+    var prefixedTransform = this._$mdConstant.CSS.TRANSFORM;
+    this._panelEl.css(prefixedTransform, positionConfig.getTransform());
+  }
 };
 
 
@@ -1500,10 +1515,13 @@ MdPanelRef.prototype._done = function(callback, self) {
  *   position: panelPosition
  * });
  *
- * @param @const {!angular.$window}
+ * @param {!angular.$window} $window
  * @final @constructor
  */
 function MdPanelPosition($window) {
+  /** @private @const */
+  this._$window = $window;
+
   /** @private {boolean} */
   this._absolute = false;
 
@@ -1530,8 +1548,6 @@ function MdPanelPosition($window) {
 
   /** @private {!Array<{x:string, y:string}>} */
   this._positions = [];
-
-  this._$window = $window;
 
   /** @private {?{x:string, y:string}} */
   this._actualPosition;
