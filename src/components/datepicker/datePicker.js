@@ -26,6 +26,7 @@
    * @param {Date=} md-max-date Expression representing a max date (inclusive).
    * @param {(function(Date): boolean)=} md-date-filter Function expecting a date and returning a boolean whether it can be selected or not.
    * @param {String=} md-placeholder The date input placeholder value.
+   * @param {String=} md-open-on-focus When present, the calendar will be opened when the input is focused.
    * @param {boolean=} ng-disabled Whether the datepicker is disabled.
    * @param {boolean=} ng-required Whether a value is required for the datepicker.
    *
@@ -221,6 +222,9 @@
     /** @type {boolean} Whether the date-picker's calendar pane is open. */
     this.isCalendarOpen = false;
 
+    /** @type {boolean} Whether the calendar should open when the input is focused. */
+    this.openOnFocus = $attrs.hasOwnProperty('mdOpenOnFocus');
+
     /**
      * Element from which the calendar pane was opened. Keep track of this so that we can return
      * focus to it when the pane is closed.
@@ -314,6 +318,10 @@
         $scope.$digest();
       }
     });
+
+    if (self.openOnFocus) {
+      self.ngInputElement.on('focus', angular.bind(self, self.openCalendarPane));
+    }
 
     $scope.$on('md-calendar-close', function() {
       self.closeCalendarPane();
@@ -574,15 +582,28 @@
   /** Close the floating calendar pane. */
   DatePickerCtrl.prototype.closeCalendarPane = function() {
     if (this.isCalendarOpen) {
-      this.detachCalendarPane();
-      this.isCalendarOpen = false;
-      this.calendarPaneOpenedFrom.focus();
-      this.calendarPaneOpenedFrom = null;
+      var self = this;
 
-      this.ngModelCtrl.$setTouched();
+      self.calendarPaneOpenedFrom.focus();
+      self.calendarPaneOpenedFrom = null;
 
-      this.documentElement.off('click touchstart', this.bodyClickHandler);
-      window.removeEventListener('resize', this.windowResizeHandler);
+      if (self.openOnFocus) {
+        // Ensures that all focus events have fired before detaching
+        // the calendar. Prevents the calendar from reopening immediately
+        // in IE when md-open-on-focus is set.
+        this.$mdUtil.nextTick(detach, false);
+      } else {
+        detach();
+      }
+    }
+
+    function detach() {
+      self.detachCalendarPane();
+      self.isCalendarOpen = false;
+      self.ngModelCtrl.$setTouched();
+
+      self.documentElement.off('click touchstart', self.bodyClickHandler);
+      window.removeEventListener('resize', self.windowResizeHandler);
     }
   };
 
