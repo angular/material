@@ -395,7 +395,7 @@ describe('md-input-container directive', function() {
     expect(el.find('label').length).toBe(1);
   });
 
-  it('should ignore placeholder when a label element is present', inject(function($rootScope, $compile) {
+  it('should ignore placeholder when a label element is present', function() {
     var el = $compile(
       '<md-input-container>' +
       '  <label>Hello</label>' +
@@ -408,19 +408,58 @@ describe('md-input-container directive', function() {
     expect(el.find('input')[0].hasAttribute('placeholder')).toBe(true);
     expect(label).toBeTruthy();
     expect(label.textContent).toEqual('Hello');
-  }));
+  });
 
-  it('should put an aria-label on the input when no label is present', function() {
+  it('should transfer the placeholder data binding to the newly-created label', function() {
+    var el = $compile(
+      '<md-input-container>' +
+      '  <input ng-model="foo" placeholder="{{placeholder}}" />' +
+      '</md-input-container>'
+    )(pageScope);
+
+    var label = el[0].querySelector('label');
+    var input = el[0].querySelector('input');
+
+    pageScope.placeholder = 'foo';
+    pageScope.$digest();
+
+    expect(label).toBeTruthy();
+
+    expect(input.hasAttribute('placeholder')).toBe(false);
+    expect(label.textContent).toEqual('foo');
+
+    pageScope.placeholder = 'bar';
+    pageScope.$digest();
+
+    // We should check again to make sure that Angular didn't
+    // re-add the placeholder attribute and cause double labels.
+    expect(input.hasAttribute('placeholder')).toBe(false);
+    expect(label.textContent).toEqual('bar');
+  });
+
+  it('should put an aria-label on the input when no label is present', inject(function($timeout) {
     var el = $compile('<form name="form">' +
       ' <md-input-container md-no-float>' +
-      '   <input placeholder="baz" md-maxlength="max" ng-model="foo" name="foo">' +
+      '   <input placeholder="baz" ng-model="foo" name="foo">' +
       ' </md-input-container>' +
       '</form>')(pageScope);
 
-    pageScope.$apply();
+    // Flushes the $mdUtil.nextTick
+    $timeout.flush();
 
     var input = el.find('input');
     expect(input.attr('aria-label')).toBe('baz');
+  }));
+
+  it('should evaluate the placeholder expression before setting the aria-label', function() {
+    pageScope.placeholder = 'baz';
+    var el = $compile('<form name="form">' +
+      ' <md-input-container md-no-float>' +
+      '   <input placeholder="{{placeholder}}" ng-model="foo" name="foo">' +
+      ' </md-input-container>' +
+      '</form>')(pageScope);
+
+    expect(el.find('input').attr('aria-label')).toBe('baz');
   });
 
   it('should put the container in "has value" state when input has a static value', function() {
@@ -437,7 +476,7 @@ describe('md-input-container directive', function() {
     expect(element.hasClass('md-input-has-value')).toBe(true);
   });
 
-  it('adds the md-auto-hide class to messages without a visiblity directive', inject(function() {
+  it('adds the md-auto-hide class to messages without a visiblity directive', function() {
     var el = compile(
       '<md-input-container><input ng-model="foo">' +
       '  <div ng-messages></div>' +
@@ -445,9 +484,9 @@ describe('md-input-container directive', function() {
     );
 
     expect(el[0].querySelector("[ng-messages]").classList.contains('md-auto-hide')).toBe(true);
-  }));
+  });
 
-  it('does not add the md-auto-hide class with md-auto-hide="false" on the messages', inject(function() {
+  it('does not add the md-auto-hide class with md-auto-hide="false" on the messages', function() {
     var el = compile(
       '<md-input-container><input ng-model="foo">' +
       '  <div ng-messages md-auto-hide="false">Test Message</div>' +
@@ -455,11 +494,11 @@ describe('md-input-container directive', function() {
     );
 
     expect(el[0].querySelector("[ng-messages]").classList.contains('md-auto-hide')).toBe(false);
-  }));
+  });
 
   var visibilityDirectives = ['ng-if', 'ng-show', 'ng-hide'];
   visibilityDirectives.forEach(function(vdir) {
-    it('does not add the md-auto-hide class with ' + vdir + ' on the messages', inject(function() {
+    it('does not add the md-auto-hide class with ' + vdir + ' on the messages', function() {
       var el = compile(
         '<md-input-container><input ng-model="foo">' +
         '  <div ng-messages ' + vdir + '="true">Test Message</div>' +
@@ -467,10 +506,10 @@ describe('md-input-container directive', function() {
       );
 
       expect(el[0].querySelector("[ng-messages]").classList.contains('md-auto-hide')).toBe(false);
-    }));
+    });
   });
 
-  it('does not add the md-auto-hide class with ngSwitch on the messages', inject(function() {
+  it('does not add the md-auto-hide class with ngSwitch on the messages', function() {
     pageScope.switchVal = 1;
 
     var el = compile(
@@ -483,7 +522,7 @@ describe('md-input-container directive', function() {
     );
 
     expect(el[0].querySelector("[ng-messages]").classList.contains('md-auto-hide')).toBe(false);
-  }));
+  });
 
   it('should set the animation class on the ngMessage properly', inject(function() {
     var element = compile(

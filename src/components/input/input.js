@@ -308,7 +308,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout, $mdGesture)
     element.after(errorsSpacer);
 
     if (!containerCtrl.label) {
-      $mdAria.expect(element, 'aria-label', element.attr('placeholder'));
+      $mdAria.expect(element, 'aria-label', attr.placeholder);
     }
 
     element.addClass('md-input');
@@ -655,15 +655,22 @@ function mdMaxlengthDirective($animate, $mdUtil) {
   }
 }
 
-function placeholderDirective($log) {
+function placeholderDirective($compile) {
   return {
     restrict: 'A',
     require: '^^?mdInputContainer',
     priority: 200,
-    link: postLink
+    link: {
+      // Note that we need to do this in the pre-link, as opposed to the post link, if we want to
+      // support data bindings in the placeholder. This is necessary, because we have a case where
+      // we transfer the placeholder value to the `<label>` and we remove it from the original `<input>`.
+      // If we did this in the post-link, Angular would have set up the observers already and would be
+      // re-adding the attribute, even though we removed it from the element.
+      pre: preLink
+    }
   };
 
-  function postLink(scope, element, attr, inputContainer) {
+  function preLink(scope, element, attr, inputContainer) {
     // If there is no input container, just return
     if (!inputContainer) return;
 
@@ -677,16 +684,25 @@ function placeholderDirective($log) {
       return;
     }
 
-    // Otherwise, grab/remove the placeholder
-    var placeholderText = attr.placeholder;
-    element.removeAttr('placeholder');
+    // md-select handles placeholders on it's own
+    if (element[0].nodeName != 'MD-SELECT') {
+      // Move the placeholder expression to the label
+      var newLabel = angular.element('<label ng-click="delegateClick()">' + attr.placeholder + '</label>');
 
-    // And add the placeholder text as a separate label
-    if (inputContainer.input && inputContainer.input[0].nodeName != 'MD-SELECT') {
-      var placeholder = '<label ng-click="delegateClick()">' + placeholderText + '</label>';
+      // Note that we unset it via `attr`, in order to get Angular
+      // to remove any observers that it might have set up. Otherwise
+      // the attribute will be added on the next digest.
+      attr.$set('placeholder', null);
 
-      inputContainer.element.addClass('md-icon-float');
-      inputContainer.element.prepend(placeholder);
+      // We need to compile the label manually in case it has any bindings.
+      // A gotcha here is that we first add the element to the DOM and we compile
+      // it later. This is necessary, because if we compile the element beforehand,
+      // it won't be able to find the `mdInputContainer` controller.
+      inputContainer.element
+        .addClass('md-icon-float')
+        .prepend(newLabel);
+
+      $compile(newLabel)(scope);
     }
   }
 }
