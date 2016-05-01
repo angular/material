@@ -152,6 +152,8 @@ input {
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: $z-index-scroll-mask;
+
   > .md-scroll-mask-bar {
     display: block;
     position: absolute;
@@ -159,7 +161,7 @@ input {
     right: 0;
     top: 0;
     bottom: 0;
-    z-index: $z-index-scroll-mask;
+    z-index: $z-index-scroll-mask-bar;
     box-shadow: inset 0px 0px 1px rgba(0, 0, 0, 0.3)
   }
 }
