@@ -7,7 +7,7 @@
       <div class="preview-glyphs">
         <md-icon md-font-icon="{{ font.name }}"
             ng-style="{color: !font.theme && font.color, 'font-size': it.size + 'px', height: it.size + 'px'}"
-            ng-class="font.theme"
+            ng-class="[font.theme, shouldSpin(font, it.size) ? 'md-spin' : '']"
             aria-label="{{ font.name + it.size }}"
             class="step "></md-icon>
       </div>
@@ -16,6 +16,8 @@
       </div>
     </div>
   </div>
+
+  <md-checkbox ng-model="isSpinning">Toggle Icon Spin</md-checkbox>
 
   <!-- For this demo, include the font-faces needed by mdIcon above -->
   <style>

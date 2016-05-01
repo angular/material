@@ -170,6 +170,12 @@ angular
  *  <md-icon md-font-set="md">favorite</md-icon>
  * </hljs>
  *
+ * Icons can also spin.
+ *
+ * <hljs lang="html">
+ *  <md-icon class="md-spin">favorite</md-icon>
+ *  <md-icon class="md-spin-reverse">favorite</md-icon>
+ * </hljs>
  */
 function mdIconDirective($mdIcon, $mdTheming, $mdAria ) {
 
