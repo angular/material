@@ -1,7 +1,7 @@
 $table-sort-icon-active-color: rgba(0, 0, 0, 0.87);
 $table-sort-icon-disabled-color: rgba(0, 0, 0, 0.26);
 
-md-head md-cell {
+table.md-table thead th {
   md-icon {
     width: 16px;
     height: 16px;

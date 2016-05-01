@@ -1,56 +1,101 @@
-angular.module('material.components.table').directive('mdCell', mdCell);
-
-var SORT_ICON = '<md-icon class="md-sort-icon" ng-class="$mdCell.getDirection()" md-svg-icon="md-arrow-up"></md-icon>';
-
-function CellController() {
-
-}
+angular.module('material.components.table')
+  .directive('mdCell', mdCell)
+  .directive('mdNumeric', mdNumeric)
+  .directive('mdOrderBy', mdOrderBy);
 
 /*
  * @ngInject
  */
 function mdCell($compile, $mdUtil) {
 
+  function Controller() {
+
+  }
+
   function postLink(scope, element, attrs, ctrls) {
-    var self = ctrls.shift();
-    var head = ctrls.shift();
-    var table = ctrls.shift();
-    var watchListener;
+    var self          = ctrls[0],
+        table         = ctrls[1],
+        jqLite        = angular.element;
 
-    function getIndex() {
-      return Array.prototype.indexOf.call(element.parent().children(), element[0]);
-    }
+    Object.defineProperty(self, 'index', {
+      get: function () {
+        return element.prop('cellIndex');
+      }
+    });
 
-    function getColumn() {
-      return table.columns[getIndex()];
-    }
-
-    function toggleClass(name, add) {
-      return add ? element.addClass(name) : element.removeClass(name);
-    }
-
-    if(!head) {
-      return scope.$watch(getColumn, function (column) {
-        toggleClass('md-numeric', column && column.numeric);
+    self.isNumeric = function () {
+      return Array.prototype.some.call(table.tHead.rows, function (row) {
+        return jqLite(row.cells[self.index]).data('numeric');
       });
-    }
+    };
+
+    scope.$watch(self.isNumeric, function (numeric) {
+      return numeric ? element.addClass('md-numeric') : element.removeClass('md-numeric');
+    });
+  }
+
+  return {
+    controller: Controller,
+    controllerAs: '$mdCell',
+    link: postLink,
+    require: ['mdCell', '^^mdTable'],
+    restrict: 'A',
+  };
+}
+
+/*
+ * @ngInject
+ */
+function mdNumeric($mdUtil) {
+
+  function postLink(scope, element, attrs) {
+    attrs.$observe('mdNumeric', function (numeric) {
+      element.data('numeric', $mdUtil.parseAttributeBoolean(numeric));
+    });
+  }
+
+  return  {
+    link: postLink,
+    require: ['mdCell', '^^mdHead'],
+    restrict: 'A'
+  };
+}
+
+/*
+ * @ngInject
+ */
+function mdOrderBy($compile, $mdUtil) {
+
+  var SORT_ICON = '<md-icon class="md-sort-icon" ng-class="$mdOrderBy.getDirection()" md-svg-icon="md-arrow-up"></md-icon>';
+
+  function Controller() {
+
+  }
+
+  function postLink(scope, element, attrs, ctrls) {
+    var self          = ctrls[0],
+        cell          = ctrls[1],
+        order         = ctrls[2],
+        table         = ctrls[3],
+        find          = table.find,
+        watchListener;
 
     function isActive() {
-      return self.orderRegex.test(head.order);
+      return self.orderRegex.test(order.value);
     }
 
     function setOrder() {
       scope.$applyAsync(function () {
         if(isActive()) {
-          head.setOrder(head.order.charAt(0) === '-' ? attrs.mdOrderBy : '-' + attrs.mdOrderBy);
+          order.setOrder(order.value.charAt(0) === '-' ? attrs.mdOrderBy : '-' + attrs.mdOrderBy);
         } else {
-          head.setOrder($mdUtil.parseAttributeBoolean(attrs.mdDesc) ? '-' + attrs.mdOrderBy : attrs.mdOrderBy);
+          order.setOrder($mdUtil.parseAttributeBoolean(attrs.mdDesc) ? '-' + attrs.mdOrderBy : attrs.mdOrderBy);
         }
       });
     }
 
     function getSortIcon() {
-      return table.find(element.find('md-icon'), function (icon) {
+      return find(element.find('md-icon'), function (icon) {
         return icon.classList.contains('md-sort-icon');
       });
     }
@@ -95,15 +140,11 @@ function mdCell($compile, $mdUtil) {
 
     self.getDirection = function () {
       if(isActive()) {
-        return head.order.charAt(0) === '-' ? 'md-desc' : 'md-asc';
+        return order.value.charAt(0) === '-' ? 'md-desc' : 'md-asc';
       }
 
       return $mdUtil.parseAttributeBoolean(attrs.mdDesc) ? 'md-desc' : 'md-asc';
     };
-
-    attrs.$observe('mdNumeric', function (numeric) {
-      self.numeric = $mdUtil.parseAttributeBoolean(numeric);
-    });
 
     attrs.$observe('mdOrderBy', function (orderBy) {
       if(orderBy) {
@@ -113,18 +154,12 @@ function mdCell($compile, $mdUtil) {
       }
     });
 
-    scope.$watch(getIndex, function (index) {
-      table.columns[index] = {
-        numeric: self.numeric
-      };
-
-      toggleClass('md-numeric', self.numeric);
-
+    scope.$watch(cell.getIndex, function () {
       if(attrs.mdOrderBy) {
         var icon = getSortIcon();
 
         if(icon) {
-          if(self.numeric) {
+          if(element.hasClass('md-numeric')) {
             element.prepend(icon);
           } else {
             element.append(icon);
@@ -135,11 +170,11 @@ function mdCell($compile, $mdUtil) {
   }
 
   return {
-    controller: CellController,
-    controllerAs: '$mdCell',
+    controller: Controller,
+    controllerAs: '$mdOrderBy',
     link: postLink,
-    require: ['mdCell', '?^^mdHead', '^^mdTable'],
-    restrict: 'E',
+    require: ['mdOrderBy', 'mdCell', '^^mdOrder', '^^mdTable'],
+    restrict: 'A',
     scope: {}
   };
 }

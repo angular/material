@@ -1,35 +1,36 @@
-angular.module('material.components.table').directive('mdHead', mdHead);
-
-var CHECKBOX = '<md-checkbox aria-label="Select All" ng-click="$mdHead.toggleAll()" ng-checked="$mdHead.allSelected()" ng-disabled="!$mdHead.getSelectableRows().length"></md-checkbox>';
-
-function HeadController() {
-
-}
+angular.module('material.components.table')
+  .directive('mdHead', mdHead)
+  .directive('mdOrder', mdOrder);
 
 /*
  * @ngInject
  */
-function mdHead($compile, $mdUtil) {
+function mdHead($compile) {
+
+  var CHECKBOX = '<md-checkbox aria-label="Select All" ng-click="$mdHead.toggleAll()" ng-checked="$mdHead.allSelected()" ng-disabled="!$mdHead.getSelectableRows().length"></md-checkbox>';
+
+  function Controller() {
+
+  }
 
   function postLink(scope, element, attrs, ctrls) {
-    var self = ctrls.shift();
-    var table = ctrls.shift();
-    var watchListener;
-
-    function cells(row) {
-      return row.find('md-cell');
-    }
+    var self          = ctrls[0],
+        table         = ctrls[1],
+        find          = table.find,
+        item          = table.item,
+        jqLite        = angular.element,
+        watchListener;
 
     function isMultiple() {
       return table.multiple;
     }
 
     function appendCheckbox() {
-      cells(self.rows().eq(-1)).eq(0).append($compile(CHECKBOX)(scope));
+      jqLite(self.rows(-1).cells[0]).append($compile(CHECKBOX)(scope));
     }
 
     function removeCheckbox() {
-      var cell = table.find(cells(self.rows().eq(-1)), function (cell) {
+      var cell = find(self.rows(-1).cells, function (cell) {
         return cell.classList.contains('md-checkbox-cell');
       });
 
@@ -42,12 +43,8 @@ function mdHead($compile, $mdUtil) {
       return angular.element(row).controller('mdSelect');
     }
 
-    self.setOrder = function (order) {
-      self.order = order;
-
-      $mdUtil.nextTick(function () {
-        scope.$eval(self.onReorder);
-      });
+    self.rows = function (index) {
+      return isNaN(index) ? element.prop('rows') : item(element.prop('rows'), index);
     };
 
     self.allSelected = function () {
@@ -59,7 +56,13 @@ function mdHead($compile, $mdUtil) {
     };
 
     self.getSelectableRows = function () {
-      return table.getBodyRows().map(mdSelectCtrl).filter(function (row) {
+      var rows = table.tBodies.reduce(function (rows, body) {
+        return rows.concat(Array.prototype.filter.call(body.rows, function (row) {
+          return !row.classList.contains('ng-leave');
+        }));
+      }, []);
+
+      return rows.map(mdSelectCtrl).filter(function (row) {
         return row && !row.disabled;
       });
     };
@@ -80,10 +83,6 @@ function mdHead($compile, $mdUtil) {
 
     self.toggleAll = function () {
       return self.allSelected() ? self.unSelectAll() : self.selectAll();
-    };
-
-    self.rows = function () {
-      return element.find('md-row');
     };
 
     self.onEnableSelection = function () {
@@ -107,12 +106,45 @@ function mdHead($compile, $mdUtil) {
 
   return {
     bindToController: true,
-    controller: HeadController,
+    controller: Controller,
     controllerAs: '$mdHead',
     link: postLink,
     require: ['mdHead', '^^mdTable'],
+    restrict: 'A'
+  };
+}
+
+/*
+ * @ngInject
+ */
+function mdOrder($mdUtil) {
+
+  function Controller() {
+
+  }
+
+  function postLink(scope, element, attrs, ctrls) {
+    var self = ctrls[0],
+        head = ctrls[1];
+
+    self.setOrder = function (order) {
+      self.value = order;
+
+      $mdUtil.nextTick(function () {
+        scope.$eval(self.onReorder);
+      });
+    };
+  }
+
+  return {
+    bindToController: true,
+    controller: Controller,
+    controllerAs: '$mdOrder',
+    link: postLink,
+    require: ['mdOrder', 'mdHead'],
+    restrict: 'A',
     scope: {
-      order: '=?mdOrder',
+      value: '=mdOrder',
       onReorder: '&?mdOnReorder'
     }
   };
