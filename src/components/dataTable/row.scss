@@ -1,9 +1,7 @@
 $table-row-hover-background: #eee;
 $table-row-select-background: #f5f5f5;
 
-md-row {
-  display: table-row;
-
+table.md-table tr {
   &.md-selected {
     background-color: $table-row-select-background;
   }
@@ -13,10 +11,10 @@ md-row {
   }
 }
 
-md-head md-row {
+table.md-table thead tr {
   height: 56px;
 }
 
-md-body md-row {
+table.md-table tbody tr {
   height: 48px;
 }

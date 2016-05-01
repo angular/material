@@ -10,32 +10,32 @@
 
   <md-content>
 
-    <md-table md-row-select="{{ctrl.options.rowSelection}}" md-selected="ctrl.selected" multiple="{{ctrl.options.multiple}}">
-      <md-head md-order="ctrl.order" md-on-reorder="ctrl.log(ctrl.order)">
-        <md-row>
-          <md-cell md-order-by="name">Name</md-cell>
-          <md-cell md-numeric md-order-by="calories">Calories</md-cell>
-          <md-cell md-numeric md-order-by="fat">Fat (g)</md-cell>
-          <md-cell md-numeric md-order-by="carbs">Carbs (g)</md-cell>
-          <md-cell md-numeric md-order-by="protein">Protein (g)</md-cell>
-          <md-cell md-numeric md-order-by="sodium">Sodium (mg)</md-cell>
-          <md-cell md-numeric md-order-by="calcium">Calcium (%)</md-cell>
-          <md-cell md-numeric md-order-by="iron">Iron (%)</md-cell>
-        </md-row>
-      </md-head>
-      <md-body>
-        <md-row md-select="dessert" md-track-by="$index" md-on-select="ctrl.onSelect(dessert)" md-on-deselect="ctrl.onDeselect(dessert)" md-auto-select="{{ctrl.options.auto}}" ng-repeat="dessert in ctrl.desserts | orderBy: ctrl.order">
-          <md-cell>{{::dessert.name}}</md-cell>
-          <md-cell>{{::dessert.calories}}</md-cell>
-          <md-cell>{{::dessert.fat}}</md-cell>
-          <md-cell>{{::dessert.carbs}}</md-cell>
-          <md-cell>{{::dessert.protein}}</md-cell>
-          <md-cell>{{::dessert.sodium}}</md-cell>
-          <md-cell>{{::dessert.calcium}}</md-cell>
-          <md-cell>{{::dessert.iron}}</md-cell>
-        </md-row>
-      </md-body>
-    </md-table>
+    <table md-table md-row-select="{{ctrl.options.rowSelection}}" md-selected="ctrl.selected" multiple="{{ctrl.options.multiple}}">
+      <thead md-head md-order="ctrl.order" md-on-reorder="ctrl.log(ctrl.order)">
+        <tr md-row>
+          <th md-cell md-order-by="name">Name</th>
+          <th md-cell md-numeric md-order-by="calories">Calories</th>
+          <th md-cell md-numeric md-order-by="fat">Fat (g)</th>
+          <th md-cell md-numeric md-order-by="carbs">Carbs (g)</th>
+          <th md-cell md-numeric md-order-by="protein">Protein (g)</th>
+          <th md-cell md-numeric md-order-by="sodium">Sodium (mg)</th>
+          <th md-cell md-numeric md-order-by="calcium">Calcium (%)</th>
+          <th md-cell md-numeric md-order-by="iron">Iron (%)</th>
+        </tr>
+      </thead>
+      <tbody md-body>
+        <tr md-row md-select="dessert" md-track-by="$index" md-on-select="ctrl.onSelect(dessert)" md-on-deselect="ctrl.onDeselect(dessert)" md-auto-select="{{ctrl.options.auto}}" ng-repeat="dessert in ctrl.desserts | orderBy: ctrl.order">
+          <td md-cell>{{::dessert.name}}</td>
+          <td md-cell>{{::dessert.calories}}</td>
+          <td md-cell>{{::dessert.fat | number: 1}}</td>
+          <td md-cell>{{::dessert.carbs}}</td>
+          <td md-cell>{{::dessert.protein | number: 1}}</td>
+          <td md-cell>{{::dessert.sodium}}</td>
+          <td md-cell>{{::dessert.calcium}}</td>
+          <td md-cell>{{::dessert.iron}}</td>
+        </tr>
+      </tbody>
+    </table>
 
   </md-content>
 

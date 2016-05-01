@@ -13,7 +13,7 @@ function Demo($http) {
     rowSelection: true
   };
 
-  this.order = 'name';
+  this.order = 'calories';
 
   this.desserts = [{
     'name': 'Frozen yogurt',

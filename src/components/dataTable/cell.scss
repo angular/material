@@ -5,8 +5,8 @@ $table-head-text-color: rgba(0, 0, 0, 0.54);
 $table-body-text-color: rgba(0, 0, 0, 0.87);
 $table-sort-active-color: rgba(0, 0, 0, 0.87);
 
-md-cell {
-  display: table-cell;
+table.md-table th,
+table.md-table td {
   text-align: left;
   white-space: nowrap;
   vertical-align: middle;
@@ -28,7 +28,8 @@ md-cell {
   }
 }
 
-md-table.md-select md-cell {
+table.md-table.md-select th,
+table.md-table.md-select td {
   &:first-child {
     width: 20px;
     padding: 0 0 0 24px;
@@ -39,8 +40,8 @@ md-table.md-select md-cell {
   }
 }
 
-md-head {
-  md-cell {
+table.md-table thead {
+  th {
     color: $table-head-text-color;
     font-size: $table-head-font-size;
     line-height: $table-head-font-size;
@@ -54,12 +55,12 @@ md-head {
     }
   }
 
-  &:not(:last-of-type) md-cell {
+  &:not(:last-of-type) th {
     border-bottom: 1px $table-border-color solid;
   }
 }
 
-md-body md-cell {
+table.md-table tbody td {
   color: $table-body-text-color;
   font-size: $table-body-font-size;
   line-height: $table-body-font-size;
