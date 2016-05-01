@@ -54,13 +54,16 @@ md-datepicker {
   }
 }
 
+.md-datepicker-is-showing .md-scroll-mask {
+  z-index: $z-index-calendar-pane - 1;
+}
 
 // Floating pane that contains the calendar at the bottom of the input.
 .md-datepicker-calendar-pane {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: $z-index-menu;
+  z-index: $z-index-calendar-pane;
 
   border-width: 1px;
   border-style: solid;

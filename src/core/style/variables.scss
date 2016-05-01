@@ -83,10 +83,12 @@ $whiteframe-shadow-24dp: 0px 11px 15px -7px rgba(0, 0, 0, $shadow-key-umbra-opac
 $z-index-toast: 105 !default;
 $z-index-tooltip: 100 !default;
 $z-index-menu: 100 !default;
+$z-index-calendar-pane: 100 !default;
 $z-index-select: 90 !default;
 $z-index-dialog: 80 !default;
 $z-index-bottom-sheet: 70 !default;
-$z-index-scroll-mask: 65 !default;
+$z-index-scroll-mask: 50 !default;
+$z-index-scroll-mask-bar: 65 !default;
 $z-index-sidenav: 60 !default;
 $z-index-backdrop: 50 !default;
 $z-index-fab: 20 !default;
