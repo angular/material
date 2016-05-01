@@ -505,7 +505,11 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   function shouldPaginate () {
     if (ctrl.noPagination || !loaded) return false;
     var canvasWidth = $element.prop('clientWidth');
-    angular.forEach(getElements().dummies, function (tab) { canvasWidth -= tab.offsetWidth; });
+
+    angular.forEach(getElements().dummies, function (tab) {
+      canvasWidth -= tab.offsetWidth;
+    });
+
     return canvasWidth < 0;
   }
 
@@ -570,17 +574,22 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   }
 
   /**
+   * Calculates the width of the pagination wrapper by summing the widths of the dummy tabs.
    * @returns {number}
    */
   function calcPagingWidth () {
-    var width = 1;
+    return calcTabsWidth(getElements().dummies);
+  }
 
-    angular.forEach(getElements().dummies, function (element) {
+  function calcTabsWidth(tabs) {
+    var width = 0;
+
+    angular.forEach(tabs, function (tab) {
       //-- Uses the larger value between `getBoundingClientRect().width` and `offsetWidth`.  This
       //   prevents `offsetWidth` value from being rounded down and causing wrapping issues, but
       //   also handles scenarios where `getBoundingClientRect()` is inaccurate (ie. tabs inside
       //   of a dialog)
-      width += Math.max(element.offsetWidth, element.getBoundingClientRect().width);
+      width += Math.max(tab.offsetWidth, tab.getBoundingClientRect().width);
     });
 
     return Math.ceil(width);
@@ -746,21 +755,25 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
       angular.element(elements.inkBar).css({ left: 'auto', right: 'auto' });
       return;
     }
+
     if (!ctrl.tabs.length) return queue.push(ctrl.updateInkBarStyles);
     // if the element is not visible, we will not be able to calculate sizes until it is
     // we should treat that as a resize event rather than just updating the ink bar
     if (!$element.prop('offsetParent')) return handleResizeWhenVisible();
+
     var index      = ctrl.selectedIndex,
         totalWidth = elements.paging.offsetWidth,
         tab        = elements.tabs[ index ],
         left       = tab.offsetLeft,
-        right      = totalWidth - left - tab.offsetWidth,
-        tabWidth;
+        right      = totalWidth - left - tab.offsetWidth;
+
     if (ctrl.shouldCenterTabs) {
-      tabWidth = Array.prototype.slice.call(elements.tabs).reduce(function (value, element) {
-        return value + element.offsetWidth;
-      }, 0);
-      if (totalWidth > tabWidth) $mdUtil.nextTick(updateInkBarStyles, false);
+      // We need to use the same calculate process as in the pagination wrapper, to avoid rounding deviations.
+      var tabWidth = calcTabsWidth(elements.tabs);
+
+      if (totalWidth > tabWidth) {
+        $mdUtil.nextTick(updateInkBarStyles, false);
+      }
     }
     updateInkBarClassName();
     angular.element(elements.inkBar).css({ left: left + 'px', right: right + 'px' });
