@@ -14,17 +14,17 @@
       <thead md-head md-order="ctrl.order" md-on-reorder="ctrl.log(ctrl.order)">
         <tr md-row>
           <th md-cell md-order-by="name">Name</th>
-          <th md-cell md-numeric md-order-by="calories">Calories</th>
-          <th md-cell md-numeric md-order-by="fat">Fat (g)</th>
-          <th md-cell md-numeric md-order-by="carbs">Carbs (g)</th>
-          <th md-cell md-numeric md-order-by="protein">Protein (g)</th>
-          <th md-cell md-numeric md-order-by="sodium">Sodium (mg)</th>
-          <th md-cell md-numeric md-order-by="calcium">Calcium (%)</th>
-          <th md-cell md-numeric md-order-by="iron">Iron (%)</th>
+          <th md-cell md-align="right" md-order-by="calories">Calories</th>
+          <th md-cell md-align="right" md-order-by="fat">Fat (g)</th>
+          <th md-cell md-align="right" md-order-by="carbs">Carbs (g)</th>
+          <th md-cell md-align="right" md-order-by="protein">Protein (g)</th>
+          <th md-cell md-align="right" md-order-by="sodium">Sodium (mg)</th>
+          <th md-cell md-align="right" md-order-by="calcium">Calcium (%)</th>
+          <th md-cell md-align="right" md-order-by="iron">Iron (%)</th>
         </tr>
       </thead>
       <tbody md-body>
-        <tr md-row md-select="dessert" md-track-by="$index" md-on-select="ctrl.onSelect(dessert)" md-on-deselect="ctrl.onDeselect(dessert)" md-auto-select="{{ctrl.options.auto}}" ng-repeat="dessert in ctrl.desserts | orderBy: ctrl.order">
+        <tr md-row md-select="dessert" md-on-select="ctrl.onSelect(dessert)" md-on-deselect="ctrl.onDeselect(dessert)" md-auto-select="{{ctrl.options.auto}}" ng-repeat="dessert in ctrl.desserts | orderBy: ctrl.order">
           <td md-cell>{{::dessert.name}}</td>
           <td md-cell>{{::dessert.calories}}</td>
           <td md-cell>{{::dessert.fat | number: 1}}</td>

@@ -1,6 +1,6 @@
 angular.module('material.components.table')
   .directive('mdCell', mdCell)
-  .directive('mdNumeric', mdNumeric)
+  .directive('mdAlign', mdAlign)
   .directive('mdOrderBy', mdOrderBy);
 
 /*
@@ -13,9 +13,11 @@ function mdCell($compile, $mdUtil) {
   }
 
   function postLink(scope, element, attrs, ctrls) {
-    var self          = ctrls[0],
-        table         = ctrls[1],
-        jqLite        = angular.element;
+    var self       = ctrls[0],
+        table      = ctrls[1],
+        search     = table.search,
+        jqLite     = angular.element,
+        alignments = ['left', 'right', 'center', 'justify'];
 
     Object.defineProperty(self, 'index', {
       get: function () {
@@ -23,14 +25,20 @@ function mdCell($compile, $mdUtil) {
       }
     });
 
-    self.isNumeric = function () {
-      return Array.prototype.some.call(table.tHead.rows, function (row) {
-        return jqLite(row.cells[self.index]).data('numeric');
+    self.getAlignment = function () {
+      return search(table.tHead.rows, function (row) {
+        return jqLite(row.cells[self.index]).data('align');
       });
     };
 
-    scope.$watch(self.isNumeric, function (numeric) {
-      return numeric ? element.addClass('md-numeric') : element.removeClass('md-numeric');
+    scope.$watch(self.getAlignment, function (value) {
+      alignments.forEach(function (alignment) {
+        if(value === alignment) {
+          element.addClass('md-align-' + alignment);
+        } else {
+          element.removeClass('md-align-' + alignment);
+        }
+      });
     });
   }
 
@@ -46,11 +54,11 @@ function mdCell($compile, $mdUtil) {
 /*
  * @ngInject
  */
-function mdNumeric($mdUtil) {
+function mdAlign($mdUtil) {
 
   function postLink(scope, element, attrs) {
-    attrs.$observe('mdNumeric', function (numeric) {
-      element.data('numeric', $mdUtil.parseAttributeBoolean(numeric));
+    attrs.$observe('mdAlign', function (align) {
+      element.data('align', align);
     });
   }
 
@@ -159,7 +167,7 @@ function mdOrderBy($compile, $mdUtil) {
         var icon = getSortIcon();
 
         if(icon) {
-          if(element.hasClass('md-numeric')) {
+          if(element.hasClass('md-align-right')) {
             element.prepend(icon);
           } else {
             element.append(icon);

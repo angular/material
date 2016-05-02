@@ -23,8 +23,20 @@ table.md-table td {
     padding: 0 24px 0 0;
   }
 
-  &.md-numeric {
+  &.md-align-left {
+    text-align: left;
+  }
+
+  &.md-align-right {
     text-align: right;
+  }
+
+  &.md-align-center {
+    text-align: center;
+  }
+
+  &.md-align-justify {
+    text-align: justify;
   }
 }
 
