@@ -288,6 +288,13 @@ angular
 
 /**
  * @ngdoc method
+ * @name MdPanelRef#destroy
+ * @description
+ * Destorys the panel. The panel cannot be opened again after this is called.
+ */
+
+/**
+ * @ngdoc method
  * @name MdPanelRef#addClass
  * @description
  * Adds a class to the panel. DO NOT use this to hide/show the panel.
