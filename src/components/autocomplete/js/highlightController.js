@@ -33,9 +33,9 @@ function MdHighlightCtrl ($scope, $element, $attrs) {
 
   function getRegExp (text, flags) {
     var str = '';
-    if (flags.indexOf('^') >= 1) str += '^';
-    str += text;
-    if (flags.indexOf('$') >= 1) str += '$';
-    return new RegExp(sanitize(str), flags.replace(/[\$\^]/g, ''));
+    if (flags.indexOf('^') >= 0) str += '^';
+    str += sanitize(text);
+    if (flags.indexOf('$') >= 0) str += '$';
+    return new RegExp(str, flags.replace(/[\$\^]/g, ''));
   }
 }
