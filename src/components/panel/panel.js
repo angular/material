@@ -96,6 +96,9 @@ angular
  *     controller.
  *   - `controllerAs` - `{string=}`: An alias to assign the controller to on
  *     the scope.
+ *   - `bindToController` - `{boolean=}`: Binds locals to the controller
+ *     instead of passing them in. Defaults to true, as this is a best
+ *     practice.
  *   - `locals` - `{Object=}`: An object containing key/value pairs. The keys
  *     will be used as names of values to inject into the controller. For
  *     example, `locals: {three: 3}` would inject `three` into the controller,
@@ -107,6 +110,8 @@ angular
  *     application.
  *   - `panelClass` - `{string=}`: A css class to apply to the panel element.
  *     This class should define any borders, box-shadow, etc. for the panel.
+ *   - `zIndex` - `{number=}`: The z-index to place the panel at.
+ *     Defaults to 80.
  *   - `position` - `{MdPanelPosition=}`: An MdPanelPosition object that
  *     specifies the alignment of the panel. For more information, see
  *     `MdPanelPosition`.
