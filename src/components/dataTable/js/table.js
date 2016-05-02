@@ -26,6 +26,16 @@ function mdTable() {
     return set[index];
   }
 
+  function search(set, callback) {
+    for(var i = 0; i < set.length; i++) {
+      var result = callback(set[i]);
+
+      if(angular.isDefined(result)) {
+        return result;
+      }
+    }
+  }
+
   /**
    * @ngInject
    */
@@ -36,6 +46,7 @@ function mdTable() {
 
     self.find = find;
     self.item = item;
+    self.search = search;
 
     Object.defineProperty(self, 'rows', {
       get: function () {
