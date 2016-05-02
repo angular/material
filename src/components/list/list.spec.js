@@ -154,6 +154,32 @@ describe('mdListItem directive', function() {
     expect(innerContent.firstElementChild.nodeName).toBe('P');
   });
 
+  it('creates buttons when used with ng-dblclick', function() {
+    var listItem = setup(
+      '<md-list-item ng-dblclick="sayHello()" ng-disabled="true">' +
+        '<p>Hello world</p>' +
+      '</md-list-item>');
+
+    // List items, which are clickable always contain a button wrap at the top level.
+    var buttonWrap = listItem.children().eq(0);
+    expect(listItem).toHaveClass('_md-button-wrap');
+
+    // The button wrap should contain the button executor, the inner content, flex filler and the
+    // secondary item container as children.
+    expect(buttonWrap.children().length).toBe(4);
+
+    var buttonExecutor = buttonWrap.children()[0];
+
+    // The list item should forward the click and disabled attributes.
+    expect(buttonExecutor.hasAttribute('ng-dblclick')).toBe(true);
+    expect(buttonExecutor.hasAttribute('ng-disabled')).toBe(true);
+
+    var innerContent = buttonWrap.children()[1];
+
+    expect(innerContent.nodeName).toBe('DIV');
+    expect(innerContent.firstElementChild.nodeName).toBe('P');
+  });
+
   it('creates buttons when used with ui-sref', function() {
     var listItem = setup(
       '<md-list-item ui-sref="somestate">' +
