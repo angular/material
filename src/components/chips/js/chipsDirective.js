@@ -90,7 +90,9 @@
    *    the delete key will remove the chip.
    * @param {string=} delete-button-label A label for the delete button. Also hidden and read by
    *    screen readers.
-   * @param {expression=} md-separator-keys An array of key codes used to separate chips.
+   * @param {expression=} md-separator-keys An array of keys used to separate chips. Each entry is
+   *     either a numeric key code (triggering on keydown, ignoring modifiers) or a length-one
+   *     string (matching that keypress).
    *
    * @usage
    * <hljs lang="html">
@@ -155,6 +157,7 @@
             ng-focus="$mdChipsCtrl.onInputFocus()"\
             ng-blur="$mdChipsCtrl.onInputBlur()"\
             ng-trim="false"\
+            ng-keypress="$mdChipsCtrl.inputKeypress($event)"\
             ng-keydown="$mdChipsCtrl.inputKeydown($event)">';
 
   var CHIP_DEFAULT_TEMPLATE = '\

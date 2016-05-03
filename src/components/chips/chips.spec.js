@@ -507,26 +507,80 @@ describe('<md-chips>', function() {
           '<md-chips ng-model="items" md-separator-keys="keys"></md-chips>';
 
         it('should create a new chip when a comma is entered', inject(function($mdConstant) {
-          scope.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA];
+          scope.keys = [$mdConstant.KEY_CODE.ENTER, ','];
           var element = buildChips(SEPARATOR_KEYS_CHIP_TEMPLATE);
           var ctrl = element.controller('mdChips');
 
-          var commaInput = {
+          // Event sequence when pressing the comma key: first commaKeydown, then commaKeypress
+          var commaAscii = ','.charCodeAt(0);
+          var commaKeydown = {
             type: 'keydown',
             keyCode: $mdConstant.KEY_CODE.COMMA,
+            charCode: 0,
             which: $mdConstant.KEY_CODE.COMMA,
+            preventDefault: jasmine.createSpy('preventDefault')
+          };
+          var commaKeypress = {
+            type: 'keypress',
+            keyCode: commaAscii,
+            charCode: commaAscii,
+            which: commaAscii,
             preventDefault: jasmine.createSpy('preventDefault')
           };
 
           ctrl.chipBuffer = 'Test';
-          element.find('input').triggerHandler(commaInput);
+          element.find('input').triggerHandler(commaKeydown);
+          element.find('input').triggerHandler(commaKeypress);
 
-          expect(commaInput.preventDefault).toHaveBeenCalled();
+          expect(commaKeydown.preventDefault).not.toHaveBeenCalled();
+          expect(commaKeypress.preventDefault).toHaveBeenCalled();
+        }));
+
+        it('should not create a new chip when shift+comma is pressed', inject(function($mdConstant) {
+          scope.keys = [$mdConstant.KEY_CODE.ENTER, ','];
+          var element = buildChips(SEPARATOR_KEYS_CHIP_TEMPLATE);
+          var ctrl = element.controller('mdChips');
+
+          // Event sequence when pressing the comma key:
+          // first shiftKeydown, then commaKeydown, then shiftCommaKeypress
+          var shiftKeyCode = 16;
+          var commaAscii = ','.charCodeAt(0);
+          var shiftCommaAscii = '<'.charCodeAt(0);  // depends on keyboard, example is dvorak
+          var shiftKeydown = {
+            type: 'keydown',
+            keyCode: shiftKeyCode,
+            charCode: 0,
+            which: shiftKeyCode,
+            preventDefault: jasmine.createSpy('preventDefault')
+          };
+          var commaKeydown = {
+            type: 'keydown',
+            keyCode: $mdConstant.KEY_CODE.COMMA,
+            charCode: 0,
+            which: $mdConstant.KEY_CODE.COMMA,
+            preventDefault: jasmine.createSpy('preventDefault')
+          };
+          var shiftCommaKeypress = {
+            type: 'keypress',
+            keyCode: shiftCommaAscii,
+            charCode: shiftCommaAscii,
+            which: shiftCommaAscii,
+            preventDefault: jasmine.createSpy('preventDefault')
+          };
+
+          ctrl.chipBuffer = 'Test';
+          element.find('input').triggerHandler(shiftKeydown);
+          element.find('input').triggerHandler(commaKeydown);
+          element.find('input').triggerHandler(shiftCommaKeypress);
+
+          expect(shiftKeydown.preventDefault).not.toHaveBeenCalled();
+          expect(commaKeydown.preventDefault).not.toHaveBeenCalled();
+          expect(shiftCommaKeypress.preventDefault).not.toHaveBeenCalled();
         }));
 
         it('supports custom separator key codes', inject(function($mdConstant) {
           var semicolon = 186;
-          scope.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA, semicolon];
+          scope.keys = [$mdConstant.KEY_CODE.ENTER, ',', semicolon];
 
           var element = buildChips(SEPARATOR_KEYS_CHIP_TEMPLATE);
           var ctrl = element.controller('mdChips');
