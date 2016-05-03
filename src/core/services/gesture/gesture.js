@@ -77,56 +77,9 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
 
   var self = {
     handler: addHandler,
-    register: register,
-    // On mobile w/out jQuery, we normally intercept clicks. Should we skip that?
-    isHijackingClicks: (isIos || isAndroid) && !hasJQuery && !forceSkipClickHijack
+    register: register
   };
 
-  if (self.isHijackingClicks) {
-    var maxClickDistance = 6;
-    self.handler('click', {
-      options: {
-        maxDistance: maxClickDistance
-      },
-      onEnd: checkDistanceAndEmit('click')
-    });
-
-    self.handler('focus', {
-      options: {
-        maxDistance: maxClickDistance
-      },
-      onEnd: function(ev, pointer) {
-        if (pointer.distance < this.state.options.maxDistance) {
-          if (canFocus(ev.target)) {
-            this.dispatchEvent(ev, 'focus', pointer);
-            ev.target.focus();
-          }
-        }
-
-        function canFocus(element) {
-          var focusableElements = ['INPUT', 'SELECT', 'BUTTON', 'TEXTAREA', 'VIDEO', 'AUDIO'];
-
-          return (element.getAttribute('tabindex') != '-1') &&
-              !element.hasAttribute('DISABLED') &&
-              (element.hasAttribute('tabindex') || element.hasAttribute('href') ||
-              (focusableElements.indexOf(element.nodeName) != -1));
-        }
-      }
-    });
-
-    self.handler('mouseup', {
-      options: {
-        maxDistance: maxClickDistance
-      },
-      onEnd: checkDistanceAndEmit('mouseup')
-    });
-
-    self.handler('mousedown', {
-      onStart: function(ev) {
-        this.dispatchEvent(ev, 'mousedown');
-      }
-    });
-  }
 
   function checkDistanceAndEmit(eventName) {
     return function(ev, pointer) {
@@ -427,7 +380,6 @@ function MdGestureHandler() {
     eventPointer = eventPointer || pointer;
     var eventObj = new angular.element.Event(eventType);
 
-    eventObj.$material = true;
     eventObj.pointer = eventPointer;
     eventObj.srcEvent = srcEvent;
 
@@ -469,7 +421,6 @@ function MdGestureHandler() {
       eventObj = document.createEvent('CustomEvent');
       eventObj.initCustomEvent(eventType, true, true, {});
     }
-    eventObj.$material = true;
     eventObj.pointer = eventPointer;
     eventObj.srcEvent = srcEvent;
     eventPointer.target.dispatchEvent(eventObj);
@@ -482,58 +433,13 @@ function MdGestureHandler() {
  * @ngInject
  */
 function attachToDocument( $mdGesture, $$MdGestureHandler ) {
-
+  
   // Polyfill document.contains for IE11.
   // TODO: move to util
   document.contains || (document.contains = function (node) {
     return document.body.contains(node);
   });
-
-  if (!isInitialized && $mdGesture.isHijackingClicks ) {
-    /*
-     * If hijack clicks is true, we preventDefault any click that wasn't
-     * sent by ngMaterial. This is because on older Android & iOS, a false, or 'ghost',
-     * click event will be sent ~400ms after a touchend event happens.
-     * The only way to know if this click is real is to prevent any normal
-     * click events, and add a flag to events sent by material so we know not to prevent those.
-     * 
-     * Two exceptions to click events that should be prevented are:
-     *  - click events sent by the keyboard (eg form submit)
-     *  - events that originate from an Ionic app
-     */
-    document.addEventListener('click'    , clickHijacker     , true);
-    document.addEventListener('mouseup'  , mouseInputHijacker, true);
-    document.addEventListener('mousedown', mouseInputHijacker, true);
-    document.addEventListener('focus'    , mouseInputHijacker, true);
-
-    isInitialized = true;
-  }
-
-  function mouseInputHijacker(ev) {
-    var isKeyClick = !ev.clientX && !ev.clientY;
-    if (!isKeyClick && !ev.$material && !ev.isIonicTap
-      && !isInputEventFromLabelClick(ev)) {
-      ev.preventDefault();
-      ev.stopPropagation();
-    }
-  }
-
-  function clickHijacker(ev) {
-    var isKeyClick = ev.clientX === 0 && ev.clientY === 0;
-    if (!isKeyClick && !ev.$material && !ev.isIonicTap
-      && !isInputEventFromLabelClick(ev)) {
-      ev.preventDefault();
-      ev.stopPropagation();
-      lastLabelClickPos = null;
-    } else {
-      lastLabelClickPos = null;
-      if (ev.target.tagName.toLowerCase() == 'label') {
-        lastLabelClickPos = {x: ev.x, y: ev.y};
-      }
-    }
-  }
-
-
+  
   // Listen to all events to cover all platforms.
   var START_EVENTS = 'mousedown touchstart pointerdown';
   var MOVE_EVENTS = 'mousemove touchmove pointermove';
@@ -645,28 +551,6 @@ function makeStartPointer(ev) {
  */
 function typesMatch(ev, pointer) {
   return ev && pointer && ev.type.charAt(0) === pointer.type;
-}
-
-/**
- * Gets whether the given event is an input event that was caused by clicking on an
- * associated label element.
- *
- * This is necessary because the browser will, upon clicking on a label element, fire an
- * *extra* click event on its associated input (if any). mdGesture is able to flag the label
- * click as with `$material` correctly, but not the second input click.
- *
- * In order to determine whether an input event is from a label click, we compare the (x, y) for
- * the event to the (x, y) for the most recent label click (which is cleared whenever a non-label
- * click occurs). Unfortunately, there are no event properties that tie the input and the label
- * together (such as relatedTarget).
- *
- * @param {MouseEvent} event
- * @returns {boolean}
- */
-function isInputEventFromLabelClick(event) {
-  return lastLabelClickPos
-      && lastLabelClickPos.x == event.x
-      && lastLabelClickPos.y == event.y;
 }
 
 /*
