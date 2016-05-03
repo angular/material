@@ -317,11 +317,11 @@ function MenuProvider($$interimElementProvider) {
             return false;
           }
           
-          function hasOrParentHasAnyAttribute(target, attrs){
+          function hasOrParentHasAnyAttribute(target, attrs) {
             if (!target) return false;
             var parent = target.parentElement;
-            while(parent && parent.nodeName != 'MD-MENU'){
-              if(hasAnyAttribute(parent,attrs)){
+            while (parent && parent.nodeName != 'MD-MENU') {
+              if (hasAnyAttribute(parent,attrs)) {
                  return true;
               }
               parent = parent.parentElement;
