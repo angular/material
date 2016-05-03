@@ -169,7 +169,8 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
       }
 
       function listener(ev) {
-        if (element[0].hasAttribute('disabled')) {
+        if (element[0].hasAttribute('disabled') || scope.mouseActive == true) {
+          scope.mouseActive = false;
           return;
         }
 
