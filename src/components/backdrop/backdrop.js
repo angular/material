@@ -27,27 +27,21 @@ angular
       link: postLink
     };
 
-    function postLink(scope, element) {
-
-      // If body scrolling has been disabled using mdUtil.disableBodyScroll(),
-      // adjust the 'backdrop' height to account for the fixed 'body' top offset
-      var body = $window.getComputedStyle($document[0].body);
-
-      if (body.position == 'fixed') {
-        var debouncedResize = $mdUtil.debounce(resize, 60, null, false);
-
-        resize();
-        angular.element($window).on('resize', debouncedResize);
-
-        scope.$on('$destroy', function() {
-          angular.element($window).off('resize', debouncedResize);
-        });
-      }
-
+    function postLink(scope, element, attrs) {
       // backdrop may be outside the $rootElement, tell ngAnimate to animate regardless
       if ($animate.pin) $animate.pin(element, $rootElement);
 
       $$rAF(function () {
+        // If body scrolling has been disabled using mdUtil.disableBodyScroll(),
+        // adjust the 'backdrop' height to account for the fixed 'body' top offset.
+        // Note that this can be pretty expensive and is better done inside the $$rAF.
+        var body = $window.getComputedStyle($document[0].body);
+        if (body.position == 'fixed') {
+          var hViewport = parseInt(body.height, 10) + Math.abs(parseInt(body.top, 10));
+          element.css({
+            height: hViewport + 'px'
+          });
+        }
 
         // Often $animate.enter() is used to append the backDrop element
         // so let's wait until $animate is done...

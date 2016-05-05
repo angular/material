@@ -629,9 +629,7 @@ function MdDialogProvider($$interimElementProvider) {
        * Check to see if they used the deprecated .md-actions class and log a warning
        */
       function warnDeprecatedActions() {
-        var badActions = element[0].querySelectorAll('.md-actions');
-
-        if (badActions.length > 0) {
+        if (element[0].querySelector('.md-actions')) {
           $log.warn('Using a class of md-actions is deprecated, please use <md-dialog-actions>.');
         }
       }
@@ -752,9 +750,7 @@ function MdDialogProvider($$interimElementProvider) {
            */
           function getDomElement(element, defaultElement) {
             if (angular.isString(element)) {
-              var simpleSelector = element,
-                container = $document[0].querySelectorAll(simpleSelector);
-                element = container.length ? container[0] : null;
+              element = $document[0].querySelector(element);
             }
 
             // If we have a reference to a raw dom element, always wrap it in jqLite
