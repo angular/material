@@ -179,7 +179,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * Removes any events or leftover elements created by this controller
    */
   function cleanup () {
-    if(!ctrl.hidden) {
+    if (!ctrl.hidden) {
       $mdUtil.enableScrolling();
     }
 
