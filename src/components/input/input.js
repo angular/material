@@ -524,7 +524,11 @@ function mdMaxlengthDirective($animate, $mdUtil) {
       element.on('input keydown keyup', function() {
         renderCharCount(); //make sure it's called with no args
       });
-
+      
+      //render count when model changes as well
+      //rerenders when the model changes in the controller and not an event
+      scope.$watch(attr.ngModel, renderCharCount);
+      
       scope.$watch(attr.mdMaxlength, function(value) {
         maxlength = value;
         if (angular.isNumber(value) && value > 0) {
