@@ -527,9 +527,7 @@ function mdMaxlengthDirective($animate, $mdUtil) {
       
       //render count when model changes as well
       //rerenders when the model changes in the controller and not an event
-      scope.$watch(attr.ngModel, function(value) {
-         renderCharCount();
-      });
+      scope.$watch(attr.ngModel, renderCharCount);
       
       scope.$watch(attr.mdMaxlength, function(value) {
         maxlength = value;
