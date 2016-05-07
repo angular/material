@@ -61,8 +61,8 @@ The Changelog may contain releases for `patch` or `minor`. If you do not see a f
 
 Developers interested in contributing should read the following guidelines:
 
-- [Issue Guidelines](CONTRIBUTING.md#submit)
-- [Contributing Guidelines](CONTRIBUTING.md)
+- [Issue Guidelines](.github/CONTRIBUTING.md#submit)
+- [Contributing Guidelines](.github/CONTRIBUTING.md)
 - [Coding Guidelines](docs/guides/CODING.md)
 - [ChangeLog](CHANGELOG.md)
 
