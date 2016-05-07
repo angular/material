@@ -8,10 +8,10 @@
   }
 
   .md-datepicker-input-container {
-    border-bottom-color: '{{background-300}}';
+    border-bottom-color: '{{foreground-4}}';
 
     &.md-datepicker-focused {
-      border-bottom-color: '{{primary-500}}'
+      border-bottom-color: '{{primary-color}}'
     }
 
     &.md-datepicker-invalid {
