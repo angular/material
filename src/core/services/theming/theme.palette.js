@@ -316,7 +316,7 @@ angular.module('material.core.theming.palette', [])
     'A400': '#8d6e63',
     'A700': '#5d4037',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200',
+    'contrastDarkColors': '50 100 200 A100 A200',
     'contrastStrongLightColors': '300 400'
   },
   'grey': {
@@ -330,13 +330,12 @@ angular.module('material.core.theming.palette', [])
     '700': '#616161',
     '800': '#424242',
     '900': '#212121',
-    '1000': '#000000',
     'A100': '#ffffff',
-    'A200': '#eeeeee',
+    'A200': '#000000',
     'A400': '#303030',
     'A700': '#616161',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '600 700 800 900'
+    'contrastLightColors': '600 700 800 900 A200 A400 A700'
   },
   'blue-grey': {
     '50': '#eceff1',
@@ -354,7 +353,7 @@ angular.module('material.core.theming.palette', [])
     'A400': '#78909c',
     'A700': '#455a64',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 300 700',
+    'contrastDarkColors': '50 100 200 300 A100 A200',
     'contrastStrongLightColors': '400 500 700'
   }
 });

@@ -8,7 +8,7 @@
 // Typography
 // ------------------------------
 $font-family: Roboto, 'Helvetica Neue', sans-serif !default;
-$font-size:   10px;
+$font-size:   10px !default;
 
 $display-4-font-size-base: rem(11.20) !default;
 $display-3-font-size-base: rem(5.600) !default;
@@ -33,22 +33,22 @@ $layout-breakpoint-md:     1280px !default;
 $layout-breakpoint-lg:     1920px !default;
 
 // Button
-$button-left-right-padding: rem(0.600);
+$button-left-right-padding: rem(0.600) !default;
 
 // Icon
 $icon-size: rem(2.400) !default;
 
 // App bar variables
-$app-bar-height: 64px;
+$app-bar-height: 64px !default;
 
 $toast-height: $baseline-grid * 3 !default;
 $toast-margin: $baseline-grid * 1 !default;
 
 // Whiteframes
 
-$shadow-key-umbra-opacity:      0.2;
-$shadow-key-penumbra-opacity:   0.14;
-$shadow-ambient-shadow-opacity: 0.12;
+$shadow-key-umbra-opacity:      0.2 !default;
+$shadow-key-penumbra-opacity:   0.14 !default;
+$shadow-ambient-shadow-opacity: 0.12 !default;
 
 // NOTE(shyndman): gulp-sass seems to be failing if I split the shadow defs across
 //    multiple lines. Ugly. Sorry.

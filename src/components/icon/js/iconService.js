@@ -19,6 +19,22 @@
     * the `$mdIcon` service searches its registry for the associated source URL;
     * that URL is used to on-demand load and parse the SVG dynamically.
     *
+    * **Notice:** Most font-icons libraries do not support ligatures (for example `fontawesome`).<br/>
+    *  In such cases you are not able to use the icon's ligature name - Like so:
+    *
+    *  <hljs lang="html">
+    *    <md-icon md-font-set="fa">fa-bell</md-icon>
+    *  </hljs>
+    *
+    * You should instead use the given unicode, instead of the ligature name.
+    *
+    * <p ng-hide="true"> ##// Notice we can't use a hljs element here, because the characters will be escaped.</p>
+    *  ```html
+    *    <md-icon md-font-set="fa">&#xf0f3</md-icon>
+    *  ```
+    *
+    * All unicode ligatures are prefixed with the `&#x` string.
+    *
     * @usage
     * <hljs lang="js">
     *   app.config(function($mdIconProvider) {
@@ -26,7 +42,7 @@
     *     // Configure URLs for icons specified by [set:]id.
     *
     *     $mdIconProvider
-    *          .defaultFontSet( 'fontawesome' )
+    *          .defaultFontSet( 'fa' )                   // This sets our default fontset className.
     *          .defaultIconSet('my/app/icons.svg')       // Register a default set of SVG icons
     *          .iconSet('social', 'my/app/social.svg')   // Register a named icon set of SVGs
     *          .icon('android', 'my/app/android.svg')    // Register a specific icon (by name)
@@ -178,7 +194,29 @@
    * @usage
    * <hljs lang="js">
    *   app.config(function($mdIconProvider) {
-   *     $mdIconProvider.defaultFontSet( 'fontawesome' );
+   *     $mdIconProvider.defaultFontSet( 'fa' );
+   *   });
+   * </hljs>
+   *
+   */
+
+  /**
+   * @ngdoc method
+   * @name $mdIconProvider#fontSet
+   *
+   * @description
+   * When using a font set for `<md-icon>` you must specify the correct font classname in the `md-font-set`
+   * attribute. If the fonset className is really long, your markup may become cluttered... an easy
+   * solution is to define an `alias` for your fontset:
+   *
+   * @param {string} alias of the specified fontset.
+   * @param {string} className of the fontset.
+   *
+   * @usage
+   * <hljs lang="js">
+   *   app.config(function($mdIconProvider) {
+   *     // In this case, we set an alias for the `material-icons` fontset.
+   *     $mdIconProvider.fontSet('md', 'material-icons');
    *   });
    * </hljs>
    *
@@ -316,9 +354,9 @@
 
    },
 
-   $get : ['$http', '$q', '$log', '$templateCache', function($http, $q, $log, $templateCache) {
+   $get : ['$http', '$q', '$log', '$templateCache', '$mdUtil', function($http, $q, $log, $templateCache, $mdUtil) {
      this.preloadIcons($templateCache);
-     return MdIconService(config, $http, $q, $log, $templateCache);
+     return MdIconService(config, $http, $q, $log, $templateCache, $mdUtil);
    }]
  };
 
@@ -373,7 +411,7 @@
   */
 
   /* @ngInject */
- function MdIconService(config, $http, $q, $log, $templateCache) {
+ function MdIconService(config, $http, $q, $log, $templateCache, $mdUtil) {
    var iconCache = {};
    var urlRegex = /[-\w@:%\+.~#?&//=]{2,}\.[a-z]{2,4}\b(\/[-\w@:%\+.~#?&//=]*)?/i;
    var dataUrlRegex = /^data:image\/svg\+xml[\s*;\w\-\=]*?(base64)?,(.*)$/i;
@@ -393,7 +431,7 @@
      // If already loaded and cached, use a clone of the cached icon.
      // Otherwise either load by URL, or lookup in the registry and then load by URL, and cache.
 
-     if ( iconCache[id] ) return $q.when( iconCache[id].clone() );
+     if ( iconCache[id] ) return $q.when( transformClone(iconCache[id]) );
      if ( urlRegex.test(id) || dataUrlRegex.test(id) ) return loadByURL(id).then( cacheIcon(id) );
      if ( id.indexOf(':') == -1 ) id = '$default:' + id;
 
@@ -418,24 +456,28 @@
       return result;
    }
 
+   function transformClone(cacheElement) {
+     var clone = cacheElement.clone();
+     var cacheSuffix = '_cache' + $mdUtil.nextUid();
+
+     // We need to modify for each cached icon the id attributes.
+     // This is needed because SVG id's are treated as normal DOM ids
+     // and should not have a duplicated id.
+     if (clone.id) clone.id += cacheSuffix;
+     angular.forEach(clone.querySelectorAll('[id]'), function (item) {
+       item.id += cacheSuffix;
+     });
+
+     return clone;
+   }
+
    /**
     * Prepare and cache the loaded icon for the specified `id`
     */
    function cacheIcon( id ) {
 
-     return function updateCache( _icon ) {
-       var icon = isIcon(_icon) ? _icon : new Icon(_icon, config[id]);
-
-       //clear id attributes to prevent aria issues
-       var elem = icon.element;
-       elem.removeAttribute('id');
-
-       angular.forEach(elem.querySelectorAll('[id]'), function(item) {
-         item.removeAttribute('id');
-       });
-
-       iconCache[id] = icon;
-
+     return function updateCache( icon ) {
+       iconCache[id] = isIcon(icon) ? icon : new Icon(icon, config[id]);
 
        return iconCache[id].clone();
      };

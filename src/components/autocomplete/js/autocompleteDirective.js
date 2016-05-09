@@ -52,6 +52,7 @@ angular
  * @param {boolean=} md-autofocus If true, the autocomplete will be automatically focused when a `$mdDialog`,
  *     `$mdBottomsheet` or `$mdSidenav`, which contains the autocomplete, is opening. <br/><br/>
  *     Also the autocomplete will immediately focus the input element.
+ * @param {boolean=} md-no-asterisk When present, asterisk will not be appended to the floating label
  * @param {boolean=} md-autoselect If true, the first item will be selected by default
  * @param {string=} md-menu-class This will be applied to the dropdown menu for styling
  * @param {string=} md-floating-label This will add a floating label to autocomplete and wrap it in
@@ -119,8 +120,8 @@ angular
  * </form>
  * </hljs>
  *
- * In this example, our code utilizes `md-item-template` and `md-not-found` to specify the
- *     different parts that make up our component.
+ * In this example, our code utilizes `md-item-template` and `ng-messages` to specify
+ *     input validation for the field.
  */
 
 function MdAutocomplete () {
@@ -173,8 +174,7 @@ function MdAutocomplete () {
       return '\
         <md-autocomplete-wrap\
             layout="row"\
-            ng-class="{ \'md-whiteframe-z1\': !floatingLabel, \'md-menu-showing\': !$mdAutocompleteCtrl.hidden }"\
-            role="listbox">\
+            ng-class="{ \'md-whiteframe-z1\': !floatingLabel, \'md-menu-showing\': !$mdAutocompleteCtrl.hidden }">\
           ' + getInputElement() + '\
           <md-progress-linear\
               class="' + (attr.mdFloatingLabel ? 'md-inline' : '') + '"\
@@ -237,17 +237,20 @@ function MdAutocomplete () {
                   name="{{inputName}}"\
                   autocomplete="off"\
                   ng-required="$mdAutocompleteCtrl.isRequired"\
+                  ng-readonly="$mdAutocompleteCtrl.isReadonly"\
                   ng-minlength="inputMinlength"\
                   ng-maxlength="inputMaxlength"\
                   ng-disabled="$mdAutocompleteCtrl.isDisabled"\
                   ng-model="$mdAutocompleteCtrl.scope.searchText"\
                   ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                   ng-blur="$mdAutocompleteCtrl.blur()"\
+                  ' + (attr.mdNoAsterisk != null ? 'md-no-asterisk="' + attr.mdNoAsterisk + '"' : '') + '\
                   ng-focus="$mdAutocompleteCtrl.focus()"\
                   aria-owns="ul-{{$mdAutocompleteCtrl.id}}"\
                   ' + (attr.mdSelectOnFocus != null ? 'md-select-on-focus=""' : '') + '\
                   aria-label="{{floatingLabel}}"\
                   aria-autocomplete="list"\
+                  role="combobox"\
                   aria-haspopup="true"\
                   aria-activedescendant=""\
                   aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>\
@@ -263,6 +266,7 @@ function MdAutocomplete () {
                 autocomplete="off"\
                 ng-required="$mdAutocompleteCtrl.isRequired"\
                 ng-disabled="$mdAutocompleteCtrl.isDisabled"\
+                ng-readonly="$mdAutocompleteCtrl.isReadonly"\
                 ng-model="$mdAutocompleteCtrl.scope.searchText"\
                 ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                 ng-blur="$mdAutocompleteCtrl.blur()"\
@@ -272,6 +276,7 @@ function MdAutocomplete () {
                 ' + (attr.mdSelectOnFocus != null ? 'md-select-on-focus=""' : '') + '\
                 aria-label="{{placeholder}}"\
                 aria-autocomplete="list"\
+                role="combobox"\
                 aria-haspopup="true"\
                 aria-activedescendant=""\
                 aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>\

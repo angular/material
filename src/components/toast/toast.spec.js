@@ -25,7 +25,23 @@ describe('$mdToast service', function() {
   }
 
   describe('simple()', function() {
+
     hasConfigMethods(['content', 'action', 'capsule', 'highlightAction', 'theme']);
+
+    it('should have `._md` class indicator', inject(function($mdToast, $material) {
+      var parent = angular.element('<div>');
+
+      $mdToast.show(
+        $mdToast.simple({
+          parent: parent,
+          content: 'Do something',
+          theme: 'some-theme',
+          capsule: true
+      }));
+      $material.flushOutstandingAnimations();
+
+      expect(parent.find('md-toast').hasClass('_md')).toBe(true);
+    }));
 
     it('supports a basic toast', inject(function($mdToast, $rootScope, $timeout, $material, $browser) {
       var openAndclosed = false;
@@ -178,6 +194,33 @@ describe('$mdToast service', function() {
         });
         var toast = $rootElement.find('md-toast');
         expect(toast.text().trim()).toBe('hello, 1');
+      }));
+
+      it('should not throw an error if template starts with comment', inject(function($timeout, $rootScope, $rootElement) {
+        var parent = angular.element('<div>');
+        setup({
+          template: '<!-- COMMENT --><md-toast>{{1}}234</md-toast>',
+          appendTo: parent
+        });
+
+        var toast = $rootElement.find('md-toast');
+        $timeout.flush();
+
+        expect(toast.length).not.toBe(0);
+      }));
+
+      it('should correctly wrap the custom template', inject(function($timeout, $rootScope, $rootElement) {
+        var parent = angular.element('<div>');
+
+        setup({
+          template: '<md-toast>Message</md-toast>',
+          appendTo: parent
+        });
+
+        var toast = $rootElement.find('md-toast');
+        $timeout.flush();
+
+        expect(toast[0].querySelector('.md-toast-content').textContent).toBe('Message');
       }));
 
       it('should add position class to toast', inject(function($rootElement, $timeout) {

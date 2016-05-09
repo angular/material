@@ -16,12 +16,17 @@ describe('<md-autocomplete>', function() {
     items = items || ['foo', 'bar', 'baz'].map(function(item) {
         return {display: item};
       });
-    inject(function($rootScope) {
+    inject(function($rootScope, $timeout) {
       scope = $rootScope.$new();
       scope.match = function(term) {
         return items.filter(function(item) {
           return item.display.indexOf(matchLowercase ? term.toLowerCase() : term) === 0;
         });
+      };
+      scope.asyncMatch = function(term) {
+        return $timeout(function() {
+          return scope.match(term)
+        }, 1000);
       };
       scope.searchText = '';
       scope.selectedItem = null;
@@ -97,7 +102,7 @@ describe('<md-autocomplete>', function() {
 
       element.remove();
     }));
-    
+
 
     it('should allow you to set an input id without floating label', inject(function() {
       var scope = createScope(null, {inputId: 'custom-input-id'});
@@ -115,6 +120,56 @@ describe('<md-autocomplete>', function() {
       var input = element.find('input');
 
       expect(input.attr('id')).toBe(scope.inputId);
+
+      element.remove();
+    }));
+
+    it('should allow allow using ng-readonly', inject(function() {
+      var scope = createScope(null, {inputId: 'custom-input-id'});
+      var template = '\
+          <md-autocomplete\
+              md-input-id="{{inputId}}"\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder"\
+              ng-readonly="readonly">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      scope.readonly = true;
+      scope.$digest();
+
+      expect(input.attr('readonly')).toBe('readonly');
+
+      scope.readonly = false;
+      scope.$digest();
+
+      expect(input.attr('readonly')).toBeUndefined();
+
+      element.remove();
+    }));
+
+    it('should allow allow using an empty readonly attribute', inject(function() {
+      var scope = createScope(null, {inputId: 'custom-input-id'});
+      var template = '\
+          <md-autocomplete\
+              md-input-id="{{inputId}}"\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder"\
+              readonly>\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      expect(input.attr('readonly')).toBe('readonly');
 
       element.remove();
     }));
@@ -206,6 +261,36 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('should not show a loading progress when the items object is invalid', inject(function() {
+      var scope = createScope(null, {
+        match: function() {
+          // Return an invalid object, which is not an array, neither a promise.
+          return {}
+        }
+      });
+
+      var template =
+        '<md-autocomplete ' +
+        'md-input-id="{{inputId}}" ' +
+        'md-selected-item="selectedItem" ' +
+        'md-search-text="searchText" ' +
+        'md-items="item in match(searchText)" ' +
+        'md-item-text="item.display" ' +
+        'tabindex="3"' +
+        'placeholder="placeholder">' +
+        '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+
+      scope.$apply('searchText = "test"');
+
+      expect(ctrl.loading).toBe(false);
+
+      element.remove();
+    }));
+
     it('should clear value when hitting escape', inject(function($mdConstant, $timeout) {
       var scope = createScope();
       var template = '\
@@ -232,6 +317,26 @@ describe('<md-autocomplete>', function() {
       });
 
       expect(scope.searchText).toBe('');
+
+      element.remove();
+    }));
+
+    it('should not show the progressbar when hitting escape on an empty input', inject(function($mdConstant, $timeout) {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)">\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+
+      $timeout.flush();
+      scope.$apply(function() {
+        ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE));
+      });
+
+      expect(element.find('md-progress-linear').length).toBe(0);
 
       element.remove();
     }));
@@ -700,6 +805,37 @@ describe('<md-autocomplete>', function() {
     }));
   });
 
+  describe('Async matching', function() {
+
+    it('should probably stop the loading indicator when clearing', inject(function($timeout, $material) {
+      var scope = createScope();
+      var template =
+        '<md-autocomplete ' +
+        '    md-search-text="searchText"' +
+        '    md-items="item in asyncMatch(searchText)" ' +
+        '    md-item-text="item.display" ' +
+        '    placeholder="placeholder">' +
+        '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var element = compile(template, scope);
+      var input = element.find('input');
+      var ctrl = element.controller('mdAutocomplete');
+
+      $material.flushInterimElement();
+
+      scope.$apply('searchText = "test"');
+
+      ctrl.clear();
+
+      expect(ctrl.loading).toBe(true);
+
+      $timeout.flush();
+
+      expect(ctrl.loading).toBe(false);
+    }));
+
+  });
+
   describe('API access', function() {
     it('should clear the selected item', inject(function($timeout) {
       var scope = createScope();
@@ -975,6 +1111,25 @@ describe('<md-autocomplete>', function() {
       expect(ctrl.isRequired).toBe(true);
     });
 
+    it('should forward the md-no-asterisk attribute', function() {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              md-min-length="0" \
+              required\
+              md-no-asterisk="true"\
+              md-floating-label="Asterisk Label">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      expect(input.attr('md-no-asterisk')).toBe('true');
+    });
   });
 
   describe('md-highlight-text', function() {

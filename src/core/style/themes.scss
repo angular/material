@@ -3,7 +3,7 @@
 html, body {
   &.md-THEME_NAME-theme {
     color: '{{foreground-1}}';
-    background-color: '{{background-50}}';
+    background-color: '{{background-color}}';
   }
 }
 
@@ -38,5 +38,11 @@ html, body {
 
   &#{$checkedSelector} ._md-icon:after {
     border-color: '{{primary-contrast-0.87}}';
+  }
+
+  & .md-indeterminate[disabled] {
+    ._md-container {
+      color: '{{foreground-3}}';
+    }
   }
 }

@@ -34,6 +34,11 @@ angular.module('material.components.input', [
  * Input and textarea elements will not behave properly unless the md-input-container
  * parent is provided.
  *
+ * A single `<md-input-container>` should contain only one `<input>` element, otherwise it will throw an error.
+ *
+ * <b>Exception:</b> Hidden inputs (`<input type="hidden" />`) are ignored and will not throw an error, so
+ * you may combine these with other inputs.
+ *
  * @param md-is-error {expression=} When the given expression evaluates to true, the input container
  *   will go into error state. Defaults to erroring if the input has been touched and is invalid.
  * @param md-no-float {boolean=} When present, `placeholder` attributes on the input will not be converted to floating
@@ -156,7 +161,9 @@ function labelDirective() {
  *   specified, a character counter will be shown underneath the input.<br/><br/>
  *   The purpose of **`md-maxlength`** is exactly to show the max length counter text. If you don't
  *   want the counter text and only need "plain" validation, you can use the "simple" `ng-maxlength`
- *   or maxlength attributes.
+ *   or maxlength attributes.<br/><br/>
+ *   **Note:** Only valid for text/string inputs (not numeric).
+ *
  * @param {string=} aria-label Aria-label is required when no label is present.  A warning message
  *   will be logged in the console if not present.
  * @param {string=} placeholder An alternative approach to using aria-label when the label is not
@@ -267,7 +274,10 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout) {
 
 
     if (!containerCtrl) return;
-    if (containerCtrl.input) {
+    if (attr.type === 'hidden') {
+      element.attr('aria-hidden', 'true');
+      return;
+    } else if (containerCtrl.input) {
       throw new Error("<md-input-container> can only have *one* <input>, <textarea> or <md-select> child element!");
     }
     containerCtrl.input = element;

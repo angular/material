@@ -57,58 +57,75 @@ angular
  * $mdSidenav(componentId).isLockedOpen();
  * </hljs>
  */
-function SidenavService($mdComponentRegistry, $q) {
-  return function(handle) {
+function SidenavService($mdComponentRegistry, $mdUtil, $q, $log) {
+  var errorMsg = "SideNav '{0}' is not available! Did you use md-component-id='{0}'?";
+  var service = {
+        find    : findInstance,     //  sync  - returns proxy API
+        waitFor : waitForInstance   //  async - returns promise
+      };
 
-    // Lookup the controller instance for the specified sidNav instance
-    var self;
-    var errorMsg = "SideNav '" + handle + "' is not available!";
-    var instance = $mdComponentRegistry.get(handle);
+  /**
+   * Service API that supports three (3) usages:
+   *   $mdSidenav().find("left")                       // sync (must already exist) or returns undefined
+   *   $mdSidenav("left").toggle();                    // sync (must already exist) or returns reject promise;
+   *   $mdSidenav("left",true).then( function(left){   // async returns instance when available
+   *    left.toggle();
+   *   });
+   */
+  return function(handle, enableWait) {
+    if ( angular.isUndefined(handle) ) return service;
 
-    if(!instance) {
-      $mdComponentRegistry.notFoundError(handle);
+    var instance = service.find(handle);
+    return  !instance && (enableWait === true) ? service.waitFor(handle) :
+            !instance && angular.isUndefined(enableWait) ? addLegacyAPI(service, handle) : instance;
+  };
+
+  /**
+   * For failed instance/handle lookups, older-clients expect an response object with noops
+   * that include `rejected promise APIs`
+   */
+  function addLegacyAPI(service, handle) {
+      var falseFn  = function() { return false; };
+      var rejectFn = function() {
+            return $q.when($mdUtil.supplant(errorMsg, [handle || ""]));
+          };
+
+      return angular.extend({
+        isLockedOpen : falseFn,
+        isOpen       : falseFn,
+        toggle       : rejectFn,
+        open         : rejectFn,
+        close        : rejectFn,
+        then : function(callback) {
+          return waitForInstance(handle)
+            .then(callback || angular.noop);
+        }
+       }, service);
     }
+    /**
+     * Synchronously lookup the controller instance for the specified sidNav instance which has been
+     * registered with the markup `md-component-id`
+     */
+    function findInstance(handle) {
+      var instance = $mdComponentRegistry.get(handle);
+      if(!instance) {
+        // Report missing instance
+        $log.error( $mdUtil.supplant(errorMsg, [handle || ""]) );
 
-    return self = {
-      // -----------------
-      // Sync methods
-      // -----------------
-      isOpen: function() {
-        return instance && instance.isOpen();
-      },
-      isLockedOpen: function() {
-        return instance && instance.isLockedOpen();
-      },
-      // -----------------
-      // Async methods
-      // -----------------
-      toggle: function() {
-        return instance ? instance.toggle() : $q.reject(errorMsg);
-      },
-      open: function() {
-        return instance ? instance.open() : $q.reject(errorMsg);
-      },
-      close: function() {
-        return instance ? instance.close() : $q.reject(errorMsg);
-      },
-      then : function( callbackFn ) {
-        var promise = instance ? $q.when(instance) : waitForInstance();
-        return promise.then( callbackFn || angular.noop );
+        // The component has not registered itself... most like NOT yet created
+        // return null to indicate that the Sidenav is not in the DOM
+        return undefined;
       }
-    };
+      return instance;
+    }
 
     /**
+     * Asynchronously wait for the component instantiation,
      * Deferred lookup of component instance using $component registry
      */
-    function waitForInstance() {
-      return $mdComponentRegistry
-                .when(handle)
-                .then(function( it ){
-                  instance = it;
-                  return it;
-                });
+    function waitForInstance(handle) {
+      return $mdComponentRegistry.when(handle);
     }
-  };
 }
 /**
  * @ngdoc directive
@@ -197,7 +214,7 @@ function SidenavFocusDirective() {
  * @param {expression=} md-is-open A model bound to whether the sidenav is opened.
  * @param {boolean=} md-disable-backdrop When present in the markup, the sidenav will not show a backdrop.
  * @param {string=} md-component-id componentId to use with $mdSidenav service.
- * @param {expression=} md-is-locked-open When this expression evalutes to true,
+ * @param {expression=} md-is-locked-open When this expression evaluates to true,
  * the sidenav 'locks open': it falls into the content's flow instead
  * of appearing over it. This overrides the `md-is-open` attribute.
  *
@@ -228,6 +245,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
    */
   function postLink(scope, element, attr, sidenavCtrl) {
     var lastParentOverFlow;
+    var backdrop;
     var triggeringElement = null;
     var promise = $q.when(true);
     var isLockedOpenParsed = $parse(attr.mdIsLockedOpen);
@@ -240,8 +258,13 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
         $mdMedia: $mdMedia
       });
     };
-    var backdrop = !angular.isDefined(attr.mdDisableBackdrop) ? $mdUtil.createBackdrop(scope, "_md-sidenav-backdrop md-opaque ng-enter") : undefined;
 
+    // Only create the backdrop if the backdrop isn't disabled.
+    if (!angular.isDefined(attr.mdDisableBackdrop)) {
+      backdrop = $mdUtil.createBackdrop(scope, "_md-sidenav-backdrop md-opaque ng-enter");
+    }
+    
+    element.addClass('_md');     // private md component indicator for styling
     $mdTheming(element);
 
     // The backdrop should inherit the sidenavs theme,

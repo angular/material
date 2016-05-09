@@ -42,7 +42,9 @@ describe('md-slider', function() {
   function getWrapper(slider) {
     return angular.element(slider[0].querySelector('._md-slider-wrapper'));
   }
-  
+
+
+
   it('should not set model below the min', function() {
     var slider = setup('ng-model="value" min="0" max="100"');
     pageScope.$apply('value = -50');
@@ -486,6 +488,12 @@ describe('md-slider', function() {
   });
 
   describe('slider container', function () {
+
+    it('should have `._md` class indicator', inject(function() {
+      var element = setupContainer('disabled="disabled"');
+      expect(element.hasClass('_md')).toBe(true);
+    }));
+
     it('should disable via the `disabled` attribute', function() {
       var container = setupContainer('disabled="disabled"');
       var slider = angular.element(container[0].querySelector('md-slider'));

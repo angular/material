@@ -1,8 +1,8 @@
 // See height set globally, depended on by buttons
 
-$md-toast-content-padding: 3 * $baseline-grid - $button-left-right-padding;
-$md-toast-button-left-margin: 3 * $baseline-grid - 2 * $button-left-right-padding;
-$md-toast-text-padding: $button-left-right-padding;
+$md-toast-content-padding: 3 * $baseline-grid - $button-left-right-padding !default;
+$md-toast-button-left-margin: 3 * $baseline-grid - 2 * $button-left-right-padding !default;
+$md-toast-text-padding: $button-left-right-padding !default;
 
 
 .md-toast-text {

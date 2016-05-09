@@ -23,6 +23,7 @@ angular.module('material.components.select', [
   .directive('mdSelectMenu', SelectMenuDirective)
   .directive('mdOption', OptionDirective)
   .directive('mdOptgroup', OptgroupDirective)
+  .directive('mdSelectHeader', SelectHeaderDirective)
   .provider('$mdSelect', SelectProvider);
 
 /**
@@ -38,6 +39,8 @@ angular.module('material.components.select', [
  * @param {expression=} md-on-close Expression to be evaluated when the select is closed.
  * @param {expression=} md-on-open Expression to be evaluated when opening the select.
  * Will hide the select options and show a spinner until the evaluated promise resolves.
+ * @param {expression=} md-selected-text Expression to be evaluated that will return a string
+ * to be displayed as a placeholder in the select input box when it is closed.
  * @param {string=} placeholder Placeholder hint text.
  * @param {string=} aria-label Optional label for accessibility. Only necessary if no placeholder or
  * explicit label is present.
@@ -62,6 +65,27 @@ angular.module('material.components.select', [
  *     <label>State</label>
  *     <md-select
  *       ng-model="someModel">
+ *       <md-option ng-value="opt" ng-repeat="opt in neighborhoods2">{{ opt }}</md-option>
+ *     </md-select>
+ *   </md-input-container>
+ * </hljs>
+ *
+ * With a select-header
+ *
+ * When a developer needs to put more than just a text label in the
+ * md-select-menu, they should use the md-select-header.
+ * The user can put custom HTML inside of the header and style it to their liking.
+ * One common use case of this would be a sticky search bar.
+ *
+ * When using the md-select-header the labels that would previously be added to the
+ * OptGroupDirective are ignored.
+ *
+ * <hljs lang="html">
+ *   <md-input-container>
+ *     <md-select ng-model="someModel">
+ *       <md-select-header>
+ *         <span> Neighborhoods - </span>
+ *       </md-select-header>
  *       <md-option ng-value="opt" ng-repeat="opt in neighborhoods2">{{ opt }}</md-option>
  *     </md-select>
  *   </md-input-container>
@@ -146,7 +170,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         .find('md-content')
         .prepend(angular.element(
           '<div>' +
-          ' <md-progress-circular md-mode="{{progressMode}}" ng-hide="$$loadingAsyncDone" md-diameter="25px"></md-progress-circular>' +
+          ' <md-progress-circular md-mode="indeterminate" ng-if="!$$loadingAsyncDone" md-diameter="25px"></md-progress-circular>' +
           '</div>'
         ));
 
@@ -188,7 +212,9 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
     element.empty().append(valueEl);
     element.append(selectTemplate);
 
-    attr.tabindex = attr.tabindex || '0';
+    if(!attr.tabindex){
+      attr.$set('tabindex', 0);
+    }
 
     return function postLink(scope, element, attr, ctrls) {
       var untouched = true;
@@ -208,7 +234,11 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
           };
 
         if (containerCtrl.input) {
-          throw new Error("<md-input-container> can only have *one* child <input>, <textarea> or <select> element!");
+          // We ignore inputs that are in the md-select-header (one
+          // case where this might be useful would be adding as searchbox)
+          if (element.find('md-select-header').find('input')[0] !== containerCtrl.input[0]) {
+            throw new Error("<md-input-container> can only have *one* child <input>, <textarea> or <select> element!");
+          }
         }
 
         containerCtrl.input = element;
@@ -257,9 +287,16 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
 
       mdSelectCtrl.setLabelText = function(text) {
         mdSelectCtrl.setIsPlaceholder(!text);
-        // Use placeholder attribute, otherwise fallback to the md-input-container label
-        var tmpPlaceholder = attr.placeholder || (containerCtrl && containerCtrl.label ? containerCtrl.label.text() : '');
-        text = text || tmpPlaceholder || '';
+
+        if (attr.mdSelectedText) {
+          text = $parse(attr.mdSelectedText)(scope);
+        } else {
+          // Use placeholder attribute, otherwise fallback to the md-input-container label
+          var tmpPlaceholder = attr.placeholder ||
+              (containerCtrl && containerCtrl.label ? containerCtrl.label.text() : '');
+          text = text || tmpPlaceholder || '';
+        }
+
         var target = valueEl.children().eq(0);
         target.html(text);
       };
@@ -288,19 +325,19 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
             }
           });
 
-        // Wait until postDigest so that we attach after ngModel's
-        // blur listener so we can set untouched.
-        $mdUtil.nextTick(function () {
-          element.on('blur', function() {
-            if (untouched) {
-              untouched = false;
-              ngModelCtrl.$setUntouched();
+        // Attach before ngModel's blur listener to stop propagation of blur event
+        // to prevent from setting $touched.
+        element.on('blur', function(event) {
+          if (untouched) {
+            untouched = false;
+            if (selectScope.isOpen) {
+              event.stopImmediatePropagation();
             }
+          }
 
-            if (selectScope.isOpen) return;
-            containerCtrl && containerCtrl.setFocused(false);
-            inputCheckValue();
-          });
+          if (selectScope.isOpen) return;
+          containerCtrl && containerCtrl.setFocused(false);
+          inputCheckValue();
         });
       }
 
@@ -323,7 +360,9 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         $mdAria.expect(element, 'aria-label', labelText);
       }
 
-      scope.$watch(selectMenuCtrl.selectedLabels, syncLabelText);
+      scope.$watch(function() {
+          return selectMenuCtrl.selectedLabels();
+      }, syncLabelText);
 
       function syncLabelText() {
         if (selectContainer) {
@@ -376,22 +415,24 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
         }
         isDisabled = disabled;
         if (disabled) {
-          element.attr({'tabindex': -1, 'aria-disabled': 'true'});
-          element.off('click', openSelect);
-          element.off('keydown', handleKeypress);
+          element
+            .attr({'aria-disabled': 'true'})
+            .removeAttr('tabindex')
+            .off('click', openSelect)
+            .off('keydown', handleKeypress);
         } else {
-          element.attr({'tabindex': attr.tabindex, 'aria-disabled': 'false'});
-          element.on('click', openSelect);
-          element.on('keydown', handleKeypress);
+          element
+            .attr({'tabindex': attr.tabindex, 'aria-disabled': 'false'})
+            .on('click', openSelect)
+            .on('keydown', handleKeypress);
         }
       });
 
-      if (!attr.disabled && !attr.ngDisabled) {
-        element.attr({'tabindex': attr.tabindex, 'aria-disabled': 'false'});
+      if (!attr.hasOwnProperty('disabled') && !attr.hasOwnProperty('ngDisabled')) {
+        element.attr({'aria-disabled': 'false'});
         element.on('click', openSelect);
         element.on('keydown', handleKeypress);
       }
-
 
       var ariaAttrs = {
         role: 'listbox',
@@ -492,11 +533,13 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
 }
 
 function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
-
+  // We want the scope to be set to 'false' so an isolated scope is not created
+  // which would interfere with the md-select-header's access to the
+  // parent scope.
   return {
     restrict: 'E',
     require: ['mdSelectMenu'],
-    scope: true,
+    scope: false,
     controller: SelectMenuController,
     link: {pre: preLink}
   };
@@ -506,6 +549,8 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
   function preLink(scope, element, attr, ctrls) {
     var selectCtrl = ctrls[0];
 
+    element.addClass('_md');     // private md component indicator for styling
+    
     $mdTheming(element);
     element.on('click', clickListener);
     element.on('keypress', keyListener);
@@ -779,7 +824,7 @@ function OptionDirective($mdButtonInkRipple, $mdUtil) {
     var selectCtrl = ctrls[1];
 
     if (selectCtrl.isMultiple) {
-      element.attr('md-checkbox-enabled', '');
+      element.addClass('_md-checkbox-enabled');
       element.prepend(CHECKBOX_SELECTION_INDICATOR.clone());
     }
 
@@ -880,14 +925,32 @@ function OptgroupDirective() {
     compile: compile
   };
   function compile(el, attrs) {
-    var labelElement = el.find('label');
-    if (!labelElement.length) {
-      labelElement = angular.element('<label>');
-      el.prepend(labelElement);
+    // If we have a select header element, we don't want to add the normal label
+    // header.
+    if (!hasSelectHeader()) {
+      setupLabelElement();
     }
-    labelElement.addClass('_md-container-ignore');
-    if (attrs.label) labelElement.text(attrs.label);
+
+    function hasSelectHeader() {
+      return el.parent().find('md-select-header').length;
+    }
+
+    function setupLabelElement() {
+      var labelElement = el.find('label');
+      if (!labelElement.length) {
+        labelElement = angular.element('<label>');
+        el.prepend(labelElement);
+      }
+      labelElement.addClass('_md-container-ignore');
+      if (attrs.label) labelElement.text(attrs.label);
+    }
   }
+}
+
+function SelectHeaderDirective() {
+  return {
+    restrict: 'E',
+  };
 }
 
 function SelectProvider($$interimElementProvider) {
@@ -1122,12 +1185,10 @@ function SelectProvider($$interimElementProvider) {
       function watchAsyncLoad() {
         if (opts.loadingAsync && !opts.isRemoved) {
           scope.$$loadingAsyncDone = false;
-          scope.progressMode = 'indeterminate';
 
           $q.when(opts.loadingAsync)
             .then(function() {
               scope.$$loadingAsyncDone = true;
-              scope.progressMode = '';
               delete opts.loadingAsync;
             }).then(function() {
               $$rAF(positionAndFocusMenu);
@@ -1229,7 +1290,8 @@ function SelectProvider($$interimElementProvider) {
             }
             newOption = optionsArray[index];
             if (newOption.hasAttribute('disabled')) newOption = undefined;
-          } while (!newOption && index < optionsArray.length - 1 && index > 0)
+          } while (!newOption && index < optionsArray.length - 1 && index > 0);
+
           newOption && newOption.focus();
           opts.focusedNode = newOption;
         }
@@ -1478,4 +1540,3 @@ function SelectProvider($$interimElementProvider) {
     return isScrollable;
   }
 }
-

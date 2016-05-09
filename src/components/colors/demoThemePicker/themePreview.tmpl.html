@@ -1,0 +1,24 @@
+<div layout="column">
+  <div md-colors="{background: '{{primary}}-500'}"  md-justified="column" class="primary line">
+    <span>Primary - {{primary}}</span>
+    <div md-justified >
+      <span>500</span>
+      <span>{{getColor(primary + '-500')}}</span>
+    </div>
+  </div>
+  <div md-colors="{background: '{{primary}}-700'}" md-justified class="line" >
+    <span>700</span>
+    <span>{{getColor(primary + '-700')}}</span>
+  </div>
+  <div md-colors="{background: '{{primary}}-800'}" md-justified class="line" >
+    <span>800</span>
+    <span>{{getColor(primary + '-800')}}</span>
+  </div>
+  <div md-colors="{background: '{{accent}}-A200'}" md-justified="column" class="accent line">
+    <span>Accent - {{accent}}</span>
+    <div md-justified>
+      <span>A200</span>
+      <span>{{getColor(accent + '-A200')}}</span>
+    </div>
+  </div>
+</div>

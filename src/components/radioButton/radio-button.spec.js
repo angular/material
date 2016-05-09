@@ -3,6 +3,15 @@ describe('radioButton', function() {
 
   beforeEach(module('material.components.radioButton'));
 
+  it('should have `._md` class indicator',inject(function($compile, $rootScope) {
+    var element = $compile('<md-radio-group ng-model="color">' +
+                               '<md-radio-button value="blue"></md-radio-button>' +
+                               '<md-radio-button value="green"></md-radio-button>' +
+                             '</md-radio-group>')($rootScope);
+
+    expect(element.hasClass('_md')).toBe(true);
+  }));
+
   it('should set checked css class', inject(function($compile, $rootScope) {
     var element = $compile('<md-radio-group ng-model="color">' +
                             '<md-radio-button value="blue"></md-radio-button>' +

@@ -143,10 +143,15 @@ angular
  *
  * When using Material Font Icons with ligatures:
  * <hljs lang="html">
- *  <!-- For Material Design Icons -->
- *  <!-- The class '.material-icons' is auto-added if a style has NOT been specified -->
+ *  <!--
+ *  For Material Design Icons
+ *  The class '.material-icons' is auto-added if a style has NOT been specified
+ *  since `material-icons` is the default fontset. So your markup:
+ *  -->
  *  <md-icon> face </md-icon>
+ *  <!-- becomes this at runtime: -->
  *  <md-icon md-font-set="material-icons"> face </md-icon>
+ *  <!-- If the fontset does not support ligature names, then we need to use the ligature unicode.-->
  *  <md-icon> &#xE87C; </md-icon>
  *  <!-- The class '.material-icons' must be manually added if other styles are also specified-->
  *  <md-icon class="material-icons md-light md-48"> face </md-icon>
@@ -157,24 +162,18 @@ angular
  * <hljs lang="js">
  *  // Specify a font-icon style alias
  *  angular.config(function($mdIconProvider) {
- *    $mdIconProvider.fontSet('fa', 'fontawesome');
+ *    $mdIconProvider.fontSet('md', 'material-icons');
  *  });
  * </hljs>
  *
  * <hljs lang="html">
- *  <md-icon md-font-set="fa">email</md-icon>
+ *  <md-icon md-font-set="md">favorite</md-icon>
  * </hljs>
  *
  */
 function mdIconDirective($mdIcon, $mdTheming, $mdAria ) {
 
   return {
-    scope: {
-      fontSet : '@mdFontSet',
-      fontIcon: '@mdFontIcon',
-      svgIcon : '@mdSvgIcon',
-      svgSrc  : '@mdSvgSrc'
-    },
     restrict: 'E',
     link : postLink
   };
@@ -192,12 +191,12 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria ) {
     // If using a font-icon, then the textual name of the icon itself
     // provides the aria-label.
 
-    var label = attr.alt || scope.fontIcon || scope.svgIcon || element.text();
+    var label = attr.alt || attr.mdFontIcon || attr.mdSvgIcon || element.text();
     var attrName = attr.$normalize(attr.$attr.mdSvgIcon || attr.$attr.mdSvgSrc || '');
 
     if ( !attr['aria-label'] ) {
 
-      if (label != '' && !parentsHaveText() ) {
+      if (label !== '' && !parentsHaveText() ) {
 
         $mdAria.expect(element, 'aria-label', label);
         $mdAria.expect(element, 'role', 'img');
@@ -238,11 +237,11 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria ) {
     }
 
     function prepareForFontIcon() {
-      if (!scope.svgIcon && !scope.svgSrc) {
-        if (scope.fontIcon) {
-          element.addClass('md-font ' + scope.fontIcon);
+      if (!attr.mdSvgIcon && !attr.mdSvgSrc) {
+        if (attr.mdFontIcon) {
+          element.addClass('md-font ' + attr.mdFontIcon);
         }
-        element.addClass($mdIcon.fontSet(scope.fontSet));
+        element.addClass($mdIcon.fontSet(attr.mdFontSet));
       }
     }
   }

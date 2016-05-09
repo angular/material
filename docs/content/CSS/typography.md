@@ -10,6 +10,37 @@ consistency across your application.
 <section class="demo-container">
   <md-toolbar class="demo-toolbar">
     <div class="md-toolbar-tools">
+      <h3>General Typography</h3>
+    </div>
+  </md-toolbar>
+  <div class="md-whiteframe-z1 docs-list">
+    <p>
+      Angular Material is always using the [Roboto](https://www.google.com/fonts#UsePlace:use/Collection:Roboto)
+      font for its components.
+    </p>
+
+    <p>
+      The `Roboto` font will be <b>not</b> automatically loaded by Angular Material itself. The developer is responsible for loading all fonts used in their application. Shown below is a sample <i>link</i> markup used to load the `Roboto` font from a CDN.
+    </p>
+
+    <hljs lang="html">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+    </hljs>
+
+    <p>
+      <h4 class="md-title">Notes</h4>
+      When `Roboto` isn't loaded, then the typography will fallback to the following fonts:
+      <p>
+        - `Helvetica Neue`<br/>
+        - `sans-serif`
+      </p>
+    </p>
+  </div>
+</section>
+
+<section class="demo-container">
+  <md-toolbar class="demo-toolbar">
+    <div class="md-toolbar-tools">
       <h3>Heading Styles</h3>
     </div>
   </md-toolbar>

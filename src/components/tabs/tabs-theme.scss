@@ -44,7 +44,7 @@
     > md-tabs-canvas {
       > md-pagination-wrapper {
         > md-tab-item:not([disabled]) {
-          color: '{{accent-100}}';
+          color: '{{accent-A100}}';
           &.md-active, &.md-focused {
             &, md-icon {
               color: '{{accent-contrast}}';
@@ -93,7 +93,7 @@ md-tabs.md-THEME_NAME-theme {
       background: '{{primary-color-0.1}}';
     }
     .md-ripple-container {
-      color: '{{accent-100}}';
+      color: '{{accent-A100}}';
     }
   }
 

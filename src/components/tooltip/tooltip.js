@@ -42,7 +42,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     restrict: 'E',
     transclude: true,
     priority:210, // Before ngAria
-    template: '<div class="_md-content" ng-transclude></div>',
+    template: '<div class="_md-content _md" ng-transclude></div>',
     scope: {
       delay: '=?mdDelay',
       visible: '=?mdVisible',
@@ -92,6 +92,11 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       content.css('transform-origin', origin);
     }
 
+    function onVisibleChanged (isVisible) {
+      if (isVisible) showTooltip();
+      else hideTooltip();
+    }
+
     function configureWatchers () {
       scope.$on('$destroy', function() {
         scope.visible = false;
@@ -99,12 +104,30 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
         angular.element($window).off('resize', debouncedOnResize);
       });
 
-      scope.$watch('visible', function (isVisible) {
-        if (isVisible) showTooltip();
-        else hideTooltip();
-      });
+      if (element[0] && 'MutationObserver' in $window) {
+        var attributeObserver = new MutationObserver(function(mutations) {
+          mutations
+            .forEach(function (mutation) {              
+              if (mutation.attributeName === 'md-visible') {
+                if (!scope.visibleWatcher)
+                  scope.visibleWatcher = scope.$watch('visible', onVisibleChanged );
+              }
+              if (mutation.attributeName === 'md-direction') {
+                updatePosition(scope.direction);
+              }
+            });
+        });
 
-      scope.$watch('direction', updatePosition );
+        attributeObserver.observe(element[0], { attributes: true});
+
+        if (attr.hasOwnProperty('mdVisible')) // build watcher only if mdVisible is being used
+          scope.visibleWatcher = scope.$watch('visible', onVisibleChanged );
+
+      }
+      else { // MutationObserver not supported
+        scope.visibleWatcher = scope.$watch('visible', onVisibleChanged );
+        scope.$watch('direction', updatePosition );
+      }
     }
 
     function addAriaLabel () {
@@ -128,13 +151,13 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       if (parent[0] && 'MutationObserver' in $window) {
         // use an mutationObserver to tackle #2602
         var attributeObserver = new MutationObserver(function(mutations) {
-          mutations
-            .forEach(function (mutation) {
-              if (mutation.attributeName === 'disabled' && parent[0].disabled) {
+          if (mutations.some(function (mutation) {
+              return (mutation.attributeName === 'disabled' && parent[0].disabled);
+            })) {
+              $mdUtil.nextTick(function() {
                 setVisible(false);
-                scope.$digest(); // make sure the elements gets updated
-              }
-            });
+              });
+          }
         });
 
         attributeObserver.observe(parent[0], { attributes: true});
@@ -187,6 +210,9 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     }
 
     function setVisible (value) {
+      // break if passed value is already in queue or there is no queue and passed value is current in the scope
+      if (setVisible.queued && setVisible.visible === !!value || scope.visible === !!value) return;
+      
       setVisible.value = !!value;
       if (!setVisible.queued) {
         if (value) {
@@ -194,16 +220,23 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
           $timeout(function() {
             scope.visible = setVisible.value;
             setVisible.queued = false;
+            if (!scope.visibleWatcher)
+              onVisibleChanged(scope.visible);
           }, scope.delay);
         } else {
-          $mdUtil.nextTick(function() { scope.visible = false; });
+          $mdUtil.nextTick(function() { 
+            scope.visible = false; 
+            if (!scope.visibleWatcher)
+              onVisibleChanged(false);
+          });
         }
       }
     }
 
     function showTooltip() {
-      // Insert the element before positioning it, so we can get the position
+      // Insert the element and position at top left, so we can get the position
       // and check if we should display it
+      element.css({top: 0, left: 0});
       tooltipParent.append(element);
 
       // Check if we should display it or not.
