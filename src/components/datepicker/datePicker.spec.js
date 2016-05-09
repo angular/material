@@ -238,7 +238,7 @@ describe('md-date-picker', function() {
 
         expect(formCtrl.$error['maxdate']).toBeTruthy();
       });
-      
+
       it('should set `filtered` $error flag on the form', function() {
         pageScope.dateFilter = function(date) {
           return date.getDay() === 1;
@@ -300,7 +300,7 @@ describe('md-date-picker', function() {
       populateInputElement('cheese');
       expect(controller.inputContainer).toHaveClass('md-datepicker-invalid');
     });
-    
+
     it('should not update the model when value is not enabled', function() {
       pageScope.dateFilter = function(date) {
         return date.getDay() === 1;
@@ -539,5 +539,11 @@ describe('md-date-picker', function() {
       scope.$emit('md-calendar-change', new Date());
       expect(controller.inputContainer).not.toHaveClass('md-datepicker-invalid');
     });
+  });
+
+  it('should be able open the calendar when the input is focused', function() {
+    createDatepickerInstance('<md-datepicker ng-model="myDate" md-open-on-focus></md-datepicker>');
+    controller.ngInputElement.triggerHandler('focus');
+    expect(document.querySelector('md-calendar')).toBeTruthy();
   });
 });

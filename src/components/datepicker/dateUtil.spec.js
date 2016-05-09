@@ -373,4 +373,67 @@ describe('$$mdDateUtil', function() {
     var maxDate = null;
     expect(dateUtil.isDateWithinRange(date, minDate, maxDate)).toBeTruthy();
   });
+
+  it('should increment a date by a number of years', function() {
+    // Increment by one.
+    var start = new Date(2015, MAY, 15);
+    var end = new Date(2016, MAY, 15);
+    expect(dateUtil.isSameDay(dateUtil.incrementYears(start, 1), end)).toBe(true);
+
+    // Negative by negative one.
+    start = new Date(2015, MAY, 15);
+    end = new Date(2014, MAY, 15);
+    expect(dateUtil.isSameDay(dateUtil.incrementYears(start, -1), end)).toBe(true);
+  });
+
+  it('should get the distance between years', function() {
+    // In the future
+    var start = new Date(2016, JAN, 15);
+    var end = new Date(2017, JUN, 15);
+    expect(dateUtil.getYearDistance(start, end)).toBe(1);
+
+    // In the past
+    start = new Date(2016, JAN, 15);
+    end = new Date(2014, JUN, 15);
+    expect(dateUtil.getYearDistance(start, end)).toBe(-2);
+  });
+
+  it('should limit a date between a minimum and a maximum', function() {
+    var min = new Date(2016, MAY, 1);
+    var max = new Date(2016, JUN, 1);
+
+    // Before the minimum
+    var target = new Date(2016, APR, 1);
+    expect(dateUtil.isSameDay(dateUtil.clampDate(target, min, max), min)).toBe(true);
+
+    // After the maximum
+    target = new Date(2016, AUG, 1);
+    expect(dateUtil.isSameDay(dateUtil.clampDate(target, min, max), max)).toBe(true);
+
+    // Within range
+    target = new Date(2016, MAY, 15);
+    expect(dateUtil.clampDate(target, min, max)).toBe(target);
+  });
+
+  it('should parse the timestamp from a DOM node', function() {
+    var node = document.createElement('td');
+
+    // With no arguments
+    expect(function() {
+      dateUtil.getTimestampFromNode();
+    }).not.toThrow();
+
+    // Without a timestamp
+    expect(dateUtil.getTimestampFromNode(node)).toBeFalsy();
+
+    // With a timestamp
+    var time = new Date().getTime();
+    node.setAttribute('data-timestamp', time);
+    var result = dateUtil.getTimestampFromNode(node);
+
+    expect(angular.isNumber(result)).toBe(true);
+    expect(result).toBe(time);
+
+    node = null;
+  });
 });
