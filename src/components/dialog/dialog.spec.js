@@ -811,7 +811,7 @@ describe('$mdDialog', function() {
 
       it('should not wrap raw content with md-dialog', inject(function($mdDialog, $rootScope) {
 
-        var template = '<div id="rawContent">Hello</div>';
+        var template = '<md-dialog id="rawContent">Hello</md-dialog>';
         var parent = angular.element('<div>');
 
         $mdDialog.show({
@@ -823,7 +823,7 @@ describe('$mdDialog', function() {
         $rootScope.$apply();
 
         var container = parent[0].querySelectorAll('md-dialog');
-        expect(container.length).toBe(0);
+        expect(container.length).toBe(1); // Should not have two dialogs; but one is required
       }));
     });
 

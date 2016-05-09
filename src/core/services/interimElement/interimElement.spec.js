@@ -253,7 +253,7 @@ describe('$$interimElement service', function() {
   });
 
   describe('a service', function() {
-    var Service;
+    var Service, ieShow;
 
     beforeEach(function() {
       setup();
@@ -262,6 +262,8 @@ describe('$$interimElement service', function() {
         $timeout = _$timeout_;
 
         Service = $$interimElement();
+
+        ieShow = Service.show;
 
         Service.show = tailHook(Service.show, flush);
         Service.hide = tailHook(Service.hide, flush);
@@ -288,9 +290,12 @@ describe('$$interimElement service', function() {
          };
 
          // `templateUrl` is invalid; element will not be created
-         Service.show({
+
+         // We use the original $$interimElement.show so that we ignore the tailhook and manually
+         // run it
+         ieShow({
            templateUrl: 'testing.html',
-           onShow : function() {   return $q.reject("failed"); }
+           onShow : function() { return $q.reject("failed"); }
          })
          .catch( onShowFail );
          $timeout.flush();
@@ -303,7 +308,9 @@ describe('$$interimElement service', function() {
            showFailed = reason;
          };
 
-         Service.show({
+         // We use the original $$interimElement.show so that we ignore the tailhook and manually
+         // run it
+         ieShow({
            templateUrl: 'testing.html',
            onShow : function() {   throw new Error("exception"); }
          })
@@ -714,11 +721,11 @@ describe('$$interimElement service', function() {
     return function() {
       var args = Array.prototype.slice.call(arguments);
       var results = sourceFn.apply(null, args);
+
       hookFn();
 
       return results;
     }
   }
-
 });
 
