@@ -26,6 +26,9 @@ $md-calendar-height:
   padding: 0;
   border: none;
 
+  // Prevent issues if somebody is applying box-sizing: border-box; eveywhere.
+  box-sizing: content-box;
+
   // The left / right padding is applied to the cells instead of the wrapper
   // because we want the header background and the month dividing border to
   // extend the entire width of the calendar.
@@ -124,6 +127,10 @@ md-calendar {
   font-size: $md-calendar-month-label-font-size;
   font-weight: 500; // Roboto Medium
   @include rtl(padding, 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding, rtl-value( 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding));
+
+  md-calendar-month &:not(.md-calendar-month-label-disabled) {
+    cursor: pointer;
+  }
 }
 
 // Table containing the day-of-the-week header.
@@ -155,9 +162,11 @@ md-calendar {
   }
 
   // Explicitly set vertical-align to avoid conflicting with popular CSS resets. When
-  // vertical-align:baseline is set, month headers are misaligned.
+  // vertical-align:baseline is set, month headers are misaligned. Also reset the box-sizing,
+  // in case the user set it to border-box.
   // http://meyerweb.com/eric/tools/css/reset/
   tbody, td, tr {
     vertical-align: middle;
+    box-sizing: content-box;
   }
 }
