@@ -124,6 +124,10 @@ md-calendar {
   font-size: $md-calendar-month-label-font-size;
   font-weight: 500; // Roboto Medium
   @include rtl(padding, 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding, rtl-value( 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding));
+
+  md-calendar-month &:not(.md-calendar-month-label-disabled) {
+    cursor: pointer;
+  }
 }
 
 // Table containing the day-of-the-week header.

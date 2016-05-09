@@ -24,6 +24,8 @@
    * @property {(function(Date): string)=} formatDate Function to format a date object to a string.
    * @property {(function(Date): string)=} monthHeaderFormatter Function that returns the label for
    *     a month given a date.
+   * @property {(function(Date): string)=} monthFormatter Function that returns the full name of a month
+   *     for a giben date.
    * @property {(function(number): string)=} weekNumberFormatter Function that returns a label for
    *     a week given the week number.
    * @property {(string)=} msgCalendar Translation of the label "Calendar" for the current locale.
@@ -212,6 +214,15 @@
       }
 
       /**
+       * Default formatter for a month.
+       * @param {!Date} date
+       * @returns {string}
+       */
+      function defaultMonthFormatter(date) {
+        return service.months[date.getMonth()] + ' ' + date.getFullYear();
+      }
+
+      /**
        * Default week number formatter.
        * @param number
        * @returns {string}
@@ -262,6 +273,7 @@
         parseDate: this.parseDate || defaultParseDate,
         isDateComplete: this.isDateComplete || defaultIsDateComplete,
         monthHeaderFormatter: this.monthHeaderFormatter || defaultMonthHeaderFormatter,
+        monthFormatter: this.monthFormatter || defaultMonthFormatter,
         weekNumberFormatter: this.weekNumberFormatter || defaultWeekNumberFormatter,
         longDateFormatter: this.longDateFormatter || defaultLongDateFormatter,
         msgCalendar: this.msgCalendar || defaultMsgCalendar,
