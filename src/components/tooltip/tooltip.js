@@ -59,6 +59,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
     var parent        = $mdUtil.getParentWithPointerEvents(element),
         content       = angular.element(element[0].getElementsByClassName('_md-content')[0]),
         tooltipParent = angular.element(document.body),
+        showTimeout   = null,
         debouncedOnResize = $$rAF.throttle(function () { updatePosition(); });
 
     if ($animate.pin) $animate.pin(element, parent);
@@ -194,7 +195,17 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       };
       var leaveHandler = function () {
         var autohide = scope.hasOwnProperty('autohide') ? scope.autohide : attr.hasOwnProperty('mdAutohide');
+
         if (autohide || mouseActive || ($document[0].activeElement !== parent[0]) ) {
+
+          // When a show timeout is currently in progress, then we have to cancel it.
+          // Otherwise the tooltip will remain showing without focus or hover.
+          if (showTimeout) {
+            $timeout.cancel(showTimeout);
+            setVisible.queued = false;
+            showTimeout = null;
+          }
+
           parent.off('blur mouseleave touchend touchcancel', leaveHandler );
           parent.triggerHandler("blur");
           setVisible(false);
@@ -214,14 +225,18 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       if (setVisible.queued && setVisible.visible === !!value || scope.visible === !!value) return;
       
       setVisible.value = !!value;
+
       if (!setVisible.queued) {
         if (value) {
           setVisible.queued = true;
-          $timeout(function() {
+          showTimeout = $timeout(function() {
             scope.visible = setVisible.value;
             setVisible.queued = false;
-            if (!scope.visibleWatcher)
+            showTimeout = null;
+
+            if (!scope.visibleWatcher) {
               onVisibleChanged(scope.visible);
+            }
           }, scope.delay);
         } else {
           $mdUtil.nextTick(function() { 
