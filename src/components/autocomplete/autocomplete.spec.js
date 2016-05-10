@@ -250,6 +250,26 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('should allow you to set a class to the md-virtual-repeat-container element', inject(function() {
+      var scope = createScope(null, {menuContainerClass: 'custom-menu-container-class'});
+      var template = '\
+          <md-autocomplete\
+              md-menu-container-class="{{menuContainerClass}}"\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var repeatContainer = element.find('md-virtual-repeat-container');
+
+      expect(repeatContainer.attr('class')).toContain(scope.menuContainerClass);
+
+      element.remove();
+    }));
+
     it('allows using ng-readonly', inject(function() {
       var scope = createScope(null, {inputId: 'custom-input-id'});
       var template = '\

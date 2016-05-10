@@ -1,3 +1,6 @@
+md-autocomplete#custom-template {
+  width: 200px;
+}
 .autocomplete-custom-template li {
   border-bottom: 1px solid #ccc;
   height: auto;
@@ -16,4 +19,7 @@
 .autocomplete-custom-template .item-title md-icon {
   height: 18px;
   width: 18px;
+}
+.custom-container {
+  min-width: 300px !important;
 }
