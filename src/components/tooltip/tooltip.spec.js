@@ -141,6 +141,29 @@ describe('<md-tooltip> directive', function() {
         expect($rootScope.testModel.isVisible).toBe(false);
     });
 
+    it('should cancel when mouseleave was before the delay', function() {
+      buildTooltip(
+        '<md-button>' +
+          'Hello' +
+          '<md-tooltip md-delay="99" md-autohide md-visible="testModel.isVisible">' +
+            'Tooltip' +
+          '</md-tooltip>' +
+        '</md-button>'
+      );
+
+
+      triggerEvent('mouseenter', true);
+      expect($rootScope.testModel.isVisible).toBeFalsy();
+
+      triggerEvent('mouseleave', true);
+      expect($rootScope.testModel.isVisible).toBeFalsy();
+
+      // Total 99 == tooltipDelay
+      $timeout.flush(99);
+
+      expect($rootScope.testModel.isVisible).toBe(false);
+    });
+
     it('should set visible on focus and blur', function() {
       buildTooltip(
         '<md-button>' +
