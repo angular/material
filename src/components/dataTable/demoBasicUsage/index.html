@@ -13,7 +13,7 @@
     <table md-table md-row-select="{{ctrl.options.rowSelection}}" md-selected="ctrl.selected" multiple="{{ctrl.options.multiple}}">
       <thead md-head md-order="ctrl.order" md-on-reorder="ctrl.log(ctrl.order)">
         <tr md-row>
-          <th md-cell md-order-by="name">Name</th>
+          <th md-cell md-order-by="name">Dessert (100g serving)</th>
           <th md-cell md-align="right" md-order-by="calories">Calories</th>
           <th md-cell md-align="right" md-order-by="fat">Fat (g)</th>
           <th md-cell md-align="right" md-order-by="carbs">Carbs (g)</th>
@@ -31,8 +31,8 @@
           <td md-cell>{{::dessert.carbs}}</td>
           <td md-cell>{{::dessert.protein | number: 1}}</td>
           <td md-cell>{{::dessert.sodium}}</td>
-          <td md-cell>{{::dessert.calcium}}</td>
-          <td md-cell>{{::dessert.iron}}</td>
+          <td md-cell>{{::dessert.calcium}}%</td>
+          <td md-cell>{{::dessert.iron}}%</td>
         </tr>
       </tbody>
     </table>
