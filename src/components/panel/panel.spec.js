@@ -592,7 +592,7 @@ describe('$mdPanel', function() {
           var closeCalled = false;
           panelRef.close = function() {
             closeCalled = true;
-            return panelRef._$q.resolve(self);
+            return panelRef._$q.when(self);
           };
 
           clickPanelContainer();
