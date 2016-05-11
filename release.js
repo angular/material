@@ -12,7 +12,7 @@
   var pushCmds       = [ 'rm abort push' ];
   var cleanupCmds    = [];
   var defaultOptions = { encoding: 'utf-8' };
-  var origin         = 'https://github.com/angular/material.git';
+  var origin         = 'git@github.com:angular/material.git';
   var lineWidth      = 80;
   var lastMajorVer   = JSON.parse(exec('curl https://material.angularjs.org/docs.json')).latest;
   var newVersion;
@@ -76,6 +76,7 @@
   function checkoutVersionBranch () {
     exec(`git branch -q -D release/${newVersion}`);
     exec(`git checkout -q -b release/${newVersion}`);
+    abortCmds.push('git co master');
     abortCmds.push(`git branch -D release/${newVersion}`);
   }
 
@@ -196,7 +197,7 @@
   function cloneRepo (repo) {
     start(`Cloning ${repo.cyan} from Github...`);
     exec(`rm -rf ${repo}`);
-    exec(`git clone https://github.com/angular/${repo}.git --depth=1`);
+    exec(`git clone git@github.com:angular/${repo}.git --depth=1`);
     done();
     cleanupCmds.push(`rm -rf ${repo}`);
   }
@@ -225,7 +226,7 @@
       'gulp build',
       'gulp build-all-modules --mode=default',
       'gulp build-all-modules --mode=closure',
-      'rm -rf dist/demos',
+      'rm -rf dist/demos'
      ]);
     done();
     start('Copy files into bower repo...');

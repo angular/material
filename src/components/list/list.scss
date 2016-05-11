@@ -82,6 +82,7 @@ md-list {
           @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-dense-primary-avatar-width);
         }
         .md-avatar {
+          flex: none;
           width: $list-item-dense-primary-avatar-width;
           height: $list-item-dense-primary-avatar-width;
         }
@@ -267,11 +268,19 @@ md-list-item {
       box-sizing: content-box;
     }
     & .md-avatar {
+      flex: none;
       width: $list-item-primary-avatar-width;
       height: $list-item-primary-avatar-width;
     }
     & .md-avatar-icon {
       padding: 8px;
+
+      // Set the width/height to the same as the icon to fix issue on iOS Safari where the
+      // height: 100% was causing it to be larger than it's parent
+      svg {
+        width: $icon-size;
+        height: $icon-size;
+      }
     }
 
     & > md-checkbox {

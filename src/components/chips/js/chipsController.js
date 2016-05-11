@@ -213,7 +213,7 @@ MdChipsCtrl.prototype.chipKeydown = function (event) {
  */
 MdChipsCtrl.prototype.getPlaceholder = function() {
   // Allow `secondary-placeholder` to be blank.
-  var useSecondary = (this.items.length &&
+  var useSecondary = (this.items && this.items.length &&
       (this.secondaryPlaceholder == '' || this.secondaryPlaceholder));
   return useSecondary ? this.secondaryPlaceholder : this.placeholder;
 };

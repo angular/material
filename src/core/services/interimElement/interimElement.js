@@ -427,7 +427,7 @@ function InterimElementProvider() {
                 element = linkElement( compiledData, options );
 
                 showAction = showElement(element, options, compiledData.controller)
-                  .then(resolve, rejectAll );
+                  .then(resolve, rejectAll);
 
               }, rejectAll);
 
@@ -673,7 +673,7 @@ function InterimElementProvider() {
               }
 
             } catch(e) {
-              reject(e.message);
+              reject(e);
             }
           });
         }

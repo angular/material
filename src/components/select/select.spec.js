@@ -193,6 +193,9 @@ describe('<md-select>', function() {
 
     // FIXME- does not work with minified, jquery
     //expect($document[0].activeElement).toBe(select[0]);
+
+    // Clean up the DOM after the test.
+    $document[0].body.removeChild(select[0]);
   }));
 
   it('should remove the input-container focus state', inject(function($rootScope, $timeout) {
@@ -337,6 +340,81 @@ describe('<md-select>', function() {
         expect(checkBoxIcon).not.toBe(null);
       }
 
+    }));
+
+    describe('md-select-header behavior', function() {
+      it('supports rendering a md-select-header', inject(function($rootScope, $compile) {
+        $rootScope.val = [1];
+        var select = $compile(
+            '<md-input-container>' +
+            '  <label>Label</label>' +
+            '  <md-select multiple ng-model="val" placeholder="Hello World">' +
+            '    <md-select-header class="demo-select-header">' +
+            '      <span>Hello World</span>' +
+            '    </md-select-header>' +
+            '    <md-optgroup label="stuff">' +
+            '      <md-option value="1">One</md-option>' +
+            '      <md-option value="2">Two</md-option>' +
+            '      <md-option value="3">Three</md-option>' +
+            '    </md-optgroup>' +
+            '  </md-select>' +
+            '</md-input-container>')($rootScope);
+
+        var header = select.find('md-select-header');
+        var headerContent = header.find('span');
+
+        expect(headerContent.text()).toBe('Hello World');
+      }));
+
+      it('does not render the label in md-optgroup if md-select-header is present', inject(function($rootScope, $compile) {
+        $rootScope.val = [1];
+        var select = $compile(
+            '<md-input-container>' +
+            '  <label>Label</label>' +
+            '  <md-select multiple ng-model="val" placeholder="Hello World">' +
+            '    <md-select-header class="demo-select-header">' +
+            '      <span>Hello World</span>' +
+            '    </md-select-header>' +
+            '    <md-optgroup label="stuff">' +
+            '      <md-option value="1">One</md-option>' +
+            '      <md-option value="2">Two</md-option>' +
+            '      <md-option value="3">Three</md-option>' +
+            '    </md-optgroup>' +
+            '  </md-select>' +
+            '</md-input-container>')($rootScope);
+
+        var optgroupLabel = select[0].querySelector('._md-container-ignore');
+
+        expect(optgroupLabel).toBe(null);
+      }));
+    });
+
+    it('does not allow keydown events to propagate from inside the md-select-menu', inject(function($rootScope, $compile) {
+      $rootScope.val = [1];
+      var select = $compile(
+          '<md-input-container>' +
+          '  <label>Label</label>' +
+          '  <md-select multiple ng-model="val" placeholder="Hello World">' +
+          '    <md-option value="1">One</md-option>' +
+          '    <md-option value="2">Two</md-option>' +
+          '    <md-option value="3">Three</md-option>' +
+          '  </md-select>' +
+          '</md-input-container>')($rootScope);
+
+      var mdOption = select.find('md-option');
+      var selectMenu = select.find('md-select-menu');
+      var keydownEvent = {
+	type: 'keydown',
+	target: mdOption[0],
+	preventDefault: jasmine.createSpy(),
+	stopPropagation: jasmine.createSpy()
+      };
+
+      openSelect(select);
+      angular.element(selectMenu).triggerHandler(keydownEvent);
+
+      expect(keydownEvent.preventDefault).toHaveBeenCalled();
+      expect(keydownEvent.stopPropagation).toHaveBeenCalled();
     }));
 
     it('supports raw html', inject(function($rootScope, $compile, $sce) {
@@ -579,7 +657,6 @@ describe('<md-select>', function() {
   });
 
   describe('multiple', function() {
-
 
     describe('model->view', function() {
 

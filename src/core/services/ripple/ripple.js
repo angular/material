@@ -117,10 +117,11 @@ function InkRippleService ($injector) {
  * Controller used by the ripple service in order to apply ripples
  * @ngInject
  */
-function InkRippleCtrl ($scope, $element, rippleOptions, $window, $timeout, $mdUtil) {
+function InkRippleCtrl ($scope, $element, rippleOptions, $window, $timeout, $mdUtil, $mdColorUtil) {
   this.$window    = $window;
   this.$timeout   = $timeout;
   this.$mdUtil    = $mdUtil;
+  this.$mdColorUtil    = $mdColorUtil;
   this.$scope     = $scope;
   this.$element   = $element;
   this.options    = rippleOptions;
@@ -200,39 +201,12 @@ InkRippleCtrl.prototype.calculateColor = function () {
 
 InkRippleCtrl.prototype._parseColor = function parseColor (color, multiplier) {
   multiplier = multiplier || 1;
-
+  var colorUtil = this.$mdColorUtil;
+  
   if (!color) return;
   if (color.indexOf('rgba') === 0) return color.replace(/\d?\.?\d*\s*\)\s*$/, (0.1 * multiplier).toString() + ')');
-  if (color.indexOf('rgb') === 0) return rgbToRGBA(color);
-  if (color.indexOf('#') === 0) return hexToRGBA(color);
-
-  /**
-   * Converts hex value to RGBA string
-   * @param color {string}
-   * @returns {string}
-   */
-  function hexToRGBA (color) {
-    var hex   = color[ 0 ] === '#' ? color.substr(1) : color,
-      dig   = hex.length / 3,
-      red   = hex.substr(0, dig),
-      green = hex.substr(dig, dig),
-      blue  = hex.substr(dig * 2);
-    if (dig === 1) {
-      red += red;
-      green += green;
-      blue += blue;
-    }
-    return 'rgba(' + parseInt(red, 16) + ',' + parseInt(green, 16) + ',' + parseInt(blue, 16) + ',0.1)';
-  }
-
-  /**
-   * Converts an RGB color to RGBA
-   * @param color {string}
-   * @returns {string}
-   */
-  function rgbToRGBA (color) {
-    return color.replace(')', ', 0.1)').replace('(', 'a(');
-  }
+  if (color.indexOf('rgb') === 0) return colorUtil.rgbToRgba(color);
+  if (color.indexOf('#') === 0) return colorUtil.hexToRgba(color);
 
 };
 
@@ -356,6 +330,7 @@ InkRippleCtrl.prototype.createRipple = function (left, top) {
   if (!this.isRippleAllowed()) return;
 
   var ctrl        = this;
+  var colorUtil   = ctrl.$mdColorUtil;
   var ripple      = angular.element('<div class="md-ripple"></div>');
   var width       = this.$element.prop('clientWidth');
   var height      = this.$element.prop('clientHeight');
@@ -370,8 +345,8 @@ InkRippleCtrl.prototype.createRipple = function (left, top) {
     background:      'black',
     width:           size + 'px',
     height:          size + 'px',
-    backgroundColor: rgbaToRGB(color),
-    borderColor:     rgbaToRGB(color)
+    backgroundColor: colorUtil.rgbaToRgb(color),
+    borderColor:     colorUtil.rgbaToRgb(color)
   });
   this.lastRipple = ripple;
 
@@ -395,12 +370,6 @@ InkRippleCtrl.prototype.createRipple = function (left, top) {
     }, DURATION, false);
 
   }, false);
-
-  function rgbaToRGB (color) {
-    return color
-        ? color.replace('rgba', 'rgb').replace(/,[^\),]+\)/, ')')
-        : 'rgb(0,0,0)';
-  }
 
   function getSize (fit, x, y) {
     return fit

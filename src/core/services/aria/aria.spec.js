@@ -60,6 +60,37 @@ describe('$mdAria service', function() {
       button.remove();
 
     }));
+
+    it('should correctly retrieve the aria-label text', inject(function($compile, $rootScope, $mdAria) {
+      var container = $compile(
+        '<div>' +
+          'PLAIN' +
+          '<span>SPAN</span>' +
+          '<div>DIV</div>' +
+        '</div>'
+      )($rootScope);
+
+      $mdAria.expectWithText(container, 'aria-label');
+
+      expect(container[0].textContent).toBe('PLAINSPANDIV');
+      expect(container.attr('aria-label')).toBe('PLAINSPANDIV');
+    }));
+
+    it('should ignore aria-hidden texts when retrieving aria-label', inject(function($compile, $rootScope, $mdAria) {
+      var container = $compile(
+        '<div>' +
+          'PLAIN' +
+          '<span aria-hidden="true">SPAN</span>' +
+          '<div aria-hidden="true">DIV</div>' +
+        '</div>'
+      )($rootScope);
+
+      $mdAria.expectWithText(container, 'aria-label');
+
+      expect(container[0].textContent).toBe('PLAINSPANDIV');
+      expect(container.attr('aria-label')).toBe('PLAIN');
+    }));
+
   });
 
 });

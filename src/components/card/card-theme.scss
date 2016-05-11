@@ -1,6 +1,7 @@
 $card-border-radius: 2px !default;
 
 md-card.md-THEME_NAME-theme {
+  color: '{{foreground-1}}';
   background-color: '{{background-hue-1}}';
   border-radius: $card-border-radius;
 

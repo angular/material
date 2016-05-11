@@ -178,6 +178,9 @@ describe('<md-tooltip> directive', function() {
 
       triggerEvent('mouseleave');
       expect($rootScope.testModel.isVisible).toBe(false);
+
+      // Clean up document.body.
+      $document[0].body.removeChild(element[0]);
     }));
 
     it('should not be visible when the window is refocused', inject(function($window, $document) {
@@ -204,6 +207,9 @@ describe('<md-tooltip> directive', function() {
       // Simulate focus event that occurs when tabbing back to the window.
       triggerEvent('focus');
       expect($rootScope.testModel.isVisible).toBe(false);
+
+      // Clean up document.body.
+      $document[0].body.removeChild(element[0]);
     }));
 
   });

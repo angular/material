@@ -9,7 +9,8 @@
 }
 
 .md-grid-item-content {
-  height:96px;
+  height:90px;
+  padding-top:10px;
 }
 .md-grid-item-content md-icon {
   height: 48px;

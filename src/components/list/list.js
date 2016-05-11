@@ -146,7 +146,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
 
           // Button which shows ripple and executes primary action.
           var buttonWrap = angular.element(
-            '<md-button class="_md-no-style" md-no-focus-style></md-button>'
+            '<md-button class="_md-no-style"></md-button>'
           );
 
           buttonWrap[0].setAttribute('aria-label', tEl[0].textContent);
@@ -199,7 +199,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
 
       function copyAttributes(item, wrapper) {
         var copiedAttrs = ['ng-if', 'ng-click', 'aria-label', 'ng-disabled',
-          'ui-sref', 'href', 'ng-href', 'ng-attr-ui-sref', 'ui-sref-opts'];
+          'ui-sref', 'href', 'ng-href', 'target', 'ng-attr-ui-sref', 'ui-sref-opts'];
 
         angular.forEach(copiedAttrs, function(attr) {
           if (item.hasAttribute(attr)) {
@@ -344,4 +344,3 @@ function MdListController($scope, $element, $mdListInkRipple) {
     $mdListInkRipple.attach(scope, element, options);
   }
 }
-

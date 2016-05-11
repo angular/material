@@ -61,8 +61,9 @@ var GENERATED = { };
 
 // In memory storage of defined themes and color palettes (both loaded by CSS, and user specified)
 var PALETTES;
-var THEMES;
 
+// Text Colors on light and dark backgrounds
+// @see https://www.google.com/design/spec/style/color.html#color-text-background-colors
 var DARK_FOREGROUND = {
   name: 'dark',
   '1': 'rgba(0,0,0,0.87)',
@@ -134,10 +135,11 @@ var generateOnDemand = false;
 
 // Nonce to be added as an attribute to the generated themes style tags.
 var nonce = null;
+var disableTheming = false;
 
 function ThemingProvider($mdColorPalette) {
   PALETTES = { };
-  THEMES = { };
+  var THEMES = { };
 
   var themingProvider;
   var defaultTheme = 'default';
@@ -152,6 +154,15 @@ function ThemingProvider($mdColorPalette) {
     definePalette: definePalette,
     extendPalette: extendPalette,
     theme: registerTheme,
+
+    /**
+     * Easy way to disable theming without having to use
+     * `.constant("$MD_THEME_CSS","");` This disables
+     * all dynamic theme style sheet generations and injections...
+     */
+    disableTheming: function() {
+      disableTheming = true;
+    },
 
     setNonce: function(nonceValue) {
       nonce = nonceValue;
@@ -342,10 +353,11 @@ function ThemingProvider($mdColorPalette) {
         };
 
     applyTheme.THEMES = angular.extend({}, THEMES);
+    applyTheme.PALETTES = angular.extend({}, PALETTES);
     applyTheme.inherit = inheritTheme;
     applyTheme.registered = registered;
     applyTheme.defaultTheme = function() { return defaultTheme; };
-    applyTheme.generateTheme = function(name) { generateTheme(name, nonce); };
+    applyTheme.generateTheme = function(name) { generateTheme(THEMES[name], name, nonce); };
 
     return applyTheme;
 
@@ -437,7 +449,7 @@ function parseRules(theme, colorType, rules) {
   var themeNameRegex = new RegExp('.md-' + theme.name + '-theme', 'g');
   // Matches '{{ primary-color }}', etc
   var hueRegex = new RegExp('(\'|")?{{\\s*(' + colorType + ')-(color|contrast)-?(\\d\\.?\\d*)?\\s*}}(\"|\')?','g');
-  var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue\-[0-3]|shadow)-?(\d\.?\d*)?(contrast)?\s*\}\}'?"?/g;
+  var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue\-[0-3]|shadow|default)-?(\d\.?\d*)?(contrast)?\s*\}\}'?"?/g;
   var palette = PALETTES[color.name];
 
   // find and replace simple variables where we use a specific hue, not an entire palette
@@ -451,9 +463,13 @@ function parseRules(theme, colorType, rules) {
         return theme.foregroundPalette[hue] || theme.foregroundPalette['1'];
       }
     }
-    if (hue.indexOf('hue') === 0) {
+
+    // `default` is also accepted as a hue-value, because the background palettes are
+    // using it as a name for the default hue.
+    if (hue.indexOf('hue') === 0 || hue === 'default') {
       hue = theme.colors[colorType].hues[hue];
     }
+
     return rgba( (PALETTES[ theme.colors[colorType].name ][hue] || '')[contrast ? 'contrast' : 'value'], opacity );
   });
 
@@ -484,10 +500,10 @@ function parseRules(theme, colorType, rules) {
 var rulesByType = {};
 
 // Generate our themes at run time given the state of THEMES and PALETTES
-function generateAllThemes($injector) {
+function generateAllThemes($injector, $mdTheming ) {
   var head = document.head;
   var firstChild = head ? head.firstElementChild : null;
-  var themeCss = $injector.has('$MD_THEME_CSS') ? $injector.get('$MD_THEME_CSS') : '';
+  var themeCss = !disableTheming && $injector.has('$MD_THEME_CSS') ? $injector.get('$MD_THEME_CSS') : '';
 
   if ( !firstChild ) return;
   if (themeCss.length === 0) return; // no rules, so no point in running this expensive task
@@ -538,9 +554,9 @@ function generateAllThemes($injector) {
   // call generateTheme to do this on a theme-by-theme basis.
   if (generateOnDemand) return;
 
-  angular.forEach(THEMES, function(theme) {
+  angular.forEach($mdTheming.THEMES, function(theme) {
     if (!GENERATED[theme.name]) {
-      generateTheme(theme.name, nonce);
+      generateTheme(theme, theme.name, nonce);
     }
   });
 
@@ -605,8 +621,7 @@ function generateAllThemes($injector) {
   }
 }
 
-function generateTheme(name, nonce) {
-  var theme = THEMES[name];
+function generateTheme(theme, name, nonce) {
   var head = document.head;
   var firstChild = head ? head.firstElementChild : null;
 

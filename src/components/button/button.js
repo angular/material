@@ -7,7 +7,36 @@
  */
 angular
     .module('material.components.button', [ 'material.core' ])
-    .directive('mdButton', MdButtonDirective);
+    .directive('mdButton', MdButtonDirective)
+    .directive('a', MdAnchorDirective);
+
+
+/**
+ * @private
+ * @restrict E
+ *
+ * @description
+ * `a` is an anchor directive used to inherit theme colors for md-primary, md-accent, etc.
+ *
+ * @usage
+ *
+ * <hljs lang="html">
+ *  <md-content md-theme="myTheme">
+ *    <a href="#chapter1" class="md-accent"></a>
+ *  </md-content>
+ * </hljs>
+ */
+function MdAnchorDirective($mdTheming) {
+  return {
+    restrict : 'E',
+    link : function postLink(scope, element) {
+      // Make sure to inherit theme so stand-alone anchors
+      // support theme colors for md-primary, md-accent, etc.
+      $mdTheming(element);
+    }
+  };
+}
+
 
 /**
  * @ngdoc directive

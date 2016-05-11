@@ -658,6 +658,27 @@ describe('<md-virtual-repeat>', function() {
     }));
   });
 
+  describe('when container scope is destroyed', function() {
+
+    it('should clean up unused blocks', function() {
+      createRepeater();
+      var containerCtrl = component.controller('mdVirtualRepeatContainer');
+      scope.items = createItems(NUM_ITEMS);
+      scope.$apply();
+
+      scope.items = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+      scope.$apply();
+
+      scope.$destroy();
+
+      var dataCount = 0;
+      angular.forEach(containerCtrl.repeater.pooledBlocks, function(block) {
+        dataCount += Object.keys(block.element.data()).length;
+      });
+      expect(dataCount).toBe(0);
+    });
+  });
+
   /**
    * Facade to access transform properly even when jQuery is used;
    * since jQuery's css function is obtaining the computed style (not wanted)

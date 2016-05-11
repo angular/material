@@ -295,6 +295,7 @@ describe('$mdGesture', function() {
         maxDistance: 10
       });
 
+      // Setup our spies and trigger our first action (touchstart)
       el.on('$md.hold', holdSpy);
       spyOn($timeout, 'cancel').and.callThrough();
 
@@ -303,7 +304,12 @@ describe('$mdGesture', function() {
         target: el[0],
         touches: [{pageX: 100, pageY: 100}]
       });
+
+      // The $md.hold spy should NOT have been called since the user has not lifted their finger
       expect(holdSpy).not.toHaveBeenCalled();
+
+      // Reset calls to $timeout.cancel so that we can ensure (below) that it is called and
+      // trigger our second action (touchmove)
       $timeout.cancel.calls.reset();
 
       $document.triggerHandler({
@@ -311,10 +317,14 @@ describe('$mdGesture', function() {
         target: el[0],
         touches: [{pageX: 90, pageY: 90}]
       });
+
+      // Because the user moves their finger instead of lifting, expect cancel to have been called
+      // and the $md.hold spy NOT to have been called
       expect($timeout.cancel).toHaveBeenCalled();
       expect(holdSpy).not.toHaveBeenCalled();
 
-      $timeout.verifyNoPendingTasks();
+      // We originally also called `$timeout.verifyNoPendingTasks();` here, however, changes made to
+      // $timeout.cancel() in 1.6 adds more tasks to the deferredQueue, so this will fail.
     }));
 
     it('should not reset timeout if moving < options.maxDistance', inject(function($mdGesture, $document, $timeout) {
