@@ -461,9 +461,9 @@ function MdNavItemController($element) {
   /** @private {boolean} */
   this._focused = false;
 
-  var hasNavClick = this.mdNavClick != null;
-  var hasNavHref = this.mdNavHref != null;
-  var hasNavSref = this.mdNavSref != null;
+  var hasNavClick = !!($element.attr('md-nav-click'));
+  var hasNavHref = !!($element.attr('md-nav-href'));
+  var hasNavSref = !!($element.attr('md-nav-sref'));
 
   // Cannot specify more than one nav attribute
   if ((hasNavClick ? 1:0) + (hasNavHref ? 1:0) + (hasNavSref ? 1:0) > 1) {
