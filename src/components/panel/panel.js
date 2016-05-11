@@ -738,9 +738,11 @@ MdPanelService.prototype.newPanelAnimation = function() {
 MdPanelService.prototype._wrapTemplate = function(origTemplate) {
   var template = origTemplate || '';
 
+  // The panel should be initially rendered offscreen so we can calculate
+  // height and width for positioning.
   return '' +
       '<div class="md-panel-outer-wrapper">' +
-      '  <div class="md-panel">' + template + '</div>' +
+      '  <div class="md-panel" style="left: -9999px;">' + template + '</div>' +
       '</div>';
 };
 
@@ -1137,7 +1139,6 @@ MdPanelRef.prototype._createPanel = function() {
 
           self._configureTrapFocus();
           self._addStyles().then(function() {
-            self._panelContainer.addClass(MD_PANEL_HIDDEN);
             resolve(self);
           }, reject);
         }, reject);
@@ -1156,15 +1157,22 @@ MdPanelRef.prototype._addStyles = function() {
     self._panelContainer.css('z-index', self._config['zIndex']);
     self._panelEl.css('z-index', self._config['zIndex'] + 1);
 
+    var hideAndResolve = function() {
+      // Remove left: -9999px and add hidden class.
+      self._panelEl.css('left', '');
+      self._panelContainer.addClass(MD_PANEL_HIDDEN);
+      resolve(self);
+    };
+
     if (self._config['fullscreen']) {
       self._panelEl.addClass('_md-panel-fullscreen');
-      resolve(self);
+      hideAndResolve();
       return; // Don't setup positioning.
     }
 
     var positionConfig = self._config['position'];
     if (!positionConfig) {
-      resolve(self);
+      hideAndResolve();
       return; // Don't setup positioning.
     }
 
@@ -1172,7 +1180,7 @@ MdPanelRef.prototype._addStyles = function() {
     // correctly. This is necessary so that the panel will have a defined height
     // and width.
     self._$rootScope['$$postDigest'](function() {
-      self._updatePosition();
+      self._updatePosition(true);
       resolve(self);
     });
   });
@@ -1181,13 +1189,20 @@ MdPanelRef.prototype._addStyles = function() {
 
 /**
  * Calculates and updates the position of the panel.
+ * @param {boolean=} opt_init
  * @private
  */
-MdPanelRef.prototype._updatePosition = function() {
+MdPanelRef.prototype._updatePosition = function(opt_init) {
   var positionConfig = this._config['position'];
 
   if (positionConfig) {
     positionConfig._setPanelPosition(this._panelEl);
+    
+    // Hide the panel now that position is known.
+    if (opt_init) {
+      this._panelContainer.addClass(MD_PANEL_HIDDEN);
+    }
+    
     this._panelEl.css('top', positionConfig.getTop());
     this._panelEl.css('bottom', positionConfig.getBottom());
     this._panelEl.css('left', positionConfig.getLeft());
