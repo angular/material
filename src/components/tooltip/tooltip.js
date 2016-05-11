@@ -247,8 +247,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
     function setVisible (value) {
       // break if passed value is already in queue or there is no queue and passed value is current in the scope
-      if (setVisible.queued && setVisible.visible === !!value || scope.visible === !!value) return;
-
+      if (setVisible.queued && setVisible.value === !!value || !setVisible.queued && scope.visible === !!value) return;
       setVisible.value = !!value;
 
       if (!setVisible.queued) {
