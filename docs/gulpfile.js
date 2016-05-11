@@ -70,7 +70,7 @@ function generateDemos() {
 
       utils.readModuleDemos(moduleName, function(demoId) {
         return lazypipe()
-          .pipe(gulpif, /.css$/, transformCss(demoId))
+          .pipe(gulpif, /^(?!.+global\.).*css/, transformCss(demoId))
           .pipe(gulp.dest, 'dist/docs/demo-partials/' + name)
         ();
       })
