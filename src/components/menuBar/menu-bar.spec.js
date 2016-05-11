@@ -24,6 +24,14 @@ describe('material.components.menuBar', function() {
 
         expect(nestedMenu.getAttribute('md-position-mode')).toBe('left bottom');
       });
+      
+      it('does not error with md-button', function() {
+        var run = function() {
+          setup({ useMdButton: true })
+        };
+        
+        expect(run).not.toThrow();
+      });
 
       describe('ARIA', function() {
         it('sets role="menubar" on the menubar', function() {
@@ -91,25 +99,26 @@ describe('material.components.menuBar', function() {
         }
 
         function setup(){
+          var tmpl = 
+            '<md-menu-bar>' +
+            '  <md-menu>' +
+            '    <md-menu-item>' +
+            '      <button ng-click="clicked=true">Button {{i}}</button>' +
+            '    </md-menu-item>' +
+            '    <md-menu-content class="test-submenu">' +
+            '      <md-menu ng-repeat="i in [1, 2]">' +
+            '        <md-menu-item>' +
+            '          <button ng-click="subclicked=true">Sub Button{{i}}</button>' +
+            '        </md-menu-item>' +
+            '        <md-menu-content>Sub {{i}} - Content</md-menu-content>' +
+            '      </md-menu>' +
+            '    </md-menu-content>' +
+            '  </md-menu>' +
+            '</md-menu-bar>';
+          
           var el;
           inject(function($compile, $rootScope) {
-            el = $compile([
-              '<md-menu-bar>',
-              '  <md-menu>',
-              '    <md-menu-item>',
-              '      <button ng-click="clicked=true">Button {{i}}</button>',
-              '    </md-menu-item>',
-              '    <md-menu-content class="test-submenu">',
-              '      <md-menu ng-repeat="i in [1, 2]">',
-              '        <md-menu-item>',
-              '          <button ng-click="subclicked=true">Sub Button{{i}}</button>',
-              '        </md-menu-item>',
-              '        <md-menu-content>Sub {{i}} - Content</md-menu-content>',
-              '      </md-menu>',
-              '    </md-menu-content>',
-              '  </md-menu>',
-              '</md-menu-bar>'
-            ].join(''))($rootScope);
+            el = $compile(tmpl)($rootScope);
             $rootScope.$digest();
           });
           attachedMenuElements.push(el);
@@ -265,17 +274,21 @@ describe('material.components.menuBar', function() {
       });
     });
 
-    function setup() {
-      var el;
+    function setup(options) {
+      var el, tmpl = 
+        '<md-menu-bar>' +
+        '  <md-menu ng-repeat="i in [1, 2, 3]">' +
+        '    <button ng-click="lastClicked = $index"></button>' +
+        '    <md-menu-content></md-menu-content>' +
+        '  </md-menu>' +
+        '</md-menu-bar>';
+
+      if (options && options.useMdButton) {
+        tmpl = tmpl.replace(/button/g, 'md-button');
+      }
+      
       inject(function($compile, $rootScope) {
-        el = $compile([
-          '<md-menu-bar>',
-            '<md-menu ng-repeat="i in [1, 2, 3]">',
-              '<button ng-click="lastClicked = $index"></button>',
-              '<md-menu-content></md-menu-content>',
-            '</md-menu>',
-          '</md-menu-bar>'
-        ].join(''))($rootScope);
+        el = $compile(tmpl)($rootScope);
         $rootScope.$digest();
       });
       attachedMenuElements.push(el);
