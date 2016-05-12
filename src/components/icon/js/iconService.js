@@ -15,8 +15,8 @@
     * If using font-icons, the developer is responsible for loading the fonts.
     *
     * If using SVGs, loading of the actual svg files are deferred to on-demand requests and are loaded
-    * internally by the `$mdIcon` service using the `$http` service. When an SVG is requested by name/ID,
-    * the `$mdIcon` service searches its registry for the associated source URL;
+    * internally by the `$mdIcon` service using the `$templateRequest` service. When an SVG is
+    * requested by name/ID, the `$mdIcon` service searches its registry for the associated source URL;
     * that URL is used to on-demand load and parse the SVG dynamically.
     *
     * **Notice:** Most font-icons libraries do not support ligatures (for example `fontawesome`).<br/>
@@ -60,15 +60,15 @@
     *     $mdIconProvider.defaultIconSet('my/app/icons.svg')
     *
     *   })
-    *   .run(function($http, $templateCache){
+    *   .run(function($templateRequest){
     *
     *     // Pre-fetch icons sources by URL and cache in the $templateCache...
-    *     // subsequent $http calls will look there first.
+    *     // subsequent $templateRequest calls will look there first.
     *
     *     var urls = [ 'imy/app/icons.svg', 'img/icons/android.svg'];
     *
     *     angular.forEach(urls, function(url) {
-    *       $http.get(url, {cache: $templateCache});
+    *       $templateRequest(url);
     *     });
     *
     *   });
@@ -88,8 +88,9 @@
     * These icons  will later be retrieved from the cache using `$mdIcon( <icon name> )`
     *
     * @param {string} id Icon name/id used to register the icon
-    * @param {string} url specifies the external location for the data file. Used internally by `$http` to load the
-    * data or as part of the lookup in `$templateCache` if pre-loading was configured.
+    * @param {string} url specifies the external location for the data file. Used internally by
+    * `$templateRequest` to load the data or as part of the lookup in `$templateCache` if pre-loading
+    * was configured.
     * @param {number=} viewBoxSize Sets the width and height the icon's viewBox.
     * It is ignored for icons with an existing viewBox. Default size is 24.
     *
@@ -118,8 +119,9 @@
     * `$mdIcon(<icon set name>:<icon name>)`
     *
     * @param {string} id Icon name/id used to register the iconset
-    * @param {string} url specifies the external location for the data file. Used internally by `$http` to load the
-    * data or as part of the lookup in `$templateCache` if pre-loading was configured.
+    * @param {string} url specifies the external location for the data file. Used internally by
+    * `$templateRequest` to load the data or as part of the lookup in `$templateCache` if pre-loading
+    * was configured.
     * @param {number=} viewBoxSize Sets the width and height of the viewBox of all icons in the set.
     * It is ignored for icons with an existing viewBox. All icons in the icon set should be the same size.
     * Default value is 24.
@@ -148,8 +150,9 @@
     * subsequent lookups of icons will failover to search this 'default' icon set.
     * Icon can be retrieved from this cached, default set using `$mdIcon(<name>)`
     *
-    * @param {string} url specifies the external location for the data file. Used internally by `$http` to load the
-    * data or as part of the lookup in `$templateCache` if pre-loading was configured.
+    * @param {string} url specifies the external location for the data file. Used internally by
+    * `$templateRequest` to load the data or as part of the lookup in `$templateCache` if pre-loading
+    * was configured.
     * @param {number=} viewBoxSize Sets the width and height of the viewBox of all icons in the set.
     * It is ignored for icons with an existing viewBox. All icons in the icon set should be the same size.
     * Default value is 24.
@@ -354,9 +357,9 @@
 
    },
 
-   $get : ['$http', '$q', '$log', '$templateCache', '$mdUtil', function($http, $q, $log, $templateCache, $mdUtil) {
+   $get : ['$templateRequest', '$q', '$log', '$templateCache', '$mdUtil', function($templateRequest, $q, $log, $templateCache, $mdUtil) {
      this.preloadIcons($templateCache);
-     return MdIconService(config, $http, $q, $log, $templateCache, $mdUtil);
+     return MdIconService(config, $templateRequest, $q, $log, $templateCache, $mdUtil);
    }]
  };
 
@@ -411,7 +414,7 @@
   */
 
   /* @ngInject */
- function MdIconService(config, $http, $q, $log, $templateCache, $mdUtil) {
+ function MdIconService(config, $templateRequest, $q, $log, $templateCache, $mdUtil) {
    var iconCache = {};
    var urlRegex = /[-\w@:%\+.~#?&//=]{2,}\.[a-z]{2,4}\b(\/[-\w@:%\+.~#?&//=]*)?/i;
    var dataUrlRegex = /^data:image\/svg\+xml[\s*;\w\-\=]*?(base64)?,(.*)$/i;
@@ -513,7 +516,7 @@
 
      function announceIdNotFound(id) {
        var msg = 'icon ' + id + ' not found';
-      $log.warn(msg);
+       $log.warn(msg);
 
        return $q.reject(msg || id);
      }
@@ -534,11 +537,18 @@
 
      /* Load the icon by URL using HTTP. */
      function loadByHttpUrl(url) {
-       return $http
-         .get(url, { cache: $templateCache })
-         .then(function(response) {
-           return angular.element('<div>').append(response.data).find('svg')[0];
-         }).catch(announceNotFound);
+       return $q(function(resolve, reject) {
+         var extractSvg = function(response) {
+           var svg = angular.element('<div>').append(response).find('svg')[0];
+           resolve(svg);
+         };
+         var announceAndReject = function(e) {
+           announceNotFound(e);
+           reject(e);
+         };
+
+         $templateRequest(url, true).then(extractSvg, announceAndReject);
+       });
      }
 
      return dataUrlRegex.test(url)
