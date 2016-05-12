@@ -26,7 +26,7 @@ BasicDemoCtrl.prototype.showDialog = function() {
       .center();
 
   var config = {
-    attachTo: '.demo-md-panel',
+    attachTo: angular.element(document.body),
     controller: PanelDialogCtrl,
     controllerAs: 'ctrl',
     disableParentScroll: this.disableParentScroll,
@@ -51,7 +51,7 @@ BasicDemoCtrl.prototype.showMenu = function(ev) {
       .addPanelPosition(this._mdPanel.xPosition.ALIGN_START, this._mdPanel.yPosition.BELOW);
 
   var config = {
-    attachTo: '.demo-md-panel',
+    attachTo: angular.element(document.body),
     controller: PanelMenuCtrl,
     controllerAs: 'ctrl',
     template:

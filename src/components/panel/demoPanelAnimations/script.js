@@ -69,7 +69,7 @@ AnimationCtrl.prototype.showDialog = function() {
 
   var config = {
     animation: animation,
-    attachTo: angular.element(document.querySelector('.demo-md-panel-animation')),
+    attachTo: angular.element(document.body),
     controller: DialogCtrl,
     controllerAs: 'ctrl',
     templateUrl: 'panel.tmpl.html',
