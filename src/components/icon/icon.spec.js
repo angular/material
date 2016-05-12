@@ -1,4 +1,4 @@
-describe('mdIcon directive', function() {
+describe('MdIcon directive', function() {
   var el;
   var $scope;
   var $compile;
@@ -332,7 +332,7 @@ describe('mdIcon directive', function() {
 });
 
 
-describe('mdIcon service', function() {
+describe('MdIcon service', function() {
 
   var $mdIcon;
   var $httpBackend;
@@ -467,7 +467,7 @@ describe('mdIcon service', function() {
         var msg;
         try {
           $mdIcon('notconfigured')
-            .catch(function(error){
+            .catch(function(error) {
               msg = error;
             });
 
@@ -518,8 +518,8 @@ describe('mdIcon service', function() {
         var msg;
         try {
           $mdIcon('notfound:someIcon')
-            .catch(function(error){
-              msg = error;
+            .catch(function(error) {
+              msg = error.data;
             });
 
           $httpBackend.flush();
@@ -529,18 +529,13 @@ describe('mdIcon service', function() {
       });
     });
 
-    /*
-     * Previous to Angular 1.6, requesting an icon that is not found would throw no errors. After
-     * 1.6, since we do not have a .catch() handler, it now throws a Possibly Unhandled Rejection
-     * error.
-     */
     describe('icon is not found', function() {
       it('should not throw Error', function() {
         expect(function(){
           $mdIcon('notfound');
 
           $httpBackend.flush();
-        }).not.toThrow('Cannot GET notfoundicon.svg');
+        }).not.toThrow();
       });
     });
   });

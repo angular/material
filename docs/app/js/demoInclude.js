@@ -1,10 +1,8 @@
 DocsApp.directive('demoInclude', [
   '$q', 
-  '$http', 
   '$compile', 
-  '$templateCache',
   '$timeout',
-function($q, $http, $compile, $templateCache, $timeout) {
+function($q, $compile, $timeout) {
   return {
     restrict: 'E',
     link: postLink

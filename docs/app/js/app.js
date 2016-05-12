@@ -722,9 +722,8 @@ function($scope, doc, component, $rootScope) {
   '$scope',
   'component',
   'demos',
-  '$http',
-  '$templateCache',
-function($rootScope, $scope, component, demos, $http, $templateCache) {
+  '$templateRequest',
+function($rootScope, $scope, component, demos, $templateRequest) {
   $rootScope.currentComponent = component;
   $rootScope.currentDoc = null;
 
@@ -737,9 +736,9 @@ function($rootScope, $scope, component, demos, $http, $templateCache) {
       .concat(demo.css || [])
       .concat(demo.html || []);
     files.forEach(function(file) {
-      file.httpPromise =$http.get(file.outputPath, {cache: $templateCache})
+      file.httpPromise = $templateRequest(file.outputPath)
         .then(function(response) {
-          file.contents = response.data
+          file.contents = response
             .replace('<head/>', '');
           return file.contents;
         });
