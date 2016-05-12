@@ -88,10 +88,8 @@ md-card {
         font-size: 14px;
       }
 
-      &:only-child {
-        .md-subhead {
-          padding-top: 3 * $card-padding / 4;
-        }
+      .md-subhead:only-child {
+        padding-top: 3 * $card-padding / 4;
       }
     }
 

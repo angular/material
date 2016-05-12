@@ -26,10 +26,8 @@ md-card.md-THEME_NAME-theme {
 
   md-card-title {
     md-card-title-text {
-      &:not(:only-child) {
-        .md-subhead {
-          color: '{{foreground-2}}';
-        }
+      .md-subhead:not(:only-child) {
+        color: '{{foreground-2}}';
       }
     }
   }
