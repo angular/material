@@ -77,28 +77,58 @@ function mdCompilerService($q, $http, $injector, $compile, $controller, $templat
     // Take resolve values and invoke them.
     // Resolves can either be a string (value: 'MyRegisteredAngularConst'),
     // or an invokable 'factory' of sorts: (value: function ValueGetter($dependency) {})
-    angular.forEach(resolve, function(value, key) {
+    function invokeResolve(key, value) {
       if (angular.isString(value)) {
         resolve[key] = $injector.get(value);
+        return $q.when();
       } else {
-        resolve[key] = $injector.invoke(value);
+        return $q.when(resolve[key] = $injector.invoke(value, null, resolve));
       }
-    });
-    //Add the locals, which are just straight values to inject
-    //eg locals: { three: 3 }, will inject three into the controller
-    angular.extend(resolve, locals);
+    }
 
-    if (templateUrl) {
-      resolve.$template = $http.get(templateUrl, {cache: $templateCache})
-        .then(function(response) {
-          return response.data;
+    function resolveLocals() {
+      var defer = $q.defer();
+
+      function runResolve(index) {
+        var key = Object.keys(resolve)[index];
+
+        if (!key) {
+          return resolveComplete();
+        }
+
+        invokeResolve(key, resolve[key]).then(function(val) {
+          // When the promise returned a value, then we can immediately update the property to
+          // be able to inject it into later resolve invokes.
+          if (val) resolve[key] = val;
+          runResolve(index + 1);
         });
-    } else {
-      resolve.$template = $q.when(template);
+      }
+
+      // Start the resolve at index 0
+      runResolve(0);
+
+      function resolveComplete() {
+        // Add the locals, which are just straight values to inject
+        // eg locals: { three: 3 }, will inject three into the controller
+        angular.extend(resolve, locals);
+
+        if (templateUrl) {
+          resolve.$template = $http.get(templateUrl, {cache: $templateCache})
+            .then(function(response) {
+              return response.data;
+            });
+        } else {
+          resolve.$template = $q.when(template);
+        }
+
+        $q.all(resolve).then(defer.resolve);
+      }
+
+      return defer.promise;
     }
 
     // Wait for all the resolves to finish if they are promises
-    return $q.all(resolve).then(function(locals) {
+    return resolveLocals().then(function(locals) {
 
       var compiledData;
       var template = transformTemplate(locals.$template, options);
@@ -112,7 +142,7 @@ function mdCompilerService($q, $http, $injector, $compile, $controller, $templat
         link: function link(scope) {
           locals.$scope = scope;
 
-          //Instantiate controller if it exists, because we have scope
+          // Instantiate controller if it exists, because we have scope
           if (controller) {
             var invokeCtrl = $controller(controller, locals, true);
             if (bindToController) {

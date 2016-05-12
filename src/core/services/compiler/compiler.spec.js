@@ -103,6 +103,27 @@ describe('$mdCompiler service', function() {
         compile(options);
         expect(options).toEqual(clone);
       });
+
+      it('should invoke the promises with the resolved locals', inject(function($q, $timeout) {
+        var deferedFirst = $q.defer();
+        var firstPromiseValue = null;
+        
+        compile({
+          resolve: {
+            firstPromise: function() {
+              return deferedFirst.promise;
+            },
+            secondProperty: function(firstPromise) {
+              firstPromiseValue = firstPromise;
+            }
+          }
+        });
+
+        deferedFirst.resolve('First Promise Value');
+        $timeout.flush();
+        
+        expect(firstPromiseValue).toBe('First Promise Value');
+      }));
     });
 
     describe('after link()', function() {
