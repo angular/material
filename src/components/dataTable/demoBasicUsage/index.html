@@ -23,7 +23,7 @@
           <th md-cell md-align="right" md-order-by="iron">Iron (%)</th>
         </tr>
       </thead>
-      <tbody md-body>
+      <tbody>
         <tr md-row md-select="dessert" md-on-select="ctrl.onSelect(dessert)" md-on-deselect="ctrl.onDeselect(dessert)" md-auto-select="{{ctrl.options.auto}}" ng-repeat="dessert in ctrl.desserts | orderBy: ctrl.order">
           <td md-cell>{{::dessert.name}}</td>
           <td md-cell>{{::dessert.calories}}</td>

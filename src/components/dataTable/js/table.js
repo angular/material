@@ -1,5 +1,35 @@
 angular.module('material.components.table').directive('mdTable', mdTable);
 
+/**
+ * @ngdoc directive
+ * @name mdTable
+ * @module material.components.dataTable
+ *
+ * @description
+ *
+ * Data tables allow users to view and manipulate large data sets efficiently.
+ *
+ * Data tables are composed of a component hierarchy, with the `md-table` component being the root
+ * component. An important distinction between this component and other components is data tables
+ * **do not** use custom elements. The reason data tables do not use custom elements is to preserve
+ * functionality of HTML tables. For example, `rowspan` and `colspan` do not work with CSS tables.
+ *
+ * @usage
+ *
+ * <hljs lang="html">
+ * <table md-table>
+ *   <tbody>
+ *     <tr>
+ *       <td></td>
+ *     </tr>
+ *   </tbody>
+ * </table>
+ * </hljs>
+ *
+ * @param {boolean=} md-row-select Enables row selection.
+ * @param {*=} md-selected A model for the selected item(s). If multiple selection is enabled the selected items will be stored in an array.
+ * @param {boolean=} multiple Allows multiple items to be selected.
+ */
 function mdTable() {
 
   function compile(tElement) {
