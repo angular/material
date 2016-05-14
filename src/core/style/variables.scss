@@ -111,11 +111,11 @@ $swift-linear-duration: 0.08s !default;
 $swift-linear-timing-function: linear !default;
 $swift-linear: all $swift-linear-duration $swift-linear-timing-function !default;
 
-$material-enter-duration: 0.5s;
+$material-enter-duration: 0.3s;
 $material-enter-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
 $material-enter: all $material-enter-duration $material-enter-timing-function;
 
-$material-leave-duration: 0.5s;
+$material-leave-duration: 0.3s;
 $material-leave-timing-function: cubic-bezier(0.4, 0.0, 1, 1);
 $material-leave: all $material-leave-duration $material-leave-timing-function;
 
