@@ -2,6 +2,78 @@ angular.module('material.components.table')
   .directive('mdRow', mdRow)
   .directive('mdSelect', mdSelect);
 
+/**
+ * @ngdoc directive
+ * @name mdRow
+ * @module material.components.dataTable
+ *
+ * @description
+ *
+ * The `md-row` component is a child of the `md-table` component and is responsible for handling
+ * row selection.
+ *
+ * @usage
+ *
+ * <hljs lang="html">
+ * <table md-table md-row-select md-selected="$ctrl.selected">
+ *   <tbody>
+ *     <tr md-row md-select="item" ng-repeat="item in $ctrl.items">
+ *       <td>{{::item.name}}</td>
+ *     </tr>
+ *   </tbody>
+ * </table>
+ * </hljs>
+ *
+ * ### Equality of Selected Items
+ *
+ * By defualt the `md-row` component will use the `===` operator for object equality; however, this
+ * is not always desirable. For greater flexability the `md-row` component allows you to track an object
+ * by an arbitrary expression using the `md-track-by` attribute.
+ *
+ * <hljs lang="html">
+ * <table md-table md-row-select md-selected="$ctrl.selected">
+ *   <tbody>
+ *     <tr md-row md-select="item" md-track-by="item.id" ng-repeat="item in $ctrl.items">
+ *       <td>{{::item.name}}</td>
+ *     </tr>
+ *   </tbody>
+ * </table>
+ * </hljs>
+ *
+ * ### Alias for Selected Items
+ *
+ * It may be useful to create an alias for an item on the current scope. You can create an alias for an item
+ * using the `item as alias` syntax.
+ *
+ * <hljs lang="html">
+ * <!-- this example creates an alias for account.user named user -->
+ * <table md-table md-row-select md-selected="$ctrl.selected">
+ *   <tbody>
+ *     <tr md-row md-select="account.user as user" md-track-by="user.email" ng-repeat="account in $ctrl.accounts">
+ *       <td>{{::user.name}}</td>
+ *     </tr>
+ *   </tbody>
+ * </table>
+ *</hljs>
+ *
+ * <hljs lang="html">
+ *  <!-- this example assigns the result of a function call to an alias named copy -->
+ * <table md-table md-row-select md-selected="$ctrl.selected">
+ *   <tbody>
+ *     <tr md-row md-select="$ctrl.copy(item) as copy" md-track-by="copy.id" ng-repeat="item in $ctrl.items">
+ *       <td>{{::copy.name}}</td>
+ *     </tr>
+ *   </tbody>
+ * </table>
+ * </hljs>
+ *
+ * @param {expression=} md-select An expression of the form `expression (as alias)?`. The value of the expression will be the item selected.
+ * @param {expression=} md-track-by Optionally use an expression to track items. Otherwise equality will be determend by `===`.
+ * @param {expression=} md-on-select An expression to be executed when an item is selected (will be called for each item).
+ * @param {expression=} md-on-deselect An expression to be executed when an item is deselected (will be called for each item).
+ * @param {boolean=} md-auto-select Allow the user to select a row by clicking anywhere in the row.
+ * @param {boolean=} disabled Will not allow the row to be selected. You may use `ng-disabled` to set this attribute.
+ */
 function mdRow() {
 
   function Controller() {
@@ -79,7 +151,7 @@ function mdSelect($compile, $mdUtil, $parse) {
     var match = attrs.mdSelect.match(/^\s*(\S+)(?:\s+as\s+(\S+))?\s*$/);
 
     if(!match) {
-      throw 'invalid expression: ' + 'md-select="' + attrs.mdSelect + '"';
+      throw 'mdSelect: Invalid expression. Expected an expression in the form of "item (as alias)?". Instead got "' + attrs.mdSelect + '".\n';
     }
 
     var self       = ctrls.shift(),
