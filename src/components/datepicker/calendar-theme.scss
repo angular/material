@@ -39,32 +39,12 @@
 
   // Selected style goes after hover and focus so that it takes priority.
   .md-calendar-date.md-calendar-selected-date,
-  .md-calendar-date.md-calendar-selected-end-date,
-  .md-calendar-date.md-calendar-selected-start-date,
-  .md-calendar-date.md-focus.md-calendar-selected-date,
-  .md-calendar-date.md-focus.md-calendar-selected-end-date,
-  .md-calendar-date.md-focus.md-calendar-selected-start-date {
+  .md-calendar-date.md-focus.md-calendar-selected-date {
     .md-calendar-date-selection-indicator {
       background: '{{primary-500}}'; // blue-500
       color: '{{primary-500-contrast}}'; // white
       border-color: transparent;
     }
-  }
-
-  // Style for cells which exist between the start and end dates of a date range on the calendar dom.
-  .md-calendar-date-range {
-    background: '{{primary-100}}'; // blue-100
-    border-color: transparent;
-  }
-
-  td.md-calendar-date-range:last-child {
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-  }
-
-  td.md-calendar-date-range:first-child {
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
   }
 
   .md-calendar-date-disabled,
