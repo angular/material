@@ -80,7 +80,7 @@ for VERSION in "${VERSIONS[@]}"; do
 
   rm -rf $BASE_DIR
   curl $ZIP_URL > $ZIP_FILE_PATH
-  unzip -d $BASE_DIR $ZIP_FILE_PATH
+  unzip -q -d $BASE_DIR $ZIP_FILE_PATH
   mv "$BASE_DIR/angular-$ZIP_FILE_SHA" "$BASE_DIR/files"
 
   echo "\n\n--- Testing AngularMaterial against AngularJS (${VERSION}) ---\n"
