@@ -340,25 +340,26 @@ describe('MdIcon service', function() {
   beforeEach(module('material.components.icon', function(_$mdIconProvider_) {
     $mdIconProvider = _$mdIconProvider_;
     $mdIconProvider
-      .icon('android'    , 'android.svg')
-      .icon('c2'         , 'c2.svg')
-      .icon('notfound'   , 'notfoundicon.svg')
-      .iconSet('social'  , 'social.svg' )
-      .iconSet('notfound', 'notfoundgroup.svg' )
+      .icon('android'           , 'android.svg')
+      .icon('c2'                , 'c2.svg')
+      .iconSet('social'         , 'social.svg' )
+      .iconSet('emptyIconSet'   , 'emptyGroup.svg' )
       .defaultIconSet('core.svg');
+
+    $mdIconProvider.icon('missingIcon', 'notfoundicon.svg');
   }));
 
   beforeEach(inject(function($templateCache, _$httpBackend_, _$mdIcon_, $rootScope) {
     $mdIcon = _$mdIcon_;
     $httpBackend = _$httpBackend_;
     $scope = $rootScope;
-    $templateCache.put('android.svg', '<svg><g id="android"></g></svg>');
-    $templateCache.put('social.svg' , '<svg><g id="s1"></g><g id="s2"></g></svg>');
-    $templateCache.put('core.svg'   , '<svg><g id="c1"></g><g id="c2" class="core"></g></svg>');
-    $templateCache.put('c2.svg'     , '<svg><g id="c2" class="override"></g></svg>');
 
-    $httpBackend.whenGET('notfoundgroup.svg').respond(404, 'Cannot GET notfoundgroup.svg');
-    $httpBackend.whenGET('notfoundicon.svg').respond(404, 'Cannot GET notfoundicon.svg');
+    $templateCache.put('android.svg'    , '<svg><g id="android"></g></svg>');
+    $templateCache.put('social.svg'     , '<svg><g id="s1"></g><g id="s2"></g></svg>');
+    $templateCache.put('core.svg'       , '<svg><g id="c1"></g><g id="c2" class="core"></g></svg>');
+    $templateCache.put('c2.svg'         , '<svg><g id="c2" class="override"></g></svg>');
+    $templateCache.put('emptyGroup.svg' , '<svg></svg>');
+
   }));
 
   describe('should configure fontSets', function() {
@@ -509,39 +510,42 @@ describe('MdIcon service', function() {
 
     });
 
-    describe('icon group is not found', function() {
-      it('should log Error and reject', inject(function($log) {
-        var errorMessage = 'Cannot GET notfoundgroup.svg';
+    describe('icon in a group is not found', function() {
+
+      it('should log Error and reject', inject(function($log, $timeout) {
+        var ERROR_ICON_NOT_FOUIND_ICONSET = 'icon emptyIconSet:someIcon not found';
         var caughtRejection = false;
 
-        $mdIcon('notfound:someIcon')
+        $mdIcon('emptyIconSet:someIcon')
           .catch(function(error) {
-            expect(error.data).toBe(errorMessage);
             caughtRejection = true;
+            expect(error).toBe( ERROR_ICON_NOT_FOUIND_ICONSET );
           });
-
-        $httpBackend.flush();
+        $timeout.flush();
 
         expect(caughtRejection).toBe(true);
-        expect($log.warn.logs[0]).toEqual([errorMessage]);
+        expect($log.warn.logs[0]).toEqual([ERROR_ICON_NOT_FOUIND_ICONSET]);
       }));
     });
 
     describe('icon is not found', function() {
       it('should log Error and reject', inject(function($log) {
-        var errorMessage = 'Cannot GET notfoundicon.svg';
+        var ERROR_ICON_NOT_FOUND = 'Cannot GET notfoundicon.svg';
         var caughtRejection = false;
 
-        $mdIcon('notfound')
+        // $mdIconProvider.icon('missingIcon', 'notfoundicon.svg');
+        $httpBackend.whenGET('notfoundicon.svg').respond(404, ERROR_ICON_NOT_FOUND);
+
+        $mdIcon('missingIcon')
           .catch(function(error) {
-            expect(error.data).toBe(errorMessage);
+            expect(error.data).toBe(ERROR_ICON_NOT_FOUND);
             caughtRejection = true;
           });
 
         $httpBackend.flush();
 
         expect(caughtRejection).toBe(true);
-        expect($log.warn.logs[0]).toEqual([errorMessage]);
+        expect($log.warn.logs[0]).toEqual([ERROR_ICON_NOT_FOUND]);
       }));
     });
   });
