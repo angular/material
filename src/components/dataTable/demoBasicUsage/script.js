@@ -1,11 +1,8 @@
-angular.module('tableDemo1', ['ngMaterial']).controller('Demo', Demo);
+angular
+  .module('tableDemo1', ['ngMaterial'])
+  .controller('AppCtrl', TableDemoCtrl);
 
-Demo.$inject = ['$http'];
-
-function Demo($http) {
-  // $http.get('data.json').then(function (response) {
-  //   console.log(response.data);
-  // });
+function TableDemoCtrl($log) {
 
   this.options = {
     auto: false,
@@ -109,16 +106,12 @@ function Demo($http) {
 
   this.selected = angular.copy(this.desserts[3]);
 
-  this.log = function (foo) {
-    console.log(foo);
-  };
-
   this.onDeselect = function (dessert) {
-    this.log('Deselected ' + dessert.name);
+    $log.info('Table: Deselected ' + dessert.name);
   };
 
   this.onSelect = function (dessert) {
-    this.log('Selected ' + dessert.name);
+    $log.info('Table: Selected ' + dessert.name);
   };
 
   this.trackBy = function (dessert) {

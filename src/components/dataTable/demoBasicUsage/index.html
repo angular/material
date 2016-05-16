@@ -1,9 +1,9 @@
-<div class="container" layout="column" ng-controller="Demo as ctrl">
+<div class="container" layout="column" ng-controller="AppCtrl as ctrl">
 
   <div layout="row" layout-wrap class="options">
-    <md-checkbox ng-model="ctrl.options.rowSelection">Row Selection</md-checkbox>
-    <md-checkbox ng-model="ctrl.options.multiple">Multiple Selection</md-checkbox>
-    <md-checkbox ng-model="ctrl.options.auto">Auto Selection</md-checkbox>
+    <md-checkbox ng-model="ctrl.options.rowSelection">Single Row Selection</md-checkbox>
+    <md-checkbox ng-model="ctrl.options.multiple">Multiple Row Selection</md-checkbox>
+    <md-checkbox ng-model="ctrl.options.auto">Select on Row Click</md-checkbox>
   </div>
 
   <md-divider></md-divider>
@@ -24,7 +24,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr md-row md-select="dessert" md-on-select="ctrl.onSelect(dessert)" md-on-deselect="ctrl.onDeselect(dessert)" md-auto-select="{{ctrl.options.auto}}" ng-repeat="dessert in ctrl.desserts | orderBy: ctrl.order">
+        <tr md-row ng-repeat="dessert in ctrl.desserts | orderBy: ctrl.order" md-select="dessert"
+            md-on-select="ctrl.onSelect(dessert)" md-on-deselect="ctrl.onDeselect(dessert)"
+            md-auto-select="{{ctrl.options.auto}}" >
           <td md-cell>{{::dessert.name}}</td>
           <td md-cell>{{::dessert.calories}}</td>
           <td md-cell>{{::dessert.fat | number: 1}}</td>

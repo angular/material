@@ -1,9 +1,5 @@
-$table-border-color: rgba(0, 0, 0, 0.12);
 $table-head-font-size: 12px;
 $table-body-font-size: 13px;
-$table-head-text-color: rgba(0, 0, 0, 0.54);
-$table-body-text-color: rgba(0, 0, 0, 0.87);
-$table-sort-active-color: rgba(0, 0, 0, 0.87);
 
 table.md-table th,
 table.md-table td {
@@ -54,27 +50,16 @@ table.md-table.md-select td {
 
 table.md-table thead {
   th {
-    color: $table-head-text-color;
     font-size: $table-head-font-size;
     line-height: $table-head-font-size;
 
     &.md-sort {
       cursor: pointer;
     }
-
-    &.md-active {
-      color: $table-sort-active-color;
-    }
-  }
-
-  &:not(:last-of-type) th {
-    border-bottom: 1px $table-border-color solid;
   }
 }
 
 table.md-table tbody td {
-  color: $table-body-text-color;
   font-size: $table-body-font-size;
   line-height: $table-body-font-size;
-  border-top: 1px $table-border-color solid;
 }

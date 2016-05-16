@@ -1,20 +1,17 @@
-$table-row-hover-background: #eee;
-$table-row-select-background: #f5f5f5;
+table.md-table {
 
-table.md-table tr {
-  &.md-selected {
-    background-color: $table-row-select-background;
+  tr {
+    &.md-auto-select:not([disabled]):hover {
+      transition: background 0.2s;
+    }
   }
-  &.md-auto-select:not([disabled]):hover {
-    transition: background-color 0.2s;
-    background-color: $table-row-hover-background;
+
+  thead tr {
+    height: 56px;
   }
-}
 
-table.md-table thead tr {
-  height: 56px;
-}
+  tbody tr {
+    height: 48px;
+  }
 
-table.md-table tbody tr {
-  height: 48px;
 }
