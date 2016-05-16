@@ -210,7 +210,7 @@ function MenuProvider($$interimElementProvider) {
         opts.menuContentEl[0].addEventListener('click', captureClickListener, true);
 
         // kick off initial focus in the menu on the first element
-        var focusTarget = opts.menuContentEl[0].querySelector('[md-menu-focus-target]');
+        var focusTarget = opts.menuContentEl[0].querySelector('[md-menu-focus-target], [md-autofocus]');
         if ( !focusTarget ) {
           var firstChild = opts.menuContentEl[0].firstElementChild;
 

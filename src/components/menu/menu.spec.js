@@ -141,6 +141,48 @@ describe('material.components.menu', function() {
       expect(getOpenMenuContainer(menu).length).toBe(0);
     }));
 
+    describe('autofocus', function() {
+
+      it('should focus a button with md-menu-focus-target', inject(function($compile, $rootScope, $document) {
+        var menu = $compile(
+          '<md-menu>' +
+            '<button ng-click="$mdOpenMenu($event)">Hello World</button>' +
+            '<md-menu-content>' +
+              '<md-menu-item>' +
+                '<button id="menuFocus" md-menu-focus-target ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+            '</md-menu-content>' +
+          '</md-menu>'
+        )($rootScope);
+
+        openMenu(menu);
+
+        var menuTarget = $document[0].querySelector('#menuFocus');
+
+        expect(document.activeElement).toBe(menuTarget);
+      }));
+
+      it('should focus a button with md-autofocus', inject(function($compile, $rootScope, $document) {
+        var menu = $compile(
+          '<md-menu>' +
+            '<button ng-click="$mdOpenMenu($event)">Hello World</button>' +
+            '<md-menu-content>' +
+              '<md-menu-item>' +
+                '<button id="menuFocus" md-autofocus ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+            '</md-menu-content>' +
+          '</md-menu>'
+        )($rootScope);
+
+        openMenu(menu);
+
+        var menuTarget = $document[0].querySelector('#menuFocus');
+
+        expect(document.activeElement).toBe(menuTarget);
+      }));
+
+    });
+
     describe('closes with -', function() {
       it('closes on normal option click', function() {
 
