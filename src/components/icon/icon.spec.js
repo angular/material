@@ -4,22 +4,20 @@ describe('MdIcon directive', function() {
   var $compile;
   var $mdIconProvider;
 
-  beforeEach(module('material.core'));
-  beforeEach(module('material.components.icon'));
-  beforeEach(module('material.components.icon',function(_$mdIconProvider_){
-     $mdIconProvider = _$mdIconProvider_;
-   }));
-   afterEach( function() {
-     $mdIconProvider.defaultFontSet('material-icons');
-     $mdIconProvider.fontSet('fa', 'fa');
-   });
+  beforeEach(module('material.components.icon', function(_$mdIconProvider_) {
+    $mdIconProvider = _$mdIconProvider_;
+  }));
+  afterEach(function() {
+    $mdIconProvider.defaultFontSet('material-icons');
+    $mdIconProvider.fontSet('fa', 'fa');
+  });
 
 
   describe('for font-icons:', function () {
 
-    beforeEach( inject(function($rootScope, _$compile_){
-        $scope = $rootScope;
-        $compile = _$compile_;
+    beforeEach(inject(function($rootScope, _$compile_) {
+      $scope = $rootScope;
+      $compile = _$compile_;
     }));
 
 
@@ -339,19 +337,18 @@ describe('MdIcon service', function() {
   var $scope;
   var $mdIconProvider;
 
-  beforeEach(module('material.core'));
-  beforeEach(module('material.components.icon',function(_$mdIconProvider_){
+  beforeEach(module('material.components.icon', function(_$mdIconProvider_) {
     $mdIconProvider = _$mdIconProvider_;
     $mdIconProvider
-      .icon('android'     , 'android.svg')
-      .icon('c2'          , 'c2.svg')
-      .icon('notfound'    ,'notfoundicon.svg')
-      .iconSet('social'   , 'social.svg' )
-      .iconSet('notfound' , 'notfoundgroup.svg' )
+      .icon('android'    , 'android.svg')
+      .icon('c2'         , 'c2.svg')
+      .icon('notfound'   , 'notfoundicon.svg')
+      .iconSet('social'  , 'social.svg' )
+      .iconSet('notfound', 'notfoundgroup.svg' )
       .defaultIconSet('core.svg');
   }));
 
-  beforeEach(inject(function($templateCache, _$httpBackend_, _$mdIcon_, $rootScope){
+  beforeEach(inject(function($templateCache, _$httpBackend_, _$mdIcon_, $rootScope) {
     $mdIcon = _$mdIcon_;
     $httpBackend = _$httpBackend_;
     $scope = $rootScope;
@@ -362,10 +359,9 @@ describe('MdIcon service', function() {
 
     $httpBackend.whenGET('notfoundgroup.svg').respond(404, 'Cannot GET notfoundgroup.svg');
     $httpBackend.whenGET('notfoundicon.svg').respond(404, 'Cannot GET notfoundicon.svg');
-
   }));
 
-  describe('should configure fontSets',function() {
+  describe('should configure fontSets', function() {
 
     it('with Material Icons by default', function () {
       expect($mdIcon.fontSet()).toBe('material-icons');
