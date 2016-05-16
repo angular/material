@@ -1,7 +1,10 @@
-table.md-table th,
-table.md-table td, {
-  md-checkbox {
-    width: 20px;
-    margin: 0;
+table.md-table {
+
+  th, td {
+    md-checkbox {
+      width: 20px;
+      margin: 0;
+    }
   }
+
 }

@@ -1,6 +1,3 @@
-$table-sort-icon-active-color: rgba(0, 0, 0, 0.87);
-$table-sort-icon-disabled-color: rgba(0, 0, 0, 0.26);
-
 table.md-table thead th {
   md-icon {
     width: 16px;
@@ -20,7 +17,6 @@ table.md-table thead th {
 
     &.md-sort-icon {
       margin-bottom: 1px;
-      color: $table-sort-icon-disabled-color;
       opacity: 0;
       transition: transform 0.25s, opacity 0.25s;
 
@@ -32,10 +28,6 @@ table.md-table thead th {
         transform: rotate(180deg);
       }
     }
-  }
-
-  &.md-active md-icon {
-    color: $table-sort-icon-active-color;
   }
 
   &:hover md-icon.md-sort-icon,
