@@ -562,8 +562,6 @@
    function announceNotFound(err) {
      var msg = angular.isString(err) ? err : (err.message || err.data || err.statusText);
      $log.warn(msg);
-
-     return $q.reject(msg);
    }
 
    /**
