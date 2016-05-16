@@ -510,29 +510,39 @@ describe('MdIcon service', function() {
     });
 
     describe('icon group is not found', function() {
-      it('should log Error', function() {
-        var msg;
-        try {
-          $mdIcon('notfound:someIcon')
-            .catch(function(error) {
-              msg = error.data;
-            });
+      it('should log Error and reject', inject(function($log) {
+        var errorMessage = 'Cannot GET notfoundgroup.svg';
+        var caughtRejection = false;
 
-          $httpBackend.flush();
-        } finally {
-          expect(msg).toEqual('Cannot GET notfoundgroup.svg');
-        }
-      });
+        $mdIcon('notfound:someIcon')
+          .catch(function(error) {
+            expect(error.data).toBe(errorMessage);
+            caughtRejection = true;
+          });
+
+        $httpBackend.flush();
+
+        expect(caughtRejection).toBe(true);
+        expect($log.warn.logs[0]).toEqual([errorMessage]);
+      }));
     });
 
     describe('icon is not found', function() {
-      it('should not throw Error', function() {
-        expect(function(){
-          $mdIcon('notfound');
+      it('should log Error and reject', inject(function($log) {
+        var errorMessage = 'Cannot GET notfoundicon.svg';
+        var caughtRejection = false;
 
-          $httpBackend.flush();
-        }).not.toThrow();
-      });
+        $mdIcon('notfound')
+          .catch(function(error) {
+            expect(error.data).toBe(errorMessage);
+            caughtRejection = true;
+          });
+
+        $httpBackend.flush();
+
+        expect(caughtRejection).toBe(true);
+        expect($log.warn.logs[0]).toEqual([errorMessage]);
+      }));
     });
   });
 
