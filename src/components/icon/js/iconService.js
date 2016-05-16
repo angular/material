@@ -360,7 +360,7 @@ MdIconProvider.prototype = {
 
   $get: ['$templateRequest', '$q', '$log', '$templateCache', '$mdUtil', function($templateRequest, $q, $log, $templateCache, $mdUtil) {
     this.preloadIcons($templateCache);
-    return MdIconService(config, $templateRequest, $q, $log, $templateCache, $mdUtil);
+    return MdIconService(config, $templateRequest, $q, $log, $mdUtil);
   }]
 };
 
@@ -415,7 +415,7 @@ function ConfigurationItem(url, viewBoxSize) {
  */
 
 /* @ngInject */
-function MdIconService(config, $templateRequest, $q, $log, $templateCache, $mdUtil) {
+function MdIconService(config, $templateRequest, $q, $log, $mdUtil) {
   var iconCache = {};
   var urlRegex = /[-\w@:%\+.~#?&//=]{2,}\.[a-z]{2,4}\b(\/[-\w@:%\+.~#?&//=]*)?/i;
   var dataUrlRegex = /^data:image\/svg\+xml[\s*;\w\-\=]*?(base64)?,(.*)$/i;
