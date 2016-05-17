@@ -370,7 +370,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     var selectedIndex = ctrl.selectedIndex,
         tab           = ctrl.tabs.splice(tabData.getIndex(), 1)[ 0 ];
     angular.forEach(ctrl.tabs, function(remainingTab) {
-      if(remainingTab.index > tab.index) {
+      if (remainingTab.index > tab.index) {
         remainingTab.index -= 1;
       }
     });
@@ -410,7 +410,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
         tab       = angular.extend(proto, tabData);
     if (angular.isDefined(index)) {
       angular.forEach(ctrl.tabs, function(existingTab) {
-        if(existingTab.index >= index) {
+        if (existingTab.index >= index) {
           existingTab.index += 1;
         }
       });
