@@ -14,7 +14,7 @@ $contact-chip-name-width: rem(12) !default;
 
 .md-contact-chips {
   .md-chips {
-    md-chip {
+    md-chip, data-md-chip {
       @include rtl(padding, $contact-chip-padding, rtl-value($contact-chip-padding));
       .md-contact-avatar {
         @include rtl(float, left, right);
@@ -67,7 +67,7 @@ $contact-chip-name-width: rem(12) !default;
   &:not(.md-readonly) {
     cursor: text;
 
-    md-chip:not(.md-readonly) {
+    md-chip:not(.md-readonly), data-md-chip:not(.md-readonly) {
       @include rtl-prop(padding-right, padding-left, $chip-remove-padding-right);
 
       ._md-chip-content {
@@ -76,7 +76,7 @@ $contact-chip-name-width: rem(12) !default;
     }
   }
 
-  md-chip {
+  md-chip, data-md-chip {
     cursor: default;
     border-radius: $chip-height / 2;
     display: block;
@@ -122,7 +122,7 @@ $contact-chip-name-width: rem(12) !default;
       box-shadow: none;
       margin: 0;
       position: relative;
-      md-icon {
+      md-icon, data-md-icon {
         height: $chip-delete-icon-size;
         width: $chip-delete-icon-size;
         position: absolute;
@@ -149,12 +149,12 @@ $contact-chip-name-width: rem(12) !default;
         }
       }
     }
-    md-autocomplete, md-autocomplete-wrap {
+    md-autocomplete, md-autocomplete-wrap, data-md-autocomplete, data-md-autocomplete-wrap {
       background: transparent;
       height: $chip-height;
     }
-    md-autocomplete {
-      md-autocomplete-wrap {
+    md-autocomplete, data-md-autocomplete {
+      md-autocomplete-wrap, data-md-autocomplete-wrap {
         box-shadow: none;
       }
       input {
@@ -170,10 +170,10 @@ $contact-chip-name-width: rem(12) !default;
         outline:none;
       }
     }
-    md-autocomplete, md-autocomplete-wrap {
+    md-autocomplete, md-autocomplete-wrap, data-md-autocomplete, data-md-autocomplete-wrap {
       height: $chip-height;
     }
-    md-autocomplete {
+    md-autocomplete, data-md-autocomplete {
       box-shadow: none;
       input {
         position: relative;
@@ -187,7 +187,7 @@ $contact-chip-name-width: rem(12) !default;
       border-width: 0;
     }
   }
-  md-autocomplete {
+  md-autocomplete, data-md-autocomplete {
     button {
       display: none;
     }
@@ -196,10 +196,10 @@ $contact-chip-name-width: rem(12) !default;
 // IE only
 @media screen and (-ms-high-contrast: active) {
   ._md-chip-input-container,
-  md-chip {
+  md-chip, data-md-chip {
     border: 1px solid #fff;
   }
-  ._md-chip-input-container md-autocomplete {
+  ._md-chip-input-container md-autocomplete, ._md-chip-input-container data-md-autocomplete {
     border: none;
   }
 }

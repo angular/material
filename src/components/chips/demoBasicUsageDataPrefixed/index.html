@@ -1,0 +1,62 @@
+<div data-ng-controller="BasicDemoCtrl as ctrl" layout="column" data-ng-cloak>
+
+  <md-content class="md-padding" layout="column">
+    <h2 class="md-title">Use a custom chip template.</h2>
+
+    <form name="fruitForm">
+      <data-md-chips data-ng-model="ctrl.roFruitNames" data-name="fruitName" data-readonly="ctrl.readonly" data-md-max-chips="5">
+        <data-md-chip-template>
+          <strong>{{$chip}}</strong>
+          <em>(fruit)</em>
+        </data-md-chip-template>
+      </data-md-chips>
+
+      <div class="errors" data-ng-messages="fruitForm.fruitName.$error">
+        <div data-ng-message="md-max-chips">The maxmium of chips is reached.</div>
+      </div>
+    </form>
+
+
+    <br/>
+    <h2 class="md-title">Use the default chip template.</h2>
+
+    <data-md-chips data-ng-model="ctrl.fruitNames" data-readonly="ctrl.readonly"></data-md-chips>
+
+
+    <br/>
+    <h2 class="md-title">Make chips editable.</h2>
+
+    <data-md-chips data-ng-model="ctrl.editableFruitNames" data-readonly="ctrl.readonly" data-md-enable-chip-edit="true"></data-md-chips>
+
+    <br/>
+    <h2 class="md-title">Use Placeholders and override hint texts.</h2>
+
+    <data-md-chips
+        data-ng-model="ctrl.tags"
+        data-readonly="ctrl.readonly"
+        data-placeholder="Enter a tag"
+        data-delete-button-label="Remove Tag"
+        data-delete-hint="Press delete to remove tag"
+        data-secondary-placeholder="+Tag"></data-md-chips>
+
+    <br/>
+    <h2 class="md-title">Display an ordered set of objects as chips (with custom template).</h2>
+    <p>Note: the variables <code>$chip</code> and <code>$index</code> are available in custom chip templates.</p>
+
+    <data-md-chips class="custom-chips" data-ng-model="ctrl.vegObjs" data-readonly="ctrl.readonly" data-md-transform-chip="ctrl.newVeg($chip)">
+      <data-md-chip-template>
+        <span>
+          <strong>[{{$index}}] {{$chip.name}}</strong>
+          <em>({{$chip.type}})</em>
+        </span>
+      </data-md-chip-template>
+      <button data-md-chip-remove class="md-primary vegetablechip">
+        <md-icon data-md-svg-icon="md-close"></data-md-icon>
+      </button>
+    </data-md-chips>
+
+    <br/>
+    <md-checkbox data-ng-model="ctrl.readonly">Readonly</data-md-checkbox>
+
+  </md-content>
+</div>

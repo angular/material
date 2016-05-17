@@ -247,19 +247,19 @@
       var userTemplate = attr['$mdUserTemplate'];
       attr['$mdUserTemplate'] = null;
 
-      var chipTemplate = getTemplateByQuery('md-chips>md-chip-template');
+      var chipTemplate = getTemplateByQuery('md-chips>md-chip-template, data-md-chips>data-md-chip-template, md-chips>data-md-chip-template, data-md-chips>md-chip-template');
 
       // Set the chip remove, chip contents and chip input templates. The link function will put
       // them on the scope for transclusion later.
-      var chipRemoveTemplate   = getTemplateByQuery('md-chips>*[md-chip-remove]') || templates.remove,
+      var chipRemoveTemplate   = getTemplateByQuery('md-chips>*[md-chip-remove], data-md-chips>*[data-md-chip-remove], data-md-chips>*[md-chip-remove], md-chips>*[data-md-chip-remove]') || templates.remove,
           chipContentsTemplate = chipTemplate || templates.default,
-          chipInputTemplate    = getTemplateByQuery('md-chips>md-autocomplete')
-              || getTemplateByQuery('md-chips>input')
+          chipInputTemplate    = getTemplateByQuery('md-chips>md-autocomplete, data-md-chips>data-md-autocomplete, md-chips>data-md-autocomplete, data-md-chips>md-autocomplete')
+              || getTemplateByQuery('md-chips>input, data-md-chips>input')
               || templates.input,
-          staticChips = userTemplate.find('md-chip');
+          staticChips = angular.element(userTemplate[0].querySelectorAll('md-chip, data-md-chip'));
 
       // Warn of malformed template. See #2545
-      if (userTemplate[0].querySelector('md-chip-template>*[md-chip-remove]')) {
+      if (userTemplate[0].querySelector('md-chip-template>*[md-chip-remove], data-md-chip-template>*[data-md-chip-remove], md-chip-template>*[data-md-chip-remove], data-md-chip-template>*[md-chip-remove]')) {
         $log.warn('invalid placement of md-chip-remove within md-chip-template.');
       }
 
@@ -326,10 +326,12 @@
             scope.$watch('$mdChipsCtrl.readonly', function(readonly) {
               if (!readonly) {
                 $mdUtil.nextTick(function(){
-                  if (chipInputTemplate.indexOf('<md-autocomplete') === 0)
-                    mdChipsCtrl
-                        .configureAutocomplete(element.find('md-autocomplete')
-                            .controller('mdAutocomplete'));
+                  if (chipInputTemplate.indexOf('<md-autocomplete') === 0 || chipInputTemplate.indexOf('<data-md-autocomplete') === 0)
+                      mdChipsCtrl
+                        .configureAutocomplete(
+                          angular.element(element[0].querySelector('md-autocomplete, data-md-autocomplete'))
+                                 .controller('mdAutocomplete')
+                        );
                   mdChipsCtrl.configureUserInput(element.find('input'));
                 });
               }
@@ -347,7 +349,9 @@
         // Compile with the parent's scope and prepend any static chips to the wrapper.
         if (staticChips.length > 0) {
           var compiledStaticChips = $compile(staticChips.clone())(scope.$parent);
-          $timeout(function() { element.find('md-chips-wrap').prepend(compiledStaticChips); });
+          $timeout(function() { 
+            angular.element(element[0].querySelector('md-chips-wrap, data-md-chips-wrap')).prepend(compiledStaticChips);
+          });
         }
       };
     }
