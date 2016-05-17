@@ -55,8 +55,8 @@ angular
  * @param {boolean=} md-no-asterisk When present, asterisk will not be appended to the floating label
  * @param {boolean=} md-autoselect If true, the first item will be selected by default
  * @param {string=} md-menu-class This will be applied to the dropdown menu for styling
- * @param {string=} md-menu-container-id This will be applied to the parent container of the dropdown
- *     menu for styling
+ * @param {string=} md-menu-container-class This will add a class to `md-virtual-repeat-container`,
+ *     the parent container of the dropdown list
  * @param {string=} md-floating-label This will add a floating label to autocomplete and wrap it in
  *     `md-input-container`
  * @param {string=} md-input-name The name attribute given to the input element to be used with
