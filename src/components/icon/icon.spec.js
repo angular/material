@@ -1,12 +1,11 @@
 describe('MdIcon directive', function() {
-  var el;
-  var $scope;
-  var $compile;
-  var $mdIconProvider;
+  var el, $scope, $compile, $mdIconProvider, $sce;
+  var wasLastSvgSrcTrusted = false;
 
   beforeEach(module('material.components.icon', function(_$mdIconProvider_) {
     $mdIconProvider = _$mdIconProvider_;
   }));
+
   afterEach(function() {
     $mdIconProvider.defaultFontSet('material-icons');
     $mdIconProvider.fontSet('fa', 'fa');
@@ -172,6 +171,13 @@ describe('MdIcon directive', function() {
 
       module(function($provide) {
         var $mdIconMock = function(id) {
+
+          wasLastSvgSrcTrusted = false;
+          if (!angular.isString(id)) {
+            id = $sce.getTrustedUrl(id);
+            wasLastSvgSrcTrusted = true;
+          }
+
           return {
             then: function(fn) {
               switch(id) {
@@ -182,6 +188,8 @@ describe('MdIcon directive', function() {
                 case 'android.svg'      : fn('<svg><g id="android"></g></svg>');
                   break;
                 case 'cake.svg'         : fn('<svg><g id="cake"></g></svg>');
+                  break;
+                case 'galactica.svg'         : fn('<svg><g id="galactica"></g></svg>');
                   break;
                 case 'image:android'    : fn('');
                   break;
@@ -229,10 +237,21 @@ describe('MdIcon directive', function() {
 
     describe('using md-svg-src=""', function() {
 
+      beforeEach(inject(function(_$sce_) {
+        $sce = _$sce_;
+      }));
+
+      it('should mark as trusted static URLs', function() {
+        el = make('<md-icon md-svg-src="galactica.svg"></md-icon>');
+        expect(wasLastSvgSrcTrusted).toBe(true);
+        expect(el[0].innerHTML).toContain('galactica')
+      });
+
       it('should update mdSvgSrc when attribute value changes', function() {
         $scope.url = 'android.svg';
         el = make('<md-icon md-svg-src="{{ url }}"></md-icon>');
         expect(el.attr('md-svg-src')).toEqual('android.svg');
+        expect(wasLastSvgSrcTrusted).toBe(false);
         $scope.url = 'cake.svg';
         $scope.$digest();
         expect(el.attr('md-svg-src')).toEqual('cake.svg');

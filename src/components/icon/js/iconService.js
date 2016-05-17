@@ -358,9 +358,9 @@ MdIconProvider.prototype = {
 
   },
 
-  $get: ['$templateRequest', '$q', '$log', '$templateCache', '$mdUtil', function($templateRequest, $q, $log, $templateCache, $mdUtil) {
+  $get: ['$templateRequest', '$q', '$log', '$templateCache', '$mdUtil', '$sce', function($templateRequest, $q, $log, $templateCache, $mdUtil, $sce) {
     this.preloadIcons($templateCache);
-    return MdIconService(config, $templateRequest, $q, $log, $mdUtil);
+    return MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce);
   }]
 };
 
@@ -415,7 +415,7 @@ function ConfigurationItem(url, viewBoxSize) {
  */
 
 /* @ngInject */
-function MdIconService(config, $templateRequest, $q, $log, $mdUtil) {
+function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   var iconCache = {};
   var urlRegex = /[-\w@:%\+.~#?&//=]{2,}\.[a-z]{2,4}\b(\/[-\w@:%\+.~#?&//=]*)?/i;
   var dataUrlRegex = /^data:image\/svg\+xml[\s*;\w\-\=]*?(base64)?,(.*)$/i;
@@ -432,12 +432,28 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil) {
   function getIcon(id) {
     id = id || '';
 
+    // If the "id" provided is not a string, the only other valid value is a $sce trust wrapper
+    // over a URL string. If the value is not trusted, this will intentionally throw an error
+    // because the user is attempted to use an unsafe URL, potentially opening themselves up
+    // to an XSS attack.
+    if (!angular.isString(id)) {
+      id = $sce.getTrustedUrl(id);
+    }
+
     // If already loaded and cached, use a clone of the cached icon.
     // Otherwise either load by URL, or lookup in the registry and then load by URL, and cache.
 
-    if (iconCache[id]) return $q.when(transformClone(iconCache[id]));
-    if (urlRegex.test(id) || dataUrlRegex.test(id)) return loadByURL(id).then(cacheIcon(id));
-    if (id.indexOf(':') == -1) id = '$default:' + id;
+    if (iconCache[id]) {
+      return $q.when(transformClone(iconCache[id]));
+    }
+
+    if (urlRegex.test(id) || dataUrlRegex.test(id)) {
+      return loadByURL(id).then(cacheIcon(id));
+    }
+
+    if (id.indexOf(':') == -1) {
+      id = '$default:' + id;
+    }
 
     var load = config[id] ? loadByID : loadFromIconSet;
     return load(id)
@@ -540,9 +556,7 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil) {
     /* Load the icon by URL using HTTP. */
     function loadByHttpUrl(url) {
       return $q(function(resolve, reject) {
-        /**
-         * Catch HTTP or generic errors not related to incorrect icon IDs.
-         */
+        // Catch HTTP or generic errors not related to incorrect icon IDs.
         var announceAndReject = function(err) {
             var msg = angular.isString(err) ? err : (err.message || err.data || err.statusText);
             $log.warn(msg);
