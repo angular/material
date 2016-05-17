@@ -124,11 +124,11 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
-    it('should allow you to set an id to the md-virtual-repeat-container element', inject(function() {
-      var scope = createScope(null, {menuContainerId: 'custom-menu-container-id'});
+    it('should allow you to set a class to the md-virtual-repeat-container element', inject(function() {
+      var scope = createScope(null, {menuContainerClass: 'custom-menu-container-class'});
       var template = '\
           <md-autocomplete\
-              md-menu-container-id="{{menuContainerId}}"\
+              md-menu-container-class="{{menuContainerClass}}"\
               md-input-id="input-id"\
               md-selected-item="selectedItem"\
               md-search-text="searchText"\
@@ -140,7 +140,7 @@ describe('<md-autocomplete>', function() {
       var element = compile(template, scope);
       var repeatContainer = element.find('md-virtual-repeat-container');
 
-      expect(repeatContainer.attr('id')).toBe(scope.menuContainerId);
+      expect(repeatContainer.attr('class')).toContain(scope.menuContainerClass);
 
       element.remove();
 

@@ -132,27 +132,27 @@ function MdAutocomplete () {
     controller:   'MdAutocompleteCtrl',
     controllerAs: '$mdAutocompleteCtrl',
     scope:        {
-      inputName:        '@mdInputName',
-      inputMinlength:   '@mdInputMinlength',
-      inputMaxlength:   '@mdInputMaxlength',
-      searchText:       '=?mdSearchText',
-      selectedItem:     '=?mdSelectedItem',
-      itemsExpr:        '@mdItems',
-      itemText:         '&mdItemText',
-      placeholder:      '@placeholder',
-      noCache:          '=?mdNoCache',
-      selectOnMatch:    '=?mdSelectOnMatch',
-      matchInsensitive: '=?mdMatchCaseInsensitive',
-      itemChange:       '&?mdSelectedItemChange',
-      textChange:       '&?mdSearchTextChange',
-      minLength:        '=?mdMinLength',
-      delay:            '=?mdDelay',
-      autofocus:        '=?mdAutofocus',
-      floatingLabel:    '@?mdFloatingLabel',
-      autoselect:       '=?mdAutoselect',
-      menuClass:        '@?mdMenuClass',
-      menuContainerId:  '@?mdMenuContainerId',
-      inputId:          '@?mdInputId'
+      inputName:          '@mdInputName',
+      inputMinlength:     '@mdInputMinlength',
+      inputMaxlength:     '@mdInputMaxlength',
+      searchText:         '=?mdSearchText',
+      selectedItem:       '=?mdSelectedItem',
+      itemsExpr:          '@mdItems',
+      itemText:           '&mdItemText',
+      placeholder:        '@placeholder',
+      noCache:            '=?mdNoCache',
+      selectOnMatch:      '=?mdSelectOnMatch',
+      matchInsensitive:   '=?mdMatchCaseInsensitive',
+      itemChange:         '&?mdSelectedItemChange',
+      textChange:         '&?mdSearchTextChange',
+      minLength:          '=?mdMinLength',
+      delay:              '=?mdDelay',
+      autofocus:          '=?mdAutofocus',
+      floatingLabel:      '@?mdFloatingLabel',
+      autoselect:         '=?mdAutoselect',
+      menuClass:          '@?mdMenuClass',
+      menuContainerClass: '@?mdMenuContainerClass',
+      inputId:            '@?mdInputId'
     },
     link: function(scope, element, attrs, controller) {
       // Retrieve the state of using a md-not-found template by using our attribute, which will
@@ -191,7 +191,8 @@ function MdAutocomplete () {
               ng-mouseleave="$mdAutocompleteCtrl.listLeave()"\
               ng-mouseup="$mdAutocompleteCtrl.mouseUp()"\
               ng-hide="$mdAutocompleteCtrl.hidden"\
-              class="md-autocomplete-suggestions-container md-whiteframe-z1"\
+              class="md-autocomplete-suggestions-container md-whiteframe-z1' +
+                (attr.mdMenuContainerClass != null ? ' ' + attr.mdMenuContainerClass : '') + '"\
               ng-class="{ \'md-not-found\': $mdAutocompleteCtrl.notFoundVisible() }"\
               role="presentation">\
             <ul class="md-autocomplete-suggestions"\
