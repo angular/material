@@ -232,6 +232,63 @@ describe('<md-tabs>', function () {
       expect(tabs1[ 0 ].querySelector('md-tab-content').textContent.trim()).toBe('content that!');
     });
 
+    it('updates pagination and ink styles when string labels change', function(done) {
+      inject(function($rootScope) {
+        // Setup our initial label
+        $rootScope.$apply('label = "Some Label"');
+
+        // Init our variables
+        var template = '<md-tabs><md-tab label="{{label}}"></md-tab></md-tabs>';
+        var tabs = setup(template);
+        var ctrl = tabs.controller('mdTabs');
+
+        // Setup spies
+        spyOn(ctrl, 'updatePagination');
+        spyOn(ctrl, 'updateInkBarStyles');
+
+        // Change the label
+        $rootScope.$apply('label="Another Label"');
+
+        // Use window.setTimeout to add our expectations to the end of the call stack, after the
+        // MutationObservers have already fired
+        window.setTimeout(function() {
+          // Fire expectations
+          expect(ctrl.updatePagination.calls.count()).toBe(1);
+          expect(ctrl.updateInkBarStyles.calls.count()).toBe(1);
+
+          done();
+        });
+      })
+    });
+
+    it('updates pagination and ink styles when HTML labels change', function(done) {
+      inject(function($rootScope) {
+        // Setup our initial label
+        $rootScope.$apply('label = "Some Label"');
+
+        // Init our variables
+        var template = '<md-tabs><md-tab><md-tab-label>{{label}}</md-tab-label></md-tab></md-tabs>';
+        var tabs = setup(template);
+        var ctrl = tabs.controller('mdTabs');
+
+        // Setup spies
+        spyOn(ctrl, 'updatePagination');
+        spyOn(ctrl, 'updateInkBarStyles');
+
+        // Change the label
+        $rootScope.$apply('label="Another Label"');
+
+        // Use window.setTimeout to add our expectations to the end of the call stack, after the
+        // MutationObservers have already fired
+        window.setTimeout(function() {
+          // Fire expectations
+          expect(ctrl.updatePagination.calls.count()).toBe(1);
+          expect(ctrl.updateInkBarStyles.calls.count()).toBe(1);
+
+          done();
+        });
+      })
+    });
   });
 
   describe('aria', function () {
