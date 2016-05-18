@@ -4,6 +4,8 @@ angular
 
 function TableDemoCtrl($log) {
 
+  this.$log = $log;
+
   this.options = {
     auto: false,
     multiple: false,
@@ -106,15 +108,15 @@ function TableDemoCtrl($log) {
 
   this.selected = angular.copy(this.desserts[3]);
 
-  this.onDeselect = function (dessert) {
+  this.onDeselect = function(dessert) {
     $log.info('Table: Deselected ' + dessert.name);
   };
 
-  this.onSelect = function (dessert) {
+  this.onSelect = function(dessert) {
     $log.info('Table: Selected ' + dessert.name);
   };
 
-  this.trackBy = function (dessert) {
+  this.trackBy = function(dessert) {
     return dessert.name;
   };
 }

@@ -1,36 +1,19 @@
-fdescribe('mdTable', function () {
-  var $scope;
+describe('mdTable', function () {
+  var $rootScope, $document;
 
   beforeEach(module('material.components.table'));
 
-  beforeEach(inject(function ($rootScope) {
-    $scope = {
-      $new: function (properties) {
-        return angular.extend($rootScope.$new(), properties);
-      }
-    };
+  beforeEach(inject(function($injector) {
+    $rootScope = $injector.get('$rootScope');
+    $document = $injector.get('$document');
   }));
 
-  it('should not enabled row selection', inject(function ($compile) {
-    var tables = [
-      $compile('<md-table>')($scope.$new()),
-      $compile('<md-table md-row-select="{{foo}}">')($scope.$new({foo: false})),
-    ];
+  it('should correctly detect the row selection', inject(function ($compile) {
+    var basicTable = $compile('<table md-table>')($rootScope);
+    var selectableTable = $compile('<table md-table md-table md-row-select="">')($rootScope);
 
-    tables.forEach(function (table) {
-      expect(table.controller('mdTable').enableSelection()).toBe(false);
-    });
-  }));
-
-  it('should enabled row selection', inject(function ($compile) {
-    var tables = [
-      $compile('<md-table md-row-select>')($scope.$new()),
-      $compile('<md-table md-row-select="{{foo}}">')($scope.$new({foo: true})),
-    ];
-
-    tables.forEach(function (table) {
-      expect(table.controller('mdTable').enableSelection()).toBe(true);
-    });
+    expect(basicTable.controller('mdTable').enableSelection()).toBe(false);
+    expect(selectableTable.controller('mdTable').enableSelection()).toBe(true);
   }));
 
 });

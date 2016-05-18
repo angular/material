@@ -1,7 +1,7 @@
 <div class="container" layout="column" ng-controller="AppCtrl as ctrl">
 
   <div layout="row" layout-wrap class="options">
-    <md-checkbox ng-model="ctrl.options.rowSelection">Single Row Selection</md-checkbox>
+    <md-checkbox ng-model="ctrl.options.rowSelection">Enable Row Selection</md-checkbox>
     <md-checkbox ng-model="ctrl.options.multiple">Multiple Row Selection</md-checkbox>
     <md-checkbox ng-model="ctrl.options.auto">Select on Row Click</md-checkbox>
   </div>
@@ -11,7 +11,7 @@
   <md-content>
 
     <table md-table md-row-select="{{ctrl.options.rowSelection}}" md-selected="ctrl.selected" multiple="{{ctrl.options.multiple}}">
-      <thead md-head md-order="ctrl.order" md-on-reorder="ctrl.log(ctrl.order)">
+      <thead md-head md-order="ctrl.order" md-on-reorder="$log.info(ctrl.order)">
         <tr md-row>
           <th md-cell md-order-by="name">Dessert (100g serving)</th>
           <th md-cell md-align="right" md-order-by="calories">Calories</th>
