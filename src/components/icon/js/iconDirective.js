@@ -1,6 +1,6 @@
 angular
   .module('material.components.icon')
-  .directive('mdIcon', ['$mdIcon', '$mdTheming', '$mdAria', mdIconDirective]);
+  .directive('mdIcon', ['$mdIcon', '$mdTheming', '$mdAria', '$sce', mdIconDirective]);
 
 /**
  * @ngdoc directive
@@ -171,7 +171,7 @@ angular
  * </hljs>
  *
  */
-function mdIconDirective($mdIcon, $mdTheming, $mdAria ) {
+function mdIconDirective($mdIcon, $mdTheming, $mdAria, $sce) {
 
   return {
     restrict: 'E',
@@ -187,6 +187,10 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria ) {
     $mdTheming(element);
 
     prepareForFontIcon();
+
+    // Keep track of the content of the svg src so we can compare against it later to see if the
+    // attribute is static (and thus safe).
+    var originalSvgSrc = element[0].getAttribute(attr.$attr.mdSvgSrc);
 
     // If using a font-icon, then the textual name of the icon itself
     // provides the aria-label.
@@ -212,6 +216,12 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria ) {
     if (attrName) {
       // Use either pre-configured SVG or URL source, respectively.
       attr.$observe(attrName, function(attrVal) {
+
+        // If using svg-src and the value is static (i.e., is exactly equal to the compile-time
+        // `md-svg-src` value), then it is implicitly trusted.
+        if (!isInlineSvg(attrVal) && attrVal === originalSvgSrc) {
+          attrVal = $sce.trustAsUrl(attrVal);
+        }
 
         element.empty();
         if (attrVal) {
@@ -244,5 +254,15 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria ) {
         element.addClass($mdIcon.fontSet(attr.mdFontSet));
       }
     }
+  }
+
+  /**
+   * Gets whether the given svg src is an inline ("data:" style) SVG.
+   * @param {string} svgSrc The svg src.
+   * @returns {boolean} Whether the src is an inline SVG.
+   */
+  function isInlineSvg(svgSrc) {
+    var dataUrlRegex = /^data:image\/svg\+xml[\s*;\w\-\=]*?(base64)?,(.*)$/i;
+    return dataUrlRegex.test(svgSrc);
   }
 }
