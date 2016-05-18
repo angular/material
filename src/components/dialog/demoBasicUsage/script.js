@@ -96,6 +96,16 @@ angular.module('dialogDemo1', ['ngMaterial'])
           $scope.status = 'You cancelled the dialog.';
         });
   };
+
+  $scope.showPrerenderedDialog = function(ev) {
+    $mdDialog.show({
+      controller: DialogController,
+      contentElement: '#myDialog',
+      parent: angular.element(document.body),
+      targetEvent: ev,
+      clickOutsideToClose: true
+    });
+  };
 });
 
 function DialogController($scope, $mdDialog) {
