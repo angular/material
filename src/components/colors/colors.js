@@ -45,7 +45,8 @@
     // Publish service instance
     return {
       applyThemeColors: applyThemeColors,
-      getThemeColor: getThemeColor
+      getThemeColor: getThemeColor,
+      hasTheme: hasTheme
     };
 
     // ********************************************
@@ -80,7 +81,7 @@
       try {
         // Assign the calculate RGBA color values directly as inline CSS
         element.css(interpolateColors(colorExpression));
-      } catch( e ) {
+      } catch (e) {
         $log.error(e.message);
       }
 
@@ -155,6 +156,16 @@
     }
 
     /**
+     * Check if expression has defined theme
+     * e.g.
+     * 'myTheme-primary' => true
+     * 'red-800' => false
+     */
+    function hasTheme(expression) {
+      return angular.isDefined($mdTheming.THEMES[expression.split('-')[0]]);
+    }
+
+    /**
      * For the evaluated expression, extract the color parts into a hash map
      */
     function extractColorOptions(expression) {
@@ -198,7 +209,7 @@
       var themeColors = $mdTheming.THEMES[theme].colors;
 
       if (parts[1] === 'hue') {
-        var hueNumber = parseInt(parts.splice(2, 1)[0],10);
+        var hueNumber = parseInt(parts.splice(2, 1)[0], 10);
 
         if (hueNumber < 1 || hueNumber > 3) {
           throw new Error($mdUtil.supplant('mdColors: \'hue-{hueNumber}\' is not a valid hue, can be only \'hue-1\', \'hue-2\' and \'hue-3\'', {hueNumber: hueNumber}));
@@ -260,24 +271,71 @@
   function MdColorsDirective($mdColors, $mdUtil, $log, $parse) {
     return {
       restrict: 'A',
+      require: ['^?mdTheme'],
       compile: function (tElem, tAttrs) {
         var shouldWatch = shouldColorsWatch();
 
-        return function (scope, element, attrs) {
-          var colorExpression = function () {
-            // Json.parse() does not work because the keys are not quoted;
-            // use $parse to convert to a hash map
-            return $parse(attrs.mdColors)(scope);
+        return function (scope, element, attrs, ctrl) {
+          var mdThemeController = ctrl[0];
+
+          var parseColors = function (theme) {
+            /**
+             * Json.parse() does not work because the keys are not quoted;
+             * use $parse to convert to a hash map
+             */
+            var colors = $parse(attrs.mdColors)(scope);
+
+            /**
+             * If mdTheme is defined up the DOM tree
+             * we add mdTheme theme to colors who doesn't specified a theme
+             *
+             * # example
+             * <hljs lang="html">
+             *   <div md-theme="myTheme">
+             *     <div md-colors="{background: 'primary-600'}">
+             *       <span md-colors="{background: 'mySecondTheme-accent-200'}">Color demo</span>
+             *     </div>
+             *   </div>
+             * </hljs>
+             *
+             * 'primary-600' will be 'myTheme-primary-600',
+             * but 'mySecondTheme-accent-200' will stay the same cause it has a theme prefix
+             */
+            if (mdThemeController) {
+              Object.keys(colors).forEach(function (prop) {
+                var color = colors[prop];
+                if (!$mdColors.hasTheme(color)) {
+                  colors[prop] = (theme || mdThemeController.$mdTheme) + '-' + color;
+                }
+              });
+            }
+
+            return colors;
           };
+
+          /**
+           * Registering for mgTheme changes and asking mdTheme controller run our callback whenever a theme changes
+           */
+          var unregisterChanges = angular.noop;
+
+          if (mdThemeController) {
+            unregisterChanges = mdThemeController.registerChanges(function (theme) {
+              $mdColors.applyThemeColors(element, parseColors(theme));
+            });
+          }
+
+          scope.$on('destroy', function () {
+            unregisterChanges();
+          });
 
           try {
             if (shouldWatch) {
-              scope.$watch(colorExpression, angular.bind(this,
+              scope.$watch(parseColors, angular.bind(this,
                 $mdColors.applyThemeColors, element
               ), true);
             }
             else {
-              $mdColors.applyThemeColors(element, colorExpression());
+              $mdColors.applyThemeColors(element, parseColors());
             }
 
           }
@@ -288,19 +346,19 @@
         };
 
         function shouldColorsWatch() {
-            // Simulate 1x binding and mark mdColorsWatch == false
-            var rawColorExpression = tAttrs.mdColors;
-            var bindOnce = rawColorExpression.indexOf('::') > -1;
-            var isStatic = bindOnce ? true : STATIC_COLOR_EXPRESSION.test(tAttrs.mdColors);
+          // Simulate 1x binding and mark mdColorsWatch == false
+          var rawColorExpression = tAttrs.mdColors;
+          var bindOnce = rawColorExpression.indexOf('::') > -1;
+          var isStatic = bindOnce ? true : STATIC_COLOR_EXPRESSION.test(tAttrs.mdColors);
 
-              // Remove it for the postLink...
-              tAttrs.mdColors = rawColorExpression.replace('::','');
+          // Remove it for the postLink...
+          tAttrs.mdColors = rawColorExpression.replace('::', '');
 
-            var hasWatchAttr = angular.isDefined(tAttrs.mdColorsWatch);
+          var hasWatchAttr = angular.isDefined(tAttrs.mdColorsWatch);
 
-            return (bindOnce || isStatic) ? false :
-                   hasWatchAttr ? $mdUtil.parseAttributeBoolean(tAttrs.mdColorsWatch) : true;
-          }
+          return (bindOnce || isStatic) ? false :
+            hasWatchAttr ? $mdUtil.parseAttributeBoolean(tAttrs.mdColorsWatch) : true;
+        }
       }
     };
 
