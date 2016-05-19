@@ -264,6 +264,55 @@ describe('md-colors', function () {
           expect(element[0].style.background).toContain( expectedRGB );
         });
       });
+
+      describe('mdColors integration', function () {
+        /**
+         * <div md-theme="myTheme">
+         *   <div md-colors="{background: 'primary'}" >
+         * </div>
+         */
+        it('should automatically inject myTheme as the theme prefix', function () {
+
+          var type = 'primary';
+          var paletteName = $mdTheming.THEMES['myTheme'].colors[type].name;
+          var color = $mdColorPalette[paletteName]['500'].value;
+          var expectedRGB = supplant('rgb({0}, {1}, {2})', [color[0], color[1], color[2]]);
+
+
+          var markup = '<div md-theme="myTheme"><div md-colors="{background: \'primary\'}" ></div></div>';
+          var element = $compile( markup )(scope);
+
+          expect(element.children()[0].style.background).toContain( expectedRGB );
+        });
+
+        /**
+         * <div md-theme="{{theme}}">
+         *   <div md-colors="{background: 'primary'}" >
+         * </div>
+         */
+        it('should register for theme changes and inject myTheme as the theme prefix', function () {
+
+          var type = 'primary';
+          var paletteName = $mdTheming.THEMES['myTheme'].colors[type].name;
+          var color = $mdColorPalette[paletteName]['500'].value;
+          var expectedRGB = supplant('rgb({0}, {1}, {2})', [color[0], color[1], color[2]]);
+
+          scope.theme = 'myTheme';
+          var markup = '<div md-theme="{{theme}}"><div md-colors="{background: \'primary\'}" ></div></div>';
+          var element = $compile( markup )(scope);
+
+          expect(element.children()[0].style.background).toContain( expectedRGB );
+
+          paletteName = $mdTheming.THEMES['default'].colors[type].name;
+          color = $mdColorPalette[paletteName]['500'].value;
+          expectedRGB = supplant('rgb({0}, {1}, {2})', [color[0], color[1], color[2]]);
+
+          scope.theme = 'default';
+          scope.$apply();
+
+          expect(element.children()[0].style.background).toContain( expectedRGB );
+        });
+      })
     });
 
     describe('watched values', function () {
