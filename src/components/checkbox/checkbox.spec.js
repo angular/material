@@ -296,6 +296,14 @@ describe('mdCheckbox', function() {
         expect(checkbox).toHaveClass(CHECKED_CSS);
       });
 
+      it('should mark the checkbox as selected, if the model is true and "md-indeterminate" is false', function() {
+        pageScope.checked = true;
+        var checkbox = compileAndLink('<md-checkbox ng-model="checked" md-indeterminate="false"></md-checkbox>');
+
+        expect(checkbox).toHaveClass(CHECKED_CSS);
+        expect(checkbox).not.toHaveClass(INDETERMINATE_CSS);
+      });
+
     });
   });
 });

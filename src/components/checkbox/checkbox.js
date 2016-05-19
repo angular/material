@@ -31,7 +31,7 @@ angular
  * @param {expression=} md-indeterminate This determines when the checkbox should be rendered as 'indeterminate'.
  *     If a truthy expression or no value is passed in the checkbox renders in the md-indeterminate state.
  *     If falsy expression is passed in it just looks like a normal unchecked checkbox.
- *     The indeterminate, checked, and unchecked states are mutually exclusive. A box cannot be in any two states at the same time. 
+ *     The indeterminate, checked, and unchecked states are mutually exclusive. A box cannot be in any two states at the same time.
  *     When a checkbox is indeterminate that overrides any checked/unchecked rendering logic.
  *
  * @usage
@@ -74,11 +74,11 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
 
   function compile (tElement, tAttrs) {
     var container = tElement.children();
-    var mdIndeterminateStateEnabled = tAttrs.hasOwnProperty('mdIndeterminate');
+    var mdIndeterminateStateEnabled = $mdUtil.parseAttributeBoolean(tAttrs.mdIndeterminate);
 
-    tAttrs.type = 'checkbox';
-    tAttrs.tabindex = tAttrs.tabindex || '0';
-    tElement.attr('role', tAttrs.type);
+    tAttrs.$set('tabindex', tAttrs.tabindex || '0');
+    tAttrs.$set('type', 'checkbox');
+    tAttrs.$set('role', tAttrs.type);
 
     // Attach a click handler in compile in order to immediately stop propagation
     // (especially for ng-click) when the checkbox is disabled.
