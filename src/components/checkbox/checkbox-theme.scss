@@ -80,6 +80,10 @@ md-checkbox.md-THEME_NAME-theme {
       border-color: '{{background-200}}';
     }
 
+    ._md-icon:after {
+      border-color: '{{foreground-3}}';
+    }
+
     ._md-label {
       color: '{{foreground-3}}';
     }
