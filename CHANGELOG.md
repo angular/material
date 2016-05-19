@@ -1,3 +1,19 @@
+<a name"1.0.9"></a>
+### 1.0.9 (2016-05-19)
+
+
+#### Features
+
+* **demos:** add global classes support ([6726ca6c](https://github.com/angular/material/commit/6726ca6c), closes [#8400](https://github.com/angular/material/issues/8400), [#8406](https://github.com/angular/material/issues/8406))
+* **panel:**
+  * New `$mdPanel` service!
+
+
+#### Bug Fixes
+
+* **build:** Fix failing tests with Angular 1.6. ([af1e2269](https://github.com/angular/material/commit/af1e2269), closes [#8404](https://github.com/angular/material/issues/8404))
+
+
 <a name"1.0.8"></a>
 ### 1.0.8 (2016-04-28)
 
