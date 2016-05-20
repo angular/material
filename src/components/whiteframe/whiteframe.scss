@@ -76,3 +76,9 @@
     border: 1px solid #fff;
   }
 }
+
+@media print {
+  md-whiteframe {
+    background-color: #fff;
+  }
+}
