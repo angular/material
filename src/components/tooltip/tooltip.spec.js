@@ -34,6 +34,16 @@ describe('<md-tooltip> directive', function() {
     expect(error).toBe(undefined);
   });
 
+  it('should set the position to "bottom", if it is undefined', function() {
+    buildTooltip(
+      '<md-button>' +
+       '<md-tooltip md-visible="true">Tooltip</md-tooltip>' +
+      '</md-button>'
+    );
+
+    expect(findTooltip().attr('md-direction')).toBe('bottom');
+  });
+
   it('should preserve parent text', function(){
       buildTooltip(
         '<md-button>' +
