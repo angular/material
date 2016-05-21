@@ -49,7 +49,13 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       autohide: '=?mdAutohide',
       direction: '@?mdDirection'    // only expect raw or interpolated string value; not expression
     },
-    link: postLink
+    compile: function(tElement, tAttr) {
+      if (!tAttr.mdDirection) {
+        tAttr.$set('mdDirection', 'bottom');
+      }
+
+      return postLink;
+    }
   };
 
   function postLink(scope, element, attr) {
