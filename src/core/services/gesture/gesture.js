@@ -305,18 +305,26 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
       onEnd: function (ev, pointer) {
         var eventType;
 
-        if (Math.abs(pointer.distanceX) > Math.abs(pointer.distanceY)) {
-            if (Math.abs(pointer.velocityX) > this.state.options.minVelocity &&
-              Math.abs(pointer.distanceX) > this.state.options.minDistance) {
-              eventType = pointer.directionX == 'left' ? '$md.swipeleft' : '$md.swiperight';
-              this.dispatchEvent(ev, eventType);
-            }
-        } else {
-            if (Math.abs(pointer.velocityY) > this.state.options.minVelocity &&
-              Math.abs(pointer.distanceY) > this.state.options.minDistance) {
-              eventType = pointer.directionY == 'up' ? '$md.swipeup' : '$md.swipedown';
-              this.dispatchEvent(ev, eventType);
-            }
+        if (isHorizontalSwipe(pointer, this.state.options)) {
+          eventType = pointer.directionX == 'left' ? '$md.swipeleft' : '$md.swiperight';
+          this.dispatchEvent(ev, eventType);
+        } else if (isVerticalSwipe(pointer, this.state.options)) {
+          eventType = pointer.directionY == 'up' ? '$md.swipeup' : '$md.swipedown';
+          this.dispatchEvent(ev, eventType);
+        }
+        
+        function isHorizontalSwipe(pointer, options) {
+          // In addition to metric checks, must be more horizontal than vertical
+          return Math.abs(pointer.distanceX) > Math.abs(pointer.distanceY) &&
+            Math.abs(pointer.velocityX) > options.minVelocity &&
+            Math.abs(pointer.distanceX) > options.minDistance;
+        }
+        
+        function isVerticalSwipe(pointer, options) {
+          // In addition to metric checks, must be more vertical than horizontal
+          return Math.abs(pointer.distanceY) > Math.abs(pointer.distanceX) &&
+            Math.abs(pointer.velocityY) > options.minVelocity &&
+            Math.abs(pointer.distanceY) > options.minDistance;
         }
       }
     });
