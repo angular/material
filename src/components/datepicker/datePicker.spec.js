@@ -364,7 +364,6 @@ describe('md-date-picker', function() {
         altKey: true,
         keyCode: keyCodes.DOWN_ARROW
       });
-      $timeout.flush();
 
       expect(controller.calendarPane.offsetHeight).toBeGreaterThan(0);
 
@@ -383,7 +382,6 @@ describe('md-date-picker', function() {
 
       // Open the pane.
       element.querySelector('md-button').click();
-      $timeout.flush();
 
       // Expect that the whole pane is on-screen.
       var paneRect = controller.calendarPane.getBoundingClientRect();
@@ -410,7 +408,6 @@ describe('md-date-picker', function() {
 
       // Open the pane.
       element.querySelector('md-button').click();
-      $timeout.flush();
 
       // Expect that the pane is on-screen.
       var paneRect = controller.calendarPane.getBoundingClientRect();
@@ -438,7 +435,6 @@ describe('md-date-picker', function() {
 
       // Open the pane.
       element.querySelector('md-button').click();
-      $timeout.flush();
 
       // Expect that the calendar pane is in the same position as the inline datepicker.
       var paneRect = controller.calendarPane.getBoundingClientRect();

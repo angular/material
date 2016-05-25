@@ -434,6 +434,6 @@ describe('$$mdDateUtil', function() {
     expect(angular.isNumber(result)).toBe(true);
     expect(result).toBe(time);
 
-    node.remove();
+    node = null;
   });
 });
