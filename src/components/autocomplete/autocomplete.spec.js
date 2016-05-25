@@ -25,7 +25,7 @@ describe('<md-autocomplete>', function() {
       };
       scope.asyncMatch = function(term) {
         return $timeout(function() {
-          return scope.match(term)
+          return scope.match(term);
         }, 1000);
       };
       scope.searchText = '';
@@ -377,6 +377,16 @@ describe('<md-autocomplete>', function() {
 
       element.remove();
     }));
+  });
+
+  it('should add extra classes to the input', function(){
+    var scope = createScope();
+    var template = '<md-autocomplete md-items="item in match(searchText)" md-input-class="custom-class"></md-autocomplete>';
+    var element = compile(template, scope);
+
+    expect(element.find('input').hasClass('custom-class')).toBe(true);
+
+    element.remove();
   });
 
   describe('basic functionality with template', function() {
